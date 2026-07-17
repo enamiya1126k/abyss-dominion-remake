@@ -1,0 +1,6 @@
+ABYSS DOMINION v0.1.0-alpha.2 差分
+
+ZIP内のファイルを、GitHubリポジトリの同じ場所へ上書きしてください。
+新規フォルダ：src/battle
+新規ファイル：src/battle/SkillSystem.js、src/data/skills.js
+削除するファイルはありません。
