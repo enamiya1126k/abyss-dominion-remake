@@ -1,6 +1,16 @@
-ABYSS DOMINION v0.1.0-alpha.2 差分
+ABYSS DOMINION v0.1.0-alpha.3
 
-ZIP内のファイルを、GitHubリポジトリの同じ場所へ上書きしてください。
-新規フォルダ：src/battle
-新規ファイル：src/battle/SkillSystem.js、src/data/skills.js
+このZIP内のファイルを、GitHubリポジトリの同じ場所へ上書きしてください。
+
+新規:
+- src/battle/EnemyAI.js
+
+上書き:
+- src/core/config.js
+- src/main.js
+- src/ui/screens/BattleScreen.js
+- src/Styles/app.css
+- README.md
+
 削除するファイルはありません。
+必ず v0.1.0-alpha.2 適用後のリポジトリへ上書きしてください。
