@@ -117,3 +117,10 @@ select{max-width:190px}
 .boss-badge{display:inline-flex;margin-right:7px;padding:3px 7px;border-radius:999px;background:#8c36d8;color:#fff;font-size:.58rem;letter-spacing:.08em;vertical-align:middle;box-shadow:0 0 14px #b84cff88}
 .floating-number.charge{color:#ffb85c}.floating-number.enrage{color:#ff55b8;font-size:1.7rem}
 .enemy-combatant:has(.boss-badge){border-color:#a947e7;box-shadow:0 0 22px #9d42d744}
+
+.status-row{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin:3px 0 7px}
+.status-chip{padding:3px 7px;border-radius:999px;font-size:.62rem;font-weight:900;border:1px solid #ffffff2a;background:#211528}
+.status-chip.poison{color:#a9ff72;border-color:#77c95066}.status-chip.burn{color:#ff9b65;border-color:#e96b4066}
+.floating-number.poison{color:#a9ff72}.floating-number.burn{color:#ff8d5c}
+.battle-log{max-height:92px;overflow:auto;margin:8px 12px 12px;padding:8px 10px;border-radius:12px;background:#0c0811;border:1px solid var(--line);font-size:.69rem;color:#cbbfd1}
+.battle-log div+div{margin-top:3px}.skill-command-list button:disabled{opacity:.48;filter:grayscale(.35)}
