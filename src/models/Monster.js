@@ -37,7 +37,9 @@ export function createMonster(speciesId,options={}){
     equipment:{weapon:null,armor:null,accessory:null,...(options.equipment??{})},
     capturedAt:options.capturedAt??new Date().toISOString(),
     battles:options.battles??0,
-    defeats:options.defeats??0
+    defeats:options.defeats??0,
+    currentHp:options.currentHp??null,
+    currentMp:options.currentMp??null
   };
 }
 export function displayName(monster){
