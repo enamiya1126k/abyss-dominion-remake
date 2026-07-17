@@ -124,3 +124,59 @@ select{max-width:190px}
 .floating-number.poison{color:#a9ff72}.floating-number.burn{color:#ff8d5c}
 .battle-log{max-height:92px;overflow:auto;margin:8px 12px 12px;padding:8px 10px;border-radius:12px;background:#0c0811;border:1px solid var(--line);font-size:.69rem;color:#cbbfd1}
 .battle-log div+div{margin-top:3px}.skill-command-list button:disabled{opacity:.48;filter:grayscale(.35)}
+
+/* v0.1.0-alpha.4.1 — mobile playability and round-based battle */
+.battle-screen{
+  grid-template-rows:auto auto minmax(0,1fr) auto auto;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 28%,#39204a 0,#160d20 30%,#07040a 72%);
+}
+.battle-header{grid-template-columns:1fr auto auto auto}
+.round-label{display:flex;align-items:baseline;gap:6px}
+.round-label small{font-size:.55rem;color:var(--muted);letter-spacing:.12em}
+.round-label b{font-size:1.35rem;color:var(--gold)}
+.turn-order{
+  display:flex;gap:6px;align-items:stretch;overflow-x:auto;
+  padding:7px;background:#100a16;border:1px solid var(--line);border-radius:14px;
+  scrollbar-width:none;
+}
+.turn-order::-webkit-scrollbar{display:none}
+.turn-order-title{display:grid;place-items:center;padding:0 7px;color:var(--muted);font-size:.62rem;white-space:nowrap}
+.turn-chip{
+  flex:0 0 auto;min-width:78px;display:grid;gap:1px;padding:6px 8px;
+  border-radius:10px;background:#24172e;border:1px solid #513b61;
+  opacity:.78;
+}
+.turn-chip b{font-size:.66rem;white-space:nowrap;max-width:92px;overflow:hidden;text-overflow:ellipsis}
+.turn-chip small{font-size:.52rem;color:var(--muted)}
+.turn-chip.enemy{background:#35151d;border-color:#7d3543}
+.turn-chip.current{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 12px #f1c96b35}
+.turn-chip.done{opacity:.28;filter:grayscale(.8)}
+.battle-arena{grid-template-rows:minmax(170px,1fr) auto}
+.enemy-combatant{width:min(88%,420px);padding:12px}
+.enemy-orb{
+  width:clamp(78px,24vw,118px);height:clamp(78px,24vw,118px);
+  margin:0 auto;box-shadow:inset -12px -14px 20px #0005,0 0 28px #ffffff15;
+}
+.battle-party{grid-template-columns:repeat(2,minmax(0,1fr))}
+.battle-unit{min-width:0;padding:8px}
+.unit-head b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.75rem}
+.battle-unit small{font-size:.61rem}
+.battle-command{padding:10px}
+.battle-command h2{font-size:1rem}
+.command-grid button{min-height:46px}
+.enemy-thinking{padding:14px;text-align:center;color:var(--muted)}
+.battle-log{margin:0;max-height:72px}
+@media(max-width:430px){
+ .battle-screen{padding:max(7px,env(safe-area-inset-top)) 7px max(7px,env(safe-area-inset-bottom));gap:6px}
+ .battle-header{gap:4px}
+ .battle-header button{padding:8px 7px;font-size:.64rem}
+ .turn-order{padding:5px;gap:4px}
+ .turn-chip{min-width:69px;padding:5px 6px}
+ .battle-arena{gap:6px}
+ .battle-party{gap:5px}
+ .command-grid{gap:4px}
+ .command-grid button{font-size:.62rem;padding:8px 1px}
+ .skill-command-list{max-height:34dvh;overflow:auto}
+}
