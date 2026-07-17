@@ -29,7 +29,7 @@ export function HomeScreen(state){
         <div class="grid">
           <button id="openMonsters" class="primary">モンスター</button>
           <button id="openExplore" class="primary">探索へ</button>
-          <button id="openEquipment">装備（準備中）</button>
+          <button id="openEquipment">装備</button>
           <button id="openSettings">設定</button>
         </div>
 
@@ -42,7 +42,7 @@ export function HomeScreen(state){
 
         <p class="footer-note">
           v0.0.1では、今後の全システムが参照する「モンスター個体データ」を完成させている。
-          探索・戦闘・捕獲が個体データへ接続された。次版で装備とショップを実装する。
+          探索・戦闘・捕獲が個体データへ接続された。装備・装備ドロップ・セレクトショップまで接続済み。
         </p>
       </div>
     </section>
