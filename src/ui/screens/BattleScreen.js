@@ -1,5 +1,6 @@
 import{displayName,calculatedStats,colorValue}from"../../models/Monster.js";
 import{learnedSkills,maxMp}from"../../battle/SkillSystem.js";
+import{cooldownRemaining,statusLabel}from"../../battle/BattleRules.js";
 
 export function BattleScreen(battle,inventory,settings){
  const alive=battle.party.filter(m=>m.currentHp>0);
@@ -16,7 +17,7 @@ export function BattleScreen(battle,inventory,settings){
   </div>
   <div class="battle-arena">
    <div id="enemyActor" class="combatant enemy-combatant">
-    <div class="enemy-name">${enemy.boss?'<span class="boss-badge">BOSS</span>':""}${enemy.name} Lv.${enemy.level}</div><div class="enemy-intent">${enemy.intent}${enemy.enraged?"・狂暴化":""}</div>
+    <div class="enemy-name">${enemy.boss?'<span class="boss-badge">BOSS</span>':""}${enemy.name} Lv.${enemy.level}</div><div class="enemy-intent">${enemy.intent}${enemy.enraged?"・狂暴化":""}</div>${(battle.enemyStatuses??[]).length?`<div class="status-row">${battle.enemyStatuses.map(s=>`<span class="status-chip ${s.id}">${statusLabel(s)}</span>`).join("")}</div>`:""}
     <div class="enemy-orb" style="background:${enemy.color}"></div>
     <div class="battle-bar"><i style="width:${enemy.hp/enemy.maxHp*100}%"></i></div>
     <div class="battle-hp">${enemy.hp}/${enemy.maxHp}</div>
@@ -32,7 +33,7 @@ export function BattleScreen(battle,inventory,settings){
   </div>
   <div class="battle-command">
    <div class="spread"><h2>${actor?displayName(actor):"全滅"}のターン</h2><span class="muted">捕獲結晶 ${inventory.captureCrystals}</span></div>
-   ${battle.skillMenu?`<div class="skill-command-list">${skills.map(skill=>`<button data-skill-id="${skill.id}" ${actor.currentMp<skill.mp?"disabled":""}><span><b>${skill.name}</b><small>${skill.description}</small></span><strong>MP ${skill.mp}</strong></button>`).join("")}<button id="closeSkillMenu" class="secondary">戻る</button></div>`:`<div class="command-grid"><button data-command="attack">たたかう</button><button data-command="guard">ガード</button><button data-command="skill">スキル</button><button data-command="item">アイテム</button><button data-command="capture">捕獲</button></div>`}
-  </div>
+   ${battle.skillMenu?`<div class="skill-command-list">${skills.map(skill=>{const cd=cooldownRemaining(battle,actor.id,skill.id),disabled=actor.currentMp<skill.mp||cd>0;return`<button data-skill-id="${skill.id}" ${disabled?"disabled":""}><span><b>${skill.name}</b><small>${skill.description}</small></span><strong>${cd>0?`CD ${cd}`:`MP ${skill.mp}`}</strong></button>`}).join("")}<button id="closeSkillMenu" class="secondary">戻る</button></div>`:`<div class="command-grid"><button data-command="attack">たたかう</button><button data-command="guard">ガード</button><button data-command="skill">スキル</button><button data-command="item">アイテム</button><button data-command="capture">捕獲</button></div>`}
+  </div><div class="battle-log">${(battle.log??[]).map(line=>`<div>${line}</div>`).join("")}</div>
  </section>`;
 }
