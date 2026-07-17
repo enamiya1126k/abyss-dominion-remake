@@ -15,6 +15,7 @@ import{ShopScreen}from"./ui/screens/ShopScreen.js";
 import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier}from"./battle/EnemyAI.js";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js";
+import{buildTurnQueue,currentTurnEntry,currentAlly,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
 let screen="home",selected=null,equipmentTarget=null,game=null,battle=null,snapshot=null,activeEnemy=null;
@@ -141,10 +142,13 @@ function startBattle(e){
  const sp=SPECIES[e.speciesId],party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);
  party.forEach(m=>{const hp=calculatedStats(m).hp,mp=maxMp(m);if(m.currentHp==null)m.currentHp=hp;if(m.currentMp==null)m.currentMp=mp;m.currentHp=Math.min(m.currentHp,hp);m.currentMp=Math.min(m.currentMp,mp)});
  const enemy=createEnemyBattleState(sp,e,save.state.player.currentFloor);
- battle={enemy,party,actorIndex:0,turn:1,busy:false,auto:save.state.settings.autoBattle,guard:null,skillMenu:false,...createBattleRulesState(party)};
- renderBattle();if(battle.auto)setTimeout(()=>command("attack"),450/battleSpeed())
+ battle={enemy,party,turn:1,busy:false,auto:save.state.settings.autoBattle,guards:{},skillMenu:false,...createBattleRulesState(party)};
+ buildTurnQueue(battle);
+ addBattleLog(battle,`行動順：${battle.turnQueue.map(entry=>entry.name).join(" → ")}`);
+ renderBattle();
+ setTimeout(()=>continueBattleFlow(),360/battleSpeed());
 }
-function actor(){const a=battle.party.filter(m=>m.currentHp>0);if(!a.length)return null;battle.actorIndex%=a.length;return a[battle.actorIndex]}
+function actor(){return currentAlly(battle)}
 function renderBattle(){
  document.querySelector(".battle-screen")?.remove();
  app.insertAdjacentHTML("beforeend",BattleScreen(battle,save.state.inventory,save.state.settings));
@@ -152,12 +156,21 @@ function renderBattle(){
  document.querySelectorAll("[data-skill-id]").forEach(b=>b.onclick=()=>command("skill",b.dataset.skillId));
  const closeSkill=document.getElementById("closeSkillMenu");if(closeSkill)closeSkill.onclick=()=>{battle.skillMenu=false;renderBattle()};
  document.getElementById("battleSpeed").onclick=()=>{const s=battleSpeed();save.state.settings.battleSpeed=s===1?2:s===2?4:1;save.save();renderBattle()};
- document.getElementById("toggleBattleAuto").onclick=()=>{battle.auto=!battle.auto;save.state.settings.autoBattle=battle.auto;save.save();renderBattle();if(battle.auto&&!battle.busy)command("attack")};
- document.getElementById("escapeBattle").onclick=()=>{if(Math.random()<.65){document.querySelector(".battle-screen").remove();activeEnemy=null;screen="explore";render()}else{alert("逃走失敗！");enemyTurn()}};
+ document.getElementById("toggleBattleAuto").onclick=()=>{battle.auto=!battle.auto;save.state.settings.autoBattle=battle.auto;save.save();renderBattle();if(battle.auto&&!battle.busy)continueBattleFlow()};
+ document.getElementById("escapeBattle").onclick=async()=>{
+  if(battle.busy||currentTurnEntry(battle)?.type!=="ally")return;
+  battle.busy=true;
+  if(Math.random()<.65){document.querySelector(".battle-screen").remove();activeEnemy=null;screen="explore";render()}
+  else{addBattleLog(battle,"逃走に失敗した");await floatText("逃走失敗","party","miss");battle.busy=false;await finishCurrentAction()}
+ };
 }
 async function command(type,skillId=null){
- if(battle.busy)return;const a=actor();if(!a)return lose();battle.busy=true;
+ if(battle.busy)return;
+ const entry=currentTurnEntry(battle),a=actor();
+ if(entry?.type!=="ally"||!a)return;
+ battle.busy=true;
  const s=calculatedStats(a),e=battle.enemy;
+
  if(type==="attack"){
   addBattleLog(battle,`${displayName(a)}：たたかう`);await animateAttack(a.id);
   if(Math.random()<.06)await floatText("MISS","enemy","miss");
@@ -168,10 +181,12 @@ async function command(type,skillId=null){
    await animateHit("enemy",critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,"enemy",critical?"critical":"damage");
   }
  }
+
  if(type==="skill"&&!skillId){battle.busy=false;battle.skillMenu=true;renderBattle();return}
+
  if(type==="skill"&&skillId){
-  const skill=skillById(skillId);
-  const cd=cooldownRemaining(battle,a.id,skillId);if(!learnedSkills(a).some(x=>x.id===skillId)||!canUseSkill(a,skill,cd)){battle.busy=false;return alert(cd>0?`あと${cd}ターン使用できない`:"MPが足りない")}
+  const skill=skillById(skillId),cd=cooldownRemaining(battle,a.id,skillId);
+  if(!learnedSkills(a).some(x=>x.id===skillId)||!canUseSkill(a,skill,cd)){battle.busy=false;return alert(cd>0?`あと${cd}ラウンド使用できない`:"MPが足りない")}
   a.currentMp-=skill.mp;setSkillCooldown(battle,a.id,skill);battle.skillMenu=false;addBattleLog(battle,`${displayName(a)}：${skill.name}`);
   if(skill.type==="selfHeal"){
    const h=Math.max(1,Math.floor(s.hp*skill.heal));a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal");
@@ -179,17 +194,25 @@ async function command(type,skillId=null){
    const healed=[];battle.party.filter(m=>m.currentHp>0).forEach(m=>{const max=calculatedStats(m).hp,h=Math.max(1,Math.floor(max*skill.heal)),before=m.currentHp;m.currentHp=Math.min(max,m.currentHp+h);healed.push(m.currentHp-before)});
    await floatText(`全体 +${Math.max(...healed)}`,"party","heal");
   }else{
-   await animateAttack(a.id,true);const hits=skill.hits??1;let total=0,anyCrit=false;
-   for(let i=0;i<hits&&e.hp>0;i++){const critical=Math.random()<Math.min(.45,.1+(skill.critBonus??0)+(s.spd??0)*.004),raw=skillDamage(s,e,skill,critical),d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)));e.hp=Math.max(0,e.hp-d);total+=d;anyCrit||=critical;await animateHit("enemy",critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,"enemy",critical?"critical":"skill")}
+   await animateAttack(a.id,true);const hits=skill.hits??1;let total=0;
+   for(let i=0;i<hits&&e.hp>0;i++){
+    const critical=Math.random()<Math.min(.45,.1+(skill.critBonus??0)+(s.spd??0)*.004),raw=skillDamage(s,e,skill,critical),d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)));
+    e.hp=Math.max(0,e.hp-d);total+=d;await animateHit("enemy",critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,"enemy",critical?"critical":"skill")
+   }
    if(skill.type==="drain"){const h=Math.max(1,Math.floor(total*skill.drain));a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal")}
    if(skill.status&&e.hp>0&&Math.random()<skill.status.chance){applyEnemyStatus(battle,skill.status);addBattleLog(battle,`${e.name}は${skill.status.name}状態になった`);await floatText(skill.status.name,"enemy",skill.status.id)}
   }
  }
- if(type==="guard"){battle.guard=a.id;addBattleLog(battle,`${displayName(a)}：ガード`);await floatText("GUARD",a.id,"guard")}
+
+ if(type==="guard"){
+  battle.guards[a.id]=true;addBattleLog(battle,`${displayName(a)}：ガード`);await floatText("GUARD",a.id,"guard")
+ }
+
  if(type==="item"){
   if(save.state.inventory.potions<=0){battle.busy=false;return alert("回復薬がない")}
   save.state.inventory.potions--;addBattleLog(battle,`${displayName(a)}：回復薬`);const h=Math.floor(s.hp*.5);a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal");
  }
+
  if(type==="capture"){
   if(save.state.inventory.captureCrystals<=0){battle.busy=false;return alert("捕獲結晶がない")}
   save.state.inventory.captureCrystals--;addBattleLog(battle,"捕獲を試みた");
@@ -197,12 +220,25 @@ async function command(type,skillId=null){
   await floatText(`捕獲 ${Math.round(chance*100)}%`,"enemy","capture");await wait(500);
   if(Math.random()<chance){const m=createMonster(e.speciesId,{level:e.level});save.state.monsters.push(m);save.state.records.captures++;save.save();await animateDefeat("enemy",true);return win(true,m)}
  }
- save.save();renderBattle();await wait(340);
+
+ save.save();renderBattle();await wait(260/battleSpeed());
  if(e.hp<=0){await animateDefeat("enemy");return win(false,null)}
- await enemyTurn();
+ battle.busy=false;
+ await finishCurrentAction();
+}
+function chooseEnemyTarget(){
+ const alive=battle.party.filter(monster=>monster.currentHp>0);
+ if(!alive.length)return null;
+ const guarded=alive.filter(monster=>battle.guards[monster.id]);
+ if(guarded.length&&Math.random()<.45)return guarded[Math.floor(Math.random()*guarded.length)];
+ return alive[Math.floor(Math.random()*alive.length)];
 }
 async function enemyTurn(){
- const a=actor();if(!a)return lose();
+ if(battle.busy)return;
+ const entry=currentTurnEntry(battle);
+ if(entry?.type!=="enemy")return continueBattleFlow();
+ const target=chooseEnemyTarget();if(!target)return lose();
+ battle.busy=true;
  const e=battle.enemy,action=chooseEnemyAction(e);addBattleLog(battle,`${e.name}：${e.intent}`);
 
  if(action===ENEMY_ACTIONS.guard){
@@ -210,37 +246,57 @@ async function enemyTurn(){
  }else if(action===ENEMY_ACTIONS.charge){
   await floatText("CHARGE","enemy","charge");
  }else if(action===ENEMY_ACTIONS.heal){
-  const h=enemyHealAmount(e);e.hp=Math.min(e.maxHp,e.hp+h);
-  await floatText(`+${h}`,"enemy","heal");
+  const h=enemyHealAmount(e);e.hp=Math.min(e.maxHp,e.hp+h);await floatText(`+${h}`,"enemy","heal");
  }else if(action===ENEMY_ACTIONS.enrage){
-  e.atk=Math.floor(e.atk*1.18);e.def=Math.floor(e.def*1.08);
-  await floatText("ENRAGE","enemy","enrage");
-  await animateHit("enemy",true);
+  e.atk=Math.floor(e.atk*1.18);e.def=Math.floor(e.def*1.08);await floatText("ENRAGE","enemy","enrage");await animateHit("enemy",true);
  }else{
-  const s=calculatedStats(a);
-  await animateAttack("enemy",action===ENEMY_ACTIONS.power);
-  if(action!==ENEMY_ACTIONS.power&&Math.random()<.05){
-   await floatText("MISS",a.id,"miss");
-  }else{
-   const guard=battle.guard===a.id,critical=Math.random()<(e.enraged?.13:.08);
-   const multiplier=enemyAttackMultiplier(e,action);
-   let d=Math.max(1,Math.floor((e.atk-s.def*.45)*multiplier*(guard?.45:1)));
-   if(critical)d=Math.floor(d*1.55);
-   a.currentHp=Math.max(0,a.currentHp-d);
-   await animateHit(a.id,critical);
-   await floatText(`${action===ENEMY_ACTIONS.power?"強撃 ":""}${critical?"CRITICAL ":""}-${d}`,a.id,critical?"critical":"enemy");
-   if(a.currentHp<=0)await animateDefeat(a.id);
+  const s=calculatedStats(target);await animateAttack("enemy",action===ENEMY_ACTIONS.power);
+  if(action!==ENEMY_ACTIONS.power&&Math.random()<.05)await floatText("MISS",target.id,"miss");
+  else{
+   const guard=Boolean(battle.guards[target.id]),critical=Math.random()<(e.enraged?.13:.08),multiplier=enemyAttackMultiplier(e,action);
+   let d=Math.max(1,Math.floor((e.atk-s.def*.45)*multiplier*(guard?.45:1)));if(critical)d=Math.floor(d*1.55);
+   target.currentHp=Math.max(0,target.currentHp-d);
+   addBattleLog(battle,`${displayName(target)}に${d}ダメージ`);
+   await animateHit(target.id,critical);await floatText(`${action===ENEMY_ACTIONS.power?"強撃 ":""}${critical?"CRITICAL ":""}-${d}`,target.id,critical?"critical":"enemy");
+   if(target.currentHp<=0)await animateDefeat(target.id);
   }
  }
 
- const statusResults=processEnemyStatuses(battle);
- for(const result of statusResults){addBattleLog(battle,`${e.name}に${result.name} ${result.damage}ダメージ`);await floatText(`-${result.damage}`,"enemy",result.id)}
- tickCooldowns(battle);
- battle.guard=null;save.save();renderBattle();await wait(420);
- if(e.hp<=0){await animateDefeat("enemy");return win(false,null)}
+ save.save();renderBattle();await wait(300/battleSpeed());
+ battle.busy=false;
  if(!battle.party.some(m=>m.currentHp>0))return lose();
- battle.actorIndex++;battle.turn++;battle.busy=false;renderBattle();
- if(battle.auto){await wait(260);command("attack")}
+ await finishCurrentAction();
+}
+async function finishCurrentAction(){
+ advanceQueue(battle);
+ if(queueFinished(battle))return endRound();
+ renderBattle();
+ await wait(180/battleSpeed());
+ return continueBattleFlow();
+}
+async function endRound(){
+ battle.busy=true;
+ const statusResults=processEnemyStatuses(battle);
+ for(const result of statusResults){addBattleLog(battle,`${battle.enemy.name}に${result.name} ${result.damage}ダメージ`);renderBattle();await floatText(`-${result.damage}`,"enemy",result.id)}
+ tickCooldowns(battle);
+ battle.guards={};
+ if(battle.enemy.hp<=0){await animateDefeat("enemy");return win(false,null)}
+ if(!battle.party.some(m=>m.currentHp>0))return lose();
+ battle.turn++;
+ buildTurnQueue(battle);
+ addBattleLog(battle,`ROUND ${battle.turn}：${battle.turnQueue.map(entry=>entry.name).join(" → ")}`);
+ battle.busy=false;save.save();renderBattle();
+ await wait(260/battleSpeed());
+ return continueBattleFlow();
+}
+async function continueBattleFlow(){
+ if(!battle||battle.busy)return;
+ skipInvalidEntries(battle);
+ if(queueFinished(battle))return endRound();
+ const entry=currentTurnEntry(battle);
+ renderBattle();
+ if(entry?.type==="enemy")return enemyTurn();
+ if(entry?.type==="ally"&&battle.auto){await wait(220/battleSpeed());return command("attack")}
 }
 function win(caught,m){
  const gold=20+battle.enemy.level*6;save.state.player.gold+=gold;save.state.records.kills++;
