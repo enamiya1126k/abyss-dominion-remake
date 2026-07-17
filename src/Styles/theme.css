@@ -1,0 +1,32 @@
+:root{
+  --bg:#0a0710;
+  --panel:#17101f;
+  --panel-2:#24172e;
+  --line:#5d4675;
+  --text:#f6efff;
+  --muted:#bbaacb;
+  --gold:#f1c96b;
+  --green:#78dc7c;
+  --red:#df6673;
+  --accent:#9a61e3;
+  --radius:20px;
+}
+body{
+  background:
+    radial-gradient(circle at 50% -20%,#392047 0,#170e1f 35%,var(--bg) 72%);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;
+}
+button{
+  color:inherit;
+  background:#342342;
+  border:1px solid #654d78;
+  border-radius:14px;
+  font-weight:850;
+  padding:10px 12px;
+}
+button:active{transform:scale(.985)}
+.primary{background:linear-gradient(135deg,#713cac,#a763e5)}
+.danger{background:#50232b;border-color:#93434d}
+.muted{color:var(--muted)}
+.gold{color:var(--gold)}
