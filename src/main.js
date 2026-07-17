@@ -8,6 +8,10 @@ import{ExploreScreen}from"./ui/screens/ExploreScreen.js";
 import{BattleScreen}from"./ui/screens/BattleScreen.js";
 import{Modal}from"./ui/components/Modal.js";
 import{createMonster,displayName,calculatedStats}from"./models/Monster.js";
+import{createEquipment,equipmentPower}from"./models/Equipment.js";
+import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js";
+import{ShopScreen}from"./ui/screens/ShopScreen.js";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
 let screen="home",selected=null,equipmentTarget=null,game=null,battle=null,snapshot=null,activeEnemy=null;
