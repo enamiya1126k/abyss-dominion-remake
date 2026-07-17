@@ -24,6 +24,7 @@ export function createEnemyBattleState(species,source,floor){
   maxHp,
   atk:Math.floor((species.baseStats.atk+source.level*1.4)*attackScale),
   def:Math.floor((species.baseStats.def+source.level*.5)*(boss?1.2:1)),
+  spd:Math.floor((species.baseStats.spd+source.level*.18)*(boss?1.08:1)),
   color:boss?"#bb4cff":species.baseStats.atk>12?"#df6262":"#a58f59",
   boss,
   phase:1,
