@@ -99,12 +99,121 @@ function bindInput(c){game.canvas=c;const i=game.input;i.pts.clear();i.last=null
 function stopGame(){if(!game)return;game.running=false;const c=game.canvas;if(c)c.onpointerdown=c.onpointermove=c.onpointerup=c.onpointercancel=c.onlostpointercapture=null}
 function pauseModal(title,body){game.paused=true;app.insertAdjacentHTML("beforeend",Modal(title,body));document.getElementById("closeGameModal").onclick=()=>{document.querySelector(".game-modal").remove();game.paused=false}}
 
-function startBattle(e){const sp=SPECIES[e.speciesId],party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);party.forEach(m=>{const max=calculatedStats(m).hp;if(m.currentHp==null)m.currentHp=max;m.currentHp=Math.min(m.currentHp,max)});const max=Math.floor(sp.baseStats.hp+e.level*8);battle={enemy:{speciesId:e.speciesId,name:sp.name,level:e.level,hp:max,maxHp:max,atk:Math.floor(sp.baseStats.atk+e.level*1.4),def:Math.floor(sp.baseStats.def+e.level*.5),color:sp.baseStats.atk>12?"#df6262":"#a58f59"},party,actorIndex:0,turn:1,busy:false,auto:save.state.settings.autoBattle,guard:null};renderBattle();if(battle.auto)setTimeout(()=>command("attack"),450)}
+
+function battleSpeed(){return save.state.settings.battleSpeed??1}
+function wait(ms){return new Promise(r=>setTimeout(r,Math.max(55,ms/battleSpeed())))}
+function battleTarget(target){
+ if(target==="enemy")return document.getElementById("enemyActor");
+ if(target==="party")return document.querySelector(".battle-party");
+ return document.getElementById(`ally-${target}`);
+}
+async function animateAttack(from,skill=false){
+ const el=battleTarget(from);if(!el)return;
+ el.classList.remove("fx-lunge","fx-skill-lunge");void el.offsetWidth;
+ el.classList.add(skill?"fx-skill-lunge":"fx-lunge");
+ await wait(skill?300:220);
+ el.classList.remove("fx-lunge","fx-skill-lunge");
+}
+async function animateHit(target,critical=false){
+ const el=battleTarget(target);if(!el)return;
+ el.classList.remove("fx-hit","fx-critical-hit");void el.offsetWidth;
+ el.classList.add(critical?"fx-critical-hit":"fx-hit");
+ await wait(260);
+ el.classList.remove("fx-hit","fx-critical-hit");
+}
+async function animateDefeat(target,captured=false){
+ const el=battleTarget(target);if(!el)return;
+ el.classList.add(captured?"fx-captured":"fx-defeat");
+ await wait(500);
+}
+async function floatText(text,target,type){
+ const layer=document.getElementById("battleFxLayer"),el=battleTarget(target);
+ if(!layer||!el)return;
+ const lr=layer.getBoundingClientRect(),r=el.getBoundingClientRect(),n=document.createElement("div");
+ n.className=`floating-number ${type}`;n.textContent=text;
+ n.style.left=`${r.left-lr.left+r.width/2}px`;n.style.top=`${r.top-lr.top+r.height*.35}px`;
+ layer.appendChild(n);await wait(560);n.remove();
+}
+function startBattle(e){
+ const sp=SPECIES[e.speciesId],party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);
+ party.forEach(m=>{const max=calculatedStats(m).hp;if(m.currentHp==null)m.currentHp=max;m.currentHp=Math.min(m.currentHp,max)});
+ const max=Math.floor(sp.baseStats.hp+e.level*8);
+ battle={enemy:{speciesId:e.speciesId,name:sp.name,level:e.level,hp:max,maxHp:max,atk:Math.floor(sp.baseStats.atk+e.level*1.4),def:Math.floor(sp.baseStats.def+e.level*.5),color:sp.baseStats.atk>12?"#df6262":"#a58f59"},party,actorIndex:0,turn:1,busy:false,auto:save.state.settings.autoBattle,guard:null};
+ renderBattle();if(battle.auto)setTimeout(()=>command("attack"),450/battleSpeed())
+}
 function actor(){const a=battle.party.filter(m=>m.currentHp>0);if(!a.length)return null;battle.actorIndex%=a.length;return a[battle.actorIndex]}
-function renderBattle(){document.querySelector(".battle-screen")?.remove();app.insertAdjacentHTML("beforeend",BattleScreen(battle,save.state.inventory));document.querySelectorAll("[data-command]").forEach(b=>b.onclick=()=>command(b.dataset.command));document.getElementById("toggleBattleAuto").onclick=()=>{battle.auto=!battle.auto;save.state.settings.autoBattle=battle.auto;save.save();renderBattle();if(battle.auto&&!battle.busy)command("attack")};document.getElementById("escapeBattle").onclick=()=>{if(Math.random()<.65){document.querySelector(".battle-screen").remove();activeEnemy=null;screen="explore";render()}else{alert("逃走失敗！");enemyTurn()}}}
-async function command(type){if(battle.busy)return;const a=actor();if(!a)return lose();battle.busy=true;const s=calculatedStats(a),e=battle.enemy;if(type==="attack"){const d=Math.max(1,Math.floor(s.atk*(.9+Math.random()*.2)-e.def*.4));e.hp=Math.max(0,e.hp-d);fx(`${displayName(a)} -${d}`)}if(type==="skill"){if(a.speciesId==="fairy"){const h=Math.floor(s.hp*.3);battle.party.forEach(m=>m.currentHp=Math.min(calculatedStats(m).hp,m.currentHp+h));fx(`全体回復 +${h}`)}else{const d=Math.max(2,Math.floor(s.atk*1.55-e.def*.25));e.hp=Math.max(0,e.hp-d);fx(`スキル -${d}`)}}if(type==="guard"){battle.guard=a.id;fx("GUARD")}if(type==="item"){if(save.state.inventory.potions<=0){battle.busy=false;return alert("回復薬がない")}save.state.inventory.potions--;const h=Math.floor(s.hp*.5);a.currentHp=Math.min(s.hp,a.currentHp+h);fx(`+${h}`)}if(type==="capture"){if(save.state.inventory.captureCrystals<=0){battle.busy=false;return alert("捕獲結晶がない")}save.state.inventory.captureCrystals--;const chance=Math.max(.08,Math.min(.88,.2+(1-e.hp/e.maxHp)*.55+(Math.max(...battle.party.map(m=>m.level+m.stars*2+m.plus))-e.level)*.012));fx(`捕獲 ${Math.round(chance*100)}%`);await wait(550);if(Math.random()<chance){const m=createMonster(e.speciesId,{level:e.level});save.state.monsters.push(m);save.state.records.captures++;return win(true,m)}}save.save();renderBattle();await wait(470);if(e.hp<=0)return win(false,null);enemyTurn()}
-async function enemyTurn(){const a=actor();if(!a)return lose();const s=calculatedStats(a),guard=battle.guard===a.id,d=Math.max(1,Math.floor((battle.enemy.atk-s.def*.45)*(guard?.45:1)));a.currentHp=Math.max(0,a.currentHp-d);battle.guard=null;fx(`${displayName(a)} -${d}`);save.save();await wait(450);if(!battle.party.some(m=>m.currentHp>0))return lose();battle.actorIndex++;battle.turn++;battle.busy=false;renderBattle();if(battle.auto){await wait(400);command("attack")}}
-function win(caught,m){const gold=20+battle.enemy.level*6;save.state.player.gold+=gold;save.state.records.kills++;battle.party.forEach(x=>{x.exp+=18+battle.enemy.level*7;const need=40+x.level*25;if(x.exp>=need){x.exp-=need;x.level++;x.currentHp=calculatedStats(x).hp}});let drop=null;if(Math.random()<.28){drop=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)]);save.state.equipment.push(drop)}save.save();snapshot.enemies=snapshot.enemies.filter(x=>x!==activeEnemy);activeEnemy=null;document.querySelector(".battle-screen")?.remove();app.insertAdjacentHTML("beforeend",Modal(caught?"捕獲成功！":"勝利！",caught?`${m.nickname}を仲間にした！<br>${gold}G獲得${drop?`<br>装備：[${drop.rarity}] ${drop.name}`:""}`:`${battle.enemy.name}を撃破！<br>${gold}G獲得${drop?`<br>装備：[${drop.rarity}] ${drop.name}`:""}`,"続ける"));document.getElementById("closeGameModal").onclick=()=>{document.querySelector(".game-modal").remove();screen="explore";render()}}
-function lose(){const lost=Math.floor(save.state.player.gold*.25);save.state.player.gold-=lost;save.state.player.currentFloor=save.state.player.checkpoint;save.state.player.inRun=false;battle.party.forEach(m=>m.currentHp=calculatedStats(m).hp);save.save();snapshot=null;document.querySelector(".battle-screen")?.remove();alert(`全滅！ ${lost}G失った`);go("home")}
-function fx(t){const el=document.getElementById("battleEffect");if(el){el.textContent=t;setTimeout(()=>{if(el)el.textContent=""},450)}}function wait(ms){return new Promise(r=>setTimeout(r,ms))}
+function renderBattle(){
+ document.querySelector(".battle-screen")?.remove();
+ app.insertAdjacentHTML("beforeend",BattleScreen(battle,save.state.inventory,save.state.settings));
+ document.querySelectorAll("[data-command]").forEach(b=>b.onclick=()=>command(b.dataset.command));
+ document.getElementById("battleSpeed").onclick=()=>{const s=battleSpeed();save.state.settings.battleSpeed=s===1?2:s===2?4:1;save.save();renderBattle()};
+ document.getElementById("toggleBattleAuto").onclick=()=>{battle.auto=!battle.auto;save.state.settings.autoBattle=battle.auto;save.save();renderBattle();if(battle.auto&&!battle.busy)command("attack")};
+ document.getElementById("escapeBattle").onclick=()=>{if(Math.random()<.65){document.querySelector(".battle-screen").remove();activeEnemy=null;screen="explore";render()}else{alert("逃走失敗！");enemyTurn()}};
+}
+async function command(type){
+ if(battle.busy)return;const a=actor();if(!a)return lose();battle.busy=true;
+ const s=calculatedStats(a),e=battle.enemy;
+ if(type==="attack"){
+  await animateAttack(a.id);
+  if(Math.random()<.06)await floatText("MISS","enemy","miss");
+  else{
+   const critical=Math.random()<Math.min(.35,.08+(s.spd??0)*.005);
+   const base=Math.max(1,Math.floor(s.atk*(.9+Math.random()*.2)-e.def*.4));
+   const d=critical?Math.floor(base*1.7):base;e.hp=Math.max(0,e.hp-d);
+   await animateHit("enemy",critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,"enemy",critical?"critical":"damage");
+  }
+ }
+ if(type==="skill"){
+  await animateAttack(a.id,true);
+  if(a.speciesId==="fairy"){
+   const h=Math.floor(s.hp*.3);battle.party.forEach(m=>m.currentHp=Math.min(calculatedStats(m).hp,m.currentHp+h));
+   await floatText(`全体 +${h}`,"party","heal");
+  }else{
+   const critical=Math.random()<.16,base=Math.max(2,Math.floor(s.atk*1.55-e.def*.25)),d=critical?Math.floor(base*1.6):base;
+   e.hp=Math.max(0,e.hp-d);await animateHit("enemy",critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,"enemy",critical?"critical":"skill");
+  }
+ }
+ if(type==="guard"){battle.guard=a.id;await floatText("GUARD",a.id,"guard")}
+ if(type==="item"){
+  if(save.state.inventory.potions<=0){battle.busy=false;return alert("回復薬がない")}
+  save.state.inventory.potions--;const h=Math.floor(s.hp*.5);a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal");
+ }
+ if(type==="capture"){
+  if(save.state.inventory.captureCrystals<=0){battle.busy=false;return alert("捕獲結晶がない")}
+  save.state.inventory.captureCrystals--;
+  const chance=Math.max(.08,Math.min(.88,.2+(1-e.hp/e.maxHp)*.55+(Math.max(...battle.party.map(m=>m.level+m.stars*2+m.plus))-e.level)*.012));
+  await floatText(`捕獲 ${Math.round(chance*100)}%`,"enemy","capture");await wait(500);
+  if(Math.random()<chance){const m=createMonster(e.speciesId,{level:e.level});save.state.monsters.push(m);save.state.records.captures++;save.save();await animateDefeat("enemy",true);return win(true,m)}
+ }
+ save.save();renderBattle();await wait(340);
+ if(e.hp<=0){await animateDefeat("enemy");return win(false,null)}
+ await enemyTurn();
+}
+async function enemyTurn(){
+ const a=actor();if(!a)return lose();const s=calculatedStats(a);
+ await animateAttack("enemy");
+ if(Math.random()<.05)await floatText("MISS",a.id,"miss");
+ else{
+  const guard=battle.guard===a.id,critical=Math.random()<.08;
+  let d=Math.max(1,Math.floor((battle.enemy.atk-s.def*.45)*(guard?.45:1)));if(critical)d=Math.floor(d*1.55);
+  a.currentHp=Math.max(0,a.currentHp-d);await animateHit(a.id,critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,a.id,critical?"critical":"enemy");
+  if(a.currentHp<=0)await animateDefeat(a.id);
+ }
+ battle.guard=null;save.save();await wait(300);
+ if(!battle.party.some(m=>m.currentHp>0))return lose();
+ battle.actorIndex++;battle.turn++;battle.busy=false;renderBattle();
+ if(battle.auto){await wait(260);command("attack")}
+}
+function win(caught,m){
+ const gold=20+battle.enemy.level*6;save.state.player.gold+=gold;save.state.records.kills++;
+ battle.party.forEach(x=>{x.exp+=18+battle.enemy.level*7;const need=40+x.level*25;if(x.exp>=need){x.exp-=need;x.level++;x.currentHp=calculatedStats(x).hp}});
+ let drop=null;if(Math.random()<.28){drop=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)]);save.state.equipment.push(drop)}
+ save.save();snapshot.enemies=snapshot.enemies.filter(x=>x!==activeEnemy);activeEnemy=null;document.querySelector(".battle-screen")?.remove();
+ app.insertAdjacentHTML("beforeend",Modal(caught?"捕獲成功！":"勝利！",caught?`${m.nickname}を仲間にした！<br>${gold}G獲得${drop?`<br>装備：[${drop.rarity}] ${drop.name}`:""}`:`${battle.enemy.name}を撃破！<br>${gold}G獲得${drop?`<br>装備：[${drop.rarity}] ${drop.name}`:""}`,"続ける"));
+ document.getElementById("closeGameModal").onclick=()=>{document.querySelector(".game-modal").remove();screen="explore";render()}
+}
+function lose(){
+ const lost=Math.floor(save.state.player.gold*.25);save.state.player.gold-=lost;save.state.player.currentFloor=save.state.player.checkpoint;save.state.player.inRun=false;
+ battle.party.forEach(m=>m.currentHp=calculatedStats(m).hp);save.save();snapshot=null;document.querySelector(".battle-screen")?.remove();alert(`全滅！ ${lost}G失った`);go("home")
+}
 render();
