@@ -1,19 +1,24 @@
 import{displayName,calculatedStats,colorValue}from"../../models/Monster.js";
 import{learnedSkills,maxMp}from"../../battle/SkillSystem.js";
 import{cooldownRemaining,statusLabel}from"../../battle/BattleRules.js";
+import{currentAlly,currentTurnEntry}from"../../battle/TurnSystem.js";
 
 export function BattleScreen(battle,inventory,settings){
- const alive=battle.party.filter(m=>m.currentHp>0);
- const actor=alive.length?alive[battle.actorIndex%alive.length]:null;
+ const actor=currentAlly(battle);
+ const current=currentTurnEntry(battle);
  const enemy=battle.enemy;
  const skills=actor?learnedSkills(actor):[];
  return`
  <section class="battle-screen" data-speed="${settings.battleSpeed}">
   <div class="battle-header">
-   <div>TURN <b>${battle.turn}</b></div>
+   <div class="round-label"><small>ROUND</small><b>${battle.turn}</b></div>
    <button id="toggleBattleAuto">AUTO ${battle.auto?"ON":"OFF"}</button>
    <button id="battleSpeed">×${settings.battleSpeed}</button>
    <button id="escapeBattle">逃げる</button>
+  </div>
+  <div class="turn-order">
+   <span class="turn-order-title">行動順</span>
+   ${(battle.turnQueue??[]).map((entry,index)=>`<span class="turn-chip ${entry.type} ${index===battle.queueIndex?"current":""} ${index<battle.queueIndex?"done":""}"><b>${entry.name}</b><small>SPD ${entry.spd}</small></span>`).join("")}
   </div>
   <div class="battle-arena">
    <div id="enemyActor" class="combatant enemy-combatant">
@@ -32,8 +37,8 @@ export function BattleScreen(battle,inventory,settings){
    <div id="battleFxLayer" class="battle-fx-layer"></div>
   </div>
   <div class="battle-command">
-   <div class="spread"><h2>${actor?displayName(actor):"全滅"}のターン</h2><span class="muted">捕獲結晶 ${inventory.captureCrystals}</span></div>
-   ${battle.skillMenu?`<div class="skill-command-list">${skills.map(skill=>{const cd=cooldownRemaining(battle,actor.id,skill.id),disabled=actor.currentMp<skill.mp||cd>0;return`<button data-skill-id="${skill.id}" ${disabled?"disabled":""}><span><b>${skill.name}</b><small>${skill.description}</small></span><strong>${cd>0?`CD ${cd}`:`MP ${skill.mp}`}</strong></button>`}).join("")}<button id="closeSkillMenu" class="secondary">戻る</button></div>`:`<div class="command-grid"><button data-command="attack">たたかう</button><button data-command="guard">ガード</button><button data-command="skill">スキル</button><button data-command="item">アイテム</button><button data-command="capture">捕獲</button></div>`}
+   <div class="spread"><h2>${actor?`${displayName(actor)}の行動`:current?.type==="enemy"?`${enemy.name}が行動中`:"ラウンド処理中"}</h2><span class="muted">捕獲結晶 ${inventory.captureCrystals}</span></div>
+   ${!actor?`<div class="enemy-thinking">敵の行動を処理しています…</div>`:battle.skillMenu?`<div class="skill-command-list">${skills.map(skill=>{const cd=cooldownRemaining(battle,actor.id,skill.id),disabled=actor.currentMp<skill.mp||cd>0;return`<button data-skill-id="${skill.id}" ${disabled?"disabled":""}><span><b>${skill.name}</b><small>${skill.description}</small></span><strong>${cd>0?`CD ${cd}`:`MP ${skill.mp}`}</strong></button>`}).join("")}<button id="closeSkillMenu" class="secondary">戻る</button></div>`:`<div class="command-grid"><button data-command="attack">たたかう</button><button data-command="guard">ガード</button><button data-command="skill">スキル</button><button data-command="item">アイテム</button><button data-command="capture">捕獲</button></div>`}
   </div><div class="battle-log">${(battle.log??[]).map(line=>`<div>${line}</div>`).join("")}</div>
  </section>`;
 }
