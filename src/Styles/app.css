@@ -96,3 +96,18 @@ input,select{
 .shop-grid span{font-size:3rem}.shop-grid small{color:var(--muted)}
 .reward-icon{text-align:center;font-size:4rem;margin:10px}
 select{max-width:190px}
+
+.battle-arena{position:relative;min-height:0;display:grid;grid-template-rows:minmax(240px,1fr) auto;gap:12px}
+.enemy-combatant{align-self:center;justify-self:center;width:min(78%,420px);text-align:center;padding:16px;border-radius:20px;background:#140c1a;border:1px solid var(--line)}
+.enemy-name{font-weight:900;font-size:1.05rem;margin-bottom:10px}
+.combatant{transform-origin:center;will-change:transform,filter,opacity}
+.battle-fx-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:20}
+.floating-number{position:absolute;transform:translate(-50%,-50%);font-weight:950;font-size:1.45rem;text-shadow:0 2px 0 #000,0 0 10px #000;animation:floatDamage .55s ease-out forwards;white-space:nowrap}
+.floating-number.damage,.floating-number.enemy{color:#ff7681}.floating-number.critical{color:#ffe46d;font-size:1.7rem}.floating-number.heal{color:#7dff92}.floating-number.miss{color:#eee}.floating-number.guard{color:#75c7ff}.floating-number.capture{color:#d79cff}.floating-number.skill{color:#ffb06a}
+.fx-lunge{animation:lunge .22s ease-in-out}.fx-skill-lunge{animation:skillLunge .3s ease-in-out}.fx-hit{animation:hitShake .26s ease-in-out}.fx-critical-hit{animation:criticalHit .3s ease-in-out}.fx-defeat{animation:defeat .5s ease-in forwards}.fx-captured{animation:captured .5s ease-in forwards}
+@keyframes floatDamage{0%{opacity:0;transform:translate(-50%,-15%) scale(.8)}20%{opacity:1;transform:translate(-50%,-55%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-135%) scale(1)}}
+@keyframes lunge{0%,100%{transform:translateX(0)}45%{transform:translateX(18px) scale(1.04)}}.enemy-combatant.fx-lunge{animation-name:enemyLunge}@keyframes enemyLunge{0%,100%{transform:translateY(0)}45%{transform:translateY(26px) scale(1.04)}}
+@keyframes skillLunge{0%,100%{transform:translateX(0);filter:none}40%{transform:translateX(28px) scale(1.08);filter:drop-shadow(0 0 16px #ffe272)}}.enemy-combatant.fx-skill-lunge{animation-name:enemySkillLunge}@keyframes enemySkillLunge{0%,100%{transform:translateY(0);filter:none}40%{transform:translateY(30px) scale(1.08);filter:drop-shadow(0 0 16px #ff7488)}}
+@keyframes hitShake{0%,100%{transform:translateX(0);filter:none}25%{transform:translateX(-9px);filter:brightness(2)}50%{transform:translateX(8px)}75%{transform:translateX(-5px)}}
+@keyframes criticalHit{0%,100%{transform:scale(1);filter:none}25%{transform:scale(1.12) rotate(-2deg);filter:brightness(3)}50%{transform:scale(.92) rotate(2deg)}75%{transform:scale(1.05)}}
+@keyframes defeat{to{opacity:0;transform:scale(.3) rotate(12deg);filter:blur(6px)}}@keyframes captured{to{opacity:0;transform:scale(0);filter:drop-shadow(0 0 28px #d278ff)}}
