@@ -12,7 +12,7 @@ export function learnedSkills(monster){
   .filter(skill=>skill.id&&skill.type);
 }
 export function skillById(id){return SKILLS[id]??null}
-export function canUseSkill(monster,skill){return Boolean(skill)&&monster.currentMp>=skill.mp}
+export function canUseSkill(monster,skill,cooldown=0){return Boolean(skill)&&monster.currentMp>=skill.mp&&cooldown<=0}
 export function skillDamage(stats,enemy,skill,critical=false){
  const base=Math.max(1,Math.floor(stats.atk*skill.power-enemy.def*.3));
  return critical?Math.floor(base*1.65):base;
