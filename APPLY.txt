@@ -1,18 +1,22 @@
-ABYSS DOMINION v0.1.0-alpha.4
+ABYSS DOMINION v0.1.0-alpha.4.1
 
-このZIP内のファイルを、GitHubリポジトリの同じ場所へ上書きしてください。
+このZIPの中身を、GitHubリポジトリの同じ場所へ上書きしてください。
 
 新規:
-- src/battle/BattleRules.js
+- src/battle/TurnSystem.js
 
 上書き:
-- src/battle/SkillSystem.js
+- index.html
+- src/battle/EnemyAI.js
 - src/core/config.js
-- src/data/skills.js
 - src/main.js
 - src/ui/screens/BattleScreen.js
 - src/Styles/app.css
 - README.md
 
 削除するファイルはありません。
-必ず v0.1.0-alpha.3 適用後のリポジトリへ上書きしてください。
+
+重要:
+GitHub上でフォルダ名は必ず `src/Styles` の大文字Sのままにしてください。
+適用後、GitHub Pagesの反映に1〜3分かかる場合があります。
+Safariで古いCSSが残る場合は再読み込みしてください。
