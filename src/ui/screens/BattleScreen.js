@@ -16,7 +16,7 @@ export function BattleScreen(battle,inventory,settings){
   </div>
   <div class="battle-arena">
    <div id="enemyActor" class="combatant enemy-combatant">
-    <div class="enemy-name">${enemy.name} Lv.${enemy.level}</div>
+    <div class="enemy-name">${enemy.boss?'<span class="boss-badge">BOSS</span>':""}${enemy.name} Lv.${enemy.level}</div><div class="enemy-intent">${enemy.intent}${enemy.enraged?"・狂暴化":""}</div>
     <div class="enemy-orb" style="background:${enemy.color}"></div>
     <div class="battle-bar"><i style="width:${enemy.hp/enemy.maxHp*100}%"></i></div>
     <div class="battle-hp">${enemy.hp}/${enemy.maxHp}</div>
