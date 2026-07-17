@@ -14,6 +14,7 @@ import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js";
 import{ShopScreen}from"./ui/screens/ShopScreen.js";
 import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier}from"./battle/EnemyAI.js";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
 let screen="home",selected=null,equipmentTarget=null,game=null,battle=null,snapshot=null,activeEnemy=null;
@@ -140,7 +141,7 @@ function startBattle(e){
  const sp=SPECIES[e.speciesId],party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);
  party.forEach(m=>{const hp=calculatedStats(m).hp,mp=maxMp(m);if(m.currentHp==null)m.currentHp=hp;if(m.currentMp==null)m.currentMp=mp;m.currentHp=Math.min(m.currentHp,hp);m.currentMp=Math.min(m.currentMp,mp)});
  const enemy=createEnemyBattleState(sp,e,save.state.player.currentFloor);
- battle={enemy,party,actorIndex:0,turn:1,busy:false,auto:save.state.settings.autoBattle,guard:null,skillMenu:false};
+ battle={enemy,party,actorIndex:0,turn:1,busy:false,auto:save.state.settings.autoBattle,guard:null,skillMenu:false,...createBattleRulesState(party)};
  renderBattle();if(battle.auto)setTimeout(()=>command("attack"),450/battleSpeed())
 }
 function actor(){const a=battle.party.filter(m=>m.currentHp>0);if(!a.length)return null;battle.actorIndex%=a.length;return a[battle.actorIndex]}
@@ -158,7 +159,7 @@ async function command(type,skillId=null){
  if(battle.busy)return;const a=actor();if(!a)return lose();battle.busy=true;
  const s=calculatedStats(a),e=battle.enemy;
  if(type==="attack"){
-  await animateAttack(a.id);
+  addBattleLog(battle,`${displayName(a)}：たたかう`);await animateAttack(a.id);
   if(Math.random()<.06)await floatText("MISS","enemy","miss");
   else{
    const critical=Math.random()<Math.min(.35,.08+(s.spd??0)*.005);
@@ -170,8 +171,8 @@ async function command(type,skillId=null){
  if(type==="skill"&&!skillId){battle.busy=false;battle.skillMenu=true;renderBattle();return}
  if(type==="skill"&&skillId){
   const skill=skillById(skillId);
-  if(!learnedSkills(a).some(x=>x.id===skillId)||!canUseSkill(a,skill)){battle.busy=false;return alert("MPが足りない")}
-  a.currentMp-=skill.mp;battle.skillMenu=false;
+  const cd=cooldownRemaining(battle,a.id,skillId);if(!learnedSkills(a).some(x=>x.id===skillId)||!canUseSkill(a,skill,cd)){battle.busy=false;return alert(cd>0?`あと${cd}ターン使用できない`:"MPが足りない")}
+  a.currentMp-=skill.mp;setSkillCooldown(battle,a.id,skill);battle.skillMenu=false;addBattleLog(battle,`${displayName(a)}：${skill.name}`);
   if(skill.type==="selfHeal"){
    const h=Math.max(1,Math.floor(s.hp*skill.heal));a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal");
   }else if(skill.type==="allHeal"){
@@ -181,16 +182,17 @@ async function command(type,skillId=null){
    await animateAttack(a.id,true);const hits=skill.hits??1;let total=0,anyCrit=false;
    for(let i=0;i<hits&&e.hp>0;i++){const critical=Math.random()<Math.min(.45,.1+(skill.critBonus??0)+(s.spd??0)*.004),raw=skillDamage(s,e,skill,critical),d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)));e.hp=Math.max(0,e.hp-d);total+=d;anyCrit||=critical;await animateHit("enemy",critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,"enemy",critical?"critical":"skill")}
    if(skill.type==="drain"){const h=Math.max(1,Math.floor(total*skill.drain));a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal")}
+   if(skill.status&&e.hp>0&&Math.random()<skill.status.chance){applyEnemyStatus(battle,skill.status);addBattleLog(battle,`${e.name}は${skill.status.name}状態になった`);await floatText(skill.status.name,"enemy",skill.status.id)}
   }
  }
- if(type==="guard"){battle.guard=a.id;await floatText("GUARD",a.id,"guard")}
+ if(type==="guard"){battle.guard=a.id;addBattleLog(battle,`${displayName(a)}：ガード`);await floatText("GUARD",a.id,"guard")}
  if(type==="item"){
   if(save.state.inventory.potions<=0){battle.busy=false;return alert("回復薬がない")}
-  save.state.inventory.potions--;const h=Math.floor(s.hp*.5);a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal");
+  save.state.inventory.potions--;addBattleLog(battle,`${displayName(a)}：回復薬`);const h=Math.floor(s.hp*.5);a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal");
  }
  if(type==="capture"){
   if(save.state.inventory.captureCrystals<=0){battle.busy=false;return alert("捕獲結晶がない")}
-  save.state.inventory.captureCrystals--;
+  save.state.inventory.captureCrystals--;addBattleLog(battle,"捕獲を試みた");
   const chance=Math.max(.08,Math.min(.88,.2+(1-e.hp/e.maxHp)*.55+(Math.max(...battle.party.map(m=>m.level+m.stars*2+m.plus))-e.level)*.012));
   await floatText(`捕獲 ${Math.round(chance*100)}%`,"enemy","capture");await wait(500);
   if(Math.random()<chance){const m=createMonster(e.speciesId,{level:e.level});save.state.monsters.push(m);save.state.records.captures++;save.save();await animateDefeat("enemy",true);return win(true,m)}
@@ -201,7 +203,7 @@ async function command(type,skillId=null){
 }
 async function enemyTurn(){
  const a=actor();if(!a)return lose();
- const e=battle.enemy,action=chooseEnemyAction(e);
+ const e=battle.enemy,action=chooseEnemyAction(e);addBattleLog(battle,`${e.name}：${e.intent}`);
 
  if(action===ENEMY_ACTIONS.guard){
   await floatText("GUARD","enemy","guard");
@@ -231,7 +233,11 @@ async function enemyTurn(){
   }
  }
 
+ const statusResults=processEnemyStatuses(battle);
+ for(const result of statusResults){addBattleLog(battle,`${e.name}に${result.name} ${result.damage}ダメージ`);await floatText(`-${result.damage}`,"enemy",result.id)}
+ tickCooldowns(battle);
  battle.guard=null;save.save();renderBattle();await wait(420);
+ if(e.hp<=0){await animateDefeat("enemy");return win(false,null)}
  if(!battle.party.some(m=>m.currentHp>0))return lose();
  battle.actorIndex++;battle.turn++;battle.busy=false;renderBattle();
  if(battle.auto){await wait(260);command("attack")}
