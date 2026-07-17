@@ -12,6 +12,8 @@ import{createEquipment,equipmentPower}from"./models/Equipment.js";
 import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js";
 import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js";
 import{ShopScreen}from"./ui/screens/ShopScreen.js";
+import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier}from"./battle/EnemyAI.js";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
 let screen="home",selected=null,equipmentTarget=null,game=null,battle=null,snapshot=null,activeEnemy=null;
@@ -136,9 +138,9 @@ async function floatText(text,target,type){
 }
 function startBattle(e){
  const sp=SPECIES[e.speciesId],party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);
- party.forEach(m=>{const max=calculatedStats(m).hp;if(m.currentHp==null)m.currentHp=max;m.currentHp=Math.min(m.currentHp,max)});
- const max=Math.floor(sp.baseStats.hp+e.level*8);
- battle={enemy:{speciesId:e.speciesId,name:sp.name,level:e.level,hp:max,maxHp:max,atk:Math.floor(sp.baseStats.atk+e.level*1.4),def:Math.floor(sp.baseStats.def+e.level*.5),color:sp.baseStats.atk>12?"#df6262":"#a58f59"},party,actorIndex:0,turn:1,busy:false,auto:save.state.settings.autoBattle,guard:null};
+ party.forEach(m=>{const hp=calculatedStats(m).hp,mp=maxMp(m);if(m.currentHp==null)m.currentHp=hp;if(m.currentMp==null)m.currentMp=mp;m.currentHp=Math.min(m.currentHp,hp);m.currentMp=Math.min(m.currentMp,mp)});
+ const enemy=createEnemyBattleState(sp,e,save.state.player.currentFloor);
+ battle={enemy,party,actorIndex:0,turn:1,busy:false,auto:save.state.settings.autoBattle,guard:null,skillMenu:false};
  renderBattle();if(battle.auto)setTimeout(()=>command("attack"),450/battleSpeed())
 }
 function actor(){const a=battle.party.filter(m=>m.currentHp>0);if(!a.length)return null;battle.actorIndex%=a.length;return a[battle.actorIndex]}
@@ -146,11 +148,13 @@ function renderBattle(){
  document.querySelector(".battle-screen")?.remove();
  app.insertAdjacentHTML("beforeend",BattleScreen(battle,save.state.inventory,save.state.settings));
  document.querySelectorAll("[data-command]").forEach(b=>b.onclick=()=>command(b.dataset.command));
+ document.querySelectorAll("[data-skill-id]").forEach(b=>b.onclick=()=>command("skill",b.dataset.skillId));
+ const closeSkill=document.getElementById("closeSkillMenu");if(closeSkill)closeSkill.onclick=()=>{battle.skillMenu=false;renderBattle()};
  document.getElementById("battleSpeed").onclick=()=>{const s=battleSpeed();save.state.settings.battleSpeed=s===1?2:s===2?4:1;save.save();renderBattle()};
  document.getElementById("toggleBattleAuto").onclick=()=>{battle.auto=!battle.auto;save.state.settings.autoBattle=battle.auto;save.save();renderBattle();if(battle.auto&&!battle.busy)command("attack")};
  document.getElementById("escapeBattle").onclick=()=>{if(Math.random()<.65){document.querySelector(".battle-screen").remove();activeEnemy=null;screen="explore";render()}else{alert("逃走失敗！");enemyTurn()}};
 }
-async function command(type){
+async function command(type,skillId=null){
  if(battle.busy)return;const a=actor();if(!a)return lose();battle.busy=true;
  const s=calculatedStats(a),e=battle.enemy;
  if(type==="attack"){
@@ -159,18 +163,24 @@ async function command(type){
   else{
    const critical=Math.random()<Math.min(.35,.08+(s.spd??0)*.005);
    const base=Math.max(1,Math.floor(s.atk*(.9+Math.random()*.2)-e.def*.4));
-   const d=critical?Math.floor(base*1.7):base;e.hp=Math.max(0,e.hp-d);
+   const raw=critical?Math.floor(base*1.7):base,d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)));e.hp=Math.max(0,e.hp-d);
    await animateHit("enemy",critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,"enemy",critical?"critical":"damage");
   }
  }
- if(type==="skill"){
-  await animateAttack(a.id,true);
-  if(a.speciesId==="fairy"){
-   const h=Math.floor(s.hp*.3);battle.party.forEach(m=>m.currentHp=Math.min(calculatedStats(m).hp,m.currentHp+h));
-   await floatText(`全体 +${h}`,"party","heal");
+ if(type==="skill"&&!skillId){battle.busy=false;battle.skillMenu=true;renderBattle();return}
+ if(type==="skill"&&skillId){
+  const skill=skillById(skillId);
+  if(!learnedSkills(a).some(x=>x.id===skillId)||!canUseSkill(a,skill)){battle.busy=false;return alert("MPが足りない")}
+  a.currentMp-=skill.mp;battle.skillMenu=false;
+  if(skill.type==="selfHeal"){
+   const h=Math.max(1,Math.floor(s.hp*skill.heal));a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal");
+  }else if(skill.type==="allHeal"){
+   const healed=[];battle.party.filter(m=>m.currentHp>0).forEach(m=>{const max=calculatedStats(m).hp,h=Math.max(1,Math.floor(max*skill.heal)),before=m.currentHp;m.currentHp=Math.min(max,m.currentHp+h);healed.push(m.currentHp-before)});
+   await floatText(`全体 +${Math.max(...healed)}`,"party","heal");
   }else{
-   const critical=Math.random()<.16,base=Math.max(2,Math.floor(s.atk*1.55-e.def*.25)),d=critical?Math.floor(base*1.6):base;
-   e.hp=Math.max(0,e.hp-d);await animateHit("enemy",critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,"enemy",critical?"critical":"skill");
+   await animateAttack(a.id,true);const hits=skill.hits??1;let total=0,anyCrit=false;
+   for(let i=0;i<hits&&e.hp>0;i++){const critical=Math.random()<Math.min(.45,.1+(skill.critBonus??0)+(s.spd??0)*.004),raw=skillDamage(s,e,skill,critical),d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)));e.hp=Math.max(0,e.hp-d);total+=d;anyCrit||=critical;await animateHit("enemy",critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,"enemy",critical?"critical":"skill")}
+   if(skill.type==="drain"){const h=Math.max(1,Math.floor(total*skill.drain));a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal")}
   }
  }
  if(type==="guard"){battle.guard=a.id;await floatText("GUARD",a.id,"guard")}
@@ -190,23 +200,45 @@ async function command(type){
  await enemyTurn();
 }
 async function enemyTurn(){
- const a=actor();if(!a)return lose();const s=calculatedStats(a);
- await animateAttack("enemy");
- if(Math.random()<.05)await floatText("MISS",a.id,"miss");
- else{
-  const guard=battle.guard===a.id,critical=Math.random()<.08;
-  let d=Math.max(1,Math.floor((battle.enemy.atk-s.def*.45)*(guard?.45:1)));if(critical)d=Math.floor(d*1.55);
-  a.currentHp=Math.max(0,a.currentHp-d);await animateHit(a.id,critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,a.id,critical?"critical":"enemy");
-  if(a.currentHp<=0)await animateDefeat(a.id);
+ const a=actor();if(!a)return lose();
+ const e=battle.enemy,action=chooseEnemyAction(e);
+
+ if(action===ENEMY_ACTIONS.guard){
+  await floatText("GUARD","enemy","guard");
+ }else if(action===ENEMY_ACTIONS.charge){
+  await floatText("CHARGE","enemy","charge");
+ }else if(action===ENEMY_ACTIONS.heal){
+  const h=enemyHealAmount(e);e.hp=Math.min(e.maxHp,e.hp+h);
+  await floatText(`+${h}`,"enemy","heal");
+ }else if(action===ENEMY_ACTIONS.enrage){
+  e.atk=Math.floor(e.atk*1.18);e.def=Math.floor(e.def*1.08);
+  await floatText("ENRAGE","enemy","enrage");
+  await animateHit("enemy",true);
+ }else{
+  const s=calculatedStats(a);
+  await animateAttack("enemy",action===ENEMY_ACTIONS.power);
+  if(action!==ENEMY_ACTIONS.power&&Math.random()<.05){
+   await floatText("MISS",a.id,"miss");
+  }else{
+   const guard=battle.guard===a.id,critical=Math.random()<(e.enraged?.13:.08);
+   const multiplier=enemyAttackMultiplier(e,action);
+   let d=Math.max(1,Math.floor((e.atk-s.def*.45)*multiplier*(guard?.45:1)));
+   if(critical)d=Math.floor(d*1.55);
+   a.currentHp=Math.max(0,a.currentHp-d);
+   await animateHit(a.id,critical);
+   await floatText(`${action===ENEMY_ACTIONS.power?"強撃 ":""}${critical?"CRITICAL ":""}-${d}`,a.id,critical?"critical":"enemy");
+   if(a.currentHp<=0)await animateDefeat(a.id);
+  }
  }
- battle.guard=null;save.save();await wait(300);
+
+ battle.guard=null;save.save();renderBattle();await wait(420);
  if(!battle.party.some(m=>m.currentHp>0))return lose();
  battle.actorIndex++;battle.turn++;battle.busy=false;renderBattle();
  if(battle.auto){await wait(260);command("attack")}
 }
 function win(caught,m){
  const gold=20+battle.enemy.level*6;save.state.player.gold+=gold;save.state.records.kills++;
- battle.party.forEach(x=>{x.exp+=18+battle.enemy.level*7;const need=40+x.level*25;if(x.exp>=need){x.exp-=need;x.level++;x.currentHp=calculatedStats(x).hp}});
+ battle.party.forEach(x=>{x.exp+=18+battle.enemy.level*7;const need=40+x.level*25;if(x.exp>=need){x.exp-=need;x.level++;x.currentHp=calculatedStats(x).hp;x.currentMp=Math.min(maxMp(x),x.currentMp+2)}});
  let drop=null;if(Math.random()<.28){drop=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)]);save.state.equipment.push(drop)}
  save.save();snapshot.enemies=snapshot.enemies.filter(x=>x!==activeEnemy);activeEnemy=null;document.querySelector(".battle-screen")?.remove();
  app.insertAdjacentHTML("beforeend",Modal(caught?"捕獲成功！":"勝利！",caught?`${m.nickname}を仲間にした！<br>${gold}G獲得${drop?`<br>装備：[${drop.rarity}] ${drop.name}`:""}`:`${battle.enemy.name}を撃破！<br>${gold}G獲得${drop?`<br>装備：[${drop.rarity}] ${drop.name}`:""}`,"続ける"));
@@ -214,6 +246,6 @@ function win(caught,m){
 }
 function lose(){
  const lost=Math.floor(save.state.player.gold*.25);save.state.player.gold-=lost;save.state.player.currentFloor=save.state.player.checkpoint;save.state.player.inRun=false;
- battle.party.forEach(m=>m.currentHp=calculatedStats(m).hp);save.save();snapshot=null;document.querySelector(".battle-screen")?.remove();alert(`全滅！ ${lost}G失った`);go("home")
+ battle.party.forEach(m=>{m.currentHp=calculatedStats(m).hp;m.currentMp=maxMp(m)});save.save();snapshot=null;document.querySelector(".battle-screen")?.remove();alert(`全滅！ ${lost}G失った`);go("home")
 }
 render();
