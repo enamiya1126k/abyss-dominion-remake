@@ -26,7 +26,7 @@ export function EquipmentScreen(state,targetId,{home=false}={}){
   <header class="topbar"><button id="backEquipmentHome">←</button><h2>装備管理</h2><span>${storageCount}</span></header>
   <div class="page equipment-page">
    <div class="panel">
-    <div class="spread"><b>装備対象</b><select id="equipmentTarget">${state.monsters.map(m=>`<option value="${m.id}" ${m.id===target.id?"selected":""}>${displayName(m)}</option>`).join("")}</select></div>
+    <div class="spread"><b>装備対象</b><select id="equipmentTarget">${state.monsters.map(m=>`<option value="${m.id}" ${m.id===target.id?"selected":""}>${state.party.includes(m.id)?"【出撃】":"【控え】"} ${displayName(m)}</option>`).join("")}</select></div>
     <div class="equipped-summary">
      <span>⚔️ 武器：${equippedName(target.equipment.weapon)}</span>
      <span>🛡️ 防具：${equippedName(target.equipment.armor)}</span>

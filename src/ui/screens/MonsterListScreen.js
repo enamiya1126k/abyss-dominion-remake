@@ -18,7 +18,7 @@ export function MonsterListScreen(state){
           <input id="monsterSearch" placeholder="名前・種族で検索">
         </div>
         <div id="monsterList" class="monster-list">
-          ${sorted.map(MonsterCard).join("")}
+          ${sorted.map(m=>MonsterCard(m,state.party.includes(m.id))).join("")}
         </div>
       </div>
     </section>
