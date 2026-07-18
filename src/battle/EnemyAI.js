@@ -12,7 +12,7 @@ export function isBossFloor(floor){
 }
 
 export function createEnemyBattleState(species,source,floor){
- const boss=isBossFloor(floor);
+ const boss=source.boss??isBossFloor(floor);
  const hpScale=boss?2.35:1;
  const attackScale=boss?1.3:1;
  const maxHp=Math.floor((species.baseStats.hp+source.level*8)*hpScale);
@@ -25,6 +25,7 @@ export function createEnemyBattleState(species,source,floor){
   atk:Math.floor((species.baseStats.atk+source.level*1.4)*attackScale),
   def:Math.floor((species.baseStats.def+source.level*.5)*(boss?1.2:1)),
   spd:Math.floor((species.baseStats.spd+source.level*.18)*(boss?1.08:1)),
+  emoji:species.emoji??"👾",
   color:boss?"#bb4cff":species.baseStats.atk>12?"#df6262":"#a58f59",
   boss,
   phase:1,
