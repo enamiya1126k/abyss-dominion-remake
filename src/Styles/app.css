@@ -250,3 +250,7 @@ select{max-width:190px}
 .exp-results .exp-defeated{opacity:.48;filter:grayscale(.7)}
 .exp-results .exp-defeated i u{width:0!important}
 .exp-results .exp-defeated small:first-of-type{color:#e47f89;font-weight:800}
+
+
+/* v0.2.3-alpha.1 items, boss presence, battle details */
+.field-item-target{display:grid;gap:7px;margin-bottom:12px}.field-item-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.field-item-grid button{display:grid;grid-template-columns:auto 1fr auto;gap:5px 8px;align-items:center;text-align:left;min-height:86px}.field-item-grid button span{font-size:1.7rem;grid-row:1/4}.field-item-grid button b{font-size:.75rem}.field-item-grid button small{color:var(--muted);font-size:.62rem}.field-item-grid button em{grid-column:3;grid-row:1/4;color:#ffd36b;font-style:normal;font-weight:900}.battle-unit{color:inherit;text-align:left;background:inherit;border:inherit;width:100%;padding:inherit}.battle-unit:active{transform:scale(.98)}.battle-mini-stats{color:#d1b9df}.battle-bar.exp i{background:linear-gradient(90deg,#7f51e7,#ffd36b)}.battle-detail{line-height:1.65}.battle-detail p{margin:8px 0}@media(max-width:430px){.field-item-grid{grid-template-columns:1fr}.field-item-grid button{min-height:72px}}
