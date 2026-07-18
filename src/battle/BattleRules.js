@@ -1,7 +1,7 @@
 export function createBattleRulesState(party){
  return{
   cooldowns:Object.fromEntries(party.map(m=>[m.id,{}])),
-  enemyStatuses:[],
+  enemyStatuses:{},
   log:["戦闘開始"],
   lastStatusTurn:0
  };
@@ -32,36 +32,9 @@ export function addBattleLog(battle,text){
  battle.log=battle.log.slice(0,6);
 }
 
-export function applyEnemyStatus(battle,status){
- if(!status)return false;
- battle.enemyStatuses??=[];
- const existing=battle.enemyStatuses.find(s=>s.id===status.id);
- if(existing){
-  existing.turns=Math.max(existing.turns,status.turns);
-  existing.power=Math.max(existing.power,status.power);
- }else{
-  battle.enemyStatuses.push({...status});
- }
- return true;
-}
-
-export function processEnemyStatuses(battle){
- const enemy=battle.enemy;
- const results=[];
- battle.enemyStatuses=(battle.enemyStatuses??[]).filter(status=>{
-  let damage=0;
-  if(status.id==="poison")damage=Math.max(1,Math.floor(enemy.maxHp*status.power));
-  if(status.id==="burn")damage=Math.max(1,Math.floor(enemy.maxHp*status.power));
-  if(damage){
-   enemy.hp=Math.max(0,enemy.hp-damage);
-   results.push({id:status.id,name:status.name,damage});
-  }
-  status.turns--;
-  return status.turns>0&&enemy.hp>0;
- });
- return results;
-}
-
+export function enemyStatusesFor(battle,enemyId){battle.enemyStatuses??={};if(Array.isArray(battle.enemyStatuses))battle.enemyStatuses={};battle.enemyStatuses[enemyId]??=[];return battle.enemyStatuses[enemyId]}
+export function applyEnemyStatus(battle,status,enemyId=battle.targetEnemyId){if(!status||!enemyId)return false;const statuses=enemyStatusesFor(battle,enemyId),existing=statuses.find(s=>s.id===status.id);if(existing){existing.turns=Math.max(existing.turns,status.turns);existing.power=Math.max(existing.power,status.power)}else statuses.push({...status});return true}
+export function processEnemyStatuses(battle){const results=[];(battle.enemies??[battle.enemy]).filter(Boolean).forEach(enemy=>{const statuses=enemyStatusesFor(battle,enemy.id);battle.enemyStatuses[enemy.id]=statuses.filter(status=>{let damage=0;if(status.id==="poison"||status.id==="burn")damage=Math.max(1,Math.floor(enemy.maxHp*status.power));if(damage){enemy.hp=Math.max(0,enemy.hp-damage);results.push({enemy,id:status.id,name:status.name,damage})}status.turns--;return status.turns>0&&enemy.hp>0})});return results}
 export function statusLabel(status){
  return `${status.name} ${status.turns}T`;
 }
