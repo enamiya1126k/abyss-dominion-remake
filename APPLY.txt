@@ -1,22 +1,15 @@
-ABYSS DOMINION v0.1.0-alpha.4.1
+ABYSS DOMINION v0.2.0-alpha.1 FULL BUILD
 
-このZIPの中身を、GitHubリポジトリの同じ場所へ上書きしてください。
+このZIPは最新版一式です。
+GitHubリポジトリ内の既存ファイルを、このフォルダの内容で置き換えてください。
 
-新規:
-- src/battle/TurnSystem.js
+確認表示:
+REMAKE v0.2.0-alpha.1
 
-上書き:
-- index.html
-- src/battle/EnemyAI.js
-- src/core/config.js
-- src/main.js
-- src/ui/screens/BattleScreen.js
-- src/Styles/app.css
-- README.md
-
-削除するファイルはありません。
-
-重要:
-GitHub上でフォルダ名は必ず `src/Styles` の大文字Sのままにしてください。
-適用後、GitHub Pagesの反映に1〜3分かかる場合があります。
-Safariで古いCSSが残る場合は再読み込みしてください。
+主な変更:
+- 探索マップ全面改修
+- ランダムエンカウント
+- 宝箱の種類・永続取得記録
+- フィールド編成・装備
+- EXP表示・戦闘リザルト
+- 10階ごとの運命の4択ボス報酬
