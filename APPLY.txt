@@ -1,15 +1,13 @@
-ABYSS DOMINION v0.2.0-alpha.1 FULL BUILD
+ABYSS DOMINION v0.2.0-alpha.1.1 HOTFIX
 
-このZIPは最新版一式です。
-GitHubリポジトリ内の既存ファイルを、このフォルダの内容で置き換えてください。
+上書き:
+- index.html
+- src/main.js
+- src/core/config.js
 
-確認表示:
-REMAKE v0.2.0-alpha.1
+修正:
+- 旧maze()と新maze()の二重定義を解消
+- 旧path()と新path()の二重定義を解消
+- Safariと同じESモジュール形式で全JavaScript構文チェック済み
 
-主な変更:
-- 探索マップ全面改修
-- ランダムエンカウント
-- 宝箱の種類・永続取得記録
-- フィールド編成・装備
-- EXP表示・戦闘リザルト
-- 10階ごとの運命の4択ボス報酬
+適用後、ホーム画面の表示が v0.2.0-alpha.1.1 になれば反映完了です。
