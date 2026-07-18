@@ -187,8 +187,8 @@ select{max-width:190px}
 /* v0.2.1-alpha.1 — exploration feel */
 .explore-stage{overflow:hidden}
 #gameCanvas{transform-origin:center;will-change:transform,filter}
-#gameCanvas.encounter-shake{animation:encounterShake .26s cubic-bezier(.36,.07,.19,.97) both}
-#gameCanvas.encounter-pull{animation:encounterPull .55s cubic-bezier(.7,0,.84,0) forwards}
+#gameCanvas.encounter-shake{animation:encounterShake .43s cubic-bezier(.36,.07,.19,.97) both}
+#gameCanvas.encounter-pull{animation:encounterPull .92s cubic-bezier(.7,0,.84,0) forwards}
 .encounter-transition{
  position:absolute;inset:0;z-index:40;pointer-events:none;overflow:hidden;
  display:grid;place-items:center;
@@ -204,7 +204,7 @@ select{max-width:190px}
 }
 .encounter-flash{position:absolute;inset:0;background:#fff;opacity:0}
 .encounter-transition.is-dark{background:#050308}
-.encounter-transition.is-dark .encounter-flash{animation:encounterFlash .18s ease-out}
+.encounter-transition.is-dark .encounter-flash{animation:encounterFlash .35s ease-out}
 @keyframes encounterShake{
  0%,100%{transform:translate3d(0,0,0)}
  15%{transform:translate3d(-7px,2px,0)}
