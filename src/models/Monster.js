@@ -69,14 +69,23 @@ export function calculatedStats(monster){
     return Math.floor(base*rankMultiplier*starMultiplier*levelGrowth*ivMultiplier*personalityMultiplier*(1+plusBonus));
   };
 
-  return{
-    hp:calc("hp"),
-    atk:calc("atk"),
-    def:calc("def"),
-    spd:calc("spd"),
-    crit:Math.floor(species.baseStats.crit*(personality.modifiers.crit??1)),
-    evasion:Math.floor(species.baseStats.evasion*(personality.modifiers.evasion??1))
+  const gear=monster._equipmentStats??{};
+  const syn=monster._synergy??{};
+  const result={
+    hp:calc("hp")+(gear.hp??0),
+    atk:calc("atk")+(gear.atk??0),
+    def:calc("def")+(gear.def??0),
+    spd:calc("spd")+(gear.spd??0),
+    crit:Math.floor(species.baseStats.crit*(personality.modifiers.crit??1))+(gear.crit??0),
+    evasion:Math.floor(species.baseStats.evasion*(personality.modifiers.evasion??1))+(gear.evasion??0)
   };
+  if(syn.atk)result.atk=Math.floor(result.atk*(1+syn.atk));
+  if(syn.def)result.def=Math.floor(result.def*(1+syn.def));
+  if(syn.spd)result.spd=Math.floor(result.spd*(1+syn.spd));
+  if(syn.crit)result.crit+=syn.crit;
+  if(monster._seriesCounts?.guardian>=2)result.def=Math.floor(result.def*1.15);
+  if(monster._seriesCounts?.traveler>=2)result.spd=Math.floor(result.spd*1.10);
+  return result;
 }
 export function unlockedSkills(monster){
   return SPECIES[monster.speciesId].skills.map(skill=>{

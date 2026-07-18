@@ -9,9 +9,16 @@ export function createEquipment(slot,options={}){
  const stats={};
  for(const[key,value]of Object.entries(base.stats))stats[key]=Math.max(1,Math.round(value*mult));
  return{
-  id:uid(),slot,name:base.name,rarity,level:1,plus:0,stats,
+  id:uid(),slot,name:base.name,rarity,level:1,plus:0,stats,series:options.series??seriesForName(base.name),
   favorite:false,locked:false,equippedBy:null,createdAt:new Date().toISOString()
  };
+}
+export function seriesForName(name){
+ if(/炎|竜鱗/.test(name))return"flame";
+ if(/守護者|革鎧|鉄の剣/.test(name))return"guardian";
+ if(/旅人|幸運/.test(name))return"traveler";
+ if(/捕獲師/.test(name))return"capturer";
+ return null
 }
 export function rollRarity(){
  const r=Math.random();
@@ -22,5 +29,5 @@ export function rollRarity(){
  return"N";
 }
 export function equipmentPower(item){
- return Object.values(item.stats).reduce((a,b)=>a+b,0)+item.plus*3+item.level;
+ return Object.values(item.stats).reduce((a,b)=>a+b,0)*(1+(item.plus??0)*.08)+(item.plus??0)*3+(item.level??1);
 }
