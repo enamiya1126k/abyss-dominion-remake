@@ -258,7 +258,7 @@ select{max-width:190px}
 /* v0.3.0-alpha.1 */
 .explore-screen{grid-template-rows:auto auto minmax(0,1fr) auto}.explore-party-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}.explore-party-strip>div{padding:6px 5px;background:#17101f;border:1px solid var(--line);border-radius:10px;min-width:0}.explore-party-strip b,.explore-party-strip span{font-size:.55rem}.explore-party-strip .hud-bar{position:relative;display:block;height:11px;margin:3px 0 0;background:#08050b;border-radius:99px;overflow:hidden}.explore-party-strip .hud-bar em{position:absolute;inset:0 auto 0 0}.explore-party-strip .hud-bar.hp em{background:#69d875}.explore-party-strip .hud-bar.mp em{background:#5c8cff}.explore-party-strip .hud-bar small{position:absolute;inset:0;display:grid;place-items:center;font-size:.43rem;line-height:1;color:#fff;text-shadow:0 1px 2px #000}.battle-unit{padding:7px}.battle-unit .battle-bar{position:relative;height:14px;margin-top:3px}.battle-unit .battle-bar.mp{height:12px;margin-top:3px}.battle-unit .bar-label{position:absolute;inset:0;display:grid;place-items:center;font-size:.54rem;font-weight:900;text-shadow:0 1px 2px #000;z-index:2}.battle-unit .battle-mini-stats{display:block;margin-top:4px;font-size:.52rem}.battle-unit .battle-exp-row{display:flex;align-items:center;gap:5px;margin-top:3px}.battle-unit .battle-exp-row small{font-size:.45rem;color:#bfb1c7;white-space:nowrap}.battle-unit .battle-bar.exp{height:2px;flex:1;margin:0}.exp-results.compact{gap:6px}.exp-results.compact>div{padding:7px;grid-template-columns:32px 1fr}.exp-results.compact>div>span{font-size:1.45rem}.result-vitals{display:flex;flex-wrap:wrap;gap:4px 10px;color:#c9bdcf}.result-vitals small{font-size:.6rem}.result-exp{height:3px!important;margin-top:3px}.level-up-card{border:1px solid #ffd36b66;box-shadow:0 0 16px #ffd36b14}.level-gains{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;margin-top:6px;padding-top:5px;border-top:1px solid #ffffff14;font-size:.58rem}.level-gains strong{color:#ff6f78}.auto-equip-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px}.auto-equip-row button{padding:8px 5px;font-size:.62rem}@media(max-width:430px){.explore-party-strip .hud-bar small{font-size:.4rem}.level-gains{grid-template-columns:1fr}}
 
-/* v0.4.0-alpha.1 */
+/* v0.5.0-alpha.1 */
 .explore-party-strip>button{padding:6px 5px;background:#17101f;border:1px solid var(--line);border-radius:10px;min-width:0;text-align:left;color:inherit;touch-action:pan-x}
 .explore-party-strip>button b,.explore-party-strip>button span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .minimap-toggle{touch-action:none;user-select:none;-webkit-user-select:none;z-index:8}
@@ -273,3 +273,13 @@ select{max-width:190px}
 .target-help{display:block;margin-top:3px;color:var(--gold);font-size:.57rem}
 .explore-detail{line-height:1.65}.explore-detail small{color:var(--muted)}
 @media(max-width:430px){.enemy-party{gap:3px}.enemy-combatant{padding:5px}.enemy-party .battle-bar{margin-top:5px}.enemy-party .battle-hp{font-size:.58rem}}
+
+/* v0.5.0-alpha.1 — hub, summon and progression */
+.summon-button{background:linear-gradient(135deg,#5b2a88,#b54df0);border-color:#d188ff}
+.home-vitals{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+.home-vitals>div{padding:8px 10px;border:1px solid #ffffff18;border-radius:10px;background:#0d0912}
+.home-vitals b,.home-vitals small{display:block}.home-vitals small{font-size:.65rem;color:#cfc3d6;margin-top:3px}
+.rest-price{display:grid;gap:4px;padding:14px;background:#0d0912;border-radius:12px;text-align:center}.rest-price b{font-size:1.4rem;color:#ffd36b}
+.gacha-menu{display:grid;gap:10px}.gacha-menu button{display:grid;gap:4px;text-align:left;padding:15px}.gacha-menu small{color:#c9bdcf}
+.gacha-results{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:58vh;overflow:auto}.gacha-results>div{display:grid;grid-template-columns:34px 1fr;gap:4px 8px;align-items:center;padding:10px;border:1px solid #ffffff18;border-radius:12px;background:#0d0912}.gacha-results span{font-size:1.6rem;grid-row:1/3}.gacha-results small{font-size:.58rem}.rarity-SR{border-color:#c586ff!important}.rarity-SSR{border-color:#ffd05c!important;box-shadow:0 0 12px #ffd05c22}.rarity-LR{border-color:#ff79dd!important;box-shadow:0 0 16px #ff79dd33}
+.equipment-manage-panel small{display:block;margin-top:5px}.danger-zone{border-color:#ff6f7855}.danger-zone .danger{width:100%;margin:10px 0;background:#53262d}
