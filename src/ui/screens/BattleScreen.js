@@ -23,13 +23,13 @@ export function BattleScreen(battle,inventory,settings){
   <div class="battle-arena">
    <div id="enemyActor" class="combatant enemy-combatant">
     <div class="enemy-name">${enemy.boss?'<span class="boss-badge">BOSS</span>':""}${enemy.name} Lv.${enemy.level}</div><div class="enemy-intent">${enemy.intent}${enemy.enraged?"・狂暴化":""}</div>${(battle.enemyStatuses??[]).length?`<div class="status-row">${battle.enemyStatuses.map(s=>`<span class="status-chip ${s.id}">${statusLabel(s)}</span>`).join("")}</div>`:""}
-    <div class="enemy-orb" style="background:${enemy.color}"></div>
+    <div class="enemy-orb" style="background:${enemy.color}"><span>${enemy.emoji??"👾"}</span></div>
     <div class="battle-bar"><i style="width:${enemy.hp/enemy.maxHp*100}%"></i></div>
     <div class="battle-hp">${enemy.hp}/${enemy.maxHp}</div>
    </div>
    <div class="battle-party">
     ${battle.party.map(m=>{const stats=calculatedStats(m),mp=maxMp(m);return`<div id="ally-${m.id}" class="battle-unit combatant ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
-      <div class="unit-head"><span class="unit-orb" style="background:${colorValue(m)}"></span><b>${displayName(m)} Lv.${m.level}</b></div>
+      <div class="unit-head"><span class="unit-orb" style="background:${colorValue(m)}">${battle.species?.[m.speciesId]?.emoji??"●"}</span><b>${displayName(m)} Lv.${m.level}</b></div>
       <small>HP ${m.currentHp}/${stats.hp}</small><div class="battle-bar ally"><i style="width:${Math.max(0,m.currentHp/stats.hp*100)}%"></i></div>
       <small class="mp-label">MP ${m.currentMp}/${mp}</small><div class="battle-bar mp"><i style="width:${Math.max(0,m.currentMp/mp*100)}%"></i></div>
      </div>`}).join("")}
