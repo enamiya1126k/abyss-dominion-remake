@@ -5,6 +5,13 @@ import{EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel,equipmentSellPrice}from"../../ser
 const SLOT_ICONS={weapon:"⚔️",armor:"🛡️",accessory:"💍"};
 
 export function EquipmentScreen(state,targetId,{home=false}={}){
+ state??={};
+ state.monsters??=[];
+ state.party??=[];
+ state.equipment??=[];
+ state.reserveEquipment??=[];
+ state.bossEquipmentVault??=[];
+ state.settings??={};
  const target=state.monsters.find(m=>m.id===targetId)??state.monsters.find(m=>state.party.includes(m.id))??state.monsters[0];
  const slot=state.settings.equipmentSlot??"weapon";
  let storage=state.settings.equipmentStorage??"inventory";
@@ -13,6 +20,7 @@ export function EquipmentScreen(state,targetId,{home=false}={}){
  const source=storage==="reserve"?state.reserveEquipment:storage==="bossVault"?state.bossEquipmentVault:state.equipment;
  const list=[...source].filter(item=>item.slot===slot).sort((a,b)=>sortItems(a,b,sort));
  const equippedName=id=>state.equipment.find(i=>i.id===id)?.name??"なし";
+ if(!target)return`<section class="screen"><header class="topbar"><button id="backEquipmentHome">←</button><h2>装備管理</h2><span>0/500</span></header><div class="page"><div class="empty">モンスターがいません</div></div></section>`;
  const storageCount=storage==="inventory"?`${state.equipment.length}/${EQUIPMENT_LIMIT}`:storage==="reserve"?`${state.reserveEquipment.length}/${RESERVE_LIMIT}`:`${state.bossEquipmentVault.length}`;
  return`<section class="screen">
   <header class="topbar"><button id="backEquipmentHome">←</button><h2>装備管理</h2><span>${storageCount}</span></header>
