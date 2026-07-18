@@ -1,11 +1,9 @@
-ABYSS DOMINION v0.2.1-alpha.2 FULL BUILD
+ABYSS DOMINION v0.2.2-alpha.1 FULL BUILD
 
-GitHubリポジトリの内容を、このZIP内のフォルダ内容で置き換えてください。
+このZIP内のフォルダ内容でGitHubリポジトリを置き換えてください。
 
-修正:
-- 戦闘後にプレイヤーが消える
-- 戦闘後にタップ移動できない
-- エンカウント演出が短すぎる
+適用後:
+REMAKE v0.2.2-alpha.1
 
-適用後の表示:
-REMAKE v0.2.1-alpha.2
+重要:
+旧セーブは削除不要です。起動時に自動移行されます。
