@@ -183,3 +183,50 @@ select{max-width:190px}
 
 /* v0.2.0 exploration rebuild */
 .explore-screen{grid-template-rows:auto auto minmax(0,1fr) auto}.explore-party-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.explore-party-strip>div{padding:5px 6px;background:#17101f;border:1px solid var(--line);border-radius:10px;min-width:0}.explore-party-strip b,.explore-party-strip span,.explore-party-strip small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.54rem}.explore-party-strip i{display:block;height:4px;background:#08050b;border-radius:99px;overflow:hidden;margin:3px 0}.explore-party-strip em{display:block;height:100%;background:linear-gradient(90deg,#8b4de2,#ffd36b)}.encounter-hint{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);padding:6px 12px;border-radius:99px;background:#100a16cc;color:#c7b9cd;font-size:.64rem;opacity:.75}.encounter-hint.warn{color:#ffd36b}.encounter-hint.danger{color:#ff7487;animation:pulseHint .7s infinite alternate}@keyframes pulseHint{to{transform:translateX(-50%) scale(1.06);box-shadow:0 0 20px #ff4c6d55}}.party-editor{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.party-editor button{display:grid;grid-template-columns:auto 1fr auto;align-items:center;text-align:left;gap:8px}.party-editor button span{font-size:1.6rem}.party-editor button.selected{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}.enemy-orb{display:grid;place-items:center}.enemy-orb span{font-size:clamp(3.8rem,16vw,6.5rem);filter:drop-shadow(0 8px 10px #0008)}.unit-orb{display:grid;place-items:center;font-size:.9rem}.battle-screen{grid-template-rows:auto auto minmax(0,1fr) auto auto}.battle-arena{grid-template-rows:minmax(150px,1fr) auto;overflow:hidden}.enemy-combatant{padding:8px}.enemy-orb{width:clamp(72px,19vw,104px);height:clamp(72px,19vw,104px)}.battle-party{position:relative;z-index:2}.victory-title{text-align:center;font-size:2rem;font-weight:950;color:#ffd36b;letter-spacing:.12em}.reward-summary{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0}.reward-summary b{padding:6px 10px;border-radius:99px;background:#2a1935}.exp-results{display:grid;gap:8px}.exp-results>div{display:grid;grid-template-columns:38px 1fr;gap:8px;align-items:center;padding:8px;background:#0e0913;border-radius:12px}.exp-results>div>span{font-size:1.8rem}.exp-results section{display:grid;gap:3px}.exp-results em{color:#ffd36b}.exp-results i{height:7px;background:#050307;border-radius:99px;overflow:hidden}.exp-results u{display:block;height:100%;background:linear-gradient(90deg,#8151e9,#ffd36b)}.boss-reward h2{text-align:center;color:#ffd36b;margin-top:16px}.boss-reward-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}.boss-reward-grid button{display:grid;gap:6px;min-height:145px;text-align:left;align-content:start}.boss-reward-grid button span{font-size:2.2rem}.boss-reward-grid button b{font-size:.85rem}.boss-reward-grid button small{color:var(--muted);line-height:1.4}@media(max-width:430px){.battle-screen{overflow:hidden}.turn-order{max-height:64px}.battle-log{max-height:56px}.battle-command{padding:7px}.command-grid button{min-height:42px}.boss-reward-grid button{min-height:130px;padding:10px}}
+
+/* v0.2.1-alpha.1 — exploration feel */
+.explore-stage{overflow:hidden}
+#gameCanvas{transform-origin:center;will-change:transform,filter}
+#gameCanvas.encounter-shake{animation:encounterShake .26s cubic-bezier(.36,.07,.19,.97) both}
+#gameCanvas.encounter-pull{animation:encounterPull .55s cubic-bezier(.7,0,.84,0) forwards}
+.encounter-transition{
+ position:absolute;inset:0;z-index:40;pointer-events:none;overflow:hidden;
+ display:grid;place-items:center;
+}
+.encounter-vortex{
+ width:18vmin;height:18vmin;border-radius:50%;
+ opacity:0;transform:scale(.15) rotate(0);
+ background:conic-gradient(from 0deg,#000 0 15%,#9b54d5 25%,#0b0710 42%,#f2cc73 55%,#000 72%,#8e48c9);
+ box-shadow:0 0 40px #a760ef88,0 0 100px #000;
+}
+.encounter-transition.is-pulling .encounter-vortex{
+ opacity:1;animation:vortexPull .54s cubic-bezier(.7,0,.84,0) forwards;
+}
+.encounter-flash{position:absolute;inset:0;background:#fff;opacity:0}
+.encounter-transition.is-dark{background:#050308}
+.encounter-transition.is-dark .encounter-flash{animation:encounterFlash .18s ease-out}
+@keyframes encounterShake{
+ 0%,100%{transform:translate3d(0,0,0)}
+ 15%{transform:translate3d(-7px,2px,0)}
+ 30%{transform:translate3d(7px,-3px,0)}
+ 45%{transform:translate3d(-5px,-1px,0)}
+ 60%{transform:translate3d(5px,3px,0)}
+ 80%{transform:translate3d(-2px,0,0)}
+}
+@keyframes encounterPull{
+ 0%{transform:scale(1);filter:blur(0) brightness(1)}
+ 55%{transform:scale(.82) rotate(-2deg);filter:blur(2px) brightness(.75)}
+ 100%{transform:scale(.03) rotate(16deg);filter:blur(9px) brightness(0)}
+}
+@keyframes vortexPull{
+ 0%{transform:scale(.15) rotate(0);opacity:0}
+ 25%{opacity:1}
+ 100%{transform:scale(18) rotate(520deg);opacity:1}
+}
+@keyframes encounterFlash{0%{opacity:.95}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){
+ #gameCanvas.encounter-shake{animation:none}
+ #gameCanvas.encounter-pull{animation:encounterFade .35s ease forwards}
+ .encounter-transition.is-pulling .encounter-vortex{animation:none;transform:scale(12);opacity:1}
+}
+@keyframes encounterFade{to{opacity:0}}
