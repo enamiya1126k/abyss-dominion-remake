@@ -1,13 +1,17 @@
-ABYSS DOMINION v0.2.0-alpha.1.1 HOTFIX
+ABYSS DOMINION v0.2.1-alpha.1 FULL BUILD
 
-上書き:
-- index.html
-- src/main.js
-- src/core/config.js
+GitHubリポジトリの現在の中身を、このフォルダ内の内容で置き換えてください。
 
-修正:
-- 旧maze()と新maze()の二重定義を解消
-- 旧path()と新path()の二重定義を解消
-- Safariと同じESモジュール形式で全JavaScript構文チェック済み
+主な更新:
+- 2マス幅通路
+- 深穴が宝箱への経路を塞がない処理
+- 🚪接触時のクラッシュ修正
+- 気配メッセージ廃止
+- 画面揺れ→吸い込み→暗転のエンカウント演出
+- 移動速度・補間調整
+- DOM切替後の描画安全化
 
-適用後、ホーム画面の表示が v0.2.0-alpha.1.1 になれば反映完了です。
+適用後の表示:
+REMAKE v0.2.1-alpha.1
+
+GitHub Pages反映後も旧バージョンの場合は、1〜3分待って再読み込みしてください。
