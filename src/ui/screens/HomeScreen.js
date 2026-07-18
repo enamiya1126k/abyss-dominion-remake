@@ -1,5 +1,7 @@
 import{APP_VERSION}from"../../core/config.js";
 import{MonsterCard}from"../components/MonsterCard.js";
+import{calculatedStats,displayName}from"../../models/Monster.js";
+import{maxMp}from"../../battle/SkillSystem.js";
 
 export function HomeScreen(state){
   const party=state.party
@@ -31,19 +33,19 @@ export function HomeScreen(state){
           <button id="openExplore" class="primary">探索へ</button>
           <button id="openEquipment">装備</button>
           <button id="openSettings">設定</button>
+          <button id="openRest">🛏️ 休息</button>
+          <button id="openGacha" class="summon-button">🔮 深淵召喚</button>
         </div>
 
         <div class="panel">
           <div class="spread"><h2>現在のパーティー</h2><span class="muted">${party.length}/4</span></div>
+          <div class="home-vitals">${party.map(m=>{const s=calculatedStats(m),hp=m.currentHp??s.hp,mp=m.currentMp??maxMp(m);return`<div><b>${displayName(m)} Lv.${m.level}</b><small>HP ${hp}/${s.hp}　MP ${mp}/${maxMp(m)}</small></div>`}).join("")}</div>
           <div class="monster-list" style="margin-top:12px">
             ${party.map(MonsterCard).join("")||'<div class="empty">パーティーなし</div>'}
           </div>
         </div>
 
-        <p class="footer-note">
-          v0.0.1では、今後の全システムが参照する「モンスター個体データ」を完成させている。
-          探索・戦闘・捕獲が個体データへ接続された。装備・装備ドロップ・セレクトショップまで接続済み。
-        </p>
+        <p class="footer-note">召喚・休息・装備強化・シリーズ効果・属性共鳴が解放された。</p>
       </div>
     </section>
   `;

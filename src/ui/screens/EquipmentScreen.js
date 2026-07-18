@@ -45,6 +45,10 @@ export function EquipmentScreen(state,targetId,{home=false}={}){
    </div>
    ${!home?'<p class="storage-notice">予備BOXと王装保管庫は帰還中のみ整理できます。</p>':""}
 
+   <div class="panel equipment-manage-panel">
+    <div class="spread"><b>装備整理</b><button id="bulkSellEquipment">N〜R一括売却</button></div>
+    <small class="muted">お気に入り・ロック・装備中は除外</small>
+   </div>
    <div class="panel equipment-sort-panel">
     <div class="spread"><b>${slotLabel(slot)}の並び替え</b><select id="equipmentSort">
       <option value="rarity" ${sort==="rarity"?"selected":""}>レア度順</option>
@@ -75,18 +79,21 @@ function sortItems(a,b,sort){
 function statTotal(item){return Object.values(item.stats??{}).reduce((sum,value)=>sum+value,0)+(item.plus??0)*3+(item.level??1)}
 
 function equipmentCard(item,state,target,storage){
- const stats=Object.entries(item.stats).map(([k,v])=>`${equipmentStatLabel(k)}+${v}`).join(" / ");
+ const mult=1+(item.plus??0)*.08;const stats=Object.entries(item.stats).map(([k,v])=>`${equipmentStatLabel(k)}+${Math.round(v*mult)}`).join(" / ");
  const owner=item.equippedBy?state.monsters.find(m=>m.id===item.equippedBy):null;
  const inventory=storage==="inventory";
  return`<article class="equipment-card">
   <div class="spread"><b style="color:${RARITY_COLORS[item.rarity]}">[${item.rarity}] ${item.name}${item.plus?` +${item.plus}`:""}</b><span>${item.favorite?"★":""}${item.locked?"🔒":""}</span></div>
-  <div class="subline">${slotLabel(item.slot)} / ${stats}<br>${owner?`装備中：${displayName(owner)}`:storage==="reserve"?"予備BOXに保管":storage==="bossVault"?"王装保管庫に保管":"未装備"}</div>
+  <div class="subline">${slotLabel(item.slot)} / ${stats}<br>${item.series?`シリーズ：${seriesLabel(item.series)}<br>`:""}${owner?`装備中：${displayName(owner)}`:storage==="reserve"?"予備BOXに保管":storage==="bossVault"?"王装保管庫に保管":"未装備"}</div>
   <div class="equipment-actions">
    ${inventory?`<button data-equip="${item.id}" data-target="${target.id}">装備</button>
    ${item.equippedBy?`<button data-unequip="${item.id}">外す</button>`:`<button data-sell="${item.id}">売却 ${equipmentSellPrice(item)}G</button>`}
+   <button data-enhance-equipment="${item.id}" ${item.plus>=10?"disabled":""}>強化 +${item.plus??0}</button>
    <button data-favorite-equipment="${item.id}">${item.favorite?"★解除":"☆お気に入り"}</button>
    <button data-lock-equipment="${item.id}">${item.locked?"🔓解除":"🔒ロック"}</button>`:
    `<button data-take-equipment="${item.id}" data-storage="${storage}">所持品へ移す</button>`}
   </div>
  </article>`;
 }
+
+function seriesLabel(id){return{flame:"炎帝",guardian:"守護者",traveler:"旅人",capturer:"捕獲師"}[id]??id}

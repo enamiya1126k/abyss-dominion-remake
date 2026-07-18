@@ -5,7 +5,7 @@ import{
   displayName,rankName,colorValue,calculatedStats,unlockedSkills
 }from"../../models/Monster.js";
 
-export function MonsterDetailScreen(monster){
+export function MonsterDetailScreen(monster,state){
   const species=SPECIES[monster.speciesId];
   const personality=PERSONALITIES[monster.personalityId];
   const stats=calculatedStats(monster);
@@ -81,9 +81,9 @@ export function MonsterDetailScreen(monster){
         <div class="panel">
           <h2>装備</h2>
           <div class="subline" style="margin-top:10px">
-            武器：未装備<br>
-            防具：未装備<br>
-            アクセ：未装備
+            武器：${state?.equipment?.find(i=>i.id===monster.equipment.weapon)?.name??"未装備"}<br>
+            防具：${state?.equipment?.find(i=>i.id===monster.equipment.armor)?.name??"未装備"}<br>
+            アクセ：${state?.equipment?.find(i=>i.id===monster.equipment.accessory)?.name??"未装備"}
           </div>
         </div>
 
@@ -101,6 +101,11 @@ export function MonsterDetailScreen(monster){
           </div>
         </div>
 
+        <div class="panel danger-zone">
+          <h2>モンスター整理</h2>
+          <button id="releaseMonster" class="danger">このモンスターを解放</button>
+          <small class="muted">出撃中・お気に入り・ロック中は解放できません。</small>
+        </div>
         <div class="panel">
           <h2>個体記録</h2>
           <div class="subline" style="margin-top:8px">
