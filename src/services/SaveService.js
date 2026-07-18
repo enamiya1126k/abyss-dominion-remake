@@ -5,7 +5,7 @@ function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
  ];
- return{schemaVersion:6,appVersion:APP_VERSION,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{}},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,partyPotions:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5},settings:{minimapVisible:true,autoBattle:true,equipmentSort:"rarity",battleSpeed:1},records:{kills:0,captures:0,chests:0,purchases:0}};
+ return{schemaVersion:7,appVersion:APP_VERSION,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{}},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,partyPotions:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5},settings:{minimapVisible:true,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},records:{kills:0,captures:0,chests:0,purchases:0}};
 }
 export class SaveService{
  constructor(){this.state=this.load();this.save()}
@@ -43,6 +43,8 @@ export class SaveService{
   s.settings.equipmentSlot??="weapon";
   s.settings.equipmentStorage??="inventory";
   s.settings.battleSpeed??=1;
+  s.settings.mapTogglePosition??=null;
+  s.settings.tutorialSeen??={};
   s.records??={kills:0,captures:0,chests:0,purchases:0};
   s.records.kills??=0;
   s.records.captures??=0;
@@ -77,9 +79,9 @@ export class SaveService{
     mainIds.add(id);
    }
   }));
-  s.schemaVersion=6;
+  s.schemaVersion=7;
   s.appVersion=APP_VERSION;
-  if(from<6)s.lastMigration={from,to:6,at:new Date().toISOString()};
+  if(from<7)s.lastMigration={from,to:7,at:new Date().toISOString()};
   return s
  }
  save(){this.state.appVersion=APP_VERSION;localStorage.setItem(SAVE_KEY,JSON.stringify(this.state))}
