@@ -19,6 +19,7 @@ export function SettingsScreen(state){
             <button id="toggleMinimap">${state.settings.minimapVisible?"ON":"OFF"}</button>
           </div>
         </div>
+        <div class="panel"><div class="spread"><span>序盤チュートリアル</span><button id="resetTutorials">再表示する</button></div></div>
         <button id="resetSave" class="danger" style="width:100%">セーブ初期化</button>
       </div>
     </section>
