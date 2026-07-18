@@ -245,3 +245,8 @@ select{max-width:190px}
  .equipment-slot-tabs button,.equipment-storage-tabs button{padding:8px 3px;font-size:.68rem}
  .equipment-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+/* v0.2.2-alpha.2 EXP survivor distribution */
+.exp-results .exp-defeated{opacity:.48;filter:grayscale(.7)}
+.exp-results .exp-defeated i u{width:0!important}
+.exp-results .exp-defeated small:first-of-type{color:#e47f89;font-weight:800}
