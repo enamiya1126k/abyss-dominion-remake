@@ -3,6 +3,7 @@ export const SPECIES={
     id:"slime",
     emoji:"🫧",
     name:"スライム",
+    element:"water",
     baseStats:{hp:46,atk:6,def:4,spd:10,crit:5,evasion:3},
     rankNames:["スライム","スライムリーダー","キングスライム","深淵粘体王"],
     skills:[
@@ -17,6 +18,7 @@ export const SPECIES={
     id:"goblin",
     emoji:"👹",
     name:"ゴブリン",
+    element:"dark",
     baseStats:{hp:52,atk:9,def:5,spd:15,crit:11,evasion:8},
     rankNames:["ゴブリン","ゴブリン隊長","ゴブリン将軍","深淵大将軍"],
     skills:[
@@ -31,6 +33,7 @@ export const SPECIES={
     id:"fairy",
     emoji:"🧚",
     name:"妖精",
+    element:"light",
     baseStats:{hp:34,atk:4,def:3,spd:18,crit:4,evasion:14},
     rankNames:["妖精","上位妖精","大精霊","深淵精霊王"],
     skills:[
@@ -45,6 +48,7 @@ export const SPECIES={
     id:"dragon",
     emoji:"🐉",
     name:"ドラゴン",
+    element:"fire",
     baseStats:{hp:92,atk:15,def:7,spd:7,crit:7,evasion:3},
     rankNames:["ドラゴン","古龍","古龍王","神龍"],
     skills:[
@@ -59,6 +63,7 @@ export const SPECIES={
     id:"mushroom",
     emoji:"🍄",
     name:"毒キノコ",
+    element:"poison",
     baseStats:{hp:58,atk:8,def:6,spd:8,crit:5,evasion:5},
     rankNames:["毒キノコ","猛毒茸","魔茸王","深淵胞子神"],
     skills:[
