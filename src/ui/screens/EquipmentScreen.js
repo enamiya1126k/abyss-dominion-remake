@@ -18,7 +18,7 @@ export function EquipmentScreen(state,targetId,{home=false}={}){
  if(!home&&storage!=="inventory")storage="inventory";
  const sort=state.settings.equipmentSort??"rarity";
  const source=storage==="reserve"?state.reserveEquipment:storage==="bossVault"?state.bossEquipmentVault:state.equipment;
- const list=[...source].filter(item=>item.slot===slot).sort((a,b)=>sortItems(a,b,sort));
+ const list=[...source].filter(item=>item.slot===slot&&(!item.equippedBy||item.equippedBy===target?.id)).sort((a,b)=>sortItems(a,b,sort));
  const equippedName=id=>state.equipment.find(i=>i.id===id)?.name??"なし";
  if(!target)return`<section class="screen"><header class="topbar"><button id="backEquipmentHome">←</button><h2>装備管理</h2><span>0/500</span></header><div class="page"><div class="empty">モンスターがいません</div></div></section>`;
  const storageCount=storage==="inventory"?`${state.equipment.length}/${EQUIPMENT_LIMIT}`:storage==="reserve"?`${state.reserveEquipment.length}/${RESERVE_LIMIT}`:`${state.bossEquipmentVault.length}`;
@@ -26,12 +26,12 @@ export function EquipmentScreen(state,targetId,{home=false}={}){
   <header class="topbar"><button id="backEquipmentHome">←</button><h2>装備管理</h2><span>${storageCount}</span></header>
   <div class="page equipment-page">
    <div class="panel">
-    <div class="spread"><b>装備対象</b><select id="equipmentTarget">${state.monsters.map(m=>`<option value="${m.id}" ${m.id===target.id?"selected":""}>${state.party.includes(m.id)?"【出撃】":"【控え】"} ${displayName(m)}</option>`).join("")}</select></div>
+    <div class="spread"><b>装備対象</b><select id="equipmentTarget">${state.party.map(id=>state.monsters.find(m=>m.id===id)).filter(Boolean).map(m=>`<option value="${m.id}" ${m.id===target.id?"selected":""}>⚔️ ${displayName(m)}</option>`).join("")}</select></div>
     <div class="equipped-summary">
      <span>⚔️ 武器：${equippedName(target.equipment.weapon)}</span>
      <span>🛡️ 防具：${equippedName(target.equipment.armor)}</span>
      <span>💍 アクセ：${equippedName(target.equipment.accessory)}</span>
-    </div>
+    </div><div class="auto-equip-row"><button id="autoEquipOne">⚡ このキャラを自動装備</button><button id="autoEquipParty">⚡ パーティ全員を自動装備</button></div>
    </div>
 
    <div class="equipment-slot-tabs">

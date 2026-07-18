@@ -30,10 +30,7 @@ export function BattleScreen(battle,inventory,settings){
    <div class="battle-party">
     ${battle.party.map(m=>{const stats=calculatedStats(m),mp=maxMp(m),need=40+m.level*25;return`<button id="ally-${m.id}" data-battle-detail="${m.id}" class="battle-unit combatant ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
       <div class="unit-head"><span class="unit-orb" style="background:${colorValue(m)}">${battle.species?.[m.speciesId]?.emoji??"●"}</span><b>${displayName(m)} Lv.${m.level}</b></div>
-      <small>HP ${m.currentHp}/${stats.hp}</small><div class="battle-bar ally"><i style="width:${Math.max(0,m.currentHp/stats.hp*100)}%"></i></div>
-      <small class="mp-label">MP ${m.currentMp}/${mp}</small><div class="battle-bar mp"><i style="width:${Math.max(0,m.currentMp/mp*100)}%"></i></div>
-      <small class="battle-mini-stats">ATK ${stats.atk} / DEF ${stats.def} / SPD ${stats.spd}</small>
-      <small>EXP ${m.exp}/${need}</small><div class="battle-bar exp"><i style="width:${Math.min(100,m.exp/need*100)}%"></i></div>
+      <div class="battle-bar ally"><span class="bar-label">HP ${m.currentHp}/${stats.hp}</span><i style="width:${Math.max(0,m.currentHp/stats.hp*100)}%"></i></div><div class="battle-bar mp"><span class="bar-label">MP ${m.currentMp}/${mp}</span><i style="width:${Math.max(0,m.currentMp/mp*100)}%"></i></div><small class="battle-mini-stats">ATK ${stats.atk} / DEF ${stats.def} / SPD ${stats.spd}</small><div class="battle-exp-row"><small>あと${Math.max(0,need-m.exp)}</small><div class="battle-bar exp"><i style="width:${Math.min(100,m.exp/need*100)}%"></i></div></div>
      </button>`}).join("")}
    </div>
    <div id="battleFxLayer" class="battle-fx-layer"></div>
