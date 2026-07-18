@@ -230,3 +230,18 @@ select{max-width:190px}
  .encounter-transition.is-pulling .encounter-vortex{animation:none;transform:scale(12);opacity:1}
 }
 @keyframes encounterFade{to{opacity:0}}
+
+/* v0.2.2 equipment management */
+.equipment-page{padding-bottom:32px}
+.equipped-summary{display:grid;gap:6px;margin-top:12px;padding:10px;border-radius:12px;background:#0e0914;color:#cfc1d8;font-size:.76rem}
+.equipment-slot-tabs,.equipment-storage-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.equipment-slot-tabs button,.equipment-storage-tabs button{min-height:50px;border-radius:14px;background:#24152f;border:1px solid #654275;color:#d7c9df;font-weight:900}
+.equipment-slot-tabs button.active,.equipment-storage-tabs button.active{background:linear-gradient(135deg,#8a37c9,#b95ce4);color:#fff;border-color:#d787ff;box-shadow:0 0 18px #a84cd044}
+.equipment-storage-tabs button small{display:block;margin-top:3px;font-size:.58rem;color:#c7b5ce}
+.equipment-storage-tabs button:disabled{opacity:.36}
+.storage-notice{margin:0;text-align:center;color:#9d8da6;font-size:.67rem}
+.equipment-sort-panel{margin-top:0}
+@media(max-width:430px){
+ .equipment-slot-tabs button,.equipment-storage-tabs button{padding:8px 3px;font-size:.68rem}
+ .equipment-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
