@@ -1,9 +1,11 @@
-ABYSS DOMINION v0.2.2-alpha.1 FULL BUILD
+ABYSS DOMINION v0.2.2-alpha.2 FULL BUILD
 
-このZIP内のフォルダ内容でGitHubリポジトリを置き換えてください。
+GitHubリポジトリの内容を、このZIP内のフォルダ内容で置き換えてください。
+
+更新:
+- 戦闘不能者はEXP 0
+- 総EXPを生存者だけで分配
+- 戦闘結果へ分配内容を表示
 
 適用後:
-REMAKE v0.2.2-alpha.1
-
-重要:
-旧セーブは削除不要です。起動時に自動移行されます。
+REMAKE v0.2.2-alpha.2
