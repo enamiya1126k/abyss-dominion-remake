@@ -1,4 +1,4 @@
-import{SaveService}from"./services/SaveService.js?v=0.3.0-alpha.1";
+import{SaveService}from"./services/SaveService.js?v=0.4.0-alpha.1";
 import{SPECIES}from"./data/species.js";
 import{HomeScreen}from"./ui/screens/HomeScreen.js";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js";
@@ -9,14 +9,14 @@ import{BattleScreen}from"./ui/screens/BattleScreen.js";
 import{Modal}from"./ui/components/Modal.js";
 import{createMonster,displayName,calculatedStats}from"./models/Monster.js";
 import{createEquipment,equipmentPower}from"./models/Equipment.js";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.3.0-alpha.1";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.4.0-alpha.1";
 import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.3.0-alpha.1";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.4.0-alpha.1";
 import{ShopScreen}from"./ui/screens/ShopScreen.js";
 import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier}from"./battle/EnemyAI.js";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js";
-import{buildTurnQueue,currentTurnEntry,currentAlly,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
 let screen="home",selected=null,equipmentTarget=null,game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home";
@@ -38,7 +38,7 @@ function bindHome(){document.getElementById("openMonsters").onclick=()=>go("mons
 function bindList(){document.getElementById("backHome").onclick=()=>go("home");const input=document.getElementById("monsterSearch");input.oninput=()=>document.querySelectorAll(".monster-card").forEach(c=>{const m=save.state.monsters.find(x=>x.id===c.querySelector("[data-monster-id]").dataset.monsterId),q=input.value.trim();c.style.display=m.nickname.includes(q)||SPECIES[m.speciesId].name.includes(q)?"grid":"none"});detailButtons()}
 function detailButtons(){document.querySelectorAll("[data-monster-id]").forEach(b=>b.onclick=()=>{selected=b.dataset.monsterId;go("detail")})}
 function bindDetail(m){document.getElementById("backMonsters").onclick=()=>go("monsters");document.getElementById("toggleFavorite").onclick=()=>{m.favorite=!m.favorite;save.save();render()};document.getElementById("saveNickname").onclick=()=>{const v=document.getElementById("nicknameInput").value.trim();if(v)m.nickname=v.slice(0,12);save.save();render()};document.querySelectorAll("[data-color-id]").forEach(b=>b.onclick=()=>{m.colorId=b.dataset.colorId;save.save();render()})}
-function bindSettings(){document.getElementById("backHome").onclick=()=>go("home");document.getElementById("toggleAuto").onclick=()=>{save.state.settings.autoBattle=!save.state.settings.autoBattle;save.save();render()};document.getElementById("toggleMinimap").onclick=()=>{save.state.settings.minimapVisible=!save.state.settings.minimapVisible;save.save();render()};document.getElementById("resetSave").onclick=()=>{if(confirm("初期化する？")){save.reset();snapshot=null;go("home")}}}
+function bindSettings(){document.getElementById("backHome").onclick=()=>go("home");document.getElementById("toggleAuto").onclick=()=>{save.state.settings.autoBattle=!save.state.settings.autoBattle;save.save();render()};document.getElementById("toggleMinimap").onclick=()=>{save.state.settings.minimapVisible=!save.state.settings.minimapVisible;save.save();render()};document.getElementById("resetTutorials")?.addEventListener("click",()=>{save.state.settings.tutorialSeen={};save.save();alert("1〜5階のチュートリアルを再表示します")});document.getElementById("resetSave").onclick=()=>{if(confirm("初期化する？")){save.reset();snapshot=null;go("home")}}}
 
 
 function bindEquipment(){
@@ -173,13 +173,21 @@ function bindExplore(){
  game.player.rx=game.player.x;game.player.ry=game.player.y;game.camera=new Camera(canvas);
  if(snapshot?.cameraData)Object.assign(game.camera,snapshot.cameraData);else game.camera.reset(game.player.x*TILE,game.player.y*TILE);
  game.camera.clamp(game.world);game.ctx=canvas.getContext("2d");game.running=true;game.paused=false;bindInput(canvas);game.last=performance.now();requestAnimationFrame(loop);
- document.getElementById("miniMapToggle").onclick=()=>{save.state.settings.minimapVisible=!save.state.settings.minimapVisible;save.save();document.getElementById("miniMapToggle").textContent=save.state.settings.minimapVisible?"MAP ON":"MAP OFF"};
+ bindMovableMapToggle();bindExploreMonsterLongPress();showFloorTutorial();
  document.getElementById("centerCamera").onclick=()=>{game.camera.reset(game.player.rx*TILE,game.player.ry*TILE);game.camera.clamp(game.world)};
  document.getElementById("pauseParty").onclick=openPartyEditor;
  document.getElementById("fieldEquipment").onclick=()=>{snapshot=currentSnapshot();stopGame();navigationOrigin="explore";go("equipment")};
  document.getElementById("pauseItems").onclick=openFieldItems;
  document.getElementById("returnHome").onclick=()=>{if(confirm(`${save.state.player.currentFloor}階から帰還する？\n次回は到達済みの階を選んで再開できます。`)){stopGame();snapshot=null;save.state.player.inRun=false;save.save();go("home")}}
 }
+function showFloorTutorial(){
+ const floor=save.state.player.currentFloor;if(floor<1||floor>5||save.state.settings.tutorialSeen?.[floor])return;
+ const tutorials={1:["戦闘の基本","まずは歩いて敵と遭遇しよう。『たたかう』『スキル』『ガード』を使い分け、スライムLv.1を倒して最初のレベルを上げよう。"],2:["捕獲","敵はHPを減らすほど捕獲しやすくなる。捕獲結晶には限りがあるので、欲しい相手を弱らせてから使おう。"],3:["編成","捕まえた仲間は『編成』から出撃できる。最大4体まで。倒れた仲間にはEXPが入らず、生存者へ再分配される。"],4:["装備","武器・防具・アクセで能力が変わる。『装備』の自動装備も使えるが、役割に合わせた手動調整も強力。"],5:["複数の敵","この階から敵が2体で現れることがある。敵をタップして攻撃対象を変更し、危険な相手から倒そう。"]};
+ const [title,body]=tutorials[floor];game.paused=true;setTimeout(()=>{app.insertAdjacentHTML("beforeend",Modal(`${floor}階チュートリアル：${title}`,`<p>${body}</p><p class="muted">この説明は初回だけ表示され、設定から再確認できます。</p>`,`探索開始`));document.getElementById("closeGameModal").onclick=()=>{save.state.settings.tutorialSeen[floor]=true;save.save();document.querySelector(".game-modal").remove();game.paused=false}},120)
+}
+function exploreMonsterDetail(id){const m=save.state.monsters.find(x=>x.id===id);if(!m)return;const st=calculatedStats(m),need=expNeed(m),remain=Math.max(0,need-m.exp),gear=Object.entries(m.equipment??{}).map(([slot,itemId])=>`${slotLabel(slot)}：${save.state.equipment.find(i=>i.id===itemId)?.name??"なし"}`).join("<br>");app.insertAdjacentHTML("beforeend",Modal(`${SPECIES[m.speciesId].emoji} ${displayName(m)}`,`<div class="explore-detail"><p><b>Lv.${m.level}　★${m.stars}　+${m.plus}</b></p><p>HP ${m.currentHp}/${st.hp}<br>MP ${m.currentMp}/${maxMp(m)}<br>ATK ${st.atk} / DEF ${st.def} / SPD ${st.spd}</p><p><b>EXP ${m.exp.toLocaleString()} / ${need.toLocaleString()}</b><br><small>次のレベルまであと ${remain.toLocaleString()}</small></p><p>${gear}</p><p><b>スキル</b><br>${learnedSkills(m).map(x=>`${x.name}（MP${x.mp}）`).join("<br>")||"なし"}</p></div>`,`閉じる`));document.getElementById("closeGameModal").onclick=()=>document.querySelector(".game-modal").remove()}
+function bindExploreMonsterLongPress(){document.querySelectorAll("[data-explore-monster]").forEach(el=>{let timer=null,moved=false;const clear=()=>{clearTimeout(timer);timer=null};el.onpointerdown=e=>{moved=false;timer=setTimeout(()=>{navigator.vibrate?.(25);exploreMonsterDetail(el.dataset.exploreMonster)},480)};el.onpointermove=()=>{moved=true;clear()};el.onpointerup=el.onpointercancel=el.onpointerleave=clear})}
+function bindMovableMapToggle(){const b=document.getElementById("miniMapToggle"),stage=document.querySelector(".explore-stage");if(!b||!stage)return;let timer=null,drag=false,offset={x:0,y:0};const place=e=>{const r=stage.getBoundingClientRect(),br=b.getBoundingClientRect(),x=Math.max(4,Math.min(r.width-br.width-4,e.clientX-r.left-offset.x)),y=Math.max(4,Math.min(r.height-br.height-4,e.clientY-r.top-offset.y));b.style.left=`${x}px`;b.style.top=`${y}px`;b.style.right="auto";save.state.settings.mapTogglePosition={x:Math.round(x),y:Math.round(y)}};b.onpointerdown=e=>{const br=b.getBoundingClientRect();offset={x:e.clientX-br.left,y:e.clientY-br.top};timer=setTimeout(()=>{drag=true;navigator.vibrate?.(20);b.classList.add("dragging");b.setPointerCapture?.(e.pointerId)},420)};b.onpointermove=e=>{if(drag)place(e)};b.onpointerup=e=>{clearTimeout(timer);if(drag){place(e);save.save();drag=false;b.classList.remove("dragging");return}save.state.settings.minimapVisible=!save.state.settings.minimapVisible;save.save();b.textContent=save.state.settings.minimapVisible?"MAP ON":"MAP OFF"};b.onpointercancel=()=>{clearTimeout(timer);drag=false;b.classList.remove("dragging")}}
 function itemCount(type){return save.state.inventory[type]??0}
 function openFieldItems(){
  game.paused=true;
@@ -208,7 +216,8 @@ function useFieldItem(type,targetId){
 }
 function openPartyEditor(){game.paused=true;const body=`<p class="muted">その場で自由に編成できます。捕獲直後の仲間もすぐ使用可能。</p><div class="party-editor">${save.state.monsters.map(m=>`<button data-party-toggle="${m.id}" class="${save.state.party.includes(m.id)?"selected":""}"><span>${SPECIES[m.speciesId].emoji}</span><b>${displayName(m)}</b><small>Lv.${m.level}</small></button>`).join("")}</div>`;app.insertAdjacentHTML("beforeend",Modal("フィールド編成",body,"閉じる"));document.querySelectorAll("[data-party-toggle]").forEach(b=>b.onclick=()=>{const id=b.dataset.partyToggle,has=save.state.party.includes(id);if(has&&save.state.party.length<=1)return alert("最低1体必要");if(!has&&save.state.party.length>=4)return alert("編成は4体まで");if(has){const mon=save.state.monsters.find(m=>m.id===id);if(mon)Object.values(mon.equipment??{}).forEach(itemId=>{const item=save.state.equipment.find(i=>i.id===itemId);if(item)item.equippedBy=null});if(mon)mon.equipment={weapon:null,armor:null,accessory:null};save.state.party=save.state.party.filter(x=>x!==id)}else save.state.party=[...save.state.party,id];save.save();b.classList.toggle("selected",!has)});document.getElementById("closeGameModal").onclick=()=>{document.querySelector(".game-modal").remove();snapshot=currentSnapshot();stopGame();render()}}
 function enemyLevelForFloor(floor){const band=Math.floor((floor-1)/10),base=band*10+1,jumps=[0,0,1,2,3,5,7,9],variance=jumps[Math.floor(Math.random()*jumps.length)]-(Math.random()<.28?Math.floor(Math.random()*4):0),milestone=floor%50===1&&floor>1?8:floor%25===1&&floor>1?4:0;return Math.max(1,base+Math.floor((floor-1)%10*.58)+variance+milestone)}
-function randomEnemy(){const ids=Object.keys(SPECIES),floor=save.state.player.currentFloor,speciesId=ids[Math.floor(Math.random()*ids.length)],equipped=Math.random()<.11,gear=equipped?createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)]):null;return{speciesId,level:enemyLevelForFloor(floor),boss:false,equipped,gear}}
+function randomEnemy(){const floor=save.state.player.currentFloor;if(floor===1)return{speciesId:"slime",level:1,boss:false,equipped:false,gear:null};const ids=Object.keys(SPECIES),speciesId=ids[Math.floor(Math.random()*ids.length)],equipped=floor>=6&&Math.random()<.11,gear=equipped?createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)]):null;return{speciesId,level:enemyLevelForFloor(floor),boss:false,equipped,gear}}
+function randomEnemyGroup(){const floor=save.state.player.currentFloor;if(floor<=4)return[randomEnemy()];let count=1,r=Math.random();if(floor<10){if(r<.12)count=2}else if(floor<50){if(r<.03)count=3;else if(r<.25)count=2}else{if(r<.08)count=3;else if(r<.35)count=2}return Array.from({length:count},randomEnemy)}
 function floorBossEnemy(){const floor=save.state.player.currentFloor,ids=Object.keys(SPECIES),speciesId=floor%20===0?"dragon":ids[Math.floor(seeded(floorSeed(floor)+991)()*ids.length)];return{speciesId,level:Math.max(10,Math.round(floor*.82)+Math.floor(Math.random()*5)),boss:true}}
 function loop(now){
  if(!game?.running)return;
@@ -237,7 +246,7 @@ async function beginEncounter(enemyOverride=null){
  fx.classList.add("is-dark");
  await wait(350);
  if(!game)return;
- activeEnemy=enemyOverride??randomEnemy();
+ activeEnemy=enemyOverride??randomEnemyGroup();
  snapshot=currentSnapshot();
  stopGame();
  startBattle(activeEnemy);
@@ -275,7 +284,7 @@ function update(dt){
  game.camera.clamp(game.world)
 }
 function openChest(c){c.open=true;const floor=save.state.player.currentFloor;save.state.player.openedChests[floor]??=[];save.state.player.openedChests[floor].push(c.id);save.state.records.chests++;let title="宝箱",body="";if(c.kind==="apple"){save.state.inventory.potions++;title="🪎 深淵の果実";body="回復薬を1個獲得"}else if(c.kind==="box"){if(Math.random()<.5){const gold=80+floor*12;save.state.player.gold+=gold;body=`${gold}Gを獲得`}else{const item=createEquipment("weapon"),receipt=equipmentReceipt(item);body=equipmentReceiptText(receipt)}}else{const rarity=c.kind==="radiant"?(Math.random()<.35?"LR":"SSR"):(Math.random()<.35?"SSR":"SR"),item=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)],{rarity}),receipt=equipmentReceipt(item);title=c.kind==="radiant"?"✨ 輝く宝箱":"🗃️ 古い収納箱";body=`${equipmentReceiptText(receipt)}<br>${Object.entries(item.stats).map(([k,v])=>`${equipmentStatLabel(k)}+${v}`).join(" / ")}`}save.save();pauseModal(title,body)}
-function draw(){const c=game.ctx,w=game.world;c.fillStyle="#120c18";c.fillRect(0,0,game.canvas.width,game.canvas.height);for(let y=0;y<w.rows;y++)for(let x=0;x<w.cols;x++){const p=game.camera.world(x*TILE,y*TILE),s=TILE*game.camera.z;c.fillStyle=w.tiles[y][x]?"#21182a":"#6a4a7f";c.fillRect(p.x,p.y,s+1,s+1)}emoji(w.exit,"🕳️");if(w.shop)emoji(w.shop,"🚪");if(w.boss)emoji(w.boss,"👹",true);w.chests.forEach(x=>!x.open&&emoji(x,x.emoji,x.kind==="radiant"));emoji({x:game.player.rx,y:game.player.ry},"👑");drawMini()}
+function draw(){const c=game.ctx,w=game.world;c.fillStyle="#120c18";c.fillRect(0,0,game.canvas.width,game.canvas.height);for(let y=0;y<w.rows;y++)for(let x=0;x<w.cols;x++){const p=game.camera.world(x*TILE,y*TILE),s=TILE*game.camera.z;c.fillStyle=w.tiles[y][x]?"#21182a":"#6a4a7f";c.fillRect(p.x,p.y,s+1,s+1)}emoji(w.exit,"🕳️");if(w.shop)emoji(w.shop,"🚪");if(w.boss)emoji(w.boss,"👹",true);w.chests.forEach(x=>!x.open&&emoji(x,x.emoji,x.kind==="radiant"));emoji({x:game.player.rx,y:game.player.ry},"😈",true);drawMini()}
 function emoji(o,t,glow=false){const p=game.camera.world(o.x*TILE,o.y*TILE),pulse=glow?1+Math.sin(performance.now()/170)*.12:1;game.ctx.save();if(glow){game.ctx.shadowColor="#ffe36f";game.ctx.shadowBlur=18}game.ctx.font=`${28*game.camera.z*pulse}px sans-serif`;game.ctx.textAlign="center";game.ctx.fillText(t,p.x+TILE*game.camera.z/2,p.y+TILE*game.camera.z/2);game.ctx.restore()}
 function drawMini(){
  const m=document.getElementById("miniMap");
@@ -323,7 +332,7 @@ function pauseModal(title,body){game.paused=true;app.insertAdjacentHTML("beforee
 function battleSpeed(){return save.state.settings.battleSpeed??1}
 function wait(ms){return new Promise(r=>setTimeout(r,Math.max(55,ms/battleSpeed())))}
 function battleTarget(target){
- if(target==="enemy")return document.getElementById("enemyActor");
+ if(target==="enemy")return document.querySelector(".enemy-combatant.targeted")??document.querySelector(".enemy-combatant");if(String(target).startsWith("enemy-"))return document.getElementById(`enemy-${target}`);
  if(target==="party")return document.querySelector(".battle-party");
  return document.getElementById(`ally-${target}`);
 }
@@ -354,16 +363,8 @@ async function floatText(text,target,type){
  n.style.left=`${r.left-lr.left+r.width/2}px`;n.style.top=`${r.top-lr.top+r.height*.35}px`;
  layer.appendChild(n);await wait(560);n.remove();
 }
-function startBattle(e){
- const sp=SPECIES[e.speciesId],party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);
- party.forEach(m=>{const hp=calculatedStats(m).hp,mp=maxMp(m);if(m.currentHp==null)m.currentHp=hp;if(m.currentMp==null)m.currentMp=mp;m.currentHp=Math.min(m.currentHp,hp);m.currentMp=Math.min(m.currentMp,mp)});
- const enemy=createEnemyBattleState(sp,e,save.state.player.currentFloor);if(e.equipped&&e.gear){enemy.gear=e.gear;enemy.name=`⚔️ ${enemy.name}`;enemy.atk+=e.gear.stats.atk??0;enemy.def+=e.gear.stats.def??0;enemy.spd+=e.gear.stats.spd??0;enemy.maxHp+=e.gear.stats.hp??0;enemy.hp=enemy.maxHp}
- battle={enemy,party,species:SPECIES,turn:1,busy:false,auto:save.state.settings.autoBattle,guards:{},skillMenu:false,...createBattleRulesState(party)};
- buildTurnQueue(battle);
- addBattleLog(battle,`行動順：${battle.turnQueue.map(entry=>entry.name).join(" → ")}`);
- renderBattle();
- setTimeout(()=>continueBattleFlow(),360/battleSpeed());
-}
+function makeBattleEnemy(e,index=0){const sp=SPECIES[e.speciesId],enemy=createEnemyBattleState(sp,e,save.state.player.currentFloor);enemy.id=`enemy-${Date.now()}-${index}-${Math.random().toString(36).slice(2,7)}`;if(e.equipped&&e.gear){enemy.gear=e.gear;enemy.name=`⚔️ ${enemy.name}`;enemy.atk+=e.gear.stats.atk??0;enemy.def+=e.gear.stats.def??0;enemy.spd+=e.gear.stats.spd??0;enemy.maxHp+=e.gear.stats.hp??0;enemy.hp=enemy.maxHp}return enemy}
+function startBattle(encounter){const party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);party.forEach(m=>{const hp=calculatedStats(m).hp,mp=maxMp(m);if(m.currentHp==null)m.currentHp=hp;if(m.currentMp==null)m.currentMp=mp;m.currentHp=Math.min(m.currentHp,hp);m.currentMp=Math.min(m.currentMp,mp)});const entries=Array.isArray(encounter)?encounter:[encounter],enemies=entries.map(makeBattleEnemy);battle={enemies,enemy:enemies[0],targetEnemyId:enemies[0]?.id,party,species:SPECIES,turn:1,busy:false,auto:save.state.settings.autoBattle,guards:{},skillMenu:false,...createBattleRulesState(party)};buildTurnQueue(battle);addBattleLog(battle,`行動順：${battle.turnQueue.map(entry=>entry.name).join(" → ")}`);renderBattle();setTimeout(()=>continueBattleFlow(),360/battleSpeed())}
 function actor(){return currentAlly(battle)}
 function renderBattle(){
  document.querySelector(".battle-screen")?.remove();
@@ -371,6 +372,7 @@ function renderBattle(){
  document.querySelectorAll("[data-command]").forEach(b=>b.onclick=()=>command(b.dataset.command));
  document.querySelectorAll("[data-skill-id]").forEach(b=>b.onclick=()=>command("skill",b.dataset.skillId));
  document.querySelectorAll("[data-battle-detail]").forEach(b=>b.onclick=()=>showBattleMonsterDetail(b.dataset.battleDetail));
+ document.querySelectorAll("[data-enemy-target]").forEach(b=>b.onclick=()=>{if(battle.busy)return;battle.targetEnemyId=b.dataset.enemyTarget;renderBattle()});
  const closeSkill=document.getElementById("closeSkillMenu");if(closeSkill)closeSkill.onclick=()=>{battle.skillMenu=false;renderBattle()};
  document.getElementById("battleSpeed").onclick=()=>{const s=battleSpeed();save.state.settings.battleSpeed=s===1?2:s===2?4:1;save.save();renderBattle()};
  document.getElementById("toggleBattleAuto").onclick=()=>{battle.auto=!battle.auto;save.state.settings.autoBattle=battle.auto;save.save();renderBattle();if(battle.auto&&!battle.busy)continueBattleFlow()};
@@ -390,16 +392,16 @@ async function command(type,skillId=null){
  const entry=currentTurnEntry(battle),a=actor();
  if(entry?.type!=="ally"||!a)return;
  battle.busy=true;
- const s=calculatedStats(a),e=battle.enemy;
+ const s=calculatedStats(a),e=selectedEnemy(battle);if(!e){battle.busy=false;return win(false,null)};battle.enemy=e;
 
  if(type==="attack"){
   addBattleLog(battle,`${displayName(a)}：たたかう`);await animateAttack(a.id);
-  if(Math.random()<.06)await floatText("MISS","enemy","miss");
+  if(Math.random()<.06)await floatText("MISS",e.id,"miss");
   else{
    const critical=Math.random()<Math.min(.35,.08+(s.spd??0)*.005);
    const base=Math.max(1,Math.floor(s.atk*(.9+Math.random()*.2)-e.def*.4));
    const raw=critical?Math.floor(base*1.7):base,d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)));e.hp=Math.max(0,e.hp-d);
-   await animateHit("enemy",critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,"enemy",critical?"critical":"damage");
+   await animateHit(e.id,critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,e.id,critical?"critical":"damage");
   }
  }
 
@@ -418,10 +420,10 @@ async function command(type,skillId=null){
    await animateAttack(a.id,true);const hits=skill.hits??1;let total=0;
    for(let i=0;i<hits&&e.hp>0;i++){
     const critical=Math.random()<Math.min(.45,.1+(skill.critBonus??0)+(s.spd??0)*.004),raw=skillDamage(s,e,skill,critical),d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)));
-    e.hp=Math.max(0,e.hp-d);total+=d;await animateHit("enemy",critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,"enemy",critical?"critical":"skill")
+    e.hp=Math.max(0,e.hp-d);total+=d;await animateHit(e.id,critical);await floatText(`${critical?"CRITICAL ":""}-${d}`,e.id,critical?"critical":"skill")
    }
    if(skill.type==="drain"){const h=Math.max(1,Math.floor(total*skill.drain));a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal")}
-   if(skill.status&&e.hp>0&&Math.random()<skill.status.chance){applyEnemyStatus(battle,skill.status);addBattleLog(battle,`${e.name}は${skill.status.name}状態になった`);await floatText(skill.status.name,"enemy",skill.status.id)}
+   if(skill.status&&e.hp>0&&Math.random()<skill.status.chance){applyEnemyStatus(battle,skill.status,e.id);addBattleLog(battle,`${e.name}は${skill.status.name}状態になった`);await floatText(skill.status.name,e.id,skill.status.id)}
   }
  }
 
@@ -439,12 +441,12 @@ async function command(type,skillId=null){
   if(save.state.inventory.captureCrystals<=0){battle.busy=false;return alert("捕獲結晶がない")}
   save.state.inventory.captureCrystals--;addBattleLog(battle,"捕獲を試みた");
   const chance=Math.max(.08,Math.min(.88,.2+(1-e.hp/e.maxHp)*.55+(Math.max(...battle.party.map(m=>m.level+m.stars*2+m.plus))-e.level)*.012));
-  await floatText(`捕獲 ${Math.round(chance*100)}%`,"enemy","capture");await wait(500);
-  if(Math.random()<chance){const m=createMonster(e.speciesId,{level:e.level});save.state.monsters.push(m);save.state.records.captures++;save.save();await animateDefeat("enemy",true);return win(true,m)}
+  await floatText(`捕獲 ${Math.round(chance*100)}%`,e.id,"capture");await wait(500);
+  if(Math.random()<chance){const m=createMonster(e.speciesId,{level:e.level});save.state.monsters.push(m);save.state.records.captures++;e.captured=true;e.hp=0;save.save();await animateDefeat(e.id,true);battle.targetEnemyId=aliveEnemies(battle)[0]?.id??null;if(!aliveEnemies(battle).length)return win(true,m);addBattleLog(battle,`${e.name}を捕獲した`)}
  }
 
  save.save();renderBattle();await wait(260/battleSpeed());
- if(e.hp<=0){await animateDefeat("enemy");return win(false,null)}
+ if(e.hp<=0){await animateDefeat(e.id);battle.targetEnemyId=aliveEnemies(battle)[0]?.id??null;if(!aliveEnemies(battle).length)return win(false,null)}
  battle.busy=false;
  await finishCurrentAction();
 }
@@ -461,18 +463,18 @@ async function enemyTurn(){
  if(entry?.type!=="enemy")return continueBattleFlow();
  const target=chooseEnemyTarget();if(!target)return lose();
  battle.busy=true;
- const e=battle.enemy,action=chooseEnemyAction(e);addBattleLog(battle,`${e.name}：${e.intent}`);
+ const e=currentEnemy(battle);if(!e){battle.busy=false;return finishCurrentAction()}battle.enemy=e;const action=chooseEnemyAction(e);addBattleLog(battle,`${e.name}：${e.intent}`);
 
  if(action===ENEMY_ACTIONS.guard){
-  await floatText("GUARD","enemy","guard");
+  await floatText("GUARD",e.id,"guard");
  }else if(action===ENEMY_ACTIONS.charge){
-  await floatText("CHARGE","enemy","charge");
+  await floatText("CHARGE",e.id,"charge");
  }else if(action===ENEMY_ACTIONS.heal){
-  const h=enemyHealAmount(e);e.hp=Math.min(e.maxHp,e.hp+h);await floatText(`+${h}`,"enemy","heal");
+  const h=enemyHealAmount(e);e.hp=Math.min(e.maxHp,e.hp+h);await floatText(`+${h}`,e.id,"heal");
  }else if(action===ENEMY_ACTIONS.enrage){
-  e.atk=Math.floor(e.atk*1.18);e.def=Math.floor(e.def*1.08);await floatText("ENRAGE","enemy","enrage");await animateHit("enemy",true);
+  e.atk=Math.floor(e.atk*1.18);e.def=Math.floor(e.def*1.08);await floatText("ENRAGE",e.id,"enrage");await animateHit(e.id,true);
  }else{
-  const s=calculatedStats(target);await animateAttack("enemy",action===ENEMY_ACTIONS.power);
+  const s=calculatedStats(target);await animateAttack(e.id,action===ENEMY_ACTIONS.power);
   if(action!==ENEMY_ACTIONS.power&&Math.random()<.05)await floatText("MISS",target.id,"miss");
   else{
    const guard=Boolean(battle.guards[target.id]),critical=Math.random()<(e.enraged?.13:.08),multiplier=enemyAttackMultiplier(e,action);
@@ -499,10 +501,10 @@ async function finishCurrentAction(){
 async function endRound(){
  battle.busy=true;
  const statusResults=processEnemyStatuses(battle);
- for(const result of statusResults){addBattleLog(battle,`${battle.enemy.name}に${result.name} ${result.damage}ダメージ`);renderBattle();await floatText(`-${result.damage}`,"enemy",result.id)}
+ for(const result of statusResults){addBattleLog(battle,`${result.enemy.name}に${result.name} ${result.damage}ダメージ`);renderBattle();await floatText(`-${result.damage}`,result.enemy.id,result.id)}
  tickCooldowns(battle);
  battle.guards={};
- if(battle.enemy.hp<=0){await animateDefeat("enemy");return win(false,null)}
+ for(const e of(battle.enemies??[]).filter(x=>x.hp<=0))await animateDefeat(e.id);if(!aliveEnemies(battle).length)return win(false,null)
  if(!battle.party.some(m=>m.currentHp>0))return lose();
  battle.turn++;
  buildTurnQueue(battle);
@@ -522,11 +524,11 @@ async function continueBattleFlow(){
 }
 function expNeed(m){return 40+m.level*25}
 function win(caught,m){
- const gold=20+battle.enemy.level*6;
+ const defeated=(battle.enemies??[battle.enemy]).filter(Boolean),gold=defeated.reduce((sum,e)=>sum+20+e.level*6,0);
  save.state.player.gold+=gold;
- save.state.records.kills++;
+ save.state.records.kills+=defeated.filter(e=>!e.captured).length;
 
- const baseGain=18+battle.enemy.level*7;
+ const baseGain=defeated.reduce((sum,e)=>sum+18+e.level*7,0);
  const totalExp=baseGain*battle.party.length;
  const survivors=battle.party.filter(monster=>monster.currentHp>0);
  const share=survivors.length?Math.floor(totalExp/survivors.length):0;
@@ -551,7 +553,8 @@ function win(caught,m){
  });
 
  let drop=null,dropReceipt=null;
- if(battle.enemy.gear&&Math.random()<.18){drop={...battle.enemy.gear,id:crypto.randomUUID?.()??`${Date.now()}-${Math.random()}`,equippedBy:null,createdAt:new Date().toISOString()};dropReceipt=equipmentReceipt(drop)}else if(Math.random()<.12){drop=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)]);dropReceipt=equipmentReceipt(drop)}
+ const geared=defeated.find(e=>e.gear);
+ if(geared&&Math.random()<.18){drop={...geared.gear,id:crypto.randomUUID?.()??`${Date.now()}-${Math.random()}`,equippedBy:null,createdAt:new Date().toISOString()};dropReceipt=equipmentReceipt(drop)}else if(Math.random()<.12){drop=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)]);dropReceipt=equipmentReceipt(drop)}
 
  save.save();
  activeEnemy=null;
@@ -559,7 +562,7 @@ function win(caught,m){
 
  const result=`<div class="victory-title">VICTORY</div><div class="reward-summary"><b>+${gold}G</b><small>総EXP ${totalExp} / 生存 ${survivors.length}体で分配</small>${drop?`<b>[${drop.rarity}] ${drop.name}（${slotLabel(drop.slot)}）</b><small>${dropReceipt.message}</small>`:""}${caught?`<b>${m.nickname}を捕獲！</b>`:""}</div><div class="exp-results compact">${progress.map(p=>{const hpMax=p.afterStats.hp,mpMax=maxMp(p.x),remaining=Math.max(0,p.need-p.x.exp),diff=k=>p.afterStats[k]-(p.before.stats[k]??0);return`<div class="${p.alive?"":"exp-defeated"} ${p.levels?"level-up-card":""}"><span>${SPECIES[p.x.speciesId].emoji}</span><section><b>${displayName(p.x)} ${p.levels?`Lv.${p.before.level} → Lv.${p.x.level} <em>LEVEL UP!</em>`:`Lv.${p.x.level}`}</b><div class="result-vitals"><small>HP ${p.x.currentHp}/${hpMax}</small><small>MP ${p.x.currentMp}/${mpMax}</small><small>${p.alive?`次まであと${remaining}EXP`:"戦闘不能：EXP 0"}</small></div><i class="result-exp"><u style="width:${Math.min(100,p.x.exp/p.need*100)}%"></u></i>${p.levels?`<div class="level-gains"><span>HP ${p.before.stats.hp} → ${p.afterStats.hp} <strong>+${diff("hp")}</strong></span><span>ATK ${p.before.stats.atk} → ${p.afterStats.atk} <strong>+${diff("atk")}</strong></span><span>DEF ${p.before.stats.def} → ${p.afterStats.def} <strong>+${diff("def")}</strong></span><span>SPD ${p.before.stats.spd} → ${p.afterStats.spd} <strong>+${diff("spd")}</strong></span></div>`:""}</section></div>`}).join("")}</div>`;
 
- if(battle.enemy.boss&&!save.state.player.bossRewards[save.state.player.currentFloor])return showBossRewards(result);
+ const boss=defeated.find(e=>e.boss);if(boss){battle.enemy=boss;if(!save.state.player.bossRewards[save.state.player.currentFloor])return showBossRewards(result)}
  app.insertAdjacentHTML("beforeend",Modal(caught?"捕獲成功！":"戦闘結果",result,"探索へ"));
  document.getElementById("closeGameModal").onclick=()=>{
   document.querySelector(".game-modal").remove();
