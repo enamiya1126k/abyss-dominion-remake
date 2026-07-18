@@ -11,7 +11,7 @@ function initialState(){
  return{schemaVersion:6,appVersion:APP_VERSION,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{}},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,captureCrystals:5},settings:{minimapVisible:true,autoBattle:true,equipmentSort:"rarity",battleSpeed:1},records:{kills:0,captures:0,chests:0,purchases:0}};
 }
 export class SaveService{
- constructor(){this.state=this.load()}
+ constructor(){this.state=this.load();this.save()}
  load(){try{const raw=localStorage.getItem(SAVE_KEY);return raw?this.migrate(JSON.parse(raw)):initialState()}catch(e){console.error(e);return initialState()}}
  migrate(s){
   const from=Number(s.schemaVersion??1);
