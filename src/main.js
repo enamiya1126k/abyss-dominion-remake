@@ -1,4 +1,4 @@
-import{SaveService}from"./services/SaveService.js?v=0.2.3-alpha.1";
+import{SaveService}from"./services/SaveService.js?v=0.3.0-alpha.1";
 import{SPECIES}from"./data/species.js";
 import{HomeScreen}from"./ui/screens/HomeScreen.js";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js";
@@ -9,9 +9,9 @@ import{BattleScreen}from"./ui/screens/BattleScreen.js";
 import{Modal}from"./ui/components/Modal.js";
 import{createMonster,displayName,calculatedStats}from"./models/Monster.js";
 import{createEquipment,equipmentPower}from"./models/Equipment.js";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.2.3-alpha.1";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.3.0-alpha.1";
 import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.2.3-alpha.1";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.3.0-alpha.1";
 import{ShopScreen}from"./ui/screens/ShopScreen.js";
 import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier}from"./battle/EnemyAI.js";
@@ -47,7 +47,7 @@ function bindEquipment(){
  document.getElementById("equipmentSort").onchange=e=>{save.state.settings.equipmentSort=e.target.value;save.save();render()};
  document.querySelectorAll("[data-equipment-slot]").forEach(b=>b.onclick=()=>{save.state.settings.equipmentSlot=b.dataset.equipmentSlot;save.save();render()});
  document.querySelectorAll("[data-equipment-storage]").forEach(b=>b.onclick=()=>{if(b.disabled)return;save.state.settings.equipmentStorage=b.dataset.equipmentStorage;save.save();render()});
- document.querySelectorAll("[data-equip]").forEach(b=>b.onclick=()=>equipItem(b.dataset.equip,b.dataset.target));
+ document.querySelectorAll("[data-equip]").forEach(b=>b.onclick=()=>equipItem(b.dataset.equip,b.dataset.target));document.getElementById("autoEquipOne")?.addEventListener("click",()=>{autoEquipMonster(equipmentTarget);save.save();render()});document.getElementById("autoEquipParty")?.addEventListener("click",()=>{save.state.party.forEach(autoEquipMonster);save.save();render()});
  document.querySelectorAll("[data-unequip]").forEach(b=>b.onclick=()=>unequipItem(b.dataset.unequip));
  document.querySelectorAll("[data-favorite-equipment]").forEach(b=>b.onclick=()=>{const i=save.state.equipment.find(x=>x.id===b.dataset.favoriteEquipment);if(!i)return;i.favorite=!i.favorite;save.save();render()});
  document.querySelectorAll("[data-lock-equipment]").forEach(b=>b.onclick=()=>{const i=save.state.equipment.find(x=>x.id===b.dataset.lockEquipment);if(!i)return;i.locked=!i.locked;save.save();render()});
@@ -57,6 +57,7 @@ function bindEquipment(){
 function equipItem(itemId,monsterId){
  const item=save.state.equipment.find(i=>i.id===itemId),monster=save.state.monsters.find(m=>m.id===monsterId);
  if(!item||!monster)return;
+ if(!save.state.party.includes(monsterId))return alert("控えモンスターには装備できません。");
  if(item.equippedBy){
   const old=save.state.monsters.find(m=>m.id===item.equippedBy);
   if(old)old.equipment[item.slot]=null;
@@ -65,6 +66,7 @@ function equipItem(itemId,monsterId){
  if(prior){const p=save.state.equipment.find(i=>i.id===prior);if(p)p.equippedBy=null}
  monster.equipment[item.slot]=item.id;item.equippedBy=monster.id;save.save();render();
 }
+function autoEquipMonster(monsterId){const monster=save.state.monsters.find(m=>m.id===monsterId);if(!monster||!save.state.party.includes(monsterId))return;for(const slot of["weapon","armor","accessory"]){const current=save.state.equipment.find(i=>i.id===monster.equipment?.[slot]),candidates=save.state.equipment.filter(i=>i.slot===slot&&(!i.equippedBy||i.equippedBy===monsterId)),best=candidates.sort((a,b)=>equipmentPower(b)-equipmentPower(a))[0];if(!best)continue;if(current&&current.id!==best.id)current.equippedBy=null;monster.equipment[slot]=best.id;best.equippedBy=monsterId}}
 function unequipItem(itemId){
  const item=save.state.equipment.find(i=>i.id===itemId);if(!item?.equippedBy)return;
  const monster=save.state.monsters.find(m=>m.id===item.equippedBy);
@@ -115,72 +117,50 @@ function purchaseResult(title,body){
 function createInputState(){return{pts:new Map(),last:null,pinch:null,drag:false,tap:0}}
 function seeded(seed){let n=seed>>>0;return()=>{n=(n*1664525+1013904223)>>>0;return n/4294967296}}
 function floorSeed(floor){const seeds=save.state.player.floorSeeds;seeds[floor]??=Math.floor(Math.random()*2147483647);save.save();return seeds[floor]}
-function floorConfig(floor,rng){if(floor<=3)return{cols:11,rows:11,shape:"初層"};const tier=Math.min(7,Math.floor((floor-1)/5)),base=13+tier*2,types=floor<8?["square","vertical","horizontal"]:["square","vertical","horizontal","cave","y"] ,shape=types[Math.floor(rng()*types.length)];let cols=base,rows=base;if(shape==="vertical"){cols=Math.max(11,base-4);rows=Math.min(29,base+6)}if(shape==="horizontal"){cols=Math.min(29,base+6);rows=Math.max(11,base-4)}return{cols:cols|1,rows:rows|1,shape}}
+function floorConfig(floor,rng){
+ const tier=Math.min(9,Math.floor((floor-1)/10));
+ const min=11+Math.min(8,tier),max=Math.min(31,17+tier*2);
+ let cols=(min+Math.floor(rng()*(max-min+1)))|1,rows=(min+Math.floor(rng()*(max-min+1)))|1;
+ const roll=rng();
+ const shape=roll<.66?"cave":roll<.78?"maze":roll<.88?"open":roll<.94?"square":"ring";
+ if(shape==="open"){cols=Math.max(cols,19);rows=Math.max(rows,19)}
+ if(shape==="square"){const s=(Math.min(cols,rows)|1);cols=s;rows=s}
+ return{cols,rows,shape}
+}
 function maze(){
  const floor=save.state.player.currentFloor,rng=seeded(floorSeed(floor)),cfg=floorConfig(floor,rng),{cols,rows,shape}=cfg;
- const tiles=Array.from({length:rows},()=>Array(cols).fill(1)),cx=Math.floor(cols/2);
- const allowed=(x,y)=>{
-  if(x<=0||y<=0||x>=cols-1||y>=rows-1)return false;
-  if(shape!=="y")return true;
-  const split=Math.floor(rows*.48);
-  if(y>=split)return Math.abs(x-cx)<=2;
-  const left=Math.round(cx-(split-y)*.55),right=Math.round(cx+(split-y)*.55);
-  return Math.abs(x-left)<=2||Math.abs(x-right)<=2||Math.abs(x-cx)<=1
- };
- let startCell=shape==="y"?{x:cx%2?cx:cx-1,y:rows-2-(rows%2?0:1)}:{x:1,y:1};
- if(!allowed(startCell.x,startCell.y))startCell={x:1,y:1};
- function carve(x,y){
-  tiles[y][x]=0;
-  for(const[dx,dy]of[[2,0],[-2,0],[0,2],[0,-2]].sort(()=>rng()-.5)){
-   const nx=x+dx,ny=y+dy;
-   if(allowed(nx,ny)&&tiles[ny][nx]){
-    tiles[y+dy/2][x+dx/2]=0;
-    carve(nx,ny)
-   }
-  }
+ let tiles=Array.from({length:rows},()=>Array(cols).fill(1));
+ const inside=(x,y)=>x>0&&y>0&&x<cols-1&&y<rows-1;
+ const carveBlob=(x,y,r=1)=>{for(let yy=-r;yy<=r;yy++)for(let xx=-r;xx<=r;xx++)if(inside(x+xx,y+yy)&&xx*xx+yy*yy<=r*r+r)tiles[y+yy][x+xx]=0};
+ const center={x:Math.floor(cols/2),y:Math.floor(rows/2)};
+ if(shape==="open"||shape==="square"){
+  const margin=shape==="square"?2:1+Math.floor(rng()*3);
+  for(let y=margin;y<rows-margin;y++)for(let x=margin;x<cols-margin;x++)tiles[y][x]=0;
+  const holes=Math.floor(cols*rows*(shape==="open"?.035:.018));
+  for(let i=0;i<holes;i++){const x=2+Math.floor(rng()*(cols-4)),y=2+Math.floor(rng()*(rows-4));if(rng()<.7)tiles[y][x]=1}
+ }else if(shape==="ring"){
+  for(let y=2;y<rows-2;y++)for(let x=2;x<cols-2;x++){const dx=(x-center.x)/(cols*.42),dy=(y-center.y)/(rows*.42),d=dx*dx+dy*dy;if(d<1&&d>.22)tiles[y][x]=0}
+  carveBlob(center.x,2,2);carveBlob(center.x,rows-3,2)
+ }else if(shape==="maze"){
+  function carve(x,y){tiles[y][x]=0;for(const[dx,dy]of[[2,0],[-2,0],[0,2],[0,-2]].sort(()=>rng()-.5)){const nx=x+dx,ny=y+dy;if(inside(nx,ny)&&tiles[ny][nx]){tiles[y+dy/2][x+dx/2]=0;carve(nx,ny)}}}
+  carve(1,1);
+  for(let i=0;i<Math.floor(cols*rows/45);i++){const x=1+Math.floor(rng()*(cols-2)),y=1+Math.floor(rng()*(rows-2));if(!tiles[y][x])carveBlob(x,y,rng()>.75?2:1)}
+ }else{
+  let x=center.x,y=center.y;carveBlob(x,y,2);const target=Math.floor(cols*rows*(.38+rng()*.18));let guard=target*25;
+  while(tiles.flat().filter(v=>v===0).length<target&&guard-->0){const d=[[1,0],[-1,0],[0,1],[0,-1]][Math.floor(rng()*4)];x=Math.max(2,Math.min(cols-3,x+d[0]));y=Math.max(2,Math.min(rows-3,y+d[1]));carveBlob(x,y,rng()<.08?2:rng()<.32?1:0)}
+  const rooms=2+Math.floor(rng()*5);
+  for(let i=0;i<rooms;i++){const tx=2+Math.floor(rng()*(cols-4)),ty=2+Math.floor(rng()*(rows-4));carveBlob(tx,ty,1+Math.floor(rng()*3));while(x!==tx||y!==ty){if(rng()<.5&&x!==tx)x+=Math.sign(tx-x);else if(y!==ty)y+=Math.sign(ty-y);else x+=Math.sign(tx-x);carveBlob(x,y,rng()<.25?1:0)}}
  }
- carve(startCell.x,startCell.y);
- if(shape==="cave")for(let i=0;i<Math.floor(cols*rows/18);i++){
-  const x=1+Math.floor(rng()*(cols-2)),y=1+Math.floor(rng()*(rows-2));
-  if(!tiles[y][x])for(let yy=-1;yy<=1;yy++)for(let xx=-1;xx<=1;xx++)if(allowed(x+xx,y+yy))tiles[y+yy][x+xx]=0
- }
-
- // Every carved route is widened while keeping the outer wall intact.
- const carved=[];
- for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++)if(!tiles[y][x])carved.push({x,y});
- for(const{x,y}of carved){
-  if(allowed(x+1,y))tiles[y][x+1]=0;
-  if(allowed(x,y+1))tiles[y+1][x]=0;
- }
-
- const cells=[];
- for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++)if(!tiles[y][x])cells.push({x,y});
- const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
- const degree=c=>[[1,0],[-1,0],[0,1],[0,-1]].filter(([dx,dy])=>!tiles[c.y+dy]?.[c.x+dx]).length;
- const deadEnds=cells.filter(c=>degree(c)<=2&&distance(c,startCell)>5);
- const exitPool=deadEnds.length?deadEnds:cells;
- const exit=exitPool.reduce((a,c)=>distance(c,startCell)>distance(a,startCell)?c:a,exitPool[0]);
-
- const reserved=c=>distance(c,startCell)<=3||distance(c,exit)<=3;
- const candidates=cells.filter(c=>!reserved(c));
- const used=new Set([`${startCell.x},${startCell.y}`,`${exit.x},${exit.y}`]);
- const pick=()=>{
-  const available=candidates.filter(c=>!used.has(`${c.x},${c.y}`));
-  const pool=available.length?available:candidates;
-  const p={...pool[Math.floor(rng()*pool.length)]};
-  used.add(`${p.x},${p.y}`);
-  return p
- };
-
- const count=Math.min(8,3+Math.floor(floor/4)),opened=save.state.player.openedChests[floor]??[],chests=[];
- for(let i=0;i<count;i++){
-  const roll=rng(),kind=roll>.9?"radiant":roll>.62?"cabinet":roll>.28?"box":"apple";
-  const emoji={apple:"🪎",box:"📦",cabinet:"🗃️",radiant:"✨📦"}[kind],p=pick();
-  chests.push({...p,id:`${floor}-${i}`,kind,emoji,open:opened.includes(`${floor}-${i}`)})
- }
- const shop=floor>=save.state.player.nextShopFloor?{...pick(),active:true}:null;
+ const cells=[];for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++)if(!tiles[y][x])cells.push({x,y});
+ if(cells.length<2){tiles[1][1]=0;tiles[rows-2][cols-2]=0;cells.push({x:1,y:1},{x:cols-2,y:rows-2})}
+ const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y),startCell=cells[Math.floor(rng()*cells.length)],exit=cells.reduce((a,c)=>distance(c,startCell)>distance(a,startCell)?c:a,cells[0]);
+ const reserved=c=>distance(c,startCell)<=4||distance(c,exit)<=4,candidates=cells.filter(c=>!reserved(c)),used=new Set([`${startCell.x},${startCell.y}`,`${exit.x},${exit.y}`]);
+ const pick=()=>{const available=candidates.filter(c=>!used.has(`${c.x},${c.y}`)),pool=available.length?available:candidates.length?candidates:cells,p={...pool[Math.floor(rng()*pool.length)]};used.add(`${p.x},${p.y}`);return p};
+ const opened=save.state.player.openedChests[floor]??[],chests=[],treasureRoom=rng()<.025,count=treasureRoom?6+Math.floor(rng()*3):(rng()<.16?0:rng()<.72?1:2);
+ for(let i=0;i<count;i++){const roll=rng(),kind=treasureRoom?(roll>.55?"radiant":"cabinet"):roll>.96?"radiant":roll>.78?"cabinet":roll>.25?"box":"apple",emoji={apple:"🪎",box:"📦",cabinet:"🗃️",radiant:"✨📦"}[kind],p=pick();chests.push({...p,id:`${floor}-${i}`,kind,emoji,open:opened.includes(`${floor}-${i}`)})}
+ const shopChance=floor%10===0?.35:.09,shop=rng()<shopChance?{...pick(),active:true}:null;if(shop)save.state.player.nextShopFloor=floor+3+Math.floor(rng()*8);
  const boss=floor%10===0&&!save.state.player.bossRewards[floor]?{...pick(),active:true}:null;
- return{cols,rows,shape,tiles,start:startCell,exit:{...exit},shop,boss,chests,steps:0,nextEncounter:8+Math.floor(rng()*18),encountering:false}
+ return{cols,rows,shape,tiles,start:startCell,exit:{...exit},shop,boss,chests,treasureRoom,steps:0,nextEncounter:10+Math.floor(rng()*23),encountering:false}
 }
 function currentSnapshot(){game.world.encountering=false;game.player.path=[];game.player.p=0;game.player.rx=game.player.x;game.player.ry=game.player.y;return{world:game.world,player:game.player,cameraData:{x:game.camera.x,y:game.camera.y,z:game.camera.z,ox:game.camera.ox,oy:game.camera.oy,manual:game.camera.manual}}}
 function bindExplore(){
@@ -226,9 +206,10 @@ function useFieldItem(type,targetId){
  if(type==="fullHeals"||type==="partyFullHeals")list.forEach(m=>{m.currentHp=calculatedStats(m).hp;m.currentMp=maxMp(m);clearAilments(m)});
  save.state.inventory[type]--;save.save();document.querySelector(".game-modal").remove();snapshot=currentSnapshot();stopGame();render();
 }
-function openPartyEditor(){game.paused=true;const body=`<p class="muted">その場で自由に編成できます。捕獲直後の仲間もすぐ使用可能。</p><div class="party-editor">${save.state.monsters.map(m=>`<button data-party-toggle="${m.id}" class="${save.state.party.includes(m.id)?"selected":""}"><span>${SPECIES[m.speciesId].emoji}</span><b>${displayName(m)}</b><small>Lv.${m.level}</small></button>`).join("")}</div>`;app.insertAdjacentHTML("beforeend",Modal("フィールド編成",body,"閉じる"));document.querySelectorAll("[data-party-toggle]").forEach(b=>b.onclick=()=>{const id=b.dataset.partyToggle,has=save.state.party.includes(id);if(has&&save.state.party.length<=1)return alert("最低1体必要");if(!has&&save.state.party.length>=4)return alert("編成は4体まで");save.state.party=has?save.state.party.filter(x=>x!==id):[...save.state.party,id];save.save();b.classList.toggle("selected",!has)});document.getElementById("closeGameModal").onclick=()=>{document.querySelector(".game-modal").remove();snapshot=currentSnapshot();stopGame();render()}}
-function randomEnemy(){const ids=Object.keys(SPECIES),floor=save.state.player.currentFloor,speciesId=ids[Math.floor(Math.random()*ids.length)];return{speciesId,level:Math.max(1,floor+Math.floor(Math.random()*3)-1),boss:false}}
-function floorBossEnemy(){const floor=save.state.player.currentFloor,ids=Object.keys(SPECIES),speciesId=floor%20===0?"dragon":ids[Math.floor(seeded(floorSeed(floor)+991)()*ids.length)];return{speciesId,level:Math.max(10,floor),boss:true}}
+function openPartyEditor(){game.paused=true;const body=`<p class="muted">その場で自由に編成できます。捕獲直後の仲間もすぐ使用可能。</p><div class="party-editor">${save.state.monsters.map(m=>`<button data-party-toggle="${m.id}" class="${save.state.party.includes(m.id)?"selected":""}"><span>${SPECIES[m.speciesId].emoji}</span><b>${displayName(m)}</b><small>Lv.${m.level}</small></button>`).join("")}</div>`;app.insertAdjacentHTML("beforeend",Modal("フィールド編成",body,"閉じる"));document.querySelectorAll("[data-party-toggle]").forEach(b=>b.onclick=()=>{const id=b.dataset.partyToggle,has=save.state.party.includes(id);if(has&&save.state.party.length<=1)return alert("最低1体必要");if(!has&&save.state.party.length>=4)return alert("編成は4体まで");if(has){const mon=save.state.monsters.find(m=>m.id===id);if(mon)Object.values(mon.equipment??{}).forEach(itemId=>{const item=save.state.equipment.find(i=>i.id===itemId);if(item)item.equippedBy=null});if(mon)mon.equipment={weapon:null,armor:null,accessory:null};save.state.party=save.state.party.filter(x=>x!==id)}else save.state.party=[...save.state.party,id];save.save();b.classList.toggle("selected",!has)});document.getElementById("closeGameModal").onclick=()=>{document.querySelector(".game-modal").remove();snapshot=currentSnapshot();stopGame();render()}}
+function enemyLevelForFloor(floor){const band=Math.floor((floor-1)/10),base=band*10+1,jumps=[0,0,1,2,3,5,7,9],variance=jumps[Math.floor(Math.random()*jumps.length)]-(Math.random()<.28?Math.floor(Math.random()*4):0),milestone=floor%50===1&&floor>1?8:floor%25===1&&floor>1?4:0;return Math.max(1,base+Math.floor((floor-1)%10*.58)+variance+milestone)}
+function randomEnemy(){const ids=Object.keys(SPECIES),floor=save.state.player.currentFloor,speciesId=ids[Math.floor(Math.random()*ids.length)],equipped=Math.random()<.11,gear=equipped?createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)]):null;return{speciesId,level:enemyLevelForFloor(floor),boss:false,equipped,gear}}
+function floorBossEnemy(){const floor=save.state.player.currentFloor,ids=Object.keys(SPECIES),speciesId=floor%20===0?"dragon":ids[Math.floor(seeded(floorSeed(floor)+991)()*ids.length)];return{speciesId,level:Math.max(10,Math.round(floor*.82)+Math.floor(Math.random()*5)),boss:true}}
 function loop(now){
  if(!game?.running)return;
  const dt=Math.min(.05,(now-game.last)/1000||0);game.last=now;
@@ -376,7 +357,7 @@ async function floatText(text,target,type){
 function startBattle(e){
  const sp=SPECIES[e.speciesId],party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);
  party.forEach(m=>{const hp=calculatedStats(m).hp,mp=maxMp(m);if(m.currentHp==null)m.currentHp=hp;if(m.currentMp==null)m.currentMp=mp;m.currentHp=Math.min(m.currentHp,hp);m.currentMp=Math.min(m.currentMp,mp)});
- const enemy=createEnemyBattleState(sp,e,save.state.player.currentFloor);
+ const enemy=createEnemyBattleState(sp,e,save.state.player.currentFloor);if(e.equipped&&e.gear){enemy.gear=e.gear;enemy.name=`⚔️ ${enemy.name}`;enemy.atk+=e.gear.stats.atk??0;enemy.def+=e.gear.stats.def??0;enemy.spd+=e.gear.stats.spd??0;enemy.maxHp+=e.gear.stats.hp??0;enemy.hp=enemy.maxHp}
  battle={enemy,party,species:SPECIES,turn:1,busy:false,auto:save.state.settings.autoBattle,guards:{},skillMenu:false,...createBattleRulesState(party)};
  buildTurnQueue(battle);
  addBattleLog(battle,`行動順：${battle.turnQueue.map(entry=>entry.name).join(" → ")}`);
@@ -553,7 +534,7 @@ function win(caught,m){
 
  const progress=battle.party.map(monster=>{
   const alive=monster.currentHp>0;
-  const before={level:monster.level,exp:monster.exp,need:expNeed(monster)};
+  const before={level:monster.level,exp:monster.exp,need:expNeed(monster),stats:{...calculatedStats(monster)},hp:monster.currentHp,mp:monster.currentMp};
   const gain=alive?share+(remainder-->0?1:0):0;
   monster.exp+=gain;
   let levels=0;
@@ -566,37 +547,17 @@ function win(caught,m){
    monster.currentMp=Math.min(maxMp(monster),monster.currentMp+2);
   }
 
-  return{ x:monster,before,gain,levels,need:expNeed(monster),alive };
+  return{ x:monster,before,gain,levels,need:expNeed(monster),alive,afterStats:{...calculatedStats(monster)} };
  });
 
  let drop=null,dropReceipt=null;
- if(Math.random()<.28){
-  drop=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)]);
-  dropReceipt=equipmentReceipt(drop);
- }
+ if(battle.enemy.gear&&Math.random()<.18){drop={...battle.enemy.gear,id:crypto.randomUUID?.()??`${Date.now()}-${Math.random()}`,equippedBy:null,createdAt:new Date().toISOString()};dropReceipt=equipmentReceipt(drop)}else if(Math.random()<.12){drop=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)]);dropReceipt=equipmentReceipt(drop)}
 
  save.save();
  activeEnemy=null;
  document.querySelector(".battle-screen")?.remove();
 
- const result=`<div class="victory-title">VICTORY</div>
-  <div class="reward-summary">
-   <b>+${gold}G</b>
-   <small>総EXP ${totalExp} / 生存 ${survivors.length}体で分配</small>
-   ${drop?`<b>[${drop.rarity}] ${drop.name}（${slotLabel(drop.slot)}）</b><small>${dropReceipt.message}</small>`:""}
-   ${caught?`<b>${m.nickname}を捕獲！</b>`:""}
-  </div>
-  <div class="exp-results">
-   ${progress.map(p=>`<div class="${p.alive?"":"exp-defeated"}">
-    <span>${SPECIES[p.x.speciesId].emoji}</span>
-    <section>
-     <b>${displayName(p.x)} Lv.${p.x.level}${p.levels?` <em>LEVEL UP!</em>`:""}</b>
-     <small>${p.alive?`EXP +${p.gain}`:"戦闘不能：EXP 0"}</small>
-     <i><u style="width:${Math.min(100,p.x.exp/p.need*100)}%"></u></i>
-     <small>${p.x.exp}/${p.need}</small>
-    </section>
-   </div>`).join("")}
-  </div>`;
+ const result=`<div class="victory-title">VICTORY</div><div class="reward-summary"><b>+${gold}G</b><small>総EXP ${totalExp} / 生存 ${survivors.length}体で分配</small>${drop?`<b>[${drop.rarity}] ${drop.name}（${slotLabel(drop.slot)}）</b><small>${dropReceipt.message}</small>`:""}${caught?`<b>${m.nickname}を捕獲！</b>`:""}</div><div class="exp-results compact">${progress.map(p=>{const hpMax=p.afterStats.hp,mpMax=maxMp(p.x),remaining=Math.max(0,p.need-p.x.exp),diff=k=>p.afterStats[k]-(p.before.stats[k]??0);return`<div class="${p.alive?"":"exp-defeated"} ${p.levels?"level-up-card":""}"><span>${SPECIES[p.x.speciesId].emoji}</span><section><b>${displayName(p.x)} ${p.levels?`Lv.${p.before.level} → Lv.${p.x.level} <em>LEVEL UP!</em>`:`Lv.${p.x.level}`}</b><div class="result-vitals"><small>HP ${p.x.currentHp}/${hpMax}</small><small>MP ${p.x.currentMp}/${mpMax}</small><small>${p.alive?`次まであと${remaining}EXP`:"戦闘不能：EXP 0"}</small></div><i class="result-exp"><u style="width:${Math.min(100,p.x.exp/p.need*100)}%"></u></i>${p.levels?`<div class="level-gains"><span>HP ${p.before.stats.hp} → ${p.afterStats.hp} <strong>+${diff("hp")}</strong></span><span>ATK ${p.before.stats.atk} → ${p.afterStats.atk} <strong>+${diff("atk")}</strong></span><span>DEF ${p.before.stats.def} → ${p.afterStats.def} <strong>+${diff("def")}</strong></span><span>SPD ${p.before.stats.spd} → ${p.afterStats.spd} <strong>+${diff("spd")}</strong></span></div>`:""}</section></div>`}).join("")}</div>`;
 
  if(battle.enemy.boss&&!save.state.player.bossRewards[save.state.player.currentFloor])return showBossRewards(result);
  app.insertAdjacentHTML("beforeend",Modal(caught?"捕獲成功！":"戦闘結果",result,"探索へ"));
