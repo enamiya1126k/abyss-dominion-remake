@@ -283,3 +283,9 @@ select{max-width:190px}
 .gacha-menu{display:grid;gap:10px}.gacha-menu button{display:grid;gap:4px;text-align:left;padding:15px}.gacha-menu small{color:#c9bdcf}
 .gacha-results{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:58vh;overflow:auto}.gacha-results>div{display:grid;grid-template-columns:34px 1fr;gap:4px 8px;align-items:center;padding:10px;border:1px solid #ffffff18;border-radius:12px;background:#0d0912}.gacha-results span{font-size:1.6rem;grid-row:1/3}.gacha-results small{font-size:.58rem}.rarity-SR{border-color:#c586ff!important}.rarity-SSR{border-color:#ffd05c!important;box-shadow:0 0 12px #ffd05c22}.rarity-LR{border-color:#ff79dd!important;box-shadow:0 0 16px #ff79dd33}
 .equipment-manage-panel small{display:block;margin-top:5px}.danger-zone{border-color:#ff6f7855}.danger-zone .danger{width:100%;margin:10px 0;background:#53262d}
+
+/* v0.6 mobile game interaction guards */
+html,body,#app,button,canvas,.screen,.panel{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+input,textarea{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
+button{touch-action:manipulation}
+.explore-party-strip>button{cursor:pointer}
