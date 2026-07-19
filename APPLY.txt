@@ -1,9 +1,15 @@
-ABYSS DOMINION v0.6.0-alpha.2 HOTFIX
+v0.7.0-alpha.1 差し替えファイル
 
-差し替えるファイルは3つだけです。
-1. index.html
-2. src/main.js
-3. src/core/config.js
+APPLY.txt
+README.md
+index.html
+src/main.js
+src/Styles/app.css
+src/core/config.js
+src/models/Monster.js
+src/services/SaveService.js
+src/ui/screens/BattleScreen.js
+src/ui/screens/HomeScreen.js
+src/ui/screens/ShopScreen.js
 
-それ以外は変更不要です。
-原因: src/main.js の floorBossEnemy() の末尾に閉じ括弧が1個多く、Parser errorになっていました。
+新規追加・削除ファイル：なし
