@@ -1,6 +1,8 @@
 import{SPECIES}from"../data/species.js";
 import{PERSONALITIES}from"../data/personalities.js";
 import{MONSTER_COLORS}from"../data/colors.js";
+import{normalizedResistances}from"../data/attributes.js";
+import{activeSeriesBonuses}from"../data/equipmentSeries.js";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -68,7 +70,12 @@ export function createMonster(speciesId,options={}){
     title:options.title??null,
     favorite:options.favorite??false,
     locked:options.locked??false,
-    equipment:{weapon:null,armor:null,accessory:null,...(options.equipment??{})},
+    attribute:options.attribute??species.element??"neutral",
+    resistances:normalizedResistances(options.resistances??species.resistances),
+    tags:options.tags??[species.race,species.role],
+    isBoss:options.isBoss??false,
+    sealedPower:options.sealedPower??null,
+    equipment:{weaponRight:null,weaponLeft:null,armorBody:null,armorSupport:null,accessoryNeck:null,accessoryFinger:null,...(options.equipment??{})},
     capturedAt:options.capturedAt??new Date().toISOString(),
     battles:options.battles??0,
     defeats:options.defeats??0,
@@ -122,8 +129,7 @@ export function calculatedStats(monster){
   if(syn.def)result.def=Math.floor(result.def*(1+syn.def));
   if(syn.spd)result.spd=Math.floor(result.spd*(1+syn.spd));
   if(syn.crit)result.crit+=syn.crit;
-  if(monster._seriesCounts?.guardian>=2)result.def=Math.floor(result.def*1.15);
-  if(monster._seriesCounts?.traveler>=2)result.spd=Math.floor(result.spd*1.10);
+  for(const bonus of activeSeriesBonuses(monster._seriesCounts)){if(bonus.effect.atk)result.atk=Math.floor(result.atk*(1+bonus.effect.atk));if(bonus.effect.def)result.def=Math.floor(result.def*(1+bonus.effect.def));if(bonus.effect.hp)result.hp=Math.floor(result.hp*(1+bonus.effect.hp));if(bonus.effect.spd)result.spd=Math.floor(result.spd*(1+bonus.effect.spd));if(bonus.effect.crit)result.crit+=bonus.effect.crit;if(bonus.effect.evasion)result.evasion+=bonus.effect.evasion;}
   return result;
 }
 export function unlockedSkills(monster){
@@ -134,3 +140,5 @@ export function unlockedSkills(monster){
     return{...skill,unlocked};
   });
 }
+
+export function calculateDangerRank(monster){const s=calculatedStats(monster);const gear=Object.values(monster.equipment??{}).filter(Boolean).length;const boss=monster.isBoss?2.5:1;const seal=monster.sealedPower?.ratio??1;return Math.max(1,Math.round((s.hp*.18+s.atk*2.8+s.def*2.2+s.spd*1.8+s.crit+s.evasion+gear*12)*boss*seal))}
