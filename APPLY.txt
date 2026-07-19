@@ -1,10 +1,13 @@
-ABYSS DOMINION v0.8.0-alpha.2.2 startup hotfix
+ABYSS DOMINION v0.9.0-alpha.1 Phase 2
 
-Files to replace:
-- index.html
-- src/main.js
+FULL ZIP: repository replacement
+PATCH ZIP: replace/add only included files
 
-Files to add:
-- src/app.bundle.js
-
-The entry script now loads from the new bundled filename, so Safari cannot reuse the broken cached module.
+Major changes:
+- Danger levels 1-5 with risk/reward scaling
+- Treasure vault probability scales with danger
+- Locked chests and abyss keys
+- Boss capture after first defeat, danger-adjusted chance
+- Attributes/resistances groundwork
+- Visible equipment series and active set bonuses
+- Save schema 12 migration
