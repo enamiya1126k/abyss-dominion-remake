@@ -1,15 +1,6 @@
-v0.7.0-alpha.1 差し替えファイル
+ABYSS DOMINION v0.8.0-alpha.1
 
-APPLY.txt
-README.md
-index.html
-src/main.js
-src/Styles/app.css
-src/core/config.js
-src/models/Monster.js
-src/services/SaveService.js
-src/ui/screens/BattleScreen.js
-src/ui/screens/HomeScreen.js
-src/ui/screens/ShopScreen.js
+FULL ZIP: repository replacement
+PATCH ZIP: replace only the included files, preserving their paths.
 
-新規追加・削除ファイル：なし
+Major changes: six equipment slots, hand rules, slot unlock progression, stronger bosses, hidden abyss/progression foundations, attributes/resistances/series/formations/danger rank/key inventory foundations.
