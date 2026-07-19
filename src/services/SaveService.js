@@ -5,7 +5,7 @@ function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
  ];
- return{schemaVersion:8,appVersion:APP_VERSION,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{}},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,partyPotions:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5},settings:{minimapVisible:true,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0}};
+ return{schemaVersion:9,appVersion:APP_VERSION,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{}},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,partyPotions:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5},settings:{minimapVisible:true,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0}};
 }
 export class SaveService{
  constructor(){this.state=this.load();this.save()}
@@ -53,7 +53,7 @@ export class SaveService{
   s.records.chests??=0;
   s.records.purchases??=0;
   s.monsters.forEach(m=>{
-   m.currentHp??=null;
+   m.traitId??="steady";
    m.currentMp??=maxMp(m);
    m.currentMp=Math.min(m.currentMp,maxMp(m));
    m.equipment??={weapon:null,armor:null,accessory:null};
@@ -82,9 +82,9 @@ export class SaveService{
     mainIds.add(id);
    }
   }));
-  s.schemaVersion=8;
+  s.schemaVersion=9;
   s.appVersion=APP_VERSION;
-  if(from<8)s.lastMigration={from,to:8,at:new Date().toISOString()};
+  if(from<9)s.lastMigration={from,to:9,at:new Date().toISOString()};
   return s
  }
  save(){this.state.appVersion=APP_VERSION;localStorage.setItem(SAVE_KEY,JSON.stringify(this.state))}
