@@ -88,9 +88,12 @@ export function MonsterDetailScreen(monster,state){
         <div class="panel">
           <h2>装備</h2>
           <div class="subline" style="margin-top:10px">
-            武器：${state?.equipment?.find(i=>i.id===monster.equipment.weapon)?.name??"未装備"}<br>
-            防具：${state?.equipment?.find(i=>i.id===monster.equipment.armor)?.name??"未装備"}<br>
-            アクセ：${state?.equipment?.find(i=>i.id===monster.equipment.accessory)?.name??"未装備"}
+            右手：${state?.equipment?.find(i=>i.id===monster.equipment.weaponRight)?.name??"未装備"}<br>
+            左手：${state?.equipment?.find(i=>i.id===monster.equipment.weaponLeft)?.name??"未装備"}<br>
+            胴：${state?.equipment?.find(i=>i.id===monster.equipment.armorBody)?.name??"未装備"}<br>
+            補助：${state?.equipment?.find(i=>i.id===monster.equipment.armorSupport)?.name??"未装備"}<br>
+            首：${state?.equipment?.find(i=>i.id===monster.equipment.accessoryNeck)?.name??"未装備"}<br>
+            指：${state?.equipment?.find(i=>i.id===monster.equipment.accessoryFinger)?.name??"未装備"}
           </div>
         </div>
 
