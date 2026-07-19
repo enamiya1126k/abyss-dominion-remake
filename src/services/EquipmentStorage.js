@@ -6,7 +6,7 @@ export function equipmentSellPrice(item){
 }
 
 export function slotLabel(slot){
- return{weapon:"武器",armor:"防具",accessory:"アクセ"}[slot]??slot;
+ return{weapon:"武器",armor:"防具",accessory:"アクセ",weaponRight:"右手武器",weaponLeft:"左手武器",armorBody:"胴防具",armorSupport:"補助防具",accessoryNeck:"首アクセ",accessoryFinger:"指アクセ"}[slot]??slot;
 }
 
 export function ensureEquipmentStorage(state){

@@ -5,13 +5,14 @@ function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
  ];
- return{schemaVersion:10,appVersion:APP_VERSION,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},bossKills:{}},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,partyPotions:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5},settings:{minimapVisible:true,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0}};
+ return{schemaVersion:11,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false},player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},bossKills:{}},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,partyPotions:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5,abyssKeys:0},settings:{minimapVisible:true,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0}};
 }
 export class SaveService{
  constructor(){this.state=this.load();this.save()}
  load(){try{const raw=localStorage.getItem(SAVE_KEY);return raw?this.migrate(JSON.parse(raw)):initialState()}catch(e){console.error(e);return initialState()}}
  migrate(s){
   const from=Number(s.schemaVersion??1);
+  s.flags??={};s.flags.abyssUnlocked??=false;s.flags.trueLevelCapRevealed??=false;s.flags.deepAbyssUnlocked??=false;
   s.player??={};
   s.player.gold??=1000;
   s.player.crystals??=20;
@@ -37,6 +38,7 @@ export class SaveService{
   s.inventory.fullHeals??=0;
   s.inventory.partyFullHeals??=0;
   s.inventory.captureCrystals??=0;
+  s.inventory.abyssKeys??=0;
   s.settings??={};
   s.settings.minimapVisible??=true;
   s.settings.shopDiscountSeed??=null;
@@ -58,10 +60,9 @@ export class SaveService{
    m.traitId??="steady";
    m.currentMp??=maxMp(m);
    m.currentMp=Math.min(m.currentMp,maxMp(m));
-   m.equipment??={weapon:null,armor:null,accessory:null};
-   m.equipment.weapon??=null;
-   m.equipment.armor??=null;
-   m.equipment.accessory??=null;
+   const oldGear=m.equipment??{};
+   m.equipment={weaponRight:oldGear.weaponRight??oldGear.weapon??null,weaponLeft:oldGear.weaponLeft??null,armorBody:oldGear.armorBody??oldGear.armor??null,armorSupport:oldGear.armorSupport??null,accessoryNeck:oldGear.accessoryNeck??oldGear.accessory??null,accessoryFinger:oldGear.accessoryFinger??null};
+   m.attribute??=null;m.resistances??={};m.tags??=[];m.isBoss??=false;m.sealedPower??=null;
   });
   for(const list of[s.equipment,s.reserveEquipment,s.bossEquipmentVault])list.forEach(i=>{
    i.favorite??=false;
@@ -71,6 +72,8 @@ export class SaveService{
    i.level??=1;
    i.createdAt??=new Date(0).toISOString();
    i.series??=null;
+   i.handedness??=i.slot==="weapon"?"either":null;
+   i.ruleOverrides??={};
   });
   // Old versions occasionally left equipped items outside the main equipment list.
   const mainIds=new Set(s.equipment.map(i=>i.id));
@@ -84,9 +87,9 @@ export class SaveService{
     mainIds.add(id);
    }
   }));
-  s.schemaVersion=10;
+  s.schemaVersion=11;
   s.appVersion=APP_VERSION;
-  if(from<10)s.lastMigration={from,to:10,at:new Date().toISOString()};
+  if(from<11)s.lastMigration={from,to:11,at:new Date().toISOString()};
   return s
  }
  save(){this.state.appVersion=APP_VERSION;localStorage.setItem(SAVE_KEY,JSON.stringify(this.state))}
