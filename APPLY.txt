@@ -1,11 +1,19 @@
-ABYSS DOMINION v0.2.2-alpha.2 FULL BUILD
+ABYSS DOMINION v0.6.0-alpha.1
 
-GitHubリポジトリの内容を、このZIP内のフォルダ内容で置き換えてください。
+【差し替え】
+index.html
+README.md
+src/main.js
+src/Styles/app.css
+src/core/config.js
+src/data/species.js
+src/data/skills.js
+src/models/Monster.js
+src/services/SaveService.js
+src/battle/SkillSystem.js
+src/ui/screens/MonsterDetailScreen.js
 
-更新:
-- 戦闘不能者はEXP 0
-- 総EXPを生存者だけで分配
-- 戦闘結果へ分配内容を表示
+【新規追加】なし
+【削除】なし
 
-適用後:
-REMAKE v0.2.2-alpha.2
+上記だけ差し替えれば更新できます。
