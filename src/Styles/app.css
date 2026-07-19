@@ -289,3 +289,46 @@ html,body,#app,button,canvas,.screen,.panel{-webkit-user-select:none;user-select
 input,textarea{-webkit-user-select:text;user-select:text;-webkit-touch-callout:default}
 button{touch-action:manipulation}
 .explore-party-strip>button{cursor:pointer}
+
+/* v0.7.0-alpha.1 */
+html,body{overscroll-behavior:none}
+.battle-screen,.explore-screen{height:100dvh;overflow:hidden}
+.turn-order{overflow:hidden;gap:3px}
+.turn-chip{min-width:64px;max-width:72px;padding:4px 5px}
+.turn-chip b{font-size:.52rem;max-width:62px;line-height:1.05}
+.turn-chip small{font-size:.38rem;line-height:1;margin-top:1px}
+.turn-order-title{font-size:.5rem;padding:0 4px}
+.level-gains{grid-template-columns:1fr 1fr!important;gap:2px 8px;font-size:.54rem;line-height:1.2}
+.exp-results.compact>div{padding:6px}
+.exp-results.compact section{gap:2px}
+.result-vitals{gap:2px 8px}
+.game-modal-card:not(.boss-reward){max-height:88dvh;overflow:auto}
+.home-party-actions{display:flex;align-items:center;gap:8px}
+.compact-button{min-height:auto;padding:6px 10px;font-size:.62rem}
+.modal-party-vitals{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-bottom:10px}
+.modal-party-vitals button{padding:7px;text-align:left;min-height:0}
+.modal-party-vitals b,.modal-party-vitals small{display:block;font-size:.62rem}
+.shop-list{display:grid;gap:8px}
+.shop-list button{display:grid;grid-template-columns:auto 1fr auto;grid-template-rows:auto auto;gap:3px 8px;text-align:left;align-items:center;min-height:72px}
+.shop-list button span{font-size:1.8rem;grid-row:1/3}
+.shop-list button small{color:var(--muted)}
+.shop-list button em{grid-column:3;grid-row:1/3;color:#ffd36b;font-style:normal;font-weight:900}
+@media(max-width:430px){
+ .turn-chip{min-width:56px;max-width:62px}
+ .turn-chip b{max-width:52px;font-size:.47rem}
+ .turn-chip small{font-size:.34rem}
+ .victory-title{font-size:1.45rem}
+ .reward-summary{margin:5px 0;gap:4px}
+ .exp-results.compact{gap:4px}
+ .exp-results.compact>div{grid-template-columns:26px 1fr}
+ .exp-results.compact>div>span{font-size:1.15rem}
+ .result-vitals small{font-size:.5rem}
+}
+
+@media(max-width:600px){
+ .exp-results.compact{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .exp-results.compact>div{grid-template-columns:22px 1fr;gap:4px}
+ .exp-results.compact section>b{font-size:.62rem;line-height:1.1}
+ .level-gains{font-size:.48rem;gap:1px 5px}
+ .result-vitals small{font-size:.44rem}
+}
