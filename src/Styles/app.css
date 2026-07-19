@@ -332,3 +332,5 @@ html,body{overscroll-behavior:none}
  .level-gains{font-size:.48rem;gap:1px 5px}
  .result-vitals small{font-size:.44rem}
 }
+
+.six-slots{display:grid;grid-template-columns:1fr 1fr;gap:6px}.six-slots span{display:block}.locked-slot{opacity:.55}.equipment-actions button:disabled{opacity:.42}
