@@ -19,6 +19,31 @@ export const TRAITS={
  lucky:{name:"幸運",description:"会心率+5%",mods:{crit:5}},
  steady:{name:"安定",description:"能力の偏りが少ない",mods:{}}
 };
+
+const RACE_EXP_RATE={
+ slime:.68,beast:.82,flying:.80,insect:.78,goblin:.90,plant:.88,
+ undead:1.00,demon:1.22,elemental:1.18,golem:1.35,dragon:1.95
+};
+const RACE_GROWTH_RATE={
+ slime:{hp:.82,atk:.72,def:.82,spd:.92},
+ beast:{hp:.94,atk:1.04,def:.88,spd:1.12},
+ flying:{hp:.78,atk:.96,def:.72,spd:1.20},
+ insect:{hp:.96,atk:.94,def:1.02,spd:.92},
+ goblin:{hp:.96,atk:1.00,def:.94,spd:1.02},
+ plant:{hp:1.08,atk:.84,def:1.05,spd:.72},
+ undead:{hp:1.10,atk:.98,def:1.05,spd:.78},
+ demon:{hp:1.12,atk:1.16,def:1.02,spd:.86},
+ elemental:{hp:.88,atk:1.12,def:.90,spd:1.06},
+ golem:{hp:1.28,atk:1.04,def:1.32,spd:.55},
+ dragon:{hp:1.34,atk:1.32,def:1.16,spd:.64}
+};
+export function expNeedFor(monster){
+  const species=SPECIES[monster.speciesId];
+  const rate=species.expRate??RACE_EXP_RATE[species.race]??1;
+  const base=40+monster.level*25+Math.floor(monster.level*monster.level*.55);
+  return Math.max(25,Math.floor(base*rate));
+}
+
 function randomTrait(){const keys=Object.keys(TRAITS);return keys[Math.floor(Math.random()*keys.length)]}
 export function createMonster(speciesId,options={}){
   const species=SPECIES[speciesId];
@@ -68,7 +93,8 @@ export function calculatedStats(monster){
   const rankMultiplier=1+(monster.rank-1)*.5;
   const starMultiplier=1+(monster.stars-1)*.08;
   const growth=species.growth??{};
-  const levelGrowthFor=key=>1+(monster.level-1)*.055*(growth[key]??1);
+  const raceGrowth=RACE_GROWTH_RATE[species.race]??{};
+  const levelGrowthFor=key=>1+(monster.level-1)*.055*(growth[key]??1)*(raceGrowth[key]??1);
   const plusBonus=monster.plus*.012;
 
   const calc=(key)=>{
