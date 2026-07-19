@@ -45,7 +45,7 @@ export function HomeScreen(state){
           </div>
         </div>
 
-        <p class="footer-note">召喚・休息・装備強化・宝物庫・鍵付き宝箱・ボス捕獲・危険度・シリーズ装備が解放された。</p>
+        <p class="footer-note">召喚・休息・装備強化・宝物庫・鍵付き宝箱・ボス捕獲・シリーズ装備が解放された。</p>
       </div>
     </section>
   `;
