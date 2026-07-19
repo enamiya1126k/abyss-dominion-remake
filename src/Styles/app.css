@@ -341,3 +341,7 @@ html,body{overscroll-behavior:none}
 .modal-party-vitals.selectable button.selected{border-color:var(--gold);box-shadow:0 0 0 2px #ffd36b55;background:#372447}
 .battle-item-list .empty{padding:14px;text-align:center;color:var(--muted)}
 .game-toast{position:fixed;z-index:120;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);padding:10px 16px;border-radius:999px;background:#21152bdc;border:1px solid var(--line);box-shadow:0 8px 28px #0008;color:#fff;font-weight:800;white-space:nowrap}
+
+/* Phase 2: danger, treasure and equipment series */
+.danger-select{display:grid;gap:7px;margin:14px 0;padding:12px;border:1px solid #8c5bb855;border-radius:14px;background:#160d1e}.danger-select select{width:100%}.danger-select small{color:var(--muted);line-height:1.45}.danger-hud{min-width:96px}.danger-hud small{color:#ffd36b!important}.enemy-danger{display:inline-block;margin-right:5px;padding:2px 6px;border-radius:99px;background:#7a2538;color:#ffd7dd;font-size:.58rem;vertical-align:middle}.series-summary{display:grid;gap:4px;margin:10px 0;padding:9px 11px;border-radius:12px;background:#120b18;border:1px solid #7d55a455}.series-summary small,.series-summary em{display:block;color:var(--muted);font-style:normal}.series-tag{color:#d89cff}.explore-hud{grid-template-columns:repeat(6,minmax(0,1fr)) auto}.treasure-room-banner{color:#ffd36b}
+@media(max-width:430px){.explore-hud{grid-template-columns:repeat(5,minmax(0,1fr));}.explore-hud .danger-hud{grid-column:span 3}.explore-hud .version{grid-column:span 2;text-align:right}}
