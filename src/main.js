@@ -1,4 +1,4 @@
-import{SaveService}from"./services/SaveService.js?v=0.6.0-alpha.1";
+import{SaveService}from"./services/SaveService.js?v=0.6.0-alpha.2";
 import{SPECIES}from"./data/species.js";
 import{HomeScreen}from"./ui/screens/HomeScreen.js";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js";
@@ -9,9 +9,9 @@ import{BattleScreen}from"./ui/screens/BattleScreen.js";
 import{Modal}from"./ui/components/Modal.js";
 import{createMonster,displayName,calculatedStats,TRAITS}from"./models/Monster.js";
 import{createEquipment,equipmentPower}from"./models/Equipment.js";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.6.0-alpha.1";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.6.0-alpha.2";
 import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.6.0-alpha.1";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.6.0-alpha.2";
 import{ShopScreen}from"./ui/screens/ShopScreen.js";
 import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier}from"./battle/EnemyAI.js";
@@ -254,7 +254,7 @@ function speciesPoolForFloor(floor){
 }
 function randomEnemy(){const floor=save.state.player.currentFloor;if(floor===1)return{speciesId:"slime",level:1,boss:false,equipped:false,gear:null};const pool=speciesPoolForFloor(floor),picked=pool[Math.floor(Math.random()*pool.length)],speciesId=picked.id,equipped=floor>=6&&Math.random()<.11,gear=equipped?createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)]):null;return{speciesId,level:enemyLevelForFloor(floor),boss:false,equipped,gear}}
 function randomEnemyGroup(){const floor=save.state.player.currentFloor;if(floor<=4)return[randomEnemy()];let count=1,r=Math.random();if(floor<10){if(r<.12)count=2}else if(floor<50){if(r<.03)count=3;else if(r<.25)count=2}else{if(r<.08)count=3;else if(r<.35)count=2}return Array.from({length:count},randomEnemy)}
-function floorBossEnemy(){const floor=save.state.player.currentFloor,pool=speciesPoolForFloor(Math.max(floor,10)).filter(s=>s.minFloor<=floor);const speciesId=(pool[Math.floor(seeded(floorSeed(floor)+991)()*pool.length)]??SPECIES.slime).id;return{speciesId,level:Math.max(10,Math.round(floor*.82)+Math.floor(Math.random()*5)),boss:true}}}
+function floorBossEnemy(){const floor=save.state.player.currentFloor,pool=speciesPoolForFloor(Math.max(floor,10)).filter(s=>s.minFloor<=floor);const speciesId=(pool[Math.floor(seeded(floorSeed(floor)+991)()*pool.length)]??SPECIES.slime).id;return{speciesId,level:Math.max(10,Math.round(floor*.82)+Math.floor(Math.random()*5)),boss:true}}
 function loop(now){
  if(!game?.running)return;
  const dt=Math.min(.05,(now-game.last)/1000||0);game.last=now;
