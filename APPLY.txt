@@ -1,18 +1,10 @@
-ABYSS DOMINION v0.8.0-alpha.2
+ABYSS DOMINION v0.8.0-alpha.2.1 HOTFIX
 
 Files to replace:
 - index.html
-- src/Styles/app.css
-- src/core/config.js
 - src/main.js
-- src/ui/components/Modal.js
 - src/ui/screens/BattleScreen.js
 
-Main changes:
-- modal cancel/close safety
-- rest cost and full-health guard
-- legacy equipment cleanup
-- field and battle item selection
-- pinch zoom
-- boss floor, strength, dialogue, replay capture
-- defeat returns party at HP1/MP0
+Fix:
+- Safari startup SyntaxError around battle command rendering.
+- Battle screen rendering split into smaller functions for WebKit compatibility.
