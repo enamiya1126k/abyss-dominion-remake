@@ -1,4 +1,4 @@
-import{SaveService}from"./services/SaveService.js?v=0.8.0-alpha.2";
+import{SaveService}from"./services/SaveService.js?v=0.8.0-alpha.2.1";
 import{SPECIES}from"./data/species.js";
 import{HomeScreen}from"./ui/screens/HomeScreen.js";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js";
@@ -9,9 +9,9 @@ import{BattleScreen}from"./ui/screens/BattleScreen.js";
 import{Modal}from"./ui/components/Modal.js";
 import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor}from"./models/Monster.js";
 import{createEquipment,equipmentPower}from"./models/Equipment.js";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.8.0-alpha.2";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.8.0-alpha.2.1";
 import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.8.0-alpha.2";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.8.0-alpha.2.1";
 import{ShopScreen}from"./ui/screens/ShopScreen.js";
 import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier}from"./battle/EnemyAI.js";
