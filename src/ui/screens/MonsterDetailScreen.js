@@ -2,7 +2,7 @@ import{SPECIES}from"../../data/species.js";
 import{PERSONALITIES}from"../../data/personalities.js";
 import{MONSTER_COLORS}from"../../data/colors.js";
 import{
-  displayName,rankName,colorValue,calculatedStats,unlockedSkills
+  displayName,rankName,colorValue,calculatedStats,unlockedSkills,TRAITS
 }from"../../models/Monster.js";
 
 export function MonsterDetailScreen(monster,state){
@@ -10,6 +10,9 @@ export function MonsterDetailScreen(monster,state){
   const personality=PERSONALITIES[monster.personalityId];
   const stats=calculatedStats(monster);
   const skills=unlockedSkills(monster);
+  const trait=TRAITS[monster.traitId]??TRAITS.steady;
+  const need=Math.floor(65*Math.pow(1.12,monster.level-1));
+  const remaining=Math.max(0,need-monster.exp);
 
   return`
     <section class="screen">
@@ -26,7 +29,7 @@ export function MonsterDetailScreen(monster,state){
             <div class="eyebrow">${rankName(monster)}</div>
             <h1>${displayName(monster)}</h1>
             <div class="stars">${"★".repeat(monster.stars)}${"☆".repeat(Math.max(0,5-monster.stars))}</div>
-            <div class="subline">Lv.${monster.level} / Rank ${monster.rank} / +${monster.plus}</div>
+            <div class="subline">Lv.${monster.level} / Rank ${monster.rank} / +${monster.plus}</div><div class="subline">${species.race}族 / ${species.role} / ${species.element}属性</div>
           </div>
         </div>
 
@@ -62,6 +65,10 @@ export function MonsterDetailScreen(monster,state){
             <div class="stat-card"><span>回避率</span><b>${stats.evasion}%</b></div>
           </div>
         </div>
+
+        <div class="panel"><h2>経験値</h2><p><b>${monster.exp.toLocaleString()} / ${need.toLocaleString()}</b><br><small>次のレベルまであと ${remaining.toLocaleString()}</small></p></div>
+
+        <div class="panel"><h2>固有特性：${trait.name}</h2><p class="muted">${trait.description}</p></div>
 
         <div class="panel">
           <h2>性格：${personality.name}</h2>
