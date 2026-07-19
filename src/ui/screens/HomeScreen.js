@@ -38,7 +38,7 @@ export function HomeScreen(state){
         </div>
 
         <div class="panel">
-          <div class="spread"><h2>現在のパーティー</h2><span class="muted">${party.length}/4</span></div>
+          <div class="spread"><h2>現在のパーティー</h2><div class="home-party-actions"><span class="muted">${party.length}/4</span><button id="editHomeParty" class="compact-button">編成する</button></div></div>
           <div class="home-vitals">${party.map(m=>{const s=calculatedStats(m),hp=m.currentHp??s.hp,mp=m.currentMp??maxMp(m);return`<div><b>${displayName(m)} Lv.${m.level}</b><small>HP ${hp}/${s.hp}　MP ${mp}/${maxMp(m)}</small></div>`}).join("")}</div>
           <div class="monster-list" style="margin-top:12px">
             ${party.map(MonsterCard).join("")||'<div class="empty">パーティーなし</div>'}
