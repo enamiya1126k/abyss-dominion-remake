@@ -2,8 +2,9 @@ import{SPECIES}from"../data/species.js";
 import{SKILLS}from"../data/skills.js";
 
 export function maxMp(monster){
- const base={slime:16,goblin:13,fairy:24,dragon:18,mushroom:17}[monster.speciesId]??15;
- return Math.floor(base+(monster.level-1)*.7+(monster.rank-1)*5+(monster.stars-1));
+ const species=SPECIES[monster.speciesId];
+ const base=species?.maxMp??15;
+ return Math.floor(base+(monster.level-1)*.65+(monster.rank-1)*5+(monster.stars-1));
 }
 export function learnedSkills(monster){
  return SPECIES[monster.speciesId].skills
