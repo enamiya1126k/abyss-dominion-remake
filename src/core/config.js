@@ -1,7 +1,11 @@
-export const APP_VERSION="0.7.0-alpha.1";
+export const APP_VERSION="0.8.0-alpha.1";
 export const SAVE_KEY="abyss-dominion-remake-v001";
 export const MAX_PARTY_SIZE=4;
 export const MAX_STARS=10;
+export const PUBLIC_MAX_LEVEL=999;
+export const TRUE_MAX_LEVEL=9999999;
+export const ABYSS_UNLOCK_FLOOR=1000;
+export const DEEP_ABYSS_TARGET_FLOOR=10000;
 export const TILE_SIZE=48;
 export const MAP_COLS=31;
 export const MAP_ROWS=31;
