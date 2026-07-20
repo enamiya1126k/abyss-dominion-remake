@@ -35,6 +35,8 @@ export function HomeScreen(state){
           <button id="openSettings">設定</button>
           <button id="openRest">🛏️ 休息</button>
           <button id="openGacha" class="summon-button">🔮 深淵召喚</button>
+          <button id="openMonsterCodex">📖 モンスター図鑑</button>
+          <button id="openEquipmentCodex">🗡️ 装備図鑑</button>
         </div>
 
         <div class="panel">

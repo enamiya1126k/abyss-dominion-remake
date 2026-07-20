@@ -15,7 +15,7 @@ function renderEnemies(battle,enemies,target){
  return enemies.map(enemy=>{
   const statuses=enemyStatusesFor(battle,enemy.id);
   const statusHtml=statuses.length?`<div class="status-row">${statuses.map(s=>`<span class="status-chip ${s.id}">${statusLabel(s)}</span>`).join("")}</div>`:"";
-  const badge=enemy.boss?'<span class="boss-badge">BOSS</span>':"";const danger=enemy.dangerLevel>1?`<span class="enemy-danger">危険度${enemy.dangerLevel}</span>`:"";
+  const badge=enemy.boss?'<span class="boss-badge">BOSS</span>':"";const danger="";
   return `<button id="enemy-${enemy.id}" data-enemy-target="${enemy.id}" class="combatant enemy-combatant ${target?.id===enemy.id?"targeted":""}">
    <div class="enemy-name">${badge}${danger}${enemy.name} Lv.${enemy.level}</div>
    <div class="enemy-intent">${enemy.intent}${enemy.enraged?"・狂暴化":""}</div>
