@@ -1,24 +1,24 @@
-import{SaveService}from"./services/SaveService.js?v=0.9.4-alpha.1";
-import{SPECIES}from"./data/species.js?v=0.9.4-alpha.1";
-import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.4-alpha.1";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.4-alpha.1";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.4-alpha.1";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.4-alpha.1";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.4-alpha.1";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.4-alpha.1";
-import{Modal}from"./ui/components/Modal.js?v=0.9.4-alpha.1";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.4-alpha.1";
-import{createEquipment,equipmentPower}from"./models/Equipment.js?v=0.9.4-alpha.1";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.4-alpha.1";
-import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.4-alpha.1";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.4-alpha.1";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.4-alpha.1";
-import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js?v=0.9.4-alpha.1";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier}from"./battle/EnemyAI.js?v=0.9.4-alpha.1";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js?v=0.9.4-alpha.1";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.4-alpha.1";
-import{dangerConfig}from"./core/DangerSystem.js?v=0.9.4-alpha.1";
-import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.4-alpha.1";
+import{SaveService}from"./services/SaveService.js?v=0.9.5-alpha.1";
+import{SPECIES}from"./data/species.js?v=0.9.5-alpha.1";
+import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.5-alpha.1";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.5-alpha.1";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.5-alpha.1";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.5-alpha.1";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.5-alpha.1";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.5-alpha.1";
+import{Modal}from"./ui/components/Modal.js?v=0.9.5-alpha.1";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.5-alpha.1";
+import{createEquipment,equipmentPower}from"./models/Equipment.js?v=0.9.5-alpha.1";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.5-alpha.1";
+import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.5-alpha.1";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.5-alpha.1";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.5-alpha.1";
+import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js?v=0.9.5-alpha.1";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier}from"./battle/EnemyAI.js?v=0.9.5-alpha.1";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js?v=0.9.5-alpha.1";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.5-alpha.1";
+import{dangerConfig}from"./core/DangerSystem.js?v=0.9.5-alpha.1";
+import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.5-alpha.1";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
 let screen="home",selected=null,equipmentTarget=null,game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home";
@@ -64,13 +64,13 @@ function go(s){screen=s;render()}
 function bindHome(){document.getElementById("openMonsters").onclick=()=>go("monsters");document.getElementById("editHomeParty")?.addEventListener("click",openHomePartyEditor);document.getElementById("openRest")?.addEventListener("click",openRest);document.getElementById("openGacha")?.addEventListener("click",openGacha);document.getElementById("openDeepGacha")?.addEventListener("click",openDeepGacha);document.getElementById("openCodexHub")?.addEventListener("click",openCodexHub);document.getElementById("openMonsterCodex")?.addEventListener("click",()=>openCodex("monster"));document.getElementById("openEquipmentCodex")?.addEventListener("click",()=>openCodex("equipment"));document.getElementById("openSettings").onclick=()=>go("settings");document.getElementById("openExplore").onclick=()=>{const max=save.state.player.maxFloor;app.insertAdjacentHTML("beforeend",Modal("探索開始",`<p>再開する階層を選択</p><input id="floorSelect" type="number" min="1" max="${max}" value="${max}"><p class="muted">1〜${max}階。地域ごとに敵・背景・報酬傾向が変化します。</p>`,`出発`));const modal=topModal(),button=modal.querySelector("#closeGameModal");button.onclick=()=>{const f=Math.max(1,Math.min(max,Number(modal.querySelector("#floorSelect").value)||max));save.state.player.currentFloor=f;save.state.player.inRun=true;save.save();snapshot=null;modal.remove();go("explore")}};document.getElementById("openEquipment").onclick=()=>go("equipment");detailButtons()}
 function bindList(){const back=document.getElementById("backHome");if(back)back.onclick=()=>go("home");const input=document.getElementById("monsterSearch");if(input)input.oninput=()=>{const q=input.value.trim();document.querySelectorAll(".monster-card").forEach(c=>{const trigger=c.querySelector("[data-monster-id]");const m=trigger?save.state.monsters.find(x=>x.id===trigger.dataset.monsterId):null;const species=m?SPECIES[m.speciesId]:null;const nickname=m?.nickname??"";const speciesName=species?.name??"";c.style.display=!q||nickname.includes(q)||speciesName.includes(q)?"grid":"none"})};detailButtons()}
 function detailButtons(){document.querySelectorAll("[data-monster-id]").forEach(b=>b.onclick=()=>{selected=b.dataset.monsterId;go("detail")})}
-function bindDetail(m){document.getElementById("backMonsters").onclick=()=>go("monsters");document.getElementById("releaseMonster")?.addEventListener("click",()=>releaseMonster(m));document.getElementById("toggleFavorite").onclick=()=>{m.favorite=!m.favorite;save.save();render()};document.getElementById("saveNickname").onclick=()=>{const v=document.getElementById("nicknameInput").value.trim();if(v)m.nickname=v.slice(0,12);save.save();render()};document.querySelectorAll("[data-color-id]").forEach(b=>b.onclick=()=>{m.colorId=b.dataset.colorId;save.save();render()})}
+function bindDetail(m){document.getElementById("backMonsters").onclick=()=>go("monsters");document.getElementById("releaseMonster")?.addEventListener("click",()=>releaseMonster(m));document.getElementById("toggleFavorite").onclick=()=>{m.favorite=!m.favorite;save.save();render()};document.getElementById("saveNickname")?.addEventListener("click",()=>{const v=document.getElementById("nicknameInput").value.trim();if(v)m.nickname=v.slice(0,12);save.save();render()});document.querySelectorAll("[data-color-id]").forEach(b=>b.onclick=()=>{m.colorId=b.dataset.colorId;save.save();render()});document.getElementById("limitBreakButton")?.addEventListener("click",()=>performLimitBreak(m.id,{returnToDetail:true}));document.getElementById("openMonsterEquipment")?.addEventListener("click",()=>{equipmentTarget=m.id;navigationOrigin="detail";go("equipment")})}
 function bindSettings(){document.getElementById("backHome").onclick=()=>go("home");document.getElementById("toggleAuto").onclick=()=>{save.state.settings.autoBattle=!save.state.settings.autoBattle;save.save();render()};document.getElementById("toggleMinimap").onclick=()=>{save.state.settings.minimapVisible=!save.state.settings.minimapVisible;save.save();render()};document.getElementById("resetTutorials")?.addEventListener("click",()=>{save.state.settings.tutorialSeen={};save.save();alert("1〜5階のチュートリアルを再表示します")});document.getElementById("resetSave").onclick=()=>{if(confirm("初期化する？")){save.reset();snapshot=null;go("home")}}}
 
 
 function bindEquipment(){
  document.getElementById("backEquipmentHome").onclick=()=>{const target=navigationOrigin;navigationOrigin="home";go(target)};
- document.getElementById("equipmentTarget").onchange=e=>{equipmentTarget=e.target.value;render()};
+ document.querySelectorAll("[data-equipment-target]").forEach(b=>b.onclick=()=>{equipmentTarget=b.dataset.equipmentTarget;render()});
  document.getElementById("equipmentSort").onchange=e=>{save.state.settings.equipmentSort=e.target.value;save.save();render()};
  document.querySelectorAll("[data-equipment-slot]").forEach(b=>b.onclick=()=>{save.state.settings.equipmentSlot=b.dataset.equipmentSlot;save.save();render()});
  document.querySelectorAll("[data-equipment-storage]").forEach(b=>b.onclick=()=>{if(b.disabled)return;save.state.settings.equipmentStorage=b.dataset.equipmentStorage;save.save();render()});
@@ -143,7 +143,7 @@ function bindPartyEditor(modal){
 function refreshPartyEditor(modal){const body=modal.querySelector(".game-modal-body");if(!body)return;body.innerHTML=partyEditorBody();bindPartyEditor(modal)}
 function formatObtainedDate(value){try{return new Date(value).toLocaleDateString("ja-JP")}catch{return"不明"}}
 function limitBreakCandidates(m){return save.state.monsters.filter(x=>x.id!==m.id&&x.speciesId===m.speciesId&&!save.state.party.includes(x.id)&&!x.favorite&&!x.locked)}
-function performLimitBreak(id){const m=save.state.monsters.find(x=>x.id===id);if(!m)return;const materials=limitBreakCandidates(m);if(materials.length<2)return alert("限界突破には、控えにいる同名モンスターが2体必要です。\nお気に入り・ロック・出撃中の個体は素材にできません。");const growth=limitBreakGrowth(m.speciesId);if(!confirm(`${displayName(m)}を +${(m.plus??0)+1}へ限界突破する？\n\n素材：同名モンスター2体\nLv1基礎補正：HP+${growth.hp} / ATK+${growth.atk} / DEF+${growth.def} / SPD+${growth.spd}`))return;const ids=new Set(materials.slice(0,2).map(x=>x.id));save.state.monsters=save.state.monsters.filter(x=>!ids.has(x.id));m.plus=(m.plus??0)+1;save.save();closeTopModal();openPartyMonsterDetail(id);}
+function performLimitBreak(id,options={}){const m=save.state.monsters.find(x=>x.id===id);if(!m)return;const materials=limitBreakCandidates(m);if(materials.length<2)return alert("限界突破には、控えにいる同名モンスターが2体必要です。\nお気に入り・ロック・出撃中の個体は素材にできません。");const growth=limitBreakGrowth(m.speciesId),before=m.plus??0;if(!confirm(`${displayName(m)}を +${before+1}へ限界突破する？\n\n素材：同名モンスター2体\nLv1基礎補正：HP+${growth.hp} / ATK+${growth.atk} / DEF+${growth.def} / SPD+${growth.spd}`))return;const ids=new Set(materials.slice(0,2).map(x=>x.id));save.state.monsters=save.state.monsters.filter(x=>!ids.has(x.id));m.plus=before+1;save.save();document.querySelectorAll(".game-modal").forEach(x=>x.remove());app.insertAdjacentHTML("beforeend",Modal("✨ LIMIT BREAK ✨",`<div class="limit-break-result"><span>${SPECIES[m.speciesId]?.emoji??"👹"}</span><h2>${displayName(m)}</h2><div><b>+${before}</b><i>→</i><strong>+${m.plus}</strong></div><p>Lv.1基礎値<br>HP +${growth.hp} / ATK +${growth.atk} / DEF +${growth.def} / SPD +${growth.spd}</p></div>`,"育成画面へ"));topModalButton().onclick=()=>{closeTopModal();if(options.returnToDetail){selected=id;screen="detail";render()}else openPartyMonsterDetail(id)}}
 function openPartyMonsterDetail(id){const m=save.state.monsters.find(x=>x.id===id);if(!m)return;const sp=SPECIES[m.speciesId],st=calculatedStats(m),growth=limitBreakGrowth(m.speciesId),aff=m.affection??0,h=m.history??{},materials=limitBreakCandidates(m).length,friend=aff>=1000?" ❤️ 親友":"";app.insertAdjacentHTML("beforeend",Modal(`${sp.emoji} ${displayName(m)}`,`<div class="codex-detail monster-growth-detail"><p><b>${monsterVisibleRarity(m)} / ${elementLabel(sp.element)} / ${sp.role??"不明"}</b></p><div class="detail-stat-grid"><span>Lv.${m.level}</span><span>才能 ${"★".repeat(m.stars??1)}${"☆".repeat(5-(m.stars??1))}</span><span>限界突破 +${m.plus??0}</span><span>なつき ${aff}/1000${friend}</span><span>HP ${st.hp}</span><span>ATK ${st.atk}</span><span>DEF ${st.def}</span><span>SPD ${st.spd}</span></div><section class="growth-panel"><b>＋限界突破</b><p>同名2体で＋1・上限なし。Lv1基礎値へ毎回 HP+${growth.hp} / ATK+${growth.atk} / DEF+${growth.def} / SPD+${growth.spd}</p><button id="limitBreakButton" ${materials<2?"disabled":""}>＋${(m.plus??0)+1}へ限界突破（素材 ${materials}/2）</button></section><section class="growth-panel"><b>❤️ なつき度ボーナス</b><p>${aff>=1000?"全段階解放・親友":`現在 ${aff}/1000　次のボーナスまで ${Math.ceil((aff+1)/100)*100-aff}`}</p></section><section class="growth-panel history-panel"><b>📖 このモンスターの歴史</b><p>初獲得：${formatObtainedDate(m.obtainedAt??m.capturedAt)} / ${m.obtainedFloor??1}F / ${m.obtainedMethod==="summon"?"召喚":"捕獲"}<br>冒険 ${h.adventures??0}回 / 戦闘 ${h.battles??0}回 / 勝利 ${h.victories??0}回<br>撃破 ${h.kills??0}体 / ボス撃破 ${h.bossDefeats??0}体 / 最高到達 ${h.highestFloor??m.obtainedFloor??1}F</p></section><p class="muted">種族 ${sp.race??"不明"}<br>特性 ${TRAITS[m.traitId]?.name??"なし"}</p></div>`,"戻る"));const modal=topModal();modal.querySelector("#limitBreakButton")?.addEventListener("click",()=>performLimitBreak(id));topModalButton().onclick=closeTopModal}
 function openHomePartyEditor(){app.insertAdjacentHTML("beforeend",Modal("パーティー編成",partyEditorBody(),"確定"));const modal=topModal();bindPartyEditor(modal);modal.querySelector("#closeGameModal").onclick=()=>{modal.remove();render()}}
 
@@ -672,7 +672,7 @@ function win(caught,m){
  let remainder=survivors.length?totalExp%survivors.length:0;
 
  const participationKills=defeated.filter(e=>!e.captured).length;
- battle.party.forEach(monster=>{monster.affection=Math.min(1000,(monster.affection??monster.bond??0)+(boss?5:2));monster.bond=monster.affection;monster.history??={};monster.history.adventures=(monster.history.adventures??0)+1;monster.history.battles=(monster.history.battles??0)+1;monster.history.victories=(monster.history.victories??0)+1;monster.history.kills=(monster.history.kills??0)+participationKills;monster.history.bossDefeats=(monster.history.bossDefeats??0)+(boss?1:0);monster.history.highestFloor=Math.max(monster.history.highestFloor??1,floor);monster.battles=(monster.battles??0)+1;});
+ battle.party.forEach(monster=>{monster.affection=Math.min(1000,(monster.affection??monster.bond??0)+(boss?5:2));monster.bond=monster.affection;monster.history??={};monster.history.adventures=(monster.history.adventures??0)+1;monster.history.battles=(monster.history.battles??0)+1;monster.history.victories=(monster.history.victories??0)+1;monster.history.kills=(monster.history.kills??0)+participationKills;monster.history.bossDefeats=(monster.history.bossDefeats??0)+(boss?1:0);monster.history.highestFloor=Math.max(monster.history.highestFloor??1,floor);monster.history.lastDeployedAt=new Date().toISOString();monster.history.consecutiveDeployments=(monster.history.consecutiveDeployments??0)+1;monster.history.longestConsecutiveDeployments=Math.max(monster.history.longestConsecutiveDeployments??0,monster.history.consecutiveDeployments);monster.battles=(monster.battles??0)+1;});
  const progress=battle.party.map(monster=>{
   const alive=monster.currentHp>0;
   const before={level:monster.level,exp:monster.exp,need:expNeed(monster),stats:{...calculatedStats(monster)},hp:monster.currentHp,mp:monster.currentMp};
