@@ -1,5 +1,5 @@
-import{SPECIES}from"../data/species.js";
-import{SKILLS}from"../data/skills.js";
+import{SPECIES}from"../data/species.js?v=0.9.2-alpha.2";
+import{SKILLS}from"../data/skills.js?v=0.9.2-alpha.2";
 
 export function maxMp(monster){
  const species=SPECIES[monster.speciesId];
