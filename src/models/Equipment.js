@@ -1,4 +1,4 @@
-import{EQUIPMENT_BASES}from"../data/equipment.js";
+import{EQUIPMENT_BASES}from"../data/equipment.js?v=0.9.2-alpha.2";
 
 function uid(){return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`}
 export function createEquipment(slot,options={}){
