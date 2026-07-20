@@ -1,4 +1,4 @@
-import{MonsterCard}from"../components/MonsterCard.js";
+import{MonsterCard}from"../components/MonsterCard.js?v=0.9.2-alpha.2";
 
 export function MonsterListScreen(state){
   const sorted=[...state.monsters].sort((a,b)=>

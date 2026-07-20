@@ -1,7 +1,7 @@
-import{APP_VERSION}from"../../core/config.js";
-import{MonsterCard}from"../components/MonsterCard.js";
-import{calculatedStats,displayName}from"../../models/Monster.js";
-import{maxMp}from"../../battle/SkillSystem.js";
+import{APP_VERSION}from"../../core/config.js?v=0.9.2-alpha.2";
+import{MonsterCard}from"../components/MonsterCard.js?v=0.9.2-alpha.2";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.2-alpha.2";
+import{maxMp}from"../../battle/SkillSystem.js?v=0.9.2-alpha.2";
 
 export function HomeScreen(state){
   const party=state.party
@@ -34,7 +34,7 @@ export function HomeScreen(state){
           <button id="openEquipment">装備</button>
           <button id="openSettings">設定</button>
           <button id="openRest">🛏️ 休息</button>
-          <button id="openGacha" class="summon-button">🔮 深淵召喚</button>
+          <button id="openGacha" class="summon-button">🔮 召喚の祭壇</button>${state.player.maxFloor>=1000?`<button id="openDeepGacha" class="deep-summon-button">🌌 深淵召喚</button>`:""}
           <button id="openMonsterCodex">📖 モンスター図鑑</button>
           <button id="openEquipmentCodex">🗡️ 装備図鑑</button>
         </div>

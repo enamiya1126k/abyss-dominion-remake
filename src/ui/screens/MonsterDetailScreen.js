@@ -1,9 +1,9 @@
-import{SPECIES}from"../../data/species.js";
-import{PERSONALITIES}from"../../data/personalities.js";
-import{MONSTER_COLORS}from"../../data/colors.js";
+import{SPECIES}from"../../data/species.js?v=0.9.2-alpha.2";
+import{PERSONALITIES}from"../../data/personalities.js?v=0.9.2-alpha.2";
+import{MONSTER_COLORS}from"../../data/colors.js?v=0.9.2-alpha.2";
 import{
   displayName,rankName,colorValue,calculatedStats,unlockedSkills,TRAITS
-}from"../../models/Monster.js";
+}from"../../models/Monster.js?v=0.9.2-alpha.2";
 
 export function MonsterDetailScreen(monster,state){
   const species=SPECIES[monster.speciesId];
