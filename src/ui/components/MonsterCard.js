@@ -1,5 +1,5 @@
-import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js";
-import{PERSONALITIES}from"../../data/personalities.js";
+import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=0.9.2-alpha.2";
+import{PERSONALITIES}from"../../data/personalities.js?v=0.9.2-alpha.2";
 
 export function MonsterCard(monster,inParty=false){
   const stats=calculatedStats(monster);
