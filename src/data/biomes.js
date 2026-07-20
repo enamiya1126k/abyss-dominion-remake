@@ -1,3 +1,4 @@
+import{SPECIES}from"./species.js";
 export const BIOMES=[
  {id:"origin_cave",name:"始まりの洞窟",icon:"🟢",from:1,to:10,theme:"cave",accent:"#7bcf8b",description:"湿った岩肌と淡い魔力が満ちる入口。",elements:["water","earth","dark"]},
  {id:"forgotten_forest",name:"忘れられた森",icon:"🌲",from:11,to:20,theme:"forest",accent:"#75c96b",description:"地下に根を張った古い森。",elements:["nature","wind","light"]},
@@ -12,11 +13,9 @@ export function biomeForFloor(floor){
  return BIOMES.find(b=>f>=b.from&&f<=b.to)??{id:`deep_${Math.floor((f-1)/50)}`,name:`深層域 ${Math.floor((f-1)/50)+1}`,icon:"🌑",from:Math.floor((f-1)/50)*50+1,to:Math.floor((f-1)/50)*50+50,theme:"deep",accent:"#8e73c9",description:"未踏の深層域。",elements:["dark"]};
 }
 export function biomeProgress(state,biome){
- const codex=state.codex??{};const seen=codex.encounters??{};
- const monsterIds=Object.keys(seen).filter(id=>seen[id]>0);
- const monsterScore=Math.min(55,monsterIds.length*5);
- const chestCount=Object.entries(state.player.openedChests??{}).filter(([floor])=>Number(floor)>=biome.from&&Number(floor)<=biome.to).reduce((n,[,ids])=>n+(ids?.length??0),0);
- const chestScore=Math.min(25,chestCount*5);
- const bossScore=Object.entries(state.player.bossKills??{}).some(([floor,k])=>Number(floor)>=biome.from&&Number(floor)<=biome.to&&k>0)?20:0;
- return Math.min(100,monsterScore+chestScore+bossScore);
+ const visited=new Set((state.player.visitedFloors??[]).map(Number));const floors=[];for(let f=biome.from;f<=biome.to;f++)floors.push(f);const floorScore=floors.length?Math.round(floors.filter(f=>visited.has(f)).length/floors.length*60):0;
+ const regional=Object.values(SPECIES).filter(sp=>(sp.minFloor??1)>=biome.from&&(sp.minFloor??1)<=biome.to);const seen=state.codex?.encounters??{};const encounterScore=regional.length?Math.round(regional.filter(sp=>(seen[sp.id]??0)>0).length/regional.length*20):0;
+ const chestCount=Object.entries(state.player.openedChests??{}).filter(([floor])=>Number(floor)>=biome.from&&Number(floor)<=biome.to).reduce((n,[,ids])=>n+(ids?.length??0),0);const eventScore=Math.min(10,chestCount*2);
+ const bossFloor=biome.to;const bossScore=(state.player.bossKills?.[bossFloor]??0)>0?10:0;
+ return Math.min(100,floorScore+encounterScore+eventScore+bossScore);
 }
