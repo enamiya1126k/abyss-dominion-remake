@@ -1,6 +1,6 @@
 # ABYSS DOMINION
 
-Current Version: v0.9.1-alpha.1.2
+Current Version: v0.9.2-alpha.2
 
 ## EXP Distribution Update
 
