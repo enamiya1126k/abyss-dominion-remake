@@ -63,10 +63,11 @@ export function createMonster(speciesId,options={}){
     ivs:options.ivs??{hp:randomIV(),atk:randomIV(),def:randomIV(),spd:randomIV()},
     level,
     exp:options.exp??0,
-    stars:options.stars??1,
+    stars:options.stars??Math.max(1,Math.min(5,options.talent??1)),
     rank:options.rank??1,
     plus:options.plus??0,
-    bond:options.bond??0,
+    affection:Math.max(0,Math.min(1000,options.affection??options.bond??0)),
+    bond:Math.max(0,Math.min(1000,options.affection??options.bond??0)),
     title:options.title??null,
     favorite:options.favorite??false,
     locked:options.locked??false,
@@ -77,6 +78,10 @@ export function createMonster(speciesId,options={}){
     sealedPower:options.sealedPower??null,
     equipment:{weaponRight:null,weaponLeft:null,armorBody:null,armorSupport:null,accessoryNeck:null,accessoryFinger:null,...(options.equipment??{})},
     capturedAt:options.capturedAt??new Date().toISOString(),
+    obtainedAt:options.obtainedAt??options.capturedAt??new Date().toISOString(),
+    obtainedFloor:options.obtainedFloor??1,
+    obtainedMethod:options.obtainedMethod??"capture",
+    history:{adventures:0,battles:options.battles??0,victories:0,defeats:options.defeats??0,bossDefeats:0,kills:0,mvp:0,highestFloor:options.obtainedFloor??1,...(options.history??{})},
     battles:options.battles??0,
     defeats:options.defeats??0,
     currentHp:options.currentHp??null,
@@ -94,22 +99,43 @@ export function rankName(monster){
 export function colorValue(monster){
   return MONSTER_COLORS.find(c=>c.id===monster.colorId)?.value??MONSTER_COLORS[0].value;
 }
+
+export function limitBreakGrowth(speciesId){
+  const base=SPECIES[speciesId]?.baseStats??{};
+  return{
+    hp:Math.max(1,Math.round((base.hp??1)*.025)),
+    atk:Math.max(0,Math.round((base.atk??0)*.025)),
+    def:Math.max(0,Math.round((base.def??0)*.025)),
+    spd:Math.max(0,Math.round((base.spd??0)*.025))
+  };
+}
+export function affectionBonuses(value){
+  const a=Math.max(0,Math.min(1000,Number(value)||0)),b={hp:0,atk:0,def:0,spd:0};
+  if(a>=100)b.hp+=.01;if(a>=200)b.atk+=.01;if(a>=300)b.def+=.01;if(a>=400)b.spd+=.01;
+  if(a>=500)b.hp+=.02;if(a>=600)b.atk+=.02;if(a>=700)b.def+=.02;if(a>=800)b.spd+=.02;
+  if(a>=900)for(const k of Object.keys(b))b[k]+=.03;
+  if(a>=1000)for(const k of Object.keys(b))b[k]+=.05;
+  return b;
+}
+
 export function calculatedStats(monster){
   const species=SPECIES[monster.speciesId];
   const personality=PERSONALITIES[monster.personalityId];
   const rankMultiplier=1+(monster.rank-1)*.5;
-  const starMultiplier=1+(monster.stars-1)*.08;
+  const talent=Math.max(1,Math.min(5,monster.stars??1));
+  const talentMultiplier=1+(talent-1)*.08;
   const growth=species.growth??{};
   const raceGrowth=RACE_GROWTH_RATE[species.race]??{};
   const levelGrowthFor=key=>1+(monster.level-1)*.055*(growth[key]??1)*(raceGrowth[key]??1);
-  const plusBonus=monster.plus*.012;
+  const limitGrowth=limitBreakGrowth(monster.speciesId);
+  const affection=affectionBonuses(monster.affection??monster.bond??0);
 
   const calc=(key)=>{
-    const base=species.baseStats[key];
+    const base=species.baseStats[key]+(limitGrowth[key]??0)*Math.max(0,monster.plus??0);
     const iv=monster.ivs[key]??75;
     const ivMultiplier=.75+iv/400;
     const personalityMultiplier=personality.modifiers[key]??1;
-    return Math.floor(base*rankMultiplier*starMultiplier*levelGrowthFor(key)*ivMultiplier*personalityMultiplier*(1+plusBonus));
+    return Math.floor(base*rankMultiplier*talentMultiplier*levelGrowthFor(key)*ivMultiplier*personalityMultiplier*(1+(affection[key]??0)));
   };
 
   const trait=TRAITS[monster.traitId]??TRAITS.steady;
