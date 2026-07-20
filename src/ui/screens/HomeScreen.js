@@ -1,13 +1,11 @@
-import{APP_VERSION}from"../../core/config.js?v=0.9.3-alpha.1";
-import{MonsterCard}from"../components/MonsterCard.js?v=0.9.3-alpha.1";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.3-alpha.1";
-import{maxMp}from"../../battle/SkillSystem.js?v=0.9.3-alpha.1";
+import{APP_VERSION}from"../../core/config.js?v=0.9.5-alpha.1";
+import{MonsterCard}from"../components/MonsterCard.js?v=0.9.5-alpha.1";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.5-alpha.1";
+import{maxMp}from"../../battle/SkillSystem.js?v=0.9.5-alpha.1";
+import{SPECIES}from"../../data/species.js?v=0.9.5-alpha.1";
 
 export function HomeScreen(state){
-  const party=state.party
-    .map(id=>state.monsters.find(m=>m.id===id))
-    .filter(Boolean);
-
+  const party=state.party.map(id=>state.monsters.find(m=>m.id===id)).filter(Boolean);
   return`
     <section class="screen home-screen">
       <div class="page">
@@ -16,41 +14,24 @@ export function HomeScreen(state){
         <p class="muted">最強のモンスター軍団を、何百時間も育て続ける。</p>
 
         <div class="panel home-status-panel">
-          <div class="spread">
-            <div>
-              <div class="gold">REMAKE v${APP_VERSION}</div>
-              <h2>モンスター基盤</h2>
-            </div>
-            <div class="muted">最高 ${state.player.maxFloor}階</div>
-          </div>
-          <div class="subline" style="margin-top:10px">
-            GOLD ${state.player.gold}　魔晶石 ${state.player.crystals}
-          </div>
+          <div class="spread"><div><div class="gold">REMAKE v${APP_VERSION}</div><h2>モンスター基盤</h2></div><div class="muted">最高 ${state.player.maxFloor}階</div></div>
+          <div class="subline" style="margin-top:10px">GOLD ${state.player.gold}　魔晶石 ${state.player.crystals}</div>
         </div>
 
         <div class="home-main-menu">
-          <button id="openExplore" class="primary">🗺️ 探索</button>
-          <button id="openGacha" class="primary summon-button">🔮 ガチャ</button>
-          <button id="openMonsters">👹 モンスター</button>
-          <button id="openEquipment">⚔️ 装備</button>
-          <button id="openCodexHub">📖 図鑑</button>
-          <button id="openSettings">⚙️ 設定</button>
+          <button id="openExplore" class="primary">🗺️ 探索</button><button id="openGacha" class="primary summon-button">🔮 ガチャ</button>
+          <button id="openMonsters">👹 モンスター</button><button id="openEquipment">⚔️ 装備</button>
+          <button id="openCodexHub">📖 図鑑</button><button id="openSettings">⚙️ 設定</button>
         </div>
-        <div class="home-utility-row">
-          <button id="openRest" class="compact-button">🛏️ 休息</button>
-          ${state.player.maxFloor>=1000?`<button id="openDeepGacha" class="compact-button deep-summon-button">🌌 深淵召喚</button>`:""}
-        </div>
+        <div class="home-utility-row"><button id="openRest" class="compact-button">🛏️ 休息</button>${state.player.maxFloor>=1000?`<button id="openDeepGacha" class="compact-button deep-summon-button">🌌 深淵召喚</button>`:""}</div>
 
-        <div class="panel">
-          <div class="spread"><h2>現在のパーティー</h2><div class="home-party-actions"><span class="muted">${party.length}/4</span><button id="editHomeParty" class="compact-button">編成する</button></div></div>
-          <div class="home-vitals">${party.map(m=>{const s=calculatedStats(m),hp=m.currentHp??s.hp,mp=m.currentMp??maxMp(m);return`<div><b>${displayName(m)} Lv.${m.level}</b><small>HP ${hp}/${s.hp}　MP ${mp}/${maxMp(m)}</small></div>`}).join("")}</div>
-          <div class="monster-list" style="margin-top:12px">
-            ${party.map(MonsterCard).join("")||'<div class="empty">パーティーなし</div>'}
-          </div>
+        <div class="panel home-party-panel">
+          <div class="spread"><div><h2>現在のパーティー</h2><small class="muted">育てる4体が、このゲームの主人公。</small></div><span class="muted">${party.length}/4</span></div>
+          <button id="editHomeParty" class="home-edit-party-button"><span>⚔️</span><b>パーティーを編成する</b><small>組み合わせ・役割・育成状況を比較</small></button>
+          <div class="home-vitals">${party.map(m=>{const s=calculatedStats(m),hp=m.currentHp??s.hp,mp=m.currentMp??maxMp(m),sp=SPECIES[m.speciesId];return`<div class="home-party-unit"><span>${sp?.emoji??"👹"}</span><section><b>${displayName(m)} Lv.${m.level}</b><small>⭐${m.stars??1}　+${m.plus??0}　❤️${m.affection??0}</small><small>HP ${hp}/${s.hp}　MP ${mp}/${maxMp(m)}</small></section></div>`}).join("")||'<div class="empty">パーティーなし</div>'}</div>
+          <div class="monster-list" style="margin-top:12px">${party.map(MonsterCard).join("")}</div>
         </div>
-
         <p class="footer-note">探索・育成・召喚を繰り返し、地下1000階を目指そう。</p>
       </div>
-    </section>
-  `;
+    </section>`;
 }
