@@ -1,4 +1,3 @@
-import{SPECIES}from"./species.js";
 export const BIOMES=[
  {id:"origin_cave",name:"始まりの洞窟",icon:"🟢",from:1,to:10,theme:"cave",accent:"#7bcf8b",description:"湿った岩肌と淡い魔力が満ちる入口。",elements:["water","earth","dark"]},
  {id:"forgotten_forest",name:"忘れられた森",icon:"🌲",from:11,to:20,theme:"forest",accent:"#75c96b",description:"地下に根を張った古い森。",elements:["nature","wind","light"]},
@@ -12,10 +11,45 @@ export function biomeForFloor(floor){
  const f=Math.max(1,Number(floor)||1);
  return BIOMES.find(b=>f>=b.from&&f<=b.to)??{id:`deep_${Math.floor((f-1)/50)}`,name:`深層域 ${Math.floor((f-1)/50)+1}`,icon:"🌑",from:Math.floor((f-1)/50)*50+1,to:Math.floor((f-1)/50)*50+50,theme:"deep",accent:"#8e73c9",description:"未踏の深層域。",elements:["dark"]};
 }
+export function ensureBiomeProgress(state,biome){
+ state.biomeProgress??={};
+ const data=state.biomeProgress[biome.id]??={};
+ data.visitedFloors=Array.isArray(data.visitedFloors)?data.visitedFloors:[];
+ data.encounters=data.encounters&&typeof data.encounters==="object"?data.encounters:{};
+ data.openedChests=Array.isArray(data.openedChests)?data.openedChests:[];
+ data.events=Array.isArray(data.events)?data.events:[];
+ data.bossDefeated=Boolean(data.bossDefeated);
+ state.biomeProgress[biome.id]=data;
+ return data;
+}
+export function recordBiomeFloor(state,floor){
+ const biome=biomeForFloor(floor),data=ensureBiomeProgress(state,biome),value=Math.max(biome.from,Math.min(biome.to,Number(floor)||biome.from));
+ if(!data.visitedFloors.includes(value))data.visitedFloors.push(value);
+ return data;
+}
+export function recordBiomeEncounter(state,floor,speciesId){
+ const biome=biomeForFloor(floor),data=ensureBiomeProgress(state,biome);
+ if(speciesId)data.encounters[speciesId]=(data.encounters[speciesId]??0)+1;
+ return data;
+}
+export function recordBiomeChest(state,floor,chestId){
+ const biome=biomeForFloor(floor),data=ensureBiomeProgress(state,biome),id=String(chestId??`${floor}-chest`);
+ if(!data.openedChests.includes(id))data.openedChests.push(id);
+ return data;
+}
+export function recordBiomeBoss(state,floor){
+ const biome=biomeForFloor(floor),data=ensureBiomeProgress(state,biome);data.bossDefeated=true;return data;
+}
 export function biomeProgress(state,biome){
- const visited=new Set((state.player.visitedFloors??[]).map(Number));const floors=[];for(let f=biome.from;f<=biome.to;f++)floors.push(f);const floorScore=floors.length?Math.round(floors.filter(f=>visited.has(f)).length/floors.length*60):0;
- const regional=Object.values(SPECIES).filter(sp=>(sp.minFloor??1)>=biome.from&&(sp.minFloor??1)<=biome.to);const seen=state.codex?.encounters??{};const encounterScore=regional.length?Math.round(regional.filter(sp=>(seen[sp.id]??0)>0).length/regional.length*20):0;
- const chestCount=Object.entries(state.player.openedChests??{}).filter(([floor])=>Number(floor)>=biome.from&&Number(floor)<=biome.to).reduce((n,[,ids])=>n+(ids?.length??0),0);const eventScore=Math.min(10,chestCount*2);
- const bossFloor=biome.to;const bossScore=(state.player.bossKills?.[bossFloor]??0)>0?10:0;
- return Math.min(100,floorScore+encounterScore+eventScore+bossScore);
+ const data=ensureBiomeProgress(state,biome);
+ const floorCount=Math.max(1,biome.to-biome.from+1);
+ const validFloors=new Set(data.visitedFloors.filter(f=>f>=biome.from&&f<=biome.to));
+ const floorScore=Math.round(Math.min(1,validFloors.size/floorCount)*60);
+ const encounterKinds=Object.values(data.encounters).filter(n=>Number(n)>0).length;
+ const encounterTarget=Math.max(4,Math.min(10,Math.ceil(floorCount*.6)));
+ const encounterScore=Math.round(Math.min(1,encounterKinds/encounterTarget)*20);
+ const chestScore=Math.round(Math.min(1,data.openedChests.length/5)*10);
+ const bossFromSave=Object.entries(state.player?.bossKills??{}).some(([floor,k])=>Number(floor)>=biome.from&&Number(floor)<=biome.to&&Number(k)>0);
+ const bossScore=(data.bossDefeated||bossFromSave)?10:0;
+ return Math.min(100,floorScore+encounterScore+chestScore+bossScore);
 }
