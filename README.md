@@ -1,6 +1,6 @@
 # ABYSS DOMINION
 
-Current Version: **v0.2.3-alpha.1**
+Current Version: v0.9.1-alpha.1.2
 
 ## EXP Distribution Update
 
@@ -72,15 +72,6 @@ Current Version: **v0.2.3-alpha.1**
 - 長押し選択とダブルタップ拡大を抑止しつつ、Safariのピンチジェスチャーは維持
 
 
-## v0.9.2-alpha.1 hotfix
+## v0.9.1-alpha.1.1 hotfix
 - モンスター一覧画面で `bindList` が未定義になる起動エラーを修正。
 - モンスター詳細から一覧へ戻る際の同エラーを修正。
-
-
-## v0.9.2-alpha.1
-- Party formation search/filter/sort UI
-- Compact exploration layout
-- Biome-based exploration completion calculation
-- Safe battle result return handling
-- Party leader and follower field sprites
-- Summoning Altar naming and rarity guide
