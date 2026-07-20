@@ -1,7 +1,7 @@
-import{APP_VERSION}from"../../core/config.js?v=0.9.2-alpha.2";
-import{MonsterCard}from"../components/MonsterCard.js?v=0.9.2-alpha.2";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.2-alpha.2";
-import{maxMp}from"../../battle/SkillSystem.js?v=0.9.2-alpha.2";
+import{APP_VERSION}from"../../core/config.js?v=0.9.3-alpha.1";
+import{MonsterCard}from"../components/MonsterCard.js?v=0.9.3-alpha.1";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.3-alpha.1";
+import{maxMp}from"../../battle/SkillSystem.js?v=0.9.3-alpha.1";
 
 export function HomeScreen(state){
   const party=state.party
@@ -15,7 +15,7 @@ export function HomeScreen(state){
         <h1 class="hero-title">地下1000階の魔王</h1>
         <p class="muted">最強のモンスター軍団を、何百時間も育て続ける。</p>
 
-        <div class="panel">
+        <div class="panel home-status-panel">
           <div class="spread">
             <div>
               <div class="gold">REMAKE v${APP_VERSION}</div>
@@ -28,15 +28,17 @@ export function HomeScreen(state){
           </div>
         </div>
 
-        <div class="grid">
-          <button id="openMonsters" class="primary">モンスター</button>
-          <button id="openExplore" class="primary">探索へ</button>
-          <button id="openEquipment">装備</button>
-          <button id="openSettings">設定</button>
-          <button id="openRest">🛏️ 休息</button>
-          <button id="openGacha" class="summon-button">🔮 召喚の祭壇</button>${state.player.maxFloor>=1000?`<button id="openDeepGacha" class="deep-summon-button">🌌 深淵召喚</button>`:""}
-          <button id="openMonsterCodex">📖 モンスター図鑑</button>
-          <button id="openEquipmentCodex">🗡️ 装備図鑑</button>
+        <div class="home-main-menu">
+          <button id="openExplore" class="primary">🗺️ 探索</button>
+          <button id="openGacha" class="primary summon-button">🔮 ガチャ</button>
+          <button id="openMonsters">👹 モンスター</button>
+          <button id="openEquipment">⚔️ 装備</button>
+          <button id="openCodexHub">📖 図鑑</button>
+          <button id="openSettings">⚙️ 設定</button>
+        </div>
+        <div class="home-utility-row">
+          <button id="openRest" class="compact-button">🛏️ 休息</button>
+          ${state.player.maxFloor>=1000?`<button id="openDeepGacha" class="compact-button deep-summon-button">🌌 深淵召喚</button>`:""}
         </div>
 
         <div class="panel">
@@ -47,7 +49,7 @@ export function HomeScreen(state){
           </div>
         </div>
 
-        <p class="footer-note">召喚・休息・装備強化・宝物庫・鍵付き宝箱・ボス捕獲・シリーズ装備が解放された。</p>
+        <p class="footer-note">探索・育成・召喚を繰り返し、地下1000階を目指そう。</p>
       </div>
     </section>
   `;
