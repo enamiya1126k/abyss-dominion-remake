@@ -1,8 +1,8 @@
-import{APP_VERSION}from"../../core/config.js?v=0.9.7-alpha.1";
-import{MonsterCard}from"../components/MonsterCard.js?v=0.9.7-alpha.1";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.7-alpha.1";
-import{maxMp}from"../../battle/SkillSystem.js?v=0.9.7-alpha.1";
-import{SPECIES}from"../../data/species.js?v=0.9.7-alpha.1";
+import{APP_VERSION}from"../../core/config.js?v=0.9.8-alpha.1";
+import{MonsterCard}from"../components/MonsterCard.js?v=0.9.8-alpha.1";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.8-alpha.1";
+import{maxMp}from"../../battle/SkillSystem.js?v=0.9.8-alpha.1";
+import{SPECIES}from"../../data/species.js?v=0.9.8-alpha.1";
 
 export function HomeScreen(state){
   const party=state.party.map(id=>state.monsters.find(m=>m.id===id)).filter(Boolean);
