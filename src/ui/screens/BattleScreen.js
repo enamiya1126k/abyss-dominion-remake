@@ -15,10 +15,10 @@ function renderEnemies(battle,enemies,target){
  return enemies.map(enemy=>{
   const statuses=enemyStatusesFor(battle,enemy.id);
   const statusHtml=statuses.length?`<div class="status-row">${statuses.map(s=>`<span class="status-chip ${s.id}">${statusLabel(s)}</span>`).join("")}</div>`:"";
-  const badge=enemy.boss?'<span class="boss-badge">BOSS</span>':"";const danger="";
-  return `<button id="enemy-${enemy.id}" data-enemy-target="${enemy.id}" class="combatant enemy-combatant ${target?.id===enemy.id?"targeted":""}">
+  const badge=enemy.boss?'<span class="boss-badge">BOSS</span>':enemy.elite?`<span class="elite-badge">${enemy.eliteAffixIcon??"🜲"} ELITE・${enemy.eliteAffixName??"変異"}</span>`:"";const danger="";
+  return `<button id="enemy-${enemy.id}" data-enemy-target="${enemy.id}" class="combatant enemy-combatant ${enemy.elite?"elite-enemy":""} ${target?.id===enemy.id?"targeted":""}">
    <div class="enemy-name">${badge}${danger}${enemy.name} Lv.${enemy.level}</div>
-   <div class="enemy-intent">${enemy.intent}${enemy.enraged?"・狂暴化":""}</div>
+   <div class="enemy-intent">${enemy.intent}${enemy.enraged?"・狂暴化":""}</div>${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
    ${statusHtml}
    <div class="enemy-orb" style="background:${enemy.color}"><span>${enemy.emoji??"👾"}</span></div>
    <div class="battle-bar"><i style="width:${enemy.hp/enemy.maxHp*100}%"></i></div>
