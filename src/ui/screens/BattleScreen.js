@@ -80,8 +80,9 @@ function renderCommands(battle,actor,current,enemies,target,inventory,skills){
 
 export function BattleScreen(battle,inventory,settings){
  const actor=currentAlly(battle),current=currentTurnEntry(battle),enemies=aliveEnemies(battle),target=selectedEnemy(battle),skills=actor?learnedSkills(actor):[];
- return `<section class="battle-screen" data-speed="${settings.battleSpeed}">
-  <div class="battle-header"><div class="round-label"><small>ROUND</small><b>${battle.turn}</b></div><button id="toggleBattleAuto">AUTO ${battle.auto?"ON":"OFF"}</button><button id="battleSpeed">×${settings.battleSpeed}</button><button id="escapeBattle">逃げる</button></div>
+ const special=battle.specialBattle?`<div class="special-battle-strip ${battle.specialBattleType}"><b>${battle.specialTitle??"SPECIAL BATTLE"}</b><small>${battle.specialSubtitle??"敗北ペナルティなし"}</small></div>`:"";
+ return `<section class="battle-screen ${battle.specialBattle?"special-battle":""}" data-speed="${settings.battleSpeed}">${special}
+  <div class="battle-header"><div class="round-label"><small>ROUND</small><b>${battle.turn}</b></div><button id="toggleBattleAuto">AUTO ${battle.auto?"ON":"OFF"}</button><button id="battleSpeed">×${settings.battleSpeed}</button>${battle.specialBattle?`<button disabled>逃走不可</button>`:`<button id="escapeBattle">逃げる</button>`}</div>
   <div class="turn-order"><span class="turn-order-title">行動順</span>${renderTurnOrder(battle)}</div>
   <div class="battle-arena multi-enemy"><div class="enemy-party">${renderEnemies(battle,enemies,target)}</div><div class="battle-party">${renderParty(battle,actor)}</div><div id="battleFxLayer" class="battle-fx-layer"></div></div>
   ${renderCommands(battle,actor,current,enemies,target,inventory,skills)}
