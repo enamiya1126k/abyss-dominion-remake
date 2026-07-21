@@ -1,20 +1,22 @@
-import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.1-part1";
+import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.1-part3-phase2";
 import{MonsterCard}from"../components/MonsterCard.js?v=0.9.8-alpha.1";
 import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.8-alpha.1";
 import{maxMp}from"../../battle/SkillSystem.js?v=0.9.8-alpha.1";
 import{SPECIES}from"../../data/species.js?v=0.9.14-alpha.2";
-import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,emergencyFragmentStatus,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=0.9.15-alpha.1-part1";
+import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,emergencyFragmentStatus,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=0.9.15-alpha.1-part3-phase2";
 
 export function HomeScreen(state){
   const party=state.party.map(id=>state.monsters.find(m=>m.id===id)).filter(Boolean);
   const team=dailyTeamAttempts(state),teamUnlocked=state.player.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR,emergencyUnlocked=state.player.maxFloor>=EMERGENCY_UNLOCK_FLOOR,revealed=hasCleared1000(state),phase=worldPhase(state);
   const fragmentTotal=Object.keys(ENDGAME_BOSSES).reduce((n,id)=>n+emergencyFragmentStatus(state,id).count,0);
+  const region=phase===1?(state.player.maxFloor>=7001?"神域":state.player.maxFloor>=3001?"深淵領域":"未知領域"):"通常領域";
   return`
-    <section class="screen home-screen world-phase-${phase}" data-world-phase="${phase}">
+    <section class="screen home-screen world-phase-${phase}${phase===1?" phase2":""}" data-world-phase="${phase}">
+      ${phase===1?`<div class="phase2-atmosphere" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span class="phase2-castle"></span></div>`:""}
       <div class="page">
         <div class="eyebrow">ABYSS DOMINION / PRODUCTION EDITION</div>
         <h1 class="hero-title">${revealed?"地下10000階の魔王":"地下1000階の魔王"}</h1>
-        <p class="muted">最強のモンスター軍団を、何百時間も育て続ける。</p>
+        <p class="muted">${phase===1?`第二世界・${region}が開かれた。`:"最強のモンスター軍団を、何百時間も育て続ける。"}</p>
 
         <div class="panel home-status-panel">
           <div class="spread"><div><div class="gold">REMAKE v${APP_VERSION}</div><h2>モンスター基盤</h2></div><div class="muted">最高 ${state.player.maxFloor}階</div></div>
@@ -26,7 +28,7 @@ export function HomeScreen(state){
           <button id="openMonsters">💪 魔物強化</button><button id="openEquipment">⚔️ 装備</button>
           <button id="openCodexHub">📖 図鑑</button><button id="openSettings">⚙️ 設定</button>
         </div>
-        <div class="home-utility-row"><button id="openRest" class="compact-button">🛏️ 休息</button>${revealed?`<button id="openDeepGacha" class="compact-button deep-summon-button">🌌 深淵召喚</button>`:""}</div>
+        <div class="home-utility-row"><button id="openRest" class="compact-button">🛏️ 休息</button>${revealed?`<button id="openDeepGacha" class="compact-button deep-summon-button">🌌 深淵召喚</button><button id="openWorldRecord" class="compact-button world-record-button">📖 世界の記録</button>`:""}</div>
         ${teamUnlocked?`<div class="panel endgame-entry-panel"><div><small class="eyebrow">4 VS 4 / NO PENALTY</small><h2>⚔️ チームバトル</h2><p class="muted">第${team.stage}試練・本日 ${team.dailyAttempts}/50戦</p></div><button id="openTeamBattle" class="primary">挑戦する</button></div>`:`<div class="panel endgame-entry-panel locked"><div><small class="eyebrow">LOCKED</small><h2>⚔️ チームバトル</h2><p class="muted">${TEAM_BATTLE_UNLOCK_FLOOR}階突破で解放</p></div></div>`}
         ${emergencyUnlocked?`<div class="panel anomaly-panel"><small class="eyebrow">WORLD ANOMALY</small><h2>🌑 深淵反応が観測されている</h2><p class="muted">探索中、極低確率で4対4の緊急戦闘が発生します。</p><div class="spread"><small>遭遇 ${state.endgame?.emergency?.encounters??0} / 撃退 ${state.endgame?.emergency?.wins??0} / 欠片 ${fragmentTotal}</small><button id="openEndgameForge" class="compact-button">欠片・神装</button></div></div>`:""}
 
