@@ -1,4 +1,4 @@
-import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.1-part3-phase2";
+import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.2-part2";
 import{SPECIES}from"./data/species.js?v=0.9.15-alpha.1-part3-phase2";
 import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.1-part3-phase2";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.1-part3-phase2";
@@ -13,6 +13,7 @@ import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./serv
 import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.15-alpha.1-part3-phase2";
 import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.1-part3-phase2";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.1-part3-phase2";
+import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=0.9.15-alpha.2-part2";
 import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js?v=0.9.15-alpha.1-part3-phase2";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier}from"./battle/EnemyAI.js?v=0.9.15-alpha.1-part3-phase2";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js?v=0.9.15-alpha.1-part3-phase2";
@@ -29,6 +30,27 @@ function topModal(){const mods=document.querySelectorAll(".game-modal");return m
 function topModalButton(){return topModal()?.querySelector("#closeGameModal")??null}
 function closeTopModal(){topModal()?.remove()}
 function showToast(text){document.querySelector(".game-toast")?.remove();const el=document.createElement("div");el.className="game-toast";el.textContent=text;document.body.appendChild(el);setTimeout(()=>el.remove(),1400)}
+async function play1000EndingSequence(){
+ document.querySelector(".ending1000")?.remove();
+ app.insertAdjacentHTML("beforeend",Ending1000Screen());
+ const overlay=document.querySelector(".ending1000");if(!overlay)return;
+ document.querySelectorAll("audio").forEach(audio=>{try{audio.pause()}catch{}});
+ let skipResolve;const skipPromise=new Promise(resolve=>skipResolve=resolve),skip=overlay.querySelector(".ending1000-skip");
+ skip.onclick=()=>skipResolve("skip");
+ const pause=ms=>Promise.race([new Promise(resolve=>setTimeout(resolve,ms)),skipPromise]);
+ requestAnimationFrame(()=>overlay.classList.add("is-visible"));
+ await pause(650);
+ for(const line of overlay.querySelectorAll("[data-ending-line]")){line.classList.add("is-visible");const result=await pause(1700);if(result==="skip")break}
+ if(!overlay.isConnected)return;
+ overlay.classList.add("show-credits");
+ let result=await pause(9000);
+ if(!overlay.isConnected)return;
+ overlay.classList.remove("show-credits");overlay.classList.add("show-anomaly");
+ if(result!=="skip")await pause(3200);
+ save.state.flags??={};save.state.flags.ending1000Played=true;save.save();
+ overlay.classList.add("is-closing");await new Promise(resolve=>setTimeout(resolve,650));overlay.remove();
+ battle=null;snapshot=null;screen="explore";render();
+}
 document.addEventListener("click",e=>{const b=e.target.closest?.("[data-modal-dismiss]");if(!b)return;const modal=b.closest(".game-modal");if(typeof modal?._onDismiss==="function"){modal._onDismiss();return}modal?.remove();if(game?.paused&&!document.querySelector(".game-modal"))game.paused=false});
 // Mobile game controls: prevent accidental selection/callout/zoom while preserving scrolling.
 document.addEventListener("contextmenu",e=>{if(!e.target.closest("input,textarea"))e.preventDefault()});
@@ -829,7 +851,7 @@ function win(caught,m){
  resultModal._onDismiss=returnToExplore;
  resultModal.querySelector("#closeGameModal").onclick=returnToExplore;
 }
-function showBossRewards(result){const floor=save.state.player.currentFloor,species=battle.enemy.speciesId,sp=SPECIES[species],weapon=createEquipment("weapon",{rarity:"LR"});weapon.name=`${sp.name}の王装`;const options=[{id:"weapon",icon:"⚔️",title:weapon.name,desc:`限定LR武器 / ${Object.entries(weapon.stats).map(([k,v])=>`${equipmentStatLabel(k)}+${v}`).join(" ")}`},{id:"crystal",icon:"💎",title:`魔晶石 ×${30+floor*2}`,desc:"召喚・育成用の資源"},{id:"supply",icon:"🗃️",title:"深淵遠征セット",desc:`捕獲結晶×${5+Math.floor(floor/10)} / 回復薬×5 / 深淵の鍵×1`}];app.insertAdjacentHTML("beforeend",`<div class="game-modal"><div class="game-modal-card boss-reward"><div>${result}</div><div class="boss-clear-emblem">👑</div><h2 class="boss-choice-title">撃破報酬を選択</h2><p class="muted">中身を見て、ひとつだけ選択。選び直しはできません。</p><div class="boss-reward-grid">${options.map(o=>`<button data-boss-reward="${o.id}"><span>${o.icon}</span><b>${o.title}</b><small>${o.desc}</small></button>`).join("")}</div></div></div>`);document.querySelectorAll("[data-boss-reward]").forEach(b=>b.onclick=()=>{if(!confirm(`${b.querySelector("b").textContent}を選ぶ？\nこの階の他の報酬は入手できません。`))return;const id=b.dataset.bossReward;if(id==="weapon")receiveEquipment(save.state,weapon,{bossReward:true});if(id==="crystal")save.state.player.crystals+=30+floor*2;if(id==="supply"){save.state.inventory.captureCrystals+=5+Math.floor(floor/10);save.state.inventory.potions+=5;save.state.inventory.abyssKeys=(save.state.inventory.abyssKeys??0)+1}save.state.player.bossRewards[floor]=id;save.save();document.querySelector(".game-modal").remove();screen="explore";render()})}
+function showBossRewards(result){const floor=save.state.player.currentFloor,species=battle.enemy.speciesId,sp=SPECIES[species],weapon=createEquipment("weapon",{rarity:"LR"});weapon.name=`${sp.name}の王装`;const options=[{id:"weapon",icon:"⚔️",title:weapon.name,desc:`限定LR武器 / ${Object.entries(weapon.stats).map(([k,v])=>`${equipmentStatLabel(k)}+${v}`).join(" ")}`},{id:"crystal",icon:"💎",title:`魔晶石 ×${30+floor*2}`,desc:"召喚・育成用の資源"},{id:"supply",icon:"🗃️",title:"深淵遠征セット",desc:`捕獲結晶×${5+Math.floor(floor/10)} / 回復薬×5 / 深淵の鍵×1`}];app.insertAdjacentHTML("beforeend",`<div class="game-modal"><div class="game-modal-card boss-reward"><div>${result}</div><div class="boss-clear-emblem">👑</div><h2 class="boss-choice-title">撃破報酬を選択</h2><p class="muted">中身を見て、ひとつだけ選択。選び直しはできません。</p><div class="boss-reward-grid">${options.map(o=>`<button data-boss-reward="${o.id}"><span>${o.icon}</span><b>${o.title}</b><small>${o.desc}</small></button>`).join("")}</div></div></div>`);document.querySelectorAll("[data-boss-reward]").forEach(b=>b.onclick=()=>{if(!confirm(`${b.querySelector("b").textContent}を選ぶ？\nこの階の他の報酬は入手できません。`))return;const id=b.dataset.bossReward;if(id==="weapon")receiveEquipment(save.state,weapon,{bossReward:true});if(id==="crystal")save.state.player.crystals+=30+floor*2;if(id==="supply"){save.state.inventory.captureCrystals+=5+Math.floor(floor/10);save.state.inventory.potions+=5;save.state.inventory.abyssKeys=(save.state.inventory.abyssKeys??0)+1}const playEnding=floor===1000&&!save.state.flags?.ending1000Played;save.state.player.bossRewards[floor]=id;save.save();document.querySelector(".game-modal").remove();if(playEnding){play1000EndingSequence();return}screen="explore";render()})}
 
 function lose(){
  if(battle?.specialBattle)return finishSpecialBattle(false);
