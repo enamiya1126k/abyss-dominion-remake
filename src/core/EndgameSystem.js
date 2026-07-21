@@ -2,6 +2,27 @@ export const TEAM_BATTLE_UNLOCK_FLOOR=100;
 export const EMERGENCY_UNLOCK_FLOOR=500;
 export const WORLD_MAX_FLOOR=10000;
 
+export const WORLD_REGIONS=[
+ {id:"normal",name:"通常領域",minFloor:1,maxFloor:1000,phase:0},
+ {id:"unknown",name:"未知領域",minFloor:1001,maxFloor:3000,phase:1},
+ {id:"abyss",name:"深淵領域",minFloor:3001,maxFloor:7000,phase:1},
+ {id:"divine",name:"神域",minFloor:7001,maxFloor:10000,phase:1}
+];
+
+export function hasCleared1000(state){return Boolean(state?.flags?.gameClear1000||Number(state?.worldPhase)>=1)}
+export function worldPhase(state){return hasCleared1000(state)?1:0}
+export function worldRegionForFloor(floor){
+ const f=Math.max(1,Math.min(WORLD_MAX_FLOOR,Number(floor)||1));
+ return WORLD_REGIONS.find(region=>f>=region.minFloor&&f<=region.maxFloor)??WORLD_REGIONS[0];
+}
+export function mark1000FloorCleared(state){
+ state.flags??={};
+ state.flags.gameClear1000=true;
+ state.flags.deepAbyssUnlocked=true;
+ state.worldPhase=1;
+ return state;
+}
+
 export const ENDGAME_BOSSES={
  abyss_gluttony:{id:"abyss_gluttony",faction:"abyss",name:"深淵・暴食",title:"飢え続ける深淵",icon:"🌑",speciesId:"ogre",support:["vampire_bat","acid_slime","wraith"],seriesId:"abyssGluttony",signature:"無限捕食",gearNames:{weapon:"暴食の大剣",armor:"暴食の外殻",accessory:"暴食の環"}},
  abyss_extinction:{id:"abyss_extinction",faction:"abyss",name:"深淵・死滅",title:"命を終わらせる深淵",icon:"☠️",speciesId:"wraith",support:["skeleton_guard","zombie","ghost"],seriesId:"abyssExtinction",signature:"死滅の波動",gearNames:{weapon:"死滅の鎌",armor:"死滅の葬衣",accessory:"死滅の刻印"}},
@@ -19,6 +40,9 @@ export function manifestationForFloor(floor){
 }
 
 export function normalizeEndgameState(state){
+ state.flags??={};
+ state.flags.gameClear1000??=false;
+ state.worldPhase=hasCleared1000(state)?1:0;
  state.endgame??={};
  state.endgame.teamBattle??={unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0};
  state.endgame.emergency??={encounters:0,wins:0,losses:0,lastFloor:0,lastRollStep:0,records:{},fragments:{},craftCounts:{},craftedGear:[]};
@@ -51,7 +75,7 @@ export function shouldTriggerEmergency(state,steps=0){
 }
 export function createEmergencyEncounter(state,forcedId=null){
  const floor=state.player?.currentFloor||500,manifestation=manifestationForFloor(floor);
- const available=Object.values(ENDGAME_BOSSES).filter(b=>floor>=1000||b.faction==="abyss");
+ const available=Object.values(ENDGAME_BOSSES).filter(b=>hasCleared1000(state)||b.faction==="abyss");
  const boss=ENDGAME_BOSSES[forcedId]??available[Math.floor(Math.random()*available.length)];
  const factionBase=boss.faction==="tenGod"?7:4;
  const leaderMultiplier=factionBase*(.65+manifestation.rate*1.75);

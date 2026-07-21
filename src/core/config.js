@@ -1,4 +1,4 @@
-export const APP_VERSION="0.9.14-alpha.3";
+export const APP_VERSION="0.9.15-alpha.1-part1";
 export const SAVE_KEY="abyss-dominion-remake-v001";
 export const MAX_PARTY_SIZE=4;
 export const MAX_STARS=5;
@@ -12,3 +12,6 @@ export const EMERGENCY_UNLOCK_FLOOR=500;
 export const TILE_SIZE=48;
 export const MAP_COLS=31;
 export const MAP_ROWS=31;
+
+export const WORLD_PHASE_NORMAL=0;
+export const WORLD_PHASE_SECOND=1;
