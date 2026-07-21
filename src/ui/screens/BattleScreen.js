@@ -51,10 +51,14 @@ function renderSkills(battle,actor,skills){
 
 function renderItems(inventory){
  const defs=[
-  ["potions","❤️","単体回復薬","HP100回復"],
-  ["partyPotions","💚","全体回復薬","全員HP50回復"],
-  ["statusCures","🩹","状態異常回復・単体","単体の異常解除"],
-  ["partyStatusCures","💨","状態異常回復・全体","全員の異常解除"],
+  ["potions","🌿","薬草","単体HP100回復"],
+  ["highPotions","🧪","ハイポーション","単体HP300回復"],
+  ["partyPotions","💚","全体回復薬","生存者全員HP80回復"],
+  ["manaPotions","💧","マナポーション","単体MP10回復"],
+  ["partyManaPotions","🌊","全体マナポーション","生存者全員MP5回復"],
+  ["reviveLeaves","🍃","命の葉","戦闘不能者をHP30%で蘇生"],
+  ["statusCures","🩹","万能薬・単体","単体の状態異常解除"],
+  ["partyStatusCures","💨","万能薬・全体","全員の状態異常解除"],
   ["fullHeals","✨","完全回復薬・単体","HP・MP・異常を全回復"],
   ["partyFullHeals","🌟","完全回復薬・全体","全員を完全回復"]
  ];
