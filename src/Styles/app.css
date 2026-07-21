@@ -529,3 +529,12 @@ html,body{overscroll-behavior:none}
 
 /* v0.9.14-alpha.2 fragments / divine gear */
 .fragment-reward{margin-top:16px;padding:14px;border:1px solid #d6ab55;border-radius:16px;background:linear-gradient(135deg,rgba(126,76,18,.28),rgba(56,24,78,.45));display:grid;gap:5px}.fragment-reward b{color:#ffd76c;font-size:1.08rem}.fragment-reward small{color:#d8cde5}.endgame-forge-list{display:grid;gap:12px;margin-top:14px}.endgame-forge-card{padding:14px;border:1px solid #6e4c85;border-radius:18px;background:#140d1c;display:grid;gap:10px}.endgame-forge-card.tenGod{border-color:#d5aa49;box-shadow:inset 0 0 24px rgba(255,201,79,.06)}.endgame-forge-card h3{margin:2px 0}.endgame-forge-card button{width:100%}.fragment-meter{height:8px;border-radius:999px;background:#09060d;overflow:hidden;border:1px solid #3d2a4d}.fragment-meter i{display:block;height:100%;background:linear-gradient(90deg,#7b3fd0,#ffd05c);border-radius:inherit}.crafted-endgame-gear{text-align:center;display:grid;gap:10px;padding:8px}.crafted-endgame-gear h2{color:#ffd76c}.crafted-endgame-gear small{display:block;color:#bfb0ca}.anomaly-panel .spread{align-items:center;gap:10px}.anomaly-panel .compact-button{padding:8px 12px;font-size:.78rem;white-space:nowrap}
+
+/* v0.9.14-alpha.3 深淵・十神専用演出 */
+.battle-cinematic-banner.boss strong{letter-spacing:.14em;text-shadow:0 0 18px #ffcf66,0 0 34px #9c4dff}
+.special-result.win h2{animation:endgame-win-pulse 1.15s ease both}
+.special-result.lose h2{opacity:.9}
+.fragment-reward{position:relative;overflow:hidden}
+.fragment-reward::after{content:"";position:absolute;inset:-80% -30%;background:linear-gradient(110deg,transparent 42%,rgba(255,255,255,.23) 50%,transparent 58%);animation:endgame-shine 1.6s ease .2s both;pointer-events:none}
+@keyframes endgame-win-pulse{0%{transform:scale(.92);filter:brightness(.7)}55%{transform:scale(1.04);filter:brightness(1.45)}100%{transform:scale(1);filter:brightness(1)}}
+@keyframes endgame-shine{from{transform:translateX(-65%) rotate(8deg)}to{transform:translateX(65%) rotate(8deg)}}
