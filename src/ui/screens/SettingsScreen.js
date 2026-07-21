@@ -1,3 +1,4 @@
+import{APP_VERSION}from"../../core/config.js?v=0.9.9-alpha.1";
 export function SettingsScreen(state){
   return`
     <section class="screen">
@@ -20,6 +21,7 @@ export function SettingsScreen(state){
           </div>
         </div>
         <div class="panel"><div class="spread"><span>序盤チュートリアル</span><button id="resetTutorials">再表示する</button></div></div>
+        <div class="panel version-panel"><div><small class="muted">ABYSS DOMINION</small><h3>REMAKE v${APP_VERSION}</h3><small class="muted">UI・魔物育成ハブ更新</small></div></div>
         <button id="resetSave" class="danger" style="width:100%">セーブ初期化</button>
       </div>
     </section>
