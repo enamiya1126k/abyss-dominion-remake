@@ -1,4 +1,4 @@
-import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.2-part2";
+import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.3-part3";
 import{SPECIES}from"./data/species.js?v=0.9.15-alpha.1-part3-phase2";
 import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.1-part3-phase2";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.1-part3-phase2";
@@ -16,6 +16,7 @@ import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.1-part3-phase2"
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=0.9.15-alpha.2-part2";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=0.9.15-alpha.3-part1";
 import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=0.9.15-alpha.3-part1";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=0.9.15-alpha.3-part3";
 import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js?v=0.9.15-alpha.1-part3-phase2";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier}from"./battle/EnemyAI.js?v=0.9.15-alpha.1-part3-phase2";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js?v=0.9.15-alpha.1-part3-phase2";
@@ -45,6 +46,36 @@ async function playSecondWorldIntro(){
  await new Promise(resolve=>enter.addEventListener("click",resolve,{once:true}));
  markSecondWorldEntered(save.state);save.save();overlay.classList.add("is-closing");await wait(650);overlay.remove();secondWorldIntroPlaying=false;screen="explore";render();return true;
 }
+
+function secondWorldEventChoiceBody(event){
+ const costs=randomEventCosts(event,event.floor);
+ const descriptions={
+  "buy-key":`ゴールド ${costs.keyGold?.toLocaleString()??0}G`,
+  "buy-rest":`魔晶石 ${costs.restCrystals??0}個`,
+  "seal":`魔晶石 ${costs.sealCrystals??0}個`
+ };
+ return`<div class="second-world-event"><div class="second-world-event-icon">${event.icon}</div><p>${event.text}</p><div class="second-world-event-choices">${event.choices.map(choice=>`<button type="button" data-second-world-choice="${choice.id}"><b>${choice.label}</b><small>${descriptions[choice.id]??choice.description}</small></button>`).join("")}</div></div>`;
+}
+function resolveSecondWorldRandomEvent(event,choice){
+ const floor=event.floor,costs=randomEventCosts(event,floor),party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);
+ let result="何も起こらなかった。",elite=false;
+ if(event.id==="abyss-altar"&&choice==="offer"){let lost=0;party.filter(m=>(m.currentHp??calculatedStats(m).hp)>1).forEach(m=>{const max=calculatedStats(m).hp,damage=Math.max(1,Math.floor(max*.2));m.currentHp=Math.max(1,(m.currentHp??max)-damage);lost+=damage});const gain=2+Math.floor((floor-1000)/250);save.state.player.crystals+=gain;result=`生命力を${lost}失い、魔晶石を${gain}個得た。`}
+ else if(event.id==="abyss-altar"&&choice==="pray"){party.filter(m=>(m.currentHp??0)>0).forEach(m=>{const st=calculatedStats(m);m.currentHp=Math.min(st.hp,(m.currentHp??st.hp)+Math.max(1,Math.floor(st.hp*.25)));m.currentMp=Math.min(maxMp(m),(m.currentMp??maxMp(m))+Math.max(1,Math.floor(maxMp(m)*.25)))});result="祭壇の火が揺らぎ、パーティーのHP・MPが回復した。"}
+ else if(event.id==="lost-merchant"&&choice==="buy-key"){if(save.state.player.gold<costs.keyGold)return{ok:false,message:`ゴールドが足りない。必要：${costs.keyGold.toLocaleString()}G`};save.state.player.gold-=costs.keyGold;save.state.inventory.abyssKeys=(save.state.inventory.abyssKeys??0)+1;result="顔のない商人から、深淵の鍵を1個受け取った。"}
+ else if(event.id==="lost-merchant"&&choice==="buy-rest"){if(save.state.player.crystals<costs.restCrystals)return{ok:false,message:`魔晶石が足りない。必要：${costs.restCrystals}個`};save.state.player.crystals-=costs.restCrystals;party.forEach(m=>{m.currentHp=calculatedStats(m).hp;m.currentMp=maxMp(m);clearAilments(m)});result="黒い香が燃え尽き、パーティーは完全回復した。"}
+ else if(event.id==="abyss-crystal"&&choice==="harvest"){const gain=1+Math.floor(((floor*7)%4));save.state.player.crystals+=gain;result=`深淵結晶から魔晶石を${gain}個採取した。`}
+ else if(event.id==="abyss-crystal"&&choice==="break"){const gold=650+Math.floor((floor-1000)*1.5);save.state.player.gold+=gold;if(game)game.world.nextEncounter=Math.min(game.world.nextEncounter,game.world.steps+2);result=`結晶を砕き、${gold.toLocaleString()}Gを得た。遠くで何かが目覚めた……。`}
+ else if(event.id==="warped-rift"&&choice==="challenge"){result="裂け目の向こうから、強大な魔物が現れた。";elite=true}
+ else if(event.id==="warped-rift"&&choice==="seal"){if(save.state.player.crystals<costs.sealCrystals)return{ok:false,message:`魔晶石が足りない。必要：${costs.sealCrystals}個`};save.state.player.crystals-=costs.sealCrystals;const gold=900+Math.floor((floor-1000)*1.2);save.state.player.gold+=gold;save.state.inventory.abyssKeys=(save.state.inventory.abyssKeys??0)+1;result=`裂け目を封じ、${gold.toLocaleString()}Gと深淵の鍵を1個得た。`}
+ markRandomEventResolved(save.state,floor,event.id);save.save();return{ok:true,message:result,elite};
+}
+function showSecondWorldRandomEvent(){
+ const event=randomEventForFloor(save.state,save.state.player.currentFloor);if(!event||!game)return false;
+ game.paused=true;app.insertAdjacentHTML("beforeend",Modal(`${event.icon} ${event.title}`,secondWorldEventChoiceBody(event),"立ち去る"));
+ const modal=topModal(),finish=(choice="leave")=>{const outcome=resolveSecondWorldRandomEvent(event,choice);if(!outcome.ok){showToast(outcome.message);return}modal.remove();game.paused=false;if(outcome.elite){pauseModal("⚠️ 裂け目の番人",`<p>${outcome.message}</p><p class="muted">通常より強い敵だ。勝利すれば高い報酬が期待できる。</p>`);const warning=topModal();warning.querySelector("#closeGameModal").textContent="戦う";warning.querySelector("#closeGameModal").onclick=()=>{warning.remove();game.paused=false;beginEncounter({...randomEnemy(),level:enemyLevelForFloor(event.floor)+18,boss:false,equipped:true,elite:true})};return}pauseModal(event.title,`<p>${outcome.message}</p>`)};
+ modal.querySelectorAll("[data-second-world-choice]").forEach(button=>button.onclick=()=>finish(button.dataset.secondWorldChoice));modal.querySelector("#closeGameModal").onclick=()=>finish("leave");modal._onDismiss=()=>finish("leave");return true;
+}
+
 async function play1000EndingSequence(){
  document.querySelector(".ending1000")?.remove();
  app.insertAdjacentHTML("beforeend",Ending1000Screen());
@@ -426,7 +457,7 @@ function bindExplore(){
  game.player.rx=game.player.x;game.player.ry=game.player.y;game.camera=new Camera(canvas);
  if(snapshot?.cameraData)Object.assign(game.camera,snapshot.cameraData);else game.camera.reset(game.player.x*TILE,game.player.y*TILE);
  game.camera.clamp(game.world);game.ctx=canvas.getContext("2d");game.running=true;game.paused=false;bindInput(canvas);game.last=performance.now();requestAnimationFrame(loop);
- bindMovableMapToggle();bindExploreMonsterLongPress();showFloorTutorial();if(game.world.treasureRoom&&!game.world.treasureNoticeShown){game.world.treasureNoticeShown=true;game.paused=true;setTimeout(()=>{pauseModal("💰 宝物庫を発見",`<p>部屋中に宝箱が並んでいる。</p><p class="muted">約半数は強力なミミック。鍵付きの箱には高レア装備が眠る。</p>`);},420)}
+ bindMovableMapToggle();bindExploreMonsterLongPress();showFloorTutorial();if(save.state.player.currentFloor>=1002&&!game.world.treasureRoom)setTimeout(()=>showSecondWorldRandomEvent(),260);if(game.world.treasureRoom&&!game.world.treasureNoticeShown){game.world.treasureNoticeShown=true;game.paused=true;setTimeout(()=>{pauseModal("💰 宝物庫を発見",`<p>部屋中に宝箱が並んでいる。</p><p class="muted">約半数は強力なミミック。鍵付きの箱には高レア装備が眠る。</p>`);},420)}
  document.getElementById("centerCamera").onclick=()=>{game.camera.reset(game.player.rx*TILE,game.player.ry*TILE);game.camera.clamp(game.world)};
  document.getElementById("pauseParty").onclick=openPartyEditor;
  document.getElementById("resourceHelp")?.addEventListener("click",openResourceHelp);
