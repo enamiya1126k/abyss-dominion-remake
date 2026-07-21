@@ -1,24 +1,24 @@
-import{SaveService}from"./services/SaveService.js?v=0.9.8-alpha.1";
-import{SPECIES}from"./data/species.js?v=0.9.8-alpha.1";
-import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.8-alpha.1";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.8-alpha.1";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.8-alpha.1";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.8-alpha.1";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.8-alpha.1";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.8-alpha.1";
-import{Modal}from"./ui/components/Modal.js?v=0.9.8-alpha.1";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.8-alpha.1";
-import{createEquipment,equipmentPower}from"./models/Equipment.js?v=0.9.8-alpha.1";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.8-alpha.1";
-import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.8-alpha.1";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.8-alpha.1";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.8-alpha.1";
-import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js?v=0.9.8-alpha.1";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier}from"./battle/EnemyAI.js?v=0.9.8-alpha.1";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js?v=0.9.8-alpha.1";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.8-alpha.1";
-import{dangerConfig}from"./core/DangerSystem.js?v=0.9.8-alpha.1";
-import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.8-alpha.1";
+import{SaveService}from"./services/SaveService.js?v=0.9.9-alpha.1";
+import{SPECIES}from"./data/species.js?v=0.9.9-alpha.1";
+import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.9-alpha.1";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.9-alpha.1";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.9-alpha.1";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.9-alpha.1";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.9-alpha.1";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.9-alpha.1";
+import{Modal}from"./ui/components/Modal.js?v=0.9.9-alpha.1";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.9-alpha.1";
+import{createEquipment,equipmentPower}from"./models/Equipment.js?v=0.9.9-alpha.1";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.9-alpha.1";
+import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.9-alpha.1";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.9-alpha.1";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.9-alpha.1";
+import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js?v=0.9.9-alpha.1";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier}from"./battle/EnemyAI.js?v=0.9.9-alpha.1";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js?v=0.9.9-alpha.1";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.9-alpha.1";
+import{dangerConfig}from"./core/DangerSystem.js?v=0.9.9-alpha.1";
+import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.9-alpha.1";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
 let screen="home",selected=null,equipmentTarget=null,game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home";
@@ -78,7 +78,7 @@ function selectableMonsters(){return save.state.monsters.filter(m=>!save.state.p
 function selectMonstersPreset(mode){const pool=selectableMonsters();if(mode==="none")monsterManage.selected.clear();else{const picks=pool.filter(m=>mode==="all"||mode==="plus0"&&(m.plus??0)===0||mode==="unfavorite"&&!m.favorite||["N","R"].includes(mode)&&(m.summonTier??m.summonRarity??SPECIES[m.speciesId]?.rarity??"N")===mode);picks.forEach(m=>monsterManage.selected.add(m.id))}render()}
 function releaseSelectedMonsters(){const targets=selectableMonsters().filter(m=>monsterManage.selected.has(m.id));if(!targets.length)return alert("手放せるモンスターが選択されていません");if(save.state.monsters.length-targets.length<1)return alert("最後の1体は手放せません");if(!confirm(`${targets.length}体を手放します。\n魔晶石 ${targets.length}個を獲得します。`))return;const ids=new Set(targets.map(m=>m.id));targets.forEach(m=>Object.values(m.equipment??{}).forEach(id=>{const i=save.state.equipment.find(x=>x.id===id);if(i)i.equippedBy=null}));save.state.monsters=save.state.monsters.filter(m=>!ids.has(m.id));save.state.player.crystals+=targets.length;monsterManage.selected.clear();save.save();render()}
 function detailButtons(){document.querySelectorAll("[data-monster-id]").forEach(b=>b.onclick=()=>{selected=b.dataset.monsterId;go("detail")})}
-function bindDetail(m){document.getElementById("backMonsters").onclick=()=>go("monsters");document.getElementById("releaseMonster")?.addEventListener("click",()=>releaseMonster(m));document.getElementById("toggleFavorite").onclick=()=>{m.favorite=!m.favorite;save.save();render()};document.getElementById("saveNickname")?.addEventListener("click",()=>{const v=document.getElementById("nicknameInput").value.trim();if(v)m.nickname=v.slice(0,12);save.save();render()});document.querySelectorAll("[data-color-id]").forEach(b=>b.onclick=()=>{m.colorId=b.dataset.colorId;save.save();render()});document.getElementById("limitBreakButton")?.addEventListener("click",()=>performLimitBreak(m.id,{returnToDetail:true}));document.getElementById("openMonsterEquipment")?.addEventListener("click",()=>{equipmentTarget=m.id;navigationOrigin="detail";go("equipment")})}
+function bindDetail(m){document.getElementById("backMonsters").onclick=()=>go("monsters");document.querySelectorAll("[data-switch-monster]").forEach(b=>b.onclick=()=>{selected=b.dataset.switchMonster;render();window.scrollTo({top:0,behavior:"smooth"})});document.querySelectorAll("[data-growth-jump]").forEach(b=>b.onclick=()=>{const ids={level:"growthLevelSection",affection:"growthAffectionSection",history:"growthHistorySection"};document.getElementById(ids[b.dataset.growthJump])?.scrollIntoView({behavior:"smooth",block:"start"})});document.getElementById("releaseMonster")?.addEventListener("click",()=>releaseMonster(m));document.getElementById("toggleFavorite").onclick=()=>{m.favorite=!m.favorite;save.save();render()};document.getElementById("saveNickname")?.addEventListener("click",()=>{const v=document.getElementById("nicknameInput").value.trim();if(v)m.nickname=v.slice(0,12);save.save();render()});document.querySelectorAll("[data-color-id]").forEach(b=>b.onclick=()=>{m.colorId=b.dataset.colorId;save.save();render()});document.getElementById("limitBreakButton")?.addEventListener("click",()=>performLimitBreak(m.id,{returnToDetail:true}));document.getElementById("openMonsterEquipment")?.addEventListener("click",()=>{equipmentTarget=m.id;navigationOrigin="detail";go("equipment")})}
 function bindSettings(){document.getElementById("backHome").onclick=()=>go("home");document.getElementById("toggleAuto").onclick=()=>{save.state.settings.autoBattle=!save.state.settings.autoBattle;save.save();render()};document.getElementById("toggleMinimap").onclick=()=>{save.state.settings.minimapVisible=!save.state.settings.minimapVisible;save.save();render()};document.getElementById("resetTutorials")?.addEventListener("click",()=>{save.state.settings.tutorialSeen={};save.save();alert("1〜5階のチュートリアルを再表示します")});document.getElementById("resetSave").onclick=()=>{if(confirm("初期化する？")){save.reset();snapshot=null;go("home")}}}
 
 
