@@ -1,25 +1,25 @@
-import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.1-part1";
-import{SPECIES}from"./data/species.js?v=0.9.15-alpha.1-part1";
-import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.1-part1";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.1-part1";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.15-alpha.1-part1";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.15-alpha.1-part1";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.1-part1";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.1-part1";
-import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.1-part1";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.1-part1";
-import{createEquipment,equipmentPower}from"./models/Equipment.js?v=0.9.15-alpha.1-part1";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.15-alpha.1-part1";
-import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.15-alpha.1-part1";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.1-part1";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.1-part1";
-import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js?v=0.9.15-alpha.1-part1";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier}from"./battle/EnemyAI.js?v=0.9.15-alpha.1-part1";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js?v=0.9.15-alpha.1-part1";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.15-alpha.1-part1";
-import{dangerConfig}from"./core/DangerSystem.js?v=0.9.15-alpha.1-part1";
-import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.15-alpha.1-part1";
-import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,ENDGAME_BOSSES,normalizeEndgameState,dailyTeamAttempts,createTeamBattleEncounter,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,craftEndgameEquipment,hasCleared1000,mark1000FloorCleared,worldRegionForFloor}from"./core/EndgameSystem.js?v=0.9.15-alpha.1-part1";
+import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.1-part3-phase2";
+import{SPECIES}from"./data/species.js?v=0.9.15-alpha.1-part3-phase2";
+import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.1-part3-phase2";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.1-part3-phase2";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.15-alpha.1-part3-phase2";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.15-alpha.1-part3-phase2";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.1-part3-phase2";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.1-part3-phase2";
+import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.1-part3-phase2";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.1-part3-phase2";
+import{createEquipment,equipmentPower}from"./models/Equipment.js?v=0.9.15-alpha.1-part3-phase2";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.15-alpha.1-part3-phase2";
+import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.15-alpha.1-part3-phase2";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.1-part3-phase2";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.1-part3-phase2";
+import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js?v=0.9.15-alpha.1-part3-phase2";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier}from"./battle/EnemyAI.js?v=0.9.15-alpha.1-part3-phase2";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js?v=0.9.15-alpha.1-part3-phase2";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.15-alpha.1-part3-phase2";
+import{dangerConfig}from"./core/DangerSystem.js?v=0.9.15-alpha.1-part3-phase2";
+import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.15-alpha.1-part3-phase2";
+import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,ENDGAME_BOSSES,normalizeEndgameState,dailyTeamAttempts,createTeamBattleEncounter,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,craftEndgameEquipment,hasCleared1000,mark1000FloorCleared,worldRegionForFloor}from"./core/EndgameSystem.js?v=0.9.15-alpha.1-part3-phase2";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
 let screen="home",selected=null,equipmentTarget=null,game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home";
@@ -62,7 +62,7 @@ function normalizeEquipmentState(){
   const counts={},stats={};Object.values(m.equipment).forEach(id=>{const item=byId.get(id);if(!item)return;const mult=1+(item.plus??0)*.08;Object.entries(item.stats??{}).forEach(([k,v])=>stats[k]=(stats[k]??0)+Math.round(v*mult));if(item.series)counts[item.series]=(counts[item.series]??0)+1});m._equipmentStats=stats;m._seriesCounts=counts;
  });
 }
-function render(){normalizeEquipmentState();if(screen==="home"){app.innerHTML=HomeScreen(save.state);bindHome()}else if(screen==="monsters"){app.innerHTML=MonsterListScreen(save.state,monsterManage);bindList()}else if(screen==="detail"){const m=save.state.monsters.find(x=>x.id===selected);app.innerHTML=MonsterDetailScreen(m,save.state);bindDetail(m)}else if(screen==="settings"){app.innerHTML=SettingsScreen(save.state);bindSettings()}else if(screen==="explore"){app.innerHTML=ExploreScreen(save.state);bindExplore()}else if(screen==="equipment"){if(!save.state.party.includes(equipmentTarget))equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;app.innerHTML=EquipmentScreen(save.state,equipmentTarget,{home:navigationOrigin==="home",...equipmentManage});bindEquipment()}else if(screen==="shop"){app.innerHTML=ShopScreen(save.state);bindShop()}}
+function render(){normalizeEquipmentState();document.body.classList.toggle("phase2",hasCleared1000(save.state));if(screen==="home"){app.innerHTML=HomeScreen(save.state);bindHome()}else if(screen==="monsters"){app.innerHTML=MonsterListScreen(save.state,monsterManage);bindList()}else if(screen==="detail"){const m=save.state.monsters.find(x=>x.id===selected);app.innerHTML=MonsterDetailScreen(m,save.state);bindDetail(m)}else if(screen==="settings"){app.innerHTML=SettingsScreen(save.state);bindSettings()}else if(screen==="explore"){app.innerHTML=ExploreScreen(save.state);bindExplore()}else if(screen==="equipment"){if(!save.state.party.includes(equipmentTarget))equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;app.innerHTML=EquipmentScreen(save.state,equipmentTarget,{home:navigationOrigin==="home",...equipmentManage});bindEquipment()}else if(screen==="shop"){app.innerHTML=ShopScreen(save.state);bindShop()}}
 function go(s){screen=s;render()}
 function capturePartyVitals(){return Object.fromEntries(save.state.party.map(id=>{const m=save.state.monsters.find(x=>x.id===id);return m?[id,{hp:m.currentHp,mp:m.currentMp,ailments:[...(m.ailments??[])]}]:null}).filter(Boolean))}
 function restorePartyVitals(vitals){if(!vitals)return;save.state.party.forEach(id=>{const m=save.state.monsters.find(x=>x.id===id),v=vitals[id];if(!m||!v)return;m.currentHp=v.hp;m.currentMp=v.mp;m.ailments=[...(v.ailments??[])]})}
@@ -83,7 +83,13 @@ function craftEndgameGear(bossId){
  app.insertAdjacentHTML("beforeend",Modal("神装顕現",`<div class="crafted-endgame-gear"><div class="warning-icon">${result.boss.icon}</div><small>${result.boss.name}シリーズ</small><h2>[LR] ${result.item.name}</h2><p>${slotLabel(result.item.slot)} / ${Object.entries(result.item.stats).map(([k,v])=>`${equipmentStatLabel(k)} +${v}`).join(" / ")}</p><b>欠片 ${result.spent}個を消費</b><small>${received.message}</small></div>`,`受け取る`));
  topModal().querySelector("#closeGameModal").onclick=()=>{closeTopModal();openEndgameForge()};
 }
-function bindHome(){document.getElementById("openMonsters").onclick=()=>go("monsters");document.getElementById("openTeamBattle")?.addEventListener("click",openTeamBattle);document.getElementById("openEndgameForge")?.addEventListener("click",openEndgameForge);document.getElementById("editHomeParty")?.addEventListener("click",openHomePartyEditor);document.getElementById("openRest")?.addEventListener("click",openRest);document.getElementById("openGacha")?.addEventListener("click",openGacha);document.getElementById("openDeepGacha")?.addEventListener("click",openDeepGacha);document.getElementById("openCodexHub")?.addEventListener("click",openCodexHub);document.getElementById("openMonsterCodex")?.addEventListener("click",()=>openCodex("monster"));document.getElementById("openEquipmentCodex")?.addEventListener("click",()=>openCodex("equipment"));document.getElementById("openSettings").onclick=()=>go("settings");document.getElementById("openExplore").onclick=()=>{const max=Math.min(WORLD_MAX_FLOOR,save.state.player.maxFloor);app.insertAdjacentHTML("beforeend",Modal("探索開始",`<p>再開する階層を選択</p><input id="floorSelect" type="number" min="1" max="${max}" value="${max}"><p class="muted">1〜${max}階。到達済みの階層から再開できます。</p>`,`出発`));const modal=topModal(),button=modal.querySelector("#closeGameModal");button.onclick=()=>{const f=Math.max(1,Math.min(max,Number(modal.querySelector("#floorSelect").value)||max));save.state.player.currentFloor=f;save.state.player.inRun=true;save.save();snapshot=null;modal.remove();go("explore")}};document.getElementById("openEquipment").onclick=()=>{equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;navigationOrigin="home";go("equipment")};detailButtons()}
+
+function openWorldRecord(){
+ const floor=save.state.player.maxFloor||1;
+ const region=floor>=7001?"神域":floor>=3001?"深淵領域":"未知領域";
+ app.insertAdjacentHTML("beforeend",Modal("世界の記録",`<div class="world-record-modal"><small class="eyebrow">RECORD I / ${region}</small><h2>地下1000階の向こう側</h2><p>地下1000階。そこは人類が知る世界の終点。</p><p>誰もが、そう信じていた。</p><hr><p>しかし、そのさらに下には──誰にも語られなかった世界が存在する。</p><p class="muted">現在確認された最深部：${floor}階</p></div>`,`閉じる`));
+}
+function bindHome(){document.getElementById("openMonsters").onclick=()=>go("monsters");document.getElementById("openTeamBattle")?.addEventListener("click",openTeamBattle);document.getElementById("openEndgameForge")?.addEventListener("click",openEndgameForge);document.getElementById("editHomeParty")?.addEventListener("click",openHomePartyEditor);document.getElementById("openRest")?.addEventListener("click",openRest);document.getElementById("openGacha")?.addEventListener("click",openGacha);document.getElementById("openDeepGacha")?.addEventListener("click",openDeepGacha);document.getElementById("openWorldRecord")?.addEventListener("click",openWorldRecord);document.getElementById("openCodexHub")?.addEventListener("click",openCodexHub);document.getElementById("openMonsterCodex")?.addEventListener("click",()=>openCodex("monster"));document.getElementById("openEquipmentCodex")?.addEventListener("click",()=>openCodex("equipment"));document.getElementById("openSettings").onclick=()=>go("settings");document.getElementById("openExplore").onclick=()=>{const max=Math.min(WORLD_MAX_FLOOR,save.state.player.maxFloor);app.insertAdjacentHTML("beforeend",Modal("探索開始",`<p>再開する階層を選択</p><input id="floorSelect" type="number" min="1" max="${max}" value="${max}"><p class="muted">1〜${max}階。到達済みの階層から再開できます。</p>`,`出発`));const modal=topModal(),button=modal.querySelector("#closeGameModal");button.onclick=()=>{const f=Math.max(1,Math.min(max,Number(modal.querySelector("#floorSelect").value)||max));save.state.player.currentFloor=f;save.state.player.inRun=true;save.save();snapshot=null;modal.remove();go("explore")}};document.getElementById("openEquipment").onclick=()=>{equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;navigationOrigin="home";go("equipment")};detailButtons()}
 function bindList(){
  const back=document.getElementById("backHome");if(back)back.onclick=()=>{monsterManage={editing:false,selected:new Set()};go("home")};
  document.getElementById("toggleMonsterEdit")?.addEventListener("click",()=>{monsterManage.editing=!monsterManage.editing;if(!monsterManage.editing)monsterManage.selected.clear();render()});
