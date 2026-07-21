@@ -18,6 +18,8 @@ import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=0.9.
 import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=0.9.15-alpha.3-part1";
 import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=0.9.15-alpha.3-part3";
 import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=0.9.15-alpha.3-part4";
+import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=0.9.15-alpha.3-part6";
+import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=0.9.15-alpha.3-part6";
 import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js?v=0.9.15-alpha.1-part3-phase2";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier}from"./battle/EnemyAI.js?v=0.9.15-alpha.1-part3-phase2";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js?v=0.9.15-alpha.1-part3-phase2";
@@ -29,6 +31,7 @@ import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,ENDGAME_BOSSES,normalizeEndgameS
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
 let screen="home",selected=null,equipmentTarget=null,game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home";
 let secondWorldIntroPlaying=false;
+let tenGodContactPlaying=false;
 let monsterManage={editing:false,selected:new Set()},equipmentManage={editing:false,selected:new Set()};
 let partyEditorState={search:"",element:"all",status:"all",sort:"rarity",direction:"desc"};
 function topModal(){const mods=document.querySelectorAll(".game-modal");return mods[mods.length-1]??null}
@@ -46,6 +49,24 @@ async function playSecondWorldIntro(){
  const enter=overlay.querySelector("[data-second-world-enter]");enter.classList.add("is-visible");
  await new Promise(resolve=>enter.addEventListener("click",resolve,{once:true}));
  markSecondWorldEntered(save.state);save.save();overlay.classList.add("is-closing");await wait(650);overlay.remove();secondWorldIntroPlaying=false;screen="explore";render();return true;
+}
+
+
+async function playTenGodFirstContact(){
+ if(tenGodContactPlaying||!game||!shouldPlayTenGodFirstContact(save.state))return false;
+ tenGodContactPlaying=true;game.paused=true;document.querySelector(".ten-god-contact")?.remove();
+ app.insertAdjacentHTML("beforeend",TenGodContactScreen(tenGodContactChoices()));
+ const overlay=document.querySelector(".ten-god-contact"),wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+ if(!overlay){tenGodContactPlaying=false;game.paused=false;return false}
+ requestAnimationFrame(()=>overlay.classList.add("is-visible"));await wait(500);
+ for(const line of overlay.querySelectorAll("[data-ten-god-line]")){line.classList.add("is-visible");await wait(900)}
+ overlay.querySelector("[data-ten-god-choices]")?.classList.add("is-visible");
+ const choiceId=await new Promise(resolve=>overlay.querySelectorAll("[data-ten-god-choice]").forEach(button=>button.addEventListener("click",()=>resolve(button.dataset.tenGodChoice),{once:true})));
+ const result=resolveTenGodFirstContact(save.state,choiceId,{recoverParty:fullyRecoverParty});save.save();
+ overlay.classList.add("is-resolved");const content=overlay.querySelector(".ten-god-contact-content");
+ content.innerHTML=`<small>CONTACT RECORDED</small><div class="ten-god-contact-sigil">◉</div><p class="ten-god-voice is-visible">${result.message}</p><button type="button" class="primary" data-ten-god-close>探索へ戻る</button>`;
+ await new Promise(resolve=>content.querySelector("[data-ten-god-close]").addEventListener("click",resolve,{once:true}));
+ overlay.classList.add("is-closing");await wait(600);overlay.remove();tenGodContactPlaying=false;game.paused=false;return true;
 }
 
 function secondWorldEventChoiceBody(event){
@@ -458,7 +479,7 @@ function bindExplore(){
  game.player.rx=game.player.x;game.player.ry=game.player.y;game.camera=new Camera(canvas);
  if(snapshot?.cameraData)Object.assign(game.camera,snapshot.cameraData);else game.camera.reset(game.player.x*TILE,game.player.y*TILE);
  game.camera.clamp(game.world);game.ctx=canvas.getContext("2d");game.running=true;game.paused=false;bindInput(canvas);game.last=performance.now();requestAnimationFrame(loop);
- bindMovableMapToggle();bindExploreMonsterLongPress();showFloorTutorial();if(save.state.player.currentFloor>=1002&&!game.world.treasureRoom)setTimeout(()=>showSecondWorldRandomEvent(),260);if(game.world.treasureRoom&&!game.world.treasureNoticeShown){game.world.treasureNoticeShown=true;game.paused=true;setTimeout(()=>{pauseModal("💰 宝物庫を発見",`<p>部屋中に宝箱が並んでいる。</p><p class="muted">約半数は強力なミミック。鍵付きの箱には高レア装備が眠る。</p>`);},420)}
+ bindMovableMapToggle();bindExploreMonsterLongPress();showFloorTutorial();if(shouldPlayTenGodFirstContact(save.state)&&!game.world.treasureRoom)setTimeout(()=>playTenGodFirstContact(),300);else if(save.state.player.currentFloor>=1002&&!game.world.treasureRoom)setTimeout(()=>showSecondWorldRandomEvent(),260);if(game.world.treasureRoom&&!game.world.treasureNoticeShown){game.world.treasureNoticeShown=true;game.paused=true;setTimeout(()=>{pauseModal("💰 宝物庫を発見",`<p>部屋中に宝箱が並んでいる。</p><p class="muted">約半数は強力なミミック。鍵付きの箱には高レア装備が眠る。</p>`);},420)}
  document.getElementById("centerCamera").onclick=()=>{game.camera.reset(game.player.rx*TILE,game.player.ry*TILE);game.camera.clamp(game.world)};
  document.getElementById("pauseParty").onclick=openPartyEditor;
  document.getElementById("resourceHelp")?.addEventListener("click",openResourceHelp);
