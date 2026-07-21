@@ -5,7 +5,11 @@ export const EQUIPMENT_SERIES={
  capturer:{name:"捕獲師",theme:"捕獲・探索",bonuses:{2:{capture:.06},3:{capture:.10},4:{dropRate:.08},5:{capture:.16},6:{rareEncounter:.10}}},
  sacredTree:{name:"聖樹",theme:"HP再生",bonuses:{2:{hpRegen:.02},3:{healPower:.08},4:{hp:.10},5:{lowHpRegen:.04},6:{partyHpRegen:.015}}},
  deepSea:{name:"深海",theme:"MP循環",bonuses:{2:{mpRegen:2},3:{mp:.08},4:{mpCost:-.05},5:{skillPower:.08},6:{freeSkillChance:.12}}},
- thunder:{name:"雷神",theme:"会心・追撃",bonuses:{2:{crit:3},3:{critDamage:.10},4:{spd:.06},5:{chainChance:.12},6:{critDamage:.25}}}
+ thunder:{name:"雷神",theme:"会心・追撃",bonuses:{2:{crit:3},3:{critDamage:.10},4:{spd:.06},5:{chainChance:.12},6:{critDamage:.25}}},
+ abyssGluttony:{name:"暴食",theme:"吸収・暴力",bonuses:{2:{atk:.12},3:{hp:.18},4:{healPower:.20},5:{critDamage:.30},6:{skillPower:.45}}},
+ abyssExtinction:{name:"死滅",theme:"呪い・終焉",bonuses:{2:{crit:8},3:{statusRes:.20},4:{atk:.18},5:{evasion:12},6:{skillPower:.50}}},
+ godIgnis:{name:"炎神",theme:"神炎・殲滅",bonuses:{2:{atk:.18},3:{fireDamage:.30},4:{crit:12},5:{fireRes:.40},6:{skillPower:.65}}},
+ godVajra:{name:"雷神・天威",theme:"天雷・超速",bonuses:{2:{spd:.18},3:{crit:14},4:{critDamage:.35},5:{chainChance:.30},6:{skillPower:.70}}}
 };
 const LABELS={atk:"ATK",def:"DEF",hp:"HP",spd:"SPD",mp:"最大MP",crit:"会心率",evasion:"回避率",fireDamage:"炎属性ダメージ",fireRes:"炎耐性",burnChance:"炎上付与率",statusRes:"状態異常耐性",guardPower:"ガード効果",lastStand:"致死ダメージ耐久",firstStrike:"開幕先制",capture:"捕獲率",dropRate:"ドロップ率",rareEncounter:"レア遭遇率",hpRegen:"毎ターンHP回復",healPower:"回復量",lowHpRegen:"瀕死時HP回復",partyHpRegen:"味方全体HP回復",mpRegen:"毎ターンMP回復",mpCost:"消費MP",skillPower:"スキル威力",freeSkillChance:"MP消費無効率",critDamage:"会心ダメージ",chainChance:"追撃率"};
 export function describeSeriesEffect(effect={}){return Object.entries(effect).map(([key,value])=>{const label=LABELS[key]??key;if(key==="lastStand")return`${label}：戦闘中1回`;if(key==="firstStrike")return`${label}`;if(key==="mpRegen")return`${label} +${value}`;const pct=Math.round(Math.abs(value)*100);const sign=value>=0?"+":"-";return`${label} ${sign}${pct}%`}).join(" / ")}
