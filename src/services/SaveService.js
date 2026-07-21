@@ -1,12 +1,12 @@
-import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.11-alpha.1";
+import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.15-alpha.1-part1";
 import{createMonster}from"../models/Monster.js?v=0.9.11-alpha.1";
 import{maxMp}from"../battle/SkillSystem.js?v=0.9.14-alpha.2";
-import{normalizeEndgameState}from"../core/EndgameSystem.js?v=0.9.14-alpha.2";
+import{normalizeEndgameState}from"../core/EndgameSystem.js?v=0.9.15-alpha.1-part1";
 function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
  ];
- return{schemaVersion:19,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false},player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},bossKills:{},dangerLevel:1},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,partyManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5,abyssKeys:0},settings:{minimapVisible:true,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0},endgame:{teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastRollStep:0,records:{},fragments:{},craftCounts:{},craftedGear:[]}}};
+ return{schemaVersion:20,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false,gameClear1000:false},worldPhase:0,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},bossKills:{},dangerLevel:1},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,partyManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5,abyssKeys:0},settings:{minimapVisible:true,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0},endgame:{teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastRollStep:0,records:{},fragments:{},craftCounts:{},craftedGear:[]}}};
 }
 export class SaveService{
  constructor(){this.state=this.load();this.save()}
@@ -14,11 +14,14 @@ export class SaveService{
  migrate(s){
   const from=Number(s.schemaVersion??1);
   s.flags??={};s.flags.abyssUnlocked??=false;s.flags.trueLevelCapRevealed??=false;s.flags.deepAbyssUnlocked??=false;
+  const legacy1000Clear=Number(s.player?.maxFloor??0)>1000||Boolean(s.player?.bossRewards?.[1000])||Number(s.player?.bossKills?.[1000]??0)>0||Boolean(s.flags.deepAbyssUnlocked);
+  s.flags.gameClear1000??=legacy1000Clear;
+  s.worldPhase=s.flags.gameClear1000?1:Math.max(0,Math.min(1,Number(s.worldPhase)||0));
   s.player??={};
   s.player.gold??=1000;
   s.player.crystals??=20;
-  s.player.maxFloor??=1;
-  s.player.currentFloor??=1;
+  s.player.maxFloor=Math.max(1,Math.min(10000,Number(s.player.maxFloor??1)));
+  s.player.currentFloor=Math.max(1,Math.min(10000,Number(s.player.currentFloor??1)));
   s.player.checkpoint??=1;
   s.player.inRun??=false;
   s.player.nextShopFloor??=4;
@@ -104,9 +107,9 @@ export class SaveService{
     mainIds.add(id);
    }
   }));
-  s.schemaVersion=19;
+  s.schemaVersion=20;
   s.appVersion=APP_VERSION;
-  if(from<19)s.lastMigration={from,to:19,at:new Date().toISOString()};
+  if(from<20)s.lastMigration={from,to:20,at:new Date().toISOString()};
   return s
  }
  save(){this.state.appVersion=APP_VERSION;localStorage.setItem(SAVE_KEY,JSON.stringify(this.state))}
