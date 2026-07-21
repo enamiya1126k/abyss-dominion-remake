@@ -1,6 +1,6 @@
-import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.5-alpha.1";
-import{createMonster}from"../models/Monster.js?v=0.9.5-alpha.1";
-import{maxMp}from"../battle/SkillSystem.js?v=0.9.5-alpha.1";
+import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.9-alpha.1";
+import{createMonster}from"../models/Monster.js?v=0.9.9-alpha.1";
+import{maxMp}from"../battle/SkillSystem.js?v=0.9.9-alpha.1";
 function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
