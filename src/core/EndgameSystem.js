@@ -3,10 +3,10 @@ export const EMERGENCY_UNLOCK_FLOOR=500;
 export const WORLD_MAX_FLOOR=10000;
 
 export const ENDGAME_BOSSES={
- abyss_gluttony:{id:"abyss_gluttony",faction:"abyss",name:"深淵・暴食",title:"飢え続ける深淵",icon:"🌑",speciesId:"ogre",support:["vampire_bat","acid_slime","wraith"],seriesId:"abyssGluttony",gearNames:{weapon:"暴食の大剣",armor:"暴食の外殻",accessory:"暴食の環"}},
- abyss_extinction:{id:"abyss_extinction",faction:"abyss",name:"深淵・死滅",title:"命を終わらせる深淵",icon:"☠️",speciesId:"wraith",support:["skeleton_guard","zombie","ghost"],seriesId:"abyssExtinction",gearNames:{weapon:"死滅の鎌",armor:"死滅の葬衣",accessory:"死滅の刻印"}},
- ten_fire:{id:"ten_fire",faction:"tenGod",name:"炎神・イグニス",title:"十神・灼熱の権能",icon:"☀️",speciesId:"salamander",support:["ember_slime","salamander","willowisp"],seriesId:"godIgnis",gearNames:{weapon:"炎神剣イグニス",armor:"炎神の天衣",accessory:"炎神核"}},
- ten_thunder:{id:"ten_thunder",faction:"tenGod",name:"雷神・ヴァジュラ",title:"十神・天雷の権能",icon:"⚡",speciesId:"wyvern",support:["harpy","willowisp","clockwork"],seriesId:"godVajra",gearNames:{weapon:"雷神槍ヴァジュラ",armor:"雷神の天鎧",accessory:"雷神核"}}
+ abyss_gluttony:{id:"abyss_gluttony",faction:"abyss",name:"深淵・暴食",title:"飢え続ける深淵",icon:"🌑",speciesId:"ogre",support:["vampire_bat","acid_slime","wraith"],seriesId:"abyssGluttony",signature:"無限捕食",gearNames:{weapon:"暴食の大剣",armor:"暴食の外殻",accessory:"暴食の環"}},
+ abyss_extinction:{id:"abyss_extinction",faction:"abyss",name:"深淵・死滅",title:"命を終わらせる深淵",icon:"☠️",speciesId:"wraith",support:["skeleton_guard","zombie","ghost"],seriesId:"abyssExtinction",signature:"死滅の波動",gearNames:{weapon:"死滅の鎌",armor:"死滅の葬衣",accessory:"死滅の刻印"}},
+ ten_fire:{id:"ten_fire",faction:"tenGod",name:"炎神・イグニス",title:"十神・灼熱の権能",icon:"☀️",speciesId:"salamander",support:["ember_slime","salamander","willowisp"],seriesId:"godIgnis",signature:"神炎・終焉焦土",gearNames:{weapon:"炎神剣イグニス",armor:"炎神の天衣",accessory:"炎神核"}},
+ ten_thunder:{id:"ten_thunder",faction:"tenGod",name:"雷神・ヴァジュラ",title:"十神・天雷の権能",icon:"⚡",speciesId:"wyvern",support:["harpy","willowisp","clockwork"],seriesId:"godVajra",signature:"神雷・万象連鎖",gearNames:{weapon:"雷神槍ヴァジュラ",armor:"雷神の天鎧",accessory:"雷神核"}}
 };
 
 export function manifestationForFloor(floor){
