@@ -1,11 +1,11 @@
-import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.9-alpha.1";
-import{createMonster}from"../models/Monster.js?v=0.9.9-alpha.1";
-import{maxMp}from"../battle/SkillSystem.js?v=0.9.9-alpha.1";
+import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.11-alpha.1";
+import{createMonster}from"../models/Monster.js?v=0.9.11-alpha.1";
+import{maxMp}from"../battle/SkillSystem.js?v=0.9.11-alpha.1";
 function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
  ];
- return{schemaVersion:16,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false},player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},bossKills:{},dangerLevel:1},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,partyPotions:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5,abyssKeys:0},settings:{minimapVisible:true,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0}};
+ return{schemaVersion:17,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false},player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},bossKills:{},dangerLevel:1},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,partyManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5,abyssKeys:0},settings:{minimapVisible:true,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0}};
 }
 export class SaveService{
  constructor(){this.state=this.load();this.save()}
@@ -33,7 +33,11 @@ export class SaveService{
   s.bossEquipmentVault??=[];
   s.inventory??={potions:0,captureCrystals:0};
   s.inventory.potions??=0;
+  s.inventory.highPotions??=0;
   s.inventory.partyPotions??=0;
+  s.inventory.manaPotions??=0;
+  s.inventory.partyManaPotions??=0;
+  s.inventory.reviveLeaves??=0;
   s.inventory.statusCures??=0;
   s.inventory.partyStatusCures??=0;
   s.inventory.fullHeals??=0;
@@ -98,9 +102,9 @@ export class SaveService{
     mainIds.add(id);
    }
   }));
-  s.schemaVersion=16;
+  s.schemaVersion=17;
   s.appVersion=APP_VERSION;
-  if(from<16)s.lastMigration={from,to:16,at:new Date().toISOString()};
+  if(from<17)s.lastMigration={from,to:17,at:new Date().toISOString()};
   return s
  }
  save(){this.state.appVersion=APP_VERSION;localStorage.setItem(SAVE_KEY,JSON.stringify(this.state))}
