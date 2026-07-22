@@ -1,3 +1,10 @@
+## v0.9.15-alpha.5 Part 2 Step 2 — 探索パーティー隊列追従
+
+- 探索中の操作キャラクターをパーティー1番目のモンスター表示に統一。
+- 2〜4番目のモンスターが、先頭の移動軌跡を一定間隔で自然に追従。
+- 宝箱・ショップ・ボス・階段・エンカウント判定は従来どおり先頭座標のみ。
+- タップ詳細などの追加操作は実装していない。
+
 v0.9.15-alpha.3 Part7 - Added Ten God Trial design.
 
 - v0.9.15-alpha.3 Part7: Added TenGodTrial event scaffold.\n
