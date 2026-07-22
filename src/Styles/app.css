@@ -728,3 +728,13 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
 /* Phase8: 1000階直後・連敗時のエマージェンシー救済表示 */
 .emergency-rescue-note{display:grid;gap:4px;margin-top:12px;padding:10px 12px;border:1px solid rgba(130,205,255,.34);border-radius:10px;background:rgba(45,112,160,.14)}
 .emergency-rescue-note b{color:#bce7ff}.emergency-rescue-note small{opacity:.78;line-height:1.45}
+
+
+/* v0.9.15-alpha.33 — final UI polish */
+.limit-break-main:disabled{background:linear-gradient(135deg,#2b2730,#403845)!important;border-color:#5a505f!important;color:#8f8795!important;box-shadow:none!important;opacity:.72;filter:saturate(.2)}
+.limit-break-main:disabled>span,.limit-break-main:disabled>b,.limit-break-main:disabled>small{color:#8f8795!important;text-shadow:none!important}
+.limit-break-main:not(:disabled){box-shadow:0 0 22px rgba(194,71,220,.28)}
+.monster-rarity-name{font-weight:900;text-shadow:0 1px 5px rgba(0,0,0,.9)}
+.rarity-name-n{color:#d9d9d9!important}.rarity-name-r{color:#69dc86!important}.rarity-name-sr{color:#64b5ff!important}.rarity-name-ssr{color:#c98cff!important}.rarity-name-ur{color:#ff8fcf!important}.rarity-name-lr{color:#ffd45d!important}.rarity-name-mythic{color:#ff8b5f!important}.rarity-name-abyss{color:#ff5f7d!important;text-shadow:0 0 10px rgba(255,65,105,.42),0 1px 5px #000}.rarity-name-ten-god{color:transparent!important;background:linear-gradient(90deg,#ff6b86,#ffd45d,#69dc86,#64b5ff,#c98cff,#ff6b86);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;animation:ten-god-name-flow 4s linear infinite;text-shadow:none}
+@keyframes ten-god-name-flow{to{background-position:220% 0}}
+.rarity-guide-row{border-left:3px solid transparent}.rarity-guide-n{border-left-color:#d9d9d9}.rarity-guide-r{border-left-color:#69dc86}.rarity-guide-sr{border-left-color:#64b5ff}.rarity-guide-ssr{border-left-color:#c98cff}.rarity-guide-ur{border-left-color:#ff8fcf}.rarity-guide-lr{border-left-color:#ffd45d}.rarity-guide-mythic{border-left-color:#ff8b5f}.rarity-guide-abyss{border-left-color:#ff5f7d!important}.rarity-guide-ten-god{border-left-color:#ffd45d!important}
