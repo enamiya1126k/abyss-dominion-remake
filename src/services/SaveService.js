@@ -1,7 +1,7 @@
 import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.15-alpha.3-part1";
 import{createMonster}from"../models/Monster.js?v=0.9.11-alpha.1";
 import{maxMp,normalizeSkillProgress}from"../battle/SkillSystem.js?v=0.9.14-alpha.2";
-import{normalizeEndgameState}from"../core/EndgameSystem.js?v=0.9.15-alpha.1-part1";
+import{normalizeEndgameState}from"../core/EndgameSystem.js?v=0.9.15-alpha.19-team-day-reset";
 import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=0.9.15-alpha.3-part3";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=0.9.15-alpha.3-part4";
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.3-part6";
