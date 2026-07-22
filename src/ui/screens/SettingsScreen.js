@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 export function SettingsScreen(state){
   return`
     <section class="screen">

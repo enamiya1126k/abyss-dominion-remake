@@ -1,8 +1,8 @@
-import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{worldPresentationForFloor}from"../../core/WorldSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{worldPresentationForFloor}from"../../core/WorldSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 export function ExploreScreen(state){const biome=biomeForFloor(state.player.currentFloor),progress=biomeProgress(state,biome),world=worldPresentationForFloor(state.player.currentFloor);const p=state.party
   .map(id=>state.monsters.find(m=>m.id===id))
   .filter(Boolean);

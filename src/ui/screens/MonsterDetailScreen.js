@@ -1,7 +1,7 @@
-import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{PERSONALITIES}from"../../data/personalities.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{MONSTER_COLORS}from"../../data/colors.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{displayName,rankName,colorValue,calculatedStats,unlockedSkills,TRAITS,limitBreakGrowth,affectionBonuses}from"../../models/Monster.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{PERSONALITIES}from"../../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{MONSTER_COLORS}from"../../data/colors.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{displayName,rankName,colorValue,calculatedStats,unlockedSkills,TRAITS,limitBreakGrowth,affectionBonuses}from"../../models/Monster.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 
 function cloneMonster(monster,changes={}){return{...monster,ivs:{...(monster.ivs??{})},equipment:{...(monster.equipment??{})},_equipmentStats:{...(monster._equipmentStats??{})},_seriesCounts:{...(monster._seriesCounts??{})},...changes}}
 function breakdown(monster,key){
