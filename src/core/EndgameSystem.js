@@ -43,7 +43,7 @@ export const TEN_GOD_IDS=Object.keys(ENDGAME_BOSSES).filter(id=>ENDGAME_BOSSES[i
 
 export function manifestationForFloor(floor){const f=Math.max(1,Number(floor)||1);if(f>=10000)return{rate:1,label:"真なる顕現",percent:100};if(f>=9000)return{rate:1,label:"完全神格",percent:100};if(f>=5000)return{rate:.8,label:"神格顕現",percent:80};if(f>=3000)return{rate:.6,label:"権能解放",percent:60};if(f>=1000)return{rate:.4,label:"上位投影体",percent:40};return{rate:.2,label:"投影体",percent:20}}
 
-export function normalizeEndgameState(state){state.flags??={};state.flags.gameClear1000??=false;state.worldPhase=hasCleared1000(state)?1:0;state.endgame??={};state.endgame.teamBattle??={unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0};state.endgame.emergency??={encounters:0,wins:0,losses:0,lastFloor:0,lastRollStep:0,records:{},fragments:{},craftCounts:{},craftedGear:[],blessings:{}};const e=state.endgame.emergency;e.records??={};e.fragments??={};e.craftCounts??={};e.craftedGear??=[];e.blessings??={};e.preludeChoices??={};e.discovered??={};state.endgame.teamBattle.unlocked=Boolean(state.endgame.teamBattle.unlocked||state.player?.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR);return state.endgame}
+export function normalizeEndgameState(state){state.flags??={};state.flags.gameClear1000??=false;state.worldPhase=hasCleared1000(state)?1:0;state.endgame??={};state.endgame.teamBattle??={unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0};state.endgame.emergency??={encounters:0,wins:0,losses:0,lastFloor:0,lastRollStep:0,records:{},fragments:{},craftCounts:{},craftedGear:[],blessings:{}};const e=state.endgame.emergency;e.records??={};e.fragments??={};e.craftCounts??={};e.craftedGear??=[];e.blessings??={};e.preludeChoices??={};e.discovered??={};e.contracts??={};state.endgame.teamBattle.unlocked=Boolean(state.endgame.teamBattle.unlocked||state.player?.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR);return state.endgame}
 export function dailyTeamAttempts(state){const team=normalizeEndgameState(state).teamBattle,key=new Date().toISOString().slice(0,10);if(team.dailyKey!==key){team.dailyKey=key;team.dailyAttempts=0}return team}
 function enemy(speciesId,level,extra={}){return{speciesId,level,boss:false,equipped:false,gear:null,...extra}}
 export function createTeamBattleEncounter(state){const team=dailyTeamAttempts(state),stage=Math.max(1,team.stage||1),base=Math.max(10,Math.round((state.player?.maxFloor||100)*(.55+stage*.035))),pools=[["goblin_guard","goblin_shaman","orc","ogre"],["skeleton_guard","skeleton_archer","wraith","zombie"],["dire_wolf","bear","harpy","wyvern"],["stone_golem","clockwork","salamander","water_spirit"]],pool=pools[(stage-1)%pools.length];return pool.map((id,i)=>enemy(id,base+i*2,{nameOverride:`試練 ${stage}・${i+1}`,teamBattle:true,statMultiplier:1+stage*.09}))}
@@ -65,6 +65,24 @@ export function resolveEndgamePrelude(state,bossId,choiceId){
 }
 export function applyPreludeToEncounter(event,prelude){
  if(!event?.enemies||!prelude)return event;event.enemies=event.enemies.map((enemy,index)=>({...enemy,statMultiplier:(enemy.statMultiplier??1)*(index===0?(prelude.enemyMultiplier??1):(prelude.supportMultiplier??1))}));return event;
+}
+
+
+export function endgameContractStatus(state,bossId,floor=state?.player?.currentFloor){
+ const boss=ENDGAME_BOSSES[bossId],e=normalizeEndgameState(state).emergency,record=e.records[bossId]??{},contract=e.contracts[bossId]??{};
+ const totalFragments=Math.max(0,Number(record.totalFragments??0)),f=Math.max(1,Number(floor)||1),eligible=f>1000;
+ const thresholds=boss?.faction==="tenGod"?[[500,1],[200,.10],[100,.03],[50,.01],[0,.001]]:[[500,1],[200,.20],[100,.05],[50,.02],[0,.003]];
+ const rate=thresholds.find(([need])=>totalFragments>=need)?.[1]??0;
+ return{bossId,boss,eligible,contracted:Boolean(contract.contracted),rate:contract.contracted?0:rate,percent:contract.contracted?0:Number((rate*100).toFixed(1)),totalFragments,attempts:Number(contract.attempts??0),contractedAt:contract.contractedAt??null,reason:contract.contracted?"契約済み":eligible?null:"1000階層未満の？？？とは契約できない"};
+}
+export function attemptEndgameContract(state,bossId,floor=state?.player?.currentFloor,roll=Math.random()){
+ const status=endgameContractStatus(state,bossId,floor),e=normalizeEndgameState(state).emergency;
+ if(!status.boss)return{...status,attempted:false,success:false};
+ e.contracts[bossId]??={contracted:false,attempts:0,contractedAt:null,contractedFloor:null};const contract=e.contracts[bossId];
+ if(!status.eligible||status.contracted)return{...status,attempted:false,success:false};
+ contract.attempts=Math.max(0,Number(contract.attempts??0))+1;const success=Number(roll)<status.rate;
+ if(success){contract.contracted=true;contract.contractedAt=new Date().toISOString();contract.contractedFloor=Math.max(1,Number(floor)||1)}
+ return{...endgameContractStatus(state,bossId,floor),attempted:true,success,rolled:Number(roll)};
 }
 
 export function fragmentRequirement(craftCount=0){return[50,75,100,125,150,200][Math.min(5,Math.max(0,Number(craftCount)||0))]}
