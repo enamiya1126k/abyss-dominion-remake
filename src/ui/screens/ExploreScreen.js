@@ -23,3 +23,23 @@ data-explore-monster="${leader.id}">
 `
 :""
 }<div class="version">v${APP_VERSION}</div></header><div class="explore-party-strip">${p.map(m=>{const s=calculatedStats(m),hp=Math.max(0,m.currentHp??s.hp),mp=Math.max(0,m.currentMp??maxMp(m));return`<button type="button" data-explore-monster="${m.id}"><b>${displayName(m)}</b><span>Lv.${m.level}</span><small class="growth-mini"><i>⭐${m.stars??1}</i><i>+${m.plus??0}</i><i>❤️${m.affection??0}</i></small><i class="hud-bar hp"><em style="width:${Math.min(100,hp/s.hp*100)}%"></em><small>HP:${hp}/${s.hp}</small></i><i class="hud-bar mp"><em style="width:${Math.min(100,mp/maxMp(m)*100)}%"></em><small>MP:${mp}/${maxMp(m)}</small></i></button>`}).join("")}</div><div class="explore-stage"><canvas id="gameCanvas"></canvas><canvas id="miniMap"></canvas><button id="miniMapToggle" class="minimap-toggle" style="${state.settings.mapTogglePosition?`left:${state.settings.mapTogglePosition.x}px;top:${state.settings.mapTogglePosition.y}px;right:auto`:``}">${state.settings.minimapVisible?"MAP ON":"MAP OFF"}</button></div><nav class="explore-nav"><button id="pauseParty">編成</button><button id="fieldEquipment">装備</button><button id="pauseItems">持ち物</button><button id="centerCamera">現在地</button><button id="returnHome" class="danger">帰還</button></nav></section>`}
+
+export function bindExploreLeaderEvents(state){
+
+    document.querySelectorAll("[data-explore-monster]").forEach(btn=>{
+
+        btn.addEventListener("click",()=>{
+
+            const id=btn.dataset.exploreMonster;
+
+            if(!id)return;
+
+            window.dispatchEvent(new CustomEvent("open-monster-detail",{
+                detail:{id}
+            }));
+
+        });
+
+    });
+
+}
