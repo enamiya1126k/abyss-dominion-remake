@@ -1,7 +1,7 @@
 import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.15-alpha.3-part1";
 import{createMonster}from"../models/Monster.js?v=0.9.11-alpha.1";
 import{maxMp,normalizeSkillProgress}from"../battle/SkillSystem.js?v=0.9.14-alpha.2";
-import{normalizeEndgameState}from"../core/EndgameSystem.js?v=0.9.15-alpha.19-team-day-reset";
+import{normalizeEndgameState}from"../core/EndgameSystem.js?v=0.9.15-alpha.22-phase8-rescue";
 import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=0.9.15-alpha.3-part3";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=0.9.15-alpha.3-part4";
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.3-part6";
@@ -9,7 +9,7 @@ function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
  ];
- return{schemaVersion:27,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false,gameClear1000:false,ending1000Played:false,secondWorldEntered:false,tenGodObserved:false},worldPhase:0,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},bossKills:{},dangerLevel:1},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,highManaPotions:0,partyManaPotions:0,fullManaPotions:0,partyFullManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5,abyssKeys:0},settings:{minimapVisible:true,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0},secondWorld:{randomEvents:{resolvedFloors:[],counts:{}},elites:{encountered:0,defeated:0,byAffix:{},bySpecies:{}}},endgame:{teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastRollStep:0,records:{},fragments:{},craftCounts:{},craftedGear:[]}}};
+ return{schemaVersion:28,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false,gameClear1000:false,ending1000Played:false,secondWorldEntered:false,tenGodObserved:false},worldPhase:0,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},bossKills:{},dangerLevel:1},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,highManaPotions:0,partyManaPotions:0,fullManaPotions:0,partyFullManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5,abyssKeys:0},settings:{minimapVisible:true,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0},secondWorld:{randomEvents:{resolvedFloors:[],counts:{}},elites:{encountered:0,defeated:0,byAffix:{},bySpecies:{}}},endgame:{teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastRollStep:0,records:{},fragments:{},craftCounts:{},craftedGear:[],rescue:{post1000Encounters:0,consecutiveLosses:0,lastResult:null}}}};
 }
 export class SaveService{
  constructor(){this.state=this.load();this.save()}
@@ -122,7 +122,7 @@ export class SaveService{
     mainIds.add(id);
    }
   }));
-  s.schemaVersion=27;
+  s.schemaVersion=28;
   s.appVersion=APP_VERSION;
   if(from<27)s.lastMigration={from,to:27,at:new Date().toISOString()};
   return s
