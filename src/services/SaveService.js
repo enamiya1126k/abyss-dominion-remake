@@ -1,10 +1,23 @@
-import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{createMonster}from"../models/Monster.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{maxMp,normalizeSkillProgress}from"../battle/SkillSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{normalizeEndgameState}from"../core/EndgameSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
+import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{createMonster}from"../models/Monster.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+
+function normalizeContractedEndgameMonster(monster){
+ if(!monster?.isContractedEndgame&&!monster?.endgameBossId)return;
+ const boss=ENDGAME_BOSSES[monster.endgameBossId];if(!boss)return;
+ monster.isContractedEndgame=true;monster.endgameFaction=boss.faction;monster.contractSignature=boss.signature;monster.contractSignatureName??=boss.signatureName??boss.skills?.[0]??boss.signature;monster.contractSeriesId=boss.seriesId;
+ monster.tags=Array.from(new Set([...(Array.isArray(monster.tags)?monster.tags:[]),boss.faction,boss.id,"contractedEndgame"].filter(Boolean)));
+ if(Number(monster.contractProfileVersion??0)>=1)return;
+ const divine=boss.faction==="tenGod",minimumIv=divine?100:95;monster.ivs??={};for(const key of["hp","atk","def","spd"])monster.ivs[key]=Math.max(minimumIv,Math.min(100,Number(monster.ivs[key])||minimumIv));
+ monster.stars=5;monster.plus=Math.max(Number(monster.plus)||0,divine?50:25);monster.affection=Math.max(Number(monster.affection??monster.bond)||0,divine?1000:750);monster.bond=monster.affection;monster.favorite=true;monster.locked=true;
+ const strongest=allLearnedSkills(monster).slice(-4);monster.equippedSkills=strongest.map(skill=>skill.id);monster.skillProgress=monster.skillProgress&&typeof monster.skillProgress==="object"&&!Array.isArray(monster.skillProgress)?monster.skillProgress:{};
+ for(const skill of strongest){const current=monster.skillProgress[skill.id]??{};const level=Math.max(Number(current.level)||1,divine?5:3);monster.skillProgress[skill.id]={...current,level,exp:Math.max(0,Number(current.exp)||0),uses:Math.max(0,Number(current.uses)||0),need:level>=10?0:25*level}}
+ monster.contractProfileVersion=1;
+}
 function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
@@ -86,6 +99,7 @@ export class SaveService{
    m.currentMp??=maxMp(m);
    m.currentMp=Math.min(m.currentMp,maxMp(m));
    m.equippedSkills=Array.isArray(m.equippedSkills)?m.equippedSkills.filter(Boolean).slice(0,4):[];
+   normalizeContractedEndgameMonster(m);
    normalizeSkillProgress(m);
    const oldGear=m.equipment??{};
    m.equipment={weaponRight:oldGear.weaponRight??oldGear.weapon??null,weaponLeft:oldGear.weaponLeft??null,armorBody:oldGear.armorBody??oldGear.armor??null,armorSupport:oldGear.armorSupport??null,accessoryNeck:oldGear.accessoryNeck??oldGear.accessory??null,accessoryFinger:oldGear.accessoryFinger??null};
