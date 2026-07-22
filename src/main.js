@@ -1,4 +1,4 @@
-import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.20-phase6";
+import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.24-phase10-4-infinite-save";
 import{SPECIES}from"./data/species.js?v=0.9.15-alpha.1-part3-phase2";
 import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.1-part3-phase2";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.1-part3-phase2";
