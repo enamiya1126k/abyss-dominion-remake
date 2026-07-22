@@ -174,7 +174,8 @@ function phase2Decorate(species,skills){
 for(const species of Object.values(SPECIES))GENERATED[species.id]=phase2Decorate(species,GENERATED[species.id]);
 const BY_ID=new Map(Object.values(GENERATED).flat().map(skill=>[skill.id,skill]));
 
-export function maxMp(monster){const species=SPECIES[monster.speciesId],base=species?.maxMp??15;return Math.floor(base+(monster.level-1)*.65+(monster.rank-1)*5+(monster.stars-1))}
+export function maxMp(monster){const species=SPECIES[monster.speciesId],base=species?.maxMp??15,raw=base+(monster.level-1)*.65+(monster.rank-1)*5+(monster.stars-1),pct=monster._equipmentAffixes?.mpPct??0;return Math.floor(raw*(1+pct/100))}
+export function effectiveSkillMpCost(monster,skill){const reduction=Math.min(50,monster?._equipmentAffixes?.mpCostReduction??0);return Math.max(0,Math.ceil((skill?.mp??0)*(1-reduction/100)))}
 export function allSpeciesSkills(speciesId){return GENERATED[speciesId]??[]}
 export function allLearnedSkills(monster){return allSpeciesSkills(monster.speciesId).filter(skill=>monster.level>=(skill.unlock?.value??1))}
 export function normalizeSkillLoadout(monster){
@@ -185,8 +186,8 @@ export function normalizeSkillLoadout(monster){
 export function learnedSkills(monster){const equipped=new Set(normalizeSkillLoadout(monster));return allLearnedSkills(monster).filter(skill=>equipped.has(skill.id))}
 export function equipSkill(monster,skillId,slot){const learned=new Set(allLearnedSkills(monster).map(x=>x.id));if(!learned.has(skillId))return false;normalizeSkillLoadout(monster);const next=[...monster.equippedSkills];const previous=next.indexOf(skillId);if(previous>=0)next[previous]=next[slot]??null;next[slot]=skillId;monster.equippedSkills=next.filter(Boolean).slice(0,4);return true}
 export function skillById(id){return BY_ID.get(id)??SKILLS[id]??null}
-export function canUseSkill(monster,skill,cooldown=0){return Boolean(skill)&&monster.currentMp>=skill.mp&&cooldown<=0}
-export function skillDamage(stats,enemy,skill,critical=false){const base=Math.max(1,Math.floor(stats.atk*skill.power-enemy.def*.3));return critical?Math.floor(base*1.65):base}
+export function canUseSkill(monster,skill,cooldown=0){return Boolean(skill)&&monster.currentMp>=effectiveSkillMpCost(monster,skill)&&cooldown<=0}
+export function skillDamage(stats,enemy,skill,critical=false){const a=stats._affixes??{},elementKey=`${skill?.element??"neutral"}Damage`,element=a[elementKey]??0,boss=enemy?.boss||enemy?.endgameBossId?a.bossDamage??0:a.normalDamage??0,low=stats._currentHpRatio!=null&&stats._currentHpRatio<=.35?a.lowHpDamage??0:0,full=stats._currentHpRatio!=null&&stats._currentHpRatio>=.999?a.fullHpDamage??0:0,base=Math.max(1,Math.floor((stats.atk*skill.power-enemy.def*.3)*(1+(element+boss+low+full)/100))),critMult=1.65+(a.critDamage??0)/100;return critical?Math.floor(base*critMult):base}
 export function skillElementLabel(skill){return elementLabel(skill?.element)}
 
 export function chooseAutoSkill(monster,battle){
