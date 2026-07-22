@@ -197,7 +197,7 @@ function selectMonstersPreset(mode){const pool=selectableMonsters();if(mode==="n
 function releaseSelectedMonsters(){const targets=selectableMonsters().filter(m=>monsterManage.selected.has(m.id));if(!targets.length)return alert("手放せるモンスターが選択されていません");if(save.state.monsters.length-targets.length<1)return alert("最後の1体は手放せません");if(!confirm(`${targets.length}体を手放します。\n魔晶石 ${targets.length}個を獲得します。`))return;const ids=new Set(targets.map(m=>m.id));targets.forEach(m=>Object.values(m.equipment??{}).forEach(id=>{const i=save.state.equipment.find(x=>x.id===id);if(i)i.equippedBy=null}));save.state.monsters=save.state.monsters.filter(m=>!ids.has(m.id));save.state.player.crystals+=targets.length;monsterManage.selected.clear();save.save();render()}
 function detailButtons(){document.querySelectorAll("[data-monster-id]").forEach(b=>b.onclick=()=>{selected=b.dataset.monsterId;go("detail")})}
 function bindDetail(m){document.getElementById("backMonsters").onclick=()=>go("monsters");document.querySelectorAll("[data-switch-monster]").forEach(b=>b.onclick=()=>{selected=b.dataset.switchMonster;render();window.scrollTo({top:0,behavior:"smooth"})});document.querySelectorAll("[data-growth-jump]").forEach(b=>b.onclick=()=>{const ids={level:"growthLevelSection",affection:"growthAffectionSection",history:"growthHistorySection"};document.getElementById(ids[b.dataset.growthJump])?.scrollIntoView({behavior:"smooth",block:"start"})});document.getElementById("releaseMonster")?.addEventListener("click",()=>releaseMonster(m));document.getElementById("toggleFavorite").onclick=()=>{m.favorite=!m.favorite;save.save();render()};document.getElementById("saveNickname")?.addEventListener("click",()=>{const v=document.getElementById("nicknameInput").value.trim();if(v)m.nickname=v.slice(0,12);save.save();render()});document.querySelectorAll("[data-color-id]").forEach(b=>b.onclick=()=>{m.colorId=b.dataset.colorId;save.save();render()});document.getElementById("limitBreakButton")?.addEventListener("click",()=>performLimitBreak(m.id,{returnToDetail:true}));document.getElementById("openMonsterEquipment")?.addEventListener("click",()=>{equipmentTarget=m.id;navigationOrigin="detail";go("equipment")})}
-function bindSettings(){document.getElementById("backHome").onclick=()=>go("home");document.getElementById("toggleAuto").onclick=()=>{save.state.settings.autoBattle=!save.state.settings.autoBattle;save.save();render()};document.getElementById("toggleMinimap").onclick=()=>{save.state.settings.minimapVisible=!save.state.settings.minimapVisible;save.save();render()};document.getElementById("resetTutorials")?.addEventListener("click",()=>{save.state.settings.tutorialSeen={};save.save();alert("1〜5階のチュートリアルを再表示します")});document.getElementById("resetSave").onclick=()=>{if(confirm("初期化する？")){save.reset();snapshot=null;go("home")}}}
+function bindSettings(){document.getElementById("backHome").onclick=()=>go("home");document.getElementById("toggleAuto").onclick=()=>{save.state.settings.autoBattle=!save.state.settings.autoBattle;save.save();render()};document.getElementById("toggleMinimap").onclick=()=>{save.state.settings.minimapVisible=!save.state.settings.minimapVisible;save.save();render()};document.getElementById("openTutorialBook")?.addEventListener("click",openTutorialBook);document.getElementById("resetSave").onclick=()=>{if(confirm("初期化する？")){save.reset();snapshot=null;go("home")}}}
 
 
 function bindEquipment(){
@@ -505,10 +505,28 @@ function openResourceHelp(){
  app.insertAdjacentHTML("beforeend",Modal("アイコン説明",body,"閉じる"));
  topModalButton().onclick=closeTopModal;
 }
+const FLOOR_TUTORIALS={
+ 1:{title:"戦闘の基本",body:"まずは歩いて敵と遭遇しよう。『たたかう』『スキル』『ガード』を使い分け、スライムLv.1を倒して最初のレベルを上げよう。"},
+ 2:{title:"捕獲",body:"敵はHPを減らすほど捕獲しやすくなる。捕獲結晶には限りがあるので、欲しい相手を弱らせてから使おう。"},
+ 3:{title:"編成",body:"捕まえた仲間は『編成』から出撃できる。最大4体まで。倒れた仲間にはEXPが入らず、生存者へ再分配される。"},
+ 4:{title:"装備",body:"武器・防具・アクセで能力が変わる。『装備』の自動装備も使えるが、役割に合わせた手動調整も強力。"},
+ 5:{title:"複数の敵",body:"この階から敵が2体で現れることがある。敵をタップして攻撃対象を変更し、危険な相手から倒そう。"}
+};
 function showFloorTutorial(){
- const floor=save.state.player.currentFloor;if(floor<1||floor>5||save.state.settings.tutorialSeen?.[floor])return;
- const tutorials={1:["戦闘の基本","まずは歩いて敵と遭遇しよう。『たたかう』『スキル』『ガード』を使い分け、スライムLv.1を倒して最初のレベルを上げよう。"],2:["捕獲","敵はHPを減らすほど捕獲しやすくなる。捕獲結晶には限りがあるので、欲しい相手を弱らせてから使おう。"],3:["編成","捕まえた仲間は『編成』から出撃できる。最大4体まで。倒れた仲間にはEXPが入らず、生存者へ再分配される。"],4:["装備","武器・防具・アクセで能力が変わる。『装備』の自動装備も使えるが、役割に合わせた手動調整も強力。"],5:["複数の敵","この階から敵が2体で現れることがある。敵をタップして攻撃対象を変更し、危険な相手から倒そう。"]};
- const [title,body]=tutorials[floor];game.paused=true;setTimeout(()=>{app.insertAdjacentHTML("beforeend",Modal(`${floor}階チュートリアル：${title}`,`<p>${body}</p><p class="muted">この説明は初回だけ表示され、設定から再確認できます。</p>`,`探索開始`));topModalButton().onclick=()=>{save.state.settings.tutorialSeen[floor]=true;save.save();document.querySelector(".game-modal").remove();game.paused=false}},120)
+ const floor=save.state.player.currentFloor,tutorial=FLOOR_TUTORIALS[floor];
+ if(!tutorial||save.state.settings.tutorialSeen?.[floor])return;
+ // 表示予約の時点で保存する。戦闘後の探索画面再生成でも二重表示されない。
+ save.state.settings.tutorialSeen??={};save.state.settings.tutorialSeen[floor]=true;save.save();
+ game.paused=true;setTimeout(()=>{
+  if(!game?.running)return;
+  app.insertAdjacentHTML("beforeend",Modal(`${floor}階チュートリアル：${tutorial.title}`,`<p>${tutorial.body}</p><p class="muted">自動表示はこの1回だけです。設定の「チュートリアル一覧」からいつでも読み返せます。</p>`,`探索開始`));
+  topModalButton().onclick=()=>{document.querySelector(".game-modal")?.remove();if(game)game.paused=false}
+ },120)
+}
+function openTutorialBook(){
+ const rows=Object.entries(FLOOR_TUTORIALS).map(([floor,t])=>`<button class="tutorial-book-row" data-tutorial-floor="${floor}"><span>${floor}F</span><div><b>${t.title}</b><small>${t.body}</small></div><em>›</em></button>`).join("");
+ app.insertAdjacentHTML("beforeend",Modal("📖 チュートリアル一覧",`<div class="tutorial-book">${rows}</div><p class="muted">ここで読み返しても、自動表示の状態は変更されません。</p>`,`閉じる`));
+ const modal=topModal();modal.querySelectorAll("[data-tutorial-floor]").forEach(button=>button.onclick=()=>{const floor=button.dataset.tutorialFloor,t=FLOOR_TUTORIALS[floor];app.insertAdjacentHTML("beforeend",Modal(`${floor}階：${t.title}`,`<p>${t.body}</p>`,`一覧へ戻る`));topModalButton().onclick=closeTopModal});modal.querySelector("#closeGameModal").onclick=closeTopModal
 }
 function exploreMonsterDetail(id){const m=save.state.monsters.find(x=>x.id===id);if(!m)return;const st=calculatedStats(m),need=expNeed(m),remain=Math.max(0,need-m.exp),gear=Object.entries(m.equipment??{}).map(([slot,itemId])=>`${slotLabel(slot)}：${save.state.equipment.find(i=>i.id===itemId)?.name??"なし"}`).join("<br>");app.insertAdjacentHTML("beforeend",Modal(`${SPECIES[m.speciesId].emoji} ${displayName(m)}`,`<div class="explore-detail"><p><b>Lv.${m.level}　★${m.stars}　+${m.plus}</b></p><p>HP ${m.currentHp??st.hp}/${st.hp}<br>MP ${m.currentMp??maxMp(m)}/${maxMp(m)}<br>ATK ${st.atk} / DEF ${st.def} / SPD ${st.spd}<br>会心 ${st.crit}% / 回避 ${st.evasion}%<br><b>${SPECIES[m.speciesId].race}族 / ${SPECIES[m.speciesId].role}</b><br>特性：${TRAITS[m.traitId]?.name??"安定"}（${TRAITS[m.traitId]?.description??""}）</p><p><b>EXP ${m.exp.toLocaleString()} / ${need.toLocaleString()}</b><br><small>次のレベルまであと ${remain.toLocaleString()}</small></p><p>${gear}</p><p><b>スキル</b><br>${learnedSkills(m).map(x=>`${x.name}（MP${x.mp}）`).join("<br>")||"なし"}</p></div>`,`閉じる`));topModalButton().onclick=()=>{const mods=document.querySelectorAll(".game-modal");mods[mods.length-1]?.remove()}}
 function bindExploreMonsterLongPress(){document.querySelectorAll("[data-explore-monster]").forEach(el=>el.onclick=()=>exploreMonsterDetail(el.dataset.exploreMonster))}
@@ -530,7 +548,7 @@ function speciesPoolForFloor(floor){
 }
 function randomEnemy(){const floor=save.state.player.currentFloor;if(floor===1)return{speciesId:"slime",level:1,boss:false,equipped:false,gear:null};if(floor>=2&&Math.random()<.006)return{speciesId:"baby_slime",level:Math.max(1,enemyLevelForFloor(floor)),boss:false,equipped:false,gear:null,rareExp:true};const pool=speciesPoolForFloor(floor).filter(s=>s.id!=="baby_slime"),picked=pool[Math.floor(Math.random()*pool.length)],speciesId=picked.id,equipped=floor>=6&&Math.random()<.11,gear=equipped?createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)]):null;return{speciesId,level:enemyLevelForFloor(floor),boss:false,equipped,gear}}
 function randomEnemyGroup(){const floor=save.state.player.currentFloor;if(floor<=4)return[randomEnemy()];let count=1,r=Math.random();if(floor<10){if(r<.12)count=2}else if(floor<50){if(r<.03)count=3;else if(r<.25)count=2}else{if(r<.08)count=3;else if(r<.35)count=2}const group=Array.from({length:count},randomEnemy);if(group.length===1&&shouldSpawnSecondWorldElite(floor))group[0]=createEliteEncounter(group[0],floor);return group}
-function floorBossEnemy(){const floor=save.state.player.currentFloor,pool=speciesPoolForFloor(Math.max(floor,10)).filter(s=>s.minFloor<=floor);const speciesId=(pool[Math.floor(seeded(floorSeed(floor)+991)()*pool.length)]??SPECIES.slime).id;const cycle=Math.floor(floor/10);return{speciesId,level:Math.max(20,cycle*20+5+Math.floor(Math.random()*6)),boss:true}}
+function floorBossEnemy(){const floor=save.state.player.currentFloor,pool=speciesPoolForFloor(Math.max(floor,10)).filter(s=>s.minFloor<=floor);const speciesId=(pool[Math.floor(seeded(floorSeed(floor)+991)()*pool.length)]??SPECIES.slime).id;const base=Math.round(floor*1.15)+2,variance=Math.floor(Math.random()*(Math.max(3,Math.round(floor*.1))+1));return{speciesId,level:Math.max(14,base+variance),boss:true}}
 function loop(now){
  if(!game?.running)return;
  const dt=Math.min(.05,(now-game.last)/1000||0);game.last=now;
