@@ -61,7 +61,7 @@ export function endgamePreludeOptions(boss){
 export function resolveEndgamePrelude(state,bossId,choiceId){
  const boss=ENDGAME_BOSSES[bossId],option=endgamePreludeOptions(boss).find(x=>x.id===choiceId)??endgamePreludeOptions(boss)[0],e=normalizeEndgameState(state).emergency;
  e.preludeChoices[bossId]??={challenge:0,study:0,oath:0};e.preludeChoices[bossId][option.id]=(e.preludeChoices[bossId][option.id]??0)+1;e.discovered[bossId]=true;
- return{...option,bossId,resultText:option.id==="challenge"?`${boss.name}は真正面からの覚悟を認め、権能を抑えた。`:option.id==="study"?`${boss.name}の権能を観測した。危険は増したが、より多くの欠片を回収できる。`:`${boss.name}との契約が成立した。本体は弱まったが、配下が凶暴化した。`};
+ return{...option,bossId,resultText:option.id==="challenge"?`${boss.name}は真正面からの覚悟を認め、権能を抑えた。`:option.id==="study"?`${boss.name}の権能を観測した。危険は増したが、より多くの欠片を回収できる。`:`${boss.name}へ代償を捧げた。本体は弱まったが、配下が凶暴化した。`};
 }
 export function applyPreludeToEncounter(event,prelude){
  if(!event?.enemies||!prelude)return event;event.enemies=event.enemies.map((enemy,index)=>({...enemy,statMultiplier:(enemy.statMultiplier??1)*(index===0?(prelude.enemyMultiplier??1):(prelude.supportMultiplier??1))}));return event;
