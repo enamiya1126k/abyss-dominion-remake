@@ -45,7 +45,7 @@ function renderSkills(battle,actor,skills){
  const rows=skills.map(skill=>{
   const cd=cooldownRemaining(battle,actor.id,skill.id),disabled=actor.currentMp<skill.mp||cd>0;
   const cost=cd>0?`CD ${cd}`:`MP ${skill.mp}`;
-  const fx=skill.element??"neutral",icon=({fire:"🔥",water:"❄️",earth:"🪨",wind:"🌪️",dark:"🌑",light:"✨",poison:"☠️",lightning:"⚡"})[fx]??"✦";return `<button class="battle-skill-button element-${fx} ${skill.awakened?"awakened":""}" data-skill-id="${skill.id}" ${disabled?"disabled":""}><span><b>${icon} ${skill.name}</b><small>${skill.tag??"スキル"}・${skill.target??"敵単体"}・${skillElementLabel(skill)}属性</small><small>${skill.description}</small></span><strong>${cost}</strong></button>`;
+  return `<button data-skill-id="${skill.id}" ${disabled?"disabled":""}><span><b>${skill.name}</b><small>${skill.tag??"スキル"}・${skill.target??"敵単体"}・${skillElementLabel(skill)}属性</small><small>${skill.description}</small></span><strong>${cost}</strong></button>`;
  }).join("");
  return `<div class="skill-command-list">${rows}<button id="closeSkillMenu" class="secondary">戻る</button></div>`;
 }
