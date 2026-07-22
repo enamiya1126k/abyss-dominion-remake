@@ -1,9 +1,12 @@
-import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.33-final-ui-polish";
 import{MonsterCard}from"../components/MonsterCard.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.15-alpha.33-final-ui-polish";
 import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,emergencyFragmentStatus,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+
+function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
+function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
 
 export function HomeScreen(state){
   const party=state.party.map(id=>state.monsters.find(m=>m.id===id)).filter(Boolean);
@@ -17,7 +20,8 @@ export function HomeScreen(state){
     const stats=calculatedStats(m),hp=Math.max(0,m.currentHp??stats.hp),mp=Math.max(0,m.currentMp??maxMp(m)),hpRatio=Math.max(0,Math.min(100,(hp/Math.max(1,stats.hp))*100)),mpMax=maxMp(m),mpRatio=Math.max(0,Math.min(100,(mp/Math.max(1,mpMax))*100)),sp=SPECIES[m.speciesId];
     const stars="⭐".repeat(Math.max(1,Math.min(5,m.stars??1)));
     const equipmentIcons=["weaponRight","armorBody","accessoryNeck","armorSupport","accessoryFinger","weaponLeft"].map(slot=>{const id=m.equipment?.[slot],item=id?equipmentById.get(id):null,icon=slot.startsWith("weapon")?"⚔️":slot.startsWith("armor")?"🛡️":"💍";return`<i class="${item?"equipped":"empty"}" title="${item?.name??"未装備"}">${icon}</i>`}).join("");
-    return`<button class="home-squad-slot" data-monster-id="${m.id}"><span class="home-squad-number">${index+1}</span><div class="home-squad-head"><span>${sp?.emoji??"👹"}</span><section><b>${displayName(m)}</b><small>Lv.${m.level} <em>+${m.plus??0}</em></small></section></div><div class="home-squad-growth"><span>${stars}</span><span>❤️${m.affection??0}</span></div><div class="home-squad-bar hp"><i style="width:${hpRatio}%"></i><small>HP ${hp}/${stats.hp}</small></div><div class="home-squad-bar mp"><i style="width:${mpRatio}%"></i><small>MP ${mp}/${mpMax}</small></div><div class="home-squad-equipment" aria-label="装備">${equipmentIcons}</div></button>`;
+    const rarity=monsterRarity(m),rarityClass=rarityNameClass(rarity);
+    return`<button class="home-squad-slot" data-monster-id="${m.id}"><span class="home-squad-number">${index+1}</span><div class="home-squad-head"><span>${sp?.emoji??"👹"}</span><section><b class="monster-rarity-name rarity-name-${rarityClass}">${displayName(m)}</b><small>Lv.${m.level} <em>+${m.plus??0}</em></small></section></div><div class="home-squad-growth"><span>${stars}</span><span>❤️${m.affection??0}</span></div><div class="home-squad-bar hp"><i style="width:${hpRatio}%"></i><small>HP ${hp}/${stats.hp}</small></div><div class="home-squad-bar mp"><i style="width:${mpRatio}%"></i><small>MP ${mp}/${mpMax}</small></div><div class="home-squad-equipment" aria-label="装備">${equipmentIcons}</div></button>`;
   }).join("");
   return`
     <section class="screen home-screen world-phase-${phase}${phase===1?" phase2":""}" data-world-phase="${phase}">

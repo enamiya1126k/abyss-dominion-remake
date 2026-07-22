@@ -1,7 +1,10 @@
 import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{PERSONALITIES}from"../../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{MONSTER_COLORS}from"../../data/colors.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{displayName,rankName,colorValue,calculatedStats,unlockedSkills,TRAITS,limitBreakGrowth,affectionBonuses}from"../../models/Monster.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{displayName,rankName,colorValue,calculatedStats,unlockedSkills,TRAITS,limitBreakGrowth,affectionBonuses}from"../../models/Monster.js?v=0.9.15-alpha.33-final-ui-polish";
+
+function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
+function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
 
 function cloneMonster(monster,changes={}){return{...monster,ivs:{...(monster.ivs??{})},equipment:{...(monster.equipment??{})},_equipmentStats:{...(monster._equipmentStats??{})},_seriesCounts:{...(monster._seriesCounts??{})},...changes}}
 function breakdown(monster,key){
@@ -16,13 +19,13 @@ function breakdown(monster,key){
 function historyDate(value){if(!value)return"未記録";const d=new Date(value);return Number.isNaN(d.getTime())?"未記録":d.toLocaleDateString("ja-JP")}
 function nextAffection(aff){if(aff>=1000)return null;return Math.min(1000,Math.ceil((aff+1)/100)*100)}
 export function MonsterDetailScreen(monster,state){
-  const species=SPECIES[monster.speciesId],personality=PERSONALITIES[monster.personalityId],stats=calculatedStats(monster),skills=unlockedSkills(monster),trait=TRAITS[monster.traitId]??TRAITS.steady;
+  const rarityClass=rarityNameClass(monsterRarity(monster)),species=SPECIES[monster.speciesId],personality=PERSONALITIES[monster.personalityId],stats=calculatedStats(monster),skills=unlockedSkills(monster),trait=TRAITS[monster.traitId]??TRAITS.steady;
   const need=Math.floor(65*Math.pow(1.12,monster.level-1)),remaining=Math.max(0,need-monster.exp),aff=monster.affection??monster.bond??0,next=nextAffection(aff),growth=limitBreakGrowth(monster.speciesId),materials=state.monsters.filter(x=>x.id!==monster.id&&x.speciesId===monster.speciesId&&!state.party.includes(x.id)&&!x.favorite&&!x.locked).length,h=monster.history??{};
   const lines=["hp","atk","def","spd"].map(key=>[key.toUpperCase(),breakdown(monster,key)]);
   const ordered=[...state.party.map(id=>state.monsters.find(m=>m.id===id)).filter(Boolean),...state.monsters.filter(m=>!state.party.includes(m.id))];
   const index=Math.max(0,ordered.findIndex(m=>m.id===monster.id)),previous=ordered[(index-1+ordered.length)%ordered.length],nextMonster=ordered[(index+1)%ordered.length];
-  return`<section class="screen monster-growth-screen"><header class="topbar"><button id="backMonsters">←</button><h2>モンスター育成</h2><button id="toggleFavorite">${monster.favorite?"★":"☆"}</button></header><div class="page"><div class="monster-switcher"><button data-switch-monster="${previous?.id??monster.id}" aria-label="前の魔物">‹</button><div><small>${state.party.includes(monster.id)?"出撃メンバー":"控え魔物"} ${index+1}/${ordered.length}</small><b>${displayName(monster)}</b></div><button data-switch-monster="${nextMonster?.id??monster.id}" aria-label="次の魔物">›</button></div>
-    <div class="panel detail-hero growth-hero"><div class="detail-orb" style="background:${colorValue(monster)}"><span>${species.emoji??"👹"}</span></div><div><div class="eyebrow">${rankName(monster)} / ${species.race}族</div><h1>${displayName(monster)}</h1><div class="growth-identifiers"><b>⭐${monster.stars??1}</b><b>+${monster.plus??0}</b><b class="affection">❤️${aff}</b>${aff>=1000?"<em>親友</em>":""}</div><div class="subline">Lv.${monster.level} / ${species.role} / ${species.element}属性</div></div></div>
+  return`<section class="screen monster-growth-screen"><header class="topbar"><button id="backMonsters">←</button><h2>モンスター育成</h2><button id="toggleFavorite">${monster.favorite?"★":"☆"}</button></header><div class="page"><div class="monster-switcher"><button data-switch-monster="${previous?.id??monster.id}" aria-label="前の魔物">‹</button><div><small>${state.party.includes(monster.id)?"出撃メンバー":"控え魔物"} ${index+1}/${ordered.length}</small><b class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</b></div><button data-switch-monster="${nextMonster?.id??monster.id}" aria-label="次の魔物">›</button></div>
+    <div class="panel detail-hero growth-hero"><div class="detail-orb" style="background:${colorValue(monster)}"><span>${species.emoji??"👹"}</span></div><div><div class="eyebrow">${rankName(monster)} / ${species.race}族</div><h1 class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</h1><div class="growth-identifiers"><b>⭐${monster.stars??1}</b><b>+${monster.plus??0}</b><b class="affection">❤️${aff}</b>${aff>=1000?"<em>親友</em>":""}</div><div class="subline">Lv.${monster.level} / ${species.role} / ${species.element}属性</div></div></div>
 
     <div class="panel next-goal-panel" id="growthLevelSection"><div class="eyebrow">NEXT GROWTH</div><h2>次に強くなる方法</h2><div class="next-goal-list"><div class="${materials>=2?"ready":""}"><span>➕</span><b>同名素材 ${materials}/2</b><small>${materials>=2?`+${(monster.plus??0)+1}へ限界突破可能`:`あと${2-materials}体で限界突破`}</small></div><div class="${aff>=1000?"complete":""}"><span>❤️</span><b>${aff>=1000?"親友達成":"次のなつきボーナス"}</b><small>${aff>=1000?"全段階のボーナスを解放済み":`あと${next-aff}で ${next}/1000`}</small></div><div><span>📈</span><b>次のレベルまで</b><small>経験値あと ${remaining.toLocaleString()}</small></div></div></div>
 
