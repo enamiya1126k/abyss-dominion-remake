@@ -17,7 +17,7 @@ import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.15-alpha.1
 import{EQUIPMENT_SERIES}from"./data/equipmentSeries.js?v=0.9.15-alpha.5-part5";
 import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.5-part9-infinite";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.1-part3-phase2";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=0.9.15-alpha.6-skill-phase1";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=0.9.15-alpha.8-skill-phase3";
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=0.9.15-alpha.2-part2";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=0.9.15-alpha.3-part1";
 import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=0.9.15-alpha.3-part1";
@@ -25,9 +25,9 @@ import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/
 import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=0.9.15-alpha.3-part4";
 import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=0.9.15-alpha.3-part6";
 import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=0.9.15-alpha.3-part6";
-import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,canUseSkill,skillDamage,chooseAutoSkill}from"./battle/SkillSystem.js?v=0.9.15-alpha.7-skill-phase2";
+import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,canUseSkill,skillDamage,chooseAutoSkill,recordSkillUse}from"./battle/SkillSystem.js?v=0.9.15-alpha.8-skill-phase3";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier}from"./battle/EnemyAI.js?v=0.9.15-alpha.1-part3-phase2";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=0.9.15-alpha.7-skill-phase2";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=0.9.15-alpha.8-skill-phase3";
 import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.15-alpha.1-part3-phase2";
 import{dangerConfig}from"./core/DangerSystem.js?v=0.9.15-alpha.1-part3-phase2";
 import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.15-alpha.1-part3-phase2";
@@ -192,6 +192,10 @@ function bindSkills(){
  const markSlot=()=>{document.querySelectorAll("[data-skill-slot]").forEach(button=>button.classList.toggle("selected",Number(button.dataset.skillSlot)===skillSlotSelection))};
  document.querySelectorAll("[data-skill-slot]").forEach(button=>button.addEventListener("click",()=>{skillSlotSelection=Number(button.dataset.skillSlot)||0;markSlot();showToast(`SLOT ${skillSlotSelection+1} を選択`)}));
  markSlot();
+ document.querySelectorAll("[data-skill-filter]").forEach(button=>button.addEventListener("click",()=>{
+  document.querySelectorAll("[data-skill-filter]").forEach(x=>x.classList.toggle("active",x===button));
+  const tag=button.dataset.skillFilter;document.querySelectorAll("[data-skill-card]").forEach(card=>card.hidden=tag!=="すべて"&&card.dataset.skillTag!==tag);
+ }));
  document.querySelectorAll("[data-skill-card]").forEach(card=>card.addEventListener("click",()=>{
   if(card.classList.contains("locked"))return showToast("まだ習得していません");
   const monster=save.state.monsters.find(m=>m.id===skillTarget),skillId=card.dataset.skillCard;if(!monster)return;
@@ -849,9 +853,10 @@ async function command(type,skillId=null){
  if(type==="skill"&&!skillId){battle.busy=false;battle.skillMenu=true;renderBattle();return}
 
  if(type==="skill"&&skillId){
-  const skill=skillById(skillId),cd=cooldownRemaining(battle,a.id,skillId);
+  const skill=skillById(skillId,a),cd=cooldownRemaining(battle,a.id,skillId);
   if(!learnedSkills(a).some(x=>x.id===skillId)||!canUseSkill(a,skill,cd)){battle.busy=false;return alert(cd>0?`あと${cd}ラウンド使用できない`:"MPが足りない")}
   a.currentMp-=skill.mp;setSkillCooldown(battle,a.id,skill);battle.skillMenu=false;addBattleLog(battle,`${displayName(a)}：${skill.name}`);await battleBanner(skill.name,skill.description??"","skill",430);
+  const skillGrowth=recordSkillUse(a,skill.id);if(skillGrowth?.leveled)addBattleLog(battle,`${skill.name}がLv.${skillGrowth.level}に成長！`);
   if(skill.type==="selfHeal"||skill.type==="stance"&&skill.heal){
    const h=Math.max(1,Math.floor(s.hp*(skill.heal??0)));a.currentHp=Math.min(s.hp,a.currentHp+h);if(h>0)await floatText(`+${h}`,a.id,"heal");applySkillEffects(skill,a,e);
   }else if(skill.type==="allHeal"){
