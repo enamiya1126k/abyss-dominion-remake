@@ -1,5 +1,5 @@
-import{SPECIES}from"../data/species.js?v=0.9.15-alpha.8-skill-phase3";
-import{SKILLS}from"../data/skills.js?v=0.9.15-alpha.8-skill-phase3";
+import{SPECIES}from"../data/species.js?v=0.9.15-alpha.6-skill-phase1";
+import{SKILLS}from"../data/skills.js?v=0.9.15-alpha.6-skill-phase1";
 
 const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
 const ROLE_POOLS={
@@ -176,36 +176,7 @@ const BY_ID=new Map(Object.values(GENERATED).flat().map(skill=>[skill.id,skill])
 
 export function maxMp(monster){const species=SPECIES[monster.speciesId],base=species?.maxMp??15;return Math.floor(base+(monster.level-1)*.65+(monster.rank-1)*5+(monster.stars-1))}
 export function allSpeciesSkills(speciesId){return GENERATED[speciesId]??[]}
-export function normalizeSkillProgress(monster){
- monster.skillProgress=monster.skillProgress&&typeof monster.skillProgress==="object"?monster.skillProgress:{};
- for(const skill of allSpeciesSkills(monster.speciesId)){
-  const p=monster.skillProgress[skill.id]??{};
-  p.level=Math.max(1,Math.min(10,Number(p.level??1)));
-  p.exp=Math.max(0,Number(p.exp??0));p.uses=Math.max(0,Number(p.uses??0));
-  while(p.level<10&&p.exp>=skillExpNeed(p.level)){p.exp-=skillExpNeed(p.level);p.level++}
-  if(p.level>=10)p.exp=0;
-  monster.skillProgress[skill.id]=p;
- }
- return monster.skillProgress;
-}
-export function skillExpNeed(level){return Math.floor(24+level*level*16)}
-export function skillProgress(monster,skillId){normalizeSkillProgress(monster);return monster.skillProgress[skillId]??{level:1,exp:0,uses:0}}
-export function skillForMonster(monster,skill){
- if(!monster||!skill)return skill;const p=skillProgress(monster,skill.id),lv=p.level,rate=1+(lv-1)*.045+(lv>=10?.10:0),scaled={...skill,skillLevel:lv,skillExp:p.exp,skillUses:p.uses,awakened:lv>=10};
- if(Number.isFinite(skill.power))scaled.power=skill.power*rate;
- if(Number.isFinite(skill.heal))scaled.heal=Math.min(1.5,skill.heal*rate);
- if(Number.isFinite(skill.mpHeal))scaled.mpHeal=Math.min(1,skill.mpHeal*rate);
- if(skill.status)scaled.status={...skill.status,power:(skill.status.power??0)*rate,chance:Math.min(1,(skill.status.chance??1)+(lv-1)*.012)};
- if(Array.isArray(skill.effects))scaled.effects=skill.effects.map(e=>({...e,value:Number.isFinite(e.value)?e.value*(1+(lv-1)*.025):e.value,chance:Number.isFinite(e.chance)?Math.min(1,e.chance+(lv-1)*.012):e.chance}));
- scaled.mp=Math.max(0,skill.mp-(lv>=5?1:0)-(lv>=10?1:0));
- return scaled;
-}
-export function recordSkillUse(monster,skillId){
- const skill=skillById(skillId);if(!monster||!skill)return null;const p=skillProgress(monster,skillId),before=p.level;p.uses++;p.exp+=Math.max(8,Math.floor(8+(skill.mp??0)*1.5+(skill.unlock?.value??1)/18));
- while(p.level<10&&p.exp>=skillExpNeed(p.level)){p.exp-=skillExpNeed(p.level);p.level++}
- if(p.level>=10)p.exp=0;return{before,level:p.level,leveled:p.level>before,progress:p};
-}
-export function allLearnedSkills(monster){normalizeSkillProgress(monster);return allSpeciesSkills(monster.speciesId).filter(skill=>monster.level>=(skill.unlock?.value??1)).map(skill=>skillForMonster(monster,skill))}
+export function allLearnedSkills(monster){return allSpeciesSkills(monster.speciesId).filter(skill=>monster.level>=(skill.unlock?.value??1))}
 export function normalizeSkillLoadout(monster){
  const learned=allLearnedSkills(monster),valid=new Set(learned.map(x=>x.id)),saved=Array.isArray(monster.equippedSkills)?monster.equippedSkills.filter(id=>valid.has(id)):[];
  for(const skill of learned){if(saved.length>=4)break;if(!saved.includes(skill.id))saved.push(skill.id)}
@@ -213,7 +184,7 @@ export function normalizeSkillLoadout(monster){
 }
 export function learnedSkills(monster){const equipped=new Set(normalizeSkillLoadout(monster));return allLearnedSkills(monster).filter(skill=>equipped.has(skill.id))}
 export function equipSkill(monster,skillId,slot){const learned=new Set(allLearnedSkills(monster).map(x=>x.id));if(!learned.has(skillId))return false;normalizeSkillLoadout(monster);const next=[...monster.equippedSkills];const previous=next.indexOf(skillId);if(previous>=0)next[previous]=next[slot]??null;next[slot]=skillId;monster.equippedSkills=next.filter(Boolean).slice(0,4);return true}
-export function skillById(id,monster=null){const skill=BY_ID.get(id)??SKILLS[id]??null;return monster&&skill?skillForMonster(monster,skill):skill}
+export function skillById(id){return BY_ID.get(id)??SKILLS[id]??null}
 export function canUseSkill(monster,skill,cooldown=0){return Boolean(skill)&&monster.currentMp>=skill.mp&&cooldown<=0}
 export function skillDamage(stats,enemy,skill,critical=false){const base=Math.max(1,Math.floor(stats.atk*skill.power-enemy.def*.3));return critical?Math.floor(base*1.65):base}
 export function skillElementLabel(skill){return elementLabel(skill?.element)}
