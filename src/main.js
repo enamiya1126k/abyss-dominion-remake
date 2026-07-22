@@ -1,39 +1,39 @@
-import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{SPECIES}from"./data/species.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{EQUIPMENT_SERIES}from"./data/equipmentSeries.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{aggregateAffixes}from"./data/equipmentAffixes.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse}from"./battle/SkillSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier}from"./battle/EnemyAI.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{dangerConfig}from"./core/DangerSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{bossLevelForFloor}from"./core/EnemyScalingSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
-import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,ENDGAME_BOSSES,normalizeEndgameState,dailyTeamAttempts,createTeamBattleEncounter,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,endgameContractStatus,attemptEndgameContract,hasCleared1000,mark1000FloorCleared,worldRegionForFloor}from"./core/EndgameSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
+import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{SPECIES}from"./data/species.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{EQUIPMENT_SERIES}from"./data/equipmentSeries.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{aggregateAffixes}from"./data/equipmentAffixes.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse}from"./battle/SkillSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier}from"./battle/EnemyAI.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{dangerConfig}from"./core/DangerSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{bossLevelForFloor}from"./core/EnemyScalingSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
+import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,ENDGAME_BOSSES,normalizeEndgameState,dailyTeamAttempts,createTeamBattleEncounter,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,endgameContractStatus,attemptEndgameContract,hasCleared1000,mark1000FloorCleared,worldRegionForFloor}from"./core/EndgameSystem.js?v=0.9.15-alpha.31-phase10-9-contract-recruit-integrity";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
 let screen="home",selected=null,equipmentTarget=null,skillTarget=null,skillSlotSelection=0,game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home";
@@ -177,8 +177,12 @@ function triggerEmergencyEncounter(){
 }
 function startSpecialBattle(enemies,options={}){startBattle(enemies,{specialBattle:true,specialBattleType:options.type,specialTitle:options.title,specialSubtitle:options.subtitle,priorVitals:options.priorVitals,specialBossId:options.bossId,powerPercent:options.powerPercent,bonusFragments:Math.max(0,Number(options.bonusFragments)||0),preludeChoiceId:options.preludeChoiceId??null,preludeResultText:options.preludeResultText??null})}
 function createContractedEndgameMonster(boss,bossId,level,floor){
- const monster=createMonster(boss.speciesId,{nickname:boss.name,title:boss.title,level:Math.max(1,Math.min(9999,Number(level)||Number(floor)||1)),stars:5,rank:4,favorite:true,locked:true,attribute:boss.element??SPECIES[boss.speciesId]?.element,obtainedFloor:Math.max(1,Number(floor)||1),obtainedMethod:"endgameContract",tags:[SPECIES[boss.speciesId]?.race,boss.faction,bossId].filter(Boolean)});
- monster.endgameBossId=bossId;monster.endgameFaction=boss.faction;monster.contractSignature=boss.signature;monster.contractSeriesId=boss.seriesId;monster.isContractedEndgame=true;monster.currentHp=calculatedStats(monster).hp;monster.currentMp=maxMp(monster);return monster;
+ const divine=boss.faction==="tenGod",contractLevel=Math.max(1,Math.min(9999,Number(level)||Number(floor)||1));
+ const monster=createMonster(boss.speciesId,{nickname:boss.name,title:boss.title,level:contractLevel,stars:5,rank:4,plus:divine?50:25,affection:divine?1000:750,ivs:{hp:100,atk:100,def:100,spd:100},traitId:divine?"lucky":"fierce",favorite:true,locked:true,attribute:boss.element??SPECIES[boss.speciesId]?.element,obtainedFloor:Math.max(1,Number(floor)||1),obtainedMethod:"endgameContract",tags:[SPECIES[boss.speciesId]?.race,boss.faction,bossId,"contractedEndgame"].filter(Boolean)});
+ const strongest=allLearnedSkills(monster).slice(-4);
+ monster.equippedSkills=strongest.map(skill=>skill.id);
+ monster.skillProgress=Object.fromEntries(strongest.map(skill=>[skill.id,{level:divine?5:3,exp:0,uses:0,need:25*(divine?5:3)}]));
+ monster.endgameBossId=bossId;monster.endgameFaction=boss.faction;monster.contractSignature=boss.signature;monster.contractSignatureName=boss.signatureName??boss.skills?.[0]??boss.signature;monster.contractSeriesId=boss.seriesId;monster.isContractedEndgame=true;monster.contractProfileVersion=1;monster.currentHp=calculatedStats(monster).hp;monster.currentMp=maxMp(monster);return monster;
 }
 function finishSpecialBattle(won){
  const type=battle.specialBattleType,prior=battle.priorVitals,bossId=battle.specialBossId,floor=save.state.player.currentFloor,bonusFragments=Math.max(0,Number(battle.bonusFragments)||0),leader=battle.enemies?.find(enemy=>enemy.endgameBossId===bossId);if(type==="team"){const team=dailyTeamAttempts(save.state);won?(team.totalWins++,team.stage++):team.totalLosses++}
