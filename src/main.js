@@ -8,7 +8,8 @@ import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.1-part3-p
 import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.5-part9-stable";
 import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.1-part3-phase2";
 import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.1-part3-phase2";
-import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=0.9.15-alpha.4-part1";
+import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=0.9.15-alpha.10-affix";
+import{ensureEquipmentAffixes,aggregateAffixes,AFFIX_QUALITY}from"./data/equipmentAffixes.js?v=0.9.15-alpha.10-affix";
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=0.9.15-alpha.5-part9-infinite";
 import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=0.9.15-alpha.5-part7-layout";
 import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=0.9.15-alpha.5-part5";
@@ -25,7 +26,7 @@ import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/
 import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=0.9.15-alpha.3-part4";
 import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=0.9.15-alpha.3-part6";
 import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=0.9.15-alpha.3-part6";
-import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,canUseSkill,skillDamage,chooseAutoSkill,recordSkillUse,allSpeciesSkills,skillProgressFor}from"./battle/SkillSystem.js?v=0.9.15-alpha.9-skill-phase45";
+import{maxMp,effectiveSkillMpCost,learnedSkills,allLearnedSkills,equipSkill,skillById,canUseSkill,skillDamage,chooseAutoSkill,recordSkillUse,allSpeciesSkills,skillProgressFor}from"./battle/SkillSystem.js?v=0.9.15-alpha.10-affix";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier}from"./battle/EnemyAI.js?v=0.9.15-alpha.1-part3-phase2";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=0.9.15-alpha.9-skill-phase45";
 import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.15-alpha.1-part3-phase2";
@@ -138,6 +139,7 @@ function normalizeEquipmentState(){
  save.state.settings.equipmentSort??="rarity";save.state.settings.equipmentSlot??="weapon";save.state.settings.equipmentStorage??="inventory";
  save.state.gacha??={firstTenUsed:false,lastDailyKey:null};save.state.codex??={encounters:{},captures:{},equipment:{}};save.state.codex.encounters??={};save.state.codex.captures??={};save.state.codex.equipment??={};save.state.rest??={lastFreeKey:null};
  const byId=new Map(save.state.equipment.map(i=>[i.id,i]));
+ [...save.state.equipment,...save.state.reserveEquipment,...save.state.bossEquipmentVault].forEach(i=>ensureEquipmentAffixes(i));
  save.state.equipment.forEach(i=>i.equippedBy=null);
  save.state.monsters.forEach(m=>{
   m.traitId??="steady";
@@ -154,7 +156,7 @@ function normalizeEquipmentState(){
   }
   m.equipment=slots;
   const natural=calculatedStats(m);if(m.currentHp==null||!Number.isFinite(m.currentHp))m.currentHp=natural.hp;if(m.currentMp==null||!Number.isFinite(m.currentMp))m.currentMp=maxMp(m);
-  const counts={},stats={};Object.values(m.equipment).forEach(id=>{const item=byId.get(id);if(!item)return;const mult=equipmentStatMultiplier(item);Object.entries(item.stats??{}).forEach(([k,v])=>stats[k]=(stats[k]??0)+Math.round(v*mult));if(item.series)counts[item.series]=(counts[item.series]??0)+1});m._equipmentStats=stats;m._seriesCounts=counts;m._seriesMasteryBonus=seriesMasteryBonusForMonster(save.state,counts);
+  const counts={},stats={},equippedItems=[];Object.values(m.equipment).forEach(id=>{const item=byId.get(id);if(!item)return;equippedItems.push(item);const mult=equipmentStatMultiplier(item);Object.entries(item.stats??{}).forEach(([k,v])=>stats[k]=(stats[k]??0)+Math.round(v*mult));if(item.series)counts[item.series]=(counts[item.series]??0)+1});m._equipmentStats=stats;m._equipmentAffixes=aggregateAffixes(equippedItems);m._seriesCounts=counts;m._seriesMasteryBonus=seriesMasteryBonusForMonster(save.state,counts);
  });
 }
 function render(){normalizeEquipmentState();document.body.classList.toggle("phase2",hasCleared1000(save.state));if(screen==="home"){app.innerHTML=HomeScreen(save.state);bindHome()}else if(screen==="monsters"){app.innerHTML=MonsterListScreen(save.state,monsterManage);bindList()}else if(screen==="detail"){const m=save.state.monsters.find(x=>x.id===selected);app.innerHTML=MonsterDetailScreen(m,save.state);bindDetail(m)}else if(screen==="settings"){app.innerHTML=SettingsScreen(save.state);bindSettings()}else if(screen==="explore"){app.innerHTML=ExploreScreen(save.state);bindExplore()}else if(screen==="equipment"){if(!save.state.party.includes(equipmentTarget))equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;app.innerHTML=EquipmentScreen(save.state,equipmentTarget,{home:navigationOrigin==="home",...equipmentManage});bindEquipment()}else if(screen==="shop"){app.innerHTML=ShopScreen(save.state);bindShop()}else if(screen==="skills"){skillTarget=save.state.monsters.some(m=>m.id===skillTarget)?skillTarget:(save.state.party[0]??save.state.monsters[0]?.id);app.innerHTML=SkillScreen(save.state,skillTarget);bindSkills()}}
@@ -226,6 +228,7 @@ function bindSettings(){document.getElementById("backHome").onclick=()=>go("home
 function bindEquipment(){
  document.getElementById("backEquipmentHome").onclick=()=>{const target=navigationOrigin;navigationOrigin="home";go(target)};
  document.querySelectorAll("[data-equipment-target]").forEach(b=>b.onclick=()=>{equipmentTarget=b.dataset.equipmentTarget;render()});
+ document.getElementById("openAffixHelp")?.addEventListener("click",openAffixHelp);
  document.getElementById("equipmentSort").onchange=e=>{save.state.settings.equipmentSort=e.target.value;save.save();render()};
  document.querySelectorAll("[data-equipment-slot]").forEach(b=>b.onclick=()=>{save.state.settings.equipmentSlot=b.dataset.equipmentSlot;save.save();render()});
  document.querySelectorAll("[data-equipment-storage]").forEach(b=>b.onclick=()=>{if(b.disabled)return;save.state.settings.equipmentStorage=b.dataset.equipmentStorage;save.save();render()});
@@ -244,6 +247,10 @@ function bindEquipment(){
  document.querySelectorAll("[data-take-equipment]").forEach(b=>b.onclick=()=>{const result=takeFromStorage(save.state,b.dataset.takeEquipment,b.dataset.storage);if(!result.ok)return alert(result.message);save.save();render()});
 }
 
+function openAffixHelp(){
+ const rows=Object.values(AFFIX_QUALITY).map(q=>`<p class="affix-quality-row"><b style="color:${q.color}">${q.name}</b><span>${q.id==="normal"?"標準的な数値":q.id==="good"?"やや高い数値":q.id==="rare"?"高水準の数値":q.id==="epic"?"かなり強力な数値":"最高クラスの数値"}</span></p>`).join("");
+ app.insertAdjacentHTML("beforeend",Modal("？ オプション品質",`<div class="affix-help"><p>装備名のレア度とは別に、各ランダムオプションの数値品質を文字色で表示します。</p>${rows}<small>同じ名前・同じレア度の装備でも、付く能力と数値は個体ごとに異なります。</small></div>`,"閉じる"));topModalButton().onclick=closeTopModal
+}
 
 function selectableEquipment(){return save.state.equipment.filter(i=>!i.equippedBy&&!i.favorite&&!i.locked)}
 function selectEquipmentPreset(mode){const slot=save.state.settings.equipmentSlot??"weapon",pool=selectableEquipment().filter(i=>i.slot===slot);if(mode==="none")equipmentManage.selected.clear();else{const counts={};pool.forEach(i=>counts[i.name]=(counts[i.name]??0)+1);pool.filter(i=>mode==="all"||mode==="plus0"&&(i.plus??0)===0||mode==="duplicate"&&counts[i.name]>1||["N","R"].includes(mode)&&i.rarity===mode).forEach(i=>equipmentManage.selected.add(i.id))}render()}
@@ -856,7 +863,7 @@ async function command(type,skillId=null){
  if(type==="skill"&&skillId){
   const skill=skillById(skillId,a),cd=cooldownRemaining(battle,a.id,skillId);
   if(!learnedSkills(a).some(x=>x.id===skillId)||!canUseSkill(a,skill,cd)){battle.busy=false;return alert(cd>0?`あと${cd}ラウンド使用できない`:"MPが足りない")}
-  a.currentMp-=skill.mp;setSkillCooldown(battle,a.id,skill);battle.skillMenu=false;addBattleLog(battle,`${displayName(a)}：${skill.name}`);await battleBanner(skill.name,skill.description??"",skill.awakened?"awakened":"skill",skill.awakened?680:430);await animateSkillEffect(skill,skill.target==="味方全体"||skill.target==="自分"?a.id:e.id);
+  const spentMp=effectiveSkillMpCost(a,skill);a.currentMp-=spentMp;setSkillCooldown(battle,a.id,skill);battle.skillMenu=false;addBattleLog(battle,`${displayName(a)}：${skill.name}`);await battleBanner(skill.name,skill.description??"",skill.awakened?"awakened":"skill",skill.awakened?680:430);await animateSkillEffect(skill,skill.target==="味方全体"||skill.target==="自分"?a.id:e.id);
   const skillGrowth=recordSkillUse(a,skill.id);if(skillGrowth?.leveled)addBattleLog(battle,`${skill.name}がLv.${skillGrowth.level}に成長！`);
   if(skill.type==="selfHeal"||skill.type==="stance"&&skill.heal){
    const h=Math.max(1,Math.floor(s.hp*(skill.heal??0)));a.currentHp=Math.min(s.hp,a.currentHp+h);if(h>0)await floatText(`+${h}`,a.id,"heal");applySkillEffects(skill,a,e);
@@ -866,11 +873,11 @@ async function command(type,skillId=null){
   }else if(skill.type==="buff"||skill.type==="stance"){applySkillEffects(skill,a,e);if(skill.heal){const targets=skill.target==="味方全体"?battle.party.filter(m=>m.currentHp>0):[a];targets.forEach(m=>{const mx=calculatedStats(m).hp;m.currentHp=Math.min(mx,m.currentHp+Math.floor(mx*skill.heal))})}await floatText("EFFECT","party","guard");
   }else if(skill.type==="cleanse"){battle.party.forEach(m=>clearNegativeAllyEffects(battle,m.id));await floatText("CLEANSE","party","heal");
   }else if(skill.type==="mpHeal"){battle.party.filter(m=>m.currentHp>0).forEach(m=>m.currentMp=Math.min(maxMp(m),m.currentMp+Math.floor(maxMp(m)*(skill.mpHeal??.2))));await floatText("MP回復","party","heal");
-  }else if(skill.type==="revive"){const target=battle.party.filter(m=>m.currentHp<=0).sort((x,y)=>calculatedStats(y).hp-calculatedStats(x).hp)[0];if(target){target.currentHp=Math.max(1,Math.floor(calculatedStats(target).hp*(skill.revive??.35)));await floatText("REVIVE",target.id,"heal")}else{a.currentMp+=skill.mp;setSkillCooldown(battle,a.id,{...skill,cooldown:0})}
+  }else if(skill.type==="revive"){const target=battle.party.filter(m=>m.currentHp<=0).sort((x,y)=>calculatedStats(y).hp-calculatedStats(x).hp)[0];if(target){target.currentHp=Math.max(1,Math.floor(calculatedStats(target).hp*(skill.revive??.35)));await floatText("REVIVE",target.id,"heal")}else{a.currentMp+=effectiveSkillMpCost(a,skill);setSkillCooldown(battle,a.id,{...skill,cooldown:0})}
   }else{
    await animateAttack(a.id,true);const hits=skill.hits??1;let total=0;const skillTargets=skill.allEnemies?aliveEnemies(battle):[e];
    for(const targetEnemy of skillTargets){const e=targetEnemy;for(let i=0;i<hits&&e.hp>0;i++){
-    const critical=Math.random()<Math.min(.65,.1+(skill.critBonus??0)+(s.spd??0)*.004),boosted={...s,atk:s.atk*allyAttackFactor(a.id)},execute=(skill.execute&&e.hp/e.maxHp<=skill.execute)?2:1,raw=skillDamage(boosted,{...e,def:e.def*enemyDefenseFactor(e.id)},skill,critical)*execute,beforeHp=e.hp,d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)*weaponMasteryDamageMultiplier(save.state,a,e)));
+    const critical=Math.random()<Math.min(.75,.1+(skill.critBonus??0)+(s.crit??0)/100+(s.spd??0)*.004),boosted={...s,atk:s.atk*allyAttackFactor(a.id),_currentHpRatio:a.currentHp/Math.max(1,s.hp)},execute=(skill.execute&&e.hp/e.maxHp<=skill.execute)?2:1,raw=skillDamage(boosted,{...e,def:e.def*enemyDefenseFactor(e.id)},skill,critical)*execute,beforeHp=e.hp,d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)*weaponMasteryDamageMultiplier(save.state,a,e)));
     e.hp=Math.max(0,e.hp-d);registerWeaponFinisher(a,e,beforeHp);total+=d;await animateHit(e.id,critical);if(critical){battleFlash("critical");burstParticles(e.id,"critical",14)}await floatText(`${critical?"CRITICAL ":""}-${d}`,e.id,critical?"critical":"skill")
    }
    }
@@ -912,7 +919,7 @@ function chooseEnemyTarget(enemy=null,mode="normal"){
 }
 async function dealEnemyHit(e,target,multiplier=1,label="",criticalChance=.08){
  const st=calculatedStats(target),guard=Boolean(battle.guards[target.id]),critical=Math.random()<criticalChance;
- const guardFx=effectValue(battle,target.id,"guard"),vulnerable=effectValue(battle,target.id,"vulnerable");let d=Math.max(1,Math.floor((e.atk*enemyAttackFactor(e.id)-st.def*allyDefenseFactor(target.id)*.45)*multiplier*(guard?.45:1)*(1-guardFx)*(1+vulnerable)));if(critical)d=Math.floor(d*1.55);
+ const guardFx=effectValue(battle,target.id,"guard"),vulnerable=effectValue(battle,target.id,"vulnerable");const affixReduction=Math.min(.5,(target._equipmentAffixes?.damageReduction??0)/100);let d=Math.max(1,Math.floor((e.atk*enemyAttackFactor(e.id)-st.def*allyDefenseFactor(target.id)*.45)*multiplier*(guard?.45:1)*(1-guardFx)*(1+vulnerable)*(1-affixReduction)));if(critical)d=Math.floor(d*1.55);
  target.currentHp=Math.max(0,target.currentHp-d);addBattleLog(battle,`${displayName(target)}に${d}ダメージ`);
  await animateHit(target.id,critical);if(critical){battleFlash("danger");burstParticles(target.id,"enemy",14)}await floatText(`${label}${critical?"CRITICAL ":""}-${d}`,target.id,critical?"critical":"enemy");
  if(target.currentHp<=0)await animateDefeat(target.id);else if(hasEffect(battle,target.id,"counter")){const cs=calculatedStats(target),counter=Math.max(1,Math.floor(cs.atk*effectValue(battle,target.id,"counter")-e.def*.25));e.hp=Math.max(0,e.hp-counter);addBattleLog(battle,`${displayName(target)}が${counter}反撃ダメージ`);await floatText(`COUNTER -${counter}`,e.id,"skill")}return d;
