@@ -1,4 +1,4 @@
-import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.5-part9-infinite";
+import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.17-save-safety";
 import{SPECIES}from"./data/species.js?v=0.9.15-alpha.1-part3-phase2";
 import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.1-part3-phase2";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.1-part3-phase2";
@@ -43,6 +43,7 @@ function topModal(){const mods=document.querySelectorAll(".game-modal");return m
 function topModalButton(){return topModal()?.querySelector("#closeGameModal")??null}
 function closeTopModal(){topModal()?.remove()}
 function showToast(text){document.querySelector(".game-toast")?.remove();const el=document.createElement("div");el.className="game-toast";el.textContent=text;document.body.appendChild(el);setTimeout(()=>el.remove(),1400)}
+let lastSaveErrorNotice=0;window.addEventListener("abyss-save-error",event=>{const now=Date.now();if(now-lastSaveErrorNotice<5000)return;lastSaveErrorNotice=now;const quota=Boolean(event.detail?.quota),message=quota?"セーブ容量が上限に達しました。不要な装備やモンスターを整理してください。":"セーブに失敗しました。空き容量を確認して、画面を閉じずに再度操作してください。";showToast("⚠️ "+message);setTimeout(()=>{if(document.querySelector("[data-save-error-modal]"))return;app.insertAdjacentHTML("beforeend",Modal("⚠️ セーブ失敗",`<div data-save-error-modal><p><b>${message}</b></p><p class="muted">直前まで正常に保存されていたデータは維持されています。現在の変更は保存されていない可能性があります。</p></div>`,`確認`));topModalButton().onclick=closeTopModal},50)});
 async function playSecondWorldIntro(){
  if(secondWorldIntroPlaying||!shouldPlaySecondWorldIntro(save.state))return false;
  secondWorldIntroPlaying=true;stopGame();document.querySelector(".second-world-intro")?.remove();
