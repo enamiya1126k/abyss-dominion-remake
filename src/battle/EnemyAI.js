@@ -6,9 +6,9 @@ export const ENEMY_ACTIONS={
 export function isBossFloor(floor){return floor>0&&floor%10===0}
 
 export function createEnemyBattleState(species,source,floor){
- const boss=source.boss??isBossFloor(floor),hpScale=boss?2.35:1,attackScale=boss?1.3:1,maxHp=Math.floor((species.baseStats.hp+source.level*8)*hpScale);
+ const boss=source.boss??isBossFloor(floor),hpScale=boss?1.65:1,attackScale=boss?1.12:1,maxHp=Math.floor((species.baseStats.hp+source.level*8)*hpScale);
  return{speciesId:source.speciesId,name:boss?`深淵の${species.name}`:species.name,level:source.level,hp:maxHp,maxHp,
-  atk:Math.floor((species.baseStats.atk+source.level*1.4)*attackScale),def:Math.floor((species.baseStats.def+source.level*.5)*(boss?1.2:1)),spd:Math.floor((species.baseStats.spd+source.level*.18)*(boss?1.08:1)),
+  atk:Math.floor((species.baseStats.atk+source.level*1.4)*attackScale),def:Math.floor((species.baseStats.def+source.level*.5)*(boss?1.08:1)),spd:Math.floor((species.baseStats.spd+source.level*.18)*(boss?1.03:1)),
   emoji:species.emoji??"👾",color:boss?"#bb4cff":species.baseStats.atk>12?"#df6262":"#a58f59",boss,phase:1,enraged:false,guard:false,charging:false,healed:false,
   intent:"様子を見ている",specialCooldown:0,divineBarrier:0};
 }
