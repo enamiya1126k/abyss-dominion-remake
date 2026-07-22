@@ -602,3 +602,6 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
 .home-squad-hp{height:7px;border-radius:999px;overflow:hidden;background:#050307}.home-squad-hp i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#55d36b,#8ee48f)}.home-squad-hp-label{font-size:.53rem;color:#cfc4d4;text-align:right}
 .home-squad-slot.empty{place-items:center;text-align:center;color:#9f91a7;border-style:dashed}.home-squad-slot.empty strong{font-size:1.4rem;line-height:1}.home-squad-slot.empty small{font-size:.58rem}
 @media(max-width:430px){.home-screen .hero-title{font-size:1.75rem}.home-screen>.page>.eyebrow{font-size:.62rem}.compact-home-status{padding:11px 12px}.home-squad-slot{min-height:80px;padding:8px}.home-main-menu{gap:7px}.home-main-menu button{min-height:76px}}
+
+/* v0.9.15-alpha.4 Part3: tutorial book */
+.tutorial-book{display:grid;gap:10px}.tutorial-book-row{width:100%;display:grid;grid-template-columns:44px 1fr 18px;gap:10px;align-items:center;text-align:left;padding:12px;border-radius:14px}.tutorial-book-row>span{font-weight:800;text-align:center}.tutorial-book-row div{display:grid;gap:3px;min-width:0}.tutorial-book-row small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.72}.tutorial-book-row em{font-size:24px;font-style:normal;opacity:.6}
