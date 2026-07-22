@@ -44,7 +44,16 @@ export const TEN_GOD_IDS=Object.keys(ENDGAME_BOSSES).filter(id=>ENDGAME_BOSSES[i
 export function manifestationForFloor(floor){const f=Math.max(1,Number(floor)||1);if(f>=10000)return{rate:1,label:"真なる顕現",percent:100};if(f>=9000)return{rate:1,label:"完全神格",percent:100};if(f>=5000)return{rate:.8,label:"神格顕現",percent:80};if(f>=3000)return{rate:.6,label:"権能解放",percent:60};if(f>=1000)return{rate:.4,label:"上位投影体",percent:40};return{rate:.2,label:"投影体",percent:20}}
 
 export function normalizeEndgameState(state){state.flags??={};state.flags.gameClear1000??=false;state.worldPhase=hasCleared1000(state)?1:0;state.endgame??={};state.endgame.teamBattle??={unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0};state.endgame.emergency??={encounters:0,wins:0,losses:0,lastFloor:0,lastRollStep:0,records:{},fragments:{},craftCounts:{},craftedGear:[],blessings:{}};const e=state.endgame.emergency;e.records??={};e.fragments??={};e.craftCounts??={};e.craftedGear??=[];e.blessings??={};e.preludeChoices??={};e.discovered??={};e.contracts??={};state.endgame.teamBattle.unlocked=Boolean(state.endgame.teamBattle.unlocked||state.player?.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR);return state.endgame}
-export function dailyTeamAttempts(state){const team=normalizeEndgameState(state).teamBattle,key=new Date().toISOString().slice(0,10);if(team.dailyKey!==key){team.dailyKey=key;team.dailyAttempts=0}return team}
+export function teamBattleDayKey(date=new Date()){
+ try{return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit"}).format(date)}
+ catch(_error){const shifted=new Date(date.getTime()+9*60*60*1000);return shifted.toISOString().slice(0,10)}
+}
+export function dailyTeamAttempts(state,date=new Date()){
+ const team=normalizeEndgameState(state).teamBattle,key=teamBattleDayKey(date);
+ if(team.dailyKey!==key){team.dailyKey=key;team.dailyAttempts=0}
+ team.dailyAttempts=Math.max(0,Math.min(50,Number(team.dailyAttempts)||0));
+ return team
+}
 function enemy(speciesId,level,extra={}){return{speciesId,level,boss:false,equipped:false,gear:null,...extra}}
 export function createTeamBattleEncounter(state){const team=dailyTeamAttempts(state),stage=Math.max(1,team.stage||1),base=Math.max(10,Math.round((state.player?.maxFloor||100)*(.55+stage*.035))),pools=[["goblin_guard","goblin_shaman","orc","ogre"],["skeleton_guard","skeleton_archer","wraith","zombie"],["dire_wolf","bear","harpy","wyvern"],["stone_golem","clockwork","salamander","water_spirit"]],pool=pools[(stage-1)%pools.length];return pool.map((id,i)=>enemy(id,base+i*2,{nameOverride:`試練 ${stage}・${i+1}`,teamBattle:true,statMultiplier:1+stage*.09}))}
 export function shouldTriggerEmergency(state,steps=0){if((state.player?.currentFloor||1)<EMERGENCY_UNLOCK_FLOOR)return false;const emergency=normalizeEndgameState(state).emergency;if(steps-emergency.lastRollStep<18)return false;emergency.lastRollStep=steps;return Math.random()<.035}
