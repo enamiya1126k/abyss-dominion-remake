@@ -16,7 +16,7 @@ export class SaveService{
  load(){try{const raw=localStorage.getItem(SAVE_KEY);return raw?this.migrate(JSON.parse(raw)):initialState()}catch(e){console.error(e);return initialState()}}
  migrate(s){
   const from=Number(s.schemaVersion??1);
-  s.flags??={};s.flags.abyssUnlocked??=false;s.flags.trueLevelCapRevealed??=false;s.flags.deepAbyssUnlocked??=false;
+  s.flags??={};s.flags.abyssUnlocked??=false;s.flags.trueLevelCapRevealed??=false;s.flags.deepAbyssUnlocked??=false;s.flags.abyssKeyExchangePreviewUnlocked??=false;
   const legacy1000Clear=Number(s.player?.maxFloor??0)>1000||Boolean(s.player?.bossRewards?.[1000])||Number(s.player?.bossKills?.[1000]??0)>0||Boolean(s.flags.deepAbyssUnlocked);
   s.flags.gameClear1000??=legacy1000Clear;
   s.flags.ending1000Played??=false;
@@ -129,12 +129,17 @@ export class SaveService{
  }
  save(){
   this.state.appVersion=APP_VERSION;
+  this.state.flags??={};
+  this.state.flags.abyssKeyExchangePreviewUnlocked=(this.state.inventory?.abyssKeys??0)>=250;
   let serialized;
   try{
    serialized=JSON.stringify(this.state);
    localStorage.setItem(SAVE_KEY,serialized);
+   const bytes=typeof TextEncoder!=="undefined"?new TextEncoder().encode(serialized).length:serialized.length*2;
+   this.lastSaveSizeBytes=bytes;
    this.lastSaveError=null;
    this.lastSavedAt=Date.now();
+   if(typeof window!=="undefined")window.dispatchEvent(new CustomEvent("abyss-save-success",{detail:{bytes,at:this.lastSavedAt}}));
    return true
   }catch(error){
    console.error("Save failed",error);
