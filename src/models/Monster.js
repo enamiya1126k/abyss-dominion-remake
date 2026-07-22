@@ -85,7 +85,8 @@ export function createMonster(speciesId,options={}){
     battles:options.battles??0,
     defeats:options.defeats??0,
     currentHp:options.currentHp??null,
-    currentMp:options.currentMp??null
+    currentMp:options.currentMp??null,
+    equippedSkills:Array.isArray(options.equippedSkills)?[...options.equippedSkills]:[]
   };
 }
 export function displayName(monster){
