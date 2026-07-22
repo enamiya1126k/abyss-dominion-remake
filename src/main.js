@@ -9,7 +9,8 @@ import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.5-part9-sta
 import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.1-part3-phase2";
 import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.1-part3-phase2";
 import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=0.9.15-alpha.10-affix";
-import{ensureEquipmentAffixes,aggregateAffixes,AFFIX_QUALITY}from"./data/equipmentAffixes.js?v=0.9.15-alpha.10-affix";
+import{ensureEquipmentAffixes,aggregateAffixes,AFFIX_QUALITY,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=0.9.15-alpha.11-affix-craft";
+import{affixShards,rerollCost,valueRerollCost,transferCost,toggleAffixLock,rerollUnlockedAffixes,rerollOneValue,transferAffix,dismantleYield,dismantleEquipment}from"./services/EquipmentAffixCrafting.js?v=0.9.15-alpha.11-affix-craft";
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=0.9.15-alpha.5-part9-infinite";
 import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=0.9.15-alpha.5-part7-layout";
 import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=0.9.15-alpha.5-part5";
@@ -135,7 +136,7 @@ class Entity{constructor(x,y){this.x=x;this.y=y;this.rx=x;this.ry=y;this.path=[]
 class Camera{constructor(c){this.c=c;this.x=TILE;this.y=TILE;this.z=.85;this.ox=0;this.oy=0;this.manual=false}world(wx,wy){return{x:(wx-this.x)*this.z+this.c.width/2+this.ox,y:(wy-this.y)*this.z+this.c.height/2+this.oy}}screen(sx,sy){return{x:(sx-this.c.width/2-this.ox)/this.z+this.x,y:(sy-this.c.height/2-this.oy)/this.z+this.y}}pan(dx,dy){this.ox+=dx;this.oy+=dy;this.manual=true}reset(px,py){this.x=px;this.y=py;this.ox=0;this.oy=0;this.z=.85;this.manual=false}follow(px,py){if(this.manual)return;const p=this.world(px,py),l=this.c.width*.34,r=this.c.width*.66,t=this.c.height*.34,b=this.c.height*.66;if(p.x<l)this.x+=(p.x-l)/this.z*.12;if(p.x>r)this.x+=(p.x-r)/this.z*.12;if(p.y<t)this.y+=(p.y-t)/this.z*.12;if(p.y>b)this.y+=(p.y-b)/this.z*.12}clamp(w){const edge=30,mw=w.cols*TILE*this.z,mh=w.rows*TILE*this.z,ml=this.c.width/2-this.x*this.z,mt=this.c.height/2-this.y*this.z,minX=edge-(ml+mw),maxX=this.c.width-edge-ml,minY=edge-(mt+mh),maxY=this.c.height-edge-mt;this.ox=mw<=this.c.width-edge*2?(this.c.width-mw)/2-ml:Math.max(minX,Math.min(maxX,this.ox));this.oy=mh<=this.c.height-edge*2?(this.c.height-mh)/2-mt:Math.max(minY,Math.min(maxY,this.oy))}}
 normalizeEndgameState(save.state);
 function normalizeEquipmentState(){
- save.state.equipment??=[];save.state.reserveEquipment??=[];save.state.bossEquipmentVault??=[];save.state.settings??={};
+ save.state.equipment??=[];save.state.reserveEquipment??=[];save.state.bossEquipmentVault??=[];save.state.settings??={};save.state.inventory??={};save.state.inventory.affixShards??=0;
  save.state.settings.equipmentSort??="rarity";save.state.settings.equipmentSlot??="weapon";save.state.settings.equipmentStorage??="inventory";
  save.state.gacha??={firstTenUsed:false,lastDailyKey:null};save.state.codex??={encounters:{},captures:{},equipment:{}};save.state.codex.encounters??={};save.state.codex.captures??={};save.state.codex.equipment??={};save.state.rest??={lastFreeKey:null};
  const byId=new Map(save.state.equipment.map(i=>[i.id,i]));
@@ -238,6 +239,7 @@ function bindEquipment(){
  document.querySelectorAll("[data-lock-equipment]").forEach(b=>b.onclick=()=>{const i=save.state.equipment.find(x=>x.id===b.dataset.lockEquipment);if(!i)return;i.locked=!i.locked;save.save();render()});
  document.querySelectorAll("[data-sell]").forEach(b=>b.onclick=()=>sellItem(b.dataset.sell));
  document.querySelectorAll("[data-enhance-equipment]").forEach(b=>b.onclick=()=>enhanceEquipment(b.dataset.enhanceEquipment));
+ document.querySelectorAll("[data-affix-craft]").forEach(b=>b.onclick=()=>openAffixCraft(b.dataset.affixCraft));
  document.getElementById("bulkSellEquipment")?.addEventListener("click",bulkSellEquipment);
  document.getElementById("toggleEquipmentEdit")?.addEventListener("click",()=>{equipmentManage.editing=!equipmentManage.editing;if(!equipmentManage.editing)equipmentManage.selected.clear();render()});
  document.querySelectorAll("[data-select-equipment-id]").forEach(c=>c.onchange=()=>{c.checked?equipmentManage.selected.add(c.dataset.selectEquipmentId):equipmentManage.selected.delete(c.dataset.selectEquipmentId);render()});
@@ -245,6 +247,22 @@ function bindEquipment(){
  document.getElementById("sellSelectedEquipment")?.addEventListener("click",sellSelectedEquipment);
  document.getElementById("lockSelectedEquipment")?.addEventListener("click",lockSelectedEquipment);
  document.querySelectorAll("[data-take-equipment]").forEach(b=>b.onclick=()=>{const result=takeFromStorage(save.state,b.dataset.takeEquipment,b.dataset.storage);if(!result.ok)return alert(result.message);save.save();render()});
+}
+
+function openAffixCraft(itemId){
+ const item=save.state.equipment.find(i=>i.id===itemId);if(!item)return;
+ const list=ensureEquipmentAffixes(item),others=save.state.equipment.filter(i=>i.id!==item.id&&i.slot===item.slot&&!i.equippedBy&&!i.favorite&&!i.locked&&ensureEquipmentAffixes(i).length);
+ const rows=list.map((a,i)=>{const q=affixQuality(a),def=affixDefinition(a.id);return`<div class="affix-craft-row"><button data-affix-lock="${i}" class="affix-lock-toggle ${a.locked?"locked":""}">${a.locked?"🔒":"🔓"}</button><b style="color:${q.color}">${formatAffix(a)}${def?.legendaryOnly?"〈固有〉":""}</b><button data-affix-value="${i}">数値再抽選 ${valueRerollCost()}🔹</button></div>`}).join("")||'<div class="empty">オプションなし</div>';
+ const transfer=others.length&&list.length?`<div class="affix-transfer"><b>オプション移植</b><select id="affixSourceItem">${others.map(i=>`<option value="${i.id}">[${i.rarity}] ${i.name}</option>`).join("")}</select><select id="affixSourceIndex"></select><select id="affixTargetIndex">${list.map((a,i)=>`<option value="${i}">置換先：${formatAffix(a)}</option>`).join("")}</select><button id="executeAffixTransfer">移植 ${transferCost()}🔹</button><small>素材装備は消えません。選んだ1枠を上書きします。</small></div>`:"";
+ app.insertAdjacentHTML("beforeend",Modal(`🎲 ${item.name}の厳選`,`<div class="affix-craft-modal"><div class="spread"><b>所持 🔹${affixShards(save.state)}</b><span>オプション欠片</span></div>${rows}<button id="rerollUnlockedAffixes" class="bulk-primary">未ロック枠を再抽選 ${rerollCost(item)}🔹</button>${transfer}<button id="dismantleAffixItem" class="danger">分解して ${dismantleYield(item)}🔹獲得</button><small>ロックした枠は全体再抽選でも保持されます。伝説固有オプションはSSR/LRから低確率で出現します。</small></div>`,`閉じる`));
+ const modal=topModal(),reopen=()=>{modal.remove();save.save();render();openAffixCraft(item.id)};
+ modal.querySelectorAll("[data-affix-lock]").forEach(b=>b.onclick=()=>{toggleAffixLock(item,Number(b.dataset.affixLock));reopen()});
+ modal.querySelectorAll("[data-affix-value]").forEach(b=>b.onclick=()=>{const r=rerollOneValue(save.state,item,Number(b.dataset.affixValue));if(!r.ok)return alert(r.message);reopen()});
+ modal.querySelector("#rerollUnlockedAffixes")?.addEventListener("click",()=>{if(!confirm(`未ロックのオプションを再抽選しますか？\n消費 ${rerollCost(item)}🔹`))return;const r=rerollUnlockedAffixes(save.state,item);if(!r.ok)return alert(r.message);reopen()});
+ const sourceSelect=modal.querySelector("#affixSourceItem"),sourceIndex=modal.querySelector("#affixSourceIndex");const refreshSource=()=>{const source=save.state.equipment.find(i=>i.id===sourceSelect?.value);if(sourceIndex)sourceIndex.innerHTML=source?ensureEquipmentAffixes(source).map((a,i)=>`<option value="${i}">${formatAffix(a)}</option>`).join(""):""};sourceSelect?.addEventListener("change",refreshSource);refreshSource();
+ modal.querySelector("#executeAffixTransfer")?.addEventListener("click",()=>{const source=save.state.equipment.find(i=>i.id===sourceSelect.value),ti=Number(modal.querySelector("#affixTargetIndex").value),si=Number(sourceIndex.value);if(!confirm(`選択したオプションを移植しますか？\n消費 ${transferCost()}🔹`))return;const r=transferAffix(save.state,source,item,si,ti);if(!r.ok)return alert(r.message);reopen()});
+ modal.querySelector("#dismantleAffixItem")?.addEventListener("click",()=>{if(!confirm(`${item.name}を分解しますか？\n装備は消滅し、${dismantleYield(item)}🔹を獲得します。`))return;const r=dismantleEquipment(save.state,item.id);if(!r.ok)return alert(r.message);modal.remove();save.save();render();showToast(`オプション欠片 ${r.gain}個獲得`)});
+ modal.querySelector("#closeGameModal").onclick=()=>modal.remove();
 }
 
 function openAffixHelp(){
