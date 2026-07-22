@@ -660,3 +660,8 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
 
 /* Weapon mastery / kill traits */
 .weapon-mastery{margin-top:9px;border:1px solid rgba(255,255,255,.1);border-radius:10px;background:rgba(0,0,0,.16);padding:8px}.weapon-mastery summary{display:flex;justify-content:space-between;gap:8px;cursor:pointer;list-style:none}.weapon-mastery summary::-webkit-details-marker{display:none}.weapon-mastery summary span,.weapon-mastery>small{font-size:11px;color:var(--muted,#b9a9c6)}.weapon-mastery-list{display:grid;gap:7px;margin:8px 0}.weapon-mastery-row{display:grid;grid-template-columns:24px 1fr;gap:6px;align-items:center}.weapon-mastery-row>span{font-size:18px}.weapon-mastery-row section{display:grid;gap:2px}.weapon-mastery-row b{font-size:12px}.weapon-mastery-row small{font-size:10px;color:var(--muted,#b9a9c6)}.weapon-mastery-row i{height:3px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden}.weapon-mastery-row u{display:block;height:100%;background:linear-gradient(90deg,#bf6cff,#ffcf5a);border-radius:inherit}
+
+/* v0.9.15-alpha.5 Part 5: series mastery */
+.series-mastery-box{display:grid;gap:6px;margin:10px 0;padding:10px;border:1px solid rgba(255,187,88,.25);border-radius:10px;background:rgba(255,170,55,.06)}
+.series-mastery-box>i{height:6px;overflow:hidden;border-radius:999px;background:#23192b}.series-mastery-box>i>u{display:block;height:100%;background:linear-gradient(90deg,#ff9f43,#ffe08a)}
+.series-mastery-box em{font-size:10px;color:#bcaec7;font-style:normal}.series-mastery-result{display:grid;gap:3px;margin-top:6px;padding:7px;border-radius:8px;background:rgba(255,181,71,.08);color:#ffd58e}
