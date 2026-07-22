@@ -605,3 +605,53 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
 
 /* v0.9.15-alpha.4 Part3: tutorial book */
 .tutorial-book{display:grid;gap:10px}.tutorial-book-row{width:100%;display:grid;grid-template-columns:44px 1fr 18px;gap:10px;align-items:center;text-align:left;padding:12px;border-radius:14px}.tutorial-book-row>span{font-weight:800;text-align:center}.tutorial-book-row div{display:grid;gap:3px;min-width:0}.tutorial-book-row small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.72}.tutorial-book-row em{font-size:24px;font-style:normal;opacity:.6}
+
+/* ===== Leader Status ===== */
+
+.leader-status{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    margin-top:8px;
+    padding:8px 12px;
+
+    width:100%;
+
+    border:none;
+    border-radius:12px;
+
+    background:rgba(255,255,255,.06);
+
+    color:#fff;
+    cursor:pointer;
+
+    transition:.18s;
+}
+
+.leader-status:hover{
+    background:rgba(255,255,255,.10);
+}
+
+.leader-icon{
+    font-size:30px;
+    width:36px;
+    text-align:center;
+}
+
+.leader-meta{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    line-height:1.15;
+}
+
+.leader-meta b{
+    font-size:14px;
+    font-weight:700;
+}
+
+.leader-meta small{
+    opacity:.7;
+    font-size:11px;
+}
