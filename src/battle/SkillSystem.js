@@ -94,6 +94,84 @@ for(const species of Object.values(SPECIES)){
  const first={...baseEntry,...base,target:base?.type==="allHeal"?"味方全体":base?.type==="selfHeal"?"自分":"敵単体",tag:base?.type?.includes("Heal")?"回復":base?.status?"継続ダメージ":"攻撃",element:species.element??"neutral",cooldown:0,unlock:{type:"level",value:1}};
  GENERATED[species.id]=[first,...ROLE_POOLS[archetype(species)].map((row,index)=>generatedSkill(species,index,row))];
 }
+function phase2Decorate(species,skills){
+ const kind=archetype(species);
+ const presets={
+  tank:[
+   null,
+   {name:"挑発の構え",type:"stance",tag:"タンク",target:"自分",description:"2ターン挑発し、受けるダメージを35%軽減。",effects:[{kind:"taunt",turns:2},{kind:"guard",value:.35,turns:2}]},
+   {name:"盾砕き",effects:[{kind:"stun",chance:.35,turns:1}]},
+   {name:"鉄壁",type:"stance",tag:"防御",target:"自分",description:"2ターン受けるダメージを55%軽減。",effects:[{kind:"guard",value:.55,turns:2}]},
+   {name:"迎撃態勢",type:"stance",tag:"カウンター",target:"自分",description:"3ターン、攻撃を受けるとATK120%で反撃。",effects:[{kind:"counter",value:1.2,turns:3}]},
+   {name:"守護の号令",type:"buff",tag:"バフ",target:"味方全体",description:"味方全体のDEFを30%上げる。",effects:[{kind:"defUp",value:.30,turns:3,allies:true}]},
+   {name:"不屈の要塞",type:"stance",tag:"タンク",target:"自分",description:"HPを38%回復し、2ターン挑発する。",heal:.38,effects:[{kind:"taunt",turns:2}]},
+   {name:"城壁反射",type:"stance",tag:"カウンター",target:"自分",description:"2ターン被ダメージ45%軽減、ATK160%で反撃。",effects:[{kind:"guard",value:.45,turns:2},{kind:"counter",value:1.6,turns:2}]},
+   {name:"全軍防衛",type:"buff",tag:"防御",target:"味方全体",description:"味方全体の被ダメージを30%軽減。",effects:[{kind:"guard",value:.30,turns:2,allies:true}]},
+   {name:"最後の砦",type:"stance",tag:"タンク",target:"自分",description:"HP70%回復、3ターン挑発・被ダメージ60%軽減。",heal:.70,effects:[{kind:"taunt",turns:3},{kind:"guard",value:.60,turns:3}]},
+   {name:"奈落の反城",type:"stance",tag:"カウンター",target:"自分",description:"3ターン、被ダメージ50%軽減しATK220%で反撃。",effects:[{kind:"guard",value:.50,turns:3},{kind:"counter",value:2.2,turns:3}]},
+   {name:"絶対防衛圏",type:"buff",tag:"超奥義",target:"味方全体",description:"味方全体を50%回復し、3ターン被ダメージ50%軽減。",heal:.50,effects:[{kind:"guard",value:.50,turns:3,allies:true}]}
+  ],
+  support:[
+   null,
+   {name:"癒やしの光",type:"allHeal",heal:.16,tag:"回復",target:"味方全体",description:"味方全体のHPを16%回復。"},
+   {name:"勇気の旋律",type:"buff",tag:"バフ",target:"味方全体",description:"味方全体のATKを25%上げる。",effects:[{kind:"atkUp",value:.25,turns:3,allies:true}]},
+   {name:"再生の風",type:"buff",tag:"継続回復",target:"味方全体",description:"3ターン、味方全体を毎ターン最大HP10%回復。",effects:[{kind:"regen",value:.10,turns:3,allies:true}]},
+   {name:"浄化",type:"cleanse",tag:"回復",target:"味方全体",description:"味方全体の状態異常と弱体効果を解除。"},
+   {name:"加速の祝福",type:"buff",tag:"バフ",target:"味方全体",description:"味方全体のSPDを30%上げる。",effects:[{kind:"spdUp",value:.30,turns:3,allies:true}]},
+   {name:"大治癒陣",type:"allHeal",heal:.34,tag:"回復",target:"味方全体",description:"味方全体のHPを34%回復。"},
+   {name:"守護結界",type:"buff",tag:"防御",target:"味方全体",description:"2ターン、味方全体の被ダメージを35%軽減。",effects:[{kind:"guard",value:.35,turns:2,allies:true}]},
+   {name:"魔力循環",type:"mpHeal",tag:"回復",target:"味方全体",description:"味方全体のMPを最大値の25%回復。",mpHeal:.25},
+   {name:"奇跡の蘇生",type:"revive",tag:"蘇生",target:"味方単体",description:"戦闘不能の味方1体をHP40%で蘇生。",revive:.40},
+   {name:"生命賛歌",type:"allHeal",heal:.65,tag:"奥義",target:"味方全体",description:"味方全体のHPを65%回復し弱体を解除。",cleanse:true},
+   {name:"女神の聖域",type:"buff",tag:"超奥義",target:"味方全体",description:"全体HP80%回復、3ターン再生と被ダメージ40%軽減。",heal:.80,effects:[{kind:"regen",value:.15,turns:3,allies:true},{kind:"guard",value:.40,turns:3,allies:true}]}
+  ],
+  debuffer:[
+   null,
+   {name:"弱体の牙",effects:[{kind:"atkDown",value:.20,turns:3,enemy:true}]},
+   {name:"毒蝕",status:{id:"poison",name:"毒",chance:.70,turns:3,power:.04}},
+   {name:"鈍化連撃",effects:[{kind:"spdDown",value:.30,turns:3,enemy:true}]},
+   {name:"腐食弾",status:{id:"poison",name:"猛毒",chance:.80,turns:4,power:.05},effects:[{kind:"defDown",value:.20,turns:3,enemy:true}]},
+   {name:"破甲穿ち",effects:[{kind:"defDown",value:.35,turns:3,enemy:true}]},
+   {name:"呪縛",effects:[{kind:"stun",chance:.55,turns:1}]},
+   {name:"深層侵食",effects:[{kind:"atkDown",value:.35,turns:3,enemy:true},{kind:"defDown",value:.25,turns:3,enemy:true}]},
+   {name:"死毒の刻印",status:{id:"poison",name:"死毒",chance:.90,turns:4,power:.07}},
+   {name:"崩壊呪詛",effects:[{kind:"atkDown",value:.40,turns:4,enemy:true},{kind:"defDown",value:.40,turns:4,enemy:true}]},
+   {name:"奈落汚染",status:{id:"poison",name:"奈落毒",chance:1,turns:5,power:.08},effects:[{kind:"spdDown",value:.45,turns:4,enemy:true}]},
+   {name:"終末侵蝕",status:{id:"poison",name:"終末毒",chance:1,turns:5,power:.11},effects:[{kind:"atkDown",value:.50,turns:4,enemy:true},{kind:"defDown",value:.50,turns:4,enemy:true}]}
+  ],
+  attacker:[
+   null,
+   {name:"強撃"},
+   {name:"戦意高揚",type:"buff",tag:"バフ",target:"自分",description:"3ターンATKを30%上げる。",effects:[{kind:"atkUp",value:.30,turns:3}]},
+   {name:"急所砕き",critBonus:.25},
+   {name:"暴威連斬"},
+   {name:"捨て身",type:"buff",tag:"攻撃特化",target:"自分",description:"3ターンATK50%上昇、被ダメージ20%増加。",effects:[{kind:"atkUp",value:.50,turns:3},{kind:"vulnerable",value:.20,turns:3}]},
+   {name:"猛襲三段",hits:3},
+   {name:"処刑撃",execute:.30,description:"敵HP30%以下なら威力が2倍。"},
+   {name:"覇王連撃",hits:3},
+   {name:"殲滅波",target:"敵全体",allEnemies:true,power:1.55,description:"敵全体に155%ダメージ。"},
+   {name:"奈落一閃",critBonus:.45},
+   {name:"終焉撃",execute:.45,description:"敵HP45%以下なら威力が2倍。"}
+  ],
+  drain:[
+   null,
+   {name:"生命吸収",drain:.40},
+   {name:"血の契約",type:"buff",tag:"バフ",target:"自分",description:"3ターンATK25%上昇、与ダメージの15%を回復。",effects:[{kind:"atkUp",value:.25,turns:3},{kind:"lifeSteal",value:.15,turns:3}]},
+   {name:"魂吸い",drain:.50},
+   {name:"暗夜の呪い",effects:[{kind:"atkDown",value:.25,turns:3,enemy:true}]},
+   {name:"命脈喰らい",drain:.58},
+   {name:"血界連牙",hits:3},
+   {name:"深淵吸命",drain:.65},
+   {name:"不死の再生",type:"buff",tag:"継続回復",target:"自分",description:"4ターン毎ターン最大HP15%回復。",effects:[{kind:"regen",value:.15,turns:4}]},
+   {name:"魂魄穿ち",effects:[{kind:"defDown",value:.35,turns:3,enemy:true}]},
+   {name:"奈落捕食",drain:.80},
+   {name:"永劫吸魂",drain:1.0,description:"与えたダメージと同量を回復する。"}
+  ]
+ };
+ const arr=presets[kind]||presets.attacker;
+ return skills.map((skill,index)=>({...skill,...(arr[index]||{}),effects:(arr[index]?.effects??skill.effects??[])}));
+}
+for(const species of Object.values(SPECIES))GENERATED[species.id]=phase2Decorate(species,GENERATED[species.id]);
 const BY_ID=new Map(Object.values(GENERATED).flat().map(skill=>[skill.id,skill]));
 
 export function maxMp(monster){const species=SPECIES[monster.speciesId],base=species?.maxMp??15;return Math.floor(base+(monster.level-1)*.65+(monster.rank-1)*5+(monster.stars-1))}
@@ -110,3 +188,14 @@ export function skillById(id){return BY_ID.get(id)??SKILLS[id]??null}
 export function canUseSkill(monster,skill,cooldown=0){return Boolean(skill)&&monster.currentMp>=skill.mp&&cooldown<=0}
 export function skillDamage(stats,enemy,skill,critical=false){const base=Math.max(1,Math.floor(stats.atk*skill.power-enemy.def*.3));return critical?Math.floor(base*1.65):base}
 export function skillElementLabel(skill){return elementLabel(skill?.element)}
+
+export function chooseAutoSkill(monster,battle){
+ const usable=learnedSkills(monster).filter(skill=>canUseSkill(monster,skill,battle?.cooldowns?.[monster.id]?.[skill.id]??0));
+ if(!usable.length)return null;
+ const hp=monster.currentHp/Math.max(1,monster._maxHp??1),dead=(battle?.party??[]).some(m=>m.currentHp<=0),hurt=(battle?.party??[]).filter(m=>m.currentHp>0&&m.currentHp<(m._maxHp??Infinity)*.65).length;
+ if(dead){const revive=usable.find(s=>s.type==="revive");if(revive)return revive}
+ if(hurt>=2){const heal=usable.filter(s=>s.type==="allHeal").sort((a,b)=>(b.heal??0)-(a.heal??0))[0];if(heal)return heal}
+ if(hp<.38){const heal=usable.find(s=>s.type==="selfHeal"||s.heal&&s.target==="自分");if(heal)return heal}
+ const tactical=usable.filter(s=>["buff","stance","cleanse","mpHeal"].includes(s.type));if(tactical.length&&Math.random()<.28)return tactical[Math.floor(Math.random()*tactical.length)];
+ const attacks=usable.filter(s=>!["allHeal","selfHeal","buff","stance","cleanse","revive","mpHeal"].includes(s.type));return attacks.sort((a,b)=>(b.power??0)-(a.power??0))[0]??usable[0]
+}
