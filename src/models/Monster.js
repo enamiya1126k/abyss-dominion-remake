@@ -1,8 +1,8 @@
-import{SPECIES}from"../data/species.js?v=0.9.2-alpha.2";
-import{PERSONALITIES}from"../data/personalities.js?v=0.9.2-alpha.2";
-import{MONSTER_COLORS}from"../data/colors.js?v=0.9.2-alpha.2";
-import{normalizedResistances}from"../data/attributes.js?v=0.9.2-alpha.2";
-import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=0.9.2-alpha.2";
+import{SPECIES}from"../data/species.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{PERSONALITIES}from"../data/personalities.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{MONSTER_COLORS}from"../data/colors.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{normalizedResistances}from"../data/attributes.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=0.9.15-alpha.28-phase10-6-consistency";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
