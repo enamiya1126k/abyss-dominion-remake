@@ -1,5 +1,5 @@
-import{SPECIES}from"../data/species.js?v=0.9.15-alpha.6-skill-phase1";
-import{SKILLS}from"../data/skills.js?v=0.9.15-alpha.6-skill-phase1";
+import{SPECIES}from"../data/species.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{SKILLS}from"../data/skills.js?v=0.9.15-alpha.28-phase10-6-consistency";
 
 const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
 const ROLE_POOLS={
