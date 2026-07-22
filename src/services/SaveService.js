@@ -1,10 +1,10 @@
-import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.15-alpha.3-part1";
-import{createMonster}from"../models/Monster.js?v=0.9.11-alpha.1";
-import{maxMp,normalizeSkillProgress}from"../battle/SkillSystem.js?v=0.9.14-alpha.2";
-import{normalizeEndgameState}from"../core/EndgameSystem.js?v=0.9.15-alpha.22-phase8-rescue";
-import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=0.9.15-alpha.3-part3";
-import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=0.9.15-alpha.3-part4";
-import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.3-part6";
+import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{createMonster}from"../models/Monster.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{maxMp,normalizeSkillProgress}from"../battle/SkillSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{normalizeEndgameState}from"../core/EndgameSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
 function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})

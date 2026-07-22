@@ -1,4 +1,4 @@
-import{ensureEquipmentAffixes,rollAffixForSlot,rerollAffixValue}from"../data/equipmentAffixes.js?v=0.9.15-alpha.11-affix-craft";
+import{ensureEquipmentAffixes,rollAffixForSlot,rerollAffixValue}from"../data/equipmentAffixes.js?v=0.9.15-alpha.28-phase10-6-consistency";
 const SHARD_KEY="affixShards";
 export function affixShards(state){state.inventory??={};return Number(state.inventory[SHARD_KEY]??0)}
 export function addAffixShards(state,n){state.inventory??={};state.inventory[SHARD_KEY]=affixShards(state)+Math.max(0,Math.floor(n));return state.inventory[SHARD_KEY]}
