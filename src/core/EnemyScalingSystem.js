@@ -82,6 +82,25 @@ export function rollEnemyEquipmentRarity(floor,rank,roll=Math.random()){
  return weightedPick([["N",.2],["R",.28],["SR",.25],["SSR",.17],["LR",.1]],roll);
 }
 
+
+export function post9000DepthProfile(floor){
+ const f=clamp(Math.floor(Number(floor)||1),1,10000);
+ if(f<9000)return{active:false,step:0,label:null,hp:1,atk:1,def:1,spd:1,statusResist:0};
+ // Lv.9999到達後も100階ごとに神域圧が上昇し、9000Fと10000Fを別物にする。
+ const step=clamp(Math.floor((f-9000)/100),0,10);
+ const t=step/10;
+ return{
+  active:true,
+  step,
+  label:step>=10?"最終神域":`第${step+1}神域`,
+  hp:lerp(1,1.85,t),
+  atk:lerp(1,1.48,t),
+  def:lerp(1,1.36,t),
+  spd:lerp(1,1.18,t),
+  statusResist:lerp(0,.28,t)
+ };
+}
+
 export function bossProfileForFloor(floor){
  const f=Math.max(1,Math.floor(Number(floor)||1));
  // 10階ごとの通常ボスは長期戦になりすぎないよう耐久を抑え、
