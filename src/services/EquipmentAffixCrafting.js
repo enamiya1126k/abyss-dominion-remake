@@ -1,0 +1,13 @@
+import{ensureEquipmentAffixes,rollAffixForSlot,rerollAffixValue}from"../data/equipmentAffixes.js?v=0.9.15-alpha.11-affix-craft";
+const SHARD_KEY="affixShards";
+export function affixShards(state){state.inventory??={};return Number(state.inventory[SHARD_KEY]??0)}
+export function addAffixShards(state,n){state.inventory??={};state.inventory[SHARD_KEY]=affixShards(state)+Math.max(0,Math.floor(n));return state.inventory[SHARD_KEY]}
+export function dismantleYield(item){return({N:1,R:2,SR:5,SSR:12,LR:28}[item.rarity]??1)+ensureEquipmentAffixes(item).length*2}
+export function rerollCost(item){const locked=ensureEquipmentAffixes(item).filter(a=>a.locked).length;return 8+locked*7}
+export function valueRerollCost(){return 5}
+export function transferCost(){return 18}
+export function toggleAffixLock(item,index){const a=ensureEquipmentAffixes(item)[index];if(!a)return false;a.locked=!a.locked;return true}
+export function rerollUnlockedAffixes(state,item){const cost=rerollCost(item);if(affixShards(state)<cost)return{ok:false,message:`オプション欠片が足りません（必要 ${cost}）`};const list=ensureEquipmentAffixes(item),used=list.filter(a=>a.locked).map(a=>a.id);for(let i=0;i<list.length;i++){if(list[i].locked)continue;const next=rollAffixForSlot(item.slot,item.rarity,used);if(next){list[i]=next;used.push(next.id)}}state.inventory[SHARD_KEY]-=cost;return{ok:true,cost}}
+export function rerollOneValue(state,item,index){const cost=valueRerollCost(),a=ensureEquipmentAffixes(item)[index];if(!a)return{ok:false,message:"対象オプションがありません"};if(affixShards(state)<cost)return{ok:false,message:`オプション欠片が足りません（必要 ${cost}）`};rerollAffixValue(a);state.inventory[SHARD_KEY]-=cost;return{ok:true,cost}}
+export function transferAffix(state,source,target,sourceIndex,targetIndex){const cost=transferCost(),sa=ensureEquipmentAffixes(source)[sourceIndex],ta=ensureEquipmentAffixes(target)[targetIndex];if(!sa||!ta)return{ok:false,message:"移植するオプションを選んでください"};if(source.id===target.id)return{ok:false,message:"同じ装備には移植できません"};if(source.slot!==target.slot)return{ok:false,message:"同じ装備種別どうしでのみ移植できます"};if(affixShards(state)<cost)return{ok:false,message:`オプション欠片が足りません（必要 ${cost}）`};target.affixes[targetIndex]={...sa,locked:false};state.inventory[SHARD_KEY]-=cost;return{ok:true,cost}}
+export function dismantleEquipment(state,itemId){const item=state.equipment.find(i=>i.id===itemId);if(!item)return{ok:false,message:"装備が見つかりません"};if(item.equippedBy||item.favorite||item.locked)return{ok:false,message:"装備中・お気に入り・ロック中は分解できません"};const gain=dismantleYield(item);state.equipment=state.equipment.filter(i=>i.id!==itemId);addAffixShards(state,gain);return{ok:true,gain}}
