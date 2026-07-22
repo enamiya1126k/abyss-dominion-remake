@@ -74,6 +74,13 @@ export function weaponMasteryRows(item){
  })
 }
 
+export function weaponMasteryBadge(item){
+ const mastery=normalizeWeaponMastery(item);if(!mastery)return"";
+ const rows=weaponMasteryRows(item),best=rows.sort((a,b)=>b.tier.level-a.tier.level||b.kills-a.kills)[0];
+ if(!best)return`<span class="growth-chip muted">⚔️ 撃破 0</span>`;
+ return`<span class="growth-chip">${best.trait.icon} ${best.trait.name}${best.tier.label||""}</span><span class="growth-chip muted">撃破 ${mastery.totalKills.toLocaleString()}</span>`
+}
+
 export function weaponMasterySummary(item){
  const mastery=normalizeWeaponMastery(item);if(!mastery)return"";
  const rows=weaponMasteryRows(item);
