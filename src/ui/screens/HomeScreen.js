@@ -10,11 +10,14 @@ export function HomeScreen(state){
   const team=dailyTeamAttempts(state),teamUnlocked=state.player.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR,emergencyUnlocked=state.player.maxFloor>=EMERGENCY_UNLOCK_FLOOR,revealed=hasCleared1000(state),phase=worldPhase(state);
   const fragmentTotal=Object.keys(ENDGAME_BOSSES).reduce((n,id)=>n+emergencyFragmentStatus(state,id).count,0);
   const region=phase===1?(state.player.maxFloor>=7001?"神域":state.player.maxFloor>=3001?"深淵領域":"未知領域"):"通常領域";
+  const equipmentById=new Map((state.equipment??[]).map(item=>[item.id,item]));
   const slots=Array.from({length:4},(_,index)=>{
     const m=party[index];
     if(!m)return`<button class="home-squad-slot empty" data-empty-party="true"><span class="home-squad-number">${index+1}</span><strong>＋</strong><small>編成する</small></button>`;
-    const s=calculatedStats(m),hp=Math.max(0,m.currentHp??s.hp),ratio=Math.max(0,Math.min(100,(hp/Math.max(1,s.hp))*100)),sp=SPECIES[m.speciesId];
-    return`<button class="home-squad-slot" data-monster-id="${m.id}"><span class="home-squad-number">${index+1}</span><div class="home-squad-head"><span>${sp?.emoji??"👹"}</span><section><b>${displayName(m)}</b><small>Lv.${m.level}</small></section></div><div class="home-squad-hp"><i style="width:${ratio}%"></i></div><small class="home-squad-hp-label">HP ${hp}/${s.hp}</small></button>`;
+    const stats=calculatedStats(m),hp=Math.max(0,m.currentHp??stats.hp),mp=Math.max(0,m.currentMp??maxMp(m)),hpRatio=Math.max(0,Math.min(100,(hp/Math.max(1,stats.hp))*100)),mpMax=maxMp(m),mpRatio=Math.max(0,Math.min(100,(mp/Math.max(1,mpMax))*100)),sp=SPECIES[m.speciesId];
+    const stars="⭐".repeat(Math.max(1,Math.min(5,m.stars??1)));
+    const equipmentIcons=["weaponRight","armorBody","accessoryNeck","armorSupport","accessoryFinger","weaponLeft"].map(slot=>{const id=m.equipment?.[slot],item=id?equipmentById.get(id):null,icon=slot.startsWith("weapon")?"⚔️":slot.startsWith("armor")?"🛡️":"💍";return`<i class="${item?"equipped":"empty"}" title="${item?.name??"未装備"}">${icon}</i>`}).join("");
+    return`<button class="home-squad-slot" data-monster-id="${m.id}"><span class="home-squad-number">${index+1}</span><div class="home-squad-head"><span>${sp?.emoji??"👹"}</span><section><b>${displayName(m)}</b><small>Lv.${m.level} <em>+${m.plus??0}</em></small></section></div><div class="home-squad-growth"><span>${stars}</span><span>❤️${m.affection??0}</span></div><div class="home-squad-bar hp"><i style="width:${hpRatio}%"></i><small>HP ${hp}/${stats.hp}</small></div><div class="home-squad-bar mp"><i style="width:${mpRatio}%"></i><small>MP ${mp}/${mpMax}</small></div><div class="home-squad-equipment" aria-label="装備">${equipmentIcons}</div></button>`;
   }).join("");
   return`
     <section class="screen home-screen world-phase-${phase}${phase===1?" phase2":""}" data-world-phase="${phase}">
@@ -25,11 +28,11 @@ export function HomeScreen(state){
 
         <div class="panel home-status-panel compact-home-status">
           <div class="compact-status-primary"><div><small>モンスター基盤</small><b>最高 ${state.player.maxFloor}階</b></div><span>${phase===1?region:"通常領域"}</span></div>
-          <div class="compact-status-resources"><span>🪙 ${state.player.gold}</span><span>💎 ${state.player.crystals}</span><small>v${APP_VERSION}</small></div>
+          <div class="compact-status-resources"><span>🪙 ${state.player.gold.toLocaleString()}</span><span>💎 ${state.player.crystals}</span><span>📀 ${state.inventory?.captureCrystals??0}</span><span>🔑 ${state.inventory?.abyssKeys??0}</span><small>v${APP_VERSION}</small></div>
         </div>
 
         <div class="panel home-party-panel compact-home-party">
-          <div class="spread"><h2>現在の部隊</h2><span class="muted">${party.length}/4</span></div>
+          <div class="spread home-party-heading"><h2>現在の部隊</h2><div><span class="muted">${party.length}/4</span><button id="editHomeParty" class="compact-button">編成</button></div></div>
           <div class="home-squad-grid">${slots}</div>
         </div>
 
