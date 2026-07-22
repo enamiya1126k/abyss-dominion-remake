@@ -691,3 +691,17 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
 .equipment-growth-records,.equipment-feed-panel{margin-top:12px;padding:12px;border:1px solid rgba(255,255,255,.1);border-radius:13px;background:rgba(0,0,0,.12)}.section-label{margin-bottom:8px;font-size:11px;font-weight:900;color:#d9c7e3;letter-spacing:.04em}.equipment-growth-records .weapon-mastery,.equipment-growth-records .series-mastery-box{margin:7px 0}.growth-record-empty{margin:0;padding:8px;border-radius:8px;background:rgba(255,255,255,.03);font-size:11px;color:var(--muted)}
 .compact-note{margin:8px 0;font-size:10px}.equipment-material-list{max-height:min(42vh,390px);overflow:auto;padding-right:2px}.equipment-material-row{padding:9px 10px;margin:6px 0;border-radius:11px}.equipment-material-row span b{font-size:12px}.equipment-material-row span small,.equipment-material-row strong{font-size:10px}.sticky-enhance-button{position:sticky;bottom:0;z-index:2;box-shadow:0 -8px 18px rgba(11,7,17,.92)}
 @media(max-width:430px){.enhancement-status-row{grid-template-columns:1fr 1fr}.enhancement-status-row span:last-child{grid-column:1/-1}.enhancement-tools{gap:5px}.enhancement-tools button{padding:9px 3px;font-size:11px}}
+
+
+/* v0.9.15-alpha.5 Part 9: infinite equipment / stable battle / shop stock */
+.shop-owned{display:inline-block;margin-top:4px;color:#f1d77a;font-size:.68rem}
+.enhancement-status-row.infinite{grid-template-columns:1fr 1fr}
+.enhancement-title-row>strong small{color:#d9b8ff}
+@media(max-width:430px){
+ .battle-arena{grid-template-rows:minmax(260px,34dvh) minmax(0,1fr)!important;overflow:hidden}
+ .enemy-party{height:100%;min-height:0;align-items:center!important}
+ .enemy-combatant{align-self:center;max-height:250px;overflow:hidden}
+ .enemy-party:has(.enemy-combatant:nth-child(2)) .enemy-combatant,.enemy-party:has(.enemy-combatant:nth-child(3)) .enemy-combatant{height:238px;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto auto;align-content:center}
+ .enemy-party:has(.enemy-combatant:nth-child(2)) .enemy-orb,.enemy-party:has(.enemy-combatant:nth-child(3)) .enemy-orb{width:82px;height:82px}
+ .battle-party{min-height:0;align-self:end}
+}
