@@ -122,11 +122,33 @@ export class SaveService{
     mainIds.add(id);
    }
   }));
-  s.schemaVersion=26;
+  s.schemaVersion=27;
   s.appVersion=APP_VERSION;
-  if(from<26)s.lastMigration={from,to:26,at:new Date().toISOString()};
+  if(from<27)s.lastMigration={from,to:27,at:new Date().toISOString()};
   return s
  }
- save(){this.state.appVersion=APP_VERSION;localStorage.setItem(SAVE_KEY,JSON.stringify(this.state))}
- reset(){localStorage.removeItem(SAVE_KEY);this.state=initialState();this.save()}
+ save(){
+  this.state.appVersion=APP_VERSION;
+  let serialized;
+  try{
+   serialized=JSON.stringify(this.state);
+   localStorage.setItem(SAVE_KEY,serialized);
+   this.lastSaveError=null;
+   this.lastSavedAt=Date.now();
+   return true
+  }catch(error){
+   console.error("Save failed",error);
+   const quota=error?.name==="QuotaExceededError"||error?.name==="NS_ERROR_DOM_QUOTA_REACHED"||error?.code===22||error?.code===1014;
+   this.lastSaveError={name:error?.name??"SaveError",message:String(error?.message??error),quota,bytes:serialized?.length??0,at:Date.now()};
+   if(typeof window!=="undefined"){
+    window.dispatchEvent(new CustomEvent("abyss-save-error",{detail:{...this.lastSaveError}}));
+   }
+   return false
+  }
+ }
+ reset(){
+  try{localStorage.removeItem(SAVE_KEY)}catch(error){console.error("Save reset failed",error)}
+  this.state=initialState();
+  return this.save()
+ }
 }
