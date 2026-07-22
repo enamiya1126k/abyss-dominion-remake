@@ -1,4 +1,4 @@
-import{EQUIPMENT_SERIES}from"../data/equipmentSeries.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{EQUIPMENT_SERIES}from"../data/equipmentSeries.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 
 export const SERIES_MASTERY_LEVELS=[
  {level:1,exp:0,label:"見習い",bonus:{}},

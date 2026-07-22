@@ -1,4 +1,4 @@
-import{SPECIES}from"../data/species.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{SPECIES}from"../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 
 export const WEAPON_MASTERY_TIERS=[
  {level:1,kills:500,bonus:.05,label:"Ⅰ"},
