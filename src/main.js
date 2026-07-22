@@ -478,7 +478,7 @@ function maze(){
  const boss=floor%10===0?{...pick(),active:true}:null;
  return{cols,rows,shape,tiles,start:startCell,exit:{...exit},shop,boss,chests,treasureRoom,steps:0,nextEncounter:10+Math.floor(rng()*23),encountering:false}
 }
-function currentSnapshot(){game.world.encountering=false;game.player.path=[];game.player.p=0;game.player.rx=game.player.x;game.player.ry=game.player.y;return{world:game.world,player:game.player,cameraData:{x:game.camera.x,y:game.camera.y,z:game.camera.z,ox:game.camera.ox,oy:game.camera.oy,manual:game.camera.manual}}}
+function currentSnapshot(){game.world.encountering=false;game.player.path=[];game.player.p=0;game.player.rx=game.player.x;game.player.ry=game.player.y;return{world:game.world,player:game.player,partyTrail:game.partyTrail,cameraData:{x:game.camera.x,y:game.camera.y,z:game.camera.z,ox:game.camera.ox,oy:game.camera.oy,manual:game.camera.manual}}}
 function bindExplore(){
  recordBiomeFloor(save.state,save.state.player.currentFloor);save.save();
  if(shouldPlaySecondWorldIntro(save.state)){setTimeout(()=>playSecondWorldIntro(),80);return}
@@ -486,7 +486,7 @@ function bindExplore(){
  canvas.width=r.width*d;canvas.height=r.height*d;
  const mini=document.getElementById("miniMap");mini.width=132*d;mini.height=132*d;
  game=snapshot??{world:maze(),player:null,camera:null,paused:false,running:true,input:createInputState()};
- game.input=createInputState();game.player??=new Entity(game.world.start.x,game.world.start.y);game.world.encountering=false;game.player.path=[];game.player.p=0;
+ game.input=createInputState();game.player??=new Entity(game.world.start.x,game.world.start.y);game.world.encountering=false;game.player.path=[];game.player.p=0;game.partyTrail=Array.isArray(game.partyTrail)&&game.partyTrail.length?game.partyTrail:[{x:game.player.rx??game.player.x,y:game.player.ry??game.player.y}];
  if(!Number.isFinite(game.player.x)||!Number.isFinite(game.player.y)){game.player.x=game.world.start.x;game.player.y=game.world.start.y}
  game.player.rx=game.player.x;game.player.ry=game.player.y;game.camera=new Camera(canvas);
  if(snapshot?.cameraData)Object.assign(game.camera,snapshot.cameraData);else game.camera.reset(game.player.x*TILE,game.player.y*TILE);
@@ -612,13 +612,39 @@ function update(dt){
    beginEncounter();return
   }
  }
+ updateExplorationPartyTrail();
  game.camera.follow(game.player.rx*TILE,game.player.ry*TILE);
  game.camera.clamp(game.world)
 }
 function openChest(c){const floor=save.state.player.currentFloor;if(c.locked&&(save.state.inventory.abyssKeys??0)<=0){game.player.path=[];return pauseModal("🔒 鍵付き宝箱",'<p>深淵の鍵が必要だ。</p><p class="muted">鍵は強敵やごく稀な敵ドロップから入手できます。</p>')}if(c.locked)save.state.inventory.abyssKeys--;c.open=true;save.state.player.openedChests[floor]??=[];if(!save.state.player.openedChests[floor].includes(c.id))save.state.player.openedChests[floor].push(c.id);recordBiomeChest(save.state,floor,c.id);save.state.records.chests++;if(c.mimic){save.save();game.player.path=[];pauseModal("！？","<p>宝箱が牙を剥いた！</p>");setTimeout(()=>{closeTopModal();game.paused=false;beginEncounter({speciesId:"mimic",level:Math.max(enemyLevelForFloor(floor)+12,Math.round(floor*1.5)),boss:false,equipped:true,gear:createEquipment("accessory",{rarity:"SR"})})},650);return}let title="宝箱",body="";if(c.kind==="apple"){save.state.inventory.potions++;title="🪎 深淵の果実";body="回復薬を1個獲得"}else if(c.kind==="box"){if(Math.random()<.5){const gold=80+floor*12;save.state.player.gold+=gold;body=`${gold}Gを獲得`}else{const item=createEquipment("weapon"),receipt=equipmentReceipt(item);body=equipmentReceiptText(receipt)}}else{const rarity=c.locked?(Math.random()<.25?"LR":"SSR"):c.kind==="radiant"?(Math.random()<.35?"LR":"SSR"):(Math.random()<.35?"SSR":"SR"),item=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)],{rarity}),receipt=equipmentReceipt(item);title=c.locked?"🔓 鍵付き宝箱":c.kind==="radiant"?"✨ 輝く宝箱":"🗃️ 古い収納箱";body=`${equipmentReceiptText(receipt)}<br>${Object.entries(item.stats).map(([k,v])=>`${equipmentStatLabel(k)}+${v}`).join(" / ")}`}save.save();pauseModal(title,body)}
-function explorationLeaderEmoji(){const leaderId=save.state.party?.[0],leader=save.state.monsters?.find(monster=>monster.id===leaderId);return SPECIES[leader?.speciesId]?.emoji??"😈"}
-function draw(){const c=game.ctx,w=game.world,palette=worldPresentationForFloor(save.state.player.currentFloor);c.fillStyle=palette.background;c.fillRect(0,0,game.canvas.width,game.canvas.height);for(let y=0;y<w.rows;y++)for(let x=0;x<w.cols;x++){const p=game.camera.world(x*TILE,y*TILE),s=TILE*game.camera.z;c.fillStyle=w.tiles[y][x]?palette.wall:palette.floor;c.fillRect(p.x,p.y,s+1,s+1)}emoji(w.exit,"🕳️");if(w.shop)emoji(w.shop,"🚪");if(w.boss)emoji(w.boss,"👹",true);w.chests.forEach(x=>!x.open&&emoji(x,x.emoji,x.kind==="radiant"));emoji({x:game.player.rx,y:game.player.ry},explorationLeaderEmoji(),true);drawMini()}
-function emoji(o,t,glow=false){const p=game.camera.world(o.x*TILE,o.y*TILE),pulse=glow?1+Math.sin(performance.now()/170)*.12:1;game.ctx.save();if(glow){game.ctx.shadowColor="#ffe36f";game.ctx.shadowBlur=18}game.ctx.font=`${28*game.camera.z*pulse}px sans-serif`;game.ctx.textAlign="center";game.ctx.fillText(t,p.x+TILE*game.camera.z/2,p.y+TILE*game.camera.z/2);game.ctx.restore()}
+function explorationPartyMembers(){return(save.state.party??[]).map(id=>save.state.monsters?.find(monster=>monster.id===id)).filter(Boolean)}
+function explorationLeaderEmoji(){const leader=explorationPartyMembers()[0];return SPECIES[leader?.speciesId]?.emoji??"😈"}
+function updateExplorationPartyTrail(){
+ if(!game?.player)return;
+ const point={x:game.player.rx,y:game.player.ry};
+ game.partyTrail??=[point];
+ const latest=game.partyTrail[0];
+ if(!latest||Math.hypot(point.x-latest.x,point.y-latest.y)>=.025)game.partyTrail.unshift(point);
+ if(game.partyTrail.length>260)game.partyTrail.length=260
+}
+function explorationFollowerPosition(index){
+ const spacing=.78*index,trail=game.partyTrail??[],fallback={x:game.player.rx,y:game.player.ry};
+ if(!trail.length)return fallback;
+ let remaining=spacing;
+ for(let i=0;i<trail.length-1;i++){
+  const a=trail[i],b=trail[i+1],segment=Math.hypot(b.x-a.x,b.y-a.y);
+  if(segment>=remaining){const ratio=segment?remaining/segment:0;return{x:a.x+(b.x-a.x)*ratio,y:a.y+(b.y-a.y)*ratio}}
+  remaining-=segment
+ }
+ return trail[trail.length-1]??fallback
+}
+function drawExplorationParty(){
+ const members=explorationPartyMembers();
+ for(let index=members.length-1;index>=1;index--){const monster=members[index],position=explorationFollowerPosition(index);emoji(position,SPECIES[monster.speciesId]?.emoji??"👾",false,.88)}
+ emoji({x:game.player.rx,y:game.player.ry},explorationLeaderEmoji(),true,1)
+}
+function draw(){const c=game.ctx,w=game.world,palette=worldPresentationForFloor(save.state.player.currentFloor);c.fillStyle=palette.background;c.fillRect(0,0,game.canvas.width,game.canvas.height);for(let y=0;y<w.rows;y++)for(let x=0;x<w.cols;x++){const p=game.camera.world(x*TILE,y*TILE),s=TILE*game.camera.z;c.fillStyle=w.tiles[y][x]?palette.wall:palette.floor;c.fillRect(p.x,p.y,s+1,s+1)}emoji(w.exit,"🕳️");if(w.shop)emoji(w.shop,"🚪");if(w.boss)emoji(w.boss,"👹",true);w.chests.forEach(x=>!x.open&&emoji(x,x.emoji,x.kind==="radiant"));drawExplorationParty();drawMini()}
+function emoji(o,t,glow=false,scale=1){const p=game.camera.world(o.x*TILE,o.y*TILE),pulse=glow?1+Math.sin(performance.now()/170)*.12:1;game.ctx.save();if(glow){game.ctx.shadowColor="#ffe36f";game.ctx.shadowBlur=18}game.ctx.font=`${28*game.camera.z*pulse*scale}px sans-serif`;game.ctx.textAlign="center";game.ctx.fillText(t,p.x+TILE*game.camera.z/2,p.y+TILE*game.camera.z/2);game.ctx.restore()}
 function drawMini(){
  const m=document.getElementById("miniMap");
  if(!m||!game?.running)return;
