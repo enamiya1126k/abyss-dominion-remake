@@ -46,3 +46,23 @@ export function consumeEquipmentMaterial(state,targetId,materialId){
  const result=addEquipmentExp(target,amount);
  return{ok:true,target,material,amount,...result,sameName:material.name===target.name};
 }
+
+
+export function projectEquipmentGrowth(item,amount){
+ const copy={level:Math.max(1,Number(item?.level??1)),exp:Math.max(0,Number(item?.exp??0))};
+ return addEquipmentExp(copy,amount);
+}
+
+export function consumeEquipmentMaterials(state,targetId,materialIds=[]){
+ const target=state.equipment?.find(item=>item.id===targetId);
+ if(!target)return{ok:false,message:"強化対象が見つかりません。"};
+ const unique=[...new Set(materialIds)].filter(id=>id!==targetId),materials=unique.map(id=>state.equipment?.find(item=>item.id===id)).filter(Boolean);
+ if(!materials.length)return{ok:false,message:"素材が選択されていません。"};
+ const invalid=materials.find(item=>item.equippedBy||item.favorite||item.locked);
+ if(invalid)return{ok:false,message:`${invalid.name}は装備中・お気に入り・ロック中のため素材にできません。`};
+ if((target.level??1)>=EQUIPMENT_LEVEL_CAP)return{ok:false,message:"現在のレベル上限に到達しています。"};
+ const amount=materials.reduce((sum,item)=>sum+equipmentMaterialExp(item,target),0),ids=new Set(materials.map(item=>item.id));
+ state.equipment=state.equipment.filter(item=>!ids.has(item.id));
+ const result=addEquipmentExp(target,amount);
+ return{ok:true,target,materials,amount,...result};
+}
