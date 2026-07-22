@@ -1,3 +1,12 @@
+# CHANGELOG
+
+## 0.9.15-alpha.28-phase10-6-consistency
+- `APP_VERSION`と起動時`ASSET_VERSION`を統一。
+- activeなES Module importのキャッシュキーを同一版数へ統一。
+- CSSキャッシュキーを同一版数へ統一。
+- README/TODOの開発状況を現行実装へ更新。
+- 旧`src/app.bundle.js`は参照されていないため、互換保管のみ継続。
+
 ## v0.9.15-alpha.19 — チームバトル日次更新修正
 
 - 1日50回の挑戦回数をUTC日付ではなく日本時間（Asia/Tokyo）の0:00で更新するよう修正。
