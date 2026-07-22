@@ -1,10 +1,10 @@
-import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{createMonster}from"../models/Monster.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{maxMp,normalizeSkillProgress}from"../battle/SkillSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{normalizeEndgameState}from"../core/EndgameSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
+import{createMonster}from"../models/Monster.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
+import{maxMp,normalizeSkillProgress}from"../battle/SkillSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
+import{normalizeEndgameState}from"../core/EndgameSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
+import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
+import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
+import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.30-phase10-8-skill-progress-runtime";
 function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
