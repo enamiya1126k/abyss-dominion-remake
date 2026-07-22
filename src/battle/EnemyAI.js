@@ -1,3 +1,4 @@
+import{bossProfileForFloor}from"../core/EnemyScalingSystem.js?v=0.9.15-alpha.21-phase7";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
  devour:"devour",annihilate:"annihilate",wrathBurst:"wrathBurst",mirror:"mirror",sleepMist:"sleepMist",plunder:"plunder",sovereign:"sovereign",
@@ -46,10 +47,11 @@ export const SPECIAL_ACTION_INFO={
 
 export function isBossFloor(floor){return floor>0&&floor%10===0}
 export function createEnemyBattleState(species,source,floor){
- const boss=source.boss??isBossFloor(floor),hpScale=boss?1.65:1,attackScale=boss?1.12:1,maxHp=Math.floor((species.baseStats.hp+source.level*8)*hpScale);
+ const boss=source.boss??isBossFloor(floor),profile=boss?bossProfileForFloor(floor):{tier:null,hp:1,atk:1,def:1,spd:1,statusResist:0,healRate:.16,powerMultiplier:1.8};
+ const maxHp=Math.max(1,Math.floor((species.baseStats.hp+source.level*8)*profile.hp));
  return{speciesId:source.speciesId,name:source.nameOverride??(boss?`深淵の${species.name}`:species.name),level:source.level,hp:maxHp,maxHp,
-  atk:Math.floor((species.baseStats.atk+source.level*1.4)*attackScale),def:Math.floor((species.baseStats.def+source.level*.5)*(boss?1.08:1)),spd:Math.floor((species.baseStats.spd+source.level*.18)*(boss?1.03:1)),
-  emoji:species.emoji??"👾",color:boss?"#bb4cff":species.baseStats.atk>12?"#df6262":"#a58f59",boss,phase:1,enraged:false,guard:false,charging:false,healed:false,
+  atk:Math.floor((species.baseStats.atk+source.level*1.4)*profile.atk),def:Math.floor((species.baseStats.def+source.level*.5)*profile.def),spd:Math.floor((species.baseStats.spd+source.level*.18)*profile.spd),
+  emoji:species.emoji??"👾",color:boss?"#bb4cff":species.baseStats.atk>12?"#df6262":"#a58f59",boss,bossTier:profile.tier,bossStatusResist:profile.statusResist,bossHealRate:profile.healRate,bossPowerMultiplier:profile.powerMultiplier,phase:1,enraged:false,guard:false,charging:false,healed:false,
   intent:"様子を見ている",specialCooldown:0,divineBarrier:0,...source};
 }
 function specialAction(enemy,hpRate){
@@ -70,7 +72,7 @@ export function chooseEnemyAction(enemy){
  enemy.intent=enemy.enraged?"狂乱攻撃":"通常攻撃";return ENEMY_ACTIONS.attack;
 }
 export function enemyDamageMultiplier(enemy){let mult=1;if(enemy.guard){enemy.guard=false;mult*=.48}if((enemy.divineBarrier??0)>0)mult*=.35;return mult}
-export function enemyHealAmount(enemy){return Math.max(1,Math.floor(enemy.maxHp*(enemy.endgameBossId?.28:enemy.boss?.22:.16)))}
-export function enemyAttackMultiplier(enemy,action){if(action===ENEMY_ACTIONS.power)return enemy.endgameBossId?2.55:enemy.boss?2.15:1.8;if(enemy.enraged)return enemy.endgameBossId?1.55:1.35;return 1}
+export function enemyHealAmount(enemy){return Math.max(1,Math.floor(enemy.maxHp*(enemy.endgameBossId?.28:enemy.boss?(enemy.bossHealRate??.12):.16)))}
+export function enemyAttackMultiplier(enemy,action){if(action===ENEMY_ACTIONS.power)return enemy.endgameBossId?2.55:enemy.boss?(enemy.bossPowerMultiplier??1.8):1.8;if(enemy.enraged)return enemy.endgameBossId?1.55:enemy.boss?1.3:1.35;return 1}
 export function specialActionMultiplier(action){return SPECIAL_ACTION_INFO[action]?.multiplier??1}
 export function specialActionInfo(action){return SPECIAL_ACTION_INFO[action]??null}
