@@ -10,9 +10,10 @@ import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.1-part3-phase2";
 import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.1-part3-phase2";
 import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=0.9.15-alpha.4-part1";
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterial,consumeEquipmentMaterials,projectEquipmentGrowth,EQUIPMENT_LEVEL_CAP}from"./services/EquipmentEnhancement.js?v=0.9.15-alpha.5-part3";
+import{recordWeaponKill,weaponMasteryDamageMultiplier}from"./services/WeaponMastery.js?v=0.9.15-alpha.5-part4";
 import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.15-alpha.1-part3-phase2";
 import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.15-alpha.1-part3-phase2";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.1-part3-phase2";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.5-part4";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.1-part3-phase2";
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=0.9.15-alpha.2-part2";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=0.9.15-alpha.3-part1";
@@ -23,7 +24,7 @@ import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstConta
 import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=0.9.15-alpha.3-part6";
 import{maxMp,learnedSkills,skillById,canUseSkill,skillDamage}from"./battle/SkillSystem.js?v=0.9.15-alpha.1-part3-phase2";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier}from"./battle/EnemyAI.js?v=0.9.15-alpha.1-part3-phase2";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js?v=0.9.15-alpha.1-part3-phase2";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses}from"./battle/BattleRules.js?v=0.9.15-alpha.5-part4";
 import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.15-alpha.1-part3-phase2";
 import{dangerConfig}from"./core/DangerSystem.js?v=0.9.15-alpha.1-part3-phase2";
 import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.15-alpha.1-part3-phase2";
@@ -792,6 +793,11 @@ function showBattleMonsterDetail(id){
  const m=battle.party.find(x=>x.id===id);if(!m)return;const st=calculatedStats(m),need=expNeed(m),gear=Object.entries(m.equipment??{}).map(([slot,itemId])=>`${slotLabel(slot)}：${save.state.equipment.find(i=>i.id===itemId)?.name??"なし"}`).join("<br>");
  app.insertAdjacentHTML("beforeend",Modal(`${SPECIES[m.speciesId].emoji} ${displayName(m)}`,`<div class="battle-detail"><p><b>Lv.${m.level} ★${m.stars} +${m.plus}</b></p><p>HP ${m.currentHp??st.hp}/${st.hp}<br>MP ${m.currentMp??maxMp(m)}/${maxMp(m)}<br>ATK ${st.atk} / DEF ${st.def} / SPD ${st.spd}<br>会心 ${st.crit}% / 回避 ${st.evasion}%<br><b>${SPECIES[m.speciesId].race}族 / ${SPECIES[m.speciesId].role}</b><br>特性：${TRAITS[m.traitId]?.name??"安定"}（${TRAITS[m.traitId]?.description??""}）</p><p>EXP ${m.exp}/${need}</p><div class="battle-bar exp"><i style="width:${Math.min(100,m.exp/need*100)}%"></i></div><p>${gear}</p><p><b>スキル</b><br>${learnedSkills(m).map(x=>`${x.name}（MP${x.mp}）`).join("<br>")||"なし"}</p></div>`,"閉じる"));topModalButton().onclick=closeTopModal
 }
+function registerWeaponFinisher(monster,enemy,beforeHp){
+ if(!monster||!enemy||beforeHp<=0||enemy.hp>0||enemy.captured||enemy.weaponKillRecorded)return;
+ enemy.weaponKillRecorded=true;enemy.defeatedByMonsterId=monster.id;
+ recordWeaponKill(save.state,monster.id,enemy)
+}
 async function command(type,skillId=null){
  if(battle.busy)return;
  const entry=currentTurnEntry(battle),a=actor();
@@ -805,7 +811,7 @@ async function command(type,skillId=null){
   else{
    const critical=Math.random()<Math.min(.35,.08+(s.spd??0)*.005);
    const base=Math.max(1,Math.floor(s.atk*(.9+Math.random()*.2)-e.def*.4));
-   const raw=critical?Math.floor(base*1.7):base,d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)));e.hp=Math.max(0,e.hp-d);
+   const raw=critical?Math.floor(base*1.7):base,beforeHp=e.hp,d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)*weaponMasteryDamageMultiplier(save.state,a,e)));e.hp=Math.max(0,e.hp-d);registerWeaponFinisher(a,e,beforeHp);
    await animateHit(e.id,critical);if(critical){battleFlash("critical");burstParticles(e.id,"critical",16)}await floatText(`${critical?"CRITICAL ":""}-${d}`,e.id,critical?"critical":"damage");
   }
  }
@@ -824,11 +830,11 @@ async function command(type,skillId=null){
   }else{
    await animateAttack(a.id,true);const hits=skill.hits??1;let total=0;
    for(let i=0;i<hits&&e.hp>0;i++){
-    const critical=Math.random()<Math.min(.45,.1+(skill.critBonus??0)+(s.spd??0)*.004),raw=skillDamage(s,e,skill,critical),d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)));
-    e.hp=Math.max(0,e.hp-d);total+=d;await animateHit(e.id,critical);if(critical){battleFlash("critical");burstParticles(e.id,"critical",14)}await floatText(`${critical?"CRITICAL ":""}-${d}`,e.id,critical?"critical":"skill")
+    const critical=Math.random()<Math.min(.45,.1+(skill.critBonus??0)+(s.spd??0)*.004),raw=skillDamage(s,e,skill,critical),beforeHp=e.hp,d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)*weaponMasteryDamageMultiplier(save.state,a,e)));
+    e.hp=Math.max(0,e.hp-d);registerWeaponFinisher(a,e,beforeHp);total+=d;await animateHit(e.id,critical);if(critical){battleFlash("critical");burstParticles(e.id,"critical",14)}await floatText(`${critical?"CRITICAL ":""}-${d}`,e.id,critical?"critical":"skill")
    }
    if(skill.type==="drain"){const h=Math.max(1,Math.floor(total*skill.drain));a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal")}
-   if(skill.status&&e.hp>0&&Math.random()<skill.status.chance){applyEnemyStatus(battle,skill.status,e.id);addBattleLog(battle,`${e.name}は${skill.status.name}状態になった`);await floatText(skill.status.name,e.id,skill.status.id)}
+   if(skill.status&&e.hp>0&&Math.random()<skill.status.chance){applyEnemyStatus(battle,{...skill.status,sourceMonsterId:a.id},e.id);addBattleLog(battle,`${e.name}は${skill.status.name}状態になった`);await floatText(skill.status.name,e.id,skill.status.id)}
   }
  }
 
@@ -902,7 +908,7 @@ async function endRound(){
  battle.busy=true;
  const statusResults=processEnemyStatuses(battle);
  for(const enemy of(battle.enemies??[]).filter(e=>e.hp>0&&e.eliteRegen>0)){const healed=Math.max(1,Math.floor(enemy.maxHp*enemy.eliteRegen));enemy.hp=Math.min(enemy.maxHp,enemy.hp+healed);addBattleLog(battle,`${enemy.name}は${healed}回復した`);await floatText(`+${healed}`,enemy.id,"heal")}
- for(const result of statusResults){addBattleLog(battle,`${result.enemy.name}に${result.name} ${result.damage}ダメージ`);renderBattle();await floatText(`-${result.damage}`,result.enemy.id,result.id)}
+ for(const result of statusResults){if(result.enemy.hp<=0&&result.sourceMonsterId){const source=battle.party.find(monster=>monster.id===result.sourceMonsterId);registerWeaponFinisher(source,result.enemy,result.beforeHp)}addBattleLog(battle,`${result.enemy.name}に${result.name} ${result.damage}ダメージ`);renderBattle();await floatText(`-${result.damage}`,result.enemy.id,result.id)}
  tickCooldowns(battle);
  battle.guards={};
  for(const e of(battle.enemies??[]).filter(x=>x.hp<=0))await animateDefeat(e.id);if(!aliveEnemies(battle).length)return win(false,null)
