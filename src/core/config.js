@@ -1,4 +1,4 @@
-export const APP_VERSION="0.9.15-alpha.22-phase8-rescue";
+export const APP_VERSION="0.9.15-alpha.28-phase10-6-consistency";
 export const SAVE_KEY="abyss-dominion-remake-v001";
 export const MAX_PARTY_SIZE=4;
 export const MAX_STARS=5;
