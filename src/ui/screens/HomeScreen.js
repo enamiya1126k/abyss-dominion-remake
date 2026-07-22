@@ -38,7 +38,8 @@ export function HomeScreen(state){
 
         <div class="home-main-menu">
           <button id="openExplore" class="primary">🗺️ 探索</button><button id="openGacha" class="primary summon-button">🔮 ガチャ</button>
-          <button id="openMonsters">💪 魔物強化</button><button id="openEquipment">⚔️ 装備</button>
+          <button id="openMonsters">💪 魔物強化</button><button id="openSkills">✨ スキル</button>
+          <button id="openEquipment">⚔️ 装備</button>
           <button id="openCodexHub">📖 図鑑</button><button id="openSettings">⚙️ 設定</button>
         </div>
         <div class="home-utility-row"><button id="openRest" class="compact-button">🛏️ 休息</button>${revealed?`<button id="openDeepGacha" class="compact-button deep-summon-button">🌌 深淵召喚</button><button id="openWorldRecord" class="compact-button world-record-button">📖 世界の記録</button>`:""}</div>
