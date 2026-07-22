@@ -1,6 +1,6 @@
 import{SAVE_KEY,APP_VERSION}from"../core/config.js?v=0.9.15-alpha.3-part1";
 import{createMonster}from"../models/Monster.js?v=0.9.11-alpha.1";
-import{maxMp}from"../battle/SkillSystem.js?v=0.9.14-alpha.2";
+import{maxMp,normalizeSkillProgress}from"../battle/SkillSystem.js?v=0.9.14-alpha.2";
 import{normalizeEndgameState}from"../core/EndgameSystem.js?v=0.9.15-alpha.1-part1";
 import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=0.9.15-alpha.3-part3";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=0.9.15-alpha.3-part4";
@@ -86,6 +86,7 @@ export class SaveService{
    m.currentMp??=maxMp(m);
    m.currentMp=Math.min(m.currentMp,maxMp(m));
    m.equippedSkills=Array.isArray(m.equippedSkills)?m.equippedSkills.filter(Boolean).slice(0,4):[];
+   normalizeSkillProgress(m);
    const oldGear=m.equipment??{};
    m.equipment={weaponRight:oldGear.weaponRight??oldGear.weapon??null,weaponLeft:oldGear.weaponLeft??null,armorBody:oldGear.armorBody??oldGear.armor??null,armorSupport:oldGear.armorSupport??null,accessoryNeck:oldGear.accessoryNeck??oldGear.accessory??null,accessoryFinger:oldGear.accessoryFinger??null};
    m.attribute??=null;m.resistances??={};m.tags??=[];m.isBoss??=false;m.sealedPower??=null;
