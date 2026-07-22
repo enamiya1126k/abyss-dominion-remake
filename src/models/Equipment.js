@@ -1,4 +1,5 @@
-import{EQUIPMENT_BASES}from"../data/equipment.js?v=0.9.2-alpha.2";
+import{EQUIPMENT_BASES}from"../data/equipment.js?v=0.9.15-alpha.10-affix";
+import{rollEquipmentAffixes,equipmentAffixPower}from"../data/equipmentAffixes.js?v=0.9.15-alpha.10-affix";
 
 function uid(){return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`}
 export function createEquipment(slot,options={}){
@@ -10,7 +11,7 @@ export function createEquipment(slot,options={}){
  for(const[key,value]of Object.entries(base.stats))stats[key]=Math.max(1,Math.round(value*mult));
  return{
   id:uid(),slot,name:base.name,rarity,level:1,plus:0,stats,handedness:options.handedness??base.handedness??(slot==="weapon"?"either":null),ruleOverrides:options.ruleOverrides??{},series:options.series??seriesForName(base.name),
-  favorite:false,locked:false,equippedBy:null,exp:0,limitBreak:0,createdAt:new Date().toISOString()
+  favorite:false,locked:false,equippedBy:null,exp:0,limitBreak:0,affixes:options.affixes??rollEquipmentAffixes(slot,rarity),createdAt:new Date().toISOString()
  };
 }
 export function seriesForName(name){
@@ -33,5 +34,5 @@ export function equipmentStatMultiplier(item){
  return(1+(item.plus??0)*.08)*(1+(level-1)*.025);
 }
 export function equipmentPower(item){
- return Object.values(item.stats).reduce((a,b)=>a+b,0)*equipmentStatMultiplier(item)+(item.plus??0)*3+(item.level??1)*2;
+ return Object.values(item.stats).reduce((a,b)=>a+b,0)*equipmentStatMultiplier(item)+(item.plus??0)*3+(item.level??1)*2+equipmentAffixPower(item);
 }

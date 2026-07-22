@@ -140,7 +140,7 @@ export function calculatedStats(monster){
   };
 
   const trait=TRAITS[monster.traitId]??TRAITS.steady;
-  const gear=monster._equipmentStats??{};
+  const gear=monster._equipmentStats??{},affix=monster._equipmentAffixes??{};
   const syn=monster._synergy??{};
   const result={
     hp:calc("hp")+(gear.hp??0),
@@ -150,7 +150,8 @@ export function calculatedStats(monster){
     crit:Math.floor(species.baseStats.crit*(personality.modifiers.crit??1))+(gear.crit??0),
     evasion:Math.floor(species.baseStats.evasion*(personality.modifiers.evasion??1))+(gear.evasion??0)
   };
-  for(const key of["hp","atk","def","spd"]){if(trait.mods[key])result[key]=Math.floor(result[key]*trait.mods[key])}
+  for(const key of["hp","atk","def","spd"]){if(trait.mods[key])result[key]=Math.floor(result[key]*trait.mods[key]);const pct=affix[`${key}Pct`]??0;if(pct)result[key]=Math.floor(result[key]*(1+pct/100))}
+  result.crit+=affix.critRate??0;result.evasion+=affix.evasion??0;result._affixes=affix;
   if(trait.mods.crit)result.crit+=trait.mods.crit;
   if(syn.atk)result.atk=Math.floor(result.atk*(1+syn.atk));
   if(syn.def)result.def=Math.floor(result.def*(1+syn.def));
