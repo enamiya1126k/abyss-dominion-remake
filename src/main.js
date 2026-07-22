@@ -15,6 +15,7 @@ import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,se
 import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.15-alpha.1-part3-phase2";
 import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.15-alpha.1-part3-phase2";
 import{EQUIPMENT_SERIES}from"./data/equipmentSeries.js?v=0.9.15-alpha.5-part5";
+import{aggregateAffixes}from"./data/equipmentAffixes.js?v=0.9.15-alpha.24-phase10-1-affix-aggregate";
 import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.5-part9-infinite";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.1-part3-phase2";
 import{SkillScreen}from"./ui/screens/SkillScreen.js?v=0.9.15-alpha.6-skill-phase1";
@@ -156,8 +157,9 @@ function normalizeEquipmentState(){
    seen.add(id);item.equippedBy=m.id;
   }
   m.equipment=slots;
+  const counts={},stats={},equippedItems=[];Object.values(m.equipment).forEach(id=>{const item=byId.get(id);if(!item)return;equippedItems.push(item);const mult=equipmentStatMultiplier(item);Object.entries(item.stats??{}).forEach(([k,v])=>stats[k]=(stats[k]??0)+Math.round(v*mult));if(item.series)counts[item.series]=(counts[item.series]??0)+1});
+  m._equipmentStats=stats;m._equipmentAffixes=aggregateAffixes(equippedItems);m._seriesCounts=counts;m._seriesMasteryBonus=seriesMasteryBonusForMonster(save.state,counts);
   const natural=calculatedStats(m);if(m.currentHp==null||!Number.isFinite(m.currentHp))m.currentHp=natural.hp;if(m.currentMp==null||!Number.isFinite(m.currentMp))m.currentMp=maxMp(m);
-  const counts={},stats={};Object.values(m.equipment).forEach(id=>{const item=byId.get(id);if(!item)return;const mult=equipmentStatMultiplier(item);Object.entries(item.stats??{}).forEach(([k,v])=>stats[k]=(stats[k]??0)+Math.round(v*mult));if(item.series)counts[item.series]=(counts[item.series]??0)+1});m._equipmentStats=stats;m._seriesCounts=counts;m._seriesMasteryBonus=seriesMasteryBonusForMonster(save.state,counts);
  });
 }
 function render(){normalizeEquipmentState();document.body.classList.toggle("phase2",hasCleared1000(save.state));if(screen==="home"){app.innerHTML=HomeScreen(save.state);bindHome()}else if(screen==="monsters"){app.innerHTML=MonsterListScreen(save.state,monsterManage);bindList()}else if(screen==="detail"){const m=save.state.monsters.find(x=>x.id===selected);app.innerHTML=MonsterDetailScreen(m,save.state);bindDetail(m)}else if(screen==="settings"){app.innerHTML=SettingsScreen(save.state);bindSettings()}else if(screen==="explore"){app.innerHTML=ExploreScreen(save.state);bindExplore()}else if(screen==="equipment"){if(!save.state.party.includes(equipmentTarget))equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;app.innerHTML=EquipmentScreen(save.state,equipmentTarget,{home:navigationOrigin==="home",...equipmentManage});bindEquipment()}else if(screen==="shop"){app.innerHTML=ShopScreen(save.state);bindShop()}else if(screen==="skills"){skillTarget=save.state.monsters.some(m=>m.id===skillTarget)?skillTarget:(save.state.party[0]??save.state.monsters[0]?.id);app.innerHTML=SkillScreen(save.state,skillTarget);bindSkills()}}
