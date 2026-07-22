@@ -1,6 +1,6 @@
-import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=0.9.13-alpha.2";
-import{PERSONALITIES}from"../../data/personalities.js?v=0.9.13-alpha.2";
-import{SPECIES}from"../../data/species.js?v=0.9.13-alpha.2";
+import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{PERSONALITIES}from"../../data/personalities.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.28-phase10-6-consistency";
 
 export function MonsterCard(monster,inParty=false,{editing=false,selected=false}={}){
   const stats=calculatedStats(monster),personality=PERSONALITIES[monster.personalityId],species=SPECIES[monster.speciesId];
