@@ -81,3 +81,8 @@
 
 **ABYSS DOMINION**  
 1000階は終点ではない。封印の入口である。
+
+
+## Latest audit
+
+Phase10-10: 総合回帰・セーブ移行監査完了（schema 30）。
