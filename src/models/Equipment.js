@@ -10,7 +10,7 @@ export function createEquipment(slot,options={}){
  for(const[key,value]of Object.entries(base.stats))stats[key]=Math.max(1,Math.round(value*mult));
  return{
   id:uid(),slot,name:base.name,rarity,level:1,plus:0,stats,handedness:options.handedness??base.handedness??(slot==="weapon"?"either":null),ruleOverrides:options.ruleOverrides??{},series:options.series??seriesForName(base.name),
-  favorite:false,locked:false,equippedBy:null,exp:0,createdAt:new Date().toISOString()
+  favorite:false,locked:false,equippedBy:null,exp:0,limitBreak:0,createdAt:new Date().toISOString()
  };
 }
 export function seriesForName(name){
