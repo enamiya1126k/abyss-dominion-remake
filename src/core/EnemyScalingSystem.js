@@ -84,9 +84,11 @@ export function rollEnemyEquipmentRarity(floor,rank,roll=Math.random()){
 
 export function bossProfileForFloor(floor){
  const f=Math.max(1,Math.floor(Number(floor)||1));
- if(f%1000===0)return{tier:"超ボス",hp:7,atk:1.6,def:1.6,spd:1.2,statusResist:.7};
- if(f%100===0)return{tier:"大ボス",hp:4.5,atk:1.45,def:1.45,spd:1.15,statusResist:.5};
- return{tier:"階層ボス",hp:3,atk:1.3,def:1.3,spd:1.1,statusResist:.3};
+ // 10階ごとの通常ボスは長期戦になりすぎないよう耐久を抑え、
+ // 100階・1000階の節目だけ明確に強くする。
+ if(f%1000===0)return{tier:"超ボス",hp:3.2,atk:1.32,def:1.2,spd:1.1,statusResist:.55,healRate:.18,powerMultiplier:2.15};
+ if(f%100===0)return{tier:"大ボス",hp:2.2,atk:1.2,def:1.12,spd:1.06,statusResist:.35,healRate:.15,powerMultiplier:1.95};
+ return{tier:"階層ボス",hp:1.55,atk:1.12,def:1.05,spd:1.03,statusResist:.18,healRate:.12,powerMultiplier:1.8};
 }
 
 export function bossLevelForFloor(floor){
