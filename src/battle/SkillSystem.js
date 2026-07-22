@@ -1,20 +1,112 @@
-import{SPECIES}from"../data/species.js?v=0.9.2-alpha.2";
-import{SKILLS}from"../data/skills.js?v=0.9.2-alpha.2";
+import{SPECIES}from"../data/species.js?v=0.9.15-alpha.6-skill-phase1";
+import{SKILLS}from"../data/skills.js?v=0.9.15-alpha.6-skill-phase1";
 
-export function maxMp(monster){
- const species=SPECIES[monster.speciesId];
- const base=species?.maxMp??15;
- return Math.floor(base+(monster.level-1)*.65+(monster.rank-1)*5+(monster.stars-1));
+const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
+const ROLE_POOLS={
+ tank:[
+  ["堅牢打ち","attack",1.15,4,"防御","敵単体","盾の重みを乗せた一撃。"],
+  ["守護の息吹","selfHeal",.24,7,"回復","自分","最大HPの24%を回復する。"],
+  ["城壁崩し","attack",1.6,10,"攻撃","敵単体","防壁ごと打ち砕く強打。"],
+  ["不屈の再生","selfHeal",.38,14,"回復","自分","最大HPの38%を回復する。"],
+  ["反攻撃","multiAttack",.78,15,"カウンター","敵単体","耐えてから二連撃を返す。"],
+  ["守護者の号砲","attack",1.9,18,"攻撃","敵単体","守護者の誇りを込めた一撃。"],
+  ["深層防衛","selfHeal",.52,22,"防御","自分","最大HPの52%を回復し戦線を維持する。"],
+  ["要塞突進","attack",2.25,25,"攻撃","敵単体","巨大な要塞のように突進する。"],
+  ["最後の砦","selfHeal",.7,30,"回復","自分","最大HPの70%を回復する切り札。"],
+  ["奈落の守護撃","attack",2.75,36,"奥義","敵単体","奈落の守護者が放つ決定打。"],
+  ["絶対防衛圏","selfHeal",1,45,"超奥義","自分","HPを完全回復する。"]
+ ],
+ support:[
+  ["励ましの光","allHeal",.12,6,"回復","味方全体","味方全体のHPを12%回復する。"],
+  ["応援弾","attack",1.2,5,"攻撃","敵単体","仲間の声援を力に変える。"],
+  ["癒やしの波","allHeal",.2,10,"回復","味方全体","味方全体のHPを20%回復する。"],
+  ["連携の一撃","multiAttack",.72,11,"攻撃","敵単体","仲間と呼吸を合わせた二連撃。"],
+  ["生命の雫","allHeal",.28,15,"回復","味方全体","味方全体のHPを28%回復する。"],
+  ["希望の閃光","attack",1.8,16,"攻撃","敵単体","希望を凝縮した強い一撃。"],
+  ["大治癒陣","allHeal",.38,22,"回復","味方全体","味方全体のHPを38%回復する。"],
+  ["救済の連弾","multiAttack",1.0,24,"攻撃","敵単体","救済の力を込めた二連撃。"],
+  ["奇跡の風","allHeal",.52,30,"回復","味方全体","味方全体のHPを52%回復する。"],
+  ["聖域の裁き","attack",2.6,35,"奥義","敵単体","聖域から裁きの光を落とす。"],
+  ["生命賛歌","allHeal",.75,46,"超奥義","味方全体","味方全体のHPを75%回復する。"]
+ ],
+ debuffer:[
+  ["弱化の牙","attack",1.1,4,"デバフ","敵単体","弱点を狙う攻撃。"],
+  ["毒蝕","attack",1.05,6,"継続ダメージ","敵単体","55%で3ターン毒を付与する。","poison"],
+  ["侵食連撃","multiAttack",.68,9,"デバフ","敵単体","侵食する二連撃。"],
+  ["腐食弾","attack",1.35,10,"継続ダメージ","敵単体","65%で3ターン毒を付与する。","poison"],
+  ["暗黒穿ち","attack",1.65,14,"攻撃","敵単体","防御の隙間を穿つ。"],
+  ["猛毒連鎖","multiAttack",.88,17,"継続ダメージ","敵単体","二連撃後、毒を狙う。","poison"],
+  ["深層侵食","attack",1.85,20,"デバフ","敵単体","深層の力で肉体を侵す。"],
+  ["死毒の刻印","attack",2.05,24,"継続ダメージ","敵単体","75%で強い毒を付与する。","poison"],
+  ["崩壊連牙","multiAttack",1.15,28,"攻撃","敵単体","崩壊を招く二連撃。"],
+  ["奈落汚染","attack",2.65,35,"奥義","敵単体","奈落の毒気を叩き込む。","poison"],
+  ["終末侵蝕","attack",3.1,44,"超奥義","敵単体","終末級の侵蝕攻撃。","poison"]
+ ],
+ attacker:[
+  ["強撃","attack",1.35,4,"攻撃","敵単体","力を込めた強い一撃。"],
+  ["二連破","multiAttack",.78,6,"攻撃","敵単体","素早い二連撃。"],
+  ["急所砕き","attack",1.7,9,"攻撃","敵単体","急所へ叩き込む。"],
+  ["暴威連斬","multiAttack",.94,12,"攻撃","敵単体","荒々しい二連撃。"],
+  ["破軍撃","attack",2.0,15,"攻撃","敵陣を破る重撃。"],
+  ["猛襲三段","multiAttack",.78,18,"攻撃","敵単体","高速の三連撃。",null,3],
+  ["深層穿断","attack",2.3,21,"攻撃","敵単体","深層の力で敵を断つ。"],
+  ["覇王連撃","multiAttack",1.15,26,"攻撃","敵単体","覇気をまとった二連撃。"],
+  ["滅砕撃","attack",2.75,30,"攻撃","敵単体","すべてを砕く一撃。"],
+  ["奈落一閃","attack",3.15,37,"奥義","敵単体","奈落を裂く一閃。"],
+  ["終焉撃","attack",3.8,48,"超奥義","敵単体","終焉を告げる最大火力。"]
+ ],
+ drain:[
+  ["生命吸収","drain",1.15,5,"吸収","敵単体","与えたダメージの35%を吸収する。"],
+  ["血牙連撃","multiAttack",.7,7,"攻撃","敵単体","血を求める二連撃。"],
+  ["魂吸い","drain",1.45,10,"吸収","敵単体","与えたダメージの40%を吸収する。"],
+  ["暗夜の爪","attack",1.75,12,"攻撃","敵単体","暗夜に紛れて切り裂く。"],
+  ["命脈喰らい","drain",1.8,16,"吸収","敵単体","与えたダメージの45%を吸収する。"],
+  ["血界連牙","multiAttack",.95,18,"攻撃","敵単体","血界から放つ二連撃。"],
+  ["深淵吸命","drain",2.15,22,"吸収","敵単体","与えたダメージの50%を吸収する。"],
+  ["魂魄穿ち","attack",2.5,27,"攻撃","敵単体","魂そのものを穿つ。"],
+  ["不死の晩餐","drain",2.65,32,"吸収","敵単体","与えたダメージの60%を吸収する。"],
+  ["奈落捕食","drain",3.0,38,"奥義","敵単体","奈落の力で生命を捕食する。"],
+  ["永劫吸魂","drain",3.45,48,"超奥義","敵単体","与えたダメージの75%を吸収する。"]
+ ]
+};
+
+function archetype(species){
+ const role=String(species?.role??"");
+ if(["tank","guard","defense"].some(x=>role.includes(x)))return"tank";
+ if(["support","healer","heal"].some(x=>role.includes(x)))return"support";
+ if(["debuffer","poison","burner","controller"].some(x=>role.includes(x)))return"debuffer";
+ if(["drain","vampire"].some(x=>role.includes(x)))return"drain";
+ return"attacker";
 }
-export function learnedSkills(monster){
- return SPECIES[monster.speciesId].skills
-  .filter(entry=>entry.unlock.type==="level"?monster.level>=entry.unlock.value:monster.rank>=entry.unlock.value)
-  .map(entry=>({...entry,...SKILLS[entry.id]}))
-  .filter(skill=>skill.id&&skill.type);
+function elementLabel(element){return({fire:"炎",water:"水",earth:"土",wind:"風",dark:"闇",light:"光",poison:"毒",neutral:"無"})[element]??"無"}
+function generatedSkill(species,index,row){
+ const[name,type,value,mp,tag,target,description,statusId,hits]=row;
+ const skill={id:`${species.id}__skill_${index+2}`,name:index>=8?`${species.name}・${name}`:name,mp,type,description,target,tag,element:species.element??"neutral",cooldown:index<2?0:index<5?1:index<8?2:index<10?3:4,unlock:{type:"level",value:UNLOCK_LEVELS[index+1]}};
+ if(type==="selfHeal"||type==="allHeal")skill.heal=value;else skill.power=value;
+ if(type==="drain")skill.drain=index>=9?.75:index>=6?.55:.4;
+ if(type==="multiAttack")skill.hits=hits??2;
+ if(statusId)skill.status={id:statusId,name:statusId==="poison"?"毒":"炎上",chance:index>=7?.75:.6,turns:3,power:index>=7?.05:.03};
+ return skill;
 }
-export function skillById(id){return SKILLS[id]??null}
+const GENERATED={};
+for(const species of Object.values(SPECIES)){
+ const baseEntry=species.skills?.[0],base=baseEntry?SKILLS[baseEntry.id]:null;
+ const first={...baseEntry,...base,target:base?.type==="allHeal"?"味方全体":base?.type==="selfHeal"?"自分":"敵単体",tag:base?.type?.includes("Heal")?"回復":base?.status?"継続ダメージ":"攻撃",element:species.element??"neutral",cooldown:0,unlock:{type:"level",value:1}};
+ GENERATED[species.id]=[first,...ROLE_POOLS[archetype(species)].map((row,index)=>generatedSkill(species,index,row))];
+}
+const BY_ID=new Map(Object.values(GENERATED).flat().map(skill=>[skill.id,skill]));
+
+export function maxMp(monster){const species=SPECIES[monster.speciesId],base=species?.maxMp??15;return Math.floor(base+(monster.level-1)*.65+(monster.rank-1)*5+(monster.stars-1))}
+export function allSpeciesSkills(speciesId){return GENERATED[speciesId]??[]}
+export function allLearnedSkills(monster){return allSpeciesSkills(monster.speciesId).filter(skill=>monster.level>=(skill.unlock?.value??1))}
+export function normalizeSkillLoadout(monster){
+ const learned=allLearnedSkills(monster),valid=new Set(learned.map(x=>x.id)),saved=Array.isArray(monster.equippedSkills)?monster.equippedSkills.filter(id=>valid.has(id)):[];
+ for(const skill of learned){if(saved.length>=4)break;if(!saved.includes(skill.id))saved.push(skill.id)}
+ monster.equippedSkills=saved.slice(0,4);return monster.equippedSkills;
+}
+export function learnedSkills(monster){const equipped=new Set(normalizeSkillLoadout(monster));return allLearnedSkills(monster).filter(skill=>equipped.has(skill.id))}
+export function equipSkill(monster,skillId,slot){const learned=new Set(allLearnedSkills(monster).map(x=>x.id));if(!learned.has(skillId))return false;normalizeSkillLoadout(monster);const next=[...monster.equippedSkills];const previous=next.indexOf(skillId);if(previous>=0)next[previous]=next[slot]??null;next[slot]=skillId;monster.equippedSkills=next.filter(Boolean).slice(0,4);return true}
+export function skillById(id){return BY_ID.get(id)??SKILLS[id]??null}
 export function canUseSkill(monster,skill,cooldown=0){return Boolean(skill)&&monster.currentMp>=skill.mp&&cooldown<=0}
-export function skillDamage(stats,enemy,skill,critical=false){
- const base=Math.max(1,Math.floor(stats.atk*skill.power-enemy.def*.3));
- return critical?Math.floor(base*1.65):base;
-}
+export function skillDamage(stats,enemy,skill,critical=false){const base=Math.max(1,Math.floor(stats.atk*skill.power-enemy.def*.3));return critical?Math.floor(base*1.65):base}
+export function skillElementLabel(skill){return elementLabel(skill?.element)}
