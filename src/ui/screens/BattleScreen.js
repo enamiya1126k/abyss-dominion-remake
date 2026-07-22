@@ -52,12 +52,12 @@ function renderSkills(battle,actor,skills){
 
 function renderItems(inventory){
  const defs=[
-  ["potions","🌿","薬草","単体HP100回復"],
-  ["highPotions","🧪","ハイポーション","単体HP300回復"],
-  ["partyPotions","💚","全体回復薬","生存者全員HP80回復"],
-  ["manaPotions","💧","マナポーション","単体MP30回復"],
-  ["highManaPotions","🔷","ハイマナポーション","単体MP100回復"],
-  ["partyManaPotions","🌊","全体マナポーション","生存者全員MP30回復"],
+  ["potions","🌿","薬草","単体HP100＋最大HP10%回復"],
+  ["highPotions","🧪","ハイポーション","単体HP300＋最大HP25%回復"],
+  ["partyPotions","💚","全体回復薬","生存者全員HP50＋最大HP7%回復"],
+  ["manaPotions","💧","マナポーション","単体MP30＋最大MP10%回復"],
+  ["highManaPotions","🔷","ハイマナポーション","単体MP100＋最大MP25%回復"],
+  ["partyManaPotions","🌊","全体マナポーション","生存者全員MP30＋最大MP7%回復"],
   ["fullManaPotions","💠","精霊の雫","単体MP全回復"],
   ["partyFullManaPotions","🌀","深淵の霊水","生存者全員MP全回復"],
   ["reviveLeaves","🍃","命の葉","戦闘不能者をHP30%で蘇生"],
