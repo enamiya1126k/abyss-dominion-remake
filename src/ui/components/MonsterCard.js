@@ -1,4 +1,4 @@
-import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{PERSONALITIES}from"../../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 
