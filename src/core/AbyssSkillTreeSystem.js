@@ -257,12 +257,14 @@ export function normalizeAbyssSkillTree(state){
   learned.push(node.id);
   learnedSet.add(node.id);
  }
- const sourcePaid=source.paidCosts&&typeof source.paidCosts==="object"&&!Array.isArray(source.paidCosts)?source.paidCosts:{};
  const paidCosts={};
  let investedGold=0;
  for(const nodeId of learned){
   const node=NODE_BY_ID.get(nodeId);
-  const paid=safeInteger(sourcePaid[nodeId],node.cost);
+  // Node prices are fixed and there are no discounts. Rebuild this value from
+  // the learned nodes so a damaged legacy paidCosts entry can never reduce the
+  // amount returned by the free full reset.
+  const paid=node.cost;
   paidCosts[nodeId]=paid;
   investedGold=Math.min(Number.MAX_SAFE_INTEGER,investedGold+paid);
  }
