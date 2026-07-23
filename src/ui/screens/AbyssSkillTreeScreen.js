@@ -4,7 +4,7 @@ import{
  abyssSkillCategoryById,
  abyssSkillNodeById,
  abyssSkillTreeSummary
-}from"../../core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.95.1-stability-audit";
+}from"../../core/AbyssSkillTreeSystem.js?v=1.1.0";
 
 function nodeStatus(state,node,learned){
  if(learned.has(node.id))return"learned";
@@ -67,8 +67,8 @@ export function AbyssSkillTreeScreen(state,activeCategoryId="economy"){
     </div>
 
     <div class="abyss-tree-foundation-note">
-     <b>v1.0：全18効果反映済み</b>
-     <span>習得した効果は、戦闘・探索・GOLD報酬へ即時反映される。</span>
+     <b>全99ノード・効果反映済み</b>
+     <span>経済・戦闘・探索に各33ノード。既存の習得状態を保ったまま、深層へ拡張される。</span>
     </div>
 
     <nav class="abyss-tree-tabs" aria-label="スキルカテゴリ">

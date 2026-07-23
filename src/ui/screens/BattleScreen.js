@@ -14,23 +14,28 @@ function renderTurnOrder(battle){
 function renderEnemies(battle,enemies,target){
  return enemies.map(enemy=>{
   const statuses=enemyStatusesFor(battle,enemy.id),effects=enemyEffectsFor(battle,enemy.id);
-  const statusHtml=statuses.length||effects.length?`<div class="status-row">${statuses.map(s=>`<span class="status-chip ${s.id}">${statusLabel(s)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${({atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",stun:"行動不能"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`:"";
+  const statusHtml=`<div class="status-row enemy-status-row" ${statuses.length||effects.length?"":'aria-hidden="true"'}>${statuses.map(s=>`<span class="status-chip ${s.id}">${statusLabel(s)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${({atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",stun:"行動不能"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`;
   const badge=enemy.boss?'<span class="boss-badge">BOSS</span>':enemy.elite?`<span class="elite-badge">${enemy.eliteAffixIcon??"🜲"} ELITE・${enemy.eliteAffixName??"変異"}</span>`:"";const danger="";
   return `<button id="enemy-${enemy.id}" data-enemy-target="${enemy.id}" class="combatant enemy-combatant ${enemy.elite?"elite-enemy":""} ${target?.id===enemy.id?"targeted":""}">
-   <div class="enemy-name">${badge}${danger}${enemy.name} Lv.${enemy.level}</div>
-   <div class="enemy-intent">${enemy.intent}${enemy.enraged?"・狂暴化":""}</div>${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
-   ${statusHtml}
+   <div class="enemy-info">
+    <div class="enemy-name">${badge}${danger}${enemy.name} Lv.${enemy.level}</div>
+    <div class="enemy-intent">${enemy.intent}${enemy.enraged?"・狂暴化":""}</div>
+    ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
+    ${statusHtml}
+   </div>
    <div class="enemy-orb" style="background:${enemy.color}"><span>${enemy.emoji??"👾"}</span></div>
-   <div class="battle-bar"><i style="width:${enemy.hp/enemy.maxHp*100}%"></i></div>
-   <div class="battle-hp">${enemy.hp}/${enemy.maxHp}</div>
+   <div class="enemy-vitals">
+    <div class="battle-bar"><i style="width:${enemy.hp/enemy.maxHp*100}%"></i></div>
+    <div class="battle-hp">${enemy.hp}/${enemy.maxHp}</div>
+   </div>
   </button>`;
  }).join("");
 }
 
 function renderParty(battle,actor){
  return battle.party.map(m=>{
-  const stats=calculatedStats(m),mp=maxMp(m),need=expNeedFor(m);
-  const effects=allyEffectsFor(battle,m.id),effectHtml=effects.length?`<div class="status-row ally-status-row">${effects.map(e=>`<span class="status-chip ${e.kind}">${({taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",regen:"再生",lifeSteal:"吸収"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`:"";
+ const stats=calculatedStats(m),mp=maxMp(m),need=expNeedFor(m);
+  const effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" ${effects.length?"":'aria-hidden="true"'}>${effects.map(e=>`<span class="status-chip ${e.kind}">${({taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",regen:"再生",lifeSteal:"吸収"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`;
   return `<button id="ally-${m.id}" data-battle-detail="${m.id}" class="battle-unit combatant ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
    <div class="unit-head"><span class="unit-orb" style="background:${colorValue(m)}">${battle.species?.[m.speciesId]?.emoji??"●"}</span><b>${displayName(m)} Lv.${m.level}</b></div>
    <div class="battle-bar ally"><span class="bar-label">HP ${m.currentHp}/${stats.hp}</span><i style="width:${Math.max(0,m.currentHp/stats.hp*100)}%"></i></div>
