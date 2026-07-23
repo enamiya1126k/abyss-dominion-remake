@@ -1,12 +1,12 @@
-import{EQUIPMENT_BASES}from"../data/equipment.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{rollEquipmentAffixes,equipmentAffixPower}from"../data/equipmentAffixes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{EQUIPMENT_BASES}from"../data/equipment.js?v=1.1.0";
+import{rollEquipmentAffixes,equipmentAffixPower}from"../data/equipmentAffixes.js?v=1.1.0";
 
 function uid(){return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`}
 export function createEquipment(slot,options={}){
  const pool=EQUIPMENT_BASES[slot];
  const base=options.base??pool[Math.floor(Math.random()*pool.length)];
  const rarity=options.rarity??rollRarity();
- const mult={N:.8,R:1,SR:1.45,SSR:2.05,LR:3}[rarity];
+ const mult={N:.8,R:1,SR:1.45,SSR:2.05,LR:3,"神話":3.65,"深淵":4.4,"十神":5.25}[rarity]??1;
  const stats={};
  for(const[key,value]of Object.entries(base.stats))stats[key]=Math.max(1,Math.round(value*mult));
  return{
