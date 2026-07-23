@@ -1,4 +1,6 @@
-const RARITY_MATERIAL_EXP={N:20,R:45,SR:100,SSR:220,LR:500};
+import{equipmentDisplayRarity}from"../data/equipment.js?v=1.1.0";
+
+const RARITY_MATERIAL_EXP={N:20,R:45,SR:100,SSR:220,LR:500,"神話":850,"深淵":1400,"十神":2400};
 
 export function equipmentExpNeed(level){
  const lv=Math.max(1,Number(level)||1);
@@ -13,7 +15,7 @@ export function equipmentInvestedExp(item){
 }
 
 export function equipmentMaterialExp(material,target){
- const base=RARITY_MATERIAL_EXP[material?.rarity]??15;
+ const base=RARITY_MATERIAL_EXP[equipmentDisplayRarity(material)]??15;
  const sameName=material?.name===target?.name?5:1;
  const inherited=equipmentInvestedExp(material);
  const plusValue=Math.max(0,Number(material?.plus??0))*55;

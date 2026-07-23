@@ -1,9 +1,10 @@
-import{ensureEquipmentAffixes,rollAffixForSlot}from"../data/equipmentAffixes.js?v=0.9.15-alpha.97-gold-affix-crafting";
-import{goldForClearedFloor}from"../core/GoldEconomySystem.js?v=1.0.0";
+import{ensureEquipmentAffixes,rollAffixForSlot}from"../data/equipmentAffixes.js?v=1.1.0";
+import{equipmentDisplayRarity}from"../data/equipment.js?v=1.1.0";
+import{goldForClearedFloor}from"../core/GoldEconomySystem.js?v=1.1.0";
 
 const LOCK_MULTIPLIERS=[1,2.25,4.75,8];
-const RARITY_MULTIPLIERS={N:.70,R:.85,SR:1,SSR:1.35,LR:1.75};
-const MINIMUM_COSTS={N:200,R:300,SR:450,SSR:700,LR:1000};
+const RARITY_MULTIPLIERS={N:.70,R:.85,SR:1,SSR:1.35,LR:1.75,"神話":2.15,"深淵":2.65,"十神":3.25};
+const MINIMUM_COSTS={N:200,R:300,SR:450,SSR:700,LR:1000,"神話":1500,"深淵":2200,"十神":3200};
 
 function safeInteger(value,fallback=0){
  const number=Number(value);
@@ -43,7 +44,7 @@ export function rerollLockMultiplier(item){
  return LOCK_MULTIPLIERS[lockedAffixCount(item)]??LOCK_MULTIPLIERS.at(-1);
 }
 export function rerollGoldCost(state,item){
- const floor=Math.max(1,Math.min(10000,safeInteger(state?.player?.maxFloor,1))),rarity=item?.rarity??"N";
+ const floor=Math.max(1,Math.min(10000,safeInteger(state?.player?.maxFloor,1))),rarity=equipmentDisplayRarity(item);
  const floorBase=goldForClearedFloor(floor)*.25,rarityBase=Math.max(MINIMUM_COSTS[rarity]??500,floorBase*(RARITY_MULTIPLIERS[rarity]??1));
  const level=Math.max(1,safeInteger(item?.level,1)),levelMultiplier=1+Math.min(.75,Math.log10(level)*.15);
  return roundedGold(rarityBase*levelMultiplier*rerollLockMultiplier(item));
@@ -71,8 +72,9 @@ export function rerollUnlockedAffixes(state,item){
 
  const originalIds=new Set(list.map(affix=>affix.id)),used=new Set(list.filter(affix=>affix.locked).map(affix=>affix.id)),replacements=new Map();
  for(const index of unlocked){
-  let next=rollAffixForSlot(item.slot,item.rarity,[...originalIds,...used]);
-  if(!next)next=rollAffixForSlot(item.slot,item.rarity,[...used]);
+  const rarity=equipmentDisplayRarity(item);
+  let next=rollAffixForSlot(item.slot,rarity,[...originalIds,...used]);
+  if(!next)next=rollAffixForSlot(item.slot,rarity,[...used]);
   if(!next)return{ok:false,message:"再抽選候補を生成できませんでした。GOLDは消費されていません"};
   next.locked=false;replacements.set(index,next);used.add(next.id);
  }

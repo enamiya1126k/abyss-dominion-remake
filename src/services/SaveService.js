@@ -1,16 +1,16 @@
-import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE}from"../core/config.js?v=1.0.0";
+import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE}from"../core/config.js?v=1.1.0";
 import{createMonster}from"../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=1.0.0";
-import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=1.0.0";
-import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=1.0.0";
+import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=1.1.0";
+import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=1.1.0";
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 
-import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=1.0.0";
-import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.95.1-stability-audit";
+import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=1.1.0";
+import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=1.1.0";
 import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=0.9.15-alpha.95.1-stability-audit";
-import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=1.0.0";
+import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=1.1.0";
 function finiteNumber(value,fallback=0,min=-Infinity,max=Infinity){
  const number=Number(value);
  return Number.isFinite(number)?Math.max(min,Math.min(max,number)):fallback;
@@ -72,13 +72,14 @@ export class SaveService{
   const from=Number(s.schemaVersion??1);
   s.flags??={};s.flags.abyssUnlocked??=false;s.flags.trueLevelCapRevealed??=false;s.flags.deepAbyssUnlocked??=false;s.flags.abyssKeyExchangePreviewUnlocked??=false;
   const legacy1000Clear=Number(s.player?.maxFloor??0)>1000||Boolean(s.player?.bossRewards?.[1000])||Number(s.player?.bossKills?.[1000]??0)>0||Boolean(s.flags.deepAbyssUnlocked);
-  s.flags.gameClear1000??=legacy1000Clear;
+  s.flags.gameClear1000=Boolean(s.flags.gameClear1000||legacy1000Clear);
   s.flags.ending1000Played??=false;
   const legacy10000Clear=Boolean(s.player?.bossRewards?.[10000])||Number(s.player?.bossKills?.[10000]??0)>0;
-  s.flags.gameClear10000??=legacy10000Clear;
+  s.flags.gameClear10000=Boolean(s.flags.gameClear10000||legacy10000Clear);
   s.flags.ending10000Played??=false;
-  s.flags.secondWorldEntered??=Number(s.player?.maxFloor??0)>=1001;
+  s.flags.secondWorldEntered=Boolean(s.flags.secondWorldEntered||Number(s.player?.maxFloor??0)>=1001);
   s.flags.tenGodObserved??=false;
+  s.flags.deepAbyssUnlocked=Boolean(s.flags.deepAbyssUnlocked||s.flags.gameClear1000||s.flags.secondWorldEntered);
   s.worldPhase=s.flags.gameClear1000?1:Math.max(0,Math.min(1,Number(s.worldPhase)||0));
   s.player??={};
   s.player.gold=Math.floor(finiteNumber(s.player.gold,1000,0,Number.MAX_SAFE_INTEGER));
