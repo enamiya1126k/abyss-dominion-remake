@@ -159,6 +159,11 @@ export function calculatedStats(monster){
   if(syn.crit)result.crit+=syn.crit;
   for(const bonus of activeSeriesBonuses(monster._seriesCounts)){if(bonus.effect.atk)result.atk=Math.floor(result.atk*(1+bonus.effect.atk));if(bonus.effect.def)result.def=Math.floor(result.def*(1+bonus.effect.def));if(bonus.effect.hp)result.hp=Math.floor(result.hp*(1+bonus.effect.hp));if(bonus.effect.spd)result.spd=Math.floor(result.spd*(1+bonus.effect.spd));if(bonus.effect.crit)result.crit+=bonus.effect.crit;if(bonus.effect.evasion)result.evasion+=bonus.effect.evasion;}
   const mastery=monster._seriesMasteryBonus??{};if(mastery.hp)result.hp=Math.floor(result.hp*(1+mastery.hp));if(mastery.atk)result.atk=Math.floor(result.atk*(1+mastery.atk));if(mastery.def)result.def=Math.floor(result.def*(1+mastery.def));if(mastery.spd)result.spd=Math.floor(result.spd*(1+mastery.spd));if(mastery.crit)result.crit+=mastery.crit;
+  const abyss=monster._abyssSkillEffects??{};
+  for(const[key,effectKey]of[["hp","partyHpRate"],["atk","partyAtkRate"],["def","partyDefRate"],["spd","partySpdRate"]]){
+    const rate=Number(abyss[effectKey])||0;
+    if(rate)result[key]=Math.max(1,Math.floor(result[key]*(1+rate)));
+  }
   return result;
 }
 export function unlockedSkills(monster){
