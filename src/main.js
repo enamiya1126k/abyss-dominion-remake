@@ -1,26 +1,26 @@
-import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
+import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{SPECIES}from"./data/species.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{EQUIPMENT_SERIES}from"./data/equipmentSeries.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{aggregateAffixes}from"./data/equipmentAffixes.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{SkillScreen}from"./ui/screens/SkillScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
-import{abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssGoldReward,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
@@ -30,13 +30,13 @@ import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstConta
 import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse}from"./battle/SkillSystem.js?v=0.9.15-alpha.29-phase10-7-affix-audit";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier}from"./battle/EnemyAI.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{dangerConfig}from"./core/DangerSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{bossLevelForFloor}from"./core/EnemyScalingSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,ENDGAME_BOSSES,normalizeEndgameState,dailyTeamAttempts,createTeamBattleEncounter,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,endgameContractStatus,attemptEndgameContract,hasCleared1000,mark1000FloorCleared,worldRegionForFloor}from"./core/EndgameSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,RETURN_RARITY_RATES,returnRewardGrade}from"./core/ReturnRewardSystem.js?v=0.9.15-alpha.39-return-rank-drop-rates";
+import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade}from"./core/ReturnRewardSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
 let screen="home",selected=null,equipmentTarget=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home";
@@ -98,9 +98,9 @@ function resolveSecondWorldRandomEvent(event,choice){
  else if(event.id==="lost-merchant"&&choice==="buy-key"){if(save.state.player.gold<costs.keyGold)return{ok:false,message:`ゴールドが足りない。必要：${costs.keyGold.toLocaleString()}G`};save.state.player.gold-=costs.keyGold;save.state.inventory.abyssKeys=(save.state.inventory.abyssKeys??0)+1;result="顔のない商人から、深淵の鍵を1個受け取った。"}
  else if(event.id==="lost-merchant"&&choice==="buy-rest"){if(save.state.player.crystals<costs.restCrystals)return{ok:false,message:`魔晶石が足りない。必要：${costs.restCrystals}個`};save.state.player.crystals-=costs.restCrystals;party.forEach(m=>{m.currentHp=calculatedStats(m).hp;m.currentMp=maxMp(m);clearAilments(m)});result="黒い香が燃え尽き、パーティーは完全回復した。"}
  else if(event.id==="abyss-crystal"&&choice==="harvest"){const gain=1+Math.floor(((floor*7)%4));save.state.player.crystals+=gain;result=`深淵結晶から魔晶石を${gain}個採取した。`}
- else if(event.id==="abyss-crystal"&&choice==="break"){const gold=650+Math.floor((floor-1000)*1.5);save.state.player.gold+=gold;if(game)game.world.nextEncounter=Math.min(game.world.nextEncounter,game.world.steps+2);result=`結晶を砕き、${gold.toLocaleString()}Gを得た。遠くで何かが目覚めた……。`}
+ else if(event.id==="abyss-crystal"&&choice==="break"){const gold=abyssGoldReward(save.state,650+Math.floor((floor-1000)*1.5),"exploration");save.state.player.gold+=gold;if(game)game.world.nextEncounter=Math.min(game.world.nextEncounter,game.world.steps+2);result=`結晶を砕き、${gold.toLocaleString()}Gを得た。遠くで何かが目覚めた……。`}
  else if(event.id==="warped-rift"&&choice==="challenge"){result="裂け目の向こうから、強大な魔物が現れた。";elite=true}
- else if(event.id==="warped-rift"&&choice==="seal"){if(save.state.player.crystals<costs.sealCrystals)return{ok:false,message:`魔晶石が足りない。必要：${costs.sealCrystals}個`};save.state.player.crystals-=costs.sealCrystals;const gold=900+Math.floor((floor-1000)*1.2);save.state.player.gold+=gold;save.state.inventory.abyssKeys=(save.state.inventory.abyssKeys??0)+1;result=`裂け目を封じ、${gold.toLocaleString()}Gと深淵の鍵を1個得た。`}
+ else if(event.id==="warped-rift"&&choice==="seal"){if(save.state.player.crystals<costs.sealCrystals)return{ok:false,message:`魔晶石が足りない。必要：${costs.sealCrystals}個`};save.state.player.crystals-=costs.sealCrystals;const gold=abyssGoldReward(save.state,900+Math.floor((floor-1000)*1.2),"exploration");save.state.player.gold+=gold;save.state.inventory.abyssKeys=(save.state.inventory.abyssKeys??0)+1;result=`裂け目を封じ、${gold.toLocaleString()}Gと深淵の鍵を1個得た。`}
  markRandomEventResolved(save.state,floor,event.id);save.save();return{ok:true,message:result,elite};
 }
 function showSecondWorldRandomEvent(){
@@ -145,6 +145,7 @@ function normalizeEquipmentState(){
  save.state.settings.equipmentSort??="rarity";save.state.settings.equipmentSlot??="weapon";save.state.settings.equipmentStorage??="inventory";
  save.state.gacha??={firstTenUsed:false,lastDailyKey:null};save.state.codex??={encounters:{},captures:{},equipment:{}};save.state.codex.encounters??={};save.state.codex.captures??={};save.state.codex.equipment??={};save.state.rest??={lastFreeKey:null};
  const byId=new Map(save.state.equipment.map(i=>[i.id,i]));
+ const abyssEffects=abyssSkillEffects(save.state);
  save.state.equipment.forEach(i=>i.equippedBy=null);
  save.state.monsters.forEach(m=>{
   m.traitId??="steady";
@@ -162,7 +163,10 @@ function normalizeEquipmentState(){
   m.equipment=slots;
   const counts={},stats={},equippedItems=[];Object.values(m.equipment).forEach(id=>{const item=byId.get(id);if(!item)return;equippedItems.push(item);const mult=equipmentStatMultiplier(item);Object.entries(item.stats??{}).forEach(([k,v])=>stats[k]=(stats[k]??0)+Math.round(v*mult));if(item.series)counts[item.series]=(counts[item.series]??0)+1});
   m._equipmentStats=stats;m._equipmentAffixes=aggregateAffixes(equippedItems);m._seriesCounts=counts;m._seriesMasteryBonus=seriesMasteryBonusForMonster(save.state,counts);
-  const natural=calculatedStats(m);if(m.currentHp==null||!Number.isFinite(m.currentHp))m.currentHp=natural.hp;if(m.currentMp==null||!Number.isFinite(m.currentMp))m.currentMp=maxMp(m);
+  if(!Object.prototype.hasOwnProperty.call(m,"_abyssSkillEffects"))Object.defineProperty(m,"_abyssSkillEffects",{value:abyssEffects,writable:true,configurable:true,enumerable:false});
+  const previousNatural=calculatedStats(m),wasFull=m.currentHp!=null&&Number.isFinite(m.currentHp)&&m.currentHp>=previousNatural.hp;
+  Object.defineProperty(m,"_abyssSkillEffects",{value:abyssEffects,writable:true,configurable:true,enumerable:false});
+  const natural=calculatedStats(m);if(m.currentHp==null||!Number.isFinite(m.currentHp)||wasFull)m.currentHp=natural.hp;else m.currentHp=Math.max(0,Math.min(natural.hp,m.currentHp));if(m.currentMp==null||!Number.isFinite(m.currentMp))m.currentMp=maxMp(m);
  });
 }
 function render(){normalizeEquipmentState();document.body.classList.toggle("phase2",hasCleared1000(save.state));if(screen==="home"){app.innerHTML=HomeScreen(save.state);bindHome()}else if(screen==="monsters"){app.innerHTML=MonsterListScreen(save.state,monsterManage);bindList()}else if(screen==="detail"){const m=save.state.monsters.find(x=>x.id===selected);app.innerHTML=MonsterDetailScreen(m,save.state);bindDetail(m)}else if(screen==="settings"){app.innerHTML=SettingsScreen(save.state);bindSettings()}else if(screen==="explore"){app.innerHTML=ExploreScreen(save.state);bindExplore()}else if(screen==="equipment"){if(!save.state.party.includes(equipmentTarget))equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;app.innerHTML=EquipmentScreen(save.state,equipmentTarget,{home:navigationOrigin==="home",...equipmentManage});bindEquipment()}else if(screen==="shop"){app.innerHTML=ShopScreen(save.state);bindShop()}else if(screen==="skills"){skillTarget=save.state.monsters.some(m=>m.id===skillTarget)?skillTarget:(save.state.party[0]??save.state.monsters[0]?.id);app.innerHTML=SkillScreen(save.state,skillTarget);bindSkills()}else if(screen==="abyssSkills"){app.innerHTML=AbyssSkillTreeScreen(save.state,abyssSkillCategory);bindAbyssSkills()}}
@@ -210,7 +214,7 @@ function openWorldRecord(){
  const region=floor>=7001?"神域":floor>=3001?"深淵領域":"未知領域";
  app.insertAdjacentHTML("beforeend",Modal("世界の記録",`<div class="world-record-modal"><small class="eyebrow">RECORD I / ${region}</small><h2>地下1000階の向こう側</h2><p>地下1000階。そこは人類が知る世界の終点。</p><p>誰もが、そう信じていた。</p><hr><p>しかし、そのさらに下には──誰にも語られなかった世界が存在する。</p><p class="muted">現在確認された最深部：${floor}階</p></div>`,`閉じる`));
 }
-function returnRarityTable(){return`<div class="return-rarity-table"><div class="return-rarity-head"><b>装備ドロップ確率</b><small>装備1枠ごとの抽選</small></div>${RETURN_RARITY_RATES.map(row=>`<p class="rarity-${row.rarity}"><span>${row.rarity}</span><b>${row.label}</b></p>`).join("")}</div>`}
+function returnRarityTable(){return`<div class="return-rarity-table"><div class="return-rarity-head"><b>装備ドロップ確率</b><small>装備1枠ごとの抽選</small></div>${returnRarityRates(save.state).map(row=>`<p class="rarity-${row.rarity}"><span>${row.rarity}</span><b>${row.label}</b></p>`).join("")}</div>`}
 function returnGradeBadge(grade){return`<div class="return-grade grade-${grade}"><small>探索評価</small><strong>${grade}</strong></div>`}
 function bindHome(){document.getElementById("openIdleReturn")?.addEventListener("click",()=>{const preview=idleReturnPreview(save.state);if(!preview.available)return;const result=claimIdleReturn(save.state);save.save();const minutes=Math.floor(result.elapsedMs/60000),hours=Math.floor(minutes/60),minutePart=minutes%60,timeText=hours>0?`${hours}時間${minutePart}分`:`${minutePart}分`,rarityRank={N:0,R:1,SR:2,SSR:3,LR:4},best=result.equipment.reduce((a,x)=>!a||rarityRank[x.item.rarity]>rarityRank[a.item.rarity]?x:a,null),equipmentRows=result.equipment.length?result.equipment.map(({item,receipt})=>`<div class="return-reward-item rarity-${item.rarity}"><b>${item.rarity} ${item.name}</b><small>${receipt.message}</small></div>`).join(""):'<p class="muted">今回は装備ドロップなし</p>',highlight=best&&["SSR","LR"].includes(best.item.rarity)?`<div class="return-reward-highlight rarity-${best.item.rarity}"><strong>${best.item.rarity} IDLE DROP!</strong><span>${best.item.name}</span></div>`:"";const grade=returnRewardGrade(result.floorUnits,result.equipment);app.insertAdjacentHTML("beforeend",Modal("放置帰還報告",`<div class="return-reward-report idle-return-report">${highlight}${returnGradeBadge(grade)}<div class="idle-return-emblem">🕯️</div><p><span>放置探索時間</span><b>${timeText}</b></p><p><span>探索地点</span><b>${result.expeditionFloor}階層帯</b></p><p><span>換算探索量</span><b>${result.floorUnits}階層分</b></p><p class="return-reward-gold"><span>獲得GOLD</span><b>${result.gold.toLocaleString()}G</b></p><h3>獲得装備 ${result.equipment.length}個</h3><div class="return-reward-items">${equipmentRows}</div>${returnRarityTable()}<small>放置報酬は手動探索の約1/10。装備は2時間ごとに1個、最大4個まで抽選します。</small></div>`,"受け取る"));const modal=topModal(),finish=()=>{modal?.remove();render()};modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish});document.getElementById("openMonsters").onclick=()=>go("monsters");document.getElementById("openSkills")?.addEventListener("click",()=>{skillTarget=save.state.party[0]??save.state.monsters[0]?.id;skillSlotSelection=0;go("skills")});document.getElementById("openAbyssSkillTree")?.addEventListener("click",()=>{abyssSkillCategory="economy";go("abyssSkills")});document.getElementById("openTeamBattle")?.addEventListener("click",openTeamBattle);document.getElementById("openEndgameForge")?.addEventListener("click",openEndgameForge);document.getElementById("editHomeParty")?.addEventListener("click",openHomePartyEditor);document.querySelectorAll("[data-empty-party]").forEach(b=>b.addEventListener("click",openHomePartyEditor));document.getElementById("openRest")?.addEventListener("click",openRest);document.getElementById("openGacha")?.addEventListener("click",openGacha);document.getElementById("openDeepGacha")?.addEventListener("click",openDeepGacha);document.getElementById("openWorldRecord")?.addEventListener("click",openWorldRecord);document.getElementById("openCodexHub")?.addEventListener("click",openCodexHub);document.getElementById("openMonsterCodex")?.addEventListener("click",()=>openCodex("monster"));document.getElementById("openEquipmentCodex")?.addEventListener("click",()=>openCodex("equipment"));document.getElementById("openSettings").onclick=()=>go("settings");document.getElementById("openExplore").onclick=()=>{const max=Math.min(WORLD_MAX_FLOOR,save.state.player.maxFloor);app.insertAdjacentHTML("beforeend",Modal("探索開始",`<p>再開する階層を選択</p><input id="floorSelect" type="number" min="1" max="${max}" value="${max}"><p class="muted">1〜${max}階。到達済みの階層から再開できます。</p>`,`出発`));const modal=topModal(),button=modal.querySelector("[data-modal-primary]");button.onclick=()=>{const f=Math.max(1,Math.min(max,Number(modal.querySelector("#floorSelect").value)||max));save.state.player.currentFloor=f;save.state.player.inRun=true;beginManualExpedition(save.state,f);save.save();snapshot=null;modal.remove();go("explore")}};document.getElementById("openEquipment").onclick=()=>{equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;navigationOrigin="home";go("equipment")};detailButtons()}
 
@@ -246,6 +250,7 @@ function bindAbyssSkills(){
   if(!confirm(`「${node.name}」を習得しますか？\n\n必要GOLD：${node.cost.toLocaleString()}G\n${node.description}`))return;
   const result=learnAbyssSkill(save.state,node.id);
   if(!result.ok){showToast(result.message);return}
+  normalizeEquipmentState();
   save.save();
   showToast(`${node.name}を習得！`);
   render();
@@ -255,6 +260,7 @@ function bindAbyssSkills(){
   if(!summary.learnedCount)return;
   if(!confirm(`深淵スキルをすべてリセットしますか？\n\n習得数：${summary.learnedCount}\n返還GOLD：${summary.investedGold.toLocaleString()}G\n\nリセット料金はかかりません。`))return;
   const result=resetAbyssSkillTree(save.state);
+  normalizeEquipmentState();
   save.save();
   showToast(`${result.refund.toLocaleString()}Gを全額返還！`);
   render();
@@ -304,7 +310,7 @@ function bindEquipment(){
 
 function selectableEquipment(){return save.state.equipment.filter(i=>!i.equippedBy&&!i.favorite&&!i.locked)}
 function selectEquipmentPreset(mode){const slot=save.state.settings.equipmentSlot??"weapon",pool=selectableEquipment().filter(i=>i.slot===slot);if(mode==="none")equipmentManage.selected.clear();else{const counts={};pool.forEach(i=>counts[i.name]=(counts[i.name]??0)+1);pool.filter(i=>mode==="all"||mode==="plus0"&&(i.plus??0)===0||mode==="duplicate"&&counts[i.name]>1||["N","R"].includes(mode)&&i.rarity===mode).forEach(i=>equipmentManage.selected.add(i.id))}render()}
-function sellSelectedEquipment(){const targets=selectableEquipment().filter(i=>equipmentManage.selected.has(i.id));if(!targets.length)return alert("売却できる装備が選択されていません");const total=targets.reduce((n,i)=>n+equipmentSellPrice(i),0);if(!confirm(`${targets.length}個を売却して ${total}G獲得します。`))return;const ids=new Set(targets.map(i=>i.id));save.state.equipment=save.state.equipment.filter(i=>!ids.has(i.id));save.state.player.gold+=total;equipmentManage.selected.clear();save.save();render()}
+function sellSelectedEquipment(){const targets=selectableEquipment().filter(i=>equipmentManage.selected.has(i.id));if(!targets.length)return alert("売却できる装備が選択されていません");const total=targets.reduce((n,i)=>n+equipmentSellPrice(i,save.state),0);if(!confirm(`${targets.length}個を売却して ${total}G獲得します。`))return;const ids=new Set(targets.map(i=>i.id));save.state.equipment=save.state.equipment.filter(i=>!ids.has(i.id));save.state.player.gold+=total;equipmentManage.selected.clear();save.save();render()}
 function lockSelectedEquipment(){const targets=save.state.equipment.filter(i=>equipmentManage.selected.has(i.id)&&!i.equippedBy&&!i.favorite);if(!targets.length)return alert("ロックできる装備が選択されていません");targets.forEach(i=>i.locked=true);equipmentManage.selected.clear();save.save();render()}
 function preserveVitals(monster,beforeStats,beforeMp){
  const oldHpMax=Math.max(1,beforeStats.hp),oldMpMax=Math.max(1,beforeMp);
@@ -378,7 +384,7 @@ function unequipMonsterAll(monsterId,confirmFirst=true){const monster=save.state
 function sellItem(itemId){
  const item=save.state.equipment.find(i=>i.id===itemId);
  if(!item||item.equippedBy||item.locked)return alert(item?.locked?"ロック中は売却できない":"装備中は売却できない");
- const price=equipmentSellPrice(item);
+ const price=equipmentSellPrice(item,save.state);
  if(!confirm(`${item.name}を${price}Gで売却する？`))return;
  save.state.equipment=save.state.equipment.filter(i=>i.id!==itemId);save.state.player.gold+=price;save.save();render();
 }
@@ -429,7 +435,7 @@ function openEquipmentEnhancement(id){
  modal.querySelector("#executeEquipmentEnhancement")?.addEventListener("click",()=>{const ids=[...selectedMaterials];if(!ids.length)return;const materials=ids.map(mid=>save.state.equipment.find(i=>i.id===mid)).filter(Boolean),total=materials.reduce((sum,m)=>sum+equipmentMaterialExp(m,item),0);if(!confirm(`${materials.length}個を素材にしますか？\n獲得EXP ${total.toLocaleString()}\n育成済みEXPは100%引き継がれます。`))return;const beforeOwner=item.equippedBy?save.state.monsters.find(m=>m.id===item.equippedBy):null,beforeStats=beforeOwner?calculatedStats(beforeOwner):null,beforeMp=beforeOwner?maxMp(beforeOwner):null,result=consumeEquipmentMaterials(save.state,item.id,ids);if(!result.ok)return alert(result.message);if(beforeOwner)preserveVitals(beforeOwner,beforeStats,beforeMp);save.save();modal.remove();showToast(result.gained?`${item.name} Lv.${item.level}へ！`:`${result.amount.toLocaleString()} EXP獲得`);render();openEquipmentEnhancement(item.id)});
  modal.querySelector("[data-modal-primary]").onclick=()=>modal.remove();refreshPreview();
 }
-function bulkSellEquipment(){const targets=save.state.equipment.filter(i=>!i.equippedBy&&!i.locked&&!i.favorite&&["N","R"].includes(i.rarity));if(!targets.length)return alert("売却対象がありません");const total=targets.reduce((n,i)=>n+equipmentSellPrice(i),0);if(!confirm(`${targets.length}個を一括売却して ${total}G獲得する？`))return;const ids=new Set(targets.map(i=>i.id));save.state.equipment=save.state.equipment.filter(i=>!ids.has(i.id));save.state.player.gold+=total;save.save();render()}
+function bulkSellEquipment(){const targets=save.state.equipment.filter(i=>!i.equippedBy&&!i.locked&&!i.favorite&&["N","R"].includes(i.rarity));if(!targets.length)return alert("売却対象がありません");const total=targets.reduce((n,i)=>n+equipmentSellPrice(i,save.state),0);if(!confirm(`${targets.length}個を一括売却して ${total}G獲得する？`))return;const ids=new Set(targets.map(i=>i.id));save.state.equipment=save.state.equipment.filter(i=>!ids.has(i.id));save.state.player.gold+=total;save.save();render()}
 function releaseMonster(m){if(save.state.party.includes(m.id))return alert("出撃中のモンスターは解放できません");if(m.favorite||m.locked)return alert("お気に入り・ロック中は解放できません");if(save.state.monsters.length<=1)return alert("最後の1体は解放できません");if(!confirm(`${displayName(m)}を解放する？\n魂として魔晶石1個を獲得します。`))return;Object.values(m.equipment??{}).forEach(id=>{const i=save.state.equipment.find(x=>x.id===id);if(i)i.equippedBy=null});save.state.monsters=save.state.monsters.filter(x=>x.id!==m.id);save.state.player.crystals++;save.save();go("monsters")}
 function partySynergy(){const counts={};save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean).forEach(m=>{const e=SPECIES[m.speciesId].element??"neutral";counts[e]=(counts[e]??0)+1});const [element,count]=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0]??[null,0];if(count<3)return null;const effects={fire:{name:"🔥 火の共鳴",atk:count>=4?.30:.20},water:{name:"💧 水の共鳴",regen:count>=4?.05:.03},dark:{name:"🌑 闇の共鳴",crit:count>=4?20:15},light:{name:"✨ 光の共鳴",def:count>=4?.20:.12},poison:{name:"☠️ 毒の共鳴",atk:count>=4?.18:.10}};return effects[element]?{element,count,...effects[element]}:null}
 function clearPartySynergy(){save.state.monsters.forEach(m=>delete m._synergy)}
@@ -559,7 +565,7 @@ function maze(){
  const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y),startCell=cells[Math.floor(rng()*cells.length)],exit=cells.reduce((a,c)=>distance(c,startCell)>distance(a,startCell)?c:a,cells[0]);
  const reserved=c=>distance(c,startCell)<=4||distance(c,exit)<=4,candidates=cells.filter(c=>!reserved(c)),used=new Set([`${startCell.x},${startCell.y}`,`${exit.x},${exit.y}`]);
  const pick=()=>{const available=candidates.filter(c=>!used.has(`${c.x},${c.y}`)),pool=available.length?available:candidates.length?candidates:cells,p={...pool[Math.floor(rng()*pool.length)]};used.add(`${p.x},${p.y}`);return p};
- const opened=save.state.player.openedChests[floor]??[],chests=[],treasureRoom=rng()<Math.min(.12,.035+Math.floor(floor/10)*.002),count=treasureRoom?7+Math.floor(rng()*4):(rng()<.16?0:rng()<.72?1:2);
+ const chestSpawnBonus=abyssSkillEffectTotal(save.state,"chestSpawnRate"),opened=save.state.player.openedChests[floor]??[],chests=[],treasureRoom=rng()<Math.min(.12,.035+Math.floor(floor/10)*.002),count=treasureRoom?7+Math.floor(rng()*4):(rng()<Math.max(0,.16-chestSpawnBonus)?0:rng()<.72?1:2);
  for(let i=0;i<count;i++){const roll=rng(),kind=treasureRoom?(roll>.48?"radiant":"cabinet"):roll>.96?"radiant":roll>.78?"cabinet":roll>.25?"box":"apple",locked=kind==="radiant"&&rng()<(treasureRoom?.58:.45),mimic=treasureRoom&&rng()<.5,emoji=mimic?"🧰":locked?"🔒":{apple:"🪎",box:"📦",cabinet:"🗃️",radiant:"✨📦"}[kind],p=pick();chests.push({...p,id:`${floor}-${i}`,kind,emoji,locked,mimic,open:opened.includes(`${floor}-${i}`)})}
  const shopChance=floor%10===0?.35:.09,shop=rng()<shopChance?{...pick(),active:true}:null;if(shop)save.state.player.nextShopFloor=floor+3+Math.floor(rng()*8);
  const boss=floor%10===0?{...pick(),active:true}:null;
@@ -713,7 +719,25 @@ function update(dt){
  game.camera.follow(game.player.rx*TILE,game.player.ry*TILE);
  game.camera.clamp(game.world)
 }
-function openChest(c){const floor=save.state.player.currentFloor;if(c.locked&&(save.state.inventory.abyssKeys??0)<=0){game.player.path=[];return pauseModal("🔒 鍵付き宝箱",'<p>深淵の鍵が必要だ。</p><p class="muted">鍵は強敵やごく稀な敵ドロップから入手できます。</p>')}if(c.locked)save.state.inventory.abyssKeys--;c.open=true;save.state.player.openedChests[floor]??=[];if(!save.state.player.openedChests[floor].includes(c.id))save.state.player.openedChests[floor].push(c.id);recordBiomeChest(save.state,floor,c.id);save.state.records.chests++;if(c.mimic){save.save();game.player.path=[];pauseModal("！？","<p>宝箱が牙を剥いた！</p>");setTimeout(()=>{closeTopModal();game.paused=false;beginEncounter({speciesId:"mimic",level:Math.max(enemyLevelForFloor(floor)+12,Math.round(floor*1.5)),boss:false,equipped:true,gear:createEquipment("accessory",{rarity:"SR"})})},650);return}let title="宝箱",body="";if(c.kind==="apple"){save.state.inventory.potions++;title="🪎 深淵の果実";body="回復薬を1個獲得"}else if(c.kind==="box"){if(Math.random()<.5){const gold=80+floor*12;save.state.player.gold+=gold;body=`${gold}Gを獲得`}else{const item=createEquipment("weapon"),receipt=equipmentReceipt(item);body=equipmentReceiptText(receipt)}}else{const rarity=c.locked?(Math.random()<.25?"LR":"SSR"):c.kind==="radiant"?(Math.random()<.35?"LR":"SSR"):(Math.random()<.35?"SSR":"SR"),item=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)],{rarity}),receipt=equipmentReceipt(item);title=c.locked?"🔓 鍵付き宝箱":c.kind==="radiant"?"✨ 輝く宝箱":"🗃️ 古い収納箱";body=`${equipmentReceiptText(receipt)}<br>${Object.entries(item.stats).map(([k,v])=>`${equipmentStatLabel(k)}+${v}`).join(" / ")}`}save.save();pauseModal(title,body)}
+function openChest(c){
+ const floor=save.state.player.currentFloor;
+ if(c.locked&&(save.state.inventory.abyssKeys??0)<=0){game.player.path=[];return pauseModal("🔒 鍵付き宝箱",'<p>深淵の鍵が必要だ。</p><p class="muted">鍵は強敵やごく稀な敵ドロップから入手できます。</p>')}
+ if(c.locked)save.state.inventory.abyssKeys--;
+ c.open=true;save.state.player.openedChests[floor]??=[];
+ if(!save.state.player.openedChests[floor].includes(c.id))save.state.player.openedChests[floor].push(c.id);
+ recordBiomeChest(save.state,floor,c.id);save.state.records.chests++;
+ if(c.mimic){save.save();game.player.path=[];pauseModal("！？","<p>宝箱が牙を剥いた！</p>");setTimeout(()=>{closeTopModal();game.paused=false;beginEncounter({speciesId:"mimic",level:Math.max(enemyLevelForFloor(floor)+12,Math.round(floor*1.5)),boss:false,equipped:true,gear:createEquipment("accessory",{rarity:"SR"})})},650);return}
+ let title="宝箱",body="";
+ if(c.kind==="apple"){save.state.inventory.potions++;title="🪎 深淵の果実";body="回復薬を1個獲得"}
+ else if(c.kind==="box"){
+  if(Math.random()<.5){const gold=abyssGoldReward(save.state,80+floor*12,"exploration");save.state.player.gold+=gold;body=`${gold}Gを獲得`}
+  else{const item=createEquipment("weapon"),receipt=equipmentReceipt(item);body=equipmentReceiptText(receipt)}
+ }else{
+  const luck=abyssEquipmentRarityBonus(save.state),rarity=c.locked?(Math.random()<Math.min(.75,.25+luck*.05)?"LR":"SSR"):c.kind==="radiant"?(Math.random()<Math.min(.85,.35+luck*.05)?"LR":"SSR"):(Math.random()<Math.min(.90,.35+luck*.05)?"SSR":"SR"),item=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)],{rarity}),receipt=equipmentReceipt(item);
+  title=c.locked?"🔓 鍵付き宝箱":c.kind==="radiant"?"✨ 輝く宝箱":"🗃️ 古い収納箱";body=`${equipmentReceiptText(receipt)}<br>${Object.entries(item.stats).map(([k,v])=>`${equipmentStatLabel(k)}+${v}`).join(" / ")}`
+ }
+ save.save();pauseModal(title,body)
+}
 function explorationPartyMembers(){return(save.state.party??[]).map(id=>save.state.monsters?.find(monster=>monster.id===id)).filter(Boolean)}
 function explorationLeaderEmoji(){const leader=explorationPartyMembers()[0];return SPECIES[leader?.speciesId]?.emoji??"😈"}
 function updateExplorationPartyTrail(){
@@ -847,6 +871,7 @@ function clearBattleCheckpoint(){delete save.state.activeBattle;save.save()}
 function resumeSavedBattle(){const data=save.state.activeBattle;if(!data?.enemies?.length)return false;const party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);if(!party.length)return false;save.state.player.currentFloor=data.floor??save.state.player.currentFloor;battle={...data,party,species:SPECIES,busy:false,skillMenu:false,itemMenu:false,enemy:data.enemies[0],...createBattleRulesState(party),cooldowns:data.cooldowns??{},enemyStatuses:data.enemyStatuses??{},allyEffects:data.allyEffects??{},enemyEffects:data.enemyEffects??{},log:data.log??[]};battle.turnQueue=data.turnQueue??[];battle.queueIndex=data.queueIndex??0;battle.targetEnemyId=data.targetEnemyId??aliveEnemies(battle)[0]?.id??null;screen="explore";renderBattle();setTimeout(()=>continueBattleFlow(),250);return true}
 function affixValue(monster,id,cap=Infinity){return Math.max(0,Math.min(cap,Number(monster?._equipmentAffixes?.[id]??0)))}
 function partyAffixTotal(id,cap=Infinity){return Math.max(0,Math.min(cap,(battle?.party??[]).reduce((sum,m)=>sum+affixValue(m,id),0)))}
+function abyssBattleMultiplier(monster,key){return Math.max(0,1+(Number(monster?._abyssSkillEffects?.[key])||0))}
 function healMultiplier(monster){return 1+affixValue(monster,"healPower",100)/100}
 function outgoingLifeSteal(monster){return affixValue(monster,"lifeSteal",30)/100}
 function equipmentRegenRate(monster){return affixValue(monster,"regen",20)/100}
@@ -921,7 +946,7 @@ async function command(type,skillId=null){
   else{
    const critical=Math.random()<affixCriticalChance(s,Math.min(.35,.08+(s.spd??0)*.005));
    const base=Math.max(1,Math.floor(s.atk*(.9+Math.random()*.2)-e.def*.4));
-   const critMult=1.7+affixValue(a,"critDamage",150)/100,damageStats={...s,_currentHpRatio:a.currentHp/Math.max(1,s.hp)},raw=(critical?Math.floor(base*critMult):base)*affixOutgoingDamageMultiplier(damageStats,e)*affixExecutionMultiplier(a,e),beforeHp=e.hp,d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)*weaponMasteryDamageMultiplier(save.state,a,e)));e.hp=Math.max(0,e.hp-d);registerWeaponFinisher(a,e,beforeHp);const steal=outgoingLifeSteal(a);if(steal){const h=Math.max(1,Math.floor(d*steal));a.currentHp=Math.min(s.hp,a.currentHp+h)}
+   const critMult=1.7+affixValue(a,"critDamage",150)/100,damageStats={...s,_currentHpRatio:a.currentHp/Math.max(1,s.hp)},raw=(critical?Math.floor(base*critMult):base)*affixOutgoingDamageMultiplier(damageStats,e)*affixExecutionMultiplier(a,e),beforeHp=e.hp,d=Math.max(1,Math.floor(raw*abyssBattleMultiplier(a,"partyDamageRate")*enemyDamageMultiplier(e)*weaponMasteryDamageMultiplier(save.state,a,e)));e.hp=Math.max(0,e.hp-d);registerWeaponFinisher(a,e,beforeHp);const steal=outgoingLifeSteal(a);if(steal){const h=Math.max(1,Math.floor(d*steal));a.currentHp=Math.min(s.hp,a.currentHp+h)}
    await animateHit(e.id,critical);if(critical){battleFlash("critical");burstParticles(e.id,"critical",16)}await floatText(`${critical?"CRITICAL ":""}-${d}`,e.id,critical?"critical":"damage");
   }
  }
@@ -944,12 +969,12 @@ async function command(type,skillId=null){
   }else{
    await animateAttack(a.id,true);const hits=skill.hits??1;let total=0;const skillTargets=skill.allEnemies?aliveEnemies(battle):[e];
    for(const targetEnemy of skillTargets){const e=targetEnemy;for(let i=0;i<hits&&e.hp>0;i++){
-    const critical=Math.random()<affixCriticalChance(s,Math.min(.65,.1+(skill.critBonus??0)+(s.spd??0)*.004)),boosted={...s,atk:s.atk*allyAttackFactor(a.id),_currentHpRatio:a.currentHp/Math.max(1,s.hp)},execute=(skill.execute&&e.hp/e.maxHp<=skill.execute)?2:1,raw=skillDamage(boosted,{...e,def:e.def*enemyDefenseFactor(e.id)},skill,critical)*execute*affixExecutionMultiplier(a,e),beforeHp=e.hp,d=Math.max(1,Math.floor(raw*enemyDamageMultiplier(e)*weaponMasteryDamageMultiplier(save.state,a,e)));
+    const critical=Math.random()<affixCriticalChance(s,Math.min(.65,.1+(skill.critBonus??0)+(s.spd??0)*.004)),boosted={...s,atk:s.atk*allyAttackFactor(a.id),_currentHpRatio:a.currentHp/Math.max(1,s.hp)},execute=(skill.execute&&e.hp/e.maxHp<=skill.execute)?2:1,raw=skillDamage(boosted,{...e,def:e.def*enemyDefenseFactor(e.id)},skill,critical)*execute*affixExecutionMultiplier(a,e),beforeHp=e.hp,d=Math.max(1,Math.floor(raw*abyssBattleMultiplier(a,"partyDamageRate")*enemyDamageMultiplier(e)*weaponMasteryDamageMultiplier(save.state,a,e)));
     e.hp=Math.max(0,e.hp-d);registerWeaponFinisher(a,e,beforeHp);total+=d;await animateHit(e.id,critical);if(critical){battleFlash("critical");burstParticles(e.id,"critical",14)}await floatText(`${critical?"CRITICAL ":""}-${d}`,e.id,critical?"critical":"skill")
    }
    }
    if(skill.type==="drain"||hasEffect(battle,a.id,"lifeSteal")||outgoingLifeSteal(a)>0){const rate=(skill.drain??0)+effectValue(battle,a.id,"lifeSteal")+outgoingLifeSteal(a),h=Math.max(1,Math.floor(total*Math.min(1.25,rate)));a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal")}
-   if(skill.status&&e.hp>0&&Math.random()<Math.min(1,skill.status.chance*(1+affixValue(a,"statusChance",100)/100))){applyEnemyStatus(battle,{...skill.status,power:(skill.status.power??0)*(1+affixValue(a,"dotDamage",150)/100),sourceMonsterId:a.id},e.id);addBattleLog(battle,`${e.name}は${skill.status.name}状態になった`);await floatText(skill.status.name,e.id,skill.status.id)}applySkillEffects(skill,a,e)
+   if(skill.status&&e.hp>0&&Math.random()<Math.min(1,skill.status.chance*(1+affixValue(a,"statusChance",100)/100))){applyEnemyStatus(battle,{...skill.status,power:(skill.status.power??0)*(1+affixValue(a,"dotDamage",150)/100)*abyssBattleMultiplier(a,"partyDamageRate"),sourceMonsterId:a.id},e.id);addBattleLog(battle,`${e.name}は${skill.status.name}状態になった`);await floatText(skill.status.name,e.id,skill.status.id)}applySkillEffects(skill,a,e)
   }
   if(skillCompleted){const echoChance=affixValue(a,"arcaneEcho",60)/100;if(mpCost>0&&echoChance&&Math.random()<echoChance){a.currentMp=Math.min(maxMp(a),a.currentMp+mpCost);addBattleLog(battle,`${displayName(a)}：MP還元が発動`);await floatText(`MP +${mpCost}`,a.id,"heal")}const beforeMasteryLevel=skillProgressFor(a,skill.id).level,masteryBonus=Math.max(0,Number(a._equipmentAffixes?.skillMasteryGain??0)),mastery=recordSkillUse(a,skill.id,1+masteryBonus/100);if(mastery.level>beforeMasteryLevel){addBattleLog(battle,`${displayName(a)}：${skill.name} 熟練Lv.${mastery.level}へ上昇`);await floatText(`SKILL Lv.${mastery.level}`,a.id,"skill")}}
  }
@@ -965,7 +990,7 @@ async function command(type,skillId=null){
   if(e.boss){const floor=save.state.player.currentFloor,defeated=(save.state.player.bossKills[floor]??0)>0;if(!defeated){battle.busy=false;return alert("初回の階層ボスは捕獲できません。まず撃破してください。")}}
   if(save.state.inventory.captureCrystals<=0){battle.busy=false;return alert("捕獲結晶がない")}
   save.state.inventory.captureCrystals--;addBattleLog(battle,"捕獲を試みた");
-  const captureBonus=affixValue(a,"captureRate",50)/100,chance=e.boss?Math.max(.01,Math.min(.20,(.01+(1-e.hp/e.maxHp)*.04)*currentDanger().bossCapture+captureBonus)):Math.max(.08,Math.min(.95,.2+(1-e.hp/e.maxHp)*.55+(Math.max(...battle.party.map(m=>m.level+m.stars*2+m.plus))-e.level)*.012+captureBonus));
+  const captureBonus=affixValue(a,"captureRate",50)/100,baseCapture=e.boss?(.01+(1-e.hp/e.maxHp)*.04)*currentDanger().bossCapture+captureBonus:.2+(1-e.hp/e.maxHp)*.55+(Math.max(...battle.party.map(m=>m.level+m.stars*2+m.plus))-e.level)*.012+captureBonus,chance=e.boss?Math.max(.01,abyssExplorationChance(save.state,baseCapture,null,{max:.20})):Math.max(.08,abyssExplorationChance(save.state,baseCapture,null,{max:.95}));
   await floatText(`捕獲 ${Math.round(chance*100)}%`,e.id,"capture");await wait(500);
   if(Math.random()<chance){const m=createMonster(e.speciesId,{level:e.level,isBoss:e.boss,sealedPower:e.boss?{state:"sealed",originalDanger:e.dangerLevel??1,awakening:0}:null,obtainedMethod:"capture",obtainedFloor:save.state.player.currentFloor,nickname:e.boss?`封印 ${SPECIES[e.speciesId].name}`:undefined});save.state.monsters.push(m);save.state.records.captures++;save.state.codex.captures[e.speciesId]=(save.state.codex.captures[e.speciesId]??0)+1;e.captured=true;e.hp=0;save.save();battleFlash("capture");burstParticles(e.id,"capture",22);await battleBanner("CAPTURE!",`${e.name}が仲間になった`,"capture",760);await animateDefeat(e.id,true);battle.targetEnemyId=aliveEnemies(battle)[0]?.id??null;if(!aliveEnemies(battle).length)return win(true,m);addBattleLog(battle,`${e.name}を捕獲した`)}
  }
@@ -988,10 +1013,10 @@ function chooseEnemyTarget(enemy=null,mode="normal"){
 async function dealEnemyHit(e,target,multiplier=1,label="",criticalChance=.08){
  const st=calculatedStats(target),guard=Boolean(battle.guards[target.id]),critical=Math.random()<criticalChance;
  if(Math.random()<Math.min(.60,(st.evasion??0)/100)){addBattleLog(battle,`${displayName(target)}が回避した`);await floatText("DODGE",target.id,"miss");return 0}
- const guardFx=Math.min(.85,effectValue(battle,target.id,"guard")*(1+affixValue(target,"guardPower",100)/100)),vulnerable=effectValue(battle,target.id,"vulnerable"),reduction=Math.min(.75,affixValue(target,"damageReduction",75)/100);let d=Math.max(1,Math.floor((e.atk*enemyAttackFactor(e.id)-st.def*allyDefenseFactor(target.id)*.45)*multiplier*(guard?Math.max(.15,.45-affixValue(target,"guardPower",100)/200):1)*(1-guardFx)*(1+vulnerable)*(1-reduction)));if(critical)d=Math.floor(d*1.55);
+ const guardFx=Math.min(.85,effectValue(battle,target.id,"guard")*(1+affixValue(target,"guardPower",100)/100)),vulnerable=effectValue(battle,target.id,"vulnerable"),reduction=Math.min(.75,affixValue(target,"damageReduction",75)/100);let d=Math.max(1,Math.floor((e.atk*enemyAttackFactor(e.id)-st.def*allyDefenseFactor(target.id)*.45)*multiplier*(guard?Math.max(.15,.45-affixValue(target,"guardPower",100)/200):1)*(1-guardFx)*(1+vulnerable)*(1-reduction)*abyssBattleMultiplier(target,"partyDamageTakenRate")));if(critical)d=Math.floor(d*1.55);
  target.currentHp=Math.max(0,target.currentHp-d);if(target.currentHp<=0&&tryUnyielding(target)){addBattleLog(battle,`${displayName(target)}の致死耐性が発動！`);await floatText("UNYIELDING",target.id,"guard")}else addBattleLog(battle,`${displayName(target)}に${d}ダメージ`);
  await animateHit(target.id,critical);if(critical){battleFlash("danger");burstParticles(target.id,"enemy",14)}await floatText(`${label}${critical?"CRITICAL ":""}-${d}`,target.id,critical?"critical":"enemy");
- if(target.currentHp<=0)await animateDefeat(target.id);else if(hasEffect(battle,target.id,"counter")){const cs=calculatedStats(target),counterBoost=1+affixValue(target,"counterDamage",150)/100,counter=Math.max(1,Math.floor((cs.atk*effectValue(battle,target.id,"counter")-e.def*.25)*counterBoost));e.hp=Math.max(0,e.hp-counter);addBattleLog(battle,`${displayName(target)}が${counter}反撃ダメージ`);await floatText(`COUNTER -${counter}`,e.id,"skill")}return d;
+ if(target.currentHp<=0)await animateDefeat(target.id);else if(hasEffect(battle,target.id,"counter")){const cs=calculatedStats(target),counterBoost=1+affixValue(target,"counterDamage",150)/100,counter=Math.max(1,Math.floor((cs.atk*effectValue(battle,target.id,"counter")-e.def*.25)*counterBoost*abyssBattleMultiplier(target,"partyDamageRate")));e.hp=Math.max(0,e.hp-counter);addBattleLog(battle,`${displayName(target)}が${counter}反撃ダメージ`);await floatText(`COUNTER -${counter}`,e.id,"skill")}return d;
 }
 async function enemyTurn(){
  if(battle.busy)return;const entry=currentTurnEntry(battle);if(entry?.type!=="enemy")return continueBattleFlow();
@@ -1054,7 +1079,7 @@ function expNeed(m){return expNeedFor(m)}
 function win(caught,m){
  if(battle?.specialBattle)return finishSpecialBattle(true);
  const defeated=(battle.enemies??[battle.enemy]).filter(Boolean),floor=save.state.player.currentFloor,boss=defeated.find(e=>e.boss),eliteDefeated=defeated.filter(e=>e.elite&&!e.captured),firstBoss=!!boss&&!save.state.player.bossRewards[floor];
- const rewardMult=eliteDefeated.length?1.65:1,goldBonus=partyAffixTotal("goldGain",300)/100;const gold=Math.round(defeated.reduce((sum,e)=>sum+(e.boss?(firstBoss?80+e.level*14:28+e.level*7):16+e.level*5),0)*rewardMult*(1+goldBonus));
+ const rewardMult=eliteDefeated.length?1.65:1,goldBonus=partyAffixTotal("goldGain",300)/100,baseGold=Math.round(defeated.reduce((sum,e)=>sum+(e.boss?(firstBoss?80+e.level*14:28+e.level*7):16+e.level*5),0)*rewardMult*(1+goldBonus)),gold=abyssGoldReward(save.state,baseGold,"battle");
  save.state.player.gold+=gold;
  save.state.records.kills+=defeated.filter(e=>!e.captured).length;
  const baseGain=defeated.reduce((sum,e)=>{
@@ -1063,10 +1088,11 @@ function win(caught,m){
   const difficulty=(e.gear?1.35:1)*(e.level>floor+4?1.2:1);
   return sum+Math.max(6,Math.round((10+e.level*4.4)*difficulty))
  },0);
- const totalExp=Math.round(baseGain*battle.party.length*rewardMult);
- const crystalRoll=defeated.reduce((sum,e)=>{const chance=e.boss?1:e.speciesId==="mimic"?1:e.gear?.25:.06;if(Math.random()<chance)return sum+(e.boss?20+Math.floor(e.level/10):e.speciesId==="mimic"?3+Math.floor(Math.random()*8):1);return sum},0);if(crystalRoll)save.state.player.crystals+=crystalRoll;
- let eliteBonusGold=0,eliteBonusCrystals=0,eliteKeyDrop=false;for(const elite of eliteDefeated){const reward=eliteRewards(elite,floor);eliteBonusGold+=reward.gold;eliteBonusCrystals+=reward.crystals;eliteKeyDrop=eliteKeyDrop||Math.random()<reward.keyChance;recordEliteDefeat(save.state,elite)}save.state.player.gold+=eliteBonusGold;save.state.player.crystals+=eliteBonusCrystals;
- const keyDrop=eliteKeyDrop||defeated.some(e=>!e.boss&&Math.random()<.002*currentDanger().keyRate)||(firstBoss&&floor%50===0);
+ const totalExp=Math.round(baseGain*battle.party.length*rewardMult*abyssSkillMultiplier(save.state,"explorationRewardRate"));
+ const crystalRoll=defeated.reduce((sum,e)=>{const chance=e.boss?1:e.speciesId==="mimic"?1:e.gear?.25:.06;if(Math.random()<abyssExplorationChance(save.state,chance,null,{max:1}))return sum+(e.boss?20+Math.floor(e.level/10):e.speciesId==="mimic"?3+Math.floor(Math.random()*8):1);return sum},0);if(crystalRoll)save.state.player.crystals+=crystalRoll;
+ const eliteAmountRate=abyssSkillEffectTotal(save.state,"eliteRewardRate")+abyssSkillEffectTotal(save.state,"explorationRewardRate");
+ let eliteBonusGold=0,eliteBonusCrystals=0,eliteKeyDrop=false;for(const elite of eliteDefeated){const reward=eliteRewards(elite,floor);eliteBonusGold+=abyssGoldReward(save.state,reward.gold,"elite");eliteBonusCrystals+=Math.max(0,Math.round(reward.crystals*(1+eliteAmountRate)));eliteKeyDrop=eliteKeyDrop||Math.random()<abyssExplorationChance(save.state,reward.keyChance,"abyssKeyDropRate",{max:.95});recordEliteDefeat(save.state,elite)}save.state.player.gold+=eliteBonusGold;save.state.player.crystals+=eliteBonusCrystals;
+ const keyDrop=eliteKeyDrop||defeated.some(e=>!e.boss&&Math.random()<abyssExplorationChance(save.state,.002*currentDanger().keyRate,"abyssKeyDropRate",{max:.95}))||(firstBoss&&floor%50===0);
  if(keyDrop)save.state.inventory.abyssKeys=(save.state.inventory.abyssKeys??0)+1;
  const survivors=battle.party.filter(monster=>monster.currentHp>0);
  const share=survivors.length?Math.floor(totalExp/survivors.length):0;
@@ -1095,14 +1121,15 @@ function win(caught,m){
 
  let drop=null,dropReceipt=null;
  const geared=defeated.find(e=>e.gear);
- const dropBonus=partyAffixTotal("dropRate",200)/100,rareBonus=partyAffixTotal("treasureSense",200)/100;
- if(geared&&Math.random()<Math.min(.85,.18*(1+dropBonus))){drop={...geared.gear,id:crypto.randomUUID?.()??`${Date.now()}-${Math.random()}`,equippedBy:null,createdAt:new Date().toISOString()};dropReceipt=equipmentReceipt(drop)}else if(Math.random()<Math.min(.75,.12*(1+dropBonus))){const rarityRoll=Math.random(),rarity=rarityRoll<Math.min(.35,.04+rareBonus*.12)?"LR":rarityRoll<Math.min(.70,.18+rareBonus*.22)?"SSR":rarityRoll<.60?"SR":undefined;drop=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)],rarity?{rarity}:undefined);dropReceipt=equipmentReceipt(drop)}
+ const dropBonus=partyAffixTotal("dropRate",200)/100,rareBonus=partyAffixTotal("treasureSense",200)/100,rarityLuck=abyssEquipmentRarityBonus(save.state);
+ const gearedDropChance=abyssExplorationChance(save.state,.18*(1+dropBonus),"equipmentDropRate",{additive:true,max:.85}),genericDropChance=abyssExplorationChance(save.state,.12*(1+dropBonus),"equipmentDropRate",{additive:true,max:.75});
+ if(geared&&Math.random()<gearedDropChance){drop={...geared.gear,id:crypto.randomUUID?.()??`${Date.now()}-${Math.random()}`,equippedBy:null,createdAt:new Date().toISOString()};dropReceipt=equipmentReceipt(drop)}else if(Math.random()<genericDropChance){const rarityRoll=Math.random(),rarity=rarityRoll<Math.min(.35,.04+rareBonus*.12+rarityLuck*.01)?"LR":rarityRoll<Math.min(.70,.18+rareBonus*.22+rarityLuck*.04)?"SSR":rarityRoll<.60?"SR":undefined;drop=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)],rarity?{rarity}:undefined);dropReceipt=equipmentReceipt(drop)}
 
  clearPartySynergy();clearBattleCheckpoint();
  activeEnemy=null;
  document.querySelector(".battle-screen")?.remove();
 
- const victorySubtitle=boss?`👑 ${String(boss.name??SPECIES[boss.speciesId]?.name??"BOSS").replace(/^⚔️\s*/,"")}撃破！`:caught?`${m.nickname}を捕獲！`:"";const result=`<div class="battle-result-cinematic ${boss?"boss-clear":""} ${caught?"capture-clear":""}"><div class="victory-rays"></div><div class="victory-title">${boss?"BOSS DEFEATED":caught?"CAPTURE SUCCESS":"VICTORY"}</div>${victorySubtitle?`<div class="victory-subtitle">${victorySubtitle}</div>`:""}</div><div class="reward-summary cinematic-rewards"><b>🪙 +${gold}G</b>${crystalRoll+eliteBonusCrystals?`<b>💎 +${crystalRoll+eliteBonusCrystals}</b>`:""}${eliteBonusGold?`<b class="elite-reward">🜲 エリート討伐 +${eliteBonusGold.toLocaleString()}G</b>`:""}<small>基礎総EXP ${totalExp} / 生存 ${survivors.length}体で分配${firstBoss?"・初回ボス撃破ボーナス":""}</small>${drop?`<b>[${drop.rarity}] ${drop.name}（${slotLabel(drop.slot)}）</b><small>${dropReceipt.message}</small>`:""}${keyDrop?`<b>🗝️ 深淵の鍵を獲得</b>`:""}${caught?`<b>${m.nickname}を捕獲！</b>`:""}${seriesMasteryResults.length?`<div class="series-mastery-result">${seriesMasteryResults.map(row=>`<small>${row.leveled?"✨ ":""}${EQUIPMENT_SERIES[row.seriesId]?.name??row.seriesId}熟練度 +${row.amount}${row.leveled?`　Lv.${row.after.level} ${row.after.label}へ！`:""}</small>`).join("")}</div>`:""}</div><div class="exp-results compact">${progress.map(p=>{const hpMax=p.afterStats.hp,mpMax=maxMp(p.x),remaining=Math.max(0,p.need-p.x.exp),diff=k=>p.afterStats[k]-(p.before.stats[k]??0);return`<div class="${p.alive?"":"exp-defeated"} ${p.levels?"level-up-card level-up-reveal":""}"><span>${SPECIES[p.x.speciesId].emoji}</span><section><b>${displayName(p.x)} ${p.levels?`Lv.${p.before.level} → Lv.${p.x.level}`:`Lv.${p.x.level}`}</b><div class="result-vitals"><small>HP ${p.x.currentHp}/${hpMax}</small><small>MP ${p.x.currentMp}/${mpMax}</small><small>${p.alive?`次まであと${remaining}EXP`:"戦闘不能：EXP 0"}</small></div><i class="result-exp"><u style="width:${Math.min(100,p.x.exp/p.need*100)}%"></u></i>${p.levels?`<div class="level-gains"><span>HP ${p.before.stats.hp} → ${p.afterStats.hp} <strong>+${diff("hp")}</strong></span><span>ATK ${p.before.stats.atk} → ${p.afterStats.atk} <strong>+${diff("atk")}</strong></span><span>DEF ${p.before.stats.def} → ${p.afterStats.def} <strong>+${diff("def")}</strong></span><span>SPD ${p.before.stats.spd} → ${p.afterStats.spd} <strong>+${diff("spd")}</strong></span></div>`:""}</section></div>`}).join("")}</div>`;
+ const victorySubtitle=boss?`👑 ${String(boss.name??SPECIES[boss.speciesId]?.name??"BOSS").replace(/^⚔️\s*/,"")}撃破！`:caught?`${m.nickname}を捕獲！`:"";const result=`<div class="battle-result-cinematic ${boss?"boss-clear":""} ${caught?"capture-clear":""}"><div class="victory-rays"></div><div class="victory-title">${boss?"BOSS DEFEATED":caught?"CAPTURE SUCCESS":"VICTORY"}</div>${victorySubtitle?`<div class="victory-subtitle">${victorySubtitle}</div>`:""}</div><div class="reward-summary cinematic-rewards"><b>🪙 +${gold}G</b>${crystalRoll+eliteBonusCrystals?`<b>💎 +${crystalRoll+eliteBonusCrystals}</b>`:""}${eliteBonusGold?`<b class="elite-reward">🜲 エリート討伐 +${eliteBonusGold.toLocaleString()}G</b>`:""}<small>総EXP ${totalExp} / 生存 ${survivors.length}体で分配${firstBoss?"・初回ボス撃破ボーナス":""}</small>${drop?`<b>[${drop.rarity}] ${drop.name}（${slotLabel(drop.slot)}）</b><small>${dropReceipt.message}</small>`:""}${keyDrop?`<b>🗝️ 深淵の鍵を獲得</b>`:""}${caught?`<b>${m.nickname}を捕獲！</b>`:""}${seriesMasteryResults.length?`<div class="series-mastery-result">${seriesMasteryResults.map(row=>`<small>${row.leveled?"✨ ":""}${EQUIPMENT_SERIES[row.seriesId]?.name??row.seriesId}熟練度 +${row.amount}${row.leveled?`　Lv.${row.after.level} ${row.after.label}へ！`:""}</small>`).join("")}</div>`:""}</div><div class="exp-results compact">${progress.map(p=>{const hpMax=p.afterStats.hp,mpMax=maxMp(p.x),remaining=Math.max(0,p.need-p.x.exp),diff=k=>p.afterStats[k]-(p.before.stats[k]??0);return`<div class="${p.alive?"":"exp-defeated"} ${p.levels?"level-up-card level-up-reveal":""}"><span>${SPECIES[p.x.speciesId].emoji}</span><section><b>${displayName(p.x)} ${p.levels?`Lv.${p.before.level} → Lv.${p.x.level}`:`Lv.${p.x.level}`}</b><div class="result-vitals"><small>HP ${p.x.currentHp}/${hpMax}</small><small>MP ${p.x.currentMp}/${mpMax}</small><small>${p.alive?`次まであと${remaining}EXP`:"戦闘不能：EXP 0"}</small></div><i class="result-exp"><u style="width:${Math.min(100,p.x.exp/p.need*100)}%"></u></i>${p.levels?`<div class="level-gains"><span>HP ${p.before.stats.hp} → ${p.afterStats.hp} <strong>+${diff("hp")}</strong></span><span>ATK ${p.before.stats.atk} → ${p.afterStats.atk} <strong>+${diff("atk")}</strong></span><span>DEF ${p.before.stats.def} → ${p.afterStats.def} <strong>+${diff("def")}</strong></span><span>SPD ${p.before.stats.spd} → ${p.afterStats.spd} <strong>+${diff("spd")}</strong></span></div>`:""}</section></div>`}).join("")}</div>`;
 
  if(boss){battle.enemy=boss;save.state.player.bossKills[floor]=(save.state.player.bossKills[floor]??0)+1;if(floor===1000)mark1000FloorCleared(save.state);recordBiomeBoss(save.state,floor);if(snapshot?.world)snapshot.world.boss=null;if(firstBoss)return showBossRewards(result)}
  app.insertAdjacentHTML("beforeend",Modal(caught?"捕獲成功！":"戦闘結果",result,"探索へ"));
@@ -1120,4 +1147,5 @@ function lose(){
  app.insertAdjacentHTML("beforeend",Modal("DEFEAT",`<div class="defeat-cinematic"><div class="defeat-mark">☠</div><h2>深淵に敗れた…</h2><p><b>${lost}G</b>を失い、${save.state.player.checkpoint}Fの拠点へ帰還します。</p><small>仲間はHP1で救出されました。</small></div>`,"拠点へ戻る"));
  const modal=topModal(),returnHome=()=>{modal?.remove();battle=null;go("home")};modal._onDismiss=returnHome;modal.querySelector("[data-modal-primary]").onclick=returnHome
 }
+normalizeEquipmentState();
 if(!resumeSavedBattle())render();
