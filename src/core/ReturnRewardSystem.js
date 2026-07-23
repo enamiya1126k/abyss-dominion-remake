@@ -1,3 +1,6 @@
+import{createEquipment}from"../models/Equipment.js?v=0.9.15-alpha.36-return-equipment-phase1";
+import{receiveEquipment}from"../services/EquipmentStorage.js?v=0.9.15-alpha.36-return-equipment-phase1";
+
 const EMPTY_MANUAL={active:false,startFloor:1,lastFloor:1,floorsCleared:0,pendingGold:0,startedAt:null};
 
 function safeFloor(value){return Math.max(1,Math.min(10000,Math.floor(Number(value)||1)))}
@@ -9,6 +12,29 @@ export function goldForClearedFloor(floor){
  const depth=Math.pow(1+f/120,1.42);
  const milestone=1+Math.floor((f-1)/100)*0.18;
  return Math.max(20,Math.round(base*depth*milestone));
+}
+
+export function manualEquipmentDropCount(floorsCleared){
+ const n=Math.max(0,Math.floor(Number(floorsCleared)||0));
+ if(n<5)return 0;
+ if(n<10)return 1;
+ if(n<20)return 2;
+ return 3;
+}
+
+export function rollManualReturnRarity(){
+ const r=Math.random();
+ if(r<.001)return"LR";
+ if(r<.04)return"SSR";
+ if(r<.20)return"SR";
+ if(r<.55)return"R";
+ return"N";
+}
+
+function createManualReturnEquipment(){
+ const slots=["weapon","armor","accessory"];
+ const slot=slots[Math.floor(Math.random()*slots.length)];
+ return createEquipment(slot,{rarity:rollManualReturnRarity()});
 }
 
 export function normalizeReturnRewards(state){
@@ -62,19 +88,26 @@ export function manualReturnPreview(state){
   endFloor:safeFloor(state.player?.currentFloor),
   floorsCleared:run.floorsCleared,
   gold:run.pendingGold,
-  startedAt:run.startedAt
+  startedAt:run.startedAt,
+  equipmentCount:manualEquipmentDropCount(run.floorsCleared)
  };
 }
 
 export function claimManualReturn(state){
  const preview=manualReturnPreview(state);
  state.player.gold=Math.max(0,Math.floor(Number(state.player.gold)||0))+preview.gold;
+ const equipment=[];
+ for(let i=0;i<preview.equipmentCount;i++){
+  const item=createManualReturnEquipment();
+  const receipt=receiveEquipment(state,item);
+  equipment.push({item,receipt});
+ }
  const history=state.returnRewards.history;
  history.totalManualReturns++;
  history.totalManualFloors+=preview.floorsCleared;
  history.totalManualGold+=preview.gold;
  state.returnRewards.manual={...EMPTY_MANUAL,startFloor:preview.endFloor,lastFloor:preview.endFloor};
- return preview;
+ return{...preview,equipment};
 }
 
 export function abandonManualExpedition(state){
