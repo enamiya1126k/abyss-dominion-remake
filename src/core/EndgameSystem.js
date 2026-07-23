@@ -10,9 +10,11 @@ export const WORLD_REGIONS=[
 ];
 
 export function hasCleared1000(state){return Boolean(state?.flags?.gameClear1000||Number(state?.worldPhase)>=1)}
+export function hasCleared10000(state){return Boolean(state?.flags?.gameClear10000)}
 export function worldPhase(state){return hasCleared1000(state)?1:0}
 export function worldRegionForFloor(floor){const f=Math.max(1,Math.min(WORLD_MAX_FLOOR,Number(floor)||1));return WORLD_REGIONS.find(region=>f>=region.minFloor&&f<=region.maxFloor)??WORLD_REGIONS[0]}
 export function mark1000FloorCleared(state){state.flags??={};state.flags.gameClear1000=true;state.flags.deepAbyssUnlocked=true;state.worldPhase=1;return state}
+export function mark10000FloorCleared(state){state.flags??={};mark1000FloorCleared(state);state.flags.gameClear10000=true;return state}
 
 const abyss=(id,name,title,icon,speciesId,support,seriesId,signature,gearNames,extra={})=>({id,faction:"abyss",name,title,icon,speciesId,support,seriesId,signature,gearNames,...extra});
 const god=(id,name,title,icon,speciesId,support,seriesId,signature,gearNames,extra={})=>({id,faction:"tenGod",name,title,icon,speciesId,support,seriesId,signature,gearNames,...extra});

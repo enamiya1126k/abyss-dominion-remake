@@ -1,3 +1,5 @@
+import{eliteGoldBase}from"./GoldEconomySystem.js?v=1.0.0";
+
 const ELITE_AFFIXES=[
  {id:"colossal",name:"巨大化",icon:"🜲",description:"最大HPが大幅に上昇",hp:2,atk:1.08,def:1.12,spd:.88},
  {id:"ferocious",name:"狂暴",icon:"🩸",description:"攻撃力が大幅に上昇",hp:1.2,atk:1.55,def:.95,spd:1.08},
@@ -27,5 +29,5 @@ export function normalizeEliteRecords(state){
 export function recordEliteEncounter(state,enemy){const records=normalizeEliteRecords(state);records.encountered++;records.lastEncounter={floor:state.player?.currentFloor??0,speciesId:enemy.speciesId,affixId:enemy.eliteAffixId,at:new Date().toISOString()};return records}
 export function recordEliteDefeat(state,enemy){const records=normalizeEliteRecords(state);records.defeated++;records.byAffix[enemy.eliteAffixId]=(records.byAffix[enemy.eliteAffixId]??0)+1;records.bySpecies[enemy.speciesId]=(records.bySpecies[enemy.speciesId]??0)+1;records.lastDefeat={floor:state.player?.currentFloor??0,speciesId:enemy.speciesId,affixId:enemy.eliteAffixId,at:new Date().toISOString()};return records}
 export function eliteRewards(enemy,floor){
- const depth=Math.max(1,Math.floor((Number(floor)-1000)/100));return{gold:450+depth*80+enemy.level*6,crystals:2+Math.floor(depth/5),keyChance:.12,rarity:depth>=25?"LR":"SSR"};
+ const depth=Math.max(1,Math.floor((Number(floor)-1000)/100));return{gold:eliteGoldBase(floor,enemy.level),crystals:2+Math.floor(depth/5),keyChance:.12,rarity:depth>=25?"LR":"SSR"};
 }

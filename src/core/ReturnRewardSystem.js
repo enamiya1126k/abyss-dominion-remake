@@ -2,6 +2,9 @@ import{createEquipment}from"../models/Equipment.js?v=0.9.15-alpha.39-return-rank
 import{receiveEquipment}from"../services/EquipmentStorage.js?v=0.9.15-alpha.95.1-stability-audit";
 import{abyssEquipmentRarityBonus}from"./AbyssSkillTreeSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 import{modifiedGoldReward}from"./GoldRewardSystem.js?v=0.9.15-alpha.95.1-stability-audit";
+import{goldForClearedFloor}from"./GoldEconomySystem.js?v=1.0.0";
+
+export{goldForClearedFloor}from"./GoldEconomySystem.js?v=1.0.0";
 
 const EMPTY_MANUAL={active:false,startFloor:1,lastFloor:1,floorsCleared:0,pendingGold:0,startedAt:null};
 const IDLE_FLOOR_INTERVAL_MS=5*60*1000;
@@ -60,15 +63,6 @@ function safeFloor(value){return Math.max(1,Math.min(10000,Math.floor(Number(val
 export function idleRewardProfile(maxFloor){
  const floor=safeFloor(maxFloor);
  return IDLE_REWARD_PROFILES.find(profile=>floor>=profile.minFloor&&floor<=profile.maxFloor)??IDLE_REWARD_PROFILES.at(-1);
-}
-
-export function goldForClearedFloor(floor){
- const f=safeFloor(floor);
- // Early floors stay modest; high floors rise strongly without touching battle rewards.
- const base=32+f*3;
- const depth=Math.pow(1+f/120,1.42);
- const milestone=1+Math.floor((f-1)/100)*0.18;
- return Math.max(20,Math.round(base*depth*milestone));
 }
 
 export function manualEquipmentDropCount(floorsCleared){
