@@ -1,11 +1,11 @@
-import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.97-gold-affix-crafting";
+import{APP_VERSION}from"../../core/config.js?v=1.0.0";
 import{MonsterCard}from"../components/MonsterCard.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,emergencyFragmentStatus,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,emergencyFragmentStatus,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=1.0.0";
 import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=0.9.15-alpha.95-abyss-skill-effects";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=0.9.15-alpha.95.1-stability-audit";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=1.0.0";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
@@ -16,9 +16,9 @@ export function HomeScreen(state){
   const idleReward=idleReturnPreview(state);
   const idleMinutes=Math.floor(idleReward.elapsedMs/60000),idleHours=Math.floor(idleMinutes/60),idleMinutePart=idleMinutes%60;
   const idleTimeText=idleHours>0?`${idleHours}時間${idleMinutePart}分`:`${idleMinutePart}分`;
-  const team=dailyTeamAttempts(state),teamUnlocked=state.player.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR,emergencyUnlocked=state.player.maxFloor>=EMERGENCY_UNLOCK_FLOOR,revealed=hasCleared1000(state),phase=worldPhase(state);
+  const team=dailyTeamAttempts(state),teamUnlocked=state.player.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR,emergencyUnlocked=state.player.maxFloor>=EMERGENCY_UNLOCK_FLOOR,revealed=hasCleared1000(state),completed=Boolean(state.flags?.gameClear10000),phase=worldPhase(state);
   const fragmentTotal=Object.keys(ENDGAME_BOSSES).reduce((n,id)=>n+emergencyFragmentStatus(state,id).count,0);
-  const region=phase===1?(state.player.maxFloor>=7001?"神域":state.player.maxFloor>=3001?"深淵領域":"未知領域"):"通常領域";
+  const region=completed?"世界最深部":phase===1?(state.player.maxFloor>=7001?"神域":state.player.maxFloor>=3001?"深淵領域":"未知領域"):"通常領域";
   const equipmentById=new Map((state.equipment??[]).map(item=>[item.id,item]));
   const slots=Array.from({length:4},(_,index)=>{
     const m=party[index];
@@ -34,7 +34,7 @@ export function HomeScreen(state){
       ${phase===1?`<div class="phase2-atmosphere" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><span class="phase2-castle"></span></div>`:""}
       <div class="page">
         <div class="eyebrow">ABYSS DOMINION</div>
-        <h1 class="hero-title">${revealed?"地下10000階の魔王":"地下1000階の魔王"}</h1>
+        <h1 class="hero-title">${completed?"深淵を統べる魔王":revealed?"地下10000階の魔王":"地下1000階の魔王"}</h1>
 
         <div class="panel home-status-panel compact-home-status">
           <div class="compact-status-primary"><div><small>モンスター基盤</small><b>最高 ${state.player.maxFloor}階</b></div><div class="home-combat-power"><small>戦力</small><strong>${formatCombatPower(combatPower)}</strong></div><span>${phase===1?region:"通常領域"}</span></div>
@@ -60,7 +60,7 @@ export function HomeScreen(state){
         <div class="home-utility-row"><button id="openRest" class="compact-button">🛏️ 休息</button>${revealed?`<button id="openDeepGacha" class="compact-button deep-summon-button">🌌 深淵召喚</button><button id="openWorldRecord" class="compact-button world-record-button">📖 世界の記録</button>`:""}</div>
         ${teamUnlocked?`<div class="panel endgame-entry-panel"><div><small class="eyebrow">4 VS 4 / NO PENALTY</small><h2>⚔️ チームバトル</h2><p class="muted">第${team.stage}試練・本日 ${team.dailyAttempts}/50戦</p></div><button id="openTeamBattle" class="primary">挑戦する</button></div>`:`<div class="panel endgame-entry-panel locked"><div><small class="eyebrow">LOCKED</small><h2>⚔️ チームバトル</h2><p class="muted">${TEAM_BATTLE_UNLOCK_FLOOR}階突破で解放</p></div></div>`}
         ${emergencyUnlocked?`<div class="panel anomaly-panel"><small class="eyebrow">WORLD ANOMALY</small><h2>🌑 深淵反応が観測されている</h2><p class="muted">探索中、極低確率で4対4の緊急戦闘が発生します。</p><div class="spread"><small>遭遇 ${state.endgame?.emergency?.encounters??0} / 撃退 ${state.endgame?.emergency?.wins??0} / 欠片 ${fragmentTotal}</small><button id="openEndgameForge" class="compact-button">欠片・神装</button></div></div>`:""}
-        <p class="footer-note">探索・育成・召喚を繰り返し、${revealed?"地下10000階を目指そう。":"地下1000階を目指そう。"}</p>
+        <p class="footer-note">${completed?"真エンディング達成。育成・装備厳選・十神との再戦はここからも続く。":`探索・育成・召喚を繰り返し、${revealed?"地下10000階を目指そう。":"地下1000階を目指そう。"}`}</p>
       </div>
     </section>`;
 }

@@ -67,7 +67,7 @@ export function AbyssSkillTreeScreen(state,activeCategoryId="economy"){
     </div>
 
     <div class="abyss-tree-foundation-note">
-     <b>alpha95：スキル効果反映</b>
+     <b>v1.0：全18効果反映済み</b>
      <span>習得した効果は、戦闘・探索・GOLD報酬へ即時反映される。</span>
     </div>
 
