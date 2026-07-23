@@ -1,16 +1,25 @@
+import{activeSecretRoom,CASINO_WIN_RATE,CASINO_PAYOUT_MULTIPLIER,DARK_MARKET_ITEM_LIMIT,SECRET_ROOM_RECOVERY_ITEMS}from"../../core/SecretRoomSystem.js?v=1.2.0";
+
+function marketStatus(room){
+ const remaining=(room?.offers??[]).filter(offer=>!offer.sold).length;
+ const recoveryRemaining=SECRET_ROOM_RECOVERY_ITEMS.reduce((sum,item)=>sum+Math.max(0,DARK_MARKET_ITEM_LIMIT-(room?.recoveryPurchased?.[item.id]??0)),0);
+ return`${remaining}点限定・回復薬 残${recoveryRemaining}`;
+}
+
 export function ShopScreen(state){
- const d=state.shop?.discount??0;
- const discountLabel=d?`本日の装備召喚 ${d}%OFF`:"本日の割引なし";
- return`<section class="screen shop-screen">
+ const room=activeSecretRoom(state);
+ if(!room)return`<section class="screen shop-screen secret-room-screen"><div class="page"><div class="spread"><div><div class="eyebrow">SECRET ROOM</div><h1 class="hero-title">深淵裏街</h1></div><button id="leaveShop">探索へ</button></div><div class="panel empty">部屋の記録が見つかりません。探索へ戻ってください。</div></div></section>`;
+ const casino=room.casino??{};
+ return`<section class="screen shop-screen secret-room-screen">
   <div class="page">
-   <div class="spread"><div><div class="eyebrow">SAFE ROOM</div><h1 class="hero-title">深淵商店街</h1></div><button id="leaveShop">探索へ</button></div>
-   <div class="panel"><div class="spread"><span>所持GOLD</span><b id="shopGold">${state.player.gold}</b></div><small class="muted">魔晶石 ${state.player.crystals}　／　${discountLabel}</small></div>
-   <div class="shop-grid">
-    <button data-shop-menu="bed"><span>🛏️</span><b>宿屋</b><small>全回復 180G</small></button>
-    <button data-shop-menu="herb"><span>🌿</span><b>薬草屋</b><small>回復・状態異常アイテム</small></button>
-    <button data-shop-menu="capture"><span>💎</span><b>捕獲商人</b><small>捕獲結晶 420G〜</small></button>
-    <button data-shop-menu="gear"><span>🎰</span><b>装備召喚</b><small>複数ガチャ・割引あり</small></button>
+   <div class="spread secret-room-heading"><div><div class="eyebrow">SECRET ROOM・${room.floor}F</div><h1 class="hero-title">深淵裏街</h1></div><button id="leaveShop">探索へ</button></div>
+   <div class="panel secret-room-wallet"><div><small>所持GOLD</small><b id="shopGold">${state.player.gold.toLocaleString()}G</b></div><span>この🚪だけの限定品</span></div>
+   <div class="secret-room-grid">
+    <button data-shop-menu="casino" class="secret-room-casino"><span>🎰</span><b>深淵スロット</b><small>当選 ${Math.round(CASINO_WIN_RATE*100)}%・配当 ${CASINO_PAYOUT_MULTIPLIER}倍</small><em>${casino.spins??0}回 / ${casino.wins??0}勝</em></button>
+    <button data-shop-menu="inn" class="${room.rested?"used":""}"><span>🛏️</span><b>無料の宿</b><small>HP・MP・状態異常を完全回復</small><em>${room.rested?"利用済み":"この🚪で1回無料"}</em></button>
+    <button data-shop-menu="market" class="secret-room-market"><span>🕶️</span><b>闇市場</b><small>SR〜神話・一点限りの裏商品</small><em>${marketStatus(room)}</em></button>
    </div>
+   <p class="secret-room-note">品揃えと宿の利用状況は、この🚪を出ても維持されます。別の🚪ではすべて新しくなります。</p>
   </div>
  </section>`;
 }

@@ -6,19 +6,19 @@ import{
  SLOT_UNLOCK_LEVEL,
  equipmentSubslotLabel,
  compatibleSubslots
-}from"../../data/equipment.js?v=1.1.0";
+}from"../../data/equipment.js?v=1.2.0";
 import{displayName,calculatedStats}from"../../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
-import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.1.0";
+import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
 import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.1.0";
 import{ATTRIBUTES}from"../../data/attributes.js?v=1.1.0";
-import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=1.1.0";
+import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=1.2.0";
 import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=0.9.15-alpha.95.1-stability-audit";
-import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.1.0";
-import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=1.1.0";
+import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.2.0";
+import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=1.2.0";
 
 function monsterRarity(monster){
  return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N";
