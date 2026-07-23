@@ -12,6 +12,9 @@ function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","�
 export function HomeScreen(state){
   const party=state.party.map(id=>state.monsters.find(m=>m.id===id)).filter(Boolean);
   const combatPower=partyCombatPower(state);
+  const idleReward=idleReturnPreview(state);
+  const idleMinutes=Math.floor(idleReward.elapsedMs/60000),idleHours=Math.floor(idleMinutes/60),idleMinutePart=idleMinutes%60;
+  const idleTimeText=idleHours>0?`${idleHours}時間${idleMinutePart}分`:`${idleMinutePart}分`;
   const team=dailyTeamAttempts(state),teamUnlocked=state.player.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR,emergencyUnlocked=state.player.maxFloor>=EMERGENCY_UNLOCK_FLOOR,revealed=hasCleared1000(state),phase=worldPhase(state);
   const fragmentTotal=Object.keys(ENDGAME_BOSSES).reduce((n,id)=>n+emergencyFragmentStatus(state,id).count,0);
   const region=phase===1?(state.player.maxFloor>=7001?"神域":state.player.maxFloor>=3001?"深淵領域":"未知領域"):"通常領域";
@@ -40,6 +43,11 @@ export function HomeScreen(state){
         <div class="panel home-party-panel compact-home-party">
           <div class="spread home-party-heading"><h2>現在の部隊</h2><div><span class="muted">${party.length}/4</span><button id="editHomeParty" class="compact-button">編成</button></div></div>
           <div class="home-squad-grid">${slots}</div>
+        </div>
+
+        <div class="panel home-idle-return-panel${idleReward.available?" ready":""}">
+          <div class="home-idle-return-copy"><small class="eyebrow">IDLE EXPEDITION</small><h2>🕯️ 放置帰還報酬</h2><p>${idleTimeText}探索・${idleReward.floorUnits}階層分相当</p><small>${idleReward.expeditionFloor}階層帯／手動報酬の約1/10${idleReward.capped?"・8時間上限到達":""}</small></div>
+          <div class="home-idle-return-value"><small>受取可能</small><strong>${idleReward.gold.toLocaleString()}G</strong><button id="openIdleReturn" class="${idleReward.available?"primary":"compact-button"}" ${idleReward.available?"":"disabled"}>${idleReward.available?"受け取る":"探索中"}</button></div>
         </div>
 
         <div class="home-main-menu">
