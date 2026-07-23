@@ -69,5 +69,13 @@ export function formatAffix(affix){const def=affixDefinition(affix.id);if(!def)r
 export function aggregateAffixes(items=[]){const result={};for(const item of items)for(const affix of ensureEquipmentAffixes(item)){result[affix.id]=(result[affix.id]??0)+Number(affix.value??0)}return result}
 export function equipmentAffixPower(item){return ensureEquipmentAffixes(item).reduce((sum,a)=>sum+(a.value??0)*(1+Object.keys(AFFIX_QUALITY).indexOf(a.quality)*.18),0)}
 
-export function rollAffixForSlot(slot,rarity="N",excludeIds=[]){const pool=AFFIX_DEFINITIONS.filter(x=>x.slots.includes(slot)&&!excludeIds.includes(x.id)&&(!x.legendaryOnly||["SSR","LR"].includes(rarity)));if(!pool.length)return null;const def=pool[Math.floor(Math.random()*pool.length)],luck=RARITY_LUCK[rarity]??0,roll=Math.min(.999,Math.random()+luck*(.35+Math.random()*.65)),quality=def.legendaryOnly?AFFIX_QUALITY.legendary:qualityForRoll(roll),value=Math.max(def.min,Math.min(def.max,Math.round(def.min+(def.max-def.min)*roll)));return{id:def.id,value,quality:quality.id,locked:false}}
+export function rollAffixForSlot(slot,rarity="N",excludeIds=[]){
+ const excluded=new Set(excludeIds),eligible=AFFIX_DEFINITIONS.filter(x=>x.slots.includes(slot)&&!excluded.has(x.id));
+ const normal=eligible.filter(x=>!x.legendaryOnly),legendary=["SSR","LR"].includes(rarity)?eligible.filter(x=>x.legendaryOnly):[];
+ const legendaryChance=rarity==="LR"?.24:rarity==="SSR"?.08:0;
+ const pool=legendary.length&&Math.random()<legendaryChance?legendary:normal.length?normal:legendary;
+ if(!pool.length)return null;
+ const def=pool[Math.floor(Math.random()*pool.length)],luck=RARITY_LUCK[rarity]??0,roll=Math.min(.999,Math.random()+luck*(.35+Math.random()*.65)),quality=def.legendaryOnly?AFFIX_QUALITY.legendary:qualityForRoll(roll),value=Math.max(def.min,Math.min(def.max,Math.round(def.min+(def.max-def.min)*roll)));
+ return{id:def.id,value,quality:quality.id,locked:false}
+}
 export function rerollAffixValue(affix){const def=affixDefinition(affix.id);if(!def)return affix;const roll=Math.random(),quality=def.legendaryOnly?AFFIX_QUALITY.legendary:qualityForRoll(roll);affix.value=Math.max(def.min,Math.min(def.max,Math.round(def.min+(def.max-def.min)*roll)));affix.quality=quality.id;return affix}
