@@ -1,10 +1,12 @@
-import{createEquipment}from"../models/Equipment.js?v=0.9.15-alpha.37-idle-return-gold-phase1";
-import{receiveEquipment}from"../services/EquipmentStorage.js?v=0.9.15-alpha.37-idle-return-gold-phase1";
+import{createEquipment}from"../models/Equipment.js?v=0.9.15-alpha.38-idle-return-equipment-phase1";
+import{receiveEquipment}from"../services/EquipmentStorage.js?v=0.9.15-alpha.38-idle-return-equipment-phase1";
 
 const EMPTY_MANUAL={active:false,startFloor:1,lastFloor:1,floorsCleared:0,pendingGold:0,startedAt:null};
 const IDLE_MAX_HOURS=8;
 const IDLE_FLOOR_INTERVAL_MS=5*60*1000;
 const IDLE_REWARD_RATE=.1;
+const IDLE_EQUIPMENT_INTERVAL_MS=2*60*60*1000;
+const IDLE_MAX_EQUIPMENT=4;
 
 function safeFloor(value){return Math.max(1,Math.min(10000,Math.floor(Number(value)||1)))}
 
@@ -34,10 +36,27 @@ export function rollManualReturnRarity(){
  return"N";
 }
 
-function createManualReturnEquipment(){
+function randomEquipmentSlot(){
  const slots=["weapon","armor","accessory"];
- const slot=slots[Math.floor(Math.random()*slots.length)];
- return createEquipment(slot,{rarity:rollManualReturnRarity()});
+ return slots[Math.floor(Math.random()*slots.length)];
+}
+
+function createManualReturnEquipment(){
+ return createEquipment(randomEquipmentSlot(),{rarity:rollManualReturnRarity()});
+}
+
+export function idleEquipmentDropCount(elapsedMs){
+ const ms=Math.max(0,Number(elapsedMs)||0);
+ return Math.min(IDLE_MAX_EQUIPMENT,Math.floor(ms/IDLE_EQUIPMENT_INTERVAL_MS));
+}
+
+export function rollIdleReturnRarity(){
+ // Same rarity table as manual return, but far fewer rolls (max 4 per 8 hours).
+ return rollManualReturnRarity();
+}
+
+function createIdleReturnEquipment(){
+ return createEquipment(randomEquipmentSlot(),{rarity:rollIdleReturnRarity()});
 }
 
 export function normalizeReturnRewards(state){
@@ -147,6 +166,7 @@ export function idleReturnPreview(state,now=Date.now()){
   expeditionFloor,
   goldPerUnit,
   gold:floorUnits*goldPerUnit,
+  equipmentCount:idleEquipmentDropCount(elapsedMs),
   maxHours:idle.maxHours,
   capped:current-idle.lastClaimAt>=maxMs,
   available:floorUnits>0
@@ -157,8 +177,14 @@ export function claimIdleReturn(state,now=Date.now()){
  const preview=idleReturnPreview(state,now);
  if(!preview.available)return preview;
  state.player.gold=Math.max(0,Math.floor(Number(state.player.gold)||0))+preview.gold;
+ const equipment=[];
+ for(let i=0;i<preview.equipmentCount;i++){
+  const item=createIdleReturnEquipment();
+  const receipt=receiveEquipment(state,item);
+  equipment.push({item,receipt});
+ }
  state.returnRewards.idle.lastClaimAt=Math.max(0,Number(now)||Date.now());
  state.returnRewards.history.totalIdleClaims++;
  state.returnRewards.history.totalIdleGold+=preview.gold;
- return{...preview,claimed:true};
+ return{...preview,equipment,claimed:true};
 }
