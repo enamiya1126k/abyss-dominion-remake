@@ -1,5 +1,19 @@
-export const RARITY_ORDER={N:0,R:1,SR:2,SSR:3,LR:4};
-export const RARITY_COLORS={N:"#d9d9d9",R:"#71c5ff",SR:"#c586ff",SSR:"#ffd05c",LR:"#ff79dd"};
+export const RARITY_ORDER={N:0,R:1,SR:2,SSR:3,LR:4,"神話":5,"深淵":6,"十神":7};
+export const RARITY_COLORS={N:"#d9d9d9",R:"#71c5ff",SR:"#c586ff",SSR:"#ffd05c",LR:"#ff79dd","神話":"#ff9a70","深淵":"#ff637f","十神":"#ffe277"};
+
+export function equipmentDisplayRarity(item){
+ if(typeof item==="string")return item;
+ if(!item||typeof item!=="object")return"N";
+ return item.summonTier
+  ??item.rewardTier
+  ??(item.endgameFaction==="tenGod"?"十神":item.endgameFaction==="abyss"?"深淵":null)
+  ??item.rarity
+  ??"N";
+}
+
+export function equipmentRarityColor(item){
+ return RARITY_COLORS[equipmentDisplayRarity(item)]??RARITY_COLORS.N;
+}
 
 export const EQUIPMENT_BASES={
  weapon:[
