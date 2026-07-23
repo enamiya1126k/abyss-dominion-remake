@@ -1,7 +1,10 @@
-import{createEquipment}from"../models/Equipment.js?v=0.9.15-alpha.36-return-equipment-phase1";
-import{receiveEquipment}from"../services/EquipmentStorage.js?v=0.9.15-alpha.36-return-equipment-phase1";
+import{createEquipment}from"../models/Equipment.js?v=0.9.15-alpha.37-idle-return-gold-phase1";
+import{receiveEquipment}from"../services/EquipmentStorage.js?v=0.9.15-alpha.37-idle-return-gold-phase1";
 
 const EMPTY_MANUAL={active:false,startFloor:1,lastFloor:1,floorsCleared:0,pendingGold:0,startedAt:null};
+const IDLE_MAX_HOURS=8;
+const IDLE_FLOOR_INTERVAL_MS=5*60*1000;
+const IDLE_REWARD_RATE=.1;
 
 function safeFloor(value){return Math.max(1,Math.min(10000,Math.floor(Number(value)||1)))}
 
@@ -49,10 +52,16 @@ export function normalizeReturnRewards(state){
   pendingGold:Math.max(0,Math.floor(Number(manual.pendingGold)||0)),
   startedAt:Number.isFinite(Number(manual.startedAt))?Number(manual.startedAt):null
  };
- state.returnRewards.history??={totalManualReturns:0,totalManualFloors:0,totalManualGold:0};
- for(const key of["totalManualReturns","totalManualFloors","totalManualGold"]){
+ state.returnRewards.history??={totalManualReturns:0,totalManualFloors:0,totalManualGold:0,totalIdleClaims:0,totalIdleGold:0};
+ for(const key of["totalManualReturns","totalManualFloors","totalManualGold","totalIdleClaims","totalIdleGold"]){
   state.returnRewards.history[key]=Math.max(0,Math.floor(Number(state.returnRewards.history[key])||0));
  }
+ const idle=state.returnRewards.idle&&typeof state.returnRewards.idle==="object"?state.returnRewards.idle:{};
+ const now=Date.now(),rawLast=Number(idle.lastClaimAt);
+ state.returnRewards.idle={
+  lastClaimAt:Number.isFinite(rawLast)&&rawLast>0?Math.min(rawLast,now):now,
+  maxHours:IDLE_MAX_HOURS
+ };
  return state.returnRewards;
 }
 
@@ -114,4 +123,42 @@ export function abandonManualExpedition(state){
  normalizeReturnRewards(state);
  const floor=safeFloor(state.player?.currentFloor);
  state.returnRewards.manual={...EMPTY_MANUAL,startFloor:floor,lastFloor:floor};
+}
+
+
+export function idleExpeditionFloor(state){
+ normalizeReturnRewards(state);
+ const maxFloor=safeFloor(state.player?.maxFloor);
+ return Math.max(1,Math.floor(maxFloor*.8));
+}
+
+export function idleReturnPreview(state,now=Date.now()){
+ normalizeReturnRewards(state);
+ const idle=state.returnRewards.idle;
+ const current=Math.max(0,Number(now)||Date.now());
+ const maxMs=idle.maxHours*60*60*1000;
+ const elapsedMs=Math.max(0,Math.min(maxMs,current-idle.lastClaimAt));
+ const floorUnits=Math.floor(elapsedMs/IDLE_FLOOR_INTERVAL_MS);
+ const expeditionFloor=idleExpeditionFloor(state);
+ const goldPerUnit=Math.max(1,Math.round(goldForClearedFloor(expeditionFloor)*IDLE_REWARD_RATE));
+ return{
+  elapsedMs,
+  floorUnits,
+  expeditionFloor,
+  goldPerUnit,
+  gold:floorUnits*goldPerUnit,
+  maxHours:idle.maxHours,
+  capped:current-idle.lastClaimAt>=maxMs,
+  available:floorUnits>0
+ };
+}
+
+export function claimIdleReturn(state,now=Date.now()){
+ const preview=idleReturnPreview(state,now);
+ if(!preview.available)return preview;
+ state.player.gold=Math.max(0,Math.floor(Number(state.player.gold)||0))+preview.gold;
+ state.returnRewards.idle.lastClaimAt=Math.max(0,Number(now)||Date.now());
+ state.returnRewards.history.totalIdleClaims++;
+ state.returnRewards.history.totalIdleGold+=preview.gold;
+ return{...preview,claimed:true};
 }
