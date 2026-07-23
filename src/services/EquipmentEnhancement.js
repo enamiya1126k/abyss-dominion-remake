@@ -1,6 +1,6 @@
-import{equipmentDisplayRarity}from"../data/equipment.js?v=1.1.0";
+import{equipmentDisplayRarity}from"../data/equipment.js?v=1.2.0";
 
-const RARITY_MATERIAL_EXP={N:20,R:45,SR:100,SSR:220,LR:500,"神話":850,"深淵":1400,"十神":2400};
+const RARITY_MATERIAL_EXP={N:20,R:45,SR:100,SSR:220,UR:350,LR:500,"神話":850,"深淵":1400,"十神":2400};
 
 export function equipmentExpNeed(level){
  const lv=Math.max(1,Number(level)||1);

@@ -1,10 +1,10 @@
-import{ensureEquipmentAffixes,rollAffixForSlot}from"../data/equipmentAffixes.js?v=1.1.0";
-import{equipmentDisplayRarity}from"../data/equipment.js?v=1.1.0";
+import{ensureEquipmentAffixes,rollAffixForSlot}from"../data/equipmentAffixes.js?v=1.2.0";
+import{equipmentDisplayRarity}from"../data/equipment.js?v=1.2.0";
 import{goldForClearedFloor}from"../core/GoldEconomySystem.js?v=1.1.0";
 
 const LOCK_MULTIPLIERS=[1,2.25,4.75,8];
-const RARITY_MULTIPLIERS={N:.70,R:.85,SR:1,SSR:1.35,LR:1.75,"神話":2.15,"深淵":2.65,"十神":3.25};
-const MINIMUM_COSTS={N:200,R:300,SR:450,SSR:700,LR:1000,"神話":1500,"深淵":2200,"十神":3200};
+const RARITY_MULTIPLIERS={N:.70,R:.85,SR:1,SSR:1.35,UR:1.55,LR:1.75,"神話":2.15,"深淵":2.65,"十神":3.25};
+const MINIMUM_COSTS={N:200,R:300,SR:450,SSR:700,UR:850,LR:1000,"神話":1500,"深淵":2200,"十神":3200};
 
 function safeInteger(value,fallback=0){
  const number=Number(value);

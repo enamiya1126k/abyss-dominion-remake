@@ -1,11 +1,11 @@
 import{abyssGoldReward}from"../core/AbyssSkillTreeSystem.js?v=1.1.0";
-import{equipmentDisplayRarity}from"../data/equipment.js?v=1.1.0";
+import{equipmentDisplayRarity}from"../data/equipment.js?v=1.2.0";
 
 export const EQUIPMENT_LIMIT=500;
 export const RESERVE_LIMIT=30;
 
 export function equipmentSellPrice(item,state=null){
- const base=({N:15,R:45,SR:110,SSR:260,LR:650,"神話":1100,"深淵":1800,"十神":3000}[equipmentDisplayRarity(item)]??10)+(item.plus??0)*25+(item.level??1)*2;
+ const base=({N:15,R:45,SR:110,SSR:260,UR:430,LR:650,"神話":1100,"深淵":1800,"十神":3000}[equipmentDisplayRarity(item)]??10)+(item.plus??0)*25+(item.level??1)*2;
  return state?abyssGoldReward(state,base,"equipmentSale"):base;
 }
 
