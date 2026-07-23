@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
 import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=0.9.15-alpha.32-phase10-10-release-audit";

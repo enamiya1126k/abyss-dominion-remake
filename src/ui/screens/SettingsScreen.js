@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
 export function SettingsScreen(state){
   return`
     <section class="screen">
@@ -21,7 +21,7 @@ export function SettingsScreen(state){
           </div>
         </div>
         <div class="panel"><div class="spread"><div><span>序盤チュートリアル</span><small class="muted" style="display:block">1〜5階の説明をいつでも確認</small></div><button id="openTutorialBook">一覧を見る</button></div></div>
-        <div class="panel version-panel"><div><small class="muted">ABYSS DOMINION</small><h3>REMAKE v${APP_VERSION}</h3><small class="muted">UI・魔物育成ハブ更新</small></div></div>
+        <div class="panel version-panel"><div><small class="muted">ABYSS DOMINION</small><h3>REMAKE v${APP_VERSION}</h3><small class="muted">深淵スキルツリー土台</small></div></div>
         <button id="resetSave" class="danger" style="width:100%">セーブ初期化</button>
       </div>
     </section>
