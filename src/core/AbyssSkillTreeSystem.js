@@ -293,6 +293,52 @@ export function abyssSkillTreeSummary(state){
  };
 }
 
+export function abyssSkillEffects(state){
+ const tree=normalizeAbyssSkillTree(state);
+ const effects={};
+ for(const nodeId of tree.learned){
+  const effect=NODE_BY_ID.get(nodeId)?.effect;
+  if(!effect)continue;
+  effects[effect.key]=(effects[effect.key]??0)+(Number(effect.value)||0);
+ }
+ return effects;
+}
+
+export function abyssSkillEffectTotal(state,key){
+ return Number(abyssSkillEffects(state)[key])||0;
+}
+
+export function abyssSkillMultiplier(state,key){
+ return Math.max(0,1+abyssSkillEffectTotal(state,key));
+}
+
+export function abyssExplorationChance(state,base,effectKey=null,{additive=false,max=1}={}){
+ const initial=Math.max(0,Number(base)||0);
+ const specific=effectKey?abyssSkillEffectTotal(state,effectKey):0;
+ const exploration=abyssSkillEffectTotal(state,"explorationRewardRate");
+ const chance=additive
+  ?(initial+specific)*(1+exploration)
+  :initial*(1+specific+exploration);
+ return Math.max(0,Math.min(max,chance));
+}
+
+export function abyssEquipmentRarityBonus(state){
+ return Math.max(0,Math.floor(abyssSkillEffectTotal(state,"equipmentRarityBonus")));
+}
+
+export function abyssGoldReward(state,amount,source="generic"){
+ const base=Math.max(0,Number(amount)||0);
+ const effects=abyssSkillEffects(state);
+ let rate=effects.goldGainRate??0;
+ if(source==="manualReturn")rate+=(effects.manualReturnGoldRate??0)+(effects.explorationRewardRate??0);
+ if(source==="idleReturn")rate+=(effects.idleReturnGoldRate??0)+(effects.explorationRewardRate??0);
+ if(source==="battle")rate+=(effects.battleGoldRate??0)+(effects.explorationRewardRate??0);
+ if(source==="elite")rate+=(effects.battleGoldRate??0)+(effects.eliteRewardRate??0)+(effects.explorationRewardRate??0);
+ if(source==="equipmentSale")rate+=effects.equipmentSellGoldRate??0;
+ if(source==="exploration")rate+=effects.explorationRewardRate??0;
+ return Math.max(0,Math.round(base*(1+rate)));
+}
+
 export function canLearnAbyssSkill(state,nodeId){
  const node=NODE_BY_ID.get(nodeId);
  if(!node)return{ok:false,reason:"unknown",message:"スキルが見つかりません。"};

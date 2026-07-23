@@ -1,4 +1,4 @@
-import{calculatedStats}from"../models/Monster.js?v=0.9.15-alpha.34-combat-power";
+import{calculatedStats}from"../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
 
 /**
  * 表示用の戦力値。
