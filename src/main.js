@@ -1,39 +1,39 @@
-import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{SPECIES}from"./data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.34-combat-power";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.15-alpha.33-final-ui-polish";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.34-combat-power";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{EQUIPMENT_SERIES}from"./data/equipmentSeries.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{aggregateAffixes}from"./data/equipmentAffixes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.33-final-ui-polish";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse}from"./battle/SkillSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier}from"./battle/EnemyAI.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{dangerConfig}from"./core/DangerSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{bossLevelForFloor}from"./core/EnemyScalingSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,ENDGAME_BOSSES,normalizeEndgameState,dailyTeamAttempts,createTeamBattleEncounter,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,endgameContractStatus,attemptEndgameContract,hasCleared1000,mark1000FloorCleared,worldRegionForFloor}from"./core/EndgameSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{SPECIES}from"./data/species.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{EQUIPMENT_SERIES}from"./data/equipmentSeries.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{aggregateAffixes}from"./data/equipmentAffixes.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse}from"./battle/SkillSystem.js?v=0.9.15-alpha.29-phase10-7-affix-audit";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier}from"./battle/EnemyAI.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{dangerConfig}from"./core/DangerSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{bossLevelForFloor}from"./core/EnemyScalingSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,ENDGAME_BOSSES,normalizeEndgameState,dailyTeamAttempts,createTeamBattleEncounter,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,endgameContractStatus,attemptEndgameContract,hasCleared1000,mark1000FloorCleared,worldRegionForFloor}from"./core/EndgameSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
 let screen="home",selected=null,equipmentTarget=null,skillTarget=null,skillSlotSelection=0,game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home";
@@ -177,12 +177,8 @@ function triggerEmergencyEncounter(){
 }
 function startSpecialBattle(enemies,options={}){startBattle(enemies,{specialBattle:true,specialBattleType:options.type,specialTitle:options.title,specialSubtitle:options.subtitle,priorVitals:options.priorVitals,specialBossId:options.bossId,powerPercent:options.powerPercent,bonusFragments:Math.max(0,Number(options.bonusFragments)||0),preludeChoiceId:options.preludeChoiceId??null,preludeResultText:options.preludeResultText??null})}
 function createContractedEndgameMonster(boss,bossId,level,floor){
- const divine=boss.faction==="tenGod",contractLevel=Math.max(1,Math.min(9999,Number(level)||Number(floor)||1));
- const monster=createMonster(boss.speciesId,{nickname:boss.name,title:boss.title,level:contractLevel,stars:5,rank:4,plus:divine?50:25,affection:divine?1000:750,ivs:{hp:100,atk:100,def:100,spd:100},traitId:divine?"lucky":"fierce",favorite:true,locked:true,attribute:boss.element??SPECIES[boss.speciesId]?.element,obtainedFloor:Math.max(1,Number(floor)||1),obtainedMethod:"endgameContract",tags:[SPECIES[boss.speciesId]?.race,boss.faction,bossId,"contractedEndgame"].filter(Boolean)});
- const strongest=allLearnedSkills(monster).slice(-4);
- monster.equippedSkills=strongest.map(skill=>skill.id);
- monster.skillProgress=Object.fromEntries(strongest.map(skill=>[skill.id,{level:divine?5:3,exp:0,uses:0,need:25*(divine?5:3)}]));
- monster.endgameBossId=bossId;monster.endgameFaction=boss.faction;monster.contractSignature=boss.signature;monster.contractSignatureName=boss.signatureName??boss.skills?.[0]??boss.signature;monster.contractSeriesId=boss.seriesId;monster.isContractedEndgame=true;monster.contractProfileVersion=1;monster.currentHp=calculatedStats(monster).hp;monster.currentMp=maxMp(monster);return monster;
+ const monster=createMonster(boss.speciesId,{nickname:boss.name,title:boss.title,level:Math.max(1,Math.min(9999,Number(level)||Number(floor)||1)),stars:5,rank:4,favorite:true,locked:true,attribute:boss.element??SPECIES[boss.speciesId]?.element,obtainedFloor:Math.max(1,Number(floor)||1),obtainedMethod:"endgameContract",tags:[SPECIES[boss.speciesId]?.race,boss.faction,bossId].filter(Boolean)});
+ monster.endgameBossId=bossId;monster.endgameFaction=boss.faction;monster.contractSignature=boss.signature;monster.contractSeriesId=boss.seriesId;monster.isContractedEndgame=true;monster.currentHp=calculatedStats(monster).hp;monster.currentMp=maxMp(monster);return monster;
 }
 function finishSpecialBattle(won){
  const type=battle.specialBattleType,prior=battle.priorVitals,bossId=battle.specialBossId,floor=save.state.player.currentFloor,bonusFragments=Math.max(0,Number(battle.bonusFragments)||0),leader=battle.enemies?.find(enemy=>enemy.endgameBossId===bossId);if(type==="team"){const team=dailyTeamAttempts(save.state);won?(team.totalWins++,team.stage++):team.totalLosses++}
@@ -252,7 +248,6 @@ function bindEquipment(){
  document.getElementById("equipmentSort").onchange=e=>{save.state.settings.equipmentSort=e.target.value;save.save();render()};
  document.querySelectorAll("[data-equipment-slot]").forEach(b=>b.onclick=()=>{save.state.settings.equipmentSlot=b.dataset.equipmentSlot;save.save();render()});
  document.querySelectorAll("[data-equipment-storage]").forEach(b=>b.onclick=()=>{if(b.disabled)return;save.state.settings.equipmentStorage=b.dataset.equipmentStorage;save.save();render()});
- document.getElementById("openAffixHelp")?.addEventListener("click",openRarityGuide);
  document.querySelectorAll("[data-equip]").forEach(b=>b.onclick=()=>equipItem(b.dataset.equip,b.dataset.target,b.dataset.subslot));document.getElementById("autoEquipOne")?.addEventListener("click",()=>{autoEquipMonster(equipmentTarget);save.save();render()});document.getElementById("autoEquipParty")?.addEventListener("click",()=>{save.state.party.forEach(autoEquipMonster);save.save();render()});document.getElementById("unequipOne")?.addEventListener("click",()=>unequipMonsterAll(equipmentTarget));document.getElementById("unequipParty")?.addEventListener("click",()=>{if(!confirm("パーティー全員の装備を解除しますか？"))return;save.state.party.forEach(id=>unequipMonsterAll(id,false));save.save();render()});
  document.querySelectorAll("[data-unequip]").forEach(b=>b.onclick=()=>unequipItem(b.dataset.unequip));
  document.querySelectorAll("[data-favorite-equipment]").forEach(b=>b.onclick=()=>{const i=save.state.equipment.find(x=>x.id===b.dataset.favoriteEquipment);if(!i)return;i.favorite=!i.favorite;save.save();render()});
@@ -368,7 +363,7 @@ const SUMMON_RARITY_INFO=[
  {id:"十神",name:"十神",note:"ガチャ排出なし。専用イベント・高難易度限定"}
 ];
 function summonOne({mode="mixed",guaranteedMonster=false,guaranteedEquipment=false,guaranteedRare=false,deep=false}={}){const isMonster=guaranteedMonster||(!guaranteedEquipment&&(mode==="monster"||Math.random()<.30)),rarity=deep?"LR":rarityRoll(guaranteedRare?"guaranteed":"normal");if(isMonster){let pool=Object.values(SPECIES).filter(sp=>sp.rarity!=="十神"&&!sp.isTenGod&&!sp.tags?.includes?.("tenGod"));if(deep)pool=pool.filter(sp=>(sp.minFloor??0)>=70);else pool=pool.filter(sp=>sp.rarity!=="深淵"&&!sp.isAbyss&&!sp.tags?.includes?.("abyss"));if(!pool.length)pool=Object.values(SPECIES).filter(sp=>sp.rarity!=="十神"&&!sp.isTenGod);const speciesId=pool[Math.floor(Math.random()*pool.length)].id,stars=deep?5:({N:1,R:1,SR:2,SSR:3,LR:4}[rarity]??1),m=createMonster(speciesId,{stars,nickname:SPECIES[speciesId].name,obtainedMethod:"summon",obtainedFloor:save.state.player.maxFloor});m.summonRarity=rarity;if(deep)m.summonTier="深淵";save.state.monsters.push(m);save.state.codex.captures[speciesId]=(save.state.codex.captures[speciesId]??0)+1;save.state.codex.encounters[speciesId]=(save.state.codex.encounters[speciesId]??0)+1;return{type:"monster",rarity,displayRarity:deep?"深淵":rarity,name:displayName(m),icon:SPECIES[speciesId].emoji,item:m}}const slot=["weapon","armor","accessory"][Math.floor(Math.random()*3)],item=createEquipment(slot,{rarity});if(deep){item.summonTier="深淵";item.name=`深淵・${item.name}`}receiveEquipment(save.state,item);save.state.codex.equipment[item.name]=(save.state.codex.equipment[item.name]??0)+1;return{type:"equipment",rarity,displayRarity:deep?"深淵":rarity,name:item.name,icon:{weapon:"⚔️",armor:"🛡️",accessory:"💍"}[slot],item}}
-function rarityGuideHtml(){const unlocked=hasCleared1000(save.state),visible=SUMMON_RARITY_INFO.filter(r=>unlocked||!["深淵","十神"].includes(r.id)),rarityClass=id=>({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[id]??id).toLowerCase();return`<div class="rarity-guide">${visible.map((r,i)=>`<div class="rarity-guide-row rarity-guide-${rarityClass(r.id)}"><span>${i+1}</span><b class="monster-rarity-name rarity-name-${rarityClass(r.id)}">${r.id}</b><strong>${r.name}</strong><small>${r.note}</small></div>`).join("")}</div><p class="rarity-guide-note">魔物の名前は、このレア度カラーで表示されます。${unlocked?" 下に行くほど上位。十神はガチャ排出されません。":" 下に行くほど上位です。"}</p>` }
+function rarityGuideHtml(){const unlocked=hasCleared1000(save.state),visible=SUMMON_RARITY_INFO.filter(r=>unlocked||!["深淵","十神"].includes(r.id));return`<div class="rarity-guide">${visible.map((r,i)=>`<div class="rarity-guide-row rarity-guide-${r.id}"><span>${i+1}</span><b>${r.id}</b><strong>${r.name}</strong><small>${r.note}</small></div>`).join("")}</div>${unlocked?'<p class="rarity-guide-note">下に行くほど上位。十神はすべてのガチャから排出されません。</p>':'<p class="rarity-guide-note">下に行くほど上位です。</p>'}` }
 function openRarityGuide(){app.insertAdjacentHTML("beforeend",Modal("レア度一覧",rarityGuideHtml(),"閉じる"));topModalButton().onclick=closeTopModal}
 function openGacha(){const key=localDayKey(),daily=save.state.gacha.lastDailyKey!==key,first=!save.state.gacha.firstTenUsed;const body=`<div class="gacha-head"><b>召喚を選択</b><div class="gacha-head-actions"><span>💎 ${save.state.player.crystals}</span><button type="button" id="openRarityGuide" class="rarity-help" aria-label="レア度一覧">？</button></div></div><div class="gacha-menu">${first?'<button data-gacha="first"><b>初回限定 無料10連</b><small>SR以上モンスター1体確定</small></button>':''}<button data-gacha="daily" ${daily?'':'disabled'}><b>1日1回 無料召喚</b><small>${daily?'モンスター・装備から抽選':'本日分は召喚済み'}</small></button><button data-gacha="monster-single"><b>🧌 モンスター召喚　💎5</b><small>モンスター100%</small></button><button data-gacha="monster-ten"><b>🧌 モンスター10連　💎45</b><small>最後の1体はSR以上</small></button><button data-gacha="equipment-single"><b>⚔️ 装備召喚　💎5</b><small>武器・防具・装飾品100%</small></button><button data-gacha="equipment-ten"><b>⚔️ 装備10連　💎45</b><small>最後の1枠はSR以上</small></button></div>`;app.insertAdjacentHTML("beforeend",Modal("🔮 召喚の祭壇",body,"閉じる"));document.querySelectorAll("[data-gacha]").forEach(b=>b.onclick=()=>performGacha(b.dataset.gacha));document.getElementById("openRarityGuide")?.addEventListener("click",openRarityGuide);topModalButton().onclick=closeTopModal}
 function openDeepGacha(){if(!hasCleared1000(save.state))return alert("深淵召喚は1000階の支配者撃破後に解放されます");const body=`<div class="gacha-head deep"><b>深淵の力を召喚する</b><div class="gacha-head-actions"><span>💎 ${save.state.player.crystals}</span><button type="button" id="openRarityGuide" class="rarity-help">？</button></div></div><div class="gacha-menu deep-gacha-menu"><button data-deep-gacha="monster-single"><b>🌌 深淵モンスター召喚　💎25</b><small>深層モンスターの深淵個体を召喚</small></button><button data-deep-gacha="monster-ten"><b>🌌 深淵モンスター10連　💎225</b><small>10体すべて深淵個体</small></button><button data-deep-gacha="equipment-single"><b>🗡️ 深淵装備召喚　💎25</b><small>深淵の名を冠するLR装備</small></button><button data-deep-gacha="equipment-ten"><b>🗡️ 深淵装備10連　💎225</b><small>10個すべて深淵装備</small></button></div><p class="gacha-footnote">十神は深淵召喚からも排出されません。</p>`;app.insertAdjacentHTML("beforeend",Modal("🌌 深淵召喚",body,"閉じる"));document.querySelectorAll("[data-deep-gacha]").forEach(b=>b.onclick=()=>performDeepGacha(b.dataset.deepGacha));document.getElementById("openRarityGuide")?.addEventListener("click",openRarityGuide);topModalButton().onclick=closeTopModal}
