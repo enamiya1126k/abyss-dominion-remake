@@ -4,7 +4,7 @@ import{
  abyssSkillCategoryById,
  abyssSkillNodeById,
  abyssSkillTreeSummary
-}from"../../core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
+}from"../../core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 
 function nodeStatus(state,node,learned){
  if(learned.has(node.id))return"learned";

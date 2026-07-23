@@ -1,7 +1,7 @@
 import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
-import{learnedSkills,maxMp,skillElementLabel}from"../../battle/SkillSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyEffectsFor}from"../../battle/BattleRules.js?v=0.9.15-alpha.95-abyss-skill-effects";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=0.9.15-alpha.95.1-stability-audit";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=0.9.15-alpha.95.1-stability-audit";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
@@ -13,8 +13,8 @@ function renderTurnOrder(battle){
 
 function renderEnemies(battle,enemies,target){
  return enemies.map(enemy=>{
-  const statuses=enemyStatusesFor(battle,enemy.id);
-  const statusHtml=statuses.length?`<div class="status-row">${statuses.map(s=>`<span class="status-chip ${s.id}">${statusLabel(s)}</span>`).join("")}</div>`:"";
+  const statuses=enemyStatusesFor(battle,enemy.id),effects=enemyEffectsFor(battle,enemy.id);
+  const statusHtml=statuses.length||effects.length?`<div class="status-row">${statuses.map(s=>`<span class="status-chip ${s.id}">${statusLabel(s)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${({atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",stun:"行動不能"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`:"";
   const badge=enemy.boss?'<span class="boss-badge">BOSS</span>':enemy.elite?`<span class="elite-badge">${enemy.eliteAffixIcon??"🜲"} ELITE・${enemy.eliteAffixName??"変異"}</span>`:"";const danger="";
   return `<button id="enemy-${enemy.id}" data-enemy-target="${enemy.id}" class="combatant enemy-combatant ${enemy.elite?"elite-enemy":""} ${target?.id===enemy.id?"targeted":""}">
    <div class="enemy-name">${badge}${danger}${enemy.name} Lv.${enemy.level}</div>
@@ -43,8 +43,8 @@ function renderParty(battle,actor){
 
 function renderSkills(battle,actor,skills){
  const rows=skills.map(skill=>{
-  const cd=cooldownRemaining(battle,actor.id,skill.id),disabled=actor.currentMp<skill.mp||cd>0;
-  const cost=cd>0?`CD ${cd}`:`MP ${skill.mp}`;
+  const cd=cooldownRemaining(battle,actor.id,skill.id),mpCost=effectiveSkillMpCost(actor,skill),disabled=actor.currentMp<mpCost||cd>0;
+  const cost=cd>0?`CD ${cd}`:`MP ${mpCost}`;
   return `<button data-skill-id="${skill.id}" ${disabled?"disabled":""}><span><b>${skill.name}</b><small>${skill.tag??"スキル"}・${skill.target??"敵単体"}・${skillElementLabel(skill)}属性</small><small>${skill.description}</small></span><strong>${cost}</strong></button>`;
  }).join("");
  return `<div class="skill-command-list">${rows}<button id="closeSkillMenu" class="secondary">戻る</button></div>`;

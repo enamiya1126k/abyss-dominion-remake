@@ -1,11 +1,11 @@
-import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.95.1-stability-audit";
 import{MonsterCard}from"../components/MonsterCard.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
-import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,emergencyFragmentStatus,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=0.9.15-alpha.95-abyss-skill-effects";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
@@ -47,7 +47,7 @@ export function HomeScreen(state){
         </div>
 
         <div class="panel home-idle-return-panel${idleReward.available?" ready":""}">
-          <div class="home-idle-return-copy"><small class="eyebrow">IDLE EXPEDITION</small><h2>🕯️ 放置帰還報酬</h2><p>${idleTimeText}探索・${idleReward.floorUnits}階層分相当</p><small>${idleReward.expeditionFloor}階層帯／手動報酬の約1/10${idleReward.capped?"・8時間上限到達":""}</small></div>
+          <div class="home-idle-return-copy"><small class="eyebrow">IDLE EXPEDITION</small><h2>🕯️ 放置帰還報酬</h2><p>${idleTimeText}探索・${idleReward.floorUnits}階層分相当</p><small>最高到達の${Math.round(idleReward.expeditionRate*100)}%（${idleReward.expeditionFloor}階層帯）／最大${idleReward.maxHours}時間${idleReward.capped?"・上限到達":""}</small></div>
           <div class="home-idle-return-value"><small>受取可能</small><strong>${idleReward.gold.toLocaleString()}G</strong><small>装備 ${idleReward.equipmentCount}個</small><button id="openIdleReturn" class="${idleReward.available?"primary":"compact-button"}" ${idleReward.available?"":"disabled"}>${idleReward.available?"受け取る":"探索中"}</button></div>
         </div>
 
