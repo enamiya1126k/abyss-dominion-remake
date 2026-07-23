@@ -1,34 +1,34 @@
-import{SaveService}from"./services/SaveService.js?v=1.0.0";
+import{SaveService}from"./services/SaveService.js?v=1.1.0";
 import{SPECIES}from"./data/species.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{HomeScreen}from"./ui/screens/HomeScreen.js?v=1.0.0";
+import{HomeScreen}from"./ui/screens/HomeScreen.js?v=1.1.0";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.15-alpha.95-abyss-skill-effects";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=1.0.0";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=1.0.0";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.95.1-stability-audit";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=1.1.0";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=1.1.0";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=1.1.0";
 import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
-import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=0.9.15-alpha.95.1-stability-audit";
+import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=1.1.0";
+import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=1.1.0";
 import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.15-alpha.95.1-stability-audit";
-import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=1.1.0";
+import{RARITY_ORDER,equipmentDisplayRarity,equipmentStatLabel}from"./data/equipment.js?v=1.1.0";
 import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=0.9.15-alpha.95.1-stability-audit";
-import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=0.9.15-alpha.97-gold-affix-crafting";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.97-gold-affix-crafting";
-import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=1.0.0";
+import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=1.1.0";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=1.1.0";
+import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=1.1.0";
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{SkillScreen}from"./ui/screens/SkillScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=1.0.0";
-import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.95.1-stability-audit";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=1.1.0";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=1.1.0";
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=1.0.0";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=1.0.0";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=1.0.0";
-import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=1.0.0";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=1.1.0";
+import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=1.1.0";
 import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse}from"./battle/SkillSystem.js?v=0.9.15-alpha.95.1-stability-audit";
@@ -39,12 +39,12 @@ import{dangerConfig}from"./core/DangerSystem.js?v=0.9.15-alpha.28-phase10-6-cons
 import{bossLevelForFloor}from"./core/EnemyScalingSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,ENDGAME_BOSSES,normalizeEndgameState,dailyTeamAttempts,createTeamBattleEncounter,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,endgameContractStatus,attemptEndgameContract,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor}from"./core/EndgameSystem.js?v=1.0.0";
-import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=1.0.0";
-import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=0.9.15-alpha.95.1-stability-audit";
-import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=1.0.0";
+import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=1.1.0";
+import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=1.1.0";
+import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=1.1.0";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
-let screen="home",selected=null,equipmentTarget=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home";
+let screen="home",selected=null,equipmentTarget=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",lastExploreCombatPower=null;
 let secondWorldIntroPlaying=false;
 let tenGodContactPlaying=false;
 let monsterManage={editing:false,selected:new Set()},equipmentManage={editing:false,selected:new Set()};
@@ -322,11 +322,11 @@ function equipmentAffixCraftingBody(item){
   const quality=affixQuality(affix),fixed=affix.locked,definition=affixDefinition(affix.id),disabled=!fixed&&locked>=maximum;
   return`<div class="affix-craft-row ${fixed?"is-fixed":""}"><span class="affix-craft-pin">${fixed?"📌":"◇"}</span><div><b style="color:${quality.color}">${formatAffix(affix)}${definition?.legendaryOnly?"〈固有〉":""}</b><small>${quality.name}${fixed?"・再抽選から保護":""}</small></div><button type="button" class="affix-lock-toggle ${fixed?"locked":""}" data-affix-lock-index="${index}" ${disabled?"disabled":""}>${fixed?"固定解除":"この枠を固定"}</button></div>`
  }).join("");
- return`<div class="affix-craft-modal"><div class="affix-craft-summary"><div><small>所持GOLD</small><b>${gold.toLocaleString()}G</b></div><div><small>今回の費用</small><b class="${gold<cost?"insufficient":""}">${cost.toLocaleString()}G</b></div><div><small>固定枠</small><b>${locked}/${maximum}</b></div></div><div class="affix-craft-equipment"><small>${item.rarity} / Lv.${Math.max(1,Number(item.level)||1)}</small><b>${item.name}${item.plus?` +${item.plus}`:""}</b></div><div class="affix-craft-list">${rows}</div><small>固定・解除そのものは無料です。固定枠が増えるほど再抽選費用が上がります。専用アイテムや魔晶石は使わず、必ず1枠以上を再抽選します。</small>${gold<cost?`<p class="affix-craft-warning">あと ${(cost-gold).toLocaleString()}G 必要です。</p>`:""}</div>`
+ return`<div class="affix-craft-modal"><div class="affix-craft-summary"><div><small>所持GOLD</small><b>${gold.toLocaleString()}G</b></div><div><small>今回の費用</small><b class="${gold<cost?"insufficient":""}">${cost.toLocaleString()}G</b></div><div><small>固定枠</small><b>${locked}/${maximum}</b></div></div><div class="affix-craft-equipment"><small>${equipmentDisplayRarity(item)} / Lv.${Math.max(1,Number(item.level)||1)}</small><b>${item.name}${item.plus?` +${item.plus}`:""}</b></div><div class="affix-craft-list">${rows}</div><small>固定・解除そのものは無料です。固定枠が増えるほど再抽選費用が上がります。専用アイテムや魔晶石は使わず、必ず1枠以上を再抽選します。</small>${gold<cost?`<p class="affix-craft-warning">あと ${(cost-gold).toLocaleString()}G 必要です。</p>`:""}</div>`
 }
 function openEquipmentAffixHelp(){
  const qualities=Object.values(AFFIX_QUALITY).map(quality=>`<p class="affix-quality-row"><b style="color:${quality.color}">${quality.name}</b><span>同じ効果でも数値品質が変化</span></p>`).join("");
- app.insertAdjacentHTML("beforeend",Modal("ランダムオプションと厳選",`<div class="affix-help">${qualities}<small>「GOLD厳選」では未固定のオプションを別種類へ再抽選します。📌固定は無料で最大3枠ですが、必ず1枠以上を再抽選対象に残します。固定数が増えるほど必要GOLDも上昇します。〈固有〉はSSR・LRだけに出現します。</small></div>`,"閉じる"));
+ app.insertAdjacentHTML("beforeend",Modal("ランダムオプションと厳選",`<div class="affix-help">${qualities}<small>「GOLD厳選」では未固定のオプションを別種類へ再抽選します。📌固定は無料で最大3枠ですが、必ず1枠以上を再抽選対象に残します。固定数が増えるほど必要GOLDも上昇します。〈固有〉はSSR以上に出現します。</small></div>`,"閉じる"));
  topModalButton().onclick=closeTopModal;
 }
 function openEquipmentAffixCrafting(itemId){
@@ -406,7 +406,7 @@ function togglePartyMember(id){
  save.save()
 }
 function rarityValue(rarity){return ({N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9}[rarity]??0)}
-function elementLabel(element){return ({all:"全属性",neutral:"無",fire:"火",water:"水",wind:"風",earth:"土",lightning:"雷",light:"光",dark:"闇",poison:"毒",nature:"自然"}[element]??element)}
+function elementLabel(element){return ({all:"全属性",neutral:"無",fire:"火",water:"水",ice:"氷",wind:"風",earth:"土",lightning:"雷",thunder:"雷",light:"光",dark:"闇",poison:"毒",nature:"自然"}[element]??element)}
 function monsterVisibleRarity(monster){const rarity=monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N";return !hasCleared1000(save.state)&&["深淵","十神"].includes(rarity)?"？？？":rarity}
 function partyEditorMonsters(){
  const q=partyEditorState.search.trim().toLowerCase();
@@ -512,14 +512,14 @@ function showSummonResults(results,deep=false){save.save();closeTopModal();app.i
 function openCodexHub(){app.insertAdjacentHTML("beforeend",Modal("📖 図鑑",`<div class="codex-hub"><button data-open-codex="monster"><span>📖</span><b>モンスター図鑑</b><small>遭遇・捕獲した魔物を確認</small></button><button data-open-codex="equipment"><span>🗡️</span><b>装備図鑑</b><small>発見した装備を確認</small></button></div>`,"閉じる"));const modal=topModal();modal.querySelectorAll("[data-open-codex]").forEach(b=>b.onclick=()=>{modal.remove();openCodex(b.dataset.openCodex)});modal.querySelector("[data-modal-primary]").onclick=()=>modal.remove()}
 function codexVisibleRarity(rarity){return !hasCleared1000(save.state)&&["深淵","十神"].includes(rarity)?"？？？":rarity}
 function openMonsterCodexDetail(speciesId,seen,index){const sp=SPECIES[speciesId];if(!sp)return;if(!seen){app.insertAdjacentHTML("beforeend",Modal(`No.${String(index+1).padStart(3,"0")} 未遭遇`,`<div class="codex-detail unknown-detail"><div class="codex-detail-icon">❔</div><p>このモンスターの情報はまだ記録されていません。</p></div>`,"図鑑へ戻る"));topModalButton().onclick=closeTopModal;return}const owned=save.state.monsters.filter(m=>m.speciesId===speciesId),captured=save.state.codex.captures[speciesId]??owned.length,base=sp.baseStats??{};app.insertAdjacentHTML("beforeend",Modal(`${sp.emoji} No.${String(index+1).padStart(3,"0")} ${sp.name}`,`<div class="codex-detail"><div class="codex-detail-head"><span>${sp.emoji}</span><div><b>${codexVisibleRarity(sp.rarity)} / ${elementLabel(sp.element)}</b><small>${sp.race??"不明"} / ${sp.role??"不明"}</small></div></div><div class="detail-stat-grid"><span>HP ${base.hp??"-"}</span><span>ATK ${base.atk??"-"}</span><span>DEF ${base.def??"-"}</span><span>SPD ${base.spd??"-"}</span></div><div class="codex-info-list"><p><b>遭遇</b>${save.state.codex.encounters[speciesId]??0}回</p><p><b>捕獲</b>${captured}回</p><p><b>出現階層</b>${sp.minFloor??"?"}階〜</p><p><b>捕獲率</b>${Math.round((sp.captureRate??0)*100)}%</p><p><b>主なスキル</b>${(sp.skills??[]).map(x=>x.name).join("、")||"不明"}</p></div></div>`,"図鑑へ戻る"));topModalButton().onclick=closeTopModal}
-function openEquipmentCodexDetail(name){const all=[...save.state.equipment,...save.state.reserveEquipment,...save.state.bossEquipmentVault],items=all.filter(i=>i.name===name);if(!items.length)return;const best=[...items].sort((a,b)=>(RARITY_ORDER[b.rarity]??0)-(RARITY_ORDER[a.rarity]??0)||(b.plus??0)-(a.plus??0))[0],stats=Object.entries(best.stats??{}).map(([k,v])=>`<span>${equipmentStatLabel(k)} +${v}</span>`).join("");app.insertAdjacentHTML("beforeend",Modal(`${best.slot==="weapon"?"⚔️":best.slot==="armor"?"🛡️":"💍"} ${name}`,`<div class="codex-detail"><p><b>[${codexVisibleRarity(best.rarity)}] ${slotLabel(best.slot)}</b></p><div class="detail-stat-grid">${stats||"<span>能力補正なし</span>"}</div><div class="codex-info-list"><p><b>所持数</b>${items.length}</p><p><b>最高強化</b>+${Math.max(...items.map(i=>i.plus??0))}</p><p><b>シリーズ</b>${best.series??"なし"}</p><p><b>装備規則</b>${best.handedness??"通常"}</p></div></div>`,"図鑑へ戻る"));topModalButton().onclick=closeTopModal}
-function openCodex(type){if(type==="monster"){const owned=new Set(save.state.monsters.map(m=>m.speciesId)),sorted=Object.values(SPECIES).sort((a,b)=>(a.minFloor??0)-(b.minFloor??0)),rows=sorted.map((sp,i)=>{const seen=(save.state.codex.encounters[sp.id]??0)>0||owned.has(sp.id),captured=save.state.codex.captures[sp.id]??save.state.monsters.filter(m=>m.speciesId===sp.id).length,rarity=seen?codexVisibleRarity(sp.rarity):"";return`<button class="codex-row ${seen?"":"unknown"}" data-codex-monster="${sp.id}" data-codex-index="${i}" data-codex-seen="${seen?1:0}"><span>${seen?sp.emoji:"❔"}</span><b>No.${String(i+1).padStart(3,"0")} ${seen?sp.name:"？？？？？"}</b><small>${seen?`${rarity} / ${elementLabel(sp.element)} / 遭遇 ${save.state.codex.encounters[sp.id]??0} / 捕獲 ${captured}`:"未遭遇"}</small></button>`}).join("");app.insertAdjacentHTML("beforeend",Modal("📖 モンスター図鑑",`<div class="codex-summary">発見 ${sorted.filter(sp=>(save.state.codex.encounters[sp.id]??0)>0||owned.has(sp.id)).length} / ${sorted.length}</div><div class="codex-list">${rows}</div>`,"閉じる"));const modal=topModal();modal.querySelectorAll("[data-codex-monster]").forEach(b=>b.onclick=()=>openMonsterCodexDetail(b.dataset.codexMonster,b.dataset.codexSeen==="1",Number(b.dataset.codexIndex)))}else{const all=[...save.state.equipment,...save.state.reserveEquipment,...save.state.bossEquipmentVault],names=[...new Set(all.map(i=>i.name))],rows=names.length?names.map(name=>{const items=all.filter(i=>i.name===name),best=[...items].sort((a,b)=>(RARITY_ORDER[b.rarity]??0)-(RARITY_ORDER[a.rarity]??0))[0];return`<button class="codex-row" data-codex-equipment="${name.replaceAll('"','&quot;')}"><span>${best.slot==="weapon"?"⚔️":best.slot==="armor"?"🛡️":"💍"}</span><b>[${codexVisibleRarity(best.rarity)}] ${name}</b><small>${slotLabel(best.slot)} / 所持 ${items.length}</small></button>`}).join(""):'<div class="empty">まだ装備を発見していません</div>';app.insertAdjacentHTML("beforeend",Modal("🗡️ 装備図鑑",`<div class="codex-summary">発見 ${names.length}種</div><div class="codex-list">${rows}</div>`,"閉じる"));const modal=topModal();modal.querySelectorAll("[data-codex-equipment]").forEach(b=>b.onclick=()=>openEquipmentCodexDetail(b.dataset.codexEquipment))}topModalButton().onclick=closeTopModal}
+function openEquipmentCodexDetail(name){const all=[...save.state.equipment,...save.state.reserveEquipment,...save.state.bossEquipmentVault],items=all.filter(i=>i.name===name);if(!items.length)return;const best=[...items].sort((a,b)=>(RARITY_ORDER[equipmentDisplayRarity(b)]??0)-(RARITY_ORDER[equipmentDisplayRarity(a)]??0)||(b.plus??0)-(a.plus??0))[0],displayRarity=equipmentDisplayRarity(best),stats=Object.entries(best.stats??{}).map(([k,v])=>`<span>${equipmentStatLabel(k)} +${v}</span>`).join("");app.insertAdjacentHTML("beforeend",Modal(`${best.slot==="weapon"?"⚔️":best.slot==="armor"?"🛡️":"💍"} ${name}`,`<div class="codex-detail"><p><b>[${codexVisibleRarity(displayRarity)}] ${slotLabel(best.slot)}</b></p><div class="detail-stat-grid">${stats||"<span>能力補正なし</span>"}</div><div class="codex-info-list"><p><b>所持数</b>${items.length}</p><p><b>最高強化</b>+${Math.max(...items.map(i=>i.plus??0))}</p><p><b>シリーズ</b>${best.series??"なし"}</p><p><b>装備規則</b>${best.handedness??"通常"}</p></div></div>`,"図鑑へ戻る"));topModalButton().onclick=closeTopModal}
+function openCodex(type){if(type==="monster"){const owned=new Set(save.state.monsters.map(m=>m.speciesId)),sorted=Object.values(SPECIES).sort((a,b)=>(a.minFloor??0)-(b.minFloor??0)),rows=sorted.map((sp,i)=>{const seen=(save.state.codex.encounters[sp.id]??0)>0||owned.has(sp.id),captured=save.state.codex.captures[sp.id]??save.state.monsters.filter(m=>m.speciesId===sp.id).length,rarity=seen?codexVisibleRarity(sp.rarity):"";return`<button class="codex-row ${seen?"":"unknown"}" data-codex-monster="${sp.id}" data-codex-index="${i}" data-codex-seen="${seen?1:0}"><span>${seen?sp.emoji:"❔"}</span><b>No.${String(i+1).padStart(3,"0")} ${seen?sp.name:"？？？？？"}</b><small>${seen?`${rarity} / ${elementLabel(sp.element)} / 遭遇 ${save.state.codex.encounters[sp.id]??0} / 捕獲 ${captured}`:"未遭遇"}</small></button>`}).join("");app.insertAdjacentHTML("beforeend",Modal("📖 モンスター図鑑",`<div class="codex-summary">発見 ${sorted.filter(sp=>(save.state.codex.encounters[sp.id]??0)>0||owned.has(sp.id)).length} / ${sorted.length}</div><div class="codex-list">${rows}</div>`,"閉じる"));const modal=topModal();modal.querySelectorAll("[data-codex-monster]").forEach(b=>b.onclick=()=>openMonsterCodexDetail(b.dataset.codexMonster,b.dataset.codexSeen==="1",Number(b.dataset.codexIndex)))}else{const all=[...save.state.equipment,...save.state.reserveEquipment,...save.state.bossEquipmentVault],names=[...new Set(all.map(i=>i.name))],rows=names.length?names.map(name=>{const items=all.filter(i=>i.name===name),best=[...items].sort((a,b)=>(RARITY_ORDER[equipmentDisplayRarity(b)]??0)-(RARITY_ORDER[equipmentDisplayRarity(a)]??0))[0],displayRarity=equipmentDisplayRarity(best);return`<button class="codex-row" data-codex-equipment="${name.replaceAll('"','&quot;')}"><span>${best.slot==="weapon"?"⚔️":best.slot==="armor"?"🛡️":"💍"}</span><b>[${codexVisibleRarity(displayRarity)}] ${name}</b><small>${slotLabel(best.slot)} / 所持 ${items.length}</small></button>`}).join(""):'<div class="empty">まだ装備を発見していません</div>';app.insertAdjacentHTML("beforeend",Modal("🗡️ 装備図鑑",`<div class="codex-summary">発見 ${names.length}種</div><div class="codex-list">${rows}</div>`,"閉じる"));const modal=topModal();modal.querySelectorAll("[data-codex-equipment]").forEach(b=>b.onclick=()=>openEquipmentCodexDetail(b.dataset.codexEquipment))}topModalButton().onclick=closeTopModal}
 function enhanceEquipment(id){openEquipmentEnhancement(id)}
 function equipmentEnhancementBody(item){
  const materials=enhancementMaterialCandidates(save.state,item.id),level=Math.max(1,item.level??1),need=equipmentExpNeed(level),progress=Math.floor(((item.exp??0)/need)*100);
- const rows=materials.slice(0,120).map(material=>{const exp=equipmentMaterialExp(material,item),same=material.name===item.name;return`<label class="equipment-material-row ${same?"same-name":""}"><input type="checkbox" data-equipment-material="${material.id}"><span><b>[${material.rarity}] ${material.name}</b><small>Lv.${material.level??1}${material.plus?` / +${material.plus}`:""}${same?" / 同名基礎EXP×5":""}${(material.level??1)>1||material.exp?" / 育成EXP100%継承":""}</small></span><strong>+${exp.toLocaleString()} EXP</strong></label>`}).join("")||'<div class="empty">素材にできる装備がありません。<br><small>装備中・お気に入り・ロック中は表示されません。</small></div>';
+ const rows=materials.slice(0,120).map(material=>{const exp=equipmentMaterialExp(material,item),same=material.name===item.name;return`<label class="equipment-material-row ${same?"same-name":""}"><input type="checkbox" data-equipment-material="${material.id}"><span><b>[${equipmentDisplayRarity(material)}] ${material.name}</b><small>Lv.${material.level??1}${material.plus?` / +${material.plus}`:""}${same?" / 同名基礎EXP×5":""}${(material.level??1)>1||material.exp?" / 育成EXP100%継承":""}</small></span><strong>+${exp.toLocaleString()} EXP</strong></label>`}).join("")||'<div class="empty">素材にできる装備がありません。<br><small>装備中・お気に入り・ロック中は表示されません。</small></div>';
  const growthRecords=`<section class="equipment-growth-records"><div class="section-label">育成記録</div>${item.slot==="weapon"?weaponMasterySummary(item):""}${item.series?seriesMasterySummary(save.state,item.series):'<p class="growth-record-empty">シリーズ装備ではありません</p>'}</section>`;
- return`<div class="equipment-enhancement"><div class="enhancement-target compact"><div class="enhancement-title-row"><div><small>INFINITE ENHANCEMENT</small><h3>[${item.rarity}] ${item.name}</h3></div><strong>Lv.${level}<small> ∞</small></strong></div><div class="enhancement-status-row infinite"><span>レベル上限なし</span><span>次Lvまで ${(need-(item.exp??0)).toLocaleString()}</span></div><div class="equipment-exp large"><i style="width:${progress}%"></i></div><p>EXP ${(item.exp??0).toLocaleString()} / ${need.toLocaleString()}</p></div>${growthRecords}<section class="equipment-feed-panel"><div class="section-label">素材を選択</div><div class="enhancement-tools"><button data-material-preset="same">同名</button><button data-material-preset="low">N・R</button><button data-material-preset="all">全選択</button><button data-material-preset="none">解除</button></div><div class="enhancement-preview" id="enhancementPreview"><b>素材 0個</b><span>獲得EXP 0</span><small>強化後 Lv.${level}</small></div><p class="muted compact-note">育成済み装備は投入EXPを100%継承。同名ボーナス×5は基礎素材EXPだけに適用され、EXP増殖は起きません。</p><div class="equipment-material-list">${rows}</div><button id="executeEquipmentEnhancement" class="primary sticky-enhance-button" disabled>選択した装備で強化</button></section></div>`
+ return`<div class="equipment-enhancement"><div class="enhancement-target compact"><div class="enhancement-title-row"><div><small>INFINITE ENHANCEMENT</small><h3>[${equipmentDisplayRarity(item)}] ${item.name}</h3></div><strong>Lv.${level}<small> ∞</small></strong></div><div class="enhancement-status-row infinite"><span>レベル上限なし</span><span>次Lvまで ${(need-(item.exp??0)).toLocaleString()}</span></div><div class="equipment-exp large"><i style="width:${progress}%"></i></div><p>EXP ${(item.exp??0).toLocaleString()} / ${need.toLocaleString()}</p></div>${growthRecords}<section class="equipment-feed-panel"><div class="section-label">素材を選択</div><div class="enhancement-tools"><button data-material-preset="same">同名</button><button data-material-preset="low">N・R</button><button data-material-preset="all">全選択</button><button data-material-preset="none">解除</button></div><div class="enhancement-preview" id="enhancementPreview"><b>素材 0個</b><span>獲得EXP 0</span><small>強化後 Lv.${level}</small></div><p class="muted compact-note">育成済み装備は投入EXPを100%継承。同名ボーナス×5は基礎素材EXPだけに適用され、EXP増殖は起きません。</p><div class="equipment-material-list">${rows}</div><button id="executeEquipmentEnhancement" class="primary sticky-enhance-button" disabled>選択した装備で強化</button></section></div>`
 }
 function openEquipmentEnhancement(id){
  const item=save.state.equipment.find(i=>i.id===id);if(!item)return;
@@ -667,9 +667,32 @@ function maze(){
  return{cols,rows,shape,tiles,start:startCell,exit:{...exit},shop,boss,chests,treasureRoom,steps:0,nextEncounter:10+Math.floor(rng()*23),encountering:false}
 }
 function currentSnapshot(){game.world.encountering=false;game.player.path=[];game.player.p=0;game.player.rx=game.player.x;game.player.ry=game.player.y;return{world:game.world,player:game.player,partyTrail:game.partyTrail,cameraData:{x:game.camera.x,y:game.camera.y,z:game.camera.z,ox:game.camera.ox,oy:game.camera.oy,manual:game.camera.manual}}}
+function animateExploreCombatPower(){
+ const hud=document.getElementById("exploreCombatPower"),value=hud?.querySelector("[data-combat-power-value]"),deltaLabel=hud?.querySelector("[data-combat-power-delta]");
+ if(!hud||!value)return;
+ const target=Math.max(0,Math.round(Number(hud.dataset.power)||0)),previous=lastExploreCombatPower;
+ lastExploreCombatPower=target;
+ const start=previous==null?Math.max(0,target-Math.max(12,Math.round(target*.12))):previous;
+ const delta=target-start;
+ if(previous!=null&&delta&&deltaLabel){
+  deltaLabel.hidden=false;
+  deltaLabel.textContent=`${delta>0?"+":""}${delta.toLocaleString("ja-JP")}`;
+  hud.classList.add(delta>0?"power-up":"power-down");
+ }
+ if(start===target){value.textContent=target.toLocaleString("ja-JP");return}
+ const started=performance.now(),duration=650;
+ const step=now=>{
+  if(!value.isConnected)return;
+  const progress=Math.min(1,(now-started)/duration),eased=1-Math.pow(1-progress,3);
+  value.textContent=Math.round(start+(target-start)*eased).toLocaleString("ja-JP");
+  if(progress<1)requestAnimationFrame(step);
+ };
+ requestAnimationFrame(step);
+}
 function bindExplore(){
  recordBiomeFloor(save.state,save.state.player.currentFloor);save.save();
  if(shouldPlaySecondWorldIntro(save.state)){setTimeout(()=>playSecondWorldIntro(),80);return}
+ animateExploreCombatPower();
  const canvas=document.getElementById("gameCanvas"),r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);
  canvas.width=r.width*d;canvas.height=r.height*d;
  const mini=document.getElementById("miniMap");mini.width=132*d;mini.height=132*d;
@@ -689,9 +712,9 @@ function bindExplore(){
  document.getElementById("returnHome").onclick=()=>{
   if(!confirm(`${save.state.player.currentFloor}階から帰還する？\n探索報酬を受け取って拠点へ戻ります。`))return;
   stopGame();snapshot=null;const result=claimManualReturn(save.state);save.state.player.inRun=false;save.save();
-  const rarityRank={N:0,R:1,SR:2,SSR:3,LR:4},best=result.equipment.reduce((a,x)=>!a||rarityRank[x.item.rarity]>rarityRank[a.item.rarity]?x:a,null);
+  const best=result.equipment.reduce((a,x)=>!a||(RARITY_ORDER[equipmentDisplayRarity(x.item)]??0)>(RARITY_ORDER[equipmentDisplayRarity(a.item)]??0)?x:a,null);
   const equipmentRows=result.equipment.length?result.equipment.map(({item,receipt})=>`<div class="return-reward-item rarity-${item.rarity}"><b>${item.rarity} ${item.name}</b><small>${receipt.message}</small></div>`).join(""):'<p class="muted">今回は装備ドロップなし</p>';
-  const highlight=best&&["SSR","LR"].includes(best.item.rarity)?`<div class="return-reward-highlight rarity-${best.item.rarity}"><strong>${best.item.rarity} DROP!</strong><span>${best.item.name}</span></div>`:"";
+  const bestRarity=best?equipmentDisplayRarity(best.item):null,highlight=best&&(RARITY_ORDER[bestRarity]??0)>=RARITY_ORDER.SSR?`<div class="return-reward-highlight rarity-${bestRarity}"><strong>${bestRarity} DROP!</strong><span>${best.item.name}</span></div>`:"";
   const grade=returnRewardGrade(result.floorsCleared,result.equipment);app.insertAdjacentHTML("beforeend",Modal("探索帰還報告",`<div class="return-reward-report">${highlight}${returnGradeBadge(grade)}<p><b>${result.startFloor}F → ${result.endFloor}F</b></p><p>踏破階層 <b>${result.floorsCleared}階</b></p><p>獲得GOLD <b>${result.gold.toLocaleString()}G</b></p><h3>獲得装備 ${result.equipment.length}個</h3><div class="return-reward-items">${equipmentRows}</div>${returnRarityTable()}</div>`,"拠点へ戻る"));
   const modal=topModal(),finish=()=>{modal?.remove();go("home")};modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish;
  }
