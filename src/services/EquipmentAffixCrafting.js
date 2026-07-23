@@ -1,13 +1,90 @@
-import{ensureEquipmentAffixes,rollAffixForSlot,rerollAffixValue}from"../data/equipmentAffixes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-const SHARD_KEY="affixShards";
-export function affixShards(state){state.inventory??={};return Number(state.inventory[SHARD_KEY]??0)}
-export function addAffixShards(state,n){state.inventory??={};state.inventory[SHARD_KEY]=affixShards(state)+Math.max(0,Math.floor(n));return state.inventory[SHARD_KEY]}
-export function dismantleYield(item){return({N:1,R:2,SR:5,SSR:12,LR:28}[item.rarity]??1)+ensureEquipmentAffixes(item).length*2}
-export function rerollCost(item){const locked=ensureEquipmentAffixes(item).filter(a=>a.locked).length;return 8+locked*7}
-export function valueRerollCost(){return 5}
-export function transferCost(){return 18}
-export function toggleAffixLock(item,index){const a=ensureEquipmentAffixes(item)[index];if(!a)return false;a.locked=!a.locked;return true}
-export function rerollUnlockedAffixes(state,item){const cost=rerollCost(item);if(affixShards(state)<cost)return{ok:false,message:`オプション欠片が足りません（必要 ${cost}）`};const list=ensureEquipmentAffixes(item),used=list.filter(a=>a.locked).map(a=>a.id);for(let i=0;i<list.length;i++){if(list[i].locked)continue;const next=rollAffixForSlot(item.slot,item.rarity,used);if(next){list[i]=next;used.push(next.id)}}state.inventory[SHARD_KEY]-=cost;return{ok:true,cost}}
-export function rerollOneValue(state,item,index){const cost=valueRerollCost(),a=ensureEquipmentAffixes(item)[index];if(!a)return{ok:false,message:"対象オプションがありません"};if(affixShards(state)<cost)return{ok:false,message:`オプション欠片が足りません（必要 ${cost}）`};rerollAffixValue(a);state.inventory[SHARD_KEY]-=cost;return{ok:true,cost}}
-export function transferAffix(state,source,target,sourceIndex,targetIndex){const cost=transferCost(),sa=ensureEquipmentAffixes(source)[sourceIndex],ta=ensureEquipmentAffixes(target)[targetIndex];if(!sa||!ta)return{ok:false,message:"移植するオプションを選んでください"};if(source.id===target.id)return{ok:false,message:"同じ装備には移植できません"};if(source.slot!==target.slot)return{ok:false,message:"同じ装備種別どうしでのみ移植できます"};if(affixShards(state)<cost)return{ok:false,message:`オプション欠片が足りません（必要 ${cost}）`};target.affixes[targetIndex]={...sa,locked:false};state.inventory[SHARD_KEY]-=cost;return{ok:true,cost}}
-export function dismantleEquipment(state,itemId){const item=state.equipment.find(i=>i.id===itemId);if(!item)return{ok:false,message:"装備が見つかりません"};if(item.equippedBy||item.favorite||item.locked||item.ruleOverrides?.unsellable)return{ok:false,message:"保護中の装備は分解できません"};const gain=dismantleYield(item);state.equipment=state.equipment.filter(i=>i.id!==itemId);addAffixShards(state,gain);return{ok:true,gain}}
+import{ensureEquipmentAffixes,rollAffixForSlot}from"../data/equipmentAffixes.js?v=0.9.15-alpha.97-gold-affix-crafting";
+import{goldForClearedFloor}from"../core/ReturnRewardSystem.js?v=0.9.15-alpha.95.1-stability-audit";
+
+const LOCK_MULTIPLIERS=[1,2.25,4.75,8];
+const RARITY_MULTIPLIERS={N:.70,R:.85,SR:1,SSR:1.35,LR:1.75};
+const MINIMUM_COSTS={N:200,R:300,SR:450,SSR:700,LR:1000};
+
+function safeInteger(value,fallback=0){
+ const number=Number(value);
+ return Number.isFinite(number)?Math.max(0,Math.min(Number.MAX_SAFE_INTEGER,Math.floor(number))):fallback;
+}
+function roundedGold(value){
+ const amount=Math.max(1,Math.min(Number.MAX_SAFE_INTEGER,Number(value)||1));
+ const unit=amount>=100000000?1000000:amount>=1000000?10000:amount>=10000?100:10;
+ return Math.max(unit,Math.min(Number.MAX_SAFE_INTEGER,Math.round(amount/unit)*unit));
+}
+export function normalizeEquipmentCraftingState(state){
+ const source=state.equipmentCrafting&&typeof state.equipmentCrafting==="object"&&!Array.isArray(state.equipmentCrafting)?state.equipmentCrafting:{};
+ state.equipmentCrafting={
+  rerolls:safeInteger(source.rerolls),
+  goldSpent:safeInteger(source.goldSpent),
+  maxLocksUsed:Math.max(0,Math.min(3,safeInteger(source.maxLocksUsed)))
+ };
+ return state.equipmentCrafting;
+}
+export function maxLockableAffixes(item){
+ return Math.max(0,Math.min(3,ensureEquipmentAffixes(item).length-1));
+}
+export function normalizeEquipmentAffixLocks(item){
+ const list=ensureEquipmentAffixes(item),maximum=maxLockableAffixes(item);
+ let kept=0;
+ list.forEach(affix=>{
+  const shouldKeep=Boolean(affix.locked)&&kept<maximum;
+  affix.locked=shouldKeep;
+  if(shouldKeep)kept++;
+ });
+ return list;
+}
+export function lockedAffixCount(item){
+ return normalizeEquipmentAffixLocks(item).filter(affix=>affix.locked).length;
+}
+export function rerollLockMultiplier(item){
+ return LOCK_MULTIPLIERS[lockedAffixCount(item)]??LOCK_MULTIPLIERS.at(-1);
+}
+export function rerollGoldCost(state,item){
+ const floor=Math.max(1,Math.min(10000,safeInteger(state?.player?.maxFloor,1))),rarity=item?.rarity??"N";
+ const floorBase=goldForClearedFloor(floor)*.25,rarityBase=Math.max(MINIMUM_COSTS[rarity]??500,floorBase*(RARITY_MULTIPLIERS[rarity]??1));
+ const level=Math.max(1,safeInteger(item?.level,1)),levelMultiplier=1+Math.min(.75,Math.log10(level)*.15);
+ return roundedGold(rarityBase*levelMultiplier*rerollLockMultiplier(item));
+}
+export function toggleAffixLock(item,index){
+ const list=normalizeEquipmentAffixLocks(item),affix=list[index];
+ if(!affix)return{ok:false,message:"対象オプションがありません"};
+ if(affix.locked){
+  affix.locked=false;
+  return{ok:true,locked:false,lockedCount:lockedAffixCount(item),maxLocks:maxLockableAffixes(item)}
+ }
+ const maximum=maxLockableAffixes(item),locked=lockedAffixCount(item);
+ if(locked>=maximum)return{ok:false,message:maximum?`固定できるのは最大${maximum}枠です。1枠以上は再抽選してください。`:"この装備は固定できません。1枠以上は再抽選してください。"};
+ affix.locked=true;
+ return{ok:true,locked:true,lockedCount:locked+1,maxLocks:maximum}
+}
+export function rerollUnlockedAffixes(state,item){
+ if(!state?.player||!item)return{ok:false,message:"装備データを確認できません"};
+ const list=normalizeEquipmentAffixLocks(item);
+ if(!list.length)return{ok:false,message:"この装備には再抽選できるオプションがありません"};
+ const unlocked=list.map((affix,index)=>affix.locked?null:index).filter(index=>index!==null);
+ if(!unlocked.length)return{ok:false,message:"再抽選するオプションを1枠以上残してください"};
+ const cost=rerollGoldCost(state,item),gold=safeInteger(state.player.gold);
+ if(gold<cost)return{ok:false,message:`GOLDが足りません（必要 ${cost.toLocaleString()}G）`,cost};
+
+ const originalIds=new Set(list.map(affix=>affix.id)),used=new Set(list.filter(affix=>affix.locked).map(affix=>affix.id)),replacements=new Map();
+ for(const index of unlocked){
+  let next=rollAffixForSlot(item.slot,item.rarity,[...originalIds,...used]);
+  if(!next)next=rollAffixForSlot(item.slot,item.rarity,[...used]);
+  if(!next)return{ok:false,message:"再抽選候補を生成できませんでした。GOLDは消費されていません"};
+  next.locked=false;replacements.set(index,next);used.add(next.id);
+ }
+
+ const before=list.map(affix=>({...affix}));
+ item.affixes=list.map((affix,index)=>replacements.get(index)??affix);
+ state.player.gold=gold-cost;
+ const history=normalizeEquipmentCraftingState(state);
+ history.rerolls=safeInteger(history.rerolls+1);
+ history.goldSpent=safeInteger(history.goldSpent+cost);
+ history.maxLocksUsed=Math.max(history.maxLocksUsed,lockedAffixCount(item));
+ item.rerollCount=safeInteger(item.rerollCount)+1;
+ item.lastRerolledAt=new Date().toISOString();
+ return{ok:true,cost,before,after:item.affixes.map(affix=>({...affix})),lockedCount:lockedAffixCount(item),rerolledCount:unlocked.length}
+}
