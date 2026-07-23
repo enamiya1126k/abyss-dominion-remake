@@ -4,7 +4,7 @@ import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.32-phase10-10-relea
 import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{worldPresentationForFloor}from"../../core/WorldSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=0.9.15-alpha.34-combat-power";
-import{manualReturnPreview}from"../../core/ReturnRewardSystem.js?v=0.9.15-alpha.35-return-reward-phase1";
+import{manualReturnPreview}from"../../core/ReturnRewardSystem.js?v=0.9.15-alpha.36-return-equipment-phase1";
 export function ExploreScreen(state){const combatPower=partyCombatPower(state),returnReward=manualReturnPreview(state),biome=biomeForFloor(state.player.currentFloor),progress=biomeProgress(state,biome),world=worldPresentationForFloor(state.player.currentFloor);const p=state.party
   .map(id=>state.monsters.find(m=>m.id===id))
   .filter(Boolean);
