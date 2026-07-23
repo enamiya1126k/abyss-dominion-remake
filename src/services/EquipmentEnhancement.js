@@ -37,7 +37,7 @@ export function addEquipmentExp(item,amount){
 export function enhancementMaterialCandidates(state,targetId){
  const target=state.equipment?.find(item=>item.id===targetId);
  if(!target)return[];
- return(state.equipment??[]).filter(item=>item.id!==targetId&&!item.equippedBy&&!item.favorite&&!item.locked)
+ return(state.equipment??[]).filter(item=>item.id!==targetId&&!item.equippedBy&&!item.favorite&&!item.locked&&!item.ruleOverrides?.unsellable)
   .sort((a,b)=>Number(b.name===target.name)-Number(a.name===target.name)||equipmentMaterialExp(b,target)-equipmentMaterialExp(a,target));
 }
 
@@ -55,8 +55,8 @@ export function consumeEquipmentMaterials(state,targetId,materialIds=[]){
  if(!target)return{ok:false,message:"強化対象が見つかりません。"};
  const unique=[...new Set(materialIds)].filter(id=>id!==targetId),materials=unique.map(id=>state.equipment?.find(item=>item.id===id)).filter(Boolean);
  if(!materials.length)return{ok:false,message:"素材が選択されていません。"};
- const invalid=materials.find(item=>item.equippedBy||item.favorite||item.locked);
- if(invalid)return{ok:false,message:`${invalid.name}は装備中・お気に入り・ロック中のため素材にできません。`};
+ const invalid=materials.find(item=>item.equippedBy||item.favorite||item.locked||item.ruleOverrides?.unsellable);
+ if(invalid)return{ok:false,message:`${invalid.name}は保護中のため素材にできません。`};
  const amount=materials.reduce((sum,item)=>sum+equipmentMaterialExp(item,target),0),ids=new Set(materials.map(item=>item.id));
  state.equipment=state.equipment.filter(item=>!ids.has(item.id));
  const result=addEquipmentExp(target,amount);

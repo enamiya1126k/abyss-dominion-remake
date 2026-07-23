@@ -1,14 +1,15 @@
-import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE}from"../core/config.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE}from"../core/config.js?v=0.9.15-alpha.95.1-stability-audit";
 import{createMonster}from"../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
-import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 
-import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
-import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=0.9.15-alpha.95.1-stability-audit";
+import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.95.1-stability-audit";
+import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 function finiteNumber(value,fallback=0,min=-Infinity,max=Infinity){
  const number=Number(value);
  return Number.isFinite(number)?Math.max(min,Math.min(max,number)):fallback;
@@ -42,18 +43,7 @@ function reconcilePartyAndEquipment(state){
  }
  if(!party.length&&state.monsters[0])party.push(state.monsters[0].id);
  state.party=party;
- const equipmentById=new Map(state.equipment.map(item=>[item.id,item]));
- for(const item of state.equipment)item.equippedBy=null;
- const globallyEquipped=new Set();
- for(const monster of state.monsters){
-  for(const slot of Object.keys(monster.equipment??{})){
-   const id=monster.equipment[slot];
-   const item=id?equipmentById.get(id):null;
-   if(!item||globallyEquipped.has(id)){monster.equipment[slot]=null;continue}
-   globallyEquipped.add(id);
-   item.equippedBy=monster.id;
-  }
- }
+ normalizeEquipmentLoadouts(state);
 }
 
 function normalizeContractedEndgameMonster(monster){
@@ -72,7 +62,7 @@ function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
  ];
- return{schemaVersion:32,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false,gameClear1000:false,ending1000Played:false,secondWorldEntered:false,tenGodObserved:false},worldPhase:0,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},bossKills:{},dangerLevel:1},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,highManaPotions:0,partyManaPotions:0,fullManaPotions:0,partyFullManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5,abyssKeys:0},settings:{minimapVisible:true,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0},abyssSkillTree:createAbyssSkillTreeState(),secondWorld:{randomEvents:{resolvedFloors:[],counts:{}},elites:{encountered:0,defeated:0,byAffix:{},bySpecies:{}}},endgame:{teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastRollStep:0,records:{},fragments:{},craftCounts:{},craftedGear:[],rescue:{post1000Encounters:0,consecutiveLosses:0,lastResult:null}}}};
+ return{schemaVersion:33,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false,gameClear1000:false,ending1000Played:false,secondWorldEntered:false,tenGodObserved:false},worldPhase:0,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},bossKills:{},dangerLevel:1},monsters,party:monsters.map(m=>m.id),equipment:[],reserveEquipment:[],bossEquipmentVault:[],inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,highManaPotions:0,partyManaPotions:0,fullManaPotions:0,partyFullManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5,abyssKeys:0},settings:{minimapVisible:true,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0},abyssSkillTree:createAbyssSkillTreeState(),secondWorld:{randomEvents:{resolvedFloors:[],counts:{}},elites:{encountered:0,defeated:0,byAffix:{},bySpecies:{}}},endgame:{teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastRollStep:0,records:{},fragments:{},craftCounts:{},craftedGear:[],rescue:{post1000Encounters:0,consecutiveLosses:0,lastResult:null}}}};
 }
 export class SaveService{
  constructor(){this.state=this.load();this.save()}
@@ -186,9 +176,9 @@ export class SaveService{
    }
   }));
   reconcilePartyAndEquipment(s);
-  s.schemaVersion=32;
+  s.schemaVersion=33;
   s.appVersion=APP_VERSION;
-  if(from<32)s.lastMigration={from,to:32,at:new Date().toISOString()};
+  if(from<33)s.lastMigration={from,to:33,at:new Date().toISOString()};
   return s
  }
  save(){

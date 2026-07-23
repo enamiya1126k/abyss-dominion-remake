@@ -1,4 +1,4 @@
-import{abyssGoldReward}from"../core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{abyssGoldReward}from"../core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 
 export const EQUIPMENT_LIMIT=500;
 export const RESERVE_LIMIT=30;
@@ -29,10 +29,10 @@ export function receiveEquipment(state,item,{bossReward=false}={}){
   state.reserveEquipment.push(item);
   return{location:"reserve",message:`所持上限のため予備BOXへ転送（${state.reserveEquipment.length}/${RESERVE_LIMIT}）`};
  }
- if(bossReward){
+ if(bossReward||item.ruleOverrides?.unsellable){
   item.equippedBy=null;
   state.bossEquipmentVault.push(item);
-  return{location:"bossVault",message:"ボス限定報酬を王装保管庫へ転送"};
+  return{location:"bossVault",message:"売却不可の限定報酬を王装保管庫へ転送"};
  }
  const gold=equipmentSellPrice(item,state);
  state.player.gold+=gold;
