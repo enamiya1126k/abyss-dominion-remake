@@ -100,7 +100,7 @@ function phase2Decorate(species,skills){
   tank:[
    null,
    {name:"挑発の構え",type:"stance",tag:"タンク",target:"自分",description:"2ターン挑発し、受けるダメージを35%軽減。",effects:[{kind:"taunt",turns:2},{kind:"guard",value:.35,turns:2}]},
-   {name:"盾砕き",effects:[{kind:"stun",chance:.35,turns:1}]},
+   {name:"盾砕き",effects:[{kind:"stun",chance:.35,turns:1,enemy:true}]},
    {name:"鉄壁",type:"stance",tag:"防御",target:"自分",description:"2ターン受けるダメージを55%軽減。",effects:[{kind:"guard",value:.55,turns:2}]},
    {name:"迎撃態勢",type:"stance",tag:"カウンター",target:"自分",description:"3ターン、攻撃を受けるとATK120%で反撃。",effects:[{kind:"counter",value:1.2,turns:3}]},
    {name:"守護の号令",type:"buff",tag:"バフ",target:"味方全体",description:"味方全体のDEFを30%上げる。",effects:[{kind:"defUp",value:.30,turns:3,allies:true}]},
@@ -132,7 +132,7 @@ function phase2Decorate(species,skills){
    {name:"鈍化連撃",effects:[{kind:"spdDown",value:.30,turns:3,enemy:true}]},
    {name:"腐食弾",status:{id:"poison",name:"猛毒",chance:.80,turns:4,power:.05},effects:[{kind:"defDown",value:.20,turns:3,enemy:true}]},
    {name:"破甲穿ち",effects:[{kind:"defDown",value:.35,turns:3,enemy:true}]},
-   {name:"呪縛",effects:[{kind:"stun",chance:.55,turns:1}]},
+   {name:"呪縛",effects:[{kind:"stun",chance:.55,turns:1,enemy:true}]},
    {name:"深層侵食",effects:[{kind:"atkDown",value:.35,turns:3,enemy:true},{kind:"defDown",value:.25,turns:3,enemy:true}]},
    {name:"死毒の刻印",status:{id:"poison",name:"死毒",chance:.90,turns:4,power:.07}},
    {name:"崩壊呪詛",effects:[{kind:"atkDown",value:.40,turns:4,enemy:true},{kind:"defDown",value:.40,turns:4,enemy:true}]},
@@ -200,7 +200,19 @@ export function normalizeSkillProgress(monster){
 export function recordSkillUse(monster,skillId,multiplier=1){const progress=skillProgressFor(monster,skillId);progress.uses++;if(progress.level>=10)return progress;progress.exp+=Math.max(1,Math.round(10*Math.max(0,multiplier)));while(progress.level<10&&progress.exp>=25*progress.level){progress.exp-=25*progress.level;progress.level++}progress.need=progress.level>=10?0:25*progress.level;return progress}
 export function skillById(id){return BY_ID.get(id)??SKILLS[id]??null}
 export function canUseSkill(monster,skill,cooldown=0){return Boolean(skill)&&monster.currentMp>=effectiveSkillMpCost(monster,skill)&&cooldown<=0}
-export function affixOutgoingDamageMultiplier(stats,enemy,element="neutral"){const a=stats?._affixes??{},elementBonus=a[`${element}Damage`]??0,targetBonus=enemy?.boss||enemy?.endgameBossId?a.bossDamage??0:a.normalDamage??0,lowBonus=stats?._currentHpRatio!=null&&stats._currentHpRatio<=.35?a.lowHpDamage??0:0,fullBonus=stats?._currentHpRatio!=null&&stats._currentHpRatio>=.999?a.fullHpDamage??0:0,total=Math.max(0,Math.min(300,Number(elementBonus)+Number(targetBonus)+Number(lowBonus)+Number(fullBonus)));return 1+total/100}
+export function affixOutgoingDamageMultiplier(stats,enemy,element="neutral"){
+ const a=stats?._affixes??{};
+ // Species data represents ice as water and thunder as lightning. Accept the
+ // equipment vocabulary as aliases so neither affix becomes a displayed-only
+ // stat. Water and ice bonuses therefore share the same elemental family.
+ const elementKeys=element==="lightning"
+  ?["thunderDamage"]
+  :element==="water"||element==="ice"
+   ?["waterDamage","iceDamage"]
+   :[`${element}Damage`];
+ const elementBonus=elementKeys.reduce((sum,key)=>sum+(Number(a[key])||0),0);
+ const targetBonus=enemy?.boss||enemy?.endgameBossId?a.bossDamage??0:a.normalDamage??0,lowBonus=stats?._currentHpRatio!=null&&stats._currentHpRatio<=.35?a.lowHpDamage??0:0,fullBonus=stats?._currentHpRatio!=null&&stats._currentHpRatio>=.999?a.fullHpDamage??0:0,total=Math.max(0,Math.min(300,Number(elementBonus)+Number(targetBonus)+Number(lowBonus)+Number(fullBonus)));return 1+total/100
+}
 export function skillDamage(stats,enemy,skill,critical=false){const a=stats._affixes??{},base=Math.max(1,Math.floor((stats.atk*skill.power-enemy.def*.3)*affixOutgoingDamageMultiplier(stats,enemy,skill?.element??"neutral"))),critMult=1.65+(a.critDamage??0)/100;return critical?Math.floor(base*critMult):base}
 export function skillElementLabel(skill){return elementLabel(skill?.element)}
 
