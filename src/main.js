@@ -1,10 +1,10 @@
-import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
 import{SPECIES}from"./data/species.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
 import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.28-phase10-6-consistency";
@@ -19,6 +19,8 @@ import{aggregateAffixes}from"./data/equipmentAffixes.js?v=0.9.15-alpha.28-phase1
 import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{SkillScreen}from"./ui/screens/SkillScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
+import{abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
@@ -37,7 +39,7 @@ import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,ENDGAME_BOSSES,normalizeEndgameS
 import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,RETURN_RARITY_RATES,returnRewardGrade}from"./core/ReturnRewardSystem.js?v=0.9.15-alpha.39-return-rank-drop-rates";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
-let screen="home",selected=null,equipmentTarget=null,skillTarget=null,skillSlotSelection=0,game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home";
+let screen="home",selected=null,equipmentTarget=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home";
 let secondWorldIntroPlaying=false;
 let tenGodContactPlaying=false;
 let monsterManage={editing:false,selected:new Set()},equipmentManage={editing:false,selected:new Set()};
@@ -163,7 +165,7 @@ function normalizeEquipmentState(){
   const natural=calculatedStats(m);if(m.currentHp==null||!Number.isFinite(m.currentHp))m.currentHp=natural.hp;if(m.currentMp==null||!Number.isFinite(m.currentMp))m.currentMp=maxMp(m);
  });
 }
-function render(){normalizeEquipmentState();document.body.classList.toggle("phase2",hasCleared1000(save.state));if(screen==="home"){app.innerHTML=HomeScreen(save.state);bindHome()}else if(screen==="monsters"){app.innerHTML=MonsterListScreen(save.state,monsterManage);bindList()}else if(screen==="detail"){const m=save.state.monsters.find(x=>x.id===selected);app.innerHTML=MonsterDetailScreen(m,save.state);bindDetail(m)}else if(screen==="settings"){app.innerHTML=SettingsScreen(save.state);bindSettings()}else if(screen==="explore"){app.innerHTML=ExploreScreen(save.state);bindExplore()}else if(screen==="equipment"){if(!save.state.party.includes(equipmentTarget))equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;app.innerHTML=EquipmentScreen(save.state,equipmentTarget,{home:navigationOrigin==="home",...equipmentManage});bindEquipment()}else if(screen==="shop"){app.innerHTML=ShopScreen(save.state);bindShop()}else if(screen==="skills"){skillTarget=save.state.monsters.some(m=>m.id===skillTarget)?skillTarget:(save.state.party[0]??save.state.monsters[0]?.id);app.innerHTML=SkillScreen(save.state,skillTarget);bindSkills()}}
+function render(){normalizeEquipmentState();document.body.classList.toggle("phase2",hasCleared1000(save.state));if(screen==="home"){app.innerHTML=HomeScreen(save.state);bindHome()}else if(screen==="monsters"){app.innerHTML=MonsterListScreen(save.state,monsterManage);bindList()}else if(screen==="detail"){const m=save.state.monsters.find(x=>x.id===selected);app.innerHTML=MonsterDetailScreen(m,save.state);bindDetail(m)}else if(screen==="settings"){app.innerHTML=SettingsScreen(save.state);bindSettings()}else if(screen==="explore"){app.innerHTML=ExploreScreen(save.state);bindExplore()}else if(screen==="equipment"){if(!save.state.party.includes(equipmentTarget))equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;app.innerHTML=EquipmentScreen(save.state,equipmentTarget,{home:navigationOrigin==="home",...equipmentManage});bindEquipment()}else if(screen==="shop"){app.innerHTML=ShopScreen(save.state);bindShop()}else if(screen==="skills"){skillTarget=save.state.monsters.some(m=>m.id===skillTarget)?skillTarget:(save.state.party[0]??save.state.monsters[0]?.id);app.innerHTML=SkillScreen(save.state,skillTarget);bindSkills()}else if(screen==="abyssSkills"){app.innerHTML=AbyssSkillTreeScreen(save.state,abyssSkillCategory);bindAbyssSkills()}}
 function go(s){screen=s;render()}
 function capturePartyVitals(){return Object.fromEntries(save.state.party.map(id=>{const m=save.state.monsters.find(x=>x.id===id);return m?[id,{hp:m.currentHp,mp:m.currentMp,ailments:[...(m.ailments??[])]}]:null}).filter(Boolean))}
 function restorePartyVitals(vitals){if(!vitals)return;save.state.party.forEach(id=>{const m=save.state.monsters.find(x=>x.id===id),v=vitals[id];if(!m||!v)return;m.currentHp=v.hp;m.currentMp=v.mp;m.ailments=[...(v.ailments??[])]})}
@@ -210,7 +212,7 @@ function openWorldRecord(){
 }
 function returnRarityTable(){return`<div class="return-rarity-table"><div class="return-rarity-head"><b>装備ドロップ確率</b><small>装備1枠ごとの抽選</small></div>${RETURN_RARITY_RATES.map(row=>`<p class="rarity-${row.rarity}"><span>${row.rarity}</span><b>${row.label}</b></p>`).join("")}</div>`}
 function returnGradeBadge(grade){return`<div class="return-grade grade-${grade}"><small>探索評価</small><strong>${grade}</strong></div>`}
-function bindHome(){document.getElementById("openIdleReturn")?.addEventListener("click",()=>{const preview=idleReturnPreview(save.state);if(!preview.available)return;const result=claimIdleReturn(save.state);save.save();const minutes=Math.floor(result.elapsedMs/60000),hours=Math.floor(minutes/60),minutePart=minutes%60,timeText=hours>0?`${hours}時間${minutePart}分`:`${minutePart}分`,rarityRank={N:0,R:1,SR:2,SSR:3,LR:4},best=result.equipment.reduce((a,x)=>!a||rarityRank[x.item.rarity]>rarityRank[a.item.rarity]?x:a,null),equipmentRows=result.equipment.length?result.equipment.map(({item,receipt})=>`<div class="return-reward-item rarity-${item.rarity}"><b>${item.rarity} ${item.name}</b><small>${receipt.message}</small></div>`).join(""):'<p class="muted">今回は装備ドロップなし</p>',highlight=best&&["SSR","LR"].includes(best.item.rarity)?`<div class="return-reward-highlight rarity-${best.item.rarity}"><strong>${best.item.rarity} IDLE DROP!</strong><span>${best.item.name}</span></div>`:"";const grade=returnRewardGrade(result.floorUnits,result.equipment);app.insertAdjacentHTML("beforeend",Modal("放置帰還報告",`<div class="return-reward-report idle-return-report">${highlight}${returnGradeBadge(grade)}<div class="idle-return-emblem">🕯️</div><p><span>放置探索時間</span><b>${timeText}</b></p><p><span>探索地点</span><b>${result.expeditionFloor}階層帯</b></p><p><span>換算探索量</span><b>${result.floorUnits}階層分</b></p><p class="return-reward-gold"><span>獲得GOLD</span><b>${result.gold.toLocaleString()}G</b></p><h3>獲得装備 ${result.equipment.length}個</h3><div class="return-reward-items">${equipmentRows}</div>${returnRarityTable()}<small>放置報酬は手動探索の約1/10。装備は2時間ごとに1個、最大4個まで抽選します。</small></div>`,"受け取る"));const modal=topModal(),finish=()=>{modal?.remove();render()};modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish});document.getElementById("openMonsters").onclick=()=>go("monsters");document.getElementById("openSkills")?.addEventListener("click",()=>{skillTarget=save.state.party[0]??save.state.monsters[0]?.id;skillSlotSelection=0;go("skills")});document.getElementById("openTeamBattle")?.addEventListener("click",openTeamBattle);document.getElementById("openEndgameForge")?.addEventListener("click",openEndgameForge);document.getElementById("editHomeParty")?.addEventListener("click",openHomePartyEditor);document.querySelectorAll("[data-empty-party]").forEach(b=>b.addEventListener("click",openHomePartyEditor));document.getElementById("openRest")?.addEventListener("click",openRest);document.getElementById("openGacha")?.addEventListener("click",openGacha);document.getElementById("openDeepGacha")?.addEventListener("click",openDeepGacha);document.getElementById("openWorldRecord")?.addEventListener("click",openWorldRecord);document.getElementById("openCodexHub")?.addEventListener("click",openCodexHub);document.getElementById("openMonsterCodex")?.addEventListener("click",()=>openCodex("monster"));document.getElementById("openEquipmentCodex")?.addEventListener("click",()=>openCodex("equipment"));document.getElementById("openSettings").onclick=()=>go("settings");document.getElementById("openExplore").onclick=()=>{const max=Math.min(WORLD_MAX_FLOOR,save.state.player.maxFloor);app.insertAdjacentHTML("beforeend",Modal("探索開始",`<p>再開する階層を選択</p><input id="floorSelect" type="number" min="1" max="${max}" value="${max}"><p class="muted">1〜${max}階。到達済みの階層から再開できます。</p>`,`出発`));const modal=topModal(),button=modal.querySelector("[data-modal-primary]");button.onclick=()=>{const f=Math.max(1,Math.min(max,Number(modal.querySelector("#floorSelect").value)||max));save.state.player.currentFloor=f;save.state.player.inRun=true;beginManualExpedition(save.state,f);save.save();snapshot=null;modal.remove();go("explore")}};document.getElementById("openEquipment").onclick=()=>{equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;navigationOrigin="home";go("equipment")};detailButtons()}
+function bindHome(){document.getElementById("openIdleReturn")?.addEventListener("click",()=>{const preview=idleReturnPreview(save.state);if(!preview.available)return;const result=claimIdleReturn(save.state);save.save();const minutes=Math.floor(result.elapsedMs/60000),hours=Math.floor(minutes/60),minutePart=minutes%60,timeText=hours>0?`${hours}時間${minutePart}分`:`${minutePart}分`,rarityRank={N:0,R:1,SR:2,SSR:3,LR:4},best=result.equipment.reduce((a,x)=>!a||rarityRank[x.item.rarity]>rarityRank[a.item.rarity]?x:a,null),equipmentRows=result.equipment.length?result.equipment.map(({item,receipt})=>`<div class="return-reward-item rarity-${item.rarity}"><b>${item.rarity} ${item.name}</b><small>${receipt.message}</small></div>`).join(""):'<p class="muted">今回は装備ドロップなし</p>',highlight=best&&["SSR","LR"].includes(best.item.rarity)?`<div class="return-reward-highlight rarity-${best.item.rarity}"><strong>${best.item.rarity} IDLE DROP!</strong><span>${best.item.name}</span></div>`:"";const grade=returnRewardGrade(result.floorUnits,result.equipment);app.insertAdjacentHTML("beforeend",Modal("放置帰還報告",`<div class="return-reward-report idle-return-report">${highlight}${returnGradeBadge(grade)}<div class="idle-return-emblem">🕯️</div><p><span>放置探索時間</span><b>${timeText}</b></p><p><span>探索地点</span><b>${result.expeditionFloor}階層帯</b></p><p><span>換算探索量</span><b>${result.floorUnits}階層分</b></p><p class="return-reward-gold"><span>獲得GOLD</span><b>${result.gold.toLocaleString()}G</b></p><h3>獲得装備 ${result.equipment.length}個</h3><div class="return-reward-items">${equipmentRows}</div>${returnRarityTable()}<small>放置報酬は手動探索の約1/10。装備は2時間ごとに1個、最大4個まで抽選します。</small></div>`,"受け取る"));const modal=topModal(),finish=()=>{modal?.remove();render()};modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish});document.getElementById("openMonsters").onclick=()=>go("monsters");document.getElementById("openSkills")?.addEventListener("click",()=>{skillTarget=save.state.party[0]??save.state.monsters[0]?.id;skillSlotSelection=0;go("skills")});document.getElementById("openAbyssSkillTree")?.addEventListener("click",()=>{abyssSkillCategory="economy";go("abyssSkills")});document.getElementById("openTeamBattle")?.addEventListener("click",openTeamBattle);document.getElementById("openEndgameForge")?.addEventListener("click",openEndgameForge);document.getElementById("editHomeParty")?.addEventListener("click",openHomePartyEditor);document.querySelectorAll("[data-empty-party]").forEach(b=>b.addEventListener("click",openHomePartyEditor));document.getElementById("openRest")?.addEventListener("click",openRest);document.getElementById("openGacha")?.addEventListener("click",openGacha);document.getElementById("openDeepGacha")?.addEventListener("click",openDeepGacha);document.getElementById("openWorldRecord")?.addEventListener("click",openWorldRecord);document.getElementById("openCodexHub")?.addEventListener("click",openCodexHub);document.getElementById("openMonsterCodex")?.addEventListener("click",()=>openCodex("monster"));document.getElementById("openEquipmentCodex")?.addEventListener("click",()=>openCodex("equipment"));document.getElementById("openSettings").onclick=()=>go("settings");document.getElementById("openExplore").onclick=()=>{const max=Math.min(WORLD_MAX_FLOOR,save.state.player.maxFloor);app.insertAdjacentHTML("beforeend",Modal("探索開始",`<p>再開する階層を選択</p><input id="floorSelect" type="number" min="1" max="${max}" value="${max}"><p class="muted">1〜${max}階。到達済みの階層から再開できます。</p>`,`出発`));const modal=topModal(),button=modal.querySelector("[data-modal-primary]");button.onclick=()=>{const f=Math.max(1,Math.min(max,Number(modal.querySelector("#floorSelect").value)||max));save.state.player.currentFloor=f;save.state.player.inRun=true;beginManualExpedition(save.state,f);save.save();snapshot=null;modal.remove();go("explore")}};document.getElementById("openEquipment").onclick=()=>{equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;navigationOrigin="home";go("equipment")};detailButtons()}
 
 function bindSkills(){
  document.getElementById("backSkillHome")?.addEventListener("click",()=>go("home"));
@@ -224,6 +226,39 @@ function bindSkills(){
   if(!allLearnedSkills(monster).some(skill=>skill.id===skillId))return;
   if(!equipSkill(monster,skillId,skillSlotSelection))return;save.save();showToast(`SLOT ${skillSlotSelection+1} に装備`);render();
  }));
+}
+
+function bindAbyssSkills(){
+ document.getElementById("backAbyssSkillHome")?.addEventListener("click",()=>go("home"));
+ document.querySelectorAll("[data-abyss-category]").forEach(button=>button.addEventListener("click",()=>{
+  abyssSkillCategory=button.dataset.abyssCategory;
+  render();
+ }));
+ document.querySelectorAll("[data-learn-abyss-skill]").forEach(button=>button.addEventListener("click",()=>{
+  const node=abyssSkillNodeById(button.dataset.learnAbyssSkill);
+  if(!node)return;
+  const affordable=(save.state.player?.gold??0)>=node.cost;
+  if(!affordable){
+   const result=learnAbyssSkill(save.state,node.id);
+   showToast(result.message);
+   return;
+  }
+  if(!confirm(`「${node.name}」を習得しますか？\n\n必要GOLD：${node.cost.toLocaleString()}G\n${node.description}`))return;
+  const result=learnAbyssSkill(save.state,node.id);
+  if(!result.ok){showToast(result.message);return}
+  save.save();
+  showToast(`${node.name}を習得！`);
+  render();
+ }));
+ document.getElementById("resetAbyssSkillTree")?.addEventListener("click",()=>{
+  const summary=abyssSkillTreeSummary(save.state);
+  if(!summary.learnedCount)return;
+  if(!confirm(`深淵スキルをすべてリセットしますか？\n\n習得数：${summary.learnedCount}\n返還GOLD：${summary.investedGold.toLocaleString()}G\n\nリセット料金はかかりません。`))return;
+  const result=resetAbyssSkillTree(save.state);
+  save.save();
+  showToast(`${result.refund.toLocaleString()}Gを全額返還！`);
+  render();
+ });
 }
 
 function bindList(){
