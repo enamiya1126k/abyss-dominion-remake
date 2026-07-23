@@ -1,5 +1,5 @@
-import{createEquipment}from"../models/Equipment.js?v=0.9.15-alpha.38-idle-return-equipment-phase1";
-import{receiveEquipment}from"../services/EquipmentStorage.js?v=0.9.15-alpha.38-idle-return-equipment-phase1";
+import{createEquipment}from"../models/Equipment.js?v=0.9.15-alpha.39-return-rank-drop-rates";
+import{receiveEquipment}from"../services/EquipmentStorage.js?v=0.9.15-alpha.39-return-rank-drop-rates";
 
 const EMPTY_MANUAL={active:false,startFloor:1,lastFloor:1,floorsCleared:0,pendingGold:0,startedAt:null};
 const IDLE_MAX_HOURS=8;
@@ -7,6 +7,25 @@ const IDLE_FLOOR_INTERVAL_MS=5*60*1000;
 const IDLE_REWARD_RATE=.1;
 const IDLE_EQUIPMENT_INTERVAL_MS=2*60*60*1000;
 const IDLE_MAX_EQUIPMENT=4;
+
+export const RETURN_RARITY_RATES=[
+ {rarity:"LR",rate:.001,label:"0.1%"},
+ {rarity:"SSR",rate:.039,label:"3.9%"},
+ {rarity:"SR",rate:.16,label:"16.0%"},
+ {rarity:"R",rate:.35,label:"35.0%"},
+ {rarity:"N",rate:.45,label:"45.0%"}
+];
+
+export function returnRewardGrade(floorsCleared,equipment=[]){
+ const floors=Math.max(0,Math.floor(Number(floorsCleared)||0));
+ const rarities=(equipment??[]).map(entry=>entry?.item?.rarity??entry?.rarity);
+ if(rarities.includes("LR")||floors>=100)return"SSS";
+ if(rarities.includes("SSR")||floors>=50)return"SS";
+ if(rarities.includes("SR")||floors>=20)return"S";
+ if(floors>=10)return"A";
+ if(floors>=5)return"B";
+ return"C";
+}
 
 function safeFloor(value){return Math.max(1,Math.min(10000,Math.floor(Number(value)||1)))}
 
