@@ -4,12 +4,14 @@ import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.15-alpha.3
 import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,emergencyFragmentStatus,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=0.9.15-alpha.34-combat-power";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
 
 export function HomeScreen(state){
   const party=state.party.map(id=>state.monsters.find(m=>m.id===id)).filter(Boolean);
+  const combatPower=partyCombatPower(state);
   const team=dailyTeamAttempts(state),teamUnlocked=state.player.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR,emergencyUnlocked=state.player.maxFloor>=EMERGENCY_UNLOCK_FLOOR,revealed=hasCleared1000(state),phase=worldPhase(state);
   const fragmentTotal=Object.keys(ENDGAME_BOSSES).reduce((n,id)=>n+emergencyFragmentStatus(state,id).count,0);
   const region=phase===1?(state.player.maxFloor>=7001?"神域":state.player.maxFloor>=3001?"深淵領域":"未知領域"):"通常領域";
@@ -31,7 +33,7 @@ export function HomeScreen(state){
         <h1 class="hero-title">${revealed?"地下10000階の魔王":"地下1000階の魔王"}</h1>
 
         <div class="panel home-status-panel compact-home-status">
-          <div class="compact-status-primary"><div><small>モンスター基盤</small><b>最高 ${state.player.maxFloor}階</b></div><span>${phase===1?region:"通常領域"}</span></div>
+          <div class="compact-status-primary"><div><small>モンスター基盤</small><b>最高 ${state.player.maxFloor}階</b></div><div class="home-combat-power"><small>戦力</small><strong>${formatCombatPower(combatPower)}</strong></div><span>${phase===1?region:"通常領域"}</span></div>
           <div class="compact-status-resources"><span>🪙 ${state.player.gold.toLocaleString()}</span><span>💎 ${state.player.crystals}</span><span>📀 ${state.inventory?.captureCrystals??0}</span><span>🔑 ${state.inventory?.abyssKeys??0}</span><small>v${APP_VERSION}</small></div>
         </div>
 
