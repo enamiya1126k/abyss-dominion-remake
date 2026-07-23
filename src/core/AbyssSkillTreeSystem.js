@@ -1,4 +1,4 @@
-export const ABYSS_SKILL_TREE_VERSION=1;
+export const ABYSS_SKILL_TREE_VERSION=2;
 
 export const ABYSS_SKILL_CATEGORIES=Object.freeze([
  {
@@ -24,7 +24,7 @@ export const ABYSS_SKILL_CATEGORIES=Object.freeze([
  }
 ]);
 
-export const ABYSS_SKILL_NODES=Object.freeze([
+const FOUNDATION_SKILL_NODES=Object.freeze([
  {
   id:"economy-gold-sense",
   category:"economy",
@@ -223,6 +223,138 @@ export const ABYSS_SKILL_NODES=Object.freeze([
   requires:["exploration-abyss-luck","exploration-key-echo"],
   effect:{key:"explorationRewardRate",value:.05}
  }
+]);
+
+const EXPANSION_STAGES=Object.freeze([
+ {suffix:"萌芽",cost:120000},
+ {suffix:"脈動",cost:300000},
+ {suffix:"刻印",cost:750000},
+ {suffix:"共鳴",cost:2000000},
+ {suffix:"転成",cost:5000000},
+ {suffix:"顕現",cost:12000000},
+ {suffix:"超越",cost:30000000},
+ {suffix:"支配",cost:75000000},
+ {suffix:"終極",cost:180000000}
+]);
+
+const EXPANSION_CAPSTONES=Object.freeze({
+ economy:"economy-abyss-market",
+ combat:"combat-dominion",
+ exploration:"exploration-endless-path"
+});
+
+const EXPANSION_BRANCHES=Object.freeze({
+ economy:[
+  {
+   id:"gold-vein",name:"黄金脈",icon:"💰",
+   effect:()=>({key:"goldGainRate",value:.01})
+  },
+  {
+   id:"expedition-guild",name:"遠征商会",icon:"🧳",
+   effect:stage=>({key:stage%2===0?"manualReturnGoldRate":"idleReturnGoldRate",value:.02})
+  },
+  {
+   id:"spoils-market",name:"戦利品市場",icon:"📈",
+   effect:stage=>({key:stage%2===0?"battleGoldRate":"equipmentSellGoldRate",value:.02})
+  }
+ ],
+ combat:[
+  {
+   id:"overlord-blood",name:"覇王血統",icon:"🩸",
+   effect:stage=>({key:stage%3===1?"partyDamageRate":"partyAtkRate",value:.01})
+  },
+  {
+   id:"undying-armor",name:"不滅装甲",icon:"🛡️",
+   effect:stage=>stage%3===0
+    ?{key:"partyHpRate",value:.015}
+    :stage%3===1
+     ?{key:"partyDefRate",value:.015}
+     :{key:"partyDamageTakenRate",value:-.01}
+  },
+  {
+   id:"demonic-circuit",name:"魔迅回路",icon:"⚡",
+   effect:stage=>stage%3===0
+    ?{key:"partySpdRate",value:.015}
+    :stage%3===1
+     ?{key:"partyDamageRate",value:.01}
+     :{key:"partyAtkRate",value:.01}
+  }
+ ],
+ exploration:[
+  {
+   id:"relic-map",name:"遺物星図",icon:"🗺️",
+   effect:stage=>({key:stage%2===0?"chestSpawnRate":"equipmentDropRate",value:.005})
+  },
+  {
+   id:"hunter-oath",name:"狩人盟約",icon:"🏹",
+   effect:stage=>({key:stage%2===0?"eliteRewardRate":"abyssKeyDropRate",value:stage%2===0 ? .02 : .015})
+  },
+  {
+   id:"fate-compass",name:"運命羅針",icon:"🧿",
+   effect:stage=>(stage+1)%3===0
+    ?{key:"equipmentRarityBonus",value:1}
+    :{key:"explorationRewardRate",value:.01}
+  }
+ ]
+});
+
+const EFFECT_LABELS=Object.freeze({
+ goldGainRate:"すべてのGOLD獲得量",
+ manualReturnGoldRate:"手動帰還のGOLD獲得量",
+ idleReturnGoldRate:"放置帰還のGOLD獲得量",
+ battleGoldRate:"戦闘で得るGOLD",
+ equipmentSellGoldRate:"装備の売却GOLD",
+ partyHpRate:"味方全体の最大HP",
+ partyAtkRate:"味方全体のATK",
+ partyDefRate:"味方全体のDEF",
+ partySpdRate:"味方全体のSPD",
+ partyDamageRate:"味方全体の与ダメージ",
+ partyDamageTakenRate:"味方全体の被ダメージ",
+ chestSpawnRate:"宝箱の出現率",
+ equipmentDropRate:"装備ドロップ率",
+ eliteRewardRate:"エリート敵の報酬量",
+ abyssKeyDropRate:"深淵の鍵の獲得率",
+ explorationRewardRate:"探索で得るすべての報酬"
+});
+
+function expansionDescription(effect){
+ if(effect.key==="equipmentRarityBonus")return"装備レアリティ抽選をさらに強化";
+ const percent=Math.round(Math.abs(effect.value)*1000)/10;
+ return`${EFFECT_LABELS[effect.key]??effect.key} ${effect.value<0?"−":"+"}${percent}%`;
+}
+
+function expansionNodesForCategory(category){
+ const branches=EXPANSION_BRANCHES[category];
+ return EXPANSION_STAGES.flatMap((stage,stageIndex)=>branches.map((branch,branchIndex)=>{
+  const id=`${category}-${branch.id}-${String(stageIndex+1).padStart(2,"0")}`;
+  const requires=stageIndex===0
+   ?[EXPANSION_CAPSTONES[category]]
+   :[`${category}-${branch.id}-${String(stageIndex).padStart(2,"0")}`];
+  // Three major convergence tiers prevent a single straight branch from
+  // unlocking the entire late tree while keeping every dependency in the
+  // immediately preceding tier for deterministic legacy-save normalization.
+  if(stageIndex>0&&[3,6,8].includes(stageIndex)){
+   const neighbor=branches[(branchIndex+branches.length-1)%branches.length];
+   requires.push(`${category}-${neighbor.id}-${String(stageIndex).padStart(2,"0")}`);
+  }
+  const effect=branch.effect(stageIndex);
+  return{
+   id,
+   category,
+   tier:stageIndex+5,
+   icon:branch.icon,
+   name:`${branch.name}・${stage.suffix}`,
+   description:expansionDescription(effect),
+   cost:stage.cost,
+   requires:[...new Set(requires)],
+   effect
+  };
+ }));
+}
+
+export const ABYSS_SKILL_NODES=Object.freeze([
+ ...FOUNDATION_SKILL_NODES,
+ ...Object.keys(EXPANSION_BRANCHES).flatMap(expansionNodesForCategory)
 ]);
 
 const NODE_BY_ID=new Map(ABYSS_SKILL_NODES.map(node=>[node.id,node]));

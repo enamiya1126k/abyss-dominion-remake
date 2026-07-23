@@ -1,10 +1,10 @@
 const MAX_FLOOR=10000;
 
 export const GOLD_ECONOMY_RATES=Object.freeze({
- battleNormal:.03,
+ battleNormal:.045,
  battleBossFirst:.15,
  battleBossRepeat:.06,
- chest:.10,
+ chest:.20,
  elite:.14,
  eventBreak:.15,
  eventSeal:.10,
@@ -39,14 +39,14 @@ export function battleGoldBase(floor,defeated,{firstBoss=false}={}){
  const enemies=(Array.isArray(defeated)?defeated:[defeated]).filter(Boolean);
  if(!enemies.length)return 0;
  const legacyMultiplier=enemies.some(enemy=>enemy.elite)?1.65:1;
- const legacy=Math.round(enemies.reduce((sum,enemy)=>{const level=Math.max(1,Number(enemy.level)||1);return sum+(enemy.boss?(firstBoss?80+level*14:28+level*7):16+level*5)},0)*legacyMultiplier);
+ const legacy=Math.round(enemies.reduce((sum,enemy)=>{const level=Math.max(1,Number(enemy.level)||1);return sum+(enemy.boss?(firstBoss?80+level*14:28+level*7):(16+level*5)*1.5)},0)*legacyMultiplier);
  const rate=Math.min(.30,enemies.reduce((sum,enemy)=>sum+(enemy.boss?(firstBoss?GOLD_ECONOMY_RATES.battleBossFirst:GOLD_ECONOMY_RATES.battleBossRepeat):GOLD_ECONOMY_RATES.battleNormal),0));
  return Math.max(legacy,roundedGold(goldForClearedFloor(floor)*rate));
 }
 
 export function chestGoldBase(floor){
  const f=safeFloor(floor);
- return Math.max(80+f*12,roundedGold(goldForClearedFloor(f)*GOLD_ECONOMY_RATES.chest));
+ return Math.max(160+f*24,roundedGold(goldForClearedFloor(f)*GOLD_ECONOMY_RATES.chest));
 }
 
 export function eliteGoldBase(floor,enemyLevel=1){
