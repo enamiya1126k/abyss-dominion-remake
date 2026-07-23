@@ -1,10 +1,10 @@
 import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"./data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.33-final-ui-polish";
+import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.34-combat-power";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.15-alpha.33-final-ui-polish";
 import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.34-combat-power";
 import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.32-phase10-10-release-audit";
