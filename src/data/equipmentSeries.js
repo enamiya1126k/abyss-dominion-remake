@@ -14,3 +14,13 @@ export const EQUIPMENT_SERIES={
 const LABELS={atk:"ATK",def:"DEF",hp:"HP",spd:"SPD",mp:"最大MP",crit:"会心率",evasion:"回避率",fireDamage:"炎属性ダメージ",fireRes:"炎耐性",burnChance:"炎上付与率",statusRes:"状態異常耐性",guardPower:"ガード効果",lastStand:"致死ダメージ耐久",firstStrike:"開幕先制",capture:"捕獲率",dropRate:"ドロップ率",rareEncounter:"レア遭遇率",hpRegen:"毎ターンHP回復",healPower:"回復量",lowHpRegen:"瀕死時HP回復",partyHpRegen:"味方全体HP回復",mpRegen:"毎ターンMP回復",mpCost:"消費MP",skillPower:"スキル威力",freeSkillChance:"MP消費無効率",critDamage:"会心ダメージ",chainChance:"追撃率"};
 export function describeSeriesEffect(effect={}){return Object.entries(effect).map(([key,value])=>{const label=LABELS[key]??key;if(key==="lastStand")return`${label}：戦闘中1回`;if(key==="firstStrike")return`${label}`;if(key==="mpRegen")return`${label} +${value}`;const pct=Math.round(Math.abs(value)*100);const sign=value>=0?"+":"-";return`${label} ${sign}${pct}%`}).join(" / ")}
 export function activeSeriesBonuses(counts={}){const active=[];for(const[id,count]of Object.entries(counts)){const series=EQUIPMENT_SERIES[id];if(!series)continue;for(const[pieces,effect]of Object.entries(series.bonuses))if(count>=Number(pieces))active.push({seriesId:id,pieces:Number(pieces),effect})}return active}
+export function aggregateSeriesEffects(counts={}){
+ const result={};
+ for(const bonus of activeSeriesBonuses(counts)){
+  for(const[key,value]of Object.entries(bonus.effect??{})){
+   if(typeof value!=="number"||!Number.isFinite(value))continue;
+   result[key]=(result[key]??0)+value;
+  }
+ }
+ return result;
+}
