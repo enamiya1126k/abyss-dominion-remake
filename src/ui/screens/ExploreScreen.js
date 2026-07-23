@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.95.1-stability-audit";
+import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.97-gold-affix-crafting";
 import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
