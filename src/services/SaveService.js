@@ -7,7 +7,7 @@ import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=0.9.15-alp
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 
-import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=0.9.15-alpha.35-return-reward-phase1";
+import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=0.9.15-alpha.36-return-equipment-phase1";
 function finiteNumber(value,fallback=0,min=-Infinity,max=Infinity){
  const number=Number(value);
  return Number.isFinite(number)?Math.max(min,Math.min(max,number)):fallback;
