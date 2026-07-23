@@ -1,10 +1,10 @@
-import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.95.1-stability-audit";
+import{SaveService}from"./services/SaveService.js?v=0.9.15-alpha.97-gold-affix-crafting";
 import{SPECIES}from"./data/species.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.95.1-stability-audit";
+import{HomeScreen}from"./ui/screens/HomeScreen.js?v=0.9.15-alpha.97-gold-affix-crafting";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=0.9.15-alpha.95-abyss-skill-effects";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.15-alpha.95.1-stability-audit";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.95.1-stability-audit";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=0.9.15-alpha.97-gold-affix-crafting";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=0.9.15-alpha.97-gold-affix-crafting";
 import{BattleScreen}from"./ui/screens/BattleScreen.js?v=0.9.15-alpha.95.1-stability-audit";
 import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses}from"./models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
@@ -15,8 +15,9 @@ import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,se
 import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=0.9.15-alpha.95.1-stability-audit";
 import{RARITY_ORDER,equipmentStatLabel}from"./data/equipment.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=0.9.15-alpha.95.1-stability-audit";
-import{aggregateAffixes}from"./data/equipmentAffixes.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.95.1-stability-audit";
+import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=0.9.15-alpha.97-gold-affix-crafting";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=0.9.15-alpha.97-gold-affix-crafting";
+import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=0.9.15-alpha.97-gold-affix-crafting";
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{SkillScreen}from"./ui/screens/SkillScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
@@ -296,8 +297,43 @@ function bindDetail(m){document.getElementById("backMonsters").onclick=()=>go("m
 function bindSettings(){document.getElementById("backHome").onclick=()=>go("home");document.getElementById("toggleAuto").onclick=()=>{save.state.settings.autoBattle=!save.state.settings.autoBattle;save.save();render()};document.getElementById("toggleMinimap").onclick=()=>{save.state.settings.minimapVisible=!save.state.settings.minimapVisible;save.save();render()};document.getElementById("openTutorialBook")?.addEventListener("click",openTutorialBook);document.getElementById("resetSave").onclick=()=>{if(confirm("初期化する？")){save.reset();snapshot=null;go("home")}}}
 
 
+function equipmentAffixCraftingBody(item){
+ const affixes=normalizeEquipmentAffixLocks(item),locked=lockedAffixCount(item),maximum=maxLockableAffixes(item),cost=rerollGoldCost(save.state,item),gold=Math.max(0,Number(save.state.player.gold)||0);
+ const rows=affixes.map((affix,index)=>{
+  const quality=affixQuality(affix),fixed=affix.locked,definition=affixDefinition(affix.id),disabled=!fixed&&locked>=maximum;
+  return`<div class="affix-craft-row ${fixed?"is-fixed":""}"><span class="affix-craft-pin">${fixed?"📌":"◇"}</span><div><b style="color:${quality.color}">${formatAffix(affix)}${definition?.legendaryOnly?"〈固有〉":""}</b><small>${quality.name}${fixed?"・再抽選から保護":""}</small></div><button type="button" class="affix-lock-toggle ${fixed?"locked":""}" data-affix-lock-index="${index}" ${disabled?"disabled":""}>${fixed?"固定解除":"この枠を固定"}</button></div>`
+ }).join("");
+ return`<div class="affix-craft-modal"><div class="affix-craft-summary"><div><small>所持GOLD</small><b>${gold.toLocaleString()}G</b></div><div><small>今回の費用</small><b class="${gold<cost?"insufficient":""}">${cost.toLocaleString()}G</b></div><div><small>固定枠</small><b>${locked}/${maximum}</b></div></div><div class="affix-craft-equipment"><small>${item.rarity} / Lv.${Math.max(1,Number(item.level)||1)}</small><b>${item.name}${item.plus?` +${item.plus}`:""}</b></div><div class="affix-craft-list">${rows}</div><small>固定・解除そのものは無料です。固定枠が増えるほど再抽選費用が上がります。専用アイテムや魔晶石は使わず、必ず1枠以上を再抽選します。</small>${gold<cost?`<p class="affix-craft-warning">あと ${(cost-gold).toLocaleString()}G 必要です。</p>`:""}</div>`
+}
+function openEquipmentAffixHelp(){
+ const qualities=Object.values(AFFIX_QUALITY).map(quality=>`<p class="affix-quality-row"><b style="color:${quality.color}">${quality.name}</b><span>同じ効果でも数値品質が変化</span></p>`).join("");
+ app.insertAdjacentHTML("beforeend",Modal("ランダムオプションと厳選",`<div class="affix-help">${qualities}<small>「GOLD厳選」では未固定のオプションを別種類へ再抽選します。📌固定は無料で最大3枠ですが、必ず1枠以上を再抽選対象に残します。固定数が増えるほど必要GOLDも上昇します。〈固有〉はSSR・LRだけに出現します。</small></div>`,"閉じる"));
+ topModalButton().onclick=closeTopModal;
+}
+function openEquipmentAffixCrafting(itemId){
+ const item=save.state.equipment.find(entry=>entry.id===itemId);
+ if(!item)return showToast("装備が見つかりません");
+ if(!normalizeEquipmentAffixLocks(item).length)return showToast("この装備にはランダムオプションがありません");
+ app.insertAdjacentHTML("beforeend",Modal("🎲 装備オプション厳選",equipmentAffixCraftingBody(item),"GOLDで再抽選"));
+ const modal=topModal(),primary=modal.querySelector("[data-modal-primary]");
+ modal._onDismiss=()=>{modal.remove();render()};
+ modal.querySelectorAll("[data-affix-lock-index]").forEach(button=>button.onclick=()=>{
+  const result=toggleAffixLock(item,Number(button.dataset.affixLockIndex));
+  if(!result.ok){showToast(result.message);return}
+  save.save();modal.remove();openEquipmentAffixCrafting(itemId);
+ });
+ primary.onclick=()=>{
+  const owner=item.equippedBy?save.state.monsters.find(monster=>monster.id===item.equippedBy):null,vital=owner?captureVitalSnapshot(owner):null;
+  const result=rerollUnlockedAffixes(save.state,item);
+  if(!result.ok){showToast(result.message);return}
+  normalizeEquipmentState();
+  if(owner&&vital)restoreVitalSnapshot(owner,vital);
+  save.save();modal._onDismiss=null;render();showToast(`${result.rerolledCount}枠を再抽選・${result.cost.toLocaleString()}G消費`);openEquipmentAffixCrafting(itemId);
+ };
+}
 function bindEquipment(){
  document.getElementById("backEquipmentHome").onclick=()=>{const target=navigationOrigin;navigationOrigin="home";go(target)};
+ document.getElementById("openAffixHelp")?.addEventListener("click",openEquipmentAffixHelp);
  document.querySelectorAll("[data-equipment-target]").forEach(b=>b.onclick=()=>{equipmentTarget=b.dataset.equipmentTarget;render()});
  document.getElementById("equipmentSort").onchange=e=>{save.state.settings.equipmentSort=e.target.value;save.save();render()};
  document.querySelectorAll("[data-equipment-slot]").forEach(b=>b.onclick=()=>{save.state.settings.equipmentSlot=b.dataset.equipmentSlot;save.save();render()});
@@ -308,6 +344,7 @@ function bindEquipment(){
  document.querySelectorAll("[data-lock-equipment]").forEach(b=>b.onclick=()=>{const i=save.state.equipment.find(x=>x.id===b.dataset.lockEquipment);if(!i)return;i.locked=!i.locked;save.save();render()});
  document.querySelectorAll("[data-sell]").forEach(b=>b.onclick=()=>sellItem(b.dataset.sell));
  document.querySelectorAll("[data-enhance-equipment]").forEach(b=>b.onclick=()=>enhanceEquipment(b.dataset.enhanceEquipment));
+ document.querySelectorAll("[data-reroll-equipment]").forEach(b=>b.onclick=()=>openEquipmentAffixCrafting(b.dataset.rerollEquipment));
  document.getElementById("bulkSellEquipment")?.addEventListener("click",bulkSellEquipment);
  document.getElementById("toggleEquipmentEdit")?.addEventListener("click",()=>{equipmentManage.editing=!equipmentManage.editing;if(!equipmentManage.editing)equipmentManage.selected.clear();render()});
  document.querySelectorAll("[data-select-equipment-id]").forEach(c=>c.onchange=()=>{c.checked?equipmentManage.selected.add(c.dataset.selectEquipmentId):equipmentManage.selected.delete(c.dataset.selectEquipmentId);render()});
