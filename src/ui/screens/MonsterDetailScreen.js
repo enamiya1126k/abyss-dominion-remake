@@ -1,14 +1,14 @@
 import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{PERSONALITIES}from"../../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{MONSTER_COLORS}from"../../data/colors.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{displayName,rankName,colorValue,calculatedStats,unlockedSkills,TRAITS,limitBreakGrowth,affectionBonuses}from"../../models/Monster.js?v=0.9.15-alpha.33-final-ui-polish";
+import{displayName,rankName,colorValue,calculatedStats,unlockedSkills,TRAITS,limitBreakGrowth,affectionBonuses}from"../../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
 
 function cloneMonster(monster,changes={}){return{...monster,ivs:{...(monster.ivs??{})},equipment:{...(monster.equipment??{})},_equipmentStats:{...(monster._equipmentStats??{})},_seriesCounts:{...(monster._seriesCounts??{})},...changes}}
 function breakdown(monster,key){
-  const stripped={_equipmentStats:{},_seriesCounts:{},_synergy:{},traitId:"steady"};
+  const stripped={_equipmentStats:{},_seriesCounts:{},_synergy:{},_abyssSkillEffects:{},traitId:"steady"};
   const base=calculatedStats(cloneMonster(monster,{...stripped,plus:0,stars:1,affection:0,bond:0}))[key]??0;
   const withLimit=calculatedStats(cloneMonster(monster,{...stripped,stars:1,affection:0,bond:0}))[key]??0;
   const withTalent=calculatedStats(cloneMonster(monster,{...stripped,affection:0,bond:0}))[key]??0;
@@ -31,7 +31,7 @@ export function MonsterDetailScreen(monster,state){
 
     <div class="panel growth-action-panel"><div class="growth-hub-grid"><button data-growth-jump="level">📈<b>レベル</b><small>経験値・成長</small></button><button id="openMonsterEquipment">⚔️<b>装備</b><small>装備を変更</small></button><button data-growth-jump="affection">❤️<b>なつき</b><small>${aff}/1000</small></button><button data-growth-jump="history">📖<b>履歴</b><small>冒険の記録</small></button></div><button id="limitBreakButton" class="limit-break-main" ${materials<2?"disabled":""}><span>✨ LIMIT BREAK</span><b>+${(monster.plus??0)+1}へ限界突破</b><small>同名モンスター2体を使用（素材 ${materials}/2）</small></button><div class="limit-growth-line">Lv.1基礎値：HP+${growth.hp} / ATK+${growth.atk} / DEF+${growth.def} / SPD+${growth.spd}</div></div>
 
-    <div class="panel"><div class="spread"><h2>ステータス</h2><small class="muted">最終値の構成</small></div><div class="stat-grid growth-stat-grid">${lines.map(([name,x])=>`<div class="stat-card"><span>${name}</span><b>${x.final}</b><small>基礎 ${x.base}</small><small>限突 ${x.limit>=0?"+":""}${x.limit} / 才能 ${x.talent>=0?"+":""}${x.talent}</small><small>なつき ${x.affection>=0?"+":""}${x.affection} / 装備等 ${x.other>=0?"+":""}${x.other}</small></div>`).join("")}<div class="stat-card"><span>会心率</span><b>${stats.crit}%</b></div><div class="stat-card"><span>回避率</span><b>${stats.evasion}%</b></div></div><p class="muted stat-note">「装備等」には装備・固有特性・共鳴・シリーズ効果を含みます。</p></div>
+    <div class="panel"><div class="spread"><h2>ステータス</h2><small class="muted">最終値の構成</small></div><div class="stat-grid growth-stat-grid">${lines.map(([name,x])=>`<div class="stat-card"><span>${name}</span><b>${x.final}</b><small>基礎 ${x.base}</small><small>限突 ${x.limit>=0?"+":""}${x.limit} / 才能 ${x.talent>=0?"+":""}${x.talent}</small><small>なつき ${x.affection>=0?"+":""}${x.affection} / 装備等 ${x.other>=0?"+":""}${x.other}</small></div>`).join("")}<div class="stat-card"><span>会心率</span><b>${stats.crit}%</b></div><div class="stat-card"><span>回避率</span><b>${stats.evasion}%</b></div></div><p class="muted stat-note">「装備等」には装備・固有特性・共鳴・シリーズ効果・深淵スキルを含みます。</p></div>
 
     <div class="panel affection-panel" id="growthAffectionSection"><div class="spread"><h2>❤️ なつき度</h2><b>${aff}/1000</b></div><div class="affection-meter"><i style="width:${Math.min(100,aff/10)}%"></i></div><div class="affection-milestones">${[100,200,300,400,500,600,700,800,900,1000].map(v=>`<span class="${aff>=v?"unlocked":""}">${v}</span>`).join("")}</div><p class="muted">現在の補正：${Object.entries(affectionBonuses(aff)).map(([k,v])=>`${k.toUpperCase()} +${Math.round(v*100)}%`).join(" / ")}</p></div>
 

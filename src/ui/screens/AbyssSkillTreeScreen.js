@@ -4,7 +4,7 @@ import{
  abyssSkillCategoryById,
  abyssSkillNodeById,
  abyssSkillTreeSummary
-}from"../../core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
+}from"../../core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
 
 function nodeStatus(state,node,learned){
  if(learned.has(node.id))return"learned";
@@ -28,7 +28,7 @@ function nodeCard(state,node,learned){
     <small>TIER ${node.tier}</small>
     <h3>${node.name}</h3>
     <p>${node.description}</p>
-    <em>${status==="learned"?"能力反映待ち":requirementText(node,learned)}</em>
+    <em>${status==="learned"?"効果発動中":requirementText(node,learned)}</em>
    </div>
    <button type="button" data-learn-abyss-skill="${node.id}" ${status==="learned"||status==="locked"?"disabled":""}>${buttonText}</button>
   </article>`;
@@ -67,8 +67,8 @@ export function AbyssSkillTreeScreen(state,activeCategoryId="economy"){
     </div>
 
     <div class="abyss-tree-foundation-note">
-     <b>alpha94：土台実装</b>
-     <span>習得状態とGOLD消費は保存される。実際の能力反映はalpha95で接続予定。</span>
+     <b>alpha95：スキル効果反映</b>
+     <span>習得した効果は、戦闘・探索・GOLD報酬へ即時反映される。</span>
     </div>
 
     <nav class="abyss-tree-tabs" aria-label="スキルカテゴリ">

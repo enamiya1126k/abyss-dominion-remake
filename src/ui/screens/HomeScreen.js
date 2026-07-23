@@ -1,11 +1,11 @@
-import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
-import{MonsterCard}from"../components/MonsterCard.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.15-alpha.33-final-ui-polish";
+import{APP_VERSION}from"../../core/config.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{MonsterCard}from"../components/MonsterCard.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,emergencyFragmentStatus,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=0.9.15-alpha.34-combat-power";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=0.9.15-alpha.38-idle-return-equipment-phase1";
+import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
