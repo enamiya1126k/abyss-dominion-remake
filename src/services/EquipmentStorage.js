@@ -1,8 +1,11 @@
+import{abyssGoldReward}from"../core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
+
 export const EQUIPMENT_LIMIT=500;
 export const RESERVE_LIMIT=30;
 
-export function equipmentSellPrice(item){
- return({N:15,R:45,SR:110,SSR:260,LR:650}[item.rarity]??10)+(item.plus??0)*25+(item.level??1)*2;
+export function equipmentSellPrice(item,state=null){
+ const base=({N:15,R:45,SR:110,SSR:260,LR:650}[item.rarity]??10)+(item.plus??0)*25+(item.level??1)*2;
+ return state?abyssGoldReward(state,base,"equipmentSale"):base;
 }
 
 export function slotLabel(slot){
@@ -31,7 +34,7 @@ export function receiveEquipment(state,item,{bossReward=false}={}){
   state.bossEquipmentVault.push(item);
   return{location:"bossVault",message:"ボス限定報酬を王装保管庫へ転送"};
  }
- const gold=equipmentSellPrice(item);
+ const gold=equipmentSellPrice(item,state);
  state.player.gold+=gold;
  return{location:"sold",gold,message:`所持上限・予備BOX満杯のため ${gold}G に自動換金`};
 }

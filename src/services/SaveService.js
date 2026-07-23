@@ -1,5 +1,5 @@
-import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE}from"../core/config.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
-import{createMonster}from"../models/Monster.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE}from"../core/config.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{createMonster}from"../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
 import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
@@ -7,8 +7,8 @@ import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=0.9.15-alp
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 
-import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=0.9.15-alpha.38-idle-return-equipment-phase1";
-import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.94-abyss-skill-tree-foundation";
+import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=0.9.15-alpha.95-abyss-skill-effects";
 function finiteNumber(value,fallback=0,min=-Infinity,max=Infinity){
  const number=Number(value);
  return Number.isFinite(number)?Math.max(min,Math.min(max,number)):fallback;
