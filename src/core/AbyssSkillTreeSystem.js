@@ -1,4 +1,4 @@
-export const ABYSS_SKILL_TREE_VERSION=2;
+export const ABYSS_SKILL_TREE_VERSION=3;
 
 export const ABYSS_SKILL_CATEGORIES=Object.freeze([
  {
@@ -23,6 +23,12 @@ export const ABYSS_SKILL_CATEGORIES=Object.freeze([
   color:"#70d6bd"
  }
 ]);
+
+const FOUNDATION_LANES=Object.freeze({
+ "economy-gold-sense":2,"economy-return-ledger":1,"economy-idle-mining":3,"economy-battle-bounty":1,"economy-appraisal":3,"economy-abyss-market":2,
+ "combat-abyss-core":2,"combat-demon-fang":1,"combat-dark-shell":3,"combat-blood-rush":1,"combat-undying-will":3,"combat-dominion":2,
+ "exploration-instinct":2,"exploration-relic-sense":1,"exploration-elite-trail":3,"exploration-abyss-luck":1,"exploration-key-echo":3,"exploration-endless-path":2
+});
 
 const FOUNDATION_SKILL_NODES=Object.freeze([
  {
@@ -223,7 +229,7 @@ const FOUNDATION_SKILL_NODES=Object.freeze([
   requires:["exploration-abyss-luck","exploration-key-echo"],
   effect:{key:"explorationRewardRate",value:.05}
  }
-]);
+].map(node=>Object.freeze({...node,lane:FOUNDATION_LANES[node.id]??2,requiresAny:[],requiresAnyCount:0,branchId:"foundation",branchName:"根源"})));
 
 const EXPANSION_STAGES=Object.freeze([
  {suffix:"萌芽",cost:120000},
@@ -234,7 +240,29 @@ const EXPANSION_STAGES=Object.freeze([
  {suffix:"顕現",cost:12000000},
  {suffix:"超越",cost:30000000},
  {suffix:"支配",cost:75000000},
- {suffix:"終極",cost:180000000}
+ {suffix:"終極",cost:180000000},
+ {suffix:"王冠",cost:350000000},
+ {suffix:"律動",cost:650000000},
+ {suffix:"深化",cost:1200000000},
+ {suffix:"星環",cost:2200000000},
+ {suffix:"変革",cost:4000000000},
+ {suffix:"天衝",cost:7500000000},
+ {suffix:"霊峰",cost:14000000000},
+ {suffix:"永劫",cost:25000000000},
+ {suffix:"神域",cost:45000000000},
+ {suffix:"冥界",cost:80000000000},
+ {suffix:"界渡",cost:140000000000},
+ {suffix:"星海",cost:240000000000},
+ {suffix:"真理",cost:400000000000},
+ {suffix:"創世",cost:650000000000},
+ {suffix:"虚無",cost:1000000000000},
+ {suffix:"原初",cost:1600000000000},
+ {suffix:"万象",cost:2500000000000},
+ {suffix:"王座",cost:3800000000000},
+ {suffix:"無限",cost:5500000000000},
+ {suffix:"終焉",cost:7500000000000},
+ {suffix:"超克",cost:10000000000000},
+ {suffix:"深淵王",cost:15000000000000}
 ]);
 
 const EXPANSION_CAPSTONES=Object.freeze({
@@ -291,7 +319,7 @@ const EXPANSION_BRANCHES=Object.freeze({
   },
   {
    id:"fate-compass",name:"運命羅針",icon:"🧿",
-   effect:stage=>(stage+1)%3===0
+   effect:stage=>[8,17,26,30].includes(stage)
     ?{key:"equipmentRarityBonus",value:1}
     :{key:"explorationRewardRate",value:.01}
   }
@@ -317,6 +345,12 @@ const EFFECT_LABELS=Object.freeze({
  explorationRewardRate:"探索で得るすべての報酬"
 });
 
+const CATEGORY_EFFECT_KEYS=Object.freeze({
+ economy:["goldGainRate","manualReturnGoldRate","idleReturnGoldRate","battleGoldRate","equipmentSellGoldRate"],
+ combat:["partyHpRate","partyAtkRate","partyDefRate","partySpdRate","partyDamageRate","partyDamageTakenRate"],
+ exploration:["chestSpawnRate","equipmentDropRate","eliteRewardRate","abyssKeyDropRate","explorationRewardRate","equipmentRarityBonus"]
+});
+
 function expansionDescription(effect){
  if(effect.key==="equipmentRarityBonus")return"装備レアリティ抽選をさらに強化";
  const percent=Math.round(Math.abs(effect.value)*1000)/10;
@@ -327,16 +361,19 @@ function expansionNodesForCategory(category){
  const branches=EXPANSION_BRANCHES[category];
  return EXPANSION_STAGES.flatMap((stage,stageIndex)=>branches.map((branch,branchIndex)=>{
   const id=`${category}-${branch.id}-${String(stageIndex+1).padStart(2,"0")}`;
-  const requires=stageIndex===0
-   ?[EXPANSION_CAPSTONES[category]]
-   :[`${category}-${branch.id}-${String(stageIndex).padStart(2,"0")}`];
-  // Three major convergence tiers prevent a single straight branch from
-  // unlocking the entire late tree while keeping every dependency in the
-  // immediately preceding tier for deterministic legacy-save normalization.
-  if(stageIndex>0&&[3,6,8].includes(stageIndex)){
-   const neighbor=branches[(branchIndex+branches.length-1)%branches.length];
-   requires.push(`${category}-${neighbor.id}-${String(stageIndex).padStart(2,"0")}`);
-  }
+  const previousIds=branches.map(entry=>`${category}-${entry.id}-${String(stageIndex).padStart(2,"0")}`);
+  let requires=[],requiresAny=[],requiresAnyCount=0,pathType="lane";
+  if(stageIndex===0)requires=[EXPANSION_CAPSTONES[category]];
+  else if([7,15,23,30].includes(stageIndex)){
+   requiresAny=previousIds;requiresAnyCount=2;pathType="convergence";
+  }else if(stageIndex%3===2){
+   requiresAny=branchIndex===0
+    ?[previousIds[0],previousIds[1]]
+    :branchIndex===1
+     ?[previousIds[0],previousIds[2]]
+     :[previousIds[1],previousIds[2]];
+   requiresAnyCount=1;pathType="choice";
+  }else requires=[previousIds[branchIndex]];
   const effect=branch.effect(stageIndex);
   return{
    id,
@@ -346,7 +383,13 @@ function expansionNodesForCategory(category){
    name:`${branch.name}・${stage.suffix}`,
    description:expansionDescription(effect),
    cost:stage.cost,
-   requires:[...new Set(requires)],
+   requires,
+   requiresAny,
+   requiresAnyCount,
+   lane:branchIndex+1,
+   branchId:branch.id,
+   branchName:branch.name,
+   pathType,
    effect
   };
  }));
@@ -366,7 +409,7 @@ function safeInteger(value,fallback=0){
 }
 
 export function createAbyssSkillTreeState(){
- return{version:ABYSS_SKILL_TREE_VERSION,learned:[],paidCosts:{},investedGold:0};
+ return{version:ABYSS_SKILL_TREE_VERSION,learned:[],grandfathered:[],paidCosts:{},investedGold:0};
 }
 
 export function abyssSkillNodeById(nodeId){
@@ -377,15 +420,27 @@ export function abyssSkillCategoryById(categoryId){
  return CATEGORY_BY_ID.get(categoryId)??ABYSS_SKILL_CATEGORIES[0];
 }
 
+export function abyssSkillBranches(categoryId){
+ return(EXPANSION_BRANCHES[categoryId]??[]).map((branch,index)=>({id:branch.id,name:branch.name,icon:branch.icon,lane:index+1}));
+}
+
+function prerequisitesMet(node,learnedSet){
+ if(!node.requires.every(id=>learnedSet.has(id)))return false;
+ const candidates=node.requiresAny??[],needed=Math.max(0,Number(node.requiresAnyCount)||0);
+ return!needed||candidates.filter(id=>learnedSet.has(id)).length>=needed;
+}
+
 export function normalizeAbyssSkillTree(state){
  const source=state?.abyssSkillTree&&typeof state.abyssSkillTree==="object"&&!Array.isArray(state.abyssSkillTree)
   ?state.abyssSkillTree
   :createAbyssSkillTreeState();
  const requested=new Set(Array.isArray(source.learned)?source.learned.filter(id=>NODE_BY_ID.has(id)):[]);
+ const grandfathered=new Set(Array.isArray(source.grandfathered)?source.grandfathered.filter(id=>requested.has(id)):[]);
+ if(Number(source.version??0)<ABYSS_SKILL_TREE_VERSION)requested.forEach(id=>grandfathered.add(id));
  const learned=[];
  const learnedSet=new Set();
  for(const node of ABYSS_SKILL_NODES){
-  if(!requested.has(node.id)||!node.requires.every(id=>learnedSet.has(id)))continue;
+  if(!requested.has(node.id)||!grandfathered.has(node.id)&&!prerequisitesMet(node,learnedSet))continue;
   learned.push(node.id);
   learnedSet.add(node.id);
  }
@@ -403,6 +458,7 @@ export function normalizeAbyssSkillTree(state){
  state.abyssSkillTree={
   version:ABYSS_SKILL_TREE_VERSION,
   learned,
+  grandfathered:[...grandfathered].filter(id=>learnedSet.has(id)),
   paidCosts,
   investedGold
  };
@@ -436,6 +492,17 @@ export function abyssSkillEffects(state){
   effects[effect.key]=(effects[effect.key]??0)+(Number(effect.value)||0);
  }
  return effects;
+}
+
+export function abyssSkillEffectSummary(state,categoryId){
+ const effects=abyssSkillEffects(state);
+ return(CATEGORY_EFFECT_KEYS[categoryId]??[]).map(key=>{
+  const value=Number(effects[key])||0;
+  if(!value)return null;
+  if(key==="equipmentRarityBonus")return{key,label:"装備レア抽選",value,text:`+${Math.floor(value)}段階`};
+  const amount=Math.round(Math.abs(value)*1000)/10;
+  return{key,label:EFFECT_LABELS[key]??key,value,text:`${value<0?"−":"+"}${amount}%`};
+ }).filter(Boolean);
 }
 
 export function abyssSkillEffectTotal(state,key){
@@ -483,6 +550,11 @@ export function canLearnAbyssSkill(state,nodeId){
  if(missing.length){
   const names=missing.map(id=>NODE_BY_ID.get(id)?.name).filter(Boolean).join("・");
   return{ok:false,reason:"prerequisite",message:`先に「${names}」を習得してください。`,node,missing};
+ }
+ const candidates=node.requiresAny??[],needed=Math.max(0,Number(node.requiresAnyCount)||0),owned=candidates.filter(id=>learned.has(id));
+ if(needed&&owned.length<needed){
+  const names=candidates.map(id=>NODE_BY_ID.get(id)?.name).filter(Boolean).join("・");
+  return{ok:false,reason:"route",message:`前提候補「${names}」から${needed}個習得してください。`,node,missing:candidates.filter(id=>!learned.has(id)),needed};
  }
  const gold=safeInteger(state.player?.gold,0);
  if(gold<node.cost)return{ok:false,reason:"gold",message:`GOLDが不足しています。あと${(node.cost-gold).toLocaleString()}G必要です。`,node};

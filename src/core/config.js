@@ -3,4 +3,4 @@ export const MAX_PARTY_SIZE=4;
 export const PUBLIC_MAX_LEVEL=100;
 export const TRUE_MAX_LEVEL=1000;
 export const ABYSS_UNLOCK_FLOOR=1000;
-export const APP_VERSION="1.3.0";
+export const APP_VERSION="1.4.0";
