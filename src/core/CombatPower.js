@@ -1,4 +1,4 @@
-import{calculatedStats}from"../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{calculatedStats}from"../models/Monster.js?v=1.3.0";
 
 /**
  * 表示用の戦力値。

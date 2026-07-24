@@ -1,7 +1,7 @@
 import{createEquipment}from"../models/Equipment.js?v=1.2.0";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=1.2.0";
-import{maxMp}from"../battle/SkillSystem.js?v=1.2.0";
-import{SPECIES}from"../data/species.js?v=1.2.0";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=1.3.0";
+import{maxMp}from"../battle/SkillSystem.js?v=1.3.0";
+import{SPECIES}from"../data/species.js?v=1.3.0";
 import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=1.2.0";
 import{equipmentStatLabel}from"../data/equipment.js?v=1.2.0";
 import{formatAffix}from"../data/equipmentAffixes.js?v=1.2.0";
@@ -24,8 +24,8 @@ export const SECRET_ROOM_RECOVERY_ITEMS=Object.freeze([
 const MARKET_RARITIES=[
  {id:"SR",threshold:.50,equipmentRate:10,monsterRate:16,stars:2},
  {id:"SSR",threshold:.76,equipmentRate:24,monsterRate:38,stars:3},
- {id:"UR",threshold:.89,equipmentRate:50,monsterRate:78,stars:4},
- {id:"LR",threshold:.97,equipmentRate:110,monsterRate:170,stars:5},
+ {id:"UR",threshold:.94,equipmentRate:50,monsterRate:78,stars:4},
+ {id:"LR",threshold:.995,equipmentRate:110,monsterRate:170,stars:5},
  {id:"神話",threshold:1,equipmentRate:260,monsterRate:400,stars:5}
 ];
 
@@ -98,9 +98,10 @@ function marketEquipmentOffer(floor,index,random){
 }
 function marketMonsterOffer(floor,index,random){
  const profile=rarityProfile(random);
- const pool=Object.values(SPECIES).filter(species=>(species.minFloor??1)<=floor&&!species.isTenGod&&!species.isAbyss&&!species.tags?.includes?.("tenGod")&&!species.tags?.includes?.("abyss"));
+ let pool=Object.values(SPECIES).filter(species=>species.rarity===profile.id&&(species.minFloor??1)<=floor&&!species.isTenGod&&!species.isAbyss&&!species.tags?.includes?.("tenGod")&&!species.tags?.includes?.("abyss"));
+ if(!pool.length)pool=Object.values(SPECIES).filter(species=>species.rarity===profile.id&&!species.isTenGod&&!species.isAbyss&&!species.tags?.includes?.("tenGod")&&!species.tags?.includes?.("abyss"));
  const species=pool[Math.floor(random()*pool.length)]??SPECIES.slime;
- const level=Math.max(1,Math.min(9999999,Math.round(1+(floor-1)*.72*(.9+random()*.2))));
+ const level=Math.max(1,Math.min(1000,Math.round(1+(floor-1)*.72*(.9+random()*.2))));
  const plus=profile.id==="神話"?Math.max(0,Math.floor(floor/500)):profile.id==="LR"?Math.max(0,Math.floor(floor/1500)):0;
  const monster=createMonster(species.id,{nickname:species.name,level,stars:profile.stars,plus,obtainedFloor:floor,obtainedMethod:"darkMarket"});
  monster.summonRarity=profile.id;if(profile.id==="神話")monster.summonTier="神話";
