@@ -1,6 +1,7 @@
 import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=1.3.0";
 import{PERSONALITIES}from"../../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../../data/species.js?v=1.3.0";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.3.0";
 
 export function MonsterCard(monster,inParty=false,{editing=false,selected=false}={}){
   const stats=calculatedStats(monster),personality=PERSONALITIES[monster.personalityId],species=SPECIES[monster.speciesId];
@@ -10,7 +11,7 @@ export function MonsterCard(monster,inParty=false,{editing=false,selected=false}
     <div class="monster-orb" style="background:${colorValue(monster)}"><span aria-hidden="true">${species?.emoji??"👹"}</span></div>
     <div>
       <div class="monster-name">${monster.favorite?"★ ":""}${monster.locked?"🔒 ":""}${displayName(monster)}</div>
-      <div class="subline">${rankName(monster)} / Lv.${monster.level} +${monster.plus}</div>
+      <div class="subline">${rankName(monster)} / Lv.${monster.level} +${monster.plus} / ⚔️戦力 ${formatCombatPower(monsterCombatPower(monster))}</div>
       <div class="stars">${"★".repeat(monster.stars)}${"☆".repeat(Math.max(0,5-monster.stars))}</div>
       <div class="subline"><span class="badge">${personality.name}</span> ❤️${monster.affection??0}　HP ${stats.hp} / ATK ${stats.atk} / DEF ${stats.def} / SPD ${stats.spd}</div>
     </div>
