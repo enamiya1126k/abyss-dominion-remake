@@ -6,7 +6,17 @@ const MONSTER_SPRITE_FOLDERS=Object.freeze({
   caterpillar:"005_caterpillar",
   skeleton:"006_skeleton",
   goblin:"007_goblin",
-  acid_slime:"008_acid_slime"
+  acid_slime:"008_acid_slime",
+  mushroom:"009_mushroom",
+  centipede:"010_centipede",
+  fang_rat:"011_fang_rat",
+  ember_slime:"012_ember_slime",
+  skeleton_archer:"013_skeleton_archer",
+  zombie:"014_zombie",
+  vampire_bat:"015_vampire_bat",
+  goblin_guard:"016_goblin_guard",
+  thorn_bud:"017_thorn_bud",
+  frost_slime:"018_frost_slime"
 });
 
 const IDLE_FRAMES=Object.freeze(["idle1","idle2","idle3","idle2"]);
