@@ -984,7 +984,7 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
 .skill-slot .skill-slot-effect{color:#e6d6ef}
 @media(max-width:420px){.skill-slot{min-height:88px}}
 
-/* v1.5.0: pixel monster sprites and game-master serial rewards */
+/* v1.6.0: pixel monster sprites and game-master serial rewards */
 .monster-visual{display:inline-grid;place-items:center;width:1.8em;height:1.8em;flex:0 0 auto;vertical-align:middle;line-height:1}
 .monster-visual img{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated;image-rendering:crisp-edges;filter:drop-shadow(0 3px 4px #0008);user-select:none;pointer-events:none}
 .monster-visual-fallback{display:grid;place-items:center;width:100%;height:100%;font-size:.8em;line-height:1}
@@ -998,3 +998,23 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
 .serial-code-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}.serial-code-form input{min-width:0;text-transform:uppercase;letter-spacing:.08em;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.serial-code-form button{white-space:nowrap;background:linear-gradient(135deg,#7b3fba,#b566ed);font-weight:800}
 .serial-reward-result{text-align:center;display:grid;gap:10px}.serial-reward-result>div{font-size:4rem;filter:drop-shadow(0 0 16px #bd72ff99)}.serial-reward-result p,.serial-reward-result small{margin:0}
 @media(max-width:480px){.serial-code-form{grid-template-columns:1fr}.serial-code-form button{min-height:46px}}
+
+/* v1.6.0: eight-frame monster animation and complete sprite coverage */
+.formation-picker-monster-visual{width:46px;height:46px}
+.formation-transfer-monster-visual{width:54px;height:54px;margin-inline:auto}
+.limit-break-monster-visual{width:92px;height:92px}
+.modal-monster-hero{display:flex;align-items:center;gap:12px;margin-bottom:12px;padding:10px;border:1px solid #8f62ac55;border-radius:14px;background:#0d0913aa}
+.modal-monster-hero p{margin:0}.modal-monster-visual{width:68px;height:68px}
+.gacha-result-monster-visual{width:54px;height:54px;margin-inline:auto}
+.codex-row-monster-visual{width:42px;height:42px}
+.codex-owned-monster-visual{width:38px;height:38px}
+.codex-detail-monster-visual{width:76px;height:76px}
+.market-monster-visual{width:68px;height:68px}
+.battle-result-monster-visual{width:48px;height:48px}
+.codex-row>b,.market-detail-hero h3,.formation-picker-row b{overflow-wrap:anywhere}
+@media(max-width:480px){
+ .formation-picker-monster-visual{width:40px;height:40px}
+ .formation-transfer-monster-visual{width:46px;height:46px}
+ .modal-monster-visual{width:58px;height:58px}
+ .codex-detail-monster-visual{width:64px;height:64px}
+}
