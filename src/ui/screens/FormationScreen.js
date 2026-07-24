@@ -1,6 +1,6 @@
 import{SPECIES}from"../../data/species.js?v=1.3.0";
 import{calculatedStats,displayName,totalExperience}from"../../models/Monster.js?v=1.3.0";
-import{maxMp,normalizeSkillLoadout,skillById}from"../../battle/SkillSystem.js?v=1.3.0";
+import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=1.3.0";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.3.0";
 import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=1.2.0";
 import{formatAffix}from"../../data/equipmentAffixes.js?v=1.2.0";
@@ -10,7 +10,7 @@ const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],
  earth:["🪨","土"],wind:["🌪️","風"],light:["✨","光"],dark:["🌑","闇"],poison:["☠️","毒"],nature:["🌿","自然"]
 };
-const LOADOUT_SLOTS=["weaponRight","armorBody","accessoryNeck","armorSupport","accessoryFinger","weaponLeft"];
+const LOADOUT_SLOTS=["weaponRight","weaponLeft","accessoryNeck","accessoryFinger","armorBody","armorSupport"];
 
 function rarityClass(rarity){return({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity??"N").toLowerCase()}
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
@@ -30,6 +30,25 @@ function equipmentSlot(state,monster,subslot){
   <small>${equipmentSubslotLabel(subslot)}・${rarity}</small>
   <b class="rarity-name-${rarityClass(rarity)}">${item.name}${item.plus?` +${item.plus}`:""}</b>
   <em>Lv.${item.level??1}・${buff}</em>
+ </button>`;
+}
+function skillEffectText(skill){
+ if(skill.type==="allHeal"||skill.type==="selfHeal")return`回復 ${Math.round((skill.heal??0)*100)}%`;
+ if(skill.type==="mpHeal")return`MP回復 ${Math.round((skill.mpHeal??0)*100)}%`;
+ if(skill.type==="revive")return`蘇生 ${Math.round((skill.revive??0)*100)}%`;
+ if(skill.type==="multiAttack")return`威力 ${Math.round((skill.power??0)*100)}%×${skill.hits??2}`;
+ if(skill.type==="drain")return`威力 ${Math.round((skill.power??0)*100)}%・吸収${Math.round((skill.drain??0)*100)}%`;
+ if(skill.type==="buff"||skill.type==="stance"||skill.type==="cleanse")return skill.tag??"特殊効果";
+ return`威力 ${Math.round((skill.power??0)*100)}%`;
+}
+function skillSlot(monster,skill,slot){
+ if(!skill)return`<button type="button" class="empty" data-formation-skill="${monster.id}" data-skill-slot="${slot}"><small>${slot+1}</small><span><b>未設定</b><em>タップして選択</em></span><i>›</i></button>`;
+ const progress=skillProgressFor(monster,skill.id),cost=effectiveSkillMpCost(monster,skill),baseCost=skill.mp??0;
+ const costLabel=cost===baseCost?`MP ${cost}`:`MP ${cost}（基本${baseCost}）`;
+ return`<button type="button" data-formation-skill="${monster.id}" data-skill-slot="${slot}">
+  <small>${slot+1}</small>
+  <span><b>${skill.name}</b><em>熟練Lv.${progress.level}・${skillElementLabel(skill)}・${skillEffectText(skill)}・${costLabel}・CT ${skill.cooldown??0}</em></span>
+  <i>›</i>
  </button>`;
 }
 function memberCard(state,monster,index){
@@ -54,7 +73,7 @@ function memberCard(state,monster,index){
   </section>
   <section class="formation-skills">
    <h3>✨ 設定中スキル <small>タップで変更</small></h3>
-   ${skills.map((skill,slot)=>`<button type="button" data-formation-skill="${monster.id}" data-skill-slot="${slot}"><small>${slot+1}</small><b>${skill?.name??"未設定"}</b><i>›</i></button>`).join("")}
+   ${skills.map((skill,slot)=>skillSlot(monster,skill,slot)).join("")}
   </section>
   <div class="formation-actions">
    <button data-formation-growth="${monster.id}">育成</button>

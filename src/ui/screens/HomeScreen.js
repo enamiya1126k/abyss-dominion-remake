@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=1.4.0";
+import{APP_VERSION}from"../../core/config.js?v=1.4.1";
 import{calculatedStats,displayName}from"../../models/Monster.js?v=1.3.0";
 import{maxMp}from"../../battle/SkillSystem.js?v=1.3.0";
 import{SPECIES}from"../../data/species.js?v=1.3.0";

@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=1.4.0";
+import{APP_VERSION}from"../../core/config.js?v=1.4.1";
 export function SettingsScreen(state){
   return`
     <section class="screen">
