@@ -1,6 +1,6 @@
-import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=1.3.0";
 import{PERSONALITIES}from"../../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{SPECIES}from"../../data/species.js?v=1.3.0";
 
 export function MonsterCard(monster,inParty=false,{editing=false,selected=false}={}){
   const stats=calculatedStats(monster),personality=PERSONALITIES[monster.personalityId],species=SPECIES[monster.speciesId];
