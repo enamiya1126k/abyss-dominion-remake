@@ -969,3 +969,17 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
 .market-detail-affixes,.market-detail-skills{display:grid;gap:5px}.market-detail-affixes p{display:grid;grid-template-columns:7px minmax(0,1fr) auto;align-items:center;gap:6px;margin:0;padding:7px;border-radius:8px;background:#ffffff07}.market-detail-affixes i{width:7px;height:7px;border-radius:50%}.market-detail-affixes small{font-size:.5rem;color:var(--muted)}.market-detail-skills h4{margin:2px 0}.market-detail-skills p{display:flex;justify-content:space-between;gap:8px;margin:0;padding:7px;border-radius:8px;background:#ffffff07}.market-detail-skills small{color:var(--muted)}
 .market-detail-price{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding:10px;border:1px solid #d6ac5955;border-radius:10px;background:#d6ac590c}.market-detail-price span{font-size:.65rem;color:#cfb876}.market-detail-price b{color:#ffe18a;font-size:1rem}
 @media(prefers-reduced-motion:reduce){.casino-reels i.rolling,.casino-reels i.landed{animation:none}}
+
+/* v1.4.1: compact skill details in formation and loadout slots */
+.formation-skills>button{grid-template-columns:12px minmax(0,1fr) 8px;gap:2px;min-height:29px}
+.formation-skills>button>small{display:grid;place-items:center;width:11px;height:11px;border-radius:3px;background:#8053b833;font-size:.34rem}
+.formation-skills>button>span{display:grid;gap:0;min-width:0}
+.formation-skills>button b{font-size:.4rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.formation-skills>button em{font-size:.29rem;line-height:1.25;color:#b7a9c0;font-style:normal;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.formation-skills>button.empty{opacity:.66}
+
+.skill-slot{min-height:102px}
+.skill-slot small{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.skill-slot small em{font-size:10px;font-style:normal;color:#ffe09a}
+.skill-slot .skill-slot-effect{color:#e6d6ef}
+@media(max-width:420px){.skill-slot{min-height:88px}}
