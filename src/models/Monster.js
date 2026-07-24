@@ -1,8 +1,9 @@
-import{SPECIES}from"../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{SPECIES}from"../data/species.js?v=1.3.0";
 import{PERSONALITIES}from"../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{MONSTER_COLORS}from"../data/colors.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{normalizedResistances}from"../data/attributes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{TRUE_MAX_LEVEL}from"../core/config.js?v=1.3.0";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -24,7 +25,8 @@ export const TRAITS={
 
 const RACE_EXP_RATE={
  slime:.68,beast:.82,flying:.80,insect:.78,goblin:.90,plant:.88,
- undead:1.00,demon:1.22,elemental:1.18,golem:1.35,dragon:1.95
+ undead:1.00,demon:1.22,elemental:1.18,golem:1.35,dragon:1.95,
+ spirit:1.08,construct:1.30,reptile:1.12
 };
 const RACE_GROWTH_RATE={
  slime:{hp:.82,atk:.72,def:.82,spd:.92},
@@ -37,13 +39,42 @@ const RACE_GROWTH_RATE={
  demon:{hp:1.12,atk:1.16,def:1.02,spd:.86},
  elemental:{hp:.88,atk:1.12,def:.90,spd:1.06},
  golem:{hp:1.28,atk:1.04,def:1.32,spd:.55},
- dragon:{hp:1.34,atk:1.32,def:1.16,spd:.64}
+ dragon:{hp:1.34,atk:1.32,def:1.16,spd:.64},
+ spirit:{hp:.86,atk:1.08,def:.88,spd:1.12},
+ construct:{hp:1.18,atk:1.05,def:1.22,spd:.72},
+ reptile:{hp:1.08,atk:1.04,def:1.10,spd:.86}
 };
 export function expNeedFor(monster){
   const species=SPECIES[monster.speciesId];
   const rate=species.expRate??RACE_EXP_RATE[species.race]??1;
   const base=40+monster.level*25+Math.floor(monster.level*monster.level*.55);
-  return Math.max(25,Math.floor(base*rate));
+ return Math.max(25,Math.floor(base*rate));
+}
+
+function experienceBeforeLevel(monster,level){
+ const target=Math.max(1,Math.min(TRUE_MAX_LEVEL,Math.floor(Number(level)||1)));
+ let total=0;
+ for(let current=1;current<target;current++)total+=expNeedFor({...monster,level:current});
+ return total;
+}
+export function totalExperience(monster){
+ const stored=Number(monster?.totalExp);
+ if(Number.isFinite(stored)&&stored>=0)return Math.floor(stored);
+ return experienceBeforeLevel(monster,monster?.level)+Math.max(0,Math.floor(Number(monster?.exp)||0));
+}
+export function applyTotalExperience(monster,total){
+ const canonical=Math.max(0,Math.floor(Number(total)||0));
+ monster.totalExp=canonical;
+ monster.level=1;
+ monster.exp=canonical;
+ while(monster.level<TRUE_MAX_LEVEL){
+  const need=expNeedFor(monster);
+  if(monster.exp<need)break;
+  monster.exp-=need;
+  monster.level++;
+ }
+ if(monster.level>=TRUE_MAX_LEVEL)monster.exp=0;
+ return monster;
 }
 
 function randomTrait(){const keys=Object.keys(TRAITS);return keys[Math.floor(Math.random()*keys.length)]}
@@ -52,8 +83,8 @@ export function createMonster(speciesId,options={}){
   if(!species)throw new Error(`Unknown species: ${speciesId}`);
   const personalityId=options.personalityId??randomKey(PERSONALITIES);
   const colorId=options.colorId??MONSTER_COLORS[Math.floor(Math.random()*MONSTER_COLORS.length)].id;
-  const level=options.level??1;
-  return{
+  const level=Math.max(1,Math.min(TRUE_MAX_LEVEL,Math.floor(Number(options.level)||1)));
+  const monster={
     id:uid(),
     speciesId,
     nickname:options.nickname??species.name,
@@ -62,7 +93,7 @@ export function createMonster(speciesId,options={}){
     traitId:options.traitId??randomTrait(),
     ivs:options.ivs??{hp:randomIV(),atk:randomIV(),def:randomIV(),spd:randomIV()},
     level,
-    exp:options.exp??0,
+    exp:Math.max(0,Math.floor(Number(options.exp)||0)),
     stars:options.stars??Math.max(1,Math.min(5,options.talent??1)),
     rank:options.rank??1,
     plus:options.plus??0,
@@ -88,6 +119,9 @@ export function createMonster(speciesId,options={}){
     currentMp:options.currentMp??null,
     equippedSkills:Array.isArray(options.equippedSkills)?[...options.equippedSkills]:[]
   };
+  if(options.totalExp!=null)applyTotalExperience(monster,options.totalExp);
+  else monster.totalExp=experienceBeforeLevel(monster,monster.level)+monster.exp;
+  return monster;
 }
 export function displayName(monster){
   const species=SPECIES[monster.speciesId];
