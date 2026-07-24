@@ -1,5 +1,5 @@
-import{EXPANDED_SPECIES}from"./expandedSpecies.js?v=1.6.0";
-import{applyMonsterNameOverride}from"./monsterNameOverrides.js?v=1.6.0";
+import{EXPANDED_SPECIES}from"./expandedSpecies.js?v=1.7.0";
+import{applyMonsterNameOverride}from"./monsterNameOverrides.js?v=1.7.0";
 
 const BASE_SPECIES={
   slime:{id:"slime",emoji:"🫧",name:"スライム",element:"water",race:"slime",role:"balanced",rarity:"N",minFloor:1,captureRate:1.0,maxMp:16,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:46,atk:6,def:4,spd:10,crit:5,evasion:3},rankNames:["スライム","上位スライム","スライム王","深淵スライム"],skills:[{id:"slime_skill",name:"体当たり",unlock:{type:"level",value:1},description:"体当たりで戦う。"}]},
