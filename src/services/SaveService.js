@@ -1,19 +1,19 @@
-import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL}from"../core/config.js?v=1.5.0";
-import{createMonster,totalExperience,applyTotalExperience}from"../models/Monster.js?v=1.3.0";
-import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=1.3.0";
+import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL}from"../core/config.js?v=1.6.0";
+import{createMonster,totalExperience,applyTotalExperience}from"../models/Monster.js?v=1.6.0";
+import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=1.6.0";
 import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=1.0.0";
 import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=1.1.0";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=1.1.0";
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{SPECIES}from"../data/species.js?v=1.3.0";
+import{SPECIES}from"../data/species.js?v=1.6.0";
 
 import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=1.4.0";
 import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=1.4.0";
 import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=1.2.0";
 import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=1.4.0";
-import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=1.3.0";
-import{normalizeSerialCodeState}from"../core/SerialCodeSystem.js?v=1.5.0";
+import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=1.6.0";
+import{normalizeSerialCodeState}from"../core/SerialCodeSystem.js?v=1.6.0";
 function finiteNumber(value,fallback=0,min=-Infinity,max=Infinity){
  const number=Number(value);
  return Number.isFinite(number)?Math.max(min,Math.min(max,number)):fallback;
