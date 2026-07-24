@@ -1,11 +1,11 @@
-import{APP_VERSION}from"../../core/config.js?v=1.6.0";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=1.6.0";
-import{maxMp}from"../../battle/SkillSystem.js?v=1.6.0";
-import{SPECIES}from"../../data/species.js?v=1.6.0";
+import{APP_VERSION}from"../../core/config.js?v=1.7.0";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=1.7.0";
+import{maxMp}from"../../battle/SkillSystem.js?v=1.7.0";
+import{SPECIES}from"../../data/species.js?v=1.7.0";
 import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,emergencyFragmentStatus,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=1.0.0";
-import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.6.0";
+import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.7.0";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=1.4.0";
-import{monsterVisual}from"../MonsterVisual.js?v=1.6.0";
+import{monsterVisual}from"../MonsterVisual.js?v=1.7.0";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}

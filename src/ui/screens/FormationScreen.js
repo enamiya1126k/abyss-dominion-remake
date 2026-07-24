@@ -1,11 +1,11 @@
-import{SPECIES}from"../../data/species.js?v=1.6.0";
-import{calculatedStats,displayName,totalExperience}from"../../models/Monster.js?v=1.6.0";
-import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=1.6.0";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.6.0";
+import{SPECIES}from"../../data/species.js?v=1.7.0";
+import{calculatedStats,displayName,totalExperience}from"../../models/Monster.js?v=1.7.0";
+import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=1.7.0";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.7.0";
 import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=1.2.0";
 import{formatAffix}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
-import{monsterVisual}from"../MonsterVisual.js?v=1.6.0";
+import{monsterVisual}from"../MonsterVisual.js?v=1.7.0";
 
 const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],
