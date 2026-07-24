@@ -1,7 +1,7 @@
 import{createEquipment,equipmentPower}from"../models/Equipment.js?v=1.2.0";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=1.3.0";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=1.3.0";
-import{SPECIES}from"../data/species.js?v=1.3.0";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=1.6.0";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=1.6.0";
+import{SPECIES}from"../data/species.js?v=1.6.0";
 import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=1.4.0";
 import{equipmentStatLabel}from"../data/equipment.js?v=1.2.0";
 import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=1.2.0";
