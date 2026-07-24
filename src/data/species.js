@@ -1,4 +1,5 @@
-import{EXPANDED_SPECIES}from"./expandedSpecies.js?v=1.3.0";
+import{EXPANDED_SPECIES}from"./expandedSpecies.js?v=1.6.0";
+import{applyMonsterNameOverride}from"./monsterNameOverrides.js?v=1.6.0";
 
 const BASE_SPECIES={
   slime:{id:"slime",emoji:"🫧",name:"スライム",element:"water",race:"slime",role:"balanced",rarity:"N",minFloor:1,captureRate:1.0,maxMp:16,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:46,atk:6,def:4,spd:10,crit:5,evasion:3},rankNames:["スライム","上位スライム","スライム王","深淵スライム"],skills:[{id:"slime_skill",name:"体当たり",unlock:{type:"level",value:1},description:"体当たりで戦う。"}]},
@@ -51,4 +52,7 @@ const BASE_SPECIES={
   angelic_orb:{id:"angelic_orb",emoji:"🔆",name:"光球精",element:"light",race:"spirit",role:"support",rarity:"SR",minFloor:55,captureRate:1.0,maxMp:30,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:55,atk:13,def:7,spd:21,crit:8,evasion:16},rankNames:["光球精","上位光球精","光球精王","深淵光球精"],skills:[{id:"angelic_orb_skill",name:"光輪",unlock:{type:"level",value:1},description:"光輪で戦う。"}]},
 };
 
-export const SPECIES=Object.freeze({...BASE_SPECIES,...EXPANDED_SPECIES});
+const ALL_SPECIES={...BASE_SPECIES,...EXPANDED_SPECIES};
+export const SPECIES=Object.freeze(Object.fromEntries(
+  Object.entries(ALL_SPECIES).map(([id,species])=>[id,applyMonsterNameOverride(species)])
+));
