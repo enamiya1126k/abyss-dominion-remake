@@ -1,4 +1,4 @@
-import{SPECIES}from"../data/species.js?v=1.3.0";
+import{SPECIES}from"../data/species.js?v=1.6.0";
 import{SKILLS}from"../data/skills.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 
 const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
