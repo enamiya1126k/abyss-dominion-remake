@@ -1,9 +1,9 @@
-import{SPECIES}from"../data/species.js?v=1.3.0";
+import{SPECIES}from"../data/species.js?v=1.6.0";
 import{PERSONALITIES}from"../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{MONSTER_COLORS}from"../data/colors.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{normalizedResistances}from"../data/attributes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{TRUE_MAX_LEVEL}from"../core/config.js?v=1.3.0";
+import{TRUE_MAX_LEVEL}from"../core/config.js?v=1.6.0";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -125,7 +125,9 @@ export function createMonster(speciesId,options={}){
 }
 export function displayName(monster){
   const species=SPECIES[monster.speciesId];
-  return monster.nickname||species.name;
+  const nickname=String(monster.nickname??"").trim();
+  if(!nickname||nickname===species.legacyName)return species.name;
+  return nickname;
 }
 export function rankName(monster){
   const species=SPECIES[monster.speciesId];
