@@ -5,6 +5,7 @@ import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.3
 import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=1.2.0";
 import{formatAffix}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
+import{monsterVisual}from"../MonsterVisual.js?v=1.5.0";
 
 const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],
@@ -57,7 +58,7 @@ function memberCard(state,monster,index){
  const skills=Array.from({length:4},(_,slot)=>skillById(monster.equippedSkills?.[slot]));
  return`<article class="formation-member" data-formation-member="${monster.id}">
   <div class="formation-slot-label">SLOT ${index+1}</div>
-  <div class="formation-member-icon">${species.emoji??"👹"}</div>
+  <div class="formation-member-icon">${monsterVisual(monster.speciesId,species.emoji??"👹",{className:"formation-monster-visual"})}</div>
   <b class="formation-member-name rarity-name-${rarityClass(rarity)}">${displayName(monster)}</b>
   <small class="formation-member-meta">${rarity}・${elementIcon}${elementName}<br>Lv.${monster.level}・★${monster.stars??1}・+${monster.plus??0}</small>
   <small class="formation-total-exp">累計EXP ${totalExperience(monster).toLocaleString()}</small>

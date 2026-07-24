@@ -1,10 +1,11 @@
-import{APP_VERSION}from"../../core/config.js?v=1.4.1";
+import{APP_VERSION}from"../../core/config.js?v=1.5.0";
 import{calculatedStats,displayName}from"../../models/Monster.js?v=1.3.0";
 import{maxMp}from"../../battle/SkillSystem.js?v=1.3.0";
 import{SPECIES}from"../../data/species.js?v=1.3.0";
 import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,emergencyFragmentStatus,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=1.0.0";
 import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.3.0";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=1.4.0";
+import{monsterVisual}from"../MonsterVisual.js?v=1.5.0";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
@@ -26,7 +27,7 @@ export function HomeScreen(state){
     const stars="⭐".repeat(Math.max(1,Math.min(5,m.stars??1)));
     const equipmentIcons=["weaponRight","armorBody","accessoryNeck","armorSupport","accessoryFinger","weaponLeft"].map(slot=>{const id=m.equipment?.[slot],item=id?equipmentById.get(id):null,icon=slot.startsWith("weapon")?"⚔️":slot.startsWith("armor")?"🛡️":"💍";return`<i class="${item?"equipped":"empty"}" title="${item?.name??"未装備"}">${icon}</i>`}).join("");
     const rarity=monsterRarity(m),rarityClass=rarityNameClass(rarity);
-    return`<div class="home-squad-slot"><span class="home-squad-number">${index+1}</span><div class="home-squad-head"><span>${sp?.emoji??"👹"}</span><section><b class="monster-rarity-name rarity-name-${rarityClass}">${displayName(m)}</b><small>Lv.${m.level} <em>+${m.plus??0}</em></small></section></div><div class="home-squad-growth"><span>${stars}</span><span>❤️${m.affection??0}</span></div><div class="home-squad-bar hp"><i style="width:${hpRatio}%"></i><small>HP ${hp}/${stats.hp}</small></div><div class="home-squad-bar mp"><i style="width:${mpRatio}%"></i><small>MP ${mp}/${mpMax}</small></div><div class="home-squad-equipment" aria-label="装備">${equipmentIcons}</div></div>`;
+    return`<div class="home-squad-slot"><span class="home-squad-number">${index+1}</span><div class="home-squad-head">${monsterVisual(m.speciesId,sp?.emoji??"👹",{className:"home-monster-visual"})}<section><b class="monster-rarity-name rarity-name-${rarityClass}">${displayName(m)}</b><small>Lv.${m.level} <em>+${m.plus??0}</em></small></section></div><div class="home-squad-growth"><span>${stars}</span><span>❤️${m.affection??0}</span></div><div class="home-squad-bar hp"><i style="width:${hpRatio}%"></i><small>HP ${hp}/${stats.hp}</small></div><div class="home-squad-bar mp"><i style="width:${mpRatio}%"></i><small>MP ${mp}/${mpMax}</small></div><div class="home-squad-equipment" aria-label="装備">${equipmentIcons}</div></div>`;
   }).join("");
   return`
     <section class="screen home-screen world-phase-${phase}${phase===1?" phase2":""}" data-world-phase="${phase}">

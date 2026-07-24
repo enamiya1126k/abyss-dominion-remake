@@ -19,6 +19,7 @@ import{SPECIES}from"../../data/species.js?v=1.3.0";
 import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=0.9.15-alpha.95.1-stability-audit";
 import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.4.0";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=1.2.0";
+import{monsterVisual}from"../MonsterVisual.js?v=1.5.0";
 
 function monsterRarity(monster){
  return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N";
@@ -203,10 +204,10 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
     <div class="equipment-target-list">${party.map(monster=>{
      const monsterSpecies=SPECIES[monster.speciesId]??{};
      const monsterAttribute=ATTRIBUTES[monster.attribute??monsterSpecies.element??"neutral"]??{icon:"◈",name:"不明"};
-     return`<button data-equipment-target="${monster.id}" class="${monster.id===target.id?"active":""}"><span>${monsterSpecies.emoji??"👹"}</span>${coloredMonsterName(monster)}<small>${monsterAttribute.icon}${monsterAttribute.name}・Lv.${monster.level}　⭐${monster.stars??1}　+${monster.plus??0}</small></button>`;
+     return`<button data-equipment-target="${monster.id}" class="${monster.id===target.id?"active":""}">${monsterVisual(monster.speciesId,monsterSpecies.emoji??"👹",{className:"equipment-tab-monster-visual"})}${coloredMonsterName(monster)}<small>${monsterAttribute.icon}${monsterAttribute.name}・Lv.${monster.level}　⭐${monster.stars??1}　+${monster.plus??0}</small></button>`;
     }).join("")}</div>
     <div class="selected-equipment-target">
-     <span>${species.emoji??"👹"}</span>
+     ${monsterVisual(target.speciesId,species.emoji??"👹",{className:"equipment-target-monster-visual"})}
      <div class="selected-equipment-identity">${coloredMonsterName(target)}<small><em class="attribute-chip">${attribute.icon} ${attribute.name}属性</em>　❤️${target.affection??0}/1000</small></div>
      <div class="selected-equipment-power"><small>戦力</small><strong>${formatCombatPower(power)}</strong></div>
     </div>

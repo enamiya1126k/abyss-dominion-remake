@@ -4,12 +4,13 @@ import{MONSTER_COLORS}from"../../data/colors.js?v=0.9.15-alpha.32-phase10-10-rel
 import{ATTRIBUTES}from"../../data/attributes.js?v=1.1.0";
 import{maxMp}from"../../battle/SkillSystem.js?v=1.3.0";
 import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=1.3.0";
+import{monsterVisual}from"../MonsterVisual.js?v=1.5.0";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
 function nextAffection(aff){if(aff>=1000)return null;return Math.min(1000,Math.ceil((aff+1)/100)*100)}
 function sourceLabel(method){
- return({capture:"探索・捕獲",summon:"召喚",market:"闇市場",darkMarket:"闇市場",endgameContract:"契約",deepSummon:"深淵召喚"}[method]??method??"不明");
+ return({capture:"探索・捕獲",summon:"召喚",market:"闇市場",darkMarket:"闇市場",endgameContract:"契約",deepSummon:"深淵召喚",serialCode:"シリアルコード"}[method]??method??"不明");
 }
 
 export function MonsterDetailScreen(monster,state){
@@ -21,15 +22,15 @@ export function MonsterDetailScreen(monster,state){
   const index=Math.max(0,ordered.findIndex(entry=>entry.id===monster.id)),previous=ordered[(index-1+ordered.length)%ordered.length],nextMonster=ordered[(index+1)%ordered.length];
   const attribute=ATTRIBUTES[monster.attribute??species.element]??{icon:"◈",name:monster.attribute??species.element??"不明"};
   const affection=affectionBonuses(aff),affectionText=Object.entries(affection).map(([key,value])=>`${key.toUpperCase()} +${Math.round(value*100)}%`).join(" / ");
-  const fieldEncounter=species.fieldEncounter!==false;
-  const sources=Array.isArray(species.acquisition)&&species.acquisition.length?species.acquisition:(fieldEncounter?["探索","召喚","闇市場"]:["召喚","闇市場"]);
+  const specialContract=Boolean(monster.isContractedEndgame),fieldEncounter=!specialContract&&species.fieldEncounter!==false;
+  const sources=specialContract?["シリアルコード","緊急戦闘での契約"]:(Array.isArray(species.acquisition)&&species.acquisition.length?species.acquisition:(fieldEncounter?["探索","召喚","闇市場"]:["召喚","闇市場"]));
   return`<section class="screen monster-growth-screen">
    <header class="topbar"><button id="backMonsters">←</button><h2>モンスター育成</h2><button id="toggleFavorite">${monster.favorite?"★":"☆"}</button></header>
    <div class="page compact-growth-page">
     <div class="monster-switcher"><button data-switch-monster="${previous?.id??monster.id}" aria-label="前の魔物">‹</button><div><small>${state.party.includes(monster.id)?"出撃メンバー":"控え魔物"} ${index+1}/${ordered.length}</small><b class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</b></div><button data-switch-monster="${nextMonster?.id??monster.id}" aria-label="次の魔物">›</button></div>
 
     <div class="panel compact-growth-summary">
-     <div class="compact-growth-identity"><div class="detail-orb" style="background:${colorValue(monster)}"><span>${species.emoji??"👹"}</span></div><div><small>${rankName(monster)} / ${species.race}族</small><h1 class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</h1><p><b>${rarity}</b>・${attribute.icon}${attribute.name}属性・${species.growthLabel??"標準"}成長</p><em>Lv.${monster.level}　⭐${monster.stars??1}　+${monster.plus??0}　❤️${aff}</em></div></div>
+     <div class="compact-growth-identity"><div class="detail-orb" style="background:${colorValue(monster)}">${monsterVisual(monster.speciesId,species.emoji??"👹",{className:"monster-detail-visual"})}</div><div><small>${rankName(monster)} / ${species.race}族</small><h1 class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</h1><p><b>${rarity}</b>・${attribute.icon}${attribute.name}属性・${species.growthLabel??"標準"}成長</p><em>Lv.${monster.level}　⭐${monster.stars??1}　+${monster.plus??0}　❤️${aff}</em></div></div>
      <div class="compact-growth-stats">
       <span><small>HP</small><b>${stats.hp.toLocaleString()}</b></span><span><small>MP</small><b>${mp.toLocaleString()}</b></span>
       <span><small>ATK</small><b>${stats.atk.toLocaleString()}</b></span><span><small>DEF</small><b>${stats.def.toLocaleString()}</b></span>
@@ -51,7 +52,7 @@ export function MonsterDetailScreen(monster,state){
     </div>
 
     <div class="panel acquisition-guide">
-     <div class="spread"><div><small>HOW TO GET</small><h2>入手の手引き</h2></div><span>${species.emoji??"👹"}</span></div>
+     <div class="spread"><div><small>HOW TO GET</small><h2>入手の手引き</h2></div>${monsterVisual(monster.speciesId,species.emoji??"👹",{className:"acquisition-monster-visual"})}</div>
      <div class="acquisition-guide-grid">
       <div><small>探索での出現帯</small><b>${fieldEncounter?`${species.minFloor??1}階以降・近い階層帯ほど出現しやすい`:"通常探索には出現しません"}</b></div>
       <div><small>主な入手方法</small><b>${sources.join("・")}</b></div>

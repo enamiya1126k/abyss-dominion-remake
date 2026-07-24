@@ -2,6 +2,7 @@ import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monst
 import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=1.3.0";
 import{cooldownRemaining,statusLabel,enemyStatusesFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=0.9.15-alpha.95.1-stability-audit";
 import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=1.3.0";
+import{monsterVisual}from"../MonsterVisual.js?v=1.5.0";
 
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
@@ -23,7 +24,7 @@ function renderEnemies(battle,enemies,target){
     ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
     ${statusHtml}
    </div>
-   <div class="enemy-orb" style="background:${enemy.color}"><span>${enemy.emoji??"👾"}</span></div>
+   <div class="enemy-orb" style="background:${enemy.color}">${monsterVisual(enemy.speciesId,enemy.emoji??"👾",{frame:enemy.hp<=0?"down":"idle",className:"battle-enemy-visual"})}</div>
    <div class="enemy-vitals">
     <div class="battle-bar"><i style="width:${enemy.hp/enemy.maxHp*100}%"></i></div>
     <div class="battle-hp">${enemy.hp}/${enemy.maxHp}</div>
@@ -37,7 +38,7 @@ function renderParty(battle,actor){
  const stats=calculatedStats(m),mp=maxMp(m),need=expNeedFor(m);
   const effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" ${effects.length?"":'aria-hidden="true"'}>${effects.map(e=>`<span class="status-chip ${e.kind}">${({taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",regen:"再生",lifeSteal:"吸収"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`;
   return `<button id="ally-${m.id}" data-battle-detail="${m.id}" class="battle-unit combatant ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
-   <div class="unit-head"><span class="unit-orb" style="background:${colorValue(m)}">${battle.species?.[m.speciesId]?.emoji??"●"}</span><b>${displayName(m)} Lv.${m.level}</b></div>
+   <div class="unit-head"><span class="unit-orb" style="background:${colorValue(m)}">${monsterVisual(m.speciesId,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual"})}</span><b>${displayName(m)} Lv.${m.level}</b></div>
    <div class="battle-bar ally"><span class="bar-label">HP ${m.currentHp}/${stats.hp}</span><i style="width:${Math.max(0,m.currentHp/stats.hp*100)}%"></i></div>
    <div class="battle-bar mp"><span class="bar-label">MP ${m.currentMp}/${mp}</span><i style="width:${Math.max(0,m.currentMp/mp*100)}%"></i></div>
    <small class="battle-mini-stats">ATK ${stats.atk} / DEF ${stats.def} / SPD ${stats.spd}</small>${effectHtml}
