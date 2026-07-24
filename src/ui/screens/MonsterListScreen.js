@@ -1,8 +1,8 @@
-import{MonsterCard}from"../components/MonsterCard.js?v=1.5.0";
-import{SPECIES}from"../../data/species.js?v=1.3.0";
-import{displayName,totalExperience}from"../../models/Monster.js?v=1.3.0";
-import{monsterCombatPower}from"../../core/CombatPower.js?v=1.3.0";
-import{monsterVisual}from"../MonsterVisual.js?v=1.5.0";
+import{MonsterCard}from"../components/MonsterCard.js?v=1.6.0";
+import{SPECIES}from"../../data/species.js?v=1.6.0";
+import{displayName,totalExperience}from"../../models/Monster.js?v=1.6.0";
+import{monsterCombatPower}from"../../core/CombatPower.js?v=1.6.0";
+import{monsterVisual}from"../MonsterVisual.js?v=1.6.0";
 
 function partyCard(m){const sp=SPECIES[m.speciesId],rarity=monsterRarity(m);return`<article class="party-growth-card"><button class="party-growth-main" data-monster-id="${m.id}">${monsterVisual(m.speciesId,sp?.emoji??"👹",{className:"party-growth-visual"})}<div><b>${displayName(m)}</b><small>${rarity} / Lv.${m.level} / ⭐${m.stars??1} / +${m.plus??0} / ❤️${m.affection??0}</small></div></button><div class="party-growth-actions"><button data-quick-equipment="${m.id}">⚔️ 装備</button><button data-quick-growth="${m.id}">💪 強化</button></div></article>`}
 const RARITY_VALUE={N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9};

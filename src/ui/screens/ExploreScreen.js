@@ -1,9 +1,9 @@
-import{APP_VERSION}from"../../core/config.js?v=1.5.0";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=1.3.0";
-import{maxMp}from"../../battle/SkillSystem.js?v=1.3.0";
+import{APP_VERSION}from"../../core/config.js?v=1.6.0";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=1.6.0";
+import{maxMp}from"../../battle/SkillSystem.js?v=1.6.0";
 import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{worldPresentationForFloor}from"../../core/WorldSystem.js?v=1.0.0";
-import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.3.0";
+import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.6.0";
 import{manualReturnPreview}from"../../core/ReturnRewardSystem.js?v=1.4.0";
 
 export function ExploreScreen(state){

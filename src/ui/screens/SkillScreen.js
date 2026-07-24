@@ -1,7 +1,7 @@
-import{SPECIES}from"../../data/species.js?v=1.3.0";
-import{displayName}from"../../models/Monster.js?v=1.3.0";
-import{allSpeciesSkills,allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=1.3.0";
-import{monsterVisual}from"../MonsterVisual.js?v=1.5.0";
+import{SPECIES}from"../../data/species.js?v=1.6.0";
+import{displayName}from"../../models/Monster.js?v=1.6.0";
+import{allSpeciesSkills,allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=1.6.0";
+import{monsterVisual}from"../MonsterVisual.js?v=1.6.0";
 const ROLE_LABELS={tank:"タンク",support:"回復・支援",debuffer:"デバフ",poison:"継続ダメージ",burner:"継続ダメージ",controller:"妨害",drain:"吸収",burst:"攻撃特化",critical:"会心特化",speed:"高速攻撃",balanced:"万能",bruiser:"攻防",magic:"魔法攻撃",ambush:"奇襲"};
 function effectText(skill){if(skill.type==="allHeal"||skill.type==="selfHeal")return`回復量 ${Math.round((skill.heal??0)*100)}%`;if(skill.type==="mpHeal")return`MP回復 ${Math.round((skill.mpHeal??0)*100)}%`;if(skill.type==="revive")return`蘇生HP ${Math.round((skill.revive??0)*100)}%`;if(skill.type==="multiAttack")return`威力 ${Math.round((skill.power??0)*100)}% × ${skill.hits??2}回`;if(skill.type==="drain")return`威力 ${Math.round((skill.power??0)*100)}% / 吸収 ${Math.round((skill.drain??0)*100)}%`;if(skill.type==="buff"||skill.type==="stance"||skill.type==="cleanse")return"能力強化・特殊効果";return`威力 ${Math.round((skill.power??0)*100)}%`}
 function slotMpText(monster,skill){const cost=effectiveSkillMpCost(monster,skill),base=skill.mp??0;return cost===base?`MP ${cost}`:`MP ${cost}（基本 ${base}）`}
