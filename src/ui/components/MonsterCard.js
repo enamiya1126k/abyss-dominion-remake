@@ -2,13 +2,14 @@ import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster
 import{PERSONALITIES}from"../../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../../data/species.js?v=1.3.0";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.3.0";
+import{monsterVisual}from"../MonsterVisual.js?v=1.5.0";
 
 export function MonsterCard(monster,inParty=false,{editing=false,selected=false}={}){
   const stats=calculatedStats(monster),personality=PERSONALITIES[monster.personalityId],species=SPECIES[monster.speciesId];
   const protectedMonster=inParty||monster.favorite||monster.locked;
   return`<article class="monster-card ${selected?"selected":""} ${protectedMonster?"protected-entry":""}">
     ${editing?`<label class="manage-check"><input type="checkbox" data-select-monster="${monster.id}" ${selected?"checked":""} ${protectedMonster?"disabled":""}><span></span></label>`:""}
-    <div class="monster-orb" style="background:${colorValue(monster)}"><span aria-hidden="true">${species?.emoji??"👹"}</span></div>
+    <div class="monster-orb" style="background:${colorValue(monster)}">${monsterVisual(monster.speciesId,species?.emoji??"👹",{className:"monster-card-visual"})}</div>
     <div>
       <div class="monster-name">${monster.favorite?"★ ":""}${monster.locked?"🔒 ":""}${displayName(monster)}</div>
       <div class="subline">${rankName(monster)} / Lv.${monster.level} +${monster.plus} / ⚔️戦力 ${formatCombatPower(monsterCombatPower(monster))}</div>
