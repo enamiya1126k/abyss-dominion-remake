@@ -17,7 +17,7 @@ import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=1.3.0";
 import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../../data/species.js?v=1.3.0";
 import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=0.9.15-alpha.95.1-stability-audit";
-import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.2.0";
+import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.4.0";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=1.2.0";
 
 function monsterRarity(monster){

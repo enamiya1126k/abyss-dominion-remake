@@ -2,7 +2,7 @@ import{SPECIES}from"../../data/species.js?v=1.3.0";
 import{calculatedStats,displayName,totalExperience}from"../../models/Monster.js?v=1.3.0";
 import{maxMp,normalizeSkillLoadout,skillById}from"../../battle/SkillSystem.js?v=1.3.0";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.3.0";
-import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel}from"../../data/equipment.js?v=1.2.0";
+import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=1.2.0";
 import{formatAffix}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
 
@@ -10,6 +10,7 @@ const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],
  earth:["🪨","土"],wind:["🌪️","風"],light:["✨","光"],dark:["🌑","闇"],poison:["☠️","毒"],nature:["🌿","自然"]
 };
+const LOADOUT_SLOTS=["weaponRight","armorBody","accessoryNeck","armorSupport","accessoryFinger","weaponLeft"];
 
 function rarityClass(rarity){return({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity??"N").toLowerCase()}
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
@@ -17,19 +18,19 @@ function elementData(monster){
  const species=SPECIES[monster.speciesId]??{};
  return ELEMENTS[monster.attribute??species.element??"neutral"]??["◈",monster.attribute??species.element??"不明"];
 }
-function weaponLine(state,monster,subslot){
+function equipmentSlot(state,monster,subslot){
+ const unlockLevel=SLOT_UNLOCK_LEVEL[subslot]??1;
+ if(monster.level<unlockLevel)return`<button type="button" class="formation-gear-slot locked" disabled><small>${equipmentSubslotLabel(subslot)}</small><b>🔒 Lv.${unlockLevel}</b><em>未解放</em></button>`;
  const item=state.equipment?.find(entry=>entry.id===monster.equipment?.[subslot]);
- if(!item)return`<button type="button" class="formation-weapon empty" data-formation-weapon-add="${monster.id}" data-formation-subslot="${subslot}"><small>${equipmentSubslotLabel(subslot)}</small><b>＋ なし</b><em>タップして装備</em></button>`;
+ if(!item)return`<button type="button" class="formation-gear-slot empty" data-formation-gear-add="${monster.id}" data-formation-subslot="${subslot}"><small>${equipmentSubslotLabel(subslot)}</small><b>＋ なし</b><em>装備する</em></button>`;
  const multiplier=equipmentStatMultiplier(item),stats=Object.entries(item.stats??{}).slice(0,2).map(([key,value])=>`${equipmentStatLabel(key)}+${Math.round(value*multiplier)}`).join(" ");
  const affix=(item.affixes??[]).slice(0,1).map(formatAffix).join(""),buff=[stats,affix].filter(Boolean).join(" / ")||"補正なし";
  const rarity=equipmentDisplayRarity(item);
- return`<details class="formation-weapon-wrap">
-  <summary class="formation-weapon"><small>${equipmentSubslotLabel(subslot)}・${rarity}</small><b class="rarity-name-${rarityClass(rarity)}">${item.name}${item.plus?` +${item.plus}`:""}</b><em>${buff}</em></summary>
-  <div class="formation-weapon-actions">
-   <button type="button" data-formation-weapon-enhance="${item.id}" data-owner="${monster.id}" data-formation-subslot="${subslot}">強化・スロット</button>
-   <button type="button" class="danger" data-formation-weapon-remove="${item.id}">外す</button>
-  </div>
- </details>`;
+ return`<button type="button" class="formation-gear-slot equipped" data-formation-gear-open="${item.id}" data-owner="${monster.id}" data-formation-subslot="${subslot}">
+  <small>${equipmentSubslotLabel(subslot)}・${rarity}</small>
+  <b class="rarity-name-${rarityClass(rarity)}">${item.name}${item.plus?` +${item.plus}`:""}</b>
+  <em>Lv.${item.level??1}・${buff}</em>
+ </button>`;
 }
 function memberCard(state,monster,index){
  const species=SPECIES[monster.speciesId]??{},stats=calculatedStats(monster),mp=maxMp(monster),[elementIcon,elementName]=elementData(monster),rarity=monsterRarity(monster);
@@ -48,9 +49,8 @@ function memberCard(state,monster,index){
    <span>SPD<b>${stats.spd.toLocaleString()}</b></span><span>❤️<b>${monster.affection??0}</b></span>
   </div>
   <section class="formation-loadout">
-   <h3>⚔️ 武器・補正</h3>
-   ${weaponLine(state,monster,"weaponRight")}
-   ${weaponLine(state,monster,"weaponLeft")}
+   <h3>🧰 装備6枠 <small>タップで詳細</small></h3>
+   <div class="formation-gear-grid">${LOADOUT_SLOTS.map(subslot=>equipmentSlot(state,monster,subslot)).join("")}</div>
   </section>
   <section class="formation-skills">
    <h3>✨ 設定中スキル <small>タップで変更</small></h3>
