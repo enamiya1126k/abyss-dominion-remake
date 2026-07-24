@@ -1,4 +1,4 @@
-import{calculatedStats,displayName}from"../models/Monster.js?v=1.6.0";
+import{calculatedStats,displayName}from"../models/Monster.js?v=1.7.0";
 
 export function aliveEnemies(battle){return (battle.enemies??[battle.enemy]).filter(Boolean).filter(enemy=>enemy.hp>0)}
 export function selectedEnemy(battle){const alive=aliveEnemies(battle);let target=alive.find(e=>e.id===battle.targetEnemyId);if(!target){target=alive[0]??null;battle.targetEnemyId=target?.id??null}return target}
