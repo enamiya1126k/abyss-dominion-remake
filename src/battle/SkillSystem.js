@@ -1,4 +1,4 @@
-import{SPECIES}from"../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{SPECIES}from"../data/species.js?v=1.3.0";
 import{SKILLS}from"../data/skills.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 
 const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
@@ -78,7 +78,7 @@ function archetype(species){
  if(["drain","vampire"].some(x=>role.includes(x)))return"drain";
  return"attacker";
 }
-function elementLabel(element){return({fire:"炎",water:"水",earth:"土",wind:"風",dark:"闇",light:"光",poison:"毒",neutral:"無"})[element]??"無"}
+function elementLabel(element){return({fire:"炎",water:"水",ice:"氷",earth:"土",wind:"風",lightning:"雷",thunder:"雷",dark:"闇",light:"光",poison:"毒",nature:"自然",neutral:"無"})[element]??"無"}
 function generatedSkill(species,index,row){
  const[name,type,value,mp,tag,target,description,statusId,hits]=row;
  const skill={id:`${species.id}__skill_${index+2}`,name:index>=8?`${species.name}・${name}`:name,mp,type,description,target,tag,element:species.element??"neutral",cooldown:index<2?0:index<5?1:index<8?2:index<10?3:4,unlock:{type:"level",value:UNLOCK_LEVELS[index+1]}};
@@ -91,7 +91,7 @@ function generatedSkill(species,index,row){
 const GENERATED={};
 for(const species of Object.values(SPECIES)){
  const baseEntry=species.skills?.[0],base=baseEntry?SKILLS[baseEntry.id]:null;
- const first={...baseEntry,...base,target:base?.type==="allHeal"?"味方全体":base?.type==="selfHeal"?"自分":"敵単体",tag:base?.type?.includes("Heal")?"回復":base?.status?"継続ダメージ":"攻撃",element:species.element??"neutral",cooldown:0,unlock:{type:"level",value:1}};
+ const first={mp:3,type:"attack",power:1,description:"敵単体へ通常威力の攻撃。",...baseEntry,...base,target:base?.type==="allHeal"?"味方全体":base?.type==="selfHeal"?"自分":"敵単体",tag:base?.type?.includes("Heal")?"回復":base?.status?"継続ダメージ":"攻撃",element:species.element??"neutral",cooldown:0,unlock:{type:"level",value:1}};
  GENERATED[species.id]=[first,...ROLE_POOLS[archetype(species)].map((row,index)=>generatedSkill(species,index,row))];
 }
 function phase2Decorate(species,skills){
