@@ -1,11 +1,11 @@
-import{SaveService}from"./services/SaveService.js?v=1.3.0";
+import{SaveService}from"./services/SaveService.js?v=1.4.0";
 import{SPECIES}from"./data/species.js?v=1.3.0";
-import{HomeScreen}from"./ui/screens/HomeScreen.js?v=1.3.0";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=1.3.0";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=1.3.0";
+import{HomeScreen}from"./ui/screens/HomeScreen.js?v=1.4.0";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=1.4.0";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=1.4.0";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=1.3.0";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=1.3.0";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=1.3.0";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=1.4.0";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=1.4.0";
 import{BattleScreen}from"./ui/screens/BattleScreen.js?v=1.3.0";
 import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=1.3.0";
@@ -13,17 +13,17 @@ import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equi
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=1.2.0";
 import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=1.3.0";
 import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=1.2.0";
-import{RARITY_ORDER,equipmentDisplayRarity,equipmentStatLabel}from"./data/equipment.js?v=1.2.0";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=1.4.0";
+import{RARITY_ORDER,equipmentDisplayRarity,equipmentStatLabel,equipmentSubslotLabel}from"./data/equipment.js?v=1.2.0";
 import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=0.9.15-alpha.95.1-stability-audit";
 import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=1.2.0";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=1.3.0";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=1.4.0";
 import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=1.2.0";
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=0.9.15-alpha.95.1-stability-audit";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=1.3.0";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=1.4.0";
 import{SkillScreen}from"./ui/screens/SkillScreen.js?v=1.3.0";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=1.1.0";
-import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=1.1.0";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=1.4.0";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=1.4.0";
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=1.0.0";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
@@ -40,11 +40,11 @@ import{dangerConfig}from"./core/DangerSystem.js?v=0.9.15-alpha.28-phase10-6-cons
 import{bossLevelForFloor}from"./core/EnemyScalingSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,ENDGAME_BOSSES,normalizeEndgameState,dailyTeamAttempts,createTeamBattleEncounter,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,endgameContractStatus,attemptEndgameContract,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor}from"./core/EndgameSystem.js?v=1.0.0";
-import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=1.1.0";
-import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=1.1.0";
+import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=1.4.0";
+import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=1.4.0";
 import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=1.1.0";
-import{partyCombatPower,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=1.3.0";
-import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_WIN_RATE,CASINO_PAYOUT_MULTIPLIER}from"./core/SecretRoomSystem.js?v=1.3.0";
+import{monsterCombatPower,partyCombatPower,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=1.3.0";
+import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=1.4.0";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
 let screen="home",selected=null,equipmentTarget=null,equipmentFocusItemId=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",skillNavigationOrigin="home",detailNavigationOrigin="monsters",formationOrigin="home",lastExploreCombatPower=null;
@@ -52,6 +52,9 @@ let secondWorldIntroPlaying=false;
 let tenGodContactPlaying=false;
 let monsterManage={editing:false,selected:new Set()},equipmentManage={editing:false,selected:new Set()};
 let partyEditorState={search:"",element:"all",status:"all",sort:"rarity",direction:"desc"};
+let monsterListState={search:"",sort:"power",direction:"desc"};
+let formationPickerState={search:"",sort:"power",direction:"desc"};
+function escapeAttribute(value){return String(value??"").replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
 function topModal(){const mods=document.querySelectorAll(".game-modal");return mods[mods.length-1]??null}
 function topModalButton(){return topModal()?.querySelector("[data-modal-primary]")??null}
 function closeTopModal(){topModal()?.remove()}
@@ -204,7 +207,7 @@ function render(){
  document.body.classList.toggle("phase2",hasCleared1000(save.state));
  if(screen==="home"){app.innerHTML=HomeScreen(save.state);bindHome()}
  else if(screen==="formation"){app.innerHTML=FormationScreen(save.state,{origin:formationOrigin});bindFormation()}
- else if(screen==="monsters"){app.innerHTML=MonsterListScreen(save.state,monsterManage);bindList()}
+ else if(screen==="monsters"){app.innerHTML=MonsterListScreen(save.state,{...monsterManage,...monsterListState});bindList()}
  else if(screen==="detail"){const m=save.state.monsters.find(x=>x.id===selected);app.innerHTML=MonsterDetailScreen(m,save.state);bindDetail(m)}
  else if(screen==="settings"){app.innerHTML=SettingsScreen(save.state);bindSettings()}
  else if(screen==="explore"){app.innerHTML=ExploreScreen(save.state);bindExplore()}
@@ -409,7 +412,10 @@ function bindAbyssSkills(){
 function bindList(){
  const back=document.getElementById("backHome");if(back)back.onclick=()=>{monsterManage={editing:false,selected:new Set()};go("home")};
  document.getElementById("toggleMonsterEdit")?.addEventListener("click",()=>{monsterManage.editing=!monsterManage.editing;if(!monsterManage.editing)monsterManage.selected.clear();render()});
- const input=document.getElementById("monsterSearch");if(input)input.oninput=()=>{const q=input.value.trim();document.querySelectorAll(".monster-card").forEach(c=>{const trigger=c.querySelector("[data-monster-id],[data-select-monster]");const id=trigger?.dataset.monsterId??trigger?.dataset.selectMonster;const m=id?save.state.monsters.find(x=>x.id===id):null;const species=m?SPECIES[m.speciesId]:null;c.style.display=!q||(m?.nickname??"").includes(q)||(species?.name??"").includes(q)?"grid":"none"})};
+ const applySearch=()=>{const q=monsterListState.search.trim().toLowerCase();document.querySelectorAll(".monster-card").forEach(c=>{const trigger=c.querySelector("[data-monster-id],[data-select-monster]");const id=trigger?.dataset.monsterId??trigger?.dataset.selectMonster;const m=id?save.state.monsters.find(x=>x.id===id):null;const species=m?SPECIES[m.speciesId]:null;c.style.display=!q||`${m?displayName(m):""} ${species?.name??""} ${species?.race??""}`.toLowerCase().includes(q)?"grid":"none"})};
+ const input=document.getElementById("monsterSearch");if(input){input.oninput=()=>{monsterListState.search=input.value;applySearch()};applySearch()}
+ document.getElementById("monsterSort")?.addEventListener("change",event=>{monsterListState.sort=event.target.value;render()});
+ document.getElementById("monsterSortDirection")?.addEventListener("click",()=>{monsterListState.direction=monsterListState.direction==="desc"?"asc":"desc";render()});
  document.querySelectorAll("[data-select-monster]").forEach(c=>c.onchange=()=>{c.checked?monsterManage.selected.add(c.dataset.selectMonster):monsterManage.selected.delete(c.dataset.selectMonster);render()});
  document.querySelectorAll("[data-select-monsters]").forEach(b=>b.onclick=()=>selectMonstersPreset(b.dataset.selectMonsters));
  document.querySelectorAll("[data-quick-equipment]").forEach(b=>b.onclick=e=>{e.stopPropagation();equipmentTarget=b.dataset.quickEquipment;navigationOrigin="monsters";go("equipment")});
@@ -522,9 +528,17 @@ function togglePartyMember(id){
  save.save()
 }
 function formationPickerBody(replacingId=null){
- const reserve=save.state.monsters.filter(monster=>!save.state.party.includes(monster.id)).sort((a,b)=>Number(b.favorite)-Number(a.favorite)||rarityValue(monsterVisibleRarity(b))-rarityValue(monsterVisibleRarity(a))||b.level-a.level);
- const rows=reserve.map(monster=>{const species=SPECIES[monster.speciesId]??{},stats=calculatedStats(monster);return`<button class="formation-picker-row" data-formation-pick="${monster.id}" data-search="${`${displayName(monster)} ${species.name}`.toLowerCase()}"><span>${species.emoji??"👹"}</span><div><b>${displayName(monster)}</b><small>${monsterVisibleRarity(monster)}・${elementLabel(species.element)}・Lv.${monster.level}・★${monster.stars??1}・+${monster.plus??0}</small><em>累計EXP ${totalExperience(monster).toLocaleString()} / HP ${stats.hp} / ATK ${stats.atk} / DEF ${stats.def} / SPD ${stats.spd}</em></div><strong>${replacingId?"交代":"編成"}</strong></button>`}).join("");
- return`<div class="formation-picker"><input id="formationPickerSearch" placeholder="名前・種族で検索"><div class="formation-picker-list">${rows||'<div class="empty">控えモンスターがいません</div>'}</div></div>`;
+ const value=monster=>{if(formationPickerState.sort==="rarity")return rarityValue(monsterVisibleRarity(monster));if(formationPickerState.sort==="level")return monster.level??1;if(formationPickerState.sort==="affection")return monster.affection??0;if(formationPickerState.sort==="experience")return totalExperience(monster);if(formationPickerState.sort==="obtained")return Date.parse(monster.obtainedAt??monster.capturedAt??0)||0;if(formationPickerState.sort==="name")return displayName(monster);return monsterCombatPower(monster)};
+ const reserve=save.state.monsters.filter(monster=>!save.state.party.includes(monster.id)).sort((a,b)=>{const av=value(a),bv=value(b),comparison=typeof av==="string"?av.localeCompare(bv,"ja"):av-bv;return(formationPickerState.direction==="asc"?comparison:-comparison)||String(a.id).localeCompare(String(b.id))});
+ const rows=reserve.map(monster=>{const species=SPECIES[monster.speciesId]??{},stats=calculatedStats(monster),power=monsterCombatPower(monster),searchText=escapeAttribute(`${displayName(monster)} ${species.name??""} ${species.race??""}`.toLowerCase());return`<button class="formation-picker-row" data-formation-pick="${monster.id}" data-search="${searchText}"><span>${species.emoji??"👹"}</span><div><b>${displayName(monster)}</b><small>${monsterVisibleRarity(monster)}・${elementLabel(species.element)}・Lv.${monster.level}・★${monster.stars??1}・+${monster.plus??0}</small><em>累計EXP ${totalExperience(monster).toLocaleString()} / HP ${stats.hp} / ATK ${stats.atk} / DEF ${stats.def} / SPD ${stats.spd}</em></div><strong><b>戦力 ${formatCombatPower(power)}</b><small>${replacingId?"交代":"編成"}</small></strong></button>`}).join("");
+ return`<div class="formation-picker">
+  <input id="formationPickerSearch" value="${escapeAttribute(formationPickerState.search)}" placeholder="名前・種族で検索">
+  <div class="formation-picker-sort"><select id="formationPickerSort">
+   <option value="power" ${formationPickerState.sort==="power"?"selected":""}>戦闘力順</option><option value="rarity" ${formationPickerState.sort==="rarity"?"selected":""}>レア度順</option><option value="level" ${formationPickerState.sort==="level"?"selected":""}>レベル順</option>
+   <option value="affection" ${formationPickerState.sort==="affection"?"selected":""}>なつき度順</option><option value="experience" ${formationPickerState.sort==="experience"?"selected":""}>累計EXP順</option><option value="obtained" ${formationPickerState.sort==="obtained"?"selected":""}>入手順</option><option value="name" ${formationPickerState.sort==="name"?"selected":""}>名前順</option>
+  </select><button type="button" id="formationPickerDirection">${formationPickerState.direction==="desc"?"降順 ↓":"昇順 ↑"}</button></div>
+  <div class="formation-picker-list">${rows||'<div class="empty">控えモンスターがいません</div>'}</div>
+ </div>`;
 }
 function replacePartyMember(outgoingId,incomingId,inherit=false){
  const index=save.state.party.indexOf(outgoingId),outgoing=save.state.monsters.find(monster=>monster.id===outgoingId),incoming=save.state.monsters.find(monster=>monster.id===incomingId);
@@ -576,13 +590,39 @@ function confirmFormationReplacement(outgoingId,incomingId){
 function openFormationPicker(replacingId=null){
  if(!replacingId&&save.state.party.length>=4)return showToast("編成は4体まで");
  app.insertAdjacentHTML("beforeend",Modal(replacingId?"交代するモンスターを選択":"＋ モンスターを編成",formationPickerBody(replacingId),"閉じる"));
- const modal=topModal(),input=modal.querySelector("#formationPickerSearch");
- input?.addEventListener("input",()=>{const query=input.value.trim().toLowerCase();modal.querySelectorAll("[data-formation-pick]").forEach(button=>button.hidden=Boolean(query)&&!button.dataset.search.includes(query))});
+ const modal=topModal();bindFormationPickerModal(modal,replacingId);
+}
+function bindFormationPickerModal(modal,replacingId=null){
+ const input=modal.querySelector("#formationPickerSearch"),applySearch=()=>{const query=formationPickerState.search.trim().toLowerCase();modal.querySelectorAll("[data-formation-pick]").forEach(button=>button.hidden=Boolean(query)&&!button.dataset.search.includes(query))};
+ if(input){input.addEventListener("input",()=>{formationPickerState.search=input.value;applySearch()});applySearch()}
+ const sort=modal.querySelector("#formationPickerSort");if(sort)sort.onchange=()=>{formationPickerState.sort=sort.value;refreshFormationPicker(modal,replacingId)};
+ modal.querySelector("#formationPickerDirection")?.addEventListener("click",()=>{formationPickerState.direction=formationPickerState.direction==="desc"?"asc":"desc";refreshFormationPicker(modal,replacingId)});
  modal.querySelectorAll("[data-formation-pick]").forEach(button=>button.onclick=()=>{
   if(replacingId){const incomingId=button.dataset.formationPick;modal.remove();confirmFormationReplacement(replacingId,incomingId);return}
   if(save.state.party.length>=4)return;
   save.state.party.push(button.dataset.formationPick);save.save();modal.remove();render();showToast("パーティーに編成しました");
  });
+ modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
+}
+function refreshFormationPicker(modal,replacingId=null){
+ const body=modal.querySelector(".game-modal-body");if(!body)return;
+ body.innerHTML=formationPickerBody(replacingId);bindFormationPickerModal(modal,replacingId);
+}
+function openFormationGearMenu(itemId,ownerId,subslot){
+ const item=save.state.equipment.find(entry=>entry.id===itemId),owner=save.state.monsters.find(monster=>monster.id===ownerId);
+ if(!item||!owner)return showToast("装備が見つかりません");
+ const multiplier=equipmentStatMultiplier(item),rarity=equipmentDisplayRarity(item);
+ const stats=Object.entries(item.stats??{}).map(([key,value])=>`<span><small>${equipmentStatLabel(key)}</small><b>+${Math.round(value*multiplier)}</b></span>`).join("");
+ const affixes=(item.affixes??[]).map(affix=>`<p><i style="background:${affixQuality(affix).color}"></i><span>${formatAffix(affix)}</span><small>${affixQuality(affix).name}</small></p>`).join("")||'<p class="muted">ランダムオプションなし</p>';
+ app.insertAdjacentHTML("beforeend",Modal(`${equipmentSubslotLabel(subslot)}・${item.name}`,`<div class="formation-gear-detail">
+  <div class="formation-gear-detail-head"><span>${item.slot==="weapon"?"⚔️":item.slot==="armor"?"🛡️":"💍"}</span><div><small>${rarity}・Lv.${item.level??1}${item.plus?`・+${item.plus}`:""}</small><h3>${item.name}</h3></div></div>
+  <div class="formation-gear-stats">${stats||"<span>補正なし</span>"}</div>
+  <div class="formation-gear-affixes">${affixes}</div>
+  <div class="formation-gear-menu-actions"><button type="button" data-gear-detail-enhance>強化・スロットへ</button><button type="button" class="danger" data-gear-detail-remove>外す</button></div>
+ </div>`,"戻る"));
+ const modal=topModal();
+ modal.querySelector("[data-gear-detail-enhance]").onclick=()=>{modal.remove();equipmentTarget=owner.id;equipmentFocusItemId=item.id;save.state.settings.equipmentSlot=item.slot;save.state.settings.equipmentStorage="inventory";navigationOrigin="formation";go("equipment")};
+ modal.querySelector("[data-gear-detail-remove]").onclick=()=>{if(!confirm(`${item.name}を外しますか？`))return;modal.remove();unequipItem(item.id)};
  modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
 }
 function bindFormation(){
@@ -593,9 +633,8 @@ function bindFormation(){
  document.querySelectorAll("[data-formation-growth]").forEach(button=>button.onclick=()=>{detailNavigationOrigin="formation";selected=button.dataset.formationGrowth;go("detail")});
  document.querySelectorAll("[data-formation-equipment]").forEach(button=>button.onclick=()=>{equipmentFocusItemId=null;equipmentTarget=button.dataset.formationEquipment;navigationOrigin="formation";go("equipment")});
  document.querySelectorAll("[data-formation-skills]").forEach(button=>button.onclick=()=>{skillTarget=button.dataset.formationSkills;skillSlotSelection=0;skillNavigationOrigin="formation";go("skills")});
- document.querySelectorAll("[data-formation-weapon-add]").forEach(button=>button.onclick=()=>{equipmentTarget=button.dataset.formationWeaponAdd;equipmentFocusItemId=null;save.state.settings.equipmentSlot="weapon";save.state.settings.equipmentStorage="inventory";navigationOrigin="formation";go("equipment")});
- document.querySelectorAll("[data-formation-weapon-enhance]").forEach(button=>button.onclick=()=>{equipmentTarget=button.dataset.owner;equipmentFocusItemId=button.dataset.formationWeaponEnhance;save.state.settings.equipmentSlot="weapon";save.state.settings.equipmentStorage="inventory";navigationOrigin="formation";go("equipment")});
- document.querySelectorAll("[data-formation-weapon-remove]").forEach(button=>button.onclick=()=>{if(confirm("この武器を外しますか？"))unequipItem(button.dataset.formationWeaponRemove)});
+ document.querySelectorAll("[data-formation-gear-add]").forEach(button=>button.onclick=()=>{const subslot=button.dataset.formationSubslot;equipmentTarget=button.dataset.formationGearAdd;equipmentFocusItemId=null;save.state.settings.equipmentSlot=subslot.startsWith("weapon")?"weapon":subslot.startsWith("armor")?"armor":"accessory";save.state.settings.equipmentStorage="inventory";navigationOrigin="formation";go("equipment")});
+ document.querySelectorAll("[data-formation-gear-open]").forEach(button=>button.onclick=()=>openFormationGearMenu(button.dataset.formationGearOpen,button.dataset.owner,button.dataset.formationSubslot));
  document.querySelectorAll("[data-formation-skill]").forEach(button=>button.onclick=()=>{skillTarget=button.dataset.formationSkill;skillSlotSelection=Number(button.dataset.skillSlot)||0;skillNavigationOrigin="formation";go("skills")});
 }
 function rarityValue(rarity){return ({N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9}[rarity]??0)}
@@ -793,26 +832,42 @@ function openShopMenu(type){
  if(type==="market")return openDarkMarket();
 }
 function casinoModalBody(){
- const room=activeSecretRoom(save.state),casino=room?.casino??{};
- return`<div class="casino-panel"><div class="casino-rules"><span>当選率 <b>${Math.round(CASINO_WIN_RATE*100)}%</b></span><span>当選配当 <b>${CASINO_PAYOUT_MULTIPLIER}倍</b></span><span>ハズレ <b>全額消失</b></span></div><div class="casino-reels" id="casinoReels"><i>❔</i><i>❔</i><i>❔</i></div><label class="casino-bet"><small>賭け金を設定</small><input id="casinoBet" type="number" min="1" max="${save.state.player.gold}" value="${Math.min(100,save.state.player.gold)}"><b>G</b></label><div class="casino-presets"><button data-casino-bet="100">100G</button><button data-casino-bet="1000">1,000G</button><button data-casino-bet="10000">10,000G</button><button data-casino-bet="max">MAX</button></div><button id="spinCasino" class="primary casino-spin" ${save.state.player.gold>0?"":"disabled"}>🎰 スロットを回す</button><div id="casinoResult" class="casino-result"><small>所持 ${save.state.player.gold.toLocaleString()}G</small></div><p class="muted">累計 ${casino.spins??0}回・${casino.wins??0}勝・収支 ${(casino.netGold??0)>=0?"+":""}${(casino.netGold??0).toLocaleString()}G</p></div>`;
+ const room=activeSecretRoom(save.state),casino=room?.casino??{},used=Boolean(casino.used||casino.spins>0),last=casino.lastResult,digits=last?.digits??["❔","❔","❔"],canPlay=!used&&save.state.player.gold>0&&save.state.player.crystals>=CASINO_CRYSTAL_COST;
+ const rateRows=CASINO_MULTIPLIER_RATES.map(bucket=>`<span><b>${bucket.label}</b><small>${bucket.rate>=.01?`${bucket.rate*100}%`:`${(bucket.rate*100).toFixed(2)}%`}</small></span>`).join("");
+ const lastResult=last?`<strong>${last.multiplier}倍・${last.payout.toLocaleString()}G</strong><small>収支 ${last.net>=0?"+":""}${last.net.toLocaleString()}G / 魔晶石 −${last.crystalCost??CASINO_CRYSTAL_COST}</small>`:`<small>所持 ${save.state.player.gold.toLocaleString()}G・💎${save.state.player.crystals.toLocaleString()}</small>`;
+ return`<div class="casino-panel">
+  <div class="casino-entry"><span>挑戦料 <b>💎${CASINO_CRYSTAL_COST}</b></span><span>挑戦回数 <b>この🚪で1回</b></span><span>最高配当 <b>999倍</b></span></div>
+  <div class="casino-rate-table">${rateRows}</div>
+  <div class="casino-reels ${used?"finished":""}" id="casinoReels">${digits.map(digit=>`<i>${digit}</i>`).join("")}</div>
+  <label class="casino-bet"><small>賭け金を手入力</small><input id="casinoBet" type="number" inputmode="numeric" min="1" max="${save.state.player.gold}" value="${Math.min(100,save.state.player.gold)}" ${used?"disabled":""}><b>G</b></label>
+  <div class="casino-presets"><button data-casino-bet="100" ${used?"disabled":""}>100G</button><button data-casino-bet="1000" ${used?"disabled":""}>1,000G</button><button data-casino-bet="10000" ${used?"disabled":""}>10,000G</button><button data-casino-bet="max" ${used?"disabled":""}>MAX</button></div>
+  <button id="spinCasino" class="primary casino-spin" ${canPlay?"":"disabled"}>${used?"この🚪では挑戦済み":`💎${CASINO_CRYSTAL_COST}で運命を回す`}</button>
+  <div id="casinoResult" class="casino-result ${last?(last.multiplier>1?"win":last.multiplier===1?"draw":"lose"):""}">${lastResult}</div>
+  <p class="muted">${used?"別の🚪を発見すると再挑戦できます。":"30倍以上は合計0.1%。数字が大きいほど急激に出にくくなります。"}</p>
+ </div>`;
 }
 function openSecretRoomCasino(){
  app.insertAdjacentHTML("beforeend",Modal("🎰 深淵スロット",casinoModalBody(),"裏街へ戻る"));
  const modal=topModal(),input=modal.querySelector("#casinoBet"),spin=modal.querySelector("#spinCasino"),reels=modal.querySelector("#casinoReels"),resultBox=modal.querySelector("#casinoResult");
  modal.querySelectorAll("[data-casino-bet]").forEach(button=>button.onclick=()=>{const value=button.dataset.casinoBet==="max"?save.state.player.gold:Number(button.dataset.casinoBet);input.value=Math.max(1,Math.min(save.state.player.gold,value||1))});
- spin?.addEventListener("click",()=>{
+ spin?.addEventListener("click",async()=>{
   const result=spinSecretRoomCasino(save.state,Number(input.value));if(!result.ok)return showToast(result.message);
-  save.save();spin.disabled=true;reels.classList.add("spinning");resultBox.innerHTML=`<b>${result.bet.toLocaleString()}G BET...</b>`;
-  setTimeout(()=>{
-   if(!modal.isConnected)return;
-   reels.classList.remove("spinning");
-   const loseSymbols=["🌑","💀","🔮","🗝️","🕯️","💎"],symbols=result.won?["7️⃣","7️⃣","7️⃣"]:Array.from({length:3},(_,index)=>loseSymbols[(Math.floor(result.roll*100)+index*2)%loseSymbols.length]);
-   reels.querySelectorAll("i").forEach((reel,index)=>reel.textContent=symbols[index]);
-   resultBox.className=`casino-result ${result.won?"win":"lose"}`;
-   resultBox.innerHTML=result.won?`<strong>JACKPOT！ +${result.net.toLocaleString()}G</strong><small>${result.payout.toLocaleString()}G獲得</small>`:`<strong>ハズレ −${result.bet.toLocaleString()}G</strong><small>賭け金は深淵へ消えた</small>`;
-   input.max=save.state.player.gold;input.value=Math.max(1,Math.min(Number(input.value)||1,save.state.player.gold));spin.disabled=save.state.player.gold<=0;
-   const footer=modal.querySelector(".casino-panel>p");if(footer){const casino=activeSecretRoom(save.state)?.casino??{};footer.textContent=`累計 ${casino.spins??0}回・${casino.wins??0}勝・収支 ${(casino.netGold??0)>=0?"+":""}${(casino.netGold??0).toLocaleString()}G`}
-  },650);
+  save.save();spin.disabled=true;input.disabled=true;modal.querySelectorAll("[data-casino-bet],[data-modal-primary],[data-modal-dismiss]").forEach(button=>button.disabled=true);
+  resultBox.className="casino-result";resultBox.innerHTML=`<b>${result.bet.toLocaleString()}G BET・運命確定…</b><small>💎${CASINO_CRYSTAL_COST}消費済み</small>`;
+  const reelElements=[...reels.querySelectorAll("i")],pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+  reelElements.forEach(reel=>{reel.textContent="✦";reel.classList.add("rolling")});
+  for(let index=0;index<reelElements.length;index++){
+   await pause(700);if(!modal.isConnected)return;
+   reelElements[index].classList.remove("rolling");reelElements[index].textContent=result.digits[index];reelElements[index].classList.add("landed");
+  }
+  reels.classList.add("finished");resultBox.className=`casino-result ${result.multiplier>1?"win":result.multiplier===1?"draw":"lose"}`;
+  resultBox.innerHTML=result.multiplier===0
+   ?`<strong>000・全額消失</strong><small>−${result.bet.toLocaleString()}G</small>`
+   :result.multiplier===1
+    ?`<strong>001・1倍</strong><small>${result.bet.toLocaleString()}G返還・GOLD収支±0</small>`
+    :`<strong>${String(result.multiplier).padStart(3,"0")}・${result.multiplier}倍！</strong><small>${result.payout.toLocaleString()}G獲得 / 収支 +${result.net.toLocaleString()}G</small>`;
+  const footer=modal.querySelector(".casino-panel>p");if(footer)footer.textContent="この🚪での挑戦は終了。別の🚪を探してください。";
+  modal.querySelectorAll("[data-modal-primary],[data-modal-dismiss]").forEach(button=>button.disabled=false);
  });
  modal.querySelector("[data-modal-primary]").onclick=()=>{modal.remove();render()};
 }
@@ -826,14 +881,36 @@ function openSecretRoomInn(){
 }
 function darkMarketBody(){
  const room=activeSecretRoom(save.state),offers=room?.offers??[];
- const offerRows=offers.map(offer=>{const rarity=String(offer.rarity??"SR"),rarityClass=({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase();return`<article class="dark-market-offer rarity-name-${rarityClass} ${offer.sold?"sold":""} ${offer.priceTone}"><span>${offer.icon}</span><div><small>${offer.kind==="monster"?"MONSTER":"EQUIPMENT"}・${rarity}</small><b>${offer.name}</b><p>${offer.description}</p><em class="market-price-label">${offer.priceLabel}${offer.priceTone==="bargain"?`・相場 ${offer.referencePrice.toLocaleString()}G`:""}</em></div><button data-market-offer="${offer.id}" ${offer.sold?"disabled":""}>${offer.sold?"売切":`${offer.price.toLocaleString()}G`}</button></article>`}).join("");
+ const offerRows=offers.map(offer=>{const rarity=String(offer.rarity??"SR"),rarityClass=({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase(),grade=offer.mystery&&!offer.revealed?"未鑑定":offer.powerLabel??"階層相応";return`<article class="dark-market-offer rarity-name-${rarityClass} ${offer.sold?"sold":""} ${offer.priceTone} grade-${offer.powerGrade??"standard"}"><span>${offer.icon}</span><div><small>${offer.kind==="monster"?"MONSTER":"EQUIPMENT"}・${rarity}・${grade}</small><b>${offer.name}</b><p>${offer.description}</p><em class="market-price-label">${offer.priceLabel}${offer.priceTone==="bargain"?`・相場 ${offer.referencePrice.toLocaleString()}G`:""}</em></div><div class="dark-market-offer-actions"><button type="button" data-market-detail="${offer.id}">詳細</button><button type="button" data-market-offer="${offer.id}" ${offer.sold?"disabled":""}>${offer.sold?"売切":`${offer.price.toLocaleString()}G`}</button></div></article>`}).join("");
  const recoveryRows=SECRET_ROOM_RECOVERY_ITEMS.map(item=>{const purchased=room?.recoveryPurchased?.[item.id]??0,remaining=Math.max(0,DARK_MARKET_ITEM_LIMIT-purchased);return`<article class="dark-market-recovery"><span>${item.icon}</span><div><b>${item.name}</b><small>${item.description}<br>所持 ${save.state.inventory[item.id]??0}</small></div><button data-market-recovery="${item.id}" ${remaining?"":"disabled"}>${remaining?`${item.price}G`:"完売"}<small>${purchased}/${DARK_MARKET_ITEM_LIMIT}</small></button></article>`}).join("");
  return`<div class="dark-market"><div class="dark-market-wallet">所持 <b>${save.state.player.gold.toLocaleString()}G</b></div><small class="muted">装備・モンスターは各1点限り。価格は相応から法外まで変動し、極稀に異常特価が紛れます。</small><h3>一点物</h3><div class="dark-market-offers">${offerRows}</div><h3>激安回復用品</h3><div class="dark-market-recovery-list">${recoveryRows}</div></div>`;
+}
+function darkMarketOfferDetail(offer){
+ if(offer.mystery&&!offer.revealed)return`<div class="market-mystery-detail"><span>❔</span><h3>${offer.name}</h3><p>商人すら鑑定していない一点物。種類と中身は購入した瞬間に判明します。</p><small>${offer.kind==="monster"?"モンスター契約":"装備"} / 表示ランク ${offer.rarity} / 返品不可</small></div>`;
+ const payload=offer.payload;if(!payload)return`<div class="empty">売却済みの商品です。</div>`;
+ if(offer.kind==="equipment"){
+  const multiplier=equipmentStatMultiplier(payload),stats=Object.entries(payload.stats??{}).map(([key,value])=>`<span><small>${equipmentStatLabel(key)}</small><b>+${Math.round(value*multiplier)}</b></span>`).join("");
+  const affixes=(payload.affixes??[]).map(affix=>`<p><i style="background:${affixQuality(affix).color}"></i><b>${formatAffix(affix)}</b><small>${affixQuality(affix).name}</small></p>`).join("")||'<p class="muted">ランダムオプションなし</p>';
+  return`<div class="market-item-detail"><div class="market-detail-hero"><span>${offer.icon}</span><div><small>${offer.rarity}・${offer.powerLabel??"階層相応"}</small><h3>${payload.name}${payload.plus?` +${payload.plus}`:""}</h3><p>${slotLabel(payload.slot)}・Lv.${payload.level??1}</p></div></div><div class="market-detail-stats">${stats}</div><div class="market-detail-affixes">${affixes}</div></div>`;
+ }
+ const species=SPECIES[payload.speciesId]??{},stats=calculatedStats(payload),skills=(payload.equippedSkills?.map(skillById).filter(Boolean)??allLearnedSkills(payload).slice(-4));
+ const skillRows=skills.map(skill=>{const progress=payload.skillProgress?.[skill.id];return`<p><b>${skill.name}</b><small>${skill.tag??skill.type}${progress?`・熟練Lv.${progress.level}`:""}</small></p>`}).join("")||'<p class="muted">スキル情報なし</p>';
+ return`<div class="market-item-detail"><div class="market-detail-hero"><span>${species.emoji??offer.icon}</span><div><small>${offer.rarity}・${offer.powerLabel??"階層相応"}</small><h3>${displayName(payload)}</h3><p>Lv.${payload.level}・${"★".repeat(payload.stars??1)}・+${payload.plus??0}・❤️${payload.affection??0}</p></div></div><div class="market-detail-stats"><span><small>HP</small><b>${stats.hp}</b></span><span><small>ATK</small><b>${stats.atk}</b></span><span><small>DEF</small><b>${stats.def}</b></span><span><small>SPD</small><b>${stats.spd}</b></span></div><div class="market-detail-skills"><h4>設定スキル</h4>${skillRows}</div></div>`;
+}
+function purchaseDarkMarketOffer(offerId,sourceModal=null){
+ const result=buyDarkMarketOffer(save.state,offerId);if(!result.ok)return showToast(result.message);
+ save.save();sourceModal?.remove();document.querySelectorAll(".game-modal").forEach(modal=>{if(modal.querySelector(".dark-market"))modal.remove()});showToast(result.message);render();openDarkMarket();
+}
+function openDarkMarketOfferDetail(offerId){
+ const offer=activeSecretRoom(save.state)?.offers?.find(entry=>entry.id===offerId);if(!offer)return showToast("商品が見つかりません");
+ app.insertAdjacentHTML("beforeend",Modal(`${offer.icon} ${offer.name}`,`${darkMarketOfferDetail(offer)}<div class="market-detail-price"><span>${offer.priceLabel}</span><b>${offer.price.toLocaleString()}G</b></div>`,offer.sold?"戻る":`${offer.price.toLocaleString()}Gで購入`));
+ const modal=topModal();modal.querySelector("[data-modal-primary]").onclick=()=>offer.sold?modal.remove():purchaseDarkMarketOffer(offer.id,modal);
 }
 function openDarkMarket(){
  app.insertAdjacentHTML("beforeend",Modal("🕶️ 闇市場",darkMarketBody(),"裏街へ戻る"));
  const modal=topModal();
- modal.querySelectorAll("[data-market-offer]").forEach(button=>button.onclick=()=>{const result=buyDarkMarketOffer(save.state,button.dataset.marketOffer);if(!result.ok)return showToast(result.message);save.save();modal.remove();showToast(result.message);render();openDarkMarket()});
+ modal.querySelectorAll("[data-market-detail]").forEach(button=>button.onclick=()=>openDarkMarketOfferDetail(button.dataset.marketDetail));
+ modal.querySelectorAll("[data-market-offer]").forEach(button=>button.onclick=()=>purchaseDarkMarketOffer(button.dataset.marketOffer,modal));
  modal.querySelectorAll("[data-market-recovery]").forEach(button=>button.onclick=()=>{const result=buyDarkMarketRecovery(save.state,button.dataset.marketRecovery);if(!result.ok)return showToast(result.message);save.save();modal.remove();showToast(result.message);render();openDarkMarket()});
  modal.querySelector("[data-modal-primary]").onclick=()=>{modal.remove();render()};
 }
