@@ -1,7 +1,7 @@
-import{SPECIES}from"../../data/species.js?v=1.2.0";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=1.2.0";
-import{maxMp,normalizeSkillLoadout,skillById}from"../../battle/SkillSystem.js?v=1.2.0";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.2.0";
+import{SPECIES}from"../../data/species.js?v=1.3.0";
+import{calculatedStats,displayName,totalExperience}from"../../models/Monster.js?v=1.3.0";
+import{maxMp,normalizeSkillLoadout,skillById}from"../../battle/SkillSystem.js?v=1.3.0";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.3.0";
 import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel}from"../../data/equipment.js?v=1.2.0";
 import{formatAffix}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
@@ -19,11 +19,17 @@ function elementData(monster){
 }
 function weaponLine(state,monster,subslot){
  const item=state.equipment?.find(entry=>entry.id===monster.equipment?.[subslot]);
- if(!item)return`<div class="formation-weapon empty"><small>${equipmentSubslotLabel(subslot)}</small><b>なし</b></div>`;
+ if(!item)return`<button type="button" class="formation-weapon empty" data-formation-weapon-add="${monster.id}" data-formation-subslot="${subslot}"><small>${equipmentSubslotLabel(subslot)}</small><b>＋ なし</b><em>タップして装備</em></button>`;
  const multiplier=equipmentStatMultiplier(item),stats=Object.entries(item.stats??{}).slice(0,2).map(([key,value])=>`${equipmentStatLabel(key)}+${Math.round(value*multiplier)}`).join(" ");
  const affix=(item.affixes??[]).slice(0,1).map(formatAffix).join(""),buff=[stats,affix].filter(Boolean).join(" / ")||"補正なし";
  const rarity=equipmentDisplayRarity(item);
- return`<div class="formation-weapon"><small>${equipmentSubslotLabel(subslot)}・${rarity}</small><b class="rarity-name-${rarityClass(rarity)}">${item.name}${item.plus?` +${item.plus}`:""}</b><em>${buff}</em></div>`;
+ return`<details class="formation-weapon-wrap">
+  <summary class="formation-weapon"><small>${equipmentSubslotLabel(subslot)}・${rarity}</small><b class="rarity-name-${rarityClass(rarity)}">${item.name}${item.plus?` +${item.plus}`:""}</b><em>${buff}</em></summary>
+  <div class="formation-weapon-actions">
+   <button type="button" data-formation-weapon-enhance="${item.id}" data-owner="${monster.id}" data-formation-subslot="${subslot}">強化・スロット</button>
+   <button type="button" class="danger" data-formation-weapon-remove="${item.id}">外す</button>
+  </div>
+ </details>`;
 }
 function memberCard(state,monster,index){
  const species=SPECIES[monster.speciesId]??{},stats=calculatedStats(monster),mp=maxMp(monster),[elementIcon,elementName]=elementData(monster),rarity=monsterRarity(monster);
@@ -34,6 +40,7 @@ function memberCard(state,monster,index){
   <div class="formation-member-icon">${species.emoji??"👹"}</div>
   <b class="formation-member-name rarity-name-${rarityClass(rarity)}">${displayName(monster)}</b>
   <small class="formation-member-meta">${rarity}・${elementIcon}${elementName}<br>Lv.${monster.level}・★${monster.stars??1}・+${monster.plus??0}</small>
+  <small class="formation-total-exp">累計EXP ${totalExperience(monster).toLocaleString()}</small>
   <div class="formation-power"><small>戦力</small><strong>${formatCombatPower(monsterCombatPower(monster))}</strong></div>
   <div class="formation-stats">
    <span>HP<b>${stats.hp.toLocaleString()}</b></span><span>MP<b>${mp.toLocaleString()}</b></span>
@@ -46,14 +53,15 @@ function memberCard(state,monster,index){
    ${weaponLine(state,monster,"weaponLeft")}
   </section>
   <section class="formation-skills">
-   <h3>✨ 設定中スキル</h3>
-   ${skills.map((skill,slot)=>`<div><small>${slot+1}</small><b>${skill?.name??"未設定"}</b></div>`).join("")}
+   <h3>✨ 設定中スキル <small>タップで変更</small></h3>
+   ${skills.map((skill,slot)=>`<button type="button" data-formation-skill="${monster.id}" data-skill-slot="${slot}"><small>${slot+1}</small><b>${skill?.name??"未設定"}</b><i>›</i></button>`).join("")}
   </section>
   <div class="formation-actions">
    <button data-formation-growth="${monster.id}">育成</button>
    <button data-formation-equipment="${monster.id}">装備</button>
    <button data-formation-skills="${monster.id}">スキル</button>
-   <button class="danger" data-formation-remove="${monster.id}">外す</button>
+   <button data-formation-replace="${monster.id}">交代</button>
+   <button class="danger formation-remove-action" data-formation-remove="${monster.id}">パーティーから外す</button>
   </div>
  </article>`;
 }

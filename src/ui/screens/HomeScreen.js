@@ -1,9 +1,9 @@
-import{APP_VERSION}from"../../core/config.js?v=1.2.0";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
-import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.95.1-stability-audit";
-import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{APP_VERSION}from"../../core/config.js?v=1.3.0";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=1.3.0";
+import{maxMp}from"../../battle/SkillSystem.js?v=1.3.0";
+import{SPECIES}from"../../data/species.js?v=1.3.0";
 import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,emergencyFragmentStatus,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=1.0.0";
-import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.2.0";
+import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.3.0";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=1.2.0";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
@@ -53,7 +53,8 @@ export function HomeScreen(state){
         </div>
         <div class="home-management-menu">
           <button id="openMonsters"><span>💪</span><b>魔物育成</b></button><button id="openEquipment"><span>⚔️</span><b>装備管理</b></button>
-          <button id="openSkills"><span>✨</span><b>スキル設定</b></button><button id="openAbyssSkillTree"><span>🌑</span><b>深淵ツリー</b></button>
+          <button id="openSkills"><span>✨</span><b>スキル設定</b></button><button id="openItemShop"><span>🧪</span><b>アイテムショップ</b></button>
+          <button id="openAbyssSkillTree"><span>🌑</span><b>深淵ツリー</b></button>
         </div>
         <div class="home-utility-row"><button id="openRest" class="compact-button">🛏️ 休息</button><button id="openCodexHub" class="compact-button">📖 図鑑</button><button id="openSettings" class="compact-button">⚙️ 設定</button>${revealed?`<button id="openDeepGacha" class="compact-button deep-summon-button">🌌 深淵召喚</button><button id="openWorldRecord" class="compact-button world-record-button">📖 世界の記録</button>`:""}</div>
         ${teamUnlocked?`<div class="panel endgame-entry-panel"><div><small class="eyebrow">4 VS 4 / NO PENALTY</small><h2>⚔️ チームバトル</h2><p class="muted">第${team.stage}試練・本日 ${team.dailyAttempts}/50戦</p></div><button id="openTeamBattle" class="primary">挑戦する</button></div>`:`<div class="panel endgame-entry-panel locked"><div><small class="eyebrow">LOCKED</small><h2>⚔️ チームバトル</h2><p class="muted">${TEAM_BATTLE_UNLOCK_FLOOR}階突破で解放</p></div></div>`}

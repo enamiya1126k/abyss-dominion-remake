@@ -7,15 +7,15 @@ import{
  equipmentSubslotLabel,
  compatibleSubslots
 }from"../../data/equipment.js?v=1.2.0";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=1.3.0";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
-import{maxMp}from"../../battle/SkillSystem.js?v=0.9.15-alpha.95.1-stability-audit";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.1.0";
+import{maxMp}from"../../battle/SkillSystem.js?v=1.3.0";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.3.0";
 import{ATTRIBUTES}from"../../data/attributes.js?v=1.1.0";
 import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=1.2.0";
-import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=1.3.0";
 import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{SPECIES}from"../../data/species.js?v=1.3.0";
 import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=0.9.15-alpha.95.1-stability-audit";
 import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.2.0";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=1.2.0";
@@ -64,7 +64,7 @@ function itemAffixes(item,{compact=false}={}){
  return`<div class="equipment-affixes ${compact?"compact":""}">${body}</div>`;
 }
 
-function equippedSlotCard(state,target,subslot){
+function equippedSlotCard(state,target,subslot,focusItemId=null){
  const levelRequired=SLOT_UNLOCK_LEVEL[subslot]??1;
  const locked=target.level<levelRequired;
  if(locked){
@@ -76,7 +76,7 @@ function equippedSlotCard(state,target,subslot){
  }
  const level=Math.max(1,item.level??1);
  const affixes=ensureEquipmentAffixes(item);
- return`<details class="equipped-slot-card equipped" data-equipped-item="${item.id}">
+ return`<details class="equipped-slot-card equipped ${item.id===focusItemId?"focused-equipment":""}" data-equipped-item="${item.id}" ${item.id===focusItemId?"open":""}>
   <summary>
    <span class="equipped-slot-label">${equipmentSubslotLabel(subslot)}</span>
    <div>${coloredEquipmentName(item)}<small>Lv.${level} ∞　${itemStats(item)||"能力補正なし"}</small></div>
@@ -116,7 +116,7 @@ function handLabel(item){
  return item.slot!=="weapon"?"":({right:"右手向き",left:"左手向き",either:"左右対応",twoHanded:"両手武器"}[item.handedness]??"左右対応");
 }
 
-function card(item,state,target,storage,{editing=false,selected=false}={}){
+function card(item,state,target,storage,{editing=false,selected=false,focused=false}={}){
  const owner=item.equippedBy?state.monsters.find(monster=>monster.id===item.equippedBy):null;
  const inventory=storage==="inventory";
  const level=Math.max(1,item.level??1);
@@ -129,7 +129,7 @@ function card(item,state,target,storage,{editing=false,selected=false}={}){
  }).join("");
  const protectedItem=!!item.equippedBy||item.favorite||item.locked||item.ruleOverrides?.unsellable;
  const affixes=ensureEquipmentAffixes(item);
- return`<article class="equipment-card ${selected?"selected":""} ${protectedItem?"protected-entry":""}">
+ return`<article class="equipment-card ${selected?"selected":""} ${protectedItem?"protected-entry":""} ${focused?"focused-equipment":""}" data-equipment-card-id="${item.id}">
   ${editing&&inventory?`<label class="manage-check"><input type="checkbox" data-select-equipment-id="${item.id}" ${selected?"checked":""} ${protectedItem?"disabled":""}><span></span></label>`:""}
   <div class="spread">${coloredEquipmentName(item)}<span>${item.favorite?"★":""}${item.locked?"🔒":""}${item.ruleOverrides?.unsellable?"🛡️":""}</span></div>
   <div class="subline">
@@ -159,7 +159,7 @@ function sortOption(value,label,current){
  return`<option value="${value}" ${value===current?"selected":""}>${label}</option>`;
 }
 
-export function EquipmentScreen(state,targetId,{home=false,editing=false,selected=new Set()}={}){
+export function EquipmentScreen(state,targetId,{home=false,editing=false,selected=new Set(),focusItemId=null}={}){
  renderedEquipmentState=state;
  state.settings??={};
  const party=state.party.map(id=>state.monsters.find(monster=>monster.id===id)).filter(Boolean);
@@ -218,7 +218,7 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
      <span><small>SPD</small><b>${stats.spd.toLocaleString()}</b></span>
      <span><small>属性</small><b>${attribute.icon}${attribute.name}</b></span>
     </div>
-    <div class="equipped-summary six-slots">${Object.keys(SLOT_UNLOCK_LEVEL).map(subslot=>equippedSlotCard(state,target,subslot)).join("")}</div>
+    <div class="equipped-summary six-slots">${Object.keys(SLOT_UNLOCK_LEVEL).map(subslot=>equippedSlotCard(state,target,subslot,focusItemId)).join("")}</div>
     ${seriesSummary?`<div class="series-summary"><b>シリーズ</b><small>${seriesSummary}</small>${active.length?`<em>${active.map(entry=>`${EQUIPMENT_SERIES[entry.seriesId]?.name} ${entry.pieces}部位：${describeSeriesEffect(entry.effect)}`).join("<br>")}</em>`:""}${seriesDetails}</div>`:""}
     <div class="auto-equip-row">
      <button id="autoEquipOne">⚡ このキャラを自動装備</button>
@@ -243,7 +243,7 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
    </div>
 
    <div class="panel equipment-sort-panel"><div class="spread"><b>${slotLabel(slot)}の並び替え</b><select id="equipmentSort">${sortOption("rarity","レア度順",sort)}${sortOption("power","総合能力順",sort)}${sortOption("atk","ATK順",sort)}${sortOption("def","DEF順",sort)}${sortOption("hp","HP順",sort)}${sortOption("spd","SPD順",sort)}${sortOption("newest","新しい順",sort)}${sortOption("favorite","お気に入り順",sort)}${sortOption("name","名前順",sort)}</select></div></div>
-   <div class="equipment-list">${list.map(item=>card(item,state,target,storage,{editing,selected:selected.has(item.id)})).join("")||'<div class="empty">装備がありません</div>'}</div>
+   <div class="equipment-list">${list.map(item=>card(item,state,target,storage,{editing,selected:selected.has(item.id),focused:item.id===focusItemId})).join("")||'<div class="empty">装備がありません</div>'}</div>
   </div>
  </section>`;
 }

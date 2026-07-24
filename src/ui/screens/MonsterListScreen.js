@@ -1,6 +1,6 @@
-import{MonsterCard}from"../components/MonsterCard.js?v=0.9.15-alpha.95-abyss-skill-effects";
-import{SPECIES}from"../../data/species.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{displayName}from"../../models/Monster.js?v=0.9.15-alpha.95-abyss-skill-effects";
+import{MonsterCard}from"../components/MonsterCard.js?v=1.3.0";
+import{SPECIES}from"../../data/species.js?v=1.3.0";
+import{displayName}from"../../models/Monster.js?v=1.3.0";
 
 function partyCard(m){const sp=SPECIES[m.speciesId];return`<article class="party-growth-card"><button class="party-growth-main" data-monster-id="${m.id}"><span>${sp?.emoji??"👹"}</span><div><b>${displayName(m)}</b><small>${sp?.rarity??"N"} / Lv.${m.level} / ⭐${m.stars??1} / +${m.plus??0} / ❤️${m.affection??0}</small></div></button><div class="party-growth-actions"><button data-quick-equipment="${m.id}">⚔️ 装備</button><button data-quick-growth="${m.id}">💪 強化</button></div></article>`}
 

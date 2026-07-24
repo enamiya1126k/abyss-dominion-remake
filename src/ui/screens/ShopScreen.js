@@ -1,4 +1,4 @@
-import{activeSecretRoom,CASINO_WIN_RATE,CASINO_PAYOUT_MULTIPLIER,DARK_MARKET_ITEM_LIMIT,SECRET_ROOM_RECOVERY_ITEMS}from"../../core/SecretRoomSystem.js?v=1.2.0";
+import{activeSecretRoom,CASINO_WIN_RATE,CASINO_PAYOUT_MULTIPLIER,DARK_MARKET_ITEM_LIMIT,SECRET_ROOM_RECOVERY_ITEMS}from"../../core/SecretRoomSystem.js?v=1.3.0";
 
 function marketStatus(room){
  const remaining=(room?.offers??[]).filter(offer=>!offer.sold).length;
