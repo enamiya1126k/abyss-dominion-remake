@@ -1,4 +1,4 @@
-import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL}from"../core/config.js?v=1.4.0";
+import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL}from"../core/config.js?v=1.4.1";
 import{createMonster,totalExperience,applyTotalExperience}from"../models/Monster.js?v=1.3.0";
 import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=1.3.0";
 import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=1.0.0";
