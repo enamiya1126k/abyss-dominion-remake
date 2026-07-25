@@ -21,9 +21,30 @@ function scenePartySlot(monster,index){
     </button>`;
 }
 
+const HOME_NUMBER_UNITS=Object.freeze([
+  [1_000_000_000_000,1_000_000_000_000,"T"],
+  [1_000_000_000,1_000_000_000,"B"],
+  [1_000_000,1_000_000,"M"],
+  [10_000,1_000,"K"],
+]);
+
+export function compactHomeNumber(value){
+  const number=Math.max(0,Number(value)||0);
+  const unit=HOME_NUMBER_UNITS.find(([threshold])=>number>=threshold);
+  if(!unit)return Math.floor(number).toLocaleString();
+  const [,divisor,suffix]=unit;
+  const scaled=number/divisor;
+  const digits=scaled>=100?0:scaled>=10?1:2;
+  return`${Number(scaled.toFixed(digits)).toLocaleString()}${suffix}`;
+}
+
+function pixelIcon(name,className=""){
+  return`<span class="home-pixel-icon icon-${name}${className?` ${className}`:""}" aria-hidden="true"></span>`;
+}
+
 function menuButton({id,icon,title,sub,className=""}){
   return`<button type="button" id="${id}" class="home-command-button ${className}">
-    <span class="home-command-icon">${icon}</span>
+    <span class="home-command-icon">${pixelIcon(icon)}</span>
     <span class="home-command-copy"><b>${title}</b><small>${sub}</small></span>
   </button>`;
 }
@@ -31,7 +52,7 @@ function menuButton({id,icon,title,sub,className=""}){
 function utilityButton({id,icon,title,value="",ready=false}){
   return`<button type="button" id="${id}" class="home-utility-button${ready?" ready":""}">
     ${ready?'<i class="home-notification-dot"></i>':""}
-    <span>${icon}</span><b>${title}</b>${value?`<small>${value}</small>`:""}
+    ${pixelIcon(icon)}<b>${title}</b>${value?`<small>${value}</small>`:""}
   </button>`;
 }
 
@@ -53,6 +74,13 @@ export function HomeScreen(state){
   return`
     <section class="screen home-command-screen world-phase-${phase}${phase===1?" phase2":""}" data-world-phase="${phase}">
       <div class="home-command-shade" aria-hidden="true"></div>
+      <div class="home-environment-motion" aria-hidden="true">
+        <i class="home-moving-sky sky-left"></i>
+        <i class="home-moving-sky sky-right"></i>
+        <i class="home-moving-foliage foliage-left"></i>
+        <i class="home-moving-foliage foliage-right"></i>
+        <i class="home-river-flow"></i>
+      </div>
 
       <header class="home-title-card">
         <small>ABYSS DOMINION</small>
@@ -60,41 +88,41 @@ export function HomeScreen(state){
       </header>
 
       <div class="home-resource-bar" aria-label="所持資源">
-        <span title="GOLD">🪙 <b>${state.player.gold.toLocaleString()}</b></span>
-        <span title="魔晶石">💎 <b>${state.player.crystals.toLocaleString()}</b></span>
-        <span title="捕獲結晶">📀 <b>${(state.inventory?.captureCrystals??0).toLocaleString()}</b></span>
-        <span title="深淵の鍵">🔑 <b>${(state.inventory?.abyssKeys??0).toLocaleString()}</b></span>
-        <button type="button" id="openSettings" aria-label="設定">⚙️</button>
+        <span title="GOLD：${state.player.gold.toLocaleString()}">${pixelIcon("coin")}<b>${compactHomeNumber(state.player.gold)}</b></span>
+        <span title="魔晶石：${state.player.crystals.toLocaleString()}">${pixelIcon("crystal")}<b>${compactHomeNumber(state.player.crystals)}</b></span>
+        <span title="捕獲結晶：${(state.inventory?.captureCrystals??0).toLocaleString()}">${pixelIcon("capture")}<b>${compactHomeNumber(state.inventory?.captureCrystals??0)}</b></span>
+        <span title="深淵の鍵：${(state.inventory?.abyssKeys??0).toLocaleString()}">${pixelIcon("key")}<b>${compactHomeNumber(state.inventory?.abyssKeys??0)}</b></span>
+        <button type="button" id="openSettings" aria-label="設定">${pixelIcon("settings")}</button>
       </div>
 
       <button type="button" id="openCombatPowerHistory" class="home-record-card">
         <small>モンスター基盤</small>
-        <strong>最高 <em>${state.player.maxFloor.toLocaleString()}</em> 階</strong>
+        <strong title="最高 ${state.player.maxFloor.toLocaleString()}階">最高 <em>${compactHomeNumber(state.player.maxFloor)}</em> 階</strong>
         <i></i>
         <span>戦力・記録</span>
-        <b>♟ ${formatCombatPower(combatPower)}</b>
+        <b title="戦力 ${formatCombatPower(combatPower)}">${pixelIcon("crossed-swords","record-power-icon")} ${compactHomeNumber(combatPower)}</b>
       </button>
 
       <nav class="home-left-menu" aria-label="主要メニュー">
-        ${menuButton({id:"openTeamBattle",icon:"⚔️",title:"チームバトル",sub:`4 VS 4 / NO PENALTY　${teamSub}`,className:teamUnlocked?"team-ready":"locked"})}
-        ${menuButton({id:"openGacha",icon:"🔮",title:"召喚",sub:"仲間・装備を獲得"})}
-        ${menuButton({id:"openMonsters",icon:"💪",title:"魔物育成",sub:"強化して部隊を強化"})}
-        ${menuButton({id:"openEquipment",icon:"🗡️",title:"装備管理",sub:"装備の確認・強化"})}
-        ${menuButton({id:"openSkills",icon:"📖",title:"スキル設定",sub:"スキルの確認・強化"})}
+        ${menuButton({id:"openTeamBattle",icon:"crossed-swords",title:"チームバトル",sub:`4 VS 4 / NO PENALTY　${teamSub}`,className:teamUnlocked?"team-ready":"locked"})}
+        ${menuButton({id:"openGacha",icon:"summon",title:"召喚",sub:"仲間・装備を獲得"})}
+        ${menuButton({id:"openMonsters",icon:"growth",title:"魔物育成",sub:"強化して部隊を強化"})}
+        ${menuButton({id:"openEquipment",icon:"equipment",title:"装備管理",sub:"装備の確認・強化"})}
+        ${menuButton({id:"openSkills",icon:"skills",title:"スキル設定",sub:"スキルの確認・強化"})}
       </nav>
 
       <aside class="home-right-menu" aria-label="お知らせと報酬">
-        ${utilityButton({id:"openIdleReturn",icon:"🧰",title:"放置報酬",value:idleReward.available?`${idleReward.gold.toLocaleString()}G`:"探索中",ready:idleReward.available})}
-        ${utilityButton({id:"openNoticeCenter",icon:"✉️",title:"お知らせ"})}
-        ${utilityButton({id:"openPresentUnavailable",icon:"🎁",title:"プレゼント"})}
+        ${utilityButton({id:"openIdleReturn",icon:"chest",title:"放置報酬",value:idleReward.available?`${compactHomeNumber(idleReward.gold)}G`:"探索中",ready:idleReward.available})}
+        ${utilityButton({id:"openNoticeCenter",icon:"notice",title:"お知らせ"})}
+        ${utilityButton({id:"openPresentUnavailable",icon:"present",title:"プレゼント"})}
       </aside>
 
       <button type="button" id="openFormation" class="home-formation-banner">
-        <span>⚔️</span><b>部隊編成</b><strong>${party.length}/4</strong>
+        ${pixelIcon("formation")}<b>部隊編成</b><strong>${party.length}/4</strong>
       </button>
 
       <button type="button" id="openRest" class="home-rest-hotspot" aria-label="休息">
-        <span>🛏️</span><b>休息</b>
+        ${pixelIcon("rest")}<b>休息</b>
       </button>
 
       <div class="home-party-stage" aria-label="現在の編成パーティ">
@@ -102,11 +130,11 @@ export function HomeScreen(state){
       </div>
 
       <nav class="home-bottom-nav" aria-label="画面メニュー">
-        <button type="button" class="active" aria-current="page"><span>🏰</span><b>ホーム</b></button>
-        <button type="button" id="openOnlineParty"><span>🧑‍🤝‍🧑</span><b>パーティ</b></button>
-        <button type="button" id="openExplore"><span>🚪</span><b>ダンジョン</b></button>
-        <button type="button" id="openItemShop"><span>🏪</span><b>ショップ</b></button>
-        <button type="button" id="openEventHub" class="${eventReady?"ready":""}">${eventReady?'<i class="home-notification-dot"></i>':""}<span>🎟️</span><b>イベント</b></button>
+        <button type="button" class="active" aria-current="page">${pixelIcon("home")}<b>ホーム</b></button>
+        <button type="button" id="openOnlineParty">${pixelIcon("party")}<b>パーティ</b></button>
+        <button type="button" id="openExplore">${pixelIcon("dungeon")}<b>ダンジョン</b></button>
+        <button type="button" id="openItemShop">${pixelIcon("shop")}<b>ショップ</b></button>
+        <button type="button" id="openEventHub" class="${eventReady?"ready":""}">${eventReady?'<i class="home-notification-dot"></i>':""}${pixelIcon("event")}<b>イベント</b></button>
       </nav>
 
       <small class="home-version">v${APP_VERSION}</small>
