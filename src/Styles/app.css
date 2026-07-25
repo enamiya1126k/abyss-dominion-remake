@@ -1009,7 +1009,7 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
 .codex-row-monster-visual{width:42px;height:42px}
 .codex-owned-monster-visual{width:38px;height:38px}
 .codex-detail-monster-visual{width:76px;height:76px}
-.market-monster-visual{width:68px;height:68px}
+.market-monster-visual{width:68px;height:68px}.market-list-monster-visual{width:34px;height:34px}
 .battle-result-monster-visual{width:48px;height:48px}
 .codex-row>b,.market-detail-hero h3,.formation-picker-row b{overflow-wrap:anywhere}
 @media(max-width:480px){

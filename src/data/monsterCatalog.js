@@ -1,0 +1,259 @@
+/*
+ * 通常モンスター図鑑 No.001〜210 の確定順と、対応する画像フォルダ。
+ * speciesId はセーブ互換性のため変更せず、図鑑番号と画像だけをここで結び付ける。
+ */
+const STANDARD_SPECIES_IDS=Object.freeze(`
+slime
+baby_slime
+cave_rat
+bat
+caterpillar
+skeleton
+goblin
+acid_slime
+mushroom
+centipede
+fang_rat
+ember_slime
+skeleton_archer
+zombie
+vampire_bat
+goblin_guard
+thorn_bud
+frost_slime
+beetle
+fairy
+skeleton_guard
+healing_mushroom
+ghost
+goblin_shaman
+wolf
+willowisp
+mantis
+orc
+water_spirit
+mandrake
+lizardman
+stone_golem
+ogre
+mimic
+bear
+harpy
+wraith
+clockwork
+king_slime
+salamander
+dire_wolf
+gargoyle
+wyvern
+ash_hound
+angelic_orb
+mud_crab
+dragon
+dark_knight
+spark_moth
+reef_serpent
+forest_ape
+frost_dragon
+lantern_ghost
+iron_turtle
+storm_crow
+cinder_imp
+ancient_dragon
+moss_golem
+moon_hare
+venom_frog
+sand_scorpion
+mist_jelly
+blade_boar
+crystal_bee
+dusk_owl
+root_guard
+ember_fox
+river_kappa
+copper_automaton
+shade_cat
+flame_lion
+tide_siren
+thunder_raptor
+grave_bishop
+jade_mantis
+iron_minotaur
+snow_leopard
+lava_tortoise
+dream_eater
+sky_stag
+rune_golem
+venom_wyvern
+rose_knight
+sea_basilisk
+storm_djinn
+bone_chimera
+golden_jackal
+magma_beetle
+frost_dryad
+clockwork_mage
+shadow_panther
+sun_priestess
+deep_octopus
+crystal_gryphon
+inferno_cerberus
+leviathan_spawn
+storm_phoenix
+abyss_reaper
+world_tree_guardian
+moon_valkyrie
+adamant_golem
+nine_tail_fox
+kraken_knight
+thunder_emperor
+void_mantis
+aurora_unicorn
+plague_dragon
+cyclone_garuda
+earth_colossus
+blood_count
+solar_sphinx
+glacier_queen
+volcano_titan
+oracle_owl
+hell_butterfly
+jade_dragon
+dread_centaur
+star_automaton
+tempest_serpent
+royal_mimic
+celestial_whale
+ragnarok_wolf
+genesis_slime
+abyssal_hydra
+seraphim
+demon_lord
+sea_empress
+thunder_kirin
+time_keeper
+eclipse_dragon
+emerald_behemoth
+frost_fenrir
+flame_ifrit
+celestial_pegasus
+underworld_king
+mechanical_deity
+poison_queen
+storm_leviathan
+moon_rabbit_sage
+sun_garuda
+obsidian_titan
+dream_dragon
+sacred_turtle
+chaos_chimera
+crystal_empress
+blood_valkyrie
+lightning_raijin
+forest_cernunnos
+ocean_poseidon
+desert_anubis
+astral_sphinx
+omega_slime
+bahamut
+apocalypse_dragon
+primordial_phoenix
+king_behemoth
+abyssal_leviathan
+god_machine_ark
+void_emperor
+eternal_valkyrie
+world_serpent
+fallen_seraph
+chaos_king
+genesis_golem
+death_lord
+celestial_kirin
+infinite_hydra
+flame_sovereign
+frost_sovereign
+`.trim().split(/\s+/));
+
+/*
+ * No.170以降は制作時にフォルダ名が固有デザイン名へ変わったため、
+ * speciesId と画像フォルダを明示的に対応させる。
+ */
+const DESIGNED_SPECIES=Object.freeze([
+  ["storm_sovereign","170_star_funeral_luminaria"],
+  ["earth_sovereign","171_obsidian_dragon_valgrim"],
+  ["light_sovereign","172_eclipse_wolf_lunafang"],
+  ["dark_sovereign","173_machine_deity_arc_nova"],
+  ["time_dragon","174_abyssal_sea_princess_seirene"],
+  ["space_whale","175_thunder_lion_regulus"],
+  ["fate_weaver","176_dream_fairy_lumiera"],
+  ["dream_emperor","177_emerald_storm_griffin"],
+  ["nightmare_empress","178_ash_oni_kagura"],
+  ["crownless_hero","179_void_whale_abyssalis"],
+  ["abyss_gatekeeper","180_dawn_sword_princess_aurelia"],
+  ["creator_dragon","181_crimson_phoenix_ignifer"],
+  ["end_bringer","182_spirit_tree_king_yggresia"],
+  ["abyss_overlord","183_azure_sea_dragon_livanion"],
+  ["eternal_sun","184_white_night_fox_mikoto"],
+  ["eternal_moon","185_starsteel_knight_ordenes"],
+  ["sea_origin","186_time_ring_hare_rapidia"],
+  ["earth_mother","187_sand_sea_sphinx_sphileon"],
+  ["sky_father","188_dreamweaver_doll_elmeria"],
+  ["thunder_origin","189_ancient_turtle_gaiatlas"],
+  ["flame_origin","190_eclipse_witch_selenova"],
+  ["frost_origin","191_thunder_emperor_beast_vajrion"],
+  ["wind_origin","192_underworld_muse_orphelia"],
+  ["life_tree","193_sky_mecha_deity_arcanova"],
+  ["death_arbiter","194_verdant_sacred_stag_fiornes"],
+  ["time_archon","195_final_flame_oni_kagura"],
+  ["space_archon","196_star_oracle_noctiel"],
+  ["fate_archon","197_twin_realm_dragon_princess_verdia"],
+  ["dream_archon","198_void_whale_astralis"],
+  ["nightmare_archon","199_celestial_guardian_archzeon"],
+  ["chaos_archon","200_end_moon_sword_saint_lunacelio"],
+  ["order_archon","201_heaven_thunder_shrine_maiden_ishurana"],
+  ["light_archon","202_netherflame_prince_valgrey"],
+  ["dark_archon","203_sacred_sea_song_princess_nereidia"],
+  ["star_archon","204_time_space_magister_chronoel"],
+  ["void_archon","205_divine_tree_guardian_princess_alveria"],
+  ["infinite_dragon","206_silver_fang_fist_emperor_regnard"],
+  ["thousand_arms","207_dream_mirage_illusionist_lumiera"],
+  ["divine_machine","208_obsidian_gun_saint_zexrain"],
+  ["first_monster","209_star_crowned_empress_asteria"],
+  ["abyss_dominion","210_zero_realm_overlord_nemesial"]
+]);
+
+const standardCatalog=STANDARD_SPECIES_IDS.map((speciesId,index)=>{
+  const number=index+1;
+  return Object.freeze({
+    number,
+    speciesId,
+    folder:`${String(number).padStart(3,"0")}_${speciesId}`
+  });
+});
+
+const designedCatalog=DESIGNED_SPECIES.map(([speciesId,folder],index)=>Object.freeze({
+  number:STANDARD_SPECIES_IDS.length+index+1,
+  speciesId,
+  folder
+}));
+
+export const MONSTER_CATALOG=Object.freeze([...standardCatalog,...designedCatalog]);
+export const MONSTER_CATALOG_ORDER=Object.freeze(MONSTER_CATALOG.map(entry=>entry.speciesId));
+export const MONSTER_SPRITE_FOLDERS=Object.freeze(Object.fromEntries(
+  MONSTER_CATALOG.map(entry=>[entry.speciesId,entry.folder])
+));
+
+const CATALOG_NUMBER_BY_ID=Object.freeze(Object.fromEntries(
+  MONSTER_CATALOG.map(entry=>[entry.speciesId,entry.number])
+));
+
+export function monsterCatalogNumber(speciesId){
+  return CATALOG_NUMBER_BY_ID[speciesId]??null;
+}
+
+export function orderedMonsterSpecies(speciesMap){
+  const source=speciesMap??{};
+  const ordered=MONSTER_CATALOG_ORDER.map(id=>source[id]).filter(Boolean);
+  const known=new Set(MONSTER_CATALOG_ORDER);
+  return [...ordered,...Object.values(source).filter(species=>!known.has(species.id))];
+}

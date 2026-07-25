@@ -1,23 +1,4 @@
-const MONSTER_SPRITE_FOLDERS=Object.freeze({
-  slime:"001_slime",
-  baby_slime:"002_baby_slime",
-  cave_rat:"003_cave_rat",
-  bat:"004_bat",
-  caterpillar:"005_caterpillar",
-  skeleton:"006_skeleton",
-  goblin:"007_goblin",
-  acid_slime:"008_acid_slime",
-  mushroom:"009_mushroom",
-  centipede:"010_centipede",
-  fang_rat:"011_fang_rat",
-  ember_slime:"012_ember_slime",
-  skeleton_archer:"013_skeleton_archer",
-  zombie:"014_zombie",
-  vampire_bat:"015_vampire_bat",
-  goblin_guard:"016_goblin_guard",
-  thorn_bud:"017_thorn_bud",
-  frost_slime:"018_frost_slime"
-});
+import{MONSTER_SPRITE_FOLDERS}from"../data/monsterCatalog.js?v=1.9.0-monster-catalog";
 
 const IDLE_FRAMES=Object.freeze(["idle1","idle2","idle3","idle2"]);
 const VALID_FRAMES=new Set(["idle","idle1","idle2","idle3","walk1","walk2","attack","damage","down"]);
@@ -81,6 +62,8 @@ if(typeof window!=="undefined"&&typeof document!=="undefined"){
     const frame=IDLE_FRAMES[idleStep];
     for(const image of document.querySelectorAll('[data-monster-sprite][data-animation-state="idle"]')){
       if(!image.isConnected||image.dataset.spriteFailed==="1"||image.offsetParent===null)continue;
+      const rect=image.getBoundingClientRect();
+      if(rect.bottom<0||rect.top>window.innerHeight||rect.right<0||rect.left>window.innerWidth)continue;
       const base=image.dataset.spriteBase;
       if(!base||image.dataset.frame===frame)continue;
       image.dataset.frame=frame;

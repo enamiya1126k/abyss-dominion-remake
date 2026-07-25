@@ -1,6 +1,6 @@
 /*
  * No.035以降の通常図鑑名を、IDやセーブ互換性を変えずに刷新する。
- * 神話帯は既に固有神名で統一されているため、そのまま維持する。
+ * No.170以降は完成したドット絵の固有デザイン名へ合わせる。
  * Deep Abyss / 十神のボス名は別データなので、この表では変更しない。
  */
 export const MONSTER_NAME_OVERRIDES=Object.freeze({
@@ -126,7 +126,60 @@ export const MONSTER_NAME_OVERRIDES=Object.freeze({
   apocalypse_dragon:"黙示滅竜アポカリオン",
   primordial_phoenix:"原初不死鳥フェニクシア",
   king_behemoth:"獣界覇王ベヒモルク",
-  abyssal_leviathan:"冥海竜皇リヴァイアサン"
+  abyssal_leviathan:"冥海竜皇リヴァイアサン",
+  god_machine_ark:"神滅機アーク・ノア",
+  void_emperor:"虚無皇ヴォイドレクス",
+  eternal_valkyrie:"永劫戦姫エタルキア",
+  world_serpent:"終環蛇ヨルムンガルド",
+  fallen_seraph:"堕天熾使アザリエル",
+  chaos_king:"混沌魔皇カオスディア",
+  genesis_golem:"創世巨神ジェネゴリア",
+  death_lord:"死界覇王モルディウス",
+  celestial_kirin:"天帝麒麟セイラン",
+  infinite_hydra:"無窮九頭竜インフィニドラ",
+  flame_sovereign:"炎界皇イグナシオン",
+  frost_sovereign:"氷界皇ニヴルシア",
+  storm_sovereign:"星葬姫ルミナリア",
+  earth_sovereign:"黒曜竜ヴァルグリム",
+  light_sovereign:"月蝕狼ルナファング",
+  dark_sovereign:"機神アークノヴァ",
+  time_dragon:"深淵海姫セイレーネ",
+  space_whale:"天雷獅子レグルス",
+  fate_weaver:"夢妖精ルミエラ",
+  dream_emperor:"翠嵐グリフォン",
+  nightmare_empress:"灰燼鬼カグラ",
+  crownless_hero:"虚無鯨アビサリス",
+  abyss_gatekeeper:"暁剣姫アウレリア",
+  creator_dragon:"紅蓮不死鳥イグニフェル",
+  end_bringer:"霊樹王ユグレシア",
+  abyss_overlord:"蒼海竜リヴァニオン",
+  eternal_sun:"白夜狐ミコト",
+  eternal_moon:"星鋼騎士オルデネス",
+  sea_origin:"時輪兎ラピディア",
+  earth_mother:"砂海賢獣スフィレオン",
+  sky_father:"夢織人形エルメリア",
+  thunder_origin:"古代亀ガイアトラス",
+  flame_origin:"月蝕魔女セレノヴァ",
+  frost_origin:"雷帝獣ヴァジリオン",
+  wind_origin:"冥界歌姫オルフェリア",
+  life_tree:"天空機神アルカノヴァ",
+  death_arbiter:"翠聖鹿フィオルネス",
+  time_archon:"終炎鬼カグラ",
+  space_archon:"星詠ノクティエル",
+  fate_archon:"双界竜姫ヴェルディア",
+  dream_archon:"虚無鯨アストラリス",
+  nightmare_archon:"天界守護神アルクゼオン",
+  chaos_archon:"終月剣聖ルナセリオ",
+  order_archon:"天雷巫女イシュラナ",
+  light_archon:"冥炎皇子ヴァルグレイ",
+  dark_archon:"聖海歌姫ネレイディア",
+  star_archon:"時空魔導士クロノエル",
+  void_archon:"神樹守姫アルヴェリア",
+  infinite_dragon:"白銀拳帝レグナード",
+  thousand_arms:"夢幻術師リュミエラ",
+  divine_machine:"黒曜銃聖ゼクスレイン",
+  first_monster:"星冠女帝アステリア",
+  abyss_dominion:"零界覇王ネメシアル"
 });
 
 export function applyMonsterNameOverride(species){
