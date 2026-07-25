@@ -239,9 +239,29 @@ const designedCatalog=DESIGNED_SPECIES.map(([speciesId,folder],index)=>Object.fr
 
 export const MONSTER_CATALOG=Object.freeze([...standardCatalog,...designedCatalog]);
 export const MONSTER_CATALOG_ORDER=Object.freeze(MONSTER_CATALOG.map(entry=>entry.speciesId));
-export const MONSTER_SPRITE_FOLDERS=Object.freeze(Object.fromEntries(
-  MONSTER_CATALOG.map(entry=>[entry.speciesId,entry.folder])
-));
+export const ENDGAME_SPRITE_FOLDERS=Object.freeze({
+  abyss_gluttony:"abyss_gluttony",
+  abyss_extinction:"abyss_extinction",
+  abyss_wrath:"abyss_wrath",
+  abyss_envy:"abyss_envy",
+  abyss_sloth:"abyss_sloth",
+  abyss_greed:"abyss_greed",
+  abyss_pride:"abyss_pride",
+  ten_fire:"ten_fire",
+  ten_water:"ten_water",
+  ten_thunder:"ten_thunder",
+  ten_wind:"ten_wind",
+  ten_earth:"ten_earth",
+  ten_light:"ten_light",
+  ten_dark:"ten_dark",
+  ten_ice:"ten_ice",
+  ten_time:"ten_time",
+  ten_space:"ten_space"
+});
+export const MONSTER_SPRITE_FOLDERS=Object.freeze({
+  ...Object.fromEntries(MONSTER_CATALOG.map(entry=>[entry.speciesId,entry.folder])),
+  ...ENDGAME_SPRITE_FOLDERS
+});
 
 const CATALOG_NUMBER_BY_ID=Object.freeze(Object.fromEntries(
   MONSTER_CATALOG.map(entry=>[entry.speciesId,entry.number])

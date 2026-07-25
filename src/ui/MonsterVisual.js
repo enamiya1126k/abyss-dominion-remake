@@ -1,4 +1,4 @@
-import{MONSTER_SPRITE_FOLDERS}from"../data/monsterCatalog.js?v=1.9.0-monster-catalog";
+import{MONSTER_SPRITE_FOLDERS}from"../data/monsterCatalog.js?v=1.9.1-endgame-sprites";
 
 const IDLE_FRAMES=Object.freeze(["idle1","idle2","idle3","idle2"]);
 const VALID_FRAMES=new Set(["idle","idle1","idle2","idle3","walk1","walk2","attack","damage","down"]);
@@ -15,23 +15,34 @@ function escapeHtml(value){
   return String(value??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;");
 }
 
-export function monsterSpriteUrl(speciesId,frame="idle"){
-  const folder=MONSTER_SPRITE_FOLDERS[speciesId];
+function baseSpeciesId(subject){
+  return typeof subject==="string"?subject:subject?.speciesId??null;
+}
+
+export function monsterVisualId(subject){
+  const speciesId=baseSpeciesId(subject);
+  if(typeof subject!=="object"||!subject)return speciesId;
+  const preferredId=subject.visualSpeciesId??subject.endgameBossId;
+  return preferredId&&MONSTER_SPRITE_FOLDERS[preferredId]?preferredId:speciesId;
+}
+
+export function monsterSpriteUrl(subject,frame="idle"){
+  const visualId=monsterVisualId(subject),folder=MONSTER_SPRITE_FOLDERS[visualId];
   return folder?`./assets/monsters/${folder}/${fileFrame(frame)}.png`:null;
 }
 
-export function hasMonsterSprite(speciesId){
-  return Boolean(MONSTER_SPRITE_FOLDERS[speciesId]);
+export function hasMonsterSprite(subject){
+  return Boolean(MONSTER_SPRITE_FOLDERS[monsterVisualId(subject)]);
 }
 
-export function monsterVisual(speciesId,fallbackEmoji="👹",{frame="idle",className=""}={}){
-  const requestedFrame=safeFrame(frame),normalizedFrame=fileFrame(requestedFrame),url=monsterSpriteUrl(speciesId,normalizedFrame);
+export function monsterVisual(subject,fallbackEmoji="👹",{frame="idle",className=""}={}){
+  const visualId=monsterVisualId(subject),requestedFrame=safeFrame(frame),normalizedFrame=fileFrame(requestedFrame),url=monsterSpriteUrl(subject,normalizedFrame);
   const classes=["monster-visual",url?"has-pixel-sprite":"emoji-only",className].filter(Boolean).join(" ");
   const fallback=`<span class="monster-visual-fallback"${url?" hidden":""}>${escapeHtml(fallbackEmoji)}</span>`;
-  if(!url)return`<span class="${classes}" data-monster-species="${escapeHtml(speciesId)}">${fallback}</span>`;
+  if(!url)return`<span class="${classes}" data-monster-species="${escapeHtml(visualId)}">${fallback}</span>`;
   const base=url.slice(0,url.lastIndexOf("/"));
   const animationState=requestedFrame==="idle"?"idle":"static";
-  return`<span class="${classes}" data-monster-species="${escapeHtml(speciesId)}"><img src="${url}" alt="" draggable="false" data-monster-sprite data-sprite-base="${base}" data-frame="${normalizedFrame}" data-animation-state="${animationState}" onerror="this.dataset.spriteFailed='1';this.hidden=true;this.nextElementSibling.hidden=false">${fallback}</span>`;
+  return`<span class="${classes}" data-monster-species="${escapeHtml(visualId)}"><img src="${url}" alt="" draggable="false" data-monster-sprite data-sprite-base="${base}" data-frame="${normalizedFrame}" data-animation-state="${animationState}" onerror="this.dataset.spriteFailed='1';this.hidden=true;this.nextElementSibling.hidden=false">${fallback}</span>`;
 }
 
 export function setMonsterVisualFrame(root,frame="idle"){

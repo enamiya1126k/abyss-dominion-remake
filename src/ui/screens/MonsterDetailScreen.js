@@ -4,7 +4,7 @@ import{MONSTER_COLORS}from"../../data/colors.js?v=0.9.15-alpha.32-phase10-10-rel
 import{ATTRIBUTES}from"../../data/attributes.js?v=1.1.0";
 import{maxMp}from"../../battle/SkillSystem.js?v=1.9.0-monster-catalog";
 import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=1.9.0-monster-catalog";
-import{monsterVisual}from"../MonsterVisual.js?v=1.9.0-monster-catalog";
+import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
@@ -30,7 +30,7 @@ export function MonsterDetailScreen(monster,state){
     <div class="monster-switcher"><button data-switch-monster="${previous?.id??monster.id}" aria-label="前の魔物">‹</button><div><small>${state.party.includes(monster.id)?"出撃メンバー":"控え魔物"} ${index+1}/${ordered.length}</small><b class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</b></div><button data-switch-monster="${nextMonster?.id??monster.id}" aria-label="次の魔物">›</button></div>
 
     <div class="panel compact-growth-summary">
-     <div class="compact-growth-identity"><div class="detail-orb" style="background:${colorValue(monster)}">${monsterVisual(monster.speciesId,species.emoji??"👹",{className:"monster-detail-visual"})}</div><div><small>${rankName(monster)} / ${species.race}族</small><h1 class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</h1><p><b>${rarity}</b>・${attribute.icon}${attribute.name}属性・${species.growthLabel??"標準"}成長</p><em>Lv.${monster.level}　⭐${monster.stars??1}　+${monster.plus??0}　❤️${aff}</em></div></div>
+     <div class="compact-growth-identity"><div class="detail-orb" style="background:${colorValue(monster)}">${monsterVisual(monster,species.emoji??"👹",{className:"monster-detail-visual"})}</div><div><small>${rankName(monster)} / ${species.race}族</small><h1 class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</h1><p><b>${rarity}</b>・${attribute.icon}${attribute.name}属性・${species.growthLabel??"標準"}成長</p><em>Lv.${monster.level}　⭐${monster.stars??1}　+${monster.plus??0}　❤️${aff}</em></div></div>
      <div class="compact-growth-stats">
       <span><small>HP</small><b>${stats.hp.toLocaleString()}</b></span><span><small>MP</small><b>${mp.toLocaleString()}</b></span>
       <span><small>ATK</small><b>${stats.atk.toLocaleString()}</b></span><span><small>DEF</small><b>${stats.def.toLocaleString()}</b></span>
@@ -52,7 +52,7 @@ export function MonsterDetailScreen(monster,state){
     </div>
 
     <div class="panel acquisition-guide">
-     <div class="spread"><div><small>HOW TO GET</small><h2>入手の手引き</h2></div>${monsterVisual(monster.speciesId,species.emoji??"👹",{className:"acquisition-monster-visual"})}</div>
+     <div class="spread"><div><small>HOW TO GET</small><h2>入手の手引き</h2></div>${monsterVisual(monster,species.emoji??"👹",{className:"acquisition-monster-visual"})}</div>
      <div class="acquisition-guide-grid">
       <div><small>探索での出現帯</small><b>${fieldEncounter?`${species.minFloor??1}階以降・近い階層帯ほど出現しやすい`:"通常探索には出現しません"}</b></div>
       <div><small>主な入手方法</small><b>${sources.join("・")}</b></div>

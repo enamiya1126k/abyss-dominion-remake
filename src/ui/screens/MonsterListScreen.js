@@ -1,10 +1,10 @@
-import{MonsterCard}from"../components/MonsterCard.js?v=1.9.0-monster-catalog";
+import{MonsterCard}from"../components/MonsterCard.js?v=1.9.1-endgame-sprites";
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
 import{displayName,totalExperience}from"../../models/Monster.js?v=1.9.0-monster-catalog";
 import{monsterCombatPower}from"../../core/CombatPower.js?v=1.9.0-monster-catalog";
-import{monsterVisual}from"../MonsterVisual.js?v=1.9.0-monster-catalog";
+import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
 
-function partyCard(m){const sp=SPECIES[m.speciesId],rarity=monsterRarity(m);return`<article class="party-growth-card"><button class="party-growth-main" data-monster-id="${m.id}">${monsterVisual(m.speciesId,sp?.emoji??"👹",{className:"party-growth-visual"})}<div><b>${displayName(m)}</b><small>${rarity} / Lv.${m.level} / ⭐${m.stars??1} / +${m.plus??0} / ❤️${m.affection??0}</small></div></button><div class="party-growth-actions"><button data-quick-equipment="${m.id}">⚔️ 装備</button><button data-quick-growth="${m.id}">💪 強化</button></div></article>`}
+function partyCard(m){const sp=SPECIES[m.speciesId],rarity=monsterRarity(m);return`<article class="party-growth-card"><button class="party-growth-main" data-monster-id="${m.id}">${monsterVisual(m,sp?.emoji??"👹",{className:"party-growth-visual"})}<div><b>${displayName(m)}</b><small>${rarity} / Lv.${m.level} / ⭐${m.stars??1} / +${m.plus??0} / ❤️${m.affection??0}</small></div></button><div class="party-growth-actions"><button data-quick-equipment="${m.id}">⚔️ 装備</button><button data-quick-growth="${m.id}">💪 強化</button></div></article>`}
 const RARITY_VALUE={N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9};
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function sortValue(monster,sort){
