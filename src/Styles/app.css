@@ -1674,3 +1674,32 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
  .v2-category-tabs{gap:2px}.v2-category-tabs button{font-size:.56rem}
  .v2-inventory-grid{gap:3px}.v2-inventory-item{min-height:92px;padding-inline:1px}.v2-inventory-item i{font-size:1.45rem}
 }
+
+/* alpha110-112: truthful summon data, larger touch targets and seven-route chrome */
+.v2-screen{--v2-nav-height:72px}
+.v2-bottom-nav{grid-template-columns:repeat(7,minmax(0,1fr));gap:1px;padding:4px}
+.v2-bottom-nav>button{min-height:44px;touch-action:manipulation}
+.v2-bottom-nav>button i{font-size:1rem}.v2-bottom-nav>button b{font-size:clamp(.36rem,1.45vw,.55rem)}
+.v2-hud-resources>button,.home-resource-bar>button{position:relative}
+.v2-hud-resources>button:after,.home-resource-bar>button:after{content:"";position:absolute;inset:-8px}
+.home-item-shop-row button{min-height:44px;touch-action:manipulation}
+.formation-screen.v2-screen .formation-actions button{min-height:42px;touch-action:manipulation}
+@media(max-height:760px){.formation-screen.v2-screen .formation-actions button{min-height:36px}}
+
+.summon-rate-guide{display:grid;gap:4px}
+.summon-rate-head,.summon-rate-row{display:grid;grid-template-columns:minmax(72px,.75fr) 1fr 1.45fr;align-items:center;gap:4px;padding:7px 8px;border:1px solid #4f3d59;background:#0a080e}
+.summon-rate-head{color:#a99ead;font-size:.6rem;text-align:center}
+.summon-rate-row strong{color:var(--rarity-color,#eee);font-size:.72rem}.summon-rate-row span{text-align:center;font-variant-numeric:tabular-nums}
+.summon-rate-notes{margin-top:6px;padding:8px;border:1px solid #4d3b57;background:#130d19}
+.summon-rate-notes p{margin:5px 0;color:#b9adbd;font-size:.62rem;line-height:1.45}.summon-rate-notes b{color:#ead7ef}
+
+.notice-center-v2 .home-notice-card{position:relative}
+.notice-center-v2 .home-notice-card.unread{border-color:#b45267;box-shadow:inset 3px 0 #d55870,0 0 10px #d5587022}
+.notice-center-v2 .home-notice-card.unread>em{color:#ff8ba1;font-size:.55rem;font-weight:900}
+.notice-center-v2 .home-notice-card.read{opacity:.88}
+
+@media(max-width:430px){
+ .v2-bottom-nav>button i{font-size:.88rem}
+ .v2-bottom-nav>button b{font-size:.36rem}
+ .summon-rate-head,.summon-rate-row{grid-template-columns:58px .8fr 1.35fr;padding-inline:5px;font-size:.55rem}
+}

@@ -20,7 +20,7 @@ import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data
 import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.4.0";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.12.0-ui-overhaul";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.7.3-alpha112";
 
 function monsterRarity(monster){
  return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N";

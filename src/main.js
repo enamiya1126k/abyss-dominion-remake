@@ -1,12 +1,12 @@
-import{SaveService}from"./services/SaveService.js?v=1.9.0-monster-catalog";
+import{SaveService}from"./services/SaveService.js?v=1.7.3-alpha112";
 import{SPECIES}from"./data/species.js?v=1.9.0-monster-catalog";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=1.9.1-endgame-sprites";
-import{HomeScreen}from"./ui/screens/HomeScreen.js?v=1.12.0-ui-overhaul";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=1.12.0-ui-overhaul";
+import{HomeScreen}from"./ui/screens/HomeScreen.js?v=1.7.3-alpha112";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=1.7.3-alpha112";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=1.9.1-endgame-sprites";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=1.9.1-endgame-sprites";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=1.8.0";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=1.9.0-monster-catalog";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=1.7.3-alpha112";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=1.7.3-alpha112";
 import{BattleScreen}from"./ui/screens/BattleScreen.js?v=1.9.1-endgame-sprites";
 import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=1.9.0-monster-catalog";
@@ -14,18 +14,18 @@ import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equi
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=1.2.0";
 import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=1.9.0-monster-catalog";
 import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=1.4.0";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=1.7.3-alpha112";
 import{RARITY_ORDER,equipmentDisplayRarity,equipmentStatLabel,equipmentSubslotLabel}from"./data/equipment.js?v=1.2.0";
 import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=0.9.15-alpha.95.1-stability-audit";
 import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=1.2.0";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=1.12.0-ui-overhaul";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=1.7.3-alpha112";
 import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=1.2.0";
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=0.9.15-alpha.95.1-stability-audit";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=1.9.0-monster-catalog";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=1.12.0-ui-overhaul";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=1.4.0";
-import{InventoryScreen}from"./ui/screens/InventoryScreen.js?v=1.12.0-ui-overhaul";
-import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=1.4.0";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=1.7.3-alpha112";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=1.7.3-alpha112";
+import{InventoryScreen}from"./ui/screens/InventoryScreen.js?v=1.7.3-alpha112";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=1.7.3-alpha112";
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=1.0.0";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=0.9.15-alpha.28-phase10-6-consistency";
@@ -42,12 +42,13 @@ import{dangerConfig}from"./core/DangerSystem.js?v=0.9.15-alpha.28-phase10-6-cons
 import{bossLevelForFloor}from"./core/EnemyScalingSystem.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,normalizeEndgameState,dailyTeamAttempts,createTeamBattleEncounter,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,endgameContractStatus,attemptEndgameContract,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor}from"./core/EndgameSystem.js?v=1.0.0";
-import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=1.4.0";
-import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=1.4.0";
+import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=1.7.3-alpha112";
+import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=1.7.3-alpha112";
 import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=1.1.0";
 import{monsterCombatPower,partyCombatPower,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=1.9.0-monster-catalog";
 import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=1.9.0-monster-catalog";
 import{applySerialReward,commitSerialRedemption,validateSerialCode}from"./core/SerialCodeSystem.js?v=1.9.0-monster-catalog";
+import{NOTICE_DEFINITIONS,markAllNoticesRead,normalizeNoticeState}from"./core/NoticeSystem.js?v=1.7.3";
 import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=1.9.1-endgame-sprites";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
@@ -231,8 +232,9 @@ function bindSharedUi(){
   if(route==="explore")return openExploreFloorSelector();
   if(route==="formation"){formationOrigin="home";return go("formation")}
   if(route==="equipment"){equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;navigationOrigin="home";return go("equipment")}
+  if(route==="skills"){skillNavigationOrigin="home";skillTarget=save.state.party[0]??save.state.monsters[0]?.id;skillSlotSelection=0;return go("skills")}
   if(route==="inventory"){inventoryCategory="all";return go("inventory")}
-  if(route==="shop")return go("shop");
+  if(route==="shop")return openHomeItemShop();
  }));
 }
 function capturePartyVitals(){return Object.fromEntries(save.state.party.map(id=>{const m=save.state.monsters.find(x=>x.id===id);return m?[id,{hp:m.currentHp,mp:m.currentMp,ailments:[...(m.ailments??[])]}]:null}).filter(Boolean))}
@@ -369,9 +371,19 @@ function openUnavailableHomeFeature(title,icon){
  topModalButton().onclick=closeTopModal;
 }
 function openNoticeCenter(){
- app.insertAdjacentHTML("beforeend",Modal("お知らせ",`<div class="notice-center-v2"><div class="notice-tabs"><button type="button" data-notice-filter="all" class="active">すべて</button><button type="button" data-notice-filter="event">イベント</button><button type="button" data-notice-filter="update">アップデート</button><button type="button" data-notice-filter="maintenance">メンテナンス</button></div><div class="home-notice-list"><article class="home-notice-card" data-notice-kind="update"><span>✨</span><div><small class="notice-type update">アップデート</small><b>拠点・主要メニューのUIを刷新</b><small>街の水面、編成モンスター、各管理画面の視認性を改善しました。</small></div><em>NEW</em></article><article class="home-notice-card" data-notice-kind="event"><span>🌌</span><div><small class="notice-type event">イベント</small><b>深淵・十神 緊急戦闘</b><small>解放条件を満たすと探索中に特別な敵が出現します。</small></div><em>›</em></article><button type="button" class="home-notice-card" data-home-notice="tutorial" data-notice-kind="update"><span>📖</span><div><small class="notice-type update">ガイド</small><b>遊び方・序盤チュートリアル</b><small>1〜5階の説明をいつでも確認できます。</small></div><em>›</em></button><button type="button" class="home-notice-card" data-home-notice="codex" data-notice-kind="update"><span>📚</span><div><small class="notice-type update">データ</small><b>モンスター・装備図鑑</b><small>発見・捕獲・獲得した記録を確認します。</small></div><em>›</em></button><article class="home-notice-card" data-notice-kind="maintenance"><span>🛠️</span><div><small class="notice-type maintenance">メンテナンス</small><b>セーブ安定性の継続確認</b><small>旧セーブとの互換性を保ったままUIを更新しています。</small></div><em>✓</em></article></div><small class="notice-footer">未読のお知らせには赤い印が付きます。</small></div>`,"閉じる"));
+ const noticeState=normalizeNoticeState(save.state),readIds=new Set(noticeState.readIds);
+ const rows=NOTICE_DEFINITIONS.map(notice=>{
+  const unread=!readIds.has(notice.id),tag=notice.action?"button":"article";
+  return`<${tag}${tag==="button"?' type="button"':""} class="home-notice-card ${unread?"unread":"read"}" data-notice-id="${notice.id}" data-notice-kind="${notice.kind}"${notice.action?` data-home-notice="${notice.action}"`:""}><span>${notice.icon}</span><div><small class="notice-type ${notice.kind}">${notice.label}</small><b>${notice.title}</b><small>${notice.body}</small></div><em>${unread?"NEW":notice.action?"›":"✓"}</em></${tag}>`;
+ }).join("");
+ app.insertAdjacentHTML("beforeend",Modal("お知らせ",`<div class="notice-center-v2"><div class="notice-tabs"><button type="button" data-notice-filter="all" class="active">すべて</button><button type="button" data-notice-filter="event">イベント</button><button type="button" data-notice-filter="update">アップデート</button><button type="button" data-notice-filter="maintenance">メンテナンス</button></div><div class="home-notice-list">${rows}</div><small class="notice-footer">開いたお知らせは、この端末のセーブに既読として保存されます。</small></div>`,"閉じる"));
  const modal=topModal();
  modal.classList.add("notice-modal-v2");
+ markAllNoticesRead(save.state);save.save();
+ const homeNoticeButton=document.getElementById("openNoticeCenter");
+ homeNoticeButton?.classList.remove("ready");
+ homeNoticeButton?.querySelector(".home-notification-dot")?.remove();
+ if(homeNoticeButton?.querySelector("small"))homeNoticeButton.querySelector("small").textContent="確認済み";
  modal.querySelectorAll("[data-notice-filter]").forEach(tab=>tab.addEventListener("click",()=>{modal.querySelectorAll("[data-notice-filter]").forEach(entry=>entry.classList.toggle("active",entry===tab));modal.querySelectorAll("[data-notice-kind]").forEach(entry=>entry.hidden=tab.dataset.noticeFilter!=="all"&&entry.dataset.noticeKind!==tab.dataset.noticeFilter)}));
  modal.querySelector('[data-home-notice="tutorial"]')?.addEventListener("click",()=>{modal.remove();openTutorialBook()});
  modal.querySelector('[data-home-notice="codex"]')?.addEventListener("click",()=>{modal.remove();openCodexHub()});
@@ -405,7 +417,7 @@ function bindHome(){
  document.getElementById("openGacha")?.addEventListener("click",openGacha);
  document.getElementById("openNoticeCenter")?.addEventListener("click",openNoticeCenter);
  document.getElementById("openPresentUnavailable")?.addEventListener("click",()=>openUnavailableHomeFeature("プレゼント","🎁"));
- document.getElementById("openOnlineParty")?.addEventListener("click",openFormationFromHome);
+ document.getElementById("openOnlineParty")?.addEventListener("click",()=>openUnavailableHomeFeature("パーティー","♟️"));
  document.getElementById("openEventHub")?.addEventListener("click",openEventHub);
  document.getElementById("openSettings").onclick=()=>go("settings");
  document.getElementById("openExplore").onclick=openExploreFloorSelector;
@@ -896,16 +908,28 @@ function summonOne({mode="mixed",guaranteedMonster=false,guaranteedEquipment=fal
 }
 function rarityGuideHtml(){const unlocked=hasCleared1000(save.state),visible=SUMMON_RARITY_INFO.filter(r=>unlocked||!["深淵","十神"].includes(r.id));return`<div class="rarity-guide">${visible.map((r,i)=>`<div class="rarity-guide-row rarity-guide-${r.id}"><span>${i+1}</span><b>${r.id}</b><strong>${r.name}</strong><small>${r.note}</small></div>`).join("")}</div>${unlocked?'<p class="rarity-guide-note">下に行くほど上位。十神はすべてのガチャから排出されません。</p>':'<p class="rarity-guide-note">下に行くほど上位です。</p>'}` }
 function openRarityGuide(){app.insertAdjacentHTML("beforeend",Modal("レア度一覧",rarityGuideHtml(),"閉じる"));topModalButton().onclick=closeTopModal}
+function normalSummonRateGuideHtml(){
+ const rates=[
+  ["神話","0.02%","0.20%"],
+  ["LR","0.18%","1.80%"],
+  ["UR","0.80%","6.00%"],
+  ["SSR","4.00%","22.00%"],
+  ["SR","13.00%","70.00%"],
+  ["R","32.00%","—"],
+  ["N","50.00%","—"]
+ ];
+ return`<div class="summon-rate-guide"><div class="summon-rate-head"><span>レア度</span><b>通常枠</b><b>10連・最後の1枠</b></div>${rates.map(([rarity,normal,guaranteed])=>`<div class="summon-rate-row rarity-${rarity}"><strong>${rarity}</strong><span>${normal}</span><span>${guaranteed}</span></div>`).join("")}<div class="summon-rate-notes"><p><b>単発・10連の通常枠</b>は上記「通常枠」で抽選します。</p><p><b>モンスター召喚／装備召喚</b>は選択した種類が100%排出されます。1日1回無料召喚のみ、モンスター30%・装備70%です。</p><p><b>深淵・十神</b>は通常召喚から排出されません。深淵は専用召喚、十神は専用イベント・高難易度で獲得します。</p></div></div>`;
+}
+function openNormalSummonRates(){app.insertAdjacentHTML("beforeend",Modal("通常召喚・提供割合",normalSummonRateGuideHtml(),"閉じる"));topModalButton().onclick=closeTopModal}
 function openGacha(){
  const key=localDayKey(),daily=save.state.gacha.lastDailyKey!==key,first=!save.state.gacha.firstTenUsed;
- const showcase=save.state.party.slice(0,3).map(id=>save.state.monsters.find(monster=>monster.id===id)).filter(Boolean).map((monster,index)=>monsterVisual(monster,SPECIES[monster.speciesId]?.emoji??"👹",{className:`gacha-showcase-monster monster-${index+1}`})).join("");
- const body=`<div class="gacha-festival-v2"><div class="gacha-v2-wallet"><span>所持魔晶石</span><b>💎 ${save.state.player.crystals.toLocaleString()}</b><button type="button" id="openRarityGuide" class="rarity-help" aria-label="レア度一覧">？</button></div><div class="gacha-v2-tabs"><button type="button" data-gacha-tab="all" class="active">おすすめ</button><button type="button" data-gacha-tab="monster">モンスター</button><button type="button" data-gacha-tab="equipment">装備</button></div><section class="gacha-v2-banner"><div><small>ピックアップ開催中</small><h3>深淵の支配者たち</h3><b>上位レア出現のチャンス</b><button type="button" id="gachaBannerGuide">提供割合を見る</button></div><div class="gacha-showcase">${showcase||'<span class="gacha-summon-sigil">✦</span>'}</div></section><div class="gacha-v2-options">${first?'<button class="gacha-v2-card featured" data-gacha="first" data-gacha-kind="all"><i>🎁</i><span><small>初回限定</small><b>無料10連</b><em>SR以上モンスター1体確定</em></span><strong>無料</strong></button>':""}<button class="gacha-v2-card daily" data-gacha="daily" data-gacha-kind="all" ${daily?"":"disabled"}><i>🌱</i><span><small>1日1回限定</small><b>無料召喚</b><em>${daily?"モンスター・装備から抽選":"本日分は召喚済み"}</em></span><strong>${daily?"無料":"済"}</strong></button><button class="gacha-v2-card" data-gacha="monster-single" data-gacha-kind="monster"><i>🧌</i><span><small>モンスター1体確定</small><b>1回召喚</b><em>モンスター100%</em></span><strong>💎5</strong></button><button class="gacha-v2-card" data-gacha="monster-ten" data-gacha-kind="monster"><i>🗝️</i><span><small>SR以上1体確定</small><b>モンスター10連</b><em>最後の1体はSR以上</em></span><strong>💎45</strong></button><button class="gacha-v2-card" data-gacha="equipment-single" data-gacha-kind="equipment"><i>⚔️</i><span><small>武器・防具・装飾品</small><b>装備1回召喚</b><em>装備100%</em></span><strong>💎5</strong></button><button class="gacha-v2-card" data-gacha="equipment-ten" data-gacha-kind="equipment"><i>🧰</i><span><small>SR以上1枠確定</small><b>装備10連</b><em>最後の1枠はSR以上</em></span><strong>💎45</strong></button></div><p class="gacha-v2-note">召喚したモンスター・装備は直接所持品に加わります。</p></div>`;
+ const body=`<div class="gacha-festival-v2"><div class="gacha-v2-wallet"><span>所持魔晶石</span><b>💎 ${save.state.player.crystals.toLocaleString()}</b><button type="button" id="openRarityGuide" class="rarity-help" aria-label="レア度一覧">？</button></div><div class="gacha-v2-tabs"><button type="button" data-gacha-tab="all" class="active">おすすめ</button><button type="button" data-gacha-tab="monster">モンスター</button><button type="button" data-gacha-tab="equipment">装備</button></div><section class="gacha-v2-banner"><div><small>通常召喚</small><h3>神話級との邂逅</h3><b>通常枠 神話0.02%・10連最後はSR以上</b><button type="button" id="gachaBannerGuide">提供割合を見る</button></div><div class="gacha-showcase"><span class="gacha-summon-sigil">✦</span></div></section><div class="gacha-v2-options">${first?'<button class="gacha-v2-card featured" data-gacha="first" data-gacha-kind="all"><i>🎁</i><span><small>初回限定</small><b>無料10連</b><em>SR以上モンスター1体確定</em></span><strong>無料</strong></button>':""}<button class="gacha-v2-card daily" data-gacha="daily" data-gacha-kind="all" ${daily?"":"disabled"}><i>🌱</i><span><small>1日1回限定</small><b>無料召喚</b><em>${daily?"モンスター30%・装備70%":"本日分は召喚済み"}</em></span><strong>${daily?"無料":"済"}</strong></button><button class="gacha-v2-card" data-gacha="monster-single" data-gacha-kind="monster"><i>🧌</i><span><small>モンスター1体確定</small><b>1回召喚</b><em>モンスター100%</em></span><strong>💎5</strong></button><button class="gacha-v2-card" data-gacha="monster-ten" data-gacha-kind="monster"><i>🗝️</i><span><small>SR以上1体確定</small><b>モンスター10連</b><em>最後の1体はSR以上</em></span><strong>💎45</strong></button><button class="gacha-v2-card" data-gacha="equipment-single" data-gacha-kind="equipment"><i>⚔️</i><span><small>武器・防具・装飾品</small><b>装備1回召喚</b><em>装備100%</em></span><strong>💎5</strong></button><button class="gacha-v2-card" data-gacha="equipment-ten" data-gacha-kind="equipment"><i>🧰</i><span><small>SR以上1枠確定</small><b>装備10連</b><em>最後の1枠はSR以上</em></span><strong>💎45</strong></button></div><p class="gacha-v2-note">召喚したモンスター・装備は直接所持品に加わります。</p></div>`;
  app.insertAdjacentHTML("beforeend",Modal("召喚の祭壇",body,"閉じる"));
  const modal=topModal();modal.classList.add("gacha-modal-v2");
  modal.querySelectorAll("[data-gacha]").forEach(button=>button.onclick=()=>performGacha(button.dataset.gacha));
  modal.querySelectorAll("[data-gacha-tab]").forEach(tab=>tab.addEventListener("click",()=>{modal.querySelectorAll("[data-gacha-tab]").forEach(entry=>entry.classList.toggle("active",entry===tab));modal.querySelectorAll("[data-gacha-kind]").forEach(card=>card.hidden=tab.dataset.gachaTab!=="all"&&!["all",tab.dataset.gachaTab].includes(card.dataset.gachaKind))}));
  modal.querySelector("#openRarityGuide")?.addEventListener("click",openRarityGuide);
- modal.querySelector("#gachaBannerGuide")?.addEventListener("click",openRarityGuide);
+ modal.querySelector("#gachaBannerGuide")?.addEventListener("click",openNormalSummonRates);
  modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
 }
 function openDeepGacha(){if(!hasCleared1000(save.state))return alert("深淵召喚は1000階の支配者撃破後に解放されます");const body=`<div class="gacha-head deep"><b>深淵の力を召喚する</b><div class="gacha-head-actions"><span>💎 ${save.state.player.crystals}</span><button type="button" id="openRarityGuide" class="rarity-help">？</button></div></div><div class="gacha-menu deep-gacha-menu"><button data-deep-gacha="monster-single"><b>🌌 深淵モンスター召喚　💎25</b><small>深層モンスターの深淵個体を召喚</small></button><button data-deep-gacha="monster-ten"><b>🌌 深淵モンスター10連　💎225</b><small>10体すべて深淵個体</small></button><button data-deep-gacha="equipment-single"><b>🗡️ 深淵装備召喚　💎25</b><small>深淵の名を冠するLR装備</small></button><button data-deep-gacha="equipment-ten"><b>🗡️ 深淵装備10連　💎225</b><small>10個すべて深淵装備</small></button></div><p class="gacha-footnote">十神は深淵召喚からも排出されません。</p>`;app.insertAdjacentHTML("beforeend",Modal("🌌 深淵召喚",body,"閉じる"));document.querySelectorAll("[data-deep-gacha]").forEach(b=>b.onclick=()=>performDeepGacha(b.dataset.deepGacha));document.getElementById("openRarityGuide")?.addEventListener("click",openRarityGuide);topModalButton().onclick=closeTopModal}
@@ -1796,3 +1820,9 @@ function lose(){
 }
 normalizeEquipmentState();
 if(!resumeSavedBattle())render();
+const skillRebalance=save.state.abyssSkillRebalance;
+if(skillRebalance?.refund>0&&!skillRebalance.notifiedAt){
+ skillRebalance.notifiedAt=new Date().toISOString();
+ save.save();
+ setTimeout(()=>showToast(`🪙 深淵ツリー価格差額 ${Number(skillRebalance.refund).toLocaleString()}Gを返還しました`),120);
+}

@@ -26,6 +26,7 @@ const NAV_ITEMS=[
  ["explore","🏰","ダンジョン"],
  ["formation","♟","編成"],
  ["equipment","⚔","装備"],
+ ["skills","✨","スキル"],
  ["inventory","🎒","持ち物"],
  ["shop","🏪","ショップ"],
  ["gacha","🔮","召喚"]

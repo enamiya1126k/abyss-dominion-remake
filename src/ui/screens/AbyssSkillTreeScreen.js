@@ -6,7 +6,7 @@ import{
  abyssSkillEffectSummary,
  abyssSkillNodeById,
  abyssSkillTreeSummary
-}from"../../core/AbyssSkillTreeSystem.js?v=1.4.0";
+}from"../../core/AbyssSkillTreeSystem.js?v=1.7.3-alpha112";
 
 const ROW_HEIGHT=144;
 

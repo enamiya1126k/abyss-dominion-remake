@@ -1,9 +1,10 @@
-import{APP_VERSION}from"../../core/config.js?v=1.7.0";
+import{APP_VERSION}from"../../core/config.js?v=1.7.3-alpha112";
 import{displayName}from"../../models/Monster.js?v=1.9.0-monster-catalog";
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
 import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=1.0.0";
 import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.9.0-monster-catalog";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=1.4.0";
+import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=1.7.3";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
 
 function scenePartySlot(monster,index){
@@ -69,6 +70,7 @@ export function HomeScreen(state){
   const sceneSlots=Array.from({length:4},(_,index)=>scenePartySlot(party[index],index)).join("");
   const teamSub=teamUnlocked?`第${team.stage}試練・本日 ${team.dailyAttempts}/50戦`:`${TEAM_BATTLE_UNLOCK_FLOOR}階突破で解放`;
   const eventReady=endgameUnlocked||revealed;
+  const noticeCount=unreadNoticeIds(state).length;
   const title=completed?"深淵を統べる魔王":revealed?"地下10000階の魔王":"地下1000階の魔王";
 
   return`
@@ -115,7 +117,7 @@ export function HomeScreen(state){
 
       <aside class="home-right-menu" aria-label="お知らせと報酬">
         ${utilityButton({id:"openIdleReturn",icon:"chest",title:"放置報酬",value:idleReward.available?`${compactHomeNumber(idleReward.gold)}G`:"探索中",ready:idleReward.available})}
-        ${utilityButton({id:"openNoticeCenter",icon:"notice",title:"お知らせ"})}
+        ${utilityButton({id:"openNoticeCenter",icon:"notice",title:"お知らせ",value:noticeCount?`未読 ${noticeCount}`:"確認済み",ready:noticeCount>0})}
         ${utilityButton({id:"openPresentUnavailable",icon:"present",title:"プレゼント"})}
       </aside>
 

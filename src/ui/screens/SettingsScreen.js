@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=1.7.0";
+import{APP_VERSION}from"../../core/config.js?v=1.7.3-alpha112";
 export function SettingsScreen(state){
   const redeemedCount=Object.keys(state.serialCodes?.redeemed??{}).length;
   return`

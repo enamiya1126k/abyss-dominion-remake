@@ -6,7 +6,7 @@ import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel,SLOT_UNLO
 import{formatAffix}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.12.0-ui-overhaul";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.7.3-alpha112";
 
 const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],

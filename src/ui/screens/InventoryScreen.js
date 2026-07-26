@@ -1,6 +1,6 @@
 import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=1.2.0";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
-import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=1.12.0-ui-overhaul";
+import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=1.7.3-alpha112";
 
 const CONSUMABLES=[
  ["potions","🧪","薬草","HPを回復"],

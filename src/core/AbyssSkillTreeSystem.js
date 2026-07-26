@@ -1,4 +1,4 @@
-export const ABYSS_SKILL_TREE_VERSION=3;
+export const ABYSS_SKILL_TREE_VERSION=4;
 
 export const ABYSS_SKILL_CATEGORIES=Object.freeze([
  {
@@ -232,37 +232,37 @@ const FOUNDATION_SKILL_NODES=Object.freeze([
 ].map(node=>Object.freeze({...node,lane:FOUNDATION_LANES[node.id]??2,requiresAny:[],requiresAnyCount:0,branchId:"foundation",branchName:"根源"})));
 
 const EXPANSION_STAGES=Object.freeze([
- {suffix:"萌芽",cost:120000},
- {suffix:"脈動",cost:300000},
- {suffix:"刻印",cost:750000},
- {suffix:"共鳴",cost:2000000},
- {suffix:"転成",cost:5000000},
- {suffix:"顕現",cost:12000000},
- {suffix:"超越",cost:30000000},
- {suffix:"支配",cost:75000000},
- {suffix:"終極",cost:180000000},
- {suffix:"王冠",cost:350000000},
- {suffix:"律動",cost:650000000},
- {suffix:"深化",cost:1200000000},
- {suffix:"星環",cost:2200000000},
- {suffix:"変革",cost:4000000000},
- {suffix:"天衝",cost:7500000000},
- {suffix:"霊峰",cost:14000000000},
- {suffix:"永劫",cost:25000000000},
- {suffix:"神域",cost:45000000000},
- {suffix:"冥界",cost:80000000000},
- {suffix:"界渡",cost:140000000000},
- {suffix:"星海",cost:240000000000},
- {suffix:"真理",cost:400000000000},
- {suffix:"創世",cost:650000000000},
- {suffix:"虚無",cost:1000000000000},
- {suffix:"原初",cost:1600000000000},
- {suffix:"万象",cost:2500000000000},
- {suffix:"王座",cost:3800000000000},
- {suffix:"無限",cost:5500000000000},
- {suffix:"終焉",cost:7500000000000},
- {suffix:"超克",cost:10000000000000},
- {suffix:"深淵王",cost:15000000000000}
+ {suffix:"萌芽",cost:120000,legacyCost:120000},
+ {suffix:"脈動",cost:300000,legacyCost:300000},
+ {suffix:"刻印",cost:750000,legacyCost:750000},
+ {suffix:"共鳴",cost:2000000,legacyCost:2000000},
+ {suffix:"転成",cost:5000000,legacyCost:5000000},
+ {suffix:"顕現",cost:12000000,legacyCost:12000000},
+ {suffix:"超越",cost:30000000,legacyCost:30000000},
+ {suffix:"支配",cost:75000000,legacyCost:75000000},
+ {suffix:"終極",cost:180000000,legacyCost:180000000},
+ {suffix:"王冠",cost:350000000,legacyCost:350000000},
+ {suffix:"律動",cost:650000000,legacyCost:650000000},
+ {suffix:"深化",cost:1200000000,legacyCost:1200000000},
+ {suffix:"星環",cost:1800000000,legacyCost:2200000000},
+ {suffix:"変革",cost:2500000000,legacyCost:4000000000},
+ {suffix:"天衝",cost:3500000000,legacyCost:7500000000},
+ {suffix:"霊峰",cost:5000000000,legacyCost:14000000000},
+ {suffix:"永劫",cost:7000000000,legacyCost:25000000000},
+ {suffix:"神域",cost:9500000000,legacyCost:45000000000},
+ {suffix:"冥界",cost:12500000000,legacyCost:80000000000},
+ {suffix:"界渡",cost:16000000000,legacyCost:140000000000},
+ {suffix:"星海",cost:20000000000,legacyCost:240000000000},
+ {suffix:"真理",cost:25000000000,legacyCost:400000000000},
+ {suffix:"創世",cost:31000000000,legacyCost:650000000000},
+ {suffix:"虚無",cost:38000000000,legacyCost:1000000000000},
+ {suffix:"原初",cost:46000000000,legacyCost:1600000000000},
+ {suffix:"万象",cost:55000000000,legacyCost:2500000000000},
+ {suffix:"王座",cost:65000000000,legacyCost:3800000000000},
+ {suffix:"無限",cost:76000000000,legacyCost:5500000000000},
+ {suffix:"終焉",cost:88000000000,legacyCost:7500000000000},
+ {suffix:"超克",cost:100000000000,legacyCost:10000000000000},
+ {suffix:"深淵王",cost:115000000000,legacyCost:15000000000000}
 ]);
 
 const EXPANSION_CAPSTONES=Object.freeze({
@@ -383,6 +383,7 @@ function expansionNodesForCategory(category){
    name:`${branch.name}・${stage.suffix}`,
    description:expansionDescription(effect),
    cost:stage.cost,
+   legacyCost:stage.legacyCost,
    requires,
    requiresAny,
    requiresAnyCount,
@@ -434,9 +435,10 @@ export function normalizeAbyssSkillTree(state){
  const source=state?.abyssSkillTree&&typeof state.abyssSkillTree==="object"&&!Array.isArray(state.abyssSkillTree)
   ?state.abyssSkillTree
   :createAbyssSkillTreeState();
+ const sourceVersion=Number(source.version??0);
  const requested=new Set(Array.isArray(source.learned)?source.learned.filter(id=>NODE_BY_ID.has(id)):[]);
  const grandfathered=new Set(Array.isArray(source.grandfathered)?source.grandfathered.filter(id=>requested.has(id)):[]);
- if(Number(source.version??0)<ABYSS_SKILL_TREE_VERSION)requested.forEach(id=>grandfathered.add(id));
+ if(sourceVersion<ABYSS_SKILL_TREE_VERSION)requested.forEach(id=>grandfathered.add(id));
  const learned=[];
  const learnedSet=new Set();
  for(const node of ABYSS_SKILL_NODES){
@@ -446,6 +448,7 @@ export function normalizeAbyssSkillTree(state){
  }
  const paidCosts={};
  let investedGold=0;
+ let rebalanceRefund=0;
  for(const nodeId of learned){
   const node=NODE_BY_ID.get(nodeId);
   // Node prices are fixed and there are no discounts. Rebuild this value from
@@ -454,6 +457,12 @@ export function normalizeAbyssSkillTree(state){
   const paid=node.cost;
   paidCosts[nodeId]=paid;
   investedGold=Math.min(Number.MAX_SAFE_INTEGER,investedGold+paid);
+  if(sourceVersion===3)rebalanceRefund=Math.min(Number.MAX_SAFE_INTEGER,rebalanceRefund+Math.max(0,(Number(node.legacyCost)||node.cost)-node.cost));
+ }
+ if(sourceVersion===3){
+  state.player??={};
+  state.player.gold=Math.min(Number.MAX_SAFE_INTEGER,safeInteger(state.player.gold,0)+rebalanceRefund);
+  state.abyssSkillRebalance={version:ABYSS_SKILL_TREE_VERSION,refund:rebalanceRefund,appliedAt:new Date().toISOString()};
  }
  state.abyssSkillTree={
   version:ABYSS_SKILL_TREE_VERSION,
