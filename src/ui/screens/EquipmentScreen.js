@@ -20,6 +20,7 @@ import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data
 import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.4.0";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.12.0-ui-overhaul";
 
 function monsterRarity(monster){
  return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N";
@@ -191,16 +192,11 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
   return`<details class="series-detail"><summary><b>${series.name}</b><span>${count}/6</span><small>${series.theme??""}</small></summary>${seriesMasterySummary(state,id)}<div>${Object.entries(series.bonuses).map(([pieces,effect])=>`<p class="${count>=Number(pieces)?"active":""}"><b>${count>=Number(pieces)?"✓":"○"} ${pieces}部位効果</b><span>${describeSeriesEffect(effect)}</span></p>`).join("")}</div></details>`;
  }).join("");
 
- return`<section class="screen">
-  <header class="topbar">
-   <button id="backEquipmentHome">←</button>
-   <h2>装備管理</h2>
-   <div class="equipment-top-actions"><span>${state.equipment.length}/${EQUIPMENT_LIMIT}</span><button id="openAffixHelp" class="affix-help-button" aria-label="ランダムオプションとGOLD厳選の説明">？</button></div>
-  </header>
+ return`<section class="screen v2-screen equipment-screen-v2">
+  ${resourceHud(state,{backId:"backEquipmentHome",title:"装備管理"})}
   <div class="page equipment-page">
    <div class="panel equipment-target-panel">
-    <b>装備対象</b>
-    <small class="muted">モンスターをタップして切り替え</small>
+    <div class="v2-equipment-heading"><div><b>装備対象</b><small>モンスターをタップして切り替え</small></div><span>${state.equipment.length}/${EQUIPMENT_LIMIT}</span><button id="openAffixHelp" class="affix-help-button" aria-label="ランダムオプションとGOLD厳選の説明">？</button></div>
     <div class="equipment-target-list">${party.map(monster=>{
      const monsterSpecies=SPECIES[monster.speciesId]??{};
      const monsterAttribute=ATTRIBUTES[monster.attribute??monsterSpecies.element??"neutral"]??{icon:"◈",name:"不明"};
@@ -246,5 +242,6 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
    <div class="panel equipment-sort-panel"><div class="spread"><b>${slotLabel(slot)}の並び替え</b><select id="equipmentSort">${sortOption("rarity","レア度順",sort)}${sortOption("power","総合能力順",sort)}${sortOption("atk","ATK順",sort)}${sortOption("def","DEF順",sort)}${sortOption("hp","HP順",sort)}${sortOption("spd","SPD順",sort)}${sortOption("newest","新しい順",sort)}${sortOption("favorite","お気に入り順",sort)}${sortOption("name","名前順",sort)}</select></div></div>
    <div class="equipment-list">${list.map(item=>card(item,state,target,storage,{editing,selected:selected.has(item.id),focused:item.id===focusItemId})).join("")||'<div class="empty">装備がありません</div>'}</div>
   </div>
+  ${bottomNav("equipment")}
  </section>`;
 }

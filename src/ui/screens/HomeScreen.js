@@ -79,7 +79,9 @@ export function HomeScreen(state){
         <i class="home-moving-sky sky-right"></i>
         <i class="home-moving-foliage foliage-left"></i>
         <i class="home-moving-foliage foliage-right"></i>
-        <i class="home-river-flow"></i>
+        <i class="home-river-shimmer river-frame-1"></i>
+        <i class="home-river-shimmer river-frame-2"></i>
+        <i class="home-river-shimmer river-frame-3"></i>
       </div>
 
       <header class="home-title-card">

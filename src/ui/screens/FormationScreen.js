@@ -6,6 +6,7 @@ import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel,SLOT_UNLO
 import{formatAffix}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.12.0-ui-overhaul";
 
 const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],
@@ -95,15 +96,12 @@ export function FormationScreen(state,{origin="home"}={}){
  const party=(state.party??[]).map(id=>state.monsters?.find(monster=>monster.id===id)).filter(Boolean);
  const cards=Array.from({length:4},(_,index)=>party[index]?memberCard(state,party[index],index):emptyCard(index)).join("");
  const total=party.reduce((sum,monster)=>sum+monsterCombatPower(monster),0);
- return`<section class="screen formation-screen" data-origin="${origin}">
-  <header class="topbar formation-topbar">
-   <button id="backFormation">←</button>
-   <div><small>PARTY DASHBOARD</small><h2>部隊編成</h2></div>
-   <span>${party.length}/4</span>
-  </header>
+ return`<section class="screen formation-screen v2-screen" data-origin="${origin}">
+  ${resourceHud(state,{backId:"backFormation",title:"編成"})}
   <div class="formation-page">
-   <div class="formation-summary"><div><small>部隊総戦力</small><strong>${formatCombatPower(total)}</strong></div><p>4体の装備・補正・スキルを一画面で比較</p></div>
+   <div class="formation-summary"><div><small>パーティ ${party.length}/4・総戦力</small><strong>${formatCombatPower(total)}</strong></div><p>装備・補正・スキルを一画面で比較</p></div>
    <div class="formation-grid">${cards}</div>
   </div>
+  ${bottomNav("formation")}
  </section>`;
 }

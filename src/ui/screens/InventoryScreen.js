@@ -1,0 +1,78 @@
+import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=1.2.0";
+import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
+import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=1.12.0-ui-overhaul";
+
+const CONSUMABLES=[
+ ["potions","🧪","薬草","HPを回復"],
+ ["highPotions","⚗️","上級回復薬","HPを大きく回復"],
+ ["partyPotions","💚","全体回復薬","味方全員のHPを回復"],
+ ["manaPotions","💧","魔力水","MPを回復"],
+ ["highManaPotions","🔷","上級魔力水","MPを大きく回復"],
+ ["partyManaPotions","🌊","全体魔力水","味方全員のMPを回復"],
+ ["fullManaPotions","💠","魔力全快薬","MPを全回復"],
+ ["partyFullManaPotions","🌀","全体魔力全快薬","味方全員のMPを全回復"],
+ ["reviveLeaves","🍃","蘇生の葉","戦闘不能を回復"],
+ ["statusCures","🩹","浄化薬","状態異常を解除"],
+ ["partyStatusCures","💨","全体浄化薬","味方全員の状態異常を解除"],
+ ["fullHeals","✨","万能霊薬","HP・MP・状態異常を回復"],
+ ["partyFullHeals","🌟","全体万能霊薬","味方全員を完全回復"]
+];
+const MATERIALS=[
+ ["captureCrystals","🔮","捕獲結晶","戦闘中の捕獲に使用"],
+ ["abyssKeys","🗝️","深淵の鍵","深淵で使用する特別な鍵"]
+];
+const CATEGORIES=[
+ ["all","すべて"],["weapon","武器"],["armor","防具"],["accessory","アクセ"],["consumable","消費"],["material","素材"]
+];
+const SLOT_ICONS={weapon:"⚔️",armor:"🛡️",accessory:"💍"};
+
+function equipmentStats(item){
+ const multiplier=equipmentStatMultiplier(item);
+ return Object.entries(item.stats??{}).slice(0,2).map(([key,value])=>`${equipmentStatLabel(key)}+${Math.round(value*multiplier)}`).join(" / ")||"能力補正なし";
+}
+
+function equipmentCard(item){
+ const rarity=equipmentDisplayRarity(item),color=equipmentRarityColor(item);
+ return`<button type="button" class="v2-inventory-item equipment" data-inventory-equipment="${item.id}" style="--item-rarity:${color}">
+  <span class="v2-item-rarity">${rarity}</span>
+  <i>${SLOT_ICONS[item.slot]??"◆"}</i>
+  <b>${item.name}</b>
+  <small>Lv.${item.level??1}${item.plus?`・+${item.plus}`:""}<br>${equipmentStats(item)}</small>
+  ${item.equippedBy?'<em>Ｅ</em>':""}
+ </button>`;
+}
+
+function stackCard([id,icon,name,description],inventory,type){
+ const amount=Math.max(0,Number(inventory[id])||0);
+ return`<button type="button" class="v2-inventory-item stack" data-inventory-stack="${id}" data-inventory-kind="${type}">
+  <i>${icon}</i><b>${name}</b><small>${description}</small><strong>×${amount.toLocaleString()}</strong>
+ </button>`;
+}
+
+export function InventoryScreen(state,category="all",sort="rarity"){
+ const rarityOrder={N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9};
+ const equipment=(state.equipment??[]).filter(item=>category==="all"||item.slot===category).sort((a,b)=>{
+  if(sort==="level")return(b.level??1)-(a.level??1);
+  if(sort==="name")return String(a.name).localeCompare(String(b.name),"ja");
+  return(rarityOrder[equipmentDisplayRarity(b)]??0)-(rarityOrder[equipmentDisplayRarity(a)]??0)||(b.level??1)-(a.level??1);
+ });
+ const stacks=[
+  ...(category==="all"||category==="consumable"?CONSUMABLES.map(item=>stackCard(item,state.inventory??{},"consumable")):[]),
+  ...(category==="all"||category==="material"?MATERIALS.map(item=>stackCard(item,state.inventory??{},"material")):[])
+ ];
+ const items=[...equipment.map(equipmentCard),...stacks];
+ return`<section class="screen v2-screen inventory-screen-v2">
+  ${resourceHud(state,{backId:"backInventory",title:"持ち物"})}
+  <main class="v2-screen-content">
+   ${sectionTitle("持ち物",`${items.length}種類 / 装備 ${(state.equipment??[]).length}個`)}
+   <div class="v2-category-tabs">${CATEGORIES.map(([id,label])=>`<button type="button" data-inventory-category="${id}" class="${category===id?"active":""}">${label}</button>`).join("")}</div>
+   <div class="v2-inventory-toolbar">
+    <button type="button" id="openEquipmentFromInventory">装備管理</button>
+    <span>タップで詳細</span>
+    <select id="inventorySort" aria-label="並び替え"><option value="rarity" ${sort==="rarity"?"selected":""}>レア度順</option><option value="level" ${sort==="level"?"selected":""}>レベル順</option><option value="name" ${sort==="name"?"selected":""}>名前順</option></select>
+   </div>
+   <div class="v2-inventory-grid">${items.join("")||'<div class="v2-empty-state">この分類の持ち物はありません</div>'}</div>
+  </main>
+  ${bottomNav("inventory")}
+ </section>`;
+}
