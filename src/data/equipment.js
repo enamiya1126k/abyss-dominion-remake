@@ -40,7 +40,27 @@ export function equipmentStatLabel(key){
  return{atk:"ATK",def:"DEF",hp:"HP",spd:"SPD",crit:"会心",evasion:"回避",capture:"捕獲",heal:"回復量",fireRes:"炎耐性"}[key]??key;
 }
 
-export const EQUIPMENT_SUBSLOTS={weapon:["weaponRight","weaponLeft"],armor:["armorBody","armorSupport"],accessory:["accessoryNeck","accessoryFinger"]};
-export const SLOT_UNLOCK_LEVEL={weaponRight:1,armorBody:1,accessoryNeck:1,armorSupport:25,accessoryFinger:50,weaponLeft:100};
-export function equipmentSubslotLabel(id){return{weaponRight:"右手",weaponLeft:"左手",armorBody:"胴",armorSupport:"補助",accessoryNeck:"首",accessoryFinger:"指"}[id]??id}
+/*
+ * セーブデータ互換のため内部キーは従来名を維持する。
+ * 表示上は「右手/左手・胴1/胴2・アクセ1/アクセ2」の順に統一。
+ */
+export const EQUIPMENT_SUBSLOTS={
+ weapon:["weaponRight","weaponLeft"],
+ armor:["armorBody","armorSupport"],
+ accessory:["accessoryNeck","accessoryFinger"]
+};
+export const EQUIPMENT_SLOT_ORDER=Object.freeze([
+ "weaponRight","weaponLeft",
+ "armorBody","armorSupport",
+ "accessoryNeck","accessoryFinger"
+]);
+export const SLOT_UNLOCK_LEVEL={
+ weaponRight:1,
+ weaponLeft:100,
+ armorBody:1,
+ armorSupport:25,
+ accessoryNeck:1,
+ accessoryFinger:50
+};
+export function equipmentSubslotLabel(id){return{weaponRight:"右手",weaponLeft:"左手",armorBody:"胴",armorSupport:"胴",accessoryNeck:"アクセ",accessoryFinger:"アクセ"}[id]??id}
 export function compatibleSubslots(item){if(item.slot==="armor")return["armorBody","armorSupport"];if(item.slot==="accessory")return["accessoryNeck","accessoryFinger"];if(item.handedness==="right")return["weaponRight"];if(item.handedness==="left")return["weaponLeft"];if(item.handedness==="twoHanded")return["weaponRight"];return["weaponRight","weaponLeft"]}
