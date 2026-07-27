@@ -1658,7 +1658,7 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
 /* The formation control is a banner in the scene, not another framed card. */
 .home-formation-banner{
  top:46%;
- right:.15%;
+ right:2%;
  width:18.2%;
  height:clamp(174px,18.5dvh,224px);
  min-height:0;
