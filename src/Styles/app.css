@@ -1615,6 +1615,191 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
 }
 @media(prefers-reduced-motion:reduce){.home-river-shimmer{animation:none}.home-river-shimmer.river-frame-1{opacity:.82}}
 
+/* alpha113: home composition matched to the approved vertical-banner mockup */
+.home-title-card{
+ width:37.2%;
+ min-height:64px;
+ padding:8px 8px 7px;
+}
+.home-title-card h1{
+ margin-top:3px;
+ font-size:clamp(.78rem,2.82vw,1.28rem);
+ letter-spacing:-.045em;
+ white-space:nowrap;
+}
+.home-record-card{
+ top:calc(var(--home-safe-top) + 50px);
+ width:29.8%;
+ min-height:94px;
+ padding:9px 7px 8px;
+}
+.home-record-card strong em{font-size:1.46em}
+.home-left-menu{
+ top:calc(var(--home-safe-top) + 160px);
+ width:30.5%;
+ gap:6px;
+}
+.home-command-button{
+ min-height:54px;
+ grid-template-columns:34px minmax(0,1fr);
+ gap:4px;
+ padding:5px 5px;
+}
+.home-command-icon .home-pixel-icon{width:34px;height:34px}
+.home-command-copy b{font-size:clamp(.62rem,2.38vw,.94rem)}
+.home-command-copy small{font-size:clamp(.36rem,1.22vw,.5rem)}
+.home-right-menu{
+ top:calc(var(--home-safe-top) + 57px);
+ width:17.8%;
+ gap:7px;
+}
+.home-utility-button{min-height:75px}
+
+/* The formation control is a banner in the scene, not another framed card. */
+.home-formation-banner{
+ top:46%;
+ right:.15%;
+ width:18.2%;
+ height:clamp(174px,18.5dvh,224px);
+ min-height:0;
+ overflow:visible;
+ isolation:isolate;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:flex-start;
+ gap:3px;
+ padding:88px 9px 31px;
+ border:0!important;
+ border-image:none!important;
+ outline:0!important;
+ clip-path:none!important;
+ background:transparent!important;
+ box-shadow:none!important;
+ filter:drop-shadow(0 7px 5px #000b);
+}
+.home-formation-banner:before{
+ content:"";
+ display:block!important;
+ position:absolute;
+ z-index:-2;
+ top:35px;
+ right:10px;
+ bottom:8px;
+ left:10px;
+ border:3px solid #b48a43;
+ background:
+  linear-gradient(90deg,transparent 0 7px,rgba(255,255,255,.06) 7px 9px,transparent 9px),
+  linear-gradient(180deg,#173c5b 0,#0b2944 58%,#071a2d 100%);
+ clip-path:polygon(0 0,100% 0,100% 78%,76% 88%,50% 100%,24% 88%,0 78%);
+ box-shadow:inset 0 0 0 3px #07131f,inset 0 0 18px #000b;
+}
+.home-formation-banner:after{
+ content:"";
+ position:absolute;
+ z-index:-3;
+ top:4px;
+ right:3px;
+ width:5px;
+ height:calc(100% + 14px);
+ background:linear-gradient(90deg,#5d3d18,#e4b961 45%,#77501f);
+ box-shadow:0 2px 0 #1d1309,0 0 0 1px #21160a;
+}
+.home-formation-banner>.home-pixel-icon{
+ position:absolute;
+ z-index:2;
+ top:0;
+ left:50%;
+ width:88px;
+ height:88px;
+ transform:translateX(-50%);
+}
+.home-formation-banner>b,
+.home-formation-banner>strong{
+ position:relative;
+ z-index:2;
+ line-height:1.15;
+ white-space:nowrap;
+}
+.home-formation-banner>b{font-size:clamp(.62rem,2.25vw,.86rem)}
+.home-formation-banner>strong{font-size:clamp(.82rem,2.75vw,1.08rem)}
+
+.home-rest-hotspot{
+ top:39.5%;
+ right:19.5%;
+ min-width:48px;
+ min-height:35px;
+ padding:3px 5px;
+ border:1px solid #725c38!important;
+ border-image:none!important;
+ background:rgba(5,8,9,.8)!important;
+ box-shadow:0 3px 7px #0009!important;
+}
+.home-rest-hotspot>.home-pixel-icon{width:24px;height:24px}
+.home-party-stage{
+ top:46.5%;
+ right:18.8%;
+ left:30.8%;
+ inset-inline-start:30.8%;
+ inset-inline-end:18.8%;
+}
+.home-scene-unit{width:clamp(98px,27vw,138px)}
+.home-scene-monster-visual,
+.home-scene-monster-visual img{
+ width:clamp(98px,27vw,138px);
+ height:clamp(98px,27vw,138px);
+}
+.home-scene-unit.back-left{left:0;top:2%}
+.home-scene-unit.back-right{right:0;left:auto;top:1%}
+.home-scene-unit.front-left{left:0;top:49%}
+.home-scene-unit.front-right{right:0;left:auto;top:48%}
+
+@media(max-width:420px){
+ .home-title-card{width:38%;padding-inline:6px}
+ .home-resource-bar{left:39.5%}
+ .home-record-card{width:29.9%;padding-inline:5px}
+ .home-left-menu{width:30.7%}
+ .home-command-button{grid-template-columns:31px minmax(0,1fr);padding-inline:4px}
+ .home-command-icon .home-pixel-icon{width:31px;height:31px}
+ .home-right-menu{width:18.3%}
+ .home-formation-banner{width:18.8%}
+ .home-formation-banner>.home-pixel-icon{width:82px;height:82px}
+}
+@media(max-height:720px){
+ .home-title-card{min-height:58px;padding-block:5px}
+ .home-record-card{top:calc(var(--home-safe-top) + 45px);min-height:86px;padding-block:6px}
+ .home-left-menu{top:calc(var(--home-safe-top) + 150px);gap:4px}
+ .home-command-button{min-height:49px;padding-block:3px}
+ .home-command-copy small{font-size:.34rem}
+ .home-right-menu{top:calc(var(--home-safe-top) + 52px);gap:4px}
+ .home-utility-button{min-height:62px;padding-block:2px}
+ .home-formation-banner{
+  top:45.5%;
+  height:clamp(151px,21.5dvh,174px);
+  padding-top:76px;
+  padding-bottom:24px;
+ }
+ .home-formation-banner:before{top:31px;right:8px;left:8px}
+ .home-formation-banner>.home-pixel-icon{width:76px;height:76px}
+ .home-rest-hotspot{top:37%}
+ .home-party-stage{top:45.5%}
+ .home-scene-unit,
+ .home-scene-monster-visual,
+ .home-scene-monster-visual img{width:88px;height:88px}
+ .home-scene-unit.front-left,.home-scene-unit.front-right{top:48%}
+}
+@media(max-height:620px){
+ .home-formation-banner{top:50.5%;height:142px;min-height:142px}
+}
+@media(min-width:700px){
+ .home-party-stage{right:18.8%;left:30.8%}
+ .home-scene-unit,
+ .home-scene-monster-visual,
+ .home-scene-monster-visual img{width:154px;height:154px}
+ .home-formation-banner>.home-pixel-icon{width:104px;height:104px}
+ .home-formation-banner{padding-top:104px}
+}
+
 /* Dungeon departure */
 .departure-modal{background:rgba(2,2,5,.88)}
 .departure-modal-card{
