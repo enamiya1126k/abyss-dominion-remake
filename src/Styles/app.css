@@ -2522,3 +2522,453 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
  .gacha-count-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
  .gacha-results-sequential{grid-template-columns:1fr}
 }
+
+/* Alpha 113 final interaction and mobile-layout pass. */
+.home-right-menu{
+ gap:3px!important;
+}
+.home-utility-button{
+ min-height:60px!important;
+ gap:0!important;
+ padding:2px!important;
+}
+.home-utility-button>.home-pixel-icon{
+ width:31px!important;
+ height:31px!important;
+}
+.home-utility-button:first-child>.home-pixel-icon{
+ width:48px!important;
+ height:48px!important;
+ margin:-6px 0 -5px;
+}
+.home-utility-button>b{line-height:1.05}
+.home-utility-button>small{font-size:clamp(.42rem,1.55vw,.6rem)!important;line-height:1.05}
+.home-rest-hotspot.home-rest-bed{
+ top:auto!important;
+ right:auto!important;
+ bottom:calc(var(--home-nav-height) + 5.5%)!important;
+ left:2.8%!important;
+ width:210px!important;
+ min-width:210px!important;
+ height:162px!important;
+ min-height:162px!important;
+ border:0!important;
+ border-image:none!important;
+ background:transparent!important;
+ box-shadow:none!important;
+ overflow:visible;
+}
+.home-rest-bed-art{
+ width:184px!important;
+ height:132px!important;
+ filter:drop-shadow(0 8px 7px #000b)!important;
+}
+.home-rest-bed>b{
+ bottom:10px!important;
+ padding:3px 13px!important;
+ border:6px solid transparent!important;
+ border-image:var(--alpha115-frame) 44 fill / 6px stretch!important;
+ background:#08070b!important;
+ font-size:.72rem!important;
+}
+.home-scene-unit .home-scene-power{
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:4px;
+ min-width:72px;
+ margin-top:-1px;
+ padding:2px 7px;
+ border:5px solid transparent;
+ border-image:var(--alpha115-frame-active) 44 fill / 5px stretch;
+ background:linear-gradient(90deg,#09070cdd,#29132edd,#09070cdd);
+ color:#ffe59b;
+ font-family:Georgia,"Yu Mincho",serif;
+ font-size:clamp(.5rem,1.9vw,.72rem);
+ font-weight:900;
+ line-height:1;
+ text-shadow:0 1px #000,0 0 7px #dcac51aa;
+ letter-spacing:.02em;
+}
+.home-scene-unit .home-scene-power i{
+ color:#c1a670;
+ font-size:.4rem;
+ font-style:normal;
+ letter-spacing:.08em;
+}
+
+.formation-member-drag{
+ cursor:grab;
+ touch-action:none;
+ user-select:none;
+ -webkit-user-select:none;
+}
+.formation-member-drag:active{cursor:grabbing}
+.formation-member-ghost{
+ position:fixed!important;
+ z-index:1600!important;
+ width:min(190px,42vw)!important;
+ max-height:160px!important;
+ overflow:hidden!important;
+ pointer-events:none!important;
+ opacity:.92!important;
+ transform:translate(-50%,-50%) rotate(1.5deg) scale(1.02)!important;
+ border:7px solid transparent!important;
+ border-image:var(--alpha115-frame-active) 44 fill / 7px stretch!important;
+ background:#0a080e!important;
+ box-shadow:0 15px 28px #000e,0 0 22px #b86fe466!important;
+}
+.formation-member.formation-dragging{opacity:.25;filter:saturate(.3)}
+.formation-member.formation-drop-ready{
+ outline:2px solid #f0cf73;
+ outline-offset:-3px;
+ box-shadow:inset 0 0 24px #b76ce15c,0 0 14px #e7c66177!important;
+}
+.formation-summary{
+ grid-template-columns:minmax(0,1fr) auto 34px!important;
+}
+.formation-rarity-help{
+ width:32px;
+ min-width:32px;
+ height:32px;
+ padding:0;
+ border:6px solid transparent;
+ border-image:var(--alpha115-frame-active) 44 fill / 6px stretch;
+ border-radius:0;
+ background:#160d1c;
+ color:#f3d98e;
+ font-weight:900;
+}
+.formation-rarity-drawer{
+ position:fixed;
+ z-index:950;
+ top:max(102px,calc(env(safe-area-inset-top) + 70px));
+ right:-126px;
+ width:126px;
+ display:grid;
+ grid-template-columns:24px minmax(0,1fr);
+ gap:3px;
+ padding:7px 5px 7px 2px;
+ border:7px solid transparent;
+ border-image:var(--alpha115-frame-active) 44 fill / 7px stretch;
+ background:#09070ddb;
+ backdrop-filter:blur(5px);
+ pointer-events:none;
+ transition:right .2s ease;
+ box-shadow:0 8px 20px #000b;
+}
+.formation-rarity-drawer.open{
+ right:0;
+ pointer-events:auto;
+}
+.formation-rarity-drawer>button{
+ align-self:stretch;
+ min-width:22px;
+ padding:0;
+ border:0;
+ background:#2c1838cc;
+ color:#e6c875;
+}
+.formation-rarity-drawer>small{
+ align-self:center;
+ color:#c7b6cc;
+ font-size:.42rem;
+ writing-mode:vertical-rl;
+}
+.formation-rarity-drawer>div{
+ grid-column:1/-1;
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:2px;
+ text-align:center;
+}
+.formation-rarity-drawer span{
+ padding:2px 1px;
+ border:1px solid #ffffff16;
+ background:#050407b8;
+ font-size:.43rem;
+ font-weight:900;
+}
+.formation-section{
+ min-width:0;
+ margin:1px 0;
+ border:1px solid #33243b;
+ background:#07060a;
+}
+.formation-section>summary{
+ min-height:22px;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:2px 4px;
+ color:#e2cfaa;
+ font-size:.4rem;
+ font-weight:900;
+ cursor:pointer;
+ list-style:none;
+}
+.formation-section>summary::-webkit-details-marker{display:none}
+.formation-section>summary:after{content:"＋";color:#b879d2}
+.formation-section[open]>summary:after{content:"−"}
+.formation-section>summary small{color:#807487;font-size:.28rem}
+.formation-stats{
+ gap:1px!important;
+ padding:1px 2px 3px!important;
+}
+.formation-stats span{
+ min-height:20px!important;
+ padding:1px!important;
+ font-size:.28rem!important;
+ line-height:1!important;
+}
+.formation-stats b{
+ margin-top:1px!important;
+ font-size:.34rem!important;
+ line-height:1!important;
+}
+.formation-gear-grid{padding:1px 2px 3px}
+.formation-gear-slot{min-height:54px!important;padding:3px!important}
+.formation-gear-slot small{font-size:.27rem!important}
+.formation-gear-slot b{font-size:.36rem!important}
+.formation-gear-slot em{font-size:.27rem!important}
+.equipment-socket-summary.compact{
+ min-height:5px!important;
+ gap:1px!important;
+ margin-top:1px!important;
+ line-height:.3!important;
+}
+.equipment-socket-summary.compact i{
+ width:3px!important;
+ height:3px!important;
+ min-width:3px!important;
+ font-size:0!important;
+ border-width:0!important;
+ transform:rotate(45deg);
+}
+.formation-skill-list{padding:1px 2px 3px}
+.formation-skill-list button{min-height:42px!important;padding:2px 3px!important}
+.formation-skill-list b{font-size:.36rem!important}
+.formation-skill-list em{font-size:.27rem!important;line-height:1.2!important}
+
+.monster-workshop-grid{
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:6px!important;
+}
+.monster-workshop-card{
+ grid-template-columns:46px minmax(0,1fr)!important;
+ gap:5px!important;
+ min-height:86px;
+ padding:6px 5px!important;
+ overflow:hidden;
+}
+.monster-workshop-card>span{
+ width:43px!important;
+ height:43px!important;
+}
+.monster-workshop-visual,
+.monster-workshop-visual img{
+ width:42px!important;
+ height:42px!important;
+}
+.monster-workshop-card>div{gap:1px!important}
+.monster-workshop-card b{
+ white-space:normal!important;
+ font-size:.5rem!important;
+ line-height:1.12;
+}
+.monster-workshop-card small{
+ white-space:normal!important;
+ font-size:.36rem!important;
+ line-height:1.22;
+}
+.monster-workshop-card>em{
+ right:4px!important;
+ bottom:3px!important;
+ font-size:.34rem!important;
+}
+.monster-workshop-card.selected{
+ border-color:#f3d579!important;
+ background:linear-gradient(145deg,#3e2a13,#180e0d)!important;
+ box-shadow:inset 0 0 17px #e9ba4a45,0 0 0 1px #c783ef!important;
+ transform:translateY(-1px);
+}
+.monster-workshop-card.selected:after{
+ content:"✓";
+ position:absolute;
+ top:3px;
+ right:3px;
+ width:18px;
+ height:18px;
+ display:grid;
+ place-items:center;
+ border-radius:50%;
+ background:#e1b953;
+ color:#100b09;
+ font-size:.6rem;
+ font-weight:900;
+}
+.workshop-target-slot.drop-ready{
+ border-color:#f1d16e!important;
+ background:#25142d!important;
+ box-shadow:inset 0 0 25px #bd6edf66,0 0 17px #edca6c99!important;
+}
+.monster-workshop-card.dragging{opacity:.28!important;filter:saturate(.25)}
+.workshop-drag-ghost{
+ width:min(280px,66vw)!important;
+ max-height:112px!important;
+ overflow:hidden!important;
+}
+.workshop-release-action{
+ border-image-source:var(--alpha115-frame-active)!important;
+ background:linear-gradient(90deg,#0a080d,#1d1018)!important;
+}
+.workshop-release-action>div{gap:1px}
+.workshop-release-action b{font-size:.85rem}
+.workshop-release-action strong{color:#8eeaff;font-size:.54rem}
+.workshop-release-action button{
+ border:7px solid transparent!important;
+ border-image:var(--alpha115-frame-active) 44 fill / 7px stretch!important;
+ border-radius:0!important;
+ background:linear-gradient(#79263a,#431523)!important;
+ color:#fff2ea!important;
+ text-shadow:0 1px #000;
+}
+
+.v2-item-art{transform:translateX(-2px)}
+.inventory-quick-popover{
+ border:8px solid transparent!important;
+ border-image:var(--alpha115-frame-active) 44 fill / 8px stretch!important;
+ border-radius:0!important;
+ background:#08070eea!important;
+ backdrop-filter:blur(5px);
+}
+.ornate-shop-modal .home-item-shop-row>span:first-child{
+ display:grid!important;
+ grid-template-columns:1fr!important;
+ place-items:center!important;
+ transform:translateX(-2px);
+}
+.home-shop-item-art{justify-self:center}
+
+.gacha-campaign-sigil,
+.gacha-category-art,
+.gacha-result-equipment-art,
+.gacha-crystal-icon{
+ display:block;
+ background-position:center;
+ background-repeat:no-repeat;
+ background-size:contain;
+ image-rendering:pixelated;
+ filter:drop-shadow(0 4px 4px #000b);
+}
+.gacha-campaign-sigil{width:118px;height:118px;justify-self:end}
+.gacha-campaign-sigil.sigil-standard{background-image:url("../../assets/ui/items/captureCrystals.png")}
+.gacha-campaign-sigil.sigil-beginner{background-image:url("../../assets/ui/items/potions.png")}
+.gacha-campaign-sigil.sigil-ssr{background-image:url("../../assets/ui/items/equipment-accessory.png")}
+.gacha-campaign-sigil.sigil-event-preview{background-image:url("../../assets/ui/items/equipment-weapon.png");filter:grayscale(.15) drop-shadow(0 4px 4px #000b)}
+.gacha-category-art{width:52px;height:52px}
+.gacha-category-art.monster-art{background-image:url("../../assets/ui/items/captureCrystals.png")}
+.gacha-category-art.equipment-art{background-image:url("../../assets/ui/items/equipment-weapon.png")}
+.gacha-crystal-icon{width:22px;height:22px;background-image:url("../../assets/ui/items/captureCrystals.png")}
+.gacha-result-equipment-art{width:44px;height:44px}
+.gacha-result-equipment-art.slot-weapon{background-image:url("../../assets/ui/items/equipment-weapon.png")}
+.gacha-result-equipment-art.slot-armor{background-image:url("../../assets/ui/items/equipment-armor.png")}
+.gacha-result-equipment-art.slot-accessory{background-image:url("../../assets/ui/items/equipment-accessory.png")}
+.gacha-campaign-slide button,
+#gachaBannerGuide,
+.gacha-count-grid button,
+.gacha-custom-count button{
+ border:7px solid transparent!important;
+ border-image:var(--alpha115-frame) 44 fill / 7px stretch!important;
+ border-radius:0!important;
+ background:linear-gradient(#281634,#110b17)!important;
+ color:#f3eadf!important;
+ box-shadow:0 3px 7px #000a!important;
+}
+.gacha-campaign-slide button:active,
+#gachaBannerGuide:active,
+.gacha-count-grid button:active,
+.gacha-custom-count button:active{
+ border-image-source:var(--alpha115-frame-active)!important;
+ filter:brightness(1.22);
+}
+.gacha-count-copy,
+.gacha-reveal-stage,
+.gacha-result-card{
+ border:8px solid transparent!important;
+ border-image:var(--alpha115-frame) 44 fill / 8px stretch!important;
+ border-radius:0!important;
+}
+.gacha-result-card{
+ background:#07060b!important;
+ box-shadow:inset 4px 0 0 var(--rarity-color,#d8d6d7),0 5px 14px #0009!important;
+}
+.gacha-result-card.rarity-n{--rarity-color:#d9d9d9}
+.gacha-result-card.rarity-r{--rarity-color:#69dc86}
+.gacha-result-card.rarity-sr{--rarity-color:#64b5ff}
+.gacha-result-card.rarity-ssr{--rarity-color:#c98cff}
+.gacha-result-card.rarity-ur{--rarity-color:#ff8fcf}
+.gacha-result-card.rarity-lr{--rarity-color:#ffd45d}
+.gacha-result-card.rarity-mythic{--rarity-color:#ff8b5f}
+.gacha-result-card.rarity-abyss{--rarity-color:#ff5f7d}
+.gacha-result-card.rarity-ten-god{--rarity-color:#fff5c4}
+.gacha-result-card b{text-shadow:0 0 7px color-mix(in srgb,var(--rarity-color) 45%,transparent)}
+.gacha-count-picker,
+.gacha-reveal{
+ border:9px solid transparent;
+ border-image:var(--alpha115-frame-active) 44 fill / 9px stretch;
+ padding:8px;
+ background:#07060b;
+}
+.ornate-unavailable{
+ text-align:center;
+ border:9px solid transparent!important;
+ border-image:var(--alpha115-frame-active) 44 fill / 9px stretch!important;
+ border-radius:0!important;
+ background:
+  radial-gradient(circle at 50% 35%,#61317b33,transparent 42%),
+  #08070c!important;
+}
+.ornate-unavailable:before{
+ content:"ABYSS DOMINION";
+ display:block;
+ margin:3px auto 12px;
+ color:#c8a968;
+ font-family:Georgia,serif;
+ font-size:.58rem;
+ letter-spacing:.22em;
+}
+
+@media(max-width:560px){
+ .home-rest-hotspot.home-rest-bed{
+  width:172px!important;
+  min-width:172px!important;
+  height:132px!important;
+  min-height:132px!important;
+ }
+ .home-rest-bed-art{width:152px!important;height:110px!important}
+ .home-scene-unit .home-scene-power{min-width:56px;padding:1px 4px;font-size:.46rem}
+ .home-scene-unit .home-scene-power i{font-size:.3rem}
+ .formation-section>summary small{display:none}
+ .monster-workshop-card{grid-template-columns:39px minmax(0,1fr)!important;min-height:78px}
+ .monster-workshop-card>span{width:37px!important;height:37px!important}
+ .monster-workshop-visual,.monster-workshop-visual img{width:36px!important;height:36px!important}
+ .workshop-sticky-action{bottom:-78px!important}
+ .gacha-campaign-sigil{width:88px;height:88px}
+}
+
+@media(max-width:390px){
+ .home-rest-hotspot.home-rest-bed{
+  left:1.2%!important;
+  width:150px!important;
+  min-width:150px!important;
+  height:116px!important;
+  min-height:116px!important;
+ }
+ .home-rest-bed-art{width:134px!important;height:98px!important}
+ .monster-workshop-card{grid-template-columns:34px minmax(0,1fr)!important;padding:5px 3px!important}
+ .monster-workshop-card>span{width:32px!important;height:32px!important}
+ .monster-workshop-visual,.monster-workshop-visual img{width:31px!important;height:31px!important}
+ .monster-workshop-card b{font-size:.45rem!important}
+ .monster-workshop-card small{font-size:.32rem!important}
+}
