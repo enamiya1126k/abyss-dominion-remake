@@ -24,6 +24,11 @@ import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
 import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.13.0-alpha115";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.13.0-alpha115";
 
+const EQUIPMENT_SCREEN_SLOT_LABELS={
+ weaponRight:"右手",weaponLeft:"左手",armorBody:"胴",armorSupport:"胴",accessoryNeck:"アクセ",accessoryFinger:"アクセ"
+};
+function screenSubslotLabel(subslot){return EQUIPMENT_SCREEN_SLOT_LABELS[subslot]??equipmentSubslotLabel(subslot)}
+
 function monsterRarity(monster){
  return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N";
 }
@@ -72,17 +77,17 @@ function equippedSlotCard(state,target,subslot,focusItemId=null){
  const levelRequired=SLOT_UNLOCK_LEVEL[subslot]??1;
  const locked=target.level<levelRequired;
  if(locked){
-  return`<div class="equipped-slot-card locked-slot"><span class="equipped-slot-label">${equipmentSubslotLabel(subslot)}</span><b>🔒 Lv.${levelRequired}</b><small>レベル到達で解放</small></div>`;
+  return`<div class="equipped-slot-card locked-slot"><span class="equipped-slot-label">${screenSubslotLabel(subslot)}</span><b>🔒 Lv.${levelRequired}</b><small>レベル到達で解放</small></div>`;
  }
  const item=state.equipment.find(entry=>entry.id===target.equipment?.[subslot]);
  if(!item){
-  return`<div class="equipped-slot-card empty-slot"><span class="equipped-slot-label">${equipmentSubslotLabel(subslot)}</span><b>なし</b><small>${slotLabel(subslot)}を選択できます</small></div>`;
+  return`<div class="equipped-slot-card empty-slot"><span class="equipped-slot-label">${screenSubslotLabel(subslot)}</span><b>なし</b><small>${slotLabel(subslot)}を選択できます</small></div>`;
  }
  const level=Math.max(1,item.level??1);
  const affixes=ensureEquipmentAffixes(item);
  return`<details class="equipped-slot-card equipped ${item.id===focusItemId?"focused-equipment":""}" data-equipped-item="${item.id}" ${item.id===focusItemId?"open":""}>
   <summary>
-   <span class="equipped-slot-label">${equipmentSubslotLabel(subslot)}</span>
+   <span class="equipped-slot-label">${screenSubslotLabel(subslot)}</span>
    <div>${coloredEquipmentName(item)}<small>Lv.${level} ∞　${itemStats(item)||"能力補正なし"}</small>${equipmentSocketSummary(item,{compact:true})}</div>
    <i>${item.favorite?"★":""}${item.locked?"🔒":""}${item.ruleOverrides?.unsellable?"🛡️":""}⌄</i>
   </summary>
@@ -129,7 +134,7 @@ function card(item,state,target,storage,{editing=false,selected=false,focused=fa
  const equipButtons=compatibleSubslots(item).map(subslot=>{
   const locked=target.level<SLOT_UNLOCK_LEVEL[subslot];
   const replacesTwoHanded=subslot==="weaponLeft"&&state.equipment.find(entry=>entry.id===target.equipment?.weaponRight)?.handedness==="twoHanded";
-  return`<button data-equip="${item.id}" data-target="${target.id}" data-subslot="${subslot}" ${locked?"disabled":""}>${equipmentSubslotLabel(subslot)}へ${locked?`（Lv.${SLOT_UNLOCK_LEVEL[subslot]}）`:replacesTwoHanded?"（両手武器を外す）":""}</button>`;
+  return`<button data-equip="${item.id}" data-target="${target.id}" data-subslot="${subslot}" ${locked?"disabled":""}>${screenSubslotLabel(subslot)}へ${locked?`（Lv.${SLOT_UNLOCK_LEVEL[subslot]}）`:replacesTwoHanded?"（両手武器を外す）":""}</button>`;
  }).join("");
  const protectedItem=!!item.equippedBy||item.favorite||item.locked||item.ruleOverrides?.unsellable;
  const affixes=ensureEquipmentAffixes(item);
