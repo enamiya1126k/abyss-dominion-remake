@@ -1,6 +1,6 @@
 import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL}from"../core/config.js?v=1.7.3-alpha112";
 import{createMonster,totalExperience,applyTotalExperience}from"../models/Monster.js?v=1.9.0-monster-catalog";
-import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=1.9.0-monster-catalog";
+import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=1.13.0-alpha115";
 import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=1.0.0";
 import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=1.1.0";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=1.1.0";
@@ -9,7 +9,7 @@ import{SPECIES}from"../data/species.js?v=1.9.0-monster-catalog";
 
 import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=1.4.0";
 import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=1.7.3-alpha112";
-import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=0.9.15-alpha.95.1-stability-audit";
+import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=1.13.0-alpha115";
 import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=1.2.0";
 import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=1.9.0-monster-catalog";
 import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=1.9.0-monster-catalog";
@@ -156,7 +156,9 @@ export class SaveService{
    const mpMax=maxMp(m);
    m.currentMp=finiteNumber(m.currentMp,mpMax,0,mpMax);
    m.currentHp=m.currentHp==null?null:finiteNumber(m.currentHp,null,0,Number.MAX_SAFE_INTEGER);
-   m.equippedSkills=Array.isArray(m.equippedSkills)?m.equippedSkills.filter(Boolean).slice(0,4):[];
+   m.equippedSkills=Array.isArray(m.equippedSkills)&&m.equippedSkills.length
+    ?Array.from({length:4},(_,index)=>m.equippedSkills[index]??null)
+    :[];
    normalizeContractedEndgameMonster(m);
    normalizeSkillProgress(m);
    const oldGear=m.equipment??{};
