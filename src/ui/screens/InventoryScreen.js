@@ -26,7 +26,9 @@ const CATEGORIES=[
  ["all","すべて"],["weapon","武器"],["armor","防具"],["accessory","アクセ"],["consumable","消費"],["material","素材"]
 ];
 const SLOT_ICONS={weapon:"⚔️",armor:"🛡️",accessory:"💍"};
-const ITEM_ART_ROOT="./assets/ui/items";
+// This URL is consumed by app.css through a custom property, so it resolves
+// relative to src/Styles/app.css rather than this module or index.html.
+const ITEM_ART_ROOT="../../assets/ui/items";
 
 function itemArt(name,fallback){
  return`<span class="v2-item-art" style="--item-art:url('${ITEM_ART_ROOT}/${name}.png')"><i>${fallback}</i></span>`;
