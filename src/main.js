@@ -337,7 +337,7 @@ const HOME_ITEM_SHOP=[
  {id:"partyFullHeals",icon:"🌟",name:"全体万能霊薬",description:"味方全員を完全回復",price:6500}
 ];
 function shopItemArt(item){
- return`<span class="home-shop-item-art" style="--shop-item-art:url('./assets/ui/items/${item.id}.png')"><i>${item.icon}</i></span>`;
+ return`<span class="home-shop-item-art" style="--shop-item-art:url('../../assets/ui/items/${item.id}.png')"><i>${item.icon}</i></span>`;
 }
 function openHomeItemShop(){
  const gold=Math.max(0,Number(save.state.player.gold)||0);
