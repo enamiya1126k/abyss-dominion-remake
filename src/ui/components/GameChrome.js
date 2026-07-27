@@ -12,11 +12,11 @@ export function resourceHud(state,{backId=null,title="",eyebrow="ABYSS DOMINION"
   ${backId?`<button type="button" id="${backId}" class="v2-hud-back" aria-label="戻る">←</button>`:""}
   <div class="v2-hud-title"><small>${eyebrow}</small>${title?`<h1>${title}</h1>`:""}</div>
   <div class="v2-hud-resources" aria-label="所持資源">
-   <span title="現在階層"><i>🏰</i><b>${compact(player.currentFloor??1)}階</b></span>
-   <span title="GOLD：${(player.gold??0).toLocaleString()}"><i>◉</i><b>${compact(player.gold)}</b></span>
-   <span title="魔晶石：${(player.crystals??0).toLocaleString()}"><i>💎</i><b>${compact(player.crystals)}</b></span>
-   <span title="捕獲結晶：${(inventory.captureCrystals??0).toLocaleString()}"><i>◈</i><b>${compact(inventory.captureCrystals)}</b></span>
-   <span title="深淵の鍵：${(inventory.abyssKeys??0).toLocaleString()}"><i>🔑</i><b>${compact(inventory.abyssKeys)}</b></span>
+   <span title="現在階層" data-resource-help="floor"><i>🏰</i><b>${compact(player.currentFloor??1)}階</b></span>
+   <span title="GOLD：${(player.gold??0).toLocaleString()}" data-resource-help="gold"><i>◉</i><b id="goldHud">${compact(player.gold)}</b></span>
+   <span title="魔晶石：${(player.crystals??0).toLocaleString()}" data-resource-help="crystal"><i>💎</i><b>${compact(player.crystals)}</b></span>
+   <span title="捕獲結晶：${(inventory.captureCrystals??0).toLocaleString()}" data-resource-help="capture"><i class="ui-capture-orb"></i><b id="captureHud">${compact(inventory.captureCrystals)}</b></span>
+   <span title="深淵の鍵：${(inventory.abyssKeys??0).toLocaleString()}" data-resource-help="key"><i>🔑</i><b>${compact(inventory.abyssKeys)}</b></span>
    ${settings?'<button type="button" data-ui-settings aria-label="設定">⚙</button>':""}
   </div>
  </header>`;
