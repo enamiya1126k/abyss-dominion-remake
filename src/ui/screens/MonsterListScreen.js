@@ -1,70 +1,39 @@
-import{MonsterCard}from"../components/MonsterCard.js?v=1.9.1-endgame-sprites";
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
-import{displayName,totalExperience}from"../../models/Monster.js?v=1.9.0-monster-catalog";
-import{monsterCombatPower}from"../../core/CombatPower.js?v=1.9.0-monster-catalog";
+import{orderedMonsterSpecies}from"../../data/monsterCatalog.js?v=1.9.1-endgame-sprites";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
+import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=1.13.0-alpha115";
 
-function partyCard(m){const sp=SPECIES[m.speciesId],rarity=monsterRarity(m);return`<article class="party-growth-card"><button class="party-growth-main" data-monster-id="${m.id}">${monsterVisual(m,sp?.emoji??"👹",{className:"party-growth-visual"})}<div><b>${displayName(m)}</b><small>${rarity} / Lv.${m.level} / ⭐${m.stars??1} / +${m.plus??0} / ❤️${m.affection??0}</small></div></button><div class="party-growth-actions"><button data-quick-equipment="${m.id}">⚔️ 装備</button><button data-quick-growth="${m.id}">💪 強化</button></div></article>`}
 const RARITY_VALUE={N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9};
-function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
-function sortValue(monster,sort){
- if(sort==="rarity")return RARITY_VALUE[monsterRarity(monster)]??0;
- if(sort==="level")return monster.level??1;
- if(sort==="affection")return monster.affection??0;
- if(sort==="experience")return totalExperience(monster);
- if(sort==="obtained")return Date.parse(monster.obtainedAt??monster.capturedAt??0)||0;
- if(sort==="name")return displayName(monster);
- return monsterCombatPower(monster);
-}
-function sortedReserve(monsters,sort,direction){
- return [...monsters].sort((a,b)=>{
-  const av=sortValue(a,sort),bv=sortValue(b,sort);
-  const comparison=typeof av==="string"?av.localeCompare(bv,"ja"):av-bv;
-  return(direction==="asc"?comparison:-comparison)||String(a.id).localeCompare(String(b.id));
- });
-}
-function escapeAttribute(value){return String(value??"").replaceAll("&","&amp;").replaceAll('"',"&quot;")}
+function safe(value){return String(value??"").replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
 
-export function MonsterListScreen(state,{editing=false,selected=new Set(),search="",sort="power",direction="desc"}={}){
-  const party=state.party.map(id=>state.monsters.find(m=>m.id===id)).filter(Boolean);
-  const partyIds=new Set(party.map(m=>m.id));
-  const reserve=sortedReserve(state.monsters.filter(monster=>!partyIds.has(monster.id)),sort,direction);
-  return`
-    <section class="screen">
-      <header class="topbar">
-        <button id="backHome">←</button>
-        <h2>魔物強化</h2>
-        <button id="toggleMonsterEdit" class="manage-edit-button">${editing?"完了":"編集"}</button>
-      </header>
-      <div class="page">
-        <div class="panel party-growth-panel"><div class="spread"><div><h2>現在のパーティー</h2><small class="muted">まず育てたい4体をすぐ選べます</small></div><span class="muted">${party.length}/4</span></div><div class="party-growth-grid">${party.map(partyCard).join("")||'<div class="empty">パーティーが編成されていません</div>'}</div></div>
-        <div class="panel monster-list-tools">
-          <div><b>控え魔物</b><small class="muted"> パーティー外の魔物</small></div>
-          <input id="monsterSearch" value="${escapeAttribute(search)}" placeholder="名前・種族で検索">
-          <select id="monsterSort" aria-label="並び替え">
-           <option value="power" ${sort==="power"?"selected":""}>戦闘力順</option>
-           <option value="rarity" ${sort==="rarity"?"selected":""}>レア度順</option>
-           <option value="level" ${sort==="level"?"selected":""}>レベル順</option>
-           <option value="affection" ${sort==="affection"?"selected":""}>なつき度順</option>
-           <option value="experience" ${sort==="experience"?"selected":""}>累計EXP順</option>
-           <option value="obtained" ${sort==="obtained"?"selected":""}>入手順</option>
-           <option value="name" ${sort==="name"?"selected":""}>名前順</option>
-          </select>
-          <button id="monsterSortDirection" type="button">${direction==="desc"?"降順 ↓":"昇順 ↑"}</button>
-          <small class="muted">${reserve.length}体 / 全${state.monsters.length}体</small>
-        </div>
-        ${editing?`<div class="panel bulk-manager">
-          <div class="spread"><b>一括管理</b><span id="monsterSelectedCount">${selected.size}体選択</span></div>
-          <div class="bulk-presets">
-            <button data-select-monsters="all">すべて</button><button data-select-monsters="none">解除</button>
-            <button data-select-monsters="N">N</button><button data-select-monsters="R">R</button><button data-select-monsters="plus0">+0</button><button data-select-monsters="unfavorite">未お気に入り</button>
-          </div>
-          <button id="releaseSelectedMonsters" class="danger bulk-primary" ${selected.size?"":"disabled"}>選択したモンスターを手放す</button>
-          <small class="muted">出撃中・お気に入り・ロック中は選択できません</small>
-        </div>`:""}
-        <div id="monsterList" class="monster-list ${editing?"manage-editing":""}">
-          ${reserve.map(m=>MonsterCard(m,false,{editing,selected:selected.has(m.id)})).join("")||'<div class="empty">控え魔物はいません</div>'}
-        </div>
-      </div>
-    </section>`;
+function speciesCard(species,index,owned){
+ const count=owned.length,highest=count?Math.max(...owned.map(monster=>monster.level??1)):0,stars=count?Math.max(...owned.map(monster=>monster.stars??1)):0,seen=count>0;
+ return`<button type="button" class="monster-species-card rarity-${species.rarity} ${seen?"owned":"unknown"}" ${seen?`data-monster-species="${species.id}"`:"disabled"} data-species-search="${safe(`${species.name} ${species.race??""} ${species.rarity} ${index+1}`.toLowerCase())}">
+  <span class="monster-species-number">No.${String(index+1).padStart(3,"0")}</span>
+  <span class="monster-species-art">${seen?monsterVisual(species.id,species.emoji??"👹",{className:"monster-species-visual"}):"<i>？</i>"}</span>
+  <b>${seen?species.name:"？？？？"}</b>
+  <small>${seen?`${species.rarity}・${species.element??"無"} / 最高Lv.${highest}`:"未所持"}</small>
+  <strong>${seen?`所持 ${count}体・⭐${stars}`:"0体"}</strong>
+ </button>`;
+}
+
+export function MonsterListScreen(state,{search=""}={}){
+ const catalog=orderedMonsterSpecies(SPECIES),ownedBySpecies=new Map();
+ state.monsters.forEach(monster=>{const list=ownedBySpecies.get(monster.speciesId)??[];list.push(monster);ownedBySpecies.set(monster.speciesId,list)});
+ const indexed=catalog.map((species,index)=>({species,index,owned:ownedBySpecies.get(species.id)??[]}));
+ indexed.sort((a,b)=>Number(Boolean(b.owned.length))-Number(Boolean(a.owned.length))||a.index-b.index);
+ const discovered=indexed.filter(entry=>entry.owned.length).length,totalOwned=state.monsters.length;
+ return`<section class="screen v2-screen monster-index-screen">
+  ${resourceHud(state,{backId:"backHome",title:"魔物一覧"})}
+  <main class="v2-screen-content">
+   ${sectionTitle("魔物一覧",`発見 ${discovered}/${catalog.length}・所持 ${totalOwned}/500`)}
+   <section class="monster-index-tools">
+    <div class="monster-index-copy"><b>MONSTER ARCHIVE</b><span>同名魔物の合成・整理を一か所で管理</span></div>
+    <input id="monsterSearch" type="search" value="${safe(search)}" placeholder="No.・名前・種族・レア度で検索">
+    <div class="monster-index-legend"><span>所持中を先に表示</span><span>カードをタップして合成・逃す</span></div>
+   </section>
+   <div class="monster-species-grid" id="monsterSpeciesGrid">${indexed.map(({species,index,owned})=>speciesCard(species,index,owned)).join("")}</div>
+  </main>
+  ${bottomNav("monsters")}
+ </section>`;
 }

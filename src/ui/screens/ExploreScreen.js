@@ -1,10 +1,11 @@
 import{APP_VERSION}from"../../core/config.js?v=1.7.3-alpha112";
 import{calculatedStats,displayName}from"../../models/Monster.js?v=1.9.0-monster-catalog";
-import{maxMp}from"../../battle/SkillSystem.js?v=1.9.0-monster-catalog";
+import{maxMp}from"../../battle/SkillSystem.js?v=1.13.0-alpha115";
 import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{worldPresentationForFloor}from"../../core/WorldSystem.js?v=1.0.0";
 import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.9.0-monster-catalog";
 import{manualReturnPreview}from"../../core/ReturnRewardSystem.js?v=1.4.0";
+import{resourceHud}from"../components/GameChrome.js?v=1.13.0-alpha115";
 
 export function ExploreScreen(state){
  const combatPower=partyCombatPower(state);
@@ -20,12 +21,8 @@ export function ExploreScreen(state){
    <div><b>${world.phase===1?`${world.subtitle}・${world.name}`:biome.name}</b><small>${world.phase===1?`${state.player.currentFloor}階・${biome.name}`:`${biome.from}〜${biome.to}階・探索率 ${progress}%`}</small></div>
    <i><em style="width:${progress}%"></em></i>
   </div>
-  <header class="explore-hud">
-   <button type="button" data-resource-help="floor" aria-label="現在階層"><b>${state.player.currentFloor}階</b></button>
-   <button type="button" data-resource-help="gold" aria-label="ゴールド"><span>🪙</span><b id="goldHud">${state.player.gold.toLocaleString()}</b></button>
-   <button type="button" data-resource-help="crystal" aria-label="魔晶石"><span>💎</span><b>${state.player.crystals}</b></button>
-   <button type="button" data-resource-help="capture" aria-label="捕獲結晶"><span>📀</span><b id="captureHud">${state.inventory.captureCrystals}</b></button>
-   <button type="button" data-resource-help="key" aria-label="深淵の鍵"><span>🔑</span><b>${state.inventory.abyssKeys??0}</b></button>
+  ${resourceHud(state,{title:`探索・${state.player.currentFloor}階`,settings:false})}
+  <header class="explore-hud explore-hud-status">
    <div id="exploreCombatPower" class="explore-combat-power" data-power="${combatPower}" aria-label="パーティー総戦力">
     <span class="combat-power-sigil">✦</span>
     <div><small>TOTAL POWER</small><b data-combat-power-value>${formatCombatPower(combatPower)}</b></div>

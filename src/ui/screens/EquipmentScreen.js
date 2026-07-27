@@ -4,12 +4,13 @@ import{
  equipmentRarityColor,
  equipmentStatLabel,
  SLOT_UNLOCK_LEVEL,
+ EQUIPMENT_SLOT_ORDER,
  equipmentSubslotLabel,
  compatibleSubslots
-}from"../../data/equipment.js?v=1.2.0";
+}from"../../data/equipment.js?v=1.13.0-alpha115";
 import{displayName,calculatedStats}from"../../models/Monster.js?v=1.9.0-monster-catalog";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
-import{maxMp}from"../../battle/SkillSystem.js?v=1.9.0-monster-catalog";
+import{maxMp}from"../../battle/SkillSystem.js?v=1.13.0-alpha115";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.9.0-monster-catalog";
 import{ATTRIBUTES}from"../../data/attributes.js?v=1.1.0";
 import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=1.2.0";
@@ -17,10 +18,11 @@ import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=1.7.0";
 import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
 import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=0.9.15-alpha.95.1-stability-audit";
-import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.4.0";
+import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.13.0-alpha115";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.7.3-alpha112";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.13.0-alpha115";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.13.0-alpha115";
 
 function monsterRarity(monster){
  return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N";
@@ -81,7 +83,7 @@ function equippedSlotCard(state,target,subslot,focusItemId=null){
  return`<details class="equipped-slot-card equipped ${item.id===focusItemId?"focused-equipment":""}" data-equipped-item="${item.id}" ${item.id===focusItemId?"open":""}>
   <summary>
    <span class="equipped-slot-label">${equipmentSubslotLabel(subslot)}</span>
-   <div>${coloredEquipmentName(item)}<small>Lv.${level} ∞　${itemStats(item)||"能力補正なし"}</small></div>
+   <div>${coloredEquipmentName(item)}<small>Lv.${level} ∞　${itemStats(item)||"能力補正なし"}</small>${equipmentSocketSummary(item,{compact:true})}</div>
    <i>${item.favorite?"★":""}${item.locked?"🔒":""}${item.ruleOverrides?.unsellable?"🛡️":""}⌄</i>
   </summary>
   <div class="equipped-slot-detail">
@@ -136,6 +138,7 @@ function card(item,state,target,storage,{editing=false,selected=false,focused=fa
   <div class="spread">${coloredEquipmentName(item)}<span>${item.favorite?"★":""}${item.locked?"🔒":""}${item.ruleOverrides?.unsellable?"🛡️":""}</span></div>
   <div class="subline">
    <span class="equipment-level">Lv.${level} ∞</span> ${slotLabel(item.slot)} ${handLabel(item)} / ${itemStats(item)||"能力補正なし"}
+   ${equipmentSocketSummary(item)}
    ${itemAffixes(item)}
    <div class="equipment-exp"><i style="width:${progress}%"></i></div>
    <small class="equipment-exp-label">EXP ${(item.exp??0).toLocaleString()} / ${need.toLocaleString()}</small>
@@ -215,7 +218,7 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
      <span><small>SPD</small><b>${stats.spd.toLocaleString()}</b></span>
      <span><small>属性</small><b>${attribute.icon}${attribute.name}</b></span>
     </div>
-    <div class="equipped-summary six-slots">${Object.keys(SLOT_UNLOCK_LEVEL).map(subslot=>equippedSlotCard(state,target,subslot,focusItemId)).join("")}</div>
+    <div class="equipped-summary six-slots">${EQUIPMENT_SLOT_ORDER.map(subslot=>equippedSlotCard(state,target,subslot,focusItemId)).join("")}</div>
     ${seriesSummary?`<div class="series-summary"><b>シリーズ</b><small>${seriesSummary}</small>${active.length?`<em>${active.map(entry=>`${EQUIPMENT_SERIES[entry.seriesId]?.name} ${entry.pieces}部位：${describeSeriesEffect(entry.effect)}`).join("<br>")}</em>`:""}${seriesDetails}</div>`:""}
     <div class="auto-equip-row">
      <button id="autoEquipOne">⚡ このキャラを自動装備</button>

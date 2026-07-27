@@ -1,18 +1,19 @@
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
 import{calculatedStats,displayName,totalExperience}from"../../models/Monster.js?v=1.9.0-monster-catalog";
-import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=1.9.0-monster-catalog";
+import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=1.13.0-alpha115";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.9.0-monster-catalog";
-import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=1.2.0";
+import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=1.13.0-alpha115";
 import{formatAffix}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.7.3-alpha112";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.13.0-alpha115";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.13.0-alpha115";
 
 const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],
  earth:["🪨","土"],wind:["🌪️","風"],light:["✨","光"],dark:["🌑","闇"],poison:["☠️","毒"],nature:["🌿","自然"]
 };
-const LOADOUT_SLOTS=["weaponRight","weaponLeft","accessoryNeck","accessoryFinger","armorBody","armorSupport"];
+const LOADOUT_SLOTS=["weaponRight","weaponLeft","armorBody","armorSupport","accessoryNeck","accessoryFinger"];
 
 function rarityClass(rarity){return({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity??"N").toLowerCase()}
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
@@ -32,6 +33,7 @@ function equipmentSlot(state,monster,subslot){
   <small>${equipmentSubslotLabel(subslot)}・${rarity}</small>
   <b class="rarity-name-${rarityClass(rarity)}">${item.name}${item.plus?` +${item.plus}`:""}</b>
   <em>Lv.${item.level??1}・${buff}</em>
+  ${equipmentSocketSummary(item,{compact:true})}
  </button>`;
 }
 function skillEffectText(skill){

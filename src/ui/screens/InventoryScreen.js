@@ -1,6 +1,7 @@
-import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=1.2.0";
+import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=1.13.0-alpha115";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
-import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=1.7.3-alpha112";
+import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=1.13.0-alpha115";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.13.0-alpha115";
 
 const CONSUMABLES=[
  ["potions","🧪","薬草","HPを回復"],
@@ -25,6 +26,11 @@ const CATEGORIES=[
  ["all","すべて"],["weapon","武器"],["armor","防具"],["accessory","アクセ"],["consumable","消費"],["material","素材"]
 ];
 const SLOT_ICONS={weapon:"⚔️",armor:"🛡️",accessory:"💍"};
+const ITEM_ART_ROOT="./assets/ui/items";
+
+function itemArt(name,fallback){
+ return`<span class="v2-item-art" style="--item-art:url('${ITEM_ART_ROOT}/${name}.png')"><i>${fallback}</i></span>`;
+}
 
 function equipmentStats(item){
  const multiplier=equipmentStatMultiplier(item);
@@ -35,9 +41,10 @@ function equipmentCard(item){
  const rarity=equipmentDisplayRarity(item),color=equipmentRarityColor(item);
  return`<button type="button" class="v2-inventory-item equipment" data-inventory-equipment="${item.id}" style="--item-rarity:${color}">
   <span class="v2-item-rarity">${rarity}</span>
-  <i>${SLOT_ICONS[item.slot]??"◆"}</i>
+  ${itemArt(`equipment-${item.slot}`,SLOT_ICONS[item.slot]??"◆")}
   <b>${item.name}</b>
   <small>Lv.${item.level??1}${item.plus?`・+${item.plus}`:""}<br>${equipmentStats(item)}</small>
+  ${equipmentSocketSummary(item,{compact:true})}
   ${item.equippedBy?'<em>Ｅ</em>':""}
  </button>`;
 }
@@ -45,7 +52,7 @@ function equipmentCard(item){
 function stackCard([id,icon,name,description],inventory,type){
  const amount=Math.max(0,Number(inventory[id])||0);
  return`<button type="button" class="v2-inventory-item stack" data-inventory-stack="${id}" data-inventory-kind="${type}">
-  <i>${icon}</i><b>${name}</b><small>${description}</small><strong>×${amount.toLocaleString()}</strong>
+  ${itemArt(id,icon)}<b>${name}</b><small>${description}</small><strong>×${amount.toLocaleString()}</strong>
  </button>`;
 }
 
@@ -68,10 +75,10 @@ export function InventoryScreen(state,category="all",sort="rarity"){
    <div class="v2-category-tabs">${CATEGORIES.map(([id,label])=>`<button type="button" data-inventory-category="${id}" class="${category===id?"active":""}">${label}</button>`).join("")}</div>
    <div class="v2-inventory-toolbar">
     <button type="button" id="openEquipmentFromInventory">装備管理</button>
-    <span>タップで詳細</span>
+    <span>タップで詳細・操作</span>
     <select id="inventorySort" aria-label="並び替え"><option value="rarity" ${sort==="rarity"?"selected":""}>レア度順</option><option value="level" ${sort==="level"?"selected":""}>レベル順</option><option value="name" ${sort==="name"?"selected":""}>名前順</option></select>
    </div>
-   <div class="v2-inventory-grid">${items.join("")||'<div class="v2-empty-state">この分類の持ち物はありません</div>'}</div>
+   <div class="v2-inventory-grid" id="inventoryContextGrid">${items.join("")||'<div class="v2-empty-state">この分類の持ち物はありません</div>'}</div>
   </main>
   ${bottomNav("inventory")}
  </section>`;

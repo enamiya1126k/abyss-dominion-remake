@@ -110,7 +110,7 @@ export function HomeScreen(state){
       <nav class="home-left-menu" aria-label="主要メニュー">
         ${menuButton({id:"openTeamBattle",icon:"crossed-swords",title:"チームバトル",sub:`4 VS 4 / NO PENALTY　${teamSub}`,className:teamUnlocked?"team-ready":"locked"})}
         ${menuButton({id:"openGacha",icon:"summon",title:"召喚",sub:"仲間・装備を獲得"})}
-        ${menuButton({id:"openMonsters",icon:"growth",title:"魔物育成",sub:"強化して部隊を強化"})}
+        ${menuButton({id:"openMonsters",icon:"growth",title:"魔物一覧",sub:"図鑑・合成・逃す"})}
         ${menuButton({id:"openEquipment",icon:"equipment",title:"装備管理",sub:"装備の確認・強化"})}
         ${menuButton({id:"openSkills",icon:"skills",title:"スキル設定",sub:"スキルの確認・強化"})}
       </nav>
@@ -125,8 +125,8 @@ export function HomeScreen(state){
         ${pixelIcon("formation")}<b>部隊編成</b><strong>${party.length}/4</strong>
       </button>
 
-      <button type="button" id="openRest" class="home-rest-hotspot" aria-label="休息">
-        ${pixelIcon("rest")}<b>休息</b>
+      <button type="button" id="openRest" class="home-rest-hotspot home-rest-bed" aria-label="ベッドで休息">
+        <span class="home-rest-bed-art" aria-hidden="true"></span><b>休息</b>
       </button>
 
       <div class="home-party-stage" aria-label="現在の編成パーティ">
