@@ -210,16 +210,16 @@ const DESIGNED_SPECIES=Object.freeze([
   ["dream_archon","198_void_whale_astralis"],
   ["nightmare_archon","199_celestial_guardian_archzeon"],
   ["chaos_archon","200_end_moon_sword_saint_lunacelio"],
-  ["order_archon","201_heaven_thunder_shrine_maiden_ishurana"],
-  ["light_archon","202_netherflame_prince_valgrey"],
-  ["dark_archon","203_sacred_sea_song_princess_nereidia"],
-  ["star_archon","204_time_space_magister_chronoel"],
-  ["void_archon","205_divine_tree_guardian_princess_alveria"],
-  ["infinite_dragon","206_silver_fang_fist_emperor_regnard"],
-  ["thousand_arms","207_dream_mirage_illusionist_lumiera"],
-  ["divine_machine","208_obsidian_gun_saint_zexrain"],
-  ["first_monster","209_star_crowned_empress_asteria"],
-  ["abyss_dominion","210_zero_realm_overlord_nemesial"]
+  ["order_archon","201_order_archon"],
+  ["light_archon","202_light_archon"],
+  ["dark_archon","203_dark_archon"],
+  ["star_archon","204_star_archon"],
+  ["void_archon","205_void_archon"],
+  ["infinite_dragon","206_infinite_dragon"],
+  ["thousand_arms","207_thousand_arms"],
+  ["divine_machine","208_divine_machine"],
+  ["first_monster","209_first_monster"],
+  ["abyss_dominion","210_abyss_dominion"]
 ]);
 
 const standardCatalog=STANDARD_SPECIES_IDS.map((speciesId,index)=>{
