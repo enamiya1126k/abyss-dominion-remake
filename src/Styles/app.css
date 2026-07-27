@@ -1789,7 +1789,7 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
  .home-scene-unit.front-left,.home-scene-unit.front-right{top:48%}
 }
 @media(max-height:620px){
- .home-formation-banner{top:50.5%;height:142px;min-height:142px}
+ .home-formation-banner{top:51.5%;height:142px;min-height:142px}
 }
 @media(min-width:700px){
  .home-party-stage{right:18.8%;left:30.8%}
@@ -1798,6 +1798,129 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
  .home-scene-monster-visual img{width:154px;height:154px}
  .home-formation-banner>.home-pixel-icon{width:104px;height:104px}
  .home-formation-banner{padding-top:104px}
+}
+
+/* alpha114: living town layers and reusable image-based home panels */
+.home-moving-sky,.home-river-flow{display:none!important}
+.home-moving-foliage{
+ display:block!important;
+ position:absolute;
+ inset:0;
+ clip-path:none!important;
+ opacity:.72;
+ background-color:transparent!important;
+ background-position:center center!important;
+ background-repeat:no-repeat!important;
+ background-size:cover!important;
+ image-rendering:pixelated;
+ pointer-events:none;
+ transform:translate3d(0,0,0);
+ transform-origin:50% 76%;
+}
+.home-moving-foliage.foliage-left{
+ background-image:url("../../assets/ui/v2/home-foliage-left.png?v=1.12.5-living-home")!important;
+ animation:homeFoliageLeft 7.6s steps(1,end) infinite!important;
+}
+.home-moving-foliage.foliage-right{
+ background-image:url("../../assets/ui/v2/home-foliage-right.png?v=1.12.5-living-home")!important;
+ animation:homeFoliageRight 9.1s steps(1,end) -3.2s infinite!important;
+}
+@keyframes homeFoliageLeft{
+ 0%,17%,100%{transform:translate3d(0,0,0)}
+ 21%,31%{transform:translate3d(-1px,0,0)}
+ 35%,46%{transform:translate3d(1px,-1px,0)}
+ 50%,63%{transform:translate3d(0,-1px,0)}
+ 67%,78%{transform:translate3d(1px,0,0)}
+ 82%,94%{transform:translate3d(-1px,-1px,0)}
+}
+@keyframes homeFoliageRight{
+ 0%,14%,100%{transform:translate3d(0,0,0)}
+ 18%,29%{transform:translate3d(1px,0,0)}
+ 33%,45%{transform:translate3d(-1px,-1px,0)}
+ 49%,61%{transform:translate3d(0,-1px,0)}
+ 65%,77%{transform:translate3d(-1px,0,0)}
+ 81%,93%{transform:translate3d(1px,-1px,0)}
+}
+.home-river-shimmer{
+ filter:brightness(1.24) saturate(1.12) drop-shadow(0 0 1px rgba(187,235,255,.68));
+ animation-duration:1.65s;
+ will-change:opacity;
+}
+.home-river-shimmer.river-frame-2{animation-delay:-1.1s}
+.home-river-shimmer.river-frame-3{animation-delay:-.55s}
+@keyframes homeWaterFrames{
+ 0%,31%{opacity:.94}
+ 33%,100%{opacity:0}
+}
+
+.home-title-card,
+.home-resource-bar,
+.home-record-card{
+ border:9px solid transparent!important;
+ border-image-source:url("../../assets/ui/v2/home-panel-frame.png?v=1.12.5-living-home")!important;
+ border-image-slice:44!important;
+ border-image-width:9px!important;
+ border-image-outset:0!important;
+ border-image-repeat:stretch!important;
+ background:linear-gradient(180deg,rgba(19,21,22,.98),rgba(4,6,7,.99))!important;
+ box-shadow:0 5px 10px #000c,inset 0 0 16px #0008!important;
+}
+.home-command-button,
+.home-utility-button{
+ border:8px solid transparent!important;
+ border-image-source:url("../../assets/ui/v2/home-panel-frame.png?v=1.12.5-living-home")!important;
+ border-image-slice:44!important;
+ border-image-width:8px!important;
+ border-image-outset:0!important;
+ border-image-repeat:stretch!important;
+ background:linear-gradient(180deg,rgba(18,20,21,.98),rgba(4,6,7,.99))!important;
+ box-shadow:0 5px 8px #000c,inset 0 0 15px #0008!important;
+}
+.home-command-button:first-child{
+ border-image-source:url("../../assets/ui/v2/home-panel-frame.png?v=1.12.5-living-home")!important;
+ background:linear-gradient(180deg,#173d59 0,#0a253a 54%,#06141e 100%)!important;
+ box-shadow:0 5px 8px #000c,inset 0 0 18px rgba(80,173,230,.18)!important;
+}
+.home-utility-button.ready{
+ box-shadow:0 5px 8px #000c,inset 0 0 18px rgba(213,170,78,.16)!important;
+}
+.home-rest-hotspot{
+ border:6px solid transparent!important;
+ border-image-source:url("../../assets/ui/v2/home-panel-frame.png?v=1.12.5-living-home")!important;
+ border-image-slice:44!important;
+ border-image-width:6px!important;
+ border-image-outset:0!important;
+ border-image-repeat:stretch!important;
+ background:rgba(5,8,9,.91)!important;
+}
+.home-bottom-nav{
+ border:9px solid transparent!important;
+ border-image-source:url("../../assets/ui/v2/home-panel-frame.png?v=1.12.5-living-home")!important;
+ border-image-slice:44!important;
+ border-image-width:9px!important;
+ border-image-outset:0!important;
+ border-image-repeat:stretch!important;
+ background:#06080a!important;
+}
+.home-bottom-nav>button{
+ border:6px solid transparent!important;
+ border-image-source:url("../../assets/ui/v2/home-panel-frame.png?v=1.12.5-living-home")!important;
+ border-image-slice:44!important;
+ border-image-width:6px!important;
+ border-image-outset:0!important;
+ border-image-repeat:stretch!important;
+ background:linear-gradient(180deg,#111416,#050708)!important;
+}
+.home-bottom-nav>button.active{
+ border-image-source:url("../../assets/ui/v2/home-panel-frame.png?v=1.12.5-living-home")!important;
+ background:linear-gradient(180deg,#174566,#0b2d48 58%,#061723)!important;
+ box-shadow:inset 0 0 16px rgba(79,181,241,.2)!important;
+}
+@media(prefers-reduced-motion:reduce){
+ .home-moving-foliage,.home-river-shimmer{animation:none!important}
+ .home-moving-foliage{transform:none!important}
+ .home-river-shimmer{opacity:0}
+ .home-river-shimmer.river-frame-1{opacity:.78}
 }
 
 /* Dungeon departure */
