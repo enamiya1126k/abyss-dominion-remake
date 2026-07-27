@@ -179,12 +179,20 @@ export function effectiveSkillMpCost(monster,skill){const reduction=Math.min(50,
 export function allSpeciesSkills(speciesId){return GENERATED[speciesId]??[]}
 export function allLearnedSkills(monster){return allSpeciesSkills(monster.speciesId).filter(skill=>monster.level>=(skill.unlock?.value??1))}
 export function normalizeSkillLoadout(monster){
- const learned=allLearnedSkills(monster),valid=new Set(learned.map(x=>x.id)),saved=Array.isArray(monster.equippedSkills)?monster.equippedSkills.filter(id=>valid.has(id)):[];
- for(const skill of learned){if(saved.length>=4)break;if(!saved.includes(skill.id))saved.push(skill.id)}
- monster.equippedSkills=saved.slice(0,4);return monster.equippedSkills;
+ const learned=allLearnedSkills(monster),valid=new Set(learned.map(x=>x.id));
+ if(!Array.isArray(monster.equippedSkills)||monster.equippedSkills.length===0){
+  monster.equippedSkills=learned.slice(0,4).map(skill=>skill.id);
+ }
+ const saved=Array.from({length:4},(_,index)=>{
+  const id=monster.equippedSkills[index];
+  return valid.has(id)?id:null;
+ });
+ const used=new Set();
+ monster.equippedSkills=saved.map(id=>{if(!id||used.has(id))return null;used.add(id);return id});
+ return monster.equippedSkills;
 }
 export function learnedSkills(monster){const equipped=new Set(normalizeSkillLoadout(monster));return allLearnedSkills(monster).filter(skill=>equipped.has(skill.id))}
-export function equipSkill(monster,skillId,slot){const learned=new Set(allLearnedSkills(monster).map(x=>x.id));if(!learned.has(skillId))return false;normalizeSkillLoadout(monster);const next=[...monster.equippedSkills];const previous=next.indexOf(skillId);if(previous>=0)next[previous]=next[slot]??null;next[slot]=skillId;monster.equippedSkills=next.filter(Boolean).slice(0,4);return true}
+export function equipSkill(monster,skillId,slot){const learned=new Set(allLearnedSkills(monster).map(x=>x.id));if(!learned.has(skillId)||slot<0||slot>3)return false;normalizeSkillLoadout(monster);const next=Array.from({length:4},(_,index)=>monster.equippedSkills[index]??null),previous=next.indexOf(skillId);if(previous>=0)next[previous]=next[slot]??null;next[slot]=skillId;monster.equippedSkills=next;return true}
 
 export function skillProgressFor(monster,skillId){monster.skillProgress??={};const current=monster.skillProgress[skillId]??{level:1,exp:0,uses:0};current.level=Math.max(1,Math.min(10,Number(current.level??1)));current.exp=Math.max(0,Number(current.exp??0));current.uses=Math.max(0,Number(current.uses??0));current.need=current.level>=10?0:25*current.level;monster.skillProgress[skillId]=current;return current}
 export function normalizeSkillProgress(monster){
