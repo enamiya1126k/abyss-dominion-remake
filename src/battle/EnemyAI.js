@@ -50,8 +50,9 @@ export function createEnemyBattleState(species,source,floor){
  const boss=source.boss??isBossFloor(floor),profile=boss?bossProfileForFloor(floor):{tier:null,hp:1,atk:1,def:1,spd:1,statusResist:0,healRate:.16,powerMultiplier:1.8},depth=post9000DepthProfile(floor);
  const maxHp=Math.max(1,Math.floor((species.baseStats.hp+source.level*8)*profile.hp*depth.hp));
  const baseName=source.nameOverride??(boss?`深淵の${species.name}`:species.name),depthName=depth.active&&depth.step>0&&!source.nameOverride?`【${depth.label}】${baseName}`:baseName;
+ const atk=Math.floor((species.baseStats.atk+source.level*1.4)*profile.atk*depth.atk),def=Math.floor((species.baseStats.def+source.level*.5)*profile.def*depth.def),magicRole=["magic","support","healer","controller","debuffer","poison","burner"].some(value=>String(species.role??"").includes(value));
  return{speciesId:source.speciesId,name:depthName,level:source.level,hp:maxHp,maxHp,
-  atk:Math.floor((species.baseStats.atk+source.level*1.4)*profile.atk*depth.atk),def:Math.floor((species.baseStats.def+source.level*.5)*profile.def*depth.def),spd:Math.floor((species.baseStats.spd+source.level*.18)*profile.spd*depth.spd),
+  atk,matk:Math.max(1,Math.floor(atk*(magicRole?1.08:.72))),def,mdef:Math.max(0,Math.floor(def*(magicRole?1.08:.82))),spd:Math.floor((species.baseStats.spd+source.level*.18)*profile.spd*depth.spd),
   emoji:species.emoji??"👾",color:boss?"#bb4cff":species.baseStats.atk>12?"#df6262":"#a58f59",boss,bossTier:profile.tier,bossStatusResist:Math.min(.9,(profile.statusResist??0)+depth.statusResist),bossHealRate:profile.healRate,bossPowerMultiplier:profile.powerMultiplier,depthTier:depth.label,depthStep:depth.step,depthPressure:depth.active?Math.round(depth.step*10):0,phase:1,enraged:false,guard:false,charging:false,healed:false,
   intent:"様子を見ている",specialCooldown:0,divineBarrier:0,...source};
 }

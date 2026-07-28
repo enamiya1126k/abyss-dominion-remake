@@ -81,7 +81,8 @@ function archetype(species){
 function elementLabel(element){return({fire:"炎",water:"水",ice:"氷",earth:"土",wind:"風",lightning:"雷",thunder:"雷",dark:"闇",light:"光",poison:"毒",nature:"自然",neutral:"無"})[element]??"無"}
 function generatedSkill(species,index,row){
  const[name,type,value,mp,tag,target,description,statusId,hits]=row;
- const skill={id:`${species.id}__skill_${index+2}`,name:index>=8?`${species.name}・${name}`:name,mp,type,description,target,tag,element:species.element??"neutral",cooldown:index<2?0:index<5?1:index<8?2:index<10?3:4,unlock:{type:"level",value:UNLOCK_LEVELS[index+1]}};
+ const magicRole=["magic","support","healer","controller","debuffer","poison","burner"].some(value=>String(species.role??"").includes(value));
+ const skill={id:`${species.id}__skill_${index+2}`,name:index>=8?`${species.name}・${name}`:name,mp,type,description,target,tag,element:species.element??"neutral",damageClass:magicRole?"magic":"physical",cooldown:index<2?0:index<5?1:index<8?2:index<10?3:4,unlock:{type:"level",value:UNLOCK_LEVELS[index+1]}};
  if(type==="selfHeal"||type==="allHeal")skill.heal=value;else skill.power=value;
  if(type==="drain")skill.drain=index>=9?.75:index>=6?.55:.4;
  if(type==="multiAttack")skill.hits=hits??2;
@@ -91,7 +92,8 @@ function generatedSkill(species,index,row){
 const GENERATED={};
 for(const species of Object.values(SPECIES)){
  const baseEntry=species.skills?.[0],base=baseEntry?SKILLS[baseEntry.id]:null;
- const first={mp:3,type:"attack",power:1,description:"敵単体へ通常威力の攻撃。",...baseEntry,...base,target:base?.type==="allHeal"?"味方全体":base?.type==="selfHeal"?"自分":"敵単体",tag:base?.type?.includes("Heal")?"回復":base?.status?"継続ダメージ":"攻撃",element:species.element??"neutral",cooldown:0,unlock:{type:"level",value:1}};
+ const magicRole=["magic","support","healer","controller","debuffer","poison","burner"].some(value=>String(species.role??"").includes(value));
+ const first={mp:3,type:"attack",power:1,description:"敵単体へ通常威力の攻撃。",damageClass:magicRole?"magic":"physical",...baseEntry,...base,target:base?.type==="allHeal"?"味方全体":base?.type==="selfHeal"?"自分":"敵単体",tag:base?.type?.includes("Heal")?"回復":base?.status?"継続ダメージ":"攻撃",element:species.element??"neutral",cooldown:0,unlock:{type:"level",value:1}};
  GENERATED[species.id]=[first,...ROLE_POOLS[archetype(species)].map((row,index)=>generatedSkill(species,index,row))];
 }
 function phase2Decorate(species,skills){
@@ -174,8 +176,8 @@ function phase2Decorate(species,skills){
 for(const species of Object.values(SPECIES))GENERATED[species.id]=phase2Decorate(species,GENERATED[species.id]);
 const BY_ID=new Map(Object.values(GENERATED).flat().map(skill=>[skill.id,skill]));
 
-export function maxMp(monster){const species=SPECIES[monster.speciesId],base=species?.maxMp??15,raw=base+(monster.level-1)*.65+(monster.rank-1)*5+(monster.stars-1),pct=monster._equipmentAffixes?.mpPct??0;return Math.floor(raw*(1+pct/100))}
-export function effectiveSkillMpCost(monster,skill){const reduction=Math.min(50,monster?._equipmentAffixes?.mpCostReduction??0);return Math.max(0,Math.ceil((skill?.mp??0)*(1-reduction/100)))}
+export function maxMp(monster){const number=(value,fallback=0)=>Number.isFinite(Number(value))?Number(value):fallback,species=SPECIES[monster.speciesId],base=number(species?.maxMp,15),raw=base+(Math.max(1,number(monster.level,1))-1)*.65+(Math.max(1,number(monster.rank,1))-1)*5+(Math.max(1,number(monster.stars,1))-1)+number(monster._equipmentStats?.mp),pct=number(monster._equipmentAffixes?.mpPct);return Math.max(0,Math.floor(raw*(1+pct/100)))}
+export function effectiveSkillMpCost(monster,skill){const source=Number(monster?._equipmentAffixes?.mpCostReduction??0),reduction=Math.min(50,Number.isFinite(source)?Math.max(0,source):0),base=Number(skill?.mp??0);return Math.max(0,Math.ceil((Number.isFinite(base)?base:0)*(1-reduction/100)))}
 export function allSpeciesSkills(speciesId){return GENERATED[speciesId]??[]}
 export function allLearnedSkills(monster){return allSpeciesSkills(monster.speciesId).filter(skill=>monster.level>=(skill.unlock?.value??1))}
 export function normalizeSkillLoadout(monster){
@@ -221,7 +223,7 @@ export function affixOutgoingDamageMultiplier(stats,enemy,element="neutral"){
  const elementBonus=elementKeys.reduce((sum,key)=>sum+(Number(a[key])||0),0);
  const targetBonus=enemy?.boss||enemy?.endgameBossId?a.bossDamage??0:a.normalDamage??0,lowBonus=stats?._currentHpRatio!=null&&stats._currentHpRatio<=.35?a.lowHpDamage??0:0,fullBonus=stats?._currentHpRatio!=null&&stats._currentHpRatio>=.999?a.fullHpDamage??0:0,total=Math.max(0,Math.min(300,Number(elementBonus)+Number(targetBonus)+Number(lowBonus)+Number(fullBonus)));return 1+total/100
 }
-export function skillDamage(stats,enemy,skill,critical=false){const a=stats._affixes??{},base=Math.max(1,Math.floor((stats.atk*skill.power-enemy.def*.3)*affixOutgoingDamageMultiplier(stats,enemy,skill?.element??"neutral"))),critMult=1.65+(a.critDamage??0)/100;return critical?Math.floor(base*critMult):base}
+export function skillDamage(stats,enemy,skill,critical=false){const a=stats._affixes??{},magic=skill?.damageClass==="magic",attack=magic?(stats.matk??stats.atk):stats.atk,defense=magic?(enemy.mdef??enemy.def):enemy.def,base=Math.max(1,Math.floor((attack*skill.power-defense*.3)*affixOutgoingDamageMultiplier(stats,enemy,skill?.element??"neutral"))),critMult=1.65+(a.critDamage??0)/100;return critical?Math.floor(base*critMult):base}
 export function skillElementLabel(skill){return elementLabel(skill?.element)}
 
 export function chooseAutoSkill(monster,battle){
