@@ -1,9 +1,9 @@
-import{createEquipment,equipmentPower}from"../models/Equipment.js?v=1.2.0";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=1.9.0-monster-catalog";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=1.13.0-alpha115";
+import{createEquipment,equipmentPower}from"../models/Equipment.js?v=1.14.0-alpha124";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=1.14.0-alpha124";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=1.14.0-alpha124";
 import{SPECIES}from"../data/species.js?v=1.9.0-monster-catalog";
-import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=1.13.0-alpha115";
-import{equipmentStatLabel}from"../data/equipment.js?v=1.2.0";
+import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=1.14.0-alpha124";
+import{equipmentStatLabel}from"../data/equipment.js?v=1.14.0-alpha124";
 import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=1.2.0";
 import{goldForClearedFloor}from"./GoldEconomySystem.js?v=1.2.0";
 

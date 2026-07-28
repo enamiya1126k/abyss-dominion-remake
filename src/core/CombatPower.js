@@ -1,4 +1,4 @@
-import{calculatedStats}from"../models/Monster.js?v=1.9.0-monster-catalog";
+import{calculatedStats}from"../models/Monster.js?v=1.14.0-alpha124";
 
 /**
  * 表示用の戦力値。
@@ -8,10 +8,14 @@ import{calculatedStats}from"../models/Monster.js?v=1.9.0-monster-catalog";
 export function monsterCombatPower(monster){
   if(!monster)return 0;
   const s=calculatedStats(monster);
+  const highAttack=Math.max(Math.max(0,s.atk),Math.max(0,s.matk??0));
+  const lowAttack=Math.min(Math.max(0,s.atk),Math.max(0,s.matk??0));
+  const highDefense=Math.max(Math.max(0,s.def),Math.max(0,s.mdef??0));
+  const lowDefense=Math.min(Math.max(0,s.def),Math.max(0,s.mdef??0));
   const raw=
     Math.max(0,s.hp)*.35+
-    Math.max(0,s.atk)*4+
-    Math.max(0,s.def)*3+
+    (highAttack+lowAttack*.35)*4+
+    (highDefense+lowDefense*.35)*3+
     Math.max(0,s.spd)*2+
     Math.max(0,s.crit)*12+
     Math.max(0,s.evasion)*10;
