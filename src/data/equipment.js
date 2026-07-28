@@ -20,7 +20,10 @@ export const EQUIPMENT_BASES={
   {name:"鉄の剣",handedness:"right",stats:{atk:5,crit:2}},
   {name:"魔爪",handedness:"either",stats:{atk:7,spd:1}},
   {name:"炎刃",handedness:"twoHanded",stats:{atk:9,crit:3}},
-  {name:"捕獲師の短剣",handedness:"left",stats:{atk:4,capture:7}}
+  {name:"捕獲師の短剣",handedness:"left",stats:{atk:4,capture:7}},
+  {name:"星詠みの杖",weaponType:"staff",handedness:"twoHanded",stats:{matk:9,mdef:2,heal:4}},
+  {name:"深森のワンド",weaponType:"staff",handedness:"either",stats:{matk:7,mp:6,heal:3}},
+  {name:"黒曜の魔導杖",weaponType:"staff",handedness:"twoHanded",stats:{matk:11,crit:2}}
  ],
  armor:[
   {name:"革鎧",stats:{hp:12,def:3}},
@@ -37,12 +40,12 @@ export const EQUIPMENT_BASES={
 };
 
 export function equipmentStatLabel(key){
- return{atk:"ATK",def:"DEF",hp:"HP",spd:"SPD",crit:"会心",evasion:"回避",capture:"捕獲",heal:"回復量",fireRes:"炎耐性"}[key]??key;
+ return{atk:"物理ATK",matk:"魔法ATK",def:"物理DEF",mdef:"魔法DEF",hp:"HP",mp:"MP",spd:"SPD",crit:"会心",evasion:"回避",capture:"捕獲",heal:"回復量",fireRes:"炎耐性"}[key]??key;
 }
 
 /*
  * セーブデータ互換のため内部キーは従来名を維持する。
- * 表示上は「右手/左手・胴1/胴2・アクセ1/アクセ2」の順に統一。
+ * 表示上は「右手/左手・首/指・胴/補助」の順に統一。
  */
 export const EQUIPMENT_SUBSLOTS={
  weapon:["weaponRight","weaponLeft"],
@@ -51,8 +54,8 @@ export const EQUIPMENT_SUBSLOTS={
 };
 export const EQUIPMENT_SLOT_ORDER=Object.freeze([
  "weaponRight","weaponLeft",
- "armorBody","armorSupport",
- "accessoryNeck","accessoryFinger"
+ "accessoryNeck","accessoryFinger",
+ "armorBody","armorSupport"
 ]);
 export const SLOT_UNLOCK_LEVEL={
  weaponRight:1,
@@ -62,5 +65,5 @@ export const SLOT_UNLOCK_LEVEL={
  accessoryNeck:1,
  accessoryFinger:50
 };
-export function equipmentSubslotLabel(id){return{weaponRight:"右手",weaponLeft:"左手",armorBody:"胴",armorSupport:"胴",accessoryNeck:"アクセ",accessoryFinger:"アクセ"}[id]??id}
+export function equipmentSubslotLabel(id){return{weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"}[id]??id}
 export function compatibleSubslots(item){if(item.slot==="armor")return["armorBody","armorSupport"];if(item.slot==="accessory")return["accessoryNeck","accessoryFinger"];if(item.handedness==="right")return["weaponRight"];if(item.handedness==="left")return["weaponLeft"];if(item.handedness==="twoHanded")return["weaponRight"];return["weaponRight","weaponLeft"]}
