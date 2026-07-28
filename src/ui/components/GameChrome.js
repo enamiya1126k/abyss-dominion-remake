@@ -23,13 +23,12 @@ export function resourceHud(state,{backId=null,title="",eyebrow="ABYSS DOMINION"
 }
 
 const NAV_ITEMS=[
- ["explore","🏰","ダンジョン"],
+ ["home","🏠","ホーム"],
  ["formation","♟","編成"],
  ["equipment","⚔","装備"],
- ["skills","✨","スキル"],
+ ["armory","🗡","武器庫"],
  ["inventory","🎒","持ち物"],
- ["shop","🏪","ショップ"],
- ["gacha","🔮","召喚"]
+ ["skills","✨","スキル"]
 ];
 
 export function bottomNav(active){
