@@ -1,5 +1,5 @@
 import{abyssGoldReward}from"../core/AbyssSkillTreeSystem.js?v=1.7.3-alpha112";
-import{equipmentDisplayRarity}from"../data/equipment.js?v=1.2.0";
+import{equipmentDisplayRarity}from"../data/equipment.js?v=1.14.0-alpha124";
 
 export const EQUIPMENT_LIMIT=500;
 export const RESERVE_LIMIT=30;
@@ -10,7 +10,7 @@ export function equipmentSellPrice(item,state=null){
 }
 
 export function slotLabel(slot){
- return{weapon:"武器",armor:"防具",accessory:"アクセ",weaponRight:"右手",weaponLeft:"左手",armorBody:"胴",armorSupport:"胴",accessoryNeck:"アクセ",accessoryFinger:"アクセ"}[slot]??slot;
+ return{weapon:"武器",armor:"防具",accessory:"アクセ",weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"}[slot]??slot;
 }
 
 export function ensureEquipmentStorage(state){

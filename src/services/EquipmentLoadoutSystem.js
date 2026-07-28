@@ -1,4 +1,4 @@
-import{SLOT_UNLOCK_LEVEL,compatibleSubslots,EQUIPMENT_SLOT_ORDER}from"../data/equipment.js?v=1.13.0-alpha115";
+import{SLOT_UNLOCK_LEVEL,compatibleSubslots,EQUIPMENT_SLOT_ORDER}from"../data/equipment.js?v=1.14.0-alpha124";
 
 export{EQUIPMENT_SLOT_ORDER};
 

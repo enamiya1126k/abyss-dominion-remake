@@ -1,5 +1,5 @@
 import{ensureEquipmentAffixes,rollAffixForSlot}from"../data/equipmentAffixes.js?v=1.2.0";
-import{equipmentDisplayRarity}from"../data/equipment.js?v=1.2.0";
+import{equipmentDisplayRarity}from"../data/equipment.js?v=1.14.0-alpha124";
 import{goldForClearedFloor}from"../core/GoldEconomySystem.js?v=1.1.0";
 
 const LOCK_MULTIPLIERS=[1,2.25,4.75,8];
