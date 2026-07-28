@@ -1,23 +1,31 @@
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
-import{calculatedStats,displayName,totalExperience}from"../../models/Monster.js?v=1.9.0-monster-catalog";
-import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=1.13.0-alpha115";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.9.0-monster-catalog";
-import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=1.13.0-alpha115";
+import{calculatedStats,displayName,totalExperience}from"../../models/Monster.js?v=1.14.0-alpha124";
+import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=1.14.0-alpha124";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.14.0-alpha124";
+import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=1.14.0-alpha124";
 import{formatAffix}from"../../data/equipmentAffixes.js?v=1.2.0";
-import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
+import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.14.0-alpha124";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.13.0-alpha115";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.13.0-alpha115";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.14.0-alpha124";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.14.0-alpha124";
 
 const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],
  earth:["🪨","土"],wind:["🌪️","風"],light:["✨","光"],dark:["🌑","闇"],poison:["☠️","毒"],nature:["🌿","自然"]
 };
-const LOADOUT_SLOTS=["weaponRight","weaponLeft","armorBody","armorSupport","accessoryNeck","accessoryFinger"];
+const LOADOUT_SLOTS=["weaponRight","weaponLeft","accessoryNeck","accessoryFinger","armorBody","armorSupport"];
 const FORMATION_SLOT_LABELS={
- weaponRight:"右手",weaponLeft:"左手",armorBody:"胴",armorSupport:"胴",accessoryNeck:"アクセ",accessoryFinger:"アクセ"
+ weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"
 };
 function formationSlotLabel(subslot){return FORMATION_SLOT_LABELS[subslot]??equipmentSubslotLabel(subslot)}
+function formationRoleLabel(species){
+ const role=String(species?.role??"").toLowerCase();
+ if(["healer","support"].some(value=>role.includes(value)))return"後方支援型";
+ if(["magic","controller","debuffer","poison","burner"].some(value=>role.includes(value)))return"魔法攻撃型";
+ if(["tank","guardian","defender"].some(value=>role.includes(value)))return"前衛防御型";
+ if(["assassin","speed","scout"].some(value=>role.includes(value)))return"高速奇襲型";
+ return"物理攻撃型";
+}
 
 function rarityClass(rarity){return({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity??"N").toLowerCase()}
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
@@ -68,7 +76,7 @@ function memberCard(state,monster,index){
    <div class="formation-slot-label">SLOT ${index+1}</div>
    <div class="formation-member-icon">${monsterVisual(monster,species.emoji??"👹",{className:"formation-monster-visual"})}</div>
    <b class="formation-member-name rarity-name-${rarityClass(rarity)}">${displayName(monster)}</b>
-   <small class="formation-member-meta">${rarity}・${elementIcon}${elementName}<br>Lv.${monster.level}・★${monster.stars??1}・+${monster.plus??0}</small>
+   <small class="formation-member-meta">${rarity}・${elementIcon}${elementName}・${formationRoleLabel(species)}<br>Lv.${monster.level}・★${monster.stars??1}・+${monster.plus??0}</small>
    <small class="formation-total-exp">累計EXP ${totalExperience(monster).toLocaleString()}</small>
   </div>
   <div class="formation-power"><small>戦力</small><strong>${formatCombatPower(monsterCombatPower(monster))}</strong></div>
@@ -76,7 +84,8 @@ function memberCard(state,monster,index){
    <summary>ステータス <small>タップで開閉</small></summary>
    <div class="formation-stats">
     <span>HP<b>${stats.hp.toLocaleString()}</b></span><span>MP<b>${mp.toLocaleString()}</b></span>
-    <span>ATK<b>${stats.atk.toLocaleString()}</b></span><span>DEF<b>${stats.def.toLocaleString()}</b></span>
+    <span>物攻<b>${stats.atk.toLocaleString()}</b></span><span>魔攻<b>${stats.matk.toLocaleString()}</b></span>
+    <span>物防<b>${stats.def.toLocaleString()}</b></span><span>魔防<b>${stats.mdef.toLocaleString()}</b></span>
     <span>SPD<b>${stats.spd.toLocaleString()}</b></span><span>❤️<b>${monster.affection??0}</b></span>
    </div>
   </details>

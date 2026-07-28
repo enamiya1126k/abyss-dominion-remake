@@ -1,5 +1,5 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=1.9.0-monster-catalog";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=1.13.0-alpha115";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=1.14.0-alpha124";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=1.14.0-alpha124";
 import{cooldownRemaining,statusLabel,enemyStatusesFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=0.9.15-alpha.95.1-stability-audit";
 import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=1.9.0-monster-catalog";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";

@@ -1,7 +1,7 @@
-import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=1.13.0-alpha115";
-import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.2.0";
-import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=1.13.0-alpha115";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.13.0-alpha115";
+import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=1.14.0-alpha124";
+import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.14.0-alpha124";
+import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=1.14.0-alpha124";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.14.0-alpha124";
 
 const CONSUMABLES=[
  ["potions","🧪","薬草","HPを回復"],
@@ -22,9 +22,8 @@ const MATERIALS=[
  ["captureCrystals","🔮","捕獲結晶","戦闘中の捕獲に使用"],
  ["abyssKeys","🗝️","深淵の鍵","深淵で使用する特別な鍵"]
 ];
-const CATEGORIES=[
- ["all","すべて"],["weapon","武器"],["armor","防具"],["accessory","アクセ"],["consumable","消費"],["material","素材"]
-];
+const ARMORY_CATEGORIES=[["all","すべて"],["weapon","武器"],["armor","防具"],["accessory","アクセ"]];
+const INVENTORY_CATEGORIES=[["all","すべて"],["consumable","消費"],["material","素材"]];
 const SLOT_ICONS={weapon:"⚔️",armor:"🛡️",accessory:"💍"};
 // This URL is consumed by app.css through a custom property, so it resolves
 // relative to src/Styles/app.css rather than this module or index.html.
@@ -58,29 +57,48 @@ function stackCard([id,icon,name,description],inventory,type){
  </button>`;
 }
 
-export function InventoryScreen(state,category="all",sort="rarity"){
+function sortedEquipment(state,category="all",sort="rarity"){
  const rarityOrder={N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9};
- const equipment=(state.equipment??[]).filter(item=>category==="all"||item.slot===category).sort((a,b)=>{
+ return[...(state.equipment??[])].filter(item=>category==="all"||item.slot===category).sort((a,b)=>{
   if(sort==="level")return(b.level??1)-(a.level??1);
   if(sort==="name")return String(a.name).localeCompare(String(b.name),"ja");
   return(rarityOrder[equipmentDisplayRarity(b)]??0)-(rarityOrder[equipmentDisplayRarity(a)]??0)||(b.level??1)-(a.level??1);
  });
- const stacks=[
-  ...(category==="all"||category==="consumable"?CONSUMABLES.map(item=>stackCard(item,state.inventory??{},"consumable")):[]),
-  ...(category==="all"||category==="material"?MATERIALS.map(item=>stackCard(item,state.inventory??{},"material")):[])
- ];
- const items=[...equipment.map(equipmentCard),...stacks];
- return`<section class="screen v2-screen inventory-screen-v2">
-  ${resourceHud(state,{backId:"backInventory",title:"持ち物"})}
+}
+
+export function ArmoryScreen(state,category="all",sort="rarity"){
+ const equipment=sortedEquipment(state,category,sort);
+ return`<section class="screen v2-screen inventory-screen-v2 armory-screen-v2">
+  ${resourceHud(state,{backId:"backInventory",title:"武器庫"})}
   <main class="v2-screen-content">
-   ${sectionTitle("持ち物",`${items.length}種類 / 装備 ${(state.equipment??[]).length}個`)}
-   <div class="v2-category-tabs">${CATEGORIES.map(([id,label])=>`<button type="button" data-inventory-category="${id}" class="${category===id?"active":""}">${label}</button>`).join("")}</div>
+   ${sectionTitle("武器庫",`${equipment.length}個 / 全装備 ${(state.equipment??[]).length}個`)}
+   <div class="v2-category-tabs">${ARMORY_CATEGORIES.map(([id,label])=>`<button type="button" data-inventory-category="${id}" class="${category===id?"active":""}">${label}</button>`).join("")}</div>
    <div class="v2-inventory-toolbar">
     <span class="v2-inventory-mode">装備管理</span>
     <span>タップで装着・強化・スロット・売却</span>
     <select id="inventorySort" aria-label="並び替え"><option value="rarity" ${sort==="rarity"?"selected":""}>レア度順</option><option value="level" ${sort==="level"?"selected":""}>レベル順</option><option value="name" ${sort==="name"?"selected":""}>名前順</option></select>
    </div>
-   <div class="v2-inventory-grid" id="inventoryContextGrid">${items.join("")||'<div class="v2-empty-state">この分類の持ち物はありません</div>'}</div>
+   <div class="v2-inventory-grid" id="inventoryContextGrid">${equipment.map(equipmentCard).join("")||'<div class="v2-empty-state">この分類の装備はありません</div>'}</div>
+  </main>
+  ${bottomNav("armory")}
+ </section>`;
+}
+
+export function InventoryScreen(state,category="all"){
+ const stacks=[
+  ...(category==="all"||category==="consumable"?CONSUMABLES.map(item=>stackCard(item,state.inventory??{},"consumable")):[]),
+  ...(category==="all"||category==="material"?MATERIALS.map(item=>stackCard(item,state.inventory??{},"material")):[])
+ ];
+ return`<section class="screen v2-screen inventory-screen-v2">
+  ${resourceHud(state,{backId:"backInventory",title:"持ち物"})}
+  <main class="v2-screen-content">
+   ${sectionTitle("持ち物",`${stacks.length}種類`)}
+   <div class="v2-category-tabs">${INVENTORY_CATEGORIES.map(([id,label])=>`<button type="button" data-inventory-category="${id}" class="${category===id?"active":""}">${label}</button>`).join("")}</div>
+   <div class="v2-inventory-toolbar">
+    <span class="v2-inventory-mode">道具・素材</span>
+    <span>タップで詳細・使用</span>
+   </div>
+   <div class="v2-inventory-grid" id="inventoryContextGrid">${stacks.join("")||'<div class="v2-empty-state">この分類の持ち物はありません</div>'}</div>
   </main>
   ${bottomNav("inventory")}
  </section>`;

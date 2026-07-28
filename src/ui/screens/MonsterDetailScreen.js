@@ -2,8 +2,8 @@ import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
 import{PERSONALITIES}from"../../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{MONSTER_COLORS}from"../../data/colors.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{ATTRIBUTES}from"../../data/attributes.js?v=1.1.0";
-import{maxMp}from"../../battle/SkillSystem.js?v=1.13.0-alpha115";
-import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=1.9.0-monster-catalog";
+import{maxMp}from"../../battle/SkillSystem.js?v=1.14.0-alpha124";
+import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=1.14.0-alpha124";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
