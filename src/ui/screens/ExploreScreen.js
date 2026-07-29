@@ -44,7 +44,6 @@ export function ExploreScreen(state){
    <canvas id="gameCanvas"></canvas>
    <span class="explore-floor-plate">${state.player.currentFloor}階</span>
    <aside class="explore-stage-tools">
-    <button type="button" id="exploreLog">🔎<b>探索ログ</b></button>
     <button type="button" id="miniMapToggle" class="minimap-toggle">🗺<b>ミニマップ</b></button>
    </aside>
    <canvas id="miniMap"></canvas>

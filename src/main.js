@@ -1,12 +1,12 @@
 import{SaveService}from"./services/SaveService.js?v=1.14.0-alpha124";
 import{SPECIES}from"./data/species.js?v=1.9.0-monster-catalog";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=1.9.1-endgame-sprites";
-import{HomeScreen}from"./ui/screens/HomeScreen.js?v=1.14.0-alpha124";
+import{HomeScreen}from"./ui/screens/HomeScreen.js?v=1.14.1-delta115";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=1.14.0-alpha124";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=1.14.0-alpha124";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=1.14.0-alpha124";
 import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=1.14.0-alpha124";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=1.14.0-alpha124";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=1.14.1-delta115";
 import{BattleScreen}from"./ui/screens/BattleScreen.js?v=1.14.0-alpha124";
 import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=1.14.0-alpha124";
@@ -52,7 +52,7 @@ import{NOTICE_DEFINITIONS,markAllNoticesRead,normalizeNoticeState}from"./core/No
 import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=1.9.1-endgame-sprites";
 
 const TILE=48,COLS=31,ROWS=31,app=document.getElementById("app"),save=new SaveService();
-let screen="home",selected=null,equipmentTarget=null,equipmentFocusItemId=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",inventoryCategory="all",inventorySort="rarity",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",skillNavigationOrigin="home",detailNavigationOrigin="monsters",formationOrigin="home",lastExploreCombatPower=null;
+let screen="home",selected=null,equipmentTarget=null,equipmentFocusItemId=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",inventoryCategory="all",inventorySort="rarity",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",skillNavigationOrigin="home",inventoryNavigationOrigin="home",settingsNavigationOrigin="home",detailNavigationOrigin="monsters",formationOrigin="home",lastExploreCombatPower=null;
 let secondWorldIntroPlaying=false;
 let tenGodContactPlaying=false;
 let monsterManage={editing:false,selected:new Set()},equipmentManage={editing:false,selected:new Set()};
@@ -226,17 +226,45 @@ function render(){
  else if(screen==="armory"){app.innerHTML=ArmoryScreen(save.state,inventoryCategory,inventorySort);bindInventory()}
  bindSharedUi();
 }
-function go(s){screen=s;render()}
+function expeditionActive(){return Boolean(save.state.player.inRun)}
+function expeditionMenuOrigin(){return expeditionActive()?"explore":"home"}
+function rememberExpeditionMenuHistory(){
+ if(!expeditionActive()||window.history.state?.abyssExpeditionMenu)return;
+ window.history.pushState({...window.history.state,abyssExpeditionMenu:true},"",window.location.href);
+}
+function menuBackTarget(origin="home"){
+ if(["formation","equipment","skills","detail","monsters"].includes(origin))return origin;
+ return expeditionActive()?"explore":origin;
+}
+function returnFromMenu(origin="home"){
+ const target=menuBackTarget(origin);
+ if(target==="explore"&&window.history.state?.abyssExpeditionMenu){window.history.back();return}
+ go(target);
+}
+function go(s){
+ if(s==="home"&&expeditionActive()){
+  if(screen!=="explore")showToast("探索中は「帰還」から拠点へ戻れます");
+  s="explore";
+ }
+ if(screen==="explore"&&["formation","equipment","skills","inventory","armory","settings"].includes(s))rememberExpeditionMenuHistory();
+ screen=s;render();
+}
+window.addEventListener("popstate",()=>{
+ if(!expeditionActive()||battle||screen==="explore")return;
+ screen="explore";render();
+});
 function bindSharedUi(){
- document.querySelector("[data-ui-settings]")?.addEventListener("click",()=>go("settings"));
+ const runOrigin=expeditionMenuOrigin(),homeButton=document.querySelector('[data-ui-route="home"]');
+ if(expeditionActive()&&homeButton){homeButton.querySelector("i").textContent="🗺";homeButton.querySelector("b").textContent="探索へ"}
+ document.querySelector("[data-ui-settings]")?.addEventListener("click",()=>{settingsNavigationOrigin=runOrigin;go("settings")});
  document.querySelectorAll("[data-ui-route]").forEach(button=>button.addEventListener("click",()=>{
  const route=button.dataset.uiRoute;
-  if(route==="home")return go("home");
-  if(route==="formation"){formationOrigin="home";return go("formation")}
-  if(route==="equipment"){equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;navigationOrigin="home";return go("equipment")}
-  if(route==="skills"){skillNavigationOrigin="home";skillTarget=save.state.party[0]??save.state.monsters[0]?.id;skillSlotSelection=0;return go("skills")}
-  if(route==="inventory"){inventoryCategory="all";return go("inventory")}
-  if(route==="armory"){inventoryCategory="all";inventorySort="rarity";return go("armory")}
+  if(route==="home")return expeditionActive()?returnFromMenu("explore"):go("home");
+  if(route==="formation"){formationOrigin=runOrigin;return go("formation")}
+  if(route==="equipment"){equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;navigationOrigin=runOrigin;return go("equipment")}
+  if(route==="skills"){skillNavigationOrigin=runOrigin;skillTarget=save.state.party[0]??save.state.monsters[0]?.id;skillSlotSelection=0;return go("skills")}
+  if(route==="inventory"){inventoryNavigationOrigin=runOrigin;inventoryCategory="all";return go("inventory")}
+  if(route==="armory"){inventoryNavigationOrigin=runOrigin;inventoryCategory="all";inventorySort="rarity";return go("armory")}
  }));
 }
 function capturePartyVitals(){return Object.fromEntries(save.state.party.map(id=>{const m=save.state.monsters.find(x=>x.id===id);return m?[id,{hp:m.currentHp,mp:m.currentMp,ailments:[...(m.ailments??[])]}]:null}).filter(Boolean))}
@@ -478,7 +506,7 @@ function bindHome(){
 }
 
 function bindSkills(){
- document.getElementById("backSkillHome")?.addEventListener("click",()=>{const target=skillNavigationOrigin;skillNavigationOrigin="home";go(target)});
+ document.getElementById("backSkillHome")?.addEventListener("click",()=>{const target=skillNavigationOrigin;skillNavigationOrigin="home";returnFromMenu(target)});
  document.querySelectorAll("[data-skill-monster]").forEach(button=>button.addEventListener("click",()=>{skillTarget=button.dataset.skillMonster;skillSlotSelection=0;render()}));
  const monster=save.state.monsters.find(m=>m.id===skillTarget);if(!monster)return;
  const describe=skill=>{
@@ -702,7 +730,7 @@ async function redeemSettingsSerialCode(event){
  topModalButton().onclick=()=>{closeTopModal();render()};
 }
 function bindSettings(){
- document.getElementById("backHome").onclick=()=>go("home");
+ document.getElementById("backHome").onclick=()=>{const target=settingsNavigationOrigin;settingsNavigationOrigin="home";returnFromMenu(target)};
  document.getElementById("toggleAuto").onclick=()=>{save.state.settings.autoBattle=!save.state.settings.autoBattle;save.save();render()};
  document.getElementById("toggleMinimap").onclick=()=>{save.state.settings.minimapVisible=!save.state.settings.minimapVisible;save.save();render()};
  document.getElementById("openTutorialBook")?.addEventListener("click",openTutorialBook);
@@ -756,12 +784,12 @@ function openEquipmentSlotPicker(subslot){
  app.insertAdjacentHTML("beforeend",Modal(`${equipmentSubslotLabel(subslot)}を選択`,`<div class="equipment-slot-picker"><p class="muted">装備可能な所持品だけを表示しています。</p>${rows||'<p class="empty">装備できる所持品がありません。</p>'}<button type="button" class="equipment-picker-armory" data-open-armory>武器庫で確認する</button></div>`,"閉じる"));
  const modal=topModal();
  modal.querySelectorAll("[data-equipment-picker-item]").forEach(button=>button.onclick=()=>{if(button.dataset.equipmentPickerItem===currentId){modal.remove();return}modal.remove();equipItem(button.dataset.equipmentPickerItem,target.id,subslot)});
- modal.querySelector("[data-open-armory]")?.addEventListener("click",()=>{modal.remove();inventoryCategory=subslot.startsWith("weapon")?"weapon":subslot.startsWith("armor")?"armor":"accessory";inventorySort="rarity";go("armory")});
+ modal.querySelector("[data-open-armory]")?.addEventListener("click",()=>{modal.remove();inventoryNavigationOrigin="equipment";inventoryCategory=subslot.startsWith("weapon")?"weapon":subslot.startsWith("armor")?"armor":"accessory";inventorySort="rarity";go("armory")});
  modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
 }
 function bindEquipment(){
  const focusedItemId=equipmentFocusItemId;
- document.getElementById("backEquipmentHome").onclick=()=>{const target=navigationOrigin;navigationOrigin="home";equipmentFocusItemId=null;go(target)};
+ document.getElementById("backEquipmentHome").onclick=()=>{const target=navigationOrigin;navigationOrigin="home";equipmentFocusItemId=null;returnFromMenu(target)};
  document.getElementById("openAffixHelp")?.addEventListener("click",openEquipmentAffixHelp);
  document.querySelectorAll("[data-equipment-target]").forEach(b=>b.onclick=()=>{equipmentFocusItemId=null;equipmentTarget=b.dataset.equipmentTarget;render()});
  document.getElementById("equipmentSort")?.addEventListener("change",e=>{save.state.settings.equipmentSort=e.target.value;save.save();render()});
@@ -866,7 +894,7 @@ function openInventoryUseTarget(type){
  modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
 }
 function bindInventory(){
- document.getElementById("backInventory")?.addEventListener("click",()=>go("home"));
+ document.getElementById("backInventory")?.addEventListener("click",()=>{const target=inventoryNavigationOrigin;inventoryNavigationOrigin="home";returnFromMenu(target)});
  document.querySelectorAll("[data-inventory-category]").forEach(button=>button.addEventListener("click",()=>{inventoryCategory=button.dataset.inventoryCategory;render()}));
  document.getElementById("inventorySort")?.addEventListener("change",event=>{inventorySort=event.target.value;render()});
  document.querySelectorAll("[data-inventory-equipment]").forEach(button=>button.addEventListener("click",event=>{
@@ -1017,7 +1045,7 @@ function openFormationGearMenu(itemId,ownerId,subslot){
  modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
 }
 function bindFormation(){
- document.getElementById("backFormation")?.addEventListener("click",()=>{const target=formationOrigin;formationOrigin="home";go(target)});
+ document.getElementById("backFormation")?.addEventListener("click",()=>{const target=formationOrigin;formationOrigin="home";returnFromMenu(target)});
  const rarityDrawer=document.querySelector("[data-formation-rarity-drawer]");
  const setRarityDrawer=open=>{
   if(!rarityDrawer)return;
@@ -1508,13 +1536,11 @@ function floorSeed(floor){const seeds=save.state.player.floorSeeds;seeds[floor]?
 function currentDanger(){return dangerConfig(save.state.player.dangerLevel??1)}
 function floorConfig(floor,rng){
  const tier=Math.min(9,Math.floor((floor-1)/10));
- const min=11+Math.min(8,tier),max=Math.min(31,17+tier*2);
+ const min=Math.min(27,15+tier*2),max=Math.min(31,21+tier*2);
  let cols=(min+Math.floor(rng()*(max-min+1)))|1,rows=(min+Math.floor(rng()*(max-min+1)))|1;
- const roll=rng();
- const shape=roll<.66?"cave":roll<.78?"maze":roll<.88?"open":roll<.94?"square":"ring";
- if(shape==="open"){cols=Math.max(cols,19);rows=Math.max(rows,19)}
- if(shape==="square"){const s=(Math.min(cols,rows)|1);cols=s;rows=s}
- return{cols,rows,shape}
+ cols=Math.max(15,Math.min(31,cols));rows=Math.max(15,Math.min(31,rows));
+ const roomCount=Math.min(7,3+Math.floor(rng()*(3+Math.min(2,Math.floor(tier/2)))));
+ return{cols,rows,shape:"rooms",roomCount}
 }
 function maze(){
  const floor=save.state.player.currentFloor,rng=seeded(floorSeed(floor));
@@ -1525,32 +1551,44 @@ function maze(){
   const start={x:cx,y:rows-3},boss={x:cx,y:5,active:true},exit={x:cx,y:2};
   return{cols,rows,shape:"bossCorridor",tiles,start,exit,shop:null,boss,chests:[],treasureRoom:false,steps:0,nextEncounter:999999,encountering:false}
  }
- const cfg=floorConfig(floor,rng),{cols,rows,shape}=cfg;
- let tiles=Array.from({length:rows},()=>Array(cols).fill(1));
+ const cfg=floorConfig(floor,rng),{cols,rows,shape,roomCount}=cfg;
+ const tiles=Array.from({length:rows},()=>Array(cols).fill(1)),rooms=[];
  const inside=(x,y)=>x>0&&y>0&&x<cols-1&&y<rows-1;
- const carveBlob=(x,y,r=1)=>{for(let yy=-r;yy<=r;yy++)for(let xx=-r;xx<=r;xx++)if(inside(x+xx,y+yy)&&xx*xx+yy*yy<=r*r+r)tiles[y+yy][x+xx]=0};
- const center={x:Math.floor(cols/2),y:Math.floor(rows/2)};
- if(shape==="open"||shape==="square"){
-  const margin=shape==="square"?2:1+Math.floor(rng()*3);
-  for(let y=margin;y<rows-margin;y++)for(let x=margin;x<cols-margin;x++)tiles[y][x]=0;
-  const holes=Math.floor(cols*rows*(shape==="open"?.035:.018));
-  for(let i=0;i<holes;i++){const x=2+Math.floor(rng()*(cols-4)),y=2+Math.floor(rng()*(rows-4));if(rng()<.7)tiles[y][x]=1}
- }else if(shape==="ring"){
-  for(let y=2;y<rows-2;y++)for(let x=2;x<cols-2;x++){const dx=(x-center.x)/(cols*.42),dy=(y-center.y)/(rows*.42),d=dx*dx+dy*dy;if(d<1&&d>.22)tiles[y][x]=0}
-  carveBlob(center.x,2,2);carveBlob(center.x,rows-3,2)
- }else if(shape==="maze"){
-  function carve(x,y){tiles[y][x]=0;for(const[dx,dy]of[[2,0],[-2,0],[0,2],[0,-2]].sort(()=>rng()-.5)){const nx=x+dx,ny=y+dy;if(inside(nx,ny)&&tiles[ny][nx]){tiles[y+dy/2][x+dx/2]=0;carve(nx,ny)}}}
-  carve(1,1);
-  for(let i=0;i<Math.floor(cols*rows/45);i++){const x=1+Math.floor(rng()*(cols-2)),y=1+Math.floor(rng()*(rows-2));if(!tiles[y][x])carveBlob(x,y,rng()>.75?2:1)}
- }else{
-  let x=center.x,y=center.y;carveBlob(x,y,2);const target=Math.floor(cols*rows*(.38+rng()*.18));let guard=target*25;
-  while(tiles.flat().filter(v=>v===0).length<target&&guard-->0){const d=[[1,0],[-1,0],[0,1],[0,-1]][Math.floor(rng()*4)];x=Math.max(2,Math.min(cols-3,x+d[0]));y=Math.max(2,Math.min(rows-3,y+d[1]));carveBlob(x,y,rng()<.08?2:rng()<.32?1:0)}
-  const rooms=2+Math.floor(rng()*5);
-  for(let i=0;i<rooms;i++){const tx=2+Math.floor(rng()*(cols-4)),ty=2+Math.floor(rng()*(rows-4));carveBlob(tx,ty,1+Math.floor(rng()*3));while(x!==tx||y!==ty){if(rng()<.5&&x!==tx)x+=Math.sign(tx-x);else if(y!==ty)y+=Math.sign(ty-y);else x+=Math.sign(tx-x);carveBlob(x,y,rng()<.25?1:0)}}
+ const carveCell=(x,y)=>{if(inside(x,y))tiles[y][x]=0};
+ const roomCenter=room=>({x:room.x+Math.floor(room.w/2),y:room.y+Math.floor(room.h/2)});
+ const overlaps=room=>rooms.some(other=>room.x<other.x+other.w+1&&room.x+room.w+1>other.x&&room.y<other.y+other.h+1&&room.y+room.h+1>other.y);
+ let attempts=0;
+ while(rooms.length<roomCount&&attempts++<900){
+  const maxWidth=Math.min(9,cols-4),maxHeight=Math.min(9,rows-4);
+  const w=Math.max(5,Math.min(maxWidth,5+Math.floor(rng()*3)*2)),h=Math.max(5,Math.min(maxHeight,5+Math.floor(rng()*5)));
+  const room={x:1+Math.floor(rng()*Math.max(1,cols-w-2)),y:1+Math.floor(rng()*Math.max(1,rows-h-2)),w,h};
+  if(!overlaps(room))rooms.push(room);
  }
+ if(rooms.length<3){
+  rooms.length=0;
+  rooms.push(
+   {x:1,y:1,w:5,h:5},
+   {x:cols-6,y:1,w:5,h:5},
+   {x:Math.floor((cols-5)/2),y:rows-6,w:5,h:5}
+  );
+ }
+ for(const room of rooms)for(let y=room.y;y<room.y+room.h;y++)for(let x=room.x;x<room.x+room.w;x++)carveCell(x,y);
+ const carveHorizontal=(from,to,y,width)=>{for(let x=Math.min(from,to);x<=Math.max(from,to);x++)for(let offset=0;offset<width;offset++)carveCell(x,y+offset-Math.floor((width-1)/2))};
+ const carveVertical=(from,to,x,width)=>{for(let y=Math.min(from,to);y<=Math.max(from,to);y++)for(let offset=0;offset<width;offset++)carveCell(x+offset-Math.floor((width-1)/2),y)};
+ const connectRooms=(a,b,width)=>{
+  if(rng()<.5){carveHorizontal(a.x,b.x,a.y,width);carveVertical(a.y,b.y,b.x,width)}
+  else{carveVertical(a.y,b.y,a.x,width);carveHorizontal(a.x,b.x,b.y,width)}
+ };
+ for(let index=1;index<rooms.length;index++){
+  const current=roomCenter(rooms[index]),prior=rooms.slice(0,index).map(roomCenter),parent=prior.reduce((best,center)=>Math.abs(center.x-current.x)+Math.abs(center.y-current.y)<Math.abs(best.x-current.x)+Math.abs(best.y-current.y)?center:best,prior[0]);
+  connectRooms(parent,current,rng()<.58?2:3);
+ }
+ if(rooms.length>3&&rng()<.45){const a=roomCenter(rooms[Math.floor(rng()*rooms.length)]),b=roomCenter(rooms[Math.floor(rng()*rooms.length)]);connectRooms(a,b,2)}
  const cells=[];for(let y=1;y<rows-1;y++)for(let x=1;x<cols-1;x++)if(!tiles[y][x])cells.push({x,y});
  if(cells.length<2){tiles[1][1]=0;tiles[rows-2][cols-2]=0;cells.push({x:1,y:1},{x:cols-2,y:rows-2})}
- const distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y),startCell=cells[Math.floor(rng()*cells.length)],exit=cells.reduce((a,c)=>distance(c,startCell)>distance(a,startCell)?c:a,cells[0]);
+ const startCell={...roomCenter(rooms[0])},key=point=>`${point.x},${point.y}`,distances=new Map([[key(startCell),0]]),queue=[startCell];
+ for(let cursor=0;cursor<queue.length;cursor++){const current=queue[cursor],distance=distances.get(key(current));for(const[dx,dy]of[[1,0],[-1,0],[0,1],[0,-1]]){const next={x:current.x+dx,y:current.y+dy},nextKey=key(next);if(!inside(next.x,next.y)||tiles[next.y][next.x]||distances.has(nextKey))continue;distances.set(nextKey,distance+1);queue.push(next)}}
+ const exit=cells.reduce((farthest,cell)=>(distances.get(key(cell))??-1)>(distances.get(key(farthest))??-1)?cell:farthest,startCell),distance=(a,b)=>Math.abs(a.x-b.x)+Math.abs(a.y-b.y);
  const reserved=c=>distance(c,startCell)<=4||distance(c,exit)<=4,candidates=cells.filter(c=>!reserved(c)),used=new Set([`${startCell.x},${startCell.y}`,`${exit.x},${exit.y}`]);
  const takeCell=randomValue=>{const available=candidates.filter(c=>!used.has(`${c.x},${c.y}`)),pool=available.length?available:candidates.length?candidates:cells,roll=Math.max(0,Math.min(.999999,Number(randomValue)||0)),p={...pool[Math.floor(roll*pool.length)]};used.add(`${p.x},${p.y}`);return p};
  const pick=()=>takeCell(rng());
@@ -1558,7 +1596,7 @@ function maze(){
  for(let i=0;i<count;i++){const roll=rng(),kind=treasureRoom?(roll>.48?"radiant":"cabinet"):roll>.96?"radiant":roll>.78?"cabinet":roll>.25?"box":"apple",locked=kind==="radiant"&&rng()<(treasureRoom?.58:.45),mimic=treasureRoom&&rng()<.5,emoji=mimic?"🧰":locked?"🔒":{apple:"🪎",box:"📦",cabinet:"🗃️",radiant:"✨📦"}[kind],p=pick();chests.push({...p,id:`${floor}-${i}`,kind,emoji,locked,mimic,open:opened.includes(`${floor}-${i}`)})}
  const roomPlan=secretRoomPlan(save.state,floor),shop=roomPlan.appears?{...takeCell(roomPlan.positionRoll),active:true,roomId:roomPlan.id}:null;
  const boss=floor%10===0?{...pick(),active:true}:null;
- return{cols,rows,shape,tiles,start:startCell,exit:{...exit},shop,boss,chests,treasureRoom,steps:0,nextEncounter:10+Math.floor(rng()*23),encountering:false}
+ return{cols,rows,shape,rooms,tiles,start:startCell,exit:{...exit},shop,boss,chests,treasureRoom,steps:0,nextEncounter:10+Math.floor(rng()*23),encountering:false}
 }
 function currentSnapshot(){game.world.encountering=false;game.player.path=[];game.player.p=0;game.player.rx=game.player.x;game.player.ry=game.player.y;return{world:game.world,player:game.player,partyTrail:game.partyTrail,cameraData:{x:game.camera.x,y:game.camera.y,z:game.camera.z,ox:game.camera.ox,oy:game.camera.oy,manual:game.camera.manual}}}
 function animateExploreCombatPower(){
@@ -1585,7 +1623,7 @@ function animateExploreCombatPower(){
 }
 function bindExplore(){
  ensureSecretRoomExpedition(save.state);recordBiomeFloor(save.state,save.state.player.currentFloor);save.save();
- explorationTexture("floor");explorationTexture("wall");
+ explorationTexture("floor");explorationTexture("wall");explorationTexture("stairs");
  if(shouldPlaySecondWorldIntro(save.state)){setTimeout(()=>playSecondWorldIntro(),80);return}
  animateExploreCombatPower();
  const canvas=document.getElementById("gameCanvas"),r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);
@@ -1606,11 +1644,6 @@ function bindExplore(){
  document.getElementById("centerCamera").onclick=()=>{game.camera.reset(game.player.rx*TILE,game.player.ry*TILE);game.camera.clamp(game.world)};
  document.getElementById("pauseParty").onclick=()=>{snapshot=currentSnapshot();stopGame();formationOrigin="explore";go("formation")};
  document.getElementById("resourceHelp")?.addEventListener("click",openResourceHelp);
- document.getElementById("exploreLog")?.addEventListener("click",()=>{
-  const preview=manualReturnPreview(save.state),records=save.state.records??{};
-  app.insertAdjacentHTML("beforeend",Modal("🔎 探索ログ",`<div class="explore-log-modal"><p><span>出発階層</span><b>${preview.startFloor}階</b></p><p><span>現在階層</span><b>${preview.endFloor}階</b></p><p><span>踏破</span><b>${preview.floorsCleared}階</b></p><p><span>帰還予定GOLD</span><b>${preview.gold.toLocaleString()}G</b></p><p><span>帰還装備</span><b>${preview.equipmentCount}個</b></p><p><span>累計宝箱</span><b>${(records.chests??0).toLocaleString()}個</b></p></div>`,"探索へ戻る"));
-  topModalButton().onclick=closeTopModal;
- });
  document.querySelectorAll("[data-resource-help]").forEach(b=>b.addEventListener("click",openResourceHelp));
  document.getElementById("fieldEquipment").onclick=()=>{snapshot=currentSnapshot();stopGame();navigationOrigin="explore";go("equipment")};
  document.getElementById("pauseItems").onclick=openFieldItems;
@@ -1776,7 +1809,7 @@ function openChest(c){
 function explorationPartyMembers(){return(save.state.party??[]).map(id=>save.state.monsters?.find(monster=>monster.id===id)).filter(Boolean)}
 const explorationSpriteCache=new Map();
 const explorationTextureCache=new Map();
-const EXPLORE_TEXTURE_URLS={floor:"assets/ui/explore/dungeon-floor.png",wall:"assets/ui/explore/dungeon-wall.png"};
+const EXPLORE_TEXTURE_URLS={floor:"assets/ui/explore/dungeon-floor.png",wall:"assets/ui/explore/dungeon-wall.png",stairs:"assets/ui/explore/dungeon-stairs.png"};
 function explorationTexture(kind){
  const url=EXPLORE_TEXTURE_URLS[kind];if(!url)return null;
  let entry=explorationTextureCache.get(url);
@@ -1816,35 +1849,52 @@ function drawExplorationMonster(position,monster,glow=false,scale=1,index=0){
  const idleFrames=["idle1","idle2","idle3","idle2"],walkFrames=["walk1","idle1","walk2","idle1"],sequence=moving?walkFrames:idleFrames;
  const frame=sequence[Math.floor(performance.now()/(moving?170:320)+index)%sequence.length];
  const image=explorationSpriteImage(monster,frame);
- if(!image){emoji(position,SPECIES[monster.speciesId]?.emoji??"👾",glow,scale);return}
- const p=game.camera.world(position.x*TILE,position.y*TILE),pixelScale=game.camera.z*.72*scale,contactX=p.x+TILE*game.camera.z/2,contactY=p.y+TILE*game.camera.z*.82;
+ if(!image){emoji(position,SPECIES[monster.speciesId]?.emoji??"👾",glow,scale*3.4);return}
+ const p=game.camera.world(position.x*TILE,position.y*TILE),pixelScale=game.camera.z*2.65*scale,contactX=p.x+TILE*game.camera.z/2,contactY=p.y+TILE*game.camera.z*.9;
  game.ctx.save();game.ctx.imageSmoothingEnabled=false;
  if(glow){game.ctx.shadowColor="#ffe36f";game.ctx.shadowBlur=18}
  game.ctx.drawImage(image,contactX-32*pixelScale,contactY-56*pixelScale,64*pixelScale,64*pixelScale);
  game.ctx.restore();
 }
+function drawExplorationTileAsset(position,image,scale=1.45){
+ if(!image)return false;
+ const p=game.camera.world(position.x*TILE,position.y*TILE),tileSize=TILE*game.camera.z,size=tileSize*scale;
+ game.ctx.save();game.ctx.imageSmoothingEnabled=false;game.ctx.shadowColor="#000";game.ctx.shadowBlur=8*game.camera.z;
+ game.ctx.drawImage(image,p.x+(tileSize-size)/2,p.y+(tileSize-size)/2,size,size);
+ game.ctx.restore();return true;
+}
 function drawExplorationParty(){
  const members=explorationPartyMembers();
  for(let index=members.length-1;index>=1;index--){const monster=members[index],position=explorationFollowerPosition(index);drawExplorationMonster(position,monster,false,.88,index)}
  if(members[0])drawExplorationMonster({x:game.player.rx,y:game.player.ry},members[0],true,1,0);
- else emoji({x:game.player.rx,y:game.player.ry},"😈",true,1)
+ else emoji({x:game.player.rx,y:game.player.ry},"😈",true,3.4)
 }
 function draw(){
- const c=game.ctx,w=game.world,palette=worldPresentationForFloor(save.state.player.currentFloor),floorTexture=explorationTexture("floor"),wallTexture=explorationTexture("wall");
+ const c=game.ctx,w=game.world,palette=worldPresentationForFloor(save.state.player.currentFloor),floorTexture=explorationTexture("floor"),wallTexture=explorationTexture("wall"),stairsTexture=explorationTexture("stairs");
  c.fillStyle="#06070a";c.fillRect(0,0,game.canvas.width,game.canvas.height);c.imageSmoothingEnabled=false;
  for(let y=0;y<w.rows;y++)for(let x=0;x<w.cols;x++){
   const p=game.camera.world(x*TILE,y*TILE),s=TILE*game.camera.z,blocked=Boolean(w.tiles[y][x]),image=blocked?wallTexture:floorTexture;
   if(image){
    const crop=96,sx=(x*71+y*29)%(image.width-crop),sy=(y*83+x*17)%(image.height-crop);
    c.drawImage(image,sx,sy,crop,crop,p.x,p.y,s+1,s+1);
-   c.fillStyle=blocked?"#02030766":"#0a07112c";c.fillRect(p.x,p.y,s+1,s+1);
+   c.fillStyle=blocked?"#010205a0":"#0d091528";c.fillRect(p.x,p.y,s+1,s+1);
   }else{c.fillStyle=blocked?palette.wall:palette.floor;c.fillRect(p.x,p.y,s+1,s+1)}
-  if(!blocked){c.strokeStyle="#9f7a3b18";c.lineWidth=Math.max(1,game.camera.z*.55);c.strokeRect(p.x,p.y,s,s)}
+  if(!blocked){
+   c.strokeStyle="#9f7a3b1f";c.lineWidth=Math.max(1,game.camera.z*.55);c.strokeRect(p.x,p.y,s,s);
+   const touchesWall=[[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>w.tiles[y+dy]?.[x+dx]!==0);
+   if(touchesWall){c.strokeStyle="#bd945044";c.lineWidth=Math.max(1,game.camera.z);c.strokeRect(p.x+1,p.y+1,s-2,s-2)}
+  }
   const deco=(x*37+y*61+save.state.player.currentFloor)%149;
   if(blocked&&deco===11){c.fillStyle="#7438a966";c.beginPath();c.moveTo(p.x+s*.45,p.y+s*.78);c.lineTo(p.x+s*.56,p.y+s*.25);c.lineTo(p.x+s*.7,p.y+s*.78);c.fill()}
   if(!blocked&&deco===19){c.fillStyle="#0a6a7166";c.fillRect(p.x+s*.08,p.y+s*.18,s*.84,s*.64)}
  }
- emoji(w.exit,"🕳️");if(w.shop)emoji(w.shop,"🚪");if(w.boss)emoji(w.boss,"👹",true);w.chests.forEach(x=>!x.open&&emoji(x,x.emoji,false));drawExplorationParty();drawMini();
+ if(!drawExplorationTileAsset(w.exit,stairsTexture)){
+  const p=game.camera.world(w.exit.x*TILE,w.exit.y*TILE),s=TILE*game.camera.z;
+  c.fillStyle="#08090d";c.fillRect(p.x+s*.12,p.y+s*.18,s*.76,s*.66);
+  c.strokeStyle="#b28a47";c.lineWidth=Math.max(1,game.camera.z);
+  for(let step=0;step<4;step++){const y=p.y+s*(.25+step*.12);c.beginPath();c.moveTo(p.x+s*(.22+step*.04),y);c.lineTo(p.x+s*(.78-step*.04),y);c.stroke()}
+ }
+ if(w.shop)emoji(w.shop,"🚪");if(w.boss)emoji(w.boss,"👹",true);w.chests.forEach(x=>!x.open&&emoji(x,x.emoji,false));drawExplorationParty();drawMini();
 }
 function emoji(o,t,glow=false,scale=1){const p=game.camera.world(o.x*TILE,o.y*TILE),pulse=glow?1+Math.sin(performance.now()/170)*.12:1;game.ctx.save();if(glow){game.ctx.shadowColor="#ffe36f";game.ctx.shadowBlur=18}game.ctx.font=`${28*game.camera.z*pulse*scale}px sans-serif`;game.ctx.textAlign="center";game.ctx.fillText(t,p.x+TILE*game.camera.z/2,p.y+TILE*game.camera.z/2);game.ctx.restore()}
 function drawMini(){
@@ -2285,6 +2335,7 @@ function lose(){
  const modal=topModal(),returnHome=()=>{modal?.remove();battle=null;go("home")};modal._onDismiss=returnHome;modal.querySelector("[data-modal-primary]").onclick=returnHome
 }
 normalizeEquipmentState();
+if(save.state.player.inRun&&!save.state.activeBattle)screen="explore";
 if(!resumeSavedBattle())render();
 const skillRebalance=save.state.abyssSkillRebalance;
 if(skillRebalance?.refund>0&&!skillRebalance.notifiedAt){

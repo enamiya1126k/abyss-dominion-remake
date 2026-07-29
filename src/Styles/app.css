@@ -2991,6 +2991,7 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
 .home-scene-unit .home-scene-power{
  position:relative;
  overflow:hidden;
+ transition:none!important;
  background:#0b080d!important;
  box-shadow:inset 0 0 0 1px #7d6035,0 3px 5px #000b!important;
 }
@@ -3017,29 +3018,33 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
  z-index:50;
  inset:0;
  display:none;
- grid-template-columns:repeat(2,minmax(0,1fr));
- grid-template-rows:repeat(2,minmax(0,1fr));
- gap:8px;
- padding:8px;
  pointer-events:none;
 }
-body.home-party-drag-active .home-party-drop-grid{display:grid}
+body.home-party-drag-active .home-party-drop-grid{display:block}
 .home-party-drop-grid>span{
+ position:absolute;
+ width:min(86px,43%);
+ height:46px;
  display:grid;
  place-items:center;
  align-content:center;
+ border-radius:50%;
  border:2px dashed #e7c76d;
- background:#130c1ed9;
+ background:#130c1ec7;
  color:#f7dda1;
  box-shadow:inset 0 0 25px #9c55c34d,0 0 12px #000;
  pointer-events:auto;
 }
-.home-party-drop-grid>span b{font:900 1.25rem Georgia,serif}
-.home-party-drop-grid>span small{font-size:.5rem}
+.home-party-drop-grid>span.front-left{left:0;top:79%;transform:translateY(-50%)}
+.home-party-drop-grid>span.front-right{right:0;top:78%;transform:translateY(-50%)}
+.home-party-drop-grid>span.back-left{left:0;top:32%;transform:translateY(-50%)}
+.home-party-drop-grid>span.back-right{right:0;top:31%;transform:translateY(-50%)}
+.home-party-drop-grid>span b{font:900 .8rem Georgia,serif}
+.home-party-drop-grid>span small{font-size:.42rem}
 .home-party-drop-grid>span.drop-ready{
  border-style:solid;
- background:#3b194edb;
- box-shadow:inset 0 0 28px #c977ed70,0 0 16px #e4bd6766;
+ background:#4a371cde;
+ box-shadow:inset 0 0 28px #ffdb6f66,0 0 18px #f3ca6e99;
 }
 .home-party-drag-ghost{
  position:fixed!important;
@@ -3052,8 +3057,8 @@ body.home-party-drag-active .home-party-drop-grid{display:grid}
  transform:translate(-50%,-50%) scale(.94)!important;
  filter:drop-shadow(0 12px 15px #000d) drop-shadow(0 0 9px #dcbd6b99)!important;
 }
-.home-scene-unit.home-party-dragging{opacity:.24!important}
-.home-rest-hotspot.home-rest-bed{left:-12px!important}
+.home-scene-unit.home-party-dragging{opacity:0!important}
+.home-rest-hotspot.home-rest-bed{left:-24px!important}
 
 /* Idle return: the claim itself should feel like opening the chest. */
 .idle-reward-claim{
@@ -3123,7 +3128,8 @@ body.home-party-drag-active .home-party-drop-grid{display:grid}
  width:min(100%,980px)!important;
  min-height:0;
  overflow:auto;
- padding:4px 6px 3px!important;
+ padding:4px 6px calc(var(--v2-nav-height) + max(12px,env(safe-area-inset-bottom)))!important;
+ scroll-padding-bottom:calc(var(--v2-nav-height) + 18px);
  scrollbar-width:thin;
 }
 .equipment-screen-v2 .equipment-target-panel{padding:6px!important}
@@ -3465,7 +3471,7 @@ body.home-party-drag-active .home-party-drop-grid{display:grid}
  min-width:0;
  min-height:72px;
  display:grid;
- grid-template-columns:42px minmax(0,1fr);
+ grid-template-columns:46px minmax(0,1fr);
  align-items:center;
  gap:3px;
  padding:4px;
@@ -3484,7 +3490,13 @@ body.home-party-drag-active .home-party-drop-grid{display:grid}
  font-size:.42rem;
  font-style:normal;
 }
-.explore-party-monster-visual{width:40px!important;height:54px!important}
+.explore-party-monster-visual,
+.explore-party-monster-visual img{
+ width:44px!important;
+ height:44px!important;
+ object-fit:contain!important;
+ image-rendering:pixelated;
+}
 .explore-party-strip>button>div{min-width:0;display:grid;gap:1px}
 .explore-party-strip b,.explore-party-strip>button>div>small{
  overflow:hidden;
@@ -3627,8 +3639,9 @@ body.home-party-drag-active .home-party-drop-grid{display:grid}
  .explore-screen-dungeon .explore-command-header{
   grid-template-columns:minmax(100px,.8fr) minmax(0,1.4fr) minmax(88px,.72fr) 26px;
  }
- .explore-party-strip>button{grid-template-columns:34px minmax(0,1fr);padding:3px}
- .explore-party-monster-visual{width:32px!important;height:46px!important}
+ .explore-party-strip>button{grid-template-columns:36px minmax(0,1fr);padding:3px}
+ .explore-party-monster-visual,
+ .explore-party-monster-visual img{width:36px!important;height:36px!important}
 }
 
 @media(max-width:400px){

@@ -133,7 +133,7 @@ export function HomeScreen(state){
       <div class="home-party-stage" aria-label="現在の編成パーティ">
         ${sceneSlots}
         <div class="home-party-drop-grid" aria-hidden="true">
-          ${Array.from({length:4},(_,index)=>`<span data-home-party-drop="${index}"><b>${index+1}</b><small>ここへ移動</small></span>`).join("")}
+          ${["front-left","front-right","back-left","back-right"].map((position,index)=>`<span class="${position}" data-home-party-drop="${index}"><b>${index+1}</b><small>ここへ移動</small></span>`).join("")}
         </div>
       </div>
 
