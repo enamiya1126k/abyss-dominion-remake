@@ -11,7 +11,7 @@ function scenePartySlot(monster,index){
   const positions=["front-left","front-right","back-left","back-right"];
   if(!monster)return`
     <button type="button" class="home-scene-unit ${positions[index]} empty" data-open-home-formation data-home-party-slot="${index}" aria-label="スロット${index+1}を編成">
-      <em class="home-slot-badge">${index+1}</em><span>＋</span><small>編成${index+1}</small>
+      <em class="home-slot-badge">${index+1}</em><span>＋</span>
     </button>`;
   const species=SPECIES[monster.speciesId];
   return`
@@ -22,6 +22,21 @@ function scenePartySlot(monster,index){
       <small>Lv.${monster.level}</small>
       <strong class="home-scene-power"><i>戦力</i>${formatCombatPower(monsterCombatPower(monster))}</strong>
     </button>`;
+}
+
+export function homePartySlots(state){
+  const partyIds=(state.party??[]).filter(Boolean).slice(0,4);
+  const partySet=new Set(partyIds),seen=new Set(),slots=Array(4).fill(null);
+  const saved=Array.isArray(state.player?.homePartySlots)?state.player.homePartySlots.slice(0,4):[];
+  saved.forEach((id,index)=>{
+    if(id&&partySet.has(id)&&!seen.has(id)){slots[index]=id;seen.add(id)}
+  });
+  partyIds.forEach(id=>{
+    if(seen.has(id))return;
+    const empty=slots.indexOf(null);
+    if(empty>=0){slots[empty]=id;seen.add(id)}
+  });
+  return slots;
 }
 
 const HOME_NUMBER_UNITS=Object.freeze([
@@ -60,7 +75,9 @@ function utilityButton({id,icon,title,value="",ready=false}){
 }
 
 export function HomeScreen(state){
-  const party=state.party.map(id=>state.monsters.find(monster=>monster.id===id)).filter(Boolean);
+  const slotIds=homePartySlots(state);
+  const party=slotIds.map(id=>id?state.monsters.find(monster=>monster.id===id):null);
+  const activeParty=party.filter(Boolean);
   const combatPower=partyCombatPower(state);
   const idleReward=idleReturnPreview(state);
   const team=dailyTeamAttempts(state);
@@ -123,7 +140,7 @@ export function HomeScreen(state){
       </aside>
 
       <button type="button" id="openFormation" class="home-formation-banner">
-        ${pixelIcon("formation")}<b>部隊編成</b><strong>${party.length}/4</strong>
+        ${pixelIcon("formation")}<b>部隊編成</b><strong>${activeParty.length}/4</strong>
       </button>
 
       <button type="button" id="openRest" class="home-rest-hotspot home-rest-bed" aria-label="ベッドで休息">

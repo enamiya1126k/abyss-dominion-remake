@@ -3481,6 +3481,8 @@ body.home-party-drag-active .home-party-drop-grid{display:block}
  background:#08080d;
  color:#eee;
  text-align:left;
+ overflow:hidden;
+ contain:paint;
 }
 .explore-party-strip>button>em{
  position:absolute;
@@ -3494,9 +3496,24 @@ body.home-party-drag-active .home-party-drop-grid{display:block}
 .explore-party-monster-visual img{
  width:44px!important;
  height:44px!important;
+ max-width:44px!important;
+ max-height:44px!important;
+ aspect-ratio:1;
  object-fit:contain!important;
+ object-position:center bottom!important;
  image-rendering:pixelated;
 }
+.explore-party-monster-visual{
+ box-sizing:border-box;
+ display:grid!important;
+ place-items:center;
+ align-self:center;
+ overflow:hidden;
+ padding:2px;
+ border:1px solid #765d3638;
+ background:radial-gradient(circle at 50% 62%,color-mix(in srgb,var(--biome-accent) 20%,transparent),transparent 70%);
+}
+.explore-party-monster-visual img{transform:none!important}
 .explore-party-strip>button>div{min-width:0;display:grid;gap:1px}
 .explore-party-strip b,.explore-party-strip>button>div>small{
  overflow:hidden;
@@ -3641,7 +3658,7 @@ body.home-party-drag-active .home-party-drop-grid{display:block}
  }
  .explore-party-strip>button{grid-template-columns:36px minmax(0,1fr);padding:3px}
  .explore-party-monster-visual,
- .explore-party-monster-visual img{width:36px!important;height:36px!important}
+ .explore-party-monster-visual img{width:36px!important;height:36px!important;max-width:36px!important;max-height:36px!important}
 }
 
 @media(max-width:400px){
