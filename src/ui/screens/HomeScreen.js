@@ -1,24 +1,26 @@
-import{APP_VERSION}from"../../core/config.js?v=1.7.3-alpha112";
-import{displayName}from"../../models/Monster.js?v=1.9.0-monster-catalog";
+import{APP_VERSION}from"../../core/config.js?v=1.14.0-alpha124";
+import{displayName}from"../../models/Monster.js?v=1.14.0-alpha124";
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
 import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=1.0.0";
-import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.9.0-monster-catalog";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=1.4.0";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.14.0-alpha124";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=1.14.0-alpha124";
 import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=1.7.3";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
 
 function scenePartySlot(monster,index){
   const positions=["front-left","front-right","back-left","back-right"];
   if(!monster)return`
-    <button type="button" class="home-scene-unit ${positions[index]} empty" data-open-home-formation aria-label="空き枠を編成">
-      <span>＋</span><small>編成</small>
+    <button type="button" class="home-scene-unit ${positions[index]} empty" data-open-home-formation data-home-party-slot="${index}" aria-label="スロット${index+1}を編成">
+      <em class="home-slot-badge">${index+1}</em><span>＋</span><small>編成${index+1}</small>
     </button>`;
   const species=SPECIES[monster.speciesId];
   return`
-    <button type="button" class="home-scene-unit ${positions[index]}" data-open-home-formation aria-label="${displayName(monster)}の編成を開く">
+    <button type="button" class="home-scene-unit ${positions[index]}" data-open-home-formation data-home-party-slot="${index}" data-home-party-member="${monster.id}" aria-label="${displayName(monster)}・編成スロット${index+1}">
+      <em class="home-slot-badge">${index+1}</em>
       ${monsterVisual(monster,species?.emoji??"👹",{className:"home-scene-monster-visual"})}
       <span class="home-scene-name">${displayName(monster)}</span>
       <small>Lv.${monster.level}</small>
+      <strong class="home-scene-power"><i>戦力</i>${formatCombatPower(monsterCombatPower(monster))}</strong>
     </button>`;
 }
 
@@ -110,7 +112,7 @@ export function HomeScreen(state){
       <nav class="home-left-menu" aria-label="主要メニュー">
         ${menuButton({id:"openTeamBattle",icon:"crossed-swords",title:"チームバトル",sub:`4 VS 4 / NO PENALTY　${teamSub}`,className:teamUnlocked?"team-ready":"locked"})}
         ${menuButton({id:"openGacha",icon:"summon",title:"召喚",sub:"仲間・装備を獲得"})}
-        ${menuButton({id:"openMonsters",icon:"growth",title:"魔物育成",sub:"強化して部隊を強化"})}
+        ${menuButton({id:"openMonsters",icon:"growth",title:"魔物一覧",sub:"図鑑・合成・逃す"})}
         ${menuButton({id:"openEquipment",icon:"equipment",title:"装備管理",sub:"装備の確認・強化"})}
         ${menuButton({id:"openSkills",icon:"skills",title:"スキル設定",sub:"スキルの確認・強化"})}
       </nav>
@@ -118,19 +120,21 @@ export function HomeScreen(state){
       <aside class="home-right-menu" aria-label="お知らせと報酬">
         ${utilityButton({id:"openIdleReturn",icon:"chest",title:"放置報酬",value:idleReward.available?`${compactHomeNumber(idleReward.gold)}G`:"探索中",ready:idleReward.available})}
         ${utilityButton({id:"openNoticeCenter",icon:"notice",title:"お知らせ",value:noticeCount?`未読 ${noticeCount}`:"確認済み",ready:noticeCount>0})}
-        ${utilityButton({id:"openPresentUnavailable",icon:"present",title:"プレゼント"})}
       </aside>
 
       <button type="button" id="openFormation" class="home-formation-banner">
         ${pixelIcon("formation")}<b>部隊編成</b><strong>${party.length}/4</strong>
       </button>
 
-      <button type="button" id="openRest" class="home-rest-hotspot" aria-label="休息">
-        ${pixelIcon("rest")}<b>休息</b>
+      <button type="button" id="openRest" class="home-rest-hotspot home-rest-bed" aria-label="ベッドで休息">
+        <span class="home-rest-bed-art" aria-hidden="true"></span><b>休息</b>
       </button>
 
       <div class="home-party-stage" aria-label="現在の編成パーティ">
         ${sceneSlots}
+        <div class="home-party-drop-grid" aria-hidden="true">
+          ${Array.from({length:4},(_,index)=>`<span data-home-party-drop="${index}"><b>${index+1}</b><small>ここへ移動</small></span>`).join("")}
+        </div>
       </div>
 
       <nav class="home-bottom-nav" aria-label="画面メニュー">

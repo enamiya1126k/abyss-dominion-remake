@@ -1,4 +1,4 @@
-import{EQUIPMENT_BASES}from"../data/equipment.js?v=1.2.0";
+import{EQUIPMENT_BASES}from"../data/equipment.js?v=1.14.0-alpha124";
 import{rollEquipmentAffixes,equipmentAffixPower}from"../data/equipmentAffixes.js?v=1.2.0";
 
 function uid(){return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`}
@@ -10,7 +10,7 @@ export function createEquipment(slot,options={}){
  const stats={};
  for(const[key,value]of Object.entries(base.stats))stats[key]=Math.max(1,Math.round(value*mult));
  return{
-  id:uid(),slot,name:base.name,rarity,level:1,plus:0,stats,handedness:options.handedness??base.handedness??(slot==="weapon"?"either":null),ruleOverrides:options.ruleOverrides??{},series:options.series??seriesForName(base.name),
+  id:uid(),slot,name:base.name,rarity,level:1,plus:0,stats,weaponType:options.weaponType??base.weaponType??null,handedness:options.handedness??base.handedness??(slot==="weapon"?"either":null),ruleOverrides:options.ruleOverrides??{},series:options.series??seriesForName(base.name),
   favorite:false,locked:false,equippedBy:null,exp:0,limitBreak:0,affixes:options.affixes??rollEquipmentAffixes(slot,rarity),createdAt:new Date().toISOString()
  };
 }

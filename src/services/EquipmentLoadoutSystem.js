@@ -1,13 +1,6 @@
-import{SLOT_UNLOCK_LEVEL,compatibleSubslots}from"../data/equipment.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{SLOT_UNLOCK_LEVEL,compatibleSubslots,EQUIPMENT_SLOT_ORDER}from"../data/equipment.js?v=1.14.0-alpha124";
 
-export const EQUIPMENT_SLOT_ORDER=Object.freeze([
- "weaponRight",
- "armorBody",
- "accessoryNeck",
- "armorSupport",
- "accessoryFinger",
- "weaponLeft"
-]);
+export{EQUIPMENT_SLOT_ORDER};
 
 export function emptyEquipmentLoadout(){
  return Object.fromEntries(EQUIPMENT_SLOT_ORDER.map(slot=>[slot,null]));

@@ -3,7 +3,7 @@ import{PERSONALITIES}from"../data/personalities.js?v=0.9.15-alpha.32-phase10-10-
 import{MONSTER_COLORS}from"../data/colors.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{normalizedResistances}from"../data/attributes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{TRUE_MAX_LEVEL}from"../core/config.js?v=1.7.0";
+import{TRUE_MAX_LEVEL}from"../core/config.js?v=1.14.0-alpha124";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -157,48 +157,64 @@ export function affectionBonuses(value){
 
 export function calculatedStats(monster){
   const species=SPECIES[monster.speciesId];
-  const personality=PERSONALITIES[monster.personalityId];
-  const rankMultiplier=1+(monster.rank-1)*.5;
-  const talent=Math.max(1,Math.min(5,monster.stars??1));
+  const personality=PERSONALITIES[monster.personalityId]??PERSONALITIES.bold??Object.values(PERSONALITIES)[0];
+  const finite=(value,fallback=0)=>Number.isFinite(Number(value))?Number(value):fallback;
+  const rank=Math.max(1,finite(monster.rank,1)),level=Math.max(1,finite(monster.level,1));
+  const rankMultiplier=1+(rank-1)*.5;
+  const talent=Math.max(1,Math.min(5,finite(monster.stars,1)));
   const talentMultiplier=1+(talent-1)*.08;
   const growth=species.growth??{};
   const raceGrowth=RACE_GROWTH_RATE[species.race]??{};
-  const levelGrowthFor=key=>1+(monster.level-1)*.055*(growth[key]??1)*(raceGrowth[key]??1);
+  const levelGrowthFor=key=>1+(level-1)*.055*(growth[key]??1)*(raceGrowth[key]??1);
   const limitGrowth=limitBreakGrowth(monster.speciesId);
   const affection=affectionBonuses(monster.affection??monster.bond??0);
 
   const calc=(key)=>{
-    const base=species.baseStats[key]+(limitGrowth[key]??0)*Math.max(0,monster.plus??0);
-    const iv=monster.ivs[key]??75;
+    const base=finite(species.baseStats[key])+(limitGrowth[key]??0)*Math.max(0,finite(monster.plus));
+    const iv=Math.max(0,Math.min(100,finite(monster.ivs?.[key],75)));
     const ivMultiplier=.75+iv/400;
-    const personalityMultiplier=personality.modifiers[key]??1;
+    const personalityMultiplier=finite(personality?.modifiers?.[key],1);
     return Math.floor(base*rankMultiplier*talentMultiplier*levelGrowthFor(key)*ivMultiplier*personalityMultiplier*(1+(affection[key]??0)));
   };
 
   const trait=TRAITS[monster.traitId]??TRAITS.steady;
   const gear=monster._equipmentStats??{},affix=monster._equipmentAffixes??{};
   const syn=monster._synergy??{};
+  const role=String(species.role??"");
+  const magicalRole=["magic","support","healer","controller","debuffer","poison","burner"].some(value=>role.includes(value));
+  const baseAtk=calc("atk"),baseDef=calc("def");
   const result={
-    hp:calc("hp")+(gear.hp??0),
-    atk:calc("atk")+(gear.atk??0),
-    def:calc("def")+(gear.def??0),
-    spd:calc("spd")+(gear.spd??0),
-    crit:Math.floor(species.baseStats.crit*(personality.modifiers.crit??1))+(gear.crit??0),
-    evasion:Math.floor(species.baseStats.evasion*(personality.modifiers.evasion??1))+(gear.evasion??0)
+    hp:calc("hp")+finite(gear.hp),
+    atk:baseAtk+finite(gear.atk),
+    matk:Math.max(1,Math.floor(baseAtk*(magicalRole?1.08:.72)))+finite(gear.matk),
+    def:baseDef+finite(gear.def),
+    mdef:Math.max(1,Math.floor(baseDef*(magicalRole?1.08:.82)))+finite(gear.mdef),
+    spd:calc("spd")+finite(gear.spd),
+    crit:Math.floor(finite(species.baseStats.crit)*finite(personality?.modifiers?.crit,1))+finite(gear.crit),
+    evasion:Math.floor(finite(species.baseStats.evasion)*finite(personality?.modifiers?.evasion,1))+finite(gear.evasion)
   };
-  for(const key of["hp","atk","def","spd"]){if(trait.mods[key])result[key]=Math.floor(result[key]*trait.mods[key]);const pct=affix[`${key}Pct`]??0;if(pct)result[key]=Math.floor(result[key]*(1+pct/100))}
-  result.crit+=affix.critRate??0;result.evasion+=affix.evasion??0;result._affixes=affix;
+  for(const key of["hp","atk","matk","def","mdef","spd"]){
+    const traitKey=key==="matk"?"atk":key==="mdef"?"def":key;
+    if(trait.mods[traitKey])result[key]=Math.floor(result[key]*trait.mods[traitKey]);
+    const pct=finite(affix[`${key}Pct`]??(key==="matk"?affix.atkPct:key==="mdef"?affix.defPct:0));
+    if(pct)result[key]=Math.floor(result[key]*(1+pct/100));
+  }
+  result.crit+=finite(affix.critRate);result.evasion+=finite(affix.evasion);result._affixes=affix;
   if(trait.mods.crit)result.crit+=trait.mods.crit;
-  if(syn.atk)result.atk=Math.floor(result.atk*(1+syn.atk));
-  if(syn.def)result.def=Math.floor(result.def*(1+syn.def));
+  if(syn.atk){result.atk=Math.floor(result.atk*(1+syn.atk));result.matk=Math.floor(result.matk*(1+syn.atk))}
+  if(syn.def){result.def=Math.floor(result.def*(1+syn.def));result.mdef=Math.floor(result.mdef*(1+syn.def))}
   if(syn.spd)result.spd=Math.floor(result.spd*(1+syn.spd));
   if(syn.crit)result.crit+=syn.crit;
-  for(const bonus of activeSeriesBonuses(monster._seriesCounts)){if(bonus.effect.atk)result.atk=Math.floor(result.atk*(1+bonus.effect.atk));if(bonus.effect.def)result.def=Math.floor(result.def*(1+bonus.effect.def));if(bonus.effect.hp)result.hp=Math.floor(result.hp*(1+bonus.effect.hp));if(bonus.effect.spd)result.spd=Math.floor(result.spd*(1+bonus.effect.spd));if(bonus.effect.crit)result.crit+=bonus.effect.crit;if(bonus.effect.evasion)result.evasion+=bonus.effect.evasion;}
-  const mastery=monster._seriesMasteryBonus??{};if(mastery.hp)result.hp=Math.floor(result.hp*(1+mastery.hp));if(mastery.atk)result.atk=Math.floor(result.atk*(1+mastery.atk));if(mastery.def)result.def=Math.floor(result.def*(1+mastery.def));if(mastery.spd)result.spd=Math.floor(result.spd*(1+mastery.spd));if(mastery.crit)result.crit+=mastery.crit;
+  for(const bonus of activeSeriesBonuses(monster._seriesCounts)){if(bonus.effect.atk){result.atk=Math.floor(result.atk*(1+bonus.effect.atk));result.matk=Math.floor(result.matk*(1+bonus.effect.atk))}if(bonus.effect.def){result.def=Math.floor(result.def*(1+bonus.effect.def));result.mdef=Math.floor(result.mdef*(1+bonus.effect.def))}if(bonus.effect.hp)result.hp=Math.floor(result.hp*(1+bonus.effect.hp));if(bonus.effect.spd)result.spd=Math.floor(result.spd*(1+bonus.effect.spd));if(bonus.effect.crit)result.crit+=bonus.effect.crit;if(bonus.effect.evasion)result.evasion+=bonus.effect.evasion;}
+  const mastery=monster._seriesMasteryBonus??{};if(mastery.hp)result.hp=Math.floor(result.hp*(1+mastery.hp));if(mastery.atk){result.atk=Math.floor(result.atk*(1+mastery.atk));result.matk=Math.floor(result.matk*(1+mastery.atk))}if(mastery.def){result.def=Math.floor(result.def*(1+mastery.def));result.mdef=Math.floor(result.mdef*(1+mastery.def))}if(mastery.spd)result.spd=Math.floor(result.spd*(1+mastery.spd));if(mastery.crit)result.crit+=mastery.crit;
   const abyss=monster._abyssSkillEffects??{};
   for(const[key,effectKey]of[["hp","partyHpRate"],["atk","partyAtkRate"],["def","partyDefRate"],["spd","partySpdRate"]]){
     const rate=Number(abyss[effectKey])||0;
-    if(rate)result[key]=Math.max(1,Math.floor(result[key]*(1+rate)));
+    if(rate){
+      result[key]=Math.max(1,Math.floor(result[key]*(1+rate)));
+      if(key==="atk")result.matk=Math.max(1,Math.floor(result.matk*(1+rate)));
+      if(key==="def")result.mdef=Math.max(1,Math.floor(result.mdef*(1+rate)));
+    }
   }
   return result;
 }
@@ -211,4 +227,4 @@ export function unlockedSkills(monster){
   });
 }
 
-export function calculateDangerRank(monster){const s=calculatedStats(monster);const gear=Object.values(monster.equipment??{}).filter(Boolean).length;const boss=monster.isBoss?2.5:1;const seal=monster.sealedPower?.ratio??1;return Math.max(1,Math.round((s.hp*.18+s.atk*2.8+s.def*2.2+s.spd*1.8+s.crit+s.evasion+gear*12)*boss*seal))}
+export function calculateDangerRank(monster){const s=calculatedStats(monster),attack=Math.max(s.atk,s.matk??0),defense=Math.max(s.def,s.mdef??0);const gear=Object.values(monster.equipment??{}).filter(Boolean).length;const boss=monster.isBoss?2.5:1;const seal=monster.sealedPower?.ratio??1;return Math.max(1,Math.round((s.hp*.18+attack*2.8+defense*2.2+s.spd*1.8+s.crit+s.evasion+gear*12)*boss*seal))}

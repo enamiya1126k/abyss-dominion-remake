@@ -1,19 +1,19 @@
-import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL}from"../core/config.js?v=1.7.3-alpha112";
-import{createMonster,totalExperience,applyTotalExperience}from"../models/Monster.js?v=1.9.0-monster-catalog";
-import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=1.9.0-monster-catalog";
+import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL}from"../core/config.js?v=1.14.0-alpha124";
+import{createMonster,totalExperience,applyTotalExperience}from"../models/Monster.js?v=1.14.0-alpha124";
+import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=1.14.0-alpha124";
 import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=1.0.0";
 import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=1.1.0";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=1.1.0";
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../data/species.js?v=1.9.0-monster-catalog";
 
-import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=1.4.0";
+import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=1.14.0-alpha124";
 import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=1.7.3-alpha112";
-import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=0.9.15-alpha.95.1-stability-audit";
-import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=1.2.0";
-import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=1.9.0-monster-catalog";
-import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=1.9.0-monster-catalog";
-import{normalizeSerialCodeState}from"../core/SerialCodeSystem.js?v=1.7.0";
+import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=1.14.0-alpha124";
+import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=1.14.0-alpha124";
+import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=1.14.0-alpha124";
+import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=1.14.0-alpha124";
+import{normalizeSerialCodeState}from"../core/SerialCodeSystem.js?v=1.14.0-alpha124";
 import{normalizeNoticeState}from"../core/NoticeSystem.js?v=1.7.3";
 function finiteNumber(value,fallback=0,min=-Infinity,max=Infinity){
  const number=Number(value);
@@ -150,13 +150,17 @@ export class SaveService{
    m.rank=Math.floor(finiteNumber(m.rank,1,1,Number.MAX_SAFE_INTEGER));
    m.stars=Math.floor(finiteNumber(m.stars,1,1,5));
    m.plus=Math.floor(finiteNumber(m.plus,0,0,Number.MAX_SAFE_INTEGER));
+   m.ivs=m.ivs&&typeof m.ivs==="object"&&!Array.isArray(m.ivs)?m.ivs:{};
+   for(const key of["hp","atk","def","spd"])m.ivs[key]=Math.floor(finiteNumber(m.ivs[key],75,0,100));
    m.traitId??="steady";
    m.personalityId??="bold";
    m.colorId??="green";
    const mpMax=maxMp(m);
    m.currentMp=finiteNumber(m.currentMp,mpMax,0,mpMax);
    m.currentHp=m.currentHp==null?null:finiteNumber(m.currentHp,null,0,Number.MAX_SAFE_INTEGER);
-   m.equippedSkills=Array.isArray(m.equippedSkills)?m.equippedSkills.filter(Boolean).slice(0,4):[];
+   m.equippedSkills=Array.isArray(m.equippedSkills)&&m.equippedSkills.length
+    ?Array.from({length:4},(_,index)=>m.equippedSkills[index]??null)
+    :[];
    normalizeContractedEndgameMonster(m);
    normalizeSkillProgress(m);
    const oldGear=m.equipment??{};
@@ -174,13 +178,27 @@ export class SaveService{
    i.favorite??=false;
    i.locked??=false;
    i.equippedBy??=null;
-   i.plus??=0;
+   i.plus=Math.floor(finiteNumber(i.plus,0,0,Number.MAX_SAFE_INTEGER));
    const savedLevel=Number(i.level??1);
    i.level=Number.isFinite(savedLevel)?Math.max(1,Math.floor(savedLevel)):1;
-   i.exp=Math.max(0,Number(i.exp??0));
+   i.exp=finiteNumber(i.exp,0,0,Number.MAX_SAFE_INTEGER);
+   i.limitBreak=Math.floor(finiteNumber(i.limitBreak,0,0,Number.MAX_SAFE_INTEGER));
+   i.stats=i.stats&&typeof i.stats==="object"&&!Array.isArray(i.stats)?i.stats:{};
+   for(const[key,value]of Object.entries(i.stats)){
+    const normalized=finiteNumber(value,0,-Number.MAX_SAFE_INTEGER,Number.MAX_SAFE_INTEGER);
+    if(normalized===0)delete i.stats[key];else i.stats[key]=normalized;
+   }
+   if(Array.isArray(i.affixes))i.affixes=i.affixes.filter(affix=>affix&&typeof affix==="object"&&affix.id).map(affix=>({
+    ...affix,
+    id:String(affix.id),
+    value:finiteNumber(affix.value,0,-Number.MAX_SAFE_INTEGER,Number.MAX_SAFE_INTEGER),
+    quality:typeof affix.quality==="string"?affix.quality:"normal",
+    locked:Boolean(affix.locked)
+   }));else delete i.affixes;
    i.createdAt??=new Date(0).toISOString();
    i.series??=null;
    i.handedness??=i.slot==="weapon"?"either":null;
+   if(i.slot==="weapon"&&!i.weaponType&&/(杖|ワンド|ロッド|staff|wand|rod)/i.test(String(i.name??"")))i.weaponType="staff";
    i.ruleOverrides??={};
    normalizeEquipmentAffixLocks(i);
   });
