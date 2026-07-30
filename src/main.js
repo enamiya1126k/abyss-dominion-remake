@@ -1,25 +1,25 @@
-import{SaveService}from"./services/SaveService.js?v=1.14.4-delta117";
+import{SaveService}from"./services/SaveService.js?v=1.7.5-final";
 import{SPECIES}from"./data/species.js?v=1.9.0-monster-catalog";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=1.9.1-endgame-sprites";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=1.14.4-delta117";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=1.7.5-final";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=1.14.0-alpha124";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=1.14.0-alpha124";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=1.14.0-alpha124";
 import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=1.14.0-alpha124";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=1.14.4-delta117";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=1.14.3-delta116";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=1.7.5-final";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=1.7.5-final";
 import{Modal}from"./ui/components/Modal.js?v=0.9.15-alpha.28-phase10-6-consistency";
-import{pixelIcon}from"./ui/components/GameChrome.js?v=1.14.4-delta117";
+import{pixelIcon}from"./ui/components/GameChrome.js?v=1.7.5-final";
 import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=1.14.0-alpha124";
 import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=1.14.0-alpha124";
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=1.14.0-alpha124";
 import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=1.9.0-monster-catalog";
 import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=0.9.15-alpha.28-phase10-6-consistency";
 import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=1.14.0-alpha124";
-import{RARITY_ORDER,equipmentDisplayRarity,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=1.14.0-alpha124";
+import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=1.7.5-final";
 import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=0.9.15-alpha.95.1-stability-audit";
 import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=1.2.0";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=1.14.4-delta117";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=1.7.5-final";
 import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=1.14.0-alpha124";
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=1.14.0-alpha124";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=1.9.0-monster-catalog";
@@ -491,6 +491,15 @@ function openEventHub(){
  modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
 }
 function bindHomePartyDrag(){
+ const dropTargetAt=(x,y)=>{
+  const direct=document.elementFromPoint(x,y)?.closest?.("[data-home-party-drop]");
+  if(direct)return direct;
+  const targets=[...document.querySelectorAll("[data-home-party-drop]")];
+  return targets.sort((a,b)=>{
+   const ar=a.getBoundingClientRect(),br=b.getBoundingClientRect();
+   return Math.hypot(x-(ar.left+ar.width/2),y-(ar.top+ar.height/2))-Math.hypot(x-(br.left+br.width/2),y-(br.top+br.height/2));
+  })[0]??null;
+ };
  document.querySelectorAll("[data-home-party-member]").forEach(unit=>{
   unit.addEventListener("click",event=>{
    if(unit.dataset.homeDragSuppress!=="1")return;
@@ -511,7 +520,7 @@ function bindHomePartyDrag(){
     if(!active||!ghost)return;
     moveEvent.preventDefault();ghost.style.left=`${moveEvent.clientX}px`;ghost.style.top=`${moveEvent.clientY}px`;
     lastTarget?.classList.remove("drop-ready");
-    lastTarget=document.elementFromPoint(moveEvent.clientX,moveEvent.clientY)?.closest?.("[data-home-party-drop]")??null;
+    lastTarget=dropTargetAt(moveEvent.clientX,moveEvent.clientY);
     lastTarget?.classList.add("drop-ready");
    };
    const finish=upEvent=>{
@@ -519,7 +528,7 @@ function bindHomePartyDrag(){
     document.removeEventListener("pointermove",move,true);document.removeEventListener("pointerup",finish,true);document.removeEventListener("pointercancel",finish,true);
     unit.classList.remove("home-party-dragging");document.body.classList.remove("home-party-drag-active");ghost?.remove();lastTarget?.classList.remove("drop-ready");
     if(!active)return;
-    const target=document.elementFromPoint(upEvent.clientX,upEvent.clientY)?.closest?.("[data-home-party-drop]")??lastTarget;
+    const target=dropTargetAt(upEvent.clientX,upEvent.clientY)??lastTarget;
     if(!target)return;
     const targetIndex=Number(target.dataset.homePartyDrop);
     if(!Number.isInteger(targetIndex)||targetIndex===sourceIndex)return;
@@ -549,6 +558,22 @@ function rememberNormalEncounter(entries){
   recordedAt:new Date().toISOString()
  };
 }
+function rememberBossEncounter(entry){
+ if(!entry?.boss||!SPECIES[entry.speciesId])return;
+ save.state.recentBossEncounter={
+  speciesId:entry.speciesId,
+  level:Math.max(1,Math.floor(Number(entry.level)||1)),
+  boss:true,
+  uncapturable:false,
+  nameOverride:entry.nameOverride??null,
+  endgameBossId:entry.endgameBossId??null,
+  faction:entry.faction??null,
+  powerRate:Number(entry.powerRate)||1,
+  manifestationLabel:entry.manifestationLabel??null,
+  recordedFloor:save.state.player.currentFloor,
+  recordedAt:new Date().toISOString()
+ };
+}
 function openBattleMemory(){
  const memory=save.state.recentEncounter,species=memory?.speciesId?SPECIES[memory.speciesId]:null;
  if(!memory||!species){
@@ -574,6 +599,37 @@ function openBattleMemory(){
   startBattle(encounter,{memoryBattle:true,memorySourceFloor:memory.recordedFloor,memorySpeciesId:memory.speciesId});
  };
 }
+function openBossMemory(){
+ const memory=save.state.recentBossEncounter,species=memory?.speciesId?SPECIES[memory.speciesId]:null;
+ if(!memory||!species){
+  app.insertAdjacentHTML("beforeend",Modal("深淵の記憶",`<div class="battle-memory-empty boss-memory-empty"><img src="assets/ui/v2/memory-rift.png" alt=""><p>記録された階層支配者はいません。</p><small>階層ボスを撃破すると、最後の1体が深淵へ刻まれます。</small></div>`,"閉じる"));
+  topModalButton().onclick=closeTopModal;return;
+ }
+ const enough=(save.state.player.crystals??0)>=10,name=memory.nameOverride??species.name;
+ const preview={speciesId:memory.speciesId,level:memory.level,stars:5,plus:0,affection:0};
+ app.insertAdjacentHTML("beforeend",Modal("深淵の記憶",`<div class="battle-memory-preview boss-memory-preview">
+  <div class="battle-memory-rift"><img src="assets/ui/v2/memory-rift.png" alt="" class="boss-memory-rift-art">${monsterVisual(preview,species.emoji??"MONSTER",{className:"battle-memory-monster-visual"})}</div>
+  <small>BOSS MEMORY・${memory.recordedFloor}F</small><h2>${name} <em>Lv.${memory.level}</em></h2>
+  <p>撃破した階層支配者を再現します。この再戦でのみ捕獲できます。</p>
+  <div class="battle-memory-cost">${pixelIcon("crystal")}<b>魔晶石 10個</b><span>所持 ${(save.state.player.crystals??0).toLocaleString()}個</span></div>
+  <small class="muted">撃破報酬の再選択・階層進行はありません。挑戦開始後の魔晶石は返還されません。</small>
+ </div>`,enough?"深淵へ挑む":"魔晶石が足りない"));
+ const modal=topModal(),primary=modal.querySelector("[data-modal-primary]");
+ if(!enough){primary.disabled=true;return}
+ let started=false;
+ primary.onclick=()=>{
+  if(started)return;started=true;primary.disabled=true;
+  if((save.state.player.crystals??0)<10){showToast("魔晶石が足りません");modal.remove();return}
+  save.state.player.crystals-=10;save.save();modal.remove();
+  const encounter={
+   speciesId:memory.speciesId,level:memory.level,boss:true,uncapturable:false,
+   nameOverride:memory.nameOverride??undefined,endgameBossId:memory.endgameBossId??undefined,
+   faction:memory.faction??undefined,powerRate:memory.powerRate??1,
+   manifestationLabel:memory.manifestationLabel??undefined
+  };
+  startBattle(encounter,{memoryBattle:true,bossMemoryBattle:true,memorySourceFloor:memory.recordedFloor,memorySpeciesId:memory.speciesId});
+ };
+}
 function bindHome(){
  document.getElementById("openIdleReturn")?.addEventListener("click",openIdleReturnPreview);
  document.getElementById("openCombatPowerHistory")?.addEventListener("click",openCombatPowerHistory);
@@ -582,6 +638,7 @@ function bindHome(){
  document.getElementById("openMonsters").onclick=()=>go("monsters");
  document.getElementById("openSkills")?.addEventListener("click",()=>{skillNavigationOrigin="home";skillTarget=save.state.party[0]??save.state.monsters[0]?.id;skillSlotSelection=0;go("skills")});
  document.getElementById("openBattleMemory")?.addEventListener("click",openBattleMemory);
+ document.getElementById("openBossMemory")?.addEventListener("click",openBossMemory);
  document.getElementById("openItemShop")?.addEventListener("click",openHomeItemShop);
  document.getElementById("openTeamBattle")?.addEventListener("click",openTeamBattle);
  document.getElementById("openRest")?.addEventListener("click",openRest);
@@ -647,9 +704,11 @@ function bindAbyssSkills(){
  document.querySelectorAll("[data-learn-abyss-skill]").forEach(button=>button.addEventListener("click",()=>{
   const node=abyssSkillNodeById(button.dataset.learnAbyssSkill);
   if(!node)return;
-  if(button.disabled||button.dataset.buying==="1")return;
+ if(button.disabled||button.dataset.buying==="1")return;
   button.dataset.buying="1";
-  const scrollY=window.scrollY,treeScroll=document.querySelector(".abyss-tree-scroll")?.scrollTop??0;
+  const scrollY=window.scrollY,anchorTop=button.getBoundingClientRect().top;
+  const tree=document.querySelector(".abyss-tree-page,.abyss-tree-scroll,[data-abyss-tree-scroll]");
+  const treeScroll=tree?.scrollTop??0;
   const vitals=save.state.monsters.map(monster=>[monster,captureVitalSnapshot(monster)]);
   const result=learnAbyssSkill(save.state,node.id);
   if(!result.ok){delete button.dataset.buying;showToast(result.message);return}
@@ -660,7 +719,16 @@ function bindAbyssSkills(){
   render();
   requestAnimationFrame(()=>{
    window.scrollTo(0,scrollY);
-   const tree=document.querySelector(".abyss-tree-scroll");if(tree)tree.scrollTop=treeScroll;
+   const restoredTree=document.querySelector(".abyss-tree-page,.abyss-tree-scroll,[data-abyss-tree-scroll]");
+   if(restoredTree)restoredTree.scrollTop=treeScroll;
+   requestAnimationFrame(()=>{
+    const learned=document.querySelector(`[data-learn-abyss-skill="${node.id}"]`);
+    if(learned){
+     const delta=learned.getBoundingClientRect().top-anchorTop;
+     if(Math.abs(delta)>.5)window.scrollBy(0,delta);
+     learned.closest(".abyss-node-card,.abyss-skill-node")?.classList.add("just-learned");
+    }
+   });
   });
  }));
  document.getElementById("resetAbyssSkillTree")?.addEventListener("click",()=>{
@@ -1958,6 +2026,38 @@ const EXPLORE_INTERACTIVE_DECORATIONS=new Set(["barrel","crate","bones","crystal
 function exploreDecorationAt(x,y){
  return ensureExploreDecorations(game?.world).find(entry=>entry.x===x&&entry.y===y&&EXPLORE_INTERACTIVE_DECORATIONS.has(entry.type)&&!entry.destroyed)??null
 }
+function refreshExplorePartyHud(){
+ if(screen!=="explore")return;
+ explorationPartyMembers().forEach(monster=>{
+  const card=document.querySelector(`[data-explore-hud-id="${monster.id}"]`);
+  if(!card)return;
+  const stats=calculatedStats(monster),hp=Math.max(0,Math.min(stats.hp,monster.currentHp??stats.hp)),monsterMp=maxMp(monster),mp=Math.max(0,Math.min(monsterMp,monster.currentMp??monsterMp));
+  const hpFill=card.querySelector("[data-hud-hp-fill]"),mpFill=card.querySelector("[data-hud-mp-fill]");
+  if(hpFill)hpFill.style.width=`${Math.min(100,hp/Math.max(1,stats.hp)*100)}%`;
+  if(mpFill)mpFill.style.width=`${Math.min(100,mp/Math.max(1,monsterMp)*100)}%`;
+  const hpLabel=card.querySelector("[data-hud-hp-label]"),mpLabel=card.querySelector("[data-hud-mp-label]");
+  if(hpLabel)hpLabel.textContent=`HP ${Math.round(hp)}/${stats.hp}`;
+  if(mpLabel)mpLabel.textContent=`MP ${Math.round(mp)}/${monsterMp}`;
+ })
+}
+function explorationPartyTiles(){
+ if(!game?.player)return[];
+ return explorationPartyMembers().map((_,index)=>{
+  const position=index===0?{x:game.player.rx,y:game.player.ry}:explorationFollowerPosition(index);
+  return{x:Math.round(position.x),y:Math.round(position.y)}
+ })
+}
+function partyOverlapsExploreObject(){
+ if(!game?.world)return false;
+ const objectKeys=new Set([
+  ...(game.world.chests??[]).filter(entry=>!entry.open).map(entry=>`${entry.x}:${entry.y}`),
+  ...ensureExploreDecorations(game.world).filter(entry=>!entry.destroyed).map(entry=>`${entry.x}:${entry.y}`),
+  game.world.exit?`${game.world.exit.x}:${game.world.exit.y}`:"",
+  game.world.shop?`${game.world.shop.x}:${game.world.shop.y}`:"",
+  game.world.boss?`${game.world.boss.x}:${game.world.boss.y}`:""
+ ].filter(Boolean));
+ return explorationPartyTiles().some(position=>objectKeys.has(`${position.x}:${position.y}`))
+}
 function interactExploreDecoration(decoration){
  if(!decoration||decoration.used||decoration.destroyed||!EXPLORE_INTERACTIVE_DECORATIONS.has(decoration.type))return false;
  const floor=save.state.player.currentFloor,roll=Math.random();
@@ -2000,6 +2100,7 @@ function interactExploreDecoration(decoration){
   if(recovered>0)message="澄んだ水で部隊のHP・MPが少し回復した";
  }
  save.save();
+ refreshExplorePartyHud();
  if(message)showToast(message);
  return true
 }
@@ -2009,7 +2110,9 @@ function update(dt){
   game.world.steps++;
   for(const c of game.world.chests)if(!c.open&&c.x===game.player.x&&c.y===game.player.y){openChest(c);return}
   const decoration=exploreDecorationAt(game.player.x,game.player.y);
-  if(decoration&&!decoration.used)interactExploreDecoration(decoration);
+  if(decoration&&!decoration.used&&interactExploreDecoration(decoration)){
+   game.world.nextEncounter=Math.max(game.world.nextEncounter??0,game.world.steps+2)
+  }
   if(game.world.boss&&game.player.x===game.world.boss.x&&game.player.y===game.world.boss.y){
    game.player.path=[];game.paused=true;const floor=save.state.player.currentFloor,lines=["ここまで辿り着いたか。だが、ここから先は通さん。","幾度来ようと同じこと。力の差を刻んでやる。","その覚悟、本物かどうか試してやろう。","この階層で朽ちるがいい。","よく来た。ワシを越えられると思うなら、剣を取れ。"];const bossInfo=floorBossEnemy(),name=SPECIES[bossInfo.speciesId].name;app.insertAdjacentHTML("beforeend",Modal(`第${floor}階層の支配者`, `<p>${lines[Math.floor(Math.random()*lines.length)]}</p><p><b>${name} Lv.${bossInfo.level}</b></p>`,"戦う"));const modal=topModal();modal.querySelector("[data-modal-primary]").onclick=()=>{modal.remove();game.paused=false;beginEncounter(bossInfo)};return
   }
@@ -2030,6 +2133,10 @@ function update(dt){
    save.save();if(save.state.player.currentFloor===1001){playSecondWorldIntro();return}go("explore");return
   }
   if(game.world.steps>=game.world.nextEncounter){
+   if(partyOverlapsExploreObject()){
+    game.world.nextEncounter=game.world.steps+2;
+    return
+   }
    game.world.steps=0;
    game.world.nextEncounter=8+Math.floor(Math.random()*24);
    beginEncounter();return
@@ -2062,10 +2169,10 @@ function explorationPartyMembers(){return(save.state.party??[]).map(id=>save.sta
 const explorationSpriteCache=new Map();
 const explorationTextureCache=new Map();
 const EXPLORE_TEXTURE_URLS={
- floor:"assets/ui/explore/dungeon-floor.png?v=1.14.4-delta117",
- wall:"assets/ui/explore/dungeon-wall.png?v=1.14.4-delta117",
- stairs:"assets/ui/explore/dungeon-stairs-arch.png?v=1.14.4-delta117",
- props:"assets/ui/explore/dungeon-props-atlas.png?v=1.14.4-delta117"
+ floor:"assets/ui/explore/dungeon-floor.png?v=1.7.5-final",
+ wall:"assets/ui/explore/dungeon-wall.png?v=1.7.5-final",
+ stairs:"assets/ui/explore/dungeon-stairs-arch.png?v=1.7.5-final",
+ props:"assets/ui/explore/dungeon-props-atlas.png?v=1.7.5-final"
 };
 const EXPLORE_ATLAS=Object.freeze({
  floor:0,wall:1,corner:2,pillar:3,entrance:4,chestClosed:5,chestOpen:6,barrel:7,
@@ -2106,7 +2213,7 @@ function updateExplorationPartyTrail(){
  if(game.partyTrail.length>260)game.partyTrail.length=260
 }
 function explorationFollowerPosition(index){
- const spacing=1.9*index,trail=game.partyTrail??[],fallback={x:game.player.rx,y:game.player.ry};
+ const spacing=2.25*index,trail=game.partyTrail??[],fallback={x:game.player.rx,y:game.player.ry};
  if(trail.length<2){
   const standby=[null,{x:-1.15,y:.78},{x:1.15,y:.78},{x:0,y:1.72}][index]??{x:0,y:index*.8};
   return{x:fallback.x+standby.x,y:fallback.y+standby.y}
@@ -2151,8 +2258,8 @@ function drawExplorationTileAsset(position,image,scale=1.45){
 function drawExploreAtlas(position,index,{scale=1.25,rotation=0,alpha=1,shadowColor=null,shadowBlur=0,offsetY=0}={}){
  const image=explorationTexture("props");if(!image)return false;
  const cellWidth=image.width/4,cellHeight=image.height/4,column=index%4,row=Math.floor(index/4);
- const p=game.camera.world(position.x*TILE,position.y*TILE),tileSize=TILE*game.camera.z,size=tileSize*scale;
- const centerX=p.x+tileSize/2,centerY=p.y+tileSize/2+offsetY*tileSize;
+ const p=game.camera.world(position.x*TILE,position.y*TILE),tileSize=TILE*game.camera.z,size=Math.round(tileSize*scale);
+ const centerX=Math.round(p.x+tileSize/2),centerY=Math.round(p.y+tileSize/2+offsetY*tileSize);
  game.ctx.save();game.ctx.imageSmoothingEnabled=false;game.ctx.globalAlpha=alpha;
  if(shadowColor){game.ctx.shadowColor=shadowColor;game.ctx.shadowBlur=shadowBlur*game.camera.z}
  game.ctx.translate(centerX,centerY);game.ctx.rotate(rotation);
@@ -2160,19 +2267,18 @@ function drawExploreAtlas(position,index,{scale=1.25,rotation=0,alpha=1,shadowCo
  game.ctx.restore();return true
 }
 function drawExploreGlow(position,color,radius=1.7,alpha=.62){
- const p=game.camera.world(position.x*TILE,position.y*TILE),tileSize=TILE*game.camera.z,cx=p.x+tileSize/2,cy=p.y+tileSize/2;
+ const p=game.camera.world(position.x*TILE,position.y*TILE),tileSize=TILE*game.camera.z,cx=Math.round(p.x+tileSize/2),cy=Math.round(p.y+tileSize/2);
  const gradient=game.ctx.createRadialGradient(cx,cy,0,cx,cy,tileSize*radius);
  gradient.addColorStop(0,`${color}${Math.round(alpha*255).toString(16).padStart(2,"0")}`);gradient.addColorStop(.38,`${color}48`);gradient.addColorStop(1,`${color}00`);
  game.ctx.save();game.ctx.globalCompositeOperation="screen";game.ctx.fillStyle=gradient;game.ctx.fillRect(cx-tileSize*radius,cy-tileSize*radius,tileSize*radius*2,tileSize*radius*2);game.ctx.restore()
 }
 function drawExploreParticles(position,color,count=7,phase=0,radius=.72){
- const p=game.camera.world(position.x*TILE,position.y*TILE),tileSize=TILE*game.camera.z,time=performance.now()/1000;
+ const p=game.camera.world(position.x*TILE,position.y*TILE),tileSize=TILE*game.camera.z,frame=Math.floor(performance.now()/280)%3;
  game.ctx.save();game.ctx.globalCompositeOperation="screen";
  for(let index=0;index<count;index++){
-  const angle=(index/count)*Math.PI*2+time*(.22+(index%3)*.07)+phase*.013;
-  const drift=(.28+(index%4)*.11)*radius,tick=(time*(.35+(index%2)*.12)+phase*.001+index/count)%1;
-  const x=p.x+tileSize*(.5+Math.cos(angle)*drift),y=p.y+tileSize*(.82-tick*.92+Math.sin(angle)*.06);
-  game.ctx.globalAlpha=.22+(1-Math.abs(tick-.5)*2)*.72;game.ctx.fillStyle=color;game.ctx.beginPath();game.ctx.arc(x,y,Math.max(1,tileSize*(.018+(index%2)*.008)),0,Math.PI*2);game.ctx.fill()
+  const angle=(index/count)*Math.PI*2+phase*.013,drift=(.25+(index%4)*.1)*radius;
+  const x=Math.round(p.x+tileSize*(.5+Math.cos(angle)*drift)),y=Math.round(p.y+tileSize*(.5+Math.sin(angle)*drift*.72));
+  game.ctx.globalAlpha=[.28,.72,.46][(frame+index)%3];game.ctx.fillStyle=color;game.ctx.beginPath();game.ctx.arc(x,y,Math.max(1,Math.round(tileSize*(.018+(index%2)*.008))),0,Math.PI*2);game.ctx.fill()
  }
  game.ctx.restore()
 }
@@ -2184,10 +2290,10 @@ function drawExploreWallArchitecture(world,theme){
    bottom:world.tiles[y+1]?.[x]===0,left:world.tiles[y]?.[x-1]===0
   };
   const sides=Object.values(open).filter(Boolean).length;if(!sides)continue;
-  let index=EXPLORE_ATLAS.wall,rotation=0,scale=1.42;
-  if(sides>=3){index=EXPLORE_ATLAS.pillar;scale=1.35}
+  let index=EXPLORE_ATLAS.wall,rotation=0,scale=1.58;
+  if(sides>=3){index=EXPLORE_ATLAS.pillar;scale=1.55}
   else if(sides===2&&!(open.top&&open.bottom)&&!(open.left&&open.right)){
-   index=EXPLORE_ATLAS.corner;scale=1.48;
+   index=EXPLORE_ATLAS.corner;scale=1.65;
    if(open.top&&open.right)rotation=Math.PI/2;
    else if(open.right&&open.bottom)rotation=Math.PI;
    else if(open.bottom&&open.left)rotation=-Math.PI/2;
@@ -2199,28 +2305,26 @@ function drawExploreDecoration(decoration,theme){
  if(decoration.destroyed)return;
  const frameTime=performance.now(),pulse=.92+Math.sin(frameTime/310+decoration.phase)*.08,usedAlpha=decoration.used?.48:1;
  if(decoration.type==="water"){
-  drawExploreAtlas(decoration,EXPLORE_ATLAS.water,{scale:(decoration.scale??1.2)*1.18,alpha:.74*usedAlpha});
+  drawExploreAtlas(decoration,EXPLORE_ATLAS.water,{scale:(decoration.scale??1.2)*1.48,alpha:.74*usedAlpha});
   const p=game.camera.world(decoration.x*TILE,decoration.y*TILE),size=TILE*game.camera.z;
   game.ctx.save();game.ctx.strokeStyle="#8ce9ff66";game.ctx.lineWidth=Math.max(1,game.camera.z*.7);
   for(let line=0;line<2;line++){const y=p.y+size*(.42+line*.18);game.ctx.beginPath();game.ctx.moveTo(p.x+size*(.22+line*.08),y);game.ctx.lineTo(p.x+size*(.72-line*.06),y);game.ctx.stroke()}game.ctx.restore();return
  }
- if(decoration.type==="entrance"){drawExploreAtlas(decoration,EXPLORE_ATLAS.entrance,{scale:(decoration.scale??1.3)*1.18,rotation:decoration.rotation,shadowColor:"#000",shadowBlur:8});return}
+ if(decoration.type==="entrance"){drawExploreAtlas(decoration,EXPLORE_ATLAS.entrance,{scale:(decoration.scale??1.3)*1.5,rotation:decoration.rotation,shadowColor:"#000",shadowBlur:8});return}
  if(decoration.type==="candelabrum"){
-  const index=EXPLORE_ATLAS.candelabrum1+(Math.floor(frameTime/220+decoration.phase)%2);
-  drawExploreGlow(decoration,theme.light,1.55,.52);drawExploreAtlas(decoration,index,{scale:1.3,shadowColor:theme.light,shadowBlur:10});return
+  drawExploreGlow(decoration,theme.light,1.65,.46*pulse);drawExploreAtlas(decoration,EXPLORE_ATLAS.candelabrum1,{scale:1.66,shadowColor:theme.light,shadowBlur:10});drawExploreParticles(decoration,theme.light,4,decoration.phase,.42);return
  }
  if(decoration.type==="crystal"){
-  const index=EXPLORE_ATLAS.crystal1+(Math.floor(frameTime/260+decoration.phase)%3);
-  drawExploreGlow(decoration,"#a95cff",1.65,.52*pulse*usedAlpha);drawExploreAtlas(decoration,index,{scale:1.34,alpha:usedAlpha,shadowColor:"#b46cff",shadowBlur:13});if(!decoration.used)drawExploreParticles(decoration,"#d6a5ff",5,decoration.phase,.55);return
+  drawExploreGlow(decoration,"#a95cff",1.72,.52*pulse*usedAlpha);drawExploreAtlas(decoration,EXPLORE_ATLAS.crystal1,{scale:1.68,alpha:usedAlpha,shadowColor:"#b46cff",shadowBlur:13});if(!decoration.used)drawExploreParticles(decoration,"#d6a5ff",5,decoration.phase,.55);return
  }
  const index={barrel:EXPLORE_ATLAS.barrel,crate:EXPLORE_ATLAS.crate,bones:EXPLORE_ATLAS.bones}[decoration.type];
- if(index!=null)drawExploreAtlas(decoration,index,{scale:(decoration.scale??1)*1.28,alpha:usedAlpha,shadowColor:"#000",shadowBlur:7})
+ if(index!=null)drawExploreAtlas(decoration,index,{scale:(decoration.scale??1)*1.68,alpha:usedAlpha,shadowColor:"#000",shadowBlur:7})
 }
 function drawExploreExit(position,image,theme){
  const pulse=.92+Math.sin(performance.now()/240)*.08;
  drawExploreGlow(position,theme.light,2.1,.68*pulse);
- if(!drawExplorationTileAsset(position,image,1.62)){
-  drawExploreAtlas(position,EXPLORE_ATLAS.entrance,{scale:1.55,shadowColor:theme.light,shadowBlur:13})
+ if(!drawExplorationTileAsset(position,image,1.78)){
+  drawExploreAtlas(position,EXPLORE_ATLAS.entrance,{scale:1.75,shadowColor:theme.light,shadowBlur:13})
  }
  drawExploreParticles(position,"#fff0a8",9,17,1)
 }
@@ -2232,9 +2336,9 @@ function drawExploreAtmosphere(theme){
 }
 function drawExplorationParty(){
  const members=explorationPartyMembers();
- for(let index=members.length-1;index>=1;index--){const monster=members[index],position=explorationFollowerPosition(index);drawExplorationMonster(position,monster,false,.88,index)}
- if(members[0])drawExplorationMonster({x:game.player.rx,y:game.player.ry},members[0],true,1,0);
- else drawExplorationMonster({x:game.player.rx,y:game.player.ry},{speciesId:"slime"},true,1,0)
+ for(let index=members.length-1;index>=1;index--){const monster=members[index],position=explorationFollowerPosition(index);drawExplorationMonster(position,monster,false,.95,index)}
+ if(members[0])drawExplorationMonster({x:game.player.rx,y:game.player.ry},members[0],false,1,0);
+ else drawExplorationMonster({x:game.player.rx,y:game.player.ry},{speciesId:"slime"},false,1,0)
 }
 function draw(){
  const c=game.ctx,w=game.world,floor=save.state.player.currentFloor,palette=worldPresentationForFloor(floor),theme=exploreBandTheme(floor),floorTexture=explorationTexture("floor"),wallTexture=explorationTexture("wall"),stairsTexture=explorationTexture("stairs");
@@ -2259,9 +2363,9 @@ function draw(){
  drawExploreAtmosphere(theme);
  decorations.filter(item=>item.type!=="water"&&item.type!=="entrance").sort((a,b)=>a.y-b.y).forEach(item=>drawExploreDecoration(item,theme));
  drawExploreExit(w.exit,stairsTexture,theme);
- if(w.shop){drawExploreGlow(w.shop,"#b05cff",1.9,.62);drawExploreAtlas(w.shop,EXPLORE_ATLAS.entrance,{scale:1.55,shadowColor:"#b05cff",shadowBlur:15});drawExploreParticles(w.shop,"#d5a0ff",7,31,.75)}
- if(w.boss){const boss=floorBossEnemy();drawExplorationMonster(w.boss,{speciesId:boss.speciesId,level:boss.level},true,1.08,9)}
- w.chests.forEach(chest=>drawExploreAtlas(chest,chest.open?EXPLORE_ATLAS.chestOpen:EXPLORE_ATLAS.chestClosed,{scale:1.25,shadowColor:chest.locked?"#f2cf72":"#000",shadowBlur:chest.locked?13:7}));
+ if(w.shop){drawExploreGlow(w.shop,"#b05cff",1.9,.62);drawExploreAtlas(w.shop,EXPLORE_ATLAS.entrance,{scale:1.72,shadowColor:"#b05cff",shadowBlur:15});drawExploreParticles(w.shop,"#d5a0ff",7,31,.75)}
+ if(w.boss){const boss=floorBossEnemy();drawExplorationMonster(w.boss,{speciesId:boss.speciesId,level:boss.level},true,1.92,9)}
+ w.chests.forEach(chest=>drawExploreAtlas(chest,chest.open?EXPLORE_ATLAS.chestOpen:EXPLORE_ATLAS.chestClosed,{scale:1.7,shadowColor:chest.locked?"#f2cf72":"#000",shadowBlur:chest.locked?13:7}));
  drawExplorationParty();drawMini();
 }
 function drawMini(){
@@ -2411,7 +2515,7 @@ function saveBattleCheckpoint(){
   specialBattle:battle.specialBattle,specialBattleType:battle.specialBattleType,specialTitle:battle.specialTitle,specialSubtitle:battle.specialSubtitle,
   priorVitals:battle.priorVitals,specialBossId:battle.specialBossId,powerPercent:battle.powerPercent,bonusFragments:battle.bonusFragments,
   preludeChoiceId:battle.preludeChoiceId,preludeResultText:battle.preludeResultText,
-  memoryBattle:Boolean(battle.memoryBattle),memorySourceFloor:battle.memorySourceFloor??null,memorySpeciesId:battle.memorySpeciesId??null
+  memoryBattle:Boolean(battle.memoryBattle),bossMemoryBattle:Boolean(battle.bossMemoryBattle),memorySourceFloor:battle.memorySourceFloor??null,memorySpeciesId:battle.memorySpeciesId??null
  };
  save.save()
 }
@@ -2539,9 +2643,9 @@ async function command(type,skillId=null){
   addBattleLog(battle,`${displayName(a)}：たたかう`);await animateAttack(a.id);
   if(Math.random()<.06)await floatText("MISS",e.id,"miss");
   else{
-   const critical=Math.random()<affixCriticalChance(s,Math.min(.35,.08+(s.spd??0)*.005)),weapon=save.state.equipment.find(item=>item.id===a.equipment?.weaponRight),magicWeapon=weapon?.weaponType==="staff"||(weapon?.stats?.matk??0)>(weapon?.stats?.atk??0),attackStat=magicWeapon?(s.matk??s.atk):s.atk,defenseStat=magicWeapon?(e.mdef??e.def):e.def;
+   const critical=Math.random()<affixCriticalChance(s,Math.min(.35,.08+(s.spd??0)*.005)),weapon=save.state.equipment.find(item=>item.id===a.equipment?.weaponRight),magicWeapon=weapon?.weaponType==="staff"||(weapon?.stats?.matk??0)>(weapon?.stats?.atk??0),rangedWeapon=magicWeapon||weapon?.weaponType==="bow",rearLine=battle.party.indexOf(a)>=2,formationMultiplier=rearLine?(rangedWeapon?1.08:.78):1.05,attackStat=magicWeapon?(s.matk??s.atk):s.atk,defenseStat=magicWeapon?(e.mdef??e.def):e.def;
    const base=Math.max(1,Math.floor(attackStat*(.9+Math.random()*.2)-defenseStat*.4));
-   const critMult=1.7+affixValue(a,"critDamage",150)/100,damageStats={...s,_currentHpRatio:a.currentHp/Math.max(1,s.hp)},raw=(critical?Math.floor(base*critMult):base)*affixOutgoingDamageMultiplier(damageStats,e,SPECIES[a.speciesId]?.element??"neutral")*affixExecutionMultiplier(a,e),beforeHp=e.hp,d=Math.max(1,Math.floor(raw*abyssBattleMultiplier(a,"partyDamageRate")*enemyDamageMultiplier(e)*weaponMasteryDamageMultiplier(save.state,a,e)));e.hp=Math.max(0,e.hp-d);registerWeaponFinisher(a,e,beforeHp);const steal=outgoingLifeSteal(a);if(steal){const h=Math.max(1,Math.floor(d*steal));a.currentHp=Math.min(s.hp,a.currentHp+h)}
+   const critMult=1.7+affixValue(a,"critDamage",150)/100,damageStats={...s,_currentHpRatio:a.currentHp/Math.max(1,s.hp)},raw=(critical?Math.floor(base*critMult):base)*formationMultiplier*affixOutgoingDamageMultiplier(damageStats,e,SPECIES[a.speciesId]?.element??"neutral")*affixExecutionMultiplier(a,e),beforeHp=e.hp,d=Math.max(1,Math.floor(raw*abyssBattleMultiplier(a,"partyDamageRate")*enemyDamageMultiplier(e)*weaponMasteryDamageMultiplier(save.state,a,e)));e.hp=Math.max(0,e.hp-d);registerWeaponFinisher(a,e,beforeHp);const steal=outgoingLifeSteal(a);if(steal){const h=Math.max(1,Math.floor(d*steal));a.currentHp=Math.min(s.hp,a.currentHp+h)}
    await animateHit(e.id,critical);if(critical){battleFlash("critical");burstParticles(e.id,"critical",16)}await floatText(`${critical?"CRITICAL ":""}-${d}`,e.id,critical?"critical":"damage");await trySeriesChainAttack(a,e,d);
   }
  }
@@ -2583,13 +2687,13 @@ async function command(type,skillId=null){
 
  if(type==="capture"){
   if((save.state.monsters?.length??0)>=500){battle.busy=false;return alert("モンスター所持数が500体で満杯です。先に整理してください。")}
-  if(e.uncapturable){battle.busy=false;return alert("この存在は捕獲できません")}
-  if(e.boss){const floor=save.state.player.currentFloor,defeated=(save.state.player.bossKills[floor]??0)>0;if(!defeated){battle.busy=false;return alert("初回の階層ボスは捕獲できません。まず撃破してください。")}}
+  if(e.boss&&!battle.bossMemoryBattle){battle.busy=false;return alert("階層ボスの捕獲は、撃破後に「深淵の記憶」から再戦した時だけ挑戦できます。")}
+  if(e.uncapturable&&!battle.bossMemoryBattle){battle.busy=false;return alert("この存在は捕獲できません")}
   if(save.state.inventory.captureCrystals<=0){battle.busy=false;return alert("捕獲結晶がない")}
   save.state.inventory.captureCrystals--;addBattleLog(battle,"捕獲を試みた");
   const captureBonus=Math.min(50,affixValue(a,"captureRate",50)+equipmentStatValue(a,"capture",50))/100,baseCapture=e.boss?(.01+(1-e.hp/e.maxHp)*.04)*currentDanger().bossCapture+captureBonus:.2+(1-e.hp/e.maxHp)*.55+(Math.max(...battle.party.map(m=>m.level+m.stars*2+m.plus))-e.level)*.012+captureBonus,chance=e.boss?Math.max(.01,abyssExplorationChance(save.state,baseCapture,null,{max:.20})):Math.max(.08,abyssExplorationChance(save.state,baseCapture,null,{max:.95}));
   await floatText(`捕獲 ${Math.round(chance*100)}%`,e.id,"capture");await wait(500);
-  if(Math.random()<chance){const m=createMonster(e.speciesId,{level:e.level,isBoss:e.boss,sealedPower:e.boss?{state:"sealed",originalDanger:e.dangerLevel??1,awakening:0}:null,obtainedMethod:"capture",obtainedFloor:save.state.player.currentFloor,nickname:e.boss?`封印 ${SPECIES[e.speciesId].name}`:undefined});save.state.monsters.push(m);save.state.records.captures++;save.state.codex.captures[e.speciesId]=(save.state.codex.captures[e.speciesId]??0)+1;e.captured=true;e.hp=0;save.save();battleFlash("capture");burstParticles(e.id,"capture",22);await battleBanner("CAPTURE!",`${e.name}が仲間になった`,"capture",760);await animateDefeat(e.id,true);battle.targetEnemyId=aliveEnemies(battle)[0]?.id??null;if(!aliveEnemies(battle).length)return win(true,m);addBattleLog(battle,`${e.name}を捕獲した`)}
+  if(Math.random()<chance){const m=createMonster(e.speciesId,{level:e.level,isBoss:e.boss,sealedPower:e.boss?{state:"sealed",originalDanger:e.dangerLevel??1,awakening:0}:null,obtainedMethod:"capture",obtainedFloor:battle.memorySourceFloor??save.state.player.currentFloor,nickname:e.boss?`封印 ${SPECIES[e.speciesId].name}`:undefined});save.state.monsters.push(m);save.state.records.captures++;save.state.codex.captures[e.speciesId]=(save.state.codex.captures[e.speciesId]??0)+1;e.captured=true;e.hp=0;save.save();battleFlash("capture");burstParticles(e.id,"capture",22);await battleBanner("CAPTURE!",`${e.name}が仲間になった`,"capture",760);await animateDefeat(e.id,true);battle.targetEnemyId=aliveEnemies(battle)[0]?.id??null;if(!aliveEnemies(battle).length)return win(true,m);addBattleLog(battle,`${e.name}を捕獲した`)}
  }
 
  saveBattleCheckpoint();renderBattle();await wait(260/battleSpeed());
@@ -2604,6 +2708,11 @@ function chooseEnemyTarget(enemy=null,mode="normal"){
  if(enemy?.endgameBossId){
   if(mode==="weak")return [...alive].sort((a,b)=>(a.currentHp/calculatedStats(a).hp)-(b.currentHp/calculatedStats(b).hp))[0];
   if(mode==="threat")return [...alive].sort((a,b)=>Math.max(calculatedStats(b).atk,calculatedStats(b).matk??0)-Math.max(calculatedStats(a).atk,calculatedStats(a).matk??0))[0];
+ }
+ const front=alive.filter(monster=>battle.party.indexOf(monster)<2),rear=alive.filter(monster=>battle.party.indexOf(monster)>=2),role=SPECIES[enemy?.speciesId]?.role??"",ranged=["mage","healer","support","ranged"].includes(role);
+ if(front.length&&!enemy?.endgameBossId){
+  const pool=ranged&&rear.length&&Math.random()<.3?rear:front;
+  return pool[Math.floor(Math.random()*pool.length)];
  }
  return alive[Math.floor(Math.random()*alive.length)];
 }
@@ -2701,8 +2810,25 @@ async function continueBattleFlow(){
  if(entry?.type==="ally"&&battle.auto){await wait(220/battleSpeed());const a=currentAlly(battle);if(a){a._maxHp=calculatedStats(a).hp;const skill=chooseAutoSkill(a,battle);if(skill)return command("skill",skill.id)}return command("attack")}
 }
 function expNeed(m){return expNeedFor(m)}
+function finishBossMemoryVictory(caught,monster){
+ const enemy=(battle?.enemies??[battle?.enemy]).filter(Boolean)[0],name=enemy?.name??SPECIES[enemy?.speciesId]?.name??"階層支配者";
+ clearPartySynergy();clearBattleCheckpoint();activeEnemy=null;
+ document.querySelector(".battle-screen")?.remove();
+ save.save();
+ const body=`<div class="memory-victory-result">
+  <img src="assets/ui/v2/memory-rift.png" alt="" class="memory-victory-rift">
+  <small>BOSS MEMORY CLEARED</small>
+  <h2>${caught?"深淵の契約成立":"記憶を制覇"}</h2>
+  <p>${caught?`${displayName(monster)}を深淵の記憶から連れ帰りました。`:`${name}の記憶を打ち破りました。`}</p>
+  <div class="memory-victory-note">${caught?`${pixelIcon("event")} 捕獲個体は魔物一覧へ追加済みです。`:"この再戦ではGOLD・EXP・撃破報酬・階層進行は発生しません。"}</div>
+ </div>`;
+ app.insertAdjacentHTML("beforeend",Modal(caught?"捕獲成功！":"深淵の記憶",body,"拠点へ戻る"));
+ const modal=topModal(),finish=()=>{modal?.remove();battle=null;go("home")};
+ modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish
+}
 function win(caught,m){
  if(battle?.specialBattle)return finishSpecialBattle(true);
+ if(battle?.bossMemoryBattle)return finishBossMemoryVictory(caught,m);
  const memoryBattle=Boolean(battle?.memoryBattle),defeated=(battle.enemies??[battle.enemy]).filter(Boolean),floor=memoryBattle?(battle.memorySourceFloor??save.state.player.currentFloor):save.state.player.currentFloor,boss=defeated.find(e=>e.boss),eliteDefeated=defeated.filter(e=>e.elite&&!e.captured),firstBoss=!!boss&&!save.state.player.bossRewards[floor];
  const rewardMult=eliteDefeated.length?1.65:1,baseGold=battleGoldBase(floor,defeated,{firstBoss}),gold=modifiedGoldReward(save.state,baseGold,"battle");
  save.state.player.gold+=gold;
@@ -2751,9 +2877,9 @@ function win(caught,m){
  activeEnemy=null;
  document.querySelector(".battle-screen")?.remove();
 
- const victorySubtitle=boss?`👑 ${String(boss.name??SPECIES[boss.speciesId]?.name??"BOSS").replace(/^⚔️\s*/,"")}撃破！`:caught?`${displayName(m)}を捕獲！`:"";const result=`<div class="battle-result-cinematic ${boss?"boss-clear":""} ${caught?"capture-clear":""}"><div class="victory-rays"></div><div class="victory-title">${boss?"BOSS DEFEATED":caught?"CAPTURE SUCCESS":"VICTORY"}</div>${victorySubtitle?`<div class="victory-subtitle">${victorySubtitle}</div>`:""}</div><div class="reward-summary cinematic-rewards"><b>🪙 +${gold}G</b>${crystalRoll+eliteBonusCrystals?`<b>💎 +${crystalRoll+eliteBonusCrystals}</b>`:""}${eliteBonusGold?`<b class="elite-reward">🜲 エリート討伐 +${eliteBonusGold.toLocaleString()}G</b>`:""}<small>総EXP ${totalExp} / 生存 ${survivors.length}体で分配${firstBoss?"・初回ボス撃破ボーナス":""}</small>${drop?`<b>[${drop.rarity}] ${drop.name}（${slotLabel(drop.slot)}）</b><small>${dropReceipt.message}</small>`:""}${keyDrop?`<b>🗝️ 深淵の鍵を獲得</b>`:""}${caught?`<b>${displayName(m)}を捕獲！</b>`:""}${seriesMasteryResults.length?`<div class="series-mastery-result">${seriesMasteryResults.map(row=>`<small>${row.leveled?"✨ ":""}${EQUIPMENT_SERIES[row.seriesId]?.name??row.seriesId}熟練度 +${row.amount}${row.leveled?`　Lv.${row.after.level} ${row.after.label}へ！`:""}</small>`).join("")}</div>`:""}</div><div class="exp-results compact">${progress.map(p=>{const hpMax=p.afterStats.hp,mpMax=maxMp(p.x),remaining=Math.max(0,p.need-p.x.exp),diff=k=>p.afterStats[k]-(p.before.stats[k]??0);return`<div class="${p.alive?"":"exp-defeated"} ${p.levels?"level-up-card level-up-reveal":""}"><span>${monsterVisual(p.x,SPECIES[p.x.speciesId].emoji,{frame:p.alive?"idle":"down",className:"battle-result-monster-visual"})}</span><section><b>${displayName(p.x)} ${p.levels?`Lv.${p.before.level} → Lv.${p.x.level}`:`Lv.${p.x.level}`}</b><div class="result-vitals"><small>HP ${p.x.currentHp}/${hpMax}</small><small>MP ${p.x.currentMp}/${mpMax}</small><small>${p.alive?`次まであと${remaining}EXP`:"戦闘不能：EXP 0"}</small></div><i class="result-exp"><u style="width:${Math.min(100,p.x.exp/p.need*100)}%"></u></i>${p.levels?`<div class="level-gains"><span>HP ${p.before.stats.hp} → ${p.afterStats.hp} <strong>+${diff("hp")}</strong></span><span>ATK ${p.before.stats.atk} → ${p.afterStats.atk} <strong>+${diff("atk")}</strong></span><span>DEF ${p.before.stats.def} → ${p.afterStats.def} <strong>+${diff("def")}</strong></span><span>SPD ${p.before.stats.spd} → ${p.afterStats.spd} <strong>+${diff("spd")}</strong></span></div>`:""}</section></div>`}).join("")}</div>`;
+ const victorySubtitle=boss?`${pixelIcon("event")} ${String(boss.name??SPECIES[boss.speciesId]?.name??"BOSS").replace(/^⚔️\s*/,"")}撃破！`:caught?`${displayName(m)}を捕獲！`:"";const result=`<div class="battle-result-cinematic ${boss?"boss-clear":""} ${caught?"capture-clear":""}"><div class="victory-rays"></div><div class="victory-title">${boss?"BOSS DEFEATED":caught?"CAPTURE SUCCESS":"VICTORY"}</div>${victorySubtitle?`<div class="victory-subtitle">${victorySubtitle}</div>`:""}</div><div class="reward-summary cinematic-rewards"><b>${pixelIcon("coin")} +${gold}G</b>${crystalRoll+eliteBonusCrystals?`<b>${pixelIcon("crystal")} +${crystalRoll+eliteBonusCrystals}</b>`:""}${eliteBonusGold?`<b class="elite-reward">${pixelIcon("crossed-swords")} エリート討伐 +${eliteBonusGold.toLocaleString()}G</b>`:""}<small>総EXP ${totalExp} / 生存 ${survivors.length}体で分配${firstBoss?"・初回ボス撃破ボーナス":""}</small>${drop?`<b>${pixelIcon("equipment")} [${drop.rarity}] ${drop.name}（${slotLabel(drop.slot)}）</b><small>${dropReceipt.message}</small>`:""}${keyDrop?`<b>${pixelIcon("key")} 深淵の鍵を獲得</b>`:""}${caught?`<b>${pixelIcon("capture")} ${displayName(m)}を捕獲！</b>`:""}${seriesMasteryResults.length?`<div class="series-mastery-result">${seriesMasteryResults.map(row=>`<small>${row.leveled?`${pixelIcon("skills")} `:""}${EQUIPMENT_SERIES[row.seriesId]?.name??row.seriesId}熟練度 +${row.amount}${row.leveled?`　Lv.${row.after.level} ${row.after.label}へ！`:""}</small>`).join("")}</div>`:""}</div><div class="exp-results compact">${progress.map(p=>{const hpMax=p.afterStats.hp,mpMax=maxMp(p.x),remaining=Math.max(0,p.need-p.x.exp),diff=k=>p.afterStats[k]-(p.before.stats[k]??0);return`<div class="${p.alive?"":"exp-defeated"} ${p.levels?"level-up-card level-up-reveal":""}"><span>${monsterVisual(p.x,SPECIES[p.x.speciesId].emoji,{frame:p.alive?"idle":"down",className:"battle-result-monster-visual"})}</span><section><b>${displayName(p.x)} ${p.levels?`Lv.${p.before.level} → Lv.${p.x.level}`:`Lv.${p.x.level}`}</b><div class="result-vitals"><small>HP ${p.x.currentHp}/${hpMax}</small><small>MP ${p.x.currentMp}/${mpMax}</small><small>${p.alive?`次まであと${remaining}EXP`:"戦闘不能：EXP 0"}</small></div><i class="result-exp"><u style="width:${Math.min(100,p.x.exp/p.need*100)}%"></u></i>${p.levels?`<div class="level-gains"><span>HP ${p.before.stats.hp} → ${p.afterStats.hp} <strong>+${diff("hp")}</strong></span><span>ATK ${p.before.stats.atk} → ${p.afterStats.atk} <strong>+${diff("atk")}</strong></span><span>DEF ${p.before.stats.def} → ${p.afterStats.def} <strong>+${diff("def")}</strong></span><span>SPD ${p.before.stats.spd} → ${p.afterStats.spd} <strong>+${diff("spd")}</strong></span></div>`:""}</section></div>`}).join("")}</div>`;
 
- if(boss){battle.enemy=boss;save.state.player.bossKills[floor]=(save.state.player.bossKills[floor]??0)+1;if(floor===1000)mark1000FloorCleared(save.state);if(floor===WORLD_MAX_FLOOR)mark10000FloorCleared(save.state);recordBiomeBoss(save.state,floor);if(snapshot?.world)snapshot.world.boss=null;if(firstBoss)return showBossRewards(result)}
+ if(boss){battle.enemy=boss;rememberBossEncounter(boss);save.state.player.bossKills[floor]=(save.state.player.bossKills[floor]??0)+1;if(floor===1000)mark1000FloorCleared(save.state);if(floor===WORLD_MAX_FLOOR)mark10000FloorCleared(save.state);recordBiomeBoss(save.state,floor);if(snapshot?.world)snapshot.world.boss=null;if(firstBoss)return showBossRewards(result)}
  const playTrueEnding=Boolean(boss&&floor===WORLD_MAX_FLOOR&&!save.state.flags?.ending10000Played);
  app.insertAdjacentHTML("beforeend",Modal(caught?"捕獲成功！":"戦闘結果",result,memoryBattle?"拠点へ戻る":"探索へ"));
  const resultModal=topModal();let resultClosed=false;
@@ -2761,7 +2887,82 @@ function win(caught,m){
  resultModal._onDismiss=returnToExplore;
  resultModal.querySelector("[data-modal-primary]").onclick=returnToExplore;
 }
-function showBossRewards(result){const floor=save.state.player.currentFloor,species=battle.enemy.speciesId,sp=SPECIES[species],weapon=createEquipment("weapon",{rarity:"LR"});weapon.name=floor===WORLD_MAX_FLOOR?"終界王装・アストラ":`${sp.name}の王装`;const options=[{id:"weapon",icon:"⚔️",title:weapon.name,desc:`限定LR武器 / ${Object.entries(weapon.stats).map(([k,v])=>`${equipmentStatLabel(k)}+${v}`).join(" ")}`},{id:"crystal",icon:"💎",title:`魔晶石 ×${30+floor*2}`,desc:"召喚・育成用の資源"},{id:"supply",icon:"🗃️",title:"深淵遠征セット",desc:`捕獲結晶×${5+Math.floor(floor/10)} / 回復薬×5 / 深淵の鍵×1`}];app.insertAdjacentHTML("beforeend",`<div class="game-modal"><div class="game-modal-card boss-reward"><div>${result}</div><div class="boss-clear-emblem">👑</div><h2 class="boss-choice-title">撃破報酬を選択</h2><p class="muted">中身を見て、ひとつだけ選択。選び直しはできません。</p><div class="boss-reward-grid">${options.map(o=>`<button data-boss-reward="${o.id}"><span>${o.icon}</span><b>${o.title}</b><small>${o.desc}</small></button>`).join("")}</div></div></div>`);document.querySelectorAll("[data-boss-reward]").forEach(b=>b.onclick=()=>{if(!confirm(`${b.querySelector("b").textContent}を選ぶ？\nこの階の他の報酬は入手できません。`))return;const id=b.dataset.bossReward;if(id==="weapon")receiveEquipment(save.state,weapon,{bossReward:true});if(id==="crystal")save.state.player.crystals+=30+floor*2;if(id==="supply"){save.state.inventory.captureCrystals+=5+Math.floor(floor/10);save.state.inventory.potions+=5;save.state.inventory.abyssKeys=(save.state.inventory.abyssKeys??0)+1}const playEnding=floor===1000&&!save.state.flags?.ending1000Played,playTrueEnding=floor===WORLD_MAX_FLOOR&&!save.state.flags?.ending10000Played;save.state.player.bossRewards[floor]=id;save.save();closeTopModal();if(playEnding){play1000EndingSequence();return}if(playTrueEnding){play10000EndingSequence();return}screen="explore";render()})}
+function randomFrom(list){return list[Math.floor(Math.random()*list.length)]}
+function bossRewardEquipment(floor,boss,slot,weaponType=null){
+ const rarity=floor>=1000?"神話":floor>=250?"LR":Math.random()<.55?"LR":"SSR";
+ let base;
+ if(slot==="weapon"){
+  const pool=EQUIPMENT_BASES.weapon.filter(item=>weaponType?item.weaponType===weaponType:true);
+  base=randomFrom(pool.length?pool:EQUIPMENT_BASES.weapon)
+ }else base=randomFrom(EQUIPMENT_BASES[slot]);
+ const item=createEquipment(slot,{rarity,base});
+ const bossName=String(boss?.name??SPECIES[boss?.speciesId]?.name??"深淵王").replace(/^⚔️\s*/,"");
+ const suffix=slot==="weapon"?(base.weaponType==="staff"?"魔導杖":base.weaponType==="bow"?"魔弓":"王装"):slot==="armor"?"覇装":"秘宝";
+ item.name=floor===WORLD_MAX_FLOOR&&slot==="weapon"?"終界王装・アストラ":`${bossName}の${suffix}`;
+ return item
+}
+function createBossRewardOptions(floor,boss){
+ const weaponType=randomFrom(["staff","bow",null]),primary=bossRewardEquipment(floor,boss,"weapon",weaponType);
+ const secondarySlot=Math.random()<.5?"armor":"accessory",secondary=bossRewardEquipment(floor,boss,secondarySlot);
+ const gold=Math.max(200000,Math.round((floor+30)*6500*(.8+Math.random()*.5)/1000)*1000);
+ const crystals=Math.max(100,Math.round((70+floor*1.8)/10)*10);
+ const captureCrystals=Math.max(10,8+Math.floor(floor/12)),heals=Math.max(5,4+Math.floor(floor/50));
+ const equipmentChoice=item=>({
+  id:`equipment-${item.id}`,type:"equipment",icon:"equipment",item,title:`[${item.rarity}] ${item.name}`,
+  desc:`${item.weaponType==="staff"?"後衛魔法向け":item.weaponType==="bow"?"後衛物理向け":item.slot==="armor"?"生存力を伸ばす防具":item.slot==="accessory"?"戦術を変える装飾品":"前衛向け武器"} / ${Object.entries(item.stats).map(([key,value])=>`${equipmentStatLabel(key)}+${value}`).join("・")}`
+ });
+ const economy=[
+  {id:`gold-${floor}`,type:"gold",icon:"coin",amount:gold,title:`GOLD ${gold.toLocaleString()}G`,desc:"深淵ツリー・装備厳選に使える大量資金"},
+  {id:`crystal-${floor}`,type:"crystal",icon:"crystal",amount:crystals,title:`魔晶石 ×${crystals.toLocaleString()}`,desc:"召喚・育成・記憶再戦に使える希少資源"}
+ ];
+ const utility=[
+  equipmentChoice(secondary),
+  {id:`supply-${floor}`,type:"supply",icon:"chest",captureCrystals,heals,keys:1,title:"深淵遠征セット",desc:`捕獲結晶×${captureCrystals}・上級回復薬×${heals}・深淵の鍵×1`}
+ ];
+ return[equipmentChoice(primary),randomFrom(economy),randomFrom(utility)]
+}
+function bossRewardIcon(option){return`<span class="boss-reward-icon">${pixelIcon(option.icon)}</span>`}
+function awardBossReward(option){
+ if(option.type==="equipment")receiveEquipment(save.state,option.item,{bossReward:true});
+ if(option.type==="gold")save.state.player.gold+=option.amount;
+ if(option.type==="crystal")save.state.player.crystals+=option.amount;
+ if(option.type==="supply"){
+  save.state.inventory.captureCrystals+=option.captureCrystals;
+  save.state.inventory.highPotions=(save.state.inventory.highPotions??0)+option.heals;
+  save.state.inventory.abyssKeys=(save.state.inventory.abyssKeys??0)+option.keys
+ }
+}
+function openBossRewardModal(floor,result=""){
+ const pending=save.state.player.pendingBossRewards?.[floor];if(!pending?.options?.length)return false;
+ app.insertAdjacentHTML("beforeend",`<div class="game-modal boss-reward-modal"><div class="game-modal-card boss-reward">${result?`<div class="boss-reward-result">${result}</div>`:""}<div class="boss-clear-emblem">${pixelIcon("event")}</div><small class="boss-choice-kicker">ABYSS TREASURE・${floor}F</small><h2 class="boss-choice-title">撃破報酬を選択</h2><p class="muted">どれも強力です。受け取れるのはひとつだけ。</p><div class="boss-reward-grid">${pending.options.map((option,index)=>`<button data-boss-reward="${option.id}"><i>CHOICE ${index+1}</i>${bossRewardIcon(option)}<b>${option.title}</b><small>${option.desc}</small></button>`).join("")}</div></div></div>`);
+ const modal=topModal();
+ modal.querySelectorAll("[data-boss-reward]").forEach(button=>button.onclick=()=>{
+  const option=pending.options.find(entry=>entry.id===button.dataset.bossReward);if(!option)return;
+  if(!confirm(`${option.title}を選びますか？\nこの階の他の報酬は失われます。`))return;
+  awardBossReward(option);
+  const playEnding=floor===1000&&!save.state.flags?.ending1000Played,playTrueEnding=floor===WORLD_MAX_FLOOR&&!save.state.flags?.ending10000Played;
+  save.state.player.bossRewards[floor]=option.id;
+  delete save.state.player.pendingBossRewards[floor];
+  save.save();modal.remove();battle=null;
+  if(playEnding){play1000EndingSequence();return}
+  if(playTrueEnding){play10000EndingSequence();return}
+  screen=save.state.player.inRun?"explore":"home";render()
+ });
+ return true
+}
+function showBossRewards(result){
+ const floor=save.state.player.currentFloor,boss=battle.enemy;
+ save.state.player.pendingBossRewards??={};
+ if(!save.state.player.pendingBossRewards[floor])save.state.player.pendingBossRewards[floor]={floor,speciesId:boss.speciesId,createdAt:new Date().toISOString(),options:createBossRewardOptions(floor,boss)};
+ save.save();openBossRewardModal(floor,result)
+}
+function resumePendingBossReward(){
+ if(document.querySelector(".game-modal,.battle-screen"))return;
+ const entries=Object.entries(save.state.player.pendingBossRewards??{}).filter(([floor,reward])=>reward?.options?.length&&!save.state.player.bossRewards?.[floor]);
+ if(!entries.length)return;
+ entries.sort((a,b)=>Number(b[0])-Number(a[0]));
+ openBossRewardModal(Number(entries[0][0]))
+}
 
 function lose(){
  if(battle?.specialBattle)return finishSpecialBattle(false);
@@ -2778,7 +2979,9 @@ function lose(){
 }
 normalizeEquipmentState();
 if(save.state.player.inRun&&!save.state.activeBattle)screen="explore";
-if(!resumeSavedBattle())render();
+const resumedSavedBattle=resumeSavedBattle();
+if(!resumedSavedBattle)render();
+if(!resumedSavedBattle)setTimeout(resumePendingBossReward,180);
 const skillRebalance=save.state.abyssSkillRebalance;
 if(skillRebalance?.refund>0&&!skillRebalance.notifiedAt){
  skillRebalance.notifiedAt=new Date().toISOString();

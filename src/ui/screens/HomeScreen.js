@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=1.14.0-alpha124";
+import{APP_VERSION}from"../../core/config.js?v=1.7.5-final";
 import{displayName}from"../../models/Monster.js?v=1.14.0-alpha124";
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
 import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=1.0.0";
@@ -8,7 +8,7 @@ import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=1.7.3";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
 
 function scenePartySlot(monster,index){
-  const positions=["front-left","front-right","back-left","back-right"];
+  const positions=["back-right","front-right","back-left","front-left"];
   if(!monster)return`
     <button type="button" class="home-scene-unit ${positions[index]} empty" data-open-home-formation data-home-party-slot="${index}" aria-label="スロット${index+1}を編成">
       <em class="home-slot-badge">${index+1}</em><span>＋</span>
@@ -60,9 +60,9 @@ function pixelIcon(name,className=""){
   return`<span class="home-pixel-icon icon-${name}${className?` ${className}`:""}" aria-hidden="true"></span>`;
 }
 
-function menuButton({id,icon,title,sub,className=""}){
+function menuButton({id,icon,title,sub,className="",asset=null}){
   return`<button type="button" id="${id}" class="home-command-button ${className}">
-    <span class="home-command-icon">${pixelIcon(icon)}</span>
+    <span class="home-command-icon">${asset?`<img src="assets/ui/v2/${asset}" alt="" class="home-command-asset">`:pixelIcon(icon)}</span>
     <span class="home-command-copy"><b>${title}</b><small>${sub}</small></span>
   </button>`;
 }
@@ -93,6 +93,9 @@ export function HomeScreen(state){
   const recentEncounter=state.recentEncounter;
   const recentSpecies=recentEncounter?.speciesId?SPECIES[recentEncounter.speciesId]:null;
   const memorySub=recentSpecies?`${recentSpecies.name} Lv.${recentEncounter.level??1}・魔晶石10個で再戦`:"直近の通常戦闘を記録";
+  const recentBoss=state.recentBossEncounter;
+  const recentBossSpecies=recentBoss?.speciesId?SPECIES[recentBoss.speciesId]:null;
+  const bossMemorySub=recentBossSpecies?`${recentBoss.nameOverride??recentBossSpecies.name} Lv.${recentBoss.level??1}・魔晶石10個`:"階層ボス撃破で記録";
   const title=completed?"深淵を統べる魔王":revealed?"地下10000階の魔王":"地下1000階の魔王";
 
   return`
@@ -136,6 +139,7 @@ export function HomeScreen(state){
         ${menuButton({id:"openEquipment",icon:"equipment",title:"装備管理",sub:"装備の確認・強化"})}
         ${menuButton({id:"openSkills",icon:"skills",title:"スキル設定",sub:"スキルの確認・強化"})}
         ${menuButton({id:"openBattleMemory",icon:"memory",title:"戦闘の記憶",sub:memorySub,className:recentSpecies?"memory-ready":"locked"})}
+        ${menuButton({id:"openBossMemory",icon:"memory",asset:"memory-rift.png",title:"深淵の記憶",sub:bossMemorySub,className:recentBossSpecies?"memory-ready boss-memory-ready":"locked"})}
       </nav>
 
       <aside class="home-right-menu" aria-label="お知らせと報酬">
@@ -154,7 +158,7 @@ export function HomeScreen(state){
       <div class="home-party-stage" aria-label="現在の編成パーティ">
         ${sceneSlots}
         <div class="home-party-drop-grid" aria-hidden="true">
-          ${["front-left","front-right","back-left","back-right"].map((position,index)=>`<span class="${position}" data-home-party-drop="${index}"><b>${index+1}</b><small>ここへ移動</small></span>`).join("")}
+          ${["back-right","front-right","back-left","front-left"].map((position,index)=>`<span class="${position}" data-home-party-drop="${index}"><b>${index+1}</b><small>移動先</small></span>`).join("")}
         </div>
       </div>
 

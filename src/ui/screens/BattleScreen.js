@@ -3,6 +3,7 @@ import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../bat
 import{cooldownRemaining,statusLabel,enemyStatusesFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=0.9.15-alpha.95.1-stability-audit";
 import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=1.9.0-monster-catalog";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
+import{pixelIcon}from"../components/GameChrome.js?v=1.7.5-final";
 
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
@@ -18,7 +19,8 @@ function renderEnemies(battle,enemies,target){
   const statusHtml=`<div class="status-row enemy-status-row" ${statuses.length||effects.length?"":'aria-hidden="true"'}>${statuses.map(s=>`<span class="status-chip ${s.id}">${statusLabel(s)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${({atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",stun:"行動不能"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`;
   const badge=enemy.boss?'<span class="boss-badge">BOSS</span>':enemy.elite?`<span class="elite-badge">${enemy.eliteAffixIcon??"🜲"} ELITE・${enemy.eliteAffixName??"変異"}</span>`:"";const danger="";
   const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
-  return `<button id="enemy-${enemy.id}" data-enemy-target="${enemy.id}" style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${enemy.elite?"elite-enemy":""} ${target?.id===enemy.id?"targeted":""}">
+  const line=index<2?"front-line":"rear-line";
+  return `<button id="enemy-${enemy.id}" data-enemy-target="${enemy.id}" style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${enemy.boss?"boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
    <div class="side-unit-sprite enemy-orb">${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.hp<=0?"down":"idle",className:"battle-enemy-visual"})}</div>
    <div class="side-unit-card enemy-info">
@@ -37,14 +39,15 @@ function renderParty(battle,actor){
  const stats=calculatedStats(m),mp=maxMp(m),need=expNeedFor(m);
   const effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" ${effects.length?"":'aria-hidden="true"'}>${effects.map(e=>`<span class="status-chip ${e.kind}">${({taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",regen:"再生",lifeSteal:"吸収"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`;
   const hpRate=Math.max(0,Math.min(100,m.currentHp/Math.max(1,stats.hp)*100)),mpRate=Math.max(0,Math.min(100,m.currentMp/Math.max(1,mp)*100));
-  return `<button id="ally-${m.id}" data-battle-detail="${m.id}" style="--formation-index:${index};--unit-color:${colorValue(m)}" class="battle-unit combatant side-battle-unit formation-slot-${index+1} ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
+  const line=index<2?"front-line":"rear-line";
+  return `<button id="ally-${m.id}" data-battle-detail="${m.id}" style="--formation-index:${index};--unit-color:${colorValue(m)}" class="battle-unit combatant side-battle-unit formation-slot-${index+1} ${line} ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
    <span class="active-turn-marker" aria-hidden="true">TURN</span>
    <div class="side-unit-sprite unit-orb">${monsterVisual(m,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual"})}</div>
    <div class="side-unit-card ally-info">
     <div class="side-unit-name unit-head"><b>${displayName(m)}</b><small>Lv.${m.level}</small></div>
     <div class="battle-bar ally"><span class="bar-label">HP ${m.currentHp}/${stats.hp}</span><i style="width:${hpRate}%"></i></div>
     <div class="battle-bar mp"><span class="bar-label">MP ${m.currentMp}/${mp}</span><i style="width:${mpRate}%"></i></div>
-    <small class="battle-mini-stats">ATK ${stats.atk} / DEF ${stats.def} / SPD ${stats.spd}</small>${effectHtml}
+    <small class="battle-mini-stats">物攻 ${stats.atk}　魔攻 ${stats.matk??stats.atk}<br>物防 ${stats.def}　魔防 ${stats.mdef??stats.def}　SPD ${stats.spd}</small>${effectHtml}
     <div class="battle-exp-row" aria-hidden="true"><small>あと${Math.max(0,need-m.exp)}</small><div class="battle-bar exp"><i style="width:${Math.min(100,m.exp/Math.max(1,need)*100)}%"></i></div></div>
    </div>
   </button>`;
@@ -62,19 +65,19 @@ function renderSkills(battle,actor,skills){
 
 function renderItems(inventory){
  const defs=[
-  ["potions","🌿","薬草","単体HP100＋最大HP10%回復"],
-  ["highPotions","🧪","ハイポーション","単体HP300＋最大HP25%回復"],
-  ["partyPotions","💚","全体回復薬","生存者全員HP50＋最大HP7%回復"],
-  ["manaPotions","💧","マナポーション","単体MP30＋最大MP10%回復"],
-  ["highManaPotions","🔷","ハイマナポーション","単体MP100＋最大MP25%回復"],
-  ["partyManaPotions","🌊","全体マナポーション","生存者全員MP30＋最大MP7%回復"],
-  ["fullManaPotions","💠","精霊の雫","単体MP全回復"],
-  ["partyFullManaPotions","🌀","深淵の霊水","生存者全員MP全回復"],
-  ["reviveLeaves","🍃","命の葉","戦闘不能者をHP30%で蘇生"],
-  ["statusCures","🩹","万能薬・単体","単体の状態異常解除"],
-  ["partyStatusCures","💨","万能薬・全体","全員の状態異常解除"],
-  ["fullHeals","✨","完全回復薬・単体","HP・MP・異常を全回復"],
-  ["partyFullHeals","🌟","完全回復薬・全体","全員を完全回復"]
+  ["potions",pixelIcon("potion"),"薬草","単体HP100＋最大HP10%回復"],
+  ["highPotions",pixelIcon("potion"),"ハイポーション","単体HP300＋最大HP25%回復"],
+  ["partyPotions",pixelIcon("potion"),"全体回復薬","生存者全員HP50＋最大HP7%回復"],
+  ["manaPotions",pixelIcon("crystal"),"マナポーション","単体MP30＋最大MP10%回復"],
+  ["highManaPotions",pixelIcon("crystal"),"ハイマナポーション","単体MP100＋最大MP25%回復"],
+  ["partyManaPotions",pixelIcon("crystal"),"全体マナポーション","生存者全員MP30＋最大MP7%回復"],
+  ["fullManaPotions",pixelIcon("crystal"),"精霊の雫","単体MP全回復"],
+  ["partyFullManaPotions",pixelIcon("crystal"),"深淵の霊水","生存者全員MP全回復"],
+  ["reviveLeaves",pixelIcon("growth"),"命の葉","戦闘不能者をHP30%で蘇生"],
+  ["statusCures",pixelIcon("potion"),"万能薬・単体","単体の状態異常解除"],
+  ["partyStatusCures",pixelIcon("potion"),"万能薬・全体","全員の状態異常解除"],
+  ["fullHeals",pixelIcon("potion"),"完全回復薬・単体","HP・MP・異常を全回復"],
+  ["partyFullHeals",pixelIcon("potion"),"完全回復薬・全体","全員を完全回復"]
  ];
  const rows=defs.filter(d=>(inventory[d[0]]??0)>0).map(([id,icon,name,desc])=>`<button data-battle-item="${id}"><span><b>${icon} ${name}</b><small>${desc}</small></span><strong>×${inventory[id]??0}</strong></button>`).join("");
  const body=rows||'<div class="empty">使用できるアイテムがありません</div>';
@@ -86,11 +89,11 @@ function renderCommands(battle,actor,current,enemies,target,inventory,skills){
  const targetHelp=actor&&enemies.length>1?`<small class="target-help">攻撃対象：${target?.name??"なし"}（敵をタップして変更）</small>`:"";
  let controls;
  if(!actor)controls='<div class="enemy-thinking">敵の行動を処理しています…</div>';
- else if(battle.auto)controls='<div class="auto-command-wait"><span>⚔</span><div><b>FULL AUTO 進行中</b><small>戦場をタップ、または上のAUTOボタンで手動操作へ</small></div></div>';
+ else if(battle.auto)controls=`<div class="auto-command-wait"><span>${pixelIcon("crossed-swords")}</span><div><b>FULL AUTO 進行中</b><small>戦場をタップ、または上のAUTOボタンで手動操作へ</small></div></div>`;
  else if(battle.skillMenu)controls=renderSkills(battle,actor,skills);
  else if(battle.itemMenu)controls=renderItems(inventory);
- else controls='<div class="command-grid"><button data-command="attack"><i>⚔</i><span>たたかう</span></button><button data-command="guard"><i>🛡</i><span>ガード</span></button><button data-command="skill"><i>✦</i><span>スキル</span></button><button data-command="item"><i>🧪</i><span>アイテム</span></button><button data-command="capture"><i>◇</i><span>捕獲</span></button></div>';
- return `<div class="battle-command ${battle.auto?"is-auto":""}"><div class="battle-command-head spread"><h2>${title}</h2><span class="muted">捕獲結晶 ${inventory.captureCrystals}</span></div>${targetHelp}${controls}</div>`;
+ else controls=`<div class="command-grid"><button data-command="attack"><i>${pixelIcon("crossed-swords")}</i><span>たたかう</span></button><button data-command="guard"><i>${pixelIcon("equipment")}</i><span>ガード</span></button><button data-command="skill"><i>${pixelIcon("skills")}</i><span>スキル</span></button><button data-command="item"><i>${pixelIcon("growth")}</i><span>アイテム</span></button><button data-command="capture"><i>${pixelIcon("capture")}</i><span>捕獲</span></button></div>`;
+ return `<div class="battle-command ${battle.auto?"is-auto":""}"><div class="battle-command-head spread"><h2>${title}</h2><span class="muted">${pixelIcon("capture")} 捕獲結晶 ${inventory.captureCrystals}</span></div>${targetHelp}${controls}</div>`;
 }
 
 export function BattleScreen(battle,inventory,settings,floor=1){
@@ -102,7 +105,7 @@ export function BattleScreen(battle,inventory,settings,floor=1){
   <div class="turn-order"><span class="turn-order-title">行動順</span>${renderTurnOrder(battle)}</div>
   <div class="battle-arena side-battle-arena multi-enemy">
    <div class="battle-stage-vignette" aria-hidden="true"></div>
-   <span class="formation-label party-label">ALLY</span><span class="formation-label enemy-label">ENEMY</span>
+   <span class="formation-label party-label">ALLY　<span>後衛 ← → 前衛</span></span><span class="formation-label enemy-label"><span>前衛 ← → 後衛</span>　ENEMY</span>
    <div class="battle-party side-party">${renderParty(battle,actor)}</div>
    <div class="battle-clash-line" aria-hidden="true"><span>VS</span></div>
    <div class="enemy-party side-enemies">${renderEnemies(battle,enemies,target)}</div>

@@ -7,7 +7,7 @@ import{
  EQUIPMENT_SLOT_ORDER,
  equipmentSubslotLabel,
  compatibleSubslots
-}from"../../data/equipment.js?v=1.14.0-alpha124";
+}from"../../data/equipment.js?v=1.7.5-final";
 import{displayName,calculatedStats}from"../../models/Monster.js?v=1.14.0-alpha124";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.14.0-alpha124";
 import{maxMp}from"../../battle/SkillSystem.js?v=1.14.0-alpha124";
@@ -21,7 +21,7 @@ import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data
 import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.14.0-alpha124";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
-import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=1.14.4-delta117";
+import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=1.7.5-final";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.14.0-alpha124";
 
 const EQUIPMENT_SCREEN_SLOT_LABELS={

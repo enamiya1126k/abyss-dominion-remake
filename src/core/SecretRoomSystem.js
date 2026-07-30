@@ -3,7 +3,7 @@ import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=1.1
 import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=1.14.0-alpha124";
 import{SPECIES}from"../data/species.js?v=1.9.0-monster-catalog";
 import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=1.14.0-alpha124";
-import{equipmentStatLabel}from"../data/equipment.js?v=1.14.0-alpha124";
+import{equipmentStatLabel}from"../data/equipment.js?v=1.7.5-final";
 import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=1.2.0";
 import{goldForClearedFloor}from"./GoldEconomySystem.js?v=1.2.0";
 

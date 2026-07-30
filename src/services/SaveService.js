@@ -1,4 +1,4 @@
-import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL}from"../core/config.js?v=1.14.0-alpha124";
+import{SAVE_KEY,APP_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL}from"../core/config.js?v=1.7.5-final";
 import{createMonster,totalExperience,applyTotalExperience}from"../models/Monster.js?v=1.14.0-alpha124";
 import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=1.14.0-alpha124";
 import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=1.0.0";
@@ -30,6 +30,18 @@ function normalizeRecentEncounter(value){
   recordedAt:typeof value.recordedAt==="string"?value.recordedAt:new Date(0).toISOString()
  };
  if(value.gear&&typeof value.gear==="object"&&!Array.isArray(value.gear))entry.gear=value.gear;
+ return entry;
+}
+function normalizeBossEncounter(value){
+ const entry=normalizeRecentEncounter(value);
+ if(!entry)return null;
+ entry.boss=true;
+ entry.uncapturable=false;
+ entry.nameOverride=typeof value.nameOverride==="string"?value.nameOverride.slice(0,80):null;
+ entry.endgameBossId=typeof value.endgameBossId==="string"?value.endgameBossId:null;
+ entry.faction=typeof value.faction==="string"?value.faction:null;
+ entry.powerRate=finiteNumber(value.powerRate,1,.1,100);
+ entry.manifestationLabel=typeof value.manifestationLabel==="string"?value.manifestationLabel.slice(0,40):null;
  return entry;
 }
 function normalizeInventory(inventory){
@@ -80,7 +92,7 @@ function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
  ];
- const state={schemaVersion:40,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false,gameClear1000:false,ending1000Played:false,gameClear10000:false,ending10000Played:false,secondWorldEntered:false,tenGodObserved:false},worldPhase:0,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},bossKills:{},dangerLevel:1},monsters,party:monsters.map(m=>m.id),recentEncounter:null,equipment:[],reserveEquipment:[],bossEquipmentVault:[],equipmentCrafting:{rerolls:0,goldSpent:0,maxLocksUsed:0},inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,highManaPotions:0,partyManaPotions:0,fullManaPotions:0,partyFullManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5,abyssKeys:0},settings:{minimapVisible:true,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},notices:{readIds:[]},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0,combatPower:{highest:0,previous:0,updatedAt:null,history:[]}},serialCodes:{redeemed:{}},secretRooms:{run:null,activeRoom:null},abyssSkillTree:createAbyssSkillTreeState(),secondWorld:{randomEvents:{resolvedFloors:[],counts:{}},elites:{encountered:0,defeated:0,byAffix:{},bySpecies:{}}},endgame:{teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastRollStep:0,records:{},fragments:{},craftCounts:{},craftedGear:[],rescue:{post1000Encounters:0,consecutiveLosses:0,lastResult:null}}}};
+ const state={schemaVersion:41,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false,gameClear1000:false,ending1000Played:false,gameClear10000:false,ending10000Played:false,secondWorldEntered:false,tenGodObserved:false},worldPhase:0,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},pendingBossRewards:{},bossKills:{},dangerLevel:1},monsters,party:monsters.map(m=>m.id),recentEncounter:null,recentBossEncounter:null,equipment:[],reserveEquipment:[],bossEquipmentVault:[],equipmentCrafting:{rerolls:0,goldSpent:0,maxLocksUsed:0},inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,highManaPotions:0,partyManaPotions:0,fullManaPotions:0,partyFullManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,captureCrystals:5,abyssKeys:0},settings:{minimapVisible:true,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,mapTogglePosition:null,tutorialSeen:{}},gacha:{firstTenUsed:false,lastDailyKey:null},notices:{readIds:[]},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0,combatPower:{highest:0,previous:0,updatedAt:null,history:[]}},serialCodes:{redeemed:{}},secretRooms:{run:null,activeRoom:null},abyssSkillTree:createAbyssSkillTreeState(),secondWorld:{randomEvents:{resolvedFloors:[],counts:{}},elites:{encountered:0,defeated:0,byAffix:{},bySpecies:{}}},endgame:{teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastRollStep:0,records:{},fragments:{},craftCounts:{},craftedGear:[],rescue:{post1000Encounters:0,consecutiveLosses:0,lastResult:null}}}};
  normalizeSerialCodeState(state);
  return state;
 }
@@ -111,9 +123,11 @@ export class SaveService{
   s.player.floorSeeds??={};
   s.player.openedChests??={};
   s.player.bossRewards??={};
+  s.player.pendingBossRewards=s.player.pendingBossRewards&&typeof s.player.pendingBossRewards==="object"&&!Array.isArray(s.player.pendingBossRewards)?s.player.pendingBossRewards:{};
   s.player.bossKills??={};
   s.player.dangerLevel??=1;
   s.recentEncounter=normalizeRecentEncounter(s.recentEncounter);
+  s.recentBossEncounter=normalizeBossEncounter(s.recentBossEncounter);
   s.monsters=(Array.isArray(s.monsters)?s.monsters:[]).filter(monster=>monster&&typeof monster==="object"&&SPECIES[monster.speciesId]);
   const monsterIds=new Set();
   s.monsters=s.monsters.filter(monster=>{if(!monster.id||monsterIds.has(monster.id))return false;monsterIds.add(monster.id);return true});
@@ -213,6 +227,7 @@ export class SaveService{
    i.series??=null;
    i.handedness??=i.slot==="weapon"?"either":null;
    if(i.slot==="weapon"&&!i.weaponType&&/(杖|ワンド|ロッド|staff|wand|rod)/i.test(String(i.name??"")))i.weaponType="staff";
+   if(i.slot==="weapon"&&!i.weaponType&&/(弓|ボウ|bow)/i.test(String(i.name??"")))i.weaponType="bow";
    i.ruleOverrides??={};
    normalizeEquipmentAffixLocks(i);
   });
@@ -230,9 +245,9 @@ export class SaveService{
    }
   }));
   reconcilePartyAndEquipment(s);
-  s.schemaVersion=40;
+  s.schemaVersion=41;
   s.appVersion=APP_VERSION;
-  if(from<40)s.lastMigration={from,to:40,at:new Date().toISOString()};
+  if(from<41)s.lastMigration={from,to:41,at:new Date().toISOString()};
   return s
  }
  save(){

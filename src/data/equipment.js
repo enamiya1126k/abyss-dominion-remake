@@ -23,7 +23,10 @@ export const EQUIPMENT_BASES={
   {name:"捕獲師の短剣",handedness:"left",stats:{atk:4,capture:7}},
   {name:"星詠みの杖",weaponType:"staff",handedness:"twoHanded",stats:{matk:9,mdef:2,heal:4}},
   {name:"深森のワンド",weaponType:"staff",handedness:"either",stats:{matk:7,mp:6,heal:3}},
-  {name:"黒曜の魔導杖",weaponType:"staff",handedness:"twoHanded",stats:{matk:11,crit:2}}
+  {name:"黒曜の魔導杖",weaponType:"staff",handedness:"twoHanded",stats:{matk:11,crit:2}},
+  {name:"狩人の短弓",weaponType:"bow",handedness:"twoHanded",stats:{atk:7,spd:2,crit:2}},
+  {name:"月影の長弓",weaponType:"bow",handedness:"twoHanded",stats:{atk:9,spd:3,crit:3}},
+  {name:"星穿ちの魔弓",weaponType:"bow",handedness:"twoHanded",stats:{atk:8,matk:6,crit:4}}
  ],
  armor:[
   {name:"革鎧",stats:{hp:12,def:3}},

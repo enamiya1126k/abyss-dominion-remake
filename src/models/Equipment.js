@@ -1,4 +1,4 @@
-import{EQUIPMENT_BASES}from"../data/equipment.js?v=1.14.0-alpha124";
+import{EQUIPMENT_BASES}from"../data/equipment.js?v=1.7.5-final";
 import{rollEquipmentAffixes,equipmentAffixPower}from"../data/equipmentAffixes.js?v=1.2.0";
 
 function uid(){return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`}

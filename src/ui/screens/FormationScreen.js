@@ -2,11 +2,11 @@ import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
 import{calculatedStats,displayName,totalExperience}from"../../models/Monster.js?v=1.14.0-alpha124";
 import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=1.14.0-alpha124";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.14.0-alpha124";
-import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=1.14.0-alpha124";
+import{equipmentDisplayRarity,equipmentSubslotLabel,equipmentStatLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=1.7.5-final";
 import{formatAffix}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.14.0-alpha124";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.14.0-alpha124";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.7.5-final";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.14.0-alpha124";
 
 const ELEMENTS={
