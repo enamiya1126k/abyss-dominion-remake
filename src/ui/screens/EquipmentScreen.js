@@ -21,7 +21,7 @@ import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data
 import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.14.0-alpha124";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.14.0-alpha124";
+import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=1.14.4-delta117";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.14.0-alpha124";
 
 const EQUIPMENT_SCREEN_SLOT_LABELS={
@@ -51,7 +51,6 @@ function coloredEquipmentName(item,{tag="b",showRarity=true}={}){
  return`<${tag} class="equipment-rarity-name equipment-rarity-${equipmentRarityClass(item)}" style="--equipment-rarity-color:${equipmentRarityColor(item)}">${showRarity?`[${rarity}] `:""}${item.name}${item.plus?` +${item.plus}`:""}</${tag}>`;
 }
 
-const SLOT_ICONS={weapon:"⚔️",armor:"🛡️",accessory:"💍"};
 let renderedEquipmentState=null;
 
 function equipmentSellPrice(item){
@@ -77,7 +76,7 @@ function equippedSlotCard(state,target,subslot,focusItemId=null){
  const levelRequired=SLOT_UNLOCK_LEVEL[subslot]??1;
  const locked=target.level<levelRequired;
  if(locked){
-  return`<div class="equipped-slot-card locked-slot"><span class="equipped-slot-label">${screenSubslotLabel(subslot)}</span><b>🔒 Lv.${levelRequired}</b><small>レベル到達で解放</small></div>`;
+  return`<div class="equipped-slot-card locked-slot"><span class="equipped-slot-label">${screenSubslotLabel(subslot)}</span><b>LOCKED・Lv.${levelRequired}</b><small>レベル到達で解放</small></div>`;
  }
  const item=state.equipment.find(entry=>entry.id===target.equipment?.[subslot]);
  if(!item){
@@ -89,15 +88,15 @@ function equippedSlotCard(state,target,subslot,focusItemId=null){
   <summary>
    <span class="equipped-slot-label">${screenSubslotLabel(subslot)}</span>
    <div>${coloredEquipmentName(item)}<small>Lv.${level} ∞　${itemStats(item)||"能力補正なし"}</small>${equipmentSocketSummary(item,{compact:true})}</div>
-   <i>${item.favorite?"★":""}${item.locked?"🔒":""}${item.ruleOverrides?.unsellable?"🛡️":""}⌄</i>
+   <i>${item.favorite?"★":""}${item.locked?"L":""}${item.ruleOverrides?.unsellable?"P":""}⌄</i>
   </summary>
   <div class="equipped-slot-detail">
    ${itemAffixes(item,{compact:true})}
    <div class="equipped-slot-actions">
-    <button type="button" data-enhance-equipment="${item.id}">🔨 育成</button>
-    ${affixes.length?`<button type="button" data-reroll-equipment="${item.id}">🎲 GOLD厳選</button>`:'<button type="button" disabled>🎲 厳選不可</button>'}
+    <button type="button" data-enhance-equipment="${item.id}">育成・スロット</button>
+    ${affixes.length?`<button type="button" data-reroll-equipment="${item.id}">GOLD厳選</button>`:'<button type="button" disabled>厳選不可</button>'}
     <button type="button" data-favorite-equipment="${item.id}">${item.favorite?"★ 解除":"☆ お気に入り"}</button>
-    <button type="button" data-lock-equipment="${item.id}">${item.locked?"🔓 解除":"🔒 ロック"}</button>
+    <button type="button" data-lock-equipment="${item.id}">${item.locked?"ロック解除":"ロック"}</button>
     <button type="button" data-unequip="${item.id}">装備を外す</button>
    </div>
   </div>
@@ -199,6 +198,7 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
   if(!series)return"";
   return`<details class="series-detail"><summary><b>${series.name}</b><span>${count}/6</span><small>${series.theme??""}</small></summary>${seriesMasterySummary(state,id)}<div>${Object.entries(series.bonuses).map(([pieces,effect])=>`<p class="${count>=Number(pieces)?"active":""}"><b>${count>=Number(pieces)?"✓":"○"} ${pieces}部位効果</b><span>${describeSeriesEffect(effect)}</span></p>`).join("")}</div></details>`;
  }).join("");
+ const equippedCards=Object.fromEntries(EQUIPMENT_SLOT_ORDER.map(subslot=>[subslot,equippedSlotCard(state,target,subslot,focusItemId)]));
 
  return`<section class="screen v2-screen equipment-screen-v2">
   ${resourceHud(state,{backId:"backEquipmentHome",title:"装備管理"})}
@@ -208,30 +208,37 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
     <div class="equipment-target-list">${party.map(monster=>{
      const monsterSpecies=SPECIES[monster.speciesId]??{};
      const monsterAttribute=ATTRIBUTES[monster.attribute??monsterSpecies.element??"neutral"]??{icon:"◈",name:"不明"};
-     return`<button data-equipment-target="${monster.id}" class="${monster.id===target.id?"active":""}">${monsterVisual(monster,monsterSpecies.emoji??"👹",{className:"equipment-tab-monster-visual"})}${coloredMonsterName(monster)}<small>${monsterAttribute.icon}${monsterAttribute.name}・Lv.${monster.level}　⭐${monster.stars??1}　+${monster.plus??0}</small></button>`;
+     return`<button data-equipment-target="${monster.id}" class="${monster.id===target.id?"active":""}">${monsterVisual(monster,monsterSpecies.emoji??"MONSTER",{className:"equipment-tab-monster-visual"})}${coloredMonsterName(monster)}<small>${monsterAttribute.name}・Lv.${monster.level}　★${monster.stars??1}　+${monster.plus??0}</small></button>`;
     }).join("")}</div>
-    <div class="selected-equipment-target">
-     ${monsterVisual(target,species.emoji??"👹",{className:"equipment-target-monster-visual"})}
-     <div class="selected-equipment-identity">${coloredMonsterName(target)}<small><em class="attribute-chip">${attribute.icon} ${attribute.name}属性</em>　❤️${target.affection??0}/1000</small></div>
-     <div class="selected-equipment-power"><small>戦力</small><strong>${formatCombatPower(power)}</strong></div>
+    <div class="equipment-loadout-workbench" aria-label="装備中の6枠">
+     <div class="equipment-slot-rail left">
+      ${equippedCards.weaponRight}${equippedCards.accessoryNeck}${equippedCards.armorBody}
+     </div>
+     <div class="equipment-paper-doll">
+      <div class="equipment-paper-doll-portrait">${monsterVisual(target,species.emoji??"MONSTER",{className:"equipment-target-monster-visual"})}</div>
+      <div class="selected-equipment-identity">${coloredMonsterName(target)}<small><em class="attribute-chip">${attribute.name}属性</em>　なつき ${target.affection??0}/1000</small></div>
+      <div class="selected-equipment-power"><small>戦力</small><strong>${formatCombatPower(power)}</strong></div>
+      <div class="selected-equipment-stats" aria-label="装備反映後ステータス">
+       <span><small>HP</small><b>${stats.hp.toLocaleString()}</b></span>
+       <span><small>MP</small><b>${maxMp(target).toLocaleString()}</b></span>
+       <span><small>物理ATK</small><b>${stats.atk.toLocaleString()}</b></span>
+       <span><small>魔法ATK</small><b>${(stats.matk??stats.atk).toLocaleString()}</b></span>
+       <span><small>物理DEF</small><b>${stats.def.toLocaleString()}</b></span>
+       <span><small>魔法DEF</small><b>${(stats.mdef??stats.def).toLocaleString()}</b></span>
+       <span><small>SPD</small><b>${stats.spd.toLocaleString()}</b></span>
+       <span><small>属性</small><b>${attribute.name}</b></span>
+      </div>
+     </div>
+     <div class="equipment-slot-rail right">
+      ${equippedCards.weaponLeft}${equippedCards.accessoryFinger}${equippedCards.armorSupport}
+     </div>
     </div>
-    <div class="selected-equipment-stats" aria-label="装備反映後ステータス">
-     <span><small>HP</small><b>${stats.hp.toLocaleString()}</b></span>
-     <span><small>MP</small><b>${maxMp(target).toLocaleString()}</b></span>
-     <span><small>物理ATK</small><b>${stats.atk.toLocaleString()}</b></span>
-     <span><small>魔法ATK</small><b>${(stats.matk??stats.atk).toLocaleString()}</b></span>
-     <span><small>物理DEF</small><b>${stats.def.toLocaleString()}</b></span>
-     <span><small>魔法DEF</small><b>${(stats.mdef??stats.def).toLocaleString()}</b></span>
-     <span><small>SPD</small><b>${stats.spd.toLocaleString()}</b></span>
-     <span><small>属性</small><b>${attribute.icon}${attribute.name}</b></span>
-    </div>
-    <div class="equipped-summary six-slots">${EQUIPMENT_SLOT_ORDER.map(subslot=>equippedSlotCard(state,target,subslot,focusItemId)).join("")}</div>
     ${seriesSummary?`<details class="series-summary equipment-series-compact"><summary><b>◆ シリーズ効果</b><small>${seriesSummary}</small><em>${active.length?active.map(entry=>describeSeriesEffect(entry.effect)).join(" / "):"発動待ち"}</em></summary><div>${seriesDetails}</div></details>`:""}
     <div class="auto-equip-row">
-     <button id="autoEquipOne">⚡ このキャラを自動装備</button>
-     <button id="autoEquipParty">⚡ パーティ全員を自動装備</button>
-     <button id="unequipOne">🗑 このキャラの装備解除</button>
-     <button id="unequipParty">🗑 パーティ全員の装備解除</button>
+     <button id="autoEquipOne">${pixelIcon("equipment")} このキャラを自動装備</button>
+     <button id="autoEquipParty">${pixelIcon("formation")} 全員を自動装備</button>
+     <button id="unequipOne">このキャラの装備解除</button>
+     <button id="unequipParty">全員の装備解除</button>
     </div>
    </div>
   </div>

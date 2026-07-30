@@ -17,7 +17,7 @@ function scenePartySlot(monster,index){
   return`
     <button type="button" class="home-scene-unit ${positions[index]}" data-open-home-formation data-home-party-slot="${index}" data-home-party-member="${monster.id}" aria-label="${displayName(monster)}・編成スロット${index+1}">
       <em class="home-slot-badge">${index+1}</em>
-      ${monsterVisual(monster,species?.emoji??"👹",{className:"home-scene-monster-visual"})}
+      ${monsterVisual(monster,species?.emoji??"MONSTER",{className:"home-scene-monster-visual"})}
       <span class="home-scene-name">${displayName(monster)}</span>
       <small>Lv.${monster.level}</small>
       <strong class="home-scene-power"><i>戦力</i>${formatCombatPower(monsterCombatPower(monster))}</strong>
@@ -90,6 +90,9 @@ export function HomeScreen(state){
   const teamSub=teamUnlocked?`第${team.stage}試練・本日 ${team.dailyAttempts}/50戦`:`${TEAM_BATTLE_UNLOCK_FLOOR}階突破で解放`;
   const eventReady=endgameUnlocked||revealed;
   const noticeCount=unreadNoticeIds(state).length;
+  const recentEncounter=state.recentEncounter;
+  const recentSpecies=recentEncounter?.speciesId?SPECIES[recentEncounter.speciesId]:null;
+  const memorySub=recentSpecies?`${recentSpecies.name} Lv.${recentEncounter.level??1}・魔晶石10個で再戦`:"直近の通常戦闘を記録";
   const title=completed?"深淵を統べる魔王":revealed?"地下10000階の魔王":"地下1000階の魔王";
 
   return`
@@ -132,6 +135,7 @@ export function HomeScreen(state){
         ${menuButton({id:"openMonsters",icon:"growth",title:"魔物一覧",sub:"図鑑・合成・逃す"})}
         ${menuButton({id:"openEquipment",icon:"equipment",title:"装備管理",sub:"装備の確認・強化"})}
         ${menuButton({id:"openSkills",icon:"skills",title:"スキル設定",sub:"スキルの確認・強化"})}
+        ${menuButton({id:"openBattleMemory",icon:"memory",title:"戦闘の記憶",sub:memorySub,className:recentSpecies?"memory-ready":"locked"})}
       </nav>
 
       <aside class="home-right-menu" aria-label="お知らせと報酬">
