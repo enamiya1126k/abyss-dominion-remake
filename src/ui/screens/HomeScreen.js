@@ -8,7 +8,10 @@ import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=1.7.3";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
 
 function scenePartySlot(monster,index){
-  const positions=["back-right","front-right","back-left","front-left"];
+  // Formation order is shared with battle: slots 1–2 are the front row and
+  // slots 3–4 are the rear row. Keep the scene positions deterministic so a
+  // saved party never appears to change rows after returning home.
+  const positions=["front-left","front-right","back-left","back-right"];
   if(!monster)return`
     <button type="button" class="home-scene-unit ${positions[index]} empty" data-open-home-formation data-home-party-slot="${index}" aria-label="スロット${index+1}を編成">
       <em class="home-slot-badge">${index+1}</em><span>＋</span>
@@ -158,7 +161,7 @@ export function HomeScreen(state){
       <div class="home-party-stage" aria-label="現在の編成パーティ">
         ${sceneSlots}
         <div class="home-party-drop-grid" aria-hidden="true">
-          ${["back-right","front-right","back-left","front-left"].map((position,index)=>`<span class="${position}" data-home-party-drop="${index}"><b>${index+1}</b><small>移動先</small></span>`).join("")}
+          ${["front-left","front-right","back-left","back-right"].map((position,index)=>`<span class="${position}" data-home-party-drop="${index}"><b>${index+1}</b><small>${index<2?"前衛":"後衛"}</small></span>`).join("")}
         </div>
       </div>
 

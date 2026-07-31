@@ -495,10 +495,12 @@ function bindHomePartyDrag(){
   const direct=document.elementFromPoint(x,y)?.closest?.("[data-home-party-drop]");
   if(direct)return direct;
   const targets=[...document.querySelectorAll("[data-home-party-drop]")];
-  return targets.sort((a,b)=>{
-   const ar=a.getBoundingClientRect(),br=b.getBoundingClientRect();
-   return Math.hypot(x-(ar.left+ar.width/2),y-(ar.top+ar.height/2))-Math.hypot(x-(br.left+br.width/2),y-(br.top+br.height/2));
-  })[0]??null;
+  const candidates=targets.map(target=>{
+   const rect=target.getBoundingClientRect(),padding=22;
+   const inside=x>=rect.left-padding&&x<=rect.right+padding&&y>=rect.top-padding&&y<=rect.bottom+padding;
+   return{target,inside,distance:Math.hypot(x-(rect.left+rect.width/2),y-(rect.top+rect.height/2))};
+  }).filter(entry=>entry.inside).sort((a,b)=>a.distance-b.distance);
+  return candidates[0]?.target??null;
  };
  document.querySelectorAll("[data-home-party-member]").forEach(unit=>{
   unit.addEventListener("click",event=>{
@@ -527,7 +529,7 @@ function bindHomePartyDrag(){
     if(timer)clearTimeout(timer);
     document.removeEventListener("pointermove",move,true);document.removeEventListener("pointerup",finish,true);document.removeEventListener("pointercancel",finish,true);
     unit.classList.remove("home-party-dragging");document.body.classList.remove("home-party-drag-active");ghost?.remove();lastTarget?.classList.remove("drop-ready");
-    if(!active)return;
+    if(!active||upEvent.type==="pointercancel")return;
     const target=dropTargetAt(upEvent.clientX,upEvent.clientY)??lastTarget;
     if(!target)return;
     const targetIndex=Number(target.dataset.homePartyDrop);
@@ -1702,7 +1704,9 @@ function floorConfig(floor,rng){
  const min=Math.min(31,23+tier),max=Math.min(39,31+tier);
  let cols=(min+Math.floor(rng()*(max-min+1)))|1,rows=(min+Math.floor(rng()*(max-min+1)))|1;
  cols=Math.max(23,Math.min(COLS,cols));rows=Math.max(23,Math.min(ROWS,rows));
- const roomCount=Math.min(10,5+Math.floor(rng()*(3+Math.min(3,Math.floor(tier/2)))));
+ // Three to seven chambers keeps each floor readable as a building plan.
+ // Deeper floors may roll more wings, but never become an indistinct maze.
+ const roomRange=Math.min(5,3+Math.floor(tier/3)),roomCount=3+Math.floor(rng()*roomRange);
  return{cols,rows,shape:"rooms",roomCount}
 }
 function populateExploreDecorations(world,floor,rng){
@@ -2334,11 +2338,25 @@ function drawExploreAtmosphere(theme){
  gradient.addColorStop(0,"rgba(0,0,0,0)");gradient.addColorStop(.52,"rgba(0,0,0,.05)");gradient.addColorStop(1,theme.dark);
  game.ctx.fillStyle=gradient;game.ctx.fillRect(0,0,game.canvas.width,game.canvas.height)
 }
-function drawExplorationParty(){
+function explorationPartySceneObjects(){
  const members=explorationPartyMembers();
- for(let index=members.length-1;index>=1;index--){const monster=members[index],position=explorationFollowerPosition(index);drawExplorationMonster(position,monster,false,.95,index)}
- if(members[0])drawExplorationMonster({x:game.player.rx,y:game.player.ry},members[0],false,1,0);
- else drawExplorationMonster({x:game.player.rx,y:game.player.ry},{speciesId:"slime"},false,1,0)
+ const entries=members.map((monster,index)=>{
+  const position=index?explorationFollowerPosition(index):{x:game.player.rx,y:game.player.ry};
+  return{y:position.y+.58,order:80+index,draw:()=>drawExplorationMonster(position,monster,false,index ? .95 : 1,index)};
+ });
+ if(!entries.length){const position={x:game.player.rx,y:game.player.ry};entries.push({y:position.y+.58,order:80,draw:()=>drawExplorationMonster(position,{speciesId:"slime"},false,1,0)})}
+ return entries
+}
+function drawExploreSceneObjects(world,floor,theme,stairsTexture){
+ const objects=[];
+ const add=(y,order,drawObject)=>objects.push({y:Number(y)||0,order,draw:drawObject});
+ ensureExploreDecorations(world).filter(item=>item.type!=="water"&&item.type!=="entrance").forEach((item,index)=>add(item.y+.26,10+index,()=>drawExploreDecoration(item,theme)));
+ add(world.exit.y+.18,30,()=>drawExploreExit(world.exit,stairsTexture,theme));
+ if(world.shop)add(world.shop.y+.28,40,()=>{drawExploreGlow(world.shop,"#b05cff",1.9,.62);drawExploreAtlas(world.shop,EXPLORE_ATLAS.entrance,{scale:1.72,shadowColor:"#b05cff",shadowBlur:15});drawExploreParticles(world.shop,"#d5a0ff",7,31,.75)});
+ if(world.boss){const boss=floorBossEnemy();add(world.boss.y+.62,60,()=>drawExplorationMonster(world.boss,{speciesId:boss.speciesId,level:boss.level},true,1.92,9))}
+ world.chests.forEach((chest,index)=>add(chest.y+.34,50+index,()=>drawExploreAtlas(chest,chest.open?EXPLORE_ATLAS.chestOpen:EXPLORE_ATLAS.chestClosed,{scale:1.7,shadowColor:chest.locked?"#f2cf72":"#000",shadowBlur:chest.locked?13:7})));
+ objects.push(...explorationPartySceneObjects());
+ objects.sort((a,b)=>a.y-b.y||a.order-b.order).forEach(entry=>entry.draw())
 }
 function draw(){
  const c=game.ctx,w=game.world,floor=save.state.player.currentFloor,palette=worldPresentationForFloor(floor),theme=exploreBandTheme(floor),floorTexture=explorationTexture("floor"),wallTexture=explorationTexture("wall"),stairsTexture=explorationTexture("stairs");
@@ -2361,12 +2379,8 @@ function draw(){
  const decorations=ensureExploreDecorations(w);
  decorations.filter(item=>item.type==="water"||item.type==="entrance").sort((a,b)=>a.y-b.y).forEach(item=>drawExploreDecoration(item,theme));
  drawExploreAtmosphere(theme);
- decorations.filter(item=>item.type!=="water"&&item.type!=="entrance").sort((a,b)=>a.y-b.y).forEach(item=>drawExploreDecoration(item,theme));
- drawExploreExit(w.exit,stairsTexture,theme);
- if(w.shop){drawExploreGlow(w.shop,"#b05cff",1.9,.62);drawExploreAtlas(w.shop,EXPLORE_ATLAS.entrance,{scale:1.72,shadowColor:"#b05cff",shadowBlur:15});drawExploreParticles(w.shop,"#d5a0ff",7,31,.75)}
- if(w.boss){const boss=floorBossEnemy();drawExplorationMonster(w.boss,{speciesId:boss.speciesId,level:boss.level},true,1.92,9)}
- w.chests.forEach(chest=>drawExploreAtlas(chest,chest.open?EXPLORE_ATLAS.chestOpen:EXPLORE_ATLAS.chestClosed,{scale:1.7,shadowColor:chest.locked?"#f2cf72":"#000",shadowBlur:chest.locked?13:7}));
- drawExplorationParty();drawMini();
+ drawExploreSceneObjects(w,floor,theme,stairsTexture);
+ drawMini();
 }
 function drawMini(){
  const m=document.getElementById("miniMap");

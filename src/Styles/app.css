@@ -4762,7 +4762,7 @@ button>.inline-pixel-icon,
 .explore-party-strip>button{
  min-height:64px!important;
  height:64px!important;
- grid-template-columns:12px 35px minmax(0,1fr)!important;
+ grid-template-columns:12px 42px minmax(0,1fr)!important;
  gap:2px!important;
  padding:3px!important;
  contain:layout paint!important;
@@ -4786,10 +4786,10 @@ button>.inline-pixel-icon,
  line-height:1!important;
 }
 .explore-party-portrait{
- width:35px!important;
- height:48px!important;
- min-width:35px!important;
- max-width:35px!important;
+ width:42px!important;
+ height:42px!important;
+ min-width:42px!important;
+ max-width:42px!important;
  align-self:center!important;
  display:grid!important;
  place-items:end center!important;
@@ -4802,11 +4802,11 @@ button>.inline-pixel-icon,
 .explore-party-portrait .monster-asset-image{
  position:static!important;
  inset:auto!important;
- width:35px!important;
- height:46px!important;
- min-width:35px!important;
- max-width:35px!important;
- max-height:46px!important;
+ width:42px!important;
+ height:42px!important;
+ min-width:42px!important;
+ max-width:42px!important;
+ max-height:42px!important;
  display:block!important;
  object-fit:contain!important;
  object-position:center bottom!important;
@@ -4902,10 +4902,14 @@ button>.inline-pixel-icon,
 
 .equipment-screen-v2 .equipment-page{
  padding-bottom:calc(var(--v2-nav-height) + 34px)!important;
+ scroll-padding-bottom:calc(var(--v2-nav-height) + 34px)!important;
 }
 .equipment-screen-v2 .auto-equip-row{
- margin-bottom:12px!important;
+ margin-bottom:max(20px,env(safe-area-inset-bottom))!important;
  padding-bottom:2px!important;
+}
+.v2-bottom-nav{
+ grid-template-columns:repeat(6,minmax(0,1fr))!important;
 }
 
 /* Battle: front row is 1–2, rear row is 3–4, matching the home formation. */
@@ -5025,12 +5029,12 @@ button>.inline-pixel-icon,
  .v2-screen-hud .v2-hud-resources{padding-inline:2px!important}
  .v2-screen-hud .v2-hud-resources>span{font-size:.43rem!important}
  .explore-party-strip{gap:2px!important}
- .explore-party-strip>button{grid-template-columns:10px 30px minmax(0,1fr)!important;padding:2px!important}
+ .explore-party-strip>button{grid-template-columns:10px 34px minmax(0,1fr)!important;padding:2px!important}
  .explore-slot-badge{width:10px!important;min-width:10px!important;font-size:.32rem!important}
- .explore-party-portrait{width:30px!important;min-width:30px!important;max-width:30px!important}
+ .explore-party-portrait{width:34px!important;height:34px!important;min-width:34px!important;max-width:34px!important}
  .explore-party-portrait .explore-party-monster-visual,
  .explore-party-portrait .explore-party-monster-visual img,
- .explore-party-portrait .monster-asset-image{width:30px!important;min-width:30px!important;max-width:30px!important}
+ .explore-party-portrait .monster-asset-image{width:34px!important;height:34px!important;min-width:34px!important;max-width:34px!important;max-height:34px!important}
  .explore-party-copy>b{font-size:.44rem!important}
  .explore-party-copy>small{font-size:.28rem!important}
  .explore-party-strip .hud-bar>small{font-size:.24rem!important}
@@ -5039,5 +5043,5 @@ button>.inline-pixel-icon,
 }
 @media(max-height:740px){
  .equipment-screen-v2 .equipment-page{padding-bottom:calc(var(--v2-nav-height) + 40px)!important}
- .equipment-screen-v2 .auto-equip-row{margin-bottom:16px!important}
+ .equipment-screen-v2 .auto-equip-row{margin-bottom:max(28px,env(safe-area-inset-bottom))!important}
 }
