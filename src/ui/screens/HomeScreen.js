@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=1.7.5-final";
+import{APP_VERSION}from"../../core/config.js?v=1.7.6-cachefix";
 import{displayName}from"../../models/Monster.js?v=1.14.0-alpha124";
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
 import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=1.0.0";
