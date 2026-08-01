@@ -5045,3 +5045,221 @@ button>.inline-pixel-icon,
  .equipment-screen-v2 .equipment-page{padding-bottom:calc(var(--v2-nav-height) + 40px)!important}
  .equipment-screen-v2 .auto-equip-row{margin-bottom:max(28px,env(safe-area-inset-bottom))!important}
 }
+
+/* v1.7.7 — release candidate layout and interaction safeguards. */
+/* HUD resource icons are atlas cells.  `contain` showed the complete sheet as a
+   tiny mosaic; capture crystals are the one standalone image in this row. */
+.v2-screen-hud .v2-hud-resources .home-pixel-icon:not(.icon-capture){
+ background-size:500% 400%!important;
+ background-position:var(--home-icon-x) var(--home-icon-y)!important;
+ background-repeat:no-repeat!important;
+}
+.v2-screen-hud .v2-hud-resources .home-pixel-icon.icon-capture{
+ background-size:contain!important;
+ background-position:center!important;
+ background-repeat:no-repeat!important;
+}
+
+/* The return-reward tile was removed from exploration, leaving three columns. */
+.explore-screen-dungeon .explore-command-header{
+ grid-template-columns:minmax(96px,.72fr) minmax(0,1.72fr) 30px!important;
+}
+.explore-party-strip>button{
+ grid-template-columns:12px 42px minmax(0,1fr)!important;
+}
+
+/* Both the map switch and the map itself can be dragged inside the stage. */
+.explore-stage-tools{pointer-events:none!important}
+.explore-stage #miniMapToggle{
+ position:absolute!important;
+ z-index:9!important;
+ right:auto;
+ bottom:auto;
+ min-width:64px!important;
+ min-height:58px!important;
+ display:grid!important;
+ place-items:center!important;
+ align-content:center!important;
+ gap:2px!important;
+ padding:4px!important;
+ border:6px solid transparent!important;
+ border-image:var(--alpha115-frame) 44 fill / 6px!important;
+ border-radius:0!important;
+ background:#08080de8!important;
+ color:#d8bc79!important;
+ opacity:1!important;
+ touch-action:none!important;
+ cursor:grab!important;
+}
+.explore-stage #miniMapToggle:active,
+.explore-stage #miniMap:active{cursor:grabbing!important}
+.explore-stage #miniMapToggle .home-pixel-icon{width:24px!important;height:24px!important}
+.explore-stage #miniMapToggle b{font-size:.42rem!important}
+.explore-stage #miniMap{
+ right:auto!important;
+ bottom:auto!important;
+ width:172px!important;
+ height:172px!important;
+ pointer-events:auto!important;
+ touch-action:none!important;
+ cursor:grab!important;
+ box-shadow:0 8px 22px #000d!important;
+}
+
+/* Four compact party columns: only the information needed to edit the line-up. */
+.formation-screen.v2-screen .formation-member{
+ grid-template-rows:auto auto minmax(70px,.46fr) minmax(138px,1fr) auto!important;
+ gap:2px!important;
+ padding:4px 3px!important;
+}
+.formation-member-drag{min-height:0;overflow:hidden}
+.formation-section{min-height:0!important;overflow:hidden!important}
+.formation-section.formation-loadout{
+ display:grid!important;
+ grid-template-rows:auto minmax(0,1fr)!important;
+}
+.formation-section.formation-skills{
+ display:grid!important;
+ grid-template-rows:auto minmax(0,1fr)!important;
+}
+.formation-gear-grid{
+ min-height:0!important;
+ display:grid!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ grid-template-rows:minmax(0,1fr)!important;
+ gap:2px!important;
+}
+.formation-gear-slot{
+ min-height:0!important;
+ height:100%!important;
+ align-content:center!important;
+}
+.formation-skill-list{
+ min-height:0!important;
+ display:grid!important;
+ grid-template-rows:repeat(4,minmax(0,1fr))!important;
+ gap:2px!important;
+ overflow:hidden!important;
+}
+.formation-skill-list>button{
+ min-height:0!important;
+ height:100%!important;
+ display:grid!important;
+ grid-template-columns:15px minmax(0,1fr) 7px!important;
+ align-items:center!important;
+ gap:2px!important;
+ overflow:hidden!important;
+}
+.formation-skill-list>button>span{min-width:0;display:grid;gap:0;overflow:hidden}
+.formation-skill-list>button b,
+.formation-skill-list>button em{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.formation-actions.compact{
+ display:grid!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:2px!important;
+}
+.formation-actions.compact button{min-height:28px!important;padding:3px 1px!important;font-size:.43rem!important}
+.formation-actions.compact .formation-remove-action{grid-column:1/-1!important}
+.formation-readonly-note{
+ min-height:34px;
+ display:grid;
+ place-items:center;
+ padding:4px;
+ border:1px solid #6c5636;
+ background:#19120bc4;
+ color:#ddc487;
+ font-size:.38rem;
+ line-height:1.35;
+ text-align:center;
+}
+
+/* Growth information is deliberately tiny so the equipment composition stays intact. */
+.selected-equipment-growth{
+ color:#e8ce84!important;
+ font-size:.48rem!important;
+ letter-spacing:.02em;
+}
+
+/* Leave a real touch-safe strip above Safari and the fixed six-button nav. */
+.equipment-screen-v2 .equipment-page{
+ padding-bottom:calc(var(--v2-nav-height) + 72px + env(safe-area-inset-bottom))!important;
+ scroll-padding-bottom:calc(var(--v2-nav-height) + 72px + env(safe-area-inset-bottom))!important;
+}
+.equipment-screen-v2 .auto-equip-row{
+ margin-bottom:48px!important;
+ padding-bottom:max(8px,env(safe-area-inset-bottom))!important;
+}
+
+.battle-memory-party{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(104px,1fr));
+ gap:6px;
+ width:100%;
+}
+.battle-memory-enemy{
+ min-width:0;
+ display:grid;
+ grid-template-columns:48px minmax(0,1fr);
+ align-items:center;
+ gap:5px;
+ padding:6px;
+ border:1px solid #594169;
+ background:#09070e;
+ text-align:left;
+}
+.battle-memory-enemy.boss{border-color:#ba8549;box-shadow:inset 0 0 16px #b66a2527}
+.battle-memory-enemy>span,
+.battle-memory-monster-visual,
+.battle-memory-monster-visual img{width:46px!important;height:46px!important;max-width:46px!important;max-height:46px!important}
+.battle-memory-enemy>div{min-width:0;display:grid;gap:1px}
+.battle-memory-enemy small{color:#bd9f69;font-size:.4rem}
+.battle-memory-enemy b,
+.battle-memory-enemy em{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.battle-memory-enemy b{font-size:.55rem}
+.battle-memory-enemy em{color:#aaa0ad;font-size:.4rem;font-style:normal}
+
+.trial-gate-grid{
+ display:grid!important;
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ gap:8px!important;
+}
+.trial-gate-grid>button{
+ min-height:138px!important;
+ display:grid!important;
+ place-items:center!important;
+ align-content:center!important;
+ gap:6px!important;
+ padding:10px 7px!important;
+ border:7px solid transparent!important;
+ border-image:var(--alpha115-frame) 44 fill / 7px!important;
+ border-radius:0!important;
+ background:#09070d!important;
+ text-align:center!important;
+}
+.trial-gate-grid>button>span{font-size:2rem}
+.trial-gate-grid>button>b{color:#efd585;font-size:.68rem}
+.trial-gate-grid>button>small{font-size:.46rem;line-height:1.45}
+.trial-gate-grid>button.locked{filter:saturate(.38);opacity:.66}
+.trial-gate-grid>button.unlocked{border-image-source:var(--alpha115-frame-active)!important;box-shadow:0 0 18px #d0a24a24}
+
+@media(max-width:420px){
+ .explore-screen-dungeon .explore-command-header{
+  grid-template-columns:minmax(88px,.74fr) minmax(0,1.72fr) 26px!important;
+ }
+ .explore-stage #miniMap{width:138px!important;height:138px!important}
+ .formation-screen.v2-screen .formation-member{
+  grid-template-rows:auto auto minmax(62px,.42fr) minmax(128px,1fr) auto!important;
+  padding:3px 2px!important;
+ }
+ .formation-section>summary{font-size:.34rem!important;padding-inline:2px!important}
+ .formation-section>summary small{display:none!important}
+ .formation-gear-slot small{font-size:.25rem!important}
+ .formation-gear-slot b{font-size:.32rem!important}
+ .formation-gear-slot em{font-size:.24rem!important}
+ .formation-skill-list>button{grid-template-columns:13px minmax(0,1fr) 6px!important;padding:1px 2px!important}
+ .formation-skill-list b{font-size:.33rem!important}
+ .formation-skill-list em{font-size:.24rem!important}
+ .trial-gate-grid{grid-template-columns:1fr!important}
+ .trial-gate-grid>button{min-height:92px!important;grid-template-columns:52px minmax(0,1fr)!important;text-align:left!important}
+ .trial-gate-grid>button>span{grid-row:1/3}
+}

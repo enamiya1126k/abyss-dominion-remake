@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=1.7.6-cachefix";
+import{APP_VERSION}from"../../core/config.js?v=1.7.7-final";
 import{displayName}from"../../models/Monster.js?v=1.14.0-alpha124";
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
 import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=1.0.0";
@@ -77,6 +77,18 @@ function utilityButton({id,icon,title,value="",ready=false}){
   </button>`;
 }
 
+function homeMemorySignature(entries){
+  const source=JSON.stringify(entries??[]);let hash=2166136261;
+  for(let index=0;index<source.length;index++)hash=Math.imul(hash^source.charCodeAt(index),16777619);
+  return`party-${entries?.length??0}-${(hash>>>0).toString(36)}`;
+}
+function homeMemoryCost(state,memory){
+  if(!memory?.entries?.length)return 10;
+  const signature=memory.signature??homeMemorySignature(memory.entries),attempts=Math.max(0,Math.floor(Number(state.battleMemoryAttempts?.[signature])||0));
+  const base=Math.min(Number.MAX_SAFE_INTEGER,10*2**Math.min(attempts,49));
+  return Math.min(Number.MAX_SAFE_INTEGER,memory.entries.some(entry=>entry.boss)?Math.ceil(base*1.5):base);
+}
+
 export function HomeScreen(state){
   const slotIds=homePartySlots(state);
   const party=slotIds.map(id=>id?state.monsters.find(monster=>monster.id===id):null);
@@ -91,14 +103,11 @@ export function HomeScreen(state){
   const phase=worldPhase(state);
   const sceneSlots=Array.from({length:4},(_,index)=>scenePartySlot(party[index],index)).join("");
   const teamSub=teamUnlocked?`第${team.stage}試練・本日 ${team.dailyAttempts}/50戦`:`${TEAM_BATTLE_UNLOCK_FLOOR}階突破で解放`;
-  const eventReady=endgameUnlocked||revealed;
+  const eventReady=teamUnlocked||endgameUnlocked||revealed;
   const noticeCount=unreadNoticeIds(state).length;
-  const recentEncounter=state.recentEncounter;
-  const recentSpecies=recentEncounter?.speciesId?SPECIES[recentEncounter.speciesId]:null;
-  const memorySub=recentSpecies?`${recentSpecies.name} Lv.${recentEncounter.level??1}・魔晶石10個で再戦`:"直近の通常戦闘を記録";
-  const recentBoss=state.recentBossEncounter;
-  const recentBossSpecies=recentBoss?.speciesId?SPECIES[recentBoss.speciesId]:null;
-  const bossMemorySub=recentBossSpecies?`${recentBoss.nameOverride??recentBossSpecies.name} Lv.${recentBoss.level??1}・魔晶石10個`:"階層ボス撃破で記録";
+  const recentMemory=state.recentBattleMemory,memoryEntries=recentMemory?.entries??[],memoryCost=homeMemoryCost(state,recentMemory);
+  const memoryNames=memoryEntries.slice(0,2).map(entry=>entry.nameOverride??SPECIES[entry.speciesId]?.name??"魔物").join("＋");
+  const memorySub=memoryEntries.length?`${memoryNames}${memoryEntries.length>2?`ほか${memoryEntries.length-2}体`:""}・${memoryCost.toLocaleString()}晶石`:"直近の敵編成を丸ごと記録";
   const title=completed?"深淵を統べる魔王":revealed?"地下10000階の魔王":"地下1000階の魔王";
 
   return`
@@ -141,8 +150,7 @@ export function HomeScreen(state){
         ${menuButton({id:"openMonsters",icon:"growth",title:"魔物一覧",sub:"図鑑・合成・逃す"})}
         ${menuButton({id:"openEquipment",icon:"equipment",title:"装備管理",sub:"装備の確認・強化"})}
         ${menuButton({id:"openSkills",icon:"skills",title:"スキル設定",sub:"スキルの確認・強化"})}
-        ${menuButton({id:"openBattleMemory",icon:"memory",title:"戦闘の記憶",sub:memorySub,className:recentSpecies?"memory-ready":"locked"})}
-        ${menuButton({id:"openBossMemory",icon:"memory",asset:"memory-rift.png",title:"深淵の記憶",sub:bossMemorySub,className:recentBossSpecies?"memory-ready boss-memory-ready":"locked"})}
+        ${menuButton({id:"openBattleMemory",icon:"memory",title:"戦闘の記憶",sub:memorySub,className:memoryEntries.length?"memory-ready":"locked"})}
       </nav>
 
       <aside class="home-right-menu" aria-label="お知らせと報酬">
@@ -170,7 +178,7 @@ export function HomeScreen(state){
         <button type="button" id="openOnlineParty">${pixelIcon("party")}<b>パーティ</b></button>
         <button type="button" id="openExplore">${pixelIcon("dungeon")}<b>ダンジョン</b></button>
         <button type="button" id="openItemShop">${pixelIcon("shop")}<b>ショップ</b></button>
-        <button type="button" id="openEventHub" class="${eventReady?"ready":""}">${eventReady?'<i class="home-notification-dot"></i>':""}${pixelIcon("event")}<b>イベント</b></button>
+        <button type="button" id="openEventHub" class="${eventReady?"ready":""}">${eventReady?'<i class="home-notification-dot"></i>':""}${pixelIcon("event")}<b>試練</b></button>
       </nav>
 
       <small class="home-version">v${APP_VERSION}</small>
