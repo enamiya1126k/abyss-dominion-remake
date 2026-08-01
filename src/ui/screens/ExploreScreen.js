@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=1.14.0-alpha124";
+import{APP_VERSION}from"../../core/config.js?v=1.7.7-final";
 import{calculatedStats,displayName}from"../../models/Monster.js?v=1.14.0-alpha124";
 import{maxMp}from"../../battle/SkillSystem.js?v=1.14.0-alpha124";
 import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
@@ -7,7 +7,7 @@ import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.14.
 import{manualReturnPreview}from"../../core/ReturnRewardSystem.js?v=1.14.0-alpha124";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
-import{resourceHud,pixelIcon}from"../components/GameChrome.js?v=1.7.5-final";
+import{resourceHud,pixelIcon}from"../components/GameChrome.js?v=1.7.7-final";
 
 function runTime(startedAt){
  const elapsed=Math.max(0,Date.now()-(Number(startedAt)||Date.now()));
@@ -16,7 +16,7 @@ function runTime(startedAt){
 }
 
 export function ExploreScreen(state){
- const combatPower=partyCombatPower(state),returnReward=manualReturnPreview(state);
+ const combatPower=partyCombatPower(state),run=manualReturnPreview(state);
  const biome=biomeForFloor(state.player.currentFloor),progress=biomeProgress(state,biome);
  const world=worldPresentationForFloor(state.player.currentFloor);
  const party=(state.party??[]).map(id=>state.monsters.find(monster=>monster.id===id)).filter(Boolean);
@@ -24,12 +24,11 @@ export function ExploreScreen(state){
   ${resourceHud(state,{title:`探索・${state.player.currentFloor}階`,settings:false,showFloor:false})}
   <div class="explore-command-header">
    <div id="exploreCombatPower" class="explore-power-record" data-power="${combatPower}">
-    <small>モンスター基盤</small><b>最高 ${state.player.maxFloor.toLocaleString()}階</b>
-    <span>戦力・記録</span><strong data-combat-power-value>${formatCombatPower(combatPower)}</strong><em data-combat-power-delta hidden></em>
+    <small>最高到達</small><b>${state.player.maxFloor.toLocaleString()}階</b>
+    <span>戦力</span><strong data-combat-power-value>${formatCombatPower(combatPower)}</strong><em data-combat-power-delta hidden></em>
    </div>
    <div class="explore-biome-card"><span>${pixelIcon(world.phase===1?"event":"dungeon")}</span><div><b>${world.phase===1?`${world.subtitle} ${world.name}`:biome.name}</b><small>${biome.from}〜${biome.to}階・探索率 ${progress}%</small><i><em style="width:${progress}%"></em></i></div></div>
-   <div class="explore-return-reward"><small>帰還報酬</small><b>${returnReward.floorsCleared}階・${returnReward.gold.toLocaleString()}G</b></div>
-   <button type="button" id="resourceHelp" class="resource-help" aria-label="アイコン説明">?</button>
+   <button type="button" id="resourceHelp" class="resource-help" aria-label="ダンジョンガイド">?</button>
   </div>
   <div class="explore-party-strip">${party.map((monster,index)=>{
    const stats=calculatedStats(monster),hp=Math.max(0,monster.currentHp??stats.hp),monsterMp=maxMp(monster),mp=Math.max(0,monster.currentMp??monsterMp),species=SPECIES[monster.speciesId]??{};
@@ -49,7 +48,7 @@ export function ExploreScreen(state){
     <button type="button" id="miniMapToggle" class="minimap-toggle">${pixelIcon("event")}<b>ミニマップ</b></button>
    </aside>
    <canvas id="miniMap"></canvas>
-   <div class="explore-run-clock"><b>探索中…</b><span data-explore-elapsed data-started-at="${returnReward.startedAt??Date.now()}">${runTime(returnReward.startedAt)}</span></div>
+   <div class="explore-run-clock"><b>探索中…</b><span data-explore-elapsed data-started-at="${run.startedAt??Date.now()}">${runTime(run.startedAt)}</span></div>
   </div>
   <nav class="explore-nav">
    <button id="pauseParty"><i>${pixelIcon("formation")}</i>編成</button>

@@ -1,13 +1,13 @@
 import{
  RARITY_ORDER,
+ RARITY_COLORS,
  equipmentDisplayRarity,
- equipmentRarityColor,
  equipmentStatLabel,
  SLOT_UNLOCK_LEVEL,
  EQUIPMENT_SLOT_ORDER,
  equipmentSubslotLabel,
  compatibleSubslots
-}from"../../data/equipment.js?v=1.7.5-final";
+}from"../../data/equipment.js?v=1.7.7-final";
 import{displayName,calculatedStats}from"../../models/Monster.js?v=1.14.0-alpha124";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.14.0-alpha124";
 import{maxMp}from"../../battle/SkillSystem.js?v=1.14.0-alpha124";
@@ -21,7 +21,7 @@ import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data
 import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.14.0-alpha124";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=1.2.0";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
-import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=1.7.5-final";
+import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=1.7.7-final";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.14.0-alpha124";
 
 const EQUIPMENT_SCREEN_SLOT_LABELS={
@@ -46,9 +46,13 @@ function equipmentRarityClass(item){
  return({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase();
 }
 
+function safeEquipmentRarityColor(item){
+ return RARITY_COLORS[equipmentDisplayRarity(item)]??RARITY_COLORS.N??"#ffffff";
+}
+
 function coloredEquipmentName(item,{tag="b",showRarity=true}={}){
  const rarity=equipmentDisplayRarity(item);
- return`<${tag} class="equipment-rarity-name equipment-rarity-${equipmentRarityClass(item)}" style="--equipment-rarity-color:${equipmentRarityColor(item)}">${showRarity?`[${rarity}] `:""}${item.name}${item.plus?` +${item.plus}`:""}</${tag}>`;
+ return`<${tag} class="equipment-rarity-name equipment-rarity-${equipmentRarityClass(item)}" style="--equipment-rarity-color:${safeEquipmentRarityColor(item)}">${showRarity?`[${rarity}] `:""}${item.name}${item.plus?` +${item.plus}`:""}</${tag}>`;
 }
 
 let renderedEquipmentState=null;
@@ -216,7 +220,7 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
      </div>
      <div class="equipment-paper-doll">
       <div class="equipment-paper-doll-portrait">${monsterVisual(target,species.emoji??"MONSTER",{className:"equipment-target-monster-visual"})}</div>
-      <div class="selected-equipment-identity">${coloredMonsterName(target)}<small><em class="attribute-chip">${attribute.name}属性</em>　なつき ${target.affection??0}/1000</small></div>
+      <div class="selected-equipment-identity">${coloredMonsterName(target)}<small class="selected-equipment-growth">Lv.${target.level}　★${target.stars??1}　+${target.plus??0}</small><small><em class="attribute-chip">${attribute.name}属性</em>　なつき ${target.affection??0}/1000</small></div>
       <div class="selected-equipment-power"><small>戦力</small><strong>${formatCombatPower(power)}</strong></div>
       <div class="selected-equipment-stats" aria-label="装備反映後ステータス">
        <span><small>HP</small><b>${stats.hp.toLocaleString()}</b></span>

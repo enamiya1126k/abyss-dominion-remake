@@ -135,6 +135,7 @@ export function beginManualExpedition(state,startFloor=state.player?.currentFloo
  normalizeReturnRewards(state);
  const floor=safeFloor(startFloor);
  state.returnRewards.manual={...EMPTY_MANUAL,active:true,startFloor:floor,lastFloor:floor,startedAt:Date.now()};
+ state.player.exploreRun={id:`run-${Date.now()}-${Math.random().toString(36).slice(2,8)}`,floors:{}};
  return state.returnRewards.manual;
 }
 
@@ -183,6 +184,7 @@ export function claimManualReturn(state){
  history.totalManualFloors+=preview.floorsCleared;
  history.totalManualGold+=preview.gold;
  state.returnRewards.manual={...EMPTY_MANUAL,startFloor:preview.endFloor,lastFloor:preview.endFloor};
+ state.player.exploreRun={id:null,floors:{}};
  return{...preview,equipment};
 }
 
@@ -190,6 +192,7 @@ export function abandonManualExpedition(state){
  normalizeReturnRewards(state);
  const floor=safeFloor(state.player?.currentFloor);
  state.returnRewards.manual={...EMPTY_MANUAL,startFloor:floor,lastFloor:floor};
+ state.player.exploreRun={id:null,floors:{}};
 }
 
 
