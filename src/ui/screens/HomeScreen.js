@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=1.7.7-final";
+import{APP_VERSION}from"../../core/config.js?v=1.14.0-alpha124";
 import{displayName}from"../../models/Monster.js?v=1.14.0-alpha124";
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
 import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=1.0.0";
@@ -8,9 +8,6 @@ import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=1.7.3";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
 
 function scenePartySlot(monster,index){
-  // Formation order is shared with battle: slots 1–2 are the front row and
-  // slots 3–4 are the rear row. Keep the scene positions deterministic so a
-  // saved party never appears to change rows after returning home.
   const positions=["front-left","front-right","back-left","back-right"];
   if(!monster)return`
     <button type="button" class="home-scene-unit ${positions[index]} empty" data-open-home-formation data-home-party-slot="${index}" aria-label="スロット${index+1}を編成">
@@ -63,9 +60,9 @@ function pixelIcon(name,className=""){
   return`<span class="home-pixel-icon icon-${name}${className?` ${className}`:""}" aria-hidden="true"></span>`;
 }
 
-function menuButton({id,icon,title,sub,className="",asset=null}){
+function menuButton({id,icon,title,sub,className=""}){
   return`<button type="button" id="${id}" class="home-command-button ${className}">
-    <span class="home-command-icon">${asset?`<img src="assets/ui/v2/${asset}" alt="" class="home-command-asset">`:pixelIcon(icon)}</span>
+    <span class="home-command-icon">${pixelIcon(icon)}</span>
     <span class="home-command-copy"><b>${title}</b><small>${sub}</small></span>
   </button>`;
 }
@@ -75,18 +72,6 @@ function utilityButton({id,icon,title,value="",ready=false}){
     ${ready?'<i class="home-notification-dot"></i>':""}
     ${pixelIcon(icon)}<b>${title}</b>${value?`<small>${value}</small>`:""}
   </button>`;
-}
-
-function homeMemorySignature(entries){
-  const source=JSON.stringify(entries??[]);let hash=2166136261;
-  for(let index=0;index<source.length;index++)hash=Math.imul(hash^source.charCodeAt(index),16777619);
-  return`party-${entries?.length??0}-${(hash>>>0).toString(36)}`;
-}
-function homeMemoryCost(state,memory){
-  if(!memory?.entries?.length)return 10;
-  const signature=memory.signature??homeMemorySignature(memory.entries),attempts=Math.max(0,Math.floor(Number(state.battleMemoryAttempts?.[signature])||0));
-  const base=Math.min(Number.MAX_SAFE_INTEGER,10*2**Math.min(attempts,49));
-  return Math.min(Number.MAX_SAFE_INTEGER,memory.entries.some(entry=>entry.boss)?Math.ceil(base*1.5):base);
 }
 
 export function HomeScreen(state){
@@ -103,11 +88,11 @@ export function HomeScreen(state){
   const phase=worldPhase(state);
   const sceneSlots=Array.from({length:4},(_,index)=>scenePartySlot(party[index],index)).join("");
   const teamSub=teamUnlocked?`第${team.stage}試練・本日 ${team.dailyAttempts}/50戦`:`${TEAM_BATTLE_UNLOCK_FLOOR}階突破で解放`;
-  const eventReady=teamUnlocked||endgameUnlocked||revealed;
+  const eventReady=endgameUnlocked||revealed;
   const noticeCount=unreadNoticeIds(state).length;
-  const recentMemory=state.recentBattleMemory,memoryEntries=recentMemory?.entries??[],memoryCost=homeMemoryCost(state,recentMemory);
-  const memoryNames=memoryEntries.slice(0,2).map(entry=>entry.nameOverride??SPECIES[entry.speciesId]?.name??"魔物").join("＋");
-  const memorySub=memoryEntries.length?`${memoryNames}${memoryEntries.length>2?`ほか${memoryEntries.length-2}体`:""}・${memoryCost.toLocaleString()}晶石`:"直近の敵編成を丸ごと記録";
+  const recentEncounter=state.recentEncounter;
+  const recentSpecies=recentEncounter?.speciesId?SPECIES[recentEncounter.speciesId]:null;
+  const memorySub=recentSpecies?`${recentSpecies.name} Lv.${recentEncounter.level??1}・魔晶石10個で再戦`:"直近の通常戦闘を記録";
   const title=completed?"深淵を統べる魔王":revealed?"地下10000階の魔王":"地下1000階の魔王";
 
   return`
@@ -150,7 +135,7 @@ export function HomeScreen(state){
         ${menuButton({id:"openMonsters",icon:"growth",title:"魔物一覧",sub:"図鑑・合成・逃す"})}
         ${menuButton({id:"openEquipment",icon:"equipment",title:"装備管理",sub:"装備の確認・強化"})}
         ${menuButton({id:"openSkills",icon:"skills",title:"スキル設定",sub:"スキルの確認・強化"})}
-        ${menuButton({id:"openBattleMemory",icon:"memory",title:"戦闘の記憶",sub:memorySub,className:memoryEntries.length?"memory-ready":"locked"})}
+        ${menuButton({id:"openBattleMemory",icon:"memory",title:"戦闘の記憶",sub:memorySub,className:recentSpecies?"memory-ready":"locked"})}
       </nav>
 
       <aside class="home-right-menu" aria-label="お知らせと報酬">
@@ -169,7 +154,7 @@ export function HomeScreen(state){
       <div class="home-party-stage" aria-label="現在の編成パーティ">
         ${sceneSlots}
         <div class="home-party-drop-grid" aria-hidden="true">
-          ${["front-left","front-right","back-left","back-right"].map((position,index)=>`<span class="${position}" data-home-party-drop="${index}"><b>${index+1}</b><small>${index<2?"前衛":"後衛"}</small></span>`).join("")}
+          ${["front-left","front-right","back-left","back-right"].map((position,index)=>`<span class="${position}" data-home-party-drop="${index}"><b>${index+1}</b><small>ここへ移動</small></span>`).join("")}
         </div>
       </div>
 
@@ -178,7 +163,7 @@ export function HomeScreen(state){
         <button type="button" id="openOnlineParty">${pixelIcon("party")}<b>パーティ</b></button>
         <button type="button" id="openExplore">${pixelIcon("dungeon")}<b>ダンジョン</b></button>
         <button type="button" id="openItemShop">${pixelIcon("shop")}<b>ショップ</b></button>
-        <button type="button" id="openEventHub" class="${eventReady?"ready":""}">${eventReady?'<i class="home-notification-dot"></i>':""}${pixelIcon("event")}<b>試練</b></button>
+        <button type="button" id="openEventHub" class="${eventReady?"ready":""}">${eventReady?'<i class="home-notification-dot"></i>':""}${pixelIcon("event")}<b>イベント</b></button>
       </nav>
 
       <small class="home-version">v${APP_VERSION}</small>
