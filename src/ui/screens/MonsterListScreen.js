@@ -6,14 +6,18 @@ import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=1.7
 const RARITY_VALUE={N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9};
 function safe(value){return String(value??"").replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
 
-function speciesCard(species,index,owned){
+function speciesCard(species,index,owned,state){
  const count=owned.length,highest=count?Math.max(...owned.map(monster=>monster.level??1)):0,stars=count?Math.max(...owned.map(monster=>monster.stars??1)):0,seen=count>0;
- return`<button type="button" class="monster-species-card rarity-${species.rarity} ${seen?"owned":"unknown"}" ${seen?`data-monster-species="${species.id}"`:"disabled"} data-species-search="${safe(`${species.name} ${species.race??""} ${species.rarity} ${index+1}`.toLowerCase())}">
+ const materialFor=target=>owned.filter(monster=>monster.id!==target.id&&!state.party.includes(monster.id)&&!monster.favorite&&!monster.locked).length;
+ const materialCount=seen?Math.max(...owned.map(materialFor)):0,ready=seen&&materialCount>=2;
+ return`<button type="button" class="monster-species-card rarity-${species.rarity} ${seen?"owned":"unknown"} ${ready?"combine-ready":""}" ${seen?`data-monster-species="${species.id}"`:"disabled"} data-species-search="${safe(`${species.name} ${species.race??""} ${species.rarity} ${index+1}`.toLowerCase())}">
   <span class="monster-species-number">No.${String(index+1).padStart(3,"0")}</span>
+  ${ready?'<span class="monster-combine-ready-badge">合成可能</span>':""}
   <span class="monster-species-art">${seen?monsterVisual(species.id,species.emoji??"👹",{className:"monster-species-visual"}):"<i>？</i>"}</span>
   <b>${seen?species.name:"？？？？"}</b>
   <small>${seen?`${species.rarity}・${species.element??"無"} / 最高Lv.${highest}`:"未所持"}</small>
-  <strong>${seen?`所持 ${count}体・⭐${stars}`:"0体"}</strong>
+  <strong>${seen?`所持 ${count}体｜最高品質 ★${stars}`:"0体"}</strong>
+  ${seen?`<em class="monster-material-count ${ready?"ready":""}">同名素材 ${materialCount}/2</em>`:""}
  </button>`;
 }
 
@@ -32,7 +36,7 @@ export function MonsterListScreen(state,{search=""}={}){
     <input id="monsterSearch" type="search" value="${safe(search)}" placeholder="No.・名前・種族・レア度で検索">
     <div class="monster-index-legend"><span>所持中を先に表示</span><span>カードをタップして合成・逃す</span></div>
    </section>
-   <div class="monster-species-grid" id="monsterSpeciesGrid">${indexed.map(({species,index,owned})=>speciesCard(species,index,owned)).join("")}</div>
+   <div class="monster-species-grid" id="monsterSpeciesGrid">${indexed.map(({species,index,owned})=>speciesCard(species,index,owned,state)).join("")}</div>
   </main>
   ${bottomNav("monsters")}
  </section>`;

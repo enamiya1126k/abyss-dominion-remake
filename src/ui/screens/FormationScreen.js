@@ -11,7 +11,7 @@ const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],
  earth:["🪨","土"],wind:["🌪️","風"],light:["✨","光"],dark:["🌑","闇"],poison:["☠️","毒"],nature:["🌿","自然"]
 };
-const LOADOUT_SLOTS=["weaponRight","weaponLeft"];
+const LOADOUT_SLOTS=["weaponRight","weaponLeft","accessoryNeck","accessoryFinger","armorBody","armorSupport"];
 const FORMATION_SLOT_LABELS={
  weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"
 };
@@ -35,14 +35,14 @@ function equipmentSlot(state,monster,subslot){
  const unlockLevel=SLOT_UNLOCK_LEVEL[subslot]??1;
  if(monster.level<unlockLevel)return`<div class="formation-gear-slot locked"><small>${formationSlotLabel(subslot)}</small><b>🔒 Lv.${unlockLevel}</b><em>未解放</em></div>`;
  const item=state.equipment?.find(entry=>entry.id===monster.equipment?.[subslot]);
- if(!item)return`<div class="formation-gear-slot empty"><small>${formationSlotLabel(subslot)}</small><b>なし</b><em>装備管理で設定</em></div>`;
+ if(!item)return`<button type="button" class="formation-gear-slot empty" data-formation-gear-add="${monster.id}" data-formation-subslot="${subslot}"><small>${formationSlotLabel(subslot)}</small><b>＋ なし</b><em>タップして装備</em></button>`;
  const rarity=equipmentDisplayRarity(item);
- return`<div class="formation-gear-slot equipped">
+ return`<button type="button" class="formation-gear-slot equipped" data-formation-gear-open="${item.id}" data-owner="${monster.id}" data-formation-subslot="${subslot}">
   <small>${formationSlotLabel(subslot)}・<span class="rarity-name-${rarityClass(rarity)}">${rarity}</span></small>
   <b>Lv.${item.level??1}・+${item.plus??0}</b>
   <em>${item.name}</em>
   ${equipmentSocketSummary(item,{compact:true})}
- </div>`;
+ </button>`;
 }
 function skillEffectText(skill){
  if(skill.type==="allHeal"||skill.type==="selfHeal")return`回復 ${Math.round((skill.heal??0)*100)}%`;
@@ -77,14 +77,14 @@ function memberCard(state,monster,index,{readOnly=false}={}){
   </div>
   <div class="formation-power"><small>戦力</small><strong>${formatCombatPower(monsterCombatPower(monster))}</strong></div>
   <details class="formation-section formation-loadout" open>
-   <summary>装備中の武器 <small>レア度・Lv・強化・◆</small></summary>
+   <summary>装備6枠 <small>右手・左手 / 首・指 / 胴・補助</small></summary>
    <div class="formation-gear-grid">${LOADOUT_SLOTS.map(subslot=>equipmentSlot(state,monster,subslot)).join("")}</div>
   </details>
   <details class="formation-section formation-skills" open>
    <summary>設定中スキル <small>タップで開閉</small></summary>
    <div class="formation-skill-list">${skills.map((skill,slot)=>skillSlot(monster,skill,slot)).join("")}</div>
   </details>
-  ${readOnly?'<div class="formation-readonly-note">帰還後に順番・交代・スキルを変更できます</div>':`<div class="formation-actions compact"><button data-formation-skills="${monster.id}">スキルを編集</button><button data-formation-replace="${monster.id}">交代</button><button class="danger formation-remove-action" data-formation-remove="${monster.id}">隊列から外す</button></div>`}
+  ${readOnly?'<div class="formation-readonly-note">帰還後に順番・交代・スキルを変更できます</div>':`<div class="formation-actions compact"><button data-formation-skills="${monster.id}">スキル編集</button><button data-formation-replace="${monster.id}">交代</button><button class="danger formation-remove-action" data-formation-remove="${monster.id}">隊列から外す</button></div>`}
  </article>`;
 }
 function emptyCard(index,{readOnly=false}={}){
