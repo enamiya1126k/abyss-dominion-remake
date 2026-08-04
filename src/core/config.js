@@ -3,4 +3,15 @@ export const MAX_PARTY_SIZE=4;
 export const PUBLIC_MAX_LEVEL=100;
 export const TRUE_MAX_LEVEL=1000;
 export const ABYSS_UNLOCK_FLOOR=1000;
-export const APP_VERSION="1.7.8";
+// Release builds only need this single switch changed back to false.  The
+// production thresholds remain untouched in their owning systems.
+export const CONTENT_TEST_MODE=true;
+export const CONTENT_TEST_UNLOCK_FLOOR=10;
+export function contentUnlockFloor(productionFloor){
+  return CONTENT_TEST_MODE?CONTENT_TEST_UNLOCK_FLOOR:Math.max(1,Number(productionFloor)||1);
+}
+export function isContentUnlocked(stateOrFloor,productionFloor){
+  const floor=typeof stateOrFloor==="number"?stateOrFloor:Number(stateOrFloor?.player?.maxFloor)||0;
+  return floor>=contentUnlockFloor(productionFloor);
+}
+export const APP_VERSION="1.7.9";
