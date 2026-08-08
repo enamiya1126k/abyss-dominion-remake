@@ -73,10 +73,13 @@ export function abyssKeyGoldCost(floor){
 
 export function specialBattleGoldBase(floor,{type,won,stage=1,powerPercent=0}={}){
  if(!won)return 0;
- let rate=0;
  if(type==="team"){
-  rate=Math.min(GOLD_ECONOMY_RATES.teamBattleMax,GOLD_ECONOMY_RATES.teamBattleBase+Math.max(1,Number(stage)||1)*GOLD_ECONOMY_RATES.teamBattleStage);
- }else if(type==="gauntlet"){
+  const s=Math.max(1,Math.min(50,Math.floor(Number(stage)||1))),milestone=s%50===0?25:s%10===0?8:s%5===0?3:1;
+  // Arena rewards intentionally explode alongside its exponential difficulty.
+  return roundedGold(goldForClearedFloor(floor)*4*Math.pow(1.14,s-1)*milestone);
+ }
+ let rate=0;
+ if(type==="gauntlet"){
   rate=Math.min(GOLD_ECONOMY_RATES.gauntletMax,GOLD_ECONOMY_RATES.gauntletBase+Math.max(1,Number(stage)||1)*GOLD_ECONOMY_RATES.gauntletStage);
  }else if(type==="emergency"){
   rate=Math.min(GOLD_ECONOMY_RATES.emergencyBattleMax,GOLD_ECONOMY_RATES.emergencyBattleBase+Math.max(0,Math.min(100,Number(powerPercent)||0))*GOLD_ECONOMY_RATES.emergencyBattlePower);

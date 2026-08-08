@@ -7,9 +7,23 @@ export const BIOMES=[
  {id:"abyss_gate",name:"深淵入口",icon:"🌌",from:51,to:60,theme:"abyss",accent:"#9d7cff",description:"ここから先は光が届かない。",elements:["dark","poison","light"]},
  {id:"nether",name:"奈落",icon:"☠️",from:61,to:100,theme:"nether",accent:"#c56cff",description:"深淵種が徘徊する底なしの領域。",elements:["dark","poison","fire"]},
 ];
+const DEEP_BIOME_CYCLE=Object.freeze([
+ {name:"煉獄火層",theme:"fire",accent:"#ff6548",description:"灼けた床と火口が続く炎の五十階層。",elements:["fire"]},
+ {name:"永久氷層",theme:"ice",accent:"#6ed6ff",description:"氷晶と凍気に閉ざされた氷の五十階層。",elements:["ice","water"]},
+ {name:"瘴毒菌層",theme:"poison",accent:"#9bdd55",description:"猛毒の胞子が漂う毒の五十階層。",elements:["poison","nature"]},
+ {name:"雷鳴天層",theme:"lightning",accent:"#d7b8ff",description:"絶え間なく雷が走る雷の五十階層。",elements:["lightning","thunder","wind"]},
+ {name:"巨岩地層",theme:"earth",accent:"#c69a5a",description:"大地の圧力が凝固した土の五十階層。",elements:["earth"]},
+ {name:"暴風空層",theme:"wind",accent:"#8de6c5",description:"地下に生まれた嵐が渦巻く風の五十階層。",elements:["wind"]},
+ {name:"白光聖層",theme:"light",accent:"#ffe9a5",description:"浄化の光が影を焼く光の五十階層。",elements:["light"]},
+ {name:"無明闇層",theme:"dark",accent:"#b36cff",description:"灯りを呑む静寂に満ちた闇の五十階層。",elements:["dark"]},
+ {name:"深海水層",theme:"water",accent:"#4da9ff",description:"水圧と濁流に支配された水の五十階層。",elements:["water","ice"]},
+ {name:"混沌境層",theme:"chaos",accent:"#ff6cae",description:"複数の法則が衝突する混沌の五十階層。",elements:["fire","water","light","dark","poison"]}
+]);
 export function biomeForFloor(floor){
  const f=Math.max(1,Number(floor)||1);
- return BIOMES.find(b=>f>=b.from&&f<=b.to)??{id:`deep_${Math.floor((f-1)/50)}`,name:`深層域 ${Math.floor((f-1)/50)+1}`,icon:"🌑",from:Math.floor((f-1)/50)*50+1,to:Math.floor((f-1)/50)*50+50,theme:"deep",accent:"#8e73c9",description:"未踏の深層域。",elements:["dark"]};
+ const fixed=BIOMES.find(b=>f>=b.from&&f<=b.to);if(fixed)return fixed;
+ const band=Math.max(0,Math.floor((f-101)/50)),template=DEEP_BIOME_CYCLE[band%DEEP_BIOME_CYCLE.length],from=101+band*50;
+ return{...template,id:`deep_${band+1}_${template.theme}`,name:`${template.name} ${band+1}`,icon:"",from,to:from+49};
 }
 export function ensureBiomeProgress(state,biome){
  state.biomeProgress??={};

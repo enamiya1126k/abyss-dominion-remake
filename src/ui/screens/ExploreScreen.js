@@ -1,13 +1,13 @@
-import{APP_VERSION}from"../../core/config.js?v=2.0.0-release";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=1.8.0-gdd-v1";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.0.0-release";
-import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{worldPresentationForFloor}from"../../core/WorldSystem.js?v=1.8.0-gdd-v1";
-import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.8.0-gdd-v1";
-import{manualReturnPreview}from"../../core/ReturnRewardSystem.js?v=1.14.0-alpha124";
-import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
-import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
-import{resourceHud,pixelIcon}from"../components/GameChrome.js?v=1.7.7-final";
+import{APP_VERSION}from"../../core/config.js?v=2.1.0-release";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=2.1.0-release";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.1.0-release";
+import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=2.1.0-release";
+import{worldPresentationForFloor}from"../../core/WorldSystem.js?v=2.1.0-release";
+import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.1.0-release";
+import{manualReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.1.0-release";
+import{monsterVisual}from"../MonsterVisual.js?v=2.1.0-release";
+import{SPECIES}from"../../data/species.js?v=2.1.0-release";
+import{resourceHud,pixelIcon}from"../components/GameChrome.js?v=2.1.0-release";
 
 function runTime(startedAt){
  const elapsed=Math.max(0,Date.now()-(Number(startedAt)||Date.now()));
@@ -24,8 +24,7 @@ export function ExploreScreen(state){
   ${resourceHud(state,{title:`探索・${state.player.currentFloor}階`,settings:false,showFloor:false})}
   <div class="explore-command-header">
    <div id="exploreCombatPower" class="explore-power-record" data-power="${combatPower}">
-    <span><small>現在階層</small><b>${state.player.currentFloor.toLocaleString()}階</b></span>
-    <span><small>⚔ 部隊戦力</small><strong data-combat-power-value>${formatCombatPower(combatPower)}</strong></span><em data-combat-power-delta hidden></em>
+    <span><small>PARTY COMBAT POWER</small><strong data-combat-power-value title="${combatPower.toLocaleString()}">${formatCombatPower(combatPower)}</strong></span><em data-combat-power-delta hidden></em>
    </div>
    <div class="explore-biome-card"><span class="explore-biome-icon">${pixelIcon(world.phase===1?"event":"dungeon")}</span><div><b>${world.phase===1?`${world.subtitle} ${world.name}`:biome.name}</b><small>${biome.from}〜${biome.to}階・探索率 ${progress}%</small><i><em style="width:${progress}%"></em></i></div></div>
    <button type="button" id="resourceHelp" class="resource-help" aria-label="ダンジョンガイド">?</button>
@@ -35,7 +34,7 @@ export function ExploreScreen(state){
    const name=displayName(monster),longName=name.length>=9;
    return`<button type="button" data-explore-monster="${monster.id}" data-explore-hud-id="${monster.id}" class="${longName?"long-name":""}" aria-label="${name}の装備画面を開く">
     <span class="explore-slot-badge">${index+1}</span>
-    <span class="explore-party-portrait">${monsterVisual(monster,species.emoji??"MONSTER",{className:"explore-party-monster-visual"})}</span>
+    <span class="explore-party-portrait"><span class="explore-portrait-vitals" aria-label="HP ${hp}/${stats.hp}、MP ${mp}/${monsterMp}"><i class="mini-hp"><em data-hud-hp-fill style="width:${Math.min(100,hp/Math.max(1,stats.hp)*100)}%"></em></i><i class="mini-mp"><em data-hud-mp-fill style="width:${Math.min(100,mp/Math.max(1,monsterMp)*100)}%"></em></i></span>${monsterVisual(monster,species.emoji??"MONSTER",{className:"explore-party-monster-visual"})}</span>
     <div class="explore-party-copy"><b>${name}</b><small>Lv.${monster.level}・★${monster.stars??1}・+${monster.plus??0}・絆${monster.affection??0}</small>
     <i class="hud-bar hp"><span data-hud-hp-fill style="width:${Math.min(100,hp/Math.max(1,stats.hp)*100)}%"></span><small data-hud-hp-label>HP ${hp}/${stats.hp}</small></i>
     <i class="hud-bar mp"><span data-hud-mp-fill style="width:${Math.min(100,mp/Math.max(1,monsterMp)*100)}%"></span><small data-hud-mp-label>MP ${mp}/${monsterMp}</small></i></div>

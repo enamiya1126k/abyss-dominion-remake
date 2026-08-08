@@ -2,7 +2,7 @@ export function TenGodContactScreen(choices){return`<section class="ten-god-cont
  <div class="ten-god-contact-scan"></div><div class="ten-god-contact-halo"></div>
  <div class="ten-god-contact-content">
   <small>UNKNOWN DIVINE SIGNAL / 01</small>
-  <div class="ten-god-contact-sigil">◉</div>
+  <div class="ten-god-contact-sigil"><span class="ten-god-contact-emblem" role="img" aria-label="十神降臨"></span></div>
   <p data-ten-god-line>時間が、止まった。</p>
   <p data-ten-god-line>足音も、風も、仲間の呼吸さえ聞こえない。</p>
   <p data-ten-god-line class="ten-god-voice">『地下を支配する者よ。』</p>

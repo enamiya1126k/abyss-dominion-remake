@@ -2,6 +2,8 @@
 
 | 資料 | 内容 |
 |---|---|
+| [RELEASE_NOTES_v2.1.0_JA.md](RELEASE_NOTES_v2.1.0_JA.md) | v2.1.0のプレイヤー向け更新内容と配置方法 |
+| [IMPLEMENTATION_VERIFICATION_v2.1.0_JA.md](IMPLEMENTATION_VERIFICATION_v2.1.0_JA.md) | 今回の修正依頼に対する実装対応と最終検証結果 |
 | [RELEASE_NOTES_v2.0.0_JA.md](RELEASE_NOTES_v2.0.0_JA.md) | プレイヤー向け更新内容と起動方法 |
 | [GDD_v1.0_IMPLEMENTATION_REPORT_JA.md](GDD_v1.0_IMPLEMENTATION_REPORT_JA.md) | 改訂GDD・Character Bibleの実装範囲と検証結果 |
 | [CHANGELOG.md](CHANGELOG.md) | バージョン別変更履歴 |
@@ -14,6 +16,6 @@
 - 深淵・十神設定：`src/data/endgameCharacters.js`
 - エンドゲーム進行：`src/core/EndgameSystem.js`
 - セーブ：`src/services/SaveService.js`
-- 回帰検証：`tests/gdd-v1-regression.mjs`
+- 回帰検証：`tests/gdd-v1-regression.mjs`、`tests/v2.1-release-regression.mjs`
 
 `src/app.bundle.js`は旧成果物であり、現在の起動経路から参照されない。

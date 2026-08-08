@@ -1,4 +1,4 @@
-import{WORLD_MAX_FLOOR}from"./EndgameSystem.js?v=2.0.0-release";
+import{WORLD_MAX_FLOOR}from"./EndgameSystem.js?v=2.1.0-release";
 
 export const WORLD_PRESENTATIONS={
  normal:{id:"normal",phase:0,name:"通常領域",subtitle:"地下世界",accent:"#b875d1",wall:"#21182a",floor:"#6a4a7f",background:"#120c18",musicProfile:"underworld"},

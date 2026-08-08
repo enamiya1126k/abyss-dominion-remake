@@ -1,14 +1,16 @@
-import{createEquipment,equipmentPower}from"../models/Equipment.js?v=1.14.0-alpha124";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=1.8.0-gdd-v1";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.0.0-release";
-import{SPECIES}from"../data/species.js?v=1.9.0-monster-catalog";
-import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=1.14.0-alpha124";
-import{equipmentStatLabel}from"../data/equipment.js?v=1.7.5-final";
-import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=1.2.0";
-import{goldForClearedFloor}from"./GoldEconomySystem.js?v=1.2.0";
+import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.1.0-release";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.1.0-release";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.1.0-release";
+import{SPECIES}from"../data/species.js?v=2.1.0-release";
+import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.1.0-release";
+import{equipmentStatLabel}from"../data/equipment.js?v=2.1.0-release";
+import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.1.0-release";
+import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.1.0-release";
+import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.1.0-release";
+import{MONSTER_STAR_MAX,premiumCrystalCost}from"./config.js?v=2.1.0-release";
 
 export const SECRET_ROOM_CHANCE=.09;
-export const CASINO_CRYSTAL_COST=10;
+export const CASINO_CRYSTAL_COST=premiumCrystalCost(10);
 export const CASINO_MULTIPLIER_RATES=Object.freeze([
  {min:0,max:0,rate:.55,label:"0倍"},
  {min:1,max:1,rate:.20,label:"1倍"},
@@ -29,11 +31,11 @@ export const SECRET_ROOM_RECOVERY_ITEMS=Object.freeze([
 ]);
 
 const MARKET_RARITIES=[
- {id:"SR",threshold:.50,equipmentRate:10,monsterRate:16,stars:2},
- {id:"SSR",threshold:.76,equipmentRate:24,monsterRate:38,stars:3},
- {id:"UR",threshold:.94,equipmentRate:50,monsterRate:78,stars:4},
- {id:"LR",threshold:.995,equipmentRate:110,monsterRate:170,stars:5},
- {id:"神話",threshold:1,equipmentRate:260,monsterRate:400,stars:5}
+ {id:"SR",threshold:.50,equipmentRate:10,monsterRate:16},
+ {id:"SSR",threshold:.76,equipmentRate:24,monsterRate:38},
+ {id:"UR",threshold:.94,equipmentRate:50,monsterRate:78},
+ {id:"LR",threshold:.995,equipmentRate:110,monsterRate:170},
+ {id:"神話",threshold:1,equipmentRate:260,monsterRate:400}
 ];
 
 const MAX_GOLD=Number.MAX_SAFE_INTEGER;
@@ -63,27 +65,17 @@ function rarityProfile(random=Math.random){
  const roll=Math.max(0,Math.min(.999999,Number(random())||0));
  return MARKET_RARITIES.find(entry=>roll<entry.threshold)??MARKET_RARITIES[0];
 }
-function marketPrice(reference,random=Math.random){
+function marketPrice(_reference,random=Math.random){
  const roll=Math.max(0,Math.min(.999999,Number(random())||0));
- let multiplier,label,tone;
- if(roll<.01){
-  multiplier=.01+Math.max(0,Math.min(1,Number(random())||0))*.08;
-  label="ありえない掘り出し物";
-  tone="bargain";
- }else if(roll<.56){
-  multiplier=.9+Math.max(0,Math.min(1,Number(random())||0))*.45;
-  label="相応価格";
-  tone="fair";
- }else if(roll<.90){
-  multiplier=1.4+Math.max(0,Math.min(1,Number(random())||0))*1.6;
-  label="高額";
-  tone="high";
- }else{
-  multiplier=3.2+Math.max(0,Math.min(1,Number(random())||0))*4.8;
-  label="法外価格";
-  tone="extreme";
- }
- return{price:roundedPrice(reference*multiplier),referencePrice:roundedPrice(reference),priceLabel:label,priceTone:tone};
+ let min,max,label,tone;
+ if(roll<.03){min=1;max=999;label="商人の気まぐれ";tone="bargain"}
+ else if(roll<.20){min=1000;max=99_999;label="値札が壊れている";tone="fair"}
+ else if(roll<.55){min=100_000;max=9_999_999;label="裏街価格";tone="fair"}
+ else if(roll<.86){min=10_000_000;max=999_999_999;label="手が届くかは別";tone="high"}
+ else{min=1_000_000_000;max=99_999_999_999;label="法外・返品不可";tone="extreme"}
+ const value=min+Math.floor(Math.max(0,Math.min(.999999,Number(random())||0))*(max-min+1));
+ const reference=100+Math.floor(Math.max(0,Math.min(.999999,Number(random())||0))*9_999_999_900);
+ return{price:roundedPrice(value),referencePrice:roundedPrice(reference),priceLabel:label,priceTone:tone};
 }
 function equipmentDescription(item){
  const stats=Object.entries(item.stats??{}).map(([key,value])=>`${equipmentStatLabel(key)}+${value}`).join(" / ");
@@ -96,11 +88,11 @@ function monsterDescription(monster){
  return`${element}属性・Lv.${monster.level}・${"★".repeat(monster.stars??1)}`;
 }
 function marketPowerProfile(floor,random=Math.random){
- const normalLevel=Math.max(1,Math.round(Math.max(1,floor)/20*(.8+random()*.4))),roll=random();
- if(roll<.012)return{id:"jackpot",label:"規格外",level:Math.min(1000,Math.max(50,Math.round(50+random()*70+floor*.35))),plus:5+Math.floor(random()*16),priceRate:7};
- if(roll<.092)return{id:"surge",label:"強上振れ",level:Math.min(1000,Math.max(normalLevel,Math.round(15+random()*40+floor*.22))),plus:Math.floor(random()*7),priceRate:2.8};
- if(roll<.86)return{id:"standard",label:"階層相応",level:normalLevel,plus:0,priceRate:1};
- return{id:"rough",label:"型落ち",level:Math.max(1,Math.min(normalLevel,1+Math.floor(random()*3))),plus:0,priceRate:.55};
+ const roll=random();
+ if(roll<.04)return{id:"jackpot",label:"測定不能",level:random()<.35?99_999:999+Math.floor(random()*99_001),monsterLevel:999,plus:30+Math.floor(random()*70),priceRate:1};
+ if(roll<.22)return{id:"surge",label:"危険な上振れ",level:100+Math.floor(random()*9_900),monsterLevel:100+Math.floor(random()*900),plus:1+Math.floor(random()*30),priceRate:1};
+ if(roll<.78)return{id:"standard",label:"出所不明",level:1+Math.floor(random()*999),monsterLevel:1+Math.floor(random()*999),plus:Math.floor(random()*11),priceRate:1};
+ return{id:"rough",label:"何かがおかしい",level:1+Math.floor(random()*30),monsterLevel:1+Math.floor(random()*30),plus:Math.floor(random()*4),priceRate:1};
 }
 function legendaryAffixes(slot,random=Math.random){
  const eligible=AFFIX_DEFINITIONS.filter(definition=>definition.slots.includes(slot)),legendary=eligible.filter(definition=>definition.legendaryOnly),normal=eligible.filter(definition=>!definition.legendaryOnly);
@@ -130,19 +122,19 @@ function marketEquipmentOffer(floor,index,random){
  else if(powerProfile.id==="surge")item.affixes=(item.affixes??[]).map(affix=>({...affix,quality:["epic","legendary"][Math.floor(random()*2)],value:Math.max(affix.value,Math.round(affix.value*(1.18+random()*.3)))}));
  item.marketGrade=powerProfile.id;item.marketGradeLabel=powerProfile.label;
  item.obtainedFloor=floor;item.obtainedMethod="darkMarket";
- const reference=Math.max(500,goldForClearedFloor(floor)*profile.equipmentRate*powerProfile.priceRate*(1+Math.min(200,item.level)*.025+item.plus*.08)+equipmentPower(item)*12),price=marketPrice(reference,random);
+ const reference=Math.max(500,goldForClearedFloor(floor)*profile.equipmentRate+equipmentPower(item)*12),price=marketPrice(reference,random);
  return maybeMysteryOffer({id:`equipment-${index}`,kind:"equipment",rarity:profile.id,name:item.name,icon:{weapon:"⚔️",armor:"🛡️",accessory:"💍"}[slot],description:`${powerProfile.label}・${equipmentDescription(item)}`,powerGrade:powerProfile.id,powerLabel:powerProfile.label,sold:false,payload:item,...price},random);
 }
 function marketMonsterOffer(floor,index,random){
+ const endgameRoll=random();
+ if(endgameRoll<.036)return marketEndgameOffer(floor,index,random,endgameRoll<.0036?"tenGod":"abyss");
  const profile=rarityProfile(random),powerProfile=marketPowerProfile(floor,random);
- let pool=Object.values(SPECIES).filter(species=>species.rarity===profile.id&&(species.minFloor??1)<=floor&&!species.isTenGod&&!species.isAbyss&&!species.tags?.includes?.("tenGod")&&!species.tags?.includes?.("abyss"));
+ let pool=Object.values(SPECIES).filter(species=>species.rarity===profile.id&&!species.isTenGod&&!species.isAbyss&&!species.tags?.includes?.("tenGod")&&!species.tags?.includes?.("abyss"));
  if(!pool.length)pool=Object.values(SPECIES).filter(species=>species.rarity===profile.id&&!species.isTenGod&&!species.isAbyss&&!species.tags?.includes?.("tenGod")&&!species.tags?.includes?.("abyss"));
  const species=pool[Math.floor(random()*pool.length)]??SPECIES.slime;
- const standardLevel=Math.max(1,Math.min(1000,Math.round(1+(floor-1)*.72*(.9+random()*.2))));
- const level=powerProfile.id==="standard"?standardLevel:powerProfile.id==="rough"?Math.max(1,Math.min(standardLevel,powerProfile.level)):Math.max(standardLevel,powerProfile.level);
- const stars=powerProfile.id==="jackpot"?5:powerProfile.id==="surge"?Math.max(4,profile.stars):profile.stars;
- const rarityPlus=profile.id==="神話"?Math.max(0,Math.floor(floor/500)):profile.id==="LR"?Math.max(0,Math.floor(floor/1500)):0;
- const plus=powerProfile.id==="jackpot"?10+Math.floor(random()*31):powerProfile.id==="surge"?Math.max(rarityPlus,2+Math.floor(random()*9)):rarityPlus;
+ const level=powerProfile.monsterLevel;
+ const stars=powerProfile.id==="jackpot"?MONSTER_STAR_MAX:1+Math.floor(random()*MONSTER_STAR_MAX);
+ const plus=powerProfile.plus;
  const ivs=powerProfile.id==="jackpot"?Object.fromEntries(["hp","atk","def","spd"].map(key=>[key,95+Math.floor(random()*6)])):undefined;
  const affection=powerProfile.id==="jackpot"?500+Math.floor(random()*501):powerProfile.id==="surge"?200+Math.floor(random()*401):0;
  const monster=createMonster(species.id,{nickname:species.name,level,stars,plus,ivs,affection,obtainedFloor:floor,obtainedMethod:"darkMarket"});
@@ -151,13 +143,22 @@ function marketMonsterOffer(floor,index,random){
  const reference=Math.max(800,goldForClearedFloor(floor)*profile.monsterRate*powerProfile.priceRate*(1+Math.min(300,level)*.012+plus*.05)),price=marketPrice(reference,random);
  return maybeMysteryOffer({id:`monster-${index}`,kind:"monster",rarity:profile.id,name:displayName(monster),icon:species.emoji??"👹",description:`${powerProfile.label}・${monsterDescription(monster)}${monster.marketSkillGrade?`・${monster.marketSkillGrade}`:""}`,powerGrade:powerProfile.id,powerLabel:powerProfile.label,sold:false,payload:monster,...price},random);
 }
+function marketEndgameOffer(floor,index,random,faction){
+ const pool=Object.values(ENDGAME_CHARACTERS).filter(character=>character.faction===faction),character=pool[Math.floor(random()*pool.length)]??pool[0];
+ const jackpot=random()<.48,level=jackpot?999:1+Math.floor(random()*999),plus=jackpot?30:Math.floor(random()*100),stars=jackpot?MONSTER_STAR_MAX:1+Math.floor(random()*MONSTER_STAR_MAX);
+ const monster=createMonster(character.speciesId,{nickname:character.name,title:character.title,level,stars,plus,rank:4,attribute:character.element,affection:jackpot?1000:Math.floor(random()*1001),obtainedFloor:floor,obtainedMethod:"darkMarket",tags:[SPECIES[character.speciesId]?.race,character.faction,character.id,"contractedEndgame"].filter(Boolean)});
+ monster.endgameBossId=character.id;monster.endgameFaction=character.faction;monster.visualSpeciesId=character.id;monster.isContractedEndgame=true;monster.contractProfileVersion=3;monster.contractSignature=character.signature;monster.contractSeriesId=character.seriesId;monster.summonRarity=faction==="tenGod"?"十神":"深淵";monster.currentHp=calculatedStats(monster).hp;monster.currentMp=maxMp(monster);
+ const exactPrice=jackpot&&random()<.55,price=exactPrice?{price:9_999_999,referencePrice:roundedPrice(100+random()*9_999_999_900),priceLabel:"黒市の奇跡",priceTone:"bargain"}:marketPrice(1,random),rarity=monster.summonRarity;
+ return maybeMysteryOffer({id:`monster-${index}`,kind:"monster",rarity,name:displayName(monster),icon:character.icon,description:`${jackpot?"伝説級事故商品":"法則外契約"}・Lv.${level}・+${plus}・★${stars} / ${character.role}`,powerGrade:jackpot?"jackpot":"surge",powerLabel:jackpot?"測定不能":"法則外",sold:false,payload:monster,...price},random);
+}
 function createRoom(roomId,floor,random=Math.random){
  const offers=[
   marketEquipmentOffer(floor,1,random),
   marketEquipmentOffer(floor,2,random),
   marketEquipmentOffer(floor,3,random),
   marketMonsterOffer(floor,1,random),
-  marketMonsterOffer(floor,2,random)
+  marketMonsterOffer(floor,2,random),
+  marketMonsterOffer(floor,3,random)
  ];
  return{
   id:String(roomId),floor:safeInteger(floor,1,1,10000),createdAt:new Date().toISOString(),rested:false,

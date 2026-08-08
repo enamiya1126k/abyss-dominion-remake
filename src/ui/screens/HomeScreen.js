@@ -1,11 +1,11 @@
-import{APP_VERSION,CONTENT_TEST_MODE,contentUnlockFloor,isContentUnlocked}from"../../core/config.js?v=2.0.0-release";
-import{displayName}from"../../models/Monster.js?v=1.8.0-gdd-v1";
-import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
-import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.0.0-release";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.8.0-gdd-v1";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=1.14.0-alpha124";
-import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=1.7.3";
-import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.1.0-release";
+import{displayName}from"../../models/Monster.js?v=2.1.0-release";
+import{SPECIES}from"../../data/species.js?v=2.1.0-release";
+import{TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.1.0-release";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.1.0-release";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.1.0-release";
+import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=2.1.0-release";
+import{monsterVisual}from"../MonsterVisual.js?v=2.1.0-release";
 
 function scenePartySlot(monster,index){
   // Formation order is shared with battle: slots 1–2 are the front row and
@@ -51,6 +51,7 @@ const HOME_NUMBER_UNITS=Object.freeze([
 
 export function compactHomeNumber(value){
   const number=Math.max(0,Number(value)||0);
+  if(number>=1_000_000_000_000_000)return number.toExponential(2).replace("e+0","e+");
   const unit=HOME_NUMBER_UNITS.find(([threshold])=>number>=threshold);
   if(!unit)return Math.floor(number).toLocaleString();
   const [,divisor,suffix]=unit;
@@ -95,15 +96,12 @@ export function HomeScreen(state){
   const activeParty=party.filter(Boolean);
   const combatPower=partyCombatPower(state);
   const idleReward=idleReturnPreview(state);
-  const team=dailyTeamAttempts(state);
   const teamUnlocked=isContentUnlocked(state,TEAM_BATTLE_UNLOCK_FLOOR);
   const endgameUnlocked=isContentUnlocked(state,EMERGENCY_UNLOCK_FLOOR);
   const revealed=hasCleared1000(state);
   const completed=Boolean(state.flags?.gameClear10000);
   const phase=worldPhase(state);
   const sceneSlots=Array.from({length:4},(_,index)=>scenePartySlot(party[index],index)).join("");
-  const teamFloor=contentUnlockFloor(TEAM_BATTLE_UNLOCK_FLOOR);
-  const teamSub=teamUnlocked?`第${team.stage}試練・本日 ${team.dailyAttempts}/50戦${CONTENT_TEST_MODE?"・試遊中":""}`:`${teamFloor}階突破で解放`;
   const eventReady=teamUnlocked||endgameUnlocked||revealed;
   const noticeCount=unreadNoticeIds(state).length;
   const recentMemory=state.recentBattleMemory,memoryEntries=recentMemory?.entries??[],memoryCost=homeMemoryCost(state,recentMemory);
@@ -146,7 +144,6 @@ export function HomeScreen(state){
       </button>
 
       <nav class="home-left-menu" aria-label="主要メニュー">
-        ${menuButton({id:"openTeamBattle",icon:"crossed-swords",title:"チームバトル",sub:`4 VS 4 / NO PENALTY　${teamSub}`,className:teamUnlocked?"team-ready":"locked"})}
         ${menuButton({id:"openGacha",icon:"summon",title:"召喚",sub:"仲間・装備を獲得"})}
         ${menuButton({id:"openMonsters",icon:"growth",title:"魔物一覧",sub:"図鑑・合成・逃す"})}
         ${menuButton({id:"openEquipment",icon:"equipment",title:"装備管理",sub:"装備の確認・強化"})}

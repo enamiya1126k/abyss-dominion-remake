@@ -1,16 +1,16 @@
-import{EQUIPMENT_BASES}from"../data/equipment.js?v=1.7.5-final";
-import{rollEquipmentAffixes,equipmentAffixPower}from"../data/equipmentAffixes.js?v=1.2.0";
+import{EQUIPMENT_BASES}from"../data/equipment.js?v=2.1.0-release";
+import{rollEquipmentAffixes,equipmentAffixPower}from"../data/equipmentAffixes.js?v=2.1.0-release";
 
 function uid(){return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`}
 export function createEquipment(slot,options={}){
  const pool=EQUIPMENT_BASES[slot];
- const base=options.base??pool[Math.floor(Math.random()*pool.length)];
- const rarity=options.rarity??rollRarity();
+ const rarity=options.rarity??options.base?.nativeRarity??rollRarity();
+ const native=pool.filter(entry=>entry.nativeRarity===rarity),base=options.base??(native.length&&Math.random()<.72?native[Math.floor(Math.random()*native.length)]:pool[Math.floor(Math.random()*pool.length)]);
  const mult={N:.8,R:1,SR:1.45,SSR:2.05,UR:2.5,LR:3,"神話":3.65,"深淵":4.4,"十神":5.25}[rarity]??1;
  const stats={};
  for(const[key,value]of Object.entries(base.stats))stats[key]=Math.max(1,Math.round(value*mult));
  return{
-  id:uid(),slot,name:base.name,rarity,level:1,plus:0,stats,weaponType:options.weaponType??base.weaponType??null,handedness:options.handedness??base.handedness??(slot==="weapon"?"either":null),ruleOverrides:options.ruleOverrides??{},series:options.series??seriesForName(base.name),
+  id:uid(),slot,name:base.name,rarity,level:1,plus:0,stats,weaponType:options.weaponType??base.weaponType??null,handedness:options.handedness??base.handedness??(slot==="weapon"?"either":null),ruleOverrides:options.ruleOverrides??{},series:options.series??seriesForName(base.name),iconAtlas:options.iconAtlas??base.iconAtlas??slot,iconIndex:options.iconIndex??base.iconIndex??0,iconColumn:options.iconColumn??null,iconRow:options.iconRow??null,
   favorite:false,locked:false,equippedBy:null,exp:0,limitBreak:0,affixes:options.affixes??rollEquipmentAffixes(slot,rarity),createdAt:new Date().toISOString()
  };
 }
@@ -23,10 +23,12 @@ export function seriesForName(name){
 }
 export function rollRarity(){
  const r=Math.random();
- if(r<.01)return"LR";
- if(r<.07)return"SSR";
- if(r<.27)return"SR";
- if(r<.82)return"R";
+ if(r<.0002)return"神話";
+ if(r<.002)return"LR";
+ if(r<.01)return"UR";
+ if(r<.05)return"SSR";
+ if(r<.18)return"SR";
+ if(r<.50)return"R";
  return"N";
 }
 export function equipmentStatMultiplier(item){

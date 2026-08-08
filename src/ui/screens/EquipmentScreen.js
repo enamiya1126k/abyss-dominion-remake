@@ -7,22 +7,24 @@ import{
  EQUIPMENT_SLOT_ORDER,
  equipmentSubslotLabel,
  compatibleSubslots
-}from"../../data/equipment.js?v=2.0.0-release";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=1.8.0-gdd-v1";
-import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.14.0-alpha124";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.0.0-release";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.8.0-gdd-v1";
-import{ATTRIBUTES}from"../../data/attributes.js?v=1.1.0";
-import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=1.14.0-alpha124";
-import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=1.7.0";
-import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
-import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=2.0.0-release";
-import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.14.0-alpha124";
-import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=1.2.0";
-import{monsterVisual}from"../MonsterVisual.js?v=2.0.0-release";
-import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=1.7.7-final";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.14.0-alpha124";
+}from"../../data/equipment.js?v=2.1.0-release";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=2.1.0-release";
+import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.1.0-release";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.1.0-release";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.1.0-release";
+import{ATTRIBUTES}from"../../data/attributes.js?v=2.1.0-release";
+import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=2.1.0-release";
+import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=2.1.0-release";
+import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=2.1.0-release";
+import{SPECIES}from"../../data/species.js?v=2.1.0-release";
+import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=2.1.0-release";
+import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=2.1.0-release";
+import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=2.1.0-release";
+import{monsterVisual}from"../MonsterVisual.js?v=2.1.0-release";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.1.0-release";
+import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.1.0-release";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.1.0-release";
+import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.1.0-release";
 
 const EQUIPMENT_SCREEN_SLOT_LABELS={
  weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"
@@ -92,6 +94,7 @@ function equippedSlotCard(state,target,subslot,focusItemId=null){
  return`<details class="equipped-slot-card equipped ${item.id===focusItemId?"focused-equipment":""}" data-equipped-item="${item.id}" ${item.id===focusItemId?"open":""}>
   <summary>
    <span class="equipped-slot-label">${screenSubslotLabel(subslot)}</span>
+   ${equipmentVisual(item,{className:"equipped-slot-art"})}
    <div>${coloredEquipmentName(item)}<small>Lv.${level} ∞　${itemStats(item)||"能力補正なし"}</small>${equipmentSocketSummary(item,{compact:true})}</div>
    <i>${item.favorite?"★":""}${item.locked?"L":""}${item.ruleOverrides?.unsellable?"P":""}⌄</i>
   </summary>
@@ -144,8 +147,8 @@ function card(item,state,target,storage,{editing=false,selected=false,focused=fa
  const protectedItem=!!item.equippedBy||item.favorite||item.locked||item.ruleOverrides?.unsellable;
  const affixes=ensureEquipmentAffixes(item);
  return`<article class="equipment-card ${selected?"selected":""} ${protectedItem?"protected-entry":""} ${focused?"focused-equipment":""}" data-equipment-card-id="${item.id}">
-  ${editing&&inventory?`<label class="manage-check"><input type="checkbox" data-select-equipment-id="${item.id}" ${selected?"checked":""} ${protectedItem?"disabled":""}><span></span></label>`:""}
-  <div class="spread">${coloredEquipmentName(item)}<span>${item.favorite?"★":""}${item.locked?"🔒":""}${item.ruleOverrides?.unsellable?"🛡️":""}</span></div>
+ ${editing&&inventory?`<label class="manage-check"><input type="checkbox" data-select-equipment-id="${item.id}" ${selected?"checked":""} ${protectedItem?"disabled":""}><span></span></label>`:""}
+  <div class="equipment-card-identity">${equipmentVisual(item,{className:"equipment-list-art"})}<div class="spread">${coloredEquipmentName(item)}<span>${item.favorite?"★":""}${item.locked?"L":""}${item.ruleOverrides?.unsellable?"P":""}</span></div></div>
   <div class="subline">
    <span class="equipment-level">Lv.${level} ∞</span> ${slotLabel(item.slot)} ${handLabel(item)} / ${itemStats(item)||"能力補正なし"}
    ${equipmentSocketSummary(item)}
@@ -190,7 +193,7 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
  const list=[...source].filter(item=>item.slot===slot&&(!item.equippedBy||item.equippedBy===target.id)).sort((a,b)=>sortItems(a,b,sort));
  const species=SPECIES[target.speciesId]??{};
  const attributeId=target.attribute??species.element??"neutral";
- const attribute=ATTRIBUTES[attributeId]??{name:attributeId||"不明",icon:"◈"};
+ const attribute=ATTRIBUTES[attributeId]??{name:attributeId||"不明"};
  const stats=calculatedStats(target);
  const power=monsterCombatPower(target);
  const counts={};
@@ -214,8 +217,8 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
     <div class="v2-equipment-heading"><div><b>装備対象</b><small>モンスターをタップして切り替え</small></div><span>${state.equipment.length}/${EQUIPMENT_LIMIT}</span><button id="openAffixHelp" class="affix-help-button" aria-label="ランダムオプションとGOLD厳選の説明">？</button></div>
     <div class="equipment-target-list">${party.map(monster=>{
      const monsterSpecies=SPECIES[monster.speciesId]??{};
-     const monsterAttribute=ATTRIBUTES[monster.attribute??monsterSpecies.element??"neutral"]??{icon:"◈",name:"不明"};
-     return`<button data-equipment-target="${monster.id}" class="${monster.id===target.id?"active":""}">${monsterVisual(monster,monsterSpecies.emoji??"MONSTER",{className:"equipment-tab-monster-visual"})}${coloredMonsterName(monster)}<small>${monsterAttribute.name}・Lv.${monster.level}　★${monster.stars??1}　+${monster.plus??0}</small></button>`;
+     const monsterAttributeId=monster.attribute??monsterSpecies.element??"neutral",monsterAttribute=ATTRIBUTES[monsterAttributeId]??{name:"不明"};
+     return`<button data-equipment-target="${monster.id}" class="${monster.id===target.id?"active":""}">${monsterVisual(monster,monsterSpecies.emoji??"MONSTER",{className:"equipment-tab-monster-visual"})}${coloredMonsterName(monster)}<small>${attributeVisual(monsterAttributeId,{label:`${monsterAttribute.name}属性`})}${monsterAttribute.name}・Lv.${monster.level}　★${monster.stars??1}　+${monster.plus??0}</small></button>`;
     }).join("")}</div>
     <div class="equipment-loadout-workbench" aria-label="装備中の6枠">
      <div class="equipment-slot-rail left">
@@ -223,7 +226,7 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
      </div>
      <div class="equipment-paper-doll">
       <div class="equipment-paper-doll-portrait">${monsterVisual(target,species.emoji??"MONSTER",{className:"equipment-target-monster-visual"})}</div>
-      <div class="selected-equipment-identity">${coloredMonsterName(target)}<small class="selected-equipment-growth">Lv.${target.level}　★${target.stars??1}　+${target.plus??0}</small><small><em class="attribute-chip">${attribute.name}属性</em>　なつき ${target.affection??0}/1000</small></div>
+      <div class="selected-equipment-identity">${coloredMonsterName(target)}<small class="selected-equipment-growth">Lv.${target.level}　★${target.stars??1}　+${target.plus??0}</small><small><em class="attribute-chip">${attributeVisual(attributeId,{label:`${attribute.name}属性`})}${attribute.name}属性</em>　なつき ${target.affection??0}/1000</small></div>
       <div class="selected-equipment-power"><small>戦力</small><strong>${formatCombatPower(power)}</strong></div>
       <div class="selected-equipment-stats" aria-label="装備反映後ステータス">
        <span><small>HP</small><b>${stats.hp.toLocaleString()}</b></span>

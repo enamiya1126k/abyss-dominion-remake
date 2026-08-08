@@ -1,8 +1,8 @@
-import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
-import{displayName}from"../../models/Monster.js?v=1.8.0-gdd-v1";
-import{allSpeciesSkills,allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=2.0.0-release";
-import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=1.7.5-final";
+import{SPECIES}from"../../data/species.js?v=2.1.0-release";
+import{displayName}from"../../models/Monster.js?v=2.1.0-release";
+import{allSpeciesSkills,allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=2.1.0-release";
+import{monsterVisual}from"../MonsterVisual.js?v=2.1.0-release";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=2.1.0-release";
 
 const ROLE_LABELS={
  tank:"前衛・守護",guard:"前衛・守護",defense:"前衛・守護",

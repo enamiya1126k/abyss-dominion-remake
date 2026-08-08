@@ -20,7 +20,7 @@ export function Ending10000Screen(){
   <div class="ending10000-vignette" aria-hidden="true"></div>
   <div class="ending10000-scene ending10000-prologue">
    <small>FLOOR 10000 — THE FINAL BOUNDARY</small>
-   <div class="ending10000-sigil">◉</div>
+   <div class="ending10000-sigil"><span class="ending10000-emblem" role="img" aria-label="深淵と十神の均衡"></span></div>
    <p data-true-ending-line>最後の境界を守る神は、静かに武器を下ろした。</p>
    <p data-true-ending-line>深淵も、十神も、もはや魔王を侵入者とは呼ばない。</p>
    <p data-true-ending-line>支配とは奪うことではない。歩み続け、世界の責任を背負うこと。</p>

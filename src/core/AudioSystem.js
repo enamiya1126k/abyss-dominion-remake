@@ -22,7 +22,18 @@ export class AudioSystem{
  note(frequency,duration=.3,wave="sine",gain=.06){if(!this.context||this.settings()?.audioEnabled===false)return;const now=this.context.currentTime,osc=this.context.createOscillator(),amp=this.context.createGain();osc.type=wave;osc.frequency.setValueAtTime(frequency,now);amp.gain.setValueAtTime(.0001,now);amp.gain.exponentialRampToValueAtTime(Math.max(.001,gain),now+.02);amp.gain.exponentialRampToValueAtTime(.0001,now+duration);osc.connect(amp);amp.connect(this.musicGain);osc.start(now);osc.stop(now+duration+.04)}
  percussion(gain=.04){if(!this.context||this.settings()?.audioEnabled===false)return;const length=Math.floor(this.context.sampleRate*.055),buffer=this.context.createBuffer(1,length,this.context.sampleRate),data=buffer.getChannelData(0);for(let index=0;index<length;index++)data[index]=(Math.random()*2-1)*(1-index/length);const source=this.context.createBufferSource(),filter=this.context.createBiquadFilter(),amp=this.context.createGain();filter.type="lowpass";filter.frequency.value=180;amp.gain.value=gain;source.buffer=buffer;source.connect(filter);filter.connect(amp);amp.connect(this.musicGain);source.start()}
  sfx(kind="select"){
-  if(!this.context||this.settings()?.audioEnabled===false)return;const table={select:[392,.08,"sine"],attack:[130.81,.12,"square"],hit:[82.41,.16,"sawtooth"],heal:[523.25,.26,"sine"],boss:[65.41,.5,"sawtooth"],victory:[659.25,.4,"triangle"],defeat:[73.42,.5,"sine"]},[frequency,duration,wave]=table[kind]??table.select,now=this.context.currentTime,osc=this.context.createOscillator(),amp=this.context.createGain();osc.type=wave;osc.frequency.setValueAtTime(frequency,now);if(kind==="hit")osc.frequency.exponentialRampToValueAtTime(Math.max(30,frequency*.45),now+duration);amp.gain.setValueAtTime(.08,now);amp.gain.exponentialRampToValueAtTime(.0001,now+duration);osc.connect(amp);amp.connect(this.sfxGain);osc.start(now);osc.stop(now+duration+.02)
+  if(!this.context||this.settings()?.audioEnabled===false)return;
+  const now=this.context.currentTime;
+  if(kind==="abyssReveal"||kind==="divineReveal"){
+   const divine=kind==="divineReveal",frequencies=divine?[65.41,261.63,392,523.25]:[65.41,73.42,98,130.81];
+   frequencies.forEach((frequency,index)=>{
+    const osc=this.context.createOscillator(),amp=this.context.createGain(),start=now+index*.075,duration=divine?1.05:.82;
+    osc.type=divine?(index?"triangle":"sine"):(index%2?"sawtooth":"square");osc.frequency.setValueAtTime(frequency,start);osc.frequency.exponentialRampToValueAtTime(divine?frequency*1.5:Math.max(28,frequency*.52),start+duration);
+    amp.gain.setValueAtTime(.0001,start);amp.gain.exponentialRampToValueAtTime(divine?.075:.062,start+.035);amp.gain.exponentialRampToValueAtTime(.0001,start+duration);osc.connect(amp);amp.connect(this.sfxGain);osc.start(start);osc.stop(start+duration+.03);
+   });
+   this.percussion(divine?.08:.11);return;
+  }
+  const table={select:[392,.08,"sine"],attack:[130.81,.12,"square"],hit:[82.41,.16,"sawtooth"],heal:[523.25,.26,"sine"],boss:[65.41,.5,"sawtooth"],victory:[659.25,.4,"triangle"],defeat:[73.42,.5,"sine"]},[frequency,duration,wave]=table[kind]??table.select,osc=this.context.createOscillator(),amp=this.context.createGain();
+  osc.type=wave;osc.frequency.setValueAtTime(frequency,now);if(kind==="hit")osc.frequency.exponentialRampToValueAtTime(Math.max(30,frequency*.45),now+duration);amp.gain.setValueAtTime(.08,now);amp.gain.exponentialRampToValueAtTime(.0001,now+duration);osc.connect(amp);amp.connect(this.sfxGain);osc.start(now);osc.stop(now+duration+.02)
  }
 }
-

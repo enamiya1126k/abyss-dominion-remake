@@ -1,4 +1,5 @@
-import{calculatedStats}from"../models/Monster.js?v=1.8.0-gdd-v1";
+import{calculatedStats}from"../models/Monster.js?v=2.1.0-release";
+import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=2.1.0-release";
 
 /**
  * 表示用の戦力値。
@@ -19,7 +20,7 @@ export function monsterCombatPower(monster){
     Math.max(0,s.spd)*2+
     Math.max(0,s.crit)*12+
     Math.max(0,s.evasion)*10;
-  return Math.max(1,Math.round(raw));
+  return Math.max(1,Math.round(raw*COMBAT_POWER_DISPLAY_SCALE));
 }
 
 export function partyCombatPower(state){
@@ -31,24 +32,28 @@ export function partyCombatPower(state){
     .reduce((total,monster)=>total+monsterCombatPower(monster),0);
 }
 
-export function formatCombatPower(value){
-  return Math.max(0,Math.round(Number(value)||0)).toLocaleString("ja-JP");
+export function formatCombatPower(value,{scientificAt=1_000_000_000_000}={}){
+  const number=Math.max(0,Math.round(Number(value)||0));
+  if(number>=scientificAt)return number.toExponential(3).replace("e+0","e+").replace("e-0","e-");
+  return number.toLocaleString("ja-JP");
 }
 
 export function normalizeCombatPowerRecord(state,fallbackPower=0){
   state.records??={};
   const current=Math.max(0,Math.round(Number(fallbackPower)||0));
   const source=state.records.combatPower&&typeof state.records.combatPower==="object"&&!Array.isArray(state.records.combatPower)?state.records.combatPower:{};
-  const highest=Math.max(0,Math.round(Number(source.highest)||0));
-  const previous=Math.max(0,Math.round(Number(source.previous)||0));
+  const legacyScale=Number(source.scaleVersion)>=2?1:COMBAT_POWER_DISPLAY_SCALE;
+  const highest=Math.max(0,Math.round(Number(source.highest)||0))*legacyScale;
+  const previous=Math.max(0,Math.round(Number(source.previous)||0))*legacyScale;
   const history=(Array.isArray(source.history)?source.history:[]).filter(entry=>entry&&typeof entry==="object").map(entry=>({
-    power:Math.max(0,Math.round(Number(entry.power)||0)),
-    previous:Math.max(0,Math.round(Number(entry.previous)||0)),
-    delta:Math.round(Number(entry.delta)||0),
+    power:Math.max(0,Math.round(Number(entry.power)||0))*legacyScale,
+    previous:Math.max(0,Math.round(Number(entry.previous)||0))*legacyScale,
+    delta:Math.round(Number(entry.delta)||0)*legacyScale,
     floor:Math.max(1,Math.round(Number(entry.floor)||1)),
     at:typeof entry.at==="string"?entry.at:new Date(0).toISOString()
   })).filter(entry=>entry.power>0).slice(-20);
   state.records.combatPower={
+    scaleVersion:2,
     highest:highest||current,
     previous:previous||highest||current,
     updatedAt:typeof source.updatedAt==="string"?source.updatedAt:null,

@@ -1,7 +1,8 @@
-import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=1.7.5-final";
-import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.14.0-alpha124";
-import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=1.7.5-final";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.14.0-alpha124";
+import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=2.1.0-release";
+import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.1.0-release";
+import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.1.0-release";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.1.0-release";
+import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.1.0-release";
 
 const CONSUMABLES=[
  ["potions","🧪","薬草","HPを回復"],
@@ -42,7 +43,7 @@ function equipmentCard(item){
  const rarity=equipmentDisplayRarity(item),color=equipmentRarityColor(item);
  return`<button type="button" class="v2-inventory-item equipment" data-inventory-equipment="${item.id}" style="--item-rarity:${color}">
   <span class="v2-item-rarity">${rarity}</span>
-  ${itemArt(`equipment-${item.slot}`,SLOT_ICONS[item.slot]??"◆")}
+  ${equipmentVisual(item,{className:"inventory-equipment-art"})}
   <b style="color:${color}">${item.name}</b>
   <small>Lv.${item.level??1}${item.plus?`・+${item.plus}`:""}<br>${equipmentStats(item)}</small>
   ${equipmentSocketSummary(item,{compact:true})}

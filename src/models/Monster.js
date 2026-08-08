@@ -1,10 +1,10 @@
-import{SPECIES}from"../data/species.js?v=1.9.0-monster-catalog";
-import{PERSONALITIES}from"../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{MONSTER_COLORS}from"../data/colors.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{normalizedResistances}from"../data/attributes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.0.0-release";
-import{normalizePersistentAilments}from"../data/statusEffects.js?v=1.8.0-gdd-v1";
-import{TRUE_MAX_LEVEL}from"../core/config.js?v=2.0.0-release";
+import{SPECIES}from"../data/species.js?v=2.1.0-release";
+import{PERSONALITIES}from"../data/personalities.js?v=2.1.0-release";
+import{MONSTER_COLORS}from"../data/colors.js?v=2.1.0-release";
+import{normalizedResistances}from"../data/attributes.js?v=2.1.0-release";
+import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.1.0-release";
+import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.1.0-release";
+import{TRUE_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.1.0-release";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -14,6 +14,13 @@ function randomKey(object){
   return keys[Math.floor(Math.random()*keys.length)];
 }
 function randomIV(){return Math.floor(70+Math.random()*31)}
+const INNATE_STAR_WEIGHTS=Object.freeze([28,22,17,12,8,5,3.5,2.2,1.5,.8]);
+export function rollInnateStars(random=Math.random){
+  const total=INNATE_STAR_WEIGHTS.reduce((sum,value)=>sum+value,0),roll=Math.max(0,Math.min(.999999,Number(random())||0))*total;
+  let cursor=0;
+  for(let index=0;index<INNATE_STAR_WEIGHTS.length;index++){cursor+=INNATE_STAR_WEIGHTS[index];if(roll<cursor)return index+1}
+  return MONSTER_STAR_MAX;
+}
 export const TRAITS={
  sturdy:{name:"頑丈",description:"HP+8%",mods:{hp:1.08}},
  fierce:{name:"猛攻",description:"ATK+9% / DEF-4%",mods:{atk:1.09,def:.96}},
@@ -95,7 +102,9 @@ export function createMonster(speciesId,options={}){
     ivs:options.ivs??{hp:randomIV(),atk:randomIV(),def:randomIV(),spd:randomIV()},
     level,
     exp:Math.max(0,Math.floor(Number(options.exp)||0)),
-    stars:options.stars??Math.max(1,Math.min(5,options.talent??1)),
+    // Stars are an immutable innate aptitude rolled per individual. They are
+    // deliberately independent from species and race.
+    stars:Math.max(1,Math.min(MONSTER_STAR_MAX,Math.floor(Number(options.stars??options.talent??rollInnateStars())||1))),
     rank:options.rank??1,
     plus:options.plus??0,
     affection:Math.max(0,Math.min(1000,options.affection??options.bond??0)),
@@ -163,7 +172,7 @@ export function calculatedStats(monster){
   const finite=(value,fallback=0)=>Number.isFinite(Number(value))?Number(value):fallback;
   const rank=Math.max(1,finite(monster.rank,1)),level=Math.max(1,finite(monster.level,1));
   const rankMultiplier=1+(rank-1)*.5;
-  const talent=Math.max(1,Math.min(5,finite(monster.stars,1)));
+  const talent=Math.max(1,Math.min(MONSTER_STAR_MAX,finite(monster.stars,1)));
   const talentMultiplier=1+(talent-1)*.08;
   const growth=species.growth??{};
   const raceGrowth=RACE_GROWTH_RATE[species.race]??{};
@@ -195,6 +204,12 @@ export function calculatedStats(monster){
     crit:Math.floor(finite(species.baseStats.crit)*finite(personality?.modifiers?.crit,1))+finite(gear.crit),
     evasion:Math.floor(finite(species.baseStats.evasion)*finite(personality?.modifiers?.evasion,1))+finite(gear.evasion)
   };
+  // Contracted endgame characters retain their actual character-class base
+  // power in every mode. Deep Abyss is x10; Ten Gods are x10 above that.
+  const endgameBase=monster.isContractedEndgame||monster.endgameBossId
+    ?monster.endgameFaction==="tenGod"?100:monster.endgameFaction==="abyss"?10:1
+    :1;
+  if(endgameBase!==1)for(const key of["hp","atk","matk","def","mdef","spd"])result[key]=Math.max(1,Math.floor(result[key]*endgameBase));
   for(const key of["hp","atk","matk","def","mdef","spd"]){
     const traitKey=key==="matk"?"atk":key==="mdef"?"def":key;
     if(trait.mods[traitKey])result[key]=Math.floor(result[key]*trait.mods[traitKey]);

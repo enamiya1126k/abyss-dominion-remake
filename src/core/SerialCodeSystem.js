@@ -1,7 +1,7 @@
-import{createMonster,calculatedStats}from"../models/Monster.js?v=1.8.0-gdd-v1";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.0.0-release";
-import{SPECIES}from"../data/species.js?v=1.9.0-monster-catalog";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.0.0-release";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=2.1.0-release";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.1.0-release";
+import{SPECIES}from"../data/species.js?v=2.1.0-release";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.1.0-release";
 
 const DEVICE_LEDGER_KEY="abyss-dominion-serial-ledger-v1";
 
@@ -82,7 +82,7 @@ function createEndgameRewardMonster(state,bossId,tier,level){
     nickname:boss.name,
     title:boss.title,
     level,
-    stars:5,
+    stars:10,
     rank:4,
     plus,
     affection,
@@ -115,7 +115,7 @@ function createRarityRewardMonster(state,speciesId,tier,level,plus,affection,ski
   const monster=createMonster(speciesId,{
     nickname:species.name,
     level,
-    stars:5,
+    stars:10,
     rank:4,
     plus,
     affection,

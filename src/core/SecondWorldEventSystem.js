@@ -1,4 +1,5 @@
-import{abyssKeyGoldCost}from"./GoldEconomySystem.js?v=1.1.0";
+import{abyssKeyGoldCost}from"./GoldEconomySystem.js?v=2.1.0-release";
+import{premiumCrystalCost}from"./config.js?v=2.1.0-release";
 
 export const SECOND_WORLD_STORY_EVENTS=[
  {id:"arrival",floor:1001,title:"未知領域"},
@@ -70,7 +71,7 @@ export function markRandomEventResolved(state,floor,eventId){
 }
 export function randomEventCosts(event,floor){
  const f=Math.max(1001,Number(floor)||1001);
- if(event.id==="lost-merchant")return{keyGold:abyssKeyGoldCost(f),restCrystals:5};
- if(event.id==="warped-rift")return{sealCrystals:3};
+ if(event.id==="lost-merchant")return{keyGold:abyssKeyGoldCost(f),restCrystals:premiumCrystalCost(5)};
+ if(event.id==="warped-rift")return{sealCrystals:premiumCrystalCost(3)};
  return{};
 }

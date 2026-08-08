@@ -1,12 +1,13 @@
-import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
-import{PERSONALITIES}from"../../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{MONSTER_COLORS}from"../../data/colors.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{ATTRIBUTES}from"../../data/attributes.js?v=1.1.0";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.0.0-release";
-import{endgameCharacter}from"../../data/endgameCharacters.js?v=2.0.0-release";
-import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=1.8.0-gdd-v1";
-import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
-import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=1.8.0-gdd-v1";
+import{SPECIES}from"../../data/species.js?v=2.1.0-release";
+import{PERSONALITIES}from"../../data/personalities.js?v=2.1.0-release";
+import{MONSTER_COLORS}from"../../data/colors.js?v=2.1.0-release";
+import{ATTRIBUTES}from"../../data/attributes.js?v=2.1.0-release";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.1.0-release";
+import{endgameCharacter}from"../../data/endgameCharacters.js?v=2.1.0-release";
+import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=2.1.0-release";
+import{monsterVisual}from"../MonsterVisual.js?v=2.1.0-release";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.1.0-release";
+import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=2.1.0-release";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
@@ -22,7 +23,7 @@ export function MonsterDetailScreen(monster,state){
   const materials=state.monsters.filter(entry=>entry.id!==monster.id&&entry.speciesId===monster.speciesId&&!state.party.includes(entry.id)&&!entry.favorite&&!entry.locked).length;
   const ordered=[...state.party.map(id=>state.monsters.find(entry=>entry.id===id)).filter(Boolean),...state.monsters.filter(entry=>!state.party.includes(entry.id))];
   const index=Math.max(0,ordered.findIndex(entry=>entry.id===monster.id)),previous=ordered[(index-1+ordered.length)%ordered.length],nextMonster=ordered[(index+1)%ordered.length];
-  const attribute=ATTRIBUTES[monster.attribute??species.element]??{icon:"◈",name:monster.attribute??species.element??"不明"};
+  const attributeId=monster.attribute??species.element??"neutral",attribute=ATTRIBUTES[attributeId]??{name:attributeId||"不明"};
   const affection=affectionBonuses(aff),affectionText=Object.entries(affection).map(([key,value])=>`${key.toUpperCase()} +${Math.round(value*100)}%`).join(" / ");
   const specialContract=Boolean(monster.isContractedEndgame),endgame=specialContract?endgameCharacter(monster.endgameBossId):null,fieldEncounter=!specialContract&&species.fieldEncounter!==false;
   const ailments=normalizePersistentAilments(monster.ailments);
@@ -33,7 +34,7 @@ export function MonsterDetailScreen(monster,state){
     <div class="monster-switcher"><button data-switch-monster="${previous?.id??monster.id}" aria-label="前の魔物">‹</button><div><small>${state.party.includes(monster.id)?"出撃メンバー":"控え魔物"} ${index+1}/${ordered.length}</small><b class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</b></div><button data-switch-monster="${nextMonster?.id??monster.id}" aria-label="次の魔物">›</button></div>
 
     <div class="panel compact-growth-summary">
-     <div class="compact-growth-identity"><div class="detail-orb" style="background:${colorValue(monster)}">${monsterVisual(monster,species.emoji??"👹",{className:"monster-detail-visual"})}</div><div><small>${rankName(monster)} / ${species.race}族</small><h1 class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</h1><p><b>${rarity}</b>・${attribute.icon}${attribute.name}属性・${species.growthLabel??"標準"}成長</p><em>Lv.${monster.level}　⭐${monster.stars??1}　+${monster.plus??0}　❤️${aff}</em></div></div>
+     <div class="compact-growth-identity"><div class="detail-orb" style="background:${colorValue(monster)}">${monsterVisual(monster,species.emoji??"👹",{className:"monster-detail-visual"})}</div><div><small>${rankName(monster)} / ${species.race}族</small><h1 class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</h1><p><b>${rarity}</b>・${attributeVisual(attributeId,{label:`${attribute.name}属性`})}${attribute.name}属性・${species.growthLabel??"標準"}成長</p><em>Lv.${monster.level}　⭐${monster.stars??1}　+${monster.plus??0}　❤️${aff}</em></div></div>
      ${ailments.length?`<div class="status-row ally-status-row">${ailments.map(status=>`<span class="status-chip ${status.id}">${persistentAilmentLabel(status)}・治療まで持続</span>`).join("")}</div>`:""}
      <div class="compact-growth-stats">
       <span><small>HP</small><b>${stats.hp.toLocaleString()}</b></span><span><small>MP</small><b>${mp.toLocaleString()}</b></span>

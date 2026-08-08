@@ -1,4 +1,4 @@
-import{activeSecretRoom,CASINO_CRYSTAL_COST,DARK_MARKET_ITEM_LIMIT,SECRET_ROOM_RECOVERY_ITEMS}from"../../core/SecretRoomSystem.js?v=1.8.0-gdd-v1";
+import{activeSecretRoom,CASINO_CRYSTAL_COST,DARK_MARKET_ITEM_LIMIT,SECRET_ROOM_RECOVERY_ITEMS}from"../../core/SecretRoomSystem.js?v=2.1.0-release";
 
 function marketStatus(room){
  const remaining=(room?.offers??[]).filter(offer=>!offer.sold).length;
