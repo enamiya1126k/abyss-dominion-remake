@@ -247,6 +247,7 @@ export const ENDGAME_SPRITE_FOLDERS=Object.freeze({
   abyss_sloth:"abyss_sloth",
   abyss_greed:"abyss_greed",
   abyss_pride:"abyss_pride",
+  abyss_lust:"abyss_extinction",
   ten_fire:"ten_fire",
   ten_water:"ten_water",
   ten_thunder:"ten_thunder",
@@ -256,7 +257,15 @@ export const ENDGAME_SPRITE_FOLDERS=Object.freeze({
   ten_dark:"ten_dark",
   ten_ice:"ten_ice",
   ten_time:"ten_time",
-  ten_space:"ten_space"
+  ten_space:"ten_space",
+  ten_life:"ten_water",
+  ten_death:"ten_dark",
+  ten_fate:"ten_thunder",
+  ten_chaos:"ten_ice",
+  ten_dominion:"ten_earth",
+  ten_creation:"ten_light",
+  ten_end:"ten_fire",
+  ten_divinity:"ten_wind"
 });
 export const MONSTER_SPRITE_FOLDERS=Object.freeze({
   ...Object.fromEntries(MONSTER_CATALOG.map(entry=>[entry.speciesId,entry.folder])),

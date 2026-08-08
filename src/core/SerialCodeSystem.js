@@ -1,7 +1,7 @@
 import{createMonster,calculatedStats}from"../models/Monster.js?v=1.8.0-gdd-v1";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=1.14.0-alpha124";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.0.0-release";
 import{SPECIES}from"../data/species.js?v=1.9.0-monster-catalog";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=1.8.0-gdd-v1";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.0.0-release";
 
 const DEVICE_LEDGER_KEY="abyss-dominion-serial-ledger-v1";
 
@@ -166,7 +166,7 @@ export function applySerialReward(state,rewardId){
   else if(rewardId==="gold10000000")state.player.gold=finiteInteger(state.player.gold)+10000000;
   else if(rewardId==="keys100")state.inventory.abyssKeys=finiteInteger(state.inventory.abyssKeys)+100;
   else if(rewardId==="capture5000")state.inventory.captureCrystals=finiteInteger(state.inventory.captureCrystals)+5000;
-  else if(rewardId==="tenGodMonster")monster=createEndgameRewardMonster(state,"ten_space","十神",100);
+  else if(rewardId==="tenGodMonster")monster=createEndgameRewardMonster(state,"ten_divinity","十神",100);
   else if(rewardId==="abyssMonster")monster=createEndgameRewardMonster(state,"abyss_pride","深淵",75);
   else if(rewardId==="mythicMonster")monster=createRarityRewardMonster(state,"creator_dragon","神話",60,10,500,3);
   else if(rewardId==="lrMonster")monster=createRarityRewardMonster(state,"ancient_dragon","LR",45,5,300,2);

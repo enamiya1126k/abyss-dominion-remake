@@ -1,6 +1,6 @@
-import{APP_VERSION}from"../../core/config.js?v=1.8.0-gdd-v1";
+import{APP_VERSION}from"../../core/config.js?v=2.0.0-release";
 import{calculatedStats,displayName}from"../../models/Monster.js?v=1.8.0-gdd-v1";
-import{maxMp}from"../../battle/SkillSystem.js?v=1.14.0-alpha124";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.0.0-release";
 import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{worldPresentationForFloor}from"../../core/WorldSystem.js?v=1.8.0-gdd-v1";
 import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.8.0-gdd-v1";

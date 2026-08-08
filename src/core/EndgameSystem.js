@@ -1,3 +1,5 @@
+import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.0.0-release";
+
 export const TEAM_BATTLE_UNLOCK_FLOOR=100;
 export const EMERGENCY_UNLOCK_FLOOR=100;
 export const WORLD_MAX_FLOOR=10000;
@@ -23,7 +25,7 @@ export function mark10000FloorCleared(state){state.flags??={};mark1000FloorClear
 const abyss=(id,name,title,icon,speciesId,support,seriesId,signature,gearNames,extra={})=>({id,faction:"abyss",name,title,icon,speciesId,support,seriesId,signature,gearNames,...extra});
 const god=(id,name,title,icon,speciesId,support,seriesId,signature,gearNames,extra={})=>({id,faction:"tenGod",name,title,icon,speciesId,support,seriesId,signature,gearNames,...extra});
 
-export const ENDGAME_BOSSES={
+const LEGACY_ENDGAME_BOSSES={
  abyss_gluttony:abyss("abyss_gluttony","深淵・暴食 グラトニー","万象を喰らい、飢えだけを残す者","🌑","ogre",["vampire_bat","acid_slime","wraith"],"abyssGluttony","無限捕食",{weapon:"喰界の大剣",armor:"喰界の外殻",accessory:"喰界の環"},{element:"dark",ai:"瀕死者を狙い、与えた傷を生命へ変える。",passive:"飢餓循環：HPが減るほど吸収量上昇",resistances:["毒無効","即死無効","闇耐性90%"],skills:["無限捕食","飢餓の咆哮","血肉再生","喰界崩壊"],lore:"深淵に落ちた無数の生命欲が、ひとつの胃袋として自我を得た。",encounterText:"『足りない。お前たちを喰らっても、まだ足りない。』",victoryText:"飢えは消えず、ただ次の器へ沈んでいった。",reward:"暴食の欠片・喰界シリーズ"}),
  abyss_extinction:abyss("abyss_extinction","深淵・死滅 モルス","命の終端を告げる静寂","☠️","wraith",["skeleton_guard","zombie","ghost"],"abyssExtinction","死滅の波動",{weapon:"死滅の鎌",armor:"死滅の葬衣",accessory:"死滅の刻印"},{element:"dark",ai:"全体攻撃と回復阻害で戦線を静かに崩壊させる。",passive:"終端侵食：長期戦ほど攻撃力上昇",resistances:["睡眠無効","恐怖無効","光以外耐性50%"],skills:["死滅の波動","終焉宣告","生命遮断","無音葬送"],lore:"死そのものではない。生が続く可能性を消す、世界の終止符。",encounterText:"『終わりは罰ではない。すべてに等しく訪れる救済だ。』",victoryText:"静寂が割れ、止まっていた鼓動が再び世界へ戻った。",reward:"死滅の欠片・葬界シリーズ"}),
  abyss_wrath:abyss("abyss_wrath","深淵・憤怒 ラース","傷を力へ変える紅蓮の獣","🔥","dark_knight",["orc","salamander","dark_knight"],"abyssWrath","憤怒爆砕",{weapon:"憤怒の断罪斧",armor:"憤怒の血鎧",accessory:"憤怒の心核"},{element:"fire",ai:"被弾するほど攻撃を強め、瀕死で連続猛攻へ移る。",passive:"報復本能：被ダメージごとにATK上昇",resistances:["火傷無効","怯み無効","火耐性95%"],skills:["憤怒爆砕","報復連牙","血煙突進","終怒解放"],lore:"敗者の怒号、奪われた者の憎悪、届かなかった祈りが鎧を得た。",encounterText:"『痛みを知れ。俺が積み上げたすべての痛みを。』",victoryText:"怒号は遠ざかり、赤い残火だけが地面に残った。",reward:"憤怒の欠片・血焔シリーズ"}),
@@ -44,10 +46,28 @@ export const ENDGAME_BOSSES={
  ten_space:god("ten_space","空神・アストラ","十神・星空と境界の権能","🌌","ancient_dragon",["wyvern","angelic_orb","ancient_dragon"],"godAstra","神星・天界墜落",{weapon:"空神剣アストラ",armor:"空神の星装",accessory:"空神冠"},{element:"wind",ai:"星を落とす全体攻撃と境界障壁を交互に用いる。",passive:"星界超越：HPが減るほど全能力上昇",resistances:["全状態異常耐性80%","風・光耐性90%","即死無効"],skills:["神星・天界墜落","境界断絶","星環障壁","宇宙創生"],lore:"世界と世界の境界を定め、空の外から侵入するものを退ける最高位の門番。",encounterText:"『ここより先は世界の外。越えるなら、ひとつの世界を背負って来い。』",victoryText:"星々が道を作り、閉ざされていた最後の境界が開いた。",trial:"空の試練：神域障壁と全体攻撃を突破する",blessing:"空神の加護：全能力上昇・状態異常耐性上昇",reward:"空神の欠片・星界神シリーズ"})
 };
 
+// Character Bible を唯一の正本とする。旧定義はセーブ移行時の名称参照だけに残す。
+export const ENDGAME_BOSSES=ENDGAME_CHARACTERS;
+
 export const ABYSS_IDS=Object.keys(ENDGAME_BOSSES).filter(id=>ENDGAME_BOSSES[id].faction==="abyss");
 export const TEN_GOD_IDS=Object.keys(ENDGAME_BOSSES).filter(id=>ENDGAME_BOSSES[id].faction==="tenGod");
 
 export function manifestationForFloor(floor){const f=Math.max(1,Number(floor)||1);if(f>=5000)return{rate:1,label:f>=10000?"真なる顕現":"完全顕現",percent:100};if(f>=3000)return{rate:.6,label:"権能解放",percent:60};return{rate:.4,label:f>=1000?"上位投影体":"投影体",percent:40}}
+
+function migrateLegacyEndgameIds(state,e){
+ const numericMaps=[e.fragments,e.craftCounts];
+ const objectMaps=[e.records,e.blessings,e.preludeChoices,e.discovered,e.contracts];
+ for(const[legacyId,currentId]of Object.entries(ENDGAME_LEGACY_ID_MAP)){
+  for(const map of numericMaps){if(!map||map[legacyId]==null)continue;map[currentId]=(Number(map[currentId])||0)+(Number(map[legacyId])||0);delete map[legacyId]}
+  for(const map of objectMaps){if(!map||map[legacyId]==null)continue;if(map[currentId]==null)map[currentId]=map[legacyId];else if(typeof map[currentId]==="object"&&typeof map[legacyId]==="object")map[currentId]={...map[legacyId],...map[currentId],contracted:Boolean(map[currentId].contracted||map[legacyId].contracted)};delete map[legacyId]}
+ }
+ if(e.pendingEncounter?.bossId)e.pendingEncounter.bossId=canonicalEndgameId(e.pendingEncounter.bossId);
+ for(const entry of e.craftedGear??[])if(entry?.bossId)entry.bossId=canonicalEndgameId(entry.bossId);
+ for(const entry of Object.values(state.endgame?.processedSpecialResults??{}))if(entry?.bossId)entry.bossId=canonicalEndgameId(entry.bossId);
+ for(const monster of state.monsters??[]){if(!monster?.endgameBossId)continue;monster.endgameBossId=canonicalEndgameId(monster.endgameBossId);const boss=endgameCharacter(monster.endgameBossId);if(boss){monster.nickname=boss.name;monster.title=boss.title;monster.endgameFaction=boss.faction;monster.contractSeriesId=boss.seriesId;monster.visualSpeciesId=boss.id}}
+ for(const collection of[state.equipment,state.reserveEquipment,state.bossEquipmentVault])for(const item of collection??[]){if(!item?.endgameBossId)continue;item.endgameBossId=canonicalEndgameId(item.endgameBossId);const boss=endgameCharacter(item.endgameBossId);if(boss){item.endgameFaction=boss.faction;item.series=boss.seriesId}}
+ for(const holder of[state.recentEncounter,state.recentBossEncounter,...(state.recentBattleMemory?.entries??[]),...(state.activeBattle?.enemies??[])])if(holder?.endgameBossId)holder.endgameBossId=canonicalEndgameId(holder.endgameBossId);
+}
 
 export function normalizeEndgameState(state){
  state.flags??={};state.flags.gameClear1000??=false;state.worldPhase=hasCleared1000(state)?1:0;state.endgame??={};
@@ -58,7 +78,7 @@ export function normalizeEndgameState(state){
  state.endgame.trials.loop=Math.max(1,Math.floor(Number(state.endgame.trials.loop)||1));
  state.endgame.trials.cleared=Array.isArray(state.endgame.trials.cleared)?Array.from(new Set(state.endgame.trials.cleared.map(Number).filter(value=>value>=1&&value<=ENDGAME_TRIAL_BATTLE_COUNT))):[];
  state.endgame.emergency??={encounters:0,wins:0,losses:0,lastFloor:0,lastTriggeredFloor:0,records:{},fragments:{},craftCounts:{},craftedGear:[],blessings:{}};
- const e=state.endgame.emergency;e.records??={};e.fragments??={};e.craftCounts??={};e.craftedGear??=[];e.blessings??={};e.preludeChoices??={};e.discovered??={};e.contracts??={};e.processedFragmentResults??={};e.processedBattleResults??={};e.lastTriggeredFloor=Math.max(0,Math.floor(Number(e.lastTriggeredFloor)||0));e.pendingEncounter=e.pendingEncounter&&ENDGAME_BOSSES[e.pendingEncounter.bossId]?{...e.pendingEncounter,bossId:String(e.pendingEncounter.bossId),floor:Math.max(EMERGENCY_UNLOCK_FLOOR,Math.floor(Number(e.pendingEncounter.floor)||EMERGENCY_UNLOCK_FLOOR))}:null;e.rescue??={post1000Encounters:0,consecutiveLosses:0,lastResult:null};
+ const e=state.endgame.emergency;e.records??={};e.fragments??={};e.craftCounts??={};e.craftedGear??=[];e.blessings??={};e.preludeChoices??={};e.discovered??={};e.contracts??={};e.processedFragmentResults??={};e.processedBattleResults??={};migrateLegacyEndgameIds(state,e);e.lastTriggeredFloor=Math.max(0,Math.floor(Number(e.lastTriggeredFloor)||0));e.pendingEncounter=e.pendingEncounter&&ENDGAME_BOSSES[e.pendingEncounter.bossId]?{...e.pendingEncounter,bossId:String(e.pendingEncounter.bossId),floor:Math.max(EMERGENCY_UNLOCK_FLOOR,Math.floor(Number(e.pendingEncounter.floor)||EMERGENCY_UNLOCK_FLOOR))}:null;e.rescue??={post1000Encounters:0,consecutiveLosses:0,lastResult:null};
  e.rescue.post1000Encounters=Math.max(0,Number(e.rescue.post1000Encounters)||0);e.rescue.consecutiveLosses=Math.max(0,Math.min(5,Number(e.rescue.consecutiveLosses)||0));e.rescue.lastResult=e.rescue.lastResult==="win"||e.rescue.lastResult==="loss"?e.rescue.lastResult:null;
  state.endgame.teamBattle.unlocked=Boolean(state.endgame.teamBattle.unlocked||state.player?.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR);return state.endgame
 }
@@ -85,6 +105,32 @@ export function dailyTeamAttempts(state,date=new Date()){
 }
 function enemy(speciesId,level,extra={}){return{speciesId,level,boss:false,equipped:false,gear:null,...extra}}
 export function createTeamBattleEncounter(state){const team=dailyTeamAttempts(state),stage=Math.max(1,team.stage||1),base=Math.max(10,Math.round((state.player?.maxFloor||100)*(.55+stage*.035))),pools=[["goblin_guard","goblin_shaman","orc","ogre"],["skeleton_guard","skeleton_archer","wraith","zombie"],["dire_wolf","bear","harpy","wyvern"],["stone_golem","clockwork","salamander","water_spirit"]],pool=pools[(stage-1)%pools.length];return pool.map((id,i)=>enemy(id,base+i*2,{nameOverride:`試練 ${stage}・${i+1}`,teamBattle:true,statMultiplier:1+stage*.09}))}
+
+const SOLO_TRIALS=[...ABYSS_IDS,...TEN_GOD_IDS].map((bossId,index)=>({number:index+1,name:`${ENDGAME_BOSSES[bossId].name}の法廷`,bossIds:[bossId]}));
+export const ENDGAME_TRIALS=Object.freeze([
+ ...SOLO_TRIALS,
+ {number:18,name:"三欲・侵食回廊",bossIds:["abyss_gluttony","abyss_wrath","abyss_envy"]},
+ {number:19,name:"四欲・王座回廊",bossIds:["abyss_sloth","abyss_greed","abyss_lust","abyss_pride"]},
+ {number:20,name:"因果境界回廊",bossIds:["ten_time","ten_space","ten_fate"]},
+ {number:21,name:"生死創終回廊",bossIds:["ten_life","ten_death","ten_creation","ten_end"]},
+ {number:22,name:"世界法則・最終審理",bossIds:["ten_chaos","ten_dominion","ten_divinity"]}
+]);
+export function endgameTrialDefinition(number){return ENDGAME_TRIALS[Math.max(1,Math.min(ENDGAME_TRIAL_BATTLE_COUNT,Math.floor(Number(number)||1)))-1]}
+export function createEndgameTrialEncounter(state,number=normalizeEndgameState(state).trials.battle){
+ const trial=endgameTrialDefinition(number),trials=normalizeEndgameState(state).trials,loopMultiplier=endgameTrialLoopMultiplier(trials.loop),maxFloor=Math.max(100,Number(state.player?.maxFloor)||100),level=Math.max(120,Math.min(9999,Math.round(maxFloor*.9+trial.number*8))),solo=trial.bossIds.length===1;
+ const leaders=trial.bossIds.map((bossId,index)=>{const boss=ENDGAME_BOSSES[bossId],base=solo?(boss.faction==="tenGod"?5.8:4.2):(boss.faction==="tenGod"?2.7:2.15);return enemy(boss.speciesId,level+index*3,{boss:true,endgameBossId:boss.id,visualSpeciesId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈回廊 ${trials.loop}周〉`,statMultiplier:base*loopMultiplier,uncapturable:true,elementMultipliers:boss.elementMultipliers,statusProfile:boss.statusProfile,bossPassive:boss.passive})});
+ if(!solo)return{trial,loop:trials.loop,enemies:leaders};
+ const boss=ENDGAME_BOSSES[trial.bossIds[0]],supports=boss.support.slice(0,3).map((speciesId,index)=>enemy(speciesId,Math.max(1,level-8-index*3),{nameOverride:`${boss.faction==="tenGod"?"法則守":"深淵眷属"}・${index+1}`,statMultiplier:(boss.faction==="tenGod"?1.85:1.45)*loopMultiplier,endgameSupport:true,uncapturable:true}));
+ return{trial,loop:trials.loop,enemies:[...leaders,...supports]};
+}
+export function recordEndgameTrialResult(state,number,won){
+ const trials=normalizeEndgameState(state).trials,index=Math.max(1,Math.min(ENDGAME_TRIAL_BATTLE_COUNT,Math.floor(Number(number)||trials.battle)));
+ if(!won)return{won:false,battle:trials.battle,loop:trials.loop,loopCompleted:false};
+ trials.cleared=Array.from(new Set([...(trials.cleared??[]),index])).sort((a,b)=>a-b);
+ const loopCompleted=index>=ENDGAME_TRIAL_BATTLE_COUNT;
+ if(loopCompleted){trials.loop++;trials.battle=1;trials.cleared=[]}else trials.battle=Math.max(trials.battle,index+1);
+ return{won:true,battle:trials.battle,loop:trials.loop,loopCompleted,cleared:index};
+}
 export function emergencyRescueStatus(state){
  const floor=Math.max(1,Number(state?.player?.currentFloor)||1),e=normalizeEndgameState(state).emergency,rescue=e.rescue,after1000=hasCleared1000(state)&&floor>1000;
  const earlyCount=after1000&&rescue.post1000Encounters<3,earlyFloor=after1000&&floor<=1250,transition=after1000&&(floor<=2000||rescue.post1000Encounters<6),losses=Math.max(0,Number(rescue.consecutiveLosses)||0);
@@ -104,7 +150,7 @@ export function shouldTriggerEmergency(state){
 export function createEmergencyEncounter(state,forcedId=null){
  const floor=state.player?.currentFloor||EMERGENCY_UNLOCK_FLOOR,rescue=emergencyRescueStatus(state),baseManifestation=manifestationForFloor(floor),rate=baseManifestation.rate,manifestation={...baseManifestation},pending=normalizeEndgameState(state).emergency.pendingEncounter;
  const available=Object.values(ENDGAME_BOSSES);
- const boss=ENDGAME_BOSSES[forcedId??pending?.bossId]??available[Math.floor(Math.random()*available.length)],factionBase=boss.faction==="tenGod"?7:4,leaderMultiplier=factionBase*(.65+manifestation.rate*1.75),supportMultiplier=(boss.faction==="tenGod"?2.5:1.75)*(1+manifestation.rate),level=Math.max(150,Math.min(9999,Math.round(floor*(1.15+manifestation.rate*.45)))),leader=enemy(boss.speciesId,level,{boss:true,endgameBossId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈${manifestation.percent}%〉`,statMultiplier:leaderMultiplier,powerRate:manifestation.rate,manifestationLabel:manifestation.label,uncapturable:true,bossPassive:boss.passive,bossResistances:boss.resistances}),supportIds=boss.support.slice(0,Math.max(0,rescue.supportCap)),supports=supportIds.map((id,i)=>enemy(id,Math.max(1,level-10-i*3),{nameOverride:`${boss.faction==="tenGod"?"神兵":"眷属"}・${i+1}`,statMultiplier:supportMultiplier,endgameSupport:true,uncapturable:true}));return{boss,manifestation,rescue,enemies:[leader,...supports]}
+ const boss=ENDGAME_BOSSES[canonicalEndgameId(forcedId??pending?.bossId)]??available[Math.floor(Math.random()*available.length)],factionBase=boss.faction==="tenGod"?7:4,leaderMultiplier=factionBase*(.65+manifestation.rate*1.75),supportMultiplier=(boss.faction==="tenGod"?2.5:1.75)*(1+manifestation.rate),level=Math.max(150,Math.min(9999,Math.round(floor*(1.15+manifestation.rate*.45)))),leader=enemy(boss.speciesId,level,{boss:true,endgameBossId:boss.id,visualSpeciesId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈${manifestation.percent}%〉`,statMultiplier:leaderMultiplier,powerRate:manifestation.rate,manifestationLabel:manifestation.label,uncapturable:true,bossPassive:boss.passive,bossResistances:boss.resistances,elementMultipliers:boss.elementMultipliers,statusProfile:boss.statusProfile}),supportIds=boss.support.slice(0,Math.max(0,rescue.supportCap)),supports=supportIds.map((id,i)=>enemy(id,Math.max(1,level-10-i*3),{nameOverride:`${boss.faction==="tenGod"?"神兵":"眷属"}・${i+1}`,statMultiplier:supportMultiplier,endgameSupport:true,uncapturable:true}));return{boss,manifestation,rescue,enemies:[leader,...supports]}
 }
 
 export function endgamePreludeOptions(boss){
@@ -126,13 +172,13 @@ export function applyPreludeToEncounter(event,prelude){
 
 
 export function endgameContractStatus(state,bossId,floor=state?.player?.currentFloor){
- const boss=ENDGAME_BOSSES[bossId],e=normalizeEndgameState(state).emergency,contract=e.contracts[bossId]??{},availableFragments=Math.max(0,Math.floor(Number(e.fragments[bossId])||0)),required=boss?.faction==="tenGod"?150:50,maxFloor=Math.max(Number(state?.player?.maxFloor)||1,Number(floor)||1),eligible=Boolean(boss&&maxFloor>=EMERGENCY_UNLOCK_FLOOR),contracted=Boolean(contract.contracted),canContract=eligible&&!contracted&&availableFragments>=required;
- return{bossId,boss,eligible,contracted,canContract,availableFragments,totalFragments:availableFragments,required,remaining:Math.max(0,required-availableFragments),attempts:Number(contract.attempts??0),contractedAt:contract.contractedAt??null,reason:contracted?"契約済み":!eligible?`${EMERGENCY_UNLOCK_FLOOR}階到達で契約機能が解放される`:availableFragments<required?`欠片が不足（${availableFragments}/${required}）`:null};
+ const canonicalId=canonicalEndgameId(bossId),boss=ENDGAME_BOSSES[canonicalId],e=normalizeEndgameState(state).emergency,contract=e.contracts[canonicalId]??{},availableFragments=Math.max(0,Math.floor(Number(e.fragments[canonicalId])||0)),required=boss?.faction==="tenGod"?150:50,maxFloor=Math.max(Number(state?.player?.maxFloor)||1,Number(floor)||1),eligible=Boolean(boss&&maxFloor>=EMERGENCY_UNLOCK_FLOOR),contracted=Boolean(contract.contracted),canContract=eligible&&!contracted&&availableFragments>=required;
+ return{bossId:canonicalId,boss,eligible,contracted,canContract,availableFragments,totalFragments:availableFragments,required,remaining:Math.max(0,required-availableFragments),attempts:Number(contract.attempts??0),contractedAt:contract.contractedAt??null,reason:contracted?"契約済み":!eligible?`${EMERGENCY_UNLOCK_FLOOR}階到達で契約機能が解放される`:availableFragments<required?`欠片が不足（${availableFragments}/${required}）`:null};
 }
 export function attemptEndgameContract(state,bossId,floor=state?.player?.currentFloor){
  const status=endgameContractStatus(state,bossId,floor),e=normalizeEndgameState(state).emergency;
  if(!status.boss)return{...status,attempted:false,success:false};
- e.contracts[bossId]??={contracted:false,attempts:0,contractedAt:null,contractedFloor:null};const contract=e.contracts[bossId];
+ bossId=status.bossId;e.contracts[bossId]??={contracted:false,attempts:0,contractedAt:null,contractedFloor:null};const contract=e.contracts[bossId];
  if(!status.canContract)return{...status,attempted:false,success:false};
  const before=Math.max(0,Math.floor(Number(e.fragments[bossId])||0));if(before<status.required)return{...endgameContractStatus(state,bossId,floor),attempted:false,success:false};
  e.fragments[bossId]=before-status.required;contract.attempts=Math.max(0,Number(contract.attempts??0))+1;contract.contracted=true;contract.contractedAt=new Date().toISOString();contract.contractedFloor=Math.max(1,Number(floor)||1);contract.spentFragments=status.required;
@@ -140,9 +186,9 @@ export function attemptEndgameContract(state,bossId,floor=state?.player?.current
 }
 
 export function fragmentRequirement(craftCount=0){return[50,75,100,125,150,200][Math.min(5,Math.max(0,Number(craftCount)||0))]}
-export function emergencyFragmentStatus(state,bossId){const e=normalizeEndgameState(state).emergency,count=e.fragments[bossId]??0,crafted=e.craftCounts[bossId]??0;return{count,crafted,required:fragmentRequirement(crafted),canCraft:count>=fragmentRequirement(crafted)}}
+export function emergencyFragmentStatus(state,bossId){bossId=canonicalEndgameId(bossId);const e=normalizeEndgameState(state).emergency,count=e.fragments[bossId]??0,crafted=e.craftCounts[bossId]??0;return{bossId,count,crafted,required:fragmentRequirement(crafted),canCraft:count>=fragmentRequirement(crafted)}}
 export function awardEmergencyFragments(state,bossId,won,resultId=null){
- if(!bossId)return 0;const e=normalizeEndgameState(state).emergency,key=resultId?String(resultId):null;
+ bossId=canonicalEndgameId(bossId);if(!bossId)return 0;const e=normalizeEndgameState(state).emergency,key=resultId?String(resultId):null;
  if(key&&Object.prototype.hasOwnProperty.call(e.processedFragmentResults,key))return Number(e.processedFragmentResults[key])||0;
  const amount=won?5:(Math.random()<.10?1:0);e.fragments[bossId]=(e.fragments[bossId]??0)+amount;
  const r=e.records[bossId]??={encounters:0,wins:0,losses:0,highestPower:0,firstFloor:null,firstVictoryFloor:null,bestRemainingHpPercent:100,totalFragments:0};r.totalFragments=(r.totalFragments??0)+amount;e.records[bossId]=r;
@@ -150,5 +196,24 @@ export function awardEmergencyFragments(state,bossId,won,resultId=null){
  return amount
 }
 function uid(){return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`}
-export function craftEndgameEquipment(state,bossId){const boss=ENDGAME_BOSSES[bossId];if(!boss)return{ok:false,message:"対象が見つかりません。"};const e=normalizeEndgameState(state).emergency,status=emergencyFragmentStatus(state,bossId);if(!status.canCraft)return{ok:false,message:`欠片が不足しています（${status.count}/${status.required}）`};const slots=["weapon","armor","accessory"],slot=slots[(status.crafted)%slots.length],god=boss.faction==="tenGod",pools=slot==="weapon"?(god?[{atk:240,crit:24,spd:35},{atk:280,crit:18},{atk:220,crit:30,heal:25}]:[{atk:150,crit:16,spd:22},{atk:180,crit:10},{atk:135,crit:22,heal:16}]):slot==="armor"?(god?[{hp:1100,def:190},{hp:900,def:230,heal:35},{hp:1250,def:150,spd:25}]:[{hp:650,def:115},{hp:520,def:145,heal:22},{hp:760,def:90,spd:16}]):(god?[{atk:90,hp:450,crit:20,spd:30},{def:85,hp:600,heal:45},{atk:70,def:60,crit:28}]:[{atk:55,hp:260,crit:14,spd:18},{def:50,hp:340,heal:28},{atk:42,def:38,crit:18}]),stats={...pools[Math.floor(Math.random()*pools.length)]},item={id:uid(),slot,name:boss.gearNames[slot],rarity:"LR",level:1,plus:0,stats,handedness:slot==="weapon"?"either":null,ruleOverrides:{endgame:true,unsellable:true},series:boss.seriesId,seriesName:`${boss.name}専用`,favorite:true,locked:true,equippedBy:null,createdAt:new Date().toISOString(),endgameBossId:bossId,endgameFaction:boss.faction,signatureSkill:boss.signature};e.fragments[bossId]-=status.required;e.craftCounts[bossId]=status.crafted+1;e.craftedGear.push({bossId,itemId:item.id,slot,at:item.createdAt});return{ok:true,item,spent:status.required,boss}}
+function endgameGearStats(boss,gear,index){
+ const god=boss.faction==="tenGod",scale=god?1.58:1,magic=boss.damageClass!=="physical";
+ const templates=[magic?{matk:150,crit:14,spd:20}:{atk:165,crit:14,spd:18},{hp:480,def:110,mdef:105},{hp:620,mp:36,heal:18},{crit:16,spd:26,atk:magic?0:48,matk:magic?48:0},{hp:820,def:145,mdef:135},{mp:52,matk:110,mdef:90,heal:22}];
+ return Object.fromEntries(Object.entries(templates[index]??{}).filter(([,value])=>value).map(([key,value])=>[key,Math.round(value*scale)]));
+}
+function endgameGearFixedEffects(boss,index){
+ const god=boss.faction==="tenGod",base=[{skillPower:god?18:12},{damageReduction:god?12:8},{hpPct:god?18:12,mpPct:god?12:8},{critRate:god?12:8,critDamage:god?20:14},{statusResistance:god?20:14,guardPower:god?16:10},{healPower:god?18:12,mpCostReduction:god?10:6}][index]??{};
+ if(boss.id==="abyss_gluttony"&&index===0)base.lifeSteal=20;
+ if(boss.id==="abyss_wrath"&&index===0)base.critDamage=40;
+ if(boss.id==="ten_fate"&&index===0)base.critRate=20;
+ if(boss.id==="ten_end"&&index===1)base.burnChance=20;
+ if(boss.id==="ten_life"&&index===0)base.healPower=25;
+ return base;
+}
+export function craftEndgameEquipment(state,bossId){
+ const canonicalId=canonicalEndgameId(bossId),boss=ENDGAME_BOSSES[canonicalId];if(!boss)return{ok:false,message:"対象が見つかりません。"};
+ const e=normalizeEndgameState(state).emergency,status=emergencyFragmentStatus(state,canonicalId);if(!status.canCraft)return{ok:false,message:`欠片が不足しています（${status.count}/${status.required}）`};
+ const gearIndex=status.crafted%boss.gear.length,gear=boss.gear[gearIndex],item={id:uid(),slot:gear.slot,name:gear.name,rarity:"LR",level:1,plus:0,stats:endgameGearStats(boss,gear,gearIndex),handedness:gear.slot==="weapon"?(gear.subslot==="weaponRight"?"right":"left"):null,ruleOverrides:{endgame:true,unsellable:true,subslot:gear.subslot},series:boss.seriesId,seriesName:`${boss.name}専用`,favorite:true,locked:true,equippedBy:null,affixes:[],fixedEffects:endgameGearFixedEffects(boss,gearIndex),fixedEffectText:gear.effectText,createdAt:new Date().toISOString(),endgameBossId:canonicalId,endgameFaction:boss.faction,signatureSkill:boss.signature};
+ e.fragments[canonicalId]-=status.required;e.craftCounts[canonicalId]=status.crafted+1;e.craftedGear.push({bossId:canonicalId,itemId:item.id,slot:gear.slot,subslot:gear.subslot,at:item.createdAt});return{ok:true,item,spent:status.required,boss,gearIndex};
+}
 export function recordEmergencyResult(state,battle,won){const end=normalizeEndgameState(state).emergency,bossId=battle?.specialBossId,floor=state.player?.currentFloor||1,key=battle?.battleId?String(battle.battleId):null;if(key&&end.processedBattleResults[key])return false;if(key){end.processedBattleResults[key]=won?"win":"loss";const keys=Object.keys(end.processedBattleResults);for(const old of keys.slice(0,Math.max(0,keys.length-100)))delete end.processedBattleResults[old]}end.encounters++;won?end.wins++:end.losses++;end.lastFloor=floor;if(hasCleared1000(state)&&floor>1000){end.rescue.post1000Encounters++;end.rescue.consecutiveLosses=won?0:Math.min(5,end.rescue.consecutiveLosses+1);end.rescue.lastResult=won?"win":"loss";}if(bossId){const r=end.records[bossId]??={encounters:0,wins:0,losses:0,highestPower:0,firstFloor:null,firstVictoryFloor:null,bestRemainingHpPercent:100,totalFragments:0};r.encounters++;won?r.wins++:r.losses++;r.highestPower=Math.max(r.highestPower,battle.powerPercent||0);r.firstFloor??=end.lastFloor;if(won)r.firstVictoryFloor??=end.lastFloor;const leader=battle.enemies?.find(x=>x.endgameBossId===bossId),remaining=leader?.maxHp?Math.max(0,Math.round((leader.hp/leader.maxHp)*100)):won?0:100;r.bestRemainingHpPercent=Math.min(r.bestRemainingHpPercent??100,remaining);end.records[bossId]=r;if(won&&ENDGAME_BOSSES[bossId]?.faction==="tenGod")end.blessings[bossId]=true}return true}

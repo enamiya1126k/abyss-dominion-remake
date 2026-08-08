@@ -1,4 +1,5 @@
 import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.0.0-release";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
  devour:"devour",annihilate:"annihilate",wrathBurst:"wrathBurst",mirror:"mirror",sleepMist:"sleepMist",plunder:"plunder",sovereign:"sovereign",
@@ -59,7 +60,14 @@ export function createEnemyBattleState(species,source,floor){
 function specialAction(enemy,hpRate){
  if(!enemy.endgameBossId)return null;enemy.specialCooldown=Math.max(0,(enemy.specialCooldown??0)-1);if(enemy.divineBarrier>0)enemy.divineBarrier--;
  if(enemy.faction==="tenGod"&&hpRate<=.72&&!enemy.divineBarrierUsed){enemy.divineBarrierUsed=true;enemy.divineBarrier=2;enemy.intent="神域障壁を展開";return ENEMY_ACTIONS.divineBarrier}
- if(enemy.specialCooldown>0)return null;const config=BOSS_SPECIALS[enemy.endgameBossId];if(!config)return null;
+ if(enemy.specialCooldown>0)return null;
+ const profile=endgameCharacter(enemy.endgameBossId);
+ if(profile){
+  const authorities=profile.skills.slice(1),useUltimate=hpRate<=.32&&!enemy.authorityUltimateUsed||((enemy.authorityUses??0)+1)%5===0,index=useUltimate?authorities.length-1:(enemy.authorityIndex??0)%Math.max(1,authorities.length-1),skill=authorities[index];
+  if(skill&&Math.random()<(enemy.faction==="tenGod"?.52:.46)){enemy.authorityIndex=(index+1)%Math.max(1,authorities.length-1);enemy.authorityUses=(enemy.authorityUses??0)+1;if(useUltimate)enemy.authorityUltimateUsed=true;enemy.specialCooldown=Math.max(1,Math.min(4,Number(skill.cooldown)||2));enemy.intent=`${skill.name}を発動`;return`authority:${skill.id}`}
+  return null;
+ }
+ const config=BOSS_SPECIALS[enemy.endgameBossId];if(!config)return null;
  if(Math.random()<config.chance){enemy.specialCooldown=config.cooldown;enemy.intent=config.intent;return ENEMY_ACTIONS[config.action]}
  return null;
 }
@@ -76,5 +84,10 @@ export function chooseEnemyAction(enemy){
 export function enemyDamageMultiplier(enemy){let mult=1;if(enemy.guard){enemy.guard=false;mult*=.48}if((enemy.divineBarrier??0)>0)mult*=.35;return mult}
 export function enemyHealAmount(enemy){return Math.max(1,Math.floor(enemy.maxHp*(enemy.endgameBossId?.28:enemy.boss?(enemy.bossHealRate??.12):.16)))}
 export function enemyAttackMultiplier(enemy,action){if(action===ENEMY_ACTIONS.power)return enemy.endgameBossId?2.55:enemy.boss?(enemy.bossPowerMultiplier??1.8):1.8;if(enemy.enraged)return enemy.endgameBossId?1.55:enemy.boss?1.3:1.35;return 1}
-export function specialActionMultiplier(action){return SPECIAL_ACTION_INFO[action]?.multiplier??1}
-export function specialActionInfo(action){return SPECIAL_ACTION_INFO[action]??null}
+function authorityInfo(action){
+ if(typeof action!=="string"||!action.startsWith("authority:"))return null;const skill=endgameSkillById(action.slice(10));if(!skill)return null;
+ const utility=["buff","stance","allHeal","selfHeal","revive","cleanse","mpHeal"].includes(skill.type);
+ return{...skill,label:skill.name,pattern:utility?"self":skill.allEnemies?"all":skill.execute||skill.drain?"singleWeak":"singleStrong",multiplier:Math.max(0,Number(skill.power)||0),utility,element:skill.element};
+}
+export function specialActionMultiplier(action){return authorityInfo(action)?.multiplier??SPECIAL_ACTION_INFO[action]?.multiplier??1}
+export function specialActionInfo(action){return authorityInfo(action)??SPECIAL_ACTION_INFO[action]??null}

@@ -11,7 +11,10 @@ export const GOLD_ECONOMY_RATES=Object.freeze({
  abyssKey:.04,
  teamBattleBase:.08,
  teamBattleStage:.008,
- teamBattleMax:.20,
+  teamBattleMax:.20,
+  gauntletBase:.12,
+  gauntletStage:.006,
+  gauntletMax:.28,
  emergencyBattleBase:.22,
  emergencyBattlePower:.0018,
  emergencyBattleMax:.40
@@ -73,6 +76,8 @@ export function specialBattleGoldBase(floor,{type,won,stage=1,powerPercent=0}={}
  let rate=0;
  if(type==="team"){
   rate=Math.min(GOLD_ECONOMY_RATES.teamBattleMax,GOLD_ECONOMY_RATES.teamBattleBase+Math.max(1,Number(stage)||1)*GOLD_ECONOMY_RATES.teamBattleStage);
+ }else if(type==="gauntlet"){
+  rate=Math.min(GOLD_ECONOMY_RATES.gauntletMax,GOLD_ECONOMY_RATES.gauntletBase+Math.max(1,Number(stage)||1)*GOLD_ECONOMY_RATES.gauntletStage);
  }else if(type==="emergency"){
   rate=Math.min(GOLD_ECONOMY_RATES.emergencyBattleMax,GOLD_ECONOMY_RATES.emergencyBattleBase+Math.max(0,Math.min(100,Number(powerPercent)||0))*GOLD_ECONOMY_RATES.emergencyBattlePower);
  }

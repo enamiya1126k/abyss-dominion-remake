@@ -1,7 +1,7 @@
-import{APP_VERSION,CONTENT_TEST_MODE,contentUnlockFloor,isContentUnlocked}from"../../core/config.js?v=1.8.0-gdd-v1";
+import{APP_VERSION,CONTENT_TEST_MODE,contentUnlockFloor,isContentUnlocked}from"../../core/config.js?v=2.0.0-release";
 import{displayName}from"../../models/Monster.js?v=1.8.0-gdd-v1";
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
-import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=1.8.0-gdd-v1";
+import{dailyTeamAttempts,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.0.0-release";
 import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.8.0-gdd-v1";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=1.14.0-alpha124";
 import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=1.7.3";

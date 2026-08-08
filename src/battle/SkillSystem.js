@@ -1,5 +1,6 @@
 import{SPECIES}from"../data/species.js?v=1.9.0-monster-catalog";
 import{SKILLS}from"../data/skills.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.0.0-release";
 
 const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
 const ROLE_POOLS={
@@ -179,7 +180,7 @@ const BY_ID=new Map(Object.values(GENERATED).flat().map(skill=>[skill.id,skill])
 export function maxMp(monster){const number=(value,fallback=0)=>Number.isFinite(Number(value))?Number(value):fallback,species=SPECIES[monster.speciesId],base=number(species?.maxMp,15),raw=base+(Math.max(1,number(monster.level,1))-1)*.65+(Math.max(1,number(monster.rank,1))-1)*5+(Math.max(1,number(monster.stars,1))-1)+number(monster._equipmentStats?.mp),pct=number(monster._equipmentAffixes?.mpPct);return Math.max(0,Math.floor(raw*(1+pct/100)))}
 export function effectiveSkillMpCost(monster,skill){const source=Number(monster?._equipmentAffixes?.mpCostReduction??0),reduction=Math.min(50,Number.isFinite(source)?Math.max(0,source):0),base=Number(skill?.mp??0);return Math.max(0,Math.ceil((Number.isFinite(base)?base:0)*(1-reduction/100)))}
 export function allSpeciesSkills(speciesId){return GENERATED[speciesId]??[]}
-export function allLearnedSkills(monster){return allSpeciesSkills(monster.speciesId).filter(skill=>monster.level>=(skill.unlock?.value??1))}
+export function allLearnedSkills(monster){const source=monster?.endgameBossId?endgameSkills(monster.endgameBossId):allSpeciesSkills(monster.speciesId);return source.filter(skill=>monster.level>=(skill.unlock?.value??1))}
 export function normalizeSkillLoadout(monster){
  const learned=allLearnedSkills(monster),valid=new Set(learned.map(x=>x.id));
  if(!Array.isArray(monster.equippedSkills)||monster.equippedSkills.length===0){
@@ -199,7 +200,7 @@ export function equipSkill(monster,skillId,slot){const learned=new Set(allLearne
 export function skillProgressFor(monster,skillId){monster.skillProgress??={};const current=monster.skillProgress[skillId]??{level:1,exp:0,uses:0};current.level=Math.max(1,Math.min(10,Number(current.level??1)));current.exp=Math.max(0,Number(current.exp??0));current.uses=Math.max(0,Number(current.uses??0));current.need=current.level>=10?0:25*current.level;monster.skillProgress[skillId]=current;return current}
 export function normalizeSkillProgress(monster){
  monster.skillProgress=monster.skillProgress&&typeof monster.skillProgress==="object"&&!Array.isArray(monster.skillProgress)?monster.skillProgress:{};
- const valid=new Set(allSpeciesSkills(monster.speciesId).map(skill=>skill.id));
+ const valid=new Set(allLearnedSkills(monster).map(skill=>skill.id));
  for(const skillId of Object.keys(monster.skillProgress)){
   if(!valid.has(skillId)){delete monster.skillProgress[skillId];continue}
   skillProgressFor(monster,skillId);
@@ -208,7 +209,7 @@ export function normalizeSkillProgress(monster){
  return monster.skillProgress;
 }
 export function recordSkillUse(monster,skillId,multiplier=1){const progress=skillProgressFor(monster,skillId);progress.uses++;if(progress.level>=10)return progress;progress.exp+=Math.max(1,Math.round(10*Math.max(0,multiplier)));while(progress.level<10&&progress.exp>=25*progress.level){progress.exp-=25*progress.level;progress.level++}progress.need=progress.level>=10?0:25*progress.level;return progress}
-export function skillById(id){return BY_ID.get(id)??SKILLS[id]??null}
+export function skillById(id){return endgameSkillById(id)??BY_ID.get(id)??SKILLS[id]??null}
 export function canUseSkill(monster,skill,cooldown=0){return Boolean(skill)&&monster.currentMp>=effectiveSkillMpCost(monster,skill)&&cooldown<=0}
 export function affixOutgoingDamageMultiplier(stats,enemy,element="neutral"){
  const a=stats?._affixes??{};

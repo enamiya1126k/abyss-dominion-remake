@@ -7,20 +7,20 @@ import{
  EQUIPMENT_SLOT_ORDER,
  equipmentSubslotLabel,
  compatibleSubslots
-}from"../../data/equipment.js?v=1.7.7-final";
+}from"../../data/equipment.js?v=2.0.0-release";
 import{displayName,calculatedStats}from"../../models/Monster.js?v=1.8.0-gdd-v1";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=1.14.0-alpha124";
-import{maxMp}from"../../battle/SkillSystem.js?v=1.14.0-alpha124";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.0.0-release";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=1.8.0-gdd-v1";
 import{ATTRIBUTES}from"../../data/attributes.js?v=1.1.0";
 import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=1.14.0-alpha124";
 import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=1.7.0";
 import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
-import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=0.9.15-alpha.95.1-stability-audit";
+import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=2.0.0-release";
 import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=1.14.0-alpha124";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=1.2.0";
-import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
+import{monsterVisual}from"../MonsterVisual.js?v=2.0.0-release";
 import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=1.7.7-final";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=1.14.0-alpha124";
 
@@ -75,6 +75,7 @@ function itemAffixes(item,{compact=false}={}){
  }).join("");
  return`<div class="equipment-affixes ${compact?"compact":""}">${body}</div>`;
 }
+function itemFixedEffect(item){return item.fixedEffectText?`<div class="equipment-fixed-authority"><b>固有能力</b><span>${item.fixedEffectText}</span></div>`:""}
 
 function equippedSlotCard(state,target,subslot,focusItemId=null){
  const levelRequired=SLOT_UNLOCK_LEVEL[subslot]??1;
@@ -95,6 +96,7 @@ function equippedSlotCard(state,target,subslot,focusItemId=null){
    <i>${item.favorite?"★":""}${item.locked?"L":""}${item.ruleOverrides?.unsellable?"P":""}⌄</i>
   </summary>
   <div class="equipped-slot-detail">
+   ${itemFixedEffect(item)}
    ${itemAffixes(item,{compact:true})}
    <div class="equipped-slot-actions">
     <button type="button" data-enhance-equipment="${item.id}">育成・スロット</button>
@@ -147,6 +149,7 @@ function card(item,state,target,storage,{editing=false,selected=false,focused=fa
   <div class="subline">
    <span class="equipment-level">Lv.${level} ∞</span> ${slotLabel(item.slot)} ${handLabel(item)} / ${itemStats(item)||"能力補正なし"}
    ${equipmentSocketSummary(item)}
+   ${itemFixedEffect(item)}
    ${itemAffixes(item)}
    <div class="equipment-exp"><i style="width:${progress}%"></i></div>
    <small class="equipment-exp-label">EXP ${(item.exp??0).toLocaleString()} / ${need.toLocaleString()}</small>

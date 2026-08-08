@@ -2,9 +2,9 @@ import{SPECIES}from"../data/species.js?v=1.9.0-monster-catalog";
 import{PERSONALITIES}from"../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{MONSTER_COLORS}from"../data/colors.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{normalizedResistances}from"../data/attributes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=0.9.15-alpha.32-phase10-10-release-audit";
+import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.0.0-release";
 import{normalizePersistentAilments}from"../data/statusEffects.js?v=1.8.0-gdd-v1";
-import{TRUE_MAX_LEVEL}from"../core/config.js?v=1.8.0-gdd-v1";
+import{TRUE_MAX_LEVEL}from"../core/config.js?v=2.0.0-release";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;

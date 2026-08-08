@@ -2,7 +2,8 @@ import{SPECIES}from"../../data/species.js?v=1.9.0-monster-catalog";
 import{PERSONALITIES}from"../../data/personalities.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{MONSTER_COLORS}from"../../data/colors.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{ATTRIBUTES}from"../../data/attributes.js?v=1.1.0";
-import{maxMp}from"../../battle/SkillSystem.js?v=1.14.0-alpha124";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.0.0-release";
+import{endgameCharacter}from"../../data/endgameCharacters.js?v=2.0.0-release";
 import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=1.8.0-gdd-v1";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
 import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=1.8.0-gdd-v1";
@@ -23,7 +24,7 @@ export function MonsterDetailScreen(monster,state){
   const index=Math.max(0,ordered.findIndex(entry=>entry.id===monster.id)),previous=ordered[(index-1+ordered.length)%ordered.length],nextMonster=ordered[(index+1)%ordered.length];
   const attribute=ATTRIBUTES[monster.attribute??species.element]??{icon:"◈",name:monster.attribute??species.element??"不明"};
   const affection=affectionBonuses(aff),affectionText=Object.entries(affection).map(([key,value])=>`${key.toUpperCase()} +${Math.round(value*100)}%`).join(" / ");
-  const specialContract=Boolean(monster.isContractedEndgame),fieldEncounter=!specialContract&&species.fieldEncounter!==false;
+  const specialContract=Boolean(monster.isContractedEndgame),endgame=specialContract?endgameCharacter(monster.endgameBossId):null,fieldEncounter=!specialContract&&species.fieldEncounter!==false;
   const ailments=normalizePersistentAilments(monster.ailments);
   const sources=specialContract?["シリアルコード","緊急戦闘での契約"]:(Array.isArray(species.acquisition)&&species.acquisition.length?species.acquisition:(fieldEncounter?["探索","召喚","闇市場"]:["召喚","闇市場"]));
   return`<section class="screen monster-growth-screen">
@@ -41,6 +42,8 @@ export function MonsterDetailScreen(monster,state){
      </div>
      <div class="compact-exp-line"><span>累計EXP ${totalExperience(monster).toLocaleString()}</span><span>次まで ${remaining.toLocaleString()} EXP</span><i><u style="width:${Math.min(100,Math.max(0,(monster.exp??0)/Math.max(1,need)*100))}%"></u></i></div>
     </div>
+
+    ${endgame?`<details class="panel endgame-dossier" open><summary><span>${endgame.icon}</span><div><small>${endgame.faction==="tenGod"?"TEN GOD LAW":"ABYSS DESIRE"}</small><b>${endgame.name}・${endgame.role}</b></div></summary><div class="endgame-dossier-body"><blockquote>${endgame.encounterText}</blockquote><p>${endgame.lore}</p><div class="endgame-dossier-grid"><section><small>固有パッシブ</small><b>${endgame.passive}</b></section><section><small>覚醒条件</small><b>${endgame.awakening}</b></section><section><small>属性倍率（被ダメージ）</small><b>${Object.entries(endgame.elementMultipliers).map(([key,value])=>`${key} ${Math.round(value*100)}%`).join(" / ")}</b></section><section><small>状態耐性</small><b>無効：${endgame.statusProfile.immune.join("・")||"なし"}<br>耐性：${endgame.statusProfile.resistant.join("・")||"なし"}${endgame.statusProfile.weak.length?`<br>弱点：${endgame.statusProfile.weak.join("・")}`:""}</b></section></div><div class="endgame-dossier-skills">${endgame.skills.map(skill=>`<article><small>${skill.tag} / MP${skill.mp} / CT${skill.cooldown}</small><b>${skill.name}</b><p>${skill.description}</p></article>`).join("")}</div></div></details>`:""}
 
     <div class="panel compact-limit-panel">
      <div><small>同名素材を合成</small><h2>＋${(monster.plus??0)+1}へ限界突破</h2><p>素材 ${materials}/2　<span>基礎値 HP+${growth.hp} / ATK+${growth.atk} / DEF+${growth.def} / SPD+${growth.spd}</span></p></div>
