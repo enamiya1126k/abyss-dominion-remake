@@ -1,6 +1,10 @@
 export const TEAM_BATTLE_UNLOCK_FLOOR=100;
-export const EMERGENCY_UNLOCK_FLOOR=500;
+export const EMERGENCY_UNLOCK_FLOOR=100;
 export const WORLD_MAX_FLOOR=10000;
+export const ENDGAME_TRIAL_BATTLE_COUNT=22;
+export const ENDGAME_EMERGENCY_RATE=.03;
+export const ENDGAME_EMERGENCY_COOLDOWN_FLOORS=10;
+export function endgameTrialLoopMultiplier(loop=1){return 1+(Math.max(1,Math.floor(Number(loop)||1))-1)*.5}
 
 export const WORLD_REGIONS=[
  {id:"normal",name:"通常領域",minFloor:1,maxFloor:1000,phase:0},
@@ -43,9 +47,32 @@ export const ENDGAME_BOSSES={
 export const ABYSS_IDS=Object.keys(ENDGAME_BOSSES).filter(id=>ENDGAME_BOSSES[id].faction==="abyss");
 export const TEN_GOD_IDS=Object.keys(ENDGAME_BOSSES).filter(id=>ENDGAME_BOSSES[id].faction==="tenGod");
 
-export function manifestationForFloor(floor){const f=Math.max(1,Number(floor)||1);if(f>=10000)return{rate:1,label:"真なる顕現",percent:100};if(f>=9000)return{rate:1,label:"完全神格",percent:100};if(f>=5000)return{rate:.8,label:"神格顕現",percent:80};if(f>=3000)return{rate:.6,label:"権能解放",percent:60};if(f>=1000)return{rate:.4,label:"上位投影体",percent:40};return{rate:.2,label:"投影体",percent:20}}
+export function manifestationForFloor(floor){const f=Math.max(1,Number(floor)||1);if(f>=5000)return{rate:1,label:f>=10000?"真なる顕現":"完全顕現",percent:100};if(f>=3000)return{rate:.6,label:"権能解放",percent:60};return{rate:.4,label:f>=1000?"上位投影体":"投影体",percent:40}}
 
-export function normalizeEndgameState(state){state.flags??={};state.flags.gameClear1000??=false;state.worldPhase=hasCleared1000(state)?1:0;state.endgame??={};state.endgame.teamBattle??={unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0};state.endgame.emergency??={encounters:0,wins:0,losses:0,lastFloor:0,lastRollStep:0,records:{},fragments:{},craftCounts:{},craftedGear:[],blessings:{}};const e=state.endgame.emergency;e.records??={};e.fragments??={};e.craftCounts??={};e.craftedGear??=[];e.blessings??={};e.preludeChoices??={};e.discovered??={};e.contracts??={};e.rescue??={post1000Encounters:0,consecutiveLosses:0,lastResult:null};e.rescue.post1000Encounters=Math.max(0,Number(e.rescue.post1000Encounters)||0);e.rescue.consecutiveLosses=Math.max(0,Math.min(5,Number(e.rescue.consecutiveLosses)||0));e.rescue.lastResult=e.rescue.lastResult==="win"||e.rescue.lastResult==="loss"?e.rescue.lastResult:null;state.endgame.teamBattle.unlocked=Boolean(state.endgame.teamBattle.unlocked||state.player?.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR);return state.endgame}
+export function normalizeEndgameState(state){
+ state.flags??={};state.flags.gameClear1000??=false;state.worldPhase=hasCleared1000(state)?1:0;state.endgame??={};
+ state.endgame.processedSpecialResults=state.endgame.processedSpecialResults&&typeof state.endgame.processedSpecialResults==="object"&&!Array.isArray(state.endgame.processedSpecialResults)?state.endgame.processedSpecialResults:{};
+ state.endgame.teamBattle??={unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0};
+ state.endgame.trials??={battle:1,loop:1,cleared:[]};
+ state.endgame.trials.battle=Math.max(1,Math.min(ENDGAME_TRIAL_BATTLE_COUNT,Math.floor(Number(state.endgame.trials.battle)||1)));
+ state.endgame.trials.loop=Math.max(1,Math.floor(Number(state.endgame.trials.loop)||1));
+ state.endgame.trials.cleared=Array.isArray(state.endgame.trials.cleared)?Array.from(new Set(state.endgame.trials.cleared.map(Number).filter(value=>value>=1&&value<=ENDGAME_TRIAL_BATTLE_COUNT))):[];
+ state.endgame.emergency??={encounters:0,wins:0,losses:0,lastFloor:0,lastTriggeredFloor:0,records:{},fragments:{},craftCounts:{},craftedGear:[],blessings:{}};
+ const e=state.endgame.emergency;e.records??={};e.fragments??={};e.craftCounts??={};e.craftedGear??=[];e.blessings??={};e.preludeChoices??={};e.discovered??={};e.contracts??={};e.processedFragmentResults??={};e.processedBattleResults??={};e.lastTriggeredFloor=Math.max(0,Math.floor(Number(e.lastTriggeredFloor)||0));e.pendingEncounter=e.pendingEncounter&&ENDGAME_BOSSES[e.pendingEncounter.bossId]?{...e.pendingEncounter,bossId:String(e.pendingEncounter.bossId),floor:Math.max(EMERGENCY_UNLOCK_FLOOR,Math.floor(Number(e.pendingEncounter.floor)||EMERGENCY_UNLOCK_FLOOR))}:null;e.rescue??={post1000Encounters:0,consecutiveLosses:0,lastResult:null};
+ e.rescue.post1000Encounters=Math.max(0,Number(e.rescue.post1000Encounters)||0);e.rescue.consecutiveLosses=Math.max(0,Math.min(5,Number(e.rescue.consecutiveLosses)||0));e.rescue.lastResult=e.rescue.lastResult==="win"||e.rescue.lastResult==="loss"?e.rescue.lastResult:null;
+ state.endgame.teamBattle.unlocked=Boolean(state.endgame.teamBattle.unlocked||state.player?.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR);return state.endgame
+}
+export function specialBattleSettlement(state,battleId){
+ const key=battleId==null?null:String(battleId);if(!key)return null;
+ return normalizeEndgameState(state).processedSpecialResults[key]??null
+}
+export function recordSpecialBattleSettlement(state,battleId,result){
+ const key=battleId==null?null:String(battleId),endgame=normalizeEndgameState(state);if(!key)return{created:false,result:null};
+ if(endgame.processedSpecialResults[key])return{created:false,result:endgame.processedSpecialResults[key]};
+ const entry={...result,battleId:key,settledAt:result?.settledAt??new Date().toISOString()};endgame.processedSpecialResults[key]=entry;
+ const keys=Object.keys(endgame.processedSpecialResults);for(const old of keys.slice(0,Math.max(0,keys.length-100)))delete endgame.processedSpecialResults[old];
+ return{created:true,result:entry}
+}
 export function teamBattleDayKey(date=new Date()){
  try{return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit"}).format(date)}
  catch(_error){const shifted=new Date(date.getTime()+9*60*60*1000);return shifted.toISOString().slice(0,10)}
@@ -62,33 +89,36 @@ export function emergencyRescueStatus(state){
  const floor=Math.max(1,Number(state?.player?.currentFloor)||1),e=normalizeEndgameState(state).emergency,rescue=e.rescue,after1000=hasCleared1000(state)&&floor>1000;
  const earlyCount=after1000&&rescue.post1000Encounters<3,earlyFloor=after1000&&floor<=1250,transition=after1000&&(floor<=2000||rescue.post1000Encounters<6),losses=Math.max(0,Number(rescue.consecutiveLosses)||0);
  const active=earlyCount||earlyFloor||losses>0;
- const rateCap=(earlyCount||earlyFloor)?0.30:(transition?0.35:null);
  const supportCap=earlyCount||earlyFloor?1:transition?2:3;
- const lossReduction=Math.min(.15,losses*.05);
- const cooldown=active?(rescue.lastResult==="loss"?42:30):18;
- return{active,after1000,earlyCount,earlyFloor,transition,losses,rateCap,supportCap:losses>=2?Math.max(0,supportCap-1):supportCap,lossReduction,cooldown,label:earlyCount||earlyFloor?"境界保護":losses?`適応補正 Lv.${losses}`:transition?"深淵適応期間":null};
+ return{active,after1000,earlyCount,earlyFloor,transition,losses,supportCap:losses>=2?Math.max(0,supportCap-1):supportCap,label:earlyCount||earlyFloor?"境界保護":losses?`適応補正 Lv.${losses}`:transition?"深淵適応期間":null};
 }
-export function shouldTriggerEmergency(state,steps=0){if((state.player?.currentFloor||1)<EMERGENCY_UNLOCK_FLOOR)return false;const emergency=normalizeEndgameState(state).emergency,rescue=emergencyRescueStatus(state);if(steps-emergency.lastRollStep<rescue.cooldown)return false;emergency.lastRollStep=steps;const chance=rescue.active?0.025:0.035;return Math.random()<chance}
+export function shouldTriggerEmergency(state){
+ const floor=Math.max(1,Math.floor(Number(state.player?.currentFloor)||1));if(floor<EMERGENCY_UNLOCK_FLOOR)return false;
+ const emergency=normalizeEndgameState(state).emergency;
+ if(emergency.pendingEncounter)return true;
+ if(emergency.lastTriggeredFloor&&floor<emergency.lastTriggeredFloor+ENDGAME_EMERGENCY_COOLDOWN_FLOORS)return false;
+ const triggered=Math.random()<ENDGAME_EMERGENCY_RATE;
+ if(triggered){const bossIds=Object.keys(ENDGAME_BOSSES),bossId=bossIds[Math.floor(Math.random()*bossIds.length)];emergency.lastTriggeredFloor=floor;emergency.pendingEncounter={bossId,floor,createdAt:new Date().toISOString(),priorVitals:null}}
+ return triggered
+}
 export function createEmergencyEncounter(state,forcedId=null){
- const floor=state.player?.currentFloor||500,rescue=emergencyRescueStatus(state),baseManifestation=manifestationForFloor(floor),rate=Math.max(.15,Math.min(baseManifestation.rate,rescue.rateCap??baseManifestation.rate)-rescue.lossReduction),manifestation={rate,label:rescue.active?(rescue.label??baseManifestation.label):baseManifestation.label,percent:Math.round(rate*100)};
- let available=Object.values(ENDGAME_BOSSES).filter(b=>hasCleared1000(state)||b.faction==="abyss");
- if(rescue.earlyCount||rescue.earlyFloor)available=available.filter(b=>b.faction==="abyss");
- else if(rescue.transition&&Math.random()>=.05)available=available.filter(b=>b.faction==="abyss");
- const boss=ENDGAME_BOSSES[forcedId]??available[Math.floor(Math.random()*available.length)],factionBase=boss.faction==="tenGod"?7:4,leaderMultiplier=factionBase*(.65+manifestation.rate*1.75),supportMultiplier=(boss.faction==="tenGod"?2.5:1.75)*(1+manifestation.rate),level=Math.max(150,Math.min(9999,Math.round(floor*(1.15+manifestation.rate*.45)))),leader=enemy(boss.speciesId,level,{boss:true,endgameBossId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈${manifestation.percent}%〉`,statMultiplier:leaderMultiplier,powerRate:manifestation.rate,manifestationLabel:manifestation.label,uncapturable:true,bossPassive:boss.passive,bossResistances:boss.resistances}),supportIds=boss.support.slice(0,Math.max(0,rescue.supportCap)),supports=supportIds.map((id,i)=>enemy(id,Math.max(1,level-10-i*3),{nameOverride:`${boss.faction==="tenGod"?"神兵":"眷属"}・${i+1}`,statMultiplier:supportMultiplier,endgameSupport:true,uncapturable:true}));return{boss,manifestation,rescue,enemies:[leader,...supports]}
+ const floor=state.player?.currentFloor||EMERGENCY_UNLOCK_FLOOR,rescue=emergencyRescueStatus(state),baseManifestation=manifestationForFloor(floor),rate=baseManifestation.rate,manifestation={...baseManifestation},pending=normalizeEndgameState(state).emergency.pendingEncounter;
+ const available=Object.values(ENDGAME_BOSSES);
+ const boss=ENDGAME_BOSSES[forcedId??pending?.bossId]??available[Math.floor(Math.random()*available.length)],factionBase=boss.faction==="tenGod"?7:4,leaderMultiplier=factionBase*(.65+manifestation.rate*1.75),supportMultiplier=(boss.faction==="tenGod"?2.5:1.75)*(1+manifestation.rate),level=Math.max(150,Math.min(9999,Math.round(floor*(1.15+manifestation.rate*.45)))),leader=enemy(boss.speciesId,level,{boss:true,endgameBossId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈${manifestation.percent}%〉`,statMultiplier:leaderMultiplier,powerRate:manifestation.rate,manifestationLabel:manifestation.label,uncapturable:true,bossPassive:boss.passive,bossResistances:boss.resistances}),supportIds=boss.support.slice(0,Math.max(0,rescue.supportCap)),supports=supportIds.map((id,i)=>enemy(id,Math.max(1,level-10-i*3),{nameOverride:`${boss.faction==="tenGod"?"神兵":"眷属"}・${i+1}`,statMultiplier:supportMultiplier,endgameSupport:true,uncapturable:true}));return{boss,manifestation,rescue,enemies:[leader,...supports]}
 }
 
 export function endgamePreludeOptions(boss){
  const divine=boss?.faction==="tenGod";
  return[
   {id:"challenge",icon:"⚔️",title:divine?"試練を正面から受ける":"正面から威圧する",desc:"敵本体の能力を10%低下。追加報酬なし。",enemyMultiplier:.90,bonusFragments:0},
-  {id:"study",icon:"👁️",title:divine?"権能を観測する":"深淵の性質を見抜く",desc:"敵は5%強化されるが、勝敗に関係なく欠片を追加獲得。",enemyMultiplier:1.05,bonusFragments:5},
-  {id:"oath",icon:divine?"✨":"🩸",title:divine?"神前に誓いを立てる":"代償を差し出す",desc:"敵本体は15%低下。ただし眷属・神兵は20%強化。",enemyMultiplier:.85,supportMultiplier:1.20,bonusFragments:2}
+  {id:"study",icon:"👁️",title:divine?"権能を観測する":"深淵の性質を見抜く",desc:"性質を見抜き、敵本体の能力を5%低下。",enemyMultiplier:.95,bonusFragments:0},
+  {id:"oath",icon:divine?"✨":"🩸",title:divine?"神前に誓いを立てる":"代償を差し出す",desc:"敵本体は15%低下。ただし眷属・神兵は20%強化。",enemyMultiplier:.85,supportMultiplier:1.20,bonusFragments:0}
  ];
 }
 export function resolveEndgamePrelude(state,bossId,choiceId){
  const boss=ENDGAME_BOSSES[bossId],option=endgamePreludeOptions(boss).find(x=>x.id===choiceId)??endgamePreludeOptions(boss)[0],e=normalizeEndgameState(state).emergency;
  e.preludeChoices[bossId]??={challenge:0,study:0,oath:0};e.preludeChoices[bossId][option.id]=(e.preludeChoices[bossId][option.id]??0)+1;e.discovered[bossId]=true;
- return{...option,bossId,resultText:option.id==="challenge"?`${boss.name}は真正面からの覚悟を認め、権能を抑えた。`:option.id==="study"?`${boss.name}の権能を観測した。危険は増したが、より多くの欠片を回収できる。`:`${boss.name}へ代償を捧げた。本体は弱まったが、配下が凶暴化した。`};
+ return{...option,bossId,resultText:option.id==="challenge"?`${boss.name}は真正面からの覚悟を認め、権能を抑えた。`:option.id==="study"?`${boss.name}の権能を観測し、本体の力をわずかに抑えた。`:`${boss.name}へ代償を捧げた。本体は弱まったが、配下が凶暴化した。`};
 }
 export function applyPreludeToEncounter(event,prelude){
  if(!event?.enemies||!prelude)return event;event.enemies=event.enemies.map((enemy,index)=>({...enemy,statMultiplier:(enemy.statMultiplier??1)*(index===0?(prelude.enemyMultiplier??1):(prelude.supportMultiplier??1))}));return event;
@@ -96,25 +126,29 @@ export function applyPreludeToEncounter(event,prelude){
 
 
 export function endgameContractStatus(state,bossId,floor=state?.player?.currentFloor){
- const boss=ENDGAME_BOSSES[bossId],e=normalizeEndgameState(state).emergency,record=e.records[bossId]??{},contract=e.contracts[bossId]??{};
- const totalFragments=Math.max(0,Number(record.totalFragments??0)),f=Math.max(1,Number(floor)||1),eligible=f>1000;
- const thresholds=boss?.faction==="tenGod"?[[500,1],[200,.10],[100,.03],[50,.01],[0,.001]]:[[500,1],[200,.20],[100,.05],[50,.02],[0,.003]];
- const rate=thresholds.find(([need])=>totalFragments>=need)?.[1]??0;
- return{bossId,boss,eligible,contracted:Boolean(contract.contracted),rate:contract.contracted?0:rate,percent:contract.contracted?0:Number((rate*100).toFixed(1)),totalFragments,attempts:Number(contract.attempts??0),contractedAt:contract.contractedAt??null,reason:contract.contracted?"契約済み":eligible?null:"1000階層未満の？？？とは契約できない"};
+ const boss=ENDGAME_BOSSES[bossId],e=normalizeEndgameState(state).emergency,contract=e.contracts[bossId]??{},availableFragments=Math.max(0,Math.floor(Number(e.fragments[bossId])||0)),required=boss?.faction==="tenGod"?150:50,maxFloor=Math.max(Number(state?.player?.maxFloor)||1,Number(floor)||1),eligible=Boolean(boss&&maxFloor>=EMERGENCY_UNLOCK_FLOOR),contracted=Boolean(contract.contracted),canContract=eligible&&!contracted&&availableFragments>=required;
+ return{bossId,boss,eligible,contracted,canContract,availableFragments,totalFragments:availableFragments,required,remaining:Math.max(0,required-availableFragments),attempts:Number(contract.attempts??0),contractedAt:contract.contractedAt??null,reason:contracted?"契約済み":!eligible?`${EMERGENCY_UNLOCK_FLOOR}階到達で契約機能が解放される`:availableFragments<required?`欠片が不足（${availableFragments}/${required}）`:null};
 }
-export function attemptEndgameContract(state,bossId,floor=state?.player?.currentFloor,roll=Math.random()){
+export function attemptEndgameContract(state,bossId,floor=state?.player?.currentFloor){
  const status=endgameContractStatus(state,bossId,floor),e=normalizeEndgameState(state).emergency;
  if(!status.boss)return{...status,attempted:false,success:false};
  e.contracts[bossId]??={contracted:false,attempts:0,contractedAt:null,contractedFloor:null};const contract=e.contracts[bossId];
- if(!status.eligible||status.contracted)return{...status,attempted:false,success:false};
- contract.attempts=Math.max(0,Number(contract.attempts??0))+1;const success=Number(roll)<status.rate;
- if(success){contract.contracted=true;contract.contractedAt=new Date().toISOString();contract.contractedFloor=Math.max(1,Number(floor)||1)}
- return{...endgameContractStatus(state,bossId,floor),attempted:true,success,rolled:Number(roll)};
+ if(!status.canContract)return{...status,attempted:false,success:false};
+ const before=Math.max(0,Math.floor(Number(e.fragments[bossId])||0));if(before<status.required)return{...endgameContractStatus(state,bossId,floor),attempted:false,success:false};
+ e.fragments[bossId]=before-status.required;contract.attempts=Math.max(0,Number(contract.attempts??0))+1;contract.contracted=true;contract.contractedAt=new Date().toISOString();contract.contractedFloor=Math.max(1,Number(floor)||1);contract.spentFragments=status.required;
+ return{...endgameContractStatus(state,bossId,floor),attempted:true,success:true,spent:status.required};
 }
 
 export function fragmentRequirement(craftCount=0){return[50,75,100,125,150,200][Math.min(5,Math.max(0,Number(craftCount)||0))]}
 export function emergencyFragmentStatus(state,bossId){const e=normalizeEndgameState(state).emergency,count=e.fragments[bossId]??0,crafted=e.craftCounts[bossId]??0;return{count,crafted,required:fragmentRequirement(crafted),canCraft:count>=fragmentRequirement(crafted)}}
-export function awardEmergencyFragments(state,bossId,won,bonus=0){if(!bossId)return 0;const e=normalizeEndgameState(state).emergency,amount=(won?20:1+Math.floor(Math.random()*3))+Math.max(0,Number(bonus)||0);e.fragments[bossId]=(e.fragments[bossId]??0)+amount;const r=e.records[bossId]??={encounters:0,wins:0,losses:0,highestPower:0,firstFloor:null,firstVictoryFloor:null,bestRemainingHpPercent:100,totalFragments:0};r.totalFragments=(r.totalFragments??0)+amount;e.records[bossId]=r;return amount}
+export function awardEmergencyFragments(state,bossId,won,resultId=null){
+ if(!bossId)return 0;const e=normalizeEndgameState(state).emergency,key=resultId?String(resultId):null;
+ if(key&&Object.prototype.hasOwnProperty.call(e.processedFragmentResults,key))return Number(e.processedFragmentResults[key])||0;
+ const amount=won?5:(Math.random()<.10?1:0);e.fragments[bossId]=(e.fragments[bossId]??0)+amount;
+ const r=e.records[bossId]??={encounters:0,wins:0,losses:0,highestPower:0,firstFloor:null,firstVictoryFloor:null,bestRemainingHpPercent:100,totalFragments:0};r.totalFragments=(r.totalFragments??0)+amount;e.records[bossId]=r;
+ if(key){e.processedFragmentResults[key]=amount;const keys=Object.keys(e.processedFragmentResults);for(const old of keys.slice(0,Math.max(0,keys.length-100)))delete e.processedFragmentResults[old]}
+ return amount
+}
 function uid(){return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`}
 export function craftEndgameEquipment(state,bossId){const boss=ENDGAME_BOSSES[bossId];if(!boss)return{ok:false,message:"対象が見つかりません。"};const e=normalizeEndgameState(state).emergency,status=emergencyFragmentStatus(state,bossId);if(!status.canCraft)return{ok:false,message:`欠片が不足しています（${status.count}/${status.required}）`};const slots=["weapon","armor","accessory"],slot=slots[(status.crafted)%slots.length],god=boss.faction==="tenGod",pools=slot==="weapon"?(god?[{atk:240,crit:24,spd:35},{atk:280,crit:18},{atk:220,crit:30,heal:25}]:[{atk:150,crit:16,spd:22},{atk:180,crit:10},{atk:135,crit:22,heal:16}]):slot==="armor"?(god?[{hp:1100,def:190},{hp:900,def:230,heal:35},{hp:1250,def:150,spd:25}]:[{hp:650,def:115},{hp:520,def:145,heal:22},{hp:760,def:90,spd:16}]):(god?[{atk:90,hp:450,crit:20,spd:30},{def:85,hp:600,heal:45},{atk:70,def:60,crit:28}]:[{atk:55,hp:260,crit:14,spd:18},{def:50,hp:340,heal:28},{atk:42,def:38,crit:18}]),stats={...pools[Math.floor(Math.random()*pools.length)]},item={id:uid(),slot,name:boss.gearNames[slot],rarity:"LR",level:1,plus:0,stats,handedness:slot==="weapon"?"either":null,ruleOverrides:{endgame:true,unsellable:true},series:boss.seriesId,seriesName:`${boss.name}専用`,favorite:true,locked:true,equippedBy:null,createdAt:new Date().toISOString(),endgameBossId:bossId,endgameFaction:boss.faction,signatureSkill:boss.signature};e.fragments[bossId]-=status.required;e.craftCounts[bossId]=status.crafted+1;e.craftedGear.push({bossId,itemId:item.id,slot,at:item.createdAt});return{ok:true,item,spent:status.required,boss}}
-export function recordEmergencyResult(state,battle,won){const end=normalizeEndgameState(state).emergency,bossId=battle?.specialBossId,floor=state.player?.currentFloor||1;end.encounters++;won?end.wins++:end.losses++;end.lastFloor=floor;if(hasCleared1000(state)&&floor>1000){end.rescue.post1000Encounters++;end.rescue.consecutiveLosses=won?0:Math.min(5,end.rescue.consecutiveLosses+1);end.rescue.lastResult=won?"win":"loss";}if(bossId){const r=end.records[bossId]??={encounters:0,wins:0,losses:0,highestPower:0,firstFloor:null,firstVictoryFloor:null,bestRemainingHpPercent:100,totalFragments:0};r.encounters++;won?r.wins++:r.losses++;r.highestPower=Math.max(r.highestPower,battle.powerPercent||0);r.firstFloor??=end.lastFloor;if(won)r.firstVictoryFloor??=end.lastFloor;const leader=battle.enemies?.find(x=>x.endgameBossId===bossId),remaining=leader?.maxHp?Math.max(0,Math.round((leader.hp/leader.maxHp)*100)):won?0:100;r.bestRemainingHpPercent=Math.min(r.bestRemainingHpPercent??100,remaining);end.records[bossId]=r;if(won&&ENDGAME_BOSSES[bossId]?.faction==="tenGod")end.blessings[bossId]=true}}
+export function recordEmergencyResult(state,battle,won){const end=normalizeEndgameState(state).emergency,bossId=battle?.specialBossId,floor=state.player?.currentFloor||1,key=battle?.battleId?String(battle.battleId):null;if(key&&end.processedBattleResults[key])return false;if(key){end.processedBattleResults[key]=won?"win":"loss";const keys=Object.keys(end.processedBattleResults);for(const old of keys.slice(0,Math.max(0,keys.length-100)))delete end.processedBattleResults[old]}end.encounters++;won?end.wins++:end.losses++;end.lastFloor=floor;if(hasCleared1000(state)&&floor>1000){end.rescue.post1000Encounters++;end.rescue.consecutiveLosses=won?0:Math.min(5,end.rescue.consecutiveLosses+1);end.rescue.lastResult=won?"win":"loss";}if(bossId){const r=end.records[bossId]??={encounters:0,wins:0,losses:0,highestPower:0,firstFloor:null,firstVictoryFloor:null,bestRemainingHpPercent:100,totalFragments:0};r.encounters++;won?r.wins++:r.losses++;r.highestPower=Math.max(r.highestPower,battle.powerPercent||0);r.firstFloor??=end.lastFloor;if(won)r.firstVictoryFloor??=end.lastFloor;const leader=battle.enemies?.find(x=>x.endgameBossId===bossId),remaining=leader?.maxHp?Math.max(0,Math.round((leader.hp/leader.maxHp)*100)):won?0:100;r.bestRemainingHpPercent=Math.min(r.bestRemainingHpPercent??100,remaining);end.records[bossId]=r;if(won&&ENDGAME_BOSSES[bossId]?.faction==="tenGod")end.blessings[bossId]=true}return true}

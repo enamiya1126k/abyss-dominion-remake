@@ -5956,3 +5956,17 @@ button>.inline-pixel-icon,
 @media(prefers-reduced-motion:reduce){
  .encounter-transition *,.return-rune-ring,.return-result-embers i,.return-floor-progress u,.rest-bed-stage-v3 i,.boss-fog-v3{animation:none!important}
 }
+
+/* GDD v1.0: visual battle timing follows the same single speed multiplier as
+   command waits. Values are supplied by BattleScreen to avoid CSS arithmetic
+   compatibility differences on older mobile WebViews. */
+.side-battle-v2 .floating-number{animation-duration:var(--battle-float,.55s)}
+.side-battle-v2 .battle-unit.fx-lunge,.side-battle-v2 .enemy-combatant.fx-lunge{animation-duration:var(--battle-lunge,.22s)}
+.side-battle-v2 .fx-skill-lunge{animation-duration:var(--battle-skill-lunge,.3s)}
+.side-battle-v2 .fx-hit{animation-duration:var(--battle-hit,.26s)}
+.side-battle-v2 .fx-critical-hit{animation-duration:var(--battle-critical-hit,.3s)}
+.side-battle-v2 .fx-defeat,.side-battle-v2 .fx-captured{animation-duration:var(--battle-defeat,.5s)}
+.side-battle-v2 .battle-cinematic-banner{animation-duration:var(--battle-banner-in,.28s)}
+.side-battle-v2 .battle-cinematic-banner.leaving{animation-duration:var(--battle-banner-out,.22s)}
+.side-battle-v2 .battle-screen-flash{animation-duration:var(--battle-flash,.38s)}
+.side-battle-v2 .fx-particle{animation-duration:var(--battle-particle,.72s)}

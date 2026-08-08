@@ -1,9 +1,10 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=1.14.0-alpha124";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=1.8.0-gdd-v1";
 import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=1.14.0-alpha124";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=0.9.15-alpha.95.1-stability-audit";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=1.9.0-monster-catalog";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=1.8.0-gdd-v1";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=1.8.0-gdd-v1";
 import{monsterVisual}from"../MonsterVisual.js?v=1.9.1-endgame-sprites";
 import{pixelIcon}from"../components/GameChrome.js?v=1.7.5-final";
+import{normalizeBattleSpeed}from"../../core/config.js?v=1.8.0-gdd-v1";
 
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
@@ -37,7 +38,7 @@ function renderEnemies(battle,enemies,target){
 function renderParty(battle,actor){
  return battle.party.map((m,index)=>{
  const stats=calculatedStats(m),mp=maxMp(m),need=expNeedFor(m);
-  const effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" ${effects.length?"":'aria-hidden="true"'}>${effects.map(e=>`<span class="status-chip ${e.kind}">${({taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",regen:"再生",lifeSteal:"吸収"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`;
+  const ailments=allyAilmentsFor(battle,m.id),effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" ${ailments.length||effects.length?"":'aria-hidden="true"'}>${ailments.map(e=>`<span class="status-chip ${e.id}">${statusLabel(e)}・持続</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${({taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",regen:"再生",lifeSteal:"吸収"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`;
   const hpRate=Math.max(0,Math.min(100,m.currentHp/Math.max(1,stats.hp)*100)),mpRate=Math.max(0,Math.min(100,m.currentMp/Math.max(1,mp)*100));
   const line=index<2?"front-line":"rear-line";
   return `<button id="ally-${m.id}" data-battle-detail="${m.id}" style="--formation-index:${index};--unit-color:${colorValue(m)}" class="battle-unit combatant side-battle-unit formation-slot-${index+1} ${line} ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
@@ -100,8 +101,10 @@ export function BattleScreen(battle,inventory,settings,floor=1){
  const actor=currentAlly(battle),current=currentTurnEntry(battle),enemies=aliveEnemies(battle),target=selectedEnemy(battle),skills=actor?learnedSkills(actor):[];
  const special=battle.specialBattle?`<div class="special-battle-strip ${battle.specialBattleType}"><b>${battle.specialTitle??"SPECIAL BATTLE"}</b><small>${battle.specialSubtitle??"敗北ペナルティなし"}</small></div>`:"";
  const floorBand=Math.max(1,Math.min(20,Math.floor((Math.max(1,Number(floor)||1)-1)/50)+1));
- return `<section class="battle-screen side-battle-v2 ${battle.auto?"auto-mode":"manual-mode"} ${battle.specialBattle?"special-battle":""}" data-speed="${settings.battleSpeed}" data-floor-band="${floorBand}">${special}
-  <div class="battle-header"><div class="round-label"><small>ROUND</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}F・ENCOUNTER`}</b><small>${battle.auto?"FULL AUTO":"COMMAND BATTLE"}</small></div><button id="toggleBattleAuto" class="${battle.auto?"enabled":""}"><span>AUTO</span><b>${battle.auto?"ON":"OFF"}</b></button><button id="battleSpeed">×${settings.battleSpeed}</button>${battle.specialBattle?`<button disabled>逃走不可</button>`:`<button id="escapeBattle">逃げる</button>`}</div>
+ const speed=normalizeBattleSpeed(settings.battleSpeed),scaled=ms=>`${Math.max(1,Math.round(ms/speed))}ms`;
+ const timingStyle=`--battle-lunge:${scaled(220)};--battle-skill-lunge:${scaled(300)};--battle-hit:${scaled(260)};--battle-critical-hit:${scaled(300)};--battle-defeat:${scaled(500)};--battle-float:${scaled(550)};--battle-banner-in:${scaled(280)};--battle-banner-out:${scaled(220)};--battle-flash:${scaled(380)};--battle-particle:${scaled(720)}`;
+ return `<section class="battle-screen side-battle-v2 ${battle.auto?"auto-mode":"manual-mode"} ${battle.specialBattle?"special-battle":""}" data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}">${special}
+  <div class="battle-header"><div class="round-label"><small>ROUND</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}F・ENCOUNTER`}</b><small>${battle.auto?"FULL AUTO":"COMMAND BATTLE"}</small></div><button id="toggleBattleAuto" class="${battle.auto?"enabled":""}"><span>AUTO</span><b>${battle.auto?"ON":"OFF"}</b></button><button id="battleSpeed">×${speed}</button>${battle.specialBattle?`<button disabled>逃走不可</button>`:`<button id="escapeBattle">逃げる</button>`}</div>
   <div class="turn-order"><span class="turn-order-title">行動順</span>${renderTurnOrder(battle)}</div>
   <div class="battle-arena side-battle-arena multi-enemy">
    <div class="battle-stage-vignette" aria-hidden="true"></div>

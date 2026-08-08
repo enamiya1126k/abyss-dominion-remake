@@ -1,4 +1,4 @@
-import{calculatedStats}from"../models/Monster.js?v=1.14.0-alpha124";
+import{calculatedStats}from"../models/Monster.js?v=1.8.0-gdd-v1";
 
 /**
  * 表示用の戦力値。

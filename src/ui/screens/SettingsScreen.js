@@ -1,4 +1,4 @@
-import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=1.7.9-delta121";
+import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=1.8.0-gdd-v1";
 export function SettingsScreen(state){
   const redeemedCount=Object.keys(state.serialCodes?.redeemed??{}).length;
   return`
@@ -27,7 +27,7 @@ export function SettingsScreen(state){
           <small>英字の大小・ハイフンの有無は問いません。各コードは同じセーブ／端末につき1回限りです。</small>
         </div>
         ${CONTENT_TEST_MODE?`<div class="settings-test-plaque-v3"><b>TEST ACCESS ACTIVE</b><small>高難度コンテンツを${CONTENT_TEST_UNLOCK_FLOOR}階で試遊できます。正式条件の値は保持されています。</small></div>`:""}
-        <div class="settings-version-plaque-v3"><small>ABYSS DOMINION</small><h3>REMAKE v${APP_VERSION}</h3><span>探索演出改修 / UI質感統一 / 試遊モード</span></div>
+        <div class="settings-version-plaque-v3"><small>ABYSS DOMINION</small><h3>REMAKE v${APP_VERSION}</h3><span>GDD v1.0同期 / 保存互換 / 製品モード</span></div>
         <button id="resetSave" class="settings-reset-v3">セーブデータを初期化</button>
       </div>
     </section>

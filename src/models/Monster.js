@@ -3,7 +3,8 @@ import{PERSONALITIES}from"../data/personalities.js?v=0.9.15-alpha.32-phase10-10-
 import{MONSTER_COLORS}from"../data/colors.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{normalizedResistances}from"../data/attributes.js?v=0.9.15-alpha.32-phase10-10-release-audit";
 import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=0.9.15-alpha.32-phase10-10-release-audit";
-import{TRUE_MAX_LEVEL}from"../core/config.js?v=1.7.6-cachefix";
+import{normalizePersistentAilments}from"../data/statusEffects.js?v=1.8.0-gdd-v1";
+import{TRUE_MAX_LEVEL}from"../core/config.js?v=1.8.0-gdd-v1";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -117,6 +118,7 @@ export function createMonster(speciesId,options={}){
     defeats:options.defeats??0,
     currentHp:options.currentHp??null,
     currentMp:options.currentMp??null,
+    ailments:normalizePersistentAilments(options.ailments),
     equippedSkills:Array.isArray(options.equippedSkills)?[...options.equippedSkills]:[]
   };
   if(options.totalExp!=null)applyTotalExperience(monster,options.totalExp);

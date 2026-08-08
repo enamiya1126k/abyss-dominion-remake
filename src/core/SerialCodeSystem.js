@@ -1,7 +1,7 @@
-import{createMonster,calculatedStats}from"../models/Monster.js?v=1.14.0-alpha124";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=1.8.0-gdd-v1";
 import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=1.14.0-alpha124";
 import{SPECIES}from"../data/species.js?v=1.9.0-monster-catalog";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=1.0.0";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=1.8.0-gdd-v1";
 
 const DEVICE_LEDGER_KEY="abyss-dominion-serial-ledger-v1";
 
