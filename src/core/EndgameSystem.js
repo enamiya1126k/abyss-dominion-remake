@@ -1,4 +1,4 @@
-import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.1.0-release";
+import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.2.0-release";
 
 export const TEAM_BATTLE_UNLOCK_FLOOR=100;
 export const EMERGENCY_UNLOCK_FLOOR=100;
@@ -129,12 +129,26 @@ export function recordManualEndgameClear(state,bossId,tierId,won){
  return manualEndgameTierStatus(state,bossId);
 }
 function enemy(speciesId,level,extra={}){return{speciesId,level,boss:false,equipped:false,gear:null,...extra}}
-export function teamBattleStageMultiplier(stage=1){const s=Math.max(1,Math.min(50,Math.floor(Number(stage)||1)));return Math.pow(1.075,s-1)*(1+Math.floor(s/10)*.35)}
-export function teamBattleRewardPreview(stage=1,floor=100){
- const s=Math.max(1,Math.min(50,Math.floor(Number(stage)||1))),scale=Math.pow(1.14,s-1),milestone=s%50===0?25:s%10===0?8:s%5===0?3:1;
- return{goldMultiplier:Math.max(4,Math.round(4*scale*milestone)),crystals:Math.max(1,Math.round(Math.pow(1.09,s-1)*(s%10===0?12:2))),guaranteedRarity:s>=50?"LR":s>=40?"UR":s>=25?"SSR":s>=10?"SR":null};
+export function teamBattleStageMultiplier(stage=1){
+ const s=Math.max(1,Math.floor(Number(stage)||1));
+ // 1〜49戦は編成を覚える助走。50戦からはエンドゲーム戦力を要求し、以後は無限に伸びる。
+ const pre50=Math.pow(1.082,Math.min(49,s)-1)*(1+Math.floor(Math.min(49,s)/10)*.42);
+ if(s<50)return pre50;
+ return pre50*85*Math.pow(1.19,s-50)*(1+Math.floor((s-50)/10)*.8);
 }
-export function createTeamBattleEncounter(state){const team=dailyTeamAttempts(state),stage=Math.max(1,team.stage||1),base=Math.max(10,Math.round((state.player?.maxFloor||100)*(.62+stage*.045))),pools=[["goblin_guard","goblin_shaman","orc","ogre"],["skeleton_guard","skeleton_archer","wraith","zombie"],["dire_wolf","bear","harpy","wyvern"],["stone_golem","clockwork","salamander","water_spirit"],["frost_slime","frost_dragon","water_spirit","harpy"],["dark_knight","wraith","angelic_orb","ancient_dragon"]],pool=pools[(stage-1)%pools.length],multiplier=teamBattleStageMultiplier(stage);return pool.map((id,i)=>enemy(id,base+i*2,{nameOverride:`試練 ${stage}・${i+1}`,teamBattle:true,statMultiplier:multiplier*(1+i*.06),trialElement:["earth","dark","wind","fire","ice","light"][(stage-1)%6]}))}
+export function teamBattleRewardPreview(stage=1,floor=100){
+ const s=Math.max(1,Math.floor(Number(stage)||1)),post50=s>=50?Math.pow(1.17,s-49):1,scale=Math.pow(1.145,Math.min(49,s)-1)*post50,milestone=s%50===0?60:s%10===0?14:s%5===0?4:1;
+ return{goldMultiplier:Math.max(4,Math.min(1e12,Math.round(4*scale*milestone))),crystals:Math.max(1,Math.min(1e9,Math.round(Math.pow(1.105,Math.min(49,s)-1)*post50*(s%10===0?18:3)))),guaranteedRarity:s>=50?"LR":s>=40?"UR":s>=25?"SSR":s>=10?"SR":null};
+}
+export function createTeamBattleEncounter(state){
+ const team=dailyTeamAttempts(state),stage=Math.max(1,Math.floor(team.stage||1)),base=Math.max(10,Math.round((state.player?.maxFloor||100)*(.62+stage*.045))),pools=[["goblin_guard","goblin_shaman","orc","ogre"],["skeleton_guard","skeleton_archer","wraith","zombie"],["dire_wolf","bear","harpy","wyvern"],["stone_golem","clockwork","salamander","water_spirit"],["frost_slime","frost_dragon","water_spirit","harpy"],["dark_knight","wraith","angelic_orb","ancient_dragon"]],element=["earth","dark","wind","fire","ice","light"][(stage-1)%6],multiplier=teamBattleStageMultiplier(stage);
+ if(stage<50){const pool=pools[(stage-1)%pools.length];return pool.map((id,i)=>enemy(id,base+i*2,{nameOverride:`試練 ${stage}・${i+1}`,teamBattle:true,statMultiplier:multiplier*(1+i*.06),trialElement:element}))}
+ const useTenGod=stage>=60&&Math.floor(stage/10)%2===0,ids=useTenGod?TEN_GOD_IDS:ABYSS_IDS,bossId=ids[(stage-50)%ids.length],boss=ENDGAME_BOSSES[bossId],level=Math.max(999,Math.round((state.player?.maxFloor||100)*1.4+(stage-50)*260)),supportIds=boss.support.slice(0,3);
+ return[
+  enemy(boss.speciesId,level,{boss:true,endgameBossId:boss.id,visualSpeciesId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈試練 ${stage}〉`,teamBattle:true,statMultiplier:multiplier*(useTenGod?.34:.48),trialElement:boss.element??element,uncapturable:true,bossPassive:boss.passive}),
+  ...supportIds.map((id,i)=>enemy(id,Math.max(1,level-35-i*18),{nameOverride:`${boss.faction==="tenGod"?"神兵":"深淵眷属"}・${i+1}`,teamBattle:true,endgameSupport:true,statMultiplier:multiplier*(.72+i*.09),trialElement:boss.element??element,uncapturable:true}))
+ ];
+}
 
 const SOLO_TRIALS=[...ABYSS_IDS,...TEN_GOD_IDS].map((bossId,index)=>({number:index+1,name:`${ENDGAME_BOSSES[bossId].name}の法廷`,bossIds:[bossId]}));
 export const ENDGAME_TRIALS=Object.freeze([
@@ -187,10 +201,10 @@ export function endgamePreludeOptions(boss){
  return ENDGAME_CHALLENGE_TIERS.map(tier=>({...tier,faction:boss?.faction??"abyss"}));
 }
 export const ENDGAME_CHALLENGE_TIERS=Object.freeze([
- {id:"projection50",title:"投影体 / 50%",form:"projection",percent:50,recommended:"Lv.999の通常装備",enemyMultiplier:.5,supportMultiplier:.5,fragmentReward:1},
- {id:"projection100",title:"投影体 / 100%",form:"projection",percent:100,recommended:"Lv.4,999の通常装備",enemyMultiplier:1,supportMultiplier:1,fragmentReward:3},
- {id:"manifest50",title:"顕現体 / 50%",form:"manifest",percent:50,recommended:"Lv.9,999のフル装備",enemyMultiplier:5,supportMultiplier:5,fragmentReward:5},
- {id:"manifest100",title:"顕現体 / 100%",form:"manifest",percent:100,recommended:"Lv.99,999のフル装備",enemyMultiplier:50,supportMultiplier:50,fragmentReward:10}
+ {id:"projection50",title:"投影体 / 50%",form:"projection",percent:50,level:999,recommended:"Lv.999の通常装備",enemyMultiplier:.5,supportMultiplier:.5,fragmentReward:1},
+ {id:"projection100",title:"投影体 / 100%",form:"projection",percent:100,level:4999,recommended:"Lv.4,999の通常装備",enemyMultiplier:1,supportMultiplier:1,fragmentReward:3},
+ {id:"manifest50",title:"顕現体 / 50%",form:"manifest",percent:50,level:9999,recommended:"Lv.9,999のフル装備",enemyMultiplier:5,supportMultiplier:5,fragmentReward:5},
+ {id:"manifest100",title:"顕現体 / 100%",form:"manifest",percent:100,level:99999,recommended:"Lv.99,999のフル装備",enemyMultiplier:50,supportMultiplier:50,fragmentReward:10}
 ]);
 export function resolveEndgamePrelude(state,bossId,choiceId){
  const boss=ENDGAME_BOSSES[bossId],option=endgamePreludeOptions(boss).find(x=>x.id===choiceId)??endgamePreludeOptions(boss)[0],e=normalizeEndgameState(state).emergency;
@@ -198,7 +212,7 @@ export function resolveEndgamePrelude(state,bossId,choiceId){
  return{...option,bossId,resultText:`${boss.name}――${option.title}の権能が解放された。`};
 }
 export function applyPreludeToEncounter(event,prelude){
- if(!event?.enemies||!prelude)return event;event.manifestation={rate:prelude.percent/100,label:prelude.form==="manifest"?"顕現体":"投影体",percent:prelude.percent};event.enemies=event.enemies.map((enemy,index)=>({...enemy,nameOverride:index===0?String(enemy.nameOverride??"").replace(/〈[^〉]+〉/,`〈${prelude.title}〉`):enemy.nameOverride,statMultiplier:(enemy.statMultiplier??1)*(index===0?(prelude.enemyMultiplier??1):(prelude.supportMultiplier??1)),powerRate:prelude.percent/100,manifestationLabel:prelude.title}));return event;
+ if(!event?.enemies||!prelude)return event;event.manifestation={rate:prelude.percent/100,label:prelude.form==="manifest"?"顕現体":"投影体",percent:prelude.percent};const exactLevel=Math.max(1,Math.floor(Number(prelude.level)||1));event.enemies=event.enemies.map((enemy,index)=>({...enemy,level:index===0?exactLevel:Math.max(1,exactLevel-37-index*13),nameOverride:index===0?String(enemy.nameOverride??"").replace(/〈[^〉]+〉/,`〈${prelude.title}〉`):enemy.nameOverride,statMultiplier:(enemy.statMultiplier??1)*(index===0?(prelude.enemyMultiplier??1):(prelude.supportMultiplier??1)),powerRate:prelude.percent/100,manifestationLabel:prelude.title}));return event;
 }
 
 

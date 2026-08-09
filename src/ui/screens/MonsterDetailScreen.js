@@ -1,13 +1,13 @@
-import{SPECIES}from"../../data/species.js?v=2.1.0-release";
-import{PERSONALITIES}from"../../data/personalities.js?v=2.1.0-release";
-import{MONSTER_COLORS}from"../../data/colors.js?v=2.1.0-release";
-import{ATTRIBUTES}from"../../data/attributes.js?v=2.1.0-release";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.1.0-release";
-import{endgameCharacter}from"../../data/endgameCharacters.js?v=2.1.0-release";
-import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=2.1.0-release";
-import{monsterVisual}from"../MonsterVisual.js?v=2.1.0-release";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.1.0-release";
-import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=2.1.0-release";
+import{SPECIES}from"../../data/species.js?v=2.2.0-release";
+import{PERSONALITIES}from"../../data/personalities.js?v=2.2.0-release";
+import{MONSTER_COLORS}from"../../data/colors.js?v=2.2.0-release";
+import{ATTRIBUTES}from"../../data/attributes.js?v=2.2.0-release";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.2.0-release";
+import{endgameCharacter}from"../../data/endgameCharacters.js?v=2.2.0-release";
+import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=2.2.0-release";
+import{monsterVisual}from"../MonsterVisual.js?v=2.2.0-release";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.2.0-release";
+import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=2.2.0-release";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}

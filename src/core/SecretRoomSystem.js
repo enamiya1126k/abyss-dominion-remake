@@ -1,13 +1,13 @@
-import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.1.0-release";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.1.0-release";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.1.0-release";
-import{SPECIES}from"../data/species.js?v=2.1.0-release";
-import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.1.0-release";
-import{equipmentStatLabel}from"../data/equipment.js?v=2.1.0-release";
-import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.1.0-release";
-import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.1.0-release";
-import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.1.0-release";
-import{MONSTER_STAR_MAX,premiumCrystalCost}from"./config.js?v=2.1.0-release";
+import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.2.0-release";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.2.0-release";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.2.0-release";
+import{SPECIES}from"../data/species.js?v=2.2.0-release";
+import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.2.0-release";
+import{equipmentStatLabel}from"../data/equipment.js?v=2.2.0-release";
+import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.2.0-release";
+import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.2.0-release";
+import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.2.0-release";
+import{MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.2.0-release";
 
 export const SECRET_ROOM_CHANCE=.09;
 export const CASINO_CRYSTAL_COST=premiumCrystalCost(10);
@@ -311,7 +311,7 @@ export function buyDarkMarketOffer(state,offerId){
  if(!offer)return{ok:false,message:"商品が見つかりません。"};
  if(offer.sold)return{ok:false,message:"この商品は売り切れです。"};
  if((state.player?.gold??0)<offer.price)return{ok:false,message:`GOLDが足りません。必要 ${offer.price.toLocaleString()}G`};
- if(offer.kind==="monster"&&(state.monsters?.length??0)>=500)return{ok:false,message:"モンスター所持数が500体で満杯です。"};
+ if(offer.kind==="monster"&&(state.monsters?.length??0)>=MONSTER_STORAGE_CAP)return{ok:false,message:`モンスター所持数が${MONSTER_STORAGE_CAP}体で満杯です。`};
  if(offer.kind==="equipment"&&(state.equipment?.length??0)>=EQUIPMENT_LIMIT&&(state.reserveEquipment?.length??0)>=RESERVE_LIMIT)return{ok:false,message:"装備所持品と予備BOXが満杯です。先に整理してください。"};
  const payload=offer.payload;if(!payload)return{ok:false,message:"商品のデータが壊れています。"};
  state.player.gold-=offer.price;state.records??={};state.records.purchases=(state.records.purchases??0)+1;

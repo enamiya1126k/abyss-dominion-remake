@@ -1,4 +1,4 @@
-import{MONSTER_SPRITE_FOLDERS}from"../data/monsterCatalog.js?v=2.1.0-release";
+import{MONSTER_SPRITE_FOLDERS}from"../data/monsterCatalog.js?v=2.2.0-release";
 
 const IDLE_FRAMES=Object.freeze(["idle1","idle2","idle3","idle2"]);
 const VALID_FRAMES=new Set(["idle","idle1","idle2","idle3","walk1","walk2","attack","damage","down"]);

@@ -1,4 +1,4 @@
-import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=2.1.0-release";
+import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=2.2.0-release";
 export function SettingsScreen(state){
   const redeemedCount=Object.keys(state.serialCodes?.redeemed??{}).length;
   return`
@@ -18,7 +18,7 @@ export function SettingsScreen(state){
           <button id="toggleMinimap" class="metal-toggle-v3 ${state.settings.minimapVisible?"on":"off"}" aria-pressed="${state.settings.minimapVisible}"><i></i><span>${state.settings.minimapVisible?"ON":"OFF"}</span></button>
         </div>
         <div class="settings-control-card-v3">
-          <div><small>ORIGINAL PROCEDURAL AUDIO</small><b>BGM・効果音</b><em>外部音源を使わない本作専用音響</em></div>
+          <div><small>ABYSS DOMINION ORIGINAL SOUNDTRACK</small><b>BGM・効果音</b><em>場面別BGMと本作専用効果音</em></div>
           <button id="toggleAudio" class="metal-toggle-v3 ${state.settings.audioEnabled!==false?"on":"off"}" aria-pressed="${state.settings.audioEnabled!==false}"><i></i><span>${state.settings.audioEnabled!==false?"ON":"OFF"}</span></button>
         </div>
         <div class="settings-audio-mix-v3">

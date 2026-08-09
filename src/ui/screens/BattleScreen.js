@@ -1,10 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.1.0-release";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.1.0-release";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.1.0-release";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.1.0-release";
-import{monsterVisual}from"../MonsterVisual.js?v=2.1.0-release";
-import{pixelIcon}from"../components/GameChrome.js?v=2.1.0-release";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.1.0-release";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.2.0-release";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.2.0-release";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.2.0-release";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.2.0-release";
+import{monsterVisual}from"../MonsterVisual.js?v=2.2.0-release";
+import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.2.0-release";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.2.0-release";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.2.0-release";
 
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
@@ -21,11 +22,12 @@ function renderEnemies(battle,enemies,target){
   const badge=enemy.boss?'<span class="boss-badge">BOSS</span>':enemy.elite?`<span class="elite-badge">${enemy.eliteAffixIcon??"🜲"} ELITE・${enemy.eliteAffixName??"変異"}</span>`:"";const danger="";
   const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
   const line=index<2?"front-line":"rear-line";
-  return `<button id="enemy-${enemy.id}" data-enemy-target="${enemy.id}" style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${enemy.boss?"boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${target?.id===enemy.id?"targeted":""}">
+  const dead=enemy.hp<=0,element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral";
+  return `<button id="enemy-${enemy.id}" ${dead?'disabled aria-hidden="true"':`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${enemy.boss?"boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
    <div class="side-unit-sprite enemy-orb">${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.hp<=0?"down":"idle",className:"battle-enemy-visual"})}</div>
    <div class="side-unit-card enemy-info">
-    <div class="side-unit-name enemy-name">${badge}${danger}<b>${enemy.name}</b><small>Lv.${enemy.level}</small></div>
+    <div class="side-unit-name enemy-name">${badge}${danger}<b>${enemy.name}</b><small>Lv.${enemy.level}</small><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="side-unit-intent enemy-intent"><span>次の行動</span><b>${enemy.intent}${enemy.enraged?"・狂暴化":""}</b></div>
     <div class="battle-bar enemy-hp"><span class="bar-label">HP ${enemy.hp}/${enemy.maxHp}</span><i style="width:${hpRate}%"></i></div>
     ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
@@ -40,12 +42,12 @@ function renderParty(battle,actor){
  const stats=calculatedStats(m),mp=maxMp(m),need=expNeedFor(m);
   const ailments=allyAilmentsFor(battle,m.id),effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" ${ailments.length||effects.length?"":'aria-hidden="true"'}>${ailments.map(e=>`<span class="status-chip ${e.id}">${statusLabel(e)}・持続</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${({taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",regen:"再生",lifeSteal:"吸収"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`;
   const hpRate=Math.max(0,Math.min(100,m.currentHp/Math.max(1,stats.hp)*100)),mpRate=Math.max(0,Math.min(100,m.currentMp/Math.max(1,mp)*100));
-  const line=index<2?"front-line":"rear-line";
+  const line=index<2?"front-line":"rear-line",element=m.attribute??battle.species?.[m.speciesId]?.element??"neutral";
   return `<button id="ally-${m.id}" data-battle-detail="${m.id}" style="--formation-index:${index};--unit-color:${colorValue(m)}" class="battle-unit combatant side-battle-unit formation-slot-${index+1} ${line} ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
    <span class="active-turn-marker" aria-hidden="true">TURN</span>
    <div class="side-unit-sprite unit-orb">${monsterVisual(m,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual"})}</div>
    <div class="side-unit-card ally-info">
-    <div class="side-unit-name unit-head"><b>${displayName(m)}</b><small>Lv.${m.level}</small></div>
+    <div class="side-unit-name unit-head"><b>${displayName(m)}</b><small>Lv.${m.level}</small><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="battle-bar ally"><span class="bar-label">HP ${m.currentHp}/${stats.hp}</span><i style="width:${hpRate}%"></i></div>
     <div class="battle-bar mp"><span class="bar-label">MP ${m.currentMp}/${mp}</span><i style="width:${mpRate}%"></i></div>
     <small class="battle-mini-stats">物攻 ${stats.atk}　魔攻 ${stats.matk??stats.atk}<br>物防 ${stats.def}　魔防 ${stats.mdef??stats.def}　SPD ${stats.spd}</small>${effectHtml}
@@ -66,19 +68,19 @@ function renderSkills(battle,actor,skills){
 
 function renderItems(inventory){
  const defs=[
-  ["potions",pixelIcon("potion"),"薬草","単体HP100＋最大HP10%回復"],
-  ["highPotions",pixelIcon("potion"),"ハイポーション","単体HP300＋最大HP25%回復"],
-  ["partyPotions",pixelIcon("potion"),"全体回復薬","生存者全員HP50＋最大HP7%回復"],
-  ["manaPotions",pixelIcon("crystal"),"マナポーション","単体MP30＋最大MP10%回復"],
-  ["highManaPotions",pixelIcon("crystal"),"ハイマナポーション","単体MP100＋最大MP25%回復"],
-  ["partyManaPotions",pixelIcon("crystal"),"全体マナポーション","生存者全員MP30＋最大MP7%回復"],
-  ["fullManaPotions",pixelIcon("crystal"),"精霊の雫","単体MP全回復"],
-  ["partyFullManaPotions",pixelIcon("crystal"),"深淵の霊水","生存者全員MP全回復"],
-  ["reviveLeaves",pixelIcon("growth"),"命の葉","戦闘不能者をHP30%で蘇生"],
-  ["statusCures",pixelIcon("potion"),"万能薬・単体","単体の状態異常解除"],
-  ["partyStatusCures",pixelIcon("potion"),"万能薬・全体","全員の状態異常解除"],
-  ["fullHeals",pixelIcon("potion"),"完全回復薬・単体","HP・MP・異常を全回復"],
-  ["partyFullHeals",pixelIcon("potion"),"完全回復薬・全体","全員を完全回復"]
+  ["potions",itemIcon("potions"),"薬草","単体HP100＋最大HP10%回復"],
+  ["highPotions",itemIcon("highPotions"),"ハイポーション","単体HP300＋最大HP25%回復"],
+  ["partyPotions",itemIcon("partyPotions"),"全体回復薬","生存者全員HP50＋最大HP7%回復"],
+  ["manaPotions",itemIcon("manaPotions"),"マナポーション","単体MP30＋最大MP10%回復"],
+  ["highManaPotions",itemIcon("highManaPotions"),"ハイマナポーション","単体MP100＋最大MP25%回復"],
+  ["partyManaPotions",itemIcon("partyManaPotions"),"全体マナポーション","生存者全員MP30＋最大MP7%回復"],
+  ["fullManaPotions",itemIcon("fullManaPotions"),"精霊の雫","単体MP全回復"],
+  ["partyFullManaPotions",itemIcon("partyFullManaPotions"),"深淵の霊水","生存者全員MP全回復"],
+  ["reviveLeaves",itemIcon("reviveLeaves"),"命の葉","戦闘不能者をHP30%で蘇生"],
+  ["statusCures",itemIcon("statusCures"),"万能薬・単体","単体の状態異常解除"],
+  ["partyStatusCures",itemIcon("partyStatusCures"),"万能薬・全体","全員の状態異常解除"],
+  ["fullHeals",itemIcon("fullHeals"),"完全回復薬・単体","HP・MP・異常を全回復"],
+  ["partyFullHeals",itemIcon("partyFullHeals"),"完全回復薬・全体","全員を完全回復"]
  ];
  const rows=defs.filter(d=>(inventory[d[0]]??0)>0).map(([id,icon,name,desc])=>`<button data-battle-item="${id}"><span><b>${icon} ${name}</b><small>${desc}</small></span><strong>×${inventory[id]??0}</strong></button>`).join("");
  const body=rows||'<div class="empty">使用できるアイテムがありません</div>';
@@ -98,16 +100,19 @@ function renderCommands(battle,actor,current,enemies,target,inventory,skills){
 }
 
 export function BattleScreen(battle,inventory,settings,floor=1){
- const actor=currentAlly(battle),current=currentTurnEntry(battle),enemies=aliveEnemies(battle),target=selectedEnemy(battle),skills=actor?learnedSkills(actor):[];
+ const actor=currentAlly(battle),current=currentTurnEntry(battle),livingEnemies=aliveEnemies(battle),enemies=battle.enemies??[],target=selectedEnemy(battle),skills=actor?learnedSkills(actor):[];
  const special=battle.specialBattle?`<div class="special-battle-strip ${battle.specialBattleType}"><b>${battle.specialTitle??"SPECIAL BATTLE"}</b><small>${battle.specialSubtitle??"敗北ペナルティなし"}</small></div>`:"";
  const floorBand=Math.max(1,Math.min(20,Math.floor((Math.max(1,Number(floor)||1)-1)/50)+1));
  const speed=normalizeBattleSpeed(settings.battleSpeed),scaled=ms=>`${Math.max(1,Math.round(ms/speed))}ms`;
  const timingStyle=`--battle-lunge:${scaled(220)};--battle-skill-lunge:${scaled(300)};--battle-hit:${scaled(260)};--battle-critical-hit:${scaled(300)};--battle-defeat:${scaled(500)};--battle-float:${scaled(550)};--battle-banner-in:${scaled(280)};--battle-banner-out:${scaled(220)};--battle-flash:${scaled(380)};--battle-particle:${scaled(720)}`;
- return `<section class="battle-screen side-battle-v2 ${battle.auto?"auto-mode":"manual-mode"} ${battle.specialBattle?"special-battle":""}" data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}">${special}
+ const theme=String(battle.battleTheme??"default").replace(/[^a-z0-9-]/gi,"");
+ const biomeBadge=battle.biomeBattle?`<div class="battle-biome-badge" style="--biome-accent:${battle.biomeBattle.accent}"><b>${battle.biomeBattle.name}</b><small>適性 +22% / 不適性 −16%</small></div>`:"";
+ return `<section class="battle-screen side-battle-v2 battle-theme-${theme} ${battle.auto?"auto-mode":"manual-mode"} ${battle.specialBattle?"special-battle":""}" data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}">${special}
   <div class="battle-header"><div class="round-label"><small>ROUND</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}F・ENCOUNTER`}</b><small>${battle.auto?"FULL AUTO":"COMMAND BATTLE"}</small></div><button id="toggleBattleAuto" class="${battle.auto?"enabled":""}"><span>AUTO</span><b>${battle.auto?"ON":"OFF"}</b></button><button id="battleSpeed">×${speed}</button>${battle.specialBattle?`<button disabled>逃走不可</button>`:`<button id="escapeBattle">逃げる</button>`}</div>
   <div class="turn-order"><span class="turn-order-title">行動順</span>${renderTurnOrder(battle)}</div>
   <div class="battle-arena side-battle-arena multi-enemy">
    <div class="battle-stage-vignette" aria-hidden="true"></div>
+   ${biomeBadge}
    <span class="formation-label party-label">ALLY　<span>後衛 ← → 前衛</span></span><span class="formation-label enemy-label"><span>前衛 ← → 後衛</span>　ENEMY</span>
    <div class="battle-party side-party">${renderParty(battle,actor)}</div>
    <div class="battle-clash-line" aria-hidden="true"><span>VS</span></div>
@@ -115,7 +120,7 @@ export function BattleScreen(battle,inventory,settings,floor=1){
    ${battle.auto?'<div class="auto-battle-notice"><b>FULL AUTO</b><small>戦場をタップで手動へ</small></div>':""}
    <div id="battleFxLayer" class="battle-fx-layer"></div>
   </div>
-  ${renderCommands(battle,actor,current,enemies,target,inventory,skills)}
+  ${renderCommands(battle,actor,current,livingEnemies,target,inventory,skills)}
   <div class="battle-log">${(battle.log??[]).map(line=>`<div>${line}</div>`).join("")}</div>
  </section>`;
 }

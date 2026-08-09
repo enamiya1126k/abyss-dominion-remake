@@ -1,11 +1,11 @@
-import{APP_VERSION}from"../../core/config.js?v=2.1.0-release";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=2.1.0-release";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.1.0-release";
-import{ENDGAME_BOSSES,ENDGAME_TRIALS}from"../../core/EndgameSystem.js?v=2.1.0-release";
-import{SPECIES}from"../../data/species.js?v=2.1.0-release";
-import{monsterVisual}from"../MonsterVisual.js?v=2.1.0-release";
-import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.1.0-release";
-import{pixelIcon,resourceHud}from"../components/GameChrome.js?v=2.1.0-release";
+import{APP_VERSION}from"../../core/config.js?v=2.2.0-release";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=2.2.0-release";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.2.0-release";
+import{ENDGAME_BOSSES,ENDGAME_TRIALS}from"../../core/EndgameSystem.js?v=2.2.0-release";
+import{SPECIES}from"../../data/species.js?v=2.2.0-release";
+import{monsterVisual}from"../MonsterVisual.js?v=2.2.0-release";
+import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.2.0-release";
+import{pixelIcon,resourceHud}from"../components/GameChrome.js?v=2.2.0-release";
 
 function partyCard(monster,index){
  const stats=calculatedStats(monster),hp=Math.max(0,Math.min(stats.hp,monster.currentHp??stats.hp)),mpMax=maxMp(monster),mp=Math.max(0,Math.min(mpMax,monster.currentMp??mpMax)),species=SPECIES[monster.speciesId]??{};

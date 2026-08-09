@@ -1,10 +1,10 @@
-import{createEquipment}from"../models/Equipment.js?v=2.1.0-release";
-import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.1.0-release";
-import{abyssEquipmentRarityBonus}from"./AbyssSkillTreeSystem.js?v=2.1.0-release";
-import{modifiedGoldReward}from"./GoldRewardSystem.js?v=2.1.0-release";
-import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.1.0-release";
+import{createEquipment}from"../models/Equipment.js?v=2.2.0-release";
+import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.2.0-release";
+import{abyssEquipmentRarityBonus}from"./AbyssSkillTreeSystem.js?v=2.2.0-release";
+import{modifiedGoldReward}from"./GoldRewardSystem.js?v=2.2.0-release";
+import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.2.0-release";
 
-export{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.1.0-release";
+export{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.2.0-release";
 
 const EMPTY_MANUAL={active:false,startFloor:1,lastFloor:1,floorsCleared:0,pendingGold:0,startedAt:null};
 const IDLE_FLOOR_INTERVAL_MS=5*60*1000;

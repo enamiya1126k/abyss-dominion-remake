@@ -1,10 +1,10 @@
-import{SPECIES}from"../data/species.js?v=2.1.0-release";
-import{PERSONALITIES}from"../data/personalities.js?v=2.1.0-release";
-import{MONSTER_COLORS}from"../data/colors.js?v=2.1.0-release";
-import{normalizedResistances}from"../data/attributes.js?v=2.1.0-release";
-import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.1.0-release";
-import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.1.0-release";
-import{TRUE_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.1.0-release";
+import{SPECIES}from"../data/species.js?v=2.2.0-release";
+import{PERSONALITIES}from"../data/personalities.js?v=2.2.0-release";
+import{MONSTER_COLORS}from"../data/colors.js?v=2.2.0-release";
+import{normalizedResistances}from"../data/attributes.js?v=2.2.0-release";
+import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.2.0-release";
+import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.2.0-release";
+import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.2.0-release";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -91,7 +91,9 @@ export function createMonster(speciesId,options={}){
   if(!species)throw new Error(`Unknown species: ${speciesId}`);
   const personalityId=options.personalityId??randomKey(PERSONALITIES);
   const colorId=options.colorId??MONSTER_COLORS[Math.floor(Math.random()*MONSTER_COLORS.length)].id;
-  const level=Math.max(1,Math.min(TRUE_MAX_LEVEL,Math.floor(Number(options.level)||1)));
+  const authoredEndgame=Boolean(options.allowEndgameLevel||options.isContractedEndgame||options.endgameBossId);
+  const levelCap=authoredEndgame?ENDGAME_MAX_LEVEL:TRUE_MAX_LEVEL;
+  const level=Math.max(1,Math.min(levelCap,Math.floor(Number(options.level)||1)));
   const monster={
     id:uid(),
     speciesId,
@@ -220,8 +222,10 @@ export function calculatedStats(monster){
   if(trait.mods.crit)result.crit+=trait.mods.crit;
   if(syn.atk){result.atk=Math.floor(result.atk*(1+syn.atk));result.matk=Math.floor(result.matk*(1+syn.atk))}
   if(syn.def){result.def=Math.floor(result.def*(1+syn.def));result.mdef=Math.floor(result.mdef*(1+syn.def))}
+  if(syn.hp)result.hp=Math.floor(result.hp*(1+syn.hp));
   if(syn.spd)result.spd=Math.floor(result.spd*(1+syn.spd));
   if(syn.crit)result.crit+=syn.crit;
+  if(syn.evasion)result.evasion+=syn.evasion;
   for(const bonus of activeSeriesBonuses(monster._seriesCounts)){if(bonus.effect.atk){result.atk=Math.floor(result.atk*(1+bonus.effect.atk));result.matk=Math.floor(result.matk*(1+bonus.effect.atk))}if(bonus.effect.def){result.def=Math.floor(result.def*(1+bonus.effect.def));result.mdef=Math.floor(result.mdef*(1+bonus.effect.def))}if(bonus.effect.hp)result.hp=Math.floor(result.hp*(1+bonus.effect.hp));if(bonus.effect.spd)result.spd=Math.floor(result.spd*(1+bonus.effect.spd));if(bonus.effect.crit)result.crit+=bonus.effect.crit;if(bonus.effect.evasion)result.evasion+=bonus.effect.evasion;}
   const mastery=monster._seriesMasteryBonus??{};if(mastery.hp)result.hp=Math.floor(result.hp*(1+mastery.hp));if(mastery.atk){result.atk=Math.floor(result.atk*(1+mastery.atk));result.matk=Math.floor(result.matk*(1+mastery.atk))}if(mastery.def){result.def=Math.floor(result.def*(1+mastery.def));result.mdef=Math.floor(result.mdef*(1+mastery.def))}if(mastery.spd)result.spd=Math.floor(result.spd*(1+mastery.spd));if(mastery.crit)result.crit+=mastery.crit;
   const abyss=monster._abyssSkillEffects??{};

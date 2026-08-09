@@ -7,24 +7,24 @@ import{
  EQUIPMENT_SLOT_ORDER,
  equipmentSubslotLabel,
  compatibleSubslots
-}from"../../data/equipment.js?v=2.1.0-release";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=2.1.0-release";
-import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.1.0-release";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.1.0-release";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.1.0-release";
-import{ATTRIBUTES}from"../../data/attributes.js?v=2.1.0-release";
-import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=2.1.0-release";
-import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=2.1.0-release";
-import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=2.1.0-release";
-import{SPECIES}from"../../data/species.js?v=2.1.0-release";
-import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=2.1.0-release";
-import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=2.1.0-release";
-import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=2.1.0-release";
-import{monsterVisual}from"../MonsterVisual.js?v=2.1.0-release";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.1.0-release";
-import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.1.0-release";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.1.0-release";
-import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.1.0-release";
+}from"../../data/equipment.js?v=2.2.0-release";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=2.2.0-release";
+import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.2.0-release";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.2.0-release";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.2.0-release";
+import{ATTRIBUTES}from"../../data/attributes.js?v=2.2.0-release";
+import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=2.2.0-release";
+import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=2.2.0-release";
+import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=2.2.0-release";
+import{SPECIES}from"../../data/species.js?v=2.2.0-release";
+import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=2.2.0-release";
+import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=2.2.0-release";
+import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=2.2.0-release";
+import{monsterVisual}from"../MonsterVisual.js?v=2.2.0-release";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.2.0-release";
+import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.2.0-release";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.2.0-release";
+import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.2.0-release";
 
 const EQUIPMENT_SCREEN_SLOT_LABELS={
  weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"
@@ -218,7 +218,7 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
     <div class="equipment-target-list">${party.map(monster=>{
      const monsterSpecies=SPECIES[monster.speciesId]??{};
      const monsterAttributeId=monster.attribute??monsterSpecies.element??"neutral",monsterAttribute=ATTRIBUTES[monsterAttributeId]??{name:"不明"};
-     return`<button data-equipment-target="${monster.id}" class="${monster.id===target.id?"active":""}">${monsterVisual(monster,monsterSpecies.emoji??"MONSTER",{className:"equipment-tab-monster-visual"})}${coloredMonsterName(monster)}<small>${attributeVisual(monsterAttributeId,{label:`${monsterAttribute.name}属性`})}${monsterAttribute.name}・Lv.${monster.level}　★${monster.stars??1}　+${monster.plus??0}</small></button>`;
+     return`<button data-equipment-target="${monster.id}" class="${monster.id===target.id?"active":""}"><span class="equipment-target-portrait"><i>${attributeVisual(monsterAttributeId,{label:`${monsterAttribute.name}属性`})}</i>${monsterVisual(monster,monsterSpecies.emoji??"MONSTER",{className:"equipment-tab-monster-visual"})}</span>${coloredMonsterName(monster)}<small>${monsterAttribute.name}・Lv.${monster.level}　★${monster.stars??1}　+${monster.plus??0}</small></button>`;
     }).join("")}</div>
     <div class="equipment-loadout-workbench" aria-label="装備中の6枠">
      <div class="equipment-slot-rail left">

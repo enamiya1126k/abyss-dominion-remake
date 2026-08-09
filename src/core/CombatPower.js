@@ -1,5 +1,5 @@
-import{calculatedStats}from"../models/Monster.js?v=2.1.0-release";
-import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=2.1.0-release";
+import{calculatedStats}from"../models/Monster.js?v=2.2.0-release";
+import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=2.2.0-release";
 
 /**
  * 表示用の戦力値。
@@ -20,7 +20,11 @@ export function monsterCombatPower(monster){
     Math.max(0,s.spd)*2+
     Math.max(0,s.crit)*12+
     Math.max(0,s.evasion)*10;
-  return Math.max(1,Math.round(raw*COMBAT_POWER_DISPLAY_SCALE));
+  // Actual stats are deliberately allowed to become enormous in the last
+  // world. A fractional power keeps the rating readable without weakening a
+  // single battle stat. It also prevents one contracted god from turning an
+  // early party record into a ten-digit value.
+  return Math.max(1,Math.round(Math.pow(Math.max(1,raw),.32)*COMBAT_POWER_DISPLAY_SCALE));
 }
 
 export function partyCombatPower(state){
@@ -32,7 +36,7 @@ export function partyCombatPower(state){
     .reduce((total,monster)=>total+monsterCombatPower(monster),0);
 }
 
-export function formatCombatPower(value,{scientificAt=1_000_000_000_000}={}){
+export function formatCombatPower(value,{scientificAt=1_000_000_000}={}){
   const number=Math.max(0,Math.round(Number(value)||0));
   if(number>=scientificAt)return number.toExponential(3).replace("e+0","e+").replace("e-0","e-");
   return number.toLocaleString("ja-JP");
@@ -42,18 +46,31 @@ export function normalizeCombatPowerRecord(state,fallbackPower=0){
   state.records??={};
   const current=Math.max(0,Math.round(Number(fallbackPower)||0));
   const source=state.records.combatPower&&typeof state.records.combatPower==="object"&&!Array.isArray(state.records.combatPower)?state.records.combatPower:{};
-  const legacyScale=Number(source.scaleVersion)>=2?1:COMBAT_POWER_DISPLAY_SCALE;
-  const highest=Math.max(0,Math.round(Number(source.highest)||0))*legacyScale;
-  const previous=Math.max(0,Math.round(Number(source.previous)||0))*legacyScale;
+  const version=Number(source.scaleVersion)||0;
+  const convert=value=>{
+    const number=Math.max(0,Number(value)||0);
+    if(version>=4)return Math.round(number);
+    // v3 was already compressed with raw^.4 * 200. Reconstruct the raw
+    // comparison score once, then apply the tighter v4 scale.
+    if(version===3){
+      const raw=Math.pow(number/200,2.5);
+      return raw?Math.max(1,Math.round(Math.pow(Math.max(1,raw),.32)*COMBAT_POWER_DISPLAY_SCALE)):0;
+    }
+    // v2 ratings were the uncompressed raw score multiplied by 1000.
+    const raw=version>=2?number/1000:number;
+    return raw?Math.max(1,Math.round(Math.pow(Math.max(1,raw),.32)*COMBAT_POWER_DISPLAY_SCALE)):0;
+  };
+  const highest=convert(source.highest);
+  const previous=convert(source.previous);
   const history=(Array.isArray(source.history)?source.history:[]).filter(entry=>entry&&typeof entry==="object").map(entry=>({
-    power:Math.max(0,Math.round(Number(entry.power)||0))*legacyScale,
-    previous:Math.max(0,Math.round(Number(entry.previous)||0))*legacyScale,
-    delta:Math.round(Number(entry.delta)||0)*legacyScale,
+    power:convert(entry.power),
+    previous:convert(entry.previous),
+    delta:convert(entry.power)-convert(entry.previous),
     floor:Math.max(1,Math.round(Number(entry.floor)||1)),
     at:typeof entry.at==="string"?entry.at:new Date(0).toISOString()
   })).filter(entry=>entry.power>0).slice(-20);
   state.records.combatPower={
-    scaleVersion:2,
+    scaleVersion:4,
     highest:highest||current,
     previous:previous||highest||current,
     updatedAt:typeof source.updatedAt==="string"?source.updatedAt:null,

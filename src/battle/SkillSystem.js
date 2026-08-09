@@ -1,6 +1,6 @@
-import{SPECIES}from"../data/species.js?v=2.1.0-release";
-import{SKILLS}from"../data/skills.js?v=2.1.0-release";
-import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.1.0-release";
+import{SPECIES}from"../data/species.js?v=2.2.0-release";
+import{SKILLS}from"../data/skills.js?v=2.2.0-release";
+import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.2.0-release";
 
 const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
 const ROLE_POOLS={
@@ -177,7 +177,12 @@ function phase2Decorate(species,skills){
 for(const species of Object.values(SPECIES))GENERATED[species.id]=phase2Decorate(species,GENERATED[species.id]);
 const BY_ID=new Map(Object.values(GENERATED).flat().map(skill=>[skill.id,skill]));
 
-export function maxMp(monster){const number=(value,fallback=0)=>Number.isFinite(Number(value))?Number(value):fallback,species=SPECIES[monster.speciesId],base=number(species?.maxMp,15),raw=base+(Math.max(1,number(monster.level,1))-1)*.65+(Math.max(1,number(monster.rank,1))-1)*5+(Math.max(1,number(monster.stars,1))-1)+number(monster._equipmentStats?.mp),pct=number(monster._equipmentAffixes?.mpPct);return Math.max(0,Math.floor(raw*(1+pct/100)))}
+export function maxMp(monster){
+ const number=(value,fallback=0)=>Number.isFinite(Number(value))?Number(value):fallback,species=SPECIES[monster.speciesId]??{},level=Math.max(1,number(monster.level,1)),rank=Math.max(1,number(monster.rank,1)),stars=Math.max(1,number(monster.stars,1)),role=String(species.role??"");
+ const caster=["magic","support","healer","controller","debuffer","poison","burner"].some(value=>role.includes(value)),tank=["tank","guard","defense"].some(value=>role.includes(value));
+ const base=Math.max(35,number(species.maxMp,15)+(caster?55:tank?25:38)),growth=(caster?2.4:tank?1.35:1.75)*Math.pow(level,.72),rarityBonus=(rank-1)*18+(stars-1)*5,endgame=monster.endgameFaction==="tenGod"?4:monster.endgameFaction==="abyss"?2.4:1,raw=(base+growth+rarityBonus)*endgame+number(monster._equipmentStats?.mp),pct=number(monster._equipmentAffixes?.mpPct);
+ return Math.max(0,Math.floor(raw*(1+pct/100)));
+}
 export function effectiveSkillMpCost(monster,skill){const source=Number(monster?._equipmentAffixes?.mpCostReduction??0),reduction=Math.min(50,Number.isFinite(source)?Math.max(0,source):0),base=Number(skill?.mp??0);return Math.max(0,Math.ceil((Number.isFinite(base)?base:0)*(1-reduction/100)))}
 export function allSpeciesSkills(speciesId){return GENERATED[speciesId]??[]}
 export function allLearnedSkills(monster){const source=monster?.endgameBossId?endgameSkills(monster.endgameBossId):allSpeciesSkills(monster.speciesId);return source.filter(skill=>monster.level>=(skill.unlock?.value??1))}

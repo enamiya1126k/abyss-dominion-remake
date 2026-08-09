@@ -1,8 +1,8 @@
-import{SPECIES}from"../../data/species.js?v=2.1.0-release";
-import{displayName}from"../../models/Monster.js?v=2.1.0-release";
-import{allSpeciesSkills,allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=2.1.0-release";
-import{monsterVisual}from"../MonsterVisual.js?v=2.1.0-release";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=2.1.0-release";
+import{SPECIES}from"../../data/species.js?v=2.2.0-release";
+import{displayName}from"../../models/Monster.js?v=2.2.0-release";
+import{allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=2.2.0-release";
+import{monsterVisual}from"../MonsterVisual.js?v=2.2.0-release";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=2.2.0-release";
 
 const ROLE_LABELS={
  tank:"前衛・守護",guard:"前衛・守護",defense:"前衛・守護",
@@ -42,7 +42,7 @@ export function SkillScreen(state,selectedId){
  if(!monster)return`<section class="screen v2-screen">${resourceHud(state,{backId:"backSkillHome",title:"スキル設定"})}<div class="page"><p>モンスターがいません。</p></div>${bottomNav("skills")}</section>`;
  normalizeSkillLoadout(monster);
  const species=SPECIES[monster.speciesId]??{},rarity=monster.summonTier??monster.summonRarity??species.rarity??"N";
- const learned=allLearnedSkills(monster),all=allSpeciesSkills(monster.speciesId);
+ const learned=allLearnedSkills(monster),all=learned;
  const slots=Array.from({length:4},(_,index)=>{
   const id=monster.equippedSkills?.[index];
   return skillSlot(monster,all.find(skill=>skill.id===id),index);

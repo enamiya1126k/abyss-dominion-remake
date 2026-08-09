@@ -1,7 +1,8 @@
-import{createMonster,calculatedStats}from"../models/Monster.js?v=2.1.0-release";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.1.0-release";
-import{SPECIES}from"../data/species.js?v=2.1.0-release";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.1.0-release";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=2.2.0-release";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.2.0-release";
+import{SPECIES}from"../data/species.js?v=2.2.0-release";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.2.0-release";
+import{MONSTER_STORAGE_CAP}from"./config.js?v=2.2.0-release";
 
 const DEVICE_LEDGER_KEY="abyss-dominion-serial-ledger-v1";
 
@@ -62,7 +63,7 @@ function loadDeviceLedger(){
 }
 
 function monsterCapacityReached(state){
-  return(state.monsters?.length??0)>=500;
+  return(state.monsters?.length??0)>=MONSTER_STORAGE_CAP;
 }
 
 function prepareSkillMastery(monster,level){
