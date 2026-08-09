@@ -1,13 +1,13 @@
-import{APP_VERSION}from"../../core/config.js?v=2.2.0-release";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=2.2.0-release";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.2.0-release";
-import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=2.2.0-release";
-import{worldPresentationForFloor}from"../../core/WorldSystem.js?v=2.2.0-release";
-import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.2.0-release";
-import{manualReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.2.0-release";
-import{monsterVisual}from"../MonsterVisual.js?v=2.2.0-release";
-import{SPECIES}from"../../data/species.js?v=2.2.0-release";
-import{resourceHud,pixelIcon}from"../components/GameChrome.js?v=2.2.0-release";
+import{APP_VERSION}from"../../core/config.js?v=2.2.1-hotfix";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=2.2.1-hotfix";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.2.1-hotfix";
+import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=2.2.1-hotfix";
+import{worldPresentationForFloor}from"../../core/WorldSystem.js?v=2.2.1-hotfix";
+import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.2.1-hotfix";
+import{manualReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.2.1-hotfix";
+import{monsterVisual}from"../MonsterVisual.js?v=2.2.1-hotfix";
+import{SPECIES}from"../../data/species.js?v=2.2.1-hotfix";
+import{resourceHud,pixelIcon}from"../components/GameChrome.js?v=2.2.1-hotfix";
 
 function runTime(startedAt){
  const elapsed=Math.max(0,Date.now()-(Number(startedAt)||Date.now()));

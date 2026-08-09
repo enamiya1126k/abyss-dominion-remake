@@ -212,6 +212,12 @@
 
 # CHANGELOG
 
+## v2.2.1 — 起動エラー修正
+
+- 探索オブジェクト処理の余分な閉じ括弧を除去し、`Unexpected token/keyword 'else'`で起動できない問題を修正。
+- アセット識別子を`2.2.1-hotfix`へ更新し、端末・CDNに残った壊れたJavaScriptを読み直すよう変更。
+- JavaScript全ファイルをES Moduleとして構文検査する回帰テストを追加。
+
 ## 0.9.15-alpha.28-phase10-6-consistency
 - `APP_VERSION`と起動時`ASSET_VERSION`を統一。
 - activeなES Module importのキャッシュキーを同一版数へ統一。
@@ -330,4 +336,4 @@ v0.9.15-alpha.3 Part7 - Added Ten God Trial design.
 - 敵味方の位置固定、TURN表示、戦闘数字、戦闘背景を刷新。
 - 提供された7曲を場面別BGMとして組み込み。
 - 所持上限3,000、一括同名合成、捕獲結晶10,000G、十神スキル設定を実装。
-- アプリ版数2.2.0、セーブスキーマ46、アセット版2.2.0-releaseへ更新。
+- アプリ版数2.2.0、セーブスキーマ46、アセット版2.2.1-hotfixへ更新。

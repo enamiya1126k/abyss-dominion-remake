@@ -11,7 +11,7 @@ export class AudioSystem{
  track(scene){
   const src=TRACKS[scene]??TRACKS.home;
   if(this.cache.has(src))return this.cache.get(src);
-  const audio=new Audio(src+"?v=2.2.0-release");audio.loop=true;audio.preload="auto";audio.playsInline=true;audio.volume=0;this.cache.set(src,audio);return audio;
+  const audio=new Audio(src+"?v=2.2.1-hotfix");audio.loop=true;audio.preload="auto";audio.playsInline=true;audio.volume=0;this.cache.set(src,audio);return audio;
  }
  async unlock(){
   if(typeof window==="undefined")return false;

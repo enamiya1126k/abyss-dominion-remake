@@ -36,7 +36,7 @@ import {monsterCombatPower, normalizeCombatPowerRecord} from "../src/core/Combat
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 
 assert.equal(PREMIUM_COST_MULTIPLIER,10);
-assert.equal(APP_VERSION,"2.2.0");
+assert.equal(APP_VERSION,"2.2.1");
 assert.equal(MONSTER_STORAGE_CAP,3000);
 assert.equal(ENDGAME_MAX_LEVEL,99999);
 assert.equal(COMBAT_POWER_DISPLAY_SCALE,90);
@@ -149,4 +149,4 @@ for(const relative of [
   assert.ok(fs.statSync(file).size>1024,`Empty release asset: ${relative}`);
 }
 
-console.log("ABYSS DOMINION v2.2.0 release regression: PASS");
+console.log("ABYSS DOMINION v2.2.1 hotfix regression: PASS");

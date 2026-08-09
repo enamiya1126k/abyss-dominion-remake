@@ -3,6 +3,8 @@
 | 資料 | 内容 |
 |---|---|
 | [RELEASE_NOTES_v2.2.0_JA.md](RELEASE_NOTES_v2.2.0_JA.md) | v2.2.0のプレイヤー向け更新内容と配置方法 |
+| [RELEASE_NOTES_v2.2.1_JA.md](RELEASE_NOTES_v2.2.1_JA.md) | v2.2.1起動修正と差し替え方法 |
+| [IMPLEMENTATION_VERIFICATION_v2.2.1_JA.md](IMPLEMENTATION_VERIFICATION_v2.2.1_JA.md) | v2.2.1起動修正の原因・検証結果 |
 | [IMPLEMENTATION_VERIFICATION_v2.2.0_JA.md](IMPLEMENTATION_VERIFICATION_v2.2.0_JA.md) | 追加修正依頼に対する実装対応と最終検証結果 |
 | [RELEASE_NOTES_v2.1.0_JA.md](RELEASE_NOTES_v2.1.0_JA.md) | v2.1.0のプレイヤー向け更新内容と配置方法 |
 | [IMPLEMENTATION_VERIFICATION_v2.1.0_JA.md](IMPLEMENTATION_VERIFICATION_v2.1.0_JA.md) | 今回の修正依頼に対する実装対応と最終検証結果 |

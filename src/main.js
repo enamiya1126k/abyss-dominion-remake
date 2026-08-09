@@ -1,64 +1,64 @@
-import{SaveService}from"./services/SaveService.js?v=2.2.0-release";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.2.0-release";
-import{AudioSystem}from"./core/AudioSystem.js?v=2.2.0-release";
-import{endgameCharacter}from"./data/endgameCharacters.js?v=2.2.0-release";
-import{SPECIES}from"./data/species.js?v=2.2.0-release";
-import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.2.0-release";
-import{attributeDamageMultiplier,attributeGuideRows,ATTRIBUTES}from"./data/attributes.js?v=2.2.0-release";
-import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.2.0-release";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.2.0-release";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.2.0-release";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.2.0-release";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.2.0-release";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.2.0-release";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.2.0-release";
-import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.2.0-release";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.2.0-release";
-import{Modal}from"./ui/components/Modal.js?v=2.2.0-release";
-import{pixelIcon}from"./ui/components/GameChrome.js?v=2.2.0-release";
-import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.2.0-release";
-import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.2.0-release";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.2.0-release";
-import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=2.2.0-release";
-import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.2.0-release";
-import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=2.2.0-release";
-import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=2.2.0-release";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=2.2.0-release";
-import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=2.2.0-release";
-import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=2.2.0-release";
-import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=2.2.0-release";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.2.0-release";
-import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.2.0-release";
-import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=2.2.0-release";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.2.0-release";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.2.0-release";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=2.2.0-release";
-import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.2.0-release";
-import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=2.2.0-release";
-import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=2.2.0-release";
-import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=2.2.0-release";
-import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=2.2.0-release";
-import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=2.2.0-release";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=2.2.0-release";
-import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.2.0-release";
-import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.2.0-release";
-import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.2.0-release";
-import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse}from"./battle/SkillSystem.js?v=2.2.0-release";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.2.0-release";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.2.0-release";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.2.0-release";
-import{dangerConfig}from"./core/DangerSystem.js?v=2.2.0-release";
-import{bossLevelForFloor}from"./core/EnemyScalingSystem.js?v=2.2.0-release";
-import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.2.0-release";
-import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.2.0-release";
-import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.2.0-release";
-import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.2.0-release";
-import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.2.0-release";
-import{monsterCombatPower,partyCombatPower,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.2.0-release";
-import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.2.0-release";
-import{applySerialReward,commitSerialRedemption,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.2.0-release";
-import{NOTICE_DEFINITIONS,markAllNoticesRead,normalizeNoticeState}from"./core/NoticeSystem.js?v=2.2.0-release";
-import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.2.0-release";
+import{SaveService}from"./services/SaveService.js?v=2.2.1-hotfix";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.2.1-hotfix";
+import{AudioSystem}from"./core/AudioSystem.js?v=2.2.1-hotfix";
+import{endgameCharacter}from"./data/endgameCharacters.js?v=2.2.1-hotfix";
+import{SPECIES}from"./data/species.js?v=2.2.1-hotfix";
+import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.2.1-hotfix";
+import{attributeDamageMultiplier,attributeGuideRows,ATTRIBUTES}from"./data/attributes.js?v=2.2.1-hotfix";
+import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.2.1-hotfix";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.2.1-hotfix";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.2.1-hotfix";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.2.1-hotfix";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.2.1-hotfix";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.2.1-hotfix";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.2.1-hotfix";
+import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.2.1-hotfix";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.2.1-hotfix";
+import{Modal}from"./ui/components/Modal.js?v=2.2.1-hotfix";
+import{pixelIcon}from"./ui/components/GameChrome.js?v=2.2.1-hotfix";
+import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.2.1-hotfix";
+import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.2.1-hotfix";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.2.1-hotfix";
+import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=2.2.1-hotfix";
+import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.2.1-hotfix";
+import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=2.2.1-hotfix";
+import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=2.2.1-hotfix";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=2.2.1-hotfix";
+import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=2.2.1-hotfix";
+import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=2.2.1-hotfix";
+import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=2.2.1-hotfix";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.2.1-hotfix";
+import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.2.1-hotfix";
+import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=2.2.1-hotfix";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.2.1-hotfix";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.2.1-hotfix";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=2.2.1-hotfix";
+import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.2.1-hotfix";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=2.2.1-hotfix";
+import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=2.2.1-hotfix";
+import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=2.2.1-hotfix";
+import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=2.2.1-hotfix";
+import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=2.2.1-hotfix";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=2.2.1-hotfix";
+import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.2.1-hotfix";
+import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.2.1-hotfix";
+import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.2.1-hotfix";
+import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse}from"./battle/SkillSystem.js?v=2.2.1-hotfix";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.2.1-hotfix";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.2.1-hotfix";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.2.1-hotfix";
+import{dangerConfig}from"./core/DangerSystem.js?v=2.2.1-hotfix";
+import{bossLevelForFloor}from"./core/EnemyScalingSystem.js?v=2.2.1-hotfix";
+import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.2.1-hotfix";
+import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.2.1-hotfix";
+import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.2.1-hotfix";
+import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.2.1-hotfix";
+import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.2.1-hotfix";
+import{monsterCombatPower,partyCombatPower,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.2.1-hotfix";
+import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.2.1-hotfix";
+import{applySerialReward,commitSerialRedemption,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.2.1-hotfix";
+import{NOTICE_DEFINITIONS,markAllNoticesRead,normalizeNoticeState}from"./core/NoticeSystem.js?v=2.2.1-hotfix";
+import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.2.1-hotfix";
 
 const TILE=88,COLS=39,ROWS=39,app=document.getElementById("app"),save=new SaveService(),audio=new AudioSystem(()=>save.state.settings);
 let screen="home",selected=null,equipmentTarget=null,equipmentFocusItemId=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",inventoryCategory="all",inventorySort="rarity",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",skillNavigationOrigin="home",inventoryNavigationOrigin="home",settingsNavigationOrigin="home",detailNavigationOrigin="monsters",formationOrigin="home",lastExploreCombatPower=null;
@@ -2405,12 +2405,11 @@ function interactExploreDecoration(decoration){
   decoration.destroyed=true;decoration.used=true;
   if(roll<.005){
    save.state.inventory.abyssKeys=(save.state.inventory.abyssKeys??0)+1;resourceToast={icon:"key",amount:1};
-  }else if(roll<.24){
-   const gold=modifiedGoldReward(save.state,Math.max(5,Math.round(chestGoldBase(floor)*.045)),"exploration");
-   save.state.player.gold+=gold;resourceToast={icon:"coin",amount:gold};
-  }else message="骨は静かに崩れた";
-  }
- }else if(decoration.type==="crystal"){
+	  }else if(roll<.24){
+	   const gold=modifiedGoldReward(save.state,Math.max(5,Math.round(chestGoldBase(floor)*.045)),"exploration");
+	   save.state.player.gold+=gold;resourceToast={icon:"coin",amount:gold};
+	  }else message="骨は静かに崩れた";
+	 }else if(decoration.type==="crystal"){
   decoration.used=true;
   const amount=roll<.08?2:1;
   save.state.player.crystals=(save.state.player.crystals??0)+amount;resourceToast={icon:"crystal",amount};
@@ -2511,11 +2510,11 @@ function explorationPartyMembers(){return(save.state.party??[]).map(id=>save.sta
 const explorationSpriteCache=new Map();
 const explorationTextureCache=new Map();
 const EXPLORE_TEXTURE_URLS={
- floor:"assets/ui/explore/dungeon-floor.png?v=2.2.0-release",
- wall:"assets/ui/explore/dungeon-wall.png?v=2.2.0-release",
- stairs:"assets/ui/explore/dungeon-stairs-arch.png?v=2.2.0-release",
- props:"assets/ui/explore/dungeon-props-atlas.png?v=2.2.0-release",
- usedWater:"assets/ui/explore/empty-water-basin.png?v=2.2.0-release"
+ floor:"assets/ui/explore/dungeon-floor.png?v=2.2.1-hotfix",
+ wall:"assets/ui/explore/dungeon-wall.png?v=2.2.1-hotfix",
+ stairs:"assets/ui/explore/dungeon-stairs-arch.png?v=2.2.1-hotfix",
+ props:"assets/ui/explore/dungeon-props-atlas.png?v=2.2.1-hotfix",
+ usedWater:"assets/ui/explore/empty-water-basin.png?v=2.2.1-hotfix"
 };
 const EXPLORE_ATLAS=Object.freeze({
  floor:0,wall:1,corner:2,pillar:3,entrance:4,chestClosed:5,chestOpen:6,barrel:7,
