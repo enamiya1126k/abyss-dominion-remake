@@ -1,8 +1,8 @@
-import{createMonster,calculatedStats}from"../models/Monster.js?v=2.2.1-hotfix";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.2.1-hotfix";
-import{SPECIES}from"../data/species.js?v=2.2.1-hotfix";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.2.1-hotfix";
-import{MONSTER_STORAGE_CAP}from"./config.js?v=2.2.1-hotfix";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=2.3.0";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.3.0";
+import{SPECIES}from"../data/species.js?v=2.3.0";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.3.0";
+import{MONSTER_STORAGE_CAP}from"./config.js?v=2.3.0";
 
 const DEVICE_LEDGER_KEY="abyss-dominion-serial-ledger-v1";
 
@@ -152,14 +152,14 @@ export async function validateSerialCode(state,rawCode){
   if(!rewardId)return{ok:false,message:"コードが正しくないか、期限外です。"};
   const redeemed=normalizeSerialCodeState(state).redeemed;
   if(redeemed[rewardId]||loadDeviceLedger()[rewardId])return{ok:false,message:"このコードはすでに使用済みです。"};
-  if(rewardId.endsWith("Monster")&&monsterCapacityReached(state))return{ok:false,message:"モンスター所持数が500体で満杯です。整理してからもう一度入力してください。"};
+  if(rewardId.endsWith("Monster")&&monsterCapacityReached(state))return{ok:false,message:`モンスター所持数が${MONSTER_STORAGE_CAP}体で満杯です。整理してからもう一度入力してください。`};
   return{ok:true,rewardId,...REWARD_INFO[rewardId]};
 }
 
 export function applySerialReward(state,rewardId){
   const info=REWARD_INFO[rewardId];
   if(!info)return{ok:false,message:"報酬データが見つかりません。"};
-  if(rewardId.endsWith("Monster")&&monsterCapacityReached(state))return{ok:false,message:"モンスター所持数が500体で満杯です。"};
+  if(rewardId.endsWith("Monster")&&monsterCapacityReached(state))return{ok:false,message:`モンスター所持数が${MONSTER_STORAGE_CAP}体で満杯です。`};
   state.player??={};
   state.inventory??={};
   let monster=null;

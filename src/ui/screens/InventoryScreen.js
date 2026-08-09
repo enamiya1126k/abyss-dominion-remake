@@ -1,8 +1,10 @@
-import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=2.2.1-hotfix";
-import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.2.1-hotfix";
-import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.2.1-hotfix";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.2.1-hotfix";
-import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.2.1-hotfix";
+import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=2.3.0";
+import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.3.0";
+import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.3.0";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.3.0";
+import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.3.0";
+import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.3.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.3.0";
 
 const CONSUMABLES=[
  ["potions","🧪","薬草","HPを回復"],
@@ -67,6 +69,15 @@ function sortedEquipment(state,category="all",sort="rarity"){
  });
 }
 
+function fragmentCards(state){
+ const emergency=state.endgame?.emergency??{},fragments=emergency.fragments??{},records=emergency.records??{};
+ const cards=Object.values(ENDGAME_BOSSES).filter(boss=>(Number(fragments[boss.id])||0)>0||(records[boss.id]?.encounters??0)>0).map(boss=>{
+  const amount=Math.max(0,Number(fragments[boss.id])||0);
+  return`<button type="button" class="v2-inventory-item stack endgame-fragment-item ${boss.faction}" data-endgame-fragment="${boss.id}">${monsterVisual(boss.id,boss.icon,{className:"inventory-fragment-visual"})}<small>${boss.faction==="tenGod"?"十神の法則片":"深淵の存在片"}</small><b>${boss.name}の欠片</b><strong>×${amount.toLocaleString()}</strong><em>欠片祭壇へ</em></button>`;
+ }).join("");
+ return`${cards}<button type="button" class="v2-inventory-item fragment-altar-entry" data-open-fragment-altar>${itemArt("abyssKeys","✦")}<b>欠片祭壇</b><small>人物契約／専用装備の顕現</small><strong>開く</strong></button>`;
+}
+
 export function ArmoryScreen(state,category="all",sort="rarity"){
  const equipment=sortedEquipment(state,category,sort);
  return`<section class="screen v2-screen inventory-screen-v2 armory-screen-v2">
@@ -86,20 +97,21 @@ export function ArmoryScreen(state,category="all",sort="rarity"){
 }
 
 export function InventoryScreen(state,category="all"){
- const stacks=[
+ const baseStacks=[
   ...(category==="all"||category==="consumable"?CONSUMABLES.map(item=>stackCard(item,state.inventory??{},"consumable")):[]),
   ...(category==="all"||category==="material"?MATERIALS.map(item=>stackCard(item,state.inventory??{},"material")):[])
  ];
+ const fragments=category==="all"||category==="material"?fragmentCards(state):"",stackCount=baseStacks.length+(fragments?1:0);
  return`<section class="screen v2-screen inventory-screen-v2">
   ${resourceHud(state,{backId:"backInventory",title:"持ち物"})}
   <main class="v2-screen-content">
-   ${sectionTitle("持ち物",`${stacks.length}種類`)}
+   ${sectionTitle("持ち物",`${stackCount}分類`)}
    <div class="v2-category-tabs">${INVENTORY_CATEGORIES.map(([id,label])=>`<button type="button" data-inventory-category="${id}" class="${category===id?"active":""}">${label}</button>`).join("")}</div>
    <div class="v2-inventory-toolbar">
     <span class="v2-inventory-mode">道具・素材</span>
     <span>タップで詳細・使用</span>
    </div>
-   <div class="v2-inventory-grid" id="inventoryContextGrid">${stacks.join("")||'<div class="v2-empty-state">この分類の持ち物はありません</div>'}</div>
+   <div class="v2-inventory-grid" id="inventoryContextGrid">${baseStacks.join("")}${fragments||(!baseStacks.length?'<div class="v2-empty-state">この分類の持ち物はありません</div>':"")}</div>
   </main>
   ${bottomNav("inventory")}
  </section>`;

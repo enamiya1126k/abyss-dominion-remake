@@ -1,17 +1,16 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.2.1-hotfix";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.2.1-hotfix";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.2.1-hotfix";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.2.1-hotfix";
-import{monsterVisual}from"../MonsterVisual.js?v=2.2.1-hotfix";
-import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.2.1-hotfix";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.2.1-hotfix";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.2.1-hotfix";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.3.0";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.3.0";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.3.0";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.3.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.3.0";
+import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.3.0";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.3.0";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.3.0";
 
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
-  const shortName=entry.name.length>6?entry.name.slice(0,6)+"…":entry.name;
   const classes=["turn-chip",entry.type,index===battle.queueIndex?"current":"",index<battle.queueIndex?"done":""].filter(Boolean).join(" ");
-  return `<span class="${classes}"><b>${shortName}</b><small>SPD ${entry.spd}</small></span>`;
+  return `<span class="${classes}" title="${entry.name}"><b>${entry.name}</b><small>SPD ${entry.spd}</small></span>`;
  }).join("");
 }
 
@@ -25,9 +24,10 @@ function renderEnemies(battle,enemies,target){
   const dead=enemy.hp<=0,element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral";
   return `<button id="enemy-${enemy.id}" ${dead?'disabled aria-hidden="true"':`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${enemy.boss?"boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
+   <span class="battle-unit-floating-name">${badge}<b>${enemy.name}</b></span>
    <div class="side-unit-sprite enemy-orb">${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.hp<=0?"down":"idle",className:"battle-enemy-visual"})}</div>
    <div class="side-unit-card enemy-info">
-    <div class="side-unit-name enemy-name">${badge}${danger}<b>${enemy.name}</b><small>Lv.${enemy.level}</small><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
+    <div class="side-unit-name enemy-name">${danger}<small>Lv.${enemy.level}</small><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="side-unit-intent enemy-intent"><span>次の行動</span><b>${enemy.intent}${enemy.enraged?"・狂暴化":""}</b></div>
     <div class="battle-bar enemy-hp"><span class="bar-label">HP ${enemy.hp}/${enemy.maxHp}</span><i style="width:${hpRate}%"></i></div>
     ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
@@ -45,9 +45,10 @@ function renderParty(battle,actor){
   const line=index<2?"front-line":"rear-line",element=m.attribute??battle.species?.[m.speciesId]?.element??"neutral";
   return `<button id="ally-${m.id}" data-battle-detail="${m.id}" style="--formation-index:${index};--unit-color:${colorValue(m)}" class="battle-unit combatant side-battle-unit formation-slot-${index+1} ${line} ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
    <span class="active-turn-marker" aria-hidden="true">TURN</span>
+   <span class="battle-unit-floating-name"><b>${displayName(m)}</b></span>
    <div class="side-unit-sprite unit-orb">${monsterVisual(m,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual"})}</div>
    <div class="side-unit-card ally-info">
-    <div class="side-unit-name unit-head"><b>${displayName(m)}</b><small>Lv.${m.level}</small><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
+    <div class="side-unit-name unit-head"><small>Lv.${m.level}</small><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="battle-bar ally"><span class="bar-label">HP ${m.currentHp}/${stats.hp}</span><i style="width:${hpRate}%"></i></div>
     <div class="battle-bar mp"><span class="bar-label">MP ${m.currentMp}/${mp}</span><i style="width:${mpRate}%"></i></div>
     <small class="battle-mini-stats">物攻 ${stats.atk}　魔攻 ${stats.matk??stats.atk}<br>物防 ${stats.def}　魔防 ${stats.mdef??stats.def}　SPD ${stats.spd}</small>${effectHtml}
@@ -104,9 +105,9 @@ export function BattleScreen(battle,inventory,settings,floor=1){
  const special=battle.specialBattle?`<div class="special-battle-strip ${battle.specialBattleType}"><b>${battle.specialTitle??"SPECIAL BATTLE"}</b><small>${battle.specialSubtitle??"敗北ペナルティなし"}</small></div>`:"";
  const floorBand=Math.max(1,Math.min(20,Math.floor((Math.max(1,Number(floor)||1)-1)/50)+1));
  const speed=normalizeBattleSpeed(settings.battleSpeed),scaled=ms=>`${Math.max(1,Math.round(ms/speed))}ms`;
- const timingStyle=`--battle-lunge:${scaled(220)};--battle-skill-lunge:${scaled(300)};--battle-hit:${scaled(260)};--battle-critical-hit:${scaled(300)};--battle-defeat:${scaled(500)};--battle-float:${scaled(550)};--battle-banner-in:${scaled(280)};--battle-banner-out:${scaled(220)};--battle-flash:${scaled(380)};--battle-particle:${scaled(720)}`;
+ const timingStyle=`--battle-lunge:${scaled(220)};--battle-skill-lunge:${scaled(300)};--battle-hit:${scaled(260)};--battle-critical-hit:${scaled(300)};--battle-defeat:${scaled(500)};--battle-float:${Math.max(780,Math.round(1250/speed))}ms;--battle-banner-in:${scaled(280)};--battle-banner-out:${scaled(220)};--battle-flash:${scaled(380)};--battle-particle:${Math.max(560,Math.round(920/speed))}ms`;
  const theme=String(battle.battleTheme??"default").replace(/[^a-z0-9-]/gi,"");
- const biomeBadge=battle.biomeBattle?`<div class="battle-biome-badge" style="--biome-accent:${battle.biomeBattle.accent}"><b>${battle.biomeBattle.name}</b><small>適性 +22% / 不適性 −16%</small></div>`:"";
+ const biomeBadge=battle.biomeBattle?`<div class="battle-biome-badge compact" style="--biome-accent:${battle.biomeBattle.accent}"><b>${battle.biomeBattle.name}</b><small>適性+22%・不適性−16%</small></div>`:"";
  return `<section class="battle-screen side-battle-v2 battle-theme-${theme} ${battle.auto?"auto-mode":"manual-mode"} ${battle.specialBattle?"special-battle":""}" data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}">${special}
   <div class="battle-header"><div class="round-label"><small>ROUND</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}F・ENCOUNTER`}</b><small>${battle.auto?"FULL AUTO":"COMMAND BATTLE"}</small></div><button id="toggleBattleAuto" class="${battle.auto?"enabled":""}"><span>AUTO</span><b>${battle.auto?"ON":"OFF"}</b></button><button id="battleSpeed">×${speed}</button>${battle.specialBattle?`<button disabled>逃走不可</button>`:`<button id="escapeBattle">逃げる</button>`}</div>
   <div class="turn-order"><span class="turn-order-title">行動順</span>${renderTurnOrder(battle)}</div>
@@ -117,7 +118,6 @@ export function BattleScreen(battle,inventory,settings,floor=1){
    <div class="battle-party side-party">${renderParty(battle,actor)}</div>
    <div class="battle-clash-line" aria-hidden="true"><span>VS</span></div>
    <div class="enemy-party side-enemies">${renderEnemies(battle,enemies,target)}</div>
-   ${battle.auto?'<div class="auto-battle-notice"><b>FULL AUTO</b><small>戦場をタップで手動へ</small></div>':""}
    <div id="battleFxLayer" class="battle-fx-layer"></div>
   </div>
   ${renderCommands(battle,actor,current,livingEnemies,target,inventory,skills)}

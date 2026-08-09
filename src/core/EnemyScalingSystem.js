@@ -103,13 +103,13 @@ export function post9000DepthProfile(floor){
 
 export function bossProfileForFloor(floor){
  const f=Math.max(1,Math.floor(Number(floor)||1));
- // 10階ごとの通常ボスは長期戦になりすぎないよう耐久を抑え、
- // 100階・1000階の節目だけ明確に強くする。
- if(f%1000===0)return{tier:"超ボス",hp:3.2,atk:1.32,def:1.2,spd:1.1,statusResist:.55,healRate:.18,powerMultiplier:2.15};
- if(f%100===0)return{tier:"大ボス",hp:2.2,atk:1.2,def:1.12,spd:1.06,statusResist:.35,healRate:.15,powerMultiplier:1.95};
- return{tier:"階層ボス",hp:1.55,atk:1.12,def:1.05,spd:1.03,statusResist:.18,healRate:.12,powerMultiplier:1.8};
+ // 10階ごとの支配者は編成・属性・状態異常対策を要求する本格戦。
+ if(f%1000===0)return{tier:"超ボス",hp:22,atk:4.1,def:3.2,spd:1.55,statusResist:.82,healRate:.28,powerMultiplier:5.2};
+ if(f%100===0)return{tier:"大ボス",hp:15,atk:3.15,def:2.5,spd:1.38,statusResist:.68,healRate:.24,powerMultiplier:4.4};
+ if(f%50===0)return{tier:"属性覇者",hp:10.5,atk:2.65,def:2.05,spd:1.28,statusResist:.54,healRate:.21,powerMultiplier:3.75};
+ return{tier:"階層ボス",hp:7.2,atk:2.15,def:1.72,spd:1.18,statusResist:.4,healRate:.19,powerMultiplier:3.35};
 }
 
 export function bossLevelForFloor(floor){
- return Math.min(ENEMY_LEVEL_CAP,Math.round(baseEnemyLevelForFloor(floor)*1.3));
+ return Math.min(ENEMY_LEVEL_CAP,Math.round(baseEnemyLevelForFloor(floor)*1.65));
 }

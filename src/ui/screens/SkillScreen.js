@@ -1,8 +1,8 @@
-import{SPECIES}from"../../data/species.js?v=2.2.1-hotfix";
-import{displayName}from"../../models/Monster.js?v=2.2.1-hotfix";
-import{allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=2.2.1-hotfix";
-import{monsterVisual}from"../MonsterVisual.js?v=2.2.1-hotfix";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=2.2.1-hotfix";
+import{SPECIES}from"../../data/species.js?v=2.3.0";
+import{displayName}from"../../models/Monster.js?v=2.3.0";
+import{allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=2.3.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.3.0";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=2.3.0";
 
 const ROLE_LABELS={
  tank:"前衛・守護",guard:"前衛・守護",defense:"前衛・守護",
@@ -50,6 +50,7 @@ export function SkillScreen(state,selectedId){
  return`<section class="screen skill-screen skill-screen-compact v2-screen">
   ${resourceHud(state,{backId:"backSkillHome",title:"スキル設定"})}
   <div class="page">
+   <nav class="skill-system-tabs"><button type="button" class="active">戦闘スキル</button><button type="button" data-open-abyss-skill-tree>深淵スキルツリー</button></nav>
    <div class="skill-monster-tabs party-only">
     ${party.map(member=>{const data=SPECIES[member.speciesId]??{};return`<button data-skill-monster="${member.id}" class="${member.id===monster.id?"active":""}">${monsterVisual(member,data.emoji??"👹",{className:"skill-tab-monster-visual"})}<small>${displayName(member)}</small></button>`}).join("")}
     <button type="button" class="skill-reserve-picker" data-open-skill-reserve><b>＋</b><small>控えから選ぶ</small></button>

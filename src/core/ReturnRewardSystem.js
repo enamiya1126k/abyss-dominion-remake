@@ -1,10 +1,10 @@
-import{createEquipment}from"../models/Equipment.js?v=2.2.1-hotfix";
-import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.2.1-hotfix";
-import{abyssEquipmentRarityBonus}from"./AbyssSkillTreeSystem.js?v=2.2.1-hotfix";
-import{modifiedGoldReward}from"./GoldRewardSystem.js?v=2.2.1-hotfix";
-import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.2.1-hotfix";
+import{createEquipment}from"../models/Equipment.js?v=2.3.0";
+import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.3.0";
+import{abyssEquipmentRarityBonus}from"./AbyssSkillTreeSystem.js?v=2.3.0";
+import{modifiedGoldReward}from"./GoldRewardSystem.js?v=2.3.0";
+import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.3.0";
 
-export{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.2.1-hotfix";
+export{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.3.0";
 
 const EMPTY_MANUAL={active:false,startFloor:1,lastFloor:1,floorsCleared:0,pendingGold:0,startedAt:null};
 const IDLE_FLOOR_INTERVAL_MS=5*60*1000;
@@ -88,8 +88,9 @@ function randomEquipmentSlot(){
  return slots[Math.floor(Math.random()*slots.length)];
 }
 
-function createManualReturnEquipment(state){
- return createEquipment(randomEquipmentSlot(),{rarity:rollManualReturnRarity(state)});
+function scaledReturnLevel(floor){return Math.max(1,Math.min(99999,Math.round(Math.max(1,Number(floor)||1)*(.5+Math.random()))))}
+function createManualReturnEquipment(state,floor=state?.player?.currentFloor){
+ const item=createEquipment(randomEquipmentSlot(),{rarity:rollManualReturnRarity(state)});item.level=scaledReturnLevel(floor);item.obtainedFloor=Math.max(1,Number(floor)||1);item.obtainedMethod="manualReturn";return item;
 }
 
 export function idleEquipmentDropCount(elapsedMs){
@@ -102,8 +103,8 @@ export function rollIdleReturnRarity(state=null){
  return rollManualReturnRarity(state);
 }
 
-function createIdleReturnEquipment(state){
- return createEquipment(randomEquipmentSlot(),{rarity:rollIdleReturnRarity(state)});
+function createIdleReturnEquipment(state,floor){
+ const item=createEquipment(randomEquipmentSlot(),{rarity:rollIdleReturnRarity(state)});item.level=scaledReturnLevel(floor);item.obtainedFloor=Math.max(1,Number(floor)||1);item.obtainedMethod="idleReturn";return item;
 }
 
 export function normalizeReturnRewards(state){
@@ -175,7 +176,7 @@ export function claimManualReturn(state){
  state.player.gold=Math.max(0,Math.floor(Number(state.player.gold)||0))+preview.gold;
  const equipment=[];
  for(let i=0;i<preview.equipmentCount;i++){
-  const item=createManualReturnEquipment(state);
+  const item=createManualReturnEquipment(state,preview.endFloor);
   const receipt=receiveEquipment(state,item);
   equipment.push({item,receipt});
  }
@@ -235,7 +236,7 @@ export function claimIdleReturn(state,now=Date.now()){
  state.player.gold=Math.max(0,Math.floor(Number(state.player.gold)||0))+preview.gold;
  const equipment=[];
  for(let i=0;i<preview.equipmentCount;i++){
-  const item=createIdleReturnEquipment(state);
+  const item=createIdleReturnEquipment(state,preview.expeditionFloor);
   const receipt=receiveEquipment(state,item);
   equipment.push({item,receipt});
  }

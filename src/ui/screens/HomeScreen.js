@@ -1,11 +1,12 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.2.1-hotfix";
-import{displayName}from"../../models/Monster.js?v=2.2.1-hotfix";
-import{SPECIES}from"../../data/species.js?v=2.2.1-hotfix";
-import{TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.2.1-hotfix";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.2.1-hotfix";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.2.1-hotfix";
-import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=2.2.1-hotfix";
-import{monsterVisual}from"../MonsterVisual.js?v=2.2.1-hotfix";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.3.0";
+import{displayName}from"../../models/Monster.js?v=2.3.0";
+import{SPECIES}from"../../data/species.js?v=2.3.0";
+import{TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.3.0";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.3.0";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.3.0";
+import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=2.3.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.3.0";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.3.0";
 
 function scenePartySlot(monster,index){
   // Formation order is shared with battle: slots 1–2 are the front row and
@@ -17,9 +18,10 @@ function scenePartySlot(monster,index){
       <em class="home-slot-badge">${index+1}</em><span>＋</span>
     </button>`;
   const species=SPECIES[monster.speciesId];
+  const attribute=monster.attribute??species?.element??"neutral";
   return`
     <button type="button" class="home-scene-unit ${positions[index]}" data-open-home-formation data-home-party-slot="${index}" data-home-party-member="${monster.id}" aria-label="${displayName(monster)}・編成スロット${index+1}">
-      <em class="home-slot-badge">${index+1}</em>
+      <em class="home-slot-badge">${index+1}</em><span class="home-slot-attribute" data-home-attribute-help="${attribute}" title="属性相性を確認">${attributeVisual(attribute,{label:`${attribute}属性`})}</span>
       ${monsterVisual(monster,species?.emoji??"MONSTER",{className:"home-scene-monster-visual"})}
       <span class="home-scene-name">${displayName(monster)}</span>
       <small>Lv.${monster.level}</small>
@@ -147,7 +149,7 @@ export function HomeScreen(state){
         ${menuButton({id:"openGacha",icon:"summon",title:"召喚",sub:"仲間・装備を獲得"})}
         ${menuButton({id:"openMonsters",icon:"growth",title:"魔物一覧",sub:"図鑑・合成・逃す"})}
         ${menuButton({id:"openEquipment",icon:"equipment",title:"装備管理",sub:"装備の確認・強化"})}
-        ${menuButton({id:"openSkills",icon:"skills",title:"スキル設定",sub:"スキルの確認・強化"})}
+        ${menuButton({id:"openSkills",icon:"skills",title:"スキル・深淵ツリー",sub:"戦闘スキル／恒久育成"})}
         ${menuButton({id:"openBattleMemory",icon:"memory",title:"戦闘の記憶",sub:memorySub,className:memoryEntries.length?"memory-ready":"locked"})}
       </nav>
 

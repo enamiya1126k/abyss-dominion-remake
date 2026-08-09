@@ -1,8 +1,8 @@
-import{SPECIES}from"../../data/species.js?v=2.2.1-hotfix";
-import{orderedMonsterSpecies}from"../../data/monsterCatalog.js?v=2.2.1-hotfix";
-import{monsterVisual}from"../MonsterVisual.js?v=2.2.1-hotfix";
-import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.2.1-hotfix";
-import{MONSTER_STORAGE_CAP}from"../../core/config.js?v=2.2.1-hotfix";
+import{SPECIES}from"../../data/species.js?v=2.3.0";
+import{orderedMonsterSpecies}from"../../data/monsterCatalog.js?v=2.3.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.3.0";
+import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.3.0";
+import{MONSTER_STORAGE_CAP}from"../../core/config.js?v=2.3.0";
 
 const RARITY_VALUE={N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9};
 function safe(value){return String(value??"").replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
@@ -35,7 +35,7 @@ export function MonsterListScreen(state,{search=""}={}){
     <div class="monster-index-copy"><b>MONSTER ARCHIVE</b><span>同名魔物の合成・整理を一か所で管理</span></div>
     <input id="monsterSearch" type="search" value="${safe(search)}" placeholder="No.・名前・種族・レア度で検索">
     <div class="monster-index-legend"><span>所持中を先に表示</span><span>カードをタップして合成・逃す</span></div>
-    <div class="monster-bulk-synthesis"><label>自動一括合成<select id="bulkSynthesisRarity"><option>N</option><option>R</option><option>SR</option><option selected>SSR</option><option>UR</option><option>LR</option><option>神話</option><option>深淵</option></select>以下</label><button type="button" id="bulkSynthesizeMonsters">保護個体を残して合成</button><small>編成中・お気に入り・ロック・各種族の最良個体は必ず残します。</small></div>
+    <section class="monster-bulk-synthesis"><div class="bulk-synthesis-copy"><small>AUTO SYNTHESIS</small><b>同名個体を一括統合</b><span>対象レア度以下から、各種族の最良個体へ「＋」を継承します。</span></div><div class="bulk-synthesis-controls"><label><span>対象上限</span><select id="bulkSynthesisRarity"><option>N</option><option>R</option><option>SR</option><option selected>SSR</option><option>UR</option><option>LR</option><option>神話</option></select><em>以下</em></label><button type="button" id="bulkSynthesizeMonsters">保護個体を残して統合</button></div><small class="bulk-synthesis-safety">編成中・お気に入り・ロック・各種族の最良個体・深淵／十神の契約個体は対象外です。</small></section>
    </section>
    <div class="monster-species-grid" id="monsterSpeciesGrid">${indexed.map(({species,index,owned})=>speciesCard(species,index,owned,state)).join("")}</div>
   </main>
