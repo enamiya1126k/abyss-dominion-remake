@@ -1,4 +1,4 @@
-import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.3.0";
+import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.3.1";
 
 export const TEAM_BATTLE_UNLOCK_FLOOR=100;
 export const EMERGENCY_UNLOCK_FLOOR=100;
@@ -8,6 +8,8 @@ export const ENDGAME_EMERGENCY_RATE=.03;
 export const ENDGAME_EMERGENCY_COOLDOWN_FLOORS=10;
 export const ENDGAME_BASE_STAT_MULTIPLIER=Object.freeze({abyss:10,tenGod:100});
 export const MANUAL_ENDGAME_DAILY_LIMIT=3;
+export const TEAM_BATTLE_DAILY_LIMIT=10;
+export const GAUNTLET_DAILY_LIMIT=10;
 export function endgameTrialLoopMultiplier(loop=1){return 1+(Math.max(1,Math.floor(Number(loop)||1))-1)*.5}
 export function endgameFactionStatMultiplier(faction){return ENDGAME_BASE_STAT_MULTIPLIER[faction]??1}
 
@@ -76,11 +78,13 @@ export function normalizeEndgameState(state){
  state.flags??={};state.flags.gameClear1000??=false;state.worldPhase=hasCleared1000(state)?1:0;state.endgame??={};
  state.endgame.processedSpecialResults=state.endgame.processedSpecialResults&&typeof state.endgame.processedSpecialResults==="object"&&!Array.isArray(state.endgame.processedSpecialResults)?state.endgame.processedSpecialResults:{};
  state.endgame.teamBattle??={unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0};
- state.endgame.trials??={battle:1,loop:1,cleared:[],run:null};
+ state.endgame.trials??={battle:1,loop:1,cleared:[],run:null,dailyKey:null,dailyAttempts:0};
  state.endgame.trials.battle=Math.max(1,Math.min(ENDGAME_TRIAL_BATTLE_COUNT,Math.floor(Number(state.endgame.trials.battle)||1)));
  state.endgame.trials.loop=Math.max(1,Math.floor(Number(state.endgame.trials.loop)||1));
  state.endgame.trials.cleared=Array.isArray(state.endgame.trials.cleared)?Array.from(new Set(state.endgame.trials.cleared.map(Number).filter(value=>value>=1&&value<=ENDGAME_TRIAL_BATTLE_COUNT))):[];
  state.endgame.trials.run=state.endgame.trials.run&&typeof state.endgame.trials.run==="object"&&!Array.isArray(state.endgame.trials.run)?state.endgame.trials.run:null;
+ state.endgame.trials.dailyKey=state.endgame.trials.dailyKey??null;
+ state.endgame.trials.dailyAttempts=Math.max(0,Math.min(GAUNTLET_DAILY_LIMIT,Math.floor(Number(state.endgame.trials.dailyAttempts)||0)));
  state.endgame.emergency??={encounters:0,wins:0,losses:0,lastFloor:0,lastTriggeredFloor:0,records:{},fragments:{},craftCounts:{},craftedGear:[],blessings:{}};
  const e=state.endgame.emergency;e.records??={};e.fragments??={};e.craftCounts??={};e.craftedGear??=[];e.blessings??={};e.preludeChoices??={};e.discovered??={};e.contracts??={};e.processedFragmentResults??={};e.processedBattleResults??={};e.manualChallenges=e.manualChallenges&&typeof e.manualChallenges==="object"&&!Array.isArray(e.manualChallenges)?e.manualChallenges:{dailyKey:null,dailyAttempts:0,unlocks:{}};e.manualChallenges.unlocks=e.manualChallenges.unlocks&&typeof e.manualChallenges.unlocks==="object"&&!Array.isArray(e.manualChallenges.unlocks)?e.manualChallenges.unlocks:{};migrateLegacyEndgameIds(state,e);e.lastTriggeredFloor=Math.max(0,Math.floor(Number(e.lastTriggeredFloor)||0));e.pendingEncounter=e.pendingEncounter&&ENDGAME_BOSSES[e.pendingEncounter.bossId]?{...e.pendingEncounter,bossId:String(e.pendingEncounter.bossId),floor:Math.max(EMERGENCY_UNLOCK_FLOOR,Math.floor(Number(e.pendingEncounter.floor)||EMERGENCY_UNLOCK_FLOOR))}:null;e.rescue??={post1000Encounters:0,consecutiveLosses:0,lastResult:null};
  e.rescue.post1000Encounters=Math.max(0,Number(e.rescue.post1000Encounters)||0);e.rescue.consecutiveLosses=Math.max(0,Math.min(5,Number(e.rescue.consecutiveLosses)||0));e.rescue.lastResult=e.rescue.lastResult==="win"||e.rescue.lastResult==="loss"?e.rescue.lastResult:null;
@@ -104,8 +108,14 @@ export function teamBattleDayKey(date=new Date()){
 export function dailyTeamAttempts(state,date=new Date()){
  const team=normalizeEndgameState(state).teamBattle,key=teamBattleDayKey(date);
  if(team.dailyKey!==key){team.dailyKey=key;team.dailyAttempts=0}
- team.dailyAttempts=Math.max(0,Math.min(50,Number(team.dailyAttempts)||0));
- return team
+ team.dailyAttempts=Math.max(0,Math.min(TEAM_BATTLE_DAILY_LIMIT,Number(team.dailyAttempts)||0));
+ team.remaining=Math.max(0,TEAM_BATTLE_DAILY_LIMIT-team.dailyAttempts);team.limit=TEAM_BATTLE_DAILY_LIMIT;return team
+}
+export function dailyGauntletAttempts(state,date=new Date()){
+ const trials=normalizeEndgameState(state).trials,key=teamBattleDayKey(date);
+ if(trials.dailyKey!==key){trials.dailyKey=key;trials.dailyAttempts=0}
+ trials.dailyAttempts=Math.max(0,Math.min(GAUNTLET_DAILY_LIMIT,Math.floor(Number(trials.dailyAttempts)||0)));
+ return{...trials,remaining:Math.max(0,GAUNTLET_DAILY_LIMIT-trials.dailyAttempts),limit:GAUNTLET_DAILY_LIMIT};
 }
 export function manualEndgameChallengeStatus(state,date=new Date()){
  const manual=normalizeEndgameState(state).emergency.manualChallenges,key=teamBattleDayKey(date);

@@ -1,64 +1,64 @@
-import{SaveService}from"./services/SaveService.js?v=2.3.0";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.3.0";
-import{AudioSystem}from"./core/AudioSystem.js?v=2.3.0";
-import{endgameCharacter}from"./data/endgameCharacters.js?v=2.3.0";
-import{SPECIES}from"./data/species.js?v=2.3.0";
-import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.3.0";
-import{attributeDamageMultiplier,attributeGuideRows,ATTRIBUTES}from"./data/attributes.js?v=2.3.0";
-import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.3.0";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.3.0";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.3.0";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.3.0";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.3.0";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.3.0";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.3.0";
-import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.3.0";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.3.0";
-import{Modal}from"./ui/components/Modal.js?v=2.3.0";
-import{pixelIcon}from"./ui/components/GameChrome.js?v=2.3.0";
-import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.3.0";
-import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.3.0";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.3.0";
-import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=2.3.0";
-import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.3.0";
-import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=2.3.0";
-import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=2.3.0";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=2.3.0";
-import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=2.3.0";
-import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=2.3.0";
-import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=2.3.0";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.3.0";
-import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.3.0";
-import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=2.3.0";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.3.0";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.3.0";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=2.3.0";
-import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.3.0";
-import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=2.3.0";
-import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=2.3.0";
-import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=2.3.0";
-import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=2.3.0";
-import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=2.3.0";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=2.3.0";
-import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.3.0";
-import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.3.0";
-import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.3.0";
-import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse}from"./battle/SkillSystem.js?v=2.3.0";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.3.0";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.3.0";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.3.0";
-import{dangerConfig}from"./core/DangerSystem.js?v=2.3.0";
-import{bossLevelForFloor}from"./core/EnemyScalingSystem.js?v=2.3.0";
-import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.3.0";
-import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.3.0";
-import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.3.0";
-import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.3.0";
-import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.3.0";
-import{monsterCombatPower,partyCombatPower,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.3.0";
-import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.3.0";
-import{applySerialReward,commitSerialRedemption,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.3.0";
-import{NOTICE_DEFINITIONS,markAllNoticesRead,normalizeNoticeState}from"./core/NoticeSystem.js?v=2.3.0";
-import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.3.0";
+import{SaveService}from"./services/SaveService.js?v=2.3.1";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.3.1";
+import{AudioSystem}from"./core/AudioSystem.js?v=2.3.1";
+import{endgameCharacter}from"./data/endgameCharacters.js?v=2.3.1";
+import{SPECIES}from"./data/species.js?v=2.3.1";
+import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.3.1";
+import{attributeDamageMultiplier,attributeGuideRows,ATTRIBUTES}from"./data/attributes.js?v=2.3.1";
+import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.3.1";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.3.1";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.3.1";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.3.1";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.3.1";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.3.1";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.3.1";
+import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.3.1";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.3.1";
+import{Modal}from"./ui/components/Modal.js?v=2.3.1";
+import{pixelIcon}from"./ui/components/GameChrome.js?v=2.3.1";
+import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.3.1";
+import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.3.1";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.3.1";
+import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=2.3.1";
+import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.3.1";
+import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=2.3.1";
+import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=2.3.1";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=2.3.1";
+import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=2.3.1";
+import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=2.3.1";
+import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=2.3.1";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.3.1";
+import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.3.1";
+import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=2.3.1";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.3.1";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.3.1";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=2.3.1";
+import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.3.1";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=2.3.1";
+import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=2.3.1";
+import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=2.3.1";
+import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=2.3.1";
+import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=2.3.1";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=2.3.1";
+import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.3.1";
+import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.3.1";
+import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.3.1";
+import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse}from"./battle/SkillSystem.js?v=2.3.1";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.3.1";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.3.1";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.3.1";
+import{dangerConfig}from"./core/DangerSystem.js?v=2.3.1";
+import{bossLevelForFloor}from"./core/EnemyScalingSystem.js?v=2.3.1";
+import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.3.1";
+import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.3.1";
+import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.3.1";
+import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.3.1";
+import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.3.1";
+import{monsterCombatPower,partyCombatPower,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.3.1";
+import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.3.1";
+import{applySerialReward,commitSerialRedemption,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.3.1";
+import{NOTICE_DEFINITIONS,markAllNoticesRead,normalizeNoticeState}from"./core/NoticeSystem.js?v=2.3.1";
+import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.3.1";
 
 const TILE=88,COLS=39,ROWS=39,app=document.getElementById("app"),save=new SaveService(),audio=new AudioSystem(()=>save.state.settings);
 let screen="home",selected=null,equipmentTarget=null,equipmentFocusItemId=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",inventoryCategory="all",inventorySort="rarity",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",skillNavigationOrigin="home",inventoryNavigationOrigin="home",settingsNavigationOrigin="home",detailNavigationOrigin="monsters",formationOrigin="home",lastExploreCombatPower=null;
@@ -346,9 +346,9 @@ function openTeamBattle(){
  const team=dailyTeamAttempts(save.state),unlockFloor=contentUnlockFloor(TEAM_BATTLE_UNLOCK_FLOOR);
  if(!isContentUnlocked(save.state,TEAM_BATTLE_UNLOCK_FLOOR))return alert(`${unlockFloor}階突破で解放されます`);
  if(save.state.party.length!==4)return alert(`4 VS 4には出撃メンバーが4体必要です（現在 ${save.state.party.length}/4体）`);
- if(team.dailyAttempts>=50)return alert("本日の挑戦回数50回を使い切りました");
+ if(team.remaining<=0)return showToast("本日の4 VS 4は終了");
  const reward=teamBattleRewardPreview(team.stage,save.state.player.maxFloor);
- app.insertAdjacentHTML("beforeend",Modal("⚔️ チームバトル",`<div class="team-battle-intro"><small>ABYSS ARENA${CONTENT_TEST_MODE?"・TEST ACCESS":""}</small><h2>第${team.stage}試練</h2><p>4体対4体。10戦ごとに敵編成と補正が跳ね上がり、第50試練は役割・属性・装備構成が必須です。</p><div class="team-reward-preview"><b>勝利GOLD ×${reward.goldMultiplier}</b><span>${pixelIcon("crystal")} ${reward.crystals}個</span>${reward.guaranteedRarity?`<em>${reward.guaranteedRarity}装備確定</em>`:""}</div><p><b>敗北ペナルティなし</b> / 本日 ${team.dailyAttempts}/50戦</p></div>`,`挑戦する`));
+ app.insertAdjacentHTML("beforeend",Modal("4 VS 4",`<div class="team-battle-intro"><small>ABYSS ARENA${CONTENT_TEST_MODE?"・TEST ACCESS":""}</small><h2>第${team.stage}試練</h2><p>4体対4体。10戦ごとに敵編成と補正が跳ね上がり、第50試練は役割・属性・装備構成が必須です。</p><div class="team-reward-preview"><b>勝利GOLD ×${reward.goldMultiplier}</b><span>${pixelIcon("crystal")} ${reward.crystals}個</span>${reward.guaranteedRarity?`<em>${reward.guaranteedRarity}装備確定</em>`:""}</div><div class="daily-attempt-plaque"><b>本日 残り${team.remaining}回</b><small>${team.dailyAttempts}/${team.limit}・日本時間0時更新</small></div></div>`,`挑戦する`));
  const modal=topModal();modal.classList.add("ornate-team-modal");
  modal.querySelector("[data-modal-primary]").onclick=()=>{if(save.state.party.length!==4)return alert("出撃メンバーを4体編成してください");modal.remove();const prior=capturePartyVitals();fullyRecoverParty();team.dailyAttempts++;save.save();startSpecialBattle(createTeamBattleEncounter(save.state),{type:"team",title:`TEAM BATTLE・第${team.stage}試練`,subtitle:"4 VS 4 / 敗北ペナルティなし",priorVitals:prior,returnScreen:"home"})};
 }
@@ -403,8 +403,8 @@ function finishSpecialBattle(won){
  let contractHtml="";if(type==="emergency"&&won)contractHtml=`<button type="button" class="fragment-altar-open" data-open-fragment-altar>${pixelIcon("summon")} 欠片祭壇へ　人物契約／神装顕現</button>`;
  if(type==="gauntlet"&&!won){fullyRecoverParty();save.save();battle=null;activeEnemy=null;showGauntletSettlement(gauntletSettlement??normalizeEndgameState(save.state).trials.lastSettlement);return}
  const trialName=ENDGAME_TRIALS[trialNumber-1]?.name??`第${trialNumber}戦`,subject=type==="gauntlet"?`奈落回廊 第${trialNumber}戦`:boss?.name??"チームバトル",progressText=type==="gauntlet"?(trialProgress?.loopCompleted?`22戦を踏破。精算せず${trialProgress.loop}周目へ進めます。`:`次は第${trialProgress?.battle??trialNumber}戦「${ENDGAME_TRIALS[(trialProgress?.battle??trialNumber)-1]?.name??trialName}」。`):type==="team"?"次の試練が解放されました。":"世界異変を退けました。";
- const teamLoot=type==="team"?`<div class="team-victory-loot"><b>${pixelIcon("crystal")} 魔晶石 ×${specialCrystals}</b>${specialEquipment?`<b>[${specialEquipment.rarity}] ${specialEquipment.name} Lv.${specialEquipment.level} +${specialEquipment.plus}</b>`:""}</div>`:"",title=won?"SPECIAL VICTORY":"DEFEAT",body=type==="gauntlet"?`<div class="special-result win gauntlet-chain-result"><small>ABYSS CORRIDOR / CHAIN CONTINUES</small><h2>${subject}を突破！</h2><p>${progressText}</p><div class="gauntlet-bank-note"><b>戦利品は回廊内に蓄積中</b><span>帰還・全滅時にGOLD／欠片／希少武器を一括精算</span></div></div>`:won?`<div class="special-result win"><h2>${subject}を突破！</h2><p>${progressText}</p><div class="fragment-reward"><b>${pixelIcon("coin")} 深層討伐報奨 +${specialGold.toLocaleString()}G</b><small>${rewardFloor}階のGOLD基準で算出</small></div>${teamLoot}${battle.preludeResultText?`<small>${battle.preludeResultText}</small>`:""}${type==="emergency"?`<div class="fragment-reward"><b>${monsterVisual(boss.id,boss.icon,{className:"fragment-boss-visual"})} ${boss.name}の欠片 ×${fragments}</b><small>所持 ${status.count}/${status.required}${status.canCraft?"　製作可能！":""}</small></div>${contractHtml}`:""}</div>`:`<div class="special-result lose"><h2>${subject}には届かなかった…</h2><p>所持品・階層・仲間へのペナルティはありません。</p>${type==="emergency"?`<div class="fragment-reward"><b>${monsterVisual(boss.id,boss.icon,{className:"fragment-boss-visual"})} ${boss.name}の欠片 ×${fragments}</b><small>${fragments?"10%抽選に成功":"今回は欠片なし"}・所持 ${status.count}/${status.required}</small></div>`:""}</div>`;
- save.save();battle=null;activeEnemy=null;app.insertAdjacentHTML("beforeend",Modal(title,body,returnScreen==="home"?"拠点へ戻る":returnScreen==="gauntlet"?"回廊へ戻る":"探索へ戻る"));const modal=topModal();modal.querySelector("[data-open-fragment-altar]")?.addEventListener("click",()=>{modal.remove();openEndgameForge()});modal.querySelector("[data-modal-primary]").onclick=()=>{modal.remove();if(returnScreen==="home"){snapshot=null;go("home")}else if(returnScreen==="gauntlet"){screen="gauntlet";render()}else{screen="explore";render()}}
+ const teamLoot=type==="team"?`<div class="team-victory-loot"><b>${pixelIcon("crystal")} 魔晶石 ×${specialCrystals}</b>${specialEquipment?`<b>[${specialEquipment.rarity}] ${specialEquipment.name} Lv.${specialEquipment.level} +${specialEquipment.plus}</b>`:""}</div>`:"",title=won?"SPECIAL VICTORY":"DEFEAT",body=type==="gauntlet"?`<div class="special-result win gauntlet-chain-result"><small>ABYSS CORRIDOR / CHAIN CONTINUES</small><h2>${subject}を突破！</h2><p>${progressText}</p><div class="gauntlet-bank-note"><b>戦利品は回廊内に蓄積中</b><span>帰還・全滅時にGOLD／欠片／希少武器を一括精算</span></div></div>`:won?`<div class="special-result win"><h2>${subject}を突破！</h2><p>${progressText}</p><div class="fragment-reward"><b>${pixelIcon("coin")} 深層討伐報奨 +${specialGold.toLocaleString()}G</b><small>${rewardFloor}階のGOLD基準で算出</small></div>${teamLoot}${battle.preludeResultText?`<small>${battle.preludeResultText}</small>`:""}${type==="emergency"?`<div class="fragment-reward"><b>${monsterVisual(boss.id,boss.icon,{className:"fragment-boss-visual"})} ${boss.name}の欠片 ×${fragments}</b><small>所持 ${status.count}/${status.required}${status.canCraft?"　製作可能！":""}</small></div>${contractHtml}`:""}</div>`:type==="team"?`<div class="team-defeat-report"><small>TEAM BATTLE / STAGE ${team?.stage??1}</small><span class="team-defeat-seal" aria-hidden="true"></span><h2>試練、未突破</h2><p>編成・属性・装備を組み直し、次の挑戦で深淵を越えてください。所持品や進行度への損失はありません。</p><div class="team-defeat-daily"><b>本日 残り${team?.remaining??0}回</b><small>日本時間0時に回復</small></div></div>`:`<div class="special-result lose"><h2>${subject}には届かなかった…</h2><p>所持品・階層・仲間へのペナルティはありません。</p>${type==="emergency"?`<div class="fragment-reward"><b>${monsterVisual(boss.id,boss.icon,{className:"fragment-boss-visual"})} ${boss.name}の欠片 ×${fragments}</b><small>${fragments?"10%抽選に成功":"今回は欠片なし"}・所持 ${status.count}/${status.required}</small></div>`:""}</div>`;
+ save.save();battle=null;activeEnemy=null;app.insertAdjacentHTML("beforeend",Modal(title,body,returnScreen==="home"?"拠点へ戻る":returnScreen==="gauntlet"?"回廊へ戻る":"探索へ戻る"));const modal=topModal();if(type==="team"&&!won)modal.classList.add("team-defeat-modal");modal.querySelector("[data-open-fragment-altar]")?.addEventListener("click",()=>{modal.remove();openEndgameForge()});modal.querySelector("[data-modal-primary]").onclick=()=>{modal.remove();if(returnScreen==="home"){snapshot=null;go("home")}else if(returnScreen==="gauntlet"){screen="gauntlet";render()}else{screen="explore";render()}}
 }
 
 function openEndgameForge(){
@@ -585,13 +585,16 @@ function showGauntletSettlement(settlement){
 function openGauntletTrial(){
  if(!isContentUnlocked(save.state,TEAM_BATTLE_UNLOCK_FLOOR))return showToast(`${contentUnlockFloor(TEAM_BATTLE_UNLOCK_FLOOR)}階突破で解放されます`);
  if(save.state.party.length!==4)return alert(`奈落回廊には出撃メンバーが4体必要です（現在 ${save.state.party.length}/4体）`);
- const state=normalizeEndgameState(save.state).trials,active=Boolean(state.run?.active);if(!active){state.battle=1;state.loop=1;state.cleared=[]}const encounter=createEndgameTrialEncounter(save.state,active?state.run.battle:1),trial=encounter.trial,bosses=trial.bossIds.map(id=>ENDGAME_BOSSES[id]);
- app.insertAdjacentHTML("beforeend",Modal("奈落回廊",`<div class="gauntlet-brief"><span class="trial-pixel-emblem corridor"></span><small>ABYSS CORRIDOR・${active?state.run.loop:state.loop}周目</small><h2>第${trial.number}/22戦　${trial.name}</h2><div class="gauntlet-opponents">${bosses.map(boss=>`<article>${monsterVisual(boss.id,boss.icon,{className:"gauntlet-boss-visual"})}<b>${boss.name}</b><small>${boss.role}</small></article>`).join("")}</div><p>ボス階層を自分で歩き、法廷主へ触れると戦闘開始。勝利後は奈落孔へ歩いて次階層へ進みます。</p><p><b>戦闘前後に持ち物使用・いつでも帰還可能</b> / 周回補正 ×${(1+(state.loop-1)*.5).toFixed(1)}</p></div>`,active?"回廊へ戻る":"奈落回廊へ入る"));
- const modal=topModal();modal.querySelector("[data-modal-primary]").onclick=()=>{modal.remove();if(!active){fullyRecoverParty();state.run={active:true,battle:1,loop:1,maxLoop:1,defeated:false,x:22,y:82,startedAt:new Date().toISOString(),fights:0,victories:0,score:0,defeatedBossIds:[]};save.save()}screen="gauntlet";render()};
+ const state=normalizeEndgameState(save.state).trials,daily=dailyGauntletAttempts(save.state),active=Boolean(state.run?.active);
+ if(!active&&daily.remaining<=0)return showToast("本日の奈落回廊は終了");
+ if(!active){state.battle=1;state.loop=1;state.cleared=[]}
+ const encounter=createEndgameTrialEncounter(save.state,active?state.run.battle:1),trial=encounter.trial,bosses=trial.bossIds.map(id=>ENDGAME_BOSSES[id]);
+ app.insertAdjacentHTML("beforeend",Modal("奈落回廊",`<div class="gauntlet-brief"><span class="trial-pixel-emblem corridor"></span><small>ABYSS CORRIDOR・${active?state.run.loop:state.loop}周目</small><h2>第${trial.number}/22戦　${trial.name}</h2><div class="gauntlet-opponents">${bosses.map(boss=>`<article>${monsterVisual(boss.id,boss.icon,{className:"gauntlet-boss-visual"})}<b>${boss.name}</b><small>${boss.role}</small></article>`).join("")}</div><p>入口から歩き、中央の法廷主へ触れると戦闘開始。勝利後は部屋奥の奈落門へ進みます。</p><p><b>戦闘前後に持ち物使用・いつでも帰還可能</b></p><div class="daily-attempt-plaque"><b>${active?"連続踏破中":`本日 残り${daily.remaining}回`}</b><small>${active?"帰還・全滅まで1回の挑戦として継続":`${daily.limit-daily.remaining}/${daily.limit}・日本時間0時更新`}</small></div></div>`,active?"回廊へ戻る":"奈落回廊へ入る"));
+ const modal=topModal();modal.querySelector("[data-modal-primary]").onclick=()=>{modal.remove();if(!active){fullyRecoverParty();state.dailyAttempts=Math.min(daily.limit,(Number(state.dailyAttempts)||0)+1);state.run={active:true,battle:1,loop:1,maxLoop:1,defeated:false,x:50,y:88,startedAt:new Date().toISOString(),fights:0,victories:0,score:0,defeatedBossIds:[]};save.save()}screen="gauntlet";render()};
 }
 let gauntletWalkToken=0;
 function currentGauntletRun(){const trials=normalizeEndgameState(save.state).trials;return trials.run?.active?trials.run:null}
-function gauntletObjectPosition(){return{x:72,y:24}}
+function gauntletObjectPosition(){const run=currentGauntletRun();return{x:50,y:run?.defeated?14:45}}
 function walkGauntletTo(targetX,targetY,action=null){
  const run=currentGauntletRun(),token=document.querySelector("[data-gauntlet-token]"),floor=document.querySelector("[data-gauntlet-floor]");if(!run||!token||!floor)return;
  const animation=++gauntletWalkToken,startX=Number(run.x)||16,startY=Number(run.y)||80,endX=Math.max(7,Math.min(93,Number(targetX)||startX)),endY=Math.max(8,Math.min(92,Number(targetY)||startY)),distance=Math.hypot(endX-startX,endY-startY),started=performance.now(),duration=Math.max(280,Math.min(1500,distance*17));
@@ -605,7 +608,7 @@ function beginGauntletEncounter(){
 }
 function advanceGauntletFloor(){
  const trials=normalizeEndgameState(save.state).trials,run=currentGauntletRun();if(!run?.defeated)return;
- run.battle=trials.battle;run.loop=trials.loop;run.maxLoop=Math.max(Number(run.maxLoop)||1,Number(run.loop)||1);run.defeated=false;run.x=22;run.y=82;run.enteredAt=new Date().toISOString();save.save();screen="gauntlet";render();
+ run.battle=trials.battle;run.loop=trials.loop;run.maxLoop=Math.max(Number(run.maxLoop)||1,Number(run.loop)||1);run.defeated=false;run.x=50;run.y=88;run.enteredAt=new Date().toISOString();save.save();screen="gauntlet";render();
 }
 function bindGauntlet(){
  const run=currentGauntletRun();if(!run){screen="home";render();return}
@@ -623,10 +626,10 @@ function openEndgameTrialPicker(){
 }
 function openEndgameDossier(bossId){const boss=endgameCharacter(bossId);if(!boss)return;const resist=Object.entries(boss.elementMultipliers).map(([key,value])=>`<span><small>${key}</small><b>${Math.round(value*100)}%</b></span>`).join(""),skills=boss.skills.map(skill=>`<article><small>${skill.tag}・MP${skill.mp}・CT${skill.cooldown}</small><b>${skill.name}</b><p>${skill.description}</p></article>`).join(""),gear=boss.gear.map(item=>`<article><small>${equipmentSubslotLabel(item.subslot)}</small><b>${item.name}</b><p>${item.effectText}</p></article>`).join("");app.insertAdjacentHTML("beforeend",Modal(`${boss.icon} ${boss.name}`,`<div class="endgame-character-bible ${boss.faction}">${monsterVisual(boss.id,boss.icon,{className:"endgame-bible-visual"})}<small>${boss.role}</small><h3>${boss.title}</h3><blockquote>${boss.encounterText}</blockquote><p>${boss.lore}</p><section><h4>戦闘思想</h4><p>${boss.ai}</p><b>${boss.passive}</b><small>${boss.awakening}</small></section><div class="endgame-resistance-grid">${resist}</div><div class="endgame-status-note"><b>無効：${boss.statusProfile.immune.join("・")||"なし"}</b><span>耐性：${boss.statusProfile.resistant.join("・")||"なし"}</span>${boss.statusProfile.weak.length?`<em>弱点：${boss.statusProfile.weak.join("・")}</em>`:""}</div><h4>固有技</h4><div class="endgame-bible-grid">${skills}</div><h4>固有装備 6部位</h4><div class="endgame-bible-grid gear">${gear}</div><div class="endgame-set-list"><b>2部位：${boss.setText[2]}</b><b>4部位：${boss.setText[4]}</b><b>6部位：${boss.setText[6]}</b></div></div>`,"戻る"));topModalButton().onclick=closeTopModal}
 function openEventHub(){
- const teamUnlocked=isContentUnlocked(save.state,TEAM_BATTLE_UNLOCK_FLOOR),emergencyUnlocked=isContentUnlocked(save.state,EMERGENCY_UNLOCK_FLOOR),gauntletUnlocked=isContentUnlocked(save.state,TEAM_BATTLE_UNLOCK_FLOOR),testLabel=CONTENT_TEST_MODE?`試遊条件 ${contentUnlockFloor(9999)}階`:"",team=dailyTeamAttempts(save.state),trials=normalizeEndgameState(save.state).trials,manual=manualEndgameChallengeStatus(save.state);
+ const teamUnlocked=isContentUnlocked(save.state,TEAM_BATTLE_UNLOCK_FLOOR),emergencyUnlocked=isContentUnlocked(save.state,EMERGENCY_UNLOCK_FLOOR),gauntletUnlocked=isContentUnlocked(save.state,TEAM_BATTLE_UNLOCK_FLOOR),testLabel=CONTENT_TEST_MODE?`試遊条件 ${contentUnlockFloor(9999)}階`:"",team=dailyTeamAttempts(save.state),trials=normalizeEndgameState(save.state).trials,gauntlet=dailyGauntletAttempts(save.state),manual=manualEndgameChallengeStatus(save.state);
  app.insertAdjacentHTML("beforeend",Modal("試練",`<div class="trial-access-note ${CONTENT_TEST_MODE?"is-test":""}"><b>${CONTENT_TEST_MODE?"TEST ACCESS":"CHALLENGE GATE"}</b><small>${CONTENT_TEST_MODE?"完成時は正式な解放条件へ自動復帰します。":"編成・属性・装備の完成度を測る最深部への門"}</small></div><div class="home-event-grid trial-gate-grid brain-rush">
-  <button type="button" data-home-trial="team" class="team ${teamUnlocked?"unlocked":"locked"}"><span class="trial-pixel-emblem arena"></span><div><b>4 VS 4</b><small>${teamUnlocked?`指数強化・第50試練は編成完成が必須 ${testLabel}`:`${contentUnlockFloor(TEAM_BATTLE_UNLOCK_FLOOR)}階突破で解放`}</small></div><em>STAGE ${team.stage}</em></button>
-  <button type="button" data-home-trial="gauntlet" class="corridor ${gauntletUnlocked?"unlocked":"locked"}"><span class="trial-pixel-emblem corridor"></span><div><b>奈落回廊</b><small>${gauntletUnlocked?`歩行式・全22法廷・戦闘前後に道具使用可 ${testLabel}`:`${contentUnlockFloor(TEAM_BATTLE_UNLOCK_FLOOR)}階突破で解放`}</small></div><em>${trials.loop}周・${trials.battle}/22</em></button>
+  <button type="button" data-home-trial="team" class="team ${teamUnlocked?"unlocked":"locked"}"><span class="trial-pixel-emblem arena"></span><div><b>4 VS 4</b><small>${teamUnlocked?`指数強化・第50試練は編成完成が必須 ${testLabel}`:`${contentUnlockFloor(TEAM_BATTLE_UNLOCK_FLOOR)}階突破で解放`}</small></div><em>残${team.remaining}/${team.limit}</em></button>
+  <button type="button" data-home-trial="gauntlet" class="corridor ${gauntletUnlocked?"unlocked":"locked"}"><span class="trial-pixel-emblem corridor"></span><div><b>奈落回廊</b><small>${gauntletUnlocked?`歩行式・全22法廷・戦闘前後に道具使用可 ${testLabel}`:`${contentUnlockFloor(TEAM_BATTLE_UNLOCK_FLOOR)}階突破で解放`}</small></div><em>${trials.run?.active?"踏破中":`残${gauntlet.remaining}/${gauntlet.limit}`}</em></button>
   <button type="button" data-home-trial="endgame" class="endgame ${emergencyUnlocked?"unlocked":"locked"}"><span class="trial-pixel-emblem endgame"></span><div><b>深淵・十神</b><small>${emergencyUnlocked?`4段階解禁・全対象で1日3戦 ${testLabel}`:`${contentUnlockFloor(EMERGENCY_UNLOCK_FLOOR)}階突破で解放`}</small></div><em>本日 残${manual.remaining}</em></button>
  </div>`,"閉じる"));
  const modal=topModal();modal.classList.add("trial-hub-modal-v3");
@@ -1306,7 +1309,7 @@ function formationPickerBody(replacingId=null){
    <option value="power" ${formationPickerState.sort==="power"?"selected":""}>戦闘力順</option><option value="rarity" ${formationPickerState.sort==="rarity"?"selected":""}>レア度順</option><option value="level" ${formationPickerState.sort==="level"?"selected":""}>レベル順</option>
    <option value="affection" ${formationPickerState.sort==="affection"?"selected":""}>なつき度順</option><option value="experience" ${formationPickerState.sort==="experience"?"selected":""}>累計EXP順</option><option value="obtained" ${formationPickerState.sort==="obtained"?"selected":""}>入手順</option><option value="name" ${formationPickerState.sort==="name"?"selected":""}>名前順</option>
   </select><button type="button" id="formationPickerDirection">${formationPickerState.direction==="desc"?"降順 ↓":"昇順 ↑"}</button></div>
-  <div class="formation-picker-list">${rows||'<div class="empty">控えモンスターがいません</div>'}</div>
+  <div class="formation-picker-list">${rows||'<div class="empty">控えモンスターがいません</div>'}<div class="empty formation-filter-empty" hidden>条件に合う魔物がいません</div></div>
  </div>`;
 }
 function replacePartyMember(outgoingId,incomingId,inherit=false){
@@ -1365,7 +1368,7 @@ function openFormationPicker(replacingId=null){
  const modal=topModal();modal.classList.add("formation-picker-modal-premium");bindFormationPickerModal(modal,replacingId);
 }
 function bindFormationPickerModal(modal,replacingId=null){
- const input=modal.querySelector("#formationPickerSearch"),applySearch=()=>{const query=formationPickerState.search.trim().toLowerCase(),attribute=formationPickerState.attribute;modal.querySelectorAll("[data-formation-pick]").forEach(button=>button.hidden=Boolean(query&&!button.dataset.search.includes(query))||attribute!=="all"&&button.dataset.formationAttribute!==attribute)};
+ const input=modal.querySelector("#formationPickerSearch"),applySearch=()=>{const query=formationPickerState.search.trim().toLowerCase(),attribute=formationPickerState.attribute,buttons=[...modal.querySelectorAll("[data-formation-pick]")];buttons.forEach(button=>button.hidden=Boolean(query&&!button.dataset.search.includes(query))||attribute!=="all"&&button.dataset.formationAttribute!==attribute);const empty=modal.querySelector(".formation-filter-empty");if(empty)empty.hidden=buttons.some(button=>!button.hidden)};
  if(input){input.addEventListener("input",()=>{formationPickerState.search=input.value;applySearch()});applySearch()}
  modal.querySelectorAll("[data-formation-attribute-filter]").forEach(button=>button.onclick=()=>{formationPickerState.attribute=button.dataset.formationAttributeFilter;modal.querySelectorAll("[data-formation-attribute-filter]").forEach(entry=>entry.classList.toggle("active",entry===button));applySearch()});
  const sort=modal.querySelector("#formationPickerSort");if(sort)sort.onchange=()=>{formationPickerState.sort=sort.value;refreshFormationPicker(modal,replacingId)};
@@ -2253,9 +2256,9 @@ function bindExplore(){
   const startedAt=Number(elapsed.dataset.startedAt)||Date.now(),tickElapsed=()=>{const seconds=Math.floor(Math.max(0,Date.now()-startedAt)/1000),hours=Math.floor(seconds/3600),minutes=Math.floor(seconds/60)%60,rest=seconds%60;elapsed.textContent=`${hours?`${String(hours).padStart(2,"0")}:`:""}${String(minutes).padStart(2,"0")}:${String(rest).padStart(2,"0")}`};
   tickElapsed();game.elapsedTimer=setInterval(tickElapsed,1000);
  }
- bindMovableMapToggle();bindExploreMonsterLongPress();showFloorTutorial();if(shouldPlayTenGodFirstContact(save.state)&&!game.world.treasureRoom)setTimeout(()=>playTenGodFirstContact(),300);else if(save.state.player.currentFloor>=1002&&!game.world.treasureRoom)setTimeout(()=>showSecondWorldRandomEvent(),260);if(game.world.treasureRoom&&!game.world.treasureNoticeShown){game.world.treasureNoticeShown=true;game.paused=true;setTimeout(()=>{pauseModal("💰 宝物庫を発見",`<p>部屋中に宝箱が並んでいる。</p><p class="muted">約半数は強力なミミック。鍵付きの箱には高レア装備が眠る。</p>`);},420)}
+ bindMovableMapToggle();bindExploreMonsterLongPress();if(save.state.settings.exploreAutoMode!=="off")requestAnimationFrame(applyExploreAutoPath);showFloorTutorial();if(shouldPlayTenGodFirstContact(save.state)&&!game.world.treasureRoom)setTimeout(()=>playTenGodFirstContact(),300);else if(save.state.player.currentFloor>=1002&&!game.world.treasureRoom)setTimeout(()=>showSecondWorldRandomEvent(),260);if(game.world.treasureRoom&&!game.world.treasureNoticeShown){game.world.treasureNoticeShown=true;game.paused=true;setTimeout(()=>{pauseModal("💰 宝物庫を発見",`<p>部屋中に宝箱が並んでいる。</p><p class="muted">約半数は強力なミミック。鍵付きの箱には高レア装備が眠る。</p>`);},420)}
  document.getElementById("toggleExplorePartyHud")?.addEventListener("click",()=>{save.state.settings.explorePartyHudCollapsed=!save.state.settings.explorePartyHudCollapsed;save.save();snapshot=currentSnapshot();stopGame();render()});
- document.querySelectorAll("[data-explore-auto-mode]").forEach(button=>button.addEventListener("click",()=>{const mode=button.dataset.exploreAutoMode;save.state.settings.exploreAutoMode=mode;save.save();if(game){game.player.path=[];game.player.p=0;if(mode!=="off")applyExploreAutoPath()}showToast(mode==="off"?"自動探索を停止しました":`${({floor:"階層攻略",items:"アイテム回収",exp:"経験値"})[mode]}優先で自動探索します`)}));
+ document.querySelectorAll("[data-explore-auto-mode]").forEach(button=>button.addEventListener("click",()=>{const mode=button.dataset.exploreAutoMode;save.state.settings.exploreAutoMode=mode;save.save();if(game){game.player.path=[];game.player.p=0;if(mode!=="off")applyExploreAutoPath()}showToast(mode==="off"?"AUTO 停止":`AUTO｜${({floor:"階層攻略",items:"回収優先",exp:"経験値優先"})[mode]}`)}));
  document.getElementById("centerCamera").onclick=()=>{game.camera.reset(game.player.rx*TILE,game.player.ry*TILE);game.camera.clamp(game.world);queueExpeditionCheckpoint()};
  document.getElementById("pauseParty").onclick=()=>{snapshot=currentSnapshot();stopGame();formationOrigin="explore";go("formation")};
  document.getElementById("resourceHelp")?.addEventListener("click",openResourceHelp);
@@ -2330,23 +2333,24 @@ function bindExploreMonsterLongPress(){document.querySelectorAll("[data-explore-
  snapshot=currentSnapshot();stopGame();equipmentTarget=id;equipmentFocusItemId=null;navigationOrigin="explore";go("equipment");
 })}
 function bindMovableMapToggle(){
- const button=document.getElementById("miniMapToggle"),map=document.getElementById("miniMap");if(!button||!map)return;
+ const button=document.getElementById("miniMapToggle"),map=document.getElementById("miniMap"),auto=document.querySelector(".explore-auto-controller");if(!button||!map)return;
  const stage=button.closest(".explore-stage");if(!stage)return;
- stage.append(button,map);
+ stage.append(button,map);if(auto)stage.append(auto);
  const clampPosition=(element,position,fallback)=>{
   const stageRect=stage.getBoundingClientRect(),rect=element.getBoundingClientRect(),source=position&&Number.isFinite(position.x)&&Number.isFinite(position.y)?position:fallback;
   return{x:Math.max(4,Math.min(stageRect.width-rect.width-4,source.x)),y:Math.max(4,Math.min(stageRect.height-rect.height-4,source.y))};
  };
  const place=(element,position,fallback)=>{const next=clampPosition(element,position,fallback);element.style.setProperty("left",`${next.x}px`,"important");element.style.setProperty("top",`${next.y}px`,"important");element.style.setProperty("right","auto","important");element.style.setProperty("bottom","auto","important");element.style.setProperty("transform","none","important");return next};
- const bindDrag=(element,settingKey,fallback,{onTap=null}={})=>{
+ const bindDrag=(element,settingKey,fallback,{onTap=null,handle=null}={})=>{
   let suppressClick=false;
   requestAnimationFrame(()=>place(element,save.state.settings[settingKey],fallback));
   element.addEventListener("pointerdown",event=>{
    if(event.button!=null&&event.button!==0)return;
+   if(handle&&!event.target.closest(handle))return;
    event.preventDefault();event.stopPropagation();element.setPointerCapture?.(event.pointerId);
    const start={x:event.clientX,y:event.clientY},origin=place(element,save.state.settings[settingKey],fallback);let moved=false,last={...start};
    const move=moveEvent=>{last={x:moveEvent.clientX,y:moveEvent.clientY};const dx=last.x-start.x,dy=last.y-start.y;if(Math.hypot(dx,dy)>5)moved=true;place(element,{x:origin.x+dx,y:origin.y+dy},fallback)};
-   const finish=upEvent=>{element.removeEventListener("pointermove",move);element.removeEventListener("pointerup",finish);element.removeEventListener("pointercancel",finish);if(Number.isFinite(upEvent.clientX)&&Number.isFinite(upEvent.clientY))last={x:upEvent.clientX,y:upEvent.clientY};const final=place(element,{x:origin.x+last.x-start.x,y:origin.y+last.y-start.y},fallback);if(moved){save.state.settings[settingKey]=final;save.save();suppressClick=true;setTimeout(()=>suppressClick=false,0)}else if(upEvent.type!=="pointercancel")onTap?.()};
+   const finish=upEvent=>{element.removeEventListener("pointermove",move);element.removeEventListener("pointerup",finish);element.removeEventListener("pointercancel",finish);if(Number.isFinite(upEvent.clientX)&&Number.isFinite(upEvent.clientY))last={x:upEvent.clientX,y:upEvent.clientY};const final=place(element,{x:origin.x+last.x-start.x,y:origin.y+last.y-start.y},fallback);if(moved){save.state.settings[settingKey]=final;save.save();suppressClick=true;setTimeout(()=>suppressClick=false,0)}else if(upEvent.type!=="pointercancel"&&onTap){suppressClick=true;onTap();setTimeout(()=>suppressClick=false,0)}};
    element.addEventListener("pointermove",move);element.addEventListener("pointerup",finish);element.addEventListener("pointercancel",finish);
   });
   element.addEventListener("click",event=>{if(suppressClick){event.preventDefault();event.stopImmediatePropagation()}},true);
@@ -2355,11 +2359,11 @@ function bindMovableMapToggle(){
  sync();
  bindDrag(button,"mapTogglePosition",{x:Math.max(8,stage.clientWidth-72),y:Math.max(8,stage.clientHeight*.48-29)},{onTap:()=>{save.state.settings.minimapVisible=save.state.settings.minimapVisible===false;save.save();sync()}});
  bindDrag(map,"minimapPanelPosition",{x:Math.max(8,stage.clientWidth-208),y:10});
+ if(auto)bindDrag(auto,"autoExploreButtonPosition",{x:Math.max(8,stage.clientWidth-122),y:Math.max(8,stage.clientHeight*.58)},{handle:"summary",onTap:()=>{auto.open=!auto.open}});
 }
 function itemCount(type){return save.state.inventory[type]??0}
 function openFieldItems(){
  if(!game?.running)return;
- stopExploreAuto();
  snapshot=currentSnapshot();stopGame();inventoryNavigationOrigin="explore";inventoryCategory="consumable";go("inventory");
 }
 function clearAilments(m){m.statuses=[];m.status=null;m.ailments=[];if(battle?.party?.some(monster=>monster.id===m.id))clearPersistentAilments(battle,m.id)}
@@ -2403,7 +2407,6 @@ function floorBossParty(bossInfo,floor){
  return[{...bossInfo,statMultiplier:(bossInfo.statMultiplier??1)*(1.25+Math.min(2.4,floor/520))},...supports]
 }
 function openFloorBossChallenge(bossInfo,floor){
- stopExploreAuto("階層支配者を検知・自動探索停止");
  const species=SPECIES[bossInfo.speciesId]??SPECIES.slime,endgame=bossInfo.endgameBossId?ENDGAME_BOSSES[bossInfo.endgameBossId]:null,name=bossInfo.nameOverride??endgame?.name??species.name,quote=endgame?.encounterText??["ここより先へ進む資格を、その力で示せ。","幾度挑もうと構わぬ。深淵は覚悟だけを量る。","この階層を越えるなら、恐れごと剣に変えてみせろ。"][Math.floor(Math.random()*3)],preview=createMonster(bossInfo.speciesId,{level:bossInfo.level,stars:5,rank:4}),partyPower=partyCombatPower(save.state),bossPower=Math.max(1,Math.round(monsterCombatPower(preview)*(bossInfo.statMultiplier??(1.45+Math.min(2,floor/700))))),tone=endgame?.faction==="tenGod"?"divine":endgame?.faction==="abyss"?"abyss":"floor";
  app.insertAdjacentHTML("beforeend",Modal("FLOOR BOSS",`<div class="floor-boss-challenge-v3 tone-${tone}"><div class="boss-chain-frame" aria-hidden="true"><i></i><i></i></div><div class="boss-crest-v3"><span>FLOOR</span><strong>${floor}</strong><em>DOMINATOR</em></div><div class="boss-visual-stage-v3"><div class="boss-fog-v3"></div>${monsterVisual({...bossInfo,visualSpeciesId:bossInfo.endgameBossId},species.emoji??"BOSS",{className:"floor-boss-monster-visual-v3"})}</div><small>${endgame?.title??`第${floor}階層の支配者`}</small><h2>${name}</h2><b>Lv.${bossInfo.level}</b><blockquote>${quote}</blockquote><div class="boss-power-versus-v3"><span><small>PARTY POWER</small><b>${formatCombatPower(partyPower)}</b></span><i>VS</i><span><small>BOSS POWER</small><b>${formatCombatPower(bossPower)}</b></span></div><button type="button" class="boss-retreat-v3" data-boss-retreat>いったん退く</button></div>`,"支配者へ挑む"));
  const modal=topModal();modal.classList.add("floor-boss-modal-v3");const retreat=()=>{modal.remove();if(game)game.paused=false};modal._onDismiss=retreat;modal.querySelector("[data-boss-retreat]").onclick=retreat;modal.querySelector("[data-modal-primary]").onclick=()=>{modal.remove();if(game)game.paused=false;beginEncounter(floorBossParty(bossInfo,floor))};
@@ -2418,7 +2421,6 @@ function loop(now){
 }
 async function beginEncounter(enemyOverride=null){
  if(!game?.running||game.world.encountering)return;
- stopExploreAuto("敵影を検知・自動探索停止");
  game.world.encountering=true;
  game.player.path=[];
  game.paused=true;
@@ -2607,11 +2609,11 @@ function explorationPartyMembers(){return(save.state.party??[]).map(id=>save.sta
 const explorationSpriteCache=new Map();
 const explorationTextureCache=new Map();
 const EXPLORE_TEXTURE_URLS={
- floor:"assets/ui/explore/dungeon-floor.png?v=2.3.0",
- wall:"assets/ui/explore/dungeon-wall.png?v=2.3.0",
- stairs:"assets/ui/explore/dungeon-stairs-arch.png?v=2.3.0",
- props:"assets/ui/explore/dungeon-props-atlas.png?v=2.3.0",
- usedWater:"assets/ui/explore/empty-water-basin.png?v=2.3.0"
+ floor:"assets/ui/explore/dungeon-floor.png?v=2.3.1",
+ wall:"assets/ui/explore/dungeon-wall.png?v=2.3.1",
+ stairs:"assets/ui/explore/dungeon-stairs-arch.png?v=2.3.1",
+ props:"assets/ui/explore/dungeon-props-atlas.png?v=2.3.1",
+ usedWater:"assets/ui/explore/empty-water-basin.png?v=2.3.1"
 };
 const EXPLORE_ATLAS=Object.freeze({
  floor:0,wall:1,corner:2,pillar:3,entrance:4,chestClosed:5,chestOpen:6,barrel:7,
@@ -2954,11 +2956,11 @@ async function floatText(text,target,type){
  const match=formatted.match(/^(.*?)([\d,]+)([^\d]*)$/);
  if(match&&["damage","critical","skill","enemy"].includes(type)){
   const [,prefix,digits,suffix]=match;n.innerHTML=`<span class="damage-prefix">${prefix}</span><span class="damage-slot-digits">${[...digits].map((digit,index)=>digit===","?'<i class="comma">,</i>':`<i data-final-digit="${digit}" style="--digit-index:${index}">0</i>`).join("")}</span><span class="damage-suffix">${suffix}</span>`;
-  const slots=[...n.querySelectorAll("[data-final-digit]")],started=performance.now(),settle=170;
-  const spin=now=>{const elapsed=now-started;slots.forEach((slot,index)=>{const local=elapsed-index*18;if(local>=settle){slot.textContent=slot.dataset.finalDigit;slot.classList.add("settled")}else slot.textContent=String(Math.floor(Math.random()*10))});if(slots.some(slot=>!slot.classList.contains("settled")))requestAnimationFrame(spin)};requestAnimationFrame(spin);
+  const slots=[...n.querySelectorAll("[data-final-digit]")],started=performance.now(),settle=300;
+  const spin=now=>{const elapsed=now-started;slots.forEach((slot,index)=>{const local=elapsed-index*24;if(local>=settle){slot.textContent=slot.dataset.finalDigit;slot.classList.add("settled")}else slot.textContent=String(Math.floor(Math.random()*10))});if(slots.some(slot=>!slot.classList.contains("settled")))requestAnimationFrame(spin)};requestAnimationFrame(spin);
  }else n.textContent=formatted;
  n.style.left=`${r.left-lr.left+r.width/2}px`;n.style.top=`${r.top-lr.top+r.height*.35}px`;
- layer.appendChild(n);const visible=Math.max(type==="critical"?1050:820,Math.round((type==="critical"?1450:1180)/battleSpeed()));setTimeout(()=>n.remove(),visible);await wait(["damage","critical","skill","enemy"].includes(type)?190:135);
+ layer.appendChild(n);const visible=type==="critical"?1800:type==="skill"?1650:1450;setTimeout(()=>n.remove(),visible);await wait(["damage","critical","skill","enemy"].includes(type)?270:180);
 }
 function battleFlash(type="hit"){
  const arena=document.querySelector(".battle-arena");if(!arena)return;
@@ -3014,7 +3016,14 @@ function saveBattleCheckpoint(){
  save.save()
 }
 function clearBattleCheckpoint(){delete save.state.activeBattle;save.save()}
-function resumeSavedBattle(){const data=save.state.activeBattle;if(!data?.enemies?.length)return false;const party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);if(!party.length)return false;save.state.player.currentFloor=data.floor??save.state.player.currentFloor;snapshot=hydrateExpeditionSnapshot(data.explorationSnapshot??save.state.expeditionSnapshot);battle={...data,battleId:data.battleId??crypto.randomUUID?.()??`${Date.now()}-${Math.random()}`,party,species:SPECIES,busy:false,skillMenu:false,itemMenu:false,enemy:data.enemies[0],...createBattleRulesState(party),cooldowns:data.cooldowns??{},enemyStatuses:data.enemyStatuses??{},allyAilments:data.allyAilments??Object.fromEntries(party.map(monster=>[monster.id,normalizePersistentAilments(monster.ailments)])),allyEffects:data.allyEffects??{},enemyEffects:data.enemyEffects??{},lastStatusTurn:data.lastStatusTurn??0,log:data.log??[]};battle.enemies.forEach(enemy=>hydrateEndgameEnemy(enemy));battle.enemy=battle.enemies[0];syncPersistentAilments(battle);battle.turnQueue=data.turnQueue??[];battle.queueIndex=data.queueIndex??0;battle.targetEnemyId=data.targetEnemyId??aliveEnemies(battle)[0]?.id??null;screen="explore";renderBattle();setTimeout(()=>data.actionCommitted?finishCurrentAction():continueBattleFlow(),scaledBattleDelay(250));return true}
+function resumeSavedBattle(){
+ const data=save.state.activeBattle;if(!data?.enemies?.length)return false;
+ const party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);if(!party.length)return false;
+ save.state.player.currentFloor=data.floor??save.state.player.currentFloor;snapshot=hydrateExpeditionSnapshot(data.explorationSnapshot??save.state.expeditionSnapshot);
+ const explorationAuto=save.state.settings.exploreAutoMode!=="off"&&!data.specialBattle&&!data.memoryBattle;
+ battle={...data,battleId:data.battleId??crypto.randomUUID?.()??`${Date.now()}-${Math.random()}`,party,species:SPECIES,busy:false,skillMenu:false,itemMenu:false,enemy:data.enemies[0],auto:explorationAuto||data.auto,explorationAuto,...createBattleRulesState(party),cooldowns:data.cooldowns??{},enemyStatuses:data.enemyStatuses??{},allyAilments:data.allyAilments??Object.fromEntries(party.map(monster=>[monster.id,normalizePersistentAilments(monster.ailments)])),allyEffects:data.allyEffects??{},enemyEffects:data.enemyEffects??{},lastStatusTurn:data.lastStatusTurn??0,log:data.log??[]};
+ battle.enemies.forEach(enemy=>hydrateEndgameEnemy(enemy));battle.enemy=battle.enemies[0];syncPersistentAilments(battle);battle.turnQueue=data.turnQueue??[];battle.queueIndex=data.queueIndex??0;battle.targetEnemyId=data.targetEnemyId??aliveEnemies(battle)[0]?.id??null;screen="explore";renderBattle();setTimeout(()=>data.actionCommitted?finishCurrentAction():continueBattleFlow(),scaledBattleDelay(250));return true
+}
 function affixValue(monster,id,cap=Infinity){return Math.max(0,Math.min(cap,Number(monster?._equipmentAffixes?.[id]??0)))}
 function equipmentStatValue(monster,id,cap=Infinity){return Math.max(0,Math.min(cap,Number(monster?._equipmentStats?.[id]??0)))}
 function seriesEffectValue(monster,id,cap=Infinity){return Math.max(0,Math.min(cap,Number(monster?._seriesEffects?.[id]??0)))}
@@ -3073,7 +3082,8 @@ function startBattle(encounter,options={}){
  });
  enemies.filter(enemy=>enemy.elite).forEach(enemy=>recordEliteEncounter(save.state,enemy));save.save();
  const endgameFaction=enemies.find(enemy=>enemy.faction)?.faction,battleTheme=endgameFaction==="tenGod"?"ten-gods":endgameFaction==="abyss"?"abyss":enemies.some(enemy=>enemy.boss)?"boss":biomeBattle?.theme??"default";
- battle={battleId:crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`,enemies,enemy:enemies[0],targetEnemyId:enemies[0]?.id,party,species:SPECIES,turn:1,busy:false,auto:save.state.settings.autoBattle,guards:{},escapePending:false,actionCommitted:false,skillMenu:false,itemMenu:false,allySynergy:synergy,enemySynergy,biomeBattle,battleTheme,...createBattleRulesState(party),...options};
+ const explorationAuto=save.state.settings.exploreAutoMode!=="off"&&!options.specialBattle&&!options.memoryBattle;
+ battle={battleId:crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`,enemies,enemy:enemies[0],targetEnemyId:enemies[0]?.id,party,species:SPECIES,turn:1,busy:false,auto:explorationAuto||save.state.settings.autoBattle,explorationAuto,guards:{},escapePending:false,actionCommitted:false,skillMenu:false,itemMenu:false,allySynergy:synergy,enemySynergy,biomeBattle,battleTheme,...createBattleRulesState(party),...options};
  audio.setScene(enemies.some(enemy=>enemy.faction==="tenGod")?"divine":enemies.some(enemy=>enemy.faction==="abyss")?"abyss":enemies.some(enemy=>enemy.elite)?"elite":enemies.some(enemy=>enemy.boss)?"boss":"battle");audio.sfx(enemies.some(enemy=>enemy.endgameBossId||enemy.boss)?"boss":"select");
  buildTurnQueue(battle);
  if(synergy)addBattleLog(battle,`${synergy.name}が発動！`);
@@ -3084,7 +3094,26 @@ function startBattle(encounter,options={}){
  saveBattleCheckpoint();renderBattle();setTimeout(async()=>{await battleIntro(enemies);continueBattleFlow()},scaledBattleDelay(120))
 }
 function actor(){return currentAlly(battle)}
-function renderBattle(){document.querySelector(".battle-screen")?.remove();app.insertAdjacentHTML("beforeend",BattleScreen(battle,save.state.inventory,save.state.settings,save.state.player.currentFloor));document.querySelectorAll("[data-command]").forEach(b=>b.onclick=()=>command(b.dataset.command));document.querySelectorAll("[data-skill-id]").forEach(b=>b.onclick=()=>command("skill",b.dataset.skillId));document.querySelectorAll("[data-battle-item]").forEach(b=>b.onclick=()=>openBattleItemTarget(b.dataset.battleItem));document.querySelectorAll("[data-battle-detail]").forEach(b=>b.onclick=()=>showBattleMonsterDetail(b.dataset.battleDetail));document.querySelectorAll("[data-enemy-target]").forEach(b=>b.onclick=()=>{if(battle.busy)return;battle.targetEnemyId=b.dataset.enemyTarget;renderBattle()});document.querySelector(".battle-arena")?.addEventListener("click",e=>{if(!battle.auto||e.target.closest("button,.combatant"))return;battle.auto=false;save.state.settings.autoBattle=false;saveBattleCheckpoint();showToast("手動操作へ切り替えました");renderBattle()});const closeSkill=document.getElementById("closeSkillMenu");if(closeSkill)closeSkill.onclick=()=>{battle.skillMenu=false;renderBattle()};const closeItem=document.getElementById("closeItemMenu");if(closeItem)closeItem.onclick=()=>{battle.itemMenu=false;renderBattle()};document.getElementById("battleSpeed").onclick=()=>{const index=BATTLE_SPEED_OPTIONS.indexOf(battleSpeed());save.state.settings.battleSpeed=BATTLE_SPEED_OPTIONS[(index+1)%BATTLE_SPEED_OPTIONS.length];save.save();renderBattle()};document.getElementById("toggleBattleAuto").onclick=()=>{battle.auto=!battle.auto;save.state.settings.autoBattle=battle.auto;save.save();renderBattle();if(battle.auto&&!battle.busy)continueBattleFlow()};document.getElementById("escapeBattle")?.addEventListener("click",requestEscape)}
+function renderBattle(){
+ document.querySelector(".battle-screen")?.remove();app.insertAdjacentHTML("beforeend",BattleScreen(battle,save.state.inventory,save.state.settings,save.state.player.currentFloor));
+ document.querySelectorAll("[data-command]").forEach(button=>button.onclick=()=>command(button.dataset.command));
+ document.querySelectorAll("[data-skill-id]").forEach(button=>button.onclick=()=>command("skill",button.dataset.skillId));
+ document.querySelectorAll("[data-battle-item]").forEach(button=>button.onclick=()=>openBattleItemTarget(button.dataset.battleItem));
+ document.querySelectorAll("[data-battle-detail]").forEach(button=>button.onclick=()=>showBattleMonsterDetail(button.dataset.battleDetail));
+ document.querySelectorAll("[data-enemy-target]").forEach(button=>button.onclick=()=>{if(battle.busy)return;battle.targetEnemyId=button.dataset.enemyTarget;renderBattle()});
+ document.querySelector(".battle-arena")?.addEventListener("click",event=>{
+  if(!battle.auto||event.target.closest("button,.combatant")||battle.explorationAuto)return;
+  battle.auto=false;save.state.settings.autoBattle=false;saveBattleCheckpoint();showToast("手動操作へ切替");renderBattle();
+ });
+ const closeSkill=document.getElementById("closeSkillMenu");if(closeSkill)closeSkill.onclick=()=>{battle.skillMenu=false;renderBattle()};
+ const closeItem=document.getElementById("closeItemMenu");if(closeItem)closeItem.onclick=()=>{battle.itemMenu=false;renderBattle()};
+ document.getElementById("battleSpeed").onclick=()=>{const index=BATTLE_SPEED_OPTIONS.indexOf(battleSpeed());save.state.settings.battleSpeed=BATTLE_SPEED_OPTIONS[(index+1)%BATTLE_SPEED_OPTIONS.length];save.save();renderBattle()};
+ document.getElementById("toggleBattleAuto").onclick=()=>{
+  if(battle.explorationAuto)return showToast("探索AUTO中");
+  battle.auto=!battle.auto;save.state.settings.autoBattle=battle.auto;save.save();renderBattle();if(battle.auto&&!battle.busy)continueBattleFlow();
+ };
+ document.getElementById("escapeBattle")?.addEventListener("click",requestEscape);
+}
 async function requestEscape(){
  if(!battle||battle.escapePending||battle.specialBattle)return;
  battle.auto=false;save.state.settings.autoBattle=false;save.save();

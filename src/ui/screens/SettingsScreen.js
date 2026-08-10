@@ -1,4 +1,4 @@
-import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=2.3.0";
+import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=2.3.1";
 export function SettingsScreen(state){
   const redeemedCount=Object.keys(state.serialCodes?.redeemed??{}).length;
   return`

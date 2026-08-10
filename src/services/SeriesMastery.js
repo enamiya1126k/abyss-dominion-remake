@@ -1,4 +1,4 @@
-import{EQUIPMENT_SERIES}from"../data/equipmentSeries.js?v=2.3.0";
+import{EQUIPMENT_SERIES}from"../data/equipmentSeries.js?v=2.3.1";
 
 export const SERIES_MASTERY_LEVELS=[
  {level:1,exp:0,label:"見習い",bonus:{}},

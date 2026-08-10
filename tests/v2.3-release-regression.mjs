@@ -10,8 +10,8 @@ import {SPECIAL_ACTION_INFO} from "../src/battle/EnemyAI.js";
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 
-assert.equal(APP_VERSION,"2.3.0");
-assert.equal(SAVE_SCHEMA_VERSION,47);
+assert.equal(APP_VERSION,"2.3.1");
+assert.equal(SAVE_SCHEMA_VERSION,48);
 assert.equal(MONSTER_STORAGE_CAP,3000);
 
 const regularBoss=bossProfileForFloor(10),fiftyBoss=bossProfileForFloor(50),hundredBoss=bossProfileForFloor(100);
@@ -41,7 +41,7 @@ assert.match(css,/v2\.3\.0 — final mobile layout/);
 assert.match(css,/gauntlet-walk-screen\{[^}]*height:100dvh!important/);
 assert.match(css,/party-hud-collapsed \.explore-party-strip\{display:none!important/);
 assert.match(css,/damage-slot-digits/);
-assert.match(index,/ASSET_VERSION = "2\.3\.0"/);
+assert.match(index,/ASSET_VERSION = "2\.3\.1"/);
 
 for(const event of ["visibilitychange","pagehide","blur","focus","pageshow"]){
   assert.ok(audio.includes(event),`Audio lifecycle event missing: ${event}`);
@@ -54,4 +54,4 @@ assert.equal(basin.readUInt32BE(16),313);
 assert.equal(basin.readUInt32BE(20),313);
 assert.ok(basin.length>50_000);
 
-console.log("ABYSS DOMINION v2.3.0 final release regression: PASS");
+console.log("ABYSS DOMINION v2.3.1 final release regression: PASS");

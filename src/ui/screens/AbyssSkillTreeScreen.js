@@ -6,9 +6,12 @@ import{
  abyssSkillEffectSummary,
  abyssSkillNodeById,
  abyssSkillTreeSummary
-}from"../../core/AbyssSkillTreeSystem.js?v=2.3.0";
+}from"../../core/AbyssSkillTreeSystem.js?v=2.3.1";
+import{pixelIcon}from"../components/GameChrome.js?v=2.3.1";
 
 const ROW_HEIGHT=144;
+const CATEGORY_ICON={economy:"coin",combat:"crossed-swords",exploration:"dungeon"};
+function treeIcon(categoryId){return pixelIcon(CATEGORY_ICON[categoryId]??"skills")}
 
 function prerequisitesMet(node,learned){
  if(!node.requires.every(id=>learned.has(id)))return false;
@@ -35,7 +38,7 @@ function nodeCard(state,node,learned){
  const buttonText=status==="learned"?"習得済み":status==="locked"?"ルート未到達":status==="short"?"GOLD不足":`${node.cost.toLocaleString()}G`;
  return`
   <article class="abyss-tree-node ${status} path-${node.pathType??"foundation"}" data-abyss-node-card="${node.id}" style="grid-column:${node.lane??2};grid-row:${node.tier}">
-   <div class="abyss-node-orb"><span>${node.icon}</span><i></i></div>
+   <div class="abyss-node-orb"><span>${treeIcon(node.category)}</span><i></i></div>
    <div class="abyss-node-copy">
     <small>T${node.tier}・${node.branchName??"根源"}</small>
     <h3>${node.name}</h3>
@@ -104,12 +107,12 @@ export function AbyssSkillTreeScreen(state,activeCategoryId="economy"){
     <nav class="abyss-tree-tabs" aria-label="スキルカテゴリ">
      ${ABYSS_SKILL_CATEGORIES.map(item=>{
       const progress=summary.byCategory[item.id];
-      return`<button type="button" data-abyss-category="${item.id}" class="${item.id===category.id?"active":""}" style="--tab-color:${item.color}"><span>${item.icon}</span><b>${item.name}</b><small>${progress.learned}/${progress.total}</small></button>`;
+      return`<button type="button" data-abyss-category="${item.id}" class="${item.id===category.id?"active":""}" style="--tab-color:${item.color}"><span>${treeIcon(item.id)}</span><b>${item.name}</b><small>${progress.learned}/${progress.total}</small></button>`;
      }).join("")}
     </nav>
 
     <div class="panel abyss-category-head">
-     <span>${category.icon}</span>
+     <span>${treeIcon(category.id)}</span>
      <div><small>${categoryProgress.learned}/${categoryProgress.total} 習得</small><h2>${category.name}</h2><p>${category.subtitle}</p></div>
     </div>
 
@@ -118,7 +121,7 @@ export function AbyssSkillTreeScreen(state,activeCategoryId="economy"){
      <div>${effectSummary(state,category.id)}</div>
     </div>
 
-    <div class="abyss-branch-legend">${branches.map(branch=>`<span data-branch-lane="${branch.lane}"><i>${branch.icon}</i><b>${branch.name}</b></span>`).join("")}</div>
+    <div class="abyss-branch-legend">${branches.map(branch=>`<span data-branch-lane="${branch.lane}"><i>${treeIcon(category.id)}</i><b>${branch.name}</b></span>`).join("")}</div>
     <div class="abyss-skill-tree-map" style="--tree-tiers:${maxTier};--tree-row:${ROW_HEIGHT}px;--tree-height:${maxTier*ROW_HEIGHT}px">
      ${connectionLines(nodes,learned,maxTier)}
      <div class="abyss-tree-grid">${nodes.map(node=>nodeCard(state,node,learned)).join("")}</div>

@@ -1,11 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.3.0";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.3.0";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.3.0";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.3.0";
-import{monsterVisual}from"../MonsterVisual.js?v=2.3.0";
-import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.3.0";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.3.0";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.3.0";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.3.1";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.3.1";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.3.1";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.3.1";
+import{monsterVisual}from"../MonsterVisual.js?v=2.3.1";
+import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.3.1";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.3.1";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.3.1";
 
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
@@ -13,11 +13,12 @@ function renderTurnOrder(battle){
   return `<span class="${classes}" title="${entry.name}"><b>${entry.name}</b><small>SPD ${entry.spd}</small></span>`;
  }).join("");
 }
+function growthText(unit){const stars=Math.max(1,Number(unit?.stars??unit?.sourceStars)||1),plus=Math.max(0,Number(unit?.plus??unit?.sourcePlus)||0);return`${stars<=5?"★".repeat(stars):`★${stars}`} ・ +${plus}`}
 
 function renderEnemies(battle,enemies,target){
  return enemies.map((enemy,index)=>{
   const statuses=enemyStatusesFor(battle,enemy.id),effects=enemyEffectsFor(battle,enemy.id);
-  const statusHtml=`<div class="status-row enemy-status-row" ${statuses.length||effects.length?"":'aria-hidden="true"'}>${statuses.map(s=>`<span class="status-chip ${s.id}">${statusLabel(s)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${({atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",stun:"行動不能"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`;
+  const statusHtml=`<div class="status-row enemy-status-row" ${statuses.length||effects.length?"":'aria-hidden="true"'}>${statuses.map(s=>`<span class="status-chip ${s.id}">${statusLabel(s)}${s.turns?` ${s.turns}T`:""}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${({atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",stun:"行動不能"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`;
   const badge=enemy.boss?'<span class="boss-badge">BOSS</span>':enemy.elite?`<span class="elite-badge">${enemy.eliteAffixIcon??"🜲"} ELITE・${enemy.eliteAffixName??"変異"}</span>`:"";const danger="";
   const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
   const line=index<2?"front-line":"rear-line";
@@ -27,7 +28,7 @@ function renderEnemies(battle,enemies,target){
    <span class="battle-unit-floating-name">${badge}<b>${enemy.name}</b></span>
    <div class="side-unit-sprite enemy-orb">${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.hp<=0?"down":"idle",className:"battle-enemy-visual"})}</div>
    <div class="side-unit-card enemy-info">
-    <div class="side-unit-name enemy-name">${danger}<small>Lv.${enemy.level}</small><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
+    <div class="side-unit-name enemy-name">${danger}<small>Lv.${enemy.level}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="side-unit-intent enemy-intent"><span>次の行動</span><b>${enemy.intent}${enemy.enraged?"・狂暴化":""}</b></div>
     <div class="battle-bar enemy-hp"><span class="bar-label">HP ${enemy.hp}/${enemy.maxHp}</span><i style="width:${hpRate}%"></i></div>
     ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
@@ -40,7 +41,7 @@ function renderEnemies(battle,enemies,target){
 function renderParty(battle,actor){
  return battle.party.map((m,index)=>{
  const stats=calculatedStats(m),mp=maxMp(m),need=expNeedFor(m);
-  const ailments=allyAilmentsFor(battle,m.id),effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" ${ailments.length||effects.length?"":'aria-hidden="true"'}>${ailments.map(e=>`<span class="status-chip ${e.id}">${statusLabel(e)}・持続</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${({taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",regen:"再生",lifeSteal:"吸収"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`;
+  const ailments=allyAilmentsFor(battle,m.id),effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" ${ailments.length||effects.length?"":'aria-hidden="true"'}>${ailments.map(e=>`<span class="status-chip ${e.id}">${statusLabel(e)}${e.turns?` ${e.turns}T`:"・持続"}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${({taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",regen:"再生",lifeSteal:"吸収"})[e.kind]??e.kind} ${e.turns}T</span>`).join("")}</div>`;
   const hpRate=Math.max(0,Math.min(100,m.currentHp/Math.max(1,stats.hp)*100)),mpRate=Math.max(0,Math.min(100,m.currentMp/Math.max(1,mp)*100));
   const line=index<2?"front-line":"rear-line",element=m.attribute??battle.species?.[m.speciesId]?.element??"neutral";
   return `<button id="ally-${m.id}" data-battle-detail="${m.id}" style="--formation-index:${index};--unit-color:${colorValue(m)}" class="battle-unit combatant side-battle-unit formation-slot-${index+1} ${line} ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
@@ -48,7 +49,7 @@ function renderParty(battle,actor){
    <span class="battle-unit-floating-name"><b>${displayName(m)}</b></span>
    <div class="side-unit-sprite unit-orb">${monsterVisual(m,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual"})}</div>
    <div class="side-unit-card ally-info">
-    <div class="side-unit-name unit-head"><small>Lv.${m.level}</small><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
+    <div class="side-unit-name unit-head"><small>Lv.${m.level}</small><em class="battle-unit-growth">${growthText(m)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="battle-bar ally"><span class="bar-label">HP ${m.currentHp}/${stats.hp}</span><i style="width:${hpRate}%"></i></div>
     <div class="battle-bar mp"><span class="bar-label">MP ${m.currentMp}/${mp}</span><i style="width:${mpRate}%"></i></div>
     <small class="battle-mini-stats">物攻 ${stats.atk}　魔攻 ${stats.matk??stats.atk}<br>物防 ${stats.def}　魔防 ${stats.mdef??stats.def}　SPD ${stats.spd}</small>${effectHtml}
@@ -105,7 +106,7 @@ export function BattleScreen(battle,inventory,settings,floor=1){
  const special=battle.specialBattle?`<div class="special-battle-strip ${battle.specialBattleType}"><b>${battle.specialTitle??"SPECIAL BATTLE"}</b><small>${battle.specialSubtitle??"敗北ペナルティなし"}</small></div>`:"";
  const floorBand=Math.max(1,Math.min(20,Math.floor((Math.max(1,Number(floor)||1)-1)/50)+1));
  const speed=normalizeBattleSpeed(settings.battleSpeed),scaled=ms=>`${Math.max(1,Math.round(ms/speed))}ms`;
- const timingStyle=`--battle-lunge:${scaled(220)};--battle-skill-lunge:${scaled(300)};--battle-hit:${scaled(260)};--battle-critical-hit:${scaled(300)};--battle-defeat:${scaled(500)};--battle-float:${Math.max(780,Math.round(1250/speed))}ms;--battle-banner-in:${scaled(280)};--battle-banner-out:${scaled(220)};--battle-flash:${scaled(380)};--battle-particle:${Math.max(560,Math.round(920/speed))}ms`;
+ const timingStyle=`--battle-lunge:${scaled(220)};--battle-skill-lunge:${scaled(300)};--battle-hit:${scaled(260)};--battle-critical-hit:${scaled(300)};--battle-defeat:${scaled(500)};--battle-float:1500ms;--battle-banner-in:${scaled(280)};--battle-banner-out:${scaled(220)};--battle-flash:${scaled(380)};--battle-particle:${Math.max(560,Math.round(920/speed))}ms`;
  const theme=String(battle.battleTheme??"default").replace(/[^a-z0-9-]/gi,"");
  const biomeBadge=battle.biomeBattle?`<div class="battle-biome-badge compact" style="--biome-accent:${battle.biomeBattle.accent}"><b>${battle.biomeBattle.name}</b><small>適性+22%・不適性−16%</small></div>`:"";
  return `<section class="battle-screen side-battle-v2 battle-theme-${theme} ${battle.auto?"auto-mode":"manual-mode"} ${battle.specialBattle?"special-battle":""}" data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}">${special}

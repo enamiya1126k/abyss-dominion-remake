@@ -566,7 +566,7 @@ export function canLearnAbyssSkill(state,nodeId){
   return{ok:false,reason:"route",message:`前提候補「${names}」から${needed}個習得してください。`,node,missing:candidates.filter(id=>!learned.has(id)),needed};
  }
  const gold=safeInteger(state.player?.gold,0);
- if(gold<node.cost)return{ok:false,reason:"gold",message:`GOLDが不足しています。あと${(node.cost-gold).toLocaleString()}G必要です。`,node};
+ if(gold<node.cost)return{ok:false,reason:"gold",message:`GOLD不足｜あと ${(node.cost-gold).toLocaleString()}G`,node};
  return{ok:true,node};
 }
 
