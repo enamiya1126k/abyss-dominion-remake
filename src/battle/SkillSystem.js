@@ -1,6 +1,6 @@
-import{SPECIES}from"../data/species.js?v=2.3.1";
-import{SKILLS}from"../data/skills.js?v=2.3.1";
-import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.3.1";
+import{SPECIES}from"../data/species.js?v=2.4.0";
+import{SKILLS}from"../data/skills.js?v=2.4.0";
+import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.4.0";
 
 const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
 const ROLE_POOLS={
@@ -175,6 +175,25 @@ function phase2Decorate(species,skills){
  return skills.map((skill,index)=>({...skill,...(arr[index]||{}),effects:(arr[index]?.effects??skill.effects??[])}));
 }
 for(const species of Object.values(SPECIES))GENERATED[species.id]=phase2Decorate(species,GENERATED[species.id]);
+for(const species of Object.values(SPECIES)){
+ if(!Array.isArray(species.authoredSkills)||!species.authoredSkills.length)continue;
+ const magicRole=["magic","support","healer","controller","debuffer","poison","burner"].some(value=>String(species.role??"").includes(value));
+ GENERATED[species.id]=species.authoredSkills.map((source,index)=>({
+  id:`${species.id}__authored_${index+1}`,
+  name:`${species.name}の技${index+1}`,
+  mp:3,
+  type:"attack",
+  power:1,
+  target:"敵単体",
+  tag:"攻撃",
+  element:species.element??"neutral",
+  damageClass:magicRole?"magic":"physical",
+  cooldown:index<2?0:index<4?2:3,
+  unlock:{type:"level",value:UNLOCK_LEVELS[Math.min(index,UNLOCK_LEVELS.length-1)]},
+  description:"固有能力を発動する。",
+  ...source
+ }));
+}
 const BY_ID=new Map(Object.values(GENERATED).flat().map(skill=>[skill.id,skill]));
 
 export function maxMp(monster){

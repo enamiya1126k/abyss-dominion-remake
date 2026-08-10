@@ -1,0 +1,76 @@
+/* v2.4.0 final responsive and tutorial corrections */
+:where(.affix-help-button,.rarity-help,.resource-help){
+  box-sizing:border-box!important;
+  flex:0 0 36px!important;
+  width:36px!important;
+  min-width:36px!important;
+  max-width:36px!important;
+  height:36px!important;
+  min-height:36px!important;
+  padding:0!important;
+  display:inline-grid!important;
+  place-items:center!important;
+  overflow:hidden!important;
+  border-radius:50%!important;
+  font:800 1rem/1 system-ui,sans-serif!important;
+  transform:none!important;
+}
+
+.game-modal-card{
+  box-sizing:border-box;
+  width:min(760px,calc(100vw - 16px));
+  max-width:calc(100vw - 16px);
+  overflow-x:hidden;
+}
+
+.equipment-screen-v2,
+.equipment-screen-v2 .equipment-page,
+.equipment-screen-v2 .equipment-target-panel,
+.equipment-screen-v2 .equipment-loadout-workbench,
+.equipment-screen-v2 .equipment-slot-rail,
+.equipment-screen-v2 .equipment-paper-doll{min-width:0;max-width:100%;box-sizing:border-box}
+.equipment-screen-v2{overflow-x:clip}
+.equipment-screen-v2 .v2-equipment-heading{display:grid;grid-template-columns:minmax(0,1fr) auto 36px;align-items:center;gap:8px}
+.equipment-screen-v2 .v2-equipment-heading>div,
+.equipment-screen-v2 .equipped-slot-card summary>div{min-width:0;overflow:hidden}
+.equipment-screen-v2 .equipment-loadout-workbench{width:100%;grid-template-columns:minmax(0,1fr) minmax(132px,1.12fr) minmax(0,1fr);overflow:visible}
+.equipment-screen-v2 .equipment-slot-rail .equipped-slot-card,
+.equipment-screen-v2 .equipment-slot-rail .equipped-slot-card summary{width:100%;max-width:100%}
+.equipment-screen-v2 .equipment-slot-rail .equipped-slot-card summary b,
+.equipment-screen-v2 .equipment-slot-rail .equipped-slot-card summary small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.equipment-screen-v2 .equipment-paper-doll-portrait img,
+.equipment-screen-v2 .equipment-tab-monster-visual img,
+.equipment-screen-v2 .equipped-slot-art img{object-fit:contain!important;object-position:center!important}
+.equipment-slot-picker{min-width:0;overflow:hidden}
+.equipment-slot-picker-row{width:100%;min-width:0;grid-template-columns:minmax(0,1fr) auto}
+.equipment-slot-picker-row>div{min-width:0}
+.equipment-slot-picker-row b,.equipment-slot-picker-row span{overflow-wrap:anywhere}
+
+.departure-gm-notice{padding:8px;border:1px solid #9b78c4;background:#271638;color:#e8d6ff;font-size:.75rem}
+.tutorial-lesson{display:grid;gap:9px}
+.tutorial-summary{margin:0;padding:9px;border-left:3px solid #c28be1;background:#24142e}
+.tutorial-lesson section{padding:9px;border:1px solid #493255;background:#100b15}
+.tutorial-lesson section small,.defeat-tutorial>small{color:#d29fea;font-weight:800;letter-spacing:.08em}
+.tutorial-lesson section p{margin:4px 0 0;line-height:1.65}
+.tutorial-skip-all{width:100%;margin-top:9px}
+.defeat-tutorial{margin-top:12px;padding:12px;border:1px solid #76548b;background:#130d19;text-align:left}
+.defeat-tutorial h3{margin:5px 0}
+.defeat-tutorial p,.defeat-tutorial ul{font-size:.78rem;line-height:1.6}
+.defeat-tutorial ul{padding-left:1.25rem}
+.tutorial-free-summon{width:100%;display:grid;gap:3px;margin:8px 0;padding:11px;border:1px solid #dfbb69;background:linear-gradient(135deg,#4b3416,#24152d);color:#fff0b7;text-align:left}
+.tutorial-free-summon small{color:#e6cf9a}
+.settings-gm-console-v3 input{min-width:0}
+
+@media (max-width:600px){
+  .equipment-screen-v2 .equipment-loadout-workbench{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    grid-template-areas:"paper paper" "left right";
+    gap:6px;
+  }
+  .equipment-screen-v2 .equipment-paper-doll{grid-area:paper;min-height:190px}
+  .equipment-screen-v2 .equipment-slot-rail.left{grid-area:left}
+  .equipment-screen-v2 .equipment-slot-rail.right{grid-area:right}
+  .equipment-screen-v2 .equipment-slot-rail .equipped-slot-detail{position:fixed!important;left:8px!important;right:8px!important;bottom:calc(var(--v2-nav-height,64px) + 8px)!important;top:auto!important;width:auto!important;max-height:48dvh;overflow:auto;z-index:120}
+  .equipment-screen-v2 .auto-equip-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .serial-code-form{grid-template-columns:1fr!important}
+}

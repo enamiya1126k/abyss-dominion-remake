@@ -1,8 +1,10 @@
-import{createMonster,calculatedStats}from"../models/Monster.js?v=2.3.1";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.3.1";
-import{SPECIES}from"../data/species.js?v=2.3.1";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.3.1";
-import{MONSTER_STORAGE_CAP}from"./config.js?v=2.3.1";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=2.4.0";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.4.0";
+import{SPECIES}from"../data/species.js?v=2.4.0";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.4.0";
+import{MONSTER_STORAGE_CAP}from"./config.js?v=2.4.0";
+import{createEquipment}from"../models/Equipment.js?v=2.4.0";
+import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.4.0";
 
 const DEVICE_LEDGER_KEY="abyss-dominion-serial-ledger-v1";
 
@@ -15,7 +17,19 @@ const CODE_REWARDS=Object.freeze({
   "c3483e6a40a8fe7a93abfdec290c5e4069227d6f583befc23e191ebfb5e7f254":"mythicMonster",
   "67574ed4708115e8d4a888edf4abc487934cba6597198d51253e49f6bb65668f":"lrMonster",
   "91f57a06ab5db692919d415690123f9c5993a204e5a231d436e5679ee13d3cbd":"capture5000"
+  ,"96fa165a21494ee5da765b98892cf27e2e9a65d07405ad061bee7f6ccaa68740":"keys1000"
+  ,"9505b9860d63c6840b7d3412246e3d079a473ca07fad1713ac55435d110c2c33":"capture50000"
+  ,"0f7ab460833992a0ef63cbe84ebd85eea4de4780c1afb0f0c78b896726e824f1":"tenGodGearPack"
+  ,"eff0a78862889d8bf3a4a0eb61895ae0ee8b34172384dee5a1407af1d5f1b6a9":"abyssGearPack"
+  ,"dc92610f50c337e3a3d01de089bde66251a595e394199f13f3cfa442e1f1f2c8":"randomLrMonster"
+  ,"b1bbce6cc2cbdd44e21bb7bad403e10467dcd36834704cb003db6f67586760a6":"randomMythicMonster"
+  ,"5b6f0f23428f299bcf017a96ff9322f8937410bb8820e3f0528c797ade1d1bc1":"randomAbyssMonster"
+  ,"69d9fe050e4d7bdf452d8460f7b2a4e4e48fef13274e5af55440b0d2069479f1":"randomTenGodMonster"
+  ,"0ee946c08c36317e3c903b6f468710edba7aba78a681808caec070692a167d63":"chappySecret"
 });
+
+const GAME_MASTER_HASH="dd808decc6532af902eb00cc9a8aad1b5575db84d325c9732fe84256cbd1b15e";
+const GAME_MASTER_RESET_HASH="221eaa54f463cdeec89723e15eb5aa7d81a772eb62193c88b0a096a0684e8d6f";
 
 const REWARD_INFO=Object.freeze({
   crystals10000:{title:"魔晶石補給",icon:"💎",message:"魔晶石 10,000個を受け取りました。"},
@@ -26,7 +40,18 @@ const REWARD_INFO=Object.freeze({
   mythicMonster:{title:"神話召喚",icon:"✨"},
   lrMonster:{title:"LR召喚",icon:"🐉"},
   capture5000:{title:"捕獲支援物資",icon:"📀",message:"捕獲結晶 5,000個を受け取りました。"}
+  ,keys1000:{title:"深層鍵庫",icon:"🔑",message:"深淵の鍵 1,000個を受け取りました。"}
+  ,capture50000:{title:"超大型捕獲支援",icon:"📀",message:"捕獲結晶 50,000個を受け取りました。"}
+  ,tenGodGearPack:{title:"十神装備三種箱",icon:"🌌"}
+  ,abyssGearPack:{title:"深淵装備三種箱",icon:"🌑"}
+  ,randomLrMonster:{title:"ランダムLR契約",icon:"🐉"}
+  ,randomMythicMonster:{title:"ランダム神話契約",icon:"✨"}
+  ,randomAbyssMonster:{title:"ランダム深淵契約",icon:"🌑"}
+  ,randomTenGodMonster:{title:"ランダム十神契約",icon:"🌌"}
+  ,chappySecret:{title:"開発室からの封印便",icon:"🛠️"}
 });
+
+export const SERIAL_CODE_COUNT=Object.keys(CODE_REWARDS).length;
 
 function finiteInteger(value,fallback=0){
   const number=Number(value);
@@ -133,6 +158,24 @@ function createRarityRewardMonster(state,speciesId,tier,level,plus,affection,ski
   return monster;
 }
 
+function randomEntry(entries){return entries[Math.floor(Math.random()*entries.length)]??null}
+function randomSpeciesId(rarity){return randomEntry(Object.values(SPECIES).filter(species=>species.rarity===rarity&&species.id!=="dev_familiar_chappy"))?.id??null}
+function randomEndgameBossId(faction){return randomEntry(Object.values(ENDGAME_BOSSES).filter(boss=>boss.faction===faction))?.id??null}
+function rewardMonsterRequired(rewardId){return rewardId.endsWith("Monster")||rewardId==="chappySecret"}
+function createFactionEquipment(faction,slot){
+ const bosses=Object.values(ENDGAME_BOSSES).filter(boss=>boss.faction===faction),boss=randomEntry(bosses),rarity=faction==="tenGod"?"十神":"深淵",item=createEquipment(slot,{rarity,series:boss?.seriesId,ruleOverrides:{endgame:true}}),name=boss?.gearNames?.[slot]??boss?.gear?.find(gear=>gear.slot===slot)?.name;
+ if(name)item.name=name;item.endgameBossId=boss?.id??null;item.endgameFaction=faction;item.favorite=true;item.rewardTier=rarity;return item
+}
+function grantEquipment(state,item){const receipt=receiveEquipment(state,item);return{item,receipt}}
+function grantFactionPack(state,faction,countPerSlot=1){
+ const granted=[];for(const slot of["weapon","armor","accessory"])for(let index=0;index<countPerSlot;index++)granted.push(grantEquipment(state,createFactionEquipment(faction,slot)));return granted
+}
+function createChappy(state){
+ const monster=createRarityRewardMonster(state,"dev_familiar_chappy","SECRET",130,13,1000,10);monster.nickname="開発使魔チャッピー";monster.locked=true;
+ const weapon=createEquipment("weapon",{rarity:"神話",handedness:"either",ruleOverrides:{unsellable:true,secret:true}});weapon.name="未完成兵装《PATCH//404》";weapon.stats={atk:404,matk:404,spd:40,crit:4};weapon.favorite=true;weapon.locked=true;weapon.rewardTier="神話";
+ return{monster,weapon}
+}
+
 function recordMonsterAcquisition(state,monster){
   state.monsters??=[];
   state.monsters.push(monster);
@@ -152,25 +195,34 @@ export async function validateSerialCode(state,rawCode){
   if(!rewardId)return{ok:false,message:"コードが正しくないか、期限外です。"};
   const redeemed=normalizeSerialCodeState(state).redeemed;
   if(redeemed[rewardId]||loadDeviceLedger()[rewardId])return{ok:false,message:"このコードはすでに使用済みです。"};
-  if(rewardId.endsWith("Monster")&&monsterCapacityReached(state))return{ok:false,message:`モンスター所持数が${MONSTER_STORAGE_CAP}体で満杯です。整理してからもう一度入力してください。`};
+  if(rewardMonsterRequired(rewardId)&&monsterCapacityReached(state))return{ok:false,message:`モンスター所持数が${MONSTER_STORAGE_CAP}体で満杯です。整理してからもう一度入力してください。`};
   return{ok:true,rewardId,...REWARD_INFO[rewardId]};
 }
 
 export function applySerialReward(state,rewardId){
   const info=REWARD_INFO[rewardId];
   if(!info)return{ok:false,message:"報酬データが見つかりません。"};
-  if(rewardId.endsWith("Monster")&&monsterCapacityReached(state))return{ok:false,message:`モンスター所持数が${MONSTER_STORAGE_CAP}体で満杯です。`};
+  if(rewardMonsterRequired(rewardId)&&monsterCapacityReached(state))return{ok:false,message:`モンスター所持数が${MONSTER_STORAGE_CAP}体で満杯です。`};
   state.player??={};
   state.inventory??={};
-  let monster=null;
+  let monster=null,message=info.message;
   if(rewardId==="crystals10000")state.player.crystals=finiteInteger(state.player.crystals)+10000;
   else if(rewardId==="gold10000000")state.player.gold=finiteInteger(state.player.gold)+10000000;
   else if(rewardId==="keys100")state.inventory.abyssKeys=finiteInteger(state.inventory.abyssKeys)+100;
   else if(rewardId==="capture5000")state.inventory.captureCrystals=finiteInteger(state.inventory.captureCrystals)+5000;
+  else if(rewardId==="keys1000")state.inventory.abyssKeys=finiteInteger(state.inventory.abyssKeys)+1000;
+  else if(rewardId==="capture50000")state.inventory.captureCrystals=finiteInteger(state.inventory.captureCrystals)+50000;
   else if(rewardId==="tenGodMonster")monster=createEndgameRewardMonster(state,"ten_divinity","十神",100);
   else if(rewardId==="abyssMonster")monster=createEndgameRewardMonster(state,"abyss_pride","深淵",75);
   else if(rewardId==="mythicMonster")monster=createRarityRewardMonster(state,"creator_dragon","神話",60,10,500,3);
   else if(rewardId==="lrMonster")monster=createRarityRewardMonster(state,"ancient_dragon","LR",45,5,300,2);
+  else if(rewardId==="randomLrMonster")monster=createRarityRewardMonster(state,randomSpeciesId("LR"),"LR",50,5,350,3);
+  else if(rewardId==="randomMythicMonster")monster=createRarityRewardMonster(state,randomSpeciesId("神話"),"神話",70,10,550,4);
+  else if(rewardId==="randomAbyssMonster")monster=createEndgameRewardMonster(state,randomEndgameBossId("abyss"),"深淵",80);
+  else if(rewardId==="randomTenGodMonster")monster=createEndgameRewardMonster(state,randomEndgameBossId("tenGod"),"十神",100);
+  else if(rewardId==="tenGodGearPack"){const equipment=grantFactionPack(state,"tenGod");message=`十神装備を武器・防具・アクセサリー各1個（計${equipment.length}個）受け取りました。`}
+  else if(rewardId==="abyssGearPack"){const equipment=grantFactionPack(state,"abyss");message=`深淵装備を武器・防具・アクセサリー各1個（計${equipment.length}個）受け取りました。`}
+  else if(rewardId==="chappySecret"){const secret=createChappy(state);monster=secret.monster;grantEquipment(state,secret.weapon);message="開発使魔チャッピーと未完成兵装《PATCH//404》が仲間になりました。"}
   if(monster)recordMonsterAcquisition(state,monster);
   const redeemedAt=new Date().toISOString();
   normalizeSerialCodeState(state).redeemed[rewardId]={at:redeemedAt};
@@ -180,8 +232,30 @@ export function applySerialReward(state,rewardId){
     title:info.title,
     icon:info.icon,
     monster,
-    message:monster?`${monster.nickname}（${monster.summonTier} / Lv.${monster.level} / ⭐5）が仲間になりました。`:info.message
+    message:message??(monster?`${monster.nickname}（${monster.summonTier} / Lv.${monster.level} / ★${monster.stars}）が仲間になりました。`:"報酬を受け取りました。")
   };
+}
+
+export async function validateGameMasterCode(state,rawCode){
+ const normalized=normalizeSerialInput(rawCode);if(!normalized)return{ok:false,message:"GMコードを入力してください。"};let hash;
+ try{hash=await sha256(normalized)}catch(error){return{ok:false,message:error.message}}
+ if(hash===GAME_MASTER_RESET_HASH)return{ok:true,kind:"reset"};
+ if(hash!==GAME_MASTER_HASH)return{ok:false,message:"GMコードが正しくありません。"};
+ if(state.gameMaster?.claimedAt)return{ok:false,message:"GM支援パックはこのセーブで受取済みです。"};
+ if((state.monsters?.length??0)>MONSTER_STORAGE_CAP-4)return{ok:false,message:"十神4体分のモンスター所持枠を空けてください。"};
+ return{ok:true,kind:"grant"}
+}
+
+export function applyGameMasterReward(state){
+ if(state.gameMaster?.claimedAt)return{ok:false,message:"GM支援パックは受取済みです。"};
+ state.player??={};state.inventory??={};state.settings??={};state.monsters??=[];
+ state.player.gold=finiteInteger(state.player.gold)+100000000;state.player.crystals=finiteInteger(state.player.crystals)+100000;
+ state.inventory.abyssKeys=finiteInteger(state.inventory.abyssKeys)+1000;state.inventory.captureCrystals=finiteInteger(state.inventory.captureCrystals)+50000;state.inventory.experienceItems=finiteInteger(state.inventory.experienceItems)+10000;
+ const equipment=[...grantFactionPack(state,"tenGod",4),...grantFactionPack(state,"abyss",4)];
+ const tenGodIds=Object.values(ENDGAME_BOSSES).filter(boss=>boss.faction==="tenGod").map(boss=>boss.id);const monsters=[];
+ for(let index=0;index<4;index++){const monster=createEndgameRewardMonster(state,randomEntry(tenGodIds),"十神",100);recordMonsterAcquisition(state,monster);monsters.push(monster)}
+ state.settings.gmFloorUnlockMax=9998;state.gameMaster={claimedAt:new Date().toISOString(),floorUnlockMax:9998,equipmentGranted:equipment.length,monsterIds:monsters.map(monster=>monster.id)};
+ return{ok:true,message:`EXP結晶10,000個、資源一式、深淵・十神装備各12個、十神4体を受け取り、1〜9998階の出発選択を解放しました。`,equipment,monsters}
 }
 
 export function commitSerialRedemption(rewardId){

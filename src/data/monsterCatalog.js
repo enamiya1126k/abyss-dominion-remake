@@ -269,7 +269,28 @@ export const ENDGAME_SPRITE_FOLDERS=Object.freeze({
 });
 export const MONSTER_SPRITE_FOLDERS=Object.freeze({
   ...Object.fromEntries(MONSTER_CATALOG.map(entry=>[entry.speciesId,entry.folder])),
-  ...ENDGAME_SPRITE_FOLDERS
+  ...ENDGAME_SPRITE_FOLDERS,
+  eraser_slime:"211_eraser_slime",
+  pushpin_roller:"212_pushpin_roller",
+  pencil_mouse:"213_pencil_mouse",
+  stapler_crab:"214_stapler_crab",
+  compass_beetle:"215_compass_beetle",
+  gluepot_mimic:"216_gluepot_mimic",
+  fountain_pen_mage:"217_fountain_pen_mage",
+  correction_ghost:"218_correction_ghost",
+  scissor_mantis:"219_scissor_mantis",
+  pencilcase_parade:"220_pencilcase_parade",
+  chalkboard_dragon:"221_chalkboard_dragon",
+  forbidden_paper_cutter:"222_forbidden_paper_cutter",
+  ochuki:"223_ochuki",
+  bechi:"224_bechi",
+  kiara:"225_kiara",
+  roxy:"226_roxy",
+  milim:"227_milim",
+  ai:"228_ai",
+  eris:"229_eris",
+  golden_darkness:"230_golden_darkness",
+  dev_familiar_chappy:"secret_dev_familiar_chappy"
 });
 
 const CATALOG_NUMBER_BY_ID=Object.freeze(Object.fromEntries(

@@ -2,6 +2,8 @@
 
 | 資料 | 内容 |
 |---|---|
+| [RELEASE_NOTES_v2.4.0_JA.md](RELEASE_NOTES_v2.4.0_JA.md) | v2.4.0完成版の更新内容 |
+| [IMPLEMENTATION_VERIFICATION_v2.4.0_JA.md](IMPLEMENTATION_VERIFICATION_v2.4.0_JA.md) | 130版引き継ぎ修正の実装範囲と検証結果 |
 | [RELEASE_NOTES_v2.3.1_JA.md](RELEASE_NOTES_v2.3.1_JA.md) | v2.3.1完成版の更新内容と配置方法 |
 | [IMPLEMENTATION_VERIFICATION_v2.3.1_JA.md](IMPLEMENTATION_VERIFICATION_v2.3.1_JA.md) | v2.3.1追加修正の実装範囲と検証結果 |
 | [RELEASE_NOTES_v2.3.0_JA.md](RELEASE_NOTES_v2.3.0_JA.md) | v2.3.0完成版の更新内容と配置方法 |
@@ -24,6 +26,6 @@
 - 深淵・十神設定：`src/data/endgameCharacters.js`
 - エンドゲーム進行：`src/core/EndgameSystem.js`
 - セーブ：`src/services/SaveService.js`
-- 回帰検証：`tests/gdd-v1-regression.mjs`、`tests/v2.1-release-regression.mjs`、`tests/v2.3-release-regression.mjs`、`tests/v2.3.1-release-regression.mjs`
+- 回帰検証：`tests/gdd-v1-regression.mjs`、`tests/v2.1-release-regression.mjs`、`tests/v2.3-release-regression.mjs`、`tests/v2.3.1-release-regression.mjs`、`tests/v2.4.0-release-regression.mjs`
 
 `src/app.bundle.js`は旧成果物であり、現在の起動経路から参照されない。

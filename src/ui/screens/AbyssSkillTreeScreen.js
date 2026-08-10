@@ -6,8 +6,8 @@ import{
  abyssSkillEffectSummary,
  abyssSkillNodeById,
  abyssSkillTreeSummary
-}from"../../core/AbyssSkillTreeSystem.js?v=2.3.1";
-import{pixelIcon}from"../components/GameChrome.js?v=2.3.1";
+}from"../../core/AbyssSkillTreeSystem.js?v=2.4.0";
+import{pixelIcon}from"../components/GameChrome.js?v=2.4.0";
 
 const ROW_HEIGHT=144;
 const CATEGORY_ICON={economy:"coin",combat:"crossed-swords",exploration:"dungeon"};

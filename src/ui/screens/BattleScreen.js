@@ -1,11 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.3.1";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.3.1";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.3.1";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.3.1";
-import{monsterVisual}from"../MonsterVisual.js?v=2.3.1";
-import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.3.1";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.3.1";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.3.1";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.4.0";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.4.0";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.4.0";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.4.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.4.0";
+import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.4.0";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.4.0";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.4.0";
 
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
@@ -29,7 +29,7 @@ function renderEnemies(battle,enemies,target){
    <div class="side-unit-sprite enemy-orb">${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.hp<=0?"down":"idle",className:"battle-enemy-visual"})}</div>
    <div class="side-unit-card enemy-info">
     <div class="side-unit-name enemy-name">${danger}<small>Lv.${enemy.level}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
-    <div class="side-unit-intent enemy-intent"><span>次の行動</span><b>${enemy.intent}${enemy.enraged?"・狂暴化":""}</b></div>
+    <div class="side-unit-intent enemy-intent"><span>戦闘特性</span><b>${enemy.enraged?"狂暴化・":""}${String(enemy.role??"balanced").toUpperCase()}</b></div>
     <div class="battle-bar enemy-hp"><span class="bar-label">HP ${enemy.hp}/${enemy.maxHp}</span><i style="width:${hpRate}%"></i></div>
     ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
     ${statusHtml}

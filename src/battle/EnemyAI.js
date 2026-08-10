@@ -1,10 +1,10 @@
-import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=2.3.1";
-import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.3.1";
+import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=2.4.0";
+import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.4.0";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
  devour:"devour",annihilate:"annihilate",wrathBurst:"wrathBurst",mirror:"mirror",sleepMist:"sleepMist",plunder:"plunder",sovereign:"sovereign",
  inferno:"inferno",tidal:"tidal",thunderstorm:"thunderstorm",tempest:"tempest",quake:"quake",radiance:"radiance",eclipse:"eclipse",absoluteZero:"absoluteZero",timeStop:"timeStop",starfall:"starfall",
- flameSweep:"flameSweep",frostNova:"frostNova",venomCloud:"venomCloud",thunderChain:"thunderChain",earthRupture:"earthRupture",galeRend:"galeRend",shadowCurse:"shadowCurse",radiantVolley:"radiantVolley",packRally:"packRally",packMend:"packMend"
+ flameSweep:"flameSweep",frostNova:"frostNova",venomCloud:"venomCloud",thunderChain:"thunderChain",earthRupture:"earthRupture",galeRend:"galeRend",shadowCurse:"shadowCurse",radiantVolley:"radiantVolley",packRally:"packRally",packMend:"packMend",packRevive:"packRevive",dispelWave:"dispelWave",manaSiphon:"manaSiphon"
 };
 
 const BOSS_SPECIALS={
@@ -54,19 +54,23 @@ export const SPECIAL_ACTION_INFO={
  shadowCurse:{label:"黒呪侵食",pattern:"all",multiplier:.9,element:"dark",status:{id:"curse",name:"呪い",chance:.58,turns:3,power:.04}},
  radiantVolley:{label:"光雨連射",pattern:"random3",multiplier:1.15,element:"light"},
  packRally:{label:"群勢号令",pattern:"self",multiplier:0,utility:true,effects:[{kind:"atkUp",value:.18,turns:3,allies:true},{kind:"defUp",value:.14,turns:3,allies:true}]},
- packMend:{label:"群体再生",pattern:"self",multiplier:0,utility:true,heal:.18,effects:[{kind:"regen",value:.04,turns:3,allies:true}]}
+ packMend:{label:"群体再生",pattern:"self",multiplier:0,utility:true,heal:.18,effects:[{kind:"regen",value:.04,turns:3,allies:true}]},
+ packRevive:{label:"魂魄再結合",pattern:"self",multiplier:0,utility:true,revive:.32},
+ dispelWave:{label:"強化崩し",pattern:"all",multiplier:.5,dispel:true},
+ manaSiphon:{label:"魔力吸奪",pattern:"all",multiplier:.58,mpDrain:.22,element:"dark"}
 };
 
 export function isBossFloor(floor){return floor>0&&floor%10===0}
 export function createEnemyBattleState(species,source,floor){
  const boss=source.boss??isBossFloor(floor),profile=boss?bossProfileForFloor(floor):{tier:null,hp:1,atk:1,def:1,spd:1,statusResist:0,healRate:.16,powerMultiplier:1.8},depth=post9000DepthProfile(floor);
  const maxHp=Math.max(1,Math.floor((species.baseStats.hp+source.level*8)*profile.hp*depth.hp));
+ const maxEnemyMp=Math.max(8,Math.floor(((species.maxMp??18)+source.level*.32)*(boss?1.35:1)));
  const baseName=source.nameOverride??(boss?`深淵の${species.name}`:species.name),depthName=depth.active&&depth.step>0&&!source.nameOverride?`【${depth.label}】${baseName}`:baseName;
  const atk=Math.floor((species.baseStats.atk+source.level*1.4)*profile.atk*depth.atk),def=Math.floor((species.baseStats.def+source.level*.5)*profile.def*depth.def),magicRole=["magic","support","healer","controller","debuffer","poison","burner"].some(value=>String(species.role??"").includes(value));
- return{speciesId:source.speciesId,name:depthName,level:source.level,hp:maxHp,maxHp,
+ return{...source,speciesId:source.speciesId,name:depthName,level:source.level,hp:maxHp,maxHp,
   atk,matk:Math.max(1,Math.floor(atk*(magicRole?1.08:.72))),def,mdef:Math.max(0,Math.floor(def*(magicRole?1.08:.82))),spd:Math.floor((species.baseStats.spd+source.level*.18)*profile.spd*depth.spd),
   emoji:species.emoji??"👾",color:boss?"#bb4cff":species.baseStats.atk>12?"#df6262":"#a58f59",boss,bossTier:profile.tier,bossStatusResist:Math.min(.9,(profile.statusResist??0)+depth.statusResist),bossHealRate:profile.healRate,bossPowerMultiplier:profile.powerMultiplier,depthTier:depth.label,depthStep:depth.step,depthPressure:depth.active?Math.round(depth.step*10):0,phase:1,enraged:false,guard:false,charging:false,healed:false,
-  intent:"様子を見ている",specialCooldown:0,divineBarrier:0,role:species.role??"balanced",element:species.element??"neutral",...source};
+  intent:"様子を見ている",maxMp:maxEnemyMp,currentMp:Math.max(0,Math.min(maxEnemyMp,Number(source.currentMp??maxEnemyMp))),specialCooldown:0,divineBarrier:0,role:species.role??"balanced",element:species.element??"neutral"};
 }
 function normalSpecialAction(enemy,hpRate){
  enemy.specialCooldown=Math.max(0,(enemy.specialCooldown??0)-1);if(enemy.specialCooldown>0)return null;
@@ -90,12 +94,34 @@ function specialAction(enemy,hpRate){
  if(Math.random()<config.chance){enemy.specialCooldown=config.cooldown;enemy.intent=config.intent;return ENEMY_ACTIONS[config.action]}
  return null;
 }
-export function chooseEnemyAction(enemy){
- const hpRate=enemy.hp/enemy.maxHp,special=specialAction(enemy,hpRate);if(special)return special;
- const tactical=normalSpecialAction(enemy,hpRate);if(tactical)return tactical;
+export function enemyActionMpCost(enemy,action){
+ if(!enemy||!action||[ENEMY_ACTIONS.attack,ENEMY_ACTIONS.guard,ENEMY_ACTIONS.charge,ENEMY_ACTIONS.power,ENEMY_ACTIONS.enrage,ENEMY_ACTIONS.manaSiphon].includes(action))return 0;
+ const maximum=Math.max(1,Number(enemy.maxMp)||1);
+ const rate=action===ENEMY_ACTIONS.heal?.14
+  :action===ENEMY_ACTIONS.packRevive?.28
+  :action===ENEMY_ACTIONS.packMend?.18
+  :action===ENEMY_ACTIONS.packRally?.16
+  :action===ENEMY_ACTIONS.dispelWave?.18
+  :action===ENEMY_ACTIONS.divineBarrier?.22
+  :String(action).startsWith("authority:")?.26
+  :enemy.endgameBossId?.24:.19;
+ return Math.max(1,Math.ceil(maximum*rate));
+}
+function canPay(enemy,action){return Math.max(0,Number(enemy.currentMp)||0)>=enemyActionMpCost(enemy,action)}
+export function chooseEnemyAction(enemy,context={}){
+ if(enemy.speciesId==="ochuki"){enemy.guard=true;enemy.intent="巨大な盾の陰で逃げ道を探す";return ENEMY_ACTIONS.guard}
+ const allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(monster=>(monster.currentHp??0)>0),hpRate=enemy.hp/enemy.maxHp,role=String(enemy.role??""),support=["healer","support","controller","debuffer","magic"].some(value=>role.includes(value));
+ const fallen=allies.find(ally=>ally.hp<=0),wounded=[...allies].filter(ally=>ally.hp>0).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];
+ if(fallen&&support&&canPay(enemy,ENEMY_ACTIONS.packRevive)){enemy.intent="倒れた味方を再構成";return ENEMY_ACTIONS.packRevive}
+ if(wounded&&wounded.hp/wounded.maxHp<.42&&support&&canPay(enemy,ENEMY_ACTIONS.packMend)){enemy.intent="負傷した群れを再生";return ENEMY_ACTIONS.packMend}
+ const positiveKinds=new Set(["atkUp","defUp","spdUp","regen","taunt","guard","counter","lifeSteal"]),buffed=opponents.some(monster=>(context.battle?.allyEffects?.[monster.id]??[]).some(effect=>positiveKinds.has(effect.kind)));
+ if(buffed&&support&&Math.random()<.64&&canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="味方の強化を崩す";return ENEMY_ACTIONS.dispelWave}
+ if((enemy.currentMp??0)<enemy.maxMp*.24&&opponents.some(monster=>(monster.currentMp??0)>0)&&Math.random()<.72){enemy.intent="魔力を奪って立て直す";return ENEMY_ACTIONS.manaSiphon}
+ const special=specialAction(enemy,hpRate);if(special&&canPay(enemy,special))return special;
+ const tactical=normalSpecialAction(enemy,hpRate);if(tactical&&canPay(enemy,tactical))return tactical;
  if(enemy.charging){enemy.charging=false;enemy.intent="強攻撃を放つ";return ENEMY_ACTIONS.power}
  if(enemy.boss&&hpRate<=.5&&!enemy.enraged){enemy.enraged=true;enemy.phase=2;enemy.intent=enemy.endgameBossId?"権能が暴走する":"狂暴化";return ENEMY_ACTIONS.enrage}
- if(hpRate<=.3&&!enemy.healed&&Math.random()<.5){enemy.healed=true;enemy.intent="自己回復";return ENEMY_ACTIONS.heal}
+ if(hpRate<=.3&&!enemy.healed&&Math.random()<.5&&canPay(enemy,ENEMY_ACTIONS.heal)){enemy.healed=true;enemy.intent="自己回復";return ENEMY_ACTIONS.heal}
  const roll=Math.random(),guardChance=enemy.boss?.12:.18,chargeChance=enemy.boss?.25:.16;
  if(roll<guardChance){enemy.guard=true;enemy.intent="防御態勢";return ENEMY_ACTIONS.guard}
  if(roll<guardChance+chargeChance){enemy.charging=true;enemy.intent="力を溜めている";return ENEMY_ACTIONS.charge}

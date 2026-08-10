@@ -1,21 +1,22 @@
-import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.3.1";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.3.1";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.3.1";
-import{SPECIES}from"../data/species.js?v=2.3.1";
-import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.3.1";
-import{equipmentStatLabel}from"../data/equipment.js?v=2.3.1";
-import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.3.1";
-import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.3.1";
-import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.3.1";
-import{MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.3.1";
+import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.4.0";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.4.0";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.4.0";
+import{SPECIES}from"../data/species.js?v=2.4.0";
+import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.4.0";
+import{equipmentStatLabel}from"../data/equipment.js?v=2.4.0";
+import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.4.0";
+import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.4.0";
+import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.4.0";
+import{MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.4.0";
 
 export const SECRET_ROOM_CHANCE=.09;
 export const CASINO_CRYSTAL_COST=premiumCrystalCost(10);
 export const CASINO_MULTIPLIER_RATES=Object.freeze([
- {min:0,max:0,rate:.55,label:"0倍"},
- {min:1,max:1,rate:.20,label:"1倍"},
- {min:2,max:9,rate:.235,label:"2〜9倍"},
- {min:10,max:29,rate:.014,label:"10〜29倍"},
+ {min:0,max:0,rate:.45,label:"0倍"},
+ {min:2,max:2,rate:.35,label:"2倍"},
+ {min:3,max:5,rate:.15,label:"3〜5倍"},
+ {min:6,max:9,rate:.04,label:"6〜9倍"},
+ {min:10,max:29,rate:.009,label:"10〜29倍"},
  {min:30,max:99,rate:.0009,label:"30〜99倍"},
  {min:100,max:999,rate:.0001,label:"100〜999倍"}
 ]);
