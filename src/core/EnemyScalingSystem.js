@@ -1,4 +1,4 @@
-export const ENEMY_LEVEL_CAP=9999;
+export const ENEMY_LEVEL_CAP=99999;
 
 const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
 const lerp=(a,b,t)=>a+(b-a)*clamp(t,0,1);
@@ -6,8 +6,8 @@ const lerp=(a,b,t)=>a+(b-a)*clamp(t,0,1);
 export function baseEnemyLevelForFloor(floor){
  const f=clamp(Math.floor(Number(floor)||1),1,10000);
  if(f<=1000)return f;
- if(f<=5000)return Math.round(lerp(1000,7000,(f-1000)/4000));
- if(f<9000)return Math.round(lerp(7000,ENEMY_LEVEL_CAP,(f-5000)/4000));
+ if(f<=5000)return Math.round(lerp(10000,90000,(f-1000)/4000));
+ if(f<9000)return Math.round(lerp(90000,ENEMY_LEVEL_CAP,(f-5000)/4000));
  return ENEMY_LEVEL_CAP;
 }
 

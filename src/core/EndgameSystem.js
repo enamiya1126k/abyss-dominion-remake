@@ -1,4 +1,4 @@
-import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.4.0";
+import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.4.1";
 
 export const TEAM_BATTLE_UNLOCK_FLOOR=100;
 export const EMERGENCY_UNLOCK_FLOOR=100;
@@ -148,7 +148,7 @@ export function teamBattleStageMultiplier(stage=1){
 }
 export function teamBattleRewardPreview(stage=1,floor=100){
  const s=Math.max(1,Math.floor(Number(stage)||1)),post50=s>=50?Math.pow(1.17,s-49):1,scale=Math.pow(1.145,Math.min(49,s)-1)*post50,milestone=s%50===0?60:s%10===0?14:s%5===0?4:1;
- return{goldMultiplier:Math.max(4,Math.min(1e12,Math.round(4*scale*milestone))),crystals:Math.max(1,Math.min(1e9,Math.round(Math.pow(1.105,Math.min(49,s)-1)*post50*(s%10===0?18:3)))),guaranteedRarity:s>=50?"LR":s>=40?"UR":s>=25?"SSR":s>=10?"SR":null};
+ return{goldMultiplier:Math.max(.04,Math.min(1e10,Math.round(4*scale*milestone)/100)),crystals:Math.max(1,Math.min(1e9,Math.round(Math.pow(1.105,Math.min(49,s)-1)*post50*(s%10===0?18:3)))),guaranteedRarity:s>=50?"LR":s>=40?"UR":s>=25?"SSR":s>=10?"SR":null};
 }
 export function createTeamBattleEncounter(state){
  const team=dailyTeamAttempts(state),stage=Math.max(1,Math.floor(team.stage||1)),base=Math.max(10,Math.round((state.player?.maxFloor||100)*(.62+stage*.045))),pools=[["goblin_guard","goblin_shaman","orc","ogre"],["skeleton_guard","skeleton_archer","wraith","zombie"],["dire_wolf","bear","harpy","wyvern"],["stone_golem","clockwork","salamander","water_spirit"],["frost_slime","frost_dragon","water_spirit","harpy"],["dark_knight","wraith","angelic_orb","ancient_dragon"]],element=["earth","dark","wind","fire","ice","light"][(stage-1)%6],multiplier=teamBattleStageMultiplier(stage);
@@ -193,18 +193,14 @@ export function emergencyRescueStatus(state){
  return{active,after1000,earlyCount,earlyFloor,transition,losses,supportCap:losses>=2?Math.max(0,supportCap-1):supportCap,label:earlyCount||earlyFloor?"境界保護":losses?`適応補正 Lv.${losses}`:transition?"深淵適応期間":null};
 }
 export function shouldTriggerEmergency(state){
- const floor=Math.max(1,Math.floor(Number(state.player?.currentFloor)||1));if(floor<EMERGENCY_UNLOCK_FLOOR)return false;
- const emergency=normalizeEndgameState(state).emergency;
- if(emergency.pendingEncounter)return true;
- if(emergency.lastTriggeredFloor&&floor<emergency.lastTriggeredFloor+ENDGAME_EMERGENCY_COOLDOWN_FLOORS)return false;
- const triggered=Math.random()<ENDGAME_EMERGENCY_RATE;
- if(triggered){const bossIds=Object.keys(ENDGAME_BOSSES),bossId=bossIds[Math.floor(Math.random()*bossIds.length)];emergency.lastTriggeredFloor=floor;emergency.pendingEncounter={bossId,floor,createdAt:new Date().toISOString(),priorVitals:null}}
- return triggered
+ // Automatic post-1000 interstitials were retired. Endgame entities now enter
+ // ordinary enemy parties directly; manual trials remain available from base.
+ return false
 }
 export function createEmergencyEncounter(state,forcedId=null){
  const floor=state.player?.currentFloor||EMERGENCY_UNLOCK_FLOOR,rescue=emergencyRescueStatus(state),baseManifestation=manifestationForFloor(floor),rate=baseManifestation.rate,manifestation={...baseManifestation},pending=normalizeEndgameState(state).emergency.pendingEncounter;
  const available=Object.values(ENDGAME_BOSSES);
- const boss=ENDGAME_BOSSES[canonicalEndgameId(forcedId??pending?.bossId)]??available[Math.floor(Math.random()*available.length)],factionBase=boss.faction==="tenGod"?7:4,leaderMultiplier=factionBase*(.65+manifestation.rate*1.75),supportMultiplier=(boss.faction==="tenGod"?2.5:1.75)*(1+manifestation.rate),level=Math.max(150,Math.min(9999,Math.round(floor*(1.15+manifestation.rate*.45)))),leader=enemy(boss.speciesId,level,{boss:true,endgameBossId:boss.id,visualSpeciesId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈${manifestation.percent}%〉`,statMultiplier:leaderMultiplier,powerRate:manifestation.rate,manifestationLabel:manifestation.label,uncapturable:true,bossPassive:boss.passive,bossResistances:boss.resistances,elementMultipliers:boss.elementMultipliers,statusProfile:boss.statusProfile}),supportIds=boss.support.slice(0,Math.max(0,rescue.supportCap)),supports=supportIds.map((id,i)=>enemy(id,Math.max(1,level-10-i*3),{nameOverride:`${boss.faction==="tenGod"?"神兵":"眷属"}・${i+1}`,statMultiplier:supportMultiplier,endgameSupport:true,uncapturable:true}));return{boss,manifestation,rescue,enemies:[leader,...supports]}
+ const boss=ENDGAME_BOSSES[canonicalEndgameId(forcedId??pending?.bossId)]??available[Math.floor(Math.random()*available.length)],factionBase=boss.faction==="tenGod"?7:4,leaderMultiplier=factionBase*(.65+manifestation.rate*1.75),supportMultiplier=(boss.faction==="tenGod"?2.5:1.75)*(1+manifestation.rate),level=Math.max(150,Math.min(99999,Math.round(floor*(1.15+manifestation.rate*.45)))),leader=enemy(boss.speciesId,level,{boss:true,endgameBossId:boss.id,visualSpeciesId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈${manifestation.percent}%〉`,statMultiplier:leaderMultiplier,powerRate:manifestation.rate,manifestationLabel:manifestation.label,uncapturable:true,bossPassive:boss.passive,bossResistances:boss.resistances,elementMultipliers:boss.elementMultipliers,statusProfile:boss.statusProfile}),supportIds=boss.support.slice(0,Math.max(0,rescue.supportCap)),supports=supportIds.map((id,i)=>enemy(id,Math.max(1,level-10-i*3),{nameOverride:`${boss.faction==="tenGod"?"神兵":"眷属"}・${i+1}`,statMultiplier:supportMultiplier,endgameSupport:true,uncapturable:true}));return{boss,manifestation,rescue,enemies:[leader,...supports]}
 }
 
 export function endgamePreludeOptions(boss){

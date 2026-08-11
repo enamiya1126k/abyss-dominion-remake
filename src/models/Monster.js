@@ -1,10 +1,10 @@
-import{SPECIES}from"../data/species.js?v=2.4.0";
-import{PERSONALITIES}from"../data/personalities.js?v=2.4.0";
-import{MONSTER_COLORS}from"../data/colors.js?v=2.4.0";
-import{normalizedResistances}from"../data/attributes.js?v=2.4.0";
-import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.4.0";
-import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.4.0";
-import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.4.0";
+import{SPECIES}from"../data/species.js?v=2.4.1";
+import{PERSONALITIES}from"../data/personalities.js?v=2.4.1";
+import{MONSTER_COLORS}from"../data/colors.js?v=2.4.1";
+import{normalizedResistances}from"../data/attributes.js?v=2.4.1";
+import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.4.1";
+import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.4.1";
+import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.4.1";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -56,14 +56,31 @@ export function expNeedFor(monster){
   const species=SPECIES[monster.speciesId];
   const rate=species.expRate??RACE_EXP_RATE[species.race]??1;
   const base=40+monster.level*25+Math.floor(monster.level*monster.level*.55);
- return Math.max(25,Math.floor(base*rate));
+  const endgameRate=monster?.endgameBossId||monster?.isContractedEndgame||["abyss","tenGod"].includes(monster?.endgameFaction)?5:1;
+ return Math.max(25,Math.floor(base*rate*endgameRate));
 }
 
-function experienceBeforeLevel(monster,level){
+export function experienceBeforeLevel(monster,level){
  const target=Math.max(1,Math.min(TRUE_MAX_LEVEL,Math.floor(Number(level)||1)));
  let total=0;
  for(let current=1;current<target;current++)total+=expNeedFor({...monster,level:current});
  return total;
+}
+// もっとも育成が重い通常種族（dragon）のLv.10000到達量を50分割する。
+// これにより通常魔物は種族差にかかわらず50個以内でLv.10000へ届く一方、
+// 深淵・十神は expNeedFor 側の5倍補正をそのまま負担する。
+const NORMAL_CRYSTAL_EXP_RATE=Math.max(...Object.values(RACE_EXP_RATE));
+const EXPERIENCE_CRYSTAL_VALUE=(()=>{
+ let targetTotal=0;
+ for(let level=1;level<TRUE_MAX_LEVEL;level++){
+  const base=40+level*25+Math.floor(level*level*.55);
+  targetTotal+=Math.max(25,Math.floor(base*NORMAL_CRYSTAL_EXP_RATE));
+ }
+ return Math.max(1,Math.ceil(targetTotal/50));
+})();
+export function experienceCrystalValue(monster){
+ // 対象ごとに逆算しない。深淵・十神だけ結晶価値まで5倍になる事故を防ぐ。
+ return EXPERIENCE_CRYSTAL_VALUE;
 }
 export function totalExperience(monster){
  const stored=Number(monster?.totalExp);
@@ -124,6 +141,9 @@ export function createMonster(speciesId,options={}){
     obtainedAt:options.obtainedAt??options.capturedAt??new Date().toISOString(),
     obtainedFloor:options.obtainedFloor??1,
     obtainedMethod:options.obtainedMethod??"capture",
+    endgameBossId:options.endgameBossId??null,
+    endgameFaction:options.endgameFaction??null,
+    isContractedEndgame:Boolean(options.isContractedEndgame),
     history:{adventures:0,battles:options.battles??0,victories:0,defeats:options.defeats??0,bossDefeats:0,kills:0,mvp:0,highestFloor:options.obtainedFloor??1,...(options.history??{})},
     battles:options.battles??0,
     defeats:options.defeats??0,

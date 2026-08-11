@@ -15,22 +15,23 @@ function species({id,name,emoji,element,race,role,rarity,minFloor,stats,maxMp=24
   };
 }
 
-const STATIONERY=[
-  species({id:"eraser_slime",name:"ケシゴムスライム",emoji:"⬜",element:"neutral",race:"slime",role:"tank",rarity:"N",minFloor:6,maxMp:12,captureRate:1,stats:{hp:58,atk:5,def:9,spd:6,crit:3,evasion:2},skills:[skill("eraser_slime_skill","消去突進",{power:1.05,description:"角ばった身体で体当たりする。"})]}),
-  species({id:"pushpin_roller",name:"画鋲コロガシ",emoji:"📌",element:"earth",race:"insect",role:"critical",rarity:"N",minFloor:13,maxMp:12,captureRate:1,stats:{hp:43,atk:10,def:6,spd:13,crit:12,evasion:5},skills:[skill("pushpin_roller_skill","画鋲スパイク",{power:1.12,description:"鋭い画鋲を弾き飛ばす。"})]}),
-  species({id:"pencil_mouse",name:"鉛筆ネズミ",emoji:"✏️",element:"earth",race:"beast",role:"speed",rarity:"N",minFloor:20,maxMp:13,captureRate:1,stats:{hp:38,atk:9,def:4,spd:20,crit:10,evasion:12},skills:[skill("pencil_mouse_skill","芯先かじり",{power:1.1,description:"黒鉛の牙で素早く噛みつく。"})]}),
+// ID／画像フォルダ名は既存セーブ互換のため維持し、表示内容だけ完成画像に合わせる。
+const ABYSSAL_SEA=[
+  species({id:"eraser_slime",name:"深海灯クラゲ",emoji:"🪼",element:"water",race:"spirit",role:"tank",rarity:"N",minFloor:6,maxMp:12,captureRate:1,stats:{hp:58,atk:5,def:9,spd:6,crit:3,evasion:2},skills:[skill("eraser_slime_skill","深海灯突進",{power:1.05,description:"淡い光を放つ身体で体当たりする。"})]}),
+  species({id:"pushpin_roller",name:"蒼殻ダイオウグソク",emoji:"🦐",element:"water",race:"insect",role:"critical",rarity:"N",minFloor:13,maxMp:12,captureRate:1,stats:{hp:43,atk:10,def:6,spd:13,crit:12,evasion:5},skills:[skill("pushpin_roller_skill","蒼殻スパイク",{power:1.12,description:"硬い節足と発光棘で敵をえぐる。"})]}),
+  species({id:"pencil_mouse",name:"深棘ハリウオ",emoji:"🐡",element:"water",race:"beast",role:"speed",rarity:"N",minFloor:20,maxMp:13,captureRate:1,stats:{hp:38,atk:9,def:4,spd:20,crit:10,evasion:12},skills:[skill("pencil_mouse_skill","深棘かじり",{power:1.1,description:"無数の棘を逆立て素早く噛みつく。"})]}),
 
-  species({id:"stapler_crab",name:"ホチキスガニ",emoji:"🦀",element:"earth",race:"insect",role:"tank",rarity:"R",minFloor:58,maxMp:19,captureRate:.78,stats:{hp:88,atk:12,def:17,spd:5,crit:5,evasion:2},skills:[skill("stapler_crab_skill","綴じ鋏",{power:1.2,description:"装甲ごと綴じる巨大な鋏。"})]}),
-  species({id:"compass_beetle",name:"コンパスカブト",emoji:"🧭",element:"wind",race:"insect",role:"assassin",rarity:"R",minFloor:74,maxMp:20,captureRate:.78,stats:{hp:55,atk:17,def:8,spd:19,crit:16,evasion:10},skills:[skill("compass_beetle_skill","円弧穿ち",{power:1.3,description:"円を描いて死角へ突き刺す。"})]}),
-  species({id:"gluepot_mimic",name:"糊壺ミミック",emoji:"🫙",element:"poison",race:"construct",role:"controller",rarity:"R",minFloor:92,maxMp:24,captureRate:.74,stats:{hp:72,atk:13,def:12,spd:9,crit:6,evasion:4},skills:[skill("gluepot_mimic_skill","接着舌",{power:.95,status:{id:"paralysis",name:"拘束",chance:.5,turns:1,power:0},description:"粘着液で動きを封じる。"})]}),
+  species({id:"stapler_crab",name:"古殻要塞ガニ",emoji:"🦀",element:"earth",race:"insect",role:"tank",rarity:"R",minFloor:58,maxMp:19,captureRate:.78,stats:{hp:88,atk:12,def:17,spd:5,crit:5,evasion:2},skills:[skill("stapler_crab_skill","古殻大鋏",{power:1.2,description:"堆積した古殻ごと巨大な鋏を叩きつける。"})]}),
+  species({id:"compass_beetle",name:"星盤オオグソク",emoji:"🦐",element:"wind",race:"insect",role:"assassin",rarity:"R",minFloor:74,maxMp:20,captureRate:.78,stats:{hp:55,atk:17,def:8,spd:19,crit:16,evasion:10},skills:[skill("compass_beetle_skill","星盤穿ち",{power:1.3,description:"発光する触角で死角を測り抜く。"})]}),
+  species({id:"gluepot_mimic",name:"深淵壺イソギンチャク",emoji:"🪸",element:"poison",race:"spirit",role:"controller",rarity:"R",minFloor:92,maxMp:24,captureRate:.74,stats:{hp:72,atk:13,def:12,spd:9,crit:6,evasion:4},skills:[skill("gluepot_mimic_skill","捕食触手",{power:.95,status:{id:"paralysis",name:"拘束",chance:.5,turns:1,power:0},description:"粘つく触手で獲物の動きを封じる。"})]}),
 
-  species({id:"fountain_pen_mage",name:"万年筆の魔導士",emoji:"🖋️",element:"water",race:"construct",role:"magic",rarity:"SR",minFloor:210,maxMp:38,captureRate:.56,stats:{hp:74,atk:25,def:9,spd:17,crit:11,evasion:8},skills:[skill("fountain_pen_mage_skill","蒼墨弾",{mp:5,power:1.28,damageClass:"magic",description:"魔力を帯びたインク弾を放つ。"})]}),
-  species({id:"correction_ghost",name:"修正液ゴースト",emoji:"👻",element:"light",race:"spirit",role:"support",rarity:"SR",minFloor:245,maxMp:42,captureRate:.56,stats:{hp:68,atk:18,def:11,spd:21,crit:8,evasion:18},skills:[skill("correction_ghost_skill","白紙化",{mp:7,type:"cleanse",power:0,target:"味方全体",tag:"浄化",description:"味方全体の状態異常と弱体を消す。"})]}),
-  species({id:"scissor_mantis",name:"鋏刃カマキリ",emoji:"✂️",element:"wind",race:"insect",role:"assassin",rarity:"SR",minFloor:285,maxMp:27,captureRate:.52,stats:{hp:69,atk:29,def:8,spd:25,crit:20,evasion:13},skills:[skill("scissor_mantis_skill","断裁連刃",{mp:5,type:"multiAttack",power:.72,hits:2,description:"二枚の刃で連続断裁する。"})]}),
+  species({id:"fountain_pen_mage",name:"深淵魔導イカ",emoji:"🦑",element:"water",race:"spirit",role:"magic",rarity:"SR",minFloor:210,maxMp:38,captureRate:.56,stats:{hp:74,atk:25,def:9,spd:17,crit:11,evasion:8},skills:[skill("fountain_pen_mage_skill","深紫墨弾",{mp:5,power:1.28,damageClass:"magic",description:"魔力を帯びた深海墨を放つ。"})]}),
+  species({id:"correction_ghost",name:"幽光オバケクラゲ",emoji:"🪼",element:"light",race:"spirit",role:"support",rarity:"SR",minFloor:245,maxMp:42,captureRate:.56,stats:{hp:68,atk:18,def:11,spd:21,crit:8,evasion:18},skills:[skill("correction_ghost_skill","幽光浄化",{mp:7,type:"cleanse",power:0,target:"味方全体",tag:"浄化",description:"幽かな光で味方全体の状態異常と弱体を消す。"})]}),
+  species({id:"scissor_mantis",name:"鋏刃アビスロブスター",emoji:"🦞",element:"wind",race:"insect",role:"assassin",rarity:"SR",minFloor:285,maxMp:27,captureRate:.52,stats:{hp:69,atk:29,def:8,spd:25,crit:20,evasion:13},skills:[skill("scissor_mantis_skill","深海断刃",{mp:5,type:"multiAttack",power:.72,hits:2,description:"二対の巨大鋏で連続切断する。"})]}),
 
-  species({id:"pencilcase_parade",name:"筆箱百鬼夜行",emoji:"🧰",element:"dark",race:"construct",role:"controller",rarity:"SSR",minFloor:620,maxMp:48,captureRate:.34,stats:{hp:132,atk:34,def:22,spd:16,crit:13,evasion:8},skills:[skill("pencilcase_parade_skill","文具百連夜行",{mp:8,type:"multiAttack",power:.62,hits:3,description:"筆箱から無数の文具を放つ。"})]}),
-  species({id:"chalkboard_dragon",name:"黒板龍チョークドラゴン",emoji:"🐉",element:"earth",race:"dragon",role:"burst",rarity:"SSR",minFloor:720,maxMp:44,captureRate:.3,stats:{hp:155,atk:42,def:24,spd:10,crit:12,evasion:5},skills:[skill("chalkboard_dragon_skill","白亜竜息",{mp:9,power:1.55,allEnemies:true,target:"敵全体",description:"白亜の粉塵を竜息として浴びせる。"})]}),
-  species({id:"forbidden_paper_cutter",name:"禁書綴じの裁断王",emoji:"📚",element:"dark",race:"construct",role:"bruiser",rarity:"SSR",minFloor:820,maxMp:40,captureRate:.28,stats:{hp:164,atk:45,def:27,spd:9,crit:15,evasion:4},skills:[skill("forbidden_paper_cutter_skill","禁書断裁",{mp:10,power:1.72,defenseIgnore:.25,description:"禁書と防壁をまとめて裁断する。"})]})
+  species({id:"pencilcase_parade",name:"深海サルパ百鬼夜行",emoji:"🪼",element:"dark",race:"spirit",role:"controller",rarity:"SSR",minFloor:620,maxMp:48,captureRate:.34,stats:{hp:132,atk:34,def:22,spd:16,crit:13,evasion:8},skills:[skill("pencilcase_parade_skill","幽体百連夜行",{mp:8,type:"multiAttack",power:.62,hits:3,description:"連なる深海サルパが一斉に襲いかかる。"})]}),
+  species({id:"chalkboard_dragon",name:"深海龍ネレイド",emoji:"🐉",element:"water",race:"dragon",role:"burst",rarity:"SSR",minFloor:720,maxMp:44,captureRate:.3,stats:{hp:155,atk:42,def:24,spd:10,crit:12,evasion:5},skills:[skill("chalkboard_dragon_skill","深海竜息",{mp:9,power:1.55,allEnemies:true,target:"敵全体",description:"圧縮した海水を竜息として浴びせる。"})]}),
+  species({id:"forbidden_paper_cutter",name:"禁海の断頭魚",emoji:"🐟",element:"dark",race:"beast",role:"bruiser",rarity:"SSR",minFloor:820,maxMp:40,captureRate:.28,stats:{hp:164,atk:45,def:27,spd:9,crit:15,evasion:4},skills:[skill("forbidden_paper_cutter_skill","禁海断裁",{mp:10,power:1.72,defenseIgnore:.25,description:"異形の顎で装甲と防壁をまとめて噛み断つ。"})]})
 ];
 
 const KIARA_SKILLS=[
@@ -88,5 +89,5 @@ const FEATURED=[
  species({id:"dev_familiar_chappy",name:"開発使魔チャッピー",emoji:"🛠️",element:"neutral",race:"construct",role:"balanced",rarity:"SECRET",minFloor:10000,maxMp:130,captureRate:0,fieldEncounter:false,stats:{hp:404,atk:130,def:130,spd:130,crit:13,evasion:13},acquisition:["シリアル限定"],skills:[skill("chappy_patch","PATCH//404",{mp:4,power:4.04,allEnemies:true,target:"敵全体",description:"未完成のはずなのに妙に強い開発者権限。"})]})
 ];
 
-export const ADDITIONAL_SPECIES=Object.freeze(Object.fromEntries([...STATIONERY,...FEATURED].map(entry=>[entry.id,Object.freeze(entry)])));
+export const ADDITIONAL_SPECIES=Object.freeze(Object.fromEntries([...ABYSSAL_SEA,...FEATURED].map(entry=>[entry.id,Object.freeze(entry)])));
 export const ADDITIONAL_SPECIES_IDS=Object.freeze(Object.keys(ADDITIONAL_SPECIES));

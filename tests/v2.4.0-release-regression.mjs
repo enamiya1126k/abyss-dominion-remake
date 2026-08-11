@@ -49,8 +49,8 @@ const {affectionBonuses,createMonster}=await import("../src/models/Monster.js");
 const {createEquipment}=await import("../src/models/Equipment.js");
 const {canEquipInSubslot}=await import("../src/services/EquipmentLoadoutSystem.js");
 
-assert.equal(APP_VERSION,"2.4.0");
-assert.equal(SAVE_SCHEMA_VERSION,49);
+assert.equal(APP_VERSION,"2.4.1");
+assert.equal(SAVE_SCHEMA_VERSION,50);
 assert.equal(SERIAL_CODE_COUNT,17);
 
 const serialCodes=new Map([
@@ -143,7 +143,7 @@ assert.deepEqual(await validateGameMasterCode(initial(),"AD-GM-RESET-1300"),{ok:
   assert.equal(state.player.crystals,before.crystals+100_000);
   assert.equal(state.inventory.abyssKeys,before.keys+1_000);
   assert.equal(state.inventory.captureCrystals,before.capture+50_000);
-  assert.equal(state.inventory.experienceItems,before.exp+10_000);
+  assert.equal(state.inventory.experienceItems,before.exp+50);
   assert.equal(state.equipment.length,before.equipment+24);
   assert.equal(result.equipment.filter(entry=>entry.item.endgameFaction==="tenGod").length,12);
   assert.equal(result.equipment.filter(entry=>entry.item.endgameFaction==="abyss").length,12);
@@ -195,7 +195,7 @@ for(const [roll,min,max] of [[0,0,0],[.5,2,2],[.85,3,5],[.97,6,9],[.995,10,29],[
 const stationery=Object.values(ADDITIONAL_SPECIES).filter(species=>species.id!=="dev_familiar_chappy"&&species.id!=="ochuki"&&!["bechi","kiara","roxy","milim","ai","eris","golden_darkness"].includes(species.id));
 assert.equal(stationery.length,12);
 assert.deepEqual(Object.fromEntries(["N","R","SR","SSR"].map(rarity=>[rarity,stationery.filter(species=>species.rarity===rarity).length])),{N:3,R:3,SR:3,SSR:3});
-assert.equal(SPECIES.compass_beetle.name,"コンパスカブト");
+assert.equal(SPECIES.compass_beetle.name,"星盤オオグソク");
 assert.ok(!Object.values(ADDITIONAL_SPECIES).some(species=>/蜘蛛|spider/i.test(`${species.id} ${species.name} ${species.race}`)));
 for(const [id,name] of [["ochuki","おちゅき"],["bechi","ベチー"],["kiara","きあら"],["roxy","ロキシー"],["milim","ミリム"],["ai","アイ"],["eris","エリス"],["golden_darkness","金色の闇"],["dev_familiar_chappy","開発使魔チャッピー"]]){
   assert.equal(SPECIES[id].name,name);
@@ -228,10 +228,18 @@ assert.ok(Object.values(affectionBonuses(1000)).every(value=>value>0));
 const frames=["idle1","idle2","idle3","walk1","walk2","attack","damage","down"];
 const uniqueFolders=[...new Set(Object.values(MONSTER_SPRITE_FOLDERS))];
 for(const folder of uniqueFolders)for(const frame of frames)assert.ok(fs.existsSync(path.join(root,"assets/monsters",folder,`${frame}.png`)),`missing ${folder}/${frame}.png`);
-const simpleFolders=[...Array.from({length:12},(_,index)=>`${String(index+211).padStart(3,"0")}_${["eraser_slime","pushpin_roller","pencil_mouse","stapler_crab","compass_beetle","gluepot_mimic","fountain_pen_mage","correction_ghost","scissor_mantis","pencilcase_parade","chalkboard_dragon","forbidden_paper_cutter"][index]}`),"secret_dev_familiar_chappy"];
+const simpleFolders=Array.from({length:12},(_,index)=>`${String(index+211).padStart(3,"0")}_${["eraser_slime","pushpin_roller","pencil_mouse","stapler_crab","compass_beetle","gluepot_mimic","fountain_pen_mage","correction_ghost","scissor_mantis","pencilcase_parade","chalkboard_dragon","forbidden_paper_cutter"][index]}`);
 const detailedFolders=["223_ochuki","224_bechi","225_kiara","226_roxy","227_milim","228_ai","229_eris","230_golden_darkness",...new Set(Object.values(ENDGAME_SPRITE_FOLDERS))];
 function pngSize(file){const data=fs.readFileSync(file);assert.equal(data.toString("ascii",1,4),"PNG");return[data.readUInt32BE(16),data.readUInt32BE(20)]}
-for(const [folders,size] of [[simpleFolders,128],[detailedFolders,512]])for(const folder of folders)for(const frame of frames){
+for(const folder of simpleFolders)for(const frame of frames){
+  const file=path.join(root,"assets/monsters",folder,`${frame}.png`),size=pngSize(file);
+  assert.ok([[128,128],[256,256]].some(expected=>expected[0]===size[0]&&expected[1]===size[1]),`${folder}/${frame}.png size`);
+}
+for(const folder of ["secret_dev_familiar_chappy"])for(const frame of frames){
+  const file=path.join(root,"assets/monsters",folder,`${frame}.png`);
+  assert.deepEqual(pngSize(file),[128,128],`${folder}/${frame}.png size`);
+}
+for(const [folders,size] of [[detailedFolders,512]])for(const folder of folders)for(const frame of frames){
   const file=path.join(root,"assets/monsters",folder,`${frame}.png`);
   assert.deepEqual(pngSize(file),[size,size],`${folder}/${frame}.png size`);
 }

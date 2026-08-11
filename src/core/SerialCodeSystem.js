@@ -1,10 +1,10 @@
-import{createMonster,calculatedStats}from"../models/Monster.js?v=2.4.0";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.4.0";
-import{SPECIES}from"../data/species.js?v=2.4.0";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.4.0";
-import{MONSTER_STORAGE_CAP}from"./config.js?v=2.4.0";
-import{createEquipment}from"../models/Equipment.js?v=2.4.0";
-import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.4.0";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=2.4.1";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.4.1";
+import{SPECIES}from"../data/species.js?v=2.4.1";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.4.1";
+import{MONSTER_STORAGE_CAP}from"./config.js?v=2.4.1";
+import{createEquipment}from"../models/Equipment.js?v=2.4.1";
+import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.4.1";
 
 const DEVICE_LEDGER_KEY="abyss-dominion-serial-ledger-v1";
 
@@ -118,6 +118,10 @@ function createEndgameRewardMonster(state,bossId,tier,level){
     attribute:boss.element??SPECIES[boss.speciesId]?.element,
     obtainedFloor:Math.max(1,Number(state.player?.maxFloor)||1),
     obtainedMethod:"serialCode",
+    endgameBossId:bossId,
+    endgameFaction:boss.faction,
+    isContractedEndgame:true,
+    allowEndgameLevel:true,
     tags:[SPECIES[boss.speciesId]?.race,boss.faction,bossId,"contractedEndgame"].filter(Boolean)
   });
   monster.summonTier=tier;
@@ -250,12 +254,12 @@ export function applyGameMasterReward(state){
  if(state.gameMaster?.claimedAt)return{ok:false,message:"GM支援パックは受取済みです。"};
  state.player??={};state.inventory??={};state.settings??={};state.monsters??=[];
  state.player.gold=finiteInteger(state.player.gold)+100000000;state.player.crystals=finiteInteger(state.player.crystals)+100000;
- state.inventory.abyssKeys=finiteInteger(state.inventory.abyssKeys)+1000;state.inventory.captureCrystals=finiteInteger(state.inventory.captureCrystals)+50000;state.inventory.experienceItems=finiteInteger(state.inventory.experienceItems)+10000;
+ state.inventory.abyssKeys=finiteInteger(state.inventory.abyssKeys)+1000;state.inventory.captureCrystals=finiteInteger(state.inventory.captureCrystals)+50000;state.inventory.experienceItems=finiteInteger(state.inventory.experienceItems)+50;
  const equipment=[...grantFactionPack(state,"tenGod",4),...grantFactionPack(state,"abyss",4)];
  const tenGodIds=Object.values(ENDGAME_BOSSES).filter(boss=>boss.faction==="tenGod").map(boss=>boss.id);const monsters=[];
  for(let index=0;index<4;index++){const monster=createEndgameRewardMonster(state,randomEntry(tenGodIds),"十神",100);recordMonsterAcquisition(state,monster);monsters.push(monster)}
  state.settings.gmFloorUnlockMax=9998;state.gameMaster={claimedAt:new Date().toISOString(),floorUnlockMax:9998,equipmentGranted:equipment.length,monsterIds:monsters.map(monster=>monster.id)};
- return{ok:true,message:`EXP結晶10,000個、資源一式、深淵・十神装備各12個、十神4体を受け取り、1〜9998階の出発選択を解放しました。`,equipment,monsters}
+ return{ok:true,message:`EXP結晶50個、資源一式、深淵・十神装備各12個、十神4体を受け取り、1〜9998階の出発選択を解放しました。`,equipment,monsters}
 }
 
 export function commitSerialRedemption(rewardId){

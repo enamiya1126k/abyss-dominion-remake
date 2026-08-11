@@ -1,22 +1,22 @@
-import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=2.4.0";
-import{createMonster,totalExperience,applyTotalExperience}from"../models/Monster.js?v=2.4.0";
-import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=2.4.0";
-import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=2.4.0";
-import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=2.4.0";
-import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=2.4.0";
-import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=2.4.0";
-import{SPECIES}from"../data/species.js?v=2.4.0";
-import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.4.0";
-import{normalizeWeaponMastery}from"./WeaponMastery.js?v=2.4.0";
+import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=2.4.1";
+import{createMonster,totalExperience,applyTotalExperience}from"../models/Monster.js?v=2.4.1";
+import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=2.4.1";
+import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=2.4.1";
+import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=2.4.1";
+import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=2.4.1";
+import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=2.4.1";
+import{SPECIES}from"../data/species.js?v=2.4.1";
+import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.4.1";
+import{normalizeWeaponMastery}from"./WeaponMastery.js?v=2.4.1";
 
-import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=2.4.0";
-import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=2.4.0";
-import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=2.4.0";
-import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=2.4.0";
-import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=2.4.0";
-import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=2.4.0";
-import{normalizeSerialCodeState}from"../core/SerialCodeSystem.js?v=2.4.0";
-import{normalizeNoticeState}from"../core/NoticeSystem.js?v=2.4.0";
+import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=2.4.1";
+import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=2.4.1";
+import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=2.4.1";
+import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=2.4.1";
+import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=2.4.1";
+import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=2.4.1";
+import{normalizeSerialCodeState}from"../core/SerialCodeSystem.js?v=2.4.1";
+import{normalizeNoticeState}from"../core/NoticeSystem.js?v=2.4.1";
 function finiteNumber(value,fallback=0,min=-Infinity,max=Infinity){
  const number=Number(value);
  return Number.isFinite(number)?Math.max(min,Math.min(max,number)):fallback;
@@ -38,7 +38,7 @@ function normalizeBossEncounter(value){
  const entry=normalizeRecentEncounter(value);
  if(!entry)return null;
  entry.boss=true;
- entry.uncapturable=false;
+ entry.uncapturable=Boolean(value.uncapturable||value.endgameBossId||["abyss","tenGod"].includes(value.faction));
  entry.nameOverride=typeof value.nameOverride==="string"?value.nameOverride.slice(0,80):null;
  entry.endgameBossId=typeof value.endgameBossId==="string"?value.endgameBossId:null;
  entry.faction=typeof value.faction==="string"?value.faction:null;
@@ -50,11 +50,12 @@ function normalizeBattleMemoryEntry(value){
  if(!value||typeof value!=="object"||!SPECIES[value.speciesId])return null;
  const entry={...value};
  entry.speciesId=String(value.speciesId);
- entry.level=Math.floor(finiteNumber(value.level,1,1,TRUE_MAX_LEVEL));
+ const endgame=Boolean(value.endgameBossId||["abyss","tenGod"].includes(value.faction));
+ entry.level=Math.floor(finiteNumber(value.level,1,1,endgame?ENDGAME_MAX_LEVEL:TRUE_MAX_LEVEL));
  entry.boss=Boolean(value.boss);
  entry.elite=Boolean(value.elite);
  entry.equipped=Boolean(value.equipped&&value.gear);
- entry.uncapturable=Boolean(value.uncapturable);
+ entry.uncapturable=Boolean(value.uncapturable||endgame);
  if(value.gear&&typeof value.gear==="object"&&!Array.isArray(value.gear))entry.gear=value.gear;
  else delete entry.gear;
  return entry;
@@ -208,6 +209,11 @@ export class SaveService{
   s.bossEquipmentVault=Array.isArray(s.bossEquipmentVault)?s.bossEquipmentVault:[];
   normalizeEquipmentCollections(s);
   s.inventory=normalizeInventory(s.inventory);
+  // Schema 49's GM pack accidentally granted 10,000 EXP crystals. Replace
+  // only that grant with the intended 50 while preserving prior stock and use.
+  if(from<50&&s.gameMaster?.claimedAt&&s.inventory.experienceItems>=9950){
+   s.inventory.experienceItems=Math.max(0,s.inventory.experienceItems-9950);
+  }
   s.settings??={};
   s.settings.minimapVisible??=true;
   s.settings.shopDiscountSeed??=null;
@@ -252,7 +258,8 @@ export class SaveService{
   normalizeEliteRecords(s);
   normalizeTenGodContact(s);
   s.monsters.forEach(m=>{
-   m.level=Math.floor(finiteNumber(m.level,1,1,TRUE_MAX_LEVEL));
+   const authoredEndgame=Boolean(m.isContractedEndgame||m.endgameBossId);
+   m.level=Math.floor(finiteNumber(m.level,1,1,authoredEndgame?ENDGAME_MAX_LEVEL:TRUE_MAX_LEVEL));
    m.exp=Math.floor(finiteNumber(m.exp,0,0,Number.MAX_SAFE_INTEGER));
    const canonicalTotal=Number.isFinite(Number(m.totalExp))
     ? Math.floor(finiteNumber(m.totalExp,0,0,Number.MAX_SAFE_INTEGER))

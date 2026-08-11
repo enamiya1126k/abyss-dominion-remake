@@ -74,3 +74,69 @@
   .equipment-screen-v2 .auto-equip-row{grid-template-columns:repeat(2,minmax(0,1fr))!important}
   .serial-code-form{grid-template-columns:1fr!important}
 }
+
+/* 132 hotfix: summon atlas cells must keep their own atlas coordinates. */
+.gacha-result-equipment-art{
+  background-image:var(--equipment-atlas)!important;
+  background-size:var(--equipment-atlas-width) var(--equipment-atlas-height)!important;
+  background-position:var(--equipment-x) var(--equipment-y)!important;
+  background-repeat:no-repeat!important;
+  image-rendering:pixelated!important;
+}
+
+/* Affection is an inspectable stat on the equipment paper doll. */
+.equipment-affection-button{
+  width:100%;min-width:0;padding:4px 7px;display:flex;align-items:center;justify-content:center;gap:6px;
+  border:1px solid #75528f;background:linear-gradient(180deg,#24132f,#100a16);color:#eadff0;
+  font:700 .66rem/1.2 system-ui,sans-serif;box-shadow:inset 0 0 12px #6f3a8a22;
+}
+.equipment-affection-button em{font-style:normal}.equipment-affection-button i{font-style:normal;color:#c994e7;font-size:.56rem}
+.affection-bonus-quick{display:grid;gap:12px;padding:12px;border:1px solid #74508d;background:linear-gradient(145deg,#1c1025,#09070d)}
+.affection-bonus-quick>strong{color:#f1d986;text-align:center}
+.affection-bonus-quick>div{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.affection-bonus-quick span{display:grid;gap:2px;padding:8px 3px;border:1px solid #4a3357;background:#0a0810;text-align:center;font-size:.65rem}
+.affection-bonus-quick span b{color:#86dcff;font-size:.88rem}.affection-bonus-quick>small{text-align:center;color:#cabbd2}
+
+/* Compact premium equipment picker. */
+.equipment-slot-picker{display:grid;gap:7px}
+.equipment-slot-picker-row{
+  position:relative;box-sizing:border-box;display:grid!important;grid-template-columns:52px minmax(0,1fr) auto!important;
+  align-items:center;gap:9px;padding:8px!important;min-height:70px;text-align:left;
+  border:1px solid #5f436e!important;background:linear-gradient(110deg,#0a0910 0%,#191020 65%,#281632 100%)!important;
+  box-shadow:inset 0 0 0 1px #d2ae5b18,0 2px 6px #0009!important;
+}
+.equipment-slot-picker-row.current{border-color:#d5b25f!important;box-shadow:inset 0 0 16px #bd8d3233,0 0 8px #b7863b44!important}
+.equipment-picker-visual{display:grid;place-items:center;width:50px;height:50px;border:1px solid #7c6250;background:radial-gradient(circle,#33243a,#08070c 72%)}
+.equipment-picker-art{width:46px!important;height:46px!important}.equipment-slot-picker-row>div{display:grid;gap:2px}
+.equipment-slot-picker-row>div small{color:#d2b35e}.equipment-slot-picker-row>div b{color:#f5edf7;font-size:.82rem}
+.equipment-slot-picker-row>div span{color:#b9aebf;font-size:.62rem}.equipment-slot-picker-row>div em{color:#b99be8;font-style:normal;font-size:.62rem}
+.equipment-slot-picker-row>strong{align-self:center;padding:7px 8px;border:1px solid #9b72b0;background:#321c3e;color:#f4e9f8;font-size:.64rem;white-space:nowrap}
+
+/* Shop: one horizontal line per item with small purchase controls at right. */
+.ornate-shop-modal .home-item-shop-list{display:grid!important;gap:6px!important}
+.ornate-shop-modal .home-item-shop-row{
+  box-sizing:border-box;display:grid!important;grid-template-columns:42px minmax(0,1fr) auto!important;align-items:center!important;
+  gap:7px!important;min-height:68px!important;padding:7px 8px!important;
+}
+.ornate-shop-modal .home-item-shop-row .home-shop-item-art{width:40px!important;height:40px!important}
+.ornate-shop-modal .home-item-shop-row>div:nth-child(2){display:grid;gap:1px;min-width:0}
+.ornate-shop-modal .home-item-shop-row>div:nth-child(2)>b{font-size:.78rem}.ornate-shop-modal .home-item-shop-row small{font-size:.56rem;line-height:1.25;color:#bbaec2}
+.ornate-shop-modal .home-item-shop-row em{font-style:normal;font-size:.55rem;color:#d2b86c}
+.ornate-shop-modal .home-shop-buy-actions{display:grid!important;grid-template-columns:1fr!important;gap:3px!important;width:94px!important}
+.ornate-shop-modal .home-shop-buy-actions button{box-sizing:border-box!important;min-height:27px!important;padding:3px 5px!important;display:flex!important;justify-content:space-between!important;gap:4px!important;font-size:.52rem!important}
+.ornate-shop-modal .home-shop-buy-actions button span{color:#d8c5df}.ornate-shop-modal .home-shop-buy-actions button b{font-size:.55rem;color:#f0d879}
+
+/* Two visible rows for stacked buffs/debuffs. */
+.side-battle-v2 .enemy-status-row,.side-battle-v2 .ally-status-row{
+  box-sizing:border-box!important;display:flex!important;flex-wrap:wrap!important;align-content:flex-start!important;
+  gap:2px!important;height:34px!important;min-height:34px!important;max-height:34px!important;overflow:hidden!important;
+}
+.side-battle-v2 .status-row .status-chip{flex:0 0 auto!important;padding:1px 3px!important;font-size:.27rem!important;line-height:1.12!important;white-space:nowrap!important}
+
+@media(max-width:430px){
+  .equipment-slot-picker-row{grid-template-columns:46px minmax(0,1fr) auto!important;gap:6px;padding:6px!important}
+  .equipment-picker-visual{width:44px;height:44px}.equipment-picker-art{width:42px!important;height:42px!important}
+  .ornate-shop-modal .home-item-shop-row{grid-template-columns:38px minmax(0,1fr) 86px!important;padding:6px!important}
+  .ornate-shop-modal .home-shop-buy-actions{width:86px!important}
+  .affection-bonus-quick>div{grid-template-columns:repeat(2,minmax(0,1fr))}
+}

@@ -1,13 +1,13 @@
-import{SPECIES}from"../../data/species.js?v=2.4.0";
-import{PERSONALITIES}from"../../data/personalities.js?v=2.4.0";
-import{MONSTER_COLORS}from"../../data/colors.js?v=2.4.0";
-import{ATTRIBUTES}from"../../data/attributes.js?v=2.4.0";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.4.0";
-import{endgameCharacter}from"../../data/endgameCharacters.js?v=2.4.0";
-import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=2.4.0";
-import{monsterVisual}from"../MonsterVisual.js?v=2.4.0";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.4.0";
-import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=2.4.0";
+import{SPECIES}from"../../data/species.js?v=2.4.1";
+import{PERSONALITIES}from"../../data/personalities.js?v=2.4.1";
+import{MONSTER_COLORS}from"../../data/colors.js?v=2.4.1";
+import{ATTRIBUTES}from"../../data/attributes.js?v=2.4.1";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.4.1";
+import{endgameCharacter}from"../../data/endgameCharacters.js?v=2.4.1";
+import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=2.4.1";
+import{monsterVisual}from"../MonsterVisual.js?v=2.4.1";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.4.1";
+import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=2.4.1";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
@@ -20,7 +20,8 @@ export function MonsterDetailScreen(monster,state){
   if(!monster)return`<section class="screen"><header class="topbar"><button id="backMonsters">←</button><h2>モンスター育成</h2></header><div class="page"><div class="empty">モンスターが見つかりません</div></div></section>`;
   const rarity=monsterRarity(monster),rarityClass=rarityNameClass(rarity),species=SPECIES[monster.speciesId],personality=PERSONALITIES[monster.personalityId],stats=calculatedStats(monster),trait=TRAITS[monster.traitId]??TRAITS.steady;
   const mp=maxMp(monster),need=expNeedFor(monster),remaining=Math.max(0,need-(monster.exp??0)),aff=monster.affection??monster.bond??0,next=nextAffection(aff),growth=limitBreakGrowth(monster.speciesId);
-  const materials=state.monsters.filter(entry=>entry.id!==monster.id&&entry.speciesId===monster.speciesId&&!state.party.includes(entry.id)&&!entry.favorite&&!entry.locked).length;
+  const identity=monster.endgameBossId??monster.speciesId;
+  const materials=state.monsters.filter(entry=>entry.id!==monster.id&&(entry.endgameBossId??entry.speciesId)===identity&&!state.party.includes(entry.id)&&!entry.favorite&&!entry.locked).length;
   const ordered=[...state.party.map(id=>state.monsters.find(entry=>entry.id===id)).filter(Boolean),...state.monsters.filter(entry=>!state.party.includes(entry.id))];
   const index=Math.max(0,ordered.findIndex(entry=>entry.id===monster.id)),previous=ordered[(index-1+ordered.length)%ordered.length],nextMonster=ordered[(index+1)%ordered.length];
   const attributeId=monster.attribute??species.element??"neutral",attribute=ATTRIBUTES[attributeId]??{name:attributeId||"不明"};
@@ -44,7 +45,7 @@ export function MonsterDetailScreen(monster,state){
      <div class="compact-exp-line"><span>累計EXP ${totalExperience(monster).toLocaleString()}</span><span>次まで ${remaining.toLocaleString()} EXP</span><i><u style="width:${Math.min(100,Math.max(0,(monster.exp??0)/Math.max(1,need)*100))}%"></u></i></div>
     </div>
 
-    ${endgame?`<details class="panel endgame-dossier" open><summary><span>${endgame.icon}</span><div><small>${endgame.faction==="tenGod"?"TEN GOD LAW":"ABYSS DESIRE"}</small><b>${endgame.name}・${endgame.role}</b></div></summary><div class="endgame-dossier-body"><blockquote>${endgame.encounterText}</blockquote><p>${endgame.lore}</p><div class="endgame-dossier-grid"><section><small>固有パッシブ</small><b>${endgame.passive}</b></section><section><small>覚醒条件</small><b>${endgame.awakening}</b></section><section><small>属性倍率（被ダメージ）</small><b>${Object.entries(endgame.elementMultipliers).map(([key,value])=>`${key} ${Math.round(value*100)}%`).join(" / ")}</b></section><section><small>状態耐性</small><b>無効：${endgame.statusProfile.immune.join("・")||"なし"}<br>耐性：${endgame.statusProfile.resistant.join("・")||"なし"}${endgame.statusProfile.weak.length?`<br>弱点：${endgame.statusProfile.weak.join("・")}`:""}</b></section></div><div class="endgame-dossier-skills">${endgame.skills.map(skill=>`<article><small>${skill.tag} / MP${skill.mp} / CT${skill.cooldown}</small><b>${skill.name}</b><p>${skill.description}</p></article>`).join("")}</div></div></details>`:""}
+    ${endgame?`<details class="panel endgame-dossier" open><summary><span>${endgame.icon}</span><div><small>${endgame.faction==="tenGod"?"十神の法則":"深淵の欲望"}</small><b>${endgame.name}・${endgame.role}</b></div></summary><div class="endgame-dossier-body"><blockquote>${endgame.encounterText}</blockquote><p>${endgame.lore}</p><div class="endgame-dossier-grid"><section><small>固有能力</small><b>${endgame.passive}</b></section><section><small>覚醒条件</small><b>${endgame.awakening}</b></section><section><small>属性倍率（被ダメージ）</small><b>${Object.entries(endgame.elementMultipliers).map(([key,value])=>`${key} ${Math.round(value*100)}%`).join(" / ")}</b></section><section><small>状態耐性</small><b>無効：${endgame.statusProfile.immune.join("・")||"なし"}<br>耐性：${endgame.statusProfile.resistant.join("・")||"なし"}${endgame.statusProfile.weak.length?`<br>弱点：${endgame.statusProfile.weak.join("・")}`:""}</b></section></div><div class="endgame-dossier-skills">${endgame.skills.map(skill=>`<article><small>${skill.tag} / MP${skill.mp} / 再使用${skill.cooldown}</small><b>${skill.name}</b><p>${skill.description}</p></article>`).join("")}</div></div></details>`:""}
 
     <div class="panel compact-limit-panel">
      <div><small>同名素材を合成</small><h2>＋${(monster.plus??0)+1}へ限界突破</h2><p>素材 ${materials}/2　<span>基礎値 HP+${growth.hp} / ATK+${growth.atk} / DEF+${growth.def} / SPD+${growth.spd}</span></p></div>
@@ -52,14 +53,14 @@ export function MonsterDetailScreen(monster,state){
     </div>
 
     <div class="panel compact-affection-panel">
-     <div class="spread"><div><small>FRIENDSHIP</small><h2>❤️ なつき度</h2></div><b>${aff}/1000${aff>=1000?"・親友":""}</b></div>
+     <div class="spread"><div><small>仲良し補正</small><h2>❤️ なつき度</h2></div><b>${aff}/1000${aff>=1000?"・親友":""}</b></div>
      <div class="affection-meter"><i style="width:${Math.min(100,aff/10)}%"></i></div>
      <p>現在の補正：<b>${affectionText}</b></p>
      <small>${next?`次のボーナスまであと ${next-aff}（${next}/1000）`:"すべてのなつきボーナスを解放済み"}</small>
     </div>
 
     <div class="panel acquisition-guide">
-     <div class="spread"><div><small>HOW TO GET</small><h2>入手の手引き</h2></div>${monsterVisual(monster,species.emoji??"👹",{className:"acquisition-monster-visual"})}</div>
+     <div class="spread"><div><small>入手方法</small><h2>入手の手引き</h2></div>${monsterVisual(monster,species.emoji??"👹",{className:"acquisition-monster-visual"})}</div>
      <div class="acquisition-guide-grid">
       <div><small>探索での出現帯</small><b>${fieldEncounter?`${species.minFloor??1}階以降・近い階層帯ほど出現しやすい`:"通常探索には出現しません"}</b></div>
       <div><small>主な入手方法</small><b>${sources.join("・")}</b></div>

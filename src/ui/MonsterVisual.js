@@ -1,7 +1,8 @@
-import{MONSTER_SPRITE_FOLDERS}from"../data/monsterCatalog.js?v=2.4.0";
+import{MONSTER_SPRITE_FOLDERS}from"../data/monsterCatalog.js?v=2.4.1";
 
 const IDLE_FRAMES=Object.freeze(["idle1","idle2","idle3","idle2"]);
 const VALID_FRAMES=new Set(["idle","idle1","idle2","idle3","walk1","walk2","attack","damage","down"]);
+const SPRITE_ASSET_VERSION="2.4.1";
 
 function safeFrame(frame){
   return VALID_FRAMES.has(frame)?frame:"idle";
@@ -28,7 +29,7 @@ export function monsterVisualId(subject){
 
 export function monsterSpriteUrl(subject,frame="idle"){
   const visualId=monsterVisualId(subject),folder=MONSTER_SPRITE_FOLDERS[visualId];
-  return folder?`./assets/monsters/${folder}/${fileFrame(frame)}.png`:null;
+  return folder?`./assets/monsters/${folder}/${fileFrame(frame)}.png?v=${SPRITE_ASSET_VERSION}`:null;
 }
 
 export function hasMonsterSprite(subject){
@@ -60,7 +61,7 @@ export function setMonsterVisualFrame(root,frame="idle"){
     delete image.dataset.spriteFailed;
     image.dataset.animationState=requestedFrame==="idle"?"idle":"static";
     image.dataset.frame=normalizedFrame;
-    image.src=`${base}/${normalizedFrame}.png`;
+    image.src=`${base}/${normalizedFrame}.png?v=${SPRITE_ASSET_VERSION}`;
   }
 }
 
@@ -78,7 +79,7 @@ if(typeof window!=="undefined"&&typeof document!=="undefined"){
       const base=image.dataset.spriteBase;
       if(!base||image.dataset.frame===frame)continue;
       image.dataset.frame=frame;
-      image.src=`${base}/${frame}.png`;
+      image.src=`${base}/${frame}.png?v=${SPRITE_ASSET_VERSION}`;
     }
   },320);
 }
