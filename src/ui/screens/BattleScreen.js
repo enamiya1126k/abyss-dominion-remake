@@ -1,11 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.4.1";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.4.1";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.4.1";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.4.1";
-import{monsterVisual}from"../MonsterVisual.js?v=2.4.1";
-import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.4.1";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.4.1";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.4.1";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.5.0";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.5.0";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.5.0";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.5.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.5.0";
+import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.5.0";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.5.0";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.5.0";
 
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
@@ -24,7 +24,7 @@ function remainingTurns(turns,persistent=false){const value=Math.max(0,Number(tu
 function renderEnemies(battle,enemies,target){
  return enemies.map((enemy,index)=>{
   const statuses=enemyStatusesFor(battle,enemy.id),effects=enemyEffectsFor(battle,enemy.id);
-  const statusHtml=`<div class="status-row enemy-status-row" ${statuses.length||effects.length?"":'aria-hidden="true"'}>${statuses.map(s=>`<span class="status-chip ${s.id}">${battleStatusLabel(s)}${remainingTurns(s.turns)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
+  const statusHtml=`<div class="status-row enemy-status-row" data-status-detail="${enemy.id}" ${statuses.length||effects.length?"":'aria-hidden="true"'}>${statuses.map(s=>`<span class="status-chip ${s.id}">${battleStatusLabel(s)}${remainingTurns(s.turns)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
   const badge=enemy.boss?'<span class="boss-badge">ボス</span>':enemy.elite?`<span class="elite-badge">${enemy.eliteAffixIcon??"🜲"} 強敵・${enemy.eliteAffixName??"変異"}</span>`:"";const danger="";
   const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
   const line=index<2?"front-line":"rear-line";
@@ -47,13 +47,13 @@ function renderEnemies(battle,enemies,target){
 function renderParty(battle,actor){
  return battle.party.map((m,index)=>{
  const stats=calculatedStats(m),mp=maxMp(m),need=expNeedFor(m);
- const ailments=allyAilmentsFor(battle,m.id),effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" ${ailments.length||effects.length?"":'aria-hidden="true"'}>${ailments.map(e=>`<span class="status-chip ${e.id}">${battleStatusLabel(e)}${remainingTurns(e.turns,true)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
+ const ailments=allyAilmentsFor(battle,m.id),effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" data-status-detail="${m.id}" ${ailments.length||effects.length?"":'aria-hidden="true"'}>${ailments.map(e=>`<span class="status-chip ${e.id}">${battleStatusLabel(e)}${remainingTurns(e.turns,true)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
   const hpRate=Math.max(0,Math.min(100,m.currentHp/Math.max(1,stats.hp)*100)),mpRate=Math.max(0,Math.min(100,m.currentMp/Math.max(1,mp)*100));
   const line=index<2?"front-line":"rear-line",element=m.attribute??battle.species?.[m.speciesId]?.element??"neutral";
   return `<button id="ally-${m.id}" data-battle-detail="${m.id}" style="--formation-index:${index};--unit-color:${colorValue(m)}" class="battle-unit combatant side-battle-unit formation-slot-${index+1} ${line} ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
    <span class="active-turn-marker" aria-hidden="true">行動中</span>
    <span class="battle-unit-floating-name"><b>${displayName(m)}</b></span>
-   <div class="side-unit-sprite unit-orb">${monsterVisual(m,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual"})}</div>
+   <div class="side-unit-sprite unit-orb">${battle.magicCircleArt?.[m.id]??""}${monsterVisual(m,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual"})}</div>
    <div class="side-unit-card ally-info">
     <div class="side-unit-name unit-head"><small>Lv.${m.level}</small><em class="battle-unit-growth">${growthText(m)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="battle-bar ally"><span class="bar-label">HP ${m.currentHp}/${stats.hp}</span><i style="width:${hpRate}%"></i></div>

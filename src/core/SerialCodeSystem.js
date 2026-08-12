@@ -1,10 +1,10 @@
-import{createMonster,calculatedStats}from"../models/Monster.js?v=2.4.1";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.4.1";
-import{SPECIES}from"../data/species.js?v=2.4.1";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.4.1";
-import{MONSTER_STORAGE_CAP}from"./config.js?v=2.4.1";
-import{createEquipment}from"../models/Equipment.js?v=2.4.1";
-import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.4.1";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=2.5.0";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.5.0";
+import{SPECIES}from"../data/species.js?v=2.5.0";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.5.0";
+import{MONSTER_STORAGE_CAP}from"./config.js?v=2.5.0";
+import{createEquipment}from"../models/Equipment.js?v=2.5.0";
+import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.5.0";
 
 const DEVICE_LEDGER_KEY="abyss-dominion-serial-ledger-v1";
 

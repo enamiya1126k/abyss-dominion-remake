@@ -1,14 +1,15 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.4.1";
-import{displayName}from"../../models/Monster.js?v=2.4.1";
-import{SPECIES}from"../../data/species.js?v=2.4.1";
-import{TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.4.1";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.4.1";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.4.1";
-import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=2.4.1";
-import{monsterVisual}from"../MonsterVisual.js?v=2.4.1";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.4.1";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.5.0";
+import{displayName}from"../../models/Monster.js?v=2.5.0";
+import{SPECIES}from"../../data/species.js?v=2.5.0";
+import{TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.5.0";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.5.0";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.5.0";
+import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=2.5.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.5.0";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.5.0";
+import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.5.0";
 
-function scenePartySlot(monster,index){
+function scenePartySlot(monster,index,state){
   // Formation order is shared with battle: slots 1–2 are the front row and
   // slots 3–4 are the rear row. Keep the scene positions deterministic so a
   // saved party never appears to change rows after returning home.
@@ -22,6 +23,7 @@ function scenePartySlot(monster,index){
   return`
     <button type="button" class="home-scene-unit ${positions[index]}" data-open-home-formation data-home-party-slot="${index}" data-home-party-member="${monster.id}" aria-label="${displayName(monster)}・編成スロット${index+1}">
       <em class="home-slot-badge">${index+1}</em><span class="home-slot-attribute" data-home-attribute-help="${attribute}" title="属性相性を確認">${attributeVisual(attribute,{label:`${attribute}属性`})}</span>
+      ${magicCircleMarkup(monster,state,{className:"home-character-circle"})}
       ${monsterVisual(monster,species?.emoji??"MONSTER",{className:"home-scene-monster-visual"})}
       <span class="home-scene-name">${displayName(monster)}</span>
       <small>Lv.${monster.level}</small>
@@ -53,6 +55,9 @@ const HOME_NUMBER_UNITS=Object.freeze([
 
 export function compactHomeNumber(value){
   const number=Math.max(0,Number(value)||0);
+  // Keep the satisfying full number for as long as the available HUD space
+  // can hold it; compact only genuinely large values.
+  if(number<100_000_000)return Math.floor(number).toLocaleString();
   if(number>=1_000_000_000_000_000)return number.toExponential(2).replace("e+0","e+");
   const unit=HOME_NUMBER_UNITS.find(([threshold])=>number>=threshold);
   if(!unit)return Math.floor(number).toLocaleString();
@@ -103,7 +108,7 @@ export function HomeScreen(state){
   const revealed=hasCleared1000(state);
   const completed=Boolean(state.flags?.gameClear10000);
   const phase=worldPhase(state);
-  const sceneSlots=Array.from({length:4},(_,index)=>scenePartySlot(party[index],index)).join("");
+  const sceneSlots=Array.from({length:4},(_,index)=>scenePartySlot(party[index],index,state)).join("");
   const eventReady=teamUnlocked||endgameUnlocked||revealed;
   const noticeCount=unreadNoticeIds(state).length;
   const recentMemory=state.recentBattleMemory,memoryEntries=recentMemory?.entries??[],memoryCost=homeMemoryCost(state,recentMemory);
@@ -130,10 +135,10 @@ export function HomeScreen(state){
       </header>
 
       <div class="home-resource-bar" aria-label="所持資源">
-        <span title="GOLD：${state.player.gold.toLocaleString()}">${pixelIcon("coin")}<b>${compactHomeNumber(state.player.gold)}</b></span>
-        <span title="魔晶石：${state.player.crystals.toLocaleString()}">${pixelIcon("crystal")}<b>${compactHomeNumber(state.player.crystals)}</b></span>
-        <span title="捕獲結晶：${(state.inventory?.captureCrystals??0).toLocaleString()}">${pixelIcon("capture")}<b>${compactHomeNumber(state.inventory?.captureCrystals??0)}</b></span>
-        <span title="深淵の鍵：${(state.inventory?.abyssKeys??0).toLocaleString()}">${pixelIcon("key")}<b>${compactHomeNumber(state.inventory?.abyssKeys??0)}</b></span>
+        <span title="GOLD：${state.player.gold.toLocaleString()}" data-exact-number="${state.player.gold.toLocaleString()}G">${pixelIcon("coin")}<b>${compactHomeNumber(state.player.gold)}</b></span>
+        <span title="魔晶石：${state.player.crystals.toLocaleString()}" data-exact-number="魔晶石 ${state.player.crystals.toLocaleString()}">${pixelIcon("crystal")}<b>${compactHomeNumber(state.player.crystals)}</b></span>
+        <span title="捕獲結晶：${(state.inventory?.captureCrystals??0).toLocaleString()}" data-exact-number="捕獲結晶 ${(state.inventory?.captureCrystals??0).toLocaleString()}">${pixelIcon("capture")}<b>${compactHomeNumber(state.inventory?.captureCrystals??0)}</b></span>
+        <span title="深淵の鍵：${(state.inventory?.abyssKeys??0).toLocaleString()}" data-exact-number="深淵の鍵 ${(state.inventory?.abyssKeys??0).toLocaleString()}">${pixelIcon("key")}<b>${compactHomeNumber(state.inventory?.abyssKeys??0)}</b></span>
         <button type="button" id="openSettings" aria-label="設定">${pixelIcon("settings")}</button>
       </div>
 

@@ -1,0 +1,57 @@
+/* v2.5.0 — magic circles, readable summons and battle reports. */
+
+/* Keep every summoned equipment cell centered at one stable visual size. */
+.gacha-result-card{grid-template-columns:58px minmax(0,1fr)!important;min-height:66px!important}
+.gacha-result-card>span{box-sizing:border-box!important;width:56px!important;height:56px!important;display:grid!important;place-items:center!important;overflow:hidden!important}
+.gacha-result-card .gacha-result-equipment-art{width:50px!important;height:50px!important;min-width:50px!important;min-height:50px!important;margin:0!important;transform:none!important;transform-origin:center!important}
+.gacha-premium-card .gacha-premium-visual{box-sizing:border-box;display:grid;place-items:center;width:min(42vw,184px)!important;height:min(42vw,184px)!important;margin-inline:auto;overflow:hidden}
+.gacha-premium-card .gacha-result-equipment-art{width:min(36vw,154px)!important;height:min(36vw,154px)!important;min-width:0!important;min-height:0!important;margin:0!important;transform:none!important;transform-origin:center!important}
+.gacha-premium-card .gacha-result-monster-visual,.gacha-premium-card .gacha-result-monster-visual img{width:min(42vw,184px)!important;height:min(42vw,184px)!important}
+
+/* The compact shop remains a single horizontal row on phones. */
+.ornate-shop-modal .home-item-shop-row{grid-template-columns:40px minmax(0,1fr) 90px!important;min-height:68px!important;padding:6px 7px!important}
+.ornate-shop-modal .home-shop-buy-actions{grid-column:3!important;grid-row:1!important;width:90px!important;align-self:center!important}
+.ornate-shop-modal .home-shop-buy-actions button{width:100%!important;min-width:0!important;min-height:32px!important;margin:0!important}
+
+/* Four resources are laid out as four equal icon/number cells. */
+.v2-screen-hud.no-floor .v2-hud-resources{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+.v2-screen-hud .v2-hud-resources>span{box-sizing:border-box!important;display:grid!important;grid-template-rows:20px 1fr!important;justify-items:center!important;align-items:center!important;gap:0!important;min-width:0!important;overflow:visible!important}
+.v2-screen-hud .v2-hud-resources>span i{width:20px!important;height:20px!important;overflow:visible!important}
+.v2-screen-hud .v2-hud-resources>span b{display:block;max-width:100%;overflow:hidden;text-overflow:clip;white-space:nowrap;font-size:clamp(.38rem,1.45vw,.56rem);font-variant-numeric:tabular-nums}
+
+/* Two readable status rows; tapping still opens the complete list. */
+.side-battle-v2 .enemy-status-row,.side-battle-v2 .ally-status-row{display:grid!important;grid-auto-flow:column!important;grid-template-rows:repeat(2,minmax(0,1fr))!important;grid-auto-columns:max-content!important;justify-content:start!important;align-items:center!important;width:100%!important;height:36px!important;max-height:36px!important;overflow:hidden!important;cursor:pointer!important}
+.side-battle-v2 .status-row .status-chip{max-width:92px;overflow:hidden;text-overflow:ellipsis}
+
+/* Do not abbreviate battle damage; shrink just enough to remain on the field. */
+.side-battle-v2 .floating-number{box-sizing:border-box;left:50%!important;max-width:96%;font-size:clamp(.82rem,4.2vw,1.45rem)!important;letter-spacing:-.03em;text-align:center}
+.side-battle-v2 .floating-number.critical{font-size:clamp(1rem,5.6vw,1.9rem)!important}
+
+/* Ability banner identifies its source without changing battlefield layout. */
+.battle-cinematic-banner{grid-template-columns:auto minmax(0,1fr)!important;grid-template-areas:"source copy"!important;column-gap:10px;align-items:center}
+.battle-cinematic-banner .battle-banner-copy{grid-area:copy;display:grid;place-items:center;min-width:0}
+.battle-banner-source{grid-area:source;display:grid;grid-template-columns:48px;justify-items:center;gap:1px;min-width:52px}
+.battle-banner-source-visual,.battle-banner-source-visual img{width:48px!important;height:48px!important}
+.battle-banner-source em{display:block;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#f4e7cf;font-size:.45rem;font-style:normal;font-weight:900}
+
+/* Magic-circle art lives behind the sprite and never changes card geometry. */
+.magic-circle{position:absolute;z-index:0;left:50%;top:58%;width:86%;aspect-ratio:1;border:2px solid currentColor;border-radius:50%;transform:translate(-50%,-50%) rotate(45deg);opacity:.55;filter:drop-shadow(0 0 8px currentColor);pointer-events:none}
+.magic-circle:before,.magic-circle:after,.magic-circle>i{content:"";position:absolute;inset:10%;border:1px solid currentColor;border-radius:50%}.magic-circle:after{inset:25%;border-radius:0;transform:rotate(45deg)}
+.magic-circle>i:nth-child(2){inset:2%;border-style:dashed}.magic-circle>b{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-45deg);font-size:.46rem;color:currentColor}
+.magic-circle-violet,.magic-circle-rose{color:#d47cff}.magic-circle-gold{color:#ffd66d}.magic-circle-cyan,.magic-circle-blue{color:#78dfff}.magic-circle-red{color:#ff6a70}.magic-circle-black{color:#9b75cf}.magic-circle-rainbow{color:#8ef5cf}.magic-circle-plain{color:#baa9c4;opacity:.22}
+.home-character-circle{width:112%;top:62%}.equipment-character-circle{width:88%;top:58%}.side-unit-sprite{isolation:isolate}.side-unit-sprite>.monster-visual,.side-unit-sprite>.monster-sprite{position:relative;z-index:1}
+
+/* Battle contribution is a separate, resilient screen before rewards. */
+.battle-contribution{display:grid;gap:10px}.contribution-heading{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:9px;padding:9px;border:1px solid #806132;background:linear-gradient(110deg,#20160c,#130c1d)}
+.contribution-heading>span{width:38px;height:38px}.contribution-heading div{display:grid}.contribution-heading small{color:#ad94bb;font-size:.54rem;letter-spacing:.12em}.contribution-heading h3{margin:0;color:#f2d888}.contribution-heading em{color:#c6b5cc;font-size:.58rem;font-style:normal}
+.contribution-list{display:grid;gap:6px}.contribution-list article{display:grid;grid-template-columns:54px minmax(78px,.8fr) minmax(0,2.2fr);align-items:center;gap:7px;min-width:0;padding:7px;border:1px solid #4d3a58;background:#0a080e}.contribution-list article.mvp{border-color:#d4ae55;box-shadow:inset 0 0 18px #c4923926}
+.contribution-portrait{position:relative;width:52px;height:52px}.contribution-monster-visual,.contribution-monster-visual img{width:52px!important;height:52px!important}.contribution-portrait>b{position:absolute;left:-3px;right:-3px;bottom:-2px;padding:1px;background:#5d3510;color:#ffe19b;font-size:.38rem;text-align:center}
+.contribution-name{display:grid;min-width:0}.contribution-name strong,.contribution-name small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.contribution-name strong{font-size:.7rem}.contribution-name small{color:#a99bae;font-size:.5rem}
+.contribution-list dl{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px;margin:0}.contribution-list dl>div{min-width:0;display:grid;padding:4px 2px;border:1px solid #322839;background:#050509;text-align:center}.contribution-list dt{color:#9d91a1;font-size:.38rem}.contribution-list dd{margin:0;overflow:hidden;text-overflow:ellipsis;color:#eee0b7;font-size:.54rem;font-variant-numeric:tabular-nums}
+
+.battle-status-detail-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.battle-status-detail-list p{margin:0;padding:8px;border:1px solid #564261;background:#0b0810}
+
+@media(max-width:430px){
+ .gacha-result-card{grid-template-columns:52px minmax(0,1fr)!important}.gacha-result-card>span{width:50px!important;height:50px!important}.gacha-result-card .gacha-result-equipment-art{width:46px!important;height:46px!important;min-width:46px!important;min-height:46px!important}
+ .contribution-list article{grid-template-columns:46px minmax(0,1fr);grid-template-areas:"portrait name" "stats stats"}.contribution-portrait{grid-area:portrait;width:44px;height:44px}.contribution-monster-visual,.contribution-monster-visual img{width:44px!important;height:44px!important}.contribution-name{grid-area:name}.contribution-list dl{grid-area:stats}
+}

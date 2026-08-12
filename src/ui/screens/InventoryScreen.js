@@ -1,10 +1,10 @@
-import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=2.4.1";
-import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.4.1";
-import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.4.1";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.4.1";
-import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.4.1";
-import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.4.1";
-import{monsterVisual}from"../MonsterVisual.js?v=2.4.1";
+import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=2.5.0";
+import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.5.0";
+import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.5.0";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.5.0";
+import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.5.0";
+import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.5.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.5.0";
 
 const CONSUMABLES=[
  ["potions","🧪","薬草","HPを回復"],
@@ -23,7 +23,7 @@ const CONSUMABLES=[
  ,["experienceItems","📘","EXP結晶","通常種は50個でLv.10,000相当。深淵・十神は必要EXP5倍"]
 ];
 const MATERIALS=[
- ["captureCrystals","🔮","捕獲結晶","戦闘中の捕獲に使用"],
+ ["captureCrystals","🔮","捕獲結晶","捕獲失敗は1個、成功時は敵に応じて最大75個消費"],
  ["abyssKeys","🗝️","深淵の鍵","深淵で使用する特別な鍵"]
 ];
 const ARMORY_CATEGORIES=[["all","すべて"],["weapon","武器"],["armor","防具"],["accessory","アクセ"]];

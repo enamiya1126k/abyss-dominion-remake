@@ -1,10 +1,10 @@
-import{SPECIES}from"../data/species.js?v=2.4.1";
-import{PERSONALITIES}from"../data/personalities.js?v=2.4.1";
-import{MONSTER_COLORS}from"../data/colors.js?v=2.4.1";
-import{normalizedResistances}from"../data/attributes.js?v=2.4.1";
-import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.4.1";
-import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.4.1";
-import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.4.1";
+import{SPECIES}from"../data/species.js?v=2.5.0";
+import{PERSONALITIES}from"../data/personalities.js?v=2.5.0";
+import{MONSTER_COLORS}from"../data/colors.js?v=2.5.0";
+import{normalizedResistances}from"../data/attributes.js?v=2.5.0";
+import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.5.0";
+import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.5.0";
+import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.5.0";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;

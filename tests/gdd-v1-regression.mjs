@@ -80,7 +80,7 @@ globalThis.CustomEvent=class CustomEvent{
 };
 
 function testSharedRules(){
-  assert.equal(APP_VERSION,"2.4.1");
+  assert.equal(APP_VERSION,"2.5.0");
   assert.equal(ABYSS_UNLOCK_FLOOR,100);
   assert.deepEqual([...BATTLE_SPEED_OPTIONS],[.5,1,2,4]);
   assert.equal(normalizeBattleSpeed(.5),.5);
@@ -238,7 +238,7 @@ function testPersistentAilments(){
 function testSaveMigration(){
   localStorage.removeItem(SAVE_KEY);
   const fresh=new SaveService();
-  assert.equal(fresh.state.schemaVersion,50);
+  assert.equal(fresh.state.schemaVersion,51);
   assert.equal(fresh.state.settings.minimapVisible,false);
   assert.equal(fresh.state.settings.battleSpeed,1);
   assert.equal(fresh.state.settings.audioEnabled,true);
@@ -280,7 +280,7 @@ function testSaveMigration(){
   };
   localStorage.setItem(SAVE_KEY,JSON.stringify(old));
   const migrated=new SaveService();
-  assert.equal(migrated.state.schemaVersion,50);
+  assert.equal(migrated.state.schemaVersion,51);
   assert.equal(migrated.state.settings.minimapVisible,true);
   assert.equal(migrated.state.settings.battleSpeed,1);
   assert.equal(migrated.state.monsters[0].ailments[0].id,"poison");
@@ -300,7 +300,7 @@ function testSaveMigration(){
   assert.equal(migrated.state.expeditionSnapshot.cameraData.z,1.4);
   assert.deepEqual(migrated.state.expeditionSnapshot.player.path,[]);
   assert.deepEqual(migrated.state.lastMigration.from,43);
-  assert.deepEqual(migrated.state.lastMigration.to,50);
+  assert.deepEqual(migrated.state.lastMigration.to,51);
   migrated.reset();
   assert.equal(migrated.state.settings.minimapVisible,false);
 }
@@ -313,7 +313,7 @@ function testScreenRendering(){
   assert.doesNotMatch(home,/プレゼント/);
   const settings=SettingsScreen(save.state);
   assert.doesNotMatch(settings,/TEST ACCESS ACTIVE/);
-  assert.match(settings,/v2\.4\.1/);
+  assert.match(settings,/v2\.5\.0/);
   assert.match(settings,/id="toggleAudio"/);
   assert.match(settings,/id="musicVolume"/);
   assert.match(settings,/id="sfxVolume"/);
@@ -379,7 +379,7 @@ function testStaticReferences(){
     "ui/screens/MonsterDetailScreen.js",
     "ui/screens/SettingsScreen.js"
   ]){
-    assert.ok(main.includes(`${modulePath}?v=2.4.1`),`Stale release cache tag: ${modulePath}`);
+    assert.ok(main.includes(`${modulePath}?v=2.5.0`),`Stale release cache tag: ${modulePath}`);
   }
   const audio=fs.readFileSync(path.join(root,"src/core/AudioSystem.js"),"utf8");
   assert.match(audio,/main-bgm\.mp3/);

@@ -11,8 +11,8 @@ import{createMonster,expNeedFor,experienceCrystalValue,applyTotalExperience}from
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const read=file=>fs.readFileSync(path.join(root,file),"utf8");
 
-assert.equal(APP_VERSION,"2.4.1");
-assert.equal(SAVE_SCHEMA_VERSION,50);
+assert.equal(APP_VERSION,"2.5.0");
+assert.equal(SAVE_SCHEMA_VERSION,51);
 assert.equal(TRUE_MAX_LEVEL,10000);
 
 const newIds=["eraser_slime","pushpin_roller","pencil_mouse","stapler_crab","compass_beetle","gluepot_mimic","fountain_pen_mage","correction_ghost","scissor_mantis","pencilcase_parade","chalkboard_dragon","forbidden_paper_cutter","ochuki","bechi","kiara","roxy","milim","ai","eris","golden_darkness"];
@@ -37,9 +37,9 @@ assert.ok(abyssGrowth.level<10000,"endgame growth must remain much slower");
 assert.equal(shouldTriggerEmergency({player:{currentFloor:5000,maxFloor:5000},flags:{},endgame:{}}),false);
 assert.equal(teamBattleRewardPreview(1,10000).goldMultiplier,.04);
 
-const main=read("src/main.js"),battle=read("src/ui/screens/BattleScreen.js"),equipment=read("src/ui/screens/EquipmentScreen.js"),css=read("src/Styles/v2.4.0.css"),save=read("src/services/SaveService.js");
+const main=read("src/main.js"),battle=read("src/ui/screens/BattleScreen.js"),equipment=read("src/ui/screens/EquipmentScreen.js"),css=read("src/Styles/v2.4.0.css")+read("src/Styles/v2.5.0.css"),save=read("src/services/SaveService.js");
 assert.match(main,/countRoll<\.25\?2:countRoll<\.62\?3:4/);
-assert.match(main,/level:Math\.max\(10000/);
+assert.match(main,/function enemyLevelForFloor\(floor\)\{return scaledEnemyLevelForFloor\(floor\)\}/);
 assert.match(main,/uncapturable:true,endgameRoaming:true/);
 assert.match(main,/chance=bossData\?\.faction==="tenGod"\?\.12:\.18/);
 assert.equal((main.match(/function playTenGodFirstContact\(/g)??[]).length,1);

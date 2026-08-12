@@ -1,40 +1,36 @@
-export const ENEMY_LEVEL_CAP=99999;
+// Enemy progression is intentionally separate from player progression.
+// Levels remain readable, while hidden equipment/mastery prevents a captured
+// high-level enemy from carrying its dungeon-only power into the party.
+export const ENEMY_LEVEL_CAP=Number.MAX_SAFE_INTEGER;
 
 const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
 const lerp=(a,b,t)=>a+(b-a)*clamp(t,0,1);
+const safeFloor=value=>Math.max(1,Math.floor(Number(value)||1));
 
 export function baseEnemyLevelForFloor(floor){
- const f=clamp(Math.floor(Number(floor)||1),1,10000);
+ const f=safeFloor(floor);
  if(f<=1000)return f;
- if(f<=5000)return Math.round(lerp(10000,90000,(f-1000)/4000));
- if(f<9000)return Math.round(lerp(90000,ENEMY_LEVEL_CAP,(f-5000)/4000));
- return ENEMY_LEVEL_CAP;
+ if(f<=1500)return Math.round(lerp(1000,5000,(f-1000)/500));
+ if(f<=2000)return Math.round(lerp(5000,10000,(f-1500)/500));
+ // No hard ceiling after 2000F. Every 100 floors adds roughly 1000 levels.
+ return Math.min(ENEMY_LEVEL_CAP,Math.round(10000+(f-2000)*10));
 }
 
 export function enemyLevelForFloor(floor,roll=Math.random()){
- const base=baseEnemyLevelForFloor(floor);
- if(base>=ENEMY_LEVEL_CAP)return ENEMY_LEVEL_CAP;
- const variance=.96+clamp(Number(roll)||0,0,1)*.08;
- return clamp(Math.round(base*variance),1,ENEMY_LEVEL_CAP);
+ const base=baseEnemyLevelForFloor(floor),variance=.96+clamp(Number(roll)||0,0,1)*.08;
+ return Math.max(1,Math.min(ENEMY_LEVEL_CAP,Math.round(base*variance)));
 }
 
 export function enemyRankRatesForFloor(floor){
- const f=clamp(Math.floor(Number(floor)||1),1,10000);
+ const f=safeFloor(floor);
  if(f<=1000)return{N:29.8,R:28,SR:22,SSR:15,LR:5,abyss:.1,tenGod:.1};
- if(f<5000){
-  const t=(f-1000)/4000;
-  return{normal:lerp(94,1,t),abyss:lerp(5,90,t),tenGod:lerp(1,9,t)};
- }
- if(f<9000){
-  const t=(f-5000)/4000;
-  return{normal:lerp(1,0,t),abyss:lerp(90,10,t),tenGod:lerp(9,90,t)};
- }
+ if(f<5000){const t=(f-1000)/4000;return{normal:lerp(94,1,t),abyss:lerp(5,90,t),tenGod:lerp(1,9,t)}}
+ if(f<9000){const t=(f-5000)/4000;return{normal:lerp(1,0,t),abyss:lerp(90,10,t),tenGod:lerp(9,90,t)}}
  return{normal:0,abyss:0,tenGod:100};
 }
 
 function weightedPick(entries,roll=Math.random()){
- const total=entries.reduce((sum,[,weight])=>sum+Math.max(0,weight),0);
- let cursor=clamp(Number(roll)||0,0,.999999)*total;
+ const total=entries.reduce((sum,[,weight])=>sum+Math.max(0,weight),0);let cursor=clamp(Number(roll)||0,0,.999999)*total;
  for(const[value,weight]of entries){cursor-=Math.max(0,weight);if(cursor<0)return value}
  return entries.at(-1)?.[0];
 }
@@ -47,69 +43,60 @@ export function rollEnemyRank(floor,roll=Math.random()){
  return weightedPick([["N",29.8],["R",28],["SR",22],["SSR",15],["LR",5]],Math.random());
 }
 
-export function visibleEnemyRank(rank,floor){
- return Number(floor)<1000&&(rank==="abyss"||rank==="tenGod")?"？？？":({abyss:"深淵",tenGod:"十神"}[rank]??rank);
-}
+export function visibleEnemyRank(rank,floor){return Number(floor)<1000&&(rank==="abyss"||rank==="tenGod")?"？？？":({abyss:"深淵",tenGod:"十神"}[rank]??rank)}
+export function enemyRankStatMultiplier(rank){return({N:1,R:1.08,SR:1.18,SSR:1.32,LR:1.5,abyss:2.5,tenGod:3.15})[rank]??1}
 
-export function enemyRankStatMultiplier(rank){
- return({N:1,R:1.08,SR:1.18,SSR:1.32,LR:1.5,abyss:1.85,tenGod:2.25})[rank]??1;
-}
-
-export function equipmentHolderRateForFloor(floor){
- const f=clamp(Number(floor)||1,1,10000);
- if(f<=1000)return .5;
- if(f<5000)return lerp(.5,1,(f-1000)/4000);
- return 1;
-}
-
-export function equipmentSlotsForFloor(floor,roll=Math.random()){
- const f=clamp(Number(floor)||1,1,10000);
- if(f>=9000)return 6;
- if(f>=8000)return weightedPick([[5,.35],[6,.65]],roll);
- if(f>=7000)return weightedPick([[4,.35],[5,.65]],roll);
- if(f>=6000)return weightedPick([[3,.3],[4,.7]],roll);
- if(f>=5000)return weightedPick([[3,.55],[4,.45]],roll);
- if(f>1000){const expected=lerp(1.5,3.5,(f-1000)/4000);return clamp(Math.round(expected+(roll-.5)),1,4)}
- return weightedPick([[1,.72],[2,.23],[3,.05]],roll);
-}
+export function equipmentHolderRateForFloor(floor){return Number(floor)>=100?1:Number(floor)>=6?.11:0}
+export function equipmentSlotsForFloor(floor){return Number(floor)>=100?6:Number(floor)>=30?2:1}
 
 export function rollEnemyEquipmentRarity(floor,rank,roll=Math.random()){
- const f=Number(floor)||1;
+ const f=safeFloor(floor);
  if(f>=9000)return roll<.65?"SSR":"LR";
- if(rank==="tenGod")return roll<.35?"SSR":"LR";
- if(rank==="abyss")return roll<.2?"SSR":"LR";
- if(f>1000&&roll<.05)return"ABYSS";
- return weightedPick([["N",.2],["R",.28],["SR",.25],["SSR",.17],["LR",.1]],roll);
+ if(rank==="tenGod")return roll<.25?"SSR":"LR";
+ if(rank==="abyss")return roll<.42?"SSR":"LR";
+ if(f>=2000)return weightedPick([["SR",.18],["SSR",.52],["LR",.3]],roll);
+ if(f>=500)return weightedPick([["R",.12],["SR",.42],["SSR",.36],["LR",.1]],roll);
+ return weightedPick([["N",.32],["R",.38],["SR",.22],["SSR",.07],["LR",.01]],roll);
 }
 
-
-export function post9000DepthProfile(floor){
- const f=clamp(Math.floor(Number(floor)||1),1,10000);
- if(f<9000)return{active:false,step:0,label:null,hp:1,atk:1,def:1,spd:1,statusResist:0};
- // Lv.9999到達後も100階ごとに神域圧が上昇し、9000Fと10000Fを別物にする。
- const step=clamp(Math.floor((f-9000)/100),0,10);
- const t=step/10;
+// Dungeon-only six-slot loadout. This object is never copied to a captured
+// monster. It represents enhancement levels, sockets, affixes and mastery.
+export function enemyHiddenProfileForFloor(floor,{rank="N",faction=null,boss=false,roll=Math.random()}={}){
+ const f=safeFloor(floor);
+ if(f<100)return{active:false,floor:f,slots:0,hp:1,atk:1,def:1,spd:1,damageTaken:1,crit:.04,mastery:0,ai:0};
+ const depth=Math.max(0,(f-100)/500),rankId=faction??rank;
+ const factionMult=rankId==="tenGod"?2.15:rankId==="abyss"?1.72:1;
+ const bossMult=boss?1.48:1;
+ const mastery=Math.floor(25+Math.pow(depth+1,.82)*44+(rankId==="tenGod"?260:rankId==="abyss"?160:0));
+ const gearLevel=Math.max(1,Math.round(baseEnemyLevelForFloor(f)*(.46+Math.min(1.1,depth*.035))));
+ const base=1+Math.pow(depth+1,.72)*.16;
  return{
-  active:true,
-  step,
-  label:step>=10?"最終神域":`第${step+1}神域`,
-  hp:lerp(1,1.85,t),
-  atk:lerp(1,1.48,t),
-  def:lerp(1,1.36,t),
-  spd:lerp(1,1.18,t),
-  statusResist:lerp(0,.28,t)
+  active:true,floor:f,slots:6,gearLevel,mastery,
+  rarity:rollEnemyEquipmentRarity(f,rankId,roll),socketGrade:Math.min(10,1+Math.floor(f/240)),
+  affixGrade:Math.min(12,1+Math.floor(f/180)),ai:Math.min(100,18+Math.floor(f/80)+(rankId==="tenGod"?22:rankId==="abyss"?14:0)),
+  hp:base*factionMult*bossMult,
+  atk:(1+Math.pow(depth+1,.68)*.13)*factionMult*bossMult,
+  def:(1+Math.pow(depth+1,.66)*.12)*factionMult*bossMult,
+  spd:(1+Math.min(2.6,Math.log2(depth+2)*.18))*(rankId==="tenGod"?1.22:rankId==="abyss"?1.13:1),
+  damageTaken:Math.max(.08,1-Math.min(.82,Math.log2(depth+2)*.085+(rankId==="tenGod"?.16:rankId==="abyss"?.1:0))),
+  crit:Math.min(.72,.06+Math.log2(depth+2)*.04+(rankId==="tenGod"?.18:rankId==="abyss"?.1:0)),
+  statusResist:Math.min(.92,.08+Math.log2(depth+2)*.075+(rankId==="tenGod"?.2:rankId==="abyss"?.12:0)),
+  capturePressure:1+Math.pow(depth+1,.55)*.55
  };
 }
 
+export function post9000DepthProfile(floor){
+ const f=safeFloor(floor);if(f<9000)return{active:false,step:0,label:null,hp:1,atk:1,def:1,spd:1,statusResist:0};
+ const step=Math.floor((f-9000)/100),t=Math.min(1,step/10);
+ return{active:true,step,label:step>=10?"最終神域":`第${step+1}神域`,hp:lerp(1,1.85,t),atk:lerp(1,1.48,t),def:lerp(1,1.36,t),spd:lerp(1,1.18,t),statusResist:lerp(0,.28,t)};
+}
+
 export function bossProfileForFloor(floor){
- const f=Math.max(1,Math.floor(Number(floor)||1));
- // 10階ごとの支配者は編成・属性・状態異常対策を要求する本格戦。
+ const f=safeFloor(floor);
  if(f%1000===0)return{tier:"超ボス",hp:22,atk:4.1,def:3.2,spd:1.55,statusResist:.82,healRate:.28,powerMultiplier:5.2};
  if(f%100===0)return{tier:"大ボス",hp:15,atk:3.15,def:2.5,spd:1.38,statusResist:.68,healRate:.24,powerMultiplier:4.4};
  if(f%50===0)return{tier:"属性覇者",hp:10.5,atk:2.65,def:2.05,spd:1.28,statusResist:.54,healRate:.21,powerMultiplier:3.75};
  return{tier:"階層ボス",hp:7.2,atk:2.15,def:1.72,spd:1.18,statusResist:.4,healRate:.19,powerMultiplier:3.35};
 }
 
-export function bossLevelForFloor(floor){
- return Math.min(ENEMY_LEVEL_CAP,Math.round(baseEnemyLevelForFloor(floor)*1.65));
-}
+export function bossLevelForFloor(floor){return Math.max(1,Math.round(baseEnemyLevelForFloor(floor)*1.65))}
