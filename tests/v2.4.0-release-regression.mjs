@@ -49,9 +49,9 @@ const {affectionBonuses,createMonster}=await import("../src/models/Monster.js");
 const {createEquipment}=await import("../src/models/Equipment.js");
 const {canEquipInSubslot}=await import("../src/services/EquipmentLoadoutSystem.js");
 
-assert.equal(APP_VERSION,"2.5.0");
-assert.equal(SAVE_SCHEMA_VERSION,51);
-assert.equal(SERIAL_CODE_COUNT,17);
+assert.equal(APP_VERSION,"2.6.0");
+assert.equal(SAVE_SCHEMA_VERSION,52);
+assert.equal(SERIAL_CODE_COUNT,21);
 
 const serialCodes=new Map([
   ["AD-GM-ZM7T-QKAG-WKHF","crystals10000"],

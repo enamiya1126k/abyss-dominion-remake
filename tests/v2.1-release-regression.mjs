@@ -36,7 +36,7 @@ import {monsterCombatPower, normalizeCombatPowerRecord} from "../src/core/Combat
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 
 assert.equal(PREMIUM_COST_MULTIPLIER,10);
-assert.equal(APP_VERSION,"2.5.0");
+assert.equal(APP_VERSION,"2.6.0");
 assert.equal(MONSTER_STORAGE_CAP,3000);
 assert.equal(ENDGAME_MAX_LEVEL,99999);
 assert.equal(COMBAT_POWER_DISPLAY_SCALE,90);

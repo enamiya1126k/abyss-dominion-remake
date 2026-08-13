@@ -1,11 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.5.0";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.5.0";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.5.0";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.5.0";
-import{monsterVisual}from"../MonsterVisual.js?v=2.5.0";
-import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.5.0";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.5.0";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.5.0";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.6.0";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.6.0";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.6.0";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.6.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.6.0";
+import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.6.0";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.6.0";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.6.0";
 
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{

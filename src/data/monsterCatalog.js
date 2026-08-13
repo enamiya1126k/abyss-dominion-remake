@@ -290,6 +290,10 @@ export const MONSTER_SPRITE_FOLDERS=Object.freeze({
   ai:"228_ai",
   eris:"229_eris",
   golden_darkness:"230_golden_darkness",
+  myth_enami:"myth_enami",
+  myth_rion:"myth_rion",
+  myth_yori:"myth_yori",
+  myth_hide:"myth_hide",
   dev_familiar_chappy:"secret_dev_familiar_chappy"
 });
 

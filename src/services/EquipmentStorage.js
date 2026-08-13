@@ -1,5 +1,5 @@
-import{abyssGoldReward}from"../core/AbyssSkillTreeSystem.js?v=2.5.0";
-import{equipmentDisplayRarity}from"../data/equipment.js?v=2.5.0";
+import{abyssGoldReward}from"../core/AbyssSkillTreeSystem.js?v=2.6.0";
+import{equipmentDisplayRarity}from"../data/equipment.js?v=2.6.0";
 
 export const EQUIPMENT_LIMIT=500;
 export const RESERVE_LIMIT=30;

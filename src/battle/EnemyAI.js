@@ -1,5 +1,5 @@
-import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=2.5.0";
-import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.5.0";
+import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=2.6.0";
+import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.6.0";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
  devour:"devour",annihilate:"annihilate",wrathBurst:"wrathBurst",mirror:"mirror",sleepMist:"sleepMist",plunder:"plunder",sovereign:"sovereign",

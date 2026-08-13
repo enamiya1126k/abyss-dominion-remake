@@ -4,10 +4,12 @@ import{
  abyssSkillBranches,
  abyssSkillCategoryById,
  abyssSkillEffectSummary,
+ magicCircleUnlockForNode,
  abyssSkillNodeById,
  abyssSkillTreeSummary
-}from"../../core/AbyssSkillTreeSystem.js?v=2.5.0";
-import{pixelIcon}from"../components/GameChrome.js?v=2.5.0";
+}from"../../core/AbyssSkillTreeSystem.js?v=2.6.0";
+import{magicCircleById}from"../../core/MagicCircleSystem.js?v=2.6.0";
+import{pixelIcon}from"../components/GameChrome.js?v=2.6.0";
 
 const ROW_HEIGHT=144;
 const CATEGORY_ICON={economy:"coin",combat:"crossed-swords",exploration:"dungeon"};
@@ -35,6 +37,7 @@ function requirementText(node,learned){
 
 function nodeCard(state,node,learned){
  const status=nodeStatus(state,node,learned);
+ const circleId=magicCircleUnlockForNode(node.id),circle=circleId?magicCircleById(circleId):null;
  const buttonText=status==="learned"?"習得済み":status==="locked"?"ルート未到達":status==="short"?"GOLD不足":`${node.cost.toLocaleString()}G`;
  return`
   <article class="abyss-tree-node ${status} path-${node.pathType??"foundation"}" data-abyss-node-card="${node.id}" style="grid-column:${node.lane??2};grid-row:${node.tier}">
@@ -43,6 +46,7 @@ function nodeCard(state,node,learned){
     <small>T${node.tier}・${node.branchName??"根源"}</small>
     <h3>${node.name}</h3>
     <p>${node.description}</p>
+    ${circle?`<span class="abyss-circle-unlock"><img src="${circle.asset}" alt=""><b>魔法陣解禁</b><strong>${circle.name} Lv.1</strong></span>`:""}
     <em>${status==="learned"?"効果発動中":requirementText(node,learned)}</em>
    </div>
    <button type="button" data-learn-abyss-skill="${node.id}" ${status==="learned"||status==="locked"?"disabled":""}>${buttonText}</button>
@@ -127,9 +131,9 @@ export function AbyssSkillTreeScreen(state,activeCategoryId="economy"){
      <div class="abyss-tree-grid">${nodes.map(node=>nodeCard(state,node,learned)).join("")}</div>
     </div>
 
-    <div class="panel abyss-tree-reset-panel">
-     <div><h3>振り直し</h3><p>習得内容をすべて解除し、投入したGOLDを全額返還する。</p></div>
-     <button id="resetAbyssSkillTree" type="button" ${summary.learnedCount?"":"disabled"}>無料リセット<br><small>${summary.investedGold.toLocaleString()}G返還</small></button>
+    <div class="panel abyss-tree-reset-panel abyss-tree-permanent-panel">
+     <div><h3>恒久成長</h3><p>習得したノードと解禁した魔法陣は永久に保持されます。深淵ツリーの振り直し・GOLD返還はできません。</p></div>
+     <span class="abyss-tree-permanent-seal">RESET<br>LOCKED</span>
     </div>
    </div>
   </section>`;

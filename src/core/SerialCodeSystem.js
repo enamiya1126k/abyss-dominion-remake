@@ -1,10 +1,10 @@
-import{createMonster,calculatedStats}from"../models/Monster.js?v=2.5.0";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.5.0";
-import{SPECIES}from"../data/species.js?v=2.5.0";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.5.0";
-import{MONSTER_STORAGE_CAP}from"./config.js?v=2.5.0";
-import{createEquipment}from"../models/Equipment.js?v=2.5.0";
-import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.5.0";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=2.6.0";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.6.0";
+import{SPECIES}from"../data/species.js?v=2.6.0";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.6.0";
+import{MONSTER_STORAGE_CAP}from"./config.js?v=2.6.0";
+import{createEquipment}from"../models/Equipment.js?v=2.6.0";
+import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.6.0";
 
 const DEVICE_LEDGER_KEY="abyss-dominion-serial-ledger-v1";
 
@@ -26,6 +26,10 @@ const CODE_REWARDS=Object.freeze({
   ,"5b6f0f23428f299bcf017a96ff9322f8937410bb8820e3f0528c797ade1d1bc1":"randomAbyssMonster"
   ,"69d9fe050e4d7bdf452d8460f7b2a4e4e48fef13274e5af55440b0d2069479f1":"randomTenGodMonster"
   ,"0ee946c08c36317e3c903b6f468710edba7aba78a681808caec070692a167d63":"chappySecret"
+  ,"348f49a6b5c31ff339d6509a8192cfc630d20b4172f727cacd4d928b6d8a42a3":"mythicPackEnami"
+  ,"4d589a2841ebf423bc321b3b8e2b54591d37a0af404bd1ec96cb1d656cbd26ad":"mythicPackRion"
+  ,"ecd4a995b6a7ef734e498ff854e94953e0a5675b3df11748e60029e22a95de49":"mythicPackYori"
+  ,"9d5c12ceb74d9ad485bdd55dbdc12916cd52e36ed38bbfbbab40f4920687b2ab":"mythicPackHide"
 });
 
 const GAME_MASTER_HASH="dd808decc6532af902eb00cc9a8aad1b5575db84d325c9732fe84256cbd1b15e";
@@ -49,6 +53,17 @@ const REWARD_INFO=Object.freeze({
   ,randomAbyssMonster:{title:"ランダム深淵契約",icon:"🌑"}
   ,randomTenGodMonster:{title:"ランダム十神契約",icon:"🌌"}
   ,chappySecret:{title:"開発室からの封印便",icon:"🛠️"}
+  ,mythicPackEnami:{title:"神話限定・えなみ創世パック",icon:"🎮"}
+  ,mythicPackRion:{title:"神話限定・りおん万能パック",icon:"💚"}
+  ,mythicPackYori:{title:"神話限定・より蒼晶パック",icon:"🔷"}
+  ,mythicPackHide:{title:"神話限定・ひで紅殻パック",icon:"🦞"}
+});
+
+const MYTHIC_PACKS=Object.freeze({
+  mythicPackEnami:{speciesId:"myth_enami",owner:"enami",names:["創世のゲームパッド","スパイシールーレット","星海山空のオレンジコート","多動の冒険靴","ゲームマスターの鍵","万象創作のダイス"]},
+  mythicPackRion:{speciesId:"myth_rion",owner:"rion",names:["話術","万能の段取り帳","主人公のグリーンコート","フッ軽スニーカー","理学療法士","マダムキラーの微笑み"]},
+  mythicPackYori:{speciesId:"myth_yori",owner:"yori",names:["ライフル","剛腕の素手","ヘルメット","迷彩服","アルコール","テトラポット"]},
+  mythicPackHide:{speciesId:"myth_hide",owner:"hide",names:["ザリガニの左腕","ザリガニの右腕","ザリガニの甲冑","ピンクタイツ","狩猟免許","修士号"]}
 });
 
 export const SERIAL_CODE_COUNT=Object.keys(CODE_REWARDS).length;
@@ -163,9 +178,9 @@ function createRarityRewardMonster(state,speciesId,tier,level,plus,affection,ski
 }
 
 function randomEntry(entries){return entries[Math.floor(Math.random()*entries.length)]??null}
-function randomSpeciesId(rarity){return randomEntry(Object.values(SPECIES).filter(species=>species.rarity===rarity&&species.id!=="dev_familiar_chappy"))?.id??null}
+function randomSpeciesId(rarity){return randomEntry(Object.values(SPECIES).filter(species=>species.rarity===rarity&&species.id!=="dev_familiar_chappy"&&!species.serialOnly&&!species.gachaExcluded))?.id??null}
 function randomEndgameBossId(faction){return randomEntry(Object.values(ENDGAME_BOSSES).filter(boss=>boss.faction===faction))?.id??null}
-function rewardMonsterRequired(rewardId){return rewardId.endsWith("Monster")||rewardId==="chappySecret"}
+function rewardMonsterRequired(rewardId){return rewardId.endsWith("Monster")||rewardId==="chappySecret"||Boolean(MYTHIC_PACKS[rewardId])}
 function createFactionEquipment(faction,slot){
  const bosses=Object.values(ENDGAME_BOSSES).filter(boss=>boss.faction===faction),boss=randomEntry(bosses),rarity=faction==="tenGod"?"十神":"深淵",item=createEquipment(slot,{rarity,series:boss?.seriesId,ruleOverrides:{endgame:true}}),name=boss?.gearNames?.[slot]??boss?.gear?.find(gear=>gear.slot===slot)?.name;
  if(name)item.name=name;item.endgameBossId=boss?.id??null;item.endgameFaction=faction;item.favorite=true;item.rewardTier=rarity;return item
@@ -178,6 +193,29 @@ function createChappy(state){
  const monster=createRarityRewardMonster(state,"dev_familiar_chappy","SECRET",130,13,1000,10);monster.nickname="開発使魔チャッピー";monster.locked=true;
  const weapon=createEquipment("weapon",{rarity:"神話",handedness:"either",ruleOverrides:{unsellable:true,secret:true}});weapon.name="未完成兵装《PATCH//404》";weapon.stats={atk:404,matk:404,spd:40,crit:4};weapon.favorite=true;weapon.locked=true;weapon.rewardTier="神話";
  return{monster,weapon}
+}
+
+function createMythicPackEquipment(pack,index){
+ const slots=["weapon","weapon","armor","armor","accessory","accessory"],slot=slots[index],item=createEquipment(slot,{rarity:"神話",handedness:slot==="weapon"?"either":null,ruleOverrides:{unsellable:true,serialOnly:true,mythicOwner:pack.speciesId}});
+ item.name=pack.names[index];item.visualAsset=`./assets/ui/equipment/mythic/${pack.owner}-${["weapon-1","weapon-2","armor-1","armor-2","accessory-1","accessory-2"][index]}.png`;item.favorite=true;item.locked=true;item.rewardTier="神話";item.affixes=[];
+ const stats=[{atk:280,matk:210,spd:28,crit:14},{atk:220,matk:270,spd:32,crit:10},{hp:720,def:245,mdef:195},{hp:520,def:190,mdef:180,spd:20},{hp:260,atk:90,matk:90,spd:30},{def:80,mdef:80,crit:16,evasion:14}];
+ item.stats={...stats[index]};return item
+}
+
+function createMythicPackMonster(state,pack){
+ const species=SPECIES[pack.speciesId];if(!species)throw new Error("神話限定キャラのデータが見つかりません。");
+ const monster=createMonster(pack.speciesId,{nickname:species.name,level:1,stars:10,rank:4,plus:50,affection:1000,favorite:true,locked:true,ivs:{hp:100,atk:100,def:100,spd:100},obtainedFloor:Math.max(1,Number(state.player?.maxFloor)||1),obtainedMethod:"serialCode",tags:[...(species.tags??[]),"serialOnly","invincibleAlliance"]});
+ monster.summonTier="神話";monster.summonRarity="神話";prepareSkillMastery(monster,5);monster.currentHp=calculatedStats(monster).hp;monster.currentMp=maxMp(monster);return monster
+}
+
+function grantMythicPack(state,rewardId){
+ const pack=MYTHIC_PACKS[rewardId],monster=createMythicPackMonster(state,pack),equipment=[],targetSlots=["weaponRight","weaponLeft","armorBody","armorSupport","accessoryNeck","accessoryFinger"];
+ monster.equipment={weaponRight:null,weaponLeft:null,armorBody:null,armorSupport:null,accessoryNeck:null,accessoryFinger:null};
+ for(let index=0;index<6;index++){
+  const granted=grantEquipment(state,createMythicPackEquipment(pack,index));equipment.push(granted);
+  if(granted.receipt.location==="inventory"){granted.item.equippedBy=monster.id;monster.equipment[targetSlots[index]]=granted.item.id}
+ }
+ return{monster,equipment,pack}
 }
 
 function recordMonsterAcquisition(state,monster){
@@ -209,7 +247,7 @@ export function applySerialReward(state,rewardId){
   if(rewardMonsterRequired(rewardId)&&monsterCapacityReached(state))return{ok:false,message:`モンスター所持数が${MONSTER_STORAGE_CAP}体で満杯です。`};
   state.player??={};
   state.inventory??={};
-  let monster=null,message=info.message;
+  let monster=null,message=info.message,equipment=[];
   if(rewardId==="crystals10000")state.player.crystals=finiteInteger(state.player.crystals)+10000;
   else if(rewardId==="gold10000000")state.player.gold=finiteInteger(state.player.gold)+10000000;
   else if(rewardId==="keys100")state.inventory.abyssKeys=finiteInteger(state.inventory.abyssKeys)+100;
@@ -227,6 +265,7 @@ export function applySerialReward(state,rewardId){
   else if(rewardId==="tenGodGearPack"){const equipment=grantFactionPack(state,"tenGod");message=`十神装備を武器・防具・アクセサリー各1個（計${equipment.length}個）受け取りました。`}
   else if(rewardId==="abyssGearPack"){const equipment=grantFactionPack(state,"abyss");message=`深淵装備を武器・防具・アクセサリー各1個（計${equipment.length}個）受け取りました。`}
   else if(rewardId==="chappySecret"){const secret=createChappy(state);monster=secret.monster;grantEquipment(state,secret.weapon);message="開発使魔チャッピーと未完成兵装《PATCH//404》が仲間になりました。"}
+  else if(MYTHIC_PACKS[rewardId]){const pack=grantMythicPack(state,rewardId);monster=pack.monster;equipment=pack.equipment;message=`神話限定 ${monster.nickname}と専用装備6点を受け取りました。`}
   if(monster)recordMonsterAcquisition(state,monster);
   const redeemedAt=new Date().toISOString();
   normalizeSerialCodeState(state).redeemed[rewardId]={at:redeemedAt};
@@ -236,6 +275,7 @@ export function applySerialReward(state,rewardId){
     title:info.title,
     icon:info.icon,
     monster,
+    equipment,
     message:message??(monster?`${monster.nickname}（${monster.summonTier} / Lv.${monster.level} / ★${monster.stars}）が仲間になりました。`:"報酬を受け取りました。")
   };
 }

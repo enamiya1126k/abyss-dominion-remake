@@ -1,0 +1,156 @@
+/* v2.6.0 — image-backed magic circles and mythic serial content. */
+
+/* The supplied magic-circle art is a visual layer only: it never changes the
+   sprite box, hit area, or the character's anchored foot position. */
+.magic-circle{
+  box-sizing:border-box!important;
+  display:block!important;
+  position:absolute!important;
+  z-index:0!important;
+  left:50%!important;
+  top:61%!important;
+  width:108%!important;
+  height:auto!important;
+  aspect-ratio:1!important;
+  border:0!important;
+  border-radius:50%!important;
+  transform:translate(-50%,-50%)!important;
+  transform-origin:center!important;
+  opacity:.66!important;
+  color:#d6b6ff;
+  filter:drop-shadow(0 0 7px currentColor) saturate(1.14);
+  overflow:visible!important;
+  isolation:isolate;
+  pointer-events:none!important;
+}
+.magic-circle::before,.magic-circle::after{display:none!important;content:none!important}
+.magic-circle>img{
+  box-sizing:border-box;
+  display:block;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  transform-origin:50% 50%;
+  mix-blend-mode:screen;
+  animation:magic-circle-art-spin 28s linear infinite,magic-circle-art-breathe 3.8s ease-in-out infinite;
+}
+.magic-circle>.magic-circle-ring-a,.magic-circle>.magic-circle-ring-b{
+  box-sizing:border-box;
+  display:block!important;
+  position:absolute!important;
+  border:1px solid currentColor!important;
+  border-radius:50%!important;
+  opacity:.68;
+  transform-origin:center!important;
+}
+.magic-circle>.magic-circle-ring-a{
+  inset:8%!important;
+  border-style:dashed!important;
+  animation:magic-circle-ring-forward 17s linear infinite;
+}
+.magic-circle>.magic-circle-ring-b{
+  inset:20%!important;
+  border-style:dotted!important;
+  animation:magic-circle-ring-reverse 11s linear infinite;
+}
+.magic-circle>b{
+  display:block!important;
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  color:#fff5c7!important;
+  font-size:clamp(.38rem,8%,.68rem)!important;
+  letter-spacing:.08em;
+  opacity:.82;
+  text-shadow:0 0 7px currentColor;
+}
+.magic-circle[data-circle-id="none"]{opacity:.16!important;filter:grayscale(1) drop-shadow(0 0 3px #cfc4d5)}
+.magic-circle[data-circle-id="none"]>img{animation:magic-circle-art-spin 55s linear infinite;mix-blend-mode:screen}
+.magic-circle-high{opacity:.82!important;filter:drop-shadow(0 0 11px currentColor) saturate(1.32)!important}
+.magic-circle-slot>img{animation-duration:7.77s,1.65s}
+.magic-circle-violet,.magic-circle-rose{color:#e086ff}.magic-circle-gold{color:#ffd870}.magic-circle-cyan,.magic-circle-blue{color:#77e9ff}.magic-circle-red{color:#ff6572}.magic-circle-black{color:#9d70dc}.magic-circle-rainbow{color:#9cffe0}.magic-circle-plain{color:#c5b8cf}
+.home-character-circle{top:65%!important;width:124%!important}
+.equipment-character-circle{top:60%!important;width:104%!important}
+.battle-magic-circle{top:68%!important;width:126%!important;opacity:.58!important}
+.workshop-circle{position:relative!important;left:auto!important;top:auto!important;width:min(42vw,180px)!important;transform:none!important;grid-area:art;align-self:center;justify-self:center}
+.side-unit-sprite{isolation:isolate}.side-unit-sprite>.monster-visual,.side-unit-sprite>.monster-sprite{position:relative;z-index:1}
+
+@keyframes magic-circle-art-spin{to{transform:rotate(360deg)}}
+@keyframes magic-circle-art-breathe{0%,100%{opacity:.72;filter:brightness(.88)}50%{opacity:1;filter:brightness(1.25)}}
+@keyframes magic-circle-ring-forward{to{transform:rotate(360deg)}}
+@keyframes magic-circle-ring-reverse{to{transform:rotate(-360deg)}}
+
+/* A proper game-style entry point replaces the temporary "素環Lv.1" pill. */
+.equipment-magic-circle-button{
+  box-sizing:border-box;
+  display:grid!important;
+  grid-template-columns:54px minmax(0,1fr) auto;
+  align-items:center;
+  gap:9px;
+  width:100%;
+  min-height:70px;
+  margin:8px 0 10px;
+  padding:8px 14px 8px 10px!important;
+  border:8px solid transparent!important;
+  border-image:url("../../assets/ui/v2/ornate-frame-active.png?v=2.6.0") 42 fill / 8px!important;
+  background:linear-gradient(100deg,#0d0911e8,#24122ee8 57%,#0a080de8)!important;
+  color:#f6e3af!important;
+  text-align:left;
+  box-shadow:inset 0 0 22px #8d3ccf24,0 2px 8px #000b;
+}
+.equipment-magic-circle-button>img{box-sizing:border-box;width:52px;height:52px;object-fit:contain;filter:drop-shadow(0 0 7px #c06cff)}
+.equipment-magic-circle-button>span{display:grid;gap:2px;min-width:0}.equipment-magic-circle-button b{font-family:serif;font-size:.9rem;letter-spacing:.08em}.equipment-magic-circle-button small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#c8b7ce;font-size:.55rem}
+.equipment-magic-circle-button>i{color:#e2bd62;font-size:.55rem;font-style:normal;white-space:nowrap}
+.equipment-magic-circle-button:active{filter:brightness(1.28);transform:translateY(1px)}
+
+/* Owned-circle workshop. Cards remain readable on narrow phones and locked
+   entries tell the player exactly where progression continues. */
+.magic-circle-workshop{display:grid;gap:10px;color:#eee4ef}
+.magic-circle-workshop>header{
+  display:grid;
+  grid-template-columns:minmax(110px,180px) minmax(0,1fr);
+  grid-template-areas:"art copy";
+  align-items:center;
+  min-height:170px;
+  padding:12px;
+  border:1px solid #785b91;
+  background:radial-gradient(circle at 22% 50%,#4b20664d,transparent 45%),linear-gradient(115deg,#08070c,#170d1e);
+  overflow:hidden;
+}
+.magic-circle-workshop>header>div{grid-area:copy;display:grid;gap:4px;min-width:0}.magic-circle-workshop>header small{color:#bca7c7;letter-spacing:.14em}.magic-circle-workshop>header h3{margin:0;color:#ffe19b;font-family:serif;font-size:1.2rem}.magic-circle-workshop>header p{margin:0;color:#d2c6d5;font-size:.64rem}.magic-circle-workshop>header strong{color:#f0c86d;font-size:.72rem}
+.magic-circle-list{display:grid;gap:7px;max-height:min(58vh,620px);padding-right:2px;overflow:auto;overscroll-behavior:contain}
+.magic-circle-row{
+  display:grid;
+  grid-template-columns:62px minmax(0,1fr) 88px;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+  padding:8px;
+  border:1px solid #4f3b58;
+  background:linear-gradient(105deg,#0a080d,#140b19);
+  box-shadow:inset 0 0 16px #6e378216;
+}
+.magic-circle-row.equipped{border-color:#d6aa50;box-shadow:inset 0 0 20px #d7a43f25,0 0 8px #d7a43f22}.magic-circle-row.locked{filter:saturate(.35);opacity:.68}
+.magic-circle-list-art{display:grid;place-items:center;width:60px;height:60px}.magic-circle-list-art img{width:58px;height:58px;object-fit:contain;filter:drop-shadow(0 0 5px #b368de)}
+.magic-circle-row>div:nth-child(2){display:grid;gap:2px;min-width:0}.magic-circle-row b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#f5dd9b;font-size:.72rem}.magic-circle-row small,.magic-circle-row em,.magic-circle-row strong{display:block;font-size:.5rem;font-style:normal}.magic-circle-row small{color:#d0c2d3}.magic-circle-row em{color:#bc83e4}.magic-circle-row strong{color:#e8bd5d}
+.magic-circle-row>div:last-child{display:grid;gap:5px}.magic-circle-row button{box-sizing:border-box;min-height:31px!important;padding:4px!important;border:1px solid #80619a!important;background:linear-gradient(#43264e,#26152e)!important;color:#fff1ce!important;font-size:.5rem!important}.magic-circle-row button:disabled{opacity:.48}
+.magic-circle-workshop>.muted{margin:0;color:#ae9cb5;font-size:.52rem}
+
+/* Deep-tree rewards use the same real art, making the unlock unmistakable. */
+.abyss-circle-unlock{display:grid;grid-template-columns:42px minmax(0,1fr);grid-template-areas:"icon label" "icon value";align-items:center;gap:0 7px;margin-top:6px;padding:6px;border:1px solid #76538b;background:#170d1f}.abyss-circle-unlock img{grid-area:icon;width:40px;height:40px;object-fit:contain;filter:drop-shadow(0 0 6px #cb79fa)}.abyss-circle-unlock b{grid-area:label;color:#c79be6;font-size:.46rem}.abyss-circle-unlock strong{grid-area:value;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#ffe2a0;font-size:.58rem}
+
+/* Four-member mythic follow-up. It sits above the field without resizing it. */
+.invincible-alliance-banner{position:absolute;z-index:25;left:50%;top:46%;width:min(92%,560px);transform:translate(-50%,-50%);padding:10px;border:1px solid #efbd53;background:linear-gradient(90deg,#13091bea,#4a1d5fea,#13091bea);color:#fff1bd;text-align:center;box-shadow:0 0 28px #d76cff6e;pointer-events:none}
+
+@media(max-width:430px){
+ .equipment-magic-circle-button{grid-template-columns:46px minmax(0,1fr);min-height:64px;padding-right:9px!important}.equipment-magic-circle-button>img{width:44px;height:44px}.equipment-magic-circle-button>i{grid-column:2}
+ .magic-circle-workshop>header{grid-template-columns:112px minmax(0,1fr);min-height:142px;padding:8px}.workshop-circle{width:112px!important}.magic-circle-workshop>header h3{font-size:.98rem}
+ .magic-circle-row{grid-template-columns:52px minmax(0,1fr) 76px;gap:6px;padding:6px}.magic-circle-list-art{width:50px;height:50px}.magic-circle-list-art img{width:49px;height:49px}.magic-circle-row button{font-size:.44rem!important}
+}
+
+@media(prefers-reduced-motion:reduce){
+ .magic-circle>img,.magic-circle>.magic-circle-ring-a,.magic-circle>.magic-circle-ring-b{animation:none!important}
+}

@@ -1,13 +1,13 @@
-import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.5.0";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.5.0";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.5.0";
-import{SPECIES}from"../data/species.js?v=2.5.0";
-import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.5.0";
-import{equipmentStatLabel}from"../data/equipment.js?v=2.5.0";
-import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.5.0";
-import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.5.0";
-import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.5.0";
-import{MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.5.0";
+import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.6.0";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.6.0";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.6.0";
+import{SPECIES}from"../data/species.js?v=2.6.0";
+import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.6.0";
+import{equipmentStatLabel}from"../data/equipment.js?v=2.6.0";
+import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.6.0";
+import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.6.0";
+import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.6.0";
+import{MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.6.0";
 
 export const SECRET_ROOM_CHANCE=.09;
 export const CASINO_CRYSTAL_COST=premiumCrystalCost(10);
@@ -130,8 +130,8 @@ function marketMonsterOffer(floor,index,random){
  const endgameRoll=random();
  if(endgameRoll<.036)return marketEndgameOffer(floor,index,random,endgameRoll<.0036?"tenGod":"abyss");
  const profile=rarityProfile(random),powerProfile=marketPowerProfile(floor,random);
- let pool=Object.values(SPECIES).filter(species=>species.rarity===profile.id&&!species.isTenGod&&!species.isAbyss&&!species.tags?.includes?.("tenGod")&&!species.tags?.includes?.("abyss"));
- if(!pool.length)pool=Object.values(SPECIES).filter(species=>species.rarity===profile.id&&!species.isTenGod&&!species.isAbyss&&!species.tags?.includes?.("tenGod")&&!species.tags?.includes?.("abyss"));
+ let pool=Object.values(SPECIES).filter(species=>species.rarity===profile.id&&!species.isTenGod&&!species.isAbyss&&!species.tags?.includes?.("tenGod")&&!species.tags?.includes?.("abyss")&&!species.serialOnly&&!species.gachaExcluded);
+ if(!pool.length)pool=Object.values(SPECIES).filter(species=>species.rarity===profile.id&&!species.isTenGod&&!species.isAbyss&&!species.tags?.includes?.("tenGod")&&!species.tags?.includes?.("abyss")&&!species.serialOnly&&!species.gachaExcluded);
  const species=pool[Math.floor(random()*pool.length)]??SPECIES.slime;
  const level=powerProfile.monsterLevel;
  const stars=powerProfile.id==="jackpot"?MONSTER_STAR_MAX:1+Math.floor(random()*MONSTER_STAR_MAX);

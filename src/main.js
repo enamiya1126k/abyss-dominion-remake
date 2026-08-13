@@ -1,65 +1,65 @@
-import{SaveService}from"./services/SaveService.js?v=2.5.0";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.5.0";
-import{AudioSystem}from"./core/AudioSystem.js?v=2.5.0";
-import{endgameCharacter}from"./data/endgameCharacters.js?v=2.5.0";
-import{SPECIES}from"./data/species.js?v=2.5.0";
-import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.5.0";
-import{attributeDamageMultiplier,attributeGuideRows,ATTRIBUTES}from"./data/attributes.js?v=2.5.0";
-import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.5.0";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.5.0";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.5.0";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.5.0";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.5.0";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.5.0";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.5.0";
-import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.5.0";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.5.0";
-import{Modal}from"./ui/components/Modal.js?v=2.5.0";
-import{pixelIcon}from"./ui/components/GameChrome.js?v=2.5.0";
-import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.5.0";
-import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.5.0";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.5.0";
-import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=2.5.0";
-import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.5.0";
-import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=2.5.0";
-import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=2.5.0";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=2.5.0";
-import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=2.5.0";
-import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=2.5.0";
-import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=2.5.0";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.5.0";
-import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.5.0";
-import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=2.5.0";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.5.0";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.5.0";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=2.5.0";
-import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.5.0";
-import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill,resetAbyssSkillTree}from"./core/AbyssSkillTreeSystem.js?v=2.5.0";
-import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=2.5.0";
-import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=2.5.0";
-import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=2.5.0";
-import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=2.5.0";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=2.5.0";
-import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.5.0";
-import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.5.0";
-import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.5.0";
-import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse}from"./battle/SkillSystem.js?v=2.5.0";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.5.0";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.5.0";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.5.0";
-import{dangerConfig}from"./core/DangerSystem.js?v=2.5.0";
-import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor}from"./core/EnemyScalingSystem.js?v=2.5.0";
-import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleMarkup,slotDamageMultiplier}from"./core/MagicCircleSystem.js?v=2.5.0";
-import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.5.0";
-import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.5.0";
-import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.5.0";
-import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.5.0";
-import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.5.0";
-import{monsterCombatPower,partyCombatPower,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.5.0";
-import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.5.0";
-import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.5.0";
-import{NOTICE_DEFINITIONS,markAllNoticesRead,normalizeNoticeState}from"./core/NoticeSystem.js?v=2.5.0";
-import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.5.0";
+import{SaveService}from"./services/SaveService.js?v=2.6.0";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.6.0";
+import{AudioSystem}from"./core/AudioSystem.js?v=2.6.0";
+import{endgameCharacter}from"./data/endgameCharacters.js?v=2.6.0";
+import{SPECIES}from"./data/species.js?v=2.6.0";
+import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.6.0";
+import{attributeDamageMultiplier,attributeGuideRows,ATTRIBUTES}from"./data/attributes.js?v=2.6.0";
+import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.6.0";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.6.0";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.6.0";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.6.0";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.6.0";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.6.0";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.6.0";
+import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.6.0";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.6.0";
+import{Modal}from"./ui/components/Modal.js?v=2.6.0";
+import{pixelIcon}from"./ui/components/GameChrome.js?v=2.6.0";
+import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.6.0";
+import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.6.0";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.6.0";
+import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=2.6.0";
+import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.6.0";
+import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=2.6.0";
+import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=2.6.0";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=2.6.0";
+import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=2.6.0";
+import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=2.6.0";
+import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=2.6.0";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.6.0";
+import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.6.0";
+import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=2.6.0";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.6.0";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.6.0";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=2.6.0";
+import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.6.0";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=2.6.0";
+import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=2.6.0";
+import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=2.6.0";
+import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=2.6.0";
+import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=2.6.0";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=2.6.0";
+import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.6.0";
+import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.6.0";
+import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.6.0";
+import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse}from"./battle/SkillSystem.js?v=2.6.0";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.6.0";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.6.0";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.6.0";
+import{dangerConfig}from"./core/DangerSystem.js?v=2.6.0";
+import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor}from"./core/EnemyScalingSystem.js?v=2.6.0";
+import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleMarkup,slotDamageMultiplier}from"./core/MagicCircleSystem.js?v=2.6.0";
+import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.6.0";
+import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.6.0";
+import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.6.0";
+import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.6.0";
+import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.6.0";
+import{monsterCombatPower,partyCombatPower,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.6.0";
+import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.6.0";
+import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.6.0";
+import{NOTICE_DEFINITIONS,markAllNoticesRead,normalizeNoticeState}from"./core/NoticeSystem.js?v=2.6.0";
+import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.6.0";
 
 const TILE=88,COLS=39,ROWS=39,app=document.getElementById("app"),save=new SaveService(),audio=new AudioSystem(()=>save.state.settings);
 let screen="home",selected=null,equipmentTarget=null,equipmentFocusItemId=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",inventoryCategory="all",inventorySort="rarity",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",skillNavigationOrigin="home",inventoryNavigationOrigin="home",settingsNavigationOrigin="home",detailNavigationOrigin="monsters",formationOrigin="home",lastExploreCombatPower=null;
@@ -899,7 +899,7 @@ function bindAbyssSkills(){
   normalizeEquipmentState();
   vitals.forEach(([monster,snapshot])=>restoreVitalSnapshot(monster,snapshot));
   save.save();
-  showToast(`${node.name}を習得！`);
+  showToast(result.circleUnlock&&!result.circleUnlock.already?`${node.name}を習得！ ${result.circleUnlock.circle.name} Lv.1解禁！`:`${node.name}を習得！`);
   render();
   requestAnimationFrame(()=>{
    window.scrollTo(0,scrollY);
@@ -915,18 +915,6 @@ function bindAbyssSkills(){
    });
   });
  }));
- document.getElementById("resetAbyssSkillTree")?.addEventListener("click",()=>{
-  const summary=abyssSkillTreeSummary(save.state);
-  if(!summary.learnedCount)return;
-  if(!confirm(`深淵スキルをすべてリセットしますか？\n\n習得数：${summary.learnedCount}\n返還GOLD：${summary.investedGold.toLocaleString()}G\n\nリセット料金はかかりません。`))return;
-  const vitals=save.state.monsters.map(monster=>[monster,captureVitalSnapshot(monster)]);
-  const result=resetAbyssSkillTree(save.state);
-  normalizeEquipmentState();
-  vitals.forEach(([monster,snapshot])=>restoreVitalSnapshot(monster,snapshot));
-  save.save();
-  showToast(`${result.refund.toLocaleString()}Gを全額返還！`);
-  render();
- });
 }
 
 const MONSTER_RELEASE_REWARDS={
@@ -1214,7 +1202,7 @@ function bindEquipment(){
 
 function magicCircleWorkshopBody(monster){
  const current=equippedMagicCircle(monster,save.state),gold=Math.max(0,Number(save.state.player.gold)||0);
- return`<div class="magic-circle-workshop"><header>${magicCircleMarkup(monster,save.state,{className:"workshop-circle"})}<div><small>装着中</small><h3>${current.name} Lv.${current.level}</h3><p>${current.summary}</p></div></header><div class="magic-circle-list">${MAGIC_CIRCLES.map(circle=>{const level=magicCircleLevel(save.state,circle.id),price=magicCirclePrice(save.state,circle.id),equipped=current.id===circle.id;return`<article class="magic-circle-row tone-${circle.tone} ${equipped?"equipped":""}"><span class="magic-circle-list-glyph">${circle.glyph}</span><div><b>${circle.name}${level?` Lv.${level}`:""}</b><small>${circle.summary}</small><em>${level?`次の強化 ${price.toLocaleString()}G`:`解放 ${price.toLocaleString()}G`}</em></div><div>${level?`<button type="button" data-circle-equip="${circle.id}" ${equipped?"disabled":""}>${equipped?"装着中":"装着"}</button>`:""}<button type="button" data-circle-buy="${circle.id}" ${gold<price?"disabled":""}>${level?"強化":"購入"}</button></div></article>`}).join("")}</div><p class="muted">購入・強化は必ず成功し、強化値が下がることはありません。</p></div>`;
+ return`<div class="magic-circle-workshop"><header>${magicCircleMarkup(monster,save.state,{className:"workshop-circle"})}<div><small>装着中</small><h3>${current.name}${current.level?` Lv.${current.level}`:""}</h3><p>${current.summary}</p><strong>所持 ${gold.toLocaleString()}G</strong></div></header><div class="magic-circle-list">${MAGIC_CIRCLES.map(circle=>{const level=magicCircleLevel(save.state,circle.id),owned=circle.id==="none"||level>0,price=magicCirclePrice(save.state,circle.id),equipped=current.id===circle.id;return`<article class="magic-circle-row tone-${circle.tone} ${equipped?"equipped":""} ${owned?"owned":"locked"}"><span class="magic-circle-list-art"><img src="${circle.asset}" alt=""></span><div><b>${circle.name}${level?` Lv.${level}`:""}</b><small>${circle.summary}</small><em>${circle.id==="none"?"いつでも選択可能":owned?magicCircleNextEffect(circle,level):"深淵ツリーで解禁"}</em>${owned&&circle.id!=="none"?`<strong>次の強化 ${price.toLocaleString()}G</strong>`:""}</div><div><button type="button" data-circle-equip="${circle.id}" ${equipped?"disabled":""}>${equipped?"装着中":"装着"}</button>${circle.id!=="none"&&owned?`<button type="button" data-circle-buy="${circle.id}" ${gold<price?"disabled":""}>GOLD強化</button>`:""}</div></article>`}).join("")}</div><p class="muted">魔法陣は深淵ツリーの節目でLv.1解禁。以後は莫大なGOLDで恒久強化されます。</p></div>`;
 }
 function openMagicCircleWorkshop(monsterId){
  const monster=save.state.monsters.find(entry=>entry.id===monsterId);if(!monster)return;
@@ -1683,10 +1671,10 @@ function rarityCssClass(rarity){return({"神話":"mythic","深淵":"abyss","十�
 function summonOne({mode="mixed",guaranteedMonster=false,guaranteedEquipment=false,guaranteedRare=false,forcedRarity=null,deep=false,equipmentSlot=null}={}){
  const requestedSlot=equipmentSlot??(["weapon","armor","accessory"].includes(mode)?mode:null),isMonster=guaranteedMonster||(!guaranteedEquipment&&!requestedSlot&&(mode==="monster"||Math.random()<.30)),rarity=forcedRarity??(deep?"LR":rarityRoll(guaranteedRare?"guaranteed":"normal"));
  if(isMonster){
-  let pool=Object.values(SPECIES).filter(species=>species.rarity!=="十神"&&!species.isTenGod&&!species.tags?.includes?.("tenGod")&&!species.isAbyss&&!species.tags?.includes?.("abyss"));
+  let pool=Object.values(SPECIES).filter(species=>species.rarity!=="十神"&&!species.isTenGod&&!species.tags?.includes?.("tenGod")&&!species.isAbyss&&!species.tags?.includes?.("abyss")&&!species.serialOnly&&!species.gachaExcluded);
   if(deep)pool=pool.filter(species=>(species.minFloor??0)>=70&&species.rarity!=="神話");
   else pool=pool.filter(species=>species.rarity===rarity);
-  if(!pool.length)pool=Object.values(SPECIES).filter(species=>species.rarity===rarity&&!species.isTenGod&&!species.isAbyss);
+  if(!pool.length)pool=Object.values(SPECIES).filter(species=>species.rarity===rarity&&!species.isTenGod&&!species.isAbyss&&!species.serialOnly&&!species.gachaExcluded);
   if(!pool.length)pool=[SPECIES.slime];
   const newArrivalIds=new Set(["eraser_slime","pushpin_roller","pencil_mouse","stapler_crab","compass_beetle","gluepot_mimic","fountain_pen_mage","correction_ghost","scissor_mantis","pencilcase_parade","chalkboard_dragon","forbidden_paper_cutter","ochuki","bechi","kiara","roxy","milim","ai","eris","golden_darkness"]);
   const featured=pool.filter(species=>newArrivalIds.has(species.id)),unownedFeatured=featured.filter(species=>!save.state.monsters.some(entry=>entry.speciesId===species.id));
@@ -1865,7 +1853,8 @@ function showSummonResults(results,deep=false,{campaign="standard"}={}){
  primary.disabled=true;dismiss.disabled=true;
  skip.onclick=startPremium;
  introTimer=setTimeout(()=>{if(!modal.isConnected)return;startPremium()},720);
- primary.onclick=()=>{if(!completed)return;modal.remove();render()};
+ const returnToSummonTop=()=>{if(!completed)return;modal.remove();go("gacha");requestAnimationFrame(()=>window.scrollTo({top:0,behavior:"auto"}))};
+ primary.onclick=returnToSummonTop;dismiss.onclick=returnToSummonTop;
 }
 function openCodexHub(){app.insertAdjacentHTML("beforeend",Modal("📖 魔物一覧",`<div class="codex-hub"><button data-open-monster-index><span>📖</span><b>魔物一覧へ</b><small>No.・所持数・合成・逃すをまとめて管理</small></button><p class="muted">装備は「持ち物」と「装備管理」に統合しました。</p></div>`,"閉じる"));const modal=topModal();modal.querySelector("[data-open-monster-index]").onclick=()=>{modal.remove();go("monsters")};modal.querySelector("[data-modal-primary]").onclick=()=>modal.remove()}
 function codexVisibleRarity(rarity){return rarity}
@@ -2694,11 +2683,11 @@ function explorationPartyMembers(){return(save.state.party??[]).map(id=>save.sta
 const explorationSpriteCache=new Map();
 const explorationTextureCache=new Map();
 const EXPLORE_TEXTURE_URLS={
- floor:"assets/ui/explore/dungeon-floor.png?v=2.5.0",
- wall:"assets/ui/explore/dungeon-wall.png?v=2.5.0",
- stairs:"assets/ui/explore/dungeon-stairs-arch.png?v=2.5.0",
- props:"assets/ui/explore/dungeon-props-atlas.png?v=2.5.0",
- usedWater:"assets/ui/explore/empty-water-basin.png?v=2.5.0"
+ floor:"assets/ui/explore/dungeon-floor.png?v=2.6.0",
+ wall:"assets/ui/explore/dungeon-wall.png?v=2.6.0",
+ stairs:"assets/ui/explore/dungeon-stairs-arch.png?v=2.6.0",
+ props:"assets/ui/explore/dungeon-props-atlas.png?v=2.6.0",
+ usedWater:"assets/ui/explore/empty-water-basin.png?v=2.6.0"
 };
 const EXPLORE_ATLAS=Object.freeze({
  floor:0,wall:1,corner:2,pillar:3,entrance:4,chestClosed:5,chestOpen:6,barrel:7,
@@ -3360,12 +3349,37 @@ function allyDefenseFactor(id){return Math.max(.2,1+effectValue(battle,id,"defUp
 function enemyAttackFactor(id){return Math.max(.2,1-effectValue(battle,id,"atkDown","enemy"))}
 function enemyDefenseFactor(id){return Math.max(.2,1-effectValue(battle,id,"defDown","enemy"))}
 function applySkillEffects(skill,a,e){for(const effect of skill.effects??[]){if(effect.enemy){const targets=skill.allEnemies?aliveEnemies(battle):[e].filter(Boolean),adjusted=effect.chance==null?effect:{...effect,chance:Math.min(1,effect.chance*(1+affixValue(a,"statusChance",100)/100))};targets.forEach(target=>applyBattleEffect(battle,target.id,adjusted,"enemy"))}else if(effect.allies){battle.party.filter(m=>m.currentHp>0).forEach(m=>applyBattleEffect(battle,m.id,effect,"ally"))}else applyBattleEffect(battle,a.id,effect,"ally")}}
+const INVINCIBLE_ALLIANCE_IDS=Object.freeze(["myth_enami","myth_rion","myth_yori","myth_hide"]);
+function invincibleAllianceReady(){const ids=new Set((battle?.party??[]).map(monster=>monster.speciesId));return INVINCIBLE_ALLIANCE_IDS.every(id=>ids.has(id))}
+function shuffledBattleEntries(entries){const next=[...entries];for(let index=next.length-1;index>0;index--){const swap=Math.floor(Math.random()*(index+1));[next[index],next[swap]]=[next[swap],next[index]]}return next}
+async function performInvincibleAllianceSkill(member,skill){
+ if(!member||member.currentHp<=0||!skill||!aliveEnemies(battle).length)return;
+ const target=aliveEnemies(battle)[Math.floor(Math.random()*aliveEnemies(battle).length)],stats=calculatedStats(member);
+ addBattleLog(battle,`無敵連携：${displayName(member)}が${skill.name}を追加発動`);
+ await battleBanner(skill.name,"連携追加発動・MP消費なし","synergy",460,member);
+ if(skill.type==="selfHeal"||skill.type==="stance"&&skill.heal){const amount=Math.max(1,Math.floor(stats.hp*(skill.heal??.2)*healMultiplier(member))),before=member.currentHp;member.currentHp=Math.min(stats.hp,member.currentHp+amount);recordBattleHealing(member,member.currentHp-before);applySkillEffects(skill,member,target);await floatText(`+${member.currentHp-before}`,member.id,"heal");return}
+ if(skill.type==="allHeal"){let maximum=0;for(const ally of battle.party.filter(entry=>entry.currentHp>0)){const max=calculatedStats(ally).hp,amount=Math.max(1,Math.floor(max*(skill.heal??.25)*healMultiplier(member))),before=ally.currentHp;ally.currentHp=Math.min(max,ally.currentHp+amount);maximum=Math.max(maximum,ally.currentHp-before);recordBattleHealing(member,ally.currentHp-before)}if(skill.cleanse)battle.party.forEach(ally=>{clearNegativeAllyEffects(battle,ally.id);clearAilments(ally)});applySkillEffects(skill,member,target);await floatText(`全体 +${maximum}`,"party","heal");return}
+ if(skill.type==="buff"||skill.type==="stance"){applySkillEffects(skill,member,target);await floatText("連携強化","party","guard");return}
+ if(skill.type==="cleanse"){battle.party.forEach(ally=>{clearNegativeAllyEffects(battle,ally.id);clearAilments(ally)});await floatText("状態回復","party","heal");return}
+ if(skill.type==="mpHeal"){battle.party.filter(ally=>ally.currentHp>0).forEach(ally=>recoverBattleMp(ally,Math.floor(maxMp(ally)*(skill.mpHeal??.2)),member));await floatText("MP回復","party","heal");return}
+ if(skill.type==="revive"){const ally=battle.party.filter(entry=>entry.currentHp<=0).sort((left,right)=>calculatedStats(right).hp-calculatedStats(left).hp)[0];if(ally&&reviveBattleMonster(ally,skill.revive??.35,skill.reviveMp??.25,member))await floatText("復活",ally.id,"heal");return}
+ await animateAttack(member.id,true);
+ const targets=skill.allEnemies?aliveEnemies(battle):[target],hits=Math.max(1,Number(skill.hits)||1);
+ for(const enemy of targets){let dealt=0;for(let hit=0;hit<hits&&enemy.hp>0;hit++){const critical=Boolean(skill.guaranteedCritical)||Math.random()<Math.min(.82,.12+(skill.critBonus??0)+(stats.spd??0)*.003),ignore=Math.max(0,Math.min(.9,Number(skill.defenseIgnore)||0)),before=enemy.hp,raw=skillDamage({...stats,_currentHpRatio:member.currentHp/Math.max(1,stats.hp)},{...enemy,def:enemy.def*(1-ignore),mdef:(enemy.mdef??enemy.def)*(1-ignore)},skill,critical),damage=Math.max(1,Math.floor(raw*.72*attributeDamageMultiplier(skill.element??SPECIES[member.speciesId]?.element??"neutral",SPECIES[enemy.speciesId]?.element??"neutral")*enemyDamageMultiplier(enemy)*(enemy.hiddenDamageTaken??1)*magicCircleDamageMultiplier(member)));enemy.hp=Math.max(0,enemy.hp-damage);dealt+=damage;recordBattleDamage(member,damage);registerWeaponFinisher(member,enemy,before);await animateHit(enemy.id,critical);await floatText(`${critical?"会心 ":""}-${damage}`,enemy.id,critical?"critical":"skill")}if(dealt&&skill.status&&enemy.hp>0&&Math.random()<(skill.status.chance??0))applyEnemyStatus(battle,{...skill.status,sourceMonsterId:member.id},enemy.id)}
+ applySkillEffects(skill,member,target);
+}
+async function triggerInvincibleAlliance(source){
+ if(!battle||battle._invincibleAllianceRunning||!invincibleAllianceReady())return;
+ const partners=shuffledBattleEntries(battle.party.filter(member=>member.id!==source.id&&member.currentHp>0&&INVINCIBLE_ALLIANCE_IDS.includes(member.speciesId)));if(!partners.length)return;
+ battle._invincibleAllianceRunning=true;
+ try{battleFlash("critical");await battleBanner("無敵",`${displayName(source)}に続き、三神話が連続発動`,`synergy invincible`,720,source);for(const member of partners){if(!aliveEnemies(battle).length)break;const skills=allLearnedSkills(member).filter(Boolean),skill=skills[Math.floor(Math.random()*skills.length)];await performInvincibleAllianceSkill(member,skill)}}finally{battle._invincibleAllianceRunning=false}
+}
 async function command(type,skillId=null){
  if(battle.busy)return;
  const entry=currentTurnEntry(battle),a=actor();
  if(entry?.type!=="ally"||!a)return;
  battle.busy=true;
- const s=calculatedStats(a),e=selectedEnemy(battle);if(!e){battle.busy=false;return win(false,null)};battle.enemy=e;
+ const s=calculatedStats(a),e=selectedEnemy(battle);if(!e){battle.busy=false;return win(false,null)};battle.enemy=e;let triggerAlliance=false;
 
  if(hasCircleEffect(a,"randomSkill")&&(type==="attack"||type==="skill"&&!skillId)){
   const unique=new Map();for(const member of save.state.monsters??[])for(const skill of allLearnedSkills(member))unique.set(skill.id,skill);const pool=[...unique.values()].filter(skill=>canUseSkill(a,skill,cooldownRemaining(battle,a.id,skill.id)));
@@ -3374,7 +3388,7 @@ async function command(type,skillId=null){
 
  if(type==="attack"){
   addBattleLog(battle,`${displayName(a)}：たたかう`);await animateAttack(a.id);
-  battle.actionCommitted=true;
+  battle.actionCommitted=true;triggerAlliance=true;
   if(Math.random()<.06)await floatText("回避",e.id,"miss");
   else{
    const critical=Math.random()<Math.min(.95,affixCriticalChance(s,Math.min(.35,.08+(s.spd??0)*.005))+magicCircleCriticalBonus(a,1)),weapon=save.state.equipment.find(item=>item.id===a.equipment?.weaponRight),magicWeapon=weapon?.weaponType==="staff"||(weapon?.stats?.matk??0)>(weapon?.stats?.atk??0),rangedWeapon=magicWeapon||weapon?.weaponType==="bow",rearLine=battle.party.indexOf(a)>=2,formationMultiplier=rearLine?(rangedWeapon?1.08:.78):1.05,attackStat=magicWeapon?(s.matk??s.atk):s.atk,defenseStat=magicWeapon?(e.mdef??e.def):e.def;
@@ -3415,7 +3429,7 @@ async function command(type,skillId=null){
    if(skill.type==="drain"||hasEffect(battle,a.id,"lifeSteal")||outgoingLifeSteal(a)>0){const rate=(skill.drain??0)+effectValue(battle,a.id,"lifeSteal")+outgoingLifeSteal(a),h=Math.max(1,Math.floor(total*Math.min(1.25,rate)));a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal")}
    if(skill.selfHeal){const h=Math.max(1,Math.floor(s.hp*skill.selfHeal));a.currentHp=Math.min(s.hp,a.currentHp+h);await floatText(`+${h}`,a.id,"heal")}if(skill.mpDrain){let drained=0;for(const targetEnemy of skillTargets.filter(enemy=>enemy.hp>0)){const amount=Math.min(Math.max(0,targetEnemy.currentMp??0),Math.max(1,Math.floor((targetEnemy.maxMp??1)*Math.min(.8,skill.mpDrain))));targetEnemy.currentMp=Math.max(0,(targetEnemy.currentMp??0)-amount);drained+=amount}const gain=Math.max(1,drained||Math.floor(maxMp(a)*Math.min(.25,skill.mpDrain)));a.currentMp=Math.min(maxMp(a),a.currentMp+gain);await floatText(`MP吸収 +${gain}`,a.id,"heal")}applySkillEffects(skill,a,e)
   }
-  if(skillCompleted){consumeMagicCircleActionCost(a);const echoChance=affixValue(a,"arcaneEcho",60)/100;if(mpCost>0&&echoChance&&Math.random()<echoChance){recoverBattleMp(a,mpCost,a);addBattleLog(battle,`${displayName(a)}：MP還元が発動`);await floatText(`MP +${mpCost}`,a.id,"heal")}const beforeMasteryLevel=skillProgressFor(a,skill.id).level,masteryBonus=Math.max(0,Number(a._equipmentAffixes?.skillMasteryGain??0)),mastery=recordSkillUse(a,skill.id,1+masteryBonus/100);if(mastery.level>beforeMasteryLevel){addBattleLog(battle,`${displayName(a)}：${skill.name} 熟練Lv.${mastery.level}へ上昇`);await floatText(`熟練 Lv.${mastery.level}`,a.id,"skill")}}
+  if(skillCompleted){triggerAlliance=true;consumeMagicCircleActionCost(a);const echoChance=affixValue(a,"arcaneEcho",60)/100;if(mpCost>0&&echoChance&&Math.random()<echoChance){recoverBattleMp(a,mpCost,a);addBattleLog(battle,`${displayName(a)}：MP還元が発動`);await floatText(`MP +${mpCost}`,a.id,"heal")}const beforeMasteryLevel=skillProgressFor(a,skill.id).level,masteryBonus=Math.max(0,Number(a._equipmentAffixes?.skillMasteryGain??0)),mastery=recordSkillUse(a,skill.id,1+masteryBonus/100);if(mastery.level>beforeMasteryLevel){addBattleLog(battle,`${displayName(a)}：${skill.name} 熟練Lv.${mastery.level}へ上昇`);await floatText(`熟練 Lv.${mastery.level}`,a.id,"skill")}}
   a._randomCircleSkill=false;
  }
 
@@ -3436,6 +3450,7 @@ async function command(type,skillId=null){
   if(Math.random()<chance){save.state.inventory.captureCrystals-=cost;const m=createMonster(e.speciesId,{level:e.level,isBoss:e.boss,sealedPower:e.boss?{state:"sealed",originalDanger:e.dangerLevel??1,awakening:0}:null,obtainedMethod:"capture",obtainedFloor:battle.memorySourceFloor??save.state.player.currentFloor,nickname:e.boss?`封印 ${SPECIES[e.speciesId].name}`:undefined});save.state.monsters.push(m);save.state.records.captures++;save.state.codex.captures[e.speciesId]=(save.state.codex.captures[e.speciesId]??0)+1;e.captured=true;e.hp=0;save.save();battleFlash("capture");burstParticles(e.id,"capture",22);await battleBanner("捕獲成功！",`${e.name}が仲間になった・結晶${cost}個消費`,"capture",760,a);await animateDefeat(e.id,true);battle.targetEnemyId=aliveEnemies(battle)[0]?.id??null;if(!aliveEnemies(battle).length)return win(true,m);addBattleLog(battle,`${e.name}を捕獲した`)}else{save.state.inventory.captureCrystals--;addBattleLog(battle,"捕獲失敗・捕獲結晶1個を消費")}
  }
 
+ if(triggerAlliance&&aliveEnemies(battle).length)await triggerInvincibleAlliance(a);
  saveBattleCheckpoint();renderBattle();await wait(260);
  if(e.hp<=0){await animateDefeat(e.id);battle.targetEnemyId=aliveEnemies(battle)[0]?.id??null;if(!aliveEnemies(battle).length)return win(false,null)}
  battle.busy=false;

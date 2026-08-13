@@ -1,4 +1,6 @@
-export const ABYSS_SKILL_TREE_VERSION=4;
+import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=2.6.0";
+
+export const ABYSS_SKILL_TREE_VERSION=5;
 
 export const ABYSS_SKILL_CATEGORIES=Object.freeze([
  {
@@ -404,6 +406,29 @@ export const ABYSS_SKILL_NODES=Object.freeze([
 const NODE_BY_ID=new Map(ABYSS_SKILL_NODES.map(node=>[node.id,node]));
 const CATEGORY_BY_ID=new Map(ABYSS_SKILL_CATEGORIES.map(category=>[category.id,category]));
 
+const MAGIC_CIRCLE_UNLOCKS=Object.freeze({
+ "economy-gold-vein-05":"slot_fate",
+ "economy-expedition-guild-08":"gold_power",
+ "economy-spoils-market-12":"inheritance",
+ "economy-gold-vein-16":"random_arsenal",
+ "economy-expedition-guild-22":"sacrifice_lottery",
+ "economy-spoils-market-31":"sole_survivor",
+ "combat-overlord-blood-05":"last_life",
+ "combat-undying-armor-08":"aegis",
+ "combat-demonic-circuit-12":"blood_acceleration",
+ "combat-overlord-blood-16":"opening_rite",
+ "combat-undying-armor-22":"judgment20",
+ "combat-demonic-circuit-31":"weak_critical",
+ "exploration-relic-map-05":"mana_reversal",
+ "exploration-hunter-oath-08":"deep_silence",
+ "exploration-fate-compass-12":"reincarnation",
+ "exploration-relic-map-16":"death_drain",
+ "exploration-hunter-oath-22":"crimson_threshold",
+ "exploration-fate-compass-31":"death_mirror"
+});
+
+export function magicCircleUnlockForNode(nodeId){return MAGIC_CIRCLE_UNLOCKS[nodeId]??null}
+
 function safeInteger(value,fallback=0){
  const number=Number(value);
  return Number.isFinite(number)?Math.max(0,Math.min(Number.MAX_SAFE_INTEGER,Math.floor(number))):fallback;
@@ -471,6 +496,10 @@ export function normalizeAbyssSkillTree(state){
   paidCosts,
   investedGold
  };
+ for(const nodeId of learned){
+  const circleId=magicCircleUnlockForNode(nodeId);
+  if(circleId)unlockMagicCircleFromTree(state,circleId);
+ }
  return state.abyssSkillTree;
 }
 
@@ -578,13 +607,12 @@ export function learnAbyssSkill(state,nodeId){
  tree.learned.push(result.node.id);
  tree.paidCosts[result.node.id]=result.node.cost;
  tree.investedGold=Math.min(Number.MAX_SAFE_INTEGER,tree.investedGold+result.node.cost);
- return{ok:true,node:result.node,cost:result.node.cost,tree};
+ const circleId=magicCircleUnlockForNode(result.node.id);
+ const circleUnlock=circleId?unlockMagicCircleFromTree(state,circleId):null;
+ return{ok:true,node:result.node,cost:result.node.cost,tree,circleUnlock};
 }
 
 export function resetAbyssSkillTree(state){
- const tree=normalizeAbyssSkillTree(state);
- const refund=tree.investedGold;
- state.player.gold=Math.min(Number.MAX_SAFE_INTEGER,safeInteger(state.player?.gold,0)+refund);
- state.abyssSkillTree=createAbyssSkillTreeState();
- return{ok:true,refund,tree:state.abyssSkillTree};
+ normalizeAbyssSkillTree(state);
+ return{ok:false,refund:0,tree:state.abyssSkillTree,message:"深淵ツリーは恒久成長です。一度習得したノードはリセットできません。"};
 }

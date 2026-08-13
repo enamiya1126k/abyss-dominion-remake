@@ -16,7 +16,7 @@ const ITEM_ART=Object.freeze({
 });
 export function itemIcon(id,className=""){
  const file=ITEM_ART[id]??"material";
- return`<img class="item-pixel-icon${className?` ${className}`:""}" src="assets/ui/items/${file}.png?v=2.5.0" alt="" aria-hidden="true" loading="eager" decoding="async">`;
+ return`<img class="item-pixel-icon${className?` ${className}`:""}" src="assets/ui/items/${file}.png?v=2.6.0" alt="" aria-hidden="true" loading="eager" decoding="async">`;
 }
 
 export function resourceHud(state,{backId=null,title="",eyebrow="ABYSS DOMINION",settings=true,showFloor=true}={}){
