@@ -6,14 +6,27 @@
 
 | 項目 | 内容 |
 |---|---|
-| Web版 | `v2.4.0` |
-| セーブスキーマ | `49` |
+| Web版 | `v2.6.1` |
+| セーブスキーマ | `52` |
 | 対応階層 | 1F〜10000F |
 | 深淵・十神 | 深淵7柱＋十神10柱／4段階手動挑戦 |
 | 奈落回廊 | 全22法廷・歩行式・無限周回 |
 | チーム試練 | 4 VS 4・第50試練以降も無限継続 |
 | 音響 | 提供済み7曲の場面別BGM＋本作専用SE |
 | 旧セーブ | 同一セーブキーのまま自動移行 |
+
+## v2.6.1の主要内容
+
+`v2.6.1`は135版を基準に、装備画面・4人連携・戦闘HP・AUTO操作・魔法陣・召喚帰還・りおん素材の8項目を統合した修正版です。
+
+- 装備画面のキャラクター背面にあった巨大魔法陣を撤去し、魔法陣設定カードの小アイコンだけを維持。
+- えなみ・りおん・より・ひでの専用装備24点を、個別透過PNG・中央固定・端片なしで統一。
+- 4人同時編成時に「無敵・四神話連携」を発動し、戦闘中は専用バッジを常時表示。
+- 味方・敵のHP減少時にダメージ残像を残し、約1.4秒かけて追従する二層バーへ変更。
+- AUTO探索コントローラーを要約欄全体の1タップで確実に開閉し、方針選択後は自動で閉じるよう修正。
+- 魔法陣18種を、密集・余白・軌道・星座・分割環・開放幾何など異なる雰囲気で再制作。固定の上下を持たない回転安全設計とし、各3フレーム・計54枚を収録。
+- 召喚結果の「×」と「閉じる」を、モンスター／装備／各召喚で共通して「召喚の祭壇」先頭へ戻すよう統一。
+- りおんの8動作を同じ衣装・中心・接地線で再制作し、上下揺れと切れ端を解消。
 
 ## v2.4.0の主要内容
 
@@ -93,7 +106,7 @@ python3 -m http.server 8080
 ## セーブ互換
 
 - セーブキー：`abyss-dominion-remake-v001`（維持）
-- `schemaVersion 1〜48`を`49`へ自動移行。
+- `schemaVersion 1〜51`を`52`へ自動移行。
 - 旧深淵・十神ID、旧★、装備、挑戦進行、探索／戦闘チェックポイントを正規化。
 - ZIPを上書き配置しても、ブラウザのサイトデータを削除しない限り既存セーブを継続できます。
 
@@ -106,6 +119,8 @@ node tests/v2.1-release-regression.mjs
 node tests/v2.3-release-regression.mjs
 node tests/v2.3.1-release-regression.mjs
 node tests/v2.4.0-release-regression.mjs
+node tests/v2.6.1-corrections-regression.mjs
+python3 tools/build_v261_assets.py
 python3 tools/build_v240_sprites.py --verify
 python3 tools/audit_sprite_catalog.py
 ```
@@ -115,6 +130,7 @@ python3 tools/audit_sprite_catalog.py
 ## 資料
 
 - [v2.4.0リリースノート](docs/RELEASE_NOTES_v2.4.0_JA.md)
+- [v2.6.1リリースノート](docs/RELEASE_NOTES_v2.6.1_JA.md)
 - [v2.4.0実装・検証レポート](docs/IMPLEMENTATION_VERIFICATION_v2.4.0_JA.md)
 - [v2.3.1リリースノート](docs/RELEASE_NOTES_v2.3.1_JA.md)
 - [GDD実装・検証レポート](docs/GDD_v1.0_IMPLEMENTATION_REPORT_JA.md)

@@ -1,8 +1,12 @@
 const freeze=value=>Object.freeze(value);
 
-const circle=(id,name,glyph,tone,baseUpgrade,summary,effect,asset)=>freeze({
- id,name,glyph,tone,baseUpgrade,summary,effect,asset:`./assets/magic-circles/${asset??id}.png`
-});
+const circle=(id,name,glyph,tone,baseUpgrade,summary,effect,asset)=>{
+ const assetId=asset??id,primary=`./assets/magic-circles/${assetId}.png`;
+ return freeze({
+  id,name,glyph,tone,baseUpgrade,summary,effect,asset:primary,
+  frames:freeze(id==="none"?[primary]:[primary,`./assets/magic-circles/${assetId}-2.png`,`./assets/magic-circles/${assetId}-3.png`])
+ });
+};
 
 export const MAGIC_CIRCLES=freeze([
  circle("none","魔法陣なし","◇","plain",0,"効果なし。足元には素環ガイドだけを表示します。","none","plain"),
@@ -106,7 +110,8 @@ export function equipMagicCircle(state,monster,id){
 
 export function magicCircleMarkup(monster,state,{className=""}={}){
  const entry=equippedMagicCircle(monster,state),high=entry.level>=20?"magic-circle-high":"",slot=entry.effect==="slot"?"magic-circle-slot":"";
- return`<span class="magic-circle magic-circle-${entry.tone} ${high} ${slot} ${className}" data-circle-id="${entry.id}" data-circle-level="${entry.level}" aria-hidden="true"><img src="${entry.asset}" alt=""><i class="magic-circle-ring-a"></i><i class="magic-circle-ring-b"></i><b>${entry.glyph}</b></span>`;
+ const frames=(entry.frames?.length?entry.frames:[entry.asset]).map((source,index)=>`<img class="magic-circle-frame magic-circle-frame-${index+1}" src="${source}" alt="" draggable="false">`).join("");
+ return`<span class="magic-circle magic-circle-${entry.tone} ${high} ${slot} ${className}" data-circle-id="${entry.id}" data-circle-level="${entry.level}" aria-hidden="true">${frames}<i class="magic-circle-ring-a"></i><i class="magic-circle-ring-b"></i><b>${entry.glyph}</b></span>`;
 }
 
 export function slotDamageMultiplier(value){

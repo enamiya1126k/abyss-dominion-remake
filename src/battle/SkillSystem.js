@@ -1,6 +1,6 @@
-import{SPECIES}from"../data/species.js?v=2.6.0";
-import{SKILLS}from"../data/skills.js?v=2.6.0";
-import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.6.0";
+import{SPECIES}from"../data/species.js?v=2.6.1";
+import{SKILLS}from"../data/skills.js?v=2.6.1";
+import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.6.1";
 
 const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
 const ROLE_POOLS={
