@@ -28,4 +28,4 @@ export function isContentUnlocked(stateOrFloor,productionFloor){
   const floor=typeof stateOrFloor==="number"?stateOrFloor:Number(stateOrFloor?.player?.maxFloor)||0;
   return floor>=contentUnlockFloor(productionFloor);
 }
-export const APP_VERSION="2.6.1";
+export const APP_VERSION="2.6.2";

@@ -103,7 +103,7 @@
   margin:8px 0 10px;
   padding:8px 14px 8px 10px!important;
   border:8px solid transparent!important;
-  border-image:url("../../assets/ui/v2/ornate-frame-active.png?v=2.6.1") 42 fill / 8px!important;
+  border-image:url("../../assets/ui/v2/ornate-frame-active.png?v=2.6.2") 42 fill / 8px!important;
   background:linear-gradient(100deg,#0d0911e8,#24122ee8 57%,#0a080de8)!important;
   color:#f6e3af!important;
   text-align:left;
@@ -153,7 +153,7 @@
 /* Four-member mythic follow-up. It sits above the field without resizing it. */
 .invincible-alliance-banner{position:absolute;z-index:25;left:50%;top:46%;width:min(92%,560px);transform:translate(-50%,-50%);padding:10px;border:1px solid #efbd53;background:linear-gradient(90deg,#13091bea,#4a1d5fea,#13091bea);color:#fff1bd;text-align:center;box-shadow:0 0 28px #d76cff6e;pointer-events:none}
 
-/* v2.6.1 correction set */
+/* v2.6.2 correction set */
 .equipment-pixel-art.equipment-direct-art{
   box-sizing:border-box!important;
   display:grid!important;
@@ -183,6 +183,10 @@
 
 .side-battle-v2 .battle-bar.has-hp-trail{position:relative;isolation:isolate}
 .side-battle-v2 .battle-bar>.hp-fill{position:absolute!important;z-index:2!important;inset:0 auto 0 0!important}
+.side-battle-v2 .battle-bar>.bar-label{z-index:6!important;pointer-events:none}
+.side-battle-v2 .battle-bar>.hp-fill.hp-fill-draining{
+  animation:battle-hp-fill-drain var(--hp-trail-duration) cubic-bezier(.18,.72,.2,1) var(--hp-trail-delay) both!important;
+}
 .side-battle-v2 .battle-bar>.hp-trail{
   position:absolute!important;
   z-index:1!important;
@@ -193,7 +197,47 @@
   animation:battle-hp-trail-drain var(--hp-trail-duration) linear var(--hp-trail-delay) both!important;
 }
 .side-battle-v2 .battle-bar.ally>.hp-trail{background:linear-gradient(90deg,#ff6d78,#ffd08b)!important;box-shadow:0 0 7px #ff7d87}
+@keyframes battle-hp-fill-drain{from{width:var(--hp-from)}to{width:var(--hp-to)}}
 @keyframes battle-hp-trail-drain{0%,24%{width:var(--hp-from)}100%{width:var(--hp-to)}}
+.side-battle-v2 .battle-bar.is-hp-draining::after{
+  content:"";
+  position:absolute;
+  z-index:4;
+  inset:-2px auto -2px 0;
+  width:28%;
+  background:linear-gradient(90deg,transparent,#fff9,transparent);
+  transform:translateX(-120%);
+  animation:battle-hp-sheen .42s linear infinite;
+  pointer-events:none;
+}
+@keyframes battle-hp-sheen{to{transform:translateX(460%)}}
+
+/* A hit now lands on the unit and the field: sharp shake, white/red blink and
+   a short full-field flash. The HP drain runs independently underneath it. */
+.side-battle-v2 .battle-arena.fx-impact-shake{animation:battle-field-impact var(--battle-hit,.3s) cubic-bezier(.15,.8,.25,1)}
+.side-battle-v2 .battle-arena.fx-impact-shake-critical{animation:battle-field-impact-critical var(--battle-critical-hit,.42s) cubic-bezier(.12,.86,.2,1)}
+.side-battle-v2 .side-battle-unit.fx-hit{animation-name:battle-unit-hit-bang!important}
+.side-battle-v2 .side-battle-unit.fx-critical-hit{animation-name:battle-unit-critical-bang!important}
+.side-battle-v2 .side-battle-unit.fx-hit .side-unit-sprite{animation:battle-unit-damage-blink var(--battle-hit,.28s) steps(2,end) both}
+.side-battle-v2 .side-battle-unit.fx-critical-hit .side-unit-sprite{animation:battle-unit-damage-blink var(--battle-critical-hit,.32s) steps(2,end) both}
+.side-battle-v2 .battle-unit-hit-flash{
+  position:absolute;
+  z-index:7;
+  inset:7% 0 23%;
+  border-radius:45%;
+  background:radial-gradient(circle,#fff 0 7%,#ffdfc9d9 9%,#ff334f80 24%,transparent 62%);
+  mix-blend-mode:screen;
+  pointer-events:none;
+  animation:battle-unit-impact-flash var(--battle-hit,.32s) ease-out both;
+}
+.side-battle-v2 .battle-unit-hit-flash.critical{background:radial-gradient(circle,#fff 0 9%,#fff5a9e8 12%,#ff582f99 30%,transparent 68%);animation-duration:var(--battle-critical-hit,.44s)}
+.side-battle-v2 .battle-screen-flash.hit{background:radial-gradient(circle at center,#fff7ef70 0,#ff475838 28%,transparent 68%)}
+@keyframes battle-field-impact{0%,100%{transform:translate(0)}18%{transform:translate(-4px,1px)}38%{transform:translate(4px,-2px)}58%{transform:translate(-3px,1px)}78%{transform:translate(2px,0)}}
+@keyframes battle-field-impact-critical{0%,100%{transform:translate(0)}12%{transform:translate(-7px,2px)}27%{transform:translate(7px,-3px)}43%{transform:translate(-6px,2px)}60%{transform:translate(5px,-1px)}78%{transform:translate(-3px,1px)}}
+@keyframes battle-unit-hit-bang{0%,100%{transform:translate(0);filter:none}16%{transform:translate(-12px,-2px) rotate(-1deg);filter:brightness(3) saturate(.3)}38%{transform:translate(10px,1px) rotate(1deg)}60%{transform:translate(-7px);filter:brightness(1.5)}80%{transform:translate(4px)}}
+@keyframes battle-unit-critical-bang{0%,100%{transform:translate(0) scale(1);filter:none}14%{transform:translate(-15px,-4px) scale(1.1) rotate(-2deg);filter:brightness(4) saturate(.2)}32%{transform:translate(13px,2px) scale(.94) rotate(2deg)}50%{transform:translate(-10px,-1px) scale(1.06)}70%{transform:translate(7px) scale(.98)}86%{transform:translate(-3px)}}
+@keyframes battle-unit-damage-blink{0%,100%{opacity:1;filter:brightness(1)}35%{opacity:.2;filter:brightness(4) saturate(.2)}70%{opacity:.68;filter:brightness(2.2)}}
+@keyframes battle-unit-impact-flash{0%{opacity:0;transform:scale(.35)}24%{opacity:1;transform:scale(1.08)}100%{opacity:0;transform:scale(1.5)}}
 
 .invincible-alliance-status{
   position:absolute;
@@ -229,5 +273,5 @@
 }
 
 @media(prefers-reduced-motion:reduce){
- .magic-circle>img,.magic-circle>.magic-circle-ring-a,.magic-circle>.magic-circle-ring-b,.invincible-alliance-status,.side-battle-v2 .battle-bar>.hp-trail{animation:none!important}
+ .magic-circle>img,.magic-circle>.magic-circle-ring-a,.magic-circle>.magic-circle-ring-b,.invincible-alliance-status,.side-battle-v2 .battle-bar>.hp-trail,.side-battle-v2 .battle-bar>.hp-fill.hp-fill-draining,.side-battle-v2 .battle-arena.fx-impact-shake,.side-battle-v2 .battle-arena.fx-impact-shake-critical,.side-battle-v2 .battle-unit-hit-flash,.side-battle-v2 .side-battle-unit.fx-hit .side-unit-sprite,.side-battle-v2 .side-battle-unit.fx-critical-hit .side-unit-sprite{animation:none!important}
 }

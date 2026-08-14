@@ -7,25 +7,25 @@ import{
  EQUIPMENT_SLOT_ORDER,
  equipmentSubslotLabel,
  compatibleSubslots
-}from"../../data/equipment.js?v=2.6.1";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=2.6.1";
-import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.6.1";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.6.1";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.6.1";
-import{ATTRIBUTES}from"../../data/attributes.js?v=2.6.1";
-import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=2.6.1";
-import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=2.6.1";
-import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=2.6.1";
-import{SPECIES}from"../../data/species.js?v=2.6.1";
-import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=2.6.1";
-import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=2.6.1";
-import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=2.6.1";
-import{monsterVisual}from"../MonsterVisual.js?v=2.6.1";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.6.1";
-import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.6.1";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.6.1";
-import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.6.1";
-import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=2.6.1";
+}from"../../data/equipment.js?v=2.6.2";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=2.6.2";
+import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.6.2";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.6.2";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.6.2";
+import{ATTRIBUTES}from"../../data/attributes.js?v=2.6.2";
+import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=2.6.2";
+import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=2.6.2";
+import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=2.6.2";
+import{SPECIES}from"../../data/species.js?v=2.6.2";
+import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=2.6.2";
+import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=2.6.2";
+import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=2.6.2";
+import{monsterVisual}from"../MonsterVisual.js?v=2.6.2";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.6.2";
+import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.6.2";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.6.2";
+import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.6.2";
+import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=2.6.2";
 
 const EQUIPMENT_SCREEN_SLOT_LABELS={
  weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"

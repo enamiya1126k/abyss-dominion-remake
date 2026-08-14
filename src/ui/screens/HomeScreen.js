@@ -1,13 +1,13 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.6.1";
-import{displayName}from"../../models/Monster.js?v=2.6.1";
-import{SPECIES}from"../../data/species.js?v=2.6.1";
-import{TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.6.1";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.6.1";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.6.1";
-import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=2.6.1";
-import{monsterVisual}from"../MonsterVisual.js?v=2.6.1";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.6.1";
-import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.6.1";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.6.2";
+import{displayName}from"../../models/Monster.js?v=2.6.2";
+import{SPECIES}from"../../data/species.js?v=2.6.2";
+import{TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.6.2";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.6.2";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.6.2";
+import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=2.6.2";
+import{monsterVisual}from"../MonsterVisual.js?v=2.6.2";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.6.2";
+import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.6.2";
 
 function scenePartySlot(monster,index,state){
   // Formation order is shared with battle: slots 1–2 are the front row and

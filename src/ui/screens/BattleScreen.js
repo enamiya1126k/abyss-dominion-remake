@@ -1,11 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.6.1";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.6.1";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.6.1";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.6.1";
-import{monsterVisual}from"../MonsterVisual.js?v=2.6.1";
-import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.6.1";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.6.1";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.6.1";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.6.2";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.6.2";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.6.2";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.6.2";
+import{monsterVisual}from"../MonsterVisual.js?v=2.6.2";
+import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.6.2";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.6.2";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.6.2";
 
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
@@ -23,9 +23,10 @@ function remainingTurns(turns,persistent=false){const value=Math.max(0,Number(tu
 const INVINCIBLE_ALLIANCE_IDS=Object.freeze(["myth_enami","myth_rion","myth_yori","myth_hide"]);
 function invincibleAllianceActive(battle){const ids=new Set((battle.party??[]).map(monster=>monster.speciesId));return INVINCIBLE_ALLIANCE_IDS.every(id=>ids.has(id))}
 function hpBar(battle,id,rate,label,tone){
- const normalized=Math.max(0,Math.min(100,Number(rate)||0)),trail=battle.hpTrails?.[id],elapsed=trail?Math.max(0,Date.now()-(Number(trail.startedAt)||0)):Infinity,duration=Math.max(1,Number(trail?.duration)||1400),active=Boolean(trail&&elapsed<duration&&Number(trail.from)>normalized);
- const afterimage=active?`<i class="hp-trail" style="--hp-from:${Math.max(normalized,Number(trail.from)||normalized).toFixed(3)}%;--hp-to:${normalized.toFixed(3)}%;--hp-trail-duration:${duration}ms;--hp-trail-delay:-${Math.min(elapsed,duration)}ms"></i>`:"";
- return`<div class="battle-bar ${tone} ${active?"has-hp-trail":""}"><span class="bar-label">${label}</span>${afterimage}<i class="hp-fill" style="width:${normalized}%"></i></div>`;
+ const normalized=Math.max(0,Math.min(100,Number(rate)||0)),trail=battle.hpTrails?.[id],elapsed=trail?Math.max(0,Date.now()-(Number(trail.startedAt)||0)):Infinity,duration=Math.max(1,Number(trail?.duration)||1400),from=Math.max(normalized,Number(trail?.from)||normalized),active=Boolean(trail&&elapsed<duration&&from>normalized);
+ const timing=active?` style="--hp-from:${from.toFixed(3)}%;--hp-to:${normalized.toFixed(3)}%;--hp-trail-duration:${duration}ms;--hp-trail-delay:-${Math.min(elapsed,duration)}ms"`:"";
+ const afterimage=active?'<i class="hp-trail" aria-hidden="true"></i>':"";
+ return`<div class="battle-bar ${tone} ${active?"has-hp-trail":""}"${timing}>${afterimage}<i class="hp-fill ${active?"hp-fill-draining":""}" style="width:${normalized}%"></i><span class="bar-label">${label}</span></div>`;
 }
 
 function renderEnemies(battle,enemies,target){

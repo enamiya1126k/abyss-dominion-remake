@@ -11,7 +11,7 @@ import{createMonster,expNeedFor,experienceCrystalValue,applyTotalExperience}from
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const read=file=>fs.readFileSync(path.join(root,file),"utf8");
 
-assert.equal(APP_VERSION,"2.6.1");
+assert.equal(APP_VERSION,"2.6.2");
 assert.equal(SAVE_SCHEMA_VERSION,52);
 assert.equal(TRUE_MAX_LEVEL,10000);
 

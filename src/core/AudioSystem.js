@@ -22,7 +22,7 @@ export class AudioSystem{
  track(scene){
   const src=TRACKS[scene]??TRACKS.home;
   if(this.cache.has(src))return this.cache.get(src);
-  const audio=new Audio(`${src}?v=2.6.1`);audio.loop=true;audio.preload="metadata";audio.playsInline=true;audio.volume=0;
+  const audio=new Audio(`${src}?v=2.6.2`);audio.loop=true;audio.preload="metadata";audio.playsInline=true;audio.volume=0;
   this.cache.set(src,audio);return audio;
  }
  async unlock(){

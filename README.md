@@ -6,7 +6,7 @@
 
 | 項目 | 内容 |
 |---|---|
-| Web版 | `v2.6.1` |
+| Web版 | `v2.6.2` |
 | セーブスキーマ | `52` |
 | 対応階層 | 1F〜10000F |
 | 深淵・十神 | 深淵7柱＋十神10柱／4段階手動挑戦 |
@@ -14,6 +14,15 @@
 | チーム試練 | 4 VS 4・第50試練以降も無限継続 |
 | 音響 | 提供済み7曲の場面別BGM＋本作専用SE |
 | 旧セーブ | 同一セーブキーのまま自動移行 |
+
+## v2.6.2の主要内容
+
+`v2.6.2`は135版を基準に、戦闘の被弾フィードバックとキャラ詳細の閉じ方を改善した修正版です。
+
+- HP数値をゲージより常に手前へ固定し、残量にかかわらず読めるよう修正。
+- HP実ゲージと数値をダメージ量に応じて約0.5〜1.15秒で滑らかに減らし、大ダメージの余韻を追加。
+- 被弾時に対象の強い揺れ、白赤点滅、戦場の衝撃揺れ、画面フラッシュを追加。戦闘速度にも追従。
+- 戦闘中のキャラ詳細を背景タップで閉じられるよう変更。詳細内のスクロール操作と右上の「×」は維持。
 
 ## v2.6.1の主要内容
 
@@ -120,6 +129,7 @@ node tests/v2.3-release-regression.mjs
 node tests/v2.3.1-release-regression.mjs
 node tests/v2.4.0-release-regression.mjs
 node tests/v2.6.1-corrections-regression.mjs
+node tests/v2.6.2-battle-feedback-regression.mjs
 python3 tools/build_v261_assets.py
 python3 tools/build_v240_sprites.py --verify
 python3 tools/audit_sprite_catalog.py
@@ -131,6 +141,7 @@ python3 tools/audit_sprite_catalog.py
 
 - [v2.4.0リリースノート](docs/RELEASE_NOTES_v2.4.0_JA.md)
 - [v2.6.1リリースノート](docs/RELEASE_NOTES_v2.6.1_JA.md)
+- [v2.6.2リリースノート](docs/RELEASE_NOTES_v2.6.2_JA.md)
 - [v2.4.0実装・検証レポート](docs/IMPLEMENTATION_VERIFICATION_v2.4.0_JA.md)
 - [v2.3.1リリースノート](docs/RELEASE_NOTES_v2.3.1_JA.md)
 - [GDD実装・検証レポート](docs/GDD_v1.0_IMPLEMENTATION_REPORT_JA.md)
