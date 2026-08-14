@@ -83,13 +83,42 @@ export const NOTICE_DEFINITIONS=Object.freeze([
  }
 ]);
 
+export const DAILY_NOTICE_GIFT=Object.freeze({captureCrystals:5,crystals:100});
+export function tokyoNoticeDayKey(value=Date.now()){
+ const date=value instanceof Date?value:new Date(value),parts=new Intl.DateTimeFormat("en",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(date),part=type=>parts.find(entry=>entry.type===type)?.value;
+ return`${part("year")}-${part("month")}-${part("day")}`;
+}
+
 export function normalizeNoticeState(state){
  const source=state?.notices&&typeof state.notices==="object"&&!Array.isArray(state.notices)?state.notices:{};
  const readIds=Array.isArray(source.readIds)
   ?source.readIds.filter(id=>typeof id==="string"&&id).slice(-200)
   :[];
- state.notices={...source,readIds:[...new Set(readIds)]};
+ const today=tokyoNoticeDayKey(),stored=source.dailyGift&&typeof source.dailyGift==="object"&&!Array.isArray(source.dailyGift)?source.dailyGift:{};
+ // A newly opened day replaces an unclaimed prior day. Nothing is queued or
+ // backfilled, which makes this a true same-day login gift.
+ const dailyGift={dayKey:today,claimedDayKey:typeof stored.claimedDayKey==="string"?stored.claimedDayKey:null,claimedAt:typeof stored.claimedAt==="string"?stored.claimedAt:null};
+ state.notices={...source,readIds:[...new Set(readIds)],dailyGift};
  return state.notices;
+}
+
+export function dailyNoticeGiftStatus(state,value=Date.now()){
+ const notices=normalizeNoticeState(state),dayKey=tokyoNoticeDayKey(value),daily=notices.dailyGift;
+ // Tests and future server clocks may provide an explicit timestamp different
+ // from the real clock used during normalization.
+ if(daily.dayKey!==dayKey)daily.dayKey=dayKey;
+ const claimed=daily.claimedDayKey===dayKey;
+ return{dayKey,claimed,available:!claimed,reward:DAILY_NOTICE_GIFT};
+}
+
+export function claimDailyNoticeGift(state,value=Date.now()){
+ const status=dailyNoticeGiftStatus(state,value),daily=state.notices.dailyGift;
+ if(!status.available)return{ok:false,reason:"already-claimed",...status};
+ state.inventory??={};state.player??={};
+ state.inventory.captureCrystals=Math.max(0,Number(state.inventory.captureCrystals)||0)+DAILY_NOTICE_GIFT.captureCrystals;
+ state.player.crystals=Math.max(0,Number(state.player.crystals)||0)+DAILY_NOTICE_GIFT.crystals;
+ daily.claimedDayKey=status.dayKey;daily.claimedAt=new Date(value).toISOString();
+ return{ok:true,...dailyNoticeGiftStatus(state,value)};
 }
 
 export function unreadNoticeIds(state){
@@ -97,6 +126,8 @@ export function unreadNoticeIds(state){
  const read=new Set(notices.readIds);
  return NOTICE_DEFINITIONS.map(notice=>notice.id).filter(id=>!read.has(id));
 }
+
+export function noticeAttentionCount(state){return unreadNoticeIds(state).length+(dailyNoticeGiftStatus(state).available?1:0)}
 
 export function markAllNoticesRead(state){
  const notices=normalizeNoticeState(state);

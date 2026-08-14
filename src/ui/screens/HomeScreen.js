@@ -1,13 +1,13 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.7.0";
-import{displayName}from"../../models/Monster.js?v=2.7.0";
-import{SPECIES}from"../../data/species.js?v=2.7.0";
-import{TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.7.0";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.7.0";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.7.0";
-import{unreadNoticeIds}from"../../core/NoticeSystem.js?v=2.7.0";
-import{monsterVisual}from"../MonsterVisual.js?v=2.7.0";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.7.0";
-import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.7.0";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.8.0";
+import{displayName}from"../../models/Monster.js?v=2.8.0";
+import{SPECIES}from"../../data/species.js?v=2.8.0";
+import{TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.8.0";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.8.0";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.8.0";
+import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.8.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.8.0";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.8.0";
+import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.8.0";
 
 function scenePartySlot(monster,index,state){
   // Formation order is shared with battle: slots 1–2 are the front row and
@@ -110,7 +110,7 @@ export function HomeScreen(state){
   const phase=worldPhase(state);
   const sceneSlots=Array.from({length:4},(_,index)=>scenePartySlot(party[index],index,state)).join("");
   const eventReady=teamUnlocked||endgameUnlocked||revealed;
-  const noticeCount=unreadNoticeIds(state).length;
+  const noticeCount=noticeAttentionCount(state);
   const recentMemory=state.recentBattleMemory,memoryEntries=recentMemory?.entries??[],memoryCost=homeMemoryCost(state,recentMemory);
   const memoryNames=memoryEntries.slice(0,2).map(entry=>entry.nameOverride??SPECIES[entry.speciesId]?.name??"魔物").join("＋");
   const memorySub=memoryEntries.length?`${memoryNames}${memoryEntries.length>2?`ほか${memoryEntries.length-2}体`:""}・${memoryCost.toLocaleString()}晶石`:"直近の敵編成を丸ごと記録";

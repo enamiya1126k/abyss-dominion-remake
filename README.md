@@ -6,14 +6,24 @@
 
 | 項目 | 内容 |
 |---|---|
-| Web版 | `v2.7.0` |
-| セーブスキーマ | `53` |
+| Web版 | `v2.8.0` |
+| セーブスキーマ | `54` |
 | 対応階層 | 1F〜10000F |
 | 深淵・十神 | 深淵7柱＋十神10柱／4段階手動挑戦 |
 | 奈落回廊 | 全22法廷・歩行式・無限周回 |
 | チーム試練 | 4 VS 4・第50試練以降も無限継続 |
 | 音響 | 提供済み7曲の場面別BGM＋本作専用SE |
 | 旧セーブ | 同一セーブキーのまま自動移行 |
+
+## v2.8.0の主要内容
+
+`v2.8.0`は137版を基準に、スキル仕様の数値化、戦闘回復演出、捕獲結晶の探索入手、毎日配布を統合した版です。
+
+- スキル説明を実データ連動へ変更。物理／魔法ATK倍率、Hit数と合計倍率、状態異常成功率・継続、回復率、強化・弱体量、対象、MP、CTを具体表示。
+- 味方の被弾と継続ダメージへ敵と共通の揺れ・点滅・画面衝撃を適用。
+- 味方・敵のHP回復を緑、MP回復を青の発光と粒子、数値カウント、滑らかなゲージ増加で表示。敵MPゲージも追加。
+- 探索中の骨から独立1%で捕獲結晶×1を取得。既存の深淵の鍵／GOLD抽選率は維持し、簡易トーストだけでAUTOを止めません。
+- お知らせBOXへ、日本時間0時更新の当日限定「捕獲結晶×5・魔晶石×100」を追加。手動受取、未受取の持越しなし、同日二重受取防止。
 
 ## v2.7.0の主要内容
 
@@ -143,6 +153,7 @@ node tests/v2.4.0-release-regression.mjs
 node tests/v2.6.1-corrections-regression.mjs
 node tests/v2.6.2-battle-feedback-regression.mjs
 node tests/v2.7.0-enemy-auto-regression.mjs
+node tests/v2.8.0-skill-recovery-daily-regression.mjs
 python3 tools/build_v261_assets.py
 python3 tools/build_v240_sprites.py --verify
 python3 tools/audit_sprite_catalog.py
@@ -156,6 +167,7 @@ python3 tools/audit_sprite_catalog.py
 - [v2.6.1リリースノート](docs/RELEASE_NOTES_v2.6.1_JA.md)
 - [v2.6.2リリースノート](docs/RELEASE_NOTES_v2.6.2_JA.md)
 - [v2.7.0リリースノート](docs/RELEASE_NOTES_v2.7.0_JA.md)
+- [v2.8.0リリースノート](docs/RELEASE_NOTES_v2.8.0_JA.md)
 - [v2.4.0実装・検証レポート](docs/IMPLEMENTATION_VERIFICATION_v2.4.0_JA.md)
 - [v2.3.1リリースノート](docs/RELEASE_NOTES_v2.3.1_JA.md)
 - [GDD実装・検証レポート](docs/GDD_v1.0_IMPLEMENTATION_REPORT_JA.md)

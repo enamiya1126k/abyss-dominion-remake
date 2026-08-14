@@ -1,6 +1,6 @@
-import{SPECIES}from"../data/species.js?v=2.7.0";
-import{SKILLS}from"../data/skills.js?v=2.7.0";
-import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.7.0";
+import{SPECIES}from"../data/species.js?v=2.8.0";
+import{SKILLS}from"../data/skills.js?v=2.8.0";
+import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.8.0";
 
 const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
 const ROLE_POOLS={
@@ -250,6 +250,61 @@ export function affixOutgoingDamageMultiplier(stats,enemy,element="neutral"){
 }
 export function skillDamage(stats,enemy,skill,critical=false){const a=stats._affixes??{},magic=skill?.damageClass==="magic",attack=magic?(stats.matk??stats.atk):stats.atk,defense=magic?(enemy.mdef??enemy.def):enemy.def,base=Math.max(1,Math.floor((attack*skill.power-defense*.3)*affixOutgoingDamageMultiplier(stats,enemy,skill?.element??"neutral"))),critMult=1.65+(a.critDamage??0)/100;return critical?Math.floor(base*critMult):base}
 export function skillElementLabel(skill){return elementLabel(skill?.element)}
+
+const STATUS_NAMES=Object.freeze({poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖",petrify:"石化"});
+const EFFECT_NAMES=Object.freeze({atkUp:"ATK上昇",atkDown:"ATK低下",defUp:"DEF上昇",defDown:"DEF低下",spdUp:"SPD上昇",spdDown:"SPD低下"});
+function percent(value){return`${Math.round((Number(value)||0)*100)}%`}
+function turnText(value){const turns=Math.max(0,Math.round(Number(value)||0));return turns?`${turns}ターン`:"即時"}
+
+// Generate the displayed specification from the same numeric fields consumed
+// by battle resolution, so UI wording cannot drift away from the real formula.
+export function skillEffectDetails(skill){
+ if(!skill)return[];
+ const lines=[],power=Math.max(0,Number(skill.power)||0),hits=Math.max(1,Math.round(Number(skill.hits)||1));
+ if(power>0){
+  const attack=skill.damageClass==="magic"?"魔法ATK":"物理ATK",hitText=hits>1?` × ${hits}Hit（合計 ${percent(power*hits)}）`:"";
+  lines.push(`${attack}の${percent(power)}ダメージ${hitText}`);
+ }
+ if(Number(skill.heal)>0)lines.push(`${skill.target==="味方全体"?"味方全体":"自分"}のHPを最大HPの${percent(skill.heal)}回復`);
+ if(Number(skill.mpHeal)>0)lines.push(`${skill.target==="味方全体"?"味方全体":"対象"}のMPを最大MPの${percent(skill.mpHeal)}回復`);
+ if(Number(skill.revive)>0)lines.push(`戦闘不能の味方1体をHP${percent(skill.revive)}${Number(skill.reviveMp)>0?`・MP${percent(skill.reviveMp)}`:""}で蘇生`);
+ if(Number(skill.drain)>0)lines.push(`与ダメージの${percent(skill.drain)}をHP吸収`);
+ if(Number(skill.selfHeal)>0)lines.push(`命中後、自分の最大HPの${percent(skill.selfHeal)}を回復`);
+ if(Number(skill.mpDrain)>0)lines.push(`対象の最大MPの${percent(skill.mpDrain)}まで吸収`);
+ if(Number(skill.currentHpDamage)>0)lines.push(`追加で対象の現在HPの${percent(Math.min(.25,Number(skill.currentHpDamage)))}ダメージ`);
+ if(Number(skill.defenseIgnore)>0)lines.push(`対象の${skill.damageClass==="magic"?"魔法DEF":"物理DEF"}を${percent(Math.min(.9,Number(skill.defenseIgnore)))}無視`);
+ if(Number(skill.execute)>0)lines.push(`対象HP${percent(skill.execute)}以下なら基礎威力2倍`);
+ if(Number(skill.critBonus)>0)lines.push(`会心率 +${percent(skill.critBonus)}`);
+ if(skill.guaranteedCritical)lines.push("必ず会心");
+ if(skill.guaranteedHit)lines.push("必中（回避・通常ガード判定を無視）");
+ if(skill.allEnemies)lines.push("敵全体が対象");
+ if(skill.randomElement)lines.push("発動ごとに攻撃属性が変化");
+ if(Number(skill.repeatDelay)>0)lines.push(`${turnText(skill.repeatDelay)}後に同威力の追撃`);
+ if(skill.confusion)lines.push("対象を誤作動させる");
+ if(skill.cleanse)lines.push("状態異常・弱体効果を解除");
+ if(Number(skill.barrier)>0)lines.push(`障壁を${Math.round(Number(skill.barrier))}段階付与`);
+ if(Number(skill.selfAtk)>0)lines.push(`命中後、自分のATK +${percent(skill.selfAtk)}`);
+ if(Number(skill.lowHpBonus)>0)lines.push(`低HP時に威力 +${percent(skill.lowHpBonus)}`);
+ const status=skill.status;
+ if(status){
+  const name=status.name??STATUS_NAMES[status.id]??status.id??"状態異常",chance=percent(status.chance??1),turns=turnText(status.turns);
+  lines.push(`${name}：成功率${chance}・${turns}${Number(status.power)>0?`・毎ターン最大HPの${percent(status.power)}ダメージ`:""}`);
+ }
+ for(const effect of skill.effects??[]){
+  const target=effect.allies?"味方全体":effect.enemy?"対象":"自分",turns=turnText(effect.turns);
+  if(EFFECT_NAMES[effect.kind]){lines.push(`${target}の${EFFECT_NAMES[effect.kind]} ${effect.kind.endsWith("Down")?"−":"+"}${percent(effect.value)}・${turns}`);continue}
+  if(effect.kind==="guard"){lines.push(`${target}の被ダメージを${percent(effect.value)}軽減・${turns}`);continue}
+  if(effect.kind==="counter"){lines.push(`攻撃を受けると物理ATKの${percent(effect.value)}で反撃・${turns}`);continue}
+  if(effect.kind==="regen"){lines.push(`${target}のHPを毎ターン最大HPの${percent(effect.value)}回復・${turns}`);continue}
+  if(effect.kind==="lifeSteal"){lines.push(`与ダメージの${percent(effect.value)}をHP回復・${turns}`);continue}
+  if(effect.kind==="vulnerable"){lines.push(`${target}の被ダメージ +${percent(effect.value)}・${turns}`);continue}
+  if(effect.kind==="taunt"){lines.push(`敵の攻撃を自分へ引きつける・${turns}`);continue}
+  if(effect.kind==="stun"){lines.push(`${STATUS_NAMES[effect.statusId]??"行動不能"}：成功率${percent(effect.chance??1)}・${turns}`);continue}
+  lines.push(`${effect.name??effect.kind}・${turns}`);
+ }
+ return[...new Set(lines)];
+}
+export function skillEffectSummary(skill,separator=" / "){const details=skillEffectDetails(skill);return details.length?details.join(separator):(skill?.description??"特殊効果を発動")}
 
 export function chooseAutoSkill(monster,battle){
  const usable=learnedSkills(monster).filter(skill=>canUseSkill(monster,skill,battle?.cooldowns?.[monster.id]?.[skill.id]??0));

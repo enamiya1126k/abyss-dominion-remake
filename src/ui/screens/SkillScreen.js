@@ -1,8 +1,8 @@
-import{SPECIES}from"../../data/species.js?v=2.7.0";
-import{displayName}from"../../models/Monster.js?v=2.7.0";
-import{allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=2.7.0";
-import{monsterVisual}from"../MonsterVisual.js?v=2.7.0";
-import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.7.0";
+import{SPECIES}from"../../data/species.js?v=2.8.0";
+import{displayName}from"../../models/Monster.js?v=2.8.0";
+import{allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=2.8.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.8.0";
+import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.8.0";
 
 const ROLE_LABELS={
  tank:"前衛・守護",guard:"前衛・守護",defense:"前衛・守護",
@@ -11,16 +11,6 @@ const ROLE_LABELS={
  drain:"前衛・吸収",burst:"前衛・火力",critical:"前衛・会心",speed:"遊撃",
  balanced:"万能",bruiser:"前衛・攻防",ambush:"遊撃"
 };
-
-function effectText(skill){
- if(skill.type==="allHeal"||skill.type==="selfHeal")return`回復 ${Math.round((skill.heal??0)*100)}%`;
- if(skill.type==="mpHeal")return`MP回復 ${Math.round((skill.mpHeal??0)*100)}%`;
- if(skill.type==="revive")return`蘇生HP ${Math.round((skill.revive??0)*100)}%`;
- if(skill.type==="multiAttack")return`威力 ${Math.round((skill.power??0)*100)}%×${skill.hits??2}`;
- if(skill.type==="drain")return`威力 ${Math.round((skill.power??0)*100)}%・吸収`;
- if(["buff","stance","cleanse"].includes(skill.type))return"能力強化・特殊効果";
- return`威力 ${Math.round((skill.power??0)*100)}%`;
-}
 
 function skillSlot(monster,skill,index){
  if(!skill)return`<button type="button" class="skill-slot-card compact empty" data-skill-slot="${index}">
@@ -31,7 +21,8 @@ function skillSlot(monster,skill,index){
   <span class="skill-slot-heading"><strong>SLOT ${index+1}</strong><b>熟練Lv.${progress.level}</b></span>
   <h3>${skill.name}</h3>
   <p>${skill.tag??skill.type}・${skillElementLabel(skill)}属性・${skill.target??"敵単体"}</p>
-  <span class="skill-slot-details"><i>${effectText(skill)}</i><i>MP ${effectiveSkillMpCost(monster,skill)}</i><i>CT ${skill.cooldown??0}</i></span>
+  <p class="skill-concrete-summary">${skillEffectSummary(skill," / ")}</p>
+  <span class="skill-slot-details"><i>MP ${effectiveSkillMpCost(monster,skill)}</i><i>CT ${skill.cooldown??0}</i></span>
   <em>詳細・変更 ›</em>
  </button>`;
 }

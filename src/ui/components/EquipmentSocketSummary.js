@@ -1,4 +1,4 @@
-import{ensureEquipmentAffixes,affixQuality}from"../../data/equipmentAffixes.js?v=2.7.0";
+import{ensureEquipmentAffixes,affixQuality}from"../../data/equipmentAffixes.js?v=2.8.0";
 
 export function equipmentSocketCapacity(item){
  return 4;

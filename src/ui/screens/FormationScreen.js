@@ -1,11 +1,11 @@
-import{SPECIES}from"../../data/species.js?v=2.7.0";
-import{displayName}from"../../models/Monster.js?v=2.7.0";
-import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor}from"../../battle/SkillSystem.js?v=2.7.0";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.7.0";
-import{equipmentDisplayRarity,equipmentSubslotLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=2.7.0";
-import{monsterVisual}from"../MonsterVisual.js?v=2.7.0";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=2.7.0";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.7.0";
+import{SPECIES}from"../../data/species.js?v=2.8.0";
+import{displayName}from"../../models/Monster.js?v=2.8.0";
+import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=2.8.0";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.8.0";
+import{equipmentDisplayRarity,equipmentSubslotLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=2.8.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.8.0";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=2.8.0";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.8.0";
 
 const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],
@@ -44,15 +44,7 @@ function equipmentSlot(state,monster,subslot){
   ${equipmentSocketSummary(item,{compact:true})}
  </button>`;
 }
-function skillEffectText(skill){
- if(skill.type==="allHeal"||skill.type==="selfHeal")return`回復 ${Math.round((skill.heal??0)*100)}%`;
- if(skill.type==="mpHeal")return`MP回復 ${Math.round((skill.mpHeal??0)*100)}%`;
- if(skill.type==="revive")return`蘇生 ${Math.round((skill.revive??0)*100)}%`;
- if(skill.type==="multiAttack")return`威力 ${Math.round((skill.power??0)*100)}%×${skill.hits??2}`;
- if(skill.type==="drain")return`威力 ${Math.round((skill.power??0)*100)}%・吸収${Math.round((skill.drain??0)*100)}%`;
- if(skill.type==="buff"||skill.type==="stance"||skill.type==="cleanse")return skill.tag??"特殊効果";
- return`威力 ${Math.round((skill.power??0)*100)}%`;
-}
+function skillEffectText(skill){return skillEffectSummary(skill," / ")}
 function skillSlot(monster,skill,slot){
  if(!skill)return`<button type="button" class="empty" data-formation-skill="${monster.id}" data-skill-slot="${slot}"><small>${slot+1}</small><span><b>未設定</b><em>タップして選択</em></span><i>›</i></button>`;
  const progress=skillProgressFor(monster,skill.id),cost=effectiveSkillMpCost(monster,skill),baseCost=skill.mp??0;
