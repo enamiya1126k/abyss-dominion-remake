@@ -48,7 +48,24 @@ export function normalizeMagicCircleState(state){
   const id=monster.magicCircleId;
   if(id==="plain"||!BY_ID.has(id)||(id!=="none"&&!normalized[id]))monster.magicCircleId="none";
  }
+ // 1個の所持魔法陣を複数人へ装着できた旧データを正規化する。
+ // 出撃枠の左から優先し、その後に控えを確認して最初の1人だけ残す。
+ const byId=new Map((state.monsters??[]).map(monster=>[monster.id,monster]));
+ const ordered=[...(state.party??[]).map(id=>byId.get(id)).filter(Boolean),...(state.monsters??[]).filter(monster=>!(state.party??[]).includes(monster.id))];
+ const assigned=new Set();
+ for(const monster of ordered){
+  const id=monster.magicCircleId;
+  if(!id||id==="none")continue;
+  if(assigned.has(id))monster.magicCircleId="none";
+  else assigned.add(id);
+ }
  return state.magicCircles;
+}
+
+export function magicCircleOwner(state,id,{excludeMonsterId=null}={}){
+ if(!id||id==="none")return null;
+ normalizeMagicCircleState(state);
+ return(state.monsters??[]).find(monster=>monster.id!==excludeMonsterId&&monster.magicCircleId===id)??null;
 }
 
 export function unlockMagicCircleFromTree(state,id){
@@ -104,14 +121,35 @@ export function equipMagicCircle(state,monster,id){
  if(!monster)return{ok:false,message:"対象が見つかりません"};
  const entry=magicCircleById(id);
  if(entry.id!=="none"&&!magicCircleLevel(state,id))return{ok:false,message:"深淵ツリーで未解禁の魔法陣です"};
+ const owner=magicCircleOwner(state,entry.id,{excludeMonsterId:monster.id});
+ if(owner)return{ok:false,owner,message:`${String(owner.nickname??"他の仲間").trim()||"他の仲間"}が装着中です。先に外してください。`};
  monster.magicCircleId=entry.id;
  return{ok:true,circle:entry};
 }
 
-export function magicCircleMarkup(monster,state,{className=""}={}){
- const entry=equippedMagicCircle(monster,state),high=entry.level>=20?"magic-circle-high":"",slot=entry.effect==="slot"?"magic-circle-slot":"";
+function circleMarkup(entry,{className=""}={}){
+ const high=entry.level>=20?"magic-circle-high":"",slot=entry.effect==="slot"?"magic-circle-slot":"";
  const frames=(entry.frames?.length?entry.frames:[entry.asset]).map((source,index)=>`<img class="magic-circle-frame magic-circle-frame-${index+1}" src="${source}" alt="" draggable="false">`).join("");
  return`<span class="magic-circle magic-circle-${entry.tone} ${high} ${slot} ${className}" data-circle-id="${entry.id}" data-circle-level="${entry.level}" aria-hidden="true">${frames}<i class="magic-circle-ring-a"></i><i class="magic-circle-ring-b"></i><b>${entry.glyph}</b></span>`;
+}
+
+export function magicCircleMarkup(monster,state,{className=""}={}){return circleMarkup(equippedMagicCircle(monster,state),{className})}
+
+const LR_PLUS_ENEMY_RANKS=new Set(["LR","神話","深淵","十神","abyss","tenGod"]);
+export function enemyMagicCircleRateForFloor(floor,rank="N"){
+ if(LR_PLUS_ENEMY_RANKS.has(String(rank)))return 1;
+ const f=Math.max(1,Math.floor(Number(floor)||1));
+ return f>=100?1:Math.max(.035,Math.min(1,.035+(f-1)*(.965/99)));
+}
+export function rollEnemyMagicCircle(floor,{rank="N",random=Math.random,force=false}={}){
+ const chance=force?1:enemyMagicCircleRateForFloor(floor,rank);
+ if(Math.max(0,Math.min(.999999,Number(random())||0))>=chance)return null;
+ const choices=MAGIC_CIRCLES.filter(entry=>entry.id!=="none"),roll=Math.max(0,Math.min(.999999,Number(random())||0)),entry=choices[Math.floor(roll*choices.length)]??choices[0];
+ const level=Math.max(1,Math.min(99,Math.round(Math.max(1,Number(floor)||1)*.78)));
+ return{...entry,level,enemyOnly:true,chance};
+}
+export function enemyMagicCircleMarkup(profile,{className="enemy-battle-magic-circle"}={}){
+ return profile?circleMarkup(profile,{className}):"";
 }
 
 export function slotDamageMultiplier(value){

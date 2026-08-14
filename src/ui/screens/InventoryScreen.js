@@ -1,10 +1,10 @@
-import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=2.6.2";
-import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.6.2";
-import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.6.2";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.6.2";
-import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.6.2";
-import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.6.2";
-import{monsterVisual}from"../MonsterVisual.js?v=2.6.2";
+import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=2.7.0";
+import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.7.0";
+import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.7.0";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.7.0";
+import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.7.0";
+import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.7.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.7.0";
 
 const CONSUMABLES=[
  ["potions","🧪","薬草","HPを回復"],

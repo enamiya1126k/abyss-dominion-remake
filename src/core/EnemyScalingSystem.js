@@ -46,11 +46,30 @@ export function rollEnemyRank(floor,roll=Math.random()){
 export function visibleEnemyRank(rank,floor){return Number(floor)<1000&&(rank==="abyss"||rank==="tenGod")?"？？？":({abyss:"深淵",tenGod:"十神"}[rank]??rank)}
 export function enemyRankStatMultiplier(rank){return({N:1,R:1.08,SR:1.18,SSR:1.32,LR:1.5,abyss:2.5,tenGod:3.15})[rank]??1}
 
-export function equipmentHolderRateForFloor(floor){return Number(floor)>=100?1:Number(floor)>=6?.11:0}
-export function equipmentSlotsForFloor(floor){return Number(floor)>=100?6:Number(floor)>=30?2:1}
+// Enemy equipment is rolled independently from the monster's visible rarity.
+// Shallow floors deliberately remain mixed; from 50F a full six-slot loadout is
+// the norm, not the exception.
+export function equipmentHolderRateForFloor(floor){
+ const f=safeFloor(floor);
+ if(f<6)return 0;
+ if(f<20)return lerp(.14,.32,(f-6)/14);
+ if(f<50)return lerp(.35,.78,(f-20)/30);
+ if(f<100)return .96;
+ return .99;
+}
+export function equipmentSlotsForFloor(floor){
+ const f=safeFloor(floor);
+ if(f<6)return 0;
+ if(f<20)return 1;
+ if(f<35)return 2;
+ if(f<50)return 3;
+ return 6;
+}
 
 export function rollEnemyEquipmentRarity(floor,rank,roll=Math.random()){
  const f=safeFloor(floor);
+ // 50F以降の敵装備6枠は、ランク帯に関係なくすべてLR相当。
+ if(f>=50)return"LR";
  if(f>=9000)return roll<.65?"SSR":"LR";
  if(rank==="tenGod")return roll<.25?"SSR":"LR";
  if(rank==="abyss")return roll<.42?"SSR":"LR";
@@ -61,24 +80,27 @@ export function rollEnemyEquipmentRarity(floor,rank,roll=Math.random()){
 
 // Dungeon-only six-slot loadout. This object is never copied to a captured
 // monster. It represents enhancement levels, sockets, affixes and mastery.
-export function enemyHiddenProfileForFloor(floor,{rank="N",faction=null,boss=false,roll=Math.random()}={}){
+export function enemyHiddenProfileForFloor(floor,{rank="N",faction=null,boss=false,equipped=false,slots=null,gearLevel=null,rarity=null,roll=Math.random()}={}){
  const f=safeFloor(floor);
- if(f<100)return{active:false,floor:f,slots:0,hp:1,atk:1,def:1,spd:1,damageTaken:1,crit:.04,mastery:0,ai:0};
+ const slotCount=Math.max(0,Math.min(6,Math.floor(Number(slots??equipmentSlotsForFloor(f))||0)));
+ const hasLoadout=Boolean(equipped||boss&&f>=50);
+ if(!hasLoadout)return{active:false,floor:f,slots:0,gearLevel:0,rarity:null,socketGrade:null,hp:1,atk:1,def:1,spd:1,damageTaken:1,crit:.04,mastery:0,ai:0};
  const depth=Math.max(0,(f-100)/500),rankId=faction??rank;
  const factionMult=rankId==="tenGod"?2.15:rankId==="abyss"?1.72:1;
  const bossMult=boss?1.48:1;
- const mastery=Math.floor(25+Math.pow(depth+1,.82)*44+(rankId==="tenGod"?260:rankId==="abyss"?160:0));
- const gearLevel=Math.max(1,Math.round(baseEnemyLevelForFloor(f)*(.46+Math.min(1.1,depth*.035))));
- const base=1+Math.pow(depth+1,.72)*.16;
+ const mastery=Math.floor(20+f*1.35+Math.pow(depth+1,.82)*44+(rankId==="tenGod"?260:rankId==="abyss"?160:0));
+ const resolvedGearLevel=Math.max(1,Math.floor(Number(gearLevel)||f*2));
+ const slotPower=Math.max(.16,slotCount/6),fullLoadout=f>=50&&slotCount>=6;
+ const base=fullLoadout?2.35+Math.min(2.8,Math.log2(depth+2)*.34):1+.2*slotCount+Math.min(.8,f/160);
  return{
-  active:true,floor:f,slots:6,gearLevel,mastery,
-  rarity:rollEnemyEquipmentRarity(f,rankId,roll),socketGrade:Math.min(10,1+Math.floor(f/240)),
+  active:true,floor:f,slots:slotCount,gearLevel:resolvedGearLevel,mastery,
+  rarity:rarity??rollEnemyEquipmentRarity(f,rankId,roll),socketGrade:fullLoadout?"LR":Math.min(10,1+Math.floor(f/24)),socketRarity:fullLoadout?"LR":null,
   affixGrade:Math.min(12,1+Math.floor(f/180)),ai:Math.min(100,18+Math.floor(f/80)+(rankId==="tenGod"?22:rankId==="abyss"?14:0)),
   hp:base*factionMult*bossMult,
-  atk:(1+Math.pow(depth+1,.68)*.13)*factionMult*bossMult,
-  def:(1+Math.pow(depth+1,.66)*.12)*factionMult*bossMult,
-  spd:(1+Math.min(2.6,Math.log2(depth+2)*.18))*(rankId==="tenGod"?1.22:rankId==="abyss"?1.13:1),
-  damageTaken:Math.max(.08,1-Math.min(.82,Math.log2(depth+2)*.085+(rankId==="tenGod"?.16:rankId==="abyss"?.1:0))),
+  atk:(fullLoadout?2.12+Math.min(2.4,Math.log2(depth+2)*.28):1+.18*slotCount+slotPower*.2)*factionMult*bossMult,
+  def:(fullLoadout?2.38+Math.min(2.7,Math.log2(depth+2)*.3):1+.2*slotCount+slotPower*.22)*factionMult*bossMult,
+  spd:(fullLoadout?1.42:1+.08*slotCount)*(1+Math.min(2.6,Math.log2(depth+2)*.12))*(rankId==="tenGod"?1.22:rankId==="abyss"?1.13:1),
+  damageTaken:Math.max(.08,1-Math.min(.82,(fullLoadout?.18:.025*slotCount)+Math.log2(depth+2)*.075+(rankId==="tenGod"?.16:rankId==="abyss"?.1:0))),
   crit:Math.min(.72,.06+Math.log2(depth+2)*.04+(rankId==="tenGod"?.18:rankId==="abyss"?.1:0)),
   statusResist:Math.min(.92,.08+Math.log2(depth+2)*.075+(rankId==="tenGod"?.2:rankId==="abyss"?.12:0)),
   capturePressure:1+Math.pow(depth+1,.55)*.55

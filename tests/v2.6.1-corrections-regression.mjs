@@ -15,7 +15,7 @@ const pngInfo=relative=>{
  return{width:data.readUInt32BE(16),height:data.readUInt32BE(20),colorType:data[25]};
 };
 
-assert.equal(APP_VERSION,"2.6.2");
+assert.equal(APP_VERSION,"2.7.0");
 
 const circles=MAGIC_CIRCLES.filter(circle=>circle.id!=="none");
 assert.equal(circles.length,18);
@@ -71,4 +71,4 @@ assert.match(css,/magic-circle-frame-cycle/);
 assert.match(main,/returnToSummonTop=.*openGacha\(\)/);
 assert.doesNotMatch(main,/returnToSummonTop=.*go\("gacha"\)/);
 
-console.log("ABYSS DOMINION v2.6.2 correction regression: PASS");
+console.log("ABYSS DOMINION v2.7.0 correction regression: PASS");

@@ -1,13 +1,13 @@
-import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.6.2";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.6.2";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.6.2";
-import{SPECIES}from"../data/species.js?v=2.6.2";
-import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.6.2";
-import{equipmentStatLabel}from"../data/equipment.js?v=2.6.2";
-import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.6.2";
-import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.6.2";
-import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.6.2";
-import{MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.6.2";
+import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.7.0";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.7.0";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.7.0";
+import{SPECIES}from"../data/species.js?v=2.7.0";
+import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.7.0";
+import{equipmentStatLabel}from"../data/equipment.js?v=2.7.0";
+import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.7.0";
+import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.7.0";
+import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.7.0";
+import{MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.7.0";
 
 export const SECRET_ROOM_CHANCE=.09;
 export const CASINO_CRYSTAL_COST=premiumCrystalCost(10);
@@ -66,7 +66,7 @@ function rarityProfile(random=Math.random){
  const roll=Math.max(0,Math.min(.999999,Number(random())||0));
  return MARKET_RARITIES.find(entry=>roll<entry.threshold)??MARKET_RARITIES[0];
 }
-function marketPrice(_reference,random=Math.random){
+function marketPrice(referenceValue,random=Math.random){
  const roll=Math.max(0,Math.min(.999999,Number(random())||0));
  let min,max,label,tone;
  if(roll<.03){min=1;max=999;label="商人の気まぐれ";tone="bargain"}
@@ -75,7 +75,7 @@ function marketPrice(_reference,random=Math.random){
  else if(roll<.86){min=10_000_000;max=999_999_999;label="手が届くかは別";tone="high"}
  else{min=1_000_000_000;max=99_999_999_999;label="法外・返品不可";tone="extreme"}
  const value=min+Math.floor(Math.max(0,Math.min(.999999,Number(random())||0))*(max-min+1));
- const reference=100+Math.floor(Math.max(0,Math.min(.999999,Number(random())||0))*9_999_999_900);
+ const reference=Math.max(1,Number(referenceValue)||1);
  return{price:roundedPrice(value),referencePrice:roundedPrice(reference),priceLabel:label,priceTone:tone};
 }
 function equipmentDescription(item){
@@ -254,6 +254,14 @@ export function enterSecretRoom(state,roomId,floor,random=Math.random){
 export function activeSecretRoom(state){
  normalizeSecretRoomState(state);
  return state.secretRooms.activeRoom;
+}
+
+// AUTOの回収優先で買ってよいのは、回復品ではなく一点物かつ
+// 相場の8%以下まで値崩れした「異常特価」だけ。
+export function isDarkMarketBargain(offer){
+ if(!offer||offer.sold||!["monster","equipment"].includes(offer.kind))return false;
+ const price=Math.max(1,Number(offer.price)||1),reference=Math.max(1,Number(offer.referencePrice)||price);
+ return offer.priceTone==="bargain"&&price/reference<=.08;
 }
 
 function weightedRange(min,max,random=Math.random,power=2.4){

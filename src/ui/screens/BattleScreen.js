@@ -1,11 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.6.2";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.6.2";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.6.2";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.6.2";
-import{monsterVisual}from"../MonsterVisual.js?v=2.6.2";
-import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.6.2";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.6.2";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.6.2";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.7.0";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.7.0";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.7.0";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.7.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.7.0";
+import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.7.0";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.7.0";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.7.0";
 
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
@@ -40,10 +40,10 @@ function renderEnemies(battle,enemies,target){
   return `<button id="enemy-${enemy.id}" ${dead?'disabled aria-hidden="true"':`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${enemy.boss?"boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
    <span class="battle-unit-floating-name">${badge}<b>${enemy.name}</b></span>
-   <div class="side-unit-sprite enemy-orb">${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.hp<=0?"down":"idle",className:"battle-enemy-visual"})}</div>
+   <div class="side-unit-sprite enemy-orb">${battle.enemyMagicCircleArt?.[enemy.id]??""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.hp<=0?"down":"idle",className:"battle-enemy-visual"})}</div>
    <div class="side-unit-card enemy-info">
     <div class="side-unit-name enemy-name">${danger}<small>Lv.${enemy.level}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
-    <div class="side-unit-intent enemy-intent"><span>戦闘特性</span><b>${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}</b></div>
+    <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
     ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${enemy.hp}/${enemy.maxHp}`,"enemy-hp")}
     ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
     ${statusHtml}

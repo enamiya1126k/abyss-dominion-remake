@@ -6,14 +6,26 @@
 
 | 項目 | 内容 |
 |---|---|
-| Web版 | `v2.6.2` |
-| セーブスキーマ | `52` |
+| Web版 | `v2.7.0` |
+| セーブスキーマ | `53` |
 | 対応階層 | 1F〜10000F |
 | 深淵・十神 | 深淵7柱＋十神10柱／4段階手動挑戦 |
 | 奈落回廊 | 全22法廷・歩行式・無限周回 |
 | チーム試練 | 4 VS 4・第50試練以降も無限継続 |
 | 音響 | 提供済み7曲の場面別BGM＋本作専用SE |
 | 旧セーブ | 同一セーブキーのまま自動移行 |
+
+## v2.7.0の主要内容
+
+`v2.7.0`は136(2)版を基準に、深層の敵戦力、完全AUTO探索、魔法陣の所有制約、戦闘詳細、帰還競合、ミミック戦を統合更新した版です。
+
+- 50F以降は敵2〜4体・ほぼ全員6枠LR装備、100F以降は4体編成を標準化。敵装備Lvは階層×2。
+- 敵魔法陣の所持率を階層に応じて上げ、100Fでは全員、LR以上は全階層で必ず装着。
+- 敵ミミックをHP5・1ラウンド合計1ダメージ上限・極端な高火力・捕獲率1%へ変更。捕獲後は敵専用補正を継承しません。
+- AUTOでミミック、階層ボス、💎報酬、取得通知、秘密の裏街、無料休憩を自動処理。回収優先だけ異常特価品とカジノを利用します。
+- 戦闘詳細を短いタップでどこからでも閉じられるようにし、縦スライドを維持。属性、なつき、物理／魔法攻防などを追加。
+- 魔法陣を1個につき1人だけ装着できるよう変更し、旧重複データは安全に1人へ正規化。
+- 帰還確定時に予約済み遭遇を破棄し、AUTO裏進行から戦闘が始まる競合を修正。
 
 ## v2.6.2の主要内容
 
@@ -115,7 +127,7 @@ python3 -m http.server 8080
 ## セーブ互換
 
 - セーブキー：`abyss-dominion-remake-v001`（維持）
-- `schemaVersion 1〜51`を`52`へ自動移行。
+- `schemaVersion 1〜52`を`53`へ自動移行。
 - 旧深淵・十神ID、旧★、装備、挑戦進行、探索／戦闘チェックポイントを正規化。
 - ZIPを上書き配置しても、ブラウザのサイトデータを削除しない限り既存セーブを継続できます。
 
@@ -130,6 +142,7 @@ node tests/v2.3.1-release-regression.mjs
 node tests/v2.4.0-release-regression.mjs
 node tests/v2.6.1-corrections-regression.mjs
 node tests/v2.6.2-battle-feedback-regression.mjs
+node tests/v2.7.0-enemy-auto-regression.mjs
 python3 tools/build_v261_assets.py
 python3 tools/build_v240_sprites.py --verify
 python3 tools/audit_sprite_catalog.py
@@ -142,6 +155,7 @@ python3 tools/audit_sprite_catalog.py
 - [v2.4.0リリースノート](docs/RELEASE_NOTES_v2.4.0_JA.md)
 - [v2.6.1リリースノート](docs/RELEASE_NOTES_v2.6.1_JA.md)
 - [v2.6.2リリースノート](docs/RELEASE_NOTES_v2.6.2_JA.md)
+- [v2.7.0リリースノート](docs/RELEASE_NOTES_v2.7.0_JA.md)
 - [v2.4.0実装・検証レポート](docs/IMPLEMENTATION_VERIFICATION_v2.4.0_JA.md)
 - [v2.3.1リリースノート](docs/RELEASE_NOTES_v2.3.1_JA.md)
 - [GDD実装・検証レポート](docs/GDD_v1.0_IMPLEMENTATION_REPORT_JA.md)

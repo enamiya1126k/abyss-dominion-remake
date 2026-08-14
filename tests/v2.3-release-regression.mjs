@@ -10,8 +10,8 @@ import {SPECIAL_ACTION_INFO} from "../src/battle/EnemyAI.js";
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 
-assert.equal(APP_VERSION,"2.6.2");
-assert.equal(SAVE_SCHEMA_VERSION,52);
+assert.equal(APP_VERSION,"2.7.0");
+assert.equal(SAVE_SCHEMA_VERSION,53);
 assert.equal(MONSTER_STORAGE_CAP,3000);
 
 const regularBoss=bossProfileForFloor(10),fiftyBoss=bossProfileForFloor(50),hundredBoss=bossProfileForFloor(100);
@@ -25,7 +25,8 @@ assert.equal(SPECIAL_ACTION_INFO.frostNova.status.id,"freeze");
 assert.equal(SPECIAL_ACTION_INFO.venomCloud.status.id,"poison");
 
 const main=read("src/main.js"),explore=read("src/ui/screens/ExploreScreen.js"),gauntlet=read("src/ui/screens/GauntletScreen.js"),audio=read("src/core/AudioSystem.js"),css=read("src/Styles/v2.2.0.css"),index=read("index.html");
-assert.match(main,/count=roll<\.34\?4/);
+assert.match(main,/else if\(floor<100\)count=roll<\.05\?1:roll<\.38\?2:roll<\.73\?3:4/);
+assert.match(main,/else count=roll<\.01\?1:roll<\.09\?2:roll<\.27\?3:4/);
 assert.match(main,/function floorBossParty\(/);
 assert.match(main,/beginEncounter\(floorBossParty\(bossInfo,floor\)\)/);
 assert.match(main,/const basinScale=\(decoration\.scale\?\?1\.2\)\*1\.48/);
@@ -41,7 +42,7 @@ assert.match(css,/v2\.3\.0 — final mobile layout/);
 assert.match(css,/gauntlet-walk-screen\{[^}]*height:100dvh!important/);
 assert.match(css,/party-hud-collapsed \.explore-party-strip\{display:none!important/);
 assert.match(css,/damage-slot-digits/);
-assert.match(index,/ASSET_VERSION = "2\.6\.2"/);
+assert.match(index,/ASSET_VERSION = "2\.7\.0"/);
 
 for(const event of ["visibilitychange","pagehide","blur","focus","pageshow"]){
   assert.ok(audio.includes(event),`Audio lifecycle event missing: ${event}`);

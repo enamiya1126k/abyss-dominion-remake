@@ -103,7 +103,7 @@
   margin:8px 0 10px;
   padding:8px 14px 8px 10px!important;
   border:8px solid transparent!important;
-  border-image:url("../../assets/ui/v2/ornate-frame-active.png?v=2.6.2") 42 fill / 8px!important;
+  border-image:url("../../assets/ui/v2/ornate-frame-active.png?v=2.7.0") 42 fill / 8px!important;
   background:linear-gradient(100deg,#0d0911e8,#24122ee8 57%,#0a080de8)!important;
   color:#f6e3af!important;
   text-align:left;
@@ -153,7 +153,7 @@
 /* Four-member mythic follow-up. It sits above the field without resizing it. */
 .invincible-alliance-banner{position:absolute;z-index:25;left:50%;top:46%;width:min(92%,560px);transform:translate(-50%,-50%);padding:10px;border:1px solid #efbd53;background:linear-gradient(90deg,#13091bea,#4a1d5fea,#13091bea);color:#fff1bd;text-align:center;box-shadow:0 0 28px #d76cff6e;pointer-events:none}
 
-/* v2.6.2 correction set */
+/* v2.7.0 correction set */
 .equipment-pixel-art.equipment-direct-art{
   box-sizing:border-box!important;
   display:grid!important;
@@ -265,11 +265,27 @@
 
 .explore-auto-controller>summary{box-sizing:border-box!important;width:100%!important;user-select:none!important;-webkit-user-select:none!important}
 
+/* v2.7.0 enemy circles + battle detail sheet */
+.enemy-battle-magic-circle{top:68%!important;width:132%!important;opacity:.76!important;filter:drop-shadow(0 0 10px #e65cff) saturate(1.45)!important}
+.magic-circle-row.in-use{border-color:#b56fe0;box-shadow:inset 0 0 18px #933bcc2b}.magic-circle-row.in-use em{color:#ff9fed}.magic-circle-row.in-use button:first-child{border-color:#78445f!important;background:linear-gradient(#3b202e,#21131a)!important}
+.battle-detail-modal-v2 .game-modal-card{max-height:min(88dvh,880px);overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.battle-detail-modal-v2 .game-modal-body{touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.battle-detail-v2{display:grid;gap:9px;padding-bottom:4px;color:#eee8ef;line-height:1.35}
+.battle-detail-v2 section{display:grid;gap:7px;padding:10px;border:1px solid #4e3a58;background:linear-gradient(120deg,#0b090eeb,#17101ceb)}
+.battle-detail-v2 h4{margin:0;color:#e7c875;font-family:serif;font-size:.73rem;letter-spacing:.08em}.battle-detail-v2 h4>b{float:right;color:#fff0bd}
+.battle-detail-hero{display:grid;grid-template-columns:96px minmax(0,1fr);align-items:center;gap:12px;min-height:112px;padding:10px;border:1px solid #806098;background:radial-gradient(circle at 15% 50%,#63317655,transparent 42%),linear-gradient(120deg,#09070c,#1d1025)}
+.battle-detail-hero>.monster-visual,.battle-detail-hero>.monster-sprite{width:92px!important;height:92px!important}.battle-detail-hero>div{display:grid;gap:4px}.battle-detail-hero small{color:#bca8c6;font-size:.48rem;letter-spacing:.16em}.battle-detail-hero h3{margin:0;color:#ffe6a7;font-family:serif;font-size:1.22rem}.battle-detail-hero>b{color:#f5edf5;font-size:.72rem}.battle-detail-hero span{display:flex;align-items:center;gap:5px;color:#e6cfec;font-size:.62rem}.battle-detail-hero .attribute-visual{width:24px;height:24px}
+.battle-detail-vitals,.battle-detail-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.battle-detail-vitals>span,.battle-detail-stat-grid>span{display:grid;gap:2px;padding:7px;border:1px solid #44334c;background:#08070a}.battle-detail-vitals small,.battle-detail-stat-grid small{color:#ad99b7;font-size:.47rem}.battle-detail-vitals b{color:#fff0be;font-size:.8rem}.battle-detail-stat-grid b{font-size:.72rem}
+.battle-affection-detail p{margin:0;color:#dfcde3;font-size:.57rem}.battle-detail-v2 .battle-bar{position:relative;margin:0;height:12px}.battle-detail-v2 .battle-bar.affection i{background:linear-gradient(90deg,#8d4eff,#e083ff,#ffe08a)}
+.battle-detail-profile{display:grid;gap:5px}.battle-detail-profile p{display:grid;grid-template-columns:76px minmax(0,1fr);gap:2px 8px;margin:0;padding:6px;border-bottom:1px solid #362a3d}.battle-detail-profile small{grid-row:1/3;color:#a995b3;font-size:.48rem}.battle-detail-profile b{font-size:.65rem}.battle-detail-profile span{color:#c8bacd;font-size:.5rem}
+.battle-detail-gear,.battle-detail-skills{display:grid;gap:5px}.battle-detail-gear>div,.battle-detail-skills>div{display:grid;grid-template-columns:74px minmax(0,1fr);gap:7px;padding:6px;border-bottom:1px solid #372b3e}.battle-detail-gear small,.battle-detail-skills small{color:#ad9ab6;font-size:.49rem}.battle-detail-gear b,.battle-detail-skills b{font-size:.61rem}.battle-detail-skills>div{grid-template-columns:1fr}.battle-detail-tap-hint{margin:2px 0 0;color:#9e8aaa;text-align:center;font-size:.5rem}
+
 @media(max-width:430px){
  .equipment-magic-circle-button{grid-template-columns:46px minmax(0,1fr);min-height:64px;padding-right:9px!important}.equipment-magic-circle-button>img{width:44px;height:44px}.equipment-magic-circle-button>i{grid-column:2}
  .magic-circle-workshop>header{grid-template-columns:112px minmax(0,1fr);min-height:142px;padding:8px}.workshop-circle{width:112px!important}.magic-circle-workshop>header h3{font-size:.98rem}
  .magic-circle-row{grid-template-columns:52px minmax(0,1fr) 76px;gap:6px;padding:6px}.magic-circle-list-art{width:50px;height:50px}.magic-circle-list-art img{width:49px;height:49px}.magic-circle-row button{font-size:.44rem!important}
  .invincible-alliance-status{top:5px;min-width:136px;padding:4px 7px}.invincible-alliance-status span{font-size:.61rem}.invincible-alliance-status small{font-size:.33rem}
+ .battle-detail-modal-v2{padding:7px}.battle-detail-modal-v2 .game-modal-card{max-height:91dvh;padding:10px}.battle-detail-hero{grid-template-columns:78px minmax(0,1fr);min-height:94px;padding:8px}.battle-detail-hero>.monster-visual,.battle-detail-hero>.monster-sprite{width:76px!important;height:76px!important}.battle-detail-hero h3{font-size:1.02rem}.battle-detail-stat-grid>span{padding:6px}.battle-detail-profile p{grid-template-columns:62px minmax(0,1fr)}
 }
 
 @media(prefers-reduced-motion:reduce){

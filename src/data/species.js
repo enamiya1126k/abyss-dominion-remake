@@ -1,7 +1,7 @@
-import{EXPANDED_SPECIES}from"./expandedSpecies.js?v=2.6.2";
-import{ADDITIONAL_SPECIES}from"./additionalSpecies.js?v=2.6.2";
-import{MYTHIC_SERIAL_SPECIES}from"./mythicSerialSpecies.js?v=2.6.2";
-import{applyMonsterNameOverride}from"./monsterNameOverrides.js?v=2.6.2";
+import{EXPANDED_SPECIES}from"./expandedSpecies.js?v=2.7.0";
+import{ADDITIONAL_SPECIES}from"./additionalSpecies.js?v=2.7.0";
+import{MYTHIC_SERIAL_SPECIES}from"./mythicSerialSpecies.js?v=2.7.0";
+import{applyMonsterNameOverride}from"./monsterNameOverrides.js?v=2.7.0";
 
 const BASE_SPECIES={
   slime:{id:"slime",emoji:"🫧",name:"スライム",element:"water",race:"slime",role:"balanced",rarity:"N",minFloor:1,captureRate:1.0,maxMp:16,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:46,atk:6,def:4,spd:10,crit:5,evasion:3},rankNames:["スライム","上位スライム","スライム王","深淵スライム"],skills:[{id:"slime_skill",name:"体当たり",unlock:{type:"level",value:1},description:"体当たりで戦う。"}]},
@@ -49,7 +49,7 @@ const BASE_SPECIES={
   dragon:{id:"dragon",emoji:"🐉",name:"ドラゴン",element:"fire",race:"dragon",role:"burst",rarity:"SSR",minFloor:70,captureRate:0.35,maxMp:18,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:124,atk:24,def:10,spd:5,crit:8,evasion:2},rankNames:["ドラゴン","上位ドラゴン","ドラゴン王","深淵ドラゴン"],skills:[{id:"dragon_skill",name:"竜炎ブレス",unlock:{type:"level",value:1},description:"竜炎ブレスで戦う。"}]},
   frost_dragon:{id:"frost_dragon",emoji:"🐉",name:"氷竜",element:"water",race:"dragon",role:"controller",rarity:"SSR",minFloor:110,captureRate:0.3,maxMp:20,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:132,atk:22,def:13,spd:4,crit:7,evasion:2},rankNames:["氷竜","上位氷竜","氷竜王","深淵氷竜"],skills:[{id:"frost_dragon_skill",name:"氷竜息",unlock:{type:"level",value:1},description:"氷竜息で戦う。"}]},
   ancient_dragon:{id:"ancient_dragon",emoji:"🐉",name:"古龍",element:"light",race:"dragon",role:"burst",rarity:"LR",minFloor:180,captureRate:0.18,maxMp:24,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:175,atk:31,def:17,spd:3,crit:10,evasion:1},rankNames:["古龍","上位古龍","古龍王","深淵古龍"],skills:[{id:"ancient_dragon_skill",name:"古龍砲",unlock:{type:"level",value:1},description:"古龍砲で戦う。"}]},
-  mimic:{id:"mimic",emoji:"🧰",name:"ミミック",element:"dark",race:"construct",role:"ambush",rarity:"SR",minFloor:28,captureRate:1.0,maxMp:16,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:74,atk:17,def:12,spd:8,crit:15,evasion:4},rankNames:["ミミック","上位ミミック","ミミック王","深淵ミミック"],skills:[{id:"mimic_skill",name:"奇襲噛み",unlock:{type:"level",value:1},description:"奇襲噛みで戦う。"}]},
+  mimic:{id:"mimic",emoji:"🧰",name:"ミミック",element:"dark",race:"construct",role:"ambush",rarity:"SR",minFloor:28,captureRate:.01,maxMp:16,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:74,atk:17,def:12,spd:8,crit:15,evasion:4},rankNames:["ミミック","上位ミミック","ミミック王","深淵ミミック"],skills:[{id:"mimic_skill",name:"奇襲噛み",unlock:{type:"level",value:1},description:"奇襲噛みで戦う。"}]},
   dark_knight:{id:"dark_knight",emoji:"♞",name:"黒騎士",element:"dark",race:"undead",role:"tank",rarity:"SSR",minFloor:75,captureRate:1.0,maxMp:22,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:112,atk:20,def:18,spd:8,crit:10,evasion:4},rankNames:["黒騎士","上位黒騎士","黒騎士王","深淵黒騎士"],skills:[{id:"dark_knight_skill",name:"漆黒剣",unlock:{type:"level",value:1},description:"漆黒剣で戦う。"}]},
   angelic_orb:{id:"angelic_orb",emoji:"🔆",name:"光球精",element:"light",race:"spirit",role:"support",rarity:"SR",minFloor:55,captureRate:1.0,maxMp:30,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:55,atk:13,def:7,spd:21,crit:8,evasion:16},rankNames:["光球精","上位光球精","光球精王","深淵光球精"],skills:[{id:"angelic_orb_skill",name:"光輪",unlock:{type:"level",value:1},description:"光輪で戦う。"}]},
 };
