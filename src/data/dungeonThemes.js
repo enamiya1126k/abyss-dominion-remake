@@ -6,46 +6,55 @@ const atlas=id=>`assets/ui/explore/biomes/${id}-atlas.png?v=${ASSET_VERSION}`;
 export const DUNGEON_THEMES=Object.freeze({
  ruins:Object.freeze({
   id:"ruins",name:"黒鉄遺跡",accent:"#d6b56f",floor:"#725a3630",wall:"#1513134d",line:"#c7a86a66",light:"#f1c777",dark:"rgba(3,4,7,.40)",
+  wallDepth:.28,wallFace:"rgba(12,10,8,.72)",wallRim:"rgba(232,199,126,.78)",wallJoint:"#4c3d27",
   floorAsset:`assets/ui/explore/dungeon-floor.png?v=${ASSET_VERSION}`,wallAsset:`assets/ui/explore/dungeon-wall.png?v=${ASSET_VERSION}`,atlasSplit:false,architecture:true,particle:"dust",minimapFloor:"#7e6748",minimapWall:"#29231f",
   variants:["古びた入口","苔むす石路","崩落回廊","封印区画","最奥祭壇"]
  }),
  jungle:Object.freeze({
   id:"jungle",name:"翠根密林",accent:"#73e09a",floor:"#244e3430",wall:"#07160e4d",line:"#72d58d66",light:"#7af2b2",dark:"rgba(1,8,5,.43)",
+  wallDepth:.34,wallFace:"rgba(3,19,10,.7)",wallRim:"rgba(122,242,178,.72)",wallJoint:"#174b2e",
   floorAsset:atlas("jungle"),wallAsset:atlas("jungle"),atlasSplit:true,architecture:false,particle:"firefly",minimapFloor:"#3c7551",minimapWall:"#10291a",
   variants:["芽吹きの径","絡根地帯","燐光樹海","古樹中枢","緑王の深庭"]
  }),
  magma:Object.freeze({
   id:"magma",name:"灼熱溶岩洞",accent:"#ff7348",floor:"#4b180d24",wall:"#1703004f",line:"#ff6b3d70",light:"#ff8a4d",dark:"rgba(12,2,0,.40)",
+  wallDepth:.36,wallFace:"rgba(38,7,2,.68)",wallRim:"rgba(255,138,77,.8)",wallJoint:"#782a18",
   floorAsset:atlas("magma"),wallAsset:atlas("magma"),atlasSplit:true,architecture:false,particle:"ember",minimapFloor:"#783423",minimapWall:"#2d0e0a",
   variants:["冷却玄武岩","赤熱亀裂帯","火脈回廊","熔融心域","噴火口深部"]
  }),
  ice:Object.freeze({
   id:"ice",name:"蒼氷晶洞",accent:"#78dbff",floor:"#17496b24",wall:"#03111f4d",line:"#8ae4ff70",light:"#a6edff",dark:"rgba(0,5,13,.43)",
+  wallDepth:.32,wallFace:"rgba(3,27,43,.66)",wallRim:"rgba(166,237,255,.82)",wallJoint:"#285e77",
   floorAsset:atlas("ice"),wallAsset:atlas("ice"),atlasSplit:true,architecture:false,particle:"snow",minimapFloor:"#3a7391",minimapWall:"#102b3f",
   variants:["薄氷回廊","霜紋地帯","氷柱迷宮","凍結心域","永久氷核"]
  }),
  sacred:Object.freeze({
   id:"sacred",name:"星金聖域",accent:"#ffe09a",floor:"#8a74321f",wall:"#18130d45",line:"#ffe09a73",light:"#fff0bb",dark:"rgba(5,4,2,.34)",
+  wallDepth:.3,wallFace:"rgba(37,30,18,.64)",wallRim:"rgba(255,240,187,.8)",wallJoint:"#816d40",
   floorAsset:atlas("sacred"),wallAsset:atlas("sacred"),atlasSplit:true,architecture:false,particle:"mote",minimapFloor:"#9c8b68",minimapWall:"#3a3328",
   variants:["巡礼石路","星刻回廊","黄金礼拝区","天光中枢","神座前庭"]
  }),
  void:Object.freeze({
   id:"void",name:"虚無断界",accent:"#d06bff",floor:"#481c6426",wall:"#10041c55",line:"#d76fff70",light:"#df8cff",dark:"rgba(2,0,9,.53)",
+  wallDepth:.35,wallFace:"rgba(14,3,28,.74)",wallRim:"rgba(223,140,255,.76)",wallJoint:"#512367",
   floorAsset:atlas("void"),wallAsset:atlas("void"),atlasSplit:true,architecture:false,particle:"star",minimapFloor:"#58336e",minimapWall:"#1b0d29",
   variants:["境界亀裂","星屑断層","重力歪曲域","虚空深部","無明特異点"]
  }),
  poison:Object.freeze({
   id:"poison",name:"瘴毒菌窟",accent:"#b7e84f",floor:"#3c52201f",wall:"#11081b52",line:"#bded566b",light:"#c8ff66",dark:"rgba(5,1,9,.48)",
+  wallDepth:.36,wallFace:"rgba(16,6,23,.72)",wallRim:"rgba(200,255,102,.7)",wallJoint:"#4d4a22",
   floorAsset:atlas("poison"),wallAsset:atlas("poison"),atlasSplit:true,architecture:false,particle:"spore",minimapFloor:"#615b35",minimapWall:"#21152a",
   variants:["湿潤胞子床","菌糸回廊","猛毒繁殖区","瘴気心域","腐王の菌床"]
  }),
  storm:Object.freeze({
   id:"storm",name:"雷晶断層",accent:"#9e8cff",floor:"#26327726",wall:"#09071f50",line:"#8f9bff73",light:"#91d8ff",dark:"rgba(1,2,12,.47)",
+  wallDepth:.33,wallFace:"rgba(8,9,34,.7)",wallRim:"rgba(145,216,255,.74)",wallJoint:"#363c78",
   floorAsset:atlas("storm"),wallAsset:atlas("storm"),atlasSplit:true,architecture:false,particle:"spark",minimapFloor:"#4a548f",minimapWall:"#181a39",
   variants:["帯電石路","紫電亀裂帯","雷晶群生区","轟雷中枢","天雷核"]
  }),
  deepsea:Object.freeze({
   id:"deepsea",name:"深海沈殿宮",accent:"#52e1dc",floor:"#124a5124",wall:"#03171c50",line:"#58ddd66b",light:"#6af1e9",dark:"rgba(0,6,10,.47)",
+  wallDepth:.34,wallFace:"rgba(2,24,31,.7)",wallRim:"rgba(106,241,233,.74)",wallJoint:"#1f6265",
   floorAsset:atlas("deepsea"),wallAsset:atlas("deepsea"),atlasSplit:true,architecture:false,particle:"bubble",minimapFloor:"#31777b",minimapWall:"#0d2c33",
   variants:["浅水回廊","藻生石路","水圧沈殿区","深海神殿","海淵最奥"]
  })
