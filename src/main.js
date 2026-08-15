@@ -8,8 +8,8 @@ import{attributeDamageMultiplier,attributeGuideRows,ATTRIBUTES}from"./data/attri
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.10.0";
 import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.10.0-build145";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.10.0-build145";
-import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build145";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build145";
+import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build146";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build146";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.10.0";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.10.0";
 import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.10.0";
@@ -1593,8 +1593,12 @@ function bindFormation(){
  }));
 }
 
+function claimOnlinePartyReward({rewardId,reward={},source={}}={}){
+ const id=String(rewardId??"").slice(0,160);if(!id)return{ok:false};const online=save.state.onlineParty??={claimedRewards:[],totalGold:0,totalCaptureCrystals:0,expeditionsCompleted:0};online.claimedRewards=Array.isArray(online.claimedRewards)?online.claimedRewards:[];if(online.claimedRewards.includes(id))return{ok:true,duplicate:true};
+ const gold=Math.max(0,Math.min(5_000_000,Math.floor(Number(reward.gold)||0))),captureCrystals=Math.max(0,Math.min(3,Math.floor(Number(reward.captureCrystals)||0)));save.state.player.gold=Math.min(Number.MAX_SAFE_INTEGER,(Number(save.state.player.gold)||0)+gold);save.state.inventory.captureCrystals=Math.min(Number.MAX_SAFE_INTEGER,(Number(save.state.inventory.captureCrystals)||0)+captureCrystals);online.claimedRewards.push(id);online.claimedRewards=online.claimedRewards.slice(-200);online.totalGold=(Number(online.totalGold)||0)+gold;online.totalCaptureCrystals=(Number(online.totalCaptureCrystals)||0)+captureCrystals;if(source.kind==="completion")online.expeditionsCompleted=(Number(online.expeditionsCompleted)||0)+1;save.save();const compact=value=>{const number=Math.max(0,Number(value)||0);if(number>=1e9)return`${Number((number/1e9).toFixed(1))}B`;if(number>=1e6)return`${Number((number/1e6).toFixed(1))}M`;if(number>=1e4)return`${Number((number/1e3).toFixed(1))}K`;return Math.floor(number).toLocaleString()};const goldHud=document.getElementById("goldHud"),captureHud=document.getElementById("captureHud");if(goldHud)goldHud.textContent=compact(save.state.player.gold);if(captureHud)captureHud.textContent=compact(save.state.inventory.captureCrystals);if(gold)showResourceToast("gold",gold);if(captureCrystals)setTimeout(()=>showResourceToast("capture",captureCrystals),260);return{ok:true,gold,captureCrystals}
+}
 function bindOnlineParty(){
- onlinePartyController??=new OnlinePartyController({getState:()=>save.state,toast:showToast,onBack:()=>go("home"),onFormation:()=>{formationOrigin="home";go("formation")}});
+ onlinePartyController??=new OnlinePartyController({getState:()=>save.state,toast:showToast,onReward:claimOnlinePartyReward,onBack:()=>go("home"),onFormation:()=>{formationOrigin="home";go("formation")}});
  onlinePartyController.mount(app);
 }
 function rarityValue(rarity){return ({N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9}[rarity]??0)}
