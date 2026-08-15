@@ -1,7 +1,8 @@
 import{SPECIES}from"../../data/species.js?v=2.10.0";
-import{displayName}from"../../models/Monster.js?v=2.10.0";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=2.10.0";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0";
-import{magicCircleById}from"../../core/MagicCircleSystem.js?v=2.10.0-build146";
+import{magicCircleById}from"../../core/MagicCircleSystem.js?v=2.10.0-build147";
+import{learnedSkills,maxMp,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.10.0";
 import{monsterVisual}from"../MonsterVisual.js?v=2.10.0";
 import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.10.0";
 
@@ -49,16 +50,22 @@ function equipmentProfile(state,monster){
   return item?{slot,label,name:item.name??"装備",rarity:item.rarity??item.displayRarity??"N",level:Math.max(1,Number(item.level)||1),plus:Math.max(0,Number(item.plus)||0)}:{slot,label,name:"なし",rarity:"",level:0,plus:0};
  });
 }
+function onlineSkillKind(skill){
+ const type=String(skill?.type??"");if(type==="revive")return"revive";if(type==="allHeal")return"allHeal";if(type==="selfHeal"||type==="heal")return"heal";if(type==="mpHeal")return"mpHeal";if(["stance","buff"].includes(type))return"guard";return"attack";
+}
+function onlineSkillProfile(monster){
+ return learnedSkills(monster).slice(0,4).map(skill=>({id:skill.id,name:skill.name??"スキル",description:skill.description??"特殊効果を発動",kind:onlineSkillKind(skill),mp:effectiveSkillMpCost(monster,skill),power:Math.max(.1,Number(skill.power)||1),heal:Math.max(0,Number(skill.heal)||Number(skill.revive)||0),mpHeal:Math.max(0,Number(skill.mpHeal)||0),hits:Math.max(1,Number(skill.hits)||1),allEnemies:Boolean(skill.allEnemies||String(skill.target??"").includes("敵全体")),allAllies:Boolean(skill.allies||String(skill.target??"").includes("味方全体")||skill.type==="allHeal"),damageClass:skill.damageClass==="magic"?"magic":"physical",element:skill.element??"neutral"}));
+}
 export function buildOnlinePartyProfile(state,{monsterId=null,displayName:onlineName=""}={}){
  const party=(state.party??[]).map(id=>state.monsters?.find(monster=>monster.id===id)).filter(Boolean),monster=party.find(entry=>entry.id===monsterId)??selectedPartyMonster(state).monster;
- if(!monster)return{displayName:onlineName||"冒険者",monsterId:null,speciesId:"slime",visualSpeciesId:null,endgameBossId:null,monsterName:"未編成",fallbackEmoji:"？",level:1,stars:1,plus:0,power:0,maxFloor:Math.max(1,Number(state.player?.maxFloor)||1),attribute:"neutral",circleId:"none",circleName:"魔法陣なし",circleLevel:0,equipment:[]};
- const species=SPECIES[monster.speciesId]??{},circle=magicCircleById(monster.magicCircleId);
+ if(!monster)return{displayName:onlineName||"冒険者",monsterId:null,speciesId:"slime",visualSpeciesId:null,endgameBossId:null,monsterName:"未編成",fallbackEmoji:"？",level:1,stars:1,plus:0,power:0,maxFloor:Math.max(1,Number(state.player?.maxFloor)||1),attribute:"neutral",circleId:"none",circleName:"魔法陣なし",circleLevel:0,equipment:[],battleStats:{hp:100,mp:10,atk:10,matk:10,def:5,mdef:5,spd:10,crit:5,evasion:3},skills:[],captureStock:Math.max(0,Number(state.inventory?.captureCrystals)||0)};
+ const species=SPECIES[monster.speciesId]??{},circle=magicCircleById(monster.magicCircleId),stats=calculatedStats(monster),mp=maxMp(monster);
  return{
   displayName:String(onlineName||displayName(monster)||"冒険者").trim().slice(0,16),monsterId:monster.id,speciesId:monster.speciesId,
   visualSpeciesId:monster.visualSpeciesId??null,endgameBossId:monster.endgameBossId??null,monsterName:displayName(monster),fallbackEmoji:species.emoji??"魔",
   level:Math.max(1,Number(monster.level)||1),stars:Math.max(1,Number(monster.stars)||1),plus:Math.max(0,Number(monster.plus)||0),
   power:monsterCombatPower(monster),maxFloor:Math.max(1,Number(state.player?.maxFloor)||1),attribute:monster.attribute??species.element??"neutral",circleId:circle.id,circleName:circle.name,circleLevel:circle.id==="none"?0:Math.max(1,Number(state.magicCircles?.owned?.[circle.id])||1),
-  equipment:equipmentProfile(state,monster)
+  equipment:equipmentProfile(state,monster),battleStats:{hp:Math.max(1,stats.hp),mp:Math.max(0,mp),atk:Math.max(1,stats.atk),matk:Math.max(1,stats.matk??stats.atk),def:Math.max(0,stats.def),mdef:Math.max(0,stats.mdef??stats.def),spd:Math.max(1,stats.spd),crit:Math.max(0,stats.crit),evasion:Math.max(0,stats.evasion)},skills:onlineSkillProfile(monster),captureStock:Math.max(0,Number(state.inventory?.captureCrystals)||0)
  };
 }
 
@@ -78,6 +85,7 @@ export function onlineMagicCircleArt(profile,{className=""}={}){
 export function onlineAvatarVisual(profile,{className=""}={}){
  return`<span class="online-avatar-stack ${className}">${onlineMagicCircleArt(profile)}${monsterVisual(profile,profile?.fallbackEmoji??"魔",{className:"online-avatar-monster"})}</span>`;
 }
+export function onlineEnemyVisual(enemy,{className=""}={}){return monsterVisual({speciesId:enemy?.speciesId??"slime",level:enemy?.level??1},enemy?.emoji??"魔",{frame:Number(enemy?.hp)<=0?"down":"idle",className:`online-enemy-monster ${className}`})}
 
 export function OnlinePartyScreen(state){
  const identity=createIdentity(),invite=inviteParameters(),{party,monster}=selectedPartyMonster(state),storedName=safeStorageGet(ONLINE_STORAGE_KEYS.displayName),defaultName=storedName||(monster?displayName(monster):"冒険者"),server=invite.server||safeStorageGet(ONLINE_STORAGE_KEYS.serverUrl);
@@ -90,7 +98,7 @@ export function OnlinePartyScreen(state){
 
   <main class="online-party-page">
    <section class="online-connect-panel" data-online-connect-panel>
-    <div class="online-connect-heading"><span class="online-signal-orb" aria-hidden="true"><i></i></span><div><small>HOME PC CO-OP SERVER</small><h2>友達と同じ世界へ</h2><p>広場と共闘探索だけを追加する独立機能です。通常ゲームとセーブは今まで通り遊べます。</p></div></div>
+    <div class="online-connect-heading"><span class="online-signal-orb" aria-hidden="true"><i></i></span><div><small>HOME PC CO-OP SERVER</small><h2>友達と同じ世界へ</h2><p>広場・共闘探索・共闘バトルを追加する独立機能です。通常ゲームとセーブは今まで通り遊べます。</p></div></div>
     <div class="online-identity-card"><div><small>あなたのフレンドID</small><strong data-online-friend-id>${identity.friendId}</strong></div><button type="button" data-copy-friend-id>コピー</button></div>
     <label class="online-field"><span>表示名</span><input type="text" data-online-display-name maxlength="16" value="${escapeHtml(defaultName)}" autocomplete="nickname"></label>
     <label class="online-field"><span>サーバーURL</span><input type="url" inputmode="url" data-online-server-url value="${escapeHtml(server)}" placeholder="https://xxxxx.trycloudflare.com" autocapitalize="none" autocomplete="url"></label>
@@ -117,11 +125,11 @@ export function OnlinePartyScreen(state){
      </div>
      <div class="online-mobile-controls" aria-label="広場の移動操作"><button data-online-move="up" aria-label="上">▲</button><button data-online-move="left" aria-label="左">◀</button><button data-online-move="down" aria-label="下">▼</button><button data-online-move="right" aria-label="右">▶</button></div>
      <section class="online-coop-lobby" data-online-coop-lobby>
-      <header><span class="online-coop-crest" aria-hidden="true">⚔</span><div><small>CO-OP READY ROOM</small><h3>共闘準備室</h3><p>1人1体を操作して、同じダンジョンを探索します。</p></div><em data-online-leader-label>リーダー選択</em></header>
+      <header><span class="online-coop-crest" aria-hidden="true">⚔</span><div><small>CO-OP READY ROOM</small><h3>共闘準備室</h3><p>1人1体を操作して、探索と戦闘を4人で共有します。</p></div><em data-online-leader-label>リーダー選択</em></header>
       <div class="online-floor-selector"><button type="button" data-online-floor-down aria-label="10階下げる">−10</button><label><small>挑戦階層</small><input type="number" min="1" max="10000" inputmode="numeric" data-online-floor value="1"><b>F</b></label><button type="button" data-online-floor-up aria-label="10階上げる">＋10</button></div>
       <div class="online-ready-grid" data-online-ready-grid></div>
       <div class="online-ready-actions"><button type="button" data-online-ready><i></i><span><small>READY CHECK</small><b>準備完了にする</b></span></button><button type="button" class="online-start-expedition" data-online-start-expedition disabled><span class="online-button-glint"></span><small>LEADER COMMAND</small><b>共闘探索へ出発</b></button></div>
-      <p class="online-coop-rule">全員が準備完了すると出発できます。探索の宝箱・遺骨・祭壇・出口は全員で共有されます。</p>
+      <p class="online-coop-rule">全員が準備完了すると出発できます。探索物・敵・戦闘結果は全員で同期され、報酬と捕獲判定は個別です。</p>
      </section>
      <div class="online-social-bar"><div class="online-preset-chat"><button type="button" data-online-chat="hello">よろしく！</button><button type="button" data-online-chat="ready">準備OK！</button><button type="button" data-online-chat="follow">ついてきて！</button><button type="button" data-online-chat="thanks">ありがとう！</button></div><div class="online-stamps"><button type="button" data-online-emote="wave" data-keep-emoji aria-label="手を振る">👋</button><button type="button" data-online-emote="cheer" data-keep-emoji aria-label="喜ぶ">✨</button><button type="button" data-online-emote="heart" data-keep-emoji aria-label="ハート">❤</button><button type="button" data-online-emote="surprise" data-keep-emoji aria-label="驚く">!!</button></div></div>
     </div>
@@ -130,8 +138,21 @@ export function OnlinePartyScreen(state){
      <div class="online-dungeon-viewport" data-online-dungeon-viewport tabindex="0" aria-label="共闘ダンジョン。通路をタップまたは方向キーで移動">
       <div class="online-dungeon-board" data-online-dungeon-board><div class="online-dungeon-grid" data-online-dungeon-grid></div><div class="online-dungeon-object-layer" data-online-dungeon-objects></div><div class="online-dungeon-player-layer" data-online-dungeon-players></div></div>
       <div class="online-expedition-event" data-online-expedition-event hidden><small>PARTY DISCOVERY</small><b></b><span></span></div>
-      <div class="online-dungeon-legend"><span><i class="chest"></i>宝箱</span><span><i class="bone"></i>遺骨</span><span><i class="shrine"></i>祭壇</span><span><i class="exit"></i>出口</span></div>
+      <div class="online-dungeon-legend"><span><i class="chest"></i>宝箱</span><span><i class="bone"></i>遺骨</span><span><i class="shrine"></i>祭壇</span><span><i class="encounter"></i>魔物</span><span><i class="exit"></i>出口</span></div>
      </div>
+     <section class="online-coop-battle" data-online-coop-battle hidden>
+      <header class="online-battle-header"><div><small>SERVER SYNCHRONIZED BATTLE</small><h3>共闘バトル</h3></div><strong>ROUND <b data-online-battle-round>1</b></strong><div class="online-battle-speed" data-online-battle-speed><button data-online-battle-speed-value="0.5">×0.5</button><button data-online-battle-speed-value="1">×1</button><button data-online-battle-speed-value="2">×2</button></div></header>
+      <div class="online-battle-banner" data-online-battle-banner hidden><small>CO-OP RESONANCE</small><b></b><span></span></div>
+      <div class="online-battle-enemies" data-online-battle-enemies></div>
+      <div class="online-battle-party" data-online-battle-party></div>
+      <div class="online-battle-command" data-online-battle-command>
+       <div class="online-battle-decision"><span>行動決定まで</span><strong data-online-battle-countdown>15.0</strong><small data-online-battle-waiting>仲間の入力を待っています</small></div>
+       <div class="online-battle-actions"><button data-online-battle-action="attack"><b>⚔</b><span>たたかう</span></button><button data-online-battle-action="guard"><b>🛡</b><span>ガード</span></button><button data-online-battle-action="skill"><b>📖</b><span>スキル</span></button><button data-online-battle-action="item"><b>🧪</b><span>応急薬</span></button><button data-online-battle-action="capture"><b>🔮</b><span>捕獲</span></button></div>
+       <div class="online-battle-skills" data-online-battle-skills hidden></div>
+       <p class="online-battle-target-note" data-online-battle-target-note>攻撃する敵を選択してください。</p>
+      </div>
+      <div class="online-battle-feed" data-online-battle-feed><span>敵と遭遇！全員の行動を同期しています。</span></div>
+     </section>
      <div class="online-dungeon-command"><div class="online-dungeon-pad" aria-label="ダンジョンの移動操作"><button data-online-dungeon-move="up" aria-label="上">▲</button><button data-online-dungeon-move="left" aria-label="左">◀</button><button data-online-dungeon-move="down" aria-label="下">▼</button><button data-online-dungeon-move="right" aria-label="右">▶</button></div><div><button type="button" data-online-request-return>帰還を提案</button><button type="button" class="online-complete-expedition" data-online-complete-expedition hidden>踏破を確定</button><nav class="online-dungeon-social" aria-label="共闘リアクション"><button type="button" data-online-chat="follow">ついてきて！</button><button type="button" data-online-chat="thanks">ありがとう！</button><button type="button" data-online-emote="cheer" data-keep-emoji aria-label="喜ぶ">✨</button><button type="button" data-online-emote="heart" data-keep-emoji aria-label="ハート">❤</button></nav><small data-online-return-status>リーダー帰還／過半数投票</small></div></div>
      <div class="online-expedition-feed" data-online-expedition-feed><span>仲間と同じマップへ入りました。</span></div>
     </section>
