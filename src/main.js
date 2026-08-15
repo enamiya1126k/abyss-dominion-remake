@@ -51,7 +51,7 @@ import{dangerConfig}from"./core/DangerSystem.js?v=2.10.0";
 import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=2.10.0";
 import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier}from"./core/MagicCircleSystem.js?v=2.10.0-build141";
 import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.10.0";
-import{dungeonThemeForFloor}from"./data/dungeonThemes.js?v=2.10.0-build143";
+import{dungeonThemeForFloor}from"./data/dungeonThemes.js?v=2.10.0-build144";
 import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.10.0";
 import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.10.0";
 import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.10.0";
@@ -2937,14 +2937,94 @@ function drawExploreParticles(position,color,count=7,phase=0,radius=.72){
  }
  game.ctx.restore()
 }
+function exploreTextureSample(image,blocked,theme,x,y){
+ if(!image)return null;
+ const split=Boolean(theme.atlasSplit),panelWidth=split?Math.floor(image.width/2):image.width,sourceX=split&&blocked?panelWidth:0,crop=Math.min(64,panelWidth-2,image.height-2),spanX=Math.max(1,panelWidth-crop-1),spanY=Math.max(1,image.height-crop-1),offsetX=Number(theme.cropOffsetX)||0,offsetY=Number(theme.cropOffsetY)||0;
+ return{sx:sourceX+(x*crop+offsetX)%spanX,sy:(y*crop+offsetY)%spanY,crop}
+}
+function drawExploreTextureSample(image,blocked,theme,x,y,dx,dy,dw,dh){
+ const sample=exploreTextureSample(image,blocked,theme,x,y);if(!sample)return false;
+ game.ctx.drawImage(image,sample.sx,sample.sy,sample.crop,sample.crop,dx,dy,dw,dh);return true
+}
+function exploreWallExposure(world,x,y){
+ return{
+  top:world.tiles[y-1]?.[x]===0,right:world.tiles[y]?.[x+1]===0,
+  bottom:world.tiles[y+1]?.[x]===0,left:world.tiles[y]?.[x-1]===0
+ }
+}
+function drawExploreRaisedWalls(world,theme,wallTexture){
+ const c=game.ctx,size=TILE*game.camera.z,depth=size*Math.max(.22,Math.min(.42,Number(theme.wallDepth)||.31)),side=depth*.46,bevel=Math.max(2,size*.075),entries=[];
+ for(let y=0;y<world.rows;y++)for(let x=0;x<world.cols;x++){
+  if(!world.tiles[y]?.[x])continue;
+  const open=exploreWallExposure(world,x,y),sides=Object.values(open).filter(Boolean).length;if(!sides)continue;
+  const p=game.camera.world(x*TILE,y*TILE),margin=depth+side;
+  if(p.x>game.canvas.width+margin||p.y>game.canvas.height+margin||p.x+size<-margin||p.y+size<-margin)continue;
+  entries.push({x,y,p,open,sides})
+ }
+ if(!entries.length)return;
+ c.save();c.imageSmoothingEnabled=false;
+
+ // Contact shadows are painted onto the walkable side first, so the themed
+ // wall faces remain crisp while still reading as solid height at a glance.
+ for(const{p,open}of entries){
+  c.fillStyle="rgba(0,0,0,.2)";
+  if(open.bottom)c.fillRect(p.x-side*.15,p.y+size+depth*.72,size+side*.3,depth*.62);
+  if(open.top)c.fillRect(p.x-side*.08,p.y-depth*.24,size+side*.16,depth*.24);
+  if(open.left)c.fillRect(p.x-side*1.36,p.y+depth*.12,side*1.36,size+depth*.34);
+  if(open.right)c.fillRect(p.x+size,p.y+depth*.12,side*1.36,size+depth*.34);
+  c.fillStyle="rgba(0,0,0,.38)";
+  if(open.bottom)c.fillRect(p.x,p.y+size+depth*.62,size,depth*.18);
+  if(open.top)c.fillRect(p.x,p.y-depth*.08,size,depth*.1);
+  if(open.left)c.fillRect(p.x-side*.28,p.y+bevel,side*.28,size-bevel);
+  if(open.right)c.fillRect(p.x+size,p.y+bevel,side*.28,size-bevel)
+ }
+
+ for(const{x,y,p,open,sides}of entries){
+  // Front face: reuse the current biome's wall art instead of covering it
+  // with a generic stone tile. This preserves magma, ice, roots, fungi, etc.
+  if(open.bottom){
+   if(!drawExploreTextureSample(wallTexture,true,theme,x,y,p.x,p.y+size-.5,size,depth+.5)){c.fillStyle=theme.wallFace;c.fillRect(p.x,p.y+size-.5,size,depth+.5)}
+   c.save();c.globalAlpha=.58;c.fillStyle=theme.wallFace;c.fillRect(p.x,p.y+size-.5,size,depth+.5);c.restore();
+   c.fillStyle="rgba(0,0,0,.24)";c.fillRect(p.x,p.y+size+depth*.7,size,depth*.3)
+  }
+  const drawSide=(direction)=>{
+   const left=direction==="left",edge=left?p.x:p.x+size,outer=left?edge-side:edge+side;
+   c.save();c.beginPath();c.moveTo(edge,p.y+bevel*.38);c.lineTo(edge,p.y+size);c.lineTo(outer,p.y+size+depth*.3);c.lineTo(outer,p.y+depth*.3);c.closePath();c.clip();
+   const dx=left?outer:edge;if(!drawExploreTextureSample(wallTexture,true,theme,x,y,dx,p.y,side,size+depth*.32)){c.fillStyle=theme.wallFace;c.fillRect(dx,p.y,side,size+depth*.32)}
+   c.globalAlpha=.68;c.fillStyle=theme.wallFace;c.fillRect(dx,p.y,side,size+depth*.32);c.restore()
+  };
+  if(open.left)drawSide("left");if(open.right)drawSide("right");
+
+  // A bevel on the wall top makes every boundary readable, including walls
+  // below the party where a tall front face would point away from the camera.
+  c.save();c.globalAlpha=.34;
+  if(open.top){c.fillStyle=theme.wallRim;c.fillRect(p.x,p.y,size,bevel*.5)}
+  if(open.left){c.fillStyle=theme.wallRim;c.fillRect(p.x,p.y,bevel*.46,size)}
+  if(open.bottom){c.fillStyle=theme.wallFace;c.fillRect(p.x,p.y+size-bevel,size,bevel)}
+  if(open.right){c.fillStyle=theme.wallFace;c.fillRect(p.x+size-bevel,p.y,bevel,size)}
+  c.restore();
+
+  // Three- and four-sided cells become capped pillars instead of floating
+  // squares. Adjacent exposed edges receive a compact masonry corner joint.
+  const joints=[];
+  if(open.top&&open.left)joints.push([p.x,p.y]);if(open.top&&open.right)joints.push([p.x+size,p.y]);
+  if(open.bottom&&open.left)joints.push([p.x,p.y+size]);if(open.bottom&&open.right)joints.push([p.x+size,p.y+size]);
+  const joint=Math.max(3,size*.09);c.fillStyle=theme.wallJoint;c.strokeStyle=theme.wallRim;c.lineWidth=Math.max(1,game.camera.z*.85);
+  joints.forEach(([jx,jy])=>{c.fillRect(jx-joint/2,jy-joint/2,joint,joint);c.strokeRect(jx-joint/2,jy-joint/2,joint,joint)});
+  if(sides>=3){const inset=size*.19;c.save();c.fillStyle=theme.wallFace;c.globalAlpha=.76;c.fillRect(p.x+inset,p.y+inset,size-inset*2,size-inset*2);c.globalAlpha=1;c.strokeStyle=theme.wallRim;c.lineWidth=Math.max(1,game.camera.z);c.strokeRect(p.x+inset,p.y+inset,size-inset*2,size-inset*2);c.fillStyle=theme.wallJoint;const core=size*.16;c.fillRect(p.x+(size-core)/2,p.y+(size-core)/2,core,core);c.restore()}
+ }
+
+ // Continuous double-stroked rims remove tile seams and make straight runs,
+ // inner corners and pillars join as one structure at every zoom level.
+ const traceEdges=()=>{c.beginPath();for(const{p,open}of entries){if(open.top){c.moveTo(p.x,p.y);c.lineTo(p.x+size,p.y)}if(open.bottom){c.moveTo(p.x,p.y+size);c.lineTo(p.x+size,p.y+size)}if(open.left){c.moveTo(p.x,p.y);c.lineTo(p.x,p.y+size)}if(open.right){c.moveTo(p.x+size,p.y);c.lineTo(p.x+size,p.y+size)}}};
+ c.lineCap="square";c.lineJoin="miter";c.strokeStyle="rgba(0,0,0,.86)";c.lineWidth=Math.max(2,game.camera.z*3.2);traceEdges();c.stroke();
+ c.strokeStyle=theme.wallRim;c.lineWidth=Math.max(1,game.camera.z*1.25);c.shadowColor=theme.light;c.shadowBlur=Math.max(0,game.camera.z*2.2);traceEdges();c.stroke();c.restore()
+}
 function drawExploreWallArchitecture(world,theme){
  if(!theme.architecture)return;
  for(let y=0;y<world.rows;y++)for(let x=0;x<world.cols;x++){
   if(!world.tiles[y]?.[x])continue;
-  const open={
-   top:world.tiles[y-1]?.[x]===0,right:world.tiles[y]?.[x+1]===0,
-   bottom:world.tiles[y+1]?.[x]===0,left:world.tiles[y]?.[x-1]===0
-  };
+  const open=exploreWallExposure(world,x,y);
   const sides=Object.values(open).filter(Boolean).length;if(!sides)continue;
   let index=EXPLORE_ATLAS.wall,rotation=0,scale=1.58;
   if(sides>=3){index=EXPLORE_ATLAS.pillar;scale=1.55}
@@ -3062,11 +3142,11 @@ function draw(){
   if(image){
    // Keep neighbouring source samples continuous. Random crop offsets made each
    // logical cell edge visible as an unintended square grid on the dungeon.
-   const split=Boolean(theme.atlasSplit),panelWidth=split?Math.floor(image.width/2):image.width,sourceX=split&&blocked?panelWidth:0,crop=Math.min(64,panelWidth-2,image.height-2),spanX=Math.max(1,panelWidth-crop-1),spanY=Math.max(1,image.height-crop-1),sx=sourceX+(x*crop+theme.cropOffsetX)%spanX,sy=(y*crop+theme.cropOffsetY)%spanY;
-   c.drawImage(image,sx,sy,crop,crop,p.x,p.y,s+1,s+1);
+   drawExploreTextureSample(image,blocked,theme,x,y,p.x,p.y,s+1,s+1);
    c.fillStyle=blocked?theme.wall:theme.floor;c.fillRect(p.x,p.y,s+1,s+1)
   }else{c.fillStyle=blocked?palette.wall:palette.floor;c.fillRect(p.x,p.y,s+1,s+1)}
  }
+ drawExploreRaisedWalls(w,theme,wallTexture);
  drawExploreWallArchitecture(w,theme);
  drawExploreWallEdges(w,theme);
  const decorations=ensureExploreDecorations(w);
