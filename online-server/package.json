@@ -1,0 +1,15 @@
+{
+  "name": "abyss-dominion-party-server",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ABYSS DOMINION online plaza server for a home PC",
+  "engines": {"node": ">=20"},
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.3"
+  }
+}
