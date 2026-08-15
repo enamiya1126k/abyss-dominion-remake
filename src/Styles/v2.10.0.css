@@ -192,3 +192,144 @@
 @media(prefers-reduced-motion:reduce){
   .battle-resurrection-fx *,.home-rest-hotspot.home-rest-bed.needs-rest,.home-rest-hotspot.home-rest-bed.needs-rest::before,.home-rest-hotspot.home-rest-bed.needs-rest::after{animation-duration:.01ms!important;animation-iteration-count:1!important}
 }
+
+/* build142 — equipment commands use the game's metal assets instead of purple pills. */
+.equipment-screen-v2 .equipment-actions,
+.equipment-screen-v2 .equipped-slot-actions{gap:6px!important}
+.equipment-screen-v2 .equipment-command{
+ --command-accent:#94784a;
+ position:relative;
+ isolation:isolate;
+ display:grid!important;
+ grid-template-columns:28px minmax(0,1fr)!important;
+ align-items:center!important;
+ gap:8px!important;
+ min-width:0;
+ min-height:49px!important;
+ padding:6px 8px!important;
+ overflow:hidden;
+ border:7px solid transparent!important;
+ border-image:url("../../assets/ui/v2/ornate-frame.png?v=2.10.0") 14 fill / 7px stretch!important;
+ border-radius:0!important;
+ background:linear-gradient(180deg,#171719,#07080a 68%,#030405)!important;
+ color:#e8e2d7!important;
+ text-align:left!important;
+ box-shadow:inset 0 0 14px #0009,0 2px 5px #0009!important;
+ touch-action:manipulation;
+ -webkit-tap-highlight-color:transparent;
+}
+.equipment-screen-v2 .equipment-command::before{
+ content:"";
+ position:absolute;
+ z-index:-1;
+ inset:5px;
+ border-left:2px solid var(--command-accent);
+ background:linear-gradient(90deg,color-mix(in srgb,var(--command-accent) 14%,transparent),transparent 55%);
+ opacity:.92;
+ pointer-events:none;
+}
+.equipment-screen-v2 .equipment-command>i{
+ display:grid;
+ place-items:center;
+ width:27px;
+ height:27px;
+ margin:0;
+ border:1px solid color-mix(in srgb,var(--command-accent) 70%,#151515);
+ background:radial-gradient(circle,#322b20,#070809 72%);
+ box-shadow:inset 0 0 8px #000,0 0 7px color-mix(in srgb,var(--command-accent) 25%,transparent);
+}
+.equipment-screen-v2 .equipment-command .home-pixel-icon{width:20px;height:20px;filter:drop-shadow(0 1px 1px #000)}
+.equipment-screen-v2 .equipment-command>span{display:grid;min-width:0;gap:1px}
+.equipment-screen-v2 .equipment-command>span>b{overflow:hidden;color:#f0ebe0;font-size:.62rem;line-height:1.15;text-overflow:ellipsis;white-space:nowrap}
+.equipment-screen-v2 .equipment-command>span>small{overflow:hidden;color:#9f988c;font-size:.46rem;line-height:1.15;text-overflow:ellipsis;white-space:nowrap}
+.equipment-screen-v2 .equipment-command.tone-primary{--command-accent:#e0b854;border-image-source:url("../../assets/ui/v2/ornate-frame-active.png?v=2.10.0")!important;background:linear-gradient(180deg,#282113,#090908 70%,#050505)!important}
+.equipment-screen-v2 .equipment-command.tone-primary>span>b{color:#ffe6a4}
+.equipment-screen-v2 .equipment-command.tone-forge{--command-accent:#b99aeb;border-image-source:url("../../assets/ui/v2/ornate-frame-active.png?v=2.10.0")!important;background:radial-gradient(circle at 12% 50%,#4c2b6a42,transparent 38%),linear-gradient(180deg,#19151e,#08080a 72%)!important}
+.equipment-screen-v2 .equipment-command.tone-forge>span>b{color:#ead9ff}
+.equipment-screen-v2 .equipment-command.tone-quiet{--command-accent:#756d65;background:linear-gradient(180deg,#141416,#060708)!important}
+.equipment-screen-v2 .equipment-command.tone-danger{--command-accent:#9e4b46;background:linear-gradient(180deg,#211011,#080607 72%)!important}
+.equipment-screen-v2 .equipment-command.tone-danger>span>b{color:#efc5bd}
+.equipment-screen-v2 .equipment-command:active:not(:disabled){filter:brightness(1.35);transform:translateY(1px)}
+.equipment-screen-v2 .equipment-command:disabled{filter:grayscale(.75);opacity:.4!important}
+.equipment-screen-v2 .equipped-slot-actions .equipment-command{min-height:43px!important;grid-template-columns:24px minmax(0,1fr)!important;gap:5px!important;padding:4px 5px!important}
+.equipment-screen-v2 .equipped-slot-actions .equipment-command>i{width:23px;height:23px}.equipment-screen-v2 .equipped-slot-actions .equipment-command .home-pixel-icon{width:17px;height:17px}
+.equipment-screen-v2 .equipped-slot-actions .equipment-command>span>b{font-size:.5rem}.equipment-screen-v2 .equipped-slot-actions .equipment-command>span>small{font-size:.38rem}
+
+/* Dedicated blacksmith screen: no generic purple modal surfaces. */
+.equipment-affix-forge-modal{
+ z-index:126!important;
+ place-items:center!important;
+ padding:max(7px,env(safe-area-inset-top)) 7px max(7px,env(safe-area-inset-bottom))!important;
+ background:radial-gradient(circle at 50% 34%,#2f251b96,transparent 34%),linear-gradient(#020303eb,#050507f2)!important;
+ backdrop-filter:blur(9px) saturate(.66)!important;
+}
+.equipment-affix-forge{
+ --forge-rarity:#d6b767;
+ position:relative;
+ width:min(100%,720px);
+ max-height:94dvh;
+ display:grid;
+ grid-template-rows:auto minmax(0,1fr);
+ overflow:hidden;
+ border:11px solid transparent;
+ border-image:url("../../assets/ui/v2/ornate-frame.png?v=2.10.0") 14 fill / 11px stretch;
+ border-radius:0;
+ background:linear-gradient(180deg,#141414fa,#08090afa 52%,#030405fd),url("../../assets/ui/v2/panel-texture.png?v=2.10.0");
+ color:#ece8df;
+ box-shadow:0 28px 80px #000f,inset 0 0 55px #b9893514;
+ animation:affixForgeOpen .24s cubic-bezier(.18,.9,.22,1) both;
+}
+.equipment-affix-forge::before{content:"";position:absolute;z-index:0;inset:7px;border:1px solid #816a3e8f;box-shadow:inset 0 0 28px #000c;pointer-events:none}
+.affix-forge-header{
+ position:relative;
+ z-index:3;
+ min-height:67px;
+ display:grid;
+ grid-template-columns:minmax(0,1fr) 44px;
+ align-items:center;
+ gap:10px;
+ padding:10px 12px 9px;
+ border-bottom:1px solid #806941;
+ background:linear-gradient(90deg,#151515,#0b0c0d 65%,#15120d);
+}
+.affix-forge-header>div{display:grid;gap:2px;min-width:0}.affix-forge-header small{color:#a99369;font:800 .48rem/1.1 Georgia,"Yu Mincho",serif;letter-spacing:.15em}.affix-forge-header h2{margin:0;color:#f2e3bd;font:900 clamp(1.05rem,4.5vw,1.55rem)/1.15 Georgia,"Yu Mincho",serif;letter-spacing:.055em;text-shadow:0 2px #000}
+.affix-forge-header>button{width:42px;height:42px;display:grid;place-items:center;padding:0;border:7px solid transparent;border-image:url("../../assets/ui/v2/ornate-frame.png?v=2.10.0") 14 fill / 7px stretch;border-radius:0;background:#090a0b;color:#e8d39e;font-size:1.35rem;font-weight:900;box-shadow:0 3px 9px #000b}
+.affix-forge-content{position:relative;z-index:2;min-height:0;display:grid;gap:8px;padding:9px 10px 10px;overflow:auto;overscroll-behavior:contain}
+.affix-forge-equipment{position:relative;min-height:112px;display:grid;grid-template-columns:96px minmax(0,1fr);align-items:center;gap:11px;padding:9px 11px;border:1px solid #665238;background:radial-gradient(circle at 49px 50%,color-mix(in srgb,var(--forge-rarity) 21%,transparent),transparent 31%),linear-gradient(105deg,#101113,#08090b 70%,#15110b);box-shadow:inset 0 0 22px #0009}
+.affix-forge-equipment::after{content:"";position:absolute;right:8px;top:8px;width:34%;height:1px;background:linear-gradient(90deg,transparent,var(--forge-rarity))}
+.affix-forge-art{position:relative;width:88px;height:88px;display:grid;place-items:center}
+.affix-forge-art>i{position:absolute;inset:5px;border:1px solid var(--forge-rarity);border-radius:50%;opacity:.65;box-shadow:0 0 14px color-mix(in srgb,var(--forge-rarity) 45%,transparent),inset 0 0 12px #000;animation:affixForgeSigil 8s linear infinite}
+.affix-forge-art>i::before,.affix-forge-art>i::after{content:"";position:absolute;inset:11px;border:1px dashed var(--forge-rarity);border-radius:50%}.affix-forge-art>i::after{inset:23px;border-style:solid}
+.affix-forge-equipment-art,.affix-forge-equipment-art img{position:relative!important;z-index:2!important;width:72px!important;height:72px!important;max-width:72px!important;max-height:72px!important;filter:drop-shadow(0 5px 4px #000) drop-shadow(0 0 8px color-mix(in srgb,var(--forge-rarity) 52%,transparent))}
+.affix-forge-equipment>div:last-child{min-width:0;display:grid;gap:4px}.affix-forge-equipment>div>small{color:#b8a57d;font-size:.56rem}.affix-forge-equipment h3{margin:0;overflow:hidden;color:var(--forge-rarity);font:900 clamp(.88rem,4vw,1.2rem)/1.2 "Hiragino Sans","Yu Gothic UI",sans-serif;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 2px #000}.affix-forge-equipment p{margin:0;color:#a9a39a;font-size:.55rem;line-height:1.45}
+.affix-forge-sockets{display:flex;gap:6px;align-items:center;height:14px}.affix-forge-sockets i{width:10px;height:10px;border:1px solid #8c816f;background:#050607;transform:rotate(45deg);box-shadow:inset 0 0 4px #000}.affix-forge-sockets i.filled{border-color:var(--forge-rarity);background:color-mix(in srgb,var(--forge-rarity) 68%,#15121b);box-shadow:0 0 7px color-mix(in srgb,var(--forge-rarity) 72%,transparent)}
+.affix-forge-ledger{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.affix-forge-ledger article{min-width:0;display:grid;grid-template-columns:27px minmax(0,1fr);align-items:center;gap:6px;padding:7px 8px;border:1px solid #3e3b34;background:#08090a}.affix-forge-ledger article.insufficient{border-color:#753b3b;background:#170909}.affix-forge-ledger article>img,.affix-forge-ledger article>i{width:25px;height:25px;display:grid;place-items:center;object-fit:contain;font-style:normal}.affix-forge-ledger .home-pixel-icon{width:22px;height:22px}.affix-forge-ledger span{min-width:0;display:grid}.affix-forge-ledger small{color:#928b81;font-size:.44rem}.affix-forge-ledger b{overflow:hidden;color:#e4d5af;font-size:.62rem;text-overflow:ellipsis;white-space:nowrap;font-variant-numeric:tabular-nums}.affix-forge-ledger .insufficient b{color:#ff8f8f}
+.affix-forge-slots{display:grid;gap:6px;padding:8px;border:1px solid #4b4438;background:#060708}.affix-forge-slots>header{display:flex;align-items:end;justify-content:space-between;gap:8px;padding:0 2px 5px;border-bottom:1px solid #423b31}.affix-forge-slots>header>div{display:grid}.affix-forge-slots>header small{color:#8e7d5d;font:800 .42rem/1 Georgia,serif;letter-spacing:.15em}.affix-forge-slots>header b{color:#ddd3bf;font-size:.76rem}.affix-forge-slots>header>span{color:#bba36f;font-size:.5rem}.affix-forge-slots>div{display:grid;gap:5px}
+.affix-forge-slot{--affix-quality:#c9c9cd;position:relative;display:grid;grid-template-columns:25px 25px minmax(0,1fr) 88px;align-items:center;gap:7px;min-height:59px;padding:6px 7px;border:1px solid color-mix(in srgb,var(--affix-quality) 43%,#272727);border-left:3px solid var(--affix-quality);background:linear-gradient(90deg,color-mix(in srgb,var(--affix-quality) 10%,#0a0b0c),#090a0b 34%,#060708);box-shadow:inset 0 0 14px #0008}
+.affix-forge-slot.is-fixed{background:linear-gradient(90deg,#3d321a77,#0b0b0b 42%);box-shadow:inset 0 0 13px #d4ac3820,0 0 8px #d4ac3812}.affix-forge-slot.is-empty{--affix-quality:#625f59;filter:none}
+.affix-forge-index{color:#756f65;font:800 .47rem/1 Georgia,serif;letter-spacing:.04em;text-align:center}.affix-forge-rune{position:relative;width:21px;height:21px;border:1px solid var(--affix-quality);transform:rotate(45deg);box-shadow:0 0 7px color-mix(in srgb,var(--affix-quality) 42%,transparent),inset 0 0 7px #000}.affix-forge-rune::after{content:"";position:absolute;inset:5px;border:1px solid var(--affix-quality)}
+.affix-forge-slot>div{min-width:0;display:grid;gap:1px}.affix-forge-slot>div small{color:#857f75;font-size:.4rem;letter-spacing:.08em}.affix-forge-slot>div b{overflow:hidden;color:var(--affix-quality);font-size:.68rem;line-height:1.25;text-overflow:ellipsis;white-space:nowrap}.affix-forge-slot>div em{color:#918c83;font-size:.44rem;font-style:normal}
+.affix-forge-slot .affix-lock-toggle{width:88px;min-height:35px;display:grid;grid-template-columns:13px minmax(0,1fr);align-items:center;gap:4px;padding:4px 6px!important;border:6px solid transparent!important;border-image:url("../../assets/ui/v2/ornate-frame.png?v=2.10.0") 14 fill / 6px stretch!important;border-radius:0!important;background:#0b0c0d!important;color:#c9c2b5!important;font-size:.49rem!important}.affix-forge-slot .affix-lock-toggle>i{width:11px;height:11px;border:1px solid #857b6b;transform:rotate(45deg)}.affix-forge-slot .affix-lock-toggle.locked{border-image-source:url("../../assets/ui/v2/ornate-frame-active.png?v=2.10.0")!important;background:#241d0f!important;color:#ffe09a!important}.affix-forge-slot .affix-lock-toggle.locked>i{border-color:#f1c55e;background:#8a641e;box-shadow:0 0 6px #ffc64d}.affix-forge-slot .affix-lock-toggle:disabled{opacity:.32}
+.affix-forge-pending{justify-self:end;width:58px;padding:4px 6px;border:1px solid #4b4842;color:#77736c;font-size:.46rem;text-align:center}
+.affix-forge-guide{margin:0;padding:7px 9px;border-left:2px solid #806b43;background:#0b0b0b;color:#9d978d;font-size:.52rem;line-height:1.5}.affix-forge-warning{margin:0;padding:7px 9px;border:1px solid #793e3b;background:#190909;color:#ff9b91;font-size:.56rem;font-weight:900;text-align:center}
+.affix-forge-footer{position:sticky;z-index:5;bottom:-10px;display:grid;grid-template-columns:auto minmax(190px,1fr);align-items:center;gap:9px;margin:0 -2px -2px;padding:8px;border-top:1px solid #8a7040;background:linear-gradient(180deg,#0e0d0be8,#050607 28%);box-shadow:0 -9px 18px #000c}.affix-forge-footer>div{display:grid;padding-left:4px}.affix-forge-footer>div small{color:#8f7b55;font:800 .4rem/1 Georgia,serif;letter-spacing:.12em}.affix-forge-footer>div b{color:#efd18a;font-size:.72rem;font-variant-numeric:tabular-nums}.affix-forge-footer>button{min-height:51px;display:grid;grid-template-columns:30px minmax(0,1fr);align-items:center;gap:8px;padding:6px 12px;border:8px solid transparent;border-image:url("../../assets/ui/v2/ornate-frame-active.png?v=2.10.0") 14 fill / 8px stretch;border-radius:0;background:radial-gradient(circle at 24px 50%,#62428755,transparent 26%),linear-gradient(180deg,#2c2111,#0b0907);color:#ffe6a5;text-align:left;box-shadow:0 5px 16px #000b,inset 0 0 16px #c58a3220}.affix-forge-footer>button>i{display:grid;place-items:center;width:29px;height:29px}.affix-forge-footer .home-pixel-icon{width:25px;height:25px}.affix-forge-footer>button>span{display:grid}.affix-forge-footer>button b{font-size:.68rem}.affix-forge-footer>button small{color:#aa9b7c;font-size:.45rem}.affix-forge-footer>button:active:not(:disabled){filter:brightness(1.45);transform:translateY(1px)}.affix-forge-footer>button:disabled{filter:grayscale(.8);opacity:.42}
+@keyframes affixForgeOpen{from{opacity:0;transform:translateY(10px) scale(.975);filter:blur(3px)}to{opacity:1;transform:none;filter:none}}
+@keyframes affixForgeSigil{to{transform:rotate(360deg)}}
+
+@media(max-width:500px){
+ .equipment-screen-v2 .equipment-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .equipment-screen-v2 .equipment-command{grid-template-columns:25px minmax(0,1fr)!important;gap:6px!important;min-height:46px!important;padding:5px 6px!important}
+ .equipment-screen-v2 .equipment-command>i{width:24px;height:24px}.equipment-screen-v2 .equipment-command .home-pixel-icon{width:18px;height:18px}.equipment-screen-v2 .equipment-command>span>b{font-size:.56rem}.equipment-screen-v2 .equipment-command>span>small{font-size:.41rem}
+ .equipment-affix-forge{max-height:96dvh;border-width:9px;border-image-width:9px}
+ .affix-forge-header{min-height:60px;padding:8px 9px}.affix-forge-header>button{width:39px;height:39px}.affix-forge-content{padding:7px;gap:6px}
+ .affix-forge-equipment{grid-template-columns:78px minmax(0,1fr);min-height:97px;padding:7px}.affix-forge-art{width:72px;height:72px}.affix-forge-equipment-art,.affix-forge-equipment-art img{width:60px!important;height:60px!important;max-width:60px!important;max-height:60px!important}.affix-forge-equipment p{font-size:.48rem}
+ .affix-forge-ledger article{grid-template-columns:22px minmax(0,1fr);gap:4px;padding:6px 4px}.affix-forge-ledger article>img,.affix-forge-ledger article>i{width:20px;height:20px}.affix-forge-ledger .home-pixel-icon{width:19px;height:19px}.affix-forge-ledger small{font-size:.38rem}.affix-forge-ledger b{font-size:.52rem}
+ .affix-forge-slot{grid-template-columns:20px 20px minmax(0,1fr) 75px;gap:5px;min-height:56px;padding:5px}.affix-forge-rune{width:17px;height:17px}.affix-forge-slot>div b{font-size:.59rem}.affix-forge-slot>div small{font-size:.35rem}.affix-forge-slot>div em{font-size:.39rem}.affix-forge-slot .affix-lock-toggle{width:75px;min-height:33px;font-size:.43rem!important;padding-inline:4px!important}
+ .affix-forge-footer{grid-template-columns:86px minmax(0,1fr);gap:5px;padding:6px}.affix-forge-footer>button{min-height:48px;padding:5px 8px}.affix-forge-footer>button b{font-size:.59rem}.affix-forge-footer>button small{font-size:.4rem}
+}
+@media(max-width:360px){
+ .affix-forge-equipment{grid-template-columns:64px minmax(0,1fr)}.affix-forge-art{width:60px;height:60px}.affix-forge-equipment-art,.affix-forge-equipment-art img{width:50px!important;height:50px!important;max-width:50px!important;max-height:50px!important}
+ .affix-forge-slot{grid-template-columns:18px minmax(0,1fr) 70px}.affix-forge-slot>.affix-forge-rune{display:none}.affix-forge-slot .affix-lock-toggle{width:70px}.affix-forge-ledger article>img,.affix-forge-ledger article>i{display:none}.affix-forge-ledger article{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){.equipment-affix-forge,.affix-forge-art>i{animation:none!important}}
