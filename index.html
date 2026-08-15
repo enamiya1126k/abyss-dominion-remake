@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="./src/Styles/v2.5.0.css?v=2.10.0">
   <link rel="stylesheet" href="./src/Styles/v2.6.0.css?v=2.10.0">
   <link rel="stylesheet" href="./src/Styles/v2.9.0.css?v=2.10.0">
-  <link rel="stylesheet" href="./src/Styles/v2.10.0.css?v=2.10.0-build144">
+  <link rel="stylesheet" href="./src/Styles/v2.10.0.css?v=2.10.0-build145">
 </head>
 <body>
   <div id="app"></div>
@@ -47,10 +47,12 @@
   </script>
   <script type="module">
     const ASSET_VERSION = "2.10.0";
+    const ASSET_BUILD = "build145";
+    const CACHE_VERSION = `${ASSET_VERSION}-${ASSET_BUILD}`;
     const VERSION_KEY = "abyss-dominion-asset-version";
     async function refreshStaleAssets() {
       const previous = localStorage.getItem(VERSION_KEY);
-      if (previous !== ASSET_VERSION) {
+      if (previous !== CACHE_VERSION) {
         try {
           if ("caches" in window) {
             const names = await caches.keys();
@@ -63,9 +65,9 @@
         } catch (error) {
           console.warn("Cache cleanup skipped", error);
         }
-        localStorage.setItem(VERSION_KEY, ASSET_VERSION);
+        localStorage.setItem(VERSION_KEY, CACHE_VERSION);
       }
-      await import(`./src/main.js?v=${ASSET_VERSION}-build144`);
+      await import(`./src/main.js?v=${ASSET_VERSION}-${ASSET_BUILD}`);
     }
     refreshStaleAssets();
   </script>
