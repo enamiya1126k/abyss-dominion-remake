@@ -1,13 +1,20 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.9.0";
-import{displayName}from"../../models/Monster.js?v=2.9.0";
-import{SPECIES}from"../../data/species.js?v=2.9.0";
-import{TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.9.0";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.9.0";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.9.0";
-import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.9.0";
-import{monsterVisual}from"../MonsterVisual.js?v=2.9.0";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.9.0";
-import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.9.0";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.10.0";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=2.10.0";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.10.0";
+import{SPECIES}from"../../data/species.js?v=2.10.0";
+import{TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.10.0";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.10.0";
+import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.10.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.10.0";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0";
+import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.10.0";
+
+export function homeCriticalVitals(monster){
+  if(!monster)return{critical:false,hpRate:1,mpRate:1};
+  const hpMax=Math.max(1,calculatedStats(monster).hp),mpMax=Math.max(1,maxMp(monster)),hp=Math.max(0,Math.min(hpMax,Number(monster.currentHp??hpMax)||0)),mp=Math.max(0,Math.min(mpMax,Number(monster.currentMp??mpMax)||0)),hpRate=hp/hpMax,mpRate=mp/mpMax;
+  return{critical:hp<=0||hpRate<=.05||mpRate<=.05,hpRate,mpRate,hp,mp,hpMax,mpMax};
+}
 
 function scenePartySlot(monster,index,state){
   // Formation order is shared with battle: slots 1–2 are the front row and
@@ -20,11 +27,13 @@ function scenePartySlot(monster,index,state){
     </button>`;
   const species=SPECIES[monster.speciesId];
   const attribute=monster.attribute??species?.element??"neutral";
+  const vitals=homeCriticalVitals(monster),criticalReason=vitals.hp<=0?"戦闘不能":vitals.hpRate<=.05?"HP残量わずか":"MP残量わずか";
   return`
-    <button type="button" class="home-scene-unit ${positions[index]}" data-open-home-formation data-home-party-slot="${index}" data-home-party-member="${monster.id}" aria-label="${displayName(monster)}・編成スロット${index+1}">
+    <button type="button" class="home-scene-unit ${positions[index]} ${vitals.critical?"is-exhausted":""}" data-open-home-formation data-home-party-slot="${index}" data-home-party-member="${monster.id}" aria-label="${displayName(monster)}・編成スロット${index+1}${vitals.critical?`・${criticalReason}`:""}">
       <em class="home-slot-badge">${index+1}</em><span class="home-slot-attribute" data-home-attribute-help="${attribute}" title="属性相性を確認">${attributeVisual(attribute,{label:`${attribute}属性`})}</span>
       ${magicCircleMarkup(monster,state,{className:"home-character-circle"})}
-      ${monsterVisual(monster,species?.emoji??"MONSTER",{className:"home-scene-monster-visual"})}
+      ${monsterVisual(monster,species?.emoji??"MONSTER",{frame:vitals.critical?"down":"idle",className:"home-scene-monster-visual"})}
+      ${vitals.critical?`<span class="home-exhausted-state" aria-hidden="true">${criticalReason}</span>`:""}
       <span class="home-scene-name">${displayName(monster)}</span>
       <small>Lv.${monster.level}</small>
       <strong class="home-scene-power"><i>戦力</i>${formatCombatPower(monsterCombatPower(monster))}</strong>
@@ -109,6 +118,7 @@ export function HomeScreen(state){
   const completed=Boolean(state.flags?.gameClear10000);
   const phase=worldPhase(state);
   const sceneSlots=Array.from({length:4},(_,index)=>scenePartySlot(party[index],index,state)).join("");
+  const criticalCount=activeParty.filter(monster=>homeCriticalVitals(monster).critical).length;
   const eventReady=teamUnlocked||endgameUnlocked||revealed;
   const noticeCount=noticeAttentionCount(state);
   const recentMemory=state.recentBattleMemory,memoryEntries=recentMemory?.entries??[],memoryCost=homeMemoryCost(state,recentMemory);
@@ -167,8 +177,9 @@ export function HomeScreen(state){
         ${pixelIcon("formation")}<b>部隊編成</b><strong>${activeParty.length}/4</strong>
       </button>
 
-      <button type="button" id="openRest" class="home-rest-hotspot home-rest-bed" aria-label="ベッドで休息">
+      <button type="button" id="openRest" class="home-rest-hotspot home-rest-bed ${criticalCount?`needs-rest rest-level-${Math.min(4,criticalCount)}`:""}" aria-label="${criticalCount?`${criticalCount}体が限界です。ベッドで休息`:`ベッドで休息`}">
         <span class="home-rest-bed-art" aria-hidden="true"></span>
+        ${criticalCount?`<span class="home-rest-callout"><b>休息できます</b><small>限界 ${criticalCount}体</small></span>`:""}
       </button>
 
       <div class="home-party-stage" aria-label="現在の編成パーティ">

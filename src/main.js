@@ -1,65 +1,65 @@
-import{SaveService}from"./services/SaveService.js?v=2.9.0";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.9.0";
-import{AudioSystem}from"./core/AudioSystem.js?v=2.9.0";
-import{endgameCharacter}from"./data/endgameCharacters.js?v=2.9.0";
-import{SPECIES}from"./data/species.js?v=2.9.0";
-import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.9.0";
-import{attributeDamageMultiplier,attributeGuideRows,ATTRIBUTES}from"./data/attributes.js?v=2.9.0";
-import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.9.0";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.9.0";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.9.0";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.9.0";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.9.0";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.9.0";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.9.0";
-import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.9.0";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.9.0";
-import{Modal}from"./ui/components/Modal.js?v=2.9.0";
-import{pixelIcon}from"./ui/components/GameChrome.js?v=2.9.0";
-import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.9.0";
-import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.9.0";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.9.0";
-import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=2.9.0";
-import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.9.0";
-import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=2.9.0";
-import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=2.9.0";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=2.9.0";
-import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=2.9.0";
-import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=2.9.0";
-import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=2.9.0";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.9.0";
-import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.9.0";
-import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=2.9.0";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.9.0";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.9.0";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=2.9.0";
-import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.9.0";
-import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=2.9.0";
-import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=2.9.0";
-import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=2.9.0";
-import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=2.9.0";
-import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=2.9.0";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=2.9.0";
-import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.9.0";
-import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.9.0";
-import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.9.0";
-import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse,skillEffectDetails,skillEffectSummary}from"./battle/SkillSystem.js?v=2.9.0";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.9.0";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.9.0";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.9.0";
-import{dangerConfig}from"./core/DangerSystem.js?v=2.9.0";
-import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=2.9.0";
-import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier}from"./core/MagicCircleSystem.js?v=2.9.0";
-import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.9.0";
-import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.9.0";
-import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.9.0";
-import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.9.0";
-import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.9.0";
-import{monsterCombatPower,partyCombatPower,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.9.0";
-import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.9.0";
-import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.9.0";
-import{NOTICE_DEFINITIONS,DAILY_NOTICE_GIFT,markAllNoticesRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount}from"./core/NoticeSystem.js?v=2.9.0";
-import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.9.0";
+import{SaveService}from"./services/SaveService.js?v=2.10.0";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.10.0";
+import{AudioSystem}from"./core/AudioSystem.js?v=2.10.0";
+import{endgameCharacter}from"./data/endgameCharacters.js?v=2.10.0";
+import{SPECIES}from"./data/species.js?v=2.10.0";
+import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.10.0";
+import{attributeDamageMultiplier,attributeGuideRows,ATTRIBUTES}from"./data/attributes.js?v=2.10.0";
+import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.10.0";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.10.0";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.10.0";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.10.0";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.10.0";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.10.0";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.10.0";
+import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.10.0";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.10.0";
+import{Modal}from"./ui/components/Modal.js?v=2.10.0";
+import{pixelIcon}from"./ui/components/GameChrome.js?v=2.10.0";
+import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.10.0";
+import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.10.0";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.10.0";
+import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=2.10.0";
+import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.10.0";
+import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=2.10.0";
+import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=2.10.0";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=2.10.0";
+import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=2.10.0";
+import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=2.10.0";
+import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=2.10.0";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.10.0";
+import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.10.0";
+import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=2.10.0";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.10.0";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.10.0";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=2.10.0";
+import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.10.0";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=2.10.0";
+import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=2.10.0";
+import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=2.10.0";
+import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=2.10.0";
+import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=2.10.0";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=2.10.0";
+import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.10.0";
+import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.10.0";
+import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.10.0";
+import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse,skillEffectDetails,skillEffectSummary}from"./battle/SkillSystem.js?v=2.10.0";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.10.0";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.10.0";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.10.0";
+import{dangerConfig}from"./core/DangerSystem.js?v=2.10.0";
+import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=2.10.0";
+import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier}from"./core/MagicCircleSystem.js?v=2.10.0";
+import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.10.0";
+import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.10.0";
+import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.10.0";
+import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.10.0";
+import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.10.0";
+import{monsterCombatPower,partyCombatPower,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.10.0";
+import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.10.0";
+import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.10.0";
+import{NOTICE_DEFINITIONS,DAILY_NOTICE_GIFT,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount}from"./core/NoticeSystem.js?v=2.10.0";
+import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.10.0";
 
 const TILE=88,COLS=39,ROWS=39,app=document.getElementById("app"),save=new SaveService(),audio=new AudioSystem(()=>save.state.settings);
 let screen="home",selected=null,equipmentTarget=null,equipmentFocusItemId=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",inventoryCategory="all",inventorySort="rarity",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",skillNavigationOrigin="home",inventoryNavigationOrigin="home",settingsNavigationOrigin="home",detailNavigationOrigin="monsters",formationOrigin="home",lastExploreCombatPower=null;
@@ -594,18 +594,20 @@ function openUnavailableHomeFeature(title,icon){
 }
 function openNoticeCenter(){
  const noticeState=normalizeNoticeState(save.state),readIds=new Set(noticeState.readIds);
- const daily=dailyNoticeGiftStatus(save.state),dailyRow=`<article class="home-notice-card daily-gift ${daily.available?"unread":"read"}" data-notice-kind="gift"><span>🎁</span><div><small class="notice-type gift">毎日配布</small><b>本日のログイン支援物資</b><small>捕獲結晶 ×${DAILY_NOTICE_GIFT.captureCrystals}・魔晶石 ×${DAILY_NOTICE_GIFT.crystals}<br>日本時間23:59まで。当日分のみ受け取れます。</small></div>${daily.available?'<button type="button" class="notice-gift-claim" data-claim-daily-gift>受け取る</button>':'<em class="notice-gift-claimed">受取済</em>'}</article>`;
+ const daily=dailyNoticeGiftStatus(save.state),dailyRow=`<article class="home-notice-card daily-gift ${daily.available?"unread":"read"}" data-notice-kind="gift"><span class="notice-card-icon">🎁</span><div class="notice-card-copy"><span class="notice-card-meta"><small class="notice-type gift">毎日配布</small><time>本日 23:59まで</time></span><b>本日のログイン支援物資</b><small>捕獲結晶 ×${DAILY_NOTICE_GIFT.captureCrystals}・魔晶石 ×${DAILY_NOTICE_GIFT.crystals}<br>当日分のみ受け取れます。未受取分は翌日に持ち越されません。</small></div>${daily.available?'<button type="button" class="notice-gift-claim" data-claim-daily-gift>受け取る</button>':'<em class="notice-gift-claimed">受取済</em>'}</article>`;
  const rows=dailyRow+NOTICE_DEFINITIONS.map(notice=>{
-  const unread=!readIds.has(notice.id),tag=notice.action?"button":"article";
-  return`<${tag}${tag==="button"?' type="button"':""} class="home-notice-card ${unread?"unread":"read"}" data-notice-id="${notice.id}" data-notice-kind="${notice.kind}"${notice.action?` data-home-notice="${notice.action}"`:""}><span>${notice.icon}</span><div><small class="notice-type ${notice.kind}">${notice.label}</small><b>${notice.title}</b><small>${notice.body}</small></div><em>${unread?"NEW":notice.action?"›":"✓"}</em></${tag}>`;
+  const unread=!readIds.has(notice.id),details=(notice.details??[]).map(line=>`<li>${line}</li>`).join("");
+  return`<article class="home-notice-card notice-entry ${unread?"unread":"read"}" data-notice-id="${notice.id}" data-notice-kind="${notice.kind}"><button type="button" class="notice-card-toggle" data-notice-toggle="${notice.id}" aria-expanded="false"><span class="notice-card-icon">${notice.icon}</span><span class="notice-card-copy"><span class="notice-card-meta"><small class="notice-type ${notice.kind}">${notice.label}</small><time>${String(notice.publishedAt??"").replaceAll("-",".")}</time></span><b>${notice.title}</b><small>${notice.body}</small></span><em>${unread?"NEW":"＋"}</em></button><div class="notice-card-detail" data-notice-detail="${notice.id}" hidden><p>${notice.body}</p>${details?`<ul>${details}</ul>`:""}${notice.action?`<button type="button" class="notice-detail-action" data-home-notice="${notice.action}">${notice.action==="tutorial"?"遊び方を開く":"図鑑を開く"}</button>`:""}</div></article>`;
  }).join("");
- app.insertAdjacentHTML("beforeend",Modal("お知らせ",`<div class="notice-center-v2"><div class="notice-tabs"><button type="button" data-notice-filter="all" class="active">すべて</button><button type="button" data-notice-filter="gift">配布</button><button type="button" data-notice-filter="event">イベント</button><button type="button" data-notice-filter="update">更新</button><button type="button" data-notice-filter="maintenance">保守</button></div><div class="home-notice-list">${rows}</div><small class="notice-footer">毎日配布は当日中に受取ボタンを押した分だけ獲得できます。未受取分は翌日に持ち越されません。</small></div>`,"閉じる"));
+ const counts={gift:1,event:NOTICE_DEFINITIONS.filter(notice=>notice.kind==="event").length,update:NOTICE_DEFINITIONS.filter(notice=>notice.kind==="update").length,maintenance:NOTICE_DEFINITIONS.filter(notice=>notice.kind==="maintenance").length},tab=(id,label,count)=>`<button type="button" role="tab" data-notice-filter="${id}" class="${id==="all"?"active":""}" aria-selected="${id==="all"}"><span>${label}</span><small>${count}</small></button>`;
+ app.insertAdjacentHTML("beforeend",Modal("お知らせ",`<div class="notice-center-v2"><div class="notice-tabs" role="tablist" aria-label="お知らせ区分">${tab("all","すべて",1+NOTICE_DEFINITIONS.length)}${tab("gift","配布",counts.gift)}${tab("event","イベント",counts.event)}${tab("update","更新",counts.update)}${tab("maintenance","保守",counts.maintenance)}</div><div class="home-notice-list">${rows}<div class="notice-empty" hidden><span>📭</span><b>該当するお知らせはありません</b><small>別の区分を選んでください。</small></div></div><small class="notice-footer">お知らせをタップすると詳細を確認できます。</small></div>`,"閉じる"));
  const modal=topModal();
  modal.classList.add("notice-modal-v2");
- markAllNoticesRead(save.state);save.save();
  const homeNoticeButton=document.getElementById("openNoticeCenter");
  const refreshNoticeButton=()=>{const count=noticeAttentionCount(save.state);homeNoticeButton?.classList.toggle("ready",count>0);if(homeNoticeButton?.querySelector("small"))homeNoticeButton.querySelector("small").textContent=count?`未読 ${count}`:"確認済み";if(count&&!homeNoticeButton?.querySelector(".home-notification-dot"))homeNoticeButton?.insertAdjacentHTML("afterbegin",'<i class="home-notification-dot"></i>');if(!count)homeNoticeButton?.querySelector(".home-notification-dot")?.remove()};refreshNoticeButton();
- modal.querySelectorAll("[data-notice-filter]").forEach(tab=>tab.addEventListener("click",()=>{modal.querySelectorAll("[data-notice-filter]").forEach(entry=>entry.classList.toggle("active",entry===tab));modal.querySelectorAll("[data-notice-kind]").forEach(entry=>entry.hidden=tab.dataset.noticeFilter!=="all"&&entry.dataset.noticeKind!==tab.dataset.noticeFilter)}));
+ const syncNoticeEmpty=()=>{const visible=[...modal.querySelectorAll("[data-notice-kind]")].filter(entry=>!entry.hidden);modal.querySelector(".notice-empty").hidden=visible.length>0};
+ modal.querySelectorAll("[data-notice-filter]").forEach(filterTab=>filterTab.addEventListener("click",()=>{modal.querySelectorAll("[data-notice-filter]").forEach(entry=>{const active=entry===filterTab;entry.classList.toggle("active",active);entry.setAttribute("aria-selected",String(active))});modal.querySelectorAll("[data-notice-kind]").forEach(entry=>entry.hidden=filterTab.dataset.noticeFilter!=="all"&&entry.dataset.noticeKind!==filterTab.dataset.noticeFilter);syncNoticeEmpty()}));
+ modal.querySelectorAll("[data-notice-toggle]").forEach(toggle=>toggle.addEventListener("click",()=>{const id=toggle.dataset.noticeToggle,detail=modal.querySelector(`[data-notice-detail="${id}"]`),open=toggle.getAttribute("aria-expanded")!=="true";modal.querySelectorAll("[data-notice-toggle]").forEach(other=>{if(other===toggle)return;other.setAttribute("aria-expanded","false");const otherDetail=modal.querySelector(`[data-notice-detail="${other.dataset.noticeToggle}"]`);if(otherDetail)otherDetail.hidden=true});toggle.setAttribute("aria-expanded",String(open));if(detail)detail.hidden=!open;const card=toggle.closest(".home-notice-card");if(card?.classList.contains("unread")){markNoticeRead(save.state,id);save.save();card.classList.remove("unread");card.classList.add("read");toggle.querySelector(":scope > em").textContent=open?"−":"＋";refreshNoticeButton()}else toggle.querySelector(":scope > em").textContent=open?"−":"＋"}));
  modal.querySelector('[data-home-notice="tutorial"]')?.addEventListener("click",()=>{modal.remove();openTutorialBook()});
  modal.querySelector('[data-home-notice="codex"]')?.addEventListener("click",()=>{modal.remove();openCodexHub()});
  modal.querySelector("[data-claim-daily-gift]")?.addEventListener("click",event=>{const result=claimDailyNoticeGift(save.state);if(!result.ok)return showToast("本日分は受取済みです");save.save();event.currentTarget.outerHTML='<em class="notice-gift-claimed">受取済</em>';refreshNoticeButton();showResourceToast("capture",DAILY_NOTICE_GIFT.captureCrystals);setTimeout(()=>showResourceToast("crystal",DAILY_NOTICE_GIFT.crystals),380);showToast(`毎日配布：捕獲結晶×${DAILY_NOTICE_GIFT.captureCrystals}・魔晶石×${DAILY_NOTICE_GIFT.crystals}`)});
@@ -2531,14 +2533,26 @@ const ENEMY_EQUIPMENT_SUBSLOTS=Object.freeze([
 ]);
 function prepareEnemyEntry(entry,floor,{forceGear=false}={}){
  const source={...entry},f=Math.max(1,Math.floor(Number(floor)||1)),species=SPECIES[source.speciesId]??{},rank=source.faction??species.rarity??"N";
- const reroll=source.enemyLoadoutVersion!==2,holder=forceGear||source.equipped===true||(!reroll?Boolean(source.equipped):Math.random()<equipmentHolderRateForFloor(f));
+ const reroll=source.enemyLoadoutVersion!==3,holder=forceGear||source.equipped===true||(!reroll?Boolean(source.equipped):Math.random()<equipmentHolderRateForFloor(f));
  const slots=holder?equipmentSlotsForFloor(f):0,rarity=holder?rollEnemyEquipmentRarity(f,rank):null,gearLevel=holder?enemyEquipmentLevelForFloor(f,{rank,boss:Boolean(source.boss)}):0;
  let enemyGear=Array.isArray(source.enemyGear)?source.enemyGear:[];
  if(holder&&(!enemyGear.length||reroll))enemyGear=ENEMY_EQUIPMENT_SUBSLOTS.slice(0,slots).map(([subslot,slot])=>{
   const item=createEquipment(slot,{rarity});item.level=gearLevel;item.plus=f>=50?Math.min(99,Math.max(10,Math.floor(f/5))):Math.min(9,Math.floor(f/10));item.enemySubslot=subslot;item.enemySocketRarity=f>=50?"LR":rarity;item.obtainedFloor=f;item.obtainedMethod="enemyLoadout";return item
  });
  const circle=Object.prototype.hasOwnProperty.call(source,"enemyMagicCircle")?source.enemyMagicCircle:rollEnemyMagicCircle(f,{rank});
- return{...source,enemyFloor:f,equipped:holder,gear:holder?(source.gear??enemyGear[0]??null):null,enemyGear:holder?enemyGear:[],enemyEquipmentSlots:slots,enemyEquipmentLevel:holder?gearLevel:0,enemyEquipmentRarity:rarity,enemySocketRarity:holder&&f>=50?"LR":rarity,enemyMagicCircle:circle,enemyLoadoutVersion:2};
+ return{...source,enemyFloor:f,equipped:holder,gear:holder?(source.gear??enemyGear[0]??null):null,enemyGear:holder?enemyGear:[],enemyEquipmentSlots:slots,enemyEquipmentLevel:holder?gearLevel:0,enemyEquipmentRarity:rarity,enemySocketRarity:holder&&f>=50?"LR":rarity,enemyMagicCircle:circle,enemyLoadoutVersion:3};
+}
+function ensureUniqueEnemyMagicCircles(entries,floor){
+ const used=new Set(),f=Math.max(1,Math.floor(Number(floor)||1)),mandatoryRanks=new Set(["LR","神話","深淵","十神","abyss","tenGod"]);
+ return entries.map(entry=>{
+  const species=SPECIES[entry?.speciesId]??{},rank=entry?.faction??species.rarity??"N";
+  let circle=entry?.enemyMagicCircle??null;
+  if((!circle&&(f>=100||mandatoryRanks.has(String(rank))))||(circle?.id&&used.has(circle.id))){
+   circle=rollEnemyMagicCircle(f,{rank,force:true,excludeIds:[...used]});
+  }
+  if(circle?.id)used.add(circle.id);
+  return circle===entry?.enemyMagicCircle?entry:{...entry,enemyMagicCircle:circle};
+ });
 }
 function speciesPoolForFloor(floor){
  const biome=biomeForFloor(floor);
@@ -2784,7 +2798,7 @@ function openChest(c){
  c.open=true;save.state.player.openedChests[floor]??=[];
  if(!save.state.player.openedChests[floor].includes(c.id))save.state.player.openedChests[floor].push(c.id);
  recordBiomeChest(save.state,floor,c.id);save.state.records.chests++;
- if(c.mimic){save.save();game.player.path=[];const warning=pauseModal("！？",'<p>宝箱が牙を剥いた！</p><p class="muted">HPはわずか5。ただし一巡に1しか削れず、噛みつきは致命的だ。</p>');game.world.encountering=true;const generation=exploreActionGeneration;setTimeout(()=>{if(generation!==exploreActionGeneration||!game?.running||!save.state.player.inRun)return;warning?.remove();game.world.encountering=false;game.paused=false;beginEncounter(prepareEnemyEntry({speciesId:"mimic",level:enemyLevelForFloor(floor),boss:false},floor,{forceGear:true}))},650);return}
+ if(c.mimic){save.save();game.player.path=[];const warning=pauseModal("！？",'<p>宝箱が牙を剥いた！</p><p class="muted">HPはわずか5。仲間ごとに一巡1しか削れず、噛みつきは致命的だ。</p>');game.world.encountering=true;const generation=exploreActionGeneration;setTimeout(()=>{if(generation!==exploreActionGeneration||!game?.running||!save.state.player.inRun)return;warning?.remove();game.world.encountering=false;game.paused=false;beginEncounter(prepareEnemyEntry({speciesId:"mimic",level:enemyLevelForFloor(floor),boss:false},floor,{forceGear:true}))},650);return}
  let title="宝箱",body="";
  if(c.kind==="apple"){save.state.inventory.potions++;title="🪎 深淵の果実";body="回復薬を1個獲得"}
  else if(c.kind==="box"){
@@ -2800,11 +2814,11 @@ function explorationPartyMembers(){return(save.state.party??[]).map(id=>save.sta
 const explorationSpriteCache=new Map();
 const explorationTextureCache=new Map();
 const EXPLORE_TEXTURE_URLS={
- floor:"assets/ui/explore/dungeon-floor.png?v=2.9.0",
- wall:"assets/ui/explore/dungeon-wall.png?v=2.9.0",
- stairs:"assets/ui/explore/dungeon-stairs-arch.png?v=2.9.0",
- props:"assets/ui/explore/dungeon-props-atlas.png?v=2.9.0",
- usedWater:"assets/ui/explore/empty-water-basin.png?v=2.9.0"
+ floor:"assets/ui/explore/dungeon-floor.png?v=2.10.0",
+ wall:"assets/ui/explore/dungeon-wall.png?v=2.10.0",
+ stairs:"assets/ui/explore/dungeon-stairs-arch.png?v=2.10.0",
+ props:"assets/ui/explore/dungeon-props-atlas.png?v=2.10.0",
+ usedWater:"assets/ui/explore/empty-water-basin.png?v=2.10.0"
 };
 const EXPLORE_ATLAS=Object.freeze({
  floor:0,wall:1,corner:2,pillar:3,entrance:4,chestClosed:5,chestOpen:6,barrel:7,
@@ -3150,9 +3164,21 @@ async function animateBattleRecoveryGauge(entry){
  fill.style.transition=`width ${duration}ms cubic-bezier(.2,.76,.18,1)`;fill.style.width=`${toRate}%`;
  await new Promise(resolve=>{const started=performance.now(),finish=()=>{fill.style.transition="none";fill.style.width=`${toRate}%`;label.textContent=`${resource.toUpperCase()} ${state.current}/${state.max}`;bar.classList.remove(`is-${kind}-recovering`);element.classList.remove(`fx-${kind}-recover`);flash.remove();resolve()},tick=now=>{if(!bar.isConnected)return finish();const progress=Math.min(1,(now-started)/Math.max(1,duration)),eased=1-Math.pow(1-progress,3),shown=Math.min(state.current,Math.round(fromValue+gain*eased));label.textContent=`${resource.toUpperCase()} ${shown}/${state.max}`;if(progress<1)requestAnimationFrame(tick);else finish()};requestAnimationFrame(tick)});
 }
+async function playBattleResurrectionFx(revives,recoveries){
+ const arena=document.querySelector(".battle-arena");
+ if(!arena||!revives.length){await Promise.all(recoveries.map(animateBattleRecoveryGauge));return}
+ const arenaRect=arena.getBoundingClientRect(),enemyCount=revives.filter(entry=>(battle.enemies??[]).some(enemy=>enemy.id===entry.target)).length,enemySide=enemyCount===revives.length,sideTotal=enemySide?(battle.enemies??[]).length:(battle.party??[]).length,allSide=revives.length>1&&revives.length===sideTotal,title=allSide?"全軍復活":revives.length>1?"連鎖蘇生":enemySide?"再構成":"蘇生";
+ const fx=document.createElement("div");fx.className=`battle-resurrection-fx ${enemySide?"enemy-revival":"ally-revival"} ${revives.length>1?"multi-revival":"single-revival"}`;fx.setAttribute("role","status");fx.setAttribute("aria-live","assertive");fx.style.setProperty("--revive-rise",`${scaledBattleDelay(920)}ms`);fx.innerHTML=`<span class="resurrection-screen-dim"></span><strong class="resurrection-title"><small>${enemySide?"ABYSS RECONSTRUCTION":"SOUL RETURN"}</small>${title}<em>${revives.length>1?`${revives.length}体 同時帰還`:"生命反応、再点火"}</em></strong>`;
+ for(const [index,entry] of revives.entries()){
+  const element=battleTarget(entry.target);if(!element)continue;setMonsterVisualFrame(element,"down");element.classList.add("is-reviving");const rect=element.getBoundingClientRect(),x=rect.left-arenaRect.left+rect.width/2,y=rect.top-arenaRect.top+rect.height*.58,column=document.createElement("span"),isEnemy=(battle.enemies??[]).some(enemy=>enemy.id===entry.target);column.className=`resurrection-column ${isEnemy?"enemy":"ally"}`;column.style.setProperty("--revive-x",`${x}px`);column.style.setProperty("--revive-y",`${y}px`);column.style.setProperty("--revive-delay",`${index*45}ms`);column.innerHTML=`<i class="resurrection-pillar"></i><i class="resurrection-sigil"><u></u><u></u><u></u></i><i class="resurrection-ground-ring"></i><span class="resurrection-particles">${Array.from({length:10},(_,particle)=>`<u style="--particle-index:${particle}"></u>`).join("")}</span>`;fx.appendChild(column);
+ }
+ arena.appendChild(fx);audio.sfx(enemySide?"boss":"heal");requestAnimationFrame(()=>fx.classList.add("is-active"));await wait(300);fx.classList.add("is-awakening");battleFlash("revive");
+ for(const entry of revives){const element=battleTarget(entry.target);if(!element)continue;setMonsterVisualFrame(element,"idle");element.classList.add("is-revived");burstParticles(entry.target,(battle.enemies??[]).some(enemy=>enemy.id===entry.target)?"enemy":"heal",18)}
+ const gauges=Promise.all(recoveries.map(animateBattleRecoveryGauge));await Promise.all([gauges,wait(920)]);fx.classList.add("is-leaving");await wait(260);fx.remove();for(const entry of revives)battleTarget(entry.target)?.classList.remove("is-reviving","is-revived");
+}
 async function flushBattleRecoveries(){
  const entries=Object.values(battle?._pendingRecoveries??{});if(battle)battle._pendingRecoveries={};
- if(entries.length){audio.sfx("heal");await Promise.all(entries.map(animateBattleRecoveryGauge))}
+ if(entries.length){const revives=entries.filter(entry=>entry.resource==="hp"&&entry.from<=0&&entry.to>0),reviveIds=new Set(revives.map(entry=>entry.target)),reviveRecoveries=entries.filter(entry=>reviveIds.has(entry.target)),ordinary=entries.filter(entry=>!reviveIds.has(entry.target));if(revives.length)await Promise.all([playBattleResurrectionFx(revives,reviveRecoveries),...ordinary.map(animateBattleRecoveryGauge)]);else{audio.sfx("heal");await Promise.all(entries.map(animateBattleRecoveryGauge))}}
  await flushMagicCircleEvents();
 }
 function hpDrainDuration(fromRate,toRate){
@@ -3246,9 +3272,9 @@ async function magicCircleActivationFx(source,profile,headline,detail="",{digits
  const arena=document.querySelector(".battle-arena");if(!arena||!profile||profile.id==="none")return;
  arena.querySelector(".magic-circle-activation")?.remove();
  const sourceId=typeof source==="object"?source?.id:source,target=battleTarget(sourceId),enemySide=Boolean((battle?.enemies??[]).some(enemy=>enemy.id===sourceId)),name=typeof source==="object"?(source.name??displayName(source)):"魔法陣";
- const tone=String(profile.tone??"violet").replace(/[^a-z0-9-]/gi,""),finalDigits=digits==null?null:String(digits).padStart(3,"0").slice(-3),jackpot=Boolean(finalDigits&&finalDigits!=="000"&&(new Set(finalDigits).size===1||Number(finalDigits)>=900));
+ const tone=String(profile.tone??"violet").replace(/[^a-z0-9-]/gi,""),finalDigits=digits==null?null:String(digits).padStart(3,"0").slice(-3),instantKill=finalDigits==="999",jackpot=Boolean(finalDigits&&finalDigits!=="000"&&(new Set(finalDigits).size===1||Number(finalDigits)>=900));
  const digitMarkup=finalDigits?`<div class="magic-circle-roulette" aria-label="抽選結果 ${finalDigits}">${[...finalDigits].map((digit,index)=>`<i data-circle-final-digit="${digit}" style="--circle-digit-index:${index}">0</i>`).join("")}</div>`:"";
- const el=document.createElement("div");el.className=`magic-circle-activation tone-${tone} ${enemySide?"enemy-circle":"ally-circle"} ${danger?"danger":""} ${finalDigits?"slot-result":""} ${jackpot?"jackpot":""}`;el.setAttribute("role","status");el.setAttribute("aria-live","assertive");el.innerHTML=`<span class="magic-circle-activation-sigil"><img src="${escapeAttribute(profile.asset)}" alt=""><i></i></span><span class="magic-circle-activation-copy"><small>${enemySide?"敵魔法陣 発動":"味方魔法陣 発動"}・${escapeAttribute(name)}</small><strong>${escapeAttribute(profile.name)}${profile.level?` Lv.${profile.level}`:""}</strong>${digitMarkup}<b>${escapeAttribute(headline)}</b>${detail?`<em>${escapeAttribute(detail)}</em>`:""}</span>`;
+ const el=document.createElement("div");el.className=`magic-circle-activation tone-${tone} ${enemySide?"enemy-circle":"ally-circle"} ${danger?"danger":""} ${finalDigits?"slot-result":""} ${jackpot?"jackpot":""} ${instantKill?"instant-kill":""}`;el.setAttribute("role","status");el.setAttribute("aria-live","assertive");el.innerHTML=`<span class="magic-circle-activation-sigil"><img src="${escapeAttribute(profile.asset)}" alt=""><i></i></span><span class="magic-circle-activation-copy"><small>${enemySide?"敵魔法陣 発動":"味方魔法陣 発動"}・${escapeAttribute(name)}</small><strong>${escapeAttribute(profile.name)}${profile.level?` Lv.${profile.level}`:""}</strong>${digitMarkup}<b>${escapeAttribute(headline)}</b>${detail?`<em>${escapeAttribute(detail)}</em>`:""}</span>`;
  arena.appendChild(el);target?.querySelector(".magic-circle")?.classList.add("is-activating");
  if(target){const wave=document.createElement("span");wave.className=`magic-circle-activation-wave ${enemySide?"enemy":"ally"}`;wave.setAttribute("aria-hidden","true");target.appendChild(wave);setTimeout(()=>wave.remove(),scaledBattleDelay(760))}
  audio.sfx(enemySide||danger?"boss":"select");battleFlash(enemySide||danger?"danger":"magic");if(sourceId)burstParticles(sourceId,enemySide?"enemy":"mana",finalDigits?20:14);
@@ -3259,7 +3285,7 @@ async function magicCircleActivationFx(source,profile,headline,detail="",{digits
    const started=performance.now(),spinDuration=scaledBattleDelay(430),stagger=scaledBattleDelay(75),spin=now=>{const elapsed=now-started;digitNodes.forEach((node,index)=>{if(node.classList.contains("settled"))return;if(elapsed>=spinDuration+index*stagger){node.textContent=node.dataset.circleFinalDigit;node.classList.add("settled")}else node.textContent=String(Math.floor(Math.random()*10))});if(digitNodes.some(node=>!node.classList.contains("settled")))requestAnimationFrame(spin)};requestAnimationFrame(spin);
   }
  }
- await wait(duration);el.classList.add("leaving");await wait(180);target?.querySelector(".magic-circle")?.classList.remove("is-activating");el.remove();
+ await wait(Math.max(1300,duration));el.classList.add("leaving");await wait(200);target?.querySelector(".magic-circle")?.classList.remove("is-activating");el.remove();
 }
 function queueMagicCircleEvent(source,headline,detail="",options={}){
  if(!battle||!source)return;const profile=options.profile??(source.enemyMagicCircle||circleInfo(source));if(!profile||profile.id==="none")return;
@@ -3300,7 +3326,7 @@ function applyEnemyMagicCircleProfile(enemy,circle){
  return enemy;
 }
 function makeBattleEnemy(e,index=0){
- const hiddenFloor=Math.max(1,Number(e.enemyFloor??(e.memorySourceFloor||save.state.player.currentFloor))||1),prepared=e.enemyLoadoutVersion===2?e:prepareEnemyEntry(e,hiddenFloor,{forceGear:Boolean(e.boss&&hiddenFloor>=50)}),sp=SPECIES[prepared.speciesId],scaled={...prepared,level:Math.max(1,prepared.level??1)},enemy=createEnemyBattleState(sp,scaled,save.state.player.currentFloor),profile=prepared.endgameBossId?endgameCharacter(prepared.endgameBossId):null,endgameBase=endgameFactionStatMultiplier(prepared.faction??profile?.faction),mult=(Number(prepared.statMultiplier)||1)*endgameBase;
+ const hiddenFloor=Math.max(1,Number(e.enemyFloor??(e.memorySourceFloor||save.state.player.currentFloor))||1),prepared=e.enemyLoadoutVersion===3?e:prepareEnemyEntry(e,hiddenFloor,{forceGear:Boolean(e.boss&&hiddenFloor>=50)}),sp=SPECIES[prepared.speciesId],scaled={...prepared,level:Math.max(1,prepared.level??1)},enemy=createEnemyBattleState(sp,scaled,save.state.player.currentFloor),profile=prepared.endgameBossId?endgameCharacter(prepared.endgameBossId):null,endgameBase=endgameFactionStatMultiplier(prepared.faction??profile?.faction),mult=(Number(prepared.statMultiplier)||1)*endgameBase;
  enemy.dangerLevel=prepared.boss?5:prepared.speciesId==="mimic"?5:prepared.equipped?4:((prepared.level??1)>save.state.player.currentFloor+4?2:1);
  if(prepared.nameOverride)enemy.name=prepared.nameOverride;
  applyEnemyMultiplier(enemy,mult);
@@ -3408,7 +3434,7 @@ function handleMagicCircleDeath(monster){
  if(hasCircleEffect(monster,"inheritance")){for(const ally of battle.party.filter(member=>member.currentHp>0)){applyBattleEffect(battle,ally.id,{kind:"atkUp",value:.3,turns:5},"ally");applyBattleEffect(battle,ally.id,{kind:"defUp",value:.3,turns:5},"ally");applyBattleEffect(battle,ally.id,{kind:"spdUp",value:.2,turns:5},"ally")}queueMagicCircleEvent(monster,"力を生存者へ継承","ATK・DEF +30% / SPD +20%・5ターン")}
  if(hasCircleEffect(monster,"deathDrain")){for(const enemy of aliveEnemies(battle))enemy.currentMp=Math.max(0,(enemy.currentMp??0)-Math.floor((enemy.maxMp??0)*.65));queueMagicCircleEvent(monster,"敵全体のMPを65%吸収","戦闘不能を魔力枯渇へ変換")}
 }
-function magicCircleInstantDeath(target,source=null){
+function magicCircleInstantDeath(target,source=null,{force=false}={}){
  if(!target)return false;
  const ally=Object.prototype.hasOwnProperty.call(target,"currentHp"),alive=ally?target.currentHp>0:target.hp>0;if(!alive)return false;
  if(ally&&hasCircleEffect(target,"deathMirror")&&!target._circleDeathMirrorUsed){
@@ -3416,7 +3442,7 @@ function magicCircleInstantDeath(target,source=null){
   if(source){if(Object.prototype.hasOwnProperty.call(source,"currentHp")){source.currentHp=0;handleMagicCircleDeath(source)}else if(Object.prototype.hasOwnProperty.call(source,"hp"))applyEnemyDamage(battle,source,source.hp)}
   addBattleLog(battle,`${displayName(target)}の死返しが即死を反射`);queueMagicCircleEvent(target,"即死を無効化・反射","最初の即死だけ発動");return true;
  }
- if(ally){target.currentHp=0;handleMagicCircleDeath(target)}else applyEnemyDamage(battle,target,target.hp);return false;
+ if(ally){target.currentHp=0;handleMagicCircleDeath(target)}else if(force)target.hp=0;else applyEnemyDamage(battle,target,target.hp);return false;
 }
 function captureCrystalCost(enemy){const floor=Math.max(1,Number(battle?.memorySourceFloor??save.state.player.currentFloor)||1),rarity=SPECIES[enemy?.speciesId]?.rarity??"N",rarityCost=({N:0,R:1,SR:3,SSR:7,LR:12,"神話":18})[rarity]??0;return Math.max(1,Math.min(75,1+Math.floor(floor/250)+rarityCost+(enemy?.boss?15:0)))}
 function tryUnyielding(monster){
@@ -3444,7 +3470,7 @@ function endgameIncomingDamageMultiplier(enemy,element){if(!enemy?.endgameBossId
 async function trySeriesChainAttack(monster,enemy,damage){
  const chance=affixValue(monster,"chainChance",60)/100;
  if(!chance||!enemy||enemy.hp<=0||Math.random()>=chance)return 0;
- const follow=Math.max(1,Math.floor(damage*.5)),hit=applyEnemyDamage(battle,enemy,follow);
+ const follow=Math.max(1,Math.floor(damage*.5)),hit=applyEnemyDamage(battle,enemy,follow,{sourceId:monster?.id});
  registerWeaponFinisher(monster,enemy,hit.beforeHp);recordBattleDamage(monster,hit.damage);
  addBattleLog(battle,`${displayName(monster)}の追撃 ${hit.damage}ダメージ`);
  await floatText(hit.damage?`追撃 -${hit.damage}`:"完全ガード",enemy.id,hit.damage?"skill":"guard");
@@ -3490,8 +3516,10 @@ async function prepareMagicCircleTurn(monster){
  const actionKey=`${battle.turn}:${battle.queueIndex}:${monster.id}`;
  if(circle.effect==="slot"){
   if(battle.circleTurnKeys?.[monster.id]===actionKey)return false;battle.circleTurnKeys[monster.id]=actionKey;
-  const roll=Math.floor(Math.random()*1000),multiplier=slotDamageMultiplier(roll),digits=String(roll).padStart(3,"0");battle.circleTurnMultipliers[monster.id]=multiplier;battle.busy=true;renderBattle();
-  await magicCircleActivationFx(monster,circle,multiplier===0?"行動休止":`最終ダメージ ×${multiplier.toFixed(2)}`,multiplier===0?"000停止・この行動はスキップ":"000〜999抽選結果",{digits,danger:multiplier===0,duration:820});addBattleLog(battle,`${displayName(monster)}：運命の三桁環 ${digits}${multiplier?`（×${multiplier.toFixed(2)}）`:"（行動休止）"}`);battle.busy=false;
+  const roll=Math.floor(Math.random()*1000),multiplier=slotDamageMultiplier(roll),digits=String(roll).padStart(3,"0"),instantKill=roll===999,victim=instantKill?(selectedEnemy(battle)??aliveEnemies(battle)[0]):null;battle.circleTurnMultipliers[monster.id]=multiplier;battle.busy=true;renderBattle();
+  await magicCircleActivationFx(monster,circle,instantKill?"999・即死確定":multiplier===0?"行動休止":`最終ダメージ ×${multiplier.toFixed(2)}`,instantKill&&victim?`${victim.name}の命運を断つ`:multiplier===0?"000停止・この行動はスキップ":"000〜999抽選結果",{digits,danger:multiplier===0||instantKill,duration:820});addBattleLog(battle,`${displayName(monster)}：運命の三桁環 ${digits}${instantKill?"（即死確定）":multiplier?`（×${multiplier.toFixed(2)}）`:"（行動休止）"}`);
+  if(instantKill&&victim?.hp>0){const beforeHp=victim.hp;magicCircleInstantDeath(victim,monster,{force:true});recordBattleDamage(monster,beforeHp);registerWeaponFinisher(monster,victim,beforeHp);addBattleLog(battle,`${victim.name}は999の運命に呑まれた`);await floatText("999・即死",victim.id,"critical");await animateDefeat(victim.id);battle.busy=false;battle.actionCommitted=true;renderBattle();if(!aliveEnemies(battle).length){await win(false,null);return true}await finishCurrentAction();return true}
+  battle.busy=false;
   if(multiplier===0){battle.actionCommitted=true;renderBattle();await wait(220);await finishCurrentAction();return true}renderBattle();return false;
  }
  const cue=allyMagicCircleTurnCue(monster,circle),cueKey=`${monster.id}:${circle.effect}`;if(!cue||battle.circleCueKeys?.[cueKey])return false;
@@ -3507,7 +3535,7 @@ async function prepareEnemyMagicCircleTurn(enemy){
  if(enemy._circleActivationShown)return false;enemy._circleActivationShown=true;const cue=enemyMagicCircleTurnCue(enemy,profile);battle.busy=true;renderBattle();await magicCircleActivationFx(enemy,profile,cue.headline,cue.detail,{danger:true,duration:560});addBattleLog(battle,`${enemy.name}：${profile.name}（${cue.headline}）`);battle.busy=false;renderBattle();return false;
 }
 function startBattle(encounter,options={}){
- const entries=Array.isArray(encounter)?encounter:[encounter];
+ const rawEntries=Array.isArray(encounter)?encounter:[encounter],entries=rawEntries;
  if(!options.memoryBattle&&!options.specialBattle)rememberBattleEncounter(entries);
  entries.forEach(entry=>recordBiomeEncounter(save.state,options.memoryBattle?(options.memorySourceFloor??save.state.player.currentFloor):save.state.player.currentFloor,entry.speciesId));
  const party=save.state.party.map(id=>save.state.monsters.find(monster=>monster.id===id)).filter(Boolean),synergy=partySynergy(),biomeBattle=!options.specialBattle&&!options.memoryBattle?battleBiomeForFloor(save.state.player.currentFloor):null;
@@ -3523,7 +3551,7 @@ function startBattle(encounter,options={}){
  });
  entries.forEach(entry=>save.state.codex.encounters[entry.speciesId]=(save.state.codex.encounters[entry.speciesId]??0)+1);
  save.save();
- const enemies=entries.map(makeBattleEnemy);
+ const enemies=ensureUniqueEnemyMagicCircles(entries.map(makeBattleEnemy),options.memorySourceFloor??save.state.player.currentFloor);
  const enemySynergy=attributeSynergyFor(enemies.map(enemy=>enemy.trialElement));
  enemies.forEach(enemy=>{
   const matches=enemySynergy&&normalizedElement(enemy.trialElement)===enemySynergy.element,terrain=biomeElementMultiplier(biomeBattle,enemy.trialElement),resonance=matches?1+Math.max(enemySynergy.atk??0,enemySynergy.def??0,enemySynergy.hp??0,enemySynergy.spd??0):1;
@@ -3669,10 +3697,10 @@ async function performInvincibleAllianceSkill(member,skill){
  if(skill.type==="buff"||skill.type==="stance"){applySkillEffects(skill,member,target);await floatText("連携強化","party","guard");return}
  if(skill.type==="cleanse"){battle.party.forEach(ally=>{clearNegativeAllyEffects(battle,ally.id);clearAilments(ally)});await floatText("状態回復","party","heal");return}
  if(skill.type==="mpHeal"){battle.party.filter(ally=>ally.currentHp>0).forEach(ally=>recoverBattleMp(ally,Math.floor(maxMp(ally)*(skill.mpHeal??.2)),member));await flushBattleRecoveries();await floatText("MP回復","party","heal");return}
- if(skill.type==="revive"){const ally=battle.party.filter(entry=>entry.currentHp<=0).sort((left,right)=>calculatedStats(right).hp-calculatedStats(left).hp)[0];if(ally&&reviveBattleMonster(ally,skill.revive??.35,skill.reviveMp??.25,member)){await flushBattleRecoveries();await floatText("復活",ally.id,"heal")}return}
+ if(skill.type==="revive"){const ally=battle.party.filter(entry=>entry.currentHp<=0).sort((left,right)=>calculatedStats(right).hp-calculatedStats(left).hp)[0];if(ally&&reviveBattleMonster(ally,skill.revive??.35,skill.reviveMp??.25,member))await flushBattleRecoveries();return}
  await animateAttack(member.id,true);
  const targets=skill.allEnemies?aliveEnemies(battle):[target],hits=Math.max(1,Number(skill.hits)||1);
- for(const enemy of targets){let dealt=0;for(let hit=0;hit<hits&&enemy.hp>0;hit++){const critical=Boolean(skill.guaranteedCritical)||Math.random()<Math.min(.82,.12+(skill.critBonus??0)+(stats.spd??0)*.003),ignore=Math.max(0,Math.min(.9,Number(skill.defenseIgnore)||0)),raw=skillDamage({...stats,_currentHpRatio:member.currentHp/Math.max(1,stats.hp)},{...enemy,def:enemy.def*(1-ignore),mdef:(enemy.mdef??enemy.def)*(1-ignore)},skill,critical),damage=Math.max(1,Math.floor(raw*.72*attributeDamageMultiplier(skill.element??SPECIES[member.speciesId]?.element??"neutral",SPECIES[enemy.speciesId]?.element??"neutral")*enemyDamageMultiplier(enemy)*(enemy.hiddenDamageTaken??1)*magicCircleDamageMultiplier(member))),applied=applyEnemyDamage(battle,enemy,damage);dealt+=applied.damage;recordBattleDamage(member,applied.damage);registerWeaponFinisher(member,enemy,applied.beforeHp);await animateHit(enemy.id,critical);await floatText(applied.damage?`${critical?"会心 ":""}-${applied.damage}`:"完全ガード",enemy.id,applied.damage?(critical?"critical":"skill"):"guard")}if(dealt&&skill.status&&enemy.hp>0&&Math.random()<(skill.status.chance??0))applyEnemyStatus(battle,{...skill.status,sourceMonsterId:member.id},enemy.id)}
+ for(const enemy of targets){let dealt=0;for(let hit=0;hit<hits&&enemy.hp>0;hit++){const critical=Boolean(skill.guaranteedCritical)||Math.random()<Math.min(.82,.12+(skill.critBonus??0)+(stats.spd??0)*.003),ignore=Math.max(0,Math.min(.9,Number(skill.defenseIgnore)||0)),raw=skillDamage({...stats,_currentHpRatio:member.currentHp/Math.max(1,stats.hp)},{...enemy,def:enemy.def*(1-ignore),mdef:(enemy.mdef??enemy.def)*(1-ignore)},skill,critical),damage=Math.max(1,Math.floor(raw*.72*attributeDamageMultiplier(skill.element??SPECIES[member.speciesId]?.element??"neutral",SPECIES[enemy.speciesId]?.element??"neutral")*enemyDamageMultiplier(enemy)*(enemy.hiddenDamageTaken??1)*magicCircleDamageMultiplier(member))),applied=applyEnemyDamage(battle,enemy,damage,{sourceId:member.id});dealt+=applied.damage;recordBattleDamage(member,applied.damage);registerWeaponFinisher(member,enemy,applied.beforeHp);await animateHit(enemy.id,critical);await floatText(applied.damage?`${critical?"会心 ":""}-${applied.damage}`:"完全ガード",enemy.id,applied.damage?(critical?"critical":"skill"):"guard")}if(dealt&&skill.status&&enemy.hp>0&&Math.random()<(skill.status.chance??0))applyEnemyStatus(battle,{...skill.status,sourceMonsterId:member.id},enemy.id)}
  applySkillEffects(skill,member,target);
 }
 async function triggerInvincibleAlliance(source){
@@ -3700,10 +3728,10 @@ async function command(type,skillId=null){
   else{
    const critical=Math.random()<Math.min(.95,affixCriticalChance(s,Math.min(.35,.08+(s.spd??0)*.005))+magicCircleCriticalBonus(a,1)),weapon=save.state.equipment.find(item=>item.id===a.equipment?.weaponRight),magicWeapon=weapon?.weaponType==="staff"||(weapon?.stats?.matk??0)>(weapon?.stats?.atk??0),rangedWeapon=magicWeapon||weapon?.weaponType==="bow",rearLine=battle.party.indexOf(a)>=2,formationMultiplier=rearLine?(rangedWeapon?1.08:.78):1.05,attackStat=magicWeapon?(s.matk??s.atk):s.atk,defenseStat=magicWeapon?(e.mdef??e.def):e.def;
    const base=Math.max(1,Math.floor(attackStat*(.9+Math.random()*.2)-defenseStat*.4));
-   const attackElement=a.attribute??SPECIES[a.speciesId]?.element??"neutral",targetElement=SPECIES[e.speciesId]?.element??"neutral",critMult=1.7+affixValue(a,"critDamage",150)/100,damageStats={...s,_currentHpRatio:a.currentHp/Math.max(1,s.hp)},raw=(critical?Math.floor(base*critMult):base)*formationMultiplier*affixOutgoingDamageMultiplier(damageStats,e,attackElement)*affixExecutionMultiplier(a,e),d=Math.max(1,Math.floor(raw*attributeDamageMultiplier(attackElement,targetElement)*abyssBattleMultiplier(a,"partyDamageRate")*enemyDamageMultiplier(e)*(e.hiddenDamageTaken??1)*endgameIncomingDamageMultiplier(e,attackElement)*weaponMasteryDamageMultiplier(save.state,a,e)*magicCircleDamageMultiplier(a))),applied=applyEnemyDamage(battle,e,d);recordBattleDamage(a,applied.damage);registerWeaponFinisher(a,e,applied.beforeHp);consumeMagicCircleActionCost(a);const steal=outgoingLifeSteal(a);if(steal&&applied.damage){const h=Math.max(1,Math.floor(applied.damage*steal)),gained=recoverBattleHp(a,h,s.hp);recordBattleHealing(a,gained)}
+   const attackElement=a.attribute??SPECIES[a.speciesId]?.element??"neutral",targetElement=SPECIES[e.speciesId]?.element??"neutral",critMult=1.7+affixValue(a,"critDamage",150)/100,damageStats={...s,_currentHpRatio:a.currentHp/Math.max(1,s.hp)},raw=(critical?Math.floor(base*critMult):base)*formationMultiplier*affixOutgoingDamageMultiplier(damageStats,e,attackElement)*affixExecutionMultiplier(a,e),d=Math.max(1,Math.floor(raw*attributeDamageMultiplier(attackElement,targetElement)*abyssBattleMultiplier(a,"partyDamageRate")*enemyDamageMultiplier(e)*(e.hiddenDamageTaken??1)*endgameIncomingDamageMultiplier(e,attackElement)*weaponMasteryDamageMultiplier(save.state,a,e)*magicCircleDamageMultiplier(a))),applied=applyEnemyDamage(battle,e,d,{sourceId:a.id});recordBattleDamage(a,applied.damage);registerWeaponFinisher(a,e,applied.beforeHp);consumeMagicCircleActionCost(a);const steal=outgoingLifeSteal(a);if(steal&&applied.damage){const h=Math.max(1,Math.floor(applied.damage*steal)),gained=recoverBattleHp(a,h,s.hp);recordBattleHealing(a,gained)}
    await animateHit(e.id,critical);if(critical&&applied.damage)burstParticles(e.id,"critical",16);await floatText(applied.damage?`${critical?"会心 ":""}-${applied.damage}`:"完全ガード",e.id,applied.damage?(critical?"critical":"damage"):"guard");await trySeriesChainAttack(a,e,applied.damage);
    const rageHits=hasCircleEffect(a,"rage")?(a._circleRage>=9?2:a._circleRage>=4?1:0):0;
-   for(let hit=0;hit<rageHits&&e.hp>0;hit++){const follow=Math.max(1,Math.floor(applied.damage*(hit?0.45:0.65))),extra=applyEnemyDamage(battle,e,follow);recordBattleDamage(a,extra.damage);registerWeaponFinisher(a,e,extra.beforeHp);await animateHit(e.id,false);await floatText(extra.damage?`連撃 -${extra.damage}`:"完全ガード",e.id,extra.damage?"skill":"guard")}
+   for(let hit=0;hit<rageHits&&e.hp>0;hit++){const follow=Math.max(1,Math.floor(applied.damage*(hit?0.45:0.65))),extra=applyEnemyDamage(battle,e,follow,{sourceId:a.id});recordBattleDamage(a,extra.damage);registerWeaponFinisher(a,e,extra.beforeHp);await animateHit(e.id,false);await floatText(extra.damage?`連撃 -${extra.damage}`:"完全ガード",e.id,extra.damage?"skill":"guard")}
   }
  }
 
@@ -3722,14 +3750,14 @@ async function command(type,skillId=null){
   }else if(skill.type==="buff"||skill.type==="stance"){applySkillEffects(skill,a,e);if(skill.heal){const targets=skill.target==="味方全体"?battle.party.filter(m=>m.currentHp>0):[a];targets.forEach(m=>{const mx=calculatedStats(m).hp;recoverBattleHp(m,Math.floor(mx*skill.heal*healMultiplier(a)),mx)})}await flushBattleRecoveries();await floatText("強化発動","party","guard");
   }else if(skill.type==="cleanse"){battle.party.forEach(m=>{clearNegativeAllyEffects(battle,m.id);clearAilments(m)});await floatText("状態回復","party","heal");
   }else if(skill.type==="mpHeal"){battle.party.filter(m=>m.currentHp>0).forEach(m=>recoverBattleMp(m,Math.floor(maxMp(m)*(skill.mpHeal??.2)),a));await flushBattleRecoveries();await floatText("MP回復","party","heal");
-  }else if(skill.type==="revive"){const target=battle.party.filter(m=>m.currentHp<=0).sort((x,y)=>calculatedStats(y).hp-calculatedStats(x).hp)[0];if(target&&reviveBattleMonster(target,skill.revive??.35,skill.reviveMp??.25,a)){await flushBattleRecoveries();await floatText("復活",target.id,"heal")}else{skillCompleted=false;const beforeRefund=a.currentMp;a.currentMp=Math.min(maxMp(a),a.currentMp+mpCost);queueBattleRecovery(a,"mp",beforeRefund,a.currentMp);if(battle.cooldowns?.[a.id])delete battle.cooldowns[a.id][skill.id]}
+  }else if(skill.type==="revive"){const target=battle.party.filter(m=>m.currentHp<=0).sort((x,y)=>calculatedStats(y).hp-calculatedStats(x).hp)[0];if(target&&reviveBattleMonster(target,skill.revive??.35,skill.reviveMp??.25,a))await flushBattleRecoveries();else{skillCompleted=false;const beforeRefund=a.currentMp;a.currentMp=Math.min(maxMp(a),a.currentMp+mpCost);queueBattleRecovery(a,"mp",beforeRefund,a.currentMp);if(battle.cooldowns?.[a.id])delete battle.cooldowns[a.id][skill.id]}
   }else{
    await animateAttack(a.id,true);const hits=skill.hits??1;let total=0;const skillTargets=skill.allEnemies?aliveEnemies(battle):[e];
    for(const targetEnemy of skillTargets){const e=targetEnemy;let targetTotal=0;for(let i=0;i<hits&&e.hp>0;i++){
-    const critical=Boolean(skill.guaranteedCritical)||Math.random()<Math.min(.95,affixCriticalChance(s,Math.min(.65,.1+(skill.critBonus??0)+(s.spd??0)*.004))+magicCircleCriticalBonus(a,skill.power??1)),ignore=Math.max(0,Math.min(.9,Number(skill.defenseIgnore)||0)),boosted={...s,atk:s.atk*allyAttackFactor(a.id),matk:(s.matk??s.atk)*allyAttackFactor(a.id),_currentHpRatio:a.currentHp/Math.max(1,s.hp)},execute=(skill.execute&&e.hp/e.maxHp<=skill.execute)?2:1,raw=skillDamage(boosted,{...e,def:e.def*enemyDefenseFactor(e.id)*(1-ignore),mdef:(e.mdef??e.def)*enemyDefenseFactor(e.id)*(1-ignore)},skill,critical)*execute*affixExecutionMultiplier(a,e)*(1+affixValue(a,"skillPower",200)/100),d=Math.max(1,Math.floor(raw*attributeDamageMultiplier(skill.element,SPECIES[e.speciesId]?.element??"neutral")*abyssBattleMultiplier(a,"partyDamageRate")*enemyDamageMultiplier(e)*(e.hiddenDamageTaken??1)*endgameIncomingDamageMultiplier(e,skill.element)*weaponMasteryDamageMultiplier(save.state,a,e)*magicCircleDamageMultiplier(a))),applied=applyEnemyDamage(battle,e,d);
+    const critical=Boolean(skill.guaranteedCritical)||Math.random()<Math.min(.95,affixCriticalChance(s,Math.min(.65,.1+(skill.critBonus??0)+(s.spd??0)*.004))+magicCircleCriticalBonus(a,skill.power??1)),ignore=Math.max(0,Math.min(.9,Number(skill.defenseIgnore)||0)),boosted={...s,atk:s.atk*allyAttackFactor(a.id),matk:(s.matk??s.atk)*allyAttackFactor(a.id),_currentHpRatio:a.currentHp/Math.max(1,s.hp)},execute=(skill.execute&&e.hp/e.maxHp<=skill.execute)?2:1,raw=skillDamage(boosted,{...e,def:e.def*enemyDefenseFactor(e.id)*(1-ignore),mdef:(e.mdef??e.def)*enemyDefenseFactor(e.id)*(1-ignore)},skill,critical)*execute*affixExecutionMultiplier(a,e)*(1+affixValue(a,"skillPower",200)/100),d=Math.max(1,Math.floor(raw*attributeDamageMultiplier(skill.element,SPECIES[e.speciesId]?.element??"neutral")*abyssBattleMultiplier(a,"partyDamageRate")*enemyDamageMultiplier(e)*(e.hiddenDamageTaken??1)*endgameIncomingDamageMultiplier(e,skill.element)*weaponMasteryDamageMultiplier(save.state,a,e)*magicCircleDamageMultiplier(a))),applied=applyEnemyDamage(battle,e,d,{sourceId:a.id});
     recordBattleDamage(a,applied.damage);registerWeaponFinisher(a,e,applied.beforeHp);total+=applied.damage;targetTotal+=applied.damage;await animateHit(e.id,critical);if(critical&&applied.damage)burstParticles(e.id,"critical",14);await floatText(applied.damage?`${critical?"会心 ":""}-${applied.damage}`:"完全ガード",e.id,applied.damage?(critical?"critical":"skill"):"guard")
    }
-    if(skill.currentHpDamage&&e.hp>0){const percentDamage=Math.max(1,Math.floor(e.hp*Math.min(.25,skill.currentHpDamage))),applied=applyEnemyDamage(battle,e,percentDamage);registerWeaponFinisher(a,e,applied.beforeHp);recordBattleDamage(a,applied.damage);total+=applied.damage;targetTotal+=applied.damage;await floatText(applied.damage?`割合 -${applied.damage}`:"完全ガード",e.id,applied.damage?"skill":"guard")}
+    if(skill.currentHpDamage&&e.hp>0){const percentDamage=Math.max(1,Math.floor(e.hp*Math.min(.25,skill.currentHpDamage))),applied=applyEnemyDamage(battle,e,percentDamage,{sourceId:a.id});registerWeaponFinisher(a,e,applied.beforeHp);recordBattleDamage(a,applied.damage);total+=applied.damage;targetTotal+=applied.damage;await floatText(applied.damage?`割合 -${applied.damage}`:"完全ガード",e.id,applied.damage?"skill":"guard")}
     if(skill.status&&e.hp>0&&Math.random()<Math.min(1,skill.status.chance*(1+affixValue(a,"statusChance",100)/100))){const applied=applyEnemyStatus(battle,{...skill.status,power:(skill.status.power??0)*(1+affixValue(a,"dotDamage",150)/100)*abyssBattleMultiplier(a,"partyDamageRate"),sourceMonsterId:a.id},e.id);if(applied){addBattleLog(battle,`${e.name}は${skill.status.name}状態になった`);await floatText(skill.status.name,e.id,skill.status.id)}}
     await trySeriesChainAttack(a,e,targetTotal);await trySeriesBurn(a,e,skill);
    }
@@ -3782,9 +3810,9 @@ async function dealEnemyHit(e,target,multiplier=1,label="",criticalChance=.08,el
  const st=calculatedStats(target),guard=Boolean(battle.guards[target.id]),endgameNoCrit=hasCircleEffect(target,"endgameNoCrit")&&Boolean(e.endgameBossId||["abyss","tenGod"].includes(e.faction)),critical=!endgameNoCrit&&(Boolean(rules.guaranteedCritical)||Math.random()<Math.min(.9,criticalChance+(e.crit??0)));
  if(!rules.guaranteedHit&&Math.random()<Math.min(.60,(st.evasion??0)/100)){addBattleLog(battle,`${displayName(target)}が回避した`);await floatText("回避",target.id,"miss");return 0}
  const ignore=Math.max(0,Math.min(.9,Number(rules.defenseIgnore)||0)),execute=rules.execute&&target.currentHp/Math.max(1,st.hp)<=rules.execute?2:1,guardFx=Math.min(.85,effectValue(battle,target.id,"guard")*(1+affixValue(target,"guardPower",100)/100)),vulnerable=effectValue(battle,target.id,"vulnerable"),reduction=Math.min(.75,affixValue(target,"damageReduction",75)/100),attackElement=element??SPECIES[e.speciesId]?.element??null,targetElement=target.attribute??SPECIES[target.speciesId]?.element??"neutral",resistance=elementalResistance(target,attackElement);let d=Math.max(1,Math.floor((e.atk*enemyAttackFactor(e.id)-st.def*(1-ignore)*allyDefenseFactor(target.id)*.45)*multiplier*attributeDamageMultiplier(attackElement,targetElement)*execute*(guard&&!rules.guaranteedHit?Math.max(.15,.45-affixValue(target,"guardPower",100)/200):1)*(1-guardFx)*(1+vulnerable)*(1-reduction)*(1-resistance)*abyssBattleMultiplier(target,"partyDamageTakenRate")));if(rules.currentHpDamage)d+=Math.max(1,Math.floor(target.currentHp*Math.min(.25,rules.currentHpDamage)));if(critical)d=Math.floor(d*1.55);if(hasCircleEffect(target,"soleSurvivor")&&battle.party.filter(member=>member.currentHp>0).length===1)d=Math.max(1,Math.floor(d*.6));d=absorbMagicCircleShield(target,d);
- target.currentHp=Math.max(0,target.currentHp-d);recordBattleTaken(target,d);if(hasCircleEffect(target,"rage")&&d>0)target._circleRage=Math.min(12,(target._circleRage??0)+1);if(target.currentHp<=0&&tryUnyielding(target)){addBattleLog(battle,`${displayName(target)}の復活・耐久効果が発動（${battle.reviveCount}/99）`);await floatText("復活",target.id,"guard")}else addBattleLog(battle,`${displayName(target)}に${d}ダメージ`);await flushMagicCircleEvents();
+ target.currentHp=Math.max(0,target.currentHp-d);recordBattleTaken(target,d);if(hasCircleEffect(target,"rage")&&d>0)target._circleRage=Math.min(12,(target._circleRage??0)+1);if(target.currentHp<=0&&tryUnyielding(target))addBattleLog(battle,`${displayName(target)}の復活・耐久効果が発動（${battle.reviveCount}/99）`);else addBattleLog(battle,`${displayName(target)}に${d}ダメージ`);await flushMagicCircleEvents();
  await animateHit(target.id,critical);if(critical)burstParticles(target.id,"enemy",14);await floatText(`${label}${critical?"会心 ":""}-${d}`,target.id,critical?"critical":"enemy");
- if(target.currentHp<=0){handleMagicCircleDeath(target);await flushMagicCircleEvents();await animateDefeat(target.id)}else if(hasEffect(battle,target.id,"counter")){const cs=calculatedStats(target),counterBoost=1+affixValue(target,"counterDamage",150)/100,counter=Math.max(1,Math.floor((cs.atk*effectValue(battle,target.id,"counter")-e.def*.25)*counterBoost*abyssBattleMultiplier(target,"partyDamageRate")*magicCircleDamageMultiplier(target))),applied=applyEnemyDamage(battle,e,counter);recordBattleDamage(target,applied.damage);registerWeaponFinisher(target,e,applied.beforeHp);addBattleLog(battle,`${displayName(target)}が${applied.damage}反撃ダメージ`);await floatText(applied.damage?`反撃 -${applied.damage}`:"完全ガード",e.id,applied.damage?"skill":"guard")}await tryGuardianPassive();return d;
+ if(target.currentHp<=0){handleMagicCircleDeath(target);await flushMagicCircleEvents();await animateDefeat(target.id)}else if(hasEffect(battle,target.id,"counter")){const cs=calculatedStats(target),counterBoost=1+affixValue(target,"counterDamage",150)/100,counter=Math.max(1,Math.floor((cs.atk*effectValue(battle,target.id,"counter")-e.def*.25)*counterBoost*abyssBattleMultiplier(target,"partyDamageRate")*magicCircleDamageMultiplier(target))),applied=applyEnemyDamage(battle,e,counter,{sourceId:target.id});recordBattleDamage(target,applied.damage);registerWeaponFinisher(target,e,applied.beforeHp);addBattleLog(battle,`${displayName(target)}が${applied.damage}反撃ダメージ`);await floatText(applied.damage?`反撃 -${applied.damage}`:"完全ガード",e.id,applied.damage?"skill":"guard")}await tryGuardianPassive();return d;
 }
 async function resolveEnemySpecialAction(e,action){
  const info=specialActionInfo(action);if(!info)return false;
@@ -3792,7 +3820,7 @@ async function resolveEnemySpecialAction(e,action){
  if(info.utility){
   const allies=info.effects?.some(effect=>effect.allies)?battle.enemies.filter(enemy=>enemy.hp>0):[e];
   if(info.heal){for(const ally of allies){const amount=Math.max(1,Math.floor(ally.maxHp*info.heal)),gained=recoverBattleHp(ally,amount,ally.maxHp);await flushBattleRecoveries();await floatText(`+${gained}`,ally.id,"heal")}}
-  if(info.revive&&canBattleRevive()){const fallen=battle.enemies.find(enemy=>enemy.hp<=0);if(fallen){const before=fallen.hp;battle.reviveCount++;fallen.hp=Math.max(1,Math.floor(fallen.maxHp*info.revive));queueBattleRecovery(fallen,"hp",before,fallen.hp);await flushBattleRecoveries();await floatText("再構成",fallen.id,"heal")}}
+  if(info.revive&&canBattleRevive()){const fallen=battle.enemies.find(enemy=>enemy.hp<=0);if(fallen){const before=fallen.hp;battle.reviveCount++;fallen.hp=Math.max(1,Math.floor(fallen.maxHp*info.revive));queueBattleRecovery(fallen,"hp",before,fallen.hp);await flushBattleRecoveries()}}
   for(const effect of info.effects??[])for(const ally of(effect.allies?allies:[e])){if(effect.kind==="atkUp")ally.atk=Math.floor(ally.atk*(1+(effect.value??.2)));if(effect.kind==="defUp")ally.def=Math.floor(ally.def*(1+(effect.value??.2)));if(effect.kind==="spdUp")ally.spd=Math.floor(ally.spd*(1+(effect.value??.2)));if(effect.kind==="guard")ally.divineBarrier=Math.max(ally.divineBarrier??0,Math.max(1,effect.turns??2));if(effect.kind==="regen")ally.eliteRegen=Math.max(ally.eliteRegen??0,effect.value??.1)}
   if(info.selfHeal){const amount=Math.max(1,Math.floor(e.maxHp*info.selfHeal)),gained=recoverBattleHp(e,amount,e.maxHp);await flushBattleRecoveries();await floatText(`+${gained}`,e.id,"heal")}return true;
  }
@@ -3803,6 +3831,7 @@ async function resolveEnemySpecialAction(e,action){
  else if(info.pattern==="singleWeak")targets=[chooseEnemyTarget(e,"weak")].filter(Boolean);
  else if(info.pattern==="singleStrong")targets=[chooseEnemyTarget(e,"threat")].filter(Boolean);
  else targets=[chooseEnemyTarget(e,"normal")].filter(Boolean);
+ if(e.enemyMimicArmor&&targets.length>1){const limit=Math.min(alive.length,Math.random()<.72?1:2);targets=[...targets].sort(()=>Math.random()-.5).slice(0,limit);addBattleLog(battle,`${e.name}の致死奇襲：対象 ${targets.length}体`)}
  const elements={inferno:"fire",tidal:"water",thunderstorm:"lightning",tempest:"wind",quake:"earth",radiance:"light",eclipse:"dark",absoluteZero:"water",timeStop:"light",starfall:"wind"};
  let multiplier=specialActionMultiplier(action)*(e.enraged?1.25:1)*Math.max(.5,Number(e._circleActionMultiplier)||1),totalDamage=0;
  if(info.copyAtk){

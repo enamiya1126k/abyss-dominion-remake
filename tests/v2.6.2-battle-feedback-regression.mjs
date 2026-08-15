@@ -9,9 +9,9 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 const main=read("src/main.js"),battle=read("src/ui/screens/BattleScreen.js"),css=read("src/Styles/v2.6.0.css"),index=read("index.html");
 
-assert.equal(APP_VERSION,"2.9.0");
+assert.equal(APP_VERSION,"2.10.0");
 assert.equal(SAVE_SCHEMA_VERSION,54);
-assert.match(index,/const ASSET_VERSION = "2\.9\.0"/);
+assert.match(index,/const ASSET_VERSION = "2\.10\.0"/);
 
 assert.match(battle,/hp-fill-draining/);
 assert.match(battle,/hp-fill[\s\S]*bar-label/,"HP label must be rendered after gauge layers");

@@ -141,10 +141,11 @@ export function enemyMagicCircleRateForFloor(floor,rank="N"){
  const f=Math.max(1,Math.floor(Number(floor)||1));
  return f>=100?1:Math.max(.035,Math.min(1,.035+(f-1)*(.965/99)));
 }
-export function rollEnemyMagicCircle(floor,{rank="N",random=Math.random,force=false}={}){
+export function rollEnemyMagicCircle(floor,{rank="N",random=Math.random,force=false,excludeIds=[]}={}){
  const chance=force?1:enemyMagicCircleRateForFloor(floor,rank);
  if(Math.max(0,Math.min(.999999,Number(random())||0))>=chance)return null;
- const choices=MAGIC_CIRCLES.filter(entry=>entry.id!=="none"),roll=Math.max(0,Math.min(.999999,Number(random())||0)),entry=choices[Math.floor(roll*choices.length)]??choices[0];
+ const excluded=new Set(Array.isArray(excludeIds)?excludeIds:excludeIds instanceof Set?[...excludeIds]:[]),choices=MAGIC_CIRCLES.filter(entry=>entry.id!=="none"&&!excluded.has(entry.id)),roll=Math.max(0,Math.min(.999999,Number(random())||0)),entry=choices[Math.floor(roll*choices.length)]??choices[0];
+ if(!entry)return null;
  const level=Math.max(1,Math.min(99,Math.round(Math.max(1,Number(floor)||1)*.78)));
  return{...entry,level,enemyOnly:true,chance};
 }

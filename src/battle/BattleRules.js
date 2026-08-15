@@ -1,5 +1,5 @@
-import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.9.0";
-import{endgameCharacter}from"../data/endgameCharacters.js?v=2.9.0";
+import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.10.0";
+import{endgameCharacter}from"../data/endgameCharacters.js?v=2.10.0";
 
 const CONTROL_STATUS_IDS=new Set(["sleep","paralysis","freeze","charm","confusion","fear"]);
 function statusProfileFor(target){return target?.statusProfile??endgameCharacter(target?.endgameBossId)?.statusProfile??null}
@@ -20,21 +20,23 @@ export function tickCooldowns(battle){Object.values(battle.cooldowns??{}).forEac
 export function addBattleLog(battle,text){battle.log??=[];battle.log.unshift(text);battle.log=battle.log.slice(0,6)}
 export function enemyStatusesFor(battle,enemyId){battle.enemyStatuses??={};if(Array.isArray(battle.enemyStatuses))battle.enemyStatuses={};battle.enemyStatuses[enemyId]??=[];return battle.enemyStatuses[enemyId]}
 export function applyEnemyStatus(battle,status,enemyId=battle.targetEnemyId){if(!status||!enemyId)return false;const enemy=(battle.enemies??[battle.enemy]).filter(Boolean).find(entry=>entry.id===enemyId),resistance=statusResistance(enemy,status.id,enemy?.bossStatusResist);if(resistance>=1||resistance&&Math.random()<resistance)return false;const statuses=enemyStatusesFor(battle,enemyId),existing=statuses.find(s=>s.id===status.id);if(existing){existing.turns=Math.max(existing.turns,status.turns);existing.power=Math.max(existing.power,status.power)}else statuses.push({...status});upsertControlSkip(battle,enemyId,status.id,status.turns,"enemy");return true}
-export function applyEnemyDamage(battle,enemy,amount){
+export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicArmor=false}={}){
  if(!enemy||enemy.hp<=0)return{beforeHp:Math.max(0,Number(enemy?.hp)||0),damage:0,requested:0};
  const requested=Math.max(0,Math.floor(Number(amount)||0)),beforeHp=enemy.hp;
  let damage=requested;
- if(enemy.enemyMimicArmor){
+ if(enemy.enemyMimicArmor&&!bypassMimicArmor){
   const round=Math.max(1,Math.floor(Number(battle?.turn)||1));
-  if(enemy._mimicDamageRound!==round){enemy._mimicDamageRound=round;enemy._mimicDamageThisRound=0}
-  damage=Math.min(damage,Math.max(0,1-(Number(enemy._mimicDamageThisRound)||0)));
+  if(enemy._mimicDamageRound!==round){enemy._mimicDamageRound=round;enemy._mimicDamageSources={};enemy._mimicRoundDamage=0}
+  const queueEntry=battle?.turnQueue?.[Math.max(0,Number(battle?.queueIndex)||0)],resolvedSource=String(sourceId??(queueEntry?.type==="ally"?queueEntry.id:"party"));
+  enemy._mimicDamageSources??={};
+  damage=enemy._mimicDamageSources[resolvedSource]||Number(enemy._mimicRoundDamage)>=4?0:Math.min(1,damage);
+  if(damage>0){enemy._mimicDamageSources[resolvedSource]=true;enemy._mimicRoundDamage=(Number(enemy._mimicRoundDamage)||0)+1}
  }
  enemy.hp=Math.max(0,enemy.hp-damage);
  const applied=beforeHp-enemy.hp;
- if(enemy.enemyMimicArmor)enemy._mimicDamageThisRound=(Number(enemy._mimicDamageThisRound)||0)+applied;
  return{beforeHp,damage:applied,requested};
 }
-export function processEnemyStatuses(battle){const results=[];(battle.enemies??[battle.enemy]).filter(Boolean).forEach(enemy=>{const statuses=enemyStatusesFor(battle,enemy.id);battle.enemyStatuses[enemy.id]=statuses.filter(status=>{let requested=0;if(["poison","burn","bleed"].includes(status.id))requested=Math.max(1,Math.floor(enemy.maxHp*status.power));if(requested){const hit=applyEnemyDamage(battle,enemy,requested);results.push({enemy,id:status.id,name:status.name,damage:hit.damage,beforeHp:hit.beforeHp,sourceMonsterId:status.sourceMonsterId??null})}status.turns--;return status.turns>0&&enemy.hp>0})});return results}
+export function processEnemyStatuses(battle){const results=[];(battle.enemies??[battle.enemy]).filter(Boolean).forEach(enemy=>{const statuses=enemyStatusesFor(battle,enemy.id);battle.enemyStatuses[enemy.id]=statuses.filter(status=>{let requested=0;if(["poison","burn","bleed"].includes(status.id))requested=Math.max(1,Math.floor(enemy.maxHp*status.power));if(requested){const hit=applyEnemyDamage(battle,enemy,requested,{sourceId:status.sourceMonsterId??`status:${status.id}`});results.push({enemy,id:status.id,name:status.name,damage:hit.damage,beforeHp:hit.beforeHp,sourceMonsterId:status.sourceMonsterId??null})}status.turns--;return status.turns>0&&enemy.hp>0})});return results}
 export function statusLabel(status){const turns=Math.max(0,Number(status?.turns)||0);return turns?`${status.name} ${turns}T`:String(status?.name??status?.id??"")}
 function effectMap(battle,key,id){battle[key]??={};battle[key][id]??=[];return battle[key][id]}
 export function allyEffectsFor(battle,id){return effectMap(battle,"allyEffects",id)}

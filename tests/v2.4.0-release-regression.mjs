@@ -49,7 +49,7 @@ const {affectionBonuses,createMonster}=await import("../src/models/Monster.js");
 const {createEquipment}=await import("../src/models/Equipment.js");
 const {canEquipInSubslot}=await import("../src/services/EquipmentLoadoutSystem.js");
 
-assert.equal(APP_VERSION,"2.9.0");
+assert.equal(APP_VERSION,"2.10.0");
 assert.equal(SAVE_SCHEMA_VERSION,54);
 assert.equal(SERIAL_CODE_COUNT,21);
 

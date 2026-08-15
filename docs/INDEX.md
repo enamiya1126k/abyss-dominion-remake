@@ -2,6 +2,7 @@
 
 | 資料 | 内容 |
 |---|---|
+| [RELEASE_NOTES_v2.10.0_JA.md](RELEASE_NOTES_v2.10.0_JA.md) | v2.10.0戦闘演出・ミミック・お知らせ・拠点表示の更新内容 |
 | [RELEASE_NOTES_v2.9.0_JA.md](RELEASE_NOTES_v2.9.0_JA.md) | v2.9.0戦闘AUTO・深層装備・魔法陣演出の更新内容 |
 | [RELEASE_NOTES_v2.8.0_JA.md](RELEASE_NOTES_v2.8.0_JA.md) | v2.8.0スキル明細・回復演出・毎日配布の更新内容 |
 | [RELEASE_NOTES_v2.7.0_JA.md](RELEASE_NOTES_v2.7.0_JA.md) | v2.7.0深層敵・完全AUTO・ミミック更新内容 |
@@ -29,6 +30,6 @@
 - 深淵・十神設定：`src/data/endgameCharacters.js`
 - エンドゲーム進行：`src/core/EndgameSystem.js`
 - セーブ：`src/services/SaveService.js`
-- 回帰検証：`tests/gdd-v1-regression.mjs`から`tests/v2.9.0-magic-circle-balance-regression.mjs`まで
+- 回帰検証：`tests/gdd-v1-regression.mjs`から`tests/v2.10.0-presentation-regression.mjs`まで
 
 `src/app.bundle.js`は旧成果物であり、現在の起動経路から参照されない。

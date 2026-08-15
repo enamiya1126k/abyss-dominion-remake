@@ -9,7 +9,7 @@ import {GAUNTLET_DAILY_LIMIT,TEAM_BATTLE_DAILY_LIMIT} from "../src/core/EndgameS
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 
-assert.equal(APP_VERSION,"2.9.0");
+assert.equal(APP_VERSION,"2.10.0");
 assert.equal(SAVE_SCHEMA_VERSION,54);
 assert.equal(MONSTER_STORAGE_CAP,3000);
 assert.equal(TEAM_BATTLE_DAILY_LIMIT,10);
@@ -48,8 +48,8 @@ assert.match(skillTree,/function treeIcon/);
 assert.doesNotMatch(skillTree,/🩸|🫀|⚔️|🏰|💰/u);
 
 const index=read("index.html");
-assert.match(index,/v2\.3\.1\.css\?v=2\.9\.0/);
-assert.match(index,/ASSET_VERSION = "2\.9\.0"/);
+assert.match(index,/v2\.3\.1\.css\?v=2\.10\.0/);
+assert.match(index,/ASSET_VERSION = "2\.10\.0"/);
 
 for(const [asset,minBytes] of [
  ["assets/ui/trials/abyss-corridor-room.png",500_000],

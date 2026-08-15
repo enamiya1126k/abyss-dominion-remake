@@ -79,20 +79,21 @@ export function rollEnemyEquipmentRarity(floor,rank,roll=Math.random()){
 }
 
 // Enemy loadouts follow the equipment power a player can realistically build,
-// rather than the old floor x2 rule. 300F is the first major wall: even an
-// ordinary enemy carries roughly Lv.2000 gear, while bosses and high rarities
-// push well beyond it. The curve keeps accelerating after 500F.
+// rather than the old floor x2 rule. A single Lv.2000 player weapon must not
+// flatten 300F, so ordinary enemies there carry six Lv.6000-class pieces. The
+// curve climbs hard after 100F and keeps accelerating beyond 500F.
 export function enemyEquipmentLevelForFloor(floor,{rank="N",boss=false}={}){
  const f=safeFloor(floor);
  let base;
  if(f<20)base=f*2;
- else if(f<50)base=40+(f-20)*3;
- else if(f<100)base=200+(f-50)*4;
- else if(f<200)base=500+(f-100)*7;
- else if(f<500)base=1200+(f-200)*8;
+ else if(f<50)base=40+(f-20)*5;
+ else if(f<100)base=200+(f-50)*10;
+ else if(f<200)base=700+(f-100)*20;
+ else if(f<300)base=2700+(f-200)*33;
+ else if(f<500)base=6000+(f-300)*45;
  else{
   const depth=f-500;
-  base=3600+depth*(9+Math.min(31,Math.log2(1+depth/250)*3.5));
+  base=15000+depth*(50+Math.min(200,Math.log2(1+depth/150)*28));
  }
  const rankMultiplier=({N:1,R:1.06,SR:1.12,SSR:1.22,UR:1.28,LR:1.35,"神話":1.48,abyss:1.7,tenGod:2.1,"深淵":1.7,"十神":2.1})[String(rank)]??1;
  return Math.max(1,Math.min(Number.MAX_SAFE_INTEGER,Math.round(base*rankMultiplier*(boss?1.55:1))));

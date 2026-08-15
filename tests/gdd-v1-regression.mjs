@@ -80,7 +80,7 @@ globalThis.CustomEvent=class CustomEvent{
 };
 
 function testSharedRules(){
-  assert.equal(APP_VERSION,"2.9.0");
+  assert.equal(APP_VERSION,"2.10.0");
   assert.equal(ABYSS_UNLOCK_FLOOR,100);
   assert.deepEqual([...BATTLE_SPEED_OPTIONS],[.5,1,2,4]);
   assert.equal(normalizeBattleSpeed(.5),.5);
@@ -313,7 +313,7 @@ function testScreenRendering(){
   assert.doesNotMatch(home,/プレゼント/);
   const settings=SettingsScreen(save.state);
   assert.doesNotMatch(settings,/TEST ACCESS ACTIVE/);
-  assert.match(settings,/v2\.9\.0/);
+  assert.match(settings,/v2\.10\.0/);
   assert.match(settings,/id="toggleAudio"/);
   assert.match(settings,/id="musicVolume"/);
   assert.match(settings,/id="sfxVolume"/);
@@ -379,7 +379,7 @@ function testStaticReferences(){
     "ui/screens/MonsterDetailScreen.js",
     "ui/screens/SettingsScreen.js"
   ]){
-    assert.ok(main.includes(`${modulePath}?v=2.9.0`),`Stale release cache tag: ${modulePath}`);
+    assert.ok(main.includes(`${modulePath}?v=2.10.0`),`Stale release cache tag: ${modulePath}`);
   }
   const audio=fs.readFileSync(path.join(root,"src/core/AudioSystem.js"),"utf8");
   assert.match(audio,/main-bgm\.mp3/);

@@ -6,7 +6,7 @@
 
 | 項目 | 内容 |
 |---|---|
-| Web版 | `v2.9.0` |
+| Web版 | `v2.10.0` |
 | セーブスキーマ | `54` |
 | 対応階層 | 1F〜10000F |
 | 深淵・十神 | 深淵7柱＋十神10柱／4段階手動挑戦 |
@@ -14,6 +14,20 @@
 | チーム試練 | 4 VS 4・第50試練以降も無限継続 |
 | 音響 | 提供済み7曲の場面別BGM＋本作専用SE |
 | 旧セーブ | 同一セーブキーのまま自動移行 |
+
+## v2.10.0の主要内容
+
+`v2.10.0`は139(2)版を基準に、戦闘演出の可読性、ミミック戦、お知らせ、拠点の瀕死表現、敵編成を重点的に仕上げた版です。
+
+- 魔法陣の結果表示を通常スキル演出と同等の長さへ統一。半透明の放射演出を抑え、濃色パネル、極太ゴシック、明確な「名称→効果→補足」の順で読みやすくしました。×0.5では約3秒確認できます。
+- 味方の「運命の三桁環」で999が揃うと、選択中の敵を即死させる専用確定演出を追加。敵側の999は従来どおり3倍です。
+- ミミックは味方1人につき各ラウンド最初の攻撃だけ1ダメージ、最大4ダメージに調整。以降は完全ガードを維持し、超火力は単体〜2体攻撃へ限定しました。
+- 味方・敵の蘇生へ、陣営色の光柱、足元魔法陣、粒子、暗転、復帰モーション、HPゲージ回復を追加。複数蘇生は同時表示し、「連鎖蘇生」「全軍復活」を使い分けます。
+- お知らせを「すべて／配布／イベント／更新／保守」で実際に絞り込めるようにし、日付、NEW／既読、展開式詳細、件数、空表示を追加しました。
+- ホームでHPまたはMPが5%以下の仲間は倒れ素材へ切替。該当者がいる間はベッドが発光し、休息可能人数を案内します。
+- 敵部隊内の魔法陣重複を禁止。100F以降およびLR以上の敵は必ず、未使用種類から魔法陣を装着します。
+- 300F通常敵の6枠装備をLv.6000級、ボスをLv.9300級へ再強化。500F以降も加速度的に伸びます。敵専用補正は捕獲後に継承しません。
+- 252キャラクター×8枚の向き正規化は、上記の戦闘・レイアウト品質を優先し、本版では既存素材を維持しています。
 
 ## v2.9.0の主要内容
 
@@ -166,6 +180,7 @@ node tests/v2.6.2-battle-feedback-regression.mjs
 node tests/v2.7.0-enemy-auto-regression.mjs
 node tests/v2.8.0-skill-recovery-daily-regression.mjs
 node tests/v2.9.0-magic-circle-balance-regression.mjs
+node tests/v2.10.0-presentation-regression.mjs
 python3 tools/build_v261_assets.py
 python3 tools/build_v240_sprites.py --verify
 python3 tools/audit_sprite_catalog.py
@@ -181,6 +196,7 @@ python3 tools/audit_sprite_catalog.py
 - [v2.7.0リリースノート](docs/RELEASE_NOTES_v2.7.0_JA.md)
 - [v2.8.0リリースノート](docs/RELEASE_NOTES_v2.8.0_JA.md)
 - [v2.9.0リリースノート](docs/RELEASE_NOTES_v2.9.0_JA.md)
+- [v2.10.0リリースノート](docs/RELEASE_NOTES_v2.10.0_JA.md)
 - [v2.4.0実装・検証レポート](docs/IMPLEMENTATION_VERIFICATION_v2.4.0_JA.md)
 - [v2.3.1リリースノート](docs/RELEASE_NOTES_v2.3.1_JA.md)
 - [GDD実装・検証レポート](docs/GDD_v1.0_IMPLEMENTATION_REPORT_JA.md)

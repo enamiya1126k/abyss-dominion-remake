@@ -15,7 +15,7 @@ const pngInfo=relative=>{
  return{width:data.readUInt32BE(16),height:data.readUInt32BE(20),colorType:data[25]};
 };
 
-assert.equal(APP_VERSION,"2.9.0");
+assert.equal(APP_VERSION,"2.10.0");
 
 const circles=MAGIC_CIRCLES.filter(circle=>circle.id!=="none");
 assert.equal(circles.length,18);

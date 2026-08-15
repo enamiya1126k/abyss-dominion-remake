@@ -11,18 +11,18 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 const index=read("index.html"),main=read("src/main.js"),battleScreen=read("src/ui/screens/BattleScreen.js"),css=read("src/Styles/v2.9.0.css");
 
-assert.equal(APP_VERSION,"2.9.0");
+assert.equal(APP_VERSION,"2.10.0");
 assert.equal(SAVE_SCHEMA_VERSION,54,"this display/balance update must keep save compatibility");
-assert.match(index,/ASSET_VERSION = "2\.9\.0"/);
-assert.match(index,/v2\.9\.0\.css\?v=2\.9\.0/);
+assert.match(index,/ASSET_VERSION = "2\.10\.0"/);
+assert.match(index,/v2\.9\.0\.css\?v=2\.10\.0/);
 
-assert.equal(enemyEquipmentLevelForFloor(300),2000,"300F normal enemies need a real wall against one Lv.2000 player weapon");
-assert.equal(enemyEquipmentLevelForFloor(300,{rank:"LR"}),2700);
-assert.equal(enemyEquipmentLevelForFloor(300,{boss:true}),3100);
-assert.equal(enemyEquipmentLevelForFloor(500),3600);
-assert.ok(enemyEquipmentLevelForFloor(1000)>10000,"the deep-floor curve must keep accelerating");
+assert.equal(enemyEquipmentLevelForFloor(300),6000,"300F normal enemies need a real wall against one Lv.2000 player weapon");
+assert.equal(enemyEquipmentLevelForFloor(300,{rank:"LR"}),8100);
+assert.equal(enemyEquipmentLevelForFloor(300,{boss:true}),9300);
+assert.equal(enemyEquipmentLevelForFloor(500),15000);
+assert.ok(enemyEquipmentLevelForFloor(1000)>60000,"the deep-floor curve must keep accelerating");
 const profile=enemyHiddenProfileForFloor(300,{equipped:true,slots:6});
-assert.equal(profile.gearLevel,2000);
+assert.equal(profile.gearLevel,6000);
 assert.equal(profile.rarity,"LR");
 assert.equal(profile.socketRarity,"LR");
 assert.ok(profile.atk>5&&profile.def>5&&profile.damageTaken<.7);
