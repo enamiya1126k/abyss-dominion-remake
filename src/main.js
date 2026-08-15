@@ -11,7 +11,7 @@ import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.10.0";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.10.0";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.10.0";
 import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.10.0";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.10.0";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.10.0-build143";
 import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.10.0";
 import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.10.0";
 import{Modal}from"./ui/components/Modal.js?v=2.10.0";
@@ -51,6 +51,7 @@ import{dangerConfig}from"./core/DangerSystem.js?v=2.10.0";
 import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=2.10.0";
 import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier}from"./core/MagicCircleSystem.js?v=2.10.0-build141";
 import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.10.0";
+import{dungeonThemeForFloor}from"./data/dungeonThemes.js?v=2.10.0-build143";
 import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.10.0";
 import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.10.0";
 import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.10.0";
@@ -2835,19 +2836,9 @@ const EXPLORE_ATLAS=Object.freeze({
  floor:0,wall:1,corner:2,pillar:3,entrance:4,chestClosed:5,chestOpen:6,barrel:7,
  crate:8,bones:9,candelabrum1:10,candelabrum2:11,crystal1:12,crystal2:13,crystal3:14,water:15
 });
-const EXPLORE_BAND_THEMES=Object.freeze([
- {floor:"#7c6b5030",wall:"#221b1838",line:"#a8875060",light:"#f3b75b",dark:"rgba(3,5,9,.37)"},
- {floor:"#4c756333",wall:"#14251f4d",line:"#74a88455",light:"#8ee6a0",dark:"rgba(2,9,8,.40)"},
- {floor:"#98504430",wall:"#32151252",line:"#d06b4e55",light:"#ff8b59",dark:"rgba(12,3,3,.41)"},
- {floor:"#436d9136",wall:"#111f304f",line:"#74b6dc5c",light:"#7cddff",dark:"rgba(2,7,15,.42)"},
- {floor:"#71489638",wall:"#24103652",line:"#aa72dd5e",light:"#c278ff",dark:"rgba(7,2,13,.44)"},
- {floor:"#8b394332",wall:"#2c0e174f",line:"#c755675c",light:"#ff6f82",dark:"rgba(12,2,6,.45)"},
- {floor:"#9b855133",wall:"#332b1948",line:"#e7c97662",light:"#ffe08a",dark:"rgba(7,6,3,.36)"},
- {floor:"#4e467e3b",wall:"#12102b55",line:"#8176c65f",light:"#9c8dff",dark:"rgba(2,1,12,.48)"}
-]);
-function exploreBandTheme(floor){return EXPLORE_BAND_THEMES[Math.floor((Math.max(1,floor)-1)/50)%EXPLORE_BAND_THEMES.length]}
-function explorationTexture(kind){
- const url=EXPLORE_TEXTURE_URLS[kind];if(!url)return null;
+function exploreBandTheme(floor){return dungeonThemeForFloor(floor)}
+function explorationTexture(kind,theme){
+ const url=kind==="floor"?theme?.floorAsset??EXPLORE_TEXTURE_URLS.floor:kind==="wall"?theme?.wallAsset??EXPLORE_TEXTURE_URLS.wall:EXPLORE_TEXTURE_URLS[kind];if(!url)return null;
  let entry=explorationTextureCache.get(url);
  if(!entry){const image=new Image();entry={image,ready:false,failed:false};explorationTextureCache.set(url,entry);image.onload=()=>entry.ready=true;image.onerror=()=>entry.failed=true;image.decoding="async";image.src=url}
  return entry.ready&&!entry.failed?entry.image:null;
@@ -2947,6 +2938,7 @@ function drawExploreParticles(position,color,count=7,phase=0,radius=.72){
  game.ctx.restore()
 }
 function drawExploreWallArchitecture(world,theme){
+ if(!theme.architecture)return;
  for(let y=0;y<world.rows;y++)for(let x=0;x<world.cols;x++){
   if(!world.tiles[y]?.[x])continue;
   const open={
@@ -2965,6 +2957,19 @@ function drawExploreWallArchitecture(world,theme){
   drawExploreAtlas({x,y},index,{scale,rotation,shadowColor:"#000",shadowBlur:8})
  }
 }
+function drawExploreWallEdges(world,theme){
+ const c=game.ctx;c.save();c.strokeStyle=theme.line;c.lineWidth=Math.max(1,game.camera.z*1.15);c.shadowColor=theme.light;c.shadowBlur=Math.max(0,game.camera.z*1.8);
+ for(let y=0;y<world.rows;y++)for(let x=0;x<world.cols;x++){
+  if(!world.tiles[y]?.[x])continue;
+  const p=game.camera.world(x*TILE,y*TILE),size=TILE*game.camera.z;c.beginPath();
+  if(world.tiles[y-1]?.[x]===0){c.moveTo(p.x,p.y);c.lineTo(p.x+size,p.y)}
+  if(world.tiles[y+1]?.[x]===0){c.moveTo(p.x,p.y+size);c.lineTo(p.x+size,p.y+size)}
+  if(world.tiles[y]?.[x-1]===0){c.moveTo(p.x,p.y);c.lineTo(p.x,p.y+size)}
+  if(world.tiles[y]?.[x+1]===0){c.moveTo(p.x+size,p.y);c.lineTo(p.x+size,p.y+size)}
+  c.stroke()
+ }
+ c.restore()
+}
 function drawExploreDecoration(decoration,theme){
  const frameTime=performance.now(),pulse=.92+Math.sin(frameTime/310+decoration.phase)*.08,usedAlpha=decoration.used?.48:1;
  if(decoration.type==="water"){
@@ -2980,11 +2985,11 @@ function drawExploreDecoration(decoration,theme){
  }
  if(decoration.type==="entrance"){drawExploreAtlas(decoration,EXPLORE_ATLAS.entrance,{scale:(decoration.scale??1.3)*1.5,rotation:decoration.rotation,shadowColor:"#000",shadowBlur:5});return}
  if(decoration.type==="candelabrum"){
-  drawExploreGlow(decoration,"#ffd58a",2.72,.1*pulse);drawExploreAtlas(decoration,EXPLORE_ATLAS.candelabrum1,{scale:1.3,shadowColor:"#ffd58a",shadowBlur:2});return
+  drawExploreGlow(decoration,theme.light,2.72,.1*pulse);drawExploreAtlas(decoration,EXPLORE_ATLAS.candelabrum1,{scale:1.3,shadowColor:theme.light,shadowBlur:2});return
  }
  if(decoration.type==="crystal"){
-  if(!decoration.used)drawExploreGlow(decoration,"#a95cff",1.4,.38*pulse);
-  drawExploreAtlas(decoration,EXPLORE_ATLAS.crystal1,{scale:decoration.used?1.22:1.58,alpha:decoration.used?.24:1,shadowColor:decoration.used?"#000":"#b46cff",shadowBlur:decoration.used?2:9});if(!decoration.used)drawExploreParticles(decoration,"#d6a5ff",3,decoration.phase,.45);return
+  if(!decoration.used)drawExploreGlow(decoration,theme.light,1.4,.38*pulse);
+  drawExploreAtlas(decoration,EXPLORE_ATLAS.crystal1,{scale:decoration.used?1.22:1.58,alpha:decoration.used?.24:1,shadowColor:decoration.used?"#000":theme.light,shadowBlur:decoration.used?2:9});if(!decoration.used)drawExploreParticles(decoration,theme.light,3,decoration.phase,.45);return
  }
  const index={barrel:EXPLORE_ATLAS.barrel,crate:EXPLORE_ATLAS.crate,bones:EXPLORE_ATLAS.bones}[decoration.type];
  if(index!=null){
@@ -2994,17 +2999,40 @@ function drawExploreDecoration(decoration,theme){
 }
 function drawExploreExit(position,image,theme){
  const pulse=.92+Math.sin(performance.now()/240)*.08;
- drawExploreGlow(position,"#8e78ff",3.08,.1*pulse);
+ drawExploreGlow(position,theme.light,3.08,.1*pulse);
  if(!drawExplorationTileAsset(position,image,1.66)){
-  drawExploreAtlas(position,EXPLORE_ATLAS.entrance,{scale:1.64,shadowColor:"#8e78ff",shadowBlur:5})
+  drawExploreAtlas(position,EXPLORE_ATLAS.entrance,{scale:1.64,shadowColor:theme.light,shadowBlur:5})
  }
- drawExploreParticles(position,"#c8bcff",4,17,.58)
+ drawExploreParticles(position,theme.light,4,17,.58)
+}
+function exploreParticleUnit(seed,index,salt=0){const value=Math.sin((seed+index*97+salt*131)*12.9898)*43758.5453;return value-Math.floor(value)}
+function drawExploreAmbientParticles(theme){
+ const c=game.ctx,width=game.canvas.width,height=game.canvas.height,time=performance.now()/1000,count=Math.max(10,Math.min(24,Math.round(width/46))),motion=theme.particle,seed=theme.ambienceSeed??1,density=Math.min(devicePixelRatio||1,2);
+ c.save();c.globalCompositeOperation="screen";c.fillStyle=theme.light;c.strokeStyle=theme.light;
+ for(let index=0;index<count;index++){
+  const ux=exploreParticleUnit(seed,index,1),uy=exploreParticleUnit(seed,index,2),speed=.025+exploreParticleUnit(seed,index,3)*.045,wave=Math.sin(time*(.55+speed*4)+index*1.73),size=Math.max(1,Math.round((1+exploreParticleUnit(seed,index,4)*1.7)*density));
+  let x=ux*width,y=uy*height,alpha=.13+exploreParticleUnit(seed,index,5)*.32;
+  if(motion==="ember"||motion==="spore"||motion==="bubble")y=height-((uy*height+time*height*speed)%height);
+  else if(motion==="snow"||motion==="dust")y=(uy*height+time*height*speed)%height;
+  x+=wave*(motion==="snow"?18:motion==="firefly"?25:8)*density;
+  if(motion==="firefly")y+=Math.cos(time*.8+index)*18*density;
+  c.globalAlpha=motion==="spark"?(Math.sin(time*7+index*2.1)>.72?alpha*.95:.035):motion==="star"?alpha*(.55+.45*Math.sin(time*1.8+index)):alpha;
+  if(motion==="spark"){
+   c.lineWidth=Math.max(1,size*.42);c.beginPath();c.moveTo(x-size*2,y+size);c.lineTo(x+size*2,y-size);c.stroke()
+  }else if(motion==="snow"){
+   c.fillRect(Math.round(x),Math.round(y),size*1.6,Math.max(1,size*.45))
+  }else{
+   c.beginPath();c.arc(x,y,motion==="bubble"?size*1.25:size*.65,0,Math.PI*2);motion==="bubble"?c.stroke():c.fill()
+  }
+ }
+ c.restore()
 }
 function drawExploreAtmosphere(theme){
  const p=game.camera.world(game.player.rx*TILE,game.player.ry*TILE),size=TILE*game.camera.z,cx=p.x+size/2,cy=p.y+size/2;
+ game.ctx.fillStyle=theme.floor;game.ctx.fillRect(0,0,game.canvas.width,game.canvas.height);
  const radius=Math.max(game.canvas.width,game.canvas.height)*.64,gradient=game.ctx.createRadialGradient(cx,cy,size*.55,cx,cy,radius);
  gradient.addColorStop(0,"rgba(0,0,0,.04)");gradient.addColorStop(.28,"rgba(0,0,0,.14)");gradient.addColorStop(.63,"rgba(0,0,0,.58)");gradient.addColorStop(1,"rgba(0,0,0,.88)");
- game.ctx.fillStyle=gradient;game.ctx.fillRect(0,0,game.canvas.width,game.canvas.height)
+ game.ctx.fillStyle=gradient;game.ctx.fillRect(0,0,game.canvas.width,game.canvas.height);drawExploreAmbientParticles(theme)
 }
 function explorationPartySceneObjects(){
  const members=explorationPartyMembers();
@@ -3027,43 +3055,43 @@ function drawExploreSceneObjects(world,floor,theme,stairsTexture){
  objects.sort((a,b)=>a.y-b.y||a.order-b.order).forEach(entry=>entry.draw())
 }
 function draw(){
- const c=game.ctx,w=game.world,floor=save.state.player.currentFloor,palette=worldPresentationForFloor(floor),theme=exploreBandTheme(floor),floorTexture=explorationTexture("floor"),wallTexture=explorationTexture("wall"),stairsTexture=explorationTexture("stairs");
+ const c=game.ctx,w=game.world,floor=save.state.player.currentFloor,palette=worldPresentationForFloor(floor),theme=exploreBandTheme(floor),floorTexture=explorationTexture("floor",theme),wallTexture=explorationTexture("wall",theme),stairsTexture=explorationTexture("stairs",theme);
  c.fillStyle="#06070a";c.fillRect(0,0,game.canvas.width,game.canvas.height);c.imageSmoothingEnabled=false;
  for(let y=0;y<w.rows;y++)for(let x=0;x<w.cols;x++){
   const p=game.camera.world(x*TILE,y*TILE),s=TILE*game.camera.z,blocked=Boolean(w.tiles[y][x]),image=blocked?wallTexture:floorTexture;
   if(image){
    // Keep neighbouring source samples continuous. Random crop offsets made each
    // logical cell edge visible as an unintended square grid on the dungeon.
-   const crop=64,spanX=Math.max(1,image.width-crop),spanY=Math.max(1,image.height-crop),sx=x*crop%spanX,sy=y*crop%spanY;
+   const split=Boolean(theme.atlasSplit),panelWidth=split?Math.floor(image.width/2):image.width,sourceX=split&&blocked?panelWidth:0,crop=Math.min(64,panelWidth-2,image.height-2),spanX=Math.max(1,panelWidth-crop-1),spanY=Math.max(1,image.height-crop-1),sx=sourceX+(x*crop+theme.cropOffsetX)%spanX,sy=(y*crop+theme.cropOffsetY)%spanY;
    c.drawImage(image,sx,sy,crop,crop,p.x,p.y,s+1,s+1);
-   c.fillStyle=blocked?"#010205aa":theme.floor;c.fillRect(p.x,p.y,s+1,s+1);
-   if(blocked){c.fillStyle=theme.wall;c.fillRect(p.x,p.y,s+1,s+1)}
+   c.fillStyle=blocked?theme.wall:theme.floor;c.fillRect(p.x,p.y,s+1,s+1)
   }else{c.fillStyle=blocked?palette.wall:palette.floor;c.fillRect(p.x,p.y,s+1,s+1)}
  }
  drawExploreWallArchitecture(w,theme);
+ drawExploreWallEdges(w,theme);
  const decorations=ensureExploreDecorations(w);
  decorations.filter(item=>item.type==="water"||item.type==="entrance").sort((a,b)=>a.y-b.y).forEach(item=>drawExploreDecoration(item,theme));
  drawExploreSceneObjects(w,floor,theme,stairsTexture);
  drawExploreAtmosphere(theme);
  // Only broad, feathered light is repainted above the fog. The actual props
  // stay in the Y-sorted scene so party members can naturally pass in front.
- drawExploreSoftAura(w.exit,"#8e78ff",3.25,.075);
- decorations.filter(item=>item.type==="candelabrum").forEach(item=>drawExploreSoftAura(item,"#ffd58a",2.85,.065));
- drawMini();
+ drawExploreSoftAura(w.exit,theme.light,3.25,.075);
+ decorations.filter(item=>item.type==="candelabrum").forEach(item=>drawExploreSoftAura(item,theme.light,2.85,.065));
+ drawMini(theme);
 }
-function drawMini(){
+function drawMini(theme=exploreBandTheme(save.state.player.currentFloor)){
  const m=document.getElementById("miniMap");
  if(!m||!game?.running)return;
  const w=game.world;
  if(!save.state.settings.minimapVisible){m.style.opacity=0;return}
  m.style.opacity=1;
  const c=m.getContext("2d"),cell=Math.min(m.width/w.cols,m.height/w.rows),ox=(m.width-w.cols*cell)/2,oy=(m.height-w.rows*cell)/2;
- c.fillStyle="#130c18";c.fillRect(0,0,m.width,m.height);
+ c.fillStyle=theme.dark;c.fillRect(0,0,m.width,m.height);
  for(let y=0;y<w.rows;y++)for(let x=0;x<w.cols;x++){
-  c.fillStyle=w.tiles[y][x]?"#24192d":"#b178d0";
+  c.fillStyle=w.tiles[y][x]?theme.minimapWall:theme.minimapFloor;
   c.fillRect(ox+x*cell,oy+y*cell,cell,cell)
  }
- c.fillStyle="#ff5d66";c.fillRect(ox+w.exit.x*cell,oy+w.exit.y*cell,cell,cell);
+ c.fillStyle=theme.light;c.fillRect(ox+w.exit.x*cell,oy+w.exit.y*cell,cell,cell);
  c.fillStyle="#5dff82";c.fillRect(ox+game.player.x*cell,oy+game.player.y*cell,cell,cell)
 }
 function path(w,s,g){
