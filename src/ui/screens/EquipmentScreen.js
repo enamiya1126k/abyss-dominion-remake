@@ -80,6 +80,10 @@ function itemAffixes(item,{compact=false}={}){
 }
 function itemFixedEffect(item){return item.fixedEffectText?`<div class="equipment-fixed-authority"><b>固有能力</b><span>${item.fixedEffectText}</span></div>`:""}
 
+function equipmentCommand({label,icon="equipment",attributes="",tone="",note="",disabled=false}={}){
+ return`<button type="button" class="equipment-command${tone?` tone-${tone}`:""}" ${attributes}${disabled?' disabled aria-disabled="true"':""}><i>${pixelIcon(icon)}</i><span><b>${label}</b>${note?`<small>${note}</small>`:""}</span></button>`;
+}
+
 function equippedSlotCard(state,target,subslot,focusItemId=null){
  const levelRequired=SLOT_UNLOCK_LEVEL[subslot]??1;
  const locked=target.level<levelRequired;
@@ -103,12 +107,12 @@ function equippedSlotCard(state,target,subslot,focusItemId=null){
    ${itemFixedEffect(item)}
    ${itemAffixes(item,{compact:true})}
    <div class="equipped-slot-actions">
-    <button type="button" class="primary-slot-action" data-open-equipment-slot="${subslot}">装備変更</button>
-    <button type="button" data-enhance-equipment="${item.id}">装備育成</button>
-    ${affixes.length?`<button type="button" data-reroll-equipment="${item.id}">スロット厳選</button>`:'<button type="button" disabled>スロットなし</button>'}
-    <button type="button" data-favorite-equipment="${item.id}">${item.favorite?"★ 解除":"☆ お気に入り"}</button>
-    <button type="button" data-lock-equipment="${item.id}">${item.locked?"ロック解除":"ロック"}</button>
-    <button type="button" data-unequip="${item.id}">装備を外す</button>
+    ${equipmentCommand({label:"装備変更",icon:"equipment",attributes:`data-open-equipment-slot="${subslot}"`,tone:"primary",note:screenSubslotLabel(subslot)})}
+    ${equipmentCommand({label:"装備育成",icon:"growth",attributes:`data-enhance-equipment="${item.id}"`,note:`Lv.${level} ∞`})}
+    ${equipmentCommand({label:"スロット厳選",icon:"summon",attributes:`data-reroll-equipment="${item.id}"`,tone:"forge",note:affixes.length?`${affixes.length}枠を調整`:"初回スロット抽選"})}
+    ${equipmentCommand({label:item.favorite?"お気に入り解除":"お気に入り",icon:"event",attributes:`data-favorite-equipment="${item.id}"`,tone:"quiet",note:item.favorite?"登録中":"未登録"})}
+    ${equipmentCommand({label:item.locked?"ロック解除":"ロック",icon:"key",attributes:`data-lock-equipment="${item.id}"`,tone:"quiet",note:item.locked?"保護中":"保護なし"})}
+    ${equipmentCommand({label:"装備を外す",icon:"return",attributes:`data-unequip="${item.id}"`,tone:"danger",note:"所持品へ戻す"})}
    </div>
   </div>
  </details>`;
@@ -144,10 +148,25 @@ function card(item,state,target,storage,{editing=false,selected=false,focused=fa
  const equipButtons=compatibleSubslots(item).map(subslot=>{
   const locked=target.level<SLOT_UNLOCK_LEVEL[subslot];
   const replacesTwoHanded=subslot==="weaponLeft"&&state.equipment.find(entry=>entry.id===target.equipment?.weaponRight)?.handedness==="twoHanded";
-  return`<button data-equip="${item.id}" data-target="${target.id}" data-subslot="${subslot}" ${locked?"disabled":""}>${screenSubslotLabel(subslot)}へ${locked?`（Lv.${SLOT_UNLOCK_LEVEL[subslot]}）`:replacesTwoHanded?"（両手武器を外す）":""}</button>`;
+  return equipmentCommand({label:`${screenSubslotLabel(subslot)}へ装備`,icon:"equipment",attributes:`data-equip="${item.id}" data-target="${target.id}" data-subslot="${subslot}"`,tone:"primary",note:locked?`Lv.${SLOT_UNLOCK_LEVEL[subslot]}で解放`:replacesTwoHanded?"両手武器と交換":"装備を変更",disabled:locked});
  }).join("");
  const protectedItem=!!item.equippedBy||item.favorite||item.locked||item.ruleOverrides?.unsellable;
  const affixes=ensureEquipmentAffixes(item);
+ let actionMarkup="";
+ if(!editing){
+  if(!inventory){
+   actionMarkup=equipmentCommand({label:"所持品へ移動",icon:"inventory",attributes:`data-take-equipment="${item.id}" data-storage="${storage}"`,tone:"primary",note:"装備管理で使用"});
+  }else{
+   actionMarkup=equipButtons;
+   if(item.equippedBy)actionMarkup+=equipmentCommand({label:"装備を外す",icon:"return",attributes:`data-unequip="${item.id}"`,tone:"danger",note:"所持品へ戻す"});
+   else if(item.ruleOverrides?.unsellable)actionMarkup+=equipmentCommand({label:"売却不可",icon:"coin",tone:"quiet",note:"保護装備",disabled:true});
+   else actionMarkup+=equipmentCommand({label:"売却",icon:"coin",attributes:`data-sell="${item.id}"`,tone:"danger",note:`${equipmentSellPrice(item).toLocaleString()}G`});
+   actionMarkup+=equipmentCommand({label:"装備育成",icon:"growth",attributes:`data-enhance-equipment="${item.id}"`,note:`Lv.${level} ∞`});
+   actionMarkup+=equipmentCommand({label:"スロット厳選",icon:"summon",attributes:`data-reroll-equipment="${item.id}"`,tone:"forge",note:affixes.length?`${affixes.length}枠を調整`:"初回スロット抽選"});
+   actionMarkup+=equipmentCommand({label:item.favorite?"お気に入り解除":"お気に入り",icon:"event",attributes:`data-favorite-equipment="${item.id}"`,tone:"quiet",note:item.favorite?"登録中":"未登録"});
+   actionMarkup+=equipmentCommand({label:item.locked?"ロック解除":"ロック",icon:"key",attributes:`data-lock-equipment="${item.id}"`,tone:"quiet",note:item.locked?"保護中":"保護なし"});
+  }
+ }
  return`<article class="equipment-card ${selected?"selected":""} ${protectedItem?"protected-entry":""} ${focused?"focused-equipment":""}" data-equipment-card-id="${item.id}">
  ${editing&&inventory?`<label class="manage-check"><input type="checkbox" data-select-equipment-id="${item.id}" ${selected?"checked":""} ${protectedItem?"disabled":""}><span></span></label>`:""}
   <div class="equipment-card-identity">${equipmentVisual(item,{className:"equipment-list-art"})}<div class="spread">${coloredEquipmentName(item)}<span>${item.favorite?"★":""}${item.locked?"L":""}${item.ruleOverrides?.unsellable?"P":""}</span></div></div>
@@ -162,17 +181,7 @@ function card(item,state,target,storage,{editing=false,selected=false,focused=fa
    <br>${owner?`装備中：${displayName(owner)}`:"未装備"}
    ${item.slot==="weapon"?`<div class="equipment-growth-chips">${weaponMasteryBadge(item)}</div>`:""}
   </div>
-  <div class="equipment-actions">${editing?"":inventory
-   ?equipButtons
-    +(item.equippedBy
-     ?`<button data-unequip="${item.id}">外す</button>`
-     :item.ruleOverrides?.unsellable
-      ?'<button disabled>売却不可</button>'
-      :`<button data-sell="${item.id}">売却 ${equipmentSellPrice(item)}G</button>`)
-    +`<button data-enhance-equipment="${item.id}">🔨 育成</button>`
-    +(affixes.length?`<button data-reroll-equipment="${item.id}">🎲 GOLD厳選</button>`:'<button disabled title="ランダムオプションがありません">🎲 厳選不可</button>')
-    +`<button data-favorite-equipment="${item.id}">${item.favorite?"★":"☆"}</button><button data-lock-equipment="${item.id}">${item.locked?"🔓":"🔒"}</button>`
-   :`<button data-take-equipment="${item.id}" data-storage="${storage}">所持品へ</button>`}</div>
+  <div class="equipment-actions">${actionMarkup}</div>
  </article>`;
 }
 
