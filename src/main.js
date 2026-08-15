@@ -6,8 +6,10 @@ import{SPECIES}from"./data/species.js?v=2.10.0";
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.10.0";
 import{attributeDamageMultiplier,attributeGuideRows,ATTRIBUTES}from"./data/attributes.js?v=2.10.0";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.10.0";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.10.0";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.10.0";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.10.0-build145";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.10.0-build145";
+import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build145";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build145";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.10.0";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.10.0";
 import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.10.0";
@@ -52,7 +54,7 @@ import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHid
 import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier}from"./core/MagicCircleSystem.js?v=2.10.0-build141";
 import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.10.0";
 import{dungeonThemeForFloor}from"./data/dungeonThemes.js?v=2.10.0-build144";
-import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.10.0";
+import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.10.0-build145";
 import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.10.0";
 import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.10.0";
 import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.10.0";
@@ -65,6 +67,7 @@ import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVis
 const TILE=88,COLS=39,ROWS=39,app=document.getElementById("app"),save=new SaveService(),audio=new AudioSystem(()=>save.state.settings);
 let screen="home",selected=null,equipmentTarget=null,equipmentFocusItemId=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",inventoryCategory="all",inventorySort="rarity",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",skillNavigationOrigin="home",inventoryNavigationOrigin="home",settingsNavigationOrigin="home",detailNavigationOrigin="monsters",formationOrigin="home",lastExploreCombatPower=null;
 let exploreActionGeneration=0,secretRoomAutoRunning=false;
+let onlinePartyController=null;
 document.addEventListener("pointerdown",()=>audio.unlock(),{once:true,passive:true});
 let secondWorldIntroPlaying=false;
 let tenGodContactPlaying=false;
@@ -341,6 +344,7 @@ function render(){
  audio.setScene(["explore","gauntlet"].includes(screen)?"explore":"home");
  if(screen==="home"){app.innerHTML=HomeScreen(save.state);bindHome()}
  else if(screen==="formation"){app.innerHTML=FormationScreen(save.state,{origin:formationOrigin});bindFormation()}
+ else if(screen==="onlineParty"){app.innerHTML=OnlinePartyScreen(save.state);bindOnlineParty()}
  else if(screen==="monsters"){app.innerHTML=MonsterListScreen(save.state,{...monsterManage,...monsterListState});bindList()}
  else if(screen==="detail"){const m=save.state.monsters.find(x=>x.id===selected);app.innerHTML=MonsterDetailScreen(m,save.state);bindDetail(m)}
  else if(screen==="settings"){app.innerHTML=SettingsScreen(save.state);bindSettings()}
@@ -375,6 +379,7 @@ function go(s){
   s="explore";
  }
  if(screen==="explore"&&["formation","equipment","skills","inventory","armory","settings"].includes(s))rememberExpeditionMenuHistory();
+ if(screen==="onlineParty"&&s!=="onlineParty")onlinePartyController?.unmount({disconnect:true});
  screen=s;render();
 }
 window.addEventListener("popstate",()=>{if(expeditionActive()&&!battle&&screen!=="explore"){screen="explore";render()}});
@@ -647,7 +652,7 @@ function showGauntletSettlement(settlement){
  app.insertAdjacentHTML("beforeend",Modal("奈落回廊・最終精算",body,"拠点へ戻る"));const modal=topModal();modal.classList.add("gauntlet-settlement-modal");modal.querySelector("[data-modal-primary]").onclick=()=>{modal.remove();screen="home";render()};
 }
 function openGauntletTrial(){
- if(!isContentUnlocked(save.state,TEAM_BATTLE_UNLOCK_FLOOR))return showToast(`${contentUnlockFloor(TEAM_BATTLE_UNLOCK_FLOOR)}階突破で解放されます`);
+ if(!isContentUnlocked(save.state,GAUNTLET_UNLOCK_FLOOR))return showToast(`${contentUnlockFloor(GAUNTLET_UNLOCK_FLOOR)}階突破で解放されます`);
  if(save.state.party.length!==4)return alert(`奈落回廊には出撃メンバーが4体必要です（現在 ${save.state.party.length}/4体）`);
  const state=normalizeEndgameState(save.state).trials,daily=dailyGauntletAttempts(save.state),active=Boolean(state.run?.active);
  if(!active&&daily.remaining<=0)return showToast("本日の奈落回廊は終了");
@@ -690,10 +695,10 @@ function openEndgameTrialPicker(){
 }
 function openEndgameDossier(bossId){const boss=endgameCharacter(bossId);if(!boss)return;const resist=Object.entries(boss.elementMultipliers).map(([key,value])=>`<span><small>${key}</small><b>${Math.round(value*100)}%</b></span>`).join(""),skills=boss.skills.map(skill=>`<article><small>${skill.tag}・MP${skill.mp}・CT${skill.cooldown}</small><b>${skill.name}</b><p>${skillEffectSummary(skill," / ")}</p></article>`).join(""),gear=boss.gear.map(item=>`<article><small>${equipmentSubslotLabel(item.subslot)}</small><b>${item.name}</b><p>${item.effectText}</p></article>`).join("");app.insertAdjacentHTML("beforeend",Modal(`${boss.icon} ${boss.name}`,`<div class="endgame-character-bible ${boss.faction}">${monsterVisual(boss.id,boss.icon,{className:"endgame-bible-visual"})}<small>${boss.role}</small><h3>${boss.title}</h3><blockquote>${boss.encounterText}</blockquote><p>${boss.lore}</p><section><h4>戦闘思想</h4><p>${boss.ai}</p><b>${boss.passive}</b><small>${boss.awakening}</small></section><div class="endgame-resistance-grid">${resist}</div><div class="endgame-status-note"><b>無効：${boss.statusProfile.immune.join("・")||"なし"}</b><span>耐性：${boss.statusProfile.resistant.join("・")||"なし"}</span>${boss.statusProfile.weak.length?`<em>弱点：${boss.statusProfile.weak.join("・")}</em>`:""}</div><h4>固有技</h4><div class="endgame-bible-grid">${skills}</div><h4>固有装備 6部位</h4><div class="endgame-bible-grid gear">${gear}</div><div class="endgame-set-list"><b>2部位：${boss.setText[2]}</b><b>4部位：${boss.setText[4]}</b><b>6部位：${boss.setText[6]}</b></div></div>`,"戻る"));topModalButton().onclick=closeTopModal}
 function openEventHub(){
- const teamUnlocked=isContentUnlocked(save.state,TEAM_BATTLE_UNLOCK_FLOOR),emergencyUnlocked=isContentUnlocked(save.state,EMERGENCY_UNLOCK_FLOOR),gauntletUnlocked=isContentUnlocked(save.state,TEAM_BATTLE_UNLOCK_FLOOR),testLabel=CONTENT_TEST_MODE?`試遊条件 ${contentUnlockFloor(9999)}階`:"",team=dailyTeamAttempts(save.state),trials=normalizeEndgameState(save.state).trials,gauntlet=dailyGauntletAttempts(save.state),manual=manualEndgameChallengeStatus(save.state);
+ const teamUnlocked=isContentUnlocked(save.state,TEAM_BATTLE_UNLOCK_FLOOR),emergencyUnlocked=isContentUnlocked(save.state,EMERGENCY_UNLOCK_FLOOR),gauntletUnlocked=isContentUnlocked(save.state,GAUNTLET_UNLOCK_FLOOR),testLabel=CONTENT_TEST_MODE?`試遊条件 ${contentUnlockFloor(9999)}階`:"",team=dailyTeamAttempts(save.state),trials=normalizeEndgameState(save.state).trials,gauntlet=dailyGauntletAttempts(save.state),manual=manualEndgameChallengeStatus(save.state);
  app.insertAdjacentHTML("beforeend",Modal("試練",`<div class="trial-access-note ${CONTENT_TEST_MODE?"is-test":""}"><b>${CONTENT_TEST_MODE?"TEST ACCESS":"CHALLENGE GATE"}</b><small>${CONTENT_TEST_MODE?"完成時は正式な解放条件へ自動復帰します。":"編成・属性・装備の完成度を測る最深部への門"}</small></div><div class="home-event-grid trial-gate-grid brain-rush">
   <button type="button" data-home-trial="team" class="team ${teamUnlocked?"unlocked":"locked"}"><span class="trial-pixel-emblem arena"></span><div><b>4 VS 4</b><small>${teamUnlocked?`指数強化・第50試練は編成完成が必須 ${testLabel}`:`${contentUnlockFloor(TEAM_BATTLE_UNLOCK_FLOOR)}階突破で解放`}</small></div><em>残${team.remaining}/${team.limit}</em></button>
-  <button type="button" data-home-trial="gauntlet" class="corridor ${gauntletUnlocked?"unlocked":"locked"}"><span class="trial-pixel-emblem corridor"></span><div><b>奈落回廊</b><small>${gauntletUnlocked?`歩行式・全22法廷・戦闘前後に道具使用可 ${testLabel}`:`${contentUnlockFloor(TEAM_BATTLE_UNLOCK_FLOOR)}階突破で解放`}</small></div><em>${trials.run?.active?"踏破中":`残${gauntlet.remaining}/${gauntlet.limit}`}</em></button>
+  <button type="button" data-home-trial="gauntlet" class="corridor ${gauntletUnlocked?"unlocked":"locked"}"><span class="trial-pixel-emblem corridor"></span><div><b>奈落回廊</b><small>${gauntletUnlocked?`歩行式・全22法廷・戦闘前後に道具使用可 ${testLabel}`:`${contentUnlockFloor(GAUNTLET_UNLOCK_FLOOR)}階突破で解放`}</small></div><em>${trials.run?.active?"踏破中":`残${gauntlet.remaining}/${gauntlet.limit}`}</em></button>
   <button type="button" data-home-trial="endgame" class="endgame ${emergencyUnlocked?"unlocked":"locked"}"><span class="trial-pixel-emblem endgame"></span><div><b>深淵・十神</b><small>${emergencyUnlocked?`4段階解禁・全対象で1日3戦 ${testLabel}`:`${contentUnlockFloor(EMERGENCY_UNLOCK_FLOOR)}階突破で解放`}</small></div><em>本日 残${manual.remaining}</em></button>
  </div>`,"閉じる"));
  const modal=topModal();modal.classList.add("trial-hub-modal-v3");
@@ -702,7 +707,7 @@ function openEventHub(){
   if(action==="team"&&teamUnlocked){modal.remove();return openTeamBattle()}
   if(action==="gauntlet"&&gauntletUnlocked){modal.remove();return openGauntletTrial()}
   if(action==="endgame"&&emergencyUnlocked){modal.remove();return openEndgameTrialPicker()}
-  const required=action==="endgame"?contentUnlockFloor(EMERGENCY_UNLOCK_FLOOR):contentUnlockFloor(TEAM_BATTLE_UNLOCK_FLOOR);showToast(`${required}階突破で解放されます`);
+  const required=action==="endgame"?contentUnlockFloor(EMERGENCY_UNLOCK_FLOOR):action==="gauntlet"?contentUnlockFloor(GAUNTLET_UNLOCK_FLOOR):contentUnlockFloor(TEAM_BATTLE_UNLOCK_FLOOR);showToast(`${required}階突破で解放されます`);
  });
  modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
 }
@@ -866,7 +871,7 @@ function bindHome(){
  document.getElementById("openRest")?.addEventListener("click",openRest);
  document.getElementById("openGacha")?.addEventListener("click",openGacha);
  document.getElementById("openNoticeCenter")?.addEventListener("click",openNoticeCenter);
- document.getElementById("openOnlineParty")?.addEventListener("click",()=>openUnavailableHomeFeature("パーティー",""));
+ document.getElementById("openOnlineParty")?.addEventListener("click",()=>go("onlineParty"));
  document.getElementById("openEventHub")?.addEventListener("click",openEventHub);
  document.getElementById("openSettings").onclick=()=>go("settings");
  document.getElementById("openExplore").onclick=openExploreFloorSelector;
@@ -1518,6 +1523,7 @@ function openFormationGearMenu(itemId,ownerId,subslot){
 }
 function bindFormation(){
  document.getElementById("backFormation")?.addEventListener("click",()=>{const target=formationOrigin;formationOrigin="home";returnFromMenu(target)});
+ document.querySelector('[data-party-tab="online"]')?.addEventListener("click",()=>go("onlineParty"));
  const rarityDrawer=document.querySelector("[data-formation-rarity-drawer]");
  const setRarityDrawer=open=>{
   if(!rarityDrawer)return;
@@ -1585,6 +1591,11 @@ function bindFormation(){
   document.addEventListener("pointerup",finish,true);
   document.addEventListener("pointercancel",finish,true);
  }));
+}
+
+function bindOnlineParty(){
+ onlinePartyController??=new OnlinePartyController({getState:()=>save.state,toast:showToast,onBack:()=>go("home"),onFormation:()=>{formationOrigin="home";go("formation")}});
+ onlinePartyController.mount(app);
 }
 function rarityValue(rarity){return ({N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9}[rarity]??0)}
 function elementLabel(element){return ({all:"全属性",neutral:"無",fire:"火",water:"水",ice:"氷",wind:"風",earth:"土",lightning:"雷",thunder:"雷",light:"光",dark:"闇",poison:"毒",nature:"自然"}[element]??element)}
@@ -4249,6 +4260,7 @@ function lose(){
 }
 normalizeEquipmentState();
 if(save.state.player.inRun&&!save.state.activeBattle)screen="explore";
+else if(!save.state.activeBattle){try{const invite=new URLSearchParams(location.search);if(invite.get("partyServer")&&invite.get("partyRoom"))screen="onlineParty"}catch{}}
 const resumedSavedBattle=resumeSavedBattle();
 if(!resumedSavedBattle)render();
 if(!resumedSavedBattle)setTimeout(()=>{if(!resumePendingEmergency())resumePendingBossReward()},180);
