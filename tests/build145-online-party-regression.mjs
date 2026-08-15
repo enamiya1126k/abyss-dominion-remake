@@ -31,7 +31,7 @@ assert.match(css,/\.online-plaza/);assert.match(css,/\.online-avatar-figure\.fac
 
 assert.match(server,/127\.0\.0\.1/);assert.match(server,/maxPayload:16\*1024/);assert.match(server,/originAllowed/);assert.match(roomStoreSource,/ROOM_FULL/);
 for(const file of["00_READ_ME_FIRST.txt","01_FIRST_SETUP.bat","02_START_SERVER.bat","03_OPEN_TUNNEL.bat","04_START_ONLINE.bat","ONLINE_SETUP_GUIDE.md","package.json"])assert.equal(fs.existsSync(path.join(root,"online-server",file)),true,`${file} is bundled`);
-assert.match(index,/ASSET_BUILD = "build14[5-7]"/);assert.match(index,/CACHE_VERSION/);
+assert.match(index,/ASSET_BUILD = "build14[5-8]"/);assert.match(index,/CACHE_VERSION/);
 
 const sent=[],connection={send:raw=>sent.push(JSON.parse(raw)),close(){}},store=new RoomStore({randomRoomCode:()=>"ABCD23"}),hello=store.hello(connection,{friendId:"AD-ABCD-EFGH",clientKey:"a-secure-local-client-key-1234",profile:{displayName:"テスト",speciesId:"slime",power:123}});assert.equal(hello.ok,true);assert.equal(store.createRoom(connection.session).room.members.length,1);assert.equal(store.rooms.size,1);
 

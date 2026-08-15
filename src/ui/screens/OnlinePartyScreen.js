@@ -1,7 +1,7 @@
 import{SPECIES}from"../../data/species.js?v=2.10.0";
 import{displayName,calculatedStats}from"../../models/Monster.js?v=2.10.0";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0";
-import{magicCircleById}from"../../core/MagicCircleSystem.js?v=2.10.0-build147";
+import{magicCircleById}from"../../core/MagicCircleSystem.js?v=2.10.0-build148";
 import{learnedSkills,maxMp,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.10.0";
 import{monsterVisual}from"../MonsterVisual.js?v=2.10.0";
 import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.10.0";
@@ -115,7 +115,7 @@ export function OnlinePartyScreen(state){
    </section>
 
    <section class="online-plaza-shell online-coop-shell" data-online-plaza-shell hidden>
-    <header class="online-room-header"><div><small>PARTY ROOM</small><strong data-online-room-id>------</strong><button type="button" data-copy-room-id>コピー</button></div><span data-online-member-count>1 / 4</span><button type="button" data-copy-invite>招待リンク</button><button type="button" class="danger" data-online-leave-room>退出</button></header>
+    <header class="online-room-header"><div><small>PARTY ROOM</small><strong data-online-room-id>------</strong><button type="button" data-copy-room-id>コピー</button></div><nav aria-label="オンライン画面"><button type="button" class="active" data-online-room-view="plaza">広場</button><button type="button" data-online-room-view="lobby">出発準備</button><button type="button" data-online-social-toggle>会話</button></nav><span data-online-member-count>1 / 4</span><button type="button" data-copy-invite>招待</button><button type="button" class="danger" data-online-leave-room>退出</button></header>
     <div class="online-plaza-view" data-online-plaza-view>
      <div class="online-plaza" data-online-plaza tabindex="0" aria-label="オンライン広場。画面タップまたは方向キーで移動">
       <div class="online-plaza-sky" aria-hidden="true"></div><div class="online-plaza-river" aria-hidden="true"></div><div class="online-plaza-ground" aria-hidden="true"></div>
@@ -136,8 +136,7 @@ export function OnlinePartyScreen(state){
     <section class="online-expedition-shell" data-online-expedition-shell hidden>
      <header class="online-expedition-header"><div><small>SHARED EXPEDITION</small><h3><span data-online-expedition-floor>1</span>F 共闘探索</h3></div><span data-online-expedition-theme>黒鉄遺跡</span><em><b data-online-discoveries>0</b>/<span data-online-discovery-total>6</span> 発見</em></header>
      <div class="online-dungeon-viewport" data-online-dungeon-viewport tabindex="0" aria-label="共闘ダンジョン。通路をタップまたは方向キーで移動">
-      <div class="online-dungeon-board" data-online-dungeon-board><div class="online-dungeon-grid" data-online-dungeon-grid></div><div class="online-dungeon-object-layer" data-online-dungeon-objects></div><div class="online-dungeon-player-layer" data-online-dungeon-players></div></div>
-      <div class="online-expedition-event" data-online-expedition-event hidden><small>PARTY DISCOVERY</small><b></b><span></span></div>
+      <div class="online-dungeon-board" data-online-dungeon-board><div class="online-dungeon-grid" data-online-dungeon-grid></div><div class="online-dungeon-decoration-layer" data-online-dungeon-decorations></div><div class="online-dungeon-object-layer" data-online-dungeon-objects></div><div class="online-dungeon-player-layer" data-online-dungeon-players></div></div>
       <div class="online-dungeon-legend"><span><i class="chest"></i>宝箱</span><span><i class="bone"></i>遺骨</span><span><i class="shrine"></i>祭壇</span><span><i class="encounter"></i>魔物</span><span><i class="exit"></i>出口</span></div>
      </div>
      <section class="online-coop-battle" data-online-coop-battle hidden>
@@ -153,6 +152,8 @@ export function OnlinePartyScreen(state){
       </div>
       <div class="online-battle-feed" data-online-battle-feed><span>敵と遭遇！全員の行動を同期しています。</span></div>
      </section>
+     <div class="online-expedition-event" data-online-expedition-event hidden><small>PARTY DISCOVERY</small><b></b><span></span></div>
+     <div class="online-stair-status" data-online-stair-status hidden><small>NEXT FLOOR</small><b>階段集合 <span>0/1</span></b><em></em></div>
      <div class="online-dungeon-command"><div class="online-dungeon-pad" aria-label="ダンジョンの移動操作"><button data-online-dungeon-move="up" aria-label="上">▲</button><button data-online-dungeon-move="left" aria-label="左">◀</button><button data-online-dungeon-move="down" aria-label="下">▼</button><button data-online-dungeon-move="right" aria-label="右">▶</button></div><div><button type="button" data-online-request-return>帰還を提案</button><button type="button" class="online-complete-expedition" data-online-complete-expedition hidden>踏破を確定</button><nav class="online-dungeon-social" aria-label="共闘リアクション"><button type="button" data-online-chat="follow">ついてきて！</button><button type="button" data-online-chat="thanks">ありがとう！</button><button type="button" data-online-emote="cheer" data-keep-emoji aria-label="喜ぶ">✨</button><button type="button" data-online-emote="heart" data-keep-emoji aria-label="ハート">❤</button></nav><small data-online-return-status>リーダー帰還／過半数投票</small></div></div>
      <div class="online-expedition-feed" data-online-expedition-feed><span>仲間と同じマップへ入りました。</span></div>
     </section>
