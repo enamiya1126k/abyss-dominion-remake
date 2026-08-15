@@ -10,7 +10,7 @@ function reply(socket,message){if(socket.readyState===WebSocket.OPEN)socket.send
 function fail(socket,result){reply(socket,{type:"error",code:result.code??"REQUEST_FAILED",message:result.message??"処理に失敗しました"})}
 
 const server=http.createServer((request,response)=>{
- if(request.url==="/health"){response.writeHead(200,{"content-type":"application/json; charset=utf-8","cache-control":"no-store"});response.end(JSON.stringify({ok:true,service:"ABYSS DOMINION CO-OP SERVER",protocol:"1.3.0",rooms:store.rooms.size,expeditions:[...store.rooms.values()].filter(room=>room.phase==="expedition").length,battles:[...store.rooms.values()].filter(room=>room.expedition?.battle).length,players:[...store.sessions.values()].filter(session=>session.connected).length,time:new Date().toISOString()}));return}
+ if(request.url==="/health"){response.writeHead(200,{"content-type":"application/json; charset=utf-8","cache-control":"no-store"});response.end(JSON.stringify({ok:true,service:"ABYSS DOMINION CO-OP SERVER",protocol:"1.4.0",rooms:store.rooms.size,expeditions:[...store.rooms.values()].filter(room=>room.phase==="expedition").length,battles:[...store.rooms.values()].filter(room=>room.expedition?.battle).length,raids:[...store.rooms.values()].filter(room=>room.phase==="raid").length,trades:store.trade.trades.size,players:[...store.sessions.values()].filter(session=>session.connected).length,time:new Date().toISOString()}));return}
  response.writeHead(200,{"content-type":"text/plain; charset=utf-8","cache-control":"no-store"});response.end("ABYSS DOMINION CO-OP SERVER\nWebSocket endpoint: /party\nHealth check: /health\n");
 });
 const wss=new WebSocketServer({noServer:true,maxPayload:16*1024,perMessageDeflate:false});
@@ -38,6 +38,16 @@ wss.on("connection",socket=>{
   else if(message.type==="battleSpeed")result=store.setBattleSpeed(session,message.speed);
   else if(message.type==="requestReturn")result=store.requestReturn(session);
   else if(message.type==="completeExpedition")result=store.completeExpedition(session);
+  else if(message.type==="startRaid")result=store.startRaid(session);
+  else if(message.type==="raidAction")result=store.submitRaidAction(session,message.action??message);
+  else if(message.type==="raidSpeed")result=store.setRaidSpeed(session,message.speed);
+  else if(message.type==="tradeRequest")result=store.requestTrade(session,message.targetId);
+  else if(message.type==="tradeRespond")result=store.respondTrade(session,message.tradeId,message.accepted);
+  else if(message.type==="tradeOffer")result=store.offerTrade(session,message.tradeId,message.asset);
+  else if(message.type==="tradeReady")result=store.readyTrade(session,message.tradeId,message.ready);
+  else if(message.type==="tradeConfirm")result=store.confirmTrade(session,message.tradeId);
+  else if(message.type==="tradeCancel")result=store.cancelTrade(session,message.tradeId);
+  else if(message.type==="tradeAck")result=store.ackTrade(session,message.tradeId,message.success!==false);
   else if(message.type==="rewardAck")result=store.ackReward(session,message.rewardId);
   else if(message.type==="ping"){reply(socket,{type:"pong",at:now});return}
   if(!result.ok)fail(socket,result);
@@ -46,7 +56,7 @@ wss.on("connection",socket=>{
 });
 const battleClock=setInterval(()=>store.advanceBattles(),250);battleClock.unref?.();
 const heartbeat=setInterval(()=>{store.pruneExpired();for(const socket of clients){if(socket.isAlive===false){socket.terminate();continue}socket.isAlive=false;socket.ping()}},10_000);heartbeat.unref?.();
-server.listen(PORT,HOST,()=>{console.log(`\nABYSS DOMINION CO-OP SERVER`);console.log(`Local: http://${HOST}:${PORT}`);console.log(`Health: http://${HOST}:${PORT}/health`);console.log(`Online plaza, shared exploration and co-op battle are ready (up to 4 players).\n`)});
+server.listen(PORT,HOST,()=>{console.log(`\nABYSS DOMINION CO-OP SERVER`);console.log(`Local: http://${HOST}:${PORT}`);console.log(`Health: http://${HOST}:${PORT}/health`);console.log(`Online plaza, exploration, raid and secure trading are ready (up to 4 players).\n`)});
 function shutdown(){clearInterval(battleClock);clearInterval(heartbeat);for(const socket of clients)try{socket.close(1001,"server shutdown")}catch{};server.close(()=>process.exit(0));setTimeout(()=>process.exit(0),1500).unref()}
 process.on("SIGINT",shutdown);process.on("SIGTERM",shutdown);
 export{server,store};
