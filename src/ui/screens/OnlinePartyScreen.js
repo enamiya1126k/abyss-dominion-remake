@@ -1,0 +1,127 @@
+import{SPECIES}from"../../data/species.js?v=2.10.0";
+import{displayName}from"../../models/Monster.js?v=2.10.0";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0";
+import{magicCircleById}from"../../core/MagicCircleSystem.js?v=2.10.0-build145";
+import{monsterVisual}from"../MonsterVisual.js?v=2.10.0";
+import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.10.0";
+
+const ONLINE_STORAGE_KEYS=Object.freeze({
+ friendId:"abyss-dominion-online-friend-id",
+ clientKey:"abyss-dominion-online-client-key",
+ resumeToken:"abyss-dominion-online-resume-token",
+ serverUrl:"abyss-dominion-online-server-url",
+ displayName:"abyss-dominion-online-display-name",
+ monsterId:"abyss-dominion-online-monster-id"
+});
+
+const EQUIPMENT_SLOTS=Object.freeze([
+ ["weaponRight","右手"],["weaponLeft","左手"],["accessoryNeck","首"],
+ ["accessoryFinger","指"],["armorBody","胴"],["armorSupport","補助"]
+]);
+
+function randomToken(length=8){
+ const alphabet="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",bytes=new Uint8Array(length);
+ globalThis.crypto?.getRandomValues?.(bytes);
+ return Array.from(bytes,(value,index)=>alphabet[(value||Math.floor(Math.random()*256)+index)%alphabet.length]).join("");
+}
+function safeStorageGet(key,fallback=""){try{return localStorage.getItem(key)??fallback}catch{return fallback}}
+function safeStorageSet(key,value){try{localStorage.setItem(key,String(value))}catch{}}
+function inviteParameters(){
+ try{const params=new URLSearchParams(location.search);return{server:params.get("partyServer")??"",room:(params.get("partyRoom")??"").toUpperCase()}}catch{return{server:"",room:""}}
+}
+function createIdentity(){
+ let friendId=safeStorageGet(ONLINE_STORAGE_KEYS.friendId),clientKey=safeStorageGet(ONLINE_STORAGE_KEYS.clientKey);
+ if(!/^AD-[A-Z2-9]{4}-[A-Z2-9]{4}$/.test(friendId)){friendId=`AD-${randomToken(4)}-${randomToken(4)}`;safeStorageSet(ONLINE_STORAGE_KEYS.friendId,friendId)}
+ if(clientKey.length<24){clientKey=`${randomToken(16)}${randomToken(16)}`;safeStorageSet(ONLINE_STORAGE_KEYS.clientKey,clientKey)}
+ return{friendId,clientKey};
+}
+function selectedPartyMonster(state){
+ const party=(state.party??[]).map(id=>state.monsters?.find(monster=>monster.id===id)).filter(Boolean);
+ const savedId=safeStorageGet(ONLINE_STORAGE_KEYS.monsterId),monster=party.find(entry=>entry.id===savedId)??party[0]??state.monsters?.[0]??null;
+ if(monster)safeStorageSet(ONLINE_STORAGE_KEYS.monsterId,monster.id);
+ return{party,monster};
+}
+function equipmentProfile(state,monster){
+ const items=new Map((state.equipment??[]).map(item=>[item.id,item]));
+ return EQUIPMENT_SLOTS.map(([slot,label])=>{
+  const item=items.get(monster?.equipment?.[slot]);
+  return item?{slot,label,name:item.name??"装備",rarity:item.rarity??item.displayRarity??"N",level:Math.max(1,Number(item.level)||1),plus:Math.max(0,Number(item.plus)||0)}:{slot,label,name:"なし",rarity:"",level:0,plus:0};
+ });
+}
+export function buildOnlinePartyProfile(state,{monsterId=null,displayName:onlineName=""}={}){
+ const party=(state.party??[]).map(id=>state.monsters?.find(monster=>monster.id===id)).filter(Boolean),monster=party.find(entry=>entry.id===monsterId)??selectedPartyMonster(state).monster;
+ if(!monster)return{displayName:onlineName||"冒険者",monsterId:null,speciesId:"slime",visualSpeciesId:null,endgameBossId:null,monsterName:"未編成",fallbackEmoji:"？",level:1,stars:1,plus:0,power:0,attribute:"neutral",circleId:"none",circleName:"魔法陣なし",circleLevel:0,equipment:[]};
+ const species=SPECIES[monster.speciesId]??{},circle=magicCircleById(monster.magicCircleId);
+ return{
+  displayName:String(onlineName||displayName(monster)||"冒険者").trim().slice(0,16),monsterId:monster.id,speciesId:monster.speciesId,
+  visualSpeciesId:monster.visualSpeciesId??null,endgameBossId:monster.endgameBossId??null,monsterName:displayName(monster),fallbackEmoji:species.emoji??"魔",
+  level:Math.max(1,Number(monster.level)||1),stars:Math.max(1,Number(monster.stars)||1),plus:Math.max(0,Number(monster.plus)||0),
+  power:monsterCombatPower(monster),attribute:monster.attribute??species.element??"neutral",circleId:circle.id,circleName:circle.name,circleLevel:circle.id==="none"?0:Math.max(1,Number(state.magicCircles?.owned?.[circle.id])||1),
+  equipment:equipmentProfile(state,monster)
+ };
+}
+
+function characterChoice(monster,selected){
+ const species=SPECIES[monster.speciesId]??{};
+ return`<button type="button" class="online-character-choice ${monster.id===selected?"selected":""}" data-online-character="${monster.id}" aria-pressed="${monster.id===selected}">
+  ${monsterVisual(monster,species.emoji??"魔",{className:"online-choice-monster"})}<span><b>${displayName(monster)}</b><small>Lv.${monster.level}・戦力 ${formatCombatPower(monsterCombatPower(monster))}</small></span>
+ </button>`;
+}
+function emptyMember(index){return`<div class="online-member-empty"><i>${index+1}</i><span>参加待ち</span></div>`}
+
+export function onlineMagicCircleArt(profile,{className=""}={}){
+ const circle=magicCircleById(profile?.circleId),source=circle?.asset??"./assets/magic-circles/plain.png";
+ return`<span class="online-circle-art ${className}" data-circle="${circle?.id??"none"}" aria-hidden="true"><img src="${source}" alt=""><i></i></span>`;
+}
+
+export function onlineAvatarVisual(profile,{className=""}={}){
+ return`<span class="online-avatar-stack ${className}">${onlineMagicCircleArt(profile)}${monsterVisual(profile,profile?.fallbackEmoji??"魔",{className:"online-avatar-monster"})}</span>`;
+}
+
+export function OnlinePartyScreen(state){
+ const identity=createIdentity(),invite=inviteParameters(),{party,monster}=selectedPartyMonster(state),storedName=safeStorageGet(ONLINE_STORAGE_KEYS.displayName),defaultName=storedName||(monster?displayName(monster):"冒険者"),server=invite.server||safeStorageGet(ONLINE_STORAGE_KEYS.serverUrl);
+ return`<section class="screen online-party-screen v2-screen" data-online-party-root>
+  ${resourceHud(state,{backId:"backOnlineParty",title:"パーティ",eyebrow:"ABYSS DOMINION / ONLINE PLAZA"})}
+  <div class="party-mode-tabs" role="tablist" aria-label="パーティ機能">
+   <button type="button" data-party-tab="formation" role="tab">${pixelIcon("formation")}<span><b>部隊編成</b><small>いつもの4体編成</small></span></button>
+   <button type="button" class="active" role="tab" aria-selected="true">${pixelIcon("party")}<span><b>オンライン広場</b><small>友達と同じ部屋で遊ぶ</small></span></button>
+  </div>
+
+  <main class="online-party-page">
+   <section class="online-connect-panel" data-online-connect-panel>
+    <div class="online-connect-heading"><span class="online-signal-orb" aria-hidden="true"><i></i></span><div><small>HOME PC PARTY SERVER</small><h2>友達のいる広場へ</h2><p>オンラインは追加機能です。サーバーがなくても通常ゲームは今まで通り遊べます。</p></div></div>
+    <div class="online-identity-card"><div><small>あなたのフレンドID</small><strong data-online-friend-id>${identity.friendId}</strong></div><button type="button" data-copy-friend-id>コピー</button></div>
+    <label class="online-field"><span>表示名</span><input type="text" data-online-display-name maxlength="16" value="${defaultName.replaceAll('"','&quot;')}" autocomplete="nickname"></label>
+    <label class="online-field"><span>サーバーURL</span><input type="url" inputmode="url" data-online-server-url value="${server.replaceAll('"','&quot;')}" placeholder="https://xxxxx.trycloudflare.com" autocapitalize="none" autocomplete="url"></label>
+    <div class="online-character-picker"><small>広場に出すキャラクター</small><div>${party.length?party.map(entry=>characterChoice(entry,monster?.id)).join(""):'<p class="online-no-party">先に1体以上を部隊編成してください。</p>'}</div></div>
+    <div class="online-connect-actions"><button type="button" class="online-primary-button" data-online-connect ${monster?"":"disabled"}><span class="online-button-glint"></span>サーバーへ接続</button><button type="button" data-online-disconnect hidden>切断</button></div>
+    <div class="online-connection-status is-offline" data-online-status><i></i><span>オフライン</span><small>通常ゲームへの影響なし</small></div>
+   </section>
+
+   <section class="online-room-gate" data-online-room-gate hidden>
+    <div class="online-room-create"><small>新しい部屋を作る</small><button type="button" class="online-primary-button" data-online-create-room>部屋を作成</button></div>
+    <div class="online-room-divider"><span>OR</span></div>
+    <form data-online-join-form><label><span>ルームIDで参加</span><input type="text" data-online-room-code maxlength="6" value="${invite.room}" placeholder="AB12CD" autocapitalize="characters" autocomplete="off"></label><button type="submit">参加する</button></form>
+    <small class="online-room-note">最大4人・ルームIDは部屋を作った人に表示されます。</small>
+   </section>
+
+   <section class="online-plaza-shell" data-online-plaza-shell hidden>
+    <header class="online-room-header"><div><small>PARTY ROOM</small><strong data-online-room-id>------</strong><button type="button" data-copy-room-id>コピー</button></div><span data-online-member-count>1 / 4</span><button type="button" data-copy-invite>招待リンク</button><button type="button" class="danger" data-online-leave-room>退出</button></header>
+    <div class="online-plaza" data-online-plaza tabindex="0" aria-label="オンライン広場。画面タップまたは方向キーで移動">
+     <div class="online-plaza-sky" aria-hidden="true"></div><div class="online-plaza-river" aria-hidden="true"></div><div class="online-plaza-ground" aria-hidden="true"></div>
+     <div class="online-plaza-landmarks" aria-hidden="true"><i class="plaza-castle"></i><i class="plaza-lamp one"></i><i class="plaza-lamp two"></i><i class="plaza-banner"></i></div>
+     <div class="online-player-layer" data-online-player-layer></div>
+     <div class="online-tap-hint" data-online-tap-hint>地面をタップ／WASDで移動</div>
+    </div>
+    <div class="online-mobile-controls" aria-label="移動操作"><button data-online-move="up" aria-label="上">▲</button><button data-online-move="left" aria-label="左">◀</button><button data-online-move="down" aria-label="下">▼</button><button data-online-move="right" aria-label="右">▶</button></div>
+    <div class="online-social-bar"><div class="online-preset-chat"><button type="button" data-online-chat="hello">よろしく！</button><button type="button" data-online-chat="ready">準備OK！</button><button type="button" data-online-chat="follow">ついてきて！</button><button type="button" data-online-chat="thanks">ありがとう！</button></div><div class="online-stamps"><button type="button" data-online-emote="wave" data-keep-emoji aria-label="手を振る">👋</button><button type="button" data-online-emote="cheer" data-keep-emoji aria-label="喜ぶ">✨</button><button type="button" data-online-emote="heart" data-keep-emoji aria-label="ハート">❤</button><button type="button" data-online-emote="surprise" data-keep-emoji aria-label="驚く">!!</button></div></div>
+    <aside class="online-member-strip" data-online-member-strip>${Array.from({length:4},(_,index)=>emptyMember(index)).join("")}</aside>
+   </section>
+  </main>
+
+  <aside class="online-profile-drawer" data-online-profile-drawer aria-hidden="true"><button type="button" data-online-profile-close aria-label="閉じる">×</button><div data-online-profile-content></div></aside>
+  ${bottomNav("party")}
+ </section>`;
+}
+
+export{ONLINE_STORAGE_KEYS};

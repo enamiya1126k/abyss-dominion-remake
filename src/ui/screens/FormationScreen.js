@@ -91,6 +91,10 @@ export function FormationScreen(state,{origin="home"}={}){
  const total=party.reduce((sum,monster)=>sum+monsterCombatPower(monster),0);
  return`<section class="screen formation-screen v2-screen" data-origin="${origin}">
   ${resourceHud(state,{backId:"backFormation",title:"編成"})}
+  <div class="party-mode-tabs" role="tablist" aria-label="パーティ機能">
+   <button type="button" class="active" role="tab" aria-selected="true">${resourcePartyIcon("formation")}<span><b>部隊編成</b><small>いつもの4体編成</small></span></button>
+   <button type="button" data-party-tab="online" role="tab">${resourcePartyIcon("party")}<span><b>オンライン広場</b><small>友達と同じ部屋で遊ぶ</small></span></button>
+  </div>
   <div class="formation-page">
    <div class="formation-summary"><div><small>パーティ ${party.length}/4・総戦力</small><strong>${formatCombatPower(total)}</strong></div><p>${readOnly?"探索中は確認のみ・変更は帰還後":"長押しで隊列変更・交代・4スキル設定"}</p><button type="button" class="formation-rarity-help" data-formation-rarity-help aria-label="レア度一覧">？</button></div>
    <aside class="formation-rarity-drawer" data-formation-rarity-drawer aria-hidden="true"><button type="button" data-formation-rarity-close>▶</button><small>レア度・表示色</small><div>${["N","R","SR","SSR","UR","LR","神話","深淵","十神"].map(rarity=>`<span class="rarity-name-${rarityClass(rarity)}">${rarity}</span>`).join("")}</div></aside>
@@ -99,3 +103,5 @@ export function FormationScreen(state,{origin="home"}={}){
   ${bottomNav("formation")}
  </section>`;
 }
+
+function resourcePartyIcon(name){return`<span class="home-pixel-icon icon-${name}" aria-hidden="true"></span>`}
