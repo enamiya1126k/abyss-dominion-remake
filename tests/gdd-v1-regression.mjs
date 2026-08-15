@@ -175,6 +175,7 @@ function testEndgameRules(){
   Math.random=originalRandom;
 
   state.endgame.emergency.fragments.abyss_gluttony=50;
+  state.player.maxFloor=150;
   assert.equal(endgameContractStatus(state,"abyss_gluttony").required,50);
   assert.equal(attemptEndgameContract(state,"abyss_gluttony").success,true);
   assert.equal(state.endgame.emergency.fragments.abyss_gluttony,0);

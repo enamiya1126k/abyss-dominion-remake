@@ -38,8 +38,8 @@ for(const asset of dungeonThemeAssetPaths()){
  const width=bytes.readUInt32BE(16),height=bytes.readUInt32BE(20);assert.ok(width>=1200&&height>=1200,`${asset} is too small for continuous canvas sampling`);
 }
 
-assert.match(index,/v2\.10\.0\.css\?v=2\.10\.0-build144/);
-assert.match(index,/main\.js\?v=\$\{ASSET_VERSION\}-build144/);
+assert.match(index,/v2\.10\.0\.css\?v=2\.10\.0-build145/);
+assert.match(index,/main\.js\?v=\$\{ASSET_VERSION\}-\$\{ASSET_BUILD\}/);
 assert.match(main,/dungeonThemeForFloor/);
 assert.match(main,/function exploreTextureSample/);
 assert.match(main,/panelWidth=split\?Math\.floor\(image\.width\/2\)/,"atlas floor and wall panels are sampled independently");
