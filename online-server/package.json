@@ -1,9 +1,9 @@
 {
   "name": "abyss-dominion-party-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
-  "description": "ABYSS DOMINION online plaza server for a home PC",
+  "description": "ABYSS DOMINION online plaza and shared expedition server for a home PC",
   "engines": {"node": ">=20"},
   "scripts": {
     "start": "node server.js",

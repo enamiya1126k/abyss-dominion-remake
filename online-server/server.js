@@ -10,8 +10,8 @@ function reply(socket,message){if(socket.readyState===WebSocket.OPEN)socket.send
 function fail(socket,result){reply(socket,{type:"error",code:result.code??"REQUEST_FAILED",message:result.message??"処理に失敗しました"})}
 
 const server=http.createServer((request,response)=>{
- if(request.url==="/health"){response.writeHead(200,{"content-type":"application/json; charset=utf-8","cache-control":"no-store"});response.end(JSON.stringify({ok:true,service:"ABYSS DOMINION PARTY SERVER",rooms:store.rooms.size,players:[...store.sessions.values()].filter(session=>session.connected).length,time:new Date().toISOString()}));return}
- response.writeHead(200,{"content-type":"text/plain; charset=utf-8","cache-control":"no-store"});response.end("ABYSS DOMINION PARTY SERVER\nWebSocket endpoint: /party\nHealth check: /health\n");
+ if(request.url==="/health"){response.writeHead(200,{"content-type":"application/json; charset=utf-8","cache-control":"no-store"});response.end(JSON.stringify({ok:true,service:"ABYSS DOMINION CO-OP SERVER",rooms:store.rooms.size,expeditions:[...store.rooms.values()].filter(room=>room.phase==="expedition").length,players:[...store.sessions.values()].filter(session=>session.connected).length,time:new Date().toISOString()}));return}
+ response.writeHead(200,{"content-type":"text/plain; charset=utf-8","cache-control":"no-store"});response.end("ABYSS DOMINION CO-OP SERVER\nWebSocket endpoint: /party\nHealth check: /health\n");
 });
 const wss=new WebSocketServer({noServer:true,maxPayload:16*1024,perMessageDeflate:false});
 server.on("upgrade",(request,socket,head)=>{
@@ -22,7 +22,7 @@ wss.on("connection",socket=>{
  socket.on("message",raw=>{
   const now=Date.now();if(now-socket.rate.started>=1000)socket.rate={started:now,count:0};if(++socket.rate.count>40){socket.close(1008,"rate limit");return}
   let message;try{message=JSON.parse(raw.toString())}catch{return fail(socket,{code:"BAD_JSON",message:"通信データを読み取れません"})}if(!message||typeof message.type!=="string")return;
-  if(message.type==="hello"){const result=store.hello(socket,message);if(!result.ok)return fail(socket,result);reply(socket,{type:"helloAck",playerId:result.playerId,resumeToken:result.resumeToken,resumed:result.resumed,room:result.room});return}
+ if(message.type==="hello"){const result=store.hello(socket,message);if(!result.ok)return fail(socket,result);reply(socket,{type:"helloAck",playerId:result.playerId,resumeToken:result.resumeToken,resumed:result.resumed,room:result.room});store.deliverPendingRewards(socket.session);return}
   const session=socket.session;if(!session)return fail(socket,{code:"NOT_READY",message:"先に接続処理を完了してください"});let result={ok:false,code:"UNKNOWN_MESSAGE",message:"未対応の通信です"};
   if(message.type==="createRoom")result=store.createRoom(session);
   else if(message.type==="joinRoom")result=store.joinRoom(session,message.roomId);
@@ -30,13 +30,20 @@ wss.on("connection",socket=>{
   else if(message.type==="move")result=store.move(session,message.position);
   else if(message.type==="profile")result=store.updateProfile(session,message.profile);
   else if(message.type==="social")result=store.social(session,message);
+  else if(message.type==="setReady")result=store.setReady(session,message.ready);
+  else if(message.type==="setFloor")result=store.setFloor(session,message.floor);
+  else if(message.type==="startExpedition")result=store.startExpedition(session);
+  else if(message.type==="expeditionMove")result=store.moveExpedition(session,message.position);
+  else if(message.type==="requestReturn")result=store.requestReturn(session);
+  else if(message.type==="completeExpedition")result=store.completeExpedition(session);
+  else if(message.type==="rewardAck")result=store.ackReward(session,message.rewardId);
   else if(message.type==="ping"){reply(socket,{type:"pong",at:now});return}
   if(!result.ok)fail(socket,result);
  });
  socket.on("close",()=>{clients.delete(socket);store.disconnect(socket.session)});socket.on("error",()=>{});
 });
 const heartbeat=setInterval(()=>{store.pruneExpired();for(const socket of clients){if(socket.isAlive===false){socket.terminate();continue}socket.isAlive=false;socket.ping()}},10_000);heartbeat.unref?.();
-server.listen(PORT,HOST,()=>{console.log(`\nABYSS DOMINION PARTY SERVER`);console.log(`Local: http://${HOST}:${PORT}`);console.log(`Health: http://${HOST}:${PORT}/health`);console.log(`Waiting for up to 4 players per room...\n`)});
+server.listen(PORT,HOST,()=>{console.log(`\nABYSS DOMINION CO-OP SERVER`);console.log(`Local: http://${HOST}:${PORT}`);console.log(`Health: http://${HOST}:${PORT}/health`);console.log(`Online plaza and shared exploration are ready (up to 4 players).\n`)});
 function shutdown(){clearInterval(heartbeat);for(const socket of clients)try{socket.close(1001,"server shutdown")}catch{};server.close(()=>process.exit(0));setTimeout(()=>process.exit(0),1500).unref()}
 process.on("SIGINT",shutdown);process.on("SIGTERM",shutdown);
 export{server,store};
