@@ -1,11 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.8.0";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.8.0";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.8.0";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.8.0";
-import{monsterVisual}from"../MonsterVisual.js?v=2.8.0";
-import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.8.0";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.8.0";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.8.0";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.9.0";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.9.0";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.9.0";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.9.0";
+import{monsterVisual}from"../MonsterVisual.js?v=2.9.0";
+import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.9.0";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.9.0";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.9.0";
 
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
@@ -34,7 +34,7 @@ function renderEnemies(battle,enemies,target){
   const statuses=enemyStatusesFor(battle,enemy.id),effects=enemyEffectsFor(battle,enemy.id);
   const statusHtml=`<div class="status-row enemy-status-row" data-status-detail="${enemy.id}" ${statuses.length||effects.length?"":'aria-hidden="true"'}>${statuses.map(s=>`<span class="status-chip ${s.id}">${battleStatusLabel(s)}${remainingTurns(s.turns)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
   const badge=enemy.boss?'<span class="boss-badge">ボス</span>':enemy.elite?`<span class="elite-badge">${enemy.eliteAffixIcon??"🜲"} 強敵・${enemy.eliteAffixName??"変異"}</span>`:"";const danger="";
-  const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100)),enemyMpMax=Math.max(0,Number(enemy.maxMp)||0),enemyMp=Math.max(0,Math.min(enemyMpMax,Number(enemy.currentMp)||0)),mpRate=enemyMpMax?enemyMp/enemyMpMax*100:0;
+  const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
   const line=index<2?"front-line":"rear-line";
   const dead=enemy.hp<=0,element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral";
   return `<button id="enemy-${enemy.id}" ${dead?'disabled aria-hidden="true"':`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${enemy.boss?"boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${target?.id===enemy.id?"targeted":""}">
@@ -45,7 +45,6 @@ function renderEnemies(battle,enemies,target){
     <div class="side-unit-name enemy-name">${danger}<small>Lv.${enemy.level}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
     ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${enemy.hp}/${enemy.maxHp}`,"enemy-hp")}
-    ${enemyMpMax?`<div class="battle-bar mp enemy-mp"><span class="bar-label">MP ${enemyMp}/${enemyMpMax}</span><i class="resource-fill" style="width:${mpRate}%"></i></div>`:""}
     ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
     ${statusHtml}
    </div>
@@ -56,6 +55,7 @@ function renderEnemies(battle,enemies,target){
 function renderParty(battle,actor){
  return battle.party.map((m,index)=>{
  const stats=calculatedStats(m),mp=maxMp(m),need=expNeedFor(m);
+ const circle=battle.magicCircleProfiles?.[m.id]??null,circleName=circle?.name??"魔法陣なし",circleLevel=Math.max(0,Number(circle?.level)||0);
  const ailments=allyAilmentsFor(battle,m.id),effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" data-status-detail="${m.id}" ${ailments.length||effects.length?"":'aria-hidden="true"'}>${ailments.map(e=>`<span class="status-chip ${e.id}">${battleStatusLabel(e)}${remainingTurns(e.turns,true)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
   const hpRate=Math.max(0,Math.min(100,m.currentHp/Math.max(1,stats.hp)*100)),mpRate=Math.max(0,Math.min(100,m.currentMp/Math.max(1,mp)*100));
   const line=index<2?"front-line":"rear-line",element=m.attribute??battle.species?.[m.speciesId]?.element??"neutral";
@@ -65,6 +65,7 @@ function renderParty(battle,actor){
    <div class="side-unit-sprite unit-orb">${battle.magicCircleArt?.[m.id]??""}${monsterVisual(m,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual"})}</div>
    <div class="side-unit-card ally-info">
     <div class="side-unit-name unit-head"><small>Lv.${m.level}</small><em class="battle-unit-growth">${growthText(m)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
+    <div class="side-unit-intent ally-circle-intent"><span>${circleLevel?`魔法陣 Lv.${circleLevel}`:"魔法陣"}</span><b>${circleName}</b></div>
     ${hpBar(battle,`ally:${m.id}`,hpRate,`HP ${m.currentHp}/${stats.hp}`,"ally")}
     <div class="battle-bar mp ally-mp"><span class="bar-label">MP ${m.currentMp}/${mp}</span><i class="resource-fill" style="width:${mpRate}%"></i></div>
     <small class="battle-mini-stats">物攻 ${stats.atk}　魔攻 ${stats.matk??stats.atk}<br>物防 ${stats.def}　魔防 ${stats.mdef??stats.def}　速度 ${stats.spd}</small>${effectHtml}
@@ -127,7 +128,7 @@ export function BattleScreen(battle,inventory,settings,floor=1){
  const biomeBadge=battle.biomeBattle?`<div class="battle-biome-badge compact" style="--biome-accent:${battle.biomeBattle.accent}"><b>${battle.biomeBattle.name}</b><small>適性+22%・不適性−16%</small></div>`:"";
  const invincibleBadge=invincibleAllianceActive(battle)?'<div class="invincible-alliance-status" role="status" aria-label="無敵・四神話連携が発動中"><span>無敵</span><small>四神話連携・常時発動</small></div>':"";
  return `<section class="battle-screen side-battle-v2 battle-theme-${theme} ${battle.auto?"auto-mode":"manual-mode"} ${battle.specialBattle?"special-battle":""}" data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}">${special}
-  <div class="battle-header"><div class="round-label"><small>ラウンド</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}F・遭遇戦`}</b><small>${battle.auto?"完全自動":"コマンド戦闘"}</small></div><button id="toggleBattleAuto" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button><button id="battleSpeed">×${speed}</button>${battle.specialBattle?`<button disabled>逃走不可</button>`:`<button id="escapeBattle">逃げる</button>`}</div>
+  <div class="battle-header"><div class="round-label"><small>ラウンド</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}F・遭遇戦`}</b><small>${battle.auto?"完全自動":"コマンド戦闘"}</small></div><button id="toggleBattleAuto" type="button" aria-pressed="${battle.auto}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button><button id="battleSpeed">×${speed}</button>${battle.specialBattle?`<button disabled>逃走不可</button>`:`<button id="escapeBattle">逃げる</button>`}</div>
   <div class="turn-order"><span class="turn-order-title">行動順</span>${renderTurnOrder(battle)}</div>
   <div class="battle-arena side-battle-arena multi-enemy">
    <div class="battle-stage-vignette" aria-hidden="true"></div>

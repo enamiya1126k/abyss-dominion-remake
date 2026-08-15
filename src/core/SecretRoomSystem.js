@@ -1,13 +1,13 @@
-import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.8.0";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.8.0";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.8.0";
-import{SPECIES}from"../data/species.js?v=2.8.0";
-import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.8.0";
-import{equipmentStatLabel}from"../data/equipment.js?v=2.8.0";
-import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.8.0";
-import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.8.0";
-import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.8.0";
-import{MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.8.0";
+import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.9.0";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.9.0";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.9.0";
+import{SPECIES}from"../data/species.js?v=2.9.0";
+import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.9.0";
+import{equipmentStatLabel}from"../data/equipment.js?v=2.9.0";
+import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.9.0";
+import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.9.0";
+import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.9.0";
+import{MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.9.0";
 
 export const SECRET_ROOM_CHANCE=.09;
 export const CASINO_CRYSTAL_COST=premiumCrystalCost(10);

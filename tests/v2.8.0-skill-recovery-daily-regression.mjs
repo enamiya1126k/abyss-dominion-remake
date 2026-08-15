@@ -11,9 +11,9 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 const main=read("src/main.js"),battleScreen=read("src/ui/screens/BattleScreen.js"),css=read("src/Styles/v2.6.0.css"),index=read("index.html");
 
-assert.equal(APP_VERSION,"2.8.0");
+assert.equal(APP_VERSION,"2.9.0");
 assert.equal(SAVE_SCHEMA_VERSION,54);
-assert.match(index,/ASSET_VERSION = "2\.8\.0"/);
+assert.match(index,/ASSET_VERSION = "2\.9\.0"/);
 
 const specification=skillEffectDetails({damageClass:"magic",power:1.2,hits:3,allEnemies:true,defenseIgnore:.25,status:{id:"poison",chance:.65,turns:3,power:.04},effects:[{kind:"defDown",value:.2,turns:3,enemy:true}]});
 assert.ok(specification.some(line=>line.includes("魔法ATKの120%")&&line.includes("3Hit")&&line.includes("合計 360%")));
@@ -42,9 +42,9 @@ assert.match(main,/function queueBattleRecovery/);
 assert.match(main,/function animateBattleRecoveryGauge/);
 assert.match(main,/await animateHit\(result\.monster\.id,false\)/,"ally periodic damage must use the hit feedback too");
 assert.match(battleScreen,/battle-skill-spec/);
-assert.match(battleScreen,/enemy-mp/);
+assert.doesNotMatch(battleScreen,/class="battle-bar mp enemy-mp"/,"enemy MP remains internal and must not consume battle-card space");
 assert.match(css,/battle-hp-recover-pulse/);
 assert.match(css,/battle-mp-recover-pulse/);
 assert.match(css,/notice-gift-claim/);
 
-console.log("ABYSS DOMINION v2.8.0 skill/recovery/daily regression: PASS");
+console.log("ABYSS DOMINION v2.9.0 skill/recovery/daily regression: PASS");

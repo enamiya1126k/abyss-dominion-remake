@@ -1,4 +1,4 @@
-import{ENDGAME_SERIES}from"./endgameCharacters.js?v=2.8.0";
+import{ENDGAME_SERIES}from"./endgameCharacters.js?v=2.9.0";
 
 export const EQUIPMENT_SERIES={
  flame:{name:"炎帝",theme:"火力・炎上",bonuses:{2:{atk:.03},3:{fireDamage:.08},4:{crit:5},5:{fireRes:.15},6:{fireDamage:.24,burnChance:.20}}},

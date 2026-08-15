@@ -10,7 +10,7 @@ import {SPECIAL_ACTION_INFO} from "../src/battle/EnemyAI.js";
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 
-assert.equal(APP_VERSION,"2.8.0");
+assert.equal(APP_VERSION,"2.9.0");
 assert.equal(SAVE_SCHEMA_VERSION,54);
 assert.equal(MONSTER_STORAGE_CAP,3000);
 
@@ -42,7 +42,7 @@ assert.match(css,/v2\.3\.0 — final mobile layout/);
 assert.match(css,/gauntlet-walk-screen\{[^}]*height:100dvh!important/);
 assert.match(css,/party-hud-collapsed \.explore-party-strip\{display:none!important/);
 assert.match(css,/damage-slot-digits/);
-assert.match(index,/ASSET_VERSION = "2\.8\.0"/);
+assert.match(index,/ASSET_VERSION = "2\.9\.0"/);
 
 for(const event of ["visibilitychange","pagehide","blur","focus","pageshow"]){
   assert.ok(audio.includes(event),`Audio lifecycle event missing: ${event}`);

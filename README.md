@@ -6,7 +6,7 @@
 
 | 項目 | 内容 |
 |---|---|
-| Web版 | `v2.8.0` |
+| Web版 | `v2.9.0` |
 | セーブスキーマ | `54` |
 | 対応階層 | 1F〜10000F |
 | 深淵・十神 | 深淵7柱＋十神10柱／4段階手動挑戦 |
@@ -14,6 +14,17 @@
 | チーム試練 | 4 VS 4・第50試練以降も無限継続 |
 | 音響 | 提供済み7曲の場面別BGM＋本作専用SE |
 | 旧セーブ | 同一セーブキーのまま自動移行 |
+
+## v2.9.0の主要内容
+
+`v2.9.0`は138版を基準に、戦闘AUTO操作、戦闘カード、深層敵装備、魔法陣の発動可視化を統合した版です。
+
+- 戦闘AUTOの「有効／無効」をタップ開始時に切り替える方式へ変更し、押下領域も拡大。スマートフォンで再描画とタップが競合して反応しない問題を解消。
+- 敵のMPは内部AIだけで管理し、戦闘カードのMPゲージを撤去。味方カードには装着中の魔法陣名とLvを追加。
+- 敵装備Lvを階層×2の旧曲線から大幅強化。300Fの通常敵は約Lv.2000、ボスは約Lv.3100を基準とし、高レア・深層ほどさらに加速。50F以降の6枠LR装備とLRスロットも維持。
+- 味方／敵の魔法陣へ専用発動演出を追加。発動者、魔法陣名・Lv、実際の倍率・吸収量・回復／消費量などを戦闘中に表示し、ログにも記録。
+- 「運命の三桁環」は000〜999を3桁スロット演出で確定し、000の行動休止と0.5〜3倍の結果をその場で表示。敵側の三桁環にも同じ実戦効果を適用。
+- 演出文字を端末内蔵の極太ゴシック系へ統一し、縁取り・発光・高コントラストで迫力と読みやすさを両立。外部フォント通信は不要。
 
 ## v2.8.0の主要内容
 
@@ -137,7 +148,7 @@ python3 -m http.server 8080
 ## セーブ互換
 
 - セーブキー：`abyss-dominion-remake-v001`（維持）
-- `schemaVersion 1〜52`を`53`へ自動移行。
+- `schemaVersion 1〜53`を`54`へ自動移行。
 - 旧深淵・十神ID、旧★、装備、挑戦進行、探索／戦闘チェックポイントを正規化。
 - ZIPを上書き配置しても、ブラウザのサイトデータを削除しない限り既存セーブを継続できます。
 
@@ -154,12 +165,13 @@ node tests/v2.6.1-corrections-regression.mjs
 node tests/v2.6.2-battle-feedback-regression.mjs
 node tests/v2.7.0-enemy-auto-regression.mjs
 node tests/v2.8.0-skill-recovery-daily-regression.mjs
+node tests/v2.9.0-magic-circle-balance-regression.mjs
 python3 tools/build_v261_assets.py
 python3 tools/build_v240_sprites.py --verify
 python3 tools/audit_sprite_catalog.py
 ```
 
-構文、モジュール参照、旧セーブ移行、管理コード全17種、GM配布量、スロット確率、敵MP・AI、なつき度、新規キャラクター、画像寸法、全素材8フレーム、画像端接触を自動検証します。
+構文、モジュール参照、旧セーブ移行、管理コード全17種、GM配布量、魔法陣スロット、敵内部MP・AI、敵装備曲線、戦闘表示、なつき度、新規キャラクター、画像寸法、全素材8フレーム、画像端接触を自動検証します。
 
 ## 資料
 
@@ -168,6 +180,7 @@ python3 tools/audit_sprite_catalog.py
 - [v2.6.2リリースノート](docs/RELEASE_NOTES_v2.6.2_JA.md)
 - [v2.7.0リリースノート](docs/RELEASE_NOTES_v2.7.0_JA.md)
 - [v2.8.0リリースノート](docs/RELEASE_NOTES_v2.8.0_JA.md)
+- [v2.9.0リリースノート](docs/RELEASE_NOTES_v2.9.0_JA.md)
 - [v2.4.0実装・検証レポート](docs/IMPLEMENTATION_VERIFICATION_v2.4.0_JA.md)
 - [v2.3.1リリースノート](docs/RELEASE_NOTES_v2.3.1_JA.md)
 - [GDD実装・検証レポート](docs/GDD_v1.0_IMPLEMENTATION_REPORT_JA.md)

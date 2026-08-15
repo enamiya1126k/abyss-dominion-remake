@@ -49,7 +49,7 @@ const {affectionBonuses,createMonster}=await import("../src/models/Monster.js");
 const {createEquipment}=await import("../src/models/Equipment.js");
 const {canEquipInSubslot}=await import("../src/services/EquipmentLoadoutSystem.js");
 
-assert.equal(APP_VERSION,"2.8.0");
+assert.equal(APP_VERSION,"2.9.0");
 assert.equal(SAVE_SCHEMA_VERSION,54);
 assert.equal(SERIAL_CODE_COUNT,21);
 
@@ -246,7 +246,7 @@ for(const [folders,size] of [[detailedFolders,512]])for(const folder of folders)
 
 const main=read("src/main.js"),battleScreen=read("src/ui/screens/BattleScreen.js"),exploreScreen=read("src/ui/screens/ExploreScreen.js"),settingsScreen=read("src/ui/screens/SettingsScreen.js"),css=read("src/Styles/v2.4.0.css");
 assert.doesNotMatch(battleScreen,/次の行動|敵MP/);
-assert.match(battleScreen,/enemy-mp/,"enemy MP must be visible so MP recovery has a readable gauge animation");
+assert.doesNotMatch(battleScreen,/class="battle-bar mp enemy-mp"/,"enemy MP is internal and must not be rendered on enemy cards");
 assert.match(battleScreen,/戦闘特性/);
 assert.match(main,/await wait\(1000\)/);
 assert.match(main,/String\(type\)\.includes\("biome"\)\?1500/);

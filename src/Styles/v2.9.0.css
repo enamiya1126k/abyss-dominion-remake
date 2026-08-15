@@ -1,0 +1,131 @@
+/* v2.9.0 — reliable AUTO control, compact battle HUD and magic-circle feedback. */
+
+/* A battle re-render can happen between touchstart and click. The JS now acts
+   on pointerdown; this larger, isolated hit target makes the intent obvious. */
+.side-battle-v2 #toggleBattleAuto{
+  position:relative;
+  z-index:55;
+  box-sizing:border-box;
+  min-width:54px!important;
+  min-height:42px!important;
+  padding:5px 9px!important;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.side-battle-v2 #toggleBattleAuto::after{content:"";position:absolute;inset:-4px}
+.side-battle-v2 #toggleBattleAuto:active{filter:brightness(1.34);transform:scale(.96)}
+.side-battle-v2 .ally-circle-intent{color:#d9c071}
+.side-battle-v2 .ally-circle-intent span{color:#a99a73}
+.side-battle-v2 .ally-circle-intent b{color:#f2db9b}
+.side-battle-v2 .enemy-mp{display:none!important}
+
+/* The effect banner uses only local system fonts so it remains reliable when
+   offline. Heavy gothic faces, restrained stroke and high contrast give the
+   pachinko-like impact without sacrificing Japanese legibility. */
+.side-battle-v2 .magic-circle-activation{
+  --circle-fx:#c86cff;
+  position:absolute;
+  z-index:52;
+  left:50%;
+  top:43%;
+  width:min(92%,580px);
+  min-height:116px;
+  display:grid;
+  grid-template-columns:94px minmax(0,1fr);
+  align-items:center;
+  gap:12px;
+  padding:12px 22px;
+  overflow:hidden;
+  border-block:2px solid color-mix(in srgb,var(--circle-fx) 74%,#fff);
+  background:linear-gradient(90deg,transparent,#08050eeb 8%,#21102df5 50%,#08050eeb 92%,transparent);
+  color:#fff;
+  text-align:left;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 42px color-mix(in srgb,var(--circle-fx) 42%,transparent),inset 0 0 35px color-mix(in srgb,var(--circle-fx) 18%,transparent);
+  pointer-events:none;
+  isolation:isolate;
+  animation:magicCircleActivationIn var(--battle-banner-in,.28s) cubic-bezier(.12,.92,.22,1) both;
+}
+.side-battle-v2 .magic-circle-activation::before,
+.side-battle-v2 .magic-circle-activation::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:-45%;
+  background:repeating-conic-gradient(from 0deg,transparent 0 10deg,var(--circle-fx) 11deg 12deg,transparent 13deg 24deg);
+  opacity:.12;
+  animation:magicCircleActivationRay 5s linear infinite;
+}
+.side-battle-v2 .magic-circle-activation::after{inset:0;background:linear-gradient(100deg,transparent 20%,#ffffff38 48%,transparent 70%);opacity:1;animation:magicCircleActivationSheen .75s ease-out both}
+.side-battle-v2 .magic-circle-activation.enemy-circle{--circle-fx:#ff4e73;background:linear-gradient(90deg,transparent,#100408eb 8%,#3a0918f5 50%,#100408eb 92%,transparent)}
+.side-battle-v2 .magic-circle-activation.tone-gold{--circle-fx:#ffd35e}.side-battle-v2 .magic-circle-activation.tone-cyan,.side-battle-v2 .magic-circle-activation.tone-blue{--circle-fx:#55ddff}.side-battle-v2 .magic-circle-activation.tone-red{--circle-fx:#ff5368}.side-battle-v2 .magic-circle-activation.tone-black{--circle-fx:#9c6cff}.side-battle-v2 .magic-circle-activation.tone-rainbow{--circle-fx:#7dffd5}.side-battle-v2 .magic-circle-activation.danger{--circle-fx:#ff3158}
+.side-battle-v2 .magic-circle-activation.leaving{animation:magicCircleActivationOut var(--battle-banner-out,.22s) ease-in both}
+.side-battle-v2 .magic-circle-activation-sigil{position:relative;display:grid;place-items:center;width:88px;height:88px}
+.side-battle-v2 .magic-circle-activation-sigil::before{content:"";position:absolute;inset:3px;border:1px dashed var(--circle-fx);border-radius:50%;box-shadow:0 0 16px var(--circle-fx);animation:magicCircleSigilSpin 1.25s linear infinite}
+.side-battle-v2 .magic-circle-activation-sigil img{width:82px;height:82px;object-fit:contain;mix-blend-mode:screen;filter:brightness(1.45) saturate(1.45) drop-shadow(0 0 10px var(--circle-fx));animation:magicCircleSigilHit .55s cubic-bezier(.15,1.2,.25,1) both}
+.side-battle-v2 .magic-circle-activation-sigil i{position:absolute;inset:15px;border:1px solid #fff8;border-radius:50%;box-shadow:inset 0 0 12px var(--circle-fx)}
+.side-battle-v2 .magic-circle-activation-copy{min-width:0;display:grid;gap:2px;align-content:center}
+.side-battle-v2 .magic-circle-activation-copy small{overflow:hidden;color:#d7ccdc;font:800 clamp(.38rem,1.8vw,.54rem)/1.2 "Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;letter-spacing:.08em;text-overflow:ellipsis;white-space:nowrap}
+.side-battle-v2 .magic-circle-activation-copy strong{
+  overflow:hidden;
+  color:#fff4c4;
+  font-family:"Arial Black","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;
+  font-size:clamp(1.05rem,5.1vw,1.9rem);
+  font-weight:1000;
+  line-height:1.04;
+  letter-spacing:.04em;
+  text-overflow:ellipsis;
+  text-shadow:0 3px 0 #2a092d,0 0 8px #fff,0 0 23px var(--circle-fx);
+  -webkit-text-stroke:.65px #230522;
+  white-space:nowrap;
+}
+.side-battle-v2 .magic-circle-activation-copy>b{color:#fff;font:1000 clamp(.74rem,3.4vw,1.18rem)/1.15 "Arial Black","Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;letter-spacing:.025em;text-shadow:0 2px 0 #000,0 0 12px var(--circle-fx);-webkit-text-stroke:.45px #160218}
+.side-battle-v2 .magic-circle-activation-copy>em{overflow:hidden;color:#e5dce8;font:800 clamp(.48rem,2.2vw,.68rem)/1.25 "Hiragino Kaku Gothic ProN","Yu Gothic",system-ui,sans-serif;font-style:normal;text-overflow:ellipsis;white-space:nowrap}
+
+.side-battle-v2 .magic-circle-roulette{display:flex;align-items:center;gap:5px;margin:3px 0 2px;perspective:300px}
+.side-battle-v2 .magic-circle-roulette i{
+  min-width:.72em;
+  padding:.02em .08em .08em;
+  border:1px solid color-mix(in srgb,var(--circle-fx) 82%,#fff);
+  background:linear-gradient(#07070b,#24102d 52%,#07070b);
+  color:#fff7b0;
+  font-family:Impact,Haettenschweiler,"Arial Black",sans-serif;
+  font-size:clamp(2rem,10vw,3.75rem);
+  font-style:normal;
+  font-variant-numeric:tabular-nums;
+  line-height:.88;
+  text-align:center;
+  text-shadow:0 3px 0 #7d1b00,0 0 8px #fff,0 0 22px #ffb11f,0 0 34px var(--circle-fx);
+  transform:rotateX(-22deg) scale(.92);
+  filter:blur(.7px);
+}
+.side-battle-v2 .magic-circle-roulette i.settled{filter:none;transform:none;animation:magicCircleDigitLock .2s cubic-bezier(.1,1.5,.25,1) both;animation-delay:calc(var(--circle-digit-index)*45ms)}
+.side-battle-v2 .magic-circle-activation.jackpot .magic-circle-roulette i{color:#fff;background:linear-gradient(#481200,#d94500 50%,#481200);box-shadow:0 0 16px #ffb11f;text-shadow:0 3px 0 #7b1300,0 0 10px #fff,0 0 28px #ffd84b}
+
+.side-battle-v2 .magic-circle-activation-wave{position:absolute;z-index:8;left:50%;bottom:18%;width:58px;height:24px;border:2px solid #76ddff;border-radius:50%;transform:translateX(-50%);box-shadow:0 0 16px #71cfff,inset 0 0 12px #71cfff;pointer-events:none;animation:magicCircleUnitWave .72s ease-out both}
+.side-battle-v2 .magic-circle-activation-wave.enemy{border-color:#ff5475;box-shadow:0 0 18px #ff385f,inset 0 0 12px #ff385f}
+.side-battle-v2 .magic-circle.is-activating>img{opacity:1!important;animation:magicCircleArtActivation .68s cubic-bezier(.15,.92,.25,1) both!important}
+.side-battle-v2 .magic-circle.is-activating>.magic-circle-ring-a,.side-battle-v2 .magic-circle.is-activating>.magic-circle-ring-b{opacity:1!important;filter:brightness(2.2) drop-shadow(0 0 6px currentColor);animation-duration:.42s!important}
+.side-battle-v2 .battle-screen-flash.magic{background:radial-gradient(circle at center,#fff 0,#72dfff70 14%,#ae48ff55 34%,transparent 68%)}
+
+@keyframes magicCircleActivationIn{0%{opacity:0;transform:translate(-50%,-50%) scaleX(.12) scaleY(.7);filter:blur(10px)}58%{opacity:1;transform:translate(-50%,-50%) scaleX(1.05) scaleY(1.02);filter:none}100%{transform:translate(-50%,-50%) scale(1)}}
+@keyframes magicCircleActivationOut{to{opacity:0;transform:translate(-50%,-58%) scaleX(1.12);filter:blur(5px)}}
+@keyframes magicCircleActivationRay{to{transform:rotate(360deg)}}
+@keyframes magicCircleActivationSheen{from{transform:translateX(-120%)}to{transform:translateX(120%)}}
+@keyframes magicCircleSigilSpin{to{transform:rotate(360deg)}}
+@keyframes magicCircleSigilHit{0%{opacity:0;transform:scale(.35) rotate(-45deg);filter:brightness(4) blur(7px)}65%{opacity:1;transform:scale(1.12) rotate(5deg)}100%{transform:scale(1)}}
+@keyframes magicCircleDigitLock{0%{transform:translateY(-.25em) scale(1.5);filter:brightness(3)}100%{transform:none;filter:none}}
+@keyframes magicCircleUnitWave{0%{opacity:1;transform:translateX(-50%) scale(.25)}100%{opacity:0;transform:translateX(-50%) scale(3.4)}}
+@keyframes magicCircleArtActivation{0%{opacity:.2;transform:rotate(-35deg) scale(.72);filter:brightness(3)}58%{opacity:1;transform:rotate(12deg) scale(1.18);filter:brightness(2.3) saturate(1.7)}100%{opacity:.95;transform:rotate(0) scale(1);filter:brightness(1.3)}}
+
+@media(max-width:430px){
+  .side-battle-v2 .magic-circle-activation{grid-template-columns:72px minmax(0,1fr);gap:8px;min-height:100px;padding:10px 14px}
+  .side-battle-v2 .magic-circle-activation-sigil{width:68px;height:68px}.side-battle-v2 .magic-circle-activation-sigil img{width:64px;height:64px}
+}
+@media(max-width:370px){.side-battle-v2 #toggleBattleAuto{min-width:49px!important;padding-inline:6px!important}.side-battle-v2 .magic-circle-activation{grid-template-columns:58px minmax(0,1fr)}.side-battle-v2 .magic-circle-activation-sigil{width:56px;height:56px}.side-battle-v2 .magic-circle-activation-sigil img{width:52px;height:52px}}
+@media(prefers-reduced-motion:reduce){
+  .side-battle-v2 .magic-circle-activation,.side-battle-v2 .magic-circle-activation::before,.side-battle-v2 .magic-circle-activation::after,.side-battle-v2 .magic-circle-activation-sigil::before,.side-battle-v2 .magic-circle-activation-sigil img,.side-battle-v2 .magic-circle-roulette i,.side-battle-v2 .magic-circle-activation-wave,.side-battle-v2 .magic-circle.is-activating>*{animation:none!important}
+}
