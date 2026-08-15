@@ -135,18 +135,35 @@ function circleMarkup(entry,{className=""}={}){
 
 export function magicCircleMarkup(monster,state,{className=""}={}){return circleMarkup(equippedMagicCircle(monster,state),{className})}
 
-const LR_PLUS_ENEMY_RANKS=new Set(["LR","神話","深淵","十神","abyss","tenGod"]);
+const LR_PLUS_ENEMY_RANKS=new Set(["lr","神話","深淵","十神","abyss","tengod"]);
+const MAX_LEVEL_ENEMY_RANKS=new Set(["深淵","十神","abyss","tengod"]);
+const ENEMY_CIRCLE_RANK_BONUS=Object.freeze({n:0,r:1,sr:2,ssr:4,ur:6,lr:9,"神話":12});
+function normalizedEnemyRank(rank){return String(rank??"N").trim().toLowerCase()}
 export function enemyMagicCircleRateForFloor(floor,rank="N"){
- if(LR_PLUS_ENEMY_RANKS.has(String(rank)))return 1;
+ if(LR_PLUS_ENEMY_RANKS.has(normalizedEnemyRank(rank)))return 1;
  const f=Math.max(1,Math.floor(Number(floor)||1));
  return f>=100?1:Math.max(.035,Math.min(1,.035+(f-1)*(.965/99)));
+}
+export function enemyMagicCircleLevelForFloor(floor,{rank="N",random=Math.random}={}){
+ const rankId=normalizedEnemyRank(rank);
+ if(MAX_LEVEL_ENEMY_RANKS.has(rankId))return 99;
+ const f=Math.max(1,Math.floor(Number(floor)||1));
+ const roll=Math.max(0,Math.min(.999999,Number(random())||0));
+ // 50Fから1000Fまでを一本の育成曲線にし、同じ階層でも個体差を残す。
+ // 300FではおおむねLv.25〜45、1000FではLv.80〜99が目安。
+ if(f<50)return Math.max(1,Math.min(3,1+Math.floor(roll*3)));
+ const progress=Math.max(0,Math.min(1,(f-50)/950));
+ const eased=Math.pow(progress,.9),center=3+eased*86,spread=3+progress*7;
+ const rankBonus=(ENEMY_CIRCLE_RANK_BONUS[rankId]??0)*(.35+progress*.65);
+ const variance=(roll-.5)*2*spread;
+ return Math.max(1,Math.min(99,Math.round(center+rankBonus+variance)));
 }
 export function rollEnemyMagicCircle(floor,{rank="N",random=Math.random,force=false,excludeIds=[]}={}){
  const chance=force?1:enemyMagicCircleRateForFloor(floor,rank);
  if(Math.max(0,Math.min(.999999,Number(random())||0))>=chance)return null;
  const excluded=new Set(Array.isArray(excludeIds)?excludeIds:excludeIds instanceof Set?[...excludeIds]:[]),choices=MAGIC_CIRCLES.filter(entry=>entry.id!=="none"&&!excluded.has(entry.id)),roll=Math.max(0,Math.min(.999999,Number(random())||0)),entry=choices[Math.floor(roll*choices.length)]??choices[0];
  if(!entry)return null;
- const level=Math.max(1,Math.min(99,Math.round(Math.max(1,Number(floor)||1)*.78)));
+ const level=enemyMagicCircleLevelForFloor(floor,{rank,random});
  return{...entry,level,enemyOnly:true,chance};
 }
 export function enemyMagicCircleMarkup(profile,{className="enemy-battle-magic-circle"}={}){
