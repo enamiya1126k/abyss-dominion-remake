@@ -75,6 +75,24 @@
 @keyframes magicCircleReadableSheen{0%{opacity:0;transform:translateX(-120%)}35%{opacity:.75}100%{opacity:0;transform:translateX(120%)}}
 @keyframes magicCircle999Impact{0%{filter:brightness(1)}42%{filter:brightness(2.15)}100%{filter:brightness(1)}}
 
+/* Equipment hotfix: restore the actual loadout browser and make every route explicit. */
+.equipment-screen-v2 .equipment-slot-tabs{margin-top:9px}
+.equipment-screen-v2 .equipment-storage-tabs{margin-top:0}
+.equipment-screen-v2 .equipment-manage-panel,.equipment-screen-v2 .equipment-sort-panel{margin:0}
+.equipment-screen-v2 .equipment-manage-panel>.spread{align-items:center;gap:8px}
+.equipment-screen-v2 .equipment-manage-panel>.spread>div{min-width:0}
+.equipment-screen-v2 .equipment-manage-panel>.spread small{color:#a99dad;font-size:.54rem;line-height:1.4}
+.equipment-screen-v2 .equipment-list{padding-bottom:10px}
+.equipment-screen-v2 .equipped-slot-detail{max-height:min(360px,55dvh);overflow:auto;overscroll-behavior:contain}
+.equipment-screen-v2 .equipped-slot-actions .primary-slot-action{border-color:#e6c766!important;background:linear-gradient(180deg,#5a451b,#24190b)!important;color:#fff1b0!important;box-shadow:inset 0 0 10px #ffc94b24,0 0 8px #d9aa3640}
+.equipment-screen-v2 .equipment-sort-panel select{max-width:58%;min-height:38px}
+.equipment-screen-v2 .bulk-secondary{width:100%;margin-top:8px}
+@media(max-width:430px){
+ .equipment-screen-v2 .equipment-slot-tabs button,.equipment-screen-v2 .equipment-storage-tabs button{min-height:44px;padding:6px 2px;font-size:.61rem}
+ .equipment-screen-v2 .equipment-storage-tabs button small{font-size:.46rem}
+ .equipment-screen-v2 .equipment-manage-panel>.spread small{font-size:.48rem}
+}
+
 /* Simultaneous resurrection cinematic. */
 .battle-resurrection-fx{position:absolute;z-index:72;inset:0;overflow:hidden;pointer-events:none;isolation:isolate;color:#f8f4ff}
 .resurrection-screen-dim{position:absolute;z-index:-2;inset:0;background:radial-gradient(circle at 50% 50%,#0b1020aa,#020308e8 78%);opacity:0;transition:opacity .22s ease}
