@@ -18,6 +18,7 @@ import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=2.10.0";
 import{normalizeSerialCodeState}from"../core/SerialCodeSystem.js?v=2.10.0";
 import{normalizeNoticeState}from"../core/NoticeSystem.js?v=2.10.0";
 import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=2.10.0-build149";
+import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=2.10.0-build150";
 function finiteNumber(value,fallback=0,min=-Infinity,max=Infinity){
  const number=Number(value);
  return Number.isFinite(number)?Math.max(min,Math.min(max,number)):fallback;
@@ -314,7 +315,7 @@ export class SaveService{
    normalizeSkillProgress(m);
    const oldGear=m.equipment??{};
    m.equipment={weaponRight:oldGear.weaponRight??oldGear.weapon??null,weaponLeft:oldGear.weaponLeft??null,armorBody:oldGear.armorBody??oldGear.armor??null,armorSupport:oldGear.armorSupport??null,accessoryNeck:oldGear.accessoryNeck??oldGear.accessory??null,accessoryFinger:oldGear.accessoryFinger??null};
-   m.attribute??=null;m.resistances??={};m.tags??=[];m.isBoss??=false;m.sealedPower??=null;
+   m.attribute=m.attribute==null?null:canonicalAttribute(m.attribute,m.speciesId??m.id);m.resistances=normalizedResistances(m.resistances);m.tags??=[];m.isBoss??=false;m.sealedPower??=null;
    m.stars=Math.max(1,Math.min(MONSTER_STAR_MAX,Number(m.stars??1)));
    m.plus=Math.max(0,Number(m.plus??0));
    m.affection=Math.max(0,Math.min(1000,Number(m.affection??m.bond??0)));

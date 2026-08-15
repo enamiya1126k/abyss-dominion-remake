@@ -47,7 +47,7 @@ export const SPECIAL_ACTION_INFO={
  starfall:{label:"神星・天界墜落",pattern:"all",multiplier:1.9,barrier:1},
  flameSweep:{label:"灼熱薙ぎ",pattern:"all",multiplier:1.02,element:"fire",status:{id:"burn",name:"火傷",chance:.62,turns:3,power:.05}},
  frostNova:{label:"氷縛波",pattern:"all",multiplier:.9,element:"ice",status:{id:"freeze",name:"凍結",chance:.34,turns:1,power:0}},
- venomCloud:{label:"猛毒霧",pattern:"all",multiplier:.78,element:"poison",status:{id:"poison",name:"毒",chance:.75,turns:4,power:.045}},
+ venomCloud:{label:"猛毒霧",pattern:"all",multiplier:.78,element:"dark",status:{id:"poison",name:"毒",chance:.75,turns:4,power:.045}},
  thunderChain:{label:"連鎖雷撃",pattern:"random3",multiplier:1.08,element:"lightning",status:{id:"paralysis",name:"麻痺",chance:.38,turns:2,power:0}},
  earthRupture:{label:"地脈断裂",pattern:"all",multiplier:1.14,element:"earth",status:{id:"stun",name:"気絶",chance:.24,turns:1,power:0}},
  galeRend:{label:"裂風連牙",pattern:"random3",multiplier:1.02,element:"wind",status:{id:"bleed",name:"出血",chance:.55,turns:3,power:.04}},

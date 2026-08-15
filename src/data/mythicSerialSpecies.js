@@ -15,23 +15,23 @@ function mythic({id,name,element,role,maxMp,stats,skills}){
 
 export const MYTHIC_SERIAL_SPECIES=Object.freeze({
   myth_enami:mythic({
-    id:"myth_enami",name:"えなみ",element:"fire",role:"creator",maxMp:140,
-    stats:{hp:320,atk:224,def:158,spd:116,crit:28,evasion:22},
+    id:"myth_enami",name:"えなみ",element:"fire",role:"support",maxMp:155,
+    stats:{hp:340,atk:195,def:190,spd:108,crit:22,evasion:20},
     skills:[
       skill("enami_world_create","万象創作",{mp:10,power:1.75,allEnemies:true,target:"敵全体",damageClass:"magic",description:"海・星・山・空を同時に創り出して敵陣を塗り替える。"}),
       skill("enami_spicy_casino","スパイシーカジノ777",{level:20,mp:14,type:"multiAttack",power:.92,hits:3,description:"運命の数字を回し、熱い三連撃を叩き込む。"}),
-      skill("enami_hyper_focus","天才の多動領域",{level:45,mp:18,type:"buff",power:0,target:"味方全体",effects:[{kind:"atkUp",value:.4,turns:3,allies:true},{kind:"spdUp",value:.45,turns:3,allies:true}],description:"仲間の発想と行動速度を一気に引き上げる。"}),
+      skill("enami_hyper_focus","天才の多動領域",{level:45,mp:18,type:"buff",power:0,target:"味方全体",partyShieldRate:.22,effects:[{kind:"atkUp",value:.32,turns:3,allies:true},{kind:"defUp",value:.3,turns:3,allies:true}],description:"味方全体へ最大HP22%分のシールドを配り、攻撃と防御を引き上げる。"}),
       skill("enami_genesis","創世遊戯・星海山空",{level:80,mp:34,power:3.4,allEnemies:true,target:"敵全体",damageClass:"magic",cooldown:4,description:"四つの世界を重ねて創世級の爆発を起こす。"})
     ]
   }),
   myth_rion:mythic({
-    id:"myth_rion",name:"りおん",element:"nature",role:"support",maxMp:152,
-    stats:{hp:350,atk:188,def:184,spd:124,crit:18,evasion:24},
+    id:"myth_rion",name:"りおん",element:"light",role:"support",maxMp:165,
+    stats:{hp:370,atk:180,def:198,spd:78,crit:18,evasion:20},
     skills:[
       skill("rion_talk","万能話術",{mp:7,power:1.32,damageClass:"magic",effects:[{kind:"defDown",value:.28,turns:3,enemy:true}],description:"軽妙な話術で相手の守りを崩す。"}),
       skill("rion_arrange","主人公の段取り",{level:20,mp:12,type:"buff",power:0,target:"味方全体",effects:[{kind:"atkUp",value:.3,turns:3,allies:true},{kind:"defUp",value:.3,turns:3,allies:true},{kind:"spdUp",value:.28,turns:3,allies:true}],description:"全員が最も動きやすい状況を即座に整える。"}),
       skill("rion_therapy","理学療法士の手",{level:45,mp:16,type:"allHeal",power:0,heal:.48,target:"味方全体",cleanse:true,description:"味方全体を回復し、弱体を浄化する。"}),
-      skill("rion_community","万界コミュニティ",{level:80,mp:30,type:"allHeal",power:0,heal:.8,target:"味方全体",effects:[{kind:"guard",value:.45,turns:3,allies:true}],cooldown:4,description:"あらゆる縁を結び、全快級の支援と守護を与える。"})
+      skill("rion_community","万界コミュニティ",{level:80,mp:30,mpRate:.65,type:"revive",power:0,revive:.28,reviveMp:.08,target:"戦闘不能の味方1体",cooldown:5,description:"最大MPの65%を捧げ、戦闘不能の味方1体をHP28%・MP8%で蘇生する。"})
     ]
   }),
   myth_yori:mythic({
@@ -45,7 +45,7 @@ export const MYTHIC_SERIAL_SPECIES=Object.freeze({
     ]
   }),
   myth_hide:mythic({
-    id:"myth_hide",name:"ひで",element:"poison",role:"bruiser",maxMp:118,
+    id:"myth_hide",name:"ひで",element:"dark",role:"bruiser",maxMp:118,
     stats:{hp:440,atk:292,def:226,spd:94,crit:26,evasion:14},
     skills:[
       skill("hide_crayfish","ザリガニ双爪",{mp:6,type:"multiAttack",power:.92,hits:2,description:"愛するザリガニの左右の爪で豪快に挟み込む。"}),

@@ -1,16 +1,17 @@
 import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.10.0";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.10.0";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.10.0";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.10.0-build150";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.10.0-build150";
 import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.10.0";
 import{monsterVisual}from"../MonsterVisual.js?v=2.10.0";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.10.0";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0-build150";
 import{normalizeBattleSpeed}from"../../core/config.js?v=2.10.0";
 
+function battleInteger(value){return Math.round(Number(value)||0).toLocaleString("ja-JP")}
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
   const classes=["turn-chip",entry.type,index===battle.queueIndex?"current":"",index<battle.queueIndex?"done":""].filter(Boolean).join(" ");
-  return `<span class="${classes}" title="${entry.name}"><b>${entry.name}</b><small>速度 ${entry.spd}</small></span>`;
+  return `<span class="${classes}" title="${entry.name}"><b>${entry.name}</b><small>速度 ${battleInteger(entry.spd)}</small></span>`;
  }).join("");
 }
 function growthText(unit){const stars=Math.max(1,Number(unit?.stars??unit?.sourceStars)||1),plus=Math.max(0,Number(unit?.plus??unit?.sourcePlus)||0);return`${stars<=5?"★".repeat(stars):`★${stars}`} ・ +${plus}`}
@@ -42,9 +43,9 @@ function renderEnemies(battle,enemies,target){
    <span class="battle-unit-floating-name">${badge}<b>${enemy.name}</b></span>
    <div class="side-unit-sprite enemy-orb">${battle.enemyMagicCircleArt?.[enemy.id]??""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.hp<=0?"down":"idle",className:"battle-enemy-visual"})}</div>
    <div class="side-unit-card enemy-info">
-    <div class="side-unit-name enemy-name">${danger}<small>Lv.${enemy.level}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
+    <div class="side-unit-name enemy-name">${danger}<small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
-    ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${enemy.hp}/${enemy.maxHp}`,"enemy-hp")}
+    ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}`,"enemy-hp")}
     ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
     ${statusHtml}
    </div>
@@ -64,12 +65,12 @@ function renderParty(battle,actor){
    <span class="battle-unit-floating-name"><b>${displayName(m)}</b></span>
    <div class="side-unit-sprite unit-orb">${battle.magicCircleArt?.[m.id]??""}${monsterVisual(m,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual"})}</div>
    <div class="side-unit-card ally-info">
-    <div class="side-unit-name unit-head"><small>Lv.${m.level}</small><em class="battle-unit-growth">${growthText(m)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
+    <div class="side-unit-name unit-head"><small>Lv.${battleInteger(m.level)}</small><em class="battle-unit-growth">${growthText(m)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="side-unit-intent ally-circle-intent"><span>${circleLevel?`魔法陣 Lv.${circleLevel}`:"魔法陣"}</span><b>${circleName}</b></div>
-    ${hpBar(battle,`ally:${m.id}`,hpRate,`HP ${m.currentHp}/${stats.hp}`,"ally")}
-    <div class="battle-bar mp ally-mp"><span class="bar-label">MP ${m.currentMp}/${mp}</span><i class="resource-fill" style="width:${mpRate}%"></i></div>
-    <small class="battle-mini-stats">物攻 ${stats.atk}　魔攻 ${stats.matk??stats.atk}<br>物防 ${stats.def}　魔防 ${stats.mdef??stats.def}　速度 ${stats.spd}</small>${effectHtml}
-    <div class="battle-exp-row" aria-hidden="true"><small>あと${Math.max(0,need-m.exp)}</small><div class="battle-bar exp"><i style="width:${Math.min(100,m.exp/Math.max(1,need)*100)}%"></i></div></div>
+    ${hpBar(battle,`ally:${m.id}`,hpRate,`HP ${battleInteger(m.currentHp)}/${battleInteger(stats.hp)}`,"ally")}
+    <div class="battle-bar mp ally-mp"><span class="bar-label">MP ${battleInteger(m.currentMp)}/${battleInteger(mp)}</span><i class="resource-fill" style="width:${mpRate}%"></i></div>
+    <small class="battle-mini-stats">物攻 ${battleInteger(stats.atk)}　魔攻 ${battleInteger(stats.matk??stats.atk)}<br>物防 ${battleInteger(stats.def)}　魔防 ${battleInteger(stats.mdef??stats.def)}　速度 ${battleInteger(stats.spd)}</small>${effectHtml}
+    <div class="battle-exp-row" aria-hidden="true"><small>あと${battleInteger(Math.max(0,need-m.exp))}</small><div class="battle-bar exp"><i style="width:${Math.min(100,m.exp/Math.max(1,need)*100)}%"></i></div></div>
    </div>
   </button>`;
  }).join("");

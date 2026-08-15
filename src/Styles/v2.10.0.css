@@ -462,8 +462,9 @@
 
 /* build148: mobile-first online flow. Each phase replaces the previous view instead
    of being appended below it; the co-op dungeon now uses the ordinary dungeon art. */
-.online-party-screen{height:100dvh;min-height:0!important;overflow:hidden!important}
-.online-party-page{width:min(100%,980px);min-height:0!important;grid-template-columns:minmax(0,1fr);margin-top:4px;padding:0 5px calc(var(--v2-nav-height) + 3px)!important;overflow:hidden!important}
+.online-party-screen{height:100dvh;min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.online-party-page{width:min(100%,980px);min-height:100%;grid-template-columns:minmax(0,1fr);margin-top:4px;padding:0 5px calc(var(--v2-nav-height) + max(18px,env(safe-area-inset-bottom)))!important;overflow:visible!important}
+.online-party-screen.has-online-room{overflow:hidden!important}.online-party-screen.has-online-room .online-party-page{height:100%;min-height:0!important;overflow:hidden!important}
 .online-connect-panel,.online-room-gate,.online-plaza-shell{grid-column:1!important}
 .online-plaza-shell{width:100%;height:100%;min-height:0!important;grid-template-rows:auto minmax(0,1fr)!important;padding:4px!important;overflow:hidden!important}
 .online-plaza-shell>[hidden],.online-plaza-view>[hidden],.online-expedition-shell>[hidden]{display:none!important}
@@ -509,3 +510,18 @@
 }
 @media(min-width:900px) and (max-height:760px){.online-party-page{height:calc(100dvh - var(--v2-topbar-height,72px) - var(--v2-nav-height,62px) - 62px);min-height:400px!important}.online-room-header{min-height:44px!important}.online-raid-hero{min-height:152px}.online-raid-boss-art,.online-raid-boss-art img{min-height:140px;height:140px}.online-raid-exchange{padding:5px}.online-raid-exchange button{min-height:39px}.online-raid-battle{grid-template-rows:36px minmax(112px,1fr) minmax(82px,.72fr) auto 18px}}
 @media(prefers-reduced-motion:reduce){.online-raid-boss-art::before,.online-raid-stage::before,.online-raid-target img{animation:none!important}}
+
+/* build150: compact, always-readable attribute guide on the home HUD. */
+.home-attribute-mini-chart{position:absolute;z-index:14;top:6px;left:50%;width:min(42%,330px);min-height:32px;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:6px;padding:4px 7px;border:1px solid #79633a;background:linear-gradient(90deg,#07090ddd,#17130ddd,#07090ddd);color:#f0dfb8;transform:translateX(-50%);box-shadow:0 3px 10px #000b;text-align:left}.home-attribute-mini-chart small{color:#8acfe2;font:.27rem/1 ui-monospace,monospace;letter-spacing:.08em;white-space:nowrap}.home-attribute-mini-chart b{min-width:0;overflow:hidden;font-size:.35rem;letter-spacing:.01em;text-overflow:ellipsis;white-space:nowrap}.home-attribute-mini-chart:active{filter:brightness(1.25)}
+@media(max-width:560px){.home-attribute-mini-chart{top:5px;width:46%;min-height:27px;padding:3px 5px}.home-attribute-mini-chart small{display:none}.home-attribute-mini-chart b{font-size:.31rem;text-align:center}}
+
+.battle-status-detail-list.detailed{display:grid;gap:8px;max-height:min(68dvh,620px);overflow:auto;padding:2px}.battle-status-detail-group{padding:9px;border:1px solid #5b465f;background:#09080d}.battle-status-detail-group.negative{border-color:#713b48;background:#12080b}.battle-status-detail-group>header,.battle-status-final,.battle-status-detail-group article,.battle-status-detail-group>footer{display:flex;align-items:center;justify-content:space-between;gap:8px}.battle-status-detail-group>header b{color:#f0dfbb}.battle-status-detail-group>header strong,.battle-status-detail-group.positive article strong{color:#8fffc2}.battle-status-detail-group.negative>header strong,.battle-status-detail-group.negative article strong{color:#ff91a3}.battle-status-final{margin:6px 0;padding:5px 7px;background:#030407;color:#a9a1aa}.battle-status-final b{color:#fff}.battle-status-detail-group article{display:grid;grid-template-columns:minmax(0,1fr) auto;padding:7px 2px;border-top:1px solid #302b32}.battle-status-detail-group article>b{overflow:hidden;color:#e1d2ba;text-overflow:ellipsis;white-space:nowrap}.battle-status-detail-group article>span{font-size:.38rem}.battle-status-detail-group article>small{grid-column:1/-1;color:#8f8791}.battle-status-detail-group>footer{padding-top:6px;border-top:1px solid #544255;color:#c9b4cd;font-weight:900}.battle-status-ailment{display:grid;grid-template-columns:1fr auto;gap:4px;padding:9px;border:1px solid #713b48;background:#12080b}.battle-status-ailment b{color:#ff91a3}.battle-status-ailment small{grid-column:1/-1;color:#9d8d93}
+
+/* build150: before a room exists the connection/setup form must be able to
+   reach its create/join controls. Once joined, the established one-screen
+   plaza/dungeon/battle layout remains fixed exactly as before. */
+@media(min-width:900px){
+ .online-party-screen:not(.has-online-room){overflow-y:auto!important}
+ .online-party-screen:not(.has-online-room) .online-party-page{height:auto!important;min-height:calc(100dvh - var(--v2-nav-height,78px))!important;overflow:visible!important}
+ .online-party-screen:not(.has-online-room) .online-connect-panel,.online-party-screen:not(.has-online-room) .online-room-gate{max-height:none!important;overflow:visible!important}
+}

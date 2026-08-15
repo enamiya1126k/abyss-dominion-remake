@@ -9,6 +9,7 @@ import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.10.0";
 import{monsterVisual}from"../MonsterVisual.js?v=2.10.0";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0";
 import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.10.0";
+import{compactAttributeChart}from"../../data/attributes.js?v=2.10.0-build150";
 
 export function homeCriticalVitals(monster){
   if(!monster)return{critical:false,hpRate:1,mpRate:1};
@@ -152,6 +153,10 @@ export function HomeScreen(state){
         <span title="深淵の鍵：${(state.inventory?.abyssKeys??0).toLocaleString()}" data-exact-number="深淵の鍵 ${(state.inventory?.abyssKeys??0).toLocaleString()}">${pixelIcon("key")}<b>${compactHomeNumber(state.inventory?.abyssKeys??0)}</b></span>
         <button type="button" id="openSettings" aria-label="設定">${pixelIcon("settings")}</button>
       </div>
+
+      <button type="button" class="home-attribute-mini-chart" data-home-attribute-help="neutral" aria-label="属性相性を確認">
+        <small>属性相性</small><b>${compactAttributeChart()}</b>
+      </button>
 
       <button type="button" id="openCombatPowerHistory" class="home-record-card">
         <small>モンスター基盤</small>

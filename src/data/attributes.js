@@ -1,26 +1,58 @@
-export const ATTRIBUTES={
- neutral:{name:"無",icon:"⚪"},fire:{name:"火",icon:"🔥"},water:{name:"水",icon:"💧"},ice:{name:"氷",icon:"❄️"},lightning:{name:"雷",icon:"⚡"},thunder:{name:"雷",icon:"⚡"},earth:{name:"土",icon:"🪨"},wind:{name:"風",icon:"🌪️"},light:{name:"光",icon:"✨"},dark:{name:"闇",icon:"🌑"},poison:{name:"毒",icon:"☠️"},nature:{name:"自然",icon:"🌿"}
-};
-export const DEFAULT_RESISTANCES=Object.freeze(Object.fromEntries(Object.keys(ATTRIBUTES).map(id=>[id,1])));
-export function normalizedResistances(value={}){return{...DEFAULT_RESISTANCES,...value}}
-export const ATTRIBUTE_RELATIONS=Object.freeze({
- fire:{strong:["nature","ice"],weak:["water"]},
- water:{strong:["fire","earth"],weak:["lightning","nature"]},
- ice:{strong:["wind","nature"],weak:["fire"]},
- lightning:{strong:["water","wind"],weak:["earth"]},
- earth:{strong:["lightning","poison"],weak:["water","wind","nature"]},
- wind:{strong:["earth","poison"],weak:["ice","lightning"]},
- light:{strong:["dark","poison"],weak:["dark"]},
- dark:{strong:["light"],weak:["light"]},
- poison:{strong:["nature"],weak:["earth","wind","light"]},
- nature:{strong:["water","earth"],weak:["fire","ice","poison"]},
- neutral:{strong:[],weak:[]}
+export const ATTRIBUTES=Object.freeze({
+ neutral:{name:"無",icon:"⚪"},
+ fire:{name:"火",icon:"🔥"},
+ water:{name:"水",icon:"💧"},
+ lightning:{name:"雷",icon:"⚡"},
+ earth:{name:"土",icon:"🪨"},
+ wind:{name:"風",icon:"🌪️"},
+ ice:{name:"氷",icon:"❄️"},
+ light:{name:"光",icon:"✨"},
+ dark:{name:"闇",icon:"🌑"}
 });
-export function canonicalAttribute(id){return id==="thunder"?"lightning":id??"neutral"}
+
+export const ATTRIBUTE_ORDER=Object.freeze(["neutral","fire","water","lightning","earth","wind","ice","light","dark"]);
+export const DEFAULT_RESISTANCES=Object.freeze(Object.fromEntries(ATTRIBUTE_ORDER.map(id=>[id,1])));
+export const ATTRIBUTE_RELATIONS=Object.freeze({
+ neutral:{strong:[],weak:[]},
+ fire:{strong:["ice"],weak:["water"]},
+ water:{strong:["fire"],weak:["lightning"]},
+ lightning:{strong:["water"],weak:["earth"]},
+ earth:{strong:["lightning"],weak:["wind"]},
+ wind:{strong:["earth"],weak:["ice"]},
+ ice:{strong:["wind"],weak:["fire"]},
+ light:{strong:["dark"],weak:["dark"]},
+ dark:{strong:["light"],weak:["light"]}
+});
+
+function stableHash(value=""){
+ let hash=2166136261;
+ for(const char of String(value)){hash^=char.charCodeAt(0);hash=Math.imul(hash,16777619)}
+ return hash>>>0;
+}
+
+export function canonicalAttribute(id,seed=""){
+ const key=String(id??"neutral").toLowerCase();
+ if(key==="thunder")return"lightning";
+ if(key==="poison")return["dark","water","earth"][stableHash(seed||key)%3];
+ if(key==="nature")return["wind","earth","light"][stableHash(seed||key)%3];
+ return ATTRIBUTES[key]?key:"neutral";
+}
+
+export function normalizedResistances(value={}){
+ const result={...DEFAULT_RESISTANCES};
+ for(const[id,multiplier]of Object.entries(value??{})){
+  const canonical=canonicalAttribute(id,`resistance:${id}`),number=Number(multiplier);
+  if(Number.isFinite(number))result[canonical]=Math.min(result[canonical]??1,number);
+ }
+ return result;
+}
+
 export function attributeDamageMultiplier(attacking,defending){
  const attack=canonicalAttribute(attacking),defense=canonicalAttribute(defending),relation=ATTRIBUTE_RELATIONS[attack]??ATTRIBUTE_RELATIONS.neutral;
  if(relation.strong.includes(defense))return 1.25;
  if(relation.weak.includes(defense))return .8;
  return 1;
 }
-export function attributeGuideRows(){return Object.entries(ATTRIBUTE_RELATIONS).filter(([id])=>id!=="neutral").map(([id,relation])=>({id,name:ATTRIBUTES[id]?.name??id,strong:relation.strong.map(key=>ATTRIBUTES[key]?.name??key),weak:relation.weak.map(key=>ATTRIBUTES[key]?.name??key)}))}
+
+export function attributeGuideRows(){return ATTRIBUTE_ORDER.map(id=>{const relation=ATTRIBUTE_RELATIONS[id];return{id,name:ATTRIBUTES[id].name,icon:ATTRIBUTES[id].icon,strong:relation.strong.map(key=>ATTRIBUTES[key].name),weak:relation.weak.map(key=>ATTRIBUTES[key].name)}})}
+export function compactAttributeChart(){return`${ATTRIBUTES.fire.icon}→${ATTRIBUTES.ice.icon}→${ATTRIBUTES.wind.icon}→${ATTRIBUTES.earth.icon}→${ATTRIBUTES.lightning.icon}→${ATTRIBUTES.water.icon}→${ATTRIBUTES.fire.icon}　${ATTRIBUTES.light.icon}⇄${ATTRIBUTES.dark.icon}　${ATTRIBUTES.neutral.icon}`}
