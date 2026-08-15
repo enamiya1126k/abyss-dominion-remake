@@ -5,6 +5,7 @@ import{goldForClearedFloor}from"../core/GoldEconomySystem.js?v=2.10.0";
 const LOCK_MULTIPLIERS=[1,2.25,4.75,8];
 const RARITY_MULTIPLIERS={N:.70,R:.85,SR:1,SSR:1.35,UR:1.55,LR:1.75,"神話":2.15,"深淵":2.65,"十神":3.25};
 const MINIMUM_COSTS={N:200,R:300,SR:450,SSR:700,UR:850,LR:1000,"神話":1500,"深淵":2200,"十神":3200};
+const INITIAL_AFFIX_COUNTS={N:1,R:1,SR:2,SSR:3,UR:3,LR:4,"神話":4,"深淵":4,"十神":4};
 
 function safeInteger(value,fallback=0){
  const number=Number(value);
@@ -49,6 +50,9 @@ export function rerollGoldCost(state,item){
  const level=Math.max(1,safeInteger(item?.level,1)),levelMultiplier=1+Math.min(.75,Math.log10(level)*.15);
  return roundedGold(rarityBase*levelMultiplier*rerollLockMultiplier(item));
 }
+export function initialAffixCount(item){
+ return INITIAL_AFFIX_COUNTS[equipmentDisplayRarity(item)]??1;
+}
 export function toggleAffixLock(item,index){
  const list=normalizeEquipmentAffixLocks(item),affix=list[index];
  if(!affix)return{ok:false,message:"対象オプションがありません"};
@@ -64,11 +68,26 @@ export function toggleAffixLock(item,index){
 export function rerollUnlockedAffixes(state,item){
  if(!state?.player||!item)return{ok:false,message:"装備データを確認できません"};
  const list=normalizeEquipmentAffixLocks(item);
- if(!list.length)return{ok:false,message:"この装備には再抽選できるオプションがありません"};
- const unlocked=list.map((affix,index)=>affix.locked?null:index).filter(index=>index!==null);
- if(!unlocked.length)return{ok:false,message:"再抽選するオプションを1枠以上残してください"};
  const cost=rerollGoldCost(state,item),gold=safeInteger(state.player.gold);
  if(gold<cost)return{ok:false,message:`GOLDが足りません（必要 ${cost.toLocaleString()}G）`,cost};
+ if(!list.length){
+  const count=initialAffixCount(item),rarity=equipmentDisplayRarity(item),generated=[],used=new Set();
+  for(let index=0;index<count;index++){
+   const next=rollAffixForSlot(item.slot,rarity,[...used]);
+   if(!next)return{ok:false,message:"初回スロット候補を生成できませんでした。GOLDは消費されていません"};
+   next.locked=false;generated.push(next);used.add(next.id);
+  }
+  item.affixes=generated;
+  state.player.gold=gold-cost;
+  const history=normalizeEquipmentCraftingState(state);
+  history.rerolls=safeInteger(history.rerolls+1);
+  history.goldSpent=safeInteger(history.goldSpent+cost);
+  item.rerollCount=safeInteger(item.rerollCount)+1;
+  item.lastRerolledAt=new Date().toISOString();
+  return{ok:true,cost,before:[],after:generated.map(affix=>({...affix})),lockedCount:0,rerolledCount:generated.length,initialized:true};
+ }
+ const unlocked=list.map((affix,index)=>affix.locked?null:index).filter(index=>index!==null);
+ if(!unlocked.length)return{ok:false,message:"再抽選するオプションを1枠以上残してください"};
 
  const originalIds=new Set(list.map(affix=>affix.id)),used=new Set(list.filter(affix=>affix.locked).map(affix=>affix.id)),replacements=new Map();
  for(const index of unlocked){
