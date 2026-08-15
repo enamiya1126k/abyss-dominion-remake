@@ -27,8 +27,8 @@ import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./serv
 import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=2.10.0";
 import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=2.10.0";
 import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=2.10.0";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.10.0-build141";
-import{lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.10.0";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.10.0-build142";
+import{initialAffixCount,lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.10.0-build142";
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=2.10.0";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.10.0";
 import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.10.0";
@@ -1169,12 +1169,24 @@ function bindSettings(){
 
 
 function equipmentAffixCraftingBody(item){
- const affixes=normalizeEquipmentAffixLocks(item),locked=lockedAffixCount(item),maximum=maxLockableAffixes(item),cost=rerollGoldCost(save.state,item),gold=Math.max(0,Number(save.state.player.gold)||0);
- const rows=affixes.map((affix,index)=>{
+ const affixes=normalizeEquipmentAffixLocks(item),locked=lockedAffixCount(item),maximum=maxLockableAffixes(item),cost=rerollGoldCost(save.state,item),gold=Math.max(0,Number(save.state.player.gold)||0),targetCount=affixes.length||initialAffixCount(item),rerollCount=Math.max(1,targetCount-locked),rarity=equipmentDisplayRarity(item);
+ const rows=affixes.length?affixes.map((affix,index)=>{
   const quality=affixQuality(affix),fixed=affix.locked,definition=affixDefinition(affix.id),disabled=!fixed&&locked>=maximum;
-  return`<div class="affix-craft-row ${fixed?"is-fixed":""}"><span class="affix-craft-pin">${fixed?"📌":"◇"}</span><div><b style="color:${quality.color}">${formatAffix(affix)}${definition?.legendaryOnly?"〈固有〉":""}</b><small>${quality.name}${fixed?"・再抽選から保護":""}</small></div><button type="button" class="affix-lock-toggle ${fixed?"locked":""}" data-affix-lock-index="${index}" ${disabled?"disabled":""}>${fixed?"固定解除":"この枠を固定"}</button></div>`
- }).join("");
- return`<div class="affix-craft-modal"><div class="affix-craft-summary"><div><small>所持GOLD</small><b>${gold.toLocaleString()}G</b></div><div><small>今回の費用</small><b class="${gold<cost?"insufficient":""}">${cost.toLocaleString()}G</b></div><div><small>固定枠</small><b>${locked}/${maximum}</b></div></div><div class="affix-craft-equipment"><small>${equipmentDisplayRarity(item)} / Lv.${Math.max(1,Number(item.level)||1)}</small><b>${item.name}${item.plus?` +${item.plus}`:""}</b></div><div class="affix-craft-list">${rows}</div><small>固定・解除そのものは無料です。固定枠が増えるほど再抽選費用が上がります。専用アイテムや魔晶石は使わず、必ず1枠以上を再抽選します。</small>${gold<cost?`<p class="affix-craft-warning">あと ${(cost-gold).toLocaleString()}G 必要です。</p>`:""}</div>`
+  return`<article class="affix-forge-slot ${fixed?"is-fixed":""}" style="--affix-quality:${quality.color}"><span class="affix-forge-index">${String(index+1).padStart(2,"0")}</span><i class="affix-forge-rune" aria-hidden="true"></i><div><small>${quality.name.toUpperCase()} SLOT${definition?.legendaryOnly?"・固有":""}</small><b>${formatAffix(affix)}</b><em>${fixed?"固定済み・再抽選から保護":"未固定・再抽選対象"}</em></div><button type="button" class="affix-lock-toggle ${fixed?"locked":""}" data-affix-lock-index="${index}" ${disabled?"disabled":""}><i aria-hidden="true"></i><span>${fixed?"固定解除":"枠を固定"}</span></button></article>`
+ }).join(""):Array.from({length:targetCount},(_,index)=>`<article class="affix-forge-slot is-empty"><span class="affix-forge-index">${String(index+1).padStart(2,"0")}</span><i class="affix-forge-rune" aria-hidden="true"></i><div><small>EMPTY SLOT</small><b>未鑑定</b><em>初回抽選で効果を付与</em></div><span class="affix-forge-pending">待機</span></article>`).join("");
+ const sockets=Array.from({length:targetCount},(_,index)=>`<i class="${index<affixes.length?"filled":"empty"}"></i>`).join("");
+ return`<div class="affix-forge-content">
+  <section class="affix-forge-equipment"><div class="affix-forge-art"><i aria-hidden="true"></i>${equipmentVisual(item,{className:"affix-forge-equipment-art"})}</div><div><small>${rarity}・${slotLabel(item.slot)}・Lv.${Math.max(1,Number(item.level)||1)} ∞</small><h3>${item.name}${item.plus?` +${item.plus}`:""}</h3><div class="affix-forge-sockets" aria-label="スロット ${affixes.length}/${targetCount}">${sockets}</div><p>${affixes.length?`${rerollCount}枠が再抽選対象です。固定した能力はそのまま残ります。`:`旧装備を含む空スロット装備です。初回抽選で${targetCount}枠すべてに能力を付与します。`}</p></div></section>
+  <section class="affix-forge-ledger" aria-label="厳選費用"><article><img src="assets/ui/items/gold.png?v=2.10.0" alt=""><span><small>所持GOLD</small><b>${gold.toLocaleString()}G</b></span></article><article class="${gold<cost?"insufficient":""}"><i>${pixelIcon("summon")}</i><span><small>${affixes.length?"再抽選費用":"初回抽選費用"}</small><b>${cost.toLocaleString()}G</b></span></article><article><i>${pixelIcon("key")}</i><span><small>固定枠</small><b>${locked}/${maximum}</b></span></article></section>
+  <section class="affix-forge-slots"><header><div><small>OPTION SOCKETS</small><b>能力スロット</b></div><span>${affixes.length?`${rerollCount}枠を更新`:`${targetCount}枠を新規生成`}</span></header><div>${rows}</div></section>
+  <p class="affix-forge-guide">固定・解除は無料。固定数が増えるほど必要GOLDが上昇します。魔晶石や専用アイテムは消費しません。</p>
+  ${gold<cost?`<p class="affix-forge-warning">GOLD不足・あと ${(cost-gold).toLocaleString()}G 必要</p>`:""}
+  <footer class="affix-forge-footer"><div><small>EXECUTION COST</small><b>${cost.toLocaleString()}G</b></div><button type="button" data-affix-reroll ${gold<cost?'disabled aria-disabled="true"':""}><i>${pixelIcon("summon")}</i><span><b>${affixes.length?`${rerollCount}枠を再抽選`:`${targetCount}枠を初回抽選`}</b><small>${gold<cost?"GOLDが不足しています":"タップして厳選を実行"}</small></span></button></footer>
+ </div>`
+}
+function equipmentAffixCraftingModal(item){
+ const rarity=equipmentDisplayRarity(item),color=equipmentRarityColor(rarity)??"#d6b767";
+ return`<div class="game-modal equipment-affix-forge-modal" role="dialog" aria-modal="true" aria-labelledby="equipmentAffixForgeTitle"><section class="equipment-affix-forge" style="--forge-rarity:${color}"><header class="affix-forge-header"><div><small>ABYSS BLACKSMITH・GOLD CRAFT</small><h2 id="equipmentAffixForgeTitle">装備スロット厳選</h2></div><button type="button" data-modal-dismiss aria-label="厳選画面を閉じる">×</button></header>${equipmentAffixCraftingBody(item)}</section></div>`;
 }
 function openEquipmentAffixHelp(){
  const qualities=Object.values(AFFIX_QUALITY).map(quality=>`<p class="affix-quality-row"><b style="color:${quality.color}">${quality.name}</b><span>同じ効果でも数値品質が変化</span></p>`).join("");
@@ -1184,23 +1196,22 @@ function openEquipmentAffixHelp(){
 function openEquipmentAffixCrafting(itemId){
  const item=save.state.equipment.find(entry=>entry.id===itemId);
  if(!item)return showToast("装備が見つかりません");
- if(!normalizeEquipmentAffixLocks(item).length)return showToast("この装備にはランダムオプションがありません");
- app.insertAdjacentHTML("beforeend",Modal("🎲 装備オプション厳選",equipmentAffixCraftingBody(item),"GOLDで再抽選"));
- const modal=topModal(),primary=modal.querySelector("[data-modal-primary]");
+ app.insertAdjacentHTML("beforeend",equipmentAffixCraftingModal(item));
+ const modal=topModal(),primary=modal.querySelector("[data-affix-reroll]");
  modal._onDismiss=()=>{modal.remove();render()};
  modal.querySelectorAll("[data-affix-lock-index]").forEach(button=>button.onclick=()=>{
   const result=toggleAffixLock(item,Number(button.dataset.affixLockIndex));
   if(!result.ok){showToast(result.message);return}
   save.save();modal.remove();openEquipmentAffixCrafting(itemId);
  });
- primary.onclick=()=>{
+ primary?.addEventListener("click",()=>{
   const owner=item.equippedBy?save.state.monsters.find(monster=>monster.id===item.equippedBy):null,vital=owner?captureVitalSnapshot(owner):null;
   const result=rerollUnlockedAffixes(save.state,item);
   if(!result.ok){showToast(result.message);return}
   normalizeEquipmentState();
   if(owner&&vital)restoreVitalSnapshot(owner,vital);
-  save.save();modal._onDismiss=null;render();showToast(`${result.rerolledCount}枠を再抽選・${result.cost.toLocaleString()}G消費`);openEquipmentAffixCrafting(itemId);
- };
+  save.save();modal._onDismiss=null;modal.remove();render();showToast(`${result.rerolledCount}枠を${result.initialized?"初回抽選":"再抽選"}・${result.cost.toLocaleString()}G消費`);openEquipmentAffixCrafting(itemId);
+ });
 }
 function openEquipmentSlotPicker(subslot){
  const target=save.state.monsters.find(monster=>monster.id===equipmentTarget);if(!target)return;
