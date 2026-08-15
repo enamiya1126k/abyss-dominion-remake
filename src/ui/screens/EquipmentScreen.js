@@ -103,8 +103,9 @@ function equippedSlotCard(state,target,subslot,focusItemId=null){
    ${itemFixedEffect(item)}
    ${itemAffixes(item,{compact:true})}
    <div class="equipped-slot-actions">
-    <button type="button" data-enhance-equipment="${item.id}">育成・スロット</button>
-    ${affixes.length?`<button type="button" data-reroll-equipment="${item.id}">GOLD厳選</button>`:'<button type="button" disabled>厳選不可</button>'}
+    <button type="button" class="primary-slot-action" data-open-equipment-slot="${subslot}">装備変更</button>
+    <button type="button" data-enhance-equipment="${item.id}">装備育成</button>
+    ${affixes.length?`<button type="button" data-reroll-equipment="${item.id}">スロット厳選</button>`:'<button type="button" disabled>スロットなし</button>'}
     <button type="button" data-favorite-equipment="${item.id}">${item.favorite?"★ 解除":"☆ お気に入り"}</button>
     <button type="button" data-lock-equipment="${item.id}">${item.locked?"ロック解除":"ロック"}</button>
     <button type="button" data-unequip="${item.id}">装備を外す</button>
@@ -189,6 +190,7 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
  if(!home&&storage!=="inventory")storage="inventory";
  const sort=state.settings.equipmentSort??"rarity";
  const source=storage==="reserve"?state.reserveEquipment:storage==="bossVault"?state.bossEquipmentVault:state.equipment;
+ const canManageInventory=storage==="inventory";
  if(!target)return`<section class="screen"><header class="topbar"><button id="backEquipmentHome">←</button><h2>装備管理</h2></header></section>`;
 
  const list=[...source].filter(item=>item.slot===slot&&(!item.equippedBy||item.equippedBy===target.id)).sort((a,b)=>sortItems(a,b,sort));
@@ -254,6 +256,22 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
      <button id="unequipParty">全員の装備解除</button>
     </div>
    </div>
+   <nav class="equipment-slot-tabs" aria-label="装備種類">
+    <button type="button" data-equipment-slot="weapon" class="${slot==="weapon"?"active":""}">⚔️ 武器</button>
+    <button type="button" data-equipment-slot="armor" class="${slot==="armor"?"active":""}">🛡️ 防具</button>
+    <button type="button" data-equipment-slot="accessory" class="${slot==="accessory"?"active":""}">💍 アクセ</button>
+   </nav>
+   <nav class="equipment-storage-tabs" aria-label="装備保管場所">
+    <button type="button" data-equipment-storage="inventory" class="${storage==="inventory"?"active":""}">所持品<small>${state.equipment.length}/${EQUIPMENT_LIMIT}</small></button>
+    <button type="button" data-equipment-storage="reserve" class="${storage==="reserve"?"active":""}" ${home?"":"disabled"}>予備BOX<small>${state.reserveEquipment.length}</small></button>
+    <button type="button" data-equipment-storage="bossVault" class="${storage==="bossVault"?"active":""}" ${home?"":"disabled"}>王装保管庫<small>${state.bossEquipmentVault.length}</small></button>
+   </nav>
+   <div class="panel equipment-manage-panel ${editing&&canManageInventory?"manage-editing":""}">
+    <div class="spread"><div><b>${slotLabel(slot)}一覧</b><small>${canManageInventory?"装備カードの部位ボタンから、選択中の仲間へ装着できます。":"カードから所持品へ戻すと、装備・育成できるようになります。"}</small></div>${canManageInventory?`<button type="button" id="toggleEquipmentEdit" class="manage-edit-button">${editing?"完了":"整理"}</button>`:""}</div>
+    ${canManageInventory?(editing?`<div class="bulk-manager"><div class="bulk-presets"><button type="button" data-select-equipment="all">全選択</button><button type="button" data-select-equipment="N">N</button><button type="button" data-select-equipment="R">R</button><button type="button" data-select-equipment="plus0">未強化</button><button type="button" data-select-equipment="duplicate">重複</button><button type="button" data-select-equipment="none">解除</button></div><button type="button" id="lockSelectedEquipment" class="bulk-secondary">選択装備をロック</button><button type="button" id="sellSelectedEquipment" class="bulk-primary danger">選択装備を売却</button></div>`:`<button type="button" id="bulkSellEquipment" class="bulk-secondary">未装備のN・Rを一括売却</button>`):""}
+   </div>
+   <div class="panel equipment-sort-panel"><div class="spread"><b>${slotLabel(slot)} ${list.length}件</b><select id="equipmentSort" aria-label="装備の並び順">${sortOption("rarity","レア度順",sort)}${sortOption("power","総合能力順",sort)}${sortOption("atk","ATK順",sort)}${sortOption("def","DEF順",sort)}${sortOption("hp","HP順",sort)}${sortOption("spd","SPD順",sort)}${sortOption("newest","新しい順",sort)}${sortOption("favorite","お気に入り順",sort)}${sortOption("name","名前順",sort)}</select></div></div>
+   <div class="equipment-list ${editing&&canManageInventory?"manage-editing":""}">${list.map(item=>card(item,state,target,storage,{editing:editing&&canManageInventory,selected:selected.has(item.id),focused:item.id===focusItemId})).join("")||'<div class="empty">この条件の装備はありません</div>'}</div>
   </div>
   ${bottomNav("equipment")}
  </section>`;
