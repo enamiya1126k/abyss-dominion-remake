@@ -10,6 +10,10 @@ const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 const index=read("index.html"),main=read("src/main.js"),screen=read("src/ui/screens/ExploreScreen.js"),css=read("src/Styles/v2.10.0.css");
 
 assert.equal(Object.keys(DUNGEON_THEMES).length,9,"nine materially distinct exploration themes are available");
+for(const theme of Object.values(DUNGEON_THEMES)){
+ assert.ok(theme.wallDepth>=.22&&theme.wallDepth<=.42,`${theme.id} has a restrained raised-wall depth`);
+ assert.ok(theme.wallFace&&theme.wallRim&&theme.wallJoint,`${theme.id} has theme-specific wall face, rim and joint colours`);
+}
 assert.equal(dungeonThemeForFloor(1).id,"ruins");
 assert.equal(dungeonThemeForFloor(11).id,"jungle");
 assert.equal(dungeonThemeForFloor(21).id,"magma");
@@ -34,10 +38,15 @@ for(const asset of dungeonThemeAssetPaths()){
  const width=bytes.readUInt32BE(16),height=bytes.readUInt32BE(20);assert.ok(width>=1200&&height>=1200,`${asset} is too small for continuous canvas sampling`);
 }
 
-assert.match(index,/v2\.10\.0\.css\?v=2\.10\.0-build143/);
-assert.match(index,/main\.js\?v=\$\{ASSET_VERSION\}-build143/);
+assert.match(index,/v2\.10\.0\.css\?v=2\.10\.0-build144/);
+assert.match(index,/main\.js\?v=\$\{ASSET_VERSION\}-build144/);
 assert.match(main,/dungeonThemeForFloor/);
+assert.match(main,/function exploreTextureSample/);
 assert.match(main,/panelWidth=split\?Math\.floor\(image\.width\/2\)/,"atlas floor and wall panels are sampled independently");
+assert.match(main,/function drawExploreRaisedWalls/);
+assert.match(main,/drawExploreTextureSample\(wallTexture,true,theme/,"raised wall faces retain the current biome's wall material");
+assert.match(main,/Contact shadows are painted onto the walkable side/);
+assert.match(main,/sides>=3/,"isolated wall cells receive a connected pillar cap");
 assert.match(main,/drawExploreAmbientParticles/);
 assert.match(main,/drawExploreWallEdges/);
 assert.match(screen,/explore-scenery-badge/);
