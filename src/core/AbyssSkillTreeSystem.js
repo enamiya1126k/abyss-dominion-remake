@@ -1,4 +1,4 @@
-import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=2.10.0-build158";
+import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=2.10.0-build159";
 
 export const ABYSS_SKILL_TREE_VERSION=6;
 
@@ -32,7 +32,7 @@ const FOUNDATION_LANES=Object.freeze({
  "exploration-instinct":2,"exploration-relic-sense":1,"exploration-elite-trail":3,"exploration-abyss-luck":1,"exploration-key-echo":3,"exploration-endless-path":2
 });
 
-// build158: the tree is a long-term progression system, but its previous
+// build159: the tree is a long-term progression system, but its previous
 // prices became a wall long before the interesting branch choices appeared.
 // Keep every effect/prerequisite intact and reduce every node to roughly 25%.
 function discountedTreePrice(original){
@@ -484,18 +484,20 @@ export function normalizeAbyssSkillTree(state){
  const paidCosts={};
  let investedGold=0;
  let rebalanceRefund=0;
+ const rebalanceAlreadyApplied=Number(state?.abyssSkillRebalance?.version)>=ABYSS_SKILL_TREE_VERSION;
+ const shouldApplyRebalanceRefund=sourceVersion>0&&sourceVersion<ABYSS_SKILL_TREE_VERSION&&!rebalanceAlreadyApplied;
  for(const nodeId of learned){
   const node=NODE_BY_ID.get(nodeId);
   const paid=node.cost;
   paidCosts[nodeId]=paid;
   investedGold=Math.min(Number.MAX_SAFE_INTEGER,investedGold+paid);
-  if(sourceVersion>0&&sourceVersion<ABYSS_SKILL_TREE_VERSION){
+  if(shouldApplyRebalanceRefund){
    const recorded=Number(source.paidCosts?.[nodeId]);
    const previousPaid=Number.isFinite(recorded)&&recorded>0?recorded:(Number(node.legacyCost)||node.cost);
    rebalanceRefund=Math.min(Number.MAX_SAFE_INTEGER,rebalanceRefund+Math.max(0,previousPaid-node.cost));
   }
  }
- if(sourceVersion>0&&sourceVersion<ABYSS_SKILL_TREE_VERSION){
+ if(shouldApplyRebalanceRefund){
   state.player??={};
   state.player.gold=Math.min(Number.MAX_SAFE_INTEGER,safeInteger(state.player.gold,0)+rebalanceRefund);
   state.abyssSkillRebalance={version:ABYSS_SKILL_TREE_VERSION,refund:rebalanceRefund,appliedAt:new Date().toISOString()};
@@ -611,16 +613,21 @@ export function canLearnAbyssSkill(state,nodeId){
 }
 
 export function learnAbyssSkill(state,nodeId){
+ const goldBeforeValidation=safeInteger(state?.player?.gold,0);
  const result=canLearnAbyssSkill(state,nodeId);
  if(!result.ok)return result;
  const tree=state.abyssSkillTree;
- state.player.gold=safeInteger(state.player.gold,0)-result.node.cost;
- tree.learned.push(result.node.id);
- tree.paidCosts[result.node.id]=result.node.cost;
- tree.investedGold=Math.min(Number.MAX_SAFE_INTEGER,tree.investedGold+result.node.cost);
+ const cost=safeInteger(result.node.cost,0),goldAfterValidation=safeInteger(state.player?.gold,0),debitBase=Math.min(goldBeforeValidation,goldAfterValidation);
+ if(cost<=0)return{ok:false,reason:"invalidCost",message:"習得コストが不正です。",node:result.node};
+ if(tree.learned.includes(result.node.id))return{ok:false,reason:"learned",message:"すでに習得済みです。",node:result.node};
+ if(debitBase<cost){state.player.gold=debitBase;return{ok:false,reason:"gold",message:`GOLD不足｜あと ${(cost-debitBase).toLocaleString()}G`,node:result.node}}
+ state.player.gold=debitBase-cost;
+ tree.learned=[...tree.learned,result.node.id];
+ tree.paidCosts={...tree.paidCosts,[result.node.id]:cost};
+ tree.investedGold=Math.min(Number.MAX_SAFE_INTEGER,safeInteger(tree.investedGold,0)+cost);
  const circleId=magicCircleUnlockForNode(result.node.id);
  const circleUnlock=circleId?unlockMagicCircleFromTree(state,circleId):null;
- return{ok:true,node:result.node,cost:result.node.cost,tree,circleUnlock};
+ return{ok:true,node:result.node,cost,tree,circleUnlock};
 }
 
 export function resetAbyssSkillTree(state){

@@ -11,7 +11,7 @@ test("build157 isolates active online play and keeps the composer persistent",as
  for(const token of["online-expedition-shell online-solo-explore explore-screen explore-screen-dungeon","online-solo-resource-hud resource-hud","explore-command-header","online-expedition-party-toggle","online-explore-nav explore-nav","online-raid-battle battle-screen side-battle-v2","battle-arena side-battle-arena","battle-command online-normal-raid-command"])assert.ok(screen.includes(token),`missing immersive component: ${token}`);
  for(const token of["data-online-chat-dock","data-online-chat-toggle","data-online-chat-drawer","data-online-chat-form","data-online-chat-input"])assert.ok(screen.includes(token),`missing persistent chat component: ${token}`);
  assert.match(styles,/html\.online-immersive,body\.online-immersive/);assert.match(styles,/position:fixed;z-index:1400/);assert.match(styles,/font-size:16px!important/);assert.match(styles,/\.online-party-screen\.online-phase-expedition \.online-expedition-shell/);assert.match(styles,/\.online-party-screen\.online-phase-raid \.online-raid-view/);
- assert.match(client,/_syncImmersiveMode/);assert.match(client,/_setChatExpanded/);assert.match(client,/online-chat-keyboard-open/);assert.match(client,/if\(!this\.chatExpanded\)this\.chatUnread/);assert.match(index,/ASSET_BUILD = "build158"/);
+ assert.match(client,/_syncImmersiveMode/);assert.match(client,/_setChatExpanded/);assert.match(client,/online-chat-keyboard-open/);assert.match(client,/if\(!this\.chatExpanded\)this\.chatUnread/);assert.match(index,/ASSET_BUILD = "build159"/);
 });
 
 test("mobile quantity shop stacks the real purchase control",async()=>{

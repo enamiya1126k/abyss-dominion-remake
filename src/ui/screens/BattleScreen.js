@@ -1,11 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.10.0-build158";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.10.0-build150";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.10.0-build150";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.10.0";
-import{monsterVisual}from"../MonsterVisual.js?v=2.10.0";
-import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.10.0";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0-build150";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.10.0";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.10.0-build159";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.10.0-build159";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.10.0-build159";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.10.0-build159";
+import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build159";
+import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.10.0-build159";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0-build159";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.10.0-build159";
 
 function battleInteger(value){return Math.round(Number(value)||0).toLocaleString("ja-JP")}
 function renderTurnOrder(battle){
@@ -127,7 +127,7 @@ export function BattleScreen(battle,inventory,settings,floor=1){
  const timingStyle=`--battle-lunge:${scaled(220)};--battle-skill-lunge:${scaled(300)};--battle-hit:${scaled(260)};--battle-critical-hit:${scaled(300)};--battle-defeat:${scaled(500)};--battle-float:1500ms;--battle-banner-in:${scaled(280)};--battle-banner-out:${scaled(220)};--battle-flash:${scaled(380)};--battle-particle:${Math.max(560,Math.round(920/speed))}ms`;
  const theme=String(battle.battleTheme??"default").replace(/[^a-z0-9-]/gi,"");
  const biomeBadge=battle.biomeBattle?`<div class="battle-biome-badge compact" style="--biome-accent:${battle.biomeBattle.accent}"><b>${battle.biomeBattle.name}</b><small>適性+22%・不適性−16%</small></div>`:"";
- const invincibleBadge=invincibleAllianceActive(battle)?'<div class="invincible-alliance-status" role="status" aria-label="無敵・四神話連携が発動中"><span>無敵</span><small>四神話連携・常時発動</small></div>':"";
+ const invincibleBadge=invincibleAllianceActive(battle)?'<div class="invincible-alliance-status" role="status" aria-label="無敵・四LR連携が発動中"><span>無敵</span><small>四LR連携・常時発動</small></div>':"";
  return `<section class="battle-screen side-battle-v2 battle-theme-${theme} ${battle.auto?"auto-mode":"manual-mode"} ${battle.specialBattle?"special-battle":""}" data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}">${special}
   <div class="battle-header"><div class="round-label"><small>ラウンド</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}F・遭遇戦`}</b><small>${battle.auto?"完全自動":"コマンド戦闘"}</small></div><button id="toggleBattleAuto" type="button" aria-pressed="${battle.auto}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button><button id="battleSpeed">×${speed}</button>${battle.specialBattle?`<button disabled>逃走不可</button>`:`<button id="escapeBattle">逃げる</button>`}</div>
   <div class="turn-order"><span class="turn-order-title">行動順</span>${renderTurnOrder(battle)}</div>

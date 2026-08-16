@@ -1,4 +1,4 @@
-import{equipmentDisplayRarity}from"./equipment.js?v=2.10.0";
+import{equipmentDisplayRarity}from"./equipment.js?v=2.10.0-build159";
 
 export const AFFIX_QUALITY={
  normal:{id:"normal",name:"通常",color:"#e8e8ec",min:.00,max:.34},
@@ -56,13 +56,20 @@ const COUNT_RANGES={N:[0,1],R:[1,1],SR:[1,2],SSR:[2,3],UR:[3,3],LR:[3,4],"神話
 const RARITY_LUCK={N:0,R:.05,SR:.12,SSR:.22,UR:.28,LR:.34,"神話":.40,"深淵":.46,"十神":.52};
 const byId=new Map(AFFIX_DEFINITIONS.map(x=>[x.id,x]));
 export const LEGENDARY_AFFIX_IDS=new Set(AFFIX_DEFINITIONS.filter(x=>x.legendaryOnly).map(x=>x.id));
+// LR以上でも固有オプションは「狙って初めて出会える」枠にする。
+// 通常のランダム枠数・ジャンルのばらつきは従来どおり維持する。
+export const LEGENDARY_AFFIX_CHANCE=Object.freeze({SSR:.004,UR:.008,LR:.015,"神話":.025,"深淵":.04,"十神":.06});
 
 function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 function qualityForRoll(roll){return Object.values(AFFIX_QUALITY).find(q=>roll>=q.min&&roll<q.max)??AFFIX_QUALITY.normal}
 export function affixDefinition(id){return byId.get(id)??null}
 export function rollEquipmentAffixes(slot,rarity="N"){
- const [minCount,maxCount]=COUNT_RANGES[rarity]??[0,1],count=randomInt(minCount,maxCount),allowLegendary=(RARITY_LUCK[rarity]??0)>=RARITY_LUCK.SSR,legendaryChance={SSR:.08,UR:.15,LR:.24,"神話":.32,"深淵":.40,"十神":.50}[rarity]??0,pool=AFFIX_DEFINITIONS.filter(x=>x.slots.includes(slot)&&(!x.legendaryOnly||allowLegendary&&Math.random()<legendaryChance)),chosen=[];
- while(chosen.length<count&&pool.length){const index=Math.floor(Math.random()*pool.length),def=pool.splice(index,1)[0],roll=Math.min(.999,Math.random()+RARITY_LUCK[rarity]*(.35+Math.random()*.65)),quality=qualityForRoll(roll),value=Math.max(def.min,Math.min(def.max,Math.round(def.min+(def.max-def.min)*roll)));chosen.push({id:def.id,value,quality:quality.id})}
+ const [minCount,maxCount]=COUNT_RANGES[rarity]??[0,1],count=randomInt(minCount,maxCount),eligible=AFFIX_DEFINITIONS.filter(x=>x.slots.includes(slot)),normal=eligible.filter(x=>!x.legendaryOnly),legendary=eligible.filter(x=>x.legendaryOnly),chosen=[];
+ if(count>0&&legendary.length&&Math.random()<(LEGENDARY_AFFIX_CHANCE[rarity]??0)){
+  const def=legendary[Math.floor(Math.random()*legendary.length)],roll=Math.min(.999,Math.random()+RARITY_LUCK[rarity]*(.35+Math.random()*.65)),value=Math.max(def.min,Math.min(def.max,Math.round(def.min+(def.max-def.min)*roll)));
+  chosen.push({id:def.id,value,quality:AFFIX_QUALITY.legendary.id});
+ }
+ while(chosen.length<count&&normal.length){const index=Math.floor(Math.random()*normal.length),def=normal.splice(index,1)[0],roll=Math.min(.999,Math.random()+RARITY_LUCK[rarity]*(.35+Math.random()*.65)),quality=qualityForRoll(roll),value=Math.max(def.min,Math.min(def.max,Math.round(def.min+(def.max-def.min)*roll)));chosen.push({id:def.id,value,quality:quality.id})}
  return chosen;
 }
 export function ensureEquipmentAffixes(item){if(!Array.isArray(item.affixes))item.affixes=rollEquipmentAffixes(item.slot,equipmentDisplayRarity(item));item.affixes.forEach(a=>a.locked=!!a.locked);return item.affixes}
@@ -73,8 +80,8 @@ export function equipmentAffixPower(item){return ensureEquipmentAffixes(item).re
 
 export function rollAffixForSlot(slot,rarity="N",excludeIds=[]){
  const excluded=new Set(excludeIds),eligible=AFFIX_DEFINITIONS.filter(x=>x.slots.includes(slot)&&!excluded.has(x.id));
- const normal=eligible.filter(x=>!x.legendaryOnly),legendary=(RARITY_LUCK[rarity]??0)>=RARITY_LUCK.SSR?eligible.filter(x=>x.legendaryOnly):[];
- const legendaryChance={SSR:.08,UR:.15,LR:.24,"神話":.32,"深淵":.40,"十神":.50}[rarity]??0;
+ const normal=eligible.filter(x=>!x.legendaryOnly),alreadyLegendary=[...excluded].some(id=>LEGENDARY_AFFIX_IDS.has(id)),legendary=!alreadyLegendary&&(RARITY_LUCK[rarity]??0)>=RARITY_LUCK.SSR?eligible.filter(x=>x.legendaryOnly):[];
+ const legendaryChance=LEGENDARY_AFFIX_CHANCE[rarity]??0;
  const pool=legendary.length&&Math.random()<legendaryChance?legendary:normal.length?normal:legendary;
  if(!pool.length)return null;
  const def=pool[Math.floor(Math.random()*pool.length)],luck=RARITY_LUCK[rarity]??0,roll=Math.min(.999,Math.random()+luck*(.35+Math.random()*.65)),quality=def.legendaryOnly?AFFIX_QUALITY.legendary:qualityForRoll(roll),value=Math.max(def.min,Math.min(def.max,Math.round(def.min+(def.max-def.min)*roll)));

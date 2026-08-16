@@ -1,71 +1,71 @@
-import{SaveService}from"./services/SaveService.js?v=2.10.0-build150";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.10.0";
-import{AudioSystem}from"./core/AudioSystem.js?v=2.10.0";
-import{endgameCharacter}from"./data/endgameCharacters.js?v=2.10.0-build158";
-import{SPECIES}from"./data/species.js?v=2.10.0-build158";
-import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.10.0";
-import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES}from"./data/attributes.js?v=2.10.0-build150";
-import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.10.0";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.10.0-build150";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.10.0-build145";
-import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build157";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build157";
-import{buildOnlineTradeCatalog,reserveOnlineTradeAsset,releaseOnlineTradeAsset,commitOnlineTrade}from"./online/OnlineTradeSystem.js?v=2.10.0-build149";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.10.0";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.10.0";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.10.0";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.10.0-build143";
-import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.10.0";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.10.0-build150";
-import{Modal}from"./ui/components/Modal.js?v=2.10.0";
-import{pixelIcon}from"./ui/components/GameChrome.js?v=2.10.0";
-import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.10.0";
-import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.10.0-build150";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.10.0-build158";
-import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=2.10.0";
-import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.10.0";
-import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=2.10.0";
-import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=2.10.0";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=2.10.0";
-import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=2.10.0";
-import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=2.10.0";
-import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=2.10.0";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.10.0-build158";
-import{initialAffixCount,lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.10.0-build142";
-import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=2.10.0-build158";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.10.0";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.10.0";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=2.10.0";
-import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.10.0-build158";
-import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=2.10.0-build158";
-import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=2.10.0";
-import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=2.10.0";
-import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=2.10.0";
-import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=2.10.0";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=2.10.0";
-import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.10.0";
-import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.10.0";
-import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.10.0";
-import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse,skillEffectDetails,skillEffectSummary}from"./battle/SkillSystem.js?v=2.10.0-build150";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.10.0";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectStackBreakdown,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.10.0-build150";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.10.0";
-import{dangerConfig}from"./core/DangerSystem.js?v=2.10.0";
-import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=2.10.0";
-import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance}from"./core/MagicCircleSystem.js?v=2.10.0-build158";
-import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.10.0-build150";
-import{dungeonThemeForFloor}from"./data/dungeonThemes.js?v=2.10.0-build144";
-import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.10.0-build158";
-import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.10.0";
-import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.10.0";
-import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.10.0";
-import{monsterCombatPower,partyCombatPower,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.10.0";
-import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.10.0";
-import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.10.0";
-import{NOTICE_DEFINITIONS,DAILY_NOTICE_GIFT,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount}from"./core/NoticeSystem.js?v=2.10.0";
-import{weekdayGachaSchedule,weekdayGachaCost,WEEKDAY_GACHA_CALENDAR}from"./core/WeekdayGachaSystem.js?v=2.10.0-build158";
-import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.10.0-build149";
-import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,createSignatureEquipment}from"./core/SignatureWeaponSystem.js?v=2.10.0-build158";
+import{SaveService}from"./services/SaveService.js?v=2.10.0-build159";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.10.0-build159";
+import{AudioSystem}from"./core/AudioSystem.js?v=2.10.0-build159";
+import{endgameCharacter}from"./data/endgameCharacters.js?v=2.10.0-build159";
+import{SPECIES}from"./data/species.js?v=2.10.0-build159";
+import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.10.0-build159";
+import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES}from"./data/attributes.js?v=2.10.0-build159";
+import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.10.0-build159";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.10.0-build159";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.10.0-build159";
+import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build159";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build159";
+import{buildOnlineTradeCatalog,reserveOnlineTradeAsset,releaseOnlineTradeAsset,commitOnlineTrade}from"./online/OnlineTradeSystem.js?v=2.10.0-build159";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.10.0-build159";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.10.0-build159";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.10.0-build159";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.10.0-build159";
+import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.10.0-build159";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.10.0-build159";
+import{Modal}from"./ui/components/Modal.js?v=2.10.0-build159";
+import{pixelIcon}from"./ui/components/GameChrome.js?v=2.10.0-build159";
+import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.10.0-build159";
+import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.10.0-build159";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.10.0-build159";
+import{createEquipment,equipmentPower,equipmentStatMultiplier}from"./models/Equipment.js?v=2.10.0-build159";
+import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.10.0-build159";
+import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=2.10.0-build159";
+import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=2.10.0-build159";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=2.10.0-build159";
+import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=2.10.0-build159";
+import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=2.10.0-build159";
+import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=2.10.0-build159";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.10.0-build159";
+import{initialAffixCount,lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.10.0-build159";
+import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=2.10.0-build159";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.10.0-build159";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.10.0-build159";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=2.10.0-build159";
+import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.10.0-build159";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=2.10.0-build159";
+import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=2.10.0-build159";
+import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=2.10.0-build159";
+import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=2.10.0-build159";
+import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=2.10.0-build159";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=2.10.0-build159";
+import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.10.0-build159";
+import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.10.0-build159";
+import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.10.0-build159";
+import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse,skillEffectDetails,skillEffectSummary}from"./battle/SkillSystem.js?v=2.10.0-build159";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.10.0-build159";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectStackBreakdown,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.10.0-build159";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.10.0-build159";
+import{dangerConfig}from"./core/DangerSystem.js?v=2.10.0-build159";
+import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=2.10.0-build159";
+import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance}from"./core/MagicCircleSystem.js?v=2.10.0-build159";
+import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.10.0-build159";
+import{dungeonThemeForFloor}from"./data/dungeonThemes.js?v=2.10.0-build159";
+import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.10.0-build159";
+import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.10.0-build159";
+import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.10.0-build159";
+import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.10.0-build159";
+import{monsterCombatPower,partyCombatPower,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.10.0-build159";
+import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.10.0-build159";
+import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.10.0-build159";
+import{NOTICE_DEFINITIONS,DAILY_NOTICE_GIFT,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount}from"./core/NoticeSystem.js?v=2.10.0-build159";
+import{weekdayGachaSchedule,weekdayGachaCost,WEEKDAY_GACHA_CALENDAR}from"./core/WeekdayGachaSystem.js?v=2.10.0-build159";
+import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.10.0-build159";
+import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,createSignatureEquipment}from"./core/SignatureWeaponSystem.js?v=2.10.0-build159";
 
 const TILE=88,COLS=39,ROWS=39,app=document.getElementById("app"),save=new SaveService(),audio=new AudioSystem(()=>save.state.settings);
 let screen="home",selected=null,equipmentTarget=null,equipmentFocusItemId=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",inventoryCategory="all",inventorySort="rarity",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",skillNavigationOrigin="home",inventoryNavigationOrigin="home",settingsNavigationOrigin="home",detailNavigationOrigin="monsters",formationOrigin="home",lastExploreCombatPower=null;
@@ -2971,19 +2971,20 @@ function explorationFollowerPosition(index){
 function drawExplorationMonster(position,monster,glow=false,scale=1,index=0){
  const moving=Boolean(game.player.path?.length)||Math.abs((game.player.rx??game.player.x)-game.player.x)>.01||Math.abs((game.player.ry??game.player.y)-game.player.y)>.01;
  const idleFrames=["idle1","idle2","idle3","idle2"],walkFrames=["walk1","idle1","walk2","idle1"],sequence=moving?walkFrames:idleFrames;
- const frame=sequence[Math.floor(performance.now()/(moving?170:320)+index)%sequence.length];
+ const maximumHp=Math.max(1,Number(calculatedStats(monster)?.hp)||1),currentHp=monster?.currentHp==null?maximumHp:Math.max(0,Number(monster.currentHp)||0),down=currentHp<=0,critical=!down&&currentHp/maximumHp<=.1;
+ const frame=down?"down":sequence[Math.floor(performance.now()/(moving?170:320)+index)%sequence.length];
  const image=explorationSpriteImage(monster,frame);
  if(!image){
   const species=SPECIES[monster.speciesId]??{},elementColor={fire:"#ff725e",water:"#61bfff",earth:"#c9995d",wind:"#7ee0b0",light:"#ffe082",dark:"#a57ad9",thunder:"#e6d65d",ice:"#a9e8ff",poison:"#9ad65f"}[species.element]??"#b79bd2";
   const p=game.camera.world(position.x*TILE,position.y*TILE),tileSize=TILE*game.camera.z,cx=p.x+tileSize/2,cy=p.y+tileSize*.75,size=Math.max(13,26*game.camera.z*scale);
-  game.ctx.save();game.ctx.imageSmoothingEnabled=false;
+  game.ctx.save();game.ctx.imageSmoothingEnabled=false;if(critical)game.ctx.globalAlpha=Math.floor(performance.now()/230)%2?.22:1;
   if(glow){game.ctx.shadowColor=elementColor;game.ctx.shadowBlur=16}
   game.ctx.fillStyle="#08070d";game.ctx.strokeStyle=elementColor;game.ctx.lineWidth=Math.max(2,game.camera.z*2);
   game.ctx.beginPath();game.ctx.moveTo(cx,cy-size*.72);game.ctx.lineTo(cx+size*.62,cy);game.ctx.lineTo(cx,cy+size*.45);game.ctx.lineTo(cx-size*.62,cy);game.ctx.closePath();game.ctx.fill();game.ctx.stroke();
   game.ctx.fillStyle=elementColor;game.ctx.globalAlpha=.8;game.ctx.fillRect(cx-size*.18,cy-size*.08,size*.36,Math.max(2,size*.12));game.ctx.restore();return
  }
  const p=game.camera.world(position.x*TILE,position.y*TILE),pixelScale=game.camera.z*2.65*scale,contactX=p.x+TILE*game.camera.z/2,contactY=p.y+TILE*game.camera.z*.9;
- game.ctx.save();game.ctx.imageSmoothingEnabled=false;
+ game.ctx.save();game.ctx.imageSmoothingEnabled=false;if(critical)game.ctx.globalAlpha=Math.floor(performance.now()/230)%2?.22:1;
  if(glow){game.ctx.shadowColor="#ffe36f";game.ctx.shadowBlur=18}
  game.ctx.drawImage(image,contactX-32*pixelScale,contactY-56*pixelScale,64*pixelScale,64*pixelScale);
  game.ctx.restore();
@@ -3834,10 +3835,10 @@ function startBattle(encounter,options={}){
  if(enemySynergy)addBattleLog(battle,`敵軍の${enemySynergy.name}が発動！`);
  if(biomeBattle)addBattleLog(battle,`${biomeBattle.name}：適性属性は強化、不適性属性は弱体化`);
  if(options.memoryBattle)addBattleLog(battle,`深淵の記憶から${enemies[0]?.name??"魔物"}が現れた`);
- if(battle.invincibleAlliance)addBattleLog(battle,"無敵・四神話連携が発動！");
+ if(battle.invincibleAlliance)addBattleLog(battle,"無敵・四LR連携が発動！");
  for(const monster of party){const resonance=signatureResonance(monster);if(!resonance)continue;if(resonance.awakened)battle.signatureShields[monster.id]=Math.max(1,Math.floor(calculatedStats(monster).hp*.25));addBattleLog(battle,`${displayName(monster)}：専用共鳴「${resonance.name}」${resonance.awakened?"6点・完全覚醒":`${resonance.pieces}/6`} 発動中`)}
  addBattleLog(battle,`行動順：${battle.turnQueue.map(entry=>entry.name).join(" → ")}`);
- saveBattleCheckpoint();renderBattle();setTimeout(async()=>{await battleIntro(enemies);if(battle?.invincibleAlliance)await battleBanner("無敵","えなみ・りおん・より・ひで　四神話連携","synergy invincible",900,party[0]);for(const monster of party){const resonance=signatureResonance(monster);if(resonance)await battleBanner(resonance.awakened?"専用6点・完全覚醒":"専用共鳴 発動中",`${displayName(monster)}・${resonance.name} ${resonance.pieces}/6`,"synergy",resonance.awakened?720:480,monster)}await applyOpeningMagicCircles();continueBattleFlow()},scaledBattleDelay(120))
+ saveBattleCheckpoint();renderBattle();setTimeout(async()=>{await battleIntro(enemies);if(battle?.invincibleAlliance)await battleBanner("無敵","えなみ・りおん・より・ひで　四LR連携","synergy invincible",900,party[0]);for(const monster of party){const resonance=signatureResonance(monster);if(resonance)await battleBanner(resonance.awakened?"専用6点・完全覚醒":"専用共鳴 発動中",`${displayName(monster)}・${resonance.name} ${resonance.pieces}/6`,"synergy",resonance.awakened?720:480,monster)}await applyOpeningMagicCircles();continueBattleFlow()},scaledBattleDelay(120))
 }
 function actor(){return currentAlly(battle)}
 function refreshBattleHpTrails(){
@@ -3859,8 +3860,8 @@ function formatBattleInteger(value){return Math.round(Number(value)||0).toLocale
 function openBattleStatusDetail(id){
  const ally=battle.party.find(entry=>entry.id===id),enemy=battle.enemies.find(entry=>entry.id===id),target=ally??enemy,targetType=ally?"ally":"enemy";if(!target)return;
  const rawEffects=targetType==="ally"?(battle.allyEffects?.[id]??[]):(battle.enemyEffects?.[id]??[]),ailments=targetType==="ally"?(battle.allyAilments?.[id]??[]):(battle.enemyStatuses?.[id]??[]),kinds=[...new Set(rawEffects.map(effect=>effect.kind))],stats=ally?calculatedStats(ally):target,sourceName=ally?displayName(ally):target.name,percent=value=>`${(Number(value)*100).toLocaleString("ja-JP",{maximumFractionDigits:1})}%`;
- const groups=kinds.map(kind=>{const detail=BATTLE_EFFECT_DETAIL[kind]??[kind,null,1],stack=effectStackBreakdown(battle,id,kind,targetType),total=stack.reduce((sum,effect)=>sum+effect.applied,0),base=detail[1]?Number(stats[detail[1]])||0:null,opposite=kind.endsWith("Up")?kind.replace(/Up$/,"Down"):kind.endsWith("Down")?kind.replace(/Down$/,"Up"):null,oppositeTotal=opposite?effectValue(battle,id,opposite,targetType):0,final=base==null?null:base*Math.max(.2,1+(kind.endsWith("Up")?total-oppositeTotal:oppositeTotal-total));return`<section class="battle-status-detail-group ${detail[2]<0?"negative":"positive"}"><header><b>${detail[0]}</b><strong>${detail[2]<0?"−":"＋"}${percent(total)}</strong></header>${base==null?"":`<p class="battle-status-final"><span>基礎 ${formatBattleInteger(base)}</span><b>現在 ${formatBattleInteger(final)}</b></p>`}<div>${stack.map(effect=>`<article><b>${effect.sourceSkillName??effect.name??kind}</b><span>元 ${percent(effect.original)} × 減衰 ${percent(effect.attenuation)} ＝ <strong>${percent(effect.applied)}</strong></span><small>${effect.sourceName??"効果元不明"}・残り${Math.max(0,Number(effect.turns)||0)}ターン</small></article>`).join("")}</div><footer>この項目の合計 ${detail[2]<0?"−":"＋"}${percent(total)}</footer></section>`}).join("");
- const ailmentRows=ailments.map(effect=>`<article class="battle-status-ailment"><b>${effect.name??effect.id??effect.kind}</b><span>残り${Math.max(0,Number(effect.turns)||0)}ターン</span><small>${effect.sourceName??effect.sourceSkillName??"継続状態"}</small></article>`).join("");
+ const groups=kinds.map(kind=>{const detail=BATTLE_EFFECT_DETAIL[kind]??[kind,null,1],stack=effectStackBreakdown(battle,id,kind,targetType),total=stack.reduce((sum,effect)=>sum+effect.applied,0),base=detail[1]?Number(stats[detail[1]])||0:null,opposite=kind.endsWith("Up")?kind.replace(/Up$/,"Down"):kind.endsWith("Down")?kind.replace(/Down$/,"Up"):null,oppositeTotal=opposite?effectValue(battle,id,opposite,targetType):0,final=base==null?null:base*Math.max(.2,1+(kind.endsWith("Up")?total-oppositeTotal:oppositeTotal-total));return`<section class="battle-status-detail-group ${detail[2]<0?"negative":"positive"}"><header><span><small>${detail[2]<0?"DEBUFF":"BUFF"}</small><b>${detail[0]}</b></span><strong>${detail[2]<0?"−":"＋"}${percent(total)}</strong></header>${base==null?"":`<p class="battle-status-final"><span><small>基礎値</small>${formatBattleInteger(base)}</span><b><small>効果反映後</small>${formatBattleInteger(final)}</b></p>`}<div class="battle-status-effect-entries">${stack.map(effect=>`<article><header><b>${effect.sourceSkillName??effect.name??kind}</b><em>残り${Math.max(0,Number(effect.turns)||0)}ターン</em></header><small class="battle-status-effect-source">発動元：${effect.sourceName??"効果元不明"}</small><dl><div><dt>元効果</dt><dd>${percent(effect.original)}</dd></div><div><dt>減衰率</dt><dd>${percent(effect.attenuation)}</dd></div><div class="applied"><dt>最終効果</dt><dd>${percent(effect.applied)}</dd></div></dl></article>`).join("")}</div><footer><span>この項目の合計</span><strong>${detail[2]<0?"−":"＋"}${percent(total)}</strong></footer></section>`}).join("");
+ const ailmentRows=ailments.map(effect=>`<article class="battle-status-ailment"><header><small>状態異常</small><b>${effect.name??effect.id??effect.kind}</b></header><strong>残り${Math.max(0,Number(effect.turns)||0)}ターン</strong><small>発動元：${effect.sourceName??effect.sourceSkillName??"継続状態"}</small></article>`).join("");
  app.insertAdjacentHTML("beforeend",Modal(`${sourceName}・状態効果`,`<div class="battle-status-detail-list detailed">${groups}${ailmentRows||""}${groups||ailmentRows?"":"<p>状態効果はありません</p>"}</div>`,"閉じる"));const modal=topModal(),close=()=>modal.remove();modal.classList.add("battle-status-detail-modal");modal.querySelector("[data-modal-primary]").onclick=close;bindTapAnywhereClose(modal,close)
 }
 function renderBattle(){

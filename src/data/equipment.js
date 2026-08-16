@@ -52,31 +52,114 @@ export const EQUIPMENT_BASES={
   {name:"革鎧",nativeRarity:"N",stats:{hp:12,def:3}},
   {name:"魔布のローブ",nativeRarity:"R",stats:{hp:18,def:2,mdef:4,heal:5}},
   {name:"竜鱗鎧",nativeRarity:"SSR",stats:{hp:25,def:6,fireRes:8}},
-  {name:"守護者の外套",nativeRarity:"SR",stats:{hp:20,def:5,mdef:5}},
+  {name:"守護者の外套",nativeRarity:"SR",stats:{hp:20,def:5,mdef:5,spd:-2}},
   {name:"鎖帷子",nativeRarity:"R",stats:{hp:20,def:6,spd:1}},
   {name:"白銀板金",nativeRarity:"SR",stats:{hp:32,def:10,mdef:4}},
-  {name:"魔女の夜衣",nativeRarity:"SR",stats:{hp:24,matk:8,mdef:10,mp:10}},
-  {name:"氷竜外套",nativeRarity:"SSR",stats:{hp:42,def:9,mdef:12,iceRes:16}},
+  {name:"魔女の夜衣",nativeRarity:"SR",stats:{hp:24,matk:8,mdef:10,mp:10,spd:5,evasion:3}},
+  {name:"氷竜外套",nativeRarity:"SSR",stats:{hp:42,def:9,mdef:12,iceRes:16,spd:-2}},
   {name:"聖騎士重鎧",nativeRarity:"SSR",stats:{hp:55,def:16,mdef:10,spd:-1}},
   {name:"王者の戦装",nativeRarity:"UR",stats:{hp:74,def:21,atk:8,crit:5}},
-  {name:"星幽ローブ",nativeRarity:"LR",stats:{hp:68,mp:32,matk:18,mdef:24}},
+  {name:"星幽ローブ",nativeRarity:"LR",stats:{hp:68,mp:32,matk:18,mdef:24,spd:10,evasion:6}},
   {name:"天穹の神鎧",nativeRarity:"神話",stats:{hp:110,def:34,mdef:32,heal:12}}
  ],
  accessory:[
-  {name:"旅人の指輪",nativeRarity:"N",stats:{spd:2,capture:3}},
-  {name:"幸運の護符",nativeRarity:"R",stats:{crit:4,evasion:2}},
-  {name:"癒やしの雫",nativeRarity:"SR",stats:{heal:12,hp:8}},
-  {name:"炎の指輪",nativeRarity:"R",stats:{atk:3,fireRes:12}},
+  {name:"旅人の指輪",nativeRarity:"N",stats:{mp:8,spd:2,capture:3}},
+  {name:"幸運の護符",nativeRarity:"R",stats:{hp:16,crit:4,evasion:2}},
+  {name:"癒やしの雫",nativeRarity:"SR",stats:{heal:12,hp:20}},
+  {name:"炎の指輪",nativeRarity:"R",stats:{mp:10,atk:3,fireRes:12}},
   {name:"生命の首飾り",nativeRarity:"R",stats:{hp:22,heal:4}},
-  {name:"毒避け護石",nativeRarity:"R",stats:{mdef:5,poisonRes:18}},
-  {name:"雷鳥の羽根",nativeRarity:"SR",stats:{spd:8,evasion:4,lightningRes:8}},
+  {name:"毒避け護石",nativeRarity:"R",stats:{hp:18,mdef:5,poisonRes:18}},
+  {name:"雷鳥の羽根",nativeRarity:"SR",stats:{mp:14,spd:8,evasion:4,lightningRes:8}},
   {name:"月光の耳飾り",nativeRarity:"SSR",stats:{matk:9,mp:14,crit:6}},
   {name:"竜心の首輪",nativeRarity:"SSR",stats:{hp:34,atk:9,def:6}},
   {name:"賢者の宝珠",nativeRarity:"UR",stats:{matk:16,mdef:12,mp:24,heal:7}},
-  {name:"時渡りの時計",nativeRarity:"LR",stats:{spd:18,evasion:10,crit:9}},
+  {name:"時渡りの時計",nativeRarity:"LR",stats:{mp:20,spd:18,evasion:10,crit:9}},
   {name:"天命の王冠",nativeRarity:"神話",stats:{hp:48,atk:18,matk:18,crit:12,heal:10}}
  ]
 };
+
+const FIXED_SUBSLOTS_BY_NAME=Object.freeze({
+ "守護者の外套":"armorSupport","魔女の夜衣":"armorSupport","氷竜外套":"armorSupport","星幽ローブ":"armorSupport",
+ "幸運の護符":"accessoryNeck","癒やしの雫":"accessoryNeck","生命の首飾り":"accessoryNeck","毒避け護石":"accessoryNeck","竜心の首輪":"accessoryNeck","天命の王冠":"accessoryNeck",
+ "旅人の指輪":"accessoryFinger","炎の指輪":"accessoryFinger","雷鳥の羽根":"accessoryFinger","月光の耳飾り":"accessoryFinger","賢者の宝珠":"accessoryFinger","時渡りの時計":"accessoryFinger"
+});
+
+const ARCHETYPE_LABELS=Object.freeze({
+ physicalAttack:"物理攻撃特化型",magicAttack:"魔法攻撃特化型",balancedAttack:"攻撃バランス型",ultimateAttack:"最強攻撃型",
+ physicalDefense:"物理防御特化型",magicDefense:"魔法防御特化型",balancedDefense:"防御バランス型",ultimateDefense:"最強防御型",
+ hpTank:"HPタンク型",hpBalanced:"HPバランス型",ultimateHp:"最強HP型",
+ mpTank:"MPタンク型",mpBalanced:"MPバランス型",ultimateMp:"最強MP型",
+ fastest:"最速型",slow:"鈍足型",supportBalanced:"補助バランス型",elementalSupport:"属性支援型",ultimateSupport:"最強補助型"
+});
+
+export function inferredEquipmentSubslot(itemOrBase,slot=itemOrBase?.slot){
+ const fixed=itemOrBase?.ruleOverrides?.subslot;
+ if(fixed&&EQUIPMENT_SLOT_ORDER.includes(fixed))return fixed;
+ const preferred=itemOrBase?.ruleOverrides?.preferredSubslot;
+ if(preferred&&EQUIPMENT_SLOT_ORDER.includes(preferred))return preferred;
+ const name=String(itemOrBase?.name??"");
+ if(FIXED_SUBSLOTS_BY_NAME[name])return FIXED_SUBSLOTS_BY_NAME[name];
+ if(slot==="armor")return"armorBody";
+ if(slot==="accessory")return"accessoryNeck";
+ return null;
+}
+
+export function equipmentIdentity(item,{subslot=null}={}){
+ const rarity=equipmentDisplayRarity(item),rank=RARITY_ORDER[rarity]??0,stats=item?.stats??{},slot=item?.slot??"weapon",fixed=subslot??inferredEquipmentSubslot(item,slot);
+ let id;
+ if(slot==="weapon"){
+  if(rank>=RARITY_ORDER["神話"])id="ultimateAttack";
+  else if((Number(stats.matk)||0)>(Number(stats.atk)||0)*1.2)id="magicAttack";
+  else if((Number(stats.atk)||0)>(Number(stats.matk)||0)*1.2)id="physicalAttack";
+  else id="balancedAttack";
+ }else if(fixed==="armorBody"){
+  if(rank>=RARITY_ORDER["神話"])id="ultimateDefense";
+  else if((Number(stats.def)||0)>(Number(stats.mdef)||0)*1.22)id="physicalDefense";
+  else if((Number(stats.mdef)||0)>(Number(stats.def)||0)*1.22)id="magicDefense";
+  else id="balancedDefense";
+ }else if(fixed==="accessoryNeck"){
+  id=rank>=RARITY_ORDER["神話"]?"ultimateHp":(Number(stats.hp)||0)>=30?"hpTank":"hpBalanced";
+ }else if(fixed==="accessoryFinger"){
+  id=rank>=RARITY_ORDER["神話"]?"ultimateMp":(Number(stats.mp)||0)>=18?"mpTank":"mpBalanced";
+ }else{
+  if(rank>=RARITY_ORDER["神話"])id="ultimateSupport";
+  else if((Number(stats.spd)||0)<0)id="slow";
+  else if((Number(stats.spd)||0)>=8)id="fastest";
+  else if(Object.keys(stats).some(key=>/(Res|Damage)$/.test(key)))id="elementalSupport";
+  else id="supportBalanced";
+ }
+ return{id,label:ARCHETYPE_LABELS[id]??"バランス型",subslot:fixed};
+}
+
+export function equipmentSeriesForItem(itemOrName,rarity=null){
+ const item=typeof itemOrName==="string"?{name:itemOrName,rarity:rarity??"N"}:itemOrName??{},name=String(item.name??""),rank=RARITY_ORDER[equipmentDisplayRarity(item)]??0,stats=item.stats??{};
+ if(/炎|竜鱗|太陽/.test(name))return"flame";
+ if(/守護者|革鎧|鉄の剣|聖騎士|星砕き|天穹/.test(name))return"guardian";
+ if(/旅人|幸運|月影|時渡り|天穿/.test(name))return"traveler";
+ if(/捕獲師/.test(name))return"capturer";
+ if(/精霊樹|生命|癒やし|竜心/.test(name))return"sacredTree";
+ if(/深海|氷晶|氷竜|星詠み|星幽|賢者/.test(name))return"deepSea";
+ if(/雷|龍哭/.test(name))return"thunder";
+ if(/王家|王者|黎明|天命/.test(name))return"royal";
+ if(/黄昏|虚空|月光/.test(name))return"void";
+ if(rank<RARITY_ORDER.SSR)return null;
+ if((Number(stats.matk)||0)>(Number(stats.atk)||0))return"deepSea";
+ if((Number(stats.def)||0)+(Number(stats.mdef)||0)>(Number(stats.atk)||0)+(Number(stats.matk)||0))return"guardian";
+ if((Number(stats.hp)||0)>=(Number(stats.mp)||0)*2)return"sacredTree";
+ if((Number(stats.spd)||0)>=8)return"traveler";
+ return"royal";
+}
+
+export function normalizeEquipmentIdentity(item,{equippedSubslot=null}={}){
+ if(!item||typeof item!=="object")return item;
+ item.ruleOverrides=item.ruleOverrides&&typeof item.ruleOverrides==="object"&&!Array.isArray(item.ruleOverrides)?item.ruleOverrides:{};
+ if(["armor","accessory"].includes(item.slot)&&!item.ruleOverrides.subslot&&!item.ruleOverrides.preferredSubslot)item.ruleOverrides.preferredSubslot=equippedSubslot??inferredEquipmentSubslot(item,item.slot);
+ const identity=equipmentIdentity(item,{subslot:item.ruleOverrides.subslot??item.ruleOverrides.preferredSubslot??equippedSubslot});
+ item.archetype=identity.id;
+ item.archetypeLabel=identity.label;
+ if(!item.series)item.series=equipmentSeriesForItem(item);
+ return item;
+}
 
 for(const[slot,bases]of Object.entries(EQUIPMENT_BASES))bases.forEach((base,index)=>{base.iconAtlas=slot;base.iconIndex=index});
 
@@ -114,4 +197,4 @@ export const SLOT_UNLOCK_LEVEL={
  accessoryFinger:50
 };
 export function equipmentSubslotLabel(id){return{weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"}[id]??id}
-export function compatibleSubslots(item){const fixed=item?.ruleOverrides?.subslot;if(fixed&&EQUIPMENT_SLOT_ORDER.includes(fixed))return[fixed];if(item.slot==="armor")return["armorBody","armorSupport"];if(item.slot==="accessory")return["accessoryNeck","accessoryFinger"];if(item.handedness==="right")return["weaponRight"];if(item.handedness==="left")return["weaponLeft"];if(item.handedness==="twoHanded")return["weaponRight"];return["weaponRight","weaponLeft"]}
+export function compatibleSubslots(item){const fixed=item?.ruleOverrides?.subslot;if(fixed&&EQUIPMENT_SLOT_ORDER.includes(fixed))return[fixed];const preferred=inferredEquipmentSubslot(item,item?.slot);if(item.slot==="armor")return preferred==="armorSupport"?["armorSupport","armorBody"]:["armorBody","armorSupport"];if(item.slot==="accessory")return preferred==="accessoryFinger"?["accessoryFinger","accessoryNeck"]:["accessoryNeck","accessoryFinger"];if(item.handedness==="right")return["weaponRight"];if(item.handedness==="left")return["weaponLeft"];if(item.handedness==="twoHanded")return["weaponRight"];return["weaponRight","weaponLeft"]}

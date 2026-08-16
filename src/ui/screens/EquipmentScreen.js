@@ -6,27 +6,28 @@ import{
  SLOT_UNLOCK_LEVEL,
  EQUIPMENT_SLOT_ORDER,
  equipmentSubslotLabel,
- compatibleSubslots
-}from"../../data/equipment.js?v=2.10.0";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=2.10.0-build158";
-import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.10.0";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.10.0";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0";
-import{ATTRIBUTES}from"../../data/attributes.js?v=2.10.0";
-import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=2.10.0";
-import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=2.10.0";
-import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=2.10.0";
-import{SPECIES}from"../../data/species.js?v=2.10.0";
-import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=2.10.0";
-import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=2.10.0";
-import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=2.10.0";
-import{monsterVisual}from"../MonsterVisual.js?v=2.10.0";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0";
-import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.10.0";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.10.0";
-import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.10.0";
-import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=2.10.0-build158";
-import{signatureWeaponState,signatureWeaponForMonster,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster}from"../../core/SignatureWeaponSystem.js?v=2.10.0-build158";
+ compatibleSubslots,
+ equipmentIdentity
+}from"../../data/equipment.js?v=2.10.0-build159";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=2.10.0-build159";
+import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.10.0-build159";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.10.0-build159";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0-build159";
+import{ATTRIBUTES}from"../../data/attributes.js?v=2.10.0-build159";
+import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=2.10.0-build159";
+import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=2.10.0-build159";
+import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=2.10.0-build159";
+import{SPECIES}from"../../data/species.js?v=2.10.0-build159";
+import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=2.10.0-build159";
+import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=2.10.0-build159";
+import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=2.10.0-build159";
+import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build159";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0-build159";
+import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.10.0-build159";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.10.0-build159";
+import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.10.0-build159";
+import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=2.10.0-build159";
+import{signatureWeaponState,signatureWeaponForMonster,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster}from"../../core/SignatureWeaponSystem.js?v=2.10.0-build159";
 
 const EQUIPMENT_SCREEN_SLOT_LABELS={
  weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"
@@ -67,7 +68,7 @@ function equipmentSellPrice(item){
 
 function itemStats(item){
  const mult=equipmentStatMultiplier(item);
- return Object.entries(item.stats??{}).map(([key,value])=>`${equipmentStatLabel(key)}+${Math.round(value*mult)}`).join(" / ");
+ return Object.entries(item.stats??{}).map(([key,value])=>{const amount=Math.round(value*mult);return`${equipmentStatLabel(key)}${amount>=0?"+":""}${amount}`}).join(" / ");
 }
 
 function itemAffixes(item,{compact=false}={}){
@@ -80,6 +81,7 @@ function itemAffixes(item,{compact=false}={}){
  return`<div class="equipment-affixes ${compact?"compact":""}">${body}</div>`;
 }
 function itemFixedEffect(item){return item.fixedEffectText?`<div class="equipment-fixed-authority"><b>固有能力</b><span>${item.fixedEffectText}</span></div>`:""}
+function itemIdentityTags(item){const identity=equipmentIdentity(item),series=item.series?EQUIPMENT_SERIES[item.series]:null,slot=identity.subslot?screenSubslotLabel(identity.subslot):"武器";return`<span class="equipment-archetype-chip"><i>${slot}</i>${identity.label}</span>${series?`<span class="equipment-series-chip">◆ ${series.name}シリーズ</span>`:""}`}
 function signatureWeaponBadge(state,target,item){const resonance=signatureWeaponState(state,target,item);if(!resonance)return"";return`<div class="signature-weapon-badge ${resonance.active?"active":"inactive"}"><b>${resonance.status}</b><span>${resonance.definition.ownerName}専用・${resonance.definition.name}</span><small>${resonance.nextText}／${resonance.definition.description}</small></div>`}
 
 function equipmentCommand({label,icon="equipment",attributes="",tone="",note="",disabled=false}={}){
@@ -102,7 +104,7 @@ function equippedSlotCard(state,target,subslot,focusItemId=null){
   <summary>
    <span class="equipped-slot-label">${screenSubslotLabel(subslot)}</span>
    ${equipmentVisual(item,{className:"equipped-slot-art"})}
-   <div>${coloredEquipmentName(item)}<small>Lv.${level} ∞　${itemStats(item)||"能力補正なし"}</small>${equipmentSocketSummary(item,{compact:true})}</div>
+   <div>${coloredEquipmentName(item)}<small>Lv.${level} ∞　${itemStats(item)||"能力補正なし"}</small><span class="equipment-identity-chips">${itemIdentityTags(item)}</span>${equipmentSocketSummary(item,{compact:true})}</div>
    <i>${item.favorite?"★":""}${item.locked?"L":""}${item.ruleOverrides?.unsellable?"P":""}⌄</i>
   </summary>
   <div class="equipped-slot-detail">
@@ -175,6 +177,7 @@ function card(item,state,target,storage,{editing=false,selected=false,focused=fa
   <div class="equipment-card-identity">${equipmentVisual(item,{className:"equipment-list-art"})}<div class="spread">${coloredEquipmentName(item)}<span>${item.favorite?"★":""}${item.locked?"L":""}${item.ruleOverrides?.unsellable?"P":""}</span>${signatureEquipmentOwnerName(item)?`<small class="signature-owner-chip">${signatureEquipmentOwnerName(item)}専用</small>`:""}</div></div>
   <div class="subline">
    <span class="equipment-level">Lv.${level} ∞</span> ${slotLabel(item.slot)} ${handLabel(item)} / ${itemStats(item)||"能力補正なし"}
+   <span class="equipment-identity-chips">${itemIdentityTags(item)}</span>
    ${equipmentSocketSummary(item)}
    ${signatureWeaponBadge(state,target,item)}
    ${itemFixedEffect(item)}

@@ -63,10 +63,10 @@ test("all 17 Deep/Ten characters keep unique skills and six exclusive pieces",()
  for(const character of characters){assert.equal(character.skills.length,5,character.id);assert.equal(character.gear.length,6,character.id);assert.deepEqual(Object.keys(character.setText).map(Number),[2,4,6])}
 });
 
-test("build158 UI and economy rules remain wired to the app",async()=>{
+test("build159 UI and economy rules remain wired to the app",async()=>{
  const[main,styles,index]=await Promise.all([read("src/main.js"),read("src/Styles/v2.10.0.css"),read("index.html")]);
  for(const token of["潤沢なGOLD","魔晶石 ×","経験値パック ×1","宝箱探索セット"])assert.ok(main.includes(token),token);
  assert.match(main,/return pool\.map\(value=>\(\{value,sort:Math\.random\(\)\}\)\)\.sort/);assert.match(main,/restGoldCost\(recovery\)/);assert.match(main,/\/250\+\(Number\(recovery\.mp\)/);
  assert.match(main,/id:"reviveLeaves"[^}]+price:60000/);assert.match(main,/function resolveRandomSkillElement/);assert.match(main,/battleFloor=prepared\.fixedTrialScaling\?hiddenFloor/);
- assert.match(styles,/grid-template-areas:"art copy" "actions actions"/);assert.match(styles,/home-shop-buy-actions\{grid-area:actions/);assert.match(styles,/weekday-gacha-calendar/);assert.match(index,/ASSET_BUILD = "build158"/);
+ assert.match(styles,/grid-template-areas:"art copy" "actions actions"/);assert.match(styles,/home-shop-buy-actions\{grid-area:actions/);assert.match(styles,/weekday-gacha-calendar/);assert.match(index,/ASSET_BUILD = "build159"/);
 });

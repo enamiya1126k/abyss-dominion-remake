@@ -1,11 +1,11 @@
-import{SPECIES}from"../../data/species.js?v=2.10.0";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=2.10.0-build158";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0";
-import{magicCircleById,equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=2.10.0-build158";
-import{learnedSkills,maxMp,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.10.0";
-import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build149";
-import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.10.0";
-import{signatureWeaponForMonster,signatureWeaponOwnerId}from"../../core/SignatureWeaponSystem.js?v=2.10.0-build158";
+import{SPECIES}from"../../data/species.js?v=2.10.0-build159";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=2.10.0-build159";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0-build159";
+import{magicCircleById,equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=2.10.0-build159";
+import{learnedSkills,maxMp,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.10.0-build159";
+import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build159";
+import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.10.0-build159";
+import{signatureWeaponForMonster,signatureWeaponOwnerId}from"../../core/SignatureWeaponSystem.js?v=2.10.0-build159";
 
 const ONLINE_STORAGE_KEYS=Object.freeze({
  friendId:"abyss-dominion-online-friend-id",
@@ -83,8 +83,8 @@ export function onlineMagicCircleArt(profile,{className=""}={}){
  return`<span class="online-circle-art ${className}" data-circle="${circle?.id??"none"}" aria-hidden="true"><img src="${source}" alt=""><i></i></span>`;
 }
 
-export function onlineAvatarVisual(profile,{className=""}={}){
- return`<span class="online-avatar-stack ${className}">${onlineMagicCircleArt(profile)}${monsterVisual(profile,profile?.fallbackEmoji??"魔",{className:"online-avatar-monster"})}</span>`;
+export function onlineAvatarVisual(profile,{className="",frame="idle"}={}){
+ return`<span class="online-avatar-stack ${className}">${onlineMagicCircleArt(profile)}${monsterVisual(profile,profile?.fallbackEmoji??"魔",{frame,className:"online-avatar-monster"})}</span>`;
 }
 export function onlineEnemyVisual(enemy,{className=""}={}){return monsterVisual({speciesId:enemy?.speciesId??"slime",level:enemy?.level??1},enemy?.emoji??"魔",{frame:Number(enemy?.hp)<=0?"down":"idle",className:`online-enemy-monster ${className}`})}
 

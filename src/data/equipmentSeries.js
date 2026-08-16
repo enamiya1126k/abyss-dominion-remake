@@ -1,4 +1,4 @@
-import{ENDGAME_SERIES}from"./endgameCharacters.js?v=2.10.0";
+import{ENDGAME_SERIES}from"./endgameCharacters.js?v=2.10.0-build159";
 
 export const EQUIPMENT_SERIES={
  flame:{name:"炎帝",theme:"火力・炎上",bonuses:{2:{atk:.03},3:{fireDamage:.08},4:{crit:5},5:{fireRes:.15},6:{fireDamage:.24,burnChance:.20}}},
@@ -8,6 +8,8 @@ export const EQUIPMENT_SERIES={
  sacredTree:{name:"聖樹",theme:"HP再生",bonuses:{2:{hpRegen:.02},3:{healPower:.08},4:{hp:.10},5:{lowHpRegen:.04},6:{partyHpRegen:.015}}},
  deepSea:{name:"深海",theme:"MP循環",bonuses:{2:{mpRegen:2},3:{mp:.08},4:{mpCost:-.05},5:{skillPower:.08},6:{freeSkillChance:.12}}},
  thunder:{name:"雷神",theme:"会心・追撃",bonuses:{2:{crit:3},3:{critDamage:.10},4:{spd:.06},5:{chainChance:.12},6:{critDamage:.25}}},
+ royal:{name:"王覇",theme:"万能・最終強化",bonuses:{2:{atk:.04},3:{def:.05},4:{hp:.08},5:{crit:6},6:{skillPower:.18}}},
+ void:{name:"虚星",theme:"魔攻・回避",bonuses:{2:{mp:.05},3:{evasion:4},4:{atk:.06},5:{crit:6},6:{skillPower:.20}}},
  abyssGluttony:{name:"暴食",theme:"吸収・暴力",bonuses:{2:{atk:.12},3:{hp:.18},4:{healPower:.20},5:{critDamage:.30},6:{skillPower:.45}}},
  abyssExtinction:{name:"死滅",theme:"呪い・終焉",bonuses:{2:{crit:8},3:{statusRes:.20},4:{atk:.18},5:{evasion:12},6:{skillPower:.50}}},
  godIgnis:{name:"炎神",theme:"神炎・殲滅",bonuses:{2:{atk:.18},3:{fireDamage:.30},4:{crit:12},5:{fireRes:.40},6:{skillPower:.65}}},

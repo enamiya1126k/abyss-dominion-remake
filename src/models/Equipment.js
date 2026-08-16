@@ -1,5 +1,5 @@
-import{EQUIPMENT_BASES}from"../data/equipment.js?v=2.10.0";
-import{rollEquipmentAffixes,equipmentAffixPower}from"../data/equipmentAffixes.js?v=2.10.0";
+import{EQUIPMENT_BASES,equipmentSeriesForItem,inferredEquipmentSubslot,normalizeEquipmentIdentity}from"../data/equipment.js?v=2.10.0-build159";
+import{rollEquipmentAffixes,equipmentAffixPower}from"../data/equipmentAffixes.js?v=2.10.0-build159";
 
 function uid(){return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`}
 export function createEquipment(slot,options={}){
@@ -8,18 +8,18 @@ export function createEquipment(slot,options={}){
  const native=pool.filter(entry=>entry.nativeRarity===rarity),base=options.base??(native.length&&Math.random()<.72?native[Math.floor(Math.random()*native.length)]:pool[Math.floor(Math.random()*pool.length)]);
  const mult={N:.8,R:1,SR:1.45,SSR:2.05,UR:2.5,LR:3,"神話":3.65,"深淵":4.4,"十神":5.25}[rarity]??1;
  const stats={};
- for(const[key,value]of Object.entries(base.stats))stats[key]=Math.max(1,Math.round(value*mult));
- return{
+ for(const[key,value]of Object.entries(base.stats)){const magnitude=Math.max(1,Math.round(Math.abs(value)*mult));stats[key]=Number(value)<0?-magnitude:magnitude}
+ const ruleOverrides={...(options.ruleOverrides??{})};
+ if(["armor","accessory"].includes(slot)&&!ruleOverrides.subslot)ruleOverrides.preferredSubslot=inferredEquipmentSubslot(base,slot);
+ const item={
   id:uid(),slot,name:base.name,rarity,level:1,plus:0,stats,weaponType:options.weaponType??base.weaponType??null,handedness:options.handedness??base.handedness??(slot==="weapon"?"either":null),ruleOverrides:options.ruleOverrides??{},series:options.series??seriesForName(base.name),iconAtlas:options.iconAtlas??base.iconAtlas??slot,iconIndex:options.iconIndex??base.iconIndex??0,iconColumn:options.iconColumn??null,iconRow:options.iconRow??null,
   favorite:false,locked:false,equippedBy:null,exp:0,limitBreak:0,affixes:options.affixes??rollEquipmentAffixes(slot,rarity),createdAt:new Date().toISOString()
  };
+ item.ruleOverrides=ruleOverrides;
+ return normalizeEquipmentIdentity(item);
 }
 export function seriesForName(name){
- if(/炎|竜鱗/.test(name))return"flame";
- if(/守護者|革鎧|鉄の剣/.test(name))return"guardian";
- if(/旅人|幸運/.test(name))return"traveler";
- if(/捕獲師/.test(name))return"capturer";
- return null
+ return equipmentSeriesForItem(name)
 }
 export function rollRarity(){
  const r=Math.random();

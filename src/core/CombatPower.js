@@ -1,5 +1,5 @@
-import{calculatedStats}from"../models/Monster.js?v=2.10.0-build158";
-import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=2.10.0";
+import{calculatedStats}from"../models/Monster.js?v=2.10.0-build159";
+import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=2.10.0-build159";
 
 /**
  * 表示用の戦力値。
