@@ -5,6 +5,7 @@ import{magicCircleById,equippedMagicCircle}from"../../core/MagicCircleSystem.js?
 import{learnedSkills,maxMp,effectiveSkillMpCost}from"../../battle/SkillSystem.js?v=2.10.0";
 import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build149";
 import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.10.0";
+import{signatureWeaponForMonster,signatureWeaponOwnerId}from"../../core/SignatureWeaponSystem.js?v=2.10.0-build157";
 
 const ONLINE_STORAGE_KEYS=Object.freeze({
  friendId:"abyss-dominion-online-friend-id",
@@ -47,7 +48,7 @@ function equipmentProfile(state,monster){
  const items=new Map((state.equipment??[]).map(item=>[item.id,item]));
  return EQUIPMENT_SLOTS.map(([slot,label])=>{
   const item=items.get(monster?.equipment?.[slot]);
-  return item?{slot,label,name:item.name??"装備",rarity:item.rarity??item.displayRarity??"N",level:Math.max(1,Number(item.level)||1),plus:Math.max(0,Number(item.plus)||0)}:{slot,label,name:"なし",rarity:"",level:0,plus:0};
+  return item?{slot,label,name:item.name??"装備",rarity:item.rarity??item.displayRarity??"N",level:Math.max(1,Number(item.level)||1),plus:Math.max(0,Number(item.plus)||0),signatureOwnerId:signatureWeaponOwnerId(item)}:{slot,label,name:"なし",rarity:"",level:0,plus:0,signatureOwnerId:null};
  });
 }
 function onlineSkillKind(skill){
@@ -59,13 +60,13 @@ function onlineSkillProfile(monster){
 export function buildOnlinePartyProfile(state,{monsterId=null,displayName:onlineName=""}={}){
  const party=(state.party??[]).map(id=>state.monsters?.find(monster=>monster.id===id)).filter(Boolean),monster=party.find(entry=>entry.id===monsterId)??selectedPartyMonster(state).monster;
  if(!monster)return{displayName:onlineName||"冒険者",monsterId:null,speciesId:"slime",visualSpeciesId:null,endgameBossId:null,monsterName:"未編成",fallbackEmoji:"？",level:1,stars:1,plus:0,power:0,maxFloor:Math.max(1,Number(state.player?.maxFloor)||1),attribute:"neutral",circleId:"none",circleName:"魔法陣なし",circleLevel:0,circleEffect:"none",equipment:[],battleStats:{hp:100,mp:10,atk:10,matk:10,def:5,mdef:5,spd:10,crit:5,evasion:3},skills:[],captureStock:Math.max(0,Number(state.inventory?.captureCrystals)||0)};
- const species=SPECIES[monster.speciesId]??{},circle=equippedMagicCircle(monster,state),stats=calculatedStats(monster),mp=maxMp(monster);
+ const species=SPECIES[monster.speciesId]??{},circle=equippedMagicCircle(monster,state),stats=calculatedStats(monster),mp=maxMp(monster),signature=signatureWeaponForMonster(state,monster);
  return{
   displayName:String(onlineName||displayName(monster)||"冒険者").trim().slice(0,16),monsterId:monster.id,speciesId:monster.speciesId,
   visualSpeciesId:monster.visualSpeciesId??null,endgameBossId:monster.endgameBossId??null,monsterName:displayName(monster),fallbackEmoji:species.emoji??"魔",
   level:Math.max(1,Number(monster.level)||1),stars:Math.max(1,Number(monster.stars)||1),plus:Math.max(0,Number(monster.plus)||0),
   power:monsterCombatPower(monster),maxFloor:Math.max(1,Number(state.player?.maxFloor)||1),attribute:monster.attribute??species.element??"neutral",circleId:circle.id,circleName:circle.name,circleLevel:circle.id==="none"?0:Math.max(1,Number(circle.level)||1),circleEffect:circle.effect??"none",
-  equipment:equipmentProfile(state,monster),battleStats:{hp:Math.max(1,stats.hp),mp:Math.max(0,mp),atk:Math.max(1,stats.atk),matk:Math.max(1,stats.matk??stats.atk),def:Math.max(0,stats.def),mdef:Math.max(0,stats.mdef??stats.def),spd:Math.max(1,stats.spd),crit:Math.max(0,stats.crit),evasion:Math.max(0,stats.evasion)},skills:onlineSkillProfile(monster),captureStock:Math.max(0,Number(state.inventory?.captureCrystals)||0)
+  equipment:equipmentProfile(state,monster),signatureResonance:signature?{id:signature.definition.id,name:signature.definition.name,ownerId:signature.ownerId,active:signature.active,description:signature.definition.description,...signature.definition}:null,battleStats:{hp:Math.max(1,stats.hp),mp:Math.max(0,mp),atk:Math.max(1,stats.atk),matk:Math.max(1,stats.matk??stats.atk),def:Math.max(0,stats.def),mdef:Math.max(0,stats.mdef??stats.def),spd:Math.max(1,stats.spd),crit:Math.max(0,stats.crit),evasion:Math.max(0,stats.evasion)},skills:onlineSkillProfile(monster),captureStock:Math.max(0,Number(state.inventory?.captureCrystals)||0)
  };
 }
 
@@ -136,13 +137,6 @@ export function OnlinePartyScreen(state){
      </section>
      <div class="online-social-bar"><div class="online-preset-chat"><button type="button" data-online-chat="hello">よろしく！</button><button type="button" data-online-chat="ready">準備OK！</button><button type="button" data-online-chat="follow">ついてきて！</button><button type="button" data-online-chat="thanks">ありがとう！</button></div><div class="online-stamps"><button type="button" data-online-emote="wave" data-keep-emoji aria-label="手を振る">👋</button><button type="button" data-online-emote="cheer" data-keep-emoji aria-label="喜ぶ">✨</button><button type="button" data-online-emote="heart" data-keep-emoji aria-label="ハート">❤</button><button type="button" data-online-emote="surprise" data-keep-emoji aria-label="驚く">!!</button></div></div>
     </div>
-    <section class="online-chat-view" data-online-chat-view hidden>
-     <header><button type="button" class="online-chat-back" data-online-close-chat aria-label="元の画面へ戻る">←</button><div><small>PARTY COMMUNICATION</small><h2>共鳴通信</h2></div><span><i></i>ルーム内だけに送信</span></header>
-     <div class="online-chat-history" data-online-chat-history role="log" aria-live="polite"><div class="online-chat-empty"><b>まだ会話はありません</b><span>1人のときも送信テストできます。仲間が入ると履歴が全員に同期されます。</span></div></div>
-     <div class="online-chat-presets" aria-label="定型文"><button type="button" data-online-chat="hello">よろしく！</button><button type="button" data-online-chat="ready">準備OK！</button><button type="button" data-online-chat="follow">ついてきて！</button><button type="button" data-online-chat="thanks">ありがとう！</button><button type="button" data-online-emote="wave" data-keep-emoji>👋</button><button type="button" data-online-emote="cheer" data-keep-emoji>✨</button><button type="button" data-online-emote="heart" data-keep-emoji>❤</button><button type="button" data-online-emote="surprise" data-keep-emoji>!!</button></div>
-     <form class="online-chat-compose" data-online-chat-form><label><span>メッセージ</span><textarea rows="2" maxlength="80" enterkeyhint="send" data-online-chat-input placeholder="ここをタップして会話（80文字まで）"></textarea><small><b data-online-chat-count>0</b>/80</small></label><button type="submit" data-online-chat-send>送信</button></form>
-     <p class="online-chat-rule">連続送信は自動で制限されます。履歴はこのルームだけで共有され、退出後は端末に残りません。</p>
-    </section>
     <section class="online-raid-view" data-online-raid-view hidden>
      <div class="online-raid-lobby" data-online-raid-lobby>
       <article class="online-raid-hero">
@@ -207,11 +201,11 @@ export function OnlinePartyScreen(state){
      </section>
      <section class="online-trade-history"><h3>交換履歴</h3><div data-online-trade-history><p>交換履歴はまだありません。</p></div></section>
     </section>
-    <section class="online-expedition-shell online-solo-explore" data-online-expedition-shell hidden>
-     <header class="online-solo-resource-hud"><strong>探索・<span data-online-expedition-floor>1</span>階</strong><div><span>${pixelIcon("coin")}<b>${Math.max(0,Number(state.player?.gold)||0).toLocaleString()}</b></span><span>${pixelIcon("crystal")}<b>${Math.max(0,Number(state.player?.crystals)||0).toLocaleString()}</b></span><span>${pixelIcon("capture")}<b>${Math.max(0,Number(state.inventory?.captureCrystals)||0).toLocaleString()}</b></span><span>${pixelIcon("key")}<b>${Math.max(0,Number(state.inventory?.abyssKeys)||0).toLocaleString()}</b></span></div></header>
-     <div class="online-solo-command-header"><div><small>PARTY COMBAT POWER</small><strong data-online-expedition-power>${formatCombatPower(combatPower)}</strong></div><section><span>${pixelIcon("dungeon")}</span><div><b data-online-expedition-theme>黒鉄遺跡</b><small>共同探索・<em data-online-discoveries>0</em>/<em data-online-discovery-total>6</em> 発見</small></div></section></div>
-     <section class="online-expedition-party-hud" data-online-expedition-party-hud></section>
-     <div class="online-solo-stage">
+    <section class="online-expedition-shell online-solo-explore explore-screen explore-screen-dungeon" data-online-expedition-shell hidden>
+     <header class="online-solo-resource-hud resource-hud"><strong>探索・<span data-online-expedition-floor>1</span>階</strong><div><span>${pixelIcon("coin")}<b>${Math.max(0,Number(state.player?.gold)||0).toLocaleString()}</b></span><span>${pixelIcon("crystal")}<b>${Math.max(0,Number(state.player?.crystals)||0).toLocaleString()}</b></span><span>${pixelIcon("capture")}<b>${Math.max(0,Number(state.inventory?.captureCrystals)||0).toLocaleString()}</b></span><span>${pixelIcon("key")}<b>${Math.max(0,Number(state.inventory?.abyssKeys)||0).toLocaleString()}</b></span></div></header>
+     <div class="online-solo-command-header explore-command-header"><div><small>PARTY COMBAT POWER</small><strong data-online-expedition-power>${formatCombatPower(combatPower)}</strong></div><section><span>${pixelIcon("dungeon")}</span><div><b data-online-expedition-theme>黒鉄遺跡</b><small>共同探索・<em data-online-discoveries>0</em>/<em data-online-discovery-total>6</em> 発見</small></div></section></div>
+     <section class="online-expedition-party-hud explore-party-hud" data-online-expedition-party-panel><button type="button" class="online-expedition-party-toggle" data-online-expedition-party-toggle aria-expanded="false"><span>部隊状況を開く</span><b>⌄</b></button><div class="online-expedition-party-strip" data-online-expedition-party-hud></div></section>
+     <div class="online-solo-stage explore-stage">
       <header class="online-expedition-header" data-online-expedition-header><div><small>SHARED EXPEDITION</small><h3><span data-online-expedition-floor-label>1</span>F 共闘探索</h3></div><span data-online-expedition-theme-label>黒鉄遺跡</span><em><b data-online-discoveries-label>0</b>/<span data-online-discovery-total-label>6</span> 発見</em></header>
       <button type="button" class="online-expedition-auto" data-online-expedition-auto>${pixelIcon("formation")}<b>自動探索</b></button><button type="button" class="online-expedition-minimap">${pixelIcon("event")}<b>ミニマップ</b></button>
       <div class="online-dungeon-viewport" data-online-dungeon-viewport tabindex="0" aria-label="共闘ダンジョン。通路をタップまたは方向キーで移動">
@@ -236,10 +230,18 @@ export function OnlinePartyScreen(state){
      </section>
      <div class="online-expedition-event" data-online-expedition-event hidden><small>PARTY DISCOVERY</small><b></b><span></span></div>
      <div class="online-stair-status" data-online-stair-status hidden><small>NEXT FLOOR</small><b>階段集合 <span>0/1</span></b><em></em></div>
-     <nav class="online-explore-nav"><button type="button" data-online-expedition-nav="formation">${pixelIcon("formation")}<b>編成</b></button><button type="button" data-online-expedition-nav="equipment">${pixelIcon("equipment")}<b>装備</b></button><button type="button" data-online-expedition-nav="items">${pixelIcon("growth")}<b>持ち物</b></button><button type="button" data-online-expedition-nav="current">${pixelIcon("event")}<b>現在地</b></button><button type="button" class="danger" data-online-request-return>${pixelIcon("rest")}<b>帰還</b></button></nav><button type="button" class="online-complete-expedition" data-online-complete-expedition hidden>踏破を確定</button><small data-online-return-status>探索継続中・帰還はいつでも提案できます</small>
+     <nav class="online-explore-nav explore-nav"><button type="button" data-online-expedition-nav="formation">${pixelIcon("formation")}<b>編成</b></button><button type="button" data-online-expedition-nav="equipment">${pixelIcon("equipment")}<b>装備</b></button><button type="button" data-online-expedition-nav="items">${pixelIcon("growth")}<b>持ち物</b></button><button type="button" data-online-expedition-nav="current">${pixelIcon("event")}<b>現在地</b></button><button type="button" class="danger" data-online-request-return>${pixelIcon("rest")}<b>帰還</b></button></nav><button type="button" class="online-complete-expedition" data-online-complete-expedition hidden>踏破を確定</button><small data-online-return-status>探索継続中・帰還はいつでも提案できます</small>
      <div class="online-expedition-feed" data-online-expedition-feed><span>仲間と同じマップへ入りました。</span></div>
     </section>
     <aside class="online-member-strip" data-online-member-strip>${Array.from({length:4},(_,index)=>emptyMember(index)).join("")}</aside>
+    <section class="online-chat-dock" data-online-chat-dock hidden>
+     <button type="button" class="online-chat-dock-toggle" data-online-chat-toggle aria-expanded="false"><span><small>PARTY CHAT</small><b>共鳴通信</b></span><em data-online-chat-dock-unread hidden>0</em><i aria-hidden="true">▲</i></button>
+     <div class="online-chat-drawer" data-online-chat-drawer hidden>
+      <div class="online-chat-history" data-online-chat-history role="log" aria-live="polite"><div class="online-chat-empty"><b>まだ会話はありません</b><span>仲間が入ると履歴が全員に同期されます。</span></div></div>
+      <div class="online-chat-presets" aria-label="定型文"><button type="button" data-online-chat="hello">よろしく！</button><button type="button" data-online-chat="ready">準備OK！</button><button type="button" data-online-chat="follow">ついてきて！</button><button type="button" data-online-chat="thanks">ありがとう！</button><button type="button" data-online-emote="wave" data-keep-emoji>👋</button><button type="button" data-online-emote="cheer" data-keep-emoji>✨</button><button type="button" data-online-emote="heart" data-keep-emoji>❤</button></div>
+     </div>
+     <form class="online-chat-compose" data-online-chat-form><label><span>メッセージ</span><textarea rows="1" maxlength="80" enterkeyhint="send" data-online-chat-input placeholder="メッセージ（80文字まで）"></textarea><small><b data-online-chat-count>0</b>/80</small></label><button type="submit" data-online-chat-send>送信</button></form>
+    </section>
    </section>
   </main>
 

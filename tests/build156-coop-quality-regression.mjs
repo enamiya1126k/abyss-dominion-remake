@@ -13,9 +13,9 @@ test("build156 adds quantity purchases and preserves current HP when battle max 
 
 test("online room modes are isolated full-screen surfaces and raid reuses normal battle components",async()=>{
  const[screen,client,styles]=await Promise.all([read("src/ui/screens/OnlinePartyScreen.js"),read("src/online/OnlinePartyClient.js"),read("src/Styles/v2.10.0.css")]);
- assert.match(styles,/\.online-party-screen\.has-online-room\{position:fixed!important/);assert.match(client,/plazaView\.hidden=expedition\|\|showRaid\|\|showResonance\|\|showTrade\|\|showChat/);
+ assert.match(styles,/html\.online-immersive,body\.online-immersive/);assert.match(styles,/\.online-party-screen\.online-phase-raid \.online-raid-view/);assert.match(styles,/position:fixed!important;z-index:1100!important/);assert.match(client,/plazaView\.hidden=expedition\|\|showRaid\|\|showResonance\|\|showTrade/);
  for(const token of["battle-screen side-battle-v2","battle-header","turn-order","battle-arena side-battle-arena","battle-party side-party","enemy-party side-enemies","battle-command","command-grid","battle-log"])assert.ok(screen.includes(token),`missing normal raid component: ${token}`);
- assert.match(styles,/build156: the raid is the ordinary floor-battle composition/);assert.match(client,/_renderRaid\(raid\)/);
+ assert.match(styles,/Raid reuses the ordinary side-battle composition/);assert.match(client,/_renderRaid\(raid\)/);
 });
 
 test("resonance maze has synchronized client, server, reconnect AI and idempotent reward hooks",async()=>{

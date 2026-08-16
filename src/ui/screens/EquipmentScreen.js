@@ -26,6 +26,7 @@ import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.10.0
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.10.0";
 import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.10.0";
 import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=2.10.0";
+import{signatureWeaponState,signatureWeaponForMonster}from"../../core/SignatureWeaponSystem.js?v=2.10.0-build157";
 
 const EQUIPMENT_SCREEN_SLOT_LABELS={
  weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"
@@ -79,6 +80,7 @@ function itemAffixes(item,{compact=false}={}){
  return`<div class="equipment-affixes ${compact?"compact":""}">${body}</div>`;
 }
 function itemFixedEffect(item){return item.fixedEffectText?`<div class="equipment-fixed-authority"><b>固有能力</b><span>${item.fixedEffectText}</span></div>`:""}
+function signatureWeaponBadge(state,target,item){const resonance=signatureWeaponState(state,target,item);if(!resonance)return"";return`<div class="signature-weapon-badge ${resonance.active?"active":"inactive"}"><b>${resonance.status}</b><span>${resonance.definition.ownerName}専用・${resonance.definition.name}</span><small>${resonance.definition.description}</small></div>`}
 
 function equipmentCommand({label,icon="equipment",attributes="",tone="",note="",disabled=false}={}){
  return`<button type="button" class="equipment-command${tone?` tone-${tone}`:""}" ${attributes}${disabled?' disabled aria-disabled="true"':""}><i>${pixelIcon(icon)}</i><span><b>${label}</b>${note?`<small>${note}</small>`:""}</span></button>`;
@@ -104,6 +106,7 @@ function equippedSlotCard(state,target,subslot,focusItemId=null){
    <i>${item.favorite?"★":""}${item.locked?"L":""}${item.ruleOverrides?.unsellable?"P":""}⌄</i>
   </summary>
   <div class="equipped-slot-detail">
+   ${signatureWeaponBadge(state,target,item)}
    ${itemFixedEffect(item)}
    ${itemAffixes(item,{compact:true})}
    <div class="equipped-slot-actions">
@@ -173,6 +176,7 @@ function card(item,state,target,storage,{editing=false,selected=false,focused=fa
   <div class="subline">
    <span class="equipment-level">Lv.${level} ∞</span> ${slotLabel(item.slot)} ${handLabel(item)} / ${itemStats(item)||"能力補正なし"}
    ${equipmentSocketSummary(item)}
+   ${signatureWeaponBadge(state,target,item)}
    ${itemFixedEffect(item)}
    ${itemAffixes(item)}
    <div class="equipment-exp"><i style="width:${progress}%"></i></div>
@@ -209,6 +213,7 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
  const stats=calculatedStats(target);
  const power=monsterCombatPower(target);
  const circle=equippedMagicCircle(target,state);
+ const signature=signatureWeaponForMonster(state,target);
  const counts={};
  Object.values(target.equipment??{}).forEach(id=>{
   const item=state.equipment.find(entry=>entry.id===id);
@@ -242,6 +247,7 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
       <button type="button" class="equipment-magic-circle-button" data-open-magic-circle="${target.id}" title="魔法陣を変更・強化"><img src="${circle.asset}" alt=""><span><b>魔法陣設定</b><small>${circle.name}${circle.level?` Lv.${circle.level}`:""}</small></span><i>変更・強化 ›</i></button>
       <div class="selected-equipment-identity">${coloredMonsterName(target)}<small class="selected-equipment-growth">Lv.${target.level}　★${target.stars??1}　+${target.plus??0}</small><button type="button" class="equipment-affection-button" data-affection-info="${target.id}"><em class="attribute-chip">${attributeVisual(attributeId,{label:`${attribute.name}属性`})}${attribute.name}属性</em><span>なつき ${target.affection??0}/1000</span><i>詳細</i></button></div>
       <div class="selected-equipment-power"><small>戦力</small><strong>${formatCombatPower(power)}</strong></div>
+      ${signature?`<div class="signature-loadout-status ${signature.active?"active":"inactive"}"><small>${signature.active?"専用共鳴 発動中":"専用効果 未発動"}</small><b>${signature.definition.name}</b><span>${signature.definition.description}</span></div>`:""}
       <div class="selected-equipment-stats" aria-label="装備反映後ステータス">
        <span><small>HP</small><b>${stats.hp.toLocaleString()}</b></span>
        <span><small>MP</small><b>${maxMp(target).toLocaleString()}</b></span>
