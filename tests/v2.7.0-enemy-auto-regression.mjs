@@ -15,7 +15,7 @@ const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 const main=read("src/main.js"),battleScreen=read("src/ui/screens/BattleScreen.js"),css=read("src/Styles/v2.6.0.css"),index=read("index.html");
 
 assert.equal(APP_VERSION,"2.10.0");
-assert.equal(SAVE_SCHEMA_VERSION,54);
+assert.equal(SAVE_SCHEMA_VERSION,55);
 assert.match(index,/ASSET_VERSION = "2\.10\.0"/);
 
 assert.equal(equipmentSlotsForFloor(49),3);

@@ -149,7 +149,10 @@ export function OnlinePartyScreen(state){
       <div class="online-raid-rule"><b>貢献度ランキング</b><span>与ダメージ・回復・蘇生・防御・補助を集計。上位ほどGOLD／💎／EXP／融骸核片が増加します。</span></div>
       <section class="online-raid-progress" data-online-raid-progress><header><div><small>SERVER PERSISTENT HP</small><b>累積討伐進行</b></div><em data-online-raid-attempts>未挑戦</em></header><div class="online-raid-progress-bar"><i data-online-raid-progress-meter></i></div><p><strong data-online-raid-progress-hp>HPは初回挑戦時に確定</strong><span>敗北しても与えたダメージは残り、次回は残HPから再開します。</span></p><ol data-online-raid-milestones><li data-threshold="5">5%</li><li data-threshold="10">10%</li><li data-threshold="25">25%</li><li data-threshold="50">50%</li><li data-threshold="75">75%</li></ol></section>
       <div class="online-raid-ready-grid" data-online-raid-ready-grid></div>
-      <button type="button" class="online-raid-start" data-online-start-raid disabled><span class="online-button-glint"></span><small>LEADER COMMAND</small><b>終焉融骸へ挑戦</b></button>
+      <div class="online-raid-ready-actions">
+       <button type="button" class="online-raid-ready" data-online-raid-ready><i></i><span><small>READY CHECK</small><b>準備完了にする</b></span></button>
+       <button type="button" class="online-raid-start" data-online-start-raid disabled><span class="online-button-glint"></span><small>LEADER COMMAND</small><b>終焉融骸へ挑戦</b></button>
+      </div>
       <section class="online-raid-exchange"><header><div><small>RAID EXCHANGE</small><h3>融骸核片 交換所</h3></div><strong>所持 <span data-online-raid-materials>0</span></strong></header><div><button type="button" data-online-raid-exchange="character" data-cost="420"><img src="./assets/online/raid/juvenile-amalga.png" alt=""><span><b>融骸幼体アマルガ</b><small>限定仲間・420核片</small></span></button><button type="button" data-online-raid-exchange="equipment" data-cost="240"><img src="./assets/equipment/end-devouring-greatblade.png" alt=""><span><b>終焉喰らいの大刃</b><small>限定神話装備・240核片</small></span></button><button type="button" data-online-raid-exchange="circle" data-cost="100"><img src="./assets/magic-circles/death-mirror-raid.png" alt=""><span><b>死鏡の魔法陣・現物</b><small>術式未解禁でも所持可・100核片</small></span></button></div></section>
      </div>
      <section class="online-raid-battle" data-online-raid-battle hidden>
@@ -180,7 +183,7 @@ export function OnlinePartyScreen(state){
      <section class="online-trade-history"><h3>交換履歴</h3><div data-online-trade-history><p>交換履歴はまだありません。</p></div></section>
     </section>
     <section class="online-expedition-shell" data-online-expedition-shell hidden>
-     <header class="online-expedition-header"><div><small>SHARED EXPEDITION</small><h3><span data-online-expedition-floor>1</span>F 共闘探索</h3></div><span data-online-expedition-theme>黒鉄遺跡</span><em><b data-online-discoveries>0</b>/<span data-online-discovery-total>6</span> 発見</em></header>
+     <header class="online-expedition-header" data-online-expedition-header><div><small>SHARED EXPEDITION</small><h3><span data-online-expedition-floor>1</span>F 共闘探索</h3></div><span data-online-expedition-theme>黒鉄遺跡</span><em><b data-online-discoveries>0</b>/<span data-online-discovery-total>6</span> 発見</em></header>
      <div class="online-dungeon-viewport" data-online-dungeon-viewport tabindex="0" aria-label="共闘ダンジョン。通路をタップまたは方向キーで移動">
       <div class="online-dungeon-board" data-online-dungeon-board><div class="online-dungeon-grid" data-online-dungeon-grid></div><div class="online-dungeon-decoration-layer" data-online-dungeon-decorations></div><div class="online-dungeon-object-layer" data-online-dungeon-objects></div><div class="online-dungeon-player-layer" data-online-dungeon-players></div></div>
       <div class="online-dungeon-legend"><span><i class="chest"></i>宝箱</span><span><i class="bone"></i>遺骨</span><span><i class="shrine"></i>祭壇</span><span><i class="encounter"></i>魔物</span><span><i class="exit"></i>出口</span></div>

@@ -239,7 +239,7 @@ function testPersistentAilments(){
 function testSaveMigration(){
   localStorage.removeItem(SAVE_KEY);
   const fresh=new SaveService();
-  assert.equal(fresh.state.schemaVersion,54);
+  assert.equal(fresh.state.schemaVersion,55);
   assert.equal(fresh.state.settings.minimapVisible,false);
   assert.equal(fresh.state.settings.battleSpeed,1);
   assert.equal(fresh.state.settings.audioEnabled,true);
@@ -281,7 +281,7 @@ function testSaveMigration(){
   };
   localStorage.setItem(SAVE_KEY,JSON.stringify(old));
   const migrated=new SaveService();
-  assert.equal(migrated.state.schemaVersion,54);
+  assert.equal(migrated.state.schemaVersion,55);
   assert.equal(migrated.state.settings.minimapVisible,true);
   assert.equal(migrated.state.settings.battleSpeed,1);
   assert.equal(migrated.state.monsters[0].ailments[0].id,"poison");
@@ -301,7 +301,7 @@ function testSaveMigration(){
   assert.equal(migrated.state.expeditionSnapshot.cameraData.z,1.4);
   assert.deepEqual(migrated.state.expeditionSnapshot.player.path,[]);
   assert.deepEqual(migrated.state.lastMigration.from,43);
-  assert.deepEqual(migrated.state.lastMigration.to,54);
+  assert.deepEqual(migrated.state.lastMigration.to,55);
   migrated.reset();
   assert.equal(migrated.state.settings.minimapVisible,false);
 }

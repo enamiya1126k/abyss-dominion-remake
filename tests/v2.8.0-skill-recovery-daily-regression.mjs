@@ -12,7 +12,7 @@ const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 const main=read("src/main.js"),battleScreen=read("src/ui/screens/BattleScreen.js"),css=read("src/Styles/v2.6.0.css"),index=read("index.html");
 
 assert.equal(APP_VERSION,"2.10.0");
-assert.equal(SAVE_SCHEMA_VERSION,54);
+assert.equal(SAVE_SCHEMA_VERSION,55);
 assert.match(index,/ASSET_VERSION = "2\.10\.0"/);
 
 const specification=skillEffectDetails({damageClass:"magic",power:1.2,hits:3,allEnemies:true,defenseIgnore:.25,status:{id:"poison",chance:.65,turns:3,power:.04},effects:[{kind:"defDown",value:.2,turns:3,enemy:true}]});

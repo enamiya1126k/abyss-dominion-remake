@@ -12,7 +12,7 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const read=file=>fs.readFileSync(path.join(root,file),"utf8");
 
 assert.equal(APP_VERSION,"2.10.0");
-assert.equal(SAVE_SCHEMA_VERSION,54);
+assert.equal(SAVE_SCHEMA_VERSION,55);
 assert.equal(TRUE_MAX_LEVEL,10000);
 
 const newIds=["eraser_slime","pushpin_roller","pencil_mouse","stapler_crab","compass_beetle","gluepot_mimic","fountain_pen_mage","correction_ghost","scissor_mantis","pencilcase_parade","chalkboard_dragon","forbidden_paper_cutter","ochuki","bechi","kiara","roxy","milim","ai","eris","golden_darkness"];

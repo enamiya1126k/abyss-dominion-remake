@@ -10,7 +10,7 @@ const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 const main=read("src/main.js"),battle=read("src/ui/screens/BattleScreen.js"),css=read("src/Styles/v2.6.0.css"),index=read("index.html");
 
 assert.equal(APP_VERSION,"2.10.0");
-assert.equal(SAVE_SCHEMA_VERSION,54);
+assert.equal(SAVE_SCHEMA_VERSION,55);
 assert.match(index,/const ASSET_VERSION = "2\.10\.0"/);
 
 assert.match(battle,/hp-fill-draining/);

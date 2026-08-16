@@ -15,7 +15,7 @@ const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 const index=read("index.html"),main=read("src/main.js"),battleScreen=read("src/ui/screens/BattleScreen.js"),css=read("src/Styles/v2.10.0.css");
 
 assert.equal(APP_VERSION,"2.10.0");
-assert.equal(SAVE_SCHEMA_VERSION,54,"presentation and balance changes remain save-compatible");
+assert.equal(SAVE_SCHEMA_VERSION,55,"presentation and balance changes remain save-compatible");
 assert.match(index,/ASSET_VERSION = "2\.10\.0"/);
 assert.match(index,/v2\.10\.0\.css\?v=2\.10\.0/);
 

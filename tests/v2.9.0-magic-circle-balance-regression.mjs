@@ -12,7 +12,7 @@ const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 const index=read("index.html"),main=read("src/main.js"),battleScreen=read("src/ui/screens/BattleScreen.js"),css=read("src/Styles/v2.9.0.css");
 
 assert.equal(APP_VERSION,"2.10.0");
-assert.equal(SAVE_SCHEMA_VERSION,54,"this display/balance update must keep save compatibility");
+assert.equal(SAVE_SCHEMA_VERSION,55,"this display/balance update must keep save compatibility");
 assert.match(index,/ASSET_VERSION = "2\.10\.0"/);
 assert.match(index,/v2\.9\.0\.css\?v=2\.10\.0/);
 

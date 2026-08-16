@@ -27,7 +27,7 @@ for(const circle of circles){
   assert.deepEqual(pngInfo(relative),{width:512,height:512,colorType:6},`${relative} format`);
  }
 }
-const circlePngs=fs.readdirSync(file("assets/magic-circles")).filter(name=>name.endsWith(".png")&&name!=="plain.png");
+const circlePngs=fs.readdirSync(file("assets/magic-circles")).filter(name=>name.endsWith(".png")&&!['plain.png','death-mirror-raid.png'].includes(name));
 assert.equal(circlePngs.length,54,"18 circles × 3 PNGs");
 assert.ok(!circlePngs.some(name=>name.includes(".tmp.")),"temporary circle PNGs must not ship");
 

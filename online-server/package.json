@@ -1,6 +1,6 @@
 {
   "name": "abyss-dominion-party-server",
-  "version": "1.3.0",
+  "version": "1.5.0",
   "private": true,
   "type": "module",
   "description": "ABYSS DOMINION online plaza, shared expedition and co-op battle server for a home PC",

@@ -8,8 +8,8 @@ import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAt
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.10.0";
 import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.10.0-build150";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.10.0-build145";
-import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build149";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build149";
+import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build154";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build154";
 import{buildOnlineTradeCatalog,reserveOnlineTradeAsset,releaseOnlineTradeAsset,commitOnlineTrade}from"./online/OnlineTradeSystem.js?v=2.10.0-build149";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.10.0";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.10.0";
@@ -1602,7 +1602,7 @@ function claimOnlinePartyReward({rewardId,reward={},source={}}={}){
 }
 function exchangeOnlineRaidReward(kind,cost){
  const online=save.state.onlineParty??={},price=Math.max(0,Math.floor(Number(cost)||0)),materials=Math.max(0,Math.floor(Number(online.raidMaterials)||0));if(materials<price)return{ok:false,message:`融骸核片が足りません（${materials}/${price}）`};let message="";
- if(kind==="character"){if(save.state.monsters.length>=MONSTER_STORAGE_CAP)return{ok:false,message:"魔物庫が満杯です。先に整理してください"};const level=Math.max(1,Math.min(ENDGAME_MAX_LEVEL,Number(save.state.player.maxFloor)||1)),monster=createMonster("ancient_dragon",{nickname:"融骸幼体アマルガ",level,stars:MONSTER_STAR_MAX,rank:4,plus:12,attribute:"dark",obtainedMethod:"onlineRaidExchange",obtainedFloor:save.state.player.maxFloor});monster.customVisualAsset="./assets/online/raid-abyss-amalgam.png";monster.raidLimited=true;monster.tags=[...(monster.tags??[]),"raid","amalgam"];save.state.monsters.push(monster);message="限定仲間「融骸幼体アマルガ」と契約しました"}
+ if(kind==="character"){if(save.state.monsters.length>=MONSTER_STORAGE_CAP)return{ok:false,message:"魔物庫が満杯です。先に整理してください"};const level=Math.max(1,Math.min(ENDGAME_MAX_LEVEL,Number(save.state.player.maxFloor)||1)),monster=createMonster("ancient_dragon",{nickname:"融骸幼体アマルガ",level,stars:MONSTER_STAR_MAX,rank:4,plus:12,attribute:"dark",obtainedMethod:"onlineRaidExchange",obtainedFloor:save.state.player.maxFloor});monster.customVisualAsset="./assets/online/raid/juvenile-amalga.png";monster.raidLimited=true;monster.tags=[...(monster.tags??[]),"raid","amalgam"];save.state.monsters.push(monster);message="限定仲間「融骸幼体アマルガ」と契約しました"}
  else if(kind==="equipment"){const item=createEquipment("weapon",{rarity:"神話"});item.name="終焉喰らいの大刃";item.level=Math.max(1,Math.min(10000,Math.round((Number(save.state.player.maxFloor)||1)*1.35)));item.plus=30;item.raidLimited=true;item.ruleOverrides={...(item.ruleOverrides??{}),unsellable:true,raidResonance:true};const result=receiveEquipment(save.state,item,{bossReward:true});message=`限定神話装備を獲得（${result.message}）`}
  else if(kind==="circle"){const instance=createMagicCircleInstance(save.state,"death_mirror",{level:1,source:"raidExchange",locked:false});if(!instance)return{ok:false,message:"魔法陣の現物を追加できませんでした"};message="「即死返鏡陣」の現物を1個獲得しました。術式未解禁なら装備・強化はできません"}
  else return{ok:false,message:"交換報酬が見つかりません"};online.raidMaterials=materials-price;online.raidExchange??={};online.raidExchange[kind]=(Number(online.raidExchange[kind])||0)+1;save.save();return{ok:true,message}

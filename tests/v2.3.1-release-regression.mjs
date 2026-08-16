@@ -10,7 +10,7 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"..");
 const read=relative=>fs.readFileSync(path.join(root,relative),"utf8");
 
 assert.equal(APP_VERSION,"2.10.0");
-assert.equal(SAVE_SCHEMA_VERSION,54);
+assert.equal(SAVE_SCHEMA_VERSION,55);
 assert.equal(MONSTER_STORAGE_CAP,3000);
 assert.equal(TEAM_BATTLE_DAILY_LIMIT,10);
 assert.equal(GAUNTLET_DAILY_LIMIT,10);
