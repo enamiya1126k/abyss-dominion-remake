@@ -1,4 +1,4 @@
-import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.10.0-build159";
+import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.10.0-build160";
 
 export const TEAM_BATTLE_UNLOCK_FLOOR=50;
 export const GAUNTLET_UNLOCK_FLOOR=100;
@@ -172,7 +172,7 @@ export const ENDGAME_TRIALS=Object.freeze([
 ]);
 export function endgameTrialDefinition(number){return ENDGAME_TRIALS[Math.max(1,Math.min(ENDGAME_TRIAL_BATTLE_COUNT,Math.floor(Number(number)||1)))-1]}
 export function createEndgameTrialEncounter(state,number=normalizeEndgameState(state).trials.battle){
- // build159: 奈落回廊はプレイヤーの最高到達階を参照しない固定難度。
+ // build160: 奈落回廊はプレイヤーの最高到達階を参照しない固定難度。
  // 暴食を現実的な最初の壁にし、以降は番号と周回だけで段階上昇する。
  const trial=endgameTrialDefinition(number),trials=normalizeEndgameState(state).trials,loopMultiplier=endgameTrialLoopMultiplier(trials.loop),progress=Math.max(0,trial.number-1),level=Math.min(9999,220+progress*72+(Math.max(1,trials.loop)-1)*320),solo=trial.bossIds.length===1;
  const leaders=trial.bossIds.map((bossId,index)=>{const boss=ENDGAME_BOSSES[bossId],factionProgress=boss.faction==="tenGod"?Math.max(0,progress-ABYSS_IDS.length):progress,base=boss.faction==="tenGod"?.045+factionProgress*.0055:.22+factionProgress*.026,groupRate=solo?1:.64;return enemy(boss.speciesId,level+index*3,{boss:true,endgameBossId:boss.id,visualSpeciesId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈回廊 ${trials.loop}周〉`,statMultiplier:base*groupRate*loopMultiplier,fixedTrialScaling:true,fixedTrialHpMultiplier:solo?4.2:2.5,enemyFloor:level+index*3,uncapturable:true,elementMultipliers:boss.elementMultipliers,statusProfile:boss.statusProfile,bossPassive:boss.passive})});

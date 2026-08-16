@@ -15,7 +15,8 @@ const read=path=>readFile(new URL(`../${path}`,import.meta.url),"utf8");
 test("JST weekday altar follows the fixed weekly calendar",()=>{
  const expected=["experience","signature","experience","signature","experience","signature","sunday"];
  for(let offset=0;offset<7;offset++)assert.equal(weekdayGachaSchedule(new Date(Date.parse("2026-08-17T03:00:00Z")+offset*86400000)).kind,expected[offset]);
- assert.deepEqual(weekdayGachaSchedule(new Date("2026-08-23T03:00:00Z")).factions,["abyss","tenGod"]);
+ assert.deepEqual(weekdayGachaSchedule(new Date("2026-08-23T03:00:00Z")).factions,["abyss"]);
+ assert.deepEqual(weekdayGachaSchedule(new Date("2026-08-30T03:00:00Z")).factions,["abyss","tenGod"]);
  assert.equal(weekdayGachaCost("signature",10),162);
 });
 
@@ -63,10 +64,10 @@ test("all 17 Deep/Ten characters keep unique skills and six exclusive pieces",()
  for(const character of characters){assert.equal(character.skills.length,5,character.id);assert.equal(character.gear.length,6,character.id);assert.deepEqual(Object.keys(character.setText).map(Number),[2,4,6])}
 });
 
-test("build159 UI and economy rules remain wired to the app",async()=>{
+test("build160 UI and economy rules remain wired to the app",async()=>{
  const[main,styles,index]=await Promise.all([read("src/main.js"),read("src/Styles/v2.10.0.css"),read("index.html")]);
- for(const token of["潤沢なGOLD","魔晶石 ×","経験値パック ×1","宝箱探索セット"])assert.ok(main.includes(token),token);
+ for(const token of["潤沢なGOLD","魔晶石 ×","bossExperiencePackAmount","宝箱探索セット"])assert.ok(main.includes(token),token);
  assert.match(main,/return pool\.map\(value=>\(\{value,sort:Math\.random\(\)\}\)\)\.sort/);assert.match(main,/restGoldCost\(recovery\)/);assert.match(main,/\/250\+\(Number\(recovery\.mp\)/);
  assert.match(main,/id:"reviveLeaves"[^}]+price:60000/);assert.match(main,/function resolveRandomSkillElement/);assert.match(main,/battleFloor=prepared\.fixedTrialScaling\?hiddenFloor/);
- assert.match(styles,/grid-template-areas:"art copy" "actions actions"/);assert.match(styles,/home-shop-buy-actions\{grid-area:actions/);assert.match(styles,/weekday-gacha-calendar/);assert.match(index,/ASSET_BUILD = "build159"/);
+ assert.match(styles,/grid-template-areas:"art copy" "actions actions"/);assert.match(styles,/home-shop-buy-actions\{grid-area:actions/);assert.match(styles,/weekday-gacha-calendar/);assert.match(index,/ASSET_BUILD = "build160"/);
 });

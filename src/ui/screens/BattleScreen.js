@@ -1,11 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.10.0-build159";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.10.0-build159";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.10.0-build159";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.10.0-build159";
-import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build159";
-import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.10.0-build159";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0-build159";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.10.0-build159";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.10.0-build160";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.10.0-build160";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.10.0-build160";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.10.0-build160";
+import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build160";
+import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.10.0-build160";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0-build160";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.10.0-build160";
 
 function battleInteger(value){return Math.round(Number(value)||0).toLocaleString("ja-JP")}
 function renderTurnOrder(battle){

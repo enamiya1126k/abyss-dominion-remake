@@ -1,10 +1,10 @@
-import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=2.10.0-build159";
-import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.10.0-build159";
-import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.10.0-build159";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.10.0-build159";
-import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.10.0-build159";
-import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.10.0-build159";
-import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build159";
+import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=2.10.0-build160";
+import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.10.0-build160";
+import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.10.0-build160";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.10.0-build160";
+import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.10.0-build160";
+import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.10.0-build160";
+import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build160";
 
 const CONSUMABLES=[
  ["potions","🧪","薬草","HPを回復"],

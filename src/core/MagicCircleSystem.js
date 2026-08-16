@@ -22,7 +22,7 @@ export const MAGIC_CIRCLES=freeze([
  circle("weak_critical","弱撃必殺陣","!","gold",240_000_000,"弱い攻撃ほどクリティカル率が高くなる。","weakCrit"),
  circle("sacrifice_lottery","等価滅殺陣","⇄","rose",720_000_000,"味方をランダムに1体失い、敵をランダムに1体即死させる。","sacrifice"),
  circle("inheritance","継承の葬環","†","violet",300_000_000,"この者が倒れると、生存する味方へ力を継承する。","inheritance"),
- circle("gold_power","黄金換力陣","G","gold",1_100_000_000,"所持GOLDに応じて攻撃上昇。行動ごとに少量のGOLDを消費。","goldPower"),
+ circle("gold_power","黄金換力陣","G","gold",1_100_000_000,"所持GOLDに応じて攻撃上昇（強い逓減・Lv.1は最大+18%、Lv.99は最大+30%）。行動ごとの消費は最大10万G。","goldPower"),
  circle("random_arsenal","万象抽選陣","?","rainbow",1_800_000_000,"固有スキルを封じ、全スキルから毎行動ランダムに発動。","randomSkill"),
  circle("sole_survivor","孤王覚醒陣","Ⅰ","black",620_000_000,"最後の生存者になると全能力と連撃率が大幅上昇。","soleSurvivor"),
  circle("death_drain","断末吸魔陣","MP","violet",380_000_000,"この者が倒れると、敵全体のMPを大量に奪う。","deathDrain"),
@@ -140,17 +140,33 @@ export function magicCircleNextEffect(entryOrId,level=0){
  return`Lv.${next}：基礎効果を強化（効果量 +${boost}%相当）・発光層を追加`;
 }
 
+// GOLDを際限なく貯めても火力が発散しないよう、対数逓減とLv別の
+// 明確な上限を両方設ける。所持資産の楽しさは残しつつ、Lv.1で最大
+// +18%、Lv.99でも最大+30%までに限定する。
+export function goldPowerDamageMultiplier(gold=0,level=1){
+ const safeGold=Math.max(0,Number(gold)||0),safeLevel=Math.max(1,Math.min(99,Math.floor(Number(level)||1)));
+ const cap=.18+(safeLevel-1)/98*.12;
+ const progress=Math.min(1,Math.log10(1+safeGold/100_000)/4);
+ return Number((1+cap*Math.max(0,progress)).toFixed(6));
+}
+export function goldPowerActionCost(gold=0){return Math.min(100_000,Math.max(1_000,Math.floor(Math.max(0,Number(gold)||0)*.00001)))}
+
 export function buyOrUpgradeMagicCircle(state,id){
  normalizeMagicCircleState(state);
- const exact=magicCircleInstanceById(state,id),entry=magicCircleById(exact?.circleId??id),instance=exact??state.magicCircles.instances.filter(item=>item.circleId===entry.id).sort((a,b)=>b.level-a.level)[0],level=instance?.level??0;
+ // normalizeMagicCircleState は互換配列を再構築するため、この関数内では
+ // 以後 normalize を呼ぶ公開ヘルパーを使わず、同じ現物IDを最後に再取得する。
+ const exact=state.magicCircles.instances.find(item=>item.instanceId===id)??null,entry=magicCircleById(exact?.circleId??id),candidate=exact??state.magicCircles.instances.filter(item=>item.circleId===entry.id).sort((a,b)=>b.level-a.level)[0],instanceId=candidate?.instanceId??null,level=candidate?.level??0;
  if(entry.id==="none")return{ok:false,message:"魔法陣なしは強化できません。"};
- if(!isMagicCircleUnlocked(state,entry.id))return{ok:false,message:"この術式の知識は深淵ツリーで未解禁です。"};
+ if(!state.magicCircles.unlocked?.[entry.id])return{ok:false,message:"この術式の知識は深淵ツリーで未解禁です。"};
  if(!level)return{ok:false,message:"現物を所持していません。再構築または交換で入手してください。"};
  if(level>=99)return{ok:false,message:"最大Lv.99です。"};
  const price=magicCircleUpgradePrice(entry,level),gold=Math.max(0,Number(state.player?.gold)||0);
  if(gold<price)return{ok:false,message:`GOLDが${price.toLocaleString()}G必要です`};
- state.player.gold=Math.floor(gold-price);
+ const instance=state.magicCircles.instances.find(item=>item.instanceId===instanceId);
+ if(!instance||instance.level!==level)return{ok:false,message:"強化対象が更新されました。もう一度お試しください。"};
+ // Lv更新とGOLD消費を同じ確定点で行う。対象が消えた場合は1Gも引かない。
  instance.level=level+1;rebuildOwnedCompatibility(state.magicCircles);
+ state.player.gold=Math.floor(gold-price);
  state.magicCircles.goldSpent+=price;
  return{ok:true,circle:entry,instance,level:level+1,price};
 }

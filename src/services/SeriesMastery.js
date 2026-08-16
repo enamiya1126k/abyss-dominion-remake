@@ -1,4 +1,4 @@
-import{EQUIPMENT_SERIES}from"../data/equipmentSeries.js?v=2.10.0-build159";
+import{EQUIPMENT_SERIES,equipmentSeriesDefinition}from"../data/equipmentSeries.js?v=2.10.0-build160";
 
 export const SERIES_MASTERY_LEVELS=[
  {level:1,exp:0,label:"見習い",bonus:{}},
@@ -27,8 +27,12 @@ export function seriesMasteryLevel(exp=0){
 
 export function nextSeriesMasteryLevel(exp=0){return SERIES_MASTERY_LEVELS.find(row=>exp<row.exp)??null}
 
-export function recordSeriesBattle(state,party=[],equipment=[],{boss=false}={}){
- const mastery=normalizeSeriesMastery(state),byId=new Map(equipment.map(item=>[item.id,item])),earned={};
+export function recordSeriesBattle(state,party=[],equipment=null,{boss=false,battleId=null}={}){
+ const mastery=normalizeSeriesMastery(state);
+ state.seriesMasteryBattleIds=Array.isArray(state.seriesMasteryBattleIds)?state.seriesMasteryBattleIds.slice(-199):[];
+ const canonicalBattleId=String(battleId??"").trim();
+ if(canonicalBattleId&&state.seriesMasteryBattleIds.includes(canonicalBattleId))return[];
+ const supplied=Array.isArray(equipment)?equipment:[],all=[...(state.equipment??[]),...(state.reserveEquipment??[]),...(state.bossEquipmentVault??[]),...supplied],byId=new Map(all.filter(Boolean).map(item=>[item.id,item])),earned={};
  for(const monster of party){
   const counts={};
   for(const id of Object.values(monster.equipment??{})){const item=byId.get(id);if(item?.series)counts[item.series]=(counts[item.series]??0)+1}
@@ -40,6 +44,7 @@ export function recordSeriesBattle(state,party=[],equipment=[],{boss=false}={}){
   row.exp+=amount;row.battles++;mastery[seriesId]=row;
   const after=seriesMasteryLevel(row.exp);results.push({seriesId,amount,before,after,leveled:after.level>before.level,exp:row.exp})
  }
+ if(canonicalBattleId)state.seriesMasteryBattleIds=[...state.seriesMasteryBattleIds,canonicalBattleId].slice(-200);
  return results
 }
 
@@ -53,7 +58,7 @@ export function seriesMasteryBonusForMonster(state,counts={}){
 }
 
 export function seriesMasterySummary(state,seriesId){
- const mastery=normalizeSeriesMastery(state)[seriesId]??{exp:0,battles:0},level=seriesMasteryLevel(mastery.exp),next=nextSeriesMasteryLevel(mastery.exp),series=EQUIPMENT_SERIES[seriesId];
+ const mastery=normalizeSeriesMastery(state)[seriesId]??{exp:0,battles:0},level=seriesMasteryLevel(mastery.exp),next=nextSeriesMasteryLevel(mastery.exp),series=equipmentSeriesDefinition(seriesId);
  const progress=next?Math.min(100,Math.round((mastery.exp-level.exp)/(next.exp-level.exp)*100)):100;
  const bonus=Object.entries(level.bonus??{}).map(([key,value])=>key==="crit"?`会心率 +${value}%`:`${({hp:"HP",atk:"ATK",def:"DEF",spd:"SPD"})[key]??key} +${Math.round(value*100)}%`).join(" / ")||"追加補正なし";
  return`<div class="series-mastery-box"><div class="spread"><b>🔥 ${series?.name??seriesId}熟練度 Lv.${level.level}</b><span>${level.label}</span></div><small>${bonus}</small><i><u style="width:${progress}%"></u></i><small>${next?`EXP ${mastery.exp.toLocaleString()} / ${next.exp.toLocaleString()}　あと${(next.exp-mastery.exp).toLocaleString()}`:`EXP ${mastery.exp.toLocaleString()}　MAX`} / 戦闘 ${mastery.battles.toLocaleString()}回</small><em>同シリーズを2部位以上装備して勝利すると上昇。ボス戦は3倍。</em></div>`

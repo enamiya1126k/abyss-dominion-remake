@@ -1,4 +1,4 @@
-import{eliteGoldBase}from"./GoldEconomySystem.js?v=2.10.0-build159";
+import{eliteGoldBase}from"./GoldEconomySystem.js?v=2.10.0-build160";
 
 const ELITE_AFFIXES=[
  {id:"colossal",name:"巨大化",icon:"🜲",description:"最大HPが大幅に上昇",hp:2,atk:1.08,def:1.12,spd:.88},

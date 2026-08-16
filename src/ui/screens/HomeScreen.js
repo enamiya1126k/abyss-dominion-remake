@@ -1,14 +1,14 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.10.0-build159";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=2.10.0-build159";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.10.0-build159";
-import{SPECIES}from"../../data/species.js?v=2.10.0-build159";
-import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.10.0-build159";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0-build159";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.10.0-build159";
-import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.10.0-build159";
-import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build159";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0-build159";
-import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.10.0-build159";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.10.0-build160";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=2.10.0-build160";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.10.0-build160";
+import{SPECIES}from"../../data/species.js?v=2.10.0-build160";
+import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.10.0-build160";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0-build160";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.10.0-build160";
+import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.10.0-build160";
+import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build160";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0-build160";
+import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.10.0-build160";
 
 const HOME_ATTRIBUTE_CYCLE=Object.freeze(["fire","ice","wind","earth","lightning","water"]);
 function homeAttributeChart(){
@@ -81,7 +81,7 @@ export function compactHomeNumber(value){
   const number=Math.max(0,Number(value)||0);
   // Keep the satisfying full number for as long as the available HUD space
   // can hold it; compact only genuinely large values.
-  if(number<100_000_000)return Math.floor(number).toLocaleString();
+  if(number<1_000_000)return Math.floor(number).toLocaleString();
   if(number>=1_000_000_000_000_000)return number.toExponential(2).replace("e+0","e+");
   const unit=HOME_NUMBER_UNITS.find(([threshold])=>number>=threshold);
   if(!unit)return Math.floor(number).toLocaleString();

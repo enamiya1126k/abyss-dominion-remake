@@ -1,25 +1,25 @@
-import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=2.10.0-build159";
-import{createMonster,totalExperience,applyTotalExperience}from"../models/Monster.js?v=2.10.0-build159";
-import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=2.10.0-build159";
-import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=2.10.0-build159";
-import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=2.10.0-build159";
-import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=2.10.0-build159";
-import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=2.10.0-build159";
-import{SPECIES}from"../data/species.js?v=2.10.0-build159";
-import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.10.0-build159";
-import{normalizeWeaponMastery}from"./WeaponMastery.js?v=2.10.0-build159";
+import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=2.10.0-build160";
+import{createMonster,totalExperience,applyTotalExperience}from"../models/Monster.js?v=2.10.0-build160";
+import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=2.10.0-build160";
+import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=2.10.0-build160";
+import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=2.10.0-build160";
+import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=2.10.0-build160";
+import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=2.10.0-build160";
+import{SPECIES}from"../data/species.js?v=2.10.0-build160";
+import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.10.0-build160";
+import{normalizeWeaponMastery}from"./WeaponMastery.js?v=2.10.0-build160";
 
-import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=2.10.0-build159";
-import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=2.10.0-build159";
-import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=2.10.0-build159";
-import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=2.10.0-build159";
-import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=2.10.0-build159";
-import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=2.10.0-build159";
-import{normalizeSerialCodeState}from"../core/SerialCodeSystem.js?v=2.10.0-build159";
-import{normalizeNoticeState}from"../core/NoticeSystem.js?v=2.10.0-build159";
-import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=2.10.0-build159";
-import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=2.10.0-build159";
-import{normalizeEquipmentIdentity}from"../data/equipment.js?v=2.10.0-build159";
+import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=2.10.0-build160";
+import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=2.10.0-build160";
+import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=2.10.0-build160";
+import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=2.10.0-build160";
+import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=2.10.0-build160";
+import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=2.10.0-build160";
+import{normalizeSerialCodeState}from"../core/SerialCodeSystem.js?v=2.10.0-build160";
+import{normalizeNoticeState}from"../core/NoticeSystem.js?v=2.10.0-build160";
+import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=2.10.0-build160";
+import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=2.10.0-build160";
+import{normalizeEquipmentIdentity}from"../data/equipment.js?v=2.10.0-build160";
 const LR_SERIAL_CHARACTER_IDS=new Set(["myth_enami","myth_yori","myth_rion","myth_hide"]);
 function finiteNumber(value,fallback=0,min=-Infinity,max=Infinity){
  const number=Number(value);
@@ -305,6 +305,7 @@ export class SaveService{
    if(LR_SERIAL_CHARACTER_IDS.has(m.speciesId)){
     m.summonTier="LR";m.summonRarity="LR";
     for(const key of["hp","atk","def","spd"])m.ivs[key]=Math.min(94,m.ivs[key]);
+    if(m.speciesId==="myth_rion")m.attribute="nature";
    }
    m.traitId??="steady";
    m.personalityId??="bold";
@@ -369,6 +370,14 @@ export class SaveService{
    if(i.slot==="weapon"&&!i.weaponType&&/(弓|ボウ|bow)/i.test(String(i.name??"")))i.weaponType="bow";
    i.ruleOverrides??={};
    normalizeEquipmentIdentity(i,{equippedSubslot:equippedSubslotByItemId.get(i.id)??null});
+   const signatureOwner=String(i.ruleOverrides?.signatureOwnerId??i.ruleOverrides?.mythicOwner??i.signatureOwnerId??"");
+   if(signatureOwner){
+    i.ruleOverrides.signatureOwnerId=signatureOwner;
+    i.ruleOverrides.signature=true;
+    const endgameOwner=ENDGAME_BOSSES[signatureOwner],ownerName=({myth_enami:"えなみ",myth_rion:"りおん",myth_yori:"より",myth_hide:"ひで"})[signatureOwner]??endgameOwner?.name??SPECIES[signatureOwner]?.name??i.ruleOverrides.signatureOwnerName??"専用装備";
+    i.series=endgameOwner?.seriesId??`signature-${signatureOwner}`;
+    i.seriesName=endgameOwner?.seriesName??`${ownerName}専用`;
+   }
    normalizeWeaponMastery(i);
    normalizeEquipmentAffixLocks(i);
   });

@@ -1,10 +1,10 @@
-import{SPECIES}from"../data/species.js?v=2.10.0-build159";
-import{PERSONALITIES}from"../data/personalities.js?v=2.10.0-build159";
-import{MONSTER_COLORS}from"../data/colors.js?v=2.10.0-build159";
-import{normalizedResistances}from"../data/attributes.js?v=2.10.0-build159";
-import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.10.0-build159";
-import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.10.0-build159";
-import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.10.0-build159";
+import{SPECIES}from"../data/species.js?v=2.10.0-build160";
+import{PERSONALITIES}from"../data/personalities.js?v=2.10.0-build160";
+import{MONSTER_COLORS}from"../data/colors.js?v=2.10.0-build160";
+import{normalizedResistances}from"../data/attributes.js?v=2.10.0-build160";
+import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.10.0-build160";
+import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.10.0-build160";
+import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.10.0-build160";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -188,6 +188,20 @@ export function affectionBonuses(value){
   return b;
 }
 
+export function levelGrowthMultiplier(level,key,growth=1,raceGrowth=1){
+  const safeLevel=Math.max(1,Number(level)||1),rawProgress=safeLevel-1,rate=key==="spd"?.045:.072;
+  // Lv.1～500は成長をはっきり実感できる。以降は緩やかに逓減させ、
+  // Lv.9000台でも基礎値が無制限に暴走しない曲線にする。
+  const effectiveProgress=Math.min(rawProgress,500)
+   +Math.min(Math.max(0,rawProgress-500),1500)*.55
+   +Math.max(0,rawProgress-2000)*.22;
+  // 50Lvごとの小節目、100Lvごとの追加節目。SPDは影響を半分に抑える。
+  const fiftySteps=Math.floor(rawProgress/50),hundredSteps=Math.floor(rawProgress/100);
+  const milestoneBase=fiftySteps*.0015+hundredSteps*.0015;
+  const milestone=Math.min(key==="spd"?.12:.30,milestoneBase*(key==="spd"?.5:1));
+  return(1+effectiveProgress*rate*(Number(growth)||1)*(Number(raceGrowth)||1)*(1+milestone));
+}
+
 export function calculatedStats(monster){
   const species=SPECIES[monster.speciesId];
   const personality=PERSONALITIES[monster.personalityId]??PERSONALITIES.bold??Object.values(PERSONALITIES)[0];
@@ -198,7 +212,7 @@ export function calculatedStats(monster){
   const talentMultiplier=1+(talent-1)*.08;
   const growth=species.growth??{};
   const raceGrowth=RACE_GROWTH_RATE[species.race]??{};
-  const levelGrowthFor=key=>1+(level-1)*.055*(growth[key]??1)*(raceGrowth[key]??1);
+  const levelGrowthFor=key=>levelGrowthMultiplier(level,key,growth[key]??1,raceGrowth[key]??1);
   const limitGrowth=limitBreakGrowth(monster.speciesId);
   const affection=affectionBonuses(monster.affection??monster.bond??0);
 

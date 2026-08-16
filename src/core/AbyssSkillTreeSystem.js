@@ -1,4 +1,4 @@
-import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=2.10.0-build159";
+import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=2.10.0-build160";
 
 export const ABYSS_SKILL_TREE_VERSION=6;
 
@@ -32,7 +32,7 @@ const FOUNDATION_LANES=Object.freeze({
  "exploration-instinct":2,"exploration-relic-sense":1,"exploration-elite-trail":3,"exploration-abyss-luck":1,"exploration-key-echo":3,"exploration-endless-path":2
 });
 
-// build159: the tree is a long-term progression system, but its previous
+// build160: the tree is a long-term progression system, but its previous
 // prices became a wall long before the interesting branch choices appeared.
 // Keep every effect/prerequisite intact and reduce every node to roughly 25%.
 function discountedTreePrice(original){
@@ -126,7 +126,7 @@ const FOUNDATION_SKILL_NODES=Object.freeze([
   tier:2,
   icon:"🦷",
   name:"魔王の牙",
-  description:"味方全体のATK +3%",
+  description:"味方全体の物理・魔法ATK +3%",
   cost:4000,
   requires:["combat-abyss-core"],
   effect:{key:"partyAtkRate",value:.03}
@@ -345,7 +345,7 @@ const EFFECT_LABELS=Object.freeze({
  battleGoldRate:"戦闘で得るGOLD",
  equipmentSellGoldRate:"装備の売却GOLD",
  partyHpRate:"味方全体の最大HP",
- partyAtkRate:"味方全体のATK",
+ partyAtkRate:"味方全体の物理・魔法ATK",
  partyDefRate:"味方全体のDEF",
  partySpdRate:"味方全体のSPD",
  partyDamageRate:"味方全体の与ダメージ",
@@ -369,6 +369,20 @@ function expansionDescription(effect){
  return`${EFFECT_LABELS[effect.key]??effect.key} ${effect.value<0?"−":"+"}${percent}%`;
 }
 
+export function abyssExpansionRewardScale(stageIndex){
+ const index=Math.max(0,Math.floor(Number(stageIndex)||0));
+ if(index>=30)return 6;
+ if(index>=24)return 3.5;
+ if(index>=16)return 2.25;
+ if(index>=8)return 1.5;
+ return 1;
+}
+
+function scaledExpansionEffect(effect,stageIndex){
+ if(!effect||effect.key==="equipmentRarityBonus")return effect;
+ return{...effect,value:Number(((Number(effect.value)||0)*abyssExpansionRewardScale(stageIndex)).toFixed(4))};
+}
+
 function expansionNodesForCategory(category){
  const branches=EXPANSION_BRANCHES[category];
  return EXPANSION_STAGES.flatMap((stage,stageIndex)=>branches.map((branch,branchIndex)=>{
@@ -386,7 +400,7 @@ function expansionNodesForCategory(category){
      :[previousIds[1],previousIds[2]];
    requiresAnyCount=1;pathType="choice";
   }else requires=[previousIds[branchIndex]];
-  const effect=branch.effect(stageIndex);
+  const effect=scaledExpansionEffect(branch.effect(stageIndex),stageIndex);
   return{
    id,
    category,

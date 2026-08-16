@@ -1,5 +1,5 @@
-import{EQUIPMENT_BASES,equipmentSeriesForItem,inferredEquipmentSubslot,normalizeEquipmentIdentity}from"../data/equipment.js?v=2.10.0-build159";
-import{rollEquipmentAffixes,equipmentAffixPower}from"../data/equipmentAffixes.js?v=2.10.0-build159";
+import{EQUIPMENT_BASES,equipmentSeriesForItem,inferredEquipmentSubslot,normalizeEquipmentIdentity}from"../data/equipment.js?v=2.10.0-build160";
+import{rollEquipmentAffixes,equipmentAffixPower}from"../data/equipmentAffixes.js?v=2.10.0-build160";
 
 function uid(){return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`}
 export function createEquipment(slot,options={}){
@@ -33,7 +33,24 @@ export function rollRarity(){
 }
 export function equipmentStatMultiplier(item){
  const level=Math.max(1,Number(item.level??1));
- return(1+(item.plus??0)*.08)*(1+(level-1)*.025);
+ const plus=Math.max(0,Number(item.plus)||0),levelProgress=level-1;
+ // 装備育成の価値は残しつつ、Lv/＋値だけを際限なく積むことが
+ // キャラクターLv・シリーズ・厳選を食い尽くさないよう段階的に逓減する。
+ const plusGrowth=Math.min(plus,30)*.08
+  +Math.min(Math.max(0,plus-30),70)*.04
+  +Math.max(0,plus-100)*.012;
+ const levelGrowth=Math.min(levelProgress,250)*.025
+  +Math.min(Math.max(0,levelProgress-250),750)*.012
+  +Math.max(0,levelProgress-1000)*.004;
+ return(1+plusGrowth)*(1+levelGrowth);
+}
+
+// ドロップ装備のLvは性能Lvであり、その半分を装備者Lvの目安にする。
+// 既存装備はロード時に外さず、新規の付け替え時だけ LoadoutSystem が使う。
+export function equipmentRequiredMonsterLevel(item){
+ const level=Math.max(1,Math.floor(Number(item?.level)||1));
+ if(item?.ruleOverrides?.signature||item?.endgameBossId||item?.isEndgameEquipment)return 1;
+ return Math.max(1,Math.ceil(level*.5));
 }
 export function equipmentPower(item){
  return Object.values(item.stats).reduce((a,b)=>a+b,0)*equipmentStatMultiplier(item)+(item.plus??0)*3+(item.level??1)*2+equipmentAffixPower(item);

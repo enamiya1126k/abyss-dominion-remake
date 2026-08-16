@@ -1,5 +1,6 @@
-import{SLOT_UNLOCK_LEVEL,compatibleSubslots,EQUIPMENT_SLOT_ORDER}from"../data/equipment.js?v=2.10.0-build159";
-import{signatureEquipmentOwnerId,signatureEquipmentMatchesMonster}from"../core/SignatureWeaponSystem.js?v=2.10.0-build159";
+import{SLOT_UNLOCK_LEVEL,compatibleSubslots,EQUIPMENT_SLOT_ORDER}from"../data/equipment.js?v=2.10.0-build160";
+import{signatureEquipmentOwnerId,signatureEquipmentMatchesMonster}from"../core/SignatureWeaponSystem.js?v=2.10.0-build160";
+import{equipmentRequiredMonsterLevel}from"../models/Equipment.js?v=2.10.0-build160";
 
 export{EQUIPMENT_SLOT_ORDER};
 
@@ -19,9 +20,10 @@ function migratedLoadout(monster){
  };
 }
 
-export function canEquipInSubslot(item,monster,subslot){
+export function canEquipInSubslot(item,monster,subslot,{preserveExisting=false}={}){
  if(!item||!monster||!EQUIPMENT_SLOT_ORDER.includes(subslot))return false;
  if((Number(monster.level)||1)<(SLOT_UNLOCK_LEVEL[subslot]??1))return false;
+ if(!preserveExisting&&(Number(monster.level)||1)<equipmentRequiredMonsterLevel(item))return false;
  if(signatureEquipmentOwnerId(item)&&!signatureEquipmentMatchesMonster(item,monster))return false;
  return compatibleSubslots(item).includes(subslot);
 }
@@ -48,7 +50,7 @@ export function normalizeEquipmentLoadouts(state,{partyOnly=true}={}){
    const item=byId.get(id);
    if(!item){repairs.missing++;continue}
    if(globallyEquipped.has(id)){repairs.duplicate++;continue}
-   if(!canEquipInSubslot(item,monster,subslot)){
+   if(!canEquipInSubslot(item,monster,subslot,{preserveExisting:true})){
     if((Number(monster.level)||1)<(SLOT_UNLOCK_LEVEL[subslot]??1))repairs.locked++;
     else repairs.incompatible++;
     continue;
@@ -71,6 +73,7 @@ export function assignEquipmentToSubslot(state,itemId,monsterId,subslot){
  const monster=state.monsters?.find(entry=>entry.id===monsterId);
  if(!item||!monster)return{ok:false,reason:"missing",message:"装備またはモンスターが見つかりません。"};
  if(!Array.isArray(state.party)||!state.party.includes(monsterId))return{ok:false,reason:"reserve",message:"控えモンスターには装備できません。"};
+ if((Number(monster.level)||1)<equipmentRequiredMonsterLevel(item))return{ok:false,reason:"level",message:`この装備にはモンスターLv.${equipmentRequiredMonsterLevel(item)}が必要です。`};
  if(!canEquipInSubslot(item,monster,subslot))return{ok:false,reason:"incompatible",message:"この装備は選択した部位へ装備できません。"};
  const displacedItemIds=new Set();
  const affectedMonsterIds=new Set([monsterId]);

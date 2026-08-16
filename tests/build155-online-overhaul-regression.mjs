@@ -9,7 +9,7 @@ test("build155 keeps the requested attribute chart, online surfaces, chat, stamp
  const[species,home,main,screen,client,styles,roomStore,raidStore]=await Promise.all([
   read("src/data/mythicSerialSpecies.js"),read("src/ui/screens/HomeScreen.js"),read("src/main.js"),read("src/ui/screens/OnlinePartyScreen.js"),read("src/online/OnlinePartyClient.js"),read("src/Styles/v2.10.0.css"),read("online-server/src/RoomStore.js"),read("online-server/src/RaidCoordinator.js")
  ]);
- assert.match(species,/myth_rion[\s\S]*?element:"wind"/);
+ assert.match(species,/myth_rion[\s\S]*?element:"nature"/);
  assert.match(home,/HOME_ATTRIBUTE_CYCLE/);assert.match(home,/home-attribute-cycle/);assert.doesNotMatch(home,/compactAttributeChart/);
  assert.match(main,/applyBossHotSpringRecovery/);assert.match(main,/now-last<200/);assert.match(main,/hpMax\*\.2/);assert.match(main,/mpMax\*\.2/);assert.match(main,/defeatedBossPosition/);
  assert.match(screen,/online-solo-resource-hud/);assert.match(screen,/data-online-expedition-auto/);assert.match(screen,/data-online-room-code/);assert.match(screen,/data-online-trade-amount/);assert.match(screen,/normal-battle-layout/);

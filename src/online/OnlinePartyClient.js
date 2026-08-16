@@ -1,7 +1,7 @@
-import{formatCombatPower}from"../core/CombatPower.js?v=2.10.0-build159";
-import{magicCircleById}from"../core/MagicCircleSystem.js?v=2.10.0-build159";
-import{dungeonThemeForFloor}from"../data/dungeonThemes.js?v=2.10.0-build159";
-import{buildOnlinePartyProfile,ONLINE_STORAGE_KEYS,onlineAvatarVisual,onlineEnemyVisual,onlineMagicCircleArt}from"../ui/screens/OnlinePartyScreen.js?v=2.10.0-build159";
+import{formatCombatPower}from"../core/CombatPower.js?v=2.10.0-build160";
+import{magicCircleById}from"../core/MagicCircleSystem.js?v=2.10.0-build160";
+import{dungeonThemeForFloor}from"../data/dungeonThemes.js?v=2.10.0-build160";
+import{buildOnlinePartyProfile,ONLINE_STORAGE_KEYS,onlineAvatarVisual,onlineEnemyVisual,onlineMagicCircleArt}from"../ui/screens/OnlinePartyScreen.js?v=2.10.0-build160";
 
 const CHAT_LABELS=Object.freeze({hello:"よろしく！",ready:"準備OK！",follow:"ついてきて！",thanks:"ありがとう！"});
 const EMOTE_LABELS=Object.freeze({wave:"👋",cheer:"✨",heart:"❤️",surprise:"‼️",like:"👍",laugh:"😂",cry:"😭",clap:"👏",alert:"❗",question:"❓",sparkle:"✨"});

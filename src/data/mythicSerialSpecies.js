@@ -16,7 +16,7 @@ function mythic({id,name,element,role,maxMp,stats,skills}){
 export const MYTHIC_SERIAL_SPECIES=Object.freeze({
   myth_enami:mythic({
     id:"myth_enami",name:"えなみ",element:"fire",role:"support",maxMp:155,
-    stats:{hp:340,atk:195,def:190,spd:108,crit:22,evasion:20},
+    stats:{hp:380,atk:195,def:215,spd:108,crit:22,evasion:23},
     skills:[
       skill("enami_world_create","万象創作",{mp:10,power:1.75,allEnemies:true,target:"敵全体",damageClass:"magic",description:"海・星・山・空を同時に創り出して敵陣を塗り替える。"}),
       skill("enami_spicy_casino","スパイシーカジノ777",{level:20,mp:14,type:"multiAttack",power:.92,hits:3,description:"運命の数字を回し、熱い三連撃を叩き込む。"}),
@@ -25,8 +25,8 @@ export const MYTHIC_SERIAL_SPECIES=Object.freeze({
     ]
   }),
   myth_rion:mythic({
-    id:"myth_rion",name:"りおん",element:"wind",role:"support",maxMp:165,
-    stats:{hp:370,atk:180,def:198,spd:122,crit:18,evasion:20},
+    id:"myth_rion",name:"りおん",element:"nature",role:"support",maxMp:165,
+    stats:{hp:405,atk:180,def:220,spd:122,crit:18,evasion:24},
     skills:[
       skill("rion_talk","万能話術",{mp:7,power:1.32,damageClass:"magic",effects:[{kind:"defDown",value:.28,turns:3,enemy:true}],description:"軽妙な話術で相手の守りを崩す。"}),
       skill("rion_arrange","主人公の段取り",{level:20,mp:12,type:"buff",power:0,target:"味方全体",effects:[{kind:"atkUp",value:.3,turns:3,allies:true},{kind:"defUp",value:.3,turns:3,allies:true},{kind:"spdUp",value:.28,turns:3,allies:true}],description:"全員が最も動きやすい状況を即座に整える。"}),
@@ -40,7 +40,7 @@ export const MYTHIC_SERIAL_SPECIES=Object.freeze({
     skills:[
       skill("yori_rifle","蒼晶銃剣",{mp:6,power:1.9,defenseIgnore:.2,description:"蒼い銃剣で狙撃と刺突を同時に行う。"}),
       skill("yori_beautiful","ビューティフォー！",{level:20,mp:11,type:"buff",power:0,target:"自分",effects:[{kind:"atkUp",value:.55,turns:3},{kind:"defUp",value:.25,turns:3}],description:"完璧な立ち回りで自身を大幅強化する。"}),
-      skill("yori_tetrapod","因縁のテトラポット",{level:45,mp:19,power:2.25,allEnemies:true,target:"敵全体",description:"因縁の巨大テトラポットを戦場へ叩き落とす。"}),
+      skill("yori_tetrapod","因縁のテトラポット",{level:45,mp:19,power:2.25,allEnemies:true,target:"敵全体",noLifeSteal:true,description:"因縁の巨大テトラポットを戦場へ叩き落とす。装備の吸収効果は発動しない。"}),
       skill("yori_difficult","ディフィカルト・暴走",{level:80,mp:32,type:"multiAttack",power:1.28,hits:5,defenseIgnore:.35,cooldown:4,description:"蒼黒の禍々しいオーラを解放した五連殲滅攻撃。"})
     ]
   }),

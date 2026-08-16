@@ -1,10 +1,10 @@
-import{createMonster,calculatedStats}from"../models/Monster.js?v=2.10.0-build159";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.10.0-build159";
-import{SPECIES}from"../data/species.js?v=2.10.0-build159";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.10.0-build159";
-import{MONSTER_STORAGE_CAP}from"./config.js?v=2.10.0-build159";
-import{createEquipment}from"../models/Equipment.js?v=2.10.0-build159";
-import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.10.0-build159";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=2.10.0-build160";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.10.0-build160";
+import{SPECIES}from"../data/species.js?v=2.10.0-build160";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.10.0-build160";
+import{MONSTER_STORAGE_CAP}from"./config.js?v=2.10.0-build160";
+import{createEquipment}from"../models/Equipment.js?v=2.10.0-build160";
+import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.10.0-build160";
 
 const DEVICE_LEDGER_KEY="abyss-dominion-serial-ledger-v1";
 
@@ -196,7 +196,7 @@ function createChappy(state){
 }
 
 function createMythicPackEquipment(pack,index){
- const slots=["weapon","weapon","armor","armor","accessory","accessory"],subslots=["weaponRight","weaponLeft","armorBody","armorSupport","accessoryNeck","accessoryFinger"],packSeries={enami:"flame",rion:"traveler",yori:"deepSea",hide:"void"}[pack.owner]??"royal",slot=slots[index],item=createEquipment(slot,{rarity:"神話",series:packSeries,handedness:slot==="weapon"?"either":null,ruleOverrides:{unsellable:true,serialOnly:true,mythicOwner:pack.speciesId,subslot:subslots[index]}});
+ const slots=["weapon","weapon","armor","armor","accessory","accessory"],subslots=["weaponRight","weaponLeft","armorBody","armorSupport","accessoryNeck","accessoryFinger"],packSeries=`signature-${pack.speciesId}`,slot=slots[index],item=createEquipment(slot,{rarity:"神話",series:packSeries,handedness:slot==="weapon"?"either":null,ruleOverrides:{unsellable:true,serialOnly:true,mythicOwner:pack.speciesId,signatureOwnerId:pack.speciesId,signaturePieceIndex:index,signature:true,subslot:subslots[index]}});
  item.name=pack.names[index];item.visualAsset=`./assets/ui/equipment/mythic/${pack.owner}-${["weapon-1","weapon-2","armor-1","armor-2","accessory-1","accessory-2"][index]}.png`;item.favorite=true;item.locked=true;item.rewardTier="神話";item.affixes=[];
  const stats=[{atk:280,matk:210,spd:28,crit:14},{atk:220,matk:270,spd:32,crit:10},{hp:720,def:245,mdef:195},{hp:520,def:190,mdef:180,spd:20},{hp:260,atk:90,matk:90,spd:30},{def:80,mdef:80,crit:16,evasion:14}];
  item.stats={...stats[index]};return item

@@ -1,5 +1,5 @@
-import{calculatedStats}from"../models/Monster.js?v=2.10.0-build159";
-import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=2.10.0-build159";
+import{calculatedStats}from"../models/Monster.js?v=2.10.0-build160";
+import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=2.10.0-build160";
 
 /**
  * 表示用の戦力値。
@@ -34,6 +34,41 @@ export function partyCombatPower(state){
     .map(id=>monsters.find(monster=>monster.id===id))
     .filter(Boolean)
     .reduce((total,monster)=>total+monsterCombatPower(monster),0);
+}
+
+function withoutEquipment(monster,{level=monster?.level??1}={}){
+ return{
+  ...monster,level,
+  _equipmentStats:{},_equipmentAffixes:{},_seriesCounts:{},_seriesEffects:{},
+  _seriesMasteryBonus:{},_signatureBonuses:{},
+  _abyssSkillEffects:monster?._abyssSkillEffects??{}
+ };
+}
+
+/** 表示用の戦力を、個体基礎・Lv成長・装備関連へ分ける。 */
+export function monsterCombatPowerBreakdown(monster){
+ if(!monster)return{base:0,level:0,equipment:0,total:0};
+ const total=monsterCombatPower(monster);
+ const naked=monsterCombatPower(withoutEquipment(monster));
+ const base=monsterCombatPower(withoutEquipment(monster,{level:1}));
+ return{
+  base,
+  level:Math.max(0,naked-base),
+  equipment:Math.max(0,total-naked),
+  total
+ };
+}
+
+export function partyCombatPowerBreakdown(state){
+ const monsters=state?.monsters??[];
+ const members=(state?.party??[]).map(id=>monsters.find(monster=>monster.id===id)).filter(Boolean).map(monster=>({monster,...monsterCombatPowerBreakdown(monster)}));
+ return{
+  members,
+  base:members.reduce((sum,row)=>sum+row.base,0),
+  level:members.reduce((sum,row)=>sum+row.level,0),
+  equipment:members.reduce((sum,row)=>sum+row.equipment,0),
+  total:members.reduce((sum,row)=>sum+row.total,0)
+ };
 }
 
 export function formatCombatPower(value,{scientificAt=1_000_000_000}={}){
