@@ -25,7 +25,7 @@ export const MYTHIC_SERIAL_SPECIES=Object.freeze({
     ]
   }),
   myth_rion:mythic({
-    id:"myth_rion",name:"りおん",element:"ice",role:"support",maxMp:165,
+    id:"myth_rion",name:"りおん",element:"wind",role:"support",maxMp:165,
     stats:{hp:370,atk:180,def:198,spd:78,crit:18,evasion:20},
     skills:[
       skill("rion_talk","万能話術",{mp:7,power:1.32,damageClass:"magic",effects:[{kind:"defDown",value:.28,turns:3,enemy:true}],description:"軽妙な話術で相手の守りを崩す。"}),

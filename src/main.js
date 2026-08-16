@@ -8,8 +8,8 @@ import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAt
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.10.0";
 import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.10.0-build150";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.10.0-build145";
-import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build154";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build154";
+import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build155";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build155";
 import{buildOnlineTradeCatalog,reserveOnlineTradeAsset,releaseOnlineTradeAsset,commitOnlineTrade}from"./online/OnlineTradeSystem.js?v=2.10.0-build149";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.10.0";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.10.0";
@@ -2722,7 +2722,29 @@ function partyOverlapsExploreObject(){
   game.world.shop?`${game.world.shop.x}:${game.world.shop.y}`:"",
   game.world.boss?`${game.world.boss.x}:${game.world.boss.y}`:""
  ].filter(Boolean));
- return explorationPartyTiles().some(position=>objectKeys.has(`${position.x}:${position.y}`))
+ if(explorationPartyTiles().some(position=>objectKeys.has(`${position.x}:${position.y}`)))return true;
+ const spring=game.world.hotSpring;
+ return Boolean(spring?.active&&explorationPartyTiles().some(position=>Math.hypot(position.x-spring.x,position.y-spring.y)<=Number(spring.radius??1.75)))
+}
+function bossHotSpringContainsPlayer(){
+ const spring=game?.world?.hotSpring;if(!spring?.active||!game?.player)return false;
+ return Math.hypot((game.player.rx??game.player.x)-spring.x,(game.player.ry??game.player.y)-spring.y)<=Number(spring.radius??1.75)
+}
+function applyBossHotSpringRecovery(now=performance.now()){
+ const spring=game?.world?.hotSpring;if(!spring?.active||!bossHotSpringContainsPlayer())return false;
+ const last=Number(spring.lastRecoveryAt)||0;if(last&&now-last<200)return false;
+ spring.lastRecoveryAt=now;let hpRecovered=0,mpRecovered=0;
+ explorationPartyMembers().forEach(monster=>{
+  if((Number(monster.currentHp)||0)<=0)return;
+  const hpMax=calculatedStats(monster).hp,mpMax=maxMp(monster),beforeHp=Math.max(0,Number(monster.currentHp)||0),beforeMp=Math.max(0,Number(monster.currentMp)||0);
+  monster.currentHp=Math.min(hpMax,beforeHp+Math.max(1,Math.round(hpMax*.2)));
+  monster.currentMp=Math.min(mpMax,beforeMp+Math.max(1,Math.round(mpMax*.2)));
+  hpRecovered+=monster.currentHp-beforeHp;mpRecovered+=monster.currentMp-beforeMp;
+ });
+ if(!hpRecovered&&!mpRecovered)return false;
+ refreshExplorePartyHud();queueExpeditionCheckpoint();
+ if(!spring.lastNoticeAt||now-spring.lastNoticeAt>=800){spring.lastNoticeAt=now;showExploreNotice(`温泉の加護　HP +${hpRecovered.toLocaleString()} / MP +${mpRecovered.toLocaleString()}`,"heal")}
+ return true
 }
 function interactExploreDecoration(decoration){
  if(!decoration||decoration.used||decoration.destroyed||!EXPLORE_INTERACTIVE_DECORATIONS.has(decoration.type))return false;
@@ -2784,6 +2806,7 @@ function applyWalkingStratumHazard(){
 }
 function update(dt){
  if(game.world.encountering)return;
+ applyBossHotSpringRecovery();
  applyExploreAutoPath();
  if(game.player.move(dt,7.5)){
   game.world.steps++;
@@ -3102,6 +3125,20 @@ function drawExploreDecoration(decoration,theme){
   if(decoration.destroyed){const p=game.camera.world(decoration.x*TILE,decoration.y*TILE),size=TILE*game.camera.z;game.ctx.save();game.ctx.strokeStyle="#c39a6255";game.ctx.lineWidth=Math.max(1,game.camera.z*.8);game.ctx.beginPath();game.ctx.moveTo(p.x+size*.27,p.y+size*.67);game.ctx.lineTo(p.x+size*.73,p.y+size*.43);game.ctx.moveTo(p.x+size*.3,p.y+size*.43);game.ctx.lineTo(p.x+size*.7,p.y+size*.68);game.ctx.stroke();game.ctx.restore()}
  }
 }
+function drawBossHotSpring(spring,theme){
+ if(!spring?.active)return;
+ const pulse=.92+Math.sin(performance.now()/360)*.08,p=game.camera.world(spring.x*TILE,spring.y*TILE),size=TILE*game.camera.z;
+ drawExploreGlow(spring,"#87e8ff",6.8,.2*pulse);
+ drawExploreAtlas(spring,EXPLORE_ATLAS.water,{scale:Number(spring.scale??5.9),alpha:.96,shadowColor:"#8beaff",shadowBlur:12});
+ const c=game.ctx;c.save();c.globalCompositeOperation="screen";
+ const water=c.createRadialGradient(p.x+size*.5,p.y+size*.53,size*.15,p.x+size*.5,p.y+size*.53,size*2.05);
+ water.addColorStop(0,"rgba(190,250,255,.82)");water.addColorStop(.3,"rgba(45,185,222,.55)");water.addColorStop(.72,"rgba(17,91,128,.32)");water.addColorStop(1,"rgba(0,24,40,0)");
+ c.fillStyle=water;c.beginPath();c.ellipse(p.x+size*.5,p.y+size*.54,size*1.95,size*1.12,0,0,Math.PI*2);c.fill();
+ c.strokeStyle="rgba(204,252,255,.62)";c.lineWidth=Math.max(1,game.camera.z*.85);
+ for(let ring=0;ring<3;ring++){const wave=(performance.now()/900+ring*.29)%1;c.globalAlpha=.65*(1-wave);c.beginPath();c.ellipse(p.x+size*.5,p.y+size*.54,size*(.45+wave*1.45),size*(.2+wave*.72),0,0,Math.PI*2);c.stroke()}
+ for(let steam=0;steam<5;steam++){const phase=(performance.now()/1700+steam*.19)%1,x=p.x+size*(-1.15+steam*.58),y=p.y+size*(.05-phase*.95);c.globalAlpha=.32*(1-phase);c.beginPath();c.arc(x+Math.sin(phase*Math.PI*2+steam)*size*.12,y,size*(.13+.12*phase),0,Math.PI*2);c.fillStyle="#d9fbff";c.fill()}
+ c.restore()
+}
 function drawExploreExit(position,image,theme){
  const pulse=.92+Math.sin(performance.now()/240)*.08;
  drawExploreGlow(position,theme.light,3.08,.1*pulse);
@@ -3176,6 +3213,7 @@ function draw(){
  drawExploreWallEdges(w,theme);
  const decorations=ensureExploreDecorations(w);
  decorations.filter(item=>item.type==="water"||item.type==="entrance").sort((a,b)=>a.y-b.y).forEach(item=>drawExploreDecoration(item,theme));
+ drawBossHotSpring(w.hotSpring,theme);
  drawExploreSceneObjects(w,floor,theme,stairsTexture);
  drawExploreAtmosphere(theme);
  // Only broad, feathered light is repainted above the fog. The actual props
@@ -3905,7 +3943,7 @@ async function command(type,skillId=null){
   battle.actionCommitted=true;triggerAlliance=true;
   if(Math.random()<.06)await floatText("回避",e.id,"miss");
   else{
-   const critical=Math.random()<Math.min(.95,affixCriticalChance(s,Math.min(.35,.08+(s.spd??0)*.005))+magicCircleCriticalBonus(a,1)),weapon=save.state.equipment.find(item=>item.id===a.equipment?.weaponRight),magicWeapon=weapon?.weaponType==="staff"||(weapon?.stats?.matk??0)>(weapon?.stats?.atk??0),formationMultiplier=1,attackStat=magicWeapon?(s.matk??s.atk):s.atk,defenseStat=magicWeapon?(e.mdef??e.def):e.def;
+   const critical=Math.random()<Math.min(.95,affixCriticalChance(s,Math.min(.35,.08+(s.spd??0)*.005))+magicCircleCriticalBonus(a,1)),weapon=save.state.equipment.find(item=>item.id===a.equipment?.weaponRight),magicWeapon=weapon?.weaponType==="staff"||(weapon?.stats?.matk??0)>(weapon?.stats?.atk??0),formationMultiplier=1,attackStat=(magicWeapon?(s.matk??s.atk):s.atk)*allyAttackFactor(a.id),defenseStat=magicWeapon?(e.mdef??e.def):e.def;
    const base=Math.max(1,Math.floor(attackStat*(.9+Math.random()*.2)-defenseStat*.4));
    const attackElement=a.attribute??SPECIES[a.speciesId]?.element??"neutral",targetElement=SPECIES[e.speciesId]?.element??"neutral",critMult=1.7+affixValue(a,"critDamage",150)/100,damageStats={...s,_currentHpRatio:a.currentHp/Math.max(1,s.hp)},raw=(critical?Math.floor(base*critMult):base)*formationMultiplier*affixOutgoingDamageMultiplier(damageStats,e,attackElement)*affixExecutionMultiplier(a,e),d=Math.max(1,Math.floor(raw*attributeDamageMultiplier(attackElement,targetElement)*abyssBattleMultiplier(a,"partyDamageRate")*enemyDamageMultiplier(e)*(e.hiddenDamageTaken??1)*endgameIncomingDamageMultiplier(e,attackElement)*weaponMasteryDamageMultiplier(save.state,a,e)*magicCircleDamageMultiplier(a))),applied=applyEnemyDamage(battle,e,d,{sourceId:a.id});recordBattleDamage(a,applied.damage);registerWeaponFinisher(a,e,applied.beforeHp);consumeMagicCircleActionCost(a);const steal=outgoingLifeSteal(a);if(steal&&applied.damage){const h=Math.max(1,Math.floor(applied.damage*steal)),gained=recoverBattleHp(a,h,s.hp);recordBattleHealing(a,gained)}
    await animateHit(e.id,critical);if(critical&&applied.damage)burstParticles(e.id,"critical",16);await floatText(applied.damage?`${critical?"会心 ":""}-${applied.damage}`:"完全ガード",e.id,applied.damage?(critical?"critical":"damage"):"guard");await trySeriesChainAttack(a,e,applied.damage);
@@ -4170,7 +4208,11 @@ function win(caught,m){
  const gearedDropChance=abyssExplorationChance(save.state,.18*(1+dropBonus),"equipmentDropRate",{additive:true,max:.85}),genericDropChance=abyssExplorationChance(save.state,.12*(1+dropBonus),"equipmentDropRate",{additive:true,max:.75});
  if(geared&&Math.random()<gearedDropChance){drop={...geared.gear,id:crypto.randomUUID?.()??`${Date.now()}-${Math.random()}`,equippedBy:null,createdAt:new Date().toISOString()};dropReceipt=equipmentReceipt(drop)}else if(Math.random()<genericDropChance){const rarityRoll=Math.random(),rarity=rarityRoll<Math.min(.35,.04+rareBonus*.12+rarityLuck*.01)?"LR":rarityRoll<Math.min(.70,.18+rareBonus*.22+rarityLuck*.04)?"SSR":rarityRoll<.60?"SR":undefined;drop=createEquipment(["weapon","armor","accessory"][Math.floor(Math.random()*3)],rarity?{rarity}:undefined);dropReceipt=equipmentReceipt(drop)}
 
- if(boss&&!memoryBattle&&snapshot?.world)snapshot.world.boss=null;
+ if(boss&&!memoryBattle&&snapshot?.world){
+  const defeatedBossPosition=snapshot.world.boss;
+  if(defeatedBossPosition)snapshot.world.hotSpring={x:defeatedBossPosition.x,y:defeatedBossPosition.y,active:true,scale:5.9,radius:1.75,lastRecoveryAt:0,lastNoticeAt:0};
+  snapshot.world.boss=null
+ }
  syncPersistentAilments(battle);persistExpeditionSnapshot(snapshot,{saveNow:false});clearPartySynergy();clearBattleCheckpoint();
  activeEnemy=null;
  document.querySelector(".battle-screen")?.remove();

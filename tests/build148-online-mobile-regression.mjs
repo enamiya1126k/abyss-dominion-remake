@@ -33,7 +33,7 @@ for (const feature of [
   ".online-battle-member.ally-target", ".online-stair-status{position:absolute",
 ]) assert.ok(css.includes(feature), `${feature} is present`);
 assert.match(main, /source\.kind==="floorClear"&&leaderFloorUnlock>0/);
-assert.match(index, /ASSET_BUILD = "build(?:14[8-9]|15[0-4])"/);
+assert.match(index, /ASSET_BUILD = "build(?:14[8-9]|15[0-5])"/);
 
 const floorOne = floorEnemyStats({ floor: 1, template: { id: "slime" }, random: () => .1 });
 assert.equal(floorOne.level, 1);

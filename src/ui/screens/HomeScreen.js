@@ -9,7 +9,21 @@ import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.10.0";
 import{monsterVisual}from"../MonsterVisual.js?v=2.10.0";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0";
 import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.10.0";
-import{compactAttributeChart}from"../../data/attributes.js?v=2.10.0-build150";
+
+const HOME_ATTRIBUTE_CYCLE=Object.freeze(["fire","ice","wind","earth","lightning","water"]);
+function homeAttributeChart(){
+  const node=(id,className="")=>attributeVisual(id,{className:`home-attribute-node ${className}`.trim(),label:`${id}属性`});
+  return`<span class="home-attribute-map" aria-hidden="true">
+    <span class="home-attribute-cycle">
+      ${HOME_ATTRIBUTE_CYCLE.map((id,index)=>node(id,`node-${index+1}`)).join("")}
+      ${HOME_ATTRIBUTE_CYCLE.map((_,index)=>`<i class="home-attribute-arrow arrow-${index+1}">➜</i>`).join("")}
+      ${node("neutral","node-neutral")}
+    </span>
+    <span class="home-attribute-pair">
+      ${node("light","node-light")}<i>⇅</i>${node("dark","node-dark")}
+    </span>
+  </span>`;
+}
 
 export function homeCriticalVitals(monster){
   if(!monster)return{critical:false,hpRate:1,mpRate:1};
@@ -155,7 +169,7 @@ export function HomeScreen(state){
       </div>
 
       <button type="button" class="home-attribute-orbit" data-home-attribute-help="neutral" aria-label="属性相性を確認">
-        <small>属性相関</small><b>${compactAttributeChart()}</b><em>タップで詳細</em>
+        <small>属性相関</small>${homeAttributeChart()}<em>矢印方向が有利</em>
       </button>
 
       <button type="button" id="openCombatPowerHistory" class="home-record-card">
