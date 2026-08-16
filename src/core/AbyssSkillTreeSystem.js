@@ -171,7 +171,7 @@ const FOUNDATION_SKILL_NODES=Object.freeze([
   tier:1,
   icon:"👁️",
   name:"探索本能",
-  description:"宝箱の出現率 +5%",
+  description:"通常探索で、宝箱マスが生成される抽選率を5%加算。戦闘報酬やボス報酬には影響しない。",
   cost:1000,
   requires:[],
   effect:{key:"chestSpawnRate",value:.05}
@@ -182,7 +182,7 @@ const FOUNDATION_SKILL_NODES=Object.freeze([
   tier:2,
   icon:"📡",
   name:"遺物感知",
-  description:"装備ドロップ率 +5%",
+  description:"通常敵・エリート敵・宝箱から装備品を入手する抽選率を5%加算。確定報酬には影響しない。",
   cost:4000,
   requires:["exploration-instinct"],
   effect:{key:"equipmentDropRate",value:.05}
@@ -193,7 +193,7 @@ const FOUNDATION_SKILL_NODES=Object.freeze([
   tier:2,
   icon:"🐾",
   name:"強敵追跡",
-  description:"エリート敵の報酬量 +10%",
+  description:"エリート敵＝金色の強敵マーク付き個体。討伐時のGOLD・装備・素材・欠片の獲得量と抽選回数を10%増加。通常敵・ボス・捕獲率には無効。",
   cost:4000,
   requires:["exploration-instinct"],
   effect:{key:"eliteRewardRate",value:.10}
@@ -204,7 +204,7 @@ const FOUNDATION_SKILL_NODES=Object.freeze([
   tier:3,
   icon:"✨",
   name:"深淵の幸運",
-  description:"装備レアリティ抽選を強化",
+  description:"探索で装備品が出た際、レアリティ抽選を1段階ぶん有利に補正。装備の入手率や強化レベル自体は増えない。",
   cost:15000,
   requires:["exploration-relic-sense"],
   effect:{key:"equipmentRarityBonus",value:1}
@@ -215,7 +215,7 @@ const FOUNDATION_SKILL_NODES=Object.freeze([
   tier:3,
   icon:"🔑",
   name:"鍵の残響",
-  description:"深淵の鍵の獲得率 +10%",
+  description:"通常探索・エリート敵・ボス報酬で行う「深淵の鍵」抽選率を10%加算。確定配布やショップ購入には影響しない。",
   cost:15000,
   requires:["exploration-elite-trail"],
   effect:{key:"abyssKeyDropRate",value:.10}
@@ -226,7 +226,7 @@ const FOUNDATION_SKILL_NODES=Object.freeze([
   tier:4,
   icon:"🌌",
   name:"無窮踏破",
-  description:"探索で得るすべての報酬 +5%",
+  description:"通常探索で得るGOLD・経験値・装備・素材・欠片の数量を5%増加。魔晶石、捕獲率、ログイン配布、試練・オンライン報酬には影響しない。",
   cost:60000,
   requires:["exploration-abyss-luck","exploration-key-echo"],
   effect:{key:"explorationRewardRate",value:.05}

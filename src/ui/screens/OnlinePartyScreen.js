@@ -115,7 +115,7 @@ export function OnlinePartyScreen(state){
    </section>
 
    <section class="online-plaza-shell online-coop-shell" data-online-plaza-shell hidden>
-    <header class="online-room-header"><div><small>PARTY ROOM</small><strong data-online-room-id>------</strong><button type="button" data-copy-room-id>コピー</button></div><nav aria-label="オンライン画面"><button type="button" class="active" data-online-room-view="plaza">広場</button><button type="button" data-online-room-view="lobby">出発準備</button><button type="button" data-online-room-view="raid">レイド</button><button type="button" data-online-room-view="trade">交換</button><button type="button" data-online-social-toggle>会話</button></nav><span data-online-member-count>1 / 4</span><button type="button" data-copy-invite>招待</button><button type="button" class="danger" data-online-leave-room>退出</button></header>
+    <header class="online-room-header"><div><small>PARTY ROOM</small><strong data-online-room-id>------</strong><button type="button" data-copy-room-id>コピー</button></div><nav aria-label="オンライン画面"><button type="button" class="active" data-online-room-view="plaza">広場</button><button type="button" data-online-room-view="lobby">出発準備</button><button type="button" data-online-room-view="raid">レイド</button><button type="button" data-online-room-view="trade">交換</button><button type="button" data-online-room-view="chat">会話<i data-online-chat-unread hidden></i></button></nav><span data-online-member-count>1 / 4</span><button type="button" data-copy-invite>招待</button><button type="button" class="danger" data-online-leave-room>退出</button></header>
     <div class="online-plaza-view" data-online-plaza-view>
      <div class="online-plaza" data-online-plaza tabindex="0" aria-label="オンライン広場。画面タップまたは方向キーで移動">
       <div class="online-plaza-sky" aria-hidden="true"></div><div class="online-plaza-river" aria-hidden="true"></div><div class="online-plaza-ground" aria-hidden="true"></div>
@@ -133,6 +133,13 @@ export function OnlinePartyScreen(state){
      </section>
      <div class="online-social-bar"><div class="online-preset-chat"><button type="button" data-online-chat="hello">よろしく！</button><button type="button" data-online-chat="ready">準備OK！</button><button type="button" data-online-chat="follow">ついてきて！</button><button type="button" data-online-chat="thanks">ありがとう！</button></div><div class="online-stamps"><button type="button" data-online-emote="wave" data-keep-emoji aria-label="手を振る">👋</button><button type="button" data-online-emote="cheer" data-keep-emoji aria-label="喜ぶ">✨</button><button type="button" data-online-emote="heart" data-keep-emoji aria-label="ハート">❤</button><button type="button" data-online-emote="surprise" data-keep-emoji aria-label="驚く">!!</button></div></div>
     </div>
+    <section class="online-chat-view" data-online-chat-view hidden>
+     <header><div><small>PARTY COMMUNICATION</small><h2>共鳴通信</h2></div><span><i></i>ルーム内だけに送信</span></header>
+     <div class="online-chat-history" data-online-chat-history role="log" aria-live="polite"><div class="online-chat-empty"><b>まだ会話はありません</b><span>1人のときも送信テストできます。仲間が入ると履歴が全員に同期されます。</span></div></div>
+     <div class="online-chat-presets" aria-label="定型文"><button type="button" data-online-chat="hello">よろしく！</button><button type="button" data-online-chat="ready">準備OK！</button><button type="button" data-online-chat="follow">ついてきて！</button><button type="button" data-online-chat="thanks">ありがとう！</button><button type="button" data-online-emote="wave" data-keep-emoji>👋</button><button type="button" data-online-emote="cheer" data-keep-emoji>✨</button><button type="button" data-online-emote="heart" data-keep-emoji>❤</button><button type="button" data-online-emote="surprise" data-keep-emoji>!!</button></div>
+     <form class="online-chat-compose" data-online-chat-form><label><span>メッセージ</span><textarea rows="2" maxlength="80" data-online-chat-input placeholder="80文字まで。個人情報は送らないでね"></textarea><small><b data-online-chat-count>0</b>/80</small></label><button type="submit" data-online-chat-send>送信</button></form>
+     <p class="online-chat-rule">連続送信は自動で制限されます。履歴はこのルームだけで共有され、退出後は端末に残りません。</p>
+    </section>
     <section class="online-raid-view" data-online-raid-view hidden>
      <div class="online-raid-lobby" data-online-raid-lobby>
       <article class="online-raid-hero">
@@ -140,15 +147,17 @@ export function OnlinePartyScreen(state){
        <div><small>WORLD RAID / CALAMITY CLASS</small><h2>終焉融骸<br>アビス＝マルガ</h2><p>十神すら捕食した、名も形も定まらぬ終焉の集合体。5ラウンドは挑戦者を観察し、6ラウンド目から破滅を解放する。</p><dl><div><dt>攻撃開始</dt><dd>ROUND 6</dd></div><div><dt>失敗報酬</dt><dd>なし</dd></div><div><dt>人数</dt><dd>1〜4人</dd></div></dl></div>
       </article>
       <div class="online-raid-rule"><b>貢献度ランキング</b><span>与ダメージ・回復・蘇生・防御・補助を集計。上位ほどGOLD／💎／EXP／融骸核片が増加します。</span></div>
+      <section class="online-raid-progress" data-online-raid-progress><header><div><small>SERVER PERSISTENT HP</small><b>累積討伐進行</b></div><em data-online-raid-attempts>未挑戦</em></header><div class="online-raid-progress-bar"><i data-online-raid-progress-meter></i></div><p><strong data-online-raid-progress-hp>HPは初回挑戦時に確定</strong><span>敗北しても与えたダメージは残り、次回は残HPから再開します。</span></p><ol data-online-raid-milestones><li data-threshold="5">5%</li><li data-threshold="10">10%</li><li data-threshold="25">25%</li><li data-threshold="50">50%</li><li data-threshold="75">75%</li></ol></section>
       <div class="online-raid-ready-grid" data-online-raid-ready-grid></div>
       <button type="button" class="online-raid-start" data-online-start-raid disabled><span class="online-button-glint"></span><small>LEADER COMMAND</small><b>終焉融骸へ挑戦</b></button>
-      <section class="online-raid-exchange"><header><div><small>RAID EXCHANGE</small><h3>融骸核片 交換所</h3></div><strong>所持 <span data-online-raid-materials>0</span></strong></header><div><button type="button" data-online-raid-exchange="character" data-cost="420"><b>融骸幼体アマルガ</b><small>限定仲間・420核片</small></button><button type="button" data-online-raid-exchange="equipment" data-cost="240"><b>終焉喰らいの大刃</b><small>限定神話装備・240核片</small></button><button type="button" data-online-raid-exchange="circle" data-cost="100"><b>死鏡の魔法陣・現物</b><small>術式未解禁でも所持可・100核片</small></button></div></section>
+      <section class="online-raid-exchange"><header><div><small>RAID EXCHANGE</small><h3>融骸核片 交換所</h3></div><strong>所持 <span data-online-raid-materials>0</span></strong></header><div><button type="button" data-online-raid-exchange="character" data-cost="420"><img src="./assets/online/raid/juvenile-amalga.png" alt=""><span><b>融骸幼体アマルガ</b><small>限定仲間・420核片</small></span></button><button type="button" data-online-raid-exchange="equipment" data-cost="240"><img src="./assets/equipment/end-devouring-greatblade.png" alt=""><span><b>終焉喰らいの大刃</b><small>限定神話装備・240核片</small></span></button><button type="button" data-online-raid-exchange="circle" data-cost="100"><img src="./assets/magic-circles/death-mirror-raid.png" alt=""><span><b>死鏡の魔法陣・現物</b><small>術式未解禁でも所持可・100核片</small></span></button></div></section>
      </div>
      <section class="online-raid-battle" data-online-raid-battle hidden>
       <header><div><small>CALAMITY RAID</small><h2 data-online-raid-name>終焉融骸・アビス＝マルガ</h2></div><strong>ROUND <b data-online-raid-round>1</b></strong><nav data-online-raid-speed><button data-online-raid-speed-value="0.5">×0.5</button><button data-online-raid-speed-value="1">×1</button><button data-online-raid-speed-value="2">×2</button></nav></header>
       <div class="online-raid-stage" data-online-raid-stage>
        <div class="online-raid-telegraph"><small data-online-raid-telegraph-stage>観察段階 1/5</small><b data-online-raid-telegraph-title>凝視</b><span data-online-raid-telegraph-message>無数の眼が挑戦者を測っている…</span><i data-online-raid-danger style="--danger:20%"></i></div>
-       <button type="button" class="online-raid-target" aria-label="レイドボス"><img src="./assets/online/raid-abyss-amalgam.png" alt=""><strong data-online-raid-hp-text>HP -- / --</strong><span class="online-raid-hp"><i data-online-raid-hp></i></span></button>
+       <button type="button" class="online-raid-target" data-online-raid-enemy="abyss-amalga" aria-label="レイドボス"><img src="./assets/online/raid-abyss-amalgam.png" alt=""><strong data-online-raid-hp-text>HP -- / --</strong><span class="online-raid-hp"><i data-online-raid-hp></i></span></button>
+       <div class="online-raid-minions" data-online-raid-minions></div>
        <div class="online-raid-impact" data-online-raid-impact hidden></div>
       </div>
       <div class="online-raid-party" data-online-raid-party></div>
@@ -199,7 +208,7 @@ export function OnlinePartyScreen(state){
   </main>
 
   <aside class="online-profile-drawer" data-online-profile-drawer aria-hidden="true"><button type="button" data-online-profile-close aria-label="閉じる">×</button><div data-online-profile-content></div></aside>
-  ${bottomNav("party")}
+  <div class="online-global-bottom-nav">${bottomNav("party")}</div>
  </section>`;
 }
 

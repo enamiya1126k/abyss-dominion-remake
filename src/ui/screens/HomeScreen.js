@@ -154,8 +154,8 @@ export function HomeScreen(state){
         <button type="button" id="openSettings" aria-label="設定">${pixelIcon("settings")}</button>
       </div>
 
-      <button type="button" class="home-attribute-mini-chart" data-home-attribute-help="neutral" aria-label="属性相性を確認">
-        <small>属性相性</small><b>${compactAttributeChart()}</b>
+      <button type="button" class="home-attribute-orbit" data-home-attribute-help="neutral" aria-label="属性相性を確認">
+        <small>属性相関</small><b>${compactAttributeChart()}</b><em>タップで詳細</em>
       </button>
 
       <button type="button" id="openCombatPowerHistory" class="home-record-card">

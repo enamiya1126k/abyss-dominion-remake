@@ -33,8 +33,8 @@ function stableHash(value=""){
 export function canonicalAttribute(id,seed=""){
  const key=String(id??"neutral").toLowerCase();
  if(key==="thunder")return"lightning";
- if(key==="poison")return["dark","water","earth"][stableHash(seed||key)%3];
- if(key==="nature")return["wind","earth","light"][stableHash(seed||key)%3];
+ if(key==="poison")return["dark","water","earth","ice"][stableHash(seed||key)%4];
+ if(key==="nature")return["wind","earth","light","ice"][stableHash(seed||key)%4];
  return ATTRIBUTES[key]?key:"neutral";
 }
 

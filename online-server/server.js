@@ -41,6 +41,7 @@ wss.on("connection",socket=>{
   else if(message.type==="startRaid")result=store.startRaid(session);
   else if(message.type==="raidAction")result=store.submitRaidAction(session,message.action??message);
   else if(message.type==="raidSpeed")result=store.setRaidSpeed(session,message.speed);
+  else if(message.type==="chat")result=store.chat(session,message);
   else if(message.type==="tradeRequest")result=store.requestTrade(session,message.targetId);
   else if(message.type==="tradeRespond")result=store.respondTrade(session,message.tradeId,message.accepted);
   else if(message.type==="tradeOffer")result=store.offerTrade(session,message.tradeId,message.asset);
