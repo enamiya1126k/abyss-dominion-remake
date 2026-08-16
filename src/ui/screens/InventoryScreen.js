@@ -3,7 +3,7 @@ import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.10.0";
 import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.10.0";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.10.0";
 import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.10.0";
-import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.10.0";
+import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.10.0-build158";
 import{monsterVisual}from"../MonsterVisual.js?v=2.10.0";
 
 const CONSUMABLES=[
@@ -20,7 +20,7 @@ const CONSUMABLES=[
  ["partyStatusCures","💨","全体浄化薬","味方全員の状態異常を解除"],
  ["fullHeals","✨","万能霊薬","HP・MP・状態異常を回復"],
  ["partyFullHeals","🌟","全体万能霊薬","味方全員を完全回復"]
- ,["experienceItems","📘","EXP結晶","通常種は50個でLv.10,000相当。深淵・十神は必要EXP5倍"]
+ ,["experienceItems","📘","経験値パック","育成用EXPを獲得。通常種は約1000個でLv.10,000相当"]
 ];
 const MATERIALS=[
  ["captureCrystals","🔮","捕獲結晶","捕獲失敗は1個、成功時は敵に応じて最大75個消費"],

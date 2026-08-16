@@ -1,4 +1,4 @@
-import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=2.10.0";
+import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=2.10.0-build158";
 import{PERSONALITIES}from"../../data/personalities.js?v=2.10.0";
 import{SPECIES}from"../../data/species.js?v=2.10.0";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0";

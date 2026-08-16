@@ -1,5 +1,5 @@
 import{APP_VERSION}from"../../core/config.js?v=2.10.0";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=2.10.0";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=2.10.0-build158";
 import{maxMp}from"../../battle/SkillSystem.js?v=2.10.0";
 import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=2.10.0";
 import{dungeonThemeForFloor}from"../../data/dungeonThemes.js?v=2.10.0-build143";

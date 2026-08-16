@@ -24,14 +24,14 @@ assert.equal(Object.values(ENDGAME_BOSSES).filter(boss=>boss.faction==="tenGod")
 
 for(const speciesId of["slime","ancient_dragon"]){
  const monster=createMonster(speciesId,{level:1});
- applyTotalExperience(monster,experienceCrystalValue(monster)*50);
- assert.equal(monster.level,10000,`${speciesId} must reach level 10000 with 50 crystals`);
+ applyTotalExperience(monster,experienceCrystalValue(monster)*1000);
+ assert.equal(monster.level,10000,`${speciesId} must reach level 10000 with about 1000 packs`);
 }
 const ordinary={speciesId:"slime",level:500},endgame={speciesId:"slime",level:500,endgameFaction:"abyss"};
 const ratio=expNeedFor(endgame)/expNeedFor(ordinary);
 assert.ok(ratio>4.99&&ratio<5.01,`endgame EXP ratio ${ratio}`);
 const abyssGrowth=createMonster("slime",{level:1,endgameBossId:"abyss_envy",endgameFaction:"abyss",isContractedEndgame:true,allowEndgameLevel:true});
-applyTotalExperience(abyssGrowth,experienceCrystalValue(abyssGrowth)*50);
+applyTotalExperience(abyssGrowth,experienceCrystalValue(abyssGrowth)*1000);
 assert.ok(abyssGrowth.level<10000,"endgame growth must remain much slower");
 
 assert.equal(shouldTriggerEmergency({player:{currentFloor:5000,maxFloor:5000},flags:{},endgame:{}}),false);

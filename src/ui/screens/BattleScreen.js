@@ -1,4 +1,4 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.10.0";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.10.0-build158";
 import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.10.0-build150";
 import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.10.0-build150";
 import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.10.0";

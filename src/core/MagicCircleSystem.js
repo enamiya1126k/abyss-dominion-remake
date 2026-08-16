@@ -129,8 +129,9 @@ export function magicCircleLevel(state,idOrInstance){
 export function magicCirclePrice(state,id){
  const entry=magicCircleById(id),level=magicCircleLevel(state,id);
  if(entry.id==="none"||!level)return 0;
- return Math.min(Number.MAX_SAFE_INTEGER,Math.round(entry.baseUpgrade*Math.pow(level+1,2.42)));
+ return magicCircleUpgradePrice(entry,level);
 }
+export function magicCircleUpgradePrice(entryOrId,level=1){const entry=typeof entryOrId==="string"?magicCircleById(entryOrId):entryOrId;return Math.min(Number.MAX_SAFE_INTEGER,Math.max(1000,Math.round((Number(entry?.baseUpgrade)||0)*.004*Math.pow(Math.max(1,Number(level)||1)+1,1.65)/1000)*1000))}
 
 export function magicCircleNextEffect(entryOrId,level=0){
  const entry=typeof entryOrId==="string"?magicCircleById(entryOrId):entryOrId;
@@ -146,7 +147,7 @@ export function buyOrUpgradeMagicCircle(state,id){
  if(!isMagicCircleUnlocked(state,entry.id))return{ok:false,message:"この術式の知識は深淵ツリーで未解禁です。"};
  if(!level)return{ok:false,message:"現物を所持していません。再構築または交換で入手してください。"};
  if(level>=99)return{ok:false,message:"最大Lv.99です。"};
- const price=Math.min(Number.MAX_SAFE_INTEGER,Math.round(entry.baseUpgrade*Math.pow(level+1,2.42))),gold=Math.max(0,Number(state.player?.gold)||0);
+ const price=magicCircleUpgradePrice(entry,level),gold=Math.max(0,Number(state.player?.gold)||0);
  if(gold<price)return{ok:false,message:`GOLDが${price.toLocaleString()}G必要です`};
  state.player.gold=Math.floor(gold-price);
  instance.level=level+1;rebuildOwnedCompatibility(state.magicCircles);

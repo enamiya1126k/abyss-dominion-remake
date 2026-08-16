@@ -1,7 +1,7 @@
 import{APP_VERSION}from"../../core/config.js?v=2.10.0";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=2.10.0";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=2.10.0-build158";
 import{maxMp}from"../../battle/SkillSystem.js?v=2.10.0";
-import{ENDGAME_BOSSES,ENDGAME_TRIALS}from"../../core/EndgameSystem.js?v=2.10.0";
+import{ENDGAME_BOSSES,ENDGAME_TRIALS}from"../../core/EndgameSystem.js?v=2.10.0-build158";
 import{SPECIES}from"../../data/species.js?v=2.10.0";
 import{monsterVisual}from"../MonsterVisual.js?v=2.10.0";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0";

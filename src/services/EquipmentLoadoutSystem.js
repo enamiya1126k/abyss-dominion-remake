@@ -1,4 +1,5 @@
 import{SLOT_UNLOCK_LEVEL,compatibleSubslots,EQUIPMENT_SLOT_ORDER}from"../data/equipment.js?v=2.10.0";
+import{signatureEquipmentOwnerId,signatureEquipmentMatchesMonster}from"../core/SignatureWeaponSystem.js?v=2.10.0-build158";
 
 export{EQUIPMENT_SLOT_ORDER};
 
@@ -21,6 +22,7 @@ function migratedLoadout(monster){
 export function canEquipInSubslot(item,monster,subslot){
  if(!item||!monster||!EQUIPMENT_SLOT_ORDER.includes(subslot))return false;
  if((Number(monster.level)||1)<(SLOT_UNLOCK_LEVEL[subslot]??1))return false;
+ if(signatureEquipmentOwnerId(item)&&!signatureEquipmentMatchesMonster(item,monster))return false;
  return compatibleSubslots(item).includes(subslot);
 }
 

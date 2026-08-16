@@ -26,7 +26,7 @@ export const MYTHIC_SERIAL_SPECIES=Object.freeze({
   }),
   myth_rion:mythic({
     id:"myth_rion",name:"りおん",element:"wind",role:"support",maxMp:165,
-    stats:{hp:370,atk:180,def:198,spd:78,crit:18,evasion:20},
+    stats:{hp:370,atk:180,def:198,spd:122,crit:18,evasion:20},
     skills:[
       skill("rion_talk","万能話術",{mp:7,power:1.32,damageClass:"magic",effects:[{kind:"defDown",value:.28,turns:3,enemy:true}],description:"軽妙な話術で相手の守りを崩す。"}),
       skill("rion_arrange","主人公の段取り",{level:20,mp:12,type:"buff",power:0,target:"味方全体",effects:[{kind:"atkUp",value:.3,turns:3,allies:true},{kind:"defUp",value:.3,turns:3,allies:true},{kind:"spdUp",value:.28,turns:3,allies:true}],description:"全員が最も動きやすい状況を即座に整える。"}),

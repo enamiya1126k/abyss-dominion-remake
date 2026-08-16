@@ -1,5 +1,5 @@
 import{formatCombatPower}from"../core/CombatPower.js?v=2.10.0";
-import{magicCircleById}from"../core/MagicCircleSystem.js?v=2.10.0-build149";
+import{magicCircleById}from"../core/MagicCircleSystem.js?v=2.10.0-build158";
 import{dungeonThemeForFloor}from"../data/dungeonThemes.js?v=2.10.0-build148";
 import{buildOnlinePartyProfile,ONLINE_STORAGE_KEYS,onlineAvatarVisual,onlineEnemyVisual,onlineMagicCircleArt}from"../ui/screens/OnlinePartyScreen.js?v=2.10.0-build157";
 

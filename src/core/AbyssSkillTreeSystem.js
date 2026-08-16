@@ -1,6 +1,6 @@
-import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=2.10.0";
+import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=2.10.0-build158";
 
-export const ABYSS_SKILL_TREE_VERSION=5;
+export const ABYSS_SKILL_TREE_VERSION=6;
 
 export const ABYSS_SKILL_CATEGORIES=Object.freeze([
  {
@@ -31,6 +31,16 @@ const FOUNDATION_LANES=Object.freeze({
  "combat-abyss-core":2,"combat-demon-fang":1,"combat-dark-shell":3,"combat-blood-rush":1,"combat-undying-will":3,"combat-dominion":2,
  "exploration-instinct":2,"exploration-relic-sense":1,"exploration-elite-trail":3,"exploration-abyss-luck":1,"exploration-key-echo":3,"exploration-endless-path":2
 });
+
+// build158: the tree is a long-term progression system, but its previous
+// prices became a wall long before the interesting branch choices appeared.
+// Keep every effect/prerequisite intact and reduce every node to roughly 25%.
+function discountedTreePrice(original){
+ const value=Math.max(0,Number(original)||0),discounted=value*.25;
+ if(discounted<1000)return Math.max(100,Math.round(discounted/50)*50);
+ if(discounted<100000)return Math.max(1000,Math.round(discounted/500)*500);
+ return Math.max(1000,Math.round(discounted/1000)*1000);
+}
 
 const FOUNDATION_SKILL_NODES=Object.freeze([
  {
@@ -231,7 +241,7 @@ const FOUNDATION_SKILL_NODES=Object.freeze([
   requires:["exploration-abyss-luck","exploration-key-echo"],
   effect:{key:"explorationRewardRate",value:.05}
  }
-].map(node=>Object.freeze({...node,lane:FOUNDATION_LANES[node.id]??2,requiresAny:[],requiresAnyCount:0,branchId:"foundation",branchName:"根源"})));
+].map(node=>Object.freeze({...node,legacyCost:node.cost,cost:discountedTreePrice(node.cost),lane:FOUNDATION_LANES[node.id]??2,requiresAny:[],requiresAnyCount:0,branchId:"foundation",branchName:"根源"})));
 
 const EXPANSION_STAGES=Object.freeze([
  {suffix:"萌芽",cost:120000,legacyCost:120000},
@@ -384,8 +394,8 @@ function expansionNodesForCategory(category){
    icon:branch.icon,
    name:`${branch.name}・${stage.suffix}`,
    description:expansionDescription(effect),
-   cost:stage.cost,
-   legacyCost:stage.legacyCost,
+   cost:discountedTreePrice(stage.cost),
+   legacyCost:stage.cost,
    requires,
    requiresAny,
    requiresAnyCount,
@@ -476,15 +486,16 @@ export function normalizeAbyssSkillTree(state){
  let rebalanceRefund=0;
  for(const nodeId of learned){
   const node=NODE_BY_ID.get(nodeId);
-  // Node prices are fixed and there are no discounts. Rebuild this value from
-  // the learned nodes so a damaged legacy paidCosts entry can never reduce the
-  // amount returned by the free full reset.
   const paid=node.cost;
   paidCosts[nodeId]=paid;
   investedGold=Math.min(Number.MAX_SAFE_INTEGER,investedGold+paid);
-  if(sourceVersion===3)rebalanceRefund=Math.min(Number.MAX_SAFE_INTEGER,rebalanceRefund+Math.max(0,(Number(node.legacyCost)||node.cost)-node.cost));
+  if(sourceVersion>0&&sourceVersion<ABYSS_SKILL_TREE_VERSION){
+   const recorded=Number(source.paidCosts?.[nodeId]);
+   const previousPaid=Number.isFinite(recorded)&&recorded>0?recorded:(Number(node.legacyCost)||node.cost);
+   rebalanceRefund=Math.min(Number.MAX_SAFE_INTEGER,rebalanceRefund+Math.max(0,previousPaid-node.cost));
+  }
  }
- if(sourceVersion===3){
+ if(sourceVersion>0&&sourceVersion<ABYSS_SKILL_TREE_VERSION){
   state.player??={};
   state.player.gold=Math.min(Number.MAX_SAFE_INTEGER,safeInteger(state.player.gold,0)+rebalanceRefund);
   state.abyssSkillRebalance={version:ABYSS_SKILL_TREE_VERSION,refund:rebalanceRefund,appliedAt:new Date().toISOString()};

@@ -1,6 +1,6 @@
 import{createEquipment}from"../models/Equipment.js?v=2.10.0";
 import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.10.0";
-import{abyssEquipmentRarityBonus}from"./AbyssSkillTreeSystem.js?v=2.10.0";
+import{abyssEquipmentRarityBonus}from"./AbyssSkillTreeSystem.js?v=2.10.0-build158";
 import{modifiedGoldReward}from"./GoldRewardSystem.js?v=2.10.0";
 import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.10.0";
 

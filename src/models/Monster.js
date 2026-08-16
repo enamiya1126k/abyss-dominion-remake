@@ -1,4 +1,4 @@
-import{SPECIES}from"../data/species.js?v=2.10.0";
+import{SPECIES}from"../data/species.js?v=2.10.0-build158";
 import{PERSONALITIES}from"../data/personalities.js?v=2.10.0";
 import{MONSTER_COLORS}from"../data/colors.js?v=2.10.0";
 import{normalizedResistances}from"../data/attributes.js?v=2.10.0";
@@ -66,8 +66,8 @@ export function experienceBeforeLevel(monster,level){
  for(let current=1;current<target;current++)total+=expNeedFor({...monster,level:current});
  return total;
 }
-// もっとも育成が重い通常種族（dragon）のLv.10000到達量を50分割する。
-// これにより通常魔物は種族差にかかわらず50個以内でLv.10000へ届く一方、
+// もっとも育成が重い通常種族（dragon）のLv.10000到達量を1000分割する。
+// 旧EXP結晶の1/20へ抑え、経験値パックを頻繁に入手して少しずつ育てる。
 // 深淵・十神は expNeedFor 側の5倍補正をそのまま負担する。
 const NORMAL_CRYSTAL_EXP_RATE=Math.max(...Object.values(RACE_EXP_RATE));
 const EXPERIENCE_CRYSTAL_VALUE=(()=>{
@@ -76,7 +76,7 @@ const EXPERIENCE_CRYSTAL_VALUE=(()=>{
   const base=40+level*25+Math.floor(level*level*.55);
   targetTotal+=Math.max(25,Math.floor(base*NORMAL_CRYSTAL_EXP_RATE));
  }
- return Math.max(1,Math.ceil(targetTotal/50));
+ return Math.max(1,Math.ceil(targetTotal/1000));
 })();
 export function experienceCrystalValue(monster){
  // 対象ごとに逆算しない。深淵・十神だけ結晶価値まで5倍になる事故を防ぐ。
@@ -257,6 +257,12 @@ export function calculatedStats(monster){
       if(key==="def")result.mdef=Math.max(1,Math.floor(result.mdef*(1+rate)));
     }
   }
+  const signature=monster._signatureBonuses??{};
+  if(signature.hp)result.hp=Math.floor(result.hp*(1+signature.hp));
+  if(signature.atk){result.atk=Math.floor(result.atk*(1+signature.atk));result.matk=Math.floor(result.matk*(1+signature.atk))}
+  if(signature.def){result.def=Math.floor(result.def*(1+signature.def));result.mdef=Math.floor(result.mdef*(1+signature.def))}
+  if(signature.spd)result.spd=Math.floor(result.spd*(1+signature.spd));
+  if(signature.crit)result.crit+=signature.crit;
   return result;
 }
 export function unlockedSkills(monster){

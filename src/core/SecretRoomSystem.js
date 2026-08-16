@@ -1,5 +1,5 @@
 import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.10.0";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.10.0";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.10.0-build158";
 import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.10.0";
 import{SPECIES}from"../data/species.js?v=2.10.0";
 import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.10.0";
