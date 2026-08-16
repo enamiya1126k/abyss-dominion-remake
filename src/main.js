@@ -8,8 +8,8 @@ import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAt
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.10.0";
 import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.10.0-build150";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.10.0-build145";
-import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build155";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build155";
+import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build156";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build156";
 import{buildOnlineTradeCatalog,reserveOnlineTradeAsset,releaseOnlineTradeAsset,commitOnlineTrade}from"./online/OnlineTradeSystem.js?v=2.10.0-build149";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.10.0";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.10.0";
@@ -560,12 +560,19 @@ function shopItemArt(item){
 function openHomeItemShop(){
  const gold=Math.max(0,Number(save.state.player.gold)||0);
  save.state.shop??={};const today=localDayKey();if(save.state.shop.captureDaily?.key!==today)save.state.shop.captureDaily={key:today,count:0};
- const rows=HOME_ITEM_SHOP.map(item=>{const remaining=item.dailyLimit?Math.max(0,item.dailyLimit-(save.state.shop.captureDaily?.count??0)):null,disabled=gold<item.price||(remaining!=null&&remaining<=0);return`<article class="home-item-shop-row">${shopItemArt(item)}<div><b>${item.name}</b><small>${item.description}</small><em>所持 ${save.state.inventory[item.id]??0}個${remaining!=null?`・本日あと${remaining}個`:""}</em></div><div class="home-shop-buy-actions"><button type="button" data-home-item-buy="${item.id}" data-buy-count="1" ${disabled?"disabled":""}><span>購入</span><b>${item.price.toLocaleString()}G</b></button></div></article>`}).join("");
+ const rows=HOME_ITEM_SHOP.map(item=>{const remaining=item.dailyLimit?Math.max(0,item.dailyLimit-(save.state.shop.captureDaily?.count??0)):null,maxByGold=Math.floor(gold/item.price),maximum=Math.max(0,Math.min(999,remaining??999,maxByGold)),disabled=maximum<=0;return`<article class="home-item-shop-row" data-home-shop-row="${item.id}" data-unit-price="${item.price}" data-max-purchase="${maximum}">${shopItemArt(item)}<div><b>${item.name}</b><small>${item.description}</small><em>所持 ${save.state.inventory[item.id]??0}個${remaining!=null?`・本日あと${remaining}個`:""}</em></div><div class="home-shop-buy-actions"><div class="home-shop-quantity" aria-label="${item.name}の購入数"><button type="button" data-shop-qty-step="-1" aria-label="1個減らす" ${disabled?"disabled":""}>−</button><input type="number" inputmode="numeric" min="1" max="${Math.max(1,maximum)}" value="1" data-shop-qty aria-label="購入数" ${disabled?"disabled":""}><button type="button" data-shop-qty-step="1" aria-label="1個増やす" ${disabled?"disabled":""}>＋</button><button type="button" data-shop-qty-max ${disabled?"disabled":""}>MAX</button></div><button type="button" data-home-item-buy="${item.id}" ${disabled?"disabled":""}><span data-shop-buy-label>${disabled?"購入不可":"1個購入"}</span><b data-shop-total>${item.price.toLocaleString()}G</b></button></div></article>`}).join("");
  app.insertAdjacentHTML("beforeend",Modal("アイテムショップ",`<div class="home-item-shop"><div class="home-item-shop-wallet"><span>所持GOLD</span><b>${gold.toLocaleString()}G</b></div><p class="muted">探索前でも帰還後でも、いつでも利用できます。闇市場の限定品とは別の常設店です。</p><div class="home-item-shop-list">${rows}</div></div>`,"閉じる"));
  const modal=topModal();
  modal.classList.add("ornate-shop-modal");
+ modal.querySelectorAll("[data-home-shop-row]").forEach(row=>{
+  const input=row.querySelector("[data-shop-qty]"),maximum=Math.max(0,Number(row.dataset.maxPurchase)||0),unitPrice=Math.max(0,Number(row.dataset.unitPrice)||0),buy=row.querySelector("[data-home-item-buy]"),label=row.querySelector("[data-shop-buy-label]"),total=row.querySelector("[data-shop-total]");
+  const normalize=()=>{if(!input||maximum<=0)return 0;const count=Math.max(1,Math.min(maximum,Math.floor(Number(input.value)||1)));input.value=String(count);if(label)label.textContent=`${count}個購入`;if(total)total.textContent=`${(unitPrice*count).toLocaleString()}G`;return count};
+  row.querySelectorAll("[data-shop-qty-step]").forEach(button=>button.addEventListener("click",()=>{input.value=String((Number(input.value)||1)+Number(button.dataset.shopQtyStep));normalize()}));
+  row.querySelector("[data-shop-qty-max]")?.addEventListener("click",()=>{input.value=String(maximum);normalize()});
+  input?.addEventListener("input",normalize);input?.addEventListener("change",normalize);if(buy)buy._selectedPurchaseCount=normalize;
+ });
  modal.querySelectorAll("[data-home-item-buy]").forEach(button=>button.onclick=()=>{
-  const item=HOME_ITEM_SHOP.find(entry=>entry.id===button.dataset.homeItemBuy),count=Math.max(1,Number(button.dataset.buyCount)||1);
+  const item=HOME_ITEM_SHOP.find(entry=>entry.id===button.dataset.homeItemBuy),count=Math.max(1,Number(button._selectedPurchaseCount?.())||1);
   if(!item)return;
   if(item.dailyLimit){const daily=save.state.shop.captureDaily;if(daily.key!==localDayKey()){daily.key=localDayKey();daily.count=0}if(daily.count+count>item.dailyLimit)return showToast("捕獲結晶は1日3個までです")}
   const cost=item.price*count;
@@ -3731,12 +3738,14 @@ function startBattle(encounter,options={}){
  entries.forEach(entry=>recordBiomeEncounter(save.state,options.memoryBattle?(options.memorySourceFloor??save.state.player.currentFloor):save.state.player.currentFloor,entry.speciesId));
  const party=save.state.party.map(id=>save.state.monsters.find(monster=>monster.id===id)).filter(Boolean),synergy=partySynergy(),biomeBattle=!options.specialBattle&&!options.memoryBattle?battleBiomeForFloor(save.state.player.currentFloor):null;
  party.forEach(monster=>{
+  const previousMaxHp=Math.max(1,Number(calculatedStats(monster).hp)||1),wasAlive=monster.currentHp==null||Number(monster.currentHp)>0;
   const element=normalizedElement(monster.attribute??SPECIES[monster.speciesId]?.element),matches=synergy&&element===synergy.element,terrain=biomeElementMultiplier(biomeBattle,element)-1;
   monster._synergy={atk:(matches?synergy.atk??0:0)+terrain,def:(matches?synergy.def??0:0)+terrain,hp:(matches?synergy.hp??0:0)+terrain,spd:(matches?synergy.spd??0:0)+terrain,crit:matches?synergy.crit??0:0,evasion:matches?synergy.evasion??0:0};
   monster._unyieldingUsed=false;
   monster._speciesReviveUsed=false;monster._guardianPassiveUsed=false;monster._circleReviveUsed=false;monster._circleLastLifeUsed=false;monster._circleDeathMirrorUsed=false;monster._circleRage=0;monster._circleDeathHandled=false;
   const hp=calculatedStats(monster).hp,mp=maxMp(monster);
   if(monster.currentHp==null)monster.currentHp=hp;
+  else if(wasAlive&&hp>previousMaxHp)monster.currentHp+=hp-previousMaxHp;
   if(monster.currentMp==null)monster.currentMp=mp;
   monster.currentHp=Math.min(monster.currentHp,hp);monster.currentMp=Math.min(monster.currentMp,mp);if(options.specialBattleType!=="gauntlet")applyStartMpAffix(monster)
  });

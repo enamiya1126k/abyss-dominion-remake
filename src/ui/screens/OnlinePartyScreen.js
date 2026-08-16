@@ -117,7 +117,7 @@ export function OnlinePartyScreen(state){
    </section>
 
    <section class="online-plaza-shell online-coop-shell" data-online-plaza-shell hidden>
-    <header class="online-room-header"><div class="online-room-code"><small>ROOM CODE</small><strong data-online-room-id>------</strong><button type="button" data-copy-room-id>コピー</button><button type="button" data-copy-invite>招待</button></div><div class="online-room-friend"><small>FRIEND ID</small><b data-online-room-friend-id>${identity.friendId}</b></div><nav aria-label="オンライン画面"><button type="button" class="active" data-online-room-view="plaza">広場</button><button type="button" data-online-room-view="lobby">出発準備</button><button type="button" data-online-room-view="raid">レイド</button><button type="button" data-online-room-view="trade">交換</button><button type="button" data-online-room-view="chat">会話<i data-online-chat-unread hidden></i></button></nav><span data-online-member-count>1 / 4</span><button type="button" class="danger" data-online-leave-room>退出</button></header>
+    <header class="online-room-header"><div class="online-room-code"><small>ROOM CODE</small><strong data-online-room-id>------</strong><button type="button" data-copy-room-id>コピー</button><button type="button" data-copy-invite>招待</button></div><div class="online-room-friend"><small>FRIEND ID</small><b data-online-room-friend-id>${identity.friendId}</b></div><nav aria-label="オンライン画面"><button type="button" class="active" data-online-room-view="plaza">広場</button><button type="button" data-online-room-view="lobby">出発準備</button><button type="button" data-online-room-view="raid">レイド</button><button type="button" data-online-room-view="resonance">共鳴迷宮</button><button type="button" data-online-room-view="trade">交換</button><button type="button" data-online-room-view="chat">会話<i data-online-chat-unread hidden></i></button></nav><span data-online-member-count>1 / 4</span><button type="button" class="danger" data-online-leave-room>退出</button></header>
     <div class="online-plaza-view" data-online-plaza-view>
      <div class="online-plaza" data-online-plaza tabindex="0" aria-label="オンライン広場。画面タップまたは方向キーで移動">
       <div class="online-plaza-sky" aria-hidden="true"></div><div class="online-plaza-river" aria-hidden="true"></div><div class="online-plaza-ground" aria-hidden="true"></div>
@@ -158,20 +158,40 @@ export function OnlinePartyScreen(state){
       </div>
       <section class="online-raid-exchange"><header><div><small>RAID EXCHANGE</small><h3>融骸核片 交換所</h3></div><strong>所持 <span data-online-raid-materials>0</span></strong></header><div><button type="button" data-online-raid-exchange="character" data-cost="420"><img src="./assets/online/raid/juvenile-amalga.png" alt=""><span><b>融骸幼体アマルガ</b><small>限定仲間・420核片</small></span></button><button type="button" data-online-raid-exchange="equipment" data-cost="240"><img src="./assets/equipment/end-devouring-greatblade.png" alt=""><span><b>終焉喰らいの大刃</b><small>限定神話装備・240核片</small></span></button><button type="button" data-online-raid-exchange="circle" data-cost="100"><img src="./assets/magic-circles/death-mirror-raid.png" alt=""><span><b>死鏡の魔法陣・現物</b><small>術式未解禁でも所持可・100核片</small></span></button></div></section>
      </div>
-     <section class="online-raid-battle normal-battle-layout" data-online-raid-battle hidden>
-      <header><div><small>CALAMITY RAID</small><h2 data-online-raid-name>終焉融骸・アビス＝マルガ</h2></div><strong>ROUND <b data-online-raid-round>1</b></strong><nav data-online-raid-speed><button data-online-raid-speed-value="0.5">×0.5</button><button data-online-raid-speed-value="1">×1</button><button data-online-raid-speed-value="2">×2</button></nav></header>
-      <div class="online-raid-turn-order" data-online-raid-turn-order aria-label="行動順"></div>
-      <div class="online-raid-stage" data-online-raid-stage>
+     <section class="online-raid-battle battle-screen side-battle-v2 battle-theme-nether manual-mode normal-battle-layout" data-online-raid-battle data-floor-band="20" hidden>
+      <div class="battle-header"><div class="round-label"><small>ラウンド</small><b data-online-raid-round>1</b></div><div class="battle-header-title"><b data-online-raid-name>終焉融骸・アビス＝マルガ</b><small>サーバー同期コマンド戦闘</small></div><button type="button" data-online-raid-speed-value="0.5">×0.5</button><button type="button" data-online-raid-speed-value="1">×1</button><button type="button" data-online-raid-speed-value="2">×2</button></div>
+      <div class="turn-order" data-online-raid-turn-order aria-label="行動順"><span class="turn-order-title">行動順</span></div>
+      <div class="battle-arena side-battle-arena multi-enemy" data-online-raid-stage>
+       <div class="battle-stage-vignette" aria-hidden="true"></div>
        <div class="online-raid-telegraph"><small data-online-raid-telegraph-stage>観察段階 1/5</small><b data-online-raid-telegraph-title>凝視</b><span data-online-raid-telegraph-message>無数の眼が挑戦者を測っている…</span><i data-online-raid-danger style="--danger:20%"></i></div>
-       <button type="button" class="online-raid-target" data-online-raid-enemy="abyss-amalga" aria-label="レイドボス"><img src="./assets/online/raid-abyss-amalgam.png" alt=""><strong data-online-raid-hp-text>HP -- / --</strong><span class="online-raid-hp"><i data-online-raid-hp></i></span></button>
-       <div class="online-raid-minions" data-online-raid-minions></div>
-       <div class="online-raid-impact" data-online-raid-impact hidden></div>
+       <span class="formation-label party-label">味方　<span>後衛 ← → 前衛</span></span><span class="formation-label enemy-label"><span>前衛 ← → 後衛</span>　敵</span>
+       <div class="battle-party side-party" data-online-raid-party></div><div class="battle-clash-line" aria-hidden="true"><span>対</span></div><div class="enemy-party side-enemies" data-online-raid-enemies></div>
+       <div class="battle-fx-layer" data-online-raid-fx></div><div class="online-raid-impact" data-online-raid-impact hidden></div>
       </div>
-      <div class="online-raid-party" data-online-raid-party></div>
-      <div class="online-raid-command"><div class="online-battle-decision"><span>行動決定まで</span><strong data-online-raid-countdown>18.0</strong><small data-online-raid-waiting>仲間の入力を待っています</small></div><div class="online-raid-actions"><button data-online-raid-action="attack"><b>⚔</b><span>たたかう</span></button><button data-online-raid-action="guard"><b>🛡</b><span>ガード</span></button><button data-online-raid-action="skill"><b>📖</b><span>スキル</span></button><button data-online-raid-action="item"><b>🧪</b><span>応急薬</span></button></div><div class="online-raid-skills" data-online-raid-skills hidden></div><p data-online-raid-target-note>味方をタップすると回復・補助対象を変更できます。</p></div>
-      <div class="online-raid-feed" data-online-raid-feed><span>終焉融骸がこちらを観察している…</span></div>
+      <div class="battle-command online-normal-raid-command"><div class="battle-command-head spread"><h2>自分の行動</h2><span class="muted" data-online-raid-waiting>仲間の入力を待っています</span></div><div class="online-battle-decision"><span>行動決定まで</span><strong data-online-raid-countdown>18.0</strong><small data-online-raid-target-note>味方をタップすると回復・補助対象を変更できます。</small></div><div class="command-grid"><button data-online-raid-action="attack"><i>${pixelIcon("crossed-swords")}</i><span>たたかう</span></button><button data-online-raid-action="guard"><i>${pixelIcon("equipment")}</i><span>ガード</span></button><button data-online-raid-action="skill"><i>${pixelIcon("skills")}</i><span>スキル</span></button><button data-online-raid-action="item"><i>${pixelIcon("growth")}</i><span>応急薬</span></button></div><div class="online-raid-skills skill-command-list" data-online-raid-skills hidden></div></div>
+      <div class="battle-log online-raid-feed" data-online-raid-feed><div>終焉融骸がこちらを観察している…</div></div>
       <button type="button" class="online-phase-chat-button" data-online-open-chat>会話 <i data-online-phase-unread hidden></i></button>
       <section class="online-raid-result" data-online-raid-result hidden><small>CONTRIBUTION RANKING</small><h3></h3><div data-online-raid-ranking></div><button type="button" data-online-raid-result-close>準備室へ戻る</button></section>
+     </section>
+    </section>
+    <section class="online-resonance-view" data-online-resonance-view hidden>
+     <div class="online-resonance-lobby" data-online-resonance-lobby>
+      <header class="online-resonance-hero"><span aria-hidden="true">◈</span><div><small>VOICE CO-OP / 5–8 MINUTES</small><h2>共鳴迷宮</h2><p>仲間ごとに違う手掛かりを声で伝え、同時スイッチ・門の防衛・救出・宝箱を突破する短時間協力コンテンツ。</p></div></header>
+      <ol class="online-resonance-rules"><li><b>別々の手掛かり</b><span>画面に出た情報を仲間へ伝える</span></li><li><b>同時操作</b><span>二つの音板を別々の場所で起動</span></li><li><b>救出と防衛</b><span>閉じ込められた仲間を助ける</span></li><li><b>宝箱かミミック</b><span>最後は全員の選択で報酬が変化</span></li></ol>
+      <div class="online-resonance-ready-grid" data-online-resonance-ready-grid></div>
+      <div class="online-resonance-ready-actions"><button type="button" data-online-resonance-ready><i></i><span><small>READY CHECK</small><b>準備完了にする</b></span></button><button type="button" data-online-start-resonance disabled><small>LEADER COMMAND</small><b>共鳴迷宮を開く</b></button></div>
+      <p class="online-coop-rule">2〜4人用。切断した仲間は一時的に追従AIへ切り替わり、再接続すると同じ位置・進行へ復帰します。</p>
+     </div>
+     <section class="online-resonance-game" data-online-resonance-game hidden>
+      <header><div><small>RESONANCE LABYRINTH</small><h2 data-online-resonance-phase>同時音板</h2></div><dl><div><dt>残り</dt><dd data-online-resonance-time>7:00</dd></div><div><dt>協力スコア</dt><dd data-online-resonance-score>0</dd></div></dl></header>
+      <aside class="online-resonance-clue"><small>あなただけの手掛かり</small><strong data-online-resonance-clue>仲間と手掛かりを共有しよう</strong></aside>
+      <div class="online-resonance-event" data-online-resonance-event><b>共鳴迷宮 開門</b><span>二つの音板を同時に起動しよう。</span></div>
+      <div class="online-resonance-board" data-online-resonance-board role="img" aria-label="共鳴迷宮マップ"></div>
+      <div class="online-resonance-status"><div><span>開門同調</span><i><u data-online-resonance-defense></u></i><b data-online-resonance-defense-label>0%</b></div><div data-online-resonance-member-status></div></div>
+      <div class="online-resonance-chests" data-online-resonance-chests hidden><button type="button" data-online-resonance-choice="gold">金の箱<small>GOLD重視</small></button><button type="button" data-online-resonance-choice="crystal">蒼の箱<small>💎重視</small></button><button type="button" data-online-resonance-choice="capture">紫の箱<small>捕獲結晶重視</small></button></div>
+      <div class="online-resonance-mimic" data-online-resonance-mimic hidden><div><b>共鳴ミミック</b><span><i data-online-resonance-mimic-meter></i></span><em data-online-resonance-mimic-hp>HP 0 / 0</em></div><button type="button" data-online-resonance-attack>みんなで攻撃！</button></div>
+      <div class="online-resonance-result" data-online-resonance-result hidden><small>CO-OP RESULT</small><h3>共鳴迷宮 踏破！</h3><strong data-online-resonance-result-score>0</strong><button type="button" data-online-resonance-return>準備室へ戻る</button></div>
+      <div class="online-resonance-controls"><div class="online-mobile-controls"><button type="button" data-online-resonance-move="up" aria-label="上">▲</button><button type="button" data-online-resonance-move="left" aria-label="左">◀</button><button type="button" data-online-resonance-move="down" aria-label="下">▼</button><button type="button" data-online-resonance-move="right" aria-label="右">▶</button></div><button type="button" class="online-resonance-action" data-online-resonance-action>共鳴する</button><button type="button" class="online-phase-chat-button" data-online-open-chat>会話 <i data-online-phase-unread hidden></i></button></div>
      </section>
     </section>
     <section class="online-trade-view" data-online-trade-view hidden>

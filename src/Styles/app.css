@@ -2255,6 +2255,15 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
  border-radius:2px;
  background:#2d1838;
 }
+.home-shop-buy-actions{min-width:170px;display:grid!important;gap:6px!important}
+.home-shop-quantity{display:grid;grid-template-columns:32px minmax(44px,1fr) 32px 48px;gap:3px;align-items:stretch}
+.home-shop-quantity button,.home-shop-quantity input{min-width:0!important;min-height:34px!important;padding:3px!important;border:1px solid #6c5577!important;background:#0c0911!important;color:#f3e6ca!important;text-align:center;font:800 .66rem/1 ui-monospace,monospace}
+.home-shop-quantity input{width:100%;appearance:textfield;-moz-appearance:textfield}
+.home-shop-quantity input::-webkit-inner-spin-button,.home-shop-quantity input::-webkit-outer-spin-button{margin:0;-webkit-appearance:none}
+.home-shop-quantity [data-shop-qty-max]{font-size:.45rem!important;letter-spacing:.04em}
+.home-shop-buy-actions>[data-home-item-buy]{min-height:42px!important;display:flex;align-items:center;justify-content:space-between;gap:8px;padding-inline:12px!important}
+.home-shop-buy-actions>[data-home-item-buy] b{color:#ffe29a}
+@media(max-width:520px){.home-shop-buy-actions{min-width:0}.home-shop-quantity{grid-template-columns:38px minmax(54px,1fr) 38px 54px}.home-item-shop-row>div:last-child{grid-template-columns:1fr!important}}
 .ornate-team-modal .team-battle-intro{
  padding:18px;
  text-align:center;
