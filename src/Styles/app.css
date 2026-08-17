@@ -2227,6 +2227,8 @@ body.phase2{--bg:#07030d;--panel:#11091d;--panel2:#1b1030;--border:#7b42ff;--tex
 .inventory-use-targets{display:grid;gap:7px}
 .inventory-use-targets button{display:grid;gap:2px;min-height:54px;text-align:left}
 .inventory-use-targets button small{color:#b7aabd}
+.gacha-campaign-sigil.sigil-permanent-signature{background-image:url("../../assets/ui/items/equipment-weapon.png");filter:drop-shadow(0 0 18px #cf4e73)}.gacha-event-mark.signature-mark{background-image:url("../../assets/ui/items/equipment-weapon.png");filter:drop-shadow(0 0 9px #d25478)}.permanent-signature-picker strong{color:#ffd878}.permanent-signature-picker p b{color:#eab1bd}.signature-pool-list{border:1px solid #54435e;background:#08070c}.signature-pool-list summary{padding:11px;color:#e4c77e;font-weight:800;cursor:pointer}.signature-pool-list>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding:0 10px 10px;max-height:210px;overflow:auto}.signature-pool-list span{overflow:hidden;padding:6px;border:1px solid #332a39;background:#0d0a11;color:#cbbfd0;font-size:.52rem;text-overflow:ellipsis;white-space:nowrap}.signature-pool-list span b{color:#c98eaf}
+
 @media(max-width:520px){
  .inventory-context-popover{grid-template-columns:minmax(0,1fr) 78px;padding:9px;gap:6px}
  .inventory-context-actions button{min-height:36px;font-size:.56rem}
@@ -6017,12 +6019,17 @@ button>.inline-pixel-icon,
 
 .equipment-drop-level{display:inline-block;margin-left:4px;padding:1px 4px;border:1px solid #6c5831;background:#171108;color:#f0d482;font-size:.42rem;font-style:normal;vertical-align:middle;white-space:nowrap}
 
+/* Build 161: bulk experience-pack use.  Keep every control comfortably
+   tappable on phones and make the result visible before the atomic commit. */
+.experience-pack-picker{display:grid;gap:12px;padding:4px}.experience-pack-picker>p{margin:0;padding:12px;border:1px solid #5d4b70;background:#09070e;text-align:center}.experience-pack-picker>p b{color:#efd993;font-family:Georgia,"Yu Mincho",serif}.experience-pack-picker>p small{color:#a99db1}.experience-pack-step{display:grid;grid-template-columns:52px 52px minmax(72px,1fr) 52px 52px;gap:6px;align-items:stretch}.experience-pack-step button,.experience-pack-presets button{min-height:48px;border:1px solid #765f8b!important;background:#171020!important;color:#eadcf1!important;font-weight:800}.experience-pack-step input{min-width:0;border:1px solid #c19a4d!important;background:#030406!important;color:#ffe6a2!important;text-align:center;font-size:1rem;font-weight:900}.experience-pack-presets{display:grid;grid-template-columns:1fr 1fr;gap:8px}.experience-pack-preview{display:grid;gap:4px;min-height:86px;padding:12px;border:1px solid #725a32;background:linear-gradient(135deg,#171006,#09070e);color:#d6c8b6}.experience-pack-preview b{color:#f2d16f;font-size:.9rem}.experience-pack-preview strong{color:#c9f2bc;font-size:1.05rem}.experience-pack-preview small{color:#a59aa8}.experience-pack-picker>#confirmExperiencePacks{min-height:54px}
+
 @media(max-width:520px){
  .game-modal>.game-modal-card{padding:13px!important}
  .floor-boss-modal-v3>.game-modal-card{padding:11px!important}.boss-visual-stage-v3{height:205px}.floor-boss-monster-visual-v3,.floor-boss-monster-visual-v3 img{width:170px!important;height:170px!important}.boss-crest-v3{width:57px;height:57px}
  .return-grade-medal{width:116px;height:116px}.return-rune-ring u{transform-origin:50% 55px}.return-rune-ring u:nth-child(2){transform:rotate(90deg)}.return-rune-ring u:nth-child(3){transform:rotate(180deg)}.return-rune-ring u:nth-child(4){transform:rotate(270deg)}
  .rest-bed-stage-v3{height:116px}.rest-bed-stage-v3 img{width:130px;height:96px}
  .settings-gm-console-v3 .serial-code-form{grid-template-columns:1fr}.settings-tutorial-v3{grid-template-columns:36px 1fr}.settings-tutorial-v3 button{grid-column:1/-1}
+ .experience-pack-step{grid-template-columns:44px 44px minmax(64px,1fr) 44px 44px;gap:4px}.experience-pack-step button{padding:4px!important;font-size:.58rem}
 }
 @media(prefers-reduced-motion:reduce){
  .encounter-transition *,.return-rune-ring,.return-result-embers i,.return-floor-progress u,.rest-bed-stage-v3 i,.boss-fog-v3{animation:none!important}

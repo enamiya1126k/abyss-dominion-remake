@@ -1,8 +1,8 @@
-import{EXPANDED_SPECIES}from"./expandedSpecies.js?v=2.10.0-build160";
-import{ADDITIONAL_SPECIES}from"./additionalSpecies.js?v=2.10.0-build160";
-import{MYTHIC_SERIAL_SPECIES}from"./mythicSerialSpecies.js?v=2.10.0-build160";
-import{applyMonsterNameOverride}from"./monsterNameOverrides.js?v=2.10.0-build160";
-import{canonicalAttribute}from"./attributes.js?v=2.10.0-build160";
+import{EXPANDED_SPECIES}from"./expandedSpecies.js?v=2.10.0-build161";
+import{ADDITIONAL_SPECIES}from"./additionalSpecies.js?v=2.10.0-build161";
+import{MYTHIC_SERIAL_SPECIES}from"./mythicSerialSpecies.js?v=2.10.0-build161";
+import{applyMonsterNameOverride}from"./monsterNameOverrides.js?v=2.10.0-build161";
+import{canonicalAttribute}from"./attributes.js?v=2.10.0-build161";
 
 const BASE_SPECIES={
   slime:{id:"slime",emoji:"🫧",name:"スライム",element:"water",race:"slime",role:"balanced",rarity:"N",minFloor:1,captureRate:1.0,maxMp:16,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:46,atk:6,def:4,spd:10,crit:5,evasion:3},rankNames:["スライム","上位スライム","スライム王","深淵スライム"],skills:[{id:"slime_skill",name:"体当たり",unlock:{type:"level",value:1},description:"体当たりで戦う。"}]},
@@ -55,7 +55,19 @@ const BASE_SPECIES={
   angelic_orb:{id:"angelic_orb",emoji:"🔆",name:"光球精",element:"light",race:"spirit",role:"support",rarity:"SR",minFloor:55,captureRate:1.0,maxMp:30,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:55,atk:13,def:7,spd:21,crit:8,evasion:16},rankNames:["光球精","上位光球精","光球精王","深淵光球精"],skills:[{id:"angelic_orb_skill",name:"光輪",unlock:{type:"level",value:1},description:"光輪で戦う。"}]},
 };
 
+const STRATEGY_RARITY=Object.freeze({N:0,R:1,SR:2,SSR:3,UR:4,LR:5,"神話":6,"深淵":7,"十神":8});
+const STRATEGY_EXCLUDED=new Set(["myth_enami","myth_yori","myth_rion","myth_hide"]);
+function highRarityStrategicIdentity(species){
+ if(!species||(STRATEGY_RARITY[species.rarity]??0)<STRATEGY_RARITY.SSR||STRATEGY_EXCLUDED.has(species.id)||species.isAbyss||species.isTenGod||species.tags?.includes?.("abyss")||species.tags?.includes?.("tenGod"))return species;
+ const role=String(species.role??"balanced"),tier=Math.max(0,(STRATEGY_RARITY[species.rarity]??3)-STRATEGY_RARITY.SSR),base={...(species.baseStats??{})};let kind="breaker",label="突破・会心",evasion=10+tier*2,accuracy=116+tier*2;
+ if(["tank","guard","defense","bruiser"].some(value=>role.includes(value))){kind="tank";label="守護・障壁・肩代わり";base.hp=Math.round((base.hp??1)*1.08);base.def=Math.round((base.def??1)*1.12);evasion=5+tier;accuracy=106+tier*2}
+ else if(["support","healer","heal"].some(value=>role.includes(value))){kind="support";label="回復・浄化・全体支援";base.hp=Math.round((base.hp??1)*1.06);base.def=Math.round((base.def??1)*1.06);evasion=16+tier*2;accuracy=108+tier*2}
+ else if(["debuffer","poison","burner","controller","magic"].some(value=>role.includes(value))){kind="control";label="弱体・命中崩し・行動制御";evasion=18+tier*2;accuracy=112+tier*2}
+ else if(["speed","assassin","ranged","critical","ambush"].some(value=>role.includes(value))){kind="agile";label="先制・回避・見切り";base.spd=Math.round((base.spd??1)*1.06);evasion=22+tier*2;accuracy=115+tier*2}
+ base.evasion=Math.min(40,Math.max(Number(base.evasion)||0,evasion));base.accuracy=Math.min(135,Math.max(Number(base.accuracy)||100,accuracy));
+ return{...species,baseStats:base,strategicIdentity:{kind,label,evasion:base.evasion,accuracy:base.accuracy}};
+}
 const ALL_SPECIES={...BASE_SPECIES,...EXPANDED_SPECIES,...ADDITIONAL_SPECIES,...MYTHIC_SERIAL_SPECIES};
 export const SPECIES=Object.freeze(Object.fromEntries(
-  Object.entries(ALL_SPECIES).map(([id,species])=>[id,applyMonsterNameOverride({...species,element:canonicalAttribute(species.element,id)})])
+  Object.entries(ALL_SPECIES).map(([id,species])=>[id,applyMonsterNameOverride(highRarityStrategicIdentity({...species,element:canonicalAttribute(species.element,id)}))])
 ));

@@ -1,6 +1,6 @@
-import{SLOT_UNLOCK_LEVEL,compatibleSubslots,EQUIPMENT_SLOT_ORDER}from"../data/equipment.js?v=2.10.0-build160";
-import{signatureEquipmentOwnerId,signatureEquipmentMatchesMonster}from"../core/SignatureWeaponSystem.js?v=2.10.0-build160";
-import{equipmentRequiredMonsterLevel}from"../models/Equipment.js?v=2.10.0-build160";
+import{SLOT_UNLOCK_LEVEL,compatibleSubslots,EQUIPMENT_SLOT_ORDER}from"../data/equipment.js?v=2.10.0-build161";
+import{signatureEquipmentOwnerId,signatureEquipmentMatchesMonster}from"../core/SignatureWeaponSystem.js?v=2.10.0-build161";
+import{equipmentRequiredMonsterLevel}from"../models/Equipment.js?v=2.10.0-build161";
 
 export{EQUIPMENT_SLOT_ORDER};
 

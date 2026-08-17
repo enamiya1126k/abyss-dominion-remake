@@ -69,5 +69,5 @@ test("build160 UI and economy rules remain wired to the app",async()=>{
  for(const token of["潤沢なGOLD","魔晶石 ×","bossExperiencePackAmount","宝箱探索セット"])assert.ok(main.includes(token),token);
  assert.match(main,/return pool\.map\(value=>\(\{value,sort:Math\.random\(\)\}\)\)\.sort/);assert.match(main,/restGoldCost\(recovery\)/);assert.match(main,/\/250\+\(Number\(recovery\.mp\)/);
  assert.match(main,/id:"reviveLeaves"[^}]+price:60000/);assert.match(main,/function resolveRandomSkillElement/);assert.match(main,/battleFloor=prepared\.fixedTrialScaling\?hiddenFloor/);
- assert.match(styles,/grid-template-areas:"art copy" "actions actions"/);assert.match(styles,/home-shop-buy-actions\{grid-area:actions/);assert.match(styles,/weekday-gacha-calendar/);assert.match(index,/ASSET_BUILD = "build160"/);
+ assert.match(styles,/grid-template-areas:"art copy" "actions actions"/);assert.match(styles,/home-shop-buy-actions\{grid-area:actions/);assert.match(styles,/weekday-gacha-calendar/);assert.match(index,/ASSET_BUILD = "build161"/);
 });

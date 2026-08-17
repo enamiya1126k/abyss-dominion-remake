@@ -1,11 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.10.0-build160";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.10.0-build160";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.10.0-build160";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.10.0-build160";
-import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build160";
-import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.10.0-build160";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0-build160";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.10.0-build160";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.10.0-build161";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.10.0-build161";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.10.0-build161";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.10.0-build161";
+import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build161";
+import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.10.0-build161";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0-build161";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.10.0-build161";
 
 function battleInteger(value){return Math.round(Number(value)||0).toLocaleString("ja-JP")}
 function renderTurnOrder(battle){
@@ -22,7 +22,7 @@ function battleEffectLabel(effect){return BATTLE_EFFECT_LABELS[effect?.kind]??ef
 function battleStatusLabel(status){const labels={poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖"};return labels[status?.id]??status?.name??statusLabel(status)}
 function remainingTurns(turns,persistent=false){const value=Math.max(0,Number(turns)||0);return value?` 残${value}`:persistent?"・持続":""}
 const INVINCIBLE_ALLIANCE_IDS=Object.freeze(["myth_enami","myth_rion","myth_yori","myth_hide"]);
-function invincibleAllianceActive(battle){const ids=new Set((battle.party??[]).map(monster=>monster.speciesId));return INVINCIBLE_ALLIANCE_IDS.every(id=>ids.has(id))}
+function invincibleAllianceActive(battle){const ids=new Set((battle.party??[]).filter(monster=>Number(monster.currentHp)>0).map(monster=>monster.speciesId));return INVINCIBLE_ALLIANCE_IDS.every(id=>ids.has(id))}
 function hpBar(battle,id,rate,label,tone){
  const normalized=Math.max(0,Math.min(100,Number(rate)||0)),trail=battle.hpTrails?.[id],elapsed=trail?Math.max(0,Date.now()-(Number(trail.startedAt)||0)):Infinity,duration=Math.max(1,Number(trail?.duration)||1400),from=Math.max(normalized,Number(trail?.from)||normalized),active=Boolean(trail&&elapsed<duration&&from>normalized);
  const timing=active?` style="--hp-from:${from.toFixed(3)}%;--hp-to:${normalized.toFixed(3)}%;--hp-trail-duration:${duration}ms;--hp-trail-delay:-${Math.min(elapsed,duration)}ms"`:"";

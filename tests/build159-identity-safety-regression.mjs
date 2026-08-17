@@ -69,6 +69,6 @@ test("save migration keeps equipment attached while correcting legacy serial ran
 test("critical/down exploration and readable status details are wired to both modes",async()=>{
  const[main,online,profile,styles,index]=await Promise.all([read("src/main.js"),read("src/online/OnlinePartyClient.js"),read("src/ui/screens/OnlinePartyScreen.js"),read("src/Styles/v2.10.0.css"),read("index.html")]);
  assert.match(main,/currentHp\/maximumHp<=\.1/);assert.match(main,/down\?"down":sequence/);assert.match(online,/critical=!down&&hp\/maxHp<=\.1/);assert.match(online,/frame:down\?"down":"idle"/);assert.match(profile,/frame="idle"/);
- for(const token of["battle-status-effect-entries","最終効果","発動元：","build160CriticalBlink","equipment-archetype-chip"])assert.ok(`${main}\n${styles}`.includes(token),token);
- assert.match(index,/ASSET_BUILD = "build160"/);
+ for(const token of["battle-status-effect-entries","最終効果","発動元：","build161CriticalBlink","equipment-archetype-chip"])assert.ok(`${main}\n${styles}`.includes(token),token);
+ assert.match(index,/ASSET_BUILD = "build161"/);
 });

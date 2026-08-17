@@ -1,5 +1,5 @@
-import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.10.0-build160";
-import{endgameCharacter}from"../data/endgameCharacters.js?v=2.10.0-build160";
+import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.10.0-build161";
+import{endgameCharacter}from"../data/endgameCharacters.js?v=2.10.0-build161";
 
 const CONTROL_STATUS_IDS=new Set(["sleep","paralysis","freeze","charm","confusion","fear"]);
 function statusProfileFor(target){return target?.statusProfile??endgameCharacter(target?.endgameBossId)?.statusProfile??null}
@@ -24,13 +24,14 @@ export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicA
  if(!enemy||enemy.hp<=0)return{beforeHp:Math.max(0,Number(enemy?.hp)||0),damage:0,requested:0};
  const requested=Math.max(0,Math.floor(Number(amount)||0)),beforeHp=enemy.hp;
  let damage=requested;
+ // A mimic is a slow evasive fortress. A source can chip it once per round,
+ // at most four different sources can chip it, and every accepted hit is 1.
  if(enemy.enemyMimicArmor&&!bypassMimicArmor){
-  const round=Math.max(1,Math.floor(Number(battle?.turn)||1));
-  if(enemy._mimicDamageRound!==round){enemy._mimicDamageRound=round;enemy._mimicDamageSources={};enemy._mimicRoundDamage=0}
-  const queueEntry=battle?.turnQueue?.[Math.max(0,Number(battle?.queueIndex)||0)],resolvedSource=String(sourceId??(queueEntry?.type==="ally"?queueEntry.id:"party"));
-  enemy._mimicDamageSources??={};
-  damage=enemy._mimicDamageSources[resolvedSource]||Number(enemy._mimicRoundDamage)>=4?0:Math.min(1,damage);
-  if(damage>0){enemy._mimicDamageSources[resolvedSource]=true;enemy._mimicRoundDamage=(Number(enemy._mimicRoundDamage)||0)+1}
+  const round=Number(battle?.turn??battle?.round??0),source=String(sourceId??"default");
+  if(enemy._mimicArmorRound!==round){enemy._mimicArmorRound=round;enemy._mimicArmorSources=[]}
+  const sources=new Set(enemy._mimicArmorSources??[]);
+  if(sources.has(source)||sources.size>=4)damage=0;
+  else{sources.add(source);enemy._mimicArmorSources=[...sources];damage=Math.min(1,damage)}
  }
  enemy.hp=Math.max(0,enemy.hp-damage);
  const applied=beforeHp-enemy.hp;

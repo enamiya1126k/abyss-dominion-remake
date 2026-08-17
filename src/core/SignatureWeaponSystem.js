@@ -1,7 +1,7 @@
-import{SPECIES}from"../data/species.js?v=2.10.0-build160";
-import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.10.0-build160";
-import{RARITY_ORDER}from"../data/equipment.js?v=2.10.0-build160";
-import{createEquipment}from"../models/Equipment.js?v=2.10.0-build160";
+import{SPECIES}from"../data/species.js?v=2.10.0-build161";
+import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.10.0-build161";
+import{RARITY_ORDER}from"../data/equipment.js?v=2.10.0-build161";
+import{createEquipment}from"../models/Equipment.js?v=2.10.0-build161";
 
 const MYTHIC=Object.freeze({
  myth_enami:Object.freeze({id:"enami-multitask",ownerId:"myth_enami",ownerName:"えなみ",name:"多動共鳴",description:"創作衝動が加速し、スキル後に追加行動を狙う。",extraActionChance:.35,theme:"連続行動"}),
@@ -55,6 +55,18 @@ export function signatureStatBonuses(state,monster){const pieces=signatureSetSta
 export function activeSignatureResonances(state,party=[]){return party.map(monster=>({monster,...(signatureSetState(state,monster)??{})})).filter(entry=>entry.active&&entry.definition)}
 
 export function signatureEligibleOwners(state){const seen=new Set(),owners=[];for(const monster of state?.monsters??[]){const ownerId=monsterOwnerId(monster);if(!ownerId||seen.has(ownerId))continue;const rarity=monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N";if(!ENDGAME_CHARACTERS[ownerId]&&(RARITY_ORDER[rarity]??0)<(RARITY_ORDER.LR??6))continue;seen.add(ownerId);owners.push({ownerId,ownerName:signatureWeaponDefinition(ownerId)?.ownerName??ownerId,monster})}return owners}
+export const PERMANENT_SIGNATURE_RATE=.001;
+const PERMANENT_SIGNATURE_EXCLUSIONS=new Set(["myth_enami","myth_yori","myth_rion","myth_hide"]);
+export function permanentSignatureOwners(){return Object.values(SPECIES).filter(species=>{
+ const rarity=species.rarity??"N";
+ return(RARITY_ORDER[rarity]??0)>=(RARITY_ORDER.SSR??3)
+  &&!PERMANENT_SIGNATURE_EXCLUSIONS.has(species.id)
+  &&!species.serialOnly
+  &&!species.isAbyss&&!species.tags?.includes?.("abyss")
+  &&!species.isTenGod&&!species.tags?.includes?.("tenGod")
+  &&!ENDGAME_CHARACTERS[species.id];
+}).map(species=>({ownerId:species.id,ownerName:signatureWeaponDefinition(species.id)?.ownerName??cleanName(species.name),rarity:species.rarity})).sort((a,b)=>(RARITY_ORDER[b.rarity]??0)-(RARITY_ORDER[a.rarity]??0)||a.ownerName.localeCompare(b.ownerName,"ja"))}
+export function rollPermanentSignatureHit(random=Math.random){return Math.max(0,Math.min(.999999,Number(random?.())||0))<PERMANENT_SIGNATURE_RATE}
 export function createSignatureEquipment(ownerId,pieceIndex=Math.floor(Math.random()*6)){pieceIndex=Math.max(0,Math.min(5,Math.floor(Number(pieceIndex)||0)));const definition=signatureWeaponDefinition(ownerId),plan=SLOT_PLAN[pieceIndex];if(!definition||!plan)return null;const endgame=ENDGAME_CHARACTERS[ownerId],mythicGear=MYTHIC_GEAR[ownerId],rarity=endgame?.faction==="tenGod"?"十神":endgame?.faction==="abyss"?"深淵":SPECIES[ownerId]?.rarity==="神話"?"神話":"LR";const item=createEquipment(plan.slot,{rarity,handedness:plan.slot==="weapon"?(plan.subslot==="weaponRight"?"right":"left"):null,ruleOverrides:{signatureOwnerId:ownerId,signatureOwnerName:definition.ownerName,signaturePieceIndex:pieceIndex,subslot:plan.subslot,signature:true}});item.name=endgame?.gear?.[pieceIndex]?.name??mythicGear?.names?.[pieceIndex]??`${definition.ownerName}専用・${plan.suffix}`;item.series=endgame?.seriesId??`signature-${ownerId}`;item.seriesName=`${definition.ownerName}専用`;item.favorite=true;item.fixedEffectText=endgame?.gear?.[pieceIndex]?.effectText??`${pieceIndex+1}点目の専用共鳴。2・4・6点で権能が段階覚醒する。`;item.signatureSkill=definition.name;if(mythicGear){item.visualAsset=`./assets/ui/equipment/mythic/${mythicGear.asset}-${["weapon-1","weapon-2","armor-1","armor-2","accessory-1","accessory-2"][pieceIndex]}.png`;item.stats={...MYTHIC_GEAR_STATS[pieceIndex]}}return item}
 
 export const SIGNATURE_WEAPON_RESONANCES=MYTHIC;

@@ -1,4 +1,4 @@
-import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=2.10.0-build160";
+import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=2.10.0-build161";
 
 export const ABYSS_SKILL_TREE_VERSION=6;
 
@@ -32,7 +32,7 @@ const FOUNDATION_LANES=Object.freeze({
  "exploration-instinct":2,"exploration-relic-sense":1,"exploration-elite-trail":3,"exploration-abyss-luck":1,"exploration-key-echo":3,"exploration-endless-path":2
 });
 
-// build160: the tree is a long-term progression system, but its previous
+// build161: the tree is a long-term progression system, but its previous
 // prices became a wall long before the interesting branch choices appeared.
 // Keep every effect/prerequisite intact and reduce every node to roughly 25%.
 function discountedTreePrice(original){

@@ -1,4 +1,4 @@
-import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.10.0-build160";
+import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.10.0-build161";
 
 export const TEAM_BATTLE_UNLOCK_FLOOR=50;
 export const GAUNTLET_UNLOCK_FLOOR=100;
@@ -171,14 +171,22 @@ export const ENDGAME_TRIALS=Object.freeze([
  {number:22,name:"世界法則・最終審理",bossIds:["ten_chaos","ten_dominion","ten_divinity"]}
 ]);
 export function endgameTrialDefinition(number){return ENDGAME_TRIALS[Math.max(1,Math.min(ENDGAME_TRIAL_BATTLE_COUNT,Math.floor(Number(number)||1)))-1]}
-export function createEndgameTrialEncounter(state,number=normalizeEndgameState(state).trials.battle){
- // build160: 奈落回廊はプレイヤーの最高到達階を参照しない固定難度。
- // 暴食を現実的な最初の壁にし、以降は番号と周回だけで段階上昇する。
- const trial=endgameTrialDefinition(number),trials=normalizeEndgameState(state).trials,loopMultiplier=endgameTrialLoopMultiplier(trials.loop),progress=Math.max(0,trial.number-1),level=Math.min(9999,220+progress*72+(Math.max(1,trials.loop)-1)*320),solo=trial.bossIds.length===1;
- const leaders=trial.bossIds.map((bossId,index)=>{const boss=ENDGAME_BOSSES[bossId],factionProgress=boss.faction==="tenGod"?Math.max(0,progress-ABYSS_IDS.length):progress,base=boss.faction==="tenGod"?.045+factionProgress*.0055:.22+factionProgress*.026,groupRate=solo?1:.64;return enemy(boss.speciesId,level+index*3,{boss:true,endgameBossId:boss.id,visualSpeciesId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈回廊 ${trials.loop}周〉`,statMultiplier:base*groupRate*loopMultiplier,fixedTrialScaling:true,fixedTrialHpMultiplier:solo?4.2:2.5,enemyFloor:level+index*3,uncapturable:true,elementMultipliers:boss.elementMultipliers,statusProfile:boss.statusProfile,bossPassive:boss.passive})});
- if(!solo)return{trial,loop:trials.loop,enemies:leaders};
+function rawEndgameTrialEncounter(loop,number){
+ const trial=endgameTrialDefinition(number),loopMultiplier=endgameTrialLoopMultiplier(loop),progress=Math.max(0,trial.number-1),level=Math.min(9999,220+progress*72+(Math.max(1,loop)-1)*320),solo=trial.bossIds.length===1;
+ const leaders=trial.bossIds.map((bossId,index)=>{const boss=ENDGAME_BOSSES[bossId],factionProgress=boss.faction==="tenGod"?Math.max(0,progress-ABYSS_IDS.length):progress,base=boss.faction==="tenGod"?.045+factionProgress*.0055:.22+factionProgress*.026,groupRate=solo?1:.64;return enemy(boss.speciesId,level+index*3,{boss:true,endgameBossId:boss.id,visualSpeciesId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈回廊 ${loop}周〉`,statMultiplier:base*groupRate*loopMultiplier,fixedTrialScaling:true,fixedTrialHpMultiplier:solo?4.2:2.5,enemyFloor:level+index*3,uncapturable:true,elementMultipliers:boss.elementMultipliers,statusProfile:boss.statusProfile,bossPassive:boss.passive})});
+ if(!solo)return{trial,loop,enemies:leaders};
  const boss=ENDGAME_BOSSES[trial.bossIds[0]],supports=boss.support.slice(0,3).map((speciesId,index)=>enemy(speciesId,Math.max(1,level-8-index*3),{nameOverride:`${boss.faction==="tenGod"?"法則守":"深淵眷属"}・${index+1}`,statMultiplier:(.72+progress*.018)*loopMultiplier,fixedTrialScaling:true,fixedTrialHpMultiplier:1.6,enemyFloor:Math.max(1,level-8-index*3),endgameSupport:true,uncapturable:true}));
- return{trial,loop:trials.loop,enemies:[...leaders,...supports]};
+ return{trial,loop,enemies:[...leaders,...supports]};
+}
+export function endgameTrialThreat(encounter){return(encounter?.enemies??[]).reduce((sum,entry)=>sum+Math.max(.001,Number(entry.statMultiplier)||1)*Math.max(1,Number(entry.fixedTrialHpMultiplier)||1)*endgameFactionStatMultiplier(entry.faction),0)}
+export function createEndgameTrialEncounter(state,number=normalizeEndgameState(state).trials.battle){
+ // 周回境界では、前周の最終複数戦を基準に最低105%の総脅威を保証する。
+ // 深淵→十神の陣営倍率差があっても、次周1戦目で難度が落ちない。
+ const trials=normalizeEndgameState(state).trials,loop=Math.max(1,trials.loop),encounter=rawEndgameTrialEncounter(loop,number);
+ if(loop<=1)return encounter;
+ const previousFinal=rawEndgameTrialEncounter(loop-1,ENDGAME_TRIAL_BATTLE_COUNT),required=endgameTrialThreat(previousFinal)*1.05,current=Math.max(.001,endgameTrialThreat(encounter)),continuity=Math.max(1,required/current);
+ if(continuity>1)encounter.enemies=encounter.enemies.map(entry=>({...entry,statMultiplier:(Number(entry.statMultiplier)||1)*continuity,continuityMultiplier:continuity}));
+ return{...encounter,continuityMultiplier:continuity,previousFinalThreat:endgameTrialThreat(previousFinal),threat:endgameTrialThreat(encounter)};
 }
 export function recordEndgameTrialResult(state,number,won){
  const trials=normalizeEndgameState(state).trials,index=Math.max(1,Math.min(ENDGAME_TRIAL_BATTLE_COUNT,Math.floor(Number(number)||trials.battle)));

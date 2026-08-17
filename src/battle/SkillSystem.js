@@ -1,6 +1,6 @@
-import{SPECIES}from"../data/species.js?v=2.10.0-build160";
-import{SKILLS}from"../data/skills.js?v=2.10.0-build160";
-import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.10.0-build160";
+import{SPECIES}from"../data/species.js?v=2.10.0-build161";
+import{SKILLS}from"../data/skills.js?v=2.10.0-build161";
+import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.10.0-build161";
 
 const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
 const ROLE_POOLS={
@@ -191,8 +191,21 @@ for(const species of Object.values(SPECIES)){
   cooldown:index<2?0:index<4?2:3,
   unlock:{type:"level",value:UNLOCK_LEVELS[Math.min(index,UNLOCK_LEVELS.length-1)]},
   description:"固有能力を発動する。",
-  ...source
+ ...source
  }));
+}
+// SSR以上（四LR・深淵・十神を除く）は、単純な数値上位ではなく編成上の
+// 役割を持つ。既存の固有技を壊さず、役割が伝わる命中・回避・障壁効果を
+// 1つだけ重ねるため、どの個体にも採用理由と対策が生まれる。
+for(const species of Object.values(SPECIES)){
+ const identity=species.strategicIdentity,skills=GENERATED[species.id];if(!identity||!skills?.length)continue;
+ const index=Math.min(1,skills.length-1),skill=skills[index],effects=[...(skill.effects??[])];let addition={},identityEffects=[];
+ if(identity.kind==="tank"){identityEffects=[{kind:"guard",value:.16,turns:2,allies:true}];addition={partyShieldRate:.08}}
+ else if(identity.kind==="support")identityEffects=[{kind:"evasionUp",value:.18,turns:3,allies:true},{kind:"accuracyUp",value:.15,turns:3,allies:true}];
+ else if(identity.kind==="control")identityEffects=[{kind:"evasionDown",value:.24,turns:3,enemy:true},{kind:"accuracyDown",value:.20,turns:3,enemy:true}];
+ else if(identity.kind==="agile")identityEffects=[{kind:"evasionUp",value:.28,turns:3},{kind:"accuracyUp",value:.20,turns:3}];
+ else identityEffects=[{kind:"accuracyUp",value:.22,turns:3},{kind:"evasionDown",value:.15,turns:3,enemy:true}];
+ skills[index]={...skill,...addition,tag:`${skill.tag??"固有"}・${identity.label}`,description:`${skill.description??"固有能力を発動する。"} ${identity.label}の追加効果。`,effects:[...effects,...identityEffects]};
 }
 const BY_ID=new Map(Object.values(GENERATED).flat().map(skill=>[skill.id,skill]));
 
@@ -252,7 +265,7 @@ export function skillDamage(stats,enemy,skill,critical=false){const a=stats._aff
 export function skillElementLabel(skill){return elementLabel(skill?.element)}
 
 const STATUS_NAMES=Object.freeze({poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖",petrify:"石化"});
-const EFFECT_NAMES=Object.freeze({atkUp:"ATK上昇",atkDown:"ATK低下",defUp:"DEF上昇",defDown:"DEF低下",spdUp:"SPD上昇",spdDown:"SPD低下"});
+const EFFECT_NAMES=Object.freeze({atkUp:"ATK上昇",atkDown:"ATK低下",defUp:"DEF上昇",defDown:"DEF低下",spdUp:"SPD上昇",spdDown:"SPD低下",evasionUp:"回避率上昇",evasionDown:"回避率低下",accuracyUp:"命中率上昇",accuracyDown:"命中率低下"});
 function percent(value){return`${Math.round((Number(value)||0)*100)}%`}
 function turnText(value){const turns=Math.max(0,Math.round(Number(value)||0));return turns?`${turns}ターン`:"即時"}
 

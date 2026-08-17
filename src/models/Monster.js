@@ -1,10 +1,10 @@
-import{SPECIES}from"../data/species.js?v=2.10.0-build160";
-import{PERSONALITIES}from"../data/personalities.js?v=2.10.0-build160";
-import{MONSTER_COLORS}from"../data/colors.js?v=2.10.0-build160";
-import{normalizedResistances}from"../data/attributes.js?v=2.10.0-build160";
-import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.10.0-build160";
-import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.10.0-build160";
-import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.10.0-build160";
+import{SPECIES}from"../data/species.js?v=2.10.0-build161";
+import{PERSONALITIES}from"../data/personalities.js?v=2.10.0-build161";
+import{MONSTER_COLORS}from"../data/colors.js?v=2.10.0-build161";
+import{normalizedResistances}from"../data/attributes.js?v=2.10.0-build161";
+import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.10.0-build161";
+import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.10.0-build161";
+import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.10.0-build161";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -238,7 +238,8 @@ export function calculatedStats(monster){
     mdef:Math.max(1,Math.floor(baseDef*(magicalRole?1.08:.82)))+finite(gear.mdef),
     spd:calc("spd")+finite(gear.spd),
     crit:Math.floor(finite(species.baseStats.crit)*finite(personality?.modifiers?.crit,1))+finite(gear.crit),
-    evasion:Math.floor(finite(species.baseStats.evasion)*finite(personality?.modifiers?.evasion,1))+finite(gear.evasion)
+    evasion:Math.floor(finite(species.baseStats.evasion)*finite(personality?.modifiers?.evasion,1))+finite(gear.evasion),
+    accuracy:Math.max(20,Math.min(180,finite(species.baseStats.accuracy,100)+finite(gear.accuracy)))
   };
   // Contracted endgame characters retain their actual character-class base
   // power in every mode. Deep Abyss is x10; Ten Gods are x10 above that.
@@ -252,7 +253,7 @@ export function calculatedStats(monster){
     const pct=finite(affix[`${key}Pct`]??(key==="matk"?affix.atkPct:key==="mdef"?affix.defPct:0));
     if(pct)result[key]=Math.floor(result[key]*(1+pct/100));
   }
-  result.crit+=finite(affix.critRate);result.evasion+=finite(affix.evasion);result._affixes=affix;
+  result.crit+=finite(affix.critRate);result.evasion+=finite(affix.evasion);result.accuracy=Math.max(20,Math.min(180,result.accuracy+finite(affix.accuracy)));result._affixes=affix;
   if(trait.mods.crit)result.crit+=trait.mods.crit;
   if(syn.atk){result.atk=Math.floor(result.atk*(1+syn.atk));result.matk=Math.floor(result.matk*(1+syn.atk))}
   if(syn.def){result.def=Math.floor(result.def*(1+syn.def));result.mdef=Math.floor(result.mdef*(1+syn.def))}
@@ -260,6 +261,7 @@ export function calculatedStats(monster){
   if(syn.spd)result.spd=Math.floor(result.spd*(1+syn.spd));
   if(syn.crit)result.crit+=syn.crit;
   if(syn.evasion)result.evasion+=syn.evasion;
+  result.evasion=Math.min(75,Math.max(0,result.evasion));
   for(const bonus of activeSeriesBonuses(monster._seriesCounts)){if(bonus.effect.atk){result.atk=Math.floor(result.atk*(1+bonus.effect.atk));result.matk=Math.floor(result.matk*(1+bonus.effect.atk))}if(bonus.effect.def){result.def=Math.floor(result.def*(1+bonus.effect.def));result.mdef=Math.floor(result.mdef*(1+bonus.effect.def))}if(bonus.effect.hp)result.hp=Math.floor(result.hp*(1+bonus.effect.hp));if(bonus.effect.spd)result.spd=Math.floor(result.spd*(1+bonus.effect.spd));if(bonus.effect.crit)result.crit+=bonus.effect.crit;if(bonus.effect.evasion)result.evasion+=bonus.effect.evasion;}
   const mastery=monster._seriesMasteryBonus??{};if(mastery.hp)result.hp=Math.floor(result.hp*(1+mastery.hp));if(mastery.atk){result.atk=Math.floor(result.atk*(1+mastery.atk));result.matk=Math.floor(result.matk*(1+mastery.atk))}if(mastery.def){result.def=Math.floor(result.def*(1+mastery.def));result.mdef=Math.floor(result.mdef*(1+mastery.def))}if(mastery.spd)result.spd=Math.floor(result.spd*(1+mastery.spd));if(mastery.crit)result.crit+=mastery.crit;
   const abyss=monster._abyssSkillEffects??{};

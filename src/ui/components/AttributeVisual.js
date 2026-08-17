@@ -1,4 +1,4 @@
-import{canonicalAttribute}from"../../data/attributes.js?v=2.10.0-build160";
+import{canonicalAttribute}from"../../data/attributes.js?v=2.10.0-build161";
 
 const ATTRIBUTE_ORDER=Object.freeze([
  "neutral","fire","water","ice",

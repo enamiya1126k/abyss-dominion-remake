@@ -1,12 +1,12 @@
-import{APP_VERSION}from"../../core/config.js?v=2.10.0-build160";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=2.10.0-build160";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.10.0-build160";
-import{ENDGAME_BOSSES,ENDGAME_TRIALS}from"../../core/EndgameSystem.js?v=2.10.0-build160";
-import{SPECIES}from"../../data/species.js?v=2.10.0-build160";
-import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build160";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0-build160";
-import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0-build160";
-import{pixelIcon,resourceHud}from"../components/GameChrome.js?v=2.10.0-build160";
+import{APP_VERSION}from"../../core/config.js?v=2.10.0-build161";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=2.10.0-build161";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.10.0-build161";
+import{ENDGAME_BOSSES,ENDGAME_TRIALS}from"../../core/EndgameSystem.js?v=2.10.0-build161";
+import{SPECIES}from"../../data/species.js?v=2.10.0-build161";
+import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build161";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0-build161";
+import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0-build161";
+import{pixelIcon,resourceHud}from"../components/GameChrome.js?v=2.10.0-build161";
 
 function partyCard(monster,index){
  const stats=calculatedStats(monster),hp=Math.max(0,Math.min(stats.hp,monster.currentHp??stats.hp)),mpMax=maxMp(monster),mp=Math.max(0,Math.min(mpMax,monster.currentMp??mpMax)),species=SPECIES[monster.speciesId]??{},rarity=monster.endgameFaction==="tenGod"?"tenGod":monster.endgameFaction==="abyss"?"abyss":species.rarity??"N",attribute=monster.attribute??species.element??"neutral";

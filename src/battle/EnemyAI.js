@@ -1,5 +1,5 @@
-import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=2.10.0-build160";
-import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.10.0-build160";
+import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=2.10.0-build161";
+import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.10.0-build161";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
  devour:"devour",annihilate:"annihilate",wrathBurst:"wrathBurst",mirror:"mirror",sleepMist:"sleepMist",plunder:"plunder",sovereign:"sovereign",
@@ -68,14 +68,16 @@ export function createEnemyBattleState(species,source,floor){
  const baseName=source.nameOverride??(boss?`深淵の${species.name}`:species.name),depthName=depth.active&&depth.step>0&&!source.nameOverride?`【${depth.label}】${baseName}`:baseName;
  const atk=Math.floor((species.baseStats.atk+source.level*1.4)*profile.atk*depth.atk),def=Math.floor((species.baseStats.def+source.level*.5)*profile.def*depth.def),magicRole=["magic","support","healer","controller","debuffer","poison","burner"].some(value=>String(species.role??"").includes(value));
  return{...source,speciesId:source.speciesId,name:depthName,level:source.level,hp:maxHp,maxHp,
-  atk,matk:Math.max(1,Math.floor(atk*(magicRole?1.08:.72))),def,mdef:Math.max(0,Math.floor(def*(magicRole?1.08:.82))),spd:Math.floor((species.baseStats.spd+source.level*.18)*profile.spd*depth.spd),
+  atk,matk:Math.max(1,Math.floor(atk*(magicRole?1.08:.72))),def,mdef:Math.max(0,Math.floor(def*(magicRole?1.08:.82))),spd:Math.floor((species.baseStats.spd+source.level*.18)*profile.spd*depth.spd),evasion:Math.min(75,Math.max(0,Number(source.evasion??species.baseStats.evasion)||0)),accuracy:Math.max(20,Math.min(180,Number(source.accuracy??species.baseStats.accuracy)||100)),
   emoji:species.emoji??"👾",color:boss?"#bb4cff":species.baseStats.atk>12?"#df6262":"#a58f59",boss,bossTier:profile.tier,bossStatusResist:Math.min(.9,(profile.statusResist??0)+depth.statusResist),bossHealRate:profile.healRate,bossPowerMultiplier:profile.powerMultiplier,depthTier:depth.label,depthStep:depth.step,depthPressure:depth.active?Math.round(depth.step*10):0,phase:1,enraged:false,guard:false,charging:false,healed:false,
-  intent:"様子を見ている",maxMp:maxEnemyMp,currentMp:Math.max(0,Math.min(maxEnemyMp,Number(source.currentMp??maxEnemyMp))),specialCooldown:0,divineBarrier:0,role:species.role??"balanced",element:species.element??"neutral"};
+  intent:"様子を見ている",maxMp:maxEnemyMp,currentMp:Math.max(0,Math.min(maxEnemyMp,Number(source.currentMp??maxEnemyMp))),specialCooldown:0,divineBarrier:0,role:species.role??"balanced",strategicIdentity:species.strategicIdentity??null,element:species.element??"neutral"};
 }
 function normalSpecialAction(enemy,hpRate){
  enemy.specialCooldown=Math.max(0,(enemy.specialCooldown??0)-1);if(enemy.specialCooldown>0)return null;
- const role=String(enemy.role??""),alliesSupport=["healer","support","controller"].some(value=>role.includes(value));
+ const role=String(enemy.role??""),identity=enemy.strategicIdentity?.kind,alliesSupport=["healer","support","controller"].some(value=>role.includes(value));
  if(alliesSupport&&hpRate<.72&&Math.random()<(enemy.boss?.7:.44)){enemy.specialCooldown=2;enemy.intent=role.includes("heal")?"群体を再生する":"群勢を強化する";return role.includes("heal")?ENEMY_ACTIONS.packMend:ENEMY_ACTIONS.packRally}
+ if(identity==="tank"&&Math.random()<(enemy.boss?.48:.30)){enemy.specialCooldown=2;enemy.intent="守護陣形を組む";return ENEMY_ACTIONS.packRally}
+ if(identity==="control"&&Math.random()<(enemy.boss?.52:.34)){enemy.specialCooldown=2;enemy.intent="命中と強化を崩す";return Math.random()<.55?ENEMY_ACTIONS.dispelWave:ENEMY_ACTIONS.manaSiphon}
  const action=({fire:ENEMY_ACTIONS.flameSweep,ice:ENEMY_ACTIONS.frostNova,water:ENEMY_ACTIONS.frostNova,poison:ENEMY_ACTIONS.venomCloud,nature:ENEMY_ACTIONS.venomCloud,lightning:ENEMY_ACTIONS.thunderChain,thunder:ENEMY_ACTIONS.thunderChain,earth:ENEMY_ACTIONS.earthRupture,wind:ENEMY_ACTIONS.galeRend,dark:ENEMY_ACTIONS.shadowCurse,light:ENEMY_ACTIONS.radiantVolley})[enemy.element];
  if(action&&Math.random()<(enemy.boss?.76:.4)){enemy.specialCooldown=enemy.boss?1:(Math.random()<.35?1:2);enemy.intent=`${SPECIAL_ACTION_INFO[action].label}を放つ`;return action}
  return null;

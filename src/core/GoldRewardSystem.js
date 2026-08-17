@@ -1,4 +1,4 @@
-import{abyssGoldReward}from"./AbyssSkillTreeSystem.js?v=2.10.0-build160";
+import{abyssGoldReward}from"./AbyssSkillTreeSystem.js?v=2.10.0-build161";
 
 export function partyEquipmentAffixTotal(state,affixId,cap=300){
  const monstersById=new Map((state.monsters??[]).map(monster=>[monster.id,monster]));
