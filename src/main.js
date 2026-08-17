@@ -1,74 +1,74 @@
-import{SaveService}from"./services/SaveService.js?v=2.10.0-build161";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.10.0-build161";
-import{AudioSystem}from"./core/AudioSystem.js?v=2.10.0-build161";
-import{endgameCharacter}from"./data/endgameCharacters.js?v=2.10.0-build161";
-import{SPECIES}from"./data/species.js?v=2.10.0-build161";
-import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.10.0-build161";
-import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES}from"./data/attributes.js?v=2.10.0-build161";
-import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.10.0-build161";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.10.0-build161";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.10.0-build161";
-import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build162";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build162";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.10.0-build161";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.10.0-build161";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.10.0-build161";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.10.0-build161";
-import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.10.0-build161";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.10.0-build161";
-import{Modal}from"./ui/components/Modal.js?v=2.10.0-build161";
-import{pixelIcon}from"./ui/components/GameChrome.js?v=2.10.0-build161";
-import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.10.0-build161";
-import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.10.0-build161";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.10.0-build161";
-import{consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=2.10.0-build161";
-import{createEquipment,equipmentPower,equipmentStatMultiplier,equipmentRequiredMonsterLevel}from"./models/Equipment.js?v=2.10.0-build161";
-import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.10.0-build161";
-import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=2.10.0-build161";
-import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=2.10.0-build161";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=2.10.0-build161";
-import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=2.10.0-build161";
-import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=2.10.0-build161";
-import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=2.10.0-build161";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.10.0-build161";
-import{initialAffixCount,lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.10.0-build161";
-import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=2.10.0-build161";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.10.0-build161";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.10.0-build161";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=2.10.0-build161";
-import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.10.0-build161";
-import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=2.10.0-build161";
-import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=2.10.0-build161";
-import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=2.10.0-build161";
-import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=2.10.0-build161";
-import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=2.10.0-build161";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=2.10.0-build161";
-import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.10.0-build161";
-import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.10.0-build161";
-import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.10.0-build161";
-import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse,skillEffectDetails,skillEffectSummary}from"./battle/SkillSystem.js?v=2.10.0-build161";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.10.0-build161";
-import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectStackBreakdown,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.10.0-build161";
-import{attackHits}from"./battle/HitSystem.js?v=2.10.0-build161";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.10.0-build161";
-import{dangerConfig}from"./core/DangerSystem.js?v=2.10.0-build161";
-import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=2.10.0-build161";
-import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost}from"./core/MagicCircleSystem.js?v=2.10.0-build161";
-import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.10.0-build161";
-import{dungeonThemeForFloor}from"./data/dungeonThemes.js?v=2.10.0-build161";
-import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.10.0-build161";
-import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.10.0-build161";
-import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.10.0-build161";
-import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.10.0-build161";
-import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.10.0-build161";
-import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.10.0-build161";
-import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.10.0-build161";
-import{NOTICE_DEFINITIONS,DAILY_NOTICE_GIFT,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount}from"./core/NoticeSystem.js?v=2.10.0-build161";
-import{weekdayGachaSchedule,weekdayGachaCost,WEEKDAY_GACHA_CALENDAR,WEEKDAY_ENDGAME_RATE,rollWeekdayEndgameHit}from"./core/WeekdayGachaSystem.js?v=2.10.0-build161";
-import{bossExperiencePackAmount}from"./core/BossRewardSystem.js?v=2.10.0-build161";
-import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=2.10.0-build161";
-import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.10.0-build161";
-import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,permanentSignatureOwners,rollPermanentSignatureHit,PERMANENT_SIGNATURE_RATE,createSignatureEquipment}from"./core/SignatureWeaponSystem.js?v=2.10.0-build161";
+import{SaveService}from"./services/SaveService.js?v=2.10.0-build163";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.10.0-build163";
+import{AudioSystem}from"./core/AudioSystem.js?v=2.10.0-build163";
+import{endgameCharacter}from"./data/endgameCharacters.js?v=2.10.0-build163";
+import{SPECIES}from"./data/species.js?v=2.10.0-build163";
+import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.10.0-build163";
+import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES}from"./data/attributes.js?v=2.10.0-build163";
+import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.10.0-build163";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.10.0-build163";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.10.0-build163";
+import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build163";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build163";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.10.0-build163";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.10.0-build163";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.10.0-build163";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.10.0-build163";
+import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.10.0-build163";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.10.0-build163";
+import{Modal}from"./ui/components/Modal.js?v=2.10.0-build163";
+import{pixelIcon}from"./ui/components/GameChrome.js?v=2.10.0-build163";
+import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.10.0-build163";
+import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.10.0-build163";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.10.0-build163";
+import{consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=2.10.0-build163";
+import{createEquipment,equipmentPower,equipmentStatMultiplier,equipmentRequiredMonsterLevel}from"./models/Equipment.js?v=2.10.0-build163";
+import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.10.0-build163";
+import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=2.10.0-build163";
+import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=2.10.0-build163";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=2.10.0-build163";
+import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=2.10.0-build163";
+import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=2.10.0-build163";
+import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=2.10.0-build163";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=2.10.0-build163";
+import{initialAffixCount,lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=2.10.0-build163";
+import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=2.10.0-build163";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.10.0-build163";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.10.0-build163";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=2.10.0-build163";
+import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.10.0-build163";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=2.10.0-build163";
+import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=2.10.0-build163";
+import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=2.10.0-build163";
+import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=2.10.0-build163";
+import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=2.10.0-build163";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=2.10.0-build163";
+import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.10.0-build163";
+import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.10.0-build163";
+import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.10.0-build163";
+import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse,skillEffectDetails,skillEffectSummary}from"./battle/SkillSystem.js?v=2.10.0-build163";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.10.0-build163";
+import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectStackBreakdown,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.10.0-build163";
+import{attackHits}from"./battle/HitSystem.js?v=2.10.0-build163";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.10.0-build163";
+import{dangerConfig}from"./core/DangerSystem.js?v=2.10.0-build163";
+import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=2.10.0-build163";
+import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost}from"./core/MagicCircleSystem.js?v=2.10.0-build163";
+import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.10.0-build163";
+import{dungeonThemeForFloor}from"./data/dungeonThemes.js?v=2.10.0-build163";
+import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.10.0-build163";
+import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=2.10.0-build163";
+import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.10.0-build163";
+import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.10.0-build163";
+import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.10.0-build163";
+import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.10.0-build163";
+import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.10.0-build163";
+import{NOTICE_DEFINITIONS,DAILY_NOTICE_GIFT,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount}from"./core/NoticeSystem.js?v=2.10.0-build163";
+import{weekdayGachaSchedule,weekdayGachaCost,WEEKDAY_GACHA_CALENDAR,WEEKDAY_ENDGAME_RATE,rollWeekdayEndgameHit}from"./core/WeekdayGachaSystem.js?v=2.10.0-build163";
+import{bossExperiencePackAmount}from"./core/BossRewardSystem.js?v=2.10.0-build163";
+import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=2.10.0-build163";
+import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.10.0-build163";
+import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,permanentSignatureOwners,rollPermanentSignatureHit,PERMANENT_SIGNATURE_RATE,createSignatureEquipment}from"./core/SignatureWeaponSystem.js?v=2.10.0-build163";
 
 const TILE=88,COLS=39,ROWS=39,app=document.getElementById("app"),save=new SaveService(),audio=new AudioSystem(()=>save.state.settings);
 let screen="home",selected=null,equipmentTarget=null,equipmentFocusItemId=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",inventoryCategory="all",inventorySort="rarity",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",skillNavigationOrigin="home",inventoryNavigationOrigin="home",settingsNavigationOrigin="home",detailNavigationOrigin="monsters",formationOrigin="home",lastExploreCombatPower=null;
@@ -1372,8 +1372,23 @@ function openInventoryContext(anchor,body){
  requestAnimationFrame(()=>document.addEventListener("pointerdown",dismiss,true));
  return popover;
 }
+function openExperiencePackTarget(){
+ const owned=itemCount("experienceItems"),party=save.state.party.map(id=>save.state.monsters.find(monster=>monster.id===id)).filter(Boolean);
+ if(!party.length)return alert("先に部隊へ仲間を編成してください");
+ const cards=party.map(monster=>{
+  const species=SPECIES[monster.speciesId]??{},stats=calculatedStats(monster),hp=monster.currentHp??stats.hp,dead=hp<=0,need=Math.max(1,expNeedFor(monster)),current=Math.max(0,Number(monster.exp)||0),progress=Math.max(0,Math.min(100,current/need*100)),plan=previewExperiencePacks(monster,1,owned),capacity=experiencePackCapacity(monster,owned);
+  return`<button type="button" class="experience-pack-target ${dead?"is-defeated":""}" data-experience-target="${escapeAttribute(monster.id)}" ${capacity?"":"disabled"}>
+   <span class="experience-pack-target-art">${monsterVisual(monster,species.emoji??"👹",{frame:dead?"down":"idle",className:"experience-pack-target-monster"})}</span>
+   <span class="experience-pack-target-copy"><small>${dead?"戦闘不能・使用可能":"育成対象"}</small><b>${escapeAttribute(displayName(monster))} <em>Lv.${monster.level.toLocaleString()}</em></b><span>EXP ${current.toLocaleString()} / ${need.toLocaleString()}</span><i style="--exp-target-progress:${progress}%"><u></u></i></span>
+   <span class="experience-pack-target-result"><small>1個使用</small><b>${plan.gain?`＋${plan.gain.toLocaleString()} EXP`:"上限到達"}</b><em>${plan.levelAfter>plan.levelBefore?`Lv.${plan.levelBefore.toLocaleString()} → ${plan.levelAfter.toLocaleString()}`:"選択"}</em></span>
+  </button>`;
+ }).join("");
+ closeInventoryContext();app.insertAdjacentHTML("beforeend",Modal("経験値パック・使用対象",`<section class="experience-pack-target-panel"><header><span>◆</span><div><small>EXPERIENCE ARCHIVE</small><b>倒れている仲間にも使用できます</b><p>経験値だけを付与します。戦闘不能は解除されません。</p></div><strong>所持 ${owned.toLocaleString()}個</strong></header><div class="experience-pack-target-grid">${cards}</div></section>`,"やめる"));
+ const modal=topModal();modal.classList.add("experience-pack-target-modal");modal.querySelectorAll("[data-experience-target]").forEach(button=>button.onclick=()=>{const target=save.state.monsters.find(monster=>monster.id===button.dataset.experienceTarget);if(!target)return;modal.remove();openExperiencePackQuantity(target)});modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
+}
 function openInventoryUseTarget(type){
  if((save.state.inventory?.[type]??0)<=0)return showToast("所持していません");
+ if(type==="experienceItems")return openExperiencePackTarget();
  const single=["potions","highPotions","manaPotions","highManaPotions","fullManaPotions","reviveLeaves","statusCures","fullHeals","experienceItems"].includes(type);
  if(!single){closeInventoryContext();return useFieldItem(type,save.state.party[0])}
  const party=save.state.party.map(id=>save.state.monsters.find(monster=>monster.id===id)).filter(Boolean);
@@ -1382,7 +1397,6 @@ function openInventoryUseTarget(type){
  const modal=topModal();modal.querySelectorAll("[data-inventory-use-target]").forEach(button=>button.onclick=()=>{
   const target=save.state.monsters.find(monster=>monster.id===button.dataset.inventoryUseTarget);if(!target)return;
  if(type==="reviveLeaves"){const maximum=calculatedStats(target).hp;target.currentHp=Math.max(1,Math.floor(maximum*.2));save.state.inventory.reviveLeaves--;save.save();modal.remove();showToast(`${displayName(target)}が立ち上がった`);render();return}
-  if(type==="experienceItems"){modal.remove();openExperiencePackQuantity(target);return}
   useFieldItem(type,target.id);
  });
  modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
@@ -2649,11 +2663,12 @@ function clearAilments(m){m.statuses=[];m.status=null;m.ailments=[];if(battle?.p
 function scaledRecovery(base,max,rate){return Math.max(1,Math.floor(base+max*rate))}
 function openExperiencePackQuantity(target){
  const owned=itemCount("experienceItems"),capacity=experiencePackCapacity(target,owned);if(!capacity)return alert("これ以上レベルを上げられません");
- app.insertAdjacentHTML("beforeend",Modal("経験値パックをまとめて使用",`<div class="experience-pack-picker"><p><b>${displayName(target)} Lv.${target.level.toLocaleString()}</b><br><small>所持 ${owned.toLocaleString()}個・使用可能 ${capacity.toLocaleString()}個</small></p><div class="experience-pack-step"><button type="button" data-exp-step="-10">−10</button><button type="button" data-exp-step="-1">−1</button><input id="experiencePackAmount" type="number" inputmode="numeric" min="1" max="${capacity}" value="${Math.min(10,capacity)}"><button type="button" data-exp-step="1">＋1</button><button type="button" data-exp-step="10">＋10</button></div><div class="experience-pack-presets"><button type="button" data-exp-half>半分</button><button type="button" data-exp-max>MAX</button></div><div id="experiencePackPreview" class="experience-pack-preview"></div><button type="button" id="confirmExperiencePacks" class="primary">この個数を使用</button></div>`,`やめる`));
- const modal=topModal(),input=modal.querySelector("#experiencePackAmount"),preview=modal.querySelector("#experiencePackPreview"),confirm=modal.querySelector("#confirmExperiencePacks"),clamp=value=>Math.max(1,Math.min(capacity,Math.floor(Number(value)||1))),refresh=()=>{input.value=String(clamp(input.value));const plan=previewExperiencePacks(target,input.value,owned);preview.innerHTML=`<strong>${plan.count.toLocaleString()}個 → ${plan.gain.toLocaleString()} EXP</strong><span>Lv.${plan.levelBefore.toLocaleString()} → <b>Lv.${plan.levelAfter.toLocaleString()}</b>${plan.capped?"（上限到達）":""}</span>`;confirm.disabled=!plan.count};
- modal.querySelectorAll("[data-exp-step]").forEach(button=>button.onclick=()=>{input.value=String(clamp(Number(input.value)+Number(button.dataset.expStep)));refresh()});modal.querySelector("[data-exp-half]").onclick=()=>{input.value=String(Math.max(1,Math.floor(capacity/2)));refresh()};modal.querySelector("[data-exp-max]").onclick=()=>{input.value=String(capacity);refresh()};input.oninput=refresh;confirm.onclick=()=>{if(confirm.disabled)return;confirm.disabled=true;const result=consumeExperiencePacks(target,input.value,save.state.inventory);if(!result.ok){confirm.disabled=false;return alert(result.reason==="LEVEL_CAP"?"レベル上限です":"使用数を確認してください")}target.currentHp=Math.min(calculatedStats(target).hp,target.currentHp??calculatedStats(target).hp);target.currentMp=Math.min(maxMp(target),target.currentMp??maxMp(target));save.save();modal.remove();showToast(`${displayName(target)}：${result.count.toLocaleString()}個で ${result.gain.toLocaleString()} EXP`);render()};modal.querySelector("[data-modal-primary]").onclick=closeTopModal;refresh();
+ const species=SPECIES[target.speciesId]??{},stats=calculatedStats(target),hp=target.currentHp??stats.hp,dead=hp<=0;
+ app.insertAdjacentHTML("beforeend",Modal("経験値パックをまとめて使用",`<div class="experience-pack-picker"><div class="experience-pack-hero ${dead?"is-defeated":""}"><span>${monsterVisual(target,species.emoji??"👹",{frame:dead?"down":"idle",className:"experience-pack-hero-monster"})}</span><div><small>${dead?"戦闘不能のまま育成":"育成対象"}</small><b>${escapeAttribute(displayName(target))} Lv.${target.level.toLocaleString()}</b><em>所持 ${owned.toLocaleString()}個・使用可能 ${capacity.toLocaleString()}個</em></div></div><div class="experience-pack-step"><button type="button" data-exp-step="-10">−10</button><button type="button" data-exp-step="-1">−1</button><input id="experiencePackAmount" type="number" inputmode="numeric" min="1" max="${capacity}" value="${Math.min(10,capacity)}"><button type="button" data-exp-step="1">＋1</button><button type="button" data-exp-step="10">＋10</button></div><div class="experience-pack-presets"><button type="button" data-exp-half>半分</button><button type="button" data-exp-max>MAX</button></div><div id="experiencePackPreview" class="experience-pack-preview"></div><button type="button" id="confirmExperiencePacks" class="primary">この個数を使用</button></div>`,`やめる`));
+ const modal=topModal();modal.classList.add("experience-pack-quantity-modal");const input=modal.querySelector("#experiencePackAmount"),preview=modal.querySelector("#experiencePackPreview"),confirm=modal.querySelector("#confirmExperiencePacks"),clamp=value=>Math.max(1,Math.min(capacity,Math.floor(Number(value)||1))),refresh=()=>{input.value=String(clamp(input.value));const plan=previewExperiencePacks(target,input.value,owned),need=Math.max(1,expNeedFor({...target,level:plan.levelAfter})),progress=Math.max(0,Math.min(100,plan.expAfter/need*100));preview.innerHTML=`<small>確定後の育成結果</small><strong>${plan.count.toLocaleString()}個 → ${plan.gain.toLocaleString()} EXP</strong><span>Lv.${plan.levelBefore.toLocaleString()} → <b>Lv.${plan.levelAfter.toLocaleString()}</b>${plan.capped?"（上限到達）":""}</span><i style="--exp-preview-progress:${progress}%"><u></u></i>`;confirm.disabled=!plan.count};
+ modal.querySelectorAll("[data-exp-step]").forEach(button=>button.onclick=()=>{input.value=String(clamp(Number(input.value)+Number(button.dataset.expStep)));refresh()});modal.querySelector("[data-exp-half]").onclick=()=>{input.value=String(Math.max(1,Math.floor(capacity/2)));refresh()};modal.querySelector("[data-exp-max]").onclick=()=>{input.value=String(capacity);refresh()};input.oninput=refresh;confirm.onclick=()=>{if(confirm.disabled)return;confirm.disabled=true;const wasDefeated=target.currentHp!=null&&Number(target.currentHp)<=0,result=consumeExperiencePacks(target,input.value,save.state.inventory);if(!result.ok){confirm.disabled=false;return alert(result.reason==="LEVEL_CAP"?"レベル上限です":"使用数を確認してください")}target.currentHp=wasDefeated?0:Math.min(calculatedStats(target).hp,target.currentHp??calculatedStats(target).hp);target.currentMp=Math.min(maxMp(target),target.currentMp??maxMp(target));save.save();modal.remove();showToast(`${displayName(target)}：${result.count.toLocaleString()}個で ${result.gain.toLocaleString()} EXP`);render()};modal.querySelector("[data-modal-primary]").onclick=closeTopModal;refresh();
 }
-function useFieldItem(type,targetId){if(itemCount(type)<=0)return;const target=save.state.monsters.find(m=>m.id===targetId),party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean),single=["potions","highPotions","manaPotions","highManaPotions","fullManaPotions","statusCures","fullHeals","experienceItems"].includes(type);if(single&&!target)return;const list=single?[target]:party;if(single&&target.currentHp<=0)return alert("戦闘不能の仲間には使用できません");if(type==="experienceItems"){const gain=Math.floor(experienceCrystalValue(target));applyTotalExperience(target,totalExperience(target)+gain);target.currentHp=Math.min(calculatedStats(target).hp,target.currentHp??calculatedStats(target).hp);target.currentMp=Math.min(maxMp(target),target.currentMp??maxMp(target));save.state.inventory.experienceItems--;save.save();closeTopModal();showToast(`${displayName(target)}が${gain.toLocaleString()} EXPを獲得`);render();return}const hasAilment=m=>(m.statuses?.length??0)||(m.ailments?.length??0)||m.status;const usable=["potions","highPotions"].includes(type)?target.currentHp<calculatedStats(target).hp:type==="partyPotions"?list.some(m=>m.currentHp>0&&m.currentHp<calculatedStats(m).hp):["manaPotions","highManaPotions","fullManaPotions"].includes(type)?target.currentMp<maxMp(target):["partyManaPotions","partyFullManaPotions"].includes(type)?list.some(m=>m.currentHp>0&&m.currentMp<maxMp(m)):type==="statusCures"?hasAilment(target):type==="partyStatusCures"?list.some(hasAilment):type==="fullHeals"?(target.currentHp<calculatedStats(target).hp||target.currentMp<maxMp(target)||hasAilment(target)):list.some(m=>m.currentHp>0&&(m.currentHp<calculatedStats(m).hp||m.currentMp<maxMp(m)||hasAilment(m)));if(!usable)return alert("もう元気だよ！");if(type==="potions"){const max=calculatedStats(target).hp;target.currentHp=Math.min(max,target.currentHp+scaledRecovery(100,max,.10))}if(type==="highPotions"){const max=calculatedStats(target).hp;target.currentHp=Math.min(max,target.currentHp+scaledRecovery(300,max,.25))}if(type==="partyPotions")list.filter(m=>m.currentHp>0).forEach(m=>{const max=calculatedStats(m).hp;m.currentHp=Math.min(max,m.currentHp+scaledRecovery(50,max,.07))});if(type==="manaPotions"){const max=maxMp(target);target.currentMp=Math.min(max,target.currentMp+scaledRecovery(30,max,.10))}if(type==="highManaPotions"){const max=maxMp(target);target.currentMp=Math.min(max,target.currentMp+scaledRecovery(100,max,.25))}if(type==="partyManaPotions")list.filter(m=>m.currentHp>0).forEach(m=>{const max=maxMp(m);m.currentMp=Math.min(max,m.currentMp+scaledRecovery(30,max,.07))});if(type==="fullManaPotions")target.currentMp=maxMp(target);if(type==="partyFullManaPotions")list.filter(m=>m.currentHp>0).forEach(m=>m.currentMp=maxMp(m));if(type==="statusCures"||type==="partyStatusCures")list.forEach(clearAilments);if(type==="fullHeals"||type==="partyFullHeals")list.filter(m=>m.currentHp>0).forEach(m=>{m.currentHp=calculatedStats(m).hp;m.currentMp=maxMp(m);clearAilments(m)});save.state.inventory[type]--;save.save();closeTopModal();snapshot=currentSnapshot();stopGame();render()}
+function useFieldItem(type,targetId){if(itemCount(type)<=0)return;const target=save.state.monsters.find(m=>m.id===targetId),party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean),single=["potions","highPotions","manaPotions","highManaPotions","fullManaPotions","statusCures","fullHeals","experienceItems"].includes(type);if(single&&!target)return;const list=single?[target]:party;if(single&&type!=="experienceItems"&&target.currentHp<=0)return alert("戦闘不能の仲間には使用できません");if(type==="experienceItems"){const wasDefeated=target.currentHp!=null&&Number(target.currentHp)<=0,gain=Math.floor(experienceCrystalValue(target));applyTotalExperience(target,totalExperience(target)+gain);target.currentHp=wasDefeated?0:Math.min(calculatedStats(target).hp,target.currentHp??calculatedStats(target).hp);target.currentMp=Math.min(maxMp(target),target.currentMp??maxMp(target));save.state.inventory.experienceItems--;save.save();closeTopModal();showToast(`${displayName(target)}が${gain.toLocaleString()} EXPを獲得`);render();return}const hasAilment=m=>(m.statuses?.length??0)||(m.ailments?.length??0)||m.status;const usable=["potions","highPotions"].includes(type)?target.currentHp<calculatedStats(target).hp:type==="partyPotions"?list.some(m=>m.currentHp>0&&m.currentHp<calculatedStats(m).hp):["manaPotions","highManaPotions","fullManaPotions"].includes(type)?target.currentMp<maxMp(target):["partyManaPotions","partyFullManaPotions"].includes(type)?list.some(m=>m.currentHp>0&&m.currentMp<maxMp(m)):type==="statusCures"?hasAilment(target):type==="partyStatusCures"?list.some(hasAilment):type==="fullHeals"?(target.currentHp<calculatedStats(target).hp||target.currentMp<maxMp(target)||hasAilment(target)):list.some(m=>m.currentHp>0&&(m.currentHp<calculatedStats(m).hp||m.currentMp<maxMp(m)||hasAilment(m)));if(!usable)return alert("もう元気だよ！");if(type==="potions"){const max=calculatedStats(target).hp;target.currentHp=Math.min(max,target.currentHp+scaledRecovery(100,max,.10))}if(type==="highPotions"){const max=calculatedStats(target).hp;target.currentHp=Math.min(max,target.currentHp+scaledRecovery(300,max,.25))}if(type==="partyPotions")list.filter(m=>m.currentHp>0).forEach(m=>{const max=calculatedStats(m).hp;m.currentHp=Math.min(max,m.currentHp+scaledRecovery(50,max,.07))});if(type==="manaPotions"){const max=maxMp(target);target.currentMp=Math.min(max,target.currentMp+scaledRecovery(30,max,.10))}if(type==="highManaPotions"){const max=maxMp(target);target.currentMp=Math.min(max,target.currentMp+scaledRecovery(100,max,.25))}if(type==="partyManaPotions")list.filter(m=>m.currentHp>0).forEach(m=>{const max=maxMp(m);m.currentMp=Math.min(max,m.currentMp+scaledRecovery(30,max,.07))});if(type==="fullManaPotions")target.currentMp=maxMp(target);if(type==="partyFullManaPotions")list.filter(m=>m.currentHp>0).forEach(m=>m.currentMp=maxMp(m));if(type==="statusCures"||type==="partyStatusCures")list.forEach(clearAilments);if(type==="fullHeals"||type==="partyFullHeals")list.filter(m=>m.currentHp>0).forEach(m=>{m.currentHp=calculatedStats(m).hp;m.currentMp=maxMp(m);clearAilments(m)});save.state.inventory[type]--;save.save();closeTopModal();snapshot=currentSnapshot();stopGame();render()}
 function openPartyEditor(){game.paused=true;app.insertAdjacentHTML("beforeend",Modal("フィールド編成",partyEditorBody("field"),"閉じる"));const modal=topModal();modal.dataset.partyEditorMode="field";bindPartyEditor(modal);const close=()=>{modal.remove();snapshot=currentSnapshot();stopGame();render()};modal._onDismiss=close;modal.querySelector("[data-modal-primary]").onclick=close}
 function enemyLevelForFloor(floor){return scaledEnemyLevelForFloor(floor)}
 const ENEMY_EQUIPMENT_SUBSLOTS=Object.freeze([

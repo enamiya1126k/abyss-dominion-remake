@@ -1,5 +1,5 @@
-import{EQUIPMENT_BASES,equipmentSeriesForItem,inferredEquipmentSubslot,normalizeEquipmentIdentity}from"../data/equipment.js?v=2.10.0-build161";
-import{rollEquipmentAffixes,equipmentAffixPower}from"../data/equipmentAffixes.js?v=2.10.0-build161";
+import{EQUIPMENT_BASES,equipmentSeriesForItem,inferredEquipmentSubslot,normalizeEquipmentIdentity}from"../data/equipment.js?v=2.10.0-build163";
+import{rollEquipmentAffixes,equipmentAffixPower}from"../data/equipmentAffixes.js?v=2.10.0-build163";
 
 function uid(){return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`}
 export function createEquipment(slot,options={}){

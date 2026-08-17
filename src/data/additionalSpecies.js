@@ -74,18 +74,18 @@ const GOLDEN_DARKNESS_SKILLS=[
  skill("golden_dark_blade","変身兵装・金刃",{mp:5,type:"multiAttack",power:.78,hits:3,description:"髪を三本の金色刃へ変えて斬り刻む。"}),
  skill("golden_dark_lance","変身兵装・金槍",{level:20,mp:10,power:2,defenseIgnore:.25,description:"黄金の槍で防御の隙間を貫く。"}),
  skill("golden_dark_assault","金色殲滅陣",{level:45,mp:18,power:1.65,allEnemies:true,target:"敵全体",critBonus:.25,description:"変身兵装を全方位へ展開する。"}),
- skill("golden_dark_overdrive","金色の闇・極限変身",{level:80,mp:30,type:"multiAttack",power:1.15,hits:6,execute:.35,cooldown:4,description:"六連の変身兵装で標的を完全に仕留める。"})
+ skill("golden_dark_overdrive","宵金のノクティア・極限変身",{level:80,mp:30,type:"multiAttack",power:1.15,hits:6,execute:.35,cooldown:4,description:"六連の変身兵装で標的を完全に仕留める。"})
 ];
 
 const FEATURED=[
  species({id:"ochuki",name:"おちゅき",emoji:"🌙",element:"neutral",race:"spirit",role:"tank",rarity:"UR",minFloor:777,maxMp:8,captureRate:.01,stats:{hp:260,atk:1,def:185,spd:42,crit:1,evasion:22},ultraRareEncounter:true,rareExp:true,fleeTurns:[2,4],skills:[skill("ochuki_moon_guard","おちゅきガード",{mp:2,type:"stance",power:0,target:"自分",tag:"防御",effects:[{kind:"guard",value:.72,turns:2}],description:"ほとんど攻撃せず、月の殻にこもる。"})]}),
  species({id:"bechi",name:"ベチー",emoji:"📕",element:"ice",race:"spirit",role:"controller",rarity:"LR",minFloor:6400,maxMp:92,captureRate:.025,stats:{hp:260,atk:102,def:145,spd:68,crit:14,evasion:12},skills:BECHI_SKILLS}),
- species({id:"kiara",name:"きあら",emoji:"❄️",element:"ice",race:"spirit",role:"healer",rarity:"神話",minFloor:9000,maxMp:118,captureRate:.008,fieldEncounter:false,stats:{hp:310,atk:126,def:168,spd:72,crit:12,evasion:16},passive:{kind:"nearDeathPartyHealOnce",heal:.35},skills:KIARA_SKILLS}),
- species({id:"roxy",name:"ロキシー",emoji:"🌊",element:"water",race:"spirit",role:"magic",rarity:"神話",minFloor:9000,maxMp:128,captureRate:.008,fieldEncounter:false,stats:{hp:245,atk:215,def:118,spd:86,crit:18,evasion:18},passive:{kind:"onceRevive",hp:.5,mp:.5},skills:ROXY_SKILLS}),
- species({id:"milim",name:"ミリム",emoji:"🐉",element:"neutral",race:"dragon",role:"burst",rarity:"神話",minFloor:9000,maxMp:104,captureRate:.006,fieldEncounter:false,stats:{hp:330,atk:260,def:150,spd:94,crit:24,evasion:16},skills:MILIM_SKILLS}),
- species({id:"ai",name:"アイ",emoji:"⭐",element:"ice",race:"spirit",role:"support",rarity:"神話",minFloor:9000,maxMp:116,captureRate:.008,fieldEncounter:false,stats:{hp:280,atk:174,def:140,spd:102,crit:18,evasion:22},skills:AI_SKILLS}),
- species({id:"eris",name:"エリス",emoji:"⚔️",element:"neutral",race:"human",role:"assassin",rarity:"神話",minFloor:9000,maxMp:82,captureRate:.008,fieldEncounter:false,stats:{hp:290,atk:242,def:138,spd:108,crit:28,evasion:20},skills:ERIS_SKILLS}),
- species({id:"golden_darkness",name:"金色の闇",emoji:"🌟",element:"neutral",race:"human",role:"assassin",rarity:"神話",minFloor:9000,maxMp:98,captureRate:.006,fieldEncounter:false,stats:{hp:276,atk:238,def:134,spd:118,crit:30,evasion:24},skills:GOLDEN_DARKNESS_SKILLS}),
+ species({id:"kiara",name:"セラフィナ",legacyName:"きあら",emoji:"❄️",element:"ice",race:"spirit",role:"healer",rarity:"神話",minFloor:9000,maxMp:118,captureRate:.008,fieldEncounter:false,stats:{hp:310,atk:126,def:168,spd:72,crit:12,evasion:16},passive:{kind:"nearDeathPartyHealOnce",heal:.35},skills:KIARA_SKILLS}),
+ species({id:"roxy",name:"ネレイア",legacyName:"ロキシー",emoji:"🌊",element:"water",race:"spirit",role:"magic",rarity:"神話",minFloor:9000,maxMp:128,captureRate:.008,fieldEncounter:false,stats:{hp:245,atk:215,def:118,spd:86,crit:18,evasion:18},passive:{kind:"onceRevive",hp:.5,mp:.5},skills:ROXY_SKILLS}),
+ species({id:"milim",name:"ミルヴァ",legacyName:"ミリム",emoji:"🐉",element:"neutral",race:"dragon",role:"burst",rarity:"神話",minFloor:9000,maxMp:104,captureRate:.006,fieldEncounter:false,stats:{hp:330,atk:260,def:150,spd:94,crit:24,evasion:16},skills:MILIM_SKILLS}),
+ species({id:"ai",name:"アイクシア",legacyName:"アイ",emoji:"⭐",element:"ice",race:"spirit",role:"support",rarity:"神話",minFloor:9000,maxMp:116,captureRate:.008,fieldEncounter:false,stats:{hp:280,atk:174,def:140,spd:102,crit:18,evasion:22},skills:AI_SKILLS}),
+ species({id:"eris",name:"イリディア",legacyName:"エリス",emoji:"⚔️",element:"neutral",race:"human",role:"assassin",rarity:"神話",minFloor:9000,maxMp:82,captureRate:.008,fieldEncounter:false,stats:{hp:290,atk:242,def:138,spd:108,crit:28,evasion:20},skills:ERIS_SKILLS}),
+ species({id:"golden_darkness",name:"宵金のノクティア",legacyName:"金色の闇",emoji:"🌟",element:"neutral",race:"human",role:"assassin",rarity:"神話",minFloor:9000,maxMp:98,captureRate:.006,fieldEncounter:false,stats:{hp:276,atk:238,def:134,spd:118,crit:30,evasion:24},skills:GOLDEN_DARKNESS_SKILLS}),
  species({id:"dev_familiar_chappy",name:"開発使魔チャッピー",emoji:"🛠️",element:"neutral",race:"construct",role:"balanced",rarity:"SECRET",minFloor:10000,maxMp:130,captureRate:0,fieldEncounter:false,stats:{hp:404,atk:130,def:130,spd:130,crit:13,evasion:13},acquisition:["シリアル限定"],skills:[skill("chappy_patch","PATCH//404",{mp:4,power:4.04,allEnemies:true,target:"敵全体",description:"未完成のはずなのに妙に強い開発者権限。"})]})
 ];
 

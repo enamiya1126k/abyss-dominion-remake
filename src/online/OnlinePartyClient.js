@@ -1,9 +1,9 @@
 import {
   buildOnlinePartyProfile, ONLINE_STORAGE_KEYS, ensureOnlineIdentity,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.10.0-build162";
+} from "../ui/screens/OnlinePartyScreen.js?v=2.10.0-build163";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
-} from "./OnlineViews.js?v=2.10.0-build162";
+} from "./OnlineViews.js?v=2.10.0-build163";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
 const DIRECTION = Object.freeze({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] });
@@ -294,10 +294,13 @@ export class OnlinePartyController {
   _self() { return this.roomState?.members?.find(member => member.playerId === this.selfId); }
 
   _showConnectionStep(step) {
+    const changed = this.connectionStep !== step;
+    this.connectionStep = step;
     const entry = this._query("[data-online-entry]"), gate = this._query("[data-online-gate]"), room = this._query("[data-online-room]");
     if (entry) entry.hidden = step !== "entry";
     if (gate) gate.hidden = step !== "gate";
     if (room) room.hidden = step !== "room";
+    if (changed) requestAnimationFrame(() => { const screen = this._query(".online-v3-screen"); if (screen) screen.scrollTop = 0; });
   }
 
   _clearRoom() {
@@ -313,10 +316,12 @@ export class OnlinePartyController {
 
   _setRoute(route, { silent = false } = {}) {
     if (!ROUTES.has(route)) return;
+    const changed = this.route !== route;
     this.route = route; storageSet(ONLINE_STORAGE_KEYS.route, route);
     if (route === "chat") this.unread = 0;
     if (!silent) { this.path = []; this.heldDirections.clear(); }
     this._render();
+    if (changed) requestAnimationFrame(() => { const stage = this._query("[data-online-stage]"); if (stage) stage.scrollTop = 0; });
   }
 
   _render() {

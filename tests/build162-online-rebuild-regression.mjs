@@ -23,8 +23,9 @@ test("build162 exposes one stage and exactly five independent online destination
   assert.doesNotMatch(screen, /data-online-room-view|data-online-trade|data-online-resonance/);
   assert.match(styles, /\.online-v3-room\s*\{[\s\S]*grid-template-rows:\s*auto minmax\(0, 1fr\) auto/);
   assert.match(styles, /\.online-v3-stage\s*\{[\s\S]*overflow:\s*auto/);
-  assert.match(index, /online-v3\.css\?v=2\.10\.0-build162/);
-  assert.match(index, /ASSET_BUILD = "build162"/);
+  assert.match(index, /online-v3\.css\?v=2\.10\.0-build163/);
+  assert.match(index, /build163\.css\?v=2\.10\.0-build163/);
+  assert.match(index, /ASSET_BUILD = "build163"/);
   assert.match(views, /画面は下へつながらず、選んだ機能だけが開きます/);
 });
 

@@ -1,5 +1,5 @@
-import{TRUE_MAX_LEVEL}from"./config.js?v=2.10.0-build161";
-import{applyTotalExperience,experienceBeforeLevel,experienceCrystalValue,totalExperience}from"../models/Monster.js?v=2.10.0-build161";
+import{TRUE_MAX_LEVEL}from"./config.js?v=2.10.0-build163";
+import{applyTotalExperience,experienceBeforeLevel,experienceCrystalValue,totalExperience}from"../models/Monster.js?v=2.10.0-build163";
 
 function integer(value){return Math.max(0,Math.floor(Number(value)||0))}
 

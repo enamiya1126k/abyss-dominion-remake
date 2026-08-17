@@ -7,9 +7,9 @@ import{
  magicCircleUnlockForNode,
  abyssSkillNodeById,
  abyssSkillTreeSummary
-}from"../../core/AbyssSkillTreeSystem.js?v=2.10.0-build161";
-import{magicCircleById}from"../../core/MagicCircleSystem.js?v=2.10.0-build161";
-import{pixelIcon}from"../components/GameChrome.js?v=2.10.0-build161";
+}from"../../core/AbyssSkillTreeSystem.js?v=2.10.0-build163";
+import{magicCircleById}from"../../core/MagicCircleSystem.js?v=2.10.0-build163";
+import{pixelIcon}from"../components/GameChrome.js?v=2.10.0-build163";
 
 const ROW_HEIGHT=144;
 const CATEGORY_ICON={economy:"coin",combat:"crossed-swords",exploration:"dungeon"};

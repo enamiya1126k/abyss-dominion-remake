@@ -1,5 +1,5 @@
-import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.10.0-build161";
-import{endgameCharacter}from"../data/endgameCharacters.js?v=2.10.0-build161";
+import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.10.0-build163";
+import{endgameCharacter}from"../data/endgameCharacters.js?v=2.10.0-build163";
 
 const CONTROL_STATUS_IDS=new Set(["sleep","paralysis","freeze","charm","confusion","fear"]);
 function statusProfileFor(target){return target?.statusProfile??endgameCharacter(target?.endgameBossId)?.statusProfile??null}

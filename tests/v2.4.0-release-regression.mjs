@@ -197,7 +197,7 @@ assert.equal(stationery.length,12);
 assert.deepEqual(Object.fromEntries(["N","R","SR","SSR"].map(rarity=>[rarity,stationery.filter(species=>species.rarity===rarity).length])),{N:3,R:3,SR:3,SSR:3});
 assert.equal(SPECIES.compass_beetle.name,"星盤オオグソク");
 assert.ok(!Object.values(ADDITIONAL_SPECIES).some(species=>/蜘蛛|spider/i.test(`${species.id} ${species.name} ${species.race}`)));
-for(const [id,name] of [["ochuki","おちゅき"],["bechi","ベチー"],["kiara","きあら"],["roxy","ロキシー"],["milim","ミリム"],["ai","アイ"],["eris","エリス"],["golden_darkness","金色の闇"],["dev_familiar_chappy","開発使魔チャッピー"]]){
+for(const [id,name] of [["ochuki","おちゅき"],["bechi","ベチー"],["kiara","セラフィナ"],["roxy","ネレイア"],["milim","ミルヴァ"],["ai","アイクシア"],["eris","イリディア"],["golden_darkness","宵金のノクティア"],["dev_familiar_chappy","開発使魔チャッピー"]]){
   assert.equal(SPECIES[id].name,name);
   assert.ok(SPECIES[id].authoredSkills.length>=1,id);
 }

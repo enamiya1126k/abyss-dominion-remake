@@ -1,4 +1,4 @@
-import{equipmentIconMeta}from"../../data/equipment.js?v=2.10.0-build161";
+import{equipmentIconMeta}from"../../data/equipment.js?v=2.10.0-build163";
 
 const EQUIPMENT_ART_ROOT="../../assets/ui/equipment";
 

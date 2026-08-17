@@ -1,11 +1,11 @@
-import { SPECIES } from "../../data/species.js?v=2.10.0-build162";
-import { displayName, calculatedStats } from "../../models/Monster.js?v=2.10.0-build162";
-import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=2.10.0-build162";
-import { magicCircleById, equippedMagicCircle } from "../../core/MagicCircleSystem.js?v=2.10.0-build162";
-import { learnedSkills, maxMp, effectiveSkillMpCost } from "../../battle/SkillSystem.js?v=2.10.0-build162";
-import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=2.10.0-build162";
-import { monsterVisual } from "../MonsterVisual.js?v=2.10.0-build162";
-import { resourceHud, pixelIcon } from "../components/GameChrome.js?v=2.10.0-build162";
+import { SPECIES } from "../../data/species.js?v=2.10.0-build163";
+import { displayName, calculatedStats } from "../../models/Monster.js?v=2.10.0-build163";
+import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=2.10.0-build163";
+import { magicCircleById, equippedMagicCircle } from "../../core/MagicCircleSystem.js?v=2.10.0-build163";
+import { learnedSkills, maxMp, effectiveSkillMpCost } from "../../battle/SkillSystem.js?v=2.10.0-build163";
+import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=2.10.0-build163";
+import { monsterVisual } from "../MonsterVisual.js?v=2.10.0-build163";
+import { resourceHud, pixelIcon } from "../components/GameChrome.js?v=2.10.0-build163";
 
 export const ONLINE_STORAGE_KEYS = Object.freeze({
   friendId: "abyss-dominion-online-friend-id",
