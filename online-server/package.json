@@ -1,9 +1,9 @@
 {
   "name": "abyss-dominion-party-server",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "private": true,
   "type": "module",
-  "description": "ABYSS DOMINION online plaza, shared expedition and co-op battle server for a home PC",
+  "description": "ABYSS DOMINION online home, shared expedition, raid, free team battle and chat server",
   "engines": {"node": ">=20"},
   "scripts": {
     "start": "node server.js",

@@ -10,7 +10,7 @@ function reply(socket,message){if(socket.readyState===WebSocket.OPEN)socket.send
 function fail(socket,result){reply(socket,{type:"error",code:result.code??"REQUEST_FAILED",message:result.message??"処理に失敗しました"})}
 
 const server=http.createServer((request,response)=>{
- if(request.url==="/health"){response.writeHead(200,{"content-type":"application/json; charset=utf-8","cache-control":"no-store"});response.end(JSON.stringify({ok:true,service:"ABYSS DOMINION CO-OP SERVER",protocol:"1.6.0",rooms:store.rooms.size,expeditions:[...store.rooms.values()].filter(room=>room.phase==="expedition").length,battles:[...store.rooms.values()].filter(room=>room.expedition?.battle).length,raids:[...store.rooms.values()].filter(room=>room.phase==="raid").length,resonanceMazes:[...store.rooms.values()].filter(room=>room.phase==="resonance").length,trades:store.trade.trades.size,players:[...store.sessions.values()].filter(session=>session.connected).length,time:new Date().toISOString()}));return}
+ if(request.url==="/health"){response.writeHead(200,{"content-type":"application/json; charset=utf-8","cache-control":"no-store"});response.end(JSON.stringify({ok:true,service:"ABYSS DOMINION CO-OP SERVER",protocol:"1.7.0",rooms:store.rooms.size,expeditions:[...store.rooms.values()].filter(room=>room.phase==="expedition").length,battles:[...store.rooms.values()].filter(room=>room.expedition?.battle).length,raids:[...store.rooms.values()].filter(room=>room.phase==="raid").length,teamBattles:[...store.rooms.values()].filter(room=>room.phase==="team").length,players:[...store.sessions.values()].filter(session=>session.connected).length,time:new Date().toISOString()}));return}
  response.writeHead(200,{"content-type":"text/plain; charset=utf-8","cache-control":"no-store"});response.end("ABYSS DOMINION CO-OP SERVER\nWebSocket endpoint: /party\nHealth check: /health\n");
 });
 const wss=new WebSocketServer({noServer:true,maxPayload:16*1024,perMessageDeflate:false});
@@ -27,9 +27,7 @@ wss.on("connection",socket=>{
   if(message.type==="createRoom")result=store.createRoom(session);
   else if(message.type==="joinRoom")result=store.joinRoom(session,message.roomId);
   else if(message.type==="leaveRoom")result=store.leaveRoom(session);
-  else if(message.type==="move")result=store.move(session,message.position);
   else if(message.type==="profile")result=store.updateProfile(session,message.profile);
-  else if(message.type==="social")result=store.social(session,message);
   else if(message.type==="setReady")result=store.setReady(session,message.ready);
   else if(message.type==="setFloor")result=store.setFloor(session,message.floor);
   else if(message.type==="startExpedition")result=store.startExpedition(session);
@@ -41,17 +39,12 @@ wss.on("connection",socket=>{
   else if(message.type==="startRaid")result=store.startRaid(session);
 	  else if(message.type==="raidAction")result=store.submitRaidAction(session,message.action??message);
 	  else if(message.type==="raidSpeed")result=store.setRaidSpeed(session,message.speed);
-	  else if(message.type==="startResonance")result=store.startResonance(session);
-	  else if(message.type==="resonanceMove")result=store.moveResonance(session,message);
-	  else if(message.type==="resonanceAction")result=store.resonanceAction(session,message);
+	  else if(message.type==="teamSide")result=store.setTeamSide(session,message.side);
+	  else if(message.type==="teamReady")result=store.setTeamReady(session,message.ready);
+	  else if(message.type==="startTeamBattle")result=store.startTeamBattle(session);
+	  else if(message.type==="teamAction")result=store.submitTeamAction(session,message.action??message);
+	  else if(message.type==="teamSpeed")result=store.setTeamSpeed(session,message.speed);
   else if(message.type==="chat")result=store.chat(session,message);
-  else if(message.type==="tradeRequest")result=store.requestTrade(session,message.targetId);
-  else if(message.type==="tradeRespond")result=store.respondTrade(session,message.tradeId,message.accepted);
-  else if(message.type==="tradeOffer")result=store.offerTrade(session,message.tradeId,message.asset);
-  else if(message.type==="tradeReady")result=store.readyTrade(session,message.tradeId,message.ready);
-  else if(message.type==="tradeConfirm")result=store.confirmTrade(session,message.tradeId);
-  else if(message.type==="tradeCancel")result=store.cancelTrade(session,message.tradeId);
-  else if(message.type==="tradeAck")result=store.ackTrade(session,message.tradeId,message.success!==false);
   else if(message.type==="rewardAck")result=store.ackReward(session,message.rewardId);
   else if(message.type==="ping"){reply(socket,{type:"pong",at:now});return}
   if(!result.ok)fail(socket,result);
@@ -60,7 +53,7 @@ wss.on("connection",socket=>{
 });
 const battleClock=setInterval(()=>store.advanceBattles(),250);battleClock.unref?.();
 const heartbeat=setInterval(()=>{store.pruneExpired();for(const socket of clients){if(socket.isAlive===false){socket.terminate();continue}socket.isAlive=false;socket.ping()}},10_000);heartbeat.unref?.();
-server.listen(PORT,HOST,()=>{console.log(`\nABYSS DOMINION CO-OP SERVER`);console.log(`Local: http://${HOST}:${PORT}`);console.log(`Health: http://${HOST}:${PORT}/health`);console.log(`Online plaza, exploration, raid, resonance maze and secure trading are ready (up to 4 players).\n`)});
+server.listen(PORT,HOST,()=>{console.log(`\nABYSS DOMINION CO-OP SERVER`);console.log(`Local: http://${HOST}:${PORT}`);console.log(`Health: http://${HOST}:${PORT}/health`);console.log(`Online home, exploration, raid, free team battle and chat are ready (up to 4 players).\n`)});
 function shutdown(){clearInterval(battleClock);clearInterval(heartbeat);for(const socket of clients)try{socket.close(1001,"server shutdown")}catch{};server.close(()=>process.exit(0));setTimeout(()=>process.exit(0),1500).unref()}
 process.on("SIGINT",shutdown);process.on("SIGTERM",shutdown);
 export{server,store};

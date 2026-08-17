@@ -8,9 +8,8 @@ import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAt
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.10.0-build161";
 import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.10.0-build161";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.10.0-build161";
-import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build161";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build161";
-import{buildOnlineTradeCatalog,reserveOnlineTradeAsset,releaseOnlineTradeAsset,commitOnlineTrade}from"./online/OnlineTradeSystem.js?v=2.10.0-build161";
+import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.10.0-build162";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.10.0-build162";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.10.0-build161";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.10.0-build161";
 import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.10.0-build161";
@@ -1637,7 +1636,7 @@ function exchangeOnlineRaidReward(kind,cost){
  else return{ok:false,message:"交換報酬が見つかりません"};online.raidMaterials=materials-price;online.raidExchange??={};online.raidExchange[kind]=(Number(online.raidExchange[kind])||0)+1;save.save();return{ok:true,message}
 }
 function bindOnlineParty(){
- onlinePartyController??=new OnlinePartyController({getState:()=>save.state,toast:showToast,onReward:claimOnlinePartyReward,getTradeCatalog:()=>buildOnlineTradeCatalog(save.state),onTradeReserve:(tradeId,ref,options)=>{const result=reserveOnlineTradeAsset(save.state,tradeId,ref,options);if(result.ok)save.save();return result},onTradeRelease:tradeId=>{const result=releaseOnlineTradeAsset(save.state,tradeId);if(result.ok)save.save();return result},onTradeCommit:(tradeId,incoming,partner)=>{const result=commitOnlineTrade(save.state,tradeId,incoming,partner);if(result.ok)save.save();return result},onRaidExchange:exchangeOnlineRaidReward,onBack:()=>go("home"),onFormation:()=>{formationOrigin="home";go("formation")}});
+ onlinePartyController??=new OnlinePartyController({getState:()=>save.state,toast:showToast,onReward:claimOnlinePartyReward,onBack:()=>go("home")});
  onlinePartyController.mount(app);
 }
 function rarityValue(rarity){return ({N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9}[rarity]??0)}
