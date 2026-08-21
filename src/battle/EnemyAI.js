@@ -1,6 +1,6 @@
 import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=2.11.2-build166";
-import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.2-build166";
-import{speciesLevelStats}from"../models/Monster.js?v=2.11.2-build166";
+import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.24-build188";
+import{speciesLevelStats}from"../models/Monster.js?v=2.11.24-build188";
 import{floorBossActionInfo}from"../data/floorBosses.js?v=2.11.21-build185";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
@@ -85,7 +85,7 @@ function normalSpecialAction(enemy,hpRate){
  if(action&&Math.random()<(enemy.boss?.76:.4)){enemy.specialCooldown=enemy.boss?1:(Math.random()<.35?1:2);enemy.intent=`${SPECIAL_ACTION_INFO[action].label}を放つ`;return action}
  return null;
 }
-const FLOOR_BOSS_POSITIVE_KINDS=new Set(["atkUp","defUp","spdUp","evasionUp","accuracyUp","regen","taunt","guard","counter","lifeSteal","magicToPhysical"]);
+const FLOOR_BOSS_POSITIVE_KINDS=new Set(["atkUp","defUp","spdUp","evasionUp","accuracyUp","critUp","guaranteedHit","guaranteedCritical","regen","taunt","guard","counter","lifeSteal","magicToPhysical"]);
 function floorBossTacticalState(enemy,context={}){
  const allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(monster=>(monster.currentHp??0)>0),battle=context.battle??{},turn=Math.max(1,Number(battle.turn)||1);
  const buffed=opponents.some(monster=>(battle.allyEffects?.[monster.id]??[]).some(effect=>FLOOR_BOSS_POSITIVE_KINDS.has(effect.kind))),hasCircle=opponents.some(monster=>{const circle=battle.magicCircleProfiles?.[monster.id];return circle&&circle.id!=="none"}),fallen=allies.some(ally=>(ally.hp??0)<=0),wounded=allies.some(ally=>(ally.hp??0)>0&&(ally.hp/Math.max(1,ally.maxHp))<.68),statusCounts=Object.fromEntries(["poison","paralysis","burn","freeze","bleed","curse"].map(id=>[id,opponents.filter(monster=>(battle.allyAilments?.[monster.id]??[]).some(status=>status.id===id)).length])),effectCounts=Object.fromEntries(["spdDown","defDown","atkDown","accuracyDown","vulnerable"].map(kind=>[kind,opponents.filter(monster=>(battle.allyEffects?.[monster.id]??[]).some(effect=>effect.kind===kind)).length])),unpoisoned=statusCounts.poison<opponents.length,hasActiveCooldowns=opponents.some(monster=>Object.values(battle.cooldowns?.[monster.id]??{}).some(turns=>Number(turns)>0)),hasMp=opponents.some(monster=>(monster.currentMp??0)>0),lowMpCount=opponents.filter(monster=>(monster.currentMp??0)/Math.max(1,Number(monster.maxMp??monster.currentMp)||1)<=.30).length,emptyMpCount=opponents.filter(monster=>(monster.currentMp??0)<=0).length,guarded=opponents.some(monster=>Boolean(battle.guards?.[monster.id])||(battle.allyEffects?.[monster.id]??[]).some(effect=>effect.kind==="guard")),hasMark=opponents.some(monster=>Boolean(battle.floorBossTargetMarks?.[enemy.id]?.[monster.id]));
@@ -123,6 +123,15 @@ function chooseFloorBossSpecial(enemy,context={}){
  if(selected.info?.telegraph){enemy.pendingFloorBossAction=selected.action;enemy.intent=`${selected.info.label}の予兆を刻む`;return ENEMY_ACTIONS.charge}
  enemy.floorBossActionUses??={};enemy.floorBossActionUses[selected.actionId]=(enemy.floorBossActionUses[selected.actionId]??0)+1;enemy.floorBossLastActionId=selected.actionId;enemy.specialCooldown=Math.max(1,Number(selected.info?.cooldown)||1);enemy.intent=`${selected.info?.label??"固有技"}を発動`;return selected.action;
 }
+const ENDGAME_POSITIVE_KINDS=new Set(["atkUp","defUp","spdUp","evasionUp","accuracyUp","critUp","guaranteedHit","guaranteedCritical","regen","taunt","guard","counter","lifeSteal","magicToPhysical"]);
+export function endgameAuthorityScore(enemy,skill,context={}){
+ if(!enemy||!skill)return-Infinity;
+ const battle=context.battle??{},allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(monster=>(monster.currentHp??0)>0),hpRate=enemy.hp/Math.max(1,enemy.maxHp),fallen=allies.some(ally=>ally.hp<=0),wounded=allies.some(ally=>ally.hp>0&&ally.hp/Math.max(1,ally.maxHp)<.62),buffed=opponents.some(monster=>(battle.allyEffects?.[monster.id]??[]).some(effect=>ENDGAME_POSITIVE_KINDS.has(effect.kind))),hasCircle=opponents.some(monster=>battle.magicCircleProfiles?.[monster.id]?.id&&battle.magicCircleProfiles[monster.id].id!=="none"),hasCooldowns=opponents.some(monster=>Object.values(battle.cooldowns?.[monster.id]??{}).some(turns=>Number(turns)>0)),hasMp=opponents.some(monster=>(monster.currentMp??0)>0);
+ const afflicted=statusId=>opponents.some(monster=>(battle.allyAilments?.[monster.id]??[]).some(status=>status.id===statusId)||(battle.allyEffects?.[monster.id]??[]).some(effect=>effect.statusId===statusId||effect.kind===statusId));
+ let score=Number(skill.ai?.base??28);if(skill.allEnemies&&opponents.length>1)score+=8+(opponents.length-1)*3;if(skill.drain||skill.selfHeal)score+=(1-hpRate)*30;if(skill.lowHpBonus&&hpRate<=Number(skill.lowHpThreshold??.5))score+=34;if(skill.execute&&opponents.some(monster=>(monster.currentHp??0)/Math.max(1,monster.maxHp??monster.currentHp)<=skill.execute))score+=40;if(skill.mpDrain&&hasMp)score+=14;if((skill.dispelOne||skill.invertOneBuff||skill.stealOneBuffRate)&&buffed)score+=30;if(skill.breakAllyMagicCircle&&hasCircle)score+=24;if(skill.increaseAllyCooldowns&&hasCooldowns)score+=20;if(skill.reducePartyCooldowns&&allies.some(ally=>(ally.specialCooldown??0)>0))score+=24;if(skill.effects?.some(effect=>effect.kind==="healDown"||effect.kind==="reviveSeal"))score+=opponents.length>1?20:12;if(skill.effects?.some(effect=>effect.allies&&["guaranteedHit","guaranteedCritical"].includes(effect.kind)))score+=allies.filter(ally=>ally.hp>0).length*6;if(skill.type==="allHeal"||skill.heal){if(wounded)score+=30;else score-=14}if(skill.revive||skill.reviveTransferRate){if(fallen)score+=70;else if(!wounded)score-=22}if(skill.type==="stance")score+=hpRate>.45?12:-4;if(skill.effects?.some(effect=>effect.allies)&&allies.filter(ally=>ally.hp>0).length>1)score+=18;if(enemy.lastAuthoritySkillId===skill.id)score-=26;
+ if(skill.partyShieldRate)score+=wounded?24:allies.filter(ally=>ally.hp>0).length*4;if(skill.status?.id&&!afflicted(skill.status.id))score+=12;if(skill.bonusVsStatus?.id)score+=afflicted(skill.bonusVsStatus.id)?30:-8;if(Number(skill.turnPowerStep)>0)score+=Math.min(Number(skill.turnPowerCap)||0,Math.max(0,(Number(battle.turn)||1)-1)*Number(skill.turnPowerStep))*50;
+ return score
+}
 function specialAction(enemy,hpRate,context={}){
  if((enemy.divineBarrier??0)>0)enemy.divineBarrier--;
  if(Array.isArray(enemy.floorBossActionIds)&&enemy.floorBossActionIds.length){
@@ -133,8 +142,8 @@ function specialAction(enemy,hpRate,context={}){
  if(enemy.specialCooldown>0)return null;
  const profile=endgameCharacter(enemy.endgameBossId);
  if(profile){
-  const authorities=profile.skills.slice(1),useUltimate=hpRate<=.32&&!enemy.authorityUltimateUsed||((enemy.authorityUses??0)+1)%5===0,index=useUltimate?authorities.length-1:(enemy.authorityIndex??0)%Math.max(1,authorities.length-1),skill=authorities[index];
-  if(skill&&Math.random()<(enemy.faction==="tenGod"?.52:.46)){enemy.authorityIndex=(index+1)%Math.max(1,authorities.length-1);enemy.authorityUses=(enemy.authorityUses??0)+1;if(useUltimate)enemy.authorityUltimateUsed=true;enemy.specialCooldown=Math.max(1,Math.min(4,Number(skill.cooldown)||2));enemy.intent=`${skill.name}を発動`;return`authority:${skill.id}`}
+  const authorities=profile.skills.slice(1),ultimate=authorities.at(-1),useUltimate=hpRate<=.32&&!enemy.authorityUltimateUsed||((enemy.authorityUses??0)+1)%5===0,pool=useUltimate?authorities:authorities.slice(0,-1),skill=[...pool].sort((left,right)=>endgameAuthorityScore(enemy,right,context)-endgameAuthorityScore(enemy,left,context))[0];
+  if(skill&&Math.random()<(enemy.faction==="tenGod"?.56:.52)){enemy.authorityUses=(enemy.authorityUses??0)+1;if(skill===ultimate&&useUltimate)enemy.authorityUltimateUsed=true;enemy.lastAuthoritySkillId=skill.id;enemy.specialCooldown=Math.max(1,Math.min(4,Number(skill.cooldown)||2));enemy.intent=`${skill.name}を発動`;return`authority:${skill.id}`}
   return null;
  }
  const config=BOSS_SPECIALS[enemy.endgameBossId];if(!config)return null;

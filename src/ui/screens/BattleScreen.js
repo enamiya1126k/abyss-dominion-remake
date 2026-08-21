@@ -1,11 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.11.2-build166";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.11.21-build185";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.11.2-build166";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.11.21-build185";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.11.24-build188";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.11.24-build188";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.11.24-build188";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.11.24-build188";
 import{monsterVisual}from"../MonsterVisual.js?v=2.11.2-build166";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.11.2-build166";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.2-build166";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.11.2-build166";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.11.24-build188";
 
 function battleInteger(value){return Math.round(Number(value)||0).toLocaleString("ja-JP")}
 function renderTurnOrder(battle){
@@ -16,7 +16,7 @@ function renderTurnOrder(battle){
 }
 function growthText(unit){const stars=Math.max(1,Number(unit?.stars??unit?.sourceStars)||1),plus=Math.max(0,Number(unit?.plus??unit?.sourcePlus)||0);return`${stars<=5?"★".repeat(stars):`★${stars}`} ・ +${plus}`}
 const BATTLE_ROLE_LABELS={balanced:"万能型",burst:"高火力型",controller:"妨害型",support:"支援型",speed:"高速型",tank:"防御型",healer:"回復型",magic:"魔法型",physical:"物理型",debuffer:"弱体型",poison:"毒撃型",burner:"炎撃型"};
-const BATTLE_EFFECT_LABELS={atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",evasionDown:"回避↓",accuracyDown:"命中↓",stun:"行動不能",vulnerable:"被ダメージ増加",taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",evasionUp:"回避↑",accuracyUp:"命中↑",regen:"再生",lifeSteal:"吸収",magicToPhysical:"魔力→物理"};
+const BATTLE_EFFECT_LABELS={atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",evasionDown:"回避↓",accuracyDown:"命中↓",healDown:"回復↓",reviveSeal:"蘇生封印",stun:"行動不能",vulnerable:"被ダメージ増加",taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",evasionUp:"回避↑",accuracyUp:"命中↑",critUp:"会心↑",guaranteedHit:"必中",guaranteedCritical:"確定会心",regen:"再生",lifeSteal:"吸収",magicToPhysical:"魔力→物理"};
 function battleRoleLabel(role){return BATTLE_ROLE_LABELS[String(role??"balanced").toLowerCase()]??String(role??"万能型")}
 function battleEffectLabel(effect){return BATTLE_EFFECT_LABELS[effect?.kind]??effect?.name??String(effect?.kind??"効果")}
 function battleStatusLabel(status){const labels={poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖"};return labels[status?.id]??status?.name??statusLabel(status)}

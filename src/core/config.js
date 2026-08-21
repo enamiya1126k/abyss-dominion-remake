@@ -29,4 +29,4 @@ export function isContentUnlocked(stateOrFloor,productionFloor){
   return floor>=contentUnlockFloor(productionFloor);
 }
 // Regression history only: APP_VERSION="2.11.13" / APP_VERSION="2.11.12" / APP_VERSION="2.11.9" / APP_VERSION="2.11.8" / APP_VERSION="2.11.7" / APP_VERSION="2.11.6" / APP_VERSION="2.11.5" / APP_VERSION="2.11.4" / APP_VERSION="2.11.3" / APP_VERSION="2.11.2" / APP_VERSION="2.11.1" / APP_VERSION="2.11.0"
-export const APP_VERSION="2.11.21";
+export const APP_VERSION="2.11.24";

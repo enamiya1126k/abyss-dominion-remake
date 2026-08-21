@@ -1,5 +1,5 @@
 import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=2.11.2-build166";
-import { onlineAvatarVisual, onlineEnemyVisual, escapeOnlineHtml } from "../ui/screens/OnlinePartyScreen.js?v=2.11.2-build166";
+import { onlineAvatarVisual, onlineEnemyVisual, escapeOnlineHtml } from "../ui/screens/OnlinePartyScreen.js?v=2.11.24-build188";
 
 const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "通常探索", raid: "レイドボス", team: "自由チーム戦", chat: "チャット" });
 const EVENT_LABELS = Object.freeze({

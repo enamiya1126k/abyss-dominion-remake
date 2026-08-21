@@ -1,6 +1,6 @@
 import{SPECIES}from"../data/species.js?v=2.11.2-build166";
 import{SKILLS}from"../data/skills.js?v=2.11.2-build166";
-import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.2-build166";
+import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.24-build188";
 import{buildIndividualSkillKit}from"../data/individualSkillKits.js?v=2.11.2-build166";
 import{floorBossWeaponSkillById}from"../data/floorBosses.js?v=2.11.21-build185";
 
@@ -296,7 +296,7 @@ export function skillDamage(stats,enemy,skill,critical=false){const a=stats._aff
 export function skillElementLabel(skill){return elementLabel(skill?.element)}
 
 const STATUS_NAMES=Object.freeze({poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖",petrify:"石化"});
-const EFFECT_NAMES=Object.freeze({atkUp:"ATK上昇",atkDown:"ATK低下",defUp:"DEF上昇",defDown:"DEF低下",spdUp:"SPD上昇",spdDown:"SPD低下",evasionUp:"回避率上昇",evasionDown:"回避率低下",accuracyUp:"命中率上昇",accuracyDown:"命中率低下"});
+const EFFECT_NAMES=Object.freeze({atkUp:"ATK上昇",atkDown:"ATK低下",defUp:"DEF上昇",defDown:"DEF低下",spdUp:"SPD上昇",spdDown:"SPD低下",evasionUp:"回避率上昇",evasionDown:"回避率低下",accuracyUp:"命中率上昇",accuracyDown:"命中率低下",critUp:"会心率上昇",healDown:"回復量低下",reviveSeal:"蘇生封印",guaranteedHit:"必中",guaranteedCritical:"確定会心"});
 function percent(value){return`${Math.round((Number(value)||0)*100)}%`}
 function turnText(value){const turns=Math.max(0,Math.round(Number(value)||0));return turns?`${turns}ターン`:"即時"}
 
@@ -314,6 +314,7 @@ export function skillEffectDetails(skill){
  if(Number(skill.reviveTransferRate)>0)lines.push(`自分の現在HPを${percent(skill.reviveTransferRate)}分け与えて味方1体を蘇生${Number(skill.reviveMp)>0?`・MP${percent(skill.reviveMp)}`:""}`);
  else if(Number(skill.revive)>0)lines.push(`戦闘不能の味方1体をHP${percent(skill.revive)}${Number(skill.reviveMp)>0?`・MP${percent(skill.reviveMp)}`:""}で蘇生`);
  if(Number(skill.drain)>0)lines.push(`与ダメージの${percent(skill.drain)}をHP吸収`);
+ if(skill.fillHpDrain)lines.push("自分の欠損HPぶんまで対象HPを防御無視で直接吸収");
  if(Number(skill.selfHeal)>0)lines.push(`命中後、自分の最大HPの${percent(skill.selfHeal)}を回復`);
  if(Number(skill.mpDrain)>0)lines.push(`対象の最大MPの${percent(skill.mpDrain)}まで吸収`);
  if(Number(skill.currentHpDamage)>0)lines.push(`追加で対象の現在HPの${percent(Math.min(.25,Number(skill.currentHpDamage)))}ダメージ`);
@@ -331,8 +332,9 @@ export function skillEffectDetails(skill){
  if(Number(skill.invertEnemyBuffRate)>0)lines.push(`敵側の強化を1つ解除し、効果量${percent(skill.invertEnemyBuffRate)}の対応弱体へ反転`);
  if(Number(skill.stealEnemyBuffRate)>0)lines.push(`敵側の強化を1つ解除し、効果量${percent(skill.stealEnemyBuffRate)}で自分へ複写`);
 	 if(Number(skill.increaseEnemyCooldowns)>0)lines.push(`敵側の固有技再使用を${Math.round(Number(skill.increaseEnemyCooldowns))}ターン延長`);
-	 if(Number(skill.reducePartyCooldowns)>0)lines.push(`味方全体の発動中スキル再使用を${Math.round(Number(skill.reducePartyCooldowns))}ターン短縮`);
+	 if(Number(skill.reducePartyCooldowns)>0)lines.push(Number(skill.reducePartyCooldowns)>=99?"味方全体の発動中スキル再使用をすべて解消":`味方全体の発動中スキル再使用を${Math.round(Number(skill.reducePartyCooldowns))}ターン短縮`);
  if(Number(skill.selfSacrificeHpDamage)>0)lines.push(`自分は戦闘不能になり、発動時HPの${percent(skill.selfSacrificeHpDamage)}を固定ダメージ化`);
+ if(Number(skill.selfHpCostRate)>0)lines.push(`発動時に自分の現在HPを${percent(skill.selfHpCostRate)}消費（HP1未満にはならない）`);
  if(skill.removeEnemyMagicCircle)lines.push("敵側の魔法陣をランダムに1つ破壊");
  if(skill.dispelEnemyBuff)lines.push("敵側の強化効果をランダムに1つ解除");
  if(skill.randomElement)lines.push("発動ごとに攻撃属性が変化");
@@ -341,15 +343,19 @@ export function skillEffectDetails(skill){
  if(skill.cleanse)lines.push("状態異常・弱体効果を解除");
  if(Number(skill.barrier)>0)lines.push(`障壁を${Math.round(Number(skill.barrier))}段階付与`);
  if(Number(skill.selfAtk)>0)lines.push(`命中後、自分のATK +${percent(skill.selfAtk)}`);
- if(Number(skill.lowHpBonus)>0)lines.push(`低HP時に威力 +${percent(skill.lowHpBonus)}`);
+ if(Number(skill.lowHpBonus)>0)lines.push(`自分のHP${percent(skill.lowHpThreshold??.5)}以下で威力 +${percent(skill.lowHpBonus)}`);
+ if(Number(skill.turnPowerStep)>0)lines.push(`経過ターンごとに威力 +${percent(skill.turnPowerStep)}（上限 +${percent(skill.turnPowerCap)}）`);
  for(const effect of skill.revivedEffects??[]){const turns=turnText(effect.turns);if(effect.kind==="regen")lines.push(`蘇生者へ毎ターン最大HP${percent(effect.value)}回復・${turns}`);else if(effect.kind==="guard")lines.push(`蘇生者の被ダメージを${percent(effect.value)}軽減・${turns}`);else lines.push(`蘇生者へ${EFFECT_NAMES[effect.kind]??effect.name??effect.kind}・${turns}`)}
  const status=skill.status;
  if(status){
   const name=status.name??STATUS_NAMES[status.id]??status.id??"状態異常",chance=percent(status.chance??1),turns=turnText(status.turns);
   lines.push(`${name}：成功率${chance}・${turns}${Number(status.power)>0?`・毎ターン最大HPの${percent(status.power)}ダメージ`:""}`);
  }
- for(const effect of skill.effects??[]){
-  const target=effect.allies?"味方全体":effect.enemy?"対象":"自分",turns=turnText(effect.turns);
+	 for(const effect of skill.effects??[]){
+	  const target=effect.allies?"味方全体":effect.enemy?"対象":"自分",turns=turnText(effect.turns);
+	  if(effect.kind==="guaranteedHit"){lines.push(`${target}の攻撃を必中化・${turns}`);continue}
+	  if(effect.kind==="guaranteedCritical"){lines.push(`${target}の攻撃を確定会心化・${turns}`);continue}
+	  if(effect.kind==="reviveSeal"){lines.push(`${target}を蘇生不能にする：成功率${percent(effect.chance??1)}・${turns}`);continue}
   if(EFFECT_NAMES[effect.kind]){lines.push(`${target}の${EFFECT_NAMES[effect.kind]} ${effect.kind.endsWith("Down")?"−":"+"}${percent(effect.value)}・${turns}`);continue}
   if(effect.kind==="guard"){lines.push(`${target}の被ダメージを${percent(effect.value)}軽減・${turns}`);continue}
   if(effect.kind==="counter"){lines.push(`攻撃を受けると物理ATKの${percent(effect.value)}で反撃・${turns}`);continue}
@@ -369,9 +375,10 @@ export function chooseAutoSkill(monster,battle){
  const usable=learnedSkills(monster).filter(skill=>canUseSkill(monster,skill,battle?.cooldowns?.[monster.id]?.[skill.id]??0));
  if(!usable.length)return null;
  const hp=monster.currentHp/Math.max(1,monster._maxHp??1),dead=(battle?.party??[]).some(m=>m.currentHp<=0),hurt=(battle?.party??[]).filter(m=>m.currentHp>0&&m.currentHp<(m._maxHp??Infinity)*.65).length;
- if(dead){const revive=usable.find(s=>s.type==="revive");if(revive)return revive}
+ if(dead){const revive=usable.find(s=>s.type==="revive"||s.revive||s.reviveTransferRate);if(revive)return revive}
  if(hurt>=2){const heal=usable.filter(s=>s.type==="allHeal").sort((a,b)=>(b.heal??0)-(a.heal??0))[0];if(heal)return heal}
  if(hp<.38){const heal=usable.find(s=>s.type==="selfHeal"||s.heal&&s.target==="自分");if(heal)return heal}
+ if(hp<.8){const fillDrain=usable.find(s=>s.fillHpDrain);if(fillDrain)return fillDrain}
  const tactical=usable.filter(s=>["buff","stance","cleanse","mpHeal"].includes(s.type));if(tactical.length&&Math.random()<.28)return tactical[Math.floor(Math.random()*tactical.length)];
  const attacks=usable.filter(s=>!["allHeal","selfHeal","buff","stance","cleanse","revive","mpHeal"].includes(s.type));return attacks.sort((a,b)=>(b.power??0)-(a.power??0))[0]??usable[0]
 }

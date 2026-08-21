@@ -1,7 +1,7 @@
-import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=2.11.2-build166";
+import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=2.11.24-build188";
 import{PERSONALITIES}from"../../data/personalities.js?v=2.11.2-build166";
 import{SPECIES}from"../../data/species.js?v=2.11.2-build166";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.2-build166";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.24-build188";
 import{monsterVisual}from"../MonsterVisual.js?v=2.11.2-build166";
 
 export function MonsterCard(monster,inParty=false,{editing=false,selected=false}={}){

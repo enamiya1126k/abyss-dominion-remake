@@ -1,5 +1,5 @@
 import{SPECIES}from"../data/species.js?v=2.11.2-build166";
-import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.11.2-build166";
+import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.11.24-build188";
 import{RARITY_ORDER}from"../data/equipment.js?v=2.11.2-build166";
 import{createEquipment}from"../models/Equipment.js?v=2.11.2-build166";
 
@@ -32,8 +32,8 @@ function generatedDefinition(ownerId){
  if(GENERIC_CACHE.has(ownerId))return GENERIC_CACHE.get(ownerId);
  const source=ownerRecord(ownerId);if(!source)return null;
  const ownerName=cleanName(source.shortName??source.name??ownerId),seed=hash(ownerId),styles=["追撃","再生","防壁","会心","加速","反撃"],style=styles[seed%styles.length];
- const endgame=ENDGAME_CHARACTERS[ownerId],signature=endgame?.signatureName??endgame?.signature??`${ownerName}覚醒`;
- const definition=Object.freeze({id:`signature-${ownerId}`,ownerId,ownerName,name:endgame?signature:`${ownerName}共鳴`,theme:endgame?.role??style,description:endgame?.awakening??`${ownerName}だけが引き出せる${style}の権能。6点で専用奥義が覚醒する。`,damageMultiplier:1.04+(seed%4)*.01,damageReductionRate:.04+((seed>>>3)%3)*.01,critBonus:.02+((seed>>>5)%3)*.01,awakenedText:endgame?.setText?.[6]??`${signature}が覚醒し、戦闘開始時に専用権能を展開。`});
+ const endgame=ENDGAME_CHARACTERS[ownerId],weapon=endgame?.signatureWeapon,signature=weapon?.skill?.name??endgame?.signatureName??endgame?.signature??`${ownerName}覚醒`;
+ const definition=Object.freeze({id:`signature-${ownerId}`,ownerId,ownerName,name:endgame?signature:`${ownerName}共鳴`,theme:endgame?.role??style,description:weapon?.description??endgame?.awakening??`${ownerName}だけが引き出せる${style}の権能。6点で専用奥義が覚醒する。`,damageMultiplier:1.04+(seed%4)*.01,damageReductionRate:.04+((seed>>>3)%3)*.01,critBonus:.02+((seed>>>5)%3)*.01,...(weapon?.resonance??{}),awakenedText:endgame?.setText?.[6]??`${signature}が覚醒し、戦闘開始時に専用権能を展開。`});
  GENERIC_CACHE.set(ownerId,definition);return definition;
 }
 
@@ -67,6 +67,14 @@ export function permanentSignatureOwners(){return Object.values(SPECIES).filter(
   &&!ENDGAME_CHARACTERS[species.id];
 }).map(species=>({ownerId:species.id,ownerName:signatureWeaponDefinition(species.id)?.ownerName??cleanName(species.name),rarity:species.rarity})).sort((a,b)=>(RARITY_ORDER[b.rarity]??0)-(RARITY_ORDER[a.rarity]??0)||a.ownerName.localeCompare(b.ownerName,"ja"))}
 export function rollPermanentSignatureHit(random=Math.random){return Math.max(0,Math.min(.999999,Number(random?.())||0))<PERMANENT_SIGNATURE_RATE}
-export function createSignatureEquipment(ownerId,pieceIndex=Math.floor(Math.random()*6)){pieceIndex=Math.max(0,Math.min(5,Math.floor(Number(pieceIndex)||0)));const definition=signatureWeaponDefinition(ownerId),plan=SLOT_PLAN[pieceIndex];if(!definition||!plan)return null;const endgame=ENDGAME_CHARACTERS[ownerId],mythicGear=MYTHIC_GEAR[ownerId],rarity=endgame?.faction==="tenGod"?"十神":endgame?.faction==="abyss"?"深淵":SPECIES[ownerId]?.rarity==="神話"?"神話":"LR";const item=createEquipment(plan.slot,{rarity,handedness:plan.slot==="weapon"?(plan.subslot==="weaponRight"?"right":"left"):null,ruleOverrides:{signatureOwnerId:ownerId,signatureOwnerName:definition.ownerName,signaturePieceIndex:pieceIndex,subslot:plan.subslot,signature:true}});item.name=endgame?.gear?.[pieceIndex]?.name??mythicGear?.names?.[pieceIndex]??`${definition.ownerName}専用・${plan.suffix}`;item.series=endgame?.seriesId??`signature-${ownerId}`;item.seriesName=`${definition.ownerName}専用`;item.favorite=true;item.fixedEffectText=endgame?.gear?.[pieceIndex]?.effectText??`${pieceIndex+1}点目の専用共鳴。2・4・6点で権能が段階覚醒する。`;item.signatureSkill=definition.name;if(mythicGear){item.visualAsset=`./assets/ui/equipment/mythic/${mythicGear.asset}-${["weapon-1","weapon-2","armor-1","armor-2","accessory-1","accessory-2"][pieceIndex]}.png`;item.stats={...MYTHIC_GEAR_STATS[pieceIndex]}}return item}
+export function normalizeSignatureWeaponItem(item){
+ const ownerId=signatureEquipmentOwnerId(item),endgame=ENDGAME_CHARACTERS[ownerId],weapon=endgame?.signatureWeapon;if(!item||!weapon)return null;
+ const storedIndex=Number(item.ruleOverrides?.signaturePieceIndex),pieceIndex=Number.isInteger(storedIndex)?storedIndex:item.ruleOverrides?.subslot==="weaponRight"?0:-1;if(pieceIndex!==0)return null;
+ item.name=weapon.name;item.stats={...(item.stats??{}),...(weapon.stats??{})};item.fixedEffects={...(item.fixedEffects??{}),...(weapon.fixedEffects??{})};item.fixedEffectText=`${weapon.description}${weapon.skill?`／装備中限定技「${weapon.skill.name}」` :""}`;item.signatureWeaponEffectId=`endgame-signature-${ownerId}`;
+ if(weapon.skill)item.grantedSkillId=weapon.skill.id;
+ return weapon
+}
+export function signatureWeaponGrantedSkill(item){return normalizeSignatureWeaponItem(item)?.skill??null}
+export function createSignatureEquipment(ownerId,pieceIndex=Math.floor(Math.random()*6)){pieceIndex=Math.max(0,Math.min(5,Math.floor(Number(pieceIndex)||0)));const definition=signatureWeaponDefinition(ownerId),plan=SLOT_PLAN[pieceIndex];if(!definition||!plan)return null;const endgame=ENDGAME_CHARACTERS[ownerId],mythicGear=MYTHIC_GEAR[ownerId],rarity=endgame?.faction==="tenGod"?"十神":endgame?.faction==="abyss"?"深淵":SPECIES[ownerId]?.rarity==="神話"?"神話":"LR";const item=createEquipment(plan.slot,{rarity,handedness:plan.slot==="weapon"?(plan.subslot==="weaponRight"?"right":"left"):null,ruleOverrides:{signatureOwnerId:ownerId,signatureOwnerName:definition.ownerName,signaturePieceIndex:pieceIndex,subslot:plan.subslot,signature:true}});item.name=endgame?.gear?.[pieceIndex]?.name??mythicGear?.names?.[pieceIndex]??`${definition.ownerName}専用・${plan.suffix}`;item.series=endgame?.seriesId??`signature-${ownerId}`;item.seriesName=`${definition.ownerName}専用`;item.favorite=true;item.fixedEffectText=endgame?.gear?.[pieceIndex]?.effectText??`${pieceIndex+1}点目の専用共鳴。2・4・6点で権能が段階覚醒する。`;item.signatureSkill=definition.name;if(mythicGear){item.visualAsset=`./assets/ui/equipment/mythic/${mythicGear.asset}-${["weapon-1","weapon-2","armor-1","armor-2","accessory-1","accessory-2"][pieceIndex]}.png`;item.stats={...MYTHIC_GEAR_STATS[pieceIndex]}}if(endgame?.signatureWeapon&&pieceIndex===0){item.stats={};item.fixedEffects={}}normalizeSignatureWeaponItem(item);return item}
 
 export const SIGNATURE_WEAPON_RESONANCES=MYTHIC;

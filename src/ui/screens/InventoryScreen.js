@@ -3,7 +3,7 @@ import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.11.2-build166"
 import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.11.2-build166";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.11.2-build166";
 import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.11.2-build166";
-import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.11.2-build166";
+import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.11.24-build188";
 import{monsterVisual}from"../MonsterVisual.js?v=2.11.2-build166";
 
 const CONSUMABLES=[

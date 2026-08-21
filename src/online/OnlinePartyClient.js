@@ -1,9 +1,9 @@
 import {
   buildOnlinePartyProfile, ONLINE_STORAGE_KEYS, ensureOnlineIdentity,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.2-build166";
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.24-build188";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
-} from "./OnlineViews.js?v=2.11.2-build166";
+} from "./OnlineViews.js?v=2.11.24-build188";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
 const DIRECTION = Object.freeze({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] });

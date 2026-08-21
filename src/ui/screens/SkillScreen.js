@@ -1,6 +1,6 @@
 import{SPECIES}from"../../data/species.js?v=2.11.2-build166";
-import{displayName}from"../../models/Monster.js?v=2.11.2-build166";
-import{allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=2.11.21-build185";
+import{displayName}from"../../models/Monster.js?v=2.11.24-build188";
+import{allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=2.11.24-build188";
 import{monsterVisual}from"../MonsterVisual.js?v=2.11.2-build166";
 import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.11.2-build166";
 

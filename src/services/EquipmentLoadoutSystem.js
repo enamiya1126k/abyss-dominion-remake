@@ -1,5 +1,5 @@
 import{SLOT_UNLOCK_LEVEL,compatibleSubslots,EQUIPMENT_SLOT_ORDER}from"../data/equipment.js?v=2.11.2-build166";
-import{signatureEquipmentOwnerId,signatureEquipmentMatchesMonster}from"../core/SignatureWeaponSystem.js?v=2.11.2-build166";
+import{signatureEquipmentOwnerId,signatureEquipmentMatchesMonster}from"../core/SignatureWeaponSystem.js?v=2.11.24-build188";
 import{equipmentRequiredMonsterLevel}from"../models/Equipment.js?v=2.11.2-build166";
 
 export{EQUIPMENT_SLOT_ORDER};

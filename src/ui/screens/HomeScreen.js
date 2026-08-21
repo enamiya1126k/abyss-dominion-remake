@@ -1,9 +1,9 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.11.21-build185";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=2.11.2-build166";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.11.2-build166";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.11.24-build188";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=2.11.24-build188";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.11.24-build188";
 import{SPECIES}from"../../data/species.js?v=2.11.2-build166";
-import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.11.2-build166";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.2-build166";
+import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.11.24-build188";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.24-build188";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.11.2-build166";
 import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.11.2-build166";
 import{monsterVisual}from"../MonsterVisual.js?v=2.11.2-build166";
