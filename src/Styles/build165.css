@@ -1,0 +1,4 @@
+/* build165: 10F～90F floor-boss original 512px sprite integration. */
+.floor-boss-monster-visual-v3 img[data-monster-sprite]{
+  object-position:center center!important;
+}

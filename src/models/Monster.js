@@ -1,10 +1,11 @@
-import{SPECIES}from"../data/species.js?v=2.10.0-build163";
-import{PERSONALITIES}from"../data/personalities.js?v=2.10.0-build163";
-import{MONSTER_COLORS}from"../data/colors.js?v=2.10.0-build163";
-import{normalizedResistances}from"../data/attributes.js?v=2.10.0-build163";
-import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.10.0-build163";
-import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.10.0-build163";
-import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.10.0-build163";
+import{SPECIES}from"../data/species.js?v=2.11.2-build166";
+import{PERSONALITIES}from"../data/personalities.js?v=2.11.2-build166";
+import{MONSTER_COLORS}from"../data/colors.js?v=2.11.2-build166";
+import{normalizedResistances}from"../data/attributes.js?v=2.11.2-build166";
+import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.11.2-build166";
+import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.11.2-build166";
+import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.11.2-build166";
+import{baseExperienceNeedForLevel}from"../core/ProgressionSystem.js?v=2.11.2-build166";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -13,29 +14,30 @@ function randomKey(object){
   const keys=Object.keys(object);
   return keys[Math.floor(Math.random()*keys.length)];
 }
-function randomIV(){return Math.floor(70+Math.random()*31)}
+// 旧セーブ互換のため ivs / stars フィールド自体は残すが、build164以降は
+// 能力計算へ一切使用しない。新規個体は全員同じ中立値で生成する。
+function randomIV(){return 100}
 const INNATE_STAR_WEIGHTS=Object.freeze([28,22,17,12,8,5,3.5,2.2,1.5,.8]);
 export function rollInnateStars(random=Math.random){
-  const total=INNATE_STAR_WEIGHTS.reduce((sum,value)=>sum+value,0),roll=Math.max(0,Math.min(.999999,Number(random())||0))*total;
-  let cursor=0;
-  for(let index=0;index<INNATE_STAR_WEIGHTS.length;index++){cursor+=INNATE_STAR_WEIGHTS[index];if(roll<cursor)return index+1}
-  return MONSTER_STAR_MAX;
+  void random;
+  return 1;
 }
 export const TRAITS={
- sturdy:{name:"頑丈",description:"HP+8%",mods:{hp:1.08}},
- fierce:{name:"猛攻",description:"ATK+9% / DEF-4%",mods:{atk:1.09,def:.96}},
- swift:{name:"俊敏",description:"SPD+10%",mods:{spd:1.10}},
- guarded:{name:"守護",description:"DEF+9%",mods:{def:1.09}},
- arcane:{name:"魔力体",description:"MP+12%",mods:{}},
- lucky:{name:"幸運",description:"会心率+5%",mods:{crit:5}},
- steady:{name:"安定",description:"能力の偏りが少ない",mods:{}}
+ sturdy:{name:"頑丈",description:"粘り強く前へ出る気質（能力補正なし）",mods:{}},
+ fierce:{name:"猛攻",description:"攻めを好む気質（能力補正なし）",mods:{}},
+ swift:{name:"俊敏",description:"素早い判断を好む気質（能力補正なし）",mods:{}},
+ guarded:{name:"守護",description:"仲間を守ろうとする気質（能力補正なし）",mods:{}},
+ arcane:{name:"魔力体",description:"術式へ強い関心を持つ気質（能力補正なし）",mods:{}},
+ lucky:{name:"幸運",description:"好機を楽しむ気質（能力補正なし）",mods:{}},
+ steady:{name:"安定",description:"落ち着いた気質（能力補正なし）",mods:{}}
 };
 
 const RACE_EXP_RATE={
- slime:.68,beast:.82,flying:.80,insect:.78,goblin:.90,plant:.88,
- undead:1.00,demon:1.22,elemental:1.18,golem:1.35,dragon:1.95,
- spirit:1.08,construct:1.30,reptile:1.12
+ slime:.97,beast:1,flying:.99,insect:1,goblin:.98,plant:1.02,
+ undead:1.03,demon:1.04,elemental:1.03,golem:1.05,dragon:1.06,
+ spirit:1.02,construct:1.04,reptile:1.02,human:1.01
 };
+const RARITY_EXP_RATE=Object.freeze({N:1,R:1.02,SR:1.04,SSR:1.07,UR:1.10,LR:1.13,"神話":1.17,"深淵":1.25,"十神":1.35});
 const RACE_GROWTH_RATE={
  slime:{hp:.82,atk:.72,def:.82,spd:.92},
  beast:{hp:.94,atk:1.04,def:.88,spd:1.12},
@@ -50,37 +52,36 @@ const RACE_GROWTH_RATE={
  dragon:{hp:1.34,atk:1.32,def:1.16,spd:.64},
  spirit:{hp:.86,atk:1.08,def:.88,spd:1.12},
  construct:{hp:1.18,atk:1.05,def:1.22,spd:.72},
- reptile:{hp:1.08,atk:1.04,def:1.10,spd:.86}
+ reptile:{hp:1.08,atk:1.04,def:1.10,spd:.86},
+ human:{hp:.96,atk:1.02,def:.96,spd:1.06}
 };
 export function expNeedFor(monster){
   const species=SPECIES[monster.speciesId];
-  const rate=species.expRate??RACE_EXP_RATE[species.race]??1;
-  const base=40+monster.level*25+Math.floor(monster.level*monster.level*.55);
-  const endgameRate=monster?.endgameBossId||monster?.isContractedEndgame||["abyss","tenGod"].includes(monster?.endgameFaction)?5:1;
- return Math.max(25,Math.floor(base*rate*endgameRate));
+  const rarity=monster?.endgameFaction==="tenGod"?"十神":monster?.endgameFaction==="abyss"?"深淵":monster?.summonRarity??species?.rarity??"N";
+  const raceRate=species?.expRate??RACE_EXP_RATE[species?.race]??1,rarityRate=RARITY_EXP_RATE[rarity]??1;
+ return Math.max(25,Math.floor(baseExperienceNeedForLevel(monster.level)*raceRate*rarityRate));
 }
 
+const EXPERIENCE_PREFIX_CACHE=new Map();
+function experienceProfileKey(monster){
+ const species=SPECIES[monster?.speciesId],rarity=monster?.endgameFaction==="tenGod"?"十神":monster?.endgameFaction==="abyss"?"深淵":monster?.summonRarity??species?.rarity??"N",raceRate=species?.expRate??RACE_EXP_RATE[species?.race]??1;
+ return`${monster?.speciesId??"unknown"}|${rarity}|${raceRate}`;
+}
+function experiencePrefix(monster,level){
+ const target=Math.max(1,Math.min(TRUE_MAX_LEVEL,Math.floor(Number(level)||1))),key=experienceProfileKey(monster),prefix=EXPERIENCE_PREFIX_CACHE.get(key)??[0,0];
+ while(prefix.length<=target){const current=prefix.length-1;prefix.push(prefix[current]+expNeedFor({...monster,level:current}))}
+ EXPERIENCE_PREFIX_CACHE.set(key,prefix);return prefix;
+}
 export function experienceBeforeLevel(monster,level){
  const target=Math.max(1,Math.min(TRUE_MAX_LEVEL,Math.floor(Number(level)||1)));
- let total=0;
- for(let current=1;current<target;current++)total+=expNeedFor({...monster,level:current});
- return total;
+ return experiencePrefix(monster,target)[target];
 }
-// もっとも育成が重い通常種族（dragon）のLv.10000到達量を1000分割する。
-// 旧EXP結晶の1/20へ抑え、経験値パックを頻繁に入手して少しずつ育てる。
-// 深淵・十神は expNeedFor 側の5倍補正をそのまま負担する。
-const NORMAL_CRYSTAL_EXP_RATE=Math.max(...Object.values(RACE_EXP_RATE));
-const EXPERIENCE_CRYSTAL_VALUE=(()=>{
- let targetTotal=0;
- for(let level=1;level<TRUE_MAX_LEVEL;level++){
-  const base=40+level*25+Math.floor(level*level*.55);
-  targetTotal+=Math.max(25,Math.floor(base*NORMAL_CRYSTAL_EXP_RATE));
- }
- return Math.max(1,Math.ceil(targetTotal/1000));
-})();
-export function experienceCrystalValue(monster){
- // 対象ごとに逆算しない。深淵・十神だけ結晶価値まで5倍になる事故を防ぐ。
- return EXPERIENCE_CRYSTAL_VALUE;
+const EXPERIENCE_PACK_LEVELS=Object.freeze({small:1,medium:3,large:6,ultra:10});
+export function experienceCrystalValue(monster,tier="small"){
+ const span=EXPERIENCE_PACK_LEVELS[tier]??EXPERIENCE_PACK_LEVELS.small,start=Math.max(1,Math.min(TRUE_MAX_LEVEL,Math.floor(Number(monster?.level)||1)));
+ let value=0;
+ for(let offset=0;offset<span&&start+offset<TRUE_MAX_LEVEL;offset++)value+=baseExperienceNeedForLevel(start+offset);
+ return Math.max(1,Math.floor(value));
 }
 export function totalExperience(monster){
  const stored=Number(monster?.totalExp);
@@ -90,15 +91,11 @@ export function totalExperience(monster){
 export function applyTotalExperience(monster,total){
  const canonical=Math.max(0,Math.floor(Number(total)||0));
  monster.totalExp=canonical;
- monster.level=1;
- monster.exp=canonical;
- while(monster.level<TRUE_MAX_LEVEL){
-  const need=expNeedFor(monster);
-  if(monster.exp<need)break;
-  monster.exp-=need;
-  monster.level++;
- }
- if(monster.level>=TRUE_MAX_LEVEL)monster.exp=0;
+ const prefix=experiencePrefix(monster,TRUE_MAX_LEVEL),maximum=prefix[TRUE_MAX_LEVEL];
+ if(canonical>=maximum){monster.level=TRUE_MAX_LEVEL;monster.exp=0;monster.totalExp=maximum;return monster}
+ let low=1,high=TRUE_MAX_LEVEL;
+ while(low<high){const middle=Math.ceil((low+high)/2);if(prefix[middle]<=canonical)low=middle;else high=middle-1}
+ monster.level=low;monster.exp=Math.max(0,canonical-prefix[low]);
  return monster;
 }
 
@@ -121,9 +118,8 @@ export function createMonster(speciesId,options={}){
     ivs:options.ivs??{hp:randomIV(),atk:randomIV(),def:randomIV(),spd:randomIV()},
     level,
     exp:Math.max(0,Math.floor(Number(options.exp)||0)),
-    // Stars are an immutable innate aptitude rolled per individual. They are
-    // deliberately independent from species and race.
-    stars:Math.max(1,Math.min(MONSTER_STAR_MAX,Math.floor(Number(options.stars??options.talent??rollInnateStars())||1))),
+    // Legacy display record only. New individuals no longer roll aptitude.
+    stars:1,
     rank:options.rank??1,
     plus:options.plus??0,
     affection:Math.max(0,Math.min(1000,options.affection??options.bond??0)),
@@ -202,59 +198,55 @@ export function levelGrowthMultiplier(level,key,growth=1,raceGrowth=1){
   return(1+effectiveProgress*rate*(Number(growth)||1)*(Number(raceGrowth)||1)*(1+milestone));
 }
 
+const RARITY_STAT_MULTIPLIER=Object.freeze({N:1,R:1.015,SR:1.03,SSR:1.05,UR:1.08,LR:1.12,"神話":1.17,"深淵":1.45,"十神":1.80,SECRET:1.05});
+function resolvedCombatRarity(source,species){
+ if(source?.endgameFaction==="tenGod")return"十神";
+ if(source?.endgameFaction==="abyss")return"深淵";
+ return source?.summonRarity??source?.summonTier??species?.rarity??"N";
+}
+export function speciesLevelStats(speciesOrId,level,{rarity=null,rank=1,plus=0}={}){
+ const species=typeof speciesOrId==="string"?SPECIES[speciesOrId]:speciesOrId;
+ if(!species)return{hp:1,atk:1,matk:1,def:0,mdef:0,spd:1,crit:0,evasion:0,accuracy:100};
+ const safeLevel=Math.max(1,Math.floor(Number(level)||1)),growth=species.growth??{},raceGrowth=RACE_GROWTH_RATE[species.race]??{},limitGrowth=limitBreakGrowth(species.id),rankMultiplier=1+(Math.max(1,Number(rank)||1)-1)*.15,rarityMultiplier=RARITY_STAT_MULTIPLIER[rarity??species.rarity??"N"]??1;
+ const calc=key=>{
+  const base=Math.max(0,Number(species.baseStats?.[key])||0)+(limitGrowth[key]??0)*Math.max(0,Number(plus)||0);
+  return Math.max(key==="hp"||key==="atk"||key==="spd"?1:0,Math.floor(base*rankMultiplier*rarityMultiplier*levelGrowthMultiplier(safeLevel,key,growth[key]??1,raceGrowth[key]??1)));
+ };
+ const role=String(species.role??""),magicalRole=["magic","support","healer","controller","debuffer","poison","burner"].some(value=>role.includes(value)),atk=calc("atk"),def=calc("def");
+ return{hp:calc("hp"),atk,matk:Math.max(1,Math.floor(atk*(magicalRole?1.08:.72))),def,mdef:Math.max(1,Math.floor(def*(magicalRole?1.08:.82))),spd:calc("spd"),crit:Math.max(0,Number(species.baseStats?.crit)||0),evasion:Math.max(0,Number(species.baseStats?.evasion)||0),accuracy:Math.max(20,Math.min(180,Number(species.baseStats?.accuracy)||100))};
+}
+
 export function calculatedStats(monster){
   const species=SPECIES[monster.speciesId];
   const personality=PERSONALITIES[monster.personalityId]??PERSONALITIES.bold??Object.values(PERSONALITIES)[0];
   const finite=(value,fallback=0)=>Number.isFinite(Number(value))?Number(value):fallback;
   const rank=Math.max(1,finite(monster.rank,1)),level=Math.max(1,finite(monster.level,1));
-  const rankMultiplier=1+(rank-1)*.5;
-  const talent=Math.max(1,Math.min(MONSTER_STAR_MAX,finite(monster.stars,1)));
-  const talentMultiplier=1+(talent-1)*.08;
-  const growth=species.growth??{};
-  const raceGrowth=RACE_GROWTH_RATE[species.race]??{};
-  const levelGrowthFor=key=>levelGrowthMultiplier(level,key,growth[key]??1,raceGrowth[key]??1);
-  const limitGrowth=limitBreakGrowth(monster.speciesId);
   const affection=affectionBonuses(monster.affection??monster.bond??0);
-
-  const calc=(key)=>{
-    const base=finite(species.baseStats[key])+(limitGrowth[key]??0)*Math.max(0,finite(monster.plus));
-    const iv=Math.max(0,Math.min(100,finite(monster.ivs?.[key],75)));
-    const ivMultiplier=.75+iv/400;
-    const personalityMultiplier=finite(personality?.modifiers?.[key],1);
-    return Math.floor(base*rankMultiplier*talentMultiplier*levelGrowthFor(key)*ivMultiplier*personalityMultiplier*(1+(affection[key]??0)));
-  };
+  // personality / trait / ★ / IV are flavour and collection history only.
+  // Species, race, rarity and earned progression are the sole innate sources.
+  const core=speciesLevelStats(species,level,{rarity:resolvedCombatRarity(monster,species),rank,plus:monster.plus});
+  const calc=key=>Math.max(key==="hp"||key==="atk"||key==="spd"?1:0,Math.floor(finite(core[key])*(1+(affection[key]??0))));
 
   const trait=TRAITS[monster.traitId]??TRAITS.steady;
   const gear=monster._equipmentStats??{},affix=monster._equipmentAffixes??{};
   const syn=monster._synergy??{};
-  const role=String(species.role??"");
-  const magicalRole=["magic","support","healer","controller","debuffer","poison","burner"].some(value=>role.includes(value));
   const baseAtk=calc("atk"),baseDef=calc("def");
   const result={
     hp:calc("hp")+finite(gear.hp),
     atk:baseAtk+finite(gear.atk),
-    matk:Math.max(1,Math.floor(baseAtk*(magicalRole?1.08:.72)))+finite(gear.matk),
+    matk:Math.max(1,Math.floor(finite(core.matk)*(1+(affection.atk??0))))+finite(gear.matk),
     def:baseDef+finite(gear.def),
-    mdef:Math.max(1,Math.floor(baseDef*(magicalRole?1.08:.82)))+finite(gear.mdef),
+    mdef:Math.max(1,Math.floor(finite(core.mdef)*(1+(affection.def??0))))+finite(gear.mdef),
     spd:calc("spd")+finite(gear.spd),
-    crit:Math.floor(finite(species.baseStats.crit)*finite(personality?.modifiers?.crit,1))+finite(gear.crit),
-    evasion:Math.floor(finite(species.baseStats.evasion)*finite(personality?.modifiers?.evasion,1))+finite(gear.evasion),
+    crit:Math.floor(finite(core.crit))+finite(gear.crit),
+    evasion:Math.floor(finite(core.evasion))+finite(gear.evasion),
     accuracy:Math.max(20,Math.min(180,finite(species.baseStats.accuracy,100)+finite(gear.accuracy)))
   };
-  // Contracted endgame characters retain their actual character-class base
-  // power in every mode. Deep Abyss is x10; Ten Gods are x10 above that.
-  const endgameBase=monster.isContractedEndgame||monster.endgameBossId
-    ?monster.endgameFaction==="tenGod"?100:monster.endgameFaction==="abyss"?10:1
-    :1;
-  if(endgameBase!==1)for(const key of["hp","atk","matk","def","mdef","spd"])result[key]=Math.max(1,Math.floor(result[key]*endgameBase));
   for(const key of["hp","atk","matk","def","mdef","spd"]){
-    const traitKey=key==="matk"?"atk":key==="mdef"?"def":key;
-    if(trait.mods[traitKey])result[key]=Math.floor(result[key]*trait.mods[traitKey]);
     const pct=finite(affix[`${key}Pct`]??(key==="matk"?affix.atkPct:key==="mdef"?affix.defPct:0));
     if(pct)result[key]=Math.floor(result[key]*(1+pct/100));
   }
   result.crit+=finite(affix.critRate);result.evasion+=finite(affix.evasion);result.accuracy=Math.max(20,Math.min(180,result.accuracy+finite(affix.accuracy)));result._affixes=affix;
-  if(trait.mods.crit)result.crit+=trait.mods.crit;
   if(syn.atk){result.atk=Math.floor(result.atk*(1+syn.atk));result.matk=Math.floor(result.matk*(1+syn.atk))}
   if(syn.def){result.def=Math.floor(result.def*(1+syn.def));result.mdef=Math.floor(result.mdef*(1+syn.def))}
   if(syn.hp)result.hp=Math.floor(result.hp*(1+syn.hp));

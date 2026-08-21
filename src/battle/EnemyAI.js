@@ -1,5 +1,7 @@
-import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=2.10.0-build163";
-import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.10.0-build163";
+import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=2.11.2-build166";
+import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.2-build166";
+import{speciesLevelStats}from"../models/Monster.js?v=2.11.2-build166";
+import{floorBossActionInfo}from"../data/floorBosses.js?v=2.11.21-build185";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
  devour:"devour",annihilate:"annihilate",wrathBurst:"wrathBurst",mirror:"mirror",sleepMist:"sleepMist",plunder:"plunder",sovereign:"sovereign",
@@ -63,14 +65,15 @@ export const SPECIAL_ACTION_INFO={
 export function isBossFloor(floor){return floor>0&&floor%10===0}
 export function createEnemyBattleState(species,source,floor){
  const boss=source.boss??isBossFloor(floor),profile=boss?bossProfileForFloor(floor):{tier:null,hp:1,atk:1,def:1,spd:1,statusResist:0,healRate:.16,powerMultiplier:1.8},depth=post9000DepthProfile(floor);
- const maxHp=Math.max(1,Math.floor((species.baseStats.hp+source.level*8)*profile.hp*depth.hp));
+ const core=speciesLevelStats(species,source.level,{rarity:source.combatRarity??species.rarity,rank:source.rank??1,plus:0});
+ const custom=source.floorBossStats??{},maxHp=Math.max(1,Math.floor(core.hp*profile.hp*depth.hp*Math.max(.5,Number(custom.hp)||1)));
  const maxEnemyMp=Math.max(8,Math.floor(((species.maxMp??18)+source.level*.32)*(boss?1.35:1)));
  const baseName=source.nameOverride??(boss?`深淵の${species.name}`:species.name),depthName=depth.active&&depth.step>0&&!source.nameOverride?`【${depth.label}】${baseName}`:baseName;
- const atk=Math.floor((species.baseStats.atk+source.level*1.4)*profile.atk*depth.atk),def=Math.floor((species.baseStats.def+source.level*.5)*profile.def*depth.def),magicRole=["magic","support","healer","controller","debuffer","poison","burner"].some(value=>String(species.role??"").includes(value));
+ const atk=Math.max(1,Math.floor(core.atk*profile.atk*depth.atk*Math.max(.5,Number(custom.atk)||1))),matk=Math.max(1,Math.floor(core.matk*profile.atk*depth.atk*Math.max(.5,Number(custom.matk)||1))),def=Math.max(0,Math.floor(core.def*profile.def*depth.def*Math.max(.5,Number(custom.def)||1))),mdef=Math.max(0,Math.floor(core.mdef*profile.def*depth.def*Math.max(.5,Number(custom.mdef)||1)));
  return{...source,speciesId:source.speciesId,name:depthName,level:source.level,hp:maxHp,maxHp,
-  atk,matk:Math.max(1,Math.floor(atk*(magicRole?1.08:.72))),def,mdef:Math.max(0,Math.floor(def*(magicRole?1.08:.82))),spd:Math.floor((species.baseStats.spd+source.level*.18)*profile.spd*depth.spd),evasion:Math.min(75,Math.max(0,Number(source.evasion??species.baseStats.evasion)||0)),accuracy:Math.max(20,Math.min(180,Number(source.accuracy??species.baseStats.accuracy)||100)),
+  atk,matk,def,mdef,spd:Math.max(1,Math.floor(core.spd*profile.spd*depth.spd*Math.max(.5,Number(custom.spd)||1))),evasion:Math.min(75,Math.max(0,Number(custom.evasion??source.evasion??core.evasion)||0)),accuracy:Math.max(20,Math.min(180,Number(custom.accuracy??source.accuracy??core.accuracy)||100)),crit:Math.max(0,Math.min(.9,Number(custom.crit??source.crit)||0)),
   emoji:species.emoji??"👾",color:boss?"#bb4cff":species.baseStats.atk>12?"#df6262":"#a58f59",boss,bossTier:profile.tier,bossStatusResist:Math.min(.9,(profile.statusResist??0)+depth.statusResist),bossHealRate:profile.healRate,bossPowerMultiplier:profile.powerMultiplier,depthTier:depth.label,depthStep:depth.step,depthPressure:depth.active?Math.round(depth.step*10):0,phase:1,enraged:false,guard:false,charging:false,healed:false,
-  intent:"様子を見ている",maxMp:maxEnemyMp,currentMp:Math.max(0,Math.min(maxEnemyMp,Number(source.currentMp??maxEnemyMp))),specialCooldown:0,divineBarrier:0,role:species.role??"balanced",strategicIdentity:species.strategicIdentity??null,element:species.element??"neutral"};
+  intent:"様子を見ている",maxMp:maxEnemyMp,currentMp:Math.max(0,Math.min(maxEnemyMp,Number(source.currentMp??maxEnemyMp))),specialCooldown:0,divineBarrier:0,role:source.role??species.role??"balanced",strategicIdentity:species.strategicIdentity??null,element:source.trialElement??source.attribute??source.element??species.element??"neutral"};
 }
 function normalSpecialAction(enemy,hpRate){
  enemy.specialCooldown=Math.max(0,(enemy.specialCooldown??0)-1);if(enemy.specialCooldown>0)return null;
@@ -82,8 +85,50 @@ function normalSpecialAction(enemy,hpRate){
  if(action&&Math.random()<(enemy.boss?.76:.4)){enemy.specialCooldown=enemy.boss?1:(Math.random()<.35?1:2);enemy.intent=`${SPECIAL_ACTION_INFO[action].label}を放つ`;return action}
  return null;
 }
-function specialAction(enemy,hpRate){
- if(!enemy.endgameBossId)return null;enemy.specialCooldown=Math.max(0,(enemy.specialCooldown??0)-1);if(enemy.divineBarrier>0)enemy.divineBarrier--;
+const FLOOR_BOSS_POSITIVE_KINDS=new Set(["atkUp","defUp","spdUp","evasionUp","accuracyUp","regen","taunt","guard","counter","lifeSteal","magicToPhysical"]);
+function floorBossTacticalState(enemy,context={}){
+ const allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(monster=>(monster.currentHp??0)>0),battle=context.battle??{},turn=Math.max(1,Number(battle.turn)||1);
+ const buffed=opponents.some(monster=>(battle.allyEffects?.[monster.id]??[]).some(effect=>FLOOR_BOSS_POSITIVE_KINDS.has(effect.kind))),hasCircle=opponents.some(monster=>{const circle=battle.magicCircleProfiles?.[monster.id];return circle&&circle.id!=="none"}),fallen=allies.some(ally=>(ally.hp??0)<=0),wounded=allies.some(ally=>(ally.hp??0)>0&&(ally.hp/Math.max(1,ally.maxHp))<.68),statusCounts=Object.fromEntries(["poison","paralysis","burn","freeze","bleed","curse"].map(id=>[id,opponents.filter(monster=>(battle.allyAilments?.[monster.id]??[]).some(status=>status.id===id)).length])),effectCounts=Object.fromEntries(["spdDown","defDown","atkDown","accuracyDown","vulnerable"].map(kind=>[kind,opponents.filter(monster=>(battle.allyEffects?.[monster.id]??[]).some(effect=>effect.kind===kind)).length])),unpoisoned=statusCounts.poison<opponents.length,hasActiveCooldowns=opponents.some(monster=>Object.values(battle.cooldowns?.[monster.id]??{}).some(turns=>Number(turns)>0)),hasMp=opponents.some(monster=>(monster.currentMp??0)>0),lowMpCount=opponents.filter(monster=>(monster.currentMp??0)/Math.max(1,Number(monster.maxMp??monster.currentMp)||1)<=.30).length,emptyMpCount=opponents.filter(monster=>(monster.currentMp??0)<=0).length,guarded=opponents.some(monster=>Boolean(battle.guards?.[monster.id])||(battle.allyEffects?.[monster.id]??[]).some(effect=>effect.kind==="guard")),hasMark=opponents.some(monster=>Boolean(battle.floorBossTargetMarks?.[enemy.id]?.[monster.id]));
+ return{allies,opponents,battle,turn,buffed,hasCircle,fallen,wounded,unpoisoned,statusCounts,effectCounts,hasActiveCooldowns,hasMp,lowMpCount,emptyMpCount,guarded,hasMark};
+}
+export function floorBossActionScore(enemy,actionId,context={}){
+ const info=floorBossActionInfo(`floorBoss:${actionId}`);if(!info)return-Infinity;
+ const ai=info.ai??{},state=floorBossTacticalState(enemy,context),uses=Math.max(0,Number(enemy.floorBossActionUses?.[actionId])||0),hpRate=enemy.hp/Math.max(1,enemy.maxHp);
+	 if(Number(info.restoreArmorLayers)>0){const cap=Math.max(1,Math.floor(Number(enemy.floorBossPassive?.startingArmorLayers)||Number(info.restoreArmorLayers))),current=Math.max(0,Math.floor(Number(enemy._floorBossArmorLayers)||0));if(current>=cap)return-Infinity}
+		 if(ai.once&&uses>0||ai.hpBelow!=null&&hpRate>ai.hpBelow||ai.hpAbove!=null&&hpRate<ai.hpAbove||ai.requiresFallen&&!state.fallen||ai.requiresWounded&&!state.wounded||ai.requiresFallenOrWounded&&!state.fallen&&!state.wounded||ai.requiresBuff&&!state.buffed||ai.requiresBuffOrCircle&&!state.buffed&&!state.hasCircle||ai.requiresUnpoisoned&&!state.unpoisoned||ai.requiresActiveCooldowns&&!state.hasActiveCooldowns||ai.requiresMark&&!state.hasMark||Array.isArray(ai.requiresEffects)&&!ai.requiresEffects.every(kind=>state.effectCounts[kind]>0)||Array.isArray(ai.requiresStatuses)&&!ai.requiresStatuses.every(id=>state.statusCounts[id]>0)||ai.partySizeAtLeast&&state.opponents.length<ai.partySizeAtLeast||ai.roundMin&&state.turn<ai.roundMin||info.shuffleNextRound&&enemy._floorBossShuffleNextRound||info.beginHealingChorus&&enemy._floorBossHealingChorus||info.applyPuppetLink&&enemy._floorBossPuppetLink&&Math.max(0,Number(enemy._floorBossPuppetLink.expiresTurn)||0)>=state.turn)return-Infinity;
+		 let score=Number(ai.base??30);if(ai.opening)score+=state.turn<=2&&!uses?32:-18;if(enemy.floorBossLastActionId===actionId)score-=20;if(info.fillHpDrain)score+=(1-hpRate)*55;if(info.revive&&state.fallen)score+=80;if(info.revive&&!state.fallen&&Number(info.fallbackHeal)>0&&hpRate<.58)score+=32;if(info.heal&&state.wounded)score+=28;if(info.selfHeal)score+=(1-hpRate)*34;if((info.dispelOne||info.invertOneBuff)&&(state.buffed||state.hasCircle))score+=26;if(info.increaseAllyCooldowns&&state.hasActiveCooldowns)score+=22;if(info.status&&state.unpoisoned)score+=8;if(info.bonusVsStatus?.id&&state.statusCounts[info.bonusVsStatus.id]>0)score+=30;if(info.bonusVsEffect?.kind&&state.effectCounts[info.bonusVsEffect.kind]>0)score+=30;if(info.spreadAilment&&state.statusCounts[info.spreadAilment]>0&&state.statusCounts[info.spreadAilment]<state.opponents.length)score+=28;if(info.mpDrain&&state.hasMp)score+=10;if(info.hpShieldRate&&Number(enemy._floorBossHpShield)<enemy.maxHp*info.hpShieldRate*.5)score+=24;if(info.restoreArmorLayers){const cap=Math.max(1,Math.floor(Number(enemy.floorBossPassive?.startingArmorLayers)||Number(info.restoreArmorLayers)));score+=Math.max(0,cap-Math.max(0,Number(enemy._floorBossArmorLayers)||0))*14}if(info.consumeImpact)score+=Math.max(0,Number(enemy._floorBossImpactStacks)||0)*6;if(info.consumeMark&&state.hasMark)score+=32;if(info.consumeArchive)score+=Math.max(0,Number(enemy._floorBossArchiveStacks)||0)*8;if(info.consumeInversion)score+=Math.max(0,Number(enemy._floorBossInversionStacks)||0)*9;if(info.consumeDamageMemory)score+=Math.min(30,Math.max(0,Number(enemy._floorBossDamageMemory)||0)*100);if(info.consumeCooldownDebt&&state.hasActiveCooldowns)score+=24;if(info.consumePolarity)score+=Math.max(0,Number(enemy._floorBossPolarityStacks)||0)*10;if(info.consumeLifeEmber)score+=Math.min(32,Math.max(0,Number(enemy._floorBossLifeEmber)||0)/Math.max(1,enemy.maxHp)*130);if(info.consumeIceSeals)score+=Math.max(0,Number(enemy._floorBossIceSeals)||0)*11;if(enemy.floorBossDomain?.effect==="polarityOverload"&&["physical","magic"].includes(info.damageClass)&&enemy._floorBossPolarityType&&enemy._floorBossPolarityType!==info.damageClass)score+=18;if(info.consumeAilment&&state.statusCounts[info.consumeAilment]>0)score+=state.statusCounts[info.consumeAilment]*10;if(info.shatterFreeze&&state.statusCounts.freeze>0)score+=30;if(info.consumePrayerHeal)score+=Math.min(28,Math.max(0,Number(enemy._floorBossPrayerReserve)||0)/Math.max(1,enemy.maxHp)*120);if(enemy.floorBossDomain?.effect==="afterimageBurst"&&!info.utility)score+=Math.max(0,Number(enemy._floorBossAfterimages)||0)*5;if(enemy.floorBossDomain?.effect==="furnaceSprint"&&info.telegraph&&Math.max(0,Number(enemy._floorBossSprintStacks)||0)>=3)score+=28;if(enemy.floorBossDomain?.effect==="absoluteZeroLaw"&&info.telegraph&&Math.max(0,Number(enemy._floorBossZeroLaw)||0)%3===2)score+=26;if(enemy.floorBossDomain?.effect==="guardRuin"&&state.guarded&&!info.utility)score+=24;if(enemy._floorBossPowerReady&&!info.utility)score+=16;if((enemy._floorBossManaCharge||enemy._floorBossCriticalReady||enemy._floorBossStormCounterReady||enemy._floorBossShieldBrokenReady||enemy._floorBossAilmentMirrorReady||enemy._floorBossSealReady||enemy._floorBossRiposteReady||enemy._floorBossPearlReady||enemy._floorBossReflectionReady||enemy._floorBossArmorBreakReady||enemy._floorBossDuelRiposteReady)&&!info.utility)score+=18;
+	 if(info.consumeToxinDoses)score+=Math.max(0,Number(enemy._floorBossToxinDoses)||0)*10;
+	 if(info.networkBurst)score+=state.statusCounts.poison*8;
+	 if(info.consumeSporeCells)score+=Math.max(0,Number(enemy._floorBossSporeCells)||0)*8;
+	 if(info.consumeFlightStacks)score+=Math.max(0,Number(enemy._floorBossFlightStacks)||0)*7;
+	 if(info.consumeBroodSacrifice)score+=Math.min(34,Math.max(0,Number(enemy._floorBossBroodSacrifice)||0)/Math.max(1,enemy.maxHp)*140);
+	 if(info.manaVacuum)score+=state.lowMpCount*10+state.emptyMpCount*8;
+	 if(Number(info.selfMpHealRate)>0)score+=(1-Math.max(0,Number(enemy.currentMp)||0)/Math.max(1,Number(enemy.maxMp)||1))*30;
+	 if(info.deathVoltageStrike)score+=Math.max(0,Number(enemy._floorBossDeathVoltage)||0)*5;
+	 if(info.consumeHealingReflection)score+=Math.min(34,Math.max(0,Number(enemy._floorBossHealingReflection)||0)*140);
+	 if(info.telegraph&&enemy.floorBossDomain?.effect==="gemVelocity")score+=Math.max(0,Number(enemy._floorBossGemVelocity)||0)*5;
+	 if(info.beginHealingChorus)score+=(1-hpRate)*45;
+	 if(info.applyPuppetLink)score+=state.opponents.length>=2?24:-30;
+	 if(info.triggerPuppetLink&&enemy._floorBossPuppetLink)score+=22;
+	 if(info.consumeManaNocturne)score+=Math.min(36,Math.max(0,Number(enemy._floorBossManaNocturne)||0)*120);
+	 if(info.eclipseFinale&&enemy._floorBossEclipseReady)score+=64;
+ return score;
+}
+function chooseFloorBossSpecial(enemy,context={}){
+ if(enemy.pendingFloorBossAction){const pending=enemy.pendingFloorBossAction;if(!canPay(enemy,pending)){enemy.charging=false;enemy.intent="予兆を維持しながら魔力を練る";return null}enemy.pendingFloorBossAction=null;enemy.charging=false;const info=floorBossActionInfo(pending),actionId=pending.slice(10);enemy.floorBossActionUses??={};enemy.floorBossActionUses[actionId]=(enemy.floorBossActionUses[actionId]??0)+1;enemy.floorBossLastActionId=actionId;enemy.specialCooldown=Math.max(1,Number(info?.cooldown)||2);enemy.intent=`${info?.label??"固有技"}を解放`;return pending}
+ enemy.specialCooldown=Math.max(0,(enemy.specialCooldown??0)-1);if(enemy.specialCooldown>0)return null;
+ const choices=enemy.floorBossActionIds.map(actionId=>({actionId,action:`floorBoss:${actionId}`,info:floorBossActionInfo(`floorBoss:${actionId}`),score:floorBossActionScore(enemy,actionId,context)})).filter(choice=>Number.isFinite(choice.score)&&canPay(enemy,choice.action)).sort((left,right)=>right.score-left.score);
+ const selected=choices[0];if(!selected)return null;
+ const urgent=selected.score>=72;if(!urgent&&Math.random()>.82)return null;
+ if(selected.info?.telegraph){enemy.pendingFloorBossAction=selected.action;enemy.intent=`${selected.info.label}の予兆を刻む`;return ENEMY_ACTIONS.charge}
+ enemy.floorBossActionUses??={};enemy.floorBossActionUses[selected.actionId]=(enemy.floorBossActionUses[selected.actionId]??0)+1;enemy.floorBossLastActionId=selected.actionId;enemy.specialCooldown=Math.max(1,Number(selected.info?.cooldown)||1);enemy.intent=`${selected.info?.label??"固有技"}を発動`;return selected.action;
+}
+function specialAction(enemy,hpRate,context={}){
+ if((enemy.divineBarrier??0)>0)enemy.divineBarrier--;
+ if(Array.isArray(enemy.floorBossActionIds)&&enemy.floorBossActionIds.length){
+  return chooseFloorBossSpecial(enemy,context);
+ }
+ if(!enemy.endgameBossId)return null;enemy.specialCooldown=Math.max(0,(enemy.specialCooldown??0)-1);
  if(enemy.faction==="tenGod"&&hpRate<=.72&&!enemy.divineBarrierUsed){enemy.divineBarrierUsed=true;enemy.divineBarrier=2;enemy.intent="神域障壁を展開";return ENEMY_ACTIONS.divineBarrier}
  if(enemy.specialCooldown>0)return null;
  const profile=endgameCharacter(enemy.endgameBossId);
@@ -99,28 +144,30 @@ function specialAction(enemy,hpRate){
 export function enemyActionMpCost(enemy,action){
  if(!enemy||!action||[ENEMY_ACTIONS.attack,ENEMY_ACTIONS.guard,ENEMY_ACTIONS.charge,ENEMY_ACTIONS.power,ENEMY_ACTIONS.enrage,ENEMY_ACTIONS.manaSiphon].includes(action))return 0;
  const maximum=Math.max(1,Number(enemy.maxMp)||1);
- const rate=action===ENEMY_ACTIONS.heal?.14
+ const floorBossInfo=String(action).startsWith("floorBoss:")?floorBossActionInfo(action):null;
+ const rate=floorBossInfo?.mpCostRate??(action===ENEMY_ACTIONS.heal?.14
   :action===ENEMY_ACTIONS.packRevive?.28
   :action===ENEMY_ACTIONS.packMend?.18
   :action===ENEMY_ACTIONS.packRally?.16
   :action===ENEMY_ACTIONS.dispelWave?.18
   :action===ENEMY_ACTIONS.divineBarrier?.22
+  :String(action).startsWith("floorBoss:")?.22
   :String(action).startsWith("authority:")?.26
-  :enemy.endgameBossId?.24:.19;
+  :enemy.endgameBossId?.24:.19);
  return Math.max(1,Math.ceil(maximum*rate));
 }
 function canPay(enemy,action){return Math.max(0,Number(enemy.currentMp)||0)>=enemyActionMpCost(enemy,action)}
 export function chooseEnemyAction(enemy,context={}){
  if(enemy.speciesId==="ochuki"){enemy.guard=true;enemy.intent="巨大な盾の陰で逃げ道を探す";return ENEMY_ACTIONS.guard}
  const allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(monster=>(monster.currentHp??0)>0),hpRate=enemy.hp/enemy.maxHp,role=String(enemy.role??""),support=["healer","support","controller","debuffer","magic"].some(value=>role.includes(value));
- const fallen=allies.find(ally=>ally.hp<=0),wounded=[...allies].filter(ally=>ally.hp>0).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];
+ const floorBoss=Array.isArray(enemy.floorBossActionIds)&&enemy.floorBossActionIds.length,fallen=allies.find(ally=>ally.hp<=0),wounded=[...allies].filter(ally=>ally.hp>0).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];
+ if(floorBoss){const special=specialAction(enemy,hpRate,context);if(special&&canPay(enemy,special))return special}
  if(fallen&&support&&canPay(enemy,ENEMY_ACTIONS.packRevive)){enemy.intent="倒れた味方を再構成";return ENEMY_ACTIONS.packRevive}
  if(wounded&&wounded.hp/wounded.maxHp<.42&&support&&canPay(enemy,ENEMY_ACTIONS.packMend)){enemy.intent="負傷した群れを再生";return ENEMY_ACTIONS.packMend}
- const positiveKinds=new Set(["atkUp","defUp","spdUp","regen","taunt","guard","counter","lifeSteal"]),buffed=opponents.some(monster=>(context.battle?.allyEffects?.[monster.id]??[]).some(effect=>positiveKinds.has(effect.kind)));
+ const buffed=opponents.some(monster=>(context.battle?.allyEffects?.[monster.id]??[]).some(effect=>FLOOR_BOSS_POSITIVE_KINDS.has(effect.kind)));
  if(buffed&&support&&Math.random()<.64&&canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="味方の強化を崩す";return ENEMY_ACTIONS.dispelWave}
  if((enemy.currentMp??0)<enemy.maxMp*.24&&opponents.some(monster=>(monster.currentMp??0)>0)&&Math.random()<.72){enemy.intent="魔力を奪って立て直す";return ENEMY_ACTIONS.manaSiphon}
- const special=specialAction(enemy,hpRate);if(special&&canPay(enemy,special))return special;
- const tactical=normalSpecialAction(enemy,hpRate);if(tactical&&canPay(enemy,tactical))return tactical;
+ if(!floorBoss){const special=specialAction(enemy,hpRate,context);if(special&&canPay(enemy,special))return special;const tactical=normalSpecialAction(enemy,hpRate);if(tactical&&canPay(enemy,tactical))return tactical}
  if(enemy.charging){enemy.charging=false;enemy.intent="強攻撃を放つ";return ENEMY_ACTIONS.power}
  if(enemy.boss&&hpRate<=.5&&!enemy.enraged){enemy.enraged=true;enemy.phase=2;enemy.intent=enemy.endgameBossId?"権能が暴走する":"狂暴化";return ENEMY_ACTIONS.enrage}
  if(hpRate<=.3&&!enemy.healed&&Math.random()<.5&&canPay(enemy,ENEMY_ACTIONS.heal)){enemy.healed=true;enemy.intent="自己回復";return ENEMY_ACTIONS.heal}
@@ -138,4 +185,4 @@ function authorityInfo(action){
  return{...skill,label:skill.name,pattern:utility?"self":skill.allEnemies?"all":skill.execute||skill.drain?"singleWeak":"singleStrong",multiplier:Math.max(0,Number(skill.power)||0),utility,element:skill.element};
 }
 export function specialActionMultiplier(action){return authorityInfo(action)?.multiplier??SPECIAL_ACTION_INFO[action]?.multiplier??1}
-export function specialActionInfo(action){return authorityInfo(action)??SPECIAL_ACTION_INFO[action]??null}
+export function specialActionInfo(action){return authorityInfo(action)??floorBossActionInfo(action)??SPECIAL_ACTION_INFO[action]??null}

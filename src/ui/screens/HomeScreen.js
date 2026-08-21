@@ -1,14 +1,14 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.10.0-build163";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=2.10.0-build163";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.10.0-build163";
-import{SPECIES}from"../../data/species.js?v=2.10.0-build163";
-import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.10.0-build163";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.10.0-build163";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.10.0-build163";
-import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.10.0-build163";
-import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build163";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.10.0-build163";
-import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.10.0-build163";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.11.21-build185";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=2.11.2-build166";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.11.2-build166";
+import{SPECIES}from"../../data/species.js?v=2.11.2-build166";
+import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.11.2-build166";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.2-build166";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.11.2-build166";
+import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.11.2-build166";
+import{monsterVisual}from"../MonsterVisual.js?v=2.11.2-build166";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.2-build166";
+import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.11.2-build166";
 
 const HOME_ATTRIBUTE_CYCLE=Object.freeze(["fire","ice","wind","earth","lightning","water"]);
 function homeAttributeChart(){

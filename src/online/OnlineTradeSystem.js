@@ -1,5 +1,5 @@
 const STACKS=Object.freeze({
- potions:["薬草","N"],highPotions:["上級回復薬","R"],partyPotions:["全体回復薬","SR"],manaPotions:["魔力水","N"],highManaPotions:["上級魔力水","R"],partyManaPotions:["全体魔力水","SR"],fullManaPotions:["完全魔力水","SSR"],partyFullManaPotions:["全体完全魔力水","UR"],reviveLeaves:["蘇生葉","SR"],statusCures:["浄化薬","R"],partyStatusCures:["全体浄化薬","SSR"],fullHeals:["完全回復薬","UR"],partyFullHeals:["全体完全回復薬","LR"],experienceItems:["経験結晶","SR"],abyssKeys:["深淵鍵","LR"]
+ potions:["薬草","N"],highPotions:["上級回復薬","R"],partyPotions:["全体回復薬","SR"],manaPotions:["魔力水","N"],highManaPotions:["上級魔力水","R"],partyManaPotions:["全体魔力水","SR"],fullManaPotions:["完全魔力水","SSR"],partyFullManaPotions:["全体完全魔力水","UR"],reviveLeaves:["蘇生葉","SR"],statusCures:["浄化薬","R"],partyStatusCures:["全体浄化薬","SSR"],fullHeals:["完全回復薬","UR"],partyFullHeals:["全体完全回復薬","LR"],experienceItems:["経験値パック（小）","R"],experienceItemsMedium:["経験値パック（中）","SR"],experienceItemsLarge:["経験値パック（大）","SSR"],experienceItemsUltra:["経験値パック（超）","UR"],abyssKeys:["深淵鍵","LR"]
 });
 const CURRENCIES=Object.freeze({gold:["GOLD","G"],crystals:["魔晶石","💎"],captureCrystals:["捕獲結晶","捕獲"]});
 const COLLECTIONS=Object.freeze(["equipment","reserveEquipment","bossEquipmentVault"]);

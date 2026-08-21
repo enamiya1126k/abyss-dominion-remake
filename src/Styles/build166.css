@@ -1,0 +1,5 @@
+/* build166: floor 10–90 bosses follow their real dungeon biome identities. */
+.floor-boss-monster-visual-v3 img[data-monster-sprite],
+.battle-enemy-visual img[data-monster-sprite]{
+  object-position:center center!important;
+}

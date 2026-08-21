@@ -1,0 +1,14 @@
+/* build174: bespoke 810–890F earth/wind bosses; 850F onward uses crisp 512px pixel-art frames. */
+.floor-boss-monster-visual-v3 img[data-monster-sprite],
+.battle-enemy-visual img[data-monster-sprite]{
+  object-position:center center!important;
+}
+
+.monster-visual[data-monster-species="floor_boss_850"] img[data-monster-sprite],
+.monster-visual[data-monster-species="floor_boss_860"] img[data-monster-sprite],
+.monster-visual[data-monster-species="floor_boss_870"] img[data-monster-sprite],
+.monster-visual[data-monster-species="floor_boss_880"] img[data-monster-sprite],
+.monster-visual[data-monster-species="floor_boss_890"] img[data-monster-sprite]{
+  image-rendering:pixelated!important;
+  image-rendering:crisp-edges!important;
+}

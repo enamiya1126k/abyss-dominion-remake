@@ -1,4 +1,4 @@
-import{equipmentDisplayRarity}from"./equipment.js?v=2.10.0-build163";
+import{equipmentDisplayRarity}from"./equipment.js?v=2.11.2-build166";
 
 export const AFFIX_QUALITY={
  normal:{id:"normal",name:"通常",color:"#e8e8ec",min:.00,max:.34},

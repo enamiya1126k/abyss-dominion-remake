@@ -1,4 +1,4 @@
-import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.10.0-build163";
+import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.11.2-build166";
 
 export const TEAM_BATTLE_UNLOCK_FLOOR=50;
 export const GAUNTLET_UNLOCK_FLOOR=100;
@@ -7,7 +7,9 @@ export const WORLD_MAX_FLOOR=10000;
 export const ENDGAME_TRIAL_BATTLE_COUNT=22;
 export const ENDGAME_EMERGENCY_RATE=.03;
 export const ENDGAME_EMERGENCY_COOLDOWN_FLOORS=10;
-export const ENDGAME_BASE_STAT_MULTIPLIER=Object.freeze({abyss:10,tenGod:100});
+// 深淵・十神は固有権能とボス専用HP/耐性で絶望感を作る。レベル差を
+// 100倍倍率で踏み潰さないため、陣営の基礎倍率自体は有限にする。
+export const ENDGAME_BASE_STAT_MULTIPLIER=Object.freeze({abyss:2.2,tenGod:3.4});
 export const MANUAL_ENDGAME_DAILY_LIMIT=3;
 export const TEAM_BATTLE_DAILY_LIMIT=10;
 export const GAUNTLET_DAILY_LIMIT=10;
@@ -173,7 +175,7 @@ export const ENDGAME_TRIALS=Object.freeze([
 export function endgameTrialDefinition(number){return ENDGAME_TRIALS[Math.max(1,Math.min(ENDGAME_TRIAL_BATTLE_COUNT,Math.floor(Number(number)||1)))-1]}
 function rawEndgameTrialEncounter(loop,number){
  const trial=endgameTrialDefinition(number),loopMultiplier=endgameTrialLoopMultiplier(loop),progress=Math.max(0,trial.number-1),level=Math.min(9999,220+progress*72+(Math.max(1,loop)-1)*320),solo=trial.bossIds.length===1;
- const leaders=trial.bossIds.map((bossId,index)=>{const boss=ENDGAME_BOSSES[bossId],factionProgress=boss.faction==="tenGod"?Math.max(0,progress-ABYSS_IDS.length):progress,base=boss.faction==="tenGod"?.045+factionProgress*.0055:.22+factionProgress*.026,groupRate=solo?1:.64;return enemy(boss.speciesId,level+index*3,{boss:true,endgameBossId:boss.id,visualSpeciesId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈回廊 ${loop}周〉`,statMultiplier:base*groupRate*loopMultiplier,fixedTrialScaling:true,fixedTrialHpMultiplier:solo?4.2:2.5,enemyFloor:level+index*3,uncapturable:true,elementMultipliers:boss.elementMultipliers,statusProfile:boss.statusProfile,bossPassive:boss.passive})});
+ const leaders=trial.bossIds.map((bossId,index)=>{const boss=ENDGAME_BOSSES[bossId],factionProgress=boss.faction==="tenGod"?Math.max(0,progress-ABYSS_IDS.length):progress,base=boss.faction==="tenGod"?1.25+factionProgress*.06:1+factionProgress*.06,groupRate=solo?1:.64;return enemy(boss.speciesId,level+index*3,{boss:true,endgameBossId:boss.id,visualSpeciesId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈回廊 ${loop}周〉`,statMultiplier:base*groupRate*loopMultiplier,fixedTrialScaling:true,fixedTrialHpMultiplier:solo?4.2:2.5,enemyFloor:level+index*3,uncapturable:true,elementMultipliers:boss.elementMultipliers,statusProfile:boss.statusProfile,bossPassive:boss.passive})});
  if(!solo)return{trial,loop,enemies:leaders};
  const boss=ENDGAME_BOSSES[trial.bossIds[0]],supports=boss.support.slice(0,3).map((speciesId,index)=>enemy(speciesId,Math.max(1,level-8-index*3),{nameOverride:`${boss.faction==="tenGod"?"法則守":"深淵眷属"}・${index+1}`,statMultiplier:(.72+progress*.018)*loopMultiplier,fixedTrialScaling:true,fixedTrialHpMultiplier:1.6,enemyFloor:Math.max(1,level-8-index*3),endgameSupport:true,uncapturable:true}));
  return{trial,loop,enemies:[...leaders,...supports]};

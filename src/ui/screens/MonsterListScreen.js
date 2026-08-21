@@ -1,9 +1,9 @@
-import{SPECIES}from"../../data/species.js?v=2.10.0-build163";
-import{orderedMonsterSpecies}from"../../data/monsterCatalog.js?v=2.10.0-build163";
-import{monsterVisual}from"../MonsterVisual.js?v=2.10.0-build163";
-import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.10.0-build163";
-import{MONSTER_STORAGE_CAP}from"../../core/config.js?v=2.10.0-build163";
-import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.10.0-build163";
+import{SPECIES}from"../../data/species.js?v=2.11.2-build166";
+import{orderedMonsterSpecies}from"../../data/monsterCatalog.js?v=2.11.2-build166";
+import{monsterVisual}from"../MonsterVisual.js?v=2.11.2-build166";
+import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.11.2-build166";
+import{MONSTER_STORAGE_CAP}from"../../core/config.js?v=2.11.2-build166";
+import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.11.2-build166";
 
 const RARITY_VALUE={N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9};
 function safe(value){return String(value??"").replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
@@ -18,7 +18,7 @@ function speciesCard(species,index,owned,state){
   <span class="monster-species-art">${seen?monsterVisual(species.visualId??species.id,species.emoji??"👹",{className:"monster-species-visual"}):"<i>？</i>"}</span>
   <b>${seen?species.name:"？？？？"}</b>
   <small>${seen?`${species.rarity}・${species.element??"無"} / 最高Lv.${highest}`:"未所持"}</small>
-  <strong>${seen?`所持 ${count}体｜固有値 ${starText}`:"0体"}</strong>
+  <strong>${seen?`所持 ${count}体｜旧★記録 ${starText}（補正なし）`:"0体"}</strong>
  </button>`;
 }
 

@@ -1,8 +1,8 @@
-import{MONSTER_SPRITE_FOLDERS}from"../data/monsterCatalog.js?v=2.10.0-build163";
+import{MONSTER_SPRITE_FOLDERS}from"../data/monsterCatalog.js?v=2.11.11-build175";
 
 const IDLE_FRAMES=Object.freeze(["idle1","idle2","idle3","idle2"]);
 const VALID_FRAMES=new Set(["idle","idle1","idle2","idle3","walk1","walk2","attack","damage","down"]);
-const SPRITE_ASSET_VERSION="2.8.0";
+const SPRITE_ASSET_VERSION="2.11.11-build175";
 
 function safeFrame(frame){
   return VALID_FRAMES.has(frame)?frame:"idle";

@@ -193,28 +193,30 @@ function circleMarkup(entry,{className=""}={}){
 
 export function magicCircleMarkup(monster,state,{className=""}={}){return circleMarkup(equippedMagicCircle(monster,state),{className})}
 
-const LR_PLUS_ENEMY_RANKS=new Set(["lr","神話","深淵","十神","abyss","tengod"]);
-const MAX_LEVEL_ENEMY_RANKS=new Set(["深淵","十神","abyss","tengod"]);
-const ENEMY_CIRCLE_RANK_BONUS=Object.freeze({n:0,r:1,sr:2,ssr:4,ur:6,lr:9,"神話":12});
+const ENEMY_CIRCLE_RANK_BONUS=Object.freeze({n:0,r:0,sr:1,ssr:2,ur:3,lr:4,"神話":5,"深淵":8,"十神":10,abyss:8,tengod:10});
 function normalizedEnemyRank(rank){return String(rank??"N").trim().toLowerCase()}
 export function enemyMagicCircleRateForFloor(floor,rank="N"){
- if(LR_PLUS_ENEMY_RANKS.has(normalizedEnemyRank(rank)))return 1;
  const f=Math.max(1,Math.floor(Number(floor)||1));
- return f>=100?1:Math.max(.035,Math.min(1,.035+(f-1)*(.965/99)));
+ void rank;
+ if(f<120)return 0;
+ if(f<200)return .05+(f-120)/80*.13;
+ if(f<300)return .18+(f-200)/100*.12;
+ if(f<500)return .30+(f-300)/200*.18;
+ if(f<750)return .48+(f-500)/250*.14;
+ if(f<1000)return .62+(f-750)/250*.13;
+ if(f<2000)return .75+(f-1000)/1000*.11;
+ if(f<5000)return .86+(f-2000)/3000*.07;
+ return Math.min(.98,.93+(f-5000)/5000*.05);
 }
 export function enemyMagicCircleLevelForFloor(floor,{rank="N",random=Math.random}={}){
  const rankId=normalizedEnemyRank(rank);
- if(MAX_LEVEL_ENEMY_RANKS.has(rankId))return 99;
  const f=Math.max(1,Math.floor(Number(floor)||1));
  const roll=Math.max(0,Math.min(.999999,Number(random())||0));
- // 50Fから1000Fまでを一本の育成曲線にし、同じ階層でも個体差を残す。
- // 300FではおおむねLv.25〜45、1000FではLv.80〜99が目安。
- if(f<50)return Math.max(1,Math.min(3,1+Math.floor(roll*3)));
- const progress=Math.max(0,Math.min(1,(f-50)/950));
- const eased=Math.pow(progress,.9),center=3+eased*86,spread=3+progress*7;
- const rankBonus=(ENEMY_CIRCLE_RANK_BONUS[rankId]??0)*(.35+progress*.65);
- const variance=(roll-.5)*2*spread;
- return Math.max(1,Math.min(99,Math.round(center+rankBonus+variance)));
+ const points=[[120,1,2],[200,2,4],[300,3,7],[500,6,12],[750,10,20],[1000,16,28],[2000,25,45],[5000,45,70],[10000,70,95]];
+ let lower=points[0],upper=points[points.length-1];
+ for(let index=1;index<points.length;index++)if(f<=points[index][0]){lower=points[index-1];upper=points[index];break}
+ const t=Math.max(0,Math.min(1,(f-lower[0])/Math.max(1,upper[0]-lower[0]))),minimum=lower[1]+(upper[1]-lower[1])*t,maximum=lower[2]+(upper[2]-lower[2])*t,rankBonus=(ENEMY_CIRCLE_RANK_BONUS[rankId]??0)*(.25+t*.35);
+ return Math.max(1,Math.min(99,Math.round(minimum+(maximum-minimum)*roll+rankBonus)));
 }
 export function rollEnemyMagicCircle(floor,{rank="N",random=Math.random,force=false,excludeIds=[]}={}){
  const chance=force?1:enemyMagicCircleRateForFloor(floor,rank);

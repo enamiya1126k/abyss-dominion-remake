@@ -1,6 +1,6 @@
-import{ensureEquipmentAffixes,rollAffixForSlot}from"../data/equipmentAffixes.js?v=2.10.0-build163";
-import{equipmentDisplayRarity}from"../data/equipment.js?v=2.10.0-build163";
-import{goldForClearedFloor}from"../core/GoldEconomySystem.js?v=2.10.0-build163";
+import{ensureEquipmentAffixes,rollAffixForSlot}from"../data/equipmentAffixes.js?v=2.11.2-build166";
+import{equipmentDisplayRarity}from"../data/equipment.js?v=2.11.2-build166";
+import{goldForClearedFloor}from"../core/GoldEconomySystem.js?v=2.11.2-build166";
 
 const LOCK_MULTIPLIERS=[1,2.25,4.75,8];
 const RARITY_MULTIPLIERS={N:.70,R:.85,SR:1,SSR:1.35,UR:1.55,LR:1.75,"神話":2.15,"深淵":2.65,"十神":3.25};

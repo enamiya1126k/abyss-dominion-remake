@@ -1,0 +1,8 @@
+/* Build 164: balance rebuild. Visual changes are deliberately minimal. */
+.boss-reward-grid button b{overflow-wrap:anywhere}
+.boss-reward-grid button small{line-height:1.45}
+
+/* Keep the four pack tiers readable on narrow iPhone layouts. */
+.inventory-item[data-item="experienceItemsMedium"],
+.inventory-item[data-item="experienceItemsLarge"],
+.inventory-item[data-item="experienceItemsUltra"]{min-width:0}

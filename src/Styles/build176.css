@@ -1,0 +1,6 @@
+/* build176: 10–90F bespoke combat identities, domains and weapon skills. */
+.floor-boss-mechanics{display:grid;grid-template-columns:1fr 1fr;gap:7px;width:min(100%,520px);margin:8px auto 2px;text-align:left}
+.floor-boss-mechanics>span{display:grid;gap:2px;padding:8px 9px;border:1px solid rgba(218,177,74,.32);border-radius:9px;background:linear-gradient(145deg,rgba(8,6,12,.92),rgba(41,18,52,.72));box-shadow:inset 0 0 16px rgba(120,56,159,.10)}
+.floor-boss-mechanics small{color:#d8b963;font-size:9px;letter-spacing:.12em}.floor-boss-mechanics b{color:#fff3c4;font-size:12px}.floor-boss-mechanics em{color:#c9bfd3;font-size:10px;font-style:normal;line-height:1.35}
+.enemy-intent .floor-boss-passive-chip{display:block;width:max-content;max-width:100%;margin:2px auto 0;padding:1px 5px;border:1px solid rgba(219,183,86,.3);border-radius:999px;color:#e7cf88;font-size:8px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:560px){.floor-boss-mechanics{grid-template-columns:1fr;gap:5px}.floor-boss-mechanics>span{padding:6px 8px}.floor-boss-mechanics em{font-size:9px}.enemy-intent .floor-boss-passive-chip{font-size:7px}}

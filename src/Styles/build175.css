@@ -1,0 +1,19 @@
+/* build175: 910–990F celestial-opera bosses; all 72 frames are centered 512px pixel art. */
+.floor-boss-monster-visual-v3 img[data-monster-sprite],
+.battle-enemy-visual img[data-monster-sprite]{
+  object-position:center center!important;
+}
+
+.monster-visual[data-monster-species="floor_boss_910"] img[data-monster-sprite],
+.monster-visual[data-monster-species="floor_boss_920"] img[data-monster-sprite],
+.monster-visual[data-monster-species="floor_boss_930"] img[data-monster-sprite],
+.monster-visual[data-monster-species="floor_boss_940"] img[data-monster-sprite],
+.monster-visual[data-monster-species="floor_boss_950"] img[data-monster-sprite],
+.monster-visual[data-monster-species="floor_boss_960"] img[data-monster-sprite],
+.monster-visual[data-monster-species="floor_boss_970"] img[data-monster-sprite],
+.monster-visual[data-monster-species="floor_boss_980"] img[data-monster-sprite],
+.monster-visual[data-monster-species="floor_boss_990"] img[data-monster-sprite]{
+  image-rendering:pixelated!important;
+  image-rendering:crisp-edges!important;
+  object-position:center center!important;
+}

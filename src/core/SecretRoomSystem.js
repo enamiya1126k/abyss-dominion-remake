@@ -1,13 +1,13 @@
-import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.10.0-build163";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.10.0-build163";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.10.0-build163";
-import{SPECIES}from"../data/species.js?v=2.10.0-build163";
-import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.10.0-build163";
-import{equipmentStatLabel}from"../data/equipment.js?v=2.10.0-build163";
-import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.10.0-build163";
-import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.10.0-build163";
-import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.10.0-build163";
-import{MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.10.0-build163";
+import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.11.2-build166";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.11.2-build166";
+import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.11.2-build166";
+import{SPECIES}from"../data/species.js?v=2.11.2-build166";
+import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.11.2-build166";
+import{equipmentStatLabel}from"../data/equipment.js?v=2.11.2-build166";
+import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.11.2-build166";
+import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.11.2-build166";
+import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.11.2-build166";
+import{MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.11.2-build166";
 
 export const SECRET_ROOM_CHANCE=.09;
 export const CASINO_CRYSTAL_COST=premiumCrystalCost(10);
@@ -86,7 +86,7 @@ function equipmentDescription(item){
 function monsterDescription(monster){
  const species=SPECIES[monster.speciesId]??{};
  const element={neutral:"無",fire:"火",water:"水",ice:"氷",wind:"風",earth:"土",lightning:"雷",thunder:"雷",light:"光",dark:"闇",poison:"毒",nature:"自然"}[species.element]??species.element??"無";
- return`${element}属性・Lv.${monster.level}・${"★".repeat(monster.stars??1)}`;
+ return`${element}属性・Lv.${monster.level}・+${monster.plus??0}`;
 }
 function marketPowerProfile(floor,random=Math.random){
  const roll=random();
@@ -134,11 +134,9 @@ function marketMonsterOffer(floor,index,random){
  if(!pool.length)pool=Object.values(SPECIES).filter(species=>species.rarity===profile.id&&!species.isTenGod&&!species.isAbyss&&!species.tags?.includes?.("tenGod")&&!species.tags?.includes?.("abyss")&&!species.serialOnly&&!species.gachaExcluded);
  const species=pool[Math.floor(random()*pool.length)]??SPECIES.slime;
  const level=powerProfile.monsterLevel;
- const stars=powerProfile.id==="jackpot"?MONSTER_STAR_MAX:1+Math.floor(random()*MONSTER_STAR_MAX);
  const plus=powerProfile.plus;
- const ivs=powerProfile.id==="jackpot"?Object.fromEntries(["hp","atk","def","spd"].map(key=>[key,95+Math.floor(random()*6)])):undefined;
  const affection=powerProfile.id==="jackpot"?500+Math.floor(random()*501):powerProfile.id==="surge"?200+Math.floor(random()*401):0;
- const monster=createMonster(species.id,{nickname:species.name,level,stars,plus,ivs,affection,obtainedFloor:floor,obtainedMethod:"darkMarket"});
+ const monster=createMonster(species.id,{nickname:species.name,level,plus,affection,obtainedFloor:floor,obtainedMethod:"darkMarket"});
  monster.summonRarity=profile.id;if(profile.id==="神話")monster.summonTier="神話";
  monster.marketGrade=powerProfile.id;monster.marketGradeLabel=powerProfile.label;applyMarketSkillPackage(monster,powerProfile.id,random);
  const reference=Math.max(800,goldForClearedFloor(floor)*profile.monsterRate*powerProfile.priceRate*(1+Math.min(300,level)*.012+plus*.05)),price=marketPrice(reference,random);
@@ -146,11 +144,11 @@ function marketMonsterOffer(floor,index,random){
 }
 function marketEndgameOffer(floor,index,random,faction){
  const pool=Object.values(ENDGAME_CHARACTERS).filter(character=>character.faction===faction),character=pool[Math.floor(random()*pool.length)]??pool[0];
- const jackpot=random()<.48,level=jackpot?999:1+Math.floor(random()*999),plus=jackpot?30:Math.floor(random()*100),stars=jackpot?MONSTER_STAR_MAX:1+Math.floor(random()*MONSTER_STAR_MAX);
- const monster=createMonster(character.speciesId,{nickname:character.name,title:character.title,level,stars,plus,rank:4,attribute:character.element,affection:jackpot?1000:Math.floor(random()*1001),obtainedFloor:floor,obtainedMethod:"darkMarket",endgameBossId:character.id,endgameFaction:character.faction,isContractedEndgame:true,allowEndgameLevel:true,tags:[SPECIES[character.speciesId]?.race,character.faction,character.id,"contractedEndgame"].filter(Boolean)});
+ const jackpot=random()<.48,level=jackpot?999:1+Math.floor(random()*999),plus=jackpot?30:Math.floor(random()*100);
+ const monster=createMonster(character.speciesId,{nickname:character.name,title:character.title,level,plus,rank:4,attribute:character.element,affection:jackpot?1000:Math.floor(random()*1001),obtainedFloor:floor,obtainedMethod:"darkMarket",endgameBossId:character.id,endgameFaction:character.faction,isContractedEndgame:true,allowEndgameLevel:true,tags:[SPECIES[character.speciesId]?.race,character.faction,character.id,"contractedEndgame"].filter(Boolean)});
  monster.endgameBossId=character.id;monster.endgameFaction=character.faction;monster.visualSpeciesId=character.id;monster.isContractedEndgame=true;monster.contractProfileVersion=3;monster.contractSignature=character.signature;monster.contractSeriesId=character.seriesId;monster.summonRarity=faction==="tenGod"?"十神":"深淵";monster.currentHp=calculatedStats(monster).hp;monster.currentMp=maxMp(monster);
  const exactPrice=jackpot&&random()<.55,price=exactPrice?{price:9_999_999,referencePrice:roundedPrice(100+random()*9_999_999_900),priceLabel:"黒市の奇跡",priceTone:"bargain"}:marketPrice(1,random),rarity=monster.summonRarity;
- return maybeMysteryOffer({id:`monster-${index}`,kind:"monster",rarity,name:displayName(monster),icon:character.icon,description:`${jackpot?"伝説級事故商品":"法則外契約"}・Lv.${level}・+${plus}・★${stars} / ${character.role}`,powerGrade:jackpot?"jackpot":"surge",powerLabel:jackpot?"測定不能":"法則外",sold:false,payload:monster,...price},random);
+ return maybeMysteryOffer({id:`monster-${index}`,kind:"monster",rarity,name:displayName(monster),icon:character.icon,description:`${jackpot?"伝説級事故商品":"法則外契約"}・Lv.${level}・+${plus} / ${character.role}`,powerGrade:jackpot?"jackpot":"surge",powerLabel:jackpot?"測定不能":"法則外",sold:false,payload:monster,...price},random);
 }
 function createRoom(roomId,floor,random=Math.random){
  const offers=[

@@ -1,0 +1,5 @@
+/* build170: bespoke 410–490F light/dark bosses and centered 512px frames. */
+.floor-boss-monster-visual-v3 img[data-monster-sprite],
+.battle-enemy-visual img[data-monster-sprite]{
+  object-position:center center!important;
+}

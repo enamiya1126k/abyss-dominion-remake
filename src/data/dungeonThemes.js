@@ -1,4 +1,4 @@
-import{biomeForFloor}from"./biomes.js?v=2.10.0-build163";
+import{biomeForFloor}from"./biomes.js?v=2.11.2-build166";
 
 const ASSET_VERSION="2.10.0-build143";
 const atlas=id=>`assets/ui/explore/biomes/${id}-atlas.png?v=${ASSET_VERSION}`;
