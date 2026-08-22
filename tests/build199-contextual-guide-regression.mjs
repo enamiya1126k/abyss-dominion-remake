@@ -28,7 +28,7 @@ globalThis.localStorage=new MemoryStorage();
 globalThis.window={dispatchEvent(){}};
 globalThis.CustomEvent=class CustomEvent{constructor(type,init={}){this.type=type;this.detail=init.detail}};
 
-assert.equal(APP_VERSION,"2.11.36");
+assert.equal(APP_VERSION,"2.11.37");
 assert.equal(SAVE_SCHEMA_VERSION,58);
 assert.equal(CONTEXT_GUIDE_STEPS.length,28);
 assert.equal(new Set(CONTEXT_GUIDE_STEPS.map(step=>step.id)).size,CONTEXT_GUIDE_STEPS.length);
@@ -63,7 +63,7 @@ for(const hook of[
 assert.equal(main.includes("showFloorTutorial()"),false);
 assert.equal(main.includes("claimDefeatTutorial()"),false);
 assert.match(index,/build199\.css\?v=2\.11\.34-build199/);
-assert.match(index,/ASSET_BUILD = "build201"/);
+assert.match(index,/ASSET_BUILD = "build202"/);
 assert.match(css,/context-guide-target/);
 assert.match(css,/tutorial-world-marker/);
 

@@ -10,9 +10,9 @@ const index=read("index.html"),css=read("src/Styles/build200.css"),main=read("sr
 
 assert.match(index,/build200\.css\?v=2\.11\.35-build200/);
 assert.ok(index.indexOf("build200.css")>index.indexOf("build199.css"),"build200 CSS must load last");
-assert.match(index,/const ASSET_VERSION = "2\.11\.36";/);
-assert.match(index,/const ASSET_BUILD = "build201";/);
-assert.match(config,/APP_VERSION="2\.11\.36"/);
+assert.match(index,/const ASSET_VERSION = "2\.11\.37";/);
+assert.match(index,/const ASSET_BUILD = "build202";/);
+assert.match(config,/APP_VERSION="2\.11\.37"/);
 
 assert.match(css,/\.floor-boss-gate-entry\[hidden\]\{display:none!important\}/);
 assert.match(css,/\.combat-rank-unit \.side-unit-sprite\{position:absolute!important\}/);

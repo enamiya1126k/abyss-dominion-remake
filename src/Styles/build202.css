@@ -1,0 +1,46 @@
+/* build202: battlefield spacing and single-owner BGM presentation support. */
+
+/* Keep only the feet near the status card instead of hiding the lower third. */
+.battle-screen.side-battle-v2 .side-unit-card{bottom:10px!important}
+.battle-screen.side-battle-v2 .side-unit-sprite{bottom:60px!important}
+.battle-screen.side-battle-v2 .side-enemies:has(.side-battle-unit:only-child) .side-unit-sprite,
+.battle-screen.side-battle-v2 .side-enemies:has(.boss-enemy:only-child) .side-unit-sprite,
+.battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .side-unit-sprite,
+.battle-screen.side-battle-v2 .floor-boss-enemy .side-unit-sprite{bottom:60px!important}
+.battle-screen.side-battle-v2 .side-battle-unit::after,
+.battle-screen.side-battle-v2 .target-reticle{bottom:59px!important}
+.battle-screen.side-battle-v2 .battle-unit-floating-name{bottom:calc(clamp(103px,22vw,139px) + 10px)!important}
+
+/* Reserve a real bottom safe area and reduce the old 12% downward stagger. */
+.battle-screen.side-battle-v2 .side-party,
+.battle-screen.side-battle-v2 .side-enemies{padding-bottom:20px!important}
+.battle-screen.side-battle-v2 .side-party .formation-slot-2,
+.battle-screen.side-battle-v2 .side-enemies .formation-slot-2{transform:translateY(2%)!important}
+.battle-screen.side-battle-v2 .side-party .formation-slot-4,
+.battle-screen.side-battle-v2 .side-enemies .formation-slot-4{transform:translateY(4%)!important}
+
+/* Large floor rulers keep the same ten-pixel lift and matching name anchor. */
+.battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .battle-unit-floating-name,
+.battle-screen.side-battle-v2 .floor-boss-enemy .battle-unit-floating-name{bottom:calc(clamp(205px,55vw,282px) + 10px)!important}
+.battle-screen.side-battle-v2 .party-floor-boss .battle-unit-floating-name{bottom:calc(clamp(130px,34vw,176px) + 10px)!important}
+
+@media(max-width:390px){
+ .battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .battle-unit-floating-name,
+ .battle-screen.side-battle-v2 .floor-boss-enemy .battle-unit-floating-name{bottom:calc(clamp(197px,53vw,222px) + 10px)!important}
+}
+
+@media(max-height:720px){
+ .battle-screen.side-battle-v2 .side-unit-card{bottom:8px!important}
+ .battle-screen.side-battle-v2 .side-unit-sprite{bottom:52px!important}
+ .battle-screen.side-battle-v2 .side-enemies:has(.side-battle-unit:only-child) .side-unit-sprite,
+ .battle-screen.side-battle-v2 .side-enemies:has(.boss-enemy:only-child) .side-unit-sprite,
+ .battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .side-unit-sprite,
+ .battle-screen.side-battle-v2 .floor-boss-enemy .side-unit-sprite{bottom:52px!important}
+ .battle-screen.side-battle-v2 .side-battle-unit::after,
+ .battle-screen.side-battle-v2 .target-reticle{bottom:51px!important}
+ .battle-screen.side-battle-v2 .battle-unit-floating-name{bottom:calc(clamp(96px,21vw,128px) + 6px)!important}
+ .battle-screen.side-battle-v2 .side-party,
+ .battle-screen.side-battle-v2 .side-enemies{padding-bottom:16px!important}
+ .battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .battle-unit-floating-name,
+ .battle-screen.side-battle-v2 .floor-boss-enemy .battle-unit-floating-name{bottom:calc(clamp(176px,47vw,207px) + 6px)!important}
+}

@@ -1,6 +1,6 @@
-import{SaveService}from"./services/SaveService.js?v=2.11.36-build201";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.36-build201";
-import{AudioSystem}from"./core/AudioSystem.js?v=2.11.2-build166";
+import{SaveService}from"./services/SaveService.js?v=2.11.37-build202";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.37-build202";
+import{AudioSystem}from"./core/AudioSystem.js?v=2.11.37-build202";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=2.11.24-build188";
 import{SPECIES}from"./data/species.js?v=2.11.33-build198";
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=2.11.2-build166";
@@ -472,7 +472,7 @@ function render(){
  try{if(REFRESHABLE_SCREENS.has(screen))sessionStorage.setItem(SCREEN_SESSION_KEY,screen)}catch{}
  const powerRecord=recordPartyCombatPower(save.state);if(powerRecord.changed)save.save();
  document.body.classList.toggle("phase2",hasCleared1000(save.state));
- audio.setScene(["explore","gauntlet"].includes(screen)?"explore":"home");
+ if(!battle)audio.setScene(["explore","gauntlet"].includes(screen)?"explore":"home");
  if(screen==="home"){app.innerHTML=HomeScreen(save.state);bindHome()}
  else if(screen==="formation"){app.innerHTML=FormationScreen(save.state,{origin:formationOrigin});bindFormation()}
  else if(screen==="onlineParty"){app.innerHTML=OnlinePartyScreen(save.state);bindOnlineParty()}

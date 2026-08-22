@@ -42,9 +42,9 @@ for(const subslot of ["weaponRight","weaponLeft"]){
 
 assert.match(main,/const equippedSkill=learnedSkills\(a\)\.find\(candidate=>candidate\.id===skillId\);let skill=equippedSkill\?\?skillById\(skillId\)/);
 assert.match(main,/return command\("attack",null,\{skipRandomCircle:true\}\)/);
-assert.match(index,/const ASSET_VERSION = "2\.11\.36";/);
-assert.match(index,/const ASSET_BUILD = "build201";/);
-assert.equal(APP_VERSION,"2.11.36");
+assert.match(index,/const ASSET_VERSION = "2\.11\.37";/);
+assert.match(index,/const ASSET_BUILD = "build202";/);
+assert.equal(APP_VERSION,"2.11.37");
 assert.equal(SAVE_SCHEMA_VERSION,58);
 
 console.log("build201 floor-boss weapon auto regression: PASS (right/left + MP fallback)");

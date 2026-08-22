@@ -3,6 +3,7 @@ const TRACKS=Object.freeze({
  boss:"assets/audio/boss-bgm.mp3",elite:"assets/audio/elite-bgm.mp3",abyss:"assets/audio/abyss-bgm.mp3",divine:"assets/audio/ten-gods-bgm.mp3",
  victory:"assets/audio/main-bgm.mp3",defeat:"assets/audio/dungeon-bgm.mp3"
 });
+const AUDIO_OWNER_KEY=Symbol.for("abyss-dominion.audio-owner");
 function safeVolume(value,fallback){const number=Number(value);return Number.isFinite(number)?Math.max(0,Math.min(1,number)):fallback}
 
 /** One owner for every BGM track. A hidden/unfocused document is always silent. */
@@ -10,12 +11,12 @@ export class AudioSystem{
  constructor(settings=()=>({})){
   this.settings=settings;this.scene="home";this.context=null;this.sfxGain=null;this.unlocked=false;this.current=null;this.fadeToken=0;this.cache=new Map();this.suspendedByPage=false;
   this.onVisibility=()=>{if(this.pageIsActive())this.resumeForPage();else this.pauseForPage()};
-  if(typeof document!=="undefined")document.addEventListener("visibilitychange",this.onVisibility,{passive:true});
+  this.onPageHide=()=>this.pauseForPage();this.onPageShow=()=>this.onVisibility();this.onBlur=()=>this.pauseForPage();this.onFocus=()=>this.onVisibility();this.onFreeze=()=>this.pauseForPage();
+  if(typeof window!=="undefined"){const previous=window[AUDIO_OWNER_KEY];if(previous&&previous!==this)previous.destroy?.();window[AUDIO_OWNER_KEY]=this}
+  if(typeof document!=="undefined"){document.addEventListener("visibilitychange",this.onVisibility,{passive:true});document.addEventListener("freeze",this.onFreeze,{passive:true})}
   if(typeof window!=="undefined"){
-   window.addEventListener("pagehide",()=>this.pauseForPage(),{passive:true});
-   window.addEventListener("pageshow",()=>this.onVisibility(),{passive:true});
-   window.addEventListener("blur",()=>this.pauseForPage(),{passive:true});
-   window.addEventListener("focus",()=>this.onVisibility(),{passive:true});
+   window.addEventListener("pagehide",this.onPageHide,{passive:true});window.addEventListener("beforeunload",this.onPageHide,{passive:true});
+   window.addEventListener("pageshow",this.onPageShow,{passive:true});window.addEventListener("blur",this.onBlur,{passive:true});window.addEventListener("focus",this.onFocus,{passive:true});
   }
  }
  pageIsActive(){return typeof document==="undefined"||document.visibilityState==="visible"&&(!document.hasFocus||document.hasFocus())}
@@ -46,20 +47,20 @@ export class AudioSystem{
  async switchTrack(scene,immediate=false){
   if(!this.unlocked||!this.pageIsActive()||this.settings()?.audioEnabled===false)return;
   this.suspendedByPage=false;
-  const next=this.track(scene),target=safeVolume(this.settings()?.musicVolume,.28),previous=this.current,token=++this.fadeToken;
-  this.cache.forEach(track=>{if(track!==previous&&track!==next){track.pause();track.currentTime=0}});
-  if(previous===next){this.current=next;next.volume=target;try{if(next.paused)await next.play()}catch(_error){}return}
-  this.current=next;next.volume=0;try{next.currentTime=0;await next.play()}catch(_error){return}
+  const next=this.track(scene),target=safeVolume(this.settings()?.musicVolume,.28),token=++this.fadeToken;
+  this.cache.forEach(track=>{if(track!==next){track.pause();track.volume=0;track.currentTime=0}});
+  this.current=next;next.volume=immediate?target:0;
+  try{if(next.paused){next.currentTime=0;await next.play()}}catch(_error){if(token===this.fadeToken&&this.current===next)this.current=null;return}
+  if(token!==this.fadeToken||this.current!==next||!this.pageIsActive()||this.suspendedByPage){if(this.current!==next||!this.pageIsActive()||this.suspendedByPage){next.pause();next.volume=0}return}
   const steps=immediate?1:10,delay=immediate?0:32;
   for(let i=1;i<=steps;i++){
-   if(token!==this.fadeToken||!this.pageIsActive())return;
-   next.volume=Math.min(1,target*i/steps);if(previous)previous.volume=Math.max(0,target*(1-i/steps));
+   if(token!==this.fadeToken||this.current!==next||!this.pageIsActive()||this.suspendedByPage){if(this.current!==next||!this.pageIsActive()||this.suspendedByPage){next.pause();next.volume=0}return}
+   next.volume=Math.min(1,target*i/steps);
    if(delay)await new Promise(resolve=>setTimeout(resolve,delay));
   }
-  if(previous){previous.pause();previous.currentTime=0}
  }
  pauseForPage(){
-  this.suspendedByPage=true;++this.fadeToken;this.cache.forEach(track=>track.pause());
+  this.suspendedByPage=true;++this.fadeToken;this.cache.forEach(track=>{track.pause();track.volume=0});
   try{this.context?.suspend?.()}catch(_error){}
  }
  async resumeForPage(){
@@ -68,6 +69,12 @@ export class AudioSystem{
  }
  stopAll(reset=true){
   ++this.fadeToken;this.cache.forEach(track=>{track.pause();track.volume=0;if(reset)track.currentTime=0});if(reset)this.current=null;
+ }
+ destroy(){
+  this.stopAll(true);this.unlocked=false;
+  if(typeof document!=="undefined"){document.removeEventListener("visibilitychange",this.onVisibility);document.removeEventListener("freeze",this.onFreeze)}
+  if(typeof window!=="undefined"){window.removeEventListener("pagehide",this.onPageHide);window.removeEventListener("beforeunload",this.onPageHide);window.removeEventListener("pageshow",this.onPageShow);window.removeEventListener("blur",this.onBlur);window.removeEventListener("focus",this.onFocus);if(window[AUDIO_OWNER_KEY]===this)delete window[AUDIO_OWNER_KEY]}
+  try{const closing=this.context?.close?.();closing?.catch?.(()=>{})}catch(_error){}
  }
  sfx(kind="select"){
   if(!this.pageIsActive()||!this.context||!this.sfxGain||this.settings()?.audioEnabled===false)return;
