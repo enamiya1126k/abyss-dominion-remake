@@ -1,3 +1,5 @@
+import{floorBossEquipmentSetForFloor}from"./floorBossEquipment.js?v=2.11.28-build193";
+
 /*
  * 10F～990F の通常階層ボス。
  *
@@ -1561,7 +1563,7 @@ const POISON_LIGHTNING_SECOND_BOSS_SIGNATURES=Object.freeze([
    {label:"封陣奥義・六極魔力絶封",pattern:"all",multiplier:1.49,element:"lightning",damageClass:"magic",manaVacuum:true,mpDrain:.15,guaranteedHit:true,mpCostRate:.47,telegraph:true,cooldown:6,ai:{base:31,hpBelow:.64}}
   ],
   weapon:{
-   effect:{id:"magnetic_vacuum_weapon",name:"六極消磁",description:"状態異常成功率+21%・MP消費-15%・雷属性威力+16%。",fixedEffects:{statusChance:21,mpCostReduction:15,lightningDamage:16}},
+   effect:{id:"magnetic_vacuum_weapon",name:"六極消磁",description:"状態異常成功率+21%・MP消費-15%・雷属性威力+16%。",fixedEffects:{statusChance:21,mpCostReduction:15,thunderDamage:16}},
    skill:{name:"電鎖秘技・六極磁封雷",mp:30,type:"attack",power:.90,target:"敵全体",allEnemies:true,tag:"専用武器技・磁封",element:"lightning",damageClass:"magic",mpDrain:.14,removeEnemyMagicCircle:true,increaseEnemyCooldowns:1,status:{id:"paralysis",name:"麻痺",chance:.42,turns:2,power:0},cooldown:6,description:"敵全体のMPを吸収して麻痺を狙い、魔法陣を1つ破壊・固有技を1ターン延長する。"}
   }
  },
@@ -1593,7 +1595,7 @@ const POISON_LIGHTNING_SECOND_BOSS_SIGNATURES=Object.freeze([
    {label:"葬鐘奥義・万晶枯葬終鳴",pattern:"all",multiplier:1.48,element:"lightning",damageClass:"magic",currentHpDamage:.045,drain:.24,guaranteedHit:true,mpCostRate:.48,telegraph:true,cooldown:6,ai:{base:32,hpBelow:.64}}
   ],
   weapon:{
-   effect:{id:"crystal_mana_weapon",name:"雷晶吸命",description:"雷属性威力+20%・与ダメージ吸収+17%・最大MP+14%。",fixedEffects:{lightningDamage:20,lifeSteal:17,mpPct:14}},
+   effect:{id:"crystal_mana_weapon",name:"雷晶吸命",description:"雷属性威力+20%・与ダメージ吸収+17%・最大MP+14%。",fixedEffects:{thunderDamage:20,lifeSteal:17,mpPct:14}},
    skill:{name:"晶葬秘技・雷晶大終鳴",mp:31,type:"drain",power:.84,target:"敵全体",allEnemies:true,tag:"専用武器技・晶葬",element:"lightning",damageClass:"magic",currentHpDamage:.04,drain:.56,mpDrain:.10,effects:[{kind:"spdDown",value:.21,turns:3,enemy:true}],cooldown:6,description:"敵全体の現在HPとMPも削り、与ダメージ56%を吸収してSPDを21%低下させる。"}
   }
  },
@@ -1609,7 +1611,7 @@ const POISON_LIGHTNING_SECOND_BOSS_SIGNATURES=Object.freeze([
    {label:"冠位奥義・七極天雷皇界",pattern:"all",multiplier:1.72,element:"lightning",damageClass:"hybrid",defenseIgnore:.23,bonusVsStatus:{id:"paralysis",multiplier:1.28},deathVoltageStrike:true,guaranteedHit:true,barrier:1,mpCostRate:.51,telegraph:true,cooldown:7,ai:{base:34,hpBelow:.66}}
   ],
   weapon:{
-   effect:{id:"seven_pole_crown_weapon",name:"七極皇権",description:"雷属性威力+22%・ボスへのダメージ+12%・状態異常耐性+17%。",fixedEffects:{lightningDamage:22,bossDamage:12,statusResistance:17}},
+   effect:{id:"seven_pole_crown_weapon",name:"七極皇権",description:"雷属性威力+22%・ボスへのダメージ+12%・状態異常耐性+17%。",fixedEffects:{thunderDamage:22,bossDamage:12,statusResistance:17}},
    skill:{name:"天轟極技・七極冠皇槍",mp:34,type:"attack",power:.54,hits:3,target:"敵単体",tag:"専用武器技・七極",element:"lightning",damageClass:"hybrid",defenseIgnore:.21,bonusVsStatus:{id:"paralysis",multiplier:1.36},status:{id:"paralysis",name:"麻痺",chance:.45,turns:2,power:0},partyShieldRate:.08,effects:[{kind:"atkUp",value:.10,turns:3,allies:true},{kind:"defUp",value:.10,turns:3,allies:true}],cooldown:6,description:"物魔複合3連撃。麻痺中へ威力36%上昇・防御21%無視、味方へ障壁と攻防強化。"}
   }
  }
@@ -2202,17 +2204,22 @@ function buildBoss(realm,form,realmIndex,formIndex){
  const actionKits=signature?.actions??domain.actions??genericActions,actions=Object.fromEntries(actionIds.map((actionId,index)=>[actionId,Object.freeze({...genericActions[index],...actionKits[index]})]));
  const scale=1+realmIndex*.012+formIndex*.003;
  const statSource=signature?.stats??form.stats,weaponSkill=signature?.weapon?.skill?Object.freeze({id:`${id}-weapon-skill`,equipmentGranted:true,unlock:{type:"equipment",value:1},...signature.weapon.skill}):null;
+ const batchEquipment=floorBossEquipmentSetForFloor(floor),weaponBatch=batchEquipment?.weapon;
+ const dedicatedWeapon=Object.freeze({
+  id:`${id}-weapon`,slot:"weapon",name:weaponBatch?.name??`${domain.weaponName??`${domain.weapon}${form.weapon}`}・${String(floor).padStart(3,"0")}式`,rarity:weaponBatch?.rarity??domain.rarity??realm.rarity,weaponType:form.weaponType,
+  stats:Object.freeze({atk:Math.max(2,Math.round((4+formIndex*1.2)*(1+realmIndex*.18))),matk:Math.max(1,Math.round((3+(8-formIndex)*.8)*(1+realmIndex*.18))),hp:Math.round((6+realmIndex*2.2)+(form.role==="tank"?12:0)),spd:Math.round((form.stats.spd-1)*18),crit:2+((realmIndex+formIndex)%7),...(weaponBatch?.stats??{})}),
+  effect:signature?.weapon?.effect?Object.freeze({...signature.weapon.effect,fixedEffects:Object.freeze({...signature.weapon.effect.fixedEffects})}):null,skill:weaponSkill,
+  visualAsset:weaponBatch?.visualAsset??null,standalone:weaponBatch?.standalone??true
+ });
+ const dedicatedArmor=batchEquipment?.armor??null,dedicatedAccessory=batchEquipment?.accessory??null;
  return Object.freeze({
   id,floor,cycleFloor:floor,name,title:`${domain.title}・${form.epithet}`,quote:domain.quote??`「${domain.name}の第${formIndex+1}律――${form.epithet}を越えてみせよ。」`,
   speciesId:realm.visuals[formIndex],visualSpeciesId:realm.bossVisuals?.[formIndex]??realm.visuals[formIndex],element:domain.element,role:form.role,rarity:domain.rarity??realm.rarity,uncapturable:true,
   stats:Object.freeze(Object.fromEntries(Object.entries(statSource).map(([key,value])=>[key,["hp","atk","matk","def","mdef","spd"].includes(key)?Number((value*scale).toFixed(4)):value]))),
   passive:signature?.passive?Object.freeze(signature.passive):null,domain:signature?.domain?Object.freeze(signature.domain):null,ai:signature?.ai?Object.freeze(signature.ai):null,
   actionIds:Object.freeze(actionIds),actions:Object.freeze(actions),
-  dedicatedWeapon:Object.freeze({
-   id:`${id}-weapon`,name:`${domain.weaponName??`${domain.weapon}${form.weapon}`}・${String(floor).padStart(3,"0")}式`,rarity:domain.rarity??realm.rarity,weaponType:form.weaponType,
-   stats:Object.freeze({atk:Math.max(2,Math.round((4+formIndex*1.2)*(1+realmIndex*.18))),matk:Math.max(1,Math.round((3+(8-formIndex)*.8)*(1+realmIndex*.18))),hp:Math.round((6+realmIndex*2.2)+(form.role==="tank"?12:0)),spd:Math.round((form.stats.spd-1)*18),crit:2+((realmIndex+formIndex)%7)}),
-   effect:signature?.weapon?.effect?Object.freeze({...signature.weapon.effect,fixedEffects:Object.freeze({...signature.weapon.effect.fixedEffects})}):null,skill:weaponSkill
-  })
+  dedicatedWeapon,dedicatedArmor,dedicatedAccessory,
+  dedicatedEquipment:Object.freeze([dedicatedWeapon,...[dedicatedArmor,dedicatedAccessory].filter(Boolean)])
  });
 }
 
@@ -2234,6 +2241,12 @@ export function floorBossActionInfo(action){
 
 export function floorBossDefinitionById(id){return CATALOG_BY_ID.get(String(id??""))??null}
 export function floorBossWeaponSkillById(id){return WEAPON_SKILL_BY_ID.get(String(id??""))??null}
+export function floorBossEquipmentDesignByPiece(id,piece="weapon"){
+ const definition=floorBossDefinitionById(id);if(!definition)return null;
+ if(piece==="armor")return definition.dedicatedArmor??null;
+ if(piece==="accessory")return definition.dedicatedAccessory??null;
+ return definition.dedicatedWeapon??null;
+}
 
 const ABYSS_MILESTONES=Object.freeze({
  100:["abyss_gluttony"],200:["abyss_wrath"],300:["abyss_envy"],400:["abyss_sloth"],500:["abyss_greed","abyss_lust"],600:["abyss_pride"],700:["abyss_gluttony","abyss_wrath"],800:["abyss_envy","abyss_sloth"],900:["abyss_greed","abyss_lust","abyss_pride"]

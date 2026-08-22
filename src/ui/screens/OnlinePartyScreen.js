@@ -1,11 +1,11 @@
-import { SPECIES } from "../../data/species.js?v=2.11.2-build166";
-import { displayName, calculatedStats } from "../../models/Monster.js?v=2.11.24-build188";
-import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=2.11.24-build188";
-import { magicCircleById, equippedMagicCircle } from "../../core/MagicCircleSystem.js?v=2.11.2-build166";
-import { learnedSkills, maxMp, effectiveSkillMpCost } from "../../battle/SkillSystem.js?v=2.11.24-build188";
-import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=2.11.24-build188";
-import { monsterVisual } from "../MonsterVisual.js?v=2.11.2-build166";
-import { resourceHud, pixelIcon } from "../components/GameChrome.js?v=2.11.2-build166";
+import { SPECIES } from "../../data/species.js?v=2.11.0-build164";
+import { displayName, calculatedStats } from "../../models/Monster.js?v=2.11.30-build195";
+import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=2.11.30-build195";
+import { magicCircleById, equippedMagicCircle } from "../../core/MagicCircleSystem.js?v=2.11.0-build164";
+import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=2.11.30-build195";
+import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=2.11.0-build164";
+import { monsterVisual } from "../MonsterVisual.js?v=2.11.0-build164";
+import { resourceHud, pixelIcon } from "../components/GameChrome.js?v=2.11.0-build164";
 
 export const ONLINE_STORAGE_KEYS = Object.freeze({
   friendId: "abyss-dominion-online-friend-id",
@@ -101,33 +101,36 @@ function onlineSkillKind(skill) {
 }
 
 function onlineSkillProfile(monster) {
-  return learnedSkills(monster).slice(0, 4).map(skill => ({
-    id: skill.id,
-    name: skill.name ?? "スキル",
-    description: skill.description ?? "特殊効果を発動",
-    kind: onlineSkillKind(skill),
-    mp: effectiveSkillMpCost(monster, skill),
-    power: Math.max(.1, Number(skill.power) || 1),
-    heal: Math.max(0, Number(skill.heal) || Number(skill.revive) || 0),
-    reviveMp: Math.max(0, Number(skill.reviveMp) || 0),
-    mpHeal: Math.max(0, Number(skill.mpHeal) || 0),
-    hits: Math.max(1, Number(skill.hits) || 1),
-    allEnemies: Boolean(skill.allEnemies || String(skill.target ?? "").includes("敵全体")),
-    allAllies: Boolean(skill.allies || String(skill.target ?? "").includes("味方全体") || skill.type === "allHeal"),
-    guaranteedHit: Boolean(skill.guaranteedHit),
-    damageClass: skill.damageClass === "magic" ? "magic" : "physical",
-    element: skill.element ?? monster.attribute ?? SPECIES[monster.speciesId]?.element ?? "neutral",
-    partyShieldRate: Math.max(0, Number(skill.partyShieldRate) || 0),
-    effects: (skill.effects ?? []).slice(0, 6).map(effect => ({
-      kind: String(effect.kind ?? ""), value: Math.max(0, Number(effect.value) || 0),
-      turns: Math.max(1, Number(effect.turns) || 1), allies: Boolean(effect.allies), enemy: Boolean(effect.enemy),
-    })),
-    status: skill.status ? {
-      id: String(skill.status.id ?? "status"), name: String(skill.status.name ?? "状態異常"),
-      chance: Math.max(0, Math.min(1, Number(skill.status.chance) || 0)),
-      power: Math.max(0, Number(skill.status.power) || 0), turns: Math.max(1, Number(skill.status.turns) || 1),
-    } : null,
-  }));
+  return learnedSkills(monster).slice(0, 4).map(baseSkill => {
+    const skill = applySkillMastery(monster, baseSkill);
+    return {
+      id: skill.id,
+      name: skill.name ?? "スキル",
+      description: skill.description ?? "特殊効果を発動",
+      kind: onlineSkillKind(skill),
+      mp: effectiveSkillMpCost(monster, skill),
+      power: Math.max(.1, Number(skill.power) || 1),
+      heal: Math.max(0, Number(skill.heal) || Number(skill.revive) || 0),
+      reviveMp: Math.max(0, Number(skill.reviveMp) || 0),
+      mpHeal: Math.max(0, Number(skill.mpHeal) || 0),
+      hits: Math.max(1, Number(skill.hits) || 1),
+      allEnemies: Boolean(skill.allEnemies || String(skill.target ?? "").includes("敵全体")),
+      allAllies: Boolean(skill.allies || String(skill.target ?? "").includes("味方全体") || skill.type === "allHeal"),
+      guaranteedHit: Boolean(skill.guaranteedHit),
+      damageClass: skill.damageClass === "magic" ? "magic" : "physical",
+      element: skill.element ?? monster.attribute ?? SPECIES[monster.speciesId]?.element ?? "neutral",
+      partyShieldRate: Math.max(0, Number(skill.partyShieldRate) || 0),
+      effects: (skill.effects ?? []).slice(0, 6).map(effect => ({
+        kind: String(effect.kind ?? ""), value: Math.max(0, Number(effect.value) || 0),
+        turns: Math.max(1, Number(effect.turns) || 1), allies: Boolean(effect.allies), enemy: Boolean(effect.enemy),
+      })),
+      status: skill.status ? {
+        id: String(skill.status.id ?? "status"), name: String(skill.status.name ?? "状態異常"),
+        chance: Math.max(0, Math.min(1, Number(skill.status.chance) || 0)),
+        power: Math.max(0, Number(skill.status.power) || 0), turns: Math.max(1, Number(skill.status.turns) || 1),
+      } : null,
+    };
+  });
 }
 
 export function buildOnlinePartyProfile(state, { monsterId = null, displayName: onlineName = "" } = {}) {

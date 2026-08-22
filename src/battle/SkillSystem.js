@@ -1,8 +1,8 @@
-import{SPECIES}from"../data/species.js?v=2.11.2-build166";
-import{SKILLS}from"../data/skills.js?v=2.11.2-build166";
-import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.24-build188";
-import{buildIndividualSkillKit}from"../data/individualSkillKits.js?v=2.11.2-build166";
-import{floorBossWeaponSkillById}from"../data/floorBosses.js?v=2.11.21-build185";
+import{SPECIES}from"../data/species.js?v=2.11.33-build198";
+import{SKILLS}from"../data/skills.js?v=2.11.0-build164";
+import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.0-build164";
+import{buildIndividualSkillKit}from"../data/individualSkillKits.js?v=2.11.0-build164";
+import{FLOOR_BOSS_CATALOG}from"../data/floorBosses.js?v=2.11.30-build195";
 
 const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
 const ROLE_POOLS={
@@ -232,6 +232,35 @@ for(const species of Object.values(SPECIES)){
  skills[index]={...skill,...addition,tag:`${skill.tag??"固有"}・${identity.label}`,description:`${skill.description??"固有能力を発動する。"} ${identity.label}の追加効果。`,effects:[...effects,...identityEffects]};
 }
 const BY_ID=new Map(Object.values(GENERATED).flat().map(skill=>[skill.id,skill]));
+const FLOOR_BOSS_SKILLS=new Map(FLOOR_BOSS_CATALOG.map(boss=>{
+ const skills=boss.actionIds.slice(0,4).map((actionId,index)=>{
+  const action=boss.actions[actionId]??{},all=action.pattern==="all",healing=Number(action.heal)>0,reviving=Number(action.revive)>0,selfHealing=Number(action.selfHeal)>0,cleansing=Boolean(action.cleanse||action.clearNegativeSelf),utility=Boolean(action.utility||healing||reviving||selfHealing||cleansing),type=reviving?"revive":healing?"allHeal":selfHealing?"selfHeal":cleansing?"cleanse":utility?"buff":"attack";
+  return{id:`${boss.id}__contract_${index+1}`,name:action.label??`${boss.name}の固有技${index+1}`,mp:Math.max(5,8+index*5+Math.floor(boss.floor/100)),mpRate:Math.max(0,Math.min(.75,Number(action.mpCostRate)||0)),type,power:utility?0:Math.max(.1,Number(action.multiplier)||1),target:reviving?"味方単体":healing||action.effects?.some(effect=>effect.allies)?"味方全体":selfHealing||cleansing||utility?"自分":all?"敵全体":"敵単体",tag:`階層ボス固有・${index===3?"奥義":"権能"}`,element:action.element??boss.element,damageClass:action.damageClass??(["magic","healer","control"].includes(boss.role)?"magic":"physical"),cooldown:Math.max(index===3?4:index===2?2:1,Number(action.cooldown)||0),unlock:{type:"level",value:1},allEnemies:all,hits:Math.max(1,Math.floor(Number(action.hits)||1)),heal:Number(action.heal)||0,revive:Number(action.revive)||0,reviveMp:Math.max(0,Math.min(1,Number(action.reviveMp)||.25)),reviveTransferRate:Number(action.reviveTransferRate)||0,revivedEffects:Array.isArray(action.revivedEffects??action.reviveEffects)?(action.revivedEffects??action.reviveEffects).map(effect=>({...effect})):[],selfHeal:Number(action.selfHeal)||0,drain:Number(action.drain)||0,mpDrain:Number(action.mpDrain)||0,currentHpDamage:Number(action.currentHpDamage)||0,defenseIgnore:Number(action.defenseIgnore)||0,execute:Number(action.execute)||0,critBonus:Number(action.critBonus)||0,guaranteedCritical:Boolean(action.guaranteedCritical),barrier:Number(action.barrier)||0,selfShieldRate:Number(action.hpShieldRate)||0,partyShieldRate:Number(action.partyShieldRate)||0,selfHpCostRate:Number(action.selfHpCostRate)||0,selfSacrificeHpDamage:Number(action.selfSacrificeHpDamage)||0,fillHpDrain:Boolean(action.fillHpDrain),guaranteedHit:Boolean(action.guaranteedHit),cleanse:cleansing,removeEnemyMagicCircle:Boolean(action.removeEnemyMagicCircle||action.breakAllyMagicCircle),dispelEnemyBuff:Boolean(action.dispelEnemyBuff||action.dispel||action.dispelOne),invertEnemyBuffRate:Number(action.invertEnemyBuffRate??action.invertRate)||0,increaseEnemyCooldowns:Math.max(0,Math.floor(Number(action.increaseEnemyCooldowns??action.increaseAllyCooldowns)||0)),randomElement:Boolean(action.randomElement),bonusVsStatus:action.bonusVsStatus?{...action.bonusVsStatus}:null,bonusVsEffect:action.bonusVsEffect?{...action.bonusVsEffect}:null,bonusVsEnemyBuff:action.bonusVsEnemyBuff?{...action.bonusVsEnemyBuff}:null,status:action.status?{...action.status}:null,effects:Array.isArray(action.effects)?action.effects.map(effect=>({...effect})):[],description:`${boss.title}を象徴する固有行動。`};
+ });
+ return[boss.id,skills];
+}));
+const FLOOR_BOSS_SKILL_BY_ID=new Map([...FLOOR_BOSS_SKILLS.values()].flat().map(skill=>[skill.id,skill]));
+
+// build195: mastery is a long-term specialization, not a reward that finishes
+// after a handful of battles.  Old save levels/EXP are preserved as-is; only
+// the next threshold and future per-use gain use this curve.
+export const SKILL_MASTERY_MAX_LEVEL=10;
+const SKILL_MASTERY_NEEDS=Object.freeze([0,100,180,300,460,680,960,1300,1720,2240]);
+export function skillMasteryNeedForLevel(level){
+ const current=Math.max(1,Math.min(SKILL_MASTERY_MAX_LEVEL,Math.floor(Number(level)||1)));
+ return current>=SKILL_MASTERY_MAX_LEVEL?0:SKILL_MASTERY_NEEDS[current];
+}
+export function skillMasteryBonuses(monster,skillOrId){
+ const skillId=typeof skillOrId==="string"?skillOrId:skillOrId?.id,level=skillId?skillProgressFor(monster,skillId).level:1,steps=Math.max(0,level-1);
+ return{level,powerRate:steps*.02,statusChance:steps*.01,mpCostRate:steps*.01};
+}
+export function applySkillMastery(monster,skill){
+ if(!skill?.id)return skill;
+ const bonus=skillMasteryBonuses(monster,skill),powerMultiplier=1+bonus.powerRate,copy={...skill,masteryLevel:bonus.level,masteryPowerRate:bonus.powerRate,masteryStatusChance:bonus.statusChance};
+ for(const key of["power","heal","selfHeal","mpHeal","partyShieldRate","selfShieldRate"]){const value=Number(skill[key]);if(Number.isFinite(value)&&value>0)copy[key]=value*powerMultiplier}
+ if(skill.status){copy.status={...skill.status,chance:Math.min(1,Math.max(0,Number(skill.status.chance)||0)+bonus.statusChance)};if(Number(skill.status.power)>0)copy.status.power=Number(skill.status.power)*powerMultiplier}
+ return copy;
+}
 
 export function maxMp(monster){
  const number=(value,fallback=0)=>Number.isFinite(Number(value))?Number(value):fallback,species=SPECIES[monster.speciesId]??{},level=Math.max(1,number(monster.level,1)),rank=Math.max(1,number(monster.rank,1)),role=String(species.role??"");
@@ -239,14 +268,19 @@ export function maxMp(monster){
  const base=Math.max(35,number(species.maxMp,15)+(caster?55:tank?25:38)),growth=(caster?2.4:tank?1.35:1.75)*Math.pow(level,.72),rarityBonus=(rank-1)*18,endgame=monster.endgameFaction==="tenGod"?1.35:monster.endgameFaction==="abyss"?1.2:1,raw=(base+growth+rarityBonus)*endgame+number(monster._equipmentStats?.mp),pct=number(monster._equipmentAffixes?.mpPct);
  return Math.max(0,Math.floor(raw*(1+pct/100)));
 }
-export function effectiveSkillMpCost(monster,skill){const source=Number(monster?._equipmentAffixes?.mpCostReduction??0),reduction=Math.min(50,Number.isFinite(source)?Math.max(0,source):0),listed=Number(skill?.mp??0),rate=Number(skill?.mpRate??0),rated=rate>0?Math.ceil(maxMp(monster)*rate):0,base=Math.max(Number.isFinite(listed)?listed:0,Number.isFinite(rated)?rated:0);return Math.max(0,Math.ceil(base*(1-reduction/100)))}
+export function effectiveSkillMpCost(monster,skill){const source=Number(monster?._equipmentAffixes?.mpCostReduction??0),equipmentReduction=Math.min(50,Number.isFinite(source)?Math.max(0,source):0),masteryReduction=skill?.id?skillMasteryBonuses(monster,skill).mpCostRate*100:0,reduction=Math.min(60,equipmentReduction+masteryReduction),listed=Number(skill?.mp??0),rate=Number(skill?.mpRate??0),rated=rate>0?Math.ceil(maxMp(monster)*rate):0,base=Math.max(Number.isFinite(listed)?listed:0,Number.isFinite(rated)?rated:0);return Math.max(0,Math.ceil(base*(1-reduction/100)))}
 export function allSpeciesSkills(speciesId){return GENERATED[speciesId]??[]}
-function equipmentGrantedSkills(monster){return Array.isArray(monster?._equipmentSkills)?monster._equipmentSkills.filter(Boolean):[]}
-export function allLearnedSkills(monster){const source=monster?.endgameBossId?endgameSkills(monster.endgameBossId):allSpeciesSkills(monster.speciesId),unique=new Map(source.filter(skill=>monster.level>=(skill.unlock?.value??1)).map(skill=>[skill.id,skill]));for(const skill of equipmentGrantedSkills(monster))unique.set(skill.id,skill);return[...unique.values()]}
+export function allLearnedSkills(monster){
+ const source=monster?.endgameBossId?endgameSkills(monster.endgameBossId):monster?.floorBossCatalogId?FLOOR_BOSS_SKILLS.get(monster.floorBossCatalogId)??allSpeciesSkills(monster.speciesId):allSpeciesSkills(monster.speciesId),equipment=Array.isArray(monster?._equipmentSkills)?monster._equipmentSkills:[],seen=new Set();
+ return[...source,...equipment].filter(skill=>skill&&monster.level>=(skill.unlock?.value??1)&&!seen.has(skill.id)&&seen.add(skill.id));
+}
 export function normalizeSkillLoadout(monster){
  const learned=allLearnedSkills(monster),valid=new Set(learned.map(x=>x.id));
- if(!Array.isArray(monster.equippedSkills)||monster.equippedSkills.length===0){
+ if(!Array.isArray(monster.equippedSkills))monster.equippedSkills=[];
+ if(monster.skillLoadoutInitialized!==true){
   monster.equippedSkills=learned.slice(0,4).map(skill=>skill.id);
+  while(monster.equippedSkills.length<4)monster.equippedSkills.push(null);
+  monster.skillLoadoutInitialized=true;
  }
  const saved=Array.from({length:4},(_,index)=>{
   const id=monster.equippedSkills[index];
@@ -254,16 +288,12 @@ export function normalizeSkillLoadout(monster){
  });
  const used=new Set();
  monster.equippedSkills=saved.map(id=>{if(!id||used.has(id))return null;used.add(id);return id});
- for(let index=0;index<monster.equippedSkills.length;index++)if(!monster.equippedSkills[index]){
-  const replacement=learned[index]&&!used.has(learned[index].id)?learned[index]:learned.find(skill=>!used.has(skill.id));
-  if(replacement){monster.equippedSkills[index]=replacement.id;used.add(replacement.id)}
- }
  return monster.equippedSkills;
 }
-export function learnedSkills(monster){const equipped=new Set(normalizeSkillLoadout(monster)),unique=new Map(allLearnedSkills(monster).filter(skill=>equipped.has(skill.id)).map(skill=>[skill.id,skill]));for(const skill of equipmentGrantedSkills(monster))unique.set(skill.id,skill);return[...unique.values()]}
-export function equipSkill(monster,skillId,slot){const learned=new Set(allLearnedSkills(monster).map(x=>x.id));if(!learned.has(skillId)||slot<0||slot>3)return false;normalizeSkillLoadout(monster);const next=Array.from({length:4},(_,index)=>monster.equippedSkills[index]??null),previous=next.indexOf(skillId);if(previous>=0)next[previous]=next[slot]??null;next[slot]=skillId;monster.equippedSkills=next;return true}
+export function learnedSkills(monster){const equipped=new Set(normalizeSkillLoadout(monster));return allLearnedSkills(monster).filter(skill=>equipped.has(skill.id))}
+export function equipSkill(monster,skillId,slot){const learned=new Set(allLearnedSkills(monster).map(x=>x.id));if(!learned.has(skillId)||slot<0||slot>3)return false;normalizeSkillLoadout(monster);const next=Array.from({length:4},(_,index)=>monster.equippedSkills[index]??null),previous=next.indexOf(skillId);if(previous>=0)next[previous]=next[slot]??null;next[slot]=skillId;monster.equippedSkills=next;monster.skillLoadoutInitialized=true;return true}
 
-export function skillProgressFor(monster,skillId){monster.skillProgress??={};const current=monster.skillProgress[skillId]??{level:1,exp:0,uses:0};current.level=Math.max(1,Math.min(10,Number(current.level??1)));current.exp=Math.max(0,Number(current.exp??0));current.uses=Math.max(0,Number(current.uses??0));current.need=current.level>=10?0:25*current.level;monster.skillProgress[skillId]=current;return current}
+export function skillProgressFor(monster,skillId){monster.skillProgress??={};const current=monster.skillProgress[skillId]??{level:1,exp:0,uses:0};current.level=Math.max(1,Math.min(SKILL_MASTERY_MAX_LEVEL,Math.floor(Number(current.level??1))));current.exp=Math.max(0,Number(current.exp??0));current.uses=Math.max(0,Math.floor(Number(current.uses??0)));current.need=skillMasteryNeedForLevel(current.level);monster.skillProgress[skillId]=current;return current}
 export function normalizeSkillProgress(monster){
  monster.skillProgress=monster.skillProgress&&typeof monster.skillProgress==="object"&&!Array.isArray(monster.skillProgress)?monster.skillProgress:{};
  const valid=new Set(allLearnedSkills(monster).map(skill=>skill.id));
@@ -276,8 +306,8 @@ export function normalizeSkillProgress(monster){
  normalizeSkillLoadout(monster);
  return monster.skillProgress;
 }
-export function recordSkillUse(monster,skillId,multiplier=1){const progress=skillProgressFor(monster,skillId);progress.uses++;if(progress.level>=10)return progress;progress.exp+=Math.max(1,Math.round(10*Math.max(0,multiplier)));while(progress.level<10&&progress.exp>=25*progress.level){progress.exp-=25*progress.level;progress.level++}progress.need=progress.level>=10?0:25*progress.level;return progress}
-export function skillById(id){return endgameSkillById(id)??floorBossWeaponSkillById(id)??BY_ID.get(id)??SKILLS[id]??null}
+export function recordSkillUse(monster,skillId,multiplier=1){const progress=skillProgressFor(monster,skillId);progress.uses++;if(progress.level>=SKILL_MASTERY_MAX_LEVEL)return progress;progress.exp+=Math.max(.01,Math.max(0,Number(multiplier)||0));while(progress.level<SKILL_MASTERY_MAX_LEVEL&&progress.exp>=skillMasteryNeedForLevel(progress.level)){progress.exp-=skillMasteryNeedForLevel(progress.level);progress.level++}progress.exp=Math.round(progress.exp*100)/100;progress.need=skillMasteryNeedForLevel(progress.level);return progress}
+export function skillById(id){return endgameSkillById(id)??FLOOR_BOSS_SKILL_BY_ID.get(id)??BY_ID.get(id)??SKILLS[id]??null}
 export function canUseSkill(monster,skill,cooldown=0){return Boolean(skill)&&monster.currentMp>=effectiveSkillMpCost(monster,skill)&&cooldown<=0}
 export function affixOutgoingDamageMultiplier(stats,enemy,element="neutral"){
  const a=stats?._affixes??{};
@@ -289,14 +319,14 @@ export function affixOutgoingDamageMultiplier(stats,enemy,element="neutral"){
   :element==="water"||element==="ice"
    ?["waterDamage","iceDamage"]
    :[`${element}Damage`];
- const elementBonus=(Number(a.allElementDamage)||0)+elementKeys.reduce((sum,key)=>sum+(Number(a[key])||0),0);
+ const elementBonus=elementKeys.reduce((sum,key)=>sum+(Number(a[key])||0),0);
  const targetBonus=enemy?.boss||enemy?.endgameBossId?a.bossDamage??0:a.normalDamage??0,lowBonus=stats?._currentHpRatio!=null&&stats._currentHpRatio<=.35?a.lowHpDamage??0:0,fullBonus=stats?._currentHpRatio!=null&&stats._currentHpRatio>=.999?a.fullHpDamage??0:0,total=Math.max(0,Math.min(300,Number(elementBonus)+Number(targetBonus)+Number(lowBonus)+Number(fullBonus)));return 1+total/100
 }
-export function skillDamage(stats,enemy,skill,critical=false){const a=stats._affixes??{},magic=skill?.damageClass==="magic",hybrid=skill?.damageClass==="hybrid",attack=hybrid?Math.max(stats.atk,stats.matk??stats.atk):magic?(stats.matk??stats.atk):stats.atk,defense=hybrid?Math.min(enemy.def,enemy.mdef??enemy.def):magic?(enemy.mdef??enemy.def):enemy.def,base=Math.max(1,Math.floor((attack*skill.power-defense*.3)*affixOutgoingDamageMultiplier(stats,enemy,skill?.element??"neutral"))),critMult=1.65+(a.critDamage??0)/100;return critical?Math.floor(base*critMult):base}
+export function skillDamage(stats,enemy,skill,critical=false){const a=stats._affixes??{},magic=skill?.damageClass==="magic",attack=magic?(stats.matk??stats.atk):stats.atk,defense=magic?(enemy.mdef??enemy.def):enemy.def,base=Math.max(1,Math.floor((attack*skill.power-defense*.3)*affixOutgoingDamageMultiplier(stats,enemy,skill?.element??"neutral"))),critMult=1.65+(a.critDamage??0)/100;return critical?Math.floor(base*critMult):base}
 export function skillElementLabel(skill){return elementLabel(skill?.element)}
 
 const STATUS_NAMES=Object.freeze({poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖",petrify:"石化"});
-const EFFECT_NAMES=Object.freeze({atkUp:"ATK上昇",atkDown:"ATK低下",defUp:"DEF上昇",defDown:"DEF低下",spdUp:"SPD上昇",spdDown:"SPD低下",evasionUp:"回避率上昇",evasionDown:"回避率低下",accuracyUp:"命中率上昇",accuracyDown:"命中率低下",critUp:"会心率上昇",healDown:"回復量低下",reviveSeal:"蘇生封印",guaranteedHit:"必中",guaranteedCritical:"確定会心"});
+const EFFECT_NAMES=Object.freeze({atkUp:"ATK上昇",atkDown:"ATK低下",defUp:"DEF上昇",defDown:"DEF低下",spdUp:"SPD上昇",spdDown:"SPD低下",evasionUp:"回避率上昇",evasionDown:"回避率低下",accuracyUp:"命中率上昇",accuracyDown:"命中率低下"});
 function percent(value){return`${Math.round((Number(value)||0)*100)}%`}
 function turnText(value){const turns=Math.max(0,Math.round(Number(value)||0));return turns?`${turns}ターン`:"即時"}
 
@@ -306,15 +336,13 @@ export function skillEffectDetails(skill){
  if(!skill)return[];
  const lines=[],power=Math.max(0,Number(skill.power)||0),hits=Math.max(1,Math.round(Number(skill.hits)||1));
  if(power>0){
-  const attack=skill.damageClass==="hybrid"?"物理・魔法ATKの高い方":skill.damageClass==="magic"?"魔法ATK":"物理ATK",hitText=hits>1?` × ${hits}Hit（合計 ${percent(power*hits)}）`:"";
+  const attack=skill.damageClass==="magic"?"魔法ATK":"物理ATK",hitText=hits>1?` × ${hits}Hit（合計 ${percent(power*hits)}）`:"";
   lines.push(`${attack}の${percent(power)}ダメージ${hitText}`);
  }
  if(Number(skill.heal)>0)lines.push(`${skill.target==="味方全体"?"味方全体":"自分"}のHPを最大HPの${percent(skill.heal)}回復`);
  if(Number(skill.mpHeal)>0)lines.push(`${skill.target==="味方全体"?"味方全体":"対象"}のMPを最大MPの${percent(skill.mpHeal)}回復`);
- if(Number(skill.reviveTransferRate)>0)lines.push(`自分の現在HPを${percent(skill.reviveTransferRate)}分け与えて味方1体を蘇生${Number(skill.reviveMp)>0?`・MP${percent(skill.reviveMp)}`:""}`);
- else if(Number(skill.revive)>0)lines.push(`戦闘不能の味方1体をHP${percent(skill.revive)}${Number(skill.reviveMp)>0?`・MP${percent(skill.reviveMp)}`:""}で蘇生`);
+ if(Number(skill.revive)>0)lines.push(`戦闘不能の味方1体をHP${percent(skill.revive)}${Number(skill.reviveMp)>0?`・MP${percent(skill.reviveMp)}`:""}で蘇生`);
  if(Number(skill.drain)>0)lines.push(`与ダメージの${percent(skill.drain)}をHP吸収`);
- if(skill.fillHpDrain)lines.push("自分の欠損HPぶんまで対象HPを防御無視で直接吸収");
  if(Number(skill.selfHeal)>0)lines.push(`命中後、自分の最大HPの${percent(skill.selfHeal)}を回復`);
  if(Number(skill.mpDrain)>0)lines.push(`対象の最大MPの${percent(skill.mpDrain)}まで吸収`);
  if(Number(skill.currentHpDamage)>0)lines.push(`追加で対象の現在HPの${percent(Math.min(.25,Number(skill.currentHpDamage)))}ダメージ`);
@@ -324,17 +352,7 @@ export function skillEffectDetails(skill){
  if(skill.guaranteedCritical)lines.push("必ず会心");
  if(skill.guaranteedHit)lines.push("必中（回避・通常ガード判定を無視）");
  if(skill.allEnemies)lines.push("敵全体が対象");
- if(Number(skill.partyShieldRate)>0)lines.push(`味方全体へ各自の最大HP${percent(skill.partyShieldRate)}分の障壁`);
- if(Number(skill.selfShieldRate)>0)lines.push(`自分へ最大HP${percent(skill.selfShieldRate)}分の障壁`);
- if(skill.bonusVsStatus?.id&&Number(skill.bonusVsStatus.multiplier)>1)lines.push(`${STATUS_NAMES[skill.bonusVsStatus.id]??skill.bonusVsStatus.id}中の対象へ威力 +${percent(Number(skill.bonusVsStatus.multiplier)-1)}`);
- if(skill.bonusVsEffect?.kind&&Number(skill.bonusVsEffect.multiplier)>1)lines.push(`${EFFECT_NAMES[skill.bonusVsEffect.kind]??skill.bonusVsEffect.kind}中の対象へ威力 +${percent(Number(skill.bonusVsEffect.multiplier)-1)}`);
- if(skill.bonusVsEnemyBuff&&Number(skill.bonusVsEnemyBuff.multiplier)>1)lines.push(`強化中の敵へ威力 +${percent(Number(skill.bonusVsEnemyBuff.multiplier)-1)}`);
- if(Number(skill.invertEnemyBuffRate)>0)lines.push(`敵側の強化を1つ解除し、効果量${percent(skill.invertEnemyBuffRate)}の対応弱体へ反転`);
- if(Number(skill.stealEnemyBuffRate)>0)lines.push(`敵側の強化を1つ解除し、効果量${percent(skill.stealEnemyBuffRate)}で自分へ複写`);
-	 if(Number(skill.increaseEnemyCooldowns)>0)lines.push(`敵側の固有技再使用を${Math.round(Number(skill.increaseEnemyCooldowns))}ターン延長`);
-	 if(Number(skill.reducePartyCooldowns)>0)lines.push(Number(skill.reducePartyCooldowns)>=99?"味方全体の発動中スキル再使用をすべて解消":`味方全体の発動中スキル再使用を${Math.round(Number(skill.reducePartyCooldowns))}ターン短縮`);
  if(Number(skill.selfSacrificeHpDamage)>0)lines.push(`自分は戦闘不能になり、発動時HPの${percent(skill.selfSacrificeHpDamage)}を固定ダメージ化`);
- if(Number(skill.selfHpCostRate)>0)lines.push(`発動時に自分の現在HPを${percent(skill.selfHpCostRate)}消費（HP1未満にはならない）`);
  if(skill.removeEnemyMagicCircle)lines.push("敵側の魔法陣をランダムに1つ破壊");
  if(skill.dispelEnemyBuff)lines.push("敵側の強化効果をランダムに1つ解除");
  if(skill.randomElement)lines.push("発動ごとに攻撃属性が変化");
@@ -343,19 +361,14 @@ export function skillEffectDetails(skill){
  if(skill.cleanse)lines.push("状態異常・弱体効果を解除");
  if(Number(skill.barrier)>0)lines.push(`障壁を${Math.round(Number(skill.barrier))}段階付与`);
  if(Number(skill.selfAtk)>0)lines.push(`命中後、自分のATK +${percent(skill.selfAtk)}`);
- if(Number(skill.lowHpBonus)>0)lines.push(`自分のHP${percent(skill.lowHpThreshold??.5)}以下で威力 +${percent(skill.lowHpBonus)}`);
- if(Number(skill.turnPowerStep)>0)lines.push(`経過ターンごとに威力 +${percent(skill.turnPowerStep)}（上限 +${percent(skill.turnPowerCap)}）`);
- for(const effect of skill.revivedEffects??[]){const turns=turnText(effect.turns);if(effect.kind==="regen")lines.push(`蘇生者へ毎ターン最大HP${percent(effect.value)}回復・${turns}`);else if(effect.kind==="guard")lines.push(`蘇生者の被ダメージを${percent(effect.value)}軽減・${turns}`);else lines.push(`蘇生者へ${EFFECT_NAMES[effect.kind]??effect.name??effect.kind}・${turns}`)}
+ if(Number(skill.lowHpBonus)>0)lines.push(`低HP時に威力 +${percent(skill.lowHpBonus)}`);
  const status=skill.status;
  if(status){
   const name=status.name??STATUS_NAMES[status.id]??status.id??"状態異常",chance=percent(status.chance??1),turns=turnText(status.turns);
   lines.push(`${name}：成功率${chance}・${turns}${Number(status.power)>0?`・毎ターン最大HPの${percent(status.power)}ダメージ`:""}`);
  }
-	 for(const effect of skill.effects??[]){
-	  const target=effect.allies?"味方全体":effect.enemy?"対象":"自分",turns=turnText(effect.turns);
-	  if(effect.kind==="guaranteedHit"){lines.push(`${target}の攻撃を必中化・${turns}`);continue}
-	  if(effect.kind==="guaranteedCritical"){lines.push(`${target}の攻撃を確定会心化・${turns}`);continue}
-	  if(effect.kind==="reviveSeal"){lines.push(`${target}を蘇生不能にする：成功率${percent(effect.chance??1)}・${turns}`);continue}
+ for(const effect of skill.effects??[]){
+  const target=effect.allies?"味方全体":effect.enemy?"対象":"自分",turns=turnText(effect.turns);
   if(EFFECT_NAMES[effect.kind]){lines.push(`${target}の${EFFECT_NAMES[effect.kind]} ${effect.kind.endsWith("Down")?"−":"+"}${percent(effect.value)}・${turns}`);continue}
   if(effect.kind==="guard"){lines.push(`${target}の被ダメージを${percent(effect.value)}軽減・${turns}`);continue}
   if(effect.kind==="counter"){lines.push(`攻撃を受けると物理ATKの${percent(effect.value)}で反撃・${turns}`);continue}
@@ -375,10 +388,9 @@ export function chooseAutoSkill(monster,battle){
  const usable=learnedSkills(monster).filter(skill=>canUseSkill(monster,skill,battle?.cooldowns?.[monster.id]?.[skill.id]??0));
  if(!usable.length)return null;
  const hp=monster.currentHp/Math.max(1,monster._maxHp??1),dead=(battle?.party??[]).some(m=>m.currentHp<=0),hurt=(battle?.party??[]).filter(m=>m.currentHp>0&&m.currentHp<(m._maxHp??Infinity)*.65).length;
- if(dead){const revive=usable.find(s=>s.type==="revive"||s.revive||s.reviveTransferRate);if(revive)return revive}
+ if(dead){const revive=usable.find(s=>s.type==="revive");if(revive)return revive}
  if(hurt>=2){const heal=usable.filter(s=>s.type==="allHeal").sort((a,b)=>(b.heal??0)-(a.heal??0))[0];if(heal)return heal}
  if(hp<.38){const heal=usable.find(s=>s.type==="selfHeal"||s.heal&&s.target==="自分");if(heal)return heal}
- if(hp<.8){const fillDrain=usable.find(s=>s.fillHpDrain);if(fillDrain)return fillDrain}
  const tactical=usable.filter(s=>["buff","stance","cleanse","mpHeal"].includes(s.type));if(tactical.length&&Math.random()<.28)return tactical[Math.floor(Math.random()*tactical.length)];
  const attacks=usable.filter(s=>!["allHeal","selfHeal","buff","stance","cleanse","revive","mpHeal"].includes(s.type));return attacks.sort((a,b)=>(b.power??0)-(a.power??0))[0]??usable[0]
 }

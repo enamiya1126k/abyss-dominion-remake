@@ -1,4 +1,4 @@
-import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=2.11.24-build188";
+import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=2.11.34-build199";
 import{SERIAL_CODE_COUNT}from"../../core/SerialCodeSystem.js?v=2.11.24-build188";
 export function SettingsScreen(state){
   const redeemedCount=Object.keys(state.serialCodes?.redeemed??{}).length;
@@ -26,7 +26,7 @@ export function SettingsScreen(state){
           <label><span><b>BGM</b><output id="musicVolumeOutput">${Math.round((state.settings.musicVolume??.28)*100)}%</output></span><input id="musicVolume" type="range" min="0" max="100" step="1" value="${Math.round((state.settings.musicVolume??.28)*100)}"></label>
           <label><span><b>SE</b><output id="sfxVolumeOutput">${Math.round((state.settings.sfxVolume??.45)*100)}%</output></span><input id="sfxVolume" type="range" min="0" max="100" step="1" value="${Math.round((state.settings.sfxVolume??.45)*100)}"></label>
         </div>
-        <div class="settings-tutorial-v3"><span aria-hidden="true">📖</span><div><b>序盤チュートリアル</b><small>1〜5階の探索指南をいつでも確認</small></div><button id="openTutorialBook">指南書を開く</button></div>
+        <div class="settings-tutorial-v3"><span aria-hidden="true">📖</span><div><b>実践ガイド</b><small>初回操作ガイドの進み具合・停止・やり直し</small></div><button id="openTutorialBook">ガイド設定</button></div>
         <div class="serial-code-panel settings-gm-console-v3">
           <div class="serial-code-heading"><div><small>GAME MASTER SEALED GIFT</small><h3>シリアルコード</h3></div><span>${redeemedCount}/${SERIAL_CODE_COUNT} 使用済み</span></div>
           <form id="serialCodeForm" class="serial-code-form">

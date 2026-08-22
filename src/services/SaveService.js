@@ -1,25 +1,28 @@
-import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=2.11.24-build188";
-import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=2.11.24-build188";
-import{maxMp,normalizeSkillProgress,allLearnedSkills}from"../battle/SkillSystem.js?v=2.11.24-build188";
-import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=2.11.24-build188";
-import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=2.11.24-build188";
-import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=2.11.2-build166";
-import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=2.11.2-build166";
-import{SPECIES}from"../data/species.js?v=2.11.2-build166";
-import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.11.2-build166";
-import{normalizeWeaponMastery}from"./WeaponMastery.js?v=2.11.2-build166";
+import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=2.11.34-build199";
+import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=2.11.30-build195";
+import{maxMp,normalizeSkillProgress,allLearnedSkills,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=2.11.30-build195";
+import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=2.11.30-build195";
+import{normalizeFloorBossChallengeState}from"../core/FloorBossChallengeSystem.js?v=2.11.30-build195";
+import{FLOOR_BOSS_CATALOG,floorBossDefinitionById}from"../data/floorBosses.js?v=2.11.30-build195";
+import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=2.11.0-build164";
+import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=2.11.0-build164";
+import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=2.11.0-build164";
+import{SPECIES}from"../data/species.js?v=2.11.0-build164";
+import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.11.0-build164";
+import{normalizeWeaponMastery}from"./WeaponMastery.js?v=2.11.0-build164";
 
-import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=2.11.2-build166";
-import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=2.11.2-build166";
-import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=2.11.24-build188";
-import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=2.11.2-build166";
-import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=2.11.24-build188";
-import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=2.11.24-build188";
-import{normalizeSerialCodeState}from"../core/SerialCodeSystem.js?v=2.11.24-build188";
-import{normalizeNoticeState}from"../core/NoticeSystem.js?v=2.11.2-build166";
-import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=2.11.2-build166";
-import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=2.11.2-build166";
-import{normalizeEquipmentIdentity}from"../data/equipment.js?v=2.11.2-build166";
+import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=2.11.0-build164";
+import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=2.11.0-build164";
+import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=2.11.29-build194";
+import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=2.11.0-build164";
+import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=2.11.30-build195";
+import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=2.11.30-build195";
+import{normalizeSerialCodeState}from"../core/SerialCodeSystem.js?v=2.11.30-build195";
+import{normalizeNoticeState}from"../core/NoticeSystem.js?v=2.11.34-build199";
+import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=2.11.0-build164";
+import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=2.11.0-build164";
+import{normalizeEquipmentIdentity}from"../data/equipment.js?v=2.11.30-build195";
+import{createContextualGuideState,normalizeContextualGuide}from"../core/ContextualGuideSystem.js?v=2.11.34-build199";
 const LR_SERIAL_CHARACTER_IDS=new Set(["myth_enami","myth_yori","myth_rion","myth_hide"]);
 function finiteNumber(value,fallback=0,min=-Infinity,max=Infinity){
  const number=Number(value);
@@ -152,14 +155,14 @@ function normalizeContractedEndgameMonster(monster){
  if(Number(monster.contractProfileVersion??0)>=2)return;
  const divine=boss.faction==="tenGod";monster.plus=Math.max(Number(monster.plus)||0,divine?50:25);monster.affection=Math.max(Number(monster.affection??monster.bond)||0,divine?1000:750);monster.bond=monster.affection;monster.favorite=true;monster.locked=true;
  const strongest=allLearnedSkills(monster).slice(-4);monster.equippedSkills=strongest.map(skill=>skill.id);monster.skillProgress=monster.skillProgress&&typeof monster.skillProgress==="object"&&!Array.isArray(monster.skillProgress)?monster.skillProgress:{};
- for(const skill of strongest){const current=monster.skillProgress[skill.id]??{};const level=Math.max(Number(current.level)||1,divine?5:3);monster.skillProgress[skill.id]={...current,level,exp:Math.max(0,Number(current.exp)||0),uses:Math.max(0,Number(current.uses)||0),need:level>=10?0:25*level}}
- monster.contractProfileVersion=2;
+ for(const skill of strongest){const current=monster.skillProgress[skill.id]??{};const level=Math.max(Number(current.level)||1,divine?5:3);monster.skillProgress[skill.id]={...current,level,exp:Math.max(0,Number(current.exp)||0),uses:Math.max(0,Number(current.uses)||0),need:skillMasteryNeedForLevel(level)}}
+ monster.skillLoadoutInitialized=true;monster.contractProfileVersion=2;
 }
 function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
  ];
-const state={schemaVersion:SAVE_SCHEMA_VERSION,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false,gameClear1000:false,ending1000Played:false,gameClear10000:false,ending10000Played:false,secondWorldEntered:false,tenGodObserved:false,individualValuesDisabled:true},worldPhase:0,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},pendingBossRewards:{},bossKills:{},dangerLevel:1,exploreRun:{id:null,floors:{}}},expeditionSnapshot:null,monsters,party:monsters.map(m=>m.id),recentEncounter:null,recentBossEncounter:null,recentBattleMemory:null,battleMemoryAttempts:{},equipment:[],reserveEquipment:[],bossEquipmentVault:[],equipmentCrafting:{rerolls:0,goldSpent:0,maxLocksUsed:0},inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,highManaPotions:0,partyManaPotions:0,fullManaPotions:0,partyFullManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,experienceItems:0,experienceItemsMedium:0,experienceItemsLarge:0,experienceItemsUltra:0,captureCrystals:5,abyssKeys:0},onlineParty:{claimedRewards:[],totalGold:0,totalCaptureCrystals:0,expeditionsCompleted:0,battlesWon:0,captures:0,raidWins:0,raidMaterials:0,raidExchange:{},tradeEscrow:{},completedTradeIds:[],tradeHistory:[]},shop:{captureDaily:{key:null,count:0}},magicCircles:{unlocked:{},instances:[],owned:{},goldSpent:0,version:3},settings:{minimapVisible:false,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,audioEnabled:true,musicVolume:.28,sfxVolume:.45,mapTogglePosition:null,minimapPanelPosition:null,autoExploreButtonPosition:null,minimapPanelPosition:null,autoExploreButtonPosition:null,explorePartyHudCollapsed:false,exploreAutoMode:"off",exploreAutoMenuOpen:false,gauntletPartyCollapsed:false,tutorialSeen:{},tutorialDefeatsSeen:0,gmFloorUnlockMax:0},gameMaster:{claimedAt:null,floorUnlockMax:0},gacha:{firstTenUsed:false,tutorialFreeSummons:0,lastDailyKey:null,guerrilla:{salt:null,lastCycle:null}},notices:{readIds:[],dailyGift:{dayKey:null,claimedDayKey:null,claimedAt:null}},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0,combatPower:{highest:0,previous:0,updatedAt:null,history:[]}},serialCodes:{redeemed:{}},secretRooms:{run:null,activeRoom:null},abyssSkillTree:createAbyssSkillTreeState(),secondWorld:{randomEvents:{resolvedFloors:[],counts:{}},elites:{encountered:0,defeated:0,byAffix:{},bySpecies:{}}},endgame:{processedSpecialResults:{},teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0},trials:{battle:1,loop:1,cleared:[],run:null,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastTriggeredFloor:0,records:{},fragments:{},craftCounts:{},craftedGear:[],processedFragmentResults:{},manualChallenges:{dailyKey:null,dailyAttempts:0,unlocks:{}},rescue:{post1000Encounters:0,consecutiveLosses:0,lastResult:null}}}};
+const state={schemaVersion:SAVE_SCHEMA_VERSION,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false,gameClear1000:false,ending1000Played:false,gameClear10000:false,ending10000Played:false,secondWorldEntered:false,tenGodObserved:false,individualValuesDisabled:true},worldPhase:0,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},pendingBossRewards:{},bossKills:{},dangerLevel:1,exploreRun:{id:null,floors:{}}},expeditionSnapshot:null,monsters,party:monsters.map(m=>m.id),recentEncounter:null,recentBossEncounter:null,recentBattleMemory:null,battleMemoryAttempts:{},equipment:[],reserveEquipment:[],bossEquipmentVault:[],equipmentCrafting:{rerolls:0,goldSpent:0,maxLocksUsed:0},inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,highManaPotions:0,partyManaPotions:0,fullManaPotions:0,partyFullManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,experienceItems:0,experienceItemsMedium:0,experienceItemsLarge:0,experienceItemsUltra:0,captureCrystals:5,abyssKeys:0},onlineParty:{claimedRewards:[],totalGold:0,totalCaptureCrystals:0,expeditionsCompleted:0,battlesWon:0,captures:0,raidWins:0,raidMaterials:0,raidExchange:{},tradeEscrow:{},completedTradeIds:[],tradeHistory:[]},shop:{captureDaily:{key:null,count:0}},magicCircles:{unlocked:{},instances:[],owned:{},goldSpent:0,version:3},settings:{minimapVisible:false,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,audioEnabled:true,musicVolume:.28,sfxVolume:.45,mapTogglePosition:null,minimapPanelPosition:null,autoExploreButtonPosition:null,minimapPanelPosition:null,autoExploreButtonPosition:null,explorePartyHudCollapsed:false,exploreAutoMode:"off",exploreAutoMenuOpen:false,gauntletPartyCollapsed:false,tutorialSeen:{},tutorialDefeatsSeen:0,contextualGuide:createContextualGuideState(monsters.length),gmFloorUnlockMax:0},gameMaster:{claimedAt:null,floorUnlockMax:0},gacha:{firstTenUsed:false,tutorialFreeSummons:0,lastDailyKey:null,guerrilla:{salt:null,lastCycle:null}},notices:{readIds:[],dailyGift:{dayKey:null,claimedDayKey:null,claimedAt:null}},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0,combatPower:{highest:0,previous:0,updatedAt:null,history:[]}},serialCodes:{redeemed:{}},secretRooms:{run:null,activeRoom:null},abyssSkillTree:createAbyssSkillTreeState(),secondWorld:{randomEvents:{resolvedFloors:[],counts:{}},elites:{encountered:0,defeated:0,byAffix:{},bySpecies:{}}},floorBossChallenges:{discovered:{},encounters:{},fragments:{},victories:{},contracts:{},processedResults:{}},endgame:{processedSpecialResults:{},teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0},trials:{battle:1,loop:1,cleared:[],run:null,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastTriggeredFloor:0,records:{},fragments:{},craftCounts:{},craftedGear:[],processedFragmentResults:{},manualChallenges:{dailyKey:null,dailyAttempts:0,unlocks:{}},rescue:{post1000Encounters:0,consecutiveLosses:0,lastResult:null}}}};
  normalizeSerialCodeState(state);
  normalizeMagicCircleState(state);
  return state;
@@ -263,6 +266,9 @@ export class SaveService{
   s.settings.gauntletPartyCollapsed=Boolean(s.settings.gauntletPartyCollapsed);
   s.settings.tutorialSeen??={};
   s.settings.tutorialDefeatsSeen=Math.floor(finiteNumber(s.settings.tutorialDefeatsSeen,0,0,2));
+  const contextualGuideMissing=!s.settings.contextualGuide||typeof s.settings.contextualGuide!=="object";
+  const legacyGuideAdvanced=contextualGuideMissing&&(Number(s.player.maxFloor)>10||Boolean(s.settings.tutorialSeen?.[5]));
+  s.settings.contextualGuide=normalizeContextualGuide(s.settings.contextualGuide,{monsterCount:s.monsters.length,legacyAdvanced:legacyGuideAdvanced});
   s.settings.gmFloorUnlockMax=Math.floor(finiteNumber(s.settings.gmFloorUnlockMax,0,0,9998));
   s.gameMaster=s.gameMaster&&typeof s.gameMaster==="object"&&!Array.isArray(s.gameMaster)?s.gameMaster:{claimedAt:null,floorUnlockMax:0};
   s.gameMaster.floorUnlockMax=Math.floor(finiteNumber(s.gameMaster.floorUnlockMax??s.settings.gmFloorUnlockMax,0,0,9998));
@@ -283,6 +289,17 @@ export class SaveService{
   normalizeAbyssSkillTree(s);
   normalizeReturnRewards(s);
   normalizeEndgameState(s);
+  // build195 prepends 90 authored floor-boss courts. Preserve an in-progress
+  // build194 corridor by moving its old 1-22 court number behind that block.
+  if(from<57&&s.endgame?.trials?.run?.active){const trials=s.endgame.trials,shift=value=>Math.max(91,Math.min(112,(Math.floor(Number(value)||1))+90));trials.battle=shift(trials.battle);trials.run.battle=shift(trials.run.battle);trials.cleared=(trials.cleared??[]).map(shift);if(s.activeBattle?.specialBattleType==="gauntlet")s.activeBattle.specialTrialNumber=shift(s.activeBattle.specialTrialNumber)}
+  const floorBossChallenges=normalizeFloorBossChallengeState(s);
+  // Existing players have already met rulers recorded by old boss kills/rewards.
+  // Carry those encounters into the new challenge gate instead of forcing a
+  // second dungeon visit merely because the gate did not exist in that build.
+  if(from<57)for(const boss of FLOOR_BOSS_CATALOG){
+   const defeated=Number(s.player.bossKills?.[boss.floor]??0)>0||Boolean(s.player.bossRewards?.[boss.floor]);
+   if(defeated){floorBossChallenges.discovered[boss.id]=true;floorBossChallenges.encounters[boss.id]=Math.max(1,Number(floorBossChallenges.encounters[boss.id])||0)}
+  }
   normalizeSecondWorldEvents(s);
   normalizeEliteRecords(s);
   normalizeTenGodContact(s);
@@ -312,6 +329,10 @@ export class SaveService{
     for(const key of["hp","atk","def","spd"])m.ivs[key]=Math.min(94,m.ivs[key]);
     if(m.speciesId==="myth_rion")m.attribute="nature";
    }
+   if(m.floorBossCatalogId){
+    const floorBoss=floorBossDefinitionById(m.floorBossCatalogId);
+    if(floorBoss){m.visualSpeciesId=floorBoss.visualSpeciesId??floorBoss.speciesId;m.floorBossStatProfile={...floorBoss.stats};m.summonTier="神話";m.summonRarity="神話"}
+   }
    m.traitId??="steady";
    m.personalityId??="bold";
    m.colorId??="green";
@@ -320,6 +341,7 @@ export class SaveService{
    m.currentHp=m.currentHp==null?null:finiteNumber(m.currentHp,null,0,Number.MAX_SAFE_INTEGER);
    m.ailments=normalizePersistentAilments([m.ailments,m.statuses,m.status]);
    m.statuses=[];m.status=null;
+   if(typeof m.skillLoadoutInitialized!=="boolean")m.skillLoadoutInitialized=Boolean(Array.isArray(m.equippedSkills)&&m.equippedSkills.length);
    m.equippedSkills=Array.isArray(m.equippedSkills)&&m.equippedSkills.length
     ?Array.from({length:4},(_,index)=>m.equippedSkills[index]??null)
     :[];

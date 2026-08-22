@@ -92,8 +92,8 @@ export const NOTICE_DEFINITIONS=Object.freeze([
   icon:"📖",
   label:"ガイド",
   publishedAt:"2026-08-08",
-  title:"遊び方・序盤チュートリアル",
-  body:"1〜5階の説明をいつでも確認できます。",
+  title:"初回だけの実践ガイド",
+  body:"その場の操作を1つずつ案内します。設定から停止・再開・やり直しができます。",
   action:"tutorial"
  },
  {

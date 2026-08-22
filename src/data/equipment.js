@@ -190,11 +190,11 @@ export const EQUIPMENT_SLOT_ORDER=Object.freeze([
 ]);
 export const SLOT_UNLOCK_LEVEL={
  weaponRight:1,
- weaponLeft:100,
+ weaponLeft:1,
  armorBody:1,
- armorSupport:25,
+ armorSupport:1,
  accessoryNeck:1,
- accessoryFinger:50
+ accessoryFinger:1
 };
 export function equipmentSubslotLabel(id){return{weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"}[id]??id}
 export function compatibleSubslots(item){const fixed=item?.ruleOverrides?.subslot;if(fixed&&EQUIPMENT_SLOT_ORDER.includes(fixed))return[fixed];const preferred=inferredEquipmentSubslot(item,item?.slot);if(item.slot==="armor")return preferred==="armorSupport"?["armorSupport","armorBody"]:["armorBody","armorSupport"];if(item.slot==="accessory")return preferred==="accessoryFinger"?["accessoryFinger","accessoryNeck"]:["accessoryNeck","accessoryFinger"];if(item.handedness==="right")return["weaponRight"];if(item.handedness==="left")return["weaponLeft"];if(item.handedness==="twoHanded")return["weaponRight"];return["weaponRight","weaponLeft"]}

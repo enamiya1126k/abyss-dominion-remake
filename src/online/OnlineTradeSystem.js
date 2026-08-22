@@ -22,12 +22,13 @@ function equipmentLocation(state,id){for(const name of COLLECTIONS){const list=A
 function equipmentOwner(state,id){return(state.monsters??[]).find(monster=>Object.values(monster.equipment??{}).includes(id))??null}
 function currencyCount(state,key){if(key==="gold")return Math.max(0,Math.floor(Number(state.player?.gold)||0));if(key==="crystals")return Math.max(0,Math.floor(Number(state.player?.crystals)||0));if(key==="captureCrystals")return Math.max(0,Math.floor(Number(state.inventory?.captureCrystals)||0));return 0}
 function changeCurrency(state,key,delta){if(key==="gold")state.player.gold=Math.max(0,Math.floor(Number(state.player.gold)||0)+delta);else if(key==="crystals")state.player.crystals=Math.max(0,Math.floor(Number(state.player.crystals)||0)+delta);else if(key==="captureCrystals")state.inventory.captureCrystals=Math.max(0,Math.floor(Number(state.inventory.captureCrystals)||0)+delta);else throw new Error("交換通貨を復元できません")}
+function monsterTradeRarity(monster){return String(monster?.endgameFaction==="tenGod"?"十神":monster?.endgameFaction==="abyss"?"深淵":monster?.summonTier??monster?.summonRarity??monster?.rarity??"N")}
 
 export function buildOnlineTradeCatalog(state){
  const catalog=[],party=new Set(state.party??[]);
  for(const monster of state.monsters??[]){
   const inParty=party.has(monster.id),hasEquipment=Object.values(monster.equipment??{}).some(Boolean),unavailable=inParty||hasEquipment||monster.locked||monster.favorite,reason=inParty?"出撃編成中":hasEquipment?"装備中":monster.locked||monster.favorite?"ロック・お気に入り中":"";
-  catalog.push({ref:`monster:${monster.id}`,kind:"monster",name:String(monster.nickname||monster.name||"仲間"),rarity:`★${Math.max(1,Number(monster.stars)||1)}`,level:Math.max(1,Number(monster.level)||1),details:`+${Math.max(0,Number(monster.plus)||0)}${reason?`・${reason}`:""}`,locked:Boolean(monster.locked),favorite:Boolean(monster.favorite),unavailable,reason,maxAmount:1});
+  catalog.push({ref:`monster:${monster.id}`,kind:"monster",name:String(monster.nickname||monster.name||"仲間"),rarity:monsterTradeRarity(monster),level:Math.max(1,Number(monster.level)||1),details:`+${Math.max(0,Number(monster.plus)||0)}${reason?`・${reason}`:""}`,locked:Boolean(monster.locked),favorite:Boolean(monster.favorite),unavailable,reason,maxAmount:1});
  }
  for(const collection of COLLECTIONS)for(const item of state[collection]??[]){
   const owner=equipmentOwner(state,item.id),unavailable=Boolean(owner||item.locked||item.favorite),reason=owner?`${owner.nickname||owner.name||"仲間"}が装備中`:item.locked||item.favorite?"ロック・お気に入り中":"";
@@ -48,7 +49,7 @@ export function reserveOnlineTradeAsset(state,tradeId,ref,{amount=1,replace=fals
   if((state.party??[]).includes(assetId))return{ok:false,message:"出撃編成中の仲間は交換できません。編成から外してください"};
   if(Object.values(monster.equipment??{}).some(Boolean))return{ok:false,message:"装備中の品をすべて外してから交換してください"};
   if((state.monsters??[]).length<=1)return{ok:false,message:"最後の1体は交換できません"};
-  payload=clone(monster);name=String(monster.nickname||monster.name||"仲間");rarity=`★${Math.max(1,Number(monster.stars)||1)}`;level=Math.max(1,Number(monster.level)||1);details=`+${Math.max(0,Number(monster.plus)||0)}`;state.monsters.splice(index,1);
+  payload=clone(monster);name=String(monster.nickname||monster.name||"仲間");rarity=monsterTradeRarity(monster);level=Math.max(1,Number(monster.level)||1);details=`+${Math.max(0,Number(monster.plus)||0)}`;state.monsters.splice(index,1);
  }else if(kind==="equipment"){
   const found=equipmentLocation(state,assetId);if(!found)return{ok:false,message:"装備が見つかりません"};
   if(found.item.locked||found.item.favorite)return{ok:false,message:"ロック・お気に入りを解除してから交換してください"};

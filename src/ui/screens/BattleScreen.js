@@ -1,11 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.11.24-build188";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.11.24-build188";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.11.24-build188";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.11.24-build188";
-import{monsterVisual}from"../MonsterVisual.js?v=2.11.2-build166";
-import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.11.2-build166";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.2-build166";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.11.24-build188";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.11.30-build195";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.11.30-build195";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.11.0-build164";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.11.30-build195";
+import{monsterVisual}from"../MonsterVisual.js?v=2.11.0-build164";
+import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.11.0-build164";
+import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.0-build164";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.11.0-build164";
 
 function battleInteger(value){return Math.round(Number(value)||0).toLocaleString("ja-JP")}
 function renderTurnOrder(battle){
@@ -14,14 +14,21 @@ function renderTurnOrder(battle){
   return `<span class="${classes}" title="${entry.name}"><b>${entry.name}</b><small>速度 ${battleInteger(entry.spd)}</small></span>`;
  }).join("");
 }
-function growthText(unit){const stars=Math.max(1,Number(unit?.stars??unit?.sourceStars)||1),plus=Math.max(0,Number(unit?.plus??unit?.sourcePlus)||0);return`${stars<=5?"★".repeat(stars):`★${stars}`} ・ +${plus}`}
+function growthText(unit){const plus=Math.max(0,Number(unit?.plus??unit?.sourcePlus)||0);return`+${plus}`}
 const BATTLE_ROLE_LABELS={balanced:"万能型",burst:"高火力型",controller:"妨害型",support:"支援型",speed:"高速型",tank:"防御型",healer:"回復型",magic:"魔法型",physical:"物理型",debuffer:"弱体型",poison:"毒撃型",burner:"炎撃型"};
-const BATTLE_EFFECT_LABELS={atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",evasionDown:"回避↓",accuracyDown:"命中↓",healDown:"回復↓",reviveSeal:"蘇生封印",stun:"行動不能",vulnerable:"被ダメージ増加",taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",evasionUp:"回避↑",accuracyUp:"命中↑",critUp:"会心↑",guaranteedHit:"必中",guaranteedCritical:"確定会心",regen:"再生",lifeSteal:"吸収",magicToPhysical:"魔力→物理"};
+const BATTLE_EFFECT_LABELS={atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",evasionDown:"回避↓",accuracyDown:"命中↓",stun:"行動不能",vulnerable:"被ダメージ増加",taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",evasionUp:"回避↑",accuracyUp:"命中↑",regen:"再生",lifeSteal:"吸収",magicToPhysical:"魔力→物理"};
 function battleRoleLabel(role){return BATTLE_ROLE_LABELS[String(role??"balanced").toLowerCase()]??String(role??"万能型")}
 function battleEffectLabel(effect){return BATTLE_EFFECT_LABELS[effect?.kind]??effect?.name??String(effect?.kind??"効果")}
 function battleStatusLabel(status){const labels={poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖"};return labels[status?.id]??status?.name??statusLabel(status)}
 function remainingTurns(turns,persistent=false){const value=Math.max(0,Number(turns)||0);return value?` 残${value}`:persistent?"・持続":""}
 const INVINCIBLE_ALLIANCE_IDS=Object.freeze(["myth_enami","myth_rion","myth_yori","myth_hide"]);
+const COMBAT_RANK_POWER=Object.freeze({UR:4,LR:5,"神話":6,"深淵":7,"十神":8});
+function combatRank(unit,species={}){
+ const value=unit?.endgameFaction==="tenGod"||unit?.faction==="tenGod"?"十神":unit?.endgameFaction==="abyss"||unit?.faction==="abyss"?"深淵":unit?.summonTier??unit?.summonRarity??unit?.combatRarity??species.rarity??null;
+ return COMBAT_RANK_POWER[value]>=4?value:null;
+}
+function rankTone(rank){return({UR:"ur",LR:"lr","神話":"mythic","深淵":"abyss","十神":"ten-god"})[rank]??""}
+function rankBadge(rank){return rank?`<span class="combat-rank-badge rank-${rankTone(rank)}">${rank}</span>`:""}
 function invincibleAllianceActive(battle){const ids=new Set((battle.party??[]).filter(monster=>Number(monster.currentHp)>0).map(monster=>monster.speciesId));return INVINCIBLE_ALLIANCE_IDS.every(id=>ids.has(id))}
 function hpBar(battle,id,rate,label,tone){
  const normalized=Math.max(0,Math.min(100,Number(rate)||0)),trail=battle.hpTrails?.[id],elapsed=trail?Math.max(0,Date.now()-(Number(trail.startedAt)||0)):Infinity,duration=Math.max(1,Number(trail?.duration)||1400),from=Math.max(normalized,Number(trail?.from)||normalized),active=Boolean(trail&&elapsed<duration&&from>normalized);
@@ -34,17 +41,17 @@ function renderEnemies(battle,enemies,target){
  return enemies.map((enemy,index)=>{
   const statuses=enemyStatusesFor(battle,enemy.id),effects=enemyEffectsFor(battle,enemy.id);
   const statusHtml=`<div class="status-row enemy-status-row" data-status-detail="${enemy.id}" ${statuses.length||effects.length?"":'aria-hidden="true"'}>${statuses.map(s=>`<span class="status-chip ${s.id}">${battleStatusLabel(s)}${remainingTurns(s.turns)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
-  const badge=enemy.boss?'<span class="boss-badge">ボス</span>':enemy.elite?`<span class="elite-badge">${enemy.eliteAffixIcon??"🜲"} 強敵・${enemy.eliteAffixName??"変異"}</span>`:"";const danger="";
+  const floorBoss=Boolean(enemy.floorBossCatalogId),badge=enemy.boss?`<span class="boss-badge">${floorBoss?"階層ボス":"ボス"}</span>`:enemy.elite?`<span class="elite-badge">${enemy.eliteAffixIcon??"🜲"} 強敵・${enemy.eliteAffixName??"変異"}</span>`:"";const danger="";
   const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
   const line=index<2?"front-line":"rear-line";
-  const dead=enemy.hp<=0,element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",floorBossIdentity=enemy.floorBossDomain?`<small class="floor-boss-passive-chip">${enemy.floorBossPassive?.name??"固有能力"}</small>`:"";
-  return `<button id="enemy-${enemy.id}" ${dead?'disabled aria-hidden="true"':`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${enemy.boss?"boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${target?.id===enemy.id?"targeted":""}">
+  const dead=enemy.hp<=0,element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",rank=combatRank(enemy,battle.species?.[enemy.speciesId]),rankClass=rank?`combat-rank-unit rank-${rankTone(rank)}`:"";
+  return `<button id="enemy-${enemy.id}" ${dead?'disabled aria-hidden="true"':`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${enemy.boss?"boss-enemy":""} ${floorBoss?"floor-boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${rankClass} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
-   <span class="battle-unit-floating-name">${badge}<b>${enemy.name}</b></span>
+   <span class="battle-unit-floating-name">${badge}${rankBadge(rank)}<b>${enemy.name}</b></span>
    <div class="side-unit-sprite enemy-orb">${battle.enemyMagicCircleArt?.[enemy.id]??""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.hp<=0?"down":"idle",className:"battle-enemy-visual"})}</div>
    <div class="side-unit-card enemy-info">
     <div class="side-unit-name enemy-name">${danger}<small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
-    <div class="side-unit-intent enemy-intent"><span>${enemy.floorBossDomain?"階層固有領域":enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.floorBossDomain?.name??enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b>${floorBossIdentity}</div>
+    <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
     ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}`,"enemy-hp")}
     ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
     ${statusHtml}
@@ -59,10 +66,11 @@ function renderParty(battle,actor){
  const circle=battle.magicCircleProfiles?.[m.id]??null,circleName=circle?.name??"魔法陣なし",circleLevel=Math.max(0,Number(circle?.level)||0);
  const ailments=allyAilmentsFor(battle,m.id),effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" data-status-detail="${m.id}" ${ailments.length||effects.length?"":'aria-hidden="true"'}>${ailments.map(e=>`<span class="status-chip ${e.id}">${battleStatusLabel(e)}${remainingTurns(e.turns,true)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
   const hpRate=Math.max(0,Math.min(100,m.currentHp/Math.max(1,stats.hp)*100)),mpRate=Math.max(0,Math.min(100,m.currentMp/Math.max(1,mp)*100));
-  const line=index<2?"front-line":"rear-line",element=m.attribute??battle.species?.[m.speciesId]?.element??"neutral";
-  return `<button id="ally-${m.id}" data-battle-detail="${m.id}" style="--formation-index:${index};--unit-color:${colorValue(m)}" class="battle-unit combatant side-battle-unit formation-slot-${index+1} ${line} ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
+  const line=index<2?"front-line":"rear-line",element=m.attribute??battle.species?.[m.speciesId]?.element??"neutral",rank=combatRank(m,battle.species?.[m.speciesId]),rankClass=rank?`combat-rank-unit rank-${rankTone(rank)}`:"";
+  const formerFloorBoss=Boolean(m.floorBossCatalogId||m.floorBossId||m.obtainedMethod==="floorBossContract");
+  return `<button id="ally-${m.id}" data-battle-detail="${m.id}" style="--formation-index:${index};--unit-color:${colorValue(m)}" class="battle-unit combatant side-battle-unit formation-slot-${index+1} ${line} ${formerFloorBoss?"party-floor-boss":""} ${rankClass} ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
    <span class="active-turn-marker" aria-hidden="true">行動中</span>
-   <span class="battle-unit-floating-name"><b>${displayName(m)}</b></span>
+   <span class="battle-unit-floating-name">${rankBadge(rank)}<b>${displayName(m)}</b></span>
    <div class="side-unit-sprite unit-orb">${battle.magicCircleArt?.[m.id]??""}${monsterVisual(m,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual"})}</div>
    <div class="side-unit-card ally-info">
     <div class="side-unit-name unit-head"><small>Lv.${battleInteger(m.level)}</small><em class="battle-unit-growth">${growthText(m)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
@@ -115,7 +123,7 @@ function renderCommands(battle,actor,current,enemies,target,inventory,skills){
  else if(battle.auto)controls=`<div class="auto-command-wait"><span>${pixelIcon("crossed-swords")}</span><div><b>完全自動戦闘 進行中</b><small>戦場をタップ、または上の自動ボタンで手動操作へ</small></div></div>`;
  else if(battle.skillMenu)controls=renderSkills(battle,actor,skills);
  else if(battle.itemMenu)controls=renderItems(inventory);
- else{const blocked=Boolean(target&&(target.uncapturable||target.endgameBossId||["abyss","tenGod"].includes(target.faction)));controls=`<div class="command-grid"><button data-command="attack"><i>${pixelIcon("crossed-swords")}</i><span>たたかう</span></button><button data-command="guard"><i>${pixelIcon("equipment")}</i><span>ガード</span></button><button data-command="skill"><i>${pixelIcon("skills")}</i><span>スキル</span></button><button data-command="item"><i>${pixelIcon("growth")}</i><span>アイテム</span></button><button data-command="capture" ${blocked?'disabled aria-label="この敵は捕獲できません"':""}><i>${pixelIcon("capture")}</i><span>${blocked?"捕獲不可":"捕獲"}</span></button></div>`}
+ else{const blocked=Boolean(target&&(target.floorBossCatalogId||target.uncapturable||target.endgameBossId||["abyss","tenGod"].includes(target.faction)));controls=`<div class="command-grid"><button data-command="attack"><i>${pixelIcon("crossed-swords")}</i><span>たたかう</span></button><button data-command="guard"><i>${pixelIcon("equipment")}</i><span>ガード</span></button><button data-command="skill"><i>${pixelIcon("skills")}</i><span>スキル</span></button><button data-command="item"><i>${pixelIcon("growth")}</i><span>アイテム</span></button><button data-command="capture" ${blocked?'disabled aria-label="この敵は捕獲できません"':""}><i>${pixelIcon("capture")}</i><span>${blocked?"捕獲不可":"捕獲"}</span></button></div>`}
  return `<div class="battle-command ${battle.auto?"is-auto":""}"><div class="battle-command-head spread"><h2>${title}</h2><span class="muted">${pixelIcon("capture")} 捕獲結晶 ${inventory.captureCrystals}</span></div>${targetHelp}${controls}</div>`;
 }
 

@@ -1,5 +1,5 @@
 export const SAVE_KEY="abyss-dominion-remake-v001";
-export const SAVE_SCHEMA_VERSION=56;
+export const SAVE_SCHEMA_VERSION=58;
 export const MAX_PARTY_SIZE=4;
 export const PUBLIC_MAX_LEVEL=100;
 export const TRUE_MAX_LEVEL=10000;
@@ -28,5 +28,4 @@ export function isContentUnlocked(stateOrFloor,productionFloor){
   const floor=typeof stateOrFloor==="number"?stateOrFloor:Number(stateOrFloor?.player?.maxFloor)||0;
   return floor>=contentUnlockFloor(productionFloor);
 }
-// Regression history only: APP_VERSION="2.11.13" / APP_VERSION="2.11.12" / APP_VERSION="2.11.9" / APP_VERSION="2.11.8" / APP_VERSION="2.11.7" / APP_VERSION="2.11.6" / APP_VERSION="2.11.5" / APP_VERSION="2.11.4" / APP_VERSION="2.11.3" / APP_VERSION="2.11.2" / APP_VERSION="2.11.1" / APP_VERSION="2.11.0"
-export const APP_VERSION="2.11.24";
+export const APP_VERSION="2.11.34";

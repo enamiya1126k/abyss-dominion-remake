@@ -1,10 +1,10 @@
-import{createMonster,calculatedStats}from"../models/Monster.js?v=2.11.24-build188";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.11.24-build188";
-import{SPECIES}from"../data/species.js?v=2.11.2-build166";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.11.24-build188";
-import{MONSTER_STORAGE_CAP}from"./config.js?v=2.11.24-build188";
-import{createEquipment}from"../models/Equipment.js?v=2.11.2-build166";
-import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.11.2-build166";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=2.11.30-build195";
+import{allLearnedSkills,maxMp,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=2.11.30-build195";
+import{SPECIES}from"../data/species.js?v=2.11.0-build164";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.11.0-build164";
+import{MONSTER_STORAGE_CAP}from"./config.js?v=2.11.0-build164";
+import{createEquipment}from"../models/Equipment.js?v=2.11.0-build164";
+import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.11.0-build164";
 
 const DEVICE_LEDGER_KEY="abyss-dominion-serial-ledger-v1";
 
@@ -111,7 +111,7 @@ function prepareSkillMastery(monster,level){
   monster.equippedSkills=skills.map(skill=>skill.id);
   monster.skillProgress={};
   for(const skill of skills){
-    monster.skillProgress[skill.id]={level,exp:0,uses:0,need:level>=10?0:25*level};
+    monster.skillProgress[skill.id]={level,exp:0,uses:0,need:skillMasteryNeedForLevel(level)};
   }
 }
 
@@ -276,7 +276,7 @@ export function applySerialReward(state,rewardId){
     icon:info.icon,
     monster,
     equipment,
-    message:message??(monster?`${monster.nickname}（${monster.summonTier} / Lv.${monster.level} / ★${monster.stars}）が仲間になりました。`:"報酬を受け取りました。")
+    message:message??(monster?`${monster.nickname}（${monster.summonTier} / Lv.${monster.level} / +${monster.plus??0}）が仲間になりました。`:"報酬を受け取りました。")
   };
 }
 

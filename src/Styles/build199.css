@@ -1,0 +1,56 @@
+/* build199: contextual, action-first onboarding */
+.context-guide-target{
+ position:relative!important;
+ z-index:10002!important;
+ isolation:isolate;
+ animation:context-guide-breathe 1.9s ease-in-out infinite!important;
+ filter:drop-shadow(0 0 8px rgba(197,142,255,.8)) drop-shadow(0 0 18px rgba(96,203,255,.45))!important;
+}
+.context-guide-target::after{
+ content:"";
+ position:absolute;
+ inset:-7px;
+ border:2px solid rgba(223,188,255,.92);
+ border-radius:inherit;
+ box-shadow:0 0 0 3px rgba(132,79,188,.2),0 0 24px rgba(194,137,255,.7);
+ pointer-events:none;
+ animation:context-guide-ring 1.9s ease-in-out infinite;
+}
+canvas.context-guide-target::after{display:none}
+@keyframes context-guide-breathe{0%,100%{filter:drop-shadow(0 0 7px rgba(197,142,255,.58)) drop-shadow(0 0 13px rgba(96,203,255,.3))}50%{filter:drop-shadow(0 0 12px rgba(220,178,255,.95)) drop-shadow(0 0 24px rgba(96,203,255,.62))}}
+@keyframes context-guide-ring{0%,100%{opacity:.48;transform:scale(.98)}50%{opacity:1;transform:scale(1.025)}}
+.context-guide{
+ position:fixed;
+ left:max(12px,env(safe-area-inset-left));
+ right:max(12px,env(safe-area-inset-right));
+ bottom:calc(18px + env(safe-area-inset-bottom));
+ z-index:10005;
+ margin:auto;
+ max-width:520px;
+ color:#f9f3ff;
+ background:linear-gradient(145deg,rgba(16,11,24,.97),rgba(39,20,55,.97));
+ border:1px solid rgba(219,179,255,.72);
+ border-radius:18px;
+ box-shadow:0 18px 55px rgba(0,0,0,.6),inset 0 1px rgba(255,255,255,.12);
+ padding:13px 44px 13px 15px;
+ pointer-events:auto;
+ animation:context-guide-in .2s ease-out;
+}
+.context-guide.place-top{top:calc(74px + env(safe-area-inset-top));bottom:auto}
+.context-guide.place-middle{top:50%;bottom:auto;transform:translateY(-50%)}
+.context-guide small{display:block;color:#cba7ed;font-size:10px;font-weight:800;letter-spacing:.12em}
+.context-guide b{display:block;margin-top:2px;color:#fff;font-size:15px}
+.context-guide p{margin:5px 0 0;color:#e8def1;font-size:13px;line-height:1.55}
+.context-guide .context-guide-close{position:absolute;right:9px;top:8px;width:30px;height:30px;border:0;background:transparent;color:#cbbfd3;font-size:18px}
+.context-guide .context-guide-confirm{width:100%;margin-top:10px;padding:10px 12px;border:1px solid #d7a9ff;border-radius:11px;background:linear-gradient(180deg,#7743a0,#4d286b);color:#fff;font-weight:800}
+.context-guide .context-guide-progress{position:absolute;right:13px;bottom:9px;color:#9d8ba8;font-size:9px}
+@keyframes context-guide-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.tutorial-world-marker{position:absolute;z-index:15;width:34px;height:34px;border:2px solid #e3bdff;border-radius:50%;pointer-events:none;box-shadow:0 0 18px #a45cff,0 0 34px #50d8ff;animation:context-world-pulse 1.5s ease-in-out infinite}
+.tutorial-world-marker::after{content:"ここ";position:absolute;left:50%;bottom:100%;transform:translate(-50%,-5px);padding:2px 6px;border-radius:7px;background:#2f1547;color:#fff;font-size:10px;white-space:nowrap}
+@keyframes context-world-pulse{0%,100%{transform:scale(.85);opacity:.65}50%{transform:scale(1.18);opacity:1}}
+.context-guide-book{display:grid;gap:12px}
+.context-guide-summary{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;padding:12px;border:1px solid #6b4e7c;border-radius:14px;background:#17101f}
+.context-guide-summary strong{font-size:26px;color:#e8c5ff}.context-guide-summary span{display:block;height:6px;margin-top:5px;border-radius:99px;background:#2d2134;overflow:hidden}.context-guide-summary span i{display:block;height:100%;background:linear-gradient(90deg,#8250ad,#55c9eb)}
+.context-guide-book-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.context-guide-book-actions button{padding:10px;border:1px solid #7c5b8e;border-radius:10px;background:#24162e;color:#fff}.context-guide-book-actions button.primary{background:#5c347a;border-color:#c596e8}
+.context-guide-step-list{display:grid;gap:4px;max-height:46vh;overflow:auto}.context-guide-step-list p{display:grid;grid-template-columns:58px 1fr auto;gap:8px;align-items:center;margin:0;padding:8px;border-bottom:1px solid #30243a;font-size:12px}.context-guide-step-list p small{color:#a890b6}.context-guide-step-list p em{color:#8e7d99}.context-guide-step-list p.done em{color:#7ee1b2}
+@media(prefers-reduced-motion:reduce){.context-guide-target,.context-guide-target::after,.tutorial-world-marker{animation:none!important}}

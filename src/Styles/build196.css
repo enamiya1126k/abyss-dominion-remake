@@ -1,0 +1,80 @@
+/* build196: right-facing source sprites and face-to-face battle presentation. */
+
+/*
+ * Every authored monster attack frame points right. Keep the original files
+ * untouched and mirror only the combat-side visual that needs to face left.
+ * Names, gauges, rank badges, magic circles, and screen effects stay outside
+ * these transforms.
+ */
+.side-battle-v2 .battle-ally-visual,
+.side-battle-v2 .battle-enemy-visual{
+  transform-origin:50% 100%!important;
+}
+.side-battle-v2 .battle-ally-visual{
+  transform:scaleX(1)!important;
+}
+.side-battle-v2 .battle-enemy-visual{
+  transform:scaleX(-1)!important;
+}
+.side-battle-v2 .battle-ally-visual img,
+.side-battle-v2 .battle-enemy-visual img{
+  object-position:center bottom!important;
+  transform-origin:50% 100%!important;
+}
+.side-battle-v2 .side-battle-unit,
+.side-battle-v2 .side-unit-sprite{
+  transform-origin:center bottom!important;
+}
+
+/* Party is left and enemies are right in the solo battlefield. */
+.side-battle-v2 .battle-unit.fx-lunge{
+  animation-name:build196AllyLunge!important;
+}
+.side-battle-v2 .enemy-combatant.fx-lunge{
+  animation-name:build196EnemyLunge!important;
+}
+.side-battle-v2 .battle-unit.fx-skill-lunge{
+  animation-name:build196AllySkillLunge!important;
+}
+.side-battle-v2 .enemy-combatant.fx-skill-lunge{
+  animation-name:build196EnemySkillLunge!important;
+}
+@keyframes build196AllyLunge{
+  0%,100%{transform:translateX(0)}
+  45%{transform:translateX(22px) scale(1.04)}
+}
+@keyframes build196EnemyLunge{
+  0%,100%{transform:translateX(0)}
+  45%{transform:translateX(-22px) scale(1.04)}
+}
+@keyframes build196AllySkillLunge{
+  0%,100%{transform:translateX(0);filter:none}
+  40%{transform:translateX(30px) scale(1.07);filter:drop-shadow(0 0 16px #ffe272)}
+}
+@keyframes build196EnemySkillLunge{
+  0%,100%{transform:translateX(0);filter:none}
+  40%{transform:translateX(-30px) scale(1.07);filter:drop-shadow(0 0 16px #ff7488)}
+}
+
+/* Online v3 places enemies left and allies right, so its facing is reversed. */
+.online-v3-battlefield .online-v3-enemy-side .monster-visual,
+.online-v3-battlefield .online-v3-enemy-side .online-v3-raid-art,
+.online-v3-battlefield .online-v3-ally-side .monster-visual{
+  transform-origin:50% 100%!important;
+}
+.online-v3-battlefield .online-v3-enemy-side .monster-visual,
+.online-v3-battlefield .online-v3-enemy-side .online-v3-raid-art{
+  transform:scaleX(1)!important;
+}
+.online-v3-battlefield .online-v3-ally-side .monster-visual{
+  transform:scaleX(-1)!important;
+}
+
+@media(prefers-reduced-motion:reduce){
+  .side-battle-v2 .battle-unit.fx-lunge,
+  .side-battle-v2 .enemy-combatant.fx-lunge,
+  .side-battle-v2 .battle-unit.fx-skill-lunge,
+  .side-battle-v2 .enemy-combatant.fx-skill-lunge{
+    animation:none!important;
+  }
+}

@@ -1,6 +1,7 @@
 import{EXPANDED_SPECIES}from"./expandedSpecies.js?v=2.11.2-build166";
 import{ADDITIONAL_SPECIES}from"./additionalSpecies.js?v=2.11.2-build166";
 import{MYTHIC_SERIAL_SPECIES}from"./mythicSerialSpecies.js?v=2.11.2-build166";
+import{BUILD198_SPECIES}from"./build198Species.js?v=2.11.33-build198";
 import{applyMonsterNameOverride}from"./monsterNameOverrides.js?v=2.11.2-build166";
 import{canonicalAttribute}from"./attributes.js?v=2.11.2-build166";
 
@@ -67,7 +68,7 @@ function highRarityStrategicIdentity(species){
  base.evasion=Math.min(40,Math.max(Number(base.evasion)||0,evasion));base.accuracy=Math.min(135,Math.max(Number(base.accuracy)||100,accuracy));
  return{...species,baseStats:base,strategicIdentity:{kind,label,evasion:base.evasion,accuracy:base.accuracy}};
 }
-const ALL_SPECIES={...BASE_SPECIES,...EXPANDED_SPECIES,...ADDITIONAL_SPECIES,...MYTHIC_SERIAL_SPECIES};
+const ALL_SPECIES={...BASE_SPECIES,...EXPANDED_SPECIES,...ADDITIONAL_SPECIES,...MYTHIC_SERIAL_SPECIES,...BUILD198_SPECIES};
 export const SPECIES=Object.freeze(Object.fromEntries(
   Object.entries(ALL_SPECIES).map(([id,species])=>[id,applyMonsterNameOverride(highRarityStrategicIdentity({...species,element:canonicalAttribute(species.element,id)}))])
 ));

@@ -1,13 +1,13 @@
-import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.11.2-build166";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.11.24-build188";
-import{allLearnedSkills,maxMp}from"../battle/SkillSystem.js?v=2.11.24-build188";
-import{SPECIES}from"../data/species.js?v=2.11.2-build166";
-import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.11.2-build166";
-import{equipmentStatLabel}from"../data/equipment.js?v=2.11.2-build166";
-import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.11.2-build166";
-import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.11.2-build166";
-import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.11.24-build188";
-import{MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.11.24-build188";
+import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.11.0-build164";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.11.30-build195";
+import{allLearnedSkills,maxMp,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=2.11.30-build195";
+import{SPECIES}from"../data/species.js?v=2.11.0-build164";
+import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.11.0-build164";
+import{equipmentStatLabel}from"../data/equipment.js?v=2.11.0-build164";
+import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.11.0-build164";
+import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.11.0-build164";
+import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.11.0-build164";
+import{MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.11.0-build164";
 
 export const SECRET_ROOM_CHANCE=.09;
 export const CASINO_CRYSTAL_COST=premiumCrystalCost(10);
@@ -108,7 +108,7 @@ function applyMarketSkillPackage(monster,grade,random=Math.random){
  if(!["surge","jackpot"].includes(grade))return;
  const strongest=allLearnedSkills(monster).slice(-4),minimum=grade==="jackpot"?10:5+Math.floor(random()*4);
  monster.equippedSkills=strongest.map(skill=>skill.id);monster.skillProgress={};
- for(const skill of strongest)monster.skillProgress[skill.id]={level:minimum,exp:0,uses:0,need:minimum>=10?0:25*minimum};
+ for(const skill of strongest)monster.skillProgress[skill.id]={level:minimum,exp:0,uses:0,need:skillMasteryNeedForLevel(minimum)};
  monster.marketSkillGrade=grade==="jackpot"?"全スキル伝説級":"熟練スキル構成";
 }
 function maybeMysteryOffer(offer,random=Math.random){

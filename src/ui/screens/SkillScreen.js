@@ -1,8 +1,8 @@
-import{SPECIES}from"../../data/species.js?v=2.11.2-build166";
-import{displayName}from"../../models/Monster.js?v=2.11.24-build188";
-import{allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=2.11.24-build188";
-import{monsterVisual}from"../MonsterVisual.js?v=2.11.2-build166";
-import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.11.2-build166";
+import{SPECIES}from"../../data/species.js?v=2.11.0-build164";
+import{displayName}from"../../models/Monster.js?v=2.11.30-build195";
+import{allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=2.11.30-build195";
+import{monsterVisual}from"../MonsterVisual.js?v=2.11.0-build164";
+import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.11.0-build164";
 
 const ROLE_LABELS={
  tank:"前衛・守護",guard:"前衛・守護",defense:"前衛・守護",
@@ -17,11 +17,14 @@ function skillSlot(monster,skill,index){
   <strong>SLOT ${index+1}</strong><h3>＋ 未設定</h3><p>タップして選択</p>
  </button>`;
  const progress=skillProgressFor(monster,skill.id);
+ const masterySteps=Math.max(0,progress.level-1),masteryRate=progress.need?Math.min(100,progress.exp/Math.max(1,progress.need)*100):100,masteryExp=Number(progress.exp.toFixed?.(2)??progress.exp).toLocaleString();
  return`<button type="button" class="skill-slot-card compact filled" data-skill-slot="${index}" data-skill-id="${skill.id}">
   <span class="skill-slot-heading"><strong>SLOT ${index+1}</strong><b>熟練Lv.${progress.level}</b></span>
   <h3>${skill.name}</h3>
   <p>${skill.tag??skill.type}・${skillElementLabel(skill)}属性・${skill.target??"敵単体"}</p>
   <p class="skill-concrete-summary">${skillEffectSummary(skill," / ")}</p>
+  <span class="skill-mastery-summary">威力・回復 +${masterySteps*2}% / 状態成功 +${masterySteps}% / MP消費 −${masterySteps}%</span>
+  <span class="skill-mastery-meter"><i style="width:${masteryRate}%"></i><small>${progress.need?`${masteryExp} / ${progress.need.toLocaleString()} EXP`:"MASTER"}</small></span>
   <span class="skill-slot-details"><i>MP ${effectiveSkillMpCost(monster,skill)}</i><i>CT ${skill.cooldown??0}</i></span>
   <em>詳細・変更 ›</em>
  </button>`;
@@ -55,7 +58,7 @@ export function SkillScreen(state,selectedId){
     <div class="spread"><h2>戦闘に持ち込む4スキル</h2><small>各枠をタップ</small></div>
     <div class="equipped-skill-grid">${slots}</div>
    </section>
-   <p class="skill-compact-help">未習得スキルは一覧に混ぜず、各枠の選択画面には習得済みだけを表示します。</p>
+   <p class="skill-compact-help">スキル使用1回で熟練EXPを1獲得。熟練Lvごとに威力・回復・障壁+2%、状態成功+1%、MP消費-1%（Lv.10上限）。既存の熟練Lv・EXPはそのまま引き継ぎます。</p>
   </div>
   ${bottomNav("skills")}
  </section>`;

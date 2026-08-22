@@ -1,24 +1,24 @@
-import{SPECIES}from"../../data/species.js?v=2.11.2-build166";
-import{orderedMonsterSpecies}from"../../data/monsterCatalog.js?v=2.11.2-build166";
-import{monsterVisual}from"../MonsterVisual.js?v=2.11.2-build166";
-import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.11.2-build166";
-import{MONSTER_STORAGE_CAP}from"../../core/config.js?v=2.11.24-build188";
-import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.11.24-build188";
+import{SPECIES}from"../../data/species.js?v=2.11.0-build164";
+import{orderedMonsterSpecies}from"../../data/monsterCatalog.js?v=2.11.0-build164";
+import{monsterVisual}from"../MonsterVisual.js?v=2.11.0-build164";
+import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.11.0-build164";
+import{MONSTER_STORAGE_CAP}from"../../core/config.js?v=2.11.0-build164";
+import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.11.0-build164";
 
 const RARITY_VALUE={N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9};
 function safe(value){return String(value??"").replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
 
 function speciesCard(species,index,owned,state){
- const count=owned.length,highest=count?Math.max(...owned.map(monster=>monster.level??1)):0,stars=count?Math.max(...owned.map(monster=>monster.stars??1)):0,seen=count>0;
+ const count=owned.length,highest=count?Math.max(...owned.map(monster=>monster.level??1)):0,seen=count>0;
  const materialFor=target=>owned.filter(monster=>monster.id!==target.id&&!state.party.includes(monster.id)&&!monster.favorite&&!monster.locked).length;
- const materialCount=seen?Math.max(...owned.map(materialFor)):0,ready=seen&&materialCount>=2,starText=stars<=6?"★".repeat(stars):`★${stars}`;
+ const materialCount=seen?Math.max(...owned.map(materialFor)):0,ready=seen&&materialCount>=2;
  return`<button type="button" class="monster-species-card rarity-${species.rarity} ${seen?"owned":"unknown"} ${ready?"combine-ready":""}" ${seen?`data-monster-species="${species.id}"`:"disabled"} data-species-search="${safe(`${species.name} ${species.race??""} ${species.rarity} ${index+1}`.toLowerCase())}">
   <span class="monster-species-number">No.${String(index+1).padStart(3,"0")}</span>
   ${ready?'<span class="monster-combine-ready-badge">合成可能</span>':""}
   <span class="monster-species-art">${seen?monsterVisual(species.visualId??species.id,species.emoji??"👹",{className:"monster-species-visual"}):"<i>？</i>"}</span>
   <b>${seen?species.name:"？？？？"}</b>
   <small>${seen?`${species.rarity}・${species.element??"無"} / 最高Lv.${highest}`:"未所持"}</small>
-  <strong>${seen?`所持 ${count}体｜旧★記録 ${starText}（補正なし）`:"0体"}</strong>
+  <strong>${seen?`所持 ${count}体｜合成素材 ${materialCount}体`:"0体"}</strong>
  </button>`;
 }
 

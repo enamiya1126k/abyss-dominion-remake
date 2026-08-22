@@ -1,8 +1,8 @@
-import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=2.11.24-build188";
-import{PERSONALITIES}from"../../data/personalities.js?v=2.11.2-build166";
-import{SPECIES}from"../../data/species.js?v=2.11.2-build166";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.24-build188";
-import{monsterVisual}from"../MonsterVisual.js?v=2.11.2-build166";
+import{displayName,rankName,colorValue,calculatedStats}from"../../models/Monster.js?v=2.11.0-build164";
+import{PERSONALITIES}from"../../data/personalities.js?v=2.11.0-build164";
+import{SPECIES}from"../../data/species.js?v=2.11.0-build164";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.0-build164";
+import{monsterVisual}from"../MonsterVisual.js?v=2.11.0-build164";
 
 export function MonsterCard(monster,inParty=false,{editing=false,selected=false}={}){
   const stats=calculatedStats(monster),personality=PERSONALITIES[monster.personalityId],species=SPECIES[monster.speciesId];
@@ -13,7 +13,6 @@ export function MonsterCard(monster,inParty=false,{editing=false,selected=false}
     <div>
       <div class="monster-name">${monster.favorite?"★ ":""}${monster.locked?"🔒 ":""}${displayName(monster)}</div>
       <div class="subline">${rankName(monster)} / Lv.${monster.level} +${monster.plus} / ⚔️戦力 ${formatCombatPower(monsterCombatPower(monster))}</div>
-      <div class="stars" title="旧セーブ互換の取得記録・能力補正なし">${monster.stars<=6?"★".repeat(monster.stars):`★${monster.stars}`}</div>
       <div class="subline"><span class="badge">${personality.name}</span> ❤️${monster.affection??0}　HP ${stats.hp} / ATK ${stats.atk} / DEF ${stats.def} / SPD ${stats.spd}</div>
     </div>
     ${editing?"":`<button data-monster-id="${monster.id}">詳細</button>`}

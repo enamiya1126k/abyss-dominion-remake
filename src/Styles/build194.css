@@ -1,0 +1,104 @@
+/* build194: final balance integration and floor-boss presentation. */
+
+/* A normal floor ruler uses a 512px source sprite and reads at roughly three
+   times the size of a roaming enemy without overflowing the iPhone arena. */
+.battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .side-battle-unit{
+ width:100%!important;
+ height:92%!important;
+}
+.battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .side-unit-sprite,
+.battle-screen.side-battle-v2 .floor-boss-enemy .side-unit-sprite{
+ width:clamp(176px,50vw,260px)!important;
+ height:clamp(176px,50vw,260px)!important;
+ bottom:50px!important;
+}
+.battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .battle-unit-floating-name,
+.battle-screen.side-battle-v2 .floor-boss-enemy .battle-unit-floating-name{
+ bottom:clamp(205px,55vw,282px)!important;
+ max-width:min(82vw,300px)!important;
+ padding:3px 7px!important;
+ border:1px solid #ca8cff88;
+ border-radius:4px;
+ background:#110716d9;
+ font-size:.5rem!important;
+ box-shadow:0 0 18px #8c25d16b;
+}
+.battle-screen.side-battle-v2 .floor-boss-enemy .boss-badge{
+ padding:2px 5px!important;
+ background:linear-gradient(180deg,#b64cff,#5f138a)!important;
+ color:#fff!important;
+ letter-spacing:.08em;
+}
+.battle-screen.side-battle-v2 .floor-boss-enemy .side-unit-sprite{
+ filter:drop-shadow(0 8px 7px #000e) drop-shadow(0 0 14px #8f2bc477)!important;
+}
+
+/* Forward-compatible presentation for a floor ruler that later joins the
+   player's roster.  Its data marker is retained by contract/capture systems. */
+.battle-screen.side-battle-v2 .party-floor-boss .side-unit-sprite{
+ width:clamp(96px,28vw,150px)!important;
+ height:clamp(96px,28vw,150px)!important;
+}
+.battle-screen.side-battle-v2 .party-floor-boss .battle-unit-floating-name{
+ bottom:clamp(130px,34vw,176px)!important;
+}
+
+.skill-slot-card .skill-mastery-summary{
+ display:block;
+ margin-top:5px;
+ color:#d9b8ed;
+ font-size:.55rem;
+ line-height:1.4;
+}
+.skill-slot-card .skill-mastery-meter{
+ position:relative;
+ height:15px;
+ margin-top:5px;
+ overflow:hidden;
+ border:1px solid #6e4b78;
+ border-radius:999px;
+ background:#09070e;
+}
+.skill-slot-card .skill-mastery-meter>i{
+ position:absolute;
+ inset:0 auto 0 0;
+ background:linear-gradient(90deg,#6f2e8f,#d1a7e8);
+ box-shadow:0 0 10px #a84cd988;
+}
+.skill-slot-card .skill-mastery-meter>small{
+ position:relative;
+ z-index:1;
+ display:block;
+ color:#fff;
+ font-size:.48rem;
+ font-weight:900;
+ line-height:13px;
+ text-align:center;
+ text-shadow:0 1px 2px #000;
+}
+.boss-reward-grid button small{overflow-wrap:anywhere}
+
+@media(max-width:390px){
+ .battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .side-unit-sprite,
+ .battle-screen.side-battle-v2 .floor-boss-enemy .side-unit-sprite{
+  width:clamp(168px,49vw,202px)!important;
+  height:clamp(168px,49vw,202px)!important;
+ }
+ .battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .battle-unit-floating-name,
+ .battle-screen.side-battle-v2 .floor-boss-enemy .battle-unit-floating-name{
+  bottom:clamp(197px,53vw,222px)!important;
+ }
+}
+
+@media(max-height:720px){
+ .battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .side-unit-sprite,
+ .battle-screen.side-battle-v2 .floor-boss-enemy .side-unit-sprite{
+  width:clamp(150px,43vw,190px)!important;
+  height:clamp(150px,43vw,190px)!important;
+  bottom:43px!important;
+ }
+ .battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .battle-unit-floating-name,
+ .battle-screen.side-battle-v2 .floor-boss-enemy .battle-unit-floating-name{
+  bottom:clamp(176px,47vw,207px)!important;
+ }
+}

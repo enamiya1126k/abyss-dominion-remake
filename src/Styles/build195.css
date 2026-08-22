@@ -1,0 +1,67 @@
+/* build195: rank identity, boss fragment gate, and compact skill selection. */
+
+.side-battle-v2 .combat-rank-badge{
+ display:inline-flex;align-items:center;justify-content:center;min-width:25px;padding:2px 5px;border:1px solid currentColor;border-radius:999px;background:#08070ddb;font-size:.27rem!important;font-weight:950;line-height:1;letter-spacing:.04em;text-shadow:0 1px 2px #000;box-shadow:inset 0 0 7px currentColor,0 0 8px currentColor;
+}
+.side-battle-v2 .combat-rank-badge.rank-ur{color:#ff93e3;background:#33122fde}
+.side-battle-v2 .combat-rank-badge.rank-lr{color:#f7cb68;background:#331a32e8}
+.side-battle-v2 .combat-rank-badge.rank-mythic{color:#ff9d67;background:#3a1711e8}
+.side-battle-v2 .combat-rank-badge.rank-abyss{color:#ff628f;background:#23071ce8}
+.side-battle-v2 .combat-rank-badge.rank-ten-god{color:#fff3a8;background:#392c09e8}
+.side-battle-v2 .combat-rank-unit .side-unit-sprite{position:relative}
+.side-battle-v2 .combat-rank-unit.rank-ur .side-unit-sprite{filter:drop-shadow(0 0 7px #f36bd5) drop-shadow(0 0 13px #7255ff88)!important}
+.side-battle-v2 .combat-rank-unit.rank-lr .side-unit-sprite{filter:drop-shadow(0 0 8px #ffcc62) drop-shadow(0 0 16px #e54dba99)!important}
+.side-battle-v2 .combat-rank-unit.rank-mythic .side-unit-sprite{filter:drop-shadow(0 0 9px #ff8f62) drop-shadow(0 0 18px #ffd36b99)!important}
+.side-battle-v2 .combat-rank-unit.rank-abyss .side-unit-sprite{filter:drop-shadow(0 0 10px #ff406e) drop-shadow(0 0 20px #7d20baaa)!important}
+.side-battle-v2 .combat-rank-unit.rank-ten-god .side-unit-sprite{filter:drop-shadow(0 0 10px #fff4ac) drop-shadow(0 0 22px #ffd951bb)!important}
+.side-battle-v2 .floor-boss-enemy.combat-rank-unit .side-unit-sprite{filter:drop-shadow(0 8px 7px #000e) drop-shadow(0 0 13px currentColor) drop-shadow(0 0 22px #8f2bc477)!important}
+
+.skill-reserve-modal-v2{background:#020208e8!important;backdrop-filter:blur(7px)}
+.skill-reserve-modal-v2>.game-modal-card{width:min(95vw,620px)!important;height:min(90dvh,760px)!important;max-height:90dvh!important;display:grid!important;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden!important;padding:10px!important;border:9px solid transparent!important;border-image:var(--alpha115-frame) 44 fill / 9px!important;background:radial-gradient(circle at 50% 0,#68417625,transparent 35%),#08080c!important}
+.skill-reserve-picker-modal.v2{min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr);gap:7px;overflow:hidden}
+.skill-reserve-tools{position:sticky;top:0;z-index:3;display:grid;gap:6px;padding:2px;background:#08080cf2}
+.skill-reserve-tools input{width:100%;min-height:39px;padding:7px 10px;border:1px solid #72527c;border-radius:5px;background:#0b0710;color:#fff;font-size:.68rem}
+.skill-reserve-tools>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.skill-reserve-tools select{min-width:0;min-height:34px;padding:4px 5px;border:1px solid #5a4662;background:#0c0910;color:#ded2e1;font-size:.52rem}
+.skill-reserve-picker-modal.v2 [data-skill-reserve-list]{min-height:0;display:grid;align-content:start;gap:5px;overflow-y:auto;overscroll-behavior:contain;padding:1px 2px 18px}
+.skill-reserve-row-v2{position:relative;width:100%;min-height:66px;display:grid;grid-template-columns:58px minmax(0,1fr);align-items:center;gap:8px;padding:5px 8px;border:1px solid #58445e!important;border-radius:3px!important;background:linear-gradient(90deg,#09080c,#100b14)!important;color:#eee8df!important;text-align:left;box-shadow:inset 0 0 15px #000}
+.skill-reserve-row-v2:active{transform:scale(.988);border-color:#e1bd67!important}
+.skill-reserve-portrait{width:54px;height:54px;display:grid;place-items:center;border:1px solid #493a50;background:#050408;overflow:hidden}
+.skill-reserve-monster-visual{width:51px!important;height:51px!important}
+.skill-reserve-row-v2>div{min-width:0;display:grid;gap:3px}
+.skill-reserve-row-v2>div>span{min-width:0;display:flex;align-items:center;gap:5px}
+.skill-reserve-row-v2 b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#f2eadc;font-size:.7rem}
+.skill-reserve-row-v2 i{color:#e6bd63;font-size:.48rem;font-style:normal}
+.skill-reserve-row-v2 small{display:flex;align-items:center;gap:5px;color:#b9adbd;font-size:.45rem}
+.skill-reserve-row-v2 u{color:#b8afb9;font-size:.48rem;text-decoration:none}
+.reserve-rank-badge{padding:2px 5px;border:1px solid #75657b;border-radius:99px;color:#d6cdd8;font-style:normal;font-weight:900}
+.reserve-rank-badge.rank-ur{color:#ff91df;border-color:#dc62c5;box-shadow:0 0 7px #e65ed455}
+.reserve-rank-badge.rank-lr{color:#f9ce6f;border-color:#e4ad43;box-shadow:0 0 7px #f3c95b55}
+.reserve-rank-badge.rank-mythic{color:#ff9d71;border-color:#ef8354;box-shadow:0 0 8px #ef835466}
+.reserve-rank-badge.rank-abyss{color:#ff668d;border-color:#e83970;box-shadow:0 0 9px #9e2bd688}
+.reserve-rank-badge.rank-ten-god{color:#fff0a2;border-color:#e7c24c;box-shadow:0 0 10px #ffe36088}
+.skill-reserve-row-v2.rank-ur{border-color:#a1438c!important}.skill-reserve-row-v2.rank-lr{border-color:#8e7139!important}.skill-reserve-row-v2.rank-mythic{border-color:#9b543a!important}.skill-reserve-row-v2.rank-abyss{border-color:#9e2850!important}.skill-reserve-row-v2.rank-ten-god{border-color:#a58a32!important}
+.skill-clear-confirm{text-align:center}.skill-clear-confirm>span{display:block;width:54px;margin:auto;color:#d9b567}.skill-clear-confirm h3{color:#f2dfb4}.skill-clear-confirm p{color:#bdb2c0;line-height:1.7}
+.skill-clear-confirm-modal [data-modal-primary]{border-color:#b74d5f!important;background:linear-gradient(180deg,#501925,#250b12)!important;color:#ffd6db!important}
+
+.boss-gate-modal-v2>.game-modal-card{width:min(96vw,720px)!important;height:min(92dvh,860px)!important;max-height:92dvh!important;display:grid!important;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden!important}
+.boss-gate-v2{min-height:0;display:grid;grid-template-rows:auto minmax(0,1fr);gap:7px;overflow:hidden}
+.boss-gate-tabs{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.boss-gate-tabs button{min-height:42px;border:1px solid #5c4667;background:#0b0810;color:#b8acbd;font-size:.62rem;font-weight:900}
+.boss-gate-tabs button.active{border-color:#d8b65d;background:linear-gradient(180deg,#382018,#17100d);color:#ffe29a;box-shadow:inset 0 0 15px #cf9b3638}
+.boss-gate-tabs em{margin-left:4px;color:#d7a7eb;font-size:.48rem;font-style:normal}
+.boss-gate-v2>[data-boss-gate-panel]{min-height:0;overflow-y:auto;overscroll-behavior:contain;padding-right:2px}
+.floor-boss-gate-head{display:grid;gap:2px;padding:7px 9px;border:1px solid #694c72;background:#0c0910}.floor-boss-gate-head b{color:#ecd7a3}.floor-boss-gate-head small{color:#a99dad;font-size:.48rem}
+.floor-boss-band-filter{position:sticky;top:-1px;z-index:5;display:flex;gap:4px;overflow-x:auto;padding:6px 0;background:#08070cf3;scrollbar-width:none}.floor-boss-band-filter::-webkit-scrollbar{display:none}.floor-boss-band-filter button{flex:0 0 auto;min-height:30px;padding:4px 9px;border:1px solid #57435e;border-radius:99px;background:#0e0a12;color:#bdb2c0;font-size:.47rem}.floor-boss-band-filter button.active{border-color:#d3b25d;background:#3a2710;color:#ffe29a}
+.floor-boss-gate-list{display:grid;gap:5px;padding-bottom:18px}
+.floor-boss-gate-entry{display:grid;grid-template-columns:minmax(0,1fr) 76px;min-height:69px;border:1px solid #57445e;background:linear-gradient(90deg,#09080c,#100b13);box-shadow:inset 0 0 14px #000}
+.floor-boss-gate-entry>button:first-child{min-width:0;display:grid;grid-template-columns:59px minmax(0,1fr);align-items:center;gap:7px;padding:5px;border:0;background:transparent;color:#eee6dc;text-align:left}.floor-boss-gate-entry>button:first-child>span{width:55px;height:55px;display:grid;place-items:center;overflow:hidden}.floor-boss-gate-visual{width:54px!important;height:54px!important}.floor-boss-gate-entry>button:first-child>div{min-width:0;display:grid;gap:2px}.floor-boss-gate-entry small{color:#bca9c4;font-size:.44rem}.floor-boss-gate-entry b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#f3e6c7;font-size:.61rem}.floor-boss-gate-entry em{color:#b9acbc;font-size:.44rem;font-style:normal}.floor-boss-gate-entry>button:last-child{margin:6px 6px 6px 0;border:1px solid #846b3e;background:#1a120a;color:#e7c870;font-size:.47rem;font-weight:900}.floor-boss-gate-entry.locked{opacity:.56}.floor-boss-gate-entry.locked .undiscovered{color:#665d69}.floor-boss-gate-entry.rank-ur{border-color:#8f3f82}.floor-boss-gate-entry.rank-lr{border-color:#90733c}.floor-boss-gate-entry.rank-mythic{border-color:#a85d3e;box-shadow:inset 0 0 16px #c6673022,0 0 9px #f28b4a22}
+
+.floor-boss-exchange>header{display:grid;gap:3px;padding:10px;border:1px solid #856935;background:radial-gradient(circle at 90% 20%,#b3833129,transparent 52%),#0a0808}.floor-boss-exchange>header b{color:#ecd39a}.floor-boss-exchange>header strong{color:#ffe07f;font-size:1.55rem}.floor-boss-exchange>header small{color:#a99dac;font-size:.5rem}.floor-boss-exchange>div{display:grid;gap:6px;margin-top:8px}.floor-boss-exchange>div>button{min-height:74px;display:grid;grid-template-columns:64px minmax(0,1fr);align-items:center;gap:8px;padding:6px;border:1px solid #654e65;background:#09080c;color:#eee7dd;text-align:left}.floor-boss-exchange>div>button:disabled{opacity:.42}.floor-boss-exchange>div>button>span{width:60px;height:60px;display:grid;place-items:center}.floor-boss-exchange>div>button>div{min-width:0;display:grid;gap:2px}.floor-boss-exchange>div small{color:#ad9eb1;font-size:.44rem}.floor-boss-exchange>div b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#f2ddb0;font-size:.62rem}.floor-boss-exchange>div em{color:#e1bd63;font-size:.5rem;font-style:normal}.floor-boss-exchange-mini,.floor-boss-exchange-equipment{width:58px!important;height:58px!important}.floor-boss-exchange-confirm{text-align:center}.floor-boss-exchange-visual{width:126px!important;height:126px!important;margin:auto}.floor-boss-exchange-confirm h3{color:#f2d99f}.floor-boss-exchange-confirm b,.floor-boss-exchange-confirm small{color:#e7bd61}.floor-boss-fragment-result .floor-boss-result-visual{width:140px!important;height:140px!important;margin:auto}
+
+@media(max-width:390px){
+ .side-battle-v2 .combat-rank-badge{min-width:22px;padding:2px 4px;font-size:.24rem!important}
+ .skill-reserve-modal-v2>.game-modal-card,.boss-gate-modal-v2>.game-modal-card{width:97vw!important;padding:8px!important}
+ .skill-reserve-tools>div{grid-template-columns:1fr 1fr}.skill-reserve-tools>div select:last-child{grid-column:1/-1}
+ .floor-boss-gate-entry{grid-template-columns:minmax(0,1fr) 68px}.floor-boss-gate-entry>button:first-child{grid-template-columns:52px minmax(0,1fr)}.floor-boss-gate-entry>button:first-child>span,.floor-boss-gate-visual{width:49px!important;height:49px!important}
+}

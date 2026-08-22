@@ -1,11 +1,11 @@
-import{SPECIES}from"../../data/species.js?v=2.11.2-build166";
-import{displayName}from"../../models/Monster.js?v=2.11.24-build188";
-import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=2.11.24-build188";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.24-build188";
-import{equipmentDisplayRarity,equipmentSubslotLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=2.11.2-build166";
-import{monsterVisual}from"../MonsterVisual.js?v=2.11.2-build166";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=2.11.2-build166";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.11.2-build166";
+import{SPECIES}from"../../data/species.js?v=2.11.0-build164";
+import{displayName}from"../../models/Monster.js?v=2.11.30-build195";
+import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=2.11.30-build195";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.30-build195";
+import{equipmentDisplayRarity,equipmentSubslotLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=2.11.30-build195";
+import{monsterVisual}from"../MonsterVisual.js?v=2.11.0-build164";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=2.11.0-build164";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.11.0-build164";
 
 const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],
@@ -51,7 +51,7 @@ function skillSlot(monster,skill,slot){
  const costLabel=cost===baseCost?`MP ${cost}`:`MP ${cost}（基本${baseCost}）`;
  return`<button type="button" data-formation-skill="${monster.id}" data-skill-slot="${slot}">
   <small>${slot+1}</small>
-  <span><b>${skill.name}</b><em>熟練Lv.${progress.level}・${skillElementLabel(skill)}・${skillEffectText(skill)}・${costLabel}・CT ${skill.cooldown??0}</em></span>
+  <span><b>${skill.name}</b><em>熟練Lv.${progress.level}${progress.need?`（${Math.floor(progress.exp)}/${progress.need}）`:"・MASTER"}・${skillElementLabel(skill)}・${skillEffectText(skill)}・${costLabel}・CT ${skill.cooldown??0}</em></span>
   <i>›</i>
  </button>`;
 }
@@ -64,7 +64,7 @@ function memberCard(state,monster,index,{readOnly=false}={}){
    <div class="formation-slot-label">SLOT ${index+1}</div>
    <div class="formation-member-icon">${monsterVisual(monster,species.emoji??"👹",{className:"formation-monster-visual"})}</div>
    <b class="formation-member-name rarity-name-${rarityClass(rarity)}">${displayName(monster)}</b>
-   <small class="formation-member-meta">${rarity}・${elementIcon}${elementName}・${formationRoleLabel(species)}<br>Lv.${monster.level}・★${monster.stars??1}・+${monster.plus??0}</small>
+   <small class="formation-member-meta">${rarity}・${elementIcon}${elementName}・${formationRoleLabel(species)}<br>Lv.${monster.level}・+${monster.plus??0}</small>
    <small class="formation-total-exp">${readOnly?"探索中・確認のみ":"長押しして順番を変更"}</small>
   </div>
   <div class="formation-power"><small>戦力</small><strong>${formatCombatPower(monsterCombatPower(monster))}</strong></div>

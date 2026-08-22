@@ -1,12 +1,11 @@
-import{SPECIES}from"../data/species.js?v=2.11.2-build166";
-import{PERSONALITIES}from"../data/personalities.js?v=2.11.2-build166";
-import{MONSTER_COLORS}from"../data/colors.js?v=2.11.2-build166";
-import{normalizedResistances}from"../data/attributes.js?v=2.11.2-build166";
-import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.11.24-build188";
-import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.11.2-build166";
-import{endgameCharacter}from"../data/endgameCharacters.js?v=2.11.24-build188";
-import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.11.24-build188";
-import{baseExperienceNeedForLevel}from"../core/ProgressionSystem.js?v=2.11.24-build188";
+import{SPECIES}from"../data/species.js?v=2.11.0-build164";
+import{PERSONALITIES}from"../data/personalities.js?v=2.11.0-build164";
+import{MONSTER_COLORS}from"../data/colors.js?v=2.11.0-build164";
+import{normalizedResistances}from"../data/attributes.js?v=2.11.0-build164";
+import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.11.0-build164";
+import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.11.0-build164";
+import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=2.11.0-build164";
+import{baseExperienceNeedForLevel}from"../core/ProgressionSystem.js?v=2.11.0-build164";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -132,6 +131,8 @@ export function createMonster(speciesId,options={}){
     resistances:normalizedResistances(options.resistances??species.resistances),
     tags:options.tags??[species.race,species.role],
     isBoss:options.isBoss??false,
+    floorBossCatalogId:options.floorBossCatalogId??options.floorBossId??null,
+    floorBossStatProfile:options.floorBossStatProfile&&typeof options.floorBossStatProfile==="object"?{...options.floorBossStatProfile}:null,
     sealedPower:options.sealedPower??null,
     equipment:{weaponRight:null,weaponLeft:null,armorBody:null,armorSupport:null,accessoryNeck:null,accessoryFinger:null,...(options.equipment??{})},
     capturedAt:options.capturedAt??new Date().toISOString(),
@@ -147,7 +148,8 @@ export function createMonster(speciesId,options={}){
     currentHp:options.currentHp??null,
     currentMp:options.currentMp??null,
     ailments:normalizePersistentAilments(options.ailments),
-    equippedSkills:Array.isArray(options.equippedSkills)?[...options.equippedSkills]:[]
+    equippedSkills:Array.isArray(options.equippedSkills)?[...options.equippedSkills]:[],
+    skillLoadoutInitialized:Boolean(options.skillLoadoutInitialized)
   };
   if(options.totalExp!=null)applyTotalExperience(monster,options.totalExp);
   else monster.totalExp=experienceBeforeLevel(monster,monster.level)+monster.exp;
@@ -224,13 +226,9 @@ export function calculatedStats(monster){
   const rank=Math.max(1,finite(monster.rank,1)),level=Math.max(1,finite(monster.level,1));
   const affection=affectionBonuses(monster.affection??monster.bond??0);
   // personality / trait / ★ / IV are flavour and collection history only.
-  // 通常個体は種族・種族系統・ランク・育成値のみ。深淵／十神だけは正本の役割補正を最後に適用する。
+  // Species, race, rarity and earned progression are the sole innate sources.
   const core=speciesLevelStats(species,level,{rarity:resolvedCombatRarity(monster,species),rank,plus:monster.plus});
-  // Deep/Ten characters share their faction rarity curve, then receive a
-  // hand-authored silhouette. This is species identity, not the removed IV/★
-  // system: every copy of the same named character receives the same profile.
-  const authored=endgameCharacter(monster.endgameBossId)?.statProfile??{},rate=key=>Math.max(.25,Math.min(3,finite(authored[key],1)));
-  const calc=(key,affectionKey=key)=>Math.max(key==="hp"||key==="atk"||key==="matk"||key==="spd"?1:0,Math.floor(finite(core[key])*rate(key)*(1+(affection[affectionKey]??0))));
+  const calc=key=>Math.max(key==="hp"||key==="atk"||key==="spd"?1:0,Math.floor(finite(core[key])*(1+(affection[key]??0))));
 
   const trait=TRAITS[monster.traitId]??TRAITS.steady;
   const gear=monster._equipmentStats??{},affix=monster._equipmentAffixes??{};
@@ -239,14 +237,27 @@ export function calculatedStats(monster){
   const result={
     hp:calc("hp")+finite(gear.hp),
     atk:baseAtk+finite(gear.atk),
-    matk:calc("matk","atk")+finite(gear.matk),
+    matk:Math.max(1,Math.floor(finite(core.matk)*(1+(affection.atk??0))))+finite(gear.matk),
     def:baseDef+finite(gear.def),
-    mdef:calc("mdef","def")+finite(gear.mdef),
+    mdef:Math.max(1,Math.floor(finite(core.mdef)*(1+(affection.def??0))))+finite(gear.mdef),
     spd:calc("spd")+finite(gear.spd),
-    crit:Math.floor(finite(core.crit))+finite(authored.crit)+finite(gear.crit),
-    evasion:Math.floor(finite(core.evasion))+finite(authored.evasion)+finite(gear.evasion),
-    accuracy:Math.max(20,Math.min(180,finite(species.baseStats.accuracy,100)+finite(authored.accuracy)+finite(gear.accuracy)))
+    crit:Math.floor(finite(core.crit))+finite(gear.crit),
+    evasion:Math.floor(finite(core.evasion))+finite(gear.evasion),
+    accuracy:Math.max(20,Math.min(180,finite(species.baseStats.accuracy,100)+finite(gear.accuracy)))
   };
+  // Contracted floor bosses retain the authored identity of their dungeon
+  // counterpart. These multipliers distinguish tanks, casters and speed types
+  // without reviving the retired per-individual ★/IV stat lottery.
+  const floorBossProfile=monster.floorBossStatProfile;
+  if(floorBossProfile&&typeof floorBossProfile==="object"){
+    for(const key of["hp","atk","matk","def","mdef","spd"]){
+      const multiplier=Math.max(.45,Math.min(1.55,finite(floorBossProfile[key],1)));
+      result[key]=Math.max(key==="hp"||key==="atk"||key==="matk"||key==="spd"?1:0,Math.floor(result[key]*multiplier));
+    }
+    result.crit+=finite(floorBossProfile.crit);
+    result.evasion+=finite(floorBossProfile.evasion);
+    result.accuracy=Math.max(20,Math.min(180,result.accuracy+finite(floorBossProfile.accuracy)));
+  }
   for(const key of["hp","atk","matk","def","mdef","spd"]){
     const pct=finite(affix[`${key}Pct`]??(key==="matk"?affix.atkPct:key==="mdef"?affix.defPct:0));
     if(pct)result[key]=Math.floor(result[key]*(1+pct/100));

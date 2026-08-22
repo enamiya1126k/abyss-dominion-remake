@@ -1,4 +1,4 @@
-import{calculatedStats,displayName}from"../models/Monster.js?v=2.11.24-build188";
+import{calculatedStats,displayName}from"../models/Monster.js?v=2.11.30-build195";
 
 export function aliveEnemies(battle){return (battle.enemies??[battle.enemy]).filter(Boolean).filter(enemy=>enemy.hp>0)}
 export function selectedEnemy(battle){const alive=aliveEnemies(battle);let target=alive.find(e=>e.id===battle.targetEnemyId);if(!target){target=alive[0]??null;battle.targetEnemyId=target?.id??null}return target}
@@ -7,7 +7,7 @@ function effectAmount(battle,type,id,kind){return effectsFor(battle,type,id).fil
 function stunned(battle,type,id){return effectsFor(battle,type,id).some(effect=>effect.kind==="stun")}
 export function buildTurnQueue(battle){
  const entries=battle.party.filter(monster=>monster.currentHp>0&&!stunned(battle,"ally",monster.id)).map(monster=>{const base=calculatedStats(monster).spd??0,rate=Math.max(.2,1+effectAmount(battle,"ally",monster.id,"spdUp")-effectAmount(battle,"ally",monster.id,"spdDown")),priority=battle.turn<=1&&Number(monster._seriesEffects?.firstStrike)>0?1:0;return{type:"ally",id:monster.id,name:displayName(monster),spd:Math.max(0,base*rate),priority,tie:Math.random()}});
- aliveEnemies(battle).filter(enemy=>!stunned(battle,"enemy",enemy.id)).forEach(enemy=>{const rate=Math.max(.2,1+effectAmount(battle,"enemy",enemy.id,"spdUp")-effectAmount(battle,"enemy",enemy.id,"spdDown"));entries.push({type:"enemy",id:enemy.id,name:enemy.name,spd:Math.max(0,(enemy.spd??0)*rate),priority:0,tie:Math.random()})});
+ aliveEnemies(battle).filter(enemy=>!stunned(battle,"enemy",enemy.id)).forEach(enemy=>{const rate=Math.max(.2,1-effectAmount(battle,"enemy",enemy.id,"spdDown"));entries.push({type:"enemy",id:enemy.id,name:enemy.name,spd:Math.max(0,(enemy.spd??0)*rate),priority:0,tie:Math.random()})});
  entries.sort((a,b)=>(b.priority??0)-(a.priority??0)||b.spd-a.spd||b.tie-a.tie);battle.turnQueue=entries;battle.queueIndex=0;return entries
 }
 export function currentTurnEntry(battle){return battle.turnQueue?.[battle.queueIndex]??null}
