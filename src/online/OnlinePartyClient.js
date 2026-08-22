@@ -1,9 +1,9 @@
 import {
   buildOnlinePartyProfile, ONLINE_STORAGE_KEYS, ensureOnlineIdentity,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.24-build188";
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.38-build203";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
-} from "./OnlineViews.js?v=2.11.24-build188";
+} from "./OnlineViews.js?v=2.11.38-build203";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
 const DIRECTION = Object.freeze({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] });
@@ -58,6 +58,8 @@ export class OnlinePartyController {
     this.rewardInFlight = new Set();
     this.selectedTarget = { explore: null, raid: "juvenile-amalga", team: null };
     this.selectedAlly = { explore: this.selfId, raid: this.selfId, team: this.selfId };
+    this.skillMenu = { explore: false, raid: false, team: false };
+    this.onlineHudCollapsed = false;
     this.heldDirections = new Set();
     this.path = [];
     this.lastMoveAt = 0;
@@ -90,6 +92,7 @@ export class OnlinePartyController {
     if (this.clockFrame) cancelAnimationFrame(this.clockFrame);
     if (this.moveFrame) cancelAnimationFrame(this.moveFrame);
     this.clockFrame = null; this.moveFrame = null;
+    this.root?.querySelector(".online-v3-screen")?.classList.remove("online-shared-gameplay-active");
     if (disconnect) this.disconnect({ leave: true, quiet: true });
     this.root = null;
   }
@@ -159,6 +162,14 @@ export class OnlinePartyController {
     if (button.matches("[data-online-team-side]")) { this._send("teamSide", { side: button.dataset.onlineTeamSide }); return; }
     if (button.matches("[data-online-team-ready]")) { const self = this._self(); this._send("teamReady", { ready: !self?.teamReady }); return; }
     if (button.matches("[data-online-start-team]")) { this._send("startTeamBattle"); return; }
+    if (button.matches("[data-enemy-target]")) { this._selectBattleTarget(button.dataset.enemyTarget, "enemy"); return; }
+    if (button.matches("[data-online-ally-target]")) { this._selectBattleTarget(button.dataset.onlineAllyTarget, "ally"); return; }
+    if (button.matches("[data-command]")) { this._battleAction(this.route, button.dataset.command); return; }
+    if (button.matches("[data-skill-id]")) { this._battleAction(this.route, "skill", button.dataset.skillId); return; }
+    if (button.id === "closeSkillMenu") { this.skillMenu[this.route] = false; this._render(); return; }
+    if (button.matches("[data-online-speed-cycle]")) { const mode = button.dataset.onlineSpeedCycle, current = Number(this._battle(mode)?.speed) || 1, speeds = [.5, 1, 2], speed = speeds[(speeds.indexOf(current) + 1) % speeds.length]; this._send(mode === "raid" ? "raidSpeed" : mode === "team" ? "teamSpeed" : "battleSpeed", { speed }); return; }
+    if (button.matches("[data-online-center]")) { this.path = []; this._query(`[data-online-map-player="${this.selfId}"]`)?.scrollIntoView?.({ block: "center", inline: "center", behavior: "smooth" }); return; }
+    if (button.matches("[data-online-party-hud-toggle]")) { this.onlineHudCollapsed = !this.onlineHudCollapsed; this._render(); return; }
     if (button.matches("[data-online-target]")) { this._selectBattleTarget(button.dataset.onlineTarget, button.dataset.onlineTargetSide); return; }
     if (button.matches("[data-online-speed]")) { const mode = button.dataset.onlineMode, speed = Number(button.dataset.onlineSpeed) || 1; this._send(mode === "raid" ? "raidSpeed" : mode === "team" ? "teamSpeed" : "battleSpeed", { speed }); return; }
     if (button.matches("[data-online-battle-action]")) { this._battleAction(button.dataset.onlineMode, button.dataset.onlineBattleAction); return; }
@@ -267,13 +278,13 @@ export class OnlinePartyController {
     if (message.type === "leftRoom") { this._clearRoom(); return; }
     if (message.type === "expeditionMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.dungeonPosition = { ...message.position }; this._render(); return; }
     if (["expeditionStarted", "battleStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this._applyRoomState(message.room); return; }
-    if (message.type === "battleRound" || message.type === "battleResolved") { if (this.roomState?.expedition) this.roomState.expedition.battle = message.battle; this._setRoute("explore", { silent: true }); this._render(); return; }
+    if (message.type === "battleRound" || message.type === "battleResolved") { if (this.roomState?.expedition) this.roomState.expedition.battle = message.battle; if (message.type === "battleRound") this.skillMenu.explore = false; this._setRoute("explore", { silent: true }); this._render(); return; }
     if (message.type === "expeditionEnded") { this.toast(message.summary?.completed ? `共闘 ${message.summary.floor}F 踏破！` : message.summary?.reason === "defeat" ? "共闘パーティが全滅しました…" : "共闘探索から帰還しました"); return; }
     if (message.type === "battleEnded") { this.toast(message.result === "victory" ? "共闘バトル勝利！" : "共闘パーティが全滅しました…"); return; }
     if (message.type === "raidStarted") { this.roomState = { ...(this.roomState ?? {}), phase: "raid", raid: message.raid, raidProgress: message.raid?.progress }; this._setRoute("raid", { silent: true }); this._render(); return; }
-    if (["raidState", "raidRound", "raidResolved"].includes(message.type)) { if (this.roomState) { this.roomState.phase = "raid"; this.roomState.raid = message.raid; this.roomState.raidProgress = message.raid?.progress ?? this.roomState.raidProgress; } this._setRoute("raid", { silent: true }); this._render(); return; }
+    if (["raidState", "raidRound", "raidResolved"].includes(message.type)) { if (this.roomState) { this.roomState.phase = "raid"; this.roomState.raid = message.raid; this.roomState.raidProgress = message.raid?.progress ?? this.roomState.raidProgress; } if (message.type === "raidRound") this.skillMenu.raid = false; this._setRoute("raid", { silent: true }); this._render(); return; }
     if (message.type === "raidEnded") { if (this.roomState) this.roomState.raidProgress = message.result === "victory" ? null : message.raid?.progress; this.toast(message.result === "victory" ? "レイド討伐成功！" : "敗北…ボスの残HPを保存しました"); return; }
-    if (message.type === "teamBattleStarted" || message.type === "teamBattleState" || message.type === "teamBattleRound" || message.type === "teamBattleResolved") { if (this.roomState) { this.roomState.phase = "team"; this.roomState.teamBattle = message.teamBattle; } this._setRoute("team", { silent: true }); this._render(); return; }
+    if (message.type === "teamBattleStarted" || message.type === "teamBattleState" || message.type === "teamBattleRound" || message.type === "teamBattleResolved") { if (this.roomState) { this.roomState.phase = "team"; this.roomState.teamBattle = message.teamBattle; } if (message.type === "teamBattleRound") this.skillMenu.team = false; this._setRoute("team", { silent: true }); this._render(); return; }
     if (message.type === "teamBattleEnded") { this.toast(message.winner ? `${message.winner === "sun" ? "紅組" : "蒼組"}の勝利！` : "引き分け！"); return; }
     if (message.type === "chatMessage") { this._receiveChat(message.message); return; }
     if (message.type === "onlineReward") { this._receiveReward(message); return; }
@@ -305,6 +316,8 @@ export class OnlinePartyController {
 
   _clearRoom() {
     this.roomState = null; this.roomId = null; this.path = []; this.heldDirections.clear(); this.unread = 0;
+    this.root?.querySelector(".online-v3-screen")?.classList.remove("online-shared-gameplay-active");
+    this._query("[data-online-room]")?.classList.remove("online-shared-gameplay");
     this._showConnectionStep(this.ws?.readyState === WebSocket.OPEN ? "gate" : "entry");
   }
 
@@ -331,13 +344,17 @@ export class OnlinePartyController {
     this.root?.querySelectorAll("[data-online-route]").forEach(button => button.classList.toggle("active", button.dataset.onlineRoute === this.route));
     const unread = this._query("[data-online-unread]"); if (unread) { unread.hidden = this.unread <= 0; unread.textContent = this.unread > 9 ? "9+" : String(this.unread); }
     const stage = this._query("[data-online-stage]"); if (!stage) return;
-    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route] };
+    const gameplay = this.route === "explore" && this.roomState.phase === "expedition" || this.route === "raid" && this.roomState.phase === "raid" || this.route === "team" && this.roomState.phase === "team";
+    this._query("[data-online-room]")?.classList.toggle("online-shared-gameplay", gameplay);
+    this.root?.querySelector(".online-v3-screen")?.classList.toggle("online-shared-gameplay-active", gameplay);
+    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.() };
     stage.innerHTML = this.route === "explore" ? renderOnlineExplore(this.roomState, this.selfId, state)
       : this.route === "raid" ? renderOnlineRaid(this.roomState, this.selfId, state)
       : this.route === "team" ? renderOnlineTeam(this.roomState, this.selfId, state)
       : this.route === "chat" ? renderOnlineChat(this.roomState, this.selfId, this.chatDraft)
       : renderOnlineHome(this.roomState, this.selfId);
     if (this.route === "chat") requestAnimationFrame(() => { const log = this._query("[data-online-chat-log]"); if (log) log.scrollTop = log.scrollHeight; });
+    if (gameplay && this.route === "explore" && !this.roomState.expedition?.battle) requestAnimationFrame(() => this._query(`[data-online-map-player="${this.selfId}"]`)?.scrollIntoView?.({ block: "center", inline: "center" }));
   }
 
   _selectBattleTarget(id, side) {
@@ -352,12 +369,14 @@ export class OnlinePartyController {
   _battleAction(mode, kind, skillId = null) {
     const battle = this._battle(mode); if (!battle || battle.phase !== "command") return this.toast("現在は行動を選べません");
     const self = battle.players?.find(player => player.playerId === this.selfId); if (!self || self.hp <= 0) return this.toast("戦闘不能中です");
-    if (kind === "skill" && !skillId) { const panel = this._query("[data-online-skills]"); if (panel) panel.hidden = !panel.hidden; return; }
+    if (kind === "skill" && !skillId) { this.skillMenu[mode] = !this.skillMenu[mode]; this._render(); return; }
     const skill = this._self()?.profile?.skills?.find(entry => entry.id === skillId);
     const support = kind === "item" || kind === "skill" && skill?.kind !== "attack";
-    if (mode === "raid") this._send("raidAction", { kind, skillId, targetId: this.selectedAlly.raid || this.selfId, enemyTargetId: this.selectedTarget.raid || "abyss-amalga" });
-    else if (mode === "team") this._send("teamAction", { kind, skillId, targetId: support ? this.selectedAlly.team || this.selfId : this.selectedTarget.team });
-    else this._send("battleAction", { kind, skillId, targetId: support ? this.selectedAlly.explore || this.selfId : this.selectedTarget.explore });
+    let sent;
+    if (mode === "raid") sent = this._send("raidAction", { kind, skillId, targetId: this.selectedAlly.raid || this.selfId, enemyTargetId: this.selectedTarget.raid || "abyss-amalga" });
+    else if (mode === "team") sent = this._send("teamAction", { kind, skillId, targetId: support ? this.selectedAlly.team || this.selfId : this.selectedTarget.team });
+    else sent = this._send("battleAction", { kind, skillId, targetId: support ? this.selectedAlly.explore || this.selfId : this.selectedTarget.explore });
+    if (sent) { battle.actions ??= {}; battle.actions[this.selfId] = { kind, skillId, pending: true }; this.skillMenu[mode] = false; this._render(); }
   }
 
   _sendPreset(text) {

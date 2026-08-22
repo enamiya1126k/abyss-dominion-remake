@@ -51,15 +51,16 @@ test("all five online destinations render independently with realistic room snap
   assert.match(chat, />入力途中<\/textarea>/);
 });
 
-test("exploration, raid and team combat all render the same shared battle surface", () => {
+test("exploration, raid and team combat all render the solo battle component", () => {
   const base = room(), shared = battle();
   const expedition = { ...base, phase: "expedition", expedition: { floor: 100, battle: { ...shared, enemies: [{ id: "e1", name: "魔物", speciesId: "slime", hp: 500, maxHp: 500 }] } } };
   const raid = { ...base, phase: "raid", raid: { ...shared, name: "終焉融骸", boss: { id: "r1", name: "アビス＝マルガ", speciesId: "slime", hp: 5000, maxHp: 5000 }, minions: [] } };
   const team = { ...base, phase: "team", teamBattle: { ...shared, format: "1 vs 1" } };
 
   for (const html of [renderOnlineExplore(expedition, "p1"), renderOnlineRaid(raid, "p1"), renderOnlineTeam(team, "p1")]) {
-    assert.equal((html.match(/class="online-v3-battle"/g) ?? []).length, 1);
-    assert.match(html, /YOUR COMMAND/);
-    assert.match(html, /data-online-battle-action="attack"/);
+    assert.equal((html.match(/class="battle-screen side-battle-v2/g) ?? []).length, 1);
+    assert.match(html, /サーバー同期戦闘/);
+    assert.match(html, /data-command="attack"/);
+    assert.doesNotMatch(html, /class="online-v3-battle"/);
   }
 });

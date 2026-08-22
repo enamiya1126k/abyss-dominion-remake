@@ -17,8 +17,8 @@ assert.match(audioSource,/Symbol\.for\("abyss-dominion\.audio-owner"\)/);
 assert.match(audioSource,/if\(track!==next\)\{track\.pause\(\);track\.volume=0;track\.currentTime=0\}/);
 assert.match(audioSource,/document\.addEventListener\("freeze",this\.onFreeze/);
 assert.match(index,/build202\.css\?v=2\.11\.37-build202/);
-assert.match(index,/const ASSET_BUILD = "build202"/);
-assert.match(config,/APP_VERSION="2\.11\.37"/);
+assert.match(index,/const ASSET_BUILD = "build20[23]"/);
+assert.match(config,/APP_VERSION="2\.11\.(?:37|38)"/);
 
 class FakeEvents{
  constructor(){this.listeners=new Map()}

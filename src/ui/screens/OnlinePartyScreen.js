@@ -136,7 +136,7 @@ function onlineSkillProfile(monster) {
 export function buildOnlinePartyProfile(state, { monsterId = null, displayName: onlineName = "" } = {}) {
   const { monster } = selectedPartyMonster(state, monsterId);
   if (!monster) return {
-    displayName: onlineName || "冒険者", monsterId: null, speciesId: "slime", monsterName: "未編成",
+    displayName: onlineName || "冒険者", monsterId: null, speciesId: "slime", visualSpeciesId: null, endgameBossId: null, floorBossCatalogId: null, summonTier: null, summonRarity: null, endgameFaction: null, monsterName: "未編成",
     fallbackEmoji: "？", level: 1, stars: 1, plus: 0, power: 0, maxFloor: 1, attribute: "neutral",
     circleId: "none", circleName: "魔法陣なし", circleLevel: 0, circleEffect: "none", equipment: [],
     battleStats: { hp: 100, mp: 10, atk: 10, matk: 10, def: 5, mdef: 5, spd: 10, crit: 5, evasion: 3, accuracy: 100 },
@@ -149,7 +149,9 @@ export function buildOnlinePartyProfile(state, { monsterId = null, displayName: 
   return {
     displayName: String(onlineName || displayName(monster) || "冒険者").trim().slice(0, 16),
     monsterId: monster.id, speciesId: monster.speciesId, visualSpeciesId: monster.visualSpeciesId ?? null,
-    endgameBossId: monster.endgameBossId ?? null, monsterName: displayName(monster), fallbackEmoji: species.emoji ?? "魔",
+    endgameBossId: monster.endgameBossId ?? null, floorBossCatalogId: monster.floorBossCatalogId ?? monster.floorBossId ?? null,
+    summonTier: monster.summonTier ?? monster.summonRarity ?? null, summonRarity: monster.summonRarity ?? monster.summonTier ?? null, endgameFaction: monster.endgameFaction ?? null,
+    monsterName: displayName(monster), fallbackEmoji: species.emoji ?? "魔",
     level: Math.max(1, Number(monster.level) || 1), stars: Math.max(1, Number(monster.stars) || 1),
     plus: Math.max(0, Number(monster.plus) || 0), power: monsterCombatPower(monster),
     maxFloor: Math.max(1, Number(state.player?.maxFloor) || 1), attribute: monster.attribute ?? species.element ?? "neutral",
@@ -171,6 +173,14 @@ export function buildOnlinePartyProfile(state, { monsterId = null, displayName: 
 
 export function onlineMagicCircleArt(profile, { className = "" } = {}) {
   const circle = magicCircleById(profile?.circleId);
+  if (String(className).split(/\s+/).includes("battle-magic-circle")) {
+    const level = Math.max(0, Number(profile?.circleLevel) || 0);
+    const high = level >= 20 ? "magic-circle-high" : "";
+    const slot = circle?.effect === "slot" ? "magic-circle-slot" : "";
+    const frames = (circle?.frames?.length ? circle.frames : [circle?.asset ?? "./assets/magic-circles/plain.png"])
+      .map((source, index) => `<img class="magic-circle-frame magic-circle-frame-${index + 1}" src="${escapeOnlineHtml(source)}" alt="" draggable="false">`).join("");
+    return `<span class="magic-circle magic-circle-${escapeOnlineHtml(circle?.tone ?? "plain")} ${high} ${slot} ${className}" data-circle-id="${escapeOnlineHtml(circle?.id ?? "none")}" data-circle-level="${level}" aria-hidden="true">${frames}<i class="magic-circle-ring-a"></i><i class="magic-circle-ring-b"></i><b>${escapeOnlineHtml(circle?.glyph ?? "◇")}</b></span>`;
+  }
   const source = circle?.asset ?? "./assets/magic-circles/plain.png";
   return `<span class="online-v3-circle ${className}" data-circle="${escapeOnlineHtml(circle?.id ?? "none")}" aria-hidden="true"><img src="${source}" alt=""><i></i></span>`;
 }

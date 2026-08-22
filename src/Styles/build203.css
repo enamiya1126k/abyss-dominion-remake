@@ -1,0 +1,188 @@
+/* build203: one right-facing source contract, battle spacing, and shared online gameplay UI. */
+
+/*
+ * All authored monster frames now face right.  Remove every historical
+ * species-by-species image mirror; only the battle-side wrapper owns facing.
+ */
+html body .monster-visual[data-monster-species]>img[data-monster-sprite],
+html body .monster-visual[data-monster-species]>img[data-monster-custom]{
+ transform:scaleX(1)!important;
+ transform-origin:50% 100%!important;
+}
+.battle-screen.side-battle-v2 .battle-ally-visual{
+ transform:scaleX(1)!important;
+ transform-origin:50% 100%!important;
+}
+.battle-screen.side-battle-v2 .battle-enemy-visual{
+ transform:scaleX(-1)!important;
+ transform-origin:50% 100%!important;
+}
+
+/*
+ * Keep cards at the established baseline. Allies get a little more breathing
+ * room, normal enemies retain build202, and large floor rulers sit lower.
+ */
+.battle-screen.side-battle-v2 .side-party .side-unit-sprite{bottom:70px!important}
+.battle-screen.side-battle-v2 .side-party .side-battle-unit::after{bottom:69px!important}
+.battle-screen.side-battle-v2 .side-party .battle-unit-floating-name{bottom:calc(clamp(103px,22vw,139px) + 20px)!important}
+
+.battle-screen.side-battle-v2 .side-enemies .side-unit-sprite{bottom:60px!important}
+.battle-screen.side-battle-v2 .side-enemies .side-battle-unit::after,
+.battle-screen.side-battle-v2 .side-enemies .target-reticle{bottom:59px!important}
+.battle-screen.side-battle-v2 .side-enemies .battle-unit-floating-name{bottom:calc(clamp(103px,22vw,139px) + 10px)!important}
+
+.battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .side-unit-sprite,
+.battle-screen.side-battle-v2 .floor-boss-enemy .side-unit-sprite{bottom:50px!important}
+.battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .side-battle-unit::after,
+.battle-screen.side-battle-v2 .floor-boss-enemy::after,
+.battle-screen.side-battle-v2 .floor-boss-enemy .target-reticle{bottom:49px!important}
+.battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .battle-unit-floating-name,
+.battle-screen.side-battle-v2 .floor-boss-enemy .battle-unit-floating-name{bottom:clamp(205px,55vw,282px)!important}
+.battle-screen.side-battle-v2 .party-floor-boss .battle-unit-floating-name{bottom:calc(clamp(130px,34vw,176px) + 20px)!important}
+
+@media(max-width:390px){
+ .battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .battle-unit-floating-name,
+ .battle-screen.side-battle-v2 .floor-boss-enemy .battle-unit-floating-name{bottom:clamp(197px,53vw,222px)!important}
+}
+
+@media(max-height:720px){
+ .battle-screen.side-battle-v2 .side-party .side-unit-sprite{bottom:60px!important}
+ .battle-screen.side-battle-v2 .side-party .side-battle-unit::after{bottom:59px!important}
+ .battle-screen.side-battle-v2 .side-party .battle-unit-floating-name{bottom:calc(clamp(96px,21vw,128px) + 14px)!important}
+ .battle-screen.side-battle-v2 .side-enemies .side-unit-sprite{bottom:52px!important}
+ .battle-screen.side-battle-v2 .side-enemies .side-battle-unit::after,
+ .battle-screen.side-battle-v2 .side-enemies .target-reticle{bottom:51px!important}
+ .battle-screen.side-battle-v2 .side-enemies .battle-unit-floating-name{bottom:calc(clamp(96px,21vw,128px) + 6px)!important}
+ .battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .side-unit-sprite,
+ .battle-screen.side-battle-v2 .floor-boss-enemy .side-unit-sprite{bottom:43px!important}
+ .battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .side-battle-unit::after,
+ .battle-screen.side-battle-v2 .floor-boss-enemy::after,
+ .battle-screen.side-battle-v2 .floor-boss-enemy .target-reticle{bottom:42px!important}
+ .battle-screen.side-battle-v2 .side-enemies:has(.floor-boss-enemy:only-child) .battle-unit-floating-name,
+ .battle-screen.side-battle-v2 .floor-boss-enemy .battle-unit-floating-name{bottom:clamp(176px,47vw,207px)!important}
+}
+
+/* A selected support target is visible without changing the solo card design. */
+.battle-screen.side-battle-v2.online-shared-battle .side-party .online-selected-ally .side-unit-card{
+ border-color:#e1bd65!important;
+ box-shadow:0 0 0 1px #e1bd6542,0 4px 12px #000b!important;
+}
+.online-shared-countdown{color:#ffe49a;font:900 .68rem ui-monospace,monospace}
+.online-shared-countdown.urgent{color:#ff7186;text-shadow:0 0 9px #ff274f}
+.online-sync-state:disabled{opacity:1!important}
+
+/*
+ * While a live online activity is open, remove only the room chrome.  The
+ * actual ExploreScreen/BattleScreen remains the exact solo component.
+ */
+.online-v3-screen.online-shared-gameplay-active{
+ height:100dvh!important;
+ min-height:0!important;
+ overflow:hidden!important;
+ padding:0!important;
+}
+.online-v3-screen.online-shared-gameplay-active>.v2-screen-hud{display:none!important}
+.online-v3-screen.online-shared-gameplay-active .online-v3-page{
+ width:100%!important;
+ height:100dvh!important;
+ min-height:0!important;
+ margin:0!important;
+ border:0!important;
+}
+.online-v3-room.online-shared-gameplay{
+ height:100dvh!important;
+ min-height:0!important;
+ grid-template-rows:minmax(0,1fr)!important;
+}
+.online-v3-room.online-shared-gameplay>.online-v3-roombar,
+.online-v3-room.online-shared-gameplay>.online-v3-nav{display:none!important}
+.online-v3-room.online-shared-gameplay>.online-v3-stage{
+ min-height:0!important;
+ height:100dvh!important;
+ overflow:hidden!important;
+ padding:0!important;
+ touch-action:auto!important;
+}
+.online-v3-room.online-shared-gameplay>.online-v3-stage>.online-shared-explore{
+ width:100%!important;
+ max-width:none!important;
+ margin:0!important;
+}
+
+/* Shared exploration swaps only the canvas content for the server map. */
+.online-shared-explore .explore-stage{isolation:isolate}
+.online-shared-map-viewport{
+ position:absolute;
+ z-index:1;
+ inset:0;
+ overflow:auto;
+ overscroll-behavior:contain;
+ touch-action:pan-x pan-y;
+ background:#030508;
+ scrollbar-width:none;
+}
+.online-shared-map-viewport::-webkit-scrollbar{display:none}
+.online-shared-map{
+ --online-cell:28px;
+ position:relative;
+ display:grid;
+ grid-template-columns:repeat(var(--map-cols),var(--online-cell));
+ grid-template-rows:repeat(var(--map-rows),var(--online-cell));
+ width:max-content;
+ min-width:100%;
+ min-height:100%;
+ align-content:center;
+ justify-content:center;
+ padding:88px;
+ background:
+  radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--scenery-accent) 14%,transparent),transparent 44%),
+  #07090c;
+ box-sizing:border-box;
+}
+.online-shared-map>i,
+.online-shared-map>button.floor{
+ box-sizing:border-box;
+ width:var(--online-cell);
+ height:var(--online-cell);
+ margin:0;
+ padding:0;
+ border:0;
+ border-radius:0;
+ font:inherit;
+}
+.online-shared-map>button.floor{
+ background:
+  linear-gradient(#090a0e3d,#090a0e61),
+  var(--explore-floor-texture,var(--dungeon-floor)) center/56px;
+ box-shadow:inset 0 0 0 1px #c2a5630b;
+}
+.online-shared-map>i.wall{
+ background:
+  linear-gradient(#0007,#000a),
+  var(--explore-wall-texture,var(--dungeon-wall)) center/56px;
+ box-shadow:inset 0 0 0 1px #d8bd8014,0 0 12px #000;
+}
+.online-shared-map .online-v3-map-object,
+.online-shared-map .online-v3-map-player{
+ width:var(--online-cell);
+ height:var(--online-cell);
+ align-self:center;
+ justify-self:center;
+}
+.online-shared-map .online-v3-map-player{z-index:5}
+.online-shared-map .online-v3-map-player .online-v3-avatar{
+ width:62px!important;
+ height:62px!important;
+}
+.online-shared-map .online-v3-map-player b{top:39px;z-index:2}
+.online-shared-explore .explore-stage-tools,
+.online-shared-explore .explore-floor-plate,
+.online-shared-explore .explore-scenery-badge,
+.online-shared-explore .explore-run-clock{z-index:8}
+.online-shared-explore .explore-stage-tools{display:flex!important;align-items:flex-start}
+.online-shared-explore .explore-stage-tools .online-floor-complete{color:#9cf5bd!important}
+
+@media(max-width:430px){
+ .online-shared-map{--online-cell:25px;padding:72px}
+ .online-shared-map .online-v3-map-player .online-v3-avatar{width:56px!important;height:56px!important}
+}
