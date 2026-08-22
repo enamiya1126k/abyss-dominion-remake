@@ -1,5 +1,5 @@
-import{SaveService}from"./services/SaveService.js?v=2.11.34-build199";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.34-build199";
+import{SaveService}from"./services/SaveService.js?v=2.11.36-build201";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.36-build201";
 import{AudioSystem}from"./core/AudioSystem.js?v=2.11.2-build166";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=2.11.24-build188";
 import{SPECIES}from"./data/species.js?v=2.11.33-build198";
@@ -46,7 +46,7 @@ import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/
 import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.11.2-build166";
 import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.11.2-build166";
 import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.11.2-build166";
-import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse,skillEffectDetails,skillEffectSummary,applySkillMastery}from"./battle/SkillSystem.js?v=2.11.33-build198";
+import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse,skillEffectDetails,skillEffectSummary,applySkillMastery}from"./battle/SkillSystem.js?v=2.11.36-build201";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyDamageAfterDefense,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.11.30-build195";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectStackBreakdown,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.11.24-build188";
 import{attackHits}from"./battle/HitSystem.js?v=2.11.2-build166";
@@ -78,6 +78,11 @@ import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatur
 const TILE=88,COLS=39,ROWS=39,app=document.getElementById("app"),save=new SaveService(),audio=new AudioSystem(()=>save.state.settings);
 const STANDARD_ENCOUNTER_SPECIES=Object.freeze(Object.values(SPECIES).filter(species=>species.id!=="baby_slime"));
 let screen="home",selected=null,equipmentTarget=null,equipmentFocusItemId=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",inventoryCategory="all",inventorySort="rarity",game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",skillNavigationOrigin="home",inventoryNavigationOrigin="home",settingsNavigationOrigin="home",detailNavigationOrigin="monsters",formationOrigin="home",lastExploreCombatPower=null;
+
+function floorBossWasDefeated(player,floor){
+ const key=String(Math.max(1,Math.floor(Number(floor)||1))),hasOwn=(record)=>Object.prototype.hasOwnProperty.call(record??{},key);
+ return Number(player?.bossKills?.[key]??0)>0||hasOwn(player?.bossRewards)||hasOwn(player?.pendingBossRewards)
+}
 const SCREEN_SESSION_KEY="abyss-dominion:current-screen",INVITE_SESSION_KEY="abyss-dominion:last-party-invite",REFRESHABLE_SCREENS=new Set(["home","formation","onlineParty","monsters","settings","explore","gauntlet","equipment","shop","skills","abyssSkills","inventory","armory"]);
 let exploreActionGeneration=0,secretRoomAutoRunning=false;
 let onlinePartyController=null;
@@ -3096,7 +3101,7 @@ function update(dt){
    save.save();screen="shop";render();return
   }
   if(game.player.x===game.world.exit.x&&game.player.y===game.world.exit.y){
-   if(save.state.player.currentFloor%10===0&&game.world.boss){
+   if(save.state.player.currentFloor%10===0&&game.world.boss&&!floorBossWasDefeated(save.state.player,save.state.player.currentFloor)){
     game.player.path=[];game.paused=true;pauseModal("まだ先へは進めない","<p>この階層の支配者が道を封じている。</p>");return
    }
    if(save.state.player.currentFloor>=WORLD_MAX_FLOOR){game.player.path=[];game.paused=true;if(exploreAutoActive())stopExploreAuto("AUTO完了：10000階へ到達しました");const cleared=Boolean(save.state.flags?.ending10000Played);app.insertAdjacentHTML("beforeend",Modal(cleared?"10000階・世界の底":"10000階・最後の境界",cleared?"<p>真なる深淵は、あなたの領域となった。</p><p class=\"muted\">ここからは育成・装備厳選・十神との再戦を続けられます。</p>":"<p>最後の境界は、まだ閉ざされている。</p><p class=\"muted\">この階層の支配者を倒してください。</p>","探索を続ける"));const modal=topModal();modal.querySelector("[data-modal-primary]").onclick=()=>{modal.remove();game.paused=false};return}
@@ -4367,14 +4372,14 @@ async function triggerInvincibleAlliance(source){
  battle._invincibleAllianceRunning=true;
  try{battleFlash("critical");await battleBanner("無敵",`${displayName(source)}に続き、三神話が連続発動`,`synergy invincible`,720,source);for(const member of partners){if(!aliveEnemies(battle).length)break;const skills=allLearnedSkills(member).filter(Boolean),skill=skills[Math.floor(Math.random()*skills.length)];await performInvincibleAllianceSkill(member,skill)}}finally{battle._invincibleAllianceRunning=false}
 }
-async function command(type,skillId=null){
+async function command(type,skillId=null,{skipRandomCircle=false}={}){
  if(battle.busy||battle.guideReady===false)return;
  const entry=currentTurnEntry(battle),a=actor();
  if(entry?.type!=="ally"||!a)return;
  battle.busy=true;
  const s=calculatedStats(a),e=selectedEnemy(battle);if(!e){battle.busy=false;return win(false,null)};battle.enemy=e;let triggerAlliance=false,signatureExtraAction=false;
 
- if(hasCircleEffect(a,"randomSkill")&&(type==="attack"||type==="skill"&&!skillId)){
+ if(!skipRandomCircle&&hasCircleEffect(a,"randomSkill")&&(type==="attack"||type==="skill"&&!skillId)){
   const unique=new Map();for(const member of save.state.monsters??[])for(const skill of allLearnedSkills(member))unique.set(skill.id,skill);const pool=[...unique.values()].filter(skill=>canUseSkill(a,skill,cooldownRemaining(battle,a.id,skill.id)));
   if(pool.length){const randomSkill=pool[Math.floor(Math.random()*pool.length)];type="skill";skillId=randomSkill.id;a._randomCircleSkill=true;await magicCircleActivationFx(a,circleInfo(a),`抽選結果：${randomSkill.name}`,"全習得スキル候補から1つを発動",{duration:620});addBattleLog(battle,`${displayName(a)}：万象抽選陣 → ${randomSkill.name}`)}
  }
@@ -4398,8 +4403,8 @@ async function command(type,skillId=null){
  if(type==="skill"&&!skillId){completeContextGuide("battle_skill_open",{quiet:true});battle.busy=false;battle.skillMenu=true;renderBattle();return}
 
  if(type==="skill"&&skillId){
-  let skill=skillById(skillId);skill=resolveRandomSkillElement(skill);const cd=cooldownRemaining(battle,a.id,skillId),randomCircleSkill=Boolean(a._randomCircleSkill);
-  if(!randomCircleSkill&&!learnedSkills(a).some(x=>x.id===skillId)||!canUseSkill(a,skill,cd)){battle.busy=false;return alert(cd>0?`あと${cd}ラウンド使用できない`:"MPが足りない")}
+  const equippedSkill=learnedSkills(a).find(candidate=>candidate.id===skillId);let skill=equippedSkill??skillById(skillId);skill=resolveRandomSkillElement(skill);const cd=cooldownRemaining(battle,a.id,skillId),randomCircleSkill=Boolean(a._randomCircleSkill),knownSkill=randomCircleSkill||Boolean(equippedSkill);
+  if(!knownSkill||!canUseSkill(a,skill,cd)){a._randomCircleSkill=false;battle.busy=false;if(battle.auto){addBattleLog(battle,`${displayName(a)}：使用できないスキルを通常攻撃へ切替`);return command("attack",null,{skipRandomCircle:true})}return alert(cd>0?`あと${cd}ラウンド使用できない`:skill?"MPが足りない":"スキルを使用できない")}
   const listedMpCost=effectiveSkillMpCost(a,skill),freeSkill=listedMpCost>0&&Math.random()<affixValue(a,"freeSkillChance",60)/100,mpCost=freeSkill?0:listedMpCost;skill=applySkillMastery(a,skill);battle.skillMenu=false;let skillCompleted=true;addBattleLog(battle,`${displayName(a)}：${skill.name}（${freeSkill?"MP消費なし":`MP-${mpCost}`}）`);await battleBanner(skill.name,skill.description??"","skill",430,a);battle.actionCommitted=true;a.currentMp=Math.max(0,a.currentMp-mpCost);setSkillCooldown(battle,a.id,skill);
   if(Number(skill.selfHpCostRate)>0&&a.currentHp>1){const cost=Math.min(a.currentHp-1,Math.max(1,Math.floor(a.currentHp*Math.min(.8,Number(skill.selfHpCostRate)))));a.currentHp=Math.max(1,a.currentHp-cost);addBattleLog(battle,`${displayName(a)}：${skill.name}の代価 HP-${cost.toLocaleString()}`);await floatText(`代価 -${cost}`,a.id,"enemy")}
   if(skill.type==="selfHeal"||skill.type==="stance"&&skill.heal){
@@ -4780,7 +4785,7 @@ function win(caught,m){
  if(battle?.specialBattle)return finishSpecialBattle(true);
  audio.setScene("victory");audio.sfx("victory");
  const contributionSnapshot=battleContributionSnapshot();
- const memoryBattle=Boolean(battle?.memoryBattle),defeated=(battle.enemies??[battle.enemy]).filter(Boolean),floor=memoryBattle?(battle.memorySourceFloor??save.state.player.currentFloor):save.state.player.currentFloor,boss=defeated.find(e=>e.boss),eliteDefeated=defeated.filter(e=>e.elite&&!e.captured),firstBoss=!!boss&&!memoryBattle&&!save.state.player.bossRewards[floor],suppressItemDrops=defeated.some(e=>e.noItemDrops);
+ const memoryBattle=Boolean(battle?.memoryBattle),defeated=(battle.enemies??[battle.enemy]).filter(Boolean),floor=memoryBattle?(battle.memorySourceFloor??save.state.player.currentFloor):save.state.player.currentFloor,boss=defeated.find(e=>e.boss),eliteDefeated=defeated.filter(e=>e.elite&&!e.captured),firstBoss=!!boss&&!memoryBattle&&!floorBossWasDefeated(save.state.player,floor),suppressItemDrops=defeated.some(e=>e.noItemDrops);
  if(!memoryBattle&&boss&&floor===10)completeContextGuide("floor10_defeat",{quiet:true});
  const rewardMult=eliteDefeated.length?1.65:1,baseGold=battleGoldBase(floor,defeated,{firstBoss}),gold=modifiedGoldReward(save.state,baseGold,"battle");
  save.state.player.gold+=gold;

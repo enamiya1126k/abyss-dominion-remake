@@ -1,0 +1,91 @@
+/* build200: boss-gate filter, rank layout, and source-facing normalization. */
+
+/* A grid declaration overrides the browser's default [hidden] presentation. */
+.floor-boss-gate-entry[hidden]{display:none!important}
+
+/* build195 accidentally changed the sprite anchor from absolute to relative. */
+.side-battle-v2 .combat-rank-unit .side-unit-sprite{position:absolute!important}
+
+/*
+ * Keep every source image untouched. These authored sprites face left, so
+ * mirror only their image layer once to normalize the base direction to the
+ * right. Combat-side wrappers then make allies and enemies face each other
+ * without mirroring names, rank badges, gauges, or effects.
+ */
+.monster-visual:is(
+ [data-monster-species="centipede"],
+ [data-monster-species="goblin_guard"],
+ [data-monster-species="skeleton_guard"],
+ [data-monster-species="bear"],
+ [data-monster-species="frost_dragon"],
+ [data-monster-species="storm_crow"],
+ [data-monster-species="ancient_dragon"],
+ [data-monster-species="moon_hare"],
+ [data-monster-species="river_kappa"],
+ [data-monster-species="shade_cat"],
+ [data-monster-species="thunder_raptor"],
+ [data-monster-species="grave_bishop"],
+ [data-monster-species="dream_eater"],
+ [data-monster-species="sky_stag"],
+ [data-monster-species="venom_wyvern"],
+ [data-monster-species="rose_knight"],
+ [data-monster-species="sea_basilisk"],
+ [data-monster-species="storm_djinn"],
+ [data-monster-species="bone_chimera"],
+ [data-monster-species="magma_beetle"],
+ [data-monster-species="clockwork_mage"],
+ [data-monster-species="shadow_panther"],
+ [data-monster-species="leviathan_spawn"],
+ [data-monster-species="moon_valkyrie"],
+ [data-monster-species="nine_tail_fox"],
+ [data-monster-species="thunder_emperor"],
+ [data-monster-species="void_mantis"],
+ [data-monster-species="aurora_unicorn"],
+ [data-monster-species="solar_sphinx"],
+ [data-monster-species="glacier_queen"],
+ [data-monster-species="volcano_titan"],
+ [data-monster-species="celestial_whale"],
+ [data-monster-species="nightmare_archon"],
+ [data-monster-species="void_archon"],
+ [data-monster-species="first_monster"],
+ [data-monster-species="pencil_mouse"],
+ [data-monster-species="chalkboard_dragon"],
+ [data-monster-species="frost_mole"],
+ [data-monster-species="floor_boss_020"],
+ [data-monster-species="floor_boss_040"],
+ [data-monster-species="floor_boss_080"],
+ [data-monster-species="floor_boss_110"],
+ [data-monster-species="floor_boss_120"],
+ [data-monster-species="floor_boss_130"],
+ [data-monster-species="floor_boss_180"],
+ [data-monster-species="floor_boss_190"],
+ [data-monster-species="floor_boss_210"],
+ [data-monster-species="floor_boss_240"],
+ [data-monster-species="floor_boss_260"],
+ [data-monster-species="floor_boss_280"],
+ [data-monster-species="floor_boss_290"],
+ [data-monster-species="floor_boss_310"],
+ [data-monster-species="floor_boss_330"],
+ [data-monster-species="floor_boss_350"],
+ [data-monster-species="floor_boss_370"],
+ [data-monster-species="floor_boss_390"],
+ [data-monster-species="floor_boss_410"],
+ [data-monster-species="floor_boss_430"],
+ [data-monster-species="floor_boss_440"],
+ [data-monster-species="floor_boss_470"],
+ [data-monster-species="floor_boss_490"],
+ [data-monster-species="floor_boss_510"],
+ [data-monster-species="floor_boss_570"],
+ [data-monster-species="floor_boss_580"],
+ [data-monster-species="floor_boss_590"],
+ [data-monster-species="floor_boss_640"],
+ [data-monster-species="floor_boss_680"],
+ [data-monster-species="floor_boss_690"],
+ [data-monster-species="floor_boss_740"],
+ [data-monster-species="floor_boss_860"],
+ [data-monster-species="floor_boss_870"],
+ [data-monster-species="floor_boss_990"]
+)>img[data-monster-sprite]{
+ transform:scaleX(-1)!important;
+ transform-origin:50% 50%!important;
+}

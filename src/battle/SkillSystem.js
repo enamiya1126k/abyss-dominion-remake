@@ -2,7 +2,7 @@ import{SPECIES}from"../data/species.js?v=2.11.33-build198";
 import{SKILLS}from"../data/skills.js?v=2.11.0-build164";
 import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.0-build164";
 import{buildIndividualSkillKit}from"../data/individualSkillKits.js?v=2.11.0-build164";
-import{FLOOR_BOSS_CATALOG}from"../data/floorBosses.js?v=2.11.30-build195";
+import{FLOOR_BOSS_CATALOG,floorBossWeaponSkillById}from"../data/floorBosses.js?v=2.11.30-build195";
 
 const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
 const ROLE_POOLS={
@@ -307,7 +307,7 @@ export function normalizeSkillProgress(monster){
  return monster.skillProgress;
 }
 export function recordSkillUse(monster,skillId,multiplier=1){const progress=skillProgressFor(monster,skillId);progress.uses++;if(progress.level>=SKILL_MASTERY_MAX_LEVEL)return progress;progress.exp+=Math.max(.01,Math.max(0,Number(multiplier)||0));while(progress.level<SKILL_MASTERY_MAX_LEVEL&&progress.exp>=skillMasteryNeedForLevel(progress.level)){progress.exp-=skillMasteryNeedForLevel(progress.level);progress.level++}progress.exp=Math.round(progress.exp*100)/100;progress.need=skillMasteryNeedForLevel(progress.level);return progress}
-export function skillById(id){return endgameSkillById(id)??FLOOR_BOSS_SKILL_BY_ID.get(id)??BY_ID.get(id)??SKILLS[id]??null}
+export function skillById(id){return endgameSkillById(id)??floorBossWeaponSkillById(id)??FLOOR_BOSS_SKILL_BY_ID.get(id)??BY_ID.get(id)??SKILLS[id]??null}
 export function canUseSkill(monster,skill,cooldown=0){return Boolean(skill)&&monster.currentMp>=effectiveSkillMpCost(monster,skill)&&cooldown<=0}
 export function affixOutgoingDamageMultiplier(stats,enemy,element="neutral"){
  const a=stats?._affixes??{};
