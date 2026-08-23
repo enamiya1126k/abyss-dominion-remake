@@ -268,7 +268,11 @@ export function maxMp(monster){
  const base=Math.max(35,number(species.maxMp,15)+(caster?55:tank?25:38)),growth=(caster?2.4:tank?1.35:1.75)*Math.pow(level,.72),rarityBonus=(rank-1)*18,endgame=monster.endgameFaction==="tenGod"?1.35:monster.endgameFaction==="abyss"?1.2:1,raw=(base+growth+rarityBonus)*endgame+number(monster._equipmentStats?.mp),pct=number(monster._equipmentAffixes?.mpPct);
  return Math.max(0,Math.floor(raw*(1+pct/100)));
 }
-export function effectiveSkillMpCost(monster,skill){const source=Number(monster?._equipmentAffixes?.mpCostReduction??0),equipmentReduction=Math.min(50,Number.isFinite(source)?Math.max(0,source):0),masteryReduction=skill?.id?skillMasteryBonuses(monster,skill).mpCostRate*100:0,reduction=Math.min(60,equipmentReduction+masteryReduction),listed=Number(skill?.mp??0),rate=Number(skill?.mpRate??0),rated=rate>0?Math.ceil(maxMp(monster)*rate):0,base=Math.max(Number.isFinite(listed)?listed:0,Number.isFinite(rated)?rated:0);return Math.max(0,Math.ceil(base*(1-reduction/100)))}
+export function skillMpCostBreakdown(monster,skill){
+ const source=Number(monster?._equipmentAffixes?.mpCostReduction??0),equipmentReduction=Math.min(50,Number.isFinite(source)?Math.max(0,source):0),masteryReduction=skill?.id?skillMasteryBonuses(monster,skill).mpCostRate*100:0,reduction=Math.min(60,equipmentReduction+masteryReduction),listed=Number(skill?.mp??0),rate=Number(skill?.mpRate??0),rated=rate>0?Math.ceil(maxMp(monster)*rate):0,base=Math.max(Number.isFinite(listed)?listed:0,Number.isFinite(rated)?rated:0),beforeEquipment=Math.max(0,Math.ceil(base*(1-Math.min(60,masteryReduction)/100))),final=Math.max(0,Math.ceil(base*(1-reduction/100)));
+ return{base,beforeEquipment,final,equipmentReduction,masteryReduction,totalReduction:reduction};
+}
+export function effectiveSkillMpCost(monster,skill){return skillMpCostBreakdown(monster,skill).final}
 export function allSpeciesSkills(speciesId){return GENERATED[speciesId]??[]}
 export function allLearnedSkills(monster){
  const source=monster?.endgameBossId?endgameSkills(monster.endgameBossId):monster?.floorBossCatalogId?FLOOR_BOSS_SKILLS.get(monster.floorBossCatalogId)??allSpeciesSkills(monster.speciesId):allSpeciesSkills(monster.speciesId),equipment=Array.isArray(monster?._equipmentSkills)?monster._equipmentSkills:[],seen=new Set();
@@ -319,7 +323,7 @@ export function affixOutgoingDamageMultiplier(stats,enemy,element="neutral"){
   :element==="water"||element==="ice"
    ?["waterDamage","iceDamage"]
    :[`${element}Damage`];
- const elementBonus=elementKeys.reduce((sum,key)=>sum+(Number(a[key])||0),0);
+ const elementBonus=(Number(a.allElementDamage)||0)+elementKeys.reduce((sum,key)=>sum+(Number(a[key])||0),0);
  const targetBonus=enemy?.boss||enemy?.endgameBossId?a.bossDamage??0:a.normalDamage??0,lowBonus=stats?._currentHpRatio!=null&&stats._currentHpRatio<=.35?a.lowHpDamage??0:0,fullBonus=stats?._currentHpRatio!=null&&stats._currentHpRatio>=.999?a.fullHpDamage??0:0,total=Math.max(0,Math.min(300,Number(elementBonus)+Number(targetBonus)+Number(lowBonus)+Number(fullBonus)));return 1+total/100
 }
 export function skillDamage(stats,enemy,skill,critical=false){const a=stats._affixes??{},magic=skill?.damageClass==="magic",attack=magic?(stats.matk??stats.atk):stats.atk,defense=magic?(enemy.mdef??enemy.def):enemy.def,base=Math.max(1,Math.floor((attack*skill.power-defense*.3)*affixOutgoingDamageMultiplier(stats,enemy,skill?.element??"neutral"))),critMult=1.65+(a.critDamage??0)/100;return critical?Math.floor(base*critMult):base}
@@ -358,7 +362,7 @@ export function skillEffectDetails(skill){
  if(skill.randomElement)lines.push("発動ごとに攻撃属性が変化");
  if(Number(skill.repeatDelay)>0)lines.push(`${turnText(skill.repeatDelay)}後に同威力の追撃`);
  if(skill.confusion)lines.push("対象を誤作動させる");
- if(skill.cleanse)lines.push("状態異常・弱体効果を解除");
+ if(skill.cleanse||skill.type==="cleanse")lines.push(`${skill.target==="味方全体"||skill.type==="allHeal"||skill.type==="cleanse"?"味方全体の":""}状態異常・弱体効果をすべて解除`);
  if(Number(skill.barrier)>0)lines.push(`障壁を${Math.round(Number(skill.barrier))}段階付与`);
  if(Number(skill.selfAtk)>0)lines.push(`命中後、自分のATK +${percent(skill.selfAtk)}`);
  if(Number(skill.lowHpBonus)>0)lines.push(`低HP時に威力 +${percent(skill.lowHpBonus)}`);

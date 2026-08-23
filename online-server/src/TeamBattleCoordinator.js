@@ -57,6 +57,18 @@ function hitLands(attacker, target, random, guaranteed = false) {
   return random() < clamp(1 - dodge / 100, 0.08, 0.98);
 }
 
+function circleDamageFactor(actor, round = 1, aliveCount = 2) {
+  const effect = actor?.circleEffect ?? "none", missing = 1 - actor.hp / Math.max(1, actor.maxHp), level = Math.max(0, Number(actor?.circleLevel) || 0);
+  if (effect === "openingBuff") return 1.2;
+  if (effect === "manaReversal") return 1.15 + Math.min(.25, level * .004);
+  if (effect === "rage") return 1 + missing * .75;
+  if (effect === "lowHpPower") return 1 + missing * 1.15;
+  if (effect === "goldPower") return 1.12 + Math.min(.3, level * .004);
+  if (effect === "soleSurvivor" && aliveCount === 1) return 1.65;
+  if (effect === "slot") { const seed = [...`${actor.playerId}:${round}`].reduce((sum, char) => Math.imul(sum ^ char.charCodeAt(0), 16777619) >>> 0, 2166136261), roll = seed % 1000; return roll === 0 ? 0 : .5 + roll / 400; }
+  return 1;
+}
+
 function publicPlayer(player) {
   const { stats, ...safe } = player;
   return { ...safe, effects: (safe.effects ?? []).map(effect => ({ ...effect })) };
@@ -74,6 +86,8 @@ export function teamBattleSnapshot(battle) {
     outcome: battle.outcome,
     winner: battle.winner,
     format: battle.format,
+    focusTarget: battle.focusTarget ? { ...battle.focusTarget } : null,
+    cheeredBy: [...(battle.cheeredBy ?? [])],
     players: Object.values(battle.players).map(publicPlayer),
     actions: Object.fromEntries(Object.entries(battle.actions).map(([id, action]) => [id, {
       kind: action.kind,
@@ -126,9 +140,10 @@ export class TeamBattleCoordinator {
     if (participants.some(member => !member.connected)) return { ok: false, code: "MEMBER_OFFLINE", message: "再接続待ちの参加者がいます" };
     if (participants.some(member => !member.teamReady)) return { ok: false, code: "NOT_ALL_READY", message: "参加者全員の準備完了を待っています" };
 
-    const players = {};
+    const players = {}, circleEvents = [];
     for (const member of participants) {
       const stats = member.profile.battleStats;
+      const circleEffect = member.profile.circleEffect ?? "none";
       players[member.playerId] = {
         playerId: member.playerId,
         name: member.profile.displayName,
@@ -140,19 +155,21 @@ export class TeamBattleCoordinator {
         maxHp: stats.hp,
         mp: stats.mp,
         maxMp: stats.mp,
-        shield: 0,
+        shield: circleEffect === "shield" ? Math.ceil(stats.hp * .5) : 0,
         guard: false,
         itemCharges: 1,
         stats: { ...stats },
-        effects: [],
+        effects: circleEffect === "openingBuff" ? [{ kind: "atkUp", value: .2, turns: 999 }, { kind: "critUp", value: .2, turns: 999 }] : [],
+        circleEffect, circleLevel: member.profile.circleLevel ?? 0, circleLastLifeUsed: false, circleReviveUsed: false,
       };
+      if (circleEffect !== "none") circleEvents.push({ kind: "circleActivate", actorId: member.playerId, actorName: member.profile.displayName, targetKind: "player", targetId: member.playerId, label: member.profile.circleName || "魔法陣" });
       member.teamReady = false;
     }
     room.teamBattle = {
       id: token(), round: 1, phase: "command", speed: 1,
       deadlineAt: this.now() + COMMAND_MS, nextRoundAt: 0,
       outcome: null, winner: null, format: `${sun.length} vs ${moon.length}`,
-      players, actions: {}, lastEvents: [],
+      players, actions: {}, lastEvents: circleEvents,
     };
     room.phase = "team";
     this.broadcast(room, { type: "teamBattleStarted", teamBattle: teamBattleSnapshot(room.teamBattle) });
@@ -303,6 +320,7 @@ export class TeamBattleCoordinator {
   _resolveAction(battle, actor, action, events) {
     if (!action) return;
     const session = this.sessions.get(actor.playerId);
+    const actorName = session?.profile?.displayName ?? actor.name ?? "挑戦者";
     const skill = action.kind === "skill" ? session?.profile.skills.find(entry => entry.id === action.skillId) : null;
     const players = Object.values(battle.players);
     const allies = players.filter(player => player.side === actor.side);
@@ -310,7 +328,7 @@ export class TeamBattleCoordinator {
     const target = players.find(player => player.playerId === action.targetId);
     if (action.kind === "guard") {
       actor.guard = true;
-      events.push({ kind: "guard", actorId: actor.playerId, targetId: actor.playerId, label: "ガード" });
+      events.push({ kind: "guard", actorId: actor.playerId, actorName, targetKind: "player", targetId: actor.playerId, label: "ガード" });
       return;
     }
     if (action.kind === "item") {
@@ -318,7 +336,7 @@ export class TeamBattleCoordinator {
       const ally = target?.side === actor.side ? target : actor;
       const before = ally.hp;
       ally.hp = Math.min(ally.maxHp, ally.hp + Math.ceil(ally.maxHp * 0.35));
-      events.push({ kind: "heal", actorId: actor.playerId, targetId: ally.playerId, value: ally.hp - before, label: "模擬戦応急薬" });
+      events.push({ kind: "heal", actorId: actor.playerId, actorName, targetKind: "player", targetId: ally.playerId, value: ally.hp - before, label: "模擬戦応急薬" });
       return;
     }
     if (skill) actor.mp = Math.max(0, actor.mp - skill.mp);
@@ -326,7 +344,7 @@ export class TeamBattleCoordinator {
       const fallen = target?.side === actor.side && target.hp <= 0 ? target : allies.find(player => player.hp <= 0);
       if (fallen) {
         fallen.hp = Math.max(1, Math.ceil(fallen.maxHp * Math.max(0.2, skill.heal || 0.35)));
-        events.push({ kind: "revive", actorId: actor.playerId, targetId: fallen.playerId, value: fallen.hp, label: skill.name });
+        events.push({ kind: "revive", actorId: actor.playerId, actorName, targetKind: "player", targetId: fallen.playerId, value: fallen.hp, label: skill.name });
       }
       return;
     }
@@ -335,27 +353,27 @@ export class TeamBattleCoordinator {
       if (["heal", "allHeal"].includes(skill.kind)) for (const ally of targets) {
         const before = ally.hp;
         ally.hp = Math.min(ally.maxHp, ally.hp + Math.ceil(ally.maxHp * Math.max(0.12, skill.heal || 0.25)));
-        events.push({ kind: "heal", actorId: actor.playerId, targetId: ally.playerId, value: ally.hp - before, label: skill.name });
+        events.push({ kind: "heal", actorId: actor.playerId, actorName, targetKind: "player", targetId: ally.playerId, value: ally.hp - before, label: skill.name });
       }
       if (skill.kind === "mpHeal") for (const ally of targets) {
         const before = ally.mp;
         ally.mp = Math.min(ally.maxMp, ally.mp + Math.ceil(ally.maxMp * Math.max(0.15, skill.mpHeal || 0.25)));
-        events.push({ kind: "mpHeal", actorId: actor.playerId, targetId: ally.playerId, value: ally.mp - before, label: skill.name });
+        events.push({ kind: "mpHeal", actorId: actor.playerId, actorName, targetKind: "player", targetId: ally.playerId, value: ally.mp - before, label: skill.name });
       }
       if (skill.kind === "guard") for (const ally of targets) ally.guard = true;
       for (const effect of skill.effects ?? []) if (effect.allies || !effect.enemy) for (const ally of targets) addEffect(ally, effect);
       if (skill.partyShieldRate) for (const ally of targets) ally.shield = Math.max(ally.shield, Math.ceil(ally.maxHp * skill.partyShieldRate));
-      if (!events.some(event => event.actorId === actor.playerId && event.label === skill.name)) events.push({ kind: "buff", actorId: actor.playerId, targetId: targets[0]?.playerId, label: skill.name });
+      if (!events.some(event => event.actorId === actor.playerId && event.label === skill.name)) events.push({ kind: "buff", actorId: actor.playerId, actorName, targetKind: "player", targetId: targets[0]?.playerId, label: skill.name });
       return;
     }
     const defender = target?.side !== actor.side && target.hp > 0 ? target : enemies[0];
     if (!defender) return;
     if (!hitLands(actor, defender, this.random, Boolean(skill?.guaranteedHit))) {
-      events.push({ kind: "miss", actorId: actor.playerId, targetId: defender.playerId, label: `${defender.name}が回避` });
+      events.push({ kind: "miss", actorId: actor.playerId, actorName, targetId: defender.playerId, label: `${defender.name}が回避` });
       return;
     }
     const magic = skill?.damageClass === "magic";
-    const attack = (magic ? actor.stats.matk : actor.stats.atk) * statFactor(actor, "atkUp", "atkDown");
+    const attack = (magic ? actor.stats.matk : actor.stats.atk) * statFactor(actor, "atkUp", "atkDown") * circleDamageFactor(actor, battle.round, allies.filter(player => player.hp > 0).length);
     const defense = (magic ? defender.stats.mdef : defender.stats.def) * statFactor(defender, "defUp", "defDown");
     const power = skill?.kind === "attack" ? Math.max(0.2, skill.power * skill.hits) : 1;
     const ratio = attack / Math.max(1, attack + defense);
@@ -368,7 +386,9 @@ export class TeamBattleCoordinator {
     defender.shield = Math.max(0, (defender.shield ?? 0) - absorbed);
     const before = defender.hp;
     defender.hp = Math.max(0, defender.hp - (value - absorbed));
-    events.push({ kind: "damage", actorId: actor.playerId, targetId: defender.playerId, value: before - defender.hp, absorbed, critical, label: skill?.name ?? "たたかう" });
+    if (defender.hp <= 0 && before > 0 && defender.circleEffect === "lastLife" && !defender.circleLastLifeUsed) { defender.circleLastLifeUsed = true; defender.hp = 1; events.push({ kind: "circleActivate", targetKind: "player", targetId: defender.playerId, label: "不屈の残光" }); }
+    if (defender.hp <= 0 && before > 0 && defender.circleEffect === "revive" && !defender.circleReviveUsed) { defender.circleReviveUsed = true; defender.hp = Math.max(1, Math.ceil(defender.maxHp * .35)); events.push({ kind: "circleActivate", targetKind: "player", targetId: defender.playerId, label: "輪廻の魔法陣" }); }
+    events.push({ kind: "damage", actorId: actor.playerId, actorName, targetId: defender.playerId, value: before - defender.hp, absorbed, critical, label: skill?.name ?? "たたかう" });
     if (skill) for (const effect of skill.effects ?? []) if (effect.enemy) addEffect(defender, effect);
     if (defender.hp <= 0) events.push({ kind: "ko", targetId: defender.playerId, label: `${defender.name} 戦闘不能` });
   }

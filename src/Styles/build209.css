@@ -1,0 +1,44 @@
+/* build209: stable co-op interactions and dungeon-native frontal treasure chests. */
+
+.online-coop-interaction button[aria-busy="true"]{
+  cursor:wait;
+  color:#f3dfaa;
+  border-color:#8f7547;
+  background:linear-gradient(#30271a,#17120d);
+  box-shadow:inset 0 0 18px #d2aa4f1f;
+}
+.online-coop-interaction button:disabled{
+  opacity:.72;
+  pointer-events:none;
+  filter:saturate(.72);
+}
+.online-merchant-receipt{
+  position:relative;
+  display:grid;
+  gap:4px;
+  margin:9px 0 5px;
+  padding:12px 10px;
+  border:1px solid #7d637f;
+  background:linear-gradient(135deg,#211526,#100b13);
+  text-align:center;
+}
+.online-merchant-receipt b{color:#f5dea0;font:900 .72rem/1.3 serif}
+.online-merchant-receipt span{color:#d5c8d8;font:750 .52rem/1.45 sans-serif}
+.online-merchant-receipt.pending{border-color:#9b7d4e;box-shadow:inset 0 0 16px #e9b65018}
+.online-merchant-receipt.success{border-color:#668d72;box-shadow:inset 0 0 18px #62c98b20}
+.online-merchant-receipt.error{border-color:#a35c68;box-shadow:inset 0 0 18px #d85b7020}
+.online-merchant-receipt.error b{color:#ffafb8}
+.online-rare-merchant-offers button:disabled{
+  opacity:.45;
+  pointer-events:none;
+  filter:grayscale(.35);
+}
+.online-map-toggle,.online-chat-toggle{
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+@media(prefers-reduced-motion:reduce){
+  .online-coop-interaction button[aria-busy="true"]{transition:none!important}
+}

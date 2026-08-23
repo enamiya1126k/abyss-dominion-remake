@@ -1,9 +1,9 @@
 import {
   buildOnlinePartyProfile, ONLINE_STORAGE_KEYS, ensureOnlineIdentity,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.39-build204";
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.44-build209";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
-} from "./OnlineViews.js?v=2.11.39-build204";
+} from "./OnlineViews.js?v=2.11.45-build210";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
 const DIRECTION = Object.freeze({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] });
@@ -36,7 +36,7 @@ async function copyText(value) {
 }
 
 export class OnlinePartyController {
-  constructor({ getState, toast = () => {}, onReward = async () => ({ ok: false }), onBack = () => {}, onExploreCanvasMount = () => {}, onExploreCanvasUpdate = () => {}, onExploreCanvasUnmount = () => {}, onScene = () => {} } = {}) {
+  constructor({ getState, toast = () => {}, onReward = async () => ({ ok: false }), onBack = () => {}, onExploreCanvasMount = () => {}, onExploreCanvasUpdate = () => {}, onExploreCanvasUnmount = () => {}, onHostWorldUpdate = () => {}, onScene = () => {} } = {}) {
     const identity = ensureOnlineIdentity();
     this.getState = getState;
     this.toast = toast;
@@ -45,6 +45,7 @@ export class OnlinePartyController {
     this.onExploreCanvasMount = onExploreCanvasMount;
     this.onExploreCanvasUpdate = onExploreCanvasUpdate;
     this.onExploreCanvasUnmount = onExploreCanvasUnmount;
+    this.onHostWorldUpdate = onHostWorldUpdate;
     this.onScene = onScene;
     this.selfId = identity.friendId;
     this.resumeToken = storageGet(ONLINE_STORAGE_KEYS.resumeToken);
@@ -67,6 +68,7 @@ export class OnlinePartyController {
     this.itemTargetMenu = { explore: false, raid: false, team: false };
     this.hpTrails = { explore: {}, raid: {}, team: {} };
     this.raidReport = null;
+    this.expeditionReport = null;
     this.hallDestination = null;
     this.exploreCanvasMounted = false;
     this.presentationTimers = new Set();
@@ -76,6 +78,17 @@ export class OnlinePartyController {
     this.lastMoveAt = 0;
     this.lastChatAt = 0;
     this.chatDraft = "";
+    this.exploreChatOpen = false;
+    this.rareMerchantOpen = false;
+    this.merchantPending = false;
+    this.merchantResult = null;
+    this.merchantPendingTimer = null;
+    this.interactionPending = null;
+    this.interactionPendingTimer = null;
+    this.chatBubbles = new Map();
+    this.socialBubbles = new Map();
+    this.pingMenuOpen = false;
+    this.coopPings = new Map();
     this.unread = 0;
     this.clockFrame = null;
     this.moveFrame = null;
@@ -101,6 +114,8 @@ export class OnlinePartyController {
     this.heldDirections.clear(); this.path = [];
     this.hallDestination = null;
     this._unmountExploreCanvas();
+    clearTimeout(this.interactionPendingTimer); clearTimeout(this.merchantPendingTimer);
+    this.interactionPendingTimer = null; this.merchantPendingTimer = null;
     for (const timer of this.presentationTimers) clearTimeout(timer);
     this.presentationTimers.clear();
     this._removeEvents();
@@ -130,7 +145,7 @@ export class OnlinePartyController {
     this._bind(this.root, "submit", event => this._handleSubmit(event));
     this._bind(this.root, "input", event => this._handleInput(event));
     this._bind(this.root, "keydown", event => {
-      if (!event.target.matches?.("[data-online-chat-input]") || event.key !== "Enter" || event.shiftKey || event.isComposing) return;
+      if (!event.target.matches?.("[data-online-chat-input],[data-online-explore-chat-input]") || event.key !== "Enter" || event.shiftKey || event.isComposing) return;
       event.preventDefault(); event.target.form?.requestSubmit();
     });
     this._bind(window, "keydown", event => {
@@ -143,6 +158,15 @@ export class OnlinePartyController {
       const button = event.target.closest?.("[data-online-move]");
       if (!button) return;
       event.preventDefault(); this.path = []; this.heldDirections.add(button.dataset.onlineMove); button.setPointerCapture?.(event.pointerId);
+    });
+    this._bind(this.root, "pointerdown", event => {
+      const emote = event.target.closest?.("[data-online-emote-anchor]");
+      if (emote) { this._beginEmoteGesture(event, emote); return; }
+      const target = event.target.closest?.("[data-enemy-target]");
+      if (!target) return;
+      const timer = setTimeout(() => { target.dataset.focusHold = "1"; this._send("focusTarget", { mode: this.route, targetId: target.dataset.enemyTarget }); this.toast("集中攻撃マーカーを共有しました"); }, 520);
+      const cancel = () => { clearTimeout(timer); window.removeEventListener("pointerup", cancel, true); window.removeEventListener("pointercancel", cancel, true); };
+      window.addEventListener("pointerup", cancel, true); window.addEventListener("pointercancel", cancel, true);
     });
     for (const type of ["pointerup", "pointercancel", "lostpointercapture"]) this._bind(this.root, type, event => {
       const button = event.target.closest?.("[data-online-move]"); if (button) this.heldDirections.delete(button.dataset.onlineMove);
@@ -163,6 +187,15 @@ export class OnlinePartyController {
     }
     const button = event.target.closest?.("button");
     if (!button) return;
+    if (button.matches("[data-online-ping-toggle]")) { this.pingMenuOpen = !this.pingMenuOpen; this._render(); return; }
+    if (button.matches("[data-online-ping-kind]")) { const kind = button.dataset.onlinePingKind; this.pingMenuOpen = false; this._send("expeditionPing", { kind }); this._render(); return; }
+    if (button.matches("[data-online-chat-toggle]")) { this.exploreChatOpen = !this.exploreChatOpen; this._render(); requestAnimationFrame(() => this._query("[data-online-explore-chat-input]")?.focus()); return; }
+    if (button.matches("[data-online-chat-close]")) { this.exploreChatOpen = false; this._render(); return; }
+    if (button.matches("[data-online-open-merchant]")) { this.rareMerchantOpen = true; this.merchantResult = null; this._render(); return; }
+    if (button.matches("[data-online-close-merchant]")) { this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this._render(); return; }
+    if (button.matches("[data-online-expedition-interact]")) { const action = button.dataset.onlineExpeditionInteract, targetId = button.dataset.onlineInteractionTarget; if (!this._beginInteractionPending(action, targetId)) return; if (!this._send("expeditionInteract", { action, targetId })) this._clearInteractionPending(false); this._render(); return; }
+    if (button.matches("[data-online-merchant-offer]")) { if (this.merchantPending) return; const offer = button.dataset.onlineMerchantOffer; this.merchantPending = true; this.merchantResult = { offer, status: "pending" }; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = setTimeout(() => { if (!this.merchantPending) return; this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "通信結果を確認できませんでした。もう一度お試しください。" }; this._render(); }, 3500); if (!this._send("rareMerchantClaim", { offer })) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "サーバーへ接続されていません。" }; } this._render(); return; }
+    if (button.matches("[data-online-battle-cheer]")) { this._send("battleCheer", { mode: button.dataset.onlineBattleCheer || this.route }); return; }
     if (button.matches("[data-online-hall-destination]")) { this.hallDestination = { x: Number(button.dataset.hallX), y: Number(button.dataset.hallY) }; return; }
     if (button.id === "backOnlineParty") { this.disconnect({ leave: true, quiet: true }); this.onBack(); return; }
     if (button.matches("[data-copy-friend-id]")) { copyText(this.selfId).then(ok => this.toast(ok ? "フレンドIDをコピーしました" : "コピーできませんでした")); return; }
@@ -177,7 +210,7 @@ export class OnlinePartyController {
     const nextRoute = button.dataset.onlineRoute ?? button.dataset.onlineGo;
     if (nextRoute && ROUTES.has(nextRoute)) { this._setRoute(nextRoute); return; }
     if (button.matches("[data-online-ready]")) { const self = this._self(); this._send("setReady", { ready: !self?.ready }); return; }
-    if (button.matches("[data-online-start-explore]")) { this._send("startExpedition"); return; }
+    if (button.matches("[data-online-start-explore]")) { this.expeditionReport = null; this._send("startExpedition", { hostWorld: this._hostWorldSnapshot() }); return; }
     if (button.matches("[data-online-return]")) { this._send("requestReturn"); return; }
     if (button.matches("[data-online-complete]")) { this._send("completeExpedition"); return; }
     if (button.matches("[data-online-start-raid]")) { this._send("startRaid"); return; }
@@ -194,6 +227,7 @@ export class OnlinePartyController {
     if (button.id === "closeItemMenu") { this.itemMenu[this.route] = false; this._render(); return; }
     if (button.id === "closeOnlineItemTarget") { this.itemTargetMenu[this.route] = false; this.itemMenu[this.route] = true; this._render(); return; }
     if (button.matches("[data-online-close-raid-report]")) { this.raidReport = null; this._render(); return; }
+    if (button.matches("[data-online-close-expedition-report]")) { this.expeditionReport = null; this._render(); return; }
     if (button.matches("[data-online-speed-cycle]")) { const mode = button.dataset.onlineSpeedCycle, current = Number(this._battle(mode)?.speed) || 1, speeds = [.5, 1, 2], speed = speeds[(speeds.indexOf(current) + 1) % speeds.length]; this._send(mode === "raid" ? "raidSpeed" : mode === "team" ? "teamSpeed" : "battleSpeed", { speed }); return; }
     if (button.matches("[data-online-center]")) { this.path = []; if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { center: true }); return; }
     if (button.matches("[data-online-party-hud-toggle]")) { this.onlineHudCollapsed = !this.onlineHudCollapsed; this._render(); return; }
@@ -240,11 +274,17 @@ export class OnlinePartyController {
       if (Date.now() - this.lastChatAt < 850) return this.toast("少し待ってから送信してください");
       if (this._send("chat", { text })) { this.lastChatAt = Date.now(); this.chatDraft = ""; input.value = ""; const count = this._query("[data-online-chat-count]"); if (count) count.textContent = "0"; }
     }
+    if (event.target.matches("[data-online-explore-chat-form]")) {
+      event.preventDefault(); const input = this._query("[data-online-explore-chat-input]");
+      const text = String(input?.value ?? "").replace(/\s+/g, " ").trim().slice(0, 80);
+      if (!text || Date.now() - this.lastChatAt < 850) return;
+      if (this._send("chat", { text })) { this.lastChatAt = Date.now(); this.chatDraft = ""; input.value = ""; input.blur(); }
+    }
   }
 
   _handleInput(event) {
     if (event.target.matches("[data-online-room-code]")) event.target.value = safeRoomId(event.target.value);
-    if (event.target.matches("[data-online-chat-input]")) { this.chatDraft = event.target.value.slice(0, 80); const count = this._query("[data-online-chat-count]"); if (count) count.textContent = String(this.chatDraft.length); }
+    if (event.target.matches("[data-online-chat-input],[data-online-explore-chat-input]")) { this.chatDraft = event.target.value.slice(0, 80); const count = this._query("[data-online-chat-count]"); if (count) count.textContent = String(this.chatDraft.length); }
     if (event.target.matches("[data-online-floor]")) {
       const self = this._self(); const max = Math.max(1, Number(self?.profile?.maxFloor) || 1);
       const floor = Math.round(clamp(event.target.value, 1, max)); event.target.value = String(floor); this._send("setFloor", { floor });
@@ -285,6 +325,19 @@ export class OnlinePartyController {
     this.ws.addEventListener("error", () => this._setStatus("error", "通信エラー", "PCサーバーとトンネルを確認してください"));
   }
 
+  _beginInteractionPending(action, targetId) {
+    if (this.interactionPending) return false;
+    const pending = { action: String(action || ""), targetId: String(targetId || ""), startedAt: Date.now() };
+    this.interactionPending = pending; clearTimeout(this.interactionPendingTimer);
+    this.interactionPendingTimer = setTimeout(() => { if (this.interactionPending !== pending) return; this.interactionPending = null; this.interactionPendingTimer = null; this._render(); }, 3000);
+    return true;
+  }
+
+  _clearInteractionPending(render = false) {
+    clearTimeout(this.interactionPendingTimer); this.interactionPendingTimer = null; this.interactionPending = null;
+    if (render) this._render();
+  }
+
   _send(type, payload = {}) {
     if (this.ws?.readyState !== WebSocket.OPEN) return false;
     this.ws.send(JSON.stringify({ type, ...payload })); return true;
@@ -305,25 +358,34 @@ export class OnlinePartyController {
     if (message.type === "leftRoom") { this._clearRoom(); return; }
     if (message.type === "memberMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.position = { ...message.position }; if (this.route === "home") this._render(); return; }
     if (message.type === "expeditionMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.dungeonPosition = { ...message.position }; if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render(); return; }
-    if (["expeditionStarted", "battleStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this._applyRoomState(message.room); return; }
-    if (message.type === "expeditionEvent") { this._announceExpeditionEvent(message.event); return; }
+    if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this._applyRoomState(message.room); return; }
+    if (message.type === "battleStarted" && message.room) { this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
+    if (message.type === "expeditionEvent") { if (message.event?.kind === "hostChestOpened") this.onHostWorldUpdate(message.event); this._announceExpeditionEvent(message.event); return; }
+    if (message.type === "expeditionPing" && message.ping?.id) { this.coopPings.set(message.ping.id, { ...message.ping }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() }); else this._render(); return; }
     if (message.type === "battleRound" || message.type === "battleResolved") { const previous = this.roomState?.expedition?.battle; this._captureHpTrails("explore", previous, message.battle); if (this.roomState?.expedition) this.roomState.expedition.battle = message.battle; if (message.type === "battleRound") this._closeBattleMenus("explore"); this._setRoute("explore", { silent: true }); this._queueBattlePresentation("explore", message.battle?.lastEvents); return; }
-    if (message.type === "expeditionEnded") { this.toast(message.summary?.completed ? `共闘 ${message.summary.floor}F 踏破！` : message.summary?.reason === "defeat" ? "共闘パーティが全滅しました…" : "共闘探索から帰還しました"); return; }
+    if (message.type === "expeditionEnded") { this.expeditionReport = message.summary ?? null; this.route = "explore"; this.toast(message.summary?.completed ? `共闘 ${message.summary.floor}F 踏破！` : message.summary?.reason === "defeat" ? "共闘パーティが全滅しました…" : "共闘探索から帰還しました"); this._render(); return; }
     if (message.type === "battleEnded") { this.toast(message.result === "victory" ? "共闘バトル勝利！" : "共闘パーティが全滅しました…"); return; }
-    if (message.type === "raidStarted") { this.roomState = { ...(this.roomState ?? {}), phase: "raid", raid: message.raid, raidProgress: message.raid?.progress }; this._setRoute("raid", { silent: true }); this._render(); return; }
+    if (message.type === "raidStarted") { this.roomState = { ...(this.roomState ?? {}), phase: "raid", raid: message.raid, raidProgress: message.raid?.progress }; this._setRoute("raid", { silent: true }); this._queueBattlePresentation("raid", message.raid?.lastEvents); return; }
     if (["raidState", "raidRound", "raidResolved"].includes(message.type)) { const previous = this.roomState?.raid; this._captureHpTrails("raid", previous, message.raid); if (this.roomState) { this.roomState.phase = "raid"; this.roomState.raid = message.raid; this.roomState.raidProgress = message.raid?.progress ?? this.roomState.raidProgress; } if (message.type === "raidRound") this._closeBattleMenus("raid"); this._setRoute("raid", { silent: true }); this._queueBattlePresentation("raid", message.raid?.lastEvents); return; }
     if (message.type === "raidEnded") { if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.raid = null; this.roomState.raidProgress = message.result === "victory" ? null : message.raid?.progress; } this.raidReport = { result: message.result, raid: message.raid, ranking: message.ranking ?? message.raid?.ranking ?? [] }; this.route = "raid"; this.toast(message.result === "victory" ? "レイド討伐成功！" : "敗北…ボスの残HPを保存しました"); this._render(); return; }
     if (message.type === "teamBattleStarted" || message.type === "teamBattleState" || message.type === "teamBattleRound" || message.type === "teamBattleResolved") { const previous = this.roomState?.teamBattle; this._captureHpTrails("team", previous, message.teamBattle); if (this.roomState) { this.roomState.phase = "team"; this.roomState.teamBattle = message.teamBattle; } if (message.type === "teamBattleRound") this._closeBattleMenus("team"); this._setRoute("team", { silent: true }); this._queueBattlePresentation("team", message.teamBattle?.lastEvents); return; }
     if (message.type === "teamBattleEnded") { this.toast(message.winner ? `${message.winner === "sun" ? "紅組" : "蒼組"}の勝利！` : "引き分け！"); return; }
     if (message.type === "chatMessage") { this._receiveChat(message.message); return; }
+    if (message.type === "social") { this._receiveSocial(message); return; }
     if (message.type === "onlineReward") { this._receiveReward(message); return; }
-    if (message.type === "error") { this.toast(message.message || "オンライン処理に失敗しました"); return; }
+    if (message.type === "error") { this._clearInteractionPending(false); if (this.merchantPending) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { ...(this.merchantResult ?? {}), status: "error", message: message.message || "支援品を受け取れませんでした。" }; } this.toast(message.message || "オンライン処理に失敗しました"); this._render(); return; }
   }
 
   _applyRoomState(room) {
     if (!room?.roomId) return;
     const previousCount = this.roomState?.chatHistory?.length ?? 0;
+    const rareKind = room?.expedition?.coop?.rare?.kind;
+    const merchantClaim = rareKind === "otherworldMerchant" ? room?.expedition?.coop?.rare?.merchantClaims?.[this.selfId] : null;
+    if (this.merchantPending && merchantClaim) { clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this.merchantPending = false; this.merchantResult = { offer: merchantClaim, status: "success" }; }
+    if (rareKind !== "otherworldMerchant") { this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; }
+    this._clearInteractionPending(false);
     this.roomState = room; this.roomId = room.roomId;
+    if (room?.expedition?.interactions?.[this.selfId]?.action !== "browseRareMerchant" && !this.merchantResult) this.rareMerchantOpen = false;
     if (room.phase === "expedition") this.route = "explore";
     else if (room.phase === "raid") this.route = "raid";
     else if (room.phase === "team") this.route = "team";
@@ -344,7 +406,7 @@ export class OnlinePartyController {
   }
 
   _clearRoom() {
-    this.roomState = null; this.roomId = null; this.path = []; this.heldDirections.clear(); this.unread = 0;
+    this.roomState = null; this.roomId = null; this.path = []; this.heldDirections.clear(); this.unread = 0; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false);
     this.root?.querySelector(".online-v3-screen")?.classList.remove("online-shared-gameplay-active");
     this._unmountExploreCanvas();
     this._query("[data-online-room]")?.classList.remove("online-shared-gameplay");
@@ -380,7 +442,7 @@ export class OnlinePartyController {
     this.root?.querySelector(".online-v3-screen")?.classList.toggle("online-shared-gameplay-active", gameplay);
     const canvasExplore = this.route === "explore" && this.roomState.phase === "expedition" && !this.roomState.expedition?.battle;
     if (this.exploreCanvasMounted) this._unmountExploreCanvas();
-    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], raidReport: this.raidReport, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.() };
+    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], raidReport: this.raidReport, expeditionReport: this.expeditionReport, exploreChatOpen: this.exploreChatOpen, merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot() };
     stage.innerHTML = this.route === "explore" ? renderOnlineExplore(this.roomState, this.selfId, state)
       : this.route === "raid" ? renderOnlineRaid(this.roomState, this.selfId, state)
       : this.route === "team" ? renderOnlineTeam(this.roomState, this.selfId, state)
@@ -388,7 +450,8 @@ export class OnlinePartyController {
       : renderOnlineHome(this.roomState, this.selfId, state);
     if (this.route === "chat") requestAnimationFrame(() => { const log = this._query("[data-online-chat-log]"); if (log) log.scrollTop = log.scrollHeight; });
     this.onScene(canvasExplore ? "explore" : gameplay ? "battle" : "home");
-    if (canvasExplore) requestAnimationFrame(() => { if (!this.mounted || this.route !== "explore" || this.roomState?.expedition?.battle) return; this.exploreCanvasMounted = true; this.onExploreCanvasMount(this.roomState, this.selfId, target => this._setDestination(target)); });
+    if (canvasExplore) requestAnimationFrame(() => { if (!this.mounted || this.route !== "explore" || this.roomState?.expedition?.battle) return; this.exploreCanvasMounted = true; this.onExploreCanvasMount(this.roomState, this.selfId, target => this._setDestination(target), this._chatBubbleSnapshot(), this._pingSnapshot(), this._socialBubbleSnapshot()); this._bindExploreChatDrag(); });
+    if (gameplay && !canvasExplore) requestAnimationFrame(() => this._decorateBattleState());
   }
 
   _selectBattleTarget(id, side) {
@@ -428,6 +491,21 @@ export class OnlinePartyController {
     const actor = this.roomState?.members?.find(member => member.playerId === event.actorId)?.profile?.displayName;
     const message = event.kind === "chest" || event.kind === "bone" || event.kind === "shrine" ? `${actor || "仲間"}が、${event.message}` : event.message || event.title;
     if (message) this.toast(message);
+    if (event.kind === "splitKey" && String(event.id ?? event.message ?? "").includes("key-complete")) this._playKeyFusion();
+  }
+
+  _playKeyFusion() {
+    const stage = this._query(".explore-stage") ?? this._query("[data-online-stage]");
+    if (!stage) return;
+    stage.querySelector(".online-key-fusion-fx")?.remove();
+    const fx = document.createElement("div");
+    fx.className = "online-key-fusion-fx";
+    fx.setAttribute("aria-live", "polite");
+    fx.innerHTML = `<div class="online-key-fusion-pieces"><img class="cyan" src="./assets/online/coop/keys/key-fragment-cyan.png?v=2.11.44-build209" alt=""><img class="violet" src="./assets/online/coop/keys/key-fragment-violet.png?v=2.11.44-build209" alt=""><img class="combined" src="./assets/online/coop/keys/key-combined.png?v=2.11.44-build209" alt=""></div><strong>共鳴鍵 完成</strong><small>封印された宝物庫が開きます</small>`;
+    stage.appendChild(fx);
+    requestAnimationFrame(() => fx.classList.add("active"));
+    const timer = setTimeout(() => { this.presentationTimers.delete(timer); fx.classList.add("leaving"); setTimeout(() => fx.remove(), 420); }, 2100);
+    this.presentationTimers.add(timer);
   }
 
   _healthMap(mode, battle) {
@@ -453,11 +531,11 @@ export class OnlinePartyController {
     const actorId = event?.actorId, targetId = event?.targetId;
     const actor = this._query(`#ally-${CSS.escape(String(actorId))}`) ?? this._query(`#enemy-${CSS.escape(String(actorId))}`);
     const target = event?.targetKind === "player" ? this._query(`#ally-${CSS.escape(String(targetId))}`) : this._query(`#enemy-${CSS.escape(String(targetId))}`);
-    if (actor && ["damage", "signature", "heal", "mpHeal", "revive"].includes(event.kind)) { actor.classList.remove("fx-lunge", "fx-skill-lunge"); void actor.offsetWidth; actor.classList.add(event.label && event.label !== "たたかう" ? "fx-skill-lunge" : "fx-lunge"); }
+    if (actor && ["damage", "signature", "heal", "mpHeal", "revive", "circleActivate"].includes(event.kind)) { actor.classList.remove("fx-lunge", "fx-skill-lunge"); void actor.offsetWidth; actor.classList.add(event.label && event.label !== "たたかう" ? "fx-skill-lunge" : "fx-lunge"); }
     if (target && ["damage", "enemyDamage", "signature", "deathMirrorPhantom"].includes(event.kind) && Number(event.value) > 0) { target.classList.remove("fx-hit", "fx-critical-hit"); void target.offsetWidth; target.classList.add(event.critical ? "fx-critical-hit" : "fx-hit"); const flash = document.createElement("span"); flash.className = `battle-unit-hit-flash ${event.critical ? "critical" : ""}`; target.appendChild(flash); setTimeout(() => flash.remove(), 420); }
     const layer = this._query("#battleFxLayer");
     if (layer && target && (Number(event?.value) || ["miss", "guard"].includes(event?.kind))) { const layerRect = layer.getBoundingClientRect(), rect = target.getBoundingClientRect(), float = document.createElement("div"); const healing = ["heal", "mpHeal", "revive"].includes(event.kind), text = event.kind === "miss" ? "MISS" : event.kind === "guard" ? "GUARD" : `${healing ? "+" : "-"}${Math.max(0, Number(event.value) || 0).toLocaleString()}`; float.className = `floating-number ${healing ? "heal" : event.critical ? "critical" : event.kind === "enemyDamage" ? "enemy" : "damage"}`; float.textContent = text; float.style.left = `${rect.left - layerRect.left + rect.width / 2}px`; float.style.top = `${rect.top - layerRect.top + rect.height * .34}px`; layer.appendChild(float); setTimeout(() => float.remove(), 1500); }
-    if (layer && event?.label && (["signature", "raidTelegraph", "revive", "effect", "buff"].includes(event.kind) || event.kind === "damage" && event.label !== "たたかう")) { const banner = document.createElement("div"); banner.className = `battle-cinematic-banner ${event.kind === "raidTelegraph" ? "boss" : "skill"}`; banner.innerHTML = `<span class="battle-banner-copy"><strong>${String(event.label).replace(/[<>]/g, "")}</strong><small>${event.actorName ? String(event.actorName).replace(/[<>]/g, "") : "共闘アクション"}</small></span>`; this._query(".battle-arena")?.appendChild(banner); setTimeout(() => { banner.classList.add("leaving"); setTimeout(() => banner.remove(), 240); }, 720); }
+    if (layer && event?.label && (["signature", "raidTelegraph", "revive", "effect", "buff", "link", "coopBreak", "circleActivate"].includes(event.kind) || event.kind === "damage" && event.label !== "たたかう")) { const banner = document.createElement("div"); banner.className = `battle-cinematic-banner ${event.kind === "raidTelegraph" || event.kind === "coopBreak" ? "boss" : "skill"}`; banner.innerHTML = `<span class="battle-banner-copy"><strong>${String(event.label).replace(/[<>]/g, "")}</strong><small>${event.actorName ? String(event.actorName).replace(/[<>]/g, "") : event.kind === "circleActivate" ? "魔法陣 発動" : "共闘アクション"}</small></span>`; this._query(".battle-arena")?.appendChild(banner); setTimeout(() => { banner.classList.add("leaving"); setTimeout(() => banner.remove(), 240); }, 720); }
   }
 
   _sendPreset(text) {
@@ -472,7 +550,9 @@ export class OnlinePartyController {
     if (!this.roomState.chatHistory.some(entry => entry.id === message.id)) this.roomState.chatHistory.push(message);
     this.roomState.chatHistory = this.roomState.chatHistory.slice(-50);
     if (this.route !== "chat") this.unread = Math.min(99, this.unread + 1);
-    this._render();
+    this.chatBubbles.set(message.playerId, { playerId: message.playerId, text: String(message.text ?? "").slice(0, 80), expiresAt: Date.now() + 6200 });
+    if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() });
+    else this._render();
   }
 
   async _receiveReward(message) {
@@ -502,12 +582,77 @@ export class OnlinePartyController {
     if (this.route === "home" && this.roomState?.phase === "lobby") { this._moveHallStep(now); return; }
     if (this.route !== "explore" || this.roomState?.phase !== "expedition" || this.roomState?.expedition?.battle) return;
     const self = this._self(), current = self?.dungeonPosition, expedition = this.roomState.expedition;
-    if (!current) return;
+    if (!current || Number(self?.coopVitals?.hp) <= 0) { this.path = []; this.heldDirections.clear(); return; }
     let direction = [...this.heldDirections][0], target = null;
     if (direction) { const [dx, dy] = DIRECTION[direction]; target = { x: current.x + dx, y: current.y + dy }; }
     else if (this.path.length) { target = this.path.shift(); const dx = target.x - current.x, dy = target.y - current.y; direction = dx < 0 ? "left" : dx > 0 ? "right" : dy < 0 ? "up" : "down"; }
     if (!target || expedition.tiles?.[target.y]?.[target.x] !== ".") { if (target) this.path = []; return; }
     this.lastMoveAt = now; self.dungeonPosition = { ...target, facing: direction }; this._send("expeditionMove", { position: self.dungeonPosition }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render();
+  }
+
+  _hostWorldSnapshot() {
+    const state = this.getState?.() ?? {}, source = state.onlineParty?.hostWorld ?? {};
+    const opened = source.openedChestIds && typeof source.openedChestIds === "object" ? source.openedChestIds : {};
+    const soloOpened = state.player?.openedChests && typeof state.player.openedChests === "object" ? state.player.openedChests : {};
+    const floors = new Set([...Object.keys(opened), ...Object.keys(soloOpened)]);
+    const onlineClears = Array.isArray(state.onlineParty?.firstCoopBossClears) ? state.onlineParty.firstCoopBossClears : [];
+    const bossKills = Object.entries(state.player?.bossKills ?? {}).filter(([, value]) => Number(value) > 0).map(([floor]) => Number(floor));
+    const bossRewards = Object.keys(state.player?.bossRewards ?? {}).map(Number);
+    return { openedChestIds: Object.fromEntries([...floors].map(floor => [String(floor), [...new Set([...(Array.isArray(opened[floor]) ? opened[floor] : []), ...(Array.isArray(soloOpened[floor]) ? soloOpened[floor] : [])].map(String).slice(0, 200))]])), defeatedBossFloors: [...new Set([...onlineClears, ...bossKills, ...bossRewards].map(Number).filter(floor => floor > 0 && floor % 10 === 0))].slice(0, 1000) };
+  }
+
+  _chatBubbleSnapshot() {
+    const now = Date.now();
+    for (const [id, bubble] of this.chatBubbles) if (Number(bubble.expiresAt) <= now) this.chatBubbles.delete(id);
+    return [...this.chatBubbles.values()].map(bubble => ({ ...bubble }));
+  }
+
+  _pingSnapshot() {
+    const now = Date.now();
+    for (const [id, ping] of this.coopPings) if (Number(ping.expiresAt) <= now) this.coopPings.delete(id);
+    return [...this.coopPings.values()].map(ping => ({ ...ping }));
+  }
+
+  _socialBubbleSnapshot() {
+    const now = Date.now();
+    for (const [id, bubble] of this.socialBubbles) if (Number(bubble.expiresAt) <= now) this.socialBubbles.delete(id);
+    return [...this.socialBubbles.values()].map(bubble => ({ ...bubble }));
+  }
+
+  _receiveSocial(message) {
+    const emoji = ({ wave: "👋", cheer: "✨", heart: "❤️", like: "👍", alert: "⚠️", question: "❓", surprise: "‼️", laugh: "😄", cry: "💧", clap: "👏", sparkle: "🌟" })[message.id] ?? "✨";
+    this.socialBubbles.set(message.playerId, { playerId: message.playerId, emoji, id: message.id, expiresAt: Date.now() + Math.max(1800, Number(message.duration) || 2800) });
+    if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot(), socialBubbles: this._socialBubbleSnapshot() }); else this._render();
+  }
+
+  _beginEmoteGesture(event, anchor) {
+    if (event.button != null && event.button !== 0) return;
+    const choices = [["wave", "👋"], ["cheer", "✨"], ["heart", "❤️"], ["like", "👍"], ["alert", "⚠️"], ["question", "❓"]];
+    const origin = { x: event.clientX, y: event.clientY }; let wheel = null, selected = 0, opened = false;
+    const open = () => { opened = true; wheel = document.createElement("div"); wheel.className = "online-emote-wheel"; wheel.style.left = `${origin.x}px`; wheel.style.top = `${origin.y}px`; wheel.innerHTML = choices.map(([id, emoji], index) => `<i data-emote-index="${index}" data-emote-id="${id}" style="--emote-angle:${index * 60 - 90}deg">${emoji}</i>`).join(""); document.body.appendChild(wheel); update({ clientX: origin.x, clientY: origin.y - 50 }); };
+    const update = move => { if (!opened || !wheel) return; const angle = Math.atan2(move.clientY - origin.y, move.clientX - origin.x) * 180 / Math.PI; selected = Math.round(((angle + 90 + 360) % 360) / 60) % choices.length; wheel.querySelectorAll("i").forEach((node, index) => node.classList.toggle("selected", index === selected)); };
+    const timer = setTimeout(open, 360);
+    const finish = up => { clearTimeout(timer); window.removeEventListener("pointermove", update, true); window.removeEventListener("pointerup", finish, true); window.removeEventListener("pointercancel", cancel, true); if (opened) { update(up); const [id] = choices[selected]; this._send("social", { kind: "emote", id }); anchor.dataset.emoteSuppress = "1"; setTimeout(() => delete anchor.dataset.emoteSuppress, 0); } wheel?.remove(); };
+    const cancel = () => { clearTimeout(timer); window.removeEventListener("pointermove", update, true); window.removeEventListener("pointerup", finish, true); window.removeEventListener("pointercancel", cancel, true); wheel?.remove(); };
+    window.addEventListener("pointermove", update, true); window.addEventListener("pointerup", finish, true); window.addEventListener("pointercancel", cancel, true);
+  }
+
+  _decorateBattleState() {
+    const battle = this._battle(this.route), focus = battle?.focusTarget;
+    if (focus && Number(focus.expiresAt) > Date.now()) this._query(`#enemy-${CSS.escape(String(focus.targetId))}`)?.classList.add("online-focus-target");
+    for (const bubble of this._socialBubbleSnapshot()) { const unit = this._query(`#ally-${CSS.escape(String(bubble.playerId))}`); if (!unit) continue; const mark = document.createElement("span"); mark.className = "online-battle-emote-bubble"; mark.textContent = bubble.emoji; unit.appendChild(mark); }
+  }
+
+  _bindExploreChatDrag() {
+    const button = this._query("#onlineExploreChatToggle"), stage = button?.closest(".explore-stage");
+    if (!button || !stage || button.dataset.dragBound === "1") return;
+    button.dataset.dragBound = "1";
+    const key = "abyss-online-explore-chat-position";
+    const read = () => { try { return JSON.parse(localStorage.getItem(key) || "null"); } catch { return null; } };
+    const place = point => { const rect = button.getBoundingClientRect(), safeX = 10, safeTop = 10, safeBottom = 14, x = clamp(point?.x ?? stage.clientWidth - 84, safeX, Math.max(safeX, stage.clientWidth - rect.width - safeX)), y = clamp(point?.y ?? stage.clientHeight * .58, safeTop, Math.max(safeTop, stage.clientHeight - rect.height - safeBottom)); button.style.setProperty("left", `${x}px`, "important"); button.style.setProperty("top", `${y}px`, "important"); button.style.setProperty("right", "auto", "important"); button.style.setProperty("bottom", "auto", "important"); return { x, y }; };
+    requestAnimationFrame(() => place(read()));
+    button.addEventListener("pointerdown", down => { if (down.button != null && down.button !== 0) return; const start = { x: down.clientX, y: down.clientY }, origin = place(read()); let moved = false; button.setPointerCapture?.(down.pointerId); const move = event => { const dx = event.clientX - start.x, dy = event.clientY - start.y; if (Math.hypot(dx, dy) > 6) moved = true; if (moved) place({ x: origin.x + dx, y: origin.y + dy }); }; const finish = event => { button.removeEventListener("pointermove", move); button.removeEventListener("pointerup", finish); button.removeEventListener("pointercancel", finish); if (moved) { const final = place({ x: origin.x + event.clientX - start.x, y: origin.y + event.clientY - start.y }); try { localStorage.setItem(key, JSON.stringify(final)); } catch {} button.dataset.dragSuppress = "1"; setTimeout(() => delete button.dataset.dragSuppress, 0); } }; button.addEventListener("pointermove", move); button.addEventListener("pointerup", finish); button.addEventListener("pointercancel", finish); });
+    button.addEventListener("click", event => { if (button.dataset.dragSuppress === "1") { event.preventDefault(); event.stopImmediatePropagation(); } }, true);
   }
 
   _moveHallStep(now) {
@@ -520,7 +665,7 @@ export class OnlinePartyController {
   }
 
   _handleClose() {
-    this.ws = null; if (this.manualClose) return;
+    this.ws = null; this._clearInteractionPending(false); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this.merchantPending = false; if (this.manualClose) return;
     this._setStatus("reconnecting", "再接続中…", "切断中はサーバーが自動行動を担当します");
     if (!this.mounted) return;
     clearTimeout(this.reconnectTimer); const delay = Math.min(10000, 800 * Math.pow(1.7, this.reconnectAttempts++));

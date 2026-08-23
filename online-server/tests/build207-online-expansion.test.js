@@ -1,0 +1,200 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { RoomStore } from "../src/RoomStore.js";
+import {
+  chooseRareEvent,
+  firstClearEquipmentRarity,
+  personalBonusDraw,
+  prepareOnlineExpansionV207,
+  rareEventChance,
+  rarityAtLeast,
+} from "../src/OnlineExpansion207.js";
+import { COOP_GIMMICK_TYPES } from "../src/CoopGimmicks.js";
+
+function connection() {
+  return { messages: [], send(raw) { this.messages.push(JSON.parse(raw)); }, close() {} };
+}
+
+function hello(store, index, profile = {}) {
+  const conn = connection();
+  const friendId = `AD-BZ27-AA${"BCDE"[index - 1]}A`;
+  const result = store.hello(conn, {
+    friendId,
+    clientKey: `build207-client-key-${index}`.padEnd(32, "x"),
+    profile: {
+      displayName: `共闘207-${index}`,
+      speciesId: "slime",
+      maxFloor: 120,
+      battleStats: { hp: 2_000, mp: 150, atk: 500, matk: 450, def: 300, mdef: 300, spd: 90, crit: 5, evasion: 3 },
+      ...profile,
+    },
+  });
+  assert.equal(result.ok, true);
+  return { conn, session: conn.session, result };
+}
+
+function readyRoom(store, count = 2, profile = {}) {
+  const players = Array.from({ length: count }, (_, index) => hello(store, index + 1, profile));
+  const created = store.createRoom(players[0].session);
+  for (const player of players.slice(1)) assert.equal(store.joinRoom(player.session, created.room.roomId).ok, true);
+  for (const player of players) assert.equal(store.setReady(player.session, true).ok, true);
+  return { players, room: store.rooms.get(created.room.roomId) };
+}
+
+function fixture(floor = 1) {
+  const rows = 15, cols = 15;
+  const tiles = Array.from({ length: rows }, (_, y) => Array.from({ length: cols }, (_, x) => x > 0 && y > 0 && x < cols - 1 && y < rows - 1 ? "." : "#"));
+  return {
+    id: `build207-fixture-${floor}`,
+    floor,
+    rows,
+    cols,
+    tiles,
+    start: { x: 1, y: 1 },
+    exit: { x: 13, y: 13 },
+    objects: [{ id: "host-chest", type: "chest", x: 2, y: 2, resolved: false }],
+    totalDiscoveries: 1,
+  };
+}
+
+test("build207 keeps one normal co-op gimmick and adds each rare intrusion as a separate bonus event", () => {
+  const expected = {
+    goldenMonster: ["rareGoldenMonster"],
+    otherworldMerchant: ["rareMerchant"],
+    hiddenPortal: ["rarePortal", "rarePortalGuardian", "rarePortalChest"],
+  };
+  for (const [kind, types] of Object.entries(expected)) {
+    const expedition = fixture(321);
+    prepareOnlineExpansionV207(expedition, {
+      ownerId: "AD-BZ27-AABA",
+      hostWorld: { openedChestIds: {} },
+      participants: 4,
+      resonance: 3,
+      forceRare: kind,
+    });
+    assert.ok(COOP_GIMMICK_TYPES.includes(expedition.coop.gimmickType));
+    assert.equal(expedition.coop.rare.kind, kind);
+    assert.deepEqual(expedition.objects.filter(object => object.rare).map(object => object.type).sort(), [...types].sort());
+    assert.equal(expedition.coop.resonance.level, 3);
+    assert.equal(expedition.coop.resonance.rewardBonusPct, 9);
+  }
+  assert.equal(chooseRareEvent({ forceRare: "goldenMonster" }), "goldenMonster");
+  assert.ok(rareEventChance({ floor: 1000, participants: 4, resonance: 5 }) > rareEventChance({ floor: 1, participants: 1, resonance: 0 }));
+});
+
+test("build207 shared loot gives everyone the same base and only the lucky player a personal extra", () => {
+  const rolls = [0, .5, .99];
+  const store = new RoomStore({ randomRoomCode: () => "LOOT27", random: () => rolls.shift() ?? .99 });
+  const { players, room } = readyRoom(store, 2);
+  assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {} } }).ok, true);
+  const results = store._queueSharedReward207(room, {
+    rewardId: "shared-loot",
+    base: { gold: 1_000, crystals: 3 },
+    source: { kind: "testChest", floor: 20, title: "共通宝箱" },
+  });
+  assert.equal(results.length, 2);
+  const first = players[0].session.pendingRewards.find(entry => entry.rewardId === `shared-loot:${players[0].session.playerId}`);
+  const second = players[1].session.pendingRewards.find(entry => entry.rewardId === `shared-loot:${players[1].session.playerId}`);
+  assert.deepEqual(first.source.sharedBase, second.source.sharedBase);
+  assert.equal(first.reward.gold, second.reward.gold);
+  assert.equal(first.reward.captureCrystals, 1);
+  assert.equal(second.reward.captureCrystals, undefined);
+  assert.equal(first.source.personalBonus, "追加捕獲結晶");
+  assert.equal(second.source.personalBonus, null);
+  assert.equal(personalBonusDraw(() => .99), null);
+});
+
+test("build207 owner disconnect keeps the current floor but blocks the next floor until reconnection", () => {
+  let now = 100_000;
+  const store = new RoomStore({ now: () => now, reconnectGraceMs: 300_000, randomRoomCode: () => "HOST27" });
+  const { players, room } = readyRoom(store, 2);
+  assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {} } }).ok, true);
+  const currentId = room.expedition.id;
+  store.disconnect(players[0].session);
+  players[1].session.dungeonPosition = { ...room.expedition.exit, facing: "down" };
+  store._updateStairGathering(room);
+  now += 3_001;
+  store._advanceExpeditionFloor(room);
+  assert.equal(room.expedition.id, currentId);
+  assert.equal(room.expedition.coop.ownerAdvanceBlocked, true);
+  assert.ok(room.expedition.coop.ownerReconnectDeadline > now);
+
+  const replacement = connection();
+  const resumed = store.hello(replacement, {
+    friendId: players[0].session.playerId,
+    clientKey: players[0].session.clientKey,
+    resumeToken: players[0].result.resumeToken,
+    profile: players[0].session.profile,
+  });
+  assert.equal(resumed.ok, true);
+  assert.equal(resumed.resumed, true);
+  assert.equal(room.expedition.hostOwnerId, players[0].session.playerId);
+  assert.equal(room.leaderId, players[0].session.playerId);
+  assert.equal(room.expedition.coop.ownerDisconnectedAt, 0);
+});
+
+test("build207 boss first-clear equipment and unlock belong only to the world owner", () => {
+  let now = 200_000;
+  const store = new RoomStore({ now: () => now, randomRoomCode: () => "BOSS27" });
+  const { players, room } = readyRoom(store, 2, { maxFloor: 20 });
+  assert.equal(store.setFloor(players[0].session, 10).ok, true);
+  for (const player of players) assert.equal(store.setReady(player.session, true).ok, true);
+  assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {}, defeatedBossFloors: [] } }).ok, true);
+  for (const player of players) player.session.dungeonPosition = { ...room.expedition.exit, facing: "down" };
+  store._updateStairGathering(room);
+  now += 3_001;
+  store._advanceExpeditionFloor(room);
+  const ownerReward = players[0].session.pendingRewards.find(entry => entry.source?.bossFirstClear);
+  const helperReward = players[1].session.pendingRewards.find(entry => entry.source?.bossAssist);
+  assert.ok(ownerReward);
+  assert.equal(ownerReward.reward.randomEquipmentRarity, firstClearEquipmentRarity(10));
+  assert.equal(ownerReward.reward.leaderFloorUnlock, 11);
+  assert.ok(helperReward);
+  assert.equal(helperReward.reward.randomEquipmentRarity, undefined);
+  assert.equal(helperReward.reward.leaderFloorUnlock, 0);
+  assert.deepEqual(room.hostWorld.defeatedBossFloors, [10]);
+  assert.equal(room.expedition.hostOwnerId, players[0].session.playerId);
+  assert.equal(room.coopRun.resonance, 1);
+  assert.equal(rarityAtLeast("UR", "UR"), true);
+  assert.equal(rarityAtLeast("SSR", "UR"), false);
+});
+
+test("build207 social, focus marker and one-use KO cheer are authoritative", () => {
+  const store = new RoomStore({ randomRoomCode: () => "PLAY27", random: () => .2 });
+  const { players, room } = readyRoom(store, 2);
+  assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {} } }).ok, true);
+  const position = room.expedition.start;
+  store._startBattle(room, { id: "build207-encounter-1", type: "encounter", ...position });
+  const battle = room.expedition.battle;
+  const enemy = battle.enemies[0];
+  assert.equal(store.social(players[0].session, { kind: "emote", id: "clap" }).ok, true);
+  assert.equal(players[1].conn.messages.findLast(message => message.type === "social")?.id, "clap");
+  assert.equal(store.focusTarget(players[0].session, { mode: "explore", targetId: enemy.id }).ok, true);
+  assert.equal(battle.focusTarget.targetId, enemy.id);
+  assert.equal(battle.focusTarget.expiresAt > 0, true);
+  battle.players[players[1].session.playerId].hp = 0;
+  assert.equal(store.battleCheer(players[1].session, { mode: "explore" }).ok, true);
+  assert.ok(battle.cheeredBy.includes(players[1].session.playerId));
+  assert.ok(battle.players[players[0].session.playerId].effects.some(effect => effect.kind === "atkUp" && effect.value === .03));
+  assert.equal(store.battleCheer(players[1].session, { mode: "explore" }).code, "CHEER_USED");
+});
+
+test("build207 rare merchant and portal objects stay interaction-driven when stepped on", () => {
+  const store = new RoomStore({ randomRoomCode: () => "STEP27" });
+  const { players, room } = readyRoom(store, 1);
+  assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {} }, forceRare: "otherworldMerchant" }).ok, true);
+  const merchant = room.expedition.objects.find(object => object.type === "rareMerchant");
+  players[0].session.dungeonPosition = { x: merchant.x, y: merchant.y, facing: "down" };
+  store._resolveLanding(room, players[0].session);
+  assert.equal(merchant.resolved, false);
+  assert.equal(room.expedition.interactions[players[0].session.playerId].action, "browseRareMerchant");
+
+  store._finishExpedition(room, { reason: "test" });
+  assert.equal(store.setReady(players[0].session, true).ok, true);
+  assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {} }, forceRare: "hiddenPortal" }).ok, true);
+  const portal = room.expedition.objects.find(object => object.type === "rarePortal");
+  players[0].session.dungeonPosition = { x: portal.x, y: portal.y, facing: "down" };
+  store._resolveLanding(room, players[0].session);
+  assert.equal(portal.resolved, false);
+  assert.equal(room.expedition.interactions[players[0].session.playerId].action, "enterRarePortal");
+});

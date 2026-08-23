@@ -143,7 +143,7 @@ test("real websocket server synchronizes four clients, chat, health and capacity
 
     const health = await fetch(`http://127.0.0.1:${port}/health`).then(response => response.json());
     assert.equal(health.ok, true);
-    assert.equal(health.protocol, "1.7.0");
+    assert.equal(health.protocol, "1.11.1");
 
     const url = `ws://127.0.0.1:${port}/party`;
     for (let index = 1; index <= 5; index += 1) clients.push(await connectPlayer(url, index));

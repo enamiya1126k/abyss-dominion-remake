@@ -1,0 +1,126 @@
+/* build210: concise battle information and hand-agnostic weapon clarity. */
+
+/* Skill cinematics keep the actor separate and shrink long technique names. */
+.battle-cinematic-banner.skill .battle-banner-copy{
+  grid-template-rows:auto auto auto;
+  gap:2px;
+  max-width:100%;
+}
+.battle-cinematic-banner.skill .battle-banner-actor{
+  color:#e4d8c8;
+  font:850 clamp(.43rem,1.8vw,.62rem)/1.15 sans-serif;
+  letter-spacing:.08em;
+}
+.battle-cinematic-banner.skill .battle-banner-copy>strong{
+  max-width:100%;
+  font-size:clamp(1.02rem,5.6vw,2.05rem);
+  line-height:1.08;
+  letter-spacing:.06em;
+  word-break:keep-all;
+  overflow-wrap:normal;
+  line-break:strict;
+}
+.battle-cinematic-banner.skill.long-title .battle-banner-copy>strong{font-size:clamp(.86rem,4.7vw,1.68rem);letter-spacing:.035em}
+.battle-cinematic-banner.skill.very-long-title .battle-banner-copy>strong{font-size:clamp(.72rem,3.9vw,1.38rem);letter-spacing:.015em}
+.battle-cinematic-banner.skill .battle-banner-effect{
+  display:-webkit-box;
+  max-width:100%;
+  overflow:hidden;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  color:#f0e7dc;
+  font:800 clamp(.47rem,2vw,.68rem)/1.3 sans-serif;
+  letter-spacing:.01em;
+}
+.battle-cinematic-banner.equipment-authority{
+  top:38%;
+  border-color:#e3b95899;
+  background:linear-gradient(90deg,transparent,#2d210be9 14%,#171006f7 50%,#2d210be9 86%,transparent);
+  box-shadow:0 0 32px #dcae4655;
+}
+.battle-cinematic-banner.equipment-authority strong{color:#ffe08a;font-size:clamp(1.02rem,5.2vw,1.8rem);letter-spacing:.06em;text-shadow:0 2px #3c2500,0 0 20px #e5a83d}
+.battle-cinematic-banner.equipment-authority small{max-width:100%;overflow:hidden;color:#efe2bf;font-size:clamp(.43rem,1.8vw,.62rem);text-overflow:ellipsis;white-space:nowrap}
+
+/* One compact persistent authority chip lives in the existing status row. */
+.side-battle-v2 .equipment-authority-badge{
+  min-width:0;
+  flex:1 1 auto;
+  display:flex;
+  align-items:center;
+  gap:1px;
+  overflow:hidden;
+  color:#efc966;
+  font:850 .27rem/1 sans-serif;
+}
+.side-battle-v2 .equipment-authority-badge i{flex:0 0 auto;color:#ffe38a;font-style:normal}
+.side-battle-v2 .equipment-authority-badge b{min-width:0;overflow:hidden;color:#efc966!important;font-size:.27rem!important;text-overflow:ellipsis;white-space:nowrap}
+.side-battle-v2 .equipment-authority-badge em{flex:0 0 auto;color:#fff0b6;font-size:.24rem;font-style:normal}
+.side-battle-v2 .equipment-authority-activation{
+  position:absolute;
+  z-index:35;
+  left:50%;
+  top:35%;
+  max-width:130px;
+  padding:3px 7px;
+  overflow:hidden;
+  border:1px solid #e2b84f;
+  border-radius:999px;
+  background:#1a1105ed;
+  color:#ffe18a;
+  font:900 .38rem/1.2 sans-serif;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  opacity:0;
+  translate:-50% 8px;
+  transition:opacity .16s ease,translate .3s ease;
+  box-shadow:0 0 18px #f1b83f66;
+  pointer-events:none;
+}
+.side-battle-v2 .equipment-authority-activation.active{opacity:1;translate:-50% 0}
+
+/* Same tiny biome panel, now driven by the actual favorable/adverse arrays. */
+.battle-biome-badge.compact{
+  min-width:0;
+  gap:2px;
+  padding:4px 7px;
+}
+.battle-biome-badge.compact>b{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+  color:var(--biome-accent);
+  font-size:.42rem;
+  letter-spacing:.06em;
+  white-space:nowrap;
+}
+.battle-biome-badge.compact>b span{display:block}
+.battle-biome-badge .battle-biome-primary{width:13px!important;height:13px!important;margin:0!important;vertical-align:middle}
+.battle-biome-badge.compact>small{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  color:#d8d0dd;
+  font-size:.27rem;
+  white-space:nowrap;
+}
+.battle-biome-badge.compact>small>span{display:flex;align-items:center;gap:1px}
+.battle-biome-badge.compact>small>i{width:1px;height:9px;background:#6b6070}
+.battle-biome-badge.compact>small em{color:#aaa0ad;font-size:.24rem;font-style:normal}
+.battle-biome-badge.compact>small strong{font-size:.27rem;letter-spacing:0}
+.battle-biome-badge.compact .favorable strong{color:#8deaa5}
+.battle-biome-badge.compact .adverse strong{color:#ff9aa9}
+.battle-biome-badge .battle-biome-attribute{width:10px!important;height:10px!important;margin:0!important;vertical-align:middle}
+.battle-biome-badge .no-attribute{color:#8c838f!important;font-size:.27rem!important;letter-spacing:0!important}
+
+@media(max-width:390px){
+  .battle-cinematic-banner.skill{width:min(96%,520px);padding-inline:12px}
+  .battle-cinematic-banner.skill .battle-banner-source{min-width:44px;grid-template-columns:42px}
+  .battle-cinematic-banner.skill .battle-banner-source-visual,
+  .battle-cinematic-banner.skill .battle-banner-source-visual img{width:42px!important;height:42px!important}
+  .battle-biome-badge.compact{padding-inline:5px}
+  .battle-biome-badge.compact>small{gap:2px}
+}
+
+@media(prefers-reduced-motion:reduce){.side-battle-v2 .equipment-authority-activation{transition:none!important}}

@@ -1,0 +1,73 @@
+/* build205: fixed first raid, persistent co-op camera and hands-on co-op systems. */
+
+/* Anchor the raid bodies to the arena while keeping their status cards clear. */
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .side-unit-sprite{
+  bottom:76px!important;
+  width:clamp(194px,43vw,258px)!important;
+  height:clamp(194px,43vw,258px)!important;
+}
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .side-unit-card{z-index:12!important;background:#0d0912ed!important}
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss::after,
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .target-reticle{bottom:69px!important}
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .battle-unit-floating-name{bottom:clamp(267px,57vw,326px)!important}
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-sub-boss .side-unit-sprite{bottom:66px!important}
+.battle-screen.side-battle-v2.online-shared-battle .enemy-battle-magic-circle{
+  z-index:0!important;
+  top:auto!important;
+  width:130%!important;
+  height:auto!important;
+  left:50%!important;
+  bottom:-24px!important;
+  transform:translateX(-50%) perspective(240px) rotateX(63deg)!important;
+  opacity:.92!important;
+  filter:drop-shadow(0 0 12px #c83cff) saturate(1.4)!important;
+}
+.battle-screen.side-battle-v2.online-shared-battle .enemy-battle-magic-circle>img{opacity:.84!important;animation:build205RaidCircleSpin 10s linear infinite!important}
+.battle-screen.side-battle-v2.online-shared-battle .raid-main-boss .has-custom-sprite img{transform-origin:50% 82%;animation:build205RaidBossEightStep 3.2s steps(1,end) infinite!important}
+.battle-screen.side-battle-v2.online-shared-battle .raid-sub-boss .has-custom-sprite img{transform-origin:50% 82%;animation:build205RaidSubBossEightStep 2.65s steps(1,end) infinite!important}
+@keyframes build205RaidBossEightStep{
+  0%{transform:translate(0,0) scale(1);filter:brightness(1)}
+  12.5%{transform:translate(-1px,-2px) scale(1.008);filter:brightness(1.04)}
+  25%{transform:translate(1px,-4px) scale(1.016);filter:brightness(1.08)}
+  37.5%{transform:translate(2px,-2px) scale(1.01);filter:brightness(1.04)}
+  50%{transform:translate(0,0) scale(1);filter:brightness(1)}
+  62.5%{transform:translate(-2px,1px) scale(.996);filter:brightness(.98)}
+  75%{transform:translate(-1px,-1px) scale(1.004);filter:brightness(1.02)}
+  87.5%{transform:translate(1px,-2px) scale(1.008);filter:brightness(1.05)}
+}
+@keyframes build205RaidSubBossEightStep{
+  0%{transform:translateY(0) rotate(0)}12.5%{transform:translateY(-2px) rotate(-.5deg)}25%{transform:translateY(-4px) rotate(-.8deg)}37.5%{transform:translateY(-3px) rotate(.35deg)}50%{transform:translateY(0) rotate(.6deg)}62.5%{transform:translateY(1px) rotate(.2deg)}75%{transform:translateY(-1px) rotate(-.35deg)}87.5%{transform:translateY(-2px) rotate(0)}
+}
+@keyframes build205RaidCircleSpin{to{transform:rotate(360deg)}}
+
+/* Movable map/chat buttons remain independent from the stage-tools layout. */
+.online-shared-explore .explore-stage-tools{width:0!important;height:0!important;display:block!important;inset:0!important}
+.online-shared-explore .explore-stage-tools>.online-map-toggle,
+.online-shared-explore .explore-stage-tools>.online-chat-toggle{position:absolute!important;z-index:22!important;margin:0!important}
+.online-shared-explore .explore-stage-tools>.online-floor-complete{position:absolute!important;z-index:21!important;right:6px!important;top:6px!important}
+.online-explore-chat-bar{
+  position:absolute;z-index:28;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));
+  display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:6px;padding:7px;
+  border:1px solid #7e5b99;background:#09070eea;box-shadow:0 5px 24px #000b;
+}
+.online-explore-chat-bar[hidden]{display:none!important}
+.online-explore-chat-bar input{min-width:0;height:38px;padding:0 10px;border:1px solid #493957;background:#15101d;color:#fff;font-size:.78rem;user-select:text;-webkit-user-select:text}
+.online-explore-chat-bar button{min-width:50px;padding:0 10px;border:1px solid #766087;background:#251730;color:#f6eaff;font-weight:900}
+.online-explore-chat-bar button:last-child{min-width:38px;color:#ff9aaa}
+.online-coop-interaction{
+  position:absolute;z-index:27;left:50%;bottom:72px;transform:translateX(-50%);width:min(88%,360px);
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:8px 9px;
+  border:1px solid #7dd9e8;background:linear-gradient(90deg,#081418ed,#171024ed);box-shadow:0 0 18px #6a4cff55;color:#defcff;
+}
+.online-coop-interaction small{font-size:.58rem;line-height:1.35}.online-coop-interaction button{min-height:38px;padding:4px 10px;border:1px solid #9a7cff;background:#352361;color:#fff;font-size:.64rem;font-weight:900}.online-coop-interaction button:disabled{opacity:.62}
+
+.online-coop-report-row{display:grid;grid-template-columns:40px 56px minmax(100px,1fr) minmax(0,1.6fr);align-items:center;gap:8px;padding:9px;border:1px solid #4d3d5b;background:#0b0911}
+.online-coop-report-row.self{border-color:#d3ac59;box-shadow:inset 0 0 18px #b8792525}.online-coop-report-row>strong{color:#f7d77f;text-align:center}.online-coop-report-row>div{display:grid;gap:2px}.online-coop-report-row>div small{color:#a9f1ff}.online-coop-report-row dl{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;margin:0}.online-coop-report-row dl div{display:grid;padding:3px;background:#15101c}.online-coop-report-row dt{font-size:.42rem;color:#a9a0af}.online-coop-report-row dd{margin:0;color:#fff;font-size:.58rem;font-weight:900}
+
+@media(max-width:520px){
+  .battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .side-unit-sprite{bottom:70px!important;width:clamp(178px,51vw,228px)!important;height:clamp(178px,51vw,228px)!important}
+  .battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .battle-unit-floating-name{bottom:clamp(237px,66vw,286px)!important}
+  .online-coop-report-row{grid-template-columns:34px 46px minmax(0,1fr)}.online-coop-report-row dl{grid-column:1/-1;grid-template-columns:repeat(6,1fr)}
+}
+@media(max-height:720px){.online-coop-interaction{bottom:56px}.online-explore-chat-bar{bottom:5px}.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .side-unit-sprite{bottom:62px!important}}
+@media(prefers-reduced-motion:reduce){.battle-screen.side-battle-v2.online-shared-battle .raid-main-boss .has-custom-sprite img,.battle-screen.side-battle-v2.online-shared-battle .raid-sub-boss .has-custom-sprite img,.battle-screen.side-battle-v2.online-shared-battle .enemy-battle-magic-circle>img{animation:none!important}}

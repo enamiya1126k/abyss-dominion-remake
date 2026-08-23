@@ -393,6 +393,7 @@ export const MONSTER_SPRITE_FOLDERS=Object.freeze({
   aurora_mantis:"238_aurora_mantis",
   frozen_mirror_knight:"239_frozen_mirror_knight",
   ember_gecko:"240_ember_gecko",
+  rare_golden_beast:"rare_golden_beast",
   myth_enami:"myth_enami",
   myth_rion:"myth_rion",
   myth_yori:"myth_yori",

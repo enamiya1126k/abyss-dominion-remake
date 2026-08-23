@@ -1,0 +1,55 @@
+/* build208: dungeon-native co-op rewards, free support merchant and rare treasure realm. */
+
+.online-coop-run-status.realm{
+  border-color:#b778ed;
+  background:linear-gradient(90deg,#100918ee,#24102fee);
+  box-shadow:0 0 18px #a749e64f,0 4px 18px #000d;
+}
+.online-coop-run-status.realm b{color:#f3ce72}.online-coop-run-status.realm span{color:#eedcff}
+
+.online-rare-merchant-call{
+  border-color:#b786d7;
+  background:linear-gradient(90deg,#09080eF2,#201027f2);
+  box-shadow:0 0 20px #9256bc55,0 8px 24px #000c;
+}
+.online-rare-merchant-call small{color:#e9d7f4;font-weight:800}
+.online-rare-merchant-call button{border-color:#d2aa64;background:linear-gradient(#402b1b,#21140e);color:#ffe9b0}
+
+.online-rare-merchant-modal{
+  position:absolute;z-index:48;left:50%;bottom:64px;translate:-50% 0;width:min(calc(100% - 20px),440px);
+  padding:10px;border:1px solid #ab77ca;background:
+    linear-gradient(145deg,rgba(22,13,28,.98),rgba(7,6,10,.99));
+  color:#f8efff;box-shadow:0 0 0 2px #000b,0 12px 38px #000e,0 0 28px #9d54cd48;
+}
+.online-rare-merchant-modal::before{content:"";position:absolute;inset:4px;pointer-events:none;border:1px solid #d1af623c}
+.online-rare-merchant-modal header{position:relative;display:grid;grid-template-columns:64px minmax(0,1fr) 32px;align-items:center;gap:8px;padding:4px 4px 10px;border-bottom:1px solid #594364}
+.online-rare-merchant-modal header img{width:64px;height:64px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 5px 7px #000) drop-shadow(0 0 7px #8f55b4)}
+.online-rare-merchant-modal header div{display:grid;gap:2px;min-width:0}.online-rare-merchant-modal header small{color:#b98ddb;font:800 .47rem/1 sans-serif;letter-spacing:.13em}.online-rare-merchant-modal header b{color:#f7df9a;font:900 .82rem/1.25 serif}.online-rare-merchant-modal header span{color:#c8bbce;font:700 .49rem/1.4 sans-serif}
+.online-rare-merchant-modal header button{align-self:start;width:30px;height:30px;padding:0;border:1px solid #7b607e;background:#130e17;color:#eacff5;font-size:1rem}
+.online-rare-merchant-offers{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:9px 0 5px}
+.online-rare-merchant-offers button{min-height:80px;display:grid;place-items:center;align-content:center;gap:3px;padding:7px 4px;border:1px solid #6a5272;background:linear-gradient(#24162c,#100b14);color:#f7edff;box-shadow:inset 0 0 12px #5c327226}
+.online-rare-merchant-offers button:active{scale:.97;border-color:#e5c36d;background:linear-gradient(#3c2922,#17100f)}
+.online-rare-merchant-offers i{display:grid;place-items:center;width:27px;height:27px;border:1px solid #ba9252;border-radius:50%;background:#2c1b12;color:#ffe49b;font:900 .47rem/1 serif}.online-rare-merchant-offers b{font:900 .62rem/1.2 serif}.online-rare-merchant-offers small{color:#c8b8d0;font:700 .46rem/1.35 sans-serif}
+.online-rare-merchant-modal>p{position:relative;margin:3px 0 0;color:#9f91a8;text-align:center;font:700 .45rem/1.4 sans-serif}
+
+.online-key-fusion-fx{
+  position:absolute;z-index:54;left:50%;top:48%;translate:-50% -50%;width:min(88%,330px);min-height:190px;
+  display:grid;place-items:center;align-content:center;gap:5px;padding:14px;pointer-events:none;opacity:0;scale:.78;
+  border:1px solid #d0ad5c;background:radial-gradient(circle,#34184ae8 0,#100a17f5 58%,#050408fa 100%);
+  box-shadow:0 0 0 2px #000b,0 0 42px #a955df7a;transition:opacity .2s ease,scale .34s cubic-bezier(.2,.88,.3,1.2);
+}
+.online-key-fusion-fx.active{opacity:1;scale:1}.online-key-fusion-fx.leaving{opacity:0;scale:1.08}
+.online-key-fusion-pieces{position:relative;width:180px;height:106px}.online-key-fusion-pieces img{position:absolute;top:0;width:106px;height:106px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 0 10px #000);transition:transform .58s cubic-bezier(.2,.8,.2,1),opacity .25s .42s}
+.online-key-fusion-pieces .cyan{left:0;transform:translateX(-42px) rotate(-12deg)}.online-key-fusion-pieces .violet{right:0;transform:translateX(42px) rotate(12deg)}.online-key-fusion-pieces .combined{left:37px;opacity:0;transform:scale(.5)}
+.online-key-fusion-fx.active .cyan{transform:translateX(32px) rotate(0);opacity:0}.online-key-fusion-fx.active .violet{transform:translateX(-32px) rotate(0);opacity:0}.online-key-fusion-fx.active .combined{opacity:1;transform:scale(1.08);filter:drop-shadow(0 0 15px #7af3ff) drop-shadow(0 0 24px #c167ff)}
+.online-key-fusion-fx strong{color:#ffe9a5;font:950 1rem/1.2 serif;letter-spacing:.13em;text-shadow:0 0 12px #f2b543}.online-key-fusion-fx small{color:#e3d3eb;font:700 .55rem/1.4 sans-serif}
+
+.online-treasure-realm .explore-stage{border-color:#9c69bc!important;box-shadow:inset 0 0 58px #6d208650,0 0 18px #9a4bc246!important}
+.online-treasure-realm .biome-banner{border-color:#a978ca!important;background:linear-gradient(135deg,#26102e,#0b0710)!important}
+
+@media(max-width:520px){
+  .online-rare-merchant-modal{bottom:57px;padding:8px}.online-rare-merchant-modal header{grid-template-columns:54px minmax(0,1fr) 29px}.online-rare-merchant-modal header img{width:54px;height:54px}.online-rare-merchant-offers button{min-height:74px}
+  .online-key-fusion-fx{min-height:170px}.online-key-fusion-pieces{scale:.9}
+}
+@media(max-height:720px){.online-rare-merchant-modal{bottom:52px}.online-rare-merchant-offers button{min-height:66px}.online-rare-merchant-modal header span{display:none}}
+@media(prefers-reduced-motion:reduce){.online-key-fusion-fx,.online-key-fusion-pieces img{transition:none!important}}

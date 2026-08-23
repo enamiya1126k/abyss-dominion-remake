@@ -1,0 +1,17 @@
+README.md
+index.html
+src/Styles/build210.css
+src/battle/SkillSystem.js
+src/core/config.js
+src/data/equipment.js
+src/main.js
+src/models/Equipment.js
+src/online/OnlinePartyClient.js
+src/online/OnlineViews.js
+src/services/EquipmentLoadoutSystem.js
+src/services/SaveService.js
+src/ui/screens/BattleScreen.js
+src/ui/screens/EquipmentScreen.js
+tests/build210-equipment-battle-clarity-regression.mjs
+BUILD210_UPDATE.md
+BUILD210_FILELIST.txt

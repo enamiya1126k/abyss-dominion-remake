@@ -10,7 +10,7 @@ function reply(socket,message){if(socket.readyState===WebSocket.OPEN)socket.send
 function fail(socket,result){reply(socket,{type:"error",code:result.code??"REQUEST_FAILED",message:result.message??"処理に失敗しました"})}
 
 const server=http.createServer((request,response)=>{
- if(request.url==="/health"){response.writeHead(200,{"content-type":"application/json; charset=utf-8","cache-control":"no-store"});response.end(JSON.stringify({ok:true,service:"ABYSS DOMINION CO-OP SERVER",protocol:"1.7.0",rooms:store.rooms.size,expeditions:[...store.rooms.values()].filter(room=>room.phase==="expedition").length,battles:[...store.rooms.values()].filter(room=>room.expedition?.battle).length,raids:[...store.rooms.values()].filter(room=>room.phase==="raid").length,teamBattles:[...store.rooms.values()].filter(room=>room.phase==="team").length,players:[...store.sessions.values()].filter(session=>session.connected).length,time:new Date().toISOString()}));return}
+ if(request.url==="/health"){response.writeHead(200,{"content-type":"application/json; charset=utf-8","cache-control":"no-store"});response.end(JSON.stringify({ok:true,service:"ABYSS DOMINION CO-OP SERVER",protocol:"1.11.1",rooms:store.rooms.size,expeditions:[...store.rooms.values()].filter(room=>room.phase==="expedition").length,battles:[...store.rooms.values()].filter(room=>room.expedition?.battle).length,raids:[...store.rooms.values()].filter(room=>room.phase==="raid").length,teamBattles:[...store.rooms.values()].filter(room=>room.phase==="team").length,players:[...store.sessions.values()].filter(session=>session.connected).length,time:new Date().toISOString()}));return}
  response.writeHead(200,{"content-type":"text/plain; charset=utf-8","cache-control":"no-store"});response.end("ABYSS DOMINION CO-OP SERVER\nWebSocket endpoint: /party\nHealth check: /health\n");
 });
 const wss=new WebSocketServer({noServer:true,maxPayload:16*1024,perMessageDeflate:false});
@@ -31,8 +31,14 @@ wss.on("connection",socket=>{
   else if(message.type==="move")result=store.move(session,message.position);
   else if(message.type==="setReady")result=store.setReady(session,message.ready);
   else if(message.type==="setFloor")result=store.setFloor(session,message.floor);
-  else if(message.type==="startExpedition")result=store.startExpedition(session);
+  else if(message.type==="startExpedition")result=store.startExpedition(session,message);
   else if(message.type==="expeditionMove")result=store.moveExpedition(session,message.position);
+	  else if(message.type==="expeditionInteract")result=store.expeditionInteract(session,message);
+	  else if(message.type==="expeditionPing")result=store.expeditionPing(session,message);
+	  else if(message.type==="rareMerchantClaim")result=store.rareMerchantClaim(session,message);
+	  else if(message.type==="social")result=store.social(session,message);
+	  else if(message.type==="focusTarget")result=store.focusTarget(session,message);
+	  else if(message.type==="battleCheer")result=store.battleCheer(session,message);
   else if(message.type==="battleAction")result=store.submitBattleAction(session,message.action??message);
   else if(message.type==="battleSpeed")result=store.setBattleSpeed(session,message.speed);
   else if(message.type==="requestReturn")result=store.requestReturn(session);

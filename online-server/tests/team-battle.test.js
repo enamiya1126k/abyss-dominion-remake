@@ -6,7 +6,7 @@ function connection() {
   return { messages: [], send(raw) { this.messages.push(JSON.parse(raw)); }, close() {} };
 }
 
-function player(store, index) {
+function player(store, index, profile = {}) {
   const conn = connection();
   const suffix = ["AAAB", "AAAC", "AAAD", "AAAE"][index - 1];
   const result = store.hello(conn, {
@@ -19,11 +19,29 @@ function player(store, index) {
       maxFloor: 100,
       battleStats: { hp: 10_000, mp: 100, atk: 1_000, matk: 900, def: 800, mdef: 750, spd: 100 + index, crit: 5, evasion: 8, accuracy: 100 },
       skills: [{ id: "strike", name: "連携撃", kind: "attack", mp: 5, power: 1.1, hits: 1 }],
+      ...profile,
     },
   });
   assert.equal(result.ok, true);
   return { conn, session: conn.session };
 }
+
+test("team battle carries equipped magic circles into the shared battle", () => {
+  const store = new RoomStore({ now: () => 35_000, randomRoomCode: () => "TCIRCL", random: () => 0.3 });
+  const first = player(store, 1, { circleId: "guardian", circleName: "守護結界陣", circleLevel: 8, circleEffect: "shield" });
+  const second = player(store, 2);
+  const created = store.createRoom(first.session);
+  assert.equal(store.joinRoom(second.session, created.room.roomId).ok, true);
+  assert.equal(store.setTeamSide(first.session, "sun").ok, true);
+  assert.equal(store.setTeamSide(second.session, "moon").ok, true);
+  assert.equal(store.setTeamReady(first.session, true).ok, true);
+  assert.equal(store.setTeamReady(second.session, true).ok, true);
+  const started = store.startTeamBattle(first.session);
+  assert.equal(started.ok, true);
+  const actor = started.teamBattle.players.find(entry => entry.playerId === first.session.playerId);
+  assert.equal(actor.shield, 5_000);
+  assert.ok(started.teamBattle.lastEvents.some(event => event.kind === "circleActivate" && event.label === "守護結界陣"));
+});
 
 function roomWithFour(store) {
   const players = [1, 2, 3, 4].map(index => player(store, index));

@@ -8,7 +8,7 @@ import{
  equipmentSubslotLabel,
  compatibleSubslots,
  equipmentIdentity
-}from"../../data/equipment.js?v=2.11.30-build195";
+}from"../../data/equipment.js?v=2.11.45-build210";
 import{displayName,calculatedStats}from"../../models/Monster.js?v=2.11.30-build195";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.11.0-build164";
 import{maxMp}from"../../battle/SkillSystem.js?v=2.11.30-build195";
@@ -140,9 +140,7 @@ function total(item){
  return Object.values(item.stats??{}).reduce((sum,value)=>sum+value,0)*equipmentStatMultiplier(item)+(item.plus??0)*3+(item.level??1)*2+equipmentAffixPower(item);
 }
 
-function handLabel(item){
- return item.slot!=="weapon"?"":({right:"右手向き",left:"左手向き",either:"左右対応",twoHanded:"両手武器"}[item.handedness]??"左右対応");
-}
+function handLabel(item){return item.slot!=="weapon"?"":"左右対応"}
 
 function card(item,state,target,storage,{editing=false,selected=false,focused=false}={}){
  const owner=item.equippedBy?state.monsters.find(monster=>monster.id===item.equippedBy):null;
@@ -152,8 +150,7 @@ function card(item,state,target,storage,{editing=false,selected=false,focused=fa
  const progress=Math.floor(((item.exp??0)/need)*100);
  const equipButtons=compatibleSubslots(item).map(subslot=>{
   const locked=target.level<SLOT_UNLOCK_LEVEL[subslot];
-  const replacesTwoHanded=subslot==="weaponLeft"&&state.equipment.find(entry=>entry.id===target.equipment?.weaponRight)?.handedness==="twoHanded";
-  return equipmentCommand({label:`${screenSubslotLabel(subslot)}へ装備`,icon:"equipment",attributes:`data-equip="${item.id}" data-target="${target.id}" data-subslot="${subslot}"`,tone:"primary",note:locked?`Lv.${SLOT_UNLOCK_LEVEL[subslot]}で解放`:replacesTwoHanded?"両手武器と交換":"装備を変更",disabled:locked});
+  return equipmentCommand({label:`${screenSubslotLabel(subslot)}へ装備`,icon:"equipment",attributes:`data-equip="${item.id}" data-target="${target.id}" data-subslot="${subslot}"`,tone:"primary",note:locked?`Lv.${SLOT_UNLOCK_LEVEL[subslot]}で解放`:"装備を変更",disabled:locked});
  }).join("");
  const protectedItem=!!item.equippedBy||item.favorite||item.locked||item.ruleOverrides?.unsellable;
  const affixes=ensureEquipmentAffixes(item);

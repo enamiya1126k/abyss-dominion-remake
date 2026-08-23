@@ -1,0 +1,112 @@
+/* build206: optional co-op floor gimmicks, pings, LINK BREAK and online circle feedback. */
+
+/* The three movable exploration tools are independent of the stage-tools strip. */
+.online-shared-explore .explore-stage-tools>.online-ping-toggle{
+  position:absolute!important;
+  z-index:22!important;
+  right:8px!important;
+  top:calc(50% + 62px)!important;
+  margin:0!important;
+  color:#bdf7ff!important;
+}
+.online-shared-explore .explore-stage-tools>.online-ping-toggle.active{
+  border-image-source:linear-gradient(135deg,#78e9ff,#b47aff)!important;
+  filter:drop-shadow(0 0 8px #6ee8ff99);
+}
+.online-ping-menu{
+  position:absolute;
+  z-index:32;
+  right:10px;
+  top:calc(50% + 118px);
+  width:min(44%,174px);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5px;
+  padding:7px;
+  border:1px solid #82dfea;
+  background:linear-gradient(145deg,#061317f2,#160b20f2);
+  box-shadow:0 8px 26px #000d,0 0 18px #62d9ff33;
+}
+.online-ping-menu[hidden]{display:none!important}
+.online-ping-menu button{
+  min-height:34px;
+  padding:5px 3px;
+  border:1px solid #65506f;
+  background:#17101e;
+  color:#f6efff;
+  font-size:.59rem;
+  font-weight:900;
+}
+.online-ping-menu button:first-child{grid-column:1/-1;border-color:#bd9f52;color:#ffe7a1}
+.online-ping-menu button:active{transform:scale(.96);background:#30203e}
+
+/* The shared LINK gauge overlays the reused dungeon battle UI. */
+.online-shared-battle-shell{position:relative;min-height:100%}
+.online-shared-battle-shell>.battle-screen{position:relative!important;inset:auto!important;min-height:100dvh}
+.online-coop-break{
+  position:absolute;
+  z-index:58;
+  left:50%;
+  top:max(7px,env(safe-area-inset-top));
+  width:min(46%,260px);
+  transform:translateX(-50%);
+  display:grid;
+  grid-template-columns:auto minmax(54px,1fr);
+  align-items:center;
+  gap:7px;
+  padding:5px 7px;
+  pointer-events:none;
+  border:1px solid #64dbed;
+  background:#080c14e8;
+  box-shadow:0 0 14px #53e2ff55;
+}
+.online-coop-break span{display:grid;line-height:1.05}.online-coop-break b{color:#baf6ff;font-size:.55rem;letter-spacing:.08em}.online-coop-break small{color:#e9dfff;font-size:.43rem}
+.online-coop-break>i{display:block;height:8px;overflow:hidden;border:1px solid #483858;background:#030206}
+.online-coop-break>i>em{display:block;height:100%;background:linear-gradient(90deg,#44d7ee,#9167ff,#ffd568);box-shadow:0 0 9px #61e8ff;transition:width .38s cubic-bezier(.2,.75,.25,1)}
+
+/* Equipped circle status is always explicit in the lobby and ready cards. */
+.online-circle-loadout{
+  display:block!important;
+  color:#9beeff!important;
+  font-size:.52rem!important;
+  line-height:1.25;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.online-v3-member.offline .online-circle-loadout{color:#746e7b!important}
+
+/* Run report awards: multiple titles can sit under one player without stretching the row. */
+.online-mvp-list{display:flex!important;flex-wrap:wrap;gap:3px;margin-top:2px}
+.online-mvp-badge{
+  display:inline-flex;
+  width:max-content;
+  padding:2px 5px;
+  border:1px solid #d5ad54;
+  background:linear-gradient(180deg,#4b3218,#1d1208);
+  color:#ffe6a0;
+  font-size:.43rem;
+  font-style:normal;
+  font-weight:950;
+  box-shadow:0 0 7px #e3a84233;
+}
+
+/* Co-op prompts stay above the ping/chat surfaces but never cover the bottom nav. */
+.online-coop-interaction{max-width:calc(100% - 24px)}
+.online-coop-interaction button:not(:disabled){animation:build206PromptPulse 1.8s ease-in-out infinite}
+@keyframes build206PromptPulse{0%,100%{box-shadow:0 0 0 #9d77ff00}50%{box-shadow:0 0 13px #9d77ff66}}
+
+@media(max-width:520px){
+  .online-coop-break{top:max(4px,env(safe-area-inset-top));width:min(42%,186px);padding:4px 5px;gap:5px}
+  .online-coop-break b{font-size:.47rem}.online-coop-break small{font-size:.38rem}
+  .online-ping-menu{right:6px;width:154px}
+  .online-shared-explore .explore-stage-tools>.online-ping-toggle{right:6px!important}
+}
+@media(max-height:720px){
+  .online-ping-menu{top:auto;bottom:62px}
+  .online-coop-break{width:168px}
+}
+@media(prefers-reduced-motion:reduce){
+  .online-coop-interaction button:not(:disabled){animation:none}
+  .online-coop-break>i>em{transition:none}
+}

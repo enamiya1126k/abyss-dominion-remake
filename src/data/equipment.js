@@ -197,4 +197,11 @@ export const SLOT_UNLOCK_LEVEL={
  accessoryFinger:1
 };
 export function equipmentSubslotLabel(id){return{weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"}[id]??id}
-export function compatibleSubslots(item){const fixed=item?.ruleOverrides?.subslot;if(fixed&&EQUIPMENT_SLOT_ORDER.includes(fixed))return[fixed];const preferred=inferredEquipmentSubslot(item,item?.slot);if(item.slot==="armor")return preferred==="armorSupport"?["armorSupport","armorBody"]:["armorBody","armorSupport"];if(item.slot==="accessory")return preferred==="accessoryFinger"?["accessoryFinger","accessoryNeck"]:["accessoryNeck","accessoryFinger"];if(item.handedness==="right")return["weaponRight"];if(item.handedness==="left")return["weaponLeft"];if(item.handedness==="twoHanded")return["weaponRight"];return["weaponRight","weaponLeft"]}
+export function compatibleSubslots(item){
+ // build210: right/left remain save-compatible loadout positions, but every
+ // weapon can be placed in either hand.  This intentionally runs before a
+ // legacy ruleOverrides.subslot check so authored boss/signature weapons are
+ // not silently locked to their old hand.
+ if(item?.slot==="weapon")return["weaponRight","weaponLeft"];
+ const fixed=item?.ruleOverrides?.subslot;if(fixed&&EQUIPMENT_SLOT_ORDER.includes(fixed))return[fixed];const preferred=inferredEquipmentSubslot(item,item?.slot);if(item.slot==="armor")return preferred==="armorSupport"?["armorSupport","armorBody"]:["armorBody","armorSupport"];if(item.slot==="accessory")return preferred==="accessoryFinger"?["accessoryFinger","accessoryNeck"]:["accessoryNeck","accessoryFinger"];return[]
+}

@@ -12,7 +12,7 @@ export function createEquipment(slot,options={}){
  const ruleOverrides={...(options.ruleOverrides??{})};
  if(["armor","accessory"].includes(slot)&&!ruleOverrides.subslot)ruleOverrides.preferredSubslot=inferredEquipmentSubslot(base,slot);
  const item={
-  id:uid(),slot,name:base.name,rarity,level:1,plus:0,stats,weaponType:options.weaponType??base.weaponType??null,handedness:options.handedness??base.handedness??(slot==="weapon"?"either":null),ruleOverrides:options.ruleOverrides??{},series:options.series??seriesForName(base.name),iconAtlas:options.iconAtlas??base.iconAtlas??slot,iconIndex:options.iconIndex??base.iconIndex??0,iconColumn:options.iconColumn??null,iconRow:options.iconRow??null,
+  id:uid(),slot,name:base.name,rarity,level:1,plus:0,stats,weaponType:options.weaponType??base.weaponType??null,handedness:slot==="weapon"?"either":null,ruleOverrides:options.ruleOverrides??{},series:options.series??seriesForName(base.name),iconAtlas:options.iconAtlas??base.iconAtlas??slot,iconIndex:options.iconIndex??base.iconIndex??0,iconColumn:options.iconColumn??null,iconRow:options.iconRow??null,
   favorite:false,locked:false,equippedBy:null,exp:0,limitBreak:0,affixes:options.affixes??rollEquipmentAffixes(slot,rarity),createdAt:new Date().toISOString()
  };
  item.ruleOverrides=ruleOverrides;

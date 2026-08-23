@@ -1,4 +1,4 @@
-import{SLOT_UNLOCK_LEVEL,compatibleSubslots,EQUIPMENT_SLOT_ORDER}from"../data/equipment.js?v=2.11.29-build194";
+import{SLOT_UNLOCK_LEVEL,compatibleSubslots,EQUIPMENT_SLOT_ORDER}from"../data/equipment.js?v=2.11.45-build210";
 import{signatureEquipmentOwnerId,signatureEquipmentMatchesMonster}from"../core/SignatureWeaponSystem.js?v=2.11.0-build164";
 import{equipmentRequiredMonsterLevel}from"../models/Equipment.js?v=2.11.0-build164";
 
@@ -55,10 +55,6 @@ export function normalizeEquipmentLoadouts(state,{partyOnly=true}={}){
     else repairs.incompatible++;
     continue;
    }
-   if(subslot==="weaponLeft"){
-    const right=byId.get(slots.weaponRight);
-    if(right?.handedness==="twoHanded"){repairs.twoHanded++;continue}
-   }
    slots[subslot]=id;
    globallyEquipped.add(id);
    item.equippedBy=monster.id;
@@ -90,20 +86,6 @@ export function assignEquipmentToSubslot(state,itemId,monsterId,subslot){
  if(prior&&prior!==itemId)displacedItemIds.add(prior);
  monster.equipment??=emptyEquipmentLoadout();
  monster.equipment[subslot]=itemId;
-
- if(item.handedness==="twoHanded"&&subslot==="weaponRight"){
-  const left=monster.equipment.weaponLeft;
-  if(left&&left!==itemId)displacedItemIds.add(left);
-  monster.equipment.weaponLeft=null;
- }
- if(subslot==="weaponLeft"){
-  const rightId=monster.equipment.weaponRight;
-  const right=state.equipment?.find(entry=>entry.id===rightId);
-  if(right?.handedness==="twoHanded"){
-   displacedItemIds.add(rightId);
-   monster.equipment.weaponRight=null;
-  }
- }
 
  const normalized=normalizeEquipmentLoadouts(state);
  return{ok:true,item,monster,affectedMonsterIds:[...affectedMonsterIds],displacedItemIds:[...displacedItemIds],repairs:normalized.repairs};
