@@ -26,7 +26,7 @@ const CONSUMABLES=[
  ,["experienceItemsUltra","📕","経験値パック（超）","1000階解禁・N標準で最大約10Lv分"]
 ];
 const MATERIALS=[
- ["captureCrystals","🔮","捕獲結晶","捕獲失敗は1個、成功時は敵に応じて最大75個消費"],
+ ["captureCrystals","🔮","捕獲結晶","捕獲1回につき1個消費"],
  ["abyssKeys","🗝️","深淵の鍵","深淵で使用する特別な鍵"]
 ];
 const ARMORY_CATEGORIES=[["all","すべて"],["weapon","武器"],["armor","防具"],["accessory","アクセ"]];

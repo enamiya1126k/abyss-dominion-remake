@@ -1,5 +1,5 @@
 import{SaveService}from"./services/SaveService.js?v=2.11.45-build210";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.47-build212";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.48-build213";
 import{AudioSystem}from"./core/AudioSystem.js?v=2.11.37-build202";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=2.11.24-build188";
 import{SPECIES}from"./data/species.js?v=2.11.33-build198";
@@ -36,7 +36,7 @@ import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normaliz
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=2.11.24-build188";
 import{SkillScreen}from"./ui/screens/SkillScreen.js?v=2.11.30-build195";
 import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=2.11.2-build166";
-import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.11.24-build188";
+import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=2.11.48-build213";
 import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=2.11.2-build166";
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=2.11.2-build166";
 import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=2.11.2-build166";
@@ -1512,7 +1512,7 @@ const INVENTORY_STACK_INFO={
  experienceItemsMedium:["📗","経験値パック（中）","300階到達で解禁。N標準で約3Lv分のEXP。"],
  experienceItemsLarge:["📙","経験値パック（大）","750階到達で解禁。N標準で約6Lv分のEXP。"],
  experienceItemsUltra:["📕","経験値パック（超）","1000階到達で解禁。N標準で最大約10Lv分のEXP。"],
- captureCrystals:["🔮","捕獲結晶","捕獲失敗は1個、成功時は敵の深度・希少度に応じて最大75個消費します。"],
+ captureCrystals:["🔮","捕獲結晶","捕獲1回につき1個消費します。"],
  abyssKeys:["🗝️","深淵の鍵","深淵の扉や特別な交換で使う希少素材です。"]
 };
 const INVENTORY_SELL_PRICE={
@@ -4165,7 +4165,7 @@ function magicCircleInstantDeath(target,source=null,{force=false}={}){
  }
  if(ally){target.currentHp=0;handleMagicCircleDeath(target)}else if(force)target.hp=0;else applyEnemyDamage(battle,target,target.hp);return false;
 }
-function captureCrystalCost(enemy){const floor=Math.max(1,Number(battle?.memorySourceFloor??save.state.player.currentFloor)||1),rarity=SPECIES[enemy?.speciesId]?.rarity??"N",rarityCost=({N:0,R:1,SR:3,SSR:7,LR:12,"神話":18})[rarity]??0;return Math.max(1,Math.min(75,1+Math.floor(floor/250)+rarityCost+(enemy?.boss?15:0)))}
+function captureCrystalCost(){return 1}
 function tryUnyielding(monster){
  const passive=SPECIES[monster.speciesId]?.passive;
  if(passive?.kind==="onceRevive"&&!monster._speciesReviveUsed&&canBattleRevive()){const beforeHp=monster.currentHp,beforeMp=monster.currentMp;monster._speciesReviveUsed=true;battle.reviveCount++;monster.currentHp=Math.max(1,Math.floor(calculatedStats(monster).hp*(passive.hp??.5)));monster.currentMp=Math.max(0,Math.floor(maxMp(monster)*(passive.mp??.5)));queueBattleRecovery(monster,"hp",beforeHp,monster.currentHp);queueBattleRecovery(monster,"mp",beforeMp,monster.currentMp);battleContribution(monster).revives++;syncInvincibleAllianceState();return true}
