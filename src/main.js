@@ -1,5 +1,5 @@
-import{SaveService}from"./services/SaveService.js?v=2.11.38-build203";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.38-build203";
+import{SaveService}from"./services/SaveService.js?v=2.11.39-build204";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.39-build204";
 import{AudioSystem}from"./core/AudioSystem.js?v=2.11.37-build202";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=2.11.24-build188";
 import{SPECIES}from"./data/species.js?v=2.11.33-build198";
@@ -8,14 +8,14 @@ import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAt
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.11.33-build198";
 import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.11.30-build195";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.11.30-build195";
-import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.11.38-build203";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.11.38-build203";
+import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.11.39-build204";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.11.39-build204";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.11.29-build194";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.11.30-build195";
 import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.11.34-build199";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.11.38-build203";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.11.39-build204";
 import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.11.30-build195";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.11.38-build203";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.11.39-build204";
 import{Modal}from"./ui/components/Modal.js?v=2.11.2-build166";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=2.11.2-build166";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.11.2-build166";
@@ -1830,9 +1830,52 @@ function exchangeOnlineRaidReward(kind,cost){
  else return{ok:false,message:"交換報酬が見つかりません"};online.raidMaterials=materials-price;online.raidExchange??={};online.raidExchange[kind]=(Number(online.raidExchange[kind])||0)+1;save.save();return{ok:true,message}
 }
 function bindOnlineParty(){
- onlinePartyController??=new OnlinePartyController({getState:()=>save.state,toast:showToast,onReward:claimOnlinePartyReward,onBack:()=>go("home")});
+ onlinePartyController??=new OnlinePartyController({
+  getState:()=>save.state,toast:showToast,onReward:claimOnlinePartyReward,onBack:()=>go("home"),
+  onExploreCanvasMount:mountOnlineExploreCanvas,
+  onExploreCanvasUpdate:updateOnlineExploreCanvas,
+  onExploreCanvasUnmount:unmountOnlineExploreCanvas,
+  onScene:scene=>audio.setScene(scene)
+ });
  onlinePartyController.mount(app);
 }
+
+function onlineExploreMonster(member){
+ const profile=member?.profile??{},vitals=member?.coopVitals??profile.battleStats??{},stats=profile.battleStats??{};
+ return{id:member.playerId,speciesId:profile.speciesId??"slime",visualSpeciesId:profile.visualSpeciesId??null,endgameBossId:profile.endgameBossId??null,floorBossCatalogId:profile.floorBossCatalogId??null,customVisualAsset:profile.customVisualAsset??null,nickname:profile.monsterName??profile.displayName??"冒険者",level:Math.max(1,Number(profile.level)||1),stars:Math.max(1,Number(profile.stars)||1),rank:1,plus:Math.max(0,Number(profile.plus)||0),attribute:profile.attribute??"neutral",currentHp:Math.max(0,Number(vitals.hp??stats.hp)||0),currentMp:Math.max(0,Number(vitals.mp??stats.mp)||0),onlineStats:{...stats,hp:Math.max(1,Number(vitals.maxHp??stats.hp)||1)},onlineMaxMp:Math.max(0,Number(vitals.maxMp??stats.mp)||0),equipment:{},equippedSkills:[],skillLoadoutInitialized:true}
+}
+function onlineExploreWorld(room){
+ const expedition=room?.expedition,objects=expedition?.objects??[],floor=Math.max(1,Number(expedition?.floor)||1),bossObject=floor%10===0?objects.find(object=>object.type==="encounter"&&!object.resolved):null;
+ const decorations=[...(expedition?.decorations??[]).map(entry=>({...entry})),...objects.filter(object=>["bone","shrine"].includes(object.type)).map((object,index)=>({...object,id:`online-object-${object.id??index}`,type:object.type==="bone"?"bones":"crystal",used:Boolean(object.resolved),destroyed:Boolean(object.resolved),phase:index*31}))];
+ return{cols:Math.max(1,Number(expedition?.cols)||1),rows:Math.max(1,Number(expedition?.rows)||1),shape:"onlineShared",tiles:(expedition?.tiles??[]).map(row=>[...row].map(tile=>tile==="."?0:1)),start:{...(expedition?.start??{x:1,y:1})},exit:{...(expedition?.exit??{x:1,y:1})},shop:null,boss:bossObject?{x:bossObject.x,y:bossObject.y}:null,onlineBossMonster:bossObject?{speciesId:"ancient_dragon",level:Math.max(14,floor),currentHp:1,onlineStats:{hp:1}}:null,chests:objects.filter(object=>object.type==="chest").map(object=>({...object,open:Boolean(object.resolved),locked:false})),decorations,hotSpring:null,encountering:false}
+}
+function syncOnlineExploreMembers(room,selfId,{snap=false}={}){
+ if(!game?.online)return;
+ game.onlineRoom=room;game.onlineFloor=Math.max(1,Number(room?.expedition?.floor)||1);game.onlineMembers=(room?.members??[]).map(member=>({member,monster:onlineExploreMonster(member)}));
+ const active=new Set();
+ for(const entry of game.onlineMembers){const position=entry.member.dungeonPosition??room?.expedition?.start;if(!position)continue;active.add(entry.member.playerId);let entity=game.onlineEntities.get(entry.member.playerId);if(!entity){entity=new Entity(position.x,position.y);game.onlineEntities.set(entry.member.playerId,entity)}else if(snap||Math.hypot(entity.x-position.x,entity.y-position.y)>2.1){entity.x=position.x;entity.y=position.y;entity.rx=position.x;entity.ry=position.y;entity.path=[];entity.p=0}else if(entity.x!==position.x||entity.y!==position.y){const last=entity.path.at(-1);if(last?.x!==position.x||last?.y!==position.y)entity.setPath([{x:position.x,y:position.y}])}if(entry.member.playerId===selfId)game.player=entity}
+ for(const id of game.onlineEntities.keys())if(!active.has(id))game.onlineEntities.delete(id);
+ if(!game.player){const start=room?.expedition?.start??{x:1,y:1};game.player=new Entity(start.x,start.y)}
+}
+function bindOnlineExploreInput(canvas,onDestination){
+ const input=createInputState(),scalePoint=event=>{const rect=canvas.getBoundingClientRect();return{x:(event.clientX-rect.left)*(canvas.width/Math.max(1,rect.width)),y:(event.clientY-rect.top)*(canvas.height/Math.max(1,rect.height))}},finish=event=>{input.pts.delete(event.pointerId);if(input.pts.size<2)input.pinch=null;if(!input.pts.size)input.drag=false};
+ game.input=input;
+ canvas.onpointerdown=event=>{canvas.setPointerCapture?.(event.pointerId);const point=scalePoint(event);input.pts.set(event.pointerId,{...point,startClientX:event.clientX,startClientY:event.clientY});if(input.pts.size===2){const[a,b]=[...input.pts.values()];input.pinch={distance:Math.hypot(a.x-b.x,a.y-b.y),zoom:game.camera.z};input.drag=true}};
+ canvas.onpointermove=event=>{const prior=input.pts.get(event.pointerId);if(!prior||!game?.online)return;const point=scalePoint(event),dx=point.x-prior.x,dy=point.y-prior.y;prior.x=point.x;prior.y=point.y;if(input.pts.size>=2){const[a,b]=[...input.pts.values()],distance=Math.hypot(a.x-b.x,a.y-b.y),center={x:(a.x+b.x)/2,y:(a.y+b.y)/2},before=game.camera.screen(center.x,center.y);game.camera.z=Math.max(.45,Math.min(2.25,input.pinch.zoom*distance/Math.max(1,input.pinch.distance)));const after=game.camera.world(before.x,before.y);game.camera.ox+=center.x-after.x;game.camera.oy+=center.y-after.y;game.camera.manual=true;game.camera.clamp(game.world);input.drag=true;return}if(Math.hypot(event.clientX-prior.startClientX,event.clientY-prior.startClientY)>=CAMERA_DRAG_THRESHOLD_PX)input.drag=true;if(input.drag){game.camera.pan(dx,dy);game.camera.clamp(game.world)}};
+ canvas.onpointerup=event=>{const prior=input.pts.get(event.pointerId),multiple=input.pinch,drag=input.drag;finish(event);if(!prior||multiple||drag||!game?.online)return;const point=scalePoint(event),worldPoint=game.camera.screen(point.x,point.y),target={x:Math.floor(worldPoint.x/TILE),y:Math.floor(worldPoint.y/TILE)};onDestination?.(target)};
+ canvas.onpointercancel=canvas.onlostpointercapture=finish;
+}
+function onlineExploreLoop(now){
+ if(!game?.online||!game.running)return;const dt=Math.min(.05,(now-game.last)/1000||0);game.last=now;
+ for(const entity of game.onlineEntities.values())entity.move(dt,7.5);
+ game.camera.follow(game.player.rx*TILE,game.player.ry*TILE);game.camera.clamp(game.world);draw();requestAnimationFrame(onlineExploreLoop)
+}
+function mountOnlineExploreCanvas(room,selfId,onDestination){
+ const canvas=document.querySelector("[data-online-dungeon-canvas]");if(!canvas||!room?.expedition)return;stopGame();const rect=canvas.getBoundingClientRect(),density=Math.min(devicePixelRatio||1,2);canvas.width=Math.max(1,Math.round(rect.width*density));canvas.height=Math.max(1,Math.round(rect.height*density));const mini=document.getElementById("miniMap");if(mini){mini.width=132*density;mini.height=132*density}
+ game={online:true,onlineSelfId:selfId,onlineFloor:room.expedition.floor,onlineMembers:[],onlineEntities:new Map(),world:onlineExploreWorld(room),player:null,camera:null,canvas,ctx:canvas.getContext("2d"),paused:false,running:true,input:createInputState(),last:performance.now()};syncOnlineExploreMembers(room,selfId,{snap:true});game.camera=new Camera(canvas);game.camera.reset(game.player.x*TILE,game.player.y*TILE);game.camera.clamp(game.world);bindOnlineExploreInput(canvas,onDestination);requestAnimationFrame(onlineExploreLoop)
+}
+function updateOnlineExploreCanvas(room,selfId,options={}){if(!game?.online)return;syncOnlineExploreMembers(room,selfId);if(options.center){game.camera.reset(game.player.rx*TILE,game.player.ry*TILE);game.camera.clamp(game.world)}}
+function unmountOnlineExploreCanvas(){if(game?.online){stopGame();game=null}}
 function rarityValue(rarity){return ({N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9}[rarity]??0)}
 function elementLabel(element){if(element==="all")return"全属性";const id=canonicalAttribute(element,`label:${element??"neutral"}`);return ATTRIBUTES[id]?.name??"無"}
 function monsterVisibleRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
@@ -2527,6 +2570,7 @@ function populateExploreDecorations(world,floor,rng){
 }
 function ensureExploreDecorations(world){
  if(!world)return[];
+ if(game?.online&&Array.isArray(world.decorations))return world.decorations;
  const floor=save.state.player.currentFloor,seed=(floorSeed(floor)^0x5f3759df)>>>0;
  return populateExploreDecorations(world,floor,seeded(seed))
 }
@@ -3143,7 +3187,7 @@ function openChest(c){
  }
  save.save();pauseModal(title,body)
 }
-function explorationPartyMembers(){return(save.state.party??[]).map(id=>save.state.monsters?.find(monster=>monster.id===id)).filter(Boolean)}
+function explorationPartyMembers(){return game?.online?(game.onlineMembers??[]).map(entry=>entry.monster).filter(Boolean):(save.state.party??[]).map(id=>save.state.monsters?.find(monster=>monster.id===id)).filter(Boolean)}
 const explorationSpriteCache=new Map();
 const explorationTextureCache=new Map();
 const EXPLORE_TEXTURE_URLS={
@@ -3200,7 +3244,7 @@ function explorationFollowerPosition(index){
 function drawExplorationMonster(position,monster,glow=false,scale=1,index=0){
  const moving=Boolean(game.player.path?.length)||Math.abs((game.player.rx??game.player.x)-game.player.x)>.01||Math.abs((game.player.ry??game.player.y)-game.player.y)>.01;
  const idleFrames=["idle1","idle2","idle3","idle2"],walkFrames=["walk1","idle1","walk2","idle1"],sequence=moving?walkFrames:idleFrames;
- const maximumHp=Math.max(1,Number(calculatedStats(monster)?.hp)||1),currentHp=monster?.currentHp==null?maximumHp:Math.max(0,Number(monster.currentHp)||0),down=currentHp<=0,critical=!down&&currentHp/maximumHp<=.1;
+ const maximumHp=Math.max(1,Number(monster?.onlineStats?.hp??monster?.maxHp??calculatedStats(monster)?.hp)||1),currentHp=monster?.currentHp==null?maximumHp:Math.max(0,Number(monster.currentHp)||0),down=currentHp<=0,critical=!down&&currentHp/maximumHp<=.1;
  const frame=down?"down":sequence[Math.floor(performance.now()/(moving?170:320)+index)%sequence.length];
  const image=explorationSpriteImage(monster,frame);
  if(!image){
@@ -3451,6 +3495,7 @@ function drawExploreAtmosphere(theme){
  game.ctx.fillStyle=gradient;game.ctx.fillRect(0,0,game.canvas.width,game.canvas.height);drawExploreAmbientParticles(theme)
 }
 function explorationPartySceneObjects(){
+ if(game?.online){return(game.onlineMembers??[]).map((entry,index)=>{const entity=game.onlineEntities?.get(entry.member.playerId),position=entity?{x:entity.rx,y:entity.ry}:entry.member.dungeonPosition??game.world.start;return{y:position.y+.88,order:80+index,draw:()=>drawExplorationMonster(position,entry.monster,false,entry.member.playerId===game.onlineSelfId?1:.95,index)}})}
  const members=explorationPartyMembers();
  const entries=members.map((monster,index)=>{
   const position=index?explorationFollowerPosition(index):{x:game.player.rx,y:game.player.ry};
@@ -3465,19 +3510,20 @@ function drawExploreSceneObjects(world,floor,theme,stairsTexture){
  ensureExploreDecorations(world).filter(item=>item.type!=="water"&&item.type!=="entrance").forEach((item,index)=>add(item.y+(item.type==="candelabrum"?.84:.7),10+index,()=>drawExploreDecoration(item,theme)));
  add(world.exit.y+.9,30,()=>drawExploreExit(world.exit,stairsTexture,theme));
  if(world.shop)add(world.shop.y+.86,40,()=>drawExploreAtlas(world.shop,EXPLORE_ATLAS.entrance,{scale:1.72,rotation:world.shop.rotation??0,shadowColor:"#000",shadowBlur:6}));
- if(world.boss){const boss=floorBossEnemy();add(world.boss.y+.9,60,()=>drawExplorationMonster(world.boss,{speciesId:boss.speciesId,visualSpeciesId:boss.visualSpeciesId,level:boss.level},true,1.92,9))}
- world.chests.forEach((chest,index)=>add(chest.y+.72,50+index,()=>drawExploreAtlas(chest,chest.open?EXPLORE_ATLAS.chestOpen:EXPLORE_ATLAS.chestClosed,{scale:1.7,shadowColor:chest.locked?"#f2cf72":"#000",shadowBlur:chest.locked?13:7})));
+ if(world.boss){const boss=game?.online?world.onlineBossMonster:floorBossEnemy();if(boss)add(world.boss.y+.9,60,()=>drawExplorationMonster(world.boss,{...boss,speciesId:boss.speciesId,visualSpeciesId:boss.visualSpeciesId,level:boss.level},true,1.92,9))}
+ (world.chests??[]).forEach((chest,index)=>add(chest.y+.72,50+index,()=>drawExploreAtlas(chest,chest.open?EXPLORE_ATLAS.chestOpen:EXPLORE_ATLAS.chestClosed,{scale:1.7,shadowColor:chest.locked?"#f2cf72":"#000",shadowBlur:chest.locked?13:7})));
  objects.push(...explorationPartySceneObjects());
  objects.sort((a,b)=>a.y-b.y||a.order-b.order).forEach(entry=>entry.draw())
 }
 function showTutorialPickupMarker(){
+ if(game?.online){document.querySelector(".tutorial-world-marker")?.remove();return}
  const stage=document.querySelector(".explore-stage"),canvas=game?.canvas??document.getElementById("gameCanvas"),pickup=ensureFirstTutorialPickup(game?.world);if(!stage||!canvas||!pickup||pickup.used||contextGuideDone("explore_pickup")){document.querySelector(".tutorial-world-marker")?.remove();return}
  let marker=stage.querySelector(".tutorial-world-marker");if(!marker){marker=document.createElement("span");marker.className="tutorial-world-marker";marker.setAttribute("aria-hidden","true");stage.appendChild(marker)}
  const stageRect=stage.getBoundingClientRect(),canvasRect=canvas.getBoundingClientRect(),point=game.camera.world(pickup.x*TILE,pickup.y*TILE),tile=TILE*game.camera.z,scaleX=canvasRect.width/Math.max(1,canvas.width),scaleY=canvasRect.height/Math.max(1,canvas.height);
  marker.style.left=`${canvasRect.left-stageRect.left+(point.x+tile/2)*scaleX-17}px`;marker.style.top=`${canvasRect.top-stageRect.top+(point.y+tile/2)*scaleY-17}px`;
 }
 function draw(){
- const c=game.ctx,w=game.world,floor=save.state.player.currentFloor,palette=worldPresentationForFloor(floor),theme=exploreBandTheme(floor),floorTexture=explorationTexture("floor",theme),wallTexture=explorationTexture("wall",theme),stairsTexture=explorationTexture("stairs",theme);
+ const c=game.ctx,w=game.world,floor=game?.online?game.onlineFloor:save.state.player.currentFloor,palette=worldPresentationForFloor(floor),theme=exploreBandTheme(floor),floorTexture=explorationTexture("floor",theme),wallTexture=explorationTexture("wall",theme),stairsTexture=explorationTexture("stairs",theme);
  c.fillStyle="#06070a";c.fillRect(0,0,game.canvas.width,game.canvas.height);c.imageSmoothingEnabled=false;
  for(let y=0;y<w.rows;y++)for(let x=0;x<w.cols;x++){
   const p=game.camera.world(x*TILE,y*TILE),s=TILE*game.camera.z,blocked=Boolean(w.tiles[y][x]),image=blocked?wallTexture:floorTexture;
@@ -3503,11 +3549,11 @@ function draw(){
  drawMini(theme);
  showTutorialPickupMarker();
 }
-function drawMini(theme=exploreBandTheme(save.state.player.currentFloor)){
+function drawMini(theme=exploreBandTheme(game?.online?game.onlineFloor:save.state.player.currentFloor)){
  const m=document.getElementById("miniMap");
  if(!m||!game?.running)return;
  const w=game.world;
- if(!save.state.settings.minimapVisible){m.style.opacity=0;return}
+ if(!game.online&&!save.state.settings.minimapVisible){m.style.opacity=0;return}
  m.style.opacity=1;
  const c=m.getContext("2d"),cell=Math.min(m.width/w.cols,m.height/w.rows),ox=(m.width-w.cols*cell)/2,oy=(m.height-w.rows*cell)/2;
  c.fillStyle=theme.dark;c.fillRect(0,0,m.width,m.height);
@@ -3516,7 +3562,7 @@ function drawMini(theme=exploreBandTheme(save.state.player.currentFloor)){
   c.fillRect(ox+x*cell,oy+y*cell,cell,cell)
  }
  c.fillStyle=theme.light;c.fillRect(ox+w.exit.x*cell,oy+w.exit.y*cell,cell,cell);
- c.fillStyle="#5dff82";c.fillRect(ox+game.player.x*cell,oy+game.player.y*cell,cell,cell)
+ if(game.online){for(const entry of game.onlineMembers??[]){const entity=game.onlineEntities?.get(entry.member.playerId);if(!entity)continue;c.fillStyle=entry.member.playerId===game.onlineSelfId?"#5dff82":"#74dff4";c.fillRect(ox+entity.x*cell,oy+entity.y*cell,cell,cell)}}else{c.fillStyle="#5dff82";c.fillRect(ox+game.player.x*cell,oy+game.player.y*cell,cell,cell)}
 }
 function path(w,s,g){
  const goalIsExit=g.x===w.exit.x&&g.y===w.exit.y;

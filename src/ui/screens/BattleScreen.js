@@ -49,7 +49,7 @@ function renderEnemies(battle,enemies,target){
   const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
   const line=index<2?"front-line":"rear-line";
   const dead=enemy.hp<=0,element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",rank=combatRank(enemy,battle.species?.[enemy.speciesId]),rankClass=rank?`combat-rank-unit rank-${rankTone(rank)}`:"";
-  return `<button id="enemy-${enemy.id}" ${dead?'disabled aria-hidden="true"':`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${enemy.boss?"boss-enemy":""} ${floorBoss?"floor-boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${rankClass} ${target?.id===enemy.id?"targeted":""}">
+  return `<button id="enemy-${enemy.id}" ${dead?'disabled aria-hidden="true"':`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${enemy.boss?"boss-enemy":""} ${enemy.raidMainBoss?"raid-main-boss":""} ${floorBoss?"floor-boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${rankClass} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
    <span class="battle-unit-floating-name">${badge}${rankBadge(rank)}<b>${enemy.name}</b></span>
    <div class="side-unit-sprite enemy-orb">${battle.enemyMagicCircleArt?.[enemy.id]??""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.hp<=0?"down":"idle",className:"battle-enemy-visual"})}</div>
@@ -119,6 +119,15 @@ function renderItems(inventory){
  return `<div class="skill-command-list battle-item-list">${body}<button id="closeItemMenu" class="secondary">戻る</button></div>`;
 }
 
+function renderOnlineItems(battle){
+ if(battle.onlineItemTargetMenu){
+  const targets=(battle.party??[]).map(monster=>`<button type="button" data-online-item-target="${monster.id}" ${monster.currentHp<=0?"disabled":""}><span><b>${unitName(monster)}</b><small>HP ${battleInteger(monster.currentHp)} / ${battleInteger(unitStats(monster).hp)}　MP ${battleInteger(monster.currentMp)} / ${battleInteger(unitMaxMp(monster))}</small></span><strong>対象</strong></button>`).join("");
+  return`<div class="skill-command-list battle-item-list online-item-target-list"><div class="online-item-step"><b>2 / 2　使用対象を選択</b><small>選択後に行動が確定します</small></div>${targets}<button id="closeOnlineItemTarget" class="secondary">戻る</button></div>`
+ }
+ const count=Math.max(0,Number(battle.onlineItemCharges)||0),disabled=count<=0;
+ return`<div class="skill-command-list battle-item-list"><div class="online-item-step"><b>1 / 2　使用アイテムを選択</b><small>このあと使用対象を選びます</small></div><button type="button" data-online-battle-item="emergency" ${disabled?"disabled":""}><span><b>${itemIcon("potions")} 共闘応急薬</b><small>味方単体のHP40%・MP25%を回復</small></span><strong>×${battleInteger(count)}</strong></button><button id="closeItemMenu" class="secondary">戻る</button></div>`
+}
+
 function renderCommands(battle,actor,current,enemies,target,inventory,skills){
  const title=battle.onlineReadOnly?"観戦中":actor?`${unitName(actor)}の行動`:current?.type==="enemy"?`${(battle.enemies??[]).find(e=>e.id===current.id)?.name??"敵"}が行動中`:"ラウンド処理中";
  const targetHelp=actor&&enemies.length>1?`<small class="target-help">攻撃対象：${target?.name??"なし"}（敵をタップして変更）</small>`:"";
@@ -128,6 +137,7 @@ function renderCommands(battle,actor,current,enemies,target,inventory,skills){
  else if(!actor)controls='<div class="enemy-thinking">敵の行動を処理しています…</div>';
  else if(battle.auto)controls=`<div class="auto-command-wait"><span>${pixelIcon("crossed-swords")}</span><div><b>完全自動戦闘 進行中</b><small>戦場をタップ、または上の自動ボタンで手動操作へ</small></div></div>`;
  else if(battle.skillMenu)controls=renderSkills(battle,actor,skills);
+ else if(battle.onlineMode&&(battle.itemMenu||battle.onlineItemTargetMenu))controls=renderOnlineItems(battle);
  else if(battle.itemMenu)controls=renderItems(inventory);
  else{const blocked=Boolean(battle.onlineMode&&!battle.onlineAllowCapture)||Boolean(target&&(target.floorBossCatalogId||target.uncapturable||target.endgameBossId||["abyss","tenGod"].includes(target.faction)));controls=`<div class="command-grid"><button data-command="attack"><i>${pixelIcon("crossed-swords")}</i><span>たたかう</span></button><button data-command="guard"><i>${pixelIcon("equipment")}</i><span>ガード</span></button><button data-command="skill"><i>${pixelIcon("skills")}</i><span>スキル</span></button><button data-command="item"><i>${pixelIcon("growth")}</i><span>${battle.onlineMode?"応急薬":"アイテム"}</span></button><button data-command="capture" ${blocked?'disabled aria-label="この敵は捕獲できません"':""}><i>${pixelIcon("capture")}</i><span>${blocked?"捕獲不可":"捕獲"}</span></button></div>`}
  const countdown=battle.onlineCountdownMode?`<strong class="online-shared-countdown" data-online-countdown="${battle.onlineCountdownMode}">${battle.phase==="command"?"--.-":"処理中"}</strong>`:"";
@@ -135,7 +145,7 @@ function renderCommands(battle,actor,current,enemies,target,inventory,skills){
 }
 
 export function BattleScreen(battle,inventory,settings,floor=1){
- const actor=currentAlly(battle),current=currentTurnEntry(battle),livingEnemies=aliveEnemies(battle),enemies=battle.enemies??[],target=selectedEnemy(battle),skills=actor?(battle.onlineSkills??learnedSkills(actor)):[];
+ const actor=battle.onlineActorId?battle.party.find(monster=>monster.id===battle.onlineActorId&&monster.currentHp>0)??null:currentAlly(battle),current=currentTurnEntry(battle),livingEnemies=aliveEnemies(battle),enemies=battle.enemies??[],target=selectedEnemy(battle),skills=actor?(battle.onlineSkills??learnedSkills(actor)):[];
  const special=battle.specialBattle?`<div class="special-battle-strip ${battle.specialBattleType}"><b>${battle.specialTitle??"特別戦"}</b><small>${battle.specialSubtitle??"敗北ペナルティなし"}</small></div>`:"";
  const floorBand=Math.max(1,Math.min(20,Math.floor((Math.max(1,Number(floor)||1)-1)/50)+1));
  const speed=normalizeBattleSpeed(battle.onlineMode?battle.speed??settings.battleSpeed:settings.battleSpeed),scaled=ms=>`${Math.max(1,Math.round(ms/speed))}ms`;

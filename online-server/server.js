@@ -28,6 +28,7 @@ wss.on("connection",socket=>{
   else if(message.type==="joinRoom")result=store.joinRoom(session,message.roomId);
   else if(message.type==="leaveRoom")result=store.leaveRoom(session);
   else if(message.type==="profile")result=store.updateProfile(session,message.profile);
+  else if(message.type==="move")result=store.move(session,message.position);
   else if(message.type==="setReady")result=store.setReady(session,message.ready);
   else if(message.type==="setFloor")result=store.setFloor(session,message.floor);
   else if(message.type==="startExpedition")result=store.startExpedition(session);

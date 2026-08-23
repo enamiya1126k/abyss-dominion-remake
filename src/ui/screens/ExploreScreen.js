@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=2.11.38-build203";
+import{APP_VERSION}from"../../core/config.js?v=2.11.39-build204";
 import{calculatedStats,displayName}from"../../models/Monster.js?v=2.11.30-build195";
 import{maxMp}from"../../battle/SkillSystem.js?v=2.11.30-build195";
 import{biomeForFloor,biomeProgress}from"../../data/biomes.js?v=2.11.0-build164";

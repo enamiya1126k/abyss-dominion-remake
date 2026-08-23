@@ -1,7 +1,7 @@
 import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=2.11.2-build166";
-import { onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml } from "../ui/screens/OnlinePartyScreen.js?v=2.11.38-build203";
-import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.38-build203";
-import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=2.11.38-build203";
+import { onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml } from "../ui/screens/OnlinePartyScreen.js?v=2.11.39-build204";
+import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.39-build204";
+import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=2.11.39-build204";
 import { pixelIcon } from "../ui/components/GameChrome.js?v=2.11.2-build166";
 
 const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "通常探索", raid: "レイドボス", team: "自由チーム戦", chat: "チャット" });
@@ -40,20 +40,29 @@ function readyGrid(room, { team = false } = {}) {
   }).join("")}${Array.from({ length: Math.max(0, 4 - (room?.members?.length ?? 0)) }, () => `<div class="online-v3-empty-member">参加待ち</div>`).join("")}</div>`;
 }
 
+const HALL_DESTINATIONS = Object.freeze([
+  { route: "raid", x: 18, y: 25, label: "レイド受付", prompt: "レイド戦へ行く", icon: "RAID" },
+  { route: "explore", x: 82, y: 25, label: "ダンジョン門", prompt: "通常探索へ行く", icon: "GATE" },
+  { route: "team", x: 24, y: 78, label: "闘技場", prompt: "4vs4へ行く", icon: "ARENA" },
+  { route: "chat", x: 76, y: 78, label: "掲示板", prompt: "会話を開く", icon: "CHAT" },
+]);
+
 export function renderOnlineHome(room, selfId) {
-  const self = memberById(room, selfId);
-  return `${screenHeader("home", "ONLINE ROOM", "遊びたい内容を選択。画面は下へつながらず、選んだ機能だけが開きます。")}
-    <section class="online-v3-home-hero">
-      <div><small>ROOM ${escapeOnlineHtml(room?.roomId ?? "------")}</small><h3>${escapeOnlineHtml(self?.profile?.displayName || "冒険者")}の共闘拠点</h3><p>${room?.members?.length ?? 0} / 4人が参加中。途中で切断しても5分以内なら同じ部屋へ復帰できます。</p></div>
-      ${onlineAvatarVisual(self?.profile ?? {}, { className: "online-v3-home-avatar" })}
-    </section>
-    <section class="online-v3-party-list"><header><h3>参加メンバー</h3><span>${room?.members?.length ?? 0} / 4</span></header>${(room?.members ?? []).map(member => memberCard(member)).join("")}</section>
-    <section class="online-v3-mode-grid">
-      <button type="button" data-online-go="explore"><span>探索</span><b>通常探索</b><small>同じダンジョンを歩き、戦闘と発見を共有</small></button>
-      <button type="button" data-online-go="raid"><span>協力</span><b>レイドボス</b><small>最大4人で巨大ボスへ挑むサーバー同期戦</small></button>
-      <button type="button" data-online-go="team"><span>対戦</span><b>自由チーム戦</b><small>1vs1・1vs2・1vs3・2vs2を自由に編成</small></button>
-      <button type="button" data-online-go="chat"><span>会話</span><b>チャット</b><small>定型文・スタンプ・80文字メッセージ</small></button>
-    </section>`;
+  const self = memberById(room, selfId), point = self?.position ?? { x: 50, y: 76 };
+  const nearby = HALL_DESTINATIONS.find(zone => Math.hypot(zone.x - Number(point.x), zone.y - Number(point.y)) <= 10);
+  return `<section class="online-gathering-hall" data-online-hall-stage aria-label="オンライン集会所">
+    <div class="online-hall-backdrop" aria-hidden="true"><span class="hall-fire hall-fire-left"></span><span class="hall-fire hall-fire-right"></span></div>
+    <header class="online-hall-hud"><div><small>GATHERING HALL / ROOM</small><b>${escapeOnlineHtml(room?.roomId ?? "------")}</b></div><span>${room?.members?.length ?? 0} / 4人</span><p>床をタップして移動・施設に近づいて選択</p></header>
+    <div class="online-hall-world">
+      ${HALL_DESTINATIONS.map(zone => `<button type="button" class="online-hall-zone zone-${zone.route}" style="--hall-x:${zone.x}%;--hall-y:${zone.y}%" data-online-hall-destination="${zone.route}" data-hall-x="${zone.x}" data-hall-y="${zone.y}" aria-label="${zone.label}へ移動"><i>${zone.icon}</i><b>${zone.label}</b></button>`).join("")}
+      <div class="online-hall-members">${(room?.members ?? []).map((member, index) => {
+        const position = member.position ?? { x: 50 + index * 4, y: 72 + index * 3 };
+        return `<figure class="online-hall-player ${member.playerId === selfId ? "self" : ""} ${member.connected ? "" : "offline"}" style="--hall-x:${clamp(position.x, 5, 95)}%;--hall-y:${clamp(position.y, 15, 96)}%" data-online-hall-player="${escapeOnlineHtml(member.playerId)}">${onlineAvatarVisual(member.profile ?? {}, { className: "online-hall-avatar" })}<figcaption>${escapeOnlineHtml(member.profile?.displayName || "冒険者")}</figcaption></figure>`;
+      }).join("")}</div>
+      ${nearby ? `<aside class="online-hall-prompt"><small>${nearby.label}</small><button type="button" data-online-go="${nearby.route}">${nearby.prompt}</button></aside>` : `<aside class="online-hall-tip">行き先へ近づくと案内が表示されます</aside>`}
+    </div>
+    <footer class="online-hall-party-strip">${(room?.members ?? []).map(member => `<span class="${member.connected ? "online" : "offline"}"><i></i>${escapeOnlineHtml(member.profile?.displayName || "冒険者")}</span>`).join("")}</footer>
+  </section>`;
 }
 
 function battleProfile(room, battlePlayer) {
@@ -92,7 +101,7 @@ function onlineEnemy(room, enemy) {
     def: Math.max(0, Number(enemy.def ?? profile?.battleStats?.def) || 0), mdef: Math.max(0, Number(enemy.mdef ?? profile?.battleStats?.mdef) || 0),
     spd: Math.max(1, Number(enemy.spd ?? profile?.battleStats?.spd) || 1), element: profile?.attribute ?? enemy.element ?? "neutral",
     emoji: profile?.fallbackEmoji ?? enemy.emoji ?? "魔", summonTier: profile?.summonTier ?? profile?.summonRarity ?? null,
-    summonRarity: profile?.summonRarity ?? profile?.summonTier ?? null, boss: Boolean(enemy.boss || enemy.id === "abyss-amalga"), uncapturable: enemy.uncapturable ?? Boolean(enemy.playerId || enemy.asset),
+    summonRarity: profile?.summonRarity ?? profile?.summonTier ?? null, boss: Boolean(enemy.boss || enemy.id === "abyss-amalga"), raidMainBoss: enemy.id === "abyss-amalga", uncapturable: enemy.uncapturable ?? Boolean(enemy.playerId || enemy.asset),
   };
 }
 
@@ -111,10 +120,24 @@ function eventLine(event) {
   return `${EVENT_LABELS[event?.kind] || "戦況"}：${label}${value ? ` ${number(value)}` : ""}`;
 }
 
-export function renderSharedBattle({ mode, room, battle, selfId, selectedTarget = null, selectedAlly = null, title = "共闘バトル", enemies = [], allowCapture = false, readOnly = false, skillMenu = false }) {
+function splitEffects(units = []) {
+  const ailments = {}, effects = {};
+  for (const unit of units) {
+    ailments[unit.playerId ?? unit.id] = (unit.effects ?? []).filter(effect => String(effect.kind ?? "").startsWith("status:")).map(effect => ({ ...effect, id: String(effect.kind).slice(7) }));
+    effects[unit.playerId ?? unit.id] = (unit.effects ?? []).filter(effect => !String(effect.kind ?? "").startsWith("status:"));
+  }
+  return { ailments, effects };
+}
+
+export function renderSharedBattle({ mode, room, battle, selfId, selectedTarget = null, selectedAlly = null, title = "共闘バトル", enemies = [], allowCapture = false, readOnly = false, skillMenu = false, itemMenu = false, itemTargetMenu = false, hpTrails = {} }) {
   const players = battle?.players ?? [], self = players.find(player => player.playerId === selfId), party = players.map(player => onlineMonster(room, player));
   const foes = enemies.map(enemy => onlineEnemy(room, enemy)), target = foes.find(enemy => enemy.id === selectedTarget && enemy.hp > 0) ?? foes.find(enemy => enemy.hp > 0) ?? null;
-  const selfMember = memberById(room, selfId), selfMonster = party.find(monster => monster.id === selfId), turnQueue = selfMonster && selfMonster.currentHp > 0 && !readOnly ? [{ type: "ally", id: selfId, name: selfMonster.onlineName, spd: selfMonster.onlineStats.spd ?? 0 }] : [];
+  const selfMember = memberById(room, selfId), selfMonster = party.find(monster => monster.id === selfId);
+  const turnQueue = [
+    ...party.filter(monster => monster.currentHp > 0).map(monster => ({ type: "ally", id: monster.id, name: monster.onlineName, spd: monster.onlineStats.spd ?? 0 })),
+    ...foes.filter(enemy => enemy.hp > 0).map(enemy => ({ type: "enemy", id: enemy.id, name: enemy.name, spd: enemy.spd ?? 0 })),
+  ].sort((left, right) => right.spd - left.spd);
+  const allyState = splitEffects(players), enemyState = splitEffects(enemies);
   const magicCircleProfiles = Object.fromEntries(party.map(monster => { const profile = memberById(room, monster.id)?.profile ?? {}; return [monster.id, { id: profile.circleId ?? "none", name: profile.circleName ?? "魔法陣なし", level: profile.circleLevel ?? 0, effect: profile.circleEffect ?? "none" }]; }));
   const magicCircleArt = Object.fromEntries(party.map(monster => [monster.id, onlineMagicCircleArt(memberById(room, monster.id)?.profile ?? {}, { className: "battle-magic-circle" })]));
   const events = [...(battle?.lastEvents ?? [])];
@@ -122,9 +145,9 @@ export function renderSharedBattle({ mode, room, battle, selfId, selectedTarget 
   const uiBattle = {
     onlineMode: mode, onlineReadOnly: readOnly, onlineActionSubmitted: Boolean(battle?.actions?.[selfId]) || battle?.phase !== "command", onlineAllowCapture: allowCapture && Number(self?.captureCharges ?? selfMember?.profile?.captureStock) > 0,
     onlineCountdownMode: mode, onlineSelectedAlly: selectedAlly || selfId, onlineSkills: (selfMember?.profile?.skills ?? []).map(onlineSkill),
-    enemies: foes, enemy: foes[0], targetEnemyId: target?.id ?? null, party, species: {}, turn: Math.max(1, Number(battle?.round) || 1), turnQueue, queueIndex: 0,
-    auto: false, busy: false, phase: battle?.phase ?? "command", speed: battle?.speed ?? 1, skillMenu: Boolean(skillMenu), itemMenu: false,
-    guards: {}, cooldowns: {}, enemyStatuses: {}, allyAilments: {}, allyEffects: {}, enemyEffects: {}, hpTrails: {},
+    enemies: foes, enemy: foes[0], targetEnemyId: target?.id ?? null, party, species: {}, turn: Math.max(1, Number(battle?.round) || 1), turnQueue, queueIndex: 0, onlineActorId: selfId,
+    auto: false, busy: false, phase: battle?.phase ?? "command", speed: battle?.speed ?? 1, skillMenu: Boolean(skillMenu), itemMenu: Boolean(itemMenu), onlineItemTargetMenu: Boolean(itemTargetMenu), onlineItemCharges: Math.max(0, Number(self?.itemCharges) || 0),
+    guards: {}, cooldowns: {}, enemyStatuses: enemyState.ailments, allyAilments: allyState.ailments, allyEffects: allyState.effects, enemyEffects: enemyState.effects, hpTrails,
     magicCircleProfiles, magicCircleArt, enemyMagicCircleArt: {}, log: events.slice(-6).map(eventLine),
     specialTitle: title, battleTheme: mode === "raid" ? "boss" : mode === "team" ? "abyss" : "default",
   };
@@ -161,12 +184,13 @@ function exploreParty(room) {
 
 export function renderOnlineExplore(room, selfId, state = {}) {
   const expedition = room?.expedition;
-  if (room?.phase === "expedition" && expedition?.battle) return renderSharedBattle({ mode: "explore", room, battle: expedition.battle, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: `${number(expedition.floor)}F・遭遇戦`, enemies: expedition.battle.enemies ?? [], allowCapture: true, skillMenu: state.skillMenu });
+  if (room?.phase === "expedition" && expedition?.battle) return renderSharedBattle({ mode: "explore", room, battle: expedition.battle, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: `${number(expedition.floor)}F・遭遇戦`, enemies: expedition.battle.enemies ?? [], allowCapture: true, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails });
   if (room?.phase === "expedition" && expedition) {
     const theme = dungeonThemeForFloor(expedition.floor), base = fallbackExploreState(state.gameState, expedition.floor), discovered = Number(expedition.discoveries) + Number(expedition.encountersCleared), total = Math.max(1, Number(expedition.totalDiscoveries) + Number(expedition.totalEncounters));
     const stageTools = `<button type="button" data-online-route="chat" class="minimap-toggle">${pixelIcon("notice")}<b>チャット</b></button>${expedition.exitReached && room.leaderId === selfId ? `<button type="button" data-online-complete class="minimap-toggle online-floor-complete">${pixelIcon("event")}<b>踏破確定</b></button>` : ""}`;
     const nav = `<button type="button" data-online-route="home"><i>${pixelIcon("formation")}</i>部屋</button><button type="button" data-online-route="chat"><i>${pixelIcon("notice")}</i>会話</button><button type="button" data-online-route="raid"><i>${pixelIcon("growth")}</i>レイド</button><button type="button" data-online-center><i>${pixelIcon("event")}</i>現在地</button><button type="button" data-online-return class="danger"><i>${pixelIcon("rest")}</i>帰還</button>`;
-    return ExploreScreen(base, { online: true, floor: expedition.floor, title: `共闘探索・${expedition.floor}階`, party: exploreParty(room), hudCollapsed: state.hudCollapsed, combatPower: (room.members ?? []).reduce((sum, member) => sum + Math.max(0, Number(member.profile?.power) || 0), 0), progress: Math.round(discovered / total * 100), run: { startedAt: expedition.startedAt ?? Date.now() }, stageContentHtml: dungeonBoard(room, selfId, theme), stageToolsHtml: stageTools, miniMapHtml: "", navHtml: nav, className: `online-scenery-${theme.id}` });
+    const compatibilityPlayers = (room.members ?? []).map(member => `<span hidden data-online-map-player="${escapeOnlineHtml(member.playerId)}"></span>`).join("");
+    return ExploreScreen(base, { online: true, floor: expedition.floor, title: `共闘探索・${expedition.floor}階`, party: exploreParty(room), hudCollapsed: state.hudCollapsed, combatPower: (room.members ?? []).reduce((sum, member) => sum + Math.max(0, Number(member.profile?.power) || 0), 0), progress: Math.round(discovered / total * 100), run: { startedAt: expedition.startedAt ?? Date.now() }, stageContentHtml: `<canvas id="gameCanvas" data-online-dungeon-canvas></canvas><div class="online-shared-map" hidden>${compatibilityPlayers}</div>`, stageToolsHtml: stageTools, miniMapHtml: '<canvas id="miniMap"></canvas>', navHtml: nav, className: `online-scenery-${theme.id}` });
   }
   return `${screenHeader("explore", "CO-OP DUNGEON", "ソロ探索と同じ部品・処理を使い、1人1体を操作する共同探索です。")}
     <section class="online-v3-lobby-card"><div><small>CHALLENGE FLOOR</small><label><input type="number" min="1" max="10000" value="${number(room?.selectedFloor || 1).replaceAll(",", "")}" data-online-floor><b>F</b></label><p>変更できるのはリーダーだけ。全員の準備後に出発できます。</p></div></section>
@@ -175,9 +199,17 @@ export function renderOnlineExplore(room, selfId, state = {}) {
 }
 
 export function renderOnlineRaid(room, selfId, state = {}) {
+  if (state.raidReport) {
+    const report = state.raidReport, rows = (report.ranking ?? []).map(entry => {
+      const member = memberById(room, entry.playerId), contribution = report.raid?.contribution?.[entry.playerId] ?? entry;
+      return `<article class="online-raid-report-row ${entry.playerId === selfId ? "self" : ""}"><strong>${number(entry.rank)}位</strong>${onlineAvatarVisual(member?.profile ?? {}, { className: "online-raid-report-avatar" })}<div><b>${escapeOnlineHtml(member?.profile?.displayName || "冒険者")}</b><small>貢献 ${number(entry.score)}</small></div><dl><div><dt>与ダメージ</dt><dd>${number(contribution.damage)}</dd></div><div><dt>被ダメージ</dt><dd>${number(contribution.taken)}</dd></div><div><dt>回復</dt><dd>${number(contribution.healing)}</dd></div><div><dt>MP回復</dt><dd>${number(contribution.mpHealing)}</dd></div><div><dt>蘇生</dt><dd>${number(contribution.revives)}</dd></div><div><dt>防御・補助</dt><dd>${number((contribution.guards ?? 0) + (contribution.support ?? 0))}</dd></div></dl></article>`;
+    }).join("");
+    return `${screenHeader("raid", report.result === "victory" ? "RAID CLEAR" : "RAID RESULT", report.result === "victory" ? "終焉融骸を討伐しました。今回の共闘貢献を確認できます。" : "今回の戦果を記録しました。ボスの残りHPは次回へ引き継がれます。")}
+      <section class="online-raid-report"><header><span>${report.result === "victory" ? "討伐成功" : "撤退"}</span><h3>共闘貢献票</h3></header><div>${rows || '<p class="empty">集計データがありません</p>'}</div><button type="button" data-online-close-raid-report>レイド受付へ戻る</button></section>`;
+  }
   if (room?.phase === "raid" && room.raid) {
     const enemies = [room.raid.boss, ...(room.raid.minions ?? [])];
-    return renderSharedBattle({ mode: "raid", room, battle: room.raid, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: room.raid.name, enemies, skillMenu: state.skillMenu });
+    return renderSharedBattle({ mode: "raid", room, battle: room.raid, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: room.raid.name, enemies, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails });
   }
   const progress = room?.raidProgress;
   return `${screenHeader("raid", "CALAMITY RAID", "巨大ボスのHPは敗北後も保存。役割と行動を相談して少しずつ討伐します。")}
@@ -191,7 +223,7 @@ export function renderOnlineTeam(room, selfId, state = {}) {
     const battle = room.teamBattle, self = battle.players?.find(player => player.playerId === selfId), viewingSide = self?.side ?? "sun", enemySide = viewingSide === "sun" ? "moon" : "sun";
     const enemies = (battle.players ?? []).filter(player => player.side === enemySide).map(player => ({ ...player, id: player.playerId, name: player.name, asset: null, emoji: player.fallbackEmoji }));
     const allyBattle = { ...battle, players: (battle.players ?? []).filter(player => player.side === viewingSide) };
-    return renderSharedBattle({ mode: "team", room, battle: allyBattle, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: `${battle.format} チーム戦`, enemies, readOnly: !self, skillMenu: state.skillMenu });
+    return renderSharedBattle({ mode: "team", room, battle: allyBattle, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: `${battle.format} チーム戦`, enemies, readOnly: !self, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails });
   }
   const self = memberById(room, selfId);
   const sun = (room?.members ?? []).filter(member => member.teamSide === "sun"), moon = (room?.members ?? []).filter(member => member.teamSide === "moon"), spectators = (room?.members ?? []).filter(member => !["sun", "moon"].includes(member.teamSide));

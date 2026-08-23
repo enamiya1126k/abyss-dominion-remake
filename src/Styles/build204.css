@@ -1,0 +1,339 @@
+/* build204: exact shared exploration canvas, raid presentation, and walkable hall. */
+
+/* The shared dungeon owns the same canvas box as the ordinary ExploreScreen. */
+.online-shared-explore .explore-stage{
+  isolation:isolate;
+}
+.online-shared-explore .explore-stage>canvas[data-online-dungeon-canvas]{
+  position:absolute!important;
+  z-index:1!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  display:block!important;
+  touch-action:none!important;
+}
+.online-shared-explore .explore-stage>#miniMap{
+  z-index:9!important;
+}
+.online-shared-explore .explore-floor-plate,
+.online-shared-explore .explore-scenery-badge,
+.online-shared-explore .explore-stage-tools,
+.online-shared-explore .explore-run-clock{
+  z-index:10!important;
+}
+
+/* Online raid: the final body is intentionally about four times a normal unit. */
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss{
+  z-index:6!important;
+}
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .side-unit-sprite{
+  width:clamp(190px,44vw,264px)!important;
+  height:clamp(190px,44vw,264px)!important;
+  bottom:54px!important;
+  z-index:5!important;
+  filter:drop-shadow(0 10px 8px #000e) drop-shadow(0 0 20px #c53d7188)!important;
+}
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss::after,
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .target-reticle{
+  bottom:53px!important;
+}
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .battle-unit-floating-name{
+  bottom:clamp(246px,55vw,318px)!important;
+  z-index:8!important;
+}
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .battle-enemy-visual,
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .battle-enemy-visual img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+}
+
+/* The online item action is deliberately two-step: item, then recipient. */
+.online-shared-battle .online-item-step{
+  grid-column:1/-1;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  padding:7px 9px;
+  border:1px solid #7f633d;
+  background:linear-gradient(90deg,#2d1d0d,#17101d);
+}
+.online-shared-battle .online-item-step b{color:#ffe29b;font-size:.68rem}
+.online-shared-battle .online-item-step small{color:#baa986;font-size:.52rem;text-align:right}
+.online-shared-battle .online-item-target-list{max-height:min(42dvh,360px);overflow:auto}
+.online-shared-battle .online-item-target-list>button:not(.secondary){
+  border-color:#665078;
+  background:linear-gradient(180deg,#181221,#090a11);
+}
+
+/* Result sheet shown before returning to the raid desk. */
+.online-raid-report{
+  width:min(950px,100%);
+  margin:0 auto;
+  display:grid;
+  gap:10px;
+}
+.online-raid-report>header{
+  padding:14px 16px;
+  border:1px solid #9b7042;
+  background:radial-gradient(circle at 10% 50%,#70421655,transparent 42%),#110d12;
+}
+.online-raid-report>header span{color:#e8ba63;font-size:.64rem;letter-spacing:.18em}
+.online-raid-report>header h3{margin:3px 0 0;color:#f4dfad;font:900 1.45rem Georgia,"Yu Mincho",serif}
+.online-raid-report>div{display:grid;gap:7px}
+.online-raid-report-row{
+  min-width:0;
+  display:grid;
+  grid-template-columns:48px 66px minmax(90px,.75fr) minmax(0,2fr);
+  align-items:center;
+  gap:8px;
+  padding:8px;
+  border:1px solid #493d51;
+  background:linear-gradient(135deg,#11101a,#07080e);
+}
+.online-raid-report-row.self{border-color:#d0a753;box-shadow:inset 0 0 22px #d5a64016}
+.online-raid-report-row>strong{color:#f1cf78;text-align:center;font-size:1rem}
+.online-raid-report-avatar{width:62px!important;height:62px!important}
+.online-raid-report-row>div{display:grid;gap:3px;min-width:0}
+.online-raid-report-row>div b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#f0e1ba}
+.online-raid-report-row>div small{color:#83dce6}
+.online-raid-report-row dl{margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.online-raid-report-row dl>div{min-width:0;padding:5px;border:1px solid #2d2935;background:#07080d;text-align:right}
+.online-raid-report-row dt{color:#918a98;font-size:.5rem;white-space:nowrap}
+.online-raid-report-row dd{margin:2px 0 0;color:#eee1bc;font-size:.64rem;overflow:hidden;text-overflow:ellipsis}
+.online-raid-report>button{
+  min-height:52px;
+  border:1px solid #c89f4c;
+  background:linear-gradient(180deg,#53350f,#241405);
+  color:#ffe5a1;
+  font-weight:900;
+}
+
+/* The online home is a real, tap-to-walk gathering hall. */
+.online-v3-stage:has(>.online-gathering-hall){padding:0!important;overflow:hidden!important}
+.online-gathering-hall{
+  position:relative;
+  width:100%;
+  height:100%;
+  min-height:430px;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  overflow:hidden;
+  border:1px solid #7d6037;
+  background:#08070b;
+  touch-action:manipulation;
+}
+.online-hall-backdrop{
+  position:absolute;
+  z-index:0;
+  inset:0;
+  background:
+    linear-gradient(180deg,#05050a22 0,#09070c11 52%,#020307a8 100%),
+    url("../../assets/ui/home-town-bg.png") center 58%/cover no-repeat;
+  filter:saturate(.82) brightness(.74) contrast(1.08);
+  transform:scale(1.015);
+}
+.online-hall-backdrop::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse at 50% 72%,transparent 0 34%,#03020888 72%,#010104e8 100%),
+    linear-gradient(90deg,#030208a8,transparent 24% 76%,#030208a8);
+}
+.online-hall-backdrop::after{
+  content:"GATHERING HALL";
+  position:absolute;
+  left:50%;
+  top:27%;
+  padding:5px 14px;
+  border:1px solid #aa824c88;
+  background:#09070dbd;
+  color:#d9bd7c99;
+  font:900 clamp(.55rem,2vw,.8rem) Georgia,serif;
+  letter-spacing:.22em;
+  transform:translateX(-50%);
+}
+.hall-fire{
+  position:absolute;
+  top:30%;
+  width:10px;
+  height:18px;
+  border-radius:50%;
+  background:#ffd25f;
+  box-shadow:0 0 12px 5px #ff7c24aa,0 0 38px 12px #ff512944;
+  animation:onlineHallFire 1.2s ease-in-out infinite alternate;
+}
+.hall-fire-left{left:12%}.hall-fire-right{right:12%;animation-delay:-.55s}
+@keyframes onlineHallFire{to{transform:translateY(-2px) scale(.82);filter:brightness(1.35)}}
+.online-hall-hud{
+  position:relative;
+  z-index:8;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:2px 10px;
+  padding:9px 12px;
+  border-bottom:1px solid #9a7544;
+  background:linear-gradient(180deg,#0e0b12f2,#09070cda);
+  box-shadow:0 8px 20px #0008;
+  pointer-events:none;
+}
+.online-hall-hud>div{display:flex;align-items:baseline;gap:9px}
+.online-hall-hud small{color:#75dfe9;font-size:.48rem;letter-spacing:.15em}
+.online-hall-hud b{color:#ffe09a;letter-spacing:.12em}
+.online-hall-hud>span{color:#82e7ba;font-weight:900}
+.online-hall-hud p{grid-column:1/-1;margin:0;color:#a9a0ad;font-size:.55rem}
+.online-hall-world{
+  position:relative;
+  z-index:2;
+  min-height:0;
+  cursor:crosshair;
+  overflow:hidden;
+}
+.online-hall-world::after{
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:8%;
+  right:8%;
+  bottom:-20%;
+  height:65%;
+  border:1px solid #b18d5740;
+  border-radius:50%;
+  background:repeating-radial-gradient(ellipse at center,#9d75480c 0 2px,transparent 3px 18px);
+  transform:perspective(280px) rotateX(58deg);
+  pointer-events:none;
+}
+.online-hall-zone{
+  --zone-tone:#cba45f;
+  position:absolute;
+  z-index:2;
+  left:var(--hall-x);
+  top:var(--hall-y);
+  width:clamp(84px,20vw,150px);
+  min-height:58px;
+  display:grid;
+  place-items:center;
+  align-content:center;
+  gap:2px;
+  padding:7px;
+  border:1px solid color-mix(in srgb,var(--zone-tone) 72%,#211625);
+  border-radius:46%;
+  background:radial-gradient(ellipse,#15101edb,#07070dc7 70%);
+  color:#e9d6a6;
+  box-shadow:0 7px 18px #000b,0 0 14px color-mix(in srgb,var(--zone-tone) 20%,transparent);
+  transform:translate(-50%,-50%);
+}
+.online-hall-zone::after{
+  content:"";
+  position:absolute;
+  inset:-7px;
+  border:1px dashed color-mix(in srgb,var(--zone-tone) 38%,transparent);
+  border-radius:50%;
+  animation:onlineHallZone 2.8s ease-in-out infinite alternate;
+}
+.online-hall-zone i{color:var(--zone-tone);font:900 .48rem ui-monospace,monospace;letter-spacing:.12em}
+.online-hall-zone b{font-size:.64rem;text-shadow:0 2px 3px #000}
+.online-hall-zone.zone-raid{--zone-tone:#ef7891}
+.online-hall-zone.zone-explore{--zone-tone:#78e4d7}
+.online-hall-zone.zone-team{--zone-tone:#f0c364}
+.online-hall-zone.zone-chat{--zone-tone:#ae87e6}
+@keyframes onlineHallZone{to{opacity:.48;transform:scale(1.05)}}
+.online-hall-members{position:absolute;z-index:5;inset:0;pointer-events:none}
+.online-hall-player{
+  position:absolute;
+  left:var(--hall-x);
+  top:var(--hall-y);
+  width:clamp(62px,15vw,90px);
+  height:clamp(76px,18vw,106px);
+  margin:0;
+  display:grid;
+  justify-items:center;
+  align-content:end;
+  transform:translate(-50%,-82%);
+  transition:left .13s linear,top .13s linear;
+  filter:drop-shadow(0 7px 4px #000c);
+}
+.online-hall-player.self{filter:drop-shadow(0 0 8px #60e7ff) drop-shadow(0 7px 4px #000c)}
+.online-hall-player.offline{filter:grayscale(1);opacity:.48}
+.online-hall-avatar{width:clamp(62px,15vw,90px)!important;height:clamp(62px,15vw,90px)!important}
+.online-hall-player figcaption{
+  position:relative;
+  z-index:4;
+  max-width:110px;
+  margin-top:-8px;
+  padding:2px 5px;
+  border:1px solid #5c5868;
+  background:#06070bd9;
+  color:#f0e4ca;
+  font-size:.5rem;
+  font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.online-hall-player.self figcaption{border-color:#58dce9;color:#c4faff}
+.online-hall-prompt,.online-hall-tip{
+  position:absolute;
+  z-index:9;
+  left:50%;
+  bottom:13px;
+  width:min(90%,440px);
+  transform:translateX(-50%);
+}
+.online-hall-prompt{
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  gap:8px;
+  padding:8px 9px;
+  border:1px solid #d2ad5e;
+  background:#0c0910ed;
+  box-shadow:0 8px 24px #000d,0 0 18px #d8a94a22;
+}
+.online-hall-prompt small{color:#b5a78e}
+.online-hall-prompt button{min-height:40px;padding:7px 14px;border:1px solid #d4ac55;background:linear-gradient(#5b3b13,#271706);color:#ffe6a5;font-weight:900}
+.online-hall-tip{padding:6px 10px;border:1px solid #4b4654;background:#07080cc7;color:#aaa3b0;font-size:.53rem;text-align:center;pointer-events:none}
+.online-hall-party-strip{
+  position:relative;
+  z-index:8;
+  display:flex;
+  gap:7px;
+  min-height:31px;
+  padding:6px 9px;
+  overflow-x:auto;
+  border-top:1px solid #806137;
+  background:#08070ce8;
+}
+.online-hall-party-strip span{display:flex;align-items:center;gap:4px;min-width:0;color:#bdb5c0;font-size:.5rem;white-space:nowrap}
+.online-hall-party-strip i{width:7px;height:7px;border-radius:50%;background:#56e29f;box-shadow:0 0 7px #56e29f}
+.online-hall-party-strip .offline i{background:#68646f;box-shadow:none}
+
+@media(max-width:520px){
+  .battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .side-unit-sprite{width:clamp(176px,55vw,230px)!important;height:clamp(176px,55vw,230px)!important}
+  .battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .battle-unit-floating-name{bottom:clamp(224px,68vw,280px)!important;max-width:185px!important}
+  .online-raid-report-row{grid-template-columns:38px 52px minmax(0,1fr);gap:6px}
+  .online-raid-report-avatar{width:50px!important;height:50px!important}
+  .online-raid-report-row dl{grid-column:1/-1;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .online-hall-zone{width:82px;min-height:50px}
+  .online-hall-zone b{font-size:.55rem}
+  .online-hall-zone i{font-size:.41rem}
+  .online-hall-hud p{display:none}
+}
+
+@media(max-height:720px){
+  .battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .side-unit-sprite{bottom:45px!important;width:clamp(160px,41vw,218px)!important;height:clamp(160px,41vw,218px)!important}
+  .battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss::after,
+  .battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .target-reticle{bottom:44px!important}
+  .battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .battle-unit-floating-name{bottom:clamp(202px,50vw,258px)!important}
+  .online-hall-hud{padding-block:5px}
+  .online-hall-party-strip{min-height:26px;padding-block:4px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .hall-fire,.online-hall-zone::after{animation:none!important}
+  .online-hall-player{transition:none!important}
+}
