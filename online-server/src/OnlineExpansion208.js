@@ -9,6 +9,39 @@ import {
 function key(point) { return `${point.x},${point.y}`; }
 function distance(left, right) { return Math.abs(left.x - right.x) + Math.abs(left.y - right.y); }
 
+function seededScore(seed, point) {
+  let value = 2166136261;
+  for (const character of `${seed}:${point.x}:${point.y}`) value = Math.imul(value ^ character.charCodeAt(0), 16777619);
+  return value >>> 0;
+}
+
+function ensureEncounterDensity(expedition, participants = 1) {
+  const current = (expedition.objects ?? []).filter(object => object.type === "encounter");
+  const partySize = Math.max(1, Math.min(4, Number(participants) || 1));
+  // One player receives the solo baseline. Each additional player adds 10%
+  // pressure so co-op stays lively without turning every step into a battle.
+  const soloBaseline = Math.max(4, Math.min(6, 4 + Math.floor((Number(expedition.floor) || 1) / 200)));
+  const target = Math.max(current.length, Math.round(soloBaseline * (1 + (partySize - 1) * .1)));
+  if (current.length >= target) { expedition.totalEncounters = current.length; return; }
+  const occupied = new Set((expedition.objects ?? []).map(key));
+  const candidates = [];
+  for (let y = 1; y < expedition.rows - 1; y++) for (let x = 1; x < expedition.cols - 1; x++) {
+    const point = { x, y };
+    if (expedition.tiles[y]?.[x] !== "." || occupied.has(key(point))) continue;
+    if (distance(point, expedition.start) < 4 || distance(point, expedition.exit) < 3) continue;
+    candidates.push(point);
+  }
+  candidates.sort((left, right) => seededScore(expedition.id ?? expedition.floor, left) - seededScore(expedition.id ?? expedition.floor, right));
+  for (let index = current.length; index < target && candidates.length; index++) {
+    const point = candidates.shift();
+    expedition.objects.push({ id: `online-encounter-${index}-${point.x}-${point.y}`, type: "encounter", ...point, resolved: false, hidden: false, onlineAdded: true });
+    occupied.add(key(point));
+  }
+  expedition.totalEncounters = expedition.objects.filter(object => object.type === "encounter").length;
+  expedition.coop ??= {};
+  expedition.coop.encounterRateLabel = partySize === 1 ? "ソロ同等" : `ソロ比 +${(partySize - 1) * 10}%`;
+}
+
 function wallAlcoves(expedition) {
   const occupied = new Set((expedition.objects ?? []).map(key));
   const result = [];
@@ -39,6 +72,7 @@ function moveVaultIntoWall(expedition) {
 
 export function prepareOnlineExpansionV208(expedition, options = {}) {
   prepareOnlineExpansionV207(expedition, options);
+  ensureEncounterDensity(expedition, options.participants);
   moveVaultIntoWall(expedition);
   for (const object of expedition.objects ?? []) {
     if (["resonanceChest", "deluxeChest", "rarePortalChest"].includes(object.type)) object.persistent = true;

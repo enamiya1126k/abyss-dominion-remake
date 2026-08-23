@@ -119,6 +119,10 @@ function onlineSkillProfile(monster) {
       guaranteedHit: Boolean(skill.guaranteedHit),
       damageClass: skill.damageClass === "magic" ? "magic" : "physical",
       element: skill.element ?? monster.attribute ?? SPECIES[monster.speciesId]?.element ?? "neutral",
+      equipmentGranted: Boolean(skill.equipmentGranted),
+      equipmentAuthorityId: skill.equipmentAuthorityId ?? null,
+      equipmentAuthorityName: skill.equipmentAuthorityName ?? null,
+      tag: skill.tag ?? null,
       partyShieldRate: Math.max(0, Number(skill.partyShieldRate) || 0),
       effects: (skill.effects ?? []).slice(0, 6).map(effect => ({
         kind: String(effect.kind ?? ""), value: Math.max(0, Number(effect.value) || 0),
@@ -133,12 +137,24 @@ function onlineSkillProfile(monster) {
   });
 }
 
+function onlineEquipmentAuthorities(monster) {
+  return (Array.isArray(monster?._equipmentAuthorities) ? monster._equipmentAuthorities : []).slice(0, 6).map(authority => ({
+    id: String(authority?.id ?? "equipment-authority").slice(0, 80),
+    name: String(authority?.name ?? "装備固有能力").slice(0, 40),
+    description: String(authority?.description ?? "").slice(0, 180),
+    fixedEffects: Object.fromEntries(Object.entries(authority?.fixedEffects ?? {}).filter(([, value]) => Number.isFinite(Number(value))).slice(0, 24).map(([key, value]) => [String(key).slice(0, 40), Number(value)])),
+    skillId: authority?.skillId == null ? null : String(authority.skillId).slice(0, 80),
+    skillName: authority?.skillName == null ? null : String(authority.skillName).slice(0, 60),
+    itemName: authority?.itemName == null ? null : String(authority.itemName).slice(0, 60),
+  }));
+}
+
 export function buildOnlinePartyProfile(state, { monsterId = null, displayName: onlineName = "" } = {}) {
   const { monster } = selectedPartyMonster(state, monsterId);
   if (!monster) return {
     displayName: onlineName || "冒険者", monsterId: null, speciesId: "slime", visualSpeciesId: null, endgameBossId: null, floorBossCatalogId: null, summonTier: null, summonRarity: null, endgameFaction: null, monsterName: "未編成",
     fallbackEmoji: "？", level: 1, stars: 1, plus: 0, power: 0, maxFloor: 1, attribute: "neutral",
-    circleId: "none", circleName: "魔法陣なし", circleLevel: 0, circleEffect: "none", equipment: [],
+    circleId: "none", circleName: "魔法陣なし", circleLevel: 0, circleEffect: "none", equipment: [], equipmentAuthorities: [],
     battleStats: { hp: 100, mp: 10, atk: 10, matk: 10, def: 5, mdef: 5, spd: 10, crit: 5, evasion: 3, accuracy: 100 },
     skills: [], captureStock: 0,
   };
@@ -156,7 +172,7 @@ export function buildOnlinePartyProfile(state, { monsterId = null, displayName: 
     plus: Math.max(0, Number(monster.plus) || 0), power: monsterCombatPower(monster),
     maxFloor: Math.max(1, Number(state.player?.maxFloor) || 1), attribute: monster.attribute ?? species.element ?? "neutral",
     circleId: circle.id, circleName: circle.name, circleLevel: circle.id === "none" ? 0 : Math.max(1, Number(circle.level) || 1),
-    circleEffect: circle.effect ?? "none", equipment: equipmentProfile(state, monster),
+    circleEffect: circle.effect ?? "none", equipment: equipmentProfile(state, monster), equipmentAuthorities: onlineEquipmentAuthorities(monster),
     signatureResonance: signature ? {
       id: signature.definition.id, name: signature.definition.name, ownerId: signature.ownerId,
       active: signature.active, description: signature.definition.description, ...signature.definition,

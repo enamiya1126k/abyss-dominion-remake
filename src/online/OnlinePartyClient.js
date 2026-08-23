@@ -1,19 +1,25 @@
 import {
   buildOnlinePartyProfile, ONLINE_STORAGE_KEYS, ensureOnlineIdentity,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.44-build209";
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.47-build212";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
-} from "./OnlineViews.js?v=2.11.45-build210";
+} from "./OnlineViews.js?v=2.11.47-build212";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
 const DIRECTION = Object.freeze({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] });
 const ONLINE_EXPLORE_CHAT_POSITION = "abyss-online-explore-chat-position";
 const ONLINE_EXPLORE_EMOTE_POSITION = "abyss-online-explore-emote-position";
+const ONLINE_HALL_EMOTE_POSITION = "abyss-online-hall-emote-position";
+const HALL_POINTS = Object.freeze([
+  { route: "raid", x: 18, y: 25 }, { route: "explore", x: 82, y: 25 },
+  { route: "team", x: 24, y: 78 }, { route: "chat", x: 76, y: 78 },
+]);
 
 function storageGet(key, fallback = "") { try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; } }
 function storageSet(key, value) { try { localStorage.setItem(key, String(value)); } catch {} }
 function clamp(value, min, max) { return Math.max(min, Math.min(max, Number(value) || 0)); }
 function safeRoomId(value) { return String(value ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6); }
+function safeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[character]); }
 function isTyping(target) { return Boolean(target?.closest?.("input,textarea,select,[contenteditable=true]")); }
 function keyDirection(key) { return ({ ArrowUp: "up", w: "up", W: "up", ArrowDown: "down", s: "down", S: "down", ArrowLeft: "left", a: "left", A: "left", ArrowRight: "right", d: "right", D: "right" })[key] ?? null; }
 
@@ -72,6 +78,7 @@ export class OnlinePartyController {
     this.raidReport = null;
     this.expeditionReport = null;
     this.hallDestination = null;
+    this.hallNearbyRoute = null;
     this.exploreCanvasMounted = false;
     this.presentationTimers = new Set();
     this.onlineHudCollapsed = false;
@@ -189,6 +196,7 @@ export class OnlinePartyController {
     }
     const button = event.target.closest?.("button");
     if (!button) return;
+    if (button.matches("[data-online-reward-close]")) { button.closest(".online-reward-receipt")?.remove(); return; }
     if (button.matches("[data-online-ping-toggle]")) { this.pingMenuOpen = !this.pingMenuOpen; this._render(); return; }
     if (button.matches("[data-online-ping-kind]")) { const kind = button.dataset.onlinePingKind; this.pingMenuOpen = false; this._send("expeditionPing", { kind }); this._render(); return; }
     if (button.matches("[data-online-chat-toggle]")) { this.exploreChatOpen = !this.exploreChatOpen; this._render(); requestAnimationFrame(() => this._query("[data-online-explore-chat-input]")?.focus()); return; }
@@ -358,7 +366,7 @@ export class OnlinePartyController {
     }
     if (message.type === "roomState") { this._applyRoomState(message.room); return; }
     if (message.type === "leftRoom") { this._clearRoom(); return; }
-    if (message.type === "memberMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.position = { ...message.position }; if (this.route === "home") this._render(); return; }
+    if (message.type === "memberMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.position = { ...message.position }; if (this.route === "home") this._updateHallPlayerDom(message.playerId); return; }
     if (message.type === "expeditionMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.dungeonPosition = { ...message.position }; if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render(); return; }
     if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this._applyRoomState(message.room); return; }
     if (message.type === "battleStarted" && message.room) { this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
@@ -482,13 +490,14 @@ export class OnlinePartyController {
     this.root?.querySelector(".online-v3-screen")?.classList.toggle("online-shared-gameplay-active", gameplay);
     const canvasExplore = this.route === "explore" && this.roomState.phase === "expedition" && !this.roomState.expedition?.battle;
     if (this.exploreCanvasMounted) this._unmountExploreCanvas();
-    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], raidReport: this.raidReport, expeditionReport: this.expeditionReport, exploreChatOpen: this.exploreChatOpen, merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot() };
+    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], raidReport: this.raidReport, expeditionReport: this.expeditionReport, exploreChatOpen: this.exploreChatOpen, merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot() };
     stage.innerHTML = this.route === "explore" ? renderOnlineExplore(this.roomState, this.selfId, state)
       : this.route === "raid" ? renderOnlineRaid(this.roomState, this.selfId, state)
       : this.route === "team" ? renderOnlineTeam(this.roomState, this.selfId, state)
       : this.route === "chat" ? renderOnlineChat(this.roomState, this.selfId, this.chatDraft)
       : renderOnlineHome(this.roomState, this.selfId, state);
     if (this.route === "chat") requestAnimationFrame(() => { const log = this._query("[data-online-chat-log]"); if (log) log.scrollTop = log.scrollHeight; });
+    if (this.route === "home") { this.hallNearbyRoute = this._hallNearby(this._self()?.position); requestAnimationFrame(() => this._prepareExploreEmoteAnchor()); }
     this.onScene(canvasExplore ? "explore" : gameplay ? "battle" : "home");
     if (canvasExplore) requestAnimationFrame(() => { if (!this.mounted || this.route !== "explore" || this.roomState?.expedition?.battle) return; this.exploreCanvasMounted = true; this.onExploreCanvasMount(this.roomState, this.selfId, target => this._setDestination(target), this._chatBubbleSnapshot(), this._pingSnapshot(), this._socialBubbleSnapshot()); this._bindExploreChatDrag(); });
     if (gameplay && !canvasExplore) requestAnimationFrame(() => this._decorateBattleState());
@@ -556,26 +565,29 @@ export class OnlinePartyController {
 
   _captureHpTrails(mode, previous, next) {
     const before = this._healthMap(mode, previous), after = this._healthMap(mode, next), trails = {};
-    for (const [key, current] of after) { const old = before.get(key); if (!old || Number(current.hp) >= Number(old.hp)) continue; trails[key] = { from: clamp(Number(old.hp) / Math.max(1, Number(old.max)) * 100, 0, 100), startedAt: Date.now(), duration: 900 }; }
+    for (const [key, current] of after) { const old = before.get(key); if (!old || Number(current.hp) >= Number(old.hp)) continue; trails[key] = { from: clamp(Number(old.hp) / Math.max(1, Number(old.max)) * 100, 0, 100), startedAt: Date.now(), duration: 1500 }; }
     this.hpTrails[mode] = trails;
   }
 
   _queueBattlePresentation(mode, events = []) {
+    for (const timer of this.presentationTimers) clearTimeout(timer);
+    this.presentationTimers.clear();
+    const spacing = mode === "raid" ? 760 : 560;
     for (const [index, event] of [...events].slice(-8).entries()) {
-      const timer = setTimeout(() => { this.presentationTimers.delete(timer); this._playBattleEvent(event); }, 80 + index * 190);
+      const timer = setTimeout(() => { this.presentationTimers.delete(timer); this._playBattleEvent(event, mode); }, 140 + index * spacing);
       this.presentationTimers.add(timer);
     }
   }
 
-  _playBattleEvent(event) {
+  _playBattleEvent(event, mode = this.route) {
     const actorId = event?.actorId, targetId = event?.targetId;
     const actor = this._query(`#ally-${CSS.escape(String(actorId))}`) ?? this._query(`#enemy-${CSS.escape(String(actorId))}`);
     const target = event?.targetKind === "player" ? this._query(`#ally-${CSS.escape(String(targetId))}`) : this._query(`#enemy-${CSS.escape(String(targetId))}`);
     if (actor && ["damage", "signature", "heal", "mpHeal", "revive", "circleActivate"].includes(event.kind)) { actor.classList.remove("fx-lunge", "fx-skill-lunge"); void actor.offsetWidth; actor.classList.add(event.label && event.label !== "たたかう" ? "fx-skill-lunge" : "fx-lunge"); }
-    if (target && ["damage", "enemyDamage", "signature", "deathMirrorPhantom"].includes(event.kind) && Number(event.value) > 0) { target.classList.remove("fx-hit", "fx-critical-hit"); void target.offsetWidth; target.classList.add(event.critical ? "fx-critical-hit" : "fx-hit"); const flash = document.createElement("span"); flash.className = `battle-unit-hit-flash ${event.critical ? "critical" : ""}`; target.appendChild(flash); setTimeout(() => flash.remove(), 420); }
+    if (target && ["damage", "enemyDamage", "signature", "deathMirrorPhantom"].includes(event.kind) && Number(event.value) > 0) { target.classList.remove("fx-hit", "fx-critical-hit"); void target.offsetWidth; target.classList.add(event.critical ? "fx-critical-hit" : "fx-hit"); const flash = document.createElement("span"); flash.className = `battle-unit-hit-flash ${event.critical ? "critical" : ""}`; target.appendChild(flash); setTimeout(() => flash.remove(), 680); }
     const layer = this._query("#battleFxLayer");
-    if (layer && target && (Number(event?.value) || ["miss", "guard"].includes(event?.kind))) { const layerRect = layer.getBoundingClientRect(), rect = target.getBoundingClientRect(), float = document.createElement("div"); const healing = ["heal", "mpHeal", "revive"].includes(event.kind), text = event.kind === "miss" ? "MISS" : event.kind === "guard" ? "GUARD" : `${healing ? "+" : "-"}${Math.max(0, Number(event.value) || 0).toLocaleString()}`; float.className = `floating-number ${healing ? "heal" : event.critical ? "critical" : event.kind === "enemyDamage" ? "enemy" : "damage"}`; float.textContent = text; float.style.left = `${rect.left - layerRect.left + rect.width / 2}px`; float.style.top = `${rect.top - layerRect.top + rect.height * .34}px`; layer.appendChild(float); setTimeout(() => float.remove(), 1500); }
-    if (layer && event?.label && (["signature", "raidTelegraph", "revive", "effect", "buff", "link", "coopBreak", "circleActivate"].includes(event.kind) || event.kind === "damage" && event.label !== "たたかう")) { const banner = document.createElement("div"); banner.className = `battle-cinematic-banner ${event.kind === "raidTelegraph" || event.kind === "coopBreak" ? "boss" : "skill"}`; banner.innerHTML = `<span class="battle-banner-copy"><strong>${String(event.label).replace(/[<>]/g, "")}</strong><small>${event.actorName ? String(event.actorName).replace(/[<>]/g, "") : event.kind === "circleActivate" ? "魔法陣 発動" : "共闘アクション"}</small></span>`; this._query(".battle-arena")?.appendChild(banner); setTimeout(() => { banner.classList.add("leaving"); setTimeout(() => banner.remove(), 240); }, 720); }
+    if (layer && target && (Number(event?.value) || ["miss", "guard"].includes(event?.kind))) { const layerRect = layer.getBoundingClientRect(), rect = target.getBoundingClientRect(), float = document.createElement("div"); const healing = ["heal", "mpHeal", "revive"].includes(event.kind), text = event.kind === "miss" ? "MISS" : event.kind === "guard" ? "GUARD" : `${healing ? "+" : "-"}${Math.max(0, Number(event.value) || 0).toLocaleString()}`; float.className = `floating-number ${healing ? "heal" : event.critical ? "critical" : event.kind === "enemyDamage" ? "enemy" : "damage"}`; float.textContent = text; float.style.left = `${rect.left - layerRect.left + rect.width / 2}px`; float.style.top = `${rect.top - layerRect.top + rect.height * .34}px`; layer.appendChild(float); setTimeout(() => float.remove(), 2400); }
+    if (layer && event?.label && (["signature", "raidTelegraph", "revive", "effect", "buff", "link", "coopBreak", "circleActivate", "equipmentAuthority"].includes(event.kind) || event.kind === "damage" && event.label !== "たたかう")) { const title = String(event.label), detail = String(event.description || event.message || event.effectText || (event.kind === "circleActivate" ? "魔法陣 発動" : event.actorName || "共闘アクション")); const banner = document.createElement("div"); const authority = event.kind === "equipmentAuthority" || /固有|権能|反照/.test(detail); banner.className = `battle-cinematic-banner ${event.kind === "raidTelegraph" || event.kind === "coopBreak" ? "boss" : "skill"} ${title.length > 20 ? "very-long-title" : title.length > 12 ? "long-title" : ""} ${authority ? "equipment-authority" : ""}`; banner.innerHTML = `<span class="battle-banner-copy"><strong>${safeHtml(title)}</strong><small class="battle-banner-effect">${safeHtml(detail)}</small></span>`; this._query(".battle-arena")?.appendChild(banner); const hold = mode === "raid" ? 2100 : 1550; setTimeout(() => { banner.classList.add("leaving"); setTimeout(() => banner.remove(), 380); }, hold); }
   }
 
   _sendPreset(text) {
@@ -592,7 +604,33 @@ export class OnlinePartyController {
     if (this.route !== "chat") this.unread = Math.min(99, this.unread + 1);
     this.chatBubbles.set(message.playerId, { playerId: message.playerId, text: String(message.text ?? "").slice(0, 80), expiresAt: Date.now() + 6200 });
     if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() });
-    else this._render();
+    else if (!["explore", "raid", "team"].includes(this.route) || !this._battle(this.route)) this._render();
+  }
+
+  _rewardRows(reward = {}) {
+    const labels = { gold: ["GOLD", "枚"], crystals: ["魔晶石", "個"], captureCrystals: ["捕獲結晶", "個"], raidMaterials: ["融骸核片", "個"], experience: ["経験値", ""] };
+    const rows = [];
+    for (const [key, [label, unit]] of Object.entries(labels)) { const value = Math.max(0, Math.floor(Number(reward?.[key]) || 0)); if (value) rows.push({ label, value: `${value.toLocaleString()}${unit}` }); }
+    if (reward?.randomEquipmentRarity) rows.push({ label: "追加装備抽選", value: String(reward.randomEquipmentRarity), rarity: String(reward.randomEquipmentRarity) });
+    return rows;
+  }
+
+  _showRewardReceipt(message, result = {}) {
+    if (result?.duplicate) return;
+    const stage = this._query(".explore-stage") ?? this._query("[data-online-stage]"); if (!stage) return;
+    stage.querySelector(".online-reward-receipt")?.remove();
+    const reward = message.reward ?? {}, source = message.source ?? {}, shared = source.sharedBase && typeof source.sharedBase === "object" ? source.sharedBase : reward;
+    const commonRows = this._rewardRows(shared), numericKeys = ["gold", "crystals", "captureCrystals", "raidMaterials", "experience"], personalReward = {};
+    for (const key of numericKeys) { const extra = Math.max(0, Number(reward?.[key] || 0) - Number(shared?.[key] || 0)); if (extra) personalReward[key] = extra; }
+    if (reward?.randomEquipmentRarity && reward.randomEquipmentRarity !== shared?.randomEquipmentRarity) personalReward.randomEquipmentRarity = reward.randomEquipmentRarity;
+    const personalRows = this._rewardRows(personalReward);
+    if (result.equipmentName && !personalRows.some(row => row.label.includes("装備"))) personalRows.push({ label: "個別装備", value: result.equipmentName, rarity: String(reward.randomEquipmentRarity || "") });
+    const rowHtml = rows => rows.length ? rows.map(row => `<li class="${row.rarity ? "rare" : ""}"><span>${safeHtml(row.label)}</span><b>${safeHtml(row.value)}</b></li>`).join("") : `<li><span>受取済み</span><b>✓</b></li>`;
+    const receipt = document.createElement("aside"); receipt.className = "online-reward-receipt"; receipt.setAttribute("role", "status");
+    receipt.innerHTML = `<header><span>ONLINE LOOT</span><strong>${safeHtml(source.title || "共闘戦利品")}</strong><button type="button" data-online-reward-close aria-label="閉じる">×</button></header><section><h4>全員共通</h4><ul>${rowHtml(commonRows)}</ul></section>${personalRows.length || source.personalBonus ? `<section class="personal"><h4>あなたの追加抽選${source.personalBonus ? `・${safeHtml(source.personalBonus)}` : ""}</h4><ul>${rowHtml(personalRows)}</ul></section>` : ""}`;
+    stage.appendChild(receipt);
+    requestAnimationFrame(() => receipt.classList.add("show"));
+    const timer = setTimeout(() => { this.presentationTimers.delete(timer); receipt.classList.add("leaving"); setTimeout(() => receipt.remove(), 380); }, 7200); this.presentationTimers.add(timer);
   }
 
   async _receiveReward(message) {
@@ -600,7 +638,7 @@ export class OnlinePartyController {
     this.rewardInFlight.add(id);
     try {
       const result = await this.onReward({ rewardId: id, reward: message.reward ?? {}, source: message.source ?? {} });
-      if (result?.ok) { this._send("rewardAck", { rewardId: id }); if (!result.duplicate) this.toast("オンライン報酬を受け取りました"); }
+      if (result?.ok) { this._send("rewardAck", { rewardId: id }); if (!result.duplicate) { this.toast("オンライン報酬を受け取りました"); this._showRewardReceipt(message, result); } }
     } finally { this.rewardInFlight.delete(id); }
   }
 
@@ -662,15 +700,14 @@ export class OnlinePartyController {
   _receiveSocial(message) {
     const emoji = ({ wave: "👋", cheer: "✨", heart: "❤️", like: "👍", alert: "⚠️", question: "❓", surprise: "‼️", laugh: "😄", cry: "💧", clap: "👏", sparkle: "🌟" })[message.id] ?? "✨";
     this.socialBubbles.set(message.playerId, { playerId: message.playerId, emoji, id: message.id, expiresAt: Date.now() + Math.max(1800, Number(message.duration) || 2800) });
-    if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot(), socialBubbles: this._socialBubbleSnapshot() }); else this._render();
+    if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot(), socialBubbles: this._socialBubbleSnapshot() }); else if (!["explore", "raid", "team"].includes(this.route) || !this._battle(this.route)) this._render();
   }
 
   _placeExploreEmote(anchor, point = null) {
-    const stage = anchor?.closest?.(".explore-stage");
+    const stage = anchor?.closest?.(".explore-stage,.online-hall-world");
     if (!anchor || !stage) return null;
     const rect = anchor.getBoundingClientRect();
-    const radialRoom = Math.min(82, Math.max(10, (stage.clientWidth - rect.width) / 2));
-    const minX = radialRoom, maxX = Math.max(minX, stage.clientWidth - rect.width - radialRoom);
+    const minX = 10, maxX = Math.max(minX, stage.clientWidth - rect.width - 10);
     const minY = 10, maxY = Math.max(minY, stage.clientHeight - rect.height - 14);
     const x = clamp(point?.x ?? minX, minX, maxX), y = clamp(point?.y ?? 12, minY, maxY);
     anchor.style.setProperty("left", `${x}px`, "important");
@@ -681,12 +718,13 @@ export class OnlinePartyController {
   }
 
   _prepareExploreEmoteAnchor() {
-    const anchor = this._query(".online-explore-emote");
+    const anchor = this._query(".online-explore-emote,.online-hall-emote-tool");
     if (!anchor) return;
+    const key = anchor.matches(".online-hall-emote-tool") ? ONLINE_HALL_EMOTE_POSITION : ONLINE_EXPLORE_EMOTE_POSITION;
     let saved = null;
-    try { saved = JSON.parse(storageGet(ONLINE_EXPLORE_EMOTE_POSITION, "null")); } catch {}
+    try { saved = JSON.parse(storageGet(key, "null")); } catch {}
     const placed = this._placeExploreEmote(anchor, saved);
-    if (placed) storageSet(ONLINE_EXPLORE_EMOTE_POSITION, JSON.stringify(placed));
+    if (placed) storageSet(key, JSON.stringify(placed));
   }
 
   _beginEmoteGesture(event, anchor) {
@@ -694,7 +732,8 @@ export class OnlinePartyController {
     event.preventDefault();
     const choices = [["wave", "👋"], ["cheer", "✨"], ["heart", "❤️"], ["like", "👍"], ["alert", "⚠️"], ["question", "❓"]];
     const pointerId = event.pointerId, origin = { x: event.clientX, y: event.clientY };
-    const movable = anchor.matches?.(".online-explore-emote"), stage = movable ? anchor.closest(".explore-stage") : null;
+    const movable = anchor.matches?.(".online-explore-emote,.online-hall-emote-tool"), stage = movable ? anchor.closest(".explore-stage,.online-hall-world") : null;
+    const positionKey = anchor.matches?.(".online-hall-emote-tool") ? ONLINE_HALL_EMOTE_POSITION : ONLINE_EXPLORE_EMOTE_POSITION;
     const anchorRect = anchor.getBoundingClientRect(), stageRect = stage?.getBoundingClientRect();
     const startPosition = stageRect ? { x: anchorRect.left - stageRect.left, y: anchorRect.top - stageRect.top } : null;
     let wheel = null, selected = 0, opened = false, dragging = false, wheelMoved = false, lastPosition = startPosition;
@@ -713,7 +752,7 @@ export class OnlinePartyController {
     const update = move => {
       if (move.pointerId != null && move.pointerId !== pointerId) return;
       const dx = move.clientX - origin.x, dy = move.clientY - origin.y;
-      if (!opened && movable && startPosition && Math.hypot(dx, dy) > 8) { dragging = true; clearTimeout(timer); anchor.classList.add("dragging"); }
+      if (movable && startPosition && Math.hypot(dx, dy) > 8 && !dragging) { dragging = true; opened = false; clearTimeout(timer); wheel?.remove(); wheel = null; anchor.classList.add("dragging"); }
       if (dragging) { move.preventDefault?.(); lastPosition = this._placeExploreEmote(anchor, { x: startPosition.x + dx, y: startPosition.y + dy }); return; }
       if (!opened || !wheel) return;
       wheelMoved = true;
@@ -726,18 +765,27 @@ export class OnlinePartyController {
     };
     const finish = up => {
       if (up.pointerId != null && up.pointerId !== pointerId) return;
-      if (dragging && lastPosition) { storageSet(ONLINE_EXPLORE_EMOTE_POSITION, JSON.stringify(lastPosition)); anchor.dataset.emoteSuppress = "1"; setTimeout(() => delete anchor.dataset.emoteSuppress, 0); }
+      if (dragging && lastPosition) { storageSet(positionKey, JSON.stringify(lastPosition)); anchor.dataset.emoteSuppress = "1"; setTimeout(() => delete anchor.dataset.emoteSuppress, 0); }
       else if (opened) { if (wheelMoved) update(up); const [id] = choices[selected]; this._send("social", { kind: "emote", id }); anchor.dataset.emoteSuppress = "1"; setTimeout(() => delete anchor.dataset.emoteSuppress, 0); }
       cleanup();
     };
-    const cancel = cancelEvent => { if (cancelEvent?.pointerId != null && cancelEvent.pointerId !== pointerId) return; if (dragging && lastPosition) storageSet(ONLINE_EXPLORE_EMOTE_POSITION, JSON.stringify(lastPosition)); cleanup(); };
+    const cancel = cancelEvent => { if (cancelEvent?.pointerId != null && cancelEvent.pointerId !== pointerId) return; if (dragging && lastPosition) storageSet(positionKey, JSON.stringify(lastPosition)); cleanup(); };
     window.addEventListener("pointermove", update, true); window.addEventListener("pointerup", finish, true); window.addEventListener("pointercancel", cancel, true);
   }
 
   _decorateBattleState() {
     const battle = this._battle(this.route), focus = battle?.focusTarget;
     if (focus && Number(focus.expiresAt) > Date.now()) this._query(`#enemy-${CSS.escape(String(focus.targetId))}`)?.classList.add("online-focus-target");
-    for (const bubble of this._socialBubbleSnapshot()) { const unit = this._query(`#ally-${CSS.escape(String(bubble.playerId))}`); if (!unit) continue; const mark = document.createElement("span"); mark.className = "online-battle-emote-bubble"; mark.textContent = bubble.emoji; unit.appendChild(mark); }
+  }
+
+  _hallNearby(position) {
+    if (!position) return null;
+    return HALL_POINTS.find(point => Math.hypot(point.x - Number(position.x), point.y - Number(position.y)) <= 10)?.route ?? null;
+  }
+
+  _updateHallPlayerDom(playerId) {
+    const member = this.roomState?.members?.find(entry => entry.playerId === playerId), node = this._query(`[data-online-hall-player="${CSS.escape(String(playerId))}"]`);
+    if (member?.position && node) { node.style.setProperty("--hall-x", `${clamp(member.position.x, 5, 95)}%`); node.style.setProperty("--hall-y", `${clamp(member.position.y, 15, 96)}%`); }
   }
 
   _bindExploreChatDrag() {
@@ -757,9 +805,9 @@ export class OnlinePartyController {
     const self = this._self(), current = self?.position, destination = this.hallDestination;
     if (!current || !destination) return;
     const dx = destination.x - current.x, dy = destination.y - current.y, distance = Math.hypot(dx, dy);
-    if (distance <= 1.5) { this.hallDestination = null; this._render(); return; }
+    if (distance <= 1.5) { this.hallDestination = null; const nearby = this._hallNearby(current); if (nearby !== this.hallNearbyRoute) { this.hallNearbyRoute = nearby; this._render(); } return; }
     const step = Math.min(6, distance), position = { x: current.x + dx / distance * step, y: current.y + dy / distance * step, facing: Math.abs(dx) > Math.abs(dy) ? dx < 0 ? "left" : "right" : dy < 0 ? "up" : "down" };
-    this.lastMoveAt = now; self.position = position; this._send("move", { position }); this._render();
+    this.lastMoveAt = now; self.position = position; this._send("move", { position }); this._updateHallPlayerDom(this.selfId); const nearby = this._hallNearby(position); if (nearby !== this.hallNearbyRoute) { this.hallNearbyRoute = nearby; this._render(); }
   }
 
   _handleClose() {

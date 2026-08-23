@@ -1,0 +1,83 @@
+/* build212: stable social surfaces, readable online combat and explicit loot. */
+
+/* Hall movement updates the avatar only; facilities look like places in the world. */
+.online-hall-zone{
+  width:clamp(78px,19vw,132px)!important;
+  min-height:72px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:none!important;
+  box-shadow:none!important;
+  overflow:visible;
+}
+.online-hall-zone::after{
+  inset:auto 8% -8px!important;
+  height:18px;
+  border:1px solid color-mix(in srgb,var(--zone-tone) 42%,transparent)!important;
+  border-radius:50%!important;
+  background:radial-gradient(ellipse,color-mix(in srgb,var(--zone-tone) 24%,transparent),transparent 70%);
+  transform:none!important;
+}
+.hall-facility-art{position:relative;width:66px;height:48px;display:block;filter:drop-shadow(0 8px 5px #000d)}
+.hall-facility-art::before,.hall-facility-art::after,.hall-facility-art em{content:"";position:absolute;display:block;box-sizing:border-box}
+.zone-raid .hall-facility-art::before{left:8px;right:8px;bottom:4px;height:28px;border:3px solid #573648;border-radius:50% 50% 12% 12%;background:linear-gradient(135deg,#7b3348,#1a1119 65%);box-shadow:inset 0 0 10px #f37d9e55}
+.zone-raid .hall-facility-art::after{left:4px;right:4px;bottom:0;height:8px;border:2px solid #b27479;background:#261116}
+.zone-raid .hall-facility-art em{left:30px;top:2px;width:7px;height:34px;border:2px solid #daa679;background:#411929;box-shadow:-18px 8px 0 -1px #8f5360,18px 8px 0 -1px #8f5360}
+.zone-explore .hall-facility-art::before{left:9px;right:9px;bottom:2px;height:42px;border:5px solid #466a6c;border-bottom:7px solid #385054;border-radius:30px 30px 3px 3px;background:radial-gradient(ellipse at bottom,#172a2e,#04090b 72%);box-shadow:inset 0 0 15px #68f5df55}
+.zone-explore .hall-facility-art::after{left:24px;bottom:4px;width:18px;height:30px;border:2px solid #73c7bc;border-bottom:0;border-radius:15px 15px 0 0;background:#02080a}
+.zone-explore .hall-facility-art em{left:4px;right:4px;bottom:0;height:7px;border:2px solid #62918e;background:#142124}
+.zone-team .hall-facility-art::before{left:4px;right:4px;bottom:5px;height:30px;border:3px solid #8d6732;border-radius:50%;background:repeating-linear-gradient(90deg,#21150c 0 6px,#4e3316 7px 11px);box-shadow:inset 0 0 12px #e5b55755}
+.zone-team .hall-facility-art::after{left:10px;right:10px;bottom:0;height:9px;border:2px solid #ad8145;background:#261706}
+.zone-team .hall-facility-art em{left:29px;top:0;width:8px;height:29px;border:2px solid #d1aa68;background:#643b13;transform:rotate(45deg);box-shadow:0 0 8px #f3cb69}
+.zone-chat .hall-facility-art::before{left:7px;right:7px;top:5px;height:34px;border:3px solid #70577e;background:repeating-linear-gradient(#23172b 0 5px,#120d17 6px 9px);box-shadow:inset 0 0 10px #bb7fe055}
+.zone-chat .hall-facility-art::after{left:16px;bottom:0;width:5px;height:16px;background:#755d48;box-shadow:30px 0 #755d48}
+.zone-chat .hall-facility-art em{left:23px;top:14px;width:20px;height:12px;border:1px solid #d5b3e2;background:#33213e}
+.online-hall-zone i,.online-hall-zone b{position:relative;z-index:2;padding:1px 5px;background:#050509bd;border-inline:1px solid color-mix(in srgb,var(--zone-tone) 52%,transparent)}
+.online-hall-zone:focus-visible .hall-facility-art{outline:2px solid #fff2a0;outline-offset:3px}
+.online-hall-prompt,.online-hall-tip{bottom:8px!important;margin:0!important}
+.online-hall-social-tools{position:absolute;z-index:18;inset:0;pointer-events:none}
+.online-hall-emote-tool,.online-hall-chat-tool{position:absolute;pointer-events:auto;display:grid;place-items:center;width:54px;height:54px;padding:4px;border:1px solid #82608f;background:#100b17e8;color:#f5e8ff;box-shadow:0 5px 16px #000c;touch-action:none;user-select:none}
+.online-hall-emote-tool{left:10px;top:10px}.online-hall-chat-tool{right:10px;top:10px}
+.online-hall-emote-tool b{font-size:22px}.online-hall-emote-tool small,.online-hall-chat-tool small{font-size:7px}.online-hall-emote-tool.dragging{filter:brightness(1.25);cursor:grabbing}
+.online-hall-chat-bar{position:absolute;z-index:35;left:7px;right:7px;bottom:7px;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:5px;padding:6px;border:1px solid #865e99;background:#09070fed;box-shadow:0 6px 22px #000d}
+.online-hall-chat-bar[hidden]{display:none!important}.online-hall-chat-bar input{min-width:0;height:38px;padding:0 9px;border:1px solid #4b3857;background:#15101d;color:#fff;font-size:16px!important}.online-hall-chat-bar button{min-width:44px;border:1px solid #775888;background:#2b1836;color:#fff;font-weight:900}
+.online-hall-chat-bubble{position:absolute;z-index:10;left:50%;bottom:94%;max-width:150px;padding:4px 7px;border:1px solid #bba9c8;border-radius:9px;background:#fff;color:#1a1420;font-size:9px;line-height:1.25;translate:-50% 0;overflow-wrap:anywhere;box-shadow:0 4px 12px #000a}
+
+/* Co-op HUD controls stay inside the stage and never cover each other. */
+.online-shared-explore .explore-stage-tools>.online-explore-emote{left:10px!important;top:10px!important}
+.online-shared-explore .explore-stage-tools>.online-map-toggle{right:8px!important;top:8px!important}
+.online-shared-explore .explore-stage-tools>.online-chat-toggle{right:8px!important;top:82px!important}
+.online-shared-explore .explore-stage-tools>.online-ping-toggle{right:8px!important;top:156px!important}
+.online-coop-run-status{left:8px!important;top:74px!important;max-width:calc(100% - 88px);padding:4px 7px!important;flex-wrap:wrap}
+
+/* Reward contents are explicit instead of disappearing as a resource toast. */
+.online-reward-receipt{position:absolute;z-index:92;left:50%;bottom:76px;width:min(92%,410px);max-height:min(58%,390px);overflow:auto;opacity:0;translate:-50% 14px;border:1px solid #d6ae59;background:linear-gradient(180deg,#17101ded,#08080df8);color:#f4e8cc;box-shadow:0 12px 38px #000e,0 0 22px #8d62ca44;transition:opacity .2s,translate .25s;pointer-events:auto}
+.online-reward-receipt.show{opacity:1;translate:-50% 0}.online-reward-receipt.leaving{opacity:0;translate:-50% 10px}
+.online-reward-receipt header{position:sticky;z-index:2;top:0;display:grid;grid-template-columns:auto minmax(0,1fr) 34px;align-items:center;gap:7px;padding:8px 9px;border-bottom:1px solid #7d5b34;background:#100c15f8}.online-reward-receipt header span{color:#7de5ef;font:900 8px/1 monospace;letter-spacing:.12em}.online-reward-receipt header strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.online-reward-receipt header button{width:32px;height:32px;border:1px solid #6e536f;background:#201529;color:#fff;font-weight:900}
+.online-reward-receipt section{padding:7px 9px}.online-reward-receipt section+section{border-top:1px solid #3e3048}.online-reward-receipt h4{margin:0 0 5px;color:#cdb67d;font-size:10px}.online-reward-receipt .personal h4{color:#d69cff}.online-reward-receipt ul{display:grid;gap:3px;margin:0;padding:0;list-style:none}.online-reward-receipt li{display:flex;justify-content:space-between;gap:8px;padding:5px 7px;background:#0b0a10;border:1px solid #29242e;font-size:10px}.online-reward-receipt li b{color:#ffe190;text-align:right}.online-reward-receipt li.rare{border-color:#a76bd0;box-shadow:inset 0 0 12px #8e44bd2b}.online-reward-receipt li.rare b{color:#e7a5ff}
+
+/* Shared battle reuses the solo information hierarchy without social clutter. */
+.online-battle-emote-anchor,.online-battle-emote-bubble{display:none!important}
+.online-coop-break{top:126px!important;width:min(48%,220px)!important}
+.online-shared-battle .floating-number{animation-duration:2200ms!important}
+.online-shared-battle .floating-number.critical{animation-duration:2500ms!important}
+.online-shared-battle .battle-cinematic-banner{z-index:70!important}
+.online-shared-battle .battle-bar>.hp-trail,.online-shared-battle .battle-bar>.hp-fill.hp-fill-draining{--hp-trail-duration:1.5s!important}
+
+/* Keep the world-raid body on the enemy half and keep its label readable. */
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss{z-index:5!important}
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .side-unit-sprite{left:57%!important;bottom:74px!important;width:clamp(150px,42vw,224px)!important;height:clamp(150px,42vw,224px)!important}
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .battle-unit-floating-name{left:57%!important;bottom:clamp(218px,52vw,284px)!important;max-width:145px!important}
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .side-unit-card{z-index:16!important}
+.battle-screen.side-battle-v2.online-shared-battle .raid-main-boss .has-custom-sprite img{animation-duration:2.7s!important;filter:drop-shadow(0 0 13px #a62d7d)}
+.battle-screen.side-battle-v2.online-shared-battle .raid-sub-boss .has-custom-sprite img{animation-duration:2.35s!important}
+
+@media(max-width:520px){
+  .online-hall-zone{width:76px!important;min-height:66px!important}.hall-facility-art{scale:.88}
+  .online-coop-break{top:118px!important;width:174px!important}
+  .battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .side-unit-sprite{left:59%!important;bottom:69px!important;width:clamp(146px,42vw,196px)!important;height:clamp(146px,42vw,196px)!important}
+  .battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .battle-unit-floating-name{left:59%!important;bottom:clamp(205px,54vw,252px)!important;max-width:126px!important}
+}
+@media(max-height:720px){.online-reward-receipt{bottom:58px}.online-hall-prompt,.online-hall-tip{bottom:4px!important}.online-coop-break{top:104px!important}}
+@media(prefers-reduced-motion:reduce){.online-reward-receipt{transition:none}.online-shared-battle .floating-number{animation-duration:1500ms!important}}

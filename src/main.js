@@ -1,5 +1,5 @@
 import{SaveService}from"./services/SaveService.js?v=2.11.45-build210";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.46-build211";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.47-build212";
 import{AudioSystem}from"./core/AudioSystem.js?v=2.11.37-build202";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=2.11.24-build188";
 import{SPECIES}from"./data/species.js?v=2.11.33-build198";
@@ -9,7 +9,7 @@ import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.11.44-build209";
 import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.11.30-build195";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.11.30-build195";
 import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.11.42-build207";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.11.46-build211";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.11.47-build212";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.11.29-build194";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.11.30-build195";
 import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.11.34-build199";
@@ -1868,7 +1868,9 @@ function onlineExploreMonster(member){
 }
 function onlineExploreWorld(room){
  const expedition=room?.expedition,objects=expedition?.objects??[],floor=Math.max(1,Number(expedition?.floor)||1),bossObject=floor%10===0?objects.find(object=>object.type==="encounter"&&!object.resolved):null;
- const decorations=[...(expedition?.decorations??[]).map(entry=>({...entry})),...objects.filter(object=>["bone","shrine"].includes(object.type)).map((object,index)=>({...object,id:`online-object-${object.id??index}`,type:object.type==="bone"?"bones":"crystal",used:Boolean(object.resolved),destroyed:Boolean(object.resolved),phase:index*31}))];
+	 // A shrine is a recovery altar, not a mineable purple crystal. Keeping the
+	 // two visuals distinct prevents crystal gathering from looking like a heal.
+	 const decorations=[...(expedition?.decorations??[]).map(entry=>({...entry})),...objects.filter(object=>["bone","shrine"].includes(object.type)).map((object,index)=>({...object,id:`online-object-${object.id??index}`,type:object.type==="bone"?"bones":"water",used:Boolean(object.resolved),destroyed:Boolean(object.resolved),phase:index*31}))];
  return{cols:Math.max(1,Number(expedition?.cols)||1),rows:Math.max(1,Number(expedition?.rows)||1),shape:"onlineShared",treasureRealm:Boolean(expedition?.coop?.rare?.realmActive),tiles:(expedition?.tiles??[]).map(row=>[...row].map(tile=>tile==="."?0:1)),start:{...(expedition?.start??{x:1,y:1})},exit:{...(expedition?.exit??{x:1,y:1})},shop:null,boss:bossObject?{x:bossObject.x,y:bossObject.y}:null,onlineBossMonster:bossObject?{speciesId:"ancient_dragon",level:Math.max(14,floor),currentHp:1,onlineStats:{hp:1}}:null,chests:objects.filter(object=>!object.hidden&&object.type==="chest").map(object=>({...object,open:Boolean(object.resolved),locked:false,onlineType:object.type})),decorations,onlineObjects:objects.filter(object=>!object.hidden&&["resonanceChest","deluxeChest","coopSwitch","resonanceVault","coopElite","relaySeal","keyFragment","combinedKey","rareGoldenMonster","rareMerchant","rarePortal","rarePortalGuardian","rarePortalChest","rareReturnPortal"].includes(object.type)).map(object=>({...object})),hotSpring:null,encountering:false}
 }
 function syncOnlineExploreMembers(room,selfId,{snap=false}={}){
@@ -3239,7 +3241,7 @@ function explorationTexture(kind,theme){
  return cachedExplorationImage(url);
 }
 function onlineCoopAsset(id){return cachedExplorationImage(ONLINE_COOP_ASSET_URLS[id])}
-function drawOnlineExploreCircle(position,profile){if(!profile?.circleId||profile.circleId==="none")return;const circle=MAGIC_CIRCLES.find(entry=>entry.id===profile.circleId),image=cachedExplorationImage(circle?.asset);if(!image)return;const p=game.camera.world(position.x*TILE,position.y*TILE),tile=TILE*game.camera.z,size=tile*1.48,c=game.ctx;c.save();c.translate(p.x+tile/2,p.y+tile*.76);c.scale(1,.48);c.rotate(performance.now()/4800+(String(profile.circleId).length%7));c.globalAlpha=.62;c.globalCompositeOperation="screen";c.shadowColor="#8eeeff";c.shadowBlur=10*game.camera.z;c.drawImage(image,-size/2,-size/2,size,size);c.restore()}
+function drawOnlineExploreCircle(position,profile){if(!profile?.circleId||profile.circleId==="none")return;const circle=MAGIC_CIRCLES.find(entry=>entry.id===profile.circleId),image=cachedExplorationImage(circle?.asset);if(!image)return;const p=game.camera.world(position.x*TILE,position.y*TILE),tile=TILE*game.camera.z,size=tile*1.34,c=game.ctx;c.save();c.translate(p.x+tile/2,p.y+tile*.94);c.scale(1,.31);c.rotate(performance.now()/4800+(String(profile.circleId).length%7));c.globalAlpha=.58;c.globalCompositeOperation="screen";c.shadowColor="#8eeeff";c.shadowBlur=9*game.camera.z;c.drawImage(image,-size/2,-size/2,size,size);c.restore()}
 function explorationSpriteImage(monster,frame){
  const url=monsterSpriteUrl(monster,frame);if(!url)return null;
  let entry=explorationSpriteCache.get(url);
@@ -3548,6 +3550,34 @@ function explorationPartySceneObjects(){
  if(!entries.length){const position={x:game.player.rx,y:game.player.ry};entries.push({y:position.y+.88,order:80,draw:()=>drawExplorationMonster(position,{speciesId:"slime"},false,1,0)})}
  return entries
 }
+function onlineExploreObjectFoot(object){
+ const ground=new Set(["resonanceChest","deluxeChest","coopSwitch","relaySeal","keyFragment","rarePortalChest"]),wall=new Set(["resonanceVault","rarePortal","rareReturnPortal"]);
+ return Number(object?.y||0)+(wall.has(object?.type)?.96:ground.has(object?.type)?.72:.9)
+}
+function drawOnlineExploreObject(object,expedition){
+ const c=game.ctx,size=TILE*game.camera.z,point=game.camera.world(object.x*TILE,object.y*TILE),cx=point.x+size/2,cy=point.y+size/2;
+ const chestAsset=(entry,open=Boolean(entry.resolved))=>{const wanted=String(entry.rewardTier||expedition?.coop?.floorTier||"black-iron"),tier=["black-iron","silver","gold","abyss"].includes(wanted)?wanted:"black-iron";return onlineCoopAsset(`chest-${tier}-${open?"open":"closed"}`)??onlineCoopAsset(`chest-black-iron-${open?"open":"closed"}`)};
+ const merchantTalking=expedition?.interactions?.[game.onlineSelfId]?.action==="browseRareMerchant",merchantClaimed=Boolean(expedition?.coop?.rare?.merchantClaims?.[game.onlineSelfId]),merchantFrames=["idle1","idle2","idle3","idle2"],merchantFrame=merchantClaimed?"idle1":merchantTalking?"talk":merchantFrames[Math.floor(performance.now()/360)%merchantFrames.length];
+ c.save();c.textAlign="center";c.textBaseline="middle";
+ if(object.type==="resonanceChest"){if(!object.resolved){const nearby=Math.min(2,Number(object.nearbyCount)||0),ready=nearby>=2;c.fillStyle=ready?"rgba(255,205,78,.17)":"rgba(101,72,255,.13)";c.strokeStyle=ready?"#ffd15c":"#73d9ff";c.lineWidth=Math.max(1,2*game.camera.z);c.setLineDash([Math.max(3,5*game.camera.z),Math.max(2,4*game.camera.z)]);c.fillRect(point.x-size,point.y-size,size*3,size*3);c.strokeRect(point.x-size,point.y-size,size*3,size*3);c.setLineDash([]);c.fillStyle=ready?"#ffe8a3":"#e8f8ff";c.font=`900 ${Math.max(9,12*game.camera.z)}px sans-serif`;c.fillText(ready?"開封可能":nearby===1?"あと1人":"2人で共鳴",cx,point.y-size*.72)}drawExplorationGroundAsset(object,chestAsset(object),object.resolved?1.26:1.34)}
+ if(object.type==="deluxeChest"){if(!object.resolved)drawExploreGlow(object,"#ffd86a",2.4,.22);drawExplorationGroundAsset(object,chestAsset(object),object.resolved?1.4:1.56)}
+ if(object.type==="coopSwitch"){const progress=Math.max(0,Math.min(1,Number(object.holdProgress)||0)),pressed=Boolean(object.pressedBy),asset=object.activated?"switch-activated":progress>.05?"switch-charging":pressed?"switch-pressed":"switch-idle";drawExplorationTileAsset(object,onlineCoopAsset(asset),1.18);if(progress>0&&!object.activated){c.fillStyle="#120d18";c.fillRect(point.x+size*.1,point.y+size*.93,size*.8,Math.max(3,size*.08));c.fillStyle="#64efff";c.fillRect(point.x+size*.1,point.y+size*.93,size*.8*progress,Math.max(3,size*.08))}}
+ if(object.type==="relaySeal"){drawExplorationTileAsset(object,onlineCoopAsset(object.active?"switch-activated":"switch-idle"),1.18);c.fillStyle=object.active?"#8dffc0":"#ffe6ab";c.font=`900 ${Math.max(10,size*.2)}px serif`;c.fillText(object.seal,cx,cy)}
+ if(object.type==="keyFragment"){drawExploreGlow(object,object.fragment==="cyan"?"#75edff":"#c887ff",1.8,.24);drawExplorationTileAsset(object,onlineCoopAsset(`key-fragment-${object.fragment}`),1.2)}
+ if(object.type==="resonanceVault"&&!object.unlocked){drawExploreGlow(object,"#bb73ff",2,.17);drawExplorationWallAsset(object,onlineCoopAsset("vault-sealed"),2.02);c.fillStyle="#f3dcff";c.font=`900 ${Math.max(8,size*.14)}px sans-serif`;c.fillText("共鳴封印",cx,point.y-size*.62)}
+ if(object.type==="coopElite"&&!object.resolved){c.beginPath();c.arc(cx,cy,size*.48,0,Math.PI*2);c.fillStyle="rgba(222,36,89,.22)";c.fill();c.strokeStyle="#ff4f7d";c.lineWidth=Math.max(2,size*.06);c.stroke();c.fillStyle="#ffe3ec";c.font=`900 ${Math.max(9,size*.16)}px serif`;c.fillText("共闘強敵",cx,point.y-size*.18)}
+ if(object.type==="rareGoldenMonster"&&!object.resolved){drawExploreGlow(object,"#ffd34d",2.6,.24);drawExplorationMonster(object,{speciesId:"rare_golden_beast",level:Math.max(20,Number(expedition?.floor)||1),currentHp:1,onlineStats:{hp:1}},true,1.2,17);c.fillStyle="#fff0a8";c.font=`900 ${Math.max(9,size*.16)}px serif`;c.fillText("黄金乱入",cx,point.y-size*.48)}
+ if(object.type==="rareMerchant"){const used=merchantClaimed||object.resolved;c.globalAlpha=used ? .48 : 1;if(!used)drawExploreGlow(object,"#b979ff",2.1,.17);drawExplorationTileAsset(object,onlineCoopAsset(`merchant-${merchantFrame}`),1.34);c.fillStyle=used?"#9d929f":"#f2d8ff";c.font=`900 ${Math.max(9,size*.15)}px serif`;c.fillText(used?"支援受取済":"異界商人",cx,point.y-size*.38)}
+ if(object.type==="rarePortal"){c.globalAlpha=object.resolved ? .58 : .84+Math.sin(performance.now()/260)*.12;if(!object.resolved)drawExploreGlow(object,"#a84dff",3,.24);drawExplorationWallAsset(object,onlineCoopAsset(object.resolved?"portal-dormant":"portal-active"),2.16,{active:!object.resolved})}
+ if(object.type==="rarePortalGuardian"&&!object.resolved){drawExploreGlow(object,"#ff416f",2.4,.22);drawExplorationMonster(object,{speciesId:"dark_knight",level:Math.max(40,Number(expedition?.floor)||1),currentHp:1,onlineStats:{hp:1}},true,1.4,29);c.fillStyle="#ffe0ed";c.font=`900 ${Math.max(9,size*.16)}px serif`;c.fillText("異界の番人",cx,point.y-size*.5)}
+ if(object.type==="rarePortalChest"){if(!object.resolved)drawExploreGlow(object,"#d894ff",2.7,.25);drawExplorationGroundAsset(object,chestAsset({...object,rewardTier:"abyss"}),object.resolved?1.45:1.62)}
+ if(object.type==="rareReturnPortal"){c.globalAlpha=.84+Math.sin(performance.now()/260)*.12;drawExploreGlow(object,"#a84dff",2.8,.24);drawExplorationWallAsset(object,onlineCoopAsset("portal-active"),2.08,{active:true});c.fillStyle="#efd8ff";c.font=`900 ${Math.max(8,size*.13)}px serif`;c.fillText("主の世界へ帰還",cx,point.y-size*.55)}
+ c.restore()
+}
+function onlineExploreSceneObjects(){
+ if(!game?.online)return[];const expedition=game.onlineRoom?.expedition;
+ return(expedition?.objects??[]).filter(object=>!object.hidden&&(!object.resolved||object.persistent)).filter(object=>["resonanceChest","deluxeChest","coopSwitch","resonanceVault","coopElite","relaySeal","keyFragment","rareGoldenMonster","rareMerchant","rarePortal","rarePortalGuardian","rarePortalChest","rareReturnPortal"].includes(object.type)).map((object,index)=>({y:onlineExploreObjectFoot(object),order:44+index,draw:()=>drawOnlineExploreObject(object,expedition)}))
+}
 function drawExploreSceneObjects(world,floor,theme,stairsTexture){
  const objects=[];
  const add=(y,order,drawObject)=>objects.push({y:Number(y)||0,order,draw:drawObject});
@@ -3555,8 +3585,9 @@ function drawExploreSceneObjects(world,floor,theme,stairsTexture){
  if(!world.treasureRealm)add(world.exit.y+.9,30,()=>drawExploreExit(world.exit,stairsTexture,theme));
  if(world.shop)add(world.shop.y+.86,40,()=>drawExploreAtlas(world.shop,EXPLORE_ATLAS.entrance,{scale:1.72,rotation:world.shop.rotation??0,shadowColor:"#000",shadowBlur:6}));
  if(world.boss){const boss=game?.online?world.onlineBossMonster:floorBossEnemy();if(boss)add(world.boss.y+.9,60,()=>drawExplorationMonster(world.boss,{...boss,speciesId:boss.speciesId,visualSpeciesId:boss.visualSpeciesId,level:boss.level},true,1.92,9))}
- (world.chests??[]).forEach((chest,index)=>add(chest.y+.72,50+index,()=>drawExploreAtlas(chest,chest.open?EXPLORE_ATLAS.chestOpen:EXPLORE_ATLAS.chestClosed,{scale:1.7,shadowColor:chest.locked?"#f2cf72":"#000",shadowBlur:chest.locked?13:7})));
- objects.push(...explorationPartySceneObjects());
+	 (world.chests??[]).forEach((chest,index)=>add(chest.y+.72,50+index,()=>drawExploreAtlas(chest,chest.open?EXPLORE_ATLAS.chestOpen:EXPLORE_ATLAS.chestClosed,{scale:1.7,shadowColor:chest.locked?"#f2cf72":"#000",shadowBlur:chest.locked?13:7})));
+	 objects.push(...onlineExploreSceneObjects());
+	 objects.push(...explorationPartySceneObjects());
  objects.sort((a,b)=>a.y-b.y||a.order-b.order).forEach(entry=>entry.draw())
 }
 function showTutorialPickupMarker(){
@@ -3567,8 +3598,8 @@ function showTutorialPickupMarker(){
  marker.style.left=`${canvasRect.left-stageRect.left+(point.x+tile/2)*scaleX-17}px`;marker.style.top=`${canvasRect.top-stageRect.top+(point.y+tile/2)*scaleY-17}px`;
 }
 function drawOnlineExploreOverlays(){
- if(!game?.online)return;
- const c=game.ctx,size=TILE*game.camera.z,expedition=game.onlineRoom?.expedition,objects=expedition?.objects??[],now=Date.now(),selfEntity=game.onlineEntities?.get(game.onlineSelfId);c.save();c.textAlign="center";c.textBaseline="middle";
+	 if(!game?.online)return;
+	 const c=game.ctx,size=TILE*game.camera.z,expedition=game.onlineRoom?.expedition,objects=[],now=Date.now(),selfEntity=game.onlineEntities?.get(game.onlineSelfId);c.save();c.textAlign="center";c.textBaseline="middle";
  const chestAsset=(object,open=Boolean(object.resolved))=>{const wanted=String(object.rewardTier||expedition?.coop?.floorTier||"black-iron"),tier=["black-iron","silver","gold","abyss"].includes(wanted)?wanted:"black-iron";return onlineCoopAsset(`chest-${tier}-${open?"open":"closed"}`)??onlineCoopAsset(`chest-black-iron-${open?"open":"closed"}`)};
  const merchantTalking=expedition?.interactions?.[game.onlineSelfId]?.action==="browseRareMerchant",merchantClaimed=Boolean(expedition?.coop?.rare?.merchantClaims?.[game.onlineSelfId]),merchantFrames=["idle1","idle2","idle3","idle2"],merchantFrame=merchantClaimed?"idle1":merchantTalking?"talk":merchantFrames[Math.floor(performance.now()/360)%merchantFrames.length];
  for(const object of objects){if(object.hidden||object.resolved&&!object.persistent)continue;const point=game.camera.world(object.x*TILE,object.y*TILE),cx=point.x+size/2,cy=point.y+size/2;
