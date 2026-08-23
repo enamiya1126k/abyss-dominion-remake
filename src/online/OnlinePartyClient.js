@@ -7,6 +7,8 @@ import {
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
 const DIRECTION = Object.freeze({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] });
+const ONLINE_EXPLORE_CHAT_POSITION = "abyss-online-explore-chat-position";
+const ONLINE_EXPLORE_EMOTE_POSITION = "abyss-online-explore-emote-position";
 
 function storageGet(key, fallback = "") { try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; } }
 function storageSet(key, value) { try { localStorage.setItem(key, String(value)); } catch {} }
@@ -376,9 +378,42 @@ export class OnlinePartyController {
     if (message.type === "error") { this._clearInteractionPending(false); if (this.merchantPending) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { ...(this.merchantResult ?? {}), status: "error", message: message.message || "支援品を受け取れませんでした。" }; } this.toast(message.message || "オンライン処理に失敗しました"); this._render(); return; }
   }
 
+  _exploreUiSignature(room) {
+    const expedition = room?.expedition;
+    if (room?.phase !== "expedition" || !expedition || expedition.battle) return "";
+    const interaction = expedition.interactions?.[this.selfId] ?? null;
+    const rare = expedition.coop?.rare ?? null;
+    const resonance = expedition.coop?.resonance ?? null;
+    return JSON.stringify({
+      expedition: expedition.id ?? null,
+      leader: room.leaderId ?? null,
+      floor: Number(expedition.floor) || 0,
+      realm: Boolean(rare?.realmActive),
+      exitReached: Boolean(expedition.exitReached),
+      progress: [Number(expedition.discoveries) || 0, Number(expedition.encountersCleared) || 0, Number(expedition.totalDiscoveries) || 0, Number(expedition.totalEncounters) || 0],
+      interaction: interaction ? [interaction.action ?? "", interaction.targetId ?? "", interaction.label ?? "", interaction.hint ?? ""] : null,
+      resonance: [Number(resonance?.level) || 0, Number(expedition.coop?.ownerReconnectDeadline) || 0],
+      rare: rare ? [rare.kind ?? "", rare.id ?? "", rare.phase ?? "", rare.merchantClaims?.[this.selfId] ?? null] : null,
+      members: (room.members ?? []).map(member => {
+        const vitals = member.coopVitals ?? member.profile?.battleStats ?? {};
+        return [member.playerId, Boolean(member.connected), Boolean(member.isLeader), Number(vitals.hp) || 0, Number(vitals.maxHp) || 0, Number(vitals.mp) || 0, Number(vitals.maxMp) || 0];
+      }),
+    });
+  }
+
   _applyRoomState(room) {
     if (!room?.roomId) return;
+    const previousRoom = this.roomState;
     const previousCount = this.roomState?.chatHistory?.length ?? 0;
+    const hadInteractionPending = Boolean(this.interactionPending);
+    const keepExploreCanvas = this.exploreCanvasMounted
+      && this.route === "explore"
+      && previousRoom?.phase === "expedition"
+      && !previousRoom?.expedition?.battle
+      && room.phase === "expedition"
+      && !room.expedition?.battle
+      && this._exploreUiSignature(previousRoom) === this._exploreUiSignature(room)
+      && !hadInteractionPending;
     const rareKind = room?.expedition?.coop?.rare?.kind;
     const merchantClaim = rareKind === "otherworldMerchant" ? room?.expedition?.coop?.rare?.merchantClaims?.[this.selfId] : null;
     if (this.merchantPending && merchantClaim) { clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this.merchantPending = false; this.merchantResult = { offer: merchantClaim, status: "success" }; }
@@ -390,7 +425,12 @@ export class OnlinePartyController {
     else if (room.phase === "raid") this.route = "raid";
     else if (room.phase === "team") this.route = "team";
     if (this.route !== "chat" && (room.chatHistory?.length ?? 0) > previousCount && previousCount > 0) this.unread = Math.min(99, this.unread + (room.chatHistory.length - previousCount));
-    this._showConnectionStep("room"); this._render();
+    this._showConnectionStep("room");
+    if (keepExploreCanvas) {
+      this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot(), socialBubbles: this._socialBubbleSnapshot() });
+      return;
+    }
+    this._render();
   }
 
   _self() { return this.roomState?.members?.find(member => member.playerId === this.selfId); }
@@ -625,15 +665,72 @@ export class OnlinePartyController {
     if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot(), socialBubbles: this._socialBubbleSnapshot() }); else this._render();
   }
 
+  _placeExploreEmote(anchor, point = null) {
+    const stage = anchor?.closest?.(".explore-stage");
+    if (!anchor || !stage) return null;
+    const rect = anchor.getBoundingClientRect();
+    const radialRoom = Math.min(82, Math.max(10, (stage.clientWidth - rect.width) / 2));
+    const minX = radialRoom, maxX = Math.max(minX, stage.clientWidth - rect.width - radialRoom);
+    const minY = 10, maxY = Math.max(minY, stage.clientHeight - rect.height - 14);
+    const x = clamp(point?.x ?? minX, minX, maxX), y = clamp(point?.y ?? 12, minY, maxY);
+    anchor.style.setProperty("left", `${x}px`, "important");
+    anchor.style.setProperty("top", `${y}px`, "important");
+    anchor.style.setProperty("right", "auto", "important");
+    anchor.style.setProperty("bottom", "auto", "important");
+    return { x, y };
+  }
+
+  _prepareExploreEmoteAnchor() {
+    const anchor = this._query(".online-explore-emote");
+    if (!anchor) return;
+    let saved = null;
+    try { saved = JSON.parse(storageGet(ONLINE_EXPLORE_EMOTE_POSITION, "null")); } catch {}
+    const placed = this._placeExploreEmote(anchor, saved);
+    if (placed) storageSet(ONLINE_EXPLORE_EMOTE_POSITION, JSON.stringify(placed));
+  }
+
   _beginEmoteGesture(event, anchor) {
     if (event.button != null && event.button !== 0) return;
+    event.preventDefault();
     const choices = [["wave", "👋"], ["cheer", "✨"], ["heart", "❤️"], ["like", "👍"], ["alert", "⚠️"], ["question", "❓"]];
-    const origin = { x: event.clientX, y: event.clientY }; let wheel = null, selected = 0, opened = false;
-    const open = () => { opened = true; wheel = document.createElement("div"); wheel.className = "online-emote-wheel"; wheel.style.left = `${origin.x}px`; wheel.style.top = `${origin.y}px`; wheel.innerHTML = choices.map(([id, emoji], index) => `<i data-emote-index="${index}" data-emote-id="${id}" style="--emote-angle:${index * 60 - 90}deg">${emoji}</i>`).join(""); document.body.appendChild(wheel); update({ clientX: origin.x, clientY: origin.y - 50 }); };
-    const update = move => { if (!opened || !wheel) return; const angle = Math.atan2(move.clientY - origin.y, move.clientX - origin.x) * 180 / Math.PI; selected = Math.round(((angle + 90 + 360) % 360) / 60) % choices.length; wheel.querySelectorAll("i").forEach((node, index) => node.classList.toggle("selected", index === selected)); };
+    const pointerId = event.pointerId, origin = { x: event.clientX, y: event.clientY };
+    const movable = anchor.matches?.(".online-explore-emote"), stage = movable ? anchor.closest(".explore-stage") : null;
+    const anchorRect = anchor.getBoundingClientRect(), stageRect = stage?.getBoundingClientRect();
+    const startPosition = stageRect ? { x: anchorRect.left - stageRect.left, y: anchorRect.top - stageRect.top } : null;
+    let wheel = null, selected = 0, opened = false, dragging = false, wheelMoved = false, lastPosition = startPosition;
+    const viewportWidth = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 1), viewportHeight = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
+    const marginX = Math.min(82, Math.max(8, viewportWidth / 2 - 4)), marginY = Math.min(82, Math.max(8, viewportHeight / 2 - 4));
+    const wheelOrigin = { x: clamp(origin.x, marginX, Math.max(marginX, viewportWidth - marginX)), y: clamp(origin.y, marginY, Math.max(marginY, viewportHeight - marginY)) };
+    const paintSelection = () => wheel?.querySelectorAll("i").forEach((node, index) => node.classList.toggle("selected", index === selected));
+    const open = () => {
+      if (dragging) return;
+      opened = true; wheel = document.createElement("div"); wheel.className = "online-emote-wheel";
+      wheel.style.left = `${wheelOrigin.x}px`; wheel.style.top = `${wheelOrigin.y}px`;
+      wheel.innerHTML = choices.map(([id, emoji], index) => `<i data-emote-index="${index}" data-emote-id="${id}" style="--emote-angle:${index * 60 - 90}deg">${emoji}</i>`).join("");
+      document.body.appendChild(wheel); paintSelection();
+    };
     const timer = setTimeout(open, 360);
-    const finish = up => { clearTimeout(timer); window.removeEventListener("pointermove", update, true); window.removeEventListener("pointerup", finish, true); window.removeEventListener("pointercancel", cancel, true); if (opened) { update(up); const [id] = choices[selected]; this._send("social", { kind: "emote", id }); anchor.dataset.emoteSuppress = "1"; setTimeout(() => delete anchor.dataset.emoteSuppress, 0); } wheel?.remove(); };
-    const cancel = () => { clearTimeout(timer); window.removeEventListener("pointermove", update, true); window.removeEventListener("pointerup", finish, true); window.removeEventListener("pointercancel", cancel, true); wheel?.remove(); };
+    const update = move => {
+      if (move.pointerId != null && move.pointerId !== pointerId) return;
+      const dx = move.clientX - origin.x, dy = move.clientY - origin.y;
+      if (!opened && movable && startPosition && Math.hypot(dx, dy) > 8) { dragging = true; clearTimeout(timer); anchor.classList.add("dragging"); }
+      if (dragging) { move.preventDefault?.(); lastPosition = this._placeExploreEmote(anchor, { x: startPosition.x + dx, y: startPosition.y + dy }); return; }
+      if (!opened || !wheel) return;
+      wheelMoved = true;
+      const angle = Math.atan2(move.clientY - wheelOrigin.y, move.clientX - wheelOrigin.x) * 180 / Math.PI;
+      selected = Math.round(((angle + 90 + 360) % 360) / 60) % choices.length; paintSelection();
+    };
+    const cleanup = () => {
+      clearTimeout(timer); anchor.classList.remove("dragging");
+      window.removeEventListener("pointermove", update, true); window.removeEventListener("pointerup", finish, true); window.removeEventListener("pointercancel", cancel, true); wheel?.remove();
+    };
+    const finish = up => {
+      if (up.pointerId != null && up.pointerId !== pointerId) return;
+      if (dragging && lastPosition) { storageSet(ONLINE_EXPLORE_EMOTE_POSITION, JSON.stringify(lastPosition)); anchor.dataset.emoteSuppress = "1"; setTimeout(() => delete anchor.dataset.emoteSuppress, 0); }
+      else if (opened) { if (wheelMoved) update(up); const [id] = choices[selected]; this._send("social", { kind: "emote", id }); anchor.dataset.emoteSuppress = "1"; setTimeout(() => delete anchor.dataset.emoteSuppress, 0); }
+      cleanup();
+    };
+    const cancel = cancelEvent => { if (cancelEvent?.pointerId != null && cancelEvent.pointerId !== pointerId) return; if (dragging && lastPosition) storageSet(ONLINE_EXPLORE_EMOTE_POSITION, JSON.stringify(lastPosition)); cleanup(); };
     window.addEventListener("pointermove", update, true); window.addEventListener("pointerup", finish, true); window.addEventListener("pointercancel", cancel, true);
   }
 
@@ -644,10 +741,11 @@ export class OnlinePartyController {
   }
 
   _bindExploreChatDrag() {
+    this._prepareExploreEmoteAnchor();
     const button = this._query("#onlineExploreChatToggle"), stage = button?.closest(".explore-stage");
     if (!button || !stage || button.dataset.dragBound === "1") return;
     button.dataset.dragBound = "1";
-    const key = "abyss-online-explore-chat-position";
+    const key = ONLINE_EXPLORE_CHAT_POSITION;
     const read = () => { try { return JSON.parse(localStorage.getItem(key) || "null"); } catch { return null; } };
     const place = point => { const rect = button.getBoundingClientRect(), safeX = 10, safeTop = 10, safeBottom = 14, x = clamp(point?.x ?? stage.clientWidth - 84, safeX, Math.max(safeX, stage.clientWidth - rect.width - safeX)), y = clamp(point?.y ?? stage.clientHeight * .58, safeTop, Math.max(safeTop, stage.clientHeight - rect.height - safeBottom)); button.style.setProperty("left", `${x}px`, "important"); button.style.setProperty("top", `${y}px`, "important"); button.style.setProperty("right", "auto", "important"); button.style.setProperty("bottom", "auto", "important"); return { x, y }; };
     requestAnimationFrame(() => place(read()));

@@ -1,0 +1,41 @@
+/* build211: stable co-op exploration, safe emote placement and iOS chat input. */
+
+/* v2.3.1 makes generic minimap buttons static. The co-op emote is a movable
+   stage control, so explicitly restore absolute positioning in this context. */
+.online-shared-explore .explore-stage-tools>.online-explore-emote{
+  position:absolute!important;
+  z-index:30!important;
+  left:82px!important;
+  right:auto!important;
+  top:12px!important;
+  bottom:auto!important;
+  margin:0!important;
+  touch-action:none!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+  cursor:grab;
+}
+.online-shared-explore .explore-stage-tools>.online-explore-emote.dragging{
+  cursor:grabbing;
+  opacity:.96!important;
+  filter:brightness(1.14);
+  box-shadow:0 0 0 2px #e5c76d,0 5px 18px #000c!important;
+}
+
+/* Safari automatically zooms focused inputs below 16px. Keep the compact
+   visual height while giving the inline co-op chat a 16px computed size. */
+.online-explore-chat-bar,
+.online-explore-chat-bar>*{box-sizing:border-box}
+.online-explore-chat-bar input{
+  width:100%;
+  max-width:100%;
+  font-size:16px!important;
+  line-height:1.2!important;
+  -webkit-text-size-adjust:100%;
+  touch-action:manipulation;
+}
+
+@media(max-width:520px){
+  .online-shared-explore .explore-stage-tools>.online-explore-emote{left:78px!important;top:10px!important}
+  .online-explore-chat-bar{left:6px;right:6px;gap:4px;padding:6px}
+}
