@@ -389,6 +389,37 @@ export function skillEffectDetails(skill){
  }
  return[...new Set(lines)];
 }
+// Compact combat wording. Every token is derived from the same numeric fields
+// used by battle resolution, while deliberately omitting flavour prose.
+export function skillCombatKeywords(skill){
+ if(!skill)return[];
+ const words=[],power=Math.max(0,Number(skill.power)||0),hits=Math.max(1,Math.round(Number(skill.hits)||1));
+ if(power>0){
+  if(skill.element&&skill.element!=="neutral")words.push(`${skillElementLabel(skill)}属性`);
+  words.push(`${skill.damageClass==="magic"?"魔法ATK":"ATK"}${Math.round(power*100)}%${hits>1?`×${hits}`:""}`);
+ }
+ if(skill.allEnemies)words.push("敵全体");
+ if(Number(skill.defenseIgnore)>0){
+  const ignore=Math.min(1,Number(skill.defenseIgnore));
+  words.push(ignore>=.995?"防御無視":`防御${Math.round(ignore*100)}%無視`);
+ }
+ if(skill.guaranteedHit)words.push("必中");
+ if(skill.guaranteedCritical)words.push("必ず会心");
+ if(Number(skill.critBonus)>0)words.push(`会心+${Math.round(Number(skill.critBonus)*100)}%`);
+ if(Number(skill.heal)>0)words.push(`HP回復${Math.round(Number(skill.heal)*100)}%`);
+ if(Number(skill.mpHeal)>0)words.push(`MP回復${Math.round(Number(skill.mpHeal)*100)}%`);
+ if(Number(skill.revive)>0)words.push(`蘇生HP${Math.round(Number(skill.revive)*100)}%`);
+ if(skill.cleanse||skill.type==="cleanse")words.push("異常・弱体解除");
+ if(Number(skill.drain)>0)words.push(`HP吸収${Math.round(Number(skill.drain)*100)}%`);
+ if(Number(skill.barrier)>0)words.push(`障壁${Math.round(Number(skill.barrier))}`);
+ const status=skill.status;if(status)words.push(`${status.name??STATUS_NAMES[status.id]??"状態異常"}${Math.round(Number(status.chance??1)*100)}%`);
+ for(const effect of skill.effects??[]){
+  if(EFFECT_NAMES[effect.kind])words.push(`${EFFECT_NAMES[effect.kind]}${Math.round(Number(effect.value||0)*100)}%`);
+  else if(effect.kind==="guard")words.push(`被ダメ-${Math.round(Number(effect.value||0)*100)}%`);
+  else if(effect.kind==="regen")words.push(`再生${Math.round(Number(effect.value||0)*100)}%`);
+ }
+ return[...new Set(words)].slice(0,6);
+}
 export function skillEffectSummary(skill,separator=" / "){const details=skillEffectDetails(skill);return details.length?details.join(separator):(skill?.description??"特殊効果を発動")}
 
 export function chooseAutoSkill(monster,battle){

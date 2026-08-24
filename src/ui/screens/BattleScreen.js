@@ -1,11 +1,12 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.11.50-build215";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.11.50-build215";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.11.51-build216";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=2.11.52-build217";
 import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.11.0-build164";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.11.50-build215";
-import{monsterVisual}from"../MonsterVisual.js?v=2.11.0-build164";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.11.51-build216";
+import{monsterVisual}from"../MonsterVisual.js?v=2.11.52-build217";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.11.0-build164";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.0-build164";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.11.50-build215";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.11.52-build217";
+import{ATTRIBUTE_RELATIONS}from"../../data/attributes.js?v=2.11.52-build217";
 
 function battleInteger(value){return Math.round(Number(value)||0).toLocaleString("ja-JP")}
 function battleParty(battle){return(Array.isArray(battle?.party)?battle.party:[]).filter(monster=>monster&&typeof monster==="object"&&monster.id&&monster.speciesId)}
@@ -37,7 +38,7 @@ function rankBadge(rank){return rank?`<span class="combat-rank-badge rank-${rank
 function htmlText(value){return String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
 function equipmentAuthorityBadge(unit){const authorities=unit?._equipmentAuthorities??[];if(!authorities.length)return"";const first=authorities[0],extra=authorities.length-1,title=authorities.map(authority=>`${authority.name}：${authority.description}`).join("／");return`<span class="equipment-authority-badge" title="${htmlText(title)}"><i>◆</i><b>${htmlText(first.name)}</b>${extra?`<em>+${extra}</em>`:""}</span>`}
 function biomeAttributeMarks(elements,label){return(elements??[]).map(element=>attributeVisual(element,{className:"battle-biome-attribute",label:`${label} ${element}属性`})).join("")}
-function renderBiomeBadge(environment){if(!environment)return"";const favorable=[...new Set(environment.favorable??[])],adverse=[...new Set(environment.adverse??[])],primary=environment.primary??favorable[0]??"neutral",boost=Math.round((Number(environment.boost)||1)*100-100),penalty=Math.round(100-(Number(environment.penalty)||1)*100);return`<div class="battle-biome-badge compact" style="--biome-accent:${environment.accent}"><b>${attributeVisual(primary,{className:"battle-biome-primary",label:"階層属性"})}<span>${htmlText(environment.name)}</span></b><small><span class="favorable"><em>有利</em>${favorable.length?biomeAttributeMarks(favorable,"有利属性"):'<b class="no-attribute">—</b>'}<strong>+${boost}%</strong></span><i aria-hidden="true"></i><span class="adverse"><em>不利</em>${adverse.length?biomeAttributeMarks(adverse,"不利属性"):'<b class="no-attribute">—</b>'}<strong>-${penalty}%</strong></span></small></div>`}
+function renderBiomeBadge(environment){if(!environment)return"";const favorable=[...new Set(environment.favorable??[])],adverse=[...new Set(environment.adverse??[])],primary=environment.primary??favorable[0]??"neutral",boost=Math.round((Number(environment.boost)||1)*100-100),penalty=Math.round(100-(Number(environment.penalty)||1)*100),effective=Object.entries(ATTRIBUTE_RELATIONS).filter(([,relation])=>relation.strong?.includes(primary)).map(([id])=>id);return`<div class="battle-biome-badge compact" style="--biome-accent:${environment.accent}"><b>${attributeVisual(primary,{className:"battle-biome-primary",label:"階層属性"})}<span>${htmlText(environment.name)}</span></b><small><span class="favorable"><em>環境強化</em>${favorable.length?biomeAttributeMarks(favorable,"環境強化属性"):'<b class="no-attribute">—</b>'}<strong>+${boost}%</strong></span><i aria-hidden="true"></i><span class="adverse"><em>環境弱体</em>${adverse.length?biomeAttributeMarks(adverse,"環境弱体属性"):'<b class="no-attribute">—</b>'}<strong>-${penalty}%</strong></span></small>${effective.length?`<small class="battle-biome-matchup"><em>攻撃有効</em>${biomeAttributeMarks(effective,"攻撃有効属性")}</small>`:""}</div>`}
 function invincibleAllianceActive(battle){const ids=new Set(battleParty(battle).filter(monster=>Number(monster.currentHp)>0).map(monster=>monster.speciesId));return INVINCIBLE_ALLIANCE_IDS.every(id=>ids.has(id))}
 function hpBar(battle,id,rate,label,tone){
  const normalized=Math.max(0,Math.min(100,Number(rate)||0)),trail=battle.hpTrails?.[id],elapsed=trail?Math.max(0,Date.now()-(Number(trail.startedAt)||0)):Infinity,duration=Math.max(1,Number(trail?.duration)||1400),from=Math.max(normalized,Number(trail?.from)||normalized),active=Boolean(trail&&elapsed<duration&&from>normalized);
@@ -57,7 +58,7 @@ function renderEnemies(battle,enemies,target){
   return `<button id="enemy-${enemy.id}" ${dead?'disabled aria-hidden="true"':`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${enemy.boss?"boss-enemy":""} ${enemy.raidMainBoss?"raid-main-boss":""} ${enemy.raidSubBoss?"raid-sub-boss":""} ${floorBoss?"floor-boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${rankClass} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
    <span class="battle-unit-floating-name">${badge}${rankBadge(rank)}<b>${enemy.name}</b></span>
-   <div class="side-unit-sprite enemy-orb">${battle.enemyMagicCircleArt?.[enemy.id]??""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.hp<=0?"down":"idle",className:"battle-enemy-visual"})}</div>
+   <div class="side-unit-sprite enemy-orb">${battle.enemyMagicCircleArt?.[enemy.id]??""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.visualFrame??(enemy.hp<=0?"down":"idle"),className:"battle-enemy-visual"})}</div>
    <div class="side-unit-card enemy-info">
     <div class="side-unit-name enemy-name">${danger}<small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
@@ -97,7 +98,7 @@ function renderSkills(battle,actor,skills){
  const rows=skills.map(skill=>{
   const cd=battle.onlineMode?0:cooldownRemaining(battle,actor.id,skill.id),mpCost=skillMpCost(actor,skill),disabled=actor.currentMp<mpCost||cd>0;
   const cost=cd>0?`再使用 ${cd}`:`MP ${mpCost}`;
-  const details=(skill.onlineDescription?[skill.onlineDescription]:skillEffectDetails(skill)).map(line=>`<li>${line}</li>`).join("");
+  const details=skillCombatKeywords(skill).map(line=>`<li>${line}</li>`).join("");
   const skillName=skill.equipmentGranted?`【装備技】${skill.name}`:skill.name,skillTag=skill.equipmentGranted?`${skill.equipmentAuthorityName??"装備固有"}・装備中限定`:skill.tag??"スキル";
   return `<button data-skill-id="${skill.id}" ${disabled?"disabled":""}><span><b>${skillName}</b><small>${skillTag}・${skill.target??"敵単体"}・${skillElementLabel(skill)}属性・CT ${skill.cooldown??0}</small><ul class="battle-skill-spec">${details}</ul></span><strong>${cost}</strong></button>`;
  }).join("");
@@ -161,20 +162,18 @@ export function BattleScreen(battle,inventory,settings,floor=1){
  const biomeBadge=renderBiomeBadge(battle.biomeBattle);
  const invincibleBadge=invincibleAllianceActive(battle)?'<div class="invincible-alliance-status" role="status" aria-label="無敵・四LR連携が発動中"><span>無敵</span><small>四LR連携・常時発動</small></div>':"";
  const onlineExit=battle.onlineMode==="explore"?'<button type="button" data-online-return>帰還</button>':'<button type="button" disabled>逃走不可</button>';
- return `<section class="battle-screen side-battle-v2 battle-theme-${theme} ${battle.auto?"auto-mode":"manual-mode"} ${battle.specialBattle?"special-battle":""} ${battle.onlineMode?"online-shared-battle":""}" ${battle.onlineMode?`data-online-battle-view="${battle.onlineMode}"`:""} data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}">${special}
+ return `<section class="battle-screen side-battle-v2 battle-history-hidden battle-theme-${theme} ${battle.auto?"auto-mode":"manual-mode"} ${battle.specialBattle?"special-battle":""} ${battle.onlineMode?"online-shared-battle":""}" ${battle.onlineMode?`data-online-battle-view="${battle.onlineMode}"`:""} data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}">${special}
   <div class="battle-header"><div class="round-label"><small>ラウンド</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}F・遭遇戦`}</b><small>${battle.onlineMode?"サーバー同期戦闘":battle.auto?"完全自動":"コマンド戦闘"}</small></div>${battle.onlineMode?'<button type="button" disabled class="enabled online-sync-state"><span>同期</span><b>有効</b></button>':`<button id="toggleBattleAuto" type="button" aria-pressed="${battle.auto}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button>`}<button id="battleSpeed" ${battle.onlineMode?`data-online-speed-cycle="${battle.onlineMode}"`:""}>×${speed}</button>${battle.onlineMode?onlineExit:battle.specialBattle?`<button disabled>逃走不可</button>`:`<button id="escapeBattle">逃げる</button>`}</div>
   <div class="turn-order"><span class="turn-order-title">行動順</span>${renderTurnOrder(battle)}</div>
   <div class="battle-arena side-battle-arena multi-enemy">
    <div class="battle-stage-vignette" aria-hidden="true"></div>
    ${biomeBadge}
    ${invincibleBadge}
-   <span class="formation-label party-label">味方　<span>後衛 ← → 前衛</span></span><span class="formation-label enemy-label"><span>前衛 ← → 後衛</span>　敵</span>
    <div class="battle-party side-party">${renderParty(battle,actor)}</div>
    <div class="battle-clash-line" aria-hidden="true"><span>対</span></div>
    <div class="enemy-party side-enemies">${renderEnemies(battle,enemies,target)}</div>
    <div id="battleFxLayer" class="battle-fx-layer"></div>
   </div>
   ${renderCommands(battle,actor,current,livingEnemies,target,inventory,skills)}
-  <div class="battle-log">${(battle.log??[]).map(line=>`<div>${line}</div>`).join("")}</div>
  </section>`;
 }

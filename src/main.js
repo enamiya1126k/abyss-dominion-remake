@@ -1,5 +1,5 @@
 import{SaveService}from"./services/SaveService.js?v=2.11.45-build210";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.50-build215";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.52-build217";
 import{AudioSystem}from"./core/AudioSystem.js?v=2.11.37-build202";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=2.11.24-build188";
 import{SPECIES}from"./data/species.js?v=2.11.33-build198";
@@ -9,18 +9,18 @@ import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.11.44-build209";
 import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.11.30-build195";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.11.30-build195";
 import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.11.42-build207";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.11.50-build215";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.11.52-build217";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.11.29-build194";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.11.30-build195";
 import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.11.34-build199";
 import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.11.42-build207";
 import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.11.30-build195";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.11.50-build215";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.11.52-build217";
 import{Modal}from"./ui/components/Modal.js?v=2.11.2-build166";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=2.11.2-build166";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.11.2-build166";
 import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.11.2-build166";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.11.50-build215";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.11.51-build216";
 import{EXPERIENCE_PACK_TYPES,experiencePackType,availableExperiencePackTypes,consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=2.11.24-build188";
 import{createEquipment,equipmentPower,equipmentStatMultiplier,equipmentRequiredMonsterLevel}from"./models/Equipment.js?v=2.11.45-build210";
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.11.2-build166";
@@ -46,11 +46,11 @@ import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/
 import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.11.2-build166";
 import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.11.2-build166";
 import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.11.2-build166";
-import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillMpCostBreakdown,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse,skillEffectDetails,skillEffectSummary,applySkillMastery}from"./battle/SkillSystem.js?v=2.11.50-build215";
+import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillMpCostBreakdown,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse,skillEffectSummary,skillCombatKeywords,applySkillMastery}from"./battle/SkillSystem.js?v=2.11.52-build217";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyDamageAfterDefense,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.11.30-build195";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectStackBreakdown,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.11.24-build188";
 import{attackHits}from"./battle/HitSystem.js?v=2.11.2-build166";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.11.50-build215";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.11.51-build216";
 import{dangerConfig}from"./core/DangerSystem.js?v=2.11.2-build166";
 import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=2.11.2-build166";
 import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost}from"./core/MagicCircleSystem.js?v=2.11.2-build166";
@@ -72,7 +72,7 @@ import{enemyExperienceReward}from"./core/ProgressionSystem.js?v=2.11.24-build188
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionForFloor,floorBossDefinitionById,floorBossEquipmentDesignByPiece,milestoneBossIdsForFloor}from"./data/floorBosses.js?v=2.11.28-build193";
 import{FLOOR_BOSS_CONTRACT_COST,FLOOR_BOSS_EQUIPMENT_COST,normalizeFloorBossChallengeState,recordFloorBossDiscovery,floorBossChallengeStatus,createFloorBossChallengeEncounter,awardFloorBossChallengeFragments,spendFloorBossFragments,restoreFloorBossFragments}from"./core/FloorBossChallengeSystem.js?v=2.11.30-build195";
 import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=2.11.24-build188";
-import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.11.44-build209";
+import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=2.11.52-build217";
 import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,permanentSignatureOwners,rollPermanentSignatureHit,PERMANENT_SIGNATURE_RATE,createSignatureEquipment,normalizeSignatureWeaponItem,signatureWeaponGrantedSkill}from"./core/SignatureWeaponSystem.js?v=2.11.24-build188";
 
 const TILE=88,COLS=39,ROWS=39,app=document.getElementById("app"),save=new SaveService(),audio=new AudioSystem(()=>save.state.settings);
@@ -1835,7 +1835,7 @@ function claimOnlinePartyReward({rewardId,reward={},source={}}={}){
 }
 function exchangeOnlineRaidReward(kind,cost){
  const online=save.state.onlineParty??={},price=Math.max(0,Math.floor(Number(cost)||0)),materials=Math.max(0,Math.floor(Number(online.raidMaterials)||0));if(materials<price)return{ok:false,message:`融骸核片が足りません（${materials}/${price}）`};let message="";
- if(kind==="character"){if(save.state.monsters.length>=MONSTER_STORAGE_CAP)return{ok:false,message:"魔物庫が満杯です。先に整理してください"};const level=Math.max(1,Math.min(ENDGAME_MAX_LEVEL,Number(save.state.player.maxFloor)||1)),monster=createMonster("ancient_dragon",{nickname:"融骸幼体アマルガ",level,stars:MONSTER_STAR_MAX,rank:4,plus:12,attribute:"dark",obtainedMethod:"onlineRaidExchange",obtainedFloor:save.state.player.maxFloor});monster.customVisualAsset="./assets/online/raid/juvenile-amalga.png";monster.raidLimited=true;monster.tags=[...(monster.tags??[]),"raid","amalgam"];save.state.monsters.push(monster);message="限定仲間「融骸幼体アマルガ」と契約しました"}
+ if(kind==="character"){if(save.state.monsters.length>=MONSTER_STORAGE_CAP)return{ok:false,message:"魔物庫が満杯です。先に整理してください"};const level=Math.max(1,Math.min(ENDGAME_MAX_LEVEL,Number(save.state.player.maxFloor)||1)),monster=createMonster("ancient_dragon",{nickname:"融骸幼体アマルガ",level,stars:MONSTER_STAR_MAX,rank:4,plus:12,attribute:"dark",obtainedMethod:"onlineRaidExchange",obtainedFloor:save.state.player.maxFloor});monster.customVisualBase="./assets/online/raid/juvenile-amalga";monster.raidLimited=true;monster.tags=[...(monster.tags??[]),"raid","amalgam"];save.state.monsters.push(monster);message="限定仲間「融骸幼体アマルガ」と契約しました"}
  else if(kind==="equipment"){const item=createEquipment("weapon",{rarity:"神話"});item.name="終焉喰らいの大刃";item.level=Math.max(1,Math.min(10000,Math.round((Number(save.state.player.maxFloor)||1)*1.35)));item.plus=30;item.raidLimited=true;item.ruleOverrides={...(item.ruleOverrides??{}),unsellable:true,raidResonance:true};const result=receiveEquipment(save.state,item,{bossReward:true});message=`限定神話装備を獲得（${result.message}）`}
  else if(kind==="circle"){const instance=createMagicCircleInstance(save.state,"death_mirror",{level:1,source:"raidExchange",locked:false});if(!instance)return{ok:false,message:"魔法陣の現物を追加できませんでした"};message="「即死返鏡陣」の現物を1個獲得しました。術式未解禁なら装備・強化はできません"}
  else return{ok:false,message:"交換報酬が見つかりません"};online.raidMaterials=materials-price;online.raidExchange??={};online.raidExchange[kind]=(Number(online.raidExchange[kind])||0)+1;save.save();return{ok:true,message}
@@ -3872,7 +3872,7 @@ function conciseBattleSkillTitle(title,source){
  for(const name of names)for(const separator of["・","：",":","／"]){const prefix=`${name}${separator}`;if(value.startsWith(prefix)){value=value.slice(prefix.length).trim();return value||String(title)}}
  return value;
 }
-function battleSkillMechanics(skill){const details=skillEffectDetails(skill);return(details.length?details.slice(0,2):[skill?.description??"特殊効果を発動"]).join("｜")}
+function battleSkillMechanics(skill){return skillCombatKeywords(skill).join("・")||"特殊効果"}
 async function battleBanner(title,subtitle="",type="normal",duration=700,source=null){
  const arena=document.querySelector(".battle-arena");if(!arena)return;
  arena.querySelector(".battle-cinematic-banner")?.remove();

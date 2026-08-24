@@ -1,0 +1,89 @@
+/* build217: solo/online battle parity, concise elemental guidance and raid sprites. */
+
+/* The formation is still used by targeting and damage rules, but the explanatory
+   corner labels no longer consume space in the arena. */
+.battle-screen.side-battle-v2 .battle-formation-label,
+.battle-screen.side-battle-v2 .ally-formation-label,
+.battle-screen.side-battle-v2 .enemy-formation-label{
+  display:none!important;
+}
+
+/* Keep the biome card compact while separating environmental modifiers from
+   attack effectiveness.  AttributeVisual supplies the same icons used elsewhere. */
+.battle-screen.side-battle-v2 .battle-biome-badge.compact{
+  min-width:min(82vw,270px);
+  max-width:min(88vw,310px);
+  gap:2px;
+  padding:5px 9px 6px;
+}
+.battle-screen.side-battle-v2 .battle-biome-badge.compact> b,
+.battle-screen.side-battle-v2 .battle-biome-badge.compact> small,
+.battle-screen.side-battle-v2 .battle-biome-badge.compact small>span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.battle-screen.side-battle-v2 .battle-biome-badge.compact> b{gap:5px}
+.battle-screen.side-battle-v2 .battle-biome-badge.compact> small{
+  gap:6px;
+  white-space:nowrap;
+}
+.battle-screen.side-battle-v2 .battle-biome-badge.compact small>span{gap:3px}
+.battle-screen.side-battle-v2 .battle-biome-badge.compact small>i{
+  width:1px;
+  height:13px;
+  background:#7c7186;
+  opacity:.65;
+}
+.battle-screen.side-battle-v2 .battle-biome-badge.compact em{
+  color:#b9b0c1;
+  font-style:normal;
+  font-size:.25rem;
+}
+.battle-screen.side-battle-v2 .battle-biome-badge.compact strong{font-size:.29rem}
+.battle-screen.side-battle-v2 .battle-biome-badge.compact .favorable strong{color:#79e5a2}
+.battle-screen.side-battle-v2 .battle-biome-badge.compact .adverse strong{color:#ff8da3}
+.battle-screen.side-battle-v2 .battle-biome-badge.compact .battle-biome-matchup{
+  width:100%;
+  padding-top:2px;
+  border-top:1px solid color-mix(in srgb,var(--biome-accent) 32%,transparent);
+  color:#f4e8b7;
+}
+.battle-screen.side-battle-v2 .battle-biome-badge.compact :is(.battle-biome-primary,.battle-biome-attribute){
+  width:14px;
+  height:14px;
+  flex:0 0 14px;
+}
+.battle-screen.side-battle-v2 .battle-biome-badge.compact .battle-biome-primary{
+  width:17px;
+  height:17px;
+  flex-basis:17px;
+}
+
+/* Custom raid art uses actual eight-frame files.  Only a faint breathing motion
+   remains between frame swaps; attack/damage/down are selected by battle events. */
+.battle-screen.side-battle-v2.online-shared-battle .has-custom-sprite img{
+  image-rendering:auto;
+  transform-origin:50% 86%;
+  animation:build217-raid-breathe 2.4s ease-in-out infinite;
+}
+.battle-screen.side-battle-v2.online-shared-battle .raid-main-boss .has-custom-sprite img{
+  animation-duration:2.8s;
+}
+@keyframes build217-raid-breathe{
+  0%,100%{translate:0 0;scale:1}
+  50%{translate:0 -2px;scale:1.012}
+}
+
+@media(max-width:420px){
+  .battle-screen.side-battle-v2 .battle-biome-badge.compact{
+    min-width:min(84vw,250px);
+    padding-inline:6px;
+  }
+  .battle-screen.side-battle-v2 .battle-biome-badge.compact> small{gap:4px}
+  .battle-screen.side-battle-v2 .battle-biome-badge.compact em{font-size:.22rem}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .battle-screen.side-battle-v2.online-shared-battle .has-custom-sprite img{animation:none!important}
+}

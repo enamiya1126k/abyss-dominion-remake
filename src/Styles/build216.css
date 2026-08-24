@@ -1,0 +1,43 @@
+/* build216: use the old history strip as battle space and protect two-line boss labels. */
+
+/* The combat log remains in battle state for diagnostics, but is no longer rendered.
+   Give its former mobile footprint back to the arena. */
+@media(max-width:720px){
+  .battle-screen.side-battle-v2.battle-history-hidden .side-battle-arena{
+    min-height:clamp(420px,112vw,720px)!important;
+  }
+}
+
+/* Boss names may wrap to two lines. Move the complete boss group down together so
+   the label, sprite and card keep their relative spacing without clipping the head. */
+.battle-screen.side-battle-v2 .side-enemies :is(.boss-enemy,.floor-boss-enemy,.raid-main-boss) .battle-unit-floating-name{
+  z-index:24!important;
+  max-width:min(46vw,170px)!important;
+  line-height:1.12!important;
+  text-align:center;
+  white-space:normal!important;
+  overflow-wrap:anywhere;
+  translate:0 18px;
+}
+.battle-screen.side-battle-v2 .side-enemies :is(.boss-enemy,.floor-boss-enemy,.raid-main-boss) .side-unit-sprite,
+.battle-screen.side-battle-v2 .side-enemies :is(.boss-enemy,.floor-boss-enemy,.raid-main-boss) .side-unit-card{
+  translate:0 18px;
+}
+
+@media(max-width:420px){
+  .battle-screen.side-battle-v2 .side-enemies :is(.boss-enemy,.floor-boss-enemy,.raid-main-boss) .battle-unit-floating-name{
+    max-width:132px!important;
+    font-size:clamp(.33rem,2.2vw,.47rem)!important;
+    translate:0 20px;
+  }
+  .battle-screen.side-battle-v2 .side-enemies :is(.boss-enemy,.floor-boss-enemy,.raid-main-boss) .side-unit-sprite,
+  .battle-screen.side-battle-v2 .side-enemies :is(.boss-enemy,.floor-boss-enemy,.raid-main-boss) .side-unit-card{
+    translate:0 20px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .battle-screen.side-battle-v2 .side-enemies :is(.boss-enemy,.floor-boss-enemy,.raid-main-boss) :is(.battle-unit-floating-name,.side-unit-sprite,.side-unit-card){
+    transition:none!important;
+  }
+}

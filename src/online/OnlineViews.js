@@ -1,7 +1,7 @@
 import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=2.11.2-build166";
 import { battleEnvironmentForFloor } from "../data/biomes.js?v=2.11.49-build214";
 import { onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml } from "../ui/screens/OnlinePartyScreen.js?v=2.11.47-build212";
-import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.50-build215";
+import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.52-build217";
 import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=2.11.44-build209";
 import { pixelIcon } from "../ui/components/GameChrome.js?v=2.11.2-build166";
 
@@ -104,7 +104,7 @@ function onlineEnemy(room, enemy) {
     ...enemy, id: enemy.id ?? enemy.playerId, speciesId: profile?.speciesId ?? enemy.speciesId ?? "slime",
     visualSpeciesId: profile?.visualSpeciesId ?? enemy.visualSpeciesId ?? null, endgameBossId: profile?.endgameBossId ?? enemy.endgameBossId ?? null,
     floorBossCatalogId: profile?.floorBossCatalogId ?? enemy.floorBossCatalogId ?? null,
-    customVisualAsset: enemy.asset ?? null, name: profile?.monsterName || enemy.monsterName || enemy.name || profile?.displayName || "敵",
+    customVisualBase: enemy.visualBase ?? null, customVisualAsset: enemy.visualBase ? null : enemy.asset ?? null, visualFrame: enemy.visualFrame ?? null, name: profile?.monsterName || enemy.monsterName || enemy.name || profile?.displayName || "敵",
     level: Math.max(1, Number(profile?.level ?? enemy.level) || 1), hp: Math.max(0, Number(enemy.hp) || 0), maxHp: Math.max(1, Number(enemy.maxHp) || 1),
     atk: Math.max(1, Number(enemy.atk ?? profile?.battleStats?.atk) || 1), matk: Math.max(1, Number(enemy.matk ?? profile?.battleStats?.matk) || 1),
     def: Math.max(0, Number(enemy.def ?? profile?.battleStats?.def) || 0), mdef: Math.max(0, Number(enemy.mdef ?? profile?.battleStats?.mdef) || 0),

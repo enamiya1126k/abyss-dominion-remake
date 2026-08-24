@@ -2,7 +2,8 @@ import{MONSTER_SPRITE_FOLDERS}from"../data/monsterCatalog.js?v=2.11.44-build209"
 
 const IDLE_FRAMES=Object.freeze(["idle1","idle2","idle3","idle2"]);
 const VALID_FRAMES=new Set(["idle","idle1","idle2","idle3","walk1","walk2","attack","damage","down"]);
-const SPRITE_ASSET_VERSION="2.11.44-build209";
+const SPRITE_ASSET_VERSION="2.11.52-build217";
+let idleStep=0;
 
 function safeFrame(frame){
   return VALID_FRAMES.has(frame)?frame:"idle";
@@ -28,20 +29,22 @@ export function monsterVisualId(subject){
 }
 
 export function monsterSpriteUrl(subject,frame="idle"){
+  if(typeof subject==="object"&&subject?.customVisualBase)return`${String(subject.customVisualBase)}-${fileFrame(frame)}.png?v=${SPRITE_ASSET_VERSION}`;
   if(typeof subject==="object"&&subject?.customVisualAsset)return String(subject.customVisualAsset);
   const visualId=monsterVisualId(subject),folder=MONSTER_SPRITE_FOLDERS[visualId];
   return folder?`./assets/monsters/${folder}/${fileFrame(frame)}.png?v=${SPRITE_ASSET_VERSION}`:null;
 }
 
 export function hasMonsterSprite(subject){
-  return Boolean(typeof subject==="object"&&subject?.customVisualAsset)||Boolean(MONSTER_SPRITE_FOLDERS[monsterVisualId(subject)]);
+  return Boolean(typeof subject==="object"&&(subject?.customVisualBase||subject?.customVisualAsset))||Boolean(MONSTER_SPRITE_FOLDERS[monsterVisualId(subject)]);
 }
 
 export function monsterVisual(subject,fallbackEmoji="👹",{frame="idle",className=""}={}){
-  const visualId=monsterVisualId(subject),requestedFrame=safeFrame(frame),normalizedFrame=fileFrame(requestedFrame),custom=Boolean(typeof subject==="object"&&subject?.customVisualAsset),url=monsterSpriteUrl(subject,normalizedFrame);
+  const visualId=monsterVisualId(subject),requestedFrame=safeFrame(frame),normalizedFrame=requestedFrame==="idle"?IDLE_FRAMES[idleStep]:fileFrame(requestedFrame),customBase=typeof subject==="object"?subject?.customVisualBase:null,custom=Boolean(customBase||typeof subject==="object"&&subject?.customVisualAsset),url=monsterSpriteUrl(subject,normalizedFrame);
   const classes=["monster-visual",url?"has-pixel-sprite":"emoji-only",className].filter(Boolean).join(" ");
   const fallback=`<span class="monster-visual-fallback"${url?" hidden":""}>${escapeHtml(fallbackEmoji)}</span>`;
   if(!url)return`<span class="${classes}" data-monster-species="${escapeHtml(visualId)}">${fallback}</span>`;
+  if(customBase){const animationState=requestedFrame==="idle"?"idle":"static";return`<span class="${classes} has-custom-sprite" data-monster-species="${escapeHtml(visualId)}"><img src="${escapeHtml(url)}" alt="" draggable="false" data-monster-custom data-monster-sprite data-custom-sprite-base="${escapeHtml(customBase)}" data-frame="${normalizedFrame}" data-animation-state="${animationState}" onerror="this.dataset.spriteFailed='1';this.hidden=true;this.nextElementSibling.hidden=false">${fallback}</span>`}
   if(custom)return`<span class="${classes} has-custom-sprite" data-monster-species="${escapeHtml(visualId)}"><img src="${escapeHtml(url)}" alt="" draggable="false" data-monster-custom onerror="this.hidden=true;this.nextElementSibling.hidden=false">${fallback}</span>`;
   const base=url.slice(0,url.lastIndexOf("/"));
   const animationState=requestedFrame==="idle"?"idle":"static";
@@ -55,7 +58,7 @@ export function setMonsterVisualFrame(root,frame="idle"){
   if(root.matches?.("[data-monster-sprite]"))images.push(root);
   images.push(...(root.querySelectorAll?.("[data-monster-sprite]")??[]));
   for(const image of images){
-    const base=image.dataset.spriteBase;
+    const base=image.dataset.spriteBase??image.dataset.customSpriteBase;
     if(!base)continue;
     image.hidden=false;
     const fallback=image.nextElementSibling;
@@ -63,12 +66,11 @@ export function setMonsterVisualFrame(root,frame="idle"){
     delete image.dataset.spriteFailed;
     image.dataset.animationState=requestedFrame==="idle"?"idle":"static";
     image.dataset.frame=normalizedFrame;
-    image.src=`${base}/${normalizedFrame}.png?v=${SPRITE_ASSET_VERSION}`;
+    image.src=image.dataset.customSpriteBase?`${base}-${normalizedFrame}.png?v=${SPRITE_ASSET_VERSION}`:`${base}/${normalizedFrame}.png?v=${SPRITE_ASSET_VERSION}`;
   }
 }
 
 if(typeof window!=="undefined"&&typeof document!=="undefined"){
-  let idleStep=0;
   const reducedMotion=window.matchMedia?.("(prefers-reduced-motion: reduce)");
   window.setInterval(()=>{
     if(reducedMotion?.matches)return;
@@ -78,10 +80,10 @@ if(typeof window!=="undefined"&&typeof document!=="undefined"){
       if(!image.isConnected||image.dataset.spriteFailed==="1"||image.offsetParent===null)continue;
       const rect=image.getBoundingClientRect();
       if(rect.bottom<0||rect.top>window.innerHeight||rect.right<0||rect.left>window.innerWidth)continue;
-      const base=image.dataset.spriteBase;
+      const base=image.dataset.spriteBase??image.dataset.customSpriteBase;
       if(!base||image.dataset.frame===frame)continue;
       image.dataset.frame=frame;
-      image.src=`${base}/${frame}.png?v=${SPRITE_ASSET_VERSION}`;
+      image.src=image.dataset.customSpriteBase?`${base}-${frame}.png?v=${SPRITE_ASSET_VERSION}`:`${base}/${frame}.png?v=${SPRITE_ASSET_VERSION}`;
     }
   },320);
 }

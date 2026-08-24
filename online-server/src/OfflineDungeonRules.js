@@ -1,5 +1,6 @@
 import {
   bossProfileForFloor,
+  bossLevelForFloor,
   enemyHiddenProfileForFloor,
   enemyLevelForFloor,
   enemyRankStatMultiplier,
@@ -9,7 +10,10 @@ import {
 } from "../../src/core/EnemyScalingSystem.js";
 
 const CARDINALS = Object.freeze([[1, 0], [-1, 0], [0, 1], [0, -1]]);
-export const ONLINE_ENEMY_HP_DIVISOR = 50;
+// The shared dungeon is the host's ordinary dungeon world.  Keep the exact
+// solo HP curve here; multiplayer compensation is applied by RoomStore using
+// the number of participating players instead of silently weakening enemies.
+export const ONLINE_ENEMY_HP_DIVISOR = 1;
 
 const BASE_STATS = Object.freeze({
   slime: { hp: 22, atk: 7, def: 4, spd: 7 },
@@ -172,8 +176,14 @@ export function encounterCountForFloor(floor, roll) {
 }
 
 export function floorEnemyStats({ floor, template, random, boss = false }) {
-  const base = BASE_STATS[template.id] ?? BASE_STATS.slime;
-  const level = floor === 1 ? 1 : enemyLevelForFloor(floor, random());
+  const sourceBase = template?.baseStats ?? BASE_STATS[template.id] ?? BASE_STATS.slime;
+  const base = {
+    hp: Math.max(1, Number(sourceBase.hp) || BASE_STATS.slime.hp),
+    atk: Math.max(1, Number(sourceBase.atk) || BASE_STATS.slime.atk),
+    def: Math.max(0, Number(sourceBase.def) || 0),
+    spd: Math.max(1, Number(sourceBase.spd) || BASE_STATS.slime.spd),
+  };
+  const level = boss ? bossLevelForFloor(floor) : floor === 1 ? 1 : enemyLevelForFloor(floor, random());
   const rank = rollEnemyRank(floor, random());
   const rankMultiplier = enemyRankStatMultiplier(rank);
   const equipped = boss || random() < equipmentHolderRateForFloor(floor);
@@ -182,11 +192,6 @@ export function floorEnemyStats({ floor, template, random, boss = false }) {
   const depthHp = 1 + Math.max(0, floor - 60) / 180;
   const depthAtk = 1 + Math.max(0, floor - 80) / 340;
   const variance = .94 + random() * .12;
-  // Online co-op used the solo hidden-equipment HP formula without the solo
-  // party-size compensation.  That made an otherwise ordinary encounter take
-  // roughly fifty times longer than the offline battle at the same floor.
-  // Keep its attack, defence, rank and equipment threat intact, while bringing
-  // only the HP pool back to the requested co-op tempo.
   const unscaledHp = (base.hp + level * 8) * rankMultiplier * hidden.hp * bossProfile.hp * depthHp * variance;
   const maxHp = Math.max(1, Math.round(unscaledHp / ONLINE_ENEMY_HP_DIVISOR));
   const atk = Math.max(1, Math.round((base.atk + level * 1.4) * rankMultiplier * hidden.atk * bossProfile.atk * depthAtk * variance));
