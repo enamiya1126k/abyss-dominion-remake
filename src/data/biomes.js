@@ -1,3 +1,5 @@
+import{ATTRIBUTE_RELATIONS,canonicalAttribute}from"./attributes.js?v=2.11.49-build214";
+
 export const BIOMES=[
  {id:"origin_cave",name:"始まりの洞窟",icon:"🟢",from:1,to:10,theme:"cave",accent:"#7bcf8b",description:"湿った岩肌と淡い魔力が満ちる入口。",elements:["water","earth","dark"]},
  {id:"forgotten_forest",name:"忘れられた森",icon:"🌲",from:11,to:20,theme:"forest",accent:"#75c96b",description:"地下に根を張った古い森。",elements:["wind","earth","light"]},
@@ -24,6 +26,10 @@ export function biomeForFloor(floor){
  const fixed=BIOMES.find(b=>f>=b.from&&f<=b.to);if(fixed)return fixed;
  const band=Math.max(0,Math.floor((f-101)/50)),template=DEEP_BIOME_CYCLE[band%DEEP_BIOME_CYCLE.length],from=101+band*50;
  return{...template,id:`deep_${band+1}_${template.theme}`,name:`${template.name} ${band+1}`,icon:"",from,to:from+49};
+}
+export function battleEnvironmentForFloor(floor){
+ const biome=biomeForFloor(floor),primary=canonicalAttribute(biome.elements?.[0]??"neutral",`biome:${biome.id}`),adverse=[...new Set(ATTRIBUTE_RELATIONS[primary]?.weak??[])];
+ return{id:biome.id,name:biome.name,theme:biome.theme,accent:biome.accent,primary,favorable:[primary],adverse,boost:1.22,penalty:.84};
 }
 export function ensureBiomeProgress(state,biome){
  state.biomeProgress??={};

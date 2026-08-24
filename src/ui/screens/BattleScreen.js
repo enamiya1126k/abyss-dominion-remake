@@ -1,13 +1,14 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.11.30-build195";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.11.45-build210";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.11.50-build215";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillEffectDetails}from"../../battle/SkillSystem.js?v=2.11.50-build215";
 import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.11.0-build164";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.11.30-build195";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.11.50-build215";
 import{monsterVisual}from"../MonsterVisual.js?v=2.11.0-build164";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.11.0-build164";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.0-build164";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.11.0-build164";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.11.50-build215";
 
 function battleInteger(value){return Math.round(Number(value)||0).toLocaleString("ja-JP")}
+function battleParty(battle){return(Array.isArray(battle?.party)?battle.party:[]).filter(monster=>monster&&typeof monster==="object"&&monster.id&&monster.speciesId)}
 function unitStats(unit){return unit?.onlineStats??calculatedStats(unit)}
 function unitMaxMp(unit){return Math.max(0,Number(unit?.onlineMaxMp??maxMp(unit))||0)}
 function unitName(unit){return unit?.onlineName??displayName(unit)}
@@ -36,8 +37,8 @@ function rankBadge(rank){return rank?`<span class="combat-rank-badge rank-${rank
 function htmlText(value){return String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
 function equipmentAuthorityBadge(unit){const authorities=unit?._equipmentAuthorities??[];if(!authorities.length)return"";const first=authorities[0],extra=authorities.length-1,title=authorities.map(authority=>`${authority.name}：${authority.description}`).join("／");return`<span class="equipment-authority-badge" title="${htmlText(title)}"><i>◆</i><b>${htmlText(first.name)}</b>${extra?`<em>+${extra}</em>`:""}</span>`}
 function biomeAttributeMarks(elements,label){return(elements??[]).map(element=>attributeVisual(element,{className:"battle-biome-attribute",label:`${label} ${element}属性`})).join("")}
-function renderBiomeBadge(environment){if(!environment)return"";const favorable=[...new Set(environment.favorable??[])],adverse=[...new Set(environment.adverse??[])],primary=favorable[0]??"neutral",boost=Math.round((Number(environment.boost)||1)*100-100),penalty=Math.round(100-(Number(environment.penalty)||1)*100);return`<div class="battle-biome-badge compact" style="--biome-accent:${environment.accent}"><b>${attributeVisual(primary,{className:"battle-biome-primary",label:"階層属性"})}<span>${htmlText(environment.name)}</span></b><small><span class="favorable"><em>有利</em>${biomeAttributeMarks(favorable,"有利属性")}<strong>+${boost}%</strong></span><i aria-hidden="true"></i><span class="adverse"><em>不利</em>${adverse.length?biomeAttributeMarks(adverse,"不利属性"):'<b class="no-attribute">—</b>'}<strong>-${penalty}%</strong></span></small></div>`}
-function invincibleAllianceActive(battle){const ids=new Set((battle.party??[]).filter(monster=>Number(monster.currentHp)>0).map(monster=>monster.speciesId));return INVINCIBLE_ALLIANCE_IDS.every(id=>ids.has(id))}
+function renderBiomeBadge(environment){if(!environment)return"";const favorable=[...new Set(environment.favorable??[])],adverse=[...new Set(environment.adverse??[])],primary=environment.primary??favorable[0]??"neutral",boost=Math.round((Number(environment.boost)||1)*100-100),penalty=Math.round(100-(Number(environment.penalty)||1)*100);return`<div class="battle-biome-badge compact" style="--biome-accent:${environment.accent}"><b>${attributeVisual(primary,{className:"battle-biome-primary",label:"階層属性"})}<span>${htmlText(environment.name)}</span></b><small><span class="favorable"><em>有利</em>${favorable.length?biomeAttributeMarks(favorable,"有利属性"):'<b class="no-attribute">—</b>'}<strong>+${boost}%</strong></span><i aria-hidden="true"></i><span class="adverse"><em>不利</em>${adverse.length?biomeAttributeMarks(adverse,"不利属性"):'<b class="no-attribute">—</b>'}<strong>-${penalty}%</strong></span></small></div>`}
+function invincibleAllianceActive(battle){const ids=new Set(battleParty(battle).filter(monster=>Number(monster.currentHp)>0).map(monster=>monster.speciesId));return INVINCIBLE_ALLIANCE_IDS.every(id=>ids.has(id))}
 function hpBar(battle,id,rate,label,tone){
  const normalized=Math.max(0,Math.min(100,Number(rate)||0)),trail=battle.hpTrails?.[id],elapsed=trail?Math.max(0,Date.now()-(Number(trail.startedAt)||0)):Infinity,duration=Math.max(1,Number(trail?.duration)||1400),from=Math.max(normalized,Number(trail?.from)||normalized),active=Boolean(trail&&elapsed<duration&&from>normalized);
  const timing=active?` style="--hp-from:${from.toFixed(3)}%;--hp-to:${normalized.toFixed(3)}%;--hp-trail-duration:${duration}ms;--hp-trail-delay:-${Math.min(elapsed,duration)}ms"`:"";
@@ -46,7 +47,7 @@ function hpBar(battle,id,rate,label,tone){
 }
 
 function renderEnemies(battle,enemies,target){
- return enemies.map((enemy,index)=>{
+ return enemies.filter(Boolean).map((enemy,index)=>{
   const statuses=enemyStatusesFor(battle,enemy.id),effects=enemyEffectsFor(battle,enemy.id);
   const statusHtml=`<div class="status-row enemy-status-row" data-status-detail="${enemy.id}" ${statuses.length||effects.length?"":'aria-hidden="true"'}>${statuses.map(s=>`<span class="status-chip ${s.id}">${battleStatusLabel(s)}${remainingTurns(s.turns)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
   const floorBoss=Boolean(enemy.floorBossCatalogId),badge=enemy.boss?`<span class="boss-badge">${floorBoss?"階層ボス":"ボス"}</span>`:enemy.elite?`<span class="elite-badge">${enemy.eliteAffixIcon??"🜲"} 強敵・${enemy.eliteAffixName??"変異"}</span>`:"";const danger="";
@@ -69,7 +70,7 @@ function renderEnemies(battle,enemies,target){
 }
 
 function renderParty(battle,actor){
- return battle.party.map((m,index)=>{
+ return battleParty(battle).map((m,index)=>{
  const stats=unitStats(m),mp=unitMaxMp(m),need=expNeedFor(m);
  const circle=battle.magicCircleProfiles?.[m.id]??null,circleName=circle?.name??"魔法陣なし",circleLevel=Math.max(0,Number(circle?.level)||0);
  const ailments=allyAilmentsFor(battle,m.id),effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" data-status-detail="${m.id}" ${ailments.length||effects.length?"":'aria-hidden="true"'}>${ailments.map(e=>`<span class="status-chip ${e.id}">${battleStatusLabel(e)}${remainingTurns(e.turns,true)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
@@ -126,7 +127,7 @@ function renderItems(inventory){
 
 function renderOnlineItems(battle){
  if(battle.onlineItemTargetMenu){
-  const targets=(battle.party??[]).map(monster=>`<button type="button" data-online-item-target="${monster.id}" ${monster.currentHp<=0?"disabled":""}><span><b>${unitName(monster)}</b><small>HP ${battleInteger(monster.currentHp)} / ${battleInteger(unitStats(monster).hp)}　MP ${battleInteger(monster.currentMp)} / ${battleInteger(unitMaxMp(monster))}</small></span><strong>対象</strong></button>`).join("");
+  const targets=battleParty(battle).map(monster=>`<button type="button" data-online-item-target="${monster.id}" ${monster.currentHp<=0?"disabled":""}><span><b>${unitName(monster)}</b><small>HP ${battleInteger(monster.currentHp)} / ${battleInteger(unitStats(monster).hp)}　MP ${battleInteger(monster.currentMp)} / ${battleInteger(unitMaxMp(monster))}</small></span><strong>対象</strong></button>`).join("");
   return`<div class="skill-command-list battle-item-list online-item-target-list"><div class="online-item-step"><b>2 / 2　使用対象を選択</b><small>選択後に行動が確定します</small></div>${targets}<button id="closeOnlineItemTarget" class="secondary">戻る</button></div>`
  }
  const count=Math.max(0,Number(battle.onlineItemCharges)||0),disabled=count<=0;
@@ -150,7 +151,8 @@ function renderCommands(battle,actor,current,enemies,target,inventory,skills){
 }
 
 export function BattleScreen(battle,inventory,settings,floor=1){
- const actor=battle.onlineActorId?battle.party.find(monster=>monster.id===battle.onlineActorId&&monster.currentHp>0)??null:currentAlly(battle),current=currentTurnEntry(battle),livingEnemies=aliveEnemies(battle),enemies=battle.enemies??[],target=selectedEnemy(battle),skills=actor?(battle.onlineSkills??learnedSkills(actor)):[];
+ const party=battleParty(battle);if(party.length!==(Array.isArray(battle?.party)?battle.party.length:0))battle={...battle,party};
+ const actor=battle.onlineActorId?party.find(monster=>monster.id===battle.onlineActorId&&monster.currentHp>0)??null:currentAlly(battle),current=currentTurnEntry(battle),livingEnemies=aliveEnemies(battle),enemies=(battle.enemies??[]).filter(Boolean),target=selectedEnemy(battle),skills=actor?(battle.onlineSkills??learnedSkills(actor)):[];
  const special=battle.specialBattle?`<div class="special-battle-strip ${battle.specialBattleType}"><b>${battle.specialTitle??"特別戦"}</b><small>${battle.specialSubtitle??"敗北ペナルティなし"}</small></div>`:"";
  const floorBand=Math.max(1,Math.min(20,Math.floor((Math.max(1,Number(floor)||1)-1)/50)+1));
  const speed=normalizeBattleSpeed(battle.onlineMode?battle.speed??settings.battleSpeed:settings.battleSpeed),scaled=ms=>`${Math.max(1,Math.round(ms/speed))}ms`;

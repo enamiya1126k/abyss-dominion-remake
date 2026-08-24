@@ -1,5 +1,5 @@
 import{SaveService}from"./services/SaveService.js?v=2.11.45-build210";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.48-build213";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.50-build215";
 import{AudioSystem}from"./core/AudioSystem.js?v=2.11.37-build202";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=2.11.24-build188";
 import{SPECIES}from"./data/species.js?v=2.11.33-build198";
@@ -9,18 +9,18 @@ import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.11.44-build209";
 import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.11.30-build195";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.11.30-build195";
 import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.11.42-build207";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.11.47-build212";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.11.50-build215";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.11.29-build194";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.11.30-build195";
 import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.11.34-build199";
 import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.11.42-build207";
 import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.11.30-build195";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.11.45-build210";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.11.50-build215";
 import{Modal}from"./ui/components/Modal.js?v=2.11.2-build166";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=2.11.2-build166";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=2.11.2-build166";
 import{attributeVisual}from"./ui/components/AttributeVisual.js?v=2.11.2-build166";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.11.30-build195";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=2.11.50-build215";
 import{EXPERIENCE_PACK_TYPES,experiencePackType,availableExperiencePackTypes,consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=2.11.24-build188";
 import{createEquipment,equipmentPower,equipmentStatMultiplier,equipmentRequiredMonsterLevel}from"./models/Equipment.js?v=2.11.45-build210";
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=2.11.2-build166";
@@ -46,15 +46,15 @@ import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/
 import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=2.11.2-build166";
 import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=2.11.2-build166";
 import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=2.11.2-build166";
-import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillMpCostBreakdown,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse,skillEffectDetails,skillEffectSummary,applySkillMastery}from"./battle/SkillSystem.js?v=2.11.45-build210";
+import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillMpCostBreakdown,skillDamage,affixOutgoingDamageMultiplier,chooseAutoSkill,skillProgressFor,recordSkillUse,skillEffectDetails,skillEffectSummary,applySkillMastery}from"./battle/SkillSystem.js?v=2.11.50-build215";
 import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyDamageAfterDefense,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=2.11.30-build195";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectStackBreakdown,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=2.11.24-build188";
 import{attackHits}from"./battle/HitSystem.js?v=2.11.2-build166";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.11.30-build195";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=2.11.50-build215";
 import{dangerConfig}from"./core/DangerSystem.js?v=2.11.2-build166";
 import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=2.11.2-build166";
 import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost}from"./core/MagicCircleSystem.js?v=2.11.2-build166";
-import{biomeForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.11.2-build166";
+import{biomeForFloor,battleEnvironmentForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=2.11.49-build214";
 import{pickBiomeEncounterSpecies}from"./core/EncounterPoolSystem.js?v=2.11.33-build198";
 import{dungeonThemeForFloor}from"./data/dungeonThemes.js?v=2.11.2-build166";
 import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_TRIAL_BATTLE_COUNT,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=2.11.30-build195";
@@ -2344,11 +2344,7 @@ function partySynergy(){const party=save.state.party.map(id=>save.state.monsters
 function clearPartySynergy(){save.state.monsters.forEach(m=>delete m._synergy)}
 function normalizedElement(element){return canonicalAttribute(element,element)}
 function battleBiomeForFloor(floor){
- const biome=biomeForFloor(floor),favorable=[...new Set((biome.elements??[]).map(normalizedElement))];
- const adverseByTheme={
-  fire:["water"],lava:["water"],ice:["fire"],poison:["light","wind"],lightning:["earth"],earth:["wind"],wind:["ice"],light:["dark"],dark:["light"],water:["lightning"],chaos:[]
- };
- return{id:biome.id,name:biome.name,theme:biome.theme,accent:biome.accent,favorable,adverse:(adverseByTheme[biome.theme]??[]).map(normalizedElement),boost:1.22,penalty:.84};
+ return battleEnvironmentForFloor(floor);
 }
 function biomeElementMultiplier(environment,element){
  if(!environment)return 1;const key=normalizedElement(element);
@@ -4013,8 +4009,18 @@ function makeBattleEnemy(e,index=0){
  if(prepared.speciesId==="mimic"&&!prepared.endgameBossId){enemy.enemyMimicArmor=true;enemy.enemyOnlyMimicProfile=true;enemy.captureRateOverride=.01;enemy.maxHp=8;enemy.hp=8;enemy.atk=Math.max(1,Math.round(enemy.atk*.7));enemy.matk=Math.max(1,Math.round((enemy.matk??enemy.atk)*.7));enemy.def=Math.max(9_999_999,Math.round(enemy.def*500));enemy.mdef=Math.max(9_999_999,Math.round((enemy.mdef??enemy.def)*500));enemy.spd=Math.max(1,Math.round(enemy.spd*.12));enemy.evasion=70;enemy.accuracy=90;enemy.role="鈍重回避要塞"}
  return enemy;
 }
+function validBattlePartyMember(monster){return Boolean(monster&&typeof monster==="object"&&monster.id&&monster.speciesId)}
+function sanitizeBattleParty(){
+ if(!battle)return[];
+ const source=Array.isArray(battle.party)?battle.party:[],canonical=(save.state.party??[]).map(id=>(save.state.monsters??[]).find(monster=>monster?.id===id)).filter(validBattlePartyMember);
+ const repaired=source.map((monster,index)=>validBattlePartyMember(monster)?monster:canonical[index]).filter(validBattlePartyMember),seen=new Set(repaired.map(monster=>monster.id));
+ if(!battle.onlineMode)for(const monster of canonical)if(!seen.has(monster.id)){repaired.push(monster);seen.add(monster.id)}
+ if(repaired.length!==source.length||repaired.some((monster,index)=>monster!==source[index]))battle.party=repaired;
+ return repaired;
+}
 function saveBattleCheckpoint(){
  if(!battle)return;
+ sanitizeBattleParty();
  syncPersistentAilments(battle);
  const explorationSnapshot=persistExpeditionSnapshot(snapshot??expeditionSnapshotFromGame(),{saveNow:false})??save.state.expeditionSnapshot??null;
  save.state.activeBattle={
@@ -4312,6 +4318,7 @@ function protectTutorialCaptureTarget(){
 }
 function refreshBattleHpTrails(){
  if(!battle)return;
+ sanitizeBattleParty();
  const now=Date.now(),rates={};
  for(const enemy of battle.enemies??[])rates[`enemy:${enemy.id}`]=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
  for(const monster of battle.party??[])rates[`ally:${monster.id}`]=Math.max(0,Math.min(100,monster.currentHp/Math.max(1,calculatedStats(monster).hp)*100));
@@ -4334,6 +4341,8 @@ function openBattleStatusDetail(id){
  app.insertAdjacentHTML("beforeend",Modal(`${sourceName}・状態効果`,`<div class="battle-status-detail-list detailed">${groups}${ailmentRows||""}${groups||ailmentRows?"":"<p>状態効果はありません</p>"}</div>`,"閉じる"));const modal=topModal(),close=()=>modal.remove();modal.classList.add("battle-status-detail-modal");modal.querySelector("[data-modal-primary]").onclick=close;bindTapAnywhereClose(modal,close)
 }
 function renderBattle(){
+ if(!battle)return;
+ sanitizeBattleParty();
  clearContextGuide();
  refreshBattleHpTrails();
  document.querySelector(".battle-screen")?.remove();app.insertAdjacentHTML("beforeend",BattleScreen(battle,save.state.inventory,save.state.settings,save.state.player.currentFloor));
@@ -4561,6 +4570,8 @@ async function triggerInvincibleAlliance(source){
  try{battleFlash("critical");await battleBanner("無敵",`${displayName(source)}に続き、三神話が連続発動`,`synergy invincible`,720,source);for(const member of partners){if(!aliveEnemies(battle).length)break;const skills=allLearnedSkills(member).filter(Boolean),skill=skills[Math.floor(Math.random()*skills.length)];await performInvincibleAllianceSkill(member,skill)}}finally{battle._invincibleAllianceRunning=false}
 }
 async function command(type,skillId=null,{skipRandomCircle=false}={}){
+ if(!battle)return;
+ sanitizeBattleParty();
  if(battle.busy||battle.guideReady===false)return;
  const entry=currentTurnEntry(battle),a=actor();
  if(entry?.type!=="ally"||!a)return;
@@ -4944,6 +4955,7 @@ async function endRound(){
 }
 async function continueBattleFlow(){
  if(!battle||battle.busy)return;
+ sanitizeBattleParty();
  if(battle.escapePending)return resolveEscape();
  skipInvalidEntries(battle);
  if(queueFinished(battle))return endRound();

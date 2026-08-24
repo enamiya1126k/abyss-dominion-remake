@@ -38,6 +38,7 @@ const RACE_EXP_RATE={
  spirit:1.02,construct:1.04,reptile:1.02,human:1.01
 };
 const RARITY_EXP_RATE=Object.freeze({N:1,R:1.02,SR:1.04,SSR:1.07,UR:1.10,LR:1.13,"神話":1.17,"深淵":1.25,"十神":1.35});
+const EMPTY_MONSTER_STATS=Object.freeze({hp:1,atk:1,matk:1,def:0,mdef:0,spd:1,crit:0,evasion:0,accuracy:100});
 const RACE_GROWTH_RATE={
  slime:{hp:.82,atk:.72,def:.82,spd:.92},
  beast:{hp:.94,atk:1.04,def:.88,spd:1.12},
@@ -56,6 +57,7 @@ const RACE_GROWTH_RATE={
  human:{hp:.96,atk:1.02,def:.96,spd:1.06}
 };
 export function expNeedFor(monster){
+  if(!monster||typeof monster!=="object")return Math.max(25,Math.floor(baseExperienceNeedForLevel(1)));
   const species=SPECIES[monster.speciesId];
   const rarity=monster?.endgameFaction==="tenGod"?"十神":monster?.endgameFaction==="abyss"?"深淵":monster?.summonRarity??species?.rarity??"N";
   const raceRate=species?.expRate??RACE_EXP_RATE[species?.race]??1,rarityRate=RARITY_EXP_RATE[rarity]??1;
@@ -156,17 +158,20 @@ export function createMonster(speciesId,options={}){
   return monster;
 }
 export function displayName(monster){
+  if(!monster||typeof monster!=="object")return"不明な魔物";
   const species=SPECIES[monster.speciesId];
   const nickname=String(monster.nickname??"").trim();
+  if(!species)return nickname||"不明な魔物";
   if(!nickname||nickname===species.legacyName)return species.name;
   return nickname;
 }
 export function rankName(monster){
-  const species=SPECIES[monster.speciesId];
-  return species.rankNames[Math.min(monster.rank-1,species.rankNames.length-1)];
+  const species=SPECIES[monster?.speciesId];
+  if(!species?.rankNames?.length)return"不明";
+  return species.rankNames[Math.min(Math.max(0,(Number(monster?.rank)||1)-1),species.rankNames.length-1)];
 }
 export function colorValue(monster){
-  return MONSTER_COLORS.find(c=>c.id===monster.colorId)?.value??MONSTER_COLORS[0].value;
+  return MONSTER_COLORS.find(c=>c.id===monster?.colorId)?.value??MONSTER_COLORS[0].value;
 }
 
 export function limitBreakGrowth(speciesId){
@@ -220,7 +225,8 @@ export function speciesLevelStats(speciesOrId,level,{rarity=null,rank=1,plus=0}=
 }
 
 export function calculatedStats(monster){
-  const species=SPECIES[monster.speciesId];
+  const species=SPECIES[monster?.speciesId];
+  if(!monster||typeof monster!=="object"||!species)return{...EMPTY_MONSTER_STATS};
   const personality=PERSONALITIES[monster.personalityId]??PERSONALITIES.bold??Object.values(PERSONALITIES)[0];
   const finite=(value,fallback=0)=>Number.isFinite(Number(value))?Number(value):fallback;
   const rank=Math.max(1,finite(monster.rank,1)),level=Math.max(1,finite(monster.level,1));
@@ -290,7 +296,9 @@ export function calculatedStats(monster){
   return result;
 }
 export function unlockedSkills(monster){
-  return SPECIES[monster.speciesId].skills.map(skill=>{
+  const skills=SPECIES[monster?.speciesId]?.skills;
+  if(!Array.isArray(skills))return[];
+  return skills.map(skill=>{
     const unlocked=skill.unlock.type==="level"
       ? monster.level>=skill.unlock.value
       : monster.rank>=skill.unlock.value;

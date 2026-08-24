@@ -1,7 +1,7 @@
 import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=2.11.2-build166";
-import { biomeForFloor } from "../data/biomes.js?v=2.11.2-build166";
+import { battleEnvironmentForFloor } from "../data/biomes.js?v=2.11.49-build214";
 import { onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml } from "../ui/screens/OnlinePartyScreen.js?v=2.11.47-build212";
-import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.45-build210";
+import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.50-build215";
 import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=2.11.44-build209";
 import { pixelIcon } from "../ui/components/GameChrome.js?v=2.11.2-build166";
 
@@ -138,23 +138,9 @@ function splitEffects(units = []) {
   return { ailments, effects };
 }
 
-function onlineBattleBiome(floor) {
-  const biome = biomeForFloor(Math.max(1, Number(floor) || 1));
-  const adverseByTheme = {
-    fire: ["water"], lava: ["water"], ice: ["fire"], poison: ["light", "wind"],
-    lightning: ["earth"], earth: ["wind"], wind: ["ice"], light: ["dark"],
-    dark: ["light"], water: ["lightning"], chaos: [],
-  };
-  return {
-    id: biome.id, name: biome.name, theme: biome.theme, accent: biome.accent,
-    favorable: [...new Set(biome.elements ?? [])], adverse: [...new Set(adverseByTheme[biome.theme] ?? [])],
-    boost: 1.22, penalty: .84,
-  };
-}
-
 export function renderSharedBattle({ mode, room, battle, selfId, selectedTarget = null, selectedAlly = null, title = "共闘バトル", enemies = [], allowCapture = false, readOnly = false, skillMenu = false, itemMenu = false, itemTargetMenu = false, hpTrails = {} }) {
-  const players = battle?.players ?? [], self = players.find(player => player.playerId === selfId), party = players.map(player => onlineMonster(room, player));
-  const foes = enemies.map(enemy => onlineEnemy(room, enemy)), target = foes.find(enemy => enemy.id === selectedTarget && enemy.hp > 0) ?? foes.find(enemy => enemy.hp > 0) ?? null;
+  const players = (Array.isArray(battle?.players) ? battle.players : []).filter(player => player && typeof player === "object" && player.playerId), self = players.find(player => player.playerId === selfId), party = players.map(player => onlineMonster(room, player));
+  const foes = (Array.isArray(enemies) ? enemies : []).filter(enemy => enemy && typeof enemy === "object").map(enemy => onlineEnemy(room, enemy)), target = foes.find(enemy => enemy.id === selectedTarget && enemy.hp > 0) ?? foes.find(enemy => enemy.hp > 0) ?? null;
   const selfMember = memberById(room, selfId), selfMonster = party.find(monster => monster.id === selfId);
   const turnQueue = [
     ...party.filter(monster => monster.currentHp > 0).map(monster => ({ type: "ally", id: monster.id, name: monster.onlineName, spd: monster.onlineStats.spd ?? 0 })),
@@ -166,7 +152,7 @@ export function renderSharedBattle({ mode, room, battle, selfId, selectedTarget 
   const enemyMagicCircleArt = Object.fromEntries(foes.filter(enemy => enemy.magicCircleAsset).map(enemy => [enemy.id, `<span class="magic-circle magic-circle-black enemy-battle-magic-circle" data-circle-id="death-mirror-raid" aria-hidden="true"><img class="magic-circle-frame magic-circle-frame-1" src="${escapeOnlineHtml(enemy.magicCircleAsset)}" alt="" draggable="false"><i class="magic-circle-ring-a"></i><i class="magic-circle-ring-b"></i><b>死</b></span>`]));
   const events = [...(battle?.lastEvents ?? [])];
   if (battle?.telegraph) events.push({ kind: "raidTelegraph", label: `${battle.telegraph.title || "予兆"}：${battle.telegraph.message || "終焉が迫る…"}` });
-  const floor = Math.max(1, Number(battle?.floor ?? room?.selectedFloor) || 1), biomeBattle = onlineBattleBiome(floor);
+  const floor = Math.max(1, Number(battle?.floor ?? room?.selectedFloor) || 1), biomeBattle = battleEnvironmentForFloor(floor);
   const uiBattle = {
     onlineMode: mode, onlineReadOnly: readOnly, onlineActionSubmitted: Boolean(battle?.actions?.[selfId]) || battle?.phase !== "command", onlineAllowCapture: allowCapture && Number(self?.captureCharges ?? selfMember?.profile?.captureStock) > 0,
     onlineCountdownMode: mode, onlineSelectedAlly: selectedAlly || selfId, onlineSkills: (selfMember?.profile?.skills ?? []).map(onlineSkill),
