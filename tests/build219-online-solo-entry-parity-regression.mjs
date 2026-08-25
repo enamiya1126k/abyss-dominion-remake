@@ -1,0 +1,15 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
+const read=p=>readFileSync(resolve(root,p),"utf8");
+const room=read("online-server/src/RoomStore.js"), main=read("src/main.js");
+assert.match(room,/boss\.resolved=false;boss\.hidden=false/);
+assert.match(room,/floorBoss=\{floor:Number\(expedition\.floor\).*defeated:false/);
+assert.match(room,/filter\(object=>object\.type!=="hotSpring"\)/);
+assert.match(room,/if\(boss\)\{boss\.resolved=true;boss\.hidden=true\}/);
+assert.match(room,/type:"hotSpring"/);
+assert.match(room,/member\.coopVitals\.hp\+Math\.max\(1,Math\.round\(member\.coopVitals\.maxHp\*\.2\)\)/);
+assert.match(main,/equipmentName=`\$\{item\.rarity\?\?equipmentRarity\} \$\{item\.name\} Lv\.\$\{/);
+console.log("build219 online solo entry parity regression: ok");

@@ -3,7 +3,7 @@ import process from"node:process";
 import{WebSocketServer,WebSocket}from"ws";
 import{RoomStore}from"./src/RoomStore.js";
 
-const HOST=process.env.HOST||"127.0.0.1",PORT=Math.max(1,Math.min(65535,Number(process.env.PORT)||8787)),store=new RoomStore(),clients=new Set();
+const HOST=process.env.HOST||"127.0.0.1",PORT=Math.max(1,Math.min(65535,Number(process.env.PORT)||8787)),store=new RoomStore({battleReconnectActionGraceMs:2500}),clients=new Set();
 const DEFAULT_ORIGINS=[/^https:\/\/[a-z0-9-]+\.github\.io$/i,/^https?:\/\/localhost(?::\d+)?$/i,/^https?:\/\/127\.0\.0\.1(?::\d+)?$/i];
 function originAllowed(origin){const configured=String(process.env.ALLOWED_ORIGINS??"").trim();if(configured==="*")return true;if(configured){return configured.split(",").map(value=>value.trim()).filter(Boolean).some(value=>origin===value)}return !origin||origin==="null"||DEFAULT_ORIGINS.some(pattern=>pattern.test(origin))}
 function reply(socket,message){if(socket.readyState===WebSocket.OPEN)socket.send(JSON.stringify(message))}
@@ -23,7 +23,7 @@ wss.on("connection",socket=>{
   const now=Date.now();if(now-socket.rate.started>=1000)socket.rate={started:now,count:0};if(++socket.rate.count>40){socket.close(1008,"rate limit");return}
   let message;try{message=JSON.parse(raw.toString())}catch{return fail(socket,{code:"BAD_JSON",message:"通信データを読み取れません"})}if(!message||typeof message.type!=="string")return;
  if(message.type==="hello"){const result=store.hello(socket,message);if(!result.ok)return fail(socket,result);reply(socket,{type:"helloAck",playerId:result.playerId,resumeToken:result.resumeToken,resumed:result.resumed,room:result.room});store.deliverPendingRewards(socket.session);return}
-  const session=socket.session;if(!session)return fail(socket,{code:"NOT_READY",message:"先に接続処理を完了してください"});let result={ok:false,code:"UNKNOWN_MESSAGE",message:"未対応の通信です"};
+  const session=socket.session;if(!session)return fail(socket,{code:"NOT_READY",message:"先に接続処理を完了してください"});if(session.connection!==socket){try{socket.close(4001,"superseded connection")}catch{}return}let result={ok:false,code:"UNKNOWN_MESSAGE",message:"未対応の通信です"};
   if(message.type==="createRoom")result=store.createRoom(session);
   else if(message.type==="joinRoom")result=store.joinRoom(session,message.roomId);
   else if(message.type==="leaveRoom")result=store.leaveRoom(session);
@@ -56,7 +56,7 @@ wss.on("connection",socket=>{
   else if(message.type==="ping"){reply(socket,{type:"pong",at:now});return}
   if(!result.ok)fail(socket,result);
  });
- socket.on("close",()=>{clients.delete(socket);store.disconnect(socket.session)});socket.on("error",()=>{});
+ socket.on("close",()=>{clients.delete(socket);store.disconnect(socket.session,socket)});socket.on("error",()=>{});
 });
 const battleClock=setInterval(()=>store.advanceBattles(),250);battleClock.unref?.();
 const heartbeat=setInterval(()=>{store.pruneExpired();for(const socket of clients){if(socket.isAlive===false){socket.terminate();continue}socket.isAlive=false;socket.ping()}},10_000);heartbeat.unref?.();

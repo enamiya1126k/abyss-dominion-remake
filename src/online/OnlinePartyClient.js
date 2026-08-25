@@ -167,6 +167,9 @@ export class OnlinePartyController {
       event.preventDefault(); this.path = []; this.heldDirections.add(direction);
     });
     this._bind(window, "keyup", event => { const direction = keyDirection(event.key); if (direction) this.heldDirections.delete(direction); });
+    this._bind(document, "visibilitychange", () => { if (document.visibilityState === "visible") this._ensureConnectionAfterResume(); });
+    this._bind(window, "pageshow", () => this._ensureConnectionAfterResume());
+    this._bind(window, "online", () => this._ensureConnectionAfterResume());
     this._bind(this.root, "pointerdown", event => {
       const button = event.target.closest?.("[data-online-move]");
       if (!button) return;
@@ -331,14 +334,16 @@ export class OnlinePartyController {
     try { url = websocketUrl(input); } catch (error) { this.toast(error.message); return; }
     storageSet(ONLINE_STORAGE_KEYS.serverUrl, input.trim()); this.manualClose = false;
     this._setStatus(reconnect ? "reconnecting" : "connecting", reconnect ? "再接続中…" : "接続中…", "PCサーバーへ接続しています");
-    try { this.ws = new WebSocket(url); } catch (error) { this._setStatus("error", "接続できません", error.message); return; }
-    this.ws.addEventListener("open", () => {
+    let socket;
+    try { socket = new WebSocket(url); this.ws = socket; } catch (error) { this._setStatus("error", "接続できません", error.message); return; }
+    socket.addEventListener("open", () => {
+      if (this.ws !== socket) return;
       this.reconnectAttempts = 0; this._refreshProfile();
       this._send("hello", { friendId: this.selfId, clientKey: storageGet(ONLINE_STORAGE_KEYS.clientKey), resumeToken: this.resumeToken, profile: this.profile });
     });
-    this.ws.addEventListener("message", event => { try { this._handleMessage(JSON.parse(event.data)); } catch (error) { console.warn("Online message ignored", error); } });
-    this.ws.addEventListener("close", () => this._handleClose());
-    this.ws.addEventListener("error", () => this._setStatus("error", "通信エラー", "PCサーバーとトンネルを確認してください"));
+    socket.addEventListener("message", event => { if (this.ws !== socket) return; try { this._handleMessage(JSON.parse(event.data)); } catch (error) { console.warn("Online message ignored", error); } });
+    socket.addEventListener("close", () => this._handleClose(socket));
+    socket.addEventListener("error", () => { if (this.ws === socket) this._setStatus("error", "通信エラー", "PCサーバーとトンネルを確認してください"); });
   }
 
   _beginInteractionPending(action, targetId) {
@@ -819,7 +824,16 @@ export class OnlinePartyController {
     this.lastMoveAt = now; self.position = position; this._send("move", { position }); this._updateHallPlayerDom(this.selfId); const nearby = this._hallNearby(position); if (nearby !== this.hallNearbyRoute) { this.hallNearbyRoute = nearby; this._render(); }
   }
 
-  _handleClose() {
+  _ensureConnectionAfterResume() {
+    if (!this.mounted || this.manualClose) return;
+    if (storageGet(ONLINE_STORAGE_KEYS.autoConnect) !== "1" || !storageGet(ONLINE_STORAGE_KEYS.serverUrl) || !this.resumeToken) return;
+    if (this.ws && [WebSocket.OPEN, WebSocket.CONNECTING].includes(this.ws.readyState)) return;
+    clearTimeout(this.reconnectTimer); this.reconnectTimer = null;
+    this.connect({ reconnect: true });
+  }
+
+  _handleClose(closedSocket = null) {
+    if (closedSocket && this.ws && this.ws !== closedSocket) return;
     this.ws = null; this._clearInteractionPending(false); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this.merchantPending = false; if (this.manualClose) return;
     this._setStatus("reconnecting", "再接続中…", "切断中はサーバーが自動行動を担当します");
     if (!this.mounted) return;

@@ -1,7 +1,7 @@
 import { SPECIES } from "../../data/species.js?v=2.11.0-build164";
 import { displayName, calculatedStats } from "../../models/Monster.js?v=2.11.30-build195";
 import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=2.11.30-build195";
-import { magicCircleById, equippedMagicCircle } from "../../core/MagicCircleSystem.js?v=2.11.0-build164";
+import { magicCircleById, equippedMagicCircle, goldPowerDamageMultiplier, goldPowerActionCost } from "../../core/MagicCircleSystem.js?v=2.11.0-build164";
 import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=2.11.30-build195";
 import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=2.11.0-build164";
 import { monsterVisual } from "../MonsterVisual.js?v=2.11.0-build164";
@@ -96,12 +96,13 @@ function onlineSkillKind(skill) {
   if (type === "allHeal") return "allHeal";
   if (type === "selfHeal" || type === "heal") return "heal";
   if (type === "mpHeal") return "mpHeal";
-  if (["stance", "buff"].includes(type)) return "buff";
+  if (["stance", "buff", "cleanse"].includes(type)) return "buff";
+  if (["guard", "defend"].includes(type)) return "guard";
   return "attack";
 }
 
 function onlineSkillProfile(monster) {
-  return learnedSkills(monster).slice(0, 4).map(baseSkill => {
+  return learnedSkills(monster).slice(0, 16).map(baseSkill => {
     const skill = applySkillMastery(monster, baseSkill);
     return {
       id: skill.id,
@@ -111,22 +112,61 @@ function onlineSkillProfile(monster) {
       mp: effectiveSkillMpCost(monster, skill),
       power: Math.max(.1, Number(skill.power) || 1),
       heal: Math.max(0, Number(skill.heal) || Number(skill.revive) || 0),
+      revive: Math.max(0, Number(skill.revive) || 0),
       reviveMp: Math.max(0, Number(skill.reviveMp) || 0),
       mpHeal: Math.max(0, Number(skill.mpHeal) || 0),
       hits: Math.max(1, Number(skill.hits) || 1),
       allEnemies: Boolean(skill.allEnemies || String(skill.target ?? "").includes("敵全体")),
       allAllies: Boolean(skill.allies || String(skill.target ?? "").includes("味方全体") || skill.type === "allHeal"),
       guaranteedHit: Boolean(skill.guaranteedHit),
-      damageClass: skill.damageClass === "magic" ? "magic" : "physical",
+      guaranteedCritical: Boolean(skill.guaranteedCritical),
+      defenseIgnore: Math.max(0, Math.min(1, Number(skill.defenseIgnore) || 0)),
+      critBonus: Math.max(0, Math.min(1, Number(skill.critBonus) || 0)),
+      drain: Math.max(0, Math.min(1, Number(skill.drain) || 0)),
+      selfHeal: Math.max(0, Math.min(1, Number(skill.selfHeal) || 0)),
+      currentHpDamage: Math.max(0, Math.min(1, Number(skill.currentHpDamage) || 0)),
+      execute: Math.max(0, Math.min(1, Number(skill.execute) || 0)),
+      barrier: Math.max(0, Number(skill.barrier) || 0),
+      selfShieldRate: Math.max(0, Math.min(.8, Number(skill.selfShieldRate) || 0)),
+      selfSacrificeHpDamage: Math.max(0, Number(skill.selfSacrificeHpDamage) || 0),
+      noLifeSteal: Boolean(skill.noLifeSteal),
+      cleanse: Boolean(skill.cleanse || skill.type === "cleanse"),
+      damageClass: skill.damageClass === "magic" ? "magic" : skill.damageClass === "hybrid" ? "hybrid" : "physical",
       element: skill.element ?? monster.attribute ?? SPECIES[monster.speciesId]?.element ?? "neutral",
       equipmentGranted: Boolean(skill.equipmentGranted),
       equipmentAuthorityId: skill.equipmentAuthorityId ?? null,
       equipmentAuthorityName: skill.equipmentAuthorityName ?? null,
       tag: skill.tag ?? null,
       partyShieldRate: Math.max(0, Number(skill.partyShieldRate) || 0),
-      effects: (skill.effects ?? []).slice(0, 6).map(effect => ({
+      hpShieldRate: Math.max(0, Number(skill.hpShieldRate) || 0),
+      cooldown: Math.max(0, Number(skill.cooldown) || 0),
+      dispelEnemyBuff: Boolean(skill.dispelEnemyBuff), dispelOne: Boolean(skill.dispelOne),
+      removeEnemyMagicCircle: Boolean(skill.removeEnemyMagicCircle), breakAllyMagicCircle: Boolean(skill.breakAllyMagicCircle),
+      reviveTransferRate: Math.max(0, Math.min(1, Number(skill.reviveTransferRate) || 0)),
+      reducePartyCooldowns: Math.max(0, Number(skill.reducePartyCooldowns) || 0),
+      increaseAllyCooldowns: Math.max(0, Number(skill.increaseAllyCooldowns) || 0),
+      increaseEnemyCooldowns: Math.max(0, Number(skill.increaseEnemyCooldowns) || 0),
+      selfHpCostRate: Math.max(0, Math.min(1, Number(skill.selfHpCostRate) || 0)),
+      mpDrain: Math.max(0, Math.min(1, Number(skill.mpDrain) || 0)),
+      turnPowerStep: Math.max(0, Number(skill.turnPowerStep) || 0), turnPowerCap: Math.max(0, Number(skill.turnPowerCap) || 0), repeatDelay: Math.max(0, Math.min(12, Math.floor(Number(skill.repeatDelay) || 0))),
+      lowHpBonus: Math.max(0, Number(skill.lowHpBonus) || 0), lowHpThreshold: Math.max(0, Math.min(1, Number(skill.lowHpThreshold) || 0)),
+      bonusVsEnemyBuff: Math.max(0, Number(skill.bonusVsEnemyBuff?.multiplier ?? skill.bonusVsEnemyBuff) > 1 ? Number(skill.bonusVsEnemyBuff?.multiplier ?? skill.bonusVsEnemyBuff) - 1 : Number(skill.bonusVsEnemyBuff?.multiplier ?? skill.bonusVsEnemyBuff) || 0),
+      bonusVsStatus: Math.max(0, Number(skill.bonusVsStatus?.multiplier ?? skill.bonusVsStatus) > 1 ? Number(skill.bonusVsStatus?.multiplier ?? skill.bonusVsStatus) - 1 : Number(skill.bonusVsStatus?.multiplier ?? skill.bonusVsStatus) || 0),
+      bonusVsStatusId: skill.bonusVsStatus?.id == null ? null : String(skill.bonusVsStatus.id).slice(0, 40),
+      bonusVsEffect: Math.max(0, Number(skill.bonusVsEffect?.multiplier ?? skill.bonusVsEffect) > 1 ? Number(skill.bonusVsEffect?.multiplier ?? skill.bonusVsEffect) - 1 : Number(skill.bonusVsEffect?.multiplier ?? skill.bonusVsEffect) || 0),
+      bonusVsEffectKind: skill.bonusVsEffect?.kind == null ? null : String(skill.bonusVsEffect.kind).slice(0, 40),
+      fillHpDrain: Math.max(0, Number(skill.fillHpDrain) || 0), randomElement: Boolean(skill.randomElement),
+      invertEnemyBuffRate: Math.max(0, Number(skill.invertEnemyBuffRate) || 0), invertOneBuff: Boolean(skill.invertOneBuff), invertRate: Math.max(0, Number(skill.invertRate) || 0),
+      stealEnemyBuffRate: Math.max(0, Number(skill.stealEnemyBuffRate) || 0), stealOneBuffRate: Math.max(0, Number(skill.stealOneBuffRate) || 0),
+      clearNegativeSelf: Boolean(skill.clearNegativeSelf), copyAtk: Math.max(0, Number(skill.copyAtk) || 0), selfAtk: Math.max(0, Number(skill.selfAtk) || 0),
+      revivedEffects: (skill.revivedEffects ?? []).slice(0, 8).map(effect => ({
+        kind: String(effect.kind ?? ""), value: Math.max(0, Number(effect.value) || 0), turns: Math.max(1, Number(effect.turns) || 1), allies: true, enemy: false,
+      })),
+      effects: (skill.effects ?? []).slice(0, 10).map(effect => ({
         kind: String(effect.kind ?? ""), value: Math.max(0, Number(effect.value) || 0),
         turns: Math.max(1, Number(effect.turns) || 1), allies: Boolean(effect.allies), enemy: Boolean(effect.enemy),
+        chance: effect.chance == null ? null : Math.max(0, Math.min(1, Number(effect.chance) || 0)),
+        statusId: effect.statusId == null ? null : String(effect.statusId).slice(0, 40), selfCost: Math.max(0, Number(effect.selfCost) || 0),
       })),
       status: skill.status ? {
         id: String(skill.status.id ?? "status"), name: String(skill.status.name ?? "状態異常"),
@@ -149,12 +189,40 @@ function onlineEquipmentAuthorities(monster) {
   }));
 }
 
+function onlineEquipmentCombatEffects(monster) {
+  const source = { ...(monster?._equipmentAffixes ?? {}) };
+  const series = monster?._seriesEffects ?? {};
+  if (Number(series.lastStand) > 0) source.lastStand = 1;
+  if (Number(series.firstStrike) > 0) source.firstStrike = 1;
+  if (Number(series.mpRegen) > 0) source.mpRegenFlat = Number(series.mpRegen);
+  if (Number(series.partyHpRegen) > 0) source.partyHpRegen = Number(series.partyHpRegen) * 100;
+  if (Number(series.lowHpRegen) > 0) source.lowHpRegen = Number(series.lowHpRegen) * 100;
+  return Object.fromEntries(Object.entries(source)
+    .filter(([, value]) => Number.isFinite(Number(value)))
+    .slice(0, 72)
+    .map(([key, value]) => [String(key).slice(0, 40), Number(value)]));
+}
+
+function onlineAbyssSkillEffects(monster) {
+  return Object.fromEntries(Object.entries(monster?._abyssSkillEffects ?? {})
+    .filter(([, value]) => Number.isFinite(Number(value)))
+    .slice(0, 64)
+    .map(([key, value]) => [String(key).slice(0, 40), Number(value)]));
+}
+
+function onlineRewardModifiers(state) {
+  const byId = new Map((state?.monsters ?? []).map(monster => [monster.id, monster]));
+  const party = (state?.party ?? []).map(id => byId.get(id)).filter(Boolean);
+  const sumAffix = (key, cap) => Math.max(0, Math.min(cap, party.reduce((sum, monster) => sum + Math.max(0, Number(monster?._equipmentAffixes?.[key]) || 0), 0)));
+  return { partyGoldGain: sumAffix("goldGain", 300), partyDropRate: sumAffix("dropRate", 200), partyTreasureSense: sumAffix("treasureSense", 200) };
+}
+
 export function buildOnlinePartyProfile(state, { monsterId = null, displayName: onlineName = "" } = {}) {
   const { monster } = selectedPartyMonster(state, monsterId);
   if (!monster) return {
     displayName: onlineName || "冒険者", monsterId: null, speciesId: "slime", visualSpeciesId: null, endgameBossId: null, floorBossCatalogId: null, summonTier: null, summonRarity: null, endgameFaction: null, monsterName: "未編成",
     fallbackEmoji: "？", level: 1, stars: 1, plus: 0, power: 0, maxFloor: 1, attribute: "neutral",
-    circleId: "none", circleName: "魔法陣なし", circleLevel: 0, circleEffect: "none", equipment: [], equipmentAuthorities: [],
+    circleId: "none", circleName: "魔法陣なし", circleLevel: 0, circleEffect: "none", goldPowerMultiplier: 1, goldPowerActionCost: 0, goldPowerGold: 0, equipment: [], equipmentAuthorities: [], equipmentCombatEffects: {}, abyssSkillEffects: {}, rewardModifiers: {},
     battleStats: { hp: 100, mp: 10, atk: 10, matk: 10, def: 5, mdef: 5, spd: 10, crit: 5, evasion: 3, accuracy: 100 },
     skills: [], captureStock: 0,
   };
@@ -172,7 +240,7 @@ export function buildOnlinePartyProfile(state, { monsterId = null, displayName: 
     plus: Math.max(0, Number(monster.plus) || 0), power: monsterCombatPower(monster),
     maxFloor: Math.max(1, Number(state.player?.maxFloor) || 1), attribute: monster.attribute ?? species.element ?? "neutral",
     circleId: circle.id, circleName: circle.name, circleLevel: circle.id === "none" ? 0 : Math.max(1, Number(circle.level) || 1),
-    circleEffect: circle.effect ?? "none", equipment: equipmentProfile(state, monster), equipmentAuthorities: onlineEquipmentAuthorities(monster),
+    circleEffect: circle.effect ?? "none", goldPowerMultiplier: circle.effect === "goldPower" ? goldPowerDamageMultiplier(state.player?.gold ?? 0, circle.level) : 1, goldPowerActionCost: circle.effect === "goldPower" ? goldPowerActionCost(state.player?.gold ?? 0) : 0, goldPowerGold: circle.effect === "goldPower" ? Math.max(0, Math.floor(Number(state.player?.gold) || 0)) : 0, equipment: equipmentProfile(state, monster), equipmentAuthorities: onlineEquipmentAuthorities(monster), equipmentCombatEffects: onlineEquipmentCombatEffects(monster), abyssSkillEffects: onlineAbyssSkillEffects(monster), rewardModifiers: onlineRewardModifiers(state),
     signatureResonance: signature ? {
       id: signature.definition.id, name: signature.definition.name, ownerId: signature.ownerId,
       active: signature.active, description: signature.definition.description, ...signature.definition,

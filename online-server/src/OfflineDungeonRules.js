@@ -76,15 +76,33 @@ function takeCells(cells, reserved, rng, count) {
 }
 
 function decorationPlan(tiles, reserved, floor, rng) {
-  const cells = [];
+  const cells = [], edgeCells = [];
   for (let y = 1; y < tiles.length - 1; y++) for (let x = 1; x < tiles[0].length - 1; x++) {
     if (tiles[y][x] !== "." || reserved.has(`${x},${y}`)) continue;
     const openCount = CARDINALS.filter(([dx, dy]) => tiles[y + dy]?.[x + dx] === ".").length;
-    if (openCount < 4) cells.push({ x, y });
+    const cell = { x, y, openCount };
+    cells.push(cell);
+    if (openCount < 4) edgeCells.push(cell);
   }
-  const types = ["candelabrum", "crystal", "barrel", "crate", "bones", "crystal", "candelabrum", "barrel"];
-  return takeCells(cells, new Set(reserved), rng, Math.min(24, Math.max(8, Math.round(cells.length / 18))))
-    .map((point, index) => ({ id: `${floor}-decor-${index}`, type: types[index % types.length], ...point, phase: Math.floor(rng() * 997) }));
+  const used = new Set(reserved), decorations = [];
+  const take = (pool, predicate = () => true) => {
+    const available = pool.filter(cell => predicate(cell) && !used.has(key(cell)));
+    if (!available.length) return null;
+    const cell = available[Math.floor(rng() * available.length)];
+    used.add(key(cell));
+    return cell;
+  };
+  const add = (type, pool = edgeCells, options = {}) => {
+    const point = take(pool, options.predicate);
+    if (!point) return;
+    decorations.push({ id: `${floor}-decor-${decorations.length}`, type, x: point.x, y: point.y, scale: options.scale ?? 1, phase: Math.floor(rng() * 997), used: false, destroyed: false });
+  };
+  const density = Math.min(30, Math.max(10, Math.round(cells.length / 17)));
+  const cycle = ["candelabrum", "crystal", "barrel", "crate", "bones", "crystal", "candelabrum", "barrel"];
+  for (let index = 0; index < density; index++) add(cycle[(index + Math.floor(rng() * cycle.length)) % cycle.length]);
+  const waterCount = Math.max(1, Math.min(3, Math.floor(cells.length / 90)));
+  for (let index = 0; index < waterCount; index++) add("water", cells, { scale: 1.25, predicate: cell => cell.openCount >= 3 });
+  return decorations;
 }
 
 function bossCorridor(floor) {
@@ -145,23 +163,27 @@ export function createSoloStyleDungeon({ roomId, floor, runId, now, random }) {
   const reserved = new Set([key(layout.start), key(layout.exit)]);
   const candidates = cells.filter(cell => Math.abs(cell.x - layout.start.x) + Math.abs(cell.y - layout.start.y) > 4 && Math.abs(cell.x - layout.exit.x) + Math.abs(cell.y - layout.exit.y) > 3);
   const objects = [];
-  const add = (type, point, index) => { if (point) { reserved.add(key(point)); objects.push({ id: `${type}-${index}`, type, ...point, resolved: false }); } };
-  if (bossFloor) add("encounter", layout.boss, 1);
+  const add = (type, point, index, extra = {}) => { if (point) { reserved.add(key(point)); objects.push({ id: `${type}-${index}`, type, ...point, resolved: false, ...extra }); } };
+  let treasureRoom = false;
+  if (bossFloor) add("encounter", layout.boss, 1, { bossEncounter: true });
   else {
-    const chestCount = random() < .16 ? 0 : random() < .72 ? 1 : 2;
-    takeCells(candidates, reserved, random, chestCount).forEach((point, index) => add("chest", point, index + 1));
-    takeCells(candidates, reserved, random, 2).forEach((point, index) => add("bone", point, index + 1));
-    takeCells(candidates, reserved, random, 1).forEach(point => add("shrine", point, 1));
-    takeCells(candidates, reserved, random, 3).forEach((point, index) => add("encounter", point, index + 1));
+    treasureRoom = random() < Math.min(.12, .035 + Math.floor(floor / 10) * .002);
+    const chestCount = treasureRoom ? 7 + Math.floor(random() * 4) : random() < .16 ? 0 : random() < .72 ? 1 : 2;
+    takeCells(candidates, reserved, random, chestCount).forEach((point, index) => {
+      const roll = random(), kind = treasureRoom ? (roll > .48 ? "radiant" : "cabinet") : roll > .96 ? "radiant" : roll > .78 ? "cabinet" : roll > .25 ? "box" : "apple";
+      add("chest", point, index + 1, { kind, locked: kind === "radiant" && random() < (treasureRoom ? .58 : .45), mimic: treasureRoom && random() < .5 });
+    });
   }
   objects.push({ id: "exit", type: "exit", ...layout.exit, resolved: false });
   const decorations = decorationPlan(tiles, reserved, floor, random);
   return {
     id: runId, roomId, floor, cols: layout.cols, rows: layout.rows,
     tiles: tiles.map(row => row.join("")), start: layout.start, exit: layout.exit,
-    objects, decorations, discoveries: 0,
-    totalDiscoveries: objects.filter(object => ["chest", "bone", "shrine"].includes(object.type)).length,
-    encountersCleared: 0, totalEncounters: objects.filter(object => object.type === "encounter").length,
+    objects, decorations, treasureRoom, steps: 0,
+    nextEncounter: bossFloor ? Number.MAX_SAFE_INTEGER : 10 + Math.floor(random() * 23), encountersEnabled: !bossFloor,
+    discoveries: 0,
+    totalDiscoveries: objects.filter(object => object.type === "chest").length + decorations.filter(object => ["barrel", "crate", "bones", "crystal", "water"].includes(object.type)).length,
+    encountersCleared: 0, totalEncounters: bossFloor ? 1 : 0,
     exitReached: false, stairsMemberIds: new Set(), stairsCountdownEndsAt: 0,
     returnVotes: new Set(), startedAt: now, eventCount: 0, lastEvent: null, battle: null,
   };
