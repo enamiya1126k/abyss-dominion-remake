@@ -1,12 +1,12 @@
 import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.11.51-build216";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=2.11.52-build217";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=2.11.53-build218";
 import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.11.0-build164";
 import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.11.51-build216";
-import{monsterVisual}from"../MonsterVisual.js?v=2.11.52-build217";
+import{monsterVisual}from"../MonsterVisual.js?v=2.11.53-build218";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.11.0-build164";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.0-build164";
-import{normalizeBattleSpeed}from"../../core/config.js?v=2.11.52-build217";
-import{ATTRIBUTE_RELATIONS}from"../../data/attributes.js?v=2.11.52-build217";
+import{normalizeBattleSpeed}from"../../core/config.js?v=2.11.53-build218";
+import{ATTRIBUTE_RELATIONS}from"../../data/attributes.js?v=2.11.53-build218";
 
 function battleInteger(value){return Math.round(Number(value)||0).toLocaleString("ja-JP")}
 function battleParty(battle){return(Array.isArray(battle?.party)?battle.party:[]).filter(monster=>monster&&typeof monster==="object"&&monster.id&&monster.speciesId)}

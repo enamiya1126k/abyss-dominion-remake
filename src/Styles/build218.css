@@ -1,0 +1,163 @@
+/* build218: canonical co-op floor bosses, polished online lobbies and pixel facilities. */
+
+/* The gathering hall uses authored transparent pixel-art buildings.  Remove the
+   old CSS mock buildings and keep each facility anchored to its world position. */
+.online-hall-zone{
+  width:clamp(92px,24vw,148px)!important;
+  min-height:92px!important;
+}
+.hall-facility-art{
+  display:block!important;
+  width:clamp(88px,22vw,138px)!important;
+  height:clamp(58px,15vw,92px)!important;
+  margin:0 auto -4px!important;
+  scale:1!important;
+  filter:drop-shadow(0 10px 7px #000e)!important;
+}
+.hall-facility-art::before,
+.hall-facility-art::after,
+.hall-facility-art em{display:none!important;content:none!important}
+.hall-facility-art img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center bottom;
+  image-rendering:pixelated;
+  -webkit-user-drag:none;
+  user-select:none;
+  pointer-events:none;
+}
+.online-hall-zone i,
+.online-hall-zone b{
+  display:block;
+  width:max-content;
+  max-width:100%;
+  margin-inline:auto;
+  border-inline:1px solid color-mix(in srgb,var(--zone-tone) 55%,transparent);
+  background:#050509e6;
+  text-shadow:0 1px 4px #000;
+}
+.online-hall-zone::after{bottom:-3px!important}
+.online-hall-zone:is(:hover,:focus-visible) .hall-facility-art{
+  filter:brightness(1.08) drop-shadow(0 0 7px color-mix(in srgb,var(--zone-tone) 54%,transparent)) drop-shadow(0 10px 7px #000e)!important;
+}
+
+/* Online reception screens now share the black/gold/purple hierarchy used by
+   equipment and boss panels without changing their existing controls. */
+.online-v3-lobby-card,
+.online-v3-ready-grid>div,
+.online-v3-ready-actions,
+.online-v3-team-select,
+.online-v3-team-roster,
+.online-v3-raid-hero,
+.online-v3-raid-progress{
+  border-color:#725d39!important;
+  background:
+    radial-gradient(circle at 85% 8%,#6e2a8626,transparent 40%),
+    linear-gradient(145deg,#111018f5,#06070bf7)!important;
+  box-shadow:inset 0 0 0 1px #b9924520,0 10px 25px #0008!important;
+}
+.online-v3-lobby-card small,
+.online-v3-team-select small,
+.online-v3-raid-hero small{color:#78dbe7!important;letter-spacing:.13em}
+.online-v3-lobby-card label,
+.online-v3-ready-grid>div.ready,
+.online-v3-team-roster .self{
+  border-color:#b9934f!important;
+  box-shadow:inset 0 0 18px #a36b2624,0 0 12px #8a57b72b!important;
+}
+.online-v3-ready-actions button,
+.online-v3-team-select button{
+  min-height:48px;
+  border:1px solid #6d527a!important;
+  background:linear-gradient(180deg,#291a33,#120f19)!important;
+  color:#f6e8c3!important;
+}
+.online-v3-ready-actions .online-v3-primary,
+.online-v3-team-select button[aria-pressed="true"]{
+  border-color:#d2ac5c!important;
+  background:linear-gradient(180deg,#624716,#2a1c0a)!important;
+  box-shadow:inset 0 0 18px #f5cf6240!important;
+}
+
+/* Boss contact is deliberate: the world stays visible behind the same black,
+   gold and purple confirmation language as solo exploration. */
+.online-shared-explore .explore-stage{position:relative}
+.online-floor-boss-confirm{
+  position:absolute;
+  z-index:120;
+  inset:0;
+  display:grid;
+  place-items:center;
+  padding:12px;
+  background:radial-gradient(circle at 50% 42%,#47185c70,#020207e8 68%);
+  backdrop-filter:blur(2px);
+}
+.online-floor-boss-confirm>div{
+  width:min(92%,420px);
+  padding:18px 16px 14px;
+  border:1px solid #d0ae63;
+  outline:1px solid #563a68;
+  outline-offset:-6px;
+  background:linear-gradient(180deg,#17121cf7,#08080cfb);
+  color:#eadfca;
+  box-shadow:0 18px 45px #000e,0 0 28px #7e3ca23d;
+  text-align:center;
+}
+.online-floor-boss-confirm small{color:#8edee8;font:800 9px/1.2 monospace;letter-spacing:.14em}
+.online-floor-boss-confirm h3{margin:9px 0 7px;color:#f3dfaa;font-family:serif;font-size:clamp(22px,6vw,34px)}
+.online-floor-boss-confirm p{margin:0 auto 10px;max-width:34em;color:#bbb1c2;font-size:11px;line-height:1.65}
+.online-floor-boss-confirm dl{display:flex;justify-content:center;gap:8px;margin:0 0 13px}
+.online-floor-boss-confirm dl span{padding:5px 9px;border:1px solid #4b3b55;background:#0d0b12;color:#f5d681;font-weight:900}
+.online-floor-boss-confirm footer{display:grid;grid-template-columns:1fr 1.25fr;gap:7px}
+.online-floor-boss-confirm button{min-height:44px;border:1px solid #5d4968;background:#1a1320;color:#eee3f2;font-weight:900}
+.online-floor-boss-confirm button.primary{border-color:#d4aa55;background:linear-gradient(180deg,#654814,#2b1c09);color:#fff0bd}
+
+/* The boss marker is visually distinct from an ordinary encounter on both the
+   compatibility minimap and the full canvas overlay. */
+.online-v3-map-object.floorBoss{
+  border:2px solid #efcf72!important;
+  border-radius:50%!important;
+  background:radial-gradient(circle,#fff3a9 0 12%,#b97422 13% 27%,#4f173f 28% 60%,transparent 62%)!important;
+  box-shadow:0 0 0 2px #241421,0 0 12px #f7c750!important;
+  animation:build218-floor-boss-pulse 1.8s ease-in-out infinite;
+}
+@keyframes build218-floor-boss-pulse{50%{filter:brightness(1.28);scale:1.08}}
+
+/* LINK BREAK no longer covers the centered biome/boss labels. */
+.online-shared-battle-shell{position:relative}
+.online-shared-battle-shell>.online-coop-break{
+  position:absolute!important;
+  z-index:48!important;
+  top:88px!important;
+  left:12px!important;
+  right:auto!important;
+  width:min(38%,168px)!important;
+  transform:none!important;
+}
+.online-shared-battle-shell>.online-coop-break span{justify-content:flex-start!important}
+
+/* Real raid frames are swapped by MonsterVisual. Keep the large body readable
+   without covering its floating name/card. */
+.battle-screen.side-battle-v2.online-shared-battle .raid-main-boss .has-custom-sprite img{
+  image-rendering:auto!important;
+  object-fit:contain;
+}
+.battle-screen.side-battle-v2.online-shared-battle .side-enemies .raid-main-boss .battle-unit-floating-name{
+  z-index:30!important;
+}
+
+@media(max-width:520px){
+  .online-hall-zone{width:94px!important;min-height:82px!important}
+  .hall-facility-art{width:92px!important;height:62px!important}
+  .online-shared-battle-shell>.online-coop-break{top:82px!important;left:8px!important;width:132px!important}
+  .online-floor-boss-confirm{padding:8px}
+  .online-floor-boss-confirm>div{padding:15px 12px 12px}
+}
+@media(max-height:720px){
+  .online-shared-battle-shell>.online-coop-break{top:72px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .online-v3-map-object.floorBoss{animation:none!important}
+}

@@ -1,0 +1,13 @@
+生成元: OpenAI built-in image generation
+
+最終プロンプト:
+Create a transparent-background 2x2 sprite sheet containing four separate fantasy RPG gathering-hall facilities, each fully contained within its own quadrant with generous transparent margins and no text, letters, UI frames, characters, ground plane, or drop shadows. Match a premium dark-fantasy Japanese mobile RPG rendered as crisp hand-painted pixel art (roughly 128–256 px game-sprite feel): blackened stone and iron, antique gold trim, restrained violet/cyan emissive crystals, strong readable silhouettes, frontal three-quarter/isometric view, consistent top-left lighting and scale. Top-left: ominous raid reception pavilion/altar with black stone, dark red cloth and a subtle crimson-violet portal glow. Top-right: cyan-lit dungeon gatehouse/arched stone portal with a closed iron gate. Bottom-left: compact circular combat arena pavilion with gold trim, crossed-sword motif and red/blue team banners. Bottom-right: sturdy wooden community notice board building/kiosk with small parchment sheets and a warm violet lantern. Keep the four designs stylistically unified, game-ready, and legible at 96–160 px.
+
+生成画像:
+generated_images/exec-b7582229-eebb-4373-a23b-4b04f5d5b4fa.png
+
+切り出し先:
+- raid-pavilion.png
+- dungeon-gate.png
+- arena.png
+- notice-board.png

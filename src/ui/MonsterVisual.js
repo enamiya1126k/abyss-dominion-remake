@@ -2,7 +2,7 @@ import{MONSTER_SPRITE_FOLDERS}from"../data/monsterCatalog.js?v=2.11.44-build209"
 
 const IDLE_FRAMES=Object.freeze(["idle1","idle2","idle3","idle2"]);
 const VALID_FRAMES=new Set(["idle","idle1","idle2","idle3","walk1","walk2","attack","damage","down"]);
-const SPRITE_ASSET_VERSION="2.11.52-build217";
+const SPRITE_ASSET_VERSION="2.11.53-build218";
 let idleStep=0;
 
 function safeFrame(frame){
