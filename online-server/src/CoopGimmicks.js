@@ -30,7 +30,10 @@ export function coopParticipantTier(count = 1) {
   if (value >= 4) return { id: "abyss", label: "深淵共鳴", rank: 4, multiplier: 2, extraRolls: 1 };
   if (value >= 3) return { id: "gold", label: "黄金共鳴", rank: 3, multiplier: 1.5, extraRolls: 0 };
   if (value >= 2) return { id: "silver", label: "白銀共鳴", rank: 2, multiplier: 1, extraRolls: 0 };
-  return { id: "black-iron", label: "単独共鳴", rank: 1, multiplier: 0.75, extraRolls: 0 };
+  // A one-player online room is ordinary exploration, not a weakened co-op
+  // mode.  Keeping the multiplier at exactly one is important for parity with
+  // the same floor played offline.
+  return { id: "solo", label: "通常探索", rank: 0, multiplier: 1, extraRolls: 0 };
 }
 
 export function coopRewardTier(floor, participantCount) {
@@ -91,6 +94,38 @@ export function prepareCoopExpeditionV206(expedition, { leaderId, hostWorld, con
     if (opened.has(hostChestKey) || opened.has(object.id)) object.resolved = true;
   }
 
+  const partySize = Math.max(1, Math.min(4, Math.floor(Number(participants) || 1)));
+  const multiplayer = partySize >= 2;
+  const bossFloor = Number(expedition.floor) % 10 === 0;
+  if (!multiplayer || bossFloor) {
+    const floorTier = coopFloorTier(expedition.floor), participantTier = coopParticipantTier(partySize), rewardTier = coopRewardTier(expedition.floor, partySize);
+    expedition.hostOwnerId = leaderId;
+    expedition.coop = {
+      enabled: multiplayer,
+      gimmickType: null,
+      floorTier: floorTier.id,
+      floorTierLabel: floorTier.label,
+      partySize,
+      participantTier: participantTier.id,
+      participantTierLabel: participantTier.label,
+      rewardTier: rewardTier.id,
+      rewardTierLabel: rewardTier.visualLabel,
+      rewardScaleLabel: rewardTier.label,
+      switchHoldStartedAt: 0,
+      switchUnlocked: false,
+      relayStage: 0,
+      relayFirstPlayerId: null,
+      relayExpiresAt: 0,
+      keyHolders: {},
+      keyCombined: false,
+      eliteBattleStarted: false,
+      eliteDefeated: false,
+    };
+    expedition.contribution = contribution ?? {};
+    expedition.interactions = {};
+    return expedition;
+  }
+
   const type = coopGimmickFor({ leaderId, floor: expedition.floor });
   const floorTier = coopFloorTier(expedition.floor), participantTier = coopParticipantTier(participants), rewardTier = coopRewardTier(expedition.floor, participants);
   const first = take(), second = farFrom(first), reward = take();
@@ -130,10 +165,11 @@ export function prepareCoopExpeditionV206(expedition, { leaderId, hostWorld, con
   expedition.totalDiscoveries += 1;
   expedition.hostOwnerId = leaderId;
   expedition.coop = {
+    enabled: true,
     gimmickType: type,
     floorTier: floorTier.id,
     floorTierLabel: floorTier.label,
-    partySize: Math.max(1, Math.min(4, Math.floor(Number(participants) || 1))),
+    partySize,
     participantTier: participantTier.id,
     participantTierLabel: participantTier.label,
     rewardTier: rewardTier.id,

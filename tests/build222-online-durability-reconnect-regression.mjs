@@ -26,7 +26,15 @@ const claim = main.slice(start, end);
 const duplicateGuard = claim.indexOf("online.claimedRewards.includes(id)");
 assert.ok(duplicateGuard >= 0, "reward claim must have a duplicate guard");
 assert.ok(duplicateGuard < claim.indexOf("recordSkillUse"), "duplicate guard must run before skill mastery side effects");
-assert.ok(duplicateGuard < claim.indexOf("recordSeriesBattle"), "duplicate guard must run before series mastery side effects");
 assert.match(claim, /online\.claimedRewards=online\.claimedRewards\.slice\(-2048\)/, "reward idempotency history should be bounded");
+
+const battleStart = main.indexOf("function persistOnlineBattleDefeated");
+const battleEnd = main.indexOf("function claimOnlinePartyReward", battleStart);
+assert.ok(battleStart >= 0 && battleEnd > battleStart, "online battle metadata persistence should exist");
+const battlePersistence = main.slice(battleStart, battleEnd);
+const battleDuplicateGuard = battlePersistence.indexOf("online.processedBattleEventIds.includes(eventId)");
+assert.ok(battleDuplicateGuard >= 0, "battle metadata persistence must have a duplicate guard");
+assert.ok(battleDuplicateGuard < battlePersistence.indexOf("recordSeriesBattle"), "battle duplicate guard must run before series mastery side effects");
+assert.match(battlePersistence, /online\.processedBattleEventIds=online\.processedBattleEventIds\.slice\(-512\)/, "battle idempotency history should be bounded");
 
 console.log("build222 online durability/reconnect regression: ok");

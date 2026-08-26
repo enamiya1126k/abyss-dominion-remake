@@ -224,7 +224,8 @@ export function buildOnlinePartyProfile(state, { monsterId = null, displayName: 
     fallbackEmoji: "？", level: 1, stars: 1, plus: 0, power: 0, maxFloor: 1, attribute: "neutral",
     circleId: "none", circleName: "魔法陣なし", circleLevel: 0, circleEffect: "none", goldPowerMultiplier: 1, goldPowerActionCost: 0, goldPowerGold: 0, equipment: [], equipmentAuthorities: [], equipmentCombatEffects: {}, abyssSkillEffects: {}, rewardModifiers: {},
     battleStats: { hp: 100, mp: 10, atk: 10, matk: 10, def: 5, mdef: 5, spd: 10, crit: 5, evasion: 3, accuracy: 100 },
-    skills: [], captureStock: 0,
+    currentHp: 100, currentMp: 10, skills: [], captureStock: 0, abyssKeyStock: 0,
+    explorePickupDone: Boolean(state?.settings?.contextualGuide?.completed?.explore_pickup),
   };
   const species = SPECIES[monster.speciesId] ?? {};
   const circle = equippedMagicCircle(monster, state);
@@ -251,7 +252,11 @@ export function buildOnlinePartyProfile(state, { monsterId = null, displayName: 
       spd: Math.max(1, stats.spd), crit: Math.max(0, stats.crit), evasion: Math.max(0, stats.evasion),
       accuracy: Math.max(20, Number(stats.accuracy) || 100),
     },
+    currentHp: Math.max(0, Math.min(stats.hp, monster.currentHp == null ? stats.hp : Number(monster.currentHp) || 0)),
+    currentMp: Math.max(0, Math.min(maxMp(monster), monster.currentMp == null ? maxMp(monster) : Number(monster.currentMp) || 0)),
     skills: onlineSkillProfile(monster), captureStock: Math.max(0, Number(state.inventory?.captureCrystals) || 0),
+    abyssKeyStock: Math.max(0, Number(state.inventory?.abyssKeys) || 0),
+    explorePickupDone: Boolean(state.settings?.contextualGuide?.completed?.explore_pickup),
   };
 }
 

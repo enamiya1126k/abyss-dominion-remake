@@ -28,6 +28,7 @@ function startForcedRare(kind) {
   const first = player(store, 1), second = player(store, 2);
   const created = store.createRoom(first.session);
   assert.equal(store.joinRoom(second.session, created.room.roomId).ok, true);
+  assert.equal(store.setFloor(first.session, 499).ok, true);
   assert.equal(store.setReady(first.session, true).ok, true);
   assert.equal(store.setReady(second.session, true).ok, true);
   assert.equal(store.startExpedition(first.session, { hostWorld: { openedChestIds: {} }, forceRare: kind }).ok, true);
@@ -37,7 +38,7 @@ function startForcedRare(kind) {
 test("build208 special assets keep dungeon state and four persistent chest tiers", () => {
   const rows = 15, cols = 15;
   const expedition = {
-    id: "build208-fixture", floor: 1000, rows, cols,
+    id: "build208-fixture", floor: 1001, rows, cols,
     tiles: Array.from({ length: rows }, (_, y) => Array.from({ length: cols }, (_, x) => x > 0 && y > 0 && x < cols - 1 && y < rows - 1 ? "." : "#")),
     start: { x: 1, y: 1 }, exit: { x: 13, y: 13 },
     objects: [{ id: "host-chest", type: "chest", x: 2, y: 2, resolved: false }], totalDiscoveries: 1,

@@ -21,7 +21,10 @@ assert.match(room, /chosenSkill\.drain/);
 assert.match(room, /chosenSkill\.selfHeal/);
 assert.match(room, /chosenSkill\.barrier/);
 assert.match(room, /skill\.cleanse/);
-assert.match(room, /sharedBase=this\._rewardFor\(battle\.floor,"battle"\)/);
+assert.match(room, /sharedBase=\{gold:battleGoldBase\(battle\.floor,defeated,\{firstBoss\}\)\}/);
+assert.match(room, /reward:\{\.\.\.sharedReward,gold,experience,crystals,abyssKeys,kills:defeated\.length/);
+assert.match(room, /randomEquipmentRarity,equipmentSlot,equipmentLevel/);
+assert.match(room, /type:"battleDefeated"/);
 
 for (const token of ["guaranteedCritical", "defenseIgnore", "critBonus", "drain", "selfHeal", "currentHpDamage", "execute", "barrier", "cleanse"]) {
   assert.match(screen, new RegExp(token));

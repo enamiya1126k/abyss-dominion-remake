@@ -10,10 +10,10 @@ function reply(socket,message){if(socket.readyState===WebSocket.OPEN)socket.send
 function fail(socket,result){reply(socket,{type:"error",code:result.code??"REQUEST_FAILED",message:result.message??"処理に失敗しました"})}
 
 const server=http.createServer((request,response)=>{
- if(request.url==="/health"){response.writeHead(200,{"content-type":"application/json; charset=utf-8","cache-control":"no-store"});response.end(JSON.stringify({ok:true,service:"ABYSS DOMINION CO-OP SERVER",protocol:"1.11.1",rooms:store.rooms.size,expeditions:[...store.rooms.values()].filter(room=>room.phase==="expedition").length,battles:[...store.rooms.values()].filter(room=>room.expedition?.battle).length,raids:[...store.rooms.values()].filter(room=>room.phase==="raid").length,teamBattles:[...store.rooms.values()].filter(room=>room.phase==="team").length,players:[...store.sessions.values()].filter(session=>session.connected).length,time:new Date().toISOString()}));return}
+ if(request.url==="/health"){response.writeHead(200,{"content-type":"application/json; charset=utf-8","cache-control":"no-store"});response.end(JSON.stringify({ok:true,service:"ABYSS DOMINION CO-OP SERVER",protocol:"1.12.0",rooms:store.rooms.size,expeditions:[...store.rooms.values()].filter(room=>room.phase==="expedition").length,battles:[...store.rooms.values()].filter(room=>room.expedition?.battle).length,raids:[...store.rooms.values()].filter(room=>room.phase==="raid").length,teamBattles:[...store.rooms.values()].filter(room=>room.phase==="team").length,players:[...store.sessions.values()].filter(session=>session.connected).length,time:new Date().toISOString()}));return}
  response.writeHead(200,{"content-type":"text/plain; charset=utf-8","cache-control":"no-store"});response.end("ABYSS DOMINION CO-OP SERVER\nWebSocket endpoint: /party\nHealth check: /health\n");
 });
-const wss=new WebSocketServer({noServer:true,maxPayload:16*1024,perMessageDeflate:false});
+const wss=new WebSocketServer({noServer:true,maxPayload:128*1024,perMessageDeflate:false});
 server.on("upgrade",(request,socket,head)=>{
  let pathname;try{pathname=new URL(request.url,"http://localhost").pathname}catch{socket.destroy();return}if(pathname!=="/party"||!originAllowed(request.headers.origin)){socket.write("HTTP/1.1 403 Forbidden\r\nConnection: close\r\n\r\n");socket.destroy();return}wss.handleUpgrade(request,socket,head,websocket=>wss.emit("connection",websocket,request));
 });
@@ -22,12 +22,13 @@ wss.on("connection",socket=>{
  socket.on("message",raw=>{
   const now=Date.now();if(now-socket.rate.started>=1000)socket.rate={started:now,count:0};if(++socket.rate.count>40){socket.close(1008,"rate limit");return}
   let message;try{message=JSON.parse(raw.toString())}catch{return fail(socket,{code:"BAD_JSON",message:"通信データを読み取れません"})}if(!message||typeof message.type!=="string")return;
- if(message.type==="hello"){const result=store.hello(socket,message);if(!result.ok)return fail(socket,result);reply(socket,{type:"helloAck",playerId:result.playerId,resumeToken:result.resumeToken,resumed:result.resumed,room:result.room});store.deliverPendingRewards(socket.session);return}
+ if(message.type==="hello"){if(message.protocol!=="1.12.0")return fail(socket,{code:"PROTOCOL_MISMATCH",message:"ゲームとオンラインサーバーのバージョンが一致しません"});const result=store.hello(socket,message);if(!result.ok)return fail(socket,result);const activeTrade=store.trade.activeFor(result.playerId);reply(socket,{type:"helloAck",protocol:"1.12.0",playerId:result.playerId,resumeToken:result.resumeToken,resumed:result.resumed,room:result.room,activeTradeIds:activeTrade?[activeTrade.tradeId]:[]});store.deliverPendingRewards(socket.session);return}
   const session=socket.session;if(!session)return fail(socket,{code:"NOT_READY",message:"先に接続処理を完了してください"});if(session.connection!==socket){try{socket.close(4001,"superseded connection")}catch{}return}let result={ok:false,code:"UNKNOWN_MESSAGE",message:"未対応の通信です"};
   if(message.type==="createRoom")result=store.createRoom(session);
   else if(message.type==="joinRoom")result=store.joinRoom(session,message.roomId);
   else if(message.type==="leaveRoom")result=store.leaveRoom(session);
   else if(message.type==="profile")result=store.updateProfile(session,message.profile);
+  else if(message.type==="expeditionProfileSync")result=store.expeditionProfileSync(session,message.profile);
   else if(message.type==="move")result=store.move(session,message.position);
   else if(message.type==="setReady")result=store.setReady(session,message.ready);
   else if(message.type==="setFloor")result=store.setFloor(session,message.floor);
@@ -43,7 +44,7 @@ wss.on("connection",socket=>{
   else if(message.type==="battleSpeed")result=store.setBattleSpeed(session,message.speed);
   else if(message.type==="requestReturn")result=store.requestReturn(session);
   else if(message.type==="completeExpedition")result=store.completeExpedition(session);
-  else if(message.type==="startRaid")result=store.startRaid(session);
+  else if(message.type==="startRaid")result=store.startRaid(session,message);
 	  else if(message.type==="raidAction")result=store.submitRaidAction(session,message.action??message);
 	  else if(message.type==="raidSpeed")result=store.setRaidSpeed(session,message.speed);
 	  else if(message.type==="teamSide")result=store.setTeamSide(session,message.side);
@@ -51,6 +52,13 @@ wss.on("connection",socket=>{
 	  else if(message.type==="startTeamBattle")result=store.startTeamBattle(session);
 	  else if(message.type==="teamAction")result=store.submitTeamAction(session,message.action??message);
 	  else if(message.type==="teamSpeed")result=store.setTeamSpeed(session,message.speed);
+  else if(message.type==="tradeInvite")result=store.requestTrade(session,message.targetId);
+  else if(message.type==="tradeAccept")result=store.respondTrade(session,message.tradeId,message.accepted);
+  else if(message.type==="tradeOffer")result=store.offerTrade(session,message.tradeId,message.asset);
+  else if(message.type==="tradeReady")result=store.readyTrade(session,message.tradeId,message.ready);
+  else if(message.type==="tradeConfirm")result=store.confirmTrade(session,message.tradeId);
+  else if(message.type==="tradeCancel")result=store.cancelTrade(session,message.tradeId);
+  else if(message.type==="tradeAck")result=store.ackTrade(session,message.tradeId,message.success);
   else if(message.type==="chat")result=store.chat(session,message);
   else if(message.type==="rewardAck")result=store.ackReward(session,message.rewardId);
   else if(message.type==="ping"){reply(socket,{type:"pong",at:now});return}

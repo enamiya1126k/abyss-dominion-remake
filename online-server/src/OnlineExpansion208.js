@@ -18,6 +18,12 @@ function seededScore(seed, point) {
 function ensureEncounterDensity(expedition, participants = 1) {
   const current = (expedition.objects ?? []).filter(object => object.type === "encounter");
   const partySize = Math.max(1, Math.min(4, Number(participants) || 1));
+  if (partySize < 2 || Number(expedition.floor) % 10 === 0) {
+    expedition.totalEncounters = current.length;
+    expedition.coop ??= {};
+    expedition.coop.encounterRateLabel = "通常探索と同一";
+    return;
+  }
   // One player receives the solo baseline. Each additional player adds 10%
   // pressure so co-op stays lively without turning every step into a battle.
   const soloBaseline = Math.max(4, Math.min(6, 4 + Math.floor((Number(expedition.floor) || 1) / 200)));

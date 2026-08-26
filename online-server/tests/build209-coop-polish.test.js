@@ -40,6 +40,7 @@ function startRoom(count = 2, { forceRare = null } = {}) {
   const players = Array.from({ length: count }, (_, index) => hello(store, index + 1));
   const created = store.createRoom(players[0].session);
   for (const player of players.slice(1)) assert.equal(store.joinRoom(player.session, created.room.roomId).ok, true);
+  if (forceRare) assert.equal(store.setFloor(players[0].session, 1199).ok, true);
   for (const player of players) assert.equal(store.setReady(player.session, true).ok, true);
   assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {} }, forceRare }).ok, true);
   return { store, players, room: store.rooms.get(created.room.roomId) };
@@ -87,7 +88,7 @@ test("build209 counts an AI proxy inside the visible 3x3 resonance guide", () =>
 });
 
 test("build209 exposes only the nearest interaction and keeps a tied target stable", () => {
-  const { store, players, room } = startRoom(1, { forceRare: "otherworldMerchant" });
+  const { store, players, room } = startRoom(2, { forceRare: "otherworldMerchant" });
   const member = players[0].session, merchant = room.expedition.objects.find(object => object.type === "rareMerchant");
   for (const object of room.expedition.objects) if (object !== merchant) object.resolved = true;
   const chest = { id: "build209-near-chest", type: "resonanceChest", x: 5, y: 4, resolved: false, hidden: false, persistent: true, rewardTier: "black-iron" };

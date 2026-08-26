@@ -37,6 +37,31 @@ const BASE_STATS = Object.freeze({
 const key = point => `${point.x},${point.y}`;
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
+function safeInteger(value, fallback = 0, min = 0, max = Number.MAX_SAFE_INTEGER) {
+  const number = Number(value);
+  return Number.isFinite(number) ? Math.max(min, Math.min(max, Math.floor(number))) : fallback;
+}
+
+// Keep these byte-for-byte equivalent to SecretRoomSystem's independent
+// expedition stream. Secret-room planning must never consume the floor RNG.
+function seeded(seed) {
+  let value = seed >>> 0;
+  return () => { value = (value * 1664525 + 1013904223) >>> 0; return value / 4294967296; };
+}
+
+function mixSeed(seed, floor) {
+  let value = (safeInteger(seed, 1, 1, 0x7fffffff) ^ (safeInteger(floor, 1, 1, 10000) * 2654435761)) >>> 0;
+  value ^= value >>> 16; value = Math.imul(value, 2246822507); value ^= value >>> 13; value = Math.imul(value, 3266489909); value ^= value >>> 16;
+  return value >>> 0;
+}
+
+function secretRoomPlan(run, floor) {
+  if (!run || run.id == null) return null;
+  const safeFloor = safeInteger(floor, 1, 1, 10000);
+  const random = seeded(mixSeed(run.seed, safeFloor));
+  return { id: `${String(run.id)}:${safeFloor}`, appears: safeFloor % 10 !== 0 && random() < .09, positionRoll: random() };
+}
+
 function floorConfig(floor, rng) {
   const tier = Math.min(9, Math.floor((floor - 1) / 10));
   const min = Math.min(31, 23 + tier);
@@ -95,14 +120,33 @@ function decorationPlan(tiles, reserved, floor, rng) {
   const add = (type, pool = edgeCells, options = {}) => {
     const point = take(pool, options.predicate);
     if (!point) return;
-    decorations.push({ id: `${floor}-decor-${decorations.length}`, type, x: point.x, y: point.y, scale: options.scale ?? 1, phase: Math.floor(rng() * 997), used: false, destroyed: false });
+    decorations.push({ id: `${floor}-decor-${decorations.length}`, type, x: point.x, y: point.y, rotation: options.rotation ?? point.rotation ?? 0, scale: options.scale ?? 1, phase: Math.floor(rng() * 997), used: false, destroyed: false });
   };
   const density = Math.min(30, Math.max(10, Math.round(cells.length / 17)));
   const cycle = ["candelabrum", "crystal", "barrel", "crate", "bones", "crystal", "candelabrum", "barrel"];
-  for (let index = 0; index < density; index++) add(cycle[(index + Math.floor(rng() * cycle.length)) % cycle.length]);
-  const waterCount = Math.max(1, Math.min(3, Math.floor(cells.length / 90)));
-  for (let index = 0; index < waterCount; index++) add("water", cells, { scale: 1.25, predicate: cell => cell.openCount >= 3 });
+  for (let index = 0; index < density; index++) add(cycle[(index + Math.floor(rng() * cycle.length)) % cycle.length], edgeCells, { scale: index % 5 === 0 ? 1.12 : 1 });
+  const waterCount = Math.max(1, Math.min(5, Math.floor(cells.length / 90)));
+  for (let index = 0; index < waterCount; index++) {
+    const before = decorations.length;
+    add("water", cells, { scale: 1.25, predicate: cell => cell.openCount >= 3 });
+    if (decorations.length === before) add("water", cells, { scale: 1.25 });
+  }
   return decorations;
+}
+
+function addFirstTutorialPickup({ tiles, start, objects, decorations, floor, explorePickupDone }) {
+  if (floor !== 1 || explorePickupDone) return null;
+  const occupied = new Set([...objects, ...decorations].filter(Boolean).map(entry => key(entry)));
+  let point = null, nearest = Infinity;
+  for (let y = 1; y < tiles.length - 1; y++) for (let x = 1; x < tiles[0].length - 1; x++) {
+    if (tiles[y][x] !== "." || occupied.has(`${x},${y}`) || x === start.x && y === start.y) continue;
+    const distance = Math.abs(x - start.x) + Math.abs(y - start.y);
+    if (distance < nearest) { point = { x, y }; nearest = distance; }
+  }
+  if (!point) return null;
+  const pickup = { id: "1-guide-first-pickup", ...point, type: "crystal", rotation: 0, scale: 1.15, phase: 199, used: false, destroyed: false, tutorialGuide: "firstPickup" };
+  decorations.push(pickup);
+  return pickup;
 }
 
 function bossCorridor(floor) {
@@ -155,32 +199,53 @@ function roomFloor(floor, rng) {
   return { cols, rows, tiles, start, exit, cells, distances };
 }
 
-export function createSoloStyleDungeon({ roomId, floor, runId, now, random }) {
+export function createSoloStyleDungeon({ roomId, floor, runId, now, random, chestSpawnBonus = 0, secretRoomRun = null, explorePickupDone = false }) {
   const bossFloor = floor % 10 === 0;
   const layout = bossFloor ? bossCorridor(floor) : roomFloor(floor, random);
   const tiles = layout.tiles;
   const cells = layout.cells ?? tiles.flatMap((row, y) => row.map((tile, x) => tile === "." ? { x, y } : null).filter(Boolean));
   const reserved = new Set([key(layout.start), key(layout.exit)]);
-  const candidates = cells.filter(cell => Math.abs(cell.x - layout.start.x) + Math.abs(cell.y - layout.start.y) > 4 && Math.abs(cell.x - layout.exit.x) + Math.abs(cell.y - layout.exit.y) > 3);
+  const candidates = cells.filter(cell => Math.abs(cell.x - layout.start.x) + Math.abs(cell.y - layout.start.y) > 4 && Math.abs(cell.x - layout.exit.x) + Math.abs(cell.y - layout.exit.y) > 4);
   const objects = [];
   const add = (type, point, index, extra = {}) => { if (point) { reserved.add(key(point)); objects.push({ id: `${type}-${index}`, type, ...point, resolved: false, ...extra }); } };
   let treasureRoom = false;
   if (bossFloor) add("encounter", layout.boss, 1, { bossEncounter: true });
   else {
     treasureRoom = random() < Math.min(.12, .035 + Math.floor(floor / 10) * .002);
-    const chestCount = treasureRoom ? 7 + Math.floor(random() * 4) : random() < .16 ? 0 : random() < .72 ? 1 : 2;
-    takeCells(candidates, reserved, random, chestCount).forEach((point, index) => {
+    const chestCount = treasureRoom ? 7 + Math.floor(random() * 4) : random() < Math.max(0, .16 - Math.max(0, Number(chestSpawnBonus) || 0)) ? 0 : random() < .72 ? 1 : 2;
+    const pick = () => {
+      const available = candidates.filter(cell => !reserved.has(key(cell))), pool = available.length ? available : candidates.length ? candidates : cells;
+      const point = { ...pool[Math.floor(random() * pool.length)] }; reserved.add(key(point)); return point;
+    };
+    for (let index = 0; index < chestCount; index++) {
       const roll = random(), kind = treasureRoom ? (roll > .48 ? "radiant" : "cabinet") : roll > .96 ? "radiant" : roll > .78 ? "cabinet" : roll > .25 ? "box" : "apple";
-      add("chest", point, index + 1, { kind, locked: kind === "radiant" && random() < (treasureRoom ? .58 : .45), mimic: treasureRoom && random() < .5 });
-    });
+      const locked = kind === "radiant" && random() < (treasureRoom ? .58 : .45), mimic = treasureRoom && random() < .5, point = pick();
+      objects.push({ id: `${floor}-${index}`, type: "chest", ...point, resolved: false, kind, locked, mimic });
+    }
+    const roomPlan = secretRoomPlan(secretRoomRun, floor);
+    if (roomPlan?.appears) {
+      const wallAdjacent = cells.filter(cell => CARDINALS.some(([dx, dy]) => tiles[cell.y + dy]?.[cell.x + dx] === "#"));
+      const candidateKeys = new Set(candidates.map(key));
+      const preferred = wallAdjacent.filter(cell => candidateKeys.has(key(cell)) && !reserved.has(key(cell)));
+      if (preferred.length) {
+        const roll = Math.max(0, Math.min(.999999, Number(roomPlan.positionRoll) || 0));
+        const point = { ...preferred[Math.floor(roll * preferred.length)] };
+        reserved.add(key(point));
+        const directions = [{ dx: 0, dy: -1, rotation: 0 }, { dx: 1, dy: 0, rotation: Math.PI / 2 }, { dx: 0, dy: 1, rotation: Math.PI }, { dx: -1, dy: 0, rotation: -Math.PI / 2 }];
+        const rotation = directions.find(direction => tiles[point.y + direction.dy]?.[point.x + direction.dx] === "#")?.rotation ?? 0;
+        objects.push({ id: roomPlan.id, roomId: roomPlan.id, type: "secretRoom", ...point, rotation, resolved: false, persistent: true });
+      }
+    }
   }
   objects.push({ id: "exit", type: "exit", ...layout.exit, resolved: false });
+  const nextEncounter = bossFloor ? Number.MAX_SAFE_INTEGER : 10 + Math.floor(random() * 23);
   const decorations = decorationPlan(tiles, reserved, floor, random);
+  addFirstTutorialPickup({ tiles, start: layout.start, objects, decorations, floor, explorePickupDone });
   return {
     id: runId, roomId, floor, cols: layout.cols, rows: layout.rows,
     tiles: tiles.map(row => row.join("")), start: layout.start, exit: layout.exit,
     objects, decorations, treasureRoom, steps: 0,
-    nextEncounter: bossFloor ? Number.MAX_SAFE_INTEGER : 10 + Math.floor(random() * 23), encountersEnabled: !bossFloor,
+    nextEncounter, encountersEnabled: !bossFloor,
     discoveries: 0,
     totalDiscoveries: objects.filter(object => object.type === "chest").length + decorations.filter(object => ["barrel", "crate", "bones", "crystal", "water"].includes(object.type)).length,
     encountersCleared: 0, totalEncounters: bossFloor ? 1 : 0,
@@ -219,5 +284,5 @@ export function floorEnemyStats({ floor, template, random, boss = false }) {
   const atk = Math.max(1, Math.round((base.atk + level * 1.4) * rankMultiplier * hidden.atk * bossProfile.atk * depthAtk * variance));
   const def = Math.max(0, Math.round((base.def + level * .5) * rankMultiplier * hidden.def * bossProfile.def * variance));
   const spd = Math.max(1, Math.round((base.spd + level * .18) * hidden.spd * bossProfile.spd * variance));
-  return { level, rank, maxHp, hp: maxHp, atk, matk: Math.max(1, Math.round(atk * (.82 + random() * .26))), def, mdef: Math.max(0, Math.round(def * (.84 + random() * .24))), spd, equipmentLevel: hidden.gearLevel ?? 0 };
+  return { level, rank, maxHp, hp: maxHp, atk, matk: Math.max(1, Math.round(atk * (.82 + random() * .26))), def, mdef: Math.max(0, Math.round(def * (.84 + random() * .24))), spd, equipped: Boolean(hidden.active), equipmentSlots: hidden.slots ?? 0, equipmentLevel: hidden.gearLevel ?? 0, equipmentRarity: hidden.rarity ?? null };
 }

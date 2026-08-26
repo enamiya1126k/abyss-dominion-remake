@@ -15,8 +15,9 @@ const roomStoreSource = read("online-server/src/RoomStore.js");
 const cssSource = read("src/Styles/build218.css");
 
 assert.match(indexSource, /build218\.css\?v=2\.11\.53-build218/);
-assert.match(indexSource, /ASSET_BUILD = "build218"/);
-assert.match(configSource, /APP_VERSION="2\.11\.53"/);
+assert.match(indexSource, /build225\.css\?v=2\.11\.54-build225/);
+assert.match(indexSource, /ASSET_BUILD = "build225"/);
+assert.match(configSource, /APP_VERSION="2\.11\.54"/);
 
 // The online floor is sourced from the same canonical boss catalogue as solo.
 assert.match(roomStoreSource, /floorBossTemplates217\(floor\)/);
@@ -29,7 +30,7 @@ assert.match(roomStoreSource, /expedition\.floorBoss\.defeated=true/);
 
 assert.match(roomStoreSource, /const templates=boss\?floorBossTemplates217\(floor\)/);
 assert.match(roomStoreSource, /milestoneBossIdsForFloor\(floor\)/);
-assert.match(roomStoreSource, /partyHpScale=1\+\(partySize-1\)\*\.82/);
+assert.match(roomStoreSource, /partyHpScale=partySize>=2\?1\+\(partySize-1\)\*\.82:1/);
 
 // Contact is confirmed before battle; defeat hands off report + exact solo choice.
 assert.match(clientSource, /floorBossConfirm/);

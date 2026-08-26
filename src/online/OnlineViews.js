@@ -1,9 +1,9 @@
-import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=2.11.2-build166";
-import { battleEnvironmentForFloor } from "../data/biomes.js?v=2.11.49-build214";
-import { onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml } from "../ui/screens/OnlinePartyScreen.js?v=2.11.47-build212";
-import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.53-build218";
-import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=2.11.44-build209";
-import { pixelIcon } from "../ui/components/GameChrome.js?v=2.11.2-build166";
+import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=2.11.54-build225";
+import { battleEnvironmentForFloor } from "../data/biomes.js?v=2.11.54-build225";
+import { onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml } from "../ui/screens/OnlinePartyScreen.js?v=2.11.54-build225";
+import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.54-build225";
+import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=2.11.54-build225";
+import { pixelIcon } from "../ui/components/GameChrome.js?v=2.11.54-build225";
 
 const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "通常探索", raid: "レイドボス", team: "自由チーム戦", chat: "チャット" });
 const EVENT_LABELS = Object.freeze({
@@ -44,9 +44,31 @@ function readyGrid(room, { team = false } = {}) {
 const HALL_DESTINATIONS = Object.freeze([
   { route: "raid", x: 18, y: 25, label: "レイド受付", prompt: "レイド戦へ行く", icon: "RAID", asset: "./assets/online/hall/build218/raid-pavilion.png" },
   { route: "explore", x: 82, y: 25, label: "ダンジョン門", prompt: "通常探索へ行く", icon: "GATE", asset: "./assets/online/hall/build218/dungeon-gate.png" },
-  { route: "team", x: 24, y: 78, label: "闘技場", prompt: "4vs4へ行く", icon: "ARENA", asset: "./assets/online/hall/build218/arena.png" },
+  { route: "team", x: 24, y: 78, label: "闘技場", prompt: "自由チーム戦へ行く", icon: "ARENA", asset: "./assets/online/hall/build218/arena.png" },
   { route: "chat", x: 76, y: 78, label: "掲示板", prompt: "会話を開く", icon: "CHAT", asset: "./assets/online/hall/build218/notice-board.png" },
 ]);
+
+function tradeAssetCard(asset, label = "未選択") {
+  if (!asset) return `<article class="online-trade-offer empty"><small>${escapeOnlineHtml(label)}</small><b>交換品を選択中</b></article>`;
+  return `<article class="online-trade-offer rarity-${escapeOnlineHtml(String(asset.rarity || "N").toLowerCase())}"><small>${escapeOnlineHtml(asset.kind === "monster" ? "仲間" : asset.kind === "equipment" ? "装備" : asset.kind === "currency" ? "通貨" : "消耗品")}</small><b>${escapeOnlineHtml(asset.name || "交換品")}</b><span>${escapeOnlineHtml([asset.rarity, asset.level ? `Lv.${number(asset.level)}` : "", asset.details].filter(Boolean).join("・"))}</span></article>`;
+}
+
+function renderTradeOverlay(room, selfId, state) {
+  const trade = state.trade; if (!trade) return "";
+  const partnerId = trade.participants?.find(id => id !== selfId), partner = memberById(room, partnerId), own = trade.offers?.[selfId], theirs = trade.offers?.[partnerId];
+  const invited = trade.state === "invited", requester = trade.requesterId === selfId, ready = Boolean(trade.ready?.[selfId]), partnerReady = Boolean(trade.ready?.[partnerId]), confirmed = Boolean(trade.confirmed?.[selfId]);
+  const filters = [["all","すべて"],["monster","仲間"],["equipment","装備"],["stack","消耗品"],["currency","通貨"]];
+  const catalog = (state.tradeCatalog ?? []).map(asset => `<button type="button" class="online-trade-catalog-item" data-online-trade-offer="${escapeOnlineHtml(asset.ref)}" ${asset.unavailable ? "disabled" : ""}><span><b>${escapeOnlineHtml(asset.name)}</b><small>${escapeOnlineHtml(`${asset.rarity || "N"}・${asset.details || ""}`)}</small></span><em>${escapeOnlineHtml(asset.unavailable ? asset.reason || "交換不可" : asset.maxAmount > 1 ? `最大 ${number(asset.maxAmount)}` : "選ぶ")}</em></button>`).join("");
+  const amount = `<label class="online-trade-amount">数量 <input type="number" min="1" max="50000000" inputmode="numeric" value="${number(state.tradeAmount || 1).replaceAll(",", "")}" data-online-trade-amount></label>`;
+  let body = "";
+  if (invited) body = requester ? `<div class="online-trade-wait"><b>交換を申し込みました</b><p>${escapeOnlineHtml(partner?.profile?.displayName || "相手")}の返事を待っています。</p><button type="button" data-online-trade-cancel>取り消す</button></div>` : `<div class="online-trade-invite"><b>${escapeOnlineHtml(partner?.profile?.displayName || "冒険者")}から交換の申し込み</b><p>交換品は双方が確認してから同時に確定します。</p><footer><button type="button" data-online-trade-decline>断る</button><button type="button" class="primary" data-online-trade-accept>交換する</button></footer></div>`;
+  else if (trade.state === "committing") body = `<div class="online-trade-wait"><b>交換品をセーブしています…</b><p>完了するまで画面を閉じないでください。切断時も再接続後に再開します。</p></div>`;
+  else body = `<div class="online-trade-offers"><section><small>あなたが渡す</small>${tradeAssetCard(own, "あなた")}</section><i>⇄</i><section><small>${escapeOnlineHtml(partner?.profile?.displayName || "相手")}から受取</small>${tradeAssetCard(theirs, "相手")}</section></div>
+    ${trade.state === "offering" ? `<div class="online-trade-picker"><nav>${filters.map(([id,label]) => `<button type="button" class="${state.tradeFilter === id ? "active" : ""}" data-online-trade-filter="${id}">${label}</button>`).join("")}</nav><div class="online-trade-search"><input type="search" maxlength="40" value="${escapeOnlineHtml(state.tradeQuery || "")}" placeholder="名前で絞り込み" data-online-trade-query>${amount}</div><div class="online-trade-catalog">${catalog || "<p>交換できる所持品がありません</p>"}</div></div>` : ""}
+    <div class="online-trade-progress"><span class="${ready ? "done" : ""}">自分 ${ready ? "SET" : "WAIT"}</span><span class="${partnerReady ? "done" : ""}">相手 ${partnerReady ? "SET" : "WAIT"}</span></div>
+    <footer class="online-trade-actions">${trade.state === "confirming" ? `<div class="online-trade-warning"><b>最終確認</b><span>成立後は元に戻せません。品名と数量を確認してください。</span></div><button type="button" class="primary" data-online-trade-confirm ${confirmed || state.tradeConfirmSeconds > 0 ? "disabled" : ""}>${confirmed ? "確認済み・相手待ち" : state.tradeConfirmSeconds > 0 ? `${number(state.tradeConfirmSeconds)}秒後に確定` : "この内容で交換確定"}</button>` : `<button type="button" data-online-trade-ready ${!own ? "disabled" : ""}>${ready ? "セットを解除" : "この品をセット"}</button>`}<button type="button" data-online-trade-cancel>交換をやめる</button></footer>`;
+  return `<aside class="online-trade-modal" role="dialog" aria-modal="true" aria-label="プレイヤー間交換"><header><div><small>SAFE PLAYER TRADE</small><b>${escapeOnlineHtml(partner?.profile?.displayName || "冒険者")}との交換</b></div>${onlineAvatarVisual(partner?.profile ?? {}, { className: "online-trade-partner" })}</header>${body}</aside>`;
+}
 
 export function renderOnlineHome(room, selfId, state = {}) {
   const self = memberById(room, selfId), point = self?.position ?? { x: 50, y: 76 };
@@ -63,13 +85,15 @@ export function renderOnlineHome(room, selfId, state = {}) {
         const position = member.position ?? { x: 50 + index * 4, y: 72 + index * 3 };
         const bubble = social.get(member.playerId);
         const chat = chats.get(member.playerId);
-        return `<figure class="online-hall-player ${member.playerId === selfId ? "self" : ""} ${member.connected ? "" : "offline"}" style="--hall-x:${clamp(position.x, 5, 95)}%;--hall-y:${clamp(position.y, 15, 96)}%" data-online-hall-player="${escapeOnlineHtml(member.playerId)}">${bubble ? `<span class="online-hall-emote">${escapeOnlineHtml(bubble.emoji)}</span>` : ""}${chat ? `<span class="online-hall-chat-bubble">${escapeOnlineHtml(chat.text)}</span>` : ""}${onlineAvatarVisual(member.profile ?? {}, { className: "online-hall-avatar" })}<figcaption>${escapeOnlineHtml(member.profile?.displayName || "冒険者")}</figcaption></figure>`;
+        const tag = member.playerId === selfId ? "figure" : "button", trade = member.playerId === selfId ? "" : `type="button" data-online-trade-player="${escapeOnlineHtml(member.playerId)}" aria-label="${escapeOnlineHtml(member.profile?.displayName || "冒険者")}と交換する" ${member.connected ? "" : "disabled"}`;
+        return `<${tag} class="online-hall-player ${member.playerId === selfId ? "self" : "tradeable"} ${member.connected ? "" : "offline"}" style="--hall-x:${clamp(position.x, 5, 95)}%;--hall-y:${clamp(position.y, 15, 96)}%" data-online-hall-player="${escapeOnlineHtml(member.playerId)}" ${trade}>${bubble ? `<span class="online-hall-emote">${escapeOnlineHtml(bubble.emoji)}</span>` : ""}${chat ? `<span class="online-hall-chat-bubble">${escapeOnlineHtml(chat.text)}</span>` : ""}${onlineAvatarVisual(member.profile ?? {}, { className: "online-hall-avatar" })}<span class="online-hall-player-name">${escapeOnlineHtml(member.profile?.displayName || "冒険者")}${member.playerId === selfId ? "" : "<small>タップで交換</small>"}</span></${tag}>`;
       }).join("")}</div>
       <div class="online-hall-social-tools"><button type="button" class="online-hall-emote-tool" data-online-emote-anchor><b>☺</b><small>長押し</small></button><button type="button" data-online-chat-toggle class="online-hall-chat-tool ${state.exploreChatOpen ? "active" : ""}">${pixelIcon("notice")}<small>チャット</small></button></div>
       ${state.exploreChatOpen ? "" : nearby ? `<aside class="online-hall-prompt"><small>${nearby.label}</small><button type="button" data-online-go="${nearby.route}">${nearby.prompt}</button></aside>` : `<aside class="online-hall-tip">行き先へ近づくと案内が表示されます</aside>`}
       ${inlineChat}
     </div>
     <footer class="online-hall-party-strip">${(room?.members ?? []).map(member => `<span class="${member.connected ? "online" : "offline"}"><i></i>${escapeOnlineHtml(member.profile?.displayName || "冒険者")}</span>`).join("")}</footer>
+    ${renderTradeOverlay(room, selfId, state)}
   </section>`;
 }
 
@@ -200,7 +224,7 @@ function exploreParty(room) {
 
 export function renderOnlineExplore(room, selfId, state = {}) {
   const expedition = room?.expedition;
-  if (state.expeditionReport) {
+  if (state.expeditionReport && (state.expeditionReport.multiplayer ?? (room?.members?.length ?? 0) >= 2)) {
     const report = state.expeditionReport, rows = (report.ranking ?? []).map(entry => {
       const member = memberById(room, entry.playerId);
       const mvps = (entry.mvpTitles ?? []).map(title => `<em class="online-mvp-badge">${escapeOnlineHtml(title)}</em>`).join("");
@@ -221,13 +245,13 @@ export function renderOnlineExplore(room, selfId, state = {}) {
     const merchantModal = `<aside class="online-rare-merchant-modal" role="dialog" aria-modal="true" aria-label="異界商人の無料支援"><header><img src="./assets/online/coop/merchant/talk.png?v=2.11.44-build209" alt=""><div><small>OTHERWORLD SUPPORT</small><b>異界商人の無料支援</b><span>代金は不要。各プレイヤー1回、ひとつだけ選べます。</span></div><button type="button" data-online-close-merchant aria-label="閉じる">×</button></header>${merchantResult ? `<div class="online-merchant-receipt ${escapeOnlineHtml(merchantResult.status || "")}"><b>${merchantResult.status === "pending" ? "処理中…" : merchantResult.status === "success" ? "支援品を受け取りました" : "受け取りを完了できませんでした"}</b><span>${escapeOnlineHtml(merchantResult.status === "error" ? merchantResult.message || "もう一度お試しください。" : merchantReceipt)}</span></div>` : ""}${merchantShowOffers ? `<div class="online-rare-merchant-offers"><button type="button" data-online-merchant-offer="relic" ${state.merchantPending ? "disabled" : ""}><i>遺物</i><b>遺物装備</b><small>${number(expedition.floor) >= 300 ? "UR装備×1" : "SSR装備×1"}</small></button><button type="button" data-online-merchant-offer="crystal" ${state.merchantPending ? "disabled" : ""}><i>結晶</i><b>結晶包み</b><small>捕獲結晶×2<br>魔晶石×3</small></button><button type="button" data-online-merchant-offer="rest" ${state.merchantPending ? "disabled" : ""}><i>灯火</i><b>全快の灯</b><small>HP・MP全回復<br>捕獲結晶×1</small></button></div>` : ""}<p>受け取った支援品は自分だけに適用されます。</p></aside>`;
     const merchantPrompt = state.merchantOpen ? merchantModal : `<aside class="online-coop-interaction online-rare-merchant-call"><small>無料支援NPC・異界商人</small><button type="button" data-online-open-merchant>異界商人と話す</button></aside>`, interactionPending = Boolean(state.interactionPending && state.interactionPending.action === interaction?.action && state.interactionPending.targetId === interaction?.targetId), interactionDisabled = interactionPending || ["waitResonanceChest","waitRelayPartner","waitKeyPartner"].includes(interaction?.action);
     const prompt = state.merchantOpen && merchantResult ? merchantModal : interaction?.action === "browseRareMerchant" ? merchantPrompt : interaction ? `<aside class="online-coop-interaction"><small>${escapeOnlineHtml(interactionPending ? "通信処理が終わるまでお待ちください" : interaction.hint || "共闘アクション")}</small><button type="button" data-online-expedition-interact="${escapeOnlineHtml(interaction.action)}" data-online-interaction-target="${escapeOnlineHtml(interaction.targetId || "")}" ${interactionDisabled ? "disabled" : ""} ${interactionPending ? 'aria-busy="true"' : ""}>${escapeOnlineHtml(interactionPending ? "処理中…" : interaction.label || "調べる")}</button></aside>` : "";
-    const resonance = Number(expedition.coop?.resonance?.level) || 0, ownerOffline = Number(expedition.coop?.ownerReconnectDeadline) > Date.now();
-    const onlineStatus = `<aside class="online-coop-run-status ${realmActive ? "realm" : ""}"><b>${realmActive ? "異界宝物庫" : `共鳴率 ${resonance}/5`}</b><span>${realmActive ? "番人を倒し、宝箱を開いて帰還" : `宝箱 +${resonance * 3}%・貢献度 +${resonance * 2}%`}</span>${ownerOffline ? `<em>主の復帰待ち：現階層のみ継続可</em>` : ""}</aside>`;
+    const resonance = Number(expedition.coop?.resonance?.level) || 0, ownerOffline = Number(expedition.coop?.ownerReconnectDeadline) > Date.now(), multiplayer = (room?.members?.length ?? 0) >= 2;
+    const onlineStatus = multiplayer ? `<aside class="online-coop-run-status ${realmActive ? "realm" : ""}"><b>${realmActive ? "異界宝物庫" : `共鳴率 ${resonance}/5`}</b><span>${realmActive ? "番人を倒し、宝箱を開いて帰還" : `宝箱 +${resonance * 3}%・貢献度 +${resonance * 2}%`}</span>${ownerOffline ? `<em>主の復帰待ち：現階層のみ継続可</em>` : ""}</aside>` : `<aside class="online-coop-run-status solo"><b>通常探索・主の世界</b><span>協力追加なし・オフライン探索と同じ進行</span></aside>`;
     const pingMenu = `<aside class="online-ping-menu ${state.pingMenuOpen ? "open" : ""}" ${state.pingMenuOpen ? "" : "hidden"}>${[["gather","集合"],["here","こっち"],["chest","宝箱"],["switch","スイッチ"],["rescue","救助"]].map(([id,label]) => `<button type="button" data-online-ping-kind="${id}">${label}</button>`).join("")}</aside>`;
     const confirm = state.floorBossConfirm ? `<aside class="online-floor-boss-confirm" role="dialog" aria-modal="true"><div><small>FLOOR DOMINATOR・${number(state.floorBossConfirm.floor)}F</small><h3>${escapeOnlineHtml(state.floorBossConfirm.profile?.name || "階層支配者")}</h3><p>通常探索と同じ強さの支配者です。勝利すると温泉と初回三択報酬が解放されます。</p><dl><span>Lv.${number(state.floorBossConfirm.profile?.level || state.floorBossConfirm.floor)}</span><span>HP ${number(state.floorBossConfirm.profile?.hp || 0)}</span></dl><footer><button type="button" data-online-cancel-floor-boss>いったん退く</button><button type="button" class="primary" data-online-confirm-floor-boss>支配者へ挑む</button></footer></div></aside>` : "";
-    return ExploreScreen(base, { online: true, floor: expedition.floor, title: realmActive ? `異界宝物庫・${expedition.floor}階` : `共闘探索・${expedition.floor}階`, party: exploreParty(room), hudCollapsed: state.hudCollapsed, combatPower: (room.members ?? []).reduce((sum, member) => sum + Math.max(0, Number(member.profile?.power) || 0), 0), progress: Math.round(discovered / total * 100), run: { startedAt: expedition.startedAt ?? Date.now() }, stageContentHtml: `<canvas id="gameCanvas" data-online-dungeon-canvas></canvas><div class="online-shared-map" hidden>${compatibilityPlayers}</div>${onlineStatus}${prompt}${inlineChat}${pingMenu}${confirm}`, stageToolsHtml: stageTools, miniMapHtml: '<canvas id="miniMap"></canvas>', navHtml: nav, className: `online-scenery-${theme.id} ${realmActive ? "online-treasure-realm" : ""}` });
+    return ExploreScreen(base, { online: true, floor: expedition.floor, title: realmActive ? `異界宝物庫・${expedition.floor}階` : multiplayer ? `共闘探索・${expedition.floor}階` : `通常探索・${expedition.floor}階`, party: exploreParty(room), hudCollapsed: state.hudCollapsed, combatPower: (room.members ?? []).reduce((sum, member) => sum + Math.max(0, Number(member.profile?.power) || 0), 0), progress: Math.round(discovered / total * 100), run: { startedAt: expedition.startedAt ?? Date.now() }, stageContentHtml: `<canvas id="gameCanvas" data-online-dungeon-canvas></canvas><div class="online-shared-map" hidden>${compatibilityPlayers}</div>${onlineStatus}${prompt}${inlineChat}${pingMenu}${confirm}`, stageToolsHtml: stageTools, miniMapHtml: '<canvas id="miniMap"></canvas>', navHtml: nav, className: `online-scenery-${theme.id} ${realmActive ? "online-treasure-realm" : ""}` });
   }
-  return `${screenHeader("explore", "CO-OP DUNGEON", "ソロ探索と同じ部品・処理を使い、1人1体を操作する共同探索です。")}
+  return `${screenHeader("explore", "HOST WORLD EXPLORATION", "1人なら通常探索と同じ。2人以上のときだけ協力要素が加わります。")} 
     <section class="online-v3-lobby-card"><div><small>CHALLENGE FLOOR</small><label><input type="number" min="1" max="10000" value="${number(room?.selectedFloor || 1).replaceAll(",", "")}" data-online-floor><b>F</b></label><p>変更できるのはリーダーだけ。全員の準備後に出発できます。</p></div></section>
     ${readyGrid(room)}
     <div class="online-v3-ready-actions"><button type="button" data-online-ready>${memberById(room, selfId)?.ready ? "準備を解除" : "準備完了"}</button><button type="button" class="online-v3-primary" data-online-start-explore ${room?.leaderId === selfId ? "" : "disabled"}>通常探索へ出発</button></div>`;
@@ -247,9 +271,16 @@ export function renderOnlineRaid(room, selfId, state = {}) {
     return renderSharedBattle({ mode: "raid", room, battle: room.raid, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: room.raid.name, enemies, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails });
   }
   const progress = room?.raidProgress;
+  const materials = Math.max(0, Number(state.gameState?.onlineParty?.raidMaterials) || 0), exchangeCount = state.gameState?.onlineParty?.raidExchange ?? {};
+  const exchanges = [
+    ["character", 240, "限定仲間", "融骸幼体アマルガ", Number(exchangeCount.character) > 0],
+    ["equipment", 180, "限定神話武器", "終焉喰らいの大刃", false],
+    ["circle", 120, "限定魔法陣", "即死返鏡陣", Number(exchangeCount.circle) > 0],
+  ];
   return `${screenHeader("raid", "CALAMITY RAID", "巨大ボスのHPは敗北後も保存。役割と行動を相談して少しずつ討伐します。")}
     <section class="online-v3-raid-hero"><img src="./assets/online/raid-abyss-amalgam.png" alt="終焉融骸・アビス＝マルガ"><div><small>WORLD RAID BOSS</small><h3>終焉融骸・アビス＝マルガ</h3><p>与ダメージ・回復・蘇生・防御・補助を貢献度として集計します。</p></div></section>
-    <section class="online-v3-raid-progress"><header><b>累積討伐進行</b><span>${progress ? `${number(progress.attempts)}回挑戦` : "未挑戦"}</span></header>${meter("boss", progress?.hp ?? 50_000, progress?.maxHp ?? 50_000)}<p>${progress ? `残りHP ${number(progress.hp)} / ${number(progress.maxHp)}` : "固定HP 50,000・Lv.50"}</p></section>
+    <section class="online-v3-raid-progress"><header><b>部屋主の累積討伐進行</b><span>${progress ? `${number(progress.attempts)}回挑戦` : "未挑戦"}</span></header>${meter("boss", progress?.hp ?? 50_000, progress?.maxHp ?? 50_000)}<p>${progress ? `残りHP ${number(progress.hp)} / ${number(progress.maxHp)}` : "固定HP 50,000・Lv.50"}</p></section>
+    <section class="online-raid-exchange"><header><div><small>RAID MATERIAL EXCHANGE</small><b>融骸核片 交換所</b></div><strong>${number(materials)}<small>個</small></strong></header><div>${exchanges.map(([kind,cost,label,name,uniqueClaimed]) => `<article><span><small>${label}</small><b>${name}</b></span><button type="button" data-online-raid-exchange="${kind}" data-online-raid-cost="${cost}" ${uniqueClaimed || materials < cost || state.raidExchangePending ? "disabled" : ""}>${uniqueClaimed ? "交換済み" : state.raidExchangePending === kind ? "交換中…" : `${number(cost)}個`}</button></article>`).join("")}</div><p>装備は繰り返し交換可。仲間と魔法陣は各セーブ1回です。</p></section>
     ${readyGrid(room)}<div class="online-v3-ready-actions"><button type="button" data-online-ready>${memberById(room, selfId)?.ready ? "準備を解除" : "準備完了"}</button><button type="button" class="online-v3-primary danger" data-online-start-raid ${room?.leaderId === selfId ? "" : "disabled"}>レイド開始</button></div>`;
 }
 

@@ -27,7 +27,7 @@ function monsterTradeRarity(monster){return String(monster?.endgameFaction==="te
 export function buildOnlineTradeCatalog(state){
  const catalog=[],party=new Set(state.party??[]);
  for(const monster of state.monsters??[]){
-  const inParty=party.has(monster.id),hasEquipment=Object.values(monster.equipment??{}).some(Boolean),unavailable=inParty||hasEquipment||monster.locked||monster.favorite,reason=inParty?"出撃編成中":hasEquipment?"装備中":monster.locked||monster.favorite?"ロック・お気に入り中":"";
+  const inParty=party.has(monster.id),hasEquipment=Object.values(monster.equipment??{}).some(Boolean),hasCircle=Boolean(monster.magicCircleInstanceId||monster.magicCircleId&&monster.magicCircleId!=="none"),unavailable=inParty||hasEquipment||hasCircle||monster.locked||monster.favorite,reason=inParty?"出撃編成中":hasEquipment?"装備中":hasCircle?"魔法陣を装備中":monster.locked||monster.favorite?"ロック・お気に入り中":"";
   catalog.push({ref:`monster:${monster.id}`,kind:"monster",name:String(monster.nickname||monster.name||"仲間"),rarity:monsterTradeRarity(monster),level:Math.max(1,Number(monster.level)||1),details:`+${Math.max(0,Number(monster.plus)||0)}${reason?`・${reason}`:""}`,locked:Boolean(monster.locked),favorite:Boolean(monster.favorite),unavailable,reason,maxAmount:1});
  }
  for(const collection of COLLECTIONS)for(const item of state[collection]??[]){
@@ -48,6 +48,7 @@ export function reserveOnlineTradeAsset(state,tradeId,ref,{amount=1,replace=fals
   if(monster.locked||monster.favorite)return{ok:false,message:"ロック・お気に入りを解除してから交換してください"};
   if((state.party??[]).includes(assetId))return{ok:false,message:"出撃編成中の仲間は交換できません。編成から外してください"};
   if(Object.values(monster.equipment??{}).some(Boolean))return{ok:false,message:"装備中の品をすべて外してから交換してください"};
+  if(monster.magicCircleInstanceId||monster.magicCircleId&&monster.magicCircleId!=="none")return{ok:false,message:"魔法陣を外してから交換してください"};
   if((state.monsters??[]).length<=1)return{ok:false,message:"最後の1体は交換できません"};
   payload=clone(monster);name=String(monster.nickname||monster.name||"仲間");rarity=monsterTradeRarity(monster);level=Math.max(1,Number(monster.level)||1);details=`+${Math.max(0,Number(monster.plus)||0)}`;state.monsters.splice(index,1);
  }else if(kind==="equipment"){

@@ -17,18 +17,21 @@ const indexSource = read("index.html");
 const configSource = read("src/core/config.js");
 
 assert.match(indexSource, /build217\.css\?v=2\.11\.52-build217/);
-assert.match(indexSource, /ASSET_BUILD = "build217"/);
-assert.match(configSource, /APP_VERSION="2\.11\.52"/);
+assert.match(indexSource, /build225\.css\?v=2\.11\.54-build225/);
+assert.match(indexSource, /ASSET_BUILD = "build225"/);
+assert.match(configSource, /APP_VERSION="2\.11\.54"/);
 
 assert.match(roomStoreSource, /floorBossDefinitionForFloor,milestoneBossIdsForFloor/);
 assert.match(roomStoreSource, /const templates=boss\?floorBossTemplates217\(floor\)/);
-assert.match(roomStoreSource, /partyHpScale=1\+\(partySize-1\)\*\.82/);
-assert.match(dungeonRulesSource, /if \(bossFloor\) add\("encounter", layout\.boss, 1\)/);
+assert.match(roomStoreSource, /partyHpScale=partySize>=2\?1\+\(partySize-1\)\*\.82:1/);
+assert.match(dungeonRulesSource, /if \(bossFloor\) add\("encounter", layout\.boss, 1, \{ bossEncounter: true \}\)/);
 assert.match(dungeonRulesSource, /ONLINE_ENEMY_HP_DIVISOR = 1/);
 
 const store = new RoomStore({ now: () => 123456, random: () => .5 });
 const member = { coopVitals: { hp: 100 }, profile: { battleStats: { hp: 100 } } };
-const enemiesAt = floor => store._createBattleEnemies({ id: `build217-${floor}`, floor }, [member], 1);
+const enemiesAt = floor => store._createBattleEnemies({ id: `build217-${floor}`, floor, floorBoss: true }, [member], 1);
+assert.equal(store._createBattleEnemies({ id: "build217-solo", floor: 1 }, [member], 1)[0].coopPartyScale, 1);
+assert.ok(Math.abs(store._createBattleEnemies({ id: "build217-coop", floor: 1 }, [member, member], 1)[0].coopPartyScale - 1.82) < 1e-9);
 const floor50 = enemiesAt(50), floor100 = enemiesAt(100), floor1000 = enemiesAt(1000);
 assert.equal(floor50.length, 1);
 assert.equal(floor50[0].name, "星祷の命紡ぎ");

@@ -1,12 +1,17 @@
 import {
   buildOnlinePartyProfile, ONLINE_STORAGE_KEYS, ensureOnlineIdentity,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.47-build212";
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.54-build225";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
-} from "./OnlineViews.js?v=2.11.53-build218";
-import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=2.11.53-build218";
+} from "./OnlineViews.js?v=2.11.54-build225";
+import {
+  buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
+  commitOnlineTrade, recoverOrphanedTradeEscrows,
+} from "./OnlineTradeSystem.js?v=2.11.54-build225";
+import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=2.11.54-build225";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
+const ONLINE_PROTOCOL = "1.12.0";
 const DIRECTION = Object.freeze({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] });
 const ONLINE_EXPLORE_CHAT_POSITION = "abyss-online-explore-chat-position";
 const ONLINE_EXPLORE_EMOTE_POSITION = "abyss-online-explore-emote-position";
@@ -45,7 +50,7 @@ async function copyText(value) {
 }
 
 export class OnlinePartyController {
-  constructor({ getState, toast = () => {}, onReward = async () => ({ ok: false }), onBack = () => {}, onExploreCanvasMount = () => {}, onExploreCanvasUpdate = () => {}, onExploreCanvasUnmount = () => {}, onHostWorldUpdate = () => {}, onFloorBossDefeated = () => {}, onScene = () => {} } = {}) {
+  constructor({ getState, toast = () => {}, onReward = async () => ({ ok: false }), onBack = () => {}, onExploreCanvasMount = () => {}, onExploreCanvasUpdate = () => {}, onExploreCanvasUnmount = () => {}, onHostWorldUpdate = () => {}, onFloorBossDefeated = () => {}, onOnlineStateMutation = () => {}, onRaidWorldUpdate = () => {}, onRaidExchange = async () => ({ ok: false }), onOnlineVitalsUpdate = () => {}, onBattleDefeated = () => {}, onSecretRoomEntered = () => {}, onBeginSecretRoomExpedition = () => {}, onTutorialGuide = () => {}, onScene = () => {} } = {}) {
     const identity = ensureOnlineIdentity();
     this.getState = getState;
     this.toast = toast;
@@ -56,6 +61,14 @@ export class OnlinePartyController {
     this.onExploreCanvasUnmount = onExploreCanvasUnmount;
     this.onHostWorldUpdate = onHostWorldUpdate;
     this.onFloorBossDefeated = onFloorBossDefeated;
+    this.onOnlineStateMutation = onOnlineStateMutation;
+    this.onRaidWorldUpdate = onRaidWorldUpdate;
+    this.onRaidExchange = onRaidExchange;
+    this.onOnlineVitalsUpdate = onOnlineVitalsUpdate;
+    this.onBattleDefeated = onBattleDefeated;
+    this.onSecretRoomEntered = onSecretRoomEntered;
+    this.onBeginSecretRoomExpedition = onBeginSecretRoomExpedition;
+    this.onTutorialGuide = onTutorialGuide;
     this.onScene = onScene;
     this.selfId = identity.friendId;
     this.resumeToken = storageGet(ONLINE_STORAGE_KEYS.resumeToken);
@@ -81,6 +94,23 @@ export class OnlinePartyController {
     this.hpTrails = { explore: {}, raid: {}, team: {} };
     this.raidReport = null;
     this.expeditionReport = null;
+    this.trade = null;
+    this.tradeFilter = "all";
+    this.tradeQuery = "";
+    this.tradeAmount = 1;
+    this.tradeConfirmAvailableAt = 0;
+    this.tradeConfirmTimer = null;
+    this.tradePendingOffer = null;
+    this.raidExchangePending = null;
+    this.lastRaidWorldSignature = "";
+    this.lastHostWorldSnapshotSignature = "";
+    this.hostWorldRevision = Math.max(0, Number(this.getState?.()?.onlineParty?.hostWorld?.revision) || 0);
+    this.processedHostWorldDeltas = new Set();
+    this.processedBattleEvents = new Set();
+    this.notifiedTutorialGuides = new Set();
+    this.pendingExpeditionProfileSync = false;
+    this.pendingRewardReceipt = null;
+    this.rewardReceiptTimer = null;
     this.hallDestination = null;
     this.hallNearbyRoute = null;
     this.exploreCanvasMounted = false;
@@ -109,14 +139,22 @@ export class OnlinePartyController {
   }
 
   mount(root) {
+    const connected = Boolean(this.ws && typeof WebSocket !== "undefined" && this.ws.readyState === WebSocket.OPEN);
     this.unmount({ disconnect: false });
     this.root = root;
     this.mounted = true;
     this.manualClose = false;
     this._refreshProfile();
     this._bindStaticUi();
-    this._setStatus("offline", "オフライン", "通常ゲームのセーブには影響しません");
     this._startLoops();
+    if (connected) {
+      this._setStatus("online", "接続済み", this.roomState ? "オンライン探索へ戻りました" : "部屋を作るか、ルームIDで参加してください");
+      this._showConnectionStep(this.roomState ? "room" : "gate");
+      if (this.roomState) this._render();
+      this._flushExpeditionProfileSync();
+      return;
+    }
+    this._setStatus("offline", "オフライン", "通常ゲームのセーブには影響しません");
     if (storageGet(ONLINE_STORAGE_KEYS.autoConnect) === "1" && storageGet(ONLINE_STORAGE_KEYS.serverUrl) && this.resumeToken) {
       queueMicrotask(() => { if (this.mounted) this.connect({ reconnect: true }); });
     }
@@ -128,7 +166,9 @@ export class OnlinePartyController {
     this.hallDestination = null;
     this._unmountExploreCanvas();
     clearTimeout(this.interactionPendingTimer); clearTimeout(this.merchantPendingTimer);
+    clearTimeout(this.tradeConfirmTimer); clearTimeout(this.rewardReceiptTimer);
     this.interactionPendingTimer = null; this.merchantPendingTimer = null;
+    this.tradeConfirmTimer = null; this.rewardReceiptTimer = null; this.pendingRewardReceipt = null;
     for (const timer of this.presentationTimers) clearTimeout(timer);
     this.presentationTimers.clear();
     this._removeEvents();
@@ -203,7 +243,16 @@ export class OnlinePartyController {
     }
     const button = event.target.closest?.("button");
     if (!button) return;
-    if (button.matches("[data-online-reward-close]")) { button.closest(".online-reward-receipt")?.remove(); return; }
+    if (button.matches("[data-online-reward-close]")) { this._clearRewardReceipt(); return; }
+    if (button.matches("[data-online-trade-player]")) { const targetId = button.dataset.onlineTradePlayer; if (targetId && targetId !== this.selfId) this._send("tradeInvite", { targetId }); return; }
+    if (button.matches("[data-online-trade-accept]")) { this._send("tradeAccept", { tradeId: this.trade?.tradeId, accepted: true }); return; }
+    if (button.matches("[data-online-trade-decline]")) { this._send("tradeAccept", { tradeId: this.trade?.tradeId, accepted: false }); return; }
+    if (button.matches("[data-online-trade-cancel]")) { this._send("tradeCancel", { tradeId: this.trade?.tradeId }); return; }
+    if (button.matches("[data-online-trade-filter]")) { this.tradeFilter = button.dataset.onlineTradeFilter || "all"; this._render(); return; }
+    if (button.matches("[data-online-trade-offer]")) { this._offerTradeAsset(button.dataset.onlineTradeOffer); return; }
+    if (button.matches("[data-online-trade-ready]")) { this._send("tradeReady", { tradeId: this.trade?.tradeId, ready: !Boolean(this.trade?.ready?.[this.selfId]) }); return; }
+    if (button.matches("[data-online-trade-confirm]")) { if (Date.now() < this.tradeConfirmAvailableAt) return; this._send("tradeConfirm", { tradeId: this.trade?.tradeId }); return; }
+    if (button.matches("[data-online-raid-exchange]")) { this._exchangeRaidReward(button.dataset.onlineRaidExchange, Number(button.dataset.onlineRaidCost)); return; }
     if (button.matches("[data-online-ping-toggle]")) { this.pingMenuOpen = !this.pingMenuOpen; this._render(); return; }
     if (button.matches("[data-online-ping-kind]")) { const kind = button.dataset.onlinePingKind; this.pingMenuOpen = false; this._send("expeditionPing", { kind }); this._render(); return; }
     if (button.matches("[data-online-chat-toggle]")) { this.exploreChatOpen = !this.exploreChatOpen; this._render(); requestAnimationFrame(() => this._query("[data-online-explore-chat-input]")?.focus()); return; }
@@ -229,10 +278,10 @@ export class OnlinePartyController {
     const nextRoute = button.dataset.onlineRoute ?? button.dataset.onlineGo;
     if (nextRoute && ROUTES.has(nextRoute)) { this._setRoute(nextRoute); return; }
     if (button.matches("[data-online-ready]")) { const self = this._self(); this._send("setReady", { ready: !self?.ready }); return; }
-    if (button.matches("[data-online-start-explore]")) { this.expeditionReport = null; this._send("startExpedition", { hostWorld: this._hostWorldSnapshot() }); return; }
+    if (button.matches("[data-online-start-explore]")) { this.expeditionReport = null; const isLeader = (this.roomState?.leaderId ?? this.roomState?.ownerId) === this.selfId || Boolean(this._self()?.isLeader); if (isLeader) this.onBeginSecretRoomExpedition(); this._refreshProfile(); this._send("startExpedition", { profile: this.profile, hostWorld: this._hostWorldNetworkSnapshot() }); return; }
     if (button.matches("[data-online-return]")) { this._send("requestReturn"); return; }
     if (button.matches("[data-online-complete]")) { this._send("completeExpedition"); return; }
-    if (button.matches("[data-online-start-raid]")) { this._send("startRaid"); return; }
+    if (button.matches("[data-online-start-raid]")) { this._send("startRaid", { raidWorld: this._raidWorldSnapshot() }); return; }
     if (button.matches("[data-online-team-side]")) { this._send("teamSide", { side: button.dataset.onlineTeamSide }); return; }
     if (button.matches("[data-online-team-ready]")) { const self = this._self(); this._send("teamReady", { ready: !self?.teamReady }); return; }
     if (button.matches("[data-online-start-team]")) { this._send("startTeamBattle"); return; }
@@ -312,6 +361,8 @@ export class OnlinePartyController {
       storageSet(ONLINE_STORAGE_KEYS.displayName, event.target.value.trim().slice(0, 16)); this._refreshProfile(); this._send("profile", { profile: this.profile });
     }
     if (event.target.matches("[data-online-server-url]")) storageSet(ONLINE_STORAGE_KEYS.serverUrl, event.target.value.trim());
+    if (event.target.matches("[data-online-trade-query]")) { this.tradeQuery = String(event.target.value ?? "").slice(0, 40); this._render(); requestAnimationFrame(() => { const input = this._query("[data-online-trade-query]"); if (input) { input.focus(); input.setSelectionRange(this.tradeQuery.length, this.tradeQuery.length); } }); }
+    if (event.target.matches("[data-online-trade-amount]")) this.tradeAmount = Math.max(1, Math.min(50_000_000, Math.floor(Number(event.target.value) || 1)));
   }
 
   _selectCharacter(monsterId) {
@@ -339,7 +390,7 @@ export class OnlinePartyController {
     socket.addEventListener("open", () => {
       if (this.ws !== socket) return;
       this.reconnectAttempts = 0; this._refreshProfile();
-      this._send("hello", { friendId: this.selfId, clientKey: storageGet(ONLINE_STORAGE_KEYS.clientKey), resumeToken: this.resumeToken, profile: this.profile });
+      this._send("hello", { protocol: ONLINE_PROTOCOL, friendId: this.selfId, clientKey: storageGet(ONLINE_STORAGE_KEYS.clientKey), resumeToken: this.resumeToken, profile: this.profile });
     });
     socket.addEventListener("message", event => { if (this.ws !== socket) return; try { this._handleMessage(JSON.parse(event.data)); } catch (error) { console.warn("Online message ignored", error); } });
     socket.addEventListener("close", () => this._handleClose(socket));
@@ -364,38 +415,187 @@ export class OnlinePartyController {
     this.ws.send(JSON.stringify({ type, ...payload })); return true;
   }
 
+  syncExpeditionProfile() {
+    this._refreshProfile();
+    this.pendingExpeditionProfileSync = true;
+    return this._flushExpeditionProfileSync();
+  }
+
+  _flushExpeditionProfileSync() {
+    if (!this.pendingExpeditionProfileSync || !this.profile) return false;
+    if (!this._send("expeditionProfileSync", { profile: this.profile })) return false;
+    this.pendingExpeditionProfileSync = false;
+    return true;
+  }
+
+  _notifyTutorialGuide(id) {
+    const key = String(id ?? "");
+    if (!key || this.notifiedTutorialGuides.has(key)) return;
+    this.notifiedTutorialGuides.add(key);
+    this.onTutorialGuide(key);
+  }
+
   _handleMessage(message) {
     if (!message || typeof message.type !== "string") return;
     if (message.type === "helloAck") {
+      if (message.protocol !== ONLINE_PROTOCOL) { this.manualClose = true; this._setStatus("error", "接続できません", "ゲームとオンラインサーバーのバージョンが一致しません"); this.ws?.close(1002, "protocol mismatch"); return; }
       this.selfId = message.playerId || this.selfId; this.resumeToken = message.resumeToken || ""; storageSet(ONLINE_STORAGE_KEYS.resumeToken, this.resumeToken);
       storageSet(ONLINE_STORAGE_KEYS.autoConnect, "1");
       this._setStatus("online", "接続済み", message.resumed ? "前の部屋へ復帰しました" : "部屋を作るか、ルームIDで参加してください");
       this._showConnectionStep(message.room ? "room" : "gate");
+      if (Array.isArray(message.activeTradeIds) || !message.resumed) {
+        const released = recoverOrphanedTradeEscrows(this.getState?.() ?? {}, Array.isArray(message.activeTradeIds) ? message.activeTradeIds : []);
+        if (released.length) { this.onOnlineStateMutation({ kind: "tradeRecovery", assets: released }); this.toast(`${released.length}件の交換品を所持品へ戻しました`); }
+      }
       if (message.room) this._applyRoomState(message.room);
       else { const invited = safeRoomId(this._query("[data-online-room-code]")?.value); if (invited.length === 6) this._send("joinRoom", { roomId: invited }); }
+      this._flushExpeditionProfileSync();
       return;
     }
     if (message.type === "roomState") { this._applyRoomState(message.room); return; }
+    if (message.type === "tradeState") { this._applyTradeState(message.trade); return; }
+    if (message.type === "tradeCancelled") { this._finishTrade(message.tradeId, { cancelled: true, reason: message.reason }); return; }
+    if (message.type === "tradeCompleted") { this._finishTrade(message.tradeId, { completed: true }); return; }
+    if (message.type === "tradeCommit") { this._commitTrade(message); return; }
+    if (message.type === "hostWorldDelta") { this._applyHostWorldDelta(message); return; }
+    if (message.type === "expeditionVitals") { this._applyExpeditionVitals(message); return; }
+    if (message.type === "secretRoomEntered") { if (String(message.playerId ?? "") !== this.selfId) return; const roomId = String(message.roomId ?? "").slice(0, 160), floor = Math.max(1, Math.min(10000, Math.floor(Number(message.floor) || 1))); if (roomId) this.onSecretRoomEntered({ roomId, floor, playerId: this.selfId }); return; }
+    if (["battleDefeated", "onlineBattleDefeated"].includes(message.type)) { this._applyBattleDefeated(message); return; }
+    if (["raidWorld", "raidWorldState"].includes(message.type)) { const ownerId = message.ownerId ?? this.roomState?.ownerId ?? this.roomState?.leaderId; if (ownerId === this.selfId) this._syncRaidWorld(message.raidWorld ?? message.progress); return; }
     if (message.type === "leftRoom") { this._clearRoom(); return; }
     if (message.type === "memberMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.position = { ...message.position }; if (this.route === "home") this._updateHallPlayerDom(message.playerId); return; }
     if (message.type === "expeditionMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.dungeonPosition = { ...message.position }; if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render(); return; }
     if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this._applyRoomState(message.room); return; }
     if (message.type === "battleStarted" && message.room) { this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
-    if (message.type === "expeditionEvent") { if (message.event?.kind === "hostChestOpened") this.onHostWorldUpdate(message.event); this._announceExpeditionEvent(message.event); return; }
-    if (message.type === "floorBossDefeated") { const reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: message.ownerId ?? null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = !reward.ownerId || reward.ownerId === this.selfId; this.floorBossConfirm = null; this.expeditionReport = message.summary ?? null; this.pendingFloorBossReward = isWorldOwner && reward.firstClear ? reward : null; if (isWorldOwner) { this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId: reward.ownerId }); this.onFloorBossDefeated({ ...reward, resume: false }); } this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！`); this._render(); return; }
+    if (message.type === "expeditionEvent") { if (message.event?.kind === "hostChestOpened") this.onHostWorldUpdate(message.event); if (message.event?.tutorialGuide === "firstPickup") this._notifyTutorialGuide("explore_pickup"); this._announceExpeditionEvent(message.event); return; }
+    if (message.type === "floorBossDefeated") { const reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: message.ownerId ?? null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = !reward.ownerId || reward.ownerId === this.selfId, multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = multiplayer && isWorldOwner && reward.firstClear ? reward : null; if (isWorldOwner) { this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId: reward.ownerId }); this.onFloorBossDefeated({ ...reward, resume: Boolean(reward.firstClear && !multiplayer) }); } this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！`); this._render(); return; }
     if (message.type === "expeditionPing" && message.ping?.id) { this.coopPings.set(message.ping.id, { ...message.ping }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() }); else this._render(); return; }
     if (message.type === "battleRound" || message.type === "battleResolved") { const previous = this.roomState?.expedition?.battle; this._captureHpTrails("explore", previous, message.battle); if (this.roomState?.expedition) this.roomState.expedition.battle = message.battle; if (message.type === "battleRound") this._closeBattleMenus("explore"); this._setRoute("explore", { silent: true }); this._queueBattlePresentation("explore", message.battle?.lastEvents); return; }
-    if (message.type === "expeditionEnded") { this.expeditionReport = message.summary ?? null; this.route = "explore"; this.toast(message.summary?.completed ? `共闘 ${message.summary.floor}F 踏破！` : message.summary?.reason === "defeat" ? "共闘パーティが全滅しました…" : "共闘探索から帰還しました"); this._render(); return; }
+    if (message.type === "expeditionEnded") { const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.expeditionReport = multiplayer ? message.summary ?? null : null; this.route = "explore"; this.toast(message.summary?.completed ? `${message.summary.floor}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
     if (message.type === "battleEnded") { this.toast(message.result === "victory" ? "共闘バトル勝利！" : "共闘パーティが全滅しました…"); return; }
-    if (message.type === "raidStarted") { this.roomState = { ...(this.roomState ?? {}), phase: "raid", raid: message.raid, raidProgress: message.raid?.progress }; this._setRoute("raid", { silent: true }); this._queueBattlePresentation("raid", message.raid?.lastEvents); return; }
-    if (["raidState", "raidRound", "raidResolved"].includes(message.type)) { const previous = this.roomState?.raid; this._captureHpTrails("raid", previous, message.raid); if (this.roomState) { this.roomState.phase = "raid"; this.roomState.raid = message.raid; this.roomState.raidProgress = message.raid?.progress ?? this.roomState.raidProgress; } if (message.type === "raidRound") this._closeBattleMenus("raid"); this._setRoute("raid", { silent: true }); this._queueBattlePresentation("raid", message.raid?.lastEvents); return; }
-    if (message.type === "raidEnded") { if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.raid = null; this.roomState.raidProgress = message.result === "victory" ? null : message.raid?.progress; } this.raidReport = { result: message.result, raid: message.raid, ranking: message.ranking ?? message.raid?.ranking ?? [] }; this.route = "raid"; this.toast(message.result === "victory" ? "レイド討伐成功！" : "敗北…ボスの残HPを保存しました"); this._render(); return; }
+    if (message.type === "raidStarted") {
+      this.roomState = { ...(this.roomState ?? {}), phase: "raid", raid: message.raid, raidProgress: message.raid?.progress };
+      const raidOwner = (this.roomState?.ownerId ?? this.roomState?.leaderId) === this.selfId;
+      if (raidOwner && Object.prototype.hasOwnProperty.call(message.raid ?? {}, "progress")) this._syncRaidWorld(message.raid.progress);
+      this._setRoute("raid", { silent: true }); this._queueBattlePresentation("raid", message.raid?.lastEvents); return;
+    }
+    if (["raidState", "raidRound", "raidResolved"].includes(message.type)) {
+      const previous = this.roomState?.raid; this._captureHpTrails("raid", previous, message.raid);
+      if (this.roomState) { this.roomState.phase = "raid"; this.roomState.raid = message.raid; this.roomState.raidProgress = message.raid?.progress ?? this.roomState.raidProgress; }
+      const raidOwner = (this.roomState?.ownerId ?? this.roomState?.leaderId) === this.selfId;
+      if (raidOwner && Object.prototype.hasOwnProperty.call(message.raid ?? {}, "progress")) this._syncRaidWorld(message.raid.progress);
+      if (message.type === "raidRound") this._closeBattleMenus("raid"); this._setRoute("raid", { silent: true }); this._queueBattlePresentation("raid", message.raid?.lastEvents); return;
+    }
+    if (message.type === "raidEnded") {
+      const raidOwner = (this.roomState?.ownerId ?? this.roomState?.leaderId) === this.selfId;
+      if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.raid = null; this.roomState.raidProgress = message.result === "victory" ? null : message.raid?.progress; }
+      if (raidOwner) this._syncRaidWorld(message.result === "victory" ? null : message.raid?.progress);
+      this.raidReport = { result: message.result, raid: message.raid, ranking: message.ranking ?? message.raid?.ranking ?? [] }; this.route = "raid"; this.toast(message.result === "victory" ? "レイド討伐成功！" : "敗北…ボスの残HPを保存しました"); this._render(); return;
+    }
     if (message.type === "teamBattleStarted" || message.type === "teamBattleState" || message.type === "teamBattleRound" || message.type === "teamBattleResolved") { const previous = this.roomState?.teamBattle; this._captureHpTrails("team", previous, message.teamBattle); if (this.roomState) { this.roomState.phase = "team"; this.roomState.teamBattle = message.teamBattle; } if (message.type === "teamBattleRound") this._closeBattleMenus("team"); this._setRoute("team", { silent: true }); this._queueBattlePresentation("team", message.teamBattle?.lastEvents); return; }
     if (message.type === "teamBattleEnded") { this.toast(message.winner ? `${message.winner === "sun" ? "紅組" : "蒼組"}の勝利！` : "引き分け！"); return; }
     if (message.type === "chatMessage") { this._receiveChat(message.message); return; }
     if (message.type === "social") { this._receiveSocial(message); return; }
     if (message.type === "onlineReward") { this._receiveReward(message); return; }
-    if (message.type === "error") { this._clearInteractionPending(false); if (this.merchantPending) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { ...(this.merchantResult ?? {}), status: "error", message: message.message || "支援品を受け取れませんでした。" }; } this.toast(message.message || "オンライン処理に失敗しました"); this._render(); return; }
+    if (message.type === "error") { this._clearInteractionPending(false); if (this.tradePendingOffer && this.trade?.tradeId) { const restored = releaseOnlineTradeAsset(this.getState?.() ?? {}, this.trade.tradeId); this.onOnlineStateMutation({ kind: "tradeRelease", tradeId: this.trade.tradeId, asset: restored.asset }); this.tradePendingOffer = null; } if (this.merchantPending) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { ...(this.merchantResult ?? {}), status: "error", message: message.message || "支援品を受け取れませんでした。" }; } this.toast(message.message || "オンライン処理に失敗しました"); this._render(); return; }
+  }
+
+  _tradeCatalog() {
+    const source = buildOnlineTradeCatalog(this.getState?.() ?? {}), kind = this.tradeFilter, query = this.tradeQuery.trim().toLocaleLowerCase("ja");
+    return source.filter(asset => (kind === "all" || asset.kind === kind) && (!query || `${asset.name} ${asset.rarity} ${asset.details}`.toLocaleLowerCase("ja").includes(query))).slice(0, 80);
+  }
+
+  _applyTradeState(trade) {
+    if (!trade?.tradeId || !trade.participants?.includes(this.selfId)) return;
+    const enteredConfirm = trade.state === "confirming" && (this.trade?.tradeId !== trade.tradeId || this.trade?.state !== "confirming");
+    this.trade = trade; this.tradePendingOffer = null; this.route = "home";
+    if (enteredConfirm) {
+      this.tradeConfirmAvailableAt = Date.now() + 3000;
+      clearTimeout(this.tradeConfirmTimer);
+      this.tradeConfirmTimer = setTimeout(() => { this.tradeConfirmTimer = null; this._render(); }, 3050);
+    } else if (trade.state !== "confirming") { this.tradeConfirmAvailableAt = 0; clearTimeout(this.tradeConfirmTimer); this.tradeConfirmTimer = null; }
+    this._render();
+  }
+
+  _offerTradeAsset(ref) {
+    const tradeId = this.trade?.tradeId;
+    if (!tradeId || !ref || this.tradePendingOffer) return;
+    const state = this.getState?.() ?? {}, replacing = Boolean(state.onlineParty?.tradeEscrow?.[tradeId]), catalogItem = buildOnlineTradeCatalog(state).find(asset => asset.ref === ref);
+    if (!catalogItem || catalogItem.unavailable) return this.toast(catalogItem?.reason || "交換できない所持品です");
+    const amount = Math.max(1, Math.min(Number(catalogItem.maxAmount) || 1, this.tradeAmount));
+    const result = reserveOnlineTradeAsset(state, tradeId, ref, { amount, replace: replacing });
+    if (!result.ok) { this.toast(result.message || "交換品を提示できません"); return; }
+    this.tradePendingOffer = result.asset;
+    this.onOnlineStateMutation({ kind: "tradeReserve", tradeId, asset: result.asset });
+    if (!this._send("tradeOffer", { tradeId, asset: result.asset })) {
+      const released = releaseOnlineTradeAsset(state, tradeId); this.tradePendingOffer = null;
+      this.onOnlineStateMutation({ kind: "tradeRelease", tradeId, asset: released.asset }); this.toast("接続が切れたため交換品を戻しました");
+    }
+    this._render();
+  }
+
+  async _commitTrade(message) {
+    const tradeId = String(message.tradeId ?? ""); if (!tradeId) return;
+    const result = commitOnlineTrade(this.getState?.() ?? {}, tradeId, message.incomingAsset, { partnerId: message.partnerId, partnerName: message.partnerName });
+    if (result.ok) {
+      await this.onOnlineStateMutation({ kind: "tradeCommit", tradeId, received: result.received, gave: result.gave });
+      this._send("tradeAck", { tradeId, success: true });
+      if (!result.duplicate) this.toast(`${result.received?.name || "交換品"}を受け取りました`);
+    } else { this._send("tradeAck", { tradeId, success: false }); this.toast(result.message || "交換品を保存できませんでした"); }
+  }
+
+  _finishTrade(tradeId, { cancelled = false, completed = false, reason = "" } = {}) {
+    if (cancelled) {
+      const result = releaseOnlineTradeAsset(this.getState?.() ?? {}, tradeId);
+      if (result.asset) this.onOnlineStateMutation({ kind: "tradeRelease", tradeId, asset: result.asset });
+      this.toast(reason === "declined" ? "交換は辞退されました" : reason === "timeout" ? "交換が時間切れになりました" : "交換を終了しました");
+    } else if (completed) this.toast("交換が完了しました");
+    if (!this.trade || this.trade.tradeId === tradeId) this._clearTradeUi();
+    this._render();
+  }
+
+  _clearTradeUi() {
+    this.trade = null; this.tradePendingOffer = null; this.tradeFilter = "all"; this.tradeQuery = ""; this.tradeAmount = 1; this.tradeConfirmAvailableAt = 0;
+    clearTimeout(this.tradeConfirmTimer); this.tradeConfirmTimer = null;
+  }
+
+  async _exchangeRaidReward(kind, cost) {
+    if (this.raidExchangePending) return;
+    this.raidExchangePending = kind; this._render();
+    try { const result = await this.onRaidExchange(kind, cost); this.toast(result?.message || (result?.ok ? "交換報酬を受け取りました" : "交換できませんでした")); }
+    finally { this.raidExchangePending = null; this._render(); }
+  }
+
+  _raidWorldSnapshot() { const source = this.getState?.()?.onlineParty?.raidWorld; return source && typeof source === "object" ? JSON.parse(JSON.stringify(source)) : null; }
+
+  _syncRaidWorld(raidWorld) {
+    const signature = JSON.stringify(raidWorld ?? null); if (signature === this.lastRaidWorldSignature) return;
+    this.lastRaidWorldSignature = signature; this.onRaidWorldUpdate({ raidWorld: raidWorld ?? null });
+  }
+
+  _applyHostWorldDelta(message) {
+    const ownerId = message.ownerId ?? this.roomState?.ownerId; if (ownerId && ownerId !== this.selfId) return;
+    const revision = Math.max(0, Math.floor(Number(message.revision) || 0)), eventKey = `${ownerId || this.selfId}:${revision || JSON.stringify(message.delta ?? {})}`;
+    if ((revision && revision <= this.hostWorldRevision) || this.processedHostWorldDeltas.has(eventKey)) return;
+    this.processedHostWorldDeltas.add(eventKey); if (this.processedHostWorldDeltas.size > 256) this.processedHostWorldDeltas.delete(this.processedHostWorldDeltas.values().next().value);
+    this.hostWorldRevision = Math.max(this.hostWorldRevision, revision);
+    const hostWorld = this._hostWorldSnapshot(), delta = message.delta ?? {}; hostWorld.revision = this.hostWorldRevision;
+    if (delta.openedChest) { const floor = String(Math.max(1, Number(delta.openedChest.floor) || 1)), chestId = String(delta.openedChest.chestId ?? ""); hostWorld.openedChestIds[floor] ??= []; if (chestId && !hostWorld.openedChestIds[floor].includes(chestId)) hostWorld.openedChestIds[floor].push(chestId); }
+    if (delta.floorSeed) { const floor = String(Math.max(1, Number(delta.floorSeed.floor) || 1)); hostWorld.floorSeeds ??= {}; hostWorld.floorSeeds[floor] = delta.floorSeed.seed; }
+    if (delta.defeatedBoss) { const floor = Math.max(10, Number(delta.defeatedBoss.floor) || 10); hostWorld.defeatedBossFloors ??= []; if (!hostWorld.defeatedBossFloors.includes(floor)) hostWorld.defeatedBossFloors.push(floor); }
+    this.onHostWorldUpdate({ kind: "hostWorldSnapshot", hostWorld, ownerId: ownerId ?? this.selfId, revision: this.hostWorldRevision });
+  }
+
+  _applyExpeditionVitals(message) {
+    if (message.playerId && message.playerId !== this.selfId) return;
+    const fallbackMutationId = `${this.roomId || "room"}:${this.roomState?.expedition?.id || "run"}:${message.monsterId || this.selectedMonsterId}:${Math.floor(Number(message.hp) || 0)}:${Math.floor(Number(message.mp) || 0)}:${message.reason || "sync"}`;
+    this.onOnlineVitalsUpdate({ mutationId: String(message.mutationId || fallbackMutationId).slice(0, 160), monsterId: message.monsterId || this.selectedMonsterId, hp: Math.max(0, Number(message.hp) || 0), mp: Math.max(0, Number(message.mp) || 0) });
+  }
+
+  _applyBattleDefeated(message) {
+    const eventId = String(message.eventId ?? message.id ?? ""); if (!eventId || this.processedBattleEvents.has(eventId)) return;
+    this.processedBattleEvents.add(eventId); if (this.processedBattleEvents.size > 256) this.processedBattleEvents.delete(this.processedBattleEvents.values().next().value);
+    this.onBattleDefeated({ eventId, monsterId: message.monsterId || this.selectedMonsterId, floor: Math.max(1, Number(message.floor) || 1), boss: Boolean(message.boss), defeated: Array.isArray(message.defeated) ? message.defeated : [] });
   }
 
   _exploreUiSignature(room) {
@@ -440,6 +640,10 @@ export class OnlinePartyController {
     if (rareKind !== "otherworldMerchant") { this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; }
     this._clearInteractionPending(false);
     this.roomState = room; this.roomId = room.roomId;
+    // A null room snapshot means the server has not imported this owner's saved
+    // raid yet.  Only an explicit raid victory is allowed to clear local progress.
+    if ((room.ownerId ?? room.leaderId) === this.selfId && room.raidProgress) this._syncRaidWorld(room.raidProgress);
+    if ((room.ownerId ?? room.leaderId) === this.selfId && room.hostWorld) { const revision = Math.max(0, Number(room.hostWorld.revision) || 0), signature = JSON.stringify(room.hostWorld); if (revision > this.hostWorldRevision || !revision && signature !== this.lastHostWorldSnapshotSignature) { this.hostWorldRevision = Math.max(this.hostWorldRevision, revision); this.lastHostWorldSnapshotSignature = signature; this.onHostWorldUpdate({ kind: "hostWorldSnapshot", hostWorld: room.hostWorld, ownerId: this.selfId, revision }); } }
     if (room?.expedition?.interactions?.[this.selfId]?.action !== "browseRareMerchant" && !this.merchantResult) this.rareMerchantOpen = false;
     if (room.phase === "expedition") this.route = "explore";
     else if (room.phase === "raid") this.route = "raid";
@@ -466,7 +670,7 @@ export class OnlinePartyController {
   }
 
   _clearRoom() {
-    this.roomState = null; this.roomId = null; this.path = []; this.heldDirections.clear(); this.unread = 0; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false);
+    this.roomState = null; this.roomId = null; this.path = []; this.heldDirections.clear(); this.unread = 0; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false); this._clearTradeUi();
     this.root?.querySelector(".online-v3-screen")?.classList.remove("online-shared-gameplay-active");
     this._unmountExploreCanvas();
     this._query("[data-online-room]")?.classList.remove("online-shared-gameplay");
@@ -502,12 +706,13 @@ export class OnlinePartyController {
     this.root?.querySelector(".online-v3-screen")?.classList.toggle("online-shared-gameplay-active", gameplay);
     const canvasExplore = this.route === "explore" && this.roomState.phase === "expedition" && !this.roomState.expedition?.battle;
     if (this.exploreCanvasMounted) this._unmountExploreCanvas();
-    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], raidReport: this.raidReport, expeditionReport: this.expeditionReport, floorBossConfirm: this.floorBossConfirm, exploreChatOpen: this.exploreChatOpen, merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot() };
+    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], raidReport: this.raidReport, expeditionReport: this.expeditionReport, floorBossConfirm: this.floorBossConfirm, exploreChatOpen: this.exploreChatOpen, merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot(), trade: this.trade, tradeCatalog: this.trade ? this._tradeCatalog() : [], tradeFilter: this.tradeFilter, tradeQuery: this.tradeQuery, tradeAmount: this.tradeAmount, tradeConfirmSeconds: Math.max(0, Math.ceil((this.tradeConfirmAvailableAt - Date.now()) / 1000)), raidExchangePending: this.raidExchangePending };
     stage.innerHTML = this.route === "explore" ? renderOnlineExplore(this.roomState, this.selfId, state)
       : this.route === "raid" ? renderOnlineRaid(this.roomState, this.selfId, state)
       : this.route === "team" ? renderOnlineTeam(this.roomState, this.selfId, state)
       : this.route === "chat" ? renderOnlineChat(this.roomState, this.selfId, this.chatDraft)
       : renderOnlineHome(this.roomState, this.selfId, state);
+    this._renderRewardReceipt();
     if (this.route === "chat") requestAnimationFrame(() => { const log = this._query("[data-online-chat-log]"); if (log) log.scrollTop = log.scrollHeight; });
     if (this.route === "home") { this.hallNearbyRoute = this._hallNearby(this._self()?.position); requestAnimationFrame(() => this._prepareExploreEmoteAnchor()); }
     this.onScene(canvasExplore ? "explore" : gameplay ? "battle" : "home");
@@ -629,21 +834,25 @@ export class OnlinePartyController {
   }
 
   _showRewardReceipt(message, result = {}) {
-    if (result?.duplicate) return;
+    if (result?.duplicate || result?.isWeapon !== true || !result?.equipmentName) return;
+    this.pendingRewardReceipt = { id: String(message.rewardId ?? Date.now()), title: String(message.source?.title || "武器獲得"), name: String(result.equipmentName), rarity: String(message.reward?.randomEquipmentRarity || ""), expiresAt: Date.now() + 7200 };
+    clearTimeout(this.rewardReceiptTimer);
+    this.rewardReceiptTimer = setTimeout(() => this._clearRewardReceipt(), 7200);
+    this._renderRewardReceipt();
+  }
+
+  _renderRewardReceipt() {
+    const data = this.pendingRewardReceipt; if (!data || data.expiresAt <= Date.now()) { if (data) this._clearRewardReceipt(); return; }
     const stage = this._query(".explore-stage") ?? this._query("[data-online-stage]"); if (!stage) return;
-    stage.querySelector(".online-reward-receipt")?.remove();
-    const reward = message.reward ?? {}, source = message.source ?? {}, shared = source.sharedBase && typeof source.sharedBase === "object" ? source.sharedBase : reward;
-    const commonRows = this._rewardRows(shared), numericKeys = ["gold", "crystals", "captureCrystals", "raidMaterials", "experience"], personalReward = {};
-    for (const key of numericKeys) { const extra = Math.max(0, Number(reward?.[key] || 0) - Number(shared?.[key] || 0)); if (extra) personalReward[key] = extra; }
-    if (reward?.randomEquipmentRarity && reward.randomEquipmentRarity !== shared?.randomEquipmentRarity) personalReward.randomEquipmentRarity = reward.randomEquipmentRarity;
-    const personalRows = this._rewardRows(personalReward);
-    if (result.equipmentName && !personalRows.some(row => row.label.includes("装備"))) personalRows.push({ label: "個別装備", value: result.equipmentName, rarity: String(reward.randomEquipmentRarity || "") });
-    const rowHtml = rows => rows.length ? rows.map(row => `<li class="${row.rarity ? "rare" : ""}"><span>${safeHtml(row.label)}</span><b>${safeHtml(row.value)}</b></li>`).join("") : `<li><span>受取済み</span><b>✓</b></li>`;
-    const receipt = document.createElement("aside"); receipt.className = "online-reward-receipt"; receipt.setAttribute("role", "status");
-    receipt.innerHTML = `<header><span>ONLINE LOOT</span><strong>${safeHtml(source.title || "共闘戦利品")}</strong><button type="button" data-online-reward-close aria-label="閉じる">×</button></header><section><h4>全員共通</h4><ul>${rowHtml(commonRows)}</ul></section>${personalRows.length || source.personalBonus ? `<section class="personal"><h4>あなたの追加抽選${source.personalBonus ? `・${safeHtml(source.personalBonus)}` : ""}</h4><ul>${rowHtml(personalRows)}</ul></section>` : ""}`;
-    stage.appendChild(receipt);
-    requestAnimationFrame(() => receipt.classList.add("show"));
-    const timer = setTimeout(() => { this.presentationTimers.delete(timer); receipt.classList.add("leaving"); setTimeout(() => receipt.remove(), 380); }, 7200); this.presentationTimers.add(timer);
+    const current = stage.querySelector(".online-reward-receipt"); if (current?.dataset.receiptId === data.id) return; current?.remove();
+    const receipt = document.createElement("aside"); receipt.className = "online-reward-receipt online-weapon-receipt"; receipt.dataset.receiptId = data.id; receipt.setAttribute("role", "status");
+    receipt.innerHTML = `<header><span>ONLINE LOOT</span><strong>${safeHtml(data.title)}</strong><button type="button" data-online-reward-close aria-label="閉じる">×</button></header><section><h4>武器を獲得</h4><ul><li class="rare"><span>${safeHtml(data.rarity || "WEAPON")}</span><b>${safeHtml(data.name)}</b></li></ul></section>`;
+    stage.appendChild(receipt); requestAnimationFrame(() => receipt.classList.add("show"));
+  }
+
+  _clearRewardReceipt() {
+    clearTimeout(this.rewardReceiptTimer); this.rewardReceiptTimer = null; this.pendingRewardReceipt = null;
+    const receipt = this._query(".online-reward-receipt"); if (!receipt) return; receipt.classList.add("leaving"); setTimeout(() => receipt.remove(), 380);
   }
 
   async _receiveReward(message) {
@@ -651,7 +860,7 @@ export class OnlinePartyController {
     this.rewardInFlight.add(id);
     try {
       const result = await this.onReward({ rewardId: id, reward: message.reward ?? {}, source: message.source ?? {} });
-      if (result?.ok) { this._send("rewardAck", { rewardId: id }); if (!result.duplicate) { this.toast("オンライン報酬を受け取りました"); this._showRewardReceipt(message, result); } }
+      if (result?.ok) { this._send("rewardAck", { rewardId: id }); if (!result.duplicate && result.isWeapon === true) this._showRewardReceipt(message, result); }
     } finally { this.rewardInFlight.delete(id); }
   }
 
@@ -678,7 +887,7 @@ export class OnlinePartyController {
     if (direction) { const [dx, dy] = DIRECTION[direction]; target = { x: current.x + dx, y: current.y + dy }; }
     else if (this.path.length) { target = this.path.shift(); const dx = target.x - current.x, dy = target.y - current.y; direction = dx < 0 ? "left" : dx > 0 ? "right" : dy < 0 ? "up" : "down"; }
     if (!target || expedition.tiles?.[target.y]?.[target.x] !== ".") { if (target) this.path = []; return; }
-    this.lastMoveAt = now; self.dungeonPosition = { ...target, facing: direction }; this._send("expeditionMove", { position: self.dungeonPosition }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render();
+    this.lastMoveAt = now; self.dungeonPosition = { ...target, facing: direction }; const sent = this._send("expeditionMove", { position: self.dungeonPosition }); if (sent) this._notifyTutorialGuide("explore_move"); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render();
   }
 
   _hostWorldSnapshot() {
@@ -690,7 +899,34 @@ export class OnlinePartyController {
     const bossKills = Object.entries(state.player?.bossKills ?? {}).filter(([, value]) => Number(value) > 0).map(([floor]) => Number(floor));
     const bossRewards = Object.keys(state.player?.bossRewards ?? {}).map(Number);
     const claimed = Array.isArray(source.claimedBossRewardFloors) ? source.claimedBossRewardFloors : [];
-    return { openedChestIds: Object.fromEntries([...floors].map(floor => [String(floor), [...new Set([...(Array.isArray(opened[floor]) ? opened[floor] : []), ...(Array.isArray(soloOpened[floor]) ? soloOpened[floor] : [])].map(String).slice(0, 200))]])), defeatedBossFloors: [...new Set([...onlineClears, ...bossKills, ...bossRewards].map(Number).filter(floor => floor > 0 && floor % 10 === 0))].slice(0, 1000), claimedBossRewardFloors: [...new Set([...claimed, ...bossRewards].map(Number).filter(floor => floor > 0 && floor % 10 === 0))].slice(0, 1000) };
+    const savedSeeds = state.player?.floorSeeds && typeof state.player.floorSeeds === "object" ? state.player.floorSeeds : {}, onlineSeeds = source.floorSeeds && typeof source.floorSeeds === "object" ? source.floorSeeds : {};
+    return { revision: Math.max(this.hostWorldRevision, Number(source.revision) || 0), openedChestIds: Object.fromEntries([...floors].map(floor => [String(floor), [...new Set([...(Array.isArray(opened[floor]) ? opened[floor] : []), ...(Array.isArray(soloOpened[floor]) ? soloOpened[floor] : [])].map(String).slice(0, 200))]])), floorSeeds: { ...savedSeeds, ...onlineSeeds }, defeatedBossFloors: [...new Set([...onlineClears, ...bossKills, ...bossRewards].map(Number).filter(floor => floor > 0 && floor % 10 === 0))].slice(0, 1000), claimedBossRewardFloors: [...new Set([...claimed, ...bossRewards].map(Number).filter(floor => floor > 0 && floor % 10 === 0))].slice(0, 1000) };
+  }
+
+  _hostWorldNetworkSnapshot() {
+    const full = this._hostWorldSnapshot(), selected = Math.max(1, Number(this.roomState?.selectedFloor) || 1);
+    const snapshot = { revision: full.revision, floorSeeds: {}, openedChestIds: {}, defeatedBossFloors: full.defeatedBossFloors, claimedBossRewardFloors: full.claimedBossRewardFloors };
+    const secretRun = this.getState?.()?.secretRooms?.run;
+    if (secretRun && typeof secretRun === "object") {
+      const id = String(secretRun.id ?? "").slice(0, 120), seed = Math.max(1, Math.min(0x7fffffff, Math.floor(Number(secretRun.seed) || 1)));
+      if (id) snapshot.secretRooms = { run: { id, seed } };
+    }
+    const candidates = [...new Set([selected, ...Object.keys(full.floorSeeds), ...Object.keys(full.openedChestIds)].map(Number).filter(floor => Number.isInteger(floor) && floor >= selected))].sort((left, right) => left - right);
+    // Keep startExpedition comfortably below the server's 128 KiB WebSocket
+    // ceiling, while prioritising the selected floor and the floors ahead.
+    for (const floor of candidates) {
+      const key = String(floor), seed = full.floorSeeds[key], opened = full.openedChestIds[key];
+      if (seed != null) snapshot.floorSeeds[key] = seed;
+      if (Array.isArray(opened) && opened.length) snapshot.openedChestIds[key] = opened.slice(0, 200);
+      if (JSON.stringify(snapshot).length <= 56 * 1024) continue;
+      delete snapshot.floorSeeds[key]; delete snapshot.openedChestIds[key];
+      if (floor === selected) {
+        if (seed != null) snapshot.floorSeeds[key] = seed;
+        if (Array.isArray(opened) && opened.length) snapshot.openedChestIds[key] = opened.slice(0, 64);
+      }
+      break;
+    }
+    return snapshot;
   }
 
   _chatBubbleSnapshot() {

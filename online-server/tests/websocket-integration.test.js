@@ -111,6 +111,7 @@ async function connectPlayer(url, index) {
   const alphabet = "BCDEFG";
   client.send({
     type: "hello",
+    protocol: "1.12.0",
     friendId: `AD-TEST-TES${alphabet[index - 1]}`,
     clientKey: `websocket-integration-secret-${index}`.padEnd(32, "x"),
     profile: profile(index),
@@ -143,7 +144,7 @@ test("real websocket server synchronizes four clients, chat, health and capacity
 
     const health = await fetch(`http://127.0.0.1:${port}/health`).then(response => response.json());
     assert.equal(health.ok, true);
-    assert.equal(health.protocol, "1.11.1");
+    assert.equal(health.protocol, "1.12.0");
 
     const url = `ws://127.0.0.1:${port}/party`;
     for (let index = 1; index <= 5; index += 1) clients.push(await connectPlayer(url, index));

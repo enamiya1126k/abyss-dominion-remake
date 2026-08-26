@@ -59,10 +59,12 @@ function takeMid(cells, source, random) {
 }
 
 export function rareEventChance({ floor = 1, participants = 1, resonance = 0 } = {}) {
+  if (Math.max(1, Math.floor(Number(participants) || 1)) < 2 || Math.max(1, Math.floor(Number(floor) || 1)) % 10 === 0) return 0;
   return Math.min(.32, .12 + Math.min(10, Math.floor(Number(floor) / 100)) * .008 + Math.max(0, Number(participants) - 1) * .025 + Math.max(0, Number(resonance)) * .012);
 }
 
 export function chooseRareEvent({ ownerId = "", floor = 1, runId = "", participants = 1, resonance = 0, forceRare = null } = {}) {
+  if (Math.max(1, Math.floor(Number(participants) || 1)) < 2 || Math.max(1, Math.floor(Number(floor) || 1)) % 10 === 0) return null;
   if (RARE_KINDS.includes(forceRare)) return forceRare;
   const random = seededRandom(hashText(`rare207:${ownerId}:${floor}:${runId}`));
   if (random() >= rareEventChance({ floor, participants, resonance })) return null;

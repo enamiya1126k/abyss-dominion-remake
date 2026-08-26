@@ -78,15 +78,16 @@ test("build207 keeps one normal co-op gimmick and adds each rare intrusion as a 
     assert.equal(expedition.coop.resonance.level, 3);
     assert.equal(expedition.coop.resonance.rewardBonusPct, 9);
   }
-  assert.equal(chooseRareEvent({ forceRare: "goldenMonster" }), "goldenMonster");
-  assert.ok(rareEventChance({ floor: 1000, participants: 4, resonance: 5 }) > rareEventChance({ floor: 1, participants: 1, resonance: 0 }));
+  assert.equal(chooseRareEvent({ forceRare: "goldenMonster", participants: 2 }), "goldenMonster");
+  assert.ok(rareEventChance({ floor: 1001, participants: 4, resonance: 5 }) > rareEventChance({ floor: 1, participants: 1, resonance: 0 }));
 });
 
 test("build207 shared loot gives everyone the same base and only the lucky player a personal extra", () => {
-  const rolls = [0, .5, .99];
+  let rolls = [.99];
   const store = new RoomStore({ randomRoomCode: () => "LOOT27", random: () => rolls.shift() ?? .99 });
   const { players, room } = readyRoom(store, 2);
   assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {} } }).ok, true);
+  rolls = [0, .5, .99];
   const results = store._queueSharedReward207(room, {
     rewardId: "shared-loot",
     base: { gold: 1_000, crystals: 3 },
@@ -140,15 +141,22 @@ test("build207 boss first-clear equipment and unlock belong only to the world ow
   assert.equal(store.setFloor(players[0].session, 10).ok, true);
   for (const player of players) assert.equal(store.setReady(player.session, true).ok, true);
   assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {}, defeatedBossFloors: [] } }).ok, true);
+  const boss = room.expedition.objects.find(object => object.type === "floorBoss");
+  store._startBattle(room, boss);
+  const battle = room.expedition.battle;
+  battle.enemies.forEach(enemy => { enemy.hp = 0; });
+  store._finishBattleVictory(room, battle);
   for (const player of players) player.session.dungeonPosition = { ...room.expedition.exit, facing: "down" };
   store._updateStairGathering(room);
   now += 3_001;
   store._advanceExpeditionFloor(room);
   const ownerReward = players[0].session.pendingRewards.find(entry => entry.source?.bossFirstClear);
+  const ownerUnlock = players[0].session.pendingRewards.find(entry => entry.source?.kind === "floorClear");
   const helperReward = players[1].session.pendingRewards.find(entry => entry.source?.bossAssist);
   assert.ok(ownerReward);
-  assert.equal(ownerReward.reward.randomEquipmentRarity, firstClearEquipmentRarity(10));
-  assert.equal(ownerReward.reward.leaderFloorUnlock, 11);
+  assert.equal(ownerReward.reward.randomEquipmentRarity, undefined);
+  assert.equal(firstClearEquipmentRarity(10), "R");
+  assert.equal(ownerUnlock.reward.leaderFloorUnlock, 11);
   assert.ok(helperReward);
   assert.equal(helperReward.reward.randomEquipmentRarity, undefined);
   assert.equal(helperReward.reward.leaderFloorUnlock, 0);
@@ -181,7 +189,10 @@ test("build207 social, focus marker and one-use KO cheer are authoritative", () 
 
 test("build207 rare merchant and portal objects stay interaction-driven when stepped on", () => {
   const store = new RoomStore({ randomRoomCode: () => "STEP27" });
-  const { players, room } = readyRoom(store, 1);
+  const { players, room } = readyRoom(store, 2);
+  store._finishExpedition(room, { reason: "select-non-boss" });
+  assert.equal(store.setFloor(players[0].session, 119).ok, true);
+  for (const player of players) assert.equal(store.setReady(player.session, true).ok, true);
   assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {} }, forceRare: "otherworldMerchant" }).ok, true);
   const merchant = room.expedition.objects.find(object => object.type === "rareMerchant");
   players[0].session.dungeonPosition = { x: merchant.x, y: merchant.y, facing: "down" };
@@ -190,7 +201,7 @@ test("build207 rare merchant and portal objects stay interaction-driven when ste
   assert.equal(room.expedition.interactions[players[0].session.playerId].action, "browseRareMerchant");
 
   store._finishExpedition(room, { reason: "test" });
-  assert.equal(store.setReady(players[0].session, true).ok, true);
+  for (const player of players) assert.equal(store.setReady(player.session, true).ok, true);
   assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {} }, forceRare: "hiddenPortal" }).ok, true);
   const portal = room.expedition.objects.find(object => object.type === "rarePortal");
   players[0].session.dungeonPosition = { x: portal.x, y: portal.y, facing: "down" };

@@ -44,11 +44,12 @@ test("build206 deterministically distributes every optional gimmick type", () =>
 test("build206 adds exactly one optional floor gimmick and preserves the host world", () => {
   for (const floor of [1, 100, 500, 1000]) {
     const source = expedition(floor);
-    prepareCoopExpeditionV206(source, { leaderId: `leader-${floor}`, hostWorld: { openedChestIds: { [floor]: [`${floor}-0`] } } });
-    assert.ok(COOP_GIMMICK_TYPES.includes(source.coop.gimmickType));
+    prepareCoopExpeditionV206(source, { leaderId: `leader-${floor}`, hostWorld: { openedChestIds: { [floor]: [`${floor}-0`] } }, participants: 2 });
+    if (floor % 10) assert.ok(COOP_GIMMICK_TYPES.includes(source.coop.gimmickType));
+    else assert.equal(source.coop.gimmickType, null);
     assert.equal(source.objects.find(object => object.hostChestKey === `${floor}-0`)?.resolved, true);
     assert.equal(source.objects.some(object => object.x === source.exit.x && object.y === source.exit.y && object.id?.startsWith("coop-")), false);
-    assert.equal(source.totalDiscoveries, 2);
+    assert.equal(source.totalDiscoveries, floor % 10 ? 2 : 1);
     assert.equal(source.coop.floorTier, coopFloorTier(floor).id);
   }
 });

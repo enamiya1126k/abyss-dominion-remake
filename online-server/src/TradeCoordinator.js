@@ -1,6 +1,6 @@
 import{randomBytes}from"node:crypto";
 
-const KINDS=new Set(["monster","equipment","stack","currency"]),MAX_ASSET_BYTES=56*1024;
+const KINDS=new Set(["monster","equipment","stack","currency"]),MAX_ASSET_BYTES=96*1024;
 function token(bytes=12){return randomBytes(bytes).toString("base64url")}
 function text(value,max=64){return String(value??"").replace(/[\u0000-\u001f\u007f]/g,"").trim().slice(0,max)}
 function clone(value){return JSON.parse(JSON.stringify(value))}

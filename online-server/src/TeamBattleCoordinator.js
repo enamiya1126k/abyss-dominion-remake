@@ -191,7 +191,8 @@ export class TeamBattleCoordinator {
 
     const targetId = cleanText(source.targetId, 80);
     const values = Object.values(battle.players);
-    const attackSkill = !skill || skill.kind === "attack";
+    const supportAction = kind === "item" || kind === "skill" && skill?.kind !== "attack";
+    const attackSkill = !supportAction;
     const candidates = values.filter(player => attackSkill ? player.side !== actor.side && player.hp > 0 : player.side === actor.side);
     let target = candidates.find(player => player.playerId === targetId);
     if (!target) target = attackSkill ? candidates.find(player => player.hp > 0) : actor;
