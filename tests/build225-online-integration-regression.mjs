@@ -7,11 +7,14 @@ const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 test("build225 advertises one cache-coherent application version", async () => {
   const [index, config, main] = await Promise.all([read("index.html"), read("src/core/config.js"), read("src/main.js")]);
   assert.match(index, /ASSET_VERSION = "2\.11\.54"/);
-  assert.match(index, /ASSET_BUILD = "build225"/);
+  assert.match(index, /ASSET_BUILD = "build228"/);
+  assert.match(index, /Styles\/build228\.css\?v=2\.11\.54-build228/);
+  assert.match(index, /Styles\/build227\.css\?v=2\.11\.54-build227/);
+  assert.match(index, /Styles\/build226\.css\?v=2\.11\.54-build226/);
   assert.match(index, /Styles\/build225\.css\?v=2\.11\.54-build225/);
   assert.match(index, /Styles\/build218\.css\?v=2\.11\.53-build218/);
   assert.match(config, /APP_VERSION="2\.11\.54"/);
-  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.54-build225/);
+  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.54-build228/);
 });
 
 test("online profile carries offline expedition attrition and host key stock", async () => {
@@ -86,18 +89,18 @@ test("resource rewards use normal toasts and only an acquired weapon opens ONLIN
 
 test("online handshake and host-world transport are versioned and bounded", async () => {
   const [client, server, roomStore] = await Promise.all([read("src/online/OnlinePartyClient.js"), read("online-server/server.js"), read("online-server/src/RoomStore.js")]);
-  assert.match(client, /const ONLINE_PROTOCOL = "1\.12\.0"/);
+  assert.match(client, /const ONLINE_PROTOCOL = "1\.14\.0"/);
   assert.match(client, /this\._send\("hello", \{ protocol: ONLINE_PROTOCOL/);
   assert.match(client, /message\.protocol !== ONLINE_PROTOCOL/);
   assert.match(client, /_hostWorldNetworkSnapshot\(\)/);
   assert.match(client, /56 \* 1024/);
-  assert.match(server, /message\.protocol!=="1\.12\.0"/);
+  assert.match(server, /message\.protocol!=="1\.14\.0"/);
   assert.match(roomStore, /publicHostWorld\(room\.hostWorld,currentFloor\)/);
 });
 
 test("battle metadata and raid exchange retain offline records and fixed prices", async () => {
   const main = await read("src/main.js");
-  assert.match(main, /ONLINE_RAID_EXCHANGE_PRICES=Object\.freeze\(\{character:240,equipment:180,circle:120\}\)/);
+  assert.match(main, /ONLINE_RAID_EXCHANGE_PRICES=Object\.freeze\(\{character:240,equipment:180,circle:120,crystals:30\}\)/);
   assert.match(main, /recordWeaponKill\(save\.state,monster\.id,enemy\)/);
   assert.match(main, /recordSeriesBattle\(save\.state,\[monster\]/);
   assert.match(main, /recordBiomeEncounter\(save\.state,floor,speciesId\)/);

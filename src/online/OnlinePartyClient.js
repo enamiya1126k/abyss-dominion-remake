@@ -1,17 +1,17 @@
 import {
   buildOnlinePartyProfile, ONLINE_STORAGE_KEYS, ensureOnlineIdentity,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.54-build225";
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.54-build226";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
-} from "./OnlineViews.js?v=2.11.54-build225";
+} from "./OnlineViews.js?v=2.11.54-build228";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   commitOnlineTrade, recoverOrphanedTradeEscrows,
-} from "./OnlineTradeSystem.js?v=2.11.54-build225";
-import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=2.11.54-build225";
+} from "./OnlineTradeSystem.js?v=2.11.54-build226";
+import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=2.11.54-build226";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
-const ONLINE_PROTOCOL = "1.12.0";
+const ONLINE_PROTOCOL = "1.14.0";
 const DIRECTION = Object.freeze({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] });
 const ONLINE_EXPLORE_CHAT_POSITION = "abyss-online-explore-chat-position";
 const ONLINE_EXPLORE_EMOTE_POSITION = "abyss-online-explore-emote-position";
@@ -85,6 +85,7 @@ export class OnlinePartyController {
     this.reconnectTimer = null;
     this.rewardInFlight = new Set();
     this.floorBossConfirm = null;
+    this.coopBossConfirm = null;
     this.pendingFloorBossReward = null;
     this.selectedTarget = { explore: null, raid: "juvenile-amalga", team: null };
     this.selectedAlly = { explore: this.selfId, raid: this.selfId, team: this.selfId };
@@ -107,6 +108,7 @@ export class OnlinePartyController {
     this.hostWorldRevision = Math.max(0, Number(this.getState?.()?.onlineParty?.hostWorld?.revision) || 0);
     this.processedHostWorldDeltas = new Set();
     this.processedBattleEvents = new Set();
+    this.processedCoopTechniqueEvents = new Set();
     this.notifiedTutorialGuides = new Set();
     this.pendingExpeditionProfileSync = false;
     this.pendingRewardReceipt = null;
@@ -261,7 +263,9 @@ export class OnlinePartyController {
     if (button.matches("[data-online-close-merchant]")) { this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this._render(); return; }
     if (button.matches("[data-online-cancel-floor-boss]")) { this.floorBossConfirm = null; this._render(); return; }
     if (button.matches("[data-online-confirm-floor-boss]")) { const pending = this.floorBossConfirm; if (!pending || !this._beginInteractionPending("challengeFloorBoss", pending.targetId)) return; this.floorBossConfirm = null; if (!this._send("expeditionInteract", { action: "challengeFloorBoss", targetId: pending.targetId })) this._clearInteractionPending(false); this._render(); return; }
-    if (button.matches("[data-online-expedition-interact]")) { const action = button.dataset.onlineExpeditionInteract, targetId = button.dataset.onlineInteractionTarget; if (action === "challengeFloorBoss") { const interaction = this.roomState?.expedition?.interactions?.[this.selfId] ?? {}; const profile = interaction.bossProfile ?? this.roomState?.expedition?.floorBoss?.profiles?.[0] ?? null; this.floorBossConfirm = { targetId, profile, floor: Number(this.roomState?.expedition?.floor) || 0 }; this._render(); return; } if (!this._beginInteractionPending(action, targetId)) return; if (!this._send("expeditionInteract", { action, targetId })) this._clearInteractionPending(false); this._render(); return; }
+    if (button.matches("[data-online-cancel-coop-boss]")) { this.coopBossConfirm = null; this._render(); return; }
+    if (button.matches("[data-online-confirm-coop-boss]")) { const pending = this.coopBossConfirm, action = pending?.action || "challengeCoopElite"; if (!pending || !this._beginInteractionPending(action, pending.targetId)) return; this.coopBossConfirm = null; if (!this._send("expeditionInteract", { action, targetId: pending.targetId })) this._clearInteractionPending(false); this._render(); return; }
+    if (button.matches("[data-online-expedition-interact]")) { const action = button.dataset.onlineExpeditionInteract, targetId = button.dataset.onlineInteractionTarget; if (action === "challengeFloorBoss") { const interaction = this.roomState?.expedition?.interactions?.[this.selfId] ?? {}; const profile = interaction.bossProfile ?? this.roomState?.expedition?.floorBoss?.profiles?.[0] ?? null; this.floorBossConfirm = { targetId, profile, floor: Number(this.roomState?.expedition?.floor) || 0 }; this._render(); return; } if (["challengeCoopElite", "challengeCoopBoss"].includes(action)) { const expedition = this.roomState?.expedition, interaction = expedition?.interactions?.[this.selfId] ?? {}, object = expedition?.objects?.find(entry => entry.id === targetId || entry.type === "coopElite") ?? {}, source = interaction.coopBoss ?? interaction.bossProfile ?? object, boss = { ...source, id: source.id ?? source.coopBossId, name: source.name ?? source.bossName, title: source.title ?? source.bossTitle, intro: source.intro ?? source.bossIntro, speciesId: source.speciesId ?? object.speciesId, visualSpeciesId: source.visualSpeciesId ?? object.visualSpeciesId, accent: source.accent ?? object.accent, mechanic: source.mechanic ?? object.mechanic }; this.coopBossConfirm = { action, targetId, boss, floor: Number(expedition?.floor) || 0 }; this._render(); return; } if (!this._beginInteractionPending(action, targetId)) return; if (!this._send("expeditionInteract", { action, targetId })) this._clearInteractionPending(false); this._render(); return; }
     if (button.matches("[data-online-merchant-offer]")) { if (this.merchantPending) return; const offer = button.dataset.onlineMerchantOffer; this.merchantPending = true; this.merchantResult = { offer, status: "pending" }; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = setTimeout(() => { if (!this.merchantPending) return; this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "通信結果を確認できませんでした。もう一度お試しください。" }; this._render(); }, 3500); if (!this._send("rareMerchantClaim", { offer })) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "サーバーへ接続されていません。" }; } this._render(); return; }
     if (button.matches("[data-online-battle-cheer]")) { this._send("battleCheer", { mode: button.dataset.onlineBattleCheer || this.route }); return; }
     if (button.matches("[data-online-hall-destination]")) { this.hallDestination = { x: Number(button.dataset.hallX), y: Number(button.dataset.hallY) }; return; }
@@ -465,16 +469,17 @@ export class OnlinePartyController {
     if (message.type === "leftRoom") { this._clearRoom(); return; }
     if (message.type === "memberMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.position = { ...message.position }; if (this.route === "home") this._updateHallPlayerDom(message.playerId); return; }
     if (message.type === "expeditionMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.dungeonPosition = { ...message.position }; if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render(); return; }
-    if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this._applyRoomState(message.room); return; }
-    if (message.type === "battleStarted" && message.room) { this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
+    if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); return; }
+    if (message.type === "battleStarted" && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
     if (message.type === "expeditionEvent") { if (message.event?.kind === "hostChestOpened") this.onHostWorldUpdate(message.event); if (message.event?.tutorialGuide === "firstPickup") this._notifyTutorialGuide("explore_pickup"); this._announceExpeditionEvent(message.event); return; }
-    if (message.type === "floorBossDefeated") { const reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: message.ownerId ?? null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = !reward.ownerId || reward.ownerId === this.selfId, multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = multiplayer && isWorldOwner && reward.firstClear ? reward : null; if (isWorldOwner) { this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId: reward.ownerId }); this.onFloorBossDefeated({ ...reward, resume: Boolean(reward.firstClear && !multiplayer) }); } this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！`); this._render(); return; }
+    if (message.type === "floorBossDefeated") { const reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: message.ownerId ?? null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = !reward.ownerId || reward.ownerId === this.selfId, multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = multiplayer && isWorldOwner && reward.firstClear ? reward : null; if (isWorldOwner) { this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId: reward.ownerId }); this.onFloorBossDefeated({ ...reward, resume: Boolean(reward.firstClear && !multiplayer) }); } this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！`); this._render(); return; }
     if (message.type === "expeditionPing" && message.ping?.id) { this.coopPings.set(message.ping.id, { ...message.ping }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() }); else this._render(); return; }
     if (message.type === "battleRound" || message.type === "battleResolved") { const previous = this.roomState?.expedition?.battle; this._captureHpTrails("explore", previous, message.battle); if (this.roomState?.expedition) this.roomState.expedition.battle = message.battle; if (message.type === "battleRound") this._closeBattleMenus("explore"); this._setRoute("explore", { silent: true }); this._queueBattlePresentation("explore", message.battle?.lastEvents); return; }
     if (message.type === "expeditionEnded") { const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.expeditionReport = multiplayer ? message.summary ?? null : null; this.route = "explore"; this.toast(message.summary?.completed ? `${message.summary.floor}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
-    if (message.type === "battleEnded") { this.toast(message.result === "victory" ? "共闘バトル勝利！" : "共闘パーティが全滅しました…"); return; }
+    if (message.type === "battleEnded") { this.coopBossConfirm = null; const bossName = message.coopBoss?.name || message.boss?.name; this.toast(message.result === "victory" ? bossName ? `${bossName}を撃破！` : "共闘バトル勝利！" : message.coopBoss ? "共闘ボスから退却。回復後に再挑戦できます" : "共闘パーティが全滅しました…"); return; }
     if (message.type === "raidStarted") {
       this.roomState = { ...(this.roomState ?? {}), phase: "raid", raid: message.raid, raidProgress: message.raid?.progress };
+      this.selectedTarget.raid = message.raid?.minions?.find(entry => entry.hp > 0)?.id ?? message.raid?.boss?.id ?? null;
       const raidOwner = (this.roomState?.ownerId ?? this.roomState?.leaderId) === this.selfId;
       if (raidOwner && Object.prototype.hasOwnProperty.call(message.raid ?? {}, "progress")) this._syncRaidWorld(message.raid.progress);
       this._setRoute("raid", { silent: true }); this._queueBattlePresentation("raid", message.raid?.lastEvents); return;
@@ -488,9 +493,9 @@ export class OnlinePartyController {
     }
     if (message.type === "raidEnded") {
       const raidOwner = (this.roomState?.ownerId ?? this.roomState?.leaderId) === this.selfId;
-      if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.raid = null; this.roomState.raidProgress = message.result === "victory" ? null : message.raid?.progress; }
-      if (raidOwner) this._syncRaidWorld(message.result === "victory" ? null : message.raid?.progress);
-      this.raidReport = { result: message.result, raid: message.raid, ranking: message.ranking ?? message.raid?.ranking ?? [] }; this.route = "raid"; this.toast(message.result === "victory" ? "レイド討伐成功！" : "敗北…ボスの残HPを保存しました"); this._render(); return;
+      if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.raid = null; this.roomState.raidProgress = message.raid?.progress ?? null; }
+      if (raidOwner) this._syncRaidWorld(message.raid?.progress ?? null);
+      this.raidReport = { result: message.result, raid: message.raid, ranking: message.ranking ?? message.raid?.ranking ?? [] }; this.route = "raid"; this.toast(message.result === "victory" ? "今週のレイド討伐成功！" : message.result === "cancelled" ? "レイドを中断し、残HPを保存しました" : "敗北…ボスの残HPを保存しました"); this._render(); return;
     }
     if (message.type === "teamBattleStarted" || message.type === "teamBattleState" || message.type === "teamBattleRound" || message.type === "teamBattleResolved") { const previous = this.roomState?.teamBattle; this._captureHpTrails("team", previous, message.teamBattle); if (this.roomState) { this.roomState.phase = "team"; this.roomState.teamBattle = message.teamBattle; } if (message.type === "teamBattleRound") this._closeBattleMenus("team"); this._setRoute("team", { silent: true }); this._queueBattlePresentation("team", message.teamBattle?.lastEvents); return; }
     if (message.type === "teamBattleEnded") { this.toast(message.winner ? `${message.winner === "sun" ? "紅組" : "蒼組"}の勝利！` : "引き分け！"); return; }
@@ -670,7 +675,7 @@ export class OnlinePartyController {
   }
 
   _clearRoom() {
-    this.roomState = null; this.roomId = null; this.path = []; this.heldDirections.clear(); this.unread = 0; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false); this._clearTradeUi();
+    this.roomState = null; this.roomId = null; this.path = []; this.heldDirections.clear(); this.unread = 0; this.floorBossConfirm = null; this.coopBossConfirm = null; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; this.processedCoopTechniqueEvents.clear(); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false); this._clearTradeUi();
     this.root?.querySelector(".online-v3-screen")?.classList.remove("online-shared-gameplay-active");
     this._unmountExploreCanvas();
     this._query("[data-online-room]")?.classList.remove("online-shared-gameplay");
@@ -706,7 +711,7 @@ export class OnlinePartyController {
     this.root?.querySelector(".online-v3-screen")?.classList.toggle("online-shared-gameplay-active", gameplay);
     const canvasExplore = this.route === "explore" && this.roomState.phase === "expedition" && !this.roomState.expedition?.battle;
     if (this.exploreCanvasMounted) this._unmountExploreCanvas();
-    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], raidReport: this.raidReport, expeditionReport: this.expeditionReport, floorBossConfirm: this.floorBossConfirm, exploreChatOpen: this.exploreChatOpen, merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot(), trade: this.trade, tradeCatalog: this.trade ? this._tradeCatalog() : [], tradeFilter: this.tradeFilter, tradeQuery: this.tradeQuery, tradeAmount: this.tradeAmount, tradeConfirmSeconds: Math.max(0, Math.ceil((this.tradeConfirmAvailableAt - Date.now()) / 1000)), raidExchangePending: this.raidExchangePending };
+    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], raidReport: this.raidReport, expeditionReport: this.expeditionReport, floorBossConfirm: this.floorBossConfirm, coopBossConfirm: this.coopBossConfirm, exploreChatOpen: this.exploreChatOpen, merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot(), trade: this.trade, tradeCatalog: this.trade ? this._tradeCatalog() : [], tradeFilter: this.tradeFilter, tradeQuery: this.tradeQuery, tradeAmount: this.tradeAmount, tradeConfirmSeconds: Math.max(0, Math.ceil((this.tradeConfirmAvailableAt - Date.now()) / 1000)), raidExchangePending: this.raidExchangePending };
     stage.innerHTML = this.route === "explore" ? renderOnlineExplore(this.roomState, this.selfId, state)
       : this.route === "raid" ? renderOnlineRaid(this.roomState, this.selfId, state)
       : this.route === "team" ? renderOnlineTeam(this.roomState, this.selfId, state)
@@ -742,7 +747,7 @@ export class OnlinePartyController {
     const skill = this._self()?.profile?.skills?.find(entry => entry.id === skillId);
     const support = kind === "item" || kind === "skill" && skill?.kind !== "attack";
     let sent;
-    if (mode === "raid") sent = this._send("raidAction", { kind, skillId, targetId: this.selectedAlly.raid || this.selfId, enemyTargetId: this.selectedTarget.raid || "abyss-amalga" });
+    if (mode === "raid") sent = this._send("raidAction", { kind, skillId, targetId: this.selectedAlly.raid || this.selfId, enemyTargetId: this.selectedTarget.raid || battle.minions?.find(entry => entry.hp > 0)?.id || battle.boss?.id });
     else if (mode === "team") sent = this._send("teamAction", { kind, skillId, targetId: support ? this.selectedAlly.team || this.selfId : this.selectedTarget.team });
     else sent = this._send("battleAction", { kind, skillId, targetId: support ? this.selectedAlly.explore || this.selfId : this.selectedTarget.explore });
     if (sent) { battle.actions ??= {}; battle.actions[this.selfId] = { kind, skillId, pending: true }; this._closeBattleMenus(mode); this._render(); }
@@ -790,22 +795,38 @@ export class OnlinePartyController {
     for (const timer of this.presentationTimers) clearTimeout(timer);
     this.presentationTimers.clear();
     const spacing = mode === "raid" ? 760 : 560;
-    for (const [index, event] of [...events].slice(-8).entries()) {
+    const rows = [...events], featured = [...rows].reverse().find(event => event?.kind === "coopBreak"), recent = rows.slice(-8);
+    if (featured && !recent.includes(featured)) recent.splice(0, Math.max(0, recent.length - 7), featured);
+    for (const [index, event] of recent.entries()) {
       const timer = setTimeout(() => { this.presentationTimers.delete(timer); this._playBattleEvent(event, mode); }, 140 + index * spacing);
       this.presentationTimers.add(timer);
     }
   }
 
   _playBattleEvent(event, mode = this.route) {
-    const actorId = event?.actorId, targetId = event?.targetId;
+    const linkArts = event?.kind === "coopBreak", techniqueEventId = linkArts ? String(event?.id ?? "") : "";
+    if (techniqueEventId && this.processedCoopTechniqueEvents.has(techniqueEventId)) return;
+    if (techniqueEventId) { this.processedCoopTechniqueEvents.add(techniqueEventId); if (this.processedCoopTechniqueEvents.size > 256) this.processedCoopTechniqueEvents.delete(this.processedCoopTechniqueEvents.values().next().value); }
+    const actorId = event?.actorId ?? event?.actorIds?.[0], targetId = event?.targetId;
     const actor = this._query(`#ally-${CSS.escape(String(actorId))}`) ?? this._query(`#enemy-${CSS.escape(String(actorId))}`);
     const target = event?.targetKind === "player" ? this._query(`#ally-${CSS.escape(String(targetId))}`) : this._query(`#enemy-${CSS.escape(String(targetId))}`);
+    if (linkArts) {
+      const actorIds = [...new Set([...(Array.isArray(event.actorIds) ? event.actorIds : []), event.actorId].filter(Boolean).map(String))];
+      const autoIncluded = new Set((Array.isArray(event.autoIncluded) ? event.autoIncluded : []).map(String));
+      for (const id of actorIds) {
+        const unit = this._query(`#ally-${CSS.escape(id)}`) ?? this._query(`#enemy-${CSS.escape(id)}`);
+        if (!unit) continue;
+        setMonsterVisualFrame(unit, "attack"); unit.classList.remove("fx-link-arts"); void unit.offsetWidth; unit.classList.add("fx-link-arts");
+        const aura = document.createElement("span"); aura.className = `online-link-arts-actor-fx ${autoIncluded.has(id) || event.autoIncluded === true ? "auto-included" : ""}`; aura.setAttribute("aria-hidden", "true"); unit.appendChild(aura);
+        setTimeout(() => { aura.remove(); unit.classList.remove("fx-link-arts"); if (!unit.classList.contains("dead")) setMonsterVisualFrame(unit, "idle"); }, 1320);
+      }
+    }
     if (actor && ["damage", "enemyDamage", "signature", "heal", "mpHeal", "revive", "circleActivate"].includes(event.kind)) { setMonsterVisualFrame(actor,"attack"); actor.classList.remove("fx-lunge", "fx-skill-lunge"); void actor.offsetWidth; actor.classList.add(event.label && event.label !== "たたかう" ? "fx-skill-lunge" : "fx-lunge"); const actorSelector=actor.id?`#${CSS.escape(actor.id)}`:null;setTimeout(()=>{const current=actorSelector?this._query(actorSelector):actor;if(current&&!current.classList.contains("dead"))setMonsterVisualFrame(current,"idle")},920); }
     if (target && ["damage", "enemyDamage", "signature", "deathMirrorPhantom"].includes(event.kind) && Number(event.value) > 0) { setMonsterVisualFrame(target,"damage"); target.classList.remove("fx-hit", "fx-critical-hit"); void target.offsetWidth; target.classList.add(event.critical ? "fx-critical-hit" : "fx-hit"); const flash = document.createElement("span"); flash.className = `battle-unit-hit-flash ${event.critical ? "critical" : ""}`; target.appendChild(flash); setTimeout(() => flash.remove(), 680); const targetSelector=target.id?`#${CSS.escape(target.id)}`:null;setTimeout(()=>{const current=targetSelector?this._query(targetSelector):target;if(current&&!current.classList.contains("dead"))setMonsterVisualFrame(current,"idle")},1050); }
     if(target&&event?.kind==="ko")setMonsterVisualFrame(target,"down");
     const layer = this._query("#battleFxLayer");
     if (layer && target && (Number(event?.value) || ["miss", "guard"].includes(event?.kind))) { const layerRect = layer.getBoundingClientRect(), rect = target.getBoundingClientRect(), float = document.createElement("div"); const healing = ["heal", "mpHeal", "revive"].includes(event.kind), text = event.kind === "miss" ? "MISS" : event.kind === "guard" ? "GUARD" : `${healing ? "+" : "-"}${Math.max(0, Number(event.value) || 0).toLocaleString()}`; float.className = `floating-number ${healing ? "heal" : event.critical ? "critical" : event.kind === "enemyDamage" ? "enemy" : "damage"}`; float.textContent = text; float.style.left = `${rect.left - layerRect.left + rect.width / 2}px`; float.style.top = `${rect.top - layerRect.top + rect.height * .34}px`; layer.appendChild(float); setTimeout(() => float.remove(), 2400); }
-    if (layer && event?.label && (["signature", "raidTelegraph", "revive", "effect", "buff", "link", "coopBreak", "circleActivate", "equipmentAuthority"].includes(event.kind) || event.kind === "damage" && event.label !== "たたかう")) { const title = String(event.label), detail = String(event.description || event.message || event.effectText || (event.kind === "circleActivate" ? "魔法陣 発動" : event.actorName || "共闘アクション")); const banner = document.createElement("div"); const authority = event.kind === "equipmentAuthority" || /固有|権能|反照/.test(detail); banner.className = `battle-cinematic-banner ${event.kind === "raidTelegraph" || event.kind === "coopBreak" ? "boss" : "skill"} ${title.length > 20 ? "very-long-title" : title.length > 12 ? "long-title" : ""} ${authority ? "equipment-authority" : ""}`; banner.innerHTML = `<span class="battle-banner-copy"><strong>${safeHtml(title)}</strong><small class="battle-banner-effect">${safeHtml(detail)}</small></span>`; this._query(".battle-arena")?.appendChild(banner); const hold = mode === "raid" ? 2100 : 1550; setTimeout(() => { banner.classList.add("leaving"); setTimeout(() => banner.remove(), 380); }, hold); }
+    if (layer && (event?.label || linkArts) && (["signature", "raidTelegraph", "revive", "effect", "buff", "link", "coopBreak", "circleActivate", "equipmentAuthority"].includes(event.kind) || event.kind === "damage" && event.label !== "たたかう")) { const title = String(event.label || "LINK ARTS"), detailBase = String(event.description || event.message || event.effectText || (event.kind === "circleActivate" ? "魔法陣 発動" : event.actorName || "共闘アクション")), detail = linkArts && (event.autoIncluded === true || Array.isArray(event.autoIncluded) && event.autoIncluded.length) ? `${detailBase}・自動連携` : detailBase; const banner = document.createElement("div"); const authority = event.kind === "equipmentAuthority" || /固有|権能|反照/.test(detail); banner.className = `battle-cinematic-banner ${event.kind === "raidTelegraph" || event.kind === "coopBreak" ? "boss" : "skill"} ${linkArts ? "link-arts" : ""} ${title.length > 20 ? "very-long-title" : title.length > 12 ? "long-title" : ""} ${authority ? "equipment-authority" : ""}`; if (event.techniqueId) banner.dataset.techniqueId = String(event.techniqueId); banner.innerHTML = `<span class="battle-banner-copy">${linkArts ? '<em class="link-arts-kicker">LINK ARTS</em>' : ""}<strong>${safeHtml(title)}</strong><small class="battle-banner-effect">${safeHtml(detail)}</small></span>`; this._query(".battle-arena")?.appendChild(banner); const hold = mode === "raid" ? 2100 : linkArts ? 1900 : 1550; setTimeout(() => { banner.classList.add("leaving"); setTimeout(() => banner.remove(), 380); }, hold); }
   }
 
   _sendPreset(text) {

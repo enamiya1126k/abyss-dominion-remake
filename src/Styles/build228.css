@@ -1,0 +1,73 @@
+/* build228: LINK ARTS promotes the shared LINK gauge into readable co-op techniques. */
+.online-shared-battle-shell>.online-link-arts{
+  top:82px!important;
+  left:10px!important;
+  width:min(40%,238px)!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:4px!important;
+  box-sizing:border-box;
+  padding:7px 8px!important;
+  transform:none!important;
+  border-color:#6eeeff;
+  background:linear-gradient(145deg,#06131af2,#160b24ed);
+  box-shadow:0 7px 22px #000c,0 0 18px #54e7ff4d;
+  color:#f6f4ff;
+}
+.online-link-arts header{display:flex;align-items:baseline;gap:6px;min-width:0;line-height:1}
+.online-link-arts header b{color:#c7fbff;font:950 11px/1 monospace;letter-spacing:.12em;white-space:nowrap}
+.online-link-arts header small{margin-left:auto;color:#f0e9ff;font:900 8px/1 monospace;white-space:nowrap}
+.online-link-arts header em{padding:2px 4px;border:1px solid #65517c;background:#0c0713;color:#d9c9f1;font:800 7px/1 monospace;font-style:normal;white-space:nowrap}
+.online-link-arts>.online-link-arts-meter{display:block;height:7px;overflow:hidden;border:1px solid #4e4264;background:#020408}
+.online-link-arts>.online-link-arts-meter>em{display:block;height:100%;background:linear-gradient(90deg,#44d7ee,#936cff 58%,#ffd568);box-shadow:0 0 10px #63eaff;transition:width .38s cubic-bezier(.2,.75,.25,1)}
+.online-link-arts.ready>.online-link-arts-meter>em{animation:build228-link-meter-ready 1.05s ease-in-out infinite}
+.online-link-arts p{min-width:0;margin:0;overflow:hidden;color:#fff0bd;font:800 8px/1.25 sans-serif;text-overflow:ellipsis;white-space:nowrap}
+.online-link-arts.waiting{border-color:#756d87;box-shadow:0 7px 22px #000c}
+.online-link-arts.waiting>.online-link-arts-meter>em{filter:saturate(.35);transition:none}
+.online-link-arts.waiting p{color:#d3cadd}
+.online-link-arts-recipes{display:grid;gap:2px;min-width:0}
+.online-link-arts-recipes span{display:flex!important;align-items:center;gap:4px;min-width:0;line-height:1!important}
+.online-link-arts-recipes b{flex:0 1 auto;overflow:hidden;color:#8cefff;font:850 7px/1.2 sans-serif;text-overflow:ellipsis;white-space:nowrap}
+.online-link-arts-recipes b::after{content:" →";color:#81758e}
+.online-link-arts-recipes em{overflow:hidden;color:#d8cedf;font:750 7px/1.2 sans-serif;font-style:normal;text-overflow:ellipsis;white-space:nowrap}
+
+.online-shared-battle-shell.is-coop-boss>.online-link-arts{width:min(40%,220px)!important}
+.online-shared-battle-shell.is-coop-boss>.online-coop-boss-mechanic{right:10px;width:min(48%,330px)}
+
+.side-battle-unit.fx-link-arts{z-index:35!important;filter:brightness(1.17) saturate(1.2)}
+.online-link-arts-actor-fx{position:absolute;z-index:42;inset:-7px;border:2px solid #73efff;border-radius:50%;box-shadow:0 0 10px #66ebff,0 0 24px #9b70ff99;pointer-events:none;animation:build228-link-actor 1.25s ease-out both}
+.online-link-arts-actor-fx::after{content:"LINK";position:absolute;left:50%;top:-9px;translate:-50% 0;padding:2px 4px;border:1px solid #8ceeff;background:#07101de8;color:#fff3b8;font:950 7px/1 monospace;letter-spacing:.08em}
+.online-link-arts-actor-fx.auto-included{border-style:dashed;border-color:#ffd568;box-shadow:0 0 11px #ffd568,0 0 24px #7eeaff99}
+.battle-cinematic-banner.link-arts{border-color:#78edff;background:linear-gradient(105deg,#03121af2,#26113bed 55%,#4b3217ed);box-shadow:0 0 24px #62e9ff77,0 0 42px #9e6dff55}
+.battle-cinematic-banner.link-arts .link-arts-kicker{display:block;margin-bottom:3px;color:#88f2ff;font:950 8px/1 monospace;font-style:normal;letter-spacing:.22em}
+.battle-cinematic-banner.link-arts strong{color:#fff2ba;text-shadow:0 0 12px #6eeaff}
+
+@keyframes build228-link-meter-ready{50%{filter:brightness(1.45);box-shadow:0 0 15px #fff1a3}}
+@keyframes build228-link-actor{0%{opacity:0;scale:.72;rotate:-8deg}24%{opacity:1;scale:1.12;rotate:2deg}100%{opacity:0;scale:1.38;rotate:0deg}}
+
+@media(max-width:600px){
+  .online-shared-battle-shell>.online-link-arts{top:76px!important;left:6px!important;width:min(46%,178px)!important;padding:5px 6px!important;gap:3px!important}
+  .online-link-arts header{gap:4px}.online-link-arts header b{font-size:9px}.online-link-arts header small{font-size:7px}.online-link-arts header em{font-size:6px}
+  .online-link-arts p{font-size:7px}.online-link-arts-recipes b,.online-link-arts-recipes em{font-size:6.5px}
+  .online-shared-battle-shell.is-coop-boss>.online-link-arts{width:min(46%,178px)!important}
+  .online-shared-battle-shell.is-coop-boss>.online-coop-boss-mechanic{right:6px!important;width:min(46%,178px)!important}
+}
+@media(max-width:390px){
+  .online-link-arts header em{display:none}
+  .online-link-arts-recipes span:nth-child(n+3){display:none!important}
+  .online-coop-boss-mechanic footer span{padding-inline:3px}
+}
+@media(max-height:700px){
+  .online-shared-battle-shell>.online-link-arts{top:67px!important}
+  .online-link-arts-recipes span:nth-child(n+3){display:none!important}
+  .online-shared-battle-shell.is-coop-boss>.online-coop-boss-mechanic{top:67px!important}
+}
+@media(max-height:667px){
+  .online-shared-battle-shell>.online-link-arts{padding-block:4px!important}
+  .online-link-arts-recipes span:nth-child(n+2){display:none!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .online-link-arts.ready>.online-link-arts-meter>em,.online-link-arts-actor-fx{animation:none!important}
+  .online-link-arts>.online-link-arts-meter>em{transition:none!important}
+  .side-battle-unit.fx-link-arts{filter:none}
+}

@@ -10,6 +10,7 @@ const read = path => readFileSync(resolve(root, path), "utf8");
 const roomStoreSource = read("online-server/src/RoomStore.js");
 const dungeonRulesSource = read("online-server/src/OfflineDungeonRules.js");
 const raidSource = read("online-server/src/RaidCoordinator.js");
+const weeklyRaidSource = read("online-server/src/WeeklyRaidCatalog.js");
 const battleSource = read("src/ui/screens/BattleScreen.js");
 const visualSource = read("src/ui/MonsterVisual.js");
 const clientSource = read("src/online/OnlinePartyClient.js");
@@ -18,7 +19,7 @@ const configSource = read("src/core/config.js");
 
 assert.match(indexSource, /build217\.css\?v=2\.11\.52-build217/);
 assert.match(indexSource, /build225\.css\?v=2\.11\.54-build225/);
-assert.match(indexSource, /ASSET_BUILD = "build225"/);
+assert.match(indexSource, /ASSET_BUILD = "build228"/);
 assert.match(configSource, /APP_VERSION="2\.11\.54"/);
 
 assert.match(roomStoreSource, /floorBossDefinitionForFloor,milestoneBossIdsForFloor/);
@@ -57,8 +58,8 @@ for (const family of ["abyss-amalga", "juvenile-amalga"]) {
     assert.ok(existsSync(resolve(root, `assets/online/raid/${family}-${frame}.png`)), `${family}-${frame}.png is required`);
   }
 }
-assert.match(raidSource, /visualBase:"\.\/assets\/online\/raid\/abyss-amalga"/);
-assert.match(raidSource, /visualBase:"\.\/assets\/online\/raid\/juvenile-amalga"/);
+assert.match(weeklyRaidSource, /visualBase:"\.\/assets\/online\/raid\/abyss-amalga"/);
+assert.match(weeklyRaidSource, /visualBase:"\.\/assets\/online\/raid\/juvenile-amalga"/);
 assert.doesNotMatch(raidSource, /abyss-amalga\.png/);
 assert.match(visualSource, /IDLE_FRAMES=Object\.freeze\(\["idle1","idle2","idle3","idle2"\]\)/);
 assert.match(clientSource, /setMonsterVisualFrame\(actor,"attack"\)/);

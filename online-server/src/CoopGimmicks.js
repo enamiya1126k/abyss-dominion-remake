@@ -1,3 +1,5 @@
+import { coopBossFor, coopBossObjectMeta } from "./CoopBossCatalog.js";
+
 const GIMMICKS = Object.freeze(["dualSwitch", "relaySeal", "resonanceChest", "splitKey", "eliteVault"]);
 
 function pointKey(point) { return `${point.x},${point.y}`; }
@@ -127,6 +129,8 @@ export function prepareCoopExpeditionV206(expedition, { leaderId, hostWorld, con
   }
 
   const type = coopGimmickFor({ leaderId, floor: expedition.floor });
+  const coopBoss = coopBossFor({ ownerId: leaderId, floor: expedition.floor });
+  const bossMeta = coopBossObjectMeta(coopBoss);
   const floorTier = coopFloorTier(expedition.floor), participantTier = coopParticipantTier(participants), rewardTier = coopRewardTier(expedition.floor, participants);
   const first = take(), second = farFrom(first), reward = take();
   const push = (...objects) => expedition.objects.push(...objects.map(object => ({ rewardTier: rewardTier.id, ...object })));
@@ -136,7 +140,7 @@ export function prepareCoopExpeditionV206(expedition, { leaderId, hostWorld, con
       { id: "coop-switch-a", type: "coopSwitch", ...first, resolved: false, active: false, occupied: false, progress: 0, persistent: true },
       { id: "coop-switch-b", type: "coopSwitch", ...second, resolved: false, active: false, occupied: false, progress: 0, persistent: true },
       { id: "coop-vault", type: "resonanceVault", ...reward, resolved: false, unlocked: false, persistent: true },
-      { id: "coop-elite", type: "coopElite", ...reward, resolved: false, hidden: true },
+      { id: "coop-elite", type: "coopElite", ...reward, ...bossMeta, resolved: false, hidden: true, persistent: true },
       { id: "coop-deluxe-chest", type: "deluxeChest", ...reward, resolved: false, hidden: true },
     );
   } else if (type === "relaySeal") {
@@ -157,13 +161,14 @@ export function prepareCoopExpeditionV206(expedition, { leaderId, hostWorld, con
   } else {
     push(
       { id: "coop-vault", type: "resonanceVault", ...reward, resolved: false, unlocked: true, persistent: true },
-      { id: "coop-elite", type: "coopElite", ...reward, resolved: false, hidden: false },
+      { id: "coop-elite", type: "coopElite", ...reward, ...bossMeta, resolved: false, hidden: false, persistent: true },
       { id: "coop-deluxe-chest", type: "deluxeChest", ...reward, resolved: false, hidden: true },
     );
   }
 
   expedition.totalDiscoveries += 1;
   expedition.hostOwnerId = leaderId;
+  const hasCoopBoss = ["dualSwitch", "eliteVault"].includes(type);
   expedition.coop = {
     enabled: true,
     gimmickType: type,
@@ -184,6 +189,9 @@ export function prepareCoopExpeditionV206(expedition, { leaderId, hostWorld, con
     keyCombined: false,
     eliteBattleStarted: false,
     eliteDefeated: false,
+    coopBoss: hasCoopBoss ? coopBossObjectMeta(coopBoss) : null,
+    coopBossAttempts: 0,
+    coopBossVictories: 0,
   };
   expedition.contribution = contribution ?? {};
   expedition.interactions = {};

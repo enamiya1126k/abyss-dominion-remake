@@ -22,7 +22,7 @@ assert.match(room, /chosenSkill\.selfHeal/);
 assert.match(room, /chosenSkill\.barrier/);
 assert.match(room, /skill\.cleanse/);
 assert.match(room, /sharedBase=\{gold:battleGoldBase\(battle\.floor,defeated,\{firstBoss\}\)\}/);
-assert.match(room, /reward:\{\.\.\.sharedReward,gold,experience,crystals,abyssKeys,kills:defeated\.length/);
+assert.match(room, /reward:\{\.\.\.sharedReward,gold,experience,crystals,captureCrystals,abyssKeys,kills:defeated\.length/);
 assert.match(room, /randomEquipmentRarity,equipmentSlot,equipmentLevel/);
 assert.match(room, /type:"battleDefeated"/);
 

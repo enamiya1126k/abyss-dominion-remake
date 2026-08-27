@@ -220,7 +220,7 @@ export class SaveService{
   normalizeEquipmentCollections(s);
   s.inventory=normalizeInventory(s.inventory);
   s.onlineParty=s.onlineParty&&typeof s.onlineParty==="object"&&!Array.isArray(s.onlineParty)?s.onlineParty:{};
-  s.onlineParty.claimedRewards=Array.isArray(s.onlineParty.claimedRewards)?[...new Set(s.onlineParty.claimedRewards.map(String).filter(Boolean))].slice(-200):[];
+  s.onlineParty.claimedRewards=Array.isArray(s.onlineParty.claimedRewards)?[...new Set(s.onlineParty.claimedRewards.map(String).filter(Boolean))].slice(-2048):[];
   s.onlineParty.totalGold=Math.floor(finiteNumber(s.onlineParty.totalGold,0,0,Number.MAX_SAFE_INTEGER));
   s.onlineParty.totalCaptureCrystals=Math.floor(finiteNumber(s.onlineParty.totalCaptureCrystals,0,0,Number.MAX_SAFE_INTEGER));
   s.onlineParty.expeditionsCompleted=Math.floor(finiteNumber(s.onlineParty.expeditionsCompleted,0,0,Number.MAX_SAFE_INTEGER));
@@ -231,16 +231,24 @@ export class SaveService{
   s.onlineParty.raidExchange=s.onlineParty.raidExchange&&typeof s.onlineParty.raidExchange==="object"&&!Array.isArray(s.onlineParty.raidExchange)?s.onlineParty.raidExchange:{};
   const raidWorld=s.onlineParty.raidWorld&&typeof s.onlineParty.raidWorld==="object"&&!Array.isArray(s.onlineParty.raidWorld)?s.onlineParty.raidWorld:{};
   const cleanRaidContribution=value=>({damage:Math.floor(finiteNumber(value?.damage,0,0,Number.MAX_SAFE_INTEGER)),taken:Math.floor(finiteNumber(value?.taken,0,0,Number.MAX_SAFE_INTEGER)),healing:Math.floor(finiteNumber(value?.healing,0,0,Number.MAX_SAFE_INTEGER)),mpHealing:Math.floor(finiteNumber(value?.mpHealing,0,0,Number.MAX_SAFE_INTEGER)),revives:Math.floor(finiteNumber(value?.revives,0,0,Number.MAX_SAFE_INTEGER)),guards:Math.floor(finiteNumber(value?.guards,0,0,Number.MAX_SAFE_INTEGER)),support:Math.floor(finiteNumber(value?.support,0,0,Number.MAX_SAFE_INTEGER))});
-  const raidContribution=raidWorld.contribution&&typeof raidWorld.contribution==="object"&&!Array.isArray(raidWorld.contribution)?Object.fromEntries(Object.entries(raidWorld.contribution).slice(0,4).map(([playerId,value])=>[String(playerId).slice(0,24),cleanRaidContribution(value)])):{};
-  const raidRanking=(Array.isArray(raidWorld.ranking)?raidWorld.ranking:[]).slice(0,4).map((entry,index)=>({playerId:String(entry?.playerId??"").slice(0,24),name:String(entry?.name??"挑戦者").slice(0,24),rank:Math.max(1,Math.min(4,Math.floor(Number(entry?.rank)||index+1))),score:Math.floor(finiteNumber(entry?.score,0,0,Number.MAX_SAFE_INTEGER)),...cleanRaidContribution(entry)}));
+  const raidContribution=raidWorld.contribution&&typeof raidWorld.contribution==="object"&&!Array.isArray(raidWorld.contribution)?Object.fromEntries(Object.entries(raidWorld.contribution).slice(0,32).map(([playerId,value])=>[String(playerId).slice(0,24),cleanRaidContribution(value)])):{};
+  const raidRanking=(Array.isArray(raidWorld.ranking)?raidWorld.ranking:[]).slice(0,32).map((entry,index)=>({playerId:String(entry?.playerId??"").slice(0,24),name:String(entry?.name??"挑戦者").slice(0,24),rank:Math.max(1,Math.min(32,Math.floor(Number(entry?.rank)||index+1))),score:Math.floor(finiteNumber(entry?.score,0,0,Number.MAX_SAFE_INTEGER)),...cleanRaidContribution(entry)}));
+  const raidPersonalMilestones=raidWorld.personalMilestonesClaimed&&typeof raidWorld.personalMilestonesClaimed==="object"&&!Array.isArray(raidWorld.personalMilestonesClaimed)?Object.fromEntries(Object.entries(raidWorld.personalMilestonesClaimed).slice(0,32).map(([playerId,list])=>[String(playerId).slice(0,24),[...new Set((Array.isArray(list)?list:[]).map(Number).filter(value=>[5,15,30].includes(value)))]])):{};
   s.onlineParty.raidWorld={
    campaignId:raidWorld.campaignId==null?null:String(raidWorld.campaignId).slice(0,120),
+   weekId:raidWorld.weekId==null?null:String(raidWorld.weekId).slice(0,80),
+   weekStartsAt:Math.floor(finiteNumber(raidWorld.weekStartsAt,0,0,Number.MAX_SAFE_INTEGER)),
+   weekEndsAt:Math.floor(finiteNumber(raidWorld.weekEndsAt,0,0,Number.MAX_SAFE_INTEGER)),
+   bossId:raidWorld.bossId==null?null:String(raidWorld.bossId).slice(0,80),
+   modifierId:raidWorld.modifierId==null?null:String(raidWorld.modifierId).slice(0,80),
    maxHp:Math.floor(finiteNumber(raidWorld.maxHp,0,0,Number.MAX_SAFE_INTEGER)),
    hp:Math.floor(finiteNumber(raidWorld.hp,0,0,Number.MAX_SAFE_INTEGER)),
    attempts:Math.floor(finiteNumber(raidWorld.attempts,0,0,Number.MAX_SAFE_INTEGER)),
    totalDamage:Math.floor(finiteNumber(raidWorld.totalDamage,0,0,Number.MAX_SAFE_INTEGER)),
-   milestonesClaimed:Array.isArray(raidWorld.milestonesClaimed)?[...new Set(raidWorld.milestonesClaimed.map(value=>Math.floor(Number(value))).filter(value=>value>0&&value<=100))].slice(0,20):[],
+   milestonesClaimed:Array.isArray(raidWorld.milestonesClaimed)?[...new Set(raidWorld.milestonesClaimed.map(value=>Math.floor(Number(value))).filter(value=>[5,10,25,50,75,100].includes(value)))]:[],
+   personalMilestonesClaimed:raidPersonalMilestones,
    lastAttemptAt:Math.floor(finiteNumber(raidWorld.lastAttemptAt,0,0,Number.MAX_SAFE_INTEGER)),
+   completedAt:Math.floor(finiteNumber(raidWorld.completedAt,0,0,Number.MAX_SAFE_INTEGER)),
    contribution:raidContribution,
    ranking:raidRanking,
   };

@@ -16,7 +16,7 @@ const cssSource = read("src/Styles/build218.css");
 
 assert.match(indexSource, /build218\.css\?v=2\.11\.53-build218/);
 assert.match(indexSource, /build225\.css\?v=2\.11\.54-build225/);
-assert.match(indexSource, /ASSET_BUILD = "build225"/);
+assert.match(indexSource, /ASSET_BUILD = "build228"/);
 assert.match(configSource, /APP_VERSION="2\.11\.54"/);
 
 // The online floor is sourced from the same canonical boss catalogue as solo.
@@ -43,7 +43,7 @@ assert.match(mainSource, /repairMissedOnlineFloorBossRewards\(\)/);
 assert.match(mainSource, /claimedBossRewardFloors/);
 assert.match(viewSource, /online-floor-boss-confirm/);
 assert.match(viewSource, /online-coop-report/);
-assert.match(viewSource, /online-shared-battle-shell[^]*breakGauge/);
+assert.match(viewSource, /online-shared-battle-shell[^]*linkArts/);
 assert.doesNotMatch(battleScreenSource, /2\.11\.52-build217/);
 
 // The gathering-hall destinations are actual authored pixel assets, not CSS shapes.

@@ -1,15 +1,15 @@
-import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=2.11.54-build225";
-import { battleEnvironmentForFloor } from "../data/biomes.js?v=2.11.54-build225";
-import { onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml } from "../ui/screens/OnlinePartyScreen.js?v=2.11.54-build225";
-import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.54-build225";
-import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=2.11.54-build225";
-import { pixelIcon } from "../ui/components/GameChrome.js?v=2.11.54-build225";
+import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=2.11.54-build226";
+import { battleEnvironmentForFloor } from "../data/biomes.js?v=2.11.54-build226";
+import { onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml } from "../ui/screens/OnlinePartyScreen.js?v=2.11.54-build226";
+import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.54-build227";
+import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=2.11.54-build226";
+import { pixelIcon } from "../ui/components/GameChrome.js?v=2.11.54-build226";
 
 const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "通常探索", raid: "レイドボス", team: "自由チーム戦", chat: "チャット" });
 const EVENT_LABELS = Object.freeze({
   damage: "ダメージ", enemyDamage: "ダメージ", heal: "回復", mpHeal: "MP回復", revive: "蘇生",
   guard: "ガード", miss: "回避", ko: "戦闘不能", effect: "効果", buff: "強化", shield: "障壁",
-  capture: "捕獲", result: "決着", signature: "共鳴", raidTelegraph: "予兆", link: "連携", coopBreak: "共闘崩し", circleActivate: "魔法陣",
+  capture: "捕獲", result: "決着", signature: "共鳴", raidTelegraph: "予兆", weeklyRule: "週間ルール", milestone: "到達報酬", link: "連携", coopBreak: "LINK ARTS", coopBossMechanic: "共鳴課題", circleActivate: "魔法陣",
 });
 
 const number = value => Math.max(0, Math.floor(Number(value) || 0)).toLocaleString();
@@ -135,7 +135,7 @@ function onlineEnemy(room, enemy) {
     def: Math.max(0, Number(enemy.def ?? profile?.battleStats?.def) || 0), mdef: Math.max(0, Number(enemy.mdef ?? profile?.battleStats?.mdef) || 0),
     spd: Math.max(1, Number(enemy.spd ?? profile?.battleStats?.spd) || 1), element: profile?.attribute ?? enemy.element ?? "neutral",
     emoji: profile?.fallbackEmoji ?? enemy.emoji ?? "魔", summonTier: profile?.summonTier ?? profile?.summonRarity ?? null,
-    summonRarity: profile?.summonRarity ?? profile?.summonTier ?? null, boss: Boolean(enemy.boss || enemy.id === "abyss-amalga"), raidMainBoss: enemy.id === "abyss-amalga", raidSubBoss: enemy.role === "subBoss", magicCircleName: enemy.magicCircle ?? null, magicCircleAsset: enemy.magicCircleAsset ?? null, uncapturable: enemy.uncapturable ?? Boolean(enemy.playerId || enemy.asset),
+    summonRarity: profile?.summonRarity ?? profile?.summonTier ?? null, boss: Boolean(enemy.boss || enemy.coopBoss || enemy.raidMainBoss || enemy.id === "abyss-amalga"), raidMainBoss: Boolean(enemy.raidMainBoss || enemy.id === "abyss-amalga"), raidSubBoss: enemy.role === "subBoss", magicCircleName: enemy.magicCircle ?? null, magicCircleAsset: enemy.magicCircleAsset ?? null, uncapturable: enemy.uncapturable ?? Boolean(enemy.boss || enemy.coopBoss || enemy.playerId || enemy.asset),
   };
 }
 
@@ -163,6 +163,46 @@ function splitEffects(units = []) {
   return { ailments, effects };
 }
 
+function renderCoopBossMechanic(battle) {
+  const boss = battle?.coopBoss;
+  if (!boss) return "";
+  const mechanic = boss.mechanic ?? battle?.coopMechanic ?? {};
+  const round = Math.max(1, Number(battle?.round) || 1);
+  const dueRound = Math.max(round, Number(mechanic.dueRound ?? boss.dueRound ?? battle?.coopBossDueRound) || round);
+  const remaining = Math.max(0, dueRound - round);
+  const successes = Math.max(0, Number(mechanic.successes ?? boss.successes) || 0);
+  const failures = Math.max(0, Number(mechanic.failures ?? boss.failures) || 0);
+  const accent = escapeOnlineHtml(boss.accent || "#8fe9ff");
+  const active = remaining === 0 && battle?.phase === "command";
+  return `<aside class="online-coop-boss-mechanic ${active ? "active" : "waiting"}" style="--coop-boss-accent:${accent}" aria-live="polite">
+    <header><small>CO-OP BOSS・${escapeOnlineHtml(boss.title || "共鳴試練")}</small><b>${escapeOnlineHtml(mechanic.name || "共鳴課題")}</b><em>${active ? "このラウンド" : `${remaining}ラウンド後`}</em></header>
+    <p>${escapeOnlineHtml(mechanic.instruction || boss.intro || "仲間と行動を合わせて共鳴を成功させよう。")}</p>
+    <footer><span>成功 ${number(successes)}</span><span>失敗 ${number(failures)}</span><strong>${escapeOnlineHtml(mechanic.shortLabel || "行動を合わせる")}</strong></footer>
+  </aside>`;
+}
+
+function renderLinkArts(battle) {
+  const state = battle?.coopTechnique ?? battle?.coopBreak;
+  if (!state || state.enabled === false) return "";
+  const gauge = Math.max(0, Number(state.gauge) || 0);
+  const maximum = Math.max(1, Number(state.max) || 100);
+  const techniques = (Array.isArray(state.techniques) ? state.techniques : []).filter(technique => technique && typeof technique === "object");
+  const lastTechniqueId = typeof state.lastTechnique === "object" ? state.lastTechnique?.id : state.lastTechnique;
+  const lastTechnique = (typeof state.lastTechnique === "object" ? state.lastTechnique : null) ?? techniques.find(technique => technique.id === lastTechniqueId) ?? null;
+  const lastLabel = String(state.lastLabel ?? "").trim();
+  const latest = [lastLabel, lastTechnique?.name].filter(Boolean).join(" → ");
+  const uses = Math.max(0, Number(state.totalUses) || 0);
+  const availablePlayers = Math.max(0, Number(state.availablePlayers) || 0);
+  const waitingForAlly = availablePlayers === 1;
+  const recipes = techniques.map(technique => `<span title="${escapeOnlineHtml(technique.effectText || technique.name || "LINK ARTS")}" aria-label="${escapeOnlineHtml(`${technique.shortLabel || "連携"}で${technique.name || "LINK ARTS"}。${technique.effectText || "共闘効果が発動"}`)}"><b>${escapeOnlineHtml(technique.shortLabel || "連携")}</b><em>${escapeOnlineHtml(technique.name || "LINK ARTS")}</em></span>`).join("");
+  return `<aside class="online-coop-break online-link-arts ${waitingForAlly ? "waiting" : gauge >= maximum ? "ready" : "charging"}" aria-label="LINK ARTS 共闘連携" aria-live="polite">
+    <header><b>LINK ARTS</b><small>${number(gauge)} / ${number(maximum)}</small>${uses ? `<em>発動 ${number(uses)}</em>` : ""}</header>
+    <i class="online-link-arts-meter" role="progressbar" aria-label="LINK ARTSゲージ" aria-valuemin="0" aria-valuemax="${maximum}" aria-valuenow="${Math.min(gauge, maximum)}" aria-valuetext="${number(gauge)} / ${number(maximum)}"><em style="width:${ratio(gauge, maximum)}%"></em></i>
+    <p>${escapeOnlineHtml(waitingForAlly ? "仲間の復帰待ち（ゲージは保持）" : latest ? `直近 ${latest}` : "仲間との行動でゲージ上昇")}</p>
+    ${recipes ? `<div class="online-link-arts-recipes" aria-label="発動レシピ">${recipes}</div>` : ""}
+  </aside>`;
+}
+
 export function renderSharedBattle({ mode, room, battle, selfId, selectedTarget = null, selectedAlly = null, title = "共闘バトル", enemies = [], allowCapture = false, readOnly = false, skillMenu = false, itemMenu = false, itemTargetMenu = false, hpTrails = {} }) {
   const players = (Array.isArray(battle?.players) ? battle.players : []).filter(player => player && typeof player === "object" && player.playerId), self = players.find(player => player.playerId === selfId), party = players.map(player => onlineMonster(room, player));
   const foes = (Array.isArray(enemies) ? enemies : []).filter(enemy => enemy && typeof enemy === "object").map(enemy => onlineEnemy(room, enemy)), target = foes.find(enemy => enemy.id === selectedTarget && enemy.hp > 0) ?? foes.find(enemy => enemy.hp > 0) ?? null;
@@ -185,13 +225,15 @@ export function renderSharedBattle({ mode, room, battle, selfId, selectedTarget 
     auto: false, busy: false, phase: battle?.phase ?? "command", speed: battle?.speed ?? 1, skillMenu: Boolean(skillMenu), itemMenu: Boolean(itemMenu), onlineItemTargetMenu: Boolean(itemTargetMenu), onlineItemCharges: Math.max(0, Number(self?.itemCharges) || 0),
     guards: {}, cooldowns: {}, enemyStatuses: enemyState.ailments, allyAilments: allyState.ailments, allyEffects: allyState.effects, enemyEffects: enemyState.effects, hpTrails,
     magicCircleProfiles, magicCircleArt, enemyMagicCircleArt, log: events.slice(-6).map(eventLine),
-    biomeBattle, specialTitle: title, battleTheme: mode === "raid" ? "boss" : mode === "team" ? "abyss" : biomeBattle.theme,
+    biomeBattle, specialTitle: title, battleTheme: mode === "raid" || battle?.coopBoss ? "boss" : mode === "team" ? "abyss" : biomeBattle.theme,
   };
   const screen = BattleScreen(uiBattle, { captureCrystals: Math.max(0, Number(self?.captureCharges ?? selfMember?.profile?.captureStock) || 0) }, { battleSpeed: uiBattle.speed }, floor);
-  const coopBreak = battle?.coopBreak, breakGauge = coopBreak ? `<aside class="online-coop-break"><span><b>LINK BREAK</b><small>${number(coopBreak.gauge)} / ${number(coopBreak.max)}</small></span><i><em style="width:${ratio(coopBreak.gauge, coopBreak.max)}%"></em></i></aside>` : "";
+  const linkArts = renderLinkArts(battle);
+  const coopBossMechanic = renderCoopBossMechanic(battle);
   const down = self && Number(self.hp) <= 0, cheered = (battle?.cheeredBy ?? []).includes(selfId);
   const cheer = down ? `<aside class="online-spectator-cheer"><b>戦況を観戦中</b><span>倒れていても1戦に1度だけ仲間を応援できます</span><button type="button" data-online-battle-cheer="${mode}" ${cheered ? "disabled" : ""}>${cheered ? "応援済み" : "応援する（全体 攻防+3%）"}</button></aside>` : "";
-  return `<div class="online-shared-battle-shell">${screen}${breakGauge}${cheer}</div>`;
+  const bossStyle = battle?.coopBoss ? ` style="--coop-boss-accent:${escapeOnlineHtml(battle.coopBoss.accent || "#8fe9ff")}"` : "";
+  return `<div class="online-shared-battle-shell ${battle?.coopBoss ? "is-coop-boss" : ""}"${bossStyle}>${screen}${linkArts}${coopBossMechanic}${cheer}</div>`;
 }
 
 function dungeonBoard(room, selfId, theme) {
@@ -232,7 +274,7 @@ export function renderOnlineExplore(room, selfId, state = {}) {
     }).join("");
     return `${screenHeader("explore", "CO-OP REPORT", report.completed ? `${number(report.floor)}Fを共に踏破しました。` : "今回の共闘記録を確認できます。")}<section class="online-raid-report online-coop-report"><header><span>${report.completed ? "EXPEDITION CLEAR" : "EXPEDITION END"}</span><h3>共闘貢献票</h3></header><div>${rows || '<p class="empty">集計データがありません</p>'}</div><button type="button" data-online-close-expedition-report>探索受付へ戻る</button></section>`;
   }
-  if (room?.phase === "expedition" && expedition?.battle) { const bossNames = expedition.floorBoss?.profiles?.map(profile => profile?.name).filter(Boolean) ?? []; return renderSharedBattle({ mode: "explore", room, battle: expedition.battle, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: bossNames.length ? `${number(expedition.floor)}F・階層支配者 ${bossNames.join("・")}` : `${number(expedition.floor)}F・遭遇戦`, enemies: expedition.battle.enemies ?? [], allowCapture: !bossNames.length, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails }); }
+  if (room?.phase === "expedition" && expedition?.battle) { const battle = expedition.battle, coopBoss = battle.coopBoss ?? null, bossNames = expedition.floorBoss?.profiles?.map(profile => profile?.name).filter(Boolean) ?? []; return renderSharedBattle({ mode: "explore", room, battle, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: coopBoss?.name ? `${number(expedition.floor)}F・共闘ボス ${coopBoss.name}` : bossNames.length ? `${number(expedition.floor)}F・階層支配者 ${bossNames.join("・")}` : `${number(expedition.floor)}F・遭遇戦`, enemies: battle.enemies ?? [], allowCapture: !coopBoss && !bossNames.length, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails }); }
   if (room?.phase === "expedition" && expedition) {
     const theme = dungeonThemeForFloor(expedition.floor), base = fallbackExploreState(state.gameState, expedition.floor), discovered = Number(expedition.discoveries) + Number(expedition.encountersCleared), total = Math.max(1, Number(expedition.totalDiscoveries) + Number(expedition.totalEncounters));
     const interaction = expedition.interactions?.[selfId] ?? null;
@@ -248,8 +290,9 @@ export function renderOnlineExplore(room, selfId, state = {}) {
     const resonance = Number(expedition.coop?.resonance?.level) || 0, ownerOffline = Number(expedition.coop?.ownerReconnectDeadline) > Date.now(), multiplayer = (room?.members?.length ?? 0) >= 2;
     const onlineStatus = multiplayer ? `<aside class="online-coop-run-status ${realmActive ? "realm" : ""}"><b>${realmActive ? "異界宝物庫" : `共鳴率 ${resonance}/5`}</b><span>${realmActive ? "番人を倒し、宝箱を開いて帰還" : `宝箱 +${resonance * 3}%・貢献度 +${resonance * 2}%`}</span>${ownerOffline ? `<em>主の復帰待ち：現階層のみ継続可</em>` : ""}</aside>` : `<aside class="online-coop-run-status solo"><b>通常探索・主の世界</b><span>協力追加なし・オフライン探索と同じ進行</span></aside>`;
     const pingMenu = `<aside class="online-ping-menu ${state.pingMenuOpen ? "open" : ""}" ${state.pingMenuOpen ? "" : "hidden"}>${[["gather","集合"],["here","こっち"],["chest","宝箱"],["switch","スイッチ"],["rescue","救助"]].map(([id,label]) => `<button type="button" data-online-ping-kind="${id}">${label}</button>`).join("")}</aside>`;
-    const confirm = state.floorBossConfirm ? `<aside class="online-floor-boss-confirm" role="dialog" aria-modal="true"><div><small>FLOOR DOMINATOR・${number(state.floorBossConfirm.floor)}F</small><h3>${escapeOnlineHtml(state.floorBossConfirm.profile?.name || "階層支配者")}</h3><p>通常探索と同じ強さの支配者です。勝利すると温泉と初回三択報酬が解放されます。</p><dl><span>Lv.${number(state.floorBossConfirm.profile?.level || state.floorBossConfirm.floor)}</span><span>HP ${number(state.floorBossConfirm.profile?.hp || 0)}</span></dl><footer><button type="button" data-online-cancel-floor-boss>いったん退く</button><button type="button" class="primary" data-online-confirm-floor-boss>支配者へ挑む</button></footer></div></aside>` : "";
-    return ExploreScreen(base, { online: true, floor: expedition.floor, title: realmActive ? `異界宝物庫・${expedition.floor}階` : multiplayer ? `共闘探索・${expedition.floor}階` : `通常探索・${expedition.floor}階`, party: exploreParty(room), hudCollapsed: state.hudCollapsed, combatPower: (room.members ?? []).reduce((sum, member) => sum + Math.max(0, Number(member.profile?.power) || 0), 0), progress: Math.round(discovered / total * 100), run: { startedAt: expedition.startedAt ?? Date.now() }, stageContentHtml: `<canvas id="gameCanvas" data-online-dungeon-canvas></canvas><div class="online-shared-map" hidden>${compatibilityPlayers}</div>${onlineStatus}${prompt}${inlineChat}${pingMenu}${confirm}`, stageToolsHtml: stageTools, miniMapHtml: '<canvas id="miniMap"></canvas>', navHtml: nav, className: `online-scenery-${theme.id} ${realmActive ? "online-treasure-realm" : ""}` });
+    const floorBossConfirm = state.floorBossConfirm ? `<aside class="online-floor-boss-confirm" role="dialog" aria-modal="true"><div><small>FLOOR DOMINATOR・${number(state.floorBossConfirm.floor)}F</small><h3>${escapeOnlineHtml(state.floorBossConfirm.profile?.name || "階層支配者")}</h3><p>通常探索と同じ強さの支配者です。勝利すると温泉と初回三択報酬が解放されます。</p><dl><span>Lv.${number(state.floorBossConfirm.profile?.level || state.floorBossConfirm.floor)}</span><span>HP ${number(state.floorBossConfirm.profile?.hp || 0)}</span></dl><footer><button type="button" data-online-cancel-floor-boss>いったん退く</button><button type="button" class="primary" data-online-confirm-floor-boss>支配者へ挑む</button></footer></div></aside>` : "";
+    const coopBoss = state.coopBossConfirm?.boss ?? null, coopBossConfirm = coopBoss ? `<aside class="online-floor-boss-confirm online-coop-boss-confirm" style="--coop-boss-accent:${escapeOnlineHtml(coopBoss.accent || "#8fe9ff")}" role="dialog" aria-modal="true" aria-label="共闘ボスへの挑戦確認"><div><small>CO-OP BOSS・${number(state.coopBossConfirm.floor)}F</small><h3>${escapeOnlineHtml(coopBoss.name || "共鳴の強敵")}</h3><strong>${escapeOnlineHtml(coopBoss.title || "複数人限定の共鳴試練")}</strong><p>${escapeOnlineHtml(coopBoss.intro || coopBoss.mechanic?.instruction || "仲間と行動を合わせて攻略する、2人以上限定のボスです。")}</p><dl><span>${escapeOnlineHtml(coopBoss.mechanic?.name || "共鳴課題")}</span><span>${escapeOnlineHtml(coopBoss.mechanic?.shortLabel || "連携必須")}</span></dl><footer><button type="button" data-online-cancel-coop-boss>いったん退く</button><button type="button" class="primary" data-online-confirm-coop-boss>仲間と挑む</button></footer></div></aside>` : "";
+    return ExploreScreen(base, { online: true, floor: expedition.floor, title: realmActive ? `異界宝物庫・${expedition.floor}階` : multiplayer ? `共闘探索・${expedition.floor}階` : `通常探索・${expedition.floor}階`, party: exploreParty(room), hudCollapsed: state.hudCollapsed, combatPower: (room.members ?? []).reduce((sum, member) => sum + Math.max(0, Number(member.profile?.power) || 0), 0), progress: Math.round(discovered / total * 100), run: { startedAt: expedition.startedAt ?? Date.now() }, stageContentHtml: `<canvas id="gameCanvas" data-online-dungeon-canvas></canvas><div class="online-shared-map" hidden>${compatibilityPlayers}</div>${onlineStatus}${prompt}${inlineChat}${pingMenu}${floorBossConfirm}${coopBossConfirm}`, stageToolsHtml: stageTools, miniMapHtml: '<canvas id="miniMap"></canvas>', navHtml: nav, className: `online-scenery-${theme.id} ${realmActive ? "online-treasure-realm" : ""}` });
   }
   return `${screenHeader("explore", "HOST WORLD EXPLORATION", "1人なら通常探索と同じ。2人以上のときだけ協力要素が加わります。")} 
     <section class="online-v3-lobby-card"><div><small>CHALLENGE FLOOR</small><label><input type="number" min="1" max="10000" value="${number(room?.selectedFloor || 1).replaceAll(",", "")}" data-online-floor><b>F</b></label><p>変更できるのはリーダーだけ。全員の準備後に出発できます。</p></div></section>
@@ -263,25 +306,31 @@ export function renderOnlineRaid(room, selfId, state = {}) {
       const member = memberById(room, entry.playerId), contribution = report.raid?.contribution?.[entry.playerId] ?? entry;
       return `<article class="online-raid-report-row ${entry.playerId === selfId ? "self" : ""}"><strong>${number(entry.rank)}位</strong>${onlineAvatarVisual(member?.profile ?? {}, { className: "online-raid-report-avatar" })}<div><b>${escapeOnlineHtml(member?.profile?.displayName || "冒険者")}</b><small>貢献 ${number(entry.score)}</small></div><dl><div><dt>与ダメージ</dt><dd>${number(contribution.damage)}</dd></div><div><dt>被ダメージ</dt><dd>${number(contribution.taken)}</dd></div><div><dt>回復</dt><dd>${number(contribution.healing)}</dd></div><div><dt>MP回復</dt><dd>${number(contribution.mpHealing)}</dd></div><div><dt>蘇生</dt><dd>${number(contribution.revives)}</dd></div><div><dt>防御・補助</dt><dd>${number((contribution.guards ?? 0) + (contribution.support ?? 0))}</dd></div></dl></article>`;
     }).join("");
-    return `${screenHeader("raid", report.result === "victory" ? "RAID CLEAR" : "RAID RESULT", report.result === "victory" ? "終焉融骸を討伐しました。今回の共闘貢献を確認できます。" : "今回の戦果を記録しました。ボスの残りHPは次回へ引き継がれます。")}
+    const reportBoss = report.raid?.weeklyBoss?.name ?? report.raid?.name ?? "ワールドレイドボス";
+    return `${screenHeader("raid", report.result === "victory" ? "WEEKLY RAID CLEAR" : "WEEKLY RAID RESULT", report.result === "victory" ? `${reportBoss}を討伐しました。次の更新まで討伐済みとして保存されます。` : "今回の戦果を記録しました。ボスの残りHPと個人貢献は次回へ引き継がれます。")}
       <section class="online-raid-report"><header><span>${report.result === "victory" ? "討伐成功" : "撤退"}</span><h3>共闘貢献票</h3></header><div>${rows || '<p class="empty">集計データがありません</p>'}</div><button type="button" data-online-close-raid-report>レイド受付へ戻る</button></section>`;
   }
   if (room?.phase === "raid" && room.raid) {
     const enemies = [room.raid.boss, ...(room.raid.minions ?? [])];
     return renderSharedBattle({ mode: "raid", room, battle: room.raid, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: room.raid.name, enemies, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails });
   }
-  const progress = room?.raidProgress;
+  const weekly = room?.weeklyRaid ?? {}, boss = weekly.boss ?? { id: "abyss-amalga", name: "終焉融骸・アビス＝マルガ", level: 50, maxHp: 50_000, heroAsset: "./assets/online/raid-abyss-amalgam.png", materialName: "融骸核片", contractName: "融骸幼体アマルガ", equipmentName: "終焉喰らいの大刃", circleName: "即死返鏡陣", intro: "与ダメージ・回復・蘇生・防御・補助を貢献度として集計します。" }, modifier = weekly.modifier ?? { name: "通常環境", description: "特殊ルールなし" };
+  const progress = room?.raidProgress?.weekId && room.raidProgress.weekId !== weekly.weekId ? null : room?.raidProgress, completed = Boolean(progress?.completedAt), endsAt = Number(weekly.endsAt) || 0, endLabel = endsAt ? new Date(endsAt).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "次週";
   const materials = Math.max(0, Number(state.gameState?.onlineParty?.raidMaterials) || 0), exchangeCount = state.gameState?.onlineParty?.raidExchange ?? {};
   const exchanges = [
-    ["character", 240, "限定仲間", "融骸幼体アマルガ", Number(exchangeCount.character) > 0],
-    ["equipment", 180, "限定神話武器", "終焉喰らいの大刃", false],
-    ["circle", 120, "限定魔法陣", "即死返鏡陣", Number(exchangeCount.circle) > 0],
+    [`character:${boss.id}`, 240, "今週の限定仲間", boss.contractName, Number(exchangeCount[`character:${boss.id}`] ?? (boss.id === "abyss-amalga" ? exchangeCount.character : 0)) > 0],
+    [`equipment:${boss.id}`, 180, "今週の神話武器", boss.equipmentName, false],
+    ...(boss.id === "abyss-amalga" ? [[`circle:${boss.id}`, 120, "限定魔法陣", boss.circleName, Number(exchangeCount[`circle:${boss.id}`] ?? exchangeCount.circle) > 0]] : []),
+    ["crystals", 30, "育成資源", "魔晶石 ×100", false],
   ];
-  return `${screenHeader("raid", "CALAMITY RAID", "巨大ボスのHPは敗北後も保存。役割と行動を相談して少しずつ討伐します。")}
-    <section class="online-v3-raid-hero"><img src="./assets/online/raid-abyss-amalgam.png" alt="終焉融骸・アビス＝マルガ"><div><small>WORLD RAID BOSS</small><h3>終焉融骸・アビス＝マルガ</h3><p>与ダメージ・回復・蘇生・防御・補助を貢献度として集計します。</p></div></section>
-    <section class="online-v3-raid-progress"><header><b>部屋主の累積討伐進行</b><span>${progress ? `${number(progress.attempts)}回挑戦` : "未挑戦"}</span></header>${meter("boss", progress?.hp ?? 50_000, progress?.maxHp ?? 50_000)}<p>${progress ? `残りHP ${number(progress.hp)} / ${number(progress.maxHp)}` : "固定HP 50,000・Lv.50"}</p></section>
-    <section class="online-raid-exchange"><header><div><small>RAID MATERIAL EXCHANGE</small><b>融骸核片 交換所</b></div><strong>${number(materials)}<small>個</small></strong></header><div>${exchanges.map(([kind,cost,label,name,uniqueClaimed]) => `<article><span><small>${label}</small><b>${name}</b></span><button type="button" data-online-raid-exchange="${kind}" data-online-raid-cost="${cost}" ${uniqueClaimed || materials < cost || state.raidExchangePending ? "disabled" : ""}>${uniqueClaimed ? "交換済み" : state.raidExchangePending === kind ? "交換中…" : `${number(cost)}個`}</button></article>`).join("")}</div><p>装備は繰り返し交換可。仲間と魔法陣は各セーブ1回です。</p></section>
-    ${readyGrid(room)}<div class="online-v3-ready-actions"><button type="button" data-online-ready>${memberById(room, selfId)?.ready ? "準備を解除" : "準備完了"}</button><button type="button" class="online-v3-primary danger" data-online-start-raid ${room?.leaderId === selfId ? "" : "disabled"}>レイド開始</button></div>`;
+  const milestones = [5, 10, 25, 50, 75, 100].map(value => `<span class="${progress?.milestonesClaimed?.includes(value) ? "claimed" : ""}">${value}%</span>`).join("");
+  return `${screenHeader("raid", "WEEKLY WORLD RAID", "毎週月曜9:00更新。部屋主の世界に残HP・累積貢献・討伐結果を保存します。")}
+    <section class="online-weekly-raid-meta"><span>WEEKLY ROTATION</span><b>${endLabel}まで</b></section>
+    <section class="online-v3-raid-hero" style="--raid-accent:${escapeOnlineHtml(boss.accent || "#b45cff")}"><img src="${escapeOnlineHtml(boss.heroAsset)}" alt="${escapeOnlineHtml(boss.name)}"><div><small>WORLD RAID BOSS・Lv.${number(boss.level)}</small><h3>${escapeOnlineHtml(boss.name)}</h3><p>${escapeOnlineHtml(boss.intro)}</p></div></section>
+    <section class="online-weekly-rule"><i>${escapeOnlineHtml(modifier.icon || "✦")}</i><div><small>THIS WEEK'S RULE</small><b>${escapeOnlineHtml(modifier.name)}</b><p>${escapeOnlineHtml(modifier.description)}</p></div></section>
+    <section class="online-v3-raid-progress ${completed ? "completed" : ""}"><header><b>${completed ? "今週の討伐完了" : "部屋主の累積討伐進行"}</b><span>${progress ? `${number(progress.attempts)}回挑戦` : "未挑戦"}</span></header>${meter("boss", progress?.hp ?? boss.maxHp, progress?.maxHp ?? boss.maxHp)}<p>${completed ? "討伐済み。次回更新時に新しいボスへ切り替わります" : progress ? `残りHP ${number(progress.hp)} / ${number(progress.maxHp)}` : `HP ${number(boss.maxHp)}・Lv.${number(boss.level)}`}</p><div class="online-raid-milestones">${milestones}</div></section>
+    <section class="online-raid-exchange"><header><div><small>WEEKLY RAID EXCHANGE</small><b>レイド核片 交換所</b></div><strong>${number(materials)}<small>個</small></strong></header><div>${exchanges.map(([kind,cost,label,name,uniqueClaimed]) => `<article><span><small>${escapeOnlineHtml(label)}</small><b>${escapeOnlineHtml(name)}</b></span><button type="button" data-online-raid-exchange="${escapeOnlineHtml(kind)}" data-online-raid-cost="${cost}" ${uniqueClaimed || materials < cost || state.raidExchangePending ? "disabled" : ""}>${uniqueClaimed ? "交換済み" : state.raidExchangePending === kind ? "交換中…" : `${number(cost)}個`}</button></article>`).join("")}</div><p>限定仲間と魔法陣はボスごとに1回。武器と魔晶石は繰り返し交換できます。</p></section>
+    ${readyGrid(room)}<div class="online-v3-ready-actions"><button type="button" data-online-ready ${completed ? "disabled" : ""}>${memberById(room, selfId)?.ready ? "準備を解除" : "準備完了"}</button><button type="button" class="online-v3-primary danger" data-online-start-raid ${room?.leaderId === selfId && !completed ? "" : "disabled"}>${completed ? "今週は討伐済み" : "週替わりレイド開始"}</button></div>`;
 }
 
 export function renderOnlineTeam(room, selfId, state = {}) {

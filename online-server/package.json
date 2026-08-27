@@ -1,6 +1,6 @@
 {
   "name": "abyss-dominion-party-server",
-  "version": "1.12.0",
+  "version": "1.14.0",
   "private": true,
   "type": "module",
   "description": "ABYSS DOMINION online home, shared expedition, raid, free team battle and chat server",
