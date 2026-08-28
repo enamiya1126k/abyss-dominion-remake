@@ -1,0 +1,1000 @@
+/* build233: shared Friend / Guild overlay, persistent guild UI, and iPhone-safe controls. */
+.online-friend-layer{
+  z-index:320;
+}
+
+.online-friend-layer *,
+.online-friend-layer *::before,
+.online-friend-layer *::after{
+  box-sizing:border-box;
+}
+
+.online-social-fab{
+  min-width:94px;
+  min-height:48px;
+  justify-content:center;
+  touch-action:manipulation;
+}
+
+.online-v3-screen.online-shared-gameplay-active>.online-friend-layer .online-social-fab{
+  bottom:calc(max(0px,env(safe-area-inset-bottom)) + 154px);
+}
+
+.online-social-scrim{
+  touch-action:none;
+}
+
+.online-friend-panel.online-social-panel{
+  top:0;
+  right:0;
+  width:min(430px,100vw);
+  height:100dvh;
+  max-height:100dvh;
+  display:grid;
+  grid-template-rows:auto auto minmax(0,1fr);
+  overflow:hidden;
+  overscroll-behavior:contain;
+  padding-top:max(12px,env(safe-area-inset-top));
+  padding-right:max(14px,env(safe-area-inset-right));
+  padding-bottom:max(12px,env(safe-area-inset-bottom));
+  padding-left:max(14px,env(safe-area-inset-left));
+  -webkit-overflow-scrolling:touch;
+}
+
+.online-social-panel>.online-social-header{
+  position:relative;
+  z-index:2;
+  min-height:54px;
+  flex:none;
+  padding:0 0 9px;
+  background:#102638;
+}
+
+.online-social-panel>.online-social-header>button{
+  width:44px;
+  min-width:44px;
+  height:44px;
+  min-height:44px;
+  touch-action:manipulation;
+}
+
+.online-social-tabs{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5px;
+  padding:8px 0;
+  border-bottom:1px solid #ffffff20;
+  background:#102638;
+}
+
+.online-social-tabs button{
+  position:relative;
+  min-width:0;
+  min-height:46px;
+  border:1px solid #ffffff24;
+  border-radius:9px;
+  background:#ffffff08;
+  color:#9eb4c0;
+  font-weight:800;
+  touch-action:manipulation;
+}
+
+.online-social-tabs button.active{
+  border-color:#68e3bc;
+  background:linear-gradient(180deg,#1b5c57,#123a42);
+  color:#edfff9;
+  box-shadow:inset 0 -3px #65e5bd;
+}
+
+.online-social-tabs button>i{
+  position:absolute;
+  top:3px;
+  right:6px;
+  min-width:19px;
+  height:19px;
+  padding:0 4px;
+  border-radius:99px;
+  background:#ff5d78;
+  color:#fff;
+  font:700 10px/19px system-ui;
+  font-style:normal;
+}
+
+.online-social-content{
+  min-height:0;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scroll-padding-block:12px max(24px,env(safe-area-inset-bottom));
+  -webkit-overflow-scrolling:touch;
+}
+
+.online-friend-view,
+.online-guild-view{
+  min-width:0;
+  padding-bottom:14px;
+}
+
+.online-friend-view>.online-friend-self{
+  margin-top:14px;
+}
+
+.online-friend-view>form,
+.online-friend-view .online-friend-actions{
+  min-width:0;
+}
+
+.online-friend-panel :is(button,input,textarea,summary){
+  -webkit-tap-highlight-color:transparent;
+}
+
+.online-friend-panel :is(button,summary){
+  min-height:44px;
+  touch-action:manipulation;
+}
+
+.online-friend-panel :is(input,textarea){
+  min-width:0;
+  width:100%;
+  border:1px solid #ffffff30;
+  border-radius:10px;
+  outline:0;
+  background:#06111a;
+  color:#fff;
+  font-size:16px;
+}
+
+.online-friend-panel :is(input,textarea):focus{
+  border-color:#71e7c3;
+  box-shadow:0 0 0 2px #71e7c326;
+}
+
+.online-friend-panel textarea{
+  resize:vertical;
+}
+
+.online-friend-panel :is(button,summary):focus-visible{
+  outline:2px solid #a2ffe4;
+  outline-offset:2px;
+}
+
+.online-friend-panel button:disabled{
+  cursor:not-allowed;
+  opacity:.42;
+  filter:saturate(.35);
+}
+
+.online-friend-self button,
+.online-friend-panel form>button,
+.online-friend-actions button{
+  min-height:44px;
+}
+
+.online-guild-status{
+  margin:10px 0 0;
+  padding:9px 11px;
+  border-left:3px solid #6ddfbe;
+  background:#0b2830;
+  color:#bceee0;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.online-guild-status:empty{
+  display:none;
+}
+
+.online-guild-section,
+.online-guild-hero,
+.online-guild-week,
+.online-guild-danger{
+  min-width:0;
+  margin-top:14px;
+  border:1px solid #ffffff1f;
+  border-radius:12px;
+  background:#071722b8;
+}
+
+.online-guild-section{
+  padding:12px;
+}
+
+.online-guild-section.priority{
+  border-color:#d5aa5b66;
+  background:linear-gradient(145deg,#30200f99,#0a1922);
+}
+
+.online-guild-section>header,
+.online-guild-week>header{
+  min-height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:9px;
+  margin-bottom:9px;
+}
+
+.online-guild-section>header>div,
+.online-guild-week>header>div{
+  min-width:0;
+}
+
+.online-guild-section>header small,
+.online-guild-week>header small{
+  display:block;
+  color:#69dfc2;
+  font:800 8px/1.2 ui-monospace,monospace;
+  letter-spacing:.12em;
+}
+
+.online-guild-section h3,
+.online-guild-week h3,
+.online-guild-danger h3{
+  margin:2px 0 0;
+  color:#eafff9;
+  font-size:15px;
+}
+
+.online-guild-section>header>em,
+.online-guild-section>header>div+em{
+  min-width:25px;
+  padding:3px 7px;
+  border-radius:99px;
+  background:#ffffff14;
+  color:#83ebcf;
+  font-size:11px;
+  font-style:normal;
+  text-align:center;
+}
+
+.online-guild-lookup{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 78px;
+  align-items:end!important;
+  gap:7px!important;
+}
+
+.online-guild-create{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 112px;
+  align-items:start!important;
+  gap:9px!important;
+}
+
+.online-guild-create .wide,
+.online-guild-create>button{
+  grid-column:1/-1;
+}
+
+.online-guild-lookup label,
+.online-guild-create label{
+  min-width:0;
+}
+
+.online-guild-lookup label>span,
+.online-guild-create label>span{
+  display:flex!important;
+  justify-content:space-between;
+  gap:7px;
+  margin-bottom:5px;
+  color:#b5cbd4!important;
+  font-size:12px!important;
+}
+
+.online-guild-create label>span small{
+  color:#728c99;
+  font-size:10px;
+}
+
+.online-guild-lookup input,
+.online-guild-create input{
+  height:46px!important;
+  padding:0 11px!important;
+}
+
+.online-guild-create textarea{
+  min-height:72px;
+  padding:10px 11px;
+  line-height:1.45;
+}
+
+.online-guild-lookup>button,
+.online-guild-create>button,
+.online-guild-actions button,
+.online-guild-card-actions button,
+.online-guild-week button,
+.online-guild-chat form>button,
+.online-guild-danger button,
+.online-guild-member-tools button{
+  min-height:44px;
+  padding:7px 11px;
+  border:1px solid #5ad8b4;
+  border-radius:9px;
+  background:#17685f;
+  color:#f0fff9;
+  font-weight:800;
+}
+
+.online-guild-card{
+  min-width:0;
+  display:grid;
+  grid-template-columns:48px minmax(0,1fr) auto;
+  align-items:center;
+  gap:9px;
+  margin-top:9px;
+  padding:10px;
+  border:1px solid #66cfb33d;
+  border-radius:10px;
+  background:#0a2630;
+}
+
+.online-guild-crest{
+  width:48px;
+  height:48px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border:1px solid #dfbd6a88;
+  clip-path:polygon(50% 0,92% 18%,84% 74%,50% 100%,16% 74%,8% 18%);
+  background:linear-gradient(145deg,#5c4720,#142f39 70%);
+  color:#fff0aa;
+  font:900 10px/1 ui-monospace,monospace;
+  letter-spacing:.04em;
+}
+
+.online-guild-card>div{
+  min-width:0;
+}
+
+.online-guild-card>div>small,
+.online-guild-card>div>b,
+.online-guild-card>div>p{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.online-guild-card>div>small{
+  color:#78d8c4;
+  font:700 9px/1 ui-monospace,monospace;
+  letter-spacing:.08em;
+}
+
+.online-guild-card>div>b{
+  margin-top:3px;
+  color:#fff5d8;
+  font-size:14px;
+  white-space:nowrap;
+}
+
+.online-guild-card>div>p{
+  margin:4px 0 0;
+  color:#93abb5;
+  font-size:10px;
+  line-height:1.4;
+  white-space:nowrap;
+}
+
+.online-guild-card>em{
+  color:#a0b8c2;
+  font-size:10px;
+  font-style:normal;
+  white-space:nowrap;
+}
+
+.online-guild-card-actions{
+  grid-column:1/-1;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:6px;
+  padding-top:8px;
+  border-top:1px solid #ffffff12;
+}
+
+.online-guild-card-actions>small{
+  min-width:0;
+  margin-right:auto;
+  overflow:hidden;
+  color:#9bb0b8;
+  font-size:10px;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.online-guild-card-actions .ghost,
+.online-guild-actions .ghost{
+  border-color:#ffffff2b;
+  background:#ffffff09;
+  color:#c7d7dc;
+}
+
+.online-guild-applying{
+  display:grid;
+  gap:5px;
+  margin-top:10px;
+  padding:9px;
+  border:1px dashed #ffffff2a;
+  color:#9fb6bf;
+}
+
+.online-guild-applying>b{
+  color:#d7ede8;
+  font-size:11px;
+}
+
+.online-guild-applying>span{
+  min-width:0;
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  font-size:10px;
+}
+
+.online-guild-applying strong{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.online-guild-applying small{
+  color:#6f9396;
+  font-family:ui-monospace,monospace;
+  white-space:nowrap;
+}
+
+.online-guild-hero{
+  display:grid;
+  grid-template-columns:62px minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  padding:13px;
+  border-color:#d7b96055;
+  background:radial-gradient(circle at 12% 30%,#b4973926,transparent 35%),linear-gradient(145deg,#122e38,#08131e);
+}
+
+.online-guild-hero>.online-guild-crest{
+  width:62px;
+  height:68px;
+  font-size:12px;
+}
+
+.online-guild-hero>div{
+  min-width:0;
+}
+
+.online-guild-hero>div>small{
+  color:#72ddc5;
+  font:800 9px/1 ui-monospace,monospace;
+  letter-spacing:.09em;
+}
+
+.online-guild-hero h3{
+  overflow:hidden;
+  margin:4px 0;
+  color:#fff0bc;
+  font:900 20px/1.2 serif;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.online-guild-hero p{
+  display:-webkit-box;
+  overflow:hidden;
+  margin:0;
+  color:#99adb6;
+  font-size:10px;
+  line-height:1.4;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+}
+
+.online-guild-hero>div>span{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:7px;
+}
+
+.online-guild-hero>div>span>*{
+  padding:3px 6px;
+  border-radius:99px;
+  background:#ffffff10;
+  color:#bdd6d8;
+  font-size:9px;
+  font-style:normal;
+}
+
+.online-guild-hero>button{
+  min-width:62px;
+  min-height:44px;
+  padding:5px 8px;
+  border:1px solid #8b7847;
+  border-radius:8px;
+  background:#2a2618;
+  color:#f6dc91;
+  font-size:10px;
+}
+
+.online-guild-week{
+  padding:12px;
+  border-color:#61d9b753;
+  background:linear-gradient(145deg,#103b3b,#081820 70%);
+}
+
+.online-guild-week>header>strong{
+  color:#98ffe1;
+  font-size:16px;
+  white-space:nowrap;
+}
+
+.online-guild-week-meter{
+  height:12px;
+  overflow:hidden;
+  border:1px solid #4b8e82;
+  border-radius:99px;
+  background:#031012;
+}
+
+.online-guild-week-meter>i{
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#1b8b78,#81f3cd);
+  box-shadow:0 0 12px #5ee8be77;
+}
+
+.online-guild-week>ol{
+  display:flex;
+  justify-content:space-between;
+  gap:4px;
+  margin:6px 0 0;
+  padding:0;
+  list-style:none;
+}
+
+.online-guild-week>ol>li{
+  display:flex;
+  align-items:center;
+  gap:3px;
+  color:#708e91;
+  font-size:8px;
+}
+
+.online-guild-week>ol>li>i{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#365054;
+}
+
+.online-guild-week>ol>li.done{
+  color:#b5f9e5;
+}
+
+.online-guild-week>ol>li.done>i{
+  background:#66e4bd;
+  box-shadow:0 0 6px #66e4bd;
+}
+
+.online-guild-week>footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:10px;
+}
+
+.online-guild-week>footer>small{
+  color:#83a3a5;
+  font-size:9px;
+  line-height:1.35;
+}
+
+.online-guild-week>footer>button{
+  flex:none;
+}
+
+.online-guild-chat-log{
+  min-height:120px;
+  max-height:270px;
+  display:grid;
+  align-content:end;
+  gap:6px;
+  overflow:auto;
+  overscroll-behavior:contain;
+  padding:8px;
+  border:1px solid #ffffff18;
+  border-radius:9px;
+  background:#030b11;
+}
+
+.online-guild-chat-log>article{
+  min-width:0;
+  padding:7px 8px;
+  border-left:3px solid #74608c;
+  border-radius:4px;
+  background:#11121b;
+}
+
+.online-guild-chat-log>article.own{
+  border-left-color:#53cdb0;
+  background:#0b1d20;
+}
+
+.online-guild-chat-log article>header{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.online-guild-chat-log article>header>b{
+  overflow:hidden;
+  color:#d9ebeb;
+  font-size:10px;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.online-guild-chat-log time{
+  color:#657b84;
+  font-size:9px;
+}
+
+.online-guild-chat-log article>p{
+  overflow-wrap:anywhere;
+  margin:4px 0 0;
+  color:#eaf7f4;
+  font-size:12px;
+  line-height:1.45;
+}
+
+.online-guild-chat>form{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 64px;
+  align-items:end!important;
+  gap:6px!important;
+  margin-top:7px;
+}
+
+.online-guild-chat>form>label{
+  position:relative;
+  min-width:0;
+}
+
+.online-guild-chat textarea{
+  min-height:58px;
+  max-height:116px;
+  padding:9px 38px 9px 10px;
+  line-height:1.4;
+}
+
+.online-guild-chat form label>small{
+  position:absolute;
+  right:7px;
+  bottom:7px;
+  color:#637b83;
+  font-size:9px;
+}
+
+.online-guild-person{
+  min-width:0;
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  padding:9px 0;
+  border-bottom:1px solid #ffffff12;
+}
+
+.online-guild-person:last-child{
+  border-bottom:0;
+}
+
+.online-guild-avatar{
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  border:1px solid #ffffff12;
+  border-radius:50%;
+  background:linear-gradient(145deg,#2d6269,#122943);
+  font-size:21px;
+}
+
+.online-guild-person.offline .online-guild-avatar{
+  filter:grayscale(.75);
+  opacity:.62;
+}
+
+.online-guild-person>div{
+  min-width:0;
+}
+
+.online-guild-person>div>span{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.online-guild-person>div b,
+.online-guild-person>div small{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.online-guild-person>div b{
+  color:#edf8f5;
+  font-size:12px;
+}
+
+.online-guild-person>div em{
+  flex:none;
+  padding:2px 4px;
+  border-radius:5px;
+  background:#65dcb925;
+  color:#8df0d2;
+  font-size:8px;
+  font-style:normal;
+}
+
+.online-guild-person>div small{
+  margin-top:3px;
+  color:#7e9aa5;
+  font-size:9px;
+}
+
+.online-guild-person-state{
+  display:grid;
+  justify-items:end;
+  gap:2px;
+}
+
+.online-guild-person-state>i{
+  color:#667c85;
+  font:800 7px/1 ui-monospace,monospace;
+  font-style:normal;
+}
+
+.online-guild-person.online .online-guild-person-state>i{
+  color:#63deb9;
+}
+
+.online-guild-person-state>b{
+  color:#b8c9ce;
+  font-size:9px;
+}
+
+.online-guild-actions{
+  grid-column:2/-1;
+  display:flex;
+  justify-content:flex-end;
+  gap:5px;
+}
+
+.online-guild-member-tools{
+  grid-column:1/-1;
+  min-width:0;
+}
+
+.online-guild-member-tools>summary,
+.online-guild-invites details>summary{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:44px;
+  padding:7px 10px;
+  border:1px solid #ffffff24;
+  border-radius:8px;
+  background:#ffffff08;
+  color:#b9cdd2;
+  font-size:11px;
+  font-weight:800;
+  list-style:none;
+  cursor:pointer;
+}
+
+.online-guild-member-tools>summary::-webkit-details-marker,
+.online-guild-invites details>summary::-webkit-details-marker{
+  display:none;
+}
+
+.online-guild-member-tools>div{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:5px;
+  padding-top:5px;
+}
+
+.online-guild-member-tools button{
+  min-width:0;
+  padding-inline:4px;
+  font-size:9px;
+}
+
+.online-guild-member-tools button.danger,
+.online-guild-danger button{
+  border-color:#b55368;
+  background:#40131e;
+  color:#ffc1cc;
+}
+
+.online-guild-invites details>div{
+  max-height:330px;
+  overflow:auto;
+  overscroll-behavior:contain;
+}
+
+.online-guild-empty{
+  margin:8px 0;
+  color:#839ca5;
+  font-size:11px;
+  line-height:1.55;
+}
+
+.online-guild-danger{
+  padding:12px;
+  border-color:#8d3b4c66;
+  background:#210b12aa;
+}
+
+.online-guild-danger p{
+  margin:7px 0;
+  color:#be909a;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.online-guild-danger button{
+  width:100%;
+  margin-top:7px;
+}
+
+@media(max-width:420px){
+  .online-friend-panel.online-social-panel{
+    width:100vw;
+    padding-right:max(10px,env(safe-area-inset-right));
+    padding-left:max(10px,env(safe-area-inset-left));
+  }
+
+  .online-social-fab{
+    right:max(10px,env(safe-area-inset-right));
+    min-width:84px;
+    padding-inline:10px;
+  }
+
+  .online-friend-person{
+    grid-template-columns:38px minmax(0,1fr);
+  }
+
+  .online-friend-actions{
+    grid-column:1/-1;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(76px,1fr));
+  }
+
+  .online-guild-create,
+  .online-guild-lookup{
+    grid-template-columns:1fr!important;
+  }
+
+  .online-guild-create .wide,
+  .online-guild-create>button{
+    grid-column:1;
+  }
+
+  .online-guild-card{
+    grid-template-columns:44px minmax(0,1fr) auto;
+    padding:9px 8px;
+  }
+
+  .online-guild-card>.online-guild-crest{
+    width:44px;
+    height:44px;
+  }
+
+  .online-guild-card-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .online-guild-card-actions>small{
+    grid-column:1/-1;
+    margin:0;
+  }
+
+  .online-guild-hero{
+    grid-template-columns:54px minmax(0,1fr);
+    padding:10px;
+  }
+
+  .online-guild-hero>.online-guild-crest{
+    width:54px;
+    height:60px;
+  }
+
+  .online-guild-hero>button{
+    grid-column:1/-1;
+    width:100%;
+  }
+
+  .online-guild-week>footer{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .online-guild-week>footer>button{
+    width:100%;
+  }
+
+  .online-guild-person{
+    grid-template-columns:38px minmax(0,1fr) auto;
+  }
+
+  .online-guild-avatar{
+    width:38px;
+    height:38px;
+  }
+
+  .online-guild-member-tools>div{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:350px){
+  .online-guild-card{
+    grid-template-columns:40px minmax(0,1fr);
+  }
+
+  .online-guild-card>em{
+    grid-column:2;
+  }
+
+  .online-guild-person{
+    grid-template-columns:36px minmax(0,1fr);
+  }
+
+  .online-guild-person-state{
+    grid-column:2;
+    grid-row:2;
+    justify-items:start;
+  }
+
+  .online-guild-actions,
+  .online-guild-member-tools{
+    grid-column:1/-1;
+  }
+}
+
+@media(max-height:667px){
+  .online-social-panel>.online-social-header{
+    min-height:48px;
+  }
+
+  .online-social-panel>.online-social-header h2{
+    font-size:20px;
+  }
+
+  .online-social-tabs{
+    padding-block:5px;
+  }
+
+  .online-social-tabs button{
+    min-height:44px;
+  }
+
+  .online-guild-chat-log{
+    max-height:190px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .online-guild-week-meter>i{
+    transition:none;
+  }
+}

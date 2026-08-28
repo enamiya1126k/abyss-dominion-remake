@@ -3,16 +3,97 @@ import { randomBytes } from "node:crypto";
 const SIDES = new Set(["sun", "moon", "spectator"]);
 const ACTIONS = new Set(["attack", "guard", "skill", "item"]);
 const SPEEDS = new Set([0.5, 1, 2]);
+const RULESETS = new Set(["standard", "balanced", "blitz"]);
+const SERIES = new Set(["bo1", "bo3"]);
 const COMMAND_MS = 18_000;
+const BLITZ_COMMAND_MS = 9_000;
 const EFFECT_KINDS = new Set([
   "atkUp", "defUp", "spdUp", "evasionUp", "accuracyUp",
   "atkDown", "defDown", "spdDown", "evasionDown", "accuracyDown",
-  "vulnerable", "regen", "counter", "guard", "taunt", "lifeSteal",
+  "critUp", "critDown", "vulnerable", "regen", "counter", "guard", "taunt", "lifeSteal",
 ]);
 
 const token = (bytes = 10) => randomBytes(bytes).toString("base64url");
 const clamp = (value, min, max) => Math.max(min, Math.min(max, Number(value) || 0));
 const cleanText = (value, max = 80) => String(value ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, max);
+
+function normalizedSettings(source = {}) {
+  const ruleset = RULESETS.has(source?.ruleset) ? source.ruleset : "standard";
+  const series = SERIES.has(source?.series) ? source.series : "bo1";
+  return { ruleset, series };
+}
+
+function targetWinsFor(series) {
+  return series === "bo3" ? 2 : 1;
+}
+
+function statPower(stats = {}) {
+  const offense = Math.max(1, (Number(stats.atk) || 1) + (Number(stats.matk) || 1));
+  const defense = Math.max(1, (Number(stats.def) || 0) + (Number(stats.mdef) || 0));
+  return Math.max(1, Math.sqrt(Math.max(1, Number(stats.hp) || 1)) * Math.sqrt(offense * defense) * Math.max(1, Math.sqrt(Number(stats.spd) || 1)));
+}
+
+function balancedStats(stats, member, participants, sideCounts) {
+  const powerValues = participants.map(entry => Math.max(1, Number(entry.profile?.power) || statPower(entry.profile?.battleStats)));
+  const averagePower = powerValues.reduce((sum, value) => sum + value, 0) / Math.max(1, powerValues.length);
+  const ownPower = Math.max(1, Number(member.profile?.power) || statPower(stats));
+  const buildScale = clamp(Math.sqrt(averagePower / ownPower), 0.65, 1.6);
+  const ownCount = Math.max(1, sideCounts[member.teamSide] || 1);
+  const enemyCount = Math.max(1, sideCounts[member.teamSide === "sun" ? "moon" : "sun"] || 1);
+  const numberAdvantage = Math.max(1, enemyCount / ownCount);
+  const enduranceScale = clamp(buildScale * numberAdvantage, 0.65, 3);
+  const combatScale = clamp(buildScale * Math.sqrt(numberAdvantage), 0.65, 2.1);
+  return {
+    hp: Math.max(1, Math.round(stats.hp * enduranceScale)),
+    mp: Math.max(0, Math.round(stats.mp * clamp(buildScale, 0.8, 1.4))),
+    atk: Math.max(1, Math.round(stats.atk * combatScale)),
+    matk: Math.max(1, Math.round(stats.matk * combatScale)),
+    def: Math.max(0, Math.round(stats.def * combatScale)),
+    mdef: Math.max(0, Math.round(stats.mdef * combatScale)),
+    spd: Math.max(1, Math.round(stats.spd * clamp(Math.sqrt(buildScale), 0.82, 1.24))),
+    crit: stats.crit,
+    evasion: stats.evasion,
+    accuracy: stats.accuracy,
+  };
+}
+
+function initialEffects(circleEffect) {
+  return circleEffect === "openingBuff" ? [{ kind: "atkUp", value: .2, turns: 999 }, { kind: "critUp", value: .2, turns: 999 }] : [];
+}
+
+function resetPlayerForGame(player) {
+  const initial = player.initial;
+  player.hp = initial.maxHp;
+  player.maxHp = initial.maxHp;
+  player.mp = initial.maxMp;
+  player.maxMp = initial.maxMp;
+  player.shield = initial.shield;
+  player.guard = false;
+  player.itemCharges = 1;
+  player.effects = initialEffects(player.circleEffect);
+  player.circleLastLifeUsed = false;
+  player.circleReviveUsed = false;
+}
+
+function resultSummary(battle) {
+  const rows = Object.values(battle.players).map(player => {
+    const metrics = player.metrics ?? {};
+    const score = Math.max(0, Math.round((metrics.damage || 0) + (metrics.healing || 0) * .7 + (metrics.support || 0) * 250 + (metrics.kos || 0) * 1000));
+    return { playerId: player.playerId, name: player.name, monsterName: player.monsterName, side: player.side, score, damage: metrics.damage || 0, healing: metrics.healing || 0, damageTaken: metrics.damageTaken || 0, guards: metrics.guards || 0, support: metrics.support || 0, kos: metrics.kos || 0 };
+  }).sort((left, right) => right.score - left.score || right.damage - left.damage || left.playerId.localeCompare(right.playerId));
+  return {
+    resultId: `team:${battle.id}`,
+    winner: battle.winner ?? null,
+    outcome: battle.outcome ?? null,
+    ruleset: battle.ruleset,
+    series: battle.series,
+    format: battle.format,
+    score: { ...battle.score },
+    games: (battle.games ?? []).map(game => ({ ...game, score: { ...game.score } })),
+    mvpPlayerId: rows[0]?.playerId ?? null,
+    ranking: rows.map((entry, index) => ({ ...entry, rank: index + 1 })),
+  };
+}
 
 function effectValue(entity, kind) {
   return (entity?.effects ?? [])
@@ -70,7 +151,7 @@ function circleDamageFactor(actor, round = 1, aliveCount = 2) {
 }
 
 function publicPlayer(player) {
-  const { stats, ...safe } = player;
+  const { stats, initial, ...safe } = player;
   return { ...safe, effects: (safe.effects ?? []).map(effect => ({ ...effect })) };
 }
 
@@ -86,6 +167,15 @@ export function teamBattleSnapshot(battle) {
     outcome: battle.outcome,
     winner: battle.winner,
     format: battle.format,
+    ruleset: battle.ruleset,
+    series: battle.series,
+    game: battle.game,
+    targetWins: battle.targetWins,
+    score: { ...(battle.score ?? { sun: 0, moon: 0 }) },
+    betweenGames: Boolean(battle.betweenGames),
+    gameWinner: battle.gameWinner ?? null,
+    games: (battle.games ?? []).map(game => ({ ...game, score: { ...game.score } })),
+    summary: battle.summary ? { ...battle.summary, score: { ...(battle.summary.score ?? {}) }, games: (battle.summary.games ?? []).map(game => ({ ...game, score: { ...(game.score ?? {}) } })), ranking: (battle.summary.ranking ?? []).map(entry => ({ ...entry })) } : null,
     focusTarget: battle.focusTarget ? { ...battle.focusTarget } : null,
     cheeredBy: [...(battle.cheeredBy ?? [])],
     players: Object.values(battle.players).map(publicPlayer),
@@ -105,6 +195,46 @@ export class TeamBattleCoordinator {
     this.random = random;
     this.sessions = sessions;
     this.broadcast = broadcast;
+  }
+
+  settings(room) {
+    if (!room) return normalizedSettings();
+    room.teamSettings = normalizedSettings(room.teamSettings);
+    return { ...room.teamSettings };
+  }
+
+  setSettings(room, session, source = {}) {
+    if (!room) return { ok: false, code: "NOT_IN_ROOM", message: "部屋に参加していません" };
+    if (room.leaderId !== session.playerId) return { ok: false, code: "LEADER_ONLY", message: "対戦ルールを変更できるのはリーダーだけです" };
+    if (room.phase !== "lobby") return { ok: false, code: "ROOM_BUSY", message: "ロビーでのみ対戦ルールを変更できます" };
+    const requestedRuleset = cleanText(source.ruleset, 20), requestedSeries = cleanText(source.series, 20);
+    if (requestedRuleset && !RULESETS.has(requestedRuleset)) return { ok: false, code: "BAD_TEAM_RULESET", message: "その対戦ルールは使用できません" };
+    if (requestedSeries && !SERIES.has(requestedSeries)) return { ok: false, code: "BAD_TEAM_SERIES", message: "その勝敗形式は使用できません" };
+    const current = this.settings(room);
+    room.teamSettings = normalizedSettings({ ruleset: requestedRuleset || current.ruleset, series: requestedSeries || current.series });
+    for (const id of room.members) {
+      const member = this.sessions.get(id);
+      if (member) member.teamReady = false;
+    }
+    this.broadcast(room, { type: "roomRefresh" });
+    return { ok: true, settings: this.settings(room) };
+  }
+
+  swapSides(room, session) {
+    if (!room) return { ok: false, code: "NOT_IN_ROOM", message: "部屋に参加していません" };
+    if (room.leaderId !== session.playerId) return { ok: false, code: "LEADER_ONLY", message: "チームを入れ替えられるのはリーダーだけです" };
+    if (room.phase !== "lobby") return { ok: false, code: "ROOM_BUSY", message: "ロビーでのみチームを入れ替えられます" };
+    let changed = 0;
+    for (const id of room.members) {
+      const member = this.sessions.get(id);
+      if (!member) continue;
+      if (member.teamSide === "sun") { member.teamSide = "moon"; changed += 1; }
+      else if (member.teamSide === "moon") { member.teamSide = "sun"; changed += 1; }
+      member.teamReady = false;
+    }
+    if (!changed) return { ok: false, code: "NO_TEAM_PLAYERS", message: "入れ替える対戦参加者がいません" };
+    this.broadcast(room, { type: "roomRefresh" });
+    return { ok: true, swapped: changed };
   }
 
   setSide(room, session, side) {
@@ -140,10 +270,13 @@ export class TeamBattleCoordinator {
     if (participants.some(member => !member.connected)) return { ok: false, code: "MEMBER_OFFLINE", message: "再接続待ちの参加者がいます" };
     if (participants.some(member => !member.teamReady)) return { ok: false, code: "NOT_ALL_READY", message: "参加者全員の準備完了を待っています" };
 
+    const settings = this.settings(room), sideCounts = { sun: sun.length, moon: moon.length };
     const players = {}, circleEvents = [];
     for (const member of participants) {
-      const stats = member.profile.battleStats;
+      const sourceStats = member.profile.battleStats;
+      const stats = settings.ruleset === "balanced" ? balancedStats(sourceStats, member, participants, sideCounts) : { ...sourceStats };
       const circleEffect = member.profile.circleEffect ?? "none";
+      const shield = circleEffect === "shield" ? Math.ceil(stats.hp * .5) : 0;
       players[member.playerId] = {
         playerId: member.playerId,
         name: member.profile.displayName,
@@ -155,21 +288,30 @@ export class TeamBattleCoordinator {
         maxHp: stats.hp,
         mp: stats.mp,
         maxMp: stats.mp,
-        shield: circleEffect === "shield" ? Math.ceil(stats.hp * .5) : 0,
+        shield,
         guard: false,
         itemCharges: 1,
         stats: { ...stats },
-        effects: circleEffect === "openingBuff" ? [{ kind: "atkUp", value: .2, turns: 999 }, { kind: "critUp", value: .2, turns: 999 }] : [],
+        effects: initialEffects(circleEffect),
         circleEffect, circleLevel: member.profile.circleLevel ?? 0, circleLastLifeUsed: false, circleReviveUsed: false,
+        balanced: settings.ruleset === "balanced",
+        balanceFactor: settings.ruleset === "balanced" ? Number((stats.hp / Math.max(1, sourceStats.hp)).toFixed(3)) : 1,
+        initial: { maxHp: stats.hp, maxMp: stats.mp, shield },
+        metrics: { damage: 0, healing: 0, damageTaken: 0, guards: 0, support: 0, kos: 0 },
       };
       if (circleEffect !== "none") circleEvents.push({ kind: "circleActivate", actorId: member.playerId, actorName: member.profile.displayName, targetKind: "player", targetId: member.playerId, label: member.profile.circleName || "魔法陣" });
       member.teamReady = false;
     }
     room.teamBattle = {
-      id: token(), round: 1, phase: "command", speed: 1,
-      deadlineAt: this.now() + COMMAND_MS, nextRoundAt: 0,
+      id: token(), round: 1, game: 1, phase: "command", speed: 1,
+      deadlineAt: this.now() + (settings.ruleset === "blitz" ? BLITZ_COMMAND_MS : COMMAND_MS), nextRoundAt: 0,
       outcome: null, winner: null, format: `${sun.length} vs ${moon.length}`,
-      players, actions: {}, lastEvents: circleEvents,
+      ruleset: settings.ruleset, series: settings.series, targetWins: targetWinsFor(settings.series),
+      score: { sun: 0, moon: 0 }, games: [], betweenGames: false, gameWinner: null,
+      commandMs: settings.ruleset === "blitz" ? BLITZ_COMMAND_MS : COMMAND_MS,
+      damageMultiplier: settings.ruleset === "blitz" ? 1.25 : 1,
+      healingMultiplier: settings.ruleset === "blitz" ? .85 : 1,
+      players, actions: {}, lastEvents: [...circleEvents, { kind: "seriesStart", label: `${settings.series === "bo3" ? "2本先取" : "1本先取"}・${settings.ruleset === "balanced" ? "均衡" : settings.ruleset === "blitz" ? "速攻" : "通常"}ルール` }],
     };
     room.phase = "team";
     this.broadcast(room, { type: "teamBattleStarted", teamBattle: teamBattleSnapshot(room.teamBattle) });
@@ -229,6 +371,10 @@ export class TeamBattleCoordinator {
       if (!aliveSun || !aliveMoon) {
         battle.outcome = aliveSun === aliveMoon ? "draw" : "victory";
         battle.winner = aliveSun === aliveMoon ? null : aliveSun ? "sun" : "moon";
+        if (battle.winner) battle.score[battle.winner] = battle.targetWins;
+        battle.gameWinner = battle.winner;
+        battle.games.push({ game: battle.game, winner: battle.winner, reason: "forfeit", score: { ...battle.score } });
+        battle.summary = resultSummary(battle);
         battle.phase = "result";
         battle.deadlineAt = 0;
         battle.nextRoundAt = this.now();
@@ -254,7 +400,8 @@ export class TeamBattleCoordinator {
     }
     if (battle.phase !== "result" || now < battle.nextRoundAt) return;
     if (battle.outcome) {
-      this.broadcast(room, { type: "teamBattleEnded", result: battle.outcome, winner: battle.winner, teamBattle: teamBattleSnapshot(battle) });
+      battle.summary ??= resultSummary(battle);
+      this.broadcast(room, { type: "teamBattleEnded", resultId: battle.summary.resultId, result: battle.outcome, winner: battle.winner, summary: battle.summary, teamBattle: teamBattleSnapshot(battle) });
       room.phase = "lobby";
       room.teamBattle = null;
       for (const id of room.members) {
@@ -264,9 +411,13 @@ export class TeamBattleCoordinator {
       this.broadcast(room, { type: "roomRefresh" });
       return;
     }
+    if (battle.betweenGames) {
+      this._openNextGame(room, battle, now);
+      return;
+    }
     battle.round += 1;
     battle.phase = "command";
-    battle.deadlineAt = now + COMMAND_MS;
+    battle.deadlineAt = now + battle.commandMs;
     battle.nextRoundAt = 0;
     battle.actions = {};
     battle.lastEvents = [];
@@ -276,6 +427,25 @@ export class TeamBattleCoordinator {
       if (regen && player.hp > 0) player.hp = Math.min(player.maxHp, player.hp + Math.ceil(player.maxHp * regen));
       tickEffects(player);
     }
+    this.broadcast(room, { type: "teamBattleRound", teamBattle: teamBattleSnapshot(battle) });
+    this.broadcast(room, { type: "roomRefresh" });
+  }
+
+  _openNextGame(room, battle, now) {
+    battle.game += 1;
+    battle.round = 1;
+    battle.phase = "command";
+    battle.deadlineAt = now + battle.commandMs;
+    battle.nextRoundAt = 0;
+    battle.actions = {};
+    battle.betweenGames = false;
+    battle.gameWinner = null;
+    battle.lastEvents = [];
+    for (const player of Object.values(battle.players)) {
+      resetPlayerForGame(player);
+      if (player.circleEffect !== "none") battle.lastEvents.push({ kind: "circleActivate", actorId: player.playerId, actorName: player.name, targetKind: "player", targetId: player.playerId, label: this.sessions.get(player.playerId)?.profile?.circleName || "魔法陣" });
+    }
+    battle.lastEvents.push({ kind: "gameStart", label: `第${battle.game}戦開始・紅 ${battle.score.sun} - ${battle.score.moon} 蒼` });
     this.broadcast(room, { type: "teamBattleRound", teamBattle: teamBattleSnapshot(battle) });
     this.broadcast(room, { type: "roomRefresh" });
   }
@@ -306,9 +476,18 @@ export class TeamBattleCoordinator {
     const aliveSun = Object.values(battle.players).some(player => player.side === "sun" && player.hp > 0);
     const aliveMoon = Object.values(battle.players).some(player => player.side === "moon" && player.hp > 0);
     if (!aliveSun || !aliveMoon) {
-      battle.outcome = aliveSun === aliveMoon ? "draw" : "victory";
-      battle.winner = aliveSun === aliveMoon ? null : aliveSun ? "sun" : "moon";
-      events.push({ kind: "result", label: battle.winner ? `${battle.winner === "sun" ? "紅組" : "蒼組"} 勝利` : "引き分け" });
+      const gameWinner = aliveSun === aliveMoon ? null : aliveSun ? "sun" : "moon";
+      battle.gameWinner = gameWinner;
+      if (gameWinner) battle.score[gameWinner] += 1;
+      battle.games.push({ game: battle.game, winner: gameWinner, reason: gameWinner ? "ko" : "draw", score: { ...battle.score } });
+      if (battle.games.length > 8) battle.games = battle.games.slice(-8);
+      const reachedTarget = gameWinner && battle.score[gameWinner] >= battle.targetWins;
+      const drawLimit = !gameWinner && (battle.series === "bo1" || battle.games.length >= 5);
+      if (reachedTarget) { battle.outcome = "victory"; battle.winner = gameWinner; }
+      else if (drawLimit) { battle.outcome = "draw"; battle.winner = null; }
+      else { battle.outcome = null; battle.winner = null; battle.betweenGames = true; }
+      events.push({ kind: "result", label: gameWinner ? `第${battle.game}戦 ${gameWinner === "sun" ? "紅組" : "蒼組"}勝利（${battle.score.sun}-${battle.score.moon}）` : "この試合は引き分け" });
+      if (battle.outcome) battle.summary = resultSummary(battle);
     }
     battle.phase = "result";
     battle.deadlineAt = 0;
@@ -329,6 +508,8 @@ export class TeamBattleCoordinator {
     const target = players.find(player => player.playerId === action.targetId);
     if (action.kind === "guard") {
       actor.guard = true;
+      actor.metrics.guards += 1;
+      actor.metrics.support += 1;
       events.push({ kind: "guard", actorId: actor.playerId, actorName, targetKind: "player", targetId: actor.playerId, label: "ガード" });
       return;
     }
@@ -336,8 +517,11 @@ export class TeamBattleCoordinator {
       actor.itemCharges = Math.max(0, actor.itemCharges - 1);
       const ally = target?.side === actor.side ? target : actor;
       const before = ally.hp;
-      ally.hp = Math.min(ally.maxHp, ally.hp + Math.ceil(ally.maxHp * 0.35));
-      events.push({ kind: "heal", actorId: actor.playerId, actorName, targetKind: "player", targetId: ally.playerId, value: ally.hp - before, label: "模擬戦応急薬" });
+      ally.hp = Math.min(ally.maxHp, ally.hp + Math.ceil(ally.maxHp * 0.35 * (battle.healingMultiplier ?? 1)));
+      const healed = ally.hp - before;
+      actor.metrics.healing += healed;
+      actor.metrics.support += 1;
+      events.push({ kind: "heal", actorId: actor.playerId, actorName, targetKind: "player", targetId: ally.playerId, value: healed, label: "模擬戦応急薬" });
       return;
     }
     if (skill) actor.mp = Math.max(0, actor.mp - skill.mp);
@@ -345,6 +529,8 @@ export class TeamBattleCoordinator {
       const fallen = target?.side === actor.side && target.hp <= 0 ? target : allies.find(player => player.hp <= 0);
       if (fallen) {
         fallen.hp = Math.max(1, Math.ceil(fallen.maxHp * Math.max(0.2, skill.heal || 0.35)));
+        actor.metrics.healing += fallen.hp;
+        actor.metrics.support += 2;
         events.push({ kind: "revive", actorId: actor.playerId, actorName, targetKind: "player", targetId: fallen.playerId, value: fallen.hp, label: skill.name });
       }
       return;
@@ -353,17 +539,22 @@ export class TeamBattleCoordinator {
       const targets = skill.allAllies || skill.kind === "allHeal" ? allies.filter(player => player.hp > 0) : [target?.side === actor.side ? target : actor];
       if (["heal", "allHeal"].includes(skill.kind)) for (const ally of targets) {
         const before = ally.hp;
-        ally.hp = Math.min(ally.maxHp, ally.hp + Math.ceil(ally.maxHp * Math.max(0.12, skill.heal || 0.25)));
-        events.push({ kind: "heal", actorId: actor.playerId, actorName, targetKind: "player", targetId: ally.playerId, value: ally.hp - before, label: skill.name });
+        ally.hp = Math.min(ally.maxHp, ally.hp + Math.ceil(ally.maxHp * Math.max(0.12, skill.heal || 0.25) * (battle.healingMultiplier ?? 1)));
+        const healed = ally.hp - before;
+        actor.metrics.healing += healed;
+        events.push({ kind: "heal", actorId: actor.playerId, actorName, targetKind: "player", targetId: ally.playerId, value: healed, label: skill.name });
       }
       if (skill.kind === "mpHeal") for (const ally of targets) {
         const before = ally.mp;
         ally.mp = Math.min(ally.maxMp, ally.mp + Math.ceil(ally.maxMp * Math.max(0.15, skill.mpHeal || 0.25)));
-        events.push({ kind: "mpHeal", actorId: actor.playerId, actorName, targetKind: "player", targetId: ally.playerId, value: ally.mp - before, label: skill.name });
+        const restored = ally.mp - before;
+        actor.metrics.support += Math.max(1, Math.ceil(restored / Math.max(1, ally.maxMp) * 10));
+        events.push({ kind: "mpHeal", actorId: actor.playerId, actorName, targetKind: "player", targetId: ally.playerId, value: restored, label: skill.name });
       }
       if (skill.kind === "guard") for (const ally of targets) ally.guard = true;
       for (const effect of skill.effects ?? []) if (effect.allies || !effect.enemy) for (const ally of targets) addEffect(ally, effect);
       if (skill.partyShieldRate) for (const ally of targets) ally.shield = Math.max(ally.shield, Math.ceil(ally.maxHp * skill.partyShieldRate));
+      actor.metrics.support += Math.max(1, targets.length);
       if (!events.some(event => event.actorId === actor.playerId && event.label === skill.name)) events.push({ kind: "buff", actorId: actor.playerId, actorName, targetKind: "player", targetId: targets[0]?.playerId, label: skill.name });
       return;
     }
@@ -378,9 +569,10 @@ export class TeamBattleCoordinator {
     const defense = (magic ? defender.stats.mdef : defender.stats.def) * statFactor(defender, "defUp", "defDown");
     const power = skill?.kind === "attack" ? Math.max(0.2, skill.power * skill.hits) : 1;
     const ratio = attack / Math.max(1, attack + defense);
-    const critical = this.random() < clamp(actor.stats.crit / 100, 0, 0.65);
+    const criticalRate = actor.stats.crit / 100 + effectValue(actor, "critUp") - effectValue(actor, "critDown");
+    const critical = this.random() < clamp(criticalRate, 0, 0.65);
     const capRate = skill ? 0.55 : 0.38;
-    const raw = Math.max(1, Math.round(defender.maxHp * ratio * 0.48 * power * (0.92 + this.random() * 0.16) * (critical ? 1.45 : 1)));
+    const raw = Math.max(1, Math.round(defender.maxHp * ratio * 0.48 * power * (battle.damageMultiplier ?? 1) * (0.92 + this.random() * 0.16) * (critical ? 1.45 : 1)));
     let value = Math.min(raw, Math.max(1, Math.ceil(defender.maxHp * capRate)));
     if (defender.guard) value = Math.max(1, Math.round(value * 0.42));
     const absorbed = Math.min(defender.shield ?? 0, value);
@@ -389,8 +581,11 @@ export class TeamBattleCoordinator {
     defender.hp = Math.max(0, defender.hp - (value - absorbed));
     if (defender.hp <= 0 && before > 0 && defender.circleEffect === "lastLife" && !defender.circleLastLifeUsed) { defender.circleLastLifeUsed = true; defender.hp = 1; events.push({ kind: "circleActivate", targetKind: "player", targetId: defender.playerId, label: "不屈の残光" }); }
     if (defender.hp <= 0 && before > 0 && defender.circleEffect === "revive" && !defender.circleReviveUsed) { defender.circleReviveUsed = true; defender.hp = Math.max(1, Math.ceil(defender.maxHp * .35)); events.push({ kind: "circleActivate", targetKind: "player", targetId: defender.playerId, label: "輪廻の魔法陣" }); }
-    events.push({ kind: "damage", actorId: actor.playerId, actorName, targetId: defender.playerId, value: before - defender.hp, absorbed, critical, label: skill?.name ?? "たたかう" });
+    const dealt = before - defender.hp;
+    actor.metrics.damage += dealt;
+    defender.metrics.damageTaken += dealt;
+    events.push({ kind: "damage", actorId: actor.playerId, actorName, targetId: defender.playerId, value: dealt, absorbed, critical, label: skill?.name ?? "たたかう" });
     if (skill) for (const effect of skill.effects ?? []) if (effect.enemy) addEffect(defender, effect);
-    if (defender.hp <= 0) events.push({ kind: "ko", targetId: defender.playerId, label: `${defender.name} 戦闘不能` });
+    if (defender.hp <= 0) { actor.metrics.kos += 1; events.push({ kind: "ko", targetId: defender.playerId, label: `${defender.name} 戦闘不能` }); }
   }
 }

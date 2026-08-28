@@ -19,7 +19,7 @@ const configSource = read("src/core/config.js");
 
 assert.match(indexSource, /build217\.css\?v=2\.11\.52-build217/);
 assert.match(indexSource, /build225\.css\?v=2\.11\.54-build225/);
-assert.match(indexSource, /ASSET_BUILD = "build228"/);
+assert.match(indexSource, /ASSET_BUILD = "build230"/);
 assert.match(configSource, /APP_VERSION="2\.11\.54"/);
 
 assert.match(roomStoreSource, /floorBossDefinitionForFloor,milestoneBossIdsForFloor/);

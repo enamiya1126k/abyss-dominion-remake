@@ -416,6 +416,7 @@ test("build228 counts disconnected AI, snapshots the alias, and resumes without 
   const resumed = env.store.hello(resumedConnection, {
     friendId: guest.session.playerId,
     clientKey: guest.session.clientKey,
+    resumeToken: guest.session.resumeToken,
     profile: guest.session.profile,
   });
   assert.equal(resumed.ok, true);

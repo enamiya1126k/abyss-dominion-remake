@@ -1,0 +1,503 @@
+/* build236: guild expedition schedules, RSVP controls, and reconnect-safe Social UI. */
+.online-guild-plans{
+  min-width:0;
+  overflow:hidden;
+  border-color:#8c79cf55;
+  background:linear-gradient(145deg,#17152f,#08141f 72%);
+}
+
+.online-guild-plan-copy{
+  margin:0 0 10px;
+  color:#a8adc4;
+  font-size:10px;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+}
+
+.online-guild-plan-compose-toggle,
+.online-guild-plan-more{
+  width:100%;
+  min-height:44px;
+  border:1px solid #a995e068;
+  border-radius:9px;
+  background:#2d2854;
+  color:#eee9ff;
+  font-size:11px;
+  font-weight:900;
+  touch-action:manipulation;
+}
+
+.online-guild-plan-compose-toggle[aria-expanded="true"]{
+  border-color:#ffffff2a;
+  background:#151b2c;
+  color:#bbc1d5;
+}
+
+.online-guild-plan-composer{
+  min-width:0;
+  margin-top:9px;
+  padding:10px;
+  border:1px solid #a995e039;
+  border-radius:10px;
+  background:#060d19c7;
+}
+
+.online-guild-plan-composer[hidden]{
+  display:none;
+}
+
+.online-guild-plan-composer form,
+.online-guild-plan-composer form>label{
+  min-width:0;
+  display:grid;
+  gap:8px;
+}
+
+.online-guild-plan-composer form>div{
+  min-width:0;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+
+.online-guild-plan-composer label{
+  min-width:0;
+  display:grid;
+  align-content:start;
+  gap:5px;
+}
+
+.online-guild-plan-composer label.date{
+  grid-column:1/-1;
+}
+
+.online-guild-plan-composer label>span{
+  min-width:0;
+  color:#bec4d9;
+  font-size:10px;
+  font-weight:800;
+}
+
+.online-guild-plan-composer label>span small{
+  color:#7f869c;
+  font-size:8px;
+}
+
+.online-guild-plan-composer :is(input,select,textarea){
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  min-height:44px;
+  margin:0;
+  padding:9px 10px;
+  border:1px solid #ffffff29;
+  border-radius:8px;
+  background:#070d18;
+  color:#f4f2ff;
+  font:inherit;
+  font-size:16px;
+}
+
+.online-guild-plan-composer textarea{
+  min-height:64px;
+  resize:vertical;
+  line-height:1.45;
+}
+
+.online-guild-plan-composer input[type="datetime-local"]{
+  color-scheme:dark;
+}
+
+.online-guild-plan-composer :is(input,select,textarea):focus{
+  border-color:#bba8ef;
+  outline:2px solid #8f79d34d;
+  outline-offset:1px;
+}
+
+.online-guild-plan-composer form>label{
+  margin-top:8px;
+}
+
+.online-guild-plan-composer form>label>small{
+  justify-self:end;
+  margin-top:-4px;
+  color:#737b92;
+  font-size:8px;
+}
+
+.online-guild-plan-composer form>button{
+  min-height:44px;
+  margin-top:8px;
+  border:1px solid #bba8ef;
+  border-radius:9px;
+  background:linear-gradient(135deg,#6550a2,#3b3278);
+  color:#fff;
+  font-size:11px;
+  font-weight:900;
+  touch-action:manipulation;
+}
+
+.online-guild-plan-list{
+  min-width:0;
+  display:grid;
+  gap:9px;
+  margin-top:10px;
+}
+
+.online-guild-plan-card{
+  min-width:0;
+  overflow:hidden;
+  padding:10px;
+  border:1px solid #ffffff1b;
+  border-radius:11px;
+  background:linear-gradient(145deg,#0d1626,#070d17);
+}
+
+.online-guild-plan-card.going{
+  border-color:#66d8b563;
+  box-shadow:inset 3px 0 #4dc59e;
+}
+
+.online-guild-plan-card.maybe{
+  border-color:#d5b66b55;
+  box-shadow:inset 3px 0 #c6a551;
+}
+
+.online-guild-plan-card>header{
+  min-width:0;
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.online-guild-plan-card>header>time{
+  flex:0 0 auto;
+  display:grid;
+  grid-template-columns:auto auto;
+  align-items:baseline;
+  gap:5px;
+  color:#f2edff;
+}
+
+.online-guild-plan-card>header>time>b{
+  font-size:11px;
+}
+
+.online-guild-plan-card>header>time>strong{
+  color:#c5b5ef;
+  font-size:15px;
+}
+
+.online-guild-plan-card>header>span{
+  min-width:0;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  gap:4px;
+}
+
+.online-guild-plan-card>header>span>em{
+  max-width:100%;
+  overflow:hidden;
+  padding:3px 6px;
+  border-radius:99px;
+  background:#8e79d32b;
+  color:#cabdf1;
+  font-size:8px;
+  font-style:normal;
+  font-weight:800;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.online-guild-plan-organizer{
+  min-width:0;
+  display:grid;
+  grid-template-columns:34px minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  margin-top:9px;
+  padding:7px;
+  border-radius:9px;
+  background:#ffffff08;
+}
+
+.online-guild-plan-organizer>i{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:linear-gradient(145deg,#5c4c92,#243653);
+  color:#fff;
+  font-size:16px;
+  font-style:normal;
+}
+
+.online-guild-plan-organizer>span{
+  min-width:0;
+}
+
+.online-guild-plan-organizer>span>*{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.online-guild-plan-organizer>span>small{
+  color:#7f879c;
+  font-size:8px;
+}
+
+.online-guild-plan-organizer>span>b{
+  margin-top:2px;
+  color:#eef1f7;
+  font-size:11px;
+}
+
+.online-guild-plan-organizer>dl{
+  display:flex;
+  gap:5px;
+  margin:0;
+}
+
+.online-guild-plan-organizer>dl>div{
+  min-width:42px;
+  padding:4px 5px;
+  border-radius:7px;
+  background:#080e1a;
+  text-align:center;
+}
+
+.online-guild-plan-organizer dt{
+  color:#747d93;
+  font-size:7px;
+}
+
+.online-guild-plan-organizer dd{
+  margin:1px 0 0;
+  color:#ddd5fa;
+  font-size:11px;
+  font-weight:900;
+}
+
+.online-guild-plan-card>p{
+  margin:8px 0 0;
+  padding:7px 8px;
+  border-left:2px solid #a58ddd;
+  background:#a58ddd10;
+  color:#c8cad5;
+  font-size:10px;
+  line-height:1.55;
+  overflow-wrap:anywhere;
+}
+
+.online-guild-plan-attendees{
+  min-width:0;
+  margin-top:9px;
+}
+
+.online-guild-plan-attendees>b{
+  display:block;
+  margin-bottom:5px;
+  color:#8e96aa;
+  font-size:8px;
+  letter-spacing:.08em;
+}
+
+.online-guild-plan-attendees>small{
+  color:#747e91;
+  font-size:9px;
+}
+
+.online-guild-plan-attendees>ul{
+  min-width:0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+
+.online-guild-plan-attendees li{
+  min-width:0;
+  max-width:100%;
+  display:grid;
+  grid-template-columns:20px minmax(0,1fr) auto;
+  align-items:center;
+  gap:4px;
+  padding:3px 6px 3px 3px;
+  border:1px solid #ffffff14;
+  border-radius:99px;
+  background:#ffffff08;
+}
+
+.online-guild-plan-attendees li>i{
+  width:20px;
+  height:20px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#26364e;
+  font-size:9px;
+  font-style:normal;
+}
+
+.online-guild-plan-attendees li>b{
+  min-width:0;
+  overflow:hidden;
+  color:#dbe0ec;
+  font-size:9px;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.online-guild-plan-attendees li>span{
+  color:#70cbaa;
+  font-size:7px;
+  white-space:nowrap;
+}
+
+.online-guild-plan-attendees li.maybe>span{
+  color:#d0b66e;
+}
+
+.online-guild-plan-card>footer{
+  min-width:0;
+  display:grid;
+  gap:7px;
+  margin-top:10px;
+  padding-top:9px;
+  border-top:1px solid #ffffff12;
+}
+
+.online-guild-plan-card>footer>div{
+  min-width:0;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:6px;
+}
+
+.online-guild-plan-card>footer button{
+  min-width:0;
+  min-height:44px;
+  padding:5px 7px;
+  border:1px solid #786a9e;
+  border-radius:8px;
+  background:#242238;
+  color:#c7c5d4;
+  font-size:9px;
+  font-weight:900;
+  overflow-wrap:anywhere;
+  touch-action:manipulation;
+}
+
+.online-guild-plan-card>footer button.selected{
+  border-color:#7de0bd;
+  background:#175646;
+  color:#eafff7;
+}
+
+.online-guild-plan-card>footer button.ghost{
+  border-color:#ffffff20;
+  background:#ffffff08;
+}
+
+.online-guild-plan-card>footer>button.danger{
+  width:100%;
+  border-color:#d7778863;
+  background:#4b202c;
+  color:#ffdce2;
+}
+
+.online-guild-plan-more{
+  margin-top:9px;
+  border-color:#ffffff20;
+  background:#111927;
+  color:#abb1c4;
+}
+
+.online-guild-plans :is(button,input,select,textarea):disabled{
+  cursor:not-allowed;
+  opacity:.46;
+}
+
+.online-guild-plans button:focus-visible{
+  outline:2px solid #c5b3f4;
+  outline-offset:2px;
+}
+
+.online-friend-connection-status{
+  margin:0 0 12px;
+  padding:9px 10px;
+  border:1px solid #e0bd6052;
+  border-radius:9px;
+  background:#4a38182e;
+  color:#ecd99e;
+  font-size:10px;
+  font-weight:800;
+  line-height:1.5;
+}
+
+@media(max-width:390px){
+  .online-guild-plans{
+    padding-inline:10px;
+  }
+
+  .online-guild-plan-composer form>div{
+    grid-template-columns:minmax(0,1fr);
+  }
+
+  .online-guild-plan-composer label.date{
+    grid-column:auto;
+  }
+
+  .online-guild-plan-card>header{
+    display:grid;
+  }
+
+  .online-guild-plan-card>header>span{
+    justify-content:flex-start;
+  }
+}
+
+@media(max-width:340px){
+  .online-guild-plan-composer,
+  .online-guild-plan-card{
+    padding-inline:8px;
+  }
+
+  .online-guild-plan-organizer{
+    grid-template-columns:32px minmax(0,1fr);
+  }
+
+  .online-guild-plan-organizer>i{
+    width:32px;
+    height:32px;
+  }
+
+  .online-guild-plan-organizer>dl{
+    grid-column:1/-1;
+  }
+
+  .online-guild-plan-organizer>dl>div{
+    flex:1;
+  }
+
+  .online-guild-plan-card>footer>div{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .online-guild-plan-card>footer>div>button:last-child{
+    grid-column:1/-1;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .online-guild-plans *{
+    scroll-behavior:auto!important;
+  }
+}

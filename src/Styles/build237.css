@@ -1,0 +1,165 @@
+/* build237: turn a scheduled guild expedition into one live gathering card. */
+.online-guild-plan-card.gathering-live{
+  border-color:rgba(112,236,190,.62);
+  box-shadow:0 0 0 1px rgba(112,236,190,.12),0 14px 34px rgba(0,0,0,.28);
+}
+
+.online-guild-plan-gathering{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  min-width:0;
+  margin:10px 0 2px;
+  padding:9px 10px;
+  border:1px solid rgba(206,173,92,.28);
+  border-radius:10px;
+  background:linear-gradient(135deg,rgba(30,21,39,.94),rgba(14,12,20,.96));
+  color:#f7f0dc;
+  font-size:11px;
+}
+
+.online-guild-plan-gathering>span{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr);
+  align-items:center;
+  gap:2px 7px;
+  min-width:0;
+}
+
+.online-guild-plan-gathering>span>i{
+  grid-row:1/3;
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#70ecbe;
+  box-shadow:0 0 10px rgba(112,236,190,.88);
+}
+
+.online-guild-plan-gathering small{
+  overflow:hidden;
+  color:#70ecbe;
+  font-size:11px;
+  font-weight:800;
+  line-height:1.25;
+  letter-spacing:.07em;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.online-guild-plan-gathering strong{
+  color:#fff;
+  font-size:12px;
+  line-height:1.35;
+}
+
+.online-guild-plan-gathering>p{
+  min-width:0;
+  margin:0;
+  color:#d8cdb8;
+  font-size:11px;
+  line-height:1.55;
+}
+
+.online-guild-plan-gathering>button,
+.online-guild-plan-gathering>b{
+  display:inline-flex;
+  flex:0 0 auto;
+  align-items:center;
+  justify-content:center;
+  min-width:92px;
+  min-height:44px;
+  padding:8px 12px;
+  border:1px solid rgba(112,236,190,.55);
+  border-radius:9px;
+  background:linear-gradient(180deg,rgba(72,181,143,.98),rgba(34,116,92,.98));
+  color:#fff;
+  font-family:inherit;
+  font-size:11px;
+  font-weight:800;
+  line-height:1.25;
+  letter-spacing:.02em;
+  text-align:center;
+}
+
+.online-guild-plan-gathering>button:focus-visible{
+  outline:2px solid #fff1b7;
+  outline-offset:2px;
+}
+
+.online-guild-plan-gathering>button:disabled{
+  cursor:not-allowed;
+  filter:saturate(.45);
+  opacity:.58;
+}
+
+.online-guild-plan-gathering.joined>b{
+  border-color:rgba(112,236,190,.22);
+  background:rgba(112,236,190,.1);
+  color:#baffdf;
+}
+
+.online-guild-plan-gathering.ready{
+  border-color:rgba(206,173,92,.42);
+}
+
+.online-guild-plan-gathering.ready small{
+  color:#ead18f;
+}
+
+.online-guild-plan-gathering.ready>button{
+  border-color:rgba(230,196,105,.68);
+  background:linear-gradient(180deg,#8a6930,#5e431d);
+}
+
+.online-guild-plan-gathering.expired{
+  border-color:rgba(154,145,164,.22);
+  background:rgba(15,13,20,.72);
+  opacity:.82;
+}
+
+.online-guild-plan-gathering.expired small{
+  color:#aaa0b3;
+}
+
+.online-guild-plan-gathering.expired>b{
+  border-color:rgba(154,145,164,.24);
+  background:rgba(112,103,120,.12);
+  color:#c2bac8;
+}
+
+@media(max-width:390px){
+  .online-guild-plan-gathering{
+    gap:8px;
+    padding:8px;
+  }
+
+  .online-guild-plan-gathering>button,
+  .online-guild-plan-gathering>b{
+    min-width:88px;
+    padding-inline:9px;
+  }
+}
+
+@media(max-width:320px){
+  .online-guild-plan-gathering{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .online-guild-plan-gathering>button,
+  .online-guild-plan-gathering>b{
+    width:100%;
+    min-width:0;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .online-guild-plan-card.gathering-live,
+  .online-guild-plan-gathering,
+  .online-guild-plan-gathering *{
+    animation:none!important;
+    scroll-behavior:auto!important;
+    transition:none!important;
+  }
+}

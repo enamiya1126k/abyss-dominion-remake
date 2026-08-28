@@ -1,0 +1,358 @@
+/* build234: guild-only party recruitment inside the existing Social / Guild panel. */
+.online-guild-recruitment{
+  overflow:hidden;
+  border-color:#6f8fe55c;
+  background:linear-gradient(145deg,#0b2131,#09151f 72%);
+}
+
+.online-guild-recruitment-copy,
+.online-guild-recruitment-hint{
+  overflow-wrap:anywhere;
+  margin:0;
+  color:#91aab5;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.online-guild-recruitment-hint{
+  margin-top:8px;
+  padding:9px 10px;
+  border:1px dashed #ffffff29;
+  border-radius:9px;
+  background:#ffffff06;
+}
+
+.online-guild-recruitment-form{
+  min-width:0;
+  display:grid!important;
+  gap:8px!important;
+  margin-top:10px;
+  padding:10px;
+  border:1px solid #6b8bd44d;
+  border-radius:10px;
+  background:#07101bd9;
+}
+
+.online-guild-recruitment-form>div{
+  min-width:0;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+}
+
+.online-guild-recruitment-form label{
+  position:relative;
+  min-width:0;
+  display:grid;
+  gap:5px;
+}
+
+.online-guild-recruitment-form label>span{
+  display:flex;
+  justify-content:space-between;
+  gap:6px;
+  color:#b8ced8;
+  font-size:11px;
+  font-weight:800;
+}
+
+.online-guild-recruitment-form label>span small{
+  color:#728c98;
+  font-size:9px;
+  font-weight:600;
+}
+
+.online-guild-recruitment-form select,
+.online-guild-recruitment-form textarea{
+  min-width:0;
+  width:100%;
+  border:1px solid #ffffff30;
+  border-radius:9px;
+  outline:0;
+  background:#030c14;
+  color:#eefbf8;
+  font-size:16px;
+}
+
+.online-guild-recruitment-form select{
+  min-height:44px;
+  padding:0 9px;
+}
+
+.online-guild-recruitment-form textarea{
+  min-height:64px;
+  max-height:116px;
+  padding:9px 42px 9px 10px;
+  line-height:1.4;
+  resize:vertical;
+}
+
+.online-guild-recruitment-form :is(select,textarea):focus{
+  border-color:#89a8ff;
+  box-shadow:0 0 0 2px #708fe62b;
+}
+
+.online-guild-recruitment-form>label>small{
+  position:absolute;
+  right:7px;
+  bottom:7px;
+  color:#667b89;
+  font-size:9px;
+}
+
+.online-guild-recruitment-form>button,
+.online-guild-recruitment-card>footer>button{
+  min-width:0;
+  min-height:44px;
+  padding:8px 11px;
+  border:1px solid #7f9ef0;
+  border-radius:9px;
+  background:#294e91;
+  color:#f3f7ff;
+  font-weight:900;
+  touch-action:manipulation;
+}
+
+.online-guild-recruitment-form>button:focus-visible,
+.online-guild-recruitment-card>footer>button:focus-visible{
+  outline:2px solid #b9caff;
+  outline-offset:2px;
+}
+
+.online-guild-recruitment-list{
+  min-width:0;
+  display:grid;
+  gap:8px;
+  margin-top:10px;
+}
+
+.online-guild-recruitment-card{
+  min-width:0;
+  overflow:hidden;
+  padding:10px;
+  border:1px solid #6d8ed944;
+  border-radius:10px;
+  background:linear-gradient(145deg,#122a3d,#09151f);
+}
+
+.online-guild-recruitment-card.own{
+  border-color:#d3b26166;
+  background:linear-gradient(145deg,#30271099,#0b1822);
+}
+
+.online-guild-recruitment-card.joined{
+  border-color:#59d4b45c;
+  box-shadow:inset 3px 0 #59d4b4;
+}
+
+.online-guild-recruitment-card>header{
+  min-width:0;
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+}
+
+.online-guild-recruitment-card>header>div{
+  min-width:0;
+}
+
+.online-guild-recruitment-card>header>div>*{
+  display:block;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.online-guild-recruitment-card>header>div>small{
+  color:#86a8ff;
+  font:800 8px/1 ui-monospace,monospace;
+  letter-spacing:.1em;
+}
+
+.online-guild-recruitment-card.own>header>div>small{
+  color:#e4c06b;
+}
+
+.online-guild-recruitment-card>header>div>b{
+  margin-top:3px;
+  color:#eef7fa;
+  font-size:13px;
+}
+
+.online-guild-recruitment-card>header>div>span{
+  margin-top:3px;
+  color:#819da8;
+  font-size:9px;
+}
+
+.online-guild-recruitment-card>header>time{
+  align-self:start;
+  padding:4px 6px;
+  border-radius:99px;
+  background:#ffffff0c;
+  color:#a9bfca;
+  font-size:8px;
+  white-space:nowrap;
+}
+
+.online-guild-recruitment-tags{
+  min-width:0;
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:8px;
+}
+
+.online-guild-recruitment-tags>em{
+  max-width:100%;
+  overflow:hidden;
+  padding:3px 7px;
+  border:1px solid #7894df3d;
+  border-radius:99px;
+  background:#6686d31c;
+  color:#bed0ff;
+  font-size:9px;
+  font-style:normal;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.online-guild-recruitment-card>p{
+  overflow-wrap:anywhere;
+  margin:8px 0 0;
+  padding:7px 8px;
+  border-left:3px solid #7394e6;
+  background:#050d16;
+  color:#dce8ee;
+  font-size:11px;
+  line-height:1.45;
+}
+
+.online-guild-recruitment-card>footer{
+  min-width:0;
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:9px;
+  padding-top:8px;
+  border-top:1px solid #ffffff12;
+}
+
+.online-guild-recruitment-card>footer>dl{
+  min-width:0;
+  display:flex;
+  gap:12px;
+  margin:0;
+}
+
+.online-guild-recruitment-card dl>div{
+  display:grid;
+  gap:2px;
+}
+
+.online-guild-recruitment-card dt{
+  color:#708a97;
+  font-size:8px;
+}
+
+.online-guild-recruitment-card dd{
+  margin:0;
+  color:#d9e7ed;
+  font-size:12px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.online-guild-recruitment-card>footer>button{
+  flex:0 1 116px;
+}
+
+.online-guild-recruitment-card>footer>button.danger{
+  border-color:#b45a70;
+  background:#451522;
+  color:#ffc4d0;
+}
+
+.online-guild-recruitment :is(button,select,textarea):disabled{
+  cursor:not-allowed;
+  opacity:.44;
+}
+
+.online-room-listing-settings.guild-restricted{
+  border-color:#d1ad5a66;
+  background:linear-gradient(145deg,#2b220f99,#0b1822);
+}
+
+.online-room-listing-guild-lock{
+  overflow-wrap:anywhere;
+  margin:0;
+  padding:10px 11px;
+  border:1px solid #d1ad5a55;
+  border-radius:10px;
+  background:#171408;
+  color:#d8c48f;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.online-room-listing-guild-lock>b,
+.online-room-listing-guild-lock>span{
+  display:block;
+}
+
+.online-room-listing-guild-lock>b{
+  margin-bottom:3px;
+  color:#ffe29a;
+  font-size:12px;
+}
+
+@media(max-width:420px){
+  .online-guild-recruitment-form>div{
+    grid-template-columns:1fr;
+  }
+
+  .online-guild-recruitment-card>footer{
+    align-items:stretch;
+    flex-direction:column;
+  }
+
+  .online-guild-recruitment-card>footer>button{
+    width:100%;
+    flex-basis:auto;
+  }
+}
+
+@media(max-width:350px){
+  .online-guild-recruitment{
+    padding-inline:9px;
+  }
+
+  .online-guild-recruitment-card>header{
+    grid-template-columns:38px minmax(0,1fr);
+  }
+
+  .online-guild-recruitment-card>header>.online-guild-avatar{
+    width:38px;
+    height:38px;
+  }
+
+  .online-guild-recruitment-card>header>time{
+    grid-column:2;
+    justify-self:start;
+  }
+}
+
+@media(max-height:667px){
+  .online-guild-recruitment-form,
+  .online-guild-recruitment-card{
+    padding:8px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .online-guild-recruitment *{
+    scroll-behavior:auto!important;
+  }
+}

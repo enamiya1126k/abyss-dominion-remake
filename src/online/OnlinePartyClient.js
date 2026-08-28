@@ -1,45 +1,534 @@
 import {
-  buildOnlinePartyProfile, ONLINE_STORAGE_KEYS, ensureOnlineIdentity,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.54-build226";
+  buildOnlinePartyProfile, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.65-build239";
 import {
-  renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
-} from "./OnlineViews.js?v=2.11.54-build228";
+  renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineResonance, renderOnlineChat,
+} from "./OnlineViews.js?v=2.11.65-build239";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   commitOnlineTrade, recoverOrphanedTradeEscrows,
 } from "./OnlineTradeSystem.js?v=2.11.54-build226";
 import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=2.11.54-build226";
 
-const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
-const ONLINE_PROTOCOL = "1.14.0";
+const ROUTES = new Set(["home", "explore", "raid", "team", "resonance", "chat"]);
+const ONLINE_PROTOCOL = "1.16.0";
+const ROOM_PURPOSES = new Set(["explore", "raid", "team", "resonance", "social"]);
+const ROOM_STYLES = new Set(["anyone", "casual", "help", "fast"]);
 const DIRECTION = Object.freeze({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] });
 const ONLINE_EXPLORE_CHAT_POSITION = "abyss-online-explore-chat-position";
 const ONLINE_EXPLORE_EMOTE_POSITION = "abyss-online-explore-emote-position";
 const ONLINE_HALL_EMOTE_POSITION = "abyss-online-hall-emote-position";
+const RESONANCE_CLICK_SUPPRESSION_MS = 900;
+const HANDSHAKE_TOKEN_RETRY_LIMIT = 2;
+const RESUME_TOKEN_MAP_LIMIT = 32;
+const RESUME_TOKEN_MAX_LENGTH = 512;
+const RESUME_TOKEN_MAP_MAX_BYTES = 64 * 1024;
+const RESONANCE_MOVE_STOP_CODES = new Set(["BLOCKED", "MOVE_CLOSED", "PLAYER_TRAPPED", "NO_RESONANCE"]);
+const GUILD_ID_PATTERN = /^GD-[A-Z2-9]{6}$/;
+const PLAYER_ID_PATTERN = /^AD-[A-Z2-9]{4}-[A-Z2-9]{4}$/;
+const GUILD_ROLES = new Set(["leader", "officer", "member"]);
+const GUILD_SHARED_GOAL_IDS = Object.freeze(["expedition", "boss", "raid", "team", "resonance"]);
+const GUILD_SHARED_GOAL_ID_SET = new Set(GUILD_SHARED_GOAL_IDS);
+const GUILD_ACTIVITY_KINDS = new Set(["checkIn", "expedition", "floorBoss", "coopBoss", "raid", "team", "resonance"]);
+const GUILD_PLAN_ID_PATTERN = /^[A-Za-z0-9_-]{18,96}$/;
+const GUILD_RECRUITMENT_ID_PATTERN = /^[A-Za-z0-9_-]{18,96}$/;
+const GUILD_PLAN_RESPONSES = new Set(["going", "maybe", "none"]);
+const GUILD_PLAN_MAX_LEAD_MS = 14 * 24 * 60 * 60_000;
+const GUILD_PLAN_TRANSITION_MIN_DELAY_MS = 50;
+const GUILD_PLAN_TRANSITION_MAX_DELAY_MS = 2_147_000_000;
+const GUILD_PLAN_TRANSITION_SETTLE_MS = 25;
+const GUILD_SERVER_CLOCK_MAX_OFFSET_MS = 31 * 24 * 60 * 60_000;
+const GUILD_PLAN_REMINDER_RECEIPT_LIMIT = 64;
+const GUILD_PLAN_REMINDER_RECEIPT_MAX_BYTES = 16 * 1024;
+const MUTED_PLAYER_LIMIT = 200;
+const FRIEND_MUTATION_SELECTOR = [
+  "[data-online-friend-accept]", "[data-online-friend-decline]", "[data-online-friend-block]",
+  "[data-online-friend-unblock]", "[data-online-user-block]", "[data-online-friend-invite]", "[data-online-friend-invite-accept]", "[data-online-friend-invite-decline]", "[data-online-friend-remove]",
+].join(",");
+const GUILD_MUTATION_SELECTOR = [
+  "[data-online-guild-apply]", "[data-online-guild-invite]", "[data-online-guild-invite-accept]", "[data-online-guild-invite-decline]",
+  "[data-online-guild-application-accept]", "[data-online-guild-application-decline]", "[data-online-guild-set-role]",
+  "[data-online-guild-transfer]", "[data-online-guild-kick]", "[data-online-guild-check-in]", "[data-online-guild-leave]", "[data-online-guild-disband]",
+  "[data-online-guild-recruitment-close]", "[data-online-guild-recruitment-join]",
+  "[data-online-guild-plan-respond]", "[data-online-guild-plan-cancel]", "[data-online-guild-plan-gather]",
+].join(",");
+const SOCIAL_FOCUS_SELECTORS = [
+  "[data-online-friends-toggle]", "[data-online-guild-plan-attention]", ".online-social-header [data-online-friends-close]",
+  "[data-online-social-tab=\"friends\"]", "[data-online-social-tab=\"guild\"]",
+  "[data-online-friend-id]", "[data-online-guild-id]", "[data-online-guild-create-name]", "[data-online-guild-create-tag]",
+  "[data-online-guild-create-description]", "[data-online-guild-chat-input]", "[data-online-guild-recruitment-purpose]",
+  "[data-online-guild-recruitment-style]", "[data-online-guild-recruitment-note]",
+  "[data-online-guild-plan-purpose]", "[data-online-guild-plan-style]", "[data-online-guild-plan-scheduled-at]",
+  "[data-online-guild-plan-floor]", "[data-online-guild-plan-note]",
+  "[data-online-user-mute]", "[data-online-user-unmute]", "[data-online-friend-unblock]",
+];
+const ONLINE_STATE_CONTROL_SELECTOR = [
+  "[data-online-create-room]", "[data-online-create-listed]", "[data-online-create-purpose]", "[data-online-create-style]",
+  "[data-online-join-listed-room]", "[data-online-quick-join]", "[data-online-refresh-listings]", "[data-online-room-purpose-filter]",
+  "[data-online-room-code]", "[data-online-join-form] button[type='submit']",
+  "[data-online-remove-room-member]", "[data-online-trade-player]", "[data-online-trade-accept]", "[data-online-trade-decline]",
+  "[data-online-trade-cancel]", "[data-online-trade-offer]", "[data-online-trade-ready]", "[data-online-trade-confirm]",
+  "[data-online-raid-exchange]", "[data-online-ping-kind]", "[data-online-expedition-interact]", "[data-online-merchant-offer]",
+  "[data-online-confirm-floor-boss]", "[data-online-confirm-coop-boss]", "[data-online-battle-cheer]", "[data-online-hall-destination]",
+  "[data-online-ready]", "[data-online-start-explore]", "[data-online-return]", "[data-online-complete]", "[data-online-start-raid]",
+  "[data-online-team-side]", "[data-online-team-ready]", "[data-online-team-ruleset]", "[data-online-team-series]", "[data-online-team-swap]", "[data-online-start-team]", "[data-online-start-resonance]",
+  "[data-online-resonance-move]", "[data-online-resonance-choice]", "[data-online-resonance-action]", "[data-online-resonance-return]",
+  "[data-online-move]", "[data-online-emote-anchor]", "[data-command]", "[data-skill-id]", "[data-online-battle-item]",
+  "[data-online-item-target]", "[data-online-speed-cycle]", "[data-online-speed]", "[data-online-battle-action]", "[data-online-battle-skill]",
+  "[data-online-preset]", "[data-online-floor]", "[data-online-room-listing-toggle]", "[data-online-room-listing-purpose]",
+  "[data-online-room-listing-style]", "[data-online-chat-input]", "[data-online-explore-chat-input]",
+  "[data-online-user-block]", "[data-online-user-mute]", "[data-online-user-unmute]", "[data-online-friend-unblock]",
+  "[data-online-chat-form] button[type='submit']", "[data-online-explore-chat-form] button[type='submit']",
+].join(",");
 const HALL_POINTS = Object.freeze([
   { route: "raid", x: 18, y: 25 }, { route: "explore", x: 82, y: 25 },
+  { route: "resonance", x: 50, y: 25 },
   { route: "team", x: 24, y: 78 }, { route: "chat", x: 76, y: 78 },
 ]);
 
 function storageGet(key, fallback = "") { try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; } }
 function storageSet(key, value) { try { localStorage.setItem(key, String(value)); } catch {} }
 function clamp(value, min, max) { return Math.max(min, Math.min(max, Number(value) || 0)); }
-function safeRoomId(value) { return String(value ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6); }
+function safeRoomId(value) {
+  let source = String(value ?? "").trim();
+  const invite = source.match(/(?:^|[?&])partyRoom=([^&#]+)/i);
+  if (invite) { try { source = decodeURIComponent(invite[1]); } catch { source = invite[1]; } }
+  return source.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
+}
 function safeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[character]); }
 function isTyping(target) { return Boolean(target?.closest?.("input,textarea,select,[contenteditable=true]")); }
 function keyDirection(key) { return ({ ArrowUp: "up", w: "up", W: "up", ArrowDown: "down", s: "down", S: "down", ArrowLeft: "left", a: "left", A: "left", ArrowRight: "right", d: "right", D: "right" })[key] ?? null; }
 
-function websocketUrl(input) {
+function capabilitySet(value) {
+  if (Array.isArray(value)) return new Set(value.map(entry => String(entry)));
+  if (value && typeof value === "object") return new Set(Object.entries(value).filter(([, enabled]) => Boolean(enabled)).map(([name]) => name));
+  return new Set();
+}
+
+function cleanSocialText(value, maximum = 80) {
+  return String(value ?? "").normalize("NFKC").replace(/[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069]/g, "").slice(0, maximum);
+}
+
+function boundedInteger(value, minimum, maximum, fallback = minimum) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.max(minimum, Math.min(maximum, Math.floor(parsed))) : fallback;
+}
+
+function readGuildPlanReminderReceipts() {
+  const raw = storageGet(ONLINE_STORAGE_KEYS.guildPlanReminderReceipts, "");
+  if (!raw || raw.length > GUILD_PLAN_REMINDER_RECEIPT_MAX_BYTES) return [];
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch { return []; }
+  const source = Array.isArray(parsed?.receipts) ? parsed.receipts : [];
+  const seen = new Set(), receipts = [];
+  for (const value of source.slice(-GUILD_PLAN_REMINDER_RECEIPT_LIMIT * 2)) {
+    const key = typeof value === "string" ? value : "";
+    if (!key || key.length > 220 || !/^[A-Za-z0-9_:\-|]+$/.test(key) || seen.has(key)) continue;
+    seen.add(key); receipts.push(key);
+  }
+  return receipts.slice(-GUILD_PLAN_REMINDER_RECEIPT_LIMIT);
+}
+
+function writeGuildPlanReminderReceipts(receipts) {
+  const bounded = [...new Set(Array.isArray(receipts) ? receipts : [])].filter(value => typeof value === "string" && value.length <= 220).slice(-GUILD_PLAN_REMINDER_RECEIPT_LIMIT);
+  let payload = JSON.stringify({ version: 1, receipts: bounded });
+  while (payload.length > GUILD_PLAN_REMINDER_RECEIPT_MAX_BYTES && bounded.length) {
+    bounded.shift(); payload = JSON.stringify({ version: 1, receipts: bounded });
+  }
+  storageSet(ONLINE_STORAGE_KEYS.guildPlanReminderReceipts, payload);
+}
+
+function normalizedPlayerId(value) {
+  const id = cleanSocialText(value, 20).trim().toUpperCase();
+  return PLAYER_ID_PATTERN.test(id) ? id : "";
+}
+
+export function normalizeMutedPlayer(source) {
+  const playerId = normalizedPlayerId(typeof source === "string" ? source : source?.playerId);
+  if (!playerId) return null;
+  return {
+    playerId,
+    displayName: cleanSocialText(source?.displayName, 16).trim() || "冒険者",
+    monsterName: cleanSocialText(source?.monsterName, 32).trim() || "仲間",
+    fallbackEmoji: cleanSocialText(source?.fallbackEmoji, 8).trim() || "魔",
+  };
+}
+
+function normalizedGuildId(value) {
+  const id = cleanSocialText(value, 10).trim().toUpperCase();
+  return GUILD_ID_PATTERN.test(id) ? id : "";
+}
+
+function emptyGuildState() { return { guild: null, invitations: [], applications: [], lookup: null, serverNow: 0 }; }
+
+export function normalizeGuildSharedGoal(source) {
+  const id = cleanSocialText(source?.id, 20).trim();
+  if (!GUILD_SHARED_GOAL_ID_SET.has(id)) return null;
+  const target = boundedInteger(source?.target, 1, 1_000_000_000, 1);
+  const current = boundedInteger(source?.current, 0, target, 0);
+  return { id, current, target, completed: source?.completed === true || current >= target };
+}
+
+function normalizeGuildSharedGoals(source) {
+  const sharedIds = new Set(), sharedGoals = [];
+  for (const raw of (Array.isArray(source) ? source : []).slice(0, 20)) {
+    const entry = normalizeGuildSharedGoal(raw);
+    if (!entry || sharedIds.has(entry.id)) continue;
+    sharedIds.add(entry.id); sharedGoals.push(entry);
+  }
+  return sharedGoals.sort((left, right) => GUILD_SHARED_GOAL_IDS.indexOf(left.id) - GUILD_SHARED_GOAL_IDS.indexOf(right.id)).slice(0, 5);
+}
+
+function normalizeGuildWeek(source) {
+  const goals = (Array.isArray(source?.goals) ? source.goals : []).slice(0, 12)
+    .map(value => boundedInteger(value, 1, 1_000_000, 0)).filter(Boolean);
+  return {
+    weekId: cleanSocialText(source?.weekId, 10),
+    points: boundedInteger(source?.points, 0, 1_000_000_000, 0),
+    goals,
+    tier: boundedInteger(source?.tier, 0, goals.length, 0),
+  };
+}
+
+function normalizeGuildActivityActor(source) {
+  if (!source || typeof source !== "object") return null;
+  return {
+    displayName: cleanSocialText(source.displayName, 16).trim() || "冒険者",
+    fallbackEmoji: cleanSocialText(source.fallbackEmoji, 8).trim() || "魔",
+  };
+}
+
+export function normalizeGuildActivity(source) {
+  const activityId = cleanSocialText(source?.activityId, 96).trim();
+  const kind = cleanSocialText(source?.kind, 20).trim();
+  const at = boundedInteger(source?.at, 0, Number.MAX_SAFE_INTEGER, 0);
+  if (!activityId || !GUILD_ACTIVITY_KINDS.has(kind) || !at) return null;
+  const actorLimit = kind === "checkIn" ? 20 : 4;
+  const actors = (Array.isArray(source?.actors) ? source.actors : []).slice(0, actorLimit)
+    .map(normalizeGuildActivityActor).filter(Boolean);
+  const activity = {
+    activityId,
+    kind,
+    actors,
+    partySize: boundedInteger(source?.partySize, 0, kind === "checkIn" ? 20 : 4, 0),
+    guildMemberCount: boundedInteger(source?.guildMemberCount, 0, actorLimit, 0),
+    points: boundedInteger(source?.points, 0, 1_000_000_000, 0),
+    at,
+  };
+  const floor = boundedInteger(source?.floor, 0, 10_000, 0);
+  if (floor) activity.floor = floor;
+  return activity;
+}
+
+function normalizeGuildActivities(source) {
+  const activitiesById = new Map();
+  for (const raw of (Array.isArray(source) ? source : []).slice(0, 160)) {
+    const entry = normalizeGuildActivity(raw);
+    if (!entry) continue;
+    const existing = activitiesById.get(entry.activityId);
+    if (!existing || entry.at > existing.at) activitiesById.set(entry.activityId, entry);
+  }
+  return [...activitiesById.values()].sort((left, right) => right.at - left.at).slice(0, 40);
+}
+
+function guildPlanDatetimeValue(timestamp) {
+  const date = new Date(Number(timestamp));
+  if (!Number.isFinite(date.getTime())) return "";
+  return new Date(date.getTime() - date.getTimezoneOffset() * 60_000).toISOString().slice(0, 16);
+}
+
+function defaultGuildPlanDraft(now = Date.now()) {
+  const rounded = Math.ceil((Number(now) + 60 * 60_000) / (5 * 60_000)) * 5 * 60_000;
+  return { purpose: "explore", style: "anyone", scheduledAt: guildPlanDatetimeValue(rounded), floor: 1, note: "" };
+}
+
+function normalizeGuildPlanPerson(source) {
+  if (!source || typeof source !== "object" || Array.isArray(source)) return null;
+  return {
+    displayName: cleanSocialText(source.displayName, 16).trim() || "冒険者",
+    fallbackEmoji: cleanSocialText(source.fallbackEmoji, 8).trim() || "魔",
+  };
+}
+
+function normalizeGuildPlanGathering(source, gatherOpensAt, gatherClosesAt) {
+  if (!source || typeof source !== "object" || Array.isArray(source)) return null;
+  const recruitmentId = cleanSocialText(source.recruitmentId, 96).trim();
+  const hostPlayerId = normalizedPlayerId(source.hostPlayerId);
+  const count = Number(source.count), maximum = Number(source.max), slots = Number(source.slots), expiresAt = Number(source.expiresAt);
+  if (!GUILD_RECRUITMENT_ID_PATTERN.test(recruitmentId) || !hostPlayerId
+    || !Number.isSafeInteger(count) || !Number.isSafeInteger(maximum) || !Number.isSafeInteger(slots) || !Number.isSafeInteger(expiresAt)
+    || maximum < 1 || maximum > 4 || count < 1 || count > maximum || slots !== maximum - count || expiresAt < gatherOpensAt
+    || gatherClosesAt > 0 && expiresAt > gatherClosesAt) return null;
+  return { recruitmentId, hostPlayerId, count, max: maximum, slots, expiresAt, joined: source.joined === true };
+}
+
+export function normalizeGuildPlan(source) {
+  const planId = cleanSocialText(source?.planId, 96).trim();
+  const purpose = cleanSocialText(source?.purpose, 20).trim();
+  const style = cleanSocialText(source?.style, 20).trim();
+  const scheduledAt = boundedInteger(source?.scheduledAt, 0, Number.MAX_SAFE_INTEGER, 0);
+  const createdAt = boundedInteger(source?.createdAt, 0, Number.MAX_SAFE_INTEGER, 0);
+  if (!GUILD_PLAN_ID_PATTERN.test(planId) || !ROOM_PURPOSES.has(purpose) || !ROOM_STYLES.has(style)) return null;
+  if (!createdAt || scheduledAt <= createdAt || scheduledAt - createdAt > GUILD_PLAN_MAX_LEAD_MS) return null;
+  const organizer = normalizeGuildPlanPerson(source?.organizer);
+  if (!organizer) return null;
+  const attendees = (Array.isArray(source?.attendees) ? source.attendees : []).slice(0, 20).map(entry => {
+    const person = normalizeGuildPlanPerson(entry), status = cleanSocialText(entry?.status, 12).trim();
+    return person && (status === "going" || status === "maybe") ? { ...person, status } : null;
+  }).filter(Boolean);
+  const goingAttendees = attendees.filter(entry => entry.status === "going").length;
+  const maybeAttendees = attendees.filter(entry => entry.status === "maybe").length;
+  const myStatus = GUILD_PLAN_RESPONSES.has(source?.myStatus) ? source.myStatus : "none";
+  const rawGatherOpensAt = Number(source?.gatherOpensAt), rawGatherClosesAt = Number(source?.gatherClosesAt);
+  const validGatherWindow = Number.isSafeInteger(rawGatherOpensAt) && Number.isSafeInteger(rawGatherClosesAt)
+    && rawGatherOpensAt === scheduledAt - 30 * 60_000 && rawGatherClosesAt === scheduledAt + 2 * 60 * 60_000;
+  const gatherOpensAt = validGatherWindow ? rawGatherOpensAt : 0;
+  const gatherClosesAt = validGatherWindow ? rawGatherClosesAt : 0;
+  return {
+    planId,
+    purpose,
+    style,
+    note: cleanSocialText(source?.note, 48).trim(),
+    floor: boundedInteger(source?.floor, 1, 10_000, 1),
+    scheduledAt,
+    createdAt,
+    organizer,
+    attendees,
+    goingCount: goingAttendees,
+    maybeCount: maybeAttendees,
+    myStatus,
+    canCancel: source?.canCancel === true,
+    canGather: source?.canGather === true && validGatherWindow,
+    gatherOpensAt,
+    gatherClosesAt,
+    gathering: validGatherWindow ? normalizeGuildPlanGathering(source?.gathering, gatherOpensAt, gatherClosesAt) : null,
+  };
+}
+
+export function normalizeGuildPlanReminder(source) {
+  const planId = cleanSocialText(source?.planId, 96).trim(), purpose = cleanSocialText(source?.purpose, 20).trim(), style = cleanSocialText(source?.style, 20).trim();
+  const scheduledAt = Number(source?.scheduledAt), organizer = normalizeGuildPlanPerson(source?.organizer);
+  if (!GUILD_PLAN_ID_PATTERN.test(planId) || !ROOM_PURPOSES.has(purpose) || !ROOM_STYLES.has(style) || !Number.isSafeInteger(scheduledAt) || scheduledAt <= 0 || !organizer) return null;
+  let gathering = null;
+  if (source?.gathering && typeof source.gathering === "object" && !Array.isArray(source.gathering)) {
+    const recruitmentId = cleanSocialText(source.gathering.recruitmentId, 96).trim(), count = Number(source.gathering.count), maximum = Number(source.gathering.max), slots = Number(source.gathering.slots), expiresAt = Number(source.gathering.expiresAt);
+    if (!GUILD_RECRUITMENT_ID_PATTERN.test(recruitmentId) || !Number.isSafeInteger(count) || !Number.isSafeInteger(maximum) || !Number.isSafeInteger(slots) || !Number.isSafeInteger(expiresAt) || maximum < 1 || maximum > 4 || count < 1 || count > maximum || slots !== maximum - count || expiresAt <= 0 || source.gathering.joined !== false) return null;
+    gathering = { recruitmentId, count, max: maximum, slots, expiresAt, joined: false };
+  }
+  return { planId, purpose, style, floor: boundedInteger(source?.floor, 1, 10_000, 1), scheduledAt, organizer, gathering };
+}
+
+function normalizeGuildPlans(source) {
+  const plansById = new Map();
+  for (const raw of (Array.isArray(source) ? source : []).slice(0, 32)) {
+    const entry = normalizeGuildPlan(raw);
+    if (!entry || plansById.has(entry.planId)) continue;
+    plansById.set(entry.planId, entry);
+  }
+  return [...plansById.values()].sort((left, right) => left.scheduledAt - right.scheduledAt || left.createdAt - right.createdAt || left.planId.localeCompare(right.planId)).slice(0, 8);
+}
+
+function normalizeGuildPublic(source) {
+  const guildId = normalizedGuildId(source?.guildId);
+  if (!guildId) return null;
+  const maximum = boundedInteger(source?.maxMembers, 1, 20, 20);
+  return {
+    guildId,
+    name: cleanSocialText(source?.name, 16).trim() || "ギルド",
+    tag: cleanSocialText(source?.tag, 4).trim().toUpperCase() || "GD",
+    description: cleanSocialText(source?.description, 80).trim(),
+    level: boundedInteger(source?.level, 1, 50, 1),
+    memberCount: boundedInteger(source?.memberCount, 0, maximum, 0),
+    maxMembers: maximum,
+    leaderId: normalizedPlayerId(source?.leaderId),
+    week: normalizeGuildWeek(source?.week),
+  };
+}
+
+function normalizeGuildPerson(source) {
+  const playerId = normalizedPlayerId(source?.playerId);
+  if (!playerId) return null;
+  const role = GUILD_ROLES.has(source?.role) ? source.role : "member";
+  return {
+    playerId,
+    displayName: cleanSocialText(source?.displayName, 16).trim() || "冒険者",
+    monsterName: cleanSocialText(source?.monsterName, 32).trim() || "仲間",
+    fallbackEmoji: cleanSocialText(source?.fallbackEmoji, 8).trim() || "魔",
+    online: Boolean(source?.online), role,
+    joinedAt: boundedInteger(source?.joinedAt, 0, Number.MAX_SAFE_INTEGER, 0),
+    weekPoints: boundedInteger(source?.weekPoints, 0, 1_000_000_000, 0),
+  };
+}
+
+export function normalizeGuildRecruitment(source) {
+  const recruitmentId = cleanSocialText(source?.recruitmentId, 96).trim();
+  const playerId = normalizedPlayerId(source?.host?.playerId);
+  const expiresAt = boundedInteger(source?.expiresAt, 0, Number.MAX_SAFE_INTEGER, 0);
+  if (!recruitmentId || !playerId || !expiresAt) return null;
+  const count = boundedInteger(source?.count, 1, 4, 1);
+  const maximum = Math.max(count, boundedInteger(source?.max, count, 4, 4));
+  const availableSlots = Math.max(0, maximum - count);
+  return {
+    recruitmentId,
+    purpose: ROOM_PURPOSES.has(source?.purpose) ? source.purpose : "explore",
+    style: ROOM_STYLES.has(source?.style) ? source.style : "anyone",
+    note: cleanSocialText(source?.note, 48).trim(),
+    floor: boundedInteger(source?.floor, 1, 10_000, 1),
+    count,
+    max: maximum,
+    slots: boundedInteger(source?.slots, 0, availableSlots, availableSlots),
+    host: {
+      playerId,
+      displayName: cleanSocialText(source?.host?.displayName, 16).trim() || "冒険者",
+      monsterName: cleanSocialText(source?.host?.monsterName, 32).trim() || "仲間",
+      speciesId: /^[A-Za-z0-9_-]{1,80}$/.test(String(source?.host?.speciesId ?? "")) ? String(source.host.speciesId) : "slime",
+      fallbackEmoji: cleanSocialText(source?.host?.fallbackEmoji, 8).trim() || "魔",
+      level: boundedInteger(source?.host?.level, 1, 99_999_999, 1),
+    },
+    createdAt: boundedInteger(source?.createdAt, 0, Number.MAX_SAFE_INTEGER, 0),
+    expiresAt,
+  };
+}
+
+function normalizeGuildProfile(source) {
+  const base = normalizeGuildPublic(source);
+  if (!base) return null;
+  const role = GUILD_ROLES.has(source?.role) ? source.role : "member";
+  const members = (Array.isArray(source?.members) ? source.members : []).slice(0, 20).map(normalizeGuildPerson).filter(Boolean);
+  const applications = (Array.isArray(source?.applications) ? source.applications : []).slice(0, 100).map(normalizeGuildPerson).filter(Boolean);
+  const chat = (Array.isArray(source?.chat) ? source.chat : []).slice(-80).map(entry => {
+    const playerId = normalizedPlayerId(entry?.playerId), id = cleanSocialText(entry?.id, 96).trim(), text = cleanSocialText(entry?.text, 80).trim();
+    if (!playerId || !id || !text) return null;
+    return { id, playerId, name: cleanSocialText(entry?.name, 16).trim() || "冒険者", text, at: boundedInteger(entry?.at, 0, Number.MAX_SAFE_INTEGER, 0) };
+  }).filter(Boolean);
+  const recruitmentIds = new Set(), recruitments = [];
+  for (const raw of (Array.isArray(source?.recruitments) ? source.recruitments : []).slice(0, 40)) {
+    const entry = normalizeGuildRecruitment(raw);
+    if (!entry || recruitmentIds.has(entry.recruitmentId)) continue;
+    recruitmentIds.add(entry.recruitmentId); recruitments.push(entry);
+    if (recruitments.length >= 20) break;
+  }
+  const activities = normalizeGuildActivities(source?.activities);
+  const plans = normalizeGuildPlans(source?.plans);
+  const week = { ...base.week, sharedGoals: normalizeGuildSharedGoals(source?.week?.sharedGoals) };
+  return { ...base, week, role, members, applications, chat, plans, recruitments, activities, checkedInToday: Boolean(source?.checkedInToday) };
+}
+
+export function normalizeGuildState(source) {
+  const invitations = (Array.isArray(source?.invitations) ? source.invitations : []).slice(0, 100).map(entry => {
+    const guild = normalizeGuildPublic(entry?.guild), inviteId = cleanSocialText(entry?.inviteId, 96).trim();
+    if (!guild || !inviteId) return null;
+    const from = normalizeGuildPerson(entry?.from) ?? { playerId: "", displayName: "冒険者", monsterName: "仲間", fallbackEmoji: "魔", online: false, role: "member", joinedAt: 0, weekPoints: 0 };
+    return { inviteId, guild, from, expiresAt: boundedInteger(entry?.expiresAt, 0, Number.MAX_SAFE_INTEGER, 0) };
+  }).filter(Boolean);
+  const applications = (Array.isArray(source?.applications) ? source.applications : []).slice(0, 3).map(normalizeGuildPublic).filter(Boolean);
+  return { guild: normalizeGuildProfile(source?.guild), invitations, applications, lookup: normalizeGuildPublic(source?.lookup), serverNow: boundedInteger(source?.serverNow, 0, Number.MAX_SAFE_INTEGER, 0) };
+}
+
+export function currentGuildRoomRecruitmentLock(guildState, roomState, now = Date.now()) {
+  const guild = guildState?.guild ?? guildState;
+  const leaderId = normalizedPlayerId(roomState?.leaderId);
+  if (!guild || !leaderId || !Number.isFinite(Number(now))) return { active: false, kind: "none" };
+  const activeAt = Number(now);
+  const planned = (Array.isArray(guild.plans) ? guild.plans : []).some(plan => {
+    const gathering = plan?.gathering;
+    return gathering?.joined === true
+      && normalizedPlayerId(gathering.hostPlayerId) === leaderId
+      && Number.isSafeInteger(gathering.expiresAt)
+      && gathering.expiresAt > activeAt;
+  });
+  if (planned) return { active: true, kind: "planned" };
+  const generic = (Array.isArray(guild.recruitments) ? guild.recruitments : []).some(entry => (
+    normalizedPlayerId(entry?.host?.playerId) === leaderId
+      && Number.isSafeInteger(entry?.expiresAt)
+      && entry.expiresAt > activeAt
+  ));
+  return generic ? { active: true, kind: "generic" } : { active: false, kind: "none" };
+}
+
+function normalizeRoomListings(source) {
+  const seen = new Set(), listings = [];
+  for (const raw of Array.isArray(source) ? source : []) {
+    const roomId = safeRoomId(raw?.roomId);
+    if (roomId.length !== 6 || seen.has(roomId)) continue;
+    const purpose = ROOM_PURPOSES.has(raw?.purpose) ? raw.purpose : "explore";
+    const style = ROOM_STYLES.has(raw?.style) ? raw.style : "anyone";
+    const count = Math.max(1, Math.min(4, Math.floor(Number(raw?.count) || 1)));
+    const maximum = Math.max(count, Math.min(4, Math.floor(Number(raw?.max) || 4)));
+    listings.push({
+      roomId, listingId: String(raw?.listingId ?? "").slice(0, 96), purpose, style,
+      floor: Math.max(1, Math.min(10000, Math.floor(Number(raw?.floor) || 1))), count, max: maximum,
+      slots: Math.max(0, Math.min(maximum, Math.floor(Number(raw?.slots) || maximum - count))),
+      host: {
+        displayName: String(raw?.host?.displayName ?? "冒険者").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 16) || "冒険者",
+        monsterName: String(raw?.host?.monsterName ?? "仲間").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 40) || "仲間",
+      },
+      publishedAt: Math.max(0, Number(raw?.publishedAt) || 0), updatedAt: Math.max(0, Number(raw?.updatedAt) || 0), expiresAt: Math.max(0, Number(raw?.expiresAt) || 0),
+    });
+    seen.add(roomId);
+    if (listings.length >= 24) break;
+  }
+  return listings;
+}
+
+function normalizedWebsocketEndpoint(input) {
   let source = String(input ?? "").trim();
-  if (!source) throw new Error("PCサーバーのURLを入力してください");
+  if (!source || source.length > 2048) return "";
   if (!/^https?:\/\//i.test(source) && !/^wss?:\/\//i.test(source)) source = `https://${source}`;
-  const url = new URL(source);
+  let url;
+  try { url = new URL(source); } catch { return ""; }
   if (url.protocol === "https:") url.protocol = "wss:";
   else if (url.protocol === "http:") url.protocol = "ws:";
-  if (!["ws:", "wss:"].includes(url.protocol)) throw new Error("http(s) または ws(s) のURLを入力してください");
-  if (location.protocol === "https:" && url.protocol === "ws:" && !["localhost", "127.0.0.1"].includes(url.hostname)) throw new Error("HTTPS版ゲームでは https:// のトンネルURLを使ってください");
+  if (!["ws:", "wss:"].includes(url.protocol) || !url.hostname || url.username || url.password) return "";
   url.pathname = "/party"; url.search = ""; url.hash = "";
   return url.toString();
+}
+
+function cleanResumeToken(value) {
+  const token = typeof value === "string" ? value.trim() : "";
+  return token && token.length <= RESUME_TOKEN_MAX_LENGTH && !/[\u0000-\u001f\u007f]/.test(token) ? token : "";
+}
+
+function readResumeTokenMap() {
+  const raw = storageGet(ONLINE_STORAGE_KEYS.resumeTokenMap, "{}");
+  if (!raw || raw.length > RESUME_TOKEN_MAP_MAX_BYTES) return Object.create(null);
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch { return Object.create(null); }
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) return Object.create(null);
+  const result = Object.create(null);
+  for (const [rawEndpoint, rawToken] of Object.entries(parsed).slice(0, RESUME_TOKEN_MAP_LIMIT)) {
+    const endpoint = normalizedWebsocketEndpoint(rawEndpoint), token = cleanResumeToken(rawToken);
+    if (endpoint && endpoint === rawEndpoint && token) result[endpoint] = token;
+  }
+  return result;
+}
+
+function writeResumeTokenMap(source) {
+  const entries = Object.entries(source ?? {}).filter(([endpoint, token]) => normalizedWebsocketEndpoint(endpoint) === endpoint && cleanResumeToken(token)).slice(-RESUME_TOKEN_MAP_LIMIT);
+  storageSet(ONLINE_STORAGE_KEYS.resumeTokenMap, JSON.stringify(Object.fromEntries(entries)));
+}
+
+function migrateLegacyResumeToken() {
+  const tokens = readResumeTokenMap();
+  if (storageGet(ONLINE_STORAGE_KEYS.resumeTokenMigration) === "1") return tokens;
+  const legacy = cleanResumeToken(storageGet(ONLINE_STORAGE_KEYS.resumeToken));
+  const savedEndpoint = normalizedWebsocketEndpoint(storageGet(ONLINE_STORAGE_KEYS.serverUrl));
+  if (!legacy) { storageSet(ONLINE_STORAGE_KEYS.resumeTokenMigration, "1"); return tokens; }
+  // A legacy token is only associated with the URL that the legacy client
+  // itself saved.  An invite URL must never inherit another server's token.
+  if (!savedEndpoint) return tokens;
+  if (!tokens[savedEndpoint]) { tokens[savedEndpoint] = legacy; writeResumeTokenMap(tokens); }
+  storageSet(ONLINE_STORAGE_KEYS.resumeTokenMigration, "1");
+  return tokens;
+}
+
+function websocketUrl(input) {
+  if (!String(input ?? "").trim()) throw new Error("PCサーバーのURLを入力してください");
+  const endpoint = normalizedWebsocketEndpoint(input);
+  if (!endpoint) throw new Error("http(s) または ws(s) のURLを入力してください");
+  const url = new URL(endpoint);
+  if (globalThis.location?.protocol === "https:" && url.protocol === "ws:" && !["localhost", "127.0.0.1"].includes(url.hostname)) throw new Error("HTTPS版ゲームでは https:// のトンネルURLを使ってください");
+  return endpoint;
 }
 
 async function copyText(value) {
@@ -50,11 +539,15 @@ async function copyText(value) {
 }
 
 export class OnlinePartyController {
-  constructor({ getState, toast = () => {}, onReward = async () => ({ ok: false }), onBack = () => {}, onExploreCanvasMount = () => {}, onExploreCanvasUpdate = () => {}, onExploreCanvasUnmount = () => {}, onHostWorldUpdate = () => {}, onFloorBossDefeated = () => {}, onOnlineStateMutation = () => {}, onRaidWorldUpdate = () => {}, onRaidExchange = async () => ({ ok: false }), onOnlineVitalsUpdate = () => {}, onBattleDefeated = () => {}, onSecretRoomEntered = () => {}, onBeginSecretRoomExpedition = () => {}, onTutorialGuide = () => {}, onScene = () => {} } = {}) {
+  constructor({ getState, toast = () => {}, onReward = async () => ({ ok: false }), onExpeditionStarted = () => ({ ok: true }), onExpeditionResult = async () => ({ ok: false }), onExpeditionOrphaned = async () => ({ ok: true, active: false }), onShowExpeditionResult = () => {}, onBack = () => {}, onExploreCanvasMount = () => {}, onExploreCanvasUpdate = () => {}, onExploreCanvasUnmount = () => {}, onHostWorldUpdate = () => {}, onFloorBossDefeated = () => {}, onOnlineStateMutation = () => {}, onRaidWorldUpdate = () => {}, onRaidExchange = async () => ({ ok: false }), onOnlineVitalsUpdate = () => {}, onBattleDefeated = () => {}, onTeamBattleResult = () => {}, onSecretRoomEntered = () => {}, onBeginSecretRoomExpedition = () => {}, onTutorialGuide = () => {}, onScene = () => {} } = {}) {
     const identity = ensureOnlineIdentity();
     this.getState = getState;
     this.toast = toast;
     this.onReward = onReward;
+    this.onExpeditionStarted = onExpeditionStarted;
+    this.onExpeditionResult = onExpeditionResult;
+    this.onExpeditionOrphaned = onExpeditionOrphaned;
+    this.onShowExpeditionResult = onShowExpeditionResult;
     this.onBack = onBack;
     this.onExploreCanvasMount = onExploreCanvasMount;
     this.onExploreCanvasUpdate = onExploreCanvasUpdate;
@@ -66,12 +559,25 @@ export class OnlinePartyController {
     this.onRaidExchange = onRaidExchange;
     this.onOnlineVitalsUpdate = onOnlineVitalsUpdate;
     this.onBattleDefeated = onBattleDefeated;
+    this.onTeamBattleResult = onTeamBattleResult;
     this.onSecretRoomEntered = onSecretRoomEntered;
     this.onBeginSecretRoomExpedition = onBeginSecretRoomExpedition;
     this.onTutorialGuide = onTutorialGuide;
     this.onScene = onScene;
     this.selfId = identity.friendId;
-    this.resumeToken = storageGet(ONLINE_STORAGE_KEYS.resumeToken);
+    const initialResumeEndpoint = normalizedWebsocketEndpoint(storageGet(ONLINE_STORAGE_KEYS.serverUrl));
+    const initialResumeTokens = migrateLegacyResumeToken();
+    this.resumeTokenEndpoint = initialResumeEndpoint;
+    this.connectionEndpoint = "";
+    this.lastHelloEndpoint = "";
+    this.socketEndpoints = new WeakMap();
+    this.resumeToken = initialResumeEndpoint ? initialResumeTokens[initialResumeEndpoint] ?? "" : "";
+    this.resumeTokenStorageSnapshot = this.resumeToken;
+    this.lastHelloResumeToken = "";
+    this.helloAckPending = false;
+    this.handshakeTokenRetries = 0;
+    this.pendingLeaveOnReconnect = null;
+    this.pendingLeaveTimer = null;
     this.selectedMonsterId = storageGet(ONLINE_STORAGE_KEYS.monsterId);
     this.route = ROUTES.has(storageGet(ONLINE_STORAGE_KEYS.route)) ? storageGet(ONLINE_STORAGE_KEYS.route) : "home";
     this.profile = null;
@@ -79,11 +585,51 @@ export class OnlinePartyController {
     this.ws = null;
     this.roomState = null;
     this.roomId = null;
+    this.capabilities = new Set();
+    this.roomListings = [];
+    this.friendState = { friends: [], incoming: [], outgoing: [], invites: [], blocked: [], muted: [] };
+    this.guildState = emptyGuildState();
+    this.guildClockOffsetMs = 0;
+    this.guildClockSynced = false;
+    this.guildPlanReminderReceipts = new Set(readGuildPlanReminderReceipts());
+    this.friendPanelOpen = false;
+    this.socialTab = "friends";
+    this.socialScrollByTab = { friends: 0, guild: 0 };
+    this.guildChatScroll = { top: 0, atBottom: true };
+    this.friendIdDraft = "";
+    this.guildLookupDraft = "";
+    this.guildCreateDraft = { name: "", tag: "", description: "" };
+    this.guildChatDraft = "";
+    this.guildPlanDraft = defaultGuildPlanDraft();
+    this.guildPlanComposerOpen = false;
+    this.guildPlansExpanded = false;
+    this.guildRecruitmentDraft = { purpose: "explore", style: "anyone", note: "" };
+    this.guildActivitiesExpanded = false;
+    this.guildPending = null;
+    this.guildPendingTimer = null;
+    this.guildPlanTransitionTimer = null;
+    this.guildStatus = "";
+    this.lastGuildChatAt = 0;
+    this.roomListingsStatus = "idle";
+    this.roomListingsGeneratedAt = 0;
+    this.roomListingPurposeFilter = "all";
+    this.roomBoardRenderSignature = "";
+    this.pendingRoomJoinId = null;
+    this.roomListingPending = false;
+    this.roomMemberRemovalPendingId = null;
     this.mounted = false;
     this.manualClose = true;
+    this.connectionReady = false;
+    this.supersededConnection = false;
+    this.connectionStatus = { kind: "offline", title: "オフライン", detail: "オンラインサーバーへ接続されていません" };
     this.reconnectAttempts = 0;
     this.reconnectTimer = null;
     this.rewardInFlight = new Set();
+    this.expeditionResultInFlight = new Set();
+    this.recoverySettlementBatch = 0;
+    this.recoverySettlementTasks = new Set();
+    this.recoverySettlementFailed = false;
+    this.presentedExpeditionResultIds = new Set();
     this.floorBossConfirm = null;
     this.coopBossConfirm = null;
     this.pendingFloorBossReward = null;
@@ -94,7 +640,11 @@ export class OnlinePartyController {
     this.itemTargetMenu = { explore: false, raid: false, team: false };
     this.hpTrails = { explore: {}, raid: {}, team: {} };
     this.raidReport = null;
+    this.teamBattleReport = null;
     this.expeditionReport = null;
+    this.pendingExpeditionReturnResult = null;
+    this.pendingExpeditionStart = false;
+    this.pendingSecretRoomRun = null;
     this.trade = null;
     this.tradeFilter = "all";
     this.tradeQuery = "";
@@ -102,6 +652,9 @@ export class OnlinePartyController {
     this.tradeConfirmAvailableAt = 0;
     this.tradeConfirmTimer = null;
     this.tradePendingOffer = null;
+    this.tradeRecoveryStatus = null;
+    this.tradeRecoveryTimer = null;
+    this.terminalTradeRecoveries = new Set();
     this.raidExchangePending = null;
     this.lastRaidWorldSignature = "";
     this.lastHostWorldSnapshotSignature = "";
@@ -119,6 +672,11 @@ export class OnlinePartyController {
     this.presentationTimers = new Set();
     this.onlineHudCollapsed = false;
     this.heldDirections = new Set();
+    this.keyboardMoveMode = "";
+    this.movePointers = new Map();
+    this.movePointerSequence = 0;
+    this.resonanceClickSuppressions = [];
+    this.lastResonanceMoveError = { code: "", at: 0 };
     this.path = [];
     this.lastMoveAt = 0;
     this.lastChatAt = 0;
@@ -141,36 +699,49 @@ export class OnlinePartyController {
   }
 
   mount(root) {
-    const connected = Boolean(this.ws && typeof WebSocket !== "undefined" && this.ws.readyState === WebSocket.OPEN);
+    const connected = this._canMutateOnline();
     this.unmount({ disconnect: false });
     this.root = root;
     this.mounted = true;
-    this.manualClose = false;
+    this.manualClose = Boolean(this.supersededConnection);
     this._refreshProfile();
     this._bindStaticUi();
+    this._renderTradeRecoveryStatus();
     this._startLoops();
     if (connected) {
       this._setStatus("online", "接続済み", this.roomState ? "オンライン探索へ戻りました" : "部屋を作るか、ルームIDで参加してください");
       this._showConnectionStep(this.roomState ? "room" : "gate");
       if (this.roomState) this._render();
+      else this._requestRoomListings();
       this._flushExpeditionProfileSync();
       return;
     }
+    this._renderRoomBoard();
+    if (this.supersededConnection) {
+      this._setStatus("error", "別の画面で接続済み", "この画面の自動再接続を停止しました。再開する場合は接続を押してください");
+      return;
+    }
     this._setStatus("offline", "オフライン", "通常ゲームのセーブには影響しません");
-    if (storageGet(ONLINE_STORAGE_KEYS.autoConnect) === "1" && storageGet(ONLINE_STORAGE_KEYS.serverUrl) && this.resumeToken) {
+    const awaitingInitialAck = Boolean(this.helloAckPending);
+    if (storageGet(ONLINE_STORAGE_KEYS.serverUrl) && (awaitingInitialAck || storageGet(ONLINE_STORAGE_KEYS.autoConnect) === "1" && this._refreshResumeTokenFromStorage())) {
+      if (awaitingInitialAck) this._setStatus("reconnecting", "認証確認中…", "初回接続の応答を安全に再確認しています");
       queueMicrotask(() => { if (this.mounted) this.connect({ reconnect: true }); });
     }
   }
 
   unmount({ disconnect = true } = {}) {
     this.mounted = false;
-    this.heldDirections.clear(); this.path = [];
+    this._clearMoveInputs({ clearClickSuppressions: true });
     this.hallDestination = null;
     this._unmountExploreCanvas();
     clearTimeout(this.interactionPendingTimer); clearTimeout(this.merchantPendingTimer);
     clearTimeout(this.tradeConfirmTimer); clearTimeout(this.rewardReceiptTimer);
+    clearTimeout(this.tradeRecoveryTimer);
+    clearTimeout(this.pendingLeaveTimer);
+    this._clearGuildPlanTransitionTimer();
     this.interactionPendingTimer = null; this.merchantPendingTimer = null;
-    this.tradeConfirmTimer = null; this.rewardReceiptTimer = null; this.pendingRewardReceipt = null;
+    this.tradeConfirmTimer = null; this.rewardReceiptTimer = null; this.pendingRewardReceipt = null; this.tradeRecoveryTimer = null; this.pendingLeaveTimer = null;
+    if (this.tradeRecoveryStatus?.status === "complete") this.tradeRecoveryStatus = null;
     for (const timer of this.presentationTimers) clearTimeout(timer);
     this.presentationTimers.clear();
     this._removeEvents();
@@ -195,56 +766,282 @@ export class OnlinePartyController {
 
   _query(selector) { return this.root?.querySelector(selector) ?? null; }
 
+  _pointerModeForButton(button) {
+    if (button?.matches?.("[data-online-resonance-move]")) return "resonance";
+    if (button?.matches?.("[data-online-move]")) return "explore";
+    return "";
+  }
+
+  _beginPointerMove(event, button) {
+    if (!button || event?.button != null && event.button !== 0) return false;
+    if (!this._canMutateOnline()) { this._announceConnectionPause(); return false; }
+    const mode = this._pointerModeForButton(button);
+    const direction = String(button.dataset?.onlineMove || button.dataset?.onlineResonanceMove || "");
+    const pointerId = Number(event?.pointerId);
+    if (!mode || !DIRECTION[direction] || !Number.isFinite(pointerId) || this.movePointers.has(pointerId)) return false;
+    event.preventDefault?.();
+    this.path = [];
+    this.movePointers.set(pointerId, { pointerId, mode, direction, sequence: ++this.movePointerSequence });
+    try { button.setPointerCapture?.(pointerId); } catch {}
+    if (mode === "resonance") {
+      const now = Date.now();
+      this.resonanceClickSuppressions.push({ pointerId, direction, expiresAt: now + RESONANCE_CLICK_SUPPRESSION_MS });
+      this.resonanceClickSuppressions = this.resonanceClickSuppressions.slice(-12);
+      this.lastMoveAt = typeof performance !== "undefined" ? performance.now() : now;
+      this._send("resonanceMove", { direction });
+    }
+    return true;
+  }
+
+  _endPointerMove(event) {
+    const pointerId = Number(event?.pointerId);
+    if (!Number.isFinite(pointerId)) return false;
+    const released = this.movePointers.delete(pointerId);
+    const suppression = [...this.resonanceClickSuppressions].reverse().find(entry => entry.pointerId === pointerId);
+    if (suppression) suppression.expiresAt = Date.now() + RESONANCE_CLICK_SUPPRESSION_MS;
+    return released;
+  }
+
+  _currentMoveDirection(mode) {
+    let latest = null;
+    for (const pointer of this.movePointers.values()) if (pointer.mode === mode && (!latest || pointer.sequence > latest.sequence)) latest = pointer;
+    return latest?.direction ?? (this.keyboardMoveMode === mode ? [...this.heldDirections][0] : null) ?? null;
+  }
+
+  _consumeResonancePointerClick(event, button) {
+    if (Number(event?.detail) === 0) return false;
+    const now = Date.now(), direction = String(button?.dataset?.onlineResonanceMove || ""), pointerId = Number(event?.pointerId);
+    this.resonanceClickSuppressions = this.resonanceClickSuppressions.filter(entry => entry.expiresAt >= now);
+    const index = this.resonanceClickSuppressions.findIndex(entry => (Number.isFinite(pointerId) && pointerId > 0 ? entry.pointerId === pointerId : entry.direction === direction));
+    if (index < 0) return false;
+    this.resonanceClickSuppressions.splice(index, 1);
+    return true;
+  }
+
+  _clearMoveInputs({ clearClickSuppressions = false } = {}) {
+    this.heldDirections.clear();
+    this.keyboardMoveMode = "";
+    this.movePointers.clear();
+    this.path = [];
+    if (clearClickSuppressions) this.resonanceClickSuppressions = [];
+  }
+
+  _movePointerModeActive(mode) {
+    if (mode === "resonance") return this.route === "resonance" && this.roomState?.phase === "resonance" && this.roomState?.resonance?.phase !== "result";
+    if (mode === "explore") return this.route === "explore" && this.roomState?.phase === "expedition" && !this.roomState?.expedition?.battle;
+    return false;
+  }
+
+  _clearInactiveMoveInputs() {
+    for (const [pointerId, pointer] of this.movePointers) if (!this._movePointerModeActive(pointer.mode)) this.movePointers.delete(pointerId);
+    if (this.keyboardMoveMode && !this._movePointerModeActive(this.keyboardMoveMode)) { this.heldDirections.clear(); this.keyboardMoveMode = ""; }
+  }
+
   _bindStaticUi() {
     this._bind(this.root, "click", event => this._handleClick(event));
     this._bind(this.root, "submit", event => this._handleSubmit(event));
     this._bind(this.root, "input", event => this._handleInput(event));
+    this._bind(this.root, "change", event => this._handleChange(event));
     this._bind(this.root, "keydown", event => {
-      if (!event.target.matches?.("[data-online-chat-input],[data-online-explore-chat-input]") || event.key !== "Enter" || event.shiftKey || event.isComposing) return;
+      if (this.friendPanelOpen && event.key === "Escape") {
+        event.preventDefault(); this.friendPanelOpen = false; this._renderFriendPanel();
+        requestAnimationFrame(() => this._query("[data-online-friends-toggle]")?.focus()); return;
+      }
+      if (this.friendPanelOpen && event.key === "Tab") {
+        const panel = this._query(".online-social-panel"), focusable = [...(panel?.querySelectorAll("button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled]),summary,[href]") ?? [])];
+        if (focusable.length) {
+          const first = focusable[0], last = focusable.at(-1), active = panel?.ownerDocument?.activeElement;
+          if (!panel.contains(active) || event.shiftKey && active === first || !event.shiftKey && active === last) { event.preventDefault(); (event.shiftKey ? last : first).focus(); return; }
+        }
+      }
+      if (!event.target.matches?.("[data-online-chat-input],[data-online-explore-chat-input],[data-online-guild-chat-input]") || event.key !== "Enter" || event.shiftKey || event.isComposing) return;
       event.preventDefault(); event.target.form?.requestSubmit();
     });
     this._bind(window, "keydown", event => {
       const direction = keyDirection(event.key);
-      if (!direction || isTyping(event.target) || this.route !== "explore" || this.roomState?.phase !== "expedition") return;
-      event.preventDefault(); this.path = []; this.heldDirections.add(direction);
+      const movingExplore = this.route === "explore" && this.roomState?.phase === "expedition" && !this.roomState?.expedition?.battle;
+      const movingResonance = this.route === "resonance" && this.roomState?.phase === "resonance" && this.roomState?.resonance?.phase !== "result";
+      if (!direction || isTyping(event.target) || !movingExplore && !movingResonance || !this._canMutateOnline()) return;
+      event.preventDefault(); this.path = []; this.keyboardMoveMode = movingResonance ? "resonance" : "explore"; this.heldDirections.add(direction);
     });
-    this._bind(window, "keyup", event => { const direction = keyDirection(event.key); if (direction) this.heldDirections.delete(direction); });
-    this._bind(document, "visibilitychange", () => { if (document.visibilityState === "visible") this._ensureConnectionAfterResume(); });
+    this._bind(window, "keyup", event => { const direction = keyDirection(event.key); if (direction) { this.heldDirections.delete(direction); if (!this.heldDirections.size) this.keyboardMoveMode = ""; } });
+    this._bind(window, "blur", () => this._clearMoveInputs());
+    this._bind(window, "pagehide", () => this._clearMoveInputs());
+    this._bind(document, "visibilitychange", () => {
+      if (document.visibilityState === "visible") this._ensureConnectionAfterResume();
+      else this._clearMoveInputs();
+    });
     this._bind(window, "pageshow", () => this._ensureConnectionAfterResume());
     this._bind(window, "online", () => this._ensureConnectionAfterResume());
     this._bind(this.root, "pointerdown", event => {
-      const button = event.target.closest?.("[data-online-move]");
+      const button = event.target.closest?.("[data-online-move],[data-online-resonance-move]");
       if (!button) return;
-      event.preventDefault(); this.path = []; this.heldDirections.add(button.dataset.onlineMove); button.setPointerCapture?.(event.pointerId);
+      this._beginPointerMove(event, button);
     });
     this._bind(this.root, "pointerdown", event => {
       const emote = event.target.closest?.("[data-online-emote-anchor]");
-      if (emote) { this._beginEmoteGesture(event, emote); return; }
+      if (emote) { if (this._canMutateOnline()) this._beginEmoteGesture(event, emote); else this._announceConnectionPause(); return; }
       const target = event.target.closest?.("[data-enemy-target]");
-      if (!target) return;
+      if (!target || !this._canMutateOnline()) return;
       const timer = setTimeout(() => { target.dataset.focusHold = "1"; this._send("focusTarget", { mode: this.route, targetId: target.dataset.enemyTarget }); this.toast("集中攻撃マーカーを共有しました"); }, 520);
       const cancel = () => { clearTimeout(timer); window.removeEventListener("pointerup", cancel, true); window.removeEventListener("pointercancel", cancel, true); };
       window.addEventListener("pointerup", cancel, true); window.addEventListener("pointercancel", cancel, true);
     });
-    for (const type of ["pointerup", "pointercancel", "lostpointercapture"]) this._bind(this.root, type, event => {
-      const button = event.target.closest?.("[data-online-move]"); if (button) this.heldDirections.delete(button.dataset.onlineMove);
-    });
+    for (const target of [window, document]) for (const type of ["pointerup", "pointercancel"]) this._bind(target, type, event => this._endPointerMove(event), true);
   }
 
   _handleClick(event) {
     const mapCell = event.target.closest?.("[data-map-x][data-map-y]");
     if (mapCell && this.route === "explore" && this.roomState?.phase === "expedition") {
+      if (!this._canMutateOnline()) { this._announceConnectionPause(); return; }
       this._setDestination({ x: Number(mapCell.dataset.mapX), y: Number(mapCell.dataset.mapY) });
       return;
     }
     const hall = event.target.closest?.("[data-online-hall-stage]");
     if (hall && !event.target.closest?.("button,.online-hall-hud,.online-hall-prompt,.online-hall-party-strip")) {
+      if (!this._canMutateOnline()) { this._announceConnectionPause(); return; }
       const world = hall.querySelector(".online-hall-world"), rect = world?.getBoundingClientRect();
       if (rect?.width && rect?.height) this.hallDestination = { x: clamp((event.clientX - rect.left) / rect.width * 100, 5, 95), y: clamp((event.clientY - rect.top) / rect.height * 100, 15, 96) };
       return;
     }
     const button = event.target.closest?.("button");
     if (!button) return;
+    if (button.matches("[data-online-guild-plan-attention]")) { this._openGuildPlanAttention(button.dataset.onlineGuildPlanAttention); return; }
+    if (button.matches("[data-online-friends-toggle]")) { this.friendPanelOpen = true; this._renderFriendPanel(); requestAnimationFrame(() => this._query(".online-social-header [data-online-friends-close]")?.focus()); return; }
+    if (button.matches("[data-online-friends-close]")) { this.friendPanelOpen = false; this._renderFriendPanel(); requestAnimationFrame(() => this._query("[data-online-friends-toggle]")?.focus()); return; }
+    if (button.matches("[data-online-social-tab]")) {
+      const tab = button.dataset.onlineSocialTab === "guild" ? "guild" : "friends", content = this._query(".online-social-content");
+      if (tab !== this.socialTab && content) this.socialScrollByTab[this.socialTab] = content.scrollTop;
+      this.socialTab = tab; this._renderFriendPanel();
+      requestAnimationFrame(() => { const target = this._query(`[data-online-social-tab="${this.socialTab}"]`); try { target?.focus({ preventScroll: true }); } catch { target?.focus(); } }); return;
+    }
+    if (button.matches("[data-copy-guild-id]")) { copyText(button.dataset.copyGuildId).then(ok => this.toast(ok ? "ギルドIDをコピーしました" : "コピーできませんでした")); return; }
+    if (button.matches("[data-online-guild-activity-more]")) { this.guildActivitiesExpanded = !this.guildActivitiesExpanded; this._renderFriendPanel(); return; }
+    if (button.matches("[data-online-guild-plan-more]")) { this.guildPlansExpanded = !this.guildPlansExpanded; this._renderFriendPanel(); return; }
+    if (button.matches("[data-online-guild-plan-compose-toggle]")) { this.guildPlanComposerOpen = !this.guildPlanComposerOpen; this._renderFriendPanel(); return; }
+    if (button.matches("[data-online-user-mute]")) { this._setPlayerMuted(button.dataset.onlineUserMute, true); return; }
+    if (button.matches("[data-online-user-unmute]")) { this._setPlayerMuted(button.dataset.onlineUserUnmute, false); return; }
+    if (button.matches(`${FRIEND_MUTATION_SELECTOR},${GUILD_MUTATION_SELECTOR}`) && !this._canMutateOnline()) { this._announceConnectionPause(); return; }
+    if (button.matches("[data-online-friend-accept]")) { this._send("friendRespond", { targetId: button.dataset.onlineFriendAccept, accepted: true }); return; }
+    if (button.matches("[data-online-friend-decline]")) { this._send("friendRespond", { targetId: button.dataset.onlineFriendDecline, accepted: false }); return; }
+    if (button.matches("[data-online-friend-block],[data-online-user-block]")) {
+      if (!this.capabilities.has("onlineSafetyV1")) { this.toast("このサーバーは安全設定に未対応です"); return; }
+      const targetId = button.dataset.onlineFriendBlock || button.dataset.onlineUserBlock;
+      const profile = this._safetyProfile(targetId), name = profile?.displayName || "この相手";
+      if (globalThis.confirm?.(`${name}をブロックしますか？\n\nフレンドを解除し、招待・交換・同室をお互いに止めます。同じ部屋にいる場合は自分が退出します。ギルド所属や進行は変更されません。`) === false) return;
+      if (this._send("friendBlock", { targetId })) { this._purgePlayerSocial(targetId); this._refreshSafetyViews(); }
+      return;
+    }
+    if (button.matches("[data-online-friend-unblock]")) {
+      if (!this.capabilities.has("onlineSafetyV1")) { this.toast("このサーバーは安全設定に未対応です"); return; }
+      const targetId = button.dataset.onlineFriendUnblock, profile = this._safetyProfile(targetId), name = profile?.displayName || "この相手";
+      if (globalThis.confirm?.(`${name}のブロックを解除しますか？\n\n以前のフレンド関係や招待は自動では戻りません。`) === false) return;
+      this._send("friendUnblock", { targetId }); return;
+    }
+    if (button.matches("[data-online-friend-invite]")) { this._send("friendRoomInvite", { targetId: button.dataset.onlineFriendInvite }); return; }
+    if (button.matches("[data-online-friend-invite-accept]")) { this._send("friendInviteRespond", { inviteId: button.dataset.onlineFriendInviteAccept, accepted: true }); return; }
+    if (button.matches("[data-online-friend-invite-decline]")) { this._send("friendInviteRespond", { inviteId: button.dataset.onlineFriendInviteDecline, accepted: false }); return; }
+    if (button.matches("[data-online-friend-remove]")) { const targetId = button.dataset.onlineFriendRemove; if (globalThis.confirm?.("このフレンドを解除しますか？") === false) return; this._send("friendRemove", { targetId }); return; }
+    if (button.matches("[data-online-guild-apply]")) { this._sendGuild("apply", "guildApply", { guildId: button.dataset.onlineGuildApply }); return; }
+    if (button.matches("[data-online-guild-invite]")) { this._sendGuild("invite", "guildInvite", { targetId: button.dataset.onlineGuildInvite }); return; }
+    if (button.matches("[data-online-guild-invite-accept]")) { this._sendGuild("inviteRespond", "guildInviteRespond", { inviteId: button.dataset.onlineGuildInviteAccept, accepted: true }); return; }
+    if (button.matches("[data-online-guild-invite-decline]")) { this._sendGuild("inviteRespond", "guildInviteRespond", { inviteId: button.dataset.onlineGuildInviteDecline, accepted: false }); return; }
+    if (button.matches("[data-online-guild-application-accept]")) { this._sendGuild("application", "guildApplicationRespond", { targetId: button.dataset.onlineGuildApplicationAccept, accepted: true }); return; }
+    if (button.matches("[data-online-guild-application-decline]")) { this._sendGuild("application", "guildApplicationRespond", { targetId: button.dataset.onlineGuildApplicationDecline, accepted: false }); return; }
+    if (button.matches("[data-online-guild-set-role]")) { this._sendGuild("setRole", "guildSetRole", { targetId: button.dataset.onlineGuildSetRole, role: button.dataset.onlineGuildRole }); return; }
+    if (button.matches("[data-online-guild-transfer]")) {
+      const targetId = button.dataset.onlineGuildTransfer, member = this.guildState.guild?.members?.find(entry => entry.playerId === targetId), name = member?.displayName || "このメンバー";
+      if (globalThis.confirm?.(`${name}へギルドマスターを譲渡しますか？`) === false) return;
+      this._sendGuild("transfer", "guildTransfer", { targetId }); return;
+    }
+    if (button.matches("[data-online-guild-kick]")) {
+      const targetId = button.dataset.onlineGuildKick, member = this.guildState.guild?.members?.find(entry => entry.playerId === targetId), name = member?.displayName || "このメンバー";
+      if (globalThis.confirm?.(`${name}をギルドから除名しますか？`) === false) return;
+      this._sendGuild("kick", "guildKick", { targetId }); return;
+    }
+    if (button.matches("[data-online-guild-check-in]")) { this._sendGuild("checkIn", "guildCheckIn"); return; }
+    if (button.matches("[data-online-guild-plan-respond]")) {
+      const planId = String(button.dataset.onlineGuildPlanId ?? ""), status = String(button.dataset.onlineGuildPlanRespond ?? "");
+      const plan = this.guildState.guild?.plans?.find(entry => entry.planId === planId);
+      if (!plan || !GUILD_PLAN_RESPONSES.has(status)) return this.toast("この予定は終了しました");
+      if (plan.myStatus === status) return;
+      this._sendGuild("planRespond", "guildPlanRespond", { planId, status });
+      return;
+    }
+    if (button.matches("[data-online-guild-plan-cancel]")) {
+      const planId = String(button.dataset.onlineGuildPlanCancel ?? ""), plan = this.guildState.guild?.plans?.find(entry => entry.planId === planId);
+      if (!plan?.canCancel) return this.toast("この予定は取り消せません");
+      if (globalThis.confirm?.("このギルド遠征予定を取り消しますか？") === false) return;
+      this._sendGuild("planCancel", "guildPlanCancel", { planId });
+      return;
+    }
+    if (button.matches("[data-online-guild-plan-gather]")) {
+      const planId = String(button.dataset.onlineGuildPlanGather ?? ""), plan = this.guildState.guild?.plans?.find(entry => entry.planId === planId);
+      if (!plan?.canGather || plan.gathering) return this.toast("この予定では集合を開始できません");
+      const now = this._guildNow();
+      if (!plan.gatherOpensAt || now < plan.gatherOpensAt || now >= plan.gatherClosesAt) return this.toast("現在は集合受付時間外です");
+      const room = this.roomState, roomCount = Array.isArray(room?.members) ? room.members.length : 0;
+      if (!room) return this.toast("先に自分のオンライン部屋を作ってください");
+      if (room.ownerId !== this.selfId || room.leaderId !== this.selfId) return this.toast("現在のプレイを終了し、自分の部屋を作ってください");
+      if (room.phase !== "lobby") return this.toast("現在のプレイを終了してロビーへ戻ってください");
+      if (roomCount >= 4) return this.toast("現在の部屋は満員です");
+      if (room.listing?.published) return this.toast("公開募集を終了してから集合を開始してください");
+      this._sendGuild("planGather", "guildPlanGather", { planId });
+      return;
+    }
+    if (button.matches("[data-online-guild-plan-gathering-close]")) {
+      const recruitmentId = String(button.dataset.onlineGuildRecruitmentClose ?? "");
+      const plan = this.guildState.guild?.plans?.find(entry => entry.gathering?.recruitmentId === recruitmentId);
+      if (!plan?.gathering || plan.gathering.hostPlayerId !== this.selfId || plan.gathering.joined !== true) return this.toast("この集合を終了できません");
+      if (globalThis.confirm?.("集合だけを終了しますか？ 遠征予定と参加表明は残ります。") === false) return;
+      this._sendGuild("recruitmentClose", "guildRecruitmentClose", { recruitmentId });
+      return;
+    }
+    if (button.matches("[data-online-guild-recruitment-close]")) {
+      const recruitmentId = String(button.dataset.onlineGuildRecruitmentClose ?? "");
+      if (recruitmentId) this._sendGuild("recruitmentClose", "guildRecruitmentClose", { recruitmentId });
+      return;
+    }
+    if (button.matches("[data-online-guild-recruitment-join]")) {
+      const recruitmentId = String(button.dataset.onlineGuildRecruitmentJoin ?? "");
+      const recruitment = this.guildState.guild?.recruitments?.find(entry => entry.recruitmentId === recruitmentId);
+      const planGathering = this.guildState.guild?.plans?.find(entry => entry.gathering?.recruitmentId === recruitmentId)?.gathering ?? null;
+      const targetId = planGathering?.hostPlayerId ?? recruitment?.host?.playerId ?? "";
+      if (!recruitment && !planGathering) return this.toast("この募集は終了しました");
+      if (!targetId) return this.toast("この募集の部屋主を確認できません");
+      if (planGathering?.joined) { this.friendPanelOpen = false; this._renderFriendPanel(); return; }
+      if (this.roomState?.leaderId === targetId) { this.friendPanelOpen = false; this._renderFriendPanel(); return; }
+      if (this.roomState?.phase && this.roomState.phase !== "lobby") return this.toast("現在のオンラインプレイを終了してから参加してください");
+      if (this.roomState && !this._confirmRoomExit()) return;
+      this._sendGuild("recruitmentJoin", "guildRecruitmentJoin", { recruitmentId }, { targetId });
+      return;
+    }
+    if (button.matches("[data-online-guild-leave]")) { if (globalThis.confirm?.("このギルドから脱退しますか？") === false) return; this._sendGuild("leave", "guildLeave"); return; }
+    if (button.matches("[data-online-guild-disband]")) {
+      const name = this.guildState.guild?.name || "";
+      let confirmedName = name;
+      if (typeof globalThis.prompt === "function") {
+        confirmedName = globalThis.prompt(`ギルドを完全に解散します。確認のため「${name}」と入力してください。`);
+        if (confirmedName == null) return;
+        if (String(confirmedName).trim() !== name) { this.toast("ギルド名が一致しません"); return; }
+      } else if (globalThis.confirm?.("このギルドを完全に解散しますか？") === false) return;
+      this._sendGuild("disband", "guildDisband", { name }); return;
+    }
+    if (button.matches("[data-online-force-close-leave]")) { this._forceClosePendingRoomLeave(); return; }
+    if (button.matches("[data-online-resonance-move]") && this._consumeResonancePointerClick(event, button)) return;
+    if (button.matches(ONLINE_STATE_CONTROL_SELECTOR) && !this._canMutateOnline()) { this._announceConnectionPause(); return; }
+    if (button.matches("[data-online-refresh-listings]")) { this._requestRoomListings({ force: true }); return; }
+    if (button.matches("[data-online-quick-join]")) { this._quickJoinRoom(); return; }
+    if (button.matches("[data-online-join-listed-room]")) { this._joinListedRoom(button.dataset.onlineJoinListedRoom, button.dataset.onlineListingId); return; }
+    if (button.matches("[data-online-remove-room-member]")) {
+      const targetId = String(button.dataset.onlineRemoveRoomMember ?? ""), member = this.roomState?.members?.find(entry => entry.playerId === targetId);
+      if (!targetId || this.roomMemberRemovalPendingId) return;
+      const name = member?.profile?.displayName || "この参加者";
+      if (typeof globalThis.confirm === "function" && !globalThis.confirm(`${name}を部屋から退出させますか？`)) return;
+      this.roomMemberRemovalPendingId = targetId;
+      if (!this._send("removeRoomMember", { targetId })) { this.roomMemberRemovalPendingId = null; this.toast("サーバーへ接続されていません"); }
+      this._render(); return;
+    }
     if (button.matches("[data-online-reward-close]")) { this._clearRewardReceipt(); return; }
     if (button.matches("[data-online-trade-player]")) { const targetId = button.dataset.onlineTradePlayer; if (targetId && targetId !== this.selfId) this._send("tradeInvite", { targetId }); return; }
     if (button.matches("[data-online-trade-accept]")) { this._send("tradeAccept", { tradeId: this.trade?.tradeId, accepted: true }); return; }
@@ -269,12 +1066,22 @@ export class OnlinePartyController {
     if (button.matches("[data-online-merchant-offer]")) { if (this.merchantPending) return; const offer = button.dataset.onlineMerchantOffer; this.merchantPending = true; this.merchantResult = { offer, status: "pending" }; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = setTimeout(() => { if (!this.merchantPending) return; this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "通信結果を確認できませんでした。もう一度お試しください。" }; this._render(); }, 3500); if (!this._send("rareMerchantClaim", { offer })) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "サーバーへ接続されていません。" }; } this._render(); return; }
     if (button.matches("[data-online-battle-cheer]")) { this._send("battleCheer", { mode: button.dataset.onlineBattleCheer || this.route }); return; }
     if (button.matches("[data-online-hall-destination]")) { this.hallDestination = { x: Number(button.dataset.hallX), y: Number(button.dataset.hallY) }; return; }
-    if (button.id === "backOnlineParty") { this.disconnect({ leave: true, quiet: true }); this.onBack(); return; }
+    if (button.id === "backOnlineParty") {
+      this.requestExit();
+      return;
+    }
     if (button.matches("[data-copy-friend-id]")) { copyText(this.selfId).then(ok => this.toast(ok ? "フレンドIDをコピーしました" : "コピーできませんでした")); return; }
     if (button.matches("[data-online-connect]")) { this.connect(); return; }
     if (button.matches("[data-online-disconnect]")) { this.disconnect(); return; }
     if (button.matches("[data-online-gate-back]")) { this.disconnect({ leave: false }); return; }
-    if (button.matches("[data-online-create-room]")) { this._send("createRoom"); return; }
+    if (button.matches("[data-online-create-room]")) {
+      const published = Boolean(this._query("[data-online-create-listed]")?.checked);
+      const purposeValue = this._query("[data-online-create-purpose]")?.value;
+      const styleValue = this._query("[data-online-create-style]")?.value;
+      const purpose = ROOM_PURPOSES.has(purposeValue) ? purposeValue : "explore";
+      const style = ROOM_STYLES.has(styleValue) ? styleValue : "anyone";
+      this._send("createRoom", { published, purpose, style }); return;
+    }
     if (button.matches("[data-online-leave-room]")) { this.leaveRoom(); return; }
     if (button.matches("[data-copy-room-id]")) { copyText(this.roomId).then(ok => this.toast(ok ? "ルームIDをコピーしました" : "コピーできませんでした")); return; }
     if (button.matches("[data-copy-invite]")) { this.copyInvite(); return; }
@@ -282,13 +1089,33 @@ export class OnlinePartyController {
     const nextRoute = button.dataset.onlineRoute ?? button.dataset.onlineGo;
     if (nextRoute && ROUTES.has(nextRoute)) { this._setRoute(nextRoute); return; }
     if (button.matches("[data-online-ready]")) { const self = this._self(); this._send("setReady", { ready: !self?.ready }); return; }
-    if (button.matches("[data-online-start-explore]")) { this.expeditionReport = null; const isLeader = (this.roomState?.leaderId ?? this.roomState?.ownerId) === this.selfId || Boolean(this._self()?.isLeader); if (isLeader) this.onBeginSecretRoomExpedition(); this._refreshProfile(); this._send("startExpedition", { profile: this.profile, hostWorld: this._hostWorldNetworkSnapshot() }); return; }
+    if (button.matches("[data-online-start-explore]")) {
+      if (this._contentStartBlockedByTrade()) return;
+      const leader = (this.roomState?.leaderId ?? this.roomState?.ownerId) === this.selfId || Boolean(this._self()?.isLeader);
+      const membersReady = this.roomState?.phase === "lobby" && (this.roomState?.members?.length ?? 0) > 0 && this.roomState.members.every(member => member.connected && member.ready);
+      if (!leader || !membersReady || this.pendingExpeditionStart) { this.toast(!leader ? "出発できるのは部屋主だけです" : !membersReady ? "全員の準備完了を待っています" : "出発を確認中です"); return; }
+      this.expeditionReport = null; this._refreshProfile();
+      const hostWorld = this._hostWorldNetworkSnapshot();
+      this.pendingSecretRoomRun = leader ? this._createPendingSecretRoomRun() : null;
+      if (this.pendingSecretRoomRun) hostWorld.secretRooms = { run: this.pendingSecretRoomRun };
+      this.pendingExpeditionStart = this._send("startExpedition", { profile: this.profile, hostWorld });
+      if (!this.pendingExpeditionStart) this.pendingSecretRoomRun = null; else this._render();
+      return;
+    }
     if (button.matches("[data-online-return]")) { this._send("requestReturn"); return; }
     if (button.matches("[data-online-complete]")) { this._send("completeExpedition"); return; }
-    if (button.matches("[data-online-start-raid]")) { this._send("startRaid", { raidWorld: this._raidWorldSnapshot() }); return; }
+    if (button.matches("[data-online-start-raid]")) { if (!this._contentStartBlockedByTrade()) this._send("startRaid", { raidWorld: this._raidWorldSnapshot() }); return; }
     if (button.matches("[data-online-team-side]")) { this._send("teamSide", { side: button.dataset.onlineTeamSide }); return; }
+    if (button.matches("[data-online-team-ruleset]")) { this._send("teamSettings", { ruleset: button.dataset.onlineTeamRuleset, series: this.roomState?.teamSettings?.series ?? "bo1" }); return; }
+    if (button.matches("[data-online-team-series]")) { this._send("teamSettings", { ruleset: this.roomState?.teamSettings?.ruleset ?? "standard", series: button.dataset.onlineTeamSeries }); return; }
+    if (button.matches("[data-online-team-swap]")) { this._send("teamSwapSides"); return; }
     if (button.matches("[data-online-team-ready]")) { const self = this._self(); this._send("teamReady", { ready: !self?.teamReady }); return; }
-    if (button.matches("[data-online-start-team]")) { this._send("startTeamBattle"); return; }
+    if (button.matches("[data-online-start-team]")) { if (!this._contentStartBlockedByTrade()) { this.teamBattleReport = null; this._send("startTeamBattle"); } return; }
+    if (button.matches("[data-online-start-resonance]")) { if (!this._contentStartBlockedByTrade()) this._send("startResonance"); return; }
+    if (button.matches("[data-online-resonance-move]")) { this._send("resonanceMove", { direction: button.dataset.onlineResonanceMove }); return; }
+    if (button.matches("[data-online-resonance-choice]")) { this._send("resonanceAction", { kind: "choose", choice: button.dataset.onlineResonanceChoice }); return; }
+    if (button.matches("[data-online-resonance-action]")) { this._send("resonanceAction", { kind: button.dataset.onlineResonanceAction }); return; }
+    if (button.matches("[data-online-resonance-return]")) { this._send("resonanceAction", { kind: "return" }); return; }
     if (button.matches("[data-enemy-target]")) { this._selectBattleTarget(button.dataset.enemyTarget, "enemy"); return; }
     if (button.matches("[data-online-ally-target]")) { this._selectBattleTarget(button.dataset.onlineAllyTarget, "ally"); return; }
     if (button.matches("[data-command]")) { this._battleAction(this.route, button.dataset.command); return; }
@@ -299,7 +1126,8 @@ export class OnlinePartyController {
     if (button.id === "closeItemMenu") { this.itemMenu[this.route] = false; this._render(); return; }
     if (button.id === "closeOnlineItemTarget") { this.itemTargetMenu[this.route] = false; this.itemMenu[this.route] = true; this._render(); return; }
     if (button.matches("[data-online-close-raid-report]")) { this.raidReport = null; this._render(); return; }
-    if (button.matches("[data-online-close-expedition-report]")) { const reward = this.pendingFloorBossReward; this.expeditionReport = null; this.pendingFloorBossReward = null; if (reward) this.onFloorBossDefeated({ ...reward, resume: true }); this._render(); return; }
+    if (button.matches("[data-online-close-team-report]")) { this.teamBattleReport = null; this._render(); return; }
+    if (button.matches("[data-online-close-expedition-report]")) { const reward = this.pendingFloorBossReward; this.expeditionReport = null; this.pendingFloorBossReward = null; if (reward) this.onFloorBossDefeated({ ...reward, resume: true }); this._render(); this._showPendingExpeditionReturnResult(); return; }
     if (button.matches("[data-online-speed-cycle]")) { const mode = button.dataset.onlineSpeedCycle, current = Number(this._battle(mode)?.speed) || 1, speeds = [.5, 1, 2], speed = speeds[(speeds.indexOf(current) + 1) % speeds.length]; this._send(mode === "raid" ? "raidSpeed" : mode === "team" ? "teamSpeed" : "battleSpeed", { speed }); return; }
     if (button.matches("[data-online-center]")) { this.path = []; if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { center: true }); return; }
     if (button.matches("[data-online-party-hud-toggle]")) { this.onlineHudCollapsed = !this.onlineHudCollapsed; this._render(); return; }
@@ -334,6 +1162,58 @@ export class OnlinePartyController {
   }
 
   _handleSubmit(event) {
+    if (event.target.matches("[data-online-friend-request-form],[data-online-guild-lookup-form],[data-online-guild-create-form],[data-online-guild-chat-form],[data-online-guild-plan-form],[data-online-guild-recruitment-form]") && !this._canMutateOnline()) {
+      event.preventDefault(); this._announceConnectionPause(); return;
+    }
+    if (event.target.matches("[data-online-friend-request-form]")) {
+      event.preventDefault(); const targetId = String(this.friendIdDraft || this._query("[data-online-friend-id]")?.value || "").trim().toUpperCase();
+      if (!/^AD-[A-Z2-9]{4}-[A-Z2-9]{4}$/.test(targetId)) return this.toast("AD-ABCD-EFGH形式で入力してください");
+      if (this._send("friendRequest", { targetId })) { this.friendIdDraft = ""; this.toast("フレンド申請を送りました"); this._renderFriendPanel(); }
+      return;
+    }
+    if (event.target.matches("[data-online-guild-lookup-form]")) {
+      event.preventDefault(); const guildId = normalizedGuildId(this.guildLookupDraft || this._query("[data-online-guild-id]")?.value);
+      if (!guildId) return this.toast("GD-ABC234形式で入力してください");
+      this._sendGuild("lookup", "guildLookup", { guildId }); return;
+    }
+    if (event.target.matches("[data-online-guild-create-form]")) {
+      event.preventDefault();
+      const name = cleanSocialText(this.guildCreateDraft.name, 16).trim(), tag = cleanSocialText(this.guildCreateDraft.tag, 4).trim().toUpperCase(), description = cleanSocialText(this.guildCreateDraft.description, 80).trim();
+      if (name.length < 2 || !/^[\p{L}\p{N}]{2,4}$/u.test(tag)) return this.toast("名前は2〜16文字、略称は文字・数字2〜4文字で入力してください");
+      this._sendGuild("create", "guildCreate", { name, tag, description }); return;
+    }
+    if (event.target.matches("[data-online-guild-chat-form]")) {
+      event.preventDefault(); const input = this._query("[data-online-guild-chat-input]");
+      const text = cleanSocialText(this.guildChatDraft || input?.value, 80).replace(/\s+/g, " ").trim();
+      if (!text) return;
+      if (Date.now() - this.lastGuildChatAt < 850) return this.toast("少し待ってから送信してください");
+      if (this._sendGuild("chat", "guildChat", { text })) { this.lastGuildChatAt = Date.now(); this.guildChatDraft = ""; if (input) input.value = ""; }
+      return;
+    }
+    if (event.target.matches("[data-online-guild-plan-form]")) {
+      event.preventDefault();
+      const purpose = ROOM_PURPOSES.has(this.guildPlanDraft.purpose) ? this.guildPlanDraft.purpose : "explore";
+      const style = ROOM_STYLES.has(this.guildPlanDraft.style) ? this.guildPlanDraft.style : "anyone";
+      const scheduledInput = String(this.guildPlanDraft.scheduledAt || this._query("[data-online-guild-plan-scheduled-at]")?.value || "");
+      const scheduledAt = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(scheduledInput) ? new Date(scheduledInput).getTime() : NaN;
+      const now = this._guildNow();
+      if (!Number.isFinite(scheduledAt) || scheduledAt < now + 10 * 60_000 || scheduledAt > now + GUILD_PLAN_MAX_LEAD_MS) return this.toast("日時は10分後から14日後までで選んでください");
+      const floor = boundedInteger(this.guildPlanDraft.floor || this._query("[data-online-guild-plan-floor]")?.value, 1, 10_000, 1);
+      const note = cleanSocialText(this.guildPlanDraft.note, 48).replace(/\s+/g, " ").trim();
+      this._sendGuild("planCreate", "guildPlanCreate", { purpose, style, scheduledAt, floor, note });
+      return;
+    }
+    if (event.target.matches("[data-online-guild-recruitment-form]")) {
+      event.preventDefault();
+      const purpose = ROOM_PURPOSES.has(this.guildRecruitmentDraft.purpose) ? this.guildRecruitmentDraft.purpose : "explore";
+      const style = ROOM_STYLES.has(this.guildRecruitmentDraft.style) ? this.guildRecruitmentDraft.style : "anyone";
+      const note = cleanSocialText(this.guildRecruitmentDraft.note, 48).replace(/\s+/g, " ").trim();
+      this._sendGuild("recruitmentCreate", "guildRecruitmentCreate", { purpose, style, note });
+      return;
+    }
+    if (event.target.matches("[data-online-join-form],[data-online-chat-form],[data-online-explore-chat-form]") && !this._canMutateOnline()) {
+      event.preventDefault(); this._announceConnectionPause(); return;
+    }
     if (event.target.matches("[data-online-join-form]")) {
       event.preventDefault(); const roomId = safeRoomId(this._query("[data-online-room-code]")?.value);
       if (roomId.length !== 6) return this.toast("6文字のルームIDを入力してください");
@@ -355,10 +1235,22 @@ export class OnlinePartyController {
   }
 
   _handleInput(event) {
+    if (event.target.matches("[data-online-friend-id]")) { this.friendIdDraft = String(event.target.value ?? "").toUpperCase().replace(/[^A-Z0-9-]/g, "").slice(0, 15); event.target.value = this.friendIdDraft; }
+    if (event.target.matches("[data-online-guild-id]")) { this.guildLookupDraft = String(event.target.value ?? "").toUpperCase().replace(/[^A-Z0-9-]/g, "").slice(0, 10); event.target.value = this.guildLookupDraft; }
+    if (event.target.matches("[data-online-guild-create-name]")) this.guildCreateDraft.name = cleanSocialText(event.target.value, 16);
+    if (event.target.matches("[data-online-guild-create-tag]")) { this.guildCreateDraft.tag = cleanSocialText(event.target.value, 4).toUpperCase().replace(/\s/g, ""); event.target.value = this.guildCreateDraft.tag; }
+    if (event.target.matches("[data-online-guild-create-description]")) this.guildCreateDraft.description = cleanSocialText(event.target.value, 80);
+    if (event.target.matches("[data-online-guild-chat-input]")) { this.guildChatDraft = cleanSocialText(event.target.value, 80); const count = event.target.parentElement?.querySelector("small"); if (count) count.textContent = `${this.guildChatDraft.length}/80`; }
+    if (event.target.matches("[data-online-guild-plan-scheduled-at]")) this.guildPlanDraft.scheduledAt = String(event.target.value ?? "").slice(0, 16);
+    if (event.target.matches("[data-online-guild-plan-floor]")) { const value = String(event.target.value ?? "").replace(/\D/g, "").slice(0, 5); this.guildPlanDraft.floor = value; if (event.target.value !== value) event.target.value = value; }
+    if (event.target.matches("[data-online-guild-plan-note]")) { this.guildPlanDraft.note = cleanSocialText(event.target.value, 48); if (event.target.value !== this.guildPlanDraft.note) event.target.value = this.guildPlanDraft.note; const count = event.target.parentElement?.querySelector(":scope>small"); if (count) count.textContent = `${this.guildPlanDraft.note.length}/48`; }
+    if (event.target.matches("[data-online-guild-recruitment-note]")) { this.guildRecruitmentDraft.note = cleanSocialText(event.target.value, 48); if (event.target.value !== this.guildRecruitmentDraft.note) event.target.value = this.guildRecruitmentDraft.note; const count = event.target.parentElement?.querySelector(":scope>small"); if (count) count.textContent = `${this.guildRecruitmentDraft.note.length}/48`; }
     if (event.target.matches("[data-online-room-code]")) event.target.value = safeRoomId(event.target.value);
     if (event.target.matches("[data-online-chat-input],[data-online-explore-chat-input]")) { this.chatDraft = event.target.value.slice(0, 80); const count = this._query("[data-online-chat-count]"); if (count) count.textContent = String(this.chatDraft.length); }
     if (event.target.matches("[data-online-floor]")) {
-      const self = this._self(); const max = Math.max(1, Number(self?.profile?.maxFloor) || 1);
+      const self = this._self(), leader = (this.roomState?.leaderId ?? this.roomState?.ownerId) === this.selfId || Boolean(self?.leader || self?.isLeader);
+      if (!leader || !this._canMutateOnline()) { event.target.value = String(Math.max(1, Number(this.roomState?.selectedFloor) || 1)); return; }
+      const max = Math.max(1, Number(self?.profile?.maxFloor) || 1);
       const floor = Math.round(clamp(event.target.value, 1, max)); event.target.value = String(floor); this._send("setFloor", { floor });
     }
     if (event.target.matches("[data-online-display-name]")) {
@@ -367,6 +1259,43 @@ export class OnlinePartyController {
     if (event.target.matches("[data-online-server-url]")) storageSet(ONLINE_STORAGE_KEYS.serverUrl, event.target.value.trim());
     if (event.target.matches("[data-online-trade-query]")) { this.tradeQuery = String(event.target.value ?? "").slice(0, 40); this._render(); requestAnimationFrame(() => { const input = this._query("[data-online-trade-query]"); if (input) { input.focus(); input.setSelectionRange(this.tradeQuery.length, this.tradeQuery.length); } }); }
     if (event.target.matches("[data-online-trade-amount]")) this.tradeAmount = Math.max(1, Math.min(50_000_000, Math.floor(Number(event.target.value) || 1)));
+  }
+
+  _handleChange(event) {
+    if (event.target.matches("[data-online-guild-plan-purpose]")) this.guildPlanDraft.purpose = ROOM_PURPOSES.has(event.target.value) ? event.target.value : "explore";
+    if (event.target.matches("[data-online-guild-plan-style]")) this.guildPlanDraft.style = ROOM_STYLES.has(event.target.value) ? event.target.value : "anyone";
+    if (event.target.matches("[data-online-guild-recruitment-purpose]")) this.guildRecruitmentDraft.purpose = ROOM_PURPOSES.has(event.target.value) ? event.target.value : "explore";
+    if (event.target.matches("[data-online-guild-recruitment-style]")) this.guildRecruitmentDraft.style = ROOM_STYLES.has(event.target.value) ? event.target.value : "anyone";
+    if (event.target.matches("[data-online-room-purpose-filter]")) {
+      const value = event.target.value;
+      this.roomListingPurposeFilter = value === "all" || ROOM_PURPOSES.has(value) ? value : "all";
+      this._requestRoomListings({ force: true });
+      return;
+    }
+    if (event.target.matches("[data-online-room-listing-toggle],[data-online-room-listing-purpose],[data-online-room-listing-style]")) {
+      if (this.roomListingPending) return;
+      const published = Boolean(this._query("[data-online-room-listing-toggle]")?.checked);
+      const guildRecruitmentLock = currentGuildRoomRecruitmentLock(this.guildState, this.roomState, this._guildNow());
+      if (published && guildRecruitmentLock.active) {
+        this.toast(guildRecruitmentLock.kind === "planned" ? "遠征予定の集合中です。予定カードで確認／予定取消を行ってください" : "ギルド共闘募集を終了してから公開募集へ切り替えてください");
+        this._render();
+        return;
+      }
+      const purposeValue = this._query("[data-online-room-listing-purpose]")?.value;
+      const styleValue = this._query("[data-online-room-listing-style]")?.value;
+      const purpose = ROOM_PURPOSES.has(purposeValue) ? purposeValue : "explore";
+      const style = ROOM_STYLES.has(styleValue) ? styleValue : "anyone";
+      this.roomListingPending = true;
+      if (!this._send("setRoomListing", { published, purpose, style })) {
+        this.roomListingPending = false;
+        this.toast("募集設定を送信できませんでした");
+        this._render();
+        return;
+      }
+      this.root?.querySelectorAll("[data-online-room-listing-toggle],[data-online-room-listing-purpose],[data-online-room-listing-style]").forEach(control => { control.disabled = true; });
+      const status = this._query(".online-room-listing-settings>header>strong");
+      if (status) status.textContent = "更新中…";
+    }
   }
 
   _selectCharacter(monsterId) {
@@ -382,23 +1311,106 @@ export class OnlinePartyController {
     this.profile = buildOnlinePartyProfile(this.getState?.(), { monsterId: this.selectedMonsterId, displayName: name });
   }
 
+  _currentResumeEndpoint() {
+    if (this.ws && this.connectionEndpoint) return this.connectionEndpoint;
+    const input = this._query("[data-online-server-url]")?.value ?? storageGet(ONLINE_STORAGE_KEYS.serverUrl);
+    return normalizedWebsocketEndpoint(input);
+  }
+
+  _refreshResumeTokenFromStorage(endpointValue = this._currentResumeEndpoint()) {
+    const endpoint = normalizedWebsocketEndpoint(endpointValue);
+    if (!endpoint) return this.resumeToken;
+    const latest = migrateLegacyResumeToken()[endpoint] ?? "";
+    if (endpoint !== this.resumeTokenEndpoint) {
+      this.resumeTokenEndpoint = endpoint;
+      this.resumeToken = latest;
+      this.resumeTokenStorageSnapshot = latest;
+    } else if (latest && latest !== this.resumeTokenStorageSnapshot) {
+      this.resumeToken = latest;
+      this.resumeTokenStorageSnapshot = latest;
+    } else if (!this.resumeToken && latest) this.resumeToken = latest;
+    return this.resumeToken;
+  }
+
+  _storeResumeTokenForEndpoint(endpointValue, value) {
+    const endpoint = normalizedWebsocketEndpoint(endpointValue), token = cleanResumeToken(value);
+    if (!endpoint || !token) return false;
+    const tokens = readResumeTokenMap();
+    if (Object.prototype.hasOwnProperty.call(tokens, endpoint)) delete tokens[endpoint];
+    tokens[endpoint] = token;
+    while (Object.keys(tokens).length > RESUME_TOKEN_MAP_LIMIT) delete tokens[Object.keys(tokens)[0]];
+    writeResumeTokenMap(tokens);
+    storageSet(ONLINE_STORAGE_KEYS.resumeTokenMigration, "1");
+    storageSet(ONLINE_STORAGE_KEYS.resumeToken, token);
+    this.resumeTokenEndpoint = endpoint;
+    this.resumeToken = token;
+    this.resumeTokenStorageSnapshot = token;
+    return true;
+  }
+
+  _handleHandshakeError(message) {
+    const code = String(message?.code ?? "HANDSHAKE_FAILED"), endpoint = this.lastHelloEndpoint || this.connectionEndpoint || this._currentResumeEndpoint();
+    const latest = endpoint ? readResumeTokenMap()[endpoint] ?? "" : "";
+    const storageTokenChanged = Boolean(latest && latest !== this.lastHelloResumeToken);
+    const retryWithLatestToken = code === "RESUME_TOKEN_MISMATCH" && storageTokenChanged && this.handshakeTokenRetries < HANDSHAKE_TOKEN_RETRY_LIMIT;
+    const socket = this.ws;
+    this.connectionReady = false;
+    this.helloAckPending = false;
+    this._clearMoveInputs();
+    if (retryWithLatestToken) {
+      this.resumeToken = latest;
+      this.resumeTokenStorageSnapshot = latest;
+      this.resumeTokenEndpoint = endpoint;
+      this.handshakeTokenRetries += 1;
+      this.manualClose = false;
+      storageSet(ONLINE_STORAGE_KEYS.autoConnect, "1");
+      this._setStatus("reconnecting", "再認証中…", "更新された再接続キーで安全に接続し直します");
+      try { socket?.close(4003, "retry hello with latest token"); } catch {}
+      return;
+    }
+    this.manualClose = true;
+    storageSet(ONLINE_STORAGE_KEYS.autoConnect, "0");
+    this._setStatus("error", "認証できません", message?.message || "接続設定を確認して、もう一度接続してください");
+    this._showConnectionStep("entry");
+    try { socket?.close(1008, "hello rejected"); } catch {}
+  }
+
   connect({ reconnect = false } = {}) {
     if (this.ws && [WebSocket.OPEN, WebSocket.CONNECTING].includes(this.ws.readyState)) return;
     const input = this._query("[data-online-server-url]")?.value ?? storageGet(ONLINE_STORAGE_KEYS.serverUrl);
     let url;
     try { url = websocketUrl(input); } catch (error) { this.toast(error.message); return; }
-    storageSet(ONLINE_STORAGE_KEYS.serverUrl, input.trim()); this.manualClose = false;
+    if (!reconnect) { this.supersededConnection = false; this.handshakeTokenRetries = 0; this.reconnectAttempts = 0; }
+    if (this.connectionEndpoint && this.connectionEndpoint !== url) {
+      this.capabilities = new Set();
+      this.friendState = { friends: [], incoming: [], outgoing: [], invites: [], blocked: [], muted: [] };
+      this.guildState = emptyGuildState();
+      this.guildClockOffsetMs = 0; this.guildClockSynced = false;
+      this.guildLookupDraft = ""; this.guildCreateDraft = { name: "", tag: "", description: "" }; this.guildChatDraft = ""; this.guildPlanDraft = defaultGuildPlanDraft(); this.guildRecruitmentDraft = { purpose: "explore", style: "anyone", note: "" };
+      this.guildPlanComposerOpen = false; this.guildPlansExpanded = false; this.guildActivitiesExpanded = false;
+      this.socialScrollByTab = { friends: 0, guild: 0 }; this.guildChatScroll = { top: 0, atBottom: true };
+      this._clearGuildPending();
+      this._renderFriendPanel();
+    }
+    this.connectionEndpoint = url;
+    this._refreshResumeTokenFromStorage(url);
+    storageSet(ONLINE_STORAGE_KEYS.serverUrl, input.trim()); this.manualClose = false; this.connectionReady = false; this._clearGuildPlanTransitionTimer(); this._clearMoveInputs();
     this._setStatus(reconnect ? "reconnecting" : "connecting", reconnect ? "再接続中…" : "接続中…", "PCサーバーへ接続しています");
     let socket;
-    try { socket = new WebSocket(url); this.ws = socket; } catch (error) { this._setStatus("error", "接続できません", error.message); return; }
+    try { socket = new WebSocket(url); this.ws = socket; (this.socketEndpoints ??= new WeakMap()).set(socket, url); } catch (error) { this._setStatus("error", "接続できません", error.message); return; }
     socket.addEventListener("open", () => {
       if (this.ws !== socket) return;
-      this.reconnectAttempts = 0; this._refreshProfile();
-      this._send("hello", { protocol: ONLINE_PROTOCOL, friendId: this.selfId, clientKey: storageGet(ONLINE_STORAGE_KEYS.clientKey), resumeToken: this.resumeToken, profile: this.profile });
+      this._refreshProfile();
+      const endpoint = this.socketEndpoints.get(socket) || url;
+      this.connectionEndpoint = endpoint;
+      this._refreshResumeTokenFromStorage(endpoint);
+      this.lastHelloEndpoint = endpoint;
+      this.lastHelloResumeToken = this.resumeToken;
+      this.helloAckPending = this._send("hello", { protocol: ONLINE_PROTOCOL, friendId: this.selfId, clientKey: storageGet(ONLINE_STORAGE_KEYS.clientKey), resumeToken: this.resumeToken, profile: this.profile });
     });
-    socket.addEventListener("message", event => { if (this.ws !== socket) return; try { this._handleMessage(JSON.parse(event.data)); } catch (error) { console.warn("Online message ignored", error); } });
-    socket.addEventListener("close", () => this._handleClose(socket));
-    socket.addEventListener("error", () => { if (this.ws === socket) this._setStatus("error", "通信エラー", "PCサーバーとトンネルを確認してください"); });
+    socket.addEventListener("message", event => { if (this.ws !== socket) return; try { this._handleMessage(JSON.parse(event.data), socket); } catch (error) { console.warn("Online message ignored", error); } });
+    socket.addEventListener("close", event => this._handleClose(socket, event));
+    socket.addEventListener("error", () => { if (this.ws === socket) { this.connectionReady = false; this._setStatus("error", "通信エラー", "PCサーバーとトンネルを確認してください"); } });
   }
 
   _beginInteractionPending(action, targetId) {
@@ -417,6 +1429,241 @@ export class OnlinePartyController {
   _send(type, payload = {}) {
     if (this.ws?.readyState !== WebSocket.OPEN) return false;
     this.ws.send(JSON.stringify({ type, ...payload })); return true;
+  }
+
+  _sendGuild(kind, type, payload = {}, meta = {}) {
+    if (!this._canMutateOnline()) { this._announceConnectionPause(); return false; }
+    if (!this.capabilities.has("guildsV1")) { this.toast("このサーバーはギルド機能に未対応です"); return false; }
+    if (String(kind).startsWith("recruitment") && !this.capabilities.has("guildPartyRecruitmentV1")) { this.toast("このサーバーはギルド共闘募集に未対応です"); return false; }
+    if (String(kind).startsWith("plan") && !this.capabilities.has("guildPlansV1")) { this.toast("このサーバーはギルド遠征予定に未対応です"); return false; }
+    if (kind === "planGather" && !this.capabilities.has("guildPlanGatheringV1")) { this.toast("このサーバーは予定からの集合に未対応です"); return false; }
+    if (this.guildPending && kind !== "recruitmentClose") { this.toast("前のギルド操作を確認中です"); return false; }
+    const pending = { kind: String(kind || type), targetId: meta.targetId ?? payload.targetId, guildId: payload.guildId, inviteId: payload.inviteId, planId: payload.planId, recruitmentId: payload.recruitmentId };
+    if (kind === "lookup") this.guildState = { ...this.guildState, lookup: null };
+    this.guildPending = pending;
+    this.guildStatus = kind === "lookup" ? "ギルドを検索中…"
+      : kind === "planCreate" ? "遠征予定を登録中…"
+        : kind === "planRespond" ? "参加表明を更新中…"
+          : kind === "planCancel" ? "遠征予定を取消中…"
+            : kind === "planGather" ? "予定の集合募集を開始中…"
+              : kind === "recruitmentCreate" ? "ギルド限定募集を公開中…"
+              : kind === "recruitmentClose" ? "ギルド限定募集を終了中…"
+                : kind === "recruitmentJoin" ? "募集の部屋へ参加中…" : "サーバーへ反映中…";
+    if (!this._send(type, payload)) { this.guildPending = null; this.guildStatus = "送信できませんでした。接続を確認してください。"; this._renderFriendPanel(); return false; }
+    clearTimeout(this.guildPendingTimer);
+    this.guildPendingTimer = setTimeout(() => {
+      if (this.guildPending !== pending) return;
+      this.guildPending = null;
+      this.guildPendingTimer = null;
+      this.guildStatus = "最新状態を再確認しています…";
+      this._send("guildList");
+      this._renderFriendPanel();
+    }, 4500);
+    this._renderFriendPanel();
+    return true;
+  }
+
+  _clearGuildPending(status = "") {
+    clearTimeout(this.guildPendingTimer);
+    this.guildPendingTimer = null;
+    this.guildPending = null;
+    this.guildStatus = cleanSocialText(status, 120).trim();
+  }
+
+  _syncGuildServerClock(value) {
+    const serverNow = Number(value), localNow = Date.now(), offset = serverNow - localNow;
+    if (!Number.isSafeInteger(serverNow) || serverNow <= 0 || !Number.isFinite(offset) || Math.abs(offset) > GUILD_SERVER_CLOCK_MAX_OFFSET_MS) {
+      this.guildClockOffsetMs = 0;
+      this.guildClockSynced = false;
+      return false;
+    }
+    this.guildClockOffsetMs = Math.max(-GUILD_SERVER_CLOCK_MAX_OFFSET_MS, Math.min(GUILD_SERVER_CLOCK_MAX_OFFSET_MS, offset));
+    this.guildClockSynced = true;
+    return true;
+  }
+
+  _guildNow() {
+    return Date.now() + (this.guildClockSynced ? this.guildClockOffsetMs : 0);
+  }
+
+  _rememberGuildPlanReminder(plan, phase) {
+    const key = `${this.selfId}|${plan.planId}|${Math.max(0, Number(plan.scheduledAt) || 0)}|${phase}`;
+    if (this.guildPlanReminderReceipts.has(key)) return false;
+    this.guildPlanReminderReceipts.add(key);
+    this.guildPlanReminderReceipts = new Set([...this.guildPlanReminderReceipts].slice(-GUILD_PLAN_REMINDER_RECEIPT_LIMIT));
+    writeGuildPlanReminderReceipts([...this.guildPlanReminderReceipts]);
+    return true;
+  }
+
+  _handleGuildPlanReminder(message) {
+    const phase = message?.phase === "live" ? "live" : message?.phase === "window" ? "window" : "";
+    const plan = normalizeGuildPlanReminder(message?.plan);
+    const serverNow = Number(message?.serverNow), clockOffset = serverNow - Date.now();
+    const validClock = Number.isSafeInteger(serverNow) && serverNow > 0 && Number.isFinite(clockOffset) && Math.abs(clockOffset) <= GUILD_SERVER_CLOCK_MAX_OFFSET_MS;
+    const inGatherWindow = plan && serverNow >= plan.scheduledAt - 30 * 60_000 && serverNow < plan.scheduledAt + 2 * 60 * 60_000;
+    if (!phase || !plan || !validClock || !inGatherWindow || (phase === "live" && (!plan.gathering || plan.gathering.expiresAt <= serverNow || plan.gathering.expiresAt > plan.scheduledAt + 2 * 60 * 60_000)) || (phase === "window" && plan.gathering)) return false;
+    this._syncGuildServerClock(serverNow);
+    if (this._rememberGuildPlanReminder(plan, phase)) {
+      const organizer = plan.organizer?.displayName || "主催者";
+      this.toast(phase === "live" ? `${organizer}のギルド遠征が集合中です` : "参加予定のギルド遠征が近づいています");
+    }
+    this._renderFriendPanel();
+    return true;
+  }
+
+  _openGuildPlanAttention(planIdValue) {
+    const planId = cleanSocialText(planIdValue, 96).trim();
+    if (!GUILD_PLAN_ID_PATTERN.test(planId) || !this.guildState.guild?.plans?.some(plan => plan.planId === planId)) {
+      this.toast("この遠征予定は終了しました");
+      return false;
+    }
+    this.friendPanelOpen = true;
+    this.socialTab = "guild";
+    this.guildPlansExpanded = true;
+    this._renderFriendPanel();
+    const focusPlan = () => {
+      if (!this.mounted || !this.friendPanelOpen || this.socialTab !== "guild") return;
+      const card = this._query(`[data-online-guild-plan-card="${planId}"]`);
+      if (!card) return;
+      try { card.focus({ preventScroll: true }); } catch { card.focus?.(); }
+      card.scrollIntoView?.({ block: "center", behavior: "auto" });
+    };
+    if (typeof requestAnimationFrame === "function") requestAnimationFrame(focusPlan); else focusPlan();
+    return true;
+  }
+
+  _canMutateOnline() {
+    return Boolean(!this.pendingLeaveOnReconnect && this.connectionReady && this.ws && typeof WebSocket !== "undefined" && this.ws.readyState === WebSocket.OPEN);
+  }
+
+  _announceConnectionPause() {
+    this.toast(this.connectionStatus.kind === "reconnecting" || this.connectionStatus.kind === "connecting" ? "再接続が終わるまでお待ちください" : "オンラインサーバーへ接続されていません");
+  }
+
+  _syncConnectionUi() {
+    if (!this.root) return;
+    const { kind = "offline", title = "オフライン", detail = "オンラインサーバーへ接続されていません" } = this.connectionStatus ?? {};
+    const banner = this._query("[data-online-connection-banner]");
+    if (banner) {
+      banner.className = `online-v3-connection-banner ${kind}`;
+      const heading = banner.querySelector("b"), copy = banner.querySelector("span");
+      if (heading) heading.textContent = title;
+      if (copy) copy.textContent = detail;
+      let offlineExit = banner.querySelector("[data-online-force-close-leave]");
+      if (this.pendingLeaveOnReconnect?.allowOfflineExit) {
+        if (!offlineExit) {
+          offlineExit = document.createElement("button");
+          offlineExit.type = "button";
+          offlineExit.dataset.onlineForceCloseLeave = "1";
+          offlineExit.textContent = "オフラインで閉じる";
+          offlineExit.setAttribute("aria-label", "通信を待たずオンライン画面を閉じる");
+          banner.appendChild(offlineExit);
+        }
+      } else offlineExit?.remove();
+    }
+    const entryStatus = this._query("[data-online-status]");
+    if (entryStatus) {
+      let offlineExit = entryStatus.querySelector("[data-online-force-close-leave]");
+      if (this.pendingLeaveOnReconnect?.allowOfflineExit) {
+        if (!offlineExit) {
+          offlineExit = document.createElement("button"); offlineExit.type = "button"; offlineExit.dataset.onlineForceCloseLeave = "1";
+          offlineExit.textContent = "オフラインで閉じる"; offlineExit.setAttribute("aria-label", "通信を待たずオンライン画面を閉じる"); entryStatus.appendChild(offlineExit);
+        }
+      } else offlineExit?.remove();
+    }
+    const paused = !this._canMutateOnline();
+    this.root.querySelector("[data-online-room]")?.classList.toggle("online-connection-paused", paused);
+    if (paused) {
+      this._clearMoveInputs();
+      this.root.querySelectorAll(ONLINE_STATE_CONTROL_SELECTOR).forEach(control => {
+        if (control.disabled) return;
+        control.dataset.onlineConnectionDisabled = "1";
+        control.disabled = true;
+      });
+    } else {
+      this.root.querySelectorAll("[data-online-connection-disabled='1']").forEach(control => {
+        control.disabled = false;
+        delete control.dataset.onlineConnectionDisabled;
+      });
+    }
+  }
+
+  _supportsRoomListings() {
+    return this.capabilities.size === 0 || ["roomListingsV1", "roomListings", "roomDirectory", "roomBoard"].some(name => this.capabilities.has(name));
+  }
+
+  _requestRoomListings({ force = false } = {}) {
+    if (this.roomState || this.connectionStep === "room") return false;
+    if (!this._supportsRoomListings()) {
+      this.roomListingsStatus = "error";
+      this._renderRoomBoard();
+      return false;
+    }
+    if (this.roomListingsStatus === "loading" && !force) return false;
+    this.roomListingsStatus = "loading";
+    this._renderRoomBoard();
+    const purpose = ROOM_PURPOSES.has(this.roomListingPurposeFilter) ? this.roomListingPurposeFilter : undefined;
+    if (this._send("listRoomListings", { purpose })) return true;
+    this.roomListingsStatus = "error";
+    this._renderRoomBoard();
+    return false;
+  }
+
+  _joinListedRoom(roomIdValue, listingIdValue) {
+    if (this.pendingRoomJoinId || this.roomState) return;
+    const roomId = safeRoomId(roomIdValue), listingId = String(listingIdValue ?? "").slice(0, 96);
+    const listing = this.roomListings.find(entry => entry.roomId === roomId && (!listingId || entry.listingId === listingId));
+    if (roomId.length !== 6 || !listing?.listingId) { this.toast("この募集は終了しました。掲示板を更新してください"); return; }
+    this.pendingRoomJoinId = roomId;
+    this._renderRoomBoard();
+    if (this._send("joinListedRoom", { roomId, listingId: listing.listingId })) return;
+    this.pendingRoomJoinId = null;
+    this.roomListingsStatus = "error";
+    this._renderRoomBoard();
+  }
+
+  _quickJoinRoom() {
+    if (this.pendingRoomJoinId || this.roomState || !this.roomListings.length) return;
+    this.pendingRoomJoinId = "quick";
+    this._renderRoomBoard();
+    const purpose = ROOM_PURPOSES.has(this.roomListingPurposeFilter) ? this.roomListingPurposeFilter : undefined;
+    if (this._send("quickJoin", { purpose })) return;
+    this.pendingRoomJoinId = null;
+    this.roomListingsStatus = "error";
+    this._renderRoomBoard();
+  }
+
+  _renderRoomBoard() {
+    const target = this._query("[data-online-room-board-content]");
+    if (!target) return;
+    const signature = JSON.stringify({
+      listings: this.roomListings, status: this.roomListingsStatus,
+      pending: this.pendingRoomJoinId, purpose: this.roomListingPurposeFilter,
+    });
+    if (signature === this.roomBoardRenderSignature && target.dataset.onlineRoomBoardRendered === "1") return;
+    const active = target.ownerDocument?.activeElement;
+    let focus = null;
+    if (active && target.contains(active)) {
+      if (active.matches?.("[data-online-room-purpose-filter]")) focus = { kind: "filter" };
+      else if (active.matches?.("[data-online-refresh-listings]")) focus = { kind: "refresh" };
+      else if (active.matches?.("[data-online-quick-join]")) focus = { kind: "quick" };
+      else if (active.matches?.("[data-online-join-listed-room]")) focus = { kind: "join", roomId: active.dataset.onlineJoinListedRoom };
+    }
+    target.innerHTML = renderOnlineRoomDirectory(this.roomListings, {
+      status: this.roomListingsStatus, pendingId: this.pendingRoomJoinId, purpose: this.roomListingPurposeFilter,
+    });
+    target.dataset.onlineRoomBoardRendered = "1";
+    this.roomBoardRenderSignature = signature;
+    this._syncConnectionUi();
+    if (!focus) return;
+    requestAnimationFrame(() => {
+      if (!this.mounted || !target.isConnected) return;
+      let node = focus.kind === "filter" ? target.querySelector("[data-online-room-purpose-filter]")
+        : focus.kind === "refresh" ? target.querySelector("[data-online-refresh-listings]")
+          : focus.kind === "quick" ? target.querySelector("[data-online-quick-join]")
+            : [...target.querySelectorAll("[data-online-join-listed-room]")].find(button => button.dataset.onlineJoinListedRoom === focus.roomId);
+      node?.focus?.({ preventScroll: true });
+    });
   }
 
   syncExpeditionProfile() {
@@ -439,44 +1686,143 @@ export class OnlinePartyController {
     this.onTutorialGuide(key);
   }
 
-  _handleMessage(message) {
+  _handleMessage(message, sourceSocket = null) {
     if (!message || typeof message.type !== "string") return;
+    if (sourceSocket && sourceSocket !== this.ws) return;
     if (message.type === "helloAck") {
-      if (message.protocol !== ONLINE_PROTOCOL) { this.manualClose = true; this._setStatus("error", "接続できません", "ゲームとオンラインサーバーのバージョンが一致しません"); this.ws?.close(1002, "protocol mismatch"); return; }
-      this.selfId = message.playerId || this.selfId; this.resumeToken = message.resumeToken || ""; storageSet(ONLINE_STORAGE_KEYS.resumeToken, this.resumeToken);
+      if (message.protocol !== ONLINE_PROTOCOL) { this._handleHandshakeError({ code: "PROTOCOL_MISMATCH", message: "ゲームとオンラインサーバーのバージョンが一致しません" }); return; }
+      this.connectionReady = true;
+      this.helloAckPending = false;
+      this.reconnectAttempts = 0;
+      this.handshakeTokenRetries = 0;
+      this.capabilities = capabilitySet(message.capabilities);
+      this.recoverySettlementBatch += 1;
+      this.recoverySettlementTasks = new Set();
+      this.recoverySettlementFailed = false;
+      this.friendState = this._normalizeFriendState(message.friendState);
+      this._purgeHiddenSocial();
+      const previousGuildId = this.guildState?.guild?.guildId ?? "", nextGuildState = normalizeGuildState(message.guildState);
+      this._syncGuildServerClock(nextGuildState.serverNow);
+      this.guildState = nextGuildState;
+      if ((this.guildState.guild?.guildId ?? "") !== previousGuildId) { this.guildPlanComposerOpen = false; this.guildPlansExpanded = false; this.guildActivitiesExpanded = false; }
+      this._clearGuildPending();
+      if (this.guildState.guild) { this.guildLookupDraft = ""; this.guildCreateDraft = { name: "", tag: "", description: "" }; }
+      else { this.guildPlanDraft = defaultGuildPlanDraft(this._guildNow()); this.guildRecruitmentDraft = { purpose: "explore", style: "anyone", note: "" }; }
+      const helloEndpoint = this.socketEndpoints?.get(sourceSocket) || this.lastHelloEndpoint || this.connectionEndpoint || this._currentResumeEndpoint();
+      this.selfId = message.playerId || this.selfId;
+      if (!this._storeResumeTokenForEndpoint(helloEndpoint, message.resumeToken)) { this.resumeToken = ""; this.resumeTokenStorageSnapshot = ""; }
       storageSet(ONLINE_STORAGE_KEYS.autoConnect, "1");
-      this._setStatus("online", "接続済み", message.resumed ? "前の部屋へ復帰しました" : "部屋を作るか、ルームIDで参加してください");
-      this._showConnectionStep(message.room ? "room" : "gate");
+      // Always refresh an open Social panel from the hello snapshot, including
+      // reconnects that do not resume a room. This also re-enables controls only
+      // after the authenticated handshake has completed.
+      this._renderFriendPanel();
       if (Array.isArray(message.activeTradeIds) || !message.resumed) {
         const released = recoverOrphanedTradeEscrows(this.getState?.() ?? {}, Array.isArray(message.activeTradeIds) ? message.activeTradeIds : []);
         if (released.length) { this.onOnlineStateMutation({ kind: "tradeRecovery", assets: released }); this.toast(`${released.length}件の交換品を所持品へ戻しました`); }
       }
-      if (message.room) this._applyRoomState(message.room);
-      else { const invited = safeRoomId(this._query("[data-online-room-code]")?.value); if (invited.length === 6) this._send("joinRoom", { roomId: invited }); }
+      if (this.pendingLeaveOnReconnect) {
+        this._showConnectionStep(message.room ? "room" : "gate");
+        if (!message.room) { this._completePendingRoomLeave(); return; }
+        const pendingRoomId = safeRoomId(this.pendingLeaveOnReconnect.roomId), resumedRoomId = safeRoomId(message.room.roomId);
+        if (!pendingRoomId || resumedRoomId !== pendingRoomId) {
+          clearTimeout(this.pendingLeaveTimer); this.pendingLeaveTimer = null;
+          this.pendingLeaveOnReconnect = null;
+          this._settlePendingExpeditionStart(null, { rejected: true });
+          this._setStatus("online", "別の部屋へ復帰しました", "誤退出を防ぐため、以前の部屋への退出操作を中止しました");
+          this.toast("接続先の部屋が変わったため、自動退出を中止しました");
+          this._applyRoomState(message.room);
+          this._flushExpeditionProfileSync();
+          return;
+        }
+        this.pendingLeaveOnReconnect.sent = true;
+        this._setStatus("reconnecting", "退出処理中…", "サーバーへ退出を確定しています");
+        if (!this._send("leaveRoom")) { this.connectionReady = false; try { this.ws?.close(1012, "retry pending leave"); } catch {} }
+        return;
+      }
+      this._setStatus("online", "接続済み", message.resumed ? "前の部屋へ復帰しました" : "部屋を作るか、ルームIDで参加してください");
+      this._showConnectionStep(message.room ? "room" : "gate");
+      if (message.room) { this._applyRoomState(message.room); this._settlePendingExpeditionStart(message.room, { rejected: message.room.phase !== "expedition" }); }
+      else {
+        this._settlePendingExpeditionStart(null, { rejected: true });
+        const invited = safeRoomId(this._query("[data-online-room-code]")?.value);
+        if (invited.length === 6) this._send("joinRoom", { roomId: invited });
+        else this._requestRoomListings();
+      }
       this._flushExpeditionProfileSync();
       return;
     }
-    if (message.type === "roomState") { this._applyRoomState(message.room); return; }
+    if (message.type === "roomListings") {
+      if (this.roomState || this.connectionStep === "room") return;
+      const generatedAt = Math.max(0, Number(message.generatedAt) || 0);
+      if (generatedAt && generatedAt < this.roomListingsGeneratedAt) return;
+      const normalized = normalizeRoomListings(message.listings);
+      this.roomListings = ROOM_PURPOSES.has(this.roomListingPurposeFilter) ? normalized.filter(listing => listing.purpose === this.roomListingPurposeFilter) : normalized;
+      this.roomListingsGeneratedAt = generatedAt || Date.now();
+      this.roomListingsStatus = "ready";
+      this._renderRoomBoard();
+      return;
+    }
+    if (message.type === "friendState") { this.friendState = this._normalizeFriendState(message.state); this._purgeHiddenSocial(); this._refreshSafetyViews(); return; }
+    if (message.type === "guildPlanReminder") { this._handleGuildPlanReminder(message); return; }
+    if (message.type === "guildState") {
+      const pendingKind = this.guildPending?.kind, pendingPlanId = pendingKind === "planGather" ? String(this.guildPending?.planId ?? "") : "", previousGuildId = this.guildState.guild?.guildId ?? "";
+      const nextGuildState = normalizeGuildState(message.state);
+      this._syncGuildServerClock(nextGuildState.serverNow);
+      this.guildState = nextGuildState;
+      if ((this.guildState.guild?.guildId ?? "") !== previousGuildId) { this.socialScrollByTab.guild = 0; this.guildChatScroll = { top: 0, atBottom: true }; this.guildPlanComposerOpen = false; this.guildPlansExpanded = false; this.guildActivitiesExpanded = false; }
+      if (pendingKind === "planGather") {
+        const pendingPlan = this.guildState.guild?.plans?.find(entry => entry.planId === pendingPlanId);
+        if (!pendingPlan || pendingPlan.gathering) this._clearGuildPending();
+      } else if (pendingKind !== "recruitmentJoin") this._clearGuildPending();
+      if (this.guildState.guild) { this.guildLookupDraft = ""; this.guildCreateDraft = { name: "", tag: "", description: "" }; }
+      if (pendingKind === "chat") this.guildChatDraft = "";
+      if (pendingKind === "planCreate") { this.guildPlanDraft = defaultGuildPlanDraft(this._guildNow()); this.guildPlanComposerOpen = false; }
+      if (pendingKind === "recruitmentCreate") this.guildRecruitmentDraft.note = "";
+      if (!this.guildState.guild) { this.guildPlanDraft = defaultGuildPlanDraft(this._guildNow()); this.guildRecruitmentDraft = { purpose: "explore", style: "anyone", note: "" }; }
+      this._renderFriendPanel(); return;
+    }
+    if (message.type === "guildLookupResult" || message.type === "guildLookup") {
+      this.guildState = { ...this.guildState, lookup: normalizeGuildPublic(message.guild) };
+      this._clearGuildPending();
+      this._renderFriendPanel(); return;
+    }
+    if (message.type === "roomState") { this._applyRoomState(message.room); this._settlePendingExpeditionStart(message.room); return; }
+    if (["resonanceStarted", "resonanceState", "resonanceEnded"].includes(message.type) && message.resonance) {
+      if (!this.roomState) return;
+      this.roomState = { ...this.roomState, phase: "resonance", resonance: message.resonance };
+      this.route = "resonance";
+      if (message.type === "resonanceEnded") { this._closeAllBattleMenus(); this.toast(message.result?.victory ? "共鳴迷宮を踏破しました！" : "共鳴迷宮が終了しました"); }
+      this._render(); return;
+    }
     if (message.type === "tradeState") { this._applyTradeState(message.trade); return; }
     if (message.type === "tradeCancelled") { this._finishTrade(message.tradeId, { cancelled: true, reason: message.reason }); return; }
     if (message.type === "tradeCompleted") { this._finishTrade(message.tradeId, { completed: true }); return; }
     if (message.type === "tradeCommit") { this._commitTrade(message); return; }
+    if (message.type === "tradeRecoveryPending") {
+      const tradeId = String(message.tradeId ?? ""); if (!tradeId) return;
+      this.terminalTradeRecoveries.add(tradeId);
+      if (this.terminalTradeRecoveries.size > 100) this.terminalTradeRecoveries.delete(this.terminalTradeRecoveries.values().next().value);
+      this._setTradeRecoveryStatus("pending", tradeId);
+      this._commitTrade(message, { recovery: true }); return;
+    }
     if (message.type === "hostWorldDelta") { this._applyHostWorldDelta(message); return; }
     if (message.type === "expeditionVitals") { this._applyExpeditionVitals(message); return; }
+    if (message.type === "recoveryComplete") { if (message.orphanedExpedition) this._receiveOrphanedExpedition(this.recoverySettlementBatch); return; }
+    if (message.type === "expeditionResult") { this._receiveExpeditionResult(message); return; }
     if (message.type === "secretRoomEntered") { if (String(message.playerId ?? "") !== this.selfId) return; const roomId = String(message.roomId ?? "").slice(0, 160), floor = Math.max(1, Math.min(10000, Math.floor(Number(message.floor) || 1))); if (roomId) this.onSecretRoomEntered({ roomId, floor, playerId: this.selfId }); return; }
     if (["battleDefeated", "onlineBattleDefeated"].includes(message.type)) { this._applyBattleDefeated(message); return; }
     if (["raidWorld", "raidWorldState"].includes(message.type)) { const ownerId = message.ownerId ?? this.roomState?.ownerId ?? this.roomState?.leaderId; if (ownerId === this.selfId) this._syncRaidWorld(message.raidWorld ?? message.progress); return; }
-    if (message.type === "leftRoom") { this._clearRoom(); return; }
+    if (message.type === "leftRoom") { if (this.pendingLeaveOnReconnect) this._completePendingRoomLeave(); else this._clearRoom(); return; }
     if (message.type === "memberMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.position = { ...message.position }; if (this.route === "home") this._updateHallPlayerDom(message.playerId); return; }
-    if (message.type === "expeditionMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.dungeonPosition = { ...message.position }; if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render(); return; }
-    if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); return; }
+    if (message.type === "expeditionMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.dungeonPosition = { ...message.position }; if (message.playerId === this.selfId) this._notifyTutorialGuide("explore_move"); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render(); return; }
+    if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); if (message.type === "expeditionStarted") { const run = message.room.coopRun ?? {}, ownerId = message.room.ownerId ?? message.room.leaderId; this.onExpeditionStarted({ runId: String(run.runId ?? message.room.expedition?.id ?? "").slice(0, 120), ownerId, startFloor: Math.max(1, Math.min(10000, Math.floor(Number(run.startFloor ?? message.room.expedition?.floor) || 1))), startedAt: Math.max(0, Number(run.startedAt ?? message.room.expedition?.startedAt) || 0) }); this._settlePendingExpeditionStart(message.room); } return; }
     if (message.type === "battleStarted" && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
     if (message.type === "expeditionEvent") { if (message.event?.kind === "hostChestOpened") this.onHostWorldUpdate(message.event); if (message.event?.tutorialGuide === "firstPickup") this._notifyTutorialGuide("explore_pickup"); this._announceExpeditionEvent(message.event); return; }
-    if (message.type === "floorBossDefeated") { const reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: message.ownerId ?? null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = !reward.ownerId || reward.ownerId === this.selfId, multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = multiplayer && isWorldOwner && reward.firstClear ? reward : null; if (isWorldOwner) { this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId: reward.ownerId }); this.onFloorBossDefeated({ ...reward, resume: Boolean(reward.firstClear && !multiplayer) }); } this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！`); this._render(); return; }
-    if (message.type === "expeditionPing" && message.ping?.id) { this.coopPings.set(message.ping.id, { ...message.ping }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() }); else this._render(); return; }
+    if (message.type === "floorBossDefeated") { const reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: message.ownerId ?? null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = !reward.ownerId || reward.ownerId === this.selfId, multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this._closeBattleMenus("explore"); this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = multiplayer && isWorldOwner && reward.firstClear ? reward : null; if (isWorldOwner) { this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId: reward.ownerId }); this.onFloorBossDefeated({ ...reward, resume: Boolean(reward.firstClear && !multiplayer) }); } this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！`); this._render(); return; }
+    if (message.type === "expeditionPing" && message.ping?.id) { if (this._isSocialHidden(message.ping.playerId)) return; this.coopPings.set(message.ping.id, { ...message.ping }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() }); else this._render(); return; }
     if (message.type === "battleRound" || message.type === "battleResolved") { const previous = this.roomState?.expedition?.battle; this._captureHpTrails("explore", previous, message.battle); if (this.roomState?.expedition) this.roomState.expedition.battle = message.battle; if (message.type === "battleRound") this._closeBattleMenus("explore"); this._setRoute("explore", { silent: true }); this._queueBattlePresentation("explore", message.battle?.lastEvents); return; }
-    if (message.type === "expeditionEnded") { const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.expeditionReport = multiplayer ? message.summary ?? null : null; this.route = "explore"; this.toast(message.summary?.completed ? `${message.summary.floor}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
-    if (message.type === "battleEnded") { this.coopBossConfirm = null; const bossName = message.coopBoss?.name || message.boss?.name; this.toast(message.result === "victory" ? bossName ? `${bossName}を撃破！` : "共闘バトル勝利！" : message.coopBoss ? "共闘ボスから退却。回復後に再挑戦できます" : "共闘パーティが全滅しました…"); return; }
+    if (message.type === "expeditionEnded") { const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.expeditionReport = multiplayer ? message.summary ?? null : null; if (this.roomState) this.roomState = { ...this.roomState, phase: "lobby", expedition: null, coopRun: null }; this._closeAllBattleMenus(); this.route = "explore"; this.toast(message.summary?.completed ? `${message.summary.floor}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
+    if (message.type === "battleEnded") { this.coopBossConfirm = null; this._closeBattleMenus("explore"); const bossName = message.coopBoss?.name || message.boss?.name; this.toast(message.result === "victory" ? bossName ? `${bossName}を撃破！` : "共闘バトル勝利！" : message.coopBoss ? "共闘ボスから退却。回復後に再挑戦できます" : "共闘パーティが全滅しました…"); return; }
     if (message.type === "raidStarted") {
       this.roomState = { ...(this.roomState ?? {}), phase: "raid", raid: message.raid, raidProgress: message.raid?.progress };
       this.selectedTarget.raid = message.raid?.minions?.find(entry => entry.hp > 0)?.id ?? message.raid?.boss?.id ?? null;
@@ -494,20 +1840,94 @@ export class OnlinePartyController {
     if (message.type === "raidEnded") {
       const raidOwner = (this.roomState?.ownerId ?? this.roomState?.leaderId) === this.selfId;
       if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.raid = null; this.roomState.raidProgress = message.raid?.progress ?? null; }
+      this._closeBattleMenus("raid");
       if (raidOwner) this._syncRaidWorld(message.raid?.progress ?? null);
       this.raidReport = { result: message.result, raid: message.raid, ranking: message.ranking ?? message.raid?.ranking ?? [] }; this.route = "raid"; this.toast(message.result === "victory" ? "今週のレイド討伐成功！" : message.result === "cancelled" ? "レイドを中断し、残HPを保存しました" : "敗北…ボスの残HPを保存しました"); this._render(); return;
     }
-    if (message.type === "teamBattleStarted" || message.type === "teamBattleState" || message.type === "teamBattleRound" || message.type === "teamBattleResolved") { const previous = this.roomState?.teamBattle; this._captureHpTrails("team", previous, message.teamBattle); if (this.roomState) { this.roomState.phase = "team"; this.roomState.teamBattle = message.teamBattle; } if (message.type === "teamBattleRound") this._closeBattleMenus("team"); this._setRoute("team", { silent: true }); this._queueBattlePresentation("team", message.teamBattle?.lastEvents); return; }
-    if (message.type === "teamBattleEnded") { this.toast(message.winner ? `${message.winner === "sun" ? "紅組" : "蒼組"}の勝利！` : "引き分け！"); return; }
+    if (message.type === "teamBattleStarted" || message.type === "teamBattleState" || message.type === "teamBattleRound" || message.type === "teamBattleResolved") { const previous = this.roomState?.teamBattle; this._captureHpTrails("team", previous, message.teamBattle); if (message.type === "teamBattleStarted") this.teamBattleReport = null; if (this.roomState) { this.roomState.phase = "team"; this.roomState.teamBattle = message.teamBattle; } if (message.type === "teamBattleRound") this._closeBattleMenus("team"); this._setRoute("team", { silent: true }); this._queueBattlePresentation("team", message.teamBattle?.lastEvents); return; }
+    if (message.type === "teamBattleEnded") { this.teamBattleReport = { resultId: message.resultId, result: message.result, winner: message.winner, summary: message.summary, teamBattle: message.teamBattle }; if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.teamBattle = null; } this._closeBattleMenus("team"); this.onTeamBattleResult(this.teamBattleReport); this.route = "team"; this.toast(message.winner ? `${message.winner === "sun" ? "紅組" : "蒼組"}の勝利！` : "引き分け！"); this._render(); return; }
     if (message.type === "chatMessage") { this._receiveChat(message.message); return; }
     if (message.type === "social") { this._receiveSocial(message); return; }
-    if (message.type === "onlineReward") { this._receiveReward(message); return; }
-    if (message.type === "error") { this._clearInteractionPending(false); if (this.tradePendingOffer && this.trade?.tradeId) { const restored = releaseOnlineTradeAsset(this.getState?.() ?? {}, this.trade.tradeId); this.onOnlineStateMutation({ kind: "tradeRelease", tradeId: this.trade.tradeId, asset: restored.asset }); this.tradePendingOffer = null; } if (this.merchantPending) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { ...(this.merchantResult ?? {}), status: "error", message: message.message || "支援品を受け取れませんでした。" }; } this.toast(message.message || "オンライン処理に失敗しました"); this._render(); return; }
+    if (message.type === "onlineReward") { const batch = this.recoverySettlementBatch; this._trackRecoverySettlement(this._receiveReward(message, batch), batch); return; }
+    if (message.type === "error") {
+      if (!this.connectionReady) { this._handleHandshakeError(message); return; }
+      if (this.pendingLeaveOnReconnect) {
+        if (["NOT_IN_ROOM", "ROOM_NOT_FOUND"].includes(String(message.code ?? ""))) this._completePendingRoomLeave();
+        else {
+          this.connectionReady = false;
+          this._setStatus("reconnecting", "退出を再確認中…", message.message || "サーバーへ退出を再送します");
+          try { this.ws?.close(1012, "retry pending leave"); } catch {}
+        }
+        return;
+      }
+      const errorCode = String(message.code ?? "");
+      if (errorCode.startsWith("GUILD_") || ["recruitment", "plan"].some(prefix => String(this.guildPending?.kind ?? "").startsWith(prefix))) {
+        this._clearGuildPending(message.message || "ギルド操作に失敗しました");
+        this.toast(message.message || "ギルド操作に失敗しました");
+        this._renderFriendPanel();
+        return;
+      }
+      if (RESONANCE_MOVE_STOP_CODES.has(errorCode)) {
+        const now = Date.now(), duplicate = this.lastResonanceMoveError.code === errorCode && now - this.lastResonanceMoveError.at < 1200;
+        this.lastResonanceMoveError = { code: errorCode, at: now };
+        this._clearMoveInputs();
+        if (!duplicate) this.toast(message.message || (errorCode === "BLOCKED" ? "その方向へは進めません" : "共鳴迷宮で移動できません"));
+        return;
+      }
+      this._settlePendingExpeditionStart(null, { rejected: true });
+      this._clearInteractionPending(false);
+      const hadPendingRoomJoin = Boolean(this.pendingRoomJoinId);
+      this.pendingRoomJoinId = null;
+      this.roomListingPending = false;
+      this.roomMemberRemovalPendingId = null;
+      if (this.roomListingsStatus === "loading" || hadPendingRoomJoin) this.roomListingsStatus = hadPendingRoomJoin ? "ready" : "error";
+      if (this.tradePendingOffer && this.trade?.tradeId) { const restored = releaseOnlineTradeAsset(this.getState?.() ?? {}, this.trade.tradeId); this.onOnlineStateMutation({ kind: "tradeRelease", tradeId: this.trade.tradeId, asset: restored.asset }); this.tradePendingOffer = null; }
+      if (this.merchantPending) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { ...(this.merchantResult ?? {}), status: "error", message: message.message || "支援品を受け取れませんでした。" }; }
+      this.toast(message.message || "オンライン処理に失敗しました");
+      if (this.roomState) this._render(); else this._renderRoomBoard();
+      return;
+    }
   }
 
   _tradeCatalog() {
     const source = buildOnlineTradeCatalog(this.getState?.() ?? {}), kind = this.tradeFilter, query = this.tradeQuery.trim().toLocaleLowerCase("ja");
     return source.filter(asset => (kind === "all" || asset.kind === kind) && (!query || `${asset.name} ${asset.rarity} ${asset.details}`.toLocaleLowerCase("ja").includes(query))).slice(0, 80);
+  }
+
+  _contentStartBlockedByTrade() {
+    if (!this.trade) return false;
+    this.toast("交換を完了または中止してから開始してください");
+    this._setRoute("home", { silent: true });
+    return true;
+  }
+
+  _settlePendingExpeditionStart(room, { rejected = false } = {}) {
+    if (!this.pendingExpeditionStart) return false;
+    if (room?.phase === "expedition") {
+      const secretRoomRun = this.pendingSecretRoomRun;
+      this.pendingExpeditionStart = false;
+      this.pendingSecretRoomRun = null;
+      if ((room.ownerId ?? room.leaderId) === this.selfId) this._commitAuthoritativeSecretRoomRun(secretRoomRun);
+      return true;
+    }
+    if (rejected) { this.pendingExpeditionStart = false; this.pendingSecretRoomRun = null; }
+    return false;
+  }
+
+  _createPendingSecretRoomRun() {
+    let seed = 0;
+    try { const values = new Uint32Array(1); globalThis.crypto?.getRandomValues?.(values); seed = Number(values[0]) & 0x7fffffff; } catch {}
+    if (!seed) seed = Math.max(1, Math.floor(Math.random() * 0x7fffffff));
+    return { id: `online-${Date.now().toString(36)}-${seed.toString(36)}`.slice(0, 120), seed, startedAt: Date.now() };
+  }
+
+  _commitAuthoritativeSecretRoomRun(source) {
+    const id = String(source?.id ?? "").trim().slice(0, 120), seed = Math.max(1, Math.min(0x7fffffff, Math.floor(Number(source?.seed) || 0)));
+    if (!id || !Number(source?.seed)) return false;
+    const current = this.getState?.()?.secretRooms?.run;
+    if (String(current?.id ?? "") === id && Number(current?.seed) === seed) return false;
+    this.onBeginSecretRoomExpedition({ id, seed, startedAt: Math.max(1, Math.floor(Number(source?.startedAt) || Date.now())) });
+    return true;
   }
 
   _applyTradeState(trade) {
@@ -539,22 +1959,36 @@ export class OnlinePartyController {
     this._render();
   }
 
-  async _commitTrade(message) {
+  async _commitTrade(message, { recovery = false } = {}) {
     const tradeId = String(message.tradeId ?? ""); if (!tradeId) return;
     const result = commitOnlineTrade(this.getState?.() ?? {}, tradeId, message.incomingAsset, { partnerId: message.partnerId, partnerName: message.partnerName });
     if (result.ok) {
       await this.onOnlineStateMutation({ kind: "tradeCommit", tradeId, received: result.received, gave: result.gave });
-      this._send("tradeAck", { tradeId, success: true });
-      if (!result.duplicate) this.toast(`${result.received?.name || "交換品"}を受け取りました`);
-    } else { this._send("tradeAck", { tradeId, success: false }); this.toast(result.message || "交換品を保存できませんでした"); }
+      const acknowledged = this._send("tradeAck", { tradeId, success: true });
+      if (recovery) this._setTradeRecoveryStatus(acknowledged ? "complete" : "saved", tradeId);
+      if (!result.duplicate) this.toast(recovery ? `${result.received?.name || "交換品"}を安全に復旧しました` : `${result.received?.name || "交換品"}を受け取りました`);
+    } else {
+      this._send("tradeAck", { tradeId, success: false });
+      if (recovery) this._setTradeRecoveryStatus("error", tradeId);
+      this.toast(result.message || "交換品を保存できませんでした");
+    }
   }
 
   _finishTrade(tradeId, { cancelled = false, completed = false, reason = "" } = {}) {
+    const id = String(tradeId ?? "");
+    if (cancelled && this.terminalTradeRecoveries.has(id)) {
+      this._setTradeRecoveryStatus("pending", id);
+      this.toast("交換の安全な復旧を続けています");
+      return;
+    }
     if (cancelled) {
       const result = releaseOnlineTradeAsset(this.getState?.() ?? {}, tradeId);
       if (result.asset) this.onOnlineStateMutation({ kind: "tradeRelease", tradeId, asset: result.asset });
       this.toast(reason === "declined" ? "交換は辞退されました" : reason === "timeout" ? "交換が時間切れになりました" : "交換を終了しました");
-    } else if (completed) this.toast("交換が完了しました");
+    } else if (completed) {
+      if (this.terminalTradeRecoveries.has(id)) this._setTradeRecoveryStatus("complete", id);
+      this.toast("交換が完了しました");
+    }
     if (!this.trade || this.trade.tradeId === tradeId) this._clearTradeUi();
     this._render();
   }
@@ -562,6 +1996,31 @@ export class OnlinePartyController {
   _clearTradeUi() {
     this.trade = null; this.tradePendingOffer = null; this.tradeFilter = "all"; this.tradeQuery = ""; this.tradeAmount = 1; this.tradeConfirmAvailableAt = 0;
     clearTimeout(this.tradeConfirmTimer); this.tradeConfirmTimer = null;
+  }
+
+  _setTradeRecoveryStatus(status, tradeId) {
+    clearTimeout(this.tradeRecoveryTimer); this.tradeRecoveryTimer = null;
+    this.tradeRecoveryStatus = { status, tradeId: String(tradeId ?? "") };
+    this._renderTradeRecoveryStatus();
+    if (status === "complete") this.tradeRecoveryTimer = setTimeout(() => {
+      this.tradeRecoveryTimer = null; this.tradeRecoveryStatus = null; this._renderTradeRecoveryStatus();
+    }, 4200);
+  }
+
+  _renderTradeRecoveryStatus() {
+    const host = this.root; if (!host) return;
+    host.querySelector("[data-online-trade-recovery-status]")?.remove();
+    const recovery = this.tradeRecoveryStatus; if (!recovery) return;
+    const copy = recovery.status === "pending" ? ["交換を安全に復旧しています", "受取処理が終わるまで画面を閉じないでください"]
+      : recovery.status === "complete" ? ["交換の復旧が完了しました", "交換品は所持品へ安全に保存されました"]
+        : recovery.status === "saved" ? ["交換品を保存しました", "再接続後にサーバーの完了確認を行います"]
+          : ["交換の復旧確認中", "再接続すると安全に再試行します"];
+    const node = document.createElement("aside");
+    node.className = `online-trade-recovery-status ${recovery.status}`;
+    node.dataset.onlineTradeRecoveryStatus = "1";
+    node.setAttribute("role", "status"); node.setAttribute("aria-live", "assertive"); node.setAttribute("aria-atomic", "true");
+    const strong = document.createElement("strong"), span = document.createElement("span");
+    strong.textContent = copy[0]; span.textContent = copy[1]; node.append(strong, span); host.appendChild(node);
   }
 
   async _exchangeRaidReward(kind, cost) {
@@ -581,26 +2040,29 @@ export class OnlinePartyController {
   _applyHostWorldDelta(message) {
     const ownerId = message.ownerId ?? this.roomState?.ownerId; if (ownerId && ownerId !== this.selfId) return;
     const revision = Math.max(0, Math.floor(Number(message.revision) || 0)), eventKey = `${ownerId || this.selfId}:${revision || JSON.stringify(message.delta ?? {})}`;
-    if ((revision && revision <= this.hostWorldRevision) || this.processedHostWorldDeltas.has(eventKey)) return;
-    this.processedHostWorldDeltas.add(eventKey); if (this.processedHostWorldDeltas.size > 256) this.processedHostWorldDeltas.delete(this.processedHostWorldDeltas.values().next().value);
-    this.hostWorldRevision = Math.max(this.hostWorldRevision, revision);
-    const hostWorld = this._hostWorldSnapshot(), delta = message.delta ?? {}; hostWorld.revision = this.hostWorldRevision;
+    const mutationId = String(message.mutationId ?? "").slice(0, 160), acknowledge = () => { if (mutationId && this.capabilities.has("hostWorldReceiptsV1")) this._send("hostWorldDeltaAck", { mutationId }); };
+    if ((revision && revision <= this.hostWorldRevision) || this.processedHostWorldDeltas.has(eventKey)) { acknowledge(); return; }
+    const hostWorld = message.hostWorld && typeof message.hostWorld === "object" ? JSON.parse(JSON.stringify(message.hostWorld)) : this._hostWorldSnapshot(), delta = message.delta ?? {}; hostWorld.revision = Math.max(Number(hostWorld.revision) || 0, revision);
     if (delta.openedChest) { const floor = String(Math.max(1, Number(delta.openedChest.floor) || 1)), chestId = String(delta.openedChest.chestId ?? ""); hostWorld.openedChestIds[floor] ??= []; if (chestId && !hostWorld.openedChestIds[floor].includes(chestId)) hostWorld.openedChestIds[floor].push(chestId); }
     if (delta.floorSeed) { const floor = String(Math.max(1, Number(delta.floorSeed.floor) || 1)); hostWorld.floorSeeds ??= {}; hostWorld.floorSeeds[floor] = delta.floorSeed.seed; }
     if (delta.defeatedBoss) { const floor = Math.max(10, Number(delta.defeatedBoss.floor) || 10); hostWorld.defeatedBossFloors ??= []; if (!hostWorld.defeatedBossFloors.includes(floor)) hostWorld.defeatedBossFloors.push(floor); }
-    this.onHostWorldUpdate({ kind: "hostWorldSnapshot", hostWorld, ownerId: ownerId ?? this.selfId, revision: this.hostWorldRevision });
+    const result = this.onHostWorldUpdate({ kind: "hostWorldSnapshot", hostWorld, ownerId: ownerId ?? this.selfId, revision }); if (!result?.ok) { this.recoverySettlementFailed = true; return result; }
+    this.hostWorldRevision = Math.max(this.hostWorldRevision, revision); this.processedHostWorldDeltas.add(eventKey); if (this.processedHostWorldDeltas.size > 256) this.processedHostWorldDeltas.delete(this.processedHostWorldDeltas.values().next().value); acknowledge();
   }
 
   _applyExpeditionVitals(message) {
     if (message.playerId && message.playerId !== this.selfId) return;
     const fallbackMutationId = `${this.roomId || "room"}:${this.roomState?.expedition?.id || "run"}:${message.monsterId || this.selectedMonsterId}:${Math.floor(Number(message.hp) || 0)}:${Math.floor(Number(message.mp) || 0)}:${message.reason || "sync"}`;
-    this.onOnlineVitalsUpdate({ mutationId: String(message.mutationId || fallbackMutationId).slice(0, 160), monsterId: message.monsterId || this.selectedMonsterId, hp: Math.max(0, Number(message.hp) || 0), mp: Math.max(0, Number(message.mp) || 0) });
+    const mutationId = String(message.mutationId || fallbackMutationId).slice(0, 160), result = this.onOnlineVitalsUpdate({ mutationId, monsterId: message.monsterId || this.selectedMonsterId, hp: Math.max(0, Number(message.hp) || 0), mp: Math.max(0, Number(message.mp) || 0) });
+    if (result?.ok && this.capabilities.has("expeditionResultsV1")) this._send("expeditionVitalsAck", { mutationId });
+    else if (!result?.ok) this.recoverySettlementFailed = true;
+    return result;
   }
 
   _applyBattleDefeated(message) {
-    const eventId = String(message.eventId ?? message.id ?? ""); if (!eventId || this.processedBattleEvents.has(eventId)) return;
-    this.processedBattleEvents.add(eventId); if (this.processedBattleEvents.size > 256) this.processedBattleEvents.delete(this.processedBattleEvents.values().next().value);
-    this.onBattleDefeated({ eventId, monsterId: message.monsterId || this.selectedMonsterId, floor: Math.max(1, Number(message.floor) || 1), boss: Boolean(message.boss), defeated: Array.isArray(message.defeated) ? message.defeated : [] });
+    const eventId = String(message.eventId ?? message.id ?? ""); if (!eventId) return;const acknowledge=()=>{if(this.capabilities.has("battleRecordsV1"))this._send("battleDefeatedAck",{eventId})};if(this.processedBattleEvents.has(eventId)){acknowledge();return}
+    const result=this.onBattleDefeated({ eventId, monsterId: message.monsterId || this.selectedMonsterId, floor: Math.max(1, Number(message.floor) || 1), boss: Boolean(message.boss), defeated: Array.isArray(message.defeated) ? message.defeated : [] });if(result?.ok===false){this.recoverySettlementFailed=true;return}
+    this.processedBattleEvents.add(eventId); if (this.processedBattleEvents.size > 256) this.processedBattleEvents.delete(this.processedBattleEvents.values().next().value);acknowledge();
   }
 
   _exploreUiSignature(room) {
@@ -628,6 +2090,14 @@ export class OnlinePartyController {
 
   _applyRoomState(room) {
     if (!room?.roomId) return;
+    const hiddenSocialIds = this._hiddenSocialIds();
+    if (Array.isArray(room.chatHistory) && hiddenSocialIds.size) room = { ...room, chatHistory: room.chatHistory.filter(entry => !hiddenSocialIds.has(normalizedPlayerId(entry?.playerId))) };
+    const recruitmentJoinCompleted = this.guildPending?.kind === "recruitmentJoin"
+      && Boolean(this.guildPending.targetId)
+      && room.leaderId === this.guildPending.targetId;
+    this.pendingRoomJoinId = null;
+    this.roomListingPending = false;
+    if (!room.members?.some(member => member.playerId === this.roomMemberRemovalPendingId)) this.roomMemberRemovalPendingId = null;
     const previousRoom = this.roomState;
     const previousCount = this.roomState?.chatHistory?.length ?? 0;
     const hadInteractionPending = Boolean(this.interactionPending);
@@ -645,14 +2115,21 @@ export class OnlinePartyController {
     if (rareKind !== "otherworldMerchant") { this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; }
     this._clearInteractionPending(false);
     this.roomState = room; this.roomId = room.roomId;
+    if (recruitmentJoinCompleted) {
+      this._clearGuildPending();
+      this.friendPanelOpen = false;
+      this.toast("ギルド募集の部屋へ参加しました");
+    }
+    if (room.phase === "expedition" && (room.ownerId ?? room.leaderId) === this.selfId) this._commitAuthoritativeSecretRoomRun(room.hostWorld?.secretRooms?.run);
     // A null room snapshot means the server has not imported this owner's saved
     // raid yet.  Only an explicit raid victory is allowed to clear local progress.
     if ((room.ownerId ?? room.leaderId) === this.selfId && room.raidProgress) this._syncRaidWorld(room.raidProgress);
-    if ((room.ownerId ?? room.leaderId) === this.selfId && room.hostWorld) { const revision = Math.max(0, Number(room.hostWorld.revision) || 0), signature = JSON.stringify(room.hostWorld); if (revision > this.hostWorldRevision || !revision && signature !== this.lastHostWorldSnapshotSignature) { this.hostWorldRevision = Math.max(this.hostWorldRevision, revision); this.lastHostWorldSnapshotSignature = signature; this.onHostWorldUpdate({ kind: "hostWorldSnapshot", hostWorld: room.hostWorld, ownerId: this.selfId, revision }); } }
+    if ((room.ownerId ?? room.leaderId) === this.selfId && room.hostWorld) { const revision = Math.max(0, Number(room.hostWorld.revision) || 0), signature = JSON.stringify(room.hostWorld); if (revision > this.hostWorldRevision || !revision && signature !== this.lastHostWorldSnapshotSignature) { const result = this.onHostWorldUpdate({ kind: "hostWorldSnapshot", hostWorld: room.hostWorld, ownerId: this.selfId, revision }); if (result?.ok) { this.hostWorldRevision = Math.max(this.hostWorldRevision, revision); this.lastHostWorldSnapshotSignature = signature; } } }
     if (room?.expedition?.interactions?.[this.selfId]?.action !== "browseRareMerchant" && !this.merchantResult) this.rareMerchantOpen = false;
     if (room.phase === "expedition") this.route = "explore";
     else if (room.phase === "raid") this.route = "raid";
     else if (room.phase === "team") this.route = "team";
+    else if (room.phase === "resonance" || room.resonance && room.resonance.phase !== "result") this.route = "resonance";
     if (this.route !== "chat" && (room.chatHistory?.length ?? 0) > previousCount && previousCount > 0) this.unread = Math.min(99, this.unread + (room.chatHistory.length - previousCount));
     this._showConnectionStep("room");
     if (keepExploreCanvas) {
@@ -664,6 +2141,172 @@ export class OnlinePartyController {
 
   _self() { return this.roomState?.members?.find(member => member.playerId === this.selfId); }
 
+  _safetyProfile(value) {
+    const playerId = normalizedPlayerId(value);
+    if (!playerId || playerId === this.selfId) return null;
+    const sources = [
+      ...(this.friendState?.friends ?? []), ...(this.friendState?.incoming ?? []), ...(this.friendState?.outgoing ?? []),
+      ...(this.friendState?.blocked ?? []), ...(this.friendState?.muted ?? []), ...(this.guildState?.guild?.members ?? []),
+    ];
+    const source = sources.find(entry => entry?.playerId === playerId);
+    const member = this.roomState?.members?.find(entry => entry?.playerId === playerId);
+    return normalizeMutedPlayer(source ?? (member ? { playerId, ...member.profile } : null) ?? { playerId });
+  }
+
+  _mutedPlayerSnapshot() {
+    const unique = new Map();
+    for (const raw of (Array.isArray(this.friendState?.muted) ? this.friendState.muted : [])) {
+      const entry = normalizeMutedPlayer(raw);
+      if (entry && entry.playerId !== this.selfId) unique.set(entry.playerId, entry);
+    }
+    return [...unique.values()].slice(0, MUTED_PLAYER_LIMIT);
+  }
+
+  _blockedPlayerIds() {
+    return new Set((Array.isArray(this.friendState?.blocked) ? this.friendState.blocked : []).map(entry => normalizedPlayerId(entry?.playerId)).filter(Boolean));
+  }
+
+  _hiddenSocialIds() {
+    return new Set([...this._mutedPlayerSnapshot().map(entry => entry.playerId), ...this._blockedPlayerIds()]);
+  }
+
+  _guildStateForDisplay() {
+    const guild = this.guildState?.guild;
+    if (!guild) return this.guildState;
+    const hidden = this._hiddenSocialIds(), blocked = this._blockedPlayerIds();
+    return { ...this.guildState, guild: {
+      ...guild,
+      chat: (guild.chat ?? []).filter(entry => !hidden.has(normalizedPlayerId(entry?.playerId))),
+      recruitments: (guild.recruitments ?? []).filter(entry => !blocked.has(normalizedPlayerId(entry?.host?.playerId))),
+      plans: (guild.plans ?? []).map(entry => blocked.has(normalizedPlayerId(entry?.gathering?.hostPlayerId)) ? { ...entry, gathering: null } : entry),
+    } };
+  }
+
+  _isSocialHidden(playerId) {
+    const id = normalizedPlayerId(playerId);
+    return Boolean(id && id !== this.selfId && this._hiddenSocialIds().has(id));
+  }
+
+  _purgePlayerSocial(value) {
+    const playerId = normalizedPlayerId(value);
+    if (!playerId || playerId === this.selfId) return;
+    this.chatBubbles.delete(playerId);
+    this.socialBubbles.delete(playerId);
+    for (const [pingId, ping] of this.coopPings) if (normalizedPlayerId(ping?.playerId) === playerId) this.coopPings.delete(pingId);
+    if (this.roomState?.chatHistory) {
+      const before = this.roomState.chatHistory.length;
+      this.roomState.chatHistory = this.roomState.chatHistory.filter(entry => normalizedPlayerId(entry?.playerId) !== playerId);
+      this.unread = Math.max(0, this.unread - Math.max(0, before - this.roomState.chatHistory.length));
+    }
+    if (this.guildState?.guild?.chat) this.guildState = { ...this.guildState, guild: { ...this.guildState.guild, chat: this.guildState.guild.chat.filter(entry => normalizedPlayerId(entry?.playerId) !== playerId) } };
+  }
+
+  _purgeHiddenSocial() {
+    for (const playerId of this._hiddenSocialIds()) this._purgePlayerSocial(playerId);
+  }
+
+  _refreshSafetyViews() {
+    if (this.roomState && !this.exploreCanvasMounted) { this._render(); return; }
+    if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot(), socialBubbles: this._socialBubbleSnapshot() });
+    this._renderFriendPanel();
+  }
+
+  _setPlayerMuted(value, muted) {
+    const profile = this._safetyProfile(value);
+    if (!profile) { this.toast("相手を確認できませんでした"); return false; }
+    if (!this.capabilities.has("onlineSafetyV1")) { this.toast("このサーバーは安全設定に未対応です"); return false; }
+    if (!this._canMutateOnline()) { this._announceConnectionPause(); return false; }
+    const sent = this._send(muted ? "friendMute" : "friendUnmute", { targetId: profile.playerId });
+    if (sent && muted) { this._purgePlayerSocial(profile.playerId); this._refreshSafetyViews(); }
+    return sent;
+  }
+
+  _normalizeFriendState(source) {
+    const safe = list => (Array.isArray(list) ? list : []).slice(0, 200).map(entry => ({ ...entry, playerId: String(entry?.playerId ?? "").slice(0, 20), displayName: String(entry?.displayName ?? "冒険者").slice(0, 16), monsterName: String(entry?.monsterName ?? "仲間").slice(0, 32), fallbackEmoji: String(entry?.fallbackEmoji ?? "魔").slice(0, 8), online: Boolean(entry?.online), roomJoinable: Boolean(entry?.roomJoinable), roomId: entry?.roomId ? safeRoomId(entry.roomId) : null }));
+    const privateSafe = list => (Array.isArray(list) ? list : []).slice(0, 200).map(normalizeMutedPlayer).filter(Boolean);
+    return { friends: safe(source?.friends), incoming: safe(source?.incoming), outgoing: safe(source?.outgoing), blocked: privateSafe(source?.blocked), muted: privateSafe(source?.muted), invites: (Array.isArray(source?.invites) ? source.invites : []).slice(0, 20).map(entry => ({ inviteId: String(entry?.inviteId ?? "").slice(0, 96), roomId: safeRoomId(entry?.roomId), expiresAt: Math.max(0, Number(entry?.expiresAt) || 0), from: safe([entry?.from])[0] })) };
+  }
+
+  _renderFriendPanel() {
+    this._clearGuildPlanTransitionTimer();
+    const layer = this._query("[data-online-friend-layer]"); if (!layer) return;
+    const active = typeof document !== "undefined" && layer.contains(document.activeElement) ? document.activeElement : null;
+    const focusKey = cleanSocialText(active?.dataset?.onlineSocialFocusKey, 160);
+    const focusSelector = active ? SOCIAL_FOCUS_SELECTORS.find(selector => active.matches?.(selector)) ?? "" : "";
+    const selection = (focusKey || focusSelector) && Number.isFinite(active?.selectionStart) ? { start: active.selectionStart, end: active.selectionEnd } : null;
+    const content = layer.querySelector(".online-social-content"), chat = layer.querySelector("[data-online-guild-chat-log]");
+    const renderedTab = content?.dataset?.onlineSocialContentTab === "guild" ? "guild" : content ? "friends" : null;
+    if (renderedTab) this.socialScrollByTab[renderedTab] = content.scrollTop;
+    if (chat) this.guildChatScroll = { top: chat.scrollTop, atBottom: chat.scrollHeight - chat.clientHeight - chat.scrollTop <= 12 };
+    const safetyCapability = this.capabilities.has("onlineSafetyV1"), mutedPlayers = this._mutedPlayerSnapshot(), guildState = this._guildStateForDisplay();
+    layer.innerHTML = renderOnlineFriendPanel(this.friendState, {
+      open: this.friendPanelOpen, selfId: this.selfId, draft: this.friendIdDraft, tab: this.socialTab, guildState,
+      safetyCapability, mutedPlayers,
+      guildOptions: {
+        connected: this._canMutateOnline(), capability: this.capabilities.has("guildsV1"), disabled: Boolean(this.pendingLeaveOnReconnect),
+        now: this._guildNow(),
+        liveGatheringJoinable: this._canMutateOnline() && !this.trade && (!this.roomState || this.roomState.phase === "lobby"),
+        recruitmentCapability: this.capabilities.has("guildPartyRecruitmentV1"), roomState: this.roomState,
+        planCapability: this.capabilities.has("guildPlansV1"), plansExpanded: this.guildPlansExpanded, planComposerOpen: this.guildPlanComposerOpen,
+        planGatheringCapability: this.capabilities.has("guildPlanGatheringV1"),
+        activityCapability: this.capabilities.has("guildActivityHistoryV1"), activitiesExpanded: this.guildActivitiesExpanded, safetyCapability,
+        pending: this.guildPending, status: this.guildStatus, guildIdDraft: this.guildLookupDraft,
+        createDraft: this.guildCreateDraft, chatDraft: this.guildChatDraft, planDraft: this.guildPlanDraft, recruitmentDraft: this.guildRecruitmentDraft, friends: this.friendState.friends,
+      },
+    });
+    const page = this._query(".online-v3-page"); if (page) page.inert = this.friendPanelOpen;
+    const nextContent = layer.querySelector(".online-social-content"), nextChat = layer.querySelector("[data-online-guild-chat-log]");
+    if (nextContent) nextContent.scrollTop = this.socialScrollByTab[this.socialTab] ?? 0;
+    if (nextChat) nextChat.scrollTop = this.guildChatScroll.atBottom ? nextChat.scrollHeight : this.guildChatScroll.top;
+    if (focusKey || focusSelector) requestAnimationFrame(() => {
+      if (!this.mounted) return;
+      if (!this.friendPanelOpen) {
+        let closedTarget = focusSelector ? layer.querySelector(focusSelector) : null;
+        closedTarget ??= layer.querySelector("[data-online-friends-toggle]");
+        if (!closedTarget || closedTarget.disabled) return;
+        try { closedTarget.focus({ preventScroll: true }); } catch { closedTarget.focus(); }
+        return;
+      }
+      let target = focusKey ? [...layer.querySelectorAll("[data-online-social-focus-key]")].find(entry => entry.dataset.onlineSocialFocusKey === focusKey) : null;
+      target ??= focusSelector ? layer.querySelector(focusSelector) : null;
+      if (!target || target.disabled) target = layer.querySelector(`[data-online-social-tab="${this.socialTab}"]`);
+      if (!target) return;
+      try { target.focus({ preventScroll: true }); } catch { target.focus(); }
+      if (selection && typeof target.setSelectionRange === "function") target.setSelectionRange(Math.min(selection.start, target.value.length), Math.min(selection.end, target.value.length));
+    });
+    this._scheduleGuildPlanTransitionRender();
+  }
+
+  _clearGuildPlanTransitionTimer() {
+    clearTimeout(this.guildPlanTransitionTimer);
+    this.guildPlanTransitionTimer = null;
+  }
+
+  _scheduleGuildPlanTransitionRender() {
+    this._clearGuildPlanTransitionTimer();
+    if (!this.mounted || !this.connectionReady) return;
+    const background = !this.friendPanelOpen || this.socialTab !== "guild";
+    if (background && !this.capabilities.has("guildPlansV1")) return;
+    const now = this._guildNow(), boundaries = [];
+    for (const plan of (Array.isArray(this.guildState?.guild?.plans) ? this.guildState.guild.plans : [])) {
+      for (const value of [plan?.gatherOpensAt, plan?.gatherClosesAt, plan?.gathering?.expiresAt]) {
+        if (Number.isSafeInteger(value) && value > now) boundaries.push(value);
+      }
+    }
+    if (!boundaries.length) return;
+    const boundary = Math.min(...boundaries);
+    const delay = Math.min(GUILD_PLAN_TRANSITION_MAX_DELAY_MS, Math.max(GUILD_PLAN_TRANSITION_MIN_DELAY_MS, boundary - now + GUILD_PLAN_TRANSITION_SETTLE_MS));
+    const timer = setTimeout(() => {
+      if (this.guildPlanTransitionTimer !== timer) return;
+      this.guildPlanTransitionTimer = null;
+      if (!this.mounted || !this.connectionReady) return;
+      if ((!this.friendPanelOpen || this.socialTab !== "guild") && !this.capabilities.has("guildPlansV1")) return;
+      if (this._guildNow() < boundary) { this._scheduleGuildPlanTransitionRender(); return; }
+      this._renderFriendPanel();
+    }, delay);
+    this.guildPlanTransitionTimer = timer;
+  }
+
   _showConnectionStep(step) {
     const changed = this.connectionStep !== step;
     this.connectionStep = step;
@@ -671,58 +2314,80 @@ export class OnlinePartyController {
     if (entry) entry.hidden = step !== "entry";
     if (gate) gate.hidden = step !== "gate";
     if (room) room.hidden = step !== "room";
+    if (step === "gate") this._renderRoomBoard();
+    this._renderFriendPanel();
     if (changed) requestAnimationFrame(() => { const screen = this._query(".online-v3-screen"); if (screen) screen.scrollTop = 0; });
   }
 
   _clearRoom() {
-    this.roomState = null; this.roomId = null; this.path = []; this.heldDirections.clear(); this.unread = 0; this.floorBossConfirm = null; this.coopBossConfirm = null; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; this.processedCoopTechniqueEvents.clear(); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false); this._clearTradeUi();
+    const showReturnResult = Boolean(this.pendingExpeditionReturnResult); this.roomState = null; this.roomId = null; this.pendingExpeditionStart = false; this.pendingSecretRoomRun = null; this._clearMoveInputs(); this._closeAllBattleMenus(); this.unread = 0; this.floorBossConfirm = null; this.coopBossConfirm = null; this.pendingFloorBossReward = null; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; this.expeditionReport = null; this.raidReport = null; this.teamBattleReport = null; this.exploreChatOpen = false; this.pingMenuOpen = false; this.pendingRoomJoinId = null; this.roomListingPending = false; this.roomMemberRemovalPendingId = null; this.processedCoopTechniqueEvents.clear(); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false); this._clearTradeUi();
     this.root?.querySelector(".online-v3-screen")?.classList.remove("online-shared-gameplay-active");
     this._unmountExploreCanvas();
     this._query("[data-online-room]")?.classList.remove("online-shared-gameplay");
     this._showConnectionStep(this.ws?.readyState === WebSocket.OPEN ? "gate" : "entry");
+    if (this.ws?.readyState === WebSocket.OPEN) this._requestRoomListings({ force: true });
+    if (showReturnResult) queueMicrotask(() => this._showPendingExpeditionReturnResult());
   }
 
   _setStatus(kind, title, detail) {
-    const node = this._query("[data-online-status]"); if (!node) return;
-    node.className = `online-v3-status ${kind}`;
-    const b = node.querySelector("b"), span = node.querySelector("span"); if (b) b.textContent = title; if (span) span.textContent = detail;
+    this.connectionStatus = { kind, title, detail };
+    const node = this._query("[data-online-status]");
+    if (node) {
+      node.className = `online-v3-status ${kind}`;
+      const b = node.querySelector("b"), span = node.querySelector("span"); if (b) b.textContent = title; if (span) span.textContent = detail;
+    }
+    this._syncConnectionUi();
   }
 
   _setRoute(route, { silent = false } = {}) {
     if (!ROUTES.has(route)) return;
+    if (this.trade && route !== "home") { this.toast("交換を完了または中止してから移動してください"); return; }
     const changed = this.route !== route;
     this.route = route; storageSet(ONLINE_STORAGE_KEYS.route, route);
     if (route === "chat") this.unread = 0;
     if (route !== "home") this.hallDestination = null;
-    if (!silent) { this.path = []; this.heldDirections.clear(); }
+    if (!silent || changed) this._clearMoveInputs();
     this._render();
     if (changed) requestAnimationFrame(() => { const stage = this._query("[data-online-stage]"); if (stage) stage.scrollTop = 0; });
   }
 
   _render() {
     if (!this.roomState || !this.roomId) return;
+    this._clearInactiveMoveInputs();
     const roomNode = this._query("[data-online-room-id]"), count = this._query("[data-online-member-count]");
     if (roomNode) roomNode.textContent = this.roomId; if (count) count.textContent = `${this.roomState.members?.length ?? 0} / 4`;
-    this.root?.querySelectorAll("[data-online-route]").forEach(button => button.classList.toggle("active", button.dataset.onlineRoute === this.route));
+    this.root?.querySelectorAll("[data-online-route]").forEach(button => { button.classList.toggle("active", button.dataset.onlineRoute === this.route); button.disabled = Boolean(this.trade && button.dataset.onlineRoute !== "home"); });
+    this.root?.querySelectorAll(".online-v3-nav [data-online-route]").forEach(button => {
+      if (button.dataset.onlineRoute === this.route) button.setAttribute("aria-current", "page");
+      else button.removeAttribute("aria-current");
+    });
     const unread = this._query("[data-online-unread]"); if (unread) { unread.hidden = this.unread <= 0; unread.textContent = this.unread > 9 ? "9+" : String(this.unread); }
     const stage = this._query("[data-online-stage]"); if (!stage) return;
-    const gameplay = this.route === "explore" && this.roomState.phase === "expedition" || this.route === "raid" && this.roomState.phase === "raid" || this.route === "team" && this.roomState.phase === "team";
+    const battleGameplay = this.route === "explore" && this.roomState.phase === "expedition" || this.route === "raid" && this.roomState.phase === "raid" || this.route === "team" && this.roomState.phase === "team";
+    const resonanceGameplay = this.route === "resonance" && this.roomState.phase === "resonance";
+    const gameplay = battleGameplay || resonanceGameplay;
     this._query("[data-online-room]")?.classList.toggle("online-shared-gameplay", gameplay);
     this.root?.querySelector(".online-v3-screen")?.classList.toggle("online-shared-gameplay-active", gameplay);
     const canvasExplore = this.route === "explore" && this.roomState.phase === "expedition" && !this.roomState.expedition?.battle;
     if (this.exploreCanvasMounted) this._unmountExploreCanvas();
-    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], raidReport: this.raidReport, expeditionReport: this.expeditionReport, floorBossConfirm: this.floorBossConfirm, coopBossConfirm: this.coopBossConfirm, exploreChatOpen: this.exploreChatOpen, merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot(), trade: this.trade, tradeCatalog: this.trade ? this._tradeCatalog() : [], tradeFilter: this.tradeFilter, tradeQuery: this.tradeQuery, tradeAmount: this.tradeAmount, tradeConfirmSeconds: Math.max(0, Math.ceil((this.tradeConfirmAvailableAt - Date.now()) / 1000)), raidExchangePending: this.raidExchangePending };
+    const guildRecruitmentLock = currentGuildRoomRecruitmentLock(this.guildState, this.roomState, this._guildNow());
+    const mutedPlayerIds = this._mutedPlayerSnapshot().map(entry => entry.playerId), blockedPlayerIds = [...this._blockedPlayerIds()];
+    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], raidReport: this.raidReport, teamBattleReport: this.teamBattleReport, expeditionReport: this.expeditionReport, expeditionReturnReady: Boolean(this.pendingExpeditionReturnResult), expeditionStartPending: this.pendingExpeditionStart, floorBossConfirm: this.floorBossConfirm, coopBossConfirm: this.coopBossConfirm, exploreChatOpen: this.exploreChatOpen, merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot(), trade: this.trade, tradeCatalog: this.trade ? this._tradeCatalog() : [], tradeFilter: this.tradeFilter, tradeQuery: this.tradeQuery, tradeAmount: this.tradeAmount, tradeConfirmSeconds: Math.max(0, Math.ceil((this.tradeConfirmAvailableAt - Date.now()) / 1000)), raidExchangePending: this.raidExchangePending, roomListingPending: this.roomListingPending, roomMemberRemovalPendingId: this.roomMemberRemovalPendingId, guildRecruitmentActive: guildRecruitmentLock.active, guildRecruitmentLock, mutedPlayerIds, blockedPlayerIds, safetyCapability: this.capabilities.has("onlineSafetyV1") };
     stage.innerHTML = this.route === "explore" ? renderOnlineExplore(this.roomState, this.selfId, state)
       : this.route === "raid" ? renderOnlineRaid(this.roomState, this.selfId, state)
       : this.route === "team" ? renderOnlineTeam(this.roomState, this.selfId, state)
-      : this.route === "chat" ? renderOnlineChat(this.roomState, this.selfId, this.chatDraft)
+      : this.route === "resonance" ? renderOnlineResonance(this.roomState, this.selfId, state)
+      : this.route === "chat" ? renderOnlineChat(this.roomState, this.selfId, state)
       : renderOnlineHome(this.roomState, this.selfId, state);
+    this._syncConnectionUi();
+    this._renderTradeRecoveryStatus();
     this._renderRewardReceipt();
     if (this.route === "chat") requestAnimationFrame(() => { const log = this._query("[data-online-chat-log]"); if (log) log.scrollTop = log.scrollHeight; });
     if (this.route === "home") { this.hallNearbyRoute = this._hallNearby(this._self()?.position); requestAnimationFrame(() => this._prepareExploreEmoteAnchor()); }
     this.onScene(canvasExplore ? "explore" : gameplay ? "battle" : "home");
     if (canvasExplore) requestAnimationFrame(() => { if (!this.mounted || this.route !== "explore" || this.roomState?.expedition?.battle) return; this.exploreCanvasMounted = true; this.onExploreCanvasMount(this.roomState, this.selfId, target => this._setDestination(target), this._chatBubbleSnapshot(), this._pingSnapshot(), this._socialBubbleSnapshot()); this._bindExploreChatDrag(); });
-    if (gameplay && !canvasExplore) requestAnimationFrame(() => this._decorateBattleState());
+    if (battleGameplay && !canvasExplore) requestAnimationFrame(() => this._decorateBattleState());
+    this._renderFriendPanel();
   }
 
   _selectBattleTarget(id, side) {
@@ -753,7 +2418,9 @@ export class OnlinePartyController {
     if (sent) { battle.actions ??= {}; battle.actions[this.selfId] = { kind, skillId, pending: true }; this._closeBattleMenus(mode); this._render(); }
   }
 
-  _closeBattleMenus(mode) { this.skillMenu[mode] = false; this.itemMenu[mode] = false; this.itemTargetMenu[mode] = false; }
+  _closeBattleMenus(mode) { if (this.skillMenu) this.skillMenu[mode] = false; if (this.itemMenu) this.itemMenu[mode] = false; if (this.itemTargetMenu) this.itemTargetMenu[mode] = false; }
+
+  _closeAllBattleMenus() { for (const mode of ["explore", "raid", "team"]) this._closeBattleMenus(mode); }
 
   _unmountExploreCanvas() { if (!this.exploreCanvasMounted) return; this.exploreCanvasMounted = false; this.onExploreCanvasUnmount(); }
 
@@ -836,7 +2503,7 @@ export class OnlinePartyController {
   }
 
   _receiveChat(message) {
-    if (!message?.id || !this.roomState) return;
+    if (!message?.id || !this.roomState || this._isSocialHidden(message.playerId)) return;
     this.roomState.chatHistory ??= [];
     if (!this.roomState.chatHistory.some(entry => entry.id === message.id)) this.roomState.chatHistory.push(message);
     this.roomState.chatHistory = this.roomState.chatHistory.slice(-50);
@@ -876,13 +2543,69 @@ export class OnlinePartyController {
     const receipt = this._query(".online-reward-receipt"); if (!receipt) return; receipt.classList.add("leaving"); setTimeout(() => receipt.remove(), 380);
   }
 
-  async _receiveReward(message) {
+  _trackRecoverySettlement(promise, batch) {
+    const tasks = this.recoverySettlementTasks, task = Promise.resolve(promise).catch(() => { if (batch === this.recoverySettlementBatch) this.recoverySettlementFailed = true; });
+    tasks.add(task); task.finally(() => tasks.delete(task)); return task;
+  }
+
+  async _receiveReward(message, batch = this.recoverySettlementBatch) {
     const id = String(message.rewardId ?? ""); if (!id || this.rewardInFlight.has(id)) return;
     this.rewardInFlight.add(id);
     try {
       const result = await this.onReward({ rewardId: id, reward: message.reward ?? {}, source: message.source ?? {} });
       if (result?.ok) { this._send("rewardAck", { rewardId: id }); if (!result.duplicate && result.isWeapon === true) this._showRewardReceipt(message, result); }
+      else if (batch === this.recoverySettlementBatch) this.recoverySettlementFailed = true;
+    } catch {
+      if (batch === this.recoverySettlementBatch) this.recoverySettlementFailed = true;
     } finally { this.rewardInFlight.delete(id); }
+  }
+
+  async _receiveExpeditionResult(message) {
+    if (!this.capabilities.has("expeditionResultsV1")) return;
+    const runId = String(message.runId ?? message.summary?.runId ?? "").slice(0, 120), resultId = String(message.resultId ?? "").slice(0, 160), ownerId = String(message.ownerId ?? "").slice(0, 24), recipientId = String(message.recipientId ?? this.selfId).slice(0, 24);
+    if (!resultId || !ownerId || recipientId !== this.selfId || this.expeditionResultInFlight.has(resultId)) return;
+    const startFloor = Math.max(1, Math.min(10000, Math.floor(Number(message.startFloor) || 1))), endFloor = Math.max(startFloor, Math.min(10000, Math.floor(Number(message.endFloor) || startFloor))), floorsCleared = Math.max(0, Math.min(10000, Math.floor(Number(message.floorsCleared) || 0)));
+    const reason = String(message.reason ?? "return").replace(/[\u0000-\u001f\u007f]/g, "").slice(0, 40) || "return", finalVitals = message.finalVitals && typeof message.finalVitals === "object" ? { mutationId: String(message.finalVitals.mutationId ?? "").slice(0, 160), monsterId: String(message.finalVitals.monsterId ?? "").slice(0, 120), playerId: recipientId, hp: Math.max(0, Number(message.finalVitals.hp) || 0), mp: Math.max(0, Number(message.finalVitals.mp) || 0), reason: "expeditionEnd" } : null;
+    const summarySource = message.summary && typeof message.summary === "object" ? message.summary : {};
+    const summary = { ...summarySource, resultId, ownerId, startFloor, endFloor, floor: Math.max(startFloor, Math.min(10000, Math.floor(Number(summarySource.floor ?? endFloor) || endFloor))), floorsCleared, completed: Boolean(message.completed), reason, multiplayer: Boolean(message.multiplayer) };
+    this.expeditionResultInFlight.add(resultId);
+    try {
+      const settled = await this.onExpeditionResult({ runId, resultId, ownerId, recipientId, startFloor, endFloor, floorsCleared, completed: Boolean(message.completed), reason, multiplayer: Boolean(message.multiplayer), finishedAt: Math.max(0, Number(message.finishedAt) || 0), finalVitals, summary });
+      if (!settled?.ok) return;
+      const presentedResultIds = this.presentedExpeditionResultIds ??= new Set();
+      if (!presentedResultIds.has(resultId)) {
+        const context = { resultId, summary, reason, defeat: settled.defeat ?? null, guest: Boolean(settled.guest), duplicate: Boolean(settled.duplicate) };
+        if (summary.multiplayer && this.roomState) {
+          this.expeditionReport = summary;
+          if (settled.returnResult || settled.defeat) this.pendingExpeditionReturnResult = { result: settled.returnResult ?? null, context };
+          this._closeBattleMenus("explore"); this.route = "explore"; this._render();
+        } else this.onShowExpeditionResult(settled.returnResult ?? null, context);
+        presentedResultIds.add(resultId);
+        if (presentedResultIds.size > 256) presentedResultIds.delete(presentedResultIds.values().next().value);
+      }
+      this._send("expeditionResultAck", { resultId });
+    } finally { this.expeditionResultInFlight.delete(resultId); }
+  }
+
+  async _receiveOrphanedExpedition(batch = this.recoverySettlementBatch) {
+    if (!this.capabilities.has("expeditionResultsV1") || this.orphanRecoveryInFlight) return;
+    this.orphanRecoveryInFlight = true;
+    try {
+      const tasks = this.recoverySettlementTasks; if (tasks.size) await Promise.allSettled([...tasks]);
+      if (batch !== this.recoverySettlementBatch) return;
+      if (this.recoverySettlementFailed) { this.toast("保留報酬を保存できなかったため、共同探索の復旧を次回接続時に再試行します"); return; }
+      const settled = await this.onExpeditionOrphaned({ reason: "serverRestart" });
+      if (!settled?.ok) { this.toast(settled?.message || "中断された探索を保存できませんでした。再接続して再試行してください"); return; }
+      if (!settled.active) return;
+      const context = settled.context ?? { reason: "serverRestart", summary: settled.summary ?? {}, guest: false };
+      this.onShowExpeditionResult(settled.returnResult ?? null, context);
+    } finally { this.orphanRecoveryInFlight = false; }
+  }
+
+  _showPendingExpeditionReturnResult() {
+    if (!this.pendingExpeditionReturnResult || this.expeditionReport) return false;
+    const pending = this.pendingExpeditionReturnResult; this.pendingExpeditionReturnResult = null;
+    this.onShowExpeditionResult(pending.result, pending.context); return true;
   }
 
   _startLoops() {
@@ -897,18 +2620,30 @@ export class OnlinePartyController {
       if (!node || !battle || battle.phase !== "command") continue;
       const remaining = Math.max(0, (Number(battle.deadlineAt) - Date.now()) / 1000); node.textContent = remaining.toFixed(1); node.classList.toggle("urgent", remaining <= 5);
     }
+    const resonanceNode = this._query("[data-online-resonance-countdown]"), resonance = this.roomState?.resonance;
+    if (resonanceNode && resonance && resonance.phase !== "result") {
+      const seconds = Math.max(0, Math.ceil((Number(resonance.deadlineAt) - Date.now()) / 1000));
+      resonanceNode.textContent = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+      resonanceNode.classList.toggle("urgent", seconds <= 30);
+    }
   }
 
   _moveStep(now) {
+    if (!this._canMutateOnline()) { this._clearMoveInputs(); return; }
     if (this.route === "home" && this.roomState?.phase === "lobby") { this._moveHallStep(now); return; }
+    if (this.route === "resonance" && this.roomState?.phase === "resonance" && this.roomState?.resonance?.phase !== "result") {
+      const direction = this._currentMoveDirection("resonance");
+      if (!direction) return;
+      this.lastMoveAt = now; this._send("resonanceMove", { direction }); return;
+    }
     if (this.route !== "explore" || this.roomState?.phase !== "expedition" || this.roomState?.expedition?.battle) return;
     const self = this._self(), current = self?.dungeonPosition, expedition = this.roomState.expedition;
-    if (!current || Number(self?.coopVitals?.hp) <= 0) { this.path = []; this.heldDirections.clear(); return; }
-    let direction = [...this.heldDirections][0], target = null;
+    if (!current || Number(self?.coopVitals?.hp) <= 0) { this._clearMoveInputs(); return; }
+    let direction = this._currentMoveDirection("explore"), target = null;
     if (direction) { const [dx, dy] = DIRECTION[direction]; target = { x: current.x + dx, y: current.y + dy }; }
     else if (this.path.length) { target = this.path.shift(); const dx = target.x - current.x, dy = target.y - current.y; direction = dx < 0 ? "left" : dx > 0 ? "right" : dy < 0 ? "up" : "down"; }
     if (!target || expedition.tiles?.[target.y]?.[target.x] !== ".") { if (target) this.path = []; return; }
-    this.lastMoveAt = now; self.dungeonPosition = { ...target, facing: direction }; const sent = this._send("expeditionMove", { position: self.dungeonPosition }); if (sent) this._notifyTutorialGuide("explore_move"); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render();
+    this.lastMoveAt = now; self.dungeonPosition = { ...target, facing: direction }; this._send("expeditionMove", { position: self.dungeonPosition }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render();
   }
 
   _hostWorldSnapshot() {
@@ -952,23 +2687,24 @@ export class OnlinePartyController {
 
   _chatBubbleSnapshot() {
     const now = Date.now();
-    for (const [id, bubble] of this.chatBubbles) if (Number(bubble.expiresAt) <= now) this.chatBubbles.delete(id);
+    for (const [id, bubble] of this.chatBubbles) if (Number(bubble.expiresAt) <= now || this._isSocialHidden(id)) this.chatBubbles.delete(id);
     return [...this.chatBubbles.values()].map(bubble => ({ ...bubble }));
   }
 
   _pingSnapshot() {
     const now = Date.now();
-    for (const [id, ping] of this.coopPings) if (Number(ping.expiresAt) <= now) this.coopPings.delete(id);
+    for (const [id, ping] of this.coopPings) if (Number(ping.expiresAt) <= now || this._isSocialHidden(ping?.playerId)) this.coopPings.delete(id);
     return [...this.coopPings.values()].map(ping => ({ ...ping }));
   }
 
   _socialBubbleSnapshot() {
     const now = Date.now();
-    for (const [id, bubble] of this.socialBubbles) if (Number(bubble.expiresAt) <= now) this.socialBubbles.delete(id);
+    for (const [id, bubble] of this.socialBubbles) if (Number(bubble.expiresAt) <= now || this._isSocialHidden(id)) this.socialBubbles.delete(id);
     return [...this.socialBubbles.values()].map(bubble => ({ ...bubble }));
   }
 
   _receiveSocial(message) {
+    if (this._isSocialHidden(message.playerId)) return;
     const emoji = ({ wave: "👋", cheer: "✨", heart: "❤️", like: "👍", alert: "⚠️", question: "❓", surprise: "‼️", laugh: "😄", cry: "💧", clap: "👏", sparkle: "🌟" })[message.id] ?? "✨";
     this.socialBubbles.set(message.playerId, { playerId: message.playerId, emoji, id: message.id, expiresAt: Date.now() + Math.max(1800, Number(message.duration) || 2800) });
     if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot(), socialBubbles: this._socialBubbleSnapshot() }); else if (!["explore", "raid", "team"].includes(this.route) || !this._battle(this.route)) this._render();
@@ -1083,16 +2819,31 @@ export class OnlinePartyController {
 
   _ensureConnectionAfterResume() {
     if (!this.mounted || this.manualClose) return;
-    if (storageGet(ONLINE_STORAGE_KEYS.autoConnect) !== "1" || !storageGet(ONLINE_STORAGE_KEYS.serverUrl) || !this.resumeToken) return;
+    this._refreshResumeTokenFromStorage();
+    const awaitingInitialAck = Boolean(this.helloAckPending);
+    if (!storageGet(ONLINE_STORAGE_KEYS.serverUrl) || !awaitingInitialAck && (storageGet(ONLINE_STORAGE_KEYS.autoConnect) !== "1" || !this.resumeToken)) return;
     if (this.ws && [WebSocket.OPEN, WebSocket.CONNECTING].includes(this.ws.readyState)) return;
     clearTimeout(this.reconnectTimer); this.reconnectTimer = null;
     this.connect({ reconnect: true });
   }
 
-  _handleClose(closedSocket = null) {
+  _handleClose(closedSocket = null, closeEvent = null) {
     if (closedSocket && this.ws && this.ws !== closedSocket) return;
-    this.ws = null; this._clearInteractionPending(false); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this.merchantPending = false; if (this.manualClose) return;
+    this.ws = null; this.connectionReady = false; this._clearGuildPlanTransitionTimer(); this._clearMoveInputs(); this._clearInteractionPending(false); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this.merchantPending = false; if (this.manualClose) return;
+    if (Number(closeEvent?.code) === 4001) {
+      clearTimeout(this.reconnectTimer); this.reconnectTimer = null;
+      clearTimeout(this.pendingLeaveTimer); this.pendingLeaveTimer = null;
+      this.manualClose = true; this.supersededConnection = true; this.helloAckPending = false; this.pendingLeaveOnReconnect = null;
+      this._clearRoom();
+      this._setStatus("error", "別の画面で接続済み", "この画面の自動再接続を停止しました。再開する場合は接続を押してください");
+      this.guildStatus = "別の画面で接続されています。この画面では操作できません。";
+      if (this.friendPanelOpen) this._renderFriendPanel();
+      return;
+    }
+    if (!this.roomState) { this.pendingRoomJoinId = null; this.roomListingsStatus = "error"; this._renderRoomBoard(); }
     this._setStatus("reconnecting", "再接続中…", "切断中はサーバーが自動行動を担当します");
+    this.guildStatus = "再接続中です。接続が戻ると操作を再開できます。";
+    if (this.friendPanelOpen) this._renderFriendPanel();
     if (!this.mounted) return;
     clearTimeout(this.reconnectTimer); const delay = Math.min(10000, 800 * Math.pow(1.7, this.reconnectAttempts++));
     this.reconnectTimer = setTimeout(() => this.connect({ reconnect: true }), delay);
@@ -1100,6 +2851,7 @@ export class OnlinePartyController {
 
   disconnect({ leave = true, quiet = false } = {}) {
     clearTimeout(this.reconnectTimer); this.reconnectTimer = null; this.manualClose = true;
+    this.connectionReady = false; this.helloAckPending = false; this._clearMoveInputs();
     storageSet(ONLINE_STORAGE_KEYS.autoConnect, "0");
     if (leave) this._send("leaveRoom");
     if (this.ws) try { this.ws.close(1000, "client disconnect"); } catch {}
@@ -1107,12 +2859,89 @@ export class OnlinePartyController {
     if (!quiet) this._setStatus("offline", "オフライン", "通常ゲームのセーブには影響しません");
   }
 
-  leaveRoom() { this._send("leaveRoom"); this._clearRoom(); this._setStatus("online", "接続済み", "別の部屋へ参加できます"); }
+  _confirmRoomExit() {
+    if (!this.roomState || typeof globalThis.confirm !== "function") return true;
+    const active = this.roomState.phase && this.roomState.phase !== "lobby";
+    return globalThis.confirm(active ? "進行中のオンラインプレイから退出しますか？\n部屋主の進行や他の参加者へ影響する場合があります。" : "このオンライン部屋から退出しますか？");
+  }
+
+  _requestRoomLeave({ exitAfter = false, onComplete = null } = {}) {
+    if (!this.roomState) {
+      if (exitAfter) { const complete = typeof onComplete === "function" ? onComplete : this.onBack; this.disconnect({ leave: false, quiet: true }); complete(); }
+      else this._clearRoom();
+      return;
+    }
+    if (this.pendingLeaveOnReconnect) {
+      this.pendingLeaveOnReconnect.exitAfter ||= exitAfter;
+      if (exitAfter && typeof onComplete === "function" && !this.pendingLeaveOnReconnect.onComplete) this.pendingLeaveOnReconnect.onComplete = onComplete;
+      return;
+    }
+    const socketReady = Boolean(this.connectionReady && this.ws && typeof WebSocket !== "undefined" && this.ws.readyState === WebSocket.OPEN);
+    this.pendingLeaveOnReconnect = { roomId: this.roomId, exitAfter: Boolean(exitAfter), onComplete: typeof onComplete === "function" ? onComplete : null, sent: false };
+    clearTimeout(this.pendingLeaveTimer);
+    this.pendingLeaveTimer = setTimeout(() => {
+      this.pendingLeaveTimer = null;
+      if (!this.pendingLeaveOnReconnect) return;
+      this.pendingLeaveOnReconnect.allowOfflineExit = true;
+      this._setStatus("reconnecting", "退出待機中…", "再接続を待つか、オフラインで閉じることができます");
+    }, 4000);
+    this._clearMoveInputs();
+    this.manualClose = false;
+    storageSet(ONLINE_STORAGE_KEYS.autoConnect, "1");
+    this._setStatus("reconnecting", "退出処理中…", socketReady ? "サーバーへ退出を確定しています" : "再接続してからサーバーへ退出を確定します");
+    if (socketReady) {
+      this.pendingLeaveOnReconnect.sent = this._send("leaveRoom");
+      if (this.pendingLeaveOnReconnect.sent) return;
+    }
+    if (!this.ws || typeof WebSocket === "undefined" || ![WebSocket.OPEN, WebSocket.CONNECTING].includes(this.ws.readyState)) this.connect({ reconnect: true });
+  }
+
+  _completePendingRoomLeave() {
+    const pending = this.pendingLeaveOnReconnect;
+    clearTimeout(this.pendingLeaveTimer); this.pendingLeaveTimer = null;
+    this.pendingLeaveOnReconnect = null;
+    this._clearRoom();
+    if (pending?.exitAfter) {
+      const complete = typeof pending.onComplete === "function" ? pending.onComplete : this.onBack;
+      this.disconnect({ leave: false, quiet: true });
+      complete();
+      return;
+    }
+    this._setStatus("online", "接続済み", "オンライン部屋から退出しました");
+  }
+
+  _forceClosePendingRoomLeave() {
+    const pending = this.pendingLeaveOnReconnect;
+    if (!pending?.allowOfflineExit) return;
+    if (typeof globalThis.confirm === "function" && !globalThis.confirm("サーバーへ退出を届けられていません。\n部屋には最大5分間表示が残る場合がありますが、オフラインで閉じますか？")) return;
+    clearTimeout(this.pendingLeaveTimer); this.pendingLeaveTimer = null;
+    this.pendingLeaveOnReconnect = null;
+    this.disconnect({ leave: false, quiet: false });
+    this.toast("通信復旧前に閉じました。サーバー側では最大5分後に退出します");
+    if (pending.exitAfter) (typeof pending.onComplete === "function" ? pending.onComplete : this.onBack)();
+  }
+
+  requestExit(onComplete = null) {
+    if (!this._confirmRoomExit()) return false;
+    const complete = typeof onComplete === "function" ? onComplete : this.onBack;
+    if (this.roomState) this._requestRoomLeave({ exitAfter: true, onComplete: complete });
+    else { this.disconnect({ leave: false, quiet: true }); complete(); }
+    return true;
+  }
+
+  leaveRoom() {
+    if (!this._confirmRoomExit()) return;
+    this._requestRoomLeave();
+  }
 
   async copyInvite() {
     if (!this.roomId) return;
     const source = this._query("[data-online-server-url]")?.value ?? storageGet(ONLINE_STORAGE_KEYS.serverUrl);
     const url = new URL(location.href); url.searchParams.set("partyServer", source); url.searchParams.set("partyRoom", this.roomId);
+    if (typeof navigator.share === "function") {
+      try { await navigator.share({ title: "ABYSS DOMINION オンライン招待", text: `ルーム ${this.roomId} へ参加`, url: url.toString() }); return; }
+      catch (error) { if (error?.name === "AbortError") return; }
+    }
     this.toast(await copyText(url.toString()) ? "招待リンクをコピーしました" : "コピーできませんでした");
   }
 }

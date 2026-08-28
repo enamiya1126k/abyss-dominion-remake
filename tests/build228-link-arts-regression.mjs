@@ -80,9 +80,10 @@ test("build228 loads its cache boundary and compact motion-safe presentation", a
     read("index.html"), read("src/main.js"), read("src/online/OnlinePartyClient.js"), read("src/Styles/build228.css"),
   ]);
   assert.match(index, /build228\.css\?v=2\.11\.54-build228/);
-  assert.match(index, /ASSET_BUILD = "build228"/);
-  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.54-build228/);
-  assert.match(client, /OnlineViews\.js\?v=2\.11\.54-build228/);
+  assert.match(index, /build230\.css\?v=2\.11\.56-build230/);
+  assert.match(index, /ASSET_BUILD = "build239"/);
+  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.65-build239/);
+  assert.match(client, /OnlineViews\.js\?v=2\.11\.65-build239/);
   assert.match(styles, /@media\(max-width:390px\)/);
   assert.match(styles, /@media\(max-height:667px\)/);
   assert.match(styles, /@media\(prefers-reduced-motion:reduce\)/);

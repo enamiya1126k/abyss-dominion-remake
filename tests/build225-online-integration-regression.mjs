@@ -6,15 +6,16 @@ const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
 test("build225 advertises one cache-coherent application version", async () => {
   const [index, config, main] = await Promise.all([read("index.html"), read("src/core/config.js"), read("src/main.js")]);
-  assert.match(index, /ASSET_VERSION = "2\.11\.54"/);
-  assert.match(index, /ASSET_BUILD = "build228"/);
+  assert.match(index, /ASSET_VERSION = "2\.11\.65"/);
+  assert.match(index, /ASSET_BUILD = "build239"/);
+  assert.match(index, /Styles\/build239\.css\?v=2\.11\.65-build239/);
   assert.match(index, /Styles\/build228\.css\?v=2\.11\.54-build228/);
   assert.match(index, /Styles\/build227\.css\?v=2\.11\.54-build227/);
   assert.match(index, /Styles\/build226\.css\?v=2\.11\.54-build226/);
   assert.match(index, /Styles\/build225\.css\?v=2\.11\.54-build225/);
   assert.match(index, /Styles\/build218\.css\?v=2\.11\.53-build218/);
   assert.match(config, /APP_VERSION="2\.11\.54"/);
-  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.54-build228/);
+  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.65-build239/);
 });
 
 test("online profile carries offline expedition attrition and host key stock", async () => {
@@ -41,14 +42,16 @@ test("online secret rooms preserve the session and return to the same controller
   assert.match(main, /if\(!onlineSecretRoomContext&&exploreAutoActive\(\)\)requestAnimationFrame\(runSecretRoomAuto\)/);
 });
 
-test("only a new leader departure rotates the online secret-room run", async () => {
+test("only a server-accepted leader departure commits the staged online secret-room run", async () => {
   const [main, client] = await Promise.all([read("src/main.js"), read("src/online/OnlinePartyClient.js")]);
-  assert.match(main, /onBeginSecretRoomExpedition:\(\)=>\{const run=beginSecretRoomExpedition\(save\.state\);save\.save\(\);return run\}/);
-  const start = client.match(/if \(button\.matches\("\[data-online-start-explore\]"\)\) \{[^}]*?this\._send\("startExpedition", \{ profile: this\.profile, hostWorld: this\._hostWorldNetworkSnapshot\(\) \}\); return; \}/)?.[0] ?? "";
-  assert.match(start, /const isLeader =/);
-  assert.match(start, /if \(isLeader\) this\.onBeginSecretRoomExpedition\(\)/);
-  assert.ok(start.indexOf("onBeginSecretRoomExpedition") < start.indexOf("_hostWorldNetworkSnapshot"));
-  assert.doesNotMatch(start, /this\._send\("profile"/);
+  assert.match(main, /onBeginSecretRoomExpedition:candidate=>\{let run;if\(candidate/);
+  assert.match(main, /save\.state\.secretRooms\.run=run;save\.state\.secretRooms\.activeRoom=null/);
+  assert.match(client, /this\.pendingSecretRoomRun = leader \? this\._createPendingSecretRoomRun\(\) : null/);
+  assert.match(client, /hostWorld\.secretRooms = \{ run: this\.pendingSecretRoomRun \}/);
+  assert.match(client, /this\.pendingExpeditionStart = this\._send\("startExpedition", \{ profile: this\.profile, hostWorld \}\)/);
+  assert.match(client, /if \(room\?\.phase === "expedition"\)[^]*this\._commitAuthoritativeSecretRoomRun\(secretRoomRun\)/);
+  assert.match(client, /room\.hostWorld\?\.secretRooms\?\.run/);
+  assert.match(client, /if \(rejected\) \{ this\.pendingExpeditionStart = false; this\.pendingSecretRoomRun = null; \}/);
 });
 
 test("online first-floor guide completion is shared with normal exploration", async () => {
@@ -89,12 +92,12 @@ test("resource rewards use normal toasts and only an acquired weapon opens ONLIN
 
 test("online handshake and host-world transport are versioned and bounded", async () => {
   const [client, server, roomStore] = await Promise.all([read("src/online/OnlinePartyClient.js"), read("online-server/server.js"), read("online-server/src/RoomStore.js")]);
-  assert.match(client, /const ONLINE_PROTOCOL = "1\.14\.0"/);
+  assert.match(client, /const ONLINE_PROTOCOL = "1\.16\.0"/);
   assert.match(client, /this\._send\("hello", \{ protocol: ONLINE_PROTOCOL/);
   assert.match(client, /message\.protocol !== ONLINE_PROTOCOL/);
   assert.match(client, /_hostWorldNetworkSnapshot\(\)/);
   assert.match(client, /56 \* 1024/);
-  assert.match(server, /message\.protocol!=="1\.14\.0"/);
+  assert.match(server, /message\.protocol!=="1\.16\.0"/);
   assert.match(roomStore, /publicHostWorld\(room\.hostWorld,currentFloor\)/);
 });
 

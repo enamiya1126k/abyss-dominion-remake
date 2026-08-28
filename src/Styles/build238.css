@@ -1,0 +1,194 @@
+/* build238: day-of guild expedition attention, reminders, and gathering controls. */
+.online-guild-plan-attention{
+  box-sizing:border-box;
+  display:grid;
+  grid-template-columns:10px minmax(0,1fr) auto;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+  min-height:52px;
+  padding:8px 10px;
+  border:1px solid rgba(112,236,190,.58);
+  border-radius:12px;
+  background:linear-gradient(135deg,rgba(19,62,61,.98),rgba(11,25,39,.98));
+  color:#f3fff9;
+  font-family:inherit;
+  text-align:left;
+  box-shadow:0 10px 28px rgba(0,0,0,.38);
+  touch-action:manipulation;
+}
+
+.online-guild-plan-attention.window{
+  border-color:rgba(232,201,116,.58);
+  background:linear-gradient(135deg,rgba(73,55,27,.98),rgba(21,23,38,.98));
+}
+
+.online-guild-plan-attention>i{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#70ecbe;
+  box-shadow:0 0 12px rgba(112,236,190,.9);
+  animation:build238-guild-attention 1.8s ease-in-out infinite;
+}
+
+.online-guild-plan-attention.window>i{
+  background:#ead18f;
+  box-shadow:0 0 10px rgba(234,209,143,.72);
+}
+
+.online-guild-plan-attention>span{
+  min-width:0;
+}
+
+.online-guild-plan-attention>span>*{
+  display:block;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.online-guild-plan-attention small{
+  color:#7ff0c9;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.09em;
+}
+
+.online-guild-plan-attention.window small{
+  color:#ead18f;
+}
+
+.online-guild-plan-attention b{
+  margin-top:2px;
+  color:#fff;
+  font-size:11px;
+}
+
+.online-guild-plan-attention em{
+  margin-top:2px;
+  color:#b9d5ce;
+  font-size:8px;
+  font-style:normal;
+}
+
+.online-guild-plan-attention.window em{
+  color:#d4c8a8;
+}
+
+.online-guild-plan-attention>strong{
+  min-width:68px;
+  color:#dffff4;
+  font-size:9px;
+  text-align:right;
+}
+
+.online-guild-plan-attention:focus-visible,
+.online-guild-plan-card:focus-visible{
+  outline:2px solid #fff1b7;
+  outline-offset:2px;
+}
+
+.online-guild-plan-attention.closed{
+  pointer-events:auto;
+  position:absolute;
+  right:max(14px,env(safe-area-inset-right));
+  bottom:max(142px,calc(env(safe-area-inset-bottom) + 132px));
+  width:min(310px,calc(100vw - 28px));
+}
+
+.online-v3-screen.online-shared-gameplay-active>.online-friend-layer .online-guild-plan-attention.closed{
+  bottom:calc(max(0px,env(safe-area-inset-bottom)) + 216px);
+}
+
+.online-guild-plan-attention.panel{
+  position:sticky;
+  z-index:4;
+  top:0;
+  width:100%;
+  margin:0 0 10px;
+}
+
+.online-social-fab.has-guild-attention{
+  border-color:#70ecbe;
+  background:linear-gradient(145deg,#24594f,#10243b);
+}
+
+.online-social-tabs button>span{
+  margin-left:5px;
+  padding:2px 5px;
+  border-radius:99px;
+  background:rgba(112,236,190,.16);
+  color:#8ef2cf;
+  font-size:8px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.online-guild-plan-card.attention{
+  border-color:rgba(112,236,190,.72);
+  box-shadow:inset 3px 0 #70ecbe,0 0 0 1px rgba(112,236,190,.1),0 14px 30px rgba(0,0,0,.24);
+}
+
+.online-guild-plan-card.attention-window{
+  border-color:rgba(234,209,143,.7);
+  box-shadow:inset 3px 0 #d8b65d,0 0 0 1px rgba(234,209,143,.1),0 14px 30px rgba(0,0,0,.24);
+}
+
+.online-guild-plan-gathering>button.end{
+  border-color:rgba(239,149,157,.6);
+  background:linear-gradient(180deg,#773640,#4c2029);
+  color:#ffe8eb;
+}
+
+@keyframes build238-guild-attention{
+  0%,100%{transform:scale(.82);opacity:.7}
+  50%{transform:scale(1);opacity:1}
+}
+
+@media(max-width:390px){
+  .online-guild-plan-attention.closed{
+    right:max(10px,env(safe-area-inset-right));
+    width:min(300px,calc(100vw - 20px));
+  }
+
+  .online-guild-plan-attention{
+    grid-template-columns:9px minmax(0,1fr) auto;
+    gap:7px;
+    min-height:48px;
+    padding:7px 9px;
+  }
+
+  .online-guild-plan-attention>strong{
+    min-width:58px;
+  }
+}
+
+@media(max-width:320px){
+  .online-guild-plan-attention>strong{
+    grid-column:2/-1;
+    min-width:0;
+    text-align:left;
+  }
+
+  .online-guild-plan-attention.closed{
+    width:calc(100vw - 20px);
+  }
+}
+
+@media(max-height:667px){
+  .online-guild-plan-attention.closed{
+    bottom:max(134px,calc(env(safe-area-inset-bottom) + 124px));
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .online-guild-plan-attention,
+  .online-guild-plan-attention *,
+  .online-guild-plan-card.attention{
+    animation:none!important;
+    scroll-behavior:auto!important;
+    transition:none!important;
+  }
+}

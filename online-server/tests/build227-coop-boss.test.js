@@ -444,6 +444,7 @@ test("build227 keeps a disconnected participant in battle and delivers one rewar
   const guest = env.players[1];
   const friendId = guest.session.playerId;
   const clientKey = guest.session.clientKey;
+  const resumeToken = guest.session.resumeToken;
   const profile = guest.session.profile;
 
   env.store.disconnect(guest.session, guest.conn);
@@ -459,7 +460,7 @@ test("build227 keeps a disconnected participant in battle and delivers one rewar
   assert.equal(guest.session.pendingRewards.filter(reward => reward.rewardId === rewardId).length, 1);
 
   const reconnected = connection();
-  const resumed = env.store.hello(reconnected, { friendId, clientKey, profile });
+  const resumed = env.store.hello(reconnected, { friendId, clientKey, resumeToken, profile });
   assert.equal(resumed.ok, true);
   assert.equal(resumed.resumed, true);
   assert.equal(resumed.room?.expedition?.id, env.room.expedition.id);

@@ -112,7 +112,7 @@ export class ResonanceMazeCoordinator{
   return{ok:true,resonance:resonanceSnapshot(state)};
  }
 
- playerLeft(room,playerId){const state=room?.resonance;if(!state?.players?.[playerId])return;delete state.players[playerId];delete state.choices[playerId];for(const plate of state.switches)if(plate.heldBy===playerId){plate.heldBy=null;plate.activatedAt=0}if(!Object.keys(state.players).length){room.phase="lobby";room.resonance=null;return}this._state(room,"leave")}
+ playerLeft(room,playerId){const state=room?.resonance;if(!state?.players?.[playerId])return;delete state.players[playerId];delete state.choices[playerId];for(const plate of state.switches)if(plate.heldBy===playerId){plate.heldBy=null;plate.activatedAt=0}const remaining=Object.keys(state.players).length;if(!remaining){room.phase="lobby";room.resonance=null;return}if(remaining<2&&state.phase!=="result"){this._finish(room,false,"partyChanged");return}this._state(room,"leave")}
 
  advance(room){
   const state=room?.resonance;if(!state||room.phase!=="resonance"||state.phase==="result")return;

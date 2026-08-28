@@ -8,8 +8,8 @@ import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAt
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.11.44-build209";
 import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.11.30-build195";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.11.30-build195";
-import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.11.54-build225";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.11.54-build228";
+import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.11.65-build239";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.11.65-build239";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.11.29-build194";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.11.30-build195";
 import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.11.34-build199";
@@ -515,6 +515,12 @@ function returnFromMenu(origin="home"){
  const target=menuBackTarget(origin);
  go(target);
 }
+function finishOnlinePartyNavigation(target="home"){
+ if(screen!=="onlineParty")return;
+ onlinePartyController?.unmount({disconnect:false});
+ try{const clean=new URL(location.href);clean.searchParams.delete("partyServer");clean.searchParams.delete("partyRoom");history.replaceState(history.state,"",`${clean.pathname}${clean.search}${clean.hash}`)}catch{}
+ screen=target;render()
+}
 function go(s){
  if(s==="home"&&expeditionActive()){
   if(screen!=="explore")showToast("探索中は「帰還」から拠点へ戻れます");
@@ -522,8 +528,8 @@ function go(s){
  }
  if(screen==="explore"&&["formation","equipment","skills","inventory","armory","settings"].includes(s))rememberExpeditionMenuHistory();
  if(screen==="onlineParty"&&s!=="onlineParty"){
-  onlinePartyController?.unmount({disconnect:true});
-  try{const clean=new URL(location.href);clean.searchParams.delete("partyServer");clean.searchParams.delete("partyRoom");history.replaceState(history.state,"",`${clean.pathname}${clean.search}${clean.hash}`)}catch{}
+  if(onlinePartyController?.requestExit){onlinePartyController.requestExit(()=>finishOnlinePartyNavigation(s));return}
+  finishOnlinePartyNavigation(s);return
  }
  screen=s;render();
 }
@@ -765,7 +771,7 @@ function openExploreFloorSelector(){
  const normalizeFloor=()=>{input.value=String(Math.max(1,Math.min(max,Number(input.value)||max)))};
  modal.querySelectorAll("[data-floor-step]").forEach(step=>step.addEventListener("click",()=>{input.value=String((Number(input.value)||max)+Number(step.dataset.floorStep));normalizeFloor()}));
  input.addEventListener("change",normalizeFloor);
- button.onclick=()=>{const floor=Math.max(1,Math.min(max,Number(modal.querySelector("#floorSelect").value)||max));completeContextGuide("dungeon_departure",{quiet:true});if(!contextGuideDone("explore_move"))save.state.settings.exploreAutoMode="off";save.state.player.currentFloor=floor;save.state.player.inRun=true;save.state.expeditionAffectionDeaths={};beginManualExpedition(save.state,floor);beginSecretRoomExpedition(save.state);clearExpeditionSnapshot();save.save();snapshot=null;modal.remove();go("explore")};
+ button.onclick=()=>{const floor=Math.max(1,Math.min(max,Number(modal.querySelector("#floorSelect").value)||max));completeContextGuide("dungeon_departure",{quiet:true});if(!contextGuideDone("explore_move"))save.state.settings.exploreAutoMode="off";save.state.player.currentFloor=floor;save.state.player.inRun=true;save.state.expeditionAffectionDeaths={};beginManualExpedition(save.state,floor);const online=onlinePartyPersistentState();online.activeExpeditionRunId=null;online.activeManualExploreRunId=null;beginSecretRoomExpedition(save.state);clearExpeditionSnapshot();save.save();snapshot=null;modal.remove();go("explore")};
  requestAnimationFrame(()=>showContextGuide({id:"dungeon_departure",title:"1階から出発しよう",text:"最初は1階のままでOK。「出発する」を押して探索を始めよう。",target:button,placement:"bottom"}));
 }
 function openUnavailableHomeFeature(title,icon){
@@ -1832,6 +1838,10 @@ function onlinePartyPersistentState(){
  online.claimedRewards=Array.isArray(online.claimedRewards)?online.claimedRewards:[];
  online.processedVitalMutationIds=Array.isArray(online.processedVitalMutationIds)?online.processedVitalMutationIds:[];
  online.processedBattleEventIds=Array.isArray(online.processedBattleEventIds)?online.processedBattleEventIds:[];
+ online.processedExpeditionResultIds=Array.isArray(online.processedExpeditionResultIds)?online.processedExpeditionResultIds:[];
+ online.completedExpeditionRunIds=Array.isArray(online.completedExpeditionRunIds)?online.completedExpeditionRunIds:[];
+ online.activeExpeditionRunId=online.activeExpeditionRunId==null?null:String(online.activeExpeditionRunId).slice(0,120)||null;
+ online.activeManualExploreRunId=online.activeManualExploreRunId==null?null:String(online.activeManualExploreRunId).slice(0,120)||null;
  online.hostWorld=online.hostWorld&&typeof online.hostWorld==="object"?online.hostWorld:{openedChestIds:{},floorSeeds:{}};
  return online
 }
@@ -1845,49 +1855,84 @@ function persistOnlineStateMutation(event={}){
  save.save();return{ok:true}
 }
 function persistOnlineRaidWorld(event={}){
- const online=onlinePartyPersistentState(),source=event?.raidWorld;
- if(!source||typeof source!=="object"){online.raidWorld={};save.save();return{ok:true}}
+ const backup=typeof structuredClone==="function"?structuredClone(save.state):JSON.parse(JSON.stringify(save.state)),online=onlinePartyPersistentState(),source=event?.raidWorld;
+ if(!source||typeof source!=="object"){online.raidWorld={};if(!save.save()){save.state=backup;return{ok:false,message:"レイド進行を保存できませんでした"}}return{ok:true}}
  const maxHp=Math.max(0,Math.floor(Number(source.maxHp)||0)),hp=Math.max(0,Math.min(maxHp||Number.MAX_SAFE_INTEGER,Math.floor(Number(source.hp)||0)));
  const cleanContribution=value=>({damage:Math.max(0,Math.floor(Number(value?.damage)||0)),taken:Math.max(0,Math.floor(Number(value?.taken)||0)),healing:Math.max(0,Math.floor(Number(value?.healing)||0)),mpHealing:Math.max(0,Math.floor(Number(value?.mpHealing)||0)),revives:Math.max(0,Math.floor(Number(value?.revives)||0)),guards:Math.max(0,Math.floor(Number(value?.guards)||0)),support:Math.max(0,Math.floor(Number(value?.support)||0))});
  const contribution=source.contribution&&typeof source.contribution==="object"&&!Array.isArray(source.contribution)?Object.fromEntries(Object.entries(source.contribution).slice(0,32).map(([playerId,value])=>[String(playerId).slice(0,24),cleanContribution(value)])):{};
  const ranking=(Array.isArray(source.ranking)?source.ranking:[]).slice(0,32).map((entry,index)=>({playerId:String(entry?.playerId??"").slice(0,24),name:String(entry?.name??"挑戦者").slice(0,24),rank:Math.max(1,Math.min(32,Math.floor(Number(entry?.rank)||index+1))),score:Math.max(0,Math.floor(Number(entry?.score)||0)),...cleanContribution(entry)}));
  const personalMilestonesClaimed=source.personalMilestonesClaimed&&typeof source.personalMilestonesClaimed==="object"&&!Array.isArray(source.personalMilestonesClaimed)?Object.fromEntries(Object.entries(source.personalMilestonesClaimed).slice(0,32).map(([playerId,list])=>[String(playerId).slice(0,24),[...new Set((Array.isArray(list)?list:[]).map(Number).filter(value=>[5,15,30].includes(value)))]])):{};
  online.raidWorld={campaignId:source.campaignId==null?null:String(source.campaignId).slice(0,120),weekId:source.weekId==null?null:String(source.weekId).slice(0,80),weekStartsAt:Math.max(0,Math.floor(Number(source.weekStartsAt)||0)),weekEndsAt:Math.max(0,Math.floor(Number(source.weekEndsAt)||0)),bossId:source.bossId==null?null:String(source.bossId).slice(0,80),modifierId:source.modifierId==null?null:String(source.modifierId).slice(0,80),maxHp,hp,attempts:Math.max(0,Math.floor(Number(source.attempts)||0)),totalDamage:Math.max(0,Math.floor(Number(source.totalDamage)||0)),milestonesClaimed:[...new Set((Array.isArray(source.milestonesClaimed)?source.milestonesClaimed:[]).map(Number).filter(value=>[5,10,25,50,75,100].includes(value)))],personalMilestonesClaimed,lastAttemptAt:Math.max(0,Math.floor(Number(source.lastAttemptAt)||0)),completedAt:Math.max(0,Math.floor(Number(source.completedAt)||0)),contribution,ranking};
- save.save();return{ok:true}
+ if(!save.save()){save.state=backup;return{ok:false,message:"レイド進行を保存できませんでした"}}return{ok:true}
 }
-function applyOnlineVitalsUpdate(event={}){
- const online=onlinePartyPersistentState(),mutationId=String(event.mutationId??"").slice(0,160),monsterId=String(event.monsterId??"").slice(0,120);
+function persistOnlineTeamBattleResult(event={}){
+ const backup=typeof structuredClone==="function"?structuredClone(save.state):JSON.parse(JSON.stringify(save.state)),online=onlinePartyPersistentState(),resultId=String(event?.resultId??event?.summary?.resultId??"").slice(0,160),selfId=String(onlinePartyController?.selfId??"");
+ online.processedTeamBattleResultIds=Array.isArray(online.processedTeamBattleResultIds)?online.processedTeamBattleResultIds:[];
+ if(!resultId)return{ok:false,message:"対戦結果IDがありません"};if(online.processedTeamBattleResultIds.includes(resultId))return{ok:true,duplicate:true};
+ const ranking=Array.isArray(event?.summary?.ranking)?event.summary.ranking:[],self=ranking.find(entry=>String(entry?.playerId??"")===selfId);if(!self||!["sun","moon"].includes(self.side))return{ok:true,spectator:true};
+ const winner=["sun","moon"].includes(event?.summary?.winner)?event.summary.winner:null,draw=!winner,won=winner===self.side;
+ const source=online.teamBattleRecords&&typeof online.teamBattleRecords==="object"?online.teamBattleRecords:{};
+ const records=online.teamBattleRecords={matches:Math.max(0,Math.floor(Number(source.matches)||0))+1,wins:Math.max(0,Math.floor(Number(source.wins)||0))+(won?1:0),losses:Math.max(0,Math.floor(Number(source.losses)||0))+(!draw&&!won?1:0),draws:Math.max(0,Math.floor(Number(source.draws)||0))+(draw?1:0),currentStreak:won?Math.max(0,Math.floor(Number(source.currentStreak)||0))+1:0,bestStreak:Math.max(0,Math.floor(Number(source.bestStreak)||0)),lastResult:draw?"draw":won?"win":"loss",lastAt:new Date().toISOString()};
+ records.bestStreak=Math.max(records.bestStreak,records.currentStreak);online.processedTeamBattleResultIds.push(resultId);online.processedTeamBattleResultIds=online.processedTeamBattleResultIds.slice(-128);if(!save.save()){save.state=backup;return{ok:false,message:"対戦結果を保存できませんでした"}}return{ok:true,records}
+}
+function applyOnlineVitalsUpdate(event={},{persist=true,allowMissing=false,skipApply=false}={}){
+ const backup=persist?(typeof structuredClone==="function"?structuredClone(save.state):JSON.parse(JSON.stringify(save.state))):null,online=onlinePartyPersistentState(),mutationId=String(event.mutationId??"").slice(0,160),monsterId=String(event.monsterId??"").slice(0,120);
  if(mutationId&&online.processedVitalMutationIds.includes(mutationId))return{ok:true,duplicate:true};
- const monster=save.state.monsters.find(entry=>entry.id===monsterId);if(!monster)return{ok:false,message:"出撃中の仲間が見つかりません"};
- const hpMax=Math.max(1,calculatedStats(monster).hp),mpMax=Math.max(0,maxMp(monster)),hp=Number(event.hp),mp=Number(event.mp);
- if(Number.isFinite(hp))monster.currentHp=Math.max(0,Math.min(hpMax,Math.floor(hp)));
- if(Number.isFinite(mp))monster.currentMp=Math.max(0,Math.min(mpMax,Math.floor(mp)));
- if(mutationId){online.processedVitalMutationIds.push(mutationId);online.processedVitalMutationIds=online.processedVitalMutationIds.slice(-256)}
- save.save();return{ok:true,hp:monster.currentHp,mp:monster.currentMp}
+ const monster=skipApply?null:save.state.monsters.find(entry=>entry.id===monsterId);
+ if(!monster&&!skipApply&&!allowMissing)return{ok:false,message:"出撃中の仲間が見つかりません"};
+ if(monster){const hpMax=Math.max(1,calculatedStats(monster).hp),mpMax=Math.max(0,maxMp(monster)),hp=Number(event.hp),mp=Number(event.mp);if(Number.isFinite(hp))monster.currentHp=Math.max(0,Math.min(hpMax,Math.floor(hp)));if(Number.isFinite(mp))monster.currentMp=Math.max(0,Math.min(mpMax,Math.floor(mp)))}
+ if(mutationId){online.processedVitalMutationIds.push(mutationId);online.processedVitalMutationIds=[...new Set(online.processedVitalMutationIds)].slice(-256)}
+ if(persist&&!save.save()){save.state=backup;return{ok:false,message:"HP・MPを保存できなかったため再試行します"}}return{ok:true,hp:monster?.currentHp??null,mp:monster?.currentMp??null,missing:!monster}
+}
+function beginOnlineExpeditionResultRun(event={}){
+ const runId=String(event.runId??"").slice(0,120),ownerId=String(event.ownerId??"").slice(0,24),selfId=String(onlinePartyController?.selfId??"");if(!runId||ownerId!==selfId)return{ok:true,guest:true};const online=onlinePartyPersistentState(),manual=save.state.returnRewards?.manual,currentExploreRunId=String(save.state.player.exploreRun?.id??"");
+ if(online.activeExpeditionRunId===runId&&manual?.active&&online.activeManualExploreRunId&&online.activeManualExploreRunId===currentExploreRunId)return{ok:true,duplicate:true};
+ const backup=typeof structuredClone==="function"?structuredClone(save.state):JSON.parse(JSON.stringify(save.state)),startFloor=Math.max(1,Math.min(WORLD_MAX_FLOOR,Math.floor(Number(event.startFloor)||1)));beginManualExpedition(save.state,startFloor);online.activeExpeditionRunId=runId;online.activeManualExploreRunId=String(save.state.player.exploreRun?.id??"").slice(0,120)||null;if(!save.save()){save.state=backup;return{ok:false,message:"探索開始状態を保存できませんでした"}}return{ok:true}
+}
+function settleOnlineExpeditionResult(event={}){
+ const runId=String(event.runId??"").slice(0,120),resultId=String(event.resultId??"").slice(0,160),ownerId=String(event.ownerId??"").slice(0,24),recipientId=String(event.recipientId??"").slice(0,24),selfId=String(onlinePartyController?.selfId??"");if(!resultId||!ownerId||recipientId!==selfId)return{ok:false,message:"探索結果の対象を確認できません"};
+ const online=onlinePartyPersistentState();if(online.processedExpeditionResultIds.includes(resultId))return{ok:true,duplicate:true};const backup=typeof structuredClone==="function"?structuredClone(save.state):JSON.parse(JSON.stringify(save.state)),clone=value=>typeof structuredClone==="function"?structuredClone(value):JSON.parse(JSON.stringify(value)),manual=save.state.returnRewards?.manual,currentExploreRunId=String(save.state.player.exploreRun?.id??""),active=Boolean(ownerId===selfId&&runId&&online.activeExpeditionRunId===runId&&manual?.active&&online.activeManualExploreRunId&&online.activeManualExploreRunId===currentExploreRunId),unrelatedRunActive=Boolean(save.state.player.inRun&&!active);
+ if(event.finalVitals){const vitals=applyOnlineVitalsUpdate(event.finalVitals,{persist:false,allowMissing:true,skipApply:unrelatedRunActive});if(!vitals.ok){save.state=backup;return vitals}}
+ let returnResult=null,defeat=null;if(ownerId===selfId){const startFloor=Math.max(1,Math.min(WORLD_MAX_FLOOR,Math.floor(Number(event.startFloor)||1))),endFloor=Math.max(startFloor,Math.min(WORLD_MAX_FLOOR,Math.floor(Number(event.endFloor)||startFloor))),floorsCleared=Math.max(0,Math.min(WORLD_MAX_FLOOR,Math.floor(Number(event.floorsCleared)||0))),reachedFloor=Math.min(endFloor,startFloor+floorsCleared);
+  if(event.reason==="defeat"){if(active){abandonManualExpedition(save.state);save.state.player.currentFloor=Math.max(1,Number(save.state.player.checkpoint)||1);save.state.player.inRun=false}const lossCap=Math.max(100,goldForClearedFloor(endFloor)),lost=Math.min(Math.floor((Number(save.state.player.gold)||0)*.10),lossCap);save.state.player.gold=Math.max(0,(Number(save.state.player.gold)||0)-lost);const monster=save.state.monsters.find(entry=>entry.id===String(event.finalVitals?.monsterId??""));if(monster&&!unrelatedRunActive){monster.currentHp=1;monster.currentMp=0;monster.history??={};monster.history.defeats=(Number(monster.history.defeats)||0)+1;monster.history.consecutiveDeployments=0}defeat={lost,checkpoint:active?save.state.player.currentFloor:Math.max(1,Number(save.state.player.checkpoint)||1),preservedRun:!active}}
+  else if(active){if(reachedFloor>Number(save.state.returnRewards.manual.lastFloor||startFloor))recordManualFloorClear(save.state,reachedFloor);save.state.player.currentFloor=Math.max(Number(save.state.player.currentFloor)||1,reachedFloor);save.state.player.maxFloor=Math.max(Number(save.state.player.maxFloor)||1,reachedFloor);save.state.player.inRun=false;returnResult=claimManualReturn(save.state)}
+  else{const preservedManual=save.state.returnRewards?.manual?clone(save.state.returnRewards.manual):null,preservedExploreRun=clone(save.state.player.exploreRun??{id:null,floors:{}}),preservedFloor=save.state.player.currentFloor,preservedInRun=Boolean(save.state.player.inRun);beginManualExpedition(save.state,startFloor);if(floorsCleared>0)recordManualFloorClear(save.state,reachedFloor);save.state.player.currentFloor=reachedFloor;save.state.player.maxFloor=Math.max(Number(save.state.player.maxFloor)||1,reachedFloor);returnResult=claimManualReturn(save.state);if(preservedManual)save.state.returnRewards.manual=preservedManual;save.state.player.exploreRun=preservedExploreRun;save.state.player.currentFloor=preservedFloor;save.state.player.inRun=preservedInRun}
+  if(online.activeExpeditionRunId===runId){online.activeExpeditionRunId=null;online.activeManualExploreRunId=null}online.completedExpeditionRunIds.push(runId);online.completedExpeditionRunIds=[...new Set(online.completedExpeditionRunIds.filter(Boolean))].slice(-2048)
+ }
+ online.processedExpeditionResultIds.push(resultId);online.processedExpeditionResultIds=[...new Set(online.processedExpeditionResultIds)].slice(-2048);if(!save.save()){save.state=backup;return{ok:false,message:"探索結果を保存できなかったため再試行します"}}return{ok:true,returnResult,defeat,guest:ownerId!==selfId}
+}
+function recoverOrphanedOnlineExpedition(){
+ const online=onlinePartyPersistentState(),runId=String(online.activeExpeditionRunId??"").slice(0,120);if(!runId)return{ok:true,active:false};
+ const backup=typeof structuredClone==="function"?structuredClone(save.state):JSON.parse(JSON.stringify(save.state)),manual=save.state.returnRewards?.manual,currentExploreRunId=String(save.state.player.exploreRun?.id??""),exact=Boolean(manual?.active&&online.activeManualExploreRunId&&online.activeManualExploreRunId===currentExploreRunId),resultId=`${runId}:client-recovery`,startFloor=Math.max(1,Math.min(WORLD_MAX_FLOOR,Math.floor(Number(manual?.startFloor)||Number(save.state.player.currentFloor)||1))),endFloor=Math.max(startFloor,Math.min(WORLD_MAX_FLOOR,Math.floor(Number(manual?.lastFloor)||startFloor)),Math.min(WORLD_MAX_FLOOR,Math.max(1,Math.floor(Number(save.state.player.currentFloor)||startFloor)))),floorsCleared=exact?Math.max(0,Math.floor(Number(manual?.floorsCleared)||0)):0;
+ let returnResult=null;if(exact){save.state.player.currentFloor=endFloor;save.state.player.maxFloor=Math.max(Number(save.state.player.maxFloor)||1,endFloor);save.state.player.inRun=false;returnResult=claimManualReturn(save.state)}
+ online.activeExpeditionRunId=null;online.activeManualExploreRunId=null;online.completedExpeditionRunIds.push(runId);online.completedExpeditionRunIds=[...new Set(online.completedExpeditionRunIds.filter(Boolean))].slice(-2048);online.processedExpeditionResultIds.push(resultId);online.processedExpeditionResultIds=[...new Set(online.processedExpeditionResultIds)].slice(-2048);
+ if(!save.save()){save.state=backup;return{ok:false,message:"中断された共同探索を保存できませんでした"}}
+ const summary={id:resultId,runId,resultId,startFloor,endFloor,floor:endFloor,floorsCleared,completed:false,reason:"serverRestart",multiplayer:false,ranking:[]},context={resultId,summary,reason:"serverRestart",guest:false,recovered:true};return{ok:true,active:exact,returnResult,summary,context}
 }
 function persistOnlineBattleDefeated(event={}){
- const online=onlinePartyPersistentState(),eventId=String(event.eventId??"").slice(0,160);if(!eventId||online.processedBattleEventIds.includes(eventId))return{ok:Boolean(eventId),duplicate:Boolean(eventId)};
+ const backup=typeof structuredClone==="function"?structuredClone(save.state):JSON.parse(JSON.stringify(save.state)),online=onlinePartyPersistentState(),eventId=String(event.eventId??"").slice(0,160);if(!eventId||online.processedBattleEventIds.includes(eventId))return{ok:Boolean(eventId),duplicate:Boolean(eventId)};
  const floor=Math.max(1,Math.min(WORLD_MAX_FLOOR,Math.floor(Number(event.floor)||1))),defeated=(Array.isArray(event.defeated)?event.defeated:[]).filter(entry=>entry&&typeof entry==="object").slice(0,12),kills=defeated.filter(entry=>!entry.captured),boss=Boolean(event.boss)||kills.some(entry=>entry.boss);
  save.state.records??={};save.state.records.kills=(Number(save.state.records.kills)||0)+kills.length;save.state.codex??={encounters:{},captures:{},equipment:{}};save.state.codex.encounters??={};recordBiomeFloor(save.state,floor);
  for(const enemy of defeated){const speciesId=String(enemy.speciesId??"");if(speciesId&&SPECIES[speciesId]){save.state.codex.encounters[speciesId]=(Number(save.state.codex.encounters[speciesId])||0)+1;recordBiomeEncounter(save.state,floor,speciesId)}}
  const monster=save.state.monsters.find(entry=>entry.id===String(event.monsterId??""));
  if(monster){const affectionGain=boss?5:2;monster.affection=Math.min(1000,(Number(monster.affection??monster.bond)||0)+affectionGain);monster.bond=monster.affection;monster.history??={};monster.history.adventures=(Number(monster.history.adventures)||0)+1;monster.history.battles=(Number(monster.history.battles)||0)+1;monster.history.victories=(Number(monster.history.victories)||0)+1;monster.history.kills=(Number(monster.history.kills)||0)+kills.length;monster.history.bossDefeats=(Number(monster.history.bossDefeats)||0)+(boss?1:0);monster.history.highestFloor=Math.max(Number(monster.history.highestFloor)||1,floor);monster.history.lastDeployedAt=new Date().toISOString();monster.history.consecutiveDeployments=(Number(monster.history.consecutiveDeployments)||0)+1;monster.history.longestConsecutiveDeployments=Math.max(Number(monster.history.longestConsecutiveDeployments)||0,monster.history.consecutiveDeployments);monster.battles=(Number(monster.battles)||0)+1;for(const enemy of kills)recordWeaponKill(save.state,monster.id,enemy);recordSeriesBattle(save.state,[monster],null,{boss,battleId:`online:${eventId}`})}
- if(boss)recordBiomeBoss(save.state,floor);online.processedBattleEventIds.push(eventId);online.processedBattleEventIds=online.processedBattleEventIds.slice(-512);save.save();return{ok:true}
+ if(boss){recordBiomeBoss(save.state,floor);save.state.player.bossKills??={};save.state.player.bossKills[floor]=Math.max(0,Number(save.state.player.bossKills[floor])||0)+1}online.processedBattleEventIds.push(eventId);online.processedBattleEventIds=online.processedBattleEventIds.slice(-512);if(!save.save()){save.state=backup;return{ok:false,message:"討伐記録を保存できませんでした"}}return{ok:true}
 }
 
 function claimOnlinePartyReward({rewardId,reward={},source={}}={}){
- const id=String(rewardId??"").slice(0,160),online=onlinePartyPersistentState();if(!id)return{ok:false};if(online.claimedRewards.includes(id))return{ok:true,duplicate:true};
- const kind=String(source.kind??"");
- if(kind==="battle"&&reward.skillUses&&source.monsterId){const masteryMonster=save.state.monsters.find(monster=>monster.id===String(source.monsterId));if(masteryMonster){const learnedIds=new Set(allLearnedSkills(masteryMonster).filter(Boolean).map(skill=>skill.id)),bonus=Math.max(0,Number(masteryMonster._equipmentAffixes?.skillMasteryGain)||0);for(const[skillId,rawCount]of Object.entries(reward.skillUses)){if(!learnedIds.has(skillId))continue;for(let use=0,count=Math.max(0,Math.min(32,Math.floor(Number(rawCount)||0)));use<count;use++)recordSkillUse(masteryMonster,skillId,1+bonus/100)}}}
+ const id=String(rewardId??"").slice(0,160),backup=typeof structuredClone==="function"?structuredClone(save.state):JSON.parse(JSON.stringify(save.state)),online=onlinePartyPersistentState();if(!id)return{ok:false};if(online.claimedRewards.includes(id))return{ok:true,duplicate:true};
+ const requestedGold=Math.max(0,Math.floor(Number(reward.gold)||0)),requestedGoldCost=Math.max(0,Math.floor(Number(reward.goldCost)||0)),requestedKeys=Math.max(0,Math.floor(Number(reward.abyssKeys)||0)),requestedKeyCost=Math.max(0,Math.floor(Number(reward.abyssKeyCost)||0));if((Number(save.state.player.gold)||0)+requestedGold<requestedGoldCost)return{ok:false,message:"GOLD消費の前に未受取報酬を保存します"};if((Number(save.state.inventory.abyssKeys)||0)+requestedKeys<requestedKeyCost)return{ok:false,message:"深淵の鍵の獲得処理を先に完了します"};
+ const kind=String(source.kind??""),explorationBattleKinds=new Set(["battle","coopBoss"]);
+ if(explorationBattleKinds.has(kind)&&reward.skillUses&&source.monsterId){const masteryMonster=save.state.monsters.find(monster=>monster.id===String(source.monsterId));if(masteryMonster){const learnedIds=new Set(allLearnedSkills(masteryMonster).filter(Boolean).map(skill=>skill.id)),bonus=Math.max(0,Number(masteryMonster._equipmentAffixes?.skillMasteryGain)||0);for(const[skillId,rawCount]of Object.entries(reward.skillUses)){if(!learnedIds.has(skillId))continue;for(let use=0,count=Math.max(0,Math.min(32,Math.floor(Number(rawCount)||0)));use<count;use++)recordSkillUse(masteryMonster,skillId,1+bonus/100)}}}
  const cap=(value,max)=>Math.max(0,Math.min(max,Math.floor(Number(value)||0))),gold=cap(reward.gold,Number.MAX_SAFE_INTEGER),goldCost=cap(reward.goldCost,Number.MAX_SAFE_INTEGER),captureCrystals=cap(reward.captureCrystals,999),crystals=cap(reward.crystals,50_000),abyssKeys=cap(reward.abyssKeys,999),abyssKeyCost=cap(reward.abyssKeyCost,99),potions=cap(reward.potions,999),raidMaterials=cap(reward.raidMaterials,50_000),experience=cap(reward.experience,1_000_000_000),equipmentRarity=!source.bossFirstClear&&["N","R","SR","SSR","UR","LR","神話"].includes(String(reward.randomEquipmentRarity))?String(reward.randomEquipmentRarity):null,battleCapture=kind==="battleCapture"&&Boolean(reward.captureAttempted),captureCost=battleCapture?Math.max(1,cap(reward.captureCrystalCost??1,99)):0;
  let captureSuccess=false,captureStorageFull=false,captureNoCrystal=false,captureName="",experienceTarget="",equipmentName="",equipmentSlot=null,equipmentAcquired=false;
  if(battleCapture){if((Number(save.state.inventory.captureCrystals)||0)<captureCost)captureNoCrystal=true;else{save.state.inventory.captureCrystals-=captureCost;const contract=reward.capture,speciesId=String(contract?.speciesId??"");if(reward.captureSuccess&&SPECIES[speciesId]){if(save.state.monsters.length>=MONSTER_STORAGE_CAP){save.state.inventory.captureCrystals+=captureCost;captureStorageFull=true}else{const monster=createMonster(speciesId,{nickname:String(contract?.name??SPECIES[speciesId].name).slice(0,40),level:Math.max(1,Math.min(10000,Number(contract?.level)||1)),attribute:contract?.attribute??SPECIES[speciesId].element,obtainedMethod:"onlineCoopCapture",obtainedFloor:Math.max(1,Math.min(10000,Number(contract?.floor??source.floor)||1))});save.state.monsters.push(monster);save.state.records??={};save.state.records.captures=(Number(save.state.records.captures)||0)+1;save.state.codex??={encounters:{},captures:{},equipment:{}};save.state.codex.encounters??={};save.state.codex.captures??={};save.state.codex.encounters[speciesId]=(Number(save.state.codex.encounters[speciesId])||0)+1;save.state.codex.captures[speciesId]=(Number(save.state.codex.captures[speciesId])||0)+1;online.captures=(Number(online.captures)||0)+1;captureSuccess=true;captureName=displayName(monster)}}}}
  if(equipmentRarity){const floor=Math.max(1,Math.min(WORLD_MAX_FLOOR,Math.floor(Number(source.floor)||1))),slots=["weapon","armor","accessory"];equipmentSlot=slots.includes(String(reward.equipmentSlot))?String(reward.equipmentSlot):slots[[...id].reduce((sum,char)=>sum+char.charCodeAt(0),0)%slots.length];const item=createEquipment(equipmentSlot,{rarity:equipmentRarity});item.level=Math.max(1,Math.min(100_000,Math.floor(Number(reward.equipmentLevel)||floor)));item.obtainedMethod="onlineCoopBonus";item.obtainedFloor=floor;const received=receiveEquipment(save.state,item);equipmentAcquired=received?.location!=="sold";save.state.codex??={encounters:{},captures:{},equipment:{}};save.state.codex.equipment??={};save.state.codex.equipment[item.name]=(Number(save.state.codex.equipment[item.name])||0)+1;equipmentName=`${item.rarity??equipmentRarity} ${item.name} Lv.${Math.max(1,Number(item.level)||1)}${Number(item.plus)>0?` +${Math.floor(Number(item.plus))}`:""}${received?.message?`（${received.message}）`:""}`}
  save.state.player.gold=Math.max(0,Math.min(Number.MAX_SAFE_INTEGER,(Number(save.state.player.gold)||0)-goldCost+gold));save.state.player.crystals=Math.min(Number.MAX_SAFE_INTEGER,(Number(save.state.player.crystals)||0)+crystals);save.state.inventory.captureCrystals=Math.min(Number.MAX_SAFE_INTEGER,(Number(save.state.inventory.captureCrystals)||0)+captureCrystals);save.state.inventory.abyssKeys=Math.max(0,Math.min(Number.MAX_SAFE_INTEGER,(Number(save.state.inventory.abyssKeys)||0)-abyssKeyCost+abyssKeys));save.state.inventory.potions=Math.min(Number.MAX_SAFE_INTEGER,(Number(save.state.inventory.potions)||0)+potions);online.raidMaterials=Math.min(Number.MAX_SAFE_INTEGER,(Number(online.raidMaterials)||0)+raidMaterials);
- const raidKinds=new Set(["raid","raidMilestone","raidJuvenile","raidPersonal"]);let target=null;if(source.kind==="battle"&&source.monsterId)target=save.state.monsters.find(monster=>monster.id===String(source.monsterId));else if(raidKinds.has(kind)){const targetId=onlinePartyController?.selectedMonsterId??save.state.party?.[0];target=save.state.monsters.find(monster=>monster.id===String(targetId))}if(target&&experience){applyTotalExperience(target,totalExperience(target)+experience);target.currentHp=Math.min(calculatedStats(target).hp,Math.max(0,Number(target.currentHp)||0));target.currentMp=Math.min(maxMp(target),Math.max(0,Number(target.currentMp)||0));experienceTarget=displayName(target)}if(kind==="raid")online.raidWins=(Number(online.raidWins)||0)+1;
- const leaderFloorUnlock=cap(reward.leaderFloorUnlock??source.leaderFloorUnlock,WORLD_MAX_FLOOR);if(kind==="floorClear"&&leaderFloorUnlock>0){const clearedFloor=Math.max(1,Math.floor(Number(source.floor)||leaderFloorUnlock-1)),manual=save.state.returnRewards?.manual;if(!manual?.active||Math.abs((Number(manual.lastFloor)||clearedFloor)-clearedFloor)>1)beginManualExpedition(save.state,clearedFloor);recordManualFloorClear(save.state,leaderFloorUnlock);save.state.player.currentFloor=leaderFloorUnlock;save.state.player.maxFloor=Math.max(Number(save.state.player.maxFloor)||1,leaderFloorUnlock);recordBiomeFloor(save.state,leaderFloorUnlock);if(leaderFloorUnlock===1001)markSecondWorldEntered(save.state)}
- if(source.bossFirstClear){const floor=Math.max(10,Math.floor(Number(source.floor)||10));prepareOnlineFloorBossReward({floor,boss:source.boss??null,bosses:source.bosses??[],resume:false})}
- online.claimedRewards.push(id);online.claimedRewards=online.claimedRewards.slice(-2048);online.totalGold=(Number(online.totalGold)||0)+gold;online.totalCaptureCrystals=(Number(online.totalCaptureCrystals)||0)+captureCrystals;if(kind==="completion"||kind==="floorClear")online.expeditionsCompleted=(Number(online.expeditionsCompleted)||0)+1;if(kind==="battle")online.battlesWon=(Number(online.battlesWon)||0)+1;save.save();
+ const raidKinds=new Set(["raid","raidMilestone","raidJuvenile","raidPersonal"]);let target=null;if(explorationBattleKinds.has(kind)&&source.monsterId)target=save.state.monsters.find(monster=>monster.id===String(source.monsterId));else if(raidKinds.has(kind)){const targetId=onlinePartyController?.selectedMonsterId??save.state.party?.[0];target=save.state.monsters.find(monster=>monster.id===String(targetId))}if(target&&experience){applyTotalExperience(target,totalExperience(target)+experience);target.currentHp=Math.min(calculatedStats(target).hp,Math.max(0,Number(target.currentHp)||0));target.currentMp=Math.min(maxMp(target),Math.max(0,Number(target.currentMp)||0));experienceTarget=displayName(target)}if(kind==="raid")online.raidWins=(Number(online.raidWins)||0)+1;
+ const leaderFloorUnlock=cap(reward.leaderFloorUnlock??source.leaderFloorUnlock,WORLD_MAX_FLOOR);if(kind==="floorClear"&&leaderFloorUnlock>0){const clearedFloor=Math.max(1,Math.floor(Number(source.floor)||leaderFloorUnlock-1)),expeditionRunId=String(source.expeditionRunId??"").slice(0,120),manual=save.state.returnRewards?.manual,activeRunId=String(online.activeExpeditionRunId??""),completed=Boolean(expeditionRunId&&online.completedExpeditionRunIds.includes(expeditionRunId)),sameRun=Boolean(expeditionRunId&&activeRunId===expeditionRunId&&manual?.active&&online.activeManualExploreRunId&&online.activeManualExploreRunId===String(save.state.player.exploreRun?.id??"")),unrelatedManual=Boolean(manual?.active&&!sameRun),previousMax=Math.max(1,Number(save.state.player.maxFloor)||1);if(!completed&&!sameRun&&!unrelatedManual){beginManualExpedition(save.state,clearedFloor);if(expeditionRunId){online.activeExpeditionRunId=expeditionRunId;online.activeManualExploreRunId=String(save.state.player.exploreRun?.id??"").slice(0,120)||null}}const attached=!completed&&!unrelatedManual&&Boolean(save.state.returnRewards?.manual?.active)&&(!expeditionRunId||online.activeExpeditionRunId===expeditionRunId&&online.activeManualExploreRunId===String(save.state.player.exploreRun?.id??""));if(attached&&leaderFloorUnlock>Number(save.state.returnRewards.manual.lastFloor||clearedFloor))recordManualFloorClear(save.state,leaderFloorUnlock);if(attached)save.state.player.currentFloor=Math.max(Number(save.state.player.currentFloor)||1,leaderFloorUnlock);save.state.player.maxFloor=Math.max(previousMax,leaderFloorUnlock);if(leaderFloorUnlock>previousMax)recordBiomeFloor(save.state,leaderFloorUnlock);if(leaderFloorUnlock===1001)markSecondWorldEntered(save.state)}
+ if(source.bossFirstClear){const floor=Math.max(10,Math.floor(Number(source.floor)||10));prepareOnlineFloorBossReward({floor,boss:source.boss??null,bosses:source.bosses??[],resume:false,persist:false})}
+ online.claimedRewards.push(id);online.claimedRewards=online.claimedRewards.slice(-2048);online.totalGold=(Number(online.totalGold)||0)+gold;online.totalCaptureCrystals=(Number(online.totalCaptureCrystals)||0)+captureCrystals;if(kind==="completion"||kind==="floorClear")online.expeditionsCompleted=(Number(online.expeditionsCompleted)||0)+1;if(explorationBattleKinds.has(kind))online.battlesWon=(Number(online.battlesWon)||0)+1;if(!save.save()){save.state=backup;return{ok:false,message:"オンライン報酬を保存できなかったため再試行します"}}
  const compact=value=>{const number=Math.max(0,Number(value)||0);if(number>=1e9)return`${Number((number/1e9).toFixed(1))}B`;if(number>=1e6)return`${Number((number/1e6).toFixed(1))}M`;if(number>=1e4)return`${Number((number/1e3).toFixed(1))}K`;return Math.floor(number).toLocaleString()},goldHud=document.getElementById("goldHud"),crystalHud=document.getElementById("crystalHud"),captureHud=document.getElementById("captureHud");if(goldHud)goldHud.textContent=compact(save.state.player.gold);if(crystalHud)crystalHud.textContent=compact(save.state.player.crystals);if(captureHud)captureHud.textContent=compact(save.state.inventory.captureCrystals);if(gold)showResourceToast("gold",gold);if(crystals)setTimeout(()=>showResourceToast("crystal",crystals),180);if(captureCrystals)setTimeout(()=>showResourceToast("capture",captureCrystals),300);if(abyssKeys)setTimeout(()=>showResourceToast("key",abyssKeys),360);if(potions)setTimeout(()=>showToast(`回復薬 ×${potions} 獲得`),380);if(raidMaterials)setTimeout(()=>showToast(`レイド核片 ×${raidMaterials} 獲得`),420);if(equipmentName&&equipmentSlot!=="weapon")setTimeout(()=>showToast(`装備獲得：${equipmentName}`),460);if(leaderFloorUnlock)showToast(`${leaderFloorUnlock}階が解放されました！`);
  return{ok:true,gold,goldCost,captureCrystals,crystals,abyssKeys,abyssKeyCost,potions,raidMaterials,experience,experienceTarget,equipmentName,equipmentSlot,isWeapon:Boolean(equipmentAcquired&&equipmentName&&equipmentSlot==="weapon"),captureSuccess,captureStorageFull,captureNoCrystal,captureName,leaderFloorUnlock}
 }
@@ -1899,7 +1944,7 @@ function exchangeOnlineRaidReward(kind,cost){
  else if(base==="crystals"){save.state.player.crystals=Math.min(Number.MAX_SAFE_INTEGER,(Number(save.state.player.crystals)||0)+100);message="魔晶石 ×100を獲得しました"}
  online.raidMaterials=materials-price;online.raidExchange[exchangeKey]=(Number(online.raidExchange[exchangeKey])||0)+1;save.save();return{ok:true,message,price}
 }
-function prepareOnlineFloorBossReward({floor,boss=null,bosses=[],resume=false,ownerId=null}={}){
+function prepareOnlineFloorBossReward({floor,boss=null,bosses=[],resume=false,ownerId=null,persist=true}={}){
  if(ownerId&&onlinePartyController?.selfId&&ownerId!==onlinePartyController.selfId)return false;
  const depth=Math.max(10,Math.min(WORLD_MAX_FLOOR,Math.floor(Number(floor)||0)));if(!depth||depth%10!==0)return false;
  save.state.player.bossKills??={};save.state.player.bossRewards??={};save.state.player.pendingBossRewards??={};
@@ -1913,7 +1958,7 @@ function prepareOnlineFloorBossReward({floor,boss=null,bosses=[],resume=false,ow
   const definition=floorBossDefinitionForFloor(depth),profile=boss??bosses?.[0]??null,candidate={speciesId:profile?.speciesId??definition?.speciesId??"ancient_dragon",name:profile?.name??definition?.name??"階層支配者",floorBossCatalogId:profile?.floorBossCatalogId??definition?.id??null};
   save.state.player.pendingBossRewards[depth]={floor:depth,speciesId:candidate.speciesId,rewardFormat:"build194-floor-boss-three-choice",createdAt:new Date().toISOString(),options:createBossRewardOptions(depth,candidate)};
  }
- save.save();if(resume)setTimeout(()=>resumePendingBossReward(),120);return true
+ if(persist&&!save.save())return false;if(resume)setTimeout(()=>resumePendingBossReward(),120);return true
 }
 function repairMissedOnlineFloorBossRewards(){
  const online=save.state.onlineParty??{},host=online.hostWorld??{},candidates=[...(Array.isArray(online.firstCoopBossClears)?online.firstCoopBossClears:[]),...(Array.isArray(host.defeatedBossFloors)?host.defeatedBossFloors:[])].map(Number).filter(floor=>floor>=10&&floor%10===0&&!save.state.player.bossRewards?.[floor]);
@@ -1930,7 +1975,7 @@ function enterOnlineSecretRoom(event={}){
 function bindOnlineParty(){
  ensureSecretRoomExpedition(save.state);save.save();
  onlinePartyController??=new OnlinePartyController({
-  getState:()=>save.state,toast:showToast,onReward:claimOnlinePartyReward,onBack:()=>go("home"),
+	  getState:()=>save.state,toast:showToast,onReward:claimOnlinePartyReward,onExpeditionStarted:beginOnlineExpeditionResultRun,onExpeditionResult:settleOnlineExpeditionResult,onExpeditionOrphaned:recoverOrphanedOnlineExpedition,onShowExpeditionResult:showOnlineExpeditionResult,onBack:()=>finishOnlinePartyNavigation("home"),
   onExploreCanvasMount:mountOnlineExploreCanvas,
 	  onExploreCanvasUpdate:updateOnlineExploreCanvas,
 	  onExploreCanvasUnmount:unmountOnlineExploreCanvas,
@@ -1941,8 +1986,9 @@ function bindOnlineParty(){
 	  onRaidExchange:exchangeOnlineRaidReward,
 	  onOnlineVitalsUpdate:applyOnlineVitalsUpdate,
 	  onBattleDefeated:persistOnlineBattleDefeated,
+	  onTeamBattleResult:persistOnlineTeamBattleResult,
 	  onSecretRoomEntered:enterOnlineSecretRoom,
-	  onBeginSecretRoomExpedition:()=>{const run=beginSecretRoomExpedition(save.state);save.save();return run},
+	  onBeginSecretRoomExpedition:candidate=>{let run;if(candidate&&String(candidate.id??"").trim()&&Number(candidate.seed)>0){ensureSecretRoomExpedition(save.state);run={id:String(candidate.id).slice(0,120),seed:Math.max(1,Math.min(0x7fffffff,Math.floor(Number(candidate.seed)||1))),startedAt:Math.max(1,Math.floor(Number(candidate.startedAt)||Date.now()))};save.state.secretRooms.run=run;save.state.secretRooms.activeRoom=null}else run=beginSecretRoomExpedition(save.state);save.save();return run},
 	  onTutorialGuide:id=>{if(["explore_move","explore_pickup"].includes(id))completeContextGuide(id,{quiet:true})},
 	  onScene:scene=>audio.setScene(scene)
  });
@@ -1951,12 +1997,12 @@ function bindOnlineParty(){
 
 function persistOnlineHostWorld(event){
  const ownerId=event?.ownerId??event?.hostOwnerId??null;if(ownerId&&onlinePartyController?.selfId&&ownerId!==onlinePartyController.selfId)return{ok:false,ignored:true};
- const online=onlinePartyPersistentState(),host=online.hostWorld,source=event?.kind==="hostWorldSnapshot"&&event.hostWorld&&typeof event.hostWorld==="object"?event.hostWorld:{};host.revision=Math.max(Number(host.revision)||0,Number(source.revision)||0,Number(event?.revision)||0);host.openedChestIds??={};host.floorSeeds??={};save.state.player.openedChests??={};save.state.player.floorSeeds??={};save.state.records??={};
+ const backup=typeof structuredClone==="function"?structuredClone(save.state):JSON.parse(JSON.stringify(save.state)),online=onlinePartyPersistentState(),host=online.hostWorld,source=event?.kind==="hostWorldSnapshot"&&event.hostWorld&&typeof event.hostWorld==="object"?event.hostWorld:{};host.revision=Math.max(Number(host.revision)||0,Number(source.revision)||0,Number(event?.revision)||0);host.openedChestIds??={};host.floorSeeds??={};save.state.player.openedChests??={};save.state.player.floorSeeds??={};save.state.records??={};
  const opened={...(source.openedChestIds&&typeof source.openedChestIds==="object"?source.openedChestIds:{})};if(event?.chestId){const floor=String(Math.max(1,Math.floor(Number(event.floor)||1)));opened[floor]=[...(Array.isArray(opened[floor])?opened[floor]:[]),String(event.chestId)]}
  for(const[floor,ids]of Object.entries(opened)){if(!Array.isArray(ids))continue;host.openedChestIds[floor]=Array.isArray(host.openedChestIds[floor])?host.openedChestIds[floor]:[];save.state.player.openedChests[floor]=Array.isArray(save.state.player.openedChests[floor])?save.state.player.openedChests[floor]:[];for(const rawId of ids.map(String).filter(Boolean).slice(0,200)){if(!host.openedChestIds[floor].includes(rawId))host.openedChestIds[floor].push(rawId);if(!save.state.player.openedChests[floor].includes(rawId)){save.state.player.openedChests[floor].push(rawId);save.state.records.chests=(Number(save.state.records.chests)||0)+1;recordBiomeChest(save.state,Number(floor)||1,rawId)}}}
  const floorSeeds={...(source.floorSeeds&&typeof source.floorSeeds==="object"?source.floorSeeds:{})};if(event?.floorSeed!=null)floorSeeds[String(Math.max(1,Math.floor(Number(event.floor)||1)))]=event.floorSeed;for(const[floor,rawSeed]of Object.entries(floorSeeds)){const seed=Math.max(0,Math.floor(Number(rawSeed)||0))>>>0;host.floorSeeds[floor]=seed;save.state.player.floorSeeds[floor]=seed}
- const defeated=[...(Array.isArray(source.defeatedBossFloors)?source.defeatedBossFloors:[]),...(event?.kind==="floorBossDefeated"?[event.floor]:[])].map(Number).filter(floor=>floor>=10&&floor%10===0);host.defeatedBossFloors=Array.isArray(host.defeatedBossFloors)?host.defeatedBossFloors:[];for(const floor of [...new Set(defeated)]){const fresh=!host.defeatedBossFloors.includes(floor);if(fresh)host.defeatedBossFloors.push(floor);if(fresh||!save.state.player.bossRewards?.[floor]){recordBiomeBoss(save.state,floor);prepareOnlineFloorBossReward({floor,ownerId,resume:false})}}
- const claimed=(Array.isArray(source.claimedBossRewardFloors)?source.claimedBossRewardFloors:[]).map(Number).filter(floor=>floor>=10&&floor%10===0);host.claimedBossRewardFloors=[...new Set([...(Array.isArray(host.claimedBossRewardFloors)?host.claimedBossRewardFloors:[]),...claimed])].slice(0,1000);save.save();return{ok:true}
+ const defeated=[...(Array.isArray(source.defeatedBossFloors)?source.defeatedBossFloors:[]),...(event?.kind==="floorBossDefeated"?[event.floor]:[])].map(Number).filter(floor=>floor>=10&&floor%10===0);host.defeatedBossFloors=Array.isArray(host.defeatedBossFloors)?host.defeatedBossFloors:[];for(const floor of [...new Set(defeated)]){const fresh=!host.defeatedBossFloors.includes(floor);if(fresh)host.defeatedBossFloors.push(floor);if(fresh||!save.state.player.bossRewards?.[floor]){recordBiomeBoss(save.state,floor);prepareOnlineFloorBossReward({floor,ownerId,resume:false,persist:false})}}
+ const claimed=(Array.isArray(source.claimedBossRewardFloors)?source.claimedBossRewardFloors:[]).map(Number).filter(floor=>floor>=10&&floor%10===0);host.claimedBossRewardFloors=[...new Set([...(Array.isArray(host.claimedBossRewardFloors)?host.claimedBossRewardFloors:[]),...claimed])].slice(0,1000);if(!save.save()){save.state=backup;return{ok:false,message:"主の世界の進行を保存できませんでした"}}return{ok:true}
 }
 
 function onlineExploreMonster(member){
@@ -2833,7 +2879,23 @@ function countUpReturnValues(modal){
   requestAnimationFrame(step);
  });
 }
-function showManualReturnResult(result){
+function showOnlineExpeditionDefeatResult({lost=0,checkpoint=1}={}){
+ app.insertAdjacentHTML("beforeend",Modal("共同探索・敗北",`<div class="defeat-cinematic"><div class="defeat-mark">☠</div><h2>深淵に敗れた…</h2><p><b>${Math.max(0,Number(lost)||0).toLocaleString()}G</b>を失い、${Math.max(1,Number(checkpoint)||1).toLocaleString()}Fの拠点へ救出されました。</p><small>通常探索と同じ敗北結果をセーブしました。</small></div>`,"オンライン受付へ戻る"));const modal=topModal(),finish=()=>modal?.remove();modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish
+}
+function showOnlineExpeditionSummary(context={}){
+ const summary=context?.summary&&typeof context.summary==="object"?context.summary:{},startFloor=Math.max(1,Math.floor(Number(summary.startFloor)||1)),endFloor=Math.max(startFloor,Math.floor(Number(summary.endFloor??summary.floor)||startFloor)),floorsCleared=Math.max(0,Math.floor(Number(summary.floorsCleared)||0)),reason=String(context?.reason??summary.reason??"return"),completed=Boolean(summary.completed),ranking=(Array.isArray(summary.ranking)?summary.ranking:[]).slice(0,4);
+ const title=completed?"共同探索を踏破":reason==="defeat"?"共同探索は敗北":reason==="serverRestart"?"共同探索を安全に回収":"共同探索から帰還",reasonLabels={leader:"部屋主が帰還を確定しました",vote:"帰還投票が成立しました",worldOwnerLeft:"部屋主の退出により帰還しました",worldOwnerTimeout:"部屋主の再接続期限を迎えました",serverRestart:"サーバー再起動で中断された進行と報酬を端末へ回収しました",maxFloor:"最深部を踏破しました",return:"共同探索を終了しました"},detail=reasonLabels[reason]??(completed?"共同探索の踏破結果を保存しました":"共同探索の結果を保存しました");
+ const rankingRows=ranking.map((entry,index)=>`<div class="return-reward-item"><b>#${Math.max(1,Math.floor(Number(entry?.rank)||index+1))} ${escapeAttribute(entry?.name||"冒険者")}</b><small>共闘貢献 ${Math.max(0,Math.floor(Number(entry?.score)||0)).toLocaleString()}</small></div>`).join("");
+ const receipt=context?.duplicate?"保存済みの結果を再確認しました。":context?.guest?"参加結果と最終HP・MPを保存しました。":"共同探索の進行と最終HP・MPを保存しました。";
+ const body=`<div class="return-reward-report return-reward-v2 online-expedition-summary"><small>ONLINE EXPEDITION RESULT</small><h2>${escapeAttribute(title)}</h2><p>${escapeAttribute(detail)}</p><div class="return-result-summary"><article>${pixelIcon("dungeon")}<small>出発</small><b>${startFloor.toLocaleString()}F</b></article><article>${pixelIcon("map")}<small>帰還地点</small><b>${endFloor.toLocaleString()}F</b></article><article>${pixelIcon("event")}<small>踏破階層</small><b>${floorsCleared.toLocaleString()}階</b></article></div>${rankingRows?`<h3>共闘貢献</h3><div class="return-reward-items">${rankingRows}</div>`:""}<p class="muted">${escapeAttribute(receipt)}</p></div>`;
+ app.insertAdjacentHTML("beforeend",Modal("共同探索・結果",body,"オンライン受付へ戻る"));const modal=topModal(),finish=()=>modal?.remove();modal.classList.add("return-result-modal-v2");modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish;return modal
+}
+function showOnlineExpeditionResult(result,context={}){
+ if(context?.defeat)return showOnlineExpeditionDefeatResult(context.defeat);
+ if(result&&Array.isArray(result.equipment))return showManualReturnResult(result,{title:"共同探索・帰還報告",primaryLabel:"オンライン受付へ戻る",onClose:()=>{}});
+ return showOnlineExpeditionSummary(context)
+}
+function showManualReturnResult(result,{title="探索帰還報告",primaryLabel="拠点へ戻る",onClose=null}={}){
  const guide=contextualGuideState();bumpGuideCounter(guide,"returns");if(!contextGuideDone("first_return")){completeGuideStep(guide,"first_return");if(save.state.gacha?.firstTenUsed){completeGuideStep(guide,"starter_gacha_open");completeGuideStep(guide,"starter_gacha_pull")}else setGuidePending(guide,"starterGacha",true);save.save()}
  const best=result.equipment.reduce((a,x)=>!a||(RARITY_ORDER[equipmentDisplayRarity(x.item)]??0)>(RARITY_ORDER[equipmentDisplayRarity(a.item)]??0)?x:a,null);
  const equipmentRows=result.equipment.length?result.equipment.map(({item,receipt})=>`<div class="return-reward-item rarity-${equipmentDisplayRarity(item)}"><span>${pixelIcon("equipment")}</span><div><b>[${equipmentDisplayRarity(item)}] ${item.name}</b><small>${receipt.message}</small></div></div>`).join(""):'<p class="muted return-no-drop">今回は装備ドロップなし</p>';
@@ -2850,9 +2912,9 @@ function showManualReturnResult(result){
   </div>
   <h3>獲得装備</h3><div class="return-reward-items">${equipmentRows}</div>${returnRarityTable()}
  </div>`;
- app.insertAdjacentHTML("beforeend",Modal("探索帰還報告",body,"拠点へ戻る"));
+ app.insertAdjacentHTML("beforeend",Modal(title,body,primaryLabel));
  const modal=topModal();modal.classList.add("return-result-modal-v2");countUpReturnValues(modal);
- let closed=false,finish=()=>{if(closed)return;closed=true;modal?.remove();go("home")};
+ let closed=false,finish=()=>{if(closed)return;closed=true;modal?.remove();if(typeof onClose==="function")onClose();else go("home")};
  modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish;
 }
 function openManualReturnConfirmation(){
@@ -5246,7 +5308,7 @@ function awardBossReward(option){
  }
 }
 function openBossRewardModal(floor,result=""){
- const pending=save.state.player.pendingBossRewards?.[floor];if(!pending?.options?.length)return false;
+ const pending=save.state.player.pendingBossRewards?.[floor];if(!pending?.options?.length)return false;const returnToOnline=screen==="onlineParty"&&Boolean(onlinePartyController);
  app.insertAdjacentHTML("beforeend",`<div class="game-modal boss-reward-modal"><div class="game-modal-card boss-reward">${result?`<div class="boss-reward-result">${result}</div>`:""}<div class="boss-clear-emblem">${pixelIcon("event")}</div><small class="boss-choice-kicker">ABYSS TREASURE・${floor}F</small><h2 class="boss-choice-title">初回撃破報酬を選択</h2><p class="muted">この階で受け取れるのは初回撃破時のひとつだけ。選択前の更新では保留されます。</p><div class="boss-reward-grid">${pending.options.map((option,index)=>`<button data-boss-reward="${option.id}"><i>CHOICE ${index+1}</i>${bossRewardIcon(option)}<b>${option.title}</b><small>${option.desc}</small></button>`).join("")}</div></div></div>`);
  const modal=topModal(),claim=(button,{automatic=false}={})=>{
   const option=pending.options.find(entry=>entry.id===button.dataset.bossReward);if(!option)return;
@@ -5259,6 +5321,7 @@ function openBossRewardModal(floor,result=""){
   save.save();modal.remove();battle=null;
   if(playEnding){play1000EndingSequence();return}
   if(playTrueEnding){play10000EndingSequence();return}
+  if(returnToOnline)return;
   screen=save.state.player.inRun?"explore":"home";render()
  };
  modal.querySelectorAll("[data-boss-reward]").forEach(button=>button.onclick=()=>claim(button));

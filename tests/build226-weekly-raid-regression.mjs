@@ -12,7 +12,7 @@ test("build226 exposes weekly raid metadata and a mobile-safe screen",async()=>{
 test("build226 persists weekly identity, completion and personal milestone receipts",async()=>{
  const[main,client,store,save]=await Promise.all([read("src/main.js"),read("src/online/OnlinePartyClient.js"),read("online-server/src/RoomStore.js"),read("src/services/SaveService.js")]);
  for(const field of ["weekId","weekStartsAt","weekEndsAt","bossId","modifierId","personalMilestonesClaimed","completedAt"]){assert.match(main,new RegExp(field));assert.match(save,new RegExp(field))}
- assert.match(main,/SaveService\.js\?v=2\.11\.54-build226/);assert.match(save,/slice\(-2048\)/);assert.match(client,/this\._syncRaidWorld\(message\.raid\?\.progress \?\? null\)/);assert.match(client,/const ONLINE_PROTOCOL = "1\.14\.0"/);assert.match(store,/weeklyRaid/);assert.match(store,/personalMilestonesClaimed/);
+ assert.match(main,/SaveService\.js\?v=2\.11\.54-build226/);assert.match(save,/slice\(-2048\)/);assert.match(client,/this\._syncRaidWorld\(message\.raid\?\.progress \?\? null\)/);assert.match(client,/const ONLINE_PROTOCOL = "1\.16\.0"/);assert.match(store,/weeklyRaid/);assert.match(store,/personalMilestonesClaimed/);
 });
 
 test("build226 exchange includes boss-specific contracts, weapons and repeatable crystals",async()=>{

@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("build162 exposes one stage and exactly five independent online destinations", async () => {
+test("the modern online shell keeps one stage and six independent destinations", async () => {
   const [screen, client, views, styles, index] = await Promise.all([
     read("src/ui/screens/OnlinePartyScreen.js"),
     read("src/online/OnlinePartyClient.js"),
@@ -14,19 +14,21 @@ test("build162 exposes one stage and exactly five independent online destination
   ]);
 
   assert.equal((screen.match(/data-online-stage/g) ?? []).length, 1);
-  assert.equal((screen.match(/data-online-route=/g) ?? []).length, 5);
-  for (const route of ["home", "explore", "raid", "team", "chat"]) {
+  assert.equal((screen.match(/data-online-route=/g) ?? []).length, 6);
+  for (const route of ["home", "explore", "raid", "team", "resonance", "chat"]) {
     assert.match(screen, new RegExp(`data-online-route="${route}"`));
     assert.match(client, new RegExp(`renderOnline${route[0].toUpperCase()}${route.slice(1)}`));
   }
-  assert.match(client, /const ROUTES = new Set\(\["home", "explore", "raid", "team", "chat"\]\)/);
-  assert.doesNotMatch(screen, /data-online-room-view|data-online-trade|data-online-resonance/);
+  assert.match(client, /const ROUTES = new Set\(\["home", "explore", "raid", "team", "resonance", "chat"\]\)/);
+  assert.doesNotMatch(screen, /data-online-room-view|data-online-trade/);
+  assert.equal((screen.match(/data-online-route="resonance"/g) ?? []).length, 1);
   assert.match(styles, /\.online-v3-room\s*\{[\s\S]*grid-template-rows:\s*auto minmax\(0, 1fr\) auto/);
   assert.match(styles, /\.online-v3-stage\s*\{[\s\S]*overflow:\s*auto/);
   assert.match(index, /online-v3\.css\?v=2\.10\.0-build163/);
   assert.match(index, /build163\.css\?v=2\.10\.0-build163/);
-  assert.match(index, /ASSET_BUILD = "build163"/);
-  assert.match(views, /画面は下へつながらず、選んだ機能だけが開きます/);
+  assert.match(index, /Styles\/build231\.css\?v=2\.11\.57-build231/);
+  assert.match(index, /ASSET_BUILD = "build239"/);
+  assert.match(views, /export function renderOnlineResonance/);
 });
 
 test("exploration supports tap paths, synchronized vitals, critical/down visuals and one shared battle renderer", async () => {
@@ -57,7 +59,7 @@ test("free team battle supports every requested split with server authority and 
   ]);
 
   assert.match(views, /1vs1、1vs2、1vs3、2vs2/);
-  assert.match(views, /報酬なしのフレンド模擬戦/);
+  assert.match(views, /最低2人。両チームに1人以上必要です/);
   assert.match(client, /teamSide/);
   assert.match(client, /teamReady/);
   assert.match(client, /startTeamBattle/);
@@ -70,8 +72,11 @@ test("free team battle supports every requested split with server authority and 
   assert.match(coordinator, /effectiveEvasion/);
   assert.doesNotMatch(coordinator, /queueReward|onlineReward/);
   assert.match(store, /teamBattle:teamBattleSnapshot/);
-  assert.match(server, /protocol:"1\.7\.0"/);
-  assert.doesNotMatch(server, /message\.type==="(?:startResonance|resonanceMove|resonanceAction|tradeRequest|tradeOffer|tradeConfirm)"/);
+  assert.match(server, /protocol:"1\.16\.0"/);
+  for (const command of ["startResonance", "resonanceMove", "resonanceAction", "tradeInvite", "tradeOffer", "tradeConfirm"]) {
+    assert.match(server, new RegExp(`message\\.type==="${command}"`));
+  }
+  assert.doesNotMatch(server, /message\.type==="tradeRequest"/);
 });
 
 test("chat is sanitized, rate-limited, retained to fifty messages and reconnect state is restored", async () => {
@@ -90,13 +95,14 @@ test("chat is sanitized, rate-limited, retained to fifty messages and reconnect 
   assert.match(store, /reconnectGraceMs=300_000/);
   assert.match(store, /resumed:Boolean\(resumed&&room\)/);
   assert.match(views, /escapeOnlineHtml\(message\.text\)/);
-  assert.match(views, /直近50件を復元/);
+  assert.match(views, /data-online-chat-log role="log"/);
 });
 
 test("screen refresh restores the exact current main screen instead of forcing online", async () => {
   const main = await read("src/main.js");
   assert.match(main, /SCREEN_SESSION_KEY="abyss-dominion:current-screen"/);
-  assert.match(main, /sessionStorage\.setItem\(SCREEN_SESSION_KEY,screen\)/);
+  assert.match(main, /const refreshScreen=screen==="shop"&&onlineSecretRoomContext\?"onlineParty":screen/);
+  assert.match(main, /sessionStorage\.setItem\(SCREEN_SESSION_KEY,refreshScreen\)/);
   assert.match(main, /else if\(restored&&REFRESHABLE_SCREENS\.has\(restored\)\)screen=restored/);
   assert.match(main, /if\(inviteKey&&inviteKey!==lastInvite\)\{screen="onlineParty"/);
 });

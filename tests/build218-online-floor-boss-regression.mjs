@@ -16,7 +16,7 @@ const cssSource = read("src/Styles/build218.css");
 
 assert.match(indexSource, /build218\.css\?v=2\.11\.53-build218/);
 assert.match(indexSource, /build225\.css\?v=2\.11\.54-build225/);
-assert.match(indexSource, /ASSET_BUILD = "build228"/);
+assert.match(indexSource, /ASSET_BUILD = "build230"/);
 assert.match(configSource, /APP_VERSION="2\.11\.54"/);
 
 // The online floor is sourced from the same canonical boss catalogue as solo.
