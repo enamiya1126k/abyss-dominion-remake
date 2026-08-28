@@ -1,75 +1,15 @@
 import { prepareCoopExpeditionV206 } from "./CoopGimmicks.js";
 
-const RARE_KINDS = Object.freeze(["goldenMonster", "otherworldMerchant", "hiddenPortal"]);
 const RARITY_ORDER = Object.freeze(["N", "R", "SR", "SSR", "UR", "LR"]);
 
-function hashText(value) {
-  let hash = 2166136261;
-  for (const char of String(value)) hash = Math.imul(hash ^ char.charCodeAt(0), 16777619);
-  return hash >>> 0;
+export function rareEventChance() {
+  // Named export retained for older imports; retired realms have no draw.
+  return 0;
 }
 
-function seededRandom(seed) {
-  let state = seed >>> 0;
-  return () => {
-    state += 0x6D2B79F5;
-    let value = state;
-    value = Math.imul(value ^ value >>> 15, value | 1);
-    value ^= value + Math.imul(value ^ value >>> 7, value | 61);
-    return ((value ^ value >>> 14) >>> 0) / 4294967296;
-  };
-}
-
-function key(point) { return `${point.x},${point.y}`; }
-function distance(left, right) { return Math.abs(left.x - right.x) + Math.abs(left.y - right.y); }
-
-function freeCells(expedition) {
-  const occupied = new Set([
-    key(expedition.start), key(expedition.exit),
-    ...(expedition.objects ?? []).map(key),
-  ]);
-  const cells = [];
-  for (let y = 1; y < expedition.rows - 1; y++) {
-    for (let x = 1; x < expedition.cols - 1; x++) {
-      if (expedition.tiles[y]?.[x] !== "." || occupied.has(`${x},${y}`)) continue;
-      cells.push({ x, y });
-    }
-  }
-  return cells;
-}
-
-function takeFar(cells, source, random) {
-  if (!cells.length) return { ...source };
-  const ranked = [...cells].sort((a, b) => distance(b, source) - distance(a, source));
-  const pool = ranked.slice(0, Math.max(1, Math.ceil(ranked.length * .22)));
-  const point = pool[Math.floor(random() * pool.length)] ?? ranked[0];
-  const index = cells.findIndex(entry => entry.x === point.x && entry.y === point.y);
-  if (index >= 0) cells.splice(index, 1);
-  return point;
-}
-
-function takeMid(cells, source, random) {
-  if (!cells.length) return { ...source };
-  const pool = cells.filter(point => distance(point, source) >= 5);
-  const sourcePool = pool.length ? pool : cells;
-  const point = sourcePool[Math.floor(random() * sourcePool.length)] ?? sourcePool[0];
-  const index = cells.findIndex(entry => entry.x === point.x && entry.y === point.y);
-  if (index >= 0) cells.splice(index, 1);
-  return point;
-}
-
-export function rareEventChance({ floor = 1, participants = 1, resonance = 0 } = {}) {
-  if (Math.max(1, Math.floor(Number(participants) || 1)) < 2 || Math.max(1, Math.floor(Number(floor) || 1)) % 10 === 0) return 0;
-  return Math.min(.32, .12 + Math.min(10, Math.floor(Number(floor) / 100)) * .008 + Math.max(0, Number(participants) - 1) * .025 + Math.max(0, Number(resonance)) * .012);
-}
-
-export function chooseRareEvent({ ownerId = "", floor = 1, runId = "", participants = 1, resonance = 0, forceRare = null } = {}) {
-  if (Math.max(1, Math.floor(Number(participants) || 1)) < 2 || Math.max(1, Math.floor(Number(floor) || 1)) % 10 === 0) return null;
-  if (RARE_KINDS.includes(forceRare)) return forceRare;
-  const random = seededRandom(hashText(`rare207:${ownerId}:${floor}:${runId}`));
-  if (random() >= rareEventChance({ floor, participants, resonance })) return null;
-  const roll = random();
-  return roll < .45 ? "goldenMonster" : roll < .75 ? "otherworldMerchant" : "hiddenPortal";
+export function chooseRareEvent() {
+  // Legacy forceRare values are intentionally ignored.
+  return null;
 }
 
 export function prepareOnlineExpansionV207(expedition, {
@@ -78,12 +18,13 @@ export function prepareOnlineExpansionV207(expedition, {
   contribution = null,
   participants = 1,
   resonance = 0,
-  forceRare = null,
+  forceRare: _legacyForceRare = null,
 } = {}) {
-  prepareCoopExpeditionV206(expedition, { leaderId: ownerId, hostWorld, contribution, participants });
+  const partySize = Math.max(1, Math.min(4, Math.floor(Number(participants) || 1)));
+  prepareCoopExpeditionV206(expedition, { leaderId: ownerId, hostWorld, contribution, participants: partySize });
   expedition.hostOwnerId = ownerId;
   expedition.coop ??= {};
-  expedition.coop.resonance = {
+  expedition.coop.resonance = partySize < 2 ? null : {
     level: Math.max(0, Math.min(5, Number(resonance) || 0)),
     max: 5,
     rewardBonusPct: Math.max(0, Math.min(15, (Number(resonance) || 0) * 3)),
@@ -92,33 +33,19 @@ export function prepareOnlineExpansionV207(expedition, {
   expedition.coop.ownerDisconnectedAt = 0;
   expedition.coop.ownerReconnectDeadline = 0;
 
-  const kind = chooseRareEvent({ ownerId, floor: expedition.floor, runId: expedition.id, participants, resonance, forceRare });
+  // The dedicated rare realms were retired in build184. Keep only the empty
+  // state shape so old snapshots/clients can be normalized without switching
+  // away from the host's ordinary exploration map.
+  void _legacyForceRare;
   expedition.coop.rare = {
-    kind,
-    resolved: !kind,
+    kind: null,
+    resolved: true,
     merchantClaims: {},
     portalEntered: false,
     guardianDefeated: false,
+    realmActive: false,
+    portalReturned: false,
   };
-  if (!kind) return expedition;
-
-  const random = seededRandom(hashText(`rare-place207:${ownerId}:${expedition.floor}:${expedition.id}`));
-  const cells = freeCells(expedition);
-  const entry = takeMid(cells, expedition.start, random);
-  if (kind === "goldenMonster") {
-    expedition.objects.push({ id: "rare-golden-monster", type: "rareGoldenMonster", ...entry, resolved: false, rare: true });
-  } else if (kind === "otherworldMerchant") {
-    expedition.objects.push({ id: "rare-otherworld-merchant", type: "rareMerchant", ...entry, resolved: false, persistent: true, rare: true });
-  } else {
-    const destination = takeFar(cells, entry, random);
-    expedition.coop.rare.destination = destination;
-    expedition.objects.push(
-      { id: "rare-hidden-portal", type: "rarePortal", ...entry, resolved: false, persistent: true, rare: true },
-      { id: "rare-portal-guardian", type: "rarePortalGuardian", ...destination, resolved: false, hidden: true, rare: true },
-      { id: "rare-portal-chest", type: "rarePortalChest", ...destination, resolved: false, hidden: true, rare: true },
-    );
-  }
-  expedition.totalDiscoveries = Math.max(1, Number(expedition.totalDiscoveries) || 0) + 1;
   return expedition;
 }
 

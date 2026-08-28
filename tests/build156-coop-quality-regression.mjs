@@ -11,20 +11,22 @@ test("build156 adds quantity purchases and preserves current HP when battle max 
  assert.match(main,/const previousMaxHp=Math\.max\(1,Number\(calculatedStats\(monster\)\.hp\)/);assert.match(main,/wasAlive&&hp>previousMaxHp/);assert.match(main,/monster\.currentHp\+=hp-previousMaxHp/);
 });
 
-test("online room modes are isolated full-screen surfaces and raid reuses normal battle components",async()=>{
- const[screen,client,styles]=await Promise.all([read("src/ui/screens/OnlinePartyScreen.js"),read("src/online/OnlinePartyClient.js"),read("src/Styles/v2.10.0.css")]);
- assert.match(styles,/html\.online-immersive,body\.online-immersive/);assert.match(styles,/\.online-party-screen\.online-phase-raid \.online-raid-view/);assert.match(styles,/position:fixed!important;z-index:1100!important/);assert.match(client,/plazaView\.hidden=expedition\|\|showRaid\|\|showResonance\|\|showTrade/);
- for(const token of["battle-screen side-battle-v2","battle-header","turn-order","battle-arena side-battle-arena","battle-party side-party","enemy-party side-enemies","battle-command","command-grid","battle-log"])assert.ok(screen.includes(token),`missing normal raid component: ${token}`);
- assert.match(styles,/Raid reuses the ordinary side-battle composition/);assert.match(client,/_renderRaid\(raid\)/);
+test("online room modes share one modern stage and exploration reuses the normal screens",async()=>{
+ const[screen,client,views]=await Promise.all([read("src/ui/screens/OnlinePartyScreen.js"),read("src/online/OnlinePartyClient.js"),read("src/online/OnlineViews.js")]);
+ assert.equal((screen.match(/data-online-stage/g)??[]).length,1);
+ assert.equal((screen.match(/data-online-route=/g)??[]).length,5);
+ assert.match(client,/renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat/);
+ assert.match(views,/function renderSharedBattle/);assert.match(views,/ExploreScreen\(base, \{ online: true/);
 });
 
-test("resonance maze has synchronized client, server, reconnect AI and idempotent reward hooks",async()=>{
- const[screen,client,store,server,coordinator,styles]=await Promise.all([read("src/ui/screens/OnlinePartyScreen.js"),read("src/online/OnlinePartyClient.js"),read("online-server/src/RoomStore.js"),read("online-server/server.js"),read("online-server/src/ResonanceMazeCoordinator.js"),read("src/Styles/v2.10.0.css")]);
- assert.match(screen,/data-online-room-view="resonance"/);assert.match(screen,/data-online-resonance-board/);assert.match(screen,/data-online-resonance-move/);assert.match(screen,/data-online-resonance-choice/);assert.match(screen,/data-online-open-chat/);
- assert.match(client,/startResonance/);assert.match(client,/resonanceMove/);assert.match(client,/resonanceAction/);assert.match(client,/_renderResonance/);assert.match(client,/online-phase-resonance/);
- assert.match(store,/ResonanceMazeCoordinator/);assert.match(store,/resonanceSnapshot/);assert.match(server,/resonanceMazes/);assert.match(server,/message\.type==="startResonance"/);
- assert.match(coordinator,/NEED_PARTY/);assert.match(coordinator,/switches/);assert.match(coordinator,/defense/);assert.match(coordinator,/rescue/);assert.match(coordinator,/mimic/);assert.match(coordinator,/session\?\.connected/);assert.match(coordinator,/rewardId:`resonance:/);
- assert.match(styles,/Resonance Maze/);assert.match(styles,/online-resonance-board/);
+test("standalone Resonance is retired while legacy clients are redirected to shared exploration",async()=>{
+ const[screen,client,views,store,server]=await Promise.all([read("src/ui/screens/OnlinePartyScreen.js"),read("src/online/OnlinePartyClient.js"),read("src/online/OnlineViews.js"),read("online-server/src/RoomStore.js"),read("online-server/server.js")]);
+ assert.doesNotMatch(screen,/data-online-route="resonance"|data-online-resonance-board/);
+ assert.doesNotMatch(client,/_send\("(?:startResonance|resonanceMove|resonanceAction)"|renderOnlineResonance/);
+ assert.doesNotMatch(views,/export function renderOnlineResonance|data-online-start-resonance/);
+ assert.match(client,/共鳴迷宮は共同探索へ統合されました/);
+ assert.match(store,/RESONANCE_INTEGRATED/);
+ assert.match(server,/message\.type==="startResonance"/);
 });
 
 test("Windows launchers are ASCII CRLF batches and direct users to safe unblock instructions",async()=>{

@@ -22,7 +22,7 @@ const RECRUITMENT_TTL_MS = 30 * 60_000;
 const RECRUITMENT_NOTE_LIMIT = 48;
 const RECRUITMENT_PER_GUILD_LIMIT = 20;
 const RECRUITMENT_GLOBAL_LIMIT = 1_000;
-const RECRUITMENT_PURPOSES = new Set(["explore", "raid", "team", "resonance", "social"]);
+const RECRUITMENT_PURPOSES = new Set(["explore", "raid", "team", "social"]);
 const RECRUITMENT_STYLES = new Set(["anyone", "casual", "help", "fast"]);
 const PLAN_LIMIT = 8;
 const PLAN_CREATOR_LIMIT = 2;
@@ -44,6 +44,7 @@ function playerId(value) { const id = text(value, 20).toUpperCase(); return PLAY
 function guildId(value) { const id = text(value, 10).toUpperCase(); return GUILD_ID.test(id) ? id : ""; }
 function inviteToken() { return randomBytes(14).toString("base64url"); }
 function guildCode() { const bytes = randomBytes(6); return `GD-${Array.from(bytes, value => GUILD_ALPHABET[value % GUILD_ALPHABET.length]).join("")}`; }
+function collaborationPurpose(value, fallback = null) { const purpose = String(value ?? ""); return purpose === "resonance" ? "explore" : RECRUITMENT_PURPOSES.has(purpose) ? purpose : fallback; }
 function weekId(now) { const date = new Date(now), day = date.getUTCDay(), monday = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() - (day + 6) % 7)); return monday.toISOString().slice(0, 10); }
 function dayId(now) { const date = new Date(now + 9 * 60 * 60_000); return date.toISOString().slice(0, 10); }
 function validDayId(value) { if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false; const parsed = new Date(`${value}T00:00:00.000Z`); return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value; }
@@ -244,7 +245,7 @@ export class GuildCoordinator {
     if (guildCount >= RECRUITMENT_PER_GUILD_LIMIT) return { ok: false, code: "GUILD_RECRUITMENT_LIMIT", message: "このギルドの募集枠はいっぱいです" };
     if (this.recruitments.size - replacements.size >= RECRUITMENT_GLOBAL_LIMIT) return { ok: false, code: "GUILD_RECRUITMENT_CAPACITY", message: "現在は新しい募集を作成できません" };
     for (const id of replacements) this._dropRecruitment(this.recruitments.get(id));
-    const createdAt = this.now(), recruitmentId = inviteToken(), entry = { recruitmentId, guildId: guild.guildId, roomId: room.roomId, publisherId: session.playerId, sourcePlanId: null, purpose: RECRUITMENT_PURPOSES.has(String(source.purpose ?? "")) ? String(source.purpose) : "explore", style: RECRUITMENT_STYLES.has(String(source.style ?? "")) ? String(source.style) : "anyone", note: text(source.note, RECRUITMENT_NOTE_LIMIT), createdAt, expiresAt: createdAt + RECRUITMENT_TTL_MS, signature: "" };
+    const createdAt = this.now(), recruitmentId = inviteToken(), entry = { recruitmentId, guildId: guild.guildId, roomId: room.roomId, publisherId: session.playerId, sourcePlanId: null, purpose: collaborationPurpose(source.purpose, "explore"), style: RECRUITMENT_STYLES.has(String(source.style ?? "")) ? String(source.style) : "anyone", note: text(source.note, RECRUITMENT_NOTE_LIMIT), createdAt, expiresAt: createdAt + RECRUITMENT_TTL_MS, signature: "" };
     room.guildAudienceId = guild.guildId; room.guildRecruitmentId = recruitmentId; entry.signature = this._recruitmentSignature(entry, room); this.recruitments.set(recruitmentId, entry); this.recruitmentByRoom.set(room.roomId, recruitmentId); this._pushGuild(guild);
     return { ok: true, recruitment: this._recruitmentDto(entry) };
   }
@@ -374,7 +375,7 @@ export class GuildCoordinator {
   createPlan(session, source = {}) {
     this.prune({ pruneRecruitments: false });
     const guild = this._guildFor(session?.playerId); if (!guild) return { ok: false, code: "GUILD_NOT_MEMBER", message: "ギルドへ所属していません" };
-    const at = this.now(), scheduledAt = Number(source.scheduledAt), floor = Number(source.floor), purpose = String(source.purpose ?? ""), style = String(source.style ?? ""), note = text(source.note, PLAN_NOTE_LIMIT + 1);
+    const at = this.now(), scheduledAt = Number(source.scheduledAt), floor = Number(source.floor), purpose = collaborationPurpose(source.purpose), style = String(source.style ?? ""), note = text(source.note, PLAN_NOTE_LIMIT + 1);
     if (!PLAN_PURPOSES.has(purpose)) return { ok: false, code: "GUILD_PLAN_PURPOSE", message: "予定の目的が正しくありません" };
     if (!PLAN_STYLES.has(style)) return { ok: false, code: "GUILD_PLAN_STYLE", message: "予定の遊び方が正しくありません" };
     if (Array.from(note).length > PLAN_NOTE_LIMIT) return { ok: false, code: "GUILD_PLAN_NOTE", message: `ひとことは${PLAN_NOTE_LIMIT}文字以内で入力してください` };
@@ -432,6 +433,7 @@ export class GuildCoordinator {
       if (pointsAccepted) {
         guild.week.eventIds.push(eventId);
         guild.week.goalCounts[rule.goal] = Math.min(SHARED_GOAL_TARGETS[rule.goal], (Number(guild.week.goalCounts[rule.goal]) || 0) + 1);
+        if (message?.type === "expeditionEnded") guild.week.goalCounts.resonance = Math.min(SHARED_GOAL_TARGETS.resonance, (Number(guild.week.goalCounts.resonance) || 0) + 1);
         for (const id of ids) this._addPoints(guild, id, rule.base, at);
       }
       this._appendRoomActivity(guild, { kind: rule.kind, actorIds: ids, points: pointsAccepted ? rule.base * ids.length : 0, partySize: eligible.size, floor: rule.floor, at });
@@ -462,7 +464,7 @@ export class GuildCoordinator {
         }
         const seenPlanIds = new Set(), planCandidates = [];
         for (const entry of (Array.isArray(source.plans) ? source.plans : []).slice(0, 1_000)) {
-          const planIdValue = text(entry?.planId, 96), creatorId = playerId(entry?.creatorId), purpose = String(entry?.purpose ?? ""), style = String(entry?.style ?? ""), floor = Number(entry?.floor), createdAt = Number(entry?.createdAt), scheduledAt = Number(entry?.scheduledAt);
+          const planIdValue = text(entry?.planId, 96), creatorId = playerId(entry?.creatorId), purpose = collaborationPurpose(entry?.purpose), style = String(entry?.style ?? ""), floor = Number(entry?.floor), createdAt = Number(entry?.createdAt), scheduledAt = Number(entry?.scheduledAt);
           if (!PLAN_ID.test(planIdValue) || seenPlanIds.has(planIdValue) || !memberIds.has(creatorId) || !PLAN_PURPOSES.has(purpose) || !PLAN_STYLES.has(style) || !Number.isSafeInteger(floor) || floor < 1 || floor > 10_000 || !Number.isSafeInteger(createdAt) || createdAt <= 0 || !Number.isSafeInteger(scheduledAt) || scheduledAt - createdAt < PLAN_MIN_LEAD_MS || scheduledAt - createdAt > PLAN_MAX_LEAD_MS || scheduledAt + PLAN_RETENTION_MS <= loadedAt) continue;
           const responses = {}; if (entry?.responses && typeof entry.responses === "object" && !Array.isArray(entry.responses)) for (const [rawMemberId, rawStatus] of Object.entries(entry.responses)) { const memberId = playerId(rawMemberId), status = String(rawStatus ?? ""); if (memberIds.has(memberId) && PLAN_RESPONSES.has(status)) responses[memberId] = status; }
           seenPlanIds.add(planIdValue); planCandidates.push({ planId: planIdValue, creatorId, purpose, style, note: text(entry?.note, PLAN_NOTE_LIMIT), floor, scheduledAt, createdAt, responses });

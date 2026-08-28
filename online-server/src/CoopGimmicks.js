@@ -56,14 +56,17 @@ export function coopRewardTier(floor, participantCount) {
 export function coopGimmickFor({ leaderId = "ROOM", floor = 1 } = {}) {
   const value = Math.max(1, Math.floor(Number(floor) || 1));
   const seed = hashText(`build206:gimmick:${leaderId}:${value}`);
-  // Boss floors lean toward the premium encounter, but still retain variation.
-  if (value % 10 === 0 && seed % 3 !== 0) return "eliteVault";
   return GIMMICKS[seed % GIMMICKS.length];
 }
 
 export function prepareCoopExpeditionV206(expedition, { leaderId, hostWorld, contribution = null, participants = 1 } = {}) {
   const rng = seededRandom(hashText(`build206:coop:${leaderId}:${expedition.floor}`));
-  const occupied = new Set([pointKey(expedition.start), pointKey(expedition.exit), ...expedition.objects.map(pointKey)]);
+  const occupied = new Set([
+    pointKey(expedition.start),
+    pointKey(expedition.exit),
+    ...expedition.objects.map(pointKey),
+    ...(expedition.decorations ?? []).map(pointKey),
+  ]);
   const cells = [];
   for (let y = 1; y < expedition.rows - 1; y++) for (let x = 1; x < expedition.cols - 1; x++) {
     if (expedition.tiles[y]?.[x] !== "." || occupied.has(`${x},${y}`)) continue;
@@ -99,12 +102,13 @@ export function prepareCoopExpeditionV206(expedition, { leaderId, hostWorld, con
   const partySize = Math.max(1, Math.min(4, Math.floor(Number(participants) || 1)));
   const multiplayer = partySize >= 2;
   const bossFloor = Number(expedition.floor) % 10 === 0;
-  if (!multiplayer || bossFloor) {
+  const withoutGimmick = () => {
     const floorTier = coopFloorTier(expedition.floor), participantTier = coopParticipantTier(partySize), rewardTier = coopRewardTier(expedition.floor, partySize);
     expedition.hostOwnerId = leaderId;
     expedition.coop = {
       enabled: multiplayer,
       gimmickType: null,
+      optionalFeature: null,
       floorTier: floorTier.id,
       floorTierLabel: floorTier.label,
       partySize,
@@ -126,14 +130,26 @@ export function prepareCoopExpeditionV206(expedition, { leaderId, hostWorld, con
     expedition.contribution = contribution ?? {};
     expedition.interactions = {};
     return expedition;
-  }
+  };
+  if (!multiplayer || bossFloor || cells.length < 3) return withoutGimmick();
 
   const type = coopGimmickFor({ leaderId, floor: expedition.floor });
   const coopBoss = coopBossFor({ ownerId: leaderId, floor: expedition.floor });
   const bossMeta = coopBossObjectMeta(coopBoss);
   const floorTier = coopFloorTier(expedition.floor), participantTier = coopParticipantTier(participants), rewardTier = coopRewardTier(expedition.floor, participants);
   const first = take(), second = farFrom(first), reward = take();
-  const push = (...objects) => expedition.objects.push(...objects.map(object => ({ rewardTier: rewardTier.id, ...object })));
+  // Every object below is one component of the single optional gimmick chosen
+  // for this floor.  These markers let clients and regression tests distinguish
+  // the additive co-op overlay from the host's untouched ordinary map objects.
+  const push = (...objects) => expedition.objects.push(...objects.map(object => ({
+    rewardTier: rewardTier.id,
+    coopOnly: true,
+    optional: true,
+    nonBlocking: true,
+    onlineAdded: true,
+    gimmickType: type,
+    ...object,
+  })));
 
   if (type === "dualSwitch") {
     push(
@@ -180,6 +196,7 @@ export function prepareCoopExpeditionV206(expedition, { leaderId, hostWorld, con
     rewardTier: rewardTier.id,
     rewardTierLabel: rewardTier.visualLabel,
     rewardScaleLabel: rewardTier.label,
+    optionalFeature: { kind: type, optional: true, nonBlocking: true },
     switchHoldStartedAt: 0,
     switchUnlocked: false,
     relayStage: 0,

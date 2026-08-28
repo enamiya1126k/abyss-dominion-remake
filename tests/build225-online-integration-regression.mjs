@@ -4,10 +4,11 @@ import { readFile } from "node:fs/promises";
 
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("build225 advertises one cache-coherent application version", async () => {
+test("build245 advertises one cache-coherent application version", async () => {
   const [index, config, main] = await Promise.all([read("index.html"), read("src/core/config.js"), read("src/main.js")]);
-  assert.match(index, /ASSET_VERSION = "2\.11\.65"/);
-  assert.match(index, /ASSET_BUILD = "build239"/);
+  assert.match(index, /ASSET_VERSION = "2\.11\.69"/);
+  assert.match(index, /ASSET_BUILD = "build245"/);
+  assert.match(index, /Styles\/build245\.css\?v=2\.11\.69-build245/);
   assert.match(index, /Styles\/build239\.css\?v=2\.11\.65-build239/);
   assert.match(index, /Styles\/build228\.css\?v=2\.11\.54-build228/);
   assert.match(index, /Styles\/build227\.css\?v=2\.11\.54-build227/);
@@ -15,7 +16,7 @@ test("build225 advertises one cache-coherent application version", async () => {
   assert.match(index, /Styles\/build225\.css\?v=2\.11\.54-build225/);
   assert.match(index, /Styles\/build218\.css\?v=2\.11\.53-build218/);
   assert.match(config, /APP_VERSION="2\.11\.54"/);
-  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.65-build239/);
+  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.69-build245/);
 });
 
 test("online profile carries offline expedition attrition and host key stock", async () => {
@@ -58,7 +59,7 @@ test("online first-floor guide completion is shared with normal exploration", as
   const client = await read("src/online/OnlinePartyClient.js");
   assert.match(client, /message\.event\?\.tutorialGuide === "firstPickup"/);
   assert.match(client, /this\._notifyTutorialGuide\("explore_pickup"\)/);
-  assert.match(client, /if \(sent\) this\._notifyTutorialGuide\("explore_move"\)/);
+  assert.match(client, /if \(message\.playerId === this\.selfId\) this\._notifyTutorialGuide\("explore_move"\)/);
 });
 
 test("online persistence is idempotent and mirrors the host normal world", async () => {
@@ -68,7 +69,7 @@ test("online persistence is idempotent and mirrors the host normal world", async
   assert.match(main, /processedBattleEventIds\.includes\(eventId\)/);
   assert.match(main, /save\.state\.player\.floorSeeds\[floor\]=seed/);
   assert.match(main, /recordBiomeChest\(save\.state,Number\(floor\)\|\|1,rawId\)/);
-  assert.match(main, /prepareOnlineFloorBossReward\(\{floor,ownerId,resume:false\}\)/);
+  assert.match(main, /prepareOnlineFloorBossReward\(\{floor,ownerId,resume:false,persist:false\}\)/);
   assert.match(save, /processedVitalMutationIds/);
   assert.match(save, /processedBattleEventIds/);
   assert.match(save, /onlineParty\.raidWorld/);
@@ -78,16 +79,17 @@ test("online persistence is idempotent and mirrors the host normal world", async
   assert.match(main, /if\(depth===WORLD_MAX_FLOOR\)mark10000FloorCleared/);
 });
 
-test("resource rewards use normal toasts and only an acquired weapon opens ONLINE LOOT", async () => {
+test("resource rewards use normal toasts and only weapons or important equipment open ONLINE LOOT", async () => {
   const [main, client] = await Promise.all([read("src/main.js"), read("src/online/OnlinePartyClient.js")]);
   assert.match(main, /showResourceToast\("gold",gold\)/);
   assert.match(main, /showResourceToast\("crystal",crystals\)/);
   assert.match(main, /showResourceToast\("capture",captureCrystals\)/);
   assert.match(main, /abyssKeyCost/);
   assert.match(main, /gold=cap\(reward\.gold,Number\.MAX_SAFE_INTEGER\)/);
-  assert.match(main, /isWeapon:Boolean\(equipmentAcquired&&equipmentName&&equipmentSlot==="weapon"\)/);
-  assert.match(client, /result\?\.isWeapon !== true/);
-  assert.match(client, /if \(!result\.duplicate && result\.isWeapon === true\) this\._showRewardReceipt/);
+  assert.match(main, /isWeapon=Boolean\(equipmentAcquired&&equipmentName&&equipmentSlot==="weapon"\)/);
+  assert.match(main, /isImportantEquipment=Boolean\(equipmentAcquired&&equipmentName&&\(isWeapon\|\|importantRarities\.has\(equipmentRarity\)\)\)/);
+  assert.match(client, /result\?\.isImportantEquipment !== true/);
+  assert.match(client, /if \(!result\.duplicate && result\.isImportantEquipment === true\) this\._showRewardReceipt/);
 });
 
 test("online handshake and host-world transport are versioned and bounded", async () => {

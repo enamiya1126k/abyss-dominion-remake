@@ -45,6 +45,7 @@ test("build236 creates sorted private guild plans with strict DTOs and RSVP/canc
   const late = store.createGuildPlan(owner.session, planSource(now, 3 * HOUR, { purpose: "raid", style: "fast", floor: 999 }));
   const early = store.createGuildPlan(member.session, planSource(now, HOUR, { purpose: "resonance", style: "help", note: "初参加歓迎", floor: 50 }));
   assert.equal(late.ok, true); assert.equal(early.ok, true);
+  assert.equal(early.plan.purpose, "explore", "legacy resonance plans migrate to co-op exploration");
   let state = store.guildState(owner.session).state.guild;
   assert.deepEqual(state.plans.map(entry => entry.planId), [early.plan.planId, late.plan.planId]);
   const exactKeys = ["attendees", "canCancel", "canGather", "createdAt", "floor", "gatherClosesAt", "gatherOpensAt", "gathering", "goingCount", "maybeCount", "myStatus", "note", "organizer", "planId", "purpose", "scheduledAt", "style"];

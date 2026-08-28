@@ -1,6 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { RoomStore } from "../src/RoomStore.js";
+import { COOP_GIMMICK_TYPES } from "../src/CoopGimmicks.js";
+
+const LEGACY_RARE_TYPES = new Set([
+  "rareGoldenMonster",
+  "rareMerchant",
+  "rarePortal",
+  "rarePortalGuardian",
+  "rarePortalChest",
+  "rareReturnPortal",
+]);
 
 function connection() {
   return {
@@ -35,6 +45,39 @@ function startRoom(count = 4, { now = () => 10_000, reconnectGraceMs = 1_000, fo
   for (const player of players) assert.equal(store.setReady(player.session, true).ok, true);
   assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {} }, forceRare }).ok, true);
   return { store, players, room: store.rooms.get(created.room.roomId) };
+}
+
+function assertSingleNormalMapGimmick(expedition) {
+  assert.ok(COOP_GIMMICK_TYPES.includes(expedition.coop.gimmickType));
+  assert.equal(expedition.coop.rare.kind, null);
+  assert.equal(expedition.objects.some(object => object.rare || LEGACY_RARE_TYPES.has(object.type)), false);
+  const optionalObjects = expedition.objects.filter(object => object.onlineAdded);
+  assert.ok(optionalObjects.length > 0);
+  assert.deepEqual([...new Set(optionalObjects.map(object => object.gimmickType))], [expedition.coop.gimmickType]);
+  assert.equal([expedition.coop.gimmickType, expedition.coop.rare.kind].filter(Boolean).length, 1);
+}
+
+function injectLegacyRareObject(expedition, kind, type) {
+  Object.assign(expedition.coop.rare, {
+    kind,
+    resolved: false,
+    merchantClaims: {},
+    portalEntered: false,
+    guardianDefeated: false,
+    realmActive: false,
+    portalReturned: false,
+  });
+  const object = {
+    id: `legacy-${type}`,
+    type,
+    ...expedition.start,
+    resolved: false,
+    hidden: false,
+    persistent: true,
+    rare: true,
+  };
+  expedition.objects.push(object);
+  return object;
 }
 
 function assertPartyTier(room, { size, participantTier, rewardTier, enabled = size >= 2 }) {
@@ -134,7 +177,8 @@ test("build230 a four-player run reduced to solo loses co-op bonuses and floor r
   assertPartyTier(room, { size: 1, participantTier: "solo", rewardTier: "black-iron", enabled: false });
   assert.equal(room.expedition.coop.participantTierLabel, "通常探索");
   assert.equal(room.expedition.coop.rewardScaleLabel, "黒鉄級・通常探索");
-  assert.equal(room.coopRun.resonance, 0);
+  assert.equal(room.coopRun.resonance, null);
+  assert.equal(room.expedition.coop.resonance, null);
 
   store.random = () => 0;
   store._queueSharedReward207(room, { rewardId: "solo-shared", base: { gold: 100 }, source: { kind: "test", floor: room.expedition.floor }, premium: true });
@@ -148,7 +192,8 @@ test("build230 a four-player run reduced to solo loses co-op bonuses and floor r
   assert.equal(store.completeExpedition(owner).ok, true);
   const floorReward = owner.pendingRewards.find(entry => entry.rewardId === `${expeditionId}:floor-clear:${owner.playerId}`);
   assert.deepEqual(floorReward?.reward, { leaderFloorUnlock: 2 }, "solo continuation must not receive a minimum two-player reward");
-  assert.equal(room.coopRun.resonance, 0, "solo floor advancement must not build co-op resonance");
+  assert.equal(room.coopRun.resonance, null, "solo floor advancement must not build co-op resonance");
+  assert.equal(room.expedition.coop.resonance, null);
   assertPartyTier(room, { size: 1, participantTier: "solo", rewardTier: "black-iron", enabled: false });
 
   store._finishExpedition(room, { completed: true, reason: "test" });
@@ -199,7 +244,11 @@ test("build230 two-to-one removes every co-op-only interaction and rejects direc
     ["challengeRareGuardian", "solo-guardian"],
     ["openRarePortalChest", "solo-rare-chest"],
   ];
-  for (const [action, targetId] of attempts) assert.equal(store.expeditionInteract(owner, { action, targetId }).code, "NEED_PARTY", action);
+  const integratedLegacyActions = new Set(["enterRarePortal", "challengeRareGuardian", "openRarePortalChest"]);
+  for (const [action, targetId] of attempts) {
+    const expectedCode = integratedLegacyActions.has(action) ? "FEATURE_INTEGRATED" : "NEED_PARTY";
+    assert.equal(store.expeditionInteract(owner, { action, targetId }).code, expectedCode, action);
+  }
   assert.equal(store.rareMerchantClaim(owner, { offer: "crystal" }).code, "NEED_PARTY");
   assert.equal(owner.pendingRewards.length, rewardsBefore);
   assert.equal(expedition.discoveries, discoveriesBefore);
@@ -209,65 +258,65 @@ test("build230 two-to-one removes every co-op-only interaction and rejects direc
   assert.equal(expedition.coop.relayStage, 0);
 });
 
-test("build230 party loss inside the rare realm returns safely without guardian or chest rewards", () => {
+test("build230 party loss after a retired rare-realm request keeps the normal map and pays nothing", () => {
   const { store, players, room } = startRoom(2, { forceRare: "hiddenPortal" });
-  const ownerPlayer = players[0], owner = ownerPlayer.session, expedition = room.expedition, portal = expedition.objects.find(object => object.type === "rarePortal");
-  assert.ok(portal);
+  const ownerPlayer = players[0], owner = ownerPlayer.session, expedition = room.expedition;
+  assertSingleNormalMapGimmick(expedition);
+  const portal = injectLegacyRareObject(expedition, "hiddenPortal", "rarePortal");
   for (const object of expedition.objects) if (object !== portal && object.type !== "chest") object.resolved = true;
   owner.dungeonPosition = { x: portal.x, y: portal.y, facing: "down" };
   store._syncCoopInteractions(room);
-  assert.equal(store.expeditionInteract(owner, { action: "enterRarePortal", targetId: portal.id }).ok, true);
-  const guardian = expedition.objects.find(object => object.type === "rarePortalGuardian"), chest = expedition.objects.find(object => object.type === "rarePortalChest"), rewardsBefore = owner.pendingRewards.length;
-  assert.equal(expedition.coop.rare.realmActive, true);
-  assert.ok(room._rareMainWorld);
+  const tilesBefore = structuredClone(expedition.tiles), rewardsBefore = owner.pendingRewards.length;
+  const response = store.expeditionInteract(owner, { action: "enterRarePortal", targetId: portal.id });
+  assert.equal(response.code, "FEATURE_INTEGRATED");
+  assert.match(response.message, /共同探索へ統合/);
+  assert.deepEqual(expedition.tiles, tilesBefore);
+  assert.equal(expedition.coop.rare.realmActive, false);
+  assert.equal(room._rareMainWorld ?? null, null);
 
   assert.equal(store.leaveRoom(players[1].session).ok, true);
   assert.equal(expedition.coop.rare.realmActive, false);
   assert.equal(expedition.coop.rare.resolved, true);
-  assert.equal(expedition.coop.rare.abandoned, true);
-  assert.equal(expedition.coop.rare.portalReturned, true);
-  assert.equal(room._rareMainWorld, null);
-  assert.equal(expedition.objects.find(object => object.type === "rarePortal")?.resolved, true);
+  assert.equal(expedition.coop.rare.kind, null);
+  assert.equal(room._rareMainWorld ?? null, null);
+  assert.equal(expedition.objects.some(object => object.rare || LEGACY_RARE_TYPES.has(object.type)), false);
   assert.equal(owner.pendingRewards.length, rewardsBefore);
-  assert.equal(store.expeditionInteract(owner, { action: "challengeRareGuardian", targetId: guardian.id }).code, "NEED_PARTY");
-  assert.equal(store.expeditionInteract(owner, { action: "openRarePortalChest", targetId: chest.id }).code, "NEED_PARTY");
+  assert.equal(store.expeditionInteract(owner, { action: "challengeRareGuardian", targetId: "retired-guardian" }).code, "FEATURE_INTEGRATED");
+  assert.equal(store.expeditionInteract(owner, { action: "openRarePortalChest", targetId: "retired-chest" }).code, "FEATURE_INTEGRATED");
   assert.equal(owner.pendingRewards.length, rewardsBefore);
-  assert.ok(ownerPlayer.conn.messages.some(message => message.type === "expeditionEvent" && message.event?.id === `${expedition.id}:portal-party-return`));
+  assert.equal(ownerPlayer.conn.messages.some(message => message.type === "expeditionEvent" && message.event?.id === `${expedition.id}:portal-party-return`), false);
 });
 
-test("build230 explicit leave aborts an active rare guardian battle without rewards", () => {
+test("build230 retired rare-realm actions cannot start a guardian battle before a guest leaves", () => {
   const { store, players, room } = startRoom(2, { forceRare: "hiddenPortal" });
-  const owner = players[0].session, expedition = room.expedition, portal = expedition.objects.find(object => object.type === "rarePortal");
-  assert.ok(portal);
+  const owner = players[0].session, expedition = room.expedition;
+  assertSingleNormalMapGimmick(expedition);
+  const portal = injectLegacyRareObject(expedition, "hiddenPortal", "rarePortal");
   owner.dungeonPosition = { x: portal.x, y: portal.y, facing: "down" };
   store._syncCoopInteractions(room);
-  assert.equal(store.expeditionInteract(owner, { action: "enterRarePortal", targetId: portal.id }).ok, true);
-  const guardian = expedition.objects.find(object => object.type === "rarePortalGuardian");
-  assert.ok(guardian);
-  owner.dungeonPosition = { x: guardian.x, y: guardian.y, facing: "down" };
-  store._syncCoopInteractions(room);
-  assert.equal(store.expeditionInteract(owner, { action: "challengeRareGuardian", targetId: guardian.id }).ok, true);
-  assert.equal(expedition.battle?.rareKind, "portalGuardian");
-  expedition.battle.players[owner.playerId].hp = 654;
-  expedition.battle.players[owner.playerId].mp = 43;
-  const rewardsBefore = owner.pendingRewards.length;
+  assert.equal(store.expeditionInteract(owner, { action: "enterRarePortal", targetId: portal.id }).code, "FEATURE_INTEGRATED");
+  assert.equal(store.expeditionInteract(owner, { action: "challengeRareGuardian", targetId: "retired-guardian" }).code, "FEATURE_INTEGRATED");
+  assert.equal(expedition.battle, null);
+  const rewardsBefore = owner.pendingRewards.length, hpBefore = owner.coopVitals.hp, mpBefore = owner.coopVitals.mp;
 
   assert.equal(store.leaveRoom(players[1].session).ok, true);
   assert.equal(expedition.battle, null);
-  assert.equal(owner.coopVitals.hp, 654);
-  assert.equal(owner.coopVitals.mp, 43);
+  assert.equal(owner.coopVitals.hp, hpBefore);
+  assert.equal(owner.coopVitals.mp, mpBefore);
   assert.equal(owner.pendingRewards.length, rewardsBefore);
+  assert.equal(expedition.coop.rare.kind, null);
   assert.equal(expedition.coop.rare.guardianDefeated, false);
-  assert.equal(expedition.coop.rare.abandoned, true);
-  assert.equal(room._rareMainWorld, null);
-  assert.ok(players[0].conn.messages.some(message => message.type === "battleEnded" && message.reason === "partyChanged" && message.result === "cancelled"));
+  assert.equal(expedition.objects.some(object => object.rare || LEGACY_RARE_TYPES.has(object.type)), false);
+  assert.equal(room._rareMainWorld ?? null, null);
+  assert.equal(players[0].conn.messages.some(message => message.type === "battleEnded" && message.reason === "partyChanged"), false);
 });
 
-test("build230 disconnect grace keeps a rare battle, then expiry aborts it without rewards", () => {
+test("build230 disconnect grace keeps a legacy rare battle, then expiry aborts it without rewards", () => {
   let now = 40_000;
   const { store, players, room } = startRoom(2, { now: () => now, reconnectGraceMs: 1_000, forceRare: "goldenMonster" });
-  const owner = players[0].session, expedition = room.expedition, golden = expedition.objects.find(object => object.type === "rareGoldenMonster");
-  assert.ok(golden);
+  const owner = players[0].session, expedition = room.expedition;
+  assertSingleNormalMapGimmick(expedition);
+  const golden = injectLegacyRareObject(expedition, "goldenMonster", "rareGoldenMonster");
   golden.resolved = true;
   store._startBattle(room, { ...golden, rareKind: "goldenMonster", coopElite: true });
   const battle = expedition.battle;
@@ -287,8 +336,9 @@ test("build230 disconnect grace keeps a rare battle, then expiry aborts it witho
   assert.equal(owner.coopVitals.hp, 765);
   assert.equal(owner.coopVitals.mp, 54);
   assert.equal(owner.pendingRewards.length, rewardsBefore);
+  assert.equal(expedition.coop.rare.kind, null);
   assert.equal(expedition.coop.rare.resolved, true);
-  assert.equal(expedition.coop.rare.abandoned, true);
+  assert.equal(expedition.objects.some(object => object.rare || LEGACY_RARE_TYPES.has(object.type)), false);
 });
 
 function startTestBattle(store, room, suffix) {

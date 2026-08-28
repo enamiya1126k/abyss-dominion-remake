@@ -16,7 +16,8 @@ test("build229 keeps private creation and direct invitation while adding the roo
   assert.match(screen, /data-online-room-code/);
   assert.match(screen, /partyRoom/);
   assert.match(screen, /maxlength="512"[^>]*data-online-room-code/);
-  for (const value of ["explore", "raid", "team", "resonance", "social", "anyone", "casual", "help", "fast"]) assert.match(screen, new RegExp(`id: "${value}"`));
+  for (const value of ["explore", "raid", "team", "social", "anyone", "casual", "help", "fast"]) assert.match(screen, new RegExp(`id: "${value}"`));
+  assert.doesNotMatch(screen, /id: "resonance", label: "共鳴迷宮"/);
 });
 
 test("build229 renders escaped compact listings with accessible one-tap actions", async () => {
@@ -90,13 +91,13 @@ test("build229 loads one coherent client cache boundary", async () => {
     read("index.html"), read("src/main.js"), read("src/online/OnlinePartyClient.js"), read("src/online/OnlineViews.js"),
   ]);
   assert.match(index, /build239\.css\?v=2\.11\.65-build239/);
-  assert.match(index, /ASSET_VERSION = "2\.11\.65"/);
-  assert.match(index, /ASSET_BUILD = "build239"/);
-  assert.match(main, /OnlinePartyScreen\.js\?v=2\.11\.65-build239/);
-  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.65-build239/);
-  assert.match(client, /OnlineViews\.js\?v=2\.11\.65-build239/);
-  assert.match(client, /OnlinePartyScreen\.js\?v=2\.11\.65-build239/);
-  assert.match(views, /OnlinePartyScreen\.js\?v=2\.11\.65-build239/);
+  assert.match(index, /ASSET_VERSION = "2\.11\.69"/);
+  assert.match(index, /ASSET_BUILD = "build245"/);
+  assert.match(main, /OnlinePartyScreen\.js\?v=2\.11\.69-build245/);
+  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.69-build245/);
+  assert.match(client, /OnlineViews\.js\?v=2\.11\.69-build245/);
+  assert.match(client, /OnlinePartyScreen\.js\?v=2\.11\.69-build245/);
+  assert.match(views, /OnlinePartyScreen\.js\?v=2\.11\.69-build245/);
 });
 
 console.log("ABYSS DOMINION build229 room board regression: PASS");

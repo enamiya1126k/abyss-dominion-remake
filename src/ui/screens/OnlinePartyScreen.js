@@ -22,10 +22,9 @@ export const ONLINE_STORAGE_KEYS = Object.freeze({
 });
 
 export const ONLINE_ROOM_PURPOSES = Object.freeze([
-  { id: "explore", label: "通常探索" },
+  { id: "explore", label: "共同探索" },
   { id: "raid", label: "週替わりレイド" },
   { id: "team", label: "自由チーム戦" },
-  { id: "resonance", label: "共鳴迷宮" },
   { id: "social", label: "交流・交換" },
 ]);
 
@@ -316,7 +315,7 @@ function roomOptionMarkup(options, selected, { includeAll = false } = {}) {
 }
 
 function roomPurposeLabel(id) {
-  return ONLINE_ROOM_PURPOSES.find(option => option.id === id)?.label ?? "通常探索";
+  return ONLINE_ROOM_PURPOSES.find(option => option.id === id)?.label ?? "共同探索";
 }
 
 function roomStyleLabel(id) {
@@ -381,7 +380,7 @@ const ONLINE_GUILD_SHARED_GOAL_LABELS = Object.freeze({
   boss: "階層／共闘ボスを討伐",
   raid: "ワールドレイドに勝利",
   team: "自由チーム戦を完了",
-  resonance: "共鳴迷宮を踏破",
+  resonance: "仲間と共同探索を完了",
 });
 
 const ONLINE_GUILD_ACTIVITY_LABELS = Object.freeze({
@@ -391,7 +390,7 @@ const ONLINE_GUILD_ACTIVITY_LABELS = Object.freeze({
   coopBoss: "が共闘ボスを討伐",
   raid: "がワールドレイドに勝利",
   team: "が自由チーム戦を完了",
-  resonance: "が共鳴迷宮を踏破",
+  resonance: "が共同探索（旧記録）を完了",
 });
 
 function onlineGuildActivityTime(value) {
@@ -714,7 +713,7 @@ export function renderOnlineGuildPanel(source = {}, options = {}) {
   const planFloor = Math.max(1, Math.min(10_000, Math.floor(Number(planDraft.floor) || 1))), planNote = String(planDraft.note ?? "").slice(0, 48);
   const planComposerOpen = options.planComposerOpen === true;
   const planCards = visiblePlans.map(entry => onlineGuildPlanCard(entry, { pending, disabled: disabled || !planCapability, gatheringCapability: planGatheringCapability && recruitmentCapability, room, selfId, roomGuildOnly: guildOnlyRoom, hasExistingRecruitment: Boolean(ownRecruitment), activeOwnGatheringPlanId: String(currentPlanGathering?.planId ?? ""), now: planNow, attentionPhase: planAttentions.find(attention => attention.planId === entry?.planId)?.phase ?? "" })).join("");
-  const planSection = planCapability ? `<section class="online-guild-section online-guild-plans"><header><div><small>EXPEDITION SCHEDULE</small><h3>ギルド遠征予定</h3></div><em>${sortedPlans.length}</em></header><p class="online-guild-plan-copy">14日先まで予定を共有できます。集合時間になったら、主催者が予定カードから自分の部屋をギルド募集へ切り替えられます。予定そのものに報酬はありません。</p><button type="button" class="online-guild-plan-compose-toggle" data-online-guild-plan-compose-toggle data-online-social-focus-key="guild-plan-compose-toggle" aria-expanded="${planComposerOpen}" aria-controls="online-guild-plan-composer" ${connectionDisabled || !planCapability ? "disabled" : ""}>${planComposerOpen ? "作成フォームを閉じる" : "新しい予定を作る"}</button><div id="online-guild-plan-composer" class="online-guild-plan-composer" ${planComposerOpen ? "" : "hidden"}><form data-online-guild-plan-form><div><label><span>目的</span><select data-online-guild-plan-purpose data-online-social-focus-key="guild-plan-purpose">${roomOptionMarkup(ONLINE_ROOM_PURPOSES, planPurpose)}</select></label><label><span>遊び方</span><select data-online-guild-plan-style data-online-social-focus-key="guild-plan-style">${roomOptionMarkup(ONLINE_ROOM_STYLES, planStyle)}</select></label><label class="date"><span>集合日時</span><input type="datetime-local" step="300" min="${escapeOnlineHtml(planMin)}" max="${escapeOnlineHtml(planMax)}" value="${escapeOnlineHtml(planScheduledAt)}" data-online-guild-plan-scheduled-at data-online-social-focus-key="guild-plan-scheduled-at"></label><label><span>通常探索の階層</span><input type="number" inputmode="numeric" min="1" max="10000" value="${planFloor}" data-online-guild-plan-floor data-online-social-focus-key="guild-plan-floor"></label></div><label><span>メモ <small>48文字まで</small></span><textarea maxlength="48" rows="2" data-online-guild-plan-note data-online-social-focus-key="guild-plan-note" placeholder="集合場所や挑戦内容など">${escapeOnlineHtml(planNote)}</textarea><small>${planNote.length}/48</small></label><button type="submit" data-online-social-focus-key="guild-plan-submit" ${disabled ? "disabled" : ""}>${onlineGuildPending(pending, "planCreate") ? "予定を登録中…" : "この予定を共有"}</button></form></div><div class="online-guild-plan-list" id="online-guild-plan-list" role="list">${planCards || `<p class="online-guild-empty">これからの遠征予定はありません。</p>`}</div>${sortedPlans.length > 3 ? `<button type="button" class="online-guild-plan-more" data-online-guild-plan-more data-online-social-focus-key="guild-plan-more" aria-expanded="${options.plansExpanded ? "true" : "false"}" aria-controls="online-guild-plan-list">${options.plansExpanded ? "優先3件だけ表示" : `すべて表示（${sortedPlans.length}件）`}</button>` : ""}</section>` : "";
+  const planSection = planCapability ? `<section class="online-guild-section online-guild-plans"><header><div><small>EXPEDITION SCHEDULE</small><h3>ギルド遠征予定</h3></div><em>${sortedPlans.length}</em></header><p class="online-guild-plan-copy">14日先まで予定を共有できます。集合時間になったら、主催者が予定カードから自分の部屋をギルド募集へ切り替えられます。予定そのものに報酬はありません。</p><button type="button" class="online-guild-plan-compose-toggle" data-online-guild-plan-compose-toggle data-online-social-focus-key="guild-plan-compose-toggle" aria-expanded="${planComposerOpen}" aria-controls="online-guild-plan-composer" ${connectionDisabled || !planCapability ? "disabled" : ""}>${planComposerOpen ? "作成フォームを閉じる" : "新しい予定を作る"}</button><div id="online-guild-plan-composer" class="online-guild-plan-composer" ${planComposerOpen ? "" : "hidden"}><form data-online-guild-plan-form><div><label><span>目的</span><select data-online-guild-plan-purpose data-online-social-focus-key="guild-plan-purpose">${roomOptionMarkup(ONLINE_ROOM_PURPOSES, planPurpose)}</select></label><label><span>遊び方</span><select data-online-guild-plan-style data-online-social-focus-key="guild-plan-style">${roomOptionMarkup(ONLINE_ROOM_STYLES, planStyle)}</select></label><label class="date"><span>集合日時</span><input type="datetime-local" step="300" min="${escapeOnlineHtml(planMin)}" max="${escapeOnlineHtml(planMax)}" value="${escapeOnlineHtml(planScheduledAt)}" data-online-guild-plan-scheduled-at data-online-social-focus-key="guild-plan-scheduled-at"></label><label><span>共同探索の階層</span><input type="number" inputmode="numeric" min="1" max="10000" value="${planFloor}" data-online-guild-plan-floor data-online-social-focus-key="guild-plan-floor"></label></div><label><span>メモ <small>48文字まで</small></span><textarea maxlength="48" rows="2" data-online-guild-plan-note data-online-social-focus-key="guild-plan-note" placeholder="集合場所や挑戦内容など">${escapeOnlineHtml(planNote)}</textarea><small>${planNote.length}/48</small></label><button type="submit" data-online-social-focus-key="guild-plan-submit" ${disabled ? "disabled" : ""}>${onlineGuildPending(pending, "planCreate") ? "予定を登録中…" : "この予定を共有"}</button></form></div><div class="online-guild-plan-list" id="online-guild-plan-list" role="list">${planCards || `<p class="online-guild-empty">これからの遠征予定はありません。</p>`}</div>${sortedPlans.length > 3 ? `<button type="button" class="online-guild-plan-more" data-online-guild-plan-more data-online-social-focus-key="guild-plan-more" aria-expanded="${options.plansExpanded ? "true" : "false"}" aria-controls="online-guild-plan-list">${options.plansExpanded ? "優先3件だけ表示" : `すべて表示（${sortedPlans.length}件）`}</button>` : ""}</section>` : "";
 
   return `<div class="online-guild-view online-guild-member-view" data-online-guild-view>
     ${statusLine}
@@ -826,10 +825,9 @@ export function OnlinePartyScreen(state) {
         <div class="online-v3-stage" data-online-stage aria-live="polite"></div>
         <nav class="online-v3-nav" aria-label="オンライン機能">
           <button type="button" data-online-route="home" class="active" aria-current="page">${pixelIcon("home")}<b>ホーム</b></button>
-          <button type="button" data-online-route="explore">${pixelIcon("dungeon")}<b>通常探索</b></button>
+          <button type="button" data-online-route="explore">${pixelIcon("dungeon")}<b>共同探索</b></button>
           <button type="button" data-online-route="raid">${pixelIcon("event")}<b>レイド</b></button>
           <button type="button" data-online-route="team">${pixelIcon("crossed-swords")}<b>チーム戦</b></button>
-          <button type="button" data-online-route="resonance">${pixelIcon("event")}<b>共鳴</b></button>
           <button type="button" data-online-route="chat">${pixelIcon("notice")}<b>掲示板</b><i data-online-unread hidden></i></button>
         </nav>
       </section>

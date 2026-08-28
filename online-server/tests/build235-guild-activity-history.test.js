@@ -56,7 +56,9 @@ test("build235 records grouped check-ins and all six multiplayer activity kinds 
     { type: "teamBattleEnded", resultId: "team-all", result: "draw", summary: { ranking: list } },
     { type: "resonanceEnded", result: { victory: true }, resonance: { id: "res-all", players: list } }
   ];
-  for (const message of messages) store._broadcast(room, message);
+  store._broadcast(room, messages[0]);
+  assert.equal(store.guildState(owner.session).state.guild.week.sharedGoals.find(goal => goal.id === "resonance").current, 1, "a completed multiplayer expedition advances the legacy co-op goal");
+  for (const message of messages.slice(1)) store._broadcast(room, message);
   let state = store.guildState(owner.session).state.guild;
   assert.equal(state.week.points, 156); assert.equal(state.members.find(entry => entry.playerId === owner.session.playerId).weekPoints, 78); assert.equal(state.members.find(entry => entry.playerId === member.session.playerId).weekPoints, 78);
   assert.deepEqual(state.week.sharedGoals.map(goal => goal.current), [1, 2, 1, 1, 1]);

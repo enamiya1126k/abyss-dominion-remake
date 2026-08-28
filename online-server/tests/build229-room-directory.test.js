@@ -146,7 +146,7 @@ test("build229 lists only a public, open lobby with a connected host", () => {
   assert.equal(env.store.joinRoom(busyHelper.session, busy.roomId).ok, true);
   assert.equal(env.store.setReady(busyHost.session, true).ok, true);
   assert.equal(env.store.setReady(busyHelper.session, true).ok, true);
-  assert.equal(env.store.startResonance(busyHost.session).ok, true);
+  assert.equal(env.store.startExpedition(busyHost.session, { hostWorld: { floorSeeds: { 1: 22917 }, openedChestIds: {} } }).ok, true);
 
   const offlineHost = hello(env.store, 19);
   publicRoom(env.store, offlineHost);

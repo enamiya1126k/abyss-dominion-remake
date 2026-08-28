@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineResonance, renderOnlineChat,
+  renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
 } from "../src/online/OnlineViews.js?v=2.10.0-build162";
 
 const profile = Object.freeze({
@@ -30,24 +30,23 @@ function battle() {
   };
 }
 
-test("all six online destinations render independently with realistic room snapshots", () => {
+test("all five online destinations render independently with realistic room snapshots", () => {
   const lobby = room();
   const home = renderOnlineHome(lobby, "p1");
   const exploreLobby = renderOnlineExplore(lobby, "p1");
   const raidLobby = renderOnlineRaid(lobby, "p1");
   const teamLobby = renderOnlineTeam(lobby, "p1");
-  const resonanceLobby = renderOnlineResonance(lobby, "p1");
   const chat = renderOnlineChat({ ...lobby, chatHistory: [{ id: "m1", playerId: "p2", name: "<より>", text: "<script>失敗</script>", createdAt: 1 }] }, "p1", "入力途中");
 
-  for (const html of [home, exploreLobby, raidLobby, teamLobby, resonanceLobby, chat]) {
+  for (const html of [home, exploreLobby, raidLobby, teamLobby, chat]) {
     assert.equal(typeof html, "string");
     assert.ok(html.length > 200);
   }
   assert.match(home, /data-online-hall-destination="explore"/);
-  assert.match(exploreLobby, /HOST WORLD EXPLORATION/);
+  assert.match(exploreLobby, /SHARED HOST EXPEDITION/);
   assert.match(raidLobby, /WEEKLY WORLD RAID/);
   assert.match(teamLobby, /1vs1、1vs2、1vs3、2vs2/);
-  assert.match(resonanceLobby, /共鳴迷宮を開始/);
+  assert.match(exploreLobby, /共同探索へ出発/);
   assert.doesNotMatch(chat, /<script>/);
   assert.match(chat, /&lt;script&gt;失敗&lt;\/script&gt;/);
   assert.match(chat, />入力途中<\/textarea>/);

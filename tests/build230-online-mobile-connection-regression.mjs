@@ -22,7 +22,7 @@ test("build230 exposes live connection state throughout the room and blocks unsa
   assert.match(client, /ONLINE_STATE_CONTROL_SELECTOR/);
   assert.match(client, /const ONLINE_PROTOCOL = "1\.16\.0"/);
   assert.match(client, /dataset\.onlineConnectionDisabled = "1"/);
-  assert.match(client, /_clearMoveInputs\(\{ clearClickSuppressions = false \} = \{\}\)/);
+  assert.match(client, /_clearMoveInputs\(\)/);
   assert.match(client, /_confirmRoomExit\(\)/);
   assert.match(client, /globalThis\.confirm/);
   assert.match(client, /helloAckPending/);
@@ -32,7 +32,7 @@ test("build230 exposes live connection state throughout the room and blocks unsa
 });
 
 test("build230 makes lobby authority and readiness visible before start", async () => {
-  const { renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineResonance } = await import("../src/online/OnlineViews.js?v=2.11.56-build230-test");
+  const { renderOnlineExplore, renderOnlineRaid, renderOnlineTeam } = await import("../src/online/OnlineViews.js?v=2.11.56-build230-test");
   const readyRoom = {
     roomId: "AB12CD", leaderId: "host", phase: "lobby", selectedFloor: 50,
     members: [member("host", { leader: true, teamSide: "sun" }), member("guest", { teamSide: "moon" })],
@@ -53,60 +53,27 @@ test("build230 makes lobby authority and readiness visible before start", async 
   assert.doesNotMatch(renderOnlineTeam(readyRoom, "host"), /data-online-start-team disabled/);
   assert.match(renderOnlineTeam({ ...readyRoom, members: [member("host", { leader: true, teamSide: "sun" }), member("guest", { teamSide: "spectator" })] }, "host"), /data-online-start-team disabled/);
   assert.match(renderOnlineTeam(readyRoom, "host"), /data-online-team-side="sun"[^>]*aria-pressed="true"/);
-  assert.doesNotMatch(renderOnlineResonance(readyRoom, "host"), /data-online-start-resonance disabled/);
-  for (const markup of [renderOnlineExplore(readyRoom, "host", { trade: { tradeId: "trade" } }), renderOnlineRaid(readyRoom, "host", { trade: { tradeId: "trade" } }), renderOnlineTeam(readyRoom, "host", { trade: { tradeId: "trade" } }), renderOnlineResonance(readyRoom, "host", { trade: { tradeId: "trade" } })]) {
-    assert.match(markup, /data-online-start-(?:explore|raid|team|resonance) disabled/);
+  for (const markup of [renderOnlineExplore(readyRoom, "host", { trade: { tradeId: "trade" } }), renderOnlineRaid(readyRoom, "host", { trade: { tradeId: "trade" } }), renderOnlineTeam(readyRoom, "host", { trade: { tradeId: "trade" } })]) {
+    assert.match(markup, /data-online-start-(?:explore|raid|team) disabled/);
     assert.match(markup, /交換を完了または中止/);
   }
 });
 
-test("build230 supports hold-to-move Resonance controls without duplicate tap sends", async () => {
+test("build244 keeps hold-to-move on the normal exploration map only", async () => {
   const client = await read("src/online/OnlinePartyClient.js");
-  assert.match(client, /\[data-online-move\],\[data-online-resonance-move\]/);
+  assert.match(client, /event\.target\.closest\?\.\("\[data-online-move\]"\)/);
   assert.match(client, /this\.movePointers\.set\(pointerId/);
   assert.match(client, /for \(const target of \[window, document\]\) for \(const type of \["pointerup", "pointercancel"\]\)/);
-  assert.match(client, /_consumeResonancePointerClick\(event, button\)/);
-  assert.doesNotMatch(client, /dataset\.onlinePointerMove/);
-  assert.match(client, /this\._send\("resonanceMove", \{ direction \}\)/);
-  assert.match(client, /RESONANCE_MOVE_STOP_CODES/);
+  assert.match(client, /this\.route === "explore" && this\.roomState\?\.phase === "expedition"/);
+  assert.doesNotMatch(client, /data-online-resonance-move|_send\("resonanceMove"/);
 });
 
-test("build230 pointer state survives redraw, releases globally, and stops blocked hold spam", async () => {
-  const { OnlinePartyController } = await import("../src/online/OnlinePartyClient.js?v=2.11.56-build230-pointer-test");
-  const controller = Object.create(OnlinePartyController.prototype), sent = [], toasts = [];
-  Object.assign(controller, {
-    route: "resonance", roomState: { phase: "resonance", resonance: { phase: "switches" } },
-    heldDirections: new Set(), keyboardMoveMode: "", movePointers: new Map(), movePointerSequence: 0,
-    resonanceClickSuppressions: [], path: [], lastMoveAt: 0, connectionReady: true,
-    pendingLeaveOnReconnect: null, lastResonanceMoveError: { code: "", at: 0 },
-    _canMutateOnline: () => true, _send: (type, payload) => { sent.push({ type, payload }); return true; },
-    _announceConnectionPause: () => {}, toast: message => toasts.push(message),
-  });
-  const button = (direction, capture = () => {}) => ({
-    dataset: { onlineResonanceMove: direction },
-    matches: selector => selector === "[data-online-resonance-move]",
-    setPointerCapture: capture,
-  });
-  const event = pointerId => ({ pointerId, button: 0, preventDefault() {} });
-
-  assert.equal(controller._beginPointerMove(event(7), button("up", () => { throw new Error("detached on redraw"); })), true);
-  assert.equal(sent.length, 1, "pointerdown sends exactly one immediate step");
-  assert.equal(controller._currentMoveDirection("resonance"), "up");
-  assert.equal(controller._endPointerMove({ pointerId: 99 }), false, "another pointer cannot release the hold");
-  assert.equal(controller._endPointerMove({ pointerId: 7 }), true, "window/document release only needs the pointer id");
-  assert.equal(controller._currentMoveDirection("resonance"), null);
-  assert.equal(controller._consumeResonancePointerClick({ pointerId: 7, detail: 1 }, button("up")), true, "redrawn button click is suppressed");
-  assert.equal(controller._consumeResonancePointerClick({ detail: 0 }, button("up")), false, "keyboard activation remains available");
-
-  controller._beginPointerMove(event(11), button("left"));
-  controller._beginPointerMove(event(12), button("right"));
-  assert.equal(controller._currentMoveDirection("resonance"), "right", "newest touch wins");
-  controller._endPointerMove({ pointerId: 12 });
-  assert.equal(controller._currentMoveDirection("resonance"), "left", "older held touch resumes");
-  controller._handleMessage({ type: "error", code: "BLOCKED", message: "壁です" });
-  controller._handleMessage({ type: "error", code: "BLOCKED", message: "壁です" });
-  assert.equal(controller.movePointers.size, 0);
-  assert.equal(toasts.length, 1, "queued BLOCKED replies do not spam toasts");
+test("build244 keeps standalone maze pointer state removed and safely redirects legacy events", async () => {
+  const client = await read("src/online/OnlinePartyClient.js");
+  assert.doesNotMatch(client, /resonanceClickSuppressions|RESONANCE_MOVE_STOP_CODES|lastResonanceMoveError/);
+  assert.match(client, /storedRoute === "resonance" \? "explore"/);
+  assert.match(client, /errorCode === "RESONANCE_INTEGRATED"/);
+  assert.match(client, /共鳴迷宮は共同探索へ統合されました/);
 });
 
 test("build230 handshake recovery is bounded and tokenless hello ACK loss can retry", async () => {
@@ -348,12 +315,12 @@ test("build237 uses one client cache boundary", async () => {
     read("index.html"), read("src/main.js"), read("src/online/OnlinePartyClient.js"), read("src/online/OnlineViews.js"),
   ]);
   assert.match(index, /build239\.css\?v=2\.11\.65-build239/);
-  assert.match(index, /ASSET_VERSION = "2\.11\.65"/);
-  assert.match(index, /ASSET_BUILD = "build239"/);
-  assert.match(main, /OnlinePartyScreen\.js\?v=2\.11\.65-build239/);
-  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.65-build239/);
-  assert.match(client, /OnlineViews\.js\?v=2\.11\.65-build239/);
-  assert.match(views, /OnlinePartyScreen\.js\?v=2\.11\.65-build239/);
+  assert.match(index, /ASSET_VERSION = "2\.11\.69"/);
+  assert.match(index, /ASSET_BUILD = "build245"/);
+  assert.match(main, /OnlinePartyScreen\.js\?v=2\.11\.69-build245/);
+  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.69-build245/);
+  assert.match(client, /OnlineViews\.js\?v=2\.11\.69-build245/);
+  assert.match(views, /OnlinePartyScreen\.js\?v=2\.11\.69-build245/);
 });
 
 console.log("ABYSS DOMINION build230 mobile connection regression: PASS");

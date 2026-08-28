@@ -2,12 +2,19 @@ import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=2.11.54-build22
 import { battleEnvironmentForFloor } from "../data/biomes.js?v=2.11.54-build226";
 import {
   onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml, ONLINE_ROOM_PURPOSES, ONLINE_ROOM_STYLES,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.65-build239";
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.69-build245";
 import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.54-build227";
 import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=2.11.54-build226";
 import { pixelIcon } from "../ui/components/GameChrome.js?v=2.11.54-build226";
 
-const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "通常探索", raid: "レイドボス", team: "自由チーム戦", resonance: "共鳴迷宮", chat: "募集・談話板" });
+const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "共同探索", raid: "レイドボス", team: "自由チーム戦", chat: "募集・談話板" });
+const COOP_GIMMICK_GUIDES = Object.freeze({
+  dualSwitch: Object.freeze({ label: "同時スイッチ", hint: "離れた2か所を仲間と同時に踏む" }),
+  relaySeal: Object.freeze({ label: "連鎖封印", hint: "仲間とA→Bの順に封印を解除" }),
+  resonanceChest: Object.freeze({ label: "共同宝箱", hint: "宝箱の近くへ2人以上で集まる" }),
+  splitKey: Object.freeze({ label: "分割された鍵", hint: "2つの鍵片を仲間と分担して集める" }),
+  eliteVault: Object.freeze({ label: "共闘強敵・宝物庫", hint: "仲間と任意の強敵へ挑戦する" }),
+});
 const EVENT_LABELS = Object.freeze({
   damage: "ダメージ", enemyDamage: "ダメージ", heal: "回復", mpHeal: "MP回復", revive: "蘇生",
   guard: "ガード", miss: "回避", ko: "戦闘不能", effect: "効果", buff: "強化", shield: "障壁",
@@ -18,6 +25,11 @@ const number = value => Math.max(0, Math.floor(Number(value) || 0)).toLocaleStri
 const clamp = (value, min, max) => Math.max(min, Math.min(max, Number(value) || 0));
 const ratio = (value, maximum) => clamp(Number(value) / Math.max(1, Number(maximum)) * 100, 0, 100);
 const memberById = (room, id) => (room?.members ?? []).find(member => member.playerId === id);
+
+function coopGimmickGuide(expedition) {
+  if (!expedition?.coop?.enabled) return null;
+  return COOP_GIMMICK_GUIDES[expedition.coop.gimmickType] ?? null;
+}
 
 function screenHeader(route, eyebrow, copy) {
   return `<header class="online-v3-view-head"><div><small>${escapeOnlineHtml(eyebrow)}</small><h2>${ROUTE_LABELS[route]}</h2><p>${escapeOnlineHtml(copy)}</p></div></header>`;
@@ -45,8 +57,7 @@ function readyGrid(room, { team = false } = {}) {
 
 const HALL_DESTINATIONS = Object.freeze([
   { route: "raid", x: 18, y: 25, label: "レイド受付", prompt: "レイド戦へ行く", icon: "RAID", asset: "./assets/online/hall/build218/raid-pavilion.png" },
-  { route: "resonance", x: 50, y: 25, label: "共鳴迷宮", prompt: "共鳴迷宮へ行く", icon: "MAZE", asset: "./assets/online/coop/portal/portal-active.png" },
-  { route: "explore", x: 82, y: 25, label: "ダンジョン門", prompt: "通常探索へ行く", icon: "GATE", asset: "./assets/online/hall/build218/dungeon-gate.png" },
+  { route: "explore", x: 82, y: 25, label: "共同探索受付", prompt: "共同探索へ行く", icon: "GATE", asset: "./assets/online/hall/build218/dungeon-gate.png" },
   { route: "team", x: 24, y: 78, label: "闘技場", prompt: "自由チーム戦へ行く", icon: "ARENA", asset: "./assets/online/hall/build218/arena.png" },
   { route: "chat", x: 76, y: 78, label: "募集・談話板", prompt: "募集・会話を開く", icon: "BOARD", asset: "./assets/online/hall/build218/notice-board.png" },
 ]);
@@ -277,7 +288,11 @@ export function renderOnlineExplore(room, selfId, state = {}) {
       return `<article class="online-coop-report-row ${entry.playerId === selfId ? "self" : ""}"><strong>${number(entry.rank)}位</strong>${onlineAvatarVisual(member?.profile ?? {}, { className: "online-raid-report-avatar" })}<div><b>${escapeOnlineHtml(member?.profile?.displayName || entry.name || "冒険者")}</b><small>共闘貢献 ${number(entry.score)}</small><span class="online-mvp-list">${mvps}</span></div><dl><div><dt>探索</dt><dd>${number(entry.exploration)}</dd></div><div><dt>戦闘</dt><dd>${number(entry.combat)}</dd></div><div><dt>救助</dt><dd>${number(entry.rescue)}</dd></div><div><dt>宝箱</dt><dd>${number(entry.chests)}</dd></div><div><dt>仕掛け</dt><dd>${number((entry.switches ?? 0) + (entry.gimmicks ?? 0))}</dd></div><div><dt>支援</dt><dd>${number(entry.support)}</dd></div></dl></article>`;
     }).join("");
     const floorBossClear = report.reason === "floorBoss";
-    const ownerResult = report.ownerId === selfId && state.expeditionReturnReady, resultNote = ownerResult ? `<p class="online-expedition-result-note">部屋主の通常探索へ、進行・HP/MP・帰還結果を保存しました。</p>` : "";
+    const worldOwnerId = report.ownerId ?? room?.ownerId ?? room?.leaderId, isWorldOwner = worldOwnerId === selfId;
+    const ownerResult = isWorldOwner && state.expeditionReturnReady;
+    const resultNote = `<p class="online-expedition-result-note">${isWorldOwner
+      ? floorBossClear ? "階層支配者の撃破結果は、部屋主であるあなたの通常探索へ保存されました。" : "踏破進行・HP/MP・帰還結果は、部屋主であるあなたの通常探索へ保存されます。"
+      : "お手伝い報酬と自分のHP/MPだけを保存しました。あなたの通常探索階層・ボス進行は変わりません。"}</p>`;
     const reportLead = floorBossClear ? `${number(report.floor)}Fの階層支配者を撃破しました。探索は続行できます。` : report.completed ? `${number(report.floor)}Fを共に踏破しました。` : report.reason === "defeat" ? "通常探索と同じ敗北結果を反映しました。" : "今回の共闘記録を確認できます。";
     const reportKind = floorBossClear ? "BOSS CLEAR" : report.completed ? "EXPEDITION CLEAR" : "EXPEDITION END";
     const closeLabel = ownerResult ? report.reason === "defeat" ? "敗北結果を確認" : "通常探索の帰還報告へ" : floorBossClear ? "探索へ戻る" : "探索受付へ戻る";
@@ -288,20 +303,22 @@ export function renderOnlineExplore(room, selfId, state = {}) {
     const theme = dungeonThemeForFloor(expedition.floor), base = fallbackExploreState(state.gameState, expedition.floor), discovered = Number(expedition.discoveries) + Number(expedition.encountersCleared), total = Math.max(1, Number(expedition.totalDiscoveries) + Number(expedition.totalEncounters));
     const interaction = expedition.interactions?.[selfId] ?? null;
     const realmActive = Boolean(expedition.coop?.rare?.realmActive);
-    const stageTools = `<button id="miniMapToggle" type="button" class="minimap-toggle online-map-toggle" aria-pressed="true">${pixelIcon("event")}<b>マップ</b></button><button id="onlineExploreChatToggle" type="button" data-online-chat-toggle class="minimap-toggle online-chat-toggle ${state.exploreChatOpen ? "active" : ""}">${pixelIcon("notice")}<b>チャット</b></button><button type="button" data-online-ping-toggle class="minimap-toggle online-ping-toggle ${state.pingMenuOpen ? "active" : ""}">${pixelIcon("event")}<b>ピン</b></button><button type="button" class="minimap-toggle online-explore-emote" data-online-emote-anchor><b>☺</b><small>長押し</small></button>${expedition.exitReached && room.leaderId === selfId ? `<button type="button" data-online-complete class="minimap-toggle online-floor-complete">${pixelIcon("event")}<b>踏破確定</b></button>` : ""}`;
+    const stageTools = `<button id="miniMapToggle" type="button" class="minimap-toggle online-map-toggle" aria-label="ミニマップを表示または非表示" aria-pressed="true">${pixelIcon("event")}<b>マップ</b></button><button id="onlineExploreChatToggle" type="button" data-online-chat-toggle class="minimap-toggle online-chat-toggle ${state.exploreChatOpen ? "active" : ""}" aria-label="探索チャットを${state.exploreChatOpen ? "閉じる" : "開く"}" aria-controls="onlineExploreChatBar" aria-expanded="${state.exploreChatOpen ? "true" : "false"}">${pixelIcon("notice")}<b>チャット</b></button><button type="button" data-online-ping-toggle class="minimap-toggle online-ping-toggle ${state.pingMenuOpen ? "active" : ""}" aria-label="ピンメニューを${state.pingMenuOpen ? "閉じる" : "開く"}" aria-controls="onlineExplorePingMenu" aria-expanded="${state.pingMenuOpen ? "true" : "false"}">${pixelIcon("event")}<b>ピン</b></button><button type="button" class="minimap-toggle online-explore-emote" data-online-emote-anchor aria-label="仲間へエモートを送る。長押しで選択"><b>☺</b><small>長押し</small></button>${expedition.exitReached && room.leaderId === selfId ? `<button type="button" data-online-complete class="minimap-toggle online-floor-complete" aria-label="この階の踏破を確定">${pixelIcon("event")}<b>踏破確定</b></button>` : ""}`;
     const nav = `<button type="button" data-online-route="home"><i>${pixelIcon("formation")}</i>部屋</button><button type="button" data-online-chat-toggle><i>${pixelIcon("notice")}</i>会話</button><button type="button" data-online-route="raid"><i>${pixelIcon("growth")}</i>レイド</button><button type="button" data-online-center><i>${pixelIcon("event")}</i>現在地</button><button type="button" data-online-return class="danger"><i>${pixelIcon("rest")}</i>帰還</button>`;
     const compatibilityPlayers = (room.members ?? []).map(member => `<span hidden data-online-map-player="${escapeOnlineHtml(member.playerId)}"></span>`).join("");
-    const inlineChat = `<form class="online-explore-chat-bar ${state.exploreChatOpen ? "open" : ""}" data-online-explore-chat-form ${state.exploreChatOpen ? "" : "hidden"}><input maxlength="80" enterkeyhint="send" autocomplete="off" data-online-explore-chat-input placeholder="探索しながら仲間へ話す" value="${escapeOnlineHtml(state.chatDraft ?? "")}"><button type="submit">送信</button><button type="button" data-online-chat-close aria-label="閉じる">×</button></form>`;
+    const inlineChat = `<form id="onlineExploreChatBar" class="online-explore-chat-bar ${state.exploreChatOpen ? "open" : ""}" data-online-explore-chat-form aria-label="探索チャット" ${state.exploreChatOpen ? "" : "hidden"}><input maxlength="80" enterkeyhint="send" autocomplete="off" data-online-explore-chat-input aria-label="仲間へのメッセージ" placeholder="探索しながら仲間へ話す" value="${escapeOnlineHtml(state.chatDraft ?? "")}"><button type="submit">送信</button><button type="button" data-online-chat-close aria-label="探索チャットを閉じる">×</button></form>`;
     const merchantResult = state.merchantResult ?? null, merchantReceipt = merchantResult?.offer === "relic" ? `${number(expedition.floor) >= 300 ? "UR" : "SSR"}装備 ×1` : merchantResult?.offer === "crystal" ? "捕獲結晶 ×2・魔晶石 ×3" : merchantResult?.offer === "rest" ? "HP・MP全回復・捕獲結晶 ×1" : "", merchantShowOffers = !merchantResult || merchantResult.status === "error";
     const merchantModal = `<aside class="online-rare-merchant-modal" role="dialog" aria-modal="true" aria-label="異界商人の無料支援"><header><img src="./assets/online/coop/merchant/talk.png?v=2.11.44-build209" alt=""><div><small>OTHERWORLD SUPPORT</small><b>異界商人の無料支援</b><span>代金は不要。各プレイヤー1回、ひとつだけ選べます。</span></div><button type="button" data-online-close-merchant aria-label="閉じる">×</button></header>${merchantResult ? `<div class="online-merchant-receipt ${escapeOnlineHtml(merchantResult.status || "")}"><b>${merchantResult.status === "pending" ? "処理中…" : merchantResult.status === "success" ? "支援品を受け取りました" : "受け取りを完了できませんでした"}</b><span>${escapeOnlineHtml(merchantResult.status === "error" ? merchantResult.message || "もう一度お試しください。" : merchantReceipt)}</span></div>` : ""}${merchantShowOffers ? `<div class="online-rare-merchant-offers"><button type="button" data-online-merchant-offer="relic" ${state.merchantPending ? "disabled" : ""}><i>遺物</i><b>遺物装備</b><small>${number(expedition.floor) >= 300 ? "UR装備×1" : "SSR装備×1"}</small></button><button type="button" data-online-merchant-offer="crystal" ${state.merchantPending ? "disabled" : ""}><i>結晶</i><b>結晶包み</b><small>捕獲結晶×2<br>魔晶石×3</small></button><button type="button" data-online-merchant-offer="rest" ${state.merchantPending ? "disabled" : ""}><i>灯火</i><b>全快の灯</b><small>HP・MP全回復<br>捕獲結晶×1</small></button></div>` : ""}<p>受け取った支援品は自分だけに適用されます。</p></aside>`;
     const merchantPrompt = state.merchantOpen ? merchantModal : `<aside class="online-coop-interaction online-rare-merchant-call"><small>無料支援NPC・異界商人</small><button type="button" data-online-open-merchant>異界商人と話す</button></aside>`, interactionPending = Boolean(state.interactionPending && state.interactionPending.action === interaction?.action && state.interactionPending.targetId === interaction?.targetId), interactionDisabled = interactionPending || ["waitResonanceChest","waitRelayPartner","waitKeyPartner"].includes(interaction?.action);
     const prompt = state.merchantOpen && merchantResult ? merchantModal : interaction?.action === "browseRareMerchant" ? merchantPrompt : interaction ? `<aside class="online-coop-interaction"><small>${escapeOnlineHtml(interactionPending ? "通信処理が終わるまでお待ちください" : interaction.hint || "共闘アクション")}</small><button type="button" data-online-expedition-interact="${escapeOnlineHtml(interaction.action)}" data-online-interaction-target="${escapeOnlineHtml(interaction.targetId || "")}" ${interactionDisabled ? "disabled" : ""} ${interactionPending ? 'aria-busy="true"' : ""}>${escapeOnlineHtml(interactionPending ? "処理中…" : interaction.label || "調べる")}</button></aside>` : "";
-    const resonance = Number(expedition.coop?.resonance?.level) || 0, ownerOffline = Number(expedition.coop?.ownerReconnectDeadline) > Date.now(), multiplayer = (room?.members?.length ?? 0) >= 2;
-    const onlineStatus = multiplayer ? `<aside class="online-coop-run-status ${realmActive ? "realm" : ""}"><b>${realmActive ? "異界宝物庫" : `共鳴率 ${resonance}/5`}</b><span>${realmActive ? "番人を倒し、宝箱を開いて帰還" : `宝箱 +${resonance * 3}%・貢献度 +${resonance * 2}%`}</span>${ownerOffline ? `<em>主の復帰待ち：現階層のみ継続可</em>` : ""}</aside>` : `<aside class="online-coop-run-status solo"><b>通常探索・主の世界</b><span>協力追加なし・オフライン探索と同じ進行</span></aside>`;
-    const pingMenu = `<aside class="online-ping-menu ${state.pingMenuOpen ? "open" : ""}" ${state.pingMenuOpen ? "" : "hidden"}>${[["gather","集合"],["here","こっち"],["chest","宝箱"],["switch","スイッチ"],["rescue","救助"]].map(([id,label]) => `<button type="button" data-online-ping-kind="${id}">${label}</button>`).join("")}</aside>`;
+    const ownerOffline = Number(expedition.coop?.ownerReconnectDeadline) > Date.now(), multiplayer = (room?.members?.length ?? 0) >= 2;
+    const isWorldOwner = (room?.ownerId ?? room?.leaderId) === selfId, gimmickGuide = multiplayer ? coopGimmickGuide(expedition) : null;
+    const progressionLabel = isWorldOwner ? "部屋主進行を保存" : "自分の階層・ボス進行は変化なし";
+    const onlineStatus = multiplayer ? `<aside class="online-coop-run-status ${realmActive ? "realm" : ""}" aria-label="共同探索の状態"><b>${realmActive ? "異界宝物庫" : gimmickGuide ? `任意協力・${escapeOnlineHtml(gimmickGuide.label)}` : "通常マップを共同探索"}</b><span>${realmActive ? "番人を倒し、宝箱を開いて帰還" : gimmickGuide ? escapeOnlineHtml(gimmickGuide.hint) : "この階は協力ギミックなし"}</span><em>${realmActive ? progressionLabel : `任意・無視して出口へ進行可／${progressionLabel}`}</em>${ownerOffline ? `<em>主の復帰待ち：現階層のみ継続可</em>` : ""}</aside>` : `<aside class="online-coop-run-status solo" aria-label="オンライン1人探索の状態"><b>通常探索・主の世界</b><span>協力追加なし・オフライン探索と同じ進行</span></aside>`;
+    const pingMenu = `<aside id="onlineExplorePingMenu" class="online-ping-menu ${state.pingMenuOpen ? "open" : ""}" aria-label="仲間へ送るピン" ${state.pingMenuOpen ? "" : "hidden"}>${[["gather","集合"],["here","こっち"],["chest","宝箱"],["switch","スイッチ"],["rescue","救助"]].map(([id,label]) => `<button type="button" data-online-ping-kind="${id}">${label}</button>`).join("")}</aside>`;
     const floorBossConfirm = state.floorBossConfirm ? `<aside class="online-floor-boss-confirm" role="dialog" aria-modal="true"><div><small>FLOOR DOMINATOR・${number(state.floorBossConfirm.floor)}F</small><h3>${escapeOnlineHtml(state.floorBossConfirm.profile?.name || "階層支配者")}</h3><p>通常探索と同じ強さの支配者です。勝利すると温泉と初回三択報酬が解放されます。</p><dl><span>Lv.${number(state.floorBossConfirm.profile?.level || state.floorBossConfirm.floor)}</span><span>HP ${number(state.floorBossConfirm.profile?.hp || 0)}</span></dl><footer><button type="button" data-online-cancel-floor-boss>いったん退く</button><button type="button" class="primary" data-online-confirm-floor-boss>支配者へ挑む</button></footer></div></aside>` : "";
     const coopBoss = state.coopBossConfirm?.boss ?? null, coopBossConfirm = coopBoss ? `<aside class="online-floor-boss-confirm online-coop-boss-confirm" style="--coop-boss-accent:${escapeOnlineHtml(coopBoss.accent || "#8fe9ff")}" role="dialog" aria-modal="true" aria-label="共闘ボスへの挑戦確認"><div><small>CO-OP BOSS・${number(state.coopBossConfirm.floor)}F</small><h3>${escapeOnlineHtml(coopBoss.name || "共鳴の強敵")}</h3><strong>${escapeOnlineHtml(coopBoss.title || "複数人限定の共鳴試練")}</strong><p>${escapeOnlineHtml(coopBoss.intro || coopBoss.mechanic?.instruction || "仲間と行動を合わせて攻略する、2人以上限定のボスです。")}</p><dl><span>${escapeOnlineHtml(coopBoss.mechanic?.name || "共鳴課題")}</span><span>${escapeOnlineHtml(coopBoss.mechanic?.shortLabel || "連携必須")}</span></dl><footer><button type="button" data-online-cancel-coop-boss>いったん退く</button><button type="button" class="primary" data-online-confirm-coop-boss>仲間と挑む</button></footer></div></aside>` : "";
-    return ExploreScreen(base, { online: true, floor: expedition.floor, title: realmActive ? `異界宝物庫・${expedition.floor}階` : multiplayer ? `共闘探索・${expedition.floor}階` : `通常探索・${expedition.floor}階`, party: exploreParty(room), hudCollapsed: state.hudCollapsed, combatPower: (room.members ?? []).reduce((sum, member) => sum + Math.max(0, Number(member.profile?.power) || 0), 0), progress: Math.round(discovered / total * 100), run: { startedAt: expedition.startedAt ?? Date.now() }, stageContentHtml: `<canvas id="gameCanvas" data-online-dungeon-canvas></canvas><div class="online-shared-map" hidden>${compatibilityPlayers}</div>${onlineStatus}${prompt}${inlineChat}${pingMenu}${floorBossConfirm}${coopBossConfirm}`, stageToolsHtml: stageTools, miniMapHtml: '<canvas id="miniMap"></canvas>', navHtml: nav, className: `online-scenery-${theme.id} ${realmActive ? "online-treasure-realm" : ""}` });
+    return ExploreScreen(base, { online: true, floor: expedition.floor, title: realmActive ? `異界宝物庫・${expedition.floor}階` : multiplayer ? `共同探索・${expedition.floor}階` : `通常探索・${expedition.floor}階`, party: exploreParty(room), hudCollapsed: state.hudCollapsed, combatPower: (room.members ?? []).reduce((sum, member) => sum + Math.max(0, Number(member.profile?.power) || 0), 0), progress: Math.round(discovered / total * 100), run: { startedAt: expedition.startedAt ?? Date.now() }, stageContentHtml: `<canvas id="gameCanvas" data-online-dungeon-canvas role="application" aria-label="共同探索マップ。行き先をタップ、ドラッグで見回し、2本指で拡大縮小できます"></canvas><div class="online-shared-map" hidden>${compatibilityPlayers}</div>${onlineStatus}${prompt}${inlineChat}${pingMenu}${floorBossConfirm}${coopBossConfirm}`, stageToolsHtml: stageTools, miniMapHtml: '<canvas id="miniMap" aria-label="ミニマップ"></canvas>', navHtml: nav, className: `online-scenery-${theme.id} ${realmActive ? "online-treasure-realm" : ""}` });
   }
   const members = room?.members ?? [], self = memberById(room, selfId);
   const leader = (room?.leaderId ?? room?.ownerId) === selfId || Boolean(self?.leader || self?.isLeader);
@@ -309,10 +326,11 @@ export function renderOnlineExplore(room, selfId, state = {}) {
   const tradeActive = Boolean(state.trade), startPending = Boolean(state.expeditionStartPending);
   const startEnabled = leader && allReady && !tradeActive && !startPending;
   const blocker = tradeActive ? "交換を完了または中止してから出発できます。" : startPending ? "サーバーの出発確認を待っています。" : !leader ? "出発操作は部屋主が行います。" : !allReady ? "全員が接続し、準備完了になると出発できます。" : "";
-  return `${screenHeader("explore", "HOST WORLD EXPLORATION", "1人なら通常探索と同じ。2人以上のときだけ協力要素が加わります。")} 
-    <section class="online-v3-lobby-card"><div><small>CHALLENGE FLOOR</small><label><input type="number" inputmode="numeric" min="1" max="10000" value="${number(room?.selectedFloor || 1).replaceAll(",", "")}" data-online-floor ${leader ? "" : 'readonly aria-readonly="true"'}><b>F</b></label><p>${leader ? "挑戦階層を選び、全員の準備後に出発できます。" : "部屋主が選んだ階層へ参加します。"}</p></div></section>
+  const progressionCopy = leader ? "踏破・階層ボス結果は、部屋主であるあなたの通常探索へ保存されます。" : "お手伝い報酬と自分のHP/MPだけを受け取り、自分の通常探索階層・ボス進行は変わりません。";
+  return `${screenHeader("explore", "SHARED HOST EXPEDITION", "部屋主の通常探索へ全員で参加します。1人なら通常探索と同じ、2人以上のときだけ任意の協力要素が加わります。")} 
+    <section class="online-v3-lobby-card"><div><small>CHALLENGE FLOOR</small><label><input type="number" inputmode="numeric" min="1" max="10000" value="${number(room?.selectedFloor || 1).replaceAll(",", "")}" data-online-floor ${leader ? "" : 'readonly aria-readonly="true"'}><b>F</b></label><p>${leader ? "挑戦階層を選び、全員の準備後に出発できます。" : "部屋主が選んだ階層へ参加します。"}<br>${progressionCopy}</p></div></section>
     ${readyGrid(room)}
-    <div class="online-v3-ready-actions"><button type="button" data-online-ready aria-pressed="${Boolean(self?.ready)}">${self?.ready ? "準備を解除" : "準備完了"}</button><button type="button" class="online-v3-primary" data-online-start-explore ${startEnabled ? "" : "disabled"}>通常探索へ出発</button></div>
+    <div class="online-v3-ready-actions"><button type="button" data-online-ready aria-pressed="${Boolean(self?.ready)}">${self?.ready ? "準備を解除" : "準備完了"}</button><button type="button" class="online-v3-primary" data-online-start-explore ${startEnabled ? "" : "disabled"}>共同探索へ出発</button></div>
     ${blocker ? `<p class="online-v3-start-blocker" role="status">${escapeOnlineHtml(blocker)}</p>` : ""}`;
 }
 
@@ -393,65 +411,6 @@ export function renderOnlineTeam(room, selfId, state = {}) {
     ${blocker ? `<p class="online-v3-start-blocker" role="status">${escapeOnlineHtml(blocker)}</p>` : ""}`;
 }
 
-const RESONANCE_PHASES = Object.freeze({
-  switches: ["音板の同時起動", "蒼と紅の音板へ分かれ、同時に操作しよう。"],
-  defense: ["共鳴杭の防衛", "みんなで共鳴を送り、開門同調を100%にしよう。"],
-  rescue: ["仲間の救出", "動ける仲間は北東の共鳴杭へ急ごう。"],
-  chest: ["三択の宝箱", "欲しい報酬を一人ずつ選ぼう。全員が選ぶと先へ進む。"],
-  mimic: ["共鳴ミミック", "移動はできない。力を合わせて攻撃しよう。"],
-  result: ["挑戦結果", "協力結果を確認してロビーへ戻ろう。"],
-});
-
-function resonanceTime(deadlineAt) {
-  const seconds = Math.max(0, Math.ceil((Number(deadlineAt) - Date.now()) / 1000));
-  return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
-}
-
-function resonanceCell(room, selfId, resonance, x, y) {
-  const tile = resonance.tiles?.[y]?.[x] ?? "#", players = (resonance.players ?? []).filter(player => player.x === x && player.y === y);
-  const plate = (resonance.switches ?? []).find(entry => entry.x === x && entry.y === y);
-  const rescue = resonance.rescuePoint?.x === x && resonance.rescuePoint?.y === y;
-  const exit = resonance.exit?.x === x && resonance.exit?.y === y;
-  const feature = plate ? `<i class="resonance-feature plate ${plate.heldBy ? "active" : ""}" title="${escapeOnlineHtml(plate.label)}">${plate.heldBy ? "◉" : "◎"}</i>` : rescue ? '<i class="resonance-feature rescue" title="救助杭">✚</i>' : exit ? '<i class="resonance-feature exit" title="出口">◇</i>' : "";
-  const figures = players.map(player => {
-    const member = memberById(room, player.playerId), own = player.playerId === selfId;
-    return `<span class="resonance-player ${own ? "self" : ""} ${player.trapped ? "trapped" : ""}" title="${escapeOnlineHtml(member?.profile?.displayName || "冒険者")}">${onlineAvatarVisual(member?.profile ?? {}, { className: "resonance-player-avatar" })}${player.trapped ? "<i>LOCK</i>" : ""}</span>`;
-  }).join("");
-  return `<span class="resonance-cell ${tile === "#" ? "wall" : "floor"} ${plate ? "has-plate" : ""} ${rescue ? "has-rescue" : ""} ${exit ? "has-exit" : ""}" data-resonance-x="${x}" data-resonance-y="${y}">${feature}${figures}</span>`;
-}
-
-export function renderOnlineResonance(room, selfId, state = {}) {
-  const self = memberById(room, selfId), resonance = room?.resonance;
-  if (room?.phase !== "resonance" || !resonance) {
-    const members = room?.members ?? [], leader = (room?.leaderId ?? room?.ownerId) === selfId || Boolean(self?.leader || self?.isLeader);
-    const allReady = members.length >= 2 && members.every(member => member.connected && member.ready), tradeActive = Boolean(state.trade);
-    return `${screenHeader("resonance", "MULTIPLAYER COORDINATION MAZE", "2〜4人限定。別々に届く手掛かりを声やチャットで共有し、7分以内の踏破を目指します。")}
-      <section class="online-resonance-lobby"><div class="online-resonance-portal"><img src="./assets/online/coop/portal/portal-active.png" alt=""><div><small>RESONANCE MAZE</small><h3>一人では解けない共鳴の試練</h3><p>音板の同時起動、防衛、救助、宝箱選択を協力して進めます。通常探索の進行には影響しません。</p></div></div><ol><li><b>2人以上で準備</b><span>全員がREADYになると部屋主が開始できます。</span></li><li><b>手掛かりは本人だけ</b><span>仲間へ内容を伝えることが攻略の鍵です。</span></li><li><b>切断中はAIが補助</b><span>再接続すると現在の盤面へそのまま復帰します。</span></li></ol></section>
-      ${readyGrid(room)}<div class="online-v3-ready-actions"><button type="button" data-online-ready aria-pressed="${Boolean(self?.ready)}">${self?.ready ? "準備を解除" : "準備完了"}</button><button type="button" class="online-v3-primary resonance-start" data-online-start-resonance ${leader && allReady && !tradeActive ? "" : "disabled"}>${tradeActive ? "交換の完了待ち" : members.length < 2 ? "2人以上で挑戦" : !allReady ? "全員の準備待ち" : "共鳴迷宮を開始"}</button></div>
-      ${tradeActive ? '<p class="online-v3-start-blocker" role="status">交換を完了または中止してから開始できます。</p>' : !leader ? '<p class="online-v3-start-blocker" role="status">開始操作は部屋主が行います。</p>' : members.length < 2 ? '<p class="online-v3-start-blocker" role="status">共鳴迷宮は2人以上で挑戦できます。</p>' : !allReady ? '<p class="online-v3-start-blocker" role="status">全員が接続し、準備完了になると開始できます。</p>' : ""}`;
-  }
-  const phase = RESONANCE_PHASES[resonance.phase] ?? ["共鳴迷宮", "仲間と連携して進もう。"], cols = Math.max(1, Math.min(13, Number(resonance.cols) || 13)), rows = Math.max(1, Math.min(13, Number(resonance.rows) || 13));
-  const ownPlayer = (resonance.players ?? []).find(player => player.playerId === selfId), ownClue = resonance.clues?.[selfId] ?? "手掛かりを受信中…", chosen = resonance.choices?.[selfId];
-  const event = resonance.lastEvent ? `<aside class="online-resonance-event"><small>${escapeOnlineHtml(resonance.lastEvent.kind || "EVENT")}</small><b>${escapeOnlineHtml(resonance.lastEvent.title || "共鳴反応")}</b><span>${escapeOnlineHtml(resonance.lastEvent.message || "")}</span></aside>` : "";
-  let actions = "";
-  if (["switches", "defense", "rescue"].includes(resonance.phase)) actions = `<button type="button" class="primary" data-online-resonance-action="interact" ${ownPlayer?.trapped ? "disabled" : ""}>${resonance.phase === "switches" ? "音板を起動" : resonance.phase === "defense" ? "共鳴を送る" : "仲間を救助"}</button>`;
-  else if (resonance.phase === "chest") actions = `<div class="online-resonance-choices"><button type="button" data-online-resonance-choice="gold" ${chosen ? "disabled" : ""}>GOLD</button><button type="button" data-online-resonance-choice="crystal" ${chosen ? "disabled" : ""}>💎 魔晶石</button><button type="button" data-online-resonance-choice="capture" ${chosen ? "disabled" : ""}>捕獲結晶</button></div>${chosen ? '<small class="online-resonance-wait">選択済み・仲間を待っています</small>' : ""}`;
-  else if (resonance.phase === "mimic") actions = `<button type="button" class="primary danger" data-online-resonance-action="attack">ミミックを攻撃</button>`;
-  else if (resonance.phase === "result") actions = `<button type="button" class="primary" data-online-resonance-return>ロビーへ戻る</button>`;
-  const cells = Array.from({ length: rows }, (_, y) => Array.from({ length: cols }, (_, x) => resonanceCell(room, selfId, resonance, x, y)).join("")).join("");
-  const chatMessages = (room?.chatHistory ?? []).slice(-5);
-  const mazeChat = `<aside class="online-resonance-chat ${state.exploreChatOpen ? "open" : ""}"><button type="button" data-online-chat-toggle aria-expanded="${state.exploreChatOpen ? "true" : "false"}">${pixelIcon("notice")}<b>作戦チャット</b></button>${state.exploreChatOpen ? `<div class="online-resonance-chat-panel"><div class="online-resonance-chat-log" role="log">${chatMessages.length ? chatMessages.map(message => `<p class="${message.playerId === selfId ? "own" : ""}"><b>${escapeOnlineHtml(message.name || memberById(room, message.playerId)?.profile?.displayName || "冒険者")}</b><span>${escapeOnlineHtml(message.text || "")}</span></p>`).join("") : "<small>手掛かりや役割を仲間へ伝えよう。</small>"}</div><form data-online-explore-chat-form><input maxlength="80" enterkeyhint="send" autocomplete="off" data-online-explore-chat-input placeholder="仲間へ作戦を伝える" value="${escapeOnlineHtml(state.chatDraft ?? "")}"><button type="submit">送信</button><button type="button" data-online-chat-close aria-label="チャットを閉じる">×</button></form></div>` : ""}</aside>`;
-  return `<section class="online-resonance-game phase-${escapeOnlineHtml(resonance.phase)}" data-online-resonance-view>
-    <header class="online-resonance-hud"><div><small>RESONANCE MAZE</small><h2>${escapeOnlineHtml(phase[0])}</h2><p>${escapeOnlineHtml(phase[1])}</p></div><time data-online-resonance-countdown class="${Number(resonance.deadlineAt) - Date.now() <= 30000 ? "urgent" : ""}">${resonanceTime(resonance.deadlineAt)}</time></header>
-    <div class="online-resonance-layout"><section class="online-resonance-board" style="--resonance-cols:${cols}" aria-label="13掛ける13の共鳴迷宮">${cells}</section>
-      <aside class="online-resonance-side"><div class="online-resonance-clue"><small>YOUR CLUE / あなただけの手掛かり</small><p>${escapeOnlineHtml(ownClue)}</p></div>${event}<div class="online-resonance-party">${(resonance.players ?? []).map(player => { const member = memberById(room, player.playerId); return `<span class="${player.trapped ? "trapped" : ""} ${player.playerId === selfId ? "self" : ""}"><b>${escapeOnlineHtml(member?.profile?.displayName || "冒険者")}</b><small>${player.trapped ? "救助待ち" : player.choice ? "宝箱選択済み" : `(${player.x}, ${player.y})`}</small></span>`; }).join("")}</div></aside></div>
-    ${resonance.phase === "defense" ? `<div class="online-resonance-defense"><span><i style="width:${ratio(resonance.defenseProgress, 100)}%"></i></span><b>開門同調 ${number(resonance.defenseProgress)}%</b></div>` : ""}
-    ${resonance.phase === "mimic" && resonance.mimic ? `<div class="online-resonance-defense mimic"><span><i style="width:${ratio(resonance.mimic.hp, resonance.mimic.maxHp)}%"></i></span><b>共鳴ミミック HP ${number(resonance.mimic.hp)} / ${number(resonance.mimic.maxHp)}</b></div>` : ""}
-    <footer class="online-resonance-controls"><div class="online-resonance-dpad" aria-label="移動"><button type="button" data-online-resonance-move="up" aria-label="上へ">▲</button><button type="button" data-online-resonance-move="left" aria-label="左へ">◀</button><button type="button" data-online-resonance-move="down" aria-label="下へ">▼</button><button type="button" data-online-resonance-move="right" aria-label="右へ">▶</button></div><div class="online-resonance-phase-action">${actions}</div></footer>
-    ${mazeChat}
-  </section>`;
-}
-
 function roomListingOptions(options, selected) {
   return options.map(option => `<option value="${escapeOnlineHtml(option.id)}" ${option.id === selected ? "selected" : ""}>${escapeOnlineHtml(option.label)}</option>`).join("");
 }
@@ -467,7 +426,7 @@ function renderRoomListingSettings(room, selfId, state) {
   const published = Boolean(listing.published), purpose = listing.purpose ?? "explore", style = listing.style ?? "anyone";
   const pending = Boolean(state.roomListingPending), guildRecruitmentLock = state.guildRecruitmentLock?.active ? state.guildRecruitmentLock : null;
   const guildRestricted = Boolean(guildRecruitmentLock || state.guildRecruitmentActive), plannedGathering = guildRecruitmentLock?.kind === "planned";
-  const purposeLabel = roomListingLabel(ONLINE_ROOM_PURPOSES, purpose, "通常探索");
+  const purposeLabel = roomListingLabel(ONLINE_ROOM_PURPOSES, purpose, "共同探索");
   const styleLabel = roomListingLabel(ONLINE_ROOM_STYLES, style, "だれでも歓迎");
   const others = (room?.members ?? []).filter(member => member.playerId !== selfId);
   const mutedIds = new Set((state.mutedPlayerIds ?? []).map(String)), blockedIds = new Set((state.blockedPlayerIds ?? []).map(String));

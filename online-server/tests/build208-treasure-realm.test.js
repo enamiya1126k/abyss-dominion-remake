@@ -1,7 +1,17 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { RoomStore } from "../src/RoomStore.js";
-import { createRareTreasureRealm208, prepareOnlineExpansionV208 } from "../src/OnlineExpansion208.js";
+import { COOP_GIMMICK_TYPES } from "../src/CoopGimmicks.js";
+import { prepareOnlineExpansionV208 } from "../src/OnlineExpansion208.js";
+
+const LEGACY_RARE_TYPES = new Set([
+  "rareGoldenMonster",
+  "rareMerchant",
+  "rarePortal",
+  "rarePortalGuardian",
+  "rarePortalChest",
+  "rareReturnPortal",
+]);
 
 function connection() {
   return { messages: [], send(raw) { this.messages.push(JSON.parse(raw)); }, close() {} };
@@ -23,7 +33,40 @@ function player(store, index = 1) {
   return { conn, session: conn.session };
 }
 
-function startForcedRare(kind) {
+function assertSingleNormalMapGimmick(expedition) {
+  assert.ok(COOP_GIMMICK_TYPES.includes(expedition.coop.gimmickType));
+  assert.equal(expedition.coop.rare.kind, null);
+  assert.equal(expedition.objects.some(object => object.rare || LEGACY_RARE_TYPES.has(object.type)), false);
+  const optionalObjects = expedition.objects.filter(object => object.onlineAdded);
+  assert.ok(optionalObjects.length > 0);
+  assert.deepEqual([...new Set(optionalObjects.map(object => object.gimmickType))], [expedition.coop.gimmickType]);
+  assert.equal([expedition.coop.gimmickType, expedition.coop.rare.kind].filter(Boolean).length, 1);
+}
+
+function injectLegacyRareObject(expedition, kind, type) {
+  Object.assign(expedition.coop.rare, {
+    kind,
+    resolved: false,
+    merchantClaims: {},
+    portalEntered: false,
+    guardianDefeated: false,
+    realmActive: false,
+    portalReturned: false,
+  });
+  const object = {
+    id: `legacy-${type}`,
+    type,
+    ...expedition.start,
+    resolved: false,
+    hidden: false,
+    persistent: true,
+    rare: true,
+  };
+  expedition.objects.push(object);
+  return object;
+}
+
+function startLegacyRareRequest(kind) {
   const store = new RoomStore({ randomRoomCode: () => "REAL28", random: () => .99 });
   const first = player(store, 1), second = player(store, 2);
   const created = store.createRoom(first.session);
@@ -32,10 +75,12 @@ function startForcedRare(kind) {
   assert.equal(store.setReady(first.session, true).ok, true);
   assert.equal(store.setReady(second.session, true).ok, true);
   assert.equal(store.startExpedition(first.session, { hostWorld: { openedChestIds: {} }, forceRare: kind }).ok, true);
-  return { store, room: store.rooms.get(created.room.roomId), players: [first, second] };
+  const room = store.rooms.get(created.room.roomId);
+  assertSingleNormalMapGimmick(room.expedition);
+  return { store, room, players: [first, second] };
 }
 
-test("build208 special assets keep dungeon state and four persistent chest tiers", () => {
+test("build208 keeps dungeon state, one normal-map gimmick, and persistent special chests", () => {
   const rows = 15, cols = 15;
   const expedition = {
     id: "build208-fixture", floor: 1001, rows, cols,
@@ -43,62 +88,37 @@ test("build208 special assets keep dungeon state and four persistent chest tiers
     start: { x: 1, y: 1 }, exit: { x: 13, y: 13 },
     objects: [{ id: "host-chest", type: "chest", x: 2, y: 2, resolved: false }], totalDiscoveries: 1,
   };
+  const originalTiles = expedition.tiles.map(row => [...row]);
   prepareOnlineExpansionV208(expedition, { ownerId: "AD-CX28-AABA", hostWorld: { openedChestIds: {} }, participants: 4, forceRare: "hiddenPortal" });
   assert.equal(expedition.coop.floorTier, "abyss");
-  assert.equal(expedition.objects.some(object => object.type === "rarePortalGuardian"), false);
-  assert.equal(expedition.objects.some(object => object.type === "rarePortalChest"), false);
-  const portal = expedition.objects.find(object => object.type === "rarePortal");
-  assert.equal(portal.wallSide, "top");
-  assert.equal(expedition.tiles[portal.y - 1][portal.x], "#");
+  assert.deepEqual(expedition.tiles, originalTiles);
+  assertSingleNormalMapGimmick(expedition);
   for (const chest of expedition.objects.filter(object => ["resonanceChest", "deluxeChest"].includes(object.type))) assert.equal(chest.persistent, true);
 });
 
-test("build208 hidden portal enters a dedicated realm, unlocks its chest, and restores the host dungeon", () => {
-  const { store, room, players } = startForcedRare("hiddenPortal");
+test("build208 legacy hidden-portal requests stay on the normal expedition map", () => {
+  const { store, room, players } = startLegacyRareRequest("hiddenPortal");
   const mainExpedition = room.expedition;
-  const originalTiles = mainExpedition.tiles.map(row => [...row]);
-  const portal = mainExpedition.objects.find(object => object.type === "rarePortal");
+  const originalTiles = structuredClone(mainExpedition.tiles);
+  const originalObjects = mainExpedition.objects.map(object => ({ ...object }));
+  const portal = injectLegacyRareObject(mainExpedition, "hiddenPortal", "rarePortal");
+  originalObjects.push({ ...portal });
   players[0].session.dungeonPosition = { x: portal.x, y: portal.y, facing: "up" };
   store._syncCoopInteractions(room);
-  assert.equal(store.expeditionInteract(players[0].session, { action: "enterRarePortal", targetId: portal.id }).ok, true);
-  assert.equal(room.expedition.coop.rare.realmActive, true);
-  assert.ok(room._rareMainWorld);
-  assert.notDeepEqual(room.expedition.tiles, originalTiles);
-  assert.deepEqual(room.expedition.objects.map(object => object.type), ["rarePortalGuardian", "rarePortalChest", "rareReturnPortal"]);
-
-  const guardian = room.expedition.objects.find(object => object.type === "rarePortalGuardian");
-  players[0].session.dungeonPosition = { x: guardian.x, y: guardian.y, facing: "up" };
-  store._syncCoopInteractions(room);
-  assert.equal(store.expeditionInteract(players[0].session, { action: "challengeRareGuardian", targetId: guardian.id }).ok, true);
-  const battle = room.expedition.battle;
-  assert.equal(battle.rareKind, "portalGuardian");
-  battle.enemies.forEach(enemy => { enemy.hp = 0; });
-  store._finishBattleVictory(room, battle);
-  const chest = room.expedition.objects.find(object => object.type === "rarePortalChest");
-  assert.equal(chest.hidden, false);
-  assert.equal(chest.persistent, true);
-
-  players[0].session.dungeonPosition = { x: chest.x, y: chest.y, facing: "up" };
-  store._syncCoopInteractions(room);
-  assert.equal(store.expeditionInteract(players[0].session, { action: "openRarePortalChest", targetId: chest.id }).ok, true);
-  assert.equal(chest.resolved, true);
-  const returnPortal = room.expedition.objects.find(object => object.type === "rareReturnPortal");
-  assert.equal(returnPortal.hidden, false);
-
-  players[0].session.dungeonPosition = { x: returnPortal.x, y: returnPortal.y, facing: "down" };
-  store._syncCoopInteractions(room);
-  assert.equal(store.expeditionInteract(players[0].session, { action: "leaveRareRealm", targetId: returnPortal.id }).ok, true);
+  const response = store.expeditionInteract(players[0].session, { action: "enterRarePortal", targetId: portal.id });
+  assert.equal(response.ok, false);
+  assert.equal(response.code, "FEATURE_INTEGRATED");
+  assert.match(response.message, /共同探索へ統合/);
   assert.deepEqual(room.expedition.tiles, originalTiles);
   assert.equal(room.expedition.coop.rare.realmActive, false);
-  assert.equal(room._rareMainWorld, null);
-  const restoredPortal = room.expedition.objects.find(object => object.type === "rarePortal");
-  assert.equal(restoredPortal.resolved, true);
-  assert.equal(restoredPortal.persistent, true);
+  assert.equal(room._rareMainWorld ?? null, null);
+  assert.deepEqual(room.expedition.objects, originalObjects);
+  assert.equal(room.phase, "expedition");
 });
 
-test("build208 free merchant support is individual, one-use, and never opens a separate route", () => {
-  const { store, room, players } = startForcedRare("otherworldMerchant");
-  const merchant = room.expedition.objects.find(object => object.type === "rareMerchant");
+test("build208 legacy merchant fixtures remain individual, one-use support", () => {
+  const { store, room, players } = startLegacyRareRequest("otherworldMerchant");
+  const merchant = injectLegacyRareObject(room.expedition, "otherworldMerchant", "rareMerchant");
   players[0].session.dungeonPosition = { x: merchant.x, y: merchant.y, facing: "down" };
   store._syncCoopInteractions(room);
   assert.equal(store.rareMerchantClaim(players[0].session, { offer: "crystal" }).ok, true);
@@ -111,12 +131,7 @@ test("build208 free merchant support is individual, one-use, and never opens a s
   assert.equal(merchant.resolved, true);
 });
 
-test("build208 realm factory keeps guardian, chest and return portal in a deterministic order", () => {
-  const realm = createRareTreasureRealm208({ floor: 777 });
-  assert.equal(realm.floor, 777);
-  assert.equal(realm.tiles[0].every(tile => tile === "#"), true);
-  assert.equal(realm.objects[0].type, "rarePortalGuardian");
-  assert.equal(realm.objects[1].hidden, true);
-  assert.equal(realm.objects[2].type, "rareReturnPortal");
-  assert.equal(realm.objects[2].hidden, true);
+test("build208 no longer exports the dedicated rare-realm factory", async () => {
+  const expansion = await import("../src/OnlineExpansion208.js");
+  assert.equal("createRareTreasureRealm208" in expansion, false);
 });

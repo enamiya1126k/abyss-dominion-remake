@@ -46,7 +46,7 @@ function state({ guildId = "GD-ABC234", activities = [], goals = sharedGoals } =
   };
 }
 
-test("build235 normalizes the five fixed shared-goal ids and rejects unknown or duplicate ids", () => {
+test("build244 keeps the five compatible shared-goal ids while presenting Resonance as shared exploration", () => {
   assert.equal(normalizeGuildSharedGoal({ id: "unknown", current: 1, target: 1 }), null);
   assert.deepEqual(normalizeGuildSharedGoal({ id: "raid", current: 99, target: 2, completed: false }), {
     id: "raid", current: 2, target: 2, completed: true,
@@ -111,7 +111,9 @@ test("build235 renders shared goals and recent activity in the specified Guild-t
   const order = ["online-guild-hero", "online-guild-week\"", "online-guild-shared-goals", "online-guild-recruitment", "online-guild-chat", "online-guild-activities", "online-guild-roster"]
     .map(token => html.indexOf(token));
   assert.ok(order.every((position, index) => position >= 0 && (!index || position > order[index - 1])), `unexpected section order: ${order}`);
-  for (const label of ["共同探索を完了", "階層／共闘ボスを討伐", "ワールドレイドに勝利", "自由チーム戦を完了", "共鳴迷宮を踏破"]) assert.match(html, new RegExp(label));
+  for (const label of ["共同探索を完了", "階層／共闘ボスを討伐", "ワールドレイドに勝利", "自由チーム戦を完了", "仲間と共同探索を完了"]) assert.match(html, new RegExp(label));
+  assert.match(html, /共同探索（旧記録）を完了/);
+  assert.doesNotMatch(html, /共鳴迷宮を踏破/);
   assert.equal((html.match(/class="online-guild-activity-card"/g) ?? []).length, 8);
   assert.match(html, /data-online-guild-activity-more/);
   assert.match(html, /data-online-social-focus-key="guild-activity-more"/);
@@ -163,7 +165,7 @@ test("build235 show-more is local-only and survives same-guild state redraws", (
   assert.equal(controller.guildActivitiesExpanded, false);
 });
 
-test("build235 preserves one Social FAB, two tabs, focus/scroll state, and the six online routes", async () => {
+test("build244 preserves one Social FAB, two tabs, focus/scroll state, and the five online routes", async () => {
   const normalized = normalizeGuildState(state());
   const closed = renderOnlineSocialPanel({}, normalized, { open: false, selfId: SELF });
   assert.equal((closed.match(/data-online-friends-toggle/g) ?? []).length, 1);
@@ -176,7 +178,7 @@ test("build235 preserves one Social FAB, two tabs, focus/scroll state, and the s
     readFile(resolve(root, "src/ui/screens/OnlinePartyScreen.js"), "utf8"),
     readFile(resolve(root, "src/online/OnlinePartyClient.js"), "utf8"),
   ]);
-  assert.equal((screen.match(/data-online-route=/g) ?? []).length, 6);
+  assert.equal((screen.match(/data-online-route=/g) ?? []).length, 5);
   for (const token of ["guildActivityHistoryV1", "guildActivitiesExpanded", "socialScrollByTab", "guildChatScroll", "data-online-social-focus-key", "preventScroll: true"]) assert.match(client, new RegExp(token));
 });
 
@@ -193,11 +195,11 @@ test("build235 CSS and cache boundary are mobile-safe and complete", async () =>
   assert.match(css, /@media\(max-width:350px\)/);
   assert.doesNotMatch(css, /min-width:\s*[4-9][0-9]{2}px/);
   assert.match(index, /build239\.css\?v=2\.11\.65-build239/);
-  assert.match(index, /ASSET_VERSION\s*\=\s*"2\.11\.65"/);
-  assert.match(index, /ASSET_BUILD\s*\=\s*"build239"/);
-  assert.match(main, /OnlinePartyScreen\.js\?v=2\.11\.65-build239/);
-  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.65-build239/);
-  assert.match(client, /OnlinePartyScreen\.js\?v=2\.11\.65-build239/);
-  assert.match(client, /OnlineViews\.js\?v=2\.11\.65-build239/);
-  assert.match(views, /OnlinePartyScreen\.js\?v=2\.11\.65-build239/);
+  assert.match(index, /ASSET_VERSION\s*\=\s*"2\.11\.69"/);
+  assert.match(index, /ASSET_BUILD\s*\=\s*"build245"/);
+  assert.match(main, /OnlinePartyScreen\.js\?v=2\.11\.69-build245/);
+  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.69-build245/);
+  assert.match(client, /OnlinePartyScreen\.js\?v=2\.11\.69-build245/);
+  assert.match(client, /OnlineViews\.js\?v=2\.11\.69-build245/);
+  assert.match(views, /OnlinePartyScreen\.js\?v=2\.11\.69-build245/);
 });

@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 
 const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
-test("the modern online shell keeps one stage and six independent destinations", async () => {
+test("the modern online shell keeps one stage and five destinations", async () => {
   const [screen, client, views, styles, index] = await Promise.all([
     read("src/ui/screens/OnlinePartyScreen.js"),
     read("src/online/OnlinePartyClient.js"),
@@ -14,21 +14,21 @@ test("the modern online shell keeps one stage and six independent destinations",
   ]);
 
   assert.equal((screen.match(/data-online-stage/g) ?? []).length, 1);
-  assert.equal((screen.match(/data-online-route=/g) ?? []).length, 6);
-  for (const route of ["home", "explore", "raid", "team", "resonance", "chat"]) {
+  assert.equal((screen.match(/data-online-route=/g) ?? []).length, 5);
+  for (const route of ["home", "explore", "raid", "team", "chat"]) {
     assert.match(screen, new RegExp(`data-online-route="${route}"`));
     assert.match(client, new RegExp(`renderOnline${route[0].toUpperCase()}${route.slice(1)}`));
   }
-  assert.match(client, /const ROUTES = new Set\(\["home", "explore", "raid", "team", "resonance", "chat"\]\)/);
+  assert.match(client, /const ROUTES = new Set\(\["home", "explore", "raid", "team", "chat"\]\)/);
   assert.doesNotMatch(screen, /data-online-room-view|data-online-trade/);
-  assert.equal((screen.match(/data-online-route="resonance"/g) ?? []).length, 1);
+  assert.equal((screen.match(/data-online-route="resonance"/g) ?? []).length, 0);
   assert.match(styles, /\.online-v3-room\s*\{[\s\S]*grid-template-rows:\s*auto minmax\(0, 1fr\) auto/);
   assert.match(styles, /\.online-v3-stage\s*\{[\s\S]*overflow:\s*auto/);
   assert.match(index, /online-v3\.css\?v=2\.10\.0-build163/);
   assert.match(index, /build163\.css\?v=2\.10\.0-build163/);
   assert.match(index, /Styles\/build231\.css\?v=2\.11\.57-build231/);
-  assert.match(index, /ASSET_BUILD = "build239"/);
-  assert.match(views, /export function renderOnlineResonance/);
+  assert.match(index, /ASSET_BUILD = "build245"/);
+  assert.doesNotMatch(views, /export function renderOnlineResonance/);
 });
 
 test("exploration supports tap paths, synchronized vitals, critical/down visuals and one shared battle renderer", async () => {

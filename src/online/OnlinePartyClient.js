@@ -1,29 +1,28 @@
 import {
   buildOnlinePartyProfile, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.65-build239";
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.69-build245";
 import {
-  renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineResonance, renderOnlineChat,
-} from "./OnlineViews.js?v=2.11.66-build242";
+  renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
+} from "./OnlineViews.js?v=2.11.69-build245";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   commitOnlineTrade, recoverOrphanedTradeEscrows,
 } from "./OnlineTradeSystem.js?v=2.11.54-build226";
 import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=2.11.54-build226";
 
-const ROUTES = new Set(["home", "explore", "raid", "team", "resonance", "chat"]);
+const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
+const LEGACY_RESONANCE_ROUTES = new Set(["resonance", "resonanceMaze", "resonance-maze"]);
 const ONLINE_PROTOCOL = "1.16.0";
-const ROOM_PURPOSES = new Set(["explore", "raid", "team", "resonance", "social"]);
+const ROOM_PURPOSES = new Set(["explore", "raid", "team", "social"]);
 const ROOM_STYLES = new Set(["anyone", "casual", "help", "fast"]);
 const DIRECTION = Object.freeze({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] });
 const ONLINE_EXPLORE_CHAT_POSITION = "abyss-online-explore-chat-position";
 const ONLINE_EXPLORE_EMOTE_POSITION = "abyss-online-explore-emote-position";
 const ONLINE_HALL_EMOTE_POSITION = "abyss-online-hall-emote-position";
-const RESONANCE_CLICK_SUPPRESSION_MS = 900;
 const HANDSHAKE_TOKEN_RETRY_LIMIT = 2;
 const RESUME_TOKEN_MAP_LIMIT = 32;
 const RESUME_TOKEN_MAX_LENGTH = 512;
 const RESUME_TOKEN_MAP_MAX_BYTES = 64 * 1024;
-const RESONANCE_MOVE_STOP_CODES = new Set(["BLOCKED", "MOVE_CLOSED", "PLAYER_TRAPPED", "NO_RESONANCE"]);
 const GUILD_ID_PATTERN = /^GD-[A-Z2-9]{6}$/;
 const PLAYER_ID_PATTERN = /^AD-[A-Z2-9]{4}-[A-Z2-9]{4}$/;
 const GUILD_ROLES = new Set(["leader", "officer", "member"]);
@@ -71,8 +70,7 @@ const ONLINE_STATE_CONTROL_SELECTOR = [
   "[data-online-raid-exchange]", "[data-online-ping-kind]", "[data-online-expedition-interact]", "[data-online-merchant-offer]",
   "[data-online-confirm-floor-boss]", "[data-online-confirm-coop-boss]", "[data-online-battle-cheer]", "[data-online-hall-destination]",
   "[data-online-ready]", "[data-online-start-explore]", "[data-online-return]", "[data-online-complete]", "[data-online-start-raid]",
-  "[data-online-team-side]", "[data-online-team-ready]", "[data-online-team-ruleset]", "[data-online-team-series]", "[data-online-team-swap]", "[data-online-start-team]", "[data-online-start-resonance]",
-  "[data-online-resonance-move]", "[data-online-resonance-choice]", "[data-online-resonance-action]", "[data-online-resonance-return]",
+  "[data-online-team-side]", "[data-online-team-ready]", "[data-online-team-ruleset]", "[data-online-team-series]", "[data-online-team-swap]", "[data-online-start-team]",
   "[data-online-move]", "[data-online-emote-anchor]", "[data-command]", "[data-skill-id]", "[data-online-battle-item]",
   "[data-online-item-target]", "[data-online-speed-cycle]", "[data-online-speed]", "[data-online-battle-action]", "[data-online-battle-skill]",
   "[data-online-preset]", "[data-online-floor]", "[data-online-room-listing-toggle]", "[data-online-room-listing-purpose]",
@@ -82,7 +80,6 @@ const ONLINE_STATE_CONTROL_SELECTOR = [
 ].join(",");
 const HALL_POINTS = Object.freeze([
   { route: "raid", x: 18, y: 25 }, { route: "explore", x: 82, y: 25 },
-  { route: "resonance", x: 50, y: 25 },
   { route: "team", x: 24, y: 78 }, { route: "chat", x: 76, y: 78 },
 ]);
 
@@ -96,6 +93,17 @@ function safeRoomId(value) {
   return source.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
 }
 function safeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[character]); }
+function normalizedRoomPurpose(value, fallback = "explore") {
+  const purpose = String(value ?? "");
+  if (purpose === "resonance") return "explore";
+  if (LEGACY_RESONANCE_ROUTES.has(purpose)) return "explore";
+  return ROOM_PURPOSES.has(purpose) ? purpose : fallback;
+}
+function normalizedOnlineRoute(value, fallback = "home") {
+  const route = String(value ?? "");
+  if (LEGACY_RESONANCE_ROUTES.has(route)) return "explore";
+  return ROUTES.has(route) ? route : fallback;
+}
 function isTyping(target) { return Boolean(target?.closest?.("input,textarea,select,[contenteditable=true]")); }
 function keyDirection(key) { return ({ ArrowUp: "up", w: "up", W: "up", ArrowDown: "down", s: "down", S: "down", ArrowLeft: "left", a: "left", A: "left", ArrowRight: "right", d: "right", D: "right" })[key] ?? null; }
 
@@ -264,7 +272,7 @@ function normalizeGuildPlanGathering(source, gatherOpensAt, gatherClosesAt) {
 
 export function normalizeGuildPlan(source) {
   const planId = cleanSocialText(source?.planId, 96).trim();
-  const purpose = cleanSocialText(source?.purpose, 20).trim();
+  const purpose = normalizedRoomPurpose(cleanSocialText(source?.purpose, 20).trim(), "");
   const style = cleanSocialText(source?.style, 20).trim();
   const scheduledAt = boundedInteger(source?.scheduledAt, 0, Number.MAX_SAFE_INTEGER, 0);
   const createdAt = boundedInteger(source?.createdAt, 0, Number.MAX_SAFE_INTEGER, 0);
@@ -306,7 +314,7 @@ export function normalizeGuildPlan(source) {
 }
 
 export function normalizeGuildPlanReminder(source) {
-  const planId = cleanSocialText(source?.planId, 96).trim(), purpose = cleanSocialText(source?.purpose, 20).trim(), style = cleanSocialText(source?.style, 20).trim();
+  const planId = cleanSocialText(source?.planId, 96).trim(), purpose = normalizedRoomPurpose(cleanSocialText(source?.purpose, 20).trim(), ""), style = cleanSocialText(source?.style, 20).trim();
   const scheduledAt = Number(source?.scheduledAt), organizer = normalizeGuildPlanPerson(source?.organizer);
   if (!GUILD_PLAN_ID_PATTERN.test(planId) || !ROOM_PURPOSES.has(purpose) || !ROOM_STYLES.has(style) || !Number.isSafeInteger(scheduledAt) || scheduledAt <= 0 || !organizer) return null;
   let gathering = null;
@@ -370,7 +378,7 @@ export function normalizeGuildRecruitment(source) {
   const availableSlots = Math.max(0, maximum - count);
   return {
     recruitmentId,
-    purpose: ROOM_PURPOSES.has(source?.purpose) ? source.purpose : "explore",
+    purpose: normalizedRoomPurpose(source?.purpose),
     style: ROOM_STYLES.has(source?.style) ? source.style : "anyone",
     note: cleanSocialText(source?.note, 48).trim(),
     floor: boundedInteger(source?.floor, 1, 10_000, 1),
@@ -451,7 +459,7 @@ function normalizeRoomListings(source) {
   for (const raw of Array.isArray(source) ? source : []) {
     const roomId = safeRoomId(raw?.roomId);
     if (roomId.length !== 6 || seen.has(roomId)) continue;
-    const purpose = ROOM_PURPOSES.has(raw?.purpose) ? raw.purpose : "explore";
+    const purpose = normalizedRoomPurpose(raw?.purpose);
     const style = ROOM_STYLES.has(raw?.style) ? raw.style : "anyone";
     const count = Math.max(1, Math.min(4, Math.floor(Number(raw?.count) || 1)));
     const maximum = Math.max(count, Math.min(4, Math.floor(Number(raw?.max) || 4)));
@@ -579,7 +587,9 @@ export class OnlinePartyController {
     this.pendingLeaveOnReconnect = null;
     this.pendingLeaveTimer = null;
     this.selectedMonsterId = storageGet(ONLINE_STORAGE_KEYS.monsterId);
-    this.route = ROUTES.has(storageGet(ONLINE_STORAGE_KEYS.route)) ? storageGet(ONLINE_STORAGE_KEYS.route) : "home";
+    const storedRoute = storageGet(ONLINE_STORAGE_KEYS.route);
+    this.route = storedRoute === "resonance" ? "explore" : normalizedOnlineRoute(storedRoute);
+    if (LEGACY_RESONANCE_ROUTES.has(storedRoute)) storageSet(ONLINE_STORAGE_KEYS.route, "explore");
     this.profile = null;
     this.root = null;
     this.ws = null;
@@ -645,6 +655,7 @@ export class OnlinePartyController {
     this.pendingExpeditionReturnResult = null;
     this.pendingExpeditionStart = false;
     this.pendingSecretRoomRun = null;
+    this.syncedExpeditionStartKey = "";
     this.trade = null;
     this.tradeFilter = "all";
     this.tradeQuery = "";
@@ -665,7 +676,9 @@ export class OnlinePartyController {
     this.notifiedTutorialGuides = new Set();
     this.pendingExpeditionProfileSync = false;
     this.pendingRewardReceipt = null;
+    this.rewardReceiptQueue = [];
     this.rewardReceiptTimer = null;
+    this.rewardReceiptAdvanceTimer = null;
     this.hallDestination = null;
     this.hallNearbyRoute = null;
     this.exploreCanvasMounted = false;
@@ -675,8 +688,6 @@ export class OnlinePartyController {
     this.keyboardMoveMode = "";
     this.movePointers = new Map();
     this.movePointerSequence = 0;
-    this.resonanceClickSuppressions = [];
-    this.lastResonanceMoveError = { code: "", at: 0 };
     this.path = [];
     this.lastMoveAt = 0;
     this.lastChatAt = 0;
@@ -731,16 +742,16 @@ export class OnlinePartyController {
 
   unmount({ disconnect = true } = {}) {
     this.mounted = false;
-    this._clearMoveInputs({ clearClickSuppressions: true });
+    this._clearMoveInputs();
     this.hallDestination = null;
     this._unmountExploreCanvas();
     clearTimeout(this.interactionPendingTimer); clearTimeout(this.merchantPendingTimer);
-    clearTimeout(this.tradeConfirmTimer); clearTimeout(this.rewardReceiptTimer);
+    clearTimeout(this.tradeConfirmTimer); clearTimeout(this.rewardReceiptTimer); clearTimeout(this.rewardReceiptAdvanceTimer);
     clearTimeout(this.tradeRecoveryTimer);
     clearTimeout(this.pendingLeaveTimer);
     this._clearGuildPlanTransitionTimer();
     this.interactionPendingTimer = null; this.merchantPendingTimer = null;
-    this.tradeConfirmTimer = null; this.rewardReceiptTimer = null; this.pendingRewardReceipt = null; this.tradeRecoveryTimer = null; this.pendingLeaveTimer = null;
+    this.tradeConfirmTimer = null; this.rewardReceiptTimer = null; this.rewardReceiptAdvanceTimer = null; this.pendingRewardReceipt = null; this.rewardReceiptQueue = []; this.tradeRecoveryTimer = null; this.pendingLeaveTimer = null;
     if (this.tradeRecoveryStatus?.status === "complete") this.tradeRecoveryStatus = null;
     for (const timer of this.presentationTimers) clearTimeout(timer);
     this.presentationTimers.clear();
@@ -767,7 +778,6 @@ export class OnlinePartyController {
   _query(selector) { return this.root?.querySelector(selector) ?? null; }
 
   _pointerModeForButton(button) {
-    if (button?.matches?.("[data-online-resonance-move]")) return "resonance";
     if (button?.matches?.("[data-online-move]")) return "explore";
     return "";
   }
@@ -776,30 +786,20 @@ export class OnlinePartyController {
     if (!button || event?.button != null && event.button !== 0) return false;
     if (!this._canMutateOnline()) { this._announceConnectionPause(); return false; }
     const mode = this._pointerModeForButton(button);
-    const direction = String(button.dataset?.onlineMove || button.dataset?.onlineResonanceMove || "");
+    const direction = String(button.dataset?.onlineMove || "");
     const pointerId = Number(event?.pointerId);
     if (!mode || !DIRECTION[direction] || !Number.isFinite(pointerId) || this.movePointers.has(pointerId)) return false;
     event.preventDefault?.();
     this.path = [];
     this.movePointers.set(pointerId, { pointerId, mode, direction, sequence: ++this.movePointerSequence });
     try { button.setPointerCapture?.(pointerId); } catch {}
-    if (mode === "resonance") {
-      const now = Date.now();
-      this.resonanceClickSuppressions.push({ pointerId, direction, expiresAt: now + RESONANCE_CLICK_SUPPRESSION_MS });
-      this.resonanceClickSuppressions = this.resonanceClickSuppressions.slice(-12);
-      this.lastMoveAt = typeof performance !== "undefined" ? performance.now() : now;
-      this._send("resonanceMove", { direction });
-    }
     return true;
   }
 
   _endPointerMove(event) {
     const pointerId = Number(event?.pointerId);
     if (!Number.isFinite(pointerId)) return false;
-    const released = this.movePointers.delete(pointerId);
-    const suppression = [...this.resonanceClickSuppressions].reverse().find(entry => entry.pointerId === pointerId);
-    if (suppression) suppression.expiresAt = Date.now() + RESONANCE_CLICK_SUPPRESSION_MS;
-    return released;
+    return this.movePointers.delete(pointerId);
   }
 
   _currentMoveDirection(mode) {
@@ -808,26 +808,14 @@ export class OnlinePartyController {
     return latest?.direction ?? (this.keyboardMoveMode === mode ? [...this.heldDirections][0] : null) ?? null;
   }
 
-  _consumeResonancePointerClick(event, button) {
-    if (Number(event?.detail) === 0) return false;
-    const now = Date.now(), direction = String(button?.dataset?.onlineResonanceMove || ""), pointerId = Number(event?.pointerId);
-    this.resonanceClickSuppressions = this.resonanceClickSuppressions.filter(entry => entry.expiresAt >= now);
-    const index = this.resonanceClickSuppressions.findIndex(entry => (Number.isFinite(pointerId) && pointerId > 0 ? entry.pointerId === pointerId : entry.direction === direction));
-    if (index < 0) return false;
-    this.resonanceClickSuppressions.splice(index, 1);
-    return true;
-  }
-
-  _clearMoveInputs({ clearClickSuppressions = false } = {}) {
+  _clearMoveInputs() {
     this.heldDirections.clear();
     this.keyboardMoveMode = "";
     this.movePointers.clear();
     this.path = [];
-    if (clearClickSuppressions) this.resonanceClickSuppressions = [];
   }
 
   _movePointerModeActive(mode) {
-    if (mode === "resonance") return this.route === "resonance" && this.roomState?.phase === "resonance" && this.roomState?.resonance?.phase !== "result";
     if (mode === "explore") return this.route === "explore" && this.roomState?.phase === "expedition" && !this.roomState?.expedition?.battle;
     return false;
   }
@@ -860,9 +848,8 @@ export class OnlinePartyController {
     this._bind(window, "keydown", event => {
       const direction = keyDirection(event.key);
       const movingExplore = this.route === "explore" && this.roomState?.phase === "expedition" && !this.roomState?.expedition?.battle;
-      const movingResonance = this.route === "resonance" && this.roomState?.phase === "resonance" && this.roomState?.resonance?.phase !== "result";
-      if (!direction || isTyping(event.target) || !movingExplore && !movingResonance || !this._canMutateOnline()) return;
-      event.preventDefault(); this.path = []; this.keyboardMoveMode = movingResonance ? "resonance" : "explore"; this.heldDirections.add(direction);
+      if (!direction || isTyping(event.target) || !movingExplore || !this._canMutateOnline()) return;
+      event.preventDefault(); this.path = []; this.keyboardMoveMode = "explore"; this.heldDirections.add(direction);
     });
     this._bind(window, "keyup", event => { const direction = keyDirection(event.key); if (direction) { this.heldDirections.delete(direction); if (!this.heldDirections.size) this.keyboardMoveMode = ""; } });
     this._bind(window, "blur", () => this._clearMoveInputs());
@@ -874,7 +861,7 @@ export class OnlinePartyController {
     this._bind(window, "pageshow", () => this._ensureConnectionAfterResume());
     this._bind(window, "online", () => this._ensureConnectionAfterResume());
     this._bind(this.root, "pointerdown", event => {
-      const button = event.target.closest?.("[data-online-move],[data-online-resonance-move]");
+      const button = event.target.closest?.("[data-online-move]");
       if (!button) return;
       this._beginPointerMove(event, button);
     });
@@ -1028,7 +1015,6 @@ export class OnlinePartyController {
       this._sendGuild("disband", "guildDisband", { name }); return;
     }
     if (button.matches("[data-online-force-close-leave]")) { this._forceClosePendingRoomLeave(); return; }
-    if (button.matches("[data-online-resonance-move]") && this._consumeResonancePointerClick(event, button)) return;
     if (button.matches(ONLINE_STATE_CONTROL_SELECTOR) && !this._canMutateOnline()) { this._announceConnectionPause(); return; }
     if (button.matches("[data-online-refresh-listings]")) { this._requestRoomListings({ force: true }); return; }
     if (button.matches("[data-online-quick-join]")) { this._quickJoinRoom(); return; }
@@ -1078,7 +1064,7 @@ export class OnlinePartyController {
       const published = Boolean(this._query("[data-online-create-listed]")?.checked);
       const purposeValue = this._query("[data-online-create-purpose]")?.value;
       const styleValue = this._query("[data-online-create-style]")?.value;
-      const purpose = ROOM_PURPOSES.has(purposeValue) ? purposeValue : "explore";
+      const purpose = normalizedRoomPurpose(purposeValue);
       const style = ROOM_STYLES.has(styleValue) ? styleValue : "anyone";
       this._send("createRoom", { published, purpose, style }); return;
     }
@@ -1111,11 +1097,6 @@ export class OnlinePartyController {
     if (button.matches("[data-online-team-swap]")) { this._send("teamSwapSides"); return; }
     if (button.matches("[data-online-team-ready]")) { const self = this._self(); this._send("teamReady", { ready: !self?.teamReady }); return; }
     if (button.matches("[data-online-start-team]")) { if (!this._contentStartBlockedByTrade()) { this.teamBattleReport = null; this._send("startTeamBattle"); } return; }
-    if (button.matches("[data-online-start-resonance]")) { if (!this._contentStartBlockedByTrade()) this._send("startResonance"); return; }
-    if (button.matches("[data-online-resonance-move]")) { this._send("resonanceMove", { direction: button.dataset.onlineResonanceMove }); return; }
-    if (button.matches("[data-online-resonance-choice]")) { this._send("resonanceAction", { kind: "choose", choice: button.dataset.onlineResonanceChoice }); return; }
-    if (button.matches("[data-online-resonance-action]")) { this._send("resonanceAction", { kind: button.dataset.onlineResonanceAction }); return; }
-    if (button.matches("[data-online-resonance-return]")) { this._send("resonanceAction", { kind: "return" }); return; }
     if (button.matches("[data-enemy-target]")) { this._selectBattleTarget(button.dataset.enemyTarget, "enemy"); return; }
     if (button.matches("[data-online-ally-target]")) { this._selectBattleTarget(button.dataset.onlineAllyTarget, "ally"); return; }
     if (button.matches("[data-command]")) { this._battleAction(this.route, button.dataset.command); return; }
@@ -1192,7 +1173,7 @@ export class OnlinePartyController {
     }
     if (event.target.matches("[data-online-guild-plan-form]")) {
       event.preventDefault();
-      const purpose = ROOM_PURPOSES.has(this.guildPlanDraft.purpose) ? this.guildPlanDraft.purpose : "explore";
+      const purpose = normalizedRoomPurpose(this.guildPlanDraft.purpose);
       const style = ROOM_STYLES.has(this.guildPlanDraft.style) ? this.guildPlanDraft.style : "anyone";
       const scheduledInput = String(this.guildPlanDraft.scheduledAt || this._query("[data-online-guild-plan-scheduled-at]")?.value || "");
       const scheduledAt = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(scheduledInput) ? new Date(scheduledInput).getTime() : NaN;
@@ -1205,7 +1186,7 @@ export class OnlinePartyController {
     }
     if (event.target.matches("[data-online-guild-recruitment-form]")) {
       event.preventDefault();
-      const purpose = ROOM_PURPOSES.has(this.guildRecruitmentDraft.purpose) ? this.guildRecruitmentDraft.purpose : "explore";
+      const purpose = normalizedRoomPurpose(this.guildRecruitmentDraft.purpose);
       const style = ROOM_STYLES.has(this.guildRecruitmentDraft.style) ? this.guildRecruitmentDraft.style : "anyone";
       const note = cleanSocialText(this.guildRecruitmentDraft.note, 48).replace(/\s+/g, " ").trim();
       this._sendGuild("recruitmentCreate", "guildRecruitmentCreate", { purpose, style, note });
@@ -1262,13 +1243,13 @@ export class OnlinePartyController {
   }
 
   _handleChange(event) {
-    if (event.target.matches("[data-online-guild-plan-purpose]")) this.guildPlanDraft.purpose = ROOM_PURPOSES.has(event.target.value) ? event.target.value : "explore";
+    if (event.target.matches("[data-online-guild-plan-purpose]")) this.guildPlanDraft.purpose = normalizedRoomPurpose(event.target.value);
     if (event.target.matches("[data-online-guild-plan-style]")) this.guildPlanDraft.style = ROOM_STYLES.has(event.target.value) ? event.target.value : "anyone";
-    if (event.target.matches("[data-online-guild-recruitment-purpose]")) this.guildRecruitmentDraft.purpose = ROOM_PURPOSES.has(event.target.value) ? event.target.value : "explore";
+    if (event.target.matches("[data-online-guild-recruitment-purpose]")) this.guildRecruitmentDraft.purpose = normalizedRoomPurpose(event.target.value);
     if (event.target.matches("[data-online-guild-recruitment-style]")) this.guildRecruitmentDraft.style = ROOM_STYLES.has(event.target.value) ? event.target.value : "anyone";
     if (event.target.matches("[data-online-room-purpose-filter]")) {
       const value = event.target.value;
-      this.roomListingPurposeFilter = value === "all" || ROOM_PURPOSES.has(value) ? value : "all";
+      this.roomListingPurposeFilter = value === "all" ? "all" : normalizedRoomPurpose(value, "all");
       this._requestRoomListings({ force: true });
       return;
     }
@@ -1283,7 +1264,7 @@ export class OnlinePartyController {
       }
       const purposeValue = this._query("[data-online-room-listing-purpose]")?.value;
       const styleValue = this._query("[data-online-room-listing-style]")?.value;
-      const purpose = ROOM_PURPOSES.has(purposeValue) ? purposeValue : "explore";
+      const purpose = normalizedRoomPurpose(purposeValue);
       const style = ROOM_STYLES.has(styleValue) ? styleValue : "anyone";
       this.roomListingPending = true;
       if (!this._send("setRoomListing", { published, purpose, style })) {
@@ -1787,11 +1768,10 @@ export class OnlinePartyController {
       this._renderFriendPanel(); return;
     }
     if (message.type === "roomState") { this._applyRoomState(message.room); this._settlePendingExpeditionStart(message.room); return; }
-    if (["resonanceStarted", "resonanceState", "resonanceEnded"].includes(message.type) && message.resonance) {
-      if (!this.roomState) return;
-      this.roomState = { ...this.roomState, phase: "resonance", resonance: message.resonance };
-      this.route = "resonance";
-      if (message.type === "resonanceEnded") { this._closeAllBattleMenus(); this.toast(message.result?.victory ? "共鳴迷宮を踏破しました！" : "共鳴迷宮が終了しました"); }
+    if (["resonanceStarted", "resonanceState", "resonanceEnded"].includes(message.type)) {
+      this.route = "explore";
+      storageSet(ONLINE_STORAGE_KEYS.route, "explore");
+      this.toast("共鳴迷宮は共同探索へ統合されました。共同探索から出発してください");
       this._render(); return;
     }
     if (message.type === "tradeState") { this._applyTradeState(message.trade); return; }
@@ -1808,14 +1788,14 @@ export class OnlinePartyController {
     if (message.type === "hostWorldDelta") { this._applyHostWorldDelta(message); return; }
     if (message.type === "expeditionVitals") { this._applyExpeditionVitals(message); return; }
     if (message.type === "recoveryComplete") { if (message.orphanedExpedition) this._receiveOrphanedExpedition(this.recoverySettlementBatch); return; }
-    if (message.type === "expeditionResult") { this._receiveExpeditionResult(message); return; }
+    if (message.type === "expeditionResult") { const batch = this.recoverySettlementBatch; this._trackRecoverySettlement(this._receiveExpeditionResult(message, batch), batch); return; }
     if (message.type === "secretRoomEntered") { if (String(message.playerId ?? "") !== this.selfId) return; const roomId = String(message.roomId ?? "").slice(0, 160), floor = Math.max(1, Math.min(10000, Math.floor(Number(message.floor) || 1))); if (roomId) this.onSecretRoomEntered({ roomId, floor, playerId: this.selfId }); return; }
     if (["battleDefeated", "onlineBattleDefeated"].includes(message.type)) { this._applyBattleDefeated(message); return; }
     if (["raidWorld", "raidWorldState"].includes(message.type)) { const ownerId = message.ownerId ?? this.roomState?.ownerId ?? this.roomState?.leaderId; if (ownerId === this.selfId) this._syncRaidWorld(message.raidWorld ?? message.progress); return; }
     if (message.type === "leftRoom") { if (this.pendingLeaveOnReconnect) this._completePendingRoomLeave(); else this._clearRoom(); return; }
     if (message.type === "memberMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.position = { ...message.position }; if (this.route === "home") this._updateHallPlayerDom(message.playerId); return; }
     if (message.type === "expeditionMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.dungeonPosition = { ...message.position }; if (message.playerId === this.selfId) this._notifyTutorialGuide("explore_move"); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render(); return; }
-    if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); if (message.type === "expeditionStarted") { const run = message.room.coopRun ?? {}, ownerId = message.room.ownerId ?? message.room.leaderId; this.onExpeditionStarted({ runId: String(run.runId ?? message.room.expedition?.id ?? "").slice(0, 120), ownerId, startFloor: Math.max(1, Math.min(10000, Math.floor(Number(run.startFloor ?? message.room.expedition?.floor) || 1))), startedAt: Math.max(0, Number(run.startedAt ?? message.room.expedition?.startedAt) || 0) }); this._settlePendingExpeditionStart(message.room); } return; }
+    if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); if (message.type === "expeditionStarted") this._settlePendingExpeditionStart(message.room); return; }
     if (message.type === "battleStarted" && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
     if (message.type === "expeditionEvent") { if (message.event?.kind === "hostChestOpened") this.onHostWorldUpdate(message.event); if (message.event?.tutorialGuide === "firstPickup") this._notifyTutorialGuide("explore_pickup"); this._announceExpeditionEvent(message.event); return; }
     if (message.type === "floorBossDefeated") { const reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: message.ownerId ?? null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = !reward.ownerId || reward.ownerId === this.selfId, multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this._closeBattleMenus("explore"); this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = multiplayer && isWorldOwner && reward.firstClear ? reward : null; if (isWorldOwner) { this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId: reward.ownerId }); this.onFloorBossDefeated({ ...reward, resume: Boolean(reward.firstClear && !multiplayer) }); } this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！`); this._render(); return; }
@@ -1867,11 +1847,9 @@ export class OnlinePartyController {
         this._renderFriendPanel();
         return;
       }
-      if (RESONANCE_MOVE_STOP_CODES.has(errorCode)) {
-        const now = Date.now(), duplicate = this.lastResonanceMoveError.code === errorCode && now - this.lastResonanceMoveError.at < 1200;
-        this.lastResonanceMoveError = { code: errorCode, at: now };
-        this._clearMoveInputs();
-        if (!duplicate) this.toast(message.message || (errorCode === "BLOCKED" ? "その方向へは進めません" : "共鳴迷宮で移動できません"));
+      if (errorCode === "RESONANCE_INTEGRATED") {
+        this._setRoute("explore", { silent: true });
+        this.toast(message.message || "共鳴迷宮は共同探索へ統合されました");
         return;
       }
       this._settlePendingExpeditionStart(null, { rejected: true });
@@ -1912,6 +1890,25 @@ export class OnlinePartyController {
     }
     if (rejected) { this.pendingExpeditionStart = false; this.pendingSecretRoomRun = null; }
     return false;
+  }
+
+  _syncActiveExpeditionRun(room) {
+    if (room?.phase !== "expedition" || !room.expedition) { this.syncedExpeditionStartKey = ""; return false; }
+    const run = room.coopRun && typeof room.coopRun === "object" ? room.coopRun : {};
+    const runId = String(run.runId ?? room.expedition.id ?? "").slice(0, 120);
+    const ownerId = String(room.expedition.hostOwnerId ?? room.ownerId ?? room.leaderId ?? "").slice(0, 24);
+    if (!runId || !ownerId) return false;
+    const key = `${ownerId}:${runId}`;
+    if (this.syncedExpeditionStartKey === key) return true;
+    const result = this.onExpeditionStarted({
+      runId, ownerId,
+      startFloor: Math.max(1, Math.min(10000, Math.floor(Number(run.startFloor ?? room.expedition.floor) || 1))),
+      startedAt: Math.max(0, Number(run.startedAt ?? room.expedition.startedAt) || 0),
+      resumed: true,
+    });
+    if (result?.ok === false) { this.recoverySettlementFailed = true; return false; }
+    this.syncedExpeditionStartKey = key;
+    return true;
   }
 
   _createPendingSecretRoomRun() {
@@ -2061,7 +2058,8 @@ export class OnlinePartyController {
 
   _applyBattleDefeated(message) {
     const eventId = String(message.eventId ?? message.id ?? ""); if (!eventId) return;const acknowledge=()=>{if(this.capabilities.has("battleRecordsV1"))this._send("battleDefeatedAck",{eventId})};if(this.processedBattleEvents.has(eventId)){acknowledge();return}
-    const result=this.onBattleDefeated({ eventId, monsterId: message.monsterId || this.selectedMonsterId, floor: Math.max(1, Number(message.floor) || 1), boss: Boolean(message.boss), defeated: Array.isArray(message.defeated) ? message.defeated : [] });if(result?.ok===false){this.recoverySettlementFailed=true;return}
+    const worldOwnerId=String(message.worldOwnerId??this.roomState?.ownerId??this.roomState?.leaderId??"").slice(0,24),floorBoss=message.floorBoss===true,progressionEligible=floorBoss&&message.progressionEligible===true&&Boolean(worldOwnerId)&&worldOwnerId===this.selfId;
+    const result=this.onBattleDefeated({ eventId, monsterId: message.monsterId || this.selectedMonsterId, floor: Math.max(1, Number(message.floor) || 1), boss: Boolean(message.boss), floorBoss, worldOwnerId, progressionEligible, defeated: Array.isArray(message.defeated) ? message.defeated : [] });if(result?.ok===false){this.recoverySettlementFailed=true;return}
     this.processedBattleEvents.add(eventId); if (this.processedBattleEvents.size > 256) this.processedBattleEvents.delete(this.processedBattleEvents.values().next().value);acknowledge();
   }
 
@@ -2090,6 +2088,11 @@ export class OnlinePartyController {
 
   _applyRoomState(room) {
     if (!room?.roomId) return;
+    if (room.phase === "resonance") {
+      room = { ...room, phase: "lobby", resonance: null };
+      this.route = "explore";
+      storageSet(ONLINE_STORAGE_KEYS.route, "explore");
+    }
     const hiddenSocialIds = this._hiddenSocialIds();
     if (Array.isArray(room.chatHistory) && hiddenSocialIds.size) room = { ...room, chatHistory: room.chatHistory.filter(entry => !hiddenSocialIds.has(normalizedPlayerId(entry?.playerId))) };
     const recruitmentJoinCompleted = this.guildPending?.kind === "recruitmentJoin"
@@ -2115,6 +2118,7 @@ export class OnlinePartyController {
     if (rareKind !== "otherworldMerchant") { this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; }
     this._clearInteractionPending(false);
     this.roomState = room; this.roomId = room.roomId;
+    this._syncActiveExpeditionRun(room);
     if (recruitmentJoinCompleted) {
       this._clearGuildPending();
       this.friendPanelOpen = false;
@@ -2129,7 +2133,6 @@ export class OnlinePartyController {
     if (room.phase === "expedition") this.route = "explore";
     else if (room.phase === "raid") this.route = "raid";
     else if (room.phase === "team") this.route = "team";
-    else if (room.phase === "resonance" || room.resonance && room.resonance.phase !== "result") this.route = "resonance";
     if (this.route !== "chat" && (room.chatHistory?.length ?? 0) > previousCount && previousCount > 0) this.unread = Math.min(99, this.unread + (room.chatHistory.length - previousCount));
     this._showConnectionStep("room");
     if (keepExploreCanvas) {
@@ -2320,7 +2323,7 @@ export class OnlinePartyController {
   }
 
   _clearRoom() {
-    const showReturnResult = Boolean(this.pendingExpeditionReturnResult); this.roomState = null; this.roomId = null; this.pendingExpeditionStart = false; this.pendingSecretRoomRun = null; this._clearMoveInputs(); this._closeAllBattleMenus(); this.unread = 0; this.floorBossConfirm = null; this.coopBossConfirm = null; this.pendingFloorBossReward = null; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; this.expeditionReport = null; this.raidReport = null; this.teamBattleReport = null; this.exploreChatOpen = false; this.pingMenuOpen = false; this.pendingRoomJoinId = null; this.roomListingPending = false; this.roomMemberRemovalPendingId = null; this.processedCoopTechniqueEvents.clear(); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false); this._clearTradeUi();
+    const showReturnResult = Boolean(this.pendingExpeditionReturnResult); this.roomState = null; this.roomId = null; this.pendingExpeditionStart = false; this.pendingSecretRoomRun = null; this.syncedExpeditionStartKey = ""; this._clearMoveInputs(); this._closeAllBattleMenus(); this.unread = 0; this.floorBossConfirm = null; this.coopBossConfirm = null; this.pendingFloorBossReward = null; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; this.expeditionReport = null; this.raidReport = null; this.teamBattleReport = null; this.exploreChatOpen = false; this.pingMenuOpen = false; this.pendingRoomJoinId = null; this.roomListingPending = false; this.roomMemberRemovalPendingId = null; this.processedCoopTechniqueEvents.clear(); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false); this._clearTradeUi();
     this.root?.querySelector(".online-v3-screen")?.classList.remove("online-shared-gameplay-active");
     this._unmountExploreCanvas();
     this._query("[data-online-room]")?.classList.remove("online-shared-gameplay");
@@ -2340,7 +2343,8 @@ export class OnlinePartyController {
   }
 
   _setRoute(route, { silent = false } = {}) {
-    if (!ROUTES.has(route)) return;
+    route = normalizedOnlineRoute(route, "");
+    if (!route) return;
     if (this.trade && route !== "home") { this.toast("交換を完了または中止してから移動してください"); return; }
     const changed = this.route !== route;
     this.route = route; storageSet(ONLINE_STORAGE_KEYS.route, route);
@@ -2364,8 +2368,7 @@ export class OnlinePartyController {
     const unread = this._query("[data-online-unread]"); if (unread) { unread.hidden = this.unread <= 0; unread.textContent = this.unread > 9 ? "9+" : String(this.unread); }
     const stage = this._query("[data-online-stage]"); if (!stage) return;
     const battleGameplay = this.route === "explore" && this.roomState.phase === "expedition" || this.route === "raid" && this.roomState.phase === "raid" || this.route === "team" && this.roomState.phase === "team";
-    const resonanceGameplay = this.route === "resonance" && this.roomState.phase === "resonance";
-    const gameplay = battleGameplay || resonanceGameplay;
+    const gameplay = battleGameplay;
     this._query("[data-online-room]")?.classList.toggle("online-shared-gameplay", gameplay);
     this.root?.querySelector(".online-v3-screen")?.classList.toggle("online-shared-gameplay-active", gameplay);
     const canvasExplore = this.route === "explore" && this.roomState.phase === "expedition" && !this.roomState.expedition?.battle;
@@ -2376,7 +2379,6 @@ export class OnlinePartyController {
     stage.innerHTML = this.route === "explore" ? renderOnlineExplore(this.roomState, this.selfId, state)
       : this.route === "raid" ? renderOnlineRaid(this.roomState, this.selfId, state)
       : this.route === "team" ? renderOnlineTeam(this.roomState, this.selfId, state)
-      : this.route === "resonance" ? renderOnlineResonance(this.roomState, this.selfId, state)
       : this.route === "chat" ? renderOnlineChat(this.roomState, this.selfId, state)
       : renderOnlineHome(this.roomState, this.selfId, state);
     this._syncConnectionUi();
@@ -2513,17 +2515,17 @@ export class OnlinePartyController {
     else if (!["explore", "raid", "team"].includes(this.route) || !this._battle(this.route)) this._render();
   }
 
-  _rewardRows(reward = {}) {
-    const labels = { gold: ["GOLD", "枚"], crystals: ["魔晶石", "個"], captureCrystals: ["捕獲結晶", "個"], raidMaterials: ["融骸核片", "個"], experience: ["経験値", ""] };
-    const rows = [];
-    for (const [key, [label, unit]] of Object.entries(labels)) { const value = Math.max(0, Math.floor(Number(reward?.[key]) || 0)); if (value) rows.push({ label, value: `${value.toLocaleString()}${unit}` }); }
-    if (reward?.randomEquipmentRarity) rows.push({ label: "追加装備抽選", value: String(reward.randomEquipmentRarity), rarity: String(reward.randomEquipmentRarity) });
-    return rows;
+  _showRewardReceipt(message, result = {}) {
+    if (result?.duplicate || result?.isImportantEquipment !== true || !result?.equipmentName) return;
+    const receipt = { id: String(message.rewardId ?? Date.now()), title: String(message.source?.title || "重要装備獲得"), name: String(result.equipmentName), kindLabel: String(result.equipmentKindLabel || "装備"), rarity: String(message.reward?.randomEquipmentRarity || "") };
+    if (this.pendingRewardReceipt?.id === receipt.id || this.rewardReceiptQueue.some(entry => entry.id === receipt.id)) return;
+    this.rewardReceiptQueue.push(receipt);
+    this._showNextRewardReceipt();
   }
 
-  _showRewardReceipt(message, result = {}) {
-    if (result?.duplicate || result?.isWeapon !== true || !result?.equipmentName) return;
-    this.pendingRewardReceipt = { id: String(message.rewardId ?? Date.now()), title: String(message.source?.title || "武器獲得"), name: String(result.equipmentName), rarity: String(message.reward?.randomEquipmentRarity || ""), expiresAt: Date.now() + 7200 };
+  _showNextRewardReceipt() {
+    if (this.pendingRewardReceipt || this.rewardReceiptAdvanceTimer || !this.rewardReceiptQueue.length) return;
+    this.pendingRewardReceipt = { ...this.rewardReceiptQueue.shift(), expiresAt: Date.now() + 7200 };
     clearTimeout(this.rewardReceiptTimer);
     this.rewardReceiptTimer = setTimeout(() => this._clearRewardReceipt(), 7200);
     this._renderRewardReceipt();
@@ -2534,13 +2536,21 @@ export class OnlinePartyController {
     const stage = this._query(".explore-stage") ?? this._query("[data-online-stage]"); if (!stage) return;
     const current = stage.querySelector(".online-reward-receipt"); if (current?.dataset.receiptId === data.id) return; current?.remove();
     const receipt = document.createElement("aside"); receipt.className = "online-reward-receipt online-weapon-receipt"; receipt.dataset.receiptId = data.id; receipt.setAttribute("role", "status");
-    receipt.innerHTML = `<header><span>ONLINE LOOT</span><strong>${safeHtml(data.title)}</strong><button type="button" data-online-reward-close aria-label="閉じる">×</button></header><section><h4>武器を獲得</h4><ul><li class="rare"><span>${safeHtml(data.rarity || "WEAPON")}</span><b>${safeHtml(data.name)}</b></li></ul></section>`;
+    receipt.innerHTML = `<header><span>ONLINE LOOT</span><strong>${safeHtml(data.title)}</strong><button type="button" data-online-reward-close aria-label="閉じる">×</button></header><section><h4>${safeHtml(data.kindLabel)}を獲得</h4><ul><li class="rare"><span>${safeHtml(data.rarity || "EQUIPMENT")}</span><b>${safeHtml(data.name)}</b></li></ul></section>`;
     stage.appendChild(receipt); requestAnimationFrame(() => receipt.classList.add("show"));
   }
 
   _clearRewardReceipt() {
     clearTimeout(this.rewardReceiptTimer); this.rewardReceiptTimer = null; this.pendingRewardReceipt = null;
-    const receipt = this._query(".online-reward-receipt"); if (!receipt) return; receipt.classList.add("leaving"); setTimeout(() => receipt.remove(), 380);
+    const receipt = this._query(".online-reward-receipt");
+    if (!receipt) { this._showNextRewardReceipt(); return; }
+    receipt.classList.add("leaving");
+    clearTimeout(this.rewardReceiptAdvanceTimer);
+    this.rewardReceiptAdvanceTimer = setTimeout(() => {
+      receipt.remove();
+      this.rewardReceiptAdvanceTimer = null;
+      this._showNextRewardReceipt();
+    }, 380);
   }
 
   _trackRecoverySettlement(promise, batch) {
@@ -2553,16 +2563,16 @@ export class OnlinePartyController {
     this.rewardInFlight.add(id);
     try {
       const result = await this.onReward({ rewardId: id, reward: message.reward ?? {}, source: message.source ?? {} });
-      if (result?.ok) { this._send("rewardAck", { rewardId: id }); if (!result.duplicate && result.isWeapon === true) this._showRewardReceipt(message, result); }
+      if (result?.ok) { this._send("rewardAck", { rewardId: id }); if (!result.duplicate && result.isImportantEquipment === true) this._showRewardReceipt(message, result); }
       else if (batch === this.recoverySettlementBatch) this.recoverySettlementFailed = true;
     } catch {
       if (batch === this.recoverySettlementBatch) this.recoverySettlementFailed = true;
     } finally { this.rewardInFlight.delete(id); }
   }
 
-  async _receiveExpeditionResult(message) {
+  async _receiveExpeditionResult(message, batch = this.recoverySettlementBatch) {
     if (!this.capabilities.has("expeditionResultsV1")) return;
-    const runId = String(message.runId ?? message.summary?.runId ?? "").slice(0, 120), resultId = String(message.resultId ?? "").slice(0, 160), ownerId = String(message.ownerId ?? "").slice(0, 24), recipientId = String(message.recipientId ?? this.selfId).slice(0, 24);
+    const runId = String(message.runId ?? message.summary?.runId ?? "").slice(0, 120), resultId = String(message.resultId ?? "").slice(0, 160), explicitOwnerId = message.ownerId ?? message.summary?.ownerId ?? this.roomState?.expedition?.hostOwnerId ?? this.roomState?.ownerId ?? this.roomState?.leaderId, ownerId = String(explicitOwnerId ?? "legacy-owner-unknown").slice(0, 24), recipientId = String(message.recipientId ?? this.selfId).slice(0, 24);
     if (!resultId || !ownerId || recipientId !== this.selfId || this.expeditionResultInFlight.has(resultId)) return;
     const startFloor = Math.max(1, Math.min(10000, Math.floor(Number(message.startFloor) || 1))), endFloor = Math.max(startFloor, Math.min(10000, Math.floor(Number(message.endFloor) || startFloor))), floorsCleared = Math.max(0, Math.min(10000, Math.floor(Number(message.floorsCleared) || 0)));
     const reason = String(message.reason ?? "return").replace(/[\u0000-\u001f\u007f]/g, "").slice(0, 40) || "return", finalVitals = message.finalVitals && typeof message.finalVitals === "object" ? { mutationId: String(message.finalVitals.mutationId ?? "").slice(0, 160), monsterId: String(message.finalVitals.monsterId ?? "").slice(0, 120), playerId: recipientId, hp: Math.max(0, Number(message.finalVitals.hp) || 0), mp: Math.max(0, Number(message.finalVitals.mp) || 0), reason: "expeditionEnd" } : null;
@@ -2571,9 +2581,9 @@ export class OnlinePartyController {
     this.expeditionResultInFlight.add(resultId);
     try {
       const settled = await this.onExpeditionResult({ runId, resultId, ownerId, recipientId, startFloor, endFloor, floorsCleared, completed: Boolean(message.completed), reason, multiplayer: Boolean(message.multiplayer), finishedAt: Math.max(0, Number(message.finishedAt) || 0), finalVitals, summary });
-      if (!settled?.ok) return;
+      if (!settled?.ok) { if (batch === this.recoverySettlementBatch) this.recoverySettlementFailed = true; return; }
       const presentedResultIds = this.presentedExpeditionResultIds ??= new Set();
-      if (!presentedResultIds.has(resultId)) {
+      if (!settled.duplicate && !presentedResultIds.has(resultId)) {
         const context = { resultId, summary, reason, defeat: settled.defeat ?? null, guest: Boolean(settled.guest), duplicate: Boolean(settled.duplicate) };
         if (summary.multiplayer && this.roomState) {
           this.expeditionReport = summary;
@@ -2620,22 +2630,11 @@ export class OnlinePartyController {
       if (!node || !battle || battle.phase !== "command") continue;
       const remaining = Math.max(0, (Number(battle.deadlineAt) - Date.now()) / 1000); node.textContent = remaining.toFixed(1); node.classList.toggle("urgent", remaining <= 5);
     }
-    const resonanceNode = this._query("[data-online-resonance-countdown]"), resonance = this.roomState?.resonance;
-    if (resonanceNode && resonance && resonance.phase !== "result") {
-      const seconds = Math.max(0, Math.ceil((Number(resonance.deadlineAt) - Date.now()) / 1000));
-      resonanceNode.textContent = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
-      resonanceNode.classList.toggle("urgent", seconds <= 30);
-    }
   }
 
   _moveStep(now) {
     if (!this._canMutateOnline()) { this._clearMoveInputs(); return; }
     if (this.route === "home" && this.roomState?.phase === "lobby") { this._moveHallStep(now); return; }
-    if (this.route === "resonance" && this.roomState?.phase === "resonance" && this.roomState?.resonance?.phase !== "result") {
-      const direction = this._currentMoveDirection("resonance");
-      if (!direction) return;
-      this.lastMoveAt = now; this._send("resonanceMove", { direction }); return;
-    }
     if (this.route !== "explore" || this.roomState?.phase !== "expedition" || this.roomState?.expedition?.battle) return;
     const self = this._self(), current = self?.dungeonPosition, expedition = this.roomState.expedition;
     if (!current || Number(self?.coopVitals?.hp) <= 0) { this._clearMoveInputs(); return; }
@@ -2898,6 +2897,13 @@ export class OnlinePartyController {
 
   _completePendingRoomLeave() {
     const pending = this.pendingLeaveOnReconnect;
+    const unsettled = [...(this.recoverySettlementTasks ?? [])];
+    if (pending && unsettled.length && !pending.waitingForSettlement) {
+      pending.waitingForSettlement = true;
+      this._setStatus("reconnecting", "退出結果を保存中…", "HP・MPと受け取った報酬を保存してから部屋を閉じます");
+      Promise.allSettled(unsettled).then(() => { if (this.pendingLeaveOnReconnect === pending) this._completePendingRoomLeave(); });
+      return;
+    }
     clearTimeout(this.pendingLeaveTimer); this.pendingLeaveTimer = null;
     this.pendingLeaveOnReconnect = null;
     this._clearRoom();

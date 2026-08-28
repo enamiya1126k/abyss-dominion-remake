@@ -1,29 +1,84 @@
-import test from"node:test";
-import assert from"node:assert/strict";
-import{RoomStore}from"../src/RoomStore.js";
+import test from "node:test";
+import assert from "node:assert/strict";
+import { RoomStore } from "../src/RoomStore.js";
 
-function connection(){return{messages:[],send(raw){this.messages.push(JSON.parse(raw))},close(){}}}
-function hello(store,index){const conn=connection(),friendId=`AD-ZZZZ-ZZZ${"BCDE"[index-1]}`;const result=store.hello(conn,{friendId,clientKey:`resonance-client-${index}`.padEnd(32,"x"),profile:{displayName:`共鳴者${index}`,speciesId:"slime",power:2_500,battleStats:{hp:5000,mp:100,atk:500,matk:500,def:400,mdef:400,spd:300}}});assert.equal(result.ok,true);return{conn,session:conn.session}}
-function route(tiles,start,target){const key=point=>`${point.x},${point.y}`,queue=[{x:start.x,y:start.y}],previous=new Map([[key(start),null]]);for(let cursor=0;cursor<queue.length;cursor++){const current=queue[cursor];if(current.x===target.x&&current.y===target.y)break;for(const[direction,[dx,dy]]of Object.entries({up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]})){const next={x:current.x+dx,y:current.y+dy,direction},id=key(next);if(tiles[next.y]?.[next.x]!=="."||previous.has(id))continue;previous.set(id,current);queue.push(next)}}const path=[];let cursor={...target};while(cursor&&(cursor.x!==start.x||cursor.y!==start.y)){const prior=previous.get(key(cursor));assert.ok(prior,"target must be reachable");path.push({direction:cursor.x<prior.x?"left":cursor.x>prior.x?"right":cursor.y<prior.y?"up":"down"});cursor=prior}return path.reverse()}
-function walk(store,room,session,target){const player=room.resonance.players[session.playerId];for(const step of route(room.resonance.tiles,player,target))assert.equal(store.moveResonance(session,step).ok,true)}
+const INTEGRATED = {
+  ok: false,
+  code: "RESONANCE_INTEGRATED",
+  message: "この機能は共同探索へ統合されました。通常の共同探索を開始してください。",
+};
 
-test("two players solve switches, defense, rescue and treasure with idempotent rewards",()=>{
- let now=1_000;const store=new RoomStore({now:()=>now,randomRoomCode:()=>"ECHO24",random:()=>.9}),leader=hello(store,1),helper=hello(store,2),created=store.createRoom(leader.session),roomId=created.room.roomId;assert.equal(store.joinRoom(helper.session,roomId).ok,true);store.setReady(leader.session,true);store.setReady(helper.session,true);
- const started=store.startResonance(leader.session);assert.equal(started.ok,true);assert.equal(started.resonance.phase,"switches");assert.notEqual(started.resonance.clues[leader.session.playerId],started.resonance.clues[helper.session.playerId]);const room=store.rooms.get(roomId);
- walk(store,room,leader.session,room.resonance.switches[0]);walk(store,room,helper.session,room.resonance.switches[1]);assert.equal(store.resonanceAction(leader.session,{kind:"interact"}).ok,true);now+=300;assert.equal(store.resonanceAction(helper.session,{kind:"interact"}).ok,true);assert.equal(room.resonance.phase,"defense");
- while(room.resonance.phase==="defense"){now+=300;assert.equal(store.resonanceAction(leader.session,{kind:"interact"}).ok,true)}assert.equal(room.resonance.phase,"rescue");assert.equal(room.resonance.players[helper.session.playerId].trapped,true);
- walk(store,room,leader.session,room.resonance.rescuePoint);now+=300;assert.equal(store.resonanceAction(leader.session,{kind:"interact"}).ok,true);assert.equal(room.resonance.phase,"chest");
- now+=300;assert.equal(store.resonanceAction(leader.session,{kind:"choose",choice:"gold"}).ok,true);now+=300;assert.equal(store.resonanceAction(helper.session,{kind:"choose",choice:"crystal"}).ok,true);assert.equal(room.resonance.phase,"result");assert.equal(room.resonance.result.victory,true);assert.equal(leader.session.pendingRewards.filter(entry=>entry.source.kind==="resonance").length,1);assert.equal(helper.session.pendingRewards.filter(entry=>entry.source.kind==="resonance").length,1);store.advanceBattles();assert.equal(leader.session.pendingRewards.filter(entry=>entry.source.kind==="resonance").length,1);
- assert.equal(store.resonanceAction(leader.session,{kind:"return"}).ok,true);assert.equal(room.phase,"lobby");assert.equal(room.resonance,null);
+function connection() {
+  return { messages: [], send(raw) { this.messages.push(JSON.parse(raw)); }, close() {} };
+}
+
+function hello(store, index) {
+  const conn = connection();
+  const friendId = `AD-ZZZZ-ZZZ${"BCDE"[index - 1]}`;
+  const result = store.hello(conn, {
+    friendId,
+    clientKey: `resonance-client-${index}`.padEnd(32, "x"),
+    profile: {
+      displayName: `共同探索者${index}`,
+      speciesId: "slime",
+      maxFloor: 100,
+      currentHp: 5000,
+      currentMp: 100,
+      battleStats: { hp: 5000, mp: 100, atk: 500, matk: 500, def: 400, mdef: 400, spd: 300 },
+    },
+  });
+  assert.equal(result.ok, true);
+  return { conn, session: conn.session };
+}
+
+test("legacy resonance commands are inert and direct the party to normal co-op exploration", () => {
+  const store = new RoomStore({ randomRoomCode: () => "ECHO24", random: () => .9 });
+  const leader = hello(store, 1), helper = hello(store, 2);
+  const created = store.createRoom(leader.session), room = store.rooms.get(created.room.roomId);
+  assert.equal(store.joinRoom(helper.session, room.roomId).ok, true);
+  assert.equal(store.setReady(leader.session, true).ok, true);
+  assert.equal(store.setReady(helper.session, true).ok, true);
+  const before = store.roomSnapshot(room), messageCounts = [leader.conn.messages.length, helper.conn.messages.length];
+
+  assert.deepEqual(store.startResonance(leader.session), INTEGRATED);
+  assert.deepEqual(store.moveResonance(leader.session, { direction: "right" }), INTEGRATED);
+  assert.deepEqual(store.resonanceAction(leader.session, { kind: "interact" }), INTEGRATED);
+  assert.deepEqual(store.roomSnapshot(room), before);
+  assert.deepEqual([leader.conn.messages.length, helper.conn.messages.length], messageCounts);
+  assert.equal(room.phase, "lobby");
+  assert.equal(room.resonance, null);
+
+  const started = store.startExpedition(leader.session, { hostWorld: { floorSeeds: { 1: 18401 }, openedChestIds: {} } });
+  assert.equal(started.ok, true);
+  assert.equal(started.room.phase, "expedition");
+  assert.equal(started.room.resonance, null);
+  assert.equal(started.room.expedition.coop.enabled, true);
+  assert.equal(started.room.expedition.coop.resonance.level, 0);
 });
 
-test("a disconnected participant stays in the maze as AI and reconnects to the same snapshot",()=>{
- let now=10_000;const store=new RoomStore({now:()=>now,reconnectGraceMs:30_000,randomRoomCode:()=>"AIMAZE",random:()=>.9}),leader=hello(store,1),helper=hello(store,2),created=store.createRoom(leader.session);store.joinRoom(helper.session,created.room.roomId);store.setReady(leader.session,true);store.setReady(helper.session,true);store.startResonance(leader.session);const before=store.roomSnapshot(store.rooms.get(created.room.roomId)).resonance;
- store.disconnect(helper.session);now+=600;store.advanceBattles();const after=store.roomSnapshot(store.rooms.get(created.room.roomId)).resonance,ai=after.players.find(player=>player.playerId===helper.session.playerId);assert.ok(ai.x!==before.players.find(player=>player.playerId===helper.session.playerId).x||ai.y!==before.players.find(player=>player.playerId===helper.session.playerId).y);
- const replacement=connection(),resumed=store.hello(replacement,{friendId:helper.session.playerId,clientKey:helper.session.clientKey,resumeToken:helper.session.resumeToken,profile:helper.session.profile});assert.equal(resumed.ok,true);assert.equal(resumed.resumed,true);assert.equal(resumed.room.phase,"resonance");assert.deepEqual(resumed.room.resonance.players.find(player=>player.playerId===helper.session.playerId),ai);
+test("one-player online exploration disables every co-op resonance layer", () => {
+  const store = new RoomStore({ randomRoomCode: () => "SOLO24", random: () => .5 });
+  const leader = hello(store, 3);
+  const created = store.createRoom(leader.session), room = store.rooms.get(created.room.roomId);
+  assert.equal(store.setReady(leader.session, true).ok, true);
+  const started = store.startExpedition(leader.session, { hostWorld: { floorSeeds: { 1: 18402 }, openedChestIds: {} }, forceRare: "hiddenPortal" });
+  assert.equal(started.ok, true);
+  assert.equal(room.coopRun.resonance, null);
+  assert.equal(room.expedition.coop.enabled, false);
+  assert.equal(room.expedition.coop.resonance, null);
+  assert.equal(room.expedition.coop.rare.kind, null);
+  const coOpTypes = new Set(["coopSwitch", "resonanceVault", "coopElite", "resonanceChest", "relaySeal", "keyFragment", "combinedKey", "rarePortal", "rarePortalGuardian", "rarePortalChest"]);
+  assert.equal(room.expedition.objects.some(object => coOpTypes.has(object.type)), false);
+  assert.equal(store.roomSnapshot(room).resonance, null);
 });
 
-test("an explicit departure ends the two-player maze instead of stranding the survivor",()=>{
- let now=20_000;const store=new RoomStore({now:()=>now,randomRoomCode:()=>"LEAVE2",random:()=>.9}),leader=hello(store,1),helper=hello(store,2),created=store.createRoom(leader.session),room=store.rooms.get(created.room.roomId);store.joinRoom(helper.session,created.room.roomId);store.setReady(leader.session,true);store.setReady(helper.session,true);assert.equal(store.startResonance(leader.session).ok,true);
- assert.equal(store.leaveRoom(helper.session).ok,true);assert.equal(room.phase,"resonance");assert.equal(room.resonance.phase,"result");assert.equal(room.resonance.result.victory,false);assert.equal(room.resonance.result.reason,"partyChanged");assert.equal(store.resonanceAction(leader.session,{kind:"return"}).ok,true);assert.equal(room.phase,"lobby");assert.equal(room.resonance,null);
+test("legacy resonance room purposes are normalized to co-op exploration", () => {
+  const store = new RoomStore({ randomRoomCode: () => "LIST24" });
+  const host = hello(store, 4), viewer = hello(store, 1);
+  const created = store.createRoom(host.session, { published: true, purpose: "resonance", style: "casual" });
+  assert.equal(created.room.listing.purpose, "explore");
+  const listed = store.listRoomListings(viewer.session, { purpose: "resonance" });
+  assert.equal(listed.ok, true);
+  assert.equal(listed.listings.length, 1);
+  assert.equal(listed.listings[0].purpose, "explore");
 });

@@ -1,8 +1,17 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { RoomStore } from "../src/RoomStore.js";
-import { coopRewardTier } from "../src/CoopGimmicks.js";
+import { COOP_GIMMICK_TYPES, coopRewardTier } from "../src/CoopGimmicks.js";
 import { prepareOnlineExpansionV208 } from "../src/OnlineExpansion208.js";
+
+const LEGACY_RARE_TYPES = new Set([
+  "rareGoldenMonster",
+  "rareMerchant",
+  "rarePortal",
+  "rarePortalGuardian",
+  "rarePortalChest",
+  "rareReturnPortal",
+]);
 
 function fixture(floor = 1) {
   const rows = 15, cols = 15;
@@ -46,6 +55,16 @@ function startRoom(count = 2, { forceRare = null } = {}) {
   return { store, players, room: store.rooms.get(created.room.roomId) };
 }
 
+function assertSingleNormalMapGimmick(expedition) {
+  assert.ok(COOP_GIMMICK_TYPES.includes(expedition.coop.gimmickType));
+  assert.equal(expedition.coop.rare.kind, null);
+  assert.equal(expedition.objects.some(object => object.rare || LEGACY_RARE_TYPES.has(object.type)), false);
+  const optionalObjects = expedition.objects.filter(object => object.onlineAdded);
+  assert.ok(optionalObjects.length > 0);
+  assert.deepEqual([...new Set(optionalObjects.map(object => object.gimmickType))], [expedition.coop.gimmickType]);
+  assert.equal([expedition.coop.gimmickType, expedition.coop.rare.kind].filter(Boolean).length, 1);
+}
+
 test("build209 fixes special chest appearance to the higher floor or starting-party tier", () => {
   const fourAtFloorOne = fixture(1);
   prepareOnlineExpansionV208(fourAtFloorOne, { ownerId: "AD-DY29-AABA", hostWorld: { openedChestIds: {} }, participants: 4, forceRare: null });
@@ -87,14 +106,25 @@ test("build209 counts an AI proxy inside the visible 3x3 resonance guide", () =>
   assert.match(room.expedition.interactions[players[0].session.playerId].hint, /開封可能/);
 });
 
-test("build209 exposes only the nearest interaction and keeps a tied target stable", () => {
+test("build209 legacy rare fixtures still participate in nearest-interaction selection", () => {
   const { store, players, room } = startRoom(2, { forceRare: "otherworldMerchant" });
-  const member = players[0].session, merchant = room.expedition.objects.find(object => object.type === "rareMerchant");
+  const member = players[0].session, expedition = room.expedition;
+  assertSingleNormalMapGimmick(expedition);
+  for (const object of expedition.objects) if (object.onlineAdded) object.resolved = true;
+  Object.assign(expedition.coop.rare, {
+    kind: "otherworldMerchant",
+    resolved: false,
+    merchantClaims: {},
+    portalEntered: false,
+    guardianDefeated: false,
+    realmActive: false,
+  });
+  const merchant = { id: "legacy-build209-merchant", type: "rareMerchant", x: 6, y: 5, resolved: false, hidden: false, persistent: true, rare: true };
+  expedition.objects.push(merchant);
   for (const object of room.expedition.objects) if (object !== merchant) object.resolved = true;
   const chest = { id: "build209-near-chest", type: "resonanceChest", x: 5, y: 4, resolved: false, hidden: false, persistent: true, rewardTier: "black-iron" };
   room.expedition.objects.push(chest);
   member.dungeonPosition = { x: 5, y: 5, facing: "up" };
-  Object.assign(merchant, { x: 6, y: 5, resolved: false, hidden: false });
   room.expedition.interactions = { [member.playerId]: { action: "browseRareMerchant", targetId: merchant.id } };
   store._syncCoopInteractions(room);
   assert.equal(room.expedition.interactions[member.playerId].targetId, merchant.id, "a tied prior target should remain stable");

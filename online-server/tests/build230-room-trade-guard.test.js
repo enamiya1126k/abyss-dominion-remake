@@ -49,11 +49,11 @@ test("build230 blocks every online content start while any room member has a liv
     env.store.startExpedition(env.left.session, {}),
     env.store.startRaid(env.left.session, {}),
     env.store.startTeamBattle(env.left.session),
-    env.store.startResonance(env.left.session),
   ]) {
     assert.equal(result.ok, false);
     assert.equal(result.code, "TRADE_ACTIVE");
   }
+  assert.equal(env.store.startResonance(env.left.session).code, "RESONANCE_INTEGRATED");
   assert.equal(env.room.phase, "lobby");
   assert.equal(env.store.cancelTrade(env.left.session, tradeId).ok, true);
   assert.equal(env.store.startExpedition(env.left.session, {}).ok, true);

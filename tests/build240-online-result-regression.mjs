@@ -24,17 +24,18 @@ const resultFunctions = [
 ].join("\n");
 
 function fixture({ owner = true, defeat = false, inRun = true } = {}) {
-  let generated = 0;
+  let generated = 0, saveCalls = 0;
   const state = {
     onlineParty: {
       claimedRewards: [], processedVitalMutationIds: [], processedBattleEventIds: [], processedExpeditionResultIds: [], completedExpeditionRunIds: [],
+      coopContributionHistory: [],
       activeExpeditionRunId: "run-A", activeManualExploreRunId: "explore-A", hostWorld: { openedChestIds: {}, floorSeeds: {} },
     },
     player: { gold: 10_000, checkpoint: 3, currentFloor: 500, maxFloor: 500, inRun, exploreRun: { id: "solo-B", floors: { 500: true } } },
     returnRewards: { manual: { active: true, startFloor: 500, lastFloor: 500, floorsCleared: 0, pendingGold: 777, startedAt: 1 } },
     monsters: [],
   };
-  const save = { state, save: () => true };
+  const save = { state, save: () => { saveCalls += 1; return true; } };
   const context = {
     save, structuredClone: undefined, WORLD_MAX_FLOOR: 10_000,
     onlinePartyController: { selfId: "SELF" },
@@ -55,7 +56,7 @@ function fixture({ owner = true, defeat = false, inRun = true } = {}) {
     startFloor: 10, endFloor: 12, floorsCleared: 2, reason: defeat ? "defeat" : "return",
     finalVitals: { mutationId: "vitals-A", monsterId: "released-monster", hp: 1, mp: 0 },
   };
-  return { state, api: context.api, event };
+  return { state, save, api: context.api, event, saveCalls: () => saveCalls };
 }
 
 test("build240 delayed online success preserves a newer offline manual run", () => {
@@ -92,6 +93,37 @@ test("build240 a released expedition monster becomes an idempotent vitals tombst
   assert.equal(result.guest, true);
   assert.ok(state.onlineParty.processedVitalMutationIds.includes("vitals-A"));
   assert.ok(state.onlineParty.processedExpeditionResultIds.includes(event.resultId));
+});
+
+test("build244 guest contribution is saved exactly once without advancing normal progression", () => {
+  const { state, api, event, saveCalls } = fixture({ owner: false, inRun: false });
+  state.onlineParty.coopContributionHistory = Array.from({ length: 128 }, (_, index) => ({ resultId: `old-${index}`, pings: index }));
+  const before = { currentFloor: state.player.currentFloor, maxFloor: state.player.maxFloor };
+  Object.assign(event, {
+    multiplayer: true, completed: true, finishedAt: 244_000,
+    summary: { multiplayer: true, ranking: [
+      { playerId: "OTHER", name: "部屋主", rank: 1, score: 999 },
+      { playerId: "SELF", name: "お手伝い", rank: 2, exploration: 3, combat: 700, rescue: 1, chests: 2, switches: 1, gimmicks: 2, pings: 4, support: 25, score: 2440, mvpTitles: ["救助王"] },
+    ] },
+  });
+
+  const first = api.settleOnlineExpeditionResult(event);
+  assert.equal(first.ok, true);
+  assert.equal(first.guest, true);
+  assert.deepEqual({ currentFloor: state.player.currentFloor, maxFloor: state.player.maxFloor }, before);
+  assert.equal(state.onlineParty.coopContributionHistory.length, 128, "guest history remains capped");
+  assert.equal(state.onlineParty.coopContributionHistory.some(entry => entry.resultId === "old-0"), false);
+  const record = state.onlineParty.coopContributionHistory.at(-1);
+  assert.deepEqual(JSON.parse(JSON.stringify({ resultId: record.resultId, pings: record.pings, rescue: record.rescue, score: record.score, mvpTitles: record.mvpTitles })), { resultId: event.resultId, pings: 4, rescue: 1, score: 2440, mvpTitles: ["救助王"] });
+  assert.ok(state.onlineParty.processedExpeditionResultIds.includes(event.resultId));
+  assert.equal(saveCalls(), 1, "contribution and processed result id share one save transaction");
+
+  const duplicate = api.settleOnlineExpeditionResult(event);
+  assert.equal(duplicate.duplicate, true);
+  assert.equal(state.onlineParty.coopContributionHistory.filter(entry => entry.resultId === event.resultId).length, 1);
+  assert.equal(state.onlineParty.coopContributionHistory.at(-1).pings, 4);
+  assert.equal(saveCalls(), 1, "duplicate delivery does not save or add contribution again");
+  assert.deepEqual({ currentFloor: state.player.currentFloor, maxFloor: state.player.maxFloor }, before);
 });
 
 test("build240 server-restart recovery settles the exact bound manual run", () => {

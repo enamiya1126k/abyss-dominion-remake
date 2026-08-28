@@ -11,6 +11,15 @@ import {
 } from "../src/OnlineExpansion207.js";
 import { COOP_GIMMICK_TYPES } from "../src/CoopGimmicks.js";
 
+const LEGACY_RARE_TYPES = new Set([
+  "rareGoldenMonster",
+  "rareMerchant",
+  "rarePortal",
+  "rarePortalGuardian",
+  "rarePortalChest",
+  "rareReturnPortal",
+]);
+
 function connection() {
   return { messages: [], send(raw) { this.messages.push(JSON.parse(raw)); }, close() {} };
 }
@@ -57,13 +66,33 @@ function fixture(floor = 1) {
   };
 }
 
-test("build207 keeps one normal co-op gimmick and adds each rare intrusion as a separate bonus event", () => {
-  const expected = {
-    goldenMonster: ["rareGoldenMonster"],
-    otherworldMerchant: ["rareMerchant"],
-    hiddenPortal: ["rarePortal", "rarePortalGuardian", "rarePortalChest"],
-  };
-  for (const [kind, types] of Object.entries(expected)) {
+function assertSingleNormalMapGimmick(expedition) {
+  assert.ok(COOP_GIMMICK_TYPES.includes(expedition.coop.gimmickType));
+  assert.equal(expedition.coop.rare.kind, null);
+  assert.equal(expedition.objects.some(object => object.rare || LEGACY_RARE_TYPES.has(object.type)), false);
+  const optionalObjects = expedition.objects.filter(object => object.onlineAdded);
+  assert.ok(optionalObjects.length > 0);
+  assert.deepEqual([...new Set(optionalObjects.map(object => object.gimmickType))], [expedition.coop.gimmickType]);
+  assert.equal([expedition.coop.gimmickType, expedition.coop.rare.kind].filter(Boolean).length, 1);
+}
+
+function injectLegacyRareObject(expedition, kind, object) {
+  Object.assign(expedition.coop.rare, {
+    kind,
+    resolved: false,
+    merchantClaims: {},
+    portalEntered: false,
+    guardianDefeated: false,
+    realmActive: false,
+    portalReturned: false,
+  });
+  const legacyObject = { resolved: false, hidden: false, persistent: true, rare: true, ...object };
+  expedition.objects.push(legacyObject);
+  return legacyObject;
+}
+
+test("build207 keeps exactly one normal-map co-op gimmick and ignores legacy rare requests", () => {
+  for (const kind of ["goldenMonster", "otherworldMerchant", "hiddenPortal"]) {
     const expedition = fixture(321);
     prepareOnlineExpansionV207(expedition, {
       ownerId: "AD-BZ27-AABA",
@@ -72,14 +101,12 @@ test("build207 keeps one normal co-op gimmick and adds each rare intrusion as a 
       resonance: 3,
       forceRare: kind,
     });
-    assert.ok(COOP_GIMMICK_TYPES.includes(expedition.coop.gimmickType));
-    assert.equal(expedition.coop.rare.kind, kind);
-    assert.deepEqual(expedition.objects.filter(object => object.rare).map(object => object.type).sort(), [...types].sort());
+    assertSingleNormalMapGimmick(expedition);
     assert.equal(expedition.coop.resonance.level, 3);
     assert.equal(expedition.coop.resonance.rewardBonusPct, 9);
   }
-  assert.equal(chooseRareEvent({ forceRare: "goldenMonster", participants: 2 }), "goldenMonster");
-  assert.ok(rareEventChance({ floor: 1001, participants: 4, resonance: 5 }) > rareEventChance({ floor: 1, participants: 1, resonance: 0 }));
+  assert.equal(chooseRareEvent({ forceRare: "goldenMonster", participants: 2 }), null);
+  assert.equal(rareEventChance({ floor: 1001, participants: 4, resonance: 5 }), 0);
 });
 
 test("build207 shared loot gives everyone the same base and only the lucky player a personal extra", () => {
@@ -187,14 +214,20 @@ test("build207 social, focus marker and one-use KO cheer are authoritative", () 
   assert.equal(store.battleCheer(players[1].session, { mode: "explore" }).code, "CHEER_USED");
 });
 
-test("build207 rare merchant and portal objects stay interaction-driven when stepped on", () => {
+test("build207 legacy merchant remains readable while portal requests stay on the normal map", () => {
   const store = new RoomStore({ randomRoomCode: () => "STEP27" });
   const { players, room } = readyRoom(store, 2);
   store._finishExpedition(room, { reason: "select-non-boss" });
   assert.equal(store.setFloor(players[0].session, 119).ok, true);
   for (const player of players) assert.equal(store.setReady(player.session, true).ok, true);
   assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {} }, forceRare: "otherworldMerchant" }).ok, true);
-  const merchant = room.expedition.objects.find(object => object.type === "rareMerchant");
+  assertSingleNormalMapGimmick(room.expedition);
+  for (const object of room.expedition.objects) if (object.onlineAdded) object.resolved = true;
+  const merchant = injectLegacyRareObject(room.expedition, "otherworldMerchant", {
+    id: "legacy-rare-merchant",
+    type: "rareMerchant",
+    ...room.expedition.start,
+  });
   players[0].session.dungeonPosition = { x: merchant.x, y: merchant.y, facing: "down" };
   store._resolveLanding(room, players[0].session);
   assert.equal(merchant.resolved, false);
@@ -203,9 +236,22 @@ test("build207 rare merchant and portal objects stay interaction-driven when ste
   store._finishExpedition(room, { reason: "test" });
   for (const player of players) assert.equal(store.setReady(player.session, true).ok, true);
   assert.equal(store.startExpedition(players[0].session, { hostWorld: { openedChestIds: {} }, forceRare: "hiddenPortal" }).ok, true);
-  const portal = room.expedition.objects.find(object => object.type === "rarePortal");
+  assertSingleNormalMapGimmick(room.expedition);
+  for (const object of room.expedition.objects) if (object.onlineAdded) object.resolved = true;
+  const portal = injectLegacyRareObject(room.expedition, "hiddenPortal", {
+    id: "legacy-rare-portal",
+    type: "rarePortal",
+    ...room.expedition.start,
+  });
   players[0].session.dungeonPosition = { x: portal.x, y: portal.y, facing: "down" };
   store._resolveLanding(room, players[0].session);
   assert.equal(portal.resolved, false);
-  assert.equal(room.expedition.interactions[players[0].session.playerId].action, "enterRarePortal");
+  assert.equal(room.expedition.interactions[players[0].session.playerId], undefined);
+  const tilesBefore = structuredClone(room.expedition.tiles);
+  const response = store.expeditionInteract(players[0].session, { action: "enterRarePortal", targetId: portal.id });
+  assert.equal(response.ok, false);
+  assert.equal(response.code, "FEATURE_INTEGRATED");
+  assert.match(response.message, /共同探索へ統合/);
+  assert.deepEqual(room.expedition.tiles, tilesBefore);
+  assert.equal(room._rareMainWorld, null);
 });
