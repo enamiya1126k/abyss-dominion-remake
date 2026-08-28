@@ -3,7 +3,7 @@ import {
 } from "../ui/screens/OnlinePartyScreen.js?v=2.11.65-build239";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineResonance, renderOnlineChat,
-} from "./OnlineViews.js?v=2.11.65-build239";
+} from "./OnlineViews.js?v=2.11.66-build242";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   commitOnlineTrade, recoverOrphanedTradeEscrows,

@@ -312,3 +312,29 @@ export function commitSerialRedemption(rewardId){
     return false;
   }
 }
+
+// The device ledger is deliberately cleared only by the genuine full-save reset.
+// Keeping this separate from the Settings serial form prevents a serial-only reset.
+export function clearSerialRedemptionLedgerForFullReset(){
+  try{
+    const storage=globalThis.localStorage;
+    if(!storage)return{ok:true,previous:null};
+    const previous=storage.getItem(DEVICE_LEDGER_KEY);
+    storage.removeItem(DEVICE_LEDGER_KEY);
+    return{ok:true,previous};
+  }catch(error){
+    console.error("Serial redemption ledger reset failed",error);
+    return{ok:false,previous:null,error};
+  }
+}
+
+export function restoreSerialRedemptionLedgerAfterFailedReset(receipt){
+  if(!receipt?.ok||receipt.previous==null)return true;
+  try{
+    globalThis.localStorage?.setItem(DEVICE_LEDGER_KEY,receipt.previous);
+    return true;
+  }catch(error){
+    console.error("Serial redemption ledger rollback failed",error);
+    return false;
+  }
+}

@@ -1,5 +1,5 @@
 import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=2.11.34-build199";
-import{SERIAL_CODE_COUNT}from"../../core/SerialCodeSystem.js?v=2.11.24-build188";
+import{SERIAL_CODE_COUNT}from"../../core/SerialCodeSystem.js?v=2.11.66-build242";
 export function SettingsScreen(state){
   const redeemedCount=Object.keys(state.serialCodes?.redeemed??{}).length;
   return`
@@ -33,7 +33,7 @@ export function SettingsScreen(state){
             <input id="serialCodeInput" type="text" inputmode="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="32" placeholder="AD-GM-XXXX-XXXX-XXXX" aria-label="シリアルコード">
             <button id="redeemSerialCode" type="submit">封印を解き、報酬を受け取る</button>
           </form>
-          <small>英字の大小・ハイフンの有無は問いません。各コードは同じセーブ／端末につき1回限りです。</small>
+          <small>英字の大小・ハイフンの有無は問いません。各コードは初期化前の同じゲームデータにつき1回限りです。</small>
         </div>
         <div class="serial-code-panel settings-gm-console-v3 gm-master-panel">
           <div class="serial-code-heading"><div><small>AUTHORIZED GAME MASTER</small><h3>GMコード</h3></div><span>${state.gameMaster?.claimedAt?"支援受取済み":"未使用"}</span></div>
@@ -41,11 +41,15 @@ export function SettingsScreen(state){
             <input id="gameMasterCodeInput" type="password" autocomplete="off" maxlength="40" placeholder="GMコードを入力" aria-label="GMコード">
             <button id="redeemGameMasterCode" type="submit">GM権限を認証する</button>
           </form>
-          <small>支援コードは最高到達階を変更せず、出発階層1〜9998だけを解放します。RESETコードは別経路で二重確認されます。</small>
+          <small>支援コードは最高到達階を変更せず、出発階層1〜9998だけを解放します。ゲーム初期化にGMコードは必要ありません。</small>
         </div>
         ${CONTENT_TEST_MODE?`<div class="settings-test-plaque-v3"><b>TEST ACCESS ACTIVE</b><small>高難度コンテンツを${CONTENT_TEST_UNLOCK_FLOOR}階で試遊できます。正式条件の値は保持されています。</small></div>`:""}
         <div class="settings-version-plaque-v3"><small>ABYSS DOMINION</small><h3>REMAKE v${APP_VERSION}</h3><span>GDD v1.0同期 / 保存互換 / 製品モード</span></div>
-        <button id="resetSave" class="settings-reset-v3">GM RESET（コード＋RESET二重確認）</button>
+        <div class="settings-version-plaque-v3" id="fullResetDescription">
+          <small>PUBLIC FULL RESET</small><h3>最初からやり直す</h3>
+          <span>進行・仲間・装備・所持品とシリアルコード使用履歴をすべて初期化します。オンラインのフレンドID・フレンド／ギルド関係・固定サーバーURLは保持されます。交換品を預けている間は実行できません。</span>
+        </div>
+        <button id="resetSave" class="settings-reset-v3" aria-describedby="fullResetDescription">ゲームデータを初期化</button>
       </div>
     </section>
   `;

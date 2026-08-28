@@ -1,0 +1,134 @@
+/* build242: iPhone-safe magic-circle and battle touch ergonomics. */
+
+@media(max-width:720px){
+  /* Keep the modal controls inside the dynamic Safari viewport.  The card itself
+     stays fixed while the circle list is the only vertically scrolling region. */
+  .magic-circle-modal{
+    box-sizing:border-box;
+    align-items:center;
+    overflow:hidden;
+    padding:
+      max(8px,env(safe-area-inset-top))
+      8px
+      max(18px,calc(env(safe-area-inset-bottom) + 10px));
+  }
+
+  .magic-circle-modal>.game-modal-card{
+    width:min(100%,680px);
+    height:min(92dvh,900px);
+    max-height:100%!important;
+    display:grid;
+    grid-template-rows:auto minmax(0,1fr) auto;
+    overflow:hidden!important;
+    padding:12px 10px 10px;
+  }
+
+  .magic-circle-modal>.game-modal-card>h2{margin:0 42px 4px 0}
+  .magic-circle-modal .game-modal-body{
+    box-sizing:border-box;
+    min-height:0;
+    display:grid;
+    margin-top:4px;
+    overflow:hidden!important;
+  }
+
+  .magic-circle-modal .magic-circle-workshop{
+    min-height:0;
+    grid-template-rows:auto minmax(0,1fr) auto;
+    gap:6px;
+    overflow:hidden;
+  }
+
+  .magic-circle-modal .magic-circle-list{
+    min-height:0;
+    max-height:none;
+    padding:6px 4px max(18px,calc(env(safe-area-inset-bottom) + 10px)) 0;
+    overflow-x:hidden;
+    overflow-y:auto;
+    overscroll-behavior-y:contain;
+    -webkit-overflow-scrolling:touch;
+    scroll-padding-block:8px max(18px,calc(env(safe-area-inset-bottom) + 10px));
+    touch-action:pan-y;
+  }
+
+  .magic-circle-modal .magic-circle-row{scroll-margin-block:8px}
+  .magic-circle-modal .magic-circle-row button,
+  .magic-circle-modal .modal-primary{
+    min-height:44px!important;
+    touch-action:manipulation;
+  }
+  .magic-circle-modal .modal-primary{margin-top:7px!important}
+
+  /* Opening Skills is a deliberate mode change: give the sheet more room than
+     the normal command row and add breathing space before the first/last card. */
+  .battle-screen.side-battle-v2 .battle-command:has(.skill-command-list:not(.battle-item-list)){
+    max-height:38dvh;
+    overflow:hidden;
+  }
+
+  .battle-screen.side-battle-v2:has(.skill-command-list:not(.battle-item-list)) .side-battle-arena{
+    min-height:clamp(320px,90vw,580px)!important;
+  }
+
+  .battle-screen.side-battle-v2 .skill-command-list:not(.battle-item-list){
+    box-sizing:border-box;
+    min-height:0;
+    max-height:32dvh;
+    align-content:start;
+    padding:9px 4px max(18px,calc(env(safe-area-inset-bottom) + 8px));
+    overflow-x:hidden;
+    overflow-y:auto;
+    overscroll-behavior-y:contain;
+    -webkit-overflow-scrolling:touch;
+    scroll-padding-block:9px max(18px,calc(env(safe-area-inset-bottom) + 8px));
+    touch-action:pan-y;
+  }
+
+  .battle-screen.side-battle-v2 .skill-command-list:not(.battle-item-list)>button{
+    min-height:52px;
+    padding:8px 9px;
+    scroll-margin-block:9px;
+    touch-action:manipulation;
+  }
+
+  /* The matchup legend remains complete but no longer dominates the field. */
+  .battle-screen.side-battle-v2 .battle-biome-badge.compact{
+    min-width:0;
+    width:min(70vw,225px);
+    max-width:min(72vw,225px);
+    gap:1px;
+    padding:3px 6px 4px;
+  }
+
+  .battle-screen.side-battle-v2 .battle-biome-badge.compact>b{gap:3px;font-size:.38rem}
+  .battle-screen.side-battle-v2 .battle-biome-badge.compact>small{gap:3px;line-height:1.05}
+  .battle-screen.side-battle-v2 .battle-biome-badge.compact small>span{gap:2px}
+  .battle-screen.side-battle-v2 .battle-biome-badge.compact small>i{height:9px}
+  .battle-screen.side-battle-v2 .battle-biome-badge.compact em{font-size:.23rem}
+  .battle-screen.side-battle-v2 .battle-biome-badge.compact strong{font-size:.27rem}
+  .battle-screen.side-battle-v2 .battle-biome-badge.compact .battle-biome-matchup{padding-top:1px}
+  .battle-screen.side-battle-v2 .battle-biome-badge.compact :is(.battle-biome-primary,.battle-biome-attribute){
+    width:9px!important;
+    height:9px!important;
+    flex:0 0 9px;
+  }
+  .battle-screen.side-battle-v2 .battle-biome-badge.compact .battle-biome-primary{
+    width:11px!important;
+    height:11px!important;
+    flex-basis:11px;
+  }
+}
+
+@media(max-width:420px) and (max-height:760px){
+  .magic-circle-modal .magic-circle-workshop>header{
+    grid-template-columns:86px minmax(0,1fr);
+    min-height:108px;
+    padding:7px;
+  }
+  .magic-circle-modal .workshop-circle{width:86px!important;height:86px!important}
+  .magic-circle-modal .magic-circle-workshop>header h3{font-size:.86rem}
+  .battle-screen.side-battle-v2 .skill-command-list:not(.battle-item-list){max-height:34dvh}
+  .battle-screen.side-battle-v2:has(.skill-command-list:not(.battle-item-list)) .side-battle-arena{
+    min-height:clamp(300px,84vw,360px)!important;
+  }
+}

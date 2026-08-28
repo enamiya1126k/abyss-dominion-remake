@@ -17,7 +17,7 @@ import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=2.11.45-bui
 import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=2.11.0-build164";
 import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=2.11.30-build195";
 import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=2.11.30-build195";
-import{normalizeSerialCodeState}from"../core/SerialCodeSystem.js?v=2.11.30-build195";
+import{clearSerialRedemptionLedgerForFullReset,normalizeSerialCodeState,restoreSerialRedemptionLedgerAfterFailedReset}from"../core/SerialCodeSystem.js?v=2.11.66-build242";
 import{normalizeNoticeState}from"../core/NoticeSystem.js?v=2.11.34-build199";
 import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=2.11.0-build164";
 import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=2.11.0-build164";
@@ -495,8 +495,13 @@ export class SaveService{
   }
  }
  reset(){
-  try{localStorage.removeItem(SAVE_KEY)}catch(error){console.error("Save reset failed",error)}
+  const ledgerReceipt=clearSerialRedemptionLedgerForFullReset();
+  if(!ledgerReceipt.ok)return false;
+  const previousState=this.state;
   this.state=initialState();
-  return this.save()
+  if(this.save())return true;
+  this.state=previousState;
+  restoreSerialRedemptionLedgerAfterFailedReset(ledgerReceipt);
+  return false
  }
 }

@@ -1,4 +1,4 @@
-import{SaveService}from"./services/SaveService.js?v=2.11.54-build226";
+import{SaveService}from"./services/SaveService.js?v=2.11.66-build242";
 import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=2.11.54-build225";
 import{AudioSystem}from"./core/AudioSystem.js?v=2.11.37-build202";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=2.11.24-build188";
@@ -9,10 +9,10 @@ import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.11.44-build209";
 import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.11.30-build195";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.11.30-build195";
 import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.11.65-build239";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.11.65-build239";
+import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.11.66-build242";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.11.29-build194";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.11.30-build195";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.11.34-build199";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.11.66-build242";
 import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.11.42-build207";
 import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.11.30-build195";
 import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.11.54-build227";
@@ -63,7 +63,8 @@ import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=2.11.2-build166";
 import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=2.11.2-build166";
 import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.11.30-build195";
 import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.11.30-build195";
-import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.11.30-build195";
+import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.11.66-build242";
+import{runConfirmedFullReset}from"./core/FullResetSystem.js?v=2.11.66-build242";
 import{NOTICE_DEFINITIONS,DAILY_NOTICE_GIFT,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount}from"./core/NoticeSystem.js?v=2.11.34-build199";
 import{CONTEXT_GUIDE_STEPS,completeGuideStep,normalizeContextualGuide,setGuidePending,guidePending,guideStepDone,bumpGuideCounter,snoozeGuideStep,guideStepSnoozed,resetContextualGuide,contextualGuideProgress}from"./core/ContextualGuideSystem.js?v=2.11.34-build199";
 import{weekdayGachaSchedule,weekdayGachaCost,WEEKDAY_GACHA_CALENDAR,WEEKDAY_ENDGAME_RATE,rollWeekdayEndgameHit}from"./core/WeekdayGachaSystem.js?v=2.11.30-build195";
@@ -1349,16 +1350,26 @@ async function redeemSettingsSerialCode(event){
  app.insertAdjacentHTML("beforeend",Modal(`${result.icon} ${result.title}`,`<div class="serial-reward-result"><div>${result.monster?monsterVisual(result.monster,result.icon,{className:"serial-reward-monster-visual"}):result.icon}</div><p><b>${result.message}</b></p><small>このコードは使用済みとして記録されました。</small></div>`,"確認"));
  topModalButton().onclick=()=>{closeTopModal();render()};
 }
-async function requestGameMasterReset(rawCode=""){
- let code=rawCode;
- if(!code)code=globalThis.prompt?.("GM RESET専用コードを入力してください。")??"";
- const validation=await validateGameMasterCode(save.state,code);
- if(!validation.ok)return showToast(validation.message);
- if(validation.kind!=="reset")return showToast("このコードはRESET専用コードではありません。");
- const literal=globalThis.prompt?.("全セーブを初期化します。確認のため RESET と入力してください。")??"";
- if(String(literal).trim().toUpperCase()!=="RESET")return showToast("RESETの入力が一致しないため中止しました。");
- if(!globalThis.confirm?.("最終確認：この端末のABYSS DOMINIONセーブを完全に初期化します。元に戻せません。実行しますか？"))return showToast("初期化を中止しました。");
- save.reset();snapshot=null;showToast("セーブを初期化しました");go("home");
+function requestFullGameReset(){
+ const result=runConfirmedFullReset({
+  state:save.state,
+  confirm:typeof globalThis.confirm==="function"?message=>globalThis.confirm(message):null,
+  prompt:typeof globalThis.prompt==="function"?message=>globalThis.prompt(message):null,
+  reset:()=>{
+   onlinePartyController?.disconnect({leave:true,quiet:true});
+   return save.reset()
+  }
+ });
+ if(!result.ok){
+  if(result.reason==="tradePending")return showToast("交換品を預けているため初期化できません。オンラインへ戻り、交換を完了または中止してください。");
+  if(result.reason==="mismatch")return showToast("「初期化」の入力が一致しないため中止しました。");
+  if(result.reason==="saveFailed")return showToast("初期データを保存できなかったため、初期化を完了できませんでした。");
+  if(result.reason==="unavailable")return showToast("このブラウザでは初期化の確認画面を開けません。");
+  return showToast("初期化を中止しました。");
+ }
+ onlinePartyController=null;game=null;battle=null;snapshot=null;activeEnemy=null;selected=null;equipmentTarget=null;skillTarget=null;
+ monsterManage={editing:false,selected:new Set()};equipmentManage={editing:false,selected:new Set()};
+ screen="home";render();showToast("ゲームデータとシリアルコード使用履歴を初期化しました");
 }
 async function redeemSettingsGameMasterCode(event){
  event?.preventDefault();
@@ -1366,7 +1377,7 @@ async function redeemSettingsGameMasterCode(event){
  button.disabled=true;const oldText=button.textContent;button.textContent="認証中…";
  const validation=await validateGameMasterCode(save.state,input.value);
  if(!validation.ok){button.disabled=false;button.textContent=oldText;return showToast(validation.message)}
- if(validation.kind==="reset"){button.disabled=false;button.textContent=oldText;return requestGameMasterReset(input.value)}
+ if(validation.kind==="reset"){button.disabled=false;button.textContent=oldText;return requestFullGameReset()}
  const backup=typeof structuredClone==="function"?structuredClone(save.state):JSON.parse(JSON.stringify(save.state));
  const result=applyGameMasterReward(save.state);
  if(!result.ok||!save.save()){save.state=backup;button.disabled=false;button.textContent=oldText;return showToast(result.message??"保存できなかったため、GM支援を取り消しました")}
@@ -1383,7 +1394,7 @@ function bindSettings(){
  document.getElementById("openTutorialBook")?.addEventListener("click",openTutorialBook);
  document.getElementById("serialCodeForm")?.addEventListener("submit",redeemSettingsSerialCode);
  document.getElementById("gameMasterCodeForm")?.addEventListener("submit",redeemSettingsGameMasterCode);
- document.getElementById("resetSave").onclick=()=>requestGameMasterReset();
+ document.getElementById("resetSave").onclick=()=>requestFullGameReset();
 }
 
 
