@@ -21,6 +21,26 @@ export const ONLINE_STORAGE_KEYS = Object.freeze({
   guildPlanReminderReceipts: "abyss-dominion-online-guild-plan-reminder-receipts-v1",
 });
 
+export const DEFAULT_ONLINE_SERVER_URL = "https://stumble-mountain-lego.ngrok-free.dev";
+
+function isFixedOnlineServerHost(value) {
+  let source = String(value ?? "").trim();
+  if (!source) return false;
+  if (!/^[a-z]+:\/\//i.test(source)) source = `https://${source}`;
+  try { return new URL(source).hostname.toLowerCase() === "stumble-mountain-lego.ngrok-free.dev"; }
+  catch { return false; }
+}
+
+export function enforceFixedOnlineServerUrl() {
+  const previous = storageGet(ONLINE_STORAGE_KEYS.serverUrl).trim();
+  if (previous && !isFixedOnlineServerHost(previous)) {
+    storageSet(ONLINE_STORAGE_KEYS.resumeToken, "");
+    storageSet(ONLINE_STORAGE_KEYS.autoConnect, "0");
+  }
+  storageSet(ONLINE_STORAGE_KEYS.serverUrl, DEFAULT_ONLINE_SERVER_URL);
+  return DEFAULT_ONLINE_SERVER_URL;
+}
+
 export const ONLINE_ROOM_PURPOSES = Object.freeze([
   { id: "explore", label: "共同探索" },
   { id: "raid", label: "週替わりレイド" },
@@ -780,7 +800,7 @@ export function OnlinePartyScreen(state) {
   const invite = inviteParameters();
   const { party, monster } = selectedPartyMonster(state);
   const defaultName = storageGet(ONLINE_STORAGE_KEYS.displayName) || (monster ? displayName(monster) : "冒険者");
-  const server = invite.server || storageGet(ONLINE_STORAGE_KEYS.serverUrl);
+  const server = enforceFixedOnlineServerUrl();
   return `<section class="screen online-v3-screen" data-online-v3-root>
     ${resourceHud(state, { backId: "backOnlineParty", title: "オンライン", eyebrow: "ABYSS DOMINION / CO-OP" })}
     <main class="online-v3-page">
@@ -788,7 +808,7 @@ export function OnlinePartyScreen(state) {
         <header><span class="online-v3-signal"><i></i></span><div><small>HOME PC CO-OP SERVER</small><h2>仲間と同じ世界へ</h2><p>最大4人で、探索・レイド・自由チーム戦・チャットを楽しめます。</p></div></header>
         <div class="online-v3-id"><span><small>フレンドID</small><strong>${identity.friendId}</strong></span><button type="button" data-copy-friend-id>コピー</button></div>
         <label class="online-v3-field"><span>表示名</span><input type="text" maxlength="16" data-online-display-name value="${escapeOnlineHtml(defaultName)}" autocomplete="nickname"></label>
-        <label class="online-v3-field"><span>サーバーURL</span><input type="url" inputmode="url" data-online-server-url value="${escapeOnlineHtml(server)}" placeholder="https://xxxxx.trycloudflare.com" autocapitalize="none"></label>
+        <label class="online-v3-field"><span>サーバーURL（固定）</span><input type="url" inputmode="url" data-online-server-url value="${escapeOnlineHtml(server)}" readonly aria-readonly="true" autocapitalize="none"></label>
         <div class="online-v3-character-picker"><small>操作するキャラクター</small><div>${party.length ? party.map(entry => characterChoice(entry, monster?.id)).join("") : "<p>先に部隊へ1体以上編成してください。</p>"}</div></div>
         <button type="button" class="online-v3-primary" data-online-connect ${monster ? "" : "disabled"}>サーバーへ接続</button>
         <div class="online-v3-status offline" data-online-status><i></i><b>オフライン</b><span>通常ゲームのセーブには影響しません</span></div>

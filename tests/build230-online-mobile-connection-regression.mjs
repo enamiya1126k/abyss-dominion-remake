@@ -315,12 +315,12 @@ test("build237 uses one client cache boundary", async () => {
     read("index.html"), read("src/main.js"), read("src/online/OnlinePartyClient.js"), read("src/online/OnlineViews.js"),
   ]);
   assert.match(index, /build239\.css\?v=2\.11\.65-build239/);
-  assert.match(index, /ASSET_VERSION = "2\.11\.69"/);
-  assert.match(index, /ASSET_BUILD = "build245"/);
-  assert.match(main, /OnlinePartyScreen\.js\?v=2\.11\.69-build245/);
-  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.69-build245/);
-  assert.match(client, /OnlineViews\.js\?v=2\.11\.69-build245/);
-  assert.match(views, /OnlinePartyScreen\.js\?v=2\.11\.69-build245/);
+  assert.match(index, /ASSET_VERSION = "2\.11\.70"/);
+  assert.match(index, /ASSET_BUILD = "build246"/);
+  assert.match(main, /OnlinePartyScreen\.js\?v=2\.11\.70-build246/);
+  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.70-build246/);
+  assert.match(client, /OnlineViews\.js\?v=2\.11\.70-build246/);
+  assert.match(views, /OnlinePartyScreen\.js\?v=2\.11\.70-build246/);
 });
 
 console.log("ABYSS DOMINION build230 mobile connection regression: PASS");

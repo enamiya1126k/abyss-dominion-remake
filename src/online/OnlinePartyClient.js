@@ -1,9 +1,9 @@
 import {
-  buildOnlinePartyProfile, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.69-build245";
+  buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.70-build246";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
-} from "./OnlineViews.js?v=2.11.69-build245";
+} from "./OnlineViews.js?v=2.11.70-build246";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   commitOnlineTrade, recoverOrphanedTradeEscrows,
@@ -573,7 +573,8 @@ export class OnlinePartyController {
     this.onTutorialGuide = onTutorialGuide;
     this.onScene = onScene;
     this.selfId = identity.friendId;
-    const initialResumeEndpoint = normalizedWebsocketEndpoint(storageGet(ONLINE_STORAGE_KEYS.serverUrl));
+    const initialServerUrl = storageGet(ONLINE_STORAGE_KEYS.serverUrl) || DEFAULT_ONLINE_SERVER_URL;
+    const initialResumeEndpoint = normalizedWebsocketEndpoint(initialServerUrl);
     const initialResumeTokens = migrateLegacyResumeToken();
     this.resumeTokenEndpoint = initialResumeEndpoint;
     this.connectionEndpoint = "";
