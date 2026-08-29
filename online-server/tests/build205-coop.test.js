@@ -84,20 +84,14 @@ test("build206 optional switch, rescue and contribution report are authoritative
   const switches = expedition.objects.filter(object => object.type === "coopSwitch");
   assert.equal(switches.length, 2);
   players[0].session.dungeonPosition = { x: switches[0].x, y: switches[0].y, facing: "down" };
-  players[1].session.dungeonPosition = { x: switches[1].x, y: switches[1].y, facing: "down" };
+  players[1].session.dungeonPosition = { ...expedition.start, facing: "left" };
   store._updateCoopSwitch(room);
   assert.equal(expedition.coop.switchUnlocked, false);
-  const retreat = expedition.objects.find(object => object.type !== "coopSwitch" && expedition.tiles[object.y]?.[object.x] === ".")
-    ?? { x: expedition.start.x, y: expedition.start.y };
-  players[1].session.dungeonPosition = { x: retreat.x, y: retreat.y, facing: "left" };
-  store._updateCoopSwitch(room);
   assert.equal(switches[1].occupied, false);
   assert.equal(switches[1].progress, 0);
   assert.equal(switches[1].active, false);
   assert.equal(expedition.coop.switchHoldStartedAt, 0);
   players[1].session.dungeonPosition = { x: switches[1].x, y: switches[1].y, facing: "down" };
-  store._updateCoopSwitch(room);
-  now += 2_001;
   store._updateCoopSwitch(room);
   assert.equal(expedition.coop.switchUnlocked, true);
   assert.equal(expedition.objects.find(object => object.type === "resonanceVault").unlocked, true);

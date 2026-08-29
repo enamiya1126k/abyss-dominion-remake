@@ -119,6 +119,7 @@ export function prepareCoopExpeditionV206(expedition, { leaderId, hostWorld, con
       rewardScaleLabel: rewardTier.label,
       switchHoldStartedAt: 0,
       switchUnlocked: false,
+      switchResolution: null,
       relayStage: 0,
       relayFirstPlayerId: null,
       relayExpiresAt: 0,
@@ -199,6 +200,7 @@ export function prepareCoopExpeditionV206(expedition, { leaderId, hostWorld, con
     optionalFeature: { kind: type, optional: true, nonBlocking: true },
     switchHoldStartedAt: 0,
     switchUnlocked: false,
+    switchResolution: null,
     relayStage: 0,
     relayFirstPlayerId: null,
     relayExpiresAt: 0,
@@ -232,6 +234,80 @@ export function scaledCoopReward(base = {}, { floor = 1, participants = 1, premi
     reward.coopExtraRolls = tier.extraRolls;
   }
   return reward;
+}
+
+/**
+ * Resolve the two-floor-switch overlay from server-owned player positions.
+ *
+ * The UI describes this as "two players step on the two switches at the same
+ * time".  There is deliberately no client timer or hidden hold requirement:
+ * the second distinct, connected and living player landing on the other
+ * switch is the authoritative transition.  The persisted resolution record
+ * makes repeated movement packets, room snapshots and reconnect ticks safe.
+ */
+export function resolveDualSwitch(expedition, members = [], { now = Date.now() } = {}) {
+  const coop = expedition?.coop;
+  const switches = (expedition?.objects ?? []).filter(object => object.type === "coopSwitch");
+  if (!coop || switches.length !== 2) return { available: false, unlocked: false, changed: false, actorIds: [] };
+
+  const living = members.filter(member => (
+    member?.connected === true
+    && member.playerId
+    && Number(member.coopVitals?.hp) > 0
+    && member.dungeonPosition
+  ));
+  const occupants = switches.map(object => living.filter(member => (
+    member.dungeonPosition.x === object.x && member.dungeonPosition.y === object.y
+  )));
+  const pair = occupants[0]
+    .flatMap(left => occupants[1].map(right => [left, right]))
+    .find(([left, right]) => left.playerId !== right.playerId);
+
+  if (coop.switchUnlocked) {
+    for (const object of switches) {
+      object.progress = 1;
+      object.active = true;
+      object.occupied = true;
+    }
+    const vault = expedition.objects.find(object => object.type === "resonanceVault");
+    const elite = expedition.objects.find(object => object.type === "coopElite");
+    if (vault) vault.unlocked = true;
+    if (elite) elite.hidden = false;
+    return {
+      available: true,
+      unlocked: true,
+      changed: false,
+      actorIds: [...(coop.switchResolution?.actorIds ?? [])],
+      resolutionId: coop.switchResolution?.id ?? `${expedition.id}:switch-open`,
+    };
+  }
+
+  switches.forEach((object, index) => {
+    object.occupied = occupants[index].length > 0;
+    object.progress = 0;
+    object.active = false;
+  });
+  if (!pair) {
+    coop.switchHoldStartedAt = 0;
+    return { available: true, unlocked: false, changed: false, actorIds: [] };
+  }
+
+  const actorIds = pair.map(member => member.playerId);
+  const resolvedAt = Math.max(1, Math.floor(Number(now) || Date.now()));
+  const resolutionId = `${expedition.id}:switch-open`;
+  coop.switchHoldStartedAt = resolvedAt;
+  coop.switchUnlocked = true;
+  coop.switchResolution = { id: resolutionId, resolvedAt, actorIds: [...actorIds] };
+  for (const object of switches) {
+    object.progress = 1;
+    object.active = true;
+    object.occupied = true;
+  }
+  const vault = expedition.objects.find(object => object.type === "resonanceVault");
+  const elite = expedition.objects.find(object => object.type === "coopElite");
+  if (vault) vault.unlocked = true;
+  if (elite) elite.hidden = false;
+  return { available: true, unlocked: true, changed: true, actorIds, resolutionId };
 }
 
 export const COOP_GIMMICK_TYPES = GIMMICKS;

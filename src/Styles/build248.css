@@ -1,0 +1,188 @@
+/* build248: stable hall emotes and an in-place quick-chat drawer. */
+
+/* The hall launcher is a fixed overlay control.  Its position never follows a
+   drag, so the radial menu and the finger always share one stable center. */
+.online-hall-emote-tool{
+  left:50%!important;
+  top:72px!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:translateX(-50%)!important;
+  touch-action:none!important;
+  -webkit-user-select:none!important;
+  user-select:none!important;
+}
+.online-hall-emote-tool:active{
+  transform:translateX(-50%) scale(.985)!important;
+}
+.online-hall-world.emote-gesture-active{
+  cursor:default;
+  touch-action:none!important;
+  overscroll-behavior:none;
+}
+.online-hall-world.emote-gesture-active :is(.online-hall-zone,.online-hall-player.tradeable){
+  pointer-events:none!important;
+}
+html.online-hall-emote-gesture,
+html.online-hall-emote-gesture body{
+  overscroll-behavior:none!important;
+  touch-action:none!important;
+}
+.online-emote-wheel-hall{
+  pointer-events:none!important;
+}
+
+/* Quick chat stays inside the hall instead of navigating away. */
+.online-hall-world.chat-open{
+  cursor:default;
+  /* Keep vertical gestures available to the chat log on iPhone.  Hall taps
+     still cannot move the player while the drawer is open (the client clears
+     the destination and the world controls below are pointer-disabled). */
+  touch-action:pan-y;
+}
+.online-hall-world.chat-open :is(.online-hall-zone,.online-hall-player.tradeable,.online-hall-emote-tool){
+  pointer-events:none!important;
+}
+.online-hall-world.chat-open .online-hall-emote-tool{
+  opacity:.38;
+}
+.online-hall-chat-tool{
+  right:max(10px,env(safe-area-inset-right))!important;
+}
+.online-hall-chat-tool.active{
+  border-color:#e2bd70;
+  background:#392244;
+  box-shadow:0 0 0 2px #09060caa,0 0 18px #bb7ee377;
+}
+.online-hall-quick-chat{
+  position:absolute;
+  z-index:36;
+  right:max(8px,env(safe-area-inset-right));
+  bottom:max(8px,env(safe-area-inset-bottom));
+  width:min(360px,calc(100% - 16px));
+  max-height:calc(100% - 16px);
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto auto;
+  overflow:hidden;
+  border:1px solid #9b72ab;
+  background:linear-gradient(180deg,#100b18f7,#07060df7);
+  box-shadow:0 14px 38px #000e,0 0 22px #7c3fac55;
+  color:#f7ecff;
+  cursor:default;
+  touch-action:pan-y;
+}
+.online-hall-quick-chat>header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-height:45px;
+  padding:7px 8px 7px 11px;
+  border-bottom:1px solid #513b5d;
+  background:#17101fe8;
+}
+.online-hall-quick-chat>header div{
+  display:grid;
+  gap:1px;
+}
+.online-hall-quick-chat>header small{
+  color:#7edce7;
+  font-size:.47rem;
+  letter-spacing:.16em;
+}
+.online-hall-quick-chat>header b{
+  color:#f3dda7;
+  font-size:.78rem;
+}
+.online-hall-quick-chat>header button{
+  width:40px;
+  height:40px;
+  padding:0;
+  border:1px solid #755886;
+  background:#24152e;
+  color:#fff;
+  font-size:1.1rem;
+}
+.online-hall-quick-chat-log{
+  min-height:74px;
+  max-height:154px;
+  display:grid;
+  align-content:end;
+  gap:5px;
+  overflow-y:auto;
+  padding:8px;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+.online-hall-quick-chat-log article{
+  min-width:0;
+  padding:5px 7px;
+  border:1px solid #403848;
+  border-radius:3px 10px 10px 10px;
+  background:#11131a;
+}
+.online-hall-quick-chat-log article.own{
+  margin-left:20px;
+  border-color:#694a7b;
+  border-radius:10px 3px 10px 10px;
+  background:#22152c;
+}
+.online-hall-quick-chat-log article b{
+  display:block;
+  color:#8edbe2;
+  font-size:.52rem;
+}
+.online-hall-quick-chat-log article p{
+  margin:2px 0 0;
+  color:#f4edf7;
+  font-size:.68rem;
+  line-height:1.35;
+  overflow-wrap:anywhere;
+}
+.online-hall-quick-chat-log .empty{
+  margin:auto;
+  color:#8f8993;
+  font-size:.62rem;
+}
+.online-hall-quick-chat .online-hall-chat-bar{
+  position:static;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:5px;
+  padding:7px 8px;
+  border:0;
+  border-top:1px solid #513b5d;
+  background:#09070f;
+  box-shadow:none;
+}
+.online-hall-quick-chat .online-hall-chat-bar input{
+  height:42px;
+  min-width:0;
+  font-size:16px!important;
+}
+.online-hall-quick-chat .online-hall-chat-bar button{
+  min-width:58px;
+  min-height:42px;
+}
+.online-hall-quick-chat>footer{
+  padding:0 8px 8px;
+  background:#09070f;
+}
+.online-hall-quick-chat>footer button{
+  width:100%;
+  min-height:38px;
+  border:1px solid #766087;
+  background:#1a1222;
+  color:#dac9e4;
+  font-size:.63rem;
+  font-weight:900;
+}
+
+@media(max-height:700px){
+  .online-hall-emote-tool{top:62px!important}
+  .online-hall-quick-chat-log{min-height:54px;max-height:100px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .online-emote-wheel i{transition:none!important}
+}

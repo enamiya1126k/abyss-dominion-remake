@@ -5,6 +5,7 @@ const ACTIONS = new Set(["attack", "guard", "skill", "item"]);
 const SPEEDS = new Set([0.5, 1, 2]);
 const RULESETS = new Set(["standard", "balanced", "blitz"]);
 const SERIES = new Set(["bo1", "bo3"]);
+const TEAM_MONSTER_LIMIT = 4;
 const COMMAND_MS = 18_000;
 const BLITZ_COMMAND_MS = 9_000;
 const EFFECT_KINDS = new Set([
@@ -18,9 +19,10 @@ const clamp = (value, min, max) => Math.max(min, Math.min(max, Number(value) || 
 const cleanText = (value, max = 80) => String(value ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, max);
 
 function normalizedSettings(source = {}) {
-  const ruleset = RULESETS.has(source?.ruleset) ? source.ruleset : "standard";
-  const series = SERIES.has(source?.series) ? source.series : "bo1";
-  return { ruleset, series };
+  return {
+    ruleset: RULESETS.has(source?.ruleset) ? source.ruleset : "standard",
+    series: SERIES.has(source?.series) ? source.series : "bo1",
+  };
 }
 
 function targetWinsFor(series) {
@@ -33,13 +35,13 @@ function statPower(stats = {}) {
   return Math.max(1, Math.sqrt(Math.max(1, Number(stats.hp) || 1)) * Math.sqrt(offense * defense) * Math.max(1, Math.sqrt(Number(stats.spd) || 1)));
 }
 
-function balancedStats(stats, member, participants, sideCounts) {
-  const powerValues = participants.map(entry => Math.max(1, Number(entry.profile?.power) || statPower(entry.profile?.battleStats)));
-  const averagePower = powerValues.reduce((sum, value) => sum + value, 0) / Math.max(1, powerValues.length);
-  const ownPower = Math.max(1, Number(member.profile?.power) || statPower(stats));
+function balancedStats(stats, profile, combatants, sideCounts, side) {
+  const powers = combatants.map(entry => Math.max(1, Number(entry.profile?.power) || statPower(entry.profile?.battleStats)));
+  const averagePower = powers.reduce((sum, value) => sum + value, 0) / Math.max(1, powers.length);
+  const ownPower = Math.max(1, Number(profile?.power) || statPower(stats));
   const buildScale = clamp(Math.sqrt(averagePower / ownPower), 0.65, 1.6);
-  const ownCount = Math.max(1, sideCounts[member.teamSide] || 1);
-  const enemyCount = Math.max(1, sideCounts[member.teamSide === "sun" ? "moon" : "sun"] || 1);
+  const ownCount = Math.max(1, sideCounts[side] || 1);
+  const enemyCount = Math.max(1, sideCounts[side === "sun" ? "moon" : "sun"] || 1);
   const numberAdvantage = Math.max(1, enemyCount / ownCount);
   const enduranceScale = clamp(buildScale * numberAdvantage, 0.65, 3);
   const combatScale = clamp(buildScale * Math.sqrt(numberAdvantage), 0.65, 2.1);
@@ -55,6 +57,33 @@ function balancedStats(stats, member, participants, sideCounts) {
     evasion: stats.evasion,
     accuracy: stats.accuracy,
   };
+}
+
+function profileRoster(profile = {}) {
+  const supplied = Array.isArray(profile.battleRoster) ? profile.battleRoster.filter(entry => entry && typeof entry === "object") : [];
+  return (supplied.length ? supplied : [profile]).slice(0, TEAM_MONSTER_LIMIT);
+}
+
+function allocateSideRoster(members) {
+  const allocations = members.map(member => ({ member, entries: profileRoster(member.profile), count: 1 }));
+  const perPlayerLimit = members.length === 1 ? TEAM_MONSTER_LIMIT : 2;
+  let remaining = Math.max(0, TEAM_MONSTER_LIMIT - allocations.length);
+  while (remaining > 0) {
+    let added = false;
+    for (const allocation of allocations) {
+      if (remaining <= 0) break;
+      if (allocation.count >= Math.min(allocation.entries.length, perPlayerLimit)) continue;
+      allocation.count += 1;
+      remaining -= 1;
+      added = true;
+    }
+    if (!added) break;
+  }
+  return allocations.flatMap(allocation => allocation.entries.slice(0, allocation.count).map((profile, order) => ({
+    member: allocation.member,
+    profile,
+    rosterOrder: order,
+  })));
 }
 
 function initialEffects(circleEffect) {
@@ -75,12 +104,36 @@ function resetPlayerForGame(player) {
   player.circleReviveUsed = false;
 }
 
+function emptyMetrics() {
+  return { damage: 0, healing: 0, damageTaken: 0, guards: 0, support: 0, kos: 0 };
+}
+
+function scoreFor(metrics = {}) {
+  return Math.max(0, Math.round((metrics.damage || 0) + (metrics.healing || 0) * .7 + (metrics.support || 0) * 250 + (metrics.kos || 0) * 1000));
+}
+
 function resultSummary(battle) {
-  const rows = Object.values(battle.players).map(player => {
-    const metrics = player.metrics ?? {};
-    const score = Math.max(0, Math.round((metrics.damage || 0) + (metrics.healing || 0) * .7 + (metrics.support || 0) * 250 + (metrics.kos || 0) * 1000));
-    return { playerId: player.playerId, name: player.name, monsterName: player.monsterName, side: player.side, score, damage: metrics.damage || 0, healing: metrics.healing || 0, damageTaken: metrics.damageTaken || 0, guards: metrics.guards || 0, support: metrics.support || 0, kos: metrics.kos || 0 };
-  }).sort((left, right) => right.score - left.score || right.damage - left.damage || left.playerId.localeCompare(right.playerId));
+  const monsters = Object.values(battle.players).map(player => {
+    const metrics = { ...emptyMetrics(), ...(player.metrics ?? {}) };
+    return {
+      playerId: player.ownerPlayerId,
+      combatantId: player.playerId,
+      monsterId: player.monsterId ?? null,
+      name: player.name,
+      monsterName: player.monsterName,
+      side: player.side,
+      score: scoreFor(metrics),
+      ...metrics,
+    };
+  }).sort((left, right) => right.score - left.score || right.damage - left.damage || left.combatantId.localeCompare(right.combatantId));
+  const aggregate = new Map();
+  for (const monster of monsters) {
+    const row = aggregate.get(monster.playerId) ?? { playerId: monster.playerId, name: monster.name, side: monster.side, monsterName: monster.monsterName, ...emptyMetrics() };
+    for (const key of Object.keys(emptyMetrics())) row[key] += monster[key] || 0;
+    aggregate.set(monster.playerId, row);
+  }
+  const rows = [...aggregate.values()].map(row => ({ ...row, score: scoreFor(row) }))
+    .sort((left, right) => right.score - left.score || right.damage - left.damage || left.playerId.localeCompare(right.playerId));
   return {
     resultId: `team:${battle.id}`,
     winner: battle.winner ?? null,
@@ -88,10 +141,13 @@ function resultSummary(battle) {
     ruleset: battle.ruleset,
     series: battle.series,
     format: battle.format,
+    playerFormat: battle.playerFormat,
     score: { ...battle.score },
     games: (battle.games ?? []).map(game => ({ ...game, score: { ...game.score } })),
     mvpPlayerId: rows[0]?.playerId ?? null,
+    mvpCombatantId: monsters[0]?.combatantId ?? null,
     ranking: rows.map((entry, index) => ({ ...entry, rank: index + 1 })),
+    monsterRanking: monsters.map((entry, index) => ({ ...entry, rank: index + 1 })),
   };
 }
 
@@ -151,7 +207,7 @@ function circleDamageFactor(actor, round = 1, aliveCount = 2) {
 }
 
 function publicPlayer(player) {
-  const { stats, initial, ...safe } = player;
+  const { stats, initial, skills, ...safe } = player;
   return { ...safe, effects: (safe.effects ?? []).map(effect => ({ ...effect })) };
 }
 
@@ -167,6 +223,8 @@ export function teamBattleSnapshot(battle) {
     outcome: battle.outcome,
     winner: battle.winner,
     format: battle.format,
+    playerFormat: battle.playerFormat,
+    teamMonsterLimit: TEAM_MONSTER_LIMIT,
     ruleset: battle.ruleset,
     series: battle.series,
     game: battle.game,
@@ -175,7 +233,13 @@ export function teamBattleSnapshot(battle) {
     betweenGames: Boolean(battle.betweenGames),
     gameWinner: battle.gameWinner ?? null,
     games: (battle.games ?? []).map(game => ({ ...game, score: { ...game.score } })),
-    summary: battle.summary ? { ...battle.summary, score: { ...(battle.summary.score ?? {}) }, games: (battle.summary.games ?? []).map(game => ({ ...game, score: { ...(game.score ?? {}) } })), ranking: (battle.summary.ranking ?? []).map(entry => ({ ...entry })) } : null,
+    summary: battle.summary ? {
+      ...battle.summary,
+      score: { ...(battle.summary.score ?? {}) },
+      games: (battle.summary.games ?? []).map(game => ({ ...game, score: { ...(game.score ?? {}) } })),
+      ranking: (battle.summary.ranking ?? []).map(entry => ({ ...entry })),
+      monsterRanking: (battle.summary.monsterRanking ?? []).map(entry => ({ ...entry })),
+    } : null,
     focusTarget: battle.focusTarget ? { ...battle.focusTarget } : null,
     cheeredBy: [...(battle.cheeredBy ?? [])],
     players: Object.values(battle.players).map(publicPlayer),
@@ -183,6 +247,7 @@ export function teamBattleSnapshot(battle) {
       kind: action.kind,
       skillId: action.skillId ?? null,
       targetId: action.targetId ?? null,
+      actorId: action.actorId ?? id,
       auto: Boolean(action.auto),
     }])),
     lastEvents: (battle.lastEvents ?? []).map(event => ({ ...event })),
@@ -270,20 +335,53 @@ export class TeamBattleCoordinator {
     if (participants.some(member => !member.connected)) return { ok: false, code: "MEMBER_OFFLINE", message: "再接続待ちの参加者がいます" };
     if (participants.some(member => !member.teamReady)) return { ok: false, code: "NOT_ALL_READY", message: "参加者全員の準備完了を待っています" };
 
-    const settings = this.settings(room), sideCounts = { sun: sun.length, moon: moon.length };
+    const settings = this.settings(room);
+    const combatants = [
+      ...allocateSideRoster(sun).map(entry => ({ ...entry, side: "sun" })),
+      ...allocateSideRoster(moon).map(entry => ({ ...entry, side: "moon" })),
+    ];
+    const sideCounts = {
+      sun: combatants.filter(entry => entry.side === "sun").length,
+      moon: combatants.filter(entry => entry.side === "moon").length,
+    };
+    if (sideCounts.sun > TEAM_MONSTER_LIMIT || sideCounts.moon > TEAM_MONSTER_LIMIT) return { ok: false, code: "TEAM_ROSTER_LIMIT", message: "紅組・蒼組それぞれ魔物4体までです" };
+
     const players = {}, circleEvents = [];
-    for (const member of participants) {
-      const sourceStats = member.profile.battleStats;
-      const stats = settings.ruleset === "balanced" ? balancedStats(sourceStats, member, participants, sideCounts) : { ...sourceStats };
-      const circleEffect = member.profile.circleEffect ?? "none";
+    const memberActorCounts = new Map();
+    for (const combatant of combatants) {
+      const { member, profile, side } = combatant;
+      const memberOrder = memberActorCounts.get(member.playerId) ?? 0;
+      memberActorCounts.set(member.playerId, memberOrder + 1);
+      const actorId = memberOrder === 0 ? member.playerId : `${member.playerId}:m${memberOrder + 1}`;
+      const sourceStats = profile.battleStats ?? member.profile.battleStats;
+      const stats = settings.ruleset === "balanced" ? balancedStats(sourceStats, profile, combatants, sideCounts, side) : { ...sourceStats };
+      const circleEffect = profile.circleEffect ?? "none";
       const shield = circleEffect === "shield" ? Math.ceil(stats.hp * .5) : 0;
-      players[member.playerId] = {
-        playerId: member.playerId,
+      const rosterIndex = Number.isInteger(Number(profile.rosterIndex)) ? Number(profile.rosterIndex) : memberOrder;
+      players[actorId] = {
+        playerId: actorId,
+        combatantId: actorId,
+        ownerPlayerId: member.playerId,
+        rosterIndex,
+        isPrimary: memberOrder === 0,
+        monsterId: cleanText(profile.monsterId, 80) || null,
         name: member.profile.displayName,
-        monsterName: member.profile.monsterName,
-        speciesId: member.profile.speciesId,
-        fallbackEmoji: member.profile.fallbackEmoji,
-        side: member.teamSide,
+        monsterName: profile.monsterName ?? member.profile.monsterName,
+        speciesId: profile.speciesId ?? member.profile.speciesId,
+        visualSpeciesId: profile.visualSpeciesId ?? member.profile.visualSpeciesId ?? null,
+        endgameBossId: profile.endgameBossId ?? null,
+        floorBossCatalogId: profile.floorBossCatalogId ?? null,
+        fallbackEmoji: profile.fallbackEmoji ?? member.profile.fallbackEmoji,
+        level: profile.level ?? member.profile.level ?? 1,
+        stars: profile.stars ?? member.profile.stars ?? 1,
+        plus: profile.plus ?? member.profile.plus ?? 0,
+        power: profile.power ?? 0,
+        summonTier: profile.summonTier ?? null,
+        summonRarity: profile.summonRarity ?? null,
+        endgameFaction: profile.endgameFaction ?? null,
+        attribute: profile.attribute ?? profile.element ?? "neutral",
+        element: profile.attribute ?? profile.element ?? "neutral",
+        side,
         hp: stats.hp,
         maxHp: stats.hp,
         mp: stats.mp,
@@ -292,20 +390,26 @@ export class TeamBattleCoordinator {
         guard: false,
         itemCharges: 1,
         stats: { ...stats },
+        skills: Array.isArray(profile.skills) ? profile.skills : [],
         effects: initialEffects(circleEffect),
-        circleEffect, circleLevel: member.profile.circleLevel ?? 0, circleLastLifeUsed: false, circleReviveUsed: false,
+        circleEffect,
+        circleId: profile.circleId ?? "none",
+        circleName: profile.circleName || "魔法陣",
+        circleLevel: profile.circleLevel ?? 0,
+        circleLastLifeUsed: false,
+        circleReviveUsed: false,
         balanced: settings.ruleset === "balanced",
         balanceFactor: settings.ruleset === "balanced" ? Number((stats.hp / Math.max(1, sourceStats.hp)).toFixed(3)) : 1,
         initial: { maxHp: stats.hp, maxMp: stats.mp, shield },
-        metrics: { damage: 0, healing: 0, damageTaken: 0, guards: 0, support: 0, kos: 0 },
+        metrics: emptyMetrics(),
       };
-      if (circleEffect !== "none") circleEvents.push({ kind: "circleActivate", actorId: member.playerId, actorName: member.profile.displayName, targetKind: "player", targetId: member.playerId, label: member.profile.circleName || "魔法陣" });
-      member.teamReady = false;
+      if (circleEffect !== "none") circleEvents.push({ kind: "circleActivate", actorId, actorOwnerId: member.playerId, actorName: member.profile.displayName, targetKind: "player", targetId: actorId, label: profile.circleName || "魔法陣" });
     }
+    for (const member of participants) member.teamReady = false;
     room.teamBattle = {
       id: token(), round: 1, game: 1, phase: "command", speed: 1,
       deadlineAt: this.now() + (settings.ruleset === "blitz" ? BLITZ_COMMAND_MS : COMMAND_MS), nextRoundAt: 0,
-      outcome: null, winner: null, format: `${sun.length} vs ${moon.length}`,
+      outcome: null, winner: null, format: `${sideCounts.sun} vs ${sideCounts.moon}`, playerFormat: `${sun.length}人 vs ${moon.length}人`,
       ruleset: settings.ruleset, series: settings.series, targetWins: targetWinsFor(settings.series),
       score: { sun: 0, moon: 0 }, games: [], betweenGames: false, gameWinner: null,
       commandMs: settings.ruleset === "blitz" ? BLITZ_COMMAND_MS : COMMAND_MS,
@@ -323,10 +427,16 @@ export class TeamBattleCoordinator {
     const battle = room?.teamBattle;
     if (!battle || room.phase !== "team") return { ok: false, code: "NO_TEAM_BATTLE", message: "チーム戦は開始されていません" };
     if (battle.phase !== "command") return { ok: false, code: "ACTION_CLOSED", message: "現在は行動を選べません" };
-    const actor = battle.players[session.playerId];
+    const ownedActors = Object.values(battle.players).filter(player => player.ownerPlayerId === session.playerId);
+    const requestedActorId = cleanText(source.actorId ?? source.combatantId, 80);
+    if (requestedActorId && !ownedActors.some(player => player.playerId === requestedActorId)) return { ok: false, code: "BAD_ACTOR", message: "その魔物は操作できません" };
+    const actor = requestedActorId
+      ? battle.players[requestedActorId]
+      : ownedActors.find(player => player.hp > 0 && !battle.actions[player.playerId]) ?? ownedActors.find(player => player.hp > 0);
     if (!actor || actor.hp <= 0) return { ok: false, code: "ACTOR_DOWN", message: "戦闘不能中です" };
+    if (battle.actions[actor.playerId]) return { ok: true, duplicate: true, teamBattle: teamBattleSnapshot(battle) };
     const kind = ACTIONS.has(source.kind) ? source.kind : "attack";
-    const skill = kind === "skill" ? session.profile.skills.find(entry => entry.id === cleanText(source.skillId, 80)) : null;
+    const skill = kind === "skill" ? actor.skills.find(entry => entry.id === cleanText(source.skillId, 80)) : null;
     if (kind === "skill" && !skill) return { ok: false, code: "BAD_SKILL", message: "そのスキルは使用できません" };
     if (skill && actor.mp < skill.mp) return { ok: false, code: "NO_MP", message: "MPが足りません" };
     if (kind === "item" && actor.itemCharges <= 0) return { ok: false, code: "NO_ITEM", message: "応急薬は使用済みです" };
@@ -341,7 +451,7 @@ export class TeamBattleCoordinator {
     if (!target) return { ok: false, code: "NO_TARGET", message: "対象がいません" };
     if (skill?.kind === "revive" && target.hp > 0) return { ok: false, code: "TARGET_ALIVE", message: "倒れている味方を選んでください" };
     if (!attackSkill && skill?.kind !== "revive" && target.hp <= 0) return { ok: false, code: "TARGET_DOWN", message: "戦闘可能な味方を選んでください" };
-    battle.actions[session.playerId] = { kind, skillId: skill?.id ?? null, targetId: target.playerId, submittedAt: this.now(), auto: false };
+    battle.actions[actor.playerId] = { actorId: actor.playerId, kind, skillId: skill?.id ?? null, targetId: target.playerId, submittedAt: this.now(), auto: false };
     this.broadcast(room, { type: "teamBattleState", teamBattle: teamBattleSnapshot(battle) });
     if (this._allReady(battle)) this._resolve(room, battle);
     return { ok: true, teamBattle: teamBattleSnapshot(battle) };
@@ -362,9 +472,11 @@ export class TeamBattleCoordinator {
     const session = this.sessions.get(playerId);
     if (session) session.teamReady = false;
     const battle = room?.teamBattle;
-    if (room?.phase === "team" && battle?.players?.[playerId]) {
-      delete battle.players[playerId];
-      delete battle.actions[playerId];
+    if (room?.phase === "team" && Object.values(battle?.players ?? {}).some(player => player.ownerPlayerId === playerId)) {
+      for (const actor of Object.values(battle.players).filter(player => player.ownerPlayerId === playerId)) {
+        delete battle.players[actor.playerId];
+        delete battle.actions[actor.playerId];
+      }
       const players = Object.values(battle.players);
       const aliveSun = players.some(player => player.side === "sun" && player.hp > 0);
       const aliveMoon = players.some(player => player.side === "moon" && player.hp > 0);
@@ -391,7 +503,7 @@ export class TeamBattleCoordinator {
     const now = this.now();
     if (battle.phase === "command") {
       for (const actor of Object.values(battle.players)) {
-        const session = this.sessions.get(actor.playerId);
+        const session = this.sessions.get(actor.ownerPlayerId);
         if (actor.hp <= 0 || battle.actions[actor.playerId] || session?.connected) continue;
         battle.actions[actor.playerId] = this._autoAction(battle, actor);
       }
@@ -443,7 +555,7 @@ export class TeamBattleCoordinator {
     battle.lastEvents = [];
     for (const player of Object.values(battle.players)) {
       resetPlayerForGame(player);
-      if (player.circleEffect !== "none") battle.lastEvents.push({ kind: "circleActivate", actorId: player.playerId, actorName: player.name, targetKind: "player", targetId: player.playerId, label: this.sessions.get(player.playerId)?.profile?.circleName || "魔法陣" });
+      if (player.circleEffect !== "none") battle.lastEvents.push({ kind: "circleActivate", actorId: player.playerId, actorOwnerId: player.ownerPlayerId, actorName: player.name, targetKind: "player", targetId: player.playerId, label: player.circleName || "魔法陣" });
     }
     battle.lastEvents.push({ kind: "gameStart", label: `第${battle.game}戦開始・紅 ${battle.score.sun} - ${battle.score.moon} 蒼` });
     this.broadcast(room, { type: "teamBattleRound", teamBattle: teamBattleSnapshot(battle) });
@@ -456,7 +568,7 @@ export class TeamBattleCoordinator {
 
   _autoAction(battle, actor) {
     const target = Object.values(battle.players).find(player => player.side !== actor.side && player.hp > 0);
-    return { kind: "attack", targetId: target?.playerId ?? null, skillId: null, submittedAt: this.now(), auto: true };
+    return { actorId: actor.playerId, kind: "attack", targetId: target?.playerId ?? null, skillId: null, submittedAt: this.now(), auto: true };
   }
 
   _resolve(room, battle) {
@@ -499,9 +611,9 @@ export class TeamBattleCoordinator {
 
   _resolveAction(battle, actor, action, events) {
     if (!action) return;
-    const session = this.sessions.get(actor.playerId);
+    const session = this.sessions.get(actor.ownerPlayerId);
     const actorName = session?.profile?.displayName ?? actor.name ?? "挑戦者";
-    const skill = action.kind === "skill" ? session?.profile.skills.find(entry => entry.id === action.skillId) : null;
+    const skill = action.kind === "skill" ? actor.skills.find(entry => entry.id === action.skillId) : null;
     const players = Object.values(battle.players);
     const allies = players.filter(player => player.side === actor.side);
     const enemies = players.filter(player => player.side !== actor.side && player.hp > 0);
@@ -510,7 +622,7 @@ export class TeamBattleCoordinator {
       actor.guard = true;
       actor.metrics.guards += 1;
       actor.metrics.support += 1;
-      events.push({ kind: "guard", actorId: actor.playerId, actorName, targetKind: "player", targetId: actor.playerId, label: "ガード" });
+      events.push({ kind: "guard", actorId: actor.playerId, actorOwnerId: actor.ownerPlayerId, actorName, targetKind: "player", targetId: actor.playerId, label: "ガード" });
       return;
     }
     if (action.kind === "item") {
@@ -521,7 +633,7 @@ export class TeamBattleCoordinator {
       const healed = ally.hp - before;
       actor.metrics.healing += healed;
       actor.metrics.support += 1;
-      events.push({ kind: "heal", actorId: actor.playerId, actorName, targetKind: "player", targetId: ally.playerId, value: healed, label: "模擬戦応急薬" });
+      events.push({ kind: "heal", actorId: actor.playerId, actorOwnerId: actor.ownerPlayerId, actorName, targetKind: "player", targetId: ally.playerId, value: healed, label: "模擬戦応急薬" });
       return;
     }
     if (skill) actor.mp = Math.max(0, actor.mp - skill.mp);
@@ -531,7 +643,7 @@ export class TeamBattleCoordinator {
         fallen.hp = Math.max(1, Math.ceil(fallen.maxHp * Math.max(0.2, skill.heal || 0.35)));
         actor.metrics.healing += fallen.hp;
         actor.metrics.support += 2;
-        events.push({ kind: "revive", actorId: actor.playerId, actorName, targetKind: "player", targetId: fallen.playerId, value: fallen.hp, label: skill.name });
+        events.push({ kind: "revive", actorId: actor.playerId, actorOwnerId: actor.ownerPlayerId, actorName, targetKind: "player", targetId: fallen.playerId, value: fallen.hp, label: skill.name });
       }
       return;
     }
@@ -542,26 +654,26 @@ export class TeamBattleCoordinator {
         ally.hp = Math.min(ally.maxHp, ally.hp + Math.ceil(ally.maxHp * Math.max(0.12, skill.heal || 0.25) * (battle.healingMultiplier ?? 1)));
         const healed = ally.hp - before;
         actor.metrics.healing += healed;
-        events.push({ kind: "heal", actorId: actor.playerId, actorName, targetKind: "player", targetId: ally.playerId, value: healed, label: skill.name });
+        events.push({ kind: "heal", actorId: actor.playerId, actorOwnerId: actor.ownerPlayerId, actorName, targetKind: "player", targetId: ally.playerId, value: healed, label: skill.name });
       }
       if (skill.kind === "mpHeal") for (const ally of targets) {
         const before = ally.mp;
         ally.mp = Math.min(ally.maxMp, ally.mp + Math.ceil(ally.maxMp * Math.max(0.15, skill.mpHeal || 0.25)));
         const restored = ally.mp - before;
         actor.metrics.support += Math.max(1, Math.ceil(restored / Math.max(1, ally.maxMp) * 10));
-        events.push({ kind: "mpHeal", actorId: actor.playerId, actorName, targetKind: "player", targetId: ally.playerId, value: restored, label: skill.name });
+        events.push({ kind: "mpHeal", actorId: actor.playerId, actorOwnerId: actor.ownerPlayerId, actorName, targetKind: "player", targetId: ally.playerId, value: restored, label: skill.name });
       }
       if (skill.kind === "guard") for (const ally of targets) ally.guard = true;
       for (const effect of skill.effects ?? []) if (effect.allies || !effect.enemy) for (const ally of targets) addEffect(ally, effect);
       if (skill.partyShieldRate) for (const ally of targets) ally.shield = Math.max(ally.shield, Math.ceil(ally.maxHp * skill.partyShieldRate));
       actor.metrics.support += Math.max(1, targets.length);
-      if (!events.some(event => event.actorId === actor.playerId && event.label === skill.name)) events.push({ kind: "buff", actorId: actor.playerId, actorName, targetKind: "player", targetId: targets[0]?.playerId, label: skill.name });
+      if (!events.some(event => event.actorId === actor.playerId && event.label === skill.name)) events.push({ kind: "buff", actorId: actor.playerId, actorOwnerId: actor.ownerPlayerId, actorName, targetKind: "player", targetId: targets[0]?.playerId, label: skill.name });
       return;
     }
     const defender = target?.side !== actor.side && target.hp > 0 ? target : enemies[0];
     if (!defender) return;
     if (!hitLands(actor, defender, this.random, Boolean(skill?.guaranteedHit))) {
-      events.push({ kind: "miss", actorId: actor.playerId, actorName, targetId: defender.playerId, label: `${defender.name}が回避` });
+      events.push({ kind: "miss", actorId: actor.playerId, actorOwnerId: actor.ownerPlayerId, actorName, targetId: defender.playerId, label: `${defender.name}が回避` });
       return;
     }
     const magic = skill?.damageClass === "magic";
@@ -584,8 +696,8 @@ export class TeamBattleCoordinator {
     const dealt = before - defender.hp;
     actor.metrics.damage += dealt;
     defender.metrics.damageTaken += dealt;
-    events.push({ kind: "damage", actorId: actor.playerId, actorName, targetId: defender.playerId, value: dealt, absorbed, critical, label: skill?.name ?? "たたかう" });
+    events.push({ kind: "damage", actorId: actor.playerId, actorOwnerId: actor.ownerPlayerId, actorName, targetId: defender.playerId, value: dealt, absorbed, critical, label: skill?.name ?? "たたかう" });
     if (skill) for (const effect of skill.effects ?? []) if (effect.enemy) addEffect(defender, effect);
-    if (defender.hp <= 0) { actor.metrics.kos += 1; events.push({ kind: "ko", targetId: defender.playerId, label: `${defender.name} 戦闘不能` }); }
+    if (defender.hp <= 0) { actor.metrics.kos += 1; events.push({ kind: "ko", actorId: actor.playerId, actorOwnerId: actor.ownerPlayerId, targetId: defender.playerId, label: `${defender.name} 戦闘不能` }); }
   }
 }

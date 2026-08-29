@@ -195,11 +195,11 @@ test("build235 CSS and cache boundary are mobile-safe and complete", async () =>
   assert.match(css, /@media\(max-width:350px\)/);
   assert.doesNotMatch(css, /min-width:\s*[4-9][0-9]{2}px/);
   assert.match(index, /build239\.css\?v=2\.11\.65-build239/);
-  assert.match(index, /ASSET_VERSION\s*\=\s*"2\.11\.71"/);
-  assert.match(index, /ASSET_BUILD\s*\=\s*"build247"/);
-  assert.match(main, /OnlinePartyScreen\.js\?v=2\.11\.71-build247/);
-  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.71-build247/);
-  assert.match(client, /OnlinePartyScreen\.js\?v=2\.11\.71-build247/);
-  assert.match(client, /OnlineViews\.js\?v=2\.11\.71-build247/);
-  assert.match(views, /OnlinePartyScreen\.js\?v=2\.11\.71-build247/);
+  assert.match(index, /ASSET_VERSION\s*\=\s*"2\.11\.72"/);
+  assert.match(index, /ASSET_BUILD\s*\=\s*"build248"/);
+  assert.match(main, /OnlinePartyScreen\.js\?v=2\.11\.72-build248/);
+  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.72-build248/);
+  assert.match(client, /OnlinePartyScreen\.js\?v=2\.11\.72-build248/);
+  assert.match(client, /OnlineViews\.js\?v=2\.11\.72-build248/);
+  assert.match(views, /OnlinePartyScreen\.js\?v=2\.11\.72-build248/);
 });

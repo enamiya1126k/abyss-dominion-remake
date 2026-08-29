@@ -2,7 +2,7 @@ import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=2.11.54-build22
 import { battleEnvironmentForFloor } from "../data/biomes.js?v=2.11.54-build226";
 import {
   onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml, ONLINE_ROOM_PURPOSES, ONLINE_ROOM_STYLES,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.71-build247";
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.72-build248";
 import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.54-build227";
 import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=2.11.54-build226";
 import { pixelIcon } from "../ui/components/GameChrome.js?v=2.11.54-build226";
@@ -26,6 +26,55 @@ const clamp = (value, min, max) => Math.max(min, Math.min(max, Number(value) || 
 const ratio = (value, maximum) => clamp(Number(value) / Math.max(1, Number(maximum)) * 100, 0, 100);
 const memberById = (room, id) => (room?.members ?? []).find(member => member.playerId === id);
 
+export function onlineBattleActorId(actor) {
+  return String(actor?.combatantId ?? actor?.playerId ?? "");
+}
+
+export function onlineBattleOwnerId(actor) {
+  return String(actor?.ownerPlayerId ?? actor?.playerId ?? "");
+}
+
+export function onlineOwnedBattleActors(battle, ownerPlayerId, { livingOnly = false } = {}) {
+  return (Array.isArray(battle?.players) ? battle.players : [])
+    .filter(actor => actor && typeof actor === "object" && onlineBattleActorId(actor) && onlineBattleOwnerId(actor) === ownerPlayerId)
+    .filter(actor => !livingOnly || Number(actor.hp) > 0)
+    .map((actor, sourceIndex) => ({ actor, sourceIndex }))
+    .sort((left, right) => {
+      const leftIndex = Number.isInteger(Number(left.actor.rosterIndex)) ? Number(left.actor.rosterIndex) : left.sourceIndex;
+      const rightIndex = Number.isInteger(Number(right.actor.rosterIndex)) ? Number(right.actor.rosterIndex) : right.sourceIndex;
+      return leftIndex - rightIndex || left.sourceIndex - right.sourceIndex;
+    })
+    .map(entry => entry.actor);
+}
+
+export function onlinePendingBattleActor(battle, ownerPlayerId) {
+  const actions = battle?.actions && typeof battle.actions === "object" ? battle.actions : {};
+  return onlineOwnedBattleActors(battle, ownerPlayerId, { livingOnly: true })
+    .find(actor => !Object.prototype.hasOwnProperty.call(actions, onlineBattleActorId(actor))) ?? null;
+}
+
+export function onlineBattleActorProfile(room, actor) {
+  const member = memberById(room, onlineBattleOwnerId(actor));
+  const root = member?.profile ?? null;
+  if (root) {
+    const roster = Array.isArray(root.battleRoster) ? root.battleRoster.slice(0, 4) : [];
+    const monsterId = String(actor?.monsterId ?? "");
+    const rosterIndex = Number(actor?.rosterIndex);
+    const selected = (monsterId ? roster.find(entry => String(entry?.monsterId ?? "") === monsterId) : null)
+      ?? (Number.isInteger(rosterIndex) ? roster.find(entry => Number(entry?.rosterIndex) === rosterIndex) ?? roster[rosterIndex] : null);
+    if (selected) return { ...root, ...selected, displayName: root.displayName ?? actor?.name ?? "冒険者" };
+    return root;
+  }
+  return {
+    speciesId: actor?.speciesId ?? "slime", visualSpeciesId: actor?.visualSpeciesId ?? null,
+    fallbackEmoji: actor?.fallbackEmoji ?? "魔", displayName: actor?.name ?? "冒険者",
+    monsterName: actor?.monsterName ?? actor?.name ?? "魔物", level: actor?.level ?? 1,
+    battleStats: actor?.battleStats ?? {}, skills: Array.isArray(actor?.skills) ? actor.skills : [],
+    circleId: actor?.circleId ?? "none", circleName: actor?.circleName ?? "魔法陣なし",
+    circleLevel: actor?.circleLevel ?? 0, circleEffect: actor?.circleEffect ?? "none",
+  };
+}
+
 function coopGimmickGuide(expedition) {
   if (!expedition?.coop?.enabled) return null;
   return COOP_GIMMICK_GUIDES[expedition.coop.gimmickType] ?? null;
@@ -47,10 +96,43 @@ function memberCard(member, { compact = false, state = "" } = {}) {
   </article>`;
 }
 
+function profileRosterCapacity(profile) {
+  const roster = Array.isArray(profile?.battleRoster) ? profile.battleRoster.filter(entry => entry && typeof entry === "object").slice(0, 4) : [];
+  return Math.max(1, roster.length);
+}
+
+export function onlineRosterAllocationCounts(members, { team = false } = {}) {
+  const source = (Array.isArray(members) ? members : []).filter(member => member && typeof member === "object");
+  const counts = new Map(source.map(member => [member.playerId, 0]));
+  const allocate = group => {
+    const allocations = group.slice(0, 4).map(member => ({ member, capacity: profileRosterCapacity(member.profile), count: 1 }));
+    const perPlayerLimit = team && allocations.length > 1 ? 2 : 4;
+    let remaining = Math.max(0, 4 - allocations.length);
+    while (remaining > 0) {
+      let added = false;
+      for (const allocation of allocations) {
+        if (remaining <= 0) break;
+        if (allocation.count >= Math.min(allocation.capacity, perPlayerLimit)) continue;
+        allocation.count += 1; remaining -= 1; added = true;
+      }
+      if (!added) break;
+    }
+    for (const allocation of allocations) counts.set(allocation.member.playerId, allocation.count);
+  };
+  if (team) {
+    allocate(source.filter(member => member.teamSide === "sun"));
+    allocate(source.filter(member => member.teamSide === "moon"));
+  } else allocate(source);
+  return counts;
+}
+
 function readyGrid(room, { team = false } = {}) {
+  const allocations = onlineRosterAllocationCounts(room?.members ?? [], { team });
   return `<div class="online-v3-ready-grid">${(room?.members ?? []).map(member => {
     const ready = team ? member.teamReady : member.ready;
-    const state = team ? member.teamSide === "sun" ? "紅組" : member.teamSide === "moon" ? "蒼組" : "観戦" : ready ? "準備完了" : "準備中";
+    const deploymentCount = allocations.get(member.playerId) ?? 0;
+    const group = team ? member.teamSide === "sun" ? "紅組" : member.teamSide === "moon" ? "蒼組" : "観戦" : ready ? "準備完了" : "準備中";
+    const state = `${group}${deploymentCount ? `・出撃${deploymentCount}体` : ""}`;
     return `<div class="${ready ? "ready" : ""}">${memberCard(member, { compact: true, state })}<strong>${ready ? "READY" : "WAIT"}</strong></div>`;
   }).join("")}${Array.from({ length: Math.max(0, 4 - (room?.members?.length ?? 0)) }, () => `<div class="online-v3-empty-member">参加待ち</div>`).join("")}</div>`;
 }
@@ -90,11 +172,17 @@ export function renderOnlineHome(room, selfId, state = {}) {
   const social = new Map((state.socialBubbles ?? []).map(entry => [entry.playerId, entry]));
   const hiddenChatIds = new Set([...(state.mutedPlayerIds ?? []), ...(state.blockedPlayerIds ?? [])].map(String));
   const chats = new Map((state.chatBubbles ?? []).filter(entry => !hiddenChatIds.has(String(entry?.playerId ?? ""))).map(entry => [entry.playerId, entry]));
-  const inlineChat = `<form class="online-hall-chat-bar ${state.exploreChatOpen ? "open" : ""}" data-online-explore-chat-form ${state.exploreChatOpen ? "" : "hidden"}><input maxlength="80" enterkeyhint="send" autocomplete="off" data-online-explore-chat-input placeholder="集会所の仲間へ話す" value="${escapeOnlineHtml(state.chatDraft ?? "")}"><button type="submit">送信</button><button type="button" data-online-chat-close aria-label="閉じる">×</button></form>`;
+  const recentChat = (room?.chatHistory ?? []).filter(message => !hiddenChatIds.has(String(message?.playerId ?? ""))).slice(-3);
+  const quickChat = state.exploreChatOpen ? `<aside id="onlineHallQuickChat" class="online-hall-quick-chat" data-online-hall-quick-chat role="dialog" aria-label="集会所の簡易チャット">
+    <header><div><small>QUICK CHAT</small><b>集会所チャット</b></div><button type="button" data-online-chat-close aria-label="簡易チャットを閉じる">×</button></header>
+    <div class="online-hall-quick-chat-log" role="log" aria-live="polite">${recentChat.length ? recentChat.map(message => `<article class="${message.playerId === selfId ? "own" : ""}"><b>${escapeOnlineHtml(message.name || "冒険者")}</b><p>${escapeOnlineHtml(message.text || "")}</p></article>`).join("") : `<p class="empty">まだ会話はありません</p>`}</div>
+    <form class="online-hall-chat-bar open" data-online-explore-chat-form><input maxlength="80" enterkeyhint="send" autocomplete="off" data-online-explore-chat-input aria-label="集会所へのメッセージ" placeholder="仲間へひとこと" value="${escapeOnlineHtml(state.chatDraft ?? "")}"><button type="submit">送信</button></form>
+    <footer><button type="button" data-online-hall-full-chat>募集・談話板を開く</button></footer>
+  </aside>` : "";
   return `<section class="online-gathering-hall" data-online-hall-stage aria-label="オンライン集会所">
     <div class="online-hall-backdrop" aria-hidden="true"></div>
     <header class="online-hall-hud"><div><small>GATHERING HALL / ROOM</small><b>${escapeOnlineHtml(room?.roomId ?? "------")}</b></div><span>${room?.members?.length ?? 0} / 4人</span><p>床をタップして移動・施設に近づいて選択</p></header>
-    <div class="online-hall-world">
+    <div class="online-hall-world ${state.exploreChatOpen ? "chat-open" : ""}">
       ${HALL_DESTINATIONS.map(zone => `<button type="button" class="online-hall-zone zone-${zone.route}" style="--hall-x:${zone.x}%;--hall-y:${zone.y}%" data-online-hall-destination="${zone.route}" data-hall-x="${zone.x}" data-hall-y="${zone.y}" aria-label="${zone.label}へ移動"><span class="hall-facility-art"><img src="${zone.asset}" alt="" draggable="false"></span><i>${zone.icon}</i><b>${zone.label}</b></button>`).join("")}
       <div class="online-hall-members">${(room?.members ?? []).map((member, index) => {
         const position = member.position ?? { x: 50 + index * 4, y: 72 + index * 3 };
@@ -103,9 +191,9 @@ export function renderOnlineHome(room, selfId, state = {}) {
         const tag = member.playerId === selfId ? "figure" : "button", trade = member.playerId === selfId ? "" : `type="button" data-online-trade-player="${escapeOnlineHtml(member.playerId)}" aria-label="${escapeOnlineHtml(member.profile?.displayName || "冒険者")}と交換する" ${member.connected ? "" : "disabled"}`;
         return `<${tag} class="online-hall-player ${member.playerId === selfId ? "self" : "tradeable"} ${member.connected ? "" : "offline"}" style="--hall-x:${clamp(position.x, 5, 95)}%;--hall-y:${clamp(position.y, 15, 96)}%" data-online-hall-player="${escapeOnlineHtml(member.playerId)}" ${trade}>${bubble ? `<span class="online-hall-emote">${escapeOnlineHtml(bubble.emoji)}</span>` : ""}${chat ? `<span class="online-hall-chat-bubble">${escapeOnlineHtml(chat.text)}</span>` : ""}${onlineAvatarVisual(member.profile ?? {}, { className: "online-hall-avatar" })}<span class="online-hall-player-name">${escapeOnlineHtml(member.profile?.displayName || "冒険者")}${member.playerId === selfId ? "" : "<small>タップで交換</small>"}</span></${tag}>`;
       }).join("")}</div>
-      <div class="online-hall-social-tools"><button type="button" class="online-hall-emote-tool" data-online-emote-anchor><b>☺</b><small>長押し</small></button><button type="button" data-online-chat-toggle class="online-hall-chat-tool ${state.exploreChatOpen ? "active" : ""}">${pixelIcon("notice")}<small>チャット</small></button></div>
+      <div class="online-hall-social-tools"><button type="button" class="online-hall-emote-tool" data-online-emote-anchor aria-label="長押ししてエモートを選ぶ"><b>☺</b><small>長押し</small></button><button type="button" data-online-chat-toggle class="online-hall-chat-tool ${state.exploreChatOpen ? "active" : ""}" aria-controls="onlineHallQuickChat" aria-expanded="${state.exploreChatOpen ? "true" : "false"}">${pixelIcon("notice")}<small>チャット</small></button></div>
       ${state.exploreChatOpen ? "" : nearby ? `<aside class="online-hall-prompt"><small>${nearby.label}</small><button type="button" data-online-go="${nearby.route}">${nearby.prompt}</button></aside>` : `<aside class="online-hall-tip">行き先へ近づくと案内が表示されます</aside>`}
-      ${inlineChat}
+      ${quickChat}
     </div>
     <footer class="online-hall-party-strip">${(room?.members ?? []).map(member => `<span class="${member.connected ? "online" : "offline"}"><i></i>${escapeOnlineHtml(member.profile?.displayName || "冒険者")}</span>`).join("")}</footer>
     ${renderTradeOverlay(room, selfId, state)}
@@ -113,17 +201,13 @@ export function renderOnlineHome(room, selfId, state = {}) {
 }
 
 function battleProfile(room, battlePlayer) {
-  const member = memberById(room, battlePlayer?.playerId);
-  return member?.profile ?? {
-    speciesId: battlePlayer?.speciesId ?? "slime", fallbackEmoji: battlePlayer?.fallbackEmoji ?? "魔",
-    displayName: battlePlayer?.name ?? "冒険者", monsterName: battlePlayer?.monsterName ?? "魔物", level: 1,
-  };
+  return onlineBattleActorProfile(room, battlePlayer);
 }
 
 function onlineMonster(room, player) {
-  const profile = battleProfile(room, player), stats = profile.battleStats ?? {};
+  const profile = battleProfile(room, player), stats = profile.battleStats ?? {}, actorId = onlineBattleActorId(player);
   return {
-    id: player.playerId, speciesId: profile.speciesId || "slime", visualSpeciesId: profile.visualSpeciesId ?? null,
+    id: actorId, speciesId: profile.speciesId || "slime", visualSpeciesId: profile.visualSpeciesId ?? null,
     endgameBossId: profile.endgameBossId ?? null, floorBossCatalogId: profile.floorBossCatalogId ?? null,
     nickname: profile.monsterName || profile.displayName || player.name || "魔物", onlineName: profile.monsterName || player.monsterName || profile.displayName || "魔物",
     level: Math.max(1, Number(profile.level) || 1), exp: 0, rank: 1, plus: Math.max(0, Number(profile.plus) || 0),
@@ -172,8 +256,9 @@ function eventLine(event) {
 function splitEffects(units = []) {
   const ailments = {}, effects = {};
   for (const unit of units) {
-    ailments[unit.playerId ?? unit.id] = (unit.effects ?? []).filter(effect => String(effect.kind ?? "").startsWith("status:")).map(effect => ({ ...effect, id: String(effect.kind).slice(7) }));
-    effects[unit.playerId ?? unit.id] = (unit.effects ?? []).filter(effect => !String(effect.kind ?? "").startsWith("status:"));
+    const unitId = onlineBattleActorId(unit) || String(unit?.id ?? "");
+    ailments[unitId] = (unit.effects ?? []).filter(effect => String(effect.kind ?? "").startsWith("status:")).map(effect => ({ ...effect, id: String(effect.kind).slice(7) }));
+    effects[unitId] = (unit.effects ?? []).filter(effect => !String(effect.kind ?? "").startsWith("status:"));
   }
   return { ailments, effects };
 }
@@ -219,33 +304,37 @@ function renderLinkArts(battle) {
 }
 
 export function renderSharedBattle({ mode, room, battle, selfId, selectedTarget = null, selectedAlly = null, title = "共闘バトル", enemies = [], allowCapture = false, readOnly = false, skillMenu = false, itemMenu = false, itemTargetMenu = false, hpTrails = {} }) {
-  const players = (Array.isArray(battle?.players) ? battle.players : []).filter(player => player && typeof player === "object" && player.playerId), self = players.find(player => player.playerId === selfId), party = players.map(player => onlineMonster(room, player));
+  const players = (Array.isArray(battle?.players) ? battle.players : []).filter(player => player && typeof player === "object" && onlineBattleActorId(player)).slice(0, 4);
+  const scopedBattle = { ...battle, players }, ownedActors = onlineOwnedBattleActors(scopedBattle, selfId), activeActor = onlinePendingBattleActor(scopedBattle, selfId);
+  const primaryActor = ownedActors.find(actor => actor.isPrimary) ?? ownedActors[0] ?? null, actionActor = activeActor ?? primaryActor;
+  const party = players.map(player => onlineMonster(room, player)), actorById = new Map(players.map(player => [onlineBattleActorId(player), player]));
   const foes = (Array.isArray(enemies) ? enemies : []).filter(enemy => enemy && typeof enemy === "object").map(enemy => onlineEnemy(room, enemy)), target = foes.find(enemy => enemy.id === selectedTarget && enemy.hp > 0) ?? foes.find(enemy => enemy.hp > 0) ?? null;
-  const selfMember = memberById(room, selfId), selfMonster = party.find(monster => monster.id === selfId);
+  const selfMember = memberById(room, selfId), actionProfile = actionActor ? battleProfile(room, actionActor) : selfMember?.profile ?? {};
   const turnQueue = [
     ...party.filter(monster => monster.currentHp > 0).map(monster => ({ type: "ally", id: monster.id, name: monster.onlineName, spd: monster.onlineStats.spd ?? 0 })),
     ...foes.filter(enemy => enemy.hp > 0).map(enemy => ({ type: "enemy", id: enemy.id, name: enemy.name, spd: enemy.spd ?? 0 })),
   ].sort((left, right) => right.spd - left.spd);
   const allyState = splitEffects(players), enemyState = splitEffects(enemies);
-  const magicCircleProfiles = Object.fromEntries(party.map(monster => { const profile = memberById(room, monster.id)?.profile ?? {}; return [monster.id, { id: profile.circleId ?? "none", name: profile.circleName ?? "魔法陣なし", level: profile.circleLevel ?? 0, effect: profile.circleEffect ?? "none" }]; }));
-  const magicCircleArt = Object.fromEntries(party.map(monster => [monster.id, onlineMagicCircleArt(memberById(room, monster.id)?.profile ?? {}, { className: "battle-magic-circle" })]));
+  const magicCircleProfiles = Object.fromEntries(party.map(monster => { const profile = battleProfile(room, actorById.get(monster.id)); return [monster.id, { id: profile.circleId ?? "none", name: profile.circleName ?? "魔法陣なし", level: profile.circleLevel ?? 0, effect: profile.circleEffect ?? "none" }]; }));
+  const magicCircleArt = Object.fromEntries(party.map(monster => [monster.id, onlineMagicCircleArt(battleProfile(room, actorById.get(monster.id)), { className: "battle-magic-circle" })]));
   const enemyMagicCircleArt = Object.fromEntries(foes.filter(enemy => enemy.magicCircleAsset).map(enemy => [enemy.id, `<span class="magic-circle magic-circle-black enemy-battle-magic-circle" data-circle-id="death-mirror-raid" aria-hidden="true"><img class="magic-circle-frame magic-circle-frame-1" src="${escapeOnlineHtml(enemy.magicCircleAsset)}" alt="" draggable="false"><i class="magic-circle-ring-a"></i><i class="magic-circle-ring-b"></i><b>死</b></span>`]));
   const events = [...(battle?.lastEvents ?? [])];
   if (battle?.telegraph) events.push({ kind: "raidTelegraph", label: `${battle.telegraph.title || "予兆"}：${battle.telegraph.message || "終焉が迫る…"}` });
   const floor = Math.max(1, Number(battle?.floor ?? room?.selectedFloor) || 1), biomeBattle = battleEnvironmentForFloor(floor);
+  const actorId = actionActor ? onlineBattleActorId(actionActor) : "", effectiveReadOnly = Boolean(readOnly || !ownedActors.length);
   const uiBattle = {
-    onlineMode: mode, onlineReadOnly: readOnly, onlineActionSubmitted: Boolean(battle?.actions?.[selfId]) || battle?.phase !== "command", onlineAllowCapture: allowCapture && Number(self?.captureCharges ?? selfMember?.profile?.captureStock) > 0,
-    onlineCountdownMode: mode, onlineSelectedAlly: selectedAlly || selfId, onlineSkills: (selfMember?.profile?.skills ?? []).map(onlineSkill),
-    enemies: foes, enemy: foes[0], targetEnemyId: target?.id ?? null, party, species: {}, turn: Math.max(1, Number(battle?.round) || 1), turnQueue, queueIndex: 0, onlineActorId: selfId,
-    auto: false, busy: false, phase: battle?.phase ?? "command", speed: battle?.speed ?? 1, skillMenu: Boolean(skillMenu), itemMenu: Boolean(itemMenu), onlineItemTargetMenu: Boolean(itemTargetMenu), onlineItemCharges: Math.max(0, Number(self?.itemCharges) || 0),
+    onlineMode: mode, onlineReadOnly: effectiveReadOnly, onlineActionSubmitted: !activeActor || battle?.phase !== "command", onlineAllowCapture: allowCapture && Number(actionActor?.captureCharges ?? selfMember?.profile?.captureStock) > 0,
+    onlineCountdownMode: mode, onlineSelectedAlly: party.some(monster => monster.id === selectedAlly) ? selectedAlly : actorId, onlineSkills: (actionProfile?.skills ?? []).map(onlineSkill),
+    enemies: foes, enemy: foes[0], targetEnemyId: target?.id ?? null, party, species: {}, turn: Math.max(1, Number(battle?.round) || 1), turnQueue, queueIndex: 0, onlineActorId: actorId,
+    auto: false, busy: false, phase: battle?.phase ?? "command", speed: battle?.speed ?? 1, skillMenu: Boolean(skillMenu), itemMenu: Boolean(itemMenu), onlineItemTargetMenu: Boolean(itemTargetMenu), onlineItemCharges: Math.max(0, Number(actionActor?.itemCharges) || 0),
     guards: {}, cooldowns: {}, enemyStatuses: enemyState.ailments, allyAilments: allyState.ailments, allyEffects: allyState.effects, enemyEffects: enemyState.effects, hpTrails,
     magicCircleProfiles, magicCircleArt, enemyMagicCircleArt, log: events.slice(-6).map(eventLine),
     biomeBattle, specialTitle: title, battleTheme: mode === "raid" || battle?.coopBoss ? "boss" : mode === "team" ? "abyss" : biomeBattle.theme,
   };
-  const screen = BattleScreen(uiBattle, { captureCrystals: Math.max(0, Number(self?.captureCharges ?? selfMember?.profile?.captureStock) || 0) }, { battleSpeed: uiBattle.speed }, floor);
+  const screen = BattleScreen(uiBattle, { captureCrystals: Math.max(0, Number(actionActor?.captureCharges ?? selfMember?.profile?.captureStock) || 0) }, { battleSpeed: uiBattle.speed }, floor);
   const linkArts = renderLinkArts(battle);
   const coopBossMechanic = renderCoopBossMechanic(battle);
-  const down = self && Number(self.hp) <= 0, cheered = (battle?.cheeredBy ?? []).includes(selfId);
+  const down = ownedActors.length > 0 && ownedActors.every(actor => Number(actor.hp) <= 0), cheered = (battle?.cheeredBy ?? []).some(id => id === selfId || ownedActors.some(actor => onlineBattleActorId(actor) === id));
   const cheer = down ? `<aside class="online-spectator-cheer"><b>戦況を観戦中</b><span>倒れていても1戦に1度だけ仲間を応援できます</span><button type="button" data-online-battle-cheer="${mode}" ${cheered ? "disabled" : ""}>${cheered ? "応援済み" : "応援する（全体 攻防+3%）"}</button></aside>` : "";
   const bossStyle = battle?.coopBoss ? ` style="--coop-boss-accent:${escapeOnlineHtml(battle.coopBoss.accent || "#8fe9ff")}"` : "";
   return `<div class="online-shared-battle-shell ${battle?.coopBoss ? "is-coop-boss" : ""}"${bossStyle}>${screen}${linkArts}${coopBossMechanic}${cheer}</div>`;
@@ -382,11 +471,14 @@ export function renderOnlineTeam(room, selfId, state = {}) {
     return `<section class="online-team-report" role="dialog" aria-label="チーム戦結果"><header><small>TEAM BATTLE RESULT</small><h3>${winner ? `${winner === "sun" ? "紅組" : "蒼組"} 勝利` : "引き分け"}</h3><strong><i>紅 ${number(score.sun)}</i><b>-</b><i>蒼 ${number(score.moon)}</i></strong></header>${mvp ? `<div class="online-team-mvp"><span>MVP</span><b>${escapeOnlineHtml(mvp.name || "挑戦者")}</b><small>${escapeOnlineHtml(mvp.monsterName || "仲間")}・SCORE ${number(mvp.score)}</small></div>` : ""}<ol>${ranking.map(entry => `<li class="${entry.playerId === summary.mvpPlayerId ? "mvp" : ""}"><b>#${number(entry.rank)} ${escapeOnlineHtml(entry.name || "挑戦者")}</b><span>与 ${number(entry.damage)}・回 ${number(entry.healing)}・KO ${number(entry.kos)}</span><strong>${number(entry.score)}</strong></li>`).join("")}</ol><button type="button" data-online-close-team-report>結果を閉じる</button></section>`;
   })() : "";
   if (room?.phase === "team" && room.teamBattle) {
-    const battle = room.teamBattle, self = battle.players?.find(player => player.playerId === selfId), viewingSide = self?.side ?? "sun", enemySide = viewingSide === "sun" ? "moon" : "sun";
-    const enemies = (battle.players ?? []).filter(player => player.side === enemySide).map(player => ({ ...player, id: player.playerId, name: player.name, asset: null, emoji: player.fallbackEmoji }));
-    const allyBattle = { ...battle, players: (battle.players ?? []).filter(player => player.side === viewingSide) };
+    const battle = room.teamBattle, actors = (Array.isArray(battle.players) ? battle.players : []).filter(actor => onlineBattleActorId(actor));
+    const owned = actors.filter(actor => onlineBattleOwnerId(actor) === selfId), selfMember = memberById(room, selfId);
+    const memberSide = ["sun", "moon"].includes(selfMember?.teamSide) ? selfMember.teamSide : null;
+    const viewingSide = owned.find(actor => ["sun", "moon"].includes(actor.side))?.side ?? memberSide ?? "sun", enemySide = viewingSide === "sun" ? "moon" : "sun";
+    const enemies = actors.filter(player => player.side === enemySide).slice(0, 4).map(player => ({ ...player, id: onlineBattleActorId(player), name: player.name, asset: null, emoji: player.fallbackEmoji }));
+    const allyBattle = { ...battle, players: actors.filter(player => player.side === viewingSide).slice(0, 4) };
     const label = ruleLabels[battle.ruleset] ?? ruleLabels.standard;
-    return `<section class="online-team-scoreboard"><span>${escapeOnlineHtml(label[0])}・${battle.series === "bo3" ? "2本先取" : "1本先取"}</span><strong><i>紅 ${number(battle.score?.sun)}</i><b>GAME ${number(battle.game)}</b><i>蒼 ${number(battle.score?.moon)}</i></strong>${battle.betweenGames ? `<em>次の試合を準備中…</em>` : ""}</section>${renderSharedBattle({ mode: "team", room, battle: allyBattle, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: `${battle.format} チーム戦`, enemies, readOnly: !self, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails })}`;
+    return `<section class="online-team-scoreboard"><span>${escapeOnlineHtml(label[0])}・${battle.series === "bo3" ? "2本先取" : "1本先取"}</span><strong><i>紅 ${number(battle.score?.sun)}</i><b>GAME ${number(battle.game)}</b><i>蒼 ${number(battle.score?.moon)}</i></strong>${battle.betweenGames ? `<em>次の試合を準備中…</em>` : ""}</section>${renderSharedBattle({ mode: "team", room, battle: allyBattle, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: `${battle.format} チーム戦`, enemies, readOnly: !owned.length, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails })}`;
   }
   const self = memberById(room, selfId);
   const sun = (room?.members ?? []).filter(member => member.teamSide === "sun"), moon = (room?.members ?? []).filter(member => member.teamSide === "moon"), spectators = (room?.members ?? []).filter(member => !["sun", "moon"].includes(member.teamSide));
@@ -395,6 +487,7 @@ export function renderOnlineTeam(room, selfId, state = {}) {
   const allReady = validTeams && competitors.every(member => member.connected && member.teamReady);
   const tradeActive = Boolean(state.trade), startEnabled = leader && allReady && !tradeActive;
   const settings = room?.teamSettings ?? { ruleset: "standard", series: "bo1" }, record = state.gameState?.onlineParty?.teamBattleRecords ?? {};
+  const teamAllocations = onlineRosterAllocationCounts(room?.members ?? [], { team: true });
   const teamPower = members => members.reduce((sum, member) => sum + Math.max(0, Number(member.profile?.power) || 0), 0);
   const sunPower = teamPower(sun), moonPower = teamPower(moon), powerGap = Math.max(sunPower, moonPower) / Math.max(1, Math.min(sunPower || 1, moonPower || 1));
   const blocker = tradeActive ? "交換を完了または中止してから開始できます。" : !leader ? "開始操作は部屋主が行います。" : !validTeams ? "紅組・蒼組へ1人以上ずつ参加してください。" : !allReady ? "対戦参加者全員が接続し、準備完了になると開始できます。" : "";
@@ -403,7 +496,7 @@ export function renderOnlineTeam(room, selfId, state = {}) {
     <section class="online-team-record"><div><small>YOUR RECORD</small><b>${number(record.wins)}勝 ${number(record.losses)}敗 ${number(record.draws)}分</b></div><span>${number(record.matches)}戦・最高${number(record.bestStreak)}連勝</span></section>
     <section class="online-team-settings"><header><div><small>MATCH RULE</small><b>対戦ルール</b></div>${leader ? "<span>部屋主が変更できます</span>" : "<span>部屋主が設定中</span>"}</header><div class="online-team-rule-grid">${Object.entries(ruleLabels).map(([id, label]) => `<button type="button" data-online-team-ruleset="${id}" class="${settings.ruleset === id ? "selected" : ""}" aria-pressed="${settings.ruleset === id}" ${leader ? "" : "disabled"}><small>${label[0]}</small><b>${label[1]}</b><span>${label[2]}</span></button>`).join("")}</div><div class="online-team-series"><button type="button" data-online-team-series="bo1" class="${settings.series === "bo1" ? "selected" : ""}" aria-pressed="${settings.series === "bo1"}" ${leader ? "" : "disabled"}><b>1本先取</b><span>短時間で決着</span></button><button type="button" data-online-team-series="bo3" class="${settings.series === "bo3" ? "selected" : ""}" aria-pressed="${settings.series === "bo3"}" ${leader ? "" : "disabled"}><b>2本先取</b><span>最大3試合</span></button></div></section>
     <section class="online-v3-team-select"><button type="button" data-online-team-side="sun" class="sun ${self?.teamSide === "sun" ? "selected" : ""}" aria-pressed="${self?.teamSide === "sun"}"><b>紅組</b><span>${sun.length}人</span></button><button type="button" data-online-team-side="spectator" class="${self?.teamSide === "spectator" ? "selected" : ""}" aria-pressed="${self?.teamSide === "spectator"}"><b>観戦</b><span>${spectators.length}人</span></button><button type="button" data-online-team-side="moon" class="moon ${self?.teamSide === "moon" ? "selected" : ""}" aria-pressed="${self?.teamSide === "moon"}"><b>蒼組</b><span>${moon.length}人</span></button></section>
-    <section class="online-v3-team-roster"><div class="sun"><header>紅組</header>${sun.map(member => memberCard(member, { compact: true, state: member.teamReady ? "READY" : "WAIT" })).join("") || "<p>参加者を待っています</p>"}</div><strong>VS</strong><div class="moon"><header>蒼組</header>${moon.map(member => memberCard(member, { compact: true, state: member.teamReady ? "READY" : "WAIT" })).join("") || "<p>参加者を待っています</p>"}</div></section>
+    <section class="online-v3-team-roster"><div class="sun"><header>紅組</header>${sun.map(member => memberCard(member, { compact: true, state: `${member.teamReady ? "READY" : "WAIT"}・出撃${teamAllocations.get(member.playerId) ?? 1}体` })).join("") || "<p>参加者を待っています</p>"}</div><strong>VS</strong><div class="moon"><header>蒼組</header>${moon.map(member => memberCard(member, { compact: true, state: `${member.teamReady ? "READY" : "WAIT"}・出撃${teamAllocations.get(member.playerId) ?? 1}体` })).join("") || "<p>参加者を待っています</p>"}</div></section>
     <section class="online-team-balance ${powerGap >= 1.8 && settings.ruleset !== "balanced" ? "warning" : ""}"><div><small>紅組 TOTAL POWER</small><b>${number(sunPower)}</b></div><span>${settings.ruleset === "balanced" ? "戦力・人数補正 ON" : powerGap >= 1.8 ? "戦力差が大きいため均衡ルール推奨" : "戦力差を確認してください"}</span><div><small>蒼組 TOTAL POWER</small><b>${number(moonPower)}</b></div></section>
     <div class="online-team-swap"><button type="button" data-online-team-swap ${leader && competitors.length ? "" : "disabled"}>紅組と蒼組を入れ替える</button></div>
     <p class="online-v3-team-rule">最低2人。両チームに1人以上必要です。1vs1、1vs2、1vs3、2vs2に対応。戦績は保存されますが、勝敗による報酬・消費はありません。</p>

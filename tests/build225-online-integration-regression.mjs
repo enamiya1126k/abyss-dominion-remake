@@ -6,9 +6,9 @@ const read = path => readFile(new URL(`../${path}`, import.meta.url), "utf8");
 
 test("build247 advertises one cache-coherent application version", async () => {
   const [index, config, main] = await Promise.all([read("index.html"), read("src/core/config.js"), read("src/main.js")]);
-  assert.match(index, /ASSET_VERSION = "2\.11\.71"/);
-  assert.match(index, /ASSET_BUILD = "build247"/);
-  assert.match(index, /Styles\/build247\.css\?v=2\.11\.71-build247/);
+  assert.match(index, /ASSET_VERSION = "2\.11\.72"/);
+  assert.match(index, /ASSET_BUILD = "build248"/);
+  assert.match(index, /Styles\/build248\.css\?v=2\.11\.72-build248/);
   assert.match(index, /Styles\/build245\.css\?v=2\.11\.69-build245/);
   assert.match(index, /Styles\/build239\.css\?v=2\.11\.65-build239/);
   assert.match(index, /Styles\/build228\.css\?v=2\.11\.54-build228/);
@@ -17,7 +17,7 @@ test("build247 advertises one cache-coherent application version", async () => {
   assert.match(index, /Styles\/build225\.css\?v=2\.11\.54-build225/);
   assert.match(index, /Styles\/build218\.css\?v=2\.11\.53-build218/);
   assert.match(config, /APP_VERSION="2\.11\.54"/);
-  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.71-build247/);
+  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.72-build248/);
 });
 
 test("online profile carries offline expedition attrition and host key stock", async () => {

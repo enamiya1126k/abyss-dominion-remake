@@ -1,9 +1,10 @@
 import {
   buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.71-build247";
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.72-build248";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
-} from "./OnlineViews.js?v=2.11.71-build247";
+  onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
+} from "./OnlineViews.js?v=2.11.72-build248";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   commitOnlineTrade, recoverOrphanedTradeEscrows,
@@ -19,7 +20,6 @@ const ROOM_STYLES = new Set(["anyone", "casual", "help", "fast"]);
 const DIRECTION = Object.freeze({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] });
 const ONLINE_EXPLORE_CHAT_POSITION = "abyss-online-explore-chat-position";
 const ONLINE_EXPLORE_EMOTE_POSITION = "abyss-online-explore-emote-position";
-const ONLINE_HALL_EMOTE_POSITION = "abyss-online-hall-emote-position";
 const HANDSHAKE_TOKEN_RETRY_LIMIT = 2;
 const RESUME_TOKEN_MAP_LIMIT = 32;
 const RESUME_TOKEN_MAX_LENGTH = 512;
@@ -128,6 +128,33 @@ function cleanSocialText(value, maximum = 80) {
 function boundedInteger(value, minimum, maximum, fallback = minimum) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? Math.max(minimum, Math.min(maximum, Math.floor(parsed))) : fallback;
+}
+
+function normalizedRosterVitals(source) {
+  const rows = [], seenMonsterIds = new Set(), seenCombatantIds = new Set();
+  for (const raw of (Array.isArray(source) ? source : []).slice(0, 8)) {
+    if (!raw || typeof raw !== "object") continue;
+    const monsterId = cleanSocialText(raw.monsterId, 120).trim();
+    const combatantId = cleanSocialText(raw.combatantId, 80).trim();
+    if (!monsterId || seenMonsterIds.has(monsterId) || (combatantId && seenCombatantIds.has(combatantId))) continue;
+    const rosterIndex = boundedInteger(raw.rosterIndex, 0, 3, rows.length);
+    const maxHp = Math.max(1, boundedInteger(raw.maxHp, 1, 1_000_000_000, 1));
+    const maxMp = Math.max(0, boundedInteger(raw.maxMp, 0, 1_000_000_000, 0));
+    seenMonsterIds.add(monsterId);
+    if (combatantId) seenCombatantIds.add(combatantId);
+    rows.push({
+      combatantId: combatantId || null,
+      monsterId,
+      rosterIndex,
+      isPrimary: raw.isPrimary === true || rosterIndex === 0,
+      hp: boundedInteger(raw.hp, 0, maxHp, 0),
+      maxHp,
+      mp: boundedInteger(raw.mp, 0, maxMp, 0),
+      maxMp,
+    });
+    if (rows.length >= 4) break;
+  }
+  return rows;
 }
 
 function readGuildPlanReminderReceipts() {
@@ -787,6 +814,8 @@ export class OnlinePartyController {
     this.lastChatAt = 0;
     this.chatDraft = "";
     this.exploreChatOpen = false;
+    this.emoteGestureActive = false;
+    this.emoteGestureCleanup = null;
     this.rareMerchantOpen = false;
     this.merchantPending = false;
     this.merchantResult = null;
@@ -836,6 +865,7 @@ export class OnlinePartyController {
 
   unmount({ disconnect = true } = {}) {
     this.mounted = false;
+    this.emoteGestureCleanup?.();
     this._clearMoveInputs();
     this.hallDestination = null;
     this._unmountExploreCanvas();
@@ -979,7 +1009,8 @@ export class OnlinePartyController {
       return;
     }
     const hall = event.target.closest?.("[data-online-hall-stage]");
-    if (hall && !event.target.closest?.("button,.online-hall-hud,.online-hall-prompt,.online-hall-party-strip")) {
+    if (hall && !event.target.closest?.("button,.online-hall-hud,.online-hall-prompt,.online-hall-party-strip,.online-hall-quick-chat")) {
+      if (this.exploreChatOpen || this.emoteGestureActive) return;
       if (!this._canMutateOnline()) { this._announceConnectionPause(); return; }
       const world = hall.querySelector(".online-hall-world"), rect = world?.getBoundingClientRect();
       if (rect?.width && rect?.height) this.hallDestination = { x: clamp((event.clientX - rect.left) / rect.width * 100, 5, 95), y: clamp((event.clientY - rect.top) / rect.height * 100, 15, 96) };
@@ -1134,8 +1165,15 @@ export class OnlinePartyController {
     if (button.matches("[data-online-raid-exchange]")) { this._exchangeRaidReward(button.dataset.onlineRaidExchange, Number(button.dataset.onlineRaidCost)); return; }
     if (button.matches("[data-online-ping-toggle]")) { this.pingMenuOpen = !this.pingMenuOpen; this._render(); return; }
     if (button.matches("[data-online-ping-kind]")) { const kind = button.dataset.onlinePingKind; this.pingMenuOpen = false; this._send("expeditionPing", { kind }); this._render(); return; }
-    if (button.matches("[data-online-chat-toggle]")) { this.exploreChatOpen = !this.exploreChatOpen; this._render(); requestAnimationFrame(() => this._query("[data-online-explore-chat-input]")?.focus()); return; }
-    if (button.matches("[data-online-chat-close]")) { this.exploreChatOpen = false; this._render(); return; }
+    if (button.matches("[data-online-hall-full-chat]")) { this.exploreChatOpen = false; this._setRoute("chat"); return; }
+    if (button.matches("[data-online-chat-toggle]")) {
+      this.exploreChatOpen = !this.exploreChatOpen;
+      if (this.route === "home") { this.hallDestination = null; this._clearMoveInputs(); }
+      this._render();
+      if (this.exploreChatOpen) requestAnimationFrame(() => this._query("[data-online-explore-chat-input]")?.focus());
+      return;
+    }
+    if (button.matches("[data-online-chat-close]")) { this.exploreChatOpen = false; this._render(); requestAnimationFrame(() => this._query("[data-online-chat-toggle]")?.focus()); return; }
     if (button.matches("[data-online-open-merchant]")) { this.rareMerchantOpen = true; this.merchantResult = null; this._render(); return; }
     if (button.matches("[data-online-close-merchant]")) { this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this._render(); return; }
     if (button.matches("[data-online-cancel-floor-boss]")) { this.floorBossConfirm = null; this._render(); return; }
@@ -1145,7 +1183,7 @@ export class OnlinePartyController {
     if (button.matches("[data-online-expedition-interact]")) { const action = button.dataset.onlineExpeditionInteract, targetId = button.dataset.onlineInteractionTarget; if (action === "challengeFloorBoss") { const interaction = this.roomState?.expedition?.interactions?.[this.selfId] ?? {}; const profile = interaction.bossProfile ?? this.roomState?.expedition?.floorBoss?.profiles?.[0] ?? null; this.floorBossConfirm = { targetId, profile, floor: Number(this.roomState?.expedition?.floor) || 0 }; this._render(); return; } if (["challengeCoopElite", "challengeCoopBoss"].includes(action)) { const expedition = this.roomState?.expedition, interaction = expedition?.interactions?.[this.selfId] ?? {}, object = expedition?.objects?.find(entry => entry.id === targetId || entry.type === "coopElite") ?? {}, source = interaction.coopBoss ?? interaction.bossProfile ?? object, boss = { ...source, id: source.id ?? source.coopBossId, name: source.name ?? source.bossName, title: source.title ?? source.bossTitle, intro: source.intro ?? source.bossIntro, speciesId: source.speciesId ?? object.speciesId, visualSpeciesId: source.visualSpeciesId ?? object.visualSpeciesId, accent: source.accent ?? object.accent, mechanic: source.mechanic ?? object.mechanic }; this.coopBossConfirm = { action, targetId, boss, floor: Number(expedition?.floor) || 0 }; this._render(); return; } if (!this._beginInteractionPending(action, targetId)) return; if (!this._send("expeditionInteract", { action, targetId })) this._clearInteractionPending(false); this._render(); return; }
     if (button.matches("[data-online-merchant-offer]")) { if (this.merchantPending) return; const offer = button.dataset.onlineMerchantOffer; this.merchantPending = true; this.merchantResult = { offer, status: "pending" }; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = setTimeout(() => { if (!this.merchantPending) return; this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "通信結果を確認できませんでした。もう一度お試しください。" }; this._render(); }, 3500); if (!this._send("rareMerchantClaim", { offer })) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "サーバーへ接続されていません。" }; } this._render(); return; }
     if (button.matches("[data-online-battle-cheer]")) { this._send("battleCheer", { mode: button.dataset.onlineBattleCheer || this.route }); return; }
-    if (button.matches("[data-online-hall-destination]")) { this.hallDestination = { x: Number(button.dataset.hallX), y: Number(button.dataset.hallY) }; return; }
+    if (button.matches("[data-online-hall-destination]")) { if (!this.exploreChatOpen && !this.emoteGestureActive) this.hallDestination = { x: Number(button.dataset.hallX), y: Number(button.dataset.hallY) }; return; }
     if (button.id === "backOnlineParty") {
       this.requestExit();
       return;
@@ -2143,8 +2181,17 @@ export class OnlinePartyController {
 
   _applyExpeditionVitals(message) {
     if (message.playerId && message.playerId !== this.selfId) return;
-    const fallbackMutationId = `${this.roomId || "room"}:${this.roomState?.expedition?.id || "run"}:${message.monsterId || this.selectedMonsterId}:${Math.floor(Number(message.hp) || 0)}:${Math.floor(Number(message.mp) || 0)}:${message.reason || "sync"}`;
-    const mutationId = String(message.mutationId || fallbackMutationId).slice(0, 160), result = this.onOnlineVitalsUpdate({ mutationId, monsterId: message.monsterId || this.selectedMonsterId, hp: Math.max(0, Number(message.hp) || 0), mp: Math.max(0, Number(message.mp) || 0) });
+    const rosterVitals = normalizedRosterVitals(message.rosterVitals);
+    const primaryVitals = rosterVitals.find(entry => entry.isPrimary)
+      ?? rosterVitals.find(entry => entry.monsterId === message.monsterId)
+      ?? rosterVitals[0]
+      ?? null;
+    const monsterId = cleanSocialText(message.monsterId || primaryVitals?.monsterId || this.selectedMonsterId, 120).trim();
+    const hp = Math.max(0, Number(message.hp ?? primaryVitals?.hp) || 0);
+    const mp = Math.max(0, Number(message.mp ?? primaryVitals?.mp) || 0);
+    const rosterSignature = rosterVitals.map(entry => `${entry.monsterId}:${entry.hp}:${entry.mp}`).join(",");
+    const fallbackMutationId = `${this.roomId || "room"}:${this.roomState?.expedition?.id || "run"}:${monsterId}:${hp}:${mp}:${message.reason || "sync"}:${rosterSignature}`;
+    const mutationId = String(message.mutationId || fallbackMutationId).slice(0, 160), result = this.onOnlineVitalsUpdate({ mutationId, monsterId, hp, mp, rosterVitals });
     if (result?.ok && this.capabilities.has("expeditionResultsV1")) this._send("expeditionVitalsAck", { mutationId });
     else if (!result?.ok) this.recoverySettlementFailed = true;
     return result;
@@ -2420,6 +2467,7 @@ export class OnlinePartyController {
   }
 
   _clearRoom() {
+    this.emoteGestureCleanup?.();
     const showReturnResult = Boolean(this.pendingExpeditionReturnResult); this.roomState = null; this.roomId = null; this.pendingExpeditionStart = false; this.pendingSecretRoomRun = null; this.syncedExpeditionStartKey = ""; this._clearMoveInputs(); this._closeAllBattleMenus(); this.unread = 0; this.floorBossConfirm = null; this.coopBossConfirm = null; this.pendingFloorBossReward = null; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; this.expeditionReport = null; this.raidReport = null; this.teamBattleReport = null; this.exploreChatOpen = false; this.pingMenuOpen = false; this.pendingRoomJoinId = null; this.roomListingPending = false; this.roomMemberRemovalPendingId = null; this.processedCoopTechniqueEvents.clear(); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false); this._clearTradeUi();
     this.root?.querySelector(".online-v3-screen")?.classList.remove("online-shared-gameplay-active");
     this._unmountExploreCanvas();
@@ -2443,6 +2491,7 @@ export class OnlinePartyController {
     route = normalizedOnlineRoute(route, "");
     if (!route) return;
     if (this.trade && route !== "home") { this.toast("交換を完了または中止してから移動してください"); return; }
+    this.emoteGestureCleanup?.();
     const changed = this.route !== route;
     this.route = route; storageSet(ONLINE_STORAGE_KEYS.route, route);
     if (route === "chat") this.unread = 0;
@@ -2500,7 +2549,11 @@ export class OnlinePartyController {
 
   _battleAction(mode, kind, skillId = null) {
     const battle = this._battle(mode); if (!battle || battle.phase !== "command") return this.toast("現在は行動を選べません");
-    const self = battle.players?.find(player => player.playerId === this.selfId); if (!self || self.hp <= 0) return this.toast("戦闘不能中です");
+    const actor = onlinePendingBattleActor(battle, this.selfId);
+    if (!actor) {
+      const living = onlineOwnedBattleActors(battle, this.selfId, { livingOnly: true });
+      return this.toast(living.length ? "すべての仲間が入力済みです" : "戦闘不能中です");
+    }
     if (kind === "skill" && !skillId) { this.skillMenu[mode] = !this.skillMenu[mode]; this._render(); return; }
     if (kind === "item") { this.skillMenu[mode] = false; this.itemMenu[mode] = true; this.itemTargetMenu[mode] = false; this._render(); return; }
     this._submitBattleAction(mode, kind, skillId);
@@ -2508,13 +2561,27 @@ export class OnlinePartyController {
 
   _submitBattleAction(mode, kind, skillId = null) {
     const battle = this._battle(mode); if (!battle || battle.phase !== "command") return this.toast("現在は行動を選べません");
-    const skill = this._self()?.profile?.skills?.find(entry => entry.id === skillId);
+    const actor = onlinePendingBattleActor(battle, this.selfId);
+    if (!actor) {
+      const living = onlineOwnedBattleActors(battle, this.selfId, { livingOnly: true });
+      return this.toast(living.length ? "すべての仲間が入力済みです" : "戦闘不能中です");
+    }
+    const actorId = onlineBattleActorId(actor), actorProfile = onlineBattleActorProfile(this.roomState, actor);
+    const skill = actorProfile?.skills?.find(entry => entry.id === skillId);
     const support = kind === "item" || kind === "skill" && skill?.kind !== "attack";
+    const actors = Array.isArray(battle.players) ? battle.players : [], allies = mode === "team" ? actors.filter(entry => entry?.side === actor?.side) : actors;
+    const selectedAlly = allies.some(entry => onlineBattleActorId(entry) === this.selectedAlly[mode]) ? this.selectedAlly[mode] : actorId;
+    const teamEnemies = mode === "team" ? actors.filter(entry => entry?.side !== actor?.side && Number(entry?.hp) > 0) : [];
+    const raidEnemies = mode === "raid" ? [battle.boss, ...(battle.minions ?? [])].filter(entry => entry && Number(entry.hp) > 0) : [];
+    const exploreEnemies = mode === "explore" ? (battle.enemies ?? []).filter(entry => Number(entry?.hp) > 0) : [];
+    const enemyTarget = mode === "raid" ? (raidEnemies.some(entry => entry.id === this.selectedTarget.raid) ? this.selectedTarget.raid : raidEnemies[0]?.id)
+      : mode === "team" ? (teamEnemies.some(entry => onlineBattleActorId(entry) === this.selectedTarget.team) ? this.selectedTarget.team : onlineBattleActorId(teamEnemies[0]))
+        : exploreEnemies.some(entry => entry.id === this.selectedTarget.explore) ? this.selectedTarget.explore : exploreEnemies[0]?.id;
     let sent;
-    if (mode === "raid") sent = this._send("raidAction", { kind, skillId, targetId: this.selectedAlly.raid || this.selfId, enemyTargetId: this.selectedTarget.raid || battle.minions?.find(entry => entry.hp > 0)?.id || battle.boss?.id });
-    else if (mode === "team") sent = this._send("teamAction", { kind, skillId, targetId: support ? this.selectedAlly.team || this.selfId : this.selectedTarget.team });
-    else sent = this._send("battleAction", { kind, skillId, targetId: support ? this.selectedAlly.explore || this.selfId : this.selectedTarget.explore });
-    if (sent) { battle.actions ??= {}; battle.actions[this.selfId] = { kind, skillId, pending: true }; this._closeBattleMenus(mode); this._render(); }
+    if (mode === "raid") sent = this._send("raidAction", { actorId, kind, skillId, targetId: selectedAlly, enemyTargetId: enemyTarget });
+    else if (mode === "team") sent = this._send("teamAction", { actorId, kind, skillId, targetId: support ? selectedAlly : enemyTarget });
+    else sent = this._send("battleAction", { actorId, kind, skillId, targetId: support ? selectedAlly : enemyTarget });
+    if (sent) { battle.actions ??= {}; battle.actions[actorId] = { actorId, kind, skillId, pending: true }; this._closeBattleMenus(mode); this._render(); }
   }
 
   _closeBattleMenus(mode) { if (this.skillMenu) this.skillMenu[mode] = false; if (this.itemMenu) this.itemMenu[mode] = false; if (this.itemTargetMenu) this.itemTargetMenu[mode] = false; }
@@ -2525,7 +2592,9 @@ export class OnlinePartyController {
 
   _announceExpeditionEvent(event) {
     if (!event) return;
-    const actor = this.roomState?.members?.find(member => member.playerId === event.actorId)?.profile?.displayName;
+    const battleActor = this.roomState?.expedition?.battle?.players?.find(entry => onlineBattleActorId(entry) === String(event.actorId ?? ""));
+    const actorProfile = battleActor ? onlineBattleActorProfile(this.roomState, battleActor) : null;
+    const actor = actorProfile?.monsterName || this.roomState?.members?.find(member => member.playerId === event.actorId)?.profile?.displayName;
     const message = event.kind === "chest" || event.kind === "bone" || event.kind === "shrine" ? `${actor || "仲間"}が、${event.message}` : event.message || event.title;
     if (message) this.toast(message);
     if (event.kind === "splitKey" && String(event.id ?? event.message ?? "").includes("key-complete")) this._playKeyFusion();
@@ -2547,8 +2616,15 @@ export class OnlinePartyController {
 
   _healthMap(mode, battle) {
     if (!battle) return new Map();
-    const foes = mode === "raid" ? [battle.boss, ...(battle.minions ?? [])] : mode === "team" ? battle.players ?? [] : battle.enemies ?? [];
-    return new Map([...(battle.players ?? []).map(player => [`ally:${player.playerId}`, { hp: player.hp, max: player.maxHp }]), ...foes.filter(Boolean).map(enemy => [`enemy:${enemy.id ?? enemy.playerId}`, { hp: enemy.hp, max: enemy.maxHp }])]);
+    const players = Array.isArray(battle.players) ? battle.players : [];
+    let allies = players, foes;
+    if (mode === "team") {
+      const ownActor = players.find(actor => onlineBattleOwnerId(actor) === this.selfId), memberSide = this._self()?.teamSide;
+      const viewingSide = ownActor?.side ?? (["sun", "moon"].includes(memberSide) ? memberSide : "sun");
+      allies = players.filter(actor => actor.side === viewingSide).slice(0, 4);
+      foes = players.filter(actor => actor.side !== viewingSide).slice(0, 4);
+    } else foes = mode === "raid" ? [battle.boss, ...(battle.minions ?? [])] : battle.enemies ?? [];
+    return new Map([...allies.map(player => [`ally:${onlineBattleActorId(player)}`, { hp: player.hp, max: player.maxHp }]), ...foes.filter(Boolean).map(enemy => [`enemy:${enemy.id ?? onlineBattleActorId(enemy)}`, { hp: enemy.hp, max: enemy.maxHp }])]);
   }
 
   _captureHpTrails(mode, previous, next) {
@@ -2575,7 +2651,7 @@ export class OnlinePartyController {
     if (techniqueEventId) { this.processedCoopTechniqueEvents.add(techniqueEventId); if (this.processedCoopTechniqueEvents.size > 256) this.processedCoopTechniqueEvents.delete(this.processedCoopTechniqueEvents.values().next().value); }
     const actorId = event?.actorId ?? event?.actorIds?.[0], targetId = event?.targetId;
     const actor = this._query(`#ally-${CSS.escape(String(actorId))}`) ?? this._query(`#enemy-${CSS.escape(String(actorId))}`);
-    const target = event?.targetKind === "player" ? this._query(`#ally-${CSS.escape(String(targetId))}`) : this._query(`#enemy-${CSS.escape(String(targetId))}`);
+    const target = event?.targetKind === "player" ? this._query(`#ally-${CSS.escape(String(targetId))}`) ?? this._query(`#enemy-${CSS.escape(String(targetId))}`) : this._query(`#enemy-${CSS.escape(String(targetId))}`);
     if (linkArts) {
       const actorIds = [...new Set([...(Array.isArray(event.actorIds) ? event.actorIds : []), event.actorId].filter(Boolean).map(String))];
       const autoIncluded = new Set((Array.isArray(event.autoIncluded) ? event.autoIncluded : []).map(String));
@@ -2672,7 +2748,19 @@ export class OnlinePartyController {
     const runId = String(message.runId ?? message.summary?.runId ?? "").slice(0, 120), resultId = String(message.resultId ?? "").slice(0, 160), explicitOwnerId = message.ownerId ?? message.summary?.ownerId ?? this.roomState?.expedition?.hostOwnerId ?? this.roomState?.ownerId ?? this.roomState?.leaderId, ownerId = String(explicitOwnerId ?? "legacy-owner-unknown").slice(0, 24), recipientId = String(message.recipientId ?? this.selfId).slice(0, 24);
     if (!resultId || !ownerId || recipientId !== this.selfId || this.expeditionResultInFlight.has(resultId)) return;
     const startFloor = Math.max(1, Math.min(10000, Math.floor(Number(message.startFloor) || 1))), endFloor = Math.max(startFloor, Math.min(10000, Math.floor(Number(message.endFloor) || startFloor))), floorsCleared = Math.max(0, Math.min(10000, Math.floor(Number(message.floorsCleared) || 0)));
-    const reason = String(message.reason ?? "return").replace(/[\u0000-\u001f\u007f]/g, "").slice(0, 40) || "return", finalVitals = message.finalVitals && typeof message.finalVitals === "object" ? { mutationId: String(message.finalVitals.mutationId ?? "").slice(0, 160), monsterId: String(message.finalVitals.monsterId ?? "").slice(0, 120), playerId: recipientId, hp: Math.max(0, Number(message.finalVitals.hp) || 0), mp: Math.max(0, Number(message.finalVitals.mp) || 0), reason: "expeditionEnd" } : null;
+    const reason = String(message.reason ?? "return").replace(/[\u0000-\u001f\u007f]/g, "").slice(0, 40) || "return";
+    const finalVitalsSource = message.finalVitals && typeof message.finalVitals === "object" ? message.finalVitals : null;
+    const rosterVitals = normalizedRosterVitals(finalVitalsSource?.rosterVitals ?? message.rosterVitals);
+    const primaryVitals = rosterVitals.find(entry => entry.isPrimary) ?? rosterVitals[0] ?? null;
+    const finalVitals = finalVitalsSource || primaryVitals ? {
+      mutationId: String(finalVitalsSource?.mutationId ?? message.mutationId ?? "").slice(0, 160),
+      monsterId: cleanSocialText(finalVitalsSource?.monsterId || primaryVitals?.monsterId, 120).trim(),
+      playerId: recipientId,
+      hp: Math.max(0, Number(finalVitalsSource?.hp ?? primaryVitals?.hp) || 0),
+      mp: Math.max(0, Number(finalVitalsSource?.mp ?? primaryVitals?.mp) || 0),
+      reason: "expeditionEnd",
+      rosterVitals,
+    } : null;
     const summarySource = message.summary && typeof message.summary === "object" ? message.summary : {};
     const summary = { ...summarySource, resultId, ownerId, startFloor, endFloor, floor: Math.max(startFloor, Math.min(10000, Math.floor(Number(summarySource.floor ?? endFloor) || endFloor))), floorsCleared, completed: Boolean(message.completed), reason, multiplayer: Boolean(message.multiplayer) };
     this.expeditionResultInFlight.add(resultId);
@@ -2731,7 +2819,10 @@ export class OnlinePartyController {
 
   _moveStep(now) {
     if (!this._canMutateOnline()) { this._clearMoveInputs(); return; }
-    if (this.route === "home" && this.roomState?.phase === "lobby") { this._moveHallStep(now); return; }
+    if (this.route === "home" && this.roomState?.phase === "lobby") {
+      if (this.exploreChatOpen || this.emoteGestureActive) { this.hallDestination = null; return; }
+      this._moveHallStep(now); return;
+    }
     if (this.route !== "explore" || this.roomState?.phase !== "expedition" || this.roomState?.expedition?.battle) return;
     const self = this._self(), current = self?.dungeonPosition, expedition = this.roomState.expedition;
     if (!current || Number(self?.coopVitals?.hp) <= 0) { this._clearMoveInputs(); return; }
@@ -2823,7 +2914,11 @@ export class OnlinePartyController {
   _prepareExploreEmoteAnchor() {
     const anchor = this._query(".online-explore-emote,.online-hall-emote-tool");
     if (!anchor) return;
-    const key = anchor.matches(".online-hall-emote-tool") ? ONLINE_HALL_EMOTE_POSITION : ONLINE_EXPLORE_EMOTE_POSITION;
+    if (anchor.matches(".online-hall-emote-tool")) {
+      for (const property of ["left", "top", "right", "bottom"]) anchor.style.removeProperty(property);
+      return;
+    }
+    const key = ONLINE_EXPLORE_EMOTE_POSITION;
     let saved = null;
     try { saved = JSON.parse(storageGet(key, "null")); } catch {}
     const placed = this._placeExploreEmote(anchor, saved);
@@ -2833,20 +2928,42 @@ export class OnlinePartyController {
   _beginEmoteGesture(event, anchor) {
     if (event.button != null && event.button !== 0) return;
     event.preventDefault();
+    event.stopPropagation();
+    this.emoteGestureCleanup?.();
     const choices = [["wave", "👋"], ["cheer", "✨"], ["heart", "❤️"], ["like", "👍"], ["alert", "⚠️"], ["question", "❓"]];
     const pointerId = event.pointerId, origin = { x: event.clientX, y: event.clientY };
-    const movable = anchor.matches?.(".online-explore-emote,.online-hall-emote-tool"), stage = movable ? anchor.closest(".explore-stage,.online-hall-world") : null;
-    const positionKey = anchor.matches?.(".online-hall-emote-tool") ? ONLINE_HALL_EMOTE_POSITION : ONLINE_EXPLORE_EMOTE_POSITION;
+    const isHall = anchor.matches?.(".online-hall-emote-tool");
+    const movable = !isHall && anchor.matches?.(".online-explore-emote"), stage = anchor.closest(".explore-stage,.online-hall-world");
+    const positionKey = ONLINE_EXPLORE_EMOTE_POSITION;
     const anchorRect = anchor.getBoundingClientRect(), stageRect = stage?.getBoundingClientRect();
     const startPosition = stageRect ? { x: anchorRect.left - stageRect.left, y: anchorRect.top - stageRect.top } : null;
-    let wheel = null, selected = 0, opened = false, dragging = false, wheelMoved = false, lastPosition = startPosition;
+    let wheel = null, selected = isHall ? null : 0, opened = false, dragging = false, wheelMoved = false, lastPosition = startPosition, cleaned = false;
     const viewportWidth = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 1), viewportHeight = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
     const marginX = Math.min(82, Math.max(8, viewportWidth / 2 - 4)), marginY = Math.min(82, Math.max(8, viewportHeight / 2 - 4));
-    const wheelOrigin = { x: clamp(origin.x, marginX, Math.max(marginX, viewportWidth - marginX)), y: clamp(origin.y, marginY, Math.max(marginY, viewportHeight - marginY)) };
-    const paintSelection = () => wheel?.querySelectorAll("i").forEach((node, index) => node.classList.toggle("selected", index === selected));
+    const wheelOrigin = isHall
+      ? { x: anchorRect.left + anchorRect.width / 2, y: anchorRect.top + anchorRect.height / 2 }
+      : { x: clamp(origin.x, marginX, Math.max(marginX, viewportWidth - marginX)), y: clamp(origin.y, marginY, Math.max(marginY, viewportHeight - marginY)) };
+    const paintSelection = () => wheel?.querySelectorAll("i").forEach((node, index) => node.classList.toggle("selected", selected != null && index === selected));
+    const selectHallOption = pointer => {
+      let next = null, nearest = Number.POSITIVE_INFINITY;
+      wheel?.querySelectorAll("i").forEach((node, index) => {
+        const rect = node.getBoundingClientRect(), distance = Math.hypot(pointer.clientX - (rect.left + rect.width / 2), pointer.clientY - (rect.top + rect.height / 2));
+        if (distance <= Math.max(26, Math.max(rect.width, rect.height) * .72) && distance < nearest) { next = index; nearest = distance; }
+      });
+      selected = next; paintSelection();
+    };
+    if (isHall) {
+      this.hallDestination = null;
+      this._clearMoveInputs();
+      this.emoteGestureActive = true;
+      stage?.classList.add("emote-gesture-active");
+      document.documentElement.classList.add("online-hall-emote-gesture");
+      anchor.setAttribute("aria-expanded", "true");
+    }
+    try { anchor.setPointerCapture?.(pointerId); } catch {}
     const open = () => {
       if (dragging) return;
-      opened = true; wheel = document.createElement("div"); wheel.className = "online-emote-wheel";
+      opened = true; wheel = document.createElement("div"); wheel.className = `online-emote-wheel${isHall ? " online-emote-wheel-hall" : ""}`;
       wheel.style.left = `${wheelOrigin.x}px`; wheel.style.top = `${wheelOrigin.y}px`;
       wheel.innerHTML = choices.map(([id, emoji], index) => `<i data-emote-index="${index}" data-emote-id="${id}" style="--emote-angle:${index * 60 - 90}deg">${emoji}</i>`).join("");
       document.body.appendChild(wheel); paintSelection();
@@ -2854,26 +2971,47 @@ export class OnlinePartyController {
     const timer = setTimeout(open, 360);
     const update = move => {
       if (move.pointerId != null && move.pointerId !== pointerId) return;
+      if (isHall) { move.preventDefault?.(); move.stopPropagation?.(); }
       const dx = move.clientX - origin.x, dy = move.clientY - origin.y;
       if (movable && startPosition && Math.hypot(dx, dy) > 8 && !dragging) { dragging = true; opened = false; clearTimeout(timer); wheel?.remove(); wheel = null; anchor.classList.add("dragging"); }
       if (dragging) { move.preventDefault?.(); lastPosition = this._placeExploreEmote(anchor, { x: startPosition.x + dx, y: startPosition.y + dy }); return; }
       if (!opened || !wheel) return;
       wheelMoved = true;
+      if (isHall) { selectHallOption(move); return; }
       const angle = Math.atan2(move.clientY - wheelOrigin.y, move.clientX - wheelOrigin.x) * 180 / Math.PI;
       selected = Math.round(((angle + 90 + 360) % 360) / 60) % choices.length; paintSelection();
     };
     const cleanup = () => {
+      if (cleaned) return;
+      cleaned = true;
       clearTimeout(timer); anchor.classList.remove("dragging");
-      window.removeEventListener("pointermove", update, true); window.removeEventListener("pointerup", finish, true); window.removeEventListener("pointercancel", cancel, true); wheel?.remove();
+      window.removeEventListener("pointermove", update, true); window.removeEventListener("pointerup", finish, true); window.removeEventListener("pointercancel", cancel, true); window.removeEventListener("touchmove", blockTouch, true); window.removeEventListener("keydown", cancelWithKeyboard, true); wheel?.remove();
+      try { if (anchor.hasPointerCapture?.(pointerId)) anchor.releasePointerCapture?.(pointerId); } catch {}
+      if (isHall) {
+        this.emoteGestureActive = false;
+        stage?.classList.remove("emote-gesture-active");
+        document.documentElement.classList.remove("online-hall-emote-gesture");
+        anchor.removeAttribute("aria-expanded");
+      }
+      if (this.emoteGestureCleanup === cleanup) this.emoteGestureCleanup = null;
     };
     const finish = up => {
       if (up.pointerId != null && up.pointerId !== pointerId) return;
       if (dragging && lastPosition) { storageSet(positionKey, JSON.stringify(lastPosition)); anchor.dataset.emoteSuppress = "1"; setTimeout(() => delete anchor.dataset.emoteSuppress, 0); }
-      else if (opened) { if (wheelMoved) update(up); const [id] = choices[selected]; this._send("social", { kind: "emote", id }); anchor.dataset.emoteSuppress = "1"; setTimeout(() => delete anchor.dataset.emoteSuppress, 0); }
+      else if (opened) {
+        if (isHall || wheelMoved) update(up);
+        if (selected != null) { const [id] = choices[selected]; this._send("social", { kind: "emote", id }); }
+        anchor.dataset.emoteSuppress = "1"; setTimeout(() => delete anchor.dataset.emoteSuppress, 0);
+      }
       cleanup();
     };
     const cancel = cancelEvent => { if (cancelEvent?.pointerId != null && cancelEvent.pointerId !== pointerId) return; if (dragging && lastPosition) storageSet(positionKey, JSON.stringify(lastPosition)); cleanup(); };
+    const blockTouch = touchEvent => { if (isHall) touchEvent.preventDefault(); };
+    const cancelWithKeyboard = keyEvent => { if (keyEvent.key === "Escape") { keyEvent.preventDefault(); cleanup(); } };
     window.addEventListener("pointermove", update, true); window.addEventListener("pointerup", finish, true); window.addEventListener("pointercancel", cancel, true);
+    if (isHall) window.addEventListener("touchmove", blockTouch, { capture: true, passive: false });
+    window.addEventListener("keydown", cancelWithKeyboard, true);
+    this.emoteGestureCleanup = cleanup;
   }
 
   _decorateBattleState() {

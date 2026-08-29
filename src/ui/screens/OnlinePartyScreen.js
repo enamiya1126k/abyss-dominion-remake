@@ -61,6 +61,28 @@ const EQUIPMENT_SLOTS = Object.freeze([
   ["accessoryFinger", "指"], ["armorBody", "胴"], ["armorSupport", "補助"],
 ]);
 
+export const ONLINE_BATTLE_ROSTER_MAX = 4;
+const ONLINE_ROSTER_STRING_MAX = 240;
+const ONLINE_ROSTER_OBJECT_KEYS_MAX = 96;
+const ONLINE_ROSTER_ARRAY_MAX = 16;
+const ONLINE_ROSTER_DEPTH_MAX = 6;
+
+function boundedOnlineRosterValue(value, depth = 0) {
+  if (value == null || typeof value === "boolean") return value;
+  if (typeof value === "string") return value.slice(0, ONLINE_ROSTER_STRING_MAX);
+  if (typeof value === "number") {
+    if (!Number.isFinite(value)) return 0;
+    return Math.max(-Number.MAX_SAFE_INTEGER, Math.min(Number.MAX_SAFE_INTEGER, value));
+  }
+  if (depth >= ONLINE_ROSTER_DEPTH_MAX) return Array.isArray(value) ? [] : {};
+  if (Array.isArray(value)) return value.slice(0, ONLINE_ROSTER_ARRAY_MAX).map(entry => boundedOnlineRosterValue(entry, depth + 1));
+  if (typeof value !== "object") return null;
+  return Object.fromEntries(Object.entries(value)
+    .filter(([key]) => !["__proto__", "prototype", "constructor"].includes(key))
+    .slice(0, ONLINE_ROSTER_OBJECT_KEYS_MAX)
+    .map(([key, entry]) => [String(key).slice(0, 40), boundedOnlineRosterValue(entry, depth + 1)]));
+}
+
 export function escapeOnlineHtml(value) {
   return String(value ?? "")
     .replaceAll("&", "&amp;")
@@ -255,45 +277,69 @@ function onlineRewardModifiers(state) {
   return { partyGoldGain: sumAffix("goldGain", 300), partyDropRate: sumAffix("dropRate", 200), partyTreasureSense: sumAffix("treasureSense", 200) };
 }
 
-export function buildOnlinePartyProfile(state, { monsterId = null, displayName: onlineName = "" } = {}) {
-  const { monster } = selectedPartyMonster(state, monsterId);
-  if (!monster) return {
-    displayName: onlineName || "冒険者", monsterId: null, speciesId: "slime", visualSpeciesId: null, endgameBossId: null, floorBossCatalogId: null, summonTier: null, summonRarity: null, endgameFaction: null, monsterName: "未編成",
-    fallbackEmoji: "？", level: 1, stars: 1, plus: 0, power: 0, maxFloor: 1, attribute: "neutral",
-    circleId: "none", circleName: "魔法陣なし", circleLevel: 0, circleEffect: "none", goldPowerMultiplier: 1, goldPowerActionCost: 0, goldPowerGold: 0, equipment: [], equipmentAuthorities: [], equipmentCombatEffects: {}, abyssSkillEffects: {}, rewardModifiers: {},
-    battleStats: { hp: 100, mp: 10, atk: 10, matk: 10, def: 5, mdef: 5, spd: 10, crit: 5, evasion: 3, accuracy: 100 },
-    currentHp: 100, currentMp: 10, skills: [], captureStock: 0, abyssKeyStock: 0,
-    explorePickupDone: Boolean(state?.settings?.contextualGuide?.completed?.explore_pickup),
-  };
+function onlineBattleMonsterProfile(state, monster) {
   const species = SPECIES[monster.speciesId] ?? {};
   const circle = equippedMagicCircle(monster, state);
   const stats = calculatedStats(monster);
+  const maximumMp = maxMp(monster);
   const signature = signatureWeaponForMonster(state, monster);
   return {
-    displayName: String(onlineName || displayName(monster) || "冒険者").trim().slice(0, 16),
     monsterId: monster.id, speciesId: monster.speciesId, visualSpeciesId: monster.visualSpeciesId ?? null,
     endgameBossId: monster.endgameBossId ?? null, floorBossCatalogId: monster.floorBossCatalogId ?? monster.floorBossId ?? null,
     summonTier: monster.summonTier ?? monster.summonRarity ?? null, summonRarity: monster.summonRarity ?? monster.summonTier ?? null, endgameFaction: monster.endgameFaction ?? null,
     monsterName: displayName(monster), fallbackEmoji: species.emoji ?? "魔",
     level: Math.max(1, Number(monster.level) || 1), stars: Math.max(1, Number(monster.stars) || 1),
     plus: Math.max(0, Number(monster.plus) || 0), power: monsterCombatPower(monster),
-    maxFloor: Math.max(1, Number(state.player?.maxFloor) || 1), attribute: monster.attribute ?? species.element ?? "neutral",
+    attribute: monster.attribute ?? species.element ?? "neutral",
     circleId: circle.id, circleName: circle.name, circleLevel: circle.id === "none" ? 0 : Math.max(1, Number(circle.level) || 1),
-    circleEffect: circle.effect ?? "none", goldPowerMultiplier: circle.effect === "goldPower" ? goldPowerDamageMultiplier(state.player?.gold ?? 0, circle.level) : 1, goldPowerActionCost: circle.effect === "goldPower" ? goldPowerActionCost(state.player?.gold ?? 0) : 0, goldPowerGold: circle.effect === "goldPower" ? Math.max(0, Math.floor(Number(state.player?.gold) || 0)) : 0, equipment: equipmentProfile(state, monster), equipmentAuthorities: onlineEquipmentAuthorities(monster), equipmentCombatEffects: onlineEquipmentCombatEffects(monster), abyssSkillEffects: onlineAbyssSkillEffects(monster), rewardModifiers: onlineRewardModifiers(state),
+    circleEffect: circle.effect ?? "none", goldPowerMultiplier: circle.effect === "goldPower" ? goldPowerDamageMultiplier(state.player?.gold ?? 0, circle.level) : 1, goldPowerActionCost: circle.effect === "goldPower" ? goldPowerActionCost(state.player?.gold ?? 0) : 0, goldPowerGold: circle.effect === "goldPower" ? Math.max(0, Math.floor(Number(state.player?.gold) || 0)) : 0, equipment: equipmentProfile(state, monster), equipmentAuthorities: onlineEquipmentAuthorities(monster), equipmentCombatEffects: onlineEquipmentCombatEffects(monster), abyssSkillEffects: onlineAbyssSkillEffects(monster),
     signatureResonance: signature ? {
       id: signature.definition.id, name: signature.definition.name, ownerId: signature.ownerId,
       active: signature.active, description: signature.definition.description, ...signature.definition,
     } : null,
     battleStats: {
-      hp: Math.max(1, stats.hp), mp: Math.max(0, maxMp(monster)), atk: Math.max(1, stats.atk),
+      hp: Math.max(1, stats.hp), mp: Math.max(0, maximumMp), atk: Math.max(1, stats.atk),
       matk: Math.max(1, stats.matk ?? stats.atk), def: Math.max(0, stats.def), mdef: Math.max(0, stats.mdef ?? stats.def),
       spd: Math.max(1, stats.spd), crit: Math.max(0, stats.crit), evasion: Math.max(0, stats.evasion),
       accuracy: Math.max(20, Number(stats.accuracy) || 100),
     },
     currentHp: Math.max(0, Math.min(stats.hp, monster.currentHp == null ? stats.hp : Number(monster.currentHp) || 0)),
-    currentMp: Math.max(0, Math.min(maxMp(monster), monster.currentMp == null ? maxMp(monster) : Number(monster.currentMp) || 0)),
-    skills: onlineSkillProfile(monster), captureStock: Math.max(0, Number(state.inventory?.captureCrystals) || 0),
+    currentMp: Math.max(0, Math.min(maximumMp, monster.currentMp == null ? maximumMp : Number(monster.currentMp) || 0)),
+    skills: onlineSkillProfile(monster),
+  };
+}
+
+function onlineBattleRoster(state, primaryMonster, party) {
+  if (!primaryMonster) return [];
+  const selected = [primaryMonster, ...(party ?? []).filter(monster => monster?.id !== primaryMonster.id)]
+    .filter((monster, index, entries) => monster?.id && entries.findIndex(entry => entry?.id === monster.id) === index)
+    .slice(0, ONLINE_BATTLE_ROSTER_MAX);
+  return selected.map((monster, rosterIndex) => boundedOnlineRosterValue({
+    rosterIndex,
+    isPrimary: monster.id === primaryMonster.id,
+    ...onlineBattleMonsterProfile(state, monster),
+  }));
+}
+
+export function buildOnlinePartyProfile(state, { monsterId = null, displayName: onlineName = "" } = {}) {
+  const { party, monster } = selectedPartyMonster(state, monsterId);
+  if (!monster) return {
+    displayName: onlineName || "冒険者", monsterId: null, speciesId: "slime", visualSpeciesId: null, endgameBossId: null, floorBossCatalogId: null, summonTier: null, summonRarity: null, endgameFaction: null, monsterName: "未編成",
+    fallbackEmoji: "？", level: 1, stars: 1, plus: 0, power: 0, maxFloor: 1, attribute: "neutral",
+    circleId: "none", circleName: "魔法陣なし", circleLevel: 0, circleEffect: "none", goldPowerMultiplier: 1, goldPowerActionCost: 0, goldPowerGold: 0, equipment: [], equipmentAuthorities: [], equipmentCombatEffects: {}, abyssSkillEffects: {}, rewardModifiers: {},
+    battleStats: { hp: 100, mp: 10, atk: 10, matk: 10, def: 5, mdef: 5, spd: 10, crit: 5, evasion: 3, accuracy: 100 },
+    currentHp: 100, currentMp: 10, skills: [], captureStock: 0, abyssKeyStock: 0,
+    battleRosterVersion: 1, primaryMonsterId: null, battleRoster: [],
+    explorePickupDone: Boolean(state?.settings?.contextualGuide?.completed?.explore_pickup),
+  };
+  const primary = onlineBattleMonsterProfile(state, monster);
+  return {
+    displayName: String(onlineName || displayName(monster) || "冒険者").trim().slice(0, 16),
+    ...primary,
+    maxFloor: Math.max(1, Number(state.player?.maxFloor) || 1), rewardModifiers: onlineRewardModifiers(state),
+    captureStock: Math.max(0, Number(state.inventory?.captureCrystals) || 0),
     abyssKeyStock: Math.max(0, Number(state.inventory?.abyssKeys) || 0),
+    battleRosterVersion: 1, primaryMonsterId: primary.monsterId, battleRoster: onlineBattleRoster(state, monster, party),
     explorePickupDone: Boolean(state.settings?.contextualGuide?.completed?.explore_pickup),
   };
 }

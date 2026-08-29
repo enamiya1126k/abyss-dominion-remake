@@ -27,7 +27,7 @@ test("the modern online shell keeps one stage and five destinations", async () =
   assert.match(index, /online-v3\.css\?v=2\.10\.0-build163/);
   assert.match(index, /build163\.css\?v=2\.10\.0-build163/);
   assert.match(index, /Styles\/build231\.css\?v=2\.11\.57-build231/);
-  assert.match(index, /ASSET_BUILD = "build247"/);
+  assert.match(index, /ASSET_BUILD = "build248"/);
   assert.doesNotMatch(views, /export function renderOnlineResonance/);
 });
 
