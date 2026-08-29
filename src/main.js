@@ -8,11 +8,11 @@ import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAt
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=2.11.44-build209";
 import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=2.11.30-build195";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=2.11.30-build195";
-import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.11.70-build246";
-import{OnlinePartyController}from"./online/OnlinePartyClient.js?v=2.11.70-build246";
+import{OnlinePartyScreen}from"./ui/screens/OnlinePartyScreen.js?v=2.11.71-build247";
+import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=2.11.71-build247";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=2.11.29-build194";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=2.11.30-build195";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.11.66-build242";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=2.11.71-build247";
 import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=2.11.42-build207";
 import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=2.11.30-build195";
 import{BattleScreen}from"./ui/screens/BattleScreen.js?v=2.11.54-build227";
@@ -64,7 +64,7 @@ import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBa
 import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=2.11.30-build195";
 import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=2.11.30-build195";
 import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=2.11.66-build242";
-import{runConfirmedFullReset}from"./core/FullResetSystem.js?v=2.11.66-build242";
+import{runConfirmedFullReset}from"./core/FullResetSystem.js?v=2.11.71-build247";
 import{NOTICE_DEFINITIONS,DAILY_NOTICE_GIFT,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount}from"./core/NoticeSystem.js?v=2.11.34-build199";
 import{CONTEXT_GUIDE_STEPS,completeGuideStep,normalizeContextualGuide,setGuidePending,guidePending,guideStepDone,bumpGuideCounter,snoozeGuideStep,guideStepSnoozed,resetContextualGuide,contextualGuideProgress}from"./core/ContextualGuideSystem.js?v=2.11.34-build199";
 import{weekdayGachaSchedule,weekdayGachaCost,WEEKDAY_GACHA_CALENDAR,WEEKDAY_ENDGAME_RATE,rollWeekdayEndgameHit}from"./core/WeekdayGachaSystem.js?v=2.11.30-build195";
@@ -86,7 +86,7 @@ function floorBossWasDefeated(player,floor){
 }
 const SCREEN_SESSION_KEY="abyss-dominion:current-screen",INVITE_SESSION_KEY="abyss-dominion:last-party-invite",REFRESHABLE_SCREENS=new Set(["home","formation","onlineParty","monsters","settings","explore","gauntlet","equipment","shop","skills","abyssSkills","inventory","armory"]);
 let exploreActionGeneration=0,secretRoomAutoRunning=false;
-let onlinePartyController=null,onlineSecretRoomContext=null;
+let onlinePartyController=null,onlineSecretRoomContext=null,fullResetInFlight=false;
 document.addEventListener("pointerdown",()=>audio.unlock(),{once:true,passive:true});
 let secondWorldIntroPlaying=false;
 let tenGodContactPlaying=false;
@@ -1350,15 +1350,13 @@ async function redeemSettingsSerialCode(event){
  app.insertAdjacentHTML("beforeend",Modal(`${result.icon} ${result.title}`,`<div class="serial-reward-result"><div>${result.monster?monsterVisual(result.monster,result.icon,{className:"serial-reward-monster-visual"}):result.icon}</div><p><b>${result.message}</b></p><small>このコードは使用済みとして記録されました。</small></div>`,"確認"));
  topModalButton().onclick=()=>{closeTopModal();render()};
 }
-function requestFullGameReset(){
+async function requestFullGameReset(){
+ if(fullResetInFlight)return showToast("初期化処理を確認中です。しばらくお待ちください。");
  const result=runConfirmedFullReset({
   state:save.state,
   confirm:typeof globalThis.confirm==="function"?message=>globalThis.confirm(message):null,
   prompt:typeof globalThis.prompt==="function"?message=>globalThis.prompt(message):null,
-  reset:()=>{
-   onlinePartyController?.disconnect({leave:true,quiet:true});
-   return save.reset()
-  }
+  reset:()=>true
  });
  if(!result.ok){
   if(result.reason==="tradePending")return showToast("交換品を預けているため初期化できません。オンラインへ戻り、交換を完了または中止してください。");
@@ -1367,9 +1365,22 @@ function requestFullGameReset(){
   if(result.reason==="unavailable")return showToast("このブラウザでは初期化の確認画面を開けません。");
   return showToast("初期化を中止しました。");
  }
+ fullResetInFlight=true;
+ showToast("オンラインのレイド記録を安全に初期化しています…");
+ onlinePartyController?.disconnect({leave:true,quiet:true});
+ let onlineReset;
+ try{onlineReset=await resetCurrentWeeklyRaidForFullReset(save.state)}catch(error){onlineReset={ok:false,reason:"offline",message:error?.message}}
+ if(!onlineReset.ok){
+  fullResetInFlight=false;
+  if(onlineReset.reason==="tradePending")return showToast("オンライン交換を完了または中止してから初期化してください。");
+  if(onlineReset.reason==="unsupported")return showToast("オンラインサーバーを最新版へ更新してから、もう一度初期化してください。");
+  if(onlineReset.reason==="auth")return showToast("オンライン本人確認に失敗しました。オンラインへ接続し直してから再試行してください。");
+  return showToast("オンラインサーバーへ初期化を届けられませんでした。ゲームデータは変更していません。通信復旧後にもう一度お試しください。");
+ }
+ if(!save.reset()){fullResetInFlight=false;return showToast("初期データを保存できなかったため、初期化を完了できませんでした。もう一度お試しください。");}
  onlinePartyController=null;game=null;battle=null;snapshot=null;activeEnemy=null;selected=null;equipmentTarget=null;skillTarget=null;
  monsterManage={editing:false,selected:new Set()};equipmentManage={editing:false,selected:new Set()};
- screen="home";render();showToast("ゲームデータとシリアルコード使用履歴を初期化しました");
+ fullResetInFlight=false;screen="home";render();showToast("ゲームデータ・シリアルコード・今週のレイド記録を初期化しました");
 }
 async function redeemSettingsGameMasterCode(event){
  event?.preventDefault();

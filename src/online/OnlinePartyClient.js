@@ -1,9 +1,9 @@
 import {
   buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.70-build246";
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.71-build247";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
-} from "./OnlineViews.js?v=2.11.70-build246";
+} from "./OnlineViews.js?v=2.11.71-build247";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   commitOnlineTrade, recoverOrphanedTradeEscrows,
@@ -11,6 +11,7 @@ import {
 import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=2.11.54-build226";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
+const SOCIAL_FAB_ROUTES = new Set(["home", "chat"]);
 const LEGACY_RESONANCE_ROUTES = new Set(["resonance", "resonanceMaze", "resonance-maze"]);
 const ONLINE_PROTOCOL = "1.16.0";
 const ROOM_PURPOSES = new Set(["explore", "raid", "team", "social"]);
@@ -40,6 +41,8 @@ const GUILD_SERVER_CLOCK_MAX_OFFSET_MS = 31 * 24 * 60 * 60_000;
 const GUILD_PLAN_REMINDER_RECEIPT_LIMIT = 64;
 const GUILD_PLAN_REMINDER_RECEIPT_MAX_BYTES = 16 * 1024;
 const MUTED_PLAYER_LIMIT = 200;
+const FULL_RESET_REQUEST_PATTERN = /^[A-Za-z0-9_-]{18,96}$/;
+const FULL_RESET_TIMEOUT_MS = 12_000;
 const FRIEND_MUTATION_SELECTOR = [
   "[data-online-friend-accept]", "[data-online-friend-decline]", "[data-online-friend-block]",
   "[data-online-friend-unblock]", "[data-online-user-block]", "[data-online-friend-invite]", "[data-online-friend-invite-accept]", "[data-online-friend-invite-decline]", "[data-online-friend-remove]",
@@ -85,6 +88,7 @@ const HALL_POINTS = Object.freeze([
 
 function storageGet(key, fallback = "") { try { return localStorage.getItem(key) ?? fallback; } catch { return fallback; } }
 function storageSet(key, value) { try { localStorage.setItem(key, String(value)); } catch {} }
+function storageRemove(key) { try { localStorage.removeItem(key); } catch {} }
 function clamp(value, min, max) { return Math.max(min, Math.min(max, Number(value) || 0)); }
 function safeRoomId(value) {
   let source = String(value ?? "").trim();
@@ -103,6 +107,10 @@ function normalizedOnlineRoute(value, fallback = "home") {
   const route = String(value ?? "");
   if (LEGACY_RESONANCE_ROUTES.has(route)) return "explore";
   return ROUTES.has(route) ? route : fallback;
+}
+export function shouldShowOnlineSocialFab({ connectionStep, route } = {}) {
+  if (connectionStep !== "room") return true;
+  return SOCIAL_FAB_ROUTES.has(normalizedOnlineRoute(route, "home"));
 }
 function isTyping(target) { return Boolean(target?.closest?.("input,textarea,select,[contenteditable=true]")); }
 function keyDirection(key) { return ({ ArrowUp: "up", w: "up", W: "up", ArrowDown: "down", s: "down", S: "down", ArrowLeft: "left", a: "left", A: "left", ArrowRight: "right", d: "right", D: "right" })[key] ?? null; }
@@ -537,6 +545,91 @@ function websocketUrl(input) {
   const url = new URL(endpoint);
   if (globalThis.location?.protocol === "https:" && url.protocol === "ws:" && !["localhost", "127.0.0.1"].includes(url.hostname)) throw new Error("HTTPS版ゲームでは https:// のトンネルURLを使ってください");
   return endpoint;
+}
+
+function fullResetRaidRequestId() {
+  const pending = storageGet(ONLINE_STORAGE_KEYS.fullResetRaidRequest).trim();
+  if (FULL_RESET_REQUEST_PATTERN.test(pending)) return pending;
+  const entropy = globalThis.crypto?.randomUUID?.().replaceAll("-", "")
+    ?? `${Date.now().toString(36)}${Math.random().toString(36).slice(2)}${Math.random().toString(36).slice(2)}`;
+  const requestId = `full-reset-${entropy}`.slice(0, 96);
+  storageSet(ONLINE_STORAGE_KEYS.fullResetRaidRequest, requestId);
+  return requestId;
+}
+
+function storeStandaloneResumeToken(endpointValue, value) {
+  const endpoint = normalizedWebsocketEndpoint(endpointValue), token = cleanResumeToken(value);
+  if (!endpoint || !token) return false;
+  const tokens = readResumeTokenMap();
+  if (Object.prototype.hasOwnProperty.call(tokens, endpoint)) delete tokens[endpoint];
+  tokens[endpoint] = token;
+  while (Object.keys(tokens).length > RESUME_TOKEN_MAP_LIMIT) delete tokens[Object.keys(tokens)[0]];
+  writeResumeTokenMap(tokens);
+  storageSet(ONLINE_STORAGE_KEYS.resumeTokenMigration, "1");
+  storageSet(ONLINE_STORAGE_KEYS.resumeToken, token);
+  return true;
+}
+
+/**
+ * Authenticate with the preserved online identity and clear only this
+ * account's current weekly-raid state before the local save is erased.  The
+ * request id remains in localStorage until the server ACK arrives, so an
+ * offline/timeout retry is safe and the local reset must not be committed.
+ */
+export function resetCurrentWeeklyRaidForFullReset(state, { timeoutMs = FULL_RESET_TIMEOUT_MS, WebSocketImpl = globalThis.WebSocket } = {}) {
+  const requestId = fullResetRaidRequestId(), identity = ensureOnlineIdentity();
+  if (typeof WebSocketImpl !== "function") return Promise.resolve({ ok: false, reason: "offline", requestId });
+  let endpoint;
+  try { endpoint = websocketUrl(storageGet(ONLINE_STORAGE_KEYS.serverUrl) || DEFAULT_ONLINE_SERVER_URL); }
+  catch (error) { return Promise.resolve({ ok: false, reason: "serverUrl", message: error?.message, requestId }); }
+  const resumeToken = migrateLegacyResumeToken()[endpoint] ?? "", clientKey = storageGet(ONLINE_STORAGE_KEYS.clientKey), profile = buildOnlinePartyProfile(state ?? {}, { displayName: storageGet(ONLINE_STORAGE_KEYS.displayName) });
+  return new Promise(resolve => {
+    let socket = null, settled = false, authenticated = false, resetSent = false;
+    const finish = result => {
+      if (settled) return;
+      settled = true; clearTimeout(timer);
+      if (result.ok) storageRemove(ONLINE_STORAGE_KEYS.fullResetRaidRequest);
+      try { socket?.close?.(1000, result.ok ? "full reset raid acknowledged" : "full reset raid aborted"); } catch {}
+      resolve({ requestId, ...result });
+    };
+    const send = message => {
+      if (!socket || socket.readyState !== 1) return false;
+      try { socket.send(JSON.stringify(message)); return true; } catch { return false; }
+    };
+    const sendReset = () => {
+      if (resetSent) return;
+      resetSent = true;
+      if (!send({ type: "resetWeeklyRaidForFullReset", requestId })) finish({ ok: false, reason: "offline" });
+    };
+    const timer = setTimeout(() => finish({ ok: false, reason: authenticated ? "timeout" : "offline" }), Math.max(2_000, Number(timeoutMs) || FULL_RESET_TIMEOUT_MS));
+    try { socket = new WebSocketImpl(endpoint); }
+    catch (error) { finish({ ok: false, reason: "offline", message: error?.message }); return; }
+    socket.addEventListener("open", () => {
+      if (!send({ type: "hello", protocol: ONLINE_PROTOCOL, friendId: identity.friendId, clientKey, resumeToken, profile })) finish({ ok: false, reason: "offline" });
+    });
+    socket.addEventListener("message", event => {
+      let message; try { message = JSON.parse(event.data); } catch { return; }
+      if (message?.type === "error") {
+        const authCodes = new Set(["ID_IN_USE", "RESUME_TOKEN_MISMATCH", "BAD_CLIENT_KEY", "BAD_FRIEND_ID"]);
+        const reason = message.code === "RESET_TRADE_ACTIVE" ? "tradePending" : authCodes.has(message.code) ? "auth" : message.code === "PROTOCOL_MISMATCH" || message.code === "UNKNOWN_MESSAGE" ? "unsupported" : "server";
+        finish({ ok: false, reason, code: message.code, message: message.message }); return;
+      }
+      if (message?.type === "helloAck") {
+        if (message.protocol !== ONLINE_PROTOCOL || message.capabilities?.fullResetRaidV1 !== true) { finish({ ok: false, reason: "unsupported" }); return; }
+        authenticated = true;
+        if (!storeStandaloneResumeToken(endpoint, message.resumeToken)) { finish({ ok: false, reason: "auth" }); return; }
+        if (Array.isArray(message.activeTradeIds) && message.activeTradeIds.length) { finish({ ok: false, reason: "tradePending" }); return; }
+        if (message.room) {
+          if (!send({ type: "leaveRoom" })) finish({ ok: false, reason: "offline" });
+        } else sendReset();
+        return;
+      }
+      if (message?.type === "leftRoom") { sendReset(); return; }
+      if (message?.type === "weeklyRaidResetAck" && message.requestId === requestId) finish({ ok: true, weekId: message.weekId, duplicate: Boolean(message.duplicate) });
+    });
+    socket.addEventListener("close", () => { if (!settled) finish({ ok: false, reason: authenticated ? "offline" : "auth" }); });
+    socket.addEventListener("error", () => {});
+  });
 }
 
 async function copyText(value) {
@@ -2242,9 +2335,12 @@ export class OnlinePartyController {
     const renderedTab = content?.dataset?.onlineSocialContentTab === "guild" ? "guild" : content ? "friends" : null;
     if (renderedTab) this.socialScrollByTab[renderedTab] = content.scrollTop;
     if (chat) this.guildChatScroll = { top: chat.scrollTop, atBottom: chat.scrollHeight - chat.clientHeight - chat.scrollTop <= 12 };
+    const showSocialFab = shouldShowOnlineSocialFab({ connectionStep: this.connectionStep, route: this.route });
+    if (!showSocialFab) this.friendPanelOpen = false;
     const safetyCapability = this.capabilities.has("onlineSafetyV1"), mutedPlayers = this._mutedPlayerSnapshot(), guildState = this._guildStateForDisplay();
     layer.innerHTML = renderOnlineFriendPanel(this.friendState, {
       open: this.friendPanelOpen, selfId: this.selfId, draft: this.friendIdDraft, tab: this.socialTab, guildState,
+      showFab: showSocialFab,
       safetyCapability, mutedPlayers,
       guildOptions: {
         connected: this._canMutateOnline(), capability: this.capabilities.has("guildsV1"), disabled: Boolean(this.pendingLeaveOnReconnect),

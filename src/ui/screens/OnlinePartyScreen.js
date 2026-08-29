@@ -19,6 +19,7 @@ export const ONLINE_STORAGE_KEYS = Object.freeze({
   route: "abyss-dominion-online-route",
   autoConnect: "abyss-dominion-online-auto-connect",
   guildPlanReminderReceipts: "abyss-dominion-online-guild-plan-reminder-receipts-v1",
+  fullResetRaidRequest: "abyss-dominion-online-full-reset-raid-request-v1",
 });
 
 export const DEFAULT_ONLINE_SERVER_URL = "https://stumble-mountain-lego.ngrok-free.dev";
@@ -780,7 +781,10 @@ export function renderOnlineSocialPanel(friendSource = {}, guildSource = {}, opt
   const attentions = onlineGuildPlanAttentions(guildState, { now: socialNow, selfId: options.selfId, connected: options.guildOptions?.connected !== false, canJoinGathering: options.guildOptions?.liveGatheringJoinable !== false }), attention = attentions[0], attentionCount = attentions.length;
   const guildRole = guildState.guild?.role, guildBadge = onlineSocialList(guildState.invitations, 100).length + (["leader", "officer"].includes(guildRole) ? onlineSocialList(guildState.guild?.applications, 100).length : 0) + attentionCount;
   const badge = friendBadge + guildBadge, open = Boolean(options.open), tab = options.tab === "guild" ? "guild" : "friends";
-  if (!open) return `${onlineGuildPlanAttentionBanner(attention, { closed: true })}<button type="button" class="online-friend-fab online-social-fab ${attentionCount ? "has-guild-attention" : ""}" data-online-friends-toggle aria-label="${escapeOnlineHtml(attentionCount ? `交流パネルを開く。遠征のお知らせ${attentionCount}件` : "交流パネルを開く")}">♟<b>${attentionCount ? "遠征あり" : "交流"}</b>${badge ? `<i>${Math.min(9, badge)}${badge > 9 ? "+" : ""}</i>` : ""}</button>`;
+  if (!open) {
+    if (options.showFab === false) return "";
+    return `${onlineGuildPlanAttentionBanner(attention, { closed: true })}<button type="button" class="online-friend-fab online-social-fab ${attentionCount ? "has-guild-attention" : ""}" data-online-friends-toggle aria-label="${escapeOnlineHtml(attentionCount ? `交流パネルを開く。遠征のお知らせ${attentionCount}件` : "交流パネルを開く")}">♟<b>${attentionCount ? "遠征あり" : "交流"}</b>${badge ? `<i>${Math.min(9, badge)}${badge > 9 ? "+" : ""}</i>` : ""}</button>`;
+  }
   const panelAttention = onlineGuildPlanAttentionBanner(attention);
   const panelContent = tab === "guild" ? renderOnlineGuildPanel(guildState, { ...options.guildOptions, selfId: options.selfId, friendState, friends: friendState.friends, mutedPlayers: options.mutedPlayers, safetyCapability: options.safetyCapability }) : renderOnlineFriendContent(friendState, { selfId: options.selfId, draft: options.draft, connected: options.guildOptions?.connected, disabled: options.guildOptions?.disabled, mutedPlayers: options.mutedPlayers, safetyCapability: options.safetyCapability });
   const content = `${panelAttention}${panelContent}`;

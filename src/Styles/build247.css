@@ -1,0 +1,9 @@
+/* build247: keep tap movement deliberate and hall facilities world-anchored. */
+
+/* theme.css replaces a button's whole transform while it is pressed.  Hall
+   facilities use that transform for their coordinate anchor, so preserve the
+   translate and apply the pressed feedback after it. */
+.online-hall-zone:active{
+  transform:translate(-50%,-50%) scale(.985)!important;
+}
+

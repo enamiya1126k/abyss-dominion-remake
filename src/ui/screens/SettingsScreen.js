@@ -47,7 +47,7 @@ export function SettingsScreen(state){
         <div class="settings-version-plaque-v3"><small>ABYSS DOMINION</small><h3>REMAKE v${APP_VERSION}</h3><span>GDD v1.0同期 / 保存互換 / 製品モード</span></div>
         <div class="settings-version-plaque-v3" id="fullResetDescription">
           <small>PUBLIC FULL RESET</small><h3>最初からやり直す</h3>
-          <span>進行・仲間・装備・所持品とシリアルコード使用履歴をすべて初期化します。オンラインのフレンドID・フレンド／ギルド関係・固定サーバーURLは保持されます。交換品を預けている間は実行できません。</span>
+          <span>進行・仲間・装備・所持品・シリアルコード使用履歴・今週のレイド記録を初期化します。フレンドID・フレンド／ギルド関係・固定サーバーURLは保持されます。オンラインサーバーへ接続できない場合や、交換品を預けている間は実行できません。</span>
         </div>
         <button id="resetSave" class="settings-reset-v3" aria-describedby="fullResetDescription">ゲームデータを初期化</button>
       </div>
