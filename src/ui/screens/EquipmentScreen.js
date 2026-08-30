@@ -11,7 +11,7 @@ import{
 }from"../../data/equipment.js?v=2.11.45-build210";
 import{displayName,calculatedStats}from"../../models/Monster.js?v=2.11.30-build195";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.11.0-build164";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.11.30-build195";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.11.73-build249";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.30-build195";
 import{ATTRIBUTES}from"../../data/attributes.js?v=2.11.0-build164";
 import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=2.11.0-build164";

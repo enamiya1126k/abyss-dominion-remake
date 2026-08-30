@@ -1,0 +1,32 @@
+/* build249: online battle impact order and delayed KO presentation */
+.online-shared-battle .battle-bar.has-hp-trail{
+  --hp-trail-duration:720ms!important;
+}
+
+.online-shared-battle .side-enemies .side-battle-unit.dead.presentation-ko-pending,
+.online-shared-battle .side-enemies .side-battle-unit.dead.presentation-ko-playing{
+  visibility:visible!important;
+  opacity:1!important;
+  filter:none!important;
+  pointer-events:none!important;
+}
+
+.online-shared-battle .side-enemies .side-battle-unit.presentation-ko-playing .side-unit-sprite{
+  animation:build249-enemy-defeat .56s cubic-bezier(.2,.72,.3,1) both!important;
+}
+
+.online-shared-battle .side-enemies .side-battle-unit.presentation-ko-resolved{
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+
+@keyframes build249-enemy-defeat{
+  0%{opacity:1;filter:brightness(1);transform:translateY(0) scale(1)}
+  32%{opacity:1;filter:brightness(2.2) saturate(1.4);transform:translateY(-3px) scale(1.06)}
+  100%{opacity:0;filter:brightness(.45) saturate(.4);transform:translateY(12px) scale(.86)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .online-shared-battle .side-enemies .side-battle-unit.presentation-ko-playing .side-unit-sprite{animation:none!important}
+}

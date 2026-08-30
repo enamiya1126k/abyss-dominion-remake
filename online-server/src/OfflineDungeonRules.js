@@ -14,6 +14,7 @@ const CARDINALS = Object.freeze([[1, 0], [-1, 0], [0, 1], [0, -1]]);
 // solo HP curve here; multiplayer compensation is applied by RoomStore using
 // the number of participating players instead of silently weakening enemies.
 export const ONLINE_ENEMY_HP_DIVISOR = 1;
+export function treasureRoomRateForFloor(floor) { return Math.min(.03, .015 + Math.floor(Math.max(1, Number(floor) || 1) / 100) * .0015); }
 
 const BASE_STATS = Object.freeze({
   slime: { hp: 22, atk: 7, def: 4, spd: 7 },
@@ -211,7 +212,7 @@ export function createSoloStyleDungeon({ roomId, floor, runId, now, random, ches
   let treasureRoom = false;
   if (bossFloor) add("encounter", layout.boss, 1, { bossEncounter: true });
   else {
-    treasureRoom = random() < Math.min(.12, .035 + Math.floor(floor / 10) * .002);
+    treasureRoom = random() < treasureRoomRateForFloor(floor);
     const chestCount = treasureRoom ? 7 + Math.floor(random() * 4) : random() < Math.max(0, .16 - Math.max(0, Number(chestSpawnBonus) || 0)) ? 0 : random() < .72 ? 1 : 2;
     const pick = () => {
       const available = candidates.filter(cell => !reserved.has(key(cell))), pool = available.length ? available : candidates.length ? candidates : cells;

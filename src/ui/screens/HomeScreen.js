@@ -1,6 +1,6 @@
 import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.11.0-build164";
 import{displayName,calculatedStats}from"../../models/Monster.js?v=2.11.30-build195";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.11.30-build195";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.11.73-build249";
 import{SPECIES}from"../../data/species.js?v=2.11.0-build164";
 import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.11.0-build164";
 import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.30-build195";

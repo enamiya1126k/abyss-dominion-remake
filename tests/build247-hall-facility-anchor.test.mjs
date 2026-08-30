@@ -15,8 +15,10 @@ test("build247 keeps every hall facility anchored during press and player rerend
   const before = anchors(renderOnlineHome(room({ x: 50, y: 76 }), "self"));
   const after = anchors(renderOnlineHome(room({ x: 42, y: 68 }), "self"));
   assert.deepEqual(before, [
+    { route: "games", x: 50, y: 25 },
     { route: "raid", x: 18, y: 25 },
     { route: "explore", x: 82, y: 25 },
+    { route: "social", x: 50, y: 49 },
     { route: "team", x: 24, y: 78 },
     { route: "chat", x: 76, y: 78 },
   ]);
@@ -28,4 +30,3 @@ test("build247 keeps every hall facility anchored during press and player rerend
   const css = await readFile(new URL("../src/Styles/build247.css", import.meta.url), "utf8");
   assert.match(css, /\.online-hall-zone:active\s*\{[^}]*transform:translate\(-50%,-50%\) scale\(\.985\)!important;/s);
 });
-

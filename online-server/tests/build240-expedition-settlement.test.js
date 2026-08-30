@@ -97,5 +97,5 @@ test("build240 websocket recovery completes only after pending settlements", asy
   const server = await readFile(new URL("../server.js", import.meta.url), "utf8");
   assert.match(server, /pendingExpeditionResult=Boolean/);
   assert.match(server, /deliverPendingRewards\(socket\.session\)[^]*type:"recoveryComplete"/);
-  assert.match(server, /orphanedExpedition:Boolean\(!result\.room&&!pendingExpeditionResult\)/);
+  assert.match(server, /orphanedExpedition:Boolean\(!result\.resumableRoom&&!pendingExpeditionResult\)/);
 });

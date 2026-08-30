@@ -45,7 +45,8 @@ test("build248 fixes the hall emote launcher and keeps its radial center stable"
   assert.match(css, /\.online-hall-emote-tool\{[^}]*left:50%!important;[^}]*top:\d+px!important;[^}]*transform:translateX\(-50%\)!important;[^}]*touch-action:none!important;/s);
   assert.match(client, /if \(anchor\.matches\("\.online-hall-emote-tool"\)\) \{[\s\S]*?anchor\.style\.removeProperty/);
   assert.doesNotMatch(client, /ONLINE_HALL_EMOTE_POSITION/);
-  assert.match(client, /const wheelOrigin = isHall[\s\S]*?anchorRect\.left \+ anchorRect\.width \/ 2[\s\S]*?anchorRect\.top \+ anchorRect\.height \/ 2/);
+  assert.match(client, /const anchorCenter = \{ x: anchorRect\.left \+ anchorRect\.width \/ 2, y: anchorRect\.top \+ anchorRect\.height \/ 2 \}/);
+  assert.match(client, /const wheelOrigin = isHallGame[\s\S]*?: isHall[\s\S]*?\? anchorCenter/);
 });
 
 test("build248 captures hall emote gestures and only sends a selected option", async () => {
@@ -63,7 +64,7 @@ test("build248 pauses hall movement for quick chat and emote interaction", async
     readFile(new URL("../src/online/OnlinePartyClient.js", import.meta.url), "utf8"),
     readFile(new URL("../src/Styles/build248.css", import.meta.url), "utf8"),
   ]);
-  assert.match(client, /if \(this\.exploreChatOpen \|\| this\.emoteGestureActive\) \{ this\.hallDestination = null; return; \}/);
+  assert.match(client, /if \(this\.exploreChatOpen \|\| this\.hallGamesOpen \|\| this\.emoteGestureActive\) \{ this\.hallDestination = null; return; \}/);
   assert.match(client, /data-online-hall-full-chat/);
   assert.match(client, /this\.exploreChatOpen = false; this\._setRoute\("chat"\)/);
   assert.match(client, /\.online-hall-party-strip,\.online-hall-quick-chat/);

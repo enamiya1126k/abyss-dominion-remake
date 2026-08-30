@@ -1,0 +1,1888 @@
+/* build252: iPhone-first Gathering Hall games — Bomb Mimic and Monster Race. */
+
+/* One walk-up facility keeps both party games in the field without adding a
+   sixth bottom-navigation destination.  The empty-art rule is a fallback for
+   cached markup that has not supplied the mimic image yet. */
+.online-hall-zone.zone-games{
+  --hall-x:50%;
+  --hall-y:25%;
+  --zone-tone:#e0b75e;
+  width:clamp(96px,25vw,150px)!important;
+  min-height:88px!important;
+  border-color:#8d6a39!important;
+  background:
+    radial-gradient(circle at 50% 62%,#64366a3d,transparent 52%),
+    radial-gradient(ellipse,#18101fdb,#07060bc9 72%)!important;
+  box-shadow:0 8px 19px #000d,0 0 17px #ba7bd43b!important;
+}
+
+.online-hall-zone.zone-games .hall-facility-art{
+  width:clamp(82px,21vw,126px)!important;
+  height:clamp(58px,15vw,88px)!important;
+  filter:drop-shadow(0 0 7px #bb65d477) drop-shadow(0 9px 6px #000e)!important;
+}
+
+.online-hall-zone.zone-games .hall-facility-art:empty::before{
+  content:""!important;
+  display:block!important;
+  width:100%;
+  height:100%;
+  background:url("../../assets/monsters/034_mimic/idle1.png") center bottom/contain no-repeat;
+  image-rendering:pixelated;
+}
+
+.online-hall-zone.zone-games i{
+  color:#8ee2eb;
+}
+
+.online-hall-zone.zone-games b{
+  color:#ffe3a0;
+}
+
+.online-hall-zone.zone-games:is(:hover,:focus-visible){
+  outline:2px solid #e5c46d;
+  outline-offset:2px;
+}
+
+/* The aliases prefixed with online-hall-* cover the compact markup used by
+   the hall renderer; hall-game-* are the stable build252 component names. */
+.online-hall-games-modal,
+.online-hall-games-overlay{
+  --hall-game-gold:#dfb65e;
+  --hall-game-gold-soft:#ffe3a0;
+  --hall-game-purple:#9866aa;
+  --hall-game-cyan:#7ddce8;
+  --hall-game-ink:#08070c;
+  --hall-game-panel:#100c15;
+  position:absolute;
+  z-index:32;
+  inset:0;
+  min-width:0;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:8px;
+  overflow-x:hidden;
+  overflow-y:auto;
+  padding:
+    max(8px,env(safe-area-inset-top))
+    max(8px,env(safe-area-inset-right))
+    max(8px,env(safe-area-inset-bottom))
+    max(8px,env(safe-area-inset-left));
+  border:1px solid #8a693d;
+  background:
+    radial-gradient(circle at 50% 9%,#7c3f9438,transparent 34%),
+    radial-gradient(circle at 50% 82%,#9c752a20,transparent 42%),
+    linear-gradient(180deg,#09070df8,#040407fc);
+  box-shadow:inset 0 0 0 1px #c6a25724,inset 0 0 60px #000b;
+  color:#eee4ef;
+  cursor:default;
+  isolation:isolate;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+}
+
+.online-hall-games-modal[hidden],
+.online-hall-games-overlay[hidden]{
+  display:none!important;
+}
+
+.online-hall-games-modal *,
+.online-hall-games-overlay *{
+  box-sizing:border-box;
+  min-width:0;
+}
+
+.online-hall-games-modal :is(button,[role="button"],select,input),
+.online-hall-games-overlay :is(button,[role="button"],select,input){
+  min-height:44px;
+  touch-action:manipulation;
+}
+
+.online-hall-games-menu,
+.online-hall-games-modal>.hall-games-body,
+.online-hall-games-overlay>.hall-games-body{
+  width:min(100%,720px);
+  min-height:0;
+  margin-inline:auto;
+  display:grid;
+  align-content:start;
+  gap:10px;
+  overflow-x:hidden;
+  overflow-y:auto;
+  padding:2px 2px max(12px,env(safe-area-inset-bottom));
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+  scrollbar-color:#654875 #0a080d;
+}
+
+.hall-games-header,
+.online-hall-games-header{
+  position:relative;
+  z-index:4;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  min-height:58px;
+  padding:9px 10px;
+  border:1px solid #7e623c;
+  background:linear-gradient(180deg,#17111df5,#0b0910f5);
+  box-shadow:0 7px 18px #0008;
+}
+
+.hall-games-header>div,
+.online-hall-games-header>div{
+  display:grid;
+  gap:2px;
+}
+
+.hall-games-header small,
+.online-hall-games-header small{
+  color:var(--hall-game-cyan,#7ddce8);
+  font:800 9px/1.2 ui-monospace,monospace;
+  letter-spacing:.16em;
+}
+
+.hall-games-header h2,
+.online-hall-games-header h2{
+  margin:0;
+  overflow:hidden;
+  color:var(--hall-game-gold-soft,#ffe3a0);
+  font:900 clamp(20px,6vw,29px)/1.08 Georgia,"Yu Mincho",serif;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hall-games-header p,
+.online-hall-games-header p{
+  grid-column:1/-1;
+  margin:1px 0 0;
+  color:#b8aebe;
+  font-size:10px;
+  line-height:1.45;
+}
+
+.hall-game-close,
+.online-hall-game-close{
+  width:44px;
+  min-width:44px;
+  height:44px;
+  padding:0;
+  border:1px solid #755485;
+  border-radius:9px;
+  background:linear-gradient(180deg,#2a1934,#120e17);
+  color:#f7ebff;
+  font-size:19px;
+  line-height:1;
+  box-shadow:inset 0 0 0 1px #ffffff0d;
+}
+
+.hall-game-close:is(:hover,:focus-visible),
+.online-hall-game-close:is(:hover,:focus-visible){
+  border-color:#e0bd69;
+  outline:2px solid #8c619866;
+  outline-offset:1px;
+}
+
+.hall-game-tabs,
+.online-hall-game-tabs{
+  position:relative;
+  z-index:3;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+  padding:5px;
+  border:1px solid #4e3c58;
+  border-radius:11px;
+  background:#08060cf2;
+}
+
+.hall-game-tabs button,
+.online-hall-game-tabs button{
+  min-height:48px;
+  padding:7px 8px;
+  overflow:hidden;
+  border:1px solid #49384f;
+  border-radius:8px;
+  background:linear-gradient(180deg,#1b1321,#0e0a13);
+  color:#bbb0c2;
+  font-size:clamp(10px,3vw,13px);
+  font-weight:900;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hall-game-tabs button:is(.active,[aria-selected="true"],[aria-pressed="true"]),
+.online-hall-game-tabs button:is(.active,[aria-selected="true"],[aria-pressed="true"]){
+  border-color:#dfb85e;
+  background:linear-gradient(180deg,#664717,#2c1c09);
+  color:#fff0bc;
+  box-shadow:inset 0 0 18px #f8d16a32,0 0 12px #a5713040;
+}
+
+.hall-game-intro-grid,
+.online-hall-game-intro-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:9px;
+}
+
+.hall-game-card,
+.online-hall-game-card{
+  position:relative;
+  min-width:0;
+  min-height:132px;
+  display:grid;
+  align-content:center;
+  gap:5px;
+  padding:14px 13px;
+  overflow:hidden;
+  border:1px solid #684b75;
+  border-radius:12px;
+  background:
+    radial-gradient(circle at 88% 14%,#a65dbc2e,transparent 34%),
+    linear-gradient(145deg,#17101d,#09070d 72%);
+  color:#e7dce9;
+  box-shadow:inset 0 0 0 1px #ffffff08,0 8px 19px #0008;
+  text-align:left;
+}
+
+.hall-game-card::after,
+.online-hall-game-card::after{
+  content:"";
+  position:absolute;
+  inset:auto -12% -48% 42%;
+  height:88%;
+  border:1px solid #d0a84c24;
+  border-radius:50%;
+  pointer-events:none;
+}
+
+.hall-game-card small,
+.online-hall-game-card small{
+  color:#7fdde8;
+  font:800 9px/1.25 ui-monospace,monospace;
+  letter-spacing:.14em;
+}
+
+.hall-game-card h3,
+.online-hall-game-card h3{
+  position:relative;
+  z-index:1;
+  margin:0;
+  color:#f7dda1;
+  font:900 clamp(19px,5.5vw,26px)/1.15 Georgia,"Yu Mincho",serif;
+}
+
+.hall-game-card p,
+.online-hall-game-card p{
+  position:relative;
+  z-index:1;
+  margin:0;
+  color:#b8adbd;
+  font-size:11px;
+  line-height:1.55;
+  overflow-wrap:anywhere;
+}
+
+.hall-game-card:is(.active,.selected,[aria-selected="true"],[aria-pressed="true"]),
+.online-hall-game-card:is(.active,.selected,[aria-selected="true"],[aria-pressed="true"]){
+  border-color:#dfb85e;
+  background:
+    radial-gradient(circle at 86% 18%,#be7fd63d,transparent 38%),
+    linear-gradient(145deg,#271629,#0b080e 72%);
+  box-shadow:inset 0 0 20px #a864b022,0 0 0 2px #dfb85e35,0 9px 22px #000a;
+}
+
+.hall-game-lobby,
+.online-hall-game-lobby{
+  min-width:0;
+  display:grid;
+  gap:10px;
+  padding:10px;
+  border:1px solid #71593a;
+  border-radius:11px;
+  background:
+    radial-gradient(circle at 92% 3%,#713c8428,transparent 35%),
+    linear-gradient(180deg,#110d16f5,#08070bf5);
+  box-shadow:inset 0 0 0 1px #c69f4c18;
+}
+
+.hall-game-lobby>header,
+.online-hall-game-lobby>header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-height:32px;
+}
+
+.hall-game-lobby>header h3,
+.online-hall-game-lobby>header h3{
+  margin:0;
+  color:#ead9ae;
+  font-size:14px;
+}
+
+.hall-game-lobby>header span,
+.online-hall-game-lobby>header span{
+  color:#7ee2bc;
+  font:900 11px/1 ui-monospace,monospace;
+  white-space:nowrap;
+}
+
+.hall-game-members,
+.online-hall-game-participants{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+}
+
+.hall-game-member,
+.online-hall-game-participant{
+  min-height:68px;
+  display:grid;
+  grid-template-columns:44px minmax(0,1fr);
+  align-items:center;
+  gap:7px;
+  padding:7px;
+  border:1px solid #3e3545;
+  border-radius:9px;
+  background:#0c0a10e8;
+  color:#bdb3c2;
+}
+
+.hall-game-member :is(img,.monster-visual,.online-v3-avatar),
+.online-hall-game-participant :is(img,.monster-visual,.online-v3-avatar){
+  width:44px!important;
+  height:44px!important;
+  object-fit:contain;
+}
+
+.hall-game-member>div,
+.online-hall-game-participant>div{
+  min-width:0;
+  display:grid;
+  gap:2px;
+}
+
+.hall-game-member b,
+.online-hall-game-participant b{
+  overflow:hidden;
+  color:#eee2c7;
+  font-size:11px;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hall-game-member small,
+.online-hall-game-participant small{
+  color:#8f8794;
+  font-size:9px;
+}
+
+.hall-game-member:is(.self,.ready),
+.online-hall-game-participant:is(.self,.ready){
+  border-color:#b28d4e;
+  background:linear-gradient(135deg,#22180d,#100b14);
+}
+
+.hall-game-member.offline,
+.online-hall-game-participant.offline{
+  filter:grayscale(1);
+  opacity:.55;
+}
+
+.hall-game-member.eliminated,
+.online-hall-game-participant.eliminated{
+  opacity:.42;
+  text-decoration:line-through;
+}
+
+.hall-game-roster,
+.online-hall-game-roster{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+  min-width:0;
+}
+
+.hall-game-monster-option,
+.online-hall-game-monster-option{
+  min-height:76px;
+  display:grid;
+  grid-template-columns:50px minmax(0,1fr);
+  align-items:center;
+  gap:8px;
+  padding:7px 8px;
+  overflow:hidden;
+  border:1px solid #4d3b55;
+  border-radius:9px;
+  background:linear-gradient(180deg,#17111d,#0b0910);
+  color:#d9cfdc;
+  text-align:left;
+}
+
+.hall-game-monster-option :is(img,.monster-visual,.online-v3-avatar),
+.online-hall-game-monster-option :is(img,.monster-visual,.online-v3-avatar){
+  width:50px!important;
+  height:50px!important;
+  object-fit:contain;
+  image-rendering:auto;
+}
+
+.hall-game-monster-option>span,
+.online-hall-game-monster-option>span{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+
+.hall-game-monster-option b,
+.online-hall-game-monster-option b{
+  overflow:hidden;
+  color:#eee3c8;
+  font-size:11px;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hall-game-monster-option small,
+.online-hall-game-monster-option small{
+  overflow:hidden;
+  color:#9f93a5;
+  font-size:9px;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hall-game-monster-option:is(.selected,[aria-selected="true"],[aria-pressed="true"]),
+.online-hall-game-monster-option:is(.selected,[aria-selected="true"],[aria-pressed="true"]){
+  border-color:#e0b75e;
+  background:linear-gradient(180deg,#4d3513,#1d1309);
+  box-shadow:inset 0 0 15px #f5cc6130,0 0 0 2px #e0b75e25;
+  color:#fff1c2;
+}
+
+.hall-game-arena,
+.online-hall-game-arena{
+  position:relative;
+  min-width:0;
+  min-height:270px;
+  display:grid;
+  align-content:stretch;
+  overflow:hidden;
+  border:1px solid #8a663d;
+  border-radius:12px;
+  background:
+    radial-gradient(ellipse at 50% 62%,#7d455331,transparent 42%),
+    linear-gradient(180deg,#0b0811f2,#050508f9),
+    url("../../assets/ui/home-town-bg.png") center/cover;
+  box-shadow:inset 0 0 38px #000d,0 10px 24px #0009;
+}
+
+.hall-game-arena::after,
+.online-hall-game-arena::after{
+  content:"";
+  position:absolute;
+  z-index:0;
+  inset:0;
+  background:linear-gradient(180deg,#0302076e,transparent 28%,#020205b5);
+  pointer-events:none;
+}
+
+.hall-game-arena>* ,
+.online-hall-game-arena>*{
+  position:relative;
+  z-index:1;
+}
+
+.hall-mimic-stage,
+.online-hall-mimic-stage{
+  min-height:270px;
+  display:grid;
+  grid-template-rows:minmax(118px,1fr) auto;
+  place-items:center;
+  gap:9px;
+  padding:16px 10px 12px;
+}
+
+.hall-mimic-core,
+.online-hall-mimic-core{
+  position:relative;
+  width:clamp(116px,34vw,168px);
+  height:clamp(116px,34vw,168px);
+  display:grid;
+  place-items:center;
+  border:1px solid #825f49;
+  border-radius:50%;
+  background:radial-gradient(circle,#7a354447 0 28%,#20101bc9 52%,#08070ccd 72%);
+  box-shadow:inset 0 0 24px #000b,0 0 20px #db65515c;
+}
+
+.hall-mimic-core::after,
+.online-hall-mimic-core::after{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border:1px dashed #e2b95a8a;
+  border-radius:50%;
+  animation:build252-mimic-fuse 1.4s linear infinite;
+}
+
+.hall-mimic-core :is(img,.monster-visual),
+.online-hall-mimic-core :is(img,.monster-visual){
+  width:78%!important;
+  height:78%!important;
+  object-fit:contain;
+  filter:drop-shadow(0 7px 5px #000e);
+}
+
+.hall-mimic-core:is(.danger,.armed),
+.online-hall-mimic-core:is(.danger,.armed){
+  border-color:#ff7079;
+  box-shadow:inset 0 0 28px #9d263d66,0 0 25px #ff5c656f;
+  animation:build252-mimic-danger .55s ease-in-out infinite alternate;
+}
+
+.hall-mimic-targets,
+.online-hall-mimic-targets{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+}
+
+.hall-mimic-player,
+.online-hall-mimic-player{
+  min-height:58px;
+  display:grid;
+  grid-template-columns:38px minmax(0,1fr);
+  align-items:center;
+  gap:6px;
+  padding:6px 8px;
+  overflow:hidden;
+  border:1px solid #54415d;
+  border-radius:9px;
+  background:#120d17e8;
+  color:#ded3e2;
+  text-align:left;
+}
+
+.hall-mimic-player :is(img,.monster-visual,.online-v3-avatar),
+.online-hall-mimic-player :is(img,.monster-visual,.online-v3-avatar){
+  width:38px!important;
+  height:38px!important;
+  object-fit:contain;
+}
+
+.hall-mimic-player b,
+.online-hall-mimic-player b{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hall-mimic-player:is(.holder,[data-holder="true"]),
+.online-hall-mimic-player:is(.holder,[data-holder="true"]){
+  border-color:#ff737c;
+  background:linear-gradient(180deg,#4b1823,#1d0c12);
+  box-shadow:0 0 14px #ff59604b;
+}
+
+.hall-mimic-player:is(.eliminated,[disabled]),
+.online-hall-mimic-player:is(.eliminated,[disabled]){
+  filter:grayscale(1);
+  opacity:.42;
+}
+
+.hall-race-track,
+.online-hall-race-track{
+  min-height:270px;
+  display:grid;
+  align-content:center;
+  gap:8px;
+  padding:14px 10px;
+  counter-reset:hall-race-lane;
+}
+
+.hall-race-lane,
+.online-hall-race-lane{
+  counter-increment:hall-race-lane;
+  position:relative;
+  min-height:54px;
+  display:grid;
+  grid-template-columns:28px minmax(0,1fr);
+  align-items:center;
+  gap:5px;
+  padding:5px 7px 5px 5px;
+  overflow:hidden;
+  border:1px solid #4c3c53;
+  border-radius:8px;
+  background:
+    repeating-linear-gradient(90deg,#ffffff05 0 12px,transparent 12px 24px),
+    linear-gradient(180deg,#14101aeb,#0a080dec);
+}
+
+.hall-race-lane::before,
+.online-hall-race-lane::before{
+  content:counter(hall-race-lane);
+  display:grid;
+  width:26px;
+  height:26px;
+  place-items:center;
+  border:1px solid #80633d;
+  border-radius:50%;
+  background:#171016;
+  color:#e8cf8e;
+  font:900 11px/1 ui-monospace,monospace;
+}
+
+.hall-race-progress,
+.online-hall-race-progress{
+  position:relative;
+  height:42px;
+  overflow:hidden;
+  border-left:2px solid #83dce8;
+  border-right:3px double #e1bd69;
+  background:linear-gradient(180deg,#211628b8,#100c16c7);
+}
+
+.hall-race-progress::after,
+.online-hall-race-progress::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(90deg,transparent 0 calc(25% - 1px),#ffffff0d calc(25% - 1px) 25%);
+  pointer-events:none;
+}
+
+.hall-race-progress>i,
+.online-hall-race-progress>i{
+  position:absolute;
+  z-index:1;
+  left:0;
+  top:0;
+  bottom:0;
+  width:clamp(0%,var(--race-progress,0%),100%);
+  background:linear-gradient(90deg,#764b8c24,#d9b65b2c);
+  transition:width .24s linear;
+}
+
+.hall-race-runner,
+.online-hall-race-runner{
+  position:absolute;
+  z-index:2;
+  left:clamp(18px,var(--race-progress,0%),calc(100% - 24px));
+  top:50%;
+  width:42px;
+  height:42px;
+  display:grid;
+  place-items:center;
+  transform:translate(-50%,-50%);
+  transition:left .24s linear;
+  filter:drop-shadow(0 4px 3px #000e);
+}
+
+.hall-race-runner :is(img,.monster-visual),
+.online-hall-race-runner :is(img,.monster-visual),
+.hall-race-runner>img,
+.online-hall-race-runner>img{
+  width:42px!important;
+  height:42px!important;
+  object-fit:contain;
+}
+
+.hall-race-lane:is(.winner,[data-place="1"]),
+.online-hall-race-lane:is(.winner,[data-place="1"]){
+  border-color:#e4bd59;
+  background:linear-gradient(180deg,#392711eb,#16100aeb);
+  box-shadow:inset 0 0 17px #edc45b2b,0 0 12px #d9a83b36;
+}
+
+.hall-game-actions,
+.online-hall-game-actions{
+  position:sticky;
+  z-index:4;
+  bottom:0;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+  padding:8px;
+  border:1px solid #6f5338;
+  border-radius:10px;
+  background:#09070df2;
+  box-shadow:0 -9px 18px #0009;
+}
+
+.hall-game-actions button,
+.online-hall-game-actions button{
+  min-height:48px;
+  padding:8px;
+  border:1px solid #684c75;
+  border-radius:8px;
+  background:linear-gradient(180deg,#291832,#120e17);
+  color:#efe3f3;
+  font-size:12px;
+  font-weight:900;
+}
+
+.hall-game-actions button:is(.primary,[data-primary="true"]),
+.online-hall-game-actions button:is(.primary,[data-primary="true"]){
+  border-color:#dfb65d;
+  background:linear-gradient(180deg,#654816,#2a1b08);
+  color:#fff0ba;
+  box-shadow:inset 0 0 18px #f7cc6233;
+}
+
+.hall-game-actions button.danger,
+.online-hall-game-actions button.danger{
+  border-color:#8b4050;
+  background:linear-gradient(180deg,#461925,#1d0d13);
+  color:#ffbac6;
+}
+
+.hall-game-actions button:disabled,
+.online-hall-game-actions button:disabled{
+  filter:grayscale(.65);
+  opacity:.45;
+}
+
+.hall-game-status,
+.online-hall-game-status{
+  min-height:44px;
+  display:grid;
+  place-items:center;
+  padding:8px 10px;
+  border:1px solid #4c4052;
+  border-radius:8px;
+  background:#09080df0;
+  color:#c9bdcc;
+  font-size:11px;
+  font-weight:800;
+  line-height:1.45;
+  text-align:center;
+  overflow-wrap:anywhere;
+}
+
+.hall-game-status:is(.live,[data-state="active"]),
+.online-hall-game-status:is(.live,[data-state="active"]){
+  border-color:#8c6b3e;
+  color:#ffe09b;
+  box-shadow:inset 0 0 15px #b27d2523;
+}
+
+.hall-game-status:is(.error,.danger),
+.online-hall-game-status:is(.error,.danger){
+  border-color:#8d3e50;
+  background:#2b0e17;
+  color:#ffb1bd;
+}
+
+.hall-game-scoreboard,
+.online-hall-game-scoreboard{
+  min-width:0;
+  display:grid;
+  gap:6px;
+  margin:0;
+  padding:10px;
+  border:1px solid #80623d;
+  border-radius:10px;
+  background:linear-gradient(145deg,#17111b,#09070c);
+  list-style:none;
+}
+
+.hall-game-scoreboard>li,
+.hall-game-scoreboard>div,
+.online-hall-game-scoreboard>li,
+.online-hall-game-scoreboard>div{
+  min-height:44px;
+  display:grid;
+  grid-template-columns:30px minmax(0,1fr) auto;
+  align-items:center;
+  gap:7px;
+  padding:6px 8px;
+  border:1px solid #332d38;
+  border-radius:7px;
+  background:#09080d;
+  color:#bdb3c1;
+}
+
+.hall-game-scoreboard b,
+.online-hall-game-scoreboard b{
+  overflow:hidden;
+  color:#eee1c7;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hall-game-scoreboard strong,
+.online-hall-game-scoreboard strong{
+  color:#e4bf66;
+  font:900 12px/1 ui-monospace,monospace;
+  white-space:nowrap;
+}
+
+.hall-game-scoreboard>li>span,
+.online-hall-game-scoreboard>li>span{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hall-game-crown,
+.online-hall-game-crown{
+  display:inline-grid;
+  width:30px;
+  height:30px;
+  place-items:center;
+  border:1px solid #d4aa50;
+  border-radius:50%;
+  background:radial-gradient(circle,#714918,#241408);
+  color:#ffe485;
+  font-size:17px;
+  filter:drop-shadow(0 0 6px #e0ae3e88);
+  animation:build252-crown .9s ease-in-out infinite alternate;
+}
+
+@keyframes build252-mimic-fuse{
+  to{transform:rotate(360deg)}
+}
+
+@keyframes build252-mimic-danger{
+  to{transform:scale(1.035);filter:brightness(1.25)}
+}
+
+@keyframes build252-crown{
+  to{transform:translateY(-2px);filter:brightness(1.24) drop-shadow(0 0 8px #e0ae3e99)}
+}
+
+@keyframes hall-game-race-run{
+  from{left:24px}
+  to{left:calc(100% - 25px)}
+}
+
+/* OnlineViews integration.  These selectors deliberately follow the emitted
+   compact markup while the component aliases above remain available for
+   future screens. */
+.hall-games-title{
+  position:sticky;
+  z-index:6;
+  top:0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  min-height:58px;
+  padding:8px 9px;
+  border:1px solid #7e623c;
+  border-radius:10px;
+  background:linear-gradient(180deg,#17111dfb,#0b0910fb);
+  box-shadow:0 7px 18px #000b;
+}
+
+.hall-games-title>div{
+  display:grid;
+  gap:2px;
+}
+
+.hall-games-title small{
+  color:#7ddce8;
+  font:800 9px/1.2 ui-monospace,monospace;
+  letter-spacing:.15em;
+}
+
+.hall-games-title b{
+  overflow:hidden;
+  color:#ffe3a0;
+  font:900 clamp(20px,6vw,28px)/1.08 Georgia,"Yu Mincho",serif;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hall-game-menu,
+.online-hall-games-menu{
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:9px;
+  margin:0;
+  padding:1px;
+  overflow:visible;
+}
+
+.hall-game-card,
+.online-hall-game-card{
+  grid-template-columns:84px minmax(0,1fr);
+  justify-items:stretch;
+}
+
+.hall-game-card>img,
+.online-hall-game-card>img{
+  position:relative;
+  z-index:1;
+  width:82px;
+  height:82px;
+  align-self:center;
+  object-fit:contain;
+  image-rendering:pixelated;
+  filter:drop-shadow(0 7px 5px #000d) drop-shadow(0 0 7px #d55e6775);
+}
+
+.hall-game-card>span:last-child,
+.online-hall-game-card>span:last-child{
+  position:relative;
+  z-index:1;
+  min-width:0;
+  display:grid;
+  align-content:center;
+  gap:4px;
+}
+
+.hall-game-card>span:last-child>b,
+.online-hall-game-card>span:last-child>b{
+  overflow:hidden;
+  color:#f7dda1;
+  font:900 clamp(17px,5vw,24px)/1.18 Georgia,"Yu Mincho",serif;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hall-game-card>span:last-child>em,
+.online-hall-game-card>span:last-child>em{
+  color:#b8adbd;
+  font-size:10px;
+  font-style:normal;
+  line-height:1.45;
+  overflow-wrap:anywhere;
+}
+
+.hall-game-race-preview{
+  position:relative!important;
+  width:84px;
+  height:76px;
+  align-self:center;
+  display:block!important;
+}
+
+.hall-game-preview-racer{
+  position:absolute!important;
+  width:48px!important;
+  height:48px!important;
+  filter:drop-shadow(0 5px 4px #000d);
+}
+
+.hall-game-preview-racer.racer-1{left:0;top:1px}
+.hall-game-preview-racer.racer-2{right:0;top:14px}
+.hall-game-preview-racer.racer-3{left:18px;bottom:0}
+
+.hall-game-lobby>header,
+.online-hall-game-lobby>header{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+}
+
+.hall-game-lobby>header>div,
+.online-hall-game-lobby>header>div{
+  display:grid;
+  gap:2px;
+}
+
+.hall-game-lobby>header small,
+.online-hall-game-lobby>header small{
+  color:#7ddce8;
+  font:800 9px/1.2 ui-monospace,monospace;
+  letter-spacing:.13em;
+}
+
+.hall-game-lobby>header b,
+.online-hall-game-lobby>header b{
+  overflow:hidden;
+  color:#ecd9aa;
+  font-size:14px;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hall-game-lobby>header strong,
+.online-hall-game-lobby>header strong{
+  display:grid;
+  min-width:44px;
+  min-height:44px;
+  place-items:center;
+  border:1px solid #dfb65d;
+  border-radius:50%;
+  background:#3a2711;
+  color:#ffe291;
+  font:900 16px/1 ui-monospace,monospace;
+}
+
+.hall-game-participants,
+.online-hall-game-participants{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+}
+
+.hall-game-participant{
+  min-height:72px;
+  display:grid;
+  grid-template-columns:46px minmax(0,1fr);
+  align-items:center;
+  gap:7px;
+  padding:7px;
+  overflow:hidden;
+  border:1px solid #3e3545;
+  border-radius:9px;
+  background:#0c0a10e8;
+  color:#bdb3c2;
+}
+
+.hall-game-participant-art{
+  width:46px!important;
+  height:46px!important;
+}
+
+.hall-game-participant>div{
+  display:grid;
+  gap:1px;
+  min-width:0;
+}
+
+.hall-game-participant small{
+  color:#7fdde8;
+  font:800 8px/1.2 ui-monospace,monospace;
+}
+
+.hall-game-participant b,
+.hall-game-participant span{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hall-game-participant b{
+  color:#eee2c7;
+  font-size:11px;
+}
+
+.hall-game-participant span{
+  color:#988d9d;
+  font-size:8px;
+}
+
+.hall-game-participant:is(.self,.ready){
+  border-color:#b28d4e;
+  background:linear-gradient(135deg,#22180d,#100b14);
+}
+
+.hall-game-participant.offline{
+  filter:grayscale(1);
+  opacity:.55;
+}
+
+.hall-game-participant.empty{
+  grid-template-columns:1fr;
+  place-items:center;
+  border-style:dashed;
+  color:#716a76;
+  text-align:center;
+}
+
+.hall-game-roster{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:7px;
+  padding:8px;
+  border:1px solid #4a384f;
+  border-radius:9px;
+  background:#09070d;
+}
+
+.hall-game-roster>header{
+  display:grid;
+  gap:2px;
+}
+
+.hall-game-roster>header small{
+  color:#79dce7;
+  font:800 8px/1.2 ui-monospace,monospace;
+  letter-spacing:.13em;
+}
+
+.hall-game-roster>header b{
+  color:#decba1;
+  font-size:12px;
+}
+
+.hall-game-roster>div{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+}
+
+.hall-game-roster>div>button{
+  min-height:72px;
+  display:grid;
+  grid-template-columns:46px minmax(0,1fr);
+  align-items:center;
+  gap:6px;
+  padding:6px;
+  overflow:hidden;
+  border:1px solid #4d3b55;
+  border-radius:8px;
+  background:linear-gradient(180deg,#17111d,#0b0910);
+  color:#d9cfdc;
+  text-align:left;
+}
+
+.hall-game-roster-art{
+  width:46px!important;
+  height:46px!important;
+}
+
+.hall-game-roster>div>button>span{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+
+.hall-game-roster>div>button b,
+.hall-game-roster>div>button small{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.hall-game-roster>div>button b{color:#eee3c8;font-size:10px}
+.hall-game-roster>div>button small{color:#9f93a5;font-size:8px}
+
+.hall-game-roster>div>button:is(.selected,[aria-pressed="true"]){
+  border-color:#e0b75e;
+  background:linear-gradient(180deg,#4d3513,#1d1309);
+  box-shadow:inset 0 0 15px #f5cc6130,0 0 0 2px #e0b75e25;
+}
+
+.hall-game-mimic-stage{
+  min-height:0;
+  display:grid;
+  grid-template-rows:none;
+  grid-auto-rows:max-content;
+  place-items:stretch;
+  align-content:start;
+  gap:9px;
+  padding:10px;
+  overflow:hidden;
+  border:1px solid #825e3b;
+  border-radius:11px;
+  background:
+    radial-gradient(circle at 50% 35%,#8d35443d,transparent 38%),
+    linear-gradient(180deg,#100a12,#060509);
+  box-shadow:inset 0 0 34px #000a;
+}
+
+.hall-game-mimic-stage>header{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  align-items:center;
+  gap:7px;
+  min-height:36px;
+  color:#b5a9b9;
+  font-size:9px;
+}
+
+.hall-game-mimic-stage>header span{
+  color:#7fdce6;
+  font:800 9px/1.2 ui-monospace,monospace;
+}
+
+.hall-game-mimic-stage>header b{color:#e9d8ab}
+.hall-game-mimic-stage>header strong{color:#ff8993;font:900 14px/1 ui-monospace,monospace}
+
+.hall-game-mimic-holder{
+  position:relative;
+  width:clamp(130px,39vw,178px);
+  min-height:146px;
+  justify-self:center;
+  display:grid;
+  place-items:center;
+  align-content:center;
+  gap:2px;
+  border:1px solid #845a4a;
+  border-radius:50%;
+  background:radial-gradient(circle,#7c35455c 0 27%,#21101bde 53%,#08070ce8 73%);
+  box-shadow:inset 0 0 25px #000b,0 0 20px #e25b6658;
+}
+
+.hall-game-mimic-holder::after{
+  content:"";
+  position:absolute;
+  inset:8px;
+  border:1px dashed #e3bc63a3;
+  border-radius:50%;
+  animation:build252-mimic-fuse 1.4s linear infinite;
+  pointer-events:none;
+}
+
+.hall-game-mimic-holder img{
+  position:relative;
+  z-index:1;
+  width:92px;
+  height:92px;
+  object-fit:contain;
+  image-rendering:pixelated;
+  filter:drop-shadow(0 7px 5px #000e);
+}
+
+.hall-game-mimic-holder small{
+  position:relative;
+  z-index:1;
+  max-width:120px;
+  color:#ffe09c;
+  font-size:9px;
+  font-weight:900;
+  line-height:1.3;
+  text-align:center;
+}
+
+.hall-game-mimic-holder.self{
+  border-color:#ff7079;
+  box-shadow:inset 0 0 28px #9d263d66,0 0 25px #ff5c656f;
+  animation:build252-mimic-danger .55s ease-in-out infinite alternate;
+}
+
+.hall-game-danger{
+  position:relative;
+  height:24px;
+  overflow:hidden;
+  border:1px solid #85404e;
+  border-radius:999px;
+  background:#0a0609;
+  box-shadow:inset 0 0 9px #000;
+}
+
+.hall-game-danger>i{
+  position:absolute;
+  inset:0 auto 0 0;
+  max-width:100%;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#8c342d,#ea5c52 65%,#ffd365);
+  box-shadow:0 0 12px #f6665c78;
+  transition:width .2s linear;
+}
+
+.hall-game-danger>b{
+  position:relative;
+  z-index:1;
+  display:grid;
+  height:100%;
+  place-items:center;
+  color:#fff2de;
+  font:900 9px/1 ui-monospace,monospace;
+  text-shadow:0 1px 3px #000;
+}
+
+.hall-game-pass-targets{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:6px;
+}
+
+.hall-game-pass-targets>small{
+  grid-column:1/-1;
+  color:#c8b9cb;
+  font-size:9px;
+  text-align:center;
+}
+
+.hall-game-pass-targets>button{
+  min-height:58px;
+  display:grid;
+  grid-template-columns:38px minmax(0,1fr);
+  align-items:center;
+  gap:6px;
+  padding:6px;
+  overflow:hidden;
+  border:1px solid #6b455d;
+  border-radius:8px;
+  background:linear-gradient(180deg,#25131e,#100a10);
+  color:#f2dce7;
+  font-size:10px;
+  font-weight:900;
+  text-align:left;
+}
+
+.hall-game-pass-targets>button:not(:disabled){
+  border-color:#e06b6d;
+  box-shadow:inset 0 0 14px #b83b4931;
+}
+
+.hall-game-pass-targets>button:disabled{opacity:.4}
+
+.hall-game-pass-art{
+  width:38px!important;
+  height:38px!important;
+}
+
+.hall-game-mimic-stage>footer,
+.hall-game-race-track>footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:7px;
+  min-height:44px;
+  padding:6px 8px;
+  border-top:1px solid #4e3b51;
+  color:#b7abbc;
+  font-size:9px;
+}
+
+.hall-game-mimic-stage>footer button,
+.hall-game-race-track>footer button{
+  min-width:92px;
+  min-height:44px;
+  border:1px solid #d9ad56;
+  border-radius:8px;
+  background:linear-gradient(180deg,#5c4014,#261806);
+  color:#ffe6a6;
+  font-weight:900;
+}
+
+.hall-game-race-track{
+  min-height:0;
+  display:grid;
+  align-content:start;
+  gap:8px;
+  padding:9px;
+  overflow:hidden;
+  border:1px solid #75583a;
+  border-radius:11px;
+  background:
+    radial-gradient(circle at 75% 5%,#71428931,transparent 34%),
+    linear-gradient(180deg,#100c15,#060509);
+}
+
+.hall-game-race-track>header{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:7px;
+}
+
+.hall-game-race-track>header>div{
+  display:grid;
+  gap:2px;
+}
+
+.hall-game-race-track>header small{
+  color:#79dce7;
+  font:800 9px/1.2 ui-monospace,monospace;
+  letter-spacing:.13em;
+}
+
+.hall-game-race-track>header b{
+  color:#edd8a4;
+  font-size:14px;
+}
+
+.hall-game-race-track>header strong{
+  display:grid;
+  width:44px;
+  height:44px;
+  place-items:center;
+  border:1px solid #dfb65d;
+  border-radius:50%;
+  background:#3a2711;
+  color:#ffe291;
+  font:900 15px/1 ui-monospace,monospace;
+}
+
+.hall-game-race-track>p{
+  margin:0;
+  color:#9f94a5;
+  font-size:9px;
+  line-height:1.45;
+}
+
+.hall-game-race-lanes{
+  display:grid;
+  gap:7px;
+}
+
+.hall-game-race-lane{
+  position:relative;
+  min-height:96px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:6px;
+  padding:7px;
+  overflow:hidden;
+  border:1px solid #493a50;
+  border-radius:8px;
+  background:
+    repeating-linear-gradient(90deg,#ffffff04 0 12px,transparent 12px 24px),
+    linear-gradient(180deg,#14101aeb,#09080ceb);
+}
+
+.hall-game-race-lane::before{
+  content:none;
+  display:none;
+}
+
+.hall-game-race-lane>header{
+  grid-column:1/-1;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:6px;
+  color:#978c9d;
+  font-size:8px;
+}
+
+.hall-game-race-lane>header small{color:#7ddce8;font:800 8px/1 ui-monospace,monospace}
+.hall-game-race-lane>header b{overflow:hidden;color:#e9ddc4;font-size:10px;text-overflow:ellipsis;white-space:nowrap}
+.hall-game-race-lane>header span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.hall-game-race-rail{
+  position:relative;
+  grid-column:1/-1;
+  height:48px;
+  overflow:hidden;
+  border-left:2px solid #83dce8;
+  border-right:3px double #e1bd69;
+  border-radius:4px;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 calc(25% - 1px),#ffffff0d calc(25% - 1px) 25%),
+    linear-gradient(180deg,#211628d4,#100c16de);
+}
+
+.hall-game-racer{
+  position:absolute;
+  z-index:2;
+  left:clamp(24px,var(--race-progress,0%),calc(100% - 25px));
+  top:50%;
+  width:46px;
+  height:46px;
+  display:grid;
+  place-items:center;
+  transform:translate(-50%,-50%);
+  transition:left .24s linear;
+  filter:drop-shadow(0 4px 3px #000e);
+}
+
+.hall-game-race-track.phase-running .hall-game-racer{
+  animation:hall-game-race-run var(--race-duration,9000ms) linear var(--race-delay,0ms) both;
+}
+
+.hall-game-racer-art{
+  width:46px!important;
+  height:46px!important;
+}
+
+.hall-game-racer em{
+  position:absolute;
+  left:50%;
+  bottom:100%;
+  max-width:96px;
+  padding:2px 4px;
+  overflow:hidden;
+  border:1px solid #6e5577;
+  border-radius:5px;
+  background:#100b16e8;
+  color:#f4dca0;
+  font-size:7px;
+  font-style:normal;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  transform:translateX(-50%);
+}
+
+.hall-game-finish{
+  position:absolute;
+  z-index:1;
+  right:1px;
+  top:0;
+  bottom:0;
+  display:grid;
+  width:25px;
+  place-items:center;
+  background:repeating-conic-gradient(#eee 0 25%,#171319 0 50%) 50%/10px 10px;
+  color:#ffe593;
+  font:900 6px/1 ui-monospace,monospace;
+  text-shadow:0 1px 3px #000,0 0 3px #000;
+  writing-mode:vertical-rl;
+}
+
+.hall-game-race-lane>button{
+  grid-column:1/-1;
+  min-height:44px;
+  border:1px solid #6d5178;
+  border-radius:7px;
+  background:linear-gradient(180deg,#281731,#120d17);
+  color:#eddff2;
+  font-size:10px;
+  font-weight:900;
+}
+
+.hall-game-race-lane>button:not(:disabled){
+  border-color:#d3aa56;
+  color:#ffe5a0;
+}
+
+.hall-game-race-lane>button:disabled{opacity:.5}
+
+.hall-game-race-lane.winner{
+  border-color:#e4bd59;
+  background:linear-gradient(180deg,#392711eb,#16100aeb);
+  box-shadow:inset 0 0 17px #edc45b2b,0 0 12px #d9a83b36;
+}
+
+.hall-game-race-lane.empty{
+  min-height:52px;
+  grid-template-columns:auto minmax(0,1fr);
+  opacity:.55;
+}
+
+.hall-game-race-lane.empty small{color:#7ddce8;font:800 8px/1 ui-monospace,monospace}
+.hall-game-race-lane.empty b{color:#a89dac;font-size:10px}
+
+.hall-game-unsupported{
+  min-height:180px;
+  display:grid;
+  place-content:center;
+  gap:8px;
+  padding:20px 14px;
+  border:1px solid #775886;
+  border-radius:11px;
+  background:linear-gradient(180deg,#17101e,#09070d);
+  text-align:center;
+}
+
+.hall-game-unsupported b{color:#f1d9a0;font-size:14px}
+.hall-game-unsupported p{max-width:34em;margin:0;color:#afa3b3;font-size:10px;line-height:1.55}
+
+.hall-games-chat-bar.online-hall-chat-bar{
+  position:sticky;
+  z-index:7;
+  left:auto;
+  right:auto;
+  bottom:62px;
+  width:100%;
+  min-height:56px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 56px 44px;
+  gap:5px;
+  padding:6px;
+  border:1px solid #8a6597;
+  border-radius:9px;
+  background:#09070ff5;
+  box-shadow:0 -5px 17px #000b,0 6px 17px #000b;
+}
+
+.hall-games-chat-bar.online-hall-chat-bar input{
+  width:100%;
+  min-width:0;
+  height:44px;
+  padding:0 9px;
+  border:1px solid #594063;
+  border-radius:7px;
+  background:#15101d;
+  color:#fff;
+  font-size:16px!important;
+}
+
+.hall-games-chat-bar.online-hall-chat-bar button{
+  min-width:44px;
+  min-height:44px;
+  padding:5px;
+  border:1px solid #745481;
+  border-radius:7px;
+  background:linear-gradient(180deg,#2b1934,#140f19);
+  color:#fff;
+  font-size:10px;
+  font-weight:900;
+}
+
+.hall-games-chat-bar.online-hall-chat-bar button[type="submit"]{
+  border-color:#c79b4d;
+  background:linear-gradient(180deg,#5b4016,#271908);
+  color:#ffe8aa;
+}
+
+.hall-games-social{
+  position:sticky;
+  z-index:6;
+  bottom:0;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+  padding:7px;
+  border:1px solid #60476c;
+  border-radius:9px;
+  background:#09070df2;
+  box-shadow:0 -8px 18px #0009;
+  margin-top:auto;
+}
+
+.hall-games-social button{
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:6px 8px;
+  border:1px solid #684d74;
+  border-radius:8px;
+  background:linear-gradient(180deg,#281731,#120d17);
+  color:#eee1f2;
+}
+
+.hall-games-social button>b{font-size:20px}
+.hall-games-social button>small{font-size:9px;font-weight:900}
+.hall-games-social .home-pixel-icon{width:25px;height:25px}
+.hall-games-social button.active{border-color:#deb75f;background:linear-gradient(180deg,#594016,#281a09);color:#ffe8aa}
+
+@media(min-width:600px){
+  .hall-game-intro-grid,
+  .online-hall-game-intro-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .hall-game-roster>div,
+  .online-hall-game-roster{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+}
+
+@media(max-width:430px){
+  .online-hall-zone.zone-games{
+    width:90px!important;
+    min-height:76px!important;
+  }
+
+  .online-hall-zone.zone-games .hall-facility-art{
+    width:82px!important;
+    height:55px!important;
+  }
+
+  .online-hall-games-modal,
+  .online-hall-games-overlay{
+    padding:
+      max(6px,env(safe-area-inset-top))
+      max(6px,env(safe-area-inset-right))
+      max(6px,env(safe-area-inset-bottom))
+      max(6px,env(safe-area-inset-left));
+  }
+
+  .online-hall-games-menu,
+  .online-hall-games-modal>.hall-games-body,
+  .online-hall-games-overlay>.hall-games-body{
+    gap:8px;
+  }
+
+  .hall-games-header,
+  .hall-games-title,
+  .online-hall-games-header{
+    padding:7px 8px;
+  }
+
+  .hall-game-card,
+  .online-hall-game-card{
+    min-height:116px;
+    padding:11px;
+    grid-template-columns:78px minmax(0,1fr);
+  }
+
+  .hall-game-card>img,
+  .online-hall-game-card>img,
+  .hall-game-race-preview{
+    width:76px;
+    height:72px;
+  }
+
+  .hall-game-lobby,
+  .online-hall-game-lobby{
+    padding:8px;
+  }
+
+  .hall-game-arena,
+  .online-hall-game-arena,
+  .hall-mimic-stage,
+  .hall-game-mimic-stage,
+  .online-hall-mimic-stage,
+  .hall-race-track,
+  .hall-game-race-track,
+  .online-hall-race-track{
+    min-height:250px;
+  }
+}
+
+@media(max-width:390px){
+  .hall-game-member,
+  .hall-game-participant,
+  .online-hall-game-participant{
+    grid-template-columns:38px minmax(0,1fr);
+    padding:6px;
+  }
+
+  .hall-game-member :is(img,.monster-visual,.online-v3-avatar),
+  .online-hall-game-participant :is(img,.monster-visual,.online-v3-avatar){
+    width:38px!important;
+    height:38px!important;
+  }
+
+  .hall-game-participant-art{
+    width:38px!important;
+    height:38px!important;
+  }
+
+  .hall-game-monster-option,
+  .online-hall-game-monster-option{
+    grid-template-columns:44px minmax(0,1fr);
+    padding-inline:6px;
+  }
+
+  .hall-game-monster-option :is(img,.monster-visual,.online-v3-avatar),
+  .online-hall-game-monster-option :is(img,.monster-visual,.online-v3-avatar){
+    width:44px!important;
+    height:44px!important;
+  }
+
+  .hall-game-roster>div>button{
+    grid-template-columns:40px minmax(0,1fr);
+    padding-inline:5px;
+  }
+
+  .hall-game-roster-art{
+    width:40px!important;
+    height:40px!important;
+  }
+
+  .hall-mimic-core,
+  .online-hall-mimic-core{
+    width:122px;
+    height:122px;
+  }
+
+  .hall-game-mimic-holder{
+    width:128px;
+    min-height:134px;
+  }
+}
+
+@media(max-width:375px){
+  .hall-game-tabs button,
+  .online-hall-game-tabs button{
+    padding-inline:5px;
+    font-size:10px;
+  }
+
+  .hall-game-members,
+  .hall-game-participants,
+  .online-hall-game-participants,
+  .hall-game-roster,
+  .online-hall-game-roster{
+    gap:5px;
+  }
+
+  .hall-game-member small,
+  .hall-game-participant small,
+  .online-hall-game-participant small,
+  .hall-game-monster-option small,
+  .online-hall-game-monster-option small{
+    font-size:8px;
+  }
+
+  .hall-game-actions,
+  .online-hall-game-actions{
+    gap:5px;
+    padding:6px;
+  }
+
+  .hall-games-social{
+    gap:5px;
+    padding:6px;
+  }
+
+  .hall-games-social button>small{
+    font-size:8px;
+  }
+
+  .hall-games-chat-bar.online-hall-chat-bar{
+    grid-template-columns:minmax(0,1fr) 52px 44px;
+    gap:4px;
+    padding:5px;
+  }
+}
+
+@media(max-height:700px){
+  /* On a short hall field the centered emote launcher would cover the new
+     center facility. Keep the wheel fully on-screen while moving its anchor
+     away from the Games entrance. */
+  .online-hall-world>.online-hall-social-tools>.online-hall-emote-tool{
+    left:max(76px,20%)!important;
+  }
+
+  .online-hall-games-modal,
+  .online-hall-games-overlay{
+    padding-top:max(5px,env(safe-area-inset-top));
+    padding-bottom:max(5px,env(safe-area-inset-bottom));
+  }
+
+  .hall-games-header,
+  .hall-games-title,
+  .online-hall-games-header{
+    min-height:52px;
+    padding-block:6px;
+  }
+
+  .hall-games-header p,
+  .online-hall-games-header p{
+    display:none;
+  }
+
+  .hall-game-card,
+  .online-hall-game-card{
+    min-height:102px;
+  }
+
+  .hall-game-arena,
+  .online-hall-game-arena,
+  .hall-mimic-stage,
+  .hall-game-mimic-stage,
+  .online-hall-mimic-stage,
+  .hall-race-track,
+  .hall-game-race-track,
+  .online-hall-race-track{
+    min-height:228px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .hall-mimic-core,
+  .online-hall-mimic-core,
+  .hall-mimic-core::after,
+  .online-hall-mimic-core::after,
+  .hall-game-mimic-holder,
+  .hall-game-mimic-holder::after,
+  .hall-game-crown,
+  .online-hall-game-crown{
+    animation:none!important;
+  }
+
+  .hall-race-progress>i,
+  .online-hall-race-progress>i,
+  .hall-race-runner,
+  .online-hall-race-runner,
+  .hall-game-danger>i,
+  .hall-game-racer{
+    animation:none!important;
+    transition:none!important;
+  }
+}

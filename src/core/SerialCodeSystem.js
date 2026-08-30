@@ -1,5 +1,5 @@
 import{createMonster,calculatedStats}from"../models/Monster.js?v=2.11.30-build195";
-import{allLearnedSkills,maxMp,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=2.11.30-build195";
+import{allLearnedSkills,maxMp,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=2.11.73-build249";
 import{SPECIES}from"../data/species.js?v=2.11.0-build164";
 import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.11.0-build164";
 import{MONSTER_STORAGE_CAP}from"./config.js?v=2.11.0-build164";

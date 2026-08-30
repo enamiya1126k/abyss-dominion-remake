@@ -1,6 +1,6 @@
 import{SPECIES}from"../../data/species.js?v=2.11.0-build164";
 import{displayName}from"../../models/Monster.js?v=2.11.30-build195";
-import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=2.11.30-build195";
+import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=2.11.73-build249";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.30-build195";
 import{equipmentDisplayRarity,equipmentSubslotLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=2.11.30-build195";
 import{monsterVisual}from"../MonsterVisual.js?v=2.11.0-build164";

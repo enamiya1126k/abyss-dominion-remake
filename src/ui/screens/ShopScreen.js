@@ -1,4 +1,4 @@
-import{activeSecretRoom,CASINO_CRYSTAL_COST,DARK_MARKET_ITEM_LIMIT,SECRET_ROOM_RECOVERY_ITEMS}from"../../core/SecretRoomSystem.js?v=2.11.24-build188";
+import{activeSecretRoom,CASINO_CRYSTAL_COST,DARK_MARKET_ITEM_LIMIT,SECRET_ROOM_RECOVERY_ITEMS}from"../../core/SecretRoomSystem.js?v=2.11.75-build251";
 
 function marketStatus(room){
  const remaining=(room?.offers??[]).filter(offer=>!offer.sold).length;
@@ -15,7 +15,7 @@ export function ShopScreen(state){
    <div class="spread secret-room-heading"><div><div class="eyebrow">SECRET ROOM・${room.floor}F</div><h1 class="hero-title">深淵裏街</h1></div><button id="leaveShop">探索へ</button></div>
    <div class="panel secret-room-wallet"><div><small>所持GOLD</small><b id="shopGold">${state.player.gold.toLocaleString()}G</b></div><span>この🚪だけの限定品</span></div>
    <div class="secret-room-grid">
-    <button data-shop-menu="casino" class="secret-room-casino ${casino.used?"used":""}"><span>🎰</span><b>深淵スロット</b><small>💎${CASINO_CRYSTAL_COST}・0〜999倍の運命抽選</small><em>${casino.used?"この🚪では挑戦済み":"この🚪で1回限り"}</em></button>
+    <button data-shop-menu="casino" class="secret-room-casino"><span>🎰</span><b>深淵スロット</b><small>${casino.entryPaid?"追加料金なし":"初回入場 💎"+CASINO_CRYSTAL_COST}・最高999倍</small><em>${casino.spins?`${casino.spins.toLocaleString()}回・収支 ${casino.netGold>=0?"+":""}${casino.netGold.toLocaleString()}G`:"入場後はGOLDで何度でも"}</em></button>
     <button data-shop-menu="inn" class="${room.rested?"used":""}"><span>🛏️</span><b>無料の宿</b><small>HP・MP・状態異常を完全回復</small><em>${room.rested?"利用済み":"この🚪で1回無料"}</em></button>
     <button data-shop-menu="market" class="secret-room-market"><span>🕶️</span><b>闇市場</b><small>SR〜神話・一点限りの裏商品</small><em>${marketStatus(room)}</em></button>
    </div>

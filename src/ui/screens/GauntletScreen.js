@@ -1,6 +1,6 @@
 import{APP_VERSION}from"../../core/config.js?v=2.11.0-build164";
 import{calculatedStats,displayName}from"../../models/Monster.js?v=2.11.30-build195";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.11.30-build195";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.11.73-build249";
 import{ENDGAME_BOSSES,ENDGAME_TRIALS}from"../../core/EndgameSystem.js?v=2.11.30-build195";
 import{floorBossDefinitionById}from"../../data/floorBosses.js?v=2.11.30-build195";
 import{SPECIES}from"../../data/species.js?v=2.11.0-build164";

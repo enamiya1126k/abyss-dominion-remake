@@ -1,10 +1,11 @@
 import {
   buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.72-build248";
+  onlineSocialNotificationSummary,
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.76-build252";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=2.11.72-build248";
+} from "./OnlineViews.js?v=2.11.76-build252";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   commitOnlineTrade, recoverOrphanedTradeEscrows,
@@ -43,6 +44,12 @@ const GUILD_PLAN_REMINDER_RECEIPT_MAX_BYTES = 16 * 1024;
 const MUTED_PLAYER_LIMIT = 200;
 const FULL_RESET_REQUEST_PATTERN = /^[A-Za-z0-9_-]{18,96}$/;
 const FULL_RESET_TIMEOUT_MS = 12_000;
+const POWER_RANKING_CAPABILITY = "powerRankingsV1";
+const BACKGROUND_CONNECTION_CAPABILITY = "backgroundConnectionV1";
+const POWER_RANKING_REQUEST_TIMEOUT_MS = 10_000;
+const POWER_RANKING_ENTRY_LIMIT = 100;
+const POWER_RANKING_PARTY_LIMIT = 4;
+const POWER_RANKING_EQUIPMENT_LIMIT = 6;
 const FRIEND_MUTATION_SELECTOR = [
   "[data-online-friend-accept]", "[data-online-friend-decline]", "[data-online-friend-block]",
   "[data-online-friend-unblock]", "[data-online-user-block]", "[data-online-friend-invite]", "[data-online-friend-invite-accept]", "[data-online-friend-invite-decline]", "[data-online-friend-remove]",
@@ -80,9 +87,14 @@ const ONLINE_STATE_CONTROL_SELECTOR = [
   "[data-online-room-listing-style]", "[data-online-chat-input]", "[data-online-explore-chat-input]",
   "[data-online-user-block]", "[data-online-user-mute]", "[data-online-user-unmute]", "[data-online-friend-unblock]",
   "[data-online-chat-form] button[type='submit']", "[data-online-explore-chat-form] button[type='submit']",
+  "[data-online-hall-games-toggle]", "[data-online-hall-game-join]", "[data-online-hall-game-leave]",
+  "[data-online-hall-game-ready]", "[data-online-hall-game-start]", "[data-online-hall-game-reset]",
+  "[data-online-hall-game-action]", "[data-online-hall-game-monster]",
 ].join(",");
 const HALL_POINTS = Object.freeze([
   { route: "raid", x: 18, y: 25 }, { route: "explore", x: 82, y: 25 },
+  { route: "games", x: 50, y: 25 },
+  { route: "social", x: 50, y: 49 },
   { route: "team", x: 24, y: 78 }, { route: "chat", x: 76, y: 78 },
 ]);
 
@@ -128,6 +140,192 @@ function cleanSocialText(value, maximum = 80) {
 function boundedInteger(value, minimum, maximum, fallback = minimum) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? Math.max(minimum, Math.min(maximum, Math.floor(parsed))) : fallback;
+}
+
+function boundedNumber(value, minimum, maximum, fallback = minimum) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.max(minimum, Math.min(maximum, parsed)) : fallback;
+}
+
+function rankingIdentifier(value, maximum = 120) {
+  const id = cleanSocialText(value, maximum).trim();
+  return /^[A-Za-z0-9_-]+$/.test(id) ? id : "";
+}
+
+function rankingText(value, maximum, fallback = "") {
+  return cleanSocialText(value, maximum).trim() || fallback;
+}
+
+function rankingAsset(value) {
+  const asset = cleanSocialText(value, 260).trim();
+  if (!asset || asset.includes("..") || asset.includes("\\") || !/^(?:\.\/)?assets\/[A-Za-z0-9_./@+-]+$/.test(asset)) return null;
+  return asset;
+}
+
+function rankingPower(value) {
+  return boundedInteger(value, 0, Number.MAX_SAFE_INTEGER, 0);
+}
+
+function normalizePowerRankingEquipment(source) {
+  if (!source || typeof source !== "object") return null;
+  const name = rankingText(source.name, 64);
+  if (!name) return null;
+  return {
+    slot: rankingText(source.slot, 24, "equipment"),
+    name,
+    rarity: rankingText(source.rarity, 16, "N"),
+    level: boundedInteger(source.level, 0, 99_999_999, 0),
+    plus: boundedInteger(source.plus, 0, 99_999, 0),
+    visualAsset: rankingAsset(source.visualAsset),
+  };
+}
+
+function normalizePowerRankingBattleStats(source) {
+  const stats = source && typeof source === "object" ? source : {};
+  const stat = (name, fallback = 0) => boundedInteger(stats[name], 0, 1_000_000_000_000, fallback);
+  // CombatPower v4 can legally produce fractional crit/evasion values after
+  // series/mastery bonuses. Preserve them so server verification uses exactly
+  // the same final stats as the local combat-power display.
+  const fractionalStat = (name, fallback = 0) => boundedNumber(stats[name], 0, 1_000_000_000_000, fallback);
+  return {
+    hp: Math.max(1, stat("hp", 1)),
+    atk: stat("atk"),
+    matk: stat("matk", stat("mag")),
+    def: stat("def"),
+    mdef: stat("mdef", stat("res")),
+    spd: stat("spd"),
+    crit: fractionalStat("crit"),
+    evasion: fractionalStat("evasion"),
+  };
+}
+
+function normalizePowerRankingMonster(source, fallbackSlot = 1) {
+  if (!source || typeof source !== "object") return null;
+  const requestedSlot = Number(source.slot);
+  const slot = Number.isInteger(requestedSlot) && requestedSlot >= 1 && requestedSlot <= POWER_RANKING_PARTY_LIMIT
+    ? requestedSlot : boundedInteger(fallbackSlot, 1, POWER_RANKING_PARTY_LIMIT, 1);
+  const speciesId = rankingIdentifier(source.speciesId, 80) || "slime";
+  const name = rankingText(source.name ?? source.monsterName, 32, "魔物");
+  const equipment = (Array.isArray(source.equipment) ? source.equipment : []).slice(0, POWER_RANKING_EQUIPMENT_LIMIT)
+    .map(normalizePowerRankingEquipment).filter(Boolean);
+  const circleSource = source.magicCircle && typeof source.magicCircle === "object" ? source.magicCircle : {
+    name: source.circleName,
+    level: source.circleLevel,
+  };
+  return {
+    slot,
+    monsterId: rankingText(source.monsterId, 80) || null,
+    speciesId,
+    visualSpeciesId: rankingIdentifier(source.visualSpeciesId, 80) || null,
+    endgameBossId: rankingIdentifier(source.endgameBossId, 80) || null,
+    floorBossCatalogId: rankingIdentifier(source.floorBossCatalogId, 80) || null,
+    customVisualAsset: rankingAsset(source.customVisualAsset),
+    customVisualBase: rankingAsset(source.customVisualBase),
+    fallbackEmoji: rankingText(source.fallbackEmoji, 8, "魔"),
+    name,
+    level: boundedInteger(source.level, 1, 99_999_999, 1),
+    rarity: rankingText(source.rarity ?? source.summonRarity ?? source.summonTier, 16, "N"),
+    stars: boundedInteger(source.stars, 0, 99, 0),
+    plus: boundedInteger(source.plus, 0, 99_999, 0),
+    power: rankingPower(source.power),
+    battleStats: normalizePowerRankingBattleStats(source.battleStats),
+    equipment,
+    magicCircle: {
+      name: rankingText(circleSource?.name, 32, "魔法陣なし"),
+      level: boundedInteger(circleSource?.level, 0, 99, 0),
+    },
+  };
+}
+
+function normalizePowerRankingIcon(source) {
+  if (!source || typeof source !== "object") return null;
+  return {
+    speciesId: rankingIdentifier(source.speciesId, 80) || "slime",
+    visualSpeciesId: rankingIdentifier(source.visualSpeciesId, 80) || null,
+    endgameBossId: rankingIdentifier(source.endgameBossId, 80) || null,
+    floorBossCatalogId: rankingIdentifier(source.floorBossCatalogId, 80) || null,
+    customVisualAsset: rankingAsset(source.customVisualAsset),
+    customVisualBase: rankingAsset(source.customVisualBase),
+    fallbackEmoji: rankingText(source.fallbackEmoji, 8, "魔"),
+    name: rankingText(source.name ?? source.monsterName, 32, "魔物"),
+  };
+}
+
+/** Build the bounded public payload accepted by the ranking server. */
+export function normalizePowerRankingSnapshot(source) {
+  if (!source || typeof source !== "object") return null;
+  const party = [], usedSlots = new Set();
+  for (const raw of (Array.isArray(source.party) ? source.party : []).slice(0, POWER_RANKING_PARTY_LIMIT * 2)) {
+    const member = normalizePowerRankingMonster(raw, party.length + 1);
+    if (!member || usedSlots.has(member.slot)) continue;
+    usedSlots.add(member.slot); party.push(member);
+    if (party.length >= POWER_RANKING_PARTY_LIMIT) break;
+  }
+  party.sort((left, right) => left.slot - right.slot);
+  if (!party.length) return null;
+  return {
+    displayName: rankingText(source.displayName, 16, "冒険者"),
+    maxFloor: boundedInteger(source.maxFloor, 1, 10_000, 1),
+    power: rankingPower(source.power),
+    party,
+  };
+}
+
+function normalizePowerRankingEntry(source) {
+  if (!source || typeof source !== "object") return null;
+  const playerId = normalizedPlayerId(source.playerId);
+  if (!playerId) return null;
+  const icon = normalizePowerRankingIcon(source.icon ?? source.leadMonster);
+  return {
+    rank: boundedInteger(source.rank, 1, 10_000_000, 1),
+    playerId,
+    displayName: rankingText(source.displayName, 16, "冒険者"),
+    power: rankingPower(source.power),
+    maxFloor: boundedInteger(source.maxFloor, 1, 10_000, 1),
+    updatedAt: boundedInteger(source.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
+    icon,
+    leadMonster: icon,
+  };
+}
+
+export function normalizePowerRankingState(source, { supported = true, loading = false, error = "" } = {}) {
+  const entries = (Array.isArray(source?.entries) ? source.entries : []).slice(0, POWER_RANKING_ENTRY_LIMIT)
+    .map(normalizePowerRankingEntry).filter(Boolean).sort((left, right) => left.rank - right.rank);
+  const self = normalizePowerRankingEntry(source?.self);
+  return {
+    supported: Boolean(supported),
+    loading: Boolean(loading),
+    entries,
+    self,
+    selfRank: self?.rank ?? null,
+    total: boundedInteger(source?.total, 0, 10_000_000, entries.length),
+    updatedAt: boundedInteger(source?.serverNow ?? source?.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
+    serverNow: boundedInteger(source?.serverNow, 0, Number.MAX_SAFE_INTEGER, 0),
+    staleAfterMs: boundedInteger(source?.staleAfterMs, 0, 365 * 24 * 60 * 60_000, 0),
+    error: rankingText(error || source?.error, 120),
+  };
+}
+
+export function normalizePowerRankingProfile(source) {
+  if (!source || typeof source !== "object") return null;
+  const playerId = normalizedPlayerId(source.playerId);
+  if (!playerId) return null;
+  const party = [], usedSlots = new Set();
+  for (const raw of (Array.isArray(source.party) ? source.party : []).slice(0, POWER_RANKING_PARTY_LIMIT * 2)) {
+    const member = normalizePowerRankingMonster(raw, party.length + 1);
+    if (!member || usedSlots.has(member.slot)) continue;
+    usedSlots.add(member.slot); party.push(member);
+    if (party.length >= POWER_RANKING_PARTY_LIMIT) break;
+  }
+  party.sort((left, right) => left.slot - right.slot);
+  return {
+    playerId,
+    displayName: rankingText(source.displayName, 16, "冒険者"),
+    power: rankingPower(source.power),
+    maxFloor: boundedInteger(source.maxFloor, 1, 10_000, 1),
+    updatedAt: boundedInteger(source.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
+    party,
+  };
 }
 
 function normalizedRosterVitals(source) {
@@ -667,7 +865,7 @@ async function copyText(value) {
 }
 
 export class OnlinePartyController {
-  constructor({ getState, toast = () => {}, onReward = async () => ({ ok: false }), onExpeditionStarted = () => ({ ok: true }), onExpeditionResult = async () => ({ ok: false }), onExpeditionOrphaned = async () => ({ ok: true, active: false }), onShowExpeditionResult = () => {}, onBack = () => {}, onExploreCanvasMount = () => {}, onExploreCanvasUpdate = () => {}, onExploreCanvasUnmount = () => {}, onHostWorldUpdate = () => {}, onFloorBossDefeated = () => {}, onOnlineStateMutation = () => {}, onRaidWorldUpdate = () => {}, onRaidExchange = async () => ({ ok: false }), onOnlineVitalsUpdate = () => {}, onBattleDefeated = () => {}, onTeamBattleResult = () => {}, onSecretRoomEntered = () => {}, onBeginSecretRoomExpedition = () => {}, onTutorialGuide = () => {}, onScene = () => {} } = {}) {
+  constructor({ getState, toast = () => {}, onReward = async () => ({ ok: false }), onExpeditionStarted = () => ({ ok: true }), onExpeditionResult = async () => ({ ok: false }), onExpeditionOrphaned = async () => ({ ok: true, active: false }), onShowExpeditionResult = () => {}, onBack = () => {}, onExploreCanvasMount = () => {}, onExploreCanvasUpdate = () => {}, onExploreCanvasUnmount = () => {}, onHostWorldUpdate = () => {}, onFloorBossDefeated = () => {}, onOnlineStateMutation = () => {}, onRaidWorldUpdate = () => {}, onRaidExchange = async () => ({ ok: false }), onOnlineVitalsUpdate = () => {}, onBattleDefeated = () => {}, onTeamBattleResult = () => {}, onSecretRoomEntered = () => {}, onBeginSecretRoomExpedition = () => {}, onTutorialGuide = () => {}, onScene = () => {}, onPowerRankingState = () => {}, onPowerRankingProfile = () => {}, onPowerRankingCapability = () => {} } = {}) {
     const identity = ensureOnlineIdentity();
     this.getState = getState;
     this.toast = toast;
@@ -692,6 +890,9 @@ export class OnlinePartyController {
     this.onBeginSecretRoomExpedition = onBeginSecretRoomExpedition;
     this.onTutorialGuide = onTutorialGuide;
     this.onScene = onScene;
+    this.onPowerRankingState = onPowerRankingState;
+    this.onPowerRankingProfile = onPowerRankingProfile;
+    this.onPowerRankingCapability = onPowerRankingCapability;
     this.selfId = identity.friendId;
     const initialServerUrl = storageGet(ONLINE_STORAGE_KEYS.serverUrl) || DEFAULT_ONLINE_SERVER_URL;
     const initialResumeEndpoint = normalizedWebsocketEndpoint(initialServerUrl);
@@ -717,6 +918,24 @@ export class OnlinePartyController {
     this.roomState = null;
     this.roomId = null;
     this.capabilities = new Set();
+    this.backgroundActive = false;
+    this.backgroundOnly = false;
+    this.desiredBackgroundOnly = false;
+    this.backgroundConnectionBusy = false;
+    this.backgroundBound = [];
+    this.connectionModePending = false;
+    this.powerRankingState = normalizePowerRankingState(null, { supported: false });
+    this.powerRankingProfile = null;
+    this.powerRankingRequests = new Map();
+    this.powerRankingRequestSequence = 0;
+    this.latestPowerRankingListRequestId = "";
+    this.latestPowerRankingProfileRequestId = "";
+    this.powerRankingWanted = false;
+    this.powerRankingWantedOptions = { limit: POWER_RANKING_ENTRY_LIMIT };
+    this.powerRankingProfileWanted = "";
+    this.latestPowerRankingSnapshot = null;
+    this.lastPowerRankingSnapshotSignature = "";
+    this.lastPowerRankingSnapshotAt = 0;
     this.roomListings = [];
     this.friendState = { friends: [], incoming: [], outgoing: [], invites: [], blocked: [], muted: [] };
     this.guildState = emptyGuildState();
@@ -770,6 +989,7 @@ export class OnlinePartyController {
     this.itemMenu = { explore: false, raid: false, team: false };
     this.itemTargetMenu = { explore: false, raid: false, team: false };
     this.hpTrails = { explore: {}, raid: {}, team: {} };
+    this.presentationKoIds = { explore: new Set(), raid: new Set(), team: new Set() };
     this.raidReport = null;
     this.teamBattleReport = null;
     this.expeditionReport = null;
@@ -802,6 +1022,9 @@ export class OnlinePartyController {
     this.rewardReceiptAdvanceTimer = null;
     this.hallDestination = null;
     this.hallNearbyRoute = null;
+    this.hallGamesOpen = false;
+    this.hallGameTab = "";
+    this.hallGameRequestSequence = 0;
     this.exploreCanvasMounted = false;
     this.presentationTimers = new Set();
     this.onlineHudCollapsed = false;
@@ -833,16 +1056,26 @@ export class OnlinePartyController {
   }
 
   mount(root) {
-    const connected = this._canMutateOnline();
-    this.unmount({ disconnect: false });
+    const connected = Boolean(this.connectionReady && this.ws && typeof WebSocket !== "undefined" && this.ws.readyState === WebSocket.OPEN);
+    const wasBackgroundOnly = this.backgroundOnly;
+    this.unmount({ disconnect: false, backgroundTransition: false });
     this.root = root;
     this.mounted = true;
+    this.desiredBackgroundOnly = false;
+    this.backgroundConnectionBusy = false;
     this.manualClose = Boolean(this.supersededConnection);
     this._refreshProfile();
     this._bindStaticUi();
     this._renderTradeRecoveryStatus();
     this._startLoops();
     if (connected) {
+      if (wasBackgroundOnly && this.capabilities.has(POWER_RANKING_CAPABILITY) && this.capabilities.has(BACKGROUND_CONNECTION_CAPABILITY)) {
+        this._requestConnectionMode(false);
+        this._setStatus("connecting", "オンライン画面を準備中…", "同じ接続で部屋情報を復帰しています");
+        this._showConnectionStep("gate");
+        return;
+      }
+      this.backgroundOnly = false;
       this._setStatus("online", "接続済み", this.roomState ? "オンライン探索へ戻りました" : "部屋を作るか、ルームIDで参加してください");
       this._showConnectionStep(this.roomState ? "room" : "gate");
       if (this.roomState) this._render();
@@ -863,7 +1096,7 @@ export class OnlinePartyController {
     }
   }
 
-  unmount({ disconnect = true } = {}) {
+  unmount({ disconnect = true, backgroundTransition = true } = {}) {
     this.mounted = false;
     this.emoteGestureCleanup?.();
     this._clearMoveInputs();
@@ -879,13 +1112,74 @@ export class OnlinePartyController {
     if (this.tradeRecoveryStatus?.status === "complete") this.tradeRecoveryStatus = null;
     for (const timer of this.presentationTimers) clearTimeout(timer);
     this.presentationTimers.clear();
+    for (const ids of Object.values(this.presentationKoIds)) ids.clear();
     this._removeEvents();
     if (this.clockFrame) cancelAnimationFrame(this.clockFrame);
     if (this.moveFrame) cancelAnimationFrame(this.moveFrame);
     this.clockFrame = null; this.moveFrame = null;
     this.root?.querySelector(".online-v3-screen")?.classList.remove("online-shared-gameplay-active");
     if (disconnect) this.disconnect({ leave: true, quiet: true });
+    else if (backgroundTransition && this.backgroundActive) {
+      this.desiredBackgroundOnly = true;
+      this._requestConnectionMode(true);
+    }
     this.root = null;
+  }
+
+  _bindBackgroundLifecycle() {
+    if (this.backgroundBound.length) return;
+    const bind = (target, type, handler) => {
+      if (!target?.addEventListener) return;
+      target.addEventListener(type, handler);
+      this.backgroundBound.push([target, type, handler]);
+    };
+    const resume = () => this._ensureConnectionAfterResume();
+    bind(globalThis.document, "visibilitychange", () => { if (globalThis.document?.visibilityState === "visible") resume(); });
+    bind(globalThis.window, "pageshow", resume);
+    bind(globalThis.window, "online", resume);
+  }
+
+  _removeBackgroundLifecycle() {
+    for (const [target, type, handler] of this.backgroundBound) target.removeEventListener(type, handler);
+    this.backgroundBound = [];
+  }
+
+  _requestConnectionMode(backgroundOnly) {
+    this.desiredBackgroundOnly = Boolean(backgroundOnly);
+    if (!this.connectionReady || !this.ws || this.ws.readyState !== WebSocket.OPEN) return false;
+    if (!this.capabilities.has(POWER_RANKING_CAPABILITY) || !this.capabilities.has(BACKGROUND_CONNECTION_CAPABILITY)) return false;
+    if (this.connectionModePending || this.backgroundOnly === this.desiredBackgroundOnly) return true;
+    this.connectionModePending = this._send("setConnectionMode", { backgroundOnly: this.desiredBackgroundOnly });
+    return this.connectionModePending;
+  }
+
+  /**
+   * Keep the controller's single authenticated socket alive while the Home
+   * screen owns the ranking UI. No room is joined or rendered in this mode.
+   */
+  startBackground({ connect = true } = {}) {
+    this.backgroundActive = true;
+    this._bindBackgroundLifecycle();
+    if (this.supersededConnection) return { ok: false, reason: "superseded" };
+    if (this.backgroundConnectionBusy && !this.mounted) return { ok: false, reason: "busy" };
+    if (this.mounted) return { ok: true, connected: this._canMutateOnline(), foreground: true };
+    this.desiredBackgroundOnly = true;
+    if (!this.connectionReady) this.backgroundOnly = true;
+    if (!connect || this.ws && [WebSocket.OPEN, WebSocket.CONNECTING].includes(this.ws.readyState)) {
+      if (this.connectionReady && this.ws?.readyState === WebSocket.OPEN) this._requestConnectionMode(true);
+      return { ok: true, connected: Boolean(this.connectionReady && this.ws?.readyState === WebSocket.OPEN) };
+    }
+    this.manualClose = false;
+    this.connect({ reconnect: true });
+    return { ok: true, connected: false, connecting: true };
+  }
+
+  stopBackground({ disconnect = false } = {}) {
+    this.backgroundActive = false;
+    this.desiredBackgroundOnly = false;
+    this._removeBackgroundLifecycle();
+    if (disconnect && !this.mounted) this.disconnect({ leave: false, quiet: true });
+    return { ok: true };
   }
 
   _bind(target, type, handler, options) {
@@ -1009,8 +1303,8 @@ export class OnlinePartyController {
       return;
     }
     const hall = event.target.closest?.("[data-online-hall-stage]");
-    if (hall && !event.target.closest?.("button,.online-hall-hud,.online-hall-prompt,.online-hall-party-strip,.online-hall-quick-chat")) {
-      if (this.exploreChatOpen || this.emoteGestureActive) return;
+    if (hall && !event.target.closest?.("button,.online-hall-hud,.online-hall-prompt,.online-hall-party-strip,.online-hall-quick-chat,.online-hall-games-modal")) {
+      if (this.exploreChatOpen || this.hallGamesOpen || this.emoteGestureActive) return;
       if (!this._canMutateOnline()) { this._announceConnectionPause(); return; }
       const world = hall.querySelector(".online-hall-world"), rect = world?.getBoundingClientRect();
       if (rect?.width && rect?.height) this.hallDestination = { x: clamp((event.clientX - rect.left) / rect.width * 100, 5, 95), y: clamp((event.clientY - rect.top) / rect.height * 100, 15, 96) };
@@ -1174,6 +1468,30 @@ export class OnlinePartyController {
       return;
     }
     if (button.matches("[data-online-chat-close]")) { this.exploreChatOpen = false; this._render(); requestAnimationFrame(() => this._query("[data-online-chat-toggle]")?.focus()); return; }
+    if (button.matches("[data-online-hall-games-toggle],[data-online-hall-game-close]")) {
+      const closing = button.matches("[data-online-hall-game-close]");
+      if (!closing && !this.capabilities.has("hallMinigamesV1")) { this.toast("遊戯広場を使うにはオンラインサーバーの193更新が必要です"); return; }
+      this.hallGamesOpen = closing ? false : !this.hallGamesOpen;
+      if (this.hallGamesOpen && !this.roomState?.hallGame) this.hallGameTab = "";
+      this.exploreChatOpen = false; this.hallDestination = null; this._clearMoveInputs(); this._render(); return;
+    }
+    if (button.matches("[data-online-hall-game-tab]")) { this.hallGameTab = button.dataset.onlineHallGameTab === "race" ? "race" : "mimic"; this._render(); return; }
+    if (button.matches("[data-online-hall-game-join],[data-online-hall-game-monster]")) {
+      const game = (button.dataset.onlineHallGameJoin || (button.hasAttribute("data-online-hall-game-monster") ? "race" : this.hallGameTab)) === "race" ? "race" : "mimic";
+      const monsterId = button.dataset.onlineHallGameMonster || undefined;
+      this.hallGameTab = game;
+      this._send("hallGameJoin", { game, monsterId, requestId: this._hallGameRequestId("join") }); return;
+    }
+    if (button.matches("[data-online-hall-game-leave]")) { this._send("hallGameLeave", { requestId: this._hallGameRequestId("leave") }); return; }
+    if (button.matches("[data-online-hall-game-ready]")) {
+      const participant = this.roomState?.hallGame?.participants?.find?.(entry => entry.playerId === this.selfId);
+      this._send("hallGameReady", { ready: !Boolean(participant?.ready), requestId: this._hallGameRequestId("ready") }); return;
+    }
+    if (button.matches("[data-online-hall-game-start]")) { this._send("hallGameStart", { requestId: this._hallGameRequestId("start") }); return; }
+    if (button.matches("[data-online-hall-game-reset]")) { this._send("hallGameReset", { requestId: this._hallGameRequestId("reset") }); return; }
+    if (button.matches("[data-online-hall-game-action]")) {
+      this._send("hallGameAction", { action: button.dataset.onlineHallGameAction, targetId: button.dataset.onlineHallGameTarget || undefined, requestId: this._hallGameRequestId("action") }); return;
+    }
     if (button.matches("[data-online-open-merchant]")) { this.rareMerchantOpen = true; this.merchantResult = null; this._render(); return; }
     if (button.matches("[data-online-close-merchant]")) { this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this._render(); return; }
     if (button.matches("[data-online-cancel-floor-boss]")) { this.floorBossConfirm = null; this._render(); return; }
@@ -1183,7 +1501,7 @@ export class OnlinePartyController {
     if (button.matches("[data-online-expedition-interact]")) { const action = button.dataset.onlineExpeditionInteract, targetId = button.dataset.onlineInteractionTarget; if (action === "challengeFloorBoss") { const interaction = this.roomState?.expedition?.interactions?.[this.selfId] ?? {}; const profile = interaction.bossProfile ?? this.roomState?.expedition?.floorBoss?.profiles?.[0] ?? null; this.floorBossConfirm = { targetId, profile, floor: Number(this.roomState?.expedition?.floor) || 0 }; this._render(); return; } if (["challengeCoopElite", "challengeCoopBoss"].includes(action)) { const expedition = this.roomState?.expedition, interaction = expedition?.interactions?.[this.selfId] ?? {}, object = expedition?.objects?.find(entry => entry.id === targetId || entry.type === "coopElite") ?? {}, source = interaction.coopBoss ?? interaction.bossProfile ?? object, boss = { ...source, id: source.id ?? source.coopBossId, name: source.name ?? source.bossName, title: source.title ?? source.bossTitle, intro: source.intro ?? source.bossIntro, speciesId: source.speciesId ?? object.speciesId, visualSpeciesId: source.visualSpeciesId ?? object.visualSpeciesId, accent: source.accent ?? object.accent, mechanic: source.mechanic ?? object.mechanic }; this.coopBossConfirm = { action, targetId, boss, floor: Number(expedition?.floor) || 0 }; this._render(); return; } if (!this._beginInteractionPending(action, targetId)) return; if (!this._send("expeditionInteract", { action, targetId })) this._clearInteractionPending(false); this._render(); return; }
     if (button.matches("[data-online-merchant-offer]")) { if (this.merchantPending) return; const offer = button.dataset.onlineMerchantOffer; this.merchantPending = true; this.merchantResult = { offer, status: "pending" }; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = setTimeout(() => { if (!this.merchantPending) return; this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "通信結果を確認できませんでした。もう一度お試しください。" }; this._render(); }, 3500); if (!this._send("rareMerchantClaim", { offer })) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "サーバーへ接続されていません。" }; } this._render(); return; }
     if (button.matches("[data-online-battle-cheer]")) { this._send("battleCheer", { mode: button.dataset.onlineBattleCheer || this.route }); return; }
-    if (button.matches("[data-online-hall-destination]")) { if (!this.exploreChatOpen && !this.emoteGestureActive) this.hallDestination = { x: Number(button.dataset.hallX), y: Number(button.dataset.hallY) }; return; }
+    if (button.matches("[data-online-hall-destination]")) { if (!this.exploreChatOpen && !this.hallGamesOpen && !this.emoteGestureActive) this.hallDestination = { x: Number(button.dataset.hallX), y: Number(button.dataset.hallY) }; return; }
     if (button.id === "backOnlineParty") {
       this.requestExit();
       return;
@@ -1426,7 +1744,7 @@ export class OnlinePartyController {
 
   _currentResumeEndpoint() {
     if (this.ws && this.connectionEndpoint) return this.connectionEndpoint;
-    const input = this._query("[data-online-server-url]")?.value ?? storageGet(ONLINE_STORAGE_KEYS.serverUrl);
+    const input = this._query("[data-online-server-url]")?.value || storageGet(ONLINE_STORAGE_KEYS.serverUrl) || DEFAULT_ONLINE_SERVER_URL;
     return normalizedWebsocketEndpoint(input);
   }
 
@@ -1490,12 +1808,16 @@ export class OnlinePartyController {
 
   connect({ reconnect = false } = {}) {
     if (this.ws && [WebSocket.OPEN, WebSocket.CONNECTING].includes(this.ws.readyState)) return;
-    const input = this._query("[data-online-server-url]")?.value ?? storageGet(ONLINE_STORAGE_KEYS.serverUrl);
+    const input = this._query("[data-online-server-url]")?.value || storageGet(ONLINE_STORAGE_KEYS.serverUrl) || DEFAULT_ONLINE_SERVER_URL;
     let url;
     try { url = websocketUrl(input); } catch (error) { this.toast(error.message); return; }
     if (!reconnect) { this.supersededConnection = false; this.handshakeTokenRetries = 0; this.reconnectAttempts = 0; }
     if (this.connectionEndpoint && this.connectionEndpoint !== url) {
       this.capabilities = new Set();
+      this.powerRankingState = normalizePowerRankingState(null, { supported: false });
+      this.powerRankingProfile = null;
+      this._notifyPowerRankingState();
+      if (typeof this.onPowerRankingProfile === "function") this.onPowerRankingProfile(null, { playerId: "", requestId: "", ok: false, reason: "serverChanged" });
       this.friendState = { friends: [], incoming: [], outgoing: [], invites: [], blocked: [], muted: [] };
       this.guildState = emptyGuildState();
       this.guildClockOffsetMs = 0; this.guildClockSynced = false;
@@ -1519,7 +1841,7 @@ export class OnlinePartyController {
       this._refreshResumeTokenFromStorage(endpoint);
       this.lastHelloEndpoint = endpoint;
       this.lastHelloResumeToken = this.resumeToken;
-      this.helloAckPending = this._send("hello", { protocol: ONLINE_PROTOCOL, friendId: this.selfId, clientKey: storageGet(ONLINE_STORAGE_KEYS.clientKey), resumeToken: this.resumeToken, profile: this.profile });
+      this.helloAckPending = this._send("hello", { protocol: ONLINE_PROTOCOL, friendId: this.selfId, clientKey: storageGet(ONLINE_STORAGE_KEYS.clientKey), resumeToken: this.resumeToken, profile: this.profile, backgroundOnly: Boolean(this.desiredBackgroundOnly && !this.mounted) });
     });
     socket.addEventListener("message", event => { if (this.ws !== socket) return; try { this._handleMessage(JSON.parse(event.data), socket); } catch (error) { console.warn("Online message ignored", error); } });
     socket.addEventListener("close", event => this._handleClose(socket, event));
@@ -1542,6 +1864,162 @@ export class OnlinePartyController {
   _send(type, payload = {}) {
     if (this.ws?.readyState !== WebSocket.OPEN) return false;
     this.ws.send(JSON.stringify({ type, ...payload })); return true;
+  }
+
+  supportsPowerRankings() {
+    return Boolean(this.connectionReady && this.capabilities.has(POWER_RANKING_CAPABILITY));
+  }
+
+  _nextPowerRankingRequestId(kind = "request") {
+    this.powerRankingRequestSequence = (this.powerRankingRequestSequence + 1) % 1_000_000;
+    const safeKind = String(kind).replace(/[^a-z]/gi, "").slice(0, 12) || "request";
+    return `power-${safeKind}-${Date.now().toString(36)}-${this.powerRankingRequestSequence.toString(36)}`;
+  }
+
+  _notifyPowerRankingState() {
+    if (typeof this.onPowerRankingState !== "function") return;
+    try { this.onPowerRankingState(this.powerRankingState); } catch (error) { console.warn("Power ranking state callback failed", error); }
+  }
+
+  _notifyPowerRankingCapability() {
+    if (typeof this.onPowerRankingCapability !== "function") return;
+    try { this.onPowerRankingCapability({ supported: this.supportsPowerRankings(), capability: POWER_RANKING_CAPABILITY }); }
+    catch (error) { console.warn("Power ranking capability callback failed", error); }
+  }
+
+  _beginPowerRankingRequest(kind, type, payload = {}, meta = {}) {
+    const requestId = this._nextPowerRankingRequestId(kind);
+    if (kind === "list") this.latestPowerRankingListRequestId = requestId;
+    if (kind === "profile") this.latestPowerRankingProfileRequestId = requestId;
+    return new Promise(resolve => {
+      const pending = {
+        kind,
+        ...meta,
+        resolve,
+        timer: setTimeout(() => {
+          if (this.powerRankingRequests.get(requestId) !== pending) return;
+          this.powerRankingRequests.delete(requestId);
+          resolve({ ok: false, reason: "timeout", requestId });
+          if (kind === "list" && requestId === this.latestPowerRankingListRequestId) {
+            this.powerRankingState = { ...this.powerRankingState, loading: false, error: "ランキングを取得できませんでした" };
+            this._notifyPowerRankingState();
+          }
+        }, POWER_RANKING_REQUEST_TIMEOUT_MS),
+      };
+      this.powerRankingRequests.set(requestId, pending);
+      if (this._send(type, { requestId, ...payload })) return;
+      clearTimeout(pending.timer);
+      this.powerRankingRequests.delete(requestId);
+      resolve({ ok: false, reason: "offline", requestId });
+    });
+  }
+
+  _settlePowerRankingRequest(message, result, expectedKind = "") {
+    const requestId = rankingText(message?.requestId, 96);
+    const pending = requestId ? this.powerRankingRequests?.get?.(requestId) : null;
+    if (!pending || expectedKind && pending.kind !== expectedKind) return false;
+    clearTimeout(pending.timer);
+    this.powerRankingRequests.delete(requestId);
+    pending.resolve({ requestId, ...result });
+    return pending;
+  }
+
+  _matchingPowerRankingRequest(message, expectedKind) {
+    const requestId = rankingText(message?.requestId, 96);
+    const pending = requestId ? this.powerRankingRequests?.get?.(requestId) : null;
+    return pending?.kind === expectedKind ? { requestId, pending } : null;
+  }
+
+  _clearPowerRankingRequests(reason = "offline") {
+    for (const [requestId, pending] of (this.powerRankingRequests ?? [])) {
+      clearTimeout(pending.timer);
+      pending.resolve({ ok: false, reason, requestId });
+    }
+    this.powerRankingRequests?.clear?.();
+    if (this.powerRankingState?.loading) {
+      this.powerRankingState = { ...this.powerRankingState, loading: false, error: reason === "unsupported" ? "" : "接続が中断されました" };
+      this._notifyPowerRankingState();
+    }
+  }
+
+  /** Publish a sanitized party snapshot. The server recalculates its power. */
+  publishPowerRankingSnapshot(snapshot, { force = false } = {}) {
+    const normalized = normalizePowerRankingSnapshot(snapshot);
+    if (!normalized) return Promise.resolve({ ok: false, reason: "invalidSnapshot" });
+    this.latestPowerRankingSnapshot = normalized;
+    const signature = JSON.stringify(normalized);
+    if (!this.connectionReady) {
+      if (this.backgroundActive) {
+        const started = this.startBackground();
+        if (started.reason === "busy" || started.reason === "superseded") return Promise.resolve({ ok: false, reason: started.reason, queued: false });
+      }
+      return Promise.resolve({ ok: false, reason: "connecting", queued: true });
+    }
+    if (!this.capabilities.has(POWER_RANKING_CAPABILITY)) return Promise.resolve({ ok: false, reason: "unsupported" });
+    if (!force && signature === this.lastPowerRankingSnapshotSignature && Date.now() - this.lastPowerRankingSnapshotAt < 30_000) {
+      return Promise.resolve({ ok: true, skipped: true });
+    }
+    return this._beginPowerRankingRequest("snapshot", "powerSnapshotSubmit", { snapshot: normalized }).then(result => {
+      if (result.ok) {
+        this.lastPowerRankingSnapshotSignature = signature;
+        this.lastPowerRankingSnapshotAt = Date.now();
+      }
+      return result;
+    });
+  }
+
+  requestPowerRankings({ limit = POWER_RANKING_ENTRY_LIMIT } = {}) {
+    const safeLimit = boundedInteger(limit, 1, POWER_RANKING_ENTRY_LIMIT, POWER_RANKING_ENTRY_LIMIT);
+    this.powerRankingWanted = true;
+    this.powerRankingWantedOptions = { limit: safeLimit };
+    this.powerRankingState = { ...this.powerRankingState, loading: true, error: "" };
+    this._notifyPowerRankingState();
+    if (!this.connectionReady) {
+      if (this.backgroundActive) {
+        const started = this.startBackground();
+        if (started.reason === "busy" || started.reason === "superseded") {
+          this.powerRankingState = { ...this.powerRankingState, loading: false, error: "" };
+          this._notifyPowerRankingState();
+          return Promise.resolve({ ok: false, reason: started.reason, queued: false });
+        }
+      }
+      return Promise.resolve({ ok: false, reason: "connecting", queued: true });
+    }
+    if (!this.capabilities.has(POWER_RANKING_CAPABILITY)) {
+      this.powerRankingState = normalizePowerRankingState(null, { supported: false });
+      this._notifyPowerRankingState();
+      return Promise.resolve({ ok: false, reason: "unsupported" });
+    }
+    return this._beginPowerRankingRequest("list", "powerRankingList", { limit: safeLimit });
+  }
+
+  requestPowerRankingProfile(playerId) {
+    const targetId = normalizedPlayerId(playerId);
+    if (!targetId) return Promise.resolve({ ok: false, reason: "invalidPlayer" });
+    this.powerRankingProfileWanted = targetId;
+    if (!this.connectionReady) {
+      if (this.backgroundActive) {
+        const started = this.startBackground();
+        if (started.reason === "busy" || started.reason === "superseded") return Promise.resolve({ ok: false, reason: started.reason, queued: false });
+      }
+      return Promise.resolve({ ok: false, reason: "connecting", queued: true });
+    }
+    if (!this.capabilities.has(POWER_RANKING_CAPABILITY)) return Promise.resolve({ ok: false, reason: "unsupported" });
+    return this._beginPowerRankingRequest("profile", "powerRankingProfile", { playerId: targetId }, { playerId: targetId });
+  }
+
+  _flushPowerRankingAfterHandshake() {
+    const supported = this.capabilities.has(POWER_RANKING_CAPABILITY);
+    this.powerRankingState = { ...this.powerRankingState, supported, loading: supported && this.powerRankingWanted, error: "" };
+    this._notifyPowerRankingCapability();
+    this._notifyPowerRankingState();
+    if (!supported) {
+      this._clearPowerRankingRequests("unsupported");
+      return;
+    }
+    if (this.latestPowerRankingSnapshot) void this.publishPowerRankingSnapshot(this.latestPowerRankingSnapshot, { force: true });
+    if (this.powerRankingWanted) void this.requestPowerRankings(this.powerRankingWantedOptions);
+    if (this.powerRankingProfileWanted) void this.requestPowerRankingProfile(this.powerRankingProfileWanted);
   }
 
   _sendGuild(kind, type, payload = {}, meta = {}) {
@@ -1646,7 +2124,7 @@ export class OnlinePartyController {
   }
 
   _canMutateOnline() {
-    return Boolean(!this.pendingLeaveOnReconnect && this.connectionReady && this.ws && typeof WebSocket !== "undefined" && this.ws.readyState === WebSocket.OPEN);
+    return Boolean(!this.pendingLeaveOnReconnect && !this.backgroundOnly && !this.connectionModePending && this.connectionReady && this.ws && typeof WebSocket !== "undefined" && this.ws.readyState === WebSocket.OPEN);
   }
 
   _announceConnectionPause() {
@@ -1809,29 +2287,56 @@ export class OnlinePartyController {
       this.reconnectAttempts = 0;
       this.handshakeTokenRetries = 0;
       this.capabilities = capabilitySet(message.capabilities);
-      this.recoverySettlementBatch += 1;
-      this.recoverySettlementTasks = new Set();
-      this.recoverySettlementFailed = false;
-      this.friendState = this._normalizeFriendState(message.friendState);
-      this._purgeHiddenSocial();
-      const previousGuildId = this.guildState?.guild?.guildId ?? "", nextGuildState = normalizeGuildState(message.guildState);
-      this._syncGuildServerClock(nextGuildState.serverNow);
-      this.guildState = nextGuildState;
-      if ((this.guildState.guild?.guildId ?? "") !== previousGuildId) { this.guildPlanComposerOpen = false; this.guildPlansExpanded = false; this.guildActivitiesExpanded = false; }
-      this._clearGuildPending();
-      if (this.guildState.guild) { this.guildLookupDraft = ""; this.guildCreateDraft = { name: "", tag: "", description: "" }; }
-      else { this.guildPlanDraft = defaultGuildPlanDraft(this._guildNow()); this.guildRecruitmentDraft = { purpose: "explore", style: "anyone", note: "" }; }
+      this.backgroundOnly = message.backgroundOnly === true;
+      this.desiredBackgroundOnly = Boolean(this.backgroundActive && !this.mounted);
+      const backgroundHandshake = this.backgroundOnly || this.desiredBackgroundOnly;
+      if (!backgroundHandshake) {
+        this.recoverySettlementBatch += 1;
+        this.recoverySettlementTasks = new Set();
+        this.recoverySettlementFailed = false;
+        this.friendState = this._normalizeFriendState(message.friendState);
+        this._purgeHiddenSocial();
+        const previousGuildId = this.guildState?.guild?.guildId ?? "", nextGuildState = normalizeGuildState(message.guildState);
+        this._syncGuildServerClock(nextGuildState.serverNow);
+        this.guildState = nextGuildState;
+        if ((this.guildState.guild?.guildId ?? "") !== previousGuildId) { this.guildPlanComposerOpen = false; this.guildPlansExpanded = false; this.guildActivitiesExpanded = false; }
+        this._clearGuildPending();
+        if (this.guildState.guild) { this.guildLookupDraft = ""; this.guildCreateDraft = { name: "", tag: "", description: "" }; }
+        else { this.guildPlanDraft = defaultGuildPlanDraft(this._guildNow()); this.guildRecruitmentDraft = { purpose: "explore", style: "anyone", note: "" }; }
+      }
       const helloEndpoint = this.socketEndpoints?.get(sourceSocket) || this.lastHelloEndpoint || this.connectionEndpoint || this._currentResumeEndpoint();
       this.selfId = message.playerId || this.selfId;
       if (!this._storeResumeTokenForEndpoint(helloEndpoint, message.resumeToken)) { this.resumeToken = ""; this.resumeTokenStorageSnapshot = ""; }
       storageSet(ONLINE_STORAGE_KEYS.autoConnect, "1");
+      this._flushPowerRankingAfterHandshake();
       // Always refresh an open Social panel from the hello snapshot, including
       // reconnects that do not resume a room. This also re-enables controls only
       // after the authenticated handshake has completed.
-      this._renderFriendPanel();
-      if (Array.isArray(message.activeTradeIds) || !message.resumed) {
+      if (!backgroundHandshake) this._renderFriendPanel();
+      if (!backgroundHandshake && (Array.isArray(message.activeTradeIds) || !message.resumed)) {
         const released = recoverOrphanedTradeEscrows(this.getState?.() ?? {}, Array.isArray(message.activeTradeIds) ? message.activeTradeIds : []);
         if (released.length) { this.onOnlineStateMutation({ kind: "tradeRecovery", assets: released }); this.toast(`${released.length}件の交換品を所持品へ戻しました`); }
+      }
+      if (backgroundHandshake) {
+        this.backgroundConnectionBusy = false;
+        this.connectionModePending = false;
+        this.roomState = null;
+        this.roomId = null;
+        if (!this.capabilities.has(POWER_RANKING_CAPABILITY) || !this.capabilities.has(BACKGROUND_CONNECTION_CAPABILITY)) {
+          // Old servers do not provide ranking data. End a headless connection
+          // quietly; mounting the Online screen can still reconnect normally.
+          this.manualClose = true;
+          this.connectionReady = false;
+          const socket = this.ws; this.ws = null;
+          try { socket?.close(1000, "background ranking unsupported"); } catch {}
+          return;
+        }
+        if (this.backgroundOnly !== this.desiredBackgroundOnly) this._requestConnectionMode(this.desiredBackgroundOnly);
+        if (this.mounted) {
+          this._setStatus("connecting", "オンライン画面を準備中…", "同じ接続で部屋情報を復帰しています");
+          this._showConnectionStep("gate");
+        }
+        return;
       }
       if (this.pendingLeaveOnReconnect) {
         this._showConnectionStep(message.room ? "room" : "gate");
@@ -1862,6 +2367,64 @@ export class OnlinePartyController {
         else this._requestRoomListings();
       }
       this._flushExpeditionProfileSync();
+      return;
+    }
+    if (message.type === "connectionModeAck") {
+      this.connectionModePending = false;
+      this.backgroundOnly = message.backgroundOnly === true;
+      this.desiredBackgroundOnly = Boolean(this.backgroundActive && !this.mounted);
+      if (this.backgroundOnly !== this.desiredBackgroundOnly) {
+        this._requestConnectionMode(this.desiredBackgroundOnly);
+        return;
+      }
+      if (this.backgroundOnly || !this.mounted) return;
+      if (message.friendState) { this.friendState = this._normalizeFriendState(message.friendState); this._purgeHiddenSocial(); }
+      else this._send("friendList");
+      if (message.guildState) {
+        const nextGuildState = normalizeGuildState(message.guildState);
+        this._syncGuildServerClock(nextGuildState.serverNow);
+        this.guildState = nextGuildState;
+      } else this._send("guildList");
+      this._renderFriendPanel();
+      if (Array.isArray(message.activeTradeIds)) {
+        const released = recoverOrphanedTradeEscrows(this.getState?.() ?? {}, message.activeTradeIds);
+        if (released.length) { this.onOnlineStateMutation({ kind: "tradeRecovery", assets: released }); this.toast(`${released.length}件の交換品を所持品へ戻しました`); }
+      }
+      this._setStatus("online", "接続済み", message.room ? "オンライン探索へ戻りました" : "部屋を作るか、ルームIDで参加してください");
+      this._showConnectionStep(message.room ? "room" : "gate");
+      if (message.room) this._applyRoomState(message.room);
+      else { this.roomState = null; this.roomId = null; this._requestRoomListings({ force: true }); }
+      return;
+    }
+    if (message.type === "powerSnapshotAck") {
+      if (!this._matchingPowerRankingRequest(message, "snapshot")) return;
+      this._settlePowerRankingRequest(message, { ok: message.ok !== false, ack: message }, "snapshot");
+      return;
+    }
+    if (message.type === "powerRankingState") {
+      const match = this._matchingPowerRankingRequest(message, "list");
+      if (!match) return;
+      const state = normalizePowerRankingState(message, { supported: true, loading: false });
+      if (match.requestId === this.latestPowerRankingListRequestId) {
+        this.powerRankingState = state;
+        this._notifyPowerRankingState();
+      }
+      this._settlePowerRankingRequest(message, { ok: true, state }, "list");
+      return;
+    }
+    if (message.type === "powerRankingProfileResult") {
+      const match = this._matchingPowerRankingRequest(message, "profile");
+      if (!match) return;
+      const profile = normalizePowerRankingProfile(message.profile);
+      if (profile && profile.playerId !== match.pending.playerId) return;
+      if (match.requestId === this.latestPowerRankingProfileRequestId) {
+        this.powerRankingProfile = profile;
+        if (typeof this.onPowerRankingProfile === "function") {
+          try { this.onPowerRankingProfile(this.powerRankingProfile, { playerId: match.pending.playerId, requestId: match.requestId, ok: Boolean(profile) }); }
+          catch (error) { console.warn("Power ranking profile callback failed", error); }
+        }
+      }
+      this._settlePowerRankingRequest(message, { ok: Boolean(profile), profile, reason: profile ? "" : "missing" }, "profile");
       return;
     }
     if (message.type === "roomListings") {
@@ -1928,14 +2491,15 @@ export class OnlinePartyController {
     if (message.type === "memberMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.position = { ...message.position }; if (this.route === "home") this._updateHallPlayerDom(message.playerId); return; }
     if (message.type === "expeditionMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.dungeonPosition = { ...message.position }; if (message.playerId === this.selfId) this._notifyTutorialGuide("explore_move"); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render(); return; }
     if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); if (message.type === "expeditionStarted") this._settlePendingExpeditionStart(message.room); return; }
-    if (message.type === "battleStarted" && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
+    if (message.type === "battleStarted" && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this.presentationKoIds.explore.clear(); this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
     if (message.type === "expeditionEvent") { if (message.event?.kind === "hostChestOpened") this.onHostWorldUpdate(message.event); if (message.event?.tutorialGuide === "firstPickup") this._notifyTutorialGuide("explore_pickup"); this._announceExpeditionEvent(message.event); return; }
     if (message.type === "floorBossDefeated") { const reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: message.ownerId ?? null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = !reward.ownerId || reward.ownerId === this.selfId, multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this._closeBattleMenus("explore"); this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = multiplayer && isWorldOwner && reward.firstClear ? reward : null; if (isWorldOwner) { this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId: reward.ownerId }); this.onFloorBossDefeated({ ...reward, resume: Boolean(reward.firstClear && !multiplayer) }); } this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！`); this._render(); return; }
     if (message.type === "expeditionPing" && message.ping?.id) { if (this._isSocialHidden(message.ping.playerId)) return; this.coopPings.set(message.ping.id, { ...message.ping }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() }); else this._render(); return; }
     if (message.type === "battleRound" || message.type === "battleResolved") { const previous = this.roomState?.expedition?.battle; this._captureHpTrails("explore", previous, message.battle); if (this.roomState?.expedition) this.roomState.expedition.battle = message.battle; if (message.type === "battleRound") this._closeBattleMenus("explore"); this._setRoute("explore", { silent: true }); this._queueBattlePresentation("explore", message.battle?.lastEvents); return; }
-    if (message.type === "expeditionEnded") { const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.expeditionReport = multiplayer ? message.summary ?? null : null; if (this.roomState) this.roomState = { ...this.roomState, phase: "lobby", expedition: null, coopRun: null }; this._closeAllBattleMenus(); this.route = "explore"; this.toast(message.summary?.completed ? `${message.summary.floor}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
-    if (message.type === "battleEnded") { this.coopBossConfirm = null; this._closeBattleMenus("explore"); const bossName = message.coopBoss?.name || message.boss?.name; this.toast(message.result === "victory" ? bossName ? `${bossName}を撃破！` : "共闘バトル勝利！" : message.coopBoss ? "共闘ボスから退却。回復後に再挑戦できます" : "共闘パーティが全滅しました…"); return; }
+    if (message.type === "expeditionEnded") { const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.presentationKoIds.explore.clear(); this.expeditionReport = multiplayer ? message.summary ?? null : null; if (this.roomState) this.roomState = { ...this.roomState, phase: "lobby", expedition: null, coopRun: null }; this._closeAllBattleMenus(); this.route = "explore"; this.toast(message.summary?.completed ? `${message.summary.floor}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
+    if (message.type === "battleEnded") { this.coopBossConfirm = null; this.presentationKoIds.explore.clear(); this._closeBattleMenus("explore"); const bossName = message.coopBoss?.name || message.boss?.name; this.toast(message.result === "victory" ? bossName ? `${bossName}を撃破！` : "共闘バトル勝利！" : message.coopBoss ? "共闘ボスから退却。回復後に再挑戦できます" : "共闘パーティが全滅しました…"); return; }
     if (message.type === "raidStarted") {
+      this.presentationKoIds.raid.clear();
       this.roomState = { ...(this.roomState ?? {}), phase: "raid", raid: message.raid, raidProgress: message.raid?.progress };
       this.selectedTarget.raid = message.raid?.minions?.find(entry => entry.hp > 0)?.id ?? message.raid?.boss?.id ?? null;
       const raidOwner = (this.roomState?.ownerId ?? this.roomState?.leaderId) === this.selfId;
@@ -1950,18 +2514,50 @@ export class OnlinePartyController {
       if (message.type === "raidRound") this._closeBattleMenus("raid"); this._setRoute("raid", { silent: true }); this._queueBattlePresentation("raid", message.raid?.lastEvents); return;
     }
     if (message.type === "raidEnded") {
+      this.presentationKoIds.raid.clear();
       const raidOwner = (this.roomState?.ownerId ?? this.roomState?.leaderId) === this.selfId;
       if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.raid = null; this.roomState.raidProgress = message.raid?.progress ?? null; }
       this._closeBattleMenus("raid");
       if (raidOwner) this._syncRaidWorld(message.raid?.progress ?? null);
       this.raidReport = { result: message.result, raid: message.raid, ranking: message.ranking ?? message.raid?.ranking ?? [] }; this.route = "raid"; this.toast(message.result === "victory" ? "今週のレイド討伐成功！" : message.result === "cancelled" ? "レイドを中断し、残HPを保存しました" : "敗北…ボスの残HPを保存しました"); this._render(); return;
     }
-    if (message.type === "teamBattleStarted" || message.type === "teamBattleState" || message.type === "teamBattleRound" || message.type === "teamBattleResolved") { const previous = this.roomState?.teamBattle; this._captureHpTrails("team", previous, message.teamBattle); if (message.type === "teamBattleStarted") this.teamBattleReport = null; if (this.roomState) { this.roomState.phase = "team"; this.roomState.teamBattle = message.teamBattle; } if (message.type === "teamBattleRound") this._closeBattleMenus("team"); this._setRoute("team", { silent: true }); this._queueBattlePresentation("team", message.teamBattle?.lastEvents); return; }
-    if (message.type === "teamBattleEnded") { this.teamBattleReport = { resultId: message.resultId, result: message.result, winner: message.winner, summary: message.summary, teamBattle: message.teamBattle }; if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.teamBattle = null; } this._closeBattleMenus("team"); this.onTeamBattleResult(this.teamBattleReport); this.route = "team"; this.toast(message.winner ? `${message.winner === "sun" ? "紅組" : "蒼組"}の勝利！` : "引き分け！"); this._render(); return; }
+    if (message.type === "teamBattleStarted" || message.type === "teamBattleState" || message.type === "teamBattleRound" || message.type === "teamBattleResolved") { const previous = this.roomState?.teamBattle; if (message.type === "teamBattleStarted") this.presentationKoIds.team.clear(); this._captureHpTrails("team", previous, message.teamBattle); if (message.type === "teamBattleStarted") this.teamBattleReport = null; if (this.roomState) { this.roomState.phase = "team"; this.roomState.teamBattle = message.teamBattle; } if (message.type === "teamBattleRound") this._closeBattleMenus("team"); this._setRoute("team", { silent: true }); this._queueBattlePresentation("team", message.teamBattle?.lastEvents); return; }
+    if (message.type === "teamBattleEnded") { this.presentationKoIds.team.clear(); this.teamBattleReport = { resultId: message.resultId, result: message.result, winner: message.winner, summary: message.summary, teamBattle: message.teamBattle }; if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.teamBattle = null; } this._closeBattleMenus("team"); this.onTeamBattleResult(this.teamBattleReport); this.route = "team"; this.toast(message.winner ? `${message.winner === "sun" ? "紅組" : "蒼組"}の勝利！` : "引き分け！"); this._render(); return; }
     if (message.type === "chatMessage") { this._receiveChat(message.message); return; }
     if (message.type === "social") { this._receiveSocial(message); return; }
     if (message.type === "onlineReward") { const batch = this.recoverySettlementBatch; this._trackRecoverySettlement(this._receiveReward(message, batch), batch); return; }
     if (message.type === "error") {
+      const powerErrorCode = String(message.code ?? "");
+      if (powerErrorCode === "BACKGROUND_CONNECTION_BUSY") {
+        this.helloAckPending = false;
+        this.connectionReady = false;
+        this.manualClose = true;
+        this.backgroundConnectionBusy = true;
+        this._clearPowerRankingRequests("busy");
+        // Another tab owns active cooperative play. Never steal that session or
+        // enter a reconnect loop merely to refresh the public ranking.
+        const socket = this.ws; this.ws = null;
+        try { socket?.close(1000, "foreground session active elsewhere"); } catch {}
+        return;
+      }
+      const powerRequestId = rankingText(message.requestId, 96), powerPending = powerRequestId ? this.powerRankingRequests?.get?.(powerRequestId) : null;
+      if (powerPending) {
+        const missing = powerErrorCode === "POWER_RANKING_PROFILE_MISSING";
+        const latestProfile = powerPending.kind === "profile" && powerRequestId === this.latestPowerRankingProfileRequestId;
+        const latestList = powerPending.kind === "list" && powerRequestId === this.latestPowerRankingListRequestId;
+        if (latestProfile) {
+          this.powerRankingProfile = null;
+          if (typeof this.onPowerRankingProfile === "function") {
+            try { this.onPowerRankingProfile(null, { playerId: powerPending.playerId, requestId: powerRequestId, ok: false, reason: missing ? "missing" : powerErrorCode }); } catch {}
+          }
+        }
+        this._settlePowerRankingRequest(message, { ok: false, reason: missing ? "missing" : powerErrorCode || "rejected", message: rankingText(message.message, 120), profile: powerPending.kind === "profile" ? null : undefined }, powerPending.kind);
+        if (latestList) {
+          this.powerRankingState = { ...this.powerRankingState, loading: false, error: rankingText(message.message, 120, "ランキングを取得できませんでした") };
+          this._notifyPowerRankingState();
+        }
+        return;
+      }
       if (!this.connectionReady) { this._handleHandshakeError(message); return; }
       if (this.pendingLeaveOnReconnect) {
         if (["NOT_IN_ROOM", "ROOM_NOT_FOUND"].includes(String(message.code ?? ""))) this._completePendingRoomLeave();
@@ -2259,6 +2855,10 @@ export class OnlinePartyController {
     if (rareKind !== "otherworldMerchant") { this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; }
     this._clearInteractionPending(false);
     this.roomState = room; this.roomId = room.roomId;
+    const hallGame = room.hallGame, hallParticipant = hallGame?.participants?.some?.(entry => entry.playerId === this.selfId);
+    if (hallGame?.game) this.hallGameTab = hallGame.game === "race" ? "race" : "mimic";
+    if (hallParticipant && !["entry", "result"].includes(String(hallGame?.phase ?? ""))) this.hallGamesOpen = true;
+    if (room.phase !== "lobby") this.hallGamesOpen = false;
     this._syncActiveExpeditionRun(room);
     if (recruitmentJoinCompleted) {
       this._clearGuildPending();
@@ -2371,6 +2971,34 @@ export class OnlinePartyController {
     return { friends: safe(source?.friends), incoming: safe(source?.incoming), outgoing: safe(source?.outgoing), blocked: privateSafe(source?.blocked), muted: privateSafe(source?.muted), invites: (Array.isArray(source?.invites) ? source.invites : []).slice(0, 20).map(entry => ({ inviteId: String(entry?.inviteId ?? "").slice(0, 96), roomId: safeRoomId(entry?.roomId), expiresAt: Math.max(0, Number(entry?.expiresAt) || 0), from: safe([entry?.from])[0] })) };
   }
 
+  _refreshHallSocialNotice(summary) {
+    const zone = this._query('.online-hall-zone[data-online-hall-destination="social"]');
+    if (!zone) return;
+    const badge = Math.max(0, Number(summary?.badge) || 0);
+    const attentionCount = Math.max(0, Number(summary?.attentionCount) || 0);
+    let notice = zone.querySelector("[data-online-hall-social-notice]");
+    if (!notice) {
+      notice = zone.ownerDocument.createElement("span");
+      notice.className = "online-hall-social-notice";
+      notice.dataset.onlineHallSocialNotice = "1";
+      notice.setAttribute("aria-hidden", "true");
+      zone.appendChild(notice);
+    }
+    notice.replaceChildren();
+    if (attentionCount) {
+      const attention = zone.ownerDocument.createElement("span");
+      attention.textContent = "遠征";
+      notice.appendChild(attention);
+    }
+    if (badge) {
+      const count = zone.ownerDocument.createElement("span");
+      count.textContent = `${Math.min(9, badge)}${badge > 9 ? "+" : ""}`;
+      notice.appendChild(count);
+    }
+    notice.hidden = !badge && !attentionCount;
+    zone.setAttribute("aria-label", `交流所へ移動${badge || attentionCount ? `。${badge ? `お知らせ${badge}件` : ""}${badge && attentionCount ? "、" : ""}${attentionCount ? "遠征あり" : ""}` : ""}`);
+  }
+
   _renderFriendPanel() {
     this._clearGuildPlanTransitionTimer();
     const layer = this._query("[data-online-friend-layer]"); if (!layer) return;
@@ -2384,15 +3012,19 @@ export class OnlinePartyController {
     if (chat) this.guildChatScroll = { top: chat.scrollTop, atBottom: chat.scrollHeight - chat.clientHeight - chat.scrollTop <= 12 };
     const showSocialFab = shouldShowOnlineSocialFab({ connectionStep: this.connectionStep, route: this.route });
     if (!showSocialFab) this.friendPanelOpen = false;
+    const hallFacilityMode = this.connectionStep === "room" && this.route === "home";
     const safetyCapability = this.capabilities.has("onlineSafetyV1"), mutedPlayers = this._mutedPlayerSnapshot(), guildState = this._guildStateForDisplay();
+    const socialNow = this._guildNow(), liveGatheringJoinable = this._canMutateOnline() && !this.trade && (!this.roomState || this.roomState.phase === "lobby");
+    const socialNotice = onlineSocialNotificationSummary(this.friendState, guildState, { now: socialNow, selfId: this.selfId, connected: this._canMutateOnline(), canJoinGathering: liveGatheringJoinable });
     layer.innerHTML = renderOnlineFriendPanel(this.friendState, {
       open: this.friendPanelOpen, selfId: this.selfId, draft: this.friendIdDraft, tab: this.socialTab, guildState,
       showFab: showSocialFab,
+      hallFacilityMode,
       safetyCapability, mutedPlayers,
       guildOptions: {
         connected: this._canMutateOnline(), capability: this.capabilities.has("guildsV1"), disabled: Boolean(this.pendingLeaveOnReconnect),
-        now: this._guildNow(),
-        liveGatheringJoinable: this._canMutateOnline() && !this.trade && (!this.roomState || this.roomState.phase === "lobby"),
+        now: socialNow,
+        liveGatheringJoinable,
         recruitmentCapability: this.capabilities.has("guildPartyRecruitmentV1"), roomState: this.roomState,
         planCapability: this.capabilities.has("guildPlansV1"), plansExpanded: this.guildPlansExpanded, planComposerOpen: this.guildPlanComposerOpen,
         planGatheringCapability: this.capabilities.has("guildPlanGatheringV1"),
@@ -2401,6 +3033,7 @@ export class OnlinePartyController {
         createDraft: this.guildCreateDraft, chatDraft: this.guildChatDraft, planDraft: this.guildPlanDraft, recruitmentDraft: this.guildRecruitmentDraft, friends: this.friendState.friends,
       },
     });
+    this._refreshHallSocialNotice(socialNotice);
     const page = this._query(".online-v3-page"); if (page) page.inert = this.friendPanelOpen;
     const nextContent = layer.querySelector(".online-social-content"), nextChat = layer.querySelector("[data-online-guild-chat-log]");
     if (nextContent) nextContent.scrollTop = this.socialScrollByTab[this.socialTab] ?? 0;
@@ -2468,7 +3101,7 @@ export class OnlinePartyController {
 
   _clearRoom() {
     this.emoteGestureCleanup?.();
-    const showReturnResult = Boolean(this.pendingExpeditionReturnResult); this.roomState = null; this.roomId = null; this.pendingExpeditionStart = false; this.pendingSecretRoomRun = null; this.syncedExpeditionStartKey = ""; this._clearMoveInputs(); this._closeAllBattleMenus(); this.unread = 0; this.floorBossConfirm = null; this.coopBossConfirm = null; this.pendingFloorBossReward = null; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; this.expeditionReport = null; this.raidReport = null; this.teamBattleReport = null; this.exploreChatOpen = false; this.pingMenuOpen = false; this.pendingRoomJoinId = null; this.roomListingPending = false; this.roomMemberRemovalPendingId = null; this.processedCoopTechniqueEvents.clear(); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false); this._clearTradeUi();
+    const showReturnResult = Boolean(this.pendingExpeditionReturnResult); this.roomState = null; this.roomId = null; this.pendingExpeditionStart = false; this.pendingSecretRoomRun = null; this.syncedExpeditionStartKey = ""; this._clearMoveInputs(); this._closeAllBattleMenus(); this.unread = 0; this.floorBossConfirm = null; this.coopBossConfirm = null; this.pendingFloorBossReward = null; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; this.expeditionReport = null; this.raidReport = null; this.teamBattleReport = null; this.exploreChatOpen = false; this.hallGamesOpen = false; this.pingMenuOpen = false; this.pendingRoomJoinId = null; this.roomListingPending = false; this.roomMemberRemovalPendingId = null; this.processedCoopTechniqueEvents.clear(); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false); this._clearTradeUi();
     this.root?.querySelector(".online-v3-screen")?.classList.remove("online-shared-gameplay-active");
     this._unmountExploreCanvas();
     this._query("[data-online-room]")?.classList.remove("online-shared-gameplay");
@@ -2519,14 +3152,33 @@ export class OnlinePartyController {
     this.root?.querySelector(".online-v3-screen")?.classList.toggle("online-shared-gameplay-active", gameplay);
     const canvasExplore = this.route === "explore" && this.roomState.phase === "expedition" && !this.roomState.expedition?.battle;
     if (this.exploreCanvasMounted) this._unmountExploreCanvas();
-    const guildRecruitmentLock = currentGuildRoomRecruitmentLock(this.guildState, this.roomState, this._guildNow());
+    const guildNow = this._guildNow();
+    const guildRecruitmentLock = currentGuildRoomRecruitmentLock(this.guildState, this.roomState, guildNow);
     const mutedPlayerIds = this._mutedPlayerSnapshot().map(entry => entry.playerId), blockedPlayerIds = [...this._blockedPlayerIds()];
-    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], raidReport: this.raidReport, teamBattleReport: this.teamBattleReport, expeditionReport: this.expeditionReport, expeditionReturnReady: Boolean(this.pendingExpeditionReturnResult), expeditionStartPending: this.pendingExpeditionStart, floorBossConfirm: this.floorBossConfirm, coopBossConfirm: this.coopBossConfirm, exploreChatOpen: this.exploreChatOpen, merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot(), trade: this.trade, tradeCatalog: this.trade ? this._tradeCatalog() : [], tradeFilter: this.tradeFilter, tradeQuery: this.tradeQuery, tradeAmount: this.tradeAmount, tradeConfirmSeconds: Math.max(0, Math.ceil((this.tradeConfirmAvailableAt - Date.now()) / 1000)), raidExchangePending: this.raidExchangePending, roomListingPending: this.roomListingPending, roomMemberRemovalPendingId: this.roomMemberRemovalPendingId, guildRecruitmentActive: guildRecruitmentLock.active, guildRecruitmentLock, mutedPlayerIds, blockedPlayerIds, safetyCapability: this.capabilities.has("onlineSafetyV1") };
+    const socialNotice = onlineSocialNotificationSummary(this.friendState, this._guildStateForDisplay(), {
+      now: guildNow,
+      selfId: this.selfId,
+      connected: this._canMutateOnline(),
+      canJoinGathering: this._canMutateOnline() && !this.trade && (!this.roomState || this.roomState.phase === "lobby"),
+    });
+    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], presentationKoIds: [...(this.presentationKoIds[this.route] ?? [])], raidReport: this.raidReport, teamBattleReport: this.teamBattleReport, expeditionReport: this.expeditionReport, expeditionReturnReady: Boolean(this.pendingExpeditionReturnResult), expeditionStartPending: this.pendingExpeditionStart, floorBossConfirm: this.floorBossConfirm, coopBossConfirm: this.coopBossConfirm, exploreChatOpen: this.exploreChatOpen, hallGamesOpen: this.hallGamesOpen, hallGameTab: this.hallGameTab, hallGamesSupported: this.capabilities.has("hallMinigamesV1"), merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot(), socialNotice, trade: this.trade, tradeCatalog: this.trade ? this._tradeCatalog() : [], tradeFilter: this.tradeFilter, tradeQuery: this.tradeQuery, tradeAmount: this.tradeAmount, tradeConfirmSeconds: Math.max(0, Math.ceil((this.tradeConfirmAvailableAt - Date.now()) / 1000)), raidExchangePending: this.raidExchangePending, roomListingPending: this.roomListingPending, roomMemberRemovalPendingId: this.roomMemberRemovalPendingId, guildRecruitmentActive: guildRecruitmentLock.active, guildRecruitmentLock, mutedPlayerIds, blockedPlayerIds, safetyCapability: this.capabilities.has("onlineSafetyV1") };
+    const activeInput = stage.contains(document.activeElement) ? document.activeElement : null;
+    const restoreHallChatFocus = this.route === "home" && this.hallGamesOpen
+      && activeInput?.matches?.("[data-online-explore-chat-input]");
+    const hallChatSelection = restoreHallChatFocus && Number.isFinite(activeInput.selectionStart)
+      ? { start: activeInput.selectionStart, end: activeInput.selectionEnd }
+      : null;
     stage.innerHTML = this.route === "explore" ? renderOnlineExplore(this.roomState, this.selfId, state)
       : this.route === "raid" ? renderOnlineRaid(this.roomState, this.selfId, state)
       : this.route === "team" ? renderOnlineTeam(this.roomState, this.selfId, state)
       : this.route === "chat" ? renderOnlineChat(this.roomState, this.selfId, state)
       : renderOnlineHome(this.roomState, this.selfId, state);
+    if (restoreHallChatFocus) requestAnimationFrame(() => {
+      const input = this._query("[data-online-explore-chat-input]");
+      if (!input) return;
+      input.focus({ preventScroll: true });
+      if (hallChatSelection) input.setSelectionRange?.(hallChatSelection.start, hallChatSelection.end);
+    });
     this._syncConnectionUi();
     this._renderTradeRecoveryStatus();
     this._renderRewardReceipt();
@@ -2629,18 +3281,20 @@ export class OnlinePartyController {
 
   _captureHpTrails(mode, previous, next) {
     const before = this._healthMap(mode, previous), after = this._healthMap(mode, next), trails = {};
-    for (const [key, current] of after) { const old = before.get(key); if (!old || Number(current.hp) >= Number(old.hp)) continue; trails[key] = { from: clamp(Number(old.hp) / Math.max(1, Number(old.max)) * 100, 0, 100), startedAt: Date.now(), duration: 1500 }; }
+    for (const [key, current] of after) { const old = before.get(key); if (!old || Number(current.hp) >= Number(old.hp)) continue; trails[key] = { from: clamp(Number(old.hp) / Math.max(1, Number(old.max)) * 100, 0, 100), startedAt: Date.now(), delay: 300, duration: 720 }; if(key.startsWith("enemy:")&&Number(old.hp)>0&&Number(current.hp)<=0)this.presentationKoIds[mode]?.add(key.slice(key.indexOf(":")+1)); }
     this.hpTrails[mode] = trails;
   }
 
   _queueBattlePresentation(mode, events = []) {
     for (const timer of this.presentationTimers) clearTimeout(timer);
     this.presentationTimers.clear();
-    const spacing = mode === "raid" ? 760 : 560;
-    const rows = [...events], featured = [...rows].reverse().find(event => event?.kind === "coopBreak"), recent = rows.slice(-8);
-    if (featured && !recent.includes(featured)) recent.splice(0, Math.max(0, recent.length - 7), featured);
-    for (const [index, event] of recent.entries()) {
-      const timer = setTimeout(() => { this.presentationTimers.delete(timer); this._playBattleEvent(event, mode); }, 140 + index * spacing);
+    const rows = [...events], featured = [...rows].reverse().find(event => event?.kind === "coopBreak"), recent = rows.slice(-12), koIds=this.presentationKoIds[mode]??new Set();
+    if (featured && !recent.includes(featured)) recent.splice(0, Math.max(0, recent.length - 11), featured);
+    for(const id of koIds)if(!recent.some(event=>event?.kind==="ko"&&String(event.targetId)===String(id)))recent.push({kind:"ko",targetKind:"enemy",targetId:id,label:"撃破"});
+    const actions=recent.filter(event=>event?.kind!=="ko").slice(-8),kos=recent.filter(event=>event?.kind==="ko");
+    for (const [index, event] of [...actions,...kos].entries()) {
+      const actionCount=actions.length,delay=index<actionCount?80+index*90:980+(index-actionCount)*120;
+      const timer = setTimeout(() => { this.presentationTimers.delete(timer); this._playBattleEvent(event, mode); }, delay);
       this.presentationTimers.add(timer);
     }
   }
@@ -2664,10 +3318,11 @@ export class OnlinePartyController {
       }
     }
     if (actor && ["damage", "enemyDamage", "signature", "heal", "mpHeal", "revive", "circleActivate"].includes(event.kind)) { setMonsterVisualFrame(actor,"attack"); actor.classList.remove("fx-lunge", "fx-skill-lunge"); void actor.offsetWidth; actor.classList.add(event.label && event.label !== "たたかう" ? "fx-skill-lunge" : "fx-lunge"); const actorSelector=actor.id?`#${CSS.escape(actor.id)}`:null;setTimeout(()=>{const current=actorSelector?this._query(actorSelector):actor;if(current&&!current.classList.contains("dead"))setMonsterVisualFrame(current,"idle")},920); }
-    if (target && ["damage", "enemyDamage", "signature", "deathMirrorPhantom"].includes(event.kind) && Number(event.value) > 0) { setMonsterVisualFrame(target,"damage"); target.classList.remove("fx-hit", "fx-critical-hit"); void target.offsetWidth; target.classList.add(event.critical ? "fx-critical-hit" : "fx-hit"); const flash = document.createElement("span"); flash.className = `battle-unit-hit-flash ${event.critical ? "critical" : ""}`; target.appendChild(flash); setTimeout(() => flash.remove(), 680); const targetSelector=target.id?`#${CSS.escape(target.id)}`:null;setTimeout(()=>{const current=targetSelector?this._query(targetSelector):target;if(current&&!current.classList.contains("dead"))setMonsterVisualFrame(current,"idle")},1050); }
-    if(target&&event?.kind==="ko")setMonsterVisualFrame(target,"down");
+    const impactDelay=["damage","enemyDamage","signature","deathMirrorPhantom"].includes(event?.kind)?170:60,schedule=(callback,delay)=>{const timer=setTimeout(()=>{this.presentationTimers.delete(timer);callback()},delay);this.presentationTimers.add(timer);return timer};
+    if (target && ["damage", "enemyDamage", "signature", "deathMirrorPhantom"].includes(event.kind) && Number(event.value) > 0) schedule(()=>{setMonsterVisualFrame(target,"damage"); target.classList.remove("fx-hit", "fx-critical-hit"); void target.offsetWidth; target.classList.add(event.critical ? "fx-critical-hit" : "fx-hit"); const flash = document.createElement("span"); flash.className = `battle-unit-hit-flash ${event.critical ? "critical" : ""}`; target.appendChild(flash); setTimeout(() => flash.remove(), 680); const targetSelector=target.id?`#${CSS.escape(target.id)}`:null;setTimeout(()=>{const current=targetSelector?this._query(targetSelector):target;if(current&&!current.classList.contains("dead"))setMonsterVisualFrame(current,"idle")},1050)},impactDelay);
+    if(target&&event?.kind==="ko"){target.classList.add("presentation-ko-playing");setMonsterVisualFrame(target,"down");schedule(()=>{this.presentationKoIds[mode]?.delete(String(targetId));target.classList.remove("presentation-ko-pending","presentation-ko-playing");target.classList.add("presentation-ko-resolved","dead");target.setAttribute("aria-hidden","true")},560)}
     const layer = this._query("#battleFxLayer");
-    if (layer && target && (Number(event?.value) || ["miss", "guard"].includes(event?.kind))) { const layerRect = layer.getBoundingClientRect(), rect = target.getBoundingClientRect(), float = document.createElement("div"); const healing = ["heal", "mpHeal", "revive"].includes(event.kind), text = event.kind === "miss" ? "MISS" : event.kind === "guard" ? "GUARD" : `${healing ? "+" : "-"}${Math.max(0, Number(event.value) || 0).toLocaleString()}`; float.className = `floating-number ${healing ? "heal" : event.critical ? "critical" : event.kind === "enemyDamage" ? "enemy" : "damage"}`; float.textContent = text; float.style.left = `${rect.left - layerRect.left + rect.width / 2}px`; float.style.top = `${rect.top - layerRect.top + rect.height * .34}px`; layer.appendChild(float); setTimeout(() => float.remove(), 2400); }
+    if (layer && target && (Number(event?.value) || ["miss", "guard"].includes(event?.kind))) schedule(()=>{const layerRect = layer.getBoundingClientRect(), rect = target.getBoundingClientRect(), float = document.createElement("div"); const healing = ["heal", "mpHeal", "revive"].includes(event.kind), text = event.kind === "miss" ? "MISS" : event.kind === "guard" ? "GUARD" : `${healing ? "+" : "-"}${Math.max(0, Number(event.value) || 0).toLocaleString()}`; float.className = `floating-number ${healing ? "heal" : event.critical ? "critical" : event.kind === "enemyDamage" ? "enemy" : "damage"}`; float.textContent = text; float.style.left = `${rect.left - layerRect.left + rect.width / 2}px`; float.style.top = `${rect.top - layerRect.top + rect.height * .34}px`; layer.appendChild(float); setTimeout(() => float.remove(), 2400)},impactDelay);
     if (layer && (event?.label || linkArts) && (["signature", "raidTelegraph", "revive", "effect", "buff", "link", "coopBreak", "circleActivate", "equipmentAuthority"].includes(event.kind) || event.kind === "damage" && event.label !== "たたかう")) { const title = String(event.label || "LINK ARTS"), detailBase = String(event.description || event.message || event.effectText || (event.kind === "circleActivate" ? "魔法陣 発動" : event.actorName || "共闘アクション")), detail = linkArts && (event.autoIncluded === true || Array.isArray(event.autoIncluded) && event.autoIncluded.length) ? `${detailBase}・自動連携` : detailBase; const banner = document.createElement("div"); const authority = event.kind === "equipmentAuthority" || /固有|権能|反照/.test(detail); banner.className = `battle-cinematic-banner ${event.kind === "raidTelegraph" || event.kind === "coopBreak" ? "boss" : "skill"} ${linkArts ? "link-arts" : ""} ${title.length > 20 ? "very-long-title" : title.length > 12 ? "long-title" : ""} ${authority ? "equipment-authority" : ""}`; if (event.techniqueId) banner.dataset.techniqueId = String(event.techniqueId); banner.innerHTML = `<span class="battle-banner-copy">${linkArts ? '<em class="link-arts-kicker">LINK ARTS</em>' : ""}<strong>${safeHtml(title)}</strong><small class="battle-banner-effect">${safeHtml(detail)}</small></span>`; this._query(".battle-arena")?.appendChild(banner); const hold = mode === "raid" ? 2100 : linkArts ? 1900 : 1550; setTimeout(() => { banner.classList.add("leaving"); setTimeout(() => banner.remove(), 380); }, hold); }
   }
 
@@ -2675,6 +3330,33 @@ export class OnlinePartyController {
     const message = String(text ?? "").trim().slice(0, 80);
     if (!message || Date.now() - this.lastChatAt < 850) return;
     if (this._send("chat", { text: message })) this.lastChatAt = Date.now();
+  }
+
+  _refreshHallSocialDom() {
+    if (this.route !== "home" || !this.exploreChatOpen) return false;
+    const composer = this._query("[data-online-explore-chat-input]");
+    const stage = this._query("[data-online-hall-stage]");
+    if (!composer || !stage) return false;
+    const chats = new Map(this._chatBubbleSnapshot().map(entry => [String(entry.playerId), entry]));
+    const emotes = new Map(this._socialBubbleSnapshot().map(entry => [String(entry.playerId), entry]));
+    const updateBubble = (player, className, value) => {
+      let bubble = player.querySelector(`.${className}`);
+      if (!value) { bubble?.remove(); return; }
+      if (!bubble) {
+        bubble = player.ownerDocument.createElement("span");
+        bubble.className = className;
+        player.insertBefore(bubble, player.firstChild);
+      }
+      bubble.textContent = value;
+    };
+    stage.querySelectorAll("[data-online-hall-player]").forEach(player => {
+      const playerId = String(player.dataset.onlineHallPlayer ?? "");
+      updateBubble(player, "online-hall-emote", emotes.get(playerId)?.emoji ?? "");
+      updateBubble(player, "online-hall-chat-bubble", chats.get(playerId)?.text ?? "");
+    });
+    const unread = this._query("[data-online-unread]");
+    if (unread) { unread.hidden = this.unread <= 0; unread.textContent = this.unread > 9 ? "9+" : String(this.unread); }
+    return true;
   }
 
   _receiveChat(message) {
@@ -2685,7 +3367,9 @@ export class OnlinePartyController {
     if (this.route !== "chat") this.unread = Math.min(99, this.unread + 1);
     this.chatBubbles.set(message.playerId, { playerId: message.playerId, text: String(message.text ?? "").slice(0, 80), expiresAt: Date.now() + 6200 });
     if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() });
-    else if (!["explore", "raid", "team"].includes(this.route) || !this._battle(this.route)) this._render();
+    else if (!["explore", "raid", "team"].includes(this.route) || !this._battle(this.route)) {
+      if (!this._refreshHallSocialDom()) this._render();
+    }
   }
 
   _showRewardReceipt(message, result = {}) {
@@ -2820,7 +3504,7 @@ export class OnlinePartyController {
   _moveStep(now) {
     if (!this._canMutateOnline()) { this._clearMoveInputs(); return; }
     if (this.route === "home" && this.roomState?.phase === "lobby") {
-      if (this.exploreChatOpen || this.emoteGestureActive) { this.hallDestination = null; return; }
+      if (this.exploreChatOpen || this.hallGamesOpen || this.emoteGestureActive) { this.hallDestination = null; return; }
       this._moveHallStep(now); return;
     }
     if (this.route !== "explore" || this.roomState?.phase !== "expedition" || this.roomState?.expedition?.battle) return;
@@ -2894,7 +3578,10 @@ export class OnlinePartyController {
     if (this._isSocialHidden(message.playerId)) return;
     const emoji = ({ wave: "👋", cheer: "✨", heart: "❤️", like: "👍", alert: "⚠️", question: "❓", surprise: "‼️", laugh: "😄", cry: "💧", clap: "👏", sparkle: "🌟" })[message.id] ?? "✨";
     this.socialBubbles.set(message.playerId, { playerId: message.playerId, emoji, id: message.id, expiresAt: Date.now() + Math.max(1800, Number(message.duration) || 2800) });
-    if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot(), socialBubbles: this._socialBubbleSnapshot() }); else if (!["explore", "raid", "team"].includes(this.route) || !this._battle(this.route)) this._render();
+    if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot(), socialBubbles: this._socialBubbleSnapshot() });
+    else if (!["explore", "raid", "team"].includes(this.route) || !this._battle(this.route)) {
+      if (!this._refreshHallSocialDom()) this._render();
+    }
   }
 
   _placeExploreEmote(anchor, point = null) {
@@ -2932,7 +3619,8 @@ export class OnlinePartyController {
     this.emoteGestureCleanup?.();
     const choices = [["wave", "👋"], ["cheer", "✨"], ["heart", "❤️"], ["like", "👍"], ["alert", "⚠️"], ["question", "❓"]];
     const pointerId = event.pointerId, origin = { x: event.clientX, y: event.clientY };
-    const isHall = anchor.matches?.(".online-hall-emote-tool");
+    const isHallGame = anchor.matches?.(".online-hall-game-emote-tool");
+    const isHall = isHallGame || anchor.matches?.(".online-hall-emote-tool");
     const movable = !isHall && anchor.matches?.(".online-explore-emote"), stage = anchor.closest(".explore-stage,.online-hall-world");
     const positionKey = ONLINE_EXPLORE_EMOTE_POSITION;
     const anchorRect = anchor.getBoundingClientRect(), stageRect = stage?.getBoundingClientRect();
@@ -2940,8 +3628,11 @@ export class OnlinePartyController {
     let wheel = null, selected = isHall ? null : 0, opened = false, dragging = false, wheelMoved = false, lastPosition = startPosition, cleaned = false;
     const viewportWidth = Math.max(1, window.innerWidth || document.documentElement.clientWidth || 1), viewportHeight = Math.max(1, window.innerHeight || document.documentElement.clientHeight || 1);
     const marginX = Math.min(82, Math.max(8, viewportWidth / 2 - 4)), marginY = Math.min(82, Math.max(8, viewportHeight / 2 - 4));
-    const wheelOrigin = isHall
-      ? { x: anchorRect.left + anchorRect.width / 2, y: anchorRect.top + anchorRect.height / 2 }
+    const anchorCenter = { x: anchorRect.left + anchorRect.width / 2, y: anchorRect.top + anchorRect.height / 2 };
+    const wheelOrigin = isHallGame
+      ? { x: clamp(anchorCenter.x, marginX, Math.max(marginX, viewportWidth - marginX)), y: clamp(anchorCenter.y, marginY, Math.max(marginY, viewportHeight - marginY)) }
+      : isHall
+      ? anchorCenter
       : { x: clamp(origin.x, marginX, Math.max(marginX, viewportWidth - marginX)), y: clamp(origin.y, marginY, Math.max(marginY, viewportHeight - marginY)) };
     const paintSelection = () => wheel?.querySelectorAll("i").forEach((node, index) => node.classList.toggle("selected", selected != null && index === selected));
     const selectHallOption = pointer => {
@@ -3024,6 +3715,11 @@ export class OnlinePartyController {
     return HALL_POINTS.find(point => Math.hypot(point.x - Number(position.x), point.y - Number(position.y)) <= 10)?.route ?? null;
   }
 
+  _hallGameRequestId(kind = "action") {
+    this.hallGameRequestSequence = (this.hallGameRequestSequence + 1) % 1_000_000;
+    return `hall-${String(kind).replace(/[^a-z]/gi, "").slice(0, 12) || "action"}-${Date.now().toString(36)}-${this.hallGameRequestSequence.toString(36)}`;
+  }
+
   _updateHallPlayerDom(playerId) {
     const member = this.roomState?.members?.find(entry => entry.playerId === playerId), node = this._query(`[data-online-hall-player="${CSS.escape(String(playerId))}"]`);
     if (member?.position && node) { node.style.setProperty("--hall-x", `${clamp(member.position.x, 5, 95)}%`); node.style.setProperty("--hall-y", `${clamp(member.position.y, 15, 96)}%`); }
@@ -3052,7 +3748,7 @@ export class OnlinePartyController {
   }
 
   _ensureConnectionAfterResume() {
-    if (!this.mounted || this.manualClose) return;
+    if ((!this.mounted && !this.backgroundActive) || this.manualClose) return;
     this._refreshResumeTokenFromStorage();
     const awaitingInitialAck = Boolean(this.helloAckPending);
     if (!storageGet(ONLINE_STORAGE_KEYS.serverUrl) || !awaitingInitialAck && (storageGet(ONLINE_STORAGE_KEYS.autoConnect) !== "1" || !this.resumeToken)) return;
@@ -3063,7 +3759,7 @@ export class OnlinePartyController {
 
   _handleClose(closedSocket = null, closeEvent = null) {
     if (closedSocket && this.ws && this.ws !== closedSocket) return;
-    this.ws = null; this.connectionReady = false; this._clearGuildPlanTransitionTimer(); this._clearMoveInputs(); this._clearInteractionPending(false); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this.merchantPending = false; if (this.manualClose) return;
+    this.ws = null; this.connectionReady = false; this.connectionModePending = false; this._clearPowerRankingRequests("offline"); this._notifyPowerRankingCapability(); this._clearGuildPlanTransitionTimer(); this._clearMoveInputs(); this._clearInteractionPending(false); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this.merchantPending = false; if (this.manualClose) return;
     if (Number(closeEvent?.code) === 4001) {
       clearTimeout(this.reconnectTimer); this.reconnectTimer = null;
       clearTimeout(this.pendingLeaveTimer); this.pendingLeaveTimer = null;
@@ -3078,14 +3774,14 @@ export class OnlinePartyController {
     this._setStatus("reconnecting", "再接続中…", "切断中はサーバーが自動行動を担当します");
     this.guildStatus = "再接続中です。接続が戻ると操作を再開できます。";
     if (this.friendPanelOpen) this._renderFriendPanel();
-    if (!this.mounted) return;
+    if (!this.mounted && !this.backgroundActive) return;
     clearTimeout(this.reconnectTimer); const delay = Math.min(10000, 800 * Math.pow(1.7, this.reconnectAttempts++));
     this.reconnectTimer = setTimeout(() => this.connect({ reconnect: true }), delay);
   }
 
   disconnect({ leave = true, quiet = false } = {}) {
     clearTimeout(this.reconnectTimer); this.reconnectTimer = null; this.manualClose = true;
-    this.connectionReady = false; this.helloAckPending = false; this._clearMoveInputs();
+    this.connectionReady = false; this.helloAckPending = false; this.connectionModePending = false; this._clearPowerRankingRequests("offline"); this._notifyPowerRankingCapability(); this._clearMoveInputs();
     storageSet(ONLINE_STORAGE_KEYS.autoConnect, "0");
     if (leave) this._send("leaveRoom");
     if (this.ws) try { this.ws.close(1000, "client disconnect"); } catch {}

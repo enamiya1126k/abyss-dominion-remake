@@ -2,7 +2,7 @@ import { SPECIES } from "../../data/species.js?v=2.11.0-build164";
 import { displayName, calculatedStats } from "../../models/Monster.js?v=2.11.30-build195";
 import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=2.11.30-build195";
 import { magicCircleById, equippedMagicCircle, goldPowerDamageMultiplier, goldPowerActionCost } from "../../core/MagicCircleSystem.js?v=2.11.0-build164";
-import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=2.11.30-build195";
+import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=2.11.73-build249";
 import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=2.11.0-build164";
 import { monsterVisual } from "../MonsterVisual.js?v=2.11.0-build164";
 import { resourceHud, pixelIcon } from "../components/GameChrome.js?v=2.11.0-build164";
@@ -171,7 +171,7 @@ function onlineSkillProfile(monster) {
       kind: onlineSkillKind(skill),
       mp: effectiveSkillMpCost(monster, skill),
       power: Math.max(.1, Number(skill.power) || 1),
-      heal: Math.max(0, Number(skill.heal) || Number(skill.revive) || 0),
+      heal: Math.max(0, Number(skill.heal) || Number(skill.selfHeal) || Number(skill.revive) || 0),
       revive: Math.max(0, Number(skill.revive) || 0),
       reviveMp: Math.max(0, Number(skill.reviveMp) || 0),
       mpHeal: Math.max(0, Number(skill.mpHeal) || 0),
@@ -567,6 +567,30 @@ export function onlineGuildPlanAttentions(source = {}, { now = Date.now(), selfI
   }).filter(entry => entry?.planId).sort((left, right) => left.priority - right.priority || left.scheduledAt - right.scheduledAt || left.planId.localeCompare(right.planId));
 }
 
+export function onlineSocialNotificationSummary(friendSource = {}, guildSource = {}, options = {}) {
+  const friendState = friendSource && typeof friendSource === "object" ? friendSource : {};
+  const guildState = guildSource && typeof guildSource === "object" ? guildSource : {};
+  const friendBadge = onlineSocialList(friendState.incoming).length + onlineSocialList(friendState.invites, 20).length;
+  const socialNow = Number.isFinite(Number(options.now)) ? Number(options.now) : Date.now();
+  const attentions = onlineGuildPlanAttentions(guildState, {
+    now: socialNow,
+    selfId: options.selfId,
+    connected: options.connected !== false,
+    canJoinGathering: options.canJoinGathering !== false,
+  });
+  const guildRole = guildState.guild?.role;
+  const guildBadge = onlineSocialList(guildState.invitations, 100).length
+    + (["leader", "officer"].includes(guildRole) ? onlineSocialList(guildState.guild?.applications, 100).length : 0)
+    + attentions.length;
+  return {
+    friendBadge,
+    guildBadge,
+    badge: friendBadge + guildBadge,
+    attention: attentions[0] ?? null,
+    attentionCount: attentions.length,
+  };
+}
+
 function onlineGuildPlanAttentionBanner(attention, { closed = false } = {}) {
   if (!attention) return "";
   return `<button type="button" class="online-guild-plan-attention ${closed ? "closed" : "panel"} ${escapeOnlineHtml(attention.phase)}" data-online-guild-plan-attention="${escapeOnlineHtml(attention.planId)}" aria-label="${escapeOnlineHtml(`${attention.title}。${attention.detail}。予定を確認`)}"><i aria-hidden="true"></i><span><small>${attention.phase === "live" ? "GUILD PARTY LIVE" : "EXPEDITION SOON"}</small><b>${escapeOnlineHtml(attention.title)}</b><em>${escapeOnlineHtml(attention.detail)}</em></span><strong>予定を見る</strong></button>`;
@@ -822,13 +846,16 @@ function renderOnlineFriendContent(source = {}, { selfId = "", draft = "", conne
 
 export function renderOnlineSocialPanel(friendSource = {}, guildSource = {}, options = {}) {
   const friendState = friendSource && typeof friendSource === "object" ? friendSource : {}, guildState = guildSource && typeof guildSource === "object" ? guildSource : {};
-  const friendBadge = onlineSocialList(friendState.incoming).length + onlineSocialList(friendState.invites, 20).length;
   const socialNow = Number.isFinite(Number(options.guildOptions?.now)) ? Number(options.guildOptions.now) : Date.now();
-  const attentions = onlineGuildPlanAttentions(guildState, { now: socialNow, selfId: options.selfId, connected: options.guildOptions?.connected !== false, canJoinGathering: options.guildOptions?.liveGatheringJoinable !== false }), attention = attentions[0], attentionCount = attentions.length;
-  const guildRole = guildState.guild?.role, guildBadge = onlineSocialList(guildState.invitations, 100).length + (["leader", "officer"].includes(guildRole) ? onlineSocialList(guildState.guild?.applications, 100).length : 0) + attentionCount;
-  const badge = friendBadge + guildBadge, open = Boolean(options.open), tab = options.tab === "guild" ? "guild" : "friends";
+  const { friendBadge, guildBadge, badge, attention, attentionCount } = onlineSocialNotificationSummary(friendState, guildState, {
+    now: socialNow,
+    selfId: options.selfId,
+    connected: options.guildOptions?.connected !== false,
+    canJoinGathering: options.guildOptions?.liveGatheringJoinable !== false,
+  });
+  const open = Boolean(options.open), tab = options.tab === "guild" ? "guild" : "friends";
   if (!open) {
-    if (options.showFab === false) return "";
+    if (options.showFab === false || options.hallFacilityMode === true) return "";
     return `${onlineGuildPlanAttentionBanner(attention, { closed: true })}<button type="button" class="online-friend-fab online-social-fab ${attentionCount ? "has-guild-attention" : ""}" data-online-friends-toggle aria-label="${escapeOnlineHtml(attentionCount ? `交流パネルを開く。遠征のお知らせ${attentionCount}件` : "交流パネルを開く")}">♟<b>${attentionCount ? "遠征あり" : "交流"}</b>${badge ? `<i>${Math.min(9, badge)}${badge > 9 ? "+" : ""}</i>` : ""}</button>`;
   }
   const panelAttention = onlineGuildPlanAttentionBanner(attention);
