@@ -1,5 +1,5 @@
 import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.11.0-build164";
-import{SPECIES}from"../data/species.js?v=2.11.82-build258";
+import{SPECIES}from"../data/species.js?v=2.11.87-build263";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionById}from"../data/floorBosses.js?v=2.11.30-build195";
 import{floorBossEnemyEntry}from"./FloorBossChallengeSystem.js?v=2.11.82-build258";
 
@@ -83,7 +83,7 @@ function migrateLegacyEndgameIds(state,e){
 export function normalizeEndgameState(state){
  state.flags??={};state.flags.gameClear1000??=false;state.worldPhase=hasCleared1000(state)?1:0;state.endgame??={};
  state.endgame.processedSpecialResults=state.endgame.processedSpecialResults&&typeof state.endgame.processedSpecialResults==="object"&&!Array.isArray(state.endgame.processedSpecialResults)?state.endgame.processedSpecialResults:{};
- state.endgame.teamBattle??={unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0};
+ state.endgame.teamBattle??={unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0,highestRewardedStage:0};
  state.endgame.trials??={battle:1,loop:1,cleared:[],run:null,dailyKey:null,dailyAttempts:0};
  state.endgame.trials.battle=Math.max(1,Math.min(ENDGAME_TRIAL_BATTLE_COUNT,Math.floor(Number(state.endgame.trials.battle)||1)));
  state.endgame.trials.loop=Math.max(1,Math.floor(Number(state.endgame.trials.loop)||1));
@@ -94,7 +94,14 @@ export function normalizeEndgameState(state){
  state.endgame.emergency??={encounters:0,wins:0,losses:0,lastFloor:0,lastTriggeredFloor:0,records:{},fragments:{},craftCounts:{},craftedGear:[],blessings:{}};
  const e=state.endgame.emergency;e.records??={};e.fragments??={};e.craftCounts??={};e.craftedGear??=[];e.blessings??={};e.preludeChoices??={};e.discovered??={};e.contracts??={};e.processedFragmentResults??={};e.processedBattleResults??={};e.manualChallenges=e.manualChallenges&&typeof e.manualChallenges==="object"&&!Array.isArray(e.manualChallenges)?e.manualChallenges:{dailyKey:null,dailyAttempts:0,unlocks:{}};e.manualChallenges.unlocks=e.manualChallenges.unlocks&&typeof e.manualChallenges.unlocks==="object"&&!Array.isArray(e.manualChallenges.unlocks)?e.manualChallenges.unlocks:{};migrateLegacyEndgameIds(state,e);e.lastTriggeredFloor=Math.max(0,Math.floor(Number(e.lastTriggeredFloor)||0));e.pendingEncounter=e.pendingEncounter&&ENDGAME_BOSSES[e.pendingEncounter.bossId]?{...e.pendingEncounter,bossId:String(e.pendingEncounter.bossId),floor:Math.max(EMERGENCY_UNLOCK_FLOOR,Math.floor(Number(e.pendingEncounter.floor)||EMERGENCY_UNLOCK_FLOOR))}:null;e.rescue??={post1000Encounters:0,consecutiveLosses:0,lastResult:null};
  e.rescue.post1000Encounters=Math.max(0,Number(e.rescue.post1000Encounters)||0);e.rescue.consecutiveLosses=Math.max(0,Math.min(5,Number(e.rescue.consecutiveLosses)||0));e.rescue.lastResult=e.rescue.lastResult==="win"||e.rescue.lastResult==="loss"?e.rescue.lastResult:null;
- state.endgame.teamBattle.unlocked=Boolean(state.endgame.teamBattle.unlocked||state.player?.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR);return state.endgame
+ const team=state.endgame.teamBattle;
+ team.stage=Math.max(1,Math.floor(Number(team.stage)||1));
+ team.totalWins=Math.max(0,Math.floor(Number(team.totalWins)||0));
+ team.totalLosses=Math.max(0,Math.floor(Number(team.totalLosses)||0));
+ team.dailyKey=team.dailyKey??null;
+ team.dailyAttempts=Math.max(0,Math.min(TEAM_BATTLE_DAILY_LIMIT,Math.floor(Number(team.dailyAttempts)||0)));
+ team.highestRewardedStage=Math.max(0,Math.floor(Number(team.highestRewardedStage??team.stage-1)||0));
+ team.unlocked=Boolean(team.unlocked||state.player?.maxFloor>=TEAM_BATTLE_UNLOCK_FLOOR);return state.endgame
 }
 export function specialBattleSettlement(state,battleId){
  const key=battleId==null?null:String(battleId);if(!key)return null;
@@ -153,8 +160,42 @@ export function teamBattleStageMultiplier(stage=1){
  return pre50*85*Math.pow(1.19,s-50)*(1+Math.floor((s-50)/10)*.8);
 }
 export function teamBattleRewardPreview(stage=1,floor=100){
- const s=Math.max(1,Math.floor(Number(stage)||1)),post50=s>=50?Math.pow(1.17,s-49):1,scale=Math.pow(1.145,Math.min(49,s)-1)*post50,milestone=s%50===0?60:s%10===0?14:s%5===0?4:1;
- return{goldMultiplier:Math.max(.04,Math.min(1e10,Math.round(4*scale*milestone)/100)),crystals:Math.max(1,Math.min(1e9,Math.round(Math.pow(1.105,Math.min(49,s)-1)*post50*(s%10===0?18:3)))),guaranteedRarity:s>=50?"LR":s>=40?"UR":s>=25?"SSR":s>=10?"SR":null};
+ const s=Math.max(1,Math.floor(Number(stage)||1)),post50=s>=50?Math.pow(1.17,s-49):1,scale=Math.pow(1.145,Math.min(49,s)-1)*post50,breakthrough=s%10===0;
+ void floor;
+ return{
+  goldMultiplier:Math.max(.5,Math.min(1e10,Math.round(4*scale)/100)),
+  crystals:Math.max(10,Math.min(1e9,Math.round(Math.pow(1.105,Math.min(49,s)-1)*post50*3))),
+  experienceMultiplier:Math.max(1,Math.min(1000,1+Math.floor((s-1)/10))),
+  breakthrough,
+  breakthroughCrystals:breakthrough?100:0,
+  breakthroughCaptureCrystals:breakthrough?50:0,
+  guaranteedRarity:s>=50?"LR":s>=40?"UR":s>=25?"SSR":s>=10?"SR":null
+ };
+}
+export function teamBattleRewardEntitlements(stage=1,{firstClear=false}={}){
+ const reward=teamBattleRewardPreview(stage),isFirstClear=Boolean(firstClear),breakthroughReward=Boolean(isFirstClear&&reward.breakthrough);
+ return{
+  ...reward,
+  firstClear:isFirstClear,
+  breakthroughReward,
+  baseCrystals:reward.crystals,
+  bonusCrystals:breakthroughReward?reward.breakthroughCrystals:0,
+  captureCrystals:breakthroughReward?reward.breakthroughCaptureCrystals:0,
+  guaranteedRarity:isFirstClear?reward.guaranteedRarity:null
+ };
+}
+export function safeCurrencyGrant(currentBalance,requestedAmount){
+ const maximum=Number.MAX_SAFE_INTEGER,currentNumber=Number(currentBalance),requestedNumber=Number(requestedAmount),current=Number.isFinite(currentNumber)?Math.max(0,Math.min(maximum,Math.floor(currentNumber))):currentNumber>0?maximum:0,requested=Number.isFinite(requestedNumber)?Math.max(0,Math.floor(requestedNumber)):requestedNumber>0?maximum:0;
+ return Math.max(0,Math.min(maximum-current,requested));
+}
+export function recordTeamBattleResult(state,won,{stage=null,attemptCharged=false,attemptDayKey=null,date=new Date()}={}){
+ const team=dailyTeamAttempts(state,date),clearedStage=Math.max(1,Math.floor(Number(stage)||Number(team.stage)||1));
+ let attemptRefunded=false;
+ if(!won&&attemptCharged&&attemptDayKey&&team.dailyKey===attemptDayKey&&team.dailyAttempts>0){team.dailyAttempts--;attemptRefunded=true}
+ const firstClear=Boolean(won&&clearedStage>team.highestRewardedStage);
+ if(won){team.totalWins++;if(firstClear)team.highestRewardedStage=clearedStage;team.stage=Math.max(team.stage,clearedStage+1)}else team.totalLosses++;
+ dailyTeamAttempts(state,date);
+ return{won:Boolean(won),clearedStage,firstClear,attemptRefunded,stage:team.stage,remaining:team.remaining,limit:team.limit};
 }
 export function createTeamBattleEncounter(state){
  const team=dailyTeamAttempts(state),stage=Math.max(1,Math.floor(team.stage||1)),boss=FLOOR_BOSS_CATALOG[(stage-1)%FLOOR_BOSS_CATALOG.length];
