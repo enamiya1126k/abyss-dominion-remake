@@ -186,7 +186,7 @@ test("build207 boss first-clear equipment and unlock belong only to the world ow
   assert.equal(ownerUnlock.reward.leaderFloorUnlock, 11);
   assert.ok(helperReward);
   assert.equal(helperReward.reward.randomEquipmentRarity, undefined);
-  assert.equal(helperReward.reward.leaderFloorUnlock, 0);
+  assert.equal(Object.hasOwn(helperReward.reward, "leaderFloorUnlock"), false, "a helper receipt must not carry an inert progression field");
   assert.deepEqual(room.hostWorld.defeatedBossFloors, [10]);
   assert.equal(room.expedition.hostOwnerId, players[0].session.playerId);
   assert.equal(room.coopRun.resonance, 1);

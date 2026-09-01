@@ -1,7 +1,7 @@
 import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.11.0-build164";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.11.30-build195";
-import{allLearnedSkills,maxMp,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=2.11.73-build249";
-import{SPECIES}from"../data/species.js?v=2.11.0-build164";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.11.82-build258";
+import{allLearnedSkills,maxMp,recommendedSkills,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=2.11.83-build259";
+import{SPECIES}from"../data/species.js?v=2.11.82-build258";
 import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.11.0-build164";
 import{equipmentStatLabel}from"../data/equipment.js?v=2.11.0-build164";
 import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.11.0-build164";
@@ -168,8 +168,8 @@ function legendaryAffixes(slot,random=Math.random){
 }
 function applyMarketSkillPackage(monster,grade,random=Math.random){
  if(!["surge","jackpot"].includes(grade))return;
- const strongest=allLearnedSkills(monster).slice(-4),minimum=grade==="jackpot"?10:5+Math.floor(random()*4);
- monster.equippedSkills=strongest.map(skill=>skill.id);monster.skillProgress={};
+ const strongest=recommendedSkills(monster,4),minimum=grade==="jackpot"?10:5+Math.floor(random()*4);
+ monster.equippedSkills=strongest.map(skill=>skill.id);while(monster.equippedSkills.length<4)monster.equippedSkills.push(null);monster.skillLoadoutInitialized=true;monster.skillRecommendationProfileVersion=199;monster.skillProgress={};
  for(const skill of strongest)monster.skillProgress[skill.id]={level:minimum,exp:0,uses:0,need:skillMasteryNeedForLevel(minimum)};
  monster.marketSkillGrade=grade==="jackpot"?"全スキル伝説級":"熟練スキル構成";
 }

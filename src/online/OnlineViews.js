@@ -2,9 +2,9 @@ import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=2.11.54-build22
 import { battleEnvironmentForFloor } from "../data/biomes.js?v=2.11.54-build226";
 import {
   onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml, ONLINE_ROOM_PURPOSES, ONLINE_ROOM_STYLES,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.76-build252";
-import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.73-build249";
-import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=2.11.54-build226";
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.82-build258";
+import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.82-build258";
+import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=2.11.82-build258";
 import { pixelIcon } from "../ui/components/GameChrome.js?v=2.11.54-build226";
 
 const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "共同探索", raid: "レイドボス", team: "自由チーム戦", chat: "募集・談話板" });
@@ -120,8 +120,20 @@ export function onlineRosterAllocationCounts(members, { team = false } = {}) {
     for (const allocation of allocations) counts.set(allocation.member.playerId, allocation.count);
   };
   if (team) {
-    allocate(source.filter(member => member.teamSide === "sun"));
-    allocate(source.filter(member => member.teamSide === "moon"));
+    const allocations = source.filter(member => ["sun", "moon"].includes(member.teamSide)).slice(0, 4)
+      .map((member, sourceIndex) => ({ member, sourceIndex, capacity: profileRosterCapacity(member.profile), count: 1 }));
+    let remaining = Math.max(0, 4 - allocations.length);
+    while (remaining > 0) {
+      const sideCount = side => allocations.filter(allocation => allocation.member.teamSide === side).reduce((sum, allocation) => sum + allocation.count, 0);
+      const eligible = allocations.filter(allocation => sideCount(allocation.member.teamSide) < 2 && allocation.count < allocation.capacity);
+      if (!eligible.length) break;
+      eligible.sort((left, right) => sideCount(left.member.teamSide) - sideCount(right.member.teamSide)
+        || left.count - right.count
+        || left.sourceIndex - right.sourceIndex);
+      eligible[0].count += 1;
+      remaining -= 1;
+    }
+    for (const allocation of allocations) counts.set(allocation.member.playerId, allocation.count);
   } else allocate(source);
   return counts;
 }
@@ -306,7 +318,9 @@ export function renderHallGamesOverlay(room, selfId, state = {}) {
 
 function tradeAssetCard(asset, label = "未選択") {
   if (!asset) return `<article class="online-trade-offer empty"><small>${escapeOnlineHtml(label)}</small><b>交換品を選択中</b></article>`;
-  return `<article class="online-trade-offer rarity-${escapeOnlineHtml(String(asset.rarity || "N").toLowerCase())}"><small>${escapeOnlineHtml(asset.kind === "monster" ? "仲間" : asset.kind === "equipment" ? "装備" : asset.kind === "currency" ? "通貨" : "消耗品")}</small><b>${escapeOnlineHtml(asset.name || "交換品")}</b><span>${escapeOnlineHtml([asset.rarity, asset.level ? `Lv.${number(asset.level)}` : "", asset.details].filter(Boolean).join("・"))}</span></article>`;
+  const amount = Number.isSafeInteger(Number(asset.amount)) && Number(asset.amount) > 0 ? Number(asset.amount) : null;
+  const quantity = amount ? `<strong class="online-trade-offer-quantity">×${number(amount)}</strong>` : "";
+  return `<article class="online-trade-offer rarity-${escapeOnlineHtml(String(asset.rarity || "N").toLowerCase())}"><small>${escapeOnlineHtml(asset.kind === "monster" ? "仲間" : asset.kind === "equipment" ? "装備" : asset.kind === "currency" ? "通貨" : "消耗品")}</small><b>${escapeOnlineHtml(asset.name || "交換品")}${quantity}</b><span>${escapeOnlineHtml([asset.rarity, asset.level && !amount ? `Lv.${number(asset.level)}` : "", asset.details].filter(Boolean).join("・"))}</span></article>`;
 }
 
 function renderTradeOverlay(room, selfId, state) {
@@ -314,15 +328,20 @@ function renderTradeOverlay(room, selfId, state) {
   const partnerId = trade.participants?.find(id => id !== selfId), partner = memberById(room, partnerId), own = trade.offers?.[selfId], theirs = trade.offers?.[partnerId];
   const invited = trade.state === "invited", requester = trade.requesterId === selfId, ready = Boolean(trade.ready?.[selfId]), partnerReady = Boolean(trade.ready?.[partnerId]), confirmed = Boolean(trade.confirmed?.[selfId]);
   const filters = [["all","すべて"],["monster","仲間"],["equipment","装備"],["stack","消耗品"],["currency","通貨"]];
-  const catalog = (state.tradeCatalog ?? []).map(asset => `<button type="button" class="online-trade-catalog-item" data-online-trade-offer="${escapeOnlineHtml(asset.ref)}" ${asset.unavailable ? "disabled" : ""}><span><b>${escapeOnlineHtml(asset.name)}</b><small>${escapeOnlineHtml(`${asset.rarity || "N"}・${asset.details || ""}`)}</small></span><em>${escapeOnlineHtml(asset.unavailable ? asset.reason || "交換不可" : asset.maxAmount > 1 ? `最大 ${number(asset.maxAmount)}` : "選ぶ")}</em></button>`).join("");
-  const amount = `<label class="online-trade-amount">数量 <input type="number" min="1" max="50000000" inputmode="numeric" value="${number(state.tradeAmount || 1).replaceAll(",", "")}" data-online-trade-amount></label>`;
+  const tradeBusy = Boolean(state.tradeOfferPending), tradeConsistent = state.tradeConsistent !== false;
+  const selected = state.tradeDraftAsset, selectedMax = Math.max(1, Math.floor(Number(selected?.maxAmount) || 1));
+  const selectedAmount = String(state.tradeAmount ?? "1").normalize("NFKC").replace(/[,_，\s]/g, "").slice(0, 24);
+  const initialAmount = /^\d+$/.test(selectedAmount) ? Number(selectedAmount) : NaN, initialValid = Number.isSafeInteger(initialAmount) && initialAmount >= 1 && initialAmount <= selectedMax;
+  const initialRemaining = initialValid ? Math.max(0, Math.floor(Number(selected?.count ?? selectedMax)) - initialAmount) : null;
+  const catalog = (state.tradeCatalog ?? []).map(asset => `<button type="button" class="online-trade-catalog-item ${state.tradeDraftRef === asset.ref ? "quantity-selected" : ""}" data-online-trade-offer="${escapeOnlineHtml(asset.ref)}" ${asset.unavailable || tradeBusy ? "disabled" : ""}><span><b>${escapeOnlineHtml(asset.name)}</b><small>${escapeOnlineHtml(`${asset.rarity || "N"}・${asset.details || ""}`)}</small></span><em>${escapeOnlineHtml(tradeBusy ? state.tradeOfferPendingLabel || "保存中…" : asset.unavailable ? asset.reason || "交換不可" : asset.maxAmount > 1 ? state.tradeDraftRef === asset.ref ? "数量を入力中" : `最大 ${number(asset.maxAmount)}` : "選ぶ")}</em></button>`).join("");
+  const amount = selected ? `<section class="online-trade-quantity-panel" aria-label="${escapeOnlineHtml(selected.name)}の交換数量"><header><span><small>選択中</small><b>${escapeOnlineHtml(selected.name)}</b></span><em>所持 ${number(selectedMax)}</em></header><div class="online-trade-quantity-controls"><button type="button" aria-label="数量を1減らす" data-online-trade-amount-step="-1" ${tradeBusy?"disabled":""}>−</button><input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="24" enterkeyhint="done" autocomplete="off" aria-label="交換数量" value="${escapeOnlineHtml(selectedAmount)}" data-online-trade-amount ${tradeBusy?"disabled":""}><button type="button" aria-label="数量を1増やす" data-online-trade-amount-step="1" ${tradeBusy?"disabled":""}>＋</button><button type="button" data-online-trade-amount-max ${tradeBusy?"disabled":""}>MAX</button></div><footer><small data-online-trade-amount-preview>${tradeBusy?escapeOnlineHtml(state.tradeOfferPendingLabel||"交換状態を保存中…"):initialValid ? `セット後の残り ${number(initialRemaining)}` : `1〜${number(selectedMax)}で入力してください`}</small><button type="button" class="primary" data-online-trade-quantity-set ${initialValid&&!tradeBusy ? "" : "disabled"}>${tradeBusy?escapeOnlineHtml(state.tradeOfferPendingLabel||"保存中…"):"この数量でセット"}</button></footer></section>` : "";
   let body = "";
   if (invited) body = requester ? `<div class="online-trade-wait"><b>交換を申し込みました</b><p>${escapeOnlineHtml(partner?.profile?.displayName || "相手")}の返事を待っています。</p><button type="button" data-online-trade-cancel>取り消す</button></div>` : `<div class="online-trade-invite"><b>${escapeOnlineHtml(partner?.profile?.displayName || "冒険者")}から交換の申し込み</b><p>交換品は双方が確認してから同時に確定します。</p><footer><button type="button" data-online-trade-decline>断る</button><button type="button" class="primary" data-online-trade-accept>交換する</button></footer></div>`;
   else if (trade.state === "committing") body = `<div class="online-trade-wait"><b>交換品をセーブしています…</b><p>完了するまで画面を閉じないでください。切断時も再接続後に再開します。</p></div>`;
   else body = `<div class="online-trade-offers"><section><small>あなたが渡す</small>${tradeAssetCard(own, "あなた")}</section><i>⇄</i><section><small>${escapeOnlineHtml(partner?.profile?.displayName || "相手")}から受取</small>${tradeAssetCard(theirs, "相手")}</section></div>
-    ${trade.state === "offering" ? `<div class="online-trade-picker"><nav>${filters.map(([id,label]) => `<button type="button" class="${state.tradeFilter === id ? "active" : ""}" data-online-trade-filter="${id}">${label}</button>`).join("")}</nav><div class="online-trade-search"><input type="search" maxlength="40" value="${escapeOnlineHtml(state.tradeQuery || "")}" placeholder="名前で絞り込み" data-online-trade-query>${amount}</div><div class="online-trade-catalog">${catalog || "<p>交換できる所持品がありません</p>"}</div></div>` : ""}
+    ${trade.state === "offering" ? `<div class="online-trade-picker ${selected ? "has-quantity" : ""}"><nav>${filters.map(([id,label]) => `<button type="button" class="${state.tradeFilter === id ? "active" : ""}" data-online-trade-filter="${id}">${label}</button>`).join("")}</nav><div class="online-trade-search"><input type="search" maxlength="40" value="${escapeOnlineHtml(state.tradeQuery || "")}" placeholder="名前で絞り込み" data-online-trade-query></div>${amount}<div class="online-trade-catalog">${catalog || "<p>交換できる所持品がありません</p>"}</div></div>` : ""}
     <div class="online-trade-progress"><span class="${ready ? "done" : ""}">自分 ${ready ? "SET" : "WAIT"}</span><span class="${partnerReady ? "done" : ""}">相手 ${partnerReady ? "SET" : "WAIT"}</span></div>
-    <footer class="online-trade-actions">${trade.state === "confirming" ? `<div class="online-trade-warning"><b>最終確認</b><span>成立後は元に戻せません。品名と数量を確認してください。</span></div><button type="button" class="primary" data-online-trade-confirm ${confirmed || state.tradeConfirmSeconds > 0 ? "disabled" : ""}>${confirmed ? "確認済み・相手待ち" : state.tradeConfirmSeconds > 0 ? `${number(state.tradeConfirmSeconds)}秒後に確定` : "この内容で交換確定"}</button>` : `<button type="button" data-online-trade-ready ${!own ? "disabled" : ""}>${ready ? "セットを解除" : "この品をセット"}</button>`}<button type="button" data-online-trade-cancel>交換をやめる</button></footer>`;
+    <footer class="online-trade-actions">${trade.state === "confirming" ? `<div class="online-trade-warning"><b>最終確認</b><span>成立後は元に戻せません。品名と数量を確認してください。</span></div><button type="button" class="primary" data-online-trade-confirm ${confirmed || state.tradeConfirmSeconds > 0 || !tradeConsistent ? "disabled" : ""}>${!tradeConsistent?"交換品を照合中…":confirmed ? "確認済み・相手待ち" : state.tradeConfirmSeconds > 0 ? `${number(state.tradeConfirmSeconds)}秒後に確定` : "この内容で交換確定"}</button>` : `<button type="button" data-online-trade-ready ${!own || !tradeConsistent ? "disabled" : ""}>${!tradeConsistent?"交換品を照合中…":ready ? "セットを解除" : "この品をセット"}</button>`}<button type="button" data-online-trade-cancel ${tradeBusy ? "disabled" : ""}>${tradeBusy ? "保存・照合中…" : "交換をやめる"}</button></footer>`;
   return `<aside class="online-trade-modal" role="dialog" aria-modal="true" aria-label="プレイヤー間交換"><header><div><small>SAFE PLAYER TRADE</small><b>${escapeOnlineHtml(partner?.profile?.displayName || "冒険者")}との交換</b></div>${onlineAvatarVisual(partner?.profile ?? {}, { className: "online-trade-partner" })}</header>${body}</aside>`;
 }
 
@@ -415,7 +434,7 @@ function onlineSkill(skill) {
     ...skill, onlineMpCost: Math.max(0, Number(skill.mp) || 0), onlineDescription: skill.description || "サーバー同期スキル",
     type: skill.kind === "allHeal" ? "allHeal" : skill.kind === "heal" ? "selfHeal" : skill.kind,
     target: skill.allEnemies ? "敵全体" : skill.allAllies ? "味方全体" : support ? "味方単体" : "敵単体",
-    tag: support ? "支援スキル" : "攻撃スキル", cooldown: 0,
+    tag: skill.tag || (support ? "支援スキル" : "攻撃スキル"), cooldown: Math.max(0, Number(skill.cooldown) || 0),
   };
 }
 
@@ -474,7 +493,7 @@ function renderLinkArts(battle) {
   </aside>`;
 }
 
-export function renderSharedBattle({ mode, room, battle, selfId, selectedTarget = null, selectedAlly = null, title = "共闘バトル", enemies = [], allowCapture = false, readOnly = false, skillMenu = false, itemMenu = false, itemTargetMenu = false, hpTrails = {}, presentationKoIds = [] }) {
+export function renderSharedBattle({ mode, room, battle, selfId, selectedTarget = null, selectedAlly = null, title = "共闘バトル", enemies = [], allowCapture = false, readOnly = false, skillMenu = false, itemMenu = false, itemTargetMenu = false, hpTrails = {}, presentationKoIds = [], autoSupported = false }) {
   const players = (Array.isArray(battle?.players) ? battle.players : []).filter(player => player && typeof player === "object" && onlineBattleActorId(player)).slice(0, 4);
   const scopedBattle = { ...battle, players }, ownedActors = onlineOwnedBattleActors(scopedBattle, selfId), activeActor = onlinePendingBattleActor(scopedBattle, selfId);
   const primaryActor = ownedActors.find(actor => actor.isPrimary) ?? ownedActors[0] ?? null, actionActor = activeActor ?? primaryActor;
@@ -493,12 +512,15 @@ export function renderSharedBattle({ mode, room, battle, selfId, selectedTarget 
   if (battle?.telegraph) events.push({ kind: "raidTelegraph", label: `${battle.telegraph.title || "予兆"}：${battle.telegraph.message || "終焉が迫る…"}` });
   const floor = Math.max(1, Number(battle?.floor ?? room?.selectedFloor) || 1), biomeBattle = battleEnvironmentForFloor(floor);
   const actorId = actionActor ? onlineBattleActorId(actionActor) : "", effectiveReadOnly = Boolean(readOnly || !ownedActors.length);
+  const actionSkills = Array.isArray(actionActor?.skills) ? actionActor.skills : actionProfile?.skills ?? [];
+  const onlineCooldowns = Object.fromEntries(players.map(player => [onlineBattleActorId(player), { ...(player.cooldowns ?? {}) }]));
+  const autoPlayers = Array.isArray(battle?.autoPlayers) ? battle.autoPlayers : [];
   const uiBattle = {
     onlineMode: mode, onlineReadOnly: effectiveReadOnly, onlineActionSubmitted: !activeActor || battle?.phase !== "command", onlineAllowCapture: allowCapture && Number(actionActor?.captureCharges ?? selfMember?.profile?.captureStock) > 0,
-    onlineCountdownMode: mode, onlineSelectedAlly: party.some(monster => monster.id === selectedAlly) ? selectedAlly : actorId, onlineSkills: (actionProfile?.skills ?? []).map(onlineSkill),
+    onlineCountdownMode: mode, onlineSelectedAlly: party.some(monster => monster.id === selectedAlly) ? selectedAlly : actorId, onlineSkills: actionSkills.map(onlineSkill),
     enemies: foes, enemy: foes[0], targetEnemyId: target?.id ?? null, party, species: {}, turn: Math.max(1, Number(battle?.round) || 1), turnQueue, queueIndex: 0, onlineActorId: actorId,
-    auto: false, busy: false, phase: battle?.phase ?? "command", speed: battle?.speed ?? 1, skillMenu: Boolean(skillMenu), itemMenu: Boolean(itemMenu), onlineItemTargetMenu: Boolean(itemTargetMenu), onlineItemCharges: Math.max(0, Number(actionActor?.itemCharges) || 0),
-    guards: {}, cooldowns: {}, enemyStatuses: enemyState.ailments, allyAilments: allyState.ailments, allyEffects: allyState.effects, enemyEffects: enemyState.effects, hpTrails, presentationKoIds,
+    auto: autoPlayers.includes(selfId), onlineAutoAvailable: autoSupported && !effectiveReadOnly, onlineAutoUnsupported: !autoSupported && !effectiveReadOnly, busy: false, phase: battle?.phase ?? "command", speed: battle?.speed ?? 1, skillMenu: Boolean(skillMenu), itemMenu: Boolean(itemMenu), onlineItemTargetMenu: Boolean(itemTargetMenu), onlineItemCharges: Math.max(0, Number(actionActor?.itemCharges) || 0),
+    guards: {}, cooldowns: onlineCooldowns, enemyStatuses: enemyState.ailments, allyAilments: allyState.ailments, allyEffects: allyState.effects, enemyEffects: enemyState.effects, hpTrails, presentationKoIds,
     magicCircleProfiles, magicCircleArt, enemyMagicCircleArt, log: events.slice(-6).map(eventLine),
     biomeBattle, specialTitle: title, battleTheme: mode === "raid" || battle?.coopBoss ? "boss" : mode === "team" ? "abyss" : biomeBattle.theme,
   };
@@ -547,18 +569,20 @@ export function renderOnlineExplore(room, selfId, state = {}) {
       const mvps = (entry.mvpTitles ?? []).map(title => `<em class="online-mvp-badge">${escapeOnlineHtml(title)}</em>`).join("");
       return `<article class="online-coop-report-row ${entry.playerId === selfId ? "self" : ""}"><strong>${number(entry.rank)}位</strong>${onlineAvatarVisual(member?.profile ?? {}, { className: "online-raid-report-avatar" })}<div><b>${escapeOnlineHtml(member?.profile?.displayName || entry.name || "冒険者")}</b><small>共闘貢献 ${number(entry.score)}</small><span class="online-mvp-list">${mvps}</span></div><dl><div><dt>探索</dt><dd>${number(entry.exploration)}</dd></div><div><dt>戦闘</dt><dd>${number(entry.combat)}</dd></div><div><dt>救助</dt><dd>${number(entry.rescue)}</dd></div><div><dt>宝箱</dt><dd>${number(entry.chests)}</dd></div><div><dt>仕掛け</dt><dd>${number((entry.switches ?? 0) + (entry.gimmicks ?? 0))}</dd></div><div><dt>支援</dt><dd>${number(entry.support)}</dd></div></dl></article>`;
     }).join("");
-    const floorBossClear = report.reason === "floorBoss";
-    const worldOwnerId = report.ownerId ?? room?.ownerId ?? room?.leaderId, isWorldOwner = worldOwnerId === selfId;
+    const floorBossClear = report.reason === "floorBoss", assistedWorld = report.assistedWorld && typeof report.assistedWorld === "object" ? report.assistedWorld : null;
+    const reportFloor = report.progressionEligible === false ? assistedWorld?.endFloor : report.floor ?? assistedWorld?.endFloor;
+    const worldOwnerId = report.ownerId ?? assistedWorld?.ownerId ?? room?.ownerId;
+    const isWorldOwner = worldOwnerId === selfId && (floorBossClear || report.progressionEligible === true);
     const ownerResult = isWorldOwner && state.expeditionReturnReady;
     const resultNote = `<p class="online-expedition-result-note">${isWorldOwner
       ? floorBossClear ? "階層支配者の撃破結果は、部屋主であるあなたの通常探索へ保存されました。" : "踏破進行・HP/MP・帰還結果は、部屋主であるあなたの通常探索へ保存されます。"
       : "お手伝い報酬と自分のHP/MPだけを保存しました。あなたの通常探索階層・ボス進行は変わりません。"}</p>`;
-    const reportLead = floorBossClear ? `${number(report.floor)}Fの階層支配者を撃破しました。探索は続行できます。` : report.completed ? `${number(report.floor)}Fを共に踏破しました。` : report.reason === "defeat" ? "通常探索と同じ敗北結果を反映しました。" : "今回の共闘記録を確認できます。";
+    const reportLead = floorBossClear ? `${number(reportFloor)}Fの階層支配者を撃破しました。探索は続行できます。` : report.completed ? `${number(reportFloor)}Fを共に踏破しました。` : report.reason === "defeat" ? isWorldOwner ? "通常探索と同じ敗北結果を反映しました。" : "お手伝い結果と自分のHP・MPを保存しました。通常探索の進行や敗北ペナルティは変わりません。" : "今回の共闘記録を確認できます。";
     const reportKind = floorBossClear ? "BOSS CLEAR" : report.completed ? "EXPEDITION CLEAR" : "EXPEDITION END";
     const closeLabel = ownerResult ? report.reason === "defeat" ? "敗北結果を確認" : "通常探索の帰還報告へ" : floorBossClear ? "探索へ戻る" : "探索受付へ戻る";
     return `${screenHeader("explore", "CO-OP REPORT", reportLead)}<section class="online-raid-report online-coop-report"><header><span>${reportKind}</span><h3>共闘貢献票</h3></header><div>${rows || '<p class="empty">集計データがありません</p>'}</div>${resultNote}<button type="button" data-online-close-expedition-report>${closeLabel}</button></section>`;
   }
-  if (room?.phase === "expedition" && expedition?.battle) { const battle = expedition.battle, coopBoss = battle.coopBoss ?? null, bossNames = expedition.floorBoss?.profiles?.map(profile => profile?.name).filter(Boolean) ?? []; return renderSharedBattle({ mode: "explore", room, battle, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: coopBoss?.name ? `${number(expedition.floor)}F・共闘ボス ${coopBoss.name}` : bossNames.length ? `${number(expedition.floor)}F・階層支配者 ${bossNames.join("・")}` : `${number(expedition.floor)}F・遭遇戦`, enemies: battle.enemies ?? [], allowCapture: !coopBoss && !bossNames.length, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails, presentationKoIds: state.presentationKoIds }); }
+  if (room?.phase === "expedition" && expedition?.battle) { const battle = expedition.battle, coopBoss = battle.coopBoss ?? null, bossNames = expedition.floorBoss?.profiles?.map(profile => profile?.name).filter(Boolean) ?? []; return renderSharedBattle({ mode: "explore", room, battle, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: coopBoss?.name ? `${number(expedition.floor)}F・共闘ボス ${coopBoss.name}` : bossNames.length ? `${number(expedition.floor)}F・階層支配者 ${bossNames.join("・")}` : `${number(expedition.floor)}F・遭遇戦`, enemies: battle.enemies ?? [], allowCapture: !coopBoss && !bossNames.length, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails, presentationKoIds: state.presentationKoIds, autoSupported: state.battleAutoSupported }); }
   if (room?.phase === "expedition" && expedition) {
     const theme = dungeonThemeForFloor(expedition.floor), base = fallbackExploreState(state.gameState, expedition.floor), discovered = Number(expedition.discoveries) + Number(expedition.encountersCleared), total = Math.max(1, Number(expedition.totalDiscoveries) + Number(expedition.totalEncounters));
     const interaction = expedition.interactions?.[selfId] ?? null;
@@ -606,7 +630,7 @@ export function renderOnlineRaid(room, selfId, state = {}) {
   }
   if (room?.phase === "raid" && room.raid) {
     const enemies = [room.raid.boss, ...(room.raid.minions ?? [])];
-    return renderSharedBattle({ mode: "raid", room, battle: room.raid, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: room.raid.name, enemies, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails, presentationKoIds: state.presentationKoIds });
+    return renderSharedBattle({ mode: "raid", room, battle: room.raid, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: room.raid.name, enemies, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails, presentationKoIds: state.presentationKoIds, autoSupported: state.battleAutoSupported });
   }
   const weekly = room?.weeklyRaid ?? {}, boss = weekly.boss ?? { id: "abyss-amalga", name: "終焉融骸・アビス＝マルガ", level: 50, maxHp: 50_000, heroAsset: "./assets/online/raid-abyss-amalgam.png", materialName: "融骸核片", contractName: "融骸幼体アマルガ", equipmentName: "終焉喰らいの大刃", circleName: "即死返鏡陣", intro: "与ダメージ・回復・蘇生・防御・補助を貢献度として集計します。" }, modifier = weekly.modifier ?? { name: "通常環境", description: "特殊ルールなし" };
   const progress = room?.raidProgress?.weekId && room.raidProgress.weekId !== weekly.weekId ? null : room?.raidProgress, completed = Boolean(progress?.completedAt), endsAt = Number(weekly.endsAt) || 0, endLabel = endsAt ? new Date(endsAt).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "次週";
@@ -649,7 +673,7 @@ export function renderOnlineTeam(room, selfId, state = {}) {
     const enemies = actors.filter(player => player.side === enemySide).slice(0, 4).map(player => ({ ...player, id: onlineBattleActorId(player), name: player.name, asset: null, emoji: player.fallbackEmoji }));
     const allyBattle = { ...battle, players: actors.filter(player => player.side === viewingSide).slice(0, 4) };
     const label = ruleLabels[battle.ruleset] ?? ruleLabels.standard;
-    return `<section class="online-team-scoreboard"><span>${escapeOnlineHtml(label[0])}・${battle.series === "bo3" ? "2本先取" : "1本先取"}</span><strong><i>紅 ${number(battle.score?.sun)}</i><b>GAME ${number(battle.game)}</b><i>蒼 ${number(battle.score?.moon)}</i></strong>${battle.betweenGames ? `<em>次の試合を準備中…</em>` : ""}</section>${renderSharedBattle({ mode: "team", room, battle: allyBattle, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: `${battle.format} チーム戦`, enemies, readOnly: !owned.length, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails, presentationKoIds: state.presentationKoIds })}`;
+    return `<section class="online-team-scoreboard"><span>${escapeOnlineHtml(label[0])}・${battle.series === "bo3" ? "2本先取" : "1本先取"}</span><strong><i>紅 ${number(battle.score?.sun)}</i><b>GAME ${number(battle.game)}</b><i>蒼 ${number(battle.score?.moon)}</i></strong>${battle.betweenGames ? `<em>次の試合を準備中…</em>` : ""}</section>${renderSharedBattle({ mode: "team", room, battle: allyBattle, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: `${battle.format} チーム戦`, enemies, readOnly: !owned.length, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails, presentationKoIds: state.presentationKoIds, autoSupported: state.battleAutoSupported })}`;
   }
   const self = memberById(room, selfId);
   const sun = (room?.members ?? []).filter(member => member.teamSide === "sun"), moon = (room?.members ?? []).filter(member => member.teamSide === "moon"), spectators = (room?.members ?? []).filter(member => !["sun", "moon"].includes(member.teamSide));

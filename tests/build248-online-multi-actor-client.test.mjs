@@ -70,7 +70,7 @@ test("build248 resolves actor ownership, roster profiles, and the next unsubmitt
   assert.equal(views.onlineBattleActorProfile(room, legacy).monsterId, "self-m1", "old one-actor snapshots still use the root profile");
 });
 
-test("build248 lobby deployment counts mirror the shared and per-side four-slot allocation", () => {
+test("build248 lobby deployment counts mirror the shared global four-slot allocation", () => {
   const third = { playerId: "AD-EEEE-FFFF", connected: true, profile: { ...guestProfile, battleRoster: guestProfile.battleRoster.slice(0, 1) } };
   const shared = views.onlineRosterAllocationCounts([members[0], members[1], third]);
   assert.deepEqual([shared.get(selfId), shared.get(guestId), shared.get(third.playerId)], [2, 1, 1]);
@@ -80,10 +80,23 @@ test("build248 lobby deployment counts mirror the shared and per-side four-slot 
     { ...third, teamSide: "moon" },
   ];
   const team = views.onlineRosterAllocationCounts(teamMembers, { team: true });
-  assert.deepEqual([team.get(selfId), team.get(guestId), team.get(third.playerId)], [2, 2, 1]);
+  assert.deepEqual([team.get(selfId), team.get(guestId), team.get(third.playerId)], [1, 1, 1]);
   const lobby = views.renderOnlineTeam({ members: teamMembers, phase: "lobby", leaderId: selfId }, selfId);
-  assert.equal((lobby.match(/出撃2体/g) ?? []).length, 2);
-  assert.equal((lobby.match(/出撃1体/g) ?? []).length, 1);
+  assert.equal((lobby.match(/出撃2体/g) ?? []).length, 0);
+  assert.equal((lobby.match(/出撃1体/g) ?? []).length, 3);
+
+  const smallSideWithReserve = teamMembers.map((member, index) => index === 2
+    ? { ...member, profile: { ...member.profile, battleRoster: guestProfile.battleRoster } }
+    : member);
+  const filled = views.onlineRosterAllocationCounts(smallSideWithReserve, { team: true });
+  assert.deepEqual(smallSideWithReserve.map(member => filled.get(member.playerId)), [1, 1, 2]);
+
+  const asymmetricDuel = [
+    { ...teamMembers[0], profile: { ...teamMembers[0].profile, battleRoster: teamMembers[0].profile.battleRoster.slice(0, 1) } },
+    { ...teamMembers[1], teamSide: "moon" },
+  ];
+  const duel = views.onlineRosterAllocationCounts(asymmetricDuel, { team: true });
+  assert.deepEqual(asymmetricDuel.map(member => duel.get(member.playerId)), [1, 2]);
 });
 
 test("build248 renders four ally slots and advances the command UI actor by actor", () => {

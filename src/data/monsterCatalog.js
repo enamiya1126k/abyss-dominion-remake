@@ -401,6 +401,12 @@ export const MONSTER_SPRITE_FOLDERS=Object.freeze({
   dev_familiar_chappy:"secret_dev_familiar_chappy"
 });
 
+// Contract-only monsters keep their art beside the online raid assets instead
+// of pretending to be one of the numbered field-species folders.
+export const MONSTER_CUSTOM_SPRITE_BASES=Object.freeze({
+  juvenile_amalga:"./assets/online/raid/juvenile-amalga"
+});
+
 const CATALOG_NUMBER_BY_ID=Object.freeze(Object.fromEntries(
   MONSTER_CATALOG.map(entry=>[entry.speciesId,entry.number])
 ));

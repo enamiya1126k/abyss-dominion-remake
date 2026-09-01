@@ -8,12 +8,13 @@ const groupHeal = { id: "heal", kind: "allHeal", heal: .20, mp: 20, allAllies: t
 const revive = { id: "revive", kind: "revive", revive: .35, mp: 30 };
 
 test("build249 treasure/mimic floor rate stays rare and bounded", () => {
-  assert.equal(treasureRoomRateForFloor(1), .015);
-  assert.equal(treasureRoomRateForFloor(99), .015);
-  assert.equal(treasureRoomRateForFloor(100), .0165);
-  assert.equal(treasureRoomRateForFloor(500), .0225);
-  assert.equal(treasureRoomRateForFloor(1000), .03);
-  assert.equal(treasureRoomRateForFloor(9999), .03);
+  // Release 200 deliberately lowered the old build249 curve.
+  assert.equal(treasureRoomRateForFloor(1), .005);
+  assert.equal(treasureRoomRateForFloor(99), .005);
+  assert.equal(treasureRoomRateForFloor(100), .0055);
+  assert.equal(treasureRoomRateForFloor(500), .0075);
+  assert.equal(treasureRoomRateForFloor(1000), .01);
+  assert.equal(treasureRoomRateForFloor(9999), .01);
 });
 
 test("build249 disconnected auto AI does not heal healthy-ish allies", () => {

@@ -45,10 +45,10 @@ function beginCommittedTrade(store, left, right) {
     payload: { key: "gold", amount: 100 },
   }).ok, true);
   assert.equal(store.offerTrade(right.session, tradeId, {
-    assetId: "currency:gems:5",
+    assetId: "currency:crystals:5",
     kind: "currency",
-    name: "GEMS",
-    payload: { key: "gems", amount: 5 },
+    name: "魔晶石",
+    payload: { key: "crystals", amount: 5 },
   }).ok, true);
   assert.equal(store.readyTrade(left.session, tradeId, true).ok, true);
   assert.equal(store.readyTrade(right.session, tradeId, true).ok, true);
@@ -154,7 +154,7 @@ test("a failed ACK write rolls back the in-memory ACK and remains safely retryab
   const requested = coordinator.request(room, left, right), tradeId = requested.trade.tradeId;
   coordinator.respond(right, tradeId, true);
   coordinator.offer(left, tradeId, { assetId: "gold", kind: "currency", name: "GOLD", payload: { key: "gold", amount: 1 } });
-  coordinator.offer(right, tradeId, { assetId: "gems", kind: "currency", name: "GEMS", payload: { key: "gems", amount: 1 } });
+  coordinator.offer(right, tradeId, { assetId: "crystals", kind: "currency", name: "魔晶石", payload: { key: "crystals", amount: 1 } });
   coordinator.readyUp(left, tradeId, true);
   coordinator.readyUp(right, tradeId, true);
   coordinator.confirm(left, tradeId);
@@ -246,7 +246,7 @@ test("journal write failure blocks trade commit and reward delivery before netwo
   const requested = store.requestTrade(left.session, right.session.playerId), id = requested.trade.tradeId;
   store.respondTrade(right.session, id, true);
   store.offerTrade(left.session, id, { assetId: "gold", kind: "currency", name: "GOLD", payload: { key: "gold", amount: 1 } });
-  store.offerTrade(right.session, id, { assetId: "gems", kind: "currency", name: "GEMS", payload: { key: "gems", amount: 1 } });
+  store.offerTrade(right.session, id, { assetId: "crystals", kind: "currency", name: "魔晶石", payload: { key: "crystals", amount: 1 } });
   store.readyTrade(left.session, id, true);
   store.readyTrade(right.session, id, true);
   store.confirmTrade(left.session, id);

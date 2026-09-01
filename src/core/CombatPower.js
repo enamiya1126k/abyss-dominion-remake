@@ -1,4 +1,4 @@
-import{calculatedStats}from"../models/Monster.js?v=2.11.30-build195";
+import{calculatedStats}from"../models/Monster.js?v=2.11.82-build258";
 import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=2.11.0-build164";
 
 /**

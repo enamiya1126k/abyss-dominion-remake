@@ -197,13 +197,13 @@ test("build243 solo chest rewards stay on the offline reward path without a pers
   assert.equal(room.expedition.coop.rare?.kind ?? null, null);
 });
 
-test("build243 normal chest rarity uses the host's offline abyss-skill thresholds", () => {
+test("build243 normal chest parity follows the Release 200 shared reward thresholds", () => {
   const { store, session, room } = createSoloRoom();
   session.profile.abyssSkillEffects.equipmentRarityBonus = 2;
   const cases = [
     [{ kind: "cabinet" }, "SSR"],
-    [{ kind: "radiant" }, "LR"],
-    [{ kind: "radiant", locked: true }, "LR"],
+    [{ kind: "radiant" }, "UR"],
+    [{ kind: "radiant", locked: true }, "神話"],
   ];
   for (const [chest, expectedRarity] of cases) {
     store.random = () => chest.locked ? .34 : .44;
@@ -211,9 +211,9 @@ test("build243 normal chest rarity uses the host's offline abyss-skill threshold
   }
 
   store.random = () => .44;
-  assert.equal(store._offlineChestReward(7, { kind: "cabinet" }).randomEquipmentRarity, "SR", "without the host profile, the offline base threshold remains unchanged");
+  assert.equal(store._offlineChestReward(7, { kind: "cabinet" }).randomEquipmentRarity, "SSR", "cabinet rewards retain their guaranteed Release 200 floor");
   store.random = () => .34;
-  assert.equal(store._offlineChestReward(7, { kind: "radiant", locked: true }).randomEquipmentRarity, "SSR");
+  assert.equal(store._offlineChestReward(7, { kind: "radiant", locked: true }).randomEquipmentRarity, "神話");
 
   assert.equal(store.startExpedition(session, { hostWorld: { floorSeeds: { 7: 24307 }, openedChestIds: { 7: [] } } }).ok, true);
   const chest = room.expedition.objects.find(object => object.type === "chest");
@@ -229,7 +229,7 @@ test("build243 normal chest rarity uses the host's offline abyss-skill threshold
 
   session.profile.abyssSkillEffects.equipmentRarityBonus = 99;
   store.random = () => .80;
-  assert.equal(store._offlineChestReward(7, { kind: "radiant", locked: true }, session).randomEquipmentRarity, "SSR", "locked chest LR chance keeps the offline 75% cap");
-  assert.equal(store._offlineChestReward(7, { kind: "radiant" }, session).randomEquipmentRarity, "LR", "radiant chest LR chance keeps the offline 85% cap");
-  assert.equal(store._offlineChestReward(7, { kind: "cabinet" }, session).randomEquipmentRarity, "SSR", "cabinet SSR chance keeps the offline 90% cap");
+  assert.equal(store._offlineChestReward(7, { kind: "radiant", locked: true }, session).randomEquipmentRarity, "神話", "locked chests are mythic regardless of luck");
+  assert.equal(store._offlineChestReward(7, { kind: "radiant" }, session).randomEquipmentRarity, "UR", "radiant luck remains bounded instead of becoming guaranteed LR");
+  assert.equal(store._offlineChestReward(7, { kind: "cabinet" }, session).randomEquipmentRarity, "SR", "cabinet luck remains bounded at an extreme roll");
 });

@@ -288,7 +288,7 @@ test("a participant cannot evade recovery capacity by ACKing only their side and
     const tradeId = requested.trade.tradeId;
     coordinator.respond(right, tradeId, true);
     coordinator.offer(left, tradeId, { assetId: `gold:${partnerId}`, kind: "currency", name: "GOLD", payload: { key: "gold", amount: 1 } });
-    coordinator.offer(right, tradeId, { assetId: `gems:${partnerId}`, kind: "currency", name: "GEMS", payload: { key: "gems", amount: 1 } });
+    coordinator.offer(right, tradeId, { assetId: `crystals:${partnerId}`, kind: "currency", name: "魔晶石", payload: { key: "crystals", amount: 1 } });
     coordinator.readyUp(left, tradeId, true);
     coordinator.readyUp(right, tradeId, true);
     coordinator.confirm(left, tradeId);
@@ -336,7 +336,7 @@ test("terminal recovery payload and ACK stay bound to the original client key an
   const tradeId = requested.trade.tradeId;
   assert.equal(coordinator.respond(right, tradeId, true).ok, true);
   assert.equal(coordinator.offer(left, tradeId, { assetId: "gold", kind: "currency", name: "GOLD", payload: { key: "gold", amount: 10 } }).ok, true);
-  assert.equal(coordinator.offer(right, tradeId, { assetId: "gems", kind: "currency", name: "GEMS", payload: { key: "gems", amount: 5 } }).ok, true);
+  assert.equal(coordinator.offer(right, tradeId, { assetId: "crystals", kind: "currency", name: "魔晶石", payload: { key: "crystals", amount: 5 } }).ok, true);
   assert.equal(coordinator.readyUp(left, tradeId, true).ok, true);
   assert.equal(coordinator.readyUp(right, tradeId, true).ok, true);
   coordinator.confirm(left, tradeId);

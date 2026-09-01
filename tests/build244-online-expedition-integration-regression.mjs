@@ -71,6 +71,19 @@ test("build244 explains host and guest progression before departure and in resul
   assert.match(guestReport, /通常探索階層・ボス進行は変わりません/);
 });
 
+test("build255 guest report displays assisted-world floors without recreating local progression", () => {
+  const lobby = { roomId: "ROOM244", ownerId: hostId, leaderId: hostId, phase: "lobby", selectedFloor: 40, members };
+  const report = {
+    id: "guest-assisted-report", ownerId: hostId, progressionEligible: false, completed: true, reason: "return", multiplayer: true, ranking: [],
+    assistedWorld: { ownerId: hostId, startFloor: 200, endFloor: 203, floorsCleared: 3 },
+  };
+  const html = renderOnlineExplore(lobby, guestId, { gameState, expeditionReport: report });
+  assert.match(html, /203Fを共に踏破しました/);
+  assert.match(html, /お手伝い報酬と自分のHP\/MPだけを保存/);
+  assert.match(html, /通常探索階層・ボス進行は変わりません/);
+  assert.doesNotMatch(html, /(?:0|undefined)Fを共に踏破/);
+});
+
 test("build244 opens a large receipt only for weapons and important equipment", async () => {
   const receiptIds = [], acknowledgements = [];
   const results = new Map([

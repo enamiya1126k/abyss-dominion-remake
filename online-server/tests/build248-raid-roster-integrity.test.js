@@ -188,7 +188,9 @@ test("raid allocates at most four actors globally while preserving one slot per 
       assert.equal(Number.isInteger(actor.rosterIndex), true);
       assert.equal(typeof actor.isPrimary, "boolean");
       assert.equal(Object.hasOwn(actor, "stats"), false);
-      assert.equal(Object.hasOwn(actor, "skills"), false);
+      assert.equal(Array.isArray(actor.skills), true);
+      assert.equal(actor.skills.length > 0, true);
+      assert.equal(actor.skills[0].cooldown, 0, "legacy skills remain valid when no base CT was configured");
     }
   }
 });

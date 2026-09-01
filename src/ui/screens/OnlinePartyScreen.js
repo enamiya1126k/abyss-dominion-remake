@@ -1,10 +1,10 @@
-import { SPECIES } from "../../data/species.js?v=2.11.0-build164";
-import { displayName, calculatedStats } from "../../models/Monster.js?v=2.11.30-build195";
-import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=2.11.30-build195";
+import { SPECIES } from "../../data/species.js?v=2.11.82-build258";
+import { displayName, calculatedStats } from "../../models/Monster.js?v=2.11.82-build258";
+import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=2.11.82-build258";
 import { magicCircleById, equippedMagicCircle, goldPowerDamageMultiplier, goldPowerActionCost } from "../../core/MagicCircleSystem.js?v=2.11.0-build164";
-import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=2.11.73-build249";
-import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=2.11.0-build164";
-import { monsterVisual } from "../MonsterVisual.js?v=2.11.0-build164";
+import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=2.11.83-build259";
+import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=2.11.82-build258";
+import { monsterVisual } from "../MonsterVisual.js?v=2.11.82-build258";
 import { resourceHud, pixelIcon } from "../components/GameChrome.js?v=2.11.0-build164";
 
 export const ONLINE_STORAGE_KEYS = Object.freeze({
@@ -16,6 +16,7 @@ export const ONLINE_STORAGE_KEYS = Object.freeze({
   serverUrl: "abyss-dominion-online-server-url",
   displayName: "abyss-dominion-online-display-name",
   monsterId: "abyss-dominion-online-monster-id",
+  battleRosterOrder: "abyss-dominion-online-battle-roster-order-v1",
   route: "abyss-dominion-online-route",
   autoConnect: "abyss-dominion-online-auto-connect",
   guildPlanReminderReceipts: "abyss-dominion-online-guild-plan-reminder-receipts-v1",
@@ -138,6 +139,62 @@ function selectedPartyMonster(state, requestedId = null) {
   return { party, monster };
 }
 
+function storedOnlineBattleRosterOrder() {
+  const raw = storageGet(ONLINE_STORAGE_KEYS.battleRosterOrder).trim();
+  if (!raw || raw.length > 4096) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed)
+      ? parsed.map(id => String(id ?? "").slice(0, 120)).filter(Boolean).slice(0, 16)
+      : [];
+  } catch { return []; }
+}
+
+/**
+ * Return the party in the user's online deployment order. The first four
+ * entries are the only monsters sent as battle candidates; the remainder are
+ * retained as reserves so a future party-size increase cannot erase the
+ * player's chosen order.
+ */
+export function onlineBattleRosterPriority(state, { monsterId = null, persist = true } = {}) {
+  const byId = new Map((state?.monsters ?? []).filter(Boolean).map(monster => [String(monster.id), monster]));
+  const party = [];
+  for (const id of state?.party ?? []) {
+    const monster = byId.get(String(id));
+    if (monster && !party.some(entry => entry.id === monster.id)) party.push(monster);
+  }
+  if (!party.length) return [];
+
+  const partyById = new Map(party.map(monster => [String(monster.id), monster]));
+  const stored = storedOnlineBattleRosterOrder();
+  const ordered = stored.map(id => partyById.get(id)).filter((monster, index, entries) => monster && entries.indexOf(monster) === index);
+  const requested = partyById.get(String(monsterId || storageGet(ONLINE_STORAGE_KEYS.monsterId)));
+  if (!ordered.length && requested) ordered.push(requested);
+  for (const monster of party) if (!ordered.includes(monster)) ordered.push(monster);
+
+  if (persist) {
+    storageSet(ONLINE_STORAGE_KEYS.battleRosterOrder, JSON.stringify(ordered.map(monster => monster.id)));
+    if (ordered[0]) storageSet(ONLINE_STORAGE_KEYS.monsterId, ordered[0].id);
+  }
+  return ordered;
+}
+
+/** Move one roster entry by one slot and persist the new priority. */
+export function moveOnlineBattleRosterPriority(state, monsterId, direction) {
+  const ordered = onlineBattleRosterPriority(state);
+  const index = ordered.findIndex(monster => String(monster.id) === String(monsterId));
+  const delta = direction === "up" ? -1 : direction === "down" ? 1 : 0;
+  const destination = index + delta;
+  if (!delta || index < 0 || destination < 0 || destination >= ordered.length) {
+    return { changed: false, order: ordered.map(monster => monster.id), primaryMonsterId: ordered[0]?.id ?? null };
+  }
+  [ordered[index], ordered[destination]] = [ordered[destination], ordered[index]];
+  const order = ordered.map(monster => monster.id);
+  storageSet(ONLINE_STORAGE_KEYS.battleRosterOrder, JSON.stringify(order));
+  storageSet(ONLINE_STORAGE_KEYS.monsterId, order[0]);
+  return { changed: true, order, primaryMonsterId: order[0] };
+}
+
 function equipmentProfile(state, monster) {
   const items = new Map((state.equipment ?? []).map(item => [item.id, item]));
   return EQUIPMENT_SLOTS.map(([slot, label]) => {
@@ -178,6 +235,7 @@ function onlineSkillProfile(monster) {
       hits: Math.max(1, Number(skill.hits) || 1),
       allEnemies: Boolean(skill.allEnemies || String(skill.target ?? "").includes("敵全体")),
       allAllies: Boolean(skill.allies || String(skill.target ?? "").includes("味方全体") || skill.type === "allHeal"),
+      selfOnly: Boolean(skill.selfOnly || skill.target === "自分"),
       guaranteedHit: Boolean(skill.guaranteedHit),
       guaranteedCritical: Boolean(skill.guaranteedCritical),
       defenseIgnore: Math.max(0, Math.min(1, Number(skill.defenseIgnore) || 0)),
@@ -311,7 +369,8 @@ function onlineBattleMonsterProfile(state, monster) {
 
 function onlineBattleRoster(state, primaryMonster, party) {
   if (!primaryMonster) return [];
-  const selected = [primaryMonster, ...(party ?? []).filter(monster => monster?.id !== primaryMonster.id)]
+  const ordered = onlineBattleRosterPriority(state, { monsterId: primaryMonster.id });
+  const selected = (ordered.length ? ordered : [primaryMonster, ...(party ?? []).filter(monster => monster?.id !== primaryMonster.id)])
     .filter((monster, index, entries) => monster?.id && entries.findIndex(entry => entry?.id === monster.id) === index)
     .slice(0, ONLINE_BATTLE_ROSTER_MAX);
   return selected.map((monster, rosterIndex) => boundedOnlineRosterValue({
@@ -322,7 +381,9 @@ function onlineBattleRoster(state, primaryMonster, party) {
 }
 
 export function buildOnlinePartyProfile(state, { monsterId = null, displayName: onlineName = "" } = {}) {
-  const { party, monster } = selectedPartyMonster(state, monsterId);
+  const { party, monster: requestedMonster } = selectedPartyMonster(state, monsterId);
+  const priority = onlineBattleRosterPriority(state, { monsterId: requestedMonster?.id });
+  const monster = priority[0] ?? requestedMonster;
   if (!monster) return {
     displayName: onlineName || "冒険者", monsterId: null, speciesId: "slime", visualSpeciesId: null, endgameBossId: null, floorBossCatalogId: null, summonTier: null, summonRarity: null, endgameFaction: null, monsterName: "未編成",
     fallbackEmoji: "？", level: 1, stars: 1, plus: 0, power: 0, maxFloor: 1, attribute: "neutral",
@@ -368,12 +429,29 @@ export function onlineEnemyVisual(enemy, { className = "" } = {}) {
   });
 }
 
-function characterChoice(monster, selected) {
+function characterChoice(monster, slotIndex, total) {
   const species = SPECIES[monster.speciesId] ?? {};
-  return `<button type="button" class="online-v3-character ${monster.id === selected ? "selected" : ""}" data-online-character="${escapeOnlineHtml(monster.id)}" aria-pressed="${monster.id === selected}">
+  const active = slotIndex < ONLINE_BATTLE_ROSTER_MAX;
+  const label = active ? `SLOT ${slotIndex + 1}` : "RESERVE";
+  return `<li class="online-v3-character ${slotIndex === 0 ? "selected" : ""}" data-online-roster-entry="${escapeOnlineHtml(monster.id)}" ${slotIndex === 0 ? 'aria-current="true"' : ""}>
+    <em class="online-v3-roster-slot"><small>${active ? "SLOT" : "控え"}</small><b>${active ? slotIndex + 1 : "—"}</b></em>
     ${monsterVisual(monster, species.emoji ?? "魔", { className: "online-v3-character-art" })}
-    <span><b>${escapeOnlineHtml(displayName(monster))}</b><small>Lv.${Number(monster.level || 1).toLocaleString()}・戦力 ${formatCombatPower(monsterCombatPower(monster))}</small></span>
-  </button>`;
+    <span><b>${escapeOnlineHtml(displayName(monster))}</b><small>Lv.${Number(monster.level || 1).toLocaleString()}・戦力 ${formatCombatPower(monsterCombatPower(monster))}</small>${slotIndex === 0 ? "<i>メイン・最優先</i>" : `<i>${escapeOnlineHtml(label)} の順で出撃</i>`}</span>
+    <span class="online-v3-roster-order" role="group" aria-label="${escapeOnlineHtml(displayName(monster))}の出撃順を変更">
+      <button type="button" data-online-roster-move="up" data-online-roster-monster="${escapeOnlineHtml(monster.id)}" aria-label="${escapeOnlineHtml(displayName(monster))}を1つ前のスロットへ" ${slotIndex === 0 ? "disabled" : ""}>↑</button>
+      <button type="button" data-online-roster-move="down" data-online-roster-monster="${escapeOnlineHtml(monster.id)}" aria-label="${escapeOnlineHtml(displayName(monster))}を1つ後ろのスロットへ" ${slotIndex === total - 1 ? "disabled" : ""}>↓</button>
+    </span>
+  </li>`;
+}
+
+export function renderOnlineBattleRosterPicker(state, { monsterId = null } = {}) {
+  const ordered = onlineBattleRosterPriority(state, { monsterId });
+  if (!ordered.length) return `<div class="online-v3-character-picker" data-online-roster-picker><header><div><small>ONLINE BATTLE ROSTER</small><b>出撃優先スロット</b></div></header><p>先に部隊へ1体以上編成してください。</p></div>`;
+  return `<div class="online-v3-character-picker" data-online-roster-picker>
+    <header><div><small>ONLINE BATTLE ROSTER</small><b>出撃優先スロット</b></div><em>最大 ${ONLINE_BATTLE_ROSTER_MAX}枠</em></header>
+    <p>部屋人数に応じて SLOT 1 から必要な数だけ出撃します。全プレイヤー合計は必ず4体以内です。</p>
+    <ol>${ordered.map((entry, index) => characterChoice(entry, index, ordered.length)).join("")}</ol>
+  </div>`;
 }
 
 function roomOptionMarkup(options, selected, { includeAll = false } = {}) {
@@ -875,7 +953,8 @@ export function renderOnlineFriendPanel(source = {}, options = {}) {
 export function OnlinePartyScreen(state) {
   const identity = ensureOnlineIdentity();
   const invite = inviteParameters();
-  const { party, monster } = selectedPartyMonster(state);
+  const { monster: requestedMonster } = selectedPartyMonster(state);
+  const monster = onlineBattleRosterPriority(state, { monsterId: requestedMonster?.id })[0] ?? requestedMonster;
   const defaultName = storageGet(ONLINE_STORAGE_KEYS.displayName) || (monster ? displayName(monster) : "冒険者");
   const server = enforceFixedOnlineServerUrl();
   return `<section class="screen online-v3-screen" data-online-v3-root>
@@ -886,7 +965,7 @@ export function OnlinePartyScreen(state) {
         <div class="online-v3-id"><span><small>フレンドID</small><strong>${identity.friendId}</strong></span><button type="button" data-copy-friend-id>コピー</button></div>
         <label class="online-v3-field"><span>表示名</span><input type="text" maxlength="16" data-online-display-name value="${escapeOnlineHtml(defaultName)}" autocomplete="nickname"></label>
         <label class="online-v3-field"><span>サーバーURL（固定）</span><input type="url" inputmode="url" data-online-server-url value="${escapeOnlineHtml(server)}" readonly aria-readonly="true" autocapitalize="none"></label>
-        <div class="online-v3-character-picker"><small>操作するキャラクター</small><div>${party.length ? party.map(entry => characterChoice(entry, monster?.id)).join("") : "<p>先に部隊へ1体以上編成してください。</p>"}</div></div>
+        ${renderOnlineBattleRosterPicker(state, { monsterId: monster?.id })}
         <button type="button" class="online-v3-primary" data-online-connect ${monster ? "" : "disabled"}>サーバーへ接続</button>
         <div class="online-v3-status offline" data-online-status><i></i><b>オフライン</b><span>通常ゲームのセーブには影響しません</span></div>
       </section>
@@ -929,6 +1008,6 @@ export function OnlinePartyScreen(state) {
         </nav>
       </section>
     </main>
-    <div class="online-friend-layer" data-online-friend-layer>${renderOnlineFriendPanel({}, { selfId: identity.friendId })}</div>
+    <div class="online-friend-layer" data-online-friend-layer>${renderOnlineFriendPanel({}, { selfId: identity.friendId, showFab: false })}</div>
   </section>`;
 }

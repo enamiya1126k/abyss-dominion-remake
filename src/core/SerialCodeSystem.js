@@ -1,7 +1,7 @@
-import{createMonster,calculatedStats}from"../models/Monster.js?v=2.11.30-build195";
-import{allLearnedSkills,maxMp,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=2.11.73-build249";
-import{SPECIES}from"../data/species.js?v=2.11.0-build164";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.11.0-build164";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=2.11.82-build258";
+import{allLearnedSkills,maxMp,recommendedSkills,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=2.11.83-build259";
+import{SPECIES}from"../data/species.js?v=2.11.82-build258";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.11.82-build258";
 import{MONSTER_STORAGE_CAP}from"./config.js?v=2.11.0-build164";
 import{createEquipment}from"../models/Equipment.js?v=2.11.0-build164";
 import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.11.0-build164";
@@ -107,8 +107,10 @@ function monsterCapacityReached(state){
 }
 
 function prepareSkillMastery(monster,level){
-  const skills=allLearnedSkills(monster).slice(-4);
+  const skills=recommendedSkills(monster,4);
   monster.equippedSkills=skills.map(skill=>skill.id);
+  while(monster.equippedSkills.length<4)monster.equippedSkills.push(null);
+  monster.skillLoadoutInitialized=true;monster.skillRecommendationProfileVersion=199;
   monster.skillProgress={};
   for(const skill of skills){
     monster.skillProgress[skill.id]={level,exp:0,uses:0,need:skillMasteryNeedForLevel(level)};

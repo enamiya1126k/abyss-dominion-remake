@@ -2,6 +2,21 @@ import { randomBytes } from "node:crypto";
 import { hashSettlementSecret } from "./SettlementJournal.js";
 
 const KINDS = new Set(["monster", "equipment", "stack", "currency"]);
+const STACK_ASSETS = new Map(Object.entries({
+  potions: ["薬草", "N"], highPotions: ["上級回復薬", "R"], partyPotions: ["全体回復薬", "SR"],
+  manaPotions: ["魔力水", "N"], highManaPotions: ["上級魔力水", "R"], partyManaPotions: ["全体魔力水", "SR"],
+  fullManaPotions: ["完全魔力水", "SSR"], partyFullManaPotions: ["全体完全魔力水", "UR"], reviveLeaves: ["蘇生葉", "SR"],
+  statusCures: ["浄化薬", "R"], partyStatusCures: ["全体浄化薬", "SSR"], fullHeals: ["完全回復薬", "UR"],
+  partyFullHeals: ["全体完全回復薬", "LR"], experienceItems: ["経験値パック（小）", "R"],
+  experienceItemsMedium: ["経験値パック（中）", "SR"], experienceItemsLarge: ["経験値パック（大）", "SSR"],
+  experienceItemsUltra: ["経験値パック（超）", "UR"], abyssKeys: ["深淵鍵", "LR"],
+}));
+const CURRENCY_ASSETS = new Map(Object.entries({
+  gold: ["GOLD", "G"], crystals: ["魔晶石", "💎"], captureCrystals: ["捕獲結晶", "捕獲"],
+}));
+const LEGACY_CURRENCY_KEYS = new Map([["gems", "crystals"]]);
+const NON_PLAYER_TRADEABLE_MONSTER_SPECIES = new Set(["juvenile_amalga"]);
+const MAX_TRADE_AMOUNT = Number.MAX_SAFE_INTEGER;
 const MAX_ASSET_PAYLOAD_BYTES = 96 * 1024;
 export const MAX_TRADE_PERSISTED_MESSAGE_BYTES = 112 * 1024;
 const TRADE_MESSAGE_ENVELOPE_RESERVE_BYTES = 8 * 1024;
@@ -56,10 +71,34 @@ function positiveInteger(value, fallback, minimum = 1) {
   return Number.isFinite(parsed) && parsed >= minimum ? parsed : fallback;
 }
 
-export function sanitizeTradeAsset(source) {
+function safeOfferRequestId(value) {
+  const id = typeof value === "string" ? value.trim() : "";
+  return /^[a-zA-Z0-9:_-]{8,96}$/.test(id) ? id : "";
+}
+
+export function sanitizeTradeAsset(source, { allowLegacy = false } = {}) {
   const kind = KINDS.has(source?.kind) ? source.kind : null;
-  const payload = safePayload(source?.payload);
+  let payload = safePayload(source?.payload);
   if (!kind || !payload) return null;
+  if (kind === "stack" || kind === "currency") {
+    const definitions = kind === "stack" ? STACK_ASSETS : CURRENCY_ASSETS;
+    const sourceKey = text(payload.key, 40), key = allowLegacy && kind === "currency" ? LEGACY_CURRENCY_KEYS.get(sourceKey) ?? sourceKey : sourceKey;
+    const amount = payload.amount, definition = definitions.get(key);
+    if (!definition || !Number.isSafeInteger(amount) || amount < 1 || amount > MAX_TRADE_AMOUNT) return null;
+    const [name, rarity] = definition;
+    payload = { key, amount };
+    const asset = {
+      assetId: `${kind}:${key}`,
+      kind,
+      name,
+      rarity,
+      level: 1,
+      details: `${amount.toLocaleString("ja-JP")}${kind === "currency" && key === "gold" ? "G" : "個"}`,
+      amount,
+      payload,
+    };
+    return jsonByteLength(asset) <= MAX_TRADE_PERSISTED_MESSAGE_BYTES - TRADE_MESSAGE_ENVELOPE_RESERVE_BYTES ? asset : null;
+  }
   const asset = {
     assetId: text(source.assetId, 160),
     kind,
@@ -72,9 +111,16 @@ export function sanitizeTradeAsset(source) {
   return jsonByteLength(asset) <= MAX_TRADE_PERSISTED_MESSAGE_BYTES - TRADE_MESSAGE_ENVELOPE_RESERVE_BYTES ? asset : null;
 }
 
+function liveTradeAssetRestriction(asset) {
+  return asset?.kind === "monster" && NON_PLAYER_TRADEABLE_MONSTER_SPECIES.has(text(asset?.payload?.speciesId, 80))
+    ? "レイド契約個体は個人交換できません"
+    : "";
+}
+
 function publicAsset(asset) {
   if (!asset) return null;
   const { payload, ...publicPart } = asset;
+  if (["stack", "currency"].includes(asset.kind)) publicPart.amount = payload?.amount;
   return publicPart;
 }
 
@@ -251,6 +297,8 @@ export class TradeCoordinator {
       requesterId: text(trade.requesterId, 24),
       participantNames: Object.fromEntries(participants.map(id => [id, text(trade.participantNames?.[id] ?? this.getPlayerName(id), 24)])),
       offers: Object.fromEntries(participants.map(id => [id, clone(trade.offers[id])])),
+      offerRequests: Object.fromEntries(participants.map(id => [id, safeOfferRequestId(trade.offerRequests?.[id])])),
+      offerRevisions: Object.fromEntries(participants.map(id => [id, Math.max(0, Math.floor(Number(trade.offerRevisions?.[id]) || 0))])),
       ack: Object.fromEntries(participants.map(id => [id, Boolean(trade.ack?.[id])])),
       credentials,
       state: trade.state === "committing" ? "committing" : "recoveryPending",
@@ -287,7 +335,7 @@ export class TradeCoordinator {
     if (!tradeId || participants.length !== 2) return null;
     const offers = {}, credentials = {}, ack = {};
     for (const id of participants) {
-      offers[id] = sanitizeTradeAsset(source?.offers?.[id]);
+      offers[id] = sanitizeTradeAsset(source?.offers?.[id], { allowLegacy: true });
       ack[id] = Boolean(source?.ack?.[id]);
       const credential = durableCredential(source?.credentials?.[id]);
       if (!offers[id] || !ack[id] && !credential) return null;
@@ -301,6 +349,8 @@ export class TradeCoordinator {
       requesterId: text(source?.requesterId, 24) || participants[0],
       participantNames: Object.fromEntries(participants.map(id => [id, text(source?.participantNames?.[id], 24)])),
       offers,
+      offerRequests: Object.fromEntries(participants.map(id => [id, safeOfferRequestId(source?.offerRequests?.[id])])),
+      offerRevisions: Object.fromEntries(participants.map(id => [id, Math.max(0, Math.floor(Number(source?.offerRevisions?.[id]) || 0))])),
       ready: Object.fromEntries(participants.map(id => [id, true])),
       confirmed: Object.fromEntries(participants.map(id => [id, true])),
       ack,
@@ -421,6 +471,8 @@ export class TradeCoordinator {
       },
       state: "invited",
       offers: {},
+      offerRequests: {},
+      offerRevisions: {},
       ready: {},
       confirmed: {},
       ack: {},
@@ -454,21 +506,37 @@ export class TradeCoordinator {
     return { ok: true, trade: this.snapshot(trade) };
   }
 
-  offer(session, tradeId, rawAsset) {
+  offer(session, tradeId, rawAsset, rawRequestId = null) {
+    const suppliedRequestId = safeOfferRequestId(rawRequestId), legacyRequest = rawRequestId == null;
     const trade = this._find(session, tradeId);
-    if (!trade) return this._missing();
-    if (!["offering", "ready"].includes(trade.state)) {
-      return { ok: false, code: "TRADE_STATE", message: "現在は提示品を変更できません" };
+    if (!trade) return { ...this._missing(), tradeId: text(tradeId,160), ...(suppliedRequestId?{requestId:suppliedRequestId}:{}) };
+    const requestId = suppliedRequestId || (legacyRequest ? `legacy-${session.playerId}-${Math.max(1,Math.floor(Number(trade.offerRevisions?.[session.playerId])||0)+1)}`.slice(0,96) : "");
+    const offerMeta = () => ({ tradeId: trade.tradeId, requestId: requestId || undefined, offerRequestId: trade.offerRequests?.[session.playerId] ?? "", offerRevision: Math.max(0,Math.floor(Number(trade.offerRevisions?.[session.playerId])||0)), trade: this.snapshot(trade) });
+    if (!requestId) return { ok: false, code: "TRADE_REQUEST_ID", message: "交換操作IDが不正です", ...offerMeta() };
+	  const asset = sanitizeTradeAsset(rawAsset);
+	  if (!asset) return { ok: false, code: "TRADE_ASSET", message: "交換品データが不正です", ...offerMeta() };
+	  const restriction = liveTradeAssetRestriction(asset);
+	  if (restriction) return { ok: false, code: "TRADE_ASSET_RESTRICTED", message: restriction, ...offerMeta() };
+    trade.offerRequests ??= {};
+    trade.offerRevisions ??= {};
+    const previousRequestId = trade.offerRequests[session.playerId] ?? "", previousAsset = trade.offers[session.playerId] ?? null;
+    if (previousRequestId === requestId) {
+      if (JSON.stringify(previousAsset) !== JSON.stringify(asset)) return { ok: false, code: "TRADE_REQUEST_REUSE", message: "同じ交換操作IDを別の品に再利用できません", ...offerMeta() };
+      this._emit(trade);
+      return { ok: true, duplicate: true, requestId, offerRequestId: requestId, offerRevision: trade.offerRevisions[session.playerId], trade: this.snapshot(trade) };
     }
-    const asset = sanitizeTradeAsset(rawAsset);
-    if (!asset) return { ok: false, code: "TRADE_ASSET", message: "交換品データが不正です" };
+    if (!["offering", "ready"].includes(trade.state)) {
+      return { ok: false, code: "TRADE_STATE", message: "現在は提示品を変更できません", ...offerMeta() };
+    }
     trade.offers[session.playerId] = asset;
+    trade.offerRequests[session.playerId] = requestId;
+    trade.offerRevisions[session.playerId] = Math.max(0, Math.floor(Number(trade.offerRevisions[session.playerId]) || 0)) + 1;
     trade.ready = {};
     trade.confirmed = {};
     trade.state = "offering";
     trade.expiresAt = this.now() + this.timeoutMs;
     this._emit(trade);
-    return { ok: true, trade: this.snapshot(trade) };
+    return { ok: true, requestId, offerRequestId: requestId, offerRevision: trade.offerRevisions[session.playerId], trade: this.snapshot(trade) };
   }
 
   readyUp(session, tradeId, ready = true) {
@@ -490,10 +558,15 @@ export class TradeCoordinator {
   confirm(session, tradeId) {
     const trade = this._find(session, tradeId);
     if (!trade) return this._missing();
-    if (trade.state !== "confirming" || !trade.participants.every(id => trade.ready[id] && trade.offers[id])) {
-      return { ok: false, code: "TRADE_STATE", message: "双方のセット完了を待っています" };
-    }
-    trade.confirmed[session.playerId] = true;
+	  if (trade.state !== "confirming" || !trade.participants.every(id => trade.ready[id] && trade.offers[id])) {
+	    return { ok: false, code: "TRADE_STATE", message: "双方のセット完了を待っています" };
+	  }
+	  const restriction = trade.participants.map(id => trade.offers[id]).map(liveTradeAssetRestriction).find(Boolean);
+	  if (restriction) {
+	    this._close(trade, "restrictedAsset", session.playerId);
+	    return { ok: false, code: "TRADE_ASSET_RESTRICTED", message: restriction, tradeId: trade.tradeId };
+	  }
+	  trade.confirmed[session.playerId] = true;
     trade.expiresAt = this.now() + this.timeoutMs;
     if (!trade.participants.every(id => trade.confirmed[id])) {
       this._emit(trade);
@@ -644,6 +717,8 @@ export class TradeCoordinator {
       requesterId: trade.requesterId,
       state: trade.state,
       offers: Object.fromEntries(trade.participants.map(id => [id, publicAsset(trade.offers[id])])),
+      offerRequests: Object.fromEntries(trade.participants.map(id => [id, safeOfferRequestId(trade.offerRequests?.[id])])),
+      offerRevisions: Object.fromEntries(trade.participants.map(id => [id, Math.max(0, Math.floor(Number(trade.offerRevisions?.[id]) || 0))])),
       ready: { ...trade.ready },
       confirmed: { ...trade.confirmed },
       expiresAt: committing ? trade.commitDeadlineAt : trade.expiresAt,

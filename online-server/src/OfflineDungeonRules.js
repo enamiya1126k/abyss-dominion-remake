@@ -8,13 +8,14 @@ import {
   equipmentSlotsForFloor,
   rollEnemyRank,
 } from "../../src/core/EnemyScalingSystem.js";
+import { treasureRoomRateForFloor, treasureRoomChestCount, shouldPlaceTreasureMimic } from "../../src/core/TreasureSystem.js";
 
 const CARDINALS = Object.freeze([[1, 0], [-1, 0], [0, 1], [0, -1]]);
 // The shared dungeon is the host's ordinary dungeon world.  Keep the exact
 // solo HP curve here; multiplayer compensation is applied by RoomStore using
 // the number of participating players instead of silently weakening enemies.
 export const ONLINE_ENEMY_HP_DIVISOR = 1;
-export function treasureRoomRateForFloor(floor) { return Math.min(.03, .015 + Math.floor(Math.max(1, Number(floor) || 1) / 100) * .0015); }
+export { treasureRoomRateForFloor };
 
 const BASE_STATS = Object.freeze({
   slime: { hp: 22, atk: 7, def: 4, spd: 7 },
@@ -213,15 +214,17 @@ export function createSoloStyleDungeon({ roomId, floor, runId, now, random, ches
   if (bossFloor) add("encounter", layout.boss, 1, { bossEncounter: true });
   else {
     treasureRoom = random() < treasureRoomRateForFloor(floor);
-    const chestCount = treasureRoom ? 7 + Math.floor(random() * 4) : random() < Math.max(0, .16 - Math.max(0, Number(chestSpawnBonus) || 0)) ? 0 : random() < .72 ? 1 : 2;
+    const chestCount = treasureRoom ? treasureRoomChestCount(random) : random() < Math.max(0, .16 - Math.max(0, Number(chestSpawnBonus) || 0)) ? 0 : random() < .72 ? 1 : 2;
     const pick = () => {
       const available = candidates.filter(cell => !reserved.has(key(cell))), pool = available.length ? available : candidates.length ? candidates : cells;
       const point = { ...pool[Math.floor(random() * pool.length)] }; reserved.add(key(point)); return point;
     };
+    let treasureMimics = 0;
     for (let index = 0; index < chestCount; index++) {
       const roll = random(), kind = treasureRoom ? (roll > .48 ? "radiant" : "cabinet") : roll > .96 ? "radiant" : roll > .78 ? "cabinet" : roll > .25 ? "box" : "apple";
-      const locked = kind === "radiant" && random() < (treasureRoom ? .58 : .45), mimic = treasureRoom && random() < .5, point = pick();
-      objects.push({ id: `${floor}-${index}`, type: "chest", ...point, resolved: false, kind, locked, mimic });
+      const locked = kind === "radiant" && random() < (treasureRoom ? .58 : .45), mimic = !locked && shouldPlaceTreasureMimic({ treasureRoom, mimicsPlaced: treasureMimics, random }), point = pick();
+      if (mimic) treasureMimics++;
+      objects.push({ id: `${floor}-${index}`, type: "chest", ...point, resolved: false, kind, locked, mimic, treasureRoom });
     }
     const roomPlan = secretRoomPlan(secretRoomRun, floor);
     if (roomPlan?.appears) {

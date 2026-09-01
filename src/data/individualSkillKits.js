@@ -4,6 +4,8 @@
 // mechanical signature without materially changing balance.
 const RARITY_INDEX=Object.freeze({N:0,R:1,SR:2,SSR:3,UR:4,LR:5,"神話":6,SECRET:3});
 const SKILL_COUNTS=Object.freeze({N:4,R:5,SR:6,SSR:7,UR:8,LR:9,"神話":10,SECRET:7});
+export const SKILL_BALANCE_VERSION=199;
+const RARITY_MP_CAP=Object.freeze({N:18,R:22,SR:28,SSR:34,UR:40,LR:48,"神話":56,SECRET:36});
 const UNLOCKS=Object.freeze({
  N:[1,20,80,180],R:[1,15,60,140,300],SR:[1,12,45,110,240,500],SSR:[1,10,35,90,190,400,800],
  UR:[1,8,30,70,150,320,650,1300],LR:[1,6,25,60,125,260,520,1050,2100],
@@ -25,6 +27,56 @@ const ELEMENT=Object.freeze({
 });
 const MAGIC_ROLES=new Set(["magic","support","healer","controller","debuffer","poison","burner"]);
 const TANK_ROLES=new Set(["tank","counter","bruiser"]);
+
+export function isOffensiveSkill(skill){
+ return Boolean(skill)&&(Number(skill.power)>0||Number(skill.currentHpDamage)>0||Number(skill.selfSacrificeHpDamage)>0||Number(skill.hits)>1&&skill.type==="attack");
+}
+function directPower(skill){return isOffensiveSkill(skill)?Math.max(0,Number(skill.power)||0)*Math.max(1,Number(skill.hits)||1)*(skill.allEnemies?1.25:1):0}
+function utilityScore(skill){
+ const effects=Array.isArray(skill?.effects)?skill.effects:[];
+ return(Math.max(Number(skill?.heal)||0,Number(skill?.selfHeal)||0)*2.1)+(Number(skill?.mpHeal)||0)*1.5+(Number(skill?.revive)||0)*2.6+(Number(skill?.partyShieldRate)||0)*2.2+(Number(skill?.selfShieldRate)||0)*1.4+effects.length*.13+(skill?.status?.chance?Number(skill.status.chance)*.45:0);
+}
+export function skillProgressionScore(skill){return directPower(skill)+utilityScore(skill)}
+
+function minimumCooldown(skill,index,lastIndex){
+ if(Number(skill?.revive)>0||Number(skill?.reviveTransferRate)>0)return 5;
+ if(index===lastIndex||String(skill?.tag??"").includes("奥義"))return 4;
+ const lasting=(skill?.status?.turns??0)>1||(skill?.effects??[]).some(effect=>(Number(effect?.turns)||0)>1);
+ const party=skill?.target==="味方全体"||skill?.target==="敵全体"||skill?.allEnemies;
+ return lasting||party||skill?.type==="allHeal"?Math.min(3,Math.max(1,index>=4?2:1)):0;
+}
+export function balanceIndividualSkillKit(species,skills,{preserveAuthored=false}={}){
+ const list=(Array.isArray(skills)?skills:[]).map(skill=>({...skill,effects:Array.isArray(skill?.effects)?skill.effects.map(effect=>({...effect})):skill?.effects,status:skill?.status?{...skill.status}:skill?.status}));
+ const tier=RARITY_INDEX[species?.rarity??"N"]??0,lastIndex=Math.max(0,list.length-1),cap=RARITY_MP_CAP[species?.rarity??"N"]??18;
+ let previousDirect=0;
+ return list.map((skill,index)=>{
+  const protectedSkill=preserveAuthored||skill.equipmentGranted===true;
+  const authored=skill.authoredSource===true;
+  const floor=1.02+tier*.035+index*.16+(index===lastIndex?.3:0),ceiling=floor+.25+tier*.04+(index===lastIndex?.45:0);
+  const direct=directPower(skill);
+  if(direct>0){
+   if(!protectedSkill&&!authored){
+    const normalized=Math.min(direct,ceiling),required=Math.max(floor,previousDirect>0?previousDirect*1.08:floor),target=Math.max(normalized,required),scale=target/direct;
+    skill.power=round(Math.max(.1,(Number(skill.power)||1)*scale),6);
+   }
+   const adjusted=directPower(skill);
+   // A very large hand-authored opener is preserved, but does not force every
+   // later generated technique into absurd numbers.
+   previousDirect=Math.max(previousDirect,authored?Math.min(adjusted,Math.min(2.75,ceiling*1.6)):adjusted);
+  }
+  if(!protectedSkill&&!authored){
+   if(skill.type==="allHeal"&&Number(skill.heal)<.12+tier*.012)skill.heal=round(.12+tier*.012,3);
+   if(skill.type==="selfHeal"&&Number(skill.heal)<.16+tier*.014)skill.heal=round(.16+tier*.014,3);
+  }
+  if(!protectedSkill){
+   skill.mp=Math.max(0,Math.min(cap,Math.round(Number(skill.mp)||0)));
+   skill.playerMpCostCap=cap;
+   skill.cooldown=Math.max(Math.round(Number(skill.cooldown)||0),minimumCooldown(skill,index,lastIndex));
+   skill.balanceVersion=SKILL_BALANCE_VERSION;
+  }
+  return skill;
+ });
+}
 
 function hash(text){let value=2166136261;for(const char of String(text)){value^=char.charCodeAt(0);value=Math.imul(value,16777619)}return value>>>0}
 function round(value,digits=3){const scale=10**digits;return Math.round(value*scale)/scale}
@@ -112,19 +164,31 @@ function advancedTechnique(species,index,seed,tier){
  return baseSkill(species,index,"逆境循環",{type:"buff",power:0,target:"味方全体",tag:"支援",heal:.08+tier*.008,effects:[effect("defUp",.16+tier*.018,3,{allies:true}),effect("regen",.04+tier*.005,3,{allies:true})],description:"味方全体を小回復し、防御と再生を与える。"});
 }
 function ultimateTechnique(species,index,seed,tier,element){
- const support=["healer","support"].includes(species.role),tank=TANK_ROLES.has(species.role),all=seed%3===0;
+ const support=["healer","support"].includes(species.role),role=species.role??"balanced",all=seed%3===0;
  if(support)return baseSkill(species,index,`${element.noun}大救界`,{type:"allHeal",power:0,target:"味方全体",tag:"奥義・救済",heal:.34+tier*.035,cleanse:true,revive:tier>=4?.22+tier*.015:0,effects:[effect("guard",.16+tier*.018,2,{allies:true})],description:"全体回復・浄化・防護を束ねた救済奥義。"});
- if(tank)return baseSkill(species,index,`${element.noun}守護王`,{type:"stance",power:0,target:"自分",tag:"奥義・守護",heal:.24+tier*.025,partyShieldRate:.10+tier*.012,effects:[effect("taunt",0,3),effect("guard",.44+tier*.025,3),effect("counter",1.15+tier*.12,3)],description:"傷を癒やし、全攻撃を肩代わりする守護奥義。"});
+ if(role==="tank")return baseSkill(species,index,`${element.noun}守護王`,{type:"stance",power:0,target:"自分",tag:"奥義・守護",heal:.24+tier*.025,partyShieldRate:.10+tier*.012,effects:[effect("taunt",0,3),effect("guard",.44+tier*.025,3),effect("counter",1.15+tier*.12,3)],description:"傷を癒やし、全攻撃を肩代わりする守護奥義。"});
+ if(role==="counter")return baseSkill(species,index,`${element.noun}報復界`,{type:"stance",power:0,target:"自分",tag:"奥義・反撃",effects:[effect("guard",.28+tier*.02,3),effect("counter",1.55+tier*.14,3)],description:"被害を抑えながら、強烈な反撃で攻勢へ転じる。"});
+ if(role==="bruiser")return baseSkill(species,index,`${element.noun}喰命撃`,{type:"drain",power:1.62+tier*.15,drain:.48+tier*.035,target:"敵単体",tag:"奥義・吸収",effects:[effect("guard",.18+tier*.015,2)],description:"敵の生命を奪い、攻めながら戦線を維持する。"});
  return baseSkill(species,index,`${element.noun}終式`,{power:1.72+tier*.17+(seed%11)*.012,allEnemies:all,target:all?"敵全体":"敵単体",tag:"奥義",defenseIgnore:.10+tier*.035,critBonus:.12+tier*.018,cooldown:4,description:`${species.name}が研ぎ澄ました固有の最終攻撃。`});
 }
 
-export function buildIndividualSkillKit(species,{legacySkill=null}={}){
+function authoredTechnique(species,index,source,generated){
+ const legacyId=source?.id;
+ return{...generated,...source,id:`${species.id}__identity_${index+1}`,name:source?.name??generated.name,authoredSource:true,authoredUnlock:source?.unlock?{...source.unlock}:null,legacySkillIds:legacyId?[legacyId]:[],unlock:source?.unlock?{...source.unlock}:generated.unlock,effects:Array.isArray(source?.effects)?source.effects.map(effect=>({...effect})):generated.effects,status:source?.status?{...source.status}:generated.status};
+}
+export function buildIndividualSkillKit(species,{legacySkill=null,authoredSkills=null}={}){
  const rarity=species.rarity??"N",tier=RARITY_INDEX[rarity]??0,count=SKILL_COUNTS[rarity]??4,seed=hash(species.id),element=ELEMENT[species.element]??ELEMENT.neutral;
  const skills=[openingAttack(species,seed,tier,element),raceTechnique(species,seed,tier),roleTechnique(species,seed,tier),elementalTechnique(species,seed,tier,element)];
  while(skills.length<count-1)skills.push(advancedTechnique(species,skills.length,seed,tier));
  if(skills.length<count)skills.push(ultimateTechnique(species,skills.length,seed,tier,element));
- if(legacySkill?.name){skills[0].name=identityName(species,legacySkill.name);skills[0].description=legacySkill.description&&legacySkill.description!==`${legacySkill.name}で戦う。`?legacySkill.description:skills[0].description}
- return skills.slice(0,count).map((skill,index)=>({...skill,unlock:{type:"level",value:(UNLOCKS[rarity]??UNLOCKS.N)[index]??1}}));
+ const authored=Array.isArray(authoredSkills)&&authoredSkills.length?authoredSkills:legacySkill?[legacySkill]:[];
+ for(let index=0;index<Math.min(authored.length,skills.length);index++)skills[index]=authoredTechnique(species,index,authored[index],skills[index]);
+ const offensive=skills.filter(isOffensiveSkill).length;
+ if(offensive<2){
+  const replaceIndex=skills.findIndex((skill,index)=>index>0&&!skill.authoredSource&&!isOffensiveSkill(skill));
+  if(replaceIndex>=0)skills[replaceIndex]=baseSkill(species,replaceIndex,`${element.noun}応戦`,{power:1.08+tier*.045+replaceIndex*.08,tag:`${element.label}・応戦`,description:"支援だけに偏らず、自ら戦線を支える固有攻撃。"});
+ }
+ return skills.slice(0,count).map((skill,index)=>({...skill,unlock:skill.authoredUnlock??{type:"level",value:(UNLOCKS[rarity]??UNLOCKS.N)[index]??1}}));
 }
 
 export function expectedSkillCount(rarity){return SKILL_COUNTS[rarity]??4}

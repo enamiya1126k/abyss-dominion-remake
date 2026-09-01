@@ -9,8 +9,8 @@ const css=readFileSync(join(root,"src/Styles/build253.css"),"utf8");
 const html=readFileSync(join(root,"index.html"),"utf8");
 
 assert.match(html,/build253\.css\?v=2\.11\.77-build253/);
-assert.match(html,/ASSET_VERSION = "2\.11\.78"/);
-assert.match(html,/ASSET_BUILD = "build254"/);
+assert.match(html,/ASSET_VERSION = "2\.11\.82"/);
+assert.match(html,/ASSET_BUILD = "build258"/);
 
 assert.match(main,/data-power-record-tab="own"/);
 assert.match(main,/data-power-record-tab="ranking"/);

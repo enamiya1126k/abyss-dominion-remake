@@ -1,6 +1,6 @@
 import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=2.11.0-build164";
 import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.0-build164";
-import{speciesLevelStats}from"../models/Monster.js?v=2.11.30-build195";
+import{speciesLevelStats}from"../models/Monster.js?v=2.11.82-build258";
 import{floorBossActionInfo}from"../data/floorBosses.js?v=2.11.30-build195";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",

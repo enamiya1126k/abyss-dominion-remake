@@ -71,9 +71,11 @@ test("request receipts are idempotent, requests are bounded, and asset URLs are 
   source.party[0].equipment[0].visualAsset = "https://evil.example/item.png";
   const first = ranking.submit(owner, { requestId: "stable_req", snapshot: source });
   assert.equal(first.ok, true);
-  const duplicate = ranking.submit(owner, { requestId: "stable_req", snapshot: { broken: true } });
+  const duplicate = ranking.submit(owner, { requestId: "stable_req", snapshot: source });
   assert.equal(duplicate.ok, true);
   assert.equal(duplicate.duplicate, true);
+  const changed = structuredClone(source); changed.displayName = "別の内容";
+  assert.equal(ranking.submit(owner, { requestId: "stable_req", snapshot: changed }).code, "POWER_REQUEST_CONFLICT");
   const detail = ranking.profile(owner, { requestId: "profile_req", playerId: owner.playerId });
   assert.equal(detail.message.profile.party[0].customVisualAsset, null);
   assert.equal(detail.message.profile.party[0].customVisualBase, "./assets/online/weekly-raid/juvenile");

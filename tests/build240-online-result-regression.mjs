@@ -29,7 +29,7 @@ function fixture({ owner = true, defeat = false, inRun = true } = {}) {
     onlineParty: {
       claimedRewards: [], processedVitalMutationIds: [], processedBattleEventIds: [], processedExpeditionResultIds: [], completedExpeditionRunIds: [],
       coopContributionHistory: [],
-      activeExpeditionRunId: "run-A", activeManualExploreRunId: "explore-A", hostWorld: { openedChestIds: {}, floorSeeds: {} },
+      activeExpeditionRunId: "run-A", activeManualExploreRunId: "explore-A", activeExpeditionOwnerId: "SELF", hostWorld: { openedChestIds: {}, floorSeeds: {} },
     },
     player: { gold: 10_000, checkpoint: 3, currentFloor: 500, maxFloor: 500, inRun, exploreRun: { id: "solo-B", floors: { 500: true } } },
     returnRewards: { manual: { active: true, startFloor: 500, lastFloor: 500, floorsCleared: 0, pendingGold: 777, startedAt: 1 } },
@@ -53,6 +53,7 @@ function fixture({ owner = true, defeat = false, inRun = true } = {}) {
   vm.runInNewContext(`${resultFunctions}\nthis.api={applyOnlineVitalsUpdate,beginOnlineExpeditionResultRun,settleOnlineExpeditionResult,recoverOrphanedOnlineExpedition};`, context);
   const event = {
     runId: "run-A", resultId: `result-${defeat ? "defeat" : "return"}`, ownerId: owner ? "SELF" : "OTHER", recipientId: "SELF",
+    progressionEligible: owner,
     startFloor: 10, endFloor: 12, floorsCleared: 2, reason: defeat ? "defeat" : "return",
     finalVitals: { mutationId: "vitals-A", monsterId: "released-monster", hp: 1, mp: 0 },
   };
@@ -101,11 +102,13 @@ test("build244 guest contribution is saved exactly once without advancing normal
   const before = { currentFloor: state.player.currentFloor, maxFloor: state.player.maxFloor };
   Object.assign(event, {
     multiplayer: true, completed: true, finishedAt: 244_000,
+    assistedWorld: { ownerId: "OTHER", startFloor: 200, endFloor: 203, floorsCleared: 3 },
     summary: { multiplayer: true, ranking: [
       { playerId: "OTHER", name: "部屋主", rank: 1, score: 999 },
       { playerId: "SELF", name: "お手伝い", rank: 2, exploration: 3, combat: 700, rescue: 1, chests: 2, switches: 1, gimmicks: 2, pings: 4, support: 25, score: 2440, mvpTitles: ["救助王"] },
     ] },
   });
+  delete event.startFloor; delete event.endFloor; delete event.floorsCleared;
 
   const first = api.settleOnlineExpeditionResult(event);
   assert.equal(first.ok, true);
@@ -114,7 +117,7 @@ test("build244 guest contribution is saved exactly once without advancing normal
   assert.equal(state.onlineParty.coopContributionHistory.length, 128, "guest history remains capped");
   assert.equal(state.onlineParty.coopContributionHistory.some(entry => entry.resultId === "old-0"), false);
   const record = state.onlineParty.coopContributionHistory.at(-1);
-  assert.deepEqual(JSON.parse(JSON.stringify({ resultId: record.resultId, pings: record.pings, rescue: record.rescue, score: record.score, mvpTitles: record.mvpTitles })), { resultId: event.resultId, pings: 4, rescue: 1, score: 2440, mvpTitles: ["救助王"] });
+  assert.deepEqual(JSON.parse(JSON.stringify({ resultId: record.resultId, startFloor: record.startFloor, endFloor: record.endFloor, floorsCleared: record.floorsCleared, pings: record.pings, rescue: record.rescue, score: record.score, mvpTitles: record.mvpTitles })), { resultId: event.resultId, startFloor: 200, endFloor: 203, floorsCleared: 3, pings: 4, rescue: 1, score: 2440, mvpTitles: ["救助王"] });
   assert.ok(state.onlineParty.processedExpeditionResultIds.includes(event.resultId));
   assert.equal(saveCalls(), 1, "contribution and processed result id share one save transaction");
 

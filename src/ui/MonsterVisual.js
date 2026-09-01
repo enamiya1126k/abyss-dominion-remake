@@ -1,4 +1,4 @@
-import{MONSTER_SPRITE_FOLDERS}from"../data/monsterCatalog.js?v=2.11.44-build209";
+import{MONSTER_SPRITE_FOLDERS,MONSTER_CUSTOM_SPRITE_BASES}from"../data/monsterCatalog.js?v=2.11.82-build258";
 
 const IDLE_FRAMES=Object.freeze(["idle1","idle2","idle3","idle2"]);
 const VALID_FRAMES=new Set(["idle","idle1","idle2","idle3","walk1","walk2","attack","damage","down"]);
@@ -28,19 +28,25 @@ export function monsterVisualId(subject){
   return preferredId&&MONSTER_SPRITE_FOLDERS[preferredId]?preferredId:speciesId;
 }
 
+function customSpriteBase(subject){
+ if(typeof subject==="object"&&subject?.customVisualBase)return String(subject.customVisualBase);
+ return MONSTER_CUSTOM_SPRITE_BASES[monsterVisualId(subject)]??null;
+}
+
 export function monsterSpriteUrl(subject,frame="idle"){
-  if(typeof subject==="object"&&subject?.customVisualBase)return`${String(subject.customVisualBase)}-${fileFrame(frame)}.png?v=${SPRITE_ASSET_VERSION}`;
+  const customBase=customSpriteBase(subject);
+  if(customBase)return`${customBase}-${fileFrame(frame)}.png?v=${SPRITE_ASSET_VERSION}`;
   if(typeof subject==="object"&&subject?.customVisualAsset)return String(subject.customVisualAsset);
   const visualId=monsterVisualId(subject),folder=MONSTER_SPRITE_FOLDERS[visualId];
   return folder?`./assets/monsters/${folder}/${fileFrame(frame)}.png?v=${SPRITE_ASSET_VERSION}`:null;
 }
 
 export function hasMonsterSprite(subject){
-  return Boolean(typeof subject==="object"&&(subject?.customVisualBase||subject?.customVisualAsset))||Boolean(MONSTER_SPRITE_FOLDERS[monsterVisualId(subject)]);
+  return Boolean(customSpriteBase(subject))||Boolean(typeof subject==="object"&&subject?.customVisualAsset)||Boolean(MONSTER_SPRITE_FOLDERS[monsterVisualId(subject)]);
 }
 
 export function monsterVisual(subject,fallbackEmoji="👹",{frame="idle",className=""}={}){
-  const visualId=monsterVisualId(subject),requestedFrame=safeFrame(frame),normalizedFrame=requestedFrame==="idle"?IDLE_FRAMES[idleStep]:fileFrame(requestedFrame),customBase=typeof subject==="object"?subject?.customVisualBase:null,custom=Boolean(customBase||typeof subject==="object"&&subject?.customVisualAsset),url=monsterSpriteUrl(subject,normalizedFrame);
+  const visualId=monsterVisualId(subject),requestedFrame=safeFrame(frame),normalizedFrame=requestedFrame==="idle"?IDLE_FRAMES[idleStep]:fileFrame(requestedFrame),customBase=customSpriteBase(subject),custom=Boolean(customBase||typeof subject==="object"&&subject?.customVisualAsset),url=monsterSpriteUrl(subject,normalizedFrame);
   const classes=["monster-visual",url?"has-pixel-sprite":"emoji-only",className].filter(Boolean).join(" ");
   const fallback=`<span class="monster-visual-fallback"${url?" hidden":""}>${escapeHtml(fallbackEmoji)}</span>`;
   if(!url)return`<span class="${classes}" data-monster-species="${escapeHtml(visualId)}">${fallback}</span>`;

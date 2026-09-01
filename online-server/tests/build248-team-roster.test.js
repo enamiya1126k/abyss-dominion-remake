@@ -65,17 +65,19 @@ test("legacy team clients still enter as one monster per player", () => {
   assert.deepEqual(result.teamBattle.players.map(actor => actor.playerId).sort(), [left.playerId, right.playerId].sort());
 });
 
-test("one player per side can deploy four monsters and command each actor explicitly", () => {
+test("one player per side deploys two monsters each within the global four-slot limit", () => {
   const { coordinator, room, members } = setup(2);
   ready(coordinator, room, members, 1);
   const started = coordinator.start(room, members[0]);
   assert.equal(started.ok, true);
-  assert.equal(started.teamBattle.format, "4 vs 4");
-  assert.equal(started.teamBattle.players.filter(actor => actor.side === "sun").length, 4);
-  assert.equal(started.teamBattle.players.filter(actor => actor.side === "moon").length, 4);
-  assert.equal(started.teamBattle.players.filter(actor => actor.ownerPlayerId === members[0].playerId).length, 4);
+  assert.equal(started.teamBattle.format, "2 vs 2");
+  assert.equal(started.teamBattle.players.length, 4);
+  assert.equal(started.teamBattle.players.filter(actor => actor.side === "sun").length, 2);
+  assert.equal(started.teamBattle.players.filter(actor => actor.side === "moon").length, 2);
+  assert.equal(started.teamBattle.players.filter(actor => actor.ownerPlayerId === members[0].playerId).length, 2);
   assert.equal(Object.hasOwn(started.teamBattle.players[0], "stats"), false);
-  assert.equal(Object.hasOwn(started.teamBattle.players[0], "skills"), false);
+  assert.equal(Array.isArray(started.teamBattle.players[0].skills), true);
+  assert.equal(started.teamBattle.players[0].skills.length > 0, true);
 
   const foreign = started.teamBattle.players.find(actor => actor.ownerPlayerId === members[1].playerId);
   assert.equal(coordinator.action(room, members[0], { actorId: foreign.combatantId, kind: "attack" }).code, "BAD_ACTOR");
@@ -85,37 +87,63 @@ test("one player per side can deploy four monsters and command each actor explic
     const target = Object.values(room.teamBattle.players).find(candidate => candidate.side !== actor.side && candidate.hp > 0);
     assert.equal(coordinator.action(room, owner, { actorId: actor.combatantId, kind: "attack", targetId: target.combatantId }).ok, true);
     submitted += 1;
-    if (submitted < 8) assert.equal(room.teamBattle.phase, "command");
+    if (submitted < 4) assert.equal(room.teamBattle.phase, "command");
   }
   assert.equal(room.teamBattle.phase, "result");
-  assert.equal(Object.keys(room.teamBattle.actions).length, 8);
+  assert.equal(Object.keys(room.teamBattle.actions).length, 4);
 });
 
-test("four-player allocation preserves one slot each and never exceeds four monsters per side", () => {
+test("four-player allocation preserves one slot each and never exceeds four monsters globally", () => {
   for (const sunCount of [1, 2]) {
     const { coordinator, room, members } = setup(4);
     ready(coordinator, room, members, sunCount);
     const result = coordinator.start(room, members[0]);
     assert.equal(result.ok, true);
-    for (const side of ["sun", "moon"]) assert.ok(result.teamBattle.players.filter(actor => actor.side === side).length <= 4);
+    assert.equal(result.teamBattle.players.length, 4);
     for (const member of members) assert.ok(result.teamBattle.players.some(actor => actor.ownerPlayerId === member.playerId));
     if (sunCount === 1) {
-      assert.equal(result.teamBattle.format, "4 vs 4");
-      assert.deepEqual(members.slice(1).map(member => result.teamBattle.players.filter(actor => actor.ownerPlayerId === member.playerId).length), [2, 1, 1]);
+      assert.equal(result.teamBattle.format, "1 vs 3");
+      assert.deepEqual(members.map(member => result.teamBattle.players.filter(actor => actor.ownerPlayerId === member.playerId).length), [1, 1, 1, 1]);
     } else {
-      assert.deepEqual(members.map(member => result.teamBattle.players.filter(actor => actor.ownerPlayerId === member.playerId).length), [2, 2, 2, 2]);
+      assert.deepEqual(members.map(member => result.teamBattle.players.filter(actor => actor.ownerPlayerId === member.playerId).length), [1, 1, 1, 1]);
     }
   }
 });
 
-test("a two-player side caps each owner at two monsters even when one roster has spare entries", () => {
+test("a three-player match gives the fourth global slot to the smaller side", () => {
   const { coordinator, room, members } = setup(3);
   members[1].profile.battleRoster = members[1].profile.battleRoster.slice(0, 1);
   ready(coordinator, room, members, 1);
   const result = coordinator.start(room, members[0]);
+  assert.equal(result.teamBattle.players.length, 4);
+  assert.equal(result.teamBattle.players.filter(actor => actor.ownerPlayerId === members[0].playerId).length, 2);
   assert.equal(result.teamBattle.players.filter(actor => actor.ownerPlayerId === members[1].playerId).length, 1);
-  assert.equal(result.teamBattle.players.filter(actor => actor.ownerPlayerId === members[2].playerId).length, 2);
-  assert.equal(result.teamBattle.players.filter(actor => actor.side === "moon").length, 3);
+  assert.equal(result.teamBattle.players.filter(actor => actor.ownerPlayerId === members[2].playerId).length, 1);
+  assert.equal(result.teamBattle.players.filter(actor => actor.side === "moon").length, 2);
+});
+
+test("a missing smaller-side reserve never reallocates its fourth slot to the larger team", () => {
+  const { coordinator, room, members } = setup(3);
+  members[0].profile.battleRoster = members[0].profile.battleRoster.slice(0, 1);
+  ready(coordinator, room, members, 1);
+  const result = coordinator.start(room, members[0]);
+  assert.equal(result.ok, true);
+  assert.equal(result.teamBattle.players.length, 3);
+  assert.equal(result.teamBattle.players.filter(actor => actor.side === "sun").length, 1);
+  assert.equal(result.teamBattle.players.filter(actor => actor.side === "moon").length, 2);
+  assert.deepEqual(members.map(member => result.teamBattle.players.filter(actor => actor.ownerPlayerId === member.playerId).length), [1, 1, 1]);
+});
+
+test("one player per side is capped at two deployments even when the opponent has no reserve", () => {
+  const { coordinator, room, members } = setup(2);
+  members[0].profile.battleRoster = members[0].profile.battleRoster.slice(0, 1);
+  ready(coordinator, room, members, 1);
+  const result = coordinator.start(room, members[0]);
+  assert.equal(result.ok, true);
+  assert.equal(result.teamBattle.players.length, 3);
+  assert.equal(result.teamBattle.players.filter(actor => actor.side === "sun").length, 1);
+  assert.equal(result.teamBattle.players.filter(actor => actor.side === "moon").length, 2);
+  assert.equal(result.teamBattle.players.filter(actor => actor.ownerPlayerId === members[1].playerId).length, 2);
 });
 
 test("balanced rules scale roster combatants and keep each actor identifiable", () => {

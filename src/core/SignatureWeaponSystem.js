@@ -1,4 +1,4 @@
-import{SPECIES}from"../data/species.js?v=2.11.2-build166";
+import{SPECIES}from"../data/species.js?v=2.11.82-build258";
 import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.11.24-build188";
 import{RARITY_ORDER}from"../data/equipment.js?v=2.11.2-build166";
 import{createEquipment}from"../models/Equipment.js?v=2.11.2-build166";

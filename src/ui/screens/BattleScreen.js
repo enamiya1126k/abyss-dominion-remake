@@ -1,8 +1,8 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.11.51-build216";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=2.11.73-build249";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=2.11.82-build258";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=2.11.83-build259";
 import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=2.11.0-build164";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.11.51-build216";
-import{monsterVisual}from"../MonsterVisual.js?v=2.11.53-build218";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=2.11.82-build258";
+import{monsterVisual}from"../MonsterVisual.js?v=2.11.82-build258";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=2.11.0-build164";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.0-build164";
 import{normalizeBattleSpeed}from"../../core/config.js?v=2.11.53-build218";
@@ -96,11 +96,11 @@ function renderParty(battle,actor){
 
 function renderSkills(battle,actor,skills){
  const rows=skills.map(skill=>{
-  const cd=battle.onlineMode?0:cooldownRemaining(battle,actor.id,skill.id),mpCost=skillMpCost(actor,skill),disabled=actor.currentMp<mpCost||cd>0;
-  const cost=cd>0?`再使用 ${cd}`:`MP ${mpCost}`;
+  const cd=Math.max(0,Number(cooldownRemaining(battle,actor.id,skill.id))||0),baseCd=Math.max(0,Number(skill.cooldown)||0),mpCost=skillMpCost(actor,skill),disabled=actor.currentMp<mpCost||cd>0;
+  const cost=cd>0?`残りCT ${cd} / MP ${mpCost}`:`MP ${mpCost}`,cooldownLabel=baseCd>0?`CT ${baseCd}`:"CTなし";
   const details=skillCombatKeywords(skill).map(line=>`<li>${line}</li>`).join("");
   const skillName=skill.equipmentGranted?`【装備技】${skill.name}`:skill.name,skillTag=skill.equipmentGranted?`${skill.equipmentAuthorityName??"装備固有"}・装備中限定`:skill.tag??"スキル";
-  return `<button data-skill-id="${skill.id}" ${disabled?"disabled":""}><span><b>${skillName}</b><small>${skillTag}・${skill.target??"敵単体"}・${skillElementLabel(skill)}属性・CT ${skill.cooldown??0}</small><ul class="battle-skill-spec">${details}</ul></span><strong>${cost}</strong></button>`;
+  return `<button data-skill-id="${skill.id}" ${disabled?"disabled":""}><span><b>${skillName}</b><small>${skillTag}・${skill.target??"敵単体"}・${skillElementLabel(skill)}属性・${cooldownLabel}</small><ul class="battle-skill-spec">${details}</ul></span><strong>${cost}</strong></button>`;
  }).join("");
  return `<div class="skill-command-list">${rows}<button id="closeSkillMenu" class="secondary">戻る</button></div>`;
 }
@@ -140,9 +140,9 @@ function renderCommands(battle,actor,current,enemies,target,inventory,skills){
  const targetHelp=actor&&enemies.length>1?`<small class="target-help">攻撃対象：${target?.name??"なし"}（敵をタップして変更）</small>`:"";
  let controls;
  if(battle.onlineReadOnly)controls='<div class="enemy-thinking">両チームの戦況を同期しています…</div>';
+ else if(battle.auto)controls=`<div class="auto-command-wait"><span>${pixelIcon("crossed-swords")}</span><div><b>完全自動戦闘 進行中</b><small>戦場をタップ、または上の自動ボタンで手動操作へ</small></div></div>`;
  else if(battle.onlineActionSubmitted)controls='<div class="auto-command-wait"><span>✓</span><div><b>行動入力済み</b><small>ほかのプレイヤーの入力を待っています</small></div></div>';
  else if(!actor)controls='<div class="enemy-thinking">敵の行動を処理しています…</div>';
- else if(battle.auto)controls=`<div class="auto-command-wait"><span>${pixelIcon("crossed-swords")}</span><div><b>完全自動戦闘 進行中</b><small>戦場をタップ、または上の自動ボタンで手動操作へ</small></div></div>`;
  else if(battle.skillMenu)controls=renderSkills(battle,actor,skills);
  else if(battle.onlineMode&&(battle.itemMenu||battle.onlineItemTargetMenu))controls=renderOnlineItems(battle);
  else if(battle.itemMenu)controls=renderItems(inventory);
@@ -162,9 +162,10 @@ export function BattleScreen(battle,inventory,settings,floor=1){
  const biomeBadge=renderBiomeBadge(battle.biomeBattle);
  const invincibleBadge=invincibleAllianceActive(battle)?'<div class="invincible-alliance-status" role="status" aria-label="無敵・四LR連携が発動中"><span>無敵</span><small>四LR連携・常時発動</small></div>':"";
  const onlineExit=battle.onlineMode==="explore"?'<button type="button" data-online-return>帰還</button>':'<button type="button" disabled>逃走不可</button>';
+ const onlineAuto=battle.onlineAutoAvailable?`<button type="button" data-online-battle-auto="${htmlText(battle.onlineMode)}" aria-pressed="${Boolean(battle.auto)}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button>`:battle.onlineAutoUnsupported?'<button type="button" disabled class="online-sync-state" title="サーバー197更新後に利用できます"><span>自動</span><b>要更新</b></button>':'<button type="button" disabled class="enabled online-sync-state"><span>同期</span><b>有効</b></button>';
  const offlineExit=battle.specialBattle?`<button id="escapeBattle" type="button" ${battle.escapePending?"disabled":""}>${battle.escapePending?"撤退待ち":"撤退"}</button>`:`<button id="escapeBattle" type="button" ${battle.escapePending?"disabled":""}>${battle.escapePending?"逃走待ち":"逃げる"}</button>`;
  return `<section class="battle-screen side-battle-v2 battle-history-hidden battle-theme-${theme} ${battle.auto?"auto-mode":"manual-mode"} ${battle.specialBattle?"special-battle":""} ${battle.onlineMode?"online-shared-battle":""}" ${battle.onlineMode?`data-online-battle-view="${battle.onlineMode}"`:""} data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}">${special}
-  <div class="battle-header"><div class="round-label"><small>ラウンド</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}F・遭遇戦`}</b><small>${battle.onlineMode?"サーバー同期戦闘":battle.auto?"完全自動":"コマンド戦闘"}</small></div>${battle.onlineMode?'<button type="button" disabled class="enabled online-sync-state"><span>同期</span><b>有効</b></button>':`<button id="toggleBattleAuto" type="button" aria-pressed="${battle.auto}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button>`}<button id="battleSpeed" ${battle.onlineMode?`data-online-speed-cycle="${battle.onlineMode}"`:""}>×${speed}</button>${battle.onlineMode?onlineExit:offlineExit}</div>
+  <div class="battle-header"><div class="round-label"><small>ラウンド</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}F・遭遇戦`}</b><small>${battle.onlineMode?battle.auto?"サーバー同期・自動戦闘":"サーバー同期戦闘":battle.auto?"完全自動":"コマンド戦闘"}</small></div>${battle.onlineMode?onlineAuto:`<button id="toggleBattleAuto" type="button" aria-pressed="${battle.auto}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button>`}<button id="battleSpeed" ${battle.onlineMode?`data-online-speed-cycle="${battle.onlineMode}"`:""}>×${speed}</button>${battle.onlineMode?onlineExit:offlineExit}</div>
   <div class="turn-order"><span class="turn-order-title">行動順</span>${renderTurnOrder(battle)}</div>
   <div class="battle-arena side-battle-arena multi-enemy">
    <div class="battle-stage-vignette" aria-hidden="true"></div>

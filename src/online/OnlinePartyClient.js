@@ -1,16 +1,18 @@
 import {
   buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
-  onlineSocialNotificationSummary,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.76-build252";
+  onlineSocialNotificationSummary, moveOnlineBattleRosterPriority, renderOnlineBattleRosterPicker,
+} from "../ui/screens/OnlinePartyScreen.js?v=2.11.82-build258";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=2.11.76-build252";
+} from "./OnlineViews.js?v=2.11.82-build258";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
-  commitOnlineTrade, recoverOrphanedTradeEscrows,
-} from "./OnlineTradeSystem.js?v=2.11.54-build226";
-import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=2.11.54-build226";
+  rollbackOnlineTradeAssetReservation, commitOnlineTrade, recoverOrphanedTradeEscrows,
+  parseOnlineTradeAmount, reconcileOnlineTradeEscrow, sameOnlineTradeAsset, sameLegacyOnlineTradeAsset,
+} from "./OnlineTradeSystem.js?v=2.11.82-build258";
+import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=2.11.82-build258";
+import { ONLINE_EXPEDITION_MOVE_INTERVAL_MS } from "./OnlineMovement.js?v=2.11.80-build256";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
 const SOCIAL_FAB_ROUTES = new Set(["home", "chat"]);
@@ -46,6 +48,7 @@ const FULL_RESET_REQUEST_PATTERN = /^[A-Za-z0-9_-]{18,96}$/;
 const FULL_RESET_TIMEOUT_MS = 12_000;
 const POWER_RANKING_CAPABILITY = "powerRankingsV1";
 const BACKGROUND_CONNECTION_CAPABILITY = "backgroundConnectionV1";
+const TRADE_OFFER_RECEIPTS_CAPABILITY = "tradeOfferReceiptsV1";
 const POWER_RANKING_REQUEST_TIMEOUT_MS = 10_000;
 const POWER_RANKING_ENTRY_LIMIT = 100;
 const POWER_RANKING_PARTY_LIMIT = 4;
@@ -82,7 +85,7 @@ const ONLINE_STATE_CONTROL_SELECTOR = [
   "[data-online-ready]", "[data-online-start-explore]", "[data-online-return]", "[data-online-complete]", "[data-online-start-raid]",
   "[data-online-team-side]", "[data-online-team-ready]", "[data-online-team-ruleset]", "[data-online-team-series]", "[data-online-team-swap]", "[data-online-start-team]",
   "[data-online-move]", "[data-online-emote-anchor]", "[data-command]", "[data-skill-id]", "[data-online-battle-item]",
-  "[data-online-item-target]", "[data-online-speed-cycle]", "[data-online-speed]", "[data-online-battle-action]", "[data-online-battle-skill]",
+  "[data-online-item-target]", "[data-online-speed-cycle]", "[data-online-speed]", "[data-online-battle-auto]", "[data-online-battle-action]", "[data-online-battle-skill]",
   "[data-online-preset]", "[data-online-floor]", "[data-online-room-listing-toggle]", "[data-online-room-listing-purpose]",
   "[data-online-room-listing-style]", "[data-online-chat-input]", "[data-online-explore-chat-input]",
   "[data-online-user-block]", "[data-online-user-mute]", "[data-online-user-unmute]", "[data-online-friend-unblock]",
@@ -109,6 +112,34 @@ function safeRoomId(value) {
   return source.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
 }
 function safeHtml(value) { return String(value ?? "").replace(/[&<>"']/g, character => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[character]); }
+const EXPEDITION_LOOT_RECEIPT_KINDS = new Set(["chest", "resonanceChest", "deluxeChest", "coopVault", "rarePortalChest"]);
+function positiveRewardAmount(value) { const amount = Math.max(0, Math.floor(Number(value) || 0)); return amount > 0 ? amount : 0; }
+export function onlineRewardReceiptData(message = {}, result = {}) {
+  if (result?.duplicate) return null;
+  const reward = message?.reward && typeof message.reward === "object" ? message.reward : {};
+  const source = message?.source && typeof message.source === "object" ? message.source : {};
+  const importantEquipment = result?.isImportantEquipment === true && Boolean(result?.equipmentName);
+  if (!importantEquipment && !EXPEDITION_LOOT_RECEIPT_KINDS.has(String(source.kind ?? ""))) return null;
+  const items = [], add = (label, value, rare = false) => { if (value) items.push({ label: String(label), value: String(value), rare: Boolean(rare) }); };
+  const gold = positiveRewardAmount(result.gold ?? reward.gold), crystals = positiveRewardAmount(result.crystals ?? reward.crystals), captureCrystals = positiveRewardAmount(result.captureCrystals ?? reward.captureCrystals), abyssKeys = positiveRewardAmount(result.abyssKeys ?? reward.abyssKeys), potions = positiveRewardAmount(result.potions ?? reward.potions), raidMaterials = positiveRewardAmount(result.raidMaterials ?? reward.raidMaterials), experience = positiveRewardAmount(result.experience ?? reward.experience);
+  if (gold) add("GOLD", `+${gold.toLocaleString()}G`);
+  if (crystals) add("魔晶石", `×${crystals.toLocaleString()}`);
+  if (captureCrystals) add("捕獲結晶", `×${captureCrystals.toLocaleString()}`);
+  if (abyssKeys) add("深淵の鍵", `×${abyssKeys.toLocaleString()}`, true);
+  if (potions) add("回復薬", `×${potions.toLocaleString()}`);
+  if (raidMaterials) add("レイド核片", `×${raidMaterials.toLocaleString()}`);
+  if (experience) add("経験値", `+${experience.toLocaleString()}`);
+  if (result?.equipmentName) add(result.equipmentKindLabel || "装備", result.equipmentName, importantEquipment || ["LR", "神話", "深淵", "十神"].includes(String(reward.randomEquipmentRarity ?? "")));
+  if (!items.length) return null;
+  return {
+    id: String(message.rewardId ?? Date.now()),
+    title: String(source.title || (importantEquipment ? "重要装備獲得" : "宝箱を開封")),
+    eyebrow: importantEquipment ? "ONLINE LOOT" : "TREASURE RECEIVED",
+    heading: importantEquipment ? `${String(result.equipmentKindLabel || "装備")}を獲得` : "受け取った報酬",
+    important: importantEquipment,
+    items,
+  };
+}
 function normalizedRoomPurpose(value, fallback = "explore") {
   const purpose = String(value ?? "");
   if (purpose === "resonance") return "explore";
@@ -121,7 +152,7 @@ function normalizedOnlineRoute(value, fallback = "home") {
   return ROUTES.has(route) ? route : fallback;
 }
 export function shouldShowOnlineSocialFab({ connectionStep, route } = {}) {
-  if (connectionStep !== "room") return true;
+  if (connectionStep !== "room") return false;
   return SOCIAL_FAB_ROUTES.has(normalizedOnlineRoute(route, "home"));
 }
 function isTyping(target) { return Boolean(target?.closest?.("input,textarea,select,[contenteditable=true]")); }
@@ -302,6 +333,12 @@ export function normalizePowerRankingState(source, { supported = true, loading =
     updatedAt: boundedInteger(source?.serverNow ?? source?.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
     serverNow: boundedInteger(source?.serverNow, 0, Number.MAX_SAFE_INTEGER, 0),
     staleAfterMs: boundedInteger(source?.staleAfterMs, 0, 365 * 24 * 60 * 60_000, 0),
+    season: source?.season && typeof source.season === "object" ? {
+      id: rankingText(source.season.id, 20),
+      startsAt: boundedInteger(source.season.startsAt, 0, Number.MAX_SAFE_INTEGER, 0),
+      endsAt: boundedInteger(source.season.endsAt, 0, Number.MAX_SAFE_INTEGER, 0),
+    } : null,
+    rewardPolicy: rankingText(source?.rewardPolicy, 80),
     error: rankingText(error || source?.error, 120),
   };
 }
@@ -353,6 +390,21 @@ function normalizedRosterVitals(source) {
     if (rows.length >= 4) break;
   }
   return rows;
+}
+
+function normalizedAssistedWorld(source, expectedOwnerId = "") {
+  if (!source || typeof source !== "object" || Array.isArray(source)) return null;
+  const ownerId = cleanSocialText(source.ownerId ?? expectedOwnerId, 24).trim();
+  if (!ownerId || (expectedOwnerId && ownerId !== expectedOwnerId)) return null;
+  const rawStartFloor = Number(source.startFloor), rawEndFloor = Number(source.endFloor), rawFloorsCleared = Number(source.floorsCleared);
+  if (!Number.isFinite(rawStartFloor) || !Number.isFinite(rawEndFloor) || !Number.isFinite(rawFloorsCleared)) return null;
+  const startFloor = boundedInteger(rawStartFloor, 1, 10000, 1);
+  return {
+    ownerId,
+    startFloor,
+    endFloor: Math.max(startFloor, boundedInteger(rawEndFloor, 1, 10000, startFloor)),
+    floorsCleared: boundedInteger(rawFloorsCleared, 0, 10000, 0),
+  };
 }
 
 function readGuildPlanReminderReceipts() {
@@ -865,7 +917,7 @@ async function copyText(value) {
 }
 
 export class OnlinePartyController {
-  constructor({ getState, toast = () => {}, onReward = async () => ({ ok: false }), onExpeditionStarted = () => ({ ok: true }), onExpeditionResult = async () => ({ ok: false }), onExpeditionOrphaned = async () => ({ ok: true, active: false }), onShowExpeditionResult = () => {}, onBack = () => {}, onExploreCanvasMount = () => {}, onExploreCanvasUpdate = () => {}, onExploreCanvasUnmount = () => {}, onHostWorldUpdate = () => {}, onFloorBossDefeated = () => {}, onOnlineStateMutation = () => {}, onRaidWorldUpdate = () => {}, onRaidExchange = async () => ({ ok: false }), onOnlineVitalsUpdate = () => {}, onBattleDefeated = () => {}, onTeamBattleResult = () => {}, onSecretRoomEntered = () => {}, onBeginSecretRoomExpedition = () => {}, onTutorialGuide = () => {}, onScene = () => {}, onPowerRankingState = () => {}, onPowerRankingProfile = () => {}, onPowerRankingCapability = () => {} } = {}) {
+  constructor({ getState, toast = () => {}, onReward = async () => ({ ok: false }), onExpeditionStarted = () => ({ ok: true }), onExpeditionResult = async () => ({ ok: false }), onExpeditionOrphaned = async () => ({ ok: true, active: false }), onGuestProgressIsolation = () => ({ ok: true }), onShowExpeditionResult = () => {}, onBack = () => {}, onExploreCanvasMount = () => {}, onExploreCanvasUpdate = () => {}, onExploreCanvasUnmount = () => {}, onHostWorldUpdate = () => {}, onFloorBossDefeated = () => {}, onOnlineStateMutation = () => ({ ok: true }), onRaidWorldUpdate = () => {}, onRaidExchange = async () => ({ ok: false }), onOnlineVitalsUpdate = () => {}, onBattleDefeated = () => {}, onTeamBattleResult = () => {}, onSecretRoomEntered = () => {}, onBeginSecretRoomExpedition = () => {}, onTutorialGuide = () => {}, onScene = () => {}, onPowerRankingState = () => {}, onPowerRankingProfile = () => {}, onPowerRankingCapability = () => {}, onPowerRankingReward = async () => ({ ok: false }) } = {}) {
     const identity = ensureOnlineIdentity();
     this.getState = getState;
     this.toast = toast;
@@ -873,6 +925,7 @@ export class OnlinePartyController {
     this.onExpeditionStarted = onExpeditionStarted;
     this.onExpeditionResult = onExpeditionResult;
     this.onExpeditionOrphaned = onExpeditionOrphaned;
+    this.onGuestProgressIsolation = onGuestProgressIsolation;
     this.onShowExpeditionResult = onShowExpeditionResult;
     this.onBack = onBack;
     this.onExploreCanvasMount = onExploreCanvasMount;
@@ -893,6 +946,7 @@ export class OnlinePartyController {
     this.onPowerRankingState = onPowerRankingState;
     this.onPowerRankingProfile = onPowerRankingProfile;
     this.onPowerRankingCapability = onPowerRankingCapability;
+    this.onPowerRankingReward = onPowerRankingReward;
     this.selfId = identity.friendId;
     const initialServerUrl = storageGet(ONLINE_STORAGE_KEYS.serverUrl) || DEFAULT_ONLINE_SERVER_URL;
     const initialResumeEndpoint = normalizedWebsocketEndpoint(initialServerUrl);
@@ -924,6 +978,7 @@ export class OnlinePartyController {
     this.backgroundConnectionBusy = false;
     this.backgroundBound = [];
     this.connectionModePending = false;
+    this.foregroundProfileSyncPending = false;
     this.powerRankingState = normalizePowerRankingState(null, { supported: false });
     this.powerRankingProfile = null;
     this.powerRankingRequests = new Map();
@@ -997,13 +1052,24 @@ export class OnlinePartyController {
     this.pendingExpeditionStart = false;
     this.pendingSecretRoomRun = null;
     this.syncedExpeditionStartKey = "";
+    this.guestProgressIsolationContext = null;
     this.trade = null;
     this.tradeFilter = "all";
     this.tradeQuery = "";
-    this.tradeAmount = 1;
+    this.tradeDraftRef = "";
+    this.tradeAmount = "1";
     this.tradeConfirmAvailableAt = 0;
     this.tradeConfirmTimer = null;
     this.tradePendingOffer = null;
+    this.tradeOfferSequence = 0;
+    this.tradeReconcileSequence = 0;
+    this.tradeReconcilePending = false;
+    this.tradeReconnectAuthoritativeIds = new Set();
+    this.tradePersistenceBlocked = false;
+    this.tradeOfferInflight = new Map();
+    this.tradeReconcileInflight = new Map();
+    this.tradeCommitInflight = new Map();
+    this.tradeFinishInflight = new Map();
     this.tradeRecoveryStatus = null;
     this.tradeRecoveryTimer = null;
     this.terminalTradeRecoveries = new Set();
@@ -1026,6 +1092,8 @@ export class OnlinePartyController {
     this.hallGameTab = "";
     this.hallGameRequestSequence = 0;
     this.exploreCanvasMounted = false;
+    this.exploreCanvasUpdateFrame = null;
+    this.pendingExploreCanvasUpdate = null;
     this.presentationTimers = new Set();
     this.onlineHudCollapsed = false;
     this.heldDirections = new Set();
@@ -1056,8 +1124,14 @@ export class OnlinePartyController {
   }
 
   mount(root) {
-    const connected = Boolean(this.connectionReady && this.ws && typeof WebSocket !== "undefined" && this.ws.readyState === WebSocket.OPEN);
+    const openSocket = Boolean(this.ws && typeof WebSocket !== "undefined" && this.ws.readyState === WebSocket.OPEN);
+    const connected = Boolean(this.connectionReady && openSocket);
     const wasBackgroundOnly = this.backgroundOnly;
+    const foregroundProfileSyncNeeded = Boolean(openSocket && (
+      connected && (wasBackgroundOnly || this.connectionModePending)
+        && this.capabilities.has(POWER_RANKING_CAPABILITY) && this.capabilities.has(BACKGROUND_CONNECTION_CAPABILITY)
+      || !this.connectionReady && this.helloAckPending && wasBackgroundOnly
+    ));
     this.unmount({ disconnect: false, backgroundTransition: false });
     this.root = root;
     this.mounted = true;
@@ -1065,6 +1139,7 @@ export class OnlinePartyController {
     this.backgroundConnectionBusy = false;
     this.manualClose = Boolean(this.supersededConnection);
     this._refreshProfile();
+    if (foregroundProfileSyncNeeded) this.foregroundProfileSyncPending = true;
     this._bindStaticUi();
     this._renderTradeRecoveryStatus();
     this._startLoops();
@@ -1451,11 +1526,19 @@ export class OnlinePartyController {
     if (button.matches("[data-online-trade-player]")) { const targetId = button.dataset.onlineTradePlayer; if (targetId && targetId !== this.selfId) this._send("tradeInvite", { targetId }); return; }
     if (button.matches("[data-online-trade-accept]")) { this._send("tradeAccept", { tradeId: this.trade?.tradeId, accepted: true }); return; }
     if (button.matches("[data-online-trade-decline]")) { this._send("tradeAccept", { tradeId: this.trade?.tradeId, accepted: false }); return; }
-    if (button.matches("[data-online-trade-cancel]")) { this._send("tradeCancel", { tradeId: this.trade?.tradeId }); return; }
+    if (button.matches("[data-online-trade-cancel]")) {
+      if (this.tradePendingOffer || this.tradeReconcilePending || this.tradeOfferInflight.has(String(this.trade?.tradeId ?? "")) || this.tradeReconcileInflight.has(String(this.trade?.tradeId ?? ""))) {
+        this.toast("交換品を保存・照合しています。完了後に中止してください"); return;
+      }
+      this._send("tradeCancel", { tradeId: this.trade?.tradeId }); return;
+    }
     if (button.matches("[data-online-trade-filter]")) { this.tradeFilter = button.dataset.onlineTradeFilter || "all"; this._render(); return; }
-    if (button.matches("[data-online-trade-offer]")) { this._offerTradeAsset(button.dataset.onlineTradeOffer); return; }
-    if (button.matches("[data-online-trade-ready]")) { this._send("tradeReady", { tradeId: this.trade?.tradeId, ready: !Boolean(this.trade?.ready?.[this.selfId]) }); return; }
-    if (button.matches("[data-online-trade-confirm]")) { if (Date.now() < this.tradeConfirmAvailableAt) return; this._send("tradeConfirm", { tradeId: this.trade?.tradeId }); return; }
+    if (button.matches("[data-online-trade-offer]")) { this._selectTradeAsset(button.dataset.onlineTradeOffer); return; }
+    if (button.matches("[data-online-trade-amount-step]")) { this._stepTradeAmount(Number(button.dataset.onlineTradeAmountStep) || 0); return; }
+    if (button.matches("[data-online-trade-amount-max]")) { this._setTradeAmountToMaximum(); return; }
+    if (button.matches("[data-online-trade-quantity-set]")) { this._offerTradeAsset(this.tradeDraftRef, { readInput: true }); return; }
+    if (button.matches("[data-online-trade-ready]")) { if (!this._tradeAdvanceAllowed()) { this.toast("交換品を保存・照合しています。完了後にもう一度お試しください"); return; } this._send("tradeReady", { tradeId: this.trade?.tradeId, ready: !Boolean(this.trade?.ready?.[this.selfId]) }); return; }
+    if (button.matches("[data-online-trade-confirm]")) { if (Date.now() < this.tradeConfirmAvailableAt) return; if (!this._tradeAdvanceAllowed()) { this.toast("交換品の照合が完了していないため確定できません"); return; } this._send("tradeConfirm", { tradeId: this.trade?.tradeId }); return; }
     if (button.matches("[data-online-raid-exchange]")) { this._exchangeRaidReward(button.dataset.onlineRaidExchange, Number(button.dataset.onlineRaidCost)); return; }
     if (button.matches("[data-online-ping-toggle]")) { this.pingMenuOpen = !this.pingMenuOpen; this._render(); return; }
     if (button.matches("[data-online-ping-kind]")) { const kind = button.dataset.onlinePingKind; this.pingMenuOpen = false; this._send("expeditionPing", { kind }); this._render(); return; }
@@ -1521,6 +1604,16 @@ export class OnlinePartyController {
     if (button.matches("[data-online-leave-room]")) { this.leaveRoom(); return; }
     if (button.matches("[data-copy-room-id]")) { copyText(this.roomId).then(ok => this.toast(ok ? "ルームIDをコピーしました" : "コピーできませんでした")); return; }
     if (button.matches("[data-copy-invite]")) { this.copyInvite(); return; }
+    if (button.matches("[data-online-roster-move]")) {
+      const result = moveOnlineBattleRosterPriority(this.getState?.(), button.dataset.onlineRosterMonster, button.dataset.onlineRosterMove);
+      if (!result.changed) return;
+      this.selectedMonsterId = result.primaryMonsterId || this.selectedMonsterId;
+      this._refreshProfile();
+      this._send("profile", { profile: this.profile });
+      const picker = this._query("[data-online-roster-picker]");
+      if (picker) picker.outerHTML = renderOnlineBattleRosterPicker(this.getState?.(), { monsterId: this.selectedMonsterId });
+      return;
+    }
     if (button.matches("[data-online-character]")) { this._selectCharacter(button.dataset.onlineCharacter); return; }
     const nextRoute = button.dataset.onlineRoute ?? button.dataset.onlineGo;
     if (nextRoute && ROUTES.has(nextRoute)) { this._setRoute(nextRoute); return; }
@@ -1564,6 +1657,7 @@ export class OnlinePartyController {
     if (button.matches("[data-online-party-hud-toggle]")) { this.onlineHudCollapsed = !this.onlineHudCollapsed; this._render(); return; }
     if (button.matches("[data-online-target]")) { this._selectBattleTarget(button.dataset.onlineTarget, button.dataset.onlineTargetSide); return; }
     if (button.matches("[data-online-speed]")) { const mode = button.dataset.onlineMode, speed = Number(button.dataset.onlineSpeed) || 1; this._send(mode === "raid" ? "raidSpeed" : mode === "team" ? "teamSpeed" : "battleSpeed", { speed }); return; }
+    if (button.matches("[data-online-battle-auto]")) { this._toggleOnlineBattleAuto(button.dataset.onlineBattleAuto); return; }
     if (button.matches("[data-online-battle-action]")) { this._battleAction(button.dataset.onlineMode, button.dataset.onlineBattleAction); return; }
     if (button.matches("[data-online-battle-skill]")) { this._battleAction(button.dataset.onlineMode, "skill", button.dataset.onlineBattleSkill); return; }
     if (button.matches("[data-online-preset]")) { this._sendPreset(button.dataset.onlinePreset); return; }
@@ -1689,7 +1783,15 @@ export class OnlinePartyController {
     }
     if (event.target.matches("[data-online-server-url]")) storageSet(ONLINE_STORAGE_KEYS.serverUrl, event.target.value.trim());
     if (event.target.matches("[data-online-trade-query]")) { this.tradeQuery = String(event.target.value ?? "").slice(0, 40); this._render(); requestAnimationFrame(() => { const input = this._query("[data-online-trade-query]"); if (input) { input.focus(); input.setSelectionRange(this.tradeQuery.length, this.tradeQuery.length); } }); }
-    if (event.target.matches("[data-online-trade-amount]")) this.tradeAmount = Math.max(1, Math.min(50_000_000, Math.floor(Number(event.target.value) || 1)));
+    if (event.target.matches("[data-online-trade-amount]")) {
+      // Normalize Japanese/full-width digits and harmless grouping separators,
+      // but keep every other character visible so a decimal or sign is rejected
+      // instead of silently changing (for example, `1.5` must not become `15`).
+      const normalized = String(event.target.value ?? "").normalize("NFKC").replace(/[,_，\s]/g, "").slice(0, 24);
+      this.tradeAmount = normalized;
+      if (event.target.value !== normalized) event.target.value = normalized;
+      this._updateTradeQuantityPreview();
+    }
   }
 
   _handleChange(event) {
@@ -1740,6 +1842,7 @@ export class OnlinePartyController {
   _refreshProfile() {
     const name = this._query("[data-online-display-name]")?.value ?? storageGet(ONLINE_STORAGE_KEYS.displayName);
     this.profile = buildOnlinePartyProfile(this.getState?.(), { monsterId: this.selectedMonsterId, displayName: name });
+    this.selectedMonsterId = this.profile.primaryMonsterId ?? this.selectedMonsterId;
   }
 
   _currentResumeEndpoint() {
@@ -1835,6 +1938,7 @@ export class OnlinePartyController {
     try { socket = new WebSocket(url); this.ws = socket; (this.socketEndpoints ??= new WeakMap()).set(socket, url); } catch (error) { this._setStatus("error", "接続できません", error.message); return; }
     socket.addEventListener("open", () => {
       if (this.ws !== socket) return;
+      this.foregroundProfileSyncPending = false;
       this._refreshProfile();
       const endpoint = this.socketEndpoints.get(socket) || url;
       this.connectionEndpoint = endpoint;
@@ -1863,7 +1967,7 @@ export class OnlinePartyController {
 
   _send(type, payload = {}) {
     if (this.ws?.readyState !== WebSocket.OPEN) return false;
-    this.ws.send(JSON.stringify({ type, ...payload })); return true;
+    try { this.ws.send(JSON.stringify({ type, ...payload })); return true; } catch { return false; }
   }
 
   supportsPowerRankings() {
@@ -1885,6 +1989,21 @@ export class OnlinePartyController {
     if (typeof this.onPowerRankingCapability !== "function") return;
     try { this.onPowerRankingCapability({ supported: this.supportsPowerRankings(), capability: POWER_RANKING_CAPABILITY }); }
     catch (error) { console.warn("Power ranking capability callback failed", error); }
+  }
+
+  _deliverPowerRankingRewards(message) {
+    const deliveries = Array.isArray(message?.rankingRewards) ? message.rankingRewards.slice(0, 12) : [];
+    for (const source of deliveries) {
+      const deliveryId = rankingText(source?.deliveryId, 96), seasonId = rankingText(source?.seasonId, 20);
+      if (!deliveryId || !seasonId || !source?.reward || typeof source.reward !== "object") continue;
+      const delivery = { deliveryId, seasonId, rank: boundedInteger(source.rank, 1, 100, 100), title: rankingText(source.title, 80, "週間戦力ランキング"), reward: { ...source.reward }, createdAt: boundedInteger(source.createdAt, 0, Number.MAX_SAFE_INTEGER, Date.now()) };
+      Promise.resolve(this.onPowerRankingReward(delivery)).catch(error => console.warn("Power ranking reward callback failed", error));
+    }
+  }
+
+  ackPowerRankingReward(deliveryId) {
+    const id = rankingText(deliveryId, 96);
+    return Boolean(id && this._send("powerRankingRewardAck", { deliveryId: id }));
   }
 
   _beginPowerRankingRequest(kind, type, payload = {}, meta = {}) {
@@ -2314,12 +2433,23 @@ export class OnlinePartyController {
       // after the authenticated handshake has completed.
       if (!backgroundHandshake) this._renderFriendPanel();
       if (!backgroundHandshake && (Array.isArray(message.activeTradeIds) || !message.resumed)) {
-        const released = recoverOrphanedTradeEscrows(this.getState?.() ?? {}, Array.isArray(message.activeTradeIds) ? message.activeTradeIds : []);
-        if (released.length) { this.onOnlineStateMutation({ kind: "tradeRecovery", assets: released }); this.toast(`${released.length}件の交換品を所持品へ戻しました`); }
+        const activeTradeIds = Array.isArray(message.activeTradeIds) ? message.activeTradeIds : [];
+        this.tradeReconnectAuthoritativeIds = new Set(activeTradeIds.map(String));
+        this._recoverOrphanedTradeEscrows(activeTradeIds);
       }
       if (backgroundHandshake) {
         this.backgroundConnectionBusy = false;
         this.connectionModePending = false;
+        if (!this._exitGuestProgressIsolation("backgroundHandshake")) {
+          this.manualClose = true;
+          this.connectionReady = false;
+          storageSet(ONLINE_STORAGE_KEYS.autoConnect, "0");
+          const socket = this.ws; this.ws = null;
+          try { socket?.close(1011, "guest progress restore failed"); } catch {}
+          this._setStatus("error", "本編進行を復元できません", "再読み込みすると、保護済みの進行から自動復元します");
+          this.toast("本編進行の保護データを保存できないため、オンライン接続を停止しました");
+          return;
+        }
         this.roomState = null;
         this.roomId = null;
         if (!this.capabilities.has(POWER_RANKING_CAPABILITY) || !this.capabilities.has(BACKGROUND_CONNECTION_CAPABILITY)) {
@@ -2348,7 +2478,7 @@ export class OnlinePartyController {
           this._settlePendingExpeditionStart(null, { rejected: true });
           this._setStatus("online", "別の部屋へ復帰しました", "誤退出を防ぐため、以前の部屋への退出操作を中止しました");
           this.toast("接続先の部屋が変わったため、自動退出を中止しました");
-          this._applyRoomState(message.room);
+          this._applyRoomState(message.room, { reconnected: Boolean(message.resumed) });
           this._flushExpeditionProfileSync();
           return;
         }
@@ -2359,8 +2489,9 @@ export class OnlinePartyController {
       }
       this._setStatus("online", "接続済み", message.resumed ? "前の部屋へ復帰しました" : "部屋を作るか、ルームIDで参加してください");
       this._showConnectionStep(message.room ? "room" : "gate");
-      if (message.room) { this._applyRoomState(message.room); this._settlePendingExpeditionStart(message.room, { rejected: message.room.phase !== "expedition" }); }
+      if (message.room) { this._applyRoomState(message.room, { reconnected: Boolean(message.resumed) }); this._settlePendingExpeditionStart(message.room, { rejected: message.room.phase !== "expedition" }); }
       else {
+        this._clearRoom({ reason: message.resumed ? "resumeWithoutRoom" : "helloWithoutRoom" });
         this._settlePendingExpeditionStart(null, { rejected: true });
         const invited = safeRoomId(this._query("[data-online-room-code]")?.value);
         if (invited.length === 6) this._send("joinRoom", { roomId: invited });
@@ -2378,6 +2509,11 @@ export class OnlinePartyController {
         return;
       }
       if (this.backgroundOnly || !this.mounted) return;
+      if (this.foregroundProfileSyncPending) {
+        this.foregroundProfileSyncPending = false;
+        this._refreshProfile();
+        this._send("profile", { profile: this.profile });
+      }
       if (message.friendState) { this.friendState = this._normalizeFriendState(message.friendState); this._purgeHiddenSocial(); }
       else this._send("friendList");
       if (message.guildState) {
@@ -2387,21 +2523,27 @@ export class OnlinePartyController {
       } else this._send("guildList");
       this._renderFriendPanel();
       if (Array.isArray(message.activeTradeIds)) {
-        const released = recoverOrphanedTradeEscrows(this.getState?.() ?? {}, message.activeTradeIds);
-        if (released.length) { this.onOnlineStateMutation({ kind: "tradeRecovery", assets: released }); this.toast(`${released.length}件の交換品を所持品へ戻しました`); }
+        this.tradeReconnectAuthoritativeIds = new Set(message.activeTradeIds.map(String));
+        this._recoverOrphanedTradeEscrows(message.activeTradeIds);
       }
       this._setStatus("online", "接続済み", message.room ? "オンライン探索へ戻りました" : "部屋を作るか、ルームIDで参加してください");
       this._showConnectionStep(message.room ? "room" : "gate");
       if (message.room) this._applyRoomState(message.room);
-      else { this.roomState = null; this.roomId = null; this._requestRoomListings({ force: true }); }
+      else { this._clearRoom({ reason: "connectionModeWithoutRoom" }); this._requestRoomListings({ force: true }); }
+      return;
+    }
+    if (message.type === "powerRankingRewards") {
+      this._deliverPowerRankingRewards(message);
       return;
     }
     if (message.type === "powerSnapshotAck") {
+      this._deliverPowerRankingRewards(message);
       if (!this._matchingPowerRankingRequest(message, "snapshot")) return;
       this._settlePowerRankingRequest(message, { ok: message.ok !== false, ack: message }, "snapshot");
       return;
     }
     if (message.type === "powerRankingState") {
+      this._deliverPowerRankingRewards(message);
       const match = this._matchingPowerRankingRequest(message, "list");
       if (!match) return;
       const state = normalizePowerRankingState(message, { supported: true, loading: false });
@@ -2412,6 +2554,7 @@ export class OnlinePartyController {
       this._settlePowerRankingRequest(message, { ok: true, state }, "list");
       return;
     }
+    if (message.type === "powerRankingRewardAck") return;
     if (message.type === "powerRankingProfileResult") {
       const match = this._matchingPowerRankingRequest(message, "profile");
       if (!match) return;
@@ -2486,36 +2629,36 @@ export class OnlinePartyController {
     if (message.type === "expeditionResult") { const batch = this.recoverySettlementBatch; this._trackRecoverySettlement(this._receiveExpeditionResult(message, batch), batch); return; }
     if (message.type === "secretRoomEntered") { if (String(message.playerId ?? "") !== this.selfId) return; const roomId = String(message.roomId ?? "").slice(0, 160), floor = Math.max(1, Math.min(10000, Math.floor(Number(message.floor) || 1))); if (roomId) this.onSecretRoomEntered({ roomId, floor, playerId: this.selfId }); return; }
     if (["battleDefeated", "onlineBattleDefeated"].includes(message.type)) { this._applyBattleDefeated(message); return; }
-    if (["raidWorld", "raidWorldState"].includes(message.type)) { const ownerId = message.ownerId ?? this.roomState?.ownerId ?? this.roomState?.leaderId; if (ownerId === this.selfId) this._syncRaidWorld(message.raidWorld ?? message.progress); return; }
-    if (message.type === "leftRoom") { if (this.pendingLeaveOnReconnect) this._completePendingRoomLeave(); else this._clearRoom(); return; }
+    if (["raidWorld", "raidWorldState"].includes(message.type)) { const ownerId = this._explicitWorldOwnerId(message); if (ownerId && ownerId === this.selfId) this._syncRaidWorld(message.raidWorld ?? message.progress); return; }
+    if (message.type === "leftRoom") { if (this.pendingLeaveOnReconnect) this._completePendingRoomLeave(); else this._clearRoom({ reason: "leftRoom" }); return; }
     if (message.type === "memberMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.position = { ...message.position }; if (this.route === "home") this._updateHallPlayerDom(message.playerId); return; }
-    if (message.type === "expeditionMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.dungeonPosition = { ...message.position }; if (message.playerId === this.selfId) this._notifyTutorialGuide("explore_move"); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render(); return; }
+    if (message.type === "expeditionMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.dungeonPosition = { ...message.position }; if (message.playerId === this.selfId) this._notifyTutorialGuide("explore_move"); if (this.exploreCanvasMounted) this._queueExploreCanvasUpdate(); else this._render(); return; }
     if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); if (message.type === "expeditionStarted") this._settlePendingExpeditionStart(message.room); return; }
     if (message.type === "battleStarted" && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this.presentationKoIds.explore.clear(); this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
-    if (message.type === "expeditionEvent") { if (message.event?.kind === "hostChestOpened") this.onHostWorldUpdate(message.event); if (message.event?.tutorialGuide === "firstPickup") this._notifyTutorialGuide("explore_pickup"); this._announceExpeditionEvent(message.event); return; }
-    if (message.type === "floorBossDefeated") { const reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: message.ownerId ?? null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = !reward.ownerId || reward.ownerId === this.selfId, multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this._closeBattleMenus("explore"); this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = multiplayer && isWorldOwner && reward.firstClear ? reward : null; if (isWorldOwner) { this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId: reward.ownerId }); this.onFloorBossDefeated({ ...reward, resume: Boolean(reward.firstClear && !multiplayer) }); } this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！`); this._render(); return; }
+    if (message.type === "expeditionEvent") { if (message.event?.kind === "hostChestOpened") { const ownerId = this._explicitWorldOwnerId(message.event); if (ownerId && ownerId === this.selfId) this.onHostWorldUpdate({ ...message.event, ownerId }); } if (message.event?.tutorialGuide === "firstPickup") this._notifyTutorialGuide("explore_pickup"); this._announceExpeditionEvent(message.event); return; }
+    if (message.type === "floorBossDefeated") { const ownerId = this._explicitWorldOwnerId(message), reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: ownerId || null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = Boolean(ownerId && ownerId === this.selfId), multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this._closeBattleMenus("explore"); this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = multiplayer && isWorldOwner && reward.firstClear ? reward : null; if (isWorldOwner) { this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId }); this.onFloorBossDefeated({ ...reward, resume: Boolean(reward.firstClear && !multiplayer) }); } this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！`); this._render(); return; }
     if (message.type === "expeditionPing" && message.ping?.id) { if (this._isSocialHidden(message.ping.playerId)) return; this.coopPings.set(message.ping.id, { ...message.ping }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() }); else this._render(); return; }
     if (message.type === "battleRound" || message.type === "battleResolved") { const previous = this.roomState?.expedition?.battle; this._captureHpTrails("explore", previous, message.battle); if (this.roomState?.expedition) this.roomState.expedition.battle = message.battle; if (message.type === "battleRound") this._closeBattleMenus("explore"); this._setRoute("explore", { silent: true }); this._queueBattlePresentation("explore", message.battle?.lastEvents); return; }
-    if (message.type === "expeditionEnded") { const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.presentationKoIds.explore.clear(); this.expeditionReport = multiplayer ? message.summary ?? null : null; if (this.roomState) this.roomState = { ...this.roomState, phase: "lobby", expedition: null, coopRun: null }; this._closeAllBattleMenus(); this.route = "explore"; this.toast(message.summary?.completed ? `${message.summary.floor}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
+    if (message.type === "expeditionEnded") { const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2, completedFloor = message.summary?.floor ?? message.summary?.assistedWorld?.endFloor; this.presentationKoIds.explore.clear(); this.expeditionReport = multiplayer ? message.summary ?? null : null; if (this.roomState) this.roomState = { ...this.roomState, phase: "lobby", expedition: null, coopRun: null }; this._closeAllBattleMenus(); this.route = "explore"; this.toast(message.summary?.completed && Number.isFinite(Number(completedFloor)) ? `${Math.max(1, Math.min(10000, Math.floor(Number(completedFloor))))}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
     if (message.type === "battleEnded") { this.coopBossConfirm = null; this.presentationKoIds.explore.clear(); this._closeBattleMenus("explore"); const bossName = message.coopBoss?.name || message.boss?.name; this.toast(message.result === "victory" ? bossName ? `${bossName}を撃破！` : "共闘バトル勝利！" : message.coopBoss ? "共闘ボスから退却。回復後に再挑戦できます" : "共闘パーティが全滅しました…"); return; }
     if (message.type === "raidStarted") {
       this.presentationKoIds.raid.clear();
       this.roomState = { ...(this.roomState ?? {}), phase: "raid", raid: message.raid, raidProgress: message.raid?.progress };
       this.selectedTarget.raid = message.raid?.minions?.find(entry => entry.hp > 0)?.id ?? message.raid?.boss?.id ?? null;
-      const raidOwner = (this.roomState?.ownerId ?? this.roomState?.leaderId) === this.selfId;
+      const raidOwner = this._canonicalRoomOwnerId(this.roomState) === this.selfId;
       if (raidOwner && Object.prototype.hasOwnProperty.call(message.raid ?? {}, "progress")) this._syncRaidWorld(message.raid.progress);
       this._setRoute("raid", { silent: true }); this._queueBattlePresentation("raid", message.raid?.lastEvents); return;
     }
     if (["raidState", "raidRound", "raidResolved"].includes(message.type)) {
       const previous = this.roomState?.raid; this._captureHpTrails("raid", previous, message.raid);
       if (this.roomState) { this.roomState.phase = "raid"; this.roomState.raid = message.raid; this.roomState.raidProgress = message.raid?.progress ?? this.roomState.raidProgress; }
-      const raidOwner = (this.roomState?.ownerId ?? this.roomState?.leaderId) === this.selfId;
+      const raidOwner = this._canonicalRoomOwnerId(this.roomState) === this.selfId;
       if (raidOwner && Object.prototype.hasOwnProperty.call(message.raid ?? {}, "progress")) this._syncRaidWorld(message.raid.progress);
       if (message.type === "raidRound") this._closeBattleMenus("raid"); this._setRoute("raid", { silent: true }); this._queueBattlePresentation("raid", message.raid?.lastEvents); return;
     }
     if (message.type === "raidEnded") {
       this.presentationKoIds.raid.clear();
-      const raidOwner = (this.roomState?.ownerId ?? this.roomState?.leaderId) === this.selfId;
+      const raidOwner = this._canonicalRoomOwnerId(this.roomState) === this.selfId;
       if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.raid = null; this.roomState.raidProgress = message.raid?.progress ?? null; }
       this._closeBattleMenus("raid");
       if (raidOwner) this._syncRaidWorld(message.raid?.progress ?? null);
@@ -2559,6 +2702,14 @@ export class OnlinePartyController {
         return;
       }
       if (!this.connectionReady) { this._handleHandshakeError(message); return; }
+      const pendingTradeOffer = this.tradePendingOffer;
+      const tradeOfferRequestMatches = pendingTradeOffer && String(message.requestId ?? "") === pendingTradeOffer.requestId && (!message.tradeId || String(message.tradeId) === pendingTradeOffer.tradeId);
+      const legacyTradeOfferRejected = pendingTradeOffer && !this.capabilities.has(TRADE_OFFER_RECEIPTS_CAPABILITY)
+        && !message.requestId && String(message.code ?? "").startsWith("TRADE_")
+        && (!message.tradeId || String(message.tradeId) === pendingTradeOffer.tradeId);
+      if (tradeOfferRequestMatches || legacyTradeOfferRejected) {
+        this._handleTradeOfferError(message); return;
+      }
       if (this.pendingLeaveOnReconnect) {
         if (["NOT_IN_ROOM", "ROOM_NOT_FOUND"].includes(String(message.code ?? ""))) this._completePendingRoomLeave();
         else {
@@ -2587,7 +2738,6 @@ export class OnlinePartyController {
       this.roomListingPending = false;
       this.roomMemberRemovalPendingId = null;
       if (this.roomListingsStatus === "loading" || hadPendingRoomJoin) this.roomListingsStatus = hadPendingRoomJoin ? "ready" : "error";
-      if (this.tradePendingOffer && this.trade?.tradeId) { const restored = releaseOnlineTradeAsset(this.getState?.() ?? {}, this.trade.tradeId); this.onOnlineStateMutation({ kind: "tradeRelease", tradeId: this.trade.tradeId, asset: restored.asset }); this.tradePendingOffer = null; }
       if (this.merchantPending) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { ...(this.merchantResult ?? {}), status: "error", message: message.message || "支援品を受け取れませんでした。" }; }
       this.toast(message.message || "オンライン処理に失敗しました");
       if (this.roomState) this._render(); else this._renderRoomBoard();
@@ -2595,9 +2745,120 @@ export class OnlinePartyController {
     }
   }
 
+  _tradeCatalogSource() {
+    const state = this.getState?.() ?? {}, source = buildOnlineTradeCatalog(state), tradeId = this.trade?.tradeId;
+    const escrow = tradeId ? state.onlineParty?.tradeEscrow?.[tradeId]?.asset : null;
+    if (escrow && ["stack", "currency"].includes(escrow.kind)) {
+      const amount = parseOnlineTradeAmount(escrow.payload?.amount), existing = source.find(asset => asset.ref === escrow.assetId);
+      if (amount && existing) {
+        existing.count = Math.min(Number.MAX_SAFE_INTEGER, (Number(existing.count) || 0) + amount);
+        existing.maxAmount = existing.count;
+        existing.details = `所持 ${existing.count.toLocaleString()}`;
+      } else if (amount) {
+        source.push({ ref: escrow.assetId, kind: escrow.kind, name: escrow.name, rarity: escrow.rarity, level: 1, details: `所持 ${amount.toLocaleString()}`, count: amount, maxAmount: amount, unavailable: false });
+      }
+    }
+    return source;
+  }
+
   _tradeCatalog() {
-    const source = buildOnlineTradeCatalog(this.getState?.() ?? {}), kind = this.tradeFilter, query = this.tradeQuery.trim().toLocaleLowerCase("ja");
+    const source = this._tradeCatalogSource(), kind = this.tradeFilter, query = this.tradeQuery.trim().toLocaleLowerCase("ja");
     return source.filter(asset => (kind === "all" || asset.kind === kind) && (!query || `${asset.name} ${asset.rarity} ${asset.details}`.toLocaleLowerCase("ja").includes(query))).slice(0, 80);
+  }
+
+  _tradeDraftAsset() { return this._tradeCatalogSource().find(asset => asset.ref === this.tradeDraftRef) ?? null; }
+
+  _selectTradeAsset(ref) {
+    if (!ref || this.tradePendingOffer) return;
+    const item = this._tradeCatalogSource().find(asset => asset.ref === ref);
+    if (!item || item.unavailable) return this.toast(item?.reason || "交換できない所持品です");
+    if (!["stack", "currency"].includes(item.kind) || Number(item.maxAmount) <= 1) {
+      this.tradeDraftRef = ""; this.tradeAmount = "1"; this._offerTradeAsset(ref); return;
+    }
+    this.tradeDraftRef = ref;
+    const escrow = this.getState?.()?.onlineParty?.tradeEscrow?.[this.trade?.tradeId]?.asset;
+    const existingAmount = escrow?.assetId === ref ? parseOnlineTradeAmount(escrow.payload?.amount, item.maxAmount) : null;
+    this.tradeAmount = String(existingAmount ?? 1);
+    this._render();
+    requestAnimationFrame(() => { const input = this._query("[data-online-trade-amount]"); input?.focus?.({ preventScroll: true }); input?.select?.(); });
+  }
+
+  _stepTradeAmount(step) {
+    const item = this._tradeDraftAsset(); if (!item) return;
+    const current = parseOnlineTradeAmount(this._query("[data-online-trade-amount]")?.value ?? this.tradeAmount, item.maxAmount) ?? 1;
+    this.tradeAmount = String(Math.max(1, Math.min(Number(item.maxAmount) || 1, current + Math.trunc(step))));
+    const input = this._query("[data-online-trade-amount]"); if (input) input.value = this.tradeAmount;
+    this._updateTradeQuantityPreview();
+  }
+
+  _setTradeAmountToMaximum() {
+    const item = this._tradeDraftAsset(); if (!item) return;
+    this.tradeAmount = String(Math.max(1, Math.floor(Number(item.maxAmount) || 1)));
+    const input = this._query("[data-online-trade-amount]"); if (input) input.value = this.tradeAmount;
+    this._updateTradeQuantityPreview();
+  }
+
+  _updateTradeQuantityPreview() {
+    const item = this._tradeDraftAsset(), input = this._query("[data-online-trade-amount]"); if (!item || !input) return;
+    const amount = parseOnlineTradeAmount(input.value, item.maxAmount), remaining = amount == null ? null : Math.max(0, Number(item.count ?? item.maxAmount) - amount);
+    const preview = this._query("[data-online-trade-amount-preview]");
+    if (preview) preview.textContent = amount == null ? `1〜${Number(item.maxAmount).toLocaleString()}で入力してください` : `セット後の残り ${remaining.toLocaleString()}`;
+    const submit = this._query("[data-online-trade-quantity-set]"); if (submit) submit.disabled = amount == null || Boolean(this.tradePendingOffer);
+  }
+
+  _nextTradeOfferRequestId() {
+    this.tradeOfferSequence = (Number(this.tradeOfferSequence) + 1) % 1_000_000;
+    let entropy = "";
+    try { const values = new Uint32Array(1); globalThis.crypto?.getRandomValues?.(values); entropy = values[0].toString(36); } catch {}
+    if (!entropy) entropy = Math.random().toString(36).slice(2, 10);
+    return `trade-offer-${Date.now().toString(36)}-${this.tradeOfferSequence.toString(36)}-${entropy}`.slice(0, 96);
+  }
+
+  async _persistTradeMutation(event, rollback = null) {
+    try {
+      const result = await Promise.resolve(this.onOnlineStateMutation({ ...event, rollback }));
+      if (result === false || result?.ok === false) { rollback?.(); return { ok: false, message: result?.message || "交換状態を保存できませんでした" }; }
+      return { ok: true };
+    } catch (error) {
+      rollback?.();
+      return { ok: false, message: error?.message || "交換状態を保存できませんでした" };
+    }
+  }
+
+  _haltTradePersistence(message = "交換データを保存できないため、安全のため操作を停止しました") {
+    this.tradePersistenceBlocked = true;
+    this.tradeReconcilePending = false;
+    this.toast(message);
+    this._render();
+  }
+
+  _tradeAdvanceAllowed() {
+    const tradeId = String(this.trade?.tradeId ?? "");
+    if (this.tradePersistenceBlocked || this.tradePendingOffer || this.tradeReconcilePending || !tradeId
+      || this.tradeOfferInflight.has(tradeId) || this.tradeReconcileInflight.has(tradeId)
+      || this.tradeCommitInflight.has(tradeId) || this.tradeFinishInflight.has(tradeId)) return false;
+    const ownOffer = this.trade.offers?.[this.selfId] ?? null, escrow = this.getState?.()?.onlineParty?.tradeEscrow?.[this.trade.tradeId] ?? null;
+    if (!ownOffer) return !escrow;
+    if (!this.capabilities.has(TRADE_OFFER_RECEIPTS_CAPABILITY)) return Boolean(escrow && escrow.status === "offered" && sameLegacyOnlineTradeAsset(escrow.asset, ownOffer));
+    const requestId = String(this.trade.offerRequests?.[this.selfId] ?? ""), revision = Math.max(0, Math.floor(Number(this.trade.offerRevisions?.[this.selfId]) || 0));
+    return Boolean(escrow && escrow.status === "offered" && sameOnlineTradeAsset(escrow.asset, ownOffer) && String(escrow.offerRequestId ?? "") === requestId && Math.max(0, Math.floor(Number(escrow.offerRevision) || 0)) === revision);
+  }
+
+  async _recoverOrphanedTradeEscrows(activeTradeIds = []) {
+    const active = new Set((Array.isArray(activeTradeIds) ? activeTradeIds : []).map(String));
+    const released = recoverOrphanedTradeEscrows(this.getState?.() ?? {}, [...active]);
+    if (released.ok === false) { this._haltTradePersistence(released.message || "一部の交換保留品を復元できませんでした"); return false; }
+    if (released.length || released.quarantined?.length) {
+      const saved = await this._persistTradeMutation({ kind: "tradeRecovery", assets: [...released], quarantined: released.quarantined ?? [] }, released.rollback);
+      if (!saved.ok) { this._haltTradePersistence(saved.message); return false; }
+    }
+    if (released.length) this.toast(`${released.length}件の交換品を所持品へ戻しました`);
+    if (released.quarantined?.length) this.toast(`${released.quarantined.length}件の旧交換データを安全領域へ隔離しました`);
+    const pendingId = String(this.tradePendingOffer?.tradeId ?? ""), shownId = String(this.trade?.tradeId ?? "");
+    if (shownId && !active.has(shownId)) this._clearTradeUi();
+    else if (pendingId && !active.has(pendingId)) this.tradePendingOffer = null;
+    this._render();
+    return true;
   }
 
   _contentStartBlockedByTrade() {
@@ -2607,13 +2868,88 @@ export class OnlinePartyController {
     return true;
   }
 
+  _explicitWorldOwnerId(source) {
+    const value = source?.worldOwnerId ?? source?.ownerId ?? source?.hostOwnerId;
+    return String(value ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 24);
+  }
+
+  _canonicalRoomOwnerId(room = this.roomState) {
+    const value = room?.expedition?.hostOwnerId ?? room?.ownerId;
+    return String(value ?? "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 24);
+  }
+
+  _guestProgressDescriptor(room) {
+    const roomId = safeRoomId(room?.roomId), ownerId = this._canonicalRoomOwnerId(room);
+    if (!roomId || !ownerId || ownerId === this.selfId) return null;
+    const runId = String(room?.coopRun?.runId ?? room?.expedition?.id ?? "").slice(0, 120);
+    return {
+      roomId, ownerId, runId,
+      startFloor: Math.max(1, Math.min(10000, Math.floor(Number(room?.coopRun?.startFloor ?? room?.expedition?.floor ?? room?.selectedFloor) || 1))),
+    };
+  }
+
+  _notifyGuestProgressIsolation(phase, context, reason) {
+    if (!context || typeof this.onGuestProgressIsolation !== "function") return { ok: true };
+    try {
+      const result = this.onGuestProgressIsolation({ phase, ...context, reason: String(reason ?? phase).slice(0, 40) });
+      if (result?.ok === false) this.recoverySettlementFailed = true;
+      return result ?? { ok: true };
+    } catch (error) {
+      this.recoverySettlementFailed = true;
+      return { ok: false, message: error?.message || "ゲスト進行の分離状態を保存できませんでした" };
+    }
+  }
+
+  _syncGuestProgressIsolation(room, { reconnected = false } = {}) {
+    const current = this.guestProgressIsolationContext, next = this._guestProgressDescriptor(room);
+    const nextRoomId = safeRoomId(room?.roomId), roomOwnerId = this._canonicalRoomOwnerId(room);
+    // An ownerless partial snapshot must never make a guarded guest look like the
+    // world owner. Keep the existing guard until an authoritative owner or exit
+    // event arrives.
+    if (!roomOwnerId && current?.roomId === nextRoomId) return true;
+    if (!next) {
+      if (!current) return true;
+      const result = this._notifyGuestProgressIsolation("exit", current, roomOwnerId === this.selfId ? "becameWorldOwner" : "roomContextChanged");
+      if (result?.ok === false) return false;
+      this.guestProgressIsolationContext = null;
+      return true;
+    }
+    const same = Boolean(current && current.roomId === next.roomId && current.ownerId === next.ownerId);
+    if (current && !same) {
+      const result = this._notifyGuestProgressIsolation("exit", current, "roomContextChanged");
+      if (result?.ok === false) return false;
+      this.guestProgressIsolationContext = null;
+    }
+    if (!same) {
+      const result = this._notifyGuestProgressIsolation("enter", next, "roomState");
+      if (result?.ok === false) return false;
+      this.guestProgressIsolationContext = next;
+      return true;
+    }
+    this.guestProgressIsolationContext = { ...current, runId: next.runId || current.runId, startFloor: current.startFloor };
+    if (reconnected) {
+      const result = this._notifyGuestProgressIsolation("reconnect", this.guestProgressIsolationContext, "helloResume");
+      if (result?.ok === false) return false;
+    }
+    return true;
+  }
+
+  _exitGuestProgressIsolation(reason = "roomClear") {
+    const current = this.guestProgressIsolationContext;
+    if (!current) return true;
+    const result = this._notifyGuestProgressIsolation("exit", current, reason);
+    if (result?.ok === false) return false;
+    this.guestProgressIsolationContext = null;
+    return true;
+  }
+
   _settlePendingExpeditionStart(room, { rejected = false } = {}) {
     if (!this.pendingExpeditionStart) return false;
     if (room?.phase === "expedition") {
       const secretRoomRun = this.pendingSecretRoomRun;
       this.pendingExpeditionStart = false;
       this.pendingSecretRoomRun = null;
-      if ((room.ownerId ?? room.leaderId) === this.selfId) this._commitAuthoritativeSecretRoomRun(secretRoomRun);
+      if (this._canonicalRoomOwnerId(room) === this.selfId) this._commitAuthoritativeSecretRoomRun(secretRoomRun);
       return true;
     }
     if (rejected) { this.pendingExpeditionStart = false; this.pendingSecretRoomRun = null; }
@@ -2624,7 +2960,7 @@ export class OnlinePartyController {
     if (room?.phase !== "expedition" || !room.expedition) { this.syncedExpeditionStartKey = ""; return false; }
     const run = room.coopRun && typeof room.coopRun === "object" ? room.coopRun : {};
     const runId = String(run.runId ?? room.expedition.id ?? "").slice(0, 120);
-    const ownerId = String(room.expedition.hostOwnerId ?? room.ownerId ?? room.leaderId ?? "").slice(0, 24);
+    const ownerId = this._canonicalRoomOwnerId(room);
     if (!runId || !ownerId) return false;
     const key = `${ownerId}:${runId}`;
     if (this.syncedExpeditionStartKey === key) return true;
@@ -2655,10 +2991,24 @@ export class OnlinePartyController {
     return true;
   }
 
-  _applyTradeState(trade) {
+  _applyTradeState(trade, { authoritative = false } = {}) {
     if (!trade?.tradeId || !trade.participants?.includes(this.selfId)) return;
-    const enteredConfirm = trade.state === "confirming" && (this.trade?.tradeId !== trade.tradeId || this.trade?.state !== "confirming");
-    this.trade = trade; this.tradePendingOffer = null; this.route = "home";
+    const tradeId = String(trade.tradeId), currentTradeId = String(this.trade?.tradeId ?? ""), pending = this.tradePendingOffer;
+    if (currentTradeId && currentTradeId !== tradeId && (pending || this.getState?.()?.onlineParty?.tradeEscrow?.[currentTradeId])) return;
+    const enteredConfirm = trade.state === "confirming" && (currentTradeId !== tradeId || this.trade?.state !== "confirming");
+    this.trade = trade; this.route = "home";
+    const reconnectIds = this.tradeReconnectAuthoritativeIds ?? new Set(), reconnectAuthoritative = reconnectIds.has(tradeId);
+    if (reconnectAuthoritative) reconnectIds.delete(tradeId);
+    const ownOffer = trade.offers?.[this.selfId] ?? null, ownRequestId = String(trade.offerRequests?.[this.selfId] ?? ""), ownRevision = Math.max(0,Math.floor(Number(trade.offerRevisions?.[this.selfId])||0));
+    const strictReceipts = this.capabilities.has(TRADE_OFFER_RECEIPTS_CAPABILITY);
+    const pendingAssetMatches = strictReceipts ? sameOnlineTradeAsset(pending?.asset,ownOffer) : sameLegacyOnlineTradeAsset(pending?.asset,ownOffer);
+    const pendingMatches = Boolean(pending && pending.tradeId === tradeId && pendingAssetMatches
+      && (!strictReceipts || pending.requestId === ownRequestId));
+    const pendingPreviousRevision = Math.max(0,Math.floor(Number(pending?.previousRevision)||0));
+    const serverIsAuthoritative = authoritative || reconnectAuthoritative || !pending || ownRevision > pendingPreviousRevision;
+    const localEscrowRevision = Math.max(0,Math.floor(Number(this.getState?.()?.onlineParty?.tradeEscrow?.[tradeId]?.offerRevision)||0));
+    const snapshotBehind = strictReceipts && !authoritative && !reconnectAuthoritative && !pending && ownRevision < localEscrowRevision;
+    if (!snapshotBehind && (pendingMatches || serverIsAuthoritative)) this._scheduleTradeSnapshotReconcile(trade,{settlePending:Boolean(pending),pendingMatches});
     if (enteredConfirm) {
       this.tradeConfirmAvailableAt = Date.now() + 3000;
       clearTimeout(this.tradeConfirmTimer);
@@ -2667,40 +3017,157 @@ export class OnlinePartyController {
     this._render();
   }
 
-  _offerTradeAsset(ref) {
-    const tradeId = this.trade?.tradeId;
-    if (!tradeId || !ref || this.tradePendingOffer) return;
-    const state = this.getState?.() ?? {}, replacing = Boolean(state.onlineParty?.tradeEscrow?.[tradeId]), catalogItem = buildOnlineTradeCatalog(state).find(asset => asset.ref === ref);
-    if (!catalogItem || catalogItem.unavailable) return this.toast(catalogItem?.reason || "交換できない所持品です");
-    const amount = Math.max(1, Math.min(Number(catalogItem.maxAmount) || 1, this.tradeAmount));
-    const result = reserveOnlineTradeAsset(state, tradeId, ref, { amount, replace: replacing });
-    if (!result.ok) { this.toast(result.message || "交換品を提示できません"); return; }
-    this.tradePendingOffer = result.asset;
-    this.onOnlineStateMutation({ kind: "tradeReserve", tradeId, asset: result.asset });
-    if (!this._send("tradeOffer", { tradeId, asset: result.asset })) {
-      const released = releaseOnlineTradeAsset(state, tradeId); this.tradePendingOffer = null;
-      this.onOnlineStateMutation({ kind: "tradeRelease", tradeId, asset: released.asset }); this.toast("接続が切れたため交換品を戻しました");
-    }
-    this._render();
+  _scheduleTradeSnapshotReconcile(trade, { settlePending = false, pendingMatches = false } = {}) {
+    const sequence = this.tradeReconcileSequence = (Number(this.tradeReconcileSequence) || 0) + 1, tradeId = String(trade.tradeId), publicOwnOffer = trade.offers?.[this.selfId] ?? null;
+    const localEscrow = this.getState?.()?.onlineParty?.tradeEscrow?.[tradeId] ?? null, strictReceipts = this.capabilities.has(TRADE_OFFER_RECEIPTS_CAPABILITY);
+    const ownOffer = strictReceipts || !publicOwnOffer ? publicOwnOffer
+      : sameLegacyOnlineTradeAsset(localEscrow?.asset, publicOwnOffer) ? localEscrow.asset
+      : sameLegacyOnlineTradeAsset(localEscrow?.previousOffer?.asset, publicOwnOffer) ? localEscrow.previousOffer.asset
+      : publicOwnOffer;
+    const requestId = String(trade.offerRequests?.[this.selfId] ?? ""), revision = Math.max(0,Math.floor(Number(trade.offerRevisions?.[this.selfId])||0));
+    this.tradeReconcilePending = true; this._render();
+    const operation = Promise.resolve().then(async()=>{
+      const current = this.trade;
+      if (!current || String(current.tradeId) !== tradeId) return;
+      const currentRequest = String(current.offerRequests?.[this.selfId] ?? ""), currentRevision = Math.max(0,Math.floor(Number(current.offerRevisions?.[this.selfId])||0));
+      if (currentRequest !== requestId || currentRevision !== revision) return;
+      const result = reconcileOnlineTradeEscrow(this.getState?.() ?? {},tradeId,ownOffer,{requestId,revision});
+      if (!result.ok) { this._haltTradePersistence(result.message || "交換品をサーバー状態へ照合できませんでした"); return; }
+      if (result.changed) {
+        const saved = await this._persistTradeMutation({kind:"tradeReconcile",tradeId,asset:result.asset,released:result.released,requestId,revision},result.rollback);
+        if (!saved.ok) { this._haltTradePersistence(saved.message); return; }
+      }
+      const pending = this.tradePendingOffer;
+      const receiptMatches = !this.capabilities.has(TRADE_OFFER_RECEIPTS_CAPABILITY) || pending?.requestId === requestId;
+      if (settlePending && pending?.tradeId === tradeId && (pendingMatches && receiptMatches || !pendingMatches)) {
+        this.tradePendingOffer = null; this.tradeDraftRef = ""; this.tradeAmount = "1";
+      }
+      this.tradePersistenceBlocked = false;
+    });
+    this.tradeReconcileInflight.set(tradeId, operation);
+    operation.catch(error=>this._haltTradePersistence(error?.message||"交換状態の照合に失敗しました")).finally(()=>{
+      if (this.tradeReconcileInflight.get(tradeId) === operation) this.tradeReconcileInflight.delete(tradeId);
+      if (this.tradeReconcileSequence === sequence) { this.tradeReconcilePending = false; this._render(); }
+    });
+    return operation;
   }
 
-  async _commitTrade(message, { recovery = false } = {}) {
+  async _handleTradeOfferError(message) {
+    const pending = this.tradePendingOffer;
+    const strictReceipts = this.capabilities.has(TRADE_OFFER_RECEIPTS_CAPABILITY);
+    if (!pending || (strictReceipts && pending.requestId !== String(message.requestId ?? ""))) return;
+    if (!strictReceipts && message.requestId && pending.requestId !== String(message.requestId)) return;
+    if (message.tradeId && pending.tradeId !== String(message.tradeId)) return;
+    if (message.trade?.tradeId === pending.tradeId) this._applyTradeState(message.trade,{authoritative:true});
+    else await this._rollbackPendingTradeOffer("serverRejected");
+    this.toast(message.message || "交換品の提示が拒否されました");
+  }
+
+  _offerTradeAsset(ref, options = {}) {
+    const tradeId = String(this.trade?.tradeId ?? "");
+    if (!tradeId || !ref || this.tradeOfferInflight.has(tradeId)) return this.tradeOfferInflight.get(tradeId) ?? Promise.resolve(null);
+    const operation = this._performTradeAssetOffer(ref, options);
+    this.tradeOfferInflight.set(tradeId, operation);
+    const cleanup = () => { if (this.tradeOfferInflight.get(tradeId) === operation) { this.tradeOfferInflight.delete(tradeId); this._render(); } };
+    operation.then(cleanup, cleanup);
+    return operation;
+  }
+
+  async _performTradeAssetOffer(ref, { readInput = false } = {}) {
+    const tradeId = this.trade?.tradeId;
+    if (!tradeId || !ref || this.tradePendingOffer || this.tradePersistenceBlocked || this.tradeReconcilePending) return;
+    const state = this.getState?.() ?? {}, replacing = Boolean(state.onlineParty?.tradeEscrow?.[tradeId]), catalogItem = this._tradeCatalogSource().find(asset => asset.ref === ref);
+    if (!catalogItem || catalogItem.unavailable) return this.toast(catalogItem?.reason || "交換できない所持品です");
+    const amount = ["stack", "currency"].includes(catalogItem.kind)
+      ? parseOnlineTradeAmount(readInput ? this._query("[data-online-trade-amount]")?.value : this.tradeAmount, catalogItem.maxAmount)
+      : 1;
+    if (!amount) { this._updateTradeQuantityPreview(); this.toast(`数量は1〜${Number(catalogItem.maxAmount).toLocaleString()}で入力してください`); return; }
+    const requestId = this._nextTradeOfferRequestId(),result = reserveOnlineTradeAsset(state, tradeId, ref, { amount, replace: replacing, requestId });
+    if (!result.ok) { this.toast(result.message || "交換品を提示できません"); return; }
+    const pending = this.tradePendingOffer = { tradeId,requestId,asset:result.asset,previousAsset:result.previousAsset??null,previousEntry:result.previousEntry??null,previousRevision:Math.max(0,Math.floor(Number(result.previousEntry?.offerRevision)||0)),status:"saving" };
+    this._render();
+    const saved = await this._persistTradeMutation({kind:"tradeReserve",tradeId,asset:result.asset,requestId},result.rollback);
+    if (!saved.ok) { if (this.tradePendingOffer === pending) this.tradePendingOffer=null; this._haltTradePersistence(saved.message); return; }
+    if (this.tradePendingOffer !== pending) return;
+    pending.status="sending";
+    if (!this._send("tradeOffer", { tradeId, asset: result.asset, requestId })) {
+      const restored = await this._rollbackPendingTradeOffer("sendFailed");
+      if (restored) this.toast("接続が切れたため交換品を元の状態へ戻しました");
+      return;
+    }
+    pending.status="awaiting";this._render();
+  }
+
+  async _rollbackPendingTradeOffer(reason = "rollback") {
+    const pending = this.tradePendingOffer, tradeId = String(pending?.tradeId ?? "");
+    if (!pending || !tradeId) return null;
+    try {
+      const previous = pending.previousEntry, result = reconcileOnlineTradeEscrow(this.getState?.() ?? {},tradeId,previous?.asset??null,{requestId:previous?.offerRequestId??"",revision:previous?.offerRevision??0});
+      if(!result.ok)throw new Error(result.message||"元の交換品を復元できません");
+      const saved=await this._persistTradeMutation({kind:"tradeRollback",tradeId,reason,asset:result.asset,released:result.released,requestId:pending.requestId},result.rollback);
+      if(!saved.ok){this._haltTradePersistence(saved.message);return null}
+      if(this.tradePendingOffer===pending)this.tradePendingOffer=null;
+      return result;
+    } catch (error) {
+      this.toast(error?.message || "交換品の復元に失敗しました。再読み込みして復旧してください");
+      return null;
+    }
+  }
+
+  _commitTrade(message, options = {}) {
+    const tradeId = String(message?.tradeId ?? ""); if (!tradeId) return Promise.resolve(false);
+    const existing = this.tradeCommitInflight.get(tradeId);
+    if (existing) return existing;
+    const operation = this._performTradeCommit(message, options);
+    this.tradeCommitInflight.set(tradeId, operation);
+    const cleanup = () => { if (this.tradeCommitInflight.get(tradeId) === operation) { this.tradeCommitInflight.delete(tradeId); this._render(); } };
+    operation.then(cleanup, cleanup);
+    return operation;
+  }
+
+  async _performTradeCommit(message, { recovery = false } = {}) {
     const tradeId = String(message.tradeId ?? ""); if (!tradeId) return;
+    const offerOperation = this.tradeOfferInflight.get(tradeId), reconcileOperation = this.tradeReconcileInflight.get(tradeId);
+    if (offerOperation) { try { await offerOperation; } catch {} }
+    if (reconcileOperation) { try { await reconcileOperation; } catch {} }
+    if (this.tradePersistenceBlocked) {
+      this._send("tradeAck", { tradeId, success: false });
+      if (recovery) this._setTradeRecoveryStatus("error", tradeId);
+      return false;
+    }
     const result = commitOnlineTrade(this.getState?.() ?? {}, tradeId, message.incomingAsset, { partnerId: message.partnerId, partnerName: message.partnerName });
     if (result.ok) {
-      await this.onOnlineStateMutation({ kind: "tradeCommit", tradeId, received: result.received, gave: result.gave });
+      const saved=result.duplicate?{ok:true}:await this._persistTradeMutation({ kind: "tradeCommit", tradeId, received: result.received, gave: result.gave },result.rollback);
+      if(!saved.ok){this._send("tradeAck",{tradeId,success:false});if(recovery)this._setTradeRecoveryStatus("error",tradeId);this._haltTradePersistence(saved.message||"交換品を保存できませんでした");return false}
       const acknowledged = this._send("tradeAck", { tradeId, success: true });
       if (recovery) this._setTradeRecoveryStatus(acknowledged ? "complete" : "saved", tradeId);
       if (!result.duplicate) this.toast(recovery ? `${result.received?.name || "交換品"}を安全に復旧しました` : `${result.received?.name || "交換品"}を受け取りました`);
+      return true;
     } else {
       this._send("tradeAck", { tradeId, success: false });
       if (recovery) this._setTradeRecoveryStatus("error", tradeId);
       this.toast(result.message || "交換品を保存できませんでした");
+      return false;
     }
   }
 
-  _finishTrade(tradeId, { cancelled = false, completed = false, reason = "" } = {}) {
+  _finishTrade(tradeId, options = {}) {
+    const id = String(tradeId ?? ""); if (!id) return Promise.resolve(false);
+    const existing = this.tradeFinishInflight.get(id);
+    if (existing) return existing;
+    const operation = this._performTradeFinish(id, options);
+    this.tradeFinishInflight.set(id, operation);
+    const cleanup = () => { if (this.tradeFinishInflight.get(id) === operation) { this.tradeFinishInflight.delete(id); this._render(); } };
+    operation.then(cleanup, cleanup);
+    return operation;
+  }
+
+  async _performTradeFinish(tradeId, { cancelled = false, completed = false, reason = "" } = {}) {
     const id = String(tradeId ?? "");
+    if(this.trade?.tradeId&&String(this.trade.tradeId)!==id&&!this.getState?.()?.onlineParty?.tradeEscrow?.[id])return;
+    for (const operation of [this.tradeOfferInflight.get(id), this.tradeReconcileInflight.get(id), this.tradeCommitInflight.get(id)]) {
+      if (operation) { try { await operation; } catch {} }
+    }
     if (cancelled && this.terminalTradeRecoveries.has(id)) {
       this._setTradeRecoveryStatus("pending", id);
       this.toast("交換の安全な復旧を続けています");
@@ -2708,7 +3175,8 @@ export class OnlinePartyController {
     }
     if (cancelled) {
       const result = releaseOnlineTradeAsset(this.getState?.() ?? {}, tradeId);
-      if (result.asset) this.onOnlineStateMutation({ kind: "tradeRelease", tradeId, asset: result.asset });
+      if(!result.ok){this._haltTradePersistence(result.message);return}
+      if (result.asset) {const saved=await this._persistTradeMutation({ kind: "tradeRelease", tradeId, asset: result.asset },result.rollback);if(!saved.ok){this._clearTradeUi();this._haltTradePersistence(saved.message);return}}
       this.toast(reason === "declined" ? "交換は辞退されました" : reason === "timeout" ? "交換が時間切れになりました" : "交換を終了しました");
     } else if (completed) {
       if (this.terminalTradeRecoveries.has(id)) this._setTradeRecoveryStatus("complete", id);
@@ -2719,7 +3187,9 @@ export class OnlinePartyController {
   }
 
   _clearTradeUi() {
-    this.trade = null; this.tradePendingOffer = null; this.tradeFilter = "all"; this.tradeQuery = ""; this.tradeAmount = 1; this.tradeConfirmAvailableAt = 0;
+    this.trade = null; this.tradePendingOffer = null; this.tradeFilter = "all"; this.tradeQuery = ""; this.tradeDraftRef = ""; this.tradeAmount = "1"; this.tradeConfirmAvailableAt = 0;
+    this.tradeReconcileSequence = (Number(this.tradeReconcileSequence) || 0) + 1;
+    this.tradeReconcilePending = false;
     clearTimeout(this.tradeConfirmTimer); this.tradeConfirmTimer = null;
   }
 
@@ -2763,15 +3233,16 @@ export class OnlinePartyController {
   }
 
   _applyHostWorldDelta(message) {
-    const ownerId = message.ownerId ?? this.roomState?.ownerId; if (ownerId && ownerId !== this.selfId) return;
-    const revision = Math.max(0, Math.floor(Number(message.revision) || 0)), eventKey = `${ownerId || this.selfId}:${revision || JSON.stringify(message.delta ?? {})}`;
+    const ownerId = this._explicitWorldOwnerId(message);
     const mutationId = String(message.mutationId ?? "").slice(0, 160), acknowledge = () => { if (mutationId && this.capabilities.has("hostWorldReceiptsV1")) this._send("hostWorldDeltaAck", { mutationId }); };
+    if (!ownerId || ownerId !== this.selfId) { acknowledge(); return { ok: true, ignored: true, guest: true }; }
+    const revision = Math.max(0, Math.floor(Number(message.revision) || 0)), eventKey = `${ownerId}:${revision || JSON.stringify(message.delta ?? {})}`;
     if ((revision && revision <= this.hostWorldRevision) || this.processedHostWorldDeltas.has(eventKey)) { acknowledge(); return; }
     const hostWorld = message.hostWorld && typeof message.hostWorld === "object" ? JSON.parse(JSON.stringify(message.hostWorld)) : this._hostWorldSnapshot(), delta = message.delta ?? {}; hostWorld.revision = Math.max(Number(hostWorld.revision) || 0, revision);
     if (delta.openedChest) { const floor = String(Math.max(1, Number(delta.openedChest.floor) || 1)), chestId = String(delta.openedChest.chestId ?? ""); hostWorld.openedChestIds[floor] ??= []; if (chestId && !hostWorld.openedChestIds[floor].includes(chestId)) hostWorld.openedChestIds[floor].push(chestId); }
     if (delta.floorSeed) { const floor = String(Math.max(1, Number(delta.floorSeed.floor) || 1)); hostWorld.floorSeeds ??= {}; hostWorld.floorSeeds[floor] = delta.floorSeed.seed; }
     if (delta.defeatedBoss) { const floor = Math.max(10, Number(delta.defeatedBoss.floor) || 10); hostWorld.defeatedBossFloors ??= []; if (!hostWorld.defeatedBossFloors.includes(floor)) hostWorld.defeatedBossFloors.push(floor); }
-    const result = this.onHostWorldUpdate({ kind: "hostWorldSnapshot", hostWorld, ownerId: ownerId ?? this.selfId, revision }); if (!result?.ok) { this.recoverySettlementFailed = true; return result; }
+    const result = this.onHostWorldUpdate({ kind: "hostWorldSnapshot", hostWorld, ownerId, revision }); if (!result?.ok) { this.recoverySettlementFailed = true; return result; }
     this.hostWorldRevision = Math.max(this.hostWorldRevision, revision); this.processedHostWorldDeltas.add(eventKey); if (this.processedHostWorldDeltas.size > 256) this.processedHostWorldDeltas.delete(this.processedHostWorldDeltas.values().next().value); acknowledge();
   }
 
@@ -2795,7 +3266,7 @@ export class OnlinePartyController {
 
   _applyBattleDefeated(message) {
     const eventId = String(message.eventId ?? message.id ?? ""); if (!eventId) return;const acknowledge=()=>{if(this.capabilities.has("battleRecordsV1"))this._send("battleDefeatedAck",{eventId})};if(this.processedBattleEvents.has(eventId)){acknowledge();return}
-    const worldOwnerId=String(message.worldOwnerId??this.roomState?.ownerId??this.roomState?.leaderId??"").slice(0,24),floorBoss=message.floorBoss===true,progressionEligible=floorBoss&&message.progressionEligible===true&&Boolean(worldOwnerId)&&worldOwnerId===this.selfId;
+    const worldOwnerId=this._explicitWorldOwnerId(message),floorBoss=message.floorBoss===true,progressionEligible=floorBoss&&message.progressionEligible===true&&Boolean(worldOwnerId)&&worldOwnerId===this.selfId;
     const result=this.onBattleDefeated({ eventId, monsterId: message.monsterId || this.selectedMonsterId, floor: Math.max(1, Number(message.floor) || 1), boss: Boolean(message.boss), floorBoss, worldOwnerId, progressionEligible, defeated: Array.isArray(message.defeated) ? message.defeated : [] });if(result?.ok===false){this.recoverySettlementFailed=true;return}
     this.processedBattleEvents.add(eventId); if (this.processedBattleEvents.size > 256) this.processedBattleEvents.delete(this.processedBattleEvents.values().next().value);acknowledge();
   }
@@ -2823,12 +3294,22 @@ export class OnlinePartyController {
     });
   }
 
-  _applyRoomState(room) {
-    if (!room?.roomId) return;
+  _applyRoomState(room, { reconnected = false } = {}) {
+    if (!room?.roomId) return false;
     if (room.phase === "resonance") {
       room = { ...room, phase: "lobby", resonance: null };
       this.route = "explore";
       storageSet(ONLINE_STORAGE_KEYS.route, "explore");
+    }
+    // Restore/capture the local progression guard before any authoritative
+    // expedition callback runs.  This order is essential when ownership moves
+    // from this player being a guest to becoming the room's world owner.
+    if (!this._syncGuestProgressIsolation(room, { reconnected })) {
+      this.recoverySettlementFailed = true;
+      this._setStatus("error", "本編進行を保護できません", "オンライン部屋から離れ、再読み込みすると保護済みの進行を復元します");
+      this.toast("本編進行を安全に分離できないため、部屋への参加を中止しました");
+      this._send("leaveRoom");
+      return false;
     }
     const hiddenSocialIds = this._hiddenSocialIds();
     if (Array.isArray(room.chatHistory) && hiddenSocialIds.size) room = { ...room, chatHistory: room.chatHistory.filter(entry => !hiddenSocialIds.has(normalizedPlayerId(entry?.playerId))) };
@@ -2855,21 +3336,22 @@ export class OnlinePartyController {
     if (rareKind !== "otherworldMerchant") { this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; }
     this._clearInteractionPending(false);
     this.roomState = room; this.roomId = room.roomId;
+    this._syncActiveExpeditionRun(room);
     const hallGame = room.hallGame, hallParticipant = hallGame?.participants?.some?.(entry => entry.playerId === this.selfId);
     if (hallGame?.game) this.hallGameTab = hallGame.game === "race" ? "race" : "mimic";
     if (hallParticipant && !["entry", "result"].includes(String(hallGame?.phase ?? ""))) this.hallGamesOpen = true;
     if (room.phase !== "lobby") this.hallGamesOpen = false;
-    this._syncActiveExpeditionRun(room);
     if (recruitmentJoinCompleted) {
       this._clearGuildPending();
       this.friendPanelOpen = false;
       this.toast("ギルド募集の部屋へ参加しました");
     }
-    if (room.phase === "expedition" && (room.ownerId ?? room.leaderId) === this.selfId) this._commitAuthoritativeSecretRoomRun(room.hostWorld?.secretRooms?.run);
+    const worldOwnerId = this._canonicalRoomOwnerId(room);
+    if (room.phase === "expedition" && worldOwnerId === this.selfId) this._commitAuthoritativeSecretRoomRun(room.hostWorld?.secretRooms?.run);
     // A null room snapshot means the server has not imported this owner's saved
     // raid yet.  Only an explicit raid victory is allowed to clear local progress.
-    if ((room.ownerId ?? room.leaderId) === this.selfId && room.raidProgress) this._syncRaidWorld(room.raidProgress);
-    if ((room.ownerId ?? room.leaderId) === this.selfId && room.hostWorld) { const revision = Math.max(0, Number(room.hostWorld.revision) || 0), signature = JSON.stringify(room.hostWorld); if (revision > this.hostWorldRevision || !revision && signature !== this.lastHostWorldSnapshotSignature) { const result = this.onHostWorldUpdate({ kind: "hostWorldSnapshot", hostWorld: room.hostWorld, ownerId: this.selfId, revision }); if (result?.ok) { this.hostWorldRevision = Math.max(this.hostWorldRevision, revision); this.lastHostWorldSnapshotSignature = signature; } } }
+    if (worldOwnerId === this.selfId && room.raidProgress) this._syncRaidWorld(room.raidProgress);
+    if (worldOwnerId === this.selfId && room.hostWorld) { const revision = Math.max(0, Number(room.hostWorld.revision) || 0), signature = JSON.stringify(room.hostWorld); if (revision > this.hostWorldRevision || !revision && signature !== this.lastHostWorldSnapshotSignature) { const result = this.onHostWorldUpdate({ kind: "hostWorldSnapshot", hostWorld: room.hostWorld, ownerId: this.selfId, revision }); if (result?.ok) { this.hostWorldRevision = Math.max(this.hostWorldRevision, revision); this.lastHostWorldSnapshotSignature = signature; } } }
     if (room?.expedition?.interactions?.[this.selfId]?.action !== "browseRareMerchant" && !this.merchantResult) this.rareMerchantOpen = false;
     if (room.phase === "expedition") this.route = "explore";
     else if (room.phase === "raid") this.route = "raid";
@@ -2877,10 +3359,11 @@ export class OnlinePartyController {
     if (this.route !== "chat" && (room.chatHistory?.length ?? 0) > previousCount && previousCount > 0) this.unread = Math.min(99, this.unread + (room.chatHistory.length - previousCount));
     this._showConnectionStep("room");
     if (keepExploreCanvas) {
-      this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot(), socialBubbles: this._socialBubbleSnapshot() });
-      return;
+      this._queueExploreCanvasUpdate({ chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot(), socialBubbles: this._socialBubbleSnapshot() });
+      return true;
     }
     this._render();
+    return true;
   }
 
   _self() { return this.roomState?.members?.find(member => member.playerId === this.selfId); }
@@ -3099,7 +3582,13 @@ export class OnlinePartyController {
     if (changed) requestAnimationFrame(() => { const screen = this._query(".online-v3-screen"); if (screen) screen.scrollTop = 0; });
   }
 
-  _clearRoom() {
+  _clearRoom({ reason = "roomClear" } = {}) {
+    if (!this._exitGuestProgressIsolation(reason)) {
+      this.recoverySettlementFailed = true;
+      this._setStatus("error", "本編進行を復元できません", "部屋情報を保持しています。再読み込みすると保護済みの進行から自動復元します");
+      this.toast("本編進行の復元を保存できないため、部屋を閉じませんでした");
+      return false;
+    }
     this.emoteGestureCleanup?.();
     const showReturnResult = Boolean(this.pendingExpeditionReturnResult); this.roomState = null; this.roomId = null; this.pendingExpeditionStart = false; this.pendingSecretRoomRun = null; this.syncedExpeditionStartKey = ""; this._clearMoveInputs(); this._closeAllBattleMenus(); this.unread = 0; this.floorBossConfirm = null; this.coopBossConfirm = null; this.pendingFloorBossReward = null; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; this.expeditionReport = null; this.raidReport = null; this.teamBattleReport = null; this.exploreChatOpen = false; this.hallGamesOpen = false; this.pingMenuOpen = false; this.pendingRoomJoinId = null; this.roomListingPending = false; this.roomMemberRemovalPendingId = null; this.processedCoopTechniqueEvents.clear(); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false); this._clearTradeUi();
     this.root?.querySelector(".online-v3-screen")?.classList.remove("online-shared-gameplay-active");
@@ -3108,6 +3597,7 @@ export class OnlinePartyController {
     this._showConnectionStep(this.ws?.readyState === WebSocket.OPEN ? "gate" : "entry");
     if (this.ws?.readyState === WebSocket.OPEN) this._requestRoomListings({ force: true });
     if (showReturnResult) queueMicrotask(() => this._showPendingExpeditionReturnResult());
+    return true;
   }
 
   _setStatus(kind, title, detail) {
@@ -3161,7 +3651,9 @@ export class OnlinePartyController {
       connected: this._canMutateOnline(),
       canJoinGathering: this._canMutateOnline() && !this.trade && (!this.roomState || this.roomState.phase === "lobby"),
     });
-    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], presentationKoIds: [...(this.presentationKoIds[this.route] ?? [])], raidReport: this.raidReport, teamBattleReport: this.teamBattleReport, expeditionReport: this.expeditionReport, expeditionReturnReady: Boolean(this.pendingExpeditionReturnResult), expeditionStartPending: this.pendingExpeditionStart, floorBossConfirm: this.floorBossConfirm, coopBossConfirm: this.coopBossConfirm, exploreChatOpen: this.exploreChatOpen, hallGamesOpen: this.hallGamesOpen, hallGameTab: this.hallGameTab, hallGamesSupported: this.capabilities.has("hallMinigamesV1"), merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot(), socialNotice, trade: this.trade, tradeCatalog: this.trade ? this._tradeCatalog() : [], tradeFilter: this.tradeFilter, tradeQuery: this.tradeQuery, tradeAmount: this.tradeAmount, tradeConfirmSeconds: Math.max(0, Math.ceil((this.tradeConfirmAvailableAt - Date.now()) / 1000)), raidExchangePending: this.raidExchangePending, roomListingPending: this.roomListingPending, roomMemberRemovalPendingId: this.roomMemberRemovalPendingId, guildRecruitmentActive: guildRecruitmentLock.active, guildRecruitmentLock, mutedPlayerIds, blockedPlayerIds, safetyCapability: this.capabilities.has("onlineSafetyV1") };
+    const renderedTradeId=String(this.trade?.tradeId??""),tradeOfferPending=Boolean(this.tradePendingOffer||this.tradeReconcilePending||this.tradeOfferInflight.has(renderedTradeId)||this.tradeReconcileInflight.has(renderedTradeId)||this.tradeCommitInflight.has(renderedTradeId)||this.tradeFinishInflight.has(renderedTradeId)),tradeOfferPendingLabel=this.tradePendingOffer?.status==="saving"?"保存中…":this.tradePendingOffer?.status==="sending"?"送信中…":this.tradeCommitInflight.has(renderedTradeId)?"確定保存中…":this.tradeFinishInflight.has(renderedTradeId)?"終了処理中…":tradeOfferPending?"照合中…":"";
+    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], presentationKoIds: [...(this.presentationKoIds[this.route] ?? [])], raidReport: this.raidReport, teamBattleReport: this.teamBattleReport, expeditionReport: this.expeditionReport, expeditionReturnReady: Boolean(this.pendingExpeditionReturnResult), expeditionStartPending: this.pendingExpeditionStart, floorBossConfirm: this.floorBossConfirm, coopBossConfirm: this.coopBossConfirm, exploreChatOpen: this.exploreChatOpen, hallGamesOpen: this.hallGamesOpen, hallGameTab: this.hallGameTab, hallGamesSupported: this.capabilities.has("hallMinigamesV1"), merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot(), socialNotice, trade: this.trade, tradeCatalog: this.trade ? this._tradeCatalog() : [], tradeFilter: this.tradeFilter, tradeQuery: this.tradeQuery, tradeDraftRef: this.tradeDraftRef, tradeDraftAsset: this.trade ? this._tradeDraftAsset() : null, tradeAmount: this.tradeAmount, tradeOfferPending, tradeOfferPendingLabel, tradeConsistent:this._tradeAdvanceAllowed(), tradeConfirmSeconds: Math.max(0, Math.ceil((this.tradeConfirmAvailableAt - Date.now()) / 1000)), raidExchangePending: this.raidExchangePending, roomListingPending: this.roomListingPending, roomMemberRemovalPendingId: this.roomMemberRemovalPendingId, guildRecruitmentActive: guildRecruitmentLock.active, guildRecruitmentLock, mutedPlayerIds, blockedPlayerIds, safetyCapability: this.capabilities.has("onlineSafetyV1") };
+    state.battleAutoSupported = this.capabilities.has("battleAutoV1");
     const activeInput = stage.contains(document.activeElement) ? document.activeElement : null;
     const restoreHallChatFocus = this.route === "home" && this.hallGamesOpen
       && activeInput?.matches?.("[data-online-explore-chat-input]");
@@ -3199,6 +3691,20 @@ export class OnlinePartyController {
 
   _battle(mode) { return mode === "raid" ? this.roomState?.raid : mode === "team" ? this.roomState?.teamBattle : this.roomState?.expedition?.battle; }
 
+  _toggleOnlineBattleAuto(mode) {
+    if (!["explore", "raid", "team"].includes(mode)) return this.toast("この戦闘では自動戦闘を利用できません");
+    if (!this.capabilities.has("battleAutoV1")) return this.toast("自動戦闘を使うにはオンラインサーバーの197更新が必要です");
+    const battle = this._battle(mode);
+    if (!battle) return this.toast("現在は自動戦闘を切り替えられません");
+    const autoPlayers = Array.isArray(battle.autoPlayers) ? battle.autoPlayers : [];
+    const enabled = !autoPlayers.includes(this.selfId);
+    if (battle.phase === "result" && enabled) return this.toast("現在は自動戦闘を切り替えられません");
+    if (!this._send("battleAuto", { mode, enabled })) return this.toast("自動戦闘の設定を送信できませんでした");
+    battle.autoPlayers = enabled ? [...new Set([...autoPlayers, this.selfId])] : autoPlayers.filter(id => id !== this.selfId);
+    this._closeBattleMenus(mode);
+    this._render();
+  }
+
   _battleAction(mode, kind, skillId = null) {
     const battle = this._battle(mode); if (!battle || battle.phase !== "command") return this.toast("現在は行動を選べません");
     const actor = onlinePendingBattleActor(battle, this.selfId);
@@ -3219,7 +3725,14 @@ export class OnlinePartyController {
       return this.toast(living.length ? "すべての仲間が入力済みです" : "戦闘不能中です");
     }
     const actorId = onlineBattleActorId(actor), actorProfile = onlineBattleActorProfile(this.roomState, actor);
-    const skill = actorProfile?.skills?.find(entry => entry.id === skillId);
+    const actorSkills = Array.isArray(actor?.skills) ? actor.skills : actorProfile?.skills ?? [];
+    const skill = actorSkills.find(entry => entry.id === skillId);
+    if (kind === "skill" && !skill) return this.toast("設定済みスキルを確認できませんでした");
+    if (kind === "skill") {
+      const remaining = Math.max(0, Number(actor?.cooldowns?.[skill.id]) || 0);
+      if (remaining > 0) return this.toast(`このスキルはあと${remaining}ターン使用できません`);
+      if (Number(actor?.mp) < Math.max(0, Number(skill.mp) || 0)) return this.toast("MPが足りません");
+    }
     const support = kind === "item" || kind === "skill" && skill?.kind !== "attack";
     const actors = Array.isArray(battle.players) ? battle.players : [], allies = mode === "team" ? actors.filter(entry => entry?.side === actor?.side) : actors;
     const selectedAlly = allies.some(entry => onlineBattleActorId(entry) === this.selectedAlly[mode]) ? this.selectedAlly[mode] : actorId;
@@ -3240,7 +3753,26 @@ export class OnlinePartyController {
 
   _closeAllBattleMenus() { for (const mode of ["explore", "raid", "team"]) this._closeBattleMenus(mode); }
 
-  _unmountExploreCanvas() { if (!this.exploreCanvasMounted) return; this.exploreCanvasMounted = false; this.onExploreCanvasUnmount(); }
+  _queueExploreCanvasUpdate(options = {}) {
+    this.pendingExploreCanvasUpdate = { ...(this.pendingExploreCanvasUpdate ?? {}), ...options };
+    if (this.exploreCanvasUpdateFrame != null) return;
+    this.exploreCanvasUpdateFrame = requestAnimationFrame(() => {
+      this.exploreCanvasUpdateFrame = null;
+      const pending = this.pendingExploreCanvasUpdate ?? {};
+      this.pendingExploreCanvasUpdate = null;
+      if (!this.exploreCanvasMounted || !this.roomState) return;
+      this.onExploreCanvasUpdate(this.roomState, this.selfId, pending);
+    });
+  }
+
+  _unmountExploreCanvas() {
+    if (this.exploreCanvasUpdateFrame != null) cancelAnimationFrame(this.exploreCanvasUpdateFrame);
+    this.exploreCanvasUpdateFrame = null;
+    this.pendingExploreCanvasUpdate = null;
+    if (!this.exploreCanvasMounted) return;
+    this.exploreCanvasMounted = false;
+    this.onExploreCanvasUnmount();
+  }
 
   _announceExpeditionEvent(event) {
     if (!event) return;
@@ -3373,8 +3905,8 @@ export class OnlinePartyController {
   }
 
   _showRewardReceipt(message, result = {}) {
-    if (result?.duplicate || result?.isImportantEquipment !== true || !result?.equipmentName) return;
-    const receipt = { id: String(message.rewardId ?? Date.now()), title: String(message.source?.title || "重要装備獲得"), name: String(result.equipmentName), kindLabel: String(result.equipmentKindLabel || "装備"), rarity: String(message.reward?.randomEquipmentRarity || "") };
+    if (result?.duplicate || result?.isImportantEquipment !== true && !EXPEDITION_LOOT_RECEIPT_KINDS.has(String(message?.source?.kind ?? ""))) return;
+    const receipt = onlineRewardReceiptData(message, result); if (!receipt) return;
     if (this.pendingRewardReceipt?.id === receipt.id || this.rewardReceiptQueue.some(entry => entry.id === receipt.id)) return;
     this.rewardReceiptQueue.push(receipt);
     this._showNextRewardReceipt();
@@ -3392,8 +3924,8 @@ export class OnlinePartyController {
     const data = this.pendingRewardReceipt; if (!data || data.expiresAt <= Date.now()) { if (data) this._clearRewardReceipt(); return; }
     const stage = this._query(".explore-stage") ?? this._query("[data-online-stage]"); if (!stage) return;
     const current = stage.querySelector(".online-reward-receipt"); if (current?.dataset.receiptId === data.id) return; current?.remove();
-    const receipt = document.createElement("aside"); receipt.className = "online-reward-receipt online-weapon-receipt"; receipt.dataset.receiptId = data.id; receipt.setAttribute("role", "status");
-    receipt.innerHTML = `<header><span>ONLINE LOOT</span><strong>${safeHtml(data.title)}</strong><button type="button" data-online-reward-close aria-label="閉じる">×</button></header><section><h4>${safeHtml(data.kindLabel)}を獲得</h4><ul><li class="rare"><span>${safeHtml(data.rarity || "EQUIPMENT")}</span><b>${safeHtml(data.name)}</b></li></ul></section>`;
+    const receipt = document.createElement("aside"); receipt.className = `online-reward-receipt ${data.important ? "online-weapon-receipt" : "online-loot-summary-receipt"}`; receipt.dataset.receiptId = data.id; receipt.setAttribute("role", "status");
+    receipt.innerHTML = `<header><span>${safeHtml(data.eyebrow)}</span><strong>${safeHtml(data.title)}</strong><button type="button" data-online-reward-close aria-label="閉じる">×</button></header><section><h4>${safeHtml(data.heading)}</h4><ul>${data.items.map(item => `<li class="${item.rare ? "rare" : ""}"><span>${safeHtml(item.label)}</span><b>${safeHtml(item.value)}</b></li>`).join("")}</ul></section>`;
     stage.appendChild(receipt); requestAnimationFrame(() => receipt.classList.add("show"));
   }
 
@@ -3420,7 +3952,7 @@ export class OnlinePartyController {
     this.rewardInFlight.add(id);
     try {
       const result = await this.onReward({ rewardId: id, reward: message.reward ?? {}, source: message.source ?? {} });
-      if (result?.ok) { this._send("rewardAck", { rewardId: id }); if (!result.duplicate && result.isImportantEquipment === true) this._showRewardReceipt(message, result); }
+      if (result?.ok) { this._send("rewardAck", { rewardId: id }); if (!result.duplicate && result.isImportantEquipment === true) this._showRewardReceipt(message, result); else if (!result.duplicate && EXPEDITION_LOOT_RECEIPT_KINDS.has(String(message?.source?.kind ?? ""))) this._showRewardReceipt(message, result); }
       else if (batch === this.recoverySettlementBatch) this.recoverySettlementFailed = true;
     } catch {
       if (batch === this.recoverySettlementBatch) this.recoverySettlementFailed = true;
@@ -3429,9 +3961,20 @@ export class OnlinePartyController {
 
   async _receiveExpeditionResult(message, batch = this.recoverySettlementBatch) {
     if (!this.capabilities.has("expeditionResultsV1")) return;
-    const runId = String(message.runId ?? message.summary?.runId ?? "").slice(0, 120), resultId = String(message.resultId ?? "").slice(0, 160), explicitOwnerId = message.ownerId ?? message.summary?.ownerId ?? this.roomState?.expedition?.hostOwnerId ?? this.roomState?.ownerId ?? this.roomState?.leaderId, ownerId = String(explicitOwnerId ?? "legacy-owner-unknown").slice(0, 24), recipientId = String(message.recipientId ?? this.selfId).slice(0, 24);
+    const runId = String(message.runId ?? message.summary?.runId ?? "").slice(0, 120), resultId = String(message.resultId ?? "").slice(0, 160), explicitOwnerId = this._explicitWorldOwnerId({ ownerId: message.ownerId ?? message.summary?.ownerId }), ownerId = explicitOwnerId || this._canonicalRoomOwnerId(this.roomState) || "legacy-owner-unknown", progressionEligible = Boolean(message.progressionEligible === true && explicitOwnerId && explicitOwnerId === this.selfId), recipientId = String(message.recipientId ?? this.selfId).slice(0, 24);
     if (!resultId || !ownerId || recipientId !== this.selfId || this.expeditionResultInFlight.has(resultId)) return;
-    const startFloor = Math.max(1, Math.min(10000, Math.floor(Number(message.startFloor) || 1))), endFloor = Math.max(startFloor, Math.min(10000, Math.floor(Number(message.endFloor) || startFloor))), floorsCleared = Math.max(0, Math.min(10000, Math.floor(Number(message.floorsCleared) || 0)));
+    const summarySource = message.summary && typeof message.summary === "object" ? message.summary : {};
+    const hasOwnerProgress = [message.startFloor, message.endFloor, message.floorsCleared].every((value, index) => value !== null && value !== "" && Number.isFinite(Number(value)) && Number(value) >= (index < 2 ? 1 : 0));
+    if (progressionEligible && !hasOwnerProgress) { if (batch === this.recoverySettlementBatch) this.recoverySettlementFailed = true; return; }
+    const startFloor = progressionEligible ? boundedInteger(message.startFloor, 1, 10000, 1) : null;
+    const endFloor = progressionEligible ? Math.max(startFloor, boundedInteger(message.endFloor, 1, 10000, startFloor)) : null;
+    const floorsCleared = progressionEligible ? boundedInteger(message.floorsCleared, 0, 10000, 0) : null;
+    const legacyAssistedSource = !progressionEligible && [message.startFloor, message.endFloor, message.floorsCleared].every((value, index) => value !== null && value !== "" && Number.isFinite(Number(value)) && Number(value) >= (index < 2 ? 1 : 0))
+      ? { ownerId, startFloor: message.startFloor, endFloor: message.endFloor, floorsCleared: message.floorsCleared }
+      : null;
+    const assistedWorld = !progressionEligible
+      ? normalizedAssistedWorld(message.assistedWorld ?? summarySource.assistedWorld ?? legacyAssistedSource, ownerId)
+      : null;
     const reason = String(message.reason ?? "return").replace(/[\u0000-\u001f\u007f]/g, "").slice(0, 40) || "return";
     const finalVitalsSource = message.finalVitals && typeof message.finalVitals === "object" ? message.finalVitals : null;
     const rosterVitals = normalizedRosterVitals(finalVitalsSource?.rosterVitals ?? message.rosterVitals);
@@ -3445,11 +3988,14 @@ export class OnlinePartyController {
       reason: "expeditionEnd",
       rosterVitals,
     } : null;
-    const summarySource = message.summary && typeof message.summary === "object" ? message.summary : {};
-    const summary = { ...summarySource, resultId, ownerId, startFloor, endFloor, floor: Math.max(startFloor, Math.min(10000, Math.floor(Number(summarySource.floor ?? endFloor) || endFloor))), floorsCleared, completed: Boolean(message.completed), reason, multiplayer: Boolean(message.multiplayer) };
+    const { startFloor: _summaryStartFloor, endFloor: _summaryEndFloor, floorsCleared: _summaryFloorsCleared, floor: _summaryFloor, nextFloor: _summaryNextFloor, ownerFloorUnlock: _summaryOwnerFloorUnlock, leaderFloorUnlock: _summaryLeaderFloorUnlock, floorUnlock: _summaryFloorUnlock, unlockFloor: _summaryUnlockFloor, unlockedFloor: _summaryUnlockedFloor, maxFloorUnlock: _summaryMaxFloorUnlock, maxFloor: _summaryMaxFloor, assistedWorld: _summaryAssistedWorld, ...guestSafeSummary } = summarySource;
+    const summary = progressionEligible
+      ? { ...summarySource, resultId, ownerId, progressionEligible, startFloor, endFloor, floor: Math.max(startFloor, boundedInteger(summarySource.floor ?? endFloor, 1, 10000, endFloor)), floorsCleared, completed: Boolean(message.completed), reason, multiplayer: Boolean(message.multiplayer) }
+      : { ...guestSafeSummary, resultId, ownerId, progressionEligible: false, ...(assistedWorld ? { assistedWorld } : {}), completed: Boolean(message.completed), reason, multiplayer: Boolean(message.multiplayer) };
     this.expeditionResultInFlight.add(resultId);
     try {
-      const settled = await this.onExpeditionResult({ runId, resultId, ownerId, recipientId, startFloor, endFloor, floorsCleared, completed: Boolean(message.completed), reason, multiplayer: Boolean(message.multiplayer), finishedAt: Math.max(0, Number(message.finishedAt) || 0), finalVitals, summary });
+      const progressionSpan = progressionEligible ? { startFloor, endFloor, floorsCleared } : assistedWorld ? { assistedWorld } : {};
+      const settled = await this.onExpeditionResult({ runId, resultId, ownerId, recipientId, progressionEligible, ...progressionSpan, completed: Boolean(message.completed), reason, multiplayer: Boolean(message.multiplayer), finishedAt: Math.max(0, Number(message.finishedAt) || 0), finalVitals, summary });
       if (!settled?.ok) { if (batch === this.recoverySettlementBatch) this.recoverySettlementFailed = true; return; }
       const presentedResultIds = this.presentedExpeditionResultIds ??= new Set();
       if (!settled.duplicate && !presentedResultIds.has(resultId)) {
@@ -3489,7 +4035,7 @@ export class OnlinePartyController {
 
   _startLoops() {
     const clock = () => { if (!this.mounted) return; this._updateClock(); this.clockFrame = requestAnimationFrame(clock); };
-    const move = now => { if (!this.mounted) return; if (now - this.lastMoveAt >= 145) this._moveStep(now); this.moveFrame = requestAnimationFrame(move); };
+    const move = now => { if (!this.mounted) return; if (now - this.lastMoveAt >= ONLINE_EXPEDITION_MOVE_INTERVAL_MS) this._moveStep(now); this.moveFrame = requestAnimationFrame(move); };
     this.clockFrame = requestAnimationFrame(clock); this.moveFrame = requestAnimationFrame(move);
   }
 
@@ -3764,7 +4310,7 @@ export class OnlinePartyController {
       clearTimeout(this.reconnectTimer); this.reconnectTimer = null;
       clearTimeout(this.pendingLeaveTimer); this.pendingLeaveTimer = null;
       this.manualClose = true; this.supersededConnection = true; this.helloAckPending = false; this.pendingLeaveOnReconnect = null;
-      this._clearRoom();
+      this._clearRoom({ reason: "superseded" });
       this._setStatus("error", "別の画面で接続済み", "この画面の自動再接続を停止しました。再開する場合は接続を押してください");
       this.guildStatus = "別の画面で接続されています。この画面では操作できません。";
       if (this.friendPanelOpen) this._renderFriendPanel();
@@ -3781,12 +4327,15 @@ export class OnlinePartyController {
 
   disconnect({ leave = true, quiet = false } = {}) {
     clearTimeout(this.reconnectTimer); this.reconnectTimer = null; this.manualClose = true;
-    this.connectionReady = false; this.helloAckPending = false; this.connectionModePending = false; this._clearPowerRankingRequests("offline"); this._notifyPowerRankingCapability(); this._clearMoveInputs();
+    this.connectionReady = false; this.helloAckPending = false; this.connectionModePending = false; this.foregroundProfileSyncPending = false; this._clearPowerRankingRequests("offline"); this._notifyPowerRankingCapability(); this._clearMoveInputs();
     storageSet(ONLINE_STORAGE_KEYS.autoConnect, "0");
     if (leave) this._send("leaveRoom");
     if (this.ws) try { this.ws.close(1000, "client disconnect"); } catch {}
-    this.ws = null; this._clearRoom();
+    this.ws = null;
+    const cleared = this._clearRoom({ reason: leave ? "disconnectLeave" : "disconnect" });
+    if (!cleared) return false;
     if (!quiet) this._setStatus("offline", "オフライン", "通常ゲームのセーブには影響しません");
+    return true;
   }
 
   _confirmRoomExit() {
@@ -3798,7 +4347,7 @@ export class OnlinePartyController {
   _requestRoomLeave({ exitAfter = false, onComplete = null } = {}) {
     if (!this.roomState) {
       if (exitAfter) { const complete = typeof onComplete === "function" ? onComplete : this.onBack; this.disconnect({ leave: false, quiet: true }); complete(); }
-      else this._clearRoom();
+      else this._clearRoom({ reason: "leaveWithoutRoom" });
       return;
     }
     if (this.pendingLeaveOnReconnect) {
@@ -3836,15 +4385,23 @@ export class OnlinePartyController {
       return;
     }
     clearTimeout(this.pendingLeaveTimer); this.pendingLeaveTimer = null;
+    if (!this._clearRoom({ reason: "leaveComplete" })) {
+      if (pending) {
+        pending.waitingForSettlement = false;
+        pending.allowOfflineExit = false;
+        this.pendingLeaveOnReconnect = pending;
+      }
+      return false;
+    }
     this.pendingLeaveOnReconnect = null;
-    this._clearRoom();
     if (pending?.exitAfter) {
       const complete = typeof pending.onComplete === "function" ? pending.onComplete : this.onBack;
       this.disconnect({ leave: false, quiet: true });
       complete();
-      return;
+      return true;
     }
     this._setStatus("online", "接続済み", "オンライン部屋から退出しました");
+    return true;
   }
 
   _forceClosePendingRoomLeave() {
@@ -3852,8 +4409,11 @@ export class OnlinePartyController {
     if (!pending?.allowOfflineExit) return;
     if (typeof globalThis.confirm === "function" && !globalThis.confirm("サーバーへ退出を届けられていません。\n部屋には最大5分間表示が残る場合がありますが、オフラインで閉じますか？")) return;
     clearTimeout(this.pendingLeaveTimer); this.pendingLeaveTimer = null;
+    if (!this.disconnect({ leave: false, quiet: false })) {
+      this.pendingLeaveOnReconnect = pending;
+      return;
+    }
     this.pendingLeaveOnReconnect = null;
-    this.disconnect({ leave: false, quiet: false });
     this.toast("通信復旧前に閉じました。サーバー側では最大5分後に退出します");
     if (pending.exitAfter) (typeof pending.onComplete === "function" ? pending.onComplete : this.onBack)();
   }

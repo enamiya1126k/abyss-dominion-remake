@@ -76,7 +76,7 @@ autoMonster.currentMp = skillMpCostBreakdown(autoMonster, modestGroupHeal).final
 assert.equal(chooseAutoSkill(autoMonster, { party: [autoMonster, ally], cooldowns: {} })?.id, attack.id, "noncritical recovery must preserve the MP reserve");
 
 const main = source("src/main.js"), rules = source("online-server/src/OfflineDungeonRules.js"), client = source("src/online/OnlinePartyClient.js"), battleScreen = source("src/ui/screens/BattleScreen.js"), index = source("index.html");
-assert.match(main, /Math\.min\(\.03,\.015\+Math\.floor\(floor\/100\)\*\.0015\)/);
+assert.match(main, /treasureRoomRateForFloor\(floor\)/);
 assert.match(rules, /treasureRoomRateForFloor\(floor\)/);
 assert.match(client, /delay: 300, duration: 720/);
 assert.match(client, /presentationKoIds/);

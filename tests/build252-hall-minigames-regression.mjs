@@ -94,8 +94,8 @@ test("build252 wires server capability, guarded messages, cache busting and mobi
     readFile(new URL("../src/Styles/build252.css", import.meta.url), "utf8"),
   ]);
   assert.match(index, /build252\.css\?v=2\.11\.76-build252/);
-  assert.match(index, /ASSET_VERSION = "2\.11\.78"/);
-  assert.match(index, /ASSET_BUILD = "build254"/);
+  assert.match(index, /ASSET_VERSION = "2\.11\.82"/);
+  assert.match(index, /ASSET_BUILD = "build258"/);
   assert.match(client, /capabilities\.has\("hallMinigamesV1"\)/);
   const hallCloseCheck = client.indexOf('const closing = button.matches("[data-online-hall-game-close]")');
   const hallCapabilityCheck = client.indexOf('if (!closing && !this.capabilities.has("hallMinigamesV1"))');

@@ -276,11 +276,12 @@ test("build244 optional co-op content can be ignored while only the owner receiv
   );
 
   const ownerClear = owner.session.pendingRewards.find(entry => entry.source?.kind === "floorClear" && entry.source.floor === floor);
-  const guestClear = guest.session.pendingRewards.find(entry => entry.source?.kind === "floorClear" && entry.source.floor === floor);
+  const guestClear = guest.session.pendingRewards.find(entry => entry.source?.kind === "floorAssist" && entry.source.floor === floor);
   assert.ok(ownerClear);
   assert.ok(guestClear, "the guest receives their own assistance reward");
   assert.equal(ownerClear.reward.leaderFloorUnlock, floor + 1);
-  assert.equal(guestClear.reward.leaderFloorUnlock, 0, "the guest's normal exploration floor must not advance");
+  assert.equal(Object.hasOwn(guestClear.reward, "leaderFloorUnlock"), false, "the guest receives no progression-shaped unlock field");
+  assert.equal(Object.hasOwn(guestClear.source, "leaderFloorUnlock"), false);
   assert.equal(ownerClear.source.worldOwnerId, owner.session.playerId);
   assert.equal(guestClear.source.worldOwnerId, owner.session.playerId);
   assert.equal(guest.session.profile.maxFloor, 1, "server-side guest progression remains untouched");
@@ -295,9 +296,11 @@ test("build244 optional co-op content can be ignored while only the owner receiv
   const guestResult = guest.session.pendingMessages.findLast(message => message.type === "expeditionResult");
   assert.equal(guestResult.recipientId, guest.session.playerId);
   assert.equal(guestResult.ownerId, owner.session.playerId);
-  assert.equal(guestResult.startFloor, floor);
-  assert.equal(guestResult.endFloor, floor + 1);
-  assert.equal(guestResult.floorsCleared, 1);
+  assert.equal(guestResult.progressionEligible, false);
+  assert.equal(Object.hasOwn(guestResult, "startFloor"), false);
+  assert.equal(Object.hasOwn(guestResult, "endFloor"), false);
+  assert.equal(Object.hasOwn(guestResult, "floorsCleared"), false);
+  assert.deepEqual(guestResult.assistedWorld, { ownerId: owner.session.playerId, startFloor: floor, endFloor: floor + 1, floorsCleared: 1 });
   assert.equal(guestResult.multiplayer, true);
   assert.equal(guestResult.finalVitals.reason, "expeditionEnd");
   assert.equal(guestResult.finalVitals.hp, 222);
@@ -341,9 +344,7 @@ test("build244 boss floors add no optional co-op feature and write first-clear s
   assert.equal(ownerDefeated?.floorBoss, true);
   assert.equal(ownerDefeated?.worldOwnerId, owner.session.playerId);
   assert.equal(ownerDefeated?.progressionEligible, true, "only the world owner may count the floor boss toward normal progression");
-  assert.equal(guestDefeated?.floorBoss, true);
-  assert.equal(guestDefeated?.worldOwnerId, owner.session.playerId);
-  assert.equal(guestDefeated?.progressionEligible, false, "a guest battle receipt must not pollute boss or biome progression");
+  assert.equal(guestDefeated, undefined, "a guest never receives a progression-shaped boss receipt");
   assert.deepEqual(owner.session.coopVitals, { hp: 321, maxHp: 500, mp: 22, maxMp: 40 });
   assert.deepEqual(guest.session.coopVitals, { hp: 234, maxHp: 500, mp: 13, maxMp: 40 });
 
@@ -357,9 +358,10 @@ test("build244 boss floors add no optional co-op feature and write first-clear s
   assert.equal(advanced.ok, true);
   assert.equal(advanced.advanced, true);
   const ownerClear = owner.session.pendingRewards.find(entry => entry.source?.kind === "floorClear" && entry.source.floor === floor);
-  const guestClear = guest.session.pendingRewards.find(entry => entry.source?.kind === "floorClear" && entry.source.floor === floor);
+  const guestClear = guest.session.pendingRewards.find(entry => entry.source?.kind === "floorAssist" && entry.source.floor === floor);
   assert.equal(ownerClear.reward.leaderFloorUnlock, floor + 1);
-  assert.equal(guestClear.reward.leaderFloorUnlock, 0);
+  assert.equal(Object.hasOwn(guestClear.reward, "leaderFloorUnlock"), false);
+  assert.equal(Object.hasOwn(guestClear.source, "leaderFloorUnlock"), false);
   assert.equal(guestClear.source.bossAssist, true);
   assert.equal(guest.session.profile.maxFloor, 1);
 });
@@ -378,13 +380,12 @@ test("build244 ordinary multiplayer battle receipts remain personal without tran
   for (const enemy of battle.enemies) enemy.hp = 0;
   store._finishBattleVictory(room, battle);
 
-  for (const member of [owner, guest]) {
-    const defeated = member.session.pendingMessages.find(message => message.type === "battleDefeated" && message.floor === floor);
-    assert.equal(defeated?.floorBoss, false);
-    assert.equal(defeated?.worldOwnerId, owner.session.playerId);
-    assert.equal(defeated?.progressionEligible, member === owner, "only the world owner may apply an ordinary battle to normal exploration progression");
-    assert.ok(member.session.pendingRewards.some(entry => entry.source?.kind === "battle"));
-  }
+  const ownerDefeated = owner.session.pendingMessages.find(message => message.type === "battleDefeated" && message.floor === floor);
+  assert.equal(ownerDefeated?.floorBoss, false);
+  assert.equal(ownerDefeated?.worldOwnerId, owner.session.playerId);
+  assert.equal(ownerDefeated?.progressionEligible, true);
+  assert.equal(guest.session.pendingMessages.some(message => message.type === "battleDefeated" && message.floor === floor), false, "guest progression receipts are physically absent");
+  for (const member of [owner, guest]) assert.ok(member.session.pendingRewards.some(entry => entry.source?.kind === "battle"));
   assert.deepEqual(room.hostWorld.defeatedBossFloors, [], "an ordinary guest battle cannot mutate the owner's boss state");
 });
 
@@ -403,14 +404,13 @@ test("build244 a co-op strong enemy is explicitly not a normal floor boss progre
   for (const enemy of battle.enemies) enemy.hp = 0;
   store._finishBattleVictory(room, battle);
 
-  for (const member of [owner, guest]) {
-    const defeated = member.session.pendingMessages.find(message => message.type === "battleDefeated" && message.floor === floor);
-    assert.equal(defeated?.floorBoss, false, "the client progression gate must never classify a co-op strong enemy as a floor boss");
-    assert.equal(defeated?.boss, true);
-    assert.equal(defeated?.worldOwnerId, owner.session.playerId);
-    assert.equal(defeated?.progressionEligible, member === owner, "only the world owner may apply a co-op strong enemy to normal exploration progression");
-    assert.ok(member.session.pendingRewards.some(entry => entry.source?.kind === "coopBoss"));
-  }
+  const ownerDefeated = owner.session.pendingMessages.find(message => message.type === "battleDefeated" && message.floor === floor);
+  assert.equal(ownerDefeated?.floorBoss, false, "the client progression gate must never classify a co-op strong enemy as a floor boss");
+  assert.equal(ownerDefeated?.boss, true);
+  assert.equal(ownerDefeated?.worldOwnerId, owner.session.playerId);
+  assert.equal(ownerDefeated?.progressionEligible, true);
+  assert.equal(guest.session.pendingMessages.some(message => message.type === "battleDefeated" && message.floor === floor), false, "guest progression receipts are physically absent");
+  for (const member of [owner, guest]) assert.ok(member.session.pendingRewards.some(entry => entry.source?.kind === "coopBoss"));
   assert.deepEqual(room.hostWorld.defeatedBossFloors, []);
   assert.equal(owner.session.pendingRewards.some(entry => entry.source?.bossFirstClear), false);
   assert.equal(guest.session.pendingRewards.some(entry => entry.source?.bossFirstClear), false);

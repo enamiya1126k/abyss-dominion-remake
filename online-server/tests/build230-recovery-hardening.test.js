@@ -183,7 +183,11 @@ test("build230 moves expired pending data into a 24-hour outbox and restores it 
   const oldToken = player.result.resumeToken;
   const roomId = store.createRoom(player.session).room.roomId;
   store._queueReward(player.session, { rewardId: "recovery-reward", reward: { gold: 1234 }, source: { kind: "test" } });
-  player.session.pendingMessages.push({ type: "hostWorldDelta", mutationId: "recovery-message", delta: { floorSeed: { floor: 2, seed: 99 } } });
+  player.session.pendingMessages.push(
+    { type: "hostWorldDelta", mutationId: "foreign-world-message", ownerId: "AD-FORE-IGN2", delta: { floorSeed: { floor: 2, seed: 99 } } },
+    { type: "battleDefeated", receiptId: "foreign-battle-message", worldOwnerId: "AD-FORE-IGN2", progressionEligible: false, floor: 2 },
+    { type: "expeditionVitals", reason: "recovery-test", hp: 321, maxHp: 500, mp: 12, maxMp: 40 },
+  );
   store.disconnect(player.session, player.conn);
   now += 1_001;
   store.pruneExpired();
@@ -194,6 +198,8 @@ test("build230 moves expired pending data into a 24-hour outbox and restores it 
   const outbox = store.recoveryOutboxes.get(player.session.playerId);
   assert.equal(outbox.resumeToken, oldToken);
   assert.equal(outbox.expiresAt, now + 24 * 60 * 60_000);
+  assert.equal(outbox.pendingMessages.some(message => message.type === "hostWorldDelta" || message.type === "battleDefeated"), false);
+  assert.equal(outbox.pendingMessages.some(message => message.type === "expeditionVitals" && message.reason === "recovery-test"), true);
 
   const missing = store.hello(connection(), identity(2));
   assert.equal(missing.code, "RESUME_TOKEN_MISMATCH");
@@ -214,7 +220,8 @@ test("build230 moves expired pending data into a 24-hour outbox and restores it 
 
   store.deliverPendingRewards(recoveredConnection.session);
   assert.equal(recoveredConnection.messages.some(message => message.type === "onlineReward" && message.rewardId === "recovery-reward"), true);
-  assert.equal(recoveredConnection.messages.some(message => message.type === "hostWorldDelta" && message.mutationId === "recovery-message"), true);
+  assert.equal(recoveredConnection.messages.some(message => message.type === "hostWorldDelta" || message.type === "battleDefeated"), false);
+  assert.equal(recoveredConnection.messages.some(message => message.type === "expeditionVitals" && message.reason === "recovery-test"), true);
 });
 
 test("build230 outboxes accept the previous token after a lost hello acknowledgement", () => {

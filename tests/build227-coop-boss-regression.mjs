@@ -33,9 +33,9 @@ test("build227 uses existing monster art and loads a mobile-safe stylesheet", as
   assert.match(styles, /@media\(max-height:700px\)/);
   assert.match(styles, /@media\(prefers-reduced-motion:reduce\)/);
   assert.match(index, /build227\.css\?v=2\.11\.54-build227/);
-  assert.match(index, /ASSET_BUILD = "build239"/);
-  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.65-build239/);
-  assert.match(main, /BattleScreen\.js\?v=2\.11\.54-build227/);
+  assert.match(index, /ASSET_BUILD = "build258"/);
+  assert.match(main, /OnlinePartyClient\.js\?v=2\.11\.82-build258/);
+  assert.match(main, /BattleScreen\.js\?v=2\.11\.82-build258/);
   const client = await read("src/online/OnlinePartyClient.js");
   assert.match(client, /const ONLINE_PROTOCOL = "1\.16\.0"/);
 });

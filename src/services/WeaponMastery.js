@@ -1,4 +1,4 @@
-import{SPECIES}from"../data/species.js?v=2.11.2-build166";
+import{SPECIES}from"../data/species.js?v=2.11.82-build258";
 
 export const WEAPON_MASTERY_TIERS=[
  {level:1,kills:500,bonus:.05,label:"Ⅰ"},

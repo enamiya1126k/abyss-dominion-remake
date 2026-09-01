@@ -25,11 +25,11 @@ test("evasion is visible combat math with a safe cap and guaranteed-hit escape h
  assert.equal(attackHitChance({accuracy:20,evasion:75,guaranteedHit:true}),1);
 });
 
-test("mimic is a slow evasive fortress and every landed hit is capped at one",()=>{
- const enemy={id:"mimic",hp:8,maxHp:8,enemyMimicArmor:true};
- assert.deepEqual(applyEnemyDamage({},enemy,999_999),{beforeHp:8,damage:1,requested:999_999});
- const store=new RoomStore({random:()=>.999999}),online=store._createBattleEnemies({id:"b",floor:29},[],1)[0];
- assert.equal(online.speciesId,"mimic");assert.equal(online.maxHp,8);assert.equal(online.spd,1);assert.equal(online.evasion,70);
+test("mimic is a short chest-only fortress and every landed hit is capped at one",()=>{
+ const enemy={id:"mimic",hp:5,maxHp:5,enemyMimicArmor:true};
+ assert.deepEqual(applyEnemyDamage({},enemy,999_999),{beforeHp:5,damage:1,requested:999_999});
+ const store=new RoomStore({random:()=>.999999}),online=store._createBattleEnemies({id:"b",floor:29,forceSpeciesId:"mimic",treasureMimic:true},[],1)[0];
+ assert.equal(online.speciesId,"mimic");assert.equal(online.maxHp,5);assert.equal(online.spd,1);assert.equal(online.evasion,24);
  assert.ok(online.def>=1_000_000_000_000&&online.mdef>=1_000_000_000_000);
  assert.equal(store._damageToEnemy(999_999_999,online,99,100).value,1);
 });

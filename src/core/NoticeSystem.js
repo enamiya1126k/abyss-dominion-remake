@@ -132,8 +132,47 @@ export function normalizeNoticeState(state){
  // A newly opened day replaces an unclaimed prior day. Nothing is queued or
  // backfilled, which makes this a true same-day login gift.
  const dailyGift={dayKey:today,claimedDayKey:typeof stored.claimedDayKey==="string"?stored.claimedDayKey:null,claimedAt:typeof stored.claimedAt==="string"?stored.claimedAt:null};
- state.notices={...source,readIds:[...new Set(readIds)],dailyGift};
+ const rewardInbox=retainNoticeRewardInbox(source.rewardInbox);
+ state.notices={...source,readIds:[...new Set(readIds)],dailyGift,rewardInbox};
  return state.notices;
+}
+
+function validDate(value){const time=new Date(value).getTime();return Number.isFinite(time)?new Date(time).toISOString():new Date(0).toISOString()}
+function rewardNumber(value,max=Number.MAX_SAFE_INTEGER){return Math.max(0,Math.min(max,Math.floor(Number(value)||0)))}
+function normalizeInboxReward(reward={}){
+ const source=reward&&typeof reward==="object"&&!Array.isArray(reward)?reward:{};
+ return{gold:rewardNumber(source.gold),crystals:rewardNumber(source.crystals,100000),captureCrystals:rewardNumber(source.captureCrystals,100000),abyssKeys:rewardNumber(source.abyssKeys,10000),experienceItemsUltra:rewardNumber(source.experienceItemsUltra,10000),fullHeals:rewardNumber(source.fullHeals,10000),partyFullHeals:rewardNumber(source.partyFullHeals,10000),mythicEquipment:rewardNumber(source.mythicEquipment,10),equipmentPlus:rewardNumber(source.equipmentPlus,999)};
+}
+
+export function retainNoticeRewardInbox(value,{claimedLimit=160}={}){
+ const pending=[],claimed=[],seen=new Set();
+ for(const entry of Array.isArray(value)?value:[]){
+  if(!entry||typeof entry!=="object"||Array.isArray(entry))continue;
+  const id=String(entry.id??"").slice(0,160);if(!id||seen.has(id))continue;seen.add(id);
+  const normalized={id,source:String(entry.source??"reward").slice(0,32),kind:"gift",icon:String(entry.icon??"🎁").slice(0,8),label:String(entry.label??"達成報酬").slice(0,24),title:String(entry.title??"報酬が届きました").slice(0,80),body:String(entry.body??"").slice(0,500),reward:normalizeInboxReward(entry.reward),milestone:entry.milestone==null?null:Math.max(0,Math.floor(Number(entry.milestone)||0)),seasonId:entry.seasonId==null?null:String(entry.seasonId).slice(0,80),rank:entry.rank==null?null:Math.max(1,Math.floor(Number(entry.rank)||1)),receivedAt:validDate(entry.receivedAt),claimedAt:entry.claimedAt?validDate(entry.claimedAt):null};
+  (normalized.claimedAt?claimed:pending).push(normalized)
+ }
+ return[...pending,...claimed.slice(0,Math.max(0,Math.floor(Number(claimedLimit)||0)))]
+}
+
+export function enqueueNoticeReward(state,entry){
+ const notices=normalizeNoticeState(state),id=String(entry?.id??"").slice(0,160);if(!id)return{ok:false,reason:"invalid"};
+ const existing=notices.rewardInbox.find(item=>item.id===id);if(existing)return{ok:true,duplicate:true,entry:existing};
+ const value={id,source:String(entry.source??"reward").slice(0,32),kind:"gift",icon:String(entry.icon??"🎁").slice(0,8),label:String(entry.label??"達成報酬").slice(0,24),title:String(entry.title??"報酬が届きました").slice(0,80),body:String(entry.body??"").slice(0,500),reward:normalizeInboxReward(entry.reward),milestone:entry.milestone??null,seasonId:entry.seasonId??null,rank:entry.rank??null,receivedAt:validDate(entry.receivedAt??Date.now()),claimedAt:null};
+ notices.rewardInbox.unshift(value);notices.rewardInbox=retainNoticeRewardInbox(notices.rewardInbox);return{ok:true,duplicate:false,entry:notices.rewardInbox.find(item=>item.id===id)??value};
+}
+
+export function pendingNoticeRewards(state){return normalizeNoticeState(state).rewardInbox.filter(entry=>!entry.claimedAt)}
+
+export function claimNoticeReward(state,id,{grantMythicEquipment=null,now=Date.now()}={}){
+ const notices=normalizeNoticeState(state),entry=notices.rewardInbox.find(item=>item.id===String(id??""));if(!entry)return{ok:false,reason:"missing"};if(entry.claimedAt)return{ok:true,duplicate:true,entry};
+ const reward=normalizeInboxReward(entry.reward),grantedEquipment=[];
+ if(reward.mythicEquipment){if(typeof grantMythicEquipment!=="function")return{ok:false,reason:"equipment-handler"};for(let index=0;index<reward.mythicEquipment;index++){const result=grantMythicEquipment({plus:reward.equipmentPlus,index,entry});if(!result?.ok)return{ok:false,reason:"equipment-full",entry};grantedEquipment.push(result)}}
+ state.player??={};state.inventory??={};
+ state.player.gold=rewardNumber(state.player.gold)+reward.gold;state.player.crystals=rewardNumber(state.player.crystals)+reward.crystals;
+ state.inventory.captureCrystals=rewardNumber(state.inventory.captureCrystals)+reward.captureCrystals;state.inventory.abyssKeys=rewardNumber(state.inventory.abyssKeys)+reward.abyssKeys;
+ state.inventory.experienceItemsUltra=rewardNumber(state.inventory.experienceItemsUltra)+reward.experienceItemsUltra;state.inventory.fullHeals=rewardNumber(state.inventory.fullHeals)+reward.fullHeals;state.inventory.partyFullHeals=rewardNumber(state.inventory.partyFullHeals)+reward.partyFullHeals;
+ entry.claimedAt=new Date(now).toISOString();return{ok:true,duplicate:false,entry,reward,grantedEquipment};
 }
 
 export function dailyNoticeGiftStatus(state,value=Date.now()){
@@ -161,7 +200,7 @@ export function unreadNoticeIds(state){
  return NOTICE_DEFINITIONS.map(notice=>notice.id).filter(id=>!read.has(id));
 }
 
-export function noticeAttentionCount(state){return unreadNoticeIds(state).length+(dailyNoticeGiftStatus(state).available?1:0)}
+export function noticeAttentionCount(state){return unreadNoticeIds(state).length+(dailyNoticeGiftStatus(state).available?1:0)+pendingNoticeRewards(state).length}
 
 export function markNoticeRead(state,id){
  const notices=normalizeNoticeState(state),noticeId=String(id??"");

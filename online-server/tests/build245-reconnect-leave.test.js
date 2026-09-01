@@ -214,7 +214,11 @@ test("build245 a guest can leave mid-floor while the owner continues and only th
   assert.equal(guestResult.finalVitals.mutationId, leaveVitals.mutationId);
   assert.equal(guestResult.finalVitals.hp, 263);
   assert.equal(guestResult.finalVitals.mp, 9);
-  assert.equal(guestResult.summary.ownerFloorUnlock, floor + 1);
+  assert.equal(guestResult.progressionEligible, false);
+  assert.equal(guestResult.summary.progressionEligible, false);
+  assert.equal(Object.hasOwn(guestResult.summary, "ownerFloorUnlock"), false);
+  assert.equal(Object.hasOwn(guestResult.summary, "nextFloor"), false);
+  assert.deepEqual(guestResult.assistedWorld, { ownerId: owner.session.playerId, startFloor: floor, endFloor: floor + 1, floorsCleared: 1 });
   assert.equal(guest.session.profile.maxFloor, 1, "a former guest's normal floor is never changed by the host result");
 });
 

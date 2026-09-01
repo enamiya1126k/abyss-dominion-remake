@@ -5,10 +5,10 @@ export const WEEKLY_RAID_BOSSES=Object.freeze([
  Object.freeze({
   id:"abyss-amalga",name:"終焉融骸・アビス＝マルガ",shortName:"終焉融骸",level:50,maxHp:50_000,
   element:"dark",accent:"#b45cff",heroAsset:"./assets/online/raid-abyss-amalgam.png",visualBase:"./assets/online/raid/abyss-amalga",
-  materialName:"融骸核片",contractName:"融骸幼体アマルガ",contractSpeciesId:"ancient_dragon",contractVisualBase:"./assets/online/raid/juvenile-amalga",
+  materialName:"融骸核片",contractName:"融骸幼体アマルガ",contractSpeciesId:"juvenile_amalga",contractVisualBase:"./assets/online/raid/juvenile-amalga",
   equipmentName:"終焉喰らいの大刃",circleName:"即死返鏡陣",circleId:"death_mirror",
   intro:"千の命を取り込んだ融骸。倒れた仲間の影を作り、残った者へ襲いかかる。",
-  subBoss:{id:"juvenile-amalga",name:"深淵の融骸幼体アマルガ",level:200,maxHp:12_500,element:"dark",visualBase:"./assets/online/raid/juvenile-amalga",attackName:"幼体融解爪"},
+  subBoss:{id:"juvenile-amalga",name:"深淵の融骸幼体アマルガ",level:200,maxHp:12_500,element:"dark",visualBase:"./assets/online/raid/juvenile-amalga",attackName:"幼体融解爪",respawnDelayRounds:1,maxRespawnsPerAttempt:2,rewardableKillsPerCampaign:1},
   patterns:[{name:"赤核穿孔",count:1,rate:.72,magic:false},{name:"千口同哭",count:2,rate:.5,magic:true},{name:"腐界圧壊",count:99,rate:.36,magic:true},{name:"崩星捕食",count:1,rate:.82,magic:false}],
  }),
  Object.freeze({

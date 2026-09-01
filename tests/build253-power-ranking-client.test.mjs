@@ -204,6 +204,193 @@ test("background lifecycle reuses an open socket and busy ownership blocks retri
   }
 });
 
+test("foreground mode synchronizes the latest profile once after the stable acknowledgement", () => {
+  const originalWebSocket = globalThis.WebSocket;
+  globalThis.WebSocket = { OPEN: 1, CONNECTING: 0 };
+  try {
+    const sent = [], modeRequests = [];
+    let profileRevision = 0;
+    const controller = Object.create(OnlinePartyController.prototype);
+    Object.assign(controller, {
+      connectionReady: true,
+      ws: { readyState: 1 },
+      capabilities: new Set(["powerRankingsV1", "backgroundConnectionV1"]),
+      backgroundActive: true,
+      backgroundOnly: true,
+      desiredBackgroundOnly: true,
+      backgroundConnectionBusy: false,
+      connectionModePending: false,
+      foregroundProfileSyncPending: false,
+      supersededConnection: false,
+      roomState: null,
+      unmount: () => {},
+      _refreshProfile() { profileRevision += 1; this.profile = { revision: profileRevision }; },
+      _bindStaticUi: () => {},
+      _renderTradeRecoveryStatus: () => {},
+      _renderRoomBoard: () => {},
+      _startLoops: () => {},
+      _requestConnectionMode(backgroundOnly) { modeRequests.push(backgroundOnly); this.connectionModePending = true; return true; },
+      _send(type, payload) { sent.push({ type, ...payload }); return true; },
+      _normalizeFriendState: source => source,
+      _purgeHiddenSocial: () => {},
+      _syncGuildServerClock: () => {},
+      _renderFriendPanel: () => {},
+      _setStatus: () => {},
+      _showConnectionStep: () => {},
+      _clearRoom: () => true,
+      _requestRoomListings: () => {},
+    });
+
+    controller.mount({});
+    assert.equal(controller.foregroundProfileSyncPending, true);
+    assert.deepEqual(modeRequests, [false]);
+    assert.equal(profileRevision, 1);
+
+    // A delayed ACK for the earlier background request must be compensated;
+    // it must not consume the one-shot foreground profile synchronization.
+    controller._handleMessage({ type: "connectionModeAck", backgroundOnly: true });
+    assert.deepEqual(modeRequests, [false, false]);
+    assert.equal(sent.some(message => message.type === "profile"), false);
+
+    controller._handleMessage({ type: "connectionModeAck", backgroundOnly: false, friendState: {}, guildState: {}, activeTradeIds: [] });
+    assert.deepEqual(sent.filter(message => message.type === "profile"), [{ type: "profile", profile: { revision: 2 } }]);
+    assert.equal(controller.foregroundProfileSyncPending, false);
+
+    controller._handleMessage({ type: "connectionModeAck", backgroundOnly: false, friendState: {}, guildState: {}, activeTradeIds: [] });
+    assert.equal(sent.filter(message => message.type === "profile").length, 1, "duplicate ACKs cannot resend the profile");
+  } finally {
+    globalThis.WebSocket = originalWebSocket;
+  }
+});
+
+test("an open pre-ACK background socket still synchronizes once after foregrounding", () => {
+  const originalWebSocket = globalThis.WebSocket;
+  globalThis.WebSocket = { OPEN: 1, CONNECTING: 0 };
+  try {
+    const sent = [], modeRequests = [];
+    let profileRevision = 0;
+    const controller = new OnlinePartyController({ getState: () => ({ monsters: [], party: [] }) });
+    Object.assign(controller, {
+      ws: { readyState: 1 },
+      connectionReady: false,
+      helloAckPending: true,
+      backgroundActive: true,
+      backgroundOnly: true,
+      desiredBackgroundOnly: true,
+      unmount: () => {},
+      _refreshProfile() { profileRevision += 1; this.profile = { revision: profileRevision }; },
+      _bindStaticUi: () => {},
+      _renderTradeRecoveryStatus: () => {},
+      _renderRoomBoard: () => {},
+      _startLoops: () => {},
+      _requestConnectionMode(backgroundOnly) { modeRequests.push(backgroundOnly); this.connectionModePending = true; return true; },
+      _send(type, payload) { sent.push({ type, ...payload }); return true; },
+      _currentResumeEndpoint: () => "wss://party.example/party",
+      _storeResumeTokenForEndpoint: () => true,
+      _flushPowerRankingAfterHandshake: () => {},
+      _exitGuestProgressIsolation: () => true,
+      _normalizeFriendState: source => source,
+      _purgeHiddenSocial: () => {},
+      _syncGuildServerClock: () => {},
+      _clearGuildPending: () => {},
+      _renderFriendPanel: () => {},
+      _setStatus: () => {},
+      _showConnectionStep: () => {},
+      _clearRoom: () => true,
+      _settlePendingExpeditionStart: () => {},
+      _requestRoomListings: () => {},
+      _flushExpeditionProfileSync: () => {},
+    });
+
+    controller.mount({});
+    assert.equal(controller.foregroundProfileSyncPending, true);
+    assert.equal(sent.some(message => message.type === "profile"), false);
+
+    controller._handleMessage({
+      type: "helloAck", protocol: "1.16.0", capabilities: { powerRankingsV1: true, backgroundConnectionV1: true },
+      playerId: PLAYER_A, resumeToken: "pre-ack-token", backgroundOnly: true, resumed: false, activeTradeIds: [],
+    });
+    assert.deepEqual(modeRequests, [false]);
+    assert.equal(sent.some(message => message.type === "profile"), false);
+
+    controller._handleMessage({ type: "connectionModeAck", backgroundOnly: false, friendState: {}, guildState: {}, activeTradeIds: [] });
+    assert.deepEqual(sent.filter(message => message.type === "profile"), [{ type: "profile", profile: { revision: 2 } }]);
+  } finally {
+    globalThis.WebSocket = originalWebSocket;
+  }
+});
+
+test("a fresh socket carries the latest profile in hello without a redundant update", () => {
+  const originalWebSocket = globalThis.WebSocket;
+  class FakeWebSocket {
+    static OPEN = 1;
+    static CONNECTING = 0;
+    static instances = [];
+    constructor(url) { this.url = url; this.readyState = 0; this.listeners = new Map(); this.sent = []; FakeWebSocket.instances.push(this); }
+    addEventListener(type, listener) { const list = this.listeners.get(type) ?? []; list.push(listener); this.listeners.set(type, list); }
+    emit(type, event = {}) { for (const listener of this.listeners.get(type) ?? []) listener(event); }
+    open() { this.readyState = FakeWebSocket.OPEN; this.emit("open"); }
+    send(payload) { this.sent.push(JSON.parse(payload)); }
+    close() { this.readyState = 3; }
+  }
+  globalThis.WebSocket = FakeWebSocket;
+  try {
+    let profileRevision = 0;
+    const controller = new OnlinePartyController({ getState: () => ({ monsters: [], party: [] }) });
+    Object.assign(controller, {
+      mounted: false,
+      backgroundActive: true,
+      backgroundOnly: true,
+      desiredBackgroundOnly: true,
+      _query: selector => selector === "[data-online-server-url]" ? { value: "https://party.example" } : null,
+      unmount: () => {},
+      _refreshProfile() { profileRevision += 1; this.profile = { revision: profileRevision }; },
+      _bindStaticUi: () => {},
+      _renderTradeRecoveryStatus: () => {},
+      _renderRoomBoard: () => {},
+      _startLoops: () => {},
+      _refreshResumeTokenFromStorage: () => "",
+      _clearGuildPlanTransitionTimer: () => {},
+      _clearMoveInputs: () => {},
+      _setStatus: () => {},
+      _currentResumeEndpoint: () => "wss://party.example/party",
+      _storeResumeTokenForEndpoint: () => true,
+      _flushPowerRankingAfterHandshake: () => {},
+      _normalizeFriendState: source => source,
+      _purgeHiddenSocial: () => {},
+      _syncGuildServerClock: () => {},
+      _clearGuildPending: () => {},
+      _renderFriendPanel: () => {},
+      _showConnectionStep: () => {},
+      _clearRoom: () => true,
+      _settlePendingExpeditionStart: () => {},
+      _requestRoomListings: () => {},
+      _flushExpeditionProfileSync: () => {},
+    });
+
+    controller.connect();
+    const socket = FakeWebSocket.instances.at(-1);
+    controller.mount({});
+    assert.equal(controller.foregroundProfileSyncPending, false, "a CONNECTING socket does not schedule a redundant profile update");
+    assert.equal(profileRevision, 1);
+
+    socket.open();
+    assert.equal(controller.foregroundProfileSyncPending, false);
+    assert.deepEqual(socket.sent.map(message => message.type), ["hello"]);
+    assert.deepEqual(socket.sent[0].profile, { revision: 2 });
+    assert.equal(socket.sent[0].backgroundOnly, false);
+
+    controller._handleMessage({
+      type: "helloAck", protocol: "1.16.0", capabilities: { powerRankingsV1: true, backgroundConnectionV1: true },
+      playerId: PLAYER_A, resumeToken: "fresh-token", backgroundOnly: false, resumed: false,
+      friendState: {}, guildState: {}, activeTradeIds: [], room: null,
+    }, socket);
+    assert.equal(socket.sent.filter(message => message.type === "profile").length, 0);
+  } finally {
+    globalThis.WebSocket = originalWebSocket;
+  }
+});
+
 test("background mode serializes hello/mount/unmount acknowledgement races", () => {
   const originalWebSocket = globalThis.WebSocket;
   globalThis.WebSocket = { OPEN: 1, CONNECTING: 0 };

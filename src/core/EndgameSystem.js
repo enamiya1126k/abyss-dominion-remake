@@ -1,7 +1,7 @@
 import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.11.0-build164";
-import{SPECIES}from"../data/species.js?v=2.11.2-build166";
+import{SPECIES}from"../data/species.js?v=2.11.82-build258";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionById}from"../data/floorBosses.js?v=2.11.30-build195";
-import{floorBossEnemyEntry}from"./FloorBossChallengeSystem.js?v=2.11.30-build195";
+import{floorBossEnemyEntry}from"./FloorBossChallengeSystem.js?v=2.11.82-build258";
 
 export const TEAM_BATTLE_UNLOCK_FLOOR=50;
 export const GAUNTLET_UNLOCK_FLOOR=100;

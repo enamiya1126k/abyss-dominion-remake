@@ -1,5 +1,5 @@
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionById}from"../data/floorBosses.js?v=2.11.30-build195";
-import{SPECIES}from"../data/species.js?v=2.11.2-build166";
+import{SPECIES}from"../data/species.js?v=2.11.82-build258";
 
 export const FLOOR_BOSS_CONTRACT_COST=50;
 export const FLOOR_BOSS_EQUIPMENT_COST=20;

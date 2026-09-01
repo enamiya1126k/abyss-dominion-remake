@@ -126,12 +126,13 @@ test("build225 exploration GOLD modifiers and equipment levels match offline rew
   const abyssAdjusted = Math.round(prop.source.sharedBase.gold * 1.3);
   assert.equal(prop.reward.gold, Math.round(abyssAdjusted * 1.25));
 
-  const equipmentRolls = [.6, .6, .25];
+  const equipmentRolls = [.59, .6, .25];
   store.random = () => equipmentRolls.shift() ?? .5;
   const equipment = store._offlineChestReward(100, { kind: "box" });
-  assert.equal(equipment.randomEquipmentRarity, "N");
+  assert.equal(equipment.randomEquipmentRarity, "R");
   assert.equal(equipment.equipmentSlot, "weapon");
-  assert.equal(equipment.equipmentLevel, 98);
+  assert.equal(equipment.equipmentLevel, 99);
+  assert.ok(equipment.gold > 0, "Release 200 makes ordinary boxes pay guaranteed GOLD alongside the equipment roll");
 });
 
 test("build225 host secret-room doors are repeatable, debounced and keep the run seed public", () => {
@@ -175,7 +176,9 @@ test("build225 tutorial pickup emits its guide marker and expedition profile syn
   assert.equal(synced.ok, true);
   assert.equal(player.session.ready, true, "secret-room profile sync does not alter readiness");
   assert.equal(player.session.profile.explorePickupDone, true);
-  assert.deepEqual(player.session.coopVitals, { hp: 500, maxHp: 500, mp: 0, maxMp: 40 });
+  assert.equal(player.session.profile.battleStats.hp, 1_000, "an active run keeps its entry HP stat");
+  assert.equal(player.session.profile.battleStats.mp, 80, "an active run keeps its entry MP stat");
+  assert.deepEqual(player.session.coopVitals, { hp: 500, maxHp: 1_000, mp: 0, maxMp: 80 });
   assert.ok(player.conn.messages.some(message => message.type === "expeditionVitals" && message.reason === "profileSync" && message.hp === 500 && message.mp === 0));
 });
 

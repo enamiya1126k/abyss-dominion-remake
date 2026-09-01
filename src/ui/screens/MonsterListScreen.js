@@ -1,9 +1,9 @@
-import{SPECIES}from"../../data/species.js?v=2.11.0-build164";
-import{orderedMonsterSpecies}from"../../data/monsterCatalog.js?v=2.11.0-build164";
-import{monsterVisual}from"../MonsterVisual.js?v=2.11.0-build164";
+import{SPECIES}from"../../data/species.js?v=2.11.86-build262";
+import{orderedMonsterSpecies}from"../../data/monsterCatalog.js?v=2.11.86-build262";
+import{monsterVisual}from"../MonsterVisual.js?v=2.11.86-build262";
 import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=2.11.0-build164";
 import{MONSTER_STORAGE_CAP}from"../../core/config.js?v=2.11.0-build164";
-import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.11.0-build164";
+import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=2.11.86-build262";
 
 const RARITY_VALUE={N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9};
 function safe(value){return String(value??"").replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}
@@ -34,6 +34,7 @@ export function MonsterListScreen(state,{search=""}={}){
    ${sectionTitle("魔物一覧",`発見 ${discovered}/${catalog.length}・所持 ${totalOwned}/${MONSTER_STORAGE_CAP}`)}
    <section class="monster-index-tools">
     <div class="monster-index-copy"><b>MONSTER ARCHIVE</b><span>同名魔物の合成・整理を一か所で管理</span></div>
+    <button type="button" id="openCompleteMonsterCodex" class="open-complete-codex"><span>🏆</span><b>全魔物図鑑</b><small>限定・階層ボス・深淵・十神まで収録</small></button>
     <input id="monsterSearch" type="search" value="${safe(search)}" placeholder="No.・名前・種族・レア度で検索">
     <div class="monster-index-legend"><span>所持中を先に表示</span><span>カードをタップして合成・逃す</span></div>
     <section class="monster-bulk-synthesis"><div class="bulk-synthesis-copy"><small>一括合成</small><b>同名個体を一括統合</b><span>最良個体へ「＋」を継承</span></div><div class="bulk-synthesis-controls"><label><select id="bulkSynthesisRarity" aria-label="対象レア度上限"><option>N</option><option>R</option><option>SR</option><option selected>SSR</option><option>UR</option><option>LR</option><option>神話</option><option>深淵</option><option>十神</option></select><em>以下</em></label><button type="button" id="bulkSynthesizeMonsters">保護して一括統合</button></div><small class="bulk-synthesis-safety">編成・お気に入り・ロック・最良個体は保護。深淵／十神も同一人物ごとに合成できます。</small></section>

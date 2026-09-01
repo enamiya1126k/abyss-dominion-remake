@@ -10,9 +10,9 @@ const battleScreen=readFileSync(join(root,"src/ui/screens/BattleScreen.js"),"utf
 const index=readFileSync(join(root,"index.html"),"utf8");
 
 test("build254 cache boundary is active",()=>{
- assert.match(index,/ASSET_VERSION = "2\.11\.78"/);
- assert.match(index,/ASSET_BUILD = "build254"/);
- assert.match(main,/BattleScreen\.js\?v=2\.11\.78-build254/);
+ assert.match(index,/ASSET_VERSION = "2\.11\.82"/);
+ assert.match(index,/ASSET_BUILD = "build258"/);
+ assert.match(main,/BattleScreen\.js\?v=2\.11\.82-build258/);
 });
 
 test("offline special battles expose an enabled retreat control",()=>{
@@ -51,4 +51,3 @@ test("endgame briefing no longer claims retreat is impossible",()=>{
  assert.match(main,/戦闘中はいつでも撤退できます。撤退した戦闘の報酬は獲得できません。/);
  assert.doesNotMatch(main,/味方は開始時に全回復。逃走不可。敗北ペナルティはありません。/);
 });
-

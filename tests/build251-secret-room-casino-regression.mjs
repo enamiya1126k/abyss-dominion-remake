@@ -213,11 +213,11 @@ test("build251 updates cache identity and removes one-spin wording", async () =>
   const assetBuild = Number(index.match(/const ASSET_BUILD = "build(\d+)"/)?.[1]);
   assert.ok(assetVersion && (assetVersion[0] > 2 || assetVersion[0] === 2 && (assetVersion[1] > 11 || assetVersion[1] === 11 && assetVersion[2] >= 75)), "active asset version must not regress below build251");
   assert.ok(assetBuild >= 251, "active asset build must not regress below build251");
-  assert.match(main, /SecretRoomSystem\.js\?v=2\.11\.75-build251/);
-  assert.match(main, /ShopScreen\.js\?v=2\.11\.75-build251/);
-  assert.match(main, /SaveService\.js\?v=2\.11\.75-build251/);
-  assert.match(shop, /SecretRoomSystem\.js\?v=2\.11\.75-build251/);
-  assert.match(saveService, /SecretRoomSystem\.js\?v=2\.11\.75-build251/);
+  assert.match(main, /SecretRoomSystem\.js\?v=2\.11\.82-build258/);
+  assert.match(main, /ShopScreen\.js\?v=2\.11\.82-build258/);
+  assert.match(main, /SaveService\.js\?v=2\.11\.82-build258/);
+  assert.match(shop, /SecretRoomSystem\.js\?v=2\.11\.82-build258/);
+  assert.match(saveService, /SecretRoomSystem\.js\?v=2\.11\.82-build258/);
   assert.doesNotMatch(secretRoom, /ENDGAME_CHARACTERS|marketEndgameOffer/);
   assert.match(secretRoom, /random\(\)<\.05\?9999/);
   assert.doesNotMatch(`${main}\n${shop}`, /この🚪で1回限り|この🚪では挑戦済み|別の🚪を発見すると再挑戦/);

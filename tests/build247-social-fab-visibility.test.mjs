@@ -5,9 +5,9 @@ import { readFile } from "node:fs/promises";
 import { shouldShowOnlineSocialFab } from "../src/online/OnlinePartyClient.js?build247-social-fab-test";
 import { renderOnlineSocialPanel } from "../src/ui/screens/OnlinePartyScreen.js?build247-social-fab-test";
 
-test("build247 shows the Social FAB only on non-gameplay online screens", () => {
+test("build247 shows the Social FAB only on room-safe social routes", () => {
   for (const connectionStep of [undefined, "entry", "gate"]) {
-    assert.equal(shouldShowOnlineSocialFab({ connectionStep, route: "explore" }), true);
+    assert.equal(shouldShowOnlineSocialFab({ connectionStep, route: "explore" }), false, String(connectionStep));
   }
   for (const route of ["home", "chat"]) {
     assert.equal(shouldShowOnlineSocialFab({ connectionStep: "room", route }), true, route);

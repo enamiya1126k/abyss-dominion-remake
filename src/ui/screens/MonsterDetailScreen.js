@@ -1,11 +1,11 @@
-import{SPECIES}from"../../data/species.js?v=2.11.0-build164";
+import{SPECIES}from"../../data/species.js?v=2.11.82-build258";
 import{PERSONALITIES}from"../../data/personalities.js?v=2.11.0-build164";
 import{MONSTER_COLORS}from"../../data/colors.js?v=2.11.0-build164";
 import{ATTRIBUTES}from"../../data/attributes.js?v=2.11.0-build164";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.11.73-build249";
+import{maxMp}from"../../battle/SkillSystem.js?v=2.11.83-build259";
 import{endgameCharacter}from"../../data/endgameCharacters.js?v=2.11.0-build164";
-import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=2.11.30-build195";
-import{monsterVisual}from"../MonsterVisual.js?v=2.11.0-build164";
+import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=2.11.82-build258";
+import{monsterVisual}from"../MonsterVisual.js?v=2.11.82-build258";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.0-build164";
 import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=2.11.0-build164";
 
@@ -13,7 +13,7 @@ function monsterRarity(monster){return monster.summonTier??monster.summonRarity?
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
 function nextAffection(aff){if(aff>=1000)return null;return Math.min(1000,Math.ceil((aff+1)/100)*100)}
 function sourceLabel(method){
- return({capture:"探索・捕獲",summon:"召喚",market:"闇市場",darkMarket:"闇市場",endgameContract:"契約",deepSummon:"深淵召喚",serialCode:"シリアルコード"}[method]??method??"不明");
+  return({capture:"探索・捕獲",summon:"召喚",market:"闇市場",darkMarket:"闇市場",endgameContract:"契約",deepSummon:"深淵召喚",serialCode:"シリアルコード",onlineWeeklyRaidExchange:"週間レイド・核片交換"}[method]??method??"不明");
 }
 
 export function MonsterDetailScreen(monster,state){

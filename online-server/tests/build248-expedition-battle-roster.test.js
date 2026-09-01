@@ -256,7 +256,7 @@ test("build248 expedition victory settles one owner reward and one receipt with 
     const rewards = member.session.pendingRewards.filter(entry => entry.source?.kind === "battle");
     const receipts = member.session.pendingMessages.filter(entry => entry.type === "battleDefeated");
     assert.equal(rewards.length, 1, "gold, crystals, drops and EXP use one idempotent owner settlement");
-    assert.equal(receipts.length, 1, "progression receives one battle receipt per owner");
+    assert.equal(receipts.length, member === members[0] ? 1 : 0, "only the world owner receives a progression battle receipt");
     assert.ok(Number.isFinite(rewards[0].reward.gold));
     assert.ok(Array.isArray(rewards[0].reward.experienceRoster));
     assert.deepEqual(rewards[0].reward.experienceRoster.map(entry => entry.monsterId).sort(), expectedByOwner.get(member.session.playerId));
@@ -269,14 +269,16 @@ test("build248 expedition victory settles one owner reward and one receipt with 
     })));
     assert.deepEqual(rewards[0].reward.skillUses, { "skill-use-0": 1 }, "the legacy scalar applies only to the primary monster");
     assert.equal(rewards[0].reward.skillUses["skill-use-1"], undefined, "secondary uses cannot be double-applied to the primary");
-    assert.equal(receipts[0].worldOwnerId, members[0].session.playerId);
-    assert.equal(receipts[0].progressionEligible, member === members[0]);
+    if (member === members[0]) {
+      assert.equal(receipts[0].worldOwnerId, members[0].session.playerId);
+      assert.equal(receipts[0].progressionEligible, true);
+    }
   }
 
   store._finishBattleVictory(room, battle);
   for (const member of members) {
     assert.equal(member.session.pendingRewards.filter(entry => entry.source?.kind === "battle").length, 1, "a retried finish cannot duplicate the owner reward");
-    assert.equal(member.session.pendingMessages.filter(entry => entry.type === "battleDefeated").length, 1, "a retried finish cannot duplicate the owner receipt");
+    assert.equal(member.session.pendingMessages.filter(entry => entry.type === "battleDefeated").length, member === members[0] ? 1 : 0, "a retried finish cannot create or duplicate a progression receipt");
   }
 });
 
