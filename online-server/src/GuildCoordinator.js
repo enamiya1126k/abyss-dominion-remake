@@ -101,7 +101,7 @@ export class GuildCoordinator {
     if (!entry || !ACTIVITY_KINDS.has(entry.kind)) return null;
     const participantLimit = entry.kind === "checkIn" ? MAX_MEMBERS : this.maxRoomMembers, at = Math.max(0, Number(entry.at) || 0), actors = [...new Set(Array.isArray(entry.actorIds) ? entry.actorIds : [])].slice(0, participantLimit).map(id => { const profile = this.profileOf(id) ?? {}; return { displayName: text(profile.displayName, 16) || "冒険者", fallbackEmoji: text(profile.fallbackEmoji, 8) || "魔" }; });
     const dto = { activityId: text(entry.activityId, 96), kind: entry.kind, at, points: Math.max(0, Math.floor(Number(entry.points) || 0)), actors, partySize: Math.max(1, Math.min(participantLimit, Math.floor(Number(entry.partySize) || 1))), guildMemberCount: Math.max(1, Math.min(participantLimit, Math.floor(Number(entry.guildMemberCount) || actors.length || 1))) };
-    if (Number.isFinite(Number(entry.floor))) dto.floor = Math.max(1, Math.min(10_000, Math.floor(Number(entry.floor))));
+    if (Number.isFinite(Number(entry.floor))) dto.floor = Math.max(1, Math.min(100, Math.floor(Number(entry.floor))));
     return ACTIVITY_ID.test(dto.activityId) && dto.at > 0 ? dto : null;
   }
   _guildSnapshot(guild, viewerId) {
@@ -135,7 +135,7 @@ export class GuildCoordinator {
       type: "guildPlanReminder", serverNow: at, phase,
       plan: {
         planId: plan.planId, purpose: plan.purpose, style: plan.style,
-        floor: Math.max(1, Math.min(10_000, Math.floor(Number(plan.floor) || 1))),
+        floor: Math.max(1, Math.min(100, Math.floor(Number(plan.floor) || 1))),
         scheduledAt: plan.scheduledAt,
         organizer: { displayName: text(organizerProfile.displayName, 16) || "冒険者", fallbackEmoji: text(organizerProfile.fallbackEmoji, 8) || "魔" }
       }
@@ -221,7 +221,7 @@ export class GuildCoordinator {
   _recruitmentDto(entry, viewerId = null) {
     const room = this.rooms.get(entry.roomId), hostSession = this.sessions.get(entry.publisherId), profile = hostSession?.profile ?? this.profileOf(entry.publisherId) ?? {};
     if (!room || [...room.members].some(id => this._blocked(viewerId, id))) return null;
-    return { recruitmentId: entry.recruitmentId, purpose: entry.purpose, style: entry.style, note: entry.note, floor: Math.max(1, Math.min(10_000, Math.floor(Number(room.selectedFloor) || 1))), count: room.members.size, max: this.maxRoomMembers, slots: Math.max(0, this.maxRoomMembers - room.members.size), host: { playerId: entry.publisherId, displayName: text(profile.displayName, 16) || "冒険者", monsterName: text(profile.monsterName, 32) || "仲間", speciesId: text(profile.speciesId, 80) || "slime", fallbackEmoji: text(profile.fallbackEmoji, 8) || "魔", level: Math.max(1, Math.floor(Number(profile.level) || 1)) }, createdAt: entry.createdAt, expiresAt: entry.expiresAt };
+    return { recruitmentId: entry.recruitmentId, purpose: entry.purpose, style: entry.style, note: entry.note, floor: Math.max(1, Math.min(100, Math.floor(Number(room.selectedFloor) || 1))), count: room.members.size, max: this.maxRoomMembers, slots: Math.max(0, this.maxRoomMembers - room.members.size), host: { playerId: entry.publisherId, displayName: text(profile.displayName, 16) || "冒険者", monsterName: text(profile.monsterName, 32) || "仲間", speciesId: text(profile.speciesId, 80) || "slime", fallbackEmoji: text(profile.fallbackEmoji, 8) || "魔", level: Math.max(1, Math.floor(Number(profile.level) || 1)) }, createdAt: entry.createdAt, expiresAt: entry.expiresAt };
   }
   _recruitmentsForGuild(guild, viewerId = null) {
     if (!guild) return [];
@@ -361,7 +361,7 @@ export class GuildCoordinator {
   }
   _appendRoomActivity(guild, { kind, actorIds, points, partySize, floor, at }) {
     const currentActors = [...new Set(actorIds)].filter(id => guild.memberIds.has(id)).slice(0, this.maxRoomMembers), entry = { activityId: inviteToken(), kind, at, weekId: guild.week.weekId, points, actorIds: currentActors, partySize: Math.max(1, Math.min(this.maxRoomMembers, Math.floor(Number(partySize) || 1))), guildMemberCount: currentActors.length };
-    if (Number.isFinite(Number(floor))) entry.floor = Math.max(1, Math.min(10_000, Math.floor(Number(floor))));
+    if (Number.isFinite(Number(floor))) entry.floor = Math.max(1, Math.min(100, Math.floor(Number(floor))));
     guild.activity.push(entry); this._trimActivity(guild, at);
   }
   _recentEventReceipts(guild, at) { return (Array.isArray(guild.recentEventReceipts) ? guild.recentEventReceipts : []).filter(entry => entry.at > at - RECENT_RECEIPT_TTL_MS).slice(-RECENT_RECEIPT_LIMIT); }
@@ -379,7 +379,7 @@ export class GuildCoordinator {
     if (!PLAN_PURPOSES.has(purpose)) return { ok: false, code: "GUILD_PLAN_PURPOSE", message: "予定の目的が正しくありません" };
     if (!PLAN_STYLES.has(style)) return { ok: false, code: "GUILD_PLAN_STYLE", message: "予定の遊び方が正しくありません" };
     if (Array.from(note).length > PLAN_NOTE_LIMIT) return { ok: false, code: "GUILD_PLAN_NOTE", message: `ひとことは${PLAN_NOTE_LIMIT}文字以内で入力してください` };
-    if (!Number.isSafeInteger(floor) || floor < 1 || floor > 10_000) return { ok: false, code: "GUILD_PLAN_FLOOR", message: "階層は1〜10000で入力してください" };
+    if (!Number.isSafeInteger(floor) || floor < 1 || floor > 100) return { ok: false, code: "GUILD_PLAN_FLOOR", message: "階層は1〜100で入力してください" };
     if (!Number.isSafeInteger(scheduledAt) || scheduledAt < at + PLAN_MIN_LEAD_MS || scheduledAt > at + PLAN_MAX_LEAD_MS) return { ok: false, code: "GUILD_PLAN_TIME", message: "開催時刻は10分後から14日以内で指定してください" };
     guild.plans ??= [];
     if (guild.plans.length >= PLAN_LIMIT) return { ok: false, code: "GUILD_PLAN_LIMIT", message: `予定はギルド全体で${PLAN_LIMIT}件までです` };
@@ -459,13 +459,13 @@ export class GuildCoordinator {
           if (!ACTIVITY_ID.test(activityId) || !activityAt || seenActivityIds.has(activityId) || !ACTIVITY_KINDS.has(kind) || (isCheckIn ? !validDayId(storedDay) : !validWeekId(storedWeekId))) continue;
           const normalized = { activityId, kind, at: activityAt, points: Math.max(0, Math.floor(Number(entry?.points) || 0)), actorIds, partySize: Math.max(1, Math.min(participantLimit, Math.floor(Number(entry?.partySize) || 1))), guildMemberCount: Math.max(1, Math.min(participantLimit, Math.floor(Number(entry?.guildMemberCount) || actorIds.length || 1))) };
           if (isCheckIn) normalized.day = storedDay; else normalized.weekId = storedWeekId;
-          if (Number.isFinite(Number(entry?.floor))) normalized.floor = Math.max(1, Math.min(10_000, Math.floor(Number(entry.floor))));
+          if (Number.isFinite(Number(entry?.floor))) normalized.floor = Math.max(1, Math.min(100, Math.floor(Number(entry.floor))));
           seenActivityIds.add(activityId); activity.push(normalized);
         }
         const seenPlanIds = new Set(), planCandidates = [];
         for (const entry of (Array.isArray(source.plans) ? source.plans : []).slice(0, 1_000)) {
           const planIdValue = text(entry?.planId, 96), creatorId = playerId(entry?.creatorId), purpose = collaborationPurpose(entry?.purpose), style = String(entry?.style ?? ""), floor = Number(entry?.floor), createdAt = Number(entry?.createdAt), scheduledAt = Number(entry?.scheduledAt);
-          if (!PLAN_ID.test(planIdValue) || seenPlanIds.has(planIdValue) || !memberIds.has(creatorId) || !PLAN_PURPOSES.has(purpose) || !PLAN_STYLES.has(style) || !Number.isSafeInteger(floor) || floor < 1 || floor > 10_000 || !Number.isSafeInteger(createdAt) || createdAt <= 0 || !Number.isSafeInteger(scheduledAt) || scheduledAt - createdAt < PLAN_MIN_LEAD_MS || scheduledAt - createdAt > PLAN_MAX_LEAD_MS || scheduledAt + PLAN_RETENTION_MS <= loadedAt) continue;
+          if (!PLAN_ID.test(planIdValue) || seenPlanIds.has(planIdValue) || !memberIds.has(creatorId) || !PLAN_PURPOSES.has(purpose) || !PLAN_STYLES.has(style) || !Number.isSafeInteger(floor) || floor < 1 || floor > 100 || !Number.isSafeInteger(createdAt) || createdAt <= 0 || !Number.isSafeInteger(scheduledAt) || scheduledAt - createdAt < PLAN_MIN_LEAD_MS || scheduledAt - createdAt > PLAN_MAX_LEAD_MS || scheduledAt + PLAN_RETENTION_MS <= loadedAt) continue;
           const responses = {}; if (entry?.responses && typeof entry.responses === "object" && !Array.isArray(entry.responses)) for (const [rawMemberId, rawStatus] of Object.entries(entry.responses)) { const memberId = playerId(rawMemberId), status = String(rawStatus ?? ""); if (memberIds.has(memberId) && PLAN_RESPONSES.has(status)) responses[memberId] = status; }
           seenPlanIds.add(planIdValue); planCandidates.push({ planId: planIdValue, creatorId, purpose, style, note: text(entry?.note, PLAN_NOTE_LIMIT), floor, scheduledAt, createdAt, responses });
         }

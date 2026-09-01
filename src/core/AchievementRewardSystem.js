@@ -9,11 +9,11 @@ const definition=(id,group,icon,title,description,metric,target,rewardValue)=>Ob
 
 export const ACHIEVEMENT_DEFINITIONS=Object.freeze([
  definition("floor-10","探索","🗺️","地下世界への第一歩","最高到達階層10階", "maxFloor",10,reward(50000,50,{captureCrystals:10})),
- definition("floor-100","探索","🗺️","百階の踏破者","最高到達階層100階", "maxFloor",100,reward(250000,150,{captureCrystals:25})),
- definition("floor-500","探索","🌑","深層を歩く者","最高到達階層500階", "maxFloor",500,reward(1000000,500,{abyssKeys:5,experienceItemsUltra:3})),
- definition("floor-1000","探索","👑","千階の支配者","最高到達階層1,000階", "maxFloor",1000,reward(3000000,1000,{abyssKeys:10,mythicEquipment:1,equipmentPlus:30})),
- definition("floor-3000","探索","🌌","深淵領域の証人","最高到達階層3,000階", "maxFloor",3000,reward(10000000,2500,{abyssKeys:30,mythicEquipment:1,equipmentPlus:60})),
- definition("floor-10000","探索","✨","世界法則の超越者","最高到達階層10,000階", "maxFloor",10000,reward(50000000,10000,{abyssKeys:100,mythicEquipment:3,equipmentPlus:99})),
+ definition("floor-30","探索","🗺️","三日を越えし者","最高到達階層30階", "maxFloor",30,reward(250000,150,{captureCrystals:25})),
+ definition("floor-50","探索","🌑","予言の折り返し","最高到達階層50階", "maxFloor",50,reward(1000000,500,{abyssKeys:5,experienceItemsUltra:3})),
+ definition("floor-70","探索","👑","七深淵の支配者","最高到達階層70階", "maxFloor",70,reward(3000000,1000,{abyssKeys:10,mythicEquipment:1,equipmentPlus:30})),
+ definition("floor-90","探索","🌌","神域を破る者","最高到達階層90階", "maxFloor",90,reward(10000000,2500,{abyssKeys:30,mythicEquipment:1,equipmentPlus:60})),
+ definition("floor-100","探索","✨","百階完全制覇","最高到達階層100階", "maxFloor",100,reward(50000000,10000,{abyssKeys:100,mythicEquipment:3,equipmentPlus:99})),
 
  definition("kills-100","戦闘","⚔️","百の討伐","累計撃破数100体", "kills",100,reward(100000,100,{experienceItemsUltra:1})),
  definition("kills-1000","戦闘","⚔️","千の討伐","累計撃破数1,000体", "kills",1000,reward(1000000,400,{experienceItemsUltra:5})),

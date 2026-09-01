@@ -21,9 +21,9 @@ const CONSUMABLES=[
  ["fullHeals","✨","万能霊薬","HP・MP・状態異常を回復"],
  ["partyFullHeals","🌟","全体万能霊薬","味方全員を完全回復"]
  ,["experienceItems","📘","経験値パック（小）","現在Lv基準・N標準で約1Lv分"]
- ,["experienceItemsMedium","📗","経験値パック（中）","300階解禁・N標準で約3Lv分"]
- ,["experienceItemsLarge","📙","経験値パック（大）","750階解禁・N標準で約6Lv分"]
- ,["experienceItemsUltra","📕","経験値パック（超）","1000階解禁・N標準で最大約10Lv分"]
+ ,["experienceItemsMedium","📗","経験値パック（中）","30階解禁・N標準で約3Lv分"]
+ ,["experienceItemsLarge","📙","経験値パック（大）","50階解禁・N標準で約6Lv分"]
+ ,["experienceItemsUltra","📕","経験値パック（超）","70階解禁・N標準で最大約10Lv分"]
 ];
 const MATERIALS=[
  ["captureCrystals","🔮","捕獲結晶","捕獲1回につき1個消費"],

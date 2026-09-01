@@ -9,11 +9,11 @@ export const WORLD_PRESENTATIONS={
 
 export function worldIdForFloor(floor){
  const f=Math.max(1,Math.min(WORLD_MAX_FLOOR,Number(floor)||1));
- if(f>=7001)return"divine";
- if(f>=3001)return"abyss";
- if(f>=1001)return"unknown";
+ if(f>=80)return"divine";
+ if(f>=70)return"abyss";
+ if(f>=30)return"unknown";
  return"normal";
 }
 export function worldPresentationForFloor(floor){return WORLD_PRESENTATIONS[worldIdForFloor(floor)]}
-export function shouldPlaySecondWorldIntro(state){return Number(state?.player?.currentFloor)>=1001&&!state?.flags?.secondWorldEntered}
+export function shouldPlaySecondWorldIntro(state){return Number(state?.player?.currentFloor)>=70&&!state?.flags?.secondWorldEntered}
 export function markSecondWorldEntered(state){state.flags??={};state.flags.secondWorldEntered=true;state.flags.deepAbyssUnlocked=true;state.worldPhase=1;return state}

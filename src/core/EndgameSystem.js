@@ -1,12 +1,12 @@
 import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=2.11.0-build164";
-import{SPECIES}from"../data/species.js?v=2.11.87-build263";
+import{SPECIES}from"../data/species.js?v=3.0.0-build300";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionById}from"../data/floorBosses.js?v=2.11.30-build195";
 import{floorBossEnemyEntry}from"./FloorBossChallengeSystem.js?v=2.11.82-build258";
 
-export const TEAM_BATTLE_UNLOCK_FLOOR=50;
-export const GAUNTLET_UNLOCK_FLOOR=100;
-export const EMERGENCY_UNLOCK_FLOOR=150;
-export const WORLD_MAX_FLOOR=10000;
+export const TEAM_BATTLE_UNLOCK_FLOOR=5;
+export const GAUNTLET_UNLOCK_FLOOR=10;
+export const EMERGENCY_UNLOCK_FLOOR=15;
+export const WORLD_MAX_FLOOR=100;
 export const ENDGAME_TRIAL_BATTLE_COUNT=112;
 export const ENDGAME_EMERGENCY_RATE=.03;
 export const ENDGAME_EMERGENCY_COOLDOWN_FLOORS=10;
@@ -20,14 +20,14 @@ export function endgameTrialLoopMultiplier(loop=1){return 1+(Math.max(1,Math.flo
 export function endgameFactionStatMultiplier(faction){return ENDGAME_BASE_STAT_MULTIPLIER[faction]??1}
 
 export const WORLD_REGIONS=[
- {id:"normal",name:"通常領域",minFloor:1,maxFloor:1000,phase:0},
- {id:"unknown",name:"未知領域",minFloor:1001,maxFloor:3000,phase:1},
- {id:"abyss",name:"深淵領域",minFloor:3001,maxFloor:7000,phase:1},
- {id:"divine",name:"神域",minFloor:7001,maxFloor:10000,phase:1}
+ {id:"normal",name:"魔界迷宮",minFloor:1,maxFloor:29,phase:0},
+ {id:"unknown",name:"侵食領域",minFloor:30,maxFloor:69,phase:0},
+ {id:"abyss",name:"深淵領域",minFloor:70,maxFloor:79,phase:1},
+ {id:"divine",name:"神域",minFloor:80,maxFloor:100,phase:1}
 ];
 
-export function hasCleared1000(state){return Boolean(state?.flags?.gameClear1000||Number(state?.worldPhase)>=1)}
-export function hasCleared10000(state){return Boolean(state?.flags?.gameClear10000)}
+export function hasCleared1000(state){return Boolean(state?.flags?.gameClear1000||state?.campaign100?.finalUnlocked||Number(state?.player?.maxFloor)>=100)}
+export function hasCleared10000(state){return Boolean(state?.flags?.gameClear10000||state?.campaign100?.finalCompleted)}
 export function worldPhase(state){return hasCleared1000(state)?1:0}
 export function worldRegionForFloor(floor){const f=Math.max(1,Math.min(WORLD_MAX_FLOOR,Number(floor)||1));return WORLD_REGIONS.find(region=>f>=region.minFloor&&f<=region.maxFloor)??WORLD_REGIONS[0]}
 export function mark1000FloorCleared(state){state.flags??={};state.flags.gameClear1000=true;state.flags.deepAbyssUnlocked=true;state.worldPhase=1;return state}

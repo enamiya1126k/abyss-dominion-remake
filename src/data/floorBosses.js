@@ -2230,8 +2230,8 @@ const ACTION_BY_ID=new Map(FLOOR_BOSS_CATALOG.flatMap(boss=>Object.entries(boss.
 const WEAPON_SKILL_BY_ID=new Map(FLOOR_BOSS_CATALOG.map(boss=>boss.dedicatedWeapon.skill).filter(Boolean).map(skill=>[skill.id,skill]));
 
 export function floorBossDefinitionForFloor(floor){
- const value=Math.max(1,Math.floor(Number(floor)||1));if(value%10!==0||value%100===0)return null;
- const cycle=((value-1)%1000)+1,definition=CATALOG_BY_FLOOR.get(cycle);return definition?{...definition,actualFloor:value,cycleIndex:Math.floor((value-1)/1000)}:null;
+ const value=Math.max(1,Math.min(100,Math.floor(Number(floor)||1)));if(value%10===0)return null;
+ const legacyFloor=value*10,definition=CATALOG_BY_FLOOR.get(legacyFloor);return definition?{...definition,actualFloor:value,legacyFloor,cycleIndex:0}:null;
 }
 
 export function floorBossActionInfo(action){
@@ -2249,14 +2249,16 @@ export function floorBossEquipmentDesignByPiece(id,piece="weapon"){
 }
 
 const ABYSS_MILESTONES=Object.freeze({
- 100:["abyss_gluttony"],200:["abyss_wrath"],300:["abyss_envy"],400:["abyss_sloth"],500:["abyss_greed","abyss_lust"],600:["abyss_pride"],700:["abyss_gluttony","abyss_wrath"],800:["abyss_envy","abyss_sloth"],900:["abyss_greed","abyss_lust","abyss_pride"]
+ 10:["abyss_gluttony"],20:["abyss_wrath"],30:["abyss_envy"],40:["abyss_sloth"],50:["abyss_greed"],60:["abyss_lust"],70:["abyss_pride"]
 });
 const TEN_GODS=Object.freeze(["ten_time","ten_space","ten_life","ten_death","ten_fate","ten_chaos","ten_dominion","ten_creation","ten_end","ten_divinity"]);
 
 export function milestoneBossIdsForFloor(floor){
- const value=Math.max(1,Math.floor(Number(floor)||1));if(value%100!==0)return[];
- if(value%1000===0)return[TEN_GODS[(Math.max(1,Math.floor(value/1000))-1)%TEN_GODS.length]];
- return[...(ABYSS_MILESTONES[value%1000]??[])];
+ const value=Math.max(1,Math.min(100,Math.floor(Number(floor)||1)));
+ if(value===80)return TEN_GODS.slice(0,3);
+ if(value===90)return TEN_GODS.slice(3,6);
+ if(value===100)return TEN_GODS.slice(6,10);
+ return[...(ABYSS_MILESTONES[value]??[])];
 }
 
 export function isMilestoneBossFloor(floor){return milestoneBossIdsForFloor(floor).length>0}

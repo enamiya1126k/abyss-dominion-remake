@@ -52,14 +52,14 @@ function seeded(seed) {
 }
 
 function mixSeed(seed, floor) {
-  let value = (safeInteger(seed, 1, 1, 0x7fffffff) ^ (safeInteger(floor, 1, 1, 10000) * 2654435761)) >>> 0;
+  let value = (safeInteger(seed, 1, 1, 0x7fffffff) ^ (safeInteger(floor, 1, 1, 100) * 2654435761)) >>> 0;
   value ^= value >>> 16; value = Math.imul(value, 2246822507); value ^= value >>> 13; value = Math.imul(value, 3266489909); value ^= value >>> 16;
   return value >>> 0;
 }
 
 function secretRoomPlan(run, floor) {
   if (!run || run.id == null) return null;
-  const safeFloor = safeInteger(floor, 1, 1, 10000);
+  const safeFloor = safeInteger(floor, 1, 1, 100);
   const random = seeded(mixSeed(run.seed, safeFloor));
   return { id: `${String(run.id)}:${safeFloor}`, appears: safeFloor % 10 !== 0 && random() < .09, positionRoll: random() };
 }
@@ -72,7 +72,7 @@ function floorConfig(floor, rng) {
   let rows = (min + Math.floor(rng() * (max - min + 1))) | 1;
   cols = clamp(cols, 23, 39);
   rows = clamp(rows, 23, 39);
-  return { cols, rows, roomCount: 3 + Math.floor(rng() * Math.min(5, 3 + Math.floor(tier / 3))) };
+  return { cols, rows, roomCount: 5 + Math.floor(rng() * 3) };
 }
 
 function distancesFrom(tiles, start) {
@@ -177,10 +177,12 @@ function roomFloor(floor, rng) {
     const room = { x: 1 + Math.floor(rng() * Math.max(1, cols - w - 2)), y: 1 + Math.floor(rng() * Math.max(1, rows - h - 2)), w, h };
     if (!overlaps(room)) rooms.push(room);
   }
-  if (rooms.length < 3) rooms.splice(0, rooms.length,
+  if (rooms.length < 5) rooms.splice(0, rooms.length,
     { x: 1, y: 1, w: 7, h: 7 },
     { x: cols - 8, y: 1, w: 7, h: 7 },
-    { x: Math.floor((cols - 7) / 2), y: rows - 8, w: 7, h: 7 });
+    { x: 1, y: rows - 8, w: 7, h: 7 },
+    { x: cols - 8, y: rows - 8, w: 7, h: 7 },
+    { x: Math.floor((cols - 7) / 2), y: Math.floor((rows - 7) / 2), w: 7, h: 7 });
   for (const room of rooms) for (let y = room.y; y < room.y + room.h; y++) for (let x = room.x; x < room.x + room.w; x++) carve(x, y);
   const horizontal = (from, to, y, width) => { for (let x = Math.min(from, to); x <= Math.max(from, to); x++) for (let offset = 0; offset < width; offset++) carve(x, y + offset - Math.floor((width - 1) / 2)); };
   const vertical = (from, to, x, width) => { for (let y = Math.min(from, to); y <= Math.max(from, to); y++) for (let offset = 0; offset < width; offset++) carve(x + offset - Math.floor((width - 1) / 2), y); };
@@ -202,8 +204,8 @@ function roomFloor(floor, rng) {
 }
 
 export function createSoloStyleDungeon({ roomId, floor, runId, now, random, chestSpawnBonus = 0, secretRoomRun = null, explorePickupDone = false }) {
-  const bossFloor = floor % 10 === 0;
-  const layout = bossFloor ? bossCorridor(floor) : roomFloor(floor, random);
+  const bossFloor = true;
+  const layout = roomFloor(floor, random);
   const tiles = layout.tiles;
   const cells = layout.cells ?? tiles.flatMap((row, y) => row.map((tile, x) => tile === "." ? { x, y } : null).filter(Boolean));
   const reserved = new Set([key(layout.start), key(layout.exit)]);
@@ -211,8 +213,9 @@ export function createSoloStyleDungeon({ roomId, floor, runId, now, random, ches
   const objects = [];
   const add = (type, point, index, extra = {}) => { if (point) { reserved.add(key(point)); objects.push({ id: `${type}-${index}`, type, ...point, resolved: false, ...extra }); } };
   let treasureRoom = false;
-  if (bossFloor) add("encounter", layout.boss, 1, { bossEncounter: true });
-  else {
+  const bossPoint=takeCells(candidates,reserved,random,1)[0]??layout.exit;add("encounter",bossPoint,1,{bossEncounter:true});
+  takeCells(candidates,reserved,random,3).forEach((point,index)=>add("campaignKey",point,index+1,{shared:true,persistent:true}));
+  {
     treasureRoom = random() < treasureRoomRateForFloor(floor);
     const chestCount = treasureRoom ? treasureRoomChestCount(random) : random() < Math.max(0, .16 - Math.max(0, Number(chestSpawnBonus) || 0)) ? 0 : random() < .72 ? 1 : 2;
     const pick = () => {
@@ -241,15 +244,15 @@ export function createSoloStyleDungeon({ roomId, floor, runId, now, random, ches
       }
     }
   }
-  objects.push({ id: "exit", type: "exit", ...layout.exit, resolved: false });
-  const nextEncounter = bossFloor ? Number.MAX_SAFE_INTEGER : 10 + Math.floor(random() * 23);
+  objects.push({ id: "exit", type: "exit", ...layout.exit, resolved: false, hidden: true });
+  const nextEncounter = 10 + Math.floor(random() * 23);
   const decorations = decorationPlan(tiles, reserved, floor, random);
   addFirstTutorialPickup({ tiles, start: layout.start, objects, decorations, floor, explorePickupDone });
   return {
     id: runId, roomId, floor, cols: layout.cols, rows: layout.rows,
     tiles: tiles.map(row => row.join("")), start: layout.start, exit: layout.exit,
     objects, decorations, treasureRoom, steps: 0,
-    nextEncounter, encountersEnabled: !bossFloor,
+    nextEncounter, encountersEnabled: true, campaignKeysCollected: 0,
     discoveries: 0,
     totalDiscoveries: objects.filter(object => object.type === "chest").length + decorations.filter(object => ["barrel", "crate", "bones", "crystal", "water"].includes(object.type)).length,
     encountersCleared: 0, totalEncounters: bossFloor ? 1 : 0,
@@ -267,6 +270,7 @@ export function encounterCountForFloor(floor, roll) {
 }
 
 export function floorEnemyStats({ floor, template, random, boss = false }) {
+  const depth=Math.max(10,Math.min(1000,Math.floor(Number(floor)||1)*10));
   const sourceBase = template?.baseStats ?? BASE_STATS[template.id] ?? BASE_STATS.slime;
   const base = {
     hp: Math.max(1, Number(sourceBase.hp) || BASE_STATS.slime.hp),
@@ -274,14 +278,14 @@ export function floorEnemyStats({ floor, template, random, boss = false }) {
     def: Math.max(0, Number(sourceBase.def) || 0),
     spd: Math.max(1, Number(sourceBase.spd) || BASE_STATS.slime.spd),
   };
-  const level = boss ? bossLevelForFloor(floor) : floor === 1 ? 1 : enemyLevelForFloor(floor, random());
-  const rank = rollEnemyRank(floor, random());
+  const level = boss ? bossLevelForFloor(depth) : enemyLevelForFloor(depth, random());
+  const rank = rollEnemyRank(depth, random());
   const rankMultiplier = enemyRankStatMultiplier(rank);
-  const equipped = boss || random() < equipmentHolderRateForFloor(floor);
-  const hidden = enemyHiddenProfileForFloor(floor, { rank, boss, equipped, slots: equipped ? equipmentSlotsForFloor(floor) : 0, roll: random() });
-  const bossProfile = boss ? bossProfileForFloor(floor) : { hp: 1, atk: 1, def: 1, spd: 1 };
-  const depthHp = 1 + Math.max(0, floor - 60) / 180;
-  const depthAtk = 1 + Math.max(0, floor - 80) / 340;
+  const equipped = boss || random() < equipmentHolderRateForFloor(depth);
+  const hidden = enemyHiddenProfileForFloor(depth, { rank, boss, equipped, slots: equipped ? equipmentSlotsForFloor(depth) : 0, roll: random() });
+  const bossProfile = boss ? bossProfileForFloor(depth) : { hp: 1, atk: 1, def: 1, spd: 1 };
+  const depthHp = 1 + Math.max(0, depth - 60) / 180;
+  const depthAtk = 1 + Math.max(0, depth - 80) / 340;
   const variance = .94 + random() * .12;
   const unscaledHp = (base.hp + level * 8) * rankMultiplier * hidden.hp * bossProfile.hp * depthHp * variance;
   const maxHp = Math.max(1, Math.round(unscaledHp / ONLINE_ENEMY_HP_DIVISOR));

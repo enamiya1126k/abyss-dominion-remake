@@ -296,7 +296,7 @@ export function normalizePowerRankingSnapshot(source) {
   if (!party.length) return null;
   return {
     displayName: rankingText(source.displayName, 16, "冒険者"),
-    maxFloor: boundedInteger(source.maxFloor, 1, 10_000, 1),
+    maxFloor: boundedInteger(source.maxFloor, 1, 100, 1),
     power: rankingPower(source.power),
     party,
   };
@@ -312,7 +312,7 @@ function normalizePowerRankingEntry(source) {
     playerId,
     displayName: rankingText(source.displayName, 16, "冒険者"),
     power: rankingPower(source.power),
-    maxFloor: boundedInteger(source.maxFloor, 1, 10_000, 1),
+    maxFloor: boundedInteger(source.maxFloor, 1, 100, 1),
     updatedAt: boundedInteger(source.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
     icon,
     leadMonster: icon,
@@ -359,7 +359,7 @@ export function normalizePowerRankingProfile(source) {
     playerId,
     displayName: rankingText(source.displayName, 16, "冒険者"),
     power: rankingPower(source.power),
-    maxFloor: boundedInteger(source.maxFloor, 1, 10_000, 1),
+    maxFloor: boundedInteger(source.maxFloor, 1, 100, 1),
     updatedAt: boundedInteger(source.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
     party,
   };
@@ -398,12 +398,12 @@ function normalizedAssistedWorld(source, expectedOwnerId = "") {
   if (!ownerId || (expectedOwnerId && ownerId !== expectedOwnerId)) return null;
   const rawStartFloor = Number(source.startFloor), rawEndFloor = Number(source.endFloor), rawFloorsCleared = Number(source.floorsCleared);
   if (!Number.isFinite(rawStartFloor) || !Number.isFinite(rawEndFloor) || !Number.isFinite(rawFloorsCleared)) return null;
-  const startFloor = boundedInteger(rawStartFloor, 1, 10000, 1);
+  const startFloor = boundedInteger(rawStartFloor, 1, 100, 1);
   return {
     ownerId,
     startFloor,
-    endFloor: Math.max(startFloor, boundedInteger(rawEndFloor, 1, 10000, startFloor)),
-    floorsCleared: boundedInteger(rawFloorsCleared, 0, 10000, 0),
+    endFloor: Math.max(startFloor, boundedInteger(rawEndFloor, 1, 100, startFloor)),
+    floorsCleared: boundedInteger(rawFloorsCleared, 0, 100, 0),
   };
 }
 
@@ -508,7 +508,7 @@ export function normalizeGuildActivity(source) {
     points: boundedInteger(source?.points, 0, 1_000_000_000, 0),
     at,
   };
-  const floor = boundedInteger(source?.floor, 0, 10_000, 0);
+  const floor = boundedInteger(source?.floor, 0, 100, 0);
   if (floor) activity.floor = floor;
   return activity;
 }
@@ -582,7 +582,7 @@ export function normalizeGuildPlan(source) {
     purpose,
     style,
     note: cleanSocialText(source?.note, 48).trim(),
-    floor: boundedInteger(source?.floor, 1, 10_000, 1),
+    floor: boundedInteger(source?.floor, 1, 100, 1),
     scheduledAt,
     createdAt,
     organizer,
@@ -608,7 +608,7 @@ export function normalizeGuildPlanReminder(source) {
     if (!GUILD_RECRUITMENT_ID_PATTERN.test(recruitmentId) || !Number.isSafeInteger(count) || !Number.isSafeInteger(maximum) || !Number.isSafeInteger(slots) || !Number.isSafeInteger(expiresAt) || maximum < 1 || maximum > 4 || count < 1 || count > maximum || slots !== maximum - count || expiresAt <= 0 || source.gathering.joined !== false) return null;
     gathering = { recruitmentId, count, max: maximum, slots, expiresAt, joined: false };
   }
-  return { planId, purpose, style, floor: boundedInteger(source?.floor, 1, 10_000, 1), scheduledAt, organizer, gathering };
+  return { planId, purpose, style, floor: boundedInteger(source?.floor, 1, 100, 1), scheduledAt, organizer, gathering };
 }
 
 function normalizeGuildPlans(source) {
@@ -666,7 +666,7 @@ export function normalizeGuildRecruitment(source) {
     purpose: normalizedRoomPurpose(source?.purpose),
     style: ROOM_STYLES.has(source?.style) ? source.style : "anyone",
     note: cleanSocialText(source?.note, 48).trim(),
-    floor: boundedInteger(source?.floor, 1, 10_000, 1),
+    floor: boundedInteger(source?.floor, 1, 100, 1),
     count,
     max: maximum,
     slots: boundedInteger(source?.slots, 0, availableSlots, availableSlots),
@@ -750,7 +750,7 @@ function normalizeRoomListings(source) {
     const maximum = Math.max(count, Math.min(4, Math.floor(Number(raw?.max) || 4)));
     listings.push({
       roomId, listingId: String(raw?.listingId ?? "").slice(0, 96), purpose, style,
-      floor: Math.max(1, Math.min(10000, Math.floor(Number(raw?.floor) || 1))), count, max: maximum,
+      floor: Math.max(1, Math.min(100, Math.floor(Number(raw?.floor) || 1))), count, max: maximum,
       slots: Math.max(0, Math.min(maximum, Math.floor(Number(raw?.slots) || maximum - count))),
       host: {
         displayName: String(raw?.host?.displayName ?? "冒険者").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 16) || "冒険者",
@@ -1581,7 +1581,7 @@ export class OnlinePartyController {
     if (button.matches("[data-online-confirm-floor-boss]")) { const pending = this.floorBossConfirm; if (!pending || !this._beginInteractionPending("challengeFloorBoss", pending.targetId)) return; this.floorBossConfirm = null; if (!this._send("expeditionInteract", { action: "challengeFloorBoss", targetId: pending.targetId })) this._clearInteractionPending(false); this._render(); return; }
     if (button.matches("[data-online-cancel-coop-boss]")) { this.coopBossConfirm = null; this._render(); return; }
     if (button.matches("[data-online-confirm-coop-boss]")) { const pending = this.coopBossConfirm, action = pending?.action || "challengeCoopElite"; if (!pending || !this._beginInteractionPending(action, pending.targetId)) return; this.coopBossConfirm = null; if (!this._send("expeditionInteract", { action, targetId: pending.targetId })) this._clearInteractionPending(false); this._render(); return; }
-    if (button.matches("[data-online-expedition-interact]")) { const action = button.dataset.onlineExpeditionInteract, targetId = button.dataset.onlineInteractionTarget; if (action === "challengeFloorBoss") { const interaction = this.roomState?.expedition?.interactions?.[this.selfId] ?? {}; const profile = interaction.bossProfile ?? this.roomState?.expedition?.floorBoss?.profiles?.[0] ?? null; this.floorBossConfirm = { targetId, profile, floor: Number(this.roomState?.expedition?.floor) || 0 }; this._render(); return; } if (["challengeCoopElite", "challengeCoopBoss"].includes(action)) { const expedition = this.roomState?.expedition, interaction = expedition?.interactions?.[this.selfId] ?? {}, object = expedition?.objects?.find(entry => entry.id === targetId || entry.type === "coopElite") ?? {}, source = interaction.coopBoss ?? interaction.bossProfile ?? object, boss = { ...source, id: source.id ?? source.coopBossId, name: source.name ?? source.bossName, title: source.title ?? source.bossTitle, intro: source.intro ?? source.bossIntro, speciesId: source.speciesId ?? object.speciesId, visualSpeciesId: source.visualSpeciesId ?? object.visualSpeciesId, accent: source.accent ?? object.accent, mechanic: source.mechanic ?? object.mechanic }; this.coopBossConfirm = { action, targetId, boss, floor: Number(expedition?.floor) || 0 }; this._render(); return; } if (!this._beginInteractionPending(action, targetId)) return; if (!this._send("expeditionInteract", { action, targetId })) this._clearInteractionPending(false); this._render(); return; }
+    if (button.matches("[data-online-expedition-interact]")) { const action = button.dataset.onlineExpeditionInteract, targetId = button.dataset.onlineInteractionTarget; if (action === "challengeFloorBoss") { if (!this._beginInteractionPending(action,targetId)) return;if (!this._send("expeditionInteract",{action,targetId}))this._clearInteractionPending(false);this._render();return; } if (["challengeCoopElite", "challengeCoopBoss"].includes(action)) { const expedition = this.roomState?.expedition, interaction = expedition?.interactions?.[this.selfId] ?? {}, object = expedition?.objects?.find(entry => entry.id === targetId || entry.type === "coopElite") ?? {}, source = interaction.coopBoss ?? interaction.bossProfile ?? object, boss = { ...source, id: source.id ?? source.coopBossId, name: source.name ?? source.bossName, title: source.title ?? source.bossTitle, intro: source.intro ?? source.bossIntro, speciesId: source.speciesId ?? object.speciesId, visualSpeciesId: source.visualSpeciesId ?? object.visualSpeciesId, accent: source.accent ?? object.accent, mechanic: source.mechanic ?? object.mechanic }; this.coopBossConfirm = { action, targetId, boss, floor: Number(expedition?.floor) || 0 }; this._render(); return; } if (!this._beginInteractionPending(action, targetId)) return; if (!this._send("expeditionInteract", { action, targetId })) this._clearInteractionPending(false); this._render(); return; }
     if (button.matches("[data-online-merchant-offer]")) { if (this.merchantPending) return; const offer = button.dataset.onlineMerchantOffer; this.merchantPending = true; this.merchantResult = { offer, status: "pending" }; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = setTimeout(() => { if (!this.merchantPending) return; this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "通信結果を確認できませんでした。もう一度お試しください。" }; this._render(); }, 3500); if (!this._send("rareMerchantClaim", { offer })) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "サーバーへ接続されていません。" }; } this._render(); return; }
     if (button.matches("[data-online-battle-cheer]")) { this._send("battleCheer", { mode: button.dataset.onlineBattleCheer || this.route }); return; }
     if (button.matches("[data-online-hall-destination]")) { if (!this.exploreChatOpen && !this.hallGamesOpen && !this.emoteGestureActive) this.hallDestination = { x: Number(button.dataset.hallX), y: Number(button.dataset.hallY) }; return; }
@@ -1723,7 +1723,7 @@ export class OnlinePartyController {
       const scheduledAt = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(scheduledInput) ? new Date(scheduledInput).getTime() : NaN;
       const now = this._guildNow();
       if (!Number.isFinite(scheduledAt) || scheduledAt < now + 10 * 60_000 || scheduledAt > now + GUILD_PLAN_MAX_LEAD_MS) return this.toast("日時は10分後から14日後までで選んでください");
-      const floor = boundedInteger(this.guildPlanDraft.floor || this._query("[data-online-guild-plan-floor]")?.value, 1, 10_000, 1);
+      const floor = boundedInteger(this.guildPlanDraft.floor || this._query("[data-online-guild-plan-floor]")?.value, 1, 100, 1);
       const note = cleanSocialText(this.guildPlanDraft.note, 48).replace(/\s+/g, " ").trim();
       this._sendGuild("planCreate", "guildPlanCreate", { purpose, style, scheduledAt, floor, note });
       return;
@@ -2627,7 +2627,7 @@ export class OnlinePartyController {
     if (message.type === "expeditionVitals") { this._applyExpeditionVitals(message); return; }
     if (message.type === "recoveryComplete") { if (message.orphanedExpedition) this._receiveOrphanedExpedition(this.recoverySettlementBatch); return; }
     if (message.type === "expeditionResult") { const batch = this.recoverySettlementBatch; this._trackRecoverySettlement(this._receiveExpeditionResult(message, batch), batch); return; }
-    if (message.type === "secretRoomEntered") { if (String(message.playerId ?? "") !== this.selfId) return; const roomId = String(message.roomId ?? "").slice(0, 160), floor = Math.max(1, Math.min(10000, Math.floor(Number(message.floor) || 1))); if (roomId) this.onSecretRoomEntered({ roomId, floor, playerId: this.selfId }); return; }
+    if (message.type === "secretRoomEntered") { if (String(message.playerId ?? "") !== this.selfId) return; const roomId = String(message.roomId ?? "").slice(0, 160), floor = Math.max(1, Math.min(100, Math.floor(Number(message.floor) || 1))); if (roomId) this.onSecretRoomEntered({ roomId, floor, playerId: this.selfId }); return; }
     if (["battleDefeated", "onlineBattleDefeated"].includes(message.type)) { this._applyBattleDefeated(message); return; }
     if (["raidWorld", "raidWorldState"].includes(message.type)) { const ownerId = this._explicitWorldOwnerId(message); if (ownerId && ownerId === this.selfId) this._syncRaidWorld(message.raidWorld ?? message.progress); return; }
     if (message.type === "leftRoom") { if (this.pendingLeaveOnReconnect) this._completePendingRoomLeave(); else this._clearRoom({ reason: "leftRoom" }); return; }
@@ -2639,7 +2639,7 @@ export class OnlinePartyController {
     if (message.type === "floorBossDefeated") { const ownerId = this._explicitWorldOwnerId(message), reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: ownerId || null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = Boolean(ownerId && ownerId === this.selfId), multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this._closeBattleMenus("explore"); this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = multiplayer && isWorldOwner && reward.firstClear ? reward : null; if (isWorldOwner) { this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId }); this.onFloorBossDefeated({ ...reward, resume: Boolean(reward.firstClear && !multiplayer) }); } this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！`); this._render(); return; }
     if (message.type === "expeditionPing" && message.ping?.id) { if (this._isSocialHidden(message.ping.playerId)) return; this.coopPings.set(message.ping.id, { ...message.ping }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() }); else this._render(); return; }
     if (message.type === "battleRound" || message.type === "battleResolved") { const previous = this.roomState?.expedition?.battle; this._captureHpTrails("explore", previous, message.battle); if (this.roomState?.expedition) this.roomState.expedition.battle = message.battle; if (message.type === "battleRound") this._closeBattleMenus("explore"); this._setRoute("explore", { silent: true }); this._queueBattlePresentation("explore", message.battle?.lastEvents); return; }
-    if (message.type === "expeditionEnded") { const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2, completedFloor = message.summary?.floor ?? message.summary?.assistedWorld?.endFloor; this.presentationKoIds.explore.clear(); this.expeditionReport = multiplayer ? message.summary ?? null : null; if (this.roomState) this.roomState = { ...this.roomState, phase: "lobby", expedition: null, coopRun: null }; this._closeAllBattleMenus(); this.route = "explore"; this.toast(message.summary?.completed && Number.isFinite(Number(completedFloor)) ? `${Math.max(1, Math.min(10000, Math.floor(Number(completedFloor))))}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
+    if (message.type === "expeditionEnded") { const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2, completedFloor = message.summary?.floor ?? message.summary?.assistedWorld?.endFloor; this.presentationKoIds.explore.clear(); this.expeditionReport = multiplayer ? message.summary ?? null : null; if (this.roomState) this.roomState = { ...this.roomState, phase: "lobby", expedition: null, coopRun: null }; this._closeAllBattleMenus(); this.route = "explore"; this.toast(message.summary?.completed && Number.isFinite(Number(completedFloor)) ? `${Math.max(1, Math.min(100, Math.floor(Number(completedFloor))))}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
     if (message.type === "battleEnded") { this.coopBossConfirm = null; this.presentationKoIds.explore.clear(); this._closeBattleMenus("explore"); const bossName = message.coopBoss?.name || message.boss?.name; this.toast(message.result === "victory" ? bossName ? `${bossName}を撃破！` : "共闘バトル勝利！" : message.coopBoss ? "共闘ボスから退却。回復後に再挑戦できます" : "共闘パーティが全滅しました…"); return; }
     if (message.type === "raidStarted") {
       this.presentationKoIds.raid.clear();
@@ -2884,7 +2884,7 @@ export class OnlinePartyController {
     const runId = String(room?.coopRun?.runId ?? room?.expedition?.id ?? "").slice(0, 120);
     return {
       roomId, ownerId, runId,
-      startFloor: Math.max(1, Math.min(10000, Math.floor(Number(room?.coopRun?.startFloor ?? room?.expedition?.floor ?? room?.selectedFloor) || 1))),
+      startFloor: Math.max(1, Math.min(100, Math.floor(Number(room?.coopRun?.startFloor ?? room?.expedition?.floor ?? room?.selectedFloor) || 1))),
     };
   }
 
@@ -2966,7 +2966,7 @@ export class OnlinePartyController {
     if (this.syncedExpeditionStartKey === key) return true;
     const result = this.onExpeditionStarted({
       runId, ownerId,
-      startFloor: Math.max(1, Math.min(10000, Math.floor(Number(run.startFloor ?? room.expedition.floor) || 1))),
+      startFloor: Math.max(1, Math.min(100, Math.floor(Number(run.startFloor ?? room.expedition.floor) || 1))),
       startedAt: Math.max(0, Number(run.startedAt ?? room.expedition.startedAt) || 0),
       resumed: true,
     });
@@ -3966,9 +3966,9 @@ export class OnlinePartyController {
     const summarySource = message.summary && typeof message.summary === "object" ? message.summary : {};
     const hasOwnerProgress = [message.startFloor, message.endFloor, message.floorsCleared].every((value, index) => value !== null && value !== "" && Number.isFinite(Number(value)) && Number(value) >= (index < 2 ? 1 : 0));
     if (progressionEligible && !hasOwnerProgress) { if (batch === this.recoverySettlementBatch) this.recoverySettlementFailed = true; return; }
-    const startFloor = progressionEligible ? boundedInteger(message.startFloor, 1, 10000, 1) : null;
-    const endFloor = progressionEligible ? Math.max(startFloor, boundedInteger(message.endFloor, 1, 10000, startFloor)) : null;
-    const floorsCleared = progressionEligible ? boundedInteger(message.floorsCleared, 0, 10000, 0) : null;
+    const startFloor = progressionEligible ? boundedInteger(message.startFloor, 1, 100, 1) : null;
+    const endFloor = progressionEligible ? Math.max(startFloor, boundedInteger(message.endFloor, 1, 100, startFloor)) : null;
+    const floorsCleared = progressionEligible ? boundedInteger(message.floorsCleared, 0, 100, 0) : null;
     const legacyAssistedSource = !progressionEligible && [message.startFloor, message.endFloor, message.floorsCleared].every((value, index) => value !== null && value !== "" && Number.isFinite(Number(value)) && Number(value) >= (index < 2 ? 1 : 0))
       ? { ownerId, startFloor: message.startFloor, endFloor: message.endFloor, floorsCleared: message.floorsCleared }
       : null;
@@ -3990,7 +3990,7 @@ export class OnlinePartyController {
     } : null;
     const { startFloor: _summaryStartFloor, endFloor: _summaryEndFloor, floorsCleared: _summaryFloorsCleared, floor: _summaryFloor, nextFloor: _summaryNextFloor, ownerFloorUnlock: _summaryOwnerFloorUnlock, leaderFloorUnlock: _summaryLeaderFloorUnlock, floorUnlock: _summaryFloorUnlock, unlockFloor: _summaryUnlockFloor, unlockedFloor: _summaryUnlockedFloor, maxFloorUnlock: _summaryMaxFloorUnlock, maxFloor: _summaryMaxFloor, assistedWorld: _summaryAssistedWorld, ...guestSafeSummary } = summarySource;
     const summary = progressionEligible
-      ? { ...summarySource, resultId, ownerId, progressionEligible, startFloor, endFloor, floor: Math.max(startFloor, boundedInteger(summarySource.floor ?? endFloor, 1, 10000, endFloor)), floorsCleared, completed: Boolean(message.completed), reason, multiplayer: Boolean(message.multiplayer) }
+      ? { ...summarySource, resultId, ownerId, progressionEligible, startFloor, endFloor, floor: Math.max(startFloor, boundedInteger(summarySource.floor ?? endFloor, 1, 100, endFloor)), floorsCleared, completed: Boolean(message.completed), reason, multiplayer: Boolean(message.multiplayer) }
       : { ...guestSafeSummary, resultId, ownerId, progressionEligible: false, ...(assistedWorld ? { assistedWorld } : {}), completed: Boolean(message.completed), reason, multiplayer: Boolean(message.multiplayer) };
     this.expeditionResultInFlight.add(resultId);
     try {

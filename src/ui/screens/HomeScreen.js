@@ -9,6 +9,7 @@ import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.11.0-build164";
 import{monsterVisual}from"../MonsterVisual.js?v=2.11.82-build258";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.0-build164";
 import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.11.0-build164";
+import{campaignDayForFloor}from"../../core/Campaign100System.js?v=3.0.0-build300";
 
 const HOME_ATTRIBUTE_CYCLE=Object.freeze(["fire","ice","wind","earth","lightning","water"]);
 function homeAttributeChart(){
@@ -130,8 +131,8 @@ export function HomeScreen(state){
   const teamUnlocked=isContentUnlocked(state,TEAM_BATTLE_UNLOCK_FLOOR);
   const gauntletUnlocked=isContentUnlocked(state,GAUNTLET_UNLOCK_FLOOR);
   const endgameUnlocked=isContentUnlocked(state,EMERGENCY_UNLOCK_FLOOR);
-  const revealed=hasCleared1000(state);
-  const completed=Boolean(state.flags?.gameClear10000);
+  const revealed=Math.max(1,Number(state.player?.maxFloor)||1)>=70;
+  const completed=Boolean(state.campaign100?.finalCompleted);
   const phase=worldPhase(state);
   const sceneSlots=Array.from({length:4},(_,index)=>scenePartySlot(party[index],index,state)).join("");
   const criticalCount=activeParty.filter(monster=>homeCriticalVitals(monster).critical).length;
@@ -140,7 +141,7 @@ export function HomeScreen(state){
   const recentMemory=state.recentBattleMemory,memoryEntries=recentMemory?.entries??[],memoryCost=homeMemoryCost(state,recentMemory);
   const memoryNames=memoryEntries.slice(0,2).map(entry=>entry.nameOverride??SPECIES[entry.speciesId]?.name??"魔物").join("＋");
   const memorySub=memoryEntries.length?`${memoryNames}${memoryEntries.length>2?`ほか${memoryEntries.length-2}体`:""}・${memoryCost.toLocaleString()}晶石`:"直近の敵編成を丸ごと記録";
-  const title=completed?"深淵を統べる魔王":revealed?"地下10000階の魔王":"地下1000階の魔王";
+  const day=campaignDayForFloor(state.player?.currentFloor??1),title=completed?"勇者を退けた魔王":`予言の十日間・第${day}日`;
 
   return`
     <section class="screen home-command-screen world-phase-${phase}${phase===1?" phase2":""}" data-world-phase="${phase}">

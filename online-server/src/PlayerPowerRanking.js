@@ -150,7 +150,7 @@ function sanitizeSnapshot(source = {}, { enforcePlausibility = true } = {}) {
   if (Array.isArray(source.party) && source.party.length > MAX_PARTY) return { error: "POWER_PARTY_TOO_LARGE" };
   const partySource = Array.isArray(source.party) ? source.party.slice(0, MAX_PARTY) : [];
   if (!partySource.length) return { error: "POWER_PARTY_REQUIRED" };
-  const maxFloor = integer(source.maxFloor, 1, 10_000, 1);
+  const maxFloor = integer(source.maxFloor, 1, 100, 1);
   const party = [];
   for (let index = 0; index < partySource.length; index++) {
     const sanitized = sanitizeMonster(partySource[index], index, { maxFloor, enforcePlausibility });
@@ -206,7 +206,7 @@ function persistedRecord(source) {
   const build = dropAssets => ({
     playerId: text(source?.playerId, 24).toUpperCase(),
     displayName: text(source?.displayName, 16) || "冒険者",
-    maxFloor: integer(source?.maxFloor, 1, 10_000, 1),
+    maxFloor: integer(source?.maxFloor, 1, 100, 1),
     power: integer(source?.power, 1, Number.MAX_SAFE_INTEGER, 1),
     party: (Array.isArray(source?.party) ? source.party : []).slice(0, MAX_PARTY).map(entry => persistedMonster(entry, { dropAssets })),
     updatedAt: integer(source?.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
@@ -224,7 +224,7 @@ function sanitizePersistedRecord(source) {
   const party = partySource.map((entry, index) => ({ ...persistedMonster(entry), slot: index + 1 }));
   const power = party.reduce((sum, entry) => sum + entry.power, 0);
   if (!powerMatches(source.power, power)) return null;
-  const record = { playerId, displayName: text(source.displayName, 16) || "冒険者", maxFloor: integer(source.maxFloor, 1, 10_000, 1), power, party, updatedAt };
+  const record = { playerId, displayName: text(source.displayName, 16) || "冒険者", maxFloor: integer(source.maxFloor, 1, 100, 1), power, party, updatedAt };
   return persistedRecord(record) ? record : null;
 }
 function compareRanking(left, right) {

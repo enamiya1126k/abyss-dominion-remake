@@ -5,9 +5,9 @@ function integer(value){return Math.max(0,Math.floor(Number(value)||0))}
 
 export const EXPERIENCE_PACK_TYPES=Object.freeze({
  small:{id:"small",inventoryKey:"experienceItems",name:"経験値パック（小）",shortName:"小",levelSpan:1,unlockFloor:1,icon:"📘"},
- medium:{id:"medium",inventoryKey:"experienceItemsMedium",name:"経験値パック（中）",shortName:"中",levelSpan:3,unlockFloor:300,icon:"📗"},
- large:{id:"large",inventoryKey:"experienceItemsLarge",name:"経験値パック（大）",shortName:"大",levelSpan:6,unlockFloor:750,icon:"📙"},
- ultra:{id:"ultra",inventoryKey:"experienceItemsUltra",name:"経験値パック（超）",shortName:"超",levelSpan:10,unlockFloor:1000,icon:"📕"}
+ medium:{id:"medium",inventoryKey:"experienceItemsMedium",name:"経験値パック（中）",shortName:"中",levelSpan:3,unlockFloor:30,icon:"📗"},
+ large:{id:"large",inventoryKey:"experienceItemsLarge",name:"経験値パック（大）",shortName:"大",levelSpan:6,unlockFloor:50,icon:"📙"},
+ ultra:{id:"ultra",inventoryKey:"experienceItemsUltra",name:"経験値パック（超）",shortName:"超",levelSpan:10,unlockFloor:70,icon:"📕"}
 });
 
 export function experiencePackType(idOrKey="small"){

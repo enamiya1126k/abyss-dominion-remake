@@ -1,13 +1,13 @@
-import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=2.11.87-build263";
+import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.0.0-build300";
 import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=2.11.82-build258";
 import{maxMp,normalizeSkillProgress,allLearnedSkills,recommendedSkills,recommendedSkillLoadout,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=2.11.83-build259";
-import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=2.11.87-build263";
+import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=3.0.0-build300";
 import{normalizeFloorBossChallengeState}from"../core/FloorBossChallengeSystem.js?v=2.11.82-build258";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionById}from"../data/floorBosses.js?v=2.11.30-build195";
 import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=2.11.0-build164";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=2.11.0-build164";
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=2.11.0-build164";
-import{SPECIES}from"../data/species.js?v=2.11.87-build263";
+import{SPECIES}from"../data/species.js?v=3.0.0-build300";
 import{JUVENILE_AMALGA_SKILLS}from"../data/raidSpecies.js?v=2.11.82-build258";
 import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.11.0-build164";
 import{normalizeWeaponMastery}from"./WeaponMastery.js?v=2.11.82-build258";
@@ -23,7 +23,8 @@ import{clearSerialRedemptionLedgerForFullReset,normalizeSerialCodeState,restoreS
 import{normalizeNoticeState}from"../core/NoticeSystem.js?v=2.11.86-build262";
 import{syncCollectionRewardInbox}from"../core/CollectionRewardSystem.js?v=2.11.86-build262";
 import{normalizeAchievementState,syncAchievementRewardInbox}from"../core/AchievementRewardSystem.js?v=2.11.86-build262";
-import{normalizeGachaDrawHistory}from"../core/GachaBalanceSystem.js?v=2.11.87-build263";
+import{normalizeGachaDrawHistory}from"../core/GachaBalanceSystem.js?v=3.0.0-build300";
+import{CAMPAIGN_MAX_FLOOR,legacyFloorToCampaignFloor,normalizeCampaignState}from"../core/Campaign100System.js?v=3.0.0-build300";
 import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=2.11.0-build164";
 import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=2.11.0-build164";
 import{normalizeEquipmentIdentity}from"../data/equipment.js?v=2.11.30-build195";
@@ -277,12 +278,18 @@ export class SaveService{
   s.flags.tenGodObserved??=false;
   s.flags.deepAbyssUnlocked=Boolean(s.flags.deepAbyssUnlocked||s.flags.gameClear1000||s.flags.secondWorldEntered);
   s.worldPhase=s.flags.gameClear1000?1:Math.max(0,Math.min(1,Number(s.worldPhase)||0));
-  s.player??={};
+ s.player??={};
+  if(from<70){
+   const oldMax=Math.max(1,Number(s.player.maxFloor)||1),oldCurrent=Math.max(1,Number(s.player.currentFloor)||1),oldCheckpoint=Math.max(1,Number(s.player.checkpoint)||1),remapLedger=ledger=>Object.fromEntries(Object.entries(ledger&&typeof ledger==="object"?ledger:{}).map(([floor,value])=>[String(legacyFloorToCampaignFloor(floor)),value]));
+   s.player.maxFloor=legacyFloorToCampaignFloor(oldMax);s.player.currentFloor=legacyFloorToCampaignFloor(oldCurrent);s.player.checkpoint=legacyFloorToCampaignFloor(oldCheckpoint);
+   s.player.bossKills=remapLedger(s.player.bossKills);s.player.bossRewards=remapLedger(s.player.bossRewards);s.player.pendingBossRewards={};
+   s.player.floorSeeds={};s.player.openedChests={};s.player.exploreRun={id:null,floors:{}};s.expeditionSnapshot=null;if(!s.activeBattle?.specialBattle)s.activeBattle=null;s.player.inRun=false;
+  }
   s.player.gold=Math.floor(finiteNumber(s.player.gold,1000,0,Number.MAX_SAFE_INTEGER));
   s.player.crystals=Math.floor(finiteNumber(s.player.crystals,20,0,Number.MAX_SAFE_INTEGER));
-  s.player.maxFloor=Math.floor(finiteNumber(s.player.maxFloor,1,1,10000));
-  s.player.currentFloor=Math.floor(finiteNumber(s.player.currentFloor,1,1,10000));
-  s.player.checkpoint=Math.floor(finiteNumber(s.player.checkpoint,1,1,10000));
+  s.player.maxFloor=Math.floor(finiteNumber(s.player.maxFloor,1,1,CAMPAIGN_MAX_FLOOR));
+  s.player.currentFloor=Math.floor(finiteNumber(s.player.currentFloor,1,1,CAMPAIGN_MAX_FLOOR));
+  s.player.checkpoint=Math.floor(finiteNumber(s.player.checkpoint,1,1,CAMPAIGN_MAX_FLOOR));
   s.player.inRun??=false;
   s.player.nextShopFloor??=4;
   s.player.floorSeeds??={};
@@ -580,6 +587,7 @@ export class SaveService{
   syncCollectionRewardInbox(s);
   normalizeAchievementState(s);
   syncAchievementRewardInbox(s);
+  normalizeCampaignState(s);
   s.schemaVersion=SAVE_SCHEMA_VERSION;
   s.appVersion=APP_VERSION;
   if(from<SAVE_SCHEMA_VERSION)s.lastMigration={from,to:SAVE_SCHEMA_VERSION,at:new Date().toISOString()};
