@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import net from "node:net";
 import path from "node:path";
 import { spawn } from "node:child_process";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { WebSocket } from "ws";
 
@@ -123,9 +125,18 @@ async function connectPlayer(url, index) {
 
 test("real websocket server synchronizes four clients, chat, health and capacity", { timeout: 20_000 }, async () => {
   const port = await freePort();
+  const stateDirectory = await mkdtemp(path.join(tmpdir(), "abyss-build305-ws-"));
   const child = spawn(process.execPath, ["server.js"], {
     cwd: serverDirectory,
-    env: { ...process.env, HOST: "127.0.0.1", PORT: String(port) },
+    env: {
+      ...process.env,
+      HOST: "127.0.0.1",
+      PORT: String(port),
+      FRIEND_STATE_FILE: path.join(stateDirectory, "friends.json"),
+      GUILD_STATE_FILE: path.join(stateDirectory, "guilds.json"),
+      POWER_RANKING_STATE_FILE: path.join(stateDirectory, "rankings.json"),
+      SETTLEMENT_STATE_FILE: path.join(stateDirectory, "settlements.json"),
+    },
     stdio: ["ignore", "pipe", "pipe"],
   });
   const clients = [];
@@ -175,5 +186,6 @@ test("real websocket server synchronizes four clients, chat, health and capacity
       new Promise(resolve => child.once("exit", resolve)),
       new Promise(resolve => setTimeout(resolve, 2_000)),
     ]);
+    await rm(stateDirectory, { recursive: true, force: true });
   }
 });

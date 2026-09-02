@@ -4,10 +4,18 @@ import assert from "node:assert/strict";
 import { createSoloStyleDungeon } from "../src/OfflineDungeonRules.js";
 import { RoomStore } from "../src/RoomStore.js";
 
-test("build260 boss floors never contain chests or mimics", () => {
-  const dungeon = createSoloStyleDungeon({ roomId: "BOSS", floor: 200, runId: "run", now: 1, random: () => 0 });
-  assert.equal(dungeon.objects.some(object => object.type === "chest"), false);
-  assert.equal(dungeon.objects.some(object => object.mimic), false);
+test("build305 floor bosses and their companions never become mimics", () => {
+  const dungeon = createSoloStyleDungeon({ roomId: "BOSS", floor: 100, runId: "run", now: 1, random: () => 0 });
+  const bossObject = dungeon.objects.find(object => object.bossEncounter);
+  assert.ok(bossObject, "the current campaign places a boss on every floor");
+  assert.notEqual(bossObject.mimic, true);
+  assert.equal(dungeon.objects.filter(object => object.type === "chest").every(object => object.mimic == null || typeof object.mimic === "boolean"), true);
+
+  const battle = { id: "build305-floor-boss", floor: 100, floorBoss: true, forceSpeciesId: "mimic" };
+  const members = [{ coopVitals: { hp: 100 }, profile: { battleStats: { hp: 100 } } }];
+  const enemies = RoomStore.prototype._createBattleEnemies.call({}, battle, members, 1);
+  assert.ok(enemies.length >= 1);
+  assert.equal(enemies.every(enemy => enemy.boss && enemy.speciesId !== "mimic" && !enemy.enemyMimicArmor), true);
 });
 
 test("build260 treasure rooms cap mimics at two", () => {

@@ -26,11 +26,11 @@ test("build301 4v4 rewards stay useful and bounded", () => {
   );
   assert.deepEqual(
     { gold: teamBattleRewardPreview(50).goldMultiplier, crystals: teamBattleRewardPreview(50).crystals },
-    { gold: 5.84, crystals: 171 },
+    { gold: 1.84, crystals: 48 },
   );
   assert.deepEqual(
     { gold: teamBattleRewardPreview(100).goldMultiplier, crystals: teamBattleRewardPreview(100).crystals },
-    { gold: 18.59, crystals: 466 },
+    { gold: 3.27, crystals: 64 },
   );
   for (let stage = 2; stage <= 200; stage++) {
     assert.ok(teamBattleRewardPreview(stage).goldMultiplier >= teamBattleRewardPreview(stage - 1).goldMultiplier);

@@ -5,12 +5,13 @@ import{dirname,relative,resolve}from"node:path";
 import{fileURLToPath}from"node:url";
 
 const SRC_ROOT=fileURLToPath(new URL("../src/",import.meta.url));
-const CURRENT_QUERY="?v=3.0.1-build301";
+const CURRENT_QUERY="?v=3.0.5-build305";
 // Build300 -> build301 logic changes plus the three dependency carriers whose
 // import URLs had to change so the new graph actually reaches the browser.
 const CHANGED_BROWSER_MODULES=new Set([
  "battle/EnemyAI.js","battle/TurnSystem.js",
- "core/AbyssSkillTreeSystem.js","core/AchievementRewardSystem.js","core/BossRewardSystem.js","core/Campaign100System.js","core/CampaignRewardSystem.js","core/CollectionRewardSystem.js","core/CombatPower.js","core/DungeonSectionSystem.js","core/EndgameSystem.js","core/EquipmentDropSystem.js","core/ExperiencePackSystem.js","core/GachaBalanceSystem.js","core/GoldRewardSystem.js","core/MagicCircleSystem.js","core/ProgressionSystem.js","core/ReturnRewardSystem.js","core/SecondWorldEventSystem.js","core/SecretRoomSystem.js","core/SerialCodeSystem.js","core/TreasureSystem.js","core/WorldSystem.js","core/config.js",
+ "core/AbyssSkillTreeSystem.js","core/AchievementRewardSystem.js","core/BossRewardSystem.js","core/Campaign100System.js","core/CampaignRewardSystem.js","core/CollectionRewardSystem.js","core/CombatPower.js","core/DungeonMiniMapSystem.js","core/DungeonSectionSystem.js","core/EndgameSystem.js","core/EquipmentDropSystem.js","core/ExperiencePackSystem.js","core/GachaBalanceSystem.js","core/GoldRewardSystem.js","core/MagicCircleSystem.js","core/ProgressionSystem.js","core/ReturnRewardSystem.js","core/SecondWorldEventSystem.js","core/SecretRoomSystem.js","core/SerialCodeSystem.js","core/TreasureSystem.js","core/WorldSystem.js","core/config.js",
+ "data/dungeonThemes.js",
  "main.js","models/Monster.js",
  "online/OnlinePartyClient.js","online/OnlineProgressIsolation.js","online/OnlineViews.js",
  "services/EquipmentAffixCrafting.js","services/EquipmentStorage.js","services/SaveService.js",
@@ -28,7 +29,7 @@ async function javascriptFiles(directory=SRC_ROOT){
  return result
 }
 
-test("build301 changed browser modules have no stale import-query edges",async()=>{
+test("build305 changed browser modules have no stale import-query edges",async()=>{
  const files=await javascriptFiles(),checked=[];
  for(const importer of files){
   const source=await readFile(importer,"utf8"),pattern=/(?:from\s*|import\s*\()(["'])([^"']+)\1/g;
@@ -40,12 +41,12 @@ test("build301 changed browser modules have no stale import-query edges",async()
    assert.equal(specifier,`${bare}${CURRENT_QUERY}`,`${relative(SRC_ROOT,importer)} imports changed ${target} through a stale cache identity`);
   }
  }
- assert.ok(checked.length>=70,`expected the active build301 dependency graph, checked only ${checked.length} edges`);
+ assert.ok(checked.length>=70,`expected the active build305 dependency graph, checked only ${checked.length} edges`);
 });
 
-test("build301 entry point is cache-busted by the active release identity",async()=>{
+test("build305 entry point is cache-busted by the active release identity",async()=>{
  const index=await readFile(new URL("../index.html",import.meta.url),"utf8");
- assert.match(index,/const ASSET_VERSION = "3\.0\.1"/);
- assert.match(index,/const ASSET_BUILD = "build301"/);
+ assert.match(index,/const ASSET_VERSION = "3\.0\.5"/);
+ assert.match(index,/const ASSET_BUILD = "build305"/);
  assert.match(index,/import\(`\.\/src\/main\.js\?v=\$\{ASSET_VERSION\}-\$\{ASSET_BUILD\}`\)/);
 });

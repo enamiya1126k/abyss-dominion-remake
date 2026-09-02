@@ -18,16 +18,16 @@ function campaignRetreatHarness(stage){
  const state={
   player:{inRun:true},activeBattle:{battleId:"campaign-final-checkpoint"},expeditionSnapshot:{floor:100},
   monsters:[
-   {id:"general-1",currentHp:1,currentMp:0,ailments:["burn"]},
-   {id:"general-2",currentHp:2,currentMp:1,ailments:[]},
+   {id:"party-1",currentHp:1,currentMp:0,ailments:["burn"]},
+   {id:"party-2",currentHp:2,currentMp:1,ailments:[]},
    {id:"bench",currentHp:88,currentMp:9,ailments:[]},
    {id:"campaign-sairan",obtainedMethod:"campaignFinalTemporary",campaignFinalTemporary:true,currentHp:999,currentMp:999},
    {id:"stale-sairan",obtainedMethod:"campaignFinalTemporary",currentHp:999,currentMp:999}
   ],
-  party:stage==="sairan"?["campaign-sairan"]:["general-1","general-2"],
+  party:stage==="sairan"?["campaign-sairan"]:["party-1","party-2"],
   campaign100:{
-   finalPartyBackup:["general-1","bench"],sairanMonsterId:"campaign-sairan",
-   finalVitals:{"general-1":{hp:47,mp:11,ailments:["poison"]},"general-2":{hp:63,mp:17,ailments:[]}}
+   finalPartyBackup:["party-1","bench"],sairanMonsterId:"campaign-sairan",
+   finalVitals:{"party-1":{hp:47,mp:11,ailments:["poison"]},"party-2":{hp:63,mp:17,ailments:[]}}
   }
  };
  const harness=new Function("state","stage",`
@@ -56,14 +56,14 @@ test("campaign-final retreat is dispatched before generic special-battle cleanup
  assert.match(retreatDispatcher,/if\(type==="floorBoss"\)\{openEndgameTrialPicker\(\)/,"other special retreat routes remain intact");
 });
 
-for(const stage of ["generals-active","sairan"]){
+for(const stage of ["party","sairan"]){
  test(`campaign-final ${stage} retreat restores the saved roster atomically`,()=>{
   const{state,result,events,battle,activeEnemy,snapshot}=campaignRetreatHarness(stage);
-  assert.equal(result,true);assert.deepEqual(state.party,["general-1","bench"]);
-  assert.deepEqual(state.monsters.map(monster=>monster.id),["general-1","general-2","bench"]);
-  assert.deepEqual(state.monsters.find(monster=>monster.id==="general-1"),{id:"general-1",currentHp:47,currentMp:11,ailments:["poison"]});
-  assert.equal(state.monsters.find(monster=>monster.id==="general-2").currentHp,63);
-  assert.equal(state.monsters.find(monster=>monster.id==="general-2").currentMp,17);
+  assert.equal(result,true);assert.deepEqual(state.party,["party-1","bench"]);
+  assert.deepEqual(state.monsters.map(monster=>monster.id),["party-1","party-2","bench"]);
+  assert.deepEqual(state.monsters.find(monster=>monster.id==="party-1"),{id:"party-1",currentHp:47,currentMp:11,ailments:["poison"]});
+  assert.equal(state.monsters.find(monster=>monster.id==="party-2").currentHp,63);
+  assert.equal(state.monsters.find(monster=>monster.id==="party-2").currentMp,17);
   assert.equal(state.player.inRun,false);assert.equal("activeBattle" in state,false);assert.equal(state.expeditionSnapshot,null);
   assert.equal(state.campaign100.sairanMonsterId,null);assert.deepEqual(state.campaign100.finalPartyBackup,[]);assert.deepEqual(state.campaign100.finalVitals,{});
   assert.equal(battle,null);assert.equal(activeEnemy,null);assert.equal(snapshot,null);
@@ -73,28 +73,30 @@ for(const stage of ["generals-active","sairan"]){
 }
 
 test("temporary Sairan receives an explicit marker as well as a temporary acquisition method",()=>{
- assert.match(main,/obtainedMethod:"campaignFinalTemporary"\}\),learnedSairanSkillIds=allLearnedSkills\(sairan\)\.map\(skill=>skill\.id\);applyCampaignSairanType\(sairan,type\.id,\{learnedSkillIds:learnedSairanSkillIds\}\);sairan\.id=`campaign-sairan-\$\{Date\.now\(\)\}`;sairan\.campaignFinalTemporary=true/);
+ assert.match(main,/obtainedMethod:"campaignFinalTemporary"\}\);sairan\.equippedSkills=recommendedSkillLoadout\(sairan\)\.slice\(0,4\);sairan\.skillLoadoutInitialized=true;sairan\.id=`campaign-sairan-\$\{Date\.now\(\)\}`;sairan\.campaignFinalTemporary=true/);
  assert.match(restoreSource,/monster\.obtainedMethod!=="campaignFinalTemporary"&&!monster\.campaignFinalTemporary/);
 });
 
-test("campaign-final carry removes defeated heroes and preserves wounded HP rates",()=>{
+test("campaign-final carry removes defeated heroes and preserves exact HP with the same loadout",()=>{
  const harness=new Function(`
   const HERO_PARTY_IDS=["enami","yori","hide","rion"],SPECIES={};
   const CAMPAIGN_MAX_FLOOR=100,campaignFloorToLegacyFloor=floor=>floor*10;
   const prepareEnemyEntry=payload=>payload;
-  let battle={enemies:[
+  const original=[
+   {speciesId:"enami",loadoutToken:"a"},{speciesId:"yori",loadoutToken:"b"},{speciesId:"hide",loadoutToken:"c"},{speciesId:"rion",loadoutToken:"d"}
+  ];
+  let battle={specialWaves:[original],enemies:[
    {speciesId:"enami",hp:0,maxHp:100},
    {speciesId:"yori",hp:25,maxHp:100},
    {speciesId:"hide",hp:100,maxHp:100},
    {speciesId:"rion",hp:1,maxHp:200}
   ]};
   ${heroCarrySource}
-  const carry=campaignEnemyCarryRates(),next=campaignHeroEncounter(50,carry),initial=campaignHeroEncounter(50);
-  return{carry,next,initial};
+  const carry=campaignHeroSurvivors(50),next=campaignHeroEncounter(50,carry);
+  return{carry,next};
  `)();
- assert.equal(harness.carry.enami,0);
  assert.deepEqual(harness.next.map(enemy=>enemy.speciesId),["yori","hide","rion"]);
- assert.equal(harness.next.find(enemy=>enemy.speciesId==="yori").carryHpRate,.25);
- assert.equal(harness.next.find(enemy=>enemy.speciesId==="rion").carryHpRate,.01,"positive HP is clamped to a visible 1% minimum");
- assert.deepEqual(harness.initial.map(enemy=>enemy.speciesId),["enami","yori","hide","rion"]);
+ assert.equal(harness.next.find(enemy=>enemy.speciesId==="yori").carryHp,25);
+ assert.equal(harness.next.find(enemy=>enemy.speciesId==="rion").carryHp,1);
+ assert.equal(harness.next.find(enemy=>enemy.speciesId==="yori").loadoutToken,"b");
 });

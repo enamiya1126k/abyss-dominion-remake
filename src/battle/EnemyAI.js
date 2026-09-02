@@ -1,6 +1,6 @@
 import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=2.11.0-build164";
 import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.0-build164";
-import{speciesLevelStats}from"../models/Monster.js?v=3.0.1-build301";
+import{speciesLevelStats}from"../models/Monster.js?v=3.0.5-build305";
 import{floorBossActionInfo}from"../data/floorBosses.js?v=2.11.30-build195";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
@@ -76,14 +76,15 @@ export function createEnemyBattleState(species,source,floor){
   emoji:species.emoji??"👾",color:boss?"#bb4cff":species.baseStats.atk>12?"#df6262":"#a58f59",boss,bossTier:profile.tier,bossStatusResist:Math.min(.9,(profile.statusResist??0)+depth.statusResist),bossHealRate:profile.healRate,bossPowerMultiplier:profile.powerMultiplier,depthTier:depth.label,depthStep:depth.step,depthPressure:depth.active?Math.round(depth.step*10):0,phase:1,enraged:false,guard:false,charging:false,healed:false,
   intent:"様子を見ている",maxMp:maxEnemyMp,currentMp:Math.max(0,Math.min(maxEnemyMp,Number(source.currentMp??maxEnemyMp))),specialCooldown:0,divineBarrier:0,role:species.role??"balanced",race:species.race??null,strategicIdentity:species.strategicIdentity??null,element:species.element??"neutral"};
 }
+function setEnemySpecialCooldown(enemy,base){enemy.specialCooldown=Math.max(0,Math.floor(Number(base)||0))+1}
 function normalSpecialAction(enemy,hpRate){
  enemy.specialCooldown=Math.max(0,(enemy.specialCooldown??0)-1);if(enemy.specialCooldown>0)return null;
  const role=String(enemy.role??""),identity=enemy.strategicIdentity?.kind,alliesSupport=["healer","support","controller"].some(value=>role.includes(value));
- if(alliesSupport&&hpRate<.72&&Math.random()<(enemy.boss?.7:.44)){enemy.specialCooldown=2;enemy.intent=role.includes("heal")?"群体を再生する":"群勢を強化する";return role.includes("heal")?ENEMY_ACTIONS.packMend:ENEMY_ACTIONS.packRally}
- if(identity==="tank"&&Math.random()<(enemy.boss?.48:.30)){enemy.specialCooldown=2;enemy.intent="守護陣形を組む";return ENEMY_ACTIONS.packRally}
- if(identity==="control"&&Math.random()<(enemy.boss?.52:.34)){enemy.specialCooldown=2;enemy.intent="命中と強化を崩す";return Math.random()<.55?ENEMY_ACTIONS.dispelWave:ENEMY_ACTIONS.manaSiphon}
+ if(alliesSupport&&hpRate<.72&&Math.random()<(enemy.boss?.7:.44)){setEnemySpecialCooldown(enemy,2);enemy.intent=role.includes("heal")?"群体を再生する":"群勢を強化する";return role.includes("heal")?ENEMY_ACTIONS.packMend:ENEMY_ACTIONS.packRally}
+ if(identity==="tank"&&Math.random()<(enemy.boss?.48:.30)){setEnemySpecialCooldown(enemy,2);enemy.intent="守護陣形を組む";return ENEMY_ACTIONS.packRally}
+ if(identity==="control"&&Math.random()<(enemy.boss?.52:.34)){setEnemySpecialCooldown(enemy,2);enemy.intent="命中と強化を崩す";return Math.random()<.55?ENEMY_ACTIONS.dispelWave:ENEMY_ACTIONS.manaSiphon}
  const action=({fire:ENEMY_ACTIONS.flameSweep,ice:ENEMY_ACTIONS.frostNova,water:ENEMY_ACTIONS.frostNova,poison:ENEMY_ACTIONS.venomCloud,nature:ENEMY_ACTIONS.venomCloud,lightning:ENEMY_ACTIONS.thunderChain,thunder:ENEMY_ACTIONS.thunderChain,earth:ENEMY_ACTIONS.earthRupture,wind:ENEMY_ACTIONS.galeRend,dark:ENEMY_ACTIONS.shadowCurse,light:ENEMY_ACTIONS.radiantVolley})[enemy.element];
- if(action&&Math.random()<(enemy.boss?.76:.4)){enemy.specialCooldown=enemy.boss?1:(Math.random()<.35?1:2);enemy.intent=`${SPECIAL_ACTION_INFO[action].label}を放つ`;return action}
+ if(action&&Math.random()<(enemy.boss?.76:.4)){setEnemySpecialCooldown(enemy,enemy.boss?1:(Math.random()<.35?1:2));enemy.intent=`${SPECIAL_ACTION_INFO[action].label}を放つ`;return action}
  return null;
 }
 function specialAction(enemy,hpRate){
@@ -93,7 +94,7 @@ function specialAction(enemy,hpRate){
   if(Math.random()<(useUltimate?.92:.67)){
    const index=useUltimate?actions.length-1:(enemy.floorBossActionIndex??0)%Math.max(1,actions.length-1),actionId=actions[index];
    if(useUltimate)enemy.floorBossUltimateUsed=true;else enemy.floorBossActionIndex=index+1;
-   enemy.specialCooldown=useUltimate?2:1;enemy.intent=`${floorBossActionInfo(`floorBoss:${actionId}`)?.label??"固有技"}を発動`;return`floorBoss:${actionId}`;
+   setEnemySpecialCooldown(enemy,useUltimate?2:1);enemy.intent=`${floorBossActionInfo(`floorBoss:${actionId}`)?.label??"固有技"}を発動`;return`floorBoss:${actionId}`;
   }
   return null;
  }
@@ -103,11 +104,11 @@ function specialAction(enemy,hpRate){
  const profile=endgameCharacter(enemy.endgameBossId);
  if(profile){
   const authorities=profile.skills.slice(1),useUltimate=hpRate<=.32&&!enemy.authorityUltimateUsed||((enemy.authorityUses??0)+1)%5===0,index=useUltimate?authorities.length-1:(enemy.authorityIndex??0)%Math.max(1,authorities.length-1),skill=authorities[index];
-  if(skill&&Math.random()<(enemy.faction==="tenGod"?.52:.46)){enemy.authorityIndex=(index+1)%Math.max(1,authorities.length-1);enemy.authorityUses=(enemy.authorityUses??0)+1;if(useUltimate)enemy.authorityUltimateUsed=true;enemy.specialCooldown=Math.max(1,Math.min(4,Number(skill.cooldown)||2));enemy.intent=`${skill.name}を発動`;return`authority:${skill.id}`}
+  if(skill&&Math.random()<(enemy.faction==="tenGod"?.52:.46)){enemy.authorityIndex=(index+1)%Math.max(1,authorities.length-1);enemy.authorityUses=(enemy.authorityUses??0)+1;if(useUltimate)enemy.authorityUltimateUsed=true;setEnemySpecialCooldown(enemy,Math.max(1,Math.min(4,Number(skill.cooldown)||2)));enemy.intent=`${skill.name}を発動`;return`authority:${skill.id}`}
   return null;
  }
  const config=BOSS_SPECIALS[enemy.endgameBossId];if(!config)return null;
- if(Math.random()<config.chance){enemy.specialCooldown=config.cooldown;enemy.intent=config.intent;return ENEMY_ACTIONS[config.action]}
+ if(Math.random()<config.chance){setEnemySpecialCooldown(enemy,config.cooldown);enemy.intent=config.intent;return ENEMY_ACTIONS[config.action]}
  return null;
 }
 export function enemyActionMpCost(enemy,action){
@@ -137,7 +138,10 @@ export function chooseEnemyAction(enemy,context={}){
  if(buffed&&support&&Math.random()<.64&&canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="味方の強化を崩す";return ENEMY_ACTIONS.dispelWave}
  if((enemy.currentMp??0)<enemy.maxMp*.24&&opponents.some(monster=>(monster.currentMp??0)>0)&&Math.random()<.72){enemy.intent="魔力を奪って立て直す";return ENEMY_ACTIONS.manaSiphon}
  const special=specialAction(enemy,hpRate);if(special&&canPay(enemy,special))return special;
- const tactical=normalSpecialAction(enemy,hpRate);if(tactical&&canPay(enemy,tactical))return tactical;
+ // Dedicated floor/endgame skills already ticked the shared counter above.
+ // Do not tick it a second time through the normal elemental action path.
+ const dedicatedCooldown=Boolean(enemy.floorBossActionIds?.length||enemy.endgameBossId)&&enemy.specialCooldown>0;
+ const tactical=dedicatedCooldown?null:normalSpecialAction(enemy,hpRate);if(tactical&&canPay(enemy,tactical))return tactical;
  if(enemy.charging){enemy.charging=false;enemy.intent="強攻撃を放つ";return ENEMY_ACTIONS.power}
  if(enemy.boss&&hpRate<=.5&&!enemy.enraged){enemy.enraged=true;enemy.phase=2;enemy.intent=enemy.endgameBossId?"権能が暴走する":"狂暴化";return ENEMY_ACTIONS.enrage}
  if(hpRate<=.3&&!enemy.healed&&Math.random()<.5&&canPay(enemy,ENEMY_ACTIONS.heal)){enemy.healed=true;enemy.intent="自己回復";return ENEMY_ACTIONS.heal}

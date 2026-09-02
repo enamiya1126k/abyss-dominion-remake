@@ -64,27 +64,33 @@ function logicalTopology(count,random){
  nodes.forEach(node=>{node.gx-=minX;node.gy-=minY});return{nodes,edges}
 }
 
-function sectionShape(node,index,attribute,random,slot){
+function sectionShape(node,index,attribute,random,slot,linkedDirections=[]){
  const baseX=3+node.gx*slot,baseY=3+node.gy*slot,cx=baseX+Math.floor(slot/2),cy=baseY+Math.floor(slot/2),cells=new Set();
  const carve=(x,y,radius=0)=>{for(let oy=-radius;oy<=radius;oy++)for(let ox=-radius;ox<=radius;ox++){const tx=x+ox,ty=y+oy;if(tx>baseX+1&&ty>baseY+1&&tx<baseX+slot-2&&ty<baseY+slot-2)cells.add(pointKey(tx,ty))}};
- for(let y=cy-2;y<=cy+2;y++)for(let x=cx-2;x<=cx+2;x++)carve(x,y);
- const walkers=4+Math.floor(random()*3);
+ // Build303 expands each independently linked dungeon to roughly 1.65 times
+ // the old walkable footprint.  The larger core prevents an irregular room
+ // from still feeling like a narrow corridor, while the connected walkers
+ // preserve the organic cave silhouette.
+ for(let y=cy-3;y<=cy+3;y++)for(let x=cx-3;x<=cx+3;x++)carve(x,y);
+ const walkers=5+Math.floor(random()*3);
  for(let walker=0;walker<walkers;walker++){
-  let x=cx,y=cy;const bias=shuffle(CARDINAL,random)[walker%CARDINAL.length],steps=15+Math.floor(random()*14);
+  let x=cx,y=cy;const bias=shuffle(CARDINAL,random)[walker%CARDINAL.length],steps=24+Math.floor(random()*22);
   for(let step=0;step<steps;step++){
-   const direction=random()<.38?bias:pick(CARDINAL,random);x=Math.max(baseX+3,Math.min(baseX+slot-4,x+direction.dx));y=Math.max(baseY+3,Math.min(baseY+slot-4,y+direction.dy));carve(x,y,random()<.28?1:0)
+   const direction=random()<.36?bias:pick(CARDINAL,random);x=Math.max(baseX+5,Math.min(baseX+slot-6,x+direction.dx));y=Math.max(baseY+5,Math.min(baseY+slot-6,y+direction.dy));carve(x,y,random()<.34?1:0)
   }
  }
  const anchor={
-  north:{x:cx,y:baseY+2},east:{x:baseX+slot-3,y:cy},south:{x:cx,y:baseY+slot-3},west:{x:baseX+2,y:cy}
+  north:{x:cx,y:baseY+3},east:{x:baseX+slot-4,y:cy},south:{x:cx,y:baseY+slot-4},west:{x:baseX+3,y:cy}
  };
- for(const direction of CARDINAL){const destination=anchor[direction.id];let x=cx,y=cy;while(x!==destination.x||y!==destination.y){if(x!==destination.x)x+=Math.sign(destination.x-x);else y+=Math.sign(destination.y-y);carve(x,y,random()<.2?1:0)}}
+ for(const directionId of linkedDirections){const destination=anchor[directionId];if(!destination)continue;let x=cx,y=cy;while(x!==destination.x||y!==destination.y){if(x!==destination.x)x+=Math.sign(destination.x-x);else y+=Math.sign(destination.y-y);carve(x,y,random()<.2?1:0)}}
  const parsed=[...cells].map(value=>{const[x,y]=value.split(",").map(Number);return{x,y}}),minX=Math.min(...parsed.map(cell=>cell.x)),maxX=Math.max(...parsed.map(cell=>cell.x)),minY=Math.min(...parsed.map(cell=>cell.y)),maxY=Math.max(...parsed.map(cell=>cell.y));
  return{id:node.id,index,gx:node.gx,gy:node.gy,attribute,center:{x:cx,y:cy},anchor,cells:parsed,cellKeys:[...cells],x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1,minX,maxX,minY,maxY}
 }
 
-export function generateSectionDungeon({count=4,attributes=[],random=Math.random,slot=27}={}){
- const total=Math.max(4,Math.min(6,Math.floor(Number(count)||4))),topology=logicalTopology(total,random),sections=topology.nodes.map((node,index)=>sectionShape(node,index,attributes[index]??"neutral",random,slot));
+export function generateSectionDungeon({count=4,attributes=[],random=Math.random,slot=42}={}){
+ const total=Math.max(4,Math.min(6,Math.floor(Number(count)||4))),topology=logicalTopology(total,random),directionsById=new Map(topology.nodes.map(node=>[node.id,new Set()]));
+ for(const edge of topology.edges){const direction=CARDINAL.find(entry=>entry.id===edge.direction)??CARDINAL[0];directionsById.get(edge.a)?.add(direction.id);directionsById.get(edge.b)?.add(direction.opposite)}
+ const sections=topology.nodes.map((node,index)=>sectionShape(node,index,attributes[index]??"neutral",random,slot,[...(directionsById.get(node.id)??[])]));
  const byId=Object.fromEntries(sections.map(section=>[section.id,section])),sectionByCell={};
  sections.forEach(section=>section.cellKeys.forEach(key=>{sectionByCell[key]=section.id}));
  const portals=[];
@@ -95,7 +101,7 @@ export function generateSectionDungeon({count=4,attributes=[],random=Math.random
  }
  const maxGX=Math.max(...sections.map(section=>section.gx)),maxGY=Math.max(...sections.map(section=>section.gy)),cols=(maxGX+1)*slot+6,rows=(maxGY+1)*slot+6,tiles=Array.from({length:rows},()=>Array(cols).fill(1));
  sections.forEach(section=>section.cells.forEach(cell=>{tiles[cell.y][cell.x]=0}));
- return{cols,rows,tiles,sections,rooms:sections,sectionGraph:topology.edges,sectionPortals:portals,sectionByCell,startSectionId:sections[0].id,start:{...sections[0].center,sectionId:sections[0].id},shape:"section-dungeons"}
+ return{cols,rows,tiles,sections,rooms:sections,sectionGraph:topology.edges,sectionPortals:portals,sectionByCell,startSectionId:sections[0].id,start:{...sections[0].center,sectionId:sections[0].id},shape:"section-dungeons",sectionScale:1.65,slot}
 }
 
 export function sectionIdAt(world,x,y){return world?.sectionByCell?.[pointKey(Math.round(Number(x)||0),Math.round(Number(y)||0))]??world?.currentSectionId??world?.startSectionId??null}

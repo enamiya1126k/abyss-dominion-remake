@@ -58,7 +58,7 @@ test("legacy saves migrate collection rewards into the durable notice inbox",()=
   seed.state.schemaVersion=59;delete seed.state.collectionRewards;delete seed.state.notices.rewardInbox;
   localStorage.setItem("abyss-dominion-remake-v001",JSON.stringify(seed.state));
   const migrated=new SaveService().state;
-  assert.equal(migrated.schemaVersion,62);
+  assert.equal(migrated.schemaVersion,75);
   assert.ok(Array.isArray(migrated.notices.rewardInbox));
   assert.equal(migrated.notices.rewardInbox.filter(entry=>entry.source==="codex").length,1);
   assert.deepEqual(migrated.collectionRewards.queuedMilestones,["10"]);

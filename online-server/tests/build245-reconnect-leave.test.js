@@ -195,6 +195,14 @@ test("build245 a guest can leave mid-floor while the owner continues and only th
   assert.equal(guest.session.pendingRewards.filter(entry => entry.rewardId.includes(":before-leave:")).length, 1);
 
   room.expedition.encountersEnabled = false;
+  room.expedition.floorBoss.defeated = true;
+  const floorBoss = room.expedition.objects.find(object => object.type === "floorBoss");
+  const floorExit = room.expedition.objects.find(object => object.type === "exit");
+  if (floorBoss) {
+    floorBoss.resolved = true;
+    floorBoss.hidden = true;
+  }
+  if (floorExit) floorExit.hidden = false;
   owner.session.dungeonPosition = { ...room.expedition.exit, facing: "down" };
   store._resolveLanding(room, owner.session);
   store._updateStairGathering(room);

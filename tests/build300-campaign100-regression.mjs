@@ -26,5 +26,5 @@ collectCampaignKey(save,12,"b");collectCampaignKey(save,12,"c");assert.equal(tro
 defeatCampaignBoss(save,12);assert.equal(trophyChestEntitlements(save,12).equipmentGuaranteed,true);const reward=claimTrophyChest(save,12);assert.equal(reward.fragmentPacks,3);assert.equal(reward.equipmentGuaranteed,true);assert.equal(campaignFloorState(save,12).trophyClaimed,true);
 const resume=beginCampaignFloorRun(save,12,"resume-2");assert.equal(resume.trophyClaimed,true);assert.equal(resume.keysCollected,3);assert.equal(resume.bossDefeated,true);assert.equal(resume.trophyLocksOpened,3);assert.equal(resume.exitUnlocked,true);
 const replay=beginCampaignFloorReplay(save,12,"replay-2");assert.equal(replay.trophyClaimed,true);assert.equal(replay.keysCollected,0);assert.equal(replay.bossDefeated,false);assert.equal(replay.trophyLocksOpened,0);assert.equal(replay.exitUnlocked,false);
-assert.equal(campaignEndingForResult({generalsWon:true}),"complete");assert.equal(campaignEndingForResult({sairanWon:true}),"comeback");assert.equal(campaignEndingForResult({}),"defeat");
+assert.equal(campaignEndingForResult({partyWon:true}),"complete");assert.equal(campaignEndingForResult({sairanWon:true}),"comeback");assert.equal(campaignEndingForResult({}),"defeat");
 console.log("build300 campaign100 regression: ok");

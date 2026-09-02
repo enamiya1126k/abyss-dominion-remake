@@ -1,15 +1,15 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.0.1-build301";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.0.1-build301";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.11.83-build259";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.0.5-build305";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.0.5-build305";
+import{maxMp}from"../../battle/SkillSystem.js?v=3.0.5-build305";
 import{SPECIES}from"../../data/species.js?v=2.11.82-build258";
-import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.0.1-build301";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.0.1-build301";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.0.1-build301";
+import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.0.5-build305";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.0.5-build305";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.0.5-build305";
 import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.11.0-build164";
-import{monsterVisual}from"../MonsterVisual.js?v=3.0.1-build301";
+import{monsterVisual}from"../MonsterVisual.js?v=3.0.5-build305";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.0-build164";
-import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.0.1-build301";
-import{campaignDayForFloor}from"../../core/Campaign100System.js?v=3.0.1-build301";
+import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.0.5-build305";
+import{campaignDayForFloor,campaignHeroAdvance}from"../../core/Campaign100System.js?v=3.0.5-build305";
 
 const HOME_ATTRIBUTE_CYCLE=Object.freeze(["fire","ice","wind","earth","lightning","water"]);
 function homeAttributeChart(){
@@ -132,7 +132,7 @@ export function HomeScreen(state){
   const gauntletUnlocked=isContentUnlocked(state,GAUNTLET_UNLOCK_FLOOR);
   const endgameUnlocked=isContentUnlocked(state,EMERGENCY_UNLOCK_FLOOR);
   const revealed=Math.max(1,Number(state.player?.maxFloor)||1)>=70;
-  const completed=Boolean(state.campaign100?.finalCompleted);
+  const completed=Boolean(state.campaign100?.finalCompleted),finalReady=Boolean(state.campaign100?.finalUnlocked&&!completed);
   const phase=worldPhase(state);
   const sceneSlots=Array.from({length:4},(_,index)=>scenePartySlot(party[index],index,state)).join("");
   const criticalCount=activeParty.filter(monster=>homeCriticalVitals(monster).critical).length;
@@ -141,7 +141,7 @@ export function HomeScreen(state){
   const recentMemory=state.recentBattleMemory,memoryEntries=recentMemory?.entries??[],memoryCost=homeMemoryCost(state,recentMemory);
   const memoryNames=memoryEntries.slice(0,2).map(entry=>entry.nameOverride??SPECIES[entry.speciesId]?.name??"魔物").join("＋");
   const memorySub=memoryEntries.length?`${memoryNames}${memoryEntries.length>2?`ほか${memoryEntries.length-2}体`:""}・${memoryCost.toLocaleString()}晶石`:"直近の敵編成を丸ごと記録";
-  const day=campaignDayForFloor(state.player?.currentFloor??1),title=completed?"勇者を退けた魔王":`予言の十日間・第${day}日`;
+  const day=campaignDayForFloor(Math.max(state.player?.currentFloor??1,state.player?.maxFloor??1)),invasion=campaignHeroAdvance(state),title=completed?"勇者一行を撃退":invasion.status,prophecyLabel=completed?"予言達成・勇者軍撃退":`予言 ${day}/10・勇者侵攻 ${invasion.progress}%`,meterLabel=completed?"迎撃完了・勝利の記録":finalReady?"勇者軍最終決戦へ ›":invasion.location,meterTag=finalReady?"button":"span",meterAction=finalReady?' id="openCampaignFinal" type="button" aria-label="勇者軍最終決戦へ"':"";
 
   return`
     <section class="screen home-command-screen world-phase-${phase}${phase===1?" phase2":""}" data-world-phase="${phase}">
@@ -157,8 +157,9 @@ export function HomeScreen(state){
       </div>
 
       <header class="home-title-card">
-        <small>ABYSS DOMINION</small>
+        <small>${prophecyLabel}</small>
         <h1>${title}</h1>
+        <${meterTag}${meterAction} class="home-invasion-meter ${completed?"is-complete":""} ${finalReady?"is-ready":""}"><i role="progressbar" aria-label="勇者の進軍度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${invasion.progress}"><em style="width:${invasion.progress}%"></em></i><b>${meterLabel}</b></${meterTag}>
       </header>
 
       <div class="home-resource-bar" aria-label="所持資源">

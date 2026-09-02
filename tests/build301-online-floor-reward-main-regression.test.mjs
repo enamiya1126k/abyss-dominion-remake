@@ -71,12 +71,15 @@ test("build301 host campaign progress merges forward and an explicit new replay 
 
   functions.mergeOnlineCampaignProgressIntoLocal(42, { runId: "run-a", keysCollected: 2, trophyLocksOpened: 2, collectedKeyIds: ["key-b"], hotSpringUsed: true });
   assert.equal(entry.keysCollected, 2);
-  assert.equal(entry.trophyLocksOpened, 2);
+  assert.equal(entry.trophyLocksOpened, 0);
+  assert.equal(entry.trophyFragmentPacksClaimed, 2);
   assert.equal(entry.hotSpringUsed, true);
   functions.mergeOnlineCampaignProgressIntoLocal(42, { runId: "run-replay", keysCollected: 1, trophyLocksOpened: 0, collectedKeyIds: ["replay-key"], trophyMythicClaimed: true, replayActive: true, bossDefeatedThisRun: false });
   assert.equal(entry.runId, "run-replay");
   assert.deepEqual(entry.keyIds, ["replay-key"]);
   assert.equal(entry.bossDefeated, false);
+  assert.equal(entry.keysConsumed, 0);
+  assert.equal(entry.trophyFragmentPacksClaimed, 0);
   assert.equal(entry.trophyClaimed, true, "replay cannot restore the first-clear signature entitlement");
 });
 

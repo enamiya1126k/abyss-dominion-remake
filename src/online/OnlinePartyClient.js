@@ -1,17 +1,17 @@
 import {
   buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
   onlineSocialNotificationSummary, moveOnlineBattleRosterPriority, renderOnlineBattleRosterPicker,
-} from "../ui/screens/OnlinePartyScreen.js?v=3.0.1-build301";
+} from "../ui/screens/OnlinePartyScreen.js?v=3.0.5-build305";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=3.0.1-build301";
+} from "./OnlineViews.js?v=3.0.5-build305";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   rollbackOnlineTradeAssetReservation, commitOnlineTrade, recoverOrphanedTradeEscrows,
   parseOnlineTradeAmount, reconcileOnlineTradeEscrow, sameOnlineTradeAsset, sameLegacyOnlineTradeAsset,
 } from "./OnlineTradeSystem.js?v=2.11.82-build258";
-import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=3.0.1-build301";
+import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=3.0.5-build305";
 import { ONLINE_EXPEDITION_MOVE_INTERVAL_MS } from "./OnlineMovement.js?v=2.11.80-build256";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
@@ -107,6 +107,13 @@ function storageGet(key, fallback = "") { try { return localStorage.getItem(key)
 function storageSet(key, value) { try { localStorage.setItem(key, String(value)); } catch {} }
 function storageRemove(key) { try { localStorage.removeItem(key); } catch {} }
 function clamp(value, min, max) { return Math.max(min, Math.min(max, Number(value) || 0)); }
+export function onlineBattlePresentationSpeed(value) {
+  const speed = Number(value);
+  return Number.isFinite(speed) && speed > 0 ? clamp(speed, .5, 2) : 1;
+}
+export function onlineBattlePresentationDelay(delay, speed = 1) {
+  return Math.max(0, Math.round(Math.max(0, Number(delay) || 0) / onlineBattlePresentationSpeed(speed)));
+}
 function safeRoomId(value) {
   let source = String(value ?? "").trim();
   const invite = source.match(/(?:^|[?&])partyRoom=([^&#]+)/i);
@@ -188,11 +195,13 @@ function normalizedCampaignFloorState(source = {}) {
   const collectedKeyIds = [...new Set((Array.isArray(source?.collectedKeyIds) ? source.collectedKeyIds : [])
     .map(value => String(value ?? "").slice(0, 80)).filter(Boolean))].slice(0, 3);
   const rawLocks = boundedInteger(source?.trophyLocksOpened, 0, 3, 0);
+  const trophyFragmentPacksClaimed = Math.max(rawLocks, boundedInteger(source?.trophyFragmentPacksClaimed, 0, 3, 0));
   const keysCollected = Math.max(collectedKeyIds.length, boundedInteger(source?.keysCollected, 0, 3, 0), rawLocks);
   return {
     runId: String(source?.runId ?? "").slice(0, 120) || null,
     keysCollected,
-    trophyLocksOpened: Math.min(keysCollected, rawLocks),
+    trophyLocksOpened: rawLocks >= 3 ? 3 : 0,
+    trophyFragmentPacksClaimed,
     collectedKeyIds,
     hotSpringUsed: Boolean(source?.hotSpringUsed),
     trophyMythicClaimed: Boolean(source?.trophyMythicClaimed) || rawLocks >= 3,
@@ -216,6 +225,7 @@ function campaignHostStateFromLocal(source = {}) {
     runId: source?.runId,
     keysCollected: source?.keysCollected,
     trophyLocksOpened: source?.trophyLocksOpened,
+    trophyFragmentPacksClaimed: source?.trophyFragmentPacksClaimed,
     collectedKeyIds: source?.keyIds,
     hotSpringUsed: source?.hotSpringUsed,
     trophyMythicClaimed: source?.trophyClaimed,
@@ -233,7 +243,8 @@ function mergeCampaignHostFloorState(onlineSource, localSource) {
   return {
     runId: local.runId || online.runId,
     keysCollected,
-    trophyLocksOpened: Math.min(keysCollected, Math.max(online.trophyLocksOpened, local.trophyLocksOpened)),
+    trophyLocksOpened: Math.max(online.trophyLocksOpened, local.trophyLocksOpened) >= 3 ? 3 : 0,
+    trophyFragmentPacksClaimed: Math.max(online.trophyFragmentPacksClaimed, local.trophyFragmentPacksClaimed),
     collectedKeyIds,
     hotSpringUsed: online.hotSpringUsed || local.hotSpringUsed,
     trophyMythicClaimed: online.trophyMythicClaimed || local.trophyMythicClaimed,
@@ -1249,8 +1260,7 @@ export class OnlinePartyController {
     this.interactionPendingTimer = null; this.merchantPendingTimer = null;
     this.tradeConfirmTimer = null; this.rewardReceiptTimer = null; this.rewardReceiptAdvanceTimer = null; this.pendingRewardReceipt = null; this.rewardReceiptQueue = []; this.tradeRecoveryTimer = null; this.pendingLeaveTimer = null;
     if (this.tradeRecoveryStatus?.status === "complete") this.tradeRecoveryStatus = null;
-    for (const timer of this.presentationTimers) clearTimeout(timer);
-    this.presentationTimers.clear();
+    this._clearPresentationTimers();
     for (const ids of Object.values(this.presentationKoIds)) ids.clear();
     this._removeEvents();
     if (this.clockFrame) cancelAnimationFrame(this.clockFrame);
@@ -2700,11 +2710,11 @@ export class OnlinePartyController {
     if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); if (message.type === "expeditionStarted") this._settlePendingExpeditionStart(message.room); return; }
     if (message.type === "battleStarted" && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this.presentationKoIds.explore.clear(); this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
     if (message.type === "expeditionEvent") { if (message.event?.kind === "hostChestOpened") { const ownerId = this._explicitWorldOwnerId(message.event); if (ownerId && ownerId === this.selfId) this.onHostWorldUpdate({ ...message.event, ownerId }); } if (message.event?.tutorialGuide === "firstPickup") this._notifyTutorialGuide("explore_pickup"); this._announceExpeditionEvent(message.event); return; }
-    if (message.type === "floorBossDefeated") { const ownerId = this._explicitWorldOwnerId(message), reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: ownerId || null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = Boolean(ownerId && ownerId === this.selfId), multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this._closeBattleMenus("explore"); this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = null; if (isWorldOwner) this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId, boss: reward.boss, bosses: reward.bosses }); this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！ 戦利品は鍵付き宝箱へ`); this._render(); return; }
+    if (message.type === "floorBossDefeated") { this._clearPresentationTimers(); const ownerId = this._explicitWorldOwnerId(message), reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: ownerId || null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = Boolean(ownerId && ownerId === this.selfId), multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this._closeBattleMenus("explore"); this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = null; if (isWorldOwner) this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId, boss: reward.boss, bosses: reward.bosses }); this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！ 戦利品は鍵付き宝箱へ`); this._render(); return; }
     if (message.type === "expeditionPing" && message.ping?.id) { if (this._isSocialHidden(message.ping.playerId)) return; this.coopPings.set(message.ping.id, { ...message.ping }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() }); else this._render(); return; }
     if (message.type === "battleRound" || message.type === "battleResolved") { const previous = this.roomState?.expedition?.battle; this._captureHpTrails("explore", previous, message.battle); if (this.roomState?.expedition) this.roomState.expedition.battle = message.battle; if (message.type === "battleRound") this._closeBattleMenus("explore"); this._setRoute("explore", { silent: true }); this._queueBattlePresentation("explore", message.battle?.lastEvents); return; }
-    if (message.type === "expeditionEnded") { const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2, completedFloor = message.summary?.floor ?? message.summary?.assistedWorld?.endFloor; this.presentationKoIds.explore.clear(); this.expeditionReport = multiplayer ? message.summary ?? null : null; if (this.roomState) this.roomState = { ...this.roomState, phase: "lobby", expedition: null, coopRun: null }; this._closeAllBattleMenus(); this.route = "explore"; this.toast(message.summary?.completed && Number.isFinite(Number(completedFloor)) ? `${Math.max(1, Math.min(100, Math.floor(Number(completedFloor))))}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
-    if (message.type === "battleEnded") { this.coopBossConfirm = null; this.presentationKoIds.explore.clear(); this._closeBattleMenus("explore"); const bossName = message.coopBoss?.name || message.boss?.name; this.toast(message.result === "victory" ? bossName ? `${bossName}を撃破！` : "共闘バトル勝利！" : message.coopBoss ? "共闘ボスから退却。回復後に再挑戦できます" : "共闘パーティが全滅しました…"); return; }
+    if (message.type === "expeditionEnded") { this._clearPresentationTimers(); const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2, completedFloor = message.summary?.floor ?? message.summary?.assistedWorld?.endFloor; this.presentationKoIds.explore.clear(); this.expeditionReport = multiplayer ? message.summary ?? null : null; if (this.roomState) this.roomState = { ...this.roomState, phase: "lobby", expedition: null, coopRun: null }; this._closeAllBattleMenus(); this.route = "explore"; this.toast(message.summary?.completed && Number.isFinite(Number(completedFloor)) ? `${Math.max(1, Math.min(100, Math.floor(Number(completedFloor))))}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
+    if (message.type === "battleEnded") { this._clearPresentationTimers(); this.coopBossConfirm = null; this.presentationKoIds.explore.clear(); this._closeBattleMenus("explore"); const bossName = message.coopBoss?.name || message.boss?.name; this.toast(message.result === "victory" ? bossName ? `${bossName}を撃破！` : "共闘バトル勝利！" : message.coopBoss ? "共闘ボスから退却。回復後に再挑戦できます" : "共闘パーティが全滅しました…"); return; }
     if (message.type === "raidStarted") {
       this.presentationKoIds.raid.clear();
       this.roomState = { ...(this.roomState ?? {}), phase: "raid", raid: message.raid, raidProgress: message.raid?.progress };
@@ -2721,6 +2731,7 @@ export class OnlinePartyController {
       if (message.type === "raidRound") this._closeBattleMenus("raid"); this._setRoute("raid", { silent: true }); this._queueBattlePresentation("raid", message.raid?.lastEvents); return;
     }
     if (message.type === "raidEnded") {
+      this._clearPresentationTimers();
       this.presentationKoIds.raid.clear();
       const raidOwner = this._canonicalRoomOwnerId(this.roomState) === this.selfId;
       if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.raid = null; this.roomState.raidProgress = message.raid?.progress ?? null; }
@@ -2729,7 +2740,7 @@ export class OnlinePartyController {
       this.raidReport = { result: message.result, raid: message.raid, ranking: message.ranking ?? message.raid?.ranking ?? [] }; this.route = "raid"; this.toast(message.result === "victory" ? "今週のレイド討伐成功！" : message.result === "cancelled" ? "レイドを中断し、残HPを保存しました" : "敗北…ボスの残HPを保存しました"); this._render(); return;
     }
     if (message.type === "teamBattleStarted" || message.type === "teamBattleState" || message.type === "teamBattleRound" || message.type === "teamBattleResolved") { const previous = this.roomState?.teamBattle; if (message.type === "teamBattleStarted") this.presentationKoIds.team.clear(); this._captureHpTrails("team", previous, message.teamBattle); if (message.type === "teamBattleStarted") this.teamBattleReport = null; if (this.roomState) { this.roomState.phase = "team"; this.roomState.teamBattle = message.teamBattle; } if (message.type === "teamBattleRound") this._closeBattleMenus("team"); this._setRoute("team", { silent: true }); this._queueBattlePresentation("team", message.teamBattle?.lastEvents); return; }
-    if (message.type === "teamBattleEnded") { this.presentationKoIds.team.clear(); this.teamBattleReport = { resultId: message.resultId, result: message.result, winner: message.winner, summary: message.summary, teamBattle: message.teamBattle }; if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.teamBattle = null; } this._closeBattleMenus("team"); this.onTeamBattleResult(this.teamBattleReport); this.route = "team"; this.toast(message.winner ? `${message.winner === "sun" ? "紅組" : "蒼組"}の勝利！` : "引き分け！"); this._render(); return; }
+    if (message.type === "teamBattleEnded") { this._clearPresentationTimers(); this.presentationKoIds.team.clear(); this.teamBattleReport = { resultId: message.resultId, result: message.result, winner: message.winner, summary: message.summary, teamBattle: message.teamBattle }; if (this.roomState) { this.roomState.phase = "lobby"; this.roomState.teamBattle = null; } this._closeBattleMenus("team"); this.onTeamBattleResult(this.teamBattleReport); this.route = "team"; this.toast(message.winner ? `${message.winner === "sun" ? "紅組" : "蒼組"}の勝利！` : "引き分け！"); this._render(); return; }
     if (message.type === "chatMessage") { this._receiveChat(message.message); return; }
     if (message.type === "social") { this._receiveSocial(message); return; }
     if (message.type === "onlineReward") { const batch = this.recoverySettlementBatch; this._trackRecoverySettlement(this._receiveReward(message, batch), batch); return; }
@@ -3851,6 +3862,25 @@ export class OnlinePartyController {
     if (event.kind === "splitKey" && String(event.id ?? event.message ?? "").includes("key-complete")) this._playKeyFusion();
   }
 
+  _battlePresentationSpeed(mode) {
+    return onlineBattlePresentationSpeed(this._battle(mode)?.speed);
+  }
+
+  _schedulePresentation(callback, delay, speed = 1) {
+    this.presentationTimers ??= new Set();
+    const timer = setTimeout(() => {
+      this.presentationTimers.delete(timer);
+      callback();
+    }, onlineBattlePresentationDelay(delay, speed));
+    this.presentationTimers.add(timer);
+    return timer;
+  }
+
+  _clearPresentationTimers() {
+    for (const timer of this.presentationTimers ?? []) clearTimeout(timer);
+    this.presentationTimers?.clear();
+  }
+
   _playKeyFusion() {
     const stage = this._query(".explore-stage") ?? this._query("[data-online-stage]");
     if (!stage) return;
@@ -3861,8 +3891,7 @@ export class OnlinePartyController {
     fx.innerHTML = `<div class="online-key-fusion-pieces"><img class="cyan" src="./assets/online/coop/keys/key-fragment-cyan.png?v=2.11.44-build209" alt=""><img class="violet" src="./assets/online/coop/keys/key-fragment-violet.png?v=2.11.44-build209" alt=""><img class="combined" src="./assets/online/coop/keys/key-combined.png?v=2.11.44-build209" alt=""></div><strong>共鳴鍵 完成</strong><small>封印された宝物庫が開きます</small>`;
     stage.appendChild(fx);
     requestAnimationFrame(() => fx.classList.add("active"));
-    const timer = setTimeout(() => { this.presentationTimers.delete(timer); fx.classList.add("leaving"); setTimeout(() => fx.remove(), 420); }, 2100);
-    this.presentationTimers.add(timer);
+    this._schedulePresentation(() => { fx.classList.add("leaving"); this._schedulePresentation(() => fx.remove(), 420); }, 2100);
   }
 
   _healthMap(mode, battle) {
@@ -3879,26 +3908,26 @@ export class OnlinePartyController {
   }
 
   _captureHpTrails(mode, previous, next) {
-    const before = this._healthMap(mode, previous), after = this._healthMap(mode, next), trails = {};
-    for (const [key, current] of after) { const old = before.get(key); if (!old || Number(current.hp) >= Number(old.hp)) continue; trails[key] = { from: clamp(Number(old.hp) / Math.max(1, Number(old.max)) * 100, 0, 100), startedAt: Date.now(), delay: 300, duration: 720 }; if(key.startsWith("enemy:")&&Number(old.hp)>0&&Number(current.hp)<=0)this.presentationKoIds[mode]?.add(key.slice(key.indexOf(":")+1)); }
+    const before = this._healthMap(mode, previous), after = this._healthMap(mode, next), trails = {}, speed = onlineBattlePresentationSpeed(next?.speed);
+    for (const [key, current] of after) { const old = before.get(key); if (!old || Number(current.hp) >= Number(old.hp)) continue; trails[key] = { from: clamp(Number(old.hp) / Math.max(1, Number(old.max)) * 100, 0, 100), startedAt: Date.now(), delay: onlineBattlePresentationDelay(300, speed), duration: onlineBattlePresentationDelay(720, speed) }; if(key.startsWith("enemy:")&&Number(old.hp)>0&&Number(current.hp)<=0)this.presentationKoIds[mode]?.add(key.slice(key.indexOf(":")+1)); }
     this.hpTrails[mode] = trails;
   }
 
   _queueBattlePresentation(mode, events = []) {
-    for (const timer of this.presentationTimers) clearTimeout(timer);
-    this.presentationTimers.clear();
-    const rows = [...events], featured = [...rows].reverse().find(event => event?.kind === "coopBreak"), recent = rows.slice(-12), koIds=this.presentationKoIds[mode]??new Set();
+    this._clearPresentationTimers();
+    const speed = this._battlePresentationSpeed(mode), rows = [...events], featured = [...rows].reverse().find(event => event?.kind === "coopBreak"), recent = rows.slice(-12), koIds=this.presentationKoIds[mode]??new Set();
     if (featured && !recent.includes(featured)) recent.splice(0, Math.max(0, recent.length - 11), featured);
     for(const id of koIds)if(!recent.some(event=>event?.kind==="ko"&&String(event.targetId)===String(id)))recent.push({kind:"ko",targetKind:"enemy",targetId:id,label:"撃破"});
     const actions=recent.filter(event=>event?.kind!=="ko").slice(-8),kos=recent.filter(event=>event?.kind==="ko");
     for (const [index, event] of [...actions,...kos].entries()) {
       const actionCount=actions.length,delay=index<actionCount?80+index*90:980+(index-actionCount)*120;
-      const timer = setTimeout(() => { this.presentationTimers.delete(timer); this._playBattleEvent(event, mode); }, delay);
-      this.presentationTimers.add(timer);
+      this._schedulePresentation(() => this._playBattleEvent(event, mode, speed), delay, speed);
     }
   }
 
-  _playBattleEvent(event, mode = this.route) {
+  _playBattleEvent(event, mode = this.route, speed = this._battlePresentationSpeed(mode)) {
+    speed = onlineBattlePresentationSpeed(speed);
+    const schedule = (callback, delay) => this._schedulePresentation(callback, delay, speed);
     const linkArts = event?.kind === "coopBreak", techniqueEventId = linkArts ? String(event?.id ?? "") : "";
     if (techniqueEventId && this.processedCoopTechniqueEvents.has(techniqueEventId)) return;
     if (techniqueEventId) { this.processedCoopTechniqueEvents.add(techniqueEventId); if (this.processedCoopTechniqueEvents.size > 256) this.processedCoopTechniqueEvents.delete(this.processedCoopTechniqueEvents.values().next().value); }
@@ -3913,16 +3942,16 @@ export class OnlinePartyController {
         if (!unit) continue;
         setMonsterVisualFrame(unit, "attack"); unit.classList.remove("fx-link-arts"); void unit.offsetWidth; unit.classList.add("fx-link-arts");
         const aura = document.createElement("span"); aura.className = `online-link-arts-actor-fx ${autoIncluded.has(id) || event.autoIncluded === true ? "auto-included" : ""}`; aura.setAttribute("aria-hidden", "true"); unit.appendChild(aura);
-        setTimeout(() => { aura.remove(); unit.classList.remove("fx-link-arts"); if (!unit.classList.contains("dead")) setMonsterVisualFrame(unit, "idle"); }, 1320);
+        schedule(() => { aura.remove(); unit.classList.remove("fx-link-arts"); if (!unit.classList.contains("dead")) setMonsterVisualFrame(unit, "idle"); }, 1320);
       }
     }
-    if (actor && ["damage", "enemyDamage", "signature", "heal", "mpHeal", "revive", "circleActivate"].includes(event.kind)) { setMonsterVisualFrame(actor,"attack"); actor.classList.remove("fx-lunge", "fx-skill-lunge"); void actor.offsetWidth; actor.classList.add(event.label && event.label !== "たたかう" ? "fx-skill-lunge" : "fx-lunge"); const actorSelector=actor.id?`#${CSS.escape(actor.id)}`:null;setTimeout(()=>{const current=actorSelector?this._query(actorSelector):actor;if(current&&!current.classList.contains("dead"))setMonsterVisualFrame(current,"idle")},920); }
-    const impactDelay=["damage","enemyDamage","signature","deathMirrorPhantom"].includes(event?.kind)?170:60,schedule=(callback,delay)=>{const timer=setTimeout(()=>{this.presentationTimers.delete(timer);callback()},delay);this.presentationTimers.add(timer);return timer};
-    if (target && ["damage", "enemyDamage", "signature", "deathMirrorPhantom"].includes(event.kind) && Number(event.value) > 0) schedule(()=>{setMonsterVisualFrame(target,"damage"); target.classList.remove("fx-hit", "fx-critical-hit"); void target.offsetWidth; target.classList.add(event.critical ? "fx-critical-hit" : "fx-hit"); const flash = document.createElement("span"); flash.className = `battle-unit-hit-flash ${event.critical ? "critical" : ""}`; target.appendChild(flash); setTimeout(() => flash.remove(), 680); const targetSelector=target.id?`#${CSS.escape(target.id)}`:null;setTimeout(()=>{const current=targetSelector?this._query(targetSelector):target;if(current&&!current.classList.contains("dead"))setMonsterVisualFrame(current,"idle")},1050)},impactDelay);
+    if (actor && ["damage", "enemyDamage", "signature", "heal", "mpHeal", "revive", "circleActivate"].includes(event.kind)) { setMonsterVisualFrame(actor,"attack"); actor.classList.remove("fx-lunge", "fx-skill-lunge"); void actor.offsetWidth; actor.classList.add(event.label && event.label !== "たたかう" ? "fx-skill-lunge" : "fx-lunge"); const actorSelector=actor.id?`#${CSS.escape(actor.id)}`:null;schedule(()=>{const current=actorSelector?this._query(actorSelector):actor;if(current&&!current.classList.contains("dead"))setMonsterVisualFrame(current,"idle")},920); }
+    const impactDelay=["damage","enemyDamage","signature","deathMirrorPhantom"].includes(event?.kind)?170:60;
+    if (target && ["damage", "enemyDamage", "signature", "deathMirrorPhantom"].includes(event.kind) && Number(event.value) > 0) schedule(()=>{setMonsterVisualFrame(target,"damage"); target.classList.remove("fx-hit", "fx-critical-hit"); void target.offsetWidth; target.classList.add(event.critical ? "fx-critical-hit" : "fx-hit"); const flash = document.createElement("span"); flash.className = `battle-unit-hit-flash ${event.critical ? "critical" : ""}`; target.appendChild(flash); schedule(() => flash.remove(), 680); const targetSelector=target.id?`#${CSS.escape(target.id)}`:null;schedule(()=>{const current=targetSelector?this._query(targetSelector):target;if(current&&!current.classList.contains("dead"))setMonsterVisualFrame(current,"idle")},1050)},impactDelay);
     if(target&&event?.kind==="ko"){target.classList.add("presentation-ko-playing");setMonsterVisualFrame(target,"down");schedule(()=>{this.presentationKoIds[mode]?.delete(String(targetId));target.classList.remove("presentation-ko-pending","presentation-ko-playing");target.classList.add("presentation-ko-resolved","dead");target.setAttribute("aria-hidden","true")},560)}
     const layer = this._query("#battleFxLayer");
-    if (layer && target && (Number(event?.value) || ["miss", "guard"].includes(event?.kind))) schedule(()=>{const layerRect = layer.getBoundingClientRect(), rect = target.getBoundingClientRect(), float = document.createElement("div"); const healing = ["heal", "mpHeal", "revive"].includes(event.kind), text = event.kind === "miss" ? "MISS" : event.kind === "guard" ? "GUARD" : `${healing ? "+" : "-"}${Math.max(0, Number(event.value) || 0).toLocaleString()}`; float.className = `floating-number ${healing ? "heal" : event.critical ? "critical" : event.kind === "enemyDamage" ? "enemy" : "damage"}`; float.textContent = text; float.style.left = `${rect.left - layerRect.left + rect.width / 2}px`; float.style.top = `${rect.top - layerRect.top + rect.height * .34}px`; layer.appendChild(float); setTimeout(() => float.remove(), 2400)},impactDelay);
-    if (layer && (event?.label || linkArts) && (["signature", "raidTelegraph", "revive", "effect", "buff", "link", "coopBreak", "circleActivate", "equipmentAuthority"].includes(event.kind) || event.kind === "damage" && event.label !== "たたかう")) { const title = String(event.label || "LINK ARTS"), detailBase = String(event.description || event.message || event.effectText || (event.kind === "circleActivate" ? "魔法陣 発動" : event.actorName || "共闘アクション")), detail = linkArts && (event.autoIncluded === true || Array.isArray(event.autoIncluded) && event.autoIncluded.length) ? `${detailBase}・自動連携` : detailBase; const banner = document.createElement("div"); const authority = event.kind === "equipmentAuthority" || /固有|権能|反照/.test(detail); banner.className = `battle-cinematic-banner ${event.kind === "raidTelegraph" || event.kind === "coopBreak" ? "boss" : "skill"} ${linkArts ? "link-arts" : ""} ${title.length > 20 ? "very-long-title" : title.length > 12 ? "long-title" : ""} ${authority ? "equipment-authority" : ""}`; if (event.techniqueId) banner.dataset.techniqueId = String(event.techniqueId); banner.innerHTML = `<span class="battle-banner-copy">${linkArts ? '<em class="link-arts-kicker">LINK ARTS</em>' : ""}<strong>${safeHtml(title)}</strong><small class="battle-banner-effect">${safeHtml(detail)}</small></span>`; this._query(".battle-arena")?.appendChild(banner); const hold = mode === "raid" ? 2100 : linkArts ? 1900 : 1550; setTimeout(() => { banner.classList.add("leaving"); setTimeout(() => banner.remove(), 380); }, hold); }
+    if (layer && target && (Number(event?.value) || ["miss", "guard"].includes(event?.kind))) schedule(()=>{const layerRect = layer.getBoundingClientRect(), rect = target.getBoundingClientRect(), float = document.createElement("div"); const healing = ["heal", "mpHeal", "revive"].includes(event.kind), text = event.kind === "miss" ? "MISS" : event.kind === "guard" ? "GUARD" : `${healing ? "+" : "-"}${Math.max(0, Number(event.value) || 0).toLocaleString()}`; float.className = `floating-number ${healing ? "heal" : event.critical ? "critical" : event.kind === "enemyDamage" ? "enemy" : "damage"}`; float.textContent = text; float.style.left = `${rect.left - layerRect.left + rect.width / 2}px`; float.style.top = `${rect.top - layerRect.top + rect.height * .34}px`; layer.appendChild(float); schedule(() => float.remove(), 2400)},impactDelay);
+    if (layer && (event?.label || linkArts) && (["signature", "raidTelegraph", "revive", "effect", "buff", "link", "coopBreak", "circleActivate", "equipmentAuthority"].includes(event.kind) || event.kind === "damage" && event.label !== "たたかう")) { const title = String(event.label || "LINK ARTS"), detailBase = String(event.description || event.message || event.effectText || (event.kind === "circleActivate" ? "魔法陣 発動" : event.actorName || "共闘アクション")), detail = linkArts && (event.autoIncluded === true || Array.isArray(event.autoIncluded) && event.autoIncluded.length) ? `${detailBase}・自動連携` : detailBase; const banner = document.createElement("div"); const authority = event.kind === "equipmentAuthority" || /固有|権能|反照/.test(detail); banner.className = `battle-cinematic-banner ${event.kind === "raidTelegraph" || event.kind === "coopBreak" ? "boss" : "skill"} ${linkArts ? "link-arts" : ""} ${title.length > 20 ? "very-long-title" : title.length > 12 ? "long-title" : ""} ${authority ? "equipment-authority" : ""}`; if (event.techniqueId) banner.dataset.techniqueId = String(event.techniqueId); banner.innerHTML = `<span class="battle-banner-copy">${linkArts ? '<em class="link-arts-kicker">LINK ARTS</em>' : ""}<strong>${safeHtml(title)}</strong><small class="battle-banner-effect">${safeHtml(detail)}</small></span>`; this._query(".battle-arena")?.appendChild(banner); const hold = mode === "raid" ? 2100 : linkArts ? 1900 : 1550; schedule(() => { banner.classList.add("leaving"); schedule(() => banner.remove(), 380); }, hold); }
   }
 
   _sendPreset(text) {

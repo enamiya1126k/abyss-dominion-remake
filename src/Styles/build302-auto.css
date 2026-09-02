@@ -1,0 +1,58 @@
+/* Build 302: a single, phone-safe automatic floor-clear toggle. */
+.explore-screen-dungeon:not(.online-shared-explore) .explore-stage>.explore-auto-toggle{
+  position:absolute!important;
+  z-index:50!important;
+  right:7px!important;
+  bottom:64px!important;
+  left:auto!important;
+  top:auto!important;
+  width:112px!important;
+  min-width:112px!important;
+  height:50px!important;
+  min-height:50px!important;
+  display:grid!important;
+  grid-template-columns:27px minmax(0,1fr)!important;
+  place-items:center!important;
+  align-content:center!important;
+  gap:5px!important;
+  margin:0!important;
+  padding:5px 7px!important;
+  overflow:visible!important;
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+  -webkit-tap-highlight-color:transparent!important;
+  border:6px solid transparent!important;
+  border-image:var(--alpha115-frame) 44 fill / 6px stretch!important;
+  border-radius:0!important;
+  background:linear-gradient(180deg,#111116f5,#050609f5)!important;
+  box-shadow:0 6px 18px #000d!important;
+  color:#e5d8bd!important;
+}
+.explore-auto-toggle>.home-pixel-icon{width:25px!important;height:25px!important;filter:grayscale(.65) brightness(.9)!important}
+.explore-auto-toggle>span{min-width:0;display:grid;justify-items:start;gap:1px;line-height:1}
+.explore-auto-toggle b{color:#e8dbc0!important;font-size:10px!important;line-height:1.15!important;white-space:nowrap!important}
+.explore-auto-toggle small{color:#9a939d!important;font:900 9px/1 sans-serif!important;letter-spacing:.12em!important}
+.explore-auto-toggle.active{
+  border-image-source:var(--alpha115-frame-active)!important;
+  background:radial-gradient(circle at 18% 50%,#8d69264a,transparent 48%),linear-gradient(180deg,#251b0cf5,#090805f5)!important;
+  box-shadow:0 0 16px #e5b74b4d,0 7px 20px #000d!important;
+}
+.explore-auto-toggle.active>.home-pixel-icon{filter:drop-shadow(0 0 6px #ffd765) brightness(1.18)!important}
+.explore-auto-toggle.active b,.explore-auto-toggle.active small{color:#ffe69b!important}
+.explore-auto-toggle:focus-visible{outline:2px solid #fff0a8!important;outline-offset:2px!important}
+
+@media(max-width:420px){
+  .explore-screen-dungeon:not(.online-shared-explore) .explore-stage>.explore-auto-toggle{right:6px!important;bottom:58px!important;width:106px!important;min-width:106px!important;height:48px!important;min-height:48px!important}
+}
+
+.boss-save-warning{
+  margin:14px 0 0;
+  padding:12px 14px;
+  border:1px solid #d66d75;
+  background:#3a1119;
+  color:#ffd9dc;
+  font-weight:800;
+  line-height:1.55;
+}

@@ -43,8 +43,8 @@ function learnedTreeState(nodeId){
 
 test("idle profiles follow the 100-floor campaign bands",()=>{
  const cases=[
-  [1,.50,4],[9,.50,4],[10,.60,6],[29,.60,6],[30,.65,8],[49,.65,8],
-  [50,.70,10],[69,.70,10],[70,.75,12],[79,.75,12],[80,.80,16],[89,.80,16],
+  [1,.50,8],[9,.50,8],[10,.60,10],[29,.60,10],[30,.65,12],[49,.65,12],
+  [50,.70,14],[69,.70,14],[70,.75,16],[79,.75,16],[80,.80,18],[89,.80,18],
   [90,.85,20],[99,.85,20],[100,.90,24]
  ];
  for(const[floor,expeditionRate,maxHours]of cases)assert.deepEqual(idleRewardProfile(floor),{minFloor:idleRewardProfile(floor).minFloor,maxFloor:idleRewardProfile(floor).maxFloor,expeditionRate,maxHours});

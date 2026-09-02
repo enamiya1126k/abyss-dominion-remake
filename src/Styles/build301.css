@@ -15,3 +15,9 @@
 @media(prefers-reduced-motion:reduce){.campaign-key-pickup,.section-transition-curtain,.post-boss-field-unlocks,.campaign-loot-reveal>h3,.campaign-fragment-get,.campaign-loot-rays{animation-duration:.01ms!important;animation-iteration-count:1!important}}
 .gacha-pity-status{display:grid;grid-template-columns:1fr repeat(3,minmax(0,1fr));align-items:center;gap:5px;padding:9px;border:1px solid #806036;background:radial-gradient(circle at 10% 50%,#92592d2e,transparent 36%),#0a080b;color:#d6c7d8}.gacha-pity-status>small{color:#f0d083;font-size:9px;letter-spacing:.08em}.gacha-pity-status>span{display:grid;gap:2px;padding:5px;border-left:1px solid #493b45;text-align:center;font-size:9px}.gacha-pity-status b{color:#f0d58b;font-size:10px}.summon-rate-guide>.gacha-pity-status{margin-bottom:7px}
 @media(max-width:620px){.gacha-pity-status{grid-template-columns:1fr 1fr}.gacha-pity-status>small{grid-column:1/-1}.gacha-pity-status>span{border:1px solid #493b45}.gacha-pity-status>span:last-child{grid-column:1/-1}}
+
+/* build302: the casino must always offer an iPhone-safe, reachable exit. */
+.casino-modal-v2{padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left))!important}
+.casino-modal-v2>.game-modal-card{max-height:calc(100dvh - max(12px,env(safe-area-inset-top)) - max(12px,env(safe-area-inset-bottom)))!important;-webkit-overflow-scrolling:touch}
+.casino-modal-v2>.game-modal-card>.modal-x{position:sticky!important;top:0!important;right:auto!important;float:right!important;z-index:12!important;margin:0 0 -43px 8px!important;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.casino-modal-v2>.game-modal-card>.modal-x:focus-visible{outline:3px solid #ffe49a;outline-offset:2px}

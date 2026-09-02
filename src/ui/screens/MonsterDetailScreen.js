@@ -2,10 +2,10 @@ import{SPECIES}from"../../data/species.js?v=2.11.82-build258";
 import{PERSONALITIES}from"../../data/personalities.js?v=2.11.0-build164";
 import{MONSTER_COLORS}from"../../data/colors.js?v=2.11.0-build164";
 import{ATTRIBUTES}from"../../data/attributes.js?v=2.11.0-build164";
-import{maxMp}from"../../battle/SkillSystem.js?v=2.11.83-build259";
+import{maxMp}from"../../battle/SkillSystem.js?v=3.0.5-build305";
 import{endgameCharacter}from"../../data/endgameCharacters.js?v=2.11.0-build164";
-import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=3.0.1-build301";
-import{monsterVisual}from"../MonsterVisual.js?v=3.0.1-build301";
+import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=3.0.5-build305";
+import{monsterVisual}from"../MonsterVisual.js?v=3.0.5-build305";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.0-build164";
 import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=2.11.0-build164";
 

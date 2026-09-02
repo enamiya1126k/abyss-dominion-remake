@@ -25,11 +25,11 @@ export function resourceHud(state,{backId=null,title="",eyebrow="ABYSS DOMINION"
   ${backId?`<button type="button" id="${backId}" class="v2-hud-back" aria-label="戻る">←</button>`:""}
   <div class="v2-hud-title"><small>${eyebrow}</small>${title?`<h1>${title}</h1>`:""}</div>
   <div class="v2-hud-resources" aria-label="所持資源">
-   ${showFloor?`<span title="現在階層" data-resource-help="floor" data-exact-number="${(player.currentFloor??1).toLocaleString()}階"><i>${pixelIcon("dungeon")}</i><b>${compact(player.currentFloor??1)}階</b></span>`:""}
-   <span title="GOLD：${(player.gold??0).toLocaleString()}" data-resource-help="gold" data-exact-number="${(player.gold??0).toLocaleString()}G"><i>${itemIcon("gold")}</i><b id="goldHud">${compact(player.gold)}</b></span>
-   <span title="魔晶石：${(player.crystals??0).toLocaleString()}" data-resource-help="crystal" data-exact-number="魔晶石 ${(player.crystals??0).toLocaleString()}"><i>${pixelIcon("crystal")}</i><b id="crystalHud">${compact(player.crystals)}</b></span>
-   <span title="捕獲結晶：${(inventory.captureCrystals??0).toLocaleString()}" data-resource-help="capture" data-exact-number="捕獲結晶 ${(inventory.captureCrystals??0).toLocaleString()}"><i>${itemIcon("captureCrystals")}</i><b id="captureHud">${compact(inventory.captureCrystals)}</b></span>
-   <span title="深淵の鍵：${(inventory.abyssKeys??0).toLocaleString()}" data-resource-help="key" data-exact-number="深淵の鍵 ${(inventory.abyssKeys??0).toLocaleString()}"><i>${itemIcon("abyssKeys")}</i><b id="keyHud">${compact(inventory.abyssKeys)}</b></span>
+   ${showFloor?`<span title="現在階層" data-exact-number="${(player.currentFloor??1).toLocaleString()}階"><i>${pixelIcon("dungeon")}</i><b>${compact(player.currentFloor??1)}階</b></span>`:""}
+   <span title="GOLD：${(player.gold??0).toLocaleString()}" data-exact-number="${(player.gold??0).toLocaleString()}G"><i>${itemIcon("gold")}</i><b id="goldHud">${compact(player.gold)}</b></span>
+   <span title="魔晶石：${(player.crystals??0).toLocaleString()}" data-exact-number="魔晶石 ${(player.crystals??0).toLocaleString()}"><i>${pixelIcon("crystal")}</i><b id="crystalHud">${compact(player.crystals)}</b></span>
+   <span title="捕獲結晶：${(inventory.captureCrystals??0).toLocaleString()}" data-exact-number="捕獲結晶 ${(inventory.captureCrystals??0).toLocaleString()}"><i>${itemIcon("captureCrystals")}</i><b id="captureHud">${compact(inventory.captureCrystals)}</b></span>
+   <span title="深淵の鍵：${(inventory.abyssKeys??0).toLocaleString()}" data-exact-number="深淵の鍵 ${(inventory.abyssKeys??0).toLocaleString()}"><i>${itemIcon("abyssKeys")}</i><b id="keyHud">${compact(inventory.abyssKeys)}</b></span>
    ${settings?`<button type="button" data-ui-settings aria-label="設定">${pixelIcon("settings")}</button>`:""}
   </div>
  </header>`;

@@ -1,5 +1,7 @@
 const MAX_FLOOR = 10_000;
-const SNAPSHOT_VERSION = 1;
+const CAMPAIGN_MAX_FLOOR = 100;
+const SNAPSHOT_VERSION = 2;
+const LEGACY_SNAPSHOT_VERSION = 1;
 const CLONE_FAILED = Symbol("clone-failed");
 const PROGRESSION_FLAG_KEYS = Object.freeze([
   "abyssUnlocked",
@@ -178,7 +180,9 @@ function normalizeLegacyRepair(value) {
 
 export function normalizeLocalProgressSnapshot(value) {
   const copied = strictClone(value);
-  if (copied === CLONE_FAILED || !plainRecord(copied) || Number(copied.version) !== SNAPSHOT_VERSION) return null;
+  if (copied === CLONE_FAILED || !plainRecord(copied)) return null;
+  const version = Number(copied.version);
+  if (![LEGACY_SNAPSHOT_VERSION, SNAPSHOT_VERSION].includes(version)) return null;
   const source = copied, player = source.player, onlineWorld = source.onlineWorld;
   const playerNumbers = ["maxFloor", "currentFloor", "checkpoint", "nextShopFloor"];
   const playerRecords = ["floorSeeds", "openedChests", "bossRewards", "pendingBossRewards", "bossKills", "exploreRun"];
@@ -188,6 +192,7 @@ export function normalizeLocalProgressSnapshot(value) {
     || !hasOwn(player, "inRun") || typeof player.inRun !== "boolean"
     || playerRecords.some(key => !hasOwn(player, key) || !plainRecord(player[key]))
     || rootRecords.some(key => !hasOwn(source, key) || !plainRecord(source[key]))
+    || (version >= SNAPSHOT_VERSION && (!hasOwn(source, "campaign100") || !plainRecord(source.campaign100)))
     || !hasOwn(source, "worldPhase") || source.worldPhase == null || !Number.isFinite(Number(source.worldPhase))
     || PROGRESSION_FLAG_KEYS.some(key => !hasOwn(source.flags, key) || typeof source.flags[key] !== "boolean")
     || !plainRecord(onlineWorld)
@@ -198,7 +203,7 @@ export function normalizeLocalProgressSnapshot(value) {
     || (source.activeBattle != null && !plainRecord(source.activeBattle))
     || (source.tenGodContact != null && !plainRecord(source.tenGodContact))) return null;
   return {
-    version: SNAPSHOT_VERSION,
+    version,
     player: {
       maxFloor: floor(player.maxFloor),
       currentFloor: floor(player.currentFloor, player.maxFloor),
@@ -222,8 +227,9 @@ export function normalizeLocalProgressSnapshot(value) {
     floorBossChallenges: source.floorBossChallenges,
     secondWorld: source.secondWorld,
     tenGodContact: source.tenGodContact ?? null,
+    campaign100: version >= SNAPSHOT_VERSION ? source.campaign100 : null,
     onlineWorld: {
-      firstCoopBossClears: [...new Set((Array.isArray(source.onlineWorld?.firstCoopBossClears) ? source.onlineWorld.firstCoopBossClears : []).map(Number).filter(value => value >= 10 && value <= MAX_FLOOR && value % 10 === 0))],
+      firstCoopBossClears: [...new Set((Array.isArray(source.onlineWorld?.firstCoopBossClears) ? source.onlineWorld.firstCoopBossClears : []).map(Number).filter(value => Number.isInteger(value) && (version >= SNAPSHOT_VERSION ? value >= 1 && value <= CAMPAIGN_MAX_FLOOR : value >= 10 && value <= MAX_FLOOR && value % 10 === 0)))],
       hostWorld: onlineWorld.hostWorld,
       activeExpeditionRunId: cleanText(source.onlineWorld?.activeExpeditionRunId, 120) || null,
       activeManualExploreRunId: cleanText(source.onlineWorld?.activeManualExploreRunId, 120) || null,
@@ -260,6 +266,7 @@ export function captureLocalProgress(state) {
     floorBossChallenges: state.floorBossChallenges,
     secondWorld: state.secondWorld,
     tenGodContact: state.tenGodContact ?? null,
+    campaign100: plainRecord(state.campaign100) ? state.campaign100 : { version: 4, floors: {} },
     onlineWorld: {
       firstCoopBossClears: online.firstCoopBossClears,
       hostWorld: online.hostWorld,
@@ -287,6 +294,7 @@ export function restoreLocalProgress(state, value) {
   state.biomeProgress = restoredSnapshot.biomeProgress;
   state.floorBossChallenges = restoredSnapshot.floorBossChallenges;
   state.secondWorld = restoredSnapshot.secondWorld;
+  if (restoredSnapshot.version >= SNAPSHOT_VERSION && plainRecord(restoredSnapshot.campaign100)) state.campaign100 = restoredSnapshot.campaign100;
   if (restoredSnapshot.tenGodContact == null) delete state.tenGodContact;
   else state.tenGodContact = restoredSnapshot.tenGodContact;
   state.onlineParty = object(state.onlineParty);

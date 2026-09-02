@@ -1,10 +1,10 @@
 import{SPECIES}from"../../data/species.js?v=2.11.82-build258";
-import{displayName}from"../../models/Monster.js?v=3.0.1-build301";
-import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=2.11.83-build259";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.0.1-build301";
+import{displayName}from"../../models/Monster.js?v=3.0.5-build305";
+import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=3.0.5-build305";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.0.5-build305";
 import{equipmentDisplayRarity,equipmentSubslotLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=2.11.30-build195";
-import{monsterVisual}from"../MonsterVisual.js?v=3.0.1-build301";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=2.11.0-build164";
+import{monsterVisual}from"../MonsterVisual.js?v=3.0.5-build305";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=3.0.5-build305";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.11.0-build164";
 
 const ELEMENTS={

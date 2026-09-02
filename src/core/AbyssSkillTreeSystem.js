@@ -1,4 +1,4 @@
-import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=3.0.1-build301";
+import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=3.0.5-build305";
 
 export const ABYSS_SKILL_TREE_VERSION=7;
 

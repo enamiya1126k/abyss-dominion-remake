@@ -125,8 +125,8 @@ test("maximum-size section maps survive expedition save normalization without a 
  globalThis.localStorage={getItem:key=>values.get(key)??null,setItem:(key,value)=>values.set(key,String(value)),removeItem:key=>values.delete(key)};
  try{
   const service=new SaveService(),template=structuredClone(service.state),scenarios=[
-   {seed:3223,axis:"x",expectedCols:168,expectedRows:33},
-   {seed:505,axis:"y",expectedCols:33,expectedRows:168}
+   {seed:3223,axis:"x",expectedCols:258,expectedRows:48},
+   {seed:505,axis:"y",expectedCols:48,expectedRows:258}
   ];
   for(const scenario of scenarios){
    const world=generateSectionDungeon({count:6,random:seeded(scenario.seed)}),cells=world.sections.flatMap(section=>section.cells),target=cells.reduce((best,cell)=>cell[scenario.axis]>best[scenario.axis]?cell:best,cells[0]);
@@ -146,16 +146,16 @@ test("maximum-size section maps survive expedition save normalization without a 
    assert.deepEqual({x:snapshot.world.exit.x,y:snapshot.world.exit.y},target,"exit remains aligned with the full tilemap");
   }
 
-  const state=structuredClone(template),oversized=190;
+  const state=structuredClone(template),oversized=300;
   state.player.inRun=true;state.expeditionSnapshot={floor:45,world:{cols:oversized,rows:oversized,tiles:Array.from({length:oversized},()=>Array(oversized).fill(0)),start:{x:0,y:0},exit:{x:oversized-1,y:oversized-1}},player:{x:oversized-1,y:oversized-1},partyTrail:[{x:oversized-1,y:oversized-1}]};
   const bounded=service.migrate(state).expeditionSnapshot;
-  assert.equal(bounded.world.cols,168,"untrusted snapshot width stays bounded to the largest legitimate map");
-  assert.equal(bounded.world.rows,168,"untrusted snapshot height stays bounded to the largest legitimate map");
-  assert.equal(bounded.world.tiles.length,168);
-  assert.ok(bounded.world.tiles.every(row=>row.length===168));
-  assert.deepEqual({x:bounded.player.x,y:bounded.player.y},{x:167,y:167});
-  assert.deepEqual(bounded.partyTrail[0],{x:167,y:167});
-  assert.deepEqual({x:bounded.world.exit.x,y:bounded.world.exit.y},{x:167,y:167});
+  assert.equal(bounded.world.cols,272,"untrusted snapshot width stays bounded to the largest legitimate map");
+  assert.equal(bounded.world.rows,272,"untrusted snapshot height stays bounded to the largest legitimate map");
+  assert.equal(bounded.world.tiles.length,272);
+  assert.ok(bounded.world.tiles.every(row=>row.length===272));
+  assert.deepEqual({x:bounded.player.x,y:bounded.player.y},{x:271,y:271});
+  assert.deepEqual(bounded.partyTrail[0],{x:271,y:271});
+  assert.deepEqual({x:bounded.world.exit.x,y:bounded.world.exit.y},{x:271,y:271});
  }finally{if(previousStorage===undefined)delete globalThis.localStorage;else globalThis.localStorage=previousStorage}
 });
 
@@ -251,13 +251,14 @@ test("all 100 campaign floors resolve to official legacy bosses or the declared 
 });
 
 test("main integration keeps section transitions, persistent post-boss unlocks, and strong reward feedback wired",async()=>{
- const[main,exploreScreen,build301Css]=await Promise.all([
+ const[main,exploreScreen,build301Css,build303Css]=await Promise.all([
   readFile(new URL("../src/main.js",import.meta.url),"utf8"),
   readFile(new URL("../src/ui/screens/ExploreScreen.js",import.meta.url),"utf8"),
-  readFile(new URL("../src/Styles/build301.css",import.meta.url),"utf8")
+  readFile(new URL("../src/Styles/build301.css",import.meta.url),"utf8"),
+  readFile(new URL("../src/Styles/build303-dungeon.css",import.meta.url),"utf8")
  ]);
  assert.match(main,/generateSectionDungeon\(\{count:cfg\.roomCount,attributes,random:rng\}\)/);
- assert.match(main,/layoutVersion:301/);
+ assert.match(main,/layoutVersion:303/);
  assert.match(main,/function transitionCampaignSection\(\)/);
  assert.match(main,/sectionPortals\.find\(entry=>entry\.sectionId===game\.world\.currentSectionId/);
  assert.doesNotMatch(main,/function connectRooms\(/,"old same-map corridor carver must stay removed");
@@ -285,4 +286,7 @@ test("main integration keeps section transitions, persistent post-boss unlocks, 
  assert.match(build301Css,/\.campaign-key-counter/);
  assert.match(build301Css,/\.campaign-loot-reveal/);
  assert.match(build301Css,/\.campaign-mythic-item/);
+ assert.match(build303Css,/\.dungeon-chest-reveal/);
+ assert.match(build303Css,/\.post-boss-field-unlocks>div>span/);
+ assert.match(build303Css,/\.section-transition-curtain>b>\.attribute-pixel-art/);
 });

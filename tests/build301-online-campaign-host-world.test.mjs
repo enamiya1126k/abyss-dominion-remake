@@ -70,9 +70,9 @@ test("build301 host-world snapshots preserve every campaign floor from 1 through
   assert.equal(full.defeatedBossFloors.includes(101), false);
   assert.equal(full.claimedBossRewardFloors.includes(200), false);
   assert.equal(full.defeatedBossFloors.includes(2.5), false);
-  assert.deepEqual(full.campaignFloorStates["4"], { runId: "offline-4", keysCollected: 1, trophyLocksOpened: 1, collectedKeyIds: ["offline-key-1"], hotSpringUsed: true, trophyMythicClaimed: false, replayActive: false, bossDefeatedThisRun: true });
-  assert.deepEqual(full.campaignFloorStates["6"], { runId: null, keysCollected: 2, trophyLocksOpened: 1, collectedKeyIds: ["campaignKey-2", "campaignKey-3"], hotSpringUsed: true, trophyMythicClaimed: false, replayActive: false, bossDefeatedThisRun: false });
-  assert.deepEqual(full.campaignFloorStates["7"], { runId: null, keysCollected: 3, trophyLocksOpened: 3, collectedKeyIds: ["a", "b", "c"], hotSpringUsed: false, trophyMythicClaimed: true, replayActive: false, bossDefeatedThisRun: false });
+  assert.deepEqual(full.campaignFloorStates["4"], { runId: "offline-4", keysCollected: 1, trophyLocksOpened: 0, trophyFragmentPacksClaimed: 1, collectedKeyIds: ["offline-key-1"], hotSpringUsed: true, trophyMythicClaimed: false, replayActive: false, bossDefeatedThisRun: true });
+  assert.deepEqual(full.campaignFloorStates["6"], { runId: null, keysCollected: 2, trophyLocksOpened: 0, trophyFragmentPacksClaimed: 1, collectedKeyIds: ["campaignKey-2", "campaignKey-3"], hotSpringUsed: true, trophyMythicClaimed: false, replayActive: false, bossDefeatedThisRun: false });
+  assert.deepEqual(full.campaignFloorStates["7"], { runId: null, keysCollected: 3, trophyLocksOpened: 3, trophyFragmentPacksClaimed: 3, collectedKeyIds: ["a", "b", "c"], hotSpringUsed: false, trophyMythicClaimed: true, replayActive: false, bossDefeatedThisRun: false });
   assert.equal(full.campaignFloorStates["101"], undefined);
 
   const network = controller._hostWorldNetworkSnapshot();
@@ -138,7 +138,7 @@ test("build301 host-world delta fallback keeps legacy claims separate from expli
   assert.deepEqual(sorted(state.onlineParty.hostWorld.defeatedBossFloors), [1, 4]);
   assert.deepEqual(state.onlineParty.hostWorld.claimedBossRewardFloors, [1]);
   assert.equal(state.onlineParty.hostWorld.campaignFloorStates["1"], undefined);
-  assert.deepEqual(state.onlineParty.hostWorld.campaignFloorStates["2"], { runId: null, keysCollected: 2, trophyLocksOpened: 1, collectedKeyIds: ["campaignKey-3"], hotSpringUsed: true, trophyMythicClaimed: false, replayActive: false, bossDefeatedThisRun: false });
+  assert.deepEqual(state.onlineParty.hostWorld.campaignFloorStates["2"], { runId: null, keysCollected: 2, trophyLocksOpened: 0, trophyFragmentPacksClaimed: 1, collectedKeyIds: ["campaignKey-3"], hotSpringUsed: true, trophyMythicClaimed: false, replayActive: false, bossDefeatedThisRun: false });
   assert.deepEqual(sent.map(message => message.mutationId), ["build301-defeated-1", "build301-claimed-1", "build301-campaign-state-2"]);
   assert.equal(controller.recoverySettlementFailed, false);
 });
@@ -192,7 +192,8 @@ test("build301 save migration converts every schema70 online ledger without corr
     assert.equal(repaired300.campaign100.floors["1"].trophyLocksOpened, 0);
     assert.equal(repaired300.campaign100.floors["10"].bossDefeated, true);
     assert.equal(repaired300.campaign100.floors["10"].trophyLocksOpened, 0);
-    assert.equal(repaired300.campaign100.floors["6"].trophyLocksOpened, 2);
+    assert.equal(repaired300.campaign100.floors["6"].trophyLocksOpened, 0);
+    assert.equal(repaired300.campaign100.floors["6"].trophyFragmentPacksClaimed, 2);
     assert.equal(repaired300.flags.gameClear1000, false);
     assert.equal(repaired300.flags.gameClear10000, false);
     assert.equal(repaired300.flags.deepAbyssUnlocked, false);
@@ -232,7 +233,8 @@ test("build301 save migration converts every schema70 online ledger without corr
     assert.deepEqual(preserved71.onlineParty.firstCoopBossClears, [6, 100]);
     assert.deepEqual(preserved71.onlineParty.hostWorld.floorSeeds, { 6: 6 });
     assert.deepEqual(preserved71.onlineParty.hostWorld.openedChestIds, { 6: ["6-0"] });
-    assert.equal(preserved71.onlineParty.hostWorld.campaignFloorStates["6"].trophyLocksOpened, 1);
+    assert.equal(preserved71.onlineParty.hostWorld.campaignFloorStates["6"].trophyLocksOpened, 0);
+    assert.equal(preserved71.onlineParty.hostWorld.campaignFloorStates["6"].trophyFragmentPacksClaimed, 1);
 
     const canonical = structuredClone(service.state);
     canonical.schemaVersion = 70;

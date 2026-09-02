@@ -1,0 +1,139 @@
+/* Build 303: larger linked dungeons, readable attributes and reward payoff. */
+
+/* The existing attribute atlas is the authority for every section crest. */
+.explore-scenery-badge{
+  width:min(48%,210px)!important;
+  grid-template-columns:32px minmax(0,1fr)!important;
+  gap:7px!important;
+}
+.explore-scenery-badge>i[data-section-attribute-logo]{
+  width:30px!important;
+  height:30px!important;
+  display:grid!important;
+  place-items:center!important;
+  border:1px solid color-mix(in srgb,var(--scenery-accent) 78%,#f7e6b2)!important;
+  background:radial-gradient(circle,color-mix(in srgb,var(--scenery-accent) 25%,#11121a),#050609 72%)!important;
+  box-shadow:0 0 11px color-mix(in srgb,var(--scenery-accent) 48%,transparent),inset 0 0 9px #000!important;
+  transform:none!important;
+}
+.explore-scenery-badge>i[data-section-attribute-logo]::after{display:none!important}
+.explore-scenery-badge>i[data-section-attribute-logo] .attribute-pixel-art{
+  width:25px!important;
+  height:25px!important;
+  margin:0!important;
+  vertical-align:middle!important;
+  filter:drop-shadow(0 0 5px var(--scenery-accent))!important;
+}
+.explore-scenery-badge[data-attribute="poison"]>i .attribute-pixel-art{filter:hue-rotate(72deg) saturate(1.55) drop-shadow(0 0 5px #b7e84f)!important}
+
+/* Crossing a boundary reads as one dungeon fading into the next. */
+.section-transition-curtain{
+  gap:8px!important;
+  background:
+    linear-gradient(90deg,#020306 0,transparent 22%,transparent 78%,#020306 100%),
+    radial-gradient(ellipse at 50% 53%,color-mix(in srgb,var(--section-accent) 34%,transparent),transparent 43%),
+    linear-gradient(180deg,#020306f9,#05030af2 52%,#020306fa)!important;
+  color:#f2eadc!important;
+  animation:build303SectionFade .78s ease both!important;
+}
+.section-transition-curtain::before,.section-transition-curtain::after{
+  content:"";position:absolute;left:12%;right:12%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--section-accent),transparent);
+  box-shadow:0 0 14px var(--section-accent);
+}
+.section-transition-curtain::before{top:30%}.section-transition-curtain::after{bottom:30%}
+.section-transition-curtain>small{color:color-mix(in srgb,var(--section-accent) 72%,#e8dcc5)!important;font-size:9px!important;letter-spacing:.32em!important}
+.section-transition-curtain>b{display:flex!important;align-items:center;justify-content:center;gap:9px;color:#f8edce!important;font:900 clamp(19px,5.5vw,28px)/1.2 Georgia,"Yu Mincho",serif!important;text-shadow:0 0 16px var(--section-accent)!important}
+.section-transition-curtain>b>.attribute-pixel-art{width:34px!important;height:34px!important;margin:0!important;vertical-align:middle!important;filter:drop-shadow(0 0 10px var(--section-accent))!important}
+.section-transition-curtain>em{color:var(--section-accent);font:800 11px/1.2 "Yu Gothic",sans-serif;font-style:normal;letter-spacing:.14em}
+@keyframes build303SectionFade{0%{opacity:0;filter:blur(5px)}22%,62%{opacity:1;filter:none}100%{opacity:0;filter:blur(3px)}}
+
+/* The map uses the real cell silhouette. Give it enough room on phones. */
+.explore-screen-dungeon:not(.online-shared-explore) .explore-stage #miniMap{
+  width:clamp(144px,44vw,176px)!important;
+  height:clamp(144px,44vw,176px)!important;
+  max-width:calc(100% - 18px)!important;
+  max-height:calc(100% - 18px)!important;
+  border-color:color-mix(in srgb,var(--scenery-accent) 58%,#9a7644)!important;
+  background:#020307f2!important;
+  image-rendering:auto!important;
+  box-shadow:0 8px 24px #000e,inset 0 0 13px color-mix(in srgb,var(--scenery-accent) 10%,transparent)!important;
+}
+
+/* Boss victory is a result banner, never a row of apparent choice buttons. */
+.post-boss-field-unlocks{
+  width:min(94%,540px)!important;
+  gap:9px!important;
+  padding:22px 16px!important;
+  background:radial-gradient(circle at 50% 8%,#c68b3e42,transparent 35%),linear-gradient(180deg,#160e09fa,#050507fa 70%)!important;
+  box-shadow:0 0 0 5px #050405dc,0 0 52px #e6ae474d,inset 0 0 28px #d6962d18!important;
+  animation:build303BossUnlock 2.6s ease both!important;
+}
+.post-boss-field-unlocks>small{color:#e2bd68!important;font-size:9px!important}
+.post-boss-field-unlocks>strong{font-size:clamp(20px,6vw,29px)!important;text-shadow:0 0 15px #dcae55}
+.post-boss-field-unlocks>div{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important}
+.post-boss-field-unlocks>div>span{
+  min-width:0;display:grid!important;grid-template-rows:36px auto auto!important;place-items:center!important;gap:4px!important;
+  padding:10px 5px!important;border:1px solid #765a2e!important;background:linear-gradient(180deg,#18130d,#080709)!important;
+  box-shadow:inset 0 0 12px #d5a24612!important;color:#f4dfa4!important;
+}
+.post-boss-field-unlocks>div>span>.home-pixel-icon{
+  display:inline-block!important;width:34px!important;height:34px!important;padding:0!important;border:0!important;background-color:transparent!important;
+  background-image:url("../../assets/ui/home-ui-icons.png?v=3.0.3-build303")!important;
+  background-size:500% 400%!important;background-position:var(--home-icon-x) var(--home-icon-y)!important;background-repeat:no-repeat!important;
+  box-shadow:none!important;
+  filter:drop-shadow(0 0 8px #e6bd68)!important;
+}
+.post-boss-field-unlocks>div>span>b{max-width:100%;overflow:hidden;color:#f4e5c2!important;font-size:10px!important;text-overflow:ellipsis;white-space:nowrap}
+.post-boss-field-unlocks>div>span>em{color:#f0c967;font:900 9px/1 sans-serif;font-style:normal;letter-spacing:.12em}
+@keyframes build303BossUnlock{0%{opacity:0;transform:translate(-50%,-42%) scale(.72)}10%,80%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-56%) scale(1.035)}}
+
+/* Ordinary chests receive the same clear "GET" language as boss loot. */
+.dungeon-chest-reward-modal>.game-modal-card{
+  width:min(95vw,590px)!important;max-height:94dvh!important;overflow:auto!important;overscroll-behavior:contain;
+  border:9px solid transparent!important;border-image:var(--alpha115-frame-active) 44 fill / 9px stretch!important;
+  border-radius:0!important;background:linear-gradient(180deg,#171109,#080709 64%,#050507)!important;
+}
+.dungeon-chest-reward-modal>.game-modal-card>h2{text-align:center;color:#e9c86f!important;font:900 17px/1.2 Georgia,"Yu Mincho",serif;letter-spacing:.1em}
+.dungeon-chest-reveal{position:relative;isolation:isolate;overflow:hidden;display:grid;gap:9px;padding:17px 11px;border:1px solid #886a35;background:radial-gradient(circle at 50% 12%,#d5a94638,transparent 39%),#070709;text-align:center}
+.dungeon-chest-reveal.locked{border-color:#aa6dd0;background:radial-gradient(circle at 50% 12%,#9c48ce45,transparent 42%),#070609}
+.dungeon-chest-rays{position:absolute;z-index:-1;inset:-55%;background:repeating-conic-gradient(from 0deg,#efd27418 0 5deg,transparent 5deg 15deg);animation:build303ChestRays 13s linear infinite}
+.dungeon-chest-reveal.locked .dungeon-chest-rays{background:repeating-conic-gradient(from 0deg,#d888ff1a 0 5deg,transparent 5deg 15deg)}
+.dungeon-chest-reveal>small{color:#c6a75d;font-size:9px;letter-spacing:.28em}.dungeon-chest-reveal.locked>small{color:#d09cea}
+.dungeon-chest-reveal>h3{margin:0;color:#fff0a2;font:900 clamp(34px,10vw,58px)/1 Georgia,"Yu Mincho",serif;letter-spacing:.06em;text-shadow:0 0 10px #ffdc64,0 0 28px #c6852e;animation:build303ChestGet .66s cubic-bezier(.15,.86,.22,1) both}
+.dungeon-chest-reveal>strong{color:#f3dfad;font:900 15px/1.25 Georgia,"Yu Mincho",serif}
+.dungeon-chest-resource-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.dungeon-chest-resource-grid>article{min-width:0;display:grid;grid-template-columns:34px minmax(0,1fr);align-items:center;gap:6px;padding:8px;border:1px solid #66502c;background:#0a0909;text-align:left}
+.dungeon-chest-resource-grid .home-pixel-icon{width:31px!important;height:31px!important}.dungeon-chest-resource-grid article>span{min-width:0;display:grid}.dungeon-chest-resource-grid small{color:#a99876;font-size:8px}.dungeon-chest-resource-grid b{overflow:hidden;color:#ffe28b;font-size:14px;text-overflow:ellipsis;white-space:nowrap}
+.dungeon-chest-equipment{display:grid;grid-template-columns:94px minmax(0,1fr);align-items:center;gap:11px;padding:11px;border:1px solid #a77d32;background:radial-gradient(circle at 13% 50%,#d29a4235,transparent 31%),linear-gradient(90deg,#151009,#080709);text-align:left}
+.dungeon-chest-equipment>div{width:90px;height:90px;display:grid;place-items:center;border:1px solid #665130;background:#050507;box-shadow:inset 0 0 20px #bc873127}.dungeon-chest-equipment-art{width:76px!important;height:76px!important;filter:drop-shadow(0 0 12px #e9bc61)}
+.dungeon-chest-equipment>span{min-width:0;display:grid;gap:4px}.dungeon-chest-equipment small{color:#d5b568;font-size:9px}.dungeon-chest-equipment b{overflow:hidden;color:#fff0bd;font:900 16px/1.25 Georgia,"Yu Mincho",serif;text-overflow:ellipsis;white-space:nowrap}.dungeon-chest-equipment em{color:#c8bac8;font-size:9px;font-style:normal;line-height:1.4}
+.dungeon-chest-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.dungeon-chest-stats>span{padding:6px;border:1px solid #4b414c;background:#09080c;color:#ded0e1;font-size:9px}
+.dungeon-chest-reveal>footer{padding-top:5px;color:#9f968d;font-size:9px}
+@keyframes build303ChestGet{0%{opacity:0;transform:scale(2);filter:blur(7px)}100%{opacity:1;transform:scale(1);filter:none}}
+@keyframes build303ChestRays{to{transform:rotate(360deg)}}
+
+/* Explicit battlefield art for every room profile. */
+.side-battle-v2.battle-theme-default .side-battle-arena::before,.side-battle-v2.battle-theme-earth .side-battle-arena::before{background-image:linear-gradient(180deg,#15110b16,transparent 44%,#050403b8),url("../../assets/ui/battle/abyss-battle-arena.png")!important}
+.side-battle-v2.battle-theme-lightning .side-battle-arena::before{background-image:radial-gradient(circle at 50% 24%,#957dff2a,transparent 38%),linear-gradient(180deg,#08081710,transparent 44%,#03030db8),url("../../assets/ui/battle/boss-throne.png")!important}
+.side-battle-v2.battle-theme-wind .side-battle-arena::before{background-image:linear-gradient(180deg,#07180d12,transparent 45%,#020b06b5),url("../../assets/ui/battle/poison-stratum.png")!important}
+.side-battle-v2.battle-theme-light .side-battle-arena::before{background-image:radial-gradient(circle at 50% 25%,#fff3bf24,transparent 42%),url("../../assets/ui/battle/ten-gods-domain.png")!important}
+.side-battle-v2.battle-theme-dark .side-battle-arena::before{background-image:radial-gradient(circle at 52% 35%,transparent,#050006a3 77%),url("../../assets/ui/battle/abyss-reality.png")!important}
+
+@media(max-width:480px){
+  .explore-scenery-badge{width:47%!important;grid-template-columns:26px minmax(0,1fr)!important}
+  .explore-scenery-badge>i[data-section-attribute-logo]{width:25px!important;height:25px!important}
+  .explore-scenery-badge>i[data-section-attribute-logo] .attribute-pixel-art{width:21px!important;height:21px!important}
+  .post-boss-field-unlocks{padding:18px 9px!important}.post-boss-field-unlocks>div{gap:4px!important}.post-boss-field-unlocks>div>span{padding:8px 2px!important}.post-boss-field-unlocks>div>span>b{font-size:8px!important}
+  .dungeon-chest-resource-grid{grid-template-columns:1fr}.dungeon-chest-equipment{grid-template-columns:76px minmax(0,1fr)}.dungeon-chest-equipment>div{width:72px;height:72px}.dungeon-chest-equipment-art{width:61px!important;height:61px!important}.dungeon-chest-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:350px){
+  .explore-scenery-badge{left:49%!important;width:45%!important}
+  .explore-screen-dungeon:not(.online-shared-explore) .explore-stage #miniMap{width:144px!important;height:144px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .section-transition-curtain{animation:none!important;opacity:1!important;filter:none!important}
+  .post-boss-field-unlocks{animation:none!important;opacity:1!important;transform:translate(-50%,-50%)!important}
+  .dungeon-chest-reveal>h3{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}
+  .dungeon-chest-rays{animation:none!important}
+}

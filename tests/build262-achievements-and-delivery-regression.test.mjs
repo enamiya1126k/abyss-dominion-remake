@@ -51,14 +51,14 @@ test("all unclaimed inbox rewards survive beyond the claimed-history cap",()=>{
 });
 
 test("retroactive achievements queue once and equipment failure remains unclaimed",()=>{
- const save=state();save.player.maxFloor=1000;save.records.kills=100;
+ const save=state();save.player.maxFloor=100;save.records.kills=100;
  const first=syncAchievementRewardInbox(save,{now:1_700_000_000_000}),second=syncAchievementRewardInbox(save,{now:1_700_000_000_100});
  assert.ok(first.added>=5);assert.equal(second.added,0);assert.equal(achievementSummary(save).unlocked,first.summary.unlocked);
  assert.equal(ACHIEVEMENT_DEFINITIONS.length,achievementSummary(save).total);
- const id="achievement-floor-1000-v1",beforeGold=save.player.gold,failed=claimNoticeReward(save,id,{grantMythicEquipment:()=>({ok:false}),now:1_700_000_000_200});
+ const id="achievement-floor-100-v1",beforeGold=save.player.gold,failed=claimNoticeReward(save,id,{grantMythicEquipment:()=>({ok:false}),now:1_700_000_000_200});
  assert.equal(failed.ok,false);assert.equal(save.player.gold,beforeGold);assert.equal(save.notices.rewardInbox.find(entry=>entry.id===id).claimedAt,null);
  const claimed=claimNoticeReward(save,id,{grantMythicEquipment:()=>({ok:true,location:"vault"}),now:1_700_000_000_300});assert.equal(claimed.ok,true);
  assert.ok(save.player.gold>beforeGold);assert.equal(claimNoticeReward(save,id,{grantMythicEquipment:()=>({ok:true})}).duplicate,true);
  save.notices.rewardInbox=save.notices.rewardInbox.filter(entry=>entry.id!==id);
- assert.equal(achievementSummary(save).statuses.find(entry=>entry.id==="floor-1000").claimed,true,"trimmed claimed history stays claimed in the ledger");
+ assert.equal(achievementSummary(save).statuses.find(entry=>entry.id==="floor-100").claimed,true,"trimmed claimed history stays claimed in the ledger");
 });

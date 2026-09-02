@@ -1,31 +1,31 @@
-import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.0.1-build301";
-import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=3.0.1-build301";
-import{maxMp,normalizeSkillProgress,allLearnedSkills,recommendedSkills,recommendedSkillLoadout,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=2.11.83-build259";
-import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=3.0.1-build301";
+import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.0.5-build305";
+import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=3.0.5-build305";
+import{maxMp,normalizeSkillProgress,allLearnedSkills,recommendedSkills,recommendedSkillLoadout,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.0.5-build305";
+import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=3.0.5-build305";
 import{normalizeFloorBossChallengeState}from"../core/FloorBossChallengeSystem.js?v=2.11.82-build258";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionById}from"../data/floorBosses.js?v=2.11.30-build195";
-import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=3.0.1-build301";
+import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=3.0.5-build305";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=2.11.0-build164";
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=2.11.0-build164";
 import{SPECIES}from"../data/species.js?v=3.0.0-build300";
 import{JUVENILE_AMALGA_SKILLS}from"../data/raidSpecies.js?v=2.11.82-build258";
 import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.11.0-build164";
 import{normalizeWeaponMastery}from"./WeaponMastery.js?v=2.11.82-build258";
-import{normalizeOnlineProgressIsolation,recoverInterruptedGuestProgress}from"../online/OnlineProgressIsolation.js?v=3.0.1-build301";
+import{normalizeOnlineProgressIsolation,recoverInterruptedGuestProgress}from"../online/OnlineProgressIsolation.js?v=3.0.5-build305";
 
-import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=3.0.1-build301";
-import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=3.0.1-build301";
+import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=3.0.5-build305";
+import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=3.0.5-build305";
 import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=2.11.82-build258";
-import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=3.0.1-build301";
-import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=3.0.1-build301";
-import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=3.0.1-build301";
-import{clearSerialRedemptionLedgerForFullReset,normalizeSerialCodeState,restoreSerialRedemptionLedgerAfterFailedReset}from"../core/SerialCodeSystem.js?v=3.0.1-build301";
+import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=3.0.5-build305";
+import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=3.0.5-build305";
+import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=3.0.5-build305";
+import{clearSerialRedemptionLedgerForFullReset,normalizeSerialCodeState,restoreSerialRedemptionLedgerAfterFailedReset}from"../core/SerialCodeSystem.js?v=3.0.5-build305";
 import{normalizeNoticeState}from"../core/NoticeSystem.js?v=2.11.86-build262";
-import{syncCollectionRewardInbox}from"../core/CollectionRewardSystem.js?v=3.0.1-build301";
-import{normalizeAchievementState,syncAchievementRewardInbox}from"../core/AchievementRewardSystem.js?v=3.0.1-build301";
-import{normalizeGachaDrawHistory,normalizeGachaPityState}from"../core/GachaBalanceSystem.js?v=3.0.1-build301";
-import{CAMPAIGN_MAX_FLOOR,legacyFloorToCampaignFloor,normalizeCampaignState,campaignFloorState}from"../core/Campaign100System.js?v=3.0.1-build301";
-import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=3.0.1-build301";
+import{syncCollectionRewardInbox}from"../core/CollectionRewardSystem.js?v=3.0.5-build305";
+import{normalizeAchievementState,syncAchievementRewardInbox}from"../core/AchievementRewardSystem.js?v=3.0.5-build305";
+import{normalizeGachaDrawHistory,normalizeGachaPityState}from"../core/GachaBalanceSystem.js?v=3.0.5-build305";
+import{CAMPAIGN_MAX_FLOOR,legacyFloorToCampaignFloor,normalizeCampaignState,campaignFloorState}from"../core/Campaign100System.js?v=3.0.5-build305";
+import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=3.0.5-build305";
 import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=2.11.0-build164";
 import{normalizeEquipmentIdentity}from"../data/equipment.js?v=2.11.30-build195";
 import{createContextualGuideState,normalizeContextualGuide}from"../core/ContextualGuideSystem.js?v=2.11.34-build199";
@@ -35,14 +35,38 @@ const RAID_JUVENILE_BOSS_ID="abyss-amalga";
 const RAID_JUVENILE_VISUAL_BASE="./assets/online/raid/juvenile-amalga";
 const SKILL_RECOMMENDATION_PROFILE_VERSION=199;
 // build301 section dungeons can span six 27-tile slots plus their outer margin.
-// Keep persisted tilemaps bounded, but never truncate a legitimate 168-tile axis.
-const EXPEDITION_MAP_MAX_DIMENSION=168;
+// Build303's six expanded sections can form a 258-tile line. Keep the bound
+// finite without truncating a legitimate campaign layout.
+const EXPEDITION_MAP_MAX_DIMENSION=272;
 const LEGACY_RAID_JUVENILE_SKILL_IDS=Object.freeze([
  "ancient_dragon__identity_1","ancient_dragon__identity_2","ancient_dragon__identity_3","ancient_dragon__identity_4"
 ]);
 function finiteNumber(value,fallback=0,min=-Infinity,max=Infinity){
  const number=Number(value);
  return Number.isFinite(number)?Math.max(min,Math.min(max,number)):fallback;
+}
+function plainRecord(value){return Boolean(value&&typeof value==="object"&&!Array.isArray(value))}
+function legacyFloorNumber(value){const number=Number(value);return Number.isFinite(number)&&number>=1?Math.floor(number):null}
+function inferredSaveSchema(state,rawSchema){
+ const parsed=Number(rawSchema);if(Number.isInteger(parsed)&&parsed>=1&&parsed<=SAVE_SCHEMA_VERSION)return parsed;
+ const player=plainRecord(state?.player)?state.player:{},legacyHighFloor=[player.maxFloor,player.currentFloor,player.checkpoint].some(value=>(legacyFloorNumber(value)??0)>CAMPAIGN_MAX_FLOOR),legacyHighLedger=[player.bossKills,player.bossRewards].some(ledger=>plainRecord(ledger)&&Object.keys(ledger).some(key=>(legacyFloorNumber(key)??0)>CAMPAIGN_MAX_FLOOR));
+ if(legacyHighFloor)return 1;
+ const app=String(state?.appVersion??"").trim(),modernApp=app.match(/^3\.0\.(\d+)(?:\D|$)/);if(modernApp)return Math.max(70,Math.min(SAVE_SCHEMA_VERSION,70+Math.floor(Number(modernApp[1])||0)));
+ const campaign=plainRecord(state?.campaign100)?state.campaign100:null,campaignVersion=Number(campaign?.version),modernCampaign=Boolean(campaign&&(Number.isFinite(campaignVersion)&&campaignVersion>=2||plainRecord(campaign.floors)||Array.isArray(campaign.endings)));
+ if(modernCampaign)return Math.max(70,SAVE_SCHEMA_VERSION-1);
+ if(/^2\./.test(app)||legacyHighLedger)return 1;
+ // With no trustworthy metadata, preserving the current 100-floor coordinate
+ // is safer than silently dividing an otherwise valid save by ten.
+ return Math.max(70,SAVE_SCHEMA_VERSION-1)
+}
+function legacyRewardRank(value){const text=String(value??"");if(text==="CAMPAIGN_TROPHY_COMPLETE"||text==="CAMPAIGN_TROPHY_3")return 4;const partial=text.match(/^CAMPAIGN_TROPHY_([12])$/);if(partial)return Number(partial[1])+1;return value?1:0}
+function remapLegacyFloorLedger(value,{numeric=false}={}){
+ const result={};for(const[rawFloor,entry]of Object.entries(plainRecord(value)?value:{})){const legacyFloor=legacyFloorNumber(rawFloor);if(legacyFloor==null)continue;const floor=String(legacyFloorToCampaignFloor(legacyFloor));if(numeric){const count=Math.floor(finiteNumber(entry,0,0,Number.MAX_SAFE_INTEGER));result[floor]=Math.max(Number(result[floor])||0,count)}else if(legacyRewardRank(entry)>legacyRewardRank(result[floor]))result[floor]=entry}
+ return result
+}
+function normalizeCampaignFloorLedger(value,{numeric=false}={}){
+ const result={};for(const[rawFloor,entry]of Object.entries(plainRecord(value)?value:{})){const floor=Number(rawFloor);if(!Number.isInteger(floor)||floor<1||floor>CAMPAIGN_MAX_FLOOR)continue;const key=String(floor);if(numeric){const count=Math.floor(finiteNumber(entry,0,0,Number.MAX_SAFE_INTEGER));result[key]=Math.max(Number(result[key])||0,count)}else if(legacyRewardRank(entry)>legacyRewardRank(result[key]))result[key]=entry}
+ return result
 }
 function normalizeCoopContributionHistory(value){
  const byResultId=new Map(),source=Array.isArray(value)?value.slice(-256):[];
@@ -251,26 +275,55 @@ export function normalizeRaidJuvenileContract(monster){
  monster.raidContractProfileVersion=1;
  return true;
 }
-function normalizeOnlineCampaignFloorState(value={}){
- const collectedKeyIds=[...new Set((Array.isArray(value?.collectedKeyIds)?value.collectedKeyIds:[]).map(entry=>String(entry??"").slice(0,80)).filter(Boolean))].slice(0,3),rawLocks=Math.floor(finiteNumber(value?.trophyLocksOpened,0,0,3)),keysCollected=Math.max(collectedKeyIds.length,Math.floor(finiteNumber(value?.keysCollected,0,0,3)),rawLocks);
- const trophyLocksOpened=Math.min(keysCollected,rawLocks);return{runId:String(value?.runId??"").slice(0,120)||null,keysCollected,trophyLocksOpened,collectedKeyIds,hotSpringUsed:Boolean(value?.hotSpringUsed),trophyMythicClaimed:Boolean(value?.trophyMythicClaimed)||trophyLocksOpened>=3,replayActive:Boolean(value?.replayActive),bossDefeatedThisRun:Boolean(value?.bossDefeatedThisRun)}
+function normalizeOnlineCampaignFloorState(value={}, {allowLegacyNumeric=false}={}){
+ const collectedKeyIds=[...new Set((Array.isArray(value?.collectedKeyIds)?value.collectedKeyIds:[]).filter(entry=>typeof entry==="string").map(entry=>entry.replace(/[\u0000-\u001f\u007f]/g,"").slice(0,80)).filter(Boolean))].slice(0,3),rawLocks=Math.floor(finiteNumber(value?.trophyLocksOpened,0,0,3)),fragmentPacks=Math.max(rawLocks,Math.floor(finiteNumber(value?.trophyFragmentPacksClaimed,0,0,3))),legacyCount=allowLegacyNumeric?Math.floor(finiteNumber(value?.keysCollected,0,0,3)):0,keysCollected=Math.max(collectedKeyIds.length,legacyCount,rawLocks>=3?3:0);
+ const trophyLocksOpened=rawLocks>=3?3:0;return{runId:String(value?.runId??"").slice(0,120)||null,keysCollected,trophyLocksOpened,trophyFragmentPacksClaimed:fragmentPacks,collectedKeyIds,hotSpringUsed:Boolean(value?.hotSpringUsed),trophyMythicClaimed:Boolean(value?.trophyMythicClaimed)||rawLocks>=3,replayActive:Boolean(value?.replayActive),bossDefeatedThisRun:Boolean(value?.bossDefeatedThisRun)}
 }
-function normalizeOnlineCampaignFloorStates(value){
- const source=value&&typeof value==="object"&&!Array.isArray(value)?value:{},result={};for(const[rawFloor,state]of Object.entries(source).slice(0,CAMPAIGN_MAX_FLOOR)){const floor=Math.floor(Number(rawFloor));if(floor<1||floor>CAMPAIGN_MAX_FLOOR)continue;result[String(floor)]=normalizeOnlineCampaignFloorState(state)}return result
+function mergeOnlineCampaignFloorState(current,incoming,{allowLegacyNumeric=false}={}){
+ if(!current)return incoming;const collectedKeyIds=[...new Set([...(current.collectedKeyIds??[]),...(incoming.collectedKeyIds??[])])].slice(0,3),trophyLocksOpened=Math.max(current.trophyLocksOpened,incoming.trophyLocksOpened),trophyFragmentPacksClaimed=Math.max(current.trophyFragmentPacksClaimed,incoming.trophyFragmentPacksClaimed),legacyCount=allowLegacyNumeric?Math.max(current.keysCollected,incoming.keysCollected):0;return{...current,...incoming,collectedKeyIds,keysCollected:Math.max(collectedKeyIds.length,legacyCount,trophyLocksOpened>=3?3:0),trophyLocksOpened,trophyFragmentPacksClaimed,hotSpringUsed:current.hotSpringUsed||incoming.hotSpringUsed,trophyMythicClaimed:current.trophyMythicClaimed||incoming.trophyMythicClaimed,replayActive:current.replayActive||incoming.replayActive,bossDefeatedThisRun:current.bossDefeatedThisRun||incoming.bossDefeatedThisRun}
+}
+function normalizeOnlineCampaignFloorStates(value,{allowLegacyNumeric=false}={}){
+ const source=plainRecord(value)?value:{},result={};for(const[rawFloor,state]of Object.entries(source)){const floor=Number(rawFloor);if(!Number.isInteger(floor)||floor<1||floor>CAMPAIGN_MAX_FLOOR)continue;const key=String(floor),incoming=normalizeOnlineCampaignFloorState(state,{allowLegacyNumeric});result[key]=mergeOnlineCampaignFloorState(result[key],incoming,{allowLegacyNumeric});if(Object.keys(result).length>=CAMPAIGN_MAX_FLOOR)break}return result
 }
 function migrateLegacyOnlineCampaignLedgers(state,from){
- if(!Number.isFinite(Number(from))||Number(from)>70)return{migrated:false,defeatedFloors:[],claimedFloors:[]};const online=state.onlineParty&&typeof state.onlineParty==="object"&&!Array.isArray(state.onlineParty)?state.onlineParty:{},host=online.hostWorld&&typeof online.hostWorld==="object"&&!Array.isArray(online.hostWorld)?online.hostWorld:{};
- const remapList=list=>[...new Set((Array.isArray(list)?list:[]).map(legacyFloorToCampaignFloor))].slice(0,CAMPAIGN_MAX_FLOOR),opened={};for(const[rawFloor,ids]of Object.entries(host.openedChestIds&&typeof host.openedChestIds==="object"?host.openedChestIds:{})){const oldFloor=Math.max(1,Math.floor(Number(rawFloor)||1)),floor=legacyFloorToCampaignFloor(oldFloor),key=String(floor),prefix=`${oldFloor}-`;opened[key]??=[];for(const rawId of Array.isArray(ids)?ids:[]){const id=String(rawId??"").slice(0,80),mapped=id.startsWith(prefix)?`${floor}-${id.slice(prefix.length)}`:id;if(mapped&&!opened[key].includes(mapped))opened[key].push(mapped)}opened[key]=opened[key].slice(0,200)}
+ if(!Number.isFinite(Number(from))||Number(from)>70)return{migrated:false,defeatedFloors:[],claimedFloors:[]};const online=plainRecord(state.onlineParty)?state.onlineParty:{},host=plainRecord(online.hostWorld)?online.hostWorld:{};
+ const remapList=list=>[...new Set((Array.isArray(list)?list:[]).map(legacyFloorNumber).filter(value=>value!=null).map(legacyFloorToCampaignFloor))].slice(0,CAMPAIGN_MAX_FLOOR),opened={};for(const[rawFloor,ids]of Object.entries(plainRecord(host.openedChestIds)?host.openedChestIds:{})){const oldFloor=legacyFloorNumber(rawFloor);if(oldFloor==null)continue;const floor=legacyFloorToCampaignFloor(oldFloor),key=String(floor),prefix=`${oldFloor}-`;opened[key]??=[];for(const rawId of Array.isArray(ids)?ids:[]){if(typeof rawId!=="string")continue;const id=rawId.replace(/[\u0000-\u001f\u007f]/g,"").slice(0,80),mapped=id.startsWith(prefix)?`${floor}-${id.slice(prefix.length)}`:id;if(mapped&&!opened[key].includes(mapped))opened[key].push(mapped)}opened[key]=opened[key].slice(0,200)}
  online.firstCoopBossClears=remapList(online.firstCoopBossClears);host.defeatedBossFloors=remapList(host.defeatedBossFloors);host.claimedBossRewardFloors=remapList(host.claimedBossRewardFloors);host.openedChestIds=opened;host.floorSeeds={};online.hostWorld=host;state.onlineParty=online;return{migrated:true,defeatedFloors:[...new Set([...online.firstCoopBossClears,...host.defeatedBossFloors,...host.claimedBossRewardFloors])],claimedFloors:[...host.claimedBossRewardFloors]}
 }
 function reconcileLegacyCampaignBossLedgers(state,from,onlineMigration={}){
- if(!(Number(from)<71))return;state.player??={};const sourceKills=state.player.bossKills&&typeof state.player.bossKills==="object"&&!Array.isArray(state.player.bossKills)?{...state.player.bossKills}:{},sourceRewards=state.player.bossRewards&&typeof state.player.bossRewards==="object"&&!Array.isArray(state.player.bossRewards)?{...state.player.bossRewards}:{},rawFloors=state.campaign100?.floors&&typeof state.campaign100.floors==="object"&&!Array.isArray(state.campaign100.floors)?state.campaign100.floors:{},offlineTruth=new Set(Object.entries(rawFloors).filter(([,entry])=>Boolean(entry?.bossDefeated)).map(([floor])=>Math.floor(Number(floor))).filter(floor=>floor>=1&&floor<=CAMPAIGN_MAX_FLOOR)),canonicalRewards=new Map();
+ if(!(Number(from)<71))return;state.player=plainRecord(state.player)?state.player:{};const sourceKills=plainRecord(state.player.bossKills)?{...state.player.bossKills}:{},sourceRewards=plainRecord(state.player.bossRewards)?{...state.player.bossRewards}:{},rawFloors=plainRecord(state.campaign100?.floors)?state.campaign100.floors:{},offlineTruth=new Set(Object.entries(rawFloors).filter(([,entry])=>entry?.bossDefeated===true).map(([floor])=>Math.floor(Number(floor))).filter(floor=>Number.isInteger(floor)&&floor>=1&&floor<=CAMPAIGN_MAX_FLOOR)),canonicalRewards=new Map();
  for(const[rawFloor,reward]of Object.entries(sourceRewards)){const floor=Math.floor(Number(rawFloor)),partial=String(reward??"").match(/^CAMPAIGN_TROPHY_([123])$/),complete=reward==="CAMPAIGN_TROPHY_COMPLETE";if(floor>=1&&floor<=CAMPAIGN_MAX_FLOOR&&(partial||complete))canonicalRewards.set(floor,complete?3:Number(partial[1]))}
  normalizeCampaignState(state);const defeated=new Set([...(onlineMigration.defeatedFloors??[]).map(Number).filter(floor=>Number.isInteger(floor)&&floor>=1&&floor<=CAMPAIGN_MAX_FLOOR),...offlineTruth,...canonicalRewards.keys()]);if(Number(from)<70){for(const rawFloor of new Set([...Object.keys(sourceKills),...Object.keys(sourceRewards)])){const floor=Math.floor(Number(rawFloor));if(floor>=1&&floor<=CAMPAIGN_MAX_FLOOR&&(Number(sourceKills[rawFloor])>0||sourceRewards[rawFloor]))defeated.add(floor)}}
  for(const floor of defeated){const entry=campaignFloorState(state,floor);entry.bossDiscovered=true;entry.bossDefeated=true;entry.exitUnlocked=true}
- for(const[floor,locks]of canonicalRewards){const entry=campaignFloorState(state,floor),safeLocks=Math.max(0,Math.min(3,Number(locks)||0));entry.bossDiscovered=true;entry.bossDefeated=true;entry.exitUnlocked=true;entry.trophyLocksOpened=Math.max(entry.trophyLocksOpened,safeLocks);entry.keysCollected=Math.max(entry.keysCollected,entry.trophyLocksOpened);for(let index=1;index<=entry.keysCollected;index++)if(!entry.keyIds.includes(`${floor}-campaign-key-${index}`))entry.keyIds.push(`${floor}-campaign-key-${index}`);if(entry.trophyLocksOpened>=3)entry.trophyClaimed=true}
- if(state.campaign100?.floors?.[String(CAMPAIGN_MAX_FLOOR)]?.bossDefeated)state.campaign100.finalUnlocked=true;const nextKills={},nextRewards={};for(let floor=1;floor<=CAMPAIGN_MAX_FLOOR;floor++){const entry=state.campaign100?.floors?.[String(floor)];if(!entry?.bossDefeated)continue;const preserveCount=Number(from)<70||offlineTruth.has(floor);nextKills[String(floor)]=preserveCount?Math.max(1,Math.floor(Number(sourceKills[floor])||0)):1;if(entry.trophyLocksOpened>=3||entry.trophyClaimed)nextRewards[String(floor)]="CAMPAIGN_TROPHY_COMPLETE";else if(entry.trophyLocksOpened>0)nextRewards[String(floor)]=`CAMPAIGN_TROPHY_${Math.min(2,entry.trophyLocksOpened)}`}
+ for(const[floor,locks]of canonicalRewards){const entry=campaignFloorState(state,floor),safeLocks=Math.max(0,Math.min(3,Number(locks)||0));entry.bossDiscovered=true;entry.bossDefeated=true;entry.exitUnlocked=true;entry.trophyLocksOpened=Math.max(entry.trophyLocksOpened,safeLocks);entry.trophyFragmentPacksClaimed=Math.max(Number(entry.trophyFragmentPacksClaimed)||0,safeLocks);entry.keysCollected=Math.max(entry.keysCollected,safeLocks);for(let index=1;index<=entry.keysCollected;index++)if(!entry.keyIds.includes(`${floor}-campaign-key-${index}`))entry.keyIds.push(`${floor}-campaign-key-${index}`);if(safeLocks>=3)entry.trophyClaimed=true}
+ if(state.campaign100?.floors?.[String(CAMPAIGN_MAX_FLOOR)]?.bossDefeated)state.campaign100.finalUnlocked=true;const nextKills={},nextRewards={};for(let floor=1;floor<=CAMPAIGN_MAX_FLOOR;floor++){const entry=state.campaign100?.floors?.[String(floor)];if(!entry?.bossDefeated)continue;const preserveCount=Number(from)<70||offlineTruth.has(floor);nextKills[String(floor)]=preserveCount?Math.max(1,Math.floor(Number(sourceKills[floor])||0)):1;if(entry.trophyLocksOpened>=3||entry.trophyClaimed)nextRewards[String(floor)]="CAMPAIGN_TROPHY_COMPLETE";else if(Number(entry.trophyFragmentPacksClaimed)>0)nextRewards[String(floor)]=`CAMPAIGN_TROPHY_${Math.min(2,Math.floor(Number(entry.trophyFragmentPacksClaimed)))}`}
  state.player.bossKills=nextKills;state.player.bossRewards=nextRewards;state.player.pendingBossRewards={}
+}
+export function migrateLegacyCampaignFinalFlow(state,from){
+ if(Number(from)>=74||!plainRecord(state))return{migrated:false,recoveredBattle:false};
+ const campaign=plainRecord(state.campaign100)?state.campaign100:(state.campaign100={}),monsters=Array.isArray(state.monsters)?state.monsters:[],temporaryIds=new Set([campaign.sairanMonsterId].filter(Boolean)),isTemporary=monster=>temporaryIds.has(monster?.id)||monster?.obtainedMethod==="campaignFinalTemporary"||monster?.campaignFinalTemporary===true,activeFinal=state.activeBattle?.specialBattleType==="campaignFinal",pendingFinal=["party","sairan"].includes(campaign.finalSessionPending)&&(!state.activeBattle||activeFinal),backup=[...new Set((Array.isArray(campaign.finalPartyBackup)?campaign.finalPartyBackup:[]).filter(value=>typeof value==="string"))].slice(0,4),vitals=plainRecord(campaign.finalVitals)?campaign.finalVitals:{},legacyBattleIds=[...(Array.isArray(campaign.activeGeneralIds)?campaign.activeGeneralIds:[]),...(Array.isArray(campaign.reserveGeneralIds)?campaign.reserveGeneralIds:[])].filter(value=>typeof value==="string"),currentParty=(Array.isArray(state.party)?state.party:[]).filter(value=>typeof value==="string"),temporaryPartyActive=!state.activeBattle&&state.player?.inRun!==true&&currentParty.some(id=>isTemporary(monsters.find(monster=>monster?.id===id))),legacyRosterActive=!state.activeBattle&&backup.length>0&&state.player?.inRun!==true&&currentParty.length>0&&currentParty.every(id=>legacyBattleIds.includes(id)),recoverRoster=activeFinal||pendingFinal||temporaryPartyActive||legacyRosterActive;
+ state.monsters=monsters.filter(monster=>!isTemporary(monster));const validIds=new Set(state.monsters.map(monster=>monster?.id).filter(Boolean));
+ if(recoverRoster){for(const[id,value]of Object.entries(vitals)){const monster=state.monsters.find(entry=>entry?.id===id);if(!monster||!value||typeof value!=="object")continue;monster.currentHp=value.hp;monster.currentMp=value.mp;monster.ailments=normalizePersistentAilments(value.ailments)}const restored=backup.filter(id=>validIds.has(id)),current=currentParty.filter(id=>validIds.has(id));state.party=(restored.length?restored:current).slice(0,4)}
+ if(activeFinal){delete state.activeBattle;state.expeditionSnapshot=null;state.player=plainRecord(state.player)?state.player:{};state.player.inRun=false}
+ for(const key of["selectedSairanType","generalIds","activeGeneralIds","reserveGeneralIds","storyDaysSeen","sairanMonsterId","finalPartyBackup","finalVitals","finalBattleLevel","finalStage","heroCarry","finalSessionPending"])delete campaign[key];
+ campaign.finalFlowMigration={version:1,recoveredBattle:Boolean(activeFinal),recoveredRoster:Boolean(recoverRoster)};
+ return{migrated:true,recoveredBattle:Boolean(activeFinal),recoveredRoster:Boolean(recoverRoster),restoredParty:[...(state.party??[])]}
+}
+export function recoverPendingCampaignFinalFlow(state){
+ if(!plainRecord(state))return{recovered:false};
+ const campaign=plainRecord(state.campaign100)?state.campaign100:(state.campaign100={}),backup=[...new Set((Array.isArray(campaign.finalPartyBackup)?campaign.finalPartyBackup:[]).filter(value=>typeof value==="string"))].slice(0,4),activeFinal=state.activeBattle?.specialBattleType==="campaignFinal";if(state.activeBattle&&!activeFinal)return{recovered:false,protectedBattle:true};const explicitPending=["party","sairan"].includes(campaign.finalSessionPending)?campaign.finalSessionPending:null,storedStage=["party","sairan"].includes(campaign.finalStage)?campaign.finalStage:null,activeStage=["party","sairan"].includes(state.activeBattle?.campaignStage)?state.activeBattle.campaignStage:null,pendingStage=explicitPending??storedStage??(activeFinal?activeStage:null);
+ if(!pendingStage)return{recovered:false};
+ const monsters=Array.isArray(state.monsters)?state.monsters:[],temporaryIds=new Set([campaign?.sairanMonsterId].filter(Boolean)),isTemporary=monster=>temporaryIds.has(monster?.id)||monster?.obtainedMethod==="campaignFinalTemporary"||monster?.campaignFinalTemporary===true,validIds=new Set(monsters.map(monster=>monster?.id).filter(Boolean)),partyIds=(Array.isArray(state.party)?state.party:[]).filter(value=>typeof value==="string"),hasBattleEnemies=Array.isArray(state.activeBattle?.enemies)&&state.activeBattle.enemies.some(enemy=>plainRecord(enemy)),hasBattleParty=partyIds.some(id=>validIds.has(id)),hasStageParty=pendingStage==="sairan"?partyIds.some(id=>validIds.has(id)&&isTemporary(monsters.find(monster=>monster?.id===id))):backup.length?partyIds.some(id=>backup.includes(id)&&validIds.has(id)):hasBattleParty;
+ if(activeFinal&&activeStage===pendingStage&&hasBattleEnemies&&hasStageParty)return{recovered:false,checkpointReady:true};
+ const vitals=plainRecord(campaign?.finalVitals)?campaign.finalVitals:{};
+ state.monsters=monsters.filter(monster=>!isTemporary(monster));const restoredValidIds=new Set(state.monsters.map(monster=>monster?.id).filter(Boolean));
+ for(const[id,value]of Object.entries(vitals)){const monster=state.monsters.find(entry=>entry?.id===id);if(!monster||!value||typeof value!=="object")continue;monster.currentHp=value.hp;monster.currentMp=value.mp;monster.ailments=normalizePersistentAilments(value.ailments)}
+ const restored=backup.filter(id=>restoredValidIds.has(id));if(restored.length)state.party=restored;else state.party=partyIds.filter(id=>restoredValidIds.has(id)).slice(0,4);
+ if(activeFinal)delete state.activeBattle;
+ state.expeditionSnapshot=null;state.player=plainRecord(state.player)?state.player:{};state.player.inRun=false;
+ for(const key of["sairanMonsterId","finalPartyBackup","finalVitals","finalBattleLevel","finalStage","heroCarry","finalSessionPending"])delete campaign[key];
+ campaign.finalFlowRecovery={version:1,stage:pendingStage,recoveredAt:new Date().toISOString()};
+ return{recovered:true,stage:pendingStage,restoredParty:[...(state.party??[])]}
 }
 function initialState(){
  const monsters=[
@@ -285,53 +338,62 @@ const state={schemaVersion:SAVE_SCHEMA_VERSION,appVersion:APP_VERSION,flags:{aby
  normalizeReturnRewards(state);
  normalizeSerialCodeState(state);
  normalizeMagicCircleState(state);
+ normalizeCampaignState(state);
  return state;
 }
 export class SaveService{
  constructor(){this.state=this.load();this.save()}
  load(){try{const raw=localStorage.getItem(SAVE_KEY);return raw?this.migrate(JSON.parse(raw)):initialState()}catch(e){console.error(e);return initialState()}}
  migrate(s){
-  const from=Number(s.schemaVersion??1);
+  if(!plainRecord(s))return initialState();
+  const from=inferredSaveSchema(s,s.schemaVersion);
   // Restore an interrupted guest session before any campaign/run migration.
   // This ensures every field restored from the snapshot passes through the
   // current normalizers instead of reintroducing legacy expedition/battle data.
-  s.onlineParty=s.onlineParty&&typeof s.onlineParty==="object"&&!Array.isArray(s.onlineParty)?s.onlineParty:{};
+  s.onlineParty=plainRecord(s.onlineParty)?s.onlineParty:{};
   normalizeOnlineProgressIsolation(s);
-  recoverInterruptedGuestProgress(s);
-  s.flags??={};s.flags.abyssUnlocked??=false;s.flags.trueLevelCapRevealed??=false;s.flags.deepAbyssUnlocked??=false;s.flags.abyssKeyExchangePreviewUnlocked??=false;
+  const guestRecovery=recoverInterruptedGuestProgress(s),restoredSnapshotVersion=Number(guestRecovery?.session?.snapshot?.version),progressFrom=guestRecovery?.restored&&restoredSnapshotVersion===1?69:from;
+  s.flags=plainRecord(s.flags)?s.flags:{};s.flags.abyssUnlocked=s.flags.abyssUnlocked===true;s.flags.trueLevelCapRevealed=s.flags.trueLevelCapRevealed===true;s.flags.deepAbyssUnlocked=s.flags.deepAbyssUnlocked===true;s.flags.abyssKeyExchangePreviewUnlocked=s.flags.abyssKeyExchangePreviewUnlocked===true;
   s.flags.individualValuesDisabled=true;
-  const legacy1000Clear=from<70&&(Number(s.player?.maxFloor??0)>1000||Boolean(s.player?.bossRewards?.[1000])||Number(s.player?.bossKills?.[1000]??0)>0||Boolean(s.flags.deepAbyssUnlocked));
-  s.flags.gameClear1000=Boolean(s.flags.gameClear1000||legacy1000Clear);
-  s.flags.ending1000Played??=false;
-  const legacy10000Clear=from<70&&(Boolean(s.player?.bossRewards?.[10000])||Number(s.player?.bossKills?.[10000]??0)>0);
-  s.flags.gameClear10000=Boolean(s.flags.gameClear10000||legacy10000Clear);
-  s.flags.ending10000Played??=false;
-  s.flags.secondWorldEntered=Boolean(s.flags.secondWorldEntered||(from<70&&Number(s.player?.maxFloor??0)>=1001));
-  s.flags.tenGodObserved??=false;
-  s.flags.deepAbyssUnlocked=Boolean(s.flags.deepAbyssUnlocked||s.flags.gameClear1000||s.flags.secondWorldEntered);
-  s.worldPhase=s.flags.gameClear1000?1:Math.max(0,Math.min(1,Number(s.worldPhase)||0));
- s.player??={};
-  if(from<70){
-   const oldMax=Math.max(1,Number(s.player.maxFloor)||1),oldCurrent=Math.max(1,Number(s.player.currentFloor)||1),oldCheckpoint=Math.max(1,Number(s.player.checkpoint)||1),remapLedger=ledger=>Object.fromEntries(Object.entries(ledger&&typeof ledger==="object"?ledger:{}).map(([floor,value])=>[String(legacyFloorToCampaignFloor(floor)),value]));
+  const legacyMaxFloor=legacyFloorNumber(s.player?.maxFloor)??0;
+  const legacy1000Clear=progressFrom<70&&(legacyMaxFloor>1000||Boolean(s.player?.bossRewards?.[1000])||Number(s.player?.bossKills?.[1000]??0)>0||s.flags.deepAbyssUnlocked===true);
+  s.flags.gameClear1000=s.flags.gameClear1000===true||legacy1000Clear;
+  s.flags.ending1000Played=s.flags.ending1000Played===true;
+  const legacy10000Clear=progressFrom<70&&(Boolean(s.player?.bossRewards?.[10000])||Number(s.player?.bossKills?.[10000]??0)>0);
+  s.flags.gameClear10000=s.flags.gameClear10000===true||legacy10000Clear;
+  s.flags.ending10000Played=s.flags.ending10000Played===true;
+  s.flags.secondWorldEntered=s.flags.secondWorldEntered===true||(progressFrom<70&&legacyMaxFloor>=1001);
+  s.flags.tenGodObserved=s.flags.tenGodObserved===true;
+  s.flags.deepAbyssUnlocked=s.flags.deepAbyssUnlocked===true||s.flags.gameClear1000||s.flags.secondWorldEntered;
+ s.worldPhase=s.flags.gameClear1000?1:Math.max(0,Math.min(1,Number(s.worldPhase)||0));
+  s.player=plainRecord(s.player)?s.player:{};
+  if(s.activeBattle!=null&&!plainRecord(s.activeBattle))s.activeBattle=null;
+  migrateLegacyCampaignFinalFlow(s,from);
+  recoverPendingCampaignFinalFlow(s);
+  if(progressFrom<70){
+   // Invalid legacy coordinates are absence, not floor 1/100 evidence.  In
+   // particular, Infinity used to be clamped through capFloor() and could
+   // falsely promote a damaged save to the campaign finale.
+   const oldMax=legacyFloorNumber(s.player.maxFloor)??1,oldCurrent=legacyFloorNumber(s.player.currentFloor)??oldMax,oldCheckpoint=legacyFloorNumber(s.player.checkpoint)??1;
    s.player.maxFloor=legacyFloorToCampaignFloor(oldMax);s.player.currentFloor=legacyFloorToCampaignFloor(oldCurrent);s.player.checkpoint=legacyFloorToCampaignFloor(oldCheckpoint);
-   s.player.bossKills=remapLedger(s.player.bossKills);s.player.bossRewards=remapLedger(s.player.bossRewards);s.player.pendingBossRewards={};
+   s.player.bossKills=remapLegacyFloorLedger(s.player.bossKills,{numeric:true});s.player.bossRewards=remapLegacyFloorLedger(s.player.bossRewards);s.player.pendingBossRewards={};
    s.player.floorSeeds={};s.player.openedChests={};s.player.exploreRun={id:null,floors:{}};s.expeditionSnapshot=null;if(!s.activeBattle?.specialBattle)s.activeBattle=null;s.player.inRun=false;
   }
-  const onlineCampaignMigration=migrateLegacyOnlineCampaignLedgers(s,from);
-  reconcileLegacyCampaignBossLedgers(s,from,onlineCampaignMigration);
+  const onlineCampaignMigration=migrateLegacyOnlineCampaignLedgers(s,progressFrom);
+  reconcileLegacyCampaignBossLedgers(s,progressFrom,onlineCampaignMigration);
   s.player.gold=Math.floor(finiteNumber(s.player.gold,1000,0,Number.MAX_SAFE_INTEGER));
   s.player.crystals=Math.floor(finiteNumber(s.player.crystals,20,0,Number.MAX_SAFE_INTEGER));
   s.player.maxFloor=Math.floor(finiteNumber(s.player.maxFloor,1,1,CAMPAIGN_MAX_FLOOR));
   s.player.currentFloor=Math.floor(finiteNumber(s.player.currentFloor,1,1,CAMPAIGN_MAX_FLOOR));
   s.player.checkpoint=Math.floor(finiteNumber(s.player.checkpoint,1,1,CAMPAIGN_MAX_FLOOR));
-  s.player.inRun??=false;
+  s.player.inRun=s.player.inRun===true;
   s.player.nextShopFloor??=4;
-  s.player.floorSeeds??={};
-  s.player.openedChests??={};
-  s.player.bossRewards??={};
+  s.player.floorSeeds=plainRecord(s.player.floorSeeds)?s.player.floorSeeds:{};
+  s.player.openedChests=plainRecord(s.player.openedChests)?s.player.openedChests:{};
+  s.player.bossRewards=normalizeCampaignFloorLedger(s.player.bossRewards);
   s.player.pendingBossRewards=s.player.pendingBossRewards&&typeof s.player.pendingBossRewards==="object"&&!Array.isArray(s.player.pendingBossRewards)?s.player.pendingBossRewards:{};
-  if(from<=70)s.player.pendingBossRewards={};
-  s.player.bossKills??={};
+  if(progressFrom<=70)s.player.pendingBossRewards={};
+  s.player.bossKills=normalizeCampaignFloorLedger(s.player.bossKills,{numeric:true});
   s.player.dangerLevel??=1;
   s.player.exploreRun=normalizeExploreRun(s.player.exploreRun);
   s.expeditionSnapshot=normalizeExpeditionSnapshot(s.expeditionSnapshot);
@@ -408,7 +470,7 @@ export class SaveService{
   s.onlineParty.hostWorld.floorSeeds=s.onlineParty.hostWorld.floorSeeds&&typeof s.onlineParty.hostWorld.floorSeeds==="object"&&!Array.isArray(s.onlineParty.hostWorld.floorSeeds)?Object.fromEntries(Object.entries(s.onlineParty.hostWorld.floorSeeds).map(([floor,seed])=>[String(Math.max(1,Math.floor(Number(floor)||1))),Math.floor(finiteNumber(seed,0,0,0xffffffff))]).slice(0,10000)):{};
   s.onlineParty.hostWorld.defeatedBossFloors=Array.isArray(s.onlineParty.hostWorld.defeatedBossFloors)?[...new Set(s.onlineParty.hostWorld.defeatedBossFloors.map(value=>Math.floor(Number(value))).filter(value=>value>=1&&value<=CAMPAIGN_MAX_FLOOR))].slice(0,1000):[];
   s.onlineParty.hostWorld.claimedBossRewardFloors=Array.isArray(s.onlineParty.hostWorld.claimedBossRewardFloors)?[...new Set(s.onlineParty.hostWorld.claimedBossRewardFloors.map(value=>Math.floor(Number(value))).filter(value=>value>=1&&value<=CAMPAIGN_MAX_FLOOR))].slice(0,1000):[];
-  s.onlineParty.hostWorld.campaignFloorStates=normalizeOnlineCampaignFloorStates(s.onlineParty.hostWorld.campaignFloorStates);
+  s.onlineParty.hostWorld.campaignFloorStates=normalizeOnlineCampaignFloorStates(s.onlineParty.hostWorld.campaignFloorStates,{allowLegacyNumeric:progressFrom<=70});
   normalizeOnlineProgressIsolation(s);
   s.shop=s.shop&&typeof s.shop==="object"&&!Array.isArray(s.shop)?s.shop:{};
   s.shop.captureDaily=s.shop.captureDaily&&typeof s.shop.captureDaily==="object"&&!Array.isArray(s.shop.captureDaily)?s.shop.captureDaily:{key:null,count:0};
@@ -426,7 +488,7 @@ export class SaveService{
    s.inventory.experienceItems=Math.max(0,s.inventory.experienceItems-9950);
    s.flags.expCrystalGrantCorrectedV2=true;
   }
-  s.settings??={};
+  s.settings=plainRecord(s.settings)?s.settings:{};
   s.settings.minimapVisible??=true;
   s.settings.shopDiscountSeed??=null;
   s.settings.autoBattle??=true;
@@ -439,12 +501,12 @@ export class SaveService{
   s.settings.sfxVolume=finiteNumber(s.settings.sfxVolume,.45,0,1);
   s.settings.mapTogglePosition??=null;
   s.settings.minimapPanelPosition??=null;
-  s.settings.autoExploreButtonPosition??=null;
+  s.settings.autoExploreButtonPosition=null;
   s.settings.explorePartyHudCollapsed=Boolean(s.settings.explorePartyHudCollapsed);
-  s.settings.exploreAutoMode=["off","floor","items","exp"].includes(s.settings.exploreAutoMode)?s.settings.exploreAutoMode:"off";
-  s.settings.exploreAutoMenuOpen=Boolean(s.settings.exploreAutoMenuOpen);
+  s.settings.exploreAutoMode=s.settings.exploreAutoMode==="off"?"off":["floor","items","exp"].includes(s.settings.exploreAutoMode)?"floor":"off";
+  s.settings.exploreAutoMenuOpen=false;
   s.settings.gauntletPartyCollapsed=Boolean(s.settings.gauntletPartyCollapsed);
-  s.settings.tutorialSeen??={};
+  s.settings.tutorialSeen=plainRecord(s.settings.tutorialSeen)?s.settings.tutorialSeen:{};
   s.settings.tutorialDefeatsSeen=Math.floor(finiteNumber(s.settings.tutorialDefeatsSeen,0,0,2));
   const contextualGuideMissing=!s.settings.contextualGuide||typeof s.settings.contextualGuide!=="object";
   const legacyGuideAdvanced=contextualGuideMissing&&(Number(s.player.maxFloor)>10||Boolean(s.settings.tutorialSeen?.[5]));
@@ -452,13 +514,13 @@ export class SaveService{
   s.settings.gmFloorUnlockMax=Math.floor(finiteNumber(s.settings.gmFloorUnlockMax,0,0,9998));
   s.gameMaster=s.gameMaster&&typeof s.gameMaster==="object"&&!Array.isArray(s.gameMaster)?s.gameMaster:{claimedAt:null,floorUnlockMax:0};
   s.gameMaster.floorUnlockMax=Math.floor(finiteNumber(s.gameMaster.floorUnlockMax??s.settings.gmFloorUnlockMax,0,0,9998));
-  s.gacha??={};s.gacha.firstTenUsed??=false;s.gacha.tutorialFreeSummons=Math.floor(finiteNumber(s.gacha.tutorialFreeSummons,0,0,1));s.gacha.lastDailyKey??=null;s.gacha.guerrilla=s.gacha.guerrilla&&typeof s.gacha.guerrilla==="object"&&!Array.isArray(s.gacha.guerrilla)?s.gacha.guerrilla:{salt:null,lastCycle:null};s.gacha.drawHistory=normalizeGachaDrawHistory(s.gacha.drawHistory);s.gacha.pity=normalizeGachaPityState(s.gacha.pity);
+  s.gacha=plainRecord(s.gacha)?s.gacha:{};s.gacha.firstTenUsed??=false;s.gacha.tutorialFreeSummons=Math.floor(finiteNumber(s.gacha.tutorialFreeSummons,0,0,1));s.gacha.lastDailyKey??=null;s.gacha.guerrilla=plainRecord(s.gacha.guerrilla)?s.gacha.guerrilla:{salt:null,lastCycle:null};s.gacha.drawHistory=normalizeGachaDrawHistory(s.gacha.drawHistory);s.gacha.pity=normalizeGachaPityState(s.gacha.pity);
   normalizeNoticeState(s);
-  s.codex??={};s.codex.encounters??={};s.codex.captures??={};s.codex.equipment??={};s.biomeProgress??={};
+  s.codex=plainRecord(s.codex)?s.codex:{};s.codex.encounters=plainRecord(s.codex.encounters)?s.codex.encounters:{};s.codex.captures=plainRecord(s.codex.captures)?s.codex.captures:{};s.codex.equipment=plainRecord(s.codex.equipment)?s.codex.equipment:{};s.biomeProgress=plainRecord(s.biomeProgress)?s.biomeProgress:{};
   Object.values(s.biomeProgress).forEach(data=>{if(!data||typeof data!=="object")return;data.visitedFloors=Array.isArray(data.visitedFloors)?data.visitedFloors:[];data.encounters=data.encounters&&typeof data.encounters==="object"?data.encounters:{};data.openedChests=Array.isArray(data.openedChests)?data.openedChests:[];data.events=Array.isArray(data.events)?data.events:[];data.bossDefeated=Boolean(data.bossDefeated)});
-  s.achievements??={};s.quests??={};
-  s.rest??={};s.rest.lastFreeKey??=null;
-  s.records??={kills:0,captures:0,chests:0,purchases:0};
+  s.achievements=plainRecord(s.achievements)?s.achievements:{};s.quests=plainRecord(s.quests)?s.quests:{};
+  s.rest=plainRecord(s.rest)?s.rest:{};s.rest.lastFreeKey??=null;
+  s.records=plainRecord(s.records)?s.records:{kills:0,captures:0,chests:0,purchases:0};
   s.records.kills=Math.floor(finiteNumber(s.records.kills,0,0,Number.MAX_SAFE_INTEGER));
   s.records.captures=Math.floor(finiteNumber(s.records.captures,0,0,Number.MAX_SAFE_INTEGER));
   s.records.chests=Math.floor(finiteNumber(s.records.chests,0,0,Number.MAX_SAFE_INTEGER));
@@ -467,7 +529,16 @@ export class SaveService{
   normalizeSerialCodeState(s);
   normalizeSecretRoomState(s);
   normalizeAbyssSkillTree(s);
+  s.returnRewards=plainRecord(s.returnRewards)?s.returnRewards:{};
+  s.returnRewards.manual=plainRecord(s.returnRewards.manual)?s.returnRewards.manual:{};
+  s.returnRewards.history=plainRecord(s.returnRewards.history)?s.returnRewards.history:{};
+  s.returnRewards.idle=plainRecord(s.returnRewards.idle)?s.returnRewards.idle:{};
   normalizeReturnRewards(s);
+  s.endgame=plainRecord(s.endgame)?s.endgame:{};
+  s.endgame.teamBattle=plainRecord(s.endgame.teamBattle)?s.endgame.teamBattle:{};
+  s.endgame.trials=plainRecord(s.endgame.trials)?s.endgame.trials:{};
+  s.endgame.emergency=plainRecord(s.endgame.emergency)?s.endgame.emergency:{};
+  s.endgame.emergency.rescue=plainRecord(s.endgame.emergency.rescue)?s.endgame.emergency.rescue:{};
   normalizeEndgameState(s);
   if(from<62&&s.activeBattle?.specialBattleType==="team"){
    const team=s.endgame.teamBattle;
@@ -486,6 +557,9 @@ export class SaveService{
    const defeated=Number(s.player.bossKills?.[boss.floor]??0)>0||Boolean(s.player.bossRewards?.[boss.floor]);
    if(defeated){floorBossChallenges.discovered[boss.id]=true;floorBossChallenges.encounters[boss.id]=Math.max(1,Number(floorBossChallenges.encounters[boss.id])||0)}
   }
+  s.secondWorld=plainRecord(s.secondWorld)?s.secondWorld:{};
+  s.secondWorld.randomEvents=plainRecord(s.secondWorld.randomEvents)?s.secondWorld.randomEvents:{};
+  s.secondWorld.elites=plainRecord(s.secondWorld.elites)?s.secondWorld.elites:{};
   normalizeSecondWorldEvents(s);
   normalizeEliteRecords(s);
   normalizeTenGodContact(s);
@@ -624,7 +698,7 @@ export class SaveService{
   normalizeAchievementState(s);
   syncAchievementRewardInbox(s);
   normalizeCampaignState(s);
-  if(from<71){s.expeditionSnapshot=null;if(s.activeBattle&&!s.activeBattle.specialBattle)s.activeBattle.explorationSnapshot=null}
+  if(from<73){s.expeditionSnapshot=null;if(s.activeBattle&&!s.activeBattle.specialBattle)s.activeBattle.explorationSnapshot=null}
   s.schemaVersion=SAVE_SCHEMA_VERSION;
   s.appVersion=APP_VERSION;
   if(from<SAVE_SCHEMA_VERSION)s.lastMigration={from,to:SAVE_SCHEMA_VERSION,at:new Date().toISOString()};

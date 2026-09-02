@@ -159,18 +159,19 @@ export function teamBattleStageMultiplier(stage=1){
  return 1+.045*(s-1)+.12*Math.floor((s-1)/10);
 }
 export function teamBattleRewardPreview(stage=1,floor=100){
- const s=Math.max(1,Math.floor(Number(stage)||1)),tier=Math.floor((s-1)/10),breakthrough=s%10===0;
+ const s=Math.max(1,Math.floor(Number(stage)||1)),breakthrough=s%10===0,difficulty=teamBattleStageMultiplier(s);
  void floor;
  return{
-  goldMultiplier:Math.max(.5,Math.min(100,Math.round((.5+.06*(s-1)+.15*tier*tier)*100)/100)),
-  // One win must always feel like progress toward a paid summon (50 crystals
-  // per single pull), while higher trials should visibly outgrow the floor.
-  crystals:Math.max(25,Math.min(10_000,Math.round(25+2*(s-1)+3*tier*tier))),
-  experienceMultiplier:Math.max(1,Math.min(1000,1+Math.floor((s-1)/10))),
+  // Rewards follow the same curve as enemy strength.  The former tier-squared
+  // formula eventually produced thousands of pulls and one LR per ordinary
+  // win even though difficulty only rose linearly.
+  goldMultiplier:Math.max(.5,Math.min(20,Math.round(difficulty*.5*100)/100)),
+  crystals:Math.max(25,Math.min(100,Math.round(25*Math.sqrt(difficulty)))),
+  experienceMultiplier:Math.max(1,Math.min(20,1+Math.floor((s-1)/10))),
   breakthrough,
   breakthroughCrystals:breakthrough?100:0,
   breakthroughCaptureCrystals:breakthrough?50:0,
-  guaranteedRarity:s>=50?"LR":s>=40?"UR":s>=25?"SSR":s>=10?"SR":null
+  guaranteedRarity:s===10?"SR":s===25?"SSR":s===40?"UR":s>=50&&breakthrough?"LR":null
  };
 }
 export function teamBattleRewardEntitlements(stage=1,{firstClear=false}={}){

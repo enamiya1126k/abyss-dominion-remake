@@ -64,6 +64,10 @@ const THEME_BY_BIOME=Object.freeze({
  cave:"ruins",forest:"jungle",lava:"magma",ice:"ice",temple:"sacred",abyss:"void",
  fire:"magma",poison:"poison",lightning:"storm",earth:"ruins",wind:"jungle",light:"sacred",dark:"void",water:"deepsea"
 });
+const THEME_BY_ATTRIBUTE=Object.freeze({
+ neutral:"ruins",fire:"magma",water:"deepsea",wind:"jungle",earth:"ruins",ice:"ice",
+ thunder:"storm",lightning:"storm",light:"sacred",dark:"void",poison:"poison"
+});
 const NETHER_SEQUENCE=Object.freeze(["poison","void","magma","poison"]);
 const CHAOS_SEQUENCE=Object.freeze(["void","storm","magma","ice","poison"]);
 
@@ -84,6 +88,11 @@ function ambienceSeed(id,variant,floor){
 export function dungeonThemeForFloor(floor){
  const value=Math.max(1,Math.floor(Number(floor)||1)),biome=biomeForFloor(value),variant=variantForFloor(value,biome),id=themeIdForFloor(value,biome,variant),base=DUNGEON_THEMES[id]??DUNGEON_THEMES.ruins;
  return{...base,variant,variantName:base.variants[variant]??base.variants.at(-1),biomeId:biome.id,biomeName:biome.name,bandFrom:biome.from,bandTo:biome.to,ambienceSeed:ambienceSeed(id,variant,value),cropOffsetX:variant*137,cropOffsetY:variant*191};
+}
+
+export function dungeonThemeForAttribute(attribute,floor=1){
+ const raw=String(attribute??"neutral").toLowerCase(),id=THEME_BY_ATTRIBUTE[raw]??"ruins",base=DUNGEON_THEMES[id]??DUNGEON_THEMES.ruins,value=Math.max(1,Math.floor(Number(floor)||1)),variant=Math.min(4,Math.floor(((value-1)%10)/2));
+ return{...base,variant,variantName:base.variants[variant]??base.variants.at(-1),attribute:raw,biomeId:`section-${raw}`,biomeName:`${raw} section`,bandFrom:value,bandTo:value,ambienceSeed:ambienceSeed(id,variant,value),cropOffsetX:variant*137,cropOffsetY:variant*191}
 }
 
 export function dungeonThemeAssetPaths(){

@@ -203,11 +203,11 @@ test("build301 the final trophy lock durably records claimedBossRewardFloors", (
     .filter(entry => entry.source?.kind === "campaignTrophy")
     .map(entry => entry.rewardId)
     .sort();
-  assert.deepEqual(stableIds, [1, 2, 3].map(lock => `campaign-trophy:v3:${owner.session.playerId}:${floor}:run:${expedition.campaignRewardRunId}:lock:${lock}:${owner.session.playerId}`));
+  assert.deepEqual(stableIds, [`campaign-trophy:v4:${owner.session.playerId}:${floor}:run:${expedition.campaignRewardRunId}:claim:${owner.session.playerId}`]);
   assert.equal(stableIds.every(id => id.includes(expedition.campaignRewardRunId)), true, "reward ids are stable inside one run and distinct across explicit replays");
 });
 
-test("build301 partial trophy locks and exact collected keys survive return and re-entry", () => {
+test("build302 collected keys survive return without creating partial trophy claims", () => {
   const floor = 6;
   const first = started({ floor, defeated: [floor] });
   const firstKey = first.room.expedition.objects.find(object => object.type === "campaignKey" && object.id === "campaignKey-2")
@@ -220,22 +220,23 @@ test("build301 partial trophy locks and exact collected keys survive return and 
 
   const saved = structuredClone(first.room.hostWorld);
   assert.deepEqual(saved.campaignFloorStates[String(floor)], {
-    runId: first.room.expedition.campaignRewardRunId, keysCollected: 1, trophyLocksOpened: 1,
+    runId: first.room.expedition.campaignRewardRunId, keysCollected: 1, trophyLocksOpened: 0,
+    trophyFragmentPacksClaimed: 0,
     collectedKeyIds: [firstKey.id], hotSpringUsed: false, trophyMythicClaimed: false,
     replayActive: false, bossDefeatedThisRun: false,
   });
-  assert.equal(trophy.locksOpened, 1);
-  assert.equal(first.owner.session.pendingRewards.filter(entry => entry.source?.kind === "campaignTrophy").length, 1);
+  assert.equal(trophy.locksOpened, 0);
+  assert.equal(first.owner.session.pendingRewards.filter(entry => entry.source?.kind === "campaignTrophy").length, 0);
 
   first.store._resolveLanding(first.room, first.owner.session);
-  assert.equal(first.owner.session.pendingRewards.filter(entry => entry.source?.kind === "campaignTrophy").length, 1, "standing on an already opened partial trophy cannot mint another reward");
+  assert.equal(first.owner.session.pendingRewards.filter(entry => entry.source?.kind === "campaignTrophy").length, 0, "one key cannot mint a partial reward");
   assert.equal(first.store.requestReturn(first.owner.session).ok, true);
 
   const second = started({ floor, hostWorld: saved });
   const restoredTrophy = objectOf(second.room.expedition, "campaignTrophy");
   const restoredKeys = second.room.expedition.objects.filter(object => object.type === "campaignKey");
   assert.equal(second.room.expedition.campaignKeysCollected, 1);
-  assert.equal(restoredTrophy.locksOpened, 1);
+  assert.equal(restoredTrophy.locksOpened, 0);
   assert.equal(restoredTrophy.resolved, false);
   assert.equal(restoredKeys.find(object => object.id === firstKey.id)?.resolved, true);
   assert.equal(restoredKeys.filter(object => object.resolved).length, 1);
@@ -308,12 +309,13 @@ test("build301 hot spring host state and every recovered vital roll back togethe
   assert.equal(owner.session.coopVitals.mp, owner.session.coopVitals.maxMp);
 });
 
-test("build301 a failed partial-lock settlement mutates neither the trophy nor host world", () => {
+test("build302 a failed all-key trophy settlement mutates neither the trophy nor host world", () => {
   const floor = 6;
   const { store, owner, room } = started({ floor, defeated: [floor] });
-  const key = room.expedition.objects.find(object => object.type === "campaignKey");
-  owner.session.dungeonPosition = { x: key.x, y: key.y, facing: "down" };
-  store._resolveLanding(room, owner.session);
+  for (const key of room.expedition.objects.filter(object => object.type === "campaignKey")) {
+    owner.session.dungeonPosition = { x: key.x, y: key.y, facing: "down" };
+    store._resolveLanding(room, owner.session);
+  }
   const trophy = objectOf(room.expedition, "campaignTrophy");
   owner.session.dungeonPosition = { x: trophy.x, y: trophy.y, facing: "down" };
   const before = structuredClone(room.hostWorld);
@@ -328,7 +330,7 @@ test("build301 a failed partial-lock settlement mutates neither the trophy nor h
 
   store._commitSettlementBatch = commit;
   store._resolveLanding(room, owner.session);
-  assert.equal(trophy.locksOpened, 1);
+  assert.equal(trophy.locksOpened, 3);
   assert.equal(owner.session.pendingRewards.filter(entry => entry.source?.kind === "campaignTrophy").length, 1);
 });
 
@@ -343,10 +345,10 @@ test("build301 milestone trophy rewards carry every boss with offline fragment p
   owner.session.dungeonPosition = { x: trophy.x, y: trophy.y, facing: "down" };
   store._resolveLanding(room, owner.session);
 
-  const finalLock = owner.session.pendingRewards.find(entry => entry.source?.kind === "campaignTrophy" && entry.source.lock === 3);
-  assert.deepEqual(finalLock.source.bosses.map(boss => boss.endgameBossId), ["ten_dominion", "ten_creation", "ten_end", "ten_divinity"]);
-  assert.deepEqual(finalLock.source.fragmentAwards.map(entry => [entry.id, entry.amount]), [
-    ["ten_dominion", 10], ["ten_creation", 10], ["ten_end", 10], ["ten_divinity", 10],
+  const claim = owner.session.pendingRewards.find(entry => entry.source?.kind === "campaignTrophy");
+  assert.deepEqual(claim.source.bosses.map(boss => boss.endgameBossId), ["ten_dominion", "ten_creation", "ten_end", "ten_divinity"]);
+  assert.deepEqual(claim.source.fragmentAwards.map(entry => [entry.id, entry.amount]), [
+    ["ten_dominion", 30], ["ten_creation", 30], ["ten_end", 30], ["ten_divinity", 30],
   ]);
 });
 
@@ -376,9 +378,10 @@ test("build301 explicit replay pays fragments with a new run id but never a seco
   replay.store._resolveLanding(replay.room, replay.owner.session);
 
   const rewards = replay.owner.session.pendingRewards.filter(entry => entry.source?.kind === "campaignTrophy");
-  assert.equal(rewards.length, 3);
+  assert.equal(rewards.length, 1);
   assert.equal(rewards.some(entry => entry.reward.randomEquipmentRarity === "神話"), false);
   assert.equal(rewards.every(entry => entry.source.fragmentAwards.length > 0), true);
+  assert.equal(rewards[0].source.fragmentPacks, 3);
   assert.notEqual(replay.room.expedition.campaignRewardRunId, firstRunId);
   assert.equal(rewards.every(entry => entry.rewardId.includes(replay.room.expedition.campaignRewardRunId)), true);
 });

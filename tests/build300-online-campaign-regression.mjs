@@ -16,8 +16,9 @@ assert.ok(stats.level>1);
 assert.ok(stats.maxHp>0);
 
 const storeSource=fs.readFileSync(new URL("../online-server/src/RoomStore.js",import.meta.url),"utf8");
-assert.match(storeSource,/newLocks=keys-opened/);
-assert.match(storeSource,/object\.locksOpened=keys;object\.resolved=keys>=3/);
+assert.match(storeSource,/if\(keys<3\)/);
+assert.match(storeSource,/trophyFragmentPacksClaimed:3/);
+assert.match(storeSource,/object\.locksOpened=3;object\.resolved=true/);
 assert.match(storeSource,/expedition\.encountersEnabled=false/);
 assert.match(storeSource,/type:["']hotSpring["']/);
 assert.match(storeSource,/type:["']campaignTrophy["']/);
