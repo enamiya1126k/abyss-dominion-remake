@@ -9,24 +9,24 @@ import{
  compatibleSubslots,
  equipmentIdentity
 }from"../../data/equipment.js?v=2.11.45-build210";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=2.11.82-build258";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.0.1-build301";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=2.11.0-build164";
 import{maxMp}from"../../battle/SkillSystem.js?v=2.11.83-build259";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.82-build258";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.0.1-build301";
 import{ATTRIBUTES}from"../../data/attributes.js?v=2.11.0-build164";
 import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=2.11.0-build164";
 import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=2.11.82-build258";
 import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=2.11.0-build164";
 import{SPECIES}from"../../data/species.js?v=2.11.82-build258";
 import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=2.11.0-build164";
-import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=2.11.0-build164";
+import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=3.0.1-build301";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=2.11.0-build164";
-import{monsterVisual}from"../MonsterVisual.js?v=2.11.82-build258";
+import{monsterVisual}from"../MonsterVisual.js?v=3.0.1-build301";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.0-build164";
 import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.11.0-build164";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.11.0-build164";
 import{equipmentVisual}from"../components/EquipmentVisual.js?v=2.11.0-build164";
-import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=2.11.0-build164";
+import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=3.0.1-build301";
 import{signatureWeaponState,signatureWeaponForMonster,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster}from"../../core/SignatureWeaponSystem.js?v=2.11.82-build258";
 
 const EQUIPMENT_SCREEN_SLOT_LABELS={

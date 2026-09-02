@@ -1,8 +1,8 @@
-import{MONSTER_SPRITE_FOLDERS,MONSTER_CUSTOM_SPRITE_BASES}from"../data/monsterCatalog.js?v=2.11.82-build258";
+import{MONSTER_SPRITE_FOLDERS,MONSTER_CUSTOM_SPRITE_BASES}from"../data/monsterCatalog.js?v=3.0.1-build301";
 
 const IDLE_FRAMES=Object.freeze(["idle1","idle2","idle3","idle2"]);
 const VALID_FRAMES=new Set(["idle","idle1","idle2","idle3","walk1","walk2","attack","damage","down"]);
-const SPRITE_ASSET_VERSION="2.11.53-build218";
+const SPRITE_ASSET_VERSION="3.0.1-build301";
 let idleStep=0;
 
 function safeFrame(frame){

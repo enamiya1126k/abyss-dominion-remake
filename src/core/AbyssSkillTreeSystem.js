@@ -1,6 +1,6 @@
-import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=2.11.2-build166";
+import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=3.0.1-build301";
 
-export const ABYSS_SKILL_TREE_VERSION=6;
+export const ABYSS_SKILL_TREE_VERSION=7;
 
 export const ABYSS_SKILL_CATEGORIES=Object.freeze([
  {
@@ -32,15 +32,16 @@ const FOUNDATION_LANES=Object.freeze({
  "exploration-instinct":2,"exploration-relic-sense":1,"exploration-elite-trail":3,"exploration-abyss-luck":1,"exploration-key-echo":3,"exploration-endless-path":2
 });
 
-// build161: the tree is a long-term progression system, but its previous
-// prices became a wall long before the interesting branch choices appeared.
-// Keep every effect/prerequisite intact and reduce every node to roughly 25%.
-function discountedTreePrice(original){
+// Version 6 used a blanket 25% discount. Keep the exact formula only for
+// reconstructing missing paidCosts during the one-time version 7 refund.
+function version6TreePrice(original){
  const value=Math.max(0,Number(original)||0),discounted=value*.25;
  if(discounted<1000)return Math.max(100,Math.round(discounted/50)*50);
  if(discounted<100000)return Math.max(1000,Math.round(discounted/500)*500);
  return Math.max(1000,Math.round(discounted/1000)*1000);
 }
+
+function foundationTreePrice(tier){return({1:1000,2:3000,3:10000,4:30000})[Math.max(1,Math.floor(Number(tier)||1))]??30000}
 
 const FOUNDATION_SKILL_NODES=Object.freeze([
  {
@@ -241,40 +242,40 @@ const FOUNDATION_SKILL_NODES=Object.freeze([
   requires:["exploration-abyss-luck","exploration-key-echo"],
   effect:{key:"explorationRewardRate",value:.05}
  }
-].map(node=>Object.freeze({...node,legacyCost:node.cost,cost:discountedTreePrice(node.cost),lane:FOUNDATION_LANES[node.id]??2,requiresAny:[],requiresAnyCount:0,branchId:"foundation",branchName:"根源"})));
+].map(node=>Object.freeze({...node,legacyCost:node.cost,previousCost:version6TreePrice(node.cost),cost:foundationTreePrice(node.tier),lane:FOUNDATION_LANES[node.id]??2,requiresAny:[],requiresAnyCount:0,branchId:"foundation",branchName:"根源"})));
 
 const EXPANSION_STAGES=Object.freeze([
- {suffix:"萌芽",cost:120000,legacyCost:120000},
- {suffix:"脈動",cost:300000,legacyCost:300000},
- {suffix:"刻印",cost:750000,legacyCost:750000},
- {suffix:"共鳴",cost:2000000,legacyCost:2000000},
- {suffix:"転成",cost:5000000,legacyCost:5000000},
- {suffix:"顕現",cost:12000000,legacyCost:12000000},
- {suffix:"超越",cost:30000000,legacyCost:30000000},
- {suffix:"支配",cost:75000000,legacyCost:75000000},
- {suffix:"終極",cost:180000000,legacyCost:180000000},
- {suffix:"王冠",cost:350000000,legacyCost:350000000},
- {suffix:"律動",cost:650000000,legacyCost:650000000},
- {suffix:"深化",cost:1200000000,legacyCost:1200000000},
- {suffix:"星環",cost:1800000000,legacyCost:2200000000},
- {suffix:"変革",cost:2500000000,legacyCost:4000000000},
- {suffix:"天衝",cost:3500000000,legacyCost:7500000000},
- {suffix:"霊峰",cost:5000000000,legacyCost:14000000000},
- {suffix:"永劫",cost:7000000000,legacyCost:25000000000},
- {suffix:"神域",cost:9500000000,legacyCost:45000000000},
- {suffix:"冥界",cost:12500000000,legacyCost:80000000000},
- {suffix:"界渡",cost:16000000000,legacyCost:140000000000},
- {suffix:"星海",cost:20000000000,legacyCost:240000000000},
- {suffix:"真理",cost:25000000000,legacyCost:400000000000},
- {suffix:"創世",cost:31000000000,legacyCost:650000000000},
- {suffix:"虚無",cost:38000000000,legacyCost:1000000000000},
- {suffix:"原初",cost:46000000000,legacyCost:1600000000000},
- {suffix:"万象",cost:55000000000,legacyCost:2500000000000},
- {suffix:"王座",cost:65000000000,legacyCost:3800000000000},
- {suffix:"無限",cost:76000000000,legacyCost:5500000000000},
- {suffix:"終焉",cost:88000000000,legacyCost:7500000000000},
- {suffix:"超克",cost:100000000000,legacyCost:10000000000000},
- {suffix:"深淵王",cost:115000000000,legacyCost:15000000000000}
+ {suffix:"萌芽",cost:5000,legacyCost:120000},
+ {suffix:"脈動",cost:10000,legacyCost:300000},
+ {suffix:"刻印",cost:20000,legacyCost:750000},
+ {suffix:"共鳴",cost:40000,legacyCost:2000000},
+ {suffix:"転成",cost:75000,legacyCost:5000000},
+ {suffix:"顕現",cost:125000,legacyCost:12000000},
+ {suffix:"超越",cost:200000,legacyCost:30000000},
+ {suffix:"支配",cost:300000,legacyCost:75000000},
+ {suffix:"終極",cost:450000,legacyCost:180000000},
+ {suffix:"王冠",cost:650000,legacyCost:350000000},
+ {suffix:"律動",cost:900000,legacyCost:650000000},
+ {suffix:"深化",cost:1200000,legacyCost:1200000000},
+ {suffix:"星環",cost:1500000,legacyCost:1800000000},
+ {suffix:"変革",cost:1800000,legacyCost:2500000000},
+ {suffix:"天衝",cost:2200000,legacyCost:3500000000},
+ {suffix:"霊峰",cost:2600000,legacyCost:5000000000},
+ {suffix:"永劫",cost:3000000,legacyCost:7000000000},
+ {suffix:"神域",cost:3500000,legacyCost:9500000000},
+ {suffix:"冥界",cost:4000000,legacyCost:12500000000},
+ {suffix:"界渡",cost:4500000,legacyCost:16000000000},
+ {suffix:"星海",cost:5000000,legacyCost:20000000000},
+ {suffix:"真理",cost:5500000,legacyCost:25000000000},
+ {suffix:"創世",cost:6000000,legacyCost:31000000000},
+ {suffix:"虚無",cost:6500000,legacyCost:38000000000},
+ {suffix:"原初",cost:7000000,legacyCost:46000000000},
+ {suffix:"万象",cost:7500000,legacyCost:55000000000},
+ {suffix:"王座",cost:8000000,legacyCost:65000000000},
+ {suffix:"無限",cost:8500000,legacyCost:76000000000},
+ {suffix:"終焉",cost:9000000,legacyCost:88000000000},
+ {suffix:"超克",cost:9500000,legacyCost:100000000000},
+ {suffix:"深淵王",cost:10000000,legacyCost:115000000000}
 ]);
 
 const EXPANSION_CAPSTONES=Object.freeze({
@@ -371,10 +372,10 @@ function expansionDescription(effect){
 
 export function abyssExpansionRewardScale(stageIndex){
  const index=Math.max(0,Math.floor(Number(stageIndex)||0));
- if(index>=30)return 6;
- if(index>=24)return 3.5;
- if(index>=16)return 2.25;
- if(index>=8)return 1.5;
+ if(index>=30)return 2.5;
+ if(index>=24)return 2;
+ if(index>=16)return 1.5;
+ if(index>=8)return 1.25;
  return 1;
 }
 
@@ -408,8 +409,9 @@ function expansionNodesForCategory(category){
    icon:branch.icon,
    name:`${branch.name}・${stage.suffix}`,
    description:expansionDescription(effect),
-   cost:discountedTreePrice(stage.cost),
-   legacyCost:stage.cost,
+   cost:stage.cost,
+   previousCost:version6TreePrice(stage.legacyCost),
+   legacyCost:stage.legacyCost,
    requires,
    requiresAny,
    requiresAnyCount,
@@ -507,7 +509,8 @@ export function normalizeAbyssSkillTree(state){
   investedGold=Math.min(Number.MAX_SAFE_INTEGER,investedGold+paid);
   if(shouldApplyRebalanceRefund){
    const recorded=Number(source.paidCosts?.[nodeId]);
-   const previousPaid=Number.isFinite(recorded)&&recorded>0?recorded:(Number(node.legacyCost)||node.cost);
+   const fallbackPaid=sourceVersion>=6?Number(node.previousCost):Number(node.legacyCost);
+   const previousPaid=Number.isFinite(recorded)&&recorded>0?recorded:(Number.isFinite(fallbackPaid)&&fallbackPaid>0?fallbackPaid:node.cost);
    rebalanceRefund=Math.min(Number.MAX_SAFE_INTEGER,rebalanceRefund+Math.max(0,previousPaid-node.cost));
   }
  }
@@ -581,10 +584,9 @@ export function abyssSkillMultiplier(state,key){
 export function abyssExplorationChance(state,base,effectKey=null,{additive=false,max=1}={}){
  const initial=Math.max(0,Number(base)||0);
  const specific=effectKey?abyssSkillEffectTotal(state,effectKey):0;
- const exploration=abyssSkillEffectTotal(state,"explorationRewardRate");
  const chance=additive
-  ?(initial+specific)*(1+exploration)
-  :initial*(1+specific+exploration);
+  ?initial+specific
+  :initial*(1+specific);
  return Math.max(0,Math.min(max,chance));
 }
 

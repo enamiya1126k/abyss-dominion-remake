@@ -1,12 +1,13 @@
 import{createEquipment,equipmentPower}from"../models/Equipment.js?v=2.11.0-build164";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=2.11.82-build258";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=3.0.1-build301";
 import{allLearnedSkills,maxMp,recommendedSkills,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=2.11.83-build259";
 import{SPECIES}from"../data/species.js?v=2.11.82-build258";
-import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=2.11.0-build164";
+import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=3.0.1-build301";
 import{equipmentStatLabel}from"../data/equipment.js?v=2.11.0-build164";
 import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=2.11.0-build164";
 import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.11.0-build164";
-import{MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=2.11.0-build164";
+import{MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=3.0.1-build301";
+import{campaignFloorToLegacyFloor}from"./Campaign100System.js?v=3.0.1-build301";
 
 export const SECRET_ROOM_CHANCE=.09;
 export const CASINO_CRYSTAL_COST=premiumCrystalCost(10);
@@ -69,6 +70,7 @@ function roundedPrice(value){
  const unit=amount>=1e9?1e6:amount>=1e6?10000:amount>=10000?100:amount>=1000?10:1;
  return Math.max(1,Math.round(amount/unit)*unit);
 }
+function economicDepth(floor){return campaignFloorToLegacyFloor(safeInteger(floor,1,1,100))}
 function rarityProfile(random=Math.random){
  const roll=Math.max(0,Math.min(.999999,Number(random())||0));
  return MARKET_RARITIES.find(entry=>roll<entry.threshold)??MARKET_RARITIES[0];
@@ -129,7 +131,7 @@ const MARKET_GRADE_PRICE_RATE=Object.freeze({rough:1,standard:1,surge:1.15,jackp
 export function darkMarketMonsterPriceFloor(floor,monsterOrLevel,rarity="SR",powerGrade="standard"){
  const monster=monsterOrLevel&&typeof monsterOrLevel==="object"?monsterOrLevel:null;
  const level=safeInteger(monster?.level??monsterOrLevel,1,1,9999);
- const safeFloor=safeInteger(floor,1,1,10000),safeBand=Math.max(3,safeFloor*3);
+ const safeBand=Math.max(3,economicDepth(floor)*3);
  const numericReference=typeof rarity==="number"?safeInteger(rarity,0):0;
  if(level<=safeBand)return numericReference;
  const rarityId=typeof rarity==="string"?rarity:String(monster?.summonTier??monster?.summonRarity??SPECIES[monster?.speciesId]?.rarity??"SR");
@@ -185,7 +187,7 @@ function marketEquipmentOffer(floor,index,random){
  else if(powerProfile.id==="surge")item.affixes=(item.affixes??[]).map(affix=>({...affix,quality:["epic","legendary"][Math.floor(random()*2)],value:Math.max(affix.value,Math.round(affix.value*(1.18+random()*.3)))}));
  item.marketGrade=powerProfile.id;item.marketGradeLabel=powerProfile.label;
  item.obtainedFloor=floor;item.obtainedMethod="darkMarket";
- const reference=Math.max(500,goldForClearedFloor(floor)*profile.equipmentRate+equipmentPower(item)*12),price=marketPrice(reference,random);
+ const reference=Math.max(500,goldForClearedFloor(economicDepth(floor))*profile.equipmentRate+equipmentPower(item)*12),price=marketPrice(reference,random);
  return maybeMysteryOffer({id:`equipment-${index}`,kind:"equipment",rarity:profile.id,name:item.name,icon:{weapon:"⚔️",armor:"🛡️",accessory:"💍"}[slot],description:`${powerProfile.label}・${equipmentDescription(item)}`,powerGrade:powerProfile.id,powerLabel:powerProfile.label,sold:false,payload:item,...price},random);
 }
 function marketMonsterOffer(floor,index,random){
@@ -199,7 +201,7 @@ function marketMonsterOffer(floor,index,random){
  const monster=createMonster(species.id,{nickname:species.name,level,plus,affection,obtainedFloor:floor,obtainedMethod:"darkMarket"});
  monster.summonRarity=profile.id;if(profile.id==="神話")monster.summonTier="神話";
  monster.marketGrade=powerProfile.id;monster.marketGradeLabel=powerProfile.label;applyMarketSkillPackage(monster,powerProfile.id,random);
- const reference=Math.max(800,goldForClearedFloor(floor)*profile.monsterRate*powerProfile.priceRate*(1+Math.min(300,level)*.012+plus*.05)),price=applyMonsterPriceFloor(marketPrice(reference,random),floor,monster,profile.id,powerProfile.id);
+ const reference=Math.max(800,goldForClearedFloor(economicDepth(floor))*profile.monsterRate*powerProfile.priceRate*(1+Math.min(300,level)*.012+plus*.05)),price=applyMonsterPriceFloor(marketPrice(reference,random),floor,monster,profile.id,powerProfile.id);
  return maybeMysteryOffer({id:`monster-${index}`,kind:"monster",rarity:profile.id,name:displayName(monster),icon:species.emoji??"👹",description:`${powerProfile.label}・${monsterDescription(monster)}${monster.marketSkillGrade?`・${monster.marketSkillGrade}`:""}`,powerGrade:powerProfile.id,powerLabel:powerProfile.label,sold:false,payload:monster,...price},random);
 }
 function createRoom(roomId,floor,random=Math.random){
@@ -342,7 +344,7 @@ function casinoMultiplier(random=Math.random){
 export function casinoBetLimit(state){
  const room=activeSecretRoom(state);
  const gold=safeInteger(state.player?.gold,0),floor=room?.floor??safeInteger(state.player?.currentFloor,1,1,10000);
- return Math.min(gold,roundedPrice(Math.max(10_000,goldForClearedFloor(floor)*500)));
+ return Math.min(gold,roundedPrice(Math.max(10_000,goldForClearedFloor(economicDepth(floor))*500)));
 }
 
 export function spinSecretRoomCasino(state,bet,randomOrOptions=Math.random){

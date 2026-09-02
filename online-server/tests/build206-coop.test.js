@@ -23,12 +23,12 @@ function expedition(floor = 1) {
 
 test("build206 floor and participant tiers match the approved boundaries", () => {
   assert.equal(coopFloorTier(1).id, "black-iron");
-  assert.equal(coopFloorTier(99).id, "black-iron");
-  assert.equal(coopFloorTier(100).id, "silver");
-  assert.equal(coopFloorTier(499).id, "silver");
-  assert.equal(coopFloorTier(500).id, "gold");
-  assert.equal(coopFloorTier(999).id, "gold");
-  assert.equal(coopFloorTier(1000).id, "abyss");
+  assert.equal(coopFloorTier(9).id, "black-iron");
+  assert.equal(coopFloorTier(10).id, "silver");
+  assert.equal(coopFloorTier(49).id, "silver");
+  assert.equal(coopFloorTier(50).id, "gold");
+  assert.equal(coopFloorTier(99).id, "gold");
+  assert.equal(coopFloorTier(100).id, "abyss");
   assert.equal(coopParticipantTier(2).id, "silver");
   assert.equal(coopParticipantTier(3).multiplier, 1.5);
   assert.equal(coopParticipantTier(4).extraRolls, 1);

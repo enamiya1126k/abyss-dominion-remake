@@ -9,6 +9,7 @@ import {
   rollEnemyRank,
 } from "../../src/core/EnemyScalingSystem.js";
 import { treasureRoomRateForFloor, treasureRoomChestCount, shouldPlaceTreasureMimic } from "../../src/core/TreasureSystem.js";
+import { campaignFloorToLegacyDepth } from "./CampaignFloorScale.js";
 
 const CARDINALS = Object.freeze([[1, 0], [-1, 0], [0, 1], [0, -1]]);
 // The shared dungeon is the host's ordinary dungeon world.  Keep the exact
@@ -216,7 +217,7 @@ export function createSoloStyleDungeon({ roomId, floor, runId, now, random, ches
   const bossPoint=takeCells(candidates,reserved,random,1)[0]??layout.exit;add("encounter",bossPoint,1,{bossEncounter:true});
   takeCells(candidates,reserved,random,3).forEach((point,index)=>add("campaignKey",point,index+1,{shared:true,persistent:true}));
   {
-    treasureRoom = random() < treasureRoomRateForFloor(floor);
+    treasureRoom = random() < treasureRoomRateForFloor(campaignFloorToLegacyDepth(floor));
     const chestCount = treasureRoom ? treasureRoomChestCount(random) : random() < Math.max(0, .16 - Math.max(0, Number(chestSpawnBonus) || 0)) ? 0 : random() < .72 ? 1 : 2;
     const pick = () => {
       const available = candidates.filter(cell => !reserved.has(key(cell))), pool = available.length ? available : candidates.length ? candidates : cells;
@@ -270,7 +271,7 @@ export function encounterCountForFloor(floor, roll) {
 }
 
 export function floorEnemyStats({ floor, template, random, boss = false }) {
-  const depth=Math.max(10,Math.min(1000,Math.floor(Number(floor)||1)*10));
+  const depth=campaignFloorToLegacyDepth(floor);
   const sourceBase = template?.baseStats ?? BASE_STATS[template.id] ?? BASE_STATS.slime;
   const base = {
     hp: Math.max(1, Number(sourceBase.hp) || BASE_STATS.slime.hp),

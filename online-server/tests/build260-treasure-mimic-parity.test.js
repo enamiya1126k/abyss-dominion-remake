@@ -20,7 +20,7 @@ test("build260 treasure rooms cap mimics at two", () => {
 
 test("build260 server chest contract preserves mythic level and plus", () => {
   const fakeStore = { random: () => .5 };
-  const reward = RoomStore.prototype._offlineChestReward.call(fakeStore, 500, { kind: "radiant", locked: true, treasureRoom: true }, { profile: {} });
+  const reward = RoomStore.prototype._offlineChestReward.call(fakeStore, 50, { kind: "radiant", locked: true, treasureRoom: true }, { profile: {} });
   assert.equal(reward.randomEquipmentRarity, "神話");
   assert.ok(reward.equipmentLevel >= 900 && reward.equipmentLevel <= 1200);
   assert.ok(reward.equipmentPlus >= 12);

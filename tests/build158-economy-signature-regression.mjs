@@ -21,12 +21,12 @@ test("JST weekday altar follows the fixed weekly calendar",()=>{
 });
 
 test("every Abyss tree node is cheaper and old investment is refunded once",()=>{
- assert.equal(ABYSS_SKILL_TREE_VERSION,6);
+ assert.equal(ABYSS_SKILL_TREE_VERSION,7);
  assert.ok(ABYSS_SKILL_NODES.length>250);
  for(const node of ABYSS_SKILL_NODES)assert.ok(node.cost<=(node.legacyCost??node.cost),`${node.id} was not discounted`);
  const node=ABYSS_SKILL_NODES.find(entry=>entry.legacyCost>entry.cost),state={player:{gold:1000},monsters:[],party:[],abyssSkillTree:{version:5,learned:[node.id],paidCosts:{[node.id]:node.legacyCost}}};
  normalizeAbyssSkillTree(state);const after=state.player.gold;
- assert.equal(after,1000+node.legacyCost-node.cost);assert.equal(state.abyssSkillRebalance.version,6);
+ assert.equal(after,1000+node.legacyCost-node.cost);assert.equal(state.abyssSkillRebalance.version,7);
  normalizeAbyssSkillTree(state);assert.equal(state.player.gold,after,"refund must be idempotent");
 });
 

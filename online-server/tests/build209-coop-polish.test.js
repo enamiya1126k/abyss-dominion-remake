@@ -75,10 +75,10 @@ test("build209 fixes special chest appearance to the higher floor or starting-pa
   assert.equal(fourAtFloorOne.coop.partySize, 4);
   assert.ok(fourAtFloorOne.objects.filter(object => object.id.startsWith("coop-")).every(object => object.rewardTier === "abyss"));
 
-  const soloAtFloorFiveHundred = fixture(500);
+  const soloAtFloorFiveHundred = fixture(50);
   prepareOnlineExpansionV208(soloAtFloorFiveHundred, { ownerId: "AD-DY29-AABA", hostWorld: { openedChestIds: {} }, participants: 1, forceRare: null });
   assert.equal(soloAtFloorFiveHundred.coop.rewardTier, "gold");
-  assert.equal(coopRewardTier(100, 3).id, "gold");
+  assert.equal(coopRewardTier(10, 3).id, "gold");
 });
 
 test("build209 keeps starting-party quality after a member disconnects", () => {

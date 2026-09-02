@@ -1,12 +1,17 @@
-import{abyssGoldReward}from"../core/AbyssSkillTreeSystem.js?v=2.11.2-build166";
+import{abyssGoldReward}from"../core/AbyssSkillTreeSystem.js?v=3.0.1-build301";
 import{equipmentDisplayRarity}from"../data/equipment.js?v=2.11.2-build166";
 
 export const EQUIPMENT_LIMIT=500;
 export const RESERVE_LIMIT=30;
+export const EQUIPMENT_SELL_BASES=Object.freeze({N:50,R:150,SR:500,SSR:1500,UR:5000,LR:15000,"神話":50000,"深淵":150000,"十神":500000});
+const SELL_PLUS_VALUE=500;
+const SELL_LEVEL_VALUE=20;
+const SELL_LEVEL_CAP=1000;
 
 export function equipmentSellPrice(item,state=null){
- const base=({N:15,R:45,SR:110,SSR:260,UR:430,LR:650,"神話":1100,"深淵":1800,"十神":3000}[equipmentDisplayRarity(item)]??10)+(item.plus??0)*25+(item.level??1)*2;
- return state?abyssGoldReward(state,base,"equipmentSale"):base;
+ const rarityBase=EQUIPMENT_SELL_BASES[equipmentDisplayRarity(item)]??50,plus=Math.max(0,Math.min(999,Math.floor(Number(item?.plus)||0))),level=Math.max(1,Math.min(SELL_LEVEL_CAP,Math.floor(Number(item?.level)||1)));
+ const base=Math.min(Number.MAX_SAFE_INTEGER,rarityBase+plus*SELL_PLUS_VALUE+level*SELL_LEVEL_VALUE),reward=state?abyssGoldReward(state,base,"equipmentSale"):base;
+ return Math.max(0,Math.min(Number.MAX_SAFE_INTEGER,Math.floor(Number(reward)||0)));
 }
 
 export function slotLabel(slot){

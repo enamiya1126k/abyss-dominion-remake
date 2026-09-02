@@ -1,25 +1,27 @@
-import{createEquipment}from"../models/Equipment.js?v=2.11.2-build166";
-import{receiveEquipment}from"../services/EquipmentStorage.js?v=2.11.2-build166";
-import{abyssEquipmentRarityBonus}from"./AbyssSkillTreeSystem.js?v=2.11.2-build166";
-import{modifiedGoldReward}from"./GoldRewardSystem.js?v=2.11.2-build166";
-import{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.11.2-build166";
+import{createEquipment}from"../models/Equipment.js?v=3.0.1-build301";
+import{receiveEquipment}from"../services/EquipmentStorage.js?v=3.0.1-build301";
+import{abyssEquipmentRarityBonus}from"./AbyssSkillTreeSystem.js?v=3.0.1-build301";
+import{modifiedGoldReward}from"./GoldRewardSystem.js?v=3.0.1-build301";
+import{goldForClearedFloor}from"./GoldEconomySystem.js?v=3.0.1-build301";
+import{CAMPAIGN_MAX_FLOOR,campaignFloorToLegacyFloor}from"./Campaign100System.js?v=3.0.1-build301";
 
-export{goldForClearedFloor}from"./GoldEconomySystem.js?v=2.11.2-build166";
+export{goldForClearedFloor}from"./GoldEconomySystem.js?v=3.0.1-build301";
 
 const EMPTY_MANUAL={active:false,startFloor:1,lastFloor:1,floorsCleared:0,pendingGold:0,startedAt:null};
 const IDLE_FLOOR_INTERVAL_MS=5*60*1000;
 const IDLE_REWARD_RATE=.1;
 const IDLE_EQUIPMENT_INTERVAL_MS=2*60*60*1000;
-const IDLE_MAX_EQUIPMENT=4;
+const IDLE_MAX_EQUIPMENT=12;
 
 export const IDLE_REWARD_PROFILES=Object.freeze([
- {minFloor:1,maxFloor:99,expeditionRate:.60,maxHours:4},
- {minFloor:100,maxFloor:499,expeditionRate:.70,maxHours:6},
- {minFloor:500,maxFloor:999,expeditionRate:.75,maxHours:8},
- {minFloor:1000,maxFloor:2999,expeditionRate:.80,maxHours:10},
- {minFloor:3000,maxFloor:6999,expeditionRate:.85,maxHours:12},
- {minFloor:7000,maxFloor:8999,expeditionRate:.90,maxHours:16},
- {minFloor:9000,maxFloor:10000,expeditionRate:.95,maxHours:24}
+ {minFloor:1,maxFloor:9,expeditionRate:.50,maxHours:4},
+ {minFloor:10,maxFloor:29,expeditionRate:.60,maxHours:6},
+ {minFloor:30,maxFloor:49,expeditionRate:.65,maxHours:8},
+ {minFloor:50,maxFloor:69,expeditionRate:.70,maxHours:10},
+ {minFloor:70,maxFloor:79,expeditionRate:.75,maxHours:12},
+ {minFloor:80,maxFloor:89,expeditionRate:.80,maxHours:16},
+ {minFloor:90,maxFloor:99,expeditionRate:.85,maxHours:20},
+ {minFloor:100,maxFloor:100,expeditionRate:.90,maxHours:24}
 ]);
 
 export const RETURN_RARITY_RATES=[
@@ -50,15 +52,17 @@ export function returnRarityRates(state=null){
 export function returnRewardGrade(floorsCleared,equipment=[]){
  const floors=Math.max(0,Math.floor(Number(floorsCleared)||0));
  const rarities=(equipment??[]).map(entry=>entry?.item?.rarity??entry?.rarity);
- if(rarities.includes("LR")||floors>=100)return"SSS";
- if(rarities.includes("SSR")||floors>=50)return"SS";
- if(rarities.includes("SR")||floors>=20)return"S";
- if(floors>=10)return"A";
- if(floors>=5)return"B";
+ if(rarities.includes("LR")||floors>=20)return"SSS";
+ if(rarities.includes("SSR")||floors>=10)return"SS";
+ if(rarities.includes("SR")||floors>=5)return"S";
+ if(floors>=3)return"A";
+ if(floors>=1)return"B";
  return"C";
 }
 
-function safeFloor(value){return Math.max(1,Math.min(10000,Math.floor(Number(value)||1)))}
+function safeFloor(value){return Math.max(1,Math.min(CAMPAIGN_MAX_FLOOR,Math.floor(Number(value)||1)))}
+function rewardDepth(floor){return campaignFloorToLegacyFloor(safeFloor(floor))}
+function safeNow(value=Date.now()){const number=Number(value);return Number.isFinite(number)&&number>=0?number:Date.now()}
 
 export function idleRewardProfile(maxFloor){
  const floor=safeFloor(maxFloor);
@@ -67,9 +71,9 @@ export function idleRewardProfile(maxFloor){
 
 export function manualEquipmentDropCount(floorsCleared){
  const n=Math.max(0,Math.floor(Number(floorsCleared)||0));
- if(n<5)return 0;
- if(n<10)return 1;
- if(n<20)return 2;
+ if(n<1)return 0;
+ if(n<3)return 1;
+ if(n<5)return 2;
  return 3;
 }
 
@@ -90,7 +94,7 @@ function randomEquipmentSlot(){
 
 function scaledReturnLevel(floor){return Math.max(1,Math.min(99999,Math.round(Math.max(1,Number(floor)||1)*(.5+Math.random()))))}
 function createManualReturnEquipment(state,floor=state?.player?.currentFloor){
- const item=createEquipment(randomEquipmentSlot(),{rarity:rollManualReturnRarity(state)});item.level=scaledReturnLevel(floor);item.obtainedFloor=Math.max(1,Number(floor)||1);item.obtainedMethod="manualReturn";return item;
+ const displayFloor=safeFloor(floor),item=createEquipment(randomEquipmentSlot(),{rarity:rollManualReturnRarity(state)});item.level=scaledReturnLevel(rewardDepth(displayFloor));item.obtainedFloor=displayFloor;item.obtainedMethod="manualReturn";return item;
 }
 
 export function idleEquipmentDropCount(elapsedMs){
@@ -99,15 +103,15 @@ export function idleEquipmentDropCount(elapsedMs){
 }
 
 export function rollIdleReturnRarity(state=null){
- // Same rarity table as manual return, but far fewer rolls (one per 2 hours, max 4).
+ // Same rarity table as manual return, but far fewer rolls (one per 2 hours, max 12).
  return rollManualReturnRarity(state);
 }
 
 function createIdleReturnEquipment(state,floor){
- const item=createEquipment(randomEquipmentSlot(),{rarity:rollIdleReturnRarity(state)});item.level=scaledReturnLevel(floor);item.obtainedFloor=Math.max(1,Number(floor)||1);item.obtainedMethod="idleReturn";return item;
+ const displayFloor=safeFloor(floor),item=createEquipment(randomEquipmentSlot(),{rarity:rollIdleReturnRarity(state)});item.level=scaledReturnLevel(rewardDepth(displayFloor));item.obtainedFloor=displayFloor;item.obtainedMethod="idleReturn";return item;
 }
 
-export function normalizeReturnRewards(state){
+export function normalizeReturnRewards(state,at=Date.now()){
  state.returnRewards??={};
  const current=safeFloor(state.player?.currentFloor);
  const manual=state.returnRewards.manual&&typeof state.returnRewards.manual==="object"?state.returnRewards.manual:{};
@@ -124,9 +128,14 @@ export function normalizeReturnRewards(state){
   state.returnRewards.history[key]=Math.max(0,Math.floor(Number(state.returnRewards.history[key])||0));
  }
  const idle=state.returnRewards.idle&&typeof state.returnRewards.idle==="object"?state.returnRewards.idle:{};
- const now=Date.now(),rawLast=Number(idle.lastClaimAt),profile=idleRewardProfile(state.player?.maxFloor);
+ const now=safeNow(at),rawLegacyLast=Number(idle.lastClaimAt),rawGoldLast=Number(idle.lastGoldClaimAt),rawEquipmentLast=Number(idle.lastEquipmentClaimAt),profile=idleRewardProfile(state.player?.maxFloor);
+ const normalizeClock=(value,fallback)=>Number.isFinite(value)&&value>0?Math.min(value,now):fallback;
+ const legacyLast=normalizeClock(rawLegacyLast,now),lastGoldClaimAt=normalizeClock(rawGoldLast,legacyLast),lastEquipmentClaimAt=normalizeClock(rawEquipmentLast,lastGoldClaimAt);
  state.returnRewards.idle={
-  lastClaimAt:Number.isFinite(rawLast)&&rawLast>0?Math.min(rawLast,now):now,
+  // lastClaimAt remains as a compatibility alias for pre-build301 saves.
+  lastClaimAt:lastGoldClaimAt,
+  lastGoldClaimAt,
+  lastEquipmentClaimAt,
   maxHours:profile.maxHours
  };
  return state.returnRewards;
@@ -152,7 +161,7 @@ export function recordManualFloorClear(state,reachedFloor){
  if(floor<=run.lastFloor)return run;
  for(let f=run.lastFloor+1;f<=floor;f++){
   run.floorsCleared++;
-  run.pendingGold+=goldForClearedFloor(f);
+  run.pendingGold+=goldForClearedFloor(rewardDepth(f));
  }
  run.lastFloor=floor;
  return run;
@@ -197,36 +206,41 @@ export function abandonManualExpedition(state){
 }
 
 
-export function idleExpeditionFloor(state){
- normalizeReturnRewards(state);
+export function idleExpeditionFloor(state,at=Date.now()){
+ normalizeReturnRewards(state,at);
  const maxFloor=safeFloor(state.player?.maxFloor);
  const profile=idleRewardProfile(maxFloor);
  return Math.max(1,Math.floor(maxFloor*profile.expeditionRate));
 }
 
 export function idleReturnPreview(state,now=Date.now()){
- normalizeReturnRewards(state);
+ const current=safeNow(now);
+ normalizeReturnRewards(state,current);
  const idle=state.returnRewards.idle;
- const current=Math.max(0,Number(now)||Date.now());
  const maxMs=idle.maxHours*60*60*1000;
- const elapsedMs=Math.max(0,Math.min(maxMs,current-idle.lastClaimAt));
- const floorUnits=Math.floor(elapsedMs/IDLE_FLOOR_INTERVAL_MS);
+ const rawGoldElapsedMs=Math.max(0,current-idle.lastGoldClaimAt),rawEquipmentElapsedMs=Math.max(0,current-idle.lastEquipmentClaimAt);
+ const goldElapsedMs=Math.min(maxMs,rawGoldElapsedMs),equipmentElapsedMs=Math.min(maxMs,rawEquipmentElapsedMs);
+ const floorUnits=Math.floor(goldElapsedMs/IDLE_FLOOR_INTERVAL_MS);
  const profile=idleRewardProfile(state.player?.maxFloor);
- const expeditionFloor=idleExpeditionFloor(state);
- const goldPerUnit=Math.max(1,Math.round(goldForClearedFloor(expeditionFloor)*IDLE_REWARD_RATE));
+ const expeditionFloor=idleExpeditionFloor(state,current);
+ const goldPerUnit=Math.max(1,Math.round(goldForClearedFloor(rewardDepth(expeditionFloor))*IDLE_REWARD_RATE));
  const baseGold=floorUnits*goldPerUnit;
  return{
-  elapsedMs,
+  elapsedMs:goldElapsedMs,
+  goldElapsedMs,
+  equipmentElapsedMs,
   floorUnits,
   expeditionFloor,
+  rewardDepth:rewardDepth(expeditionFloor),
   goldPerUnit,
   baseGold,
   gold:modifiedGoldReward(state,baseGold,"idleReturn"),
-  equipmentCount:idleEquipmentDropCount(elapsedMs),
+  equipmentCount:idleEquipmentDropCount(equipmentElapsedMs),
   maxHours:idle.maxHours,
   expeditionRate:profile.expeditionRate,
-  capped:current-idle.lastClaimAt>=maxMs,
-  available:floorUnits>0
+  capped:rawGoldElapsedMs>=maxMs,
+  equipmentCapped:rawEquipmentElapsedMs>=maxMs,
+  available:floorUnits>0||idleEquipmentDropCount(equipmentElapsedMs)>0
  };
 }
 
@@ -240,7 +254,10 @@ export function claimIdleReturn(state,now=Date.now()){
   const receipt=receiveEquipment(state,item);
   equipment.push({item,receipt});
  }
- state.returnRewards.idle.lastClaimAt=Math.max(0,Number(now)||Date.now());
+ const current=safeNow(now),idle=state.returnRewards.idle;
+ if(preview.floorUnits>0)idle.lastGoldClaimAt=preview.capped?current:Math.min(current,idle.lastGoldClaimAt+preview.floorUnits*IDLE_FLOOR_INTERVAL_MS);
+ if(preview.equipmentCount>0)idle.lastEquipmentClaimAt=preview.equipmentCapped?current:Math.min(current,idle.lastEquipmentClaimAt+preview.equipmentCount*IDLE_EQUIPMENT_INTERVAL_MS);
+ idle.lastClaimAt=idle.lastGoldClaimAt;
  state.returnRewards.history.totalIdleClaims++;
  state.returnRewards.history.totalIdleGold+=preview.gold;
  return{...preview,equipment,claimed:true};

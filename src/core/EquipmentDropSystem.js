@@ -1,4 +1,4 @@
-import{ENDGAME_MAX_LEVEL}from"./config.js?v=2.11.24-build188";
+import{ENDGAME_MAX_LEVEL}from"./config.js?v=3.0.1-build301";
 
 /**
  * Field drops are intentionally close to the floor that produced them.
@@ -12,4 +12,3 @@ export function equipmentDropLevelForFloor(floor,{boss=false,elite=false,random=
  const roll=Math.max(0,Math.min(.999999,Number(random?.())||0));
  return Math.max(1,Math.min(ENDGAME_MAX_LEVEL,Math.round(center+safeFloor*(roll*2-1)*spread)));
 }
-

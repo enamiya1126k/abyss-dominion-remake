@@ -1,7 +1,7 @@
 import{SPECIES}from"../../data/species.js?v=2.11.82-build258";
-import{displayName}from"../../models/Monster.js?v=2.11.82-build258";
+import{displayName}from"../../models/Monster.js?v=3.0.1-build301";
 import{allLearnedSkills,effectiveSkillMpCost,normalizeSkillLoadout,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=2.11.83-build259";
-import{monsterVisual}from"../MonsterVisual.js?v=2.11.82-build258";
+import{monsterVisual}from"../MonsterVisual.js?v=3.0.1-build301";
 import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=2.11.0-build164";
 
 const ROLE_LABELS={

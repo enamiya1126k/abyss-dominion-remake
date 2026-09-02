@@ -1,4 +1,5 @@
 import { coopBossFor, coopBossObjectMeta } from "./CoopBossCatalog.js";
+import { campaignFloorToLegacyDepth } from "./CampaignFloorScale.js";
 
 const GIMMICKS = Object.freeze(["dualSwitch", "relaySeal", "resonanceChest", "splitKey", "eliteVault"]);
 
@@ -20,7 +21,7 @@ function seededRandom(seed) {
 }
 
 export function coopFloorTier(floor = 1) {
-  const value = Math.max(1, Math.floor(Number(floor) || 1));
+  const value = campaignFloorToLegacyDepth(floor);
   if (value >= 1000) return { id: "abyss", label: "深淵級", rank: 4, multiplier: 2.4 };
   if (value >= 500) return { id: "gold", label: "金級", rank: 3, multiplier: 1.85 };
   if (value >= 100) return { id: "silver", label: "銀級", rank: 2, multiplier: 1.35 };

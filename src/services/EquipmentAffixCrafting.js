@@ -44,9 +44,12 @@ export function lockedAffixCount(item){
 export function rerollLockMultiplier(item){
  return LOCK_MULTIPLIERS[lockedAffixCount(item)]??LOCK_MULTIPLIERS.at(-1);
 }
+export function equipmentCraftingEconomicFloor(floor){
+ return Math.min(1000,Math.max(1,safeInteger(floor,1))*10);
+}
 export function rerollGoldCost(state,item){
  const floor=Math.max(1,Math.min(10000,safeInteger(state?.player?.maxFloor,1))),rarity=equipmentDisplayRarity(item);
- const floorBase=goldForClearedFloor(floor)*.25,rarityBase=Math.max(MINIMUM_COSTS[rarity]??500,floorBase*(RARITY_MULTIPLIERS[rarity]??1));
+ const floorBase=goldForClearedFloor(equipmentCraftingEconomicFloor(floor))*.75,rarityBase=Math.max(MINIMUM_COSTS[rarity]??500,floorBase*(RARITY_MULTIPLIERS[rarity]??1));
  const level=Math.max(1,safeInteger(item?.level,1)),levelMultiplier=1+Math.min(.75,Math.log10(level)*.15);
  return roundedGold(rarityBase*levelMultiplier*rerollLockMultiplier(item));
 }

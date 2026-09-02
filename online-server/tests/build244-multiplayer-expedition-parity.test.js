@@ -309,7 +309,7 @@ test("build244 optional co-op content can be ignored while only the owner receiv
   assert.equal(guest.session.profile.maxFloor, 1);
 });
 
-test("build244 boss floors add no optional co-op feature and write first-clear state only to the owner", () => {
+test("build301 boss floors remove the legacy first-clear choice and persist world state only to the owner", () => {
   const floor = 10;
   const { store, members: [owner, guest], room } = startRoom({ floor, seed: 244_010, nextSeed: 244_011, forceRare: "hiddenPortal" });
 
@@ -332,8 +332,8 @@ test("build244 boss floors add no optional co-op feature and write first-clear s
 
   assert.deepEqual(room.hostWorld.defeatedBossFloors, [floor]);
   const ownerFirstClear = owner.session.pendingRewards.find(entry => entry.source?.kind === "floorBoss" && entry.source?.bossFirstClear);
-  assert.ok(ownerFirstClear, "the owner receives the first-clear choice contract");
-  assert.equal(ownerFirstClear.source.worldOwnerId, owner.session.playerId);
+  assert.equal(ownerFirstClear, undefined, "the removed three-choice contract must never be queued");
+  assert.ok(room.expedition.objects.some(object => object.type === "campaignTrophy"));
   assert.equal(guest.session.pendingRewards.some(entry => entry.source?.kind === "floorBoss" && entry.source?.bossFirstClear), false, "the guest must not receive the owner's first-clear state");
   assert.ok(owner.session.pendingMessages.some(message => message.type === "hostWorldDelta" && message.delta?.defeatedBoss?.floor === floor));
   assert.equal(guest.session.pendingMessages.some(message => message.type === "hostWorldDelta" && message.delta?.defeatedBoss?.floor === floor), false);

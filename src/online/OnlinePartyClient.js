@@ -1,23 +1,25 @@
 import {
   buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
   onlineSocialNotificationSummary, moveOnlineBattleRosterPriority, renderOnlineBattleRosterPicker,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.82-build258";
+} from "../ui/screens/OnlinePartyScreen.js?v=3.0.1-build301";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=2.11.82-build258";
+} from "./OnlineViews.js?v=3.0.1-build301";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   rollbackOnlineTradeAssetReservation, commitOnlineTrade, recoverOrphanedTradeEscrows,
   parseOnlineTradeAmount, reconcileOnlineTradeEscrow, sameOnlineTradeAsset, sameLegacyOnlineTradeAsset,
 } from "./OnlineTradeSystem.js?v=2.11.82-build258";
-import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=2.11.82-build258";
+import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=3.0.1-build301";
 import { ONLINE_EXPEDITION_MOVE_INTERVAL_MS } from "./OnlineMovement.js?v=2.11.80-build256";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
 const SOCIAL_FAB_ROUTES = new Set(["home", "chat"]);
 const LEGACY_RESONANCE_ROUTES = new Set(["resonance", "resonanceMaze", "resonance-maze"]);
 const ONLINE_PROTOCOL = "1.16.0";
+const CAMPAIGN_FLOOR_MIN = 1;
+const CAMPAIGN_FLOOR_MAX = 100;
 const ROOM_PURPOSES = new Set(["explore", "raid", "team", "social"]);
 const ROOM_STYLES = new Set(["anyone", "casual", "help", "fast"]);
 const DIRECTION = Object.freeze({ up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] });
@@ -176,6 +178,68 @@ function boundedInteger(value, minimum, maximum, fallback = minimum) {
 function boundedNumber(value, minimum, maximum, fallback = minimum) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? Math.max(minimum, Math.min(maximum, parsed)) : fallback;
+}
+
+function normalizedCampaignFloors(values) {
+  return [...new Set((Array.isArray(values) ? values : []).map(Number).filter(floor => Number.isInteger(floor) && floor >= CAMPAIGN_FLOOR_MIN && floor <= CAMPAIGN_FLOOR_MAX))].slice(0, CAMPAIGN_FLOOR_MAX);
+}
+
+function normalizedCampaignFloorState(source = {}) {
+  const collectedKeyIds = [...new Set((Array.isArray(source?.collectedKeyIds) ? source.collectedKeyIds : [])
+    .map(value => String(value ?? "").slice(0, 80)).filter(Boolean))].slice(0, 3);
+  const rawLocks = boundedInteger(source?.trophyLocksOpened, 0, 3, 0);
+  const keysCollected = Math.max(collectedKeyIds.length, boundedInteger(source?.keysCollected, 0, 3, 0), rawLocks);
+  return {
+    runId: String(source?.runId ?? "").slice(0, 120) || null,
+    keysCollected,
+    trophyLocksOpened: Math.min(keysCollected, rawLocks),
+    collectedKeyIds,
+    hotSpringUsed: Boolean(source?.hotSpringUsed),
+    trophyMythicClaimed: Boolean(source?.trophyMythicClaimed) || rawLocks >= 3,
+    replayActive: Boolean(source?.replayActive),
+    bossDefeatedThisRun: Boolean(source?.bossDefeatedThisRun),
+  };
+}
+
+function normalizedCampaignFloorStates(source) {
+  const states = source && typeof source === "object" && !Array.isArray(source) ? source : {}, result = {};
+  for (const [rawFloor, state] of Object.entries(states).slice(0, CAMPAIGN_FLOOR_MAX)) {
+    const floor = Number(rawFloor);
+    if (!Number.isInteger(floor) || floor < CAMPAIGN_FLOOR_MIN || floor > CAMPAIGN_FLOOR_MAX) continue;
+    result[String(floor)] = normalizedCampaignFloorState(state);
+  }
+  return result;
+}
+
+function campaignHostStateFromLocal(source = {}) {
+  return normalizedCampaignFloorState({
+    runId: source?.runId,
+    keysCollected: source?.keysCollected,
+    trophyLocksOpened: source?.trophyLocksOpened,
+    collectedKeyIds: source?.keyIds,
+    hotSpringUsed: source?.hotSpringUsed,
+    trophyMythicClaimed: source?.trophyClaimed,
+    replayActive: false,
+    bossDefeatedThisRun: Boolean(source?.bossDefeated),
+  });
+}
+
+function mergeCampaignHostFloorState(onlineSource, localSource) {
+  if (!onlineSource) return campaignHostStateFromLocal(localSource);
+  const online = normalizedCampaignFloorState(onlineSource), local = campaignHostStateFromLocal(localSource);
+  if (local.runId && online.runId && local.runId !== online.runId) return { ...local, trophyMythicClaimed: online.trophyMythicClaimed || local.trophyMythicClaimed };
+  const collectedKeyIds = [...new Set([...online.collectedKeyIds, ...local.collectedKeyIds])].slice(0, 3);
+  const keysCollected = Math.min(3, Math.max(online.keysCollected, local.keysCollected, collectedKeyIds.length));
+  return {
+    runId: local.runId || online.runId,
+    keysCollected,
+    trophyLocksOpened: Math.min(keysCollected, Math.max(online.trophyLocksOpened, local.trophyLocksOpened)),
+    collectedKeyIds,
+    hotSpringUsed: online.hotSpringUsed || local.hotSpringUsed,
+    trophyMythicClaimed: online.trophyMythicClaimed || local.trophyMythicClaimed,
+    replayActive: online.replayActive,
+    bossDefeatedThisRun: online.bossDefeatedThisRun || local.bossDefeatedThisRun,
+  };
 }
 
 function rankingIdentifier(value, maximum = 120) {
@@ -2636,7 +2700,7 @@ export class OnlinePartyController {
     if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); if (message.type === "expeditionStarted") this._settlePendingExpeditionStart(message.room); return; }
     if (message.type === "battleStarted" && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this.presentationKoIds.explore.clear(); this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
     if (message.type === "expeditionEvent") { if (message.event?.kind === "hostChestOpened") { const ownerId = this._explicitWorldOwnerId(message.event); if (ownerId && ownerId === this.selfId) this.onHostWorldUpdate({ ...message.event, ownerId }); } if (message.event?.tutorialGuide === "firstPickup") this._notifyTutorialGuide("explore_pickup"); this._announceExpeditionEvent(message.event); return; }
-    if (message.type === "floorBossDefeated") { const ownerId = this._explicitWorldOwnerId(message), reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: ownerId || null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = Boolean(ownerId && ownerId === this.selfId), multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this._closeBattleMenus("explore"); this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = multiplayer && isWorldOwner && reward.firstClear ? reward : null; if (isWorldOwner) { this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId }); this.onFloorBossDefeated({ ...reward, resume: Boolean(reward.firstClear && !multiplayer) }); } this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！`); this._render(); return; }
+    if (message.type === "floorBossDefeated") { const ownerId = this._explicitWorldOwnerId(message), reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: ownerId || null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = Boolean(ownerId && ownerId === this.selfId), multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this._closeBattleMenus("explore"); this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = null; if (isWorldOwner) this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId, boss: reward.boss, bosses: reward.bosses }); this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！ 戦利品は鍵付き宝箱へ`); this._render(); return; }
     if (message.type === "expeditionPing" && message.ping?.id) { if (this._isSocialHidden(message.ping.playerId)) return; this.coopPings.set(message.ping.id, { ...message.ping }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() }); else this._render(); return; }
     if (message.type === "battleRound" || message.type === "battleResolved") { const previous = this.roomState?.expedition?.battle; this._captureHpTrails("explore", previous, message.battle); if (this.roomState?.expedition) this.roomState.expedition.battle = message.battle; if (message.type === "battleRound") this._closeBattleMenus("explore"); this._setRoute("explore", { silent: true }); this._queueBattlePresentation("explore", message.battle?.lastEvents); return; }
     if (message.type === "expeditionEnded") { const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2, completedFloor = message.summary?.floor ?? message.summary?.assistedWorld?.endFloor; this.presentationKoIds.explore.clear(); this.expeditionReport = multiplayer ? message.summary ?? null : null; if (this.roomState) this.roomState = { ...this.roomState, phase: "lobby", expedition: null, coopRun: null }; this._closeAllBattleMenus(); this.route = "explore"; this.toast(message.summary?.completed && Number.isFinite(Number(completedFloor)) ? `${Math.max(1, Math.min(100, Math.floor(Number(completedFloor))))}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
@@ -3241,7 +3305,10 @@ export class OnlinePartyController {
     const hostWorld = message.hostWorld && typeof message.hostWorld === "object" ? JSON.parse(JSON.stringify(message.hostWorld)) : this._hostWorldSnapshot(), delta = message.delta ?? {}; hostWorld.revision = Math.max(Number(hostWorld.revision) || 0, revision);
     if (delta.openedChest) { const floor = String(Math.max(1, Number(delta.openedChest.floor) || 1)), chestId = String(delta.openedChest.chestId ?? ""); hostWorld.openedChestIds[floor] ??= []; if (chestId && !hostWorld.openedChestIds[floor].includes(chestId)) hostWorld.openedChestIds[floor].push(chestId); }
     if (delta.floorSeed) { const floor = String(Math.max(1, Number(delta.floorSeed.floor) || 1)); hostWorld.floorSeeds ??= {}; hostWorld.floorSeeds[floor] = delta.floorSeed.seed; }
-    if (delta.defeatedBoss) { const floor = Math.max(10, Number(delta.defeatedBoss.floor) || 10); hostWorld.defeatedBossFloors ??= []; if (!hostWorld.defeatedBossFloors.includes(floor)) hostWorld.defeatedBossFloors.push(floor); }
+    if (delta.defeatedBoss) { const floor = Number(delta.defeatedBoss.floor); hostWorld.defeatedBossFloors = normalizedCampaignFloors(hostWorld.defeatedBossFloors); if (Number.isInteger(floor) && floor >= CAMPAIGN_FLOOR_MIN && floor <= CAMPAIGN_FLOOR_MAX && !hostWorld.defeatedBossFloors.includes(floor)) hostWorld.defeatedBossFloors.push(floor); }
+    if (delta.claimedBossReward) { const floor = Number(delta.claimedBossReward.floor); hostWorld.claimedBossRewardFloors = normalizedCampaignFloors(hostWorld.claimedBossRewardFloors); if (Number.isInteger(floor) && floor >= CAMPAIGN_FLOOR_MIN && floor <= CAMPAIGN_FLOOR_MAX && !hostWorld.claimedBossRewardFloors.includes(floor)) hostWorld.claimedBossRewardFloors.push(floor); }
+    if (delta.campaignFloorState) { const floor = Number(delta.campaignFloorState.floor); hostWorld.campaignFloorStates = normalizedCampaignFloorStates(hostWorld.campaignFloorStates); if (Number.isInteger(floor) && floor >= CAMPAIGN_FLOOR_MIN && floor <= CAMPAIGN_FLOOR_MAX) hostWorld.campaignFloorStates[String(floor)] = normalizedCampaignFloorState(delta.campaignFloorState.state); }
+    hostWorld.campaignFloorStates = normalizedCampaignFloorStates(hostWorld.campaignFloorStates);
     const result = this.onHostWorldUpdate({ kind: "hostWorldSnapshot", hostWorld, ownerId, revision }); if (!result?.ok) { this.recoverySettlementFailed = true; return result; }
     this.hostWorldRevision = Math.max(this.hostWorldRevision, revision); this.processedHostWorldDeltas.add(eventKey); if (this.processedHostWorldDeltas.size > 256) this.processedHostWorldDeltas.delete(this.processedHostWorldDeltas.values().next().value); acknowledge();
   }
@@ -4068,17 +4135,23 @@ export class OnlinePartyController {
     const opened = source.openedChestIds && typeof source.openedChestIds === "object" ? source.openedChestIds : {};
     const soloOpened = state.player?.openedChests && typeof state.player.openedChests === "object" ? state.player.openedChests : {};
     const floors = new Set([...Object.keys(opened), ...Object.keys(soloOpened)]);
+    const defeated = Array.isArray(source.defeatedBossFloors) ? source.defeatedBossFloors : [];
     const onlineClears = Array.isArray(state.onlineParty?.firstCoopBossClears) ? state.onlineParty.firstCoopBossClears : [];
     const bossKills = Object.entries(state.player?.bossKills ?? {}).filter(([, value]) => Number(value) > 0).map(([floor]) => Number(floor));
     const bossRewards = Object.keys(state.player?.bossRewards ?? {}).map(Number);
     const claimed = Array.isArray(source.claimedBossRewardFloors) ? source.claimedBossRewardFloors : [];
+    const campaignFloorStates = normalizedCampaignFloorStates(source.campaignFloorStates);
+    const campaignFloors = state.campaign100?.floors && typeof state.campaign100.floors === "object" && !Array.isArray(state.campaign100.floors) ? state.campaign100.floors : {};
+    const campaignDefeated = [];
+    for (const [rawFloor, localFloorState] of Object.entries(campaignFloors)) { const floor = Number(rawFloor); if (!Number.isInteger(floor) || floor < CAMPAIGN_FLOOR_MIN || floor > CAMPAIGN_FLOOR_MAX) continue; const key = String(floor); campaignFloorStates[key] = mergeCampaignHostFloorState(campaignFloorStates[key], localFloorState); if (localFloorState?.bossDefeated) campaignDefeated.push(floor); }
     const savedSeeds = state.player?.floorSeeds && typeof state.player.floorSeeds === "object" ? state.player.floorSeeds : {}, onlineSeeds = source.floorSeeds && typeof source.floorSeeds === "object" ? source.floorSeeds : {};
-    return { revision: Math.max(this.hostWorldRevision, Number(source.revision) || 0), openedChestIds: Object.fromEntries([...floors].map(floor => [String(floor), [...new Set([...(Array.isArray(opened[floor]) ? opened[floor] : []), ...(Array.isArray(soloOpened[floor]) ? soloOpened[floor] : [])].map(String).slice(0, 200))]])), floorSeeds: { ...savedSeeds, ...onlineSeeds }, defeatedBossFloors: [...new Set([...onlineClears, ...bossKills, ...bossRewards].map(Number).filter(floor => floor > 0 && floor % 10 === 0))].slice(0, 1000), claimedBossRewardFloors: [...new Set([...claimed, ...bossRewards].map(Number).filter(floor => floor > 0 && floor % 10 === 0))].slice(0, 1000) };
+    const claimedBossRewardFloors = normalizedCampaignFloors(claimed);
+    return { revision: Math.max(this.hostWorldRevision, Number(source.revision) || 0), openedChestIds: Object.fromEntries([...floors].map(floor => [String(floor), [...new Set([...(Array.isArray(opened[floor]) ? opened[floor] : []), ...(Array.isArray(soloOpened[floor]) ? soloOpened[floor] : [])].map(String).slice(0, 200))]])), floorSeeds: { ...savedSeeds, ...onlineSeeds }, defeatedBossFloors: normalizedCampaignFloors([...defeated, ...onlineClears, ...bossKills, ...bossRewards, ...campaignDefeated]), claimedBossRewardFloors, campaignFloorStates };
   }
 
   _hostWorldNetworkSnapshot() {
     const full = this._hostWorldSnapshot(), selected = Math.max(1, Number(this.roomState?.selectedFloor) || 1);
-    const snapshot = { revision: full.revision, floorSeeds: {}, openedChestIds: {}, defeatedBossFloors: full.defeatedBossFloors, claimedBossRewardFloors: full.claimedBossRewardFloors };
+    const snapshot = { revision: full.revision, floorSeeds: {}, openedChestIds: {}, defeatedBossFloors: full.defeatedBossFloors, claimedBossRewardFloors: full.claimedBossRewardFloors, campaignFloorStates: full.campaignFloorStates };
     const secretRun = this.getState?.()?.secretRooms?.run;
     if (secretRun && typeof secretRun === "object") {
       const id = String(secretRun.id ?? "").slice(0, 120), seed = Math.max(1, Math.min(0x7fffffff, Math.floor(Number(secretRun.seed) || 1)));

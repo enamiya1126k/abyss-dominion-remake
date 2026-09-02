@@ -1,4 +1,5 @@
 import { prepareCoopExpeditionV206 } from "./CoopGimmicks.js";
+import { campaignFloorToLegacyDepth } from "./CampaignFloorScale.js";
 
 const RARITY_ORDER = Object.freeze(["N", "R", "SR", "SSR", "UR", "LR"]);
 
@@ -53,14 +54,15 @@ export function personalBonusDraw(random = Math.random, { floor = 1, resonance =
   const chance = Math.min(.4, (premium ? .25 : .18) + Math.max(0, Number(resonance)) * .03);
   if (random() >= chance) return null;
   const roll = random();
-  if (roll < .42) return { reward: { gold: Math.max(500, Math.round((Number(floor) + 10) * (premium ? 280 : 130))) }, label: "追加GOLD" };
+  const rewardDepth = campaignFloorToLegacyDepth(floor);
+  if (roll < .42) return { reward: { gold: Math.max(500, Math.round((rewardDepth + 10) * (premium ? 280 : 130))) }, label: "追加GOLD" };
   if (roll < .68) return { reward: { captureCrystals: premium ? 2 : 1 }, label: "追加捕獲結晶" };
   const rarityRoll = random(), rarity = rarityRoll > .985 ? "LR" : rarityRoll > .90 ? "UR" : rarityRoll > .64 ? "SSR" : "SR";
   return { reward: { randomEquipmentRarity: rarity }, label: `${rarity}装備`, rarity };
 }
 
 export function firstClearEquipmentRarity(floor = 1) {
-  const value = Math.max(1, Number(floor) || 1);
+  const value = campaignFloorToLegacyDepth(floor);
   if (value >= 1000) return "LR";
   if (value >= 500) return "UR";
   if (value >= 100) return "SSR";

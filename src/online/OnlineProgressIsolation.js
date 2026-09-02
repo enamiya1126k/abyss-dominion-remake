@@ -492,6 +492,7 @@ export function applyLegacyProgressRecovery(state, candidate, requestedFloor, no
   online.hostWorld = object(online.hostWorld);
   online.hostWorld.openedChestIds = numericFloorMap(online.hostWorld.openedChestIds, targetFloor);
   online.hostWorld.floorSeeds = numericFloorMap(online.hostWorld.floorSeeds, targetFloor);
+  online.hostWorld.campaignFloorStates = numericFloorMap(online.hostWorld.campaignFloorStates, targetFloor);
   online.hostWorld.defeatedBossFloors = (Array.isArray(online.hostWorld.defeatedBossFloors) ? online.hostWorld.defeatedBossFloors : []).filter(value => Number(value) <= targetFloor);
   online.hostWorld.claimedBossRewardFloors = (Array.isArray(online.hostWorld.claimedBossRewardFloors) ? online.hostWorld.claimedBossRewardFloors : []).filter(value => Number(value) <= targetFloor);
   online.activeExpeditionRunId = null;

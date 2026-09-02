@@ -2,6 +2,8 @@ const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
 const safeFloor=value=>clamp(Math.floor(Number(value)||1),1,10000);
 const safeRandom=random=>typeof random==="function"?random:Math.random;
 const roll=(random,min,max)=>min+Math.floor(safeRandom(random)()*(max-min+1));
+const EQUIPMENT_SLOTS=Object.freeze(["weapon","armor","accessory"]);
+const equipmentSlot=random=>EQUIPMENT_SLOTS[Math.floor(safeRandom(random)()*EQUIPMENT_SLOTS.length)]??EQUIPMENT_SLOTS[0];
 
 export const TREASURE_BALANCE_VERSION=200;
 export const TREASURE_ROOM_MIMIC_RATE=.15;
@@ -43,12 +45,11 @@ export function rollTreasureChestReward({floor=1,kind="box",locked=false,treasur
   reward.potions=2;reward.gold=Math.max(1,Math.round(base*1.5));
  }else if(chestKind==="box"){
   reward.gold=Math.max(1,Math.round(base*(treasureRoom?4:3)));
-  if(rng()<.6)reward.equipment={rarity:rarityRoll(chestKind,false,luck,rng),slot:"weapon",level:treasureEquipmentLevel(depth,{kind:chestKind,random:rng}),plus:roll(rng,0,Math.min(8,1+Math.floor(depth/250)))};
+  if(rng()<.6)reward.equipment={rarity:rarityRoll(chestKind,false,luck,rng),slot:equipmentSlot(rng),level:treasureEquipmentLevel(depth,{kind:chestKind,random:rng}),plus:roll(rng,0,Math.min(8,1+Math.floor(depth/250)))};
  }else{
   reward.gold=Math.max(1,Math.round(base*(locked?8:chestKind==="radiant"?4:2)));
   reward.crystals=locked?roll(rng,5,9):chestKind==="radiant"?roll(rng,1,3):0;
-  const slots=["weapon","armor","accessory"];
-  reward.equipment={rarity:rarityRoll(chestKind,locked,luck,rng),slot:slots[Math.floor(rng()*slots.length)],level:treasureEquipmentLevel(depth,{kind:chestKind,locked,random:rng}),plus:locked?roll(rng,12,30):chestKind==="radiant"?roll(rng,5,16):roll(rng,2,10)}
+  reward.equipment={rarity:rarityRoll(chestKind,locked,luck,rng),slot:equipmentSlot(rng),level:treasureEquipmentLevel(depth,{kind:chestKind,locked,random:rng}),plus:locked?roll(rng,12,30):chestKind==="radiant"?roll(rng,5,16):roll(rng,2,10)}
  }
  return reward
 }

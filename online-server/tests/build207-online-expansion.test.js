@@ -161,7 +161,7 @@ test("build207 owner disconnect keeps the current floor but blocks the next floo
   assert.equal(room.expedition.coop.ownerDisconnectedAt, 0);
 });
 
-test("build207 boss first-clear equipment and unlock belong only to the world owner", () => {
+test("build301 boss first-clear removes the legacy equipment contract while unlock remains owner-only", () => {
   let now = 200_000;
   const store = new RoomStore({ now: () => now, randomRoomCode: () => "BOSS27" });
   const { players, room } = readyRoom(store, 2, { maxFloor: 20 });
@@ -173,6 +173,7 @@ test("build207 boss first-clear equipment and unlock belong only to the world ow
   const battle = room.expedition.battle;
   battle.enemies.forEach(enemy => { enemy.hp = 0; });
   store._finishBattleVictory(room, battle);
+  const trophyUnlocked = room.expedition.objects.some(object => object.type === "campaignTrophy");
   for (const player of players) player.session.dungeonPosition = { ...room.expedition.exit, facing: "down" };
   store._updateStairGathering(room);
   now += 3_001;
@@ -180,9 +181,9 @@ test("build207 boss first-clear equipment and unlock belong only to the world ow
   const ownerReward = players[0].session.pendingRewards.find(entry => entry.source?.bossFirstClear);
   const ownerUnlock = players[0].session.pendingRewards.find(entry => entry.source?.kind === "floorClear");
   const helperReward = players[1].session.pendingRewards.find(entry => entry.source?.bossAssist);
-  assert.ok(ownerReward);
-  assert.equal(ownerReward.reward.randomEquipmentRarity, undefined);
-  assert.equal(firstClearEquipmentRarity(10), "R");
+  assert.equal(ownerReward, undefined);
+  assert.equal(trophyUnlocked, true);
+  assert.equal(firstClearEquipmentRarity(10), "SSR");
   assert.equal(ownerUnlock.reward.leaderFloorUnlock, 11);
   assert.ok(helperReward);
   assert.equal(helperReward.reward.randomEquipmentRarity, undefined);

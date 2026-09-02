@@ -1,31 +1,31 @@
-import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.0.0-build300";
-import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=2.11.82-build258";
+import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.0.1-build301";
+import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=3.0.1-build301";
 import{maxMp,normalizeSkillProgress,allLearnedSkills,recommendedSkills,recommendedSkillLoadout,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=2.11.83-build259";
-import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=3.0.0-build300";
+import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=3.0.1-build301";
 import{normalizeFloorBossChallengeState}from"../core/FloorBossChallengeSystem.js?v=2.11.82-build258";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionById}from"../data/floorBosses.js?v=2.11.30-build195";
-import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=2.11.0-build164";
+import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=3.0.1-build301";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=2.11.0-build164";
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=2.11.0-build164";
 import{SPECIES}from"../data/species.js?v=3.0.0-build300";
 import{JUVENILE_AMALGA_SKILLS}from"../data/raidSpecies.js?v=2.11.82-build258";
 import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.11.0-build164";
 import{normalizeWeaponMastery}from"./WeaponMastery.js?v=2.11.82-build258";
-import{normalizeOnlineProgressIsolation,recoverInterruptedGuestProgress}from"../online/OnlineProgressIsolation.js?v=2.11.79-build255";
+import{normalizeOnlineProgressIsolation,recoverInterruptedGuestProgress}from"../online/OnlineProgressIsolation.js?v=3.0.1-build301";
 
-import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=2.11.0-build164";
-import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=2.11.0-build164";
+import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=3.0.1-build301";
+import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=3.0.1-build301";
 import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=2.11.82-build258";
-import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=2.11.0-build164";
-import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=2.11.82-build258";
-import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=2.11.82-build258";
-import{clearSerialRedemptionLedgerForFullReset,normalizeSerialCodeState,restoreSerialRedemptionLedgerAfterFailedReset}from"../core/SerialCodeSystem.js?v=2.11.82-build258";
+import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=3.0.1-build301";
+import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=3.0.1-build301";
+import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=3.0.1-build301";
+import{clearSerialRedemptionLedgerForFullReset,normalizeSerialCodeState,restoreSerialRedemptionLedgerAfterFailedReset}from"../core/SerialCodeSystem.js?v=3.0.1-build301";
 import{normalizeNoticeState}from"../core/NoticeSystem.js?v=2.11.86-build262";
-import{syncCollectionRewardInbox}from"../core/CollectionRewardSystem.js?v=2.11.86-build262";
-import{normalizeAchievementState,syncAchievementRewardInbox}from"../core/AchievementRewardSystem.js?v=2.11.86-build262";
-import{normalizeGachaDrawHistory}from"../core/GachaBalanceSystem.js?v=3.0.0-build300";
-import{CAMPAIGN_MAX_FLOOR,legacyFloorToCampaignFloor,normalizeCampaignState}from"../core/Campaign100System.js?v=3.0.0-build300";
-import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=2.11.0-build164";
+import{syncCollectionRewardInbox}from"../core/CollectionRewardSystem.js?v=3.0.1-build301";
+import{normalizeAchievementState,syncAchievementRewardInbox}from"../core/AchievementRewardSystem.js?v=3.0.1-build301";
+import{normalizeGachaDrawHistory,normalizeGachaPityState}from"../core/GachaBalanceSystem.js?v=3.0.1-build301";
+import{CAMPAIGN_MAX_FLOOR,legacyFloorToCampaignFloor,normalizeCampaignState,campaignFloorState}from"../core/Campaign100System.js?v=3.0.1-build301";
+import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=3.0.1-build301";
 import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=2.11.0-build164";
 import{normalizeEquipmentIdentity}from"../data/equipment.js?v=2.11.30-build195";
 import{createContextualGuideState,normalizeContextualGuide}from"../core/ContextualGuideSystem.js?v=2.11.34-build199";
@@ -34,6 +34,9 @@ const RAID_JUVENILE_SPECIES_ID="juvenile_amalga";
 const RAID_JUVENILE_BOSS_ID="abyss-amalga";
 const RAID_JUVENILE_VISUAL_BASE="./assets/online/raid/juvenile-amalga";
 const SKILL_RECOMMENDATION_PROFILE_VERSION=199;
+// build301 section dungeons can span six 27-tile slots plus their outer margin.
+// Keep persisted tilemaps bounded, but never truncate a legitimate 168-tile axis.
+const EXPEDITION_MAP_MAX_DIMENSION=168;
 const LEGACY_RAID_JUVENILE_SKILL_IDS=Object.freeze([
  "ancient_dragon__identity_1","ancient_dragon__identity_2","ancient_dragon__identity_3","ancient_dragon__identity_4"
 ]);
@@ -120,8 +123,15 @@ function normalizeExpeditionSnapshot(value){
  const sourceWorld=value.world;
  if(!sourceWorld||typeof sourceWorld!=="object"||!Array.isArray(sourceWorld.tiles)||!sourceWorld.start||!sourceWorld.exit)return null;
  const world={...sourceWorld};
- world.cols=Math.floor(finiteNumber(world.cols,world.tiles[0]?.length??1,1,100));
- world.rows=Math.floor(finiteNumber(world.rows,world.tiles.length,1,100));
+ const sourceTiles=sourceWorld.tiles.slice(0,EXPEDITION_MAP_MAX_DIMENSION),rows=Math.max(1,sourceTiles.length),cols=Math.max(1,Math.min(EXPEDITION_MAP_MAX_DIMENSION,sourceTiles.reduce((max,row)=>Math.max(max,Array.isArray(row)?row.length:0),0)));
+ world.tiles=Array.from({length:rows},(_,rowIndex)=>{const row=Array.isArray(sourceTiles[rowIndex])?sourceTiles[rowIndex].slice(0,cols):[];while(row.length<cols)row.push(1);return row});
+ // Tile dimensions are authoritative. This also repairs snapshots written with
+ // the former 100-tile cols/rows clamp while their complete tiles survived.
+ world.cols=cols;
+ world.rows=rows;
+ const normalizeWorldPoint=(point,fallback={x:0,y:0})=>({...point,x:finiteNumber(point?.x,fallback.x,0,world.cols-1),y:finiteNumber(point?.y,fallback.y,0,world.rows-1)});
+ world.start=normalizeWorldPoint(world.start);
+ world.exit=normalizeWorldPoint(world.exit,world.start);
  world.encountering=false;
  world.steps=Math.floor(finiteNumber(world.steps,0,0,Number.MAX_SAFE_INTEGER));
  world.nextEncounter=Math.floor(finiteNumber(world.nextEncounter,8,0,Number.MAX_SAFE_INTEGER));
@@ -137,7 +147,7 @@ function normalizeExpeditionSnapshot(value){
   oy:finiteNumber(value.cameraData?.oy,0,Number.MIN_SAFE_INTEGER,Number.MAX_SAFE_INTEGER),
   manual:Boolean(value.cameraData?.manual)
  };
- const partyTrail=(Array.isArray(value.partyTrail)?value.partyTrail:[]).slice(0,512).map(point=>({x:finiteNumber(point?.x,x,-100,100),y:finiteNumber(point?.y,y,-100,100)}));
+ const partyTrail=(Array.isArray(value.partyTrail)?value.partyTrail:[]).slice(0,512).map(point=>({x:finiteNumber(point?.x,x,0,world.cols-1),y:finiteNumber(point?.y,y,0,world.rows-1)}));
  return{floor:Math.floor(finiteNumber(value.floor,1,1,10000)),world,player,partyTrail,cameraData,savedAt:typeof value.savedAt==="string"?value.savedAt:new Date(0).toISOString()};
 }
 function normalizeInventory(inventory){
@@ -241,15 +251,37 @@ export function normalizeRaidJuvenileContract(monster){
  monster.raidContractProfileVersion=1;
  return true;
 }
+function normalizeOnlineCampaignFloorState(value={}){
+ const collectedKeyIds=[...new Set((Array.isArray(value?.collectedKeyIds)?value.collectedKeyIds:[]).map(entry=>String(entry??"").slice(0,80)).filter(Boolean))].slice(0,3),rawLocks=Math.floor(finiteNumber(value?.trophyLocksOpened,0,0,3)),keysCollected=Math.max(collectedKeyIds.length,Math.floor(finiteNumber(value?.keysCollected,0,0,3)),rawLocks);
+ const trophyLocksOpened=Math.min(keysCollected,rawLocks);return{runId:String(value?.runId??"").slice(0,120)||null,keysCollected,trophyLocksOpened,collectedKeyIds,hotSpringUsed:Boolean(value?.hotSpringUsed),trophyMythicClaimed:Boolean(value?.trophyMythicClaimed)||trophyLocksOpened>=3,replayActive:Boolean(value?.replayActive),bossDefeatedThisRun:Boolean(value?.bossDefeatedThisRun)}
+}
+function normalizeOnlineCampaignFloorStates(value){
+ const source=value&&typeof value==="object"&&!Array.isArray(value)?value:{},result={};for(const[rawFloor,state]of Object.entries(source).slice(0,CAMPAIGN_MAX_FLOOR)){const floor=Math.floor(Number(rawFloor));if(floor<1||floor>CAMPAIGN_MAX_FLOOR)continue;result[String(floor)]=normalizeOnlineCampaignFloorState(state)}return result
+}
+function migrateLegacyOnlineCampaignLedgers(state,from){
+ if(!Number.isFinite(Number(from))||Number(from)>70)return{migrated:false,defeatedFloors:[],claimedFloors:[]};const online=state.onlineParty&&typeof state.onlineParty==="object"&&!Array.isArray(state.onlineParty)?state.onlineParty:{},host=online.hostWorld&&typeof online.hostWorld==="object"&&!Array.isArray(online.hostWorld)?online.hostWorld:{};
+ const remapList=list=>[...new Set((Array.isArray(list)?list:[]).map(legacyFloorToCampaignFloor))].slice(0,CAMPAIGN_MAX_FLOOR),opened={};for(const[rawFloor,ids]of Object.entries(host.openedChestIds&&typeof host.openedChestIds==="object"?host.openedChestIds:{})){const oldFloor=Math.max(1,Math.floor(Number(rawFloor)||1)),floor=legacyFloorToCampaignFloor(oldFloor),key=String(floor),prefix=`${oldFloor}-`;opened[key]??=[];for(const rawId of Array.isArray(ids)?ids:[]){const id=String(rawId??"").slice(0,80),mapped=id.startsWith(prefix)?`${floor}-${id.slice(prefix.length)}`:id;if(mapped&&!opened[key].includes(mapped))opened[key].push(mapped)}opened[key]=opened[key].slice(0,200)}
+ online.firstCoopBossClears=remapList(online.firstCoopBossClears);host.defeatedBossFloors=remapList(host.defeatedBossFloors);host.claimedBossRewardFloors=remapList(host.claimedBossRewardFloors);host.openedChestIds=opened;host.floorSeeds={};online.hostWorld=host;state.onlineParty=online;return{migrated:true,defeatedFloors:[...new Set([...online.firstCoopBossClears,...host.defeatedBossFloors,...host.claimedBossRewardFloors])],claimedFloors:[...host.claimedBossRewardFloors]}
+}
+function reconcileLegacyCampaignBossLedgers(state,from,onlineMigration={}){
+ if(!(Number(from)<71))return;state.player??={};const sourceKills=state.player.bossKills&&typeof state.player.bossKills==="object"&&!Array.isArray(state.player.bossKills)?{...state.player.bossKills}:{},sourceRewards=state.player.bossRewards&&typeof state.player.bossRewards==="object"&&!Array.isArray(state.player.bossRewards)?{...state.player.bossRewards}:{},rawFloors=state.campaign100?.floors&&typeof state.campaign100.floors==="object"&&!Array.isArray(state.campaign100.floors)?state.campaign100.floors:{},offlineTruth=new Set(Object.entries(rawFloors).filter(([,entry])=>Boolean(entry?.bossDefeated)).map(([floor])=>Math.floor(Number(floor))).filter(floor=>floor>=1&&floor<=CAMPAIGN_MAX_FLOOR)),canonicalRewards=new Map();
+ for(const[rawFloor,reward]of Object.entries(sourceRewards)){const floor=Math.floor(Number(rawFloor)),partial=String(reward??"").match(/^CAMPAIGN_TROPHY_([123])$/),complete=reward==="CAMPAIGN_TROPHY_COMPLETE";if(floor>=1&&floor<=CAMPAIGN_MAX_FLOOR&&(partial||complete))canonicalRewards.set(floor,complete?3:Number(partial[1]))}
+ normalizeCampaignState(state);const defeated=new Set([...(onlineMigration.defeatedFloors??[]).map(Number).filter(floor=>Number.isInteger(floor)&&floor>=1&&floor<=CAMPAIGN_MAX_FLOOR),...offlineTruth,...canonicalRewards.keys()]);if(Number(from)<70){for(const rawFloor of new Set([...Object.keys(sourceKills),...Object.keys(sourceRewards)])){const floor=Math.floor(Number(rawFloor));if(floor>=1&&floor<=CAMPAIGN_MAX_FLOOR&&(Number(sourceKills[rawFloor])>0||sourceRewards[rawFloor]))defeated.add(floor)}}
+ for(const floor of defeated){const entry=campaignFloorState(state,floor);entry.bossDiscovered=true;entry.bossDefeated=true;entry.exitUnlocked=true}
+ for(const[floor,locks]of canonicalRewards){const entry=campaignFloorState(state,floor),safeLocks=Math.max(0,Math.min(3,Number(locks)||0));entry.bossDiscovered=true;entry.bossDefeated=true;entry.exitUnlocked=true;entry.trophyLocksOpened=Math.max(entry.trophyLocksOpened,safeLocks);entry.keysCollected=Math.max(entry.keysCollected,entry.trophyLocksOpened);for(let index=1;index<=entry.keysCollected;index++)if(!entry.keyIds.includes(`${floor}-campaign-key-${index}`))entry.keyIds.push(`${floor}-campaign-key-${index}`);if(entry.trophyLocksOpened>=3)entry.trophyClaimed=true}
+ if(state.campaign100?.floors?.[String(CAMPAIGN_MAX_FLOOR)]?.bossDefeated)state.campaign100.finalUnlocked=true;const nextKills={},nextRewards={};for(let floor=1;floor<=CAMPAIGN_MAX_FLOOR;floor++){const entry=state.campaign100?.floors?.[String(floor)];if(!entry?.bossDefeated)continue;const preserveCount=Number(from)<70||offlineTruth.has(floor);nextKills[String(floor)]=preserveCount?Math.max(1,Math.floor(Number(sourceKills[floor])||0)):1;if(entry.trophyLocksOpened>=3||entry.trophyClaimed)nextRewards[String(floor)]="CAMPAIGN_TROPHY_COMPLETE";else if(entry.trophyLocksOpened>0)nextRewards[String(floor)]=`CAMPAIGN_TROPHY_${Math.min(2,entry.trophyLocksOpened)}`}
+ state.player.bossKills=nextKills;state.player.bossRewards=nextRewards;state.player.pendingBossRewards={}
+}
 function initialState(){
  const monsters=[
   createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
  ];
-const state={schemaVersion:SAVE_SCHEMA_VERSION,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false,gameClear1000:false,ending1000Played:false,gameClear10000:false,ending10000Played:false,secondWorldEntered:false,tenGodObserved:false,individualValuesDisabled:true},worldPhase:0,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},pendingBossRewards:{},bossKills:{},dangerLevel:1,exploreRun:{id:null,floors:{}}},expeditionSnapshot:null,monsters,party:monsters.map(m=>m.id),recentEncounter:null,recentBossEncounter:null,recentBattleMemory:null,battleMemoryAttempts:{},equipment:[],reserveEquipment:[],bossEquipmentVault:[],equipmentCrafting:{rerolls:0,goldSpent:0,maxLocksUsed:0},inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,highManaPotions:0,partyManaPotions:0,fullManaPotions:0,partyFullManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,experienceItems:0,experienceItemsMedium:0,experienceItemsLarge:0,experienceItemsUltra:0,captureCrystals:5,abyssKeys:0},onlineParty:{claimedRewards:[],totalGold:0,totalCaptureCrystals:0,expeditionsCompleted:0,battlesWon:0,captures:0,raidWins:0,raidMaterials:0,raidExchange:{},raidWorld:{},tradeEscrow:{},completedTradeIds:[],tradeHistory:[],processedVitalMutationIds:[],processedBattleEventIds:[],processedExpeditionResultIds:[],activeExpeditionRunId:null,activeManualExploreRunId:null,activeExpeditionOwnerId:null,progressIsolation:{version:1,activeGuestSession:null,interruptedRecovery:{},dismissedLegacyCandidates:[],lastLegacyRepair:null},hostWorld:{ownerId:null,openedChestIds:{},floorSeeds:{},defeatedBossFloors:[],claimedBossRewardFloors:[]}},shop:{captureDaily:{key:null,count:0}},magicCircles:{unlocked:{},instances:[],owned:{},goldSpent:0,version:3},settings:{minimapVisible:false,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,audioEnabled:true,musicVolume:.28,sfxVolume:.45,mapTogglePosition:null,minimapPanelPosition:null,autoExploreButtonPosition:null,minimapPanelPosition:null,autoExploreButtonPosition:null,explorePartyHudCollapsed:false,exploreAutoMode:"off",exploreAutoMenuOpen:false,gauntletPartyCollapsed:false,tutorialSeen:{},tutorialDefeatsSeen:0,contextualGuide:createContextualGuideState(monsters.length),gmFloorUnlockMax:0},gameMaster:{claimedAt:null,floorUnlockMax:0},gacha:{firstTenUsed:false,tutorialFreeSummons:0,lastDailyKey:null,guerrilla:{salt:null,lastCycle:null},drawHistory:{}},notices:{readIds:[],dailyGift:{dayKey:null,claimedDayKey:null,claimedAt:null},rewardInbox:[]},collectionRewards:{queuedMilestones:[],lastOwnedCount:1,total:0},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{version:1,unlockedIds:[],queuedIds:[],unlockedAt:{}},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0,combatPower:{highest:0,previous:0,updatedAt:null,history:[]}},serialCodes:{redeemed:{}},secretRooms:{run:null,activeRoom:null},abyssSkillTree:createAbyssSkillTreeState(),secondWorld:{randomEvents:{resolvedFloors:[],counts:{}},elites:{encountered:0,defeated:0,byAffix:{},bySpecies:{}}},floorBossChallenges:{discovered:{},encounters:{},fragments:{},victories:{},contracts:{},processedResults:{}},endgame:{processedSpecialResults:{},teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0,highestRewardedStage:0},trials:{battle:1,loop:1,cleared:[],run:null,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastTriggeredFloor:0,records:{},fragments:{},craftCounts:{},craftedGear:[],processedFragmentResults:{},manualChallenges:{dailyKey:null,dailyAttempts:0,unlocks:{}},rescue:{post1000Encounters:0,consecutiveLosses:0,lastResult:null}}}};
+const state={schemaVersion:SAVE_SCHEMA_VERSION,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false,gameClear1000:false,ending1000Played:false,gameClear10000:false,ending10000Played:false,secondWorldEntered:false,tenGodObserved:false,individualValuesDisabled:true},worldPhase:0,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},openedChests:{},bossRewards:{},pendingBossRewards:{},bossKills:{},dangerLevel:1,exploreRun:{id:null,floors:{}}},expeditionSnapshot:null,monsters,party:monsters.map(m=>m.id),recentEncounter:null,recentBossEncounter:null,recentBattleMemory:null,battleMemoryAttempts:{},equipment:[],reserveEquipment:[],bossEquipmentVault:[],equipmentCrafting:{rerolls:0,goldSpent:0,maxLocksUsed:0},inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,highManaPotions:0,partyManaPotions:0,fullManaPotions:0,partyFullManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,experienceItems:0,experienceItemsMedium:0,experienceItemsLarge:0,experienceItemsUltra:0,captureCrystals:5,abyssKeys:0},onlineParty:{claimedRewards:[],totalGold:0,totalCaptureCrystals:0,expeditionsCompleted:0,battlesWon:0,captures:0,raidWins:0,raidMaterials:0,raidExchange:{},raidWorld:{},tradeEscrow:{},completedTradeIds:[],tradeHistory:[],processedVitalMutationIds:[],processedBattleEventIds:[],processedExpeditionResultIds:[],activeExpeditionRunId:null,activeManualExploreRunId:null,activeExpeditionOwnerId:null,progressIsolation:{version:1,activeGuestSession:null,interruptedRecovery:{},dismissedLegacyCandidates:[],lastLegacyRepair:null},hostWorld:{ownerId:null,openedChestIds:{},floorSeeds:{},defeatedBossFloors:[],claimedBossRewardFloors:[]}},shop:{captureDaily:{key:null,count:0}},magicCircles:{unlocked:{},instances:[],owned:{},goldSpent:0,version:3},settings:{minimapVisible:false,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,audioEnabled:true,musicVolume:.28,sfxVolume:.45,mapTogglePosition:null,minimapPanelPosition:null,autoExploreButtonPosition:null,minimapPanelPosition:null,autoExploreButtonPosition:null,explorePartyHudCollapsed:false,exploreAutoMode:"off",exploreAutoMenuOpen:false,gauntletPartyCollapsed:false,tutorialSeen:{},tutorialDefeatsSeen:0,contextualGuide:createContextualGuideState(monsters.length),gmFloorUnlockMax:0},gameMaster:{claimedAt:null,floorUnlockMax:0},gacha:{firstTenUsed:false,tutorialFreeSummons:0,lastDailyKey:null,guerrilla:{salt:null,lastCycle:null},drawHistory:{},pity:normalizeGachaPityState({})},notices:{readIds:[],dailyGift:{dayKey:null,claimedDayKey:null,claimedAt:null},rewardInbox:[]},collectionRewards:{queuedMilestones:[],lastOwnedCount:1,total:0},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{version:1,unlockedIds:[],queuedIds:[],unlockedAt:{}},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0,combatPower:{highest:0,previous:0,updatedAt:null,history:[]}},serialCodes:{redeemed:{}},secretRooms:{run:null,activeRoom:null},abyssSkillTree:createAbyssSkillTreeState(),secondWorld:{randomEvents:{resolvedFloors:[],counts:{}},elites:{encountered:0,defeated:0,byAffix:{},bySpecies:{}}},floorBossChallenges:{discovered:{},encounters:{},fragments:{},victories:{},contracts:{},processedResults:{}},endgame:{processedSpecialResults:{},teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0,highestRewardedStage:0},trials:{battle:1,loop:1,cleared:[],run:null,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastTriggeredFloor:0,records:{},fragments:{},craftCounts:{},craftedGear:[],processedFragmentResults:{},manualChallenges:{dailyKey:null,dailyAttempts:0,unlocks:{}},rescue:{post1000Encounters:0,consecutiveLosses:0,lastResult:null}}}};
  state.onlineParty.firstCoopBossClears=[];
  state.onlineParty.completedExpeditionRunIds=[];
  state.onlineParty.coopContributionHistory=[];
  state.onlineParty.hostWorld.defeatedBossFloors=[];
+ state.onlineParty.hostWorld.campaignFloorStates={};
  normalizeReturnRewards(state);
  normalizeSerialCodeState(state);
  normalizeMagicCircleState(state);
@@ -268,13 +300,13 @@ export class SaveService{
   recoverInterruptedGuestProgress(s);
   s.flags??={};s.flags.abyssUnlocked??=false;s.flags.trueLevelCapRevealed??=false;s.flags.deepAbyssUnlocked??=false;s.flags.abyssKeyExchangePreviewUnlocked??=false;
   s.flags.individualValuesDisabled=true;
-  const legacy1000Clear=Number(s.player?.maxFloor??0)>1000||Boolean(s.player?.bossRewards?.[1000])||Number(s.player?.bossKills?.[1000]??0)>0||Boolean(s.flags.deepAbyssUnlocked);
+  const legacy1000Clear=from<70&&(Number(s.player?.maxFloor??0)>1000||Boolean(s.player?.bossRewards?.[1000])||Number(s.player?.bossKills?.[1000]??0)>0||Boolean(s.flags.deepAbyssUnlocked));
   s.flags.gameClear1000=Boolean(s.flags.gameClear1000||legacy1000Clear);
   s.flags.ending1000Played??=false;
-  const legacy10000Clear=Boolean(s.player?.bossRewards?.[10000])||Number(s.player?.bossKills?.[10000]??0)>0;
+  const legacy10000Clear=from<70&&(Boolean(s.player?.bossRewards?.[10000])||Number(s.player?.bossKills?.[10000]??0)>0);
   s.flags.gameClear10000=Boolean(s.flags.gameClear10000||legacy10000Clear);
   s.flags.ending10000Played??=false;
-  s.flags.secondWorldEntered=Boolean(s.flags.secondWorldEntered||Number(s.player?.maxFloor??0)>=1001);
+  s.flags.secondWorldEntered=Boolean(s.flags.secondWorldEntered||(from<70&&Number(s.player?.maxFloor??0)>=1001));
   s.flags.tenGodObserved??=false;
   s.flags.deepAbyssUnlocked=Boolean(s.flags.deepAbyssUnlocked||s.flags.gameClear1000||s.flags.secondWorldEntered);
   s.worldPhase=s.flags.gameClear1000?1:Math.max(0,Math.min(1,Number(s.worldPhase)||0));
@@ -285,6 +317,8 @@ export class SaveService{
    s.player.bossKills=remapLedger(s.player.bossKills);s.player.bossRewards=remapLedger(s.player.bossRewards);s.player.pendingBossRewards={};
    s.player.floorSeeds={};s.player.openedChests={};s.player.exploreRun={id:null,floors:{}};s.expeditionSnapshot=null;if(!s.activeBattle?.specialBattle)s.activeBattle=null;s.player.inRun=false;
   }
+  const onlineCampaignMigration=migrateLegacyOnlineCampaignLedgers(s,from);
+  reconcileLegacyCampaignBossLedgers(s,from,onlineCampaignMigration);
   s.player.gold=Math.floor(finiteNumber(s.player.gold,1000,0,Number.MAX_SAFE_INTEGER));
   s.player.crystals=Math.floor(finiteNumber(s.player.crystals,20,0,Number.MAX_SAFE_INTEGER));
   s.player.maxFloor=Math.floor(finiteNumber(s.player.maxFloor,1,1,CAMPAIGN_MAX_FLOOR));
@@ -296,6 +330,7 @@ export class SaveService{
   s.player.openedChests??={};
   s.player.bossRewards??={};
   s.player.pendingBossRewards=s.player.pendingBossRewards&&typeof s.player.pendingBossRewards==="object"&&!Array.isArray(s.player.pendingBossRewards)?s.player.pendingBossRewards:{};
+  if(from<=70)s.player.pendingBossRewards={};
   s.player.bossKills??={};
   s.player.dangerLevel??=1;
   s.player.exploreRun=normalizeExploreRun(s.player.exploreRun);
@@ -364,15 +399,16 @@ export class SaveService{
   s.onlineParty.activeExpeditionRunId=s.onlineParty.activeExpeditionRunId==null?null:String(s.onlineParty.activeExpeditionRunId).slice(0,120)||null;
   s.onlineParty.activeManualExploreRunId=s.onlineParty.activeManualExploreRunId==null?null:String(s.onlineParty.activeManualExploreRunId).slice(0,120)||null;
   s.onlineParty.activeExpeditionOwnerId=s.onlineParty.activeExpeditionOwnerId==null?null:String(s.onlineParty.activeExpeditionOwnerId).slice(0,24)||null;
-  s.onlineParty.firstCoopBossClears=Array.isArray(s.onlineParty.firstCoopBossClears)?[...new Set(s.onlineParty.firstCoopBossClears.map(value=>Math.floor(Number(value))).filter(value=>value>0&&value%10===0))].slice(0,1000):[];
+  s.onlineParty.firstCoopBossClears=Array.isArray(s.onlineParty.firstCoopBossClears)?[...new Set(s.onlineParty.firstCoopBossClears.map(value=>Math.floor(Number(value))).filter(value=>value>=1&&value<=CAMPAIGN_MAX_FLOOR))].slice(0,1000):[];
   s.onlineParty.hostWorld=s.onlineParty.hostWorld&&typeof s.onlineParty.hostWorld==="object"&&!Array.isArray(s.onlineParty.hostWorld)?s.onlineParty.hostWorld:{openedChestIds:{}};
   s.onlineParty.hostWorld.ownerId=s.onlineParty.hostWorld.ownerId==null?null:String(s.onlineParty.hostWorld.ownerId).slice(0,24)||null;
   s.onlineParty.hostWorld.revision=Math.floor(finiteNumber(s.onlineParty.hostWorld.revision,0,0,Number.MAX_SAFE_INTEGER));
   s.onlineParty.hostWorld.openedChestIds=s.onlineParty.hostWorld.openedChestIds&&typeof s.onlineParty.hostWorld.openedChestIds==="object"&&!Array.isArray(s.onlineParty.hostWorld.openedChestIds)?s.onlineParty.hostWorld.openedChestIds:{};
   for(const floor of Object.keys(s.onlineParty.hostWorld.openedChestIds))s.onlineParty.hostWorld.openedChestIds[floor]=Array.isArray(s.onlineParty.hostWorld.openedChestIds[floor])?[...new Set(s.onlineParty.hostWorld.openedChestIds[floor].map(String).filter(Boolean))].slice(0,200):[];
   s.onlineParty.hostWorld.floorSeeds=s.onlineParty.hostWorld.floorSeeds&&typeof s.onlineParty.hostWorld.floorSeeds==="object"&&!Array.isArray(s.onlineParty.hostWorld.floorSeeds)?Object.fromEntries(Object.entries(s.onlineParty.hostWorld.floorSeeds).map(([floor,seed])=>[String(Math.max(1,Math.floor(Number(floor)||1))),Math.floor(finiteNumber(seed,0,0,0xffffffff))]).slice(0,10000)):{};
-  s.onlineParty.hostWorld.defeatedBossFloors=Array.isArray(s.onlineParty.hostWorld.defeatedBossFloors)?[...new Set(s.onlineParty.hostWorld.defeatedBossFloors.map(value=>Math.floor(Number(value))).filter(value=>value>0&&value%10===0))].slice(0,1000):[];
-  s.onlineParty.hostWorld.claimedBossRewardFloors=Array.isArray(s.onlineParty.hostWorld.claimedBossRewardFloors)?[...new Set(s.onlineParty.hostWorld.claimedBossRewardFloors.map(value=>Math.floor(Number(value))).filter(value=>value>0&&value%10===0))].slice(0,1000):[];
+  s.onlineParty.hostWorld.defeatedBossFloors=Array.isArray(s.onlineParty.hostWorld.defeatedBossFloors)?[...new Set(s.onlineParty.hostWorld.defeatedBossFloors.map(value=>Math.floor(Number(value))).filter(value=>value>=1&&value<=CAMPAIGN_MAX_FLOOR))].slice(0,1000):[];
+  s.onlineParty.hostWorld.claimedBossRewardFloors=Array.isArray(s.onlineParty.hostWorld.claimedBossRewardFloors)?[...new Set(s.onlineParty.hostWorld.claimedBossRewardFloors.map(value=>Math.floor(Number(value))).filter(value=>value>=1&&value<=CAMPAIGN_MAX_FLOOR))].slice(0,1000):[];
+  s.onlineParty.hostWorld.campaignFloorStates=normalizeOnlineCampaignFloorStates(s.onlineParty.hostWorld.campaignFloorStates);
   normalizeOnlineProgressIsolation(s);
   s.shop=s.shop&&typeof s.shop==="object"&&!Array.isArray(s.shop)?s.shop:{};
   s.shop.captureDaily=s.shop.captureDaily&&typeof s.shop.captureDaily==="object"&&!Array.isArray(s.shop.captureDaily)?s.shop.captureDaily:{key:null,count:0};
@@ -416,7 +452,7 @@ export class SaveService{
   s.settings.gmFloorUnlockMax=Math.floor(finiteNumber(s.settings.gmFloorUnlockMax,0,0,9998));
   s.gameMaster=s.gameMaster&&typeof s.gameMaster==="object"&&!Array.isArray(s.gameMaster)?s.gameMaster:{claimedAt:null,floorUnlockMax:0};
   s.gameMaster.floorUnlockMax=Math.floor(finiteNumber(s.gameMaster.floorUnlockMax??s.settings.gmFloorUnlockMax,0,0,9998));
-  s.gacha??={};s.gacha.firstTenUsed??=false;s.gacha.tutorialFreeSummons=Math.floor(finiteNumber(s.gacha.tutorialFreeSummons,0,0,1));s.gacha.lastDailyKey??=null;s.gacha.guerrilla=s.gacha.guerrilla&&typeof s.gacha.guerrilla==="object"&&!Array.isArray(s.gacha.guerrilla)?s.gacha.guerrilla:{salt:null,lastCycle:null};s.gacha.drawHistory=normalizeGachaDrawHistory(s.gacha.drawHistory);
+  s.gacha??={};s.gacha.firstTenUsed??=false;s.gacha.tutorialFreeSummons=Math.floor(finiteNumber(s.gacha.tutorialFreeSummons,0,0,1));s.gacha.lastDailyKey??=null;s.gacha.guerrilla=s.gacha.guerrilla&&typeof s.gacha.guerrilla==="object"&&!Array.isArray(s.gacha.guerrilla)?s.gacha.guerrilla:{salt:null,lastCycle:null};s.gacha.drawHistory=normalizeGachaDrawHistory(s.gacha.drawHistory);s.gacha.pity=normalizeGachaPityState(s.gacha.pity);
   normalizeNoticeState(s);
   s.codex??={};s.codex.encounters??={};s.codex.captures??={};s.codex.equipment??={};s.biomeProgress??={};
   Object.values(s.biomeProgress).forEach(data=>{if(!data||typeof data!=="object")return;data.visitedFloors=Array.isArray(data.visitedFloors)?data.visitedFloors:[];data.encounters=data.encounters&&typeof data.encounters==="object"?data.encounters:{};data.openedChests=Array.isArray(data.openedChests)?data.openedChests:[];data.events=Array.isArray(data.events)?data.events:[];data.bossDefeated=Boolean(data.bossDefeated)});
@@ -588,6 +624,7 @@ export class SaveService{
   normalizeAchievementState(s);
   syncAchievementRewardInbox(s);
   normalizeCampaignState(s);
+  if(from<71){s.expeditionSnapshot=null;if(s.activeBattle&&!s.activeBattle.specialBattle)s.activeBattle.explorationSnapshot=null}
   s.schemaVersion=SAVE_SCHEMA_VERSION;
   s.appVersion=APP_VERSION;
   if(from<SAVE_SCHEMA_VERSION)s.lastMigration={from,to:SAVE_SCHEMA_VERSION,at:new Date().toISOString()};

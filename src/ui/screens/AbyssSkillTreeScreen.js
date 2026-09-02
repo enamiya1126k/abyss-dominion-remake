@@ -7,8 +7,8 @@ import{
  magicCircleUnlockForNode,
  abyssSkillNodeById,
  abyssSkillTreeSummary
-}from"../../core/AbyssSkillTreeSystem.js?v=2.11.2-build166";
-import{magicCircleById}from"../../core/MagicCircleSystem.js?v=2.11.2-build166";
+}from"../../core/AbyssSkillTreeSystem.js?v=3.0.1-build301";
+import{magicCircleById}from"../../core/MagicCircleSystem.js?v=3.0.1-build301";
 import{pixelIcon}from"../components/GameChrome.js?v=2.11.2-build166";
 
 const ROW_HEIGHT=144;

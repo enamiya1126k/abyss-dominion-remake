@@ -1,5 +1,15 @@
 const freeze=value=>Object.freeze(value);
 
+export const MAGIC_CIRCLE_STATE_VERSION=4;
+
+function safeCircleLevel(level=1){return Math.max(1,Math.min(99,Math.floor(Number(level)||1)))}
+function circleLevelProgress(level=1){return(safeCircleLevel(level)-1)/98}
+function roundedRate(value){return Number(Math.max(0,Number(value)||0).toFixed(4))}
+function percentText(value,digits=1){
+ const amount=Math.max(0,Number(value)||0)*100;
+ return`${amount.toFixed(digits).replace(/\.0$/,"")}%`;
+}
+
 const circle=(id,name,glyph,tone,baseUpgrade,summary,effect,asset)=>{
  const assetId=asset??id,primary=`./assets/magic-circles/${assetId}.png`;
  return freeze({
@@ -33,6 +43,92 @@ export const MAGIC_CIRCLES=freeze([
 const BY_ID=new Map(MAGIC_CIRCLES.map(entry=>[entry.id,entry]));
 export function magicCircleById(id){return BY_ID.get(id)??BY_ID.get("none")}
 
+/**
+ * Canonical player-side values for a magic circle at a given level.
+ *
+ * Keeping the progression contract here prevents the workshop, battle and
+ * online profile from inventing different values.  Level 1 deliberately
+ * preserves the pre-v4 battle values; levels 2-99 add bounded improvements.
+ */
+export function magicCircleLevelEffect(entryOrId,level=1){
+ const entry=typeof entryOrId==="string"?magicCircleById(entryOrId):entryOrId??magicCircleById("none"),safeLevel=entry.id==="none"?0:safeCircleLevel(level),progress=entry.id==="none"?0:circleLevelProgress(safeLevel);
+ const base={id:entry.id,effect:entry.effect,level:safeLevel,progress:roundedRate(progress)};
+ if(entry.effect==="none")return freeze({...base,summary:"効果なし"});
+ if(entry.effect==="slot"){
+  const damageMin=.5,damageMax=3+.5*progress;
+  return freeze({...base,damageMin,damageMax:roundedRate(damageMax),instantKillRoll:999,summary:`通常抽選 ${damageMin.toFixed(1)}〜${damageMax.toFixed(2)}倍`});
+ }
+ if(entry.effect==="lastLife"){
+  const surviveHpRate=.25*progress;
+  return freeze({...base,surviveHpRate:roundedRate(surviveHpRate),minimumHp:1,summary:surviveHpRate?`致死耐久後 HP${percentText(surviveHpRate)}で生存`:`致死耐久後 HP1で生存`});
+ }
+ if(entry.effect==="revive"){
+  const reviveHpRate=.40+.30*progress,reviveMpRate=.25+.25*progress;
+  return freeze({...base,reviveHpRate:roundedRate(reviveHpRate),reviveMpRate:roundedRate(reviveMpRate),summary:`蘇生 HP${percentText(reviveHpRate)}・MP${percentText(reviveMpRate)}`});
+ }
+ if(entry.effect==="manaReversal"){
+  const damageMultiplier=1.12+Math.min(.18,safeLevel*.004);
+  return freeze({...base,damageMultiplier:roundedRate(damageMultiplier),summary:`与ダメージ ×${damageMultiplier.toFixed(3)}`});
+ }
+ if(entry.effect==="endgameNoCrit"){
+  const damageReductionRate=.15*progress;
+  return freeze({...base,preventsCritical:true,damageReductionRate:roundedRate(damageReductionRate),summary:`深淵・十神の会心無効${damageReductionRate?`・被ダメージ${percentText(damageReductionRate)}軽減`:""}`});
+ }
+ if(entry.effect==="shield"){
+  const shieldRate=.50+.20*progress;
+  return freeze({...base,shieldRate:roundedRate(shieldRate),summary:`開戦障壁 最大HP${percentText(shieldRate)}`});
+ }
+ if(entry.effect==="openingBuff"){
+  const damageRate=.20+.10*progress,criticalRate=.20+.10*progress;
+  return freeze({...base,damageRate:roundedRate(damageRate),criticalRate:roundedRate(criticalRate),summary:`味方全体 与ダメ・会心率 +${percentText(damageRate)}`});
+ }
+ if(entry.effect==="turn20"){
+  const triggerTurn=Math.round(20-8*progress);
+  return freeze({...base,triggerTurn,summary:`終焉発動 ${triggerTurn}ターン`});
+ }
+ if(entry.effect==="rage"){
+  const damagePerHit=.08+.02*progress,maxDamageBonus=1+.25*progress;
+  return freeze({...base,damagePerHit:roundedRate(damagePerHit),maxDamageBonus:roundedRate(maxDamageBonus),firstChainHits:4,secondChainHits:9,summary:`被弾ごと与ダメ +${percentText(damagePerHit)}・最大+${percentText(maxDamageBonus)}`});
+ }
+ if(entry.effect==="weakCrit"){
+  const criticalCeiling=.48+.12*progress;
+  return freeze({...base,criticalCeiling:roundedRate(criticalCeiling),minimumCriticalBonus:.05,summary:`弱攻撃の会心補正 最大+${percentText(criticalCeiling-.10)}`});
+ }
+ if(entry.effect==="sacrifice"){
+  const survivorShieldRate=.25*progress;
+  return freeze({...base,survivorShieldRate:roundedRate(survivorShieldRate),summary:survivorShieldRate?`等価滅殺後、生存者へ最大HP${percentText(survivorShieldRate)}障壁`:`味方1体と敵1体へ即死判定`});
+ }
+ if(entry.effect==="inheritance"){
+  const attackRate=.30+.15*progress,defenseRate=.30+.15*progress,speedRate=.20+.10*progress,turns=Math.round(5+3*progress);
+  return freeze({...base,attackRate:roundedRate(attackRate),defenseRate:roundedRate(defenseRate),speedRate:roundedRate(speedRate),turns,summary:`継承 ATK・DEF+${percentText(attackRate)}／SPD+${percentText(speedRate)}・${turns}T`});
+ }
+ if(entry.effect==="goldPower"){
+  const damageCap=.18+.12*progress;
+  return freeze({...base,damageCap:roundedRate(damageCap),summary:`所持GOLD換力 最大+${percentText(damageCap)}`});
+ }
+ if(entry.effect==="randomSkill"){
+  const randomSkillDamageRate=.25*progress;
+  return freeze({...base,randomSkillDamageRate:roundedRate(randomSkillDamageRate),summary:randomSkillDamageRate?`ランダム発動スキル 与ダメ+${percentText(randomSkillDamageRate)}`:`全スキルからランダム発動`});
+ }
+ if(entry.effect==="soleSurvivor"){
+  const damageMultiplier=2+.4*progress,damageReductionRate=.40+.15*progress;
+  return freeze({...base,damageMultiplier:roundedRate(damageMultiplier),damageReductionRate:roundedRate(damageReductionRate),summary:`最後の生存者 与ダメ×${damageMultiplier.toFixed(2)}・被ダメ${percentText(damageReductionRate)}軽減`});
+ }
+ if(entry.effect==="deathDrain"){
+  const enemyMpDrainRate=.65+.25*progress;
+  return freeze({...base,enemyMpDrainRate:roundedRate(enemyMpDrainRate),summary:`戦闘不能時、敵全体MPを${percentText(enemyMpDrainRate)}減少`});
+ }
+ if(entry.effect==="lowHpPower"){
+  const maximumDamageBonus=1.25+.35*progress;
+  return freeze({...base,maximumDamageBonus:roundedRate(maximumDamageBonus),summary:`瀕死時の最大与ダメージ +${percentText(maximumDamageBonus)}`});
+ }
+ if(entry.effect==="deathMirror"){
+  const reflectedHealRate=.30*progress;
+  return freeze({...base,reflectedHealRate:roundedRate(reflectedHealRate),summary:reflectedHealRate?`即死反射後 HP${percentText(reflectedHealRate)}回復`:`最初の即死を無効化・反射`});
+ }
+ return freeze({...base,genericPowerRate:roundedRate(.25*progress),summary:`基礎効果 +${percentText(.25*progress)}`});
+}
+
 function safeInstanceId(value){return/^[a-zA-Z0-9:_-]{4,120}$/.test(String(value??""))?String(value):null}
 function nextInstanceId(state,circleId){
  const source=globalThis.crypto?.randomUUID?.()??`${Date.now().toString(36)}-${Math.random().toString(36).slice(2,10)}`;
@@ -46,8 +142,29 @@ function rebuildOwnedCompatibility(magicCircles){
  magicCircles.owned=owned;
 }
 
+function roundedUpgradePrice(baseUpgrade,level,{coefficient,exponent}){
+ const safeBase=Math.max(0,Number(baseUpgrade)||0),safeLevel=safeCircleLevel(level),raw=safeBase*coefficient*Math.pow(safeLevel+1,exponent);
+ return Math.min(Number.MAX_SAFE_INTEGER,Math.max(1000,Math.round(raw/1000)*1000));
+}
+
+export function legacyMagicCircleUpgradePrice(entryOrId,level=1){
+ const entry=typeof entryOrId==="string"?magicCircleById(entryOrId):entryOrId;
+ return roundedUpgradePrice(entry?.baseUpgrade,level,{coefficient:.004,exponent:1.65});
+}
+
+function upgradeInvestment(instances,priceForLevel){
+ let total=0;
+ for(const instance of instances??[]){
+  const entry=magicCircleById(instance?.circleId),level=safeCircleLevel(instance?.level);
+  if(entry.id==="none")continue;
+  for(let paidLevel=1;paidLevel<level;paidLevel++)total=Math.min(Number.MAX_SAFE_INTEGER,total+priceForLevel(entry,paidLevel));
+ }
+ return total;
+}
+
 export function normalizeMagicCircleState(state){
  const source=state?.magicCircles&&typeof state.magicCircles==="object"&&!Array.isArray(state.magicCircles)?state.magicCircles:{};
+ const sourceVersion=Math.max(0,Math.floor(Number(source.version)||0));
  const legacyOwned=source.owned&&typeof source.owned==="object"&&!Array.isArray(source.owned)?source.owned:{};
  const unlocked={};
  for(const entry of MAGIC_CIRCLES){
@@ -70,7 +187,14 @@ export function normalizeMagicCircleState(state){
   const instanceId=`mc:${entry.id}:legacy`;usedIds.add(instanceId);
   instances.push({instanceId,circleId:entry.id,level:Math.min(99,level),source:"legacy",createdAt:0,locked:false,favorite:false});
  }
- state.magicCircles={...source,unlocked,instances,goldSpent:Math.max(0,Math.floor(Number(source.goldSpent)||0)),version:3};
+ let goldSpent=Math.max(0,Math.floor(Number(source.goldSpent)||0));
+ const rebalanceApplied=Number(state?.magicCircleRebalance?.version)>=MAGIC_CIRCLE_STATE_VERSION;
+ if(sourceVersion>0&&sourceVersion<MAGIC_CIRCLE_STATE_VERSION&&!rebalanceApplied){
+  const legacyInvestment=upgradeInvestment(instances,legacyMagicCircleUpgradePrice),currentInvestment=upgradeInvestment(instances,magicCircleUpgradePrice),theoreticalRefund=Math.max(0,legacyInvestment-currentInvestment),refund=Math.min(goldSpent,theoreticalRefund);
+  state.player??={};state.player.gold=Math.min(Number.MAX_SAFE_INTEGER,Math.max(0,Math.floor(Number(state.player.gold)||0))+refund);goldSpent=Math.max(0,goldSpent-refund);
+  state.magicCircleRebalance={version:MAGIC_CIRCLE_STATE_VERSION,refund,appliedAt:new Date().toISOString()};
+ }
+ state.magicCircles={...source,unlocked,instances,goldSpent,version:MAGIC_CIRCLE_STATE_VERSION};
  rebuildOwnedCompatibility(state.magicCircles);
 
  // 出撃枠の左から優先し、各現物を必ず1人だけへ割り当てる。
@@ -117,8 +241,8 @@ export function unlockMagicCircleFromTree(state,id){
 }
 
 export function equippedMagicCircle(monster,state){
- normalizeMagicCircleState(state);const instance=state.magicCircles.instances.find(item=>item.instanceId===monster?.magicCircleInstanceId),entry=magicCircleById(instance?.circleId??monster?.magicCircleId);
- return{...entry,level:entry.id==="none"?0:instance?.level??magicCircleLevel(state,entry.id),instanceId:instance?.instanceId??null};
+ normalizeMagicCircleState(state);const instance=state.magicCircles.instances.find(item=>item.instanceId===monster?.magicCircleInstanceId),entry=magicCircleById(instance?.circleId??monster?.magicCircleId),level=entry.id==="none"?0:instance?.level??magicCircleLevel(state,entry.id);
+ return{...entry,level,levelEffect:magicCircleLevelEffect(entry,level||1),instanceId:instance?.instanceId??null};
 }
 
 export function magicCircleLevel(state,idOrInstance){
@@ -131,13 +255,14 @@ export function magicCirclePrice(state,id){
  if(entry.id==="none"||!level)return 0;
  return magicCircleUpgradePrice(entry,level);
 }
-export function magicCircleUpgradePrice(entryOrId,level=1){const entry=typeof entryOrId==="string"?magicCircleById(entryOrId):entryOrId;return Math.min(Number.MAX_SAFE_INTEGER,Math.max(1000,Math.round((Number(entry?.baseUpgrade)||0)*.004*Math.pow(Math.max(1,Number(level)||1)+1,1.65)/1000)*1000))}
+export function magicCircleUpgradePrice(entryOrId,level=1){const entry=typeof entryOrId==="string"?magicCircleById(entryOrId):entryOrId;return roundedUpgradePrice(entry?.baseUpgrade,level,{coefficient:.0002,exponent:1.30})}
 
 export function magicCircleNextEffect(entryOrId,level=0){
  const entry=typeof entryOrId==="string"?magicCircleById(entryOrId):entryOrId;
  if(entry.id==="none")return"強化なし";
- const next=Math.max(1,Number(level)||1)+1,boost=Math.min(250,Math.round((next-1)*3.5));
- return`Lv.${next}：基礎効果を強化（効果量 +${boost}%相当）・発光層を追加`;
+ const current=safeCircleLevel(level),next=Math.min(99,current+1);
+ if(current>=99)return"最大Lv.99・強化完了";
+ return`Lv.${next}：${magicCircleLevelEffect(entry,next).summary}`;
 }
 
 // GOLDを際限なく貯めても火力が発散しないよう、対数逓減とLv別の
@@ -230,7 +355,8 @@ export function enemyMagicCircleMarkup(profile,{className="enemy-battle-magic-ci
  return profile?circleMarkup(profile,{className}):"";
 }
 
-export function slotDamageMultiplier(value){
+export function slotDamageMultiplier(value,level=1){
  const roll=Math.max(0,Math.min(999,Math.floor(Number(value)||0)));if(roll===0)return 0;
- return Number((.5+(roll/999)*2.5).toFixed(3));
+ const maximum=magicCircleLevelEffect("slot_fate",level).damageMax;
+ return Number((.5+(roll/999)*(maximum-.5)).toFixed(3));
 }

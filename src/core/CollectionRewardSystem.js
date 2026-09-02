@@ -1,7 +1,7 @@
 import{SPECIES}from"../data/species.js?v=2.11.86-build262";
 import{orderedMonsterSpecies}from"../data/monsterCatalog.js?v=2.11.86-build262";
 import{FLOOR_BOSS_CATALOG}from"../data/floorBosses.js?v=2.11.86-build262";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=2.11.86-build262";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.0.1-build301";
 
 const LIMITED_TAGS=new Set(["mythicSerial","serialOnly","raidLimited","eventLimited","limited"]);
 const number=value=>Math.max(0,Math.floor(Number(value)||0));

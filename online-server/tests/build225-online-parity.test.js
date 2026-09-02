@@ -128,10 +128,10 @@ test("build225 exploration GOLD modifiers and equipment levels match offline rew
 
   const equipmentRolls = [.59, .6, .25];
   store.random = () => equipmentRolls.shift() ?? .5;
-  const equipment = store._offlineChestReward(100, { kind: "box" });
+  const equipment = store._offlineChestReward(10, { kind: "box" });
   assert.equal(equipment.randomEquipmentRarity, "R");
   assert.equal(equipment.equipmentSlot, "weapon");
-  assert.equal(equipment.equipmentLevel, 99);
+  assert.equal(equipment.equipmentLevel, 108);
   assert.ok(equipment.gold > 0, "Release 200 makes ordinary boxes pay guaranteed GOLD alongside the equipment roll");
 });
 

@@ -98,8 +98,9 @@ assert.equal(biomeForFloor(201).theme,"poison");
 assert.equal(biomeForFloor(601).theme,"fire");
 assert.equal(biomeForFloor(101).to-biomeForFloor(101).from+1,50);
 
-assert.ok(teamBattleStageMultiplier(50)>teamBattleStageMultiplier(1)*50);
-assert.ok(teamBattleRewardPreview(50).goldMultiplier>teamBattleRewardPreview(1).goldMultiplier*1000);
+assert.ok(teamBattleStageMultiplier(50)>teamBattleStageMultiplier(49));
+assert.ok(teamBattleStageMultiplier(50)/teamBattleStageMultiplier(49)<1.15);
+assert.ok(teamBattleRewardPreview(50).goldMultiplier>teamBattleRewardPreview(1).goldMultiplier);
 assert.equal(teamBattleRewardPreview(50).guaranteedRarity,"LR");
 const infiniteState={player:{currentFloor:1000,maxFloor:1000},flags:{},endgame:{teamBattle:{stage:51,dailyAttempts:0,totalWins:0,totalLosses:0}}};
 assert.equal(createTeamBattleEncounter(infiniteState).length,4);

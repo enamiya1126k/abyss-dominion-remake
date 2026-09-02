@@ -2,9 +2,9 @@ import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=2.11.54-build22
 import { battleEnvironmentForFloor } from "../data/biomes.js?v=2.11.54-build226";
 import {
   onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml, ONLINE_ROOM_PURPOSES, ONLINE_ROOM_STYLES,
-} from "../ui/screens/OnlinePartyScreen.js?v=2.11.82-build258";
-import { BattleScreen } from "../ui/screens/BattleScreen.js?v=2.11.82-build258";
-import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=2.11.82-build258";
+} from "../ui/screens/OnlinePartyScreen.js?v=3.0.1-build301";
+import { BattleScreen } from "../ui/screens/BattleScreen.js?v=3.0.1-build301";
+import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=3.0.1-build301";
 import { pixelIcon } from "../ui/components/GameChrome.js?v=2.11.54-build226";
 
 const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "共同探索", raid: "レイドボス", team: "自由チーム戦", chat: "募集・談話板" });

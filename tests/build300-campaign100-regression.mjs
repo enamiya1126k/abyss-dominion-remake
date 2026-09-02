@@ -1,7 +1,7 @@
 import assert from"node:assert/strict";
 import{
  CAMPAIGN_MAX_FLOOR,CAMPAIGN_KEYS_PER_FLOOR,campaignFloorToLegacyFloor,legacyFloorToCampaignFloor,campaignDayForFloor,
- campaignMilestoneBossIds,roomCountForRandom,roomAttributesForFloor,normalizeCampaignState,campaignFloorState,beginCampaignFloorRun,collectCampaignKey,
+ campaignMilestoneBossIds,roomCountForRandom,roomAttributesForFloor,normalizeCampaignState,campaignFloorState,beginCampaignFloorRun,beginCampaignFloorReplay,collectCampaignKey,
  defeatCampaignBoss,trophyChestEntitlements,claimTrophyChest,campaignEndingForResult
 }from"../src/core/Campaign100System.js";
 
@@ -24,6 +24,7 @@ const save={};normalizeCampaignState(save);const floor=campaignFloorState(save,1
 assert.deepEqual(collectCampaignKey(save,12,"a"),{collected:true,count:1});assert.deepEqual(collectCampaignKey(save,12,"a"),{collected:false,count:1});
 collectCampaignKey(save,12,"b");collectCampaignKey(save,12,"c");assert.equal(trophyChestEntitlements(save,12).available,false);
 defeatCampaignBoss(save,12);assert.equal(trophyChestEntitlements(save,12).equipmentGuaranteed,true);const reward=claimTrophyChest(save,12);assert.equal(reward.fragmentPacks,3);assert.equal(reward.equipmentGuaranteed,true);assert.equal(campaignFloorState(save,12).trophyClaimed,true);
-const replay=beginCampaignFloorRun(save,12,"replay-2");assert.equal(replay.trophyClaimed,true);assert.equal(replay.keysCollected,0);assert.equal(replay.bossDefeated,false);assert.equal(replay.trophyLocksOpened,0);
+const resume=beginCampaignFloorRun(save,12,"resume-2");assert.equal(resume.trophyClaimed,true);assert.equal(resume.keysCollected,3);assert.equal(resume.bossDefeated,true);assert.equal(resume.trophyLocksOpened,3);assert.equal(resume.exitUnlocked,true);
+const replay=beginCampaignFloorReplay(save,12,"replay-2");assert.equal(replay.trophyClaimed,true);assert.equal(replay.keysCollected,0);assert.equal(replay.bossDefeated,false);assert.equal(replay.trophyLocksOpened,0);assert.equal(replay.exitUnlocked,false);
 assert.equal(campaignEndingForResult({generalsWon:true}),"complete");assert.equal(campaignEndingForResult({sairanWon:true}),"comeback");assert.equal(campaignEndingForResult({}),"defeat");
 console.log("build300 campaign100 regression: ok");

@@ -183,18 +183,19 @@ test("build251 keeps recovery purchases repeatable and capped at ten", () => {
 });
 
 test("build251 leaves up-to-three-times levels unpriced and scales excessive levels", () => {
-  assert.equal(darkMarketMonsterPriceFloor(100, 300, "SR", "standard"), 0);
-  const justOver = darkMarketMonsterPriceFloor(100, 301, "SR", "standard");
-  const high = darkMarketMonsterPriceFloor(100, 1_000, "SR", "standard");
-  const jackpot = darkMarketMonsterPriceFloor(100, 9_999, "LR", "jackpot");
+  // Build301 campaign 10F has the former 100F economic depth.
+  assert.equal(darkMarketMonsterPriceFloor(10, 300, "SR", "standard"), 0);
+  const justOver = darkMarketMonsterPriceFloor(10, 301, "SR", "standard");
+  const high = darkMarketMonsterPriceFloor(10, 1_000, "SR", "standard");
+  const jackpot = darkMarketMonsterPriceFloor(10, 9_999, "LR", "jackpot");
   assert.ok(justOver > 0);
   assert.ok(high > justOver);
   assert.ok(jackpot > high);
-  assert.ok(darkMarketMonsterPriceFloor(100, { level: 9_999, plus: 99 }, "LR", "jackpot") > jackpot);
-  assert.ok(darkMarketMonsterPriceFloor(100, { level: 9_999 }, "LR", "jackpot") >= jackpot);
-  assert.ok(darkMarketMonsterPriceFloor(100, 9_999, 123_456) >= 123_456, "numeric third argument remains a reference-price floor");
+  assert.ok(darkMarketMonsterPriceFloor(10, { level: 9_999, plus: 99 }, "LR", "jackpot") > jackpot);
+  assert.ok(darkMarketMonsterPriceFloor(10, { level: 9_999 }, "LR", "jackpot") >= jackpot);
+  assert.ok(darkMarketMonsterPriceFloor(10, 9_999, 123_456) >= 123_456, "numeric third argument remains a reference-price floor");
   assert.ok(
-    darkMarketMonsterPriceFloor(53, { speciesId: "mimic", level: 590, plus: 5 }, "SR", "standard") > 28_416_033,
+    darkMarketMonsterPriceFloor(6, { speciesId: "mimic", level: 590, plus: 5 }, "SR", "standard") > 28_416_033,
     "the reported 53F/Lv590 bargain case must cost more than the screenshot wallet",
   );
 });
@@ -213,11 +214,11 @@ test("build251 updates cache identity and removes one-spin wording", async () =>
   const assetBuild = Number(index.match(/const ASSET_BUILD = "build(\d+)"/)?.[1]);
   assert.ok(assetVersion && (assetVersion[0] > 2 || assetVersion[0] === 2 && (assetVersion[1] > 11 || assetVersion[1] === 11 && assetVersion[2] >= 75)), "active asset version must not regress below build251");
   assert.ok(assetBuild >= 251, "active asset build must not regress below build251");
-  assert.match(main, /SecretRoomSystem\.js\?v=2\.11\.82-build258/);
+  assert.match(main, /SecretRoomSystem\.js\?v=3\.0\.1-build301/);
   assert.match(main, /ShopScreen\.js\?v=2\.11\.82-build258/);
-  assert.match(main, /SaveService\.js\?v=2\.11\.82-build258/);
-  assert.match(shop, /SecretRoomSystem\.js\?v=2\.11\.82-build258/);
-  assert.match(saveService, /SecretRoomSystem\.js\?v=2\.11\.82-build258/);
+  assert.match(main, /SaveService\.js\?v=3\.0\.1-build301/);
+  assert.match(shop, /SecretRoomSystem\.js\?v=3\.0\.1-build301/);
+  assert.match(saveService, /SecretRoomSystem\.js\?v=3\.0\.1-build301/);
   assert.doesNotMatch(secretRoom, /ENDGAME_CHARACTERS|marketEndgameOffer/);
   assert.match(secretRoom, /random\(\)<\.05\?9999/);
   assert.doesNotMatch(`${main}\n${shop}`, /この🚪で1回限り|この🚪では挑戦済み|別の🚪を発見すると再挑戦/);

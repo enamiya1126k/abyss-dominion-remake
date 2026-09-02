@@ -19,6 +19,6 @@ const storeSource=fs.readFileSync(new URL("../online-server/src/RoomStore.js",im
 assert.match(storeSource,/newLocks=keys-opened/);
 assert.match(storeSource,/object\.locksOpened=keys;object\.resolved=keys>=3/);
 assert.match(storeSource,/expedition\.encountersEnabled=false/);
-assert.match(storeSource,/type:"hotSpring"/);
-assert.match(storeSource,/type:"campaignTrophy"/);
+assert.match(storeSource,/type:["']hotSpring["']/);
+assert.match(storeSource,/type:["']campaignTrophy["']/);
 console.log("build300 online campaign regression: ok");

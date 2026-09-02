@@ -1,15 +1,15 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=2.11.0-build164";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=2.11.82-build258";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.0.1-build301";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.0.1-build301";
 import{maxMp}from"../../battle/SkillSystem.js?v=2.11.83-build259";
 import{SPECIES}from"../../data/species.js?v=2.11.82-build258";
-import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=2.11.82-build258";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=2.11.82-build258";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=2.11.0-build164";
+import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.0.1-build301";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.0.1-build301";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.0.1-build301";
 import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.11.0-build164";
-import{monsterVisual}from"../MonsterVisual.js?v=2.11.82-build258";
+import{monsterVisual}from"../MonsterVisual.js?v=3.0.1-build301";
 import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.0-build164";
-import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=2.11.0-build164";
-import{campaignDayForFloor}from"../../core/Campaign100System.js?v=3.0.0-build300";
+import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.0.1-build301";
+import{campaignDayForFloor}from"../../core/Campaign100System.js?v=3.0.1-build301";
 
 const HOME_ATTRIBUTE_CYCLE=Object.freeze(["fire","ice","wind","earth","lightning","water"]);
 function homeAttributeChart(){

@@ -57,7 +57,7 @@ test("character level matters while late growth and gear enhancement diminish",(
 });
 
 test("late Abyss-tree rewards become materially richer and ATK means both attack classes",async()=>{
- assert.equal(abyssExpansionRewardScale(0),1);assert.equal(abyssExpansionRewardScale(8),1.5);assert.equal(abyssExpansionRewardScale(24),3.5);assert.equal(abyssExpansionRewardScale(30),6);
+ assert.equal(abyssExpansionRewardScale(0),1);assert.equal(abyssExpansionRewardScale(8),1.25);assert.equal(abyssExpansionRewardScale(16),1.5);assert.equal(abyssExpansionRewardScale(24),2);assert.equal(abyssExpansionRewardScale(30),2.5);
  const[tree,monster]=await Promise.all([read("src/core/AbyssSkillTreeSystem.js"),read("src/models/Monster.js")]);assert.match(tree,/物理・魔法ATK/);assert.match(monster,/if\(key==="atk"\)result\.matk/);
 });
 
