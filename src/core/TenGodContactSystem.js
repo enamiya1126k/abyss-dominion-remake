@@ -7,7 +7,7 @@ const CHOICES={
 };
 
 export function normalizeTenGodContact(state){
- state.tenGodContact??={};
+ state.tenGodContact=state.tenGodContact&&typeof state.tenGodContact==="object"&&!Array.isArray(state.tenGodContact)?state.tenGodContact:{};
  state.tenGodContact.firstContactPlayed=Boolean(state.tenGodContact.firstContactPlayed);
  state.tenGodContact.choice=state.tenGodContact.choice??null;
  state.tenGodContact.contactedAtFloor=Number(state.tenGodContact.contactedAtFloor??0);

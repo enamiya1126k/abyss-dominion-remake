@@ -1,9 +1,9 @@
-import{SPECIES}from"../data/species.js?v=2.11.82-build258";
+import{SPECIES}from"../data/species.js?v=3.0.9-build309";
 import{SKILLS}from"../data/skills.js?v=2.11.0-build164";
 import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.0-build164";
 import{balanceIndividualSkillKit,buildIndividualSkillKit,isOffensiveSkill,skillProgressionScore}from"../data/individualSkillKits.js?v=2.11.83-build259";
 import{FLOOR_BOSS_CATALOG,floorBossWeaponSkillById}from"../data/floorBosses.js?v=2.11.30-build195";
-import{attributeDamageMultiplier,canonicalAttribute}from"../data/attributes.js?v=2.11.0-build164";
+import{attributeDamageMultiplier,canonicalAttribute}from"../data/attributes.js?v=3.0.9-build309";
 
 const UNLOCK_LEVELS=[1,5,10,20,30,45,60,80,100,130,170,220];
 const ROLE_POOLS={
@@ -476,7 +476,7 @@ function autoMaximumHp(member){return Math.max(1,Number(member?._maxHp??member?.
 function autoHpRatio(member){return Math.max(0,Number(member?.currentHp)||0)/autoMaximumHp(member)}
 function autoMaximumMp(member){return Math.max(1,Number(member?._maxMp??member?.maxMp)||maxMp(member)||Number(member?.currentMp)||1)}
 function autoMpRatio(member){return Math.max(0,Number(member?.currentMp)||0)/autoMaximumMp(member)}
-function autoEnemyElement(enemy){return canonicalAttribute(enemy?.element??SPECIES[enemy?.speciesId]?.element??"neutral",enemy?.speciesId)}
+function autoEnemyElement(enemy){return canonicalAttribute(enemy?.trialElement??enemy?.element??SPECIES[enemy?.speciesId]?.element??"neutral",enemy?.speciesId)}
 function autoMonsterElement(monster){return canonicalAttribute(monster?.attribute??SPECIES[monster?.speciesId]?.element??"neutral",monster?.speciesId)}
 function autoEnemyThreat(enemy){
  const offense=Math.max(1,Number(enemy?.atk)||0,Number(enemy?.matk)||0),speed=Math.max(0,Number(enemy?.spd)||0),durability=Math.max(1,Number(enemy?.maxHp)||Number(enemy?.hp)||1),ratio=Math.max(0,Number(enemy?.hp)||0)/durability,actions=Array.isArray(enemy?.battleActions)?enemy.battleActions:[],support=actions.some(action=>Number(action?.heal)>0||Number(action?.revive)>0||action?.cleanse)?1.24:1,control=actions.some(action=>action?.status||action?.effects?.some(effect=>["stun","reviveSeal","healDown"].includes(effect?.kind)))?1.16:1,state=enemy?.charging||enemy?.enraged?1.3:enemy?.divineBarrier>0?1.12:1,boss=enemy?.boss?1.5:enemy?.elite?1.25:1;

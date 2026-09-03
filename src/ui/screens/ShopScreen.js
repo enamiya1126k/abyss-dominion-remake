@@ -1,4 +1,4 @@
-import{activeSecretRoom,CASINO_CRYSTAL_COST,DARK_MARKET_ITEM_LIMIT,SECRET_ROOM_RECOVERY_ITEMS}from"../../core/SecretRoomSystem.js?v=3.0.5-build305";
+import{activeSecretRoom,CASINO_CRYSTAL_COST,DARK_MARKET_ITEM_LIMIT,SECRET_ROOM_RECOVERY_ITEMS}from"../../core/SecretRoomSystem.js?v=3.1.1-build311";
 
 function marketStatus(room){
  const remaining=(room?.offers??[]).filter(offer=>!offer.sold).length;
@@ -12,7 +12,7 @@ export function ShopScreen(state){
  const casino=room.casino??{};
  return`<section class="screen shop-screen secret-room-screen">
   <div class="page">
-   <div class="spread secret-room-heading"><div><div class="eyebrow">SECRET ROOM・${room.floor}F</div><h1 class="hero-title">深淵裏街</h1></div><button id="leaveShop">探索へ</button></div>
+   <div class="spread secret-room-heading"><div><div class="eyebrow">SECRET ROOM・${room.floor}階</div><h1 class="hero-title">深淵裏街</h1></div><button id="leaveShop">探索へ</button></div>
    <div class="panel secret-room-wallet"><div><small>所持GOLD</small><b id="shopGold">${state.player.gold.toLocaleString()}G</b></div><span>この🚪だけの限定品</span></div>
    <div class="secret-room-grid">
     <button data-shop-menu="casino" class="secret-room-casino"><span>🎰</span><b>深淵スロット</b><small>${casino.entryPaid?"追加料金なし":"初回入場 💎"+CASINO_CRYSTAL_COST}・最高999倍</small><em>${casino.spins?`${casino.spins.toLocaleString()}回・収支 ${casino.netGold>=0?"+":""}${casino.netGold.toLocaleString()}G`:"入場後はGOLDで何度でも"}</em></button>

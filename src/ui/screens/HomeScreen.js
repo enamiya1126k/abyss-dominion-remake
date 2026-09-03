@@ -1,29 +1,19 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.0.5-build305";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.0.5-build305";
-import{maxMp}from"../../battle/SkillSystem.js?v=3.0.5-build305";
-import{SPECIES}from"../../data/species.js?v=2.11.82-build258";
-import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.0.5-build305";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.0.5-build305";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.0.5-build305";
-import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=2.11.0-build164";
-import{monsterVisual}from"../MonsterVisual.js?v=3.0.5-build305";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.0-build164";
-import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.0.5-build305";
-import{campaignDayForFloor,campaignHeroAdvance}from"../../core/Campaign100System.js?v=3.0.5-build305";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.1-build311";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.1-build311";
+import{maxMp}from"../../battle/SkillSystem.js?v=3.1.1-build311";
+import{SPECIES}from"../../data/species.js?v=3.1.1-build311";
+import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.1-build311";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.1-build311";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.1-build311";
+import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=3.1.1-build311";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build311";
+import{attributeCycleVisual,attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
+import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.1-build311";
+import{campaignDayForFloor,campaignHeroAdvance}from"../../core/Campaign100System.js?v=3.1.1-build311";
+import{normalizeCampaignHeroInvasion}from"../../core/CampaignHeroEncounterSystem.js?v=3.1.1-build311";
 
-const HOME_ATTRIBUTE_CYCLE=Object.freeze(["fire","ice","wind","earth","lightning","water"]);
 function homeAttributeChart(){
-  const node=(id,className="")=>attributeVisual(id,{className:`home-attribute-node ${className}`.trim(),label:`${id}属性`});
-  return`<span class="home-attribute-map" aria-hidden="true">
-    <span class="home-attribute-cycle">
-      ${HOME_ATTRIBUTE_CYCLE.map((id,index)=>node(id,`node-${index+1}`)).join("")}
-      ${HOME_ATTRIBUTE_CYCLE.map((_,index)=>`<i class="home-attribute-arrow arrow-${index+1}">➜</i>`).join("")}
-      ${node("neutral","node-neutral")}
-    </span>
-    <span class="home-attribute-pair">
-      ${node("light","node-light")}<i>⇅</i>${node("dark","node-dark")}
-    </span>
-  </span>`;
+ return attributeCycleVisual({className:"home-attribute-chart",decorative:true});
 }
 
 export function homeCriticalVitals(monster){
@@ -132,7 +122,10 @@ export function HomeScreen(state){
   const gauntletUnlocked=isContentUnlocked(state,GAUNTLET_UNLOCK_FLOOR);
   const endgameUnlocked=isContentUnlocked(state,EMERGENCY_UNLOCK_FLOOR);
   const revealed=Math.max(1,Number(state.player?.maxFloor)||1)>=70;
-  const completed=Boolean(state.campaign100?.finalCompleted),finalReady=Boolean(state.campaign100?.finalUnlocked&&!completed);
+  // The campaign floor ledger unlocks its exit as soon as one of the four
+  // 100階 gods fall. The final arena is unlocked only after the player
+  // actually reaches that exit, so its durable receipt owns this CTA.
+  const heroInvasion=normalizeCampaignHeroInvasion(state),completed=Boolean(state.campaign100?.finalCompleted||heroInvasion.finalArena?.completed),finalReady=Boolean(heroInvasion.finalArena?.unlocked&&!completed);
   const phase=worldPhase(state);
   const sceneSlots=Array.from({length:4},(_,index)=>scenePartySlot(party[index],index,state)).join("");
   const criticalCount=activeParty.filter(monster=>homeCriticalVitals(monster).critical).length;
@@ -141,7 +134,7 @@ export function HomeScreen(state){
   const recentMemory=state.recentBattleMemory,memoryEntries=recentMemory?.entries??[],memoryCost=homeMemoryCost(state,recentMemory);
   const memoryNames=memoryEntries.slice(0,2).map(entry=>entry.nameOverride??SPECIES[entry.speciesId]?.name??"魔物").join("＋");
   const memorySub=memoryEntries.length?`${memoryNames}${memoryEntries.length>2?`ほか${memoryEntries.length-2}体`:""}・${memoryCost.toLocaleString()}晶石`:"直近の敵編成を丸ごと記録";
-  const day=campaignDayForFloor(Math.max(state.player?.currentFloor??1,state.player?.maxFloor??1)),invasion=campaignHeroAdvance(state),title=completed?"勇者一行を撃退":invasion.status,prophecyLabel=completed?"予言達成・勇者軍撃退":`予言 ${day}/10・勇者侵攻 ${invasion.progress}%`,meterLabel=completed?"迎撃完了・勝利の記録":finalReady?"勇者軍最終決戦へ ›":invasion.location,meterTag=finalReady?"button":"span",meterAction=finalReady?' id="openCampaignFinal" type="button" aria-label="勇者軍最終決戦へ"':"";
+  const timelineFloor=heroInvasion.rewind?.active?heroInvasion.rewind.currentFloor:Math.max(state.player?.currentFloor??1,state.player?.maxFloor??1),day=campaignDayForFloor(timelineFloor),baseInvasion=campaignHeroAdvance(state),invasion=heroInvasion.rewind?.active?{...baseInvasion,progress:Math.min(99,Math.max(80,timelineFloor-1)),location:`予言9日目・${timelineFloor}階`,status:"リオネルの巻き戻し中"}:baseInvasion,title=completed?"勇者一行を撃退":invasion.status,prophecyLabel=completed?"予言達成・勇者軍撃退":`予言 ${day}/10・勇者侵攻 ${invasion.progress}%`,meterLabel=completed?"迎撃完了・勝利の記録":finalReady&&!heroInvasion.rewind?.active?"勇者軍最終決戦へ ›":invasion.location,meterTag=finalReady&&!heroInvasion.rewind?.active?"button":"span",meterAction=finalReady&&!heroInvasion.rewind?.active?' id="openCampaignFinal" type="button" aria-label="勇者軍最終決戦へ"':"";
 
   return`
     <section class="screen home-command-screen world-phase-${phase}${phase===1?" phase2":""}" data-world-phase="${phase}">

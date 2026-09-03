@@ -1,0 +1,360 @@
+/* Build310: field hero pursuit, persistent wounds and the dedicated finale. */
+
+/* -------------------------------------------------------------------------- */
+/* Exploration: an intruding hero must read as a threat without hiding play. */
+/* -------------------------------------------------------------------------- */
+.explore-stage.is-hero-hunt{
+  isolation:isolate;
+}
+.explore-stage.is-hero-hunt::after{
+  content:"";
+  position:absolute;
+  z-index:24;
+  inset:0;
+  border:1px solid #bb3f51a6;
+  background:radial-gradient(circle at var(--hero-screen-x,50%) var(--hero-screen-y,50%),transparent 0 12%,#23030a19 42%,#07030773 100%);
+  box-shadow:inset 0 0 34px #7d071c59;
+  pointer-events:none;
+  animation:campaignHeroDangerBreath 1.8s ease-in-out infinite;
+}
+.campaign-hero-chase-hud{
+  box-sizing:border-box;
+  position:absolute;
+  z-index:36;
+  top:8px;
+  left:50%;
+  width:min(66%,330px);
+  min-height:44px;
+  display:grid;
+  grid-template-columns:38px minmax(0,1fr) auto;
+  align-items:center;
+  gap:7px;
+  padding:5px 8px;
+  border:1px solid #bd5968;
+  background:linear-gradient(90deg,#17070ded,#09070ced 68%,#19070ded);
+  box-shadow:0 5px 16px #000d,inset 0 0 14px #b12f4d20;
+  color:#eee4e5;
+  pointer-events:none;
+  transform:translateX(-50%);
+}
+.campaign-hero-chase-hud.is-discovered{animation:campaignHeroHudReveal .36s cubic-bezier(.2,.8,.2,1) both}
+.campaign-hero-chase-hud.is-tracking{border-color:#e04b60;box-shadow:0 5px 16px #000d,0 0 14px #c1254055,inset 0 0 14px #b12f4d28}
+.campaign-hero-chase-hud.is-contact{border-color:#f2c76f;background:linear-gradient(90deg,#351014f2,#10090cf2 70%,#351014f2)}
+.campaign-hero-chase-portrait{
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border:1px solid #8e5962;
+  background:radial-gradient(circle,#42202b,#080609 72%);
+}
+.campaign-hero-chase-portrait .campaign-hero-chase-visual{width:34px!important;height:34px!important;display:grid!important;place-items:center}
+.campaign-hero-chase-portrait .campaign-hero-chase-visual img{width:100%!important;height:100%!important;object-fit:contain!important;filter:drop-shadow(0 2px 2px #000)}
+.campaign-hero-chase-copy{min-width:0;display:grid;gap:2px}
+.campaign-hero-chase-copy>small{overflow:hidden;color:#c88a95;font:900 7px/1 ui-monospace,monospace;letter-spacing:.12em;text-overflow:ellipsis;white-space:nowrap}
+.campaign-hero-chase-copy>b{overflow:hidden;color:#f4e6d5;font:900 11px/1.15 Georgia,"Yu Mincho",serif;text-overflow:ellipsis;white-space:nowrap}
+.campaign-hero-chase-state{display:grid;justify-items:end;gap:3px;min-width:48px;color:#d8b174;font:900 8px/1 sans-serif;white-space:nowrap}
+.campaign-hero-wound-meter{width:52px;height:5px;overflow:hidden;border:1px solid #44202a;background:#030305}
+.campaign-hero-wound-meter>i{display:block;width:var(--hero-hp,100%);height:100%;background:linear-gradient(90deg,#721128,#e54459 64%,#ffc0b2);box-shadow:0 0 6px #e13c55;transition:width .45s ease}
+
+.campaign-hero-edge-chip{
+  --hero-edge-x:50%;
+  --hero-edge-y:50%;
+  box-sizing:border-box;
+  position:absolute;
+  z-index:35;
+  left:var(--hero-edge-x);
+  top:var(--hero-edge-y);
+  width:44px;
+  height:44px;
+  display:grid;
+  place-items:center;
+  border:1px solid #b45060;
+  border-radius:50%;
+  background:radial-gradient(circle,#35131e 0 42%,#09060bea 72%);
+  box-shadow:0 3px 12px #000e,0 0 12px #c1254652;
+  pointer-events:none;
+  transform:translate(-50%,-50%);
+}
+.campaign-hero-edge-chip::after{
+  content:"";
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-top:2px solid #ffd58e;
+  border-right:2px solid #ffd58e;
+  filter:drop-shadow(0 0 3px #e34f62);
+}
+.campaign-hero-edge-chip.is-north{top:8px;left:50%;transform:translate(-50%,0)}.campaign-hero-edge-chip.is-north::after{bottom:-9px;transform:rotate(135deg)}
+.campaign-hero-edge-chip.is-east{top:50%;left:auto;right:8px;transform:translate(0,-50%)}.campaign-hero-edge-chip.is-east::after{left:-9px;transform:rotate(225deg)}
+.campaign-hero-edge-chip.is-south{top:auto;bottom:8px;left:50%;transform:translate(-50%,0)}.campaign-hero-edge-chip.is-south::after{top:-9px;transform:rotate(-45deg)}
+.campaign-hero-edge-chip.is-west{top:50%;left:8px;transform:translate(0,-50%)}.campaign-hero-edge-chip.is-west::after{right:-9px;transform:rotate(45deg)}
+.campaign-hero-edge-chip>.campaign-hero-edge-visual{width:38px!important;height:38px!important;display:grid!important;place-items:center}
+.campaign-hero-edge-chip>.campaign-hero-edge-visual img{width:100%!important;height:100%!important;object-fit:contain!important;filter:drop-shadow(0 2px 2px #000)}
+.campaign-hero-edge-chip.is-tracking{animation:campaignHeroEdgePulse .85s ease-in-out infinite}
+.campaign-hero-field-actor{filter:drop-shadow(0 5px 3px #000) drop-shadow(0 0 8px #e13e596b)}
+.campaign-hero-field-actor.is-discovered{animation:campaignHeroActorFound .48s ease-out both}
+
+/* The ordinary encounter cinema receives a harder, human-intruder treatment. */
+.encounter-transition.encounter-hero,
+.encounter-transition.campaign-hero-encounter-transition{--encounter:#e8b85d;background:#09020770}
+.encounter-transition.encounter-hero .encounter-mist,
+.encounter-transition.campaign-hero-encounter-transition .encounter-mist{
+  filter:blur(11px) contrast(1.2);
+  background:radial-gradient(ellipse at 50% 48%,#d7ae5729,transparent 28%),linear-gradient(90deg,#170208d9,transparent 32% 68%,#170208d9);
+}
+.encounter-transition.encounter-hero .encounter-vignette,
+.encounter-transition.campaign-hero-encounter-transition .encounter-vignette{background:radial-gradient(ellipse at center,transparent 0 12%,#26040a9b 58%,#000 92%)}
+.encounter-transition.encounter-hero .encounter-warning strong,
+.encounter-transition.campaign-hero-encounter-transition .encounter-warning strong{color:#fff0ce;text-shadow:0 3px #000,0 0 20px #f14e5f,0 0 34px #e9b85c66}
+.encounter-transition.encounter-hero .encounter-curtain,
+.encounter-transition.campaign-hero-encounter-transition .encounter-curtain{background:linear-gradient(90deg,#020103,#17050b)}
+
+/* -------------------------------------------------------------------------- */
+/* Dedicated final floor.                                                     */
+/* -------------------------------------------------------------------------- */
+.campaign-final-floor-screen{
+  --final-accent:#d5ad5a;
+  box-sizing:border-box;
+  position:relative;
+  isolation:isolate;
+  width:100%;
+  height:100dvh;
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  gap:7px;
+  overflow:hidden;
+  padding:max(8px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(8px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));
+  background:#030306;
+  color:#e8dfd0;
+}
+.campaign-final-floor-screen::before{
+  content:"";
+  position:absolute;
+  z-index:-2;
+  inset:0;
+  background-image:linear-gradient(180deg,#06040a61,#030306c4 70%,#020204f2),url("../../assets/ui/battle/boss-throne.png");
+  background-position:center;
+  background-size:cover;
+  filter:saturate(.7) brightness(.58) contrast(1.1);
+  transform:scale(1.03);
+}
+.campaign-final-floor-screen::after{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:0;
+  background:radial-gradient(circle at 50% 42%,#a12d4635,transparent 34%),linear-gradient(90deg,#000b,transparent 26% 74%,#000b);
+  box-shadow:inset 0 0 72px #000;
+  pointer-events:none;
+}
+.campaign-final-floor-header{
+  min-width:0;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  padding:8px 11px;
+  border:1px solid #84683d;
+  background:linear-gradient(90deg,#100d0dea,#08070bea);
+  box-shadow:0 5px 15px #000b,inset 0 0 13px #d6a94c12;
+}
+.campaign-final-floor-header>div{min-width:0}
+.campaign-final-floor-header small{display:block;color:#bb8d58;font:900 8px/1 ui-monospace,monospace;letter-spacing:.16em}
+.campaign-final-floor-header h1{overflow:hidden;margin:3px 0 0;color:#f3dfb2;font:900 clamp(18px,5vw,31px)/1.05 Georgia,"Yu Mincho",serif;text-overflow:ellipsis;white-space:nowrap}
+.campaign-final-floor-progress{display:grid;justify-items:end;gap:3px;color:#b8a98e;font:800 8px/1 sans-serif;white-space:nowrap}
+.campaign-final-floor-progress>b{color:#f2ce7b;font-size:14px}
+
+.campaign-final-floor-stage{
+  min-height:0;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  gap:8px;
+  overflow:hidden;
+  padding:11px;
+  border:1px solid #725737;
+  background:linear-gradient(180deg,#0a070bbb,#040407de);
+  box-shadow:inset 0 0 38px #000,0 8px 24px #000a;
+}
+.campaign-final-floor-stage>header{text-align:center}
+.campaign-final-floor-stage>header small{color:#b98192;font:900 8px/1 ui-monospace,monospace;letter-spacing:.18em}
+.campaign-final-floor-stage>header h2{margin:5px 0;color:#ffe1a1;font:900 clamp(22px,6vw,38px)/1.05 Georgia,"Yu Mincho",serif;text-shadow:0 3px 8px #000,0 0 18px #b640564c}
+.campaign-final-floor-stage>header p{max-width:640px;margin:0 auto;color:#c8bdc6;font-size:11px;line-height:1.5}
+
+.campaign-final-hero-grid{
+  min-height:0;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  align-items:stretch;
+  gap:7px;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  padding:3px;
+  -webkit-overflow-scrolling:touch;
+}
+.campaign-final-hero-card{
+  position:relative;
+  min-width:0;
+  display:grid;
+  grid-template-rows:auto minmax(72px,1fr) auto auto;
+  align-items:end;
+  gap:5px;
+  padding:7px;
+  overflow:hidden;
+  border:1px solid #694353;
+  background:linear-gradient(180deg,#1b0d17dc,#08070be8);
+  box-shadow:inset 0 0 18px #000a;
+}
+.campaign-final-hero-card::after{content:"";position:absolute;inset:auto 9px 4px;height:1px;background:linear-gradient(90deg,transparent,#b9788d,transparent)}
+.campaign-final-hero-card>small{overflow:hidden;color:#b87e90;font:900 7px/1 ui-monospace,monospace;letter-spacing:.1em;text-overflow:ellipsis;white-space:nowrap}
+.campaign-final-hero-art{min-height:0;display:grid;place-items:end center}
+.campaign-final-floor-hero-visual{width:min(100%,112px)!important;height:min(19vh,132px)!important;display:grid!important;place-items:end center}
+.campaign-final-floor-hero-visual img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;filter:drop-shadow(0 6px 4px #000) drop-shadow(0 0 8px #9d314f55)}
+.campaign-final-hero-copy{min-width:0;display:grid;gap:2px}
+.campaign-final-hero-copy>b{overflow:hidden;color:#f1dfcb;font:900 12px/1.1 Georgia,"Yu Mincho",serif;text-overflow:ellipsis;white-space:nowrap}
+.campaign-final-hero-copy>span{overflow:hidden;color:#968d97;font-size:8px;text-overflow:ellipsis;white-space:nowrap}
+.campaign-final-hero-hp{position:relative;height:10px;overflow:hidden;border:1px solid #47232e;background:#030305}
+.campaign-final-hero-hp>i{display:block;width:var(--hero-hp,100%);height:100%;background:linear-gradient(90deg,#77172c,#df4156 68%,#ffc0b5);box-shadow:0 0 7px #d63850;transition:width .5s ease}
+.campaign-final-hero-hp>em{position:absolute;inset:0;display:grid;place-items:center;color:#fff5ec;font:900 7px/1 ui-monospace,monospace;font-style:normal;text-shadow:0 1px 2px #000}
+.campaign-final-hero-card.is-wounded{border-color:#b35942;background:linear-gradient(180deg,#25100ddc,#08070be8)}
+.campaign-final-hero-card.is-wounded .campaign-final-hero-art img{filter:drop-shadow(0 6px 4px #000) drop-shadow(0 0 9px #e05a3f73)}
+.campaign-final-hero-card.is-defeated{
+  border-color:#39333b;
+  background:linear-gradient(180deg,#0c0b0dcc,#050506e8);
+  filter:saturate(.14);
+}
+.campaign-final-hero-card.is-defeated>small{color:#d0abb7}
+.campaign-final-hero-card.is-defeated .campaign-final-hero-copy>span{color:#c0b7c0}
+.campaign-final-hero-card.is-defeated .campaign-final-hero-art img{filter:grayscale(1) brightness(.48) drop-shadow(0 5px 3px #000);transform:translateY(6px)}
+.campaign-final-hero-card.is-defeated .campaign-final-hero-hp>i{width:0!important}
+.campaign-final-hero-card.is-defeated::before{content:"";position:absolute;z-index:2;inset:8px;background:linear-gradient(135deg,transparent 48.5%,#a98c6d 49% 51%,transparent 51.5%),linear-gradient(45deg,transparent 48.5%,#a98c6d 49% 51%,transparent 51.5%);opacity:.42;pointer-events:none}
+
+.campaign-final-floor-actions{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(120px,.42fr);
+  align-items:center;
+  gap:8px;
+}
+.campaign-final-floor-actions>p{margin:0;padding:8px;border-left:3px solid #8d3c51;background:#0d080ccc;color:#beb2bb;font-size:10px;line-height:1.45}
+.campaign-final-floor-actions>p b{color:#f0cc83}
+.campaign-final-floor-actions>button,
+.campaign-final-floor-footer>button{
+  min-height:48px;
+  padding:7px 12px;
+  border:7px solid transparent;
+  border-image:var(--alpha115-frame-active,url("../../assets/ui/v2/ornate-frame-active.png")) 44 fill / 7px stretch;
+  border-radius:0;
+  background:linear-gradient(180deg,#3d2713,#110b08);
+  color:#ffe4a4;
+  font:900 13px/1.2 Georgia,"Yu Mincho",serif;
+  touch-action:manipulation;
+}
+.campaign-final-floor-actions>button:disabled{filter:grayscale(1);opacity:.42}
+.campaign-final-floor-footer{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:7px 9px;border:1px solid #59452f;background:#08070ad9}
+.campaign-final-floor-footer>p{min-width:0;margin:0;color:#a79da6;font-size:9px;line-height:1.4}
+.campaign-final-floor-footer>nav{display:flex;gap:6px}
+.campaign-final-floor-footer button{min-height:44px;padding:7px 12px;border:1px solid #84683d;background:#17100c;color:#f4d48d;font:900 11px/1 Georgia,"Yu Mincho",serif}
+
+/* -------------------------------------------------------------------------- */
+/* Build310 endings. Existing Build304 ending markup remains compatible.      */
+/* -------------------------------------------------------------------------- */
+.campaign-ending.ending-complete::before{background:radial-gradient(circle at 50% 30%,#d9ab3d48,transparent 48%)}
+.campaign-ending.ending-complete h2{color:#ffe5a0;text-shadow:0 3px 9px #000,0 0 22px #e0b34c88}
+.campaign-ending:is(.ending-narrow,.ending-comeback)::before{background:radial-gradient(circle at 50% 30%,#803cad52,transparent 49%)}
+.campaign-ending:is(.ending-narrow,.ending-comeback) h2{color:#e5b4ff;text-shadow:0 3px 9px #000,0 0 20px #9a4dcc88}
+.campaign-ending.ending-defeat::before{background:radial-gradient(circle at 50% 30%,#b420394f,transparent 48%)}
+.campaign-ending.ending-defeat h2{color:#ff9eaa;text-shadow:0 3px 9px #000,0 0 18px #d3264477}
+.campaign-ending:is(.ending-all-preempted,.ending-preemptive)::before{background:radial-gradient(circle at 50% 30%,#4d9d8b52,transparent 48%)}
+.campaign-ending:is(.ending-all-preempted,.ending-preemptive) h2{color:#bff6de;text-shadow:0 3px 9px #000,0 0 22px #55c9a88f}
+.campaign-ending:is(.ending-all-preempted,.ending-preemptive)>b{border-color:#4f8777;background:#07110e;color:#ccebdd}
+.campaign-ending-hero-result{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:12px}
+.campaign-ending-hero-result>span{min-width:0;padding:6px;border:1px solid #4b3d48;background:#08070a;color:#bcb1b9;font-size:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.campaign-ending-hero-result>span.is-defeated{border-color:#497165;color:#b7e0d2}
+
+/* -------------------------------------------------------------------------- */
+/* Lionel rewinds the prophecy from day ten to day nine after a final defeat. */
+/* -------------------------------------------------------------------------- */
+.lionel-rewind-modal{z-index:110!important;place-items:safe center!important;background:radial-gradient(circle at 50% 44%,#3c1e5966,transparent 42%),#020205f2!important}
+.lionel-rewind-modal>.game-modal-card{
+  width:min(94vw,650px)!important;
+  max-height:calc(100dvh - max(16px,env(safe-area-inset-top)) - max(16px,env(safe-area-inset-bottom)))!important;
+  overflow:hidden!important;
+  border-image:var(--alpha115-frame-active,url("../../assets/ui/v2/ornate-frame-active.png")) 44 fill / 9px stretch!important;
+  background:linear-gradient(180deg,#120d18f8,#050509fc)!important;
+}
+.lionel-rewind{display:grid;gap:12px;padding:5px 2px 9px;text-align:center}
+.lionel-rewind>header small{color:#a486c2;font:900 9px/1 ui-monospace,monospace;letter-spacing:.18em}
+.lionel-rewind>header h2{margin:7px 0 4px;color:#ead7ff;font:900 clamp(23px,7vw,40px)/1.06 Georgia,"Yu Mincho",serif;text-shadow:0 3px 8px #000,0 0 20px #8c4fc488}
+.lionel-rewind>header p{margin:0;color:#c5b8c9;font-size:11px;line-height:1.6}
+.lionel-rewind-stage{position:relative;min-height:245px;display:grid;place-items:center;overflow:hidden;border:1px solid #74548d;background:radial-gradient(circle at center,#2b1740 0,transparent 48%),#06050a;box-shadow:inset 0 0 32px #000}
+.lionel-rewind-stage::before,.lionel-rewind-stage::after{content:"";position:absolute;width:min(66vw,330px);aspect-ratio:1;border:1px solid #b683d08c;border-radius:50%;background:repeating-conic-gradient(#b67cce29 0 1deg,transparent 1deg 18deg);animation:lionelRewindRing 3.2s cubic-bezier(.45,0,.2,1) both}
+.lionel-rewind-stage::after{width:min(48vw,220px);border-color:#e6c46ba6;animation-duration:2.7s;animation-direction:reverse}
+.lionel-rewind-art{position:absolute;z-index:2;left:4%;bottom:0;width:min(34%,160px);height:85%;display:grid;place-items:end center}
+.lionel-rewind-visual{width:100%!important;height:100%!important;display:grid!important;place-items:end center}
+.lionel-rewind-visual img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;filter:drop-shadow(0 6px 4px #000) drop-shadow(0 0 10px #a75bd077)}
+.lionel-rewind-clock{position:relative;z-index:3;width:min(56%,290px);display:grid;place-items:center;gap:8px;margin-left:18%;padding:17px 10px;border:1px solid #8d6a9f;background:#08070bd9;box-shadow:0 6px 20px #000b}
+.lionel-rewind-day{grid-area:1/1;display:grid;gap:4px;opacity:0}
+.lionel-rewind-day>small{color:#a997ae;font:900 8px/1 ui-monospace,monospace;letter-spacing:.15em}
+.lionel-rewind-day>b{color:#f2dba3;font:900 clamp(29px,9vw,53px)/1 Georgia,"Yu Mincho",serif;text-shadow:0 2px 5px #000}
+.lionel-rewind-day.is-day-10{animation:lionelDayTen 2.2s ease-in both}
+.lionel-rewind-day.is-day-9{animation:lionelDayNine 2.2s 1.35s ease-out both}
+.lionel-rewind-note{margin:0;padding:8px 10px;border-left:3px solid #8e5aac;background:#0e0913;color:#c7bbc9;font-size:10px;line-height:1.5;text-align:left}
+.lionel-rewind-note>b{color:#ebd1ff}
+.lionel-rewind-defeat{display:block;margin:6px 0 3px;color:#ff9eaa;font:900 clamp(30px,9vw,52px)/1 Georgia,"Yu Mincho",serif;text-shadow:0 3px 9px #000,0 0 18px #d3264477}
+
+@keyframes campaignHeroDangerBreath{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes campaignHeroHudReveal{from{opacity:0;transform:translate(-50%,-14px)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes campaignHeroEdgePulse{0%,100%{box-shadow:0 3px 12px #000e,0 0 8px #c1254640}50%{box-shadow:0 3px 12px #000e,0 0 19px #f149638f}}
+@keyframes campaignHeroActorFound{0%{opacity:.2;transform:scale(.7);filter:brightness(3)}65%{opacity:1;transform:scale(1.12);filter:brightness(1.5)}100%{transform:scale(1)}}
+@keyframes lionelRewindRing{0%{opacity:0;transform:rotate(0) scale(.35)}25%{opacity:1}100%{opacity:.22;transform:rotate(-540deg) scale(1.15)}}
+@keyframes lionelDayTen{0%,34%{opacity:1;transform:none;filter:blur(0)}75%,100%{opacity:0;transform:translateY(18px) scale(.8);filter:blur(8px)}}
+@keyframes lionelDayNine{0%,12%{opacity:0;transform:translateY(-18px) scale(1.22);filter:blur(8px)}55%,100%{opacity:1;transform:none;filter:blur(0)}}
+
+/* -------------------------------------------------------------------------- */
+/* Phone, iPhone safe areas and short landscape layouts.                      */
+/* -------------------------------------------------------------------------- */
+@media(max-width:560px){
+  .campaign-hero-chase-hud{top:6px;width:min(64%,250px);grid-template-columns:32px minmax(0,1fr);padding:4px 6px}
+  .campaign-hero-chase-portrait{width:30px;height:30px}.campaign-hero-chase-portrait .campaign-hero-chase-visual{width:29px!important;height:29px!important}
+  .campaign-hero-chase-state{grid-column:2;grid-row:2;grid-template-columns:auto 42px;justify-self:stretch;align-items:center;justify-content:space-between;min-width:0}
+  .campaign-hero-chase-copy>small{font-size:6px}.campaign-hero-chase-copy>b{font-size:9px}
+  .campaign-hero-edge-chip{width:40px;height:40px}.campaign-hero-edge-chip>.campaign-hero-edge-visual{width:34px!important;height:34px!important}
+  .campaign-final-floor-screen{gap:5px;padding:max(5px,env(safe-area-inset-top)) max(5px,env(safe-area-inset-right)) max(5px,env(safe-area-inset-bottom)) max(5px,env(safe-area-inset-left))}
+  .campaign-final-floor-header{padding:6px 8px}.campaign-final-floor-header h1{font-size:18px}.campaign-final-floor-progress>b{font-size:12px}
+  .campaign-final-floor-stage{gap:6px;padding:7px}.campaign-final-floor-stage>header h2{font-size:23px}.campaign-final-floor-stage>header p{font-size:9px}
+  .campaign-final-hero-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+  .campaign-final-hero-card{grid-template-columns:52px minmax(0,1fr);grid-template-rows:auto 1fr auto;grid-template-areas:"art tag" "art copy" "hp hp";align-items:center;gap:3px;min-height:91px;padding:5px}
+  .campaign-final-hero-card>small{grid-area:tag}.campaign-final-hero-art{grid-area:art;height:68px}.campaign-final-floor-hero-visual{width:50px!important;height:66px!important}.campaign-final-hero-copy{grid-area:copy}.campaign-final-hero-hp{grid-area:hp}
+  .campaign-final-floor-actions{grid-template-columns:minmax(0,1fr) minmax(112px,.55fr);gap:5px}.campaign-final-floor-actions>p{font-size:8px}.campaign-final-floor-actions>button{font-size:11px}
+  .campaign-final-floor-footer{grid-template-columns:minmax(0,1fr) auto;padding:5px}.campaign-final-floor-footer>p{font-size:8px}
+  .campaign-ending-hero-result{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lionel-rewind-modal{padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left))!important}
+  .lionel-rewind-modal>.game-modal-card{width:calc(100vw - 12px)!important;padding:10px!important}
+  .lionel-rewind{gap:8px}.lionel-rewind-stage{min-height:220px}.lionel-rewind-art{width:31%}.lionel-rewind-clock{width:61%;margin-left:23%;padding:13px 7px}.lionel-rewind-note{font-size:9px}
+}
+
+@media(orientation:landscape) and (max-height:560px){
+  .campaign-final-floor-screen{height:100dvh;grid-template-columns:minmax(165px,.34fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:5px;padding:max(4px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) max(4px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left))}
+  .campaign-final-floor-header{grid-column:1;grid-row:1;align-content:center;grid-template-columns:1fr}.campaign-final-floor-progress{justify-items:start}.campaign-final-floor-stage{grid-column:2;grid-row:1/3;padding:6px}.campaign-final-floor-stage>header h2{font-size:20px}.campaign-final-floor-stage>header p{display:none}
+  .campaign-final-hero-grid{grid-template-columns:repeat(4,minmax(0,1fr));overflow:hidden}.campaign-final-hero-card{display:grid;grid-template-columns:1fr;grid-template-rows:auto minmax(45px,1fr) auto auto;grid-template-areas:none;min-height:0}.campaign-final-hero-card>small,.campaign-final-hero-art,.campaign-final-hero-copy,.campaign-final-hero-hp{grid-area:auto}.campaign-final-hero-art{height:auto}.campaign-final-floor-hero-visual{width:min(100%,72px)!important;height:min(25vh,82px)!important}
+  .campaign-final-floor-actions{grid-template-columns:minmax(0,1fr) 126px}.campaign-final-floor-footer{grid-column:1;grid-row:2}.campaign-final-floor-footer>p{display:none}
+  .lionel-rewind-modal>.game-modal-card{width:min(92vw,760px)!important;max-height:calc(100dvh - 8px)!important;padding:9px!important}.lionel-rewind{grid-template-columns:minmax(0,1fr) minmax(270px,1.3fr);grid-template-rows:auto auto;gap:7px;text-align:left}.lionel-rewind>header{align-self:center}.lionel-rewind-stage{grid-column:2;grid-row:1/3;min-height:calc(100dvh - 64px)}.lionel-rewind-note{grid-column:1}.lionel-rewind-art{width:28%}.lionel-rewind-clock{width:58%}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .explore-stage.is-hero-hunt::after,
+  .campaign-hero-chase-hud.is-discovered,
+  .campaign-hero-edge-chip.is-tracking,
+  .campaign-hero-field-actor.is-discovered,
+  .lionel-rewind-stage::before,
+  .lionel-rewind-stage::after,
+  .lionel-rewind-day.is-day-10,
+  .lionel-rewind-day.is-day-9{animation:none!important;transition:none!important}
+  .campaign-hero-chase-hud.is-discovered{opacity:1;transform:translate(-50%,0)}
+  .lionel-rewind-stage::before,.lionel-rewind-stage::after{opacity:.25;transform:none}
+  .lionel-rewind-day.is-day-10{display:none;opacity:0}
+  .lionel-rewind-day.is-day-9{opacity:1;filter:none;transform:none}
+  .campaign-hero-wound-meter>i,.campaign-final-hero-hp>i{transition:none!important}
+}

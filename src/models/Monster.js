@@ -1,11 +1,11 @@
-import{SPECIES}from"../data/species.js?v=2.11.82-build258";
-import{PERSONALITIES}from"../data/personalities.js?v=2.11.0-build164";
-import{MONSTER_COLORS}from"../data/colors.js?v=2.11.0-build164";
-import{normalizedResistances}from"../data/attributes.js?v=2.11.0-build164";
-import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=2.11.0-build164";
-import{normalizePersistentAilments}from"../data/statusEffects.js?v=2.11.0-build164";
-import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=3.0.5-build305";
-import{baseExperienceNeedForLevel}from"../core/ProgressionSystem.js?v=3.0.5-build305";
+import{SPECIES}from"../data/species.js?v=3.1.1-build311";
+import{PERSONALITIES}from"../data/personalities.js?v=3.1.1-build311";
+import{MONSTER_COLORS}from"../data/colors.js?v=3.1.1-build311";
+import{normalizedResistances}from"../data/attributes.js?v=3.1.1-build311";
+import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=3.1.1-build311";
+import{normalizePersistentAilments}from"../data/statusEffects.js?v=3.1.1-build311";
+import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=3.1.1-build311";
+import{baseExperienceNeedForLevel}from"../core/ProgressionSystem.js?v=3.1.1-build311";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;

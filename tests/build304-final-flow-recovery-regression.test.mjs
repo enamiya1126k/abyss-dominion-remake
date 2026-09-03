@@ -202,7 +202,7 @@ for (const stage of ["party", "sairan"]) {
   });
 }
 
-test("Build304 keeps a valid final-battle checkpoint byte-for-byte unchanged", () => {
+test("Build309 retires even a structurally valid legacy Sairan checkpoint", () => {
   const state = {
     player: { inRun: true },
     activeBattle: {
@@ -230,12 +230,18 @@ test("Build304 keeps a valid final-battle checkpoint byte-for-byte unchanged", (
       sairanMonsterId: "checkpoint-sairan",
     },
   };
-  const before = clone(state);
-
   const result = recoverPendingCampaignFinalFlow(state);
 
-  assert.deepEqual(result, { recovered: false, checkpointReady: true });
-  assert.deepEqual(state, before);
+  assert.deepEqual(result, { recovered: true, stage: "sairan", restoredParty: ["m1"] });
+  assert.deepEqual(state.party, ["m1"]);
+  assert.equal(state.monsters.some(monster => monster?.id === "checkpoint-sairan"), false);
+  assert.equal(state.monsters.find(monster => monster?.id === "m1").currentHp, 33);
+  assert.equal(state.monsters.find(monster => monster?.id === "m1").currentMp, 14);
+  assert.equal(Object.hasOwn(state, "activeBattle"), false);
+  assert.equal(state.expeditionSnapshot, null);
+  assert.equal(state.player.inRun, false);
+  assert.equal(state.campaign100.finalFlowRecovery.version, 2);
+  assert.equal(state.campaign100.finalFlowRecovery.reason, "sairan-story-only");
 });
 
 test("Build304 pending recovery never destroys a different special-battle checkpoint", () => {

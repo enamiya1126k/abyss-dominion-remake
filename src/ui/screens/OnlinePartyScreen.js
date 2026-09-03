@@ -1,11 +1,11 @@
-import { SPECIES } from "../../data/species.js?v=2.11.82-build258";
-import { displayName, calculatedStats } from "../../models/Monster.js?v=3.0.5-build305";
-import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=3.0.5-build305";
-import { magicCircleById, equippedMagicCircle, goldPowerDamageMultiplier, goldPowerActionCost } from "../../core/MagicCircleSystem.js?v=3.0.5-build305";
-import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=3.0.5-build305";
-import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=2.11.82-build258";
-import { monsterVisual } from "../MonsterVisual.js?v=3.0.5-build305";
-import { resourceHud, pixelIcon } from "../components/GameChrome.js?v=3.0.5-build305";
+import { SPECIES } from "../../data/species.js?v=3.1.1-build311";
+import { displayName, calculatedStats } from "../../models/Monster.js?v=3.1.1-build311";
+import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=3.1.1-build311";
+import { magicCircleById, equippedMagicCircle, goldPowerDamageMultiplier, goldPowerActionCost } from "../../core/MagicCircleSystem.js?v=3.1.1-build311";
+import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=3.1.1-build311";
+import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=3.1.1-build311";
+import { monsterVisual } from "../MonsterVisual.js?v=3.1.1-build311";
+import { resourceHud, pixelIcon } from "../components/GameChrome.js?v=3.1.1-build311";
 
 export const ONLINE_STORAGE_KEYS = Object.freeze({
   friendId: "abyss-dominion-online-friend-id",
@@ -489,7 +489,7 @@ export function renderOnlineRoomDirectory(listings = [], { status = "idle", pend
     const aria = `${hostName}の部屋、${purposeLabel}、${styleLabel}、${floor}階、${count}/${maximum}人に参加`;
     return `<article class="online-room-listing-card ${joining ? "joining" : ""}" role="listitem" data-online-listed-room="${escapeOnlineHtml(roomId)}">
       <div class="online-room-listing-copy"><span><em>${escapeOnlineHtml(purposeLabel)}</em><em>${escapeOnlineHtml(styleLabel)}</em></span><b>${escapeOnlineHtml(hostName)}</b><small>仲間：${escapeOnlineHtml(monsterName)}</small></div>
-      <dl><div><dt>階層</dt><dd>${floor.toLocaleString()}F</dd></div><div><dt>人数</dt><dd>${count}/${maximum}</dd></div><div><dt>ROOM</dt><dd>${escapeOnlineHtml(roomId || "------")}</dd></div></dl>
+      <dl><div><dt>階層</dt><dd>${floor.toLocaleString()}階</dd></div><div><dt>人数</dt><dd>${count}/${maximum}</dd></div><div><dt>ROOM</dt><dd>${escapeOnlineHtml(roomId || "------")}</dd></div></dl>
       <button type="button" data-online-join-listed-room="${escapeOnlineHtml(roomId)}" data-online-listing-id="${escapeOnlineHtml(listingId)}" aria-label="${escapeOnlineHtml(aria)}" ${pendingId ? "disabled" : ""}>${joining ? "参加中…" : "参加"}</button>
     </article>`;
   }).join("");
@@ -572,7 +572,7 @@ function onlineGuildActivityCard(entry) {
   const actorIcons = actors.slice(0, 4).map(actor => `<i aria-hidden="true">${escapeOnlineHtml(String(actor?.fallbackEmoji || "魔").slice(0, 8))}</i>`).join("");
   const partySize = onlineSocialCount(entry?.partySize, kind === "checkIn" ? 20 : 4), guildMemberCount = onlineSocialCount(entry?.guildMemberCount, 20);
   const floor = onlineSocialCount(entry?.floor, 100), points = onlineSocialCount(entry?.points, 1_000_000_000);
-  const badges = `${floor && ["expedition", "floorBoss", "coopBoss"].includes(kind) ? `<em>${floor.toLocaleString()}F</em>` : ""}${partySize ? `<em>${kind === "checkIn" ? "出席" : "PT"} ${partySize}人</em>` : ""}${guildMemberCount ? `<em>ギルド ${guildMemberCount}人</em>` : ""}`;
+  const badges = `${floor && ["expedition", "floorBoss", "coopBoss"].includes(kind) ? `<em>${floor.toLocaleString()}階</em>` : ""}${partySize ? `<em>${kind === "checkIn" ? "出席" : "PT"} ${partySize}人</em>` : ""}${guildMemberCount ? `<em>ギルド ${guildMemberCount}人</em>` : ""}`;
   return `<article class="online-guild-activity-card"><span class="online-guild-activity-actors">${actorIcons || "<i aria-hidden=\"true\">魔</i>"}${actors.length > 4 ? `<b>+${actors.length - 4}</b>` : ""}</span><div><p><b>${onlineGuildActorNames(actors)}</b>${label}</p><span>${badges}${points ? `<strong>+${points.toLocaleString()} Pt</strong>` : ""}</span></div><time>${escapeOnlineHtml(onlineGuildActivityTime(entry?.at))}</time></article>`;
 }
 
@@ -681,7 +681,7 @@ function onlineGuildPlanCard(entry, { pending = null, disabled = false, gatherin
   const myStatus = ["going", "maybe", "none"].includes(entry?.myStatus) ? entry.myStatus : "none";
   const responding = onlineGuildPending(pending, "planRespond", id), cancelling = onlineGuildPending(pending, "planCancel", id);
   const attendeeRows = attendees.map(person => `<li class="${person.status}"><i aria-hidden="true">${escapeOnlineHtml(person?.fallbackEmoji || "魔")}</i><b>${escapeOnlineHtml(person?.displayName || "冒険者")}</b><span>${person.status === "going" ? "参加予定" : "未定"}</span></li>`).join("");
-  const planFloor = purpose === "explore" ? `<em>${Math.max(1, onlineSocialCount(entry?.floor, 100)).toLocaleString()}F</em>` : "";
+  const planFloor = purpose === "explore" ? `<em>${Math.max(1, onlineSocialCount(entry?.floor, 100)).toLocaleString()}階</em>` : "";
   const at = Number.isFinite(Number(now)) ? Number(now) : Date.now(), gathering = entry?.gathering && typeof entry.gathering === "object" ? entry.gathering : null;
   const gatheringActive = Boolean(gathering && Number(gathering.expiresAt) > at), gatheringFull = Boolean(gathering && (Number(gathering.count) >= Number(gathering.max) || Number(gathering.slots) <= 0));
   let gatheringMarkup = "";
@@ -746,7 +746,7 @@ function onlineGuildRecruitmentCard(entry, { selfId = "", room = null, pending =
     <header><span class="online-guild-avatar" aria-hidden="true">${escapeOnlineHtml(host?.fallbackEmoji || "魔")}</span><div><small>${own ? "YOUR PARTY" : "GUILD PARTY"}</small><b>${escapeOnlineHtml(host?.displayName || "冒険者")}</b><span>${escapeOnlineHtml(host?.monsterName || "仲間")}・Lv.${Math.max(1, onlineSocialCount(host?.level, 99_999_999)).toLocaleString()}</span></div><time>${escapeOnlineHtml(onlineGuildRecruitmentTime(entry?.expiresAt, now))}</time></header>
     <div class="online-guild-recruitment-tags"><em>${escapeOnlineHtml(roomPurposeLabel(entry?.purpose))}</em><em>${escapeOnlineHtml(roomStyleLabel(entry?.style))}</em></div>
     ${entry?.note ? `<p>${escapeOnlineHtml(entry.note)}</p>` : ""}
-    <footer><dl><div><dt>階層</dt><dd>${Math.max(1, onlineSocialCount(entry?.floor, 100)).toLocaleString()}F</dd></div><div><dt>人数</dt><dd>${count} / ${maximum}</dd></div></dl>${action}</footer>
+    <footer><dl><div><dt>階層</dt><dd>${Math.max(1, onlineSocialCount(entry?.floor, 100)).toLocaleString()}階</dd></div><div><dt>人数</dt><dd>${count} / ${maximum}</dd></div></dl>${action}</footer>
   </article>`;
 }
 

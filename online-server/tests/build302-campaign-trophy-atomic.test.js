@@ -108,9 +108,11 @@ test("build302 trophy remains fully locked at one or two keys and pays everythin
 
   const rewards = owner.session.pendingRewards.filter(entry => entry.source?.kind === "campaignTrophy");
   assert.equal(rewards.length, 1, "three fragment packs and the mythic are one atomic delivery");
-  assert.match(rewards[0].rewardId, /^campaign-trophy:v4:/);
+  assert.match(rewards[0].rewardId, /^campaign-trophy:v6:/);
+  assert.ok(rewards[0].rewardId.includes(room.expedition.campaignRewardRunId));
+  assert.ok(rewards[0].rewardId.includes(trophy.bossId));
   assert.equal(rewards[0].reward.randomEquipmentRarity, "神話");
-  assert.equal(rewards[0].reward.crystals, 15);
+  assert.ok(rewards[0].reward.crystals >= 25, "Build308 uses the increased floor-boss crystal reward");
   assert.equal(rewards[0].source.fragmentPacks, 3);
   assert.equal(rewards[0].source.legacyFragmentPacks, 0);
   assert.equal(rewards[0].source.fragmentAwards[0].amount, 12);
@@ -164,7 +166,7 @@ test("build302 rescues Build301 partial fragment locks without removing or re-aw
   assert.equal(rewards[0].source.legacyFragmentPacks, 1);
   assert.equal(rewards[0].source.fragmentPacks, 2, "only the two unpaid fragment packs are delivered");
   assert.equal(rewards[0].source.fragmentAwards[0].amount, 8);
-  assert.equal(rewards[0].reward.crystals, 10);
+  assert.ok(rewards[0].reward.crystals >= 25, "legacy fragment recovery still receives the full Build308 boss currency");
   assert.equal(rewards[0].reward.randomEquipmentRarity, "神話");
   assert.equal(rewards[0].source.firstClaim, true);
   assert.equal(context.room.hostWorld.campaignFloorStates["6"].trophyLocksOpened, 3);
@@ -188,7 +190,7 @@ test("build302 preserves the canonical partial receipt sent by an offline save",
   const reward = context.owner.session.pendingRewards.find(entry => entry.source?.kind === "campaignTrophy");
   assert.equal(reward.source.legacyFragmentPacks, 2);
   assert.equal(reward.source.fragmentPacks, 1);
-  assert.equal(reward.reward.crystals, 5);
+  assert.ok(reward.reward.crystals >= 25, "only fragments are prorated; Build308 boss currency is not");
   assert.equal(reward.reward.randomEquipmentRarity, "神話");
 });
 

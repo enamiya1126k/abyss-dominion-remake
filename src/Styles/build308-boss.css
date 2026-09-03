@@ -1,0 +1,267 @@
+/* Build 308: boss-trophy identity, currency payoff and post-boss clarity. */
+
+/* A fragment is represented by its owner, not by an abstract diamond. */
+.campaign-loot-modal .campaign-fragment-list {
+  min-width: 0;
+  gap: 7px;
+}
+.campaign-loot-modal .campaign-fragment-get {
+  box-sizing: border-box;
+  grid-template-columns: 58px minmax(0, 1fr);
+  min-width: 0;
+  width: 100%;
+  min-height: 62px;
+  padding: 7px 10px;
+  overflow: hidden;
+  border-color: #74508b;
+  background: radial-gradient(circle at 29px 50%, #a44be326, transparent 54px),
+    linear-gradient(90deg, #100916, #09070c 72%);
+}
+.campaign-loot-modal .campaign-fragment-get > i {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  overflow: visible;
+  border: 1px solid #69427e;
+  background: radial-gradient(circle, #5d257846 0, #09070d 72%);
+  box-shadow:
+    inset 0 0 15px #bf5eff24,
+    0 0 10px #b44cff28;
+  text-shadow: none;
+}
+.campaign-loot-modal .campaign-fragment-get > i::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #e3a2ff30, transparent 70%);
+}
+.campaign-loot-modal .campaign-fragment-boss-art,
+.campaign-loot-modal .campaign-fragment-boss-art img {
+  display: block;
+  width: 52px !important;
+  height: 52px !important;
+  max-width: 52px !important;
+  max-height: 52px !important;
+  object-fit: contain;
+}
+.campaign-loot-modal .campaign-fragment-boss-art {
+  overflow: visible;
+  filter: drop-shadow(0 3px 2px #000) drop-shadow(0 0 7px #cf6cff96);
+}
+.campaign-loot-modal .campaign-fragment-boss-art img {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.campaign-loot-modal .campaign-fragment-get > span {
+  min-width: 0;
+  align-items: center;
+}
+.campaign-loot-modal .campaign-fragment-get small,
+.campaign-loot-modal .campaign-fragment-get b,
+.campaign-loot-modal .campaign-fragment-get em {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.campaign-loot-modal .campaign-fragment-get small {
+  color: #d7b6e8;
+  font-size: 10px;
+}
+
+/* GOLD and crystals stay compact and read as currencies at a glance. */
+.campaign-loot-modal .campaign-fragment-get.is-currency {
+  grid-template-columns: 48px minmax(0, 1fr);
+  min-height: 54px;
+  border-color: #685532;
+  background: radial-gradient(circle at 24px 50%, #d6a33b25, transparent 48px),
+    linear-gradient(90deg, #120e08, #09080a 72%);
+}
+.campaign-loot-modal .campaign-fragment-get.is-currency > i {
+  width: 44px;
+  height: 44px;
+  border-color: #796333;
+  background: radial-gradient(circle, #8c672f3d, #08080b 72%);
+  box-shadow:
+    inset 0 0 12px #efc35a20,
+    0 0 8px #d9ae4430;
+}
+.campaign-loot-modal .campaign-fragment-get.is-currency > i::after {
+  inset: 4px;
+  background: radial-gradient(circle, #ffe19b20, transparent 72%);
+}
+.campaign-loot-modal .campaign-fragment-get.is-currency .home-pixel-icon {
+  width: 38px !important;
+  height: 38px !important;
+  margin: 0 !important;
+  filter: drop-shadow(0 0 6px #ecc65a99) !important;
+}
+.campaign-loot-modal .campaign-fragment-get.is-currency > span > b {
+  color: #ffe197;
+  font-variant-numeric: tabular-nums;
+}
+.campaign-loot-modal .campaign-fragment-get.is-currency > span > em {
+  white-space: nowrap;
+}
+
+/* Long fixed boss-equipment names must never push the reward card off-screen. */
+.campaign-loot-modal .campaign-loot-reveal,
+.campaign-loot-modal .campaign-mythic-item,
+.campaign-loot-modal .campaign-mythic-item > span {
+  min-width: 0;
+}
+.campaign-loot-modal .campaign-mythic-item b,
+.campaign-loot-modal .campaign-mythic-item em {
+  overflow-wrap: anywhere;
+}
+.campaign-loot-modal .campaign-loot-reveal > footer small {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+}
+
+/* The three field unlocks are status results. Colour separates their roles. */
+.post-boss-field-unlocks > div > span.trophy {
+  border-color: #82529b !important;
+  box-shadow: inset 0 0 15px #bb63e51c !important;
+}
+.post-boss-field-unlocks > div > span.spring {
+  border-color: #47747e !important;
+  box-shadow: inset 0 0 15px #6fe2f322 !important;
+}
+.post-boss-field-unlocks > div > span.route {
+  border-color: #87692f !important;
+  box-shadow: inset 0 0 15px #e6bb5720 !important;
+}
+.post-boss-field-unlocks > div > span.spring > .home-pixel-icon {
+  filter: drop-shadow(0 0 8px #7feaff) !important;
+}
+.post-boss-field-unlocks > div > span.trophy > .home-pixel-icon {
+  filter: drop-shadow(0 0 8px #d47cff) !important;
+}
+
+@media (max-width: 390px) {
+  .campaign-loot-modal {
+    padding: max(4px, env(safe-area-inset-top))
+      max(4px, env(safe-area-inset-right)) max(4px, env(safe-area-inset-bottom))
+      max(4px, env(safe-area-inset-left)) !important;
+  }
+  .campaign-loot-modal > .game-modal-card {
+    box-sizing: border-box;
+    width: calc(100vw - 8px) !important;
+    max-width: 100% !important;
+    max-height: calc(100dvh - 8px) !important;
+    padding: 10px !important;
+  }
+  .campaign-loot-modal > .game-modal-card > h2 {
+    font-size: 16px !important;
+  }
+  .campaign-loot-modal .campaign-loot-reveal {
+    gap: 7px;
+    padding: 11px 7px;
+  }
+  .campaign-loot-modal .campaign-loot-reveal > h3 {
+    font-size: clamp(30px, 10vw, 40px);
+  }
+  .campaign-loot-modal .campaign-mythic-item {
+    grid-template-columns: 70px minmax(0, 1fr);
+    gap: 8px;
+    padding: 7px;
+  }
+  .campaign-loot-modal .campaign-mythic-item > div {
+    width: 68px;
+    height: 68px;
+  }
+  .campaign-loot-modal .campaign-mythic-art {
+    width: 58px !important;
+    height: 58px !important;
+  }
+  .campaign-loot-modal .campaign-mythic-item b {
+    font-size: 13px;
+  }
+  .campaign-loot-modal .campaign-loot-stats {
+    gap: 3px;
+  }
+  .campaign-loot-modal .campaign-loot-stats span {
+    padding: 4px 3px;
+    font-size: 8px;
+  }
+  .campaign-loot-modal .campaign-fragment-get {
+    grid-template-columns: 50px minmax(0, 1fr);
+    min-height: 55px;
+    gap: 6px;
+    padding: 5px 7px;
+  }
+  .campaign-loot-modal .campaign-fragment-get > i {
+    width: 47px;
+    height: 47px;
+  }
+  .campaign-loot-modal .campaign-fragment-boss-art,
+  .campaign-loot-modal .campaign-fragment-boss-art img {
+    width: 45px !important;
+    height: 45px !important;
+    max-width: 45px !important;
+    max-height: 45px !important;
+  }
+  .campaign-loot-modal .campaign-fragment-get.is-currency {
+    grid-template-columns: 42px minmax(0, 1fr);
+    min-height: 46px;
+  }
+  .campaign-loot-modal .campaign-fragment-get.is-currency > i {
+    width: 39px;
+    height: 39px;
+  }
+  .campaign-loot-modal .campaign-fragment-get.is-currency .home-pixel-icon {
+    width: 34px !important;
+    height: 34px !important;
+  }
+  .campaign-loot-modal .campaign-fragment-get small {
+    font-size: 8px;
+  }
+  .campaign-loot-modal .campaign-fragment-get b {
+    font-size: 16px;
+  }
+  .campaign-loot-modal .campaign-fragment-get em {
+    font-size: 8px;
+  }
+  .campaign-loot-modal .campaign-loot-reveal > footer {
+    padding-top: 2px;
+  }
+  .campaign-loot-modal .campaign-loot-reveal > footer small {
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 390px) and (max-height: 740px) {
+  .campaign-loot-modal .campaign-loot-reveal > small {
+    font-size: 7px;
+  }
+  .campaign-loot-modal .campaign-loot-reveal > h3 {
+    font-size: 28px;
+  }
+  .campaign-loot-modal .campaign-mythic-item {
+    grid-template-columns: 58px minmax(0, 1fr);
+  }
+  .campaign-loot-modal .campaign-mythic-item > div {
+    width: 56px;
+    height: 56px;
+  }
+  .campaign-loot-modal .campaign-mythic-art {
+    width: 48px !important;
+    height: 48px !important;
+  }
+  .campaign-loot-modal .campaign-fragment-get {
+    min-height: 47px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .campaign-loot-modal .campaign-fragment-get,
+  .campaign-loot-modal .campaign-loot-reveal > h3,
+  .campaign-loot-modal .campaign-loot-rays {
+    animation: none !important;
+  }
+}

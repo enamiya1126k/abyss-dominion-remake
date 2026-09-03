@@ -1,0 +1,34 @@
+/* Build311: final iPhone/WebKit and release-audit corrections. */
+
+/* The north pursuit marker must sit below the fixed encounter HUD. */
+.campaign-hero-edge-chip.is-north {
+  top: 64px !important;
+  z-index: 37 !important;
+}
+
+/* All skip controls keep a full finger-sized target on iPhone. */
+.campaign-story-skip,
+.ending1000-skip,
+.ending10000-skip {
+  min-width: 44px !important;
+  min-height: 44px !important;
+  touch-action: manipulation;
+}
+
+/* Replace the platform-dependent chess glyph with the existing pixel atlas. */
+.online-leader-crown::before {
+  content: "" !important;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin-right: 3px;
+  background: url("../../assets/ui/home-ui-icons.png?v=3.1.1-build311") 100% 100% / 500% 400% no-repeat;
+  image-rendering: pixelated;
+  vertical-align: -2px;
+}
+
+@media (max-width: 720px) {
+  .campaign-hero-edge-chip.is-north {
+    top: 58px !important;
+  }
+}

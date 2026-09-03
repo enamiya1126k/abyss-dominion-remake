@@ -203,7 +203,7 @@ test("build301 the final trophy lock durably records claimedBossRewardFloors", (
     .filter(entry => entry.source?.kind === "campaignTrophy")
     .map(entry => entry.rewardId)
     .sort();
-  assert.deepEqual(stableIds, [`campaign-trophy:v4:${owner.session.playerId}:${floor}:run:${expedition.campaignRewardRunId}:claim:${owner.session.playerId}`]);
+  assert.deepEqual(stableIds, [`campaign-trophy:v6:${owner.session.playerId}:${floor}:${expedition.campaignRewardRunId}:${trophy.bossId}:claim:${owner.session.playerId}`]);
   assert.equal(stableIds.every(id => id.includes(expedition.campaignRewardRunId)), true, "reward ids are stable inside one run and distinct across explicit replays");
 });
 
@@ -223,7 +223,9 @@ test("build302 collected keys survive return without creating partial trophy cla
     runId: first.room.expedition.campaignRewardRunId, keysCollected: 1, trophyLocksOpened: 0,
     trophyFragmentPacksClaimed: 0,
     collectedKeyIds: [firstKey.id], hotSpringUsed: false, trophyMythicClaimed: false,
-    replayActive: false, bossDefeatedThisRun: false,
+    replayActive: false, bossDefeatedThisRun: true,
+    openedBossIds: [], claimedBossIds: [], mythicClaimedBossIds: [], fragmentPacksClaimedByBoss: {},
+    defeatedBossIds: [trophy.bossId],
   });
   assert.equal(trophy.locksOpened, 0);
   assert.equal(first.owner.session.pendingRewards.filter(entry => entry.source?.kind === "campaignTrophy").length, 0);
@@ -256,7 +258,7 @@ test("build301 hot spring use survives return and cannot heal again on re-entry"
   first.store._resolveLanding(first.room, first.owner.session);
 
   assert.equal(spring.resolved, true);
-  assert.equal(spring.hidden, true);
+  assert.equal(spring.hidden, false, "Build308 keeps a used spring visible");
   assert.equal(first.room.hostWorld.campaignFloorStates[String(floor)].hotSpringUsed, true);
   const delta = first.owner.session.pendingMessages.findLast(message => message.type === "hostWorldDelta");
   assert.deepEqual(delta.delta.hotSpringUsed, { floor });
@@ -266,7 +268,7 @@ test("build301 hot spring use survives return and cannot heal again on re-entry"
   const second = started({ floor, hostWorld: saved });
   const restored = objectOf(second.room.expedition, "hotSpring");
   assert.equal(restored.resolved, true);
-  assert.equal(restored.hidden, true);
+  assert.equal(restored.hidden, false, "the visible used state survives re-entry");
   assert.equal(second.result.room.hostWorld.campaignFloorStates[String(floor)].hotSpringUsed, true);
 });
 
@@ -334,21 +336,26 @@ test("build302 a failed all-key trophy settlement mutates neither the trophy nor
   assert.equal(owner.session.pendingRewards.filter(entry => entry.source?.kind === "campaignTrophy").length, 1);
 });
 
-test("build301 milestone trophy rewards carry every boss with offline fragment parity", () => {
+test("build308 milestone trophies each carry only their matching boss with fragment parity", () => {
   const floor = 100;
   const { store, owner, room } = started({ floor, defeated: [floor] });
   for (const key of room.expedition.objects.filter(object => object.type === "campaignKey")) {
     owner.session.dungeonPosition = { x: key.x, y: key.y, facing: "down" };
     store._resolveLanding(room, owner.session);
   }
-  const trophy = objectOf(room.expedition, "campaignTrophy");
-  owner.session.dungeonPosition = { x: trophy.x, y: trophy.y, facing: "down" };
-  store._resolveLanding(room, owner.session);
+  const trophies = room.expedition.objects.filter(object => object.type === "campaignTrophy");
+  assert.deepEqual(trophies.map(trophy => trophy.bossId), ["ten_dominion", "ten_creation", "ten_end", "ten_divinity"]);
+  for (const trophy of trophies) {
+    owner.session.dungeonPosition = { x: trophy.x, y: trophy.y, facing: "down" };
+    store._resolveLanding(room, owner.session);
+  }
 
-  const claim = owner.session.pendingRewards.find(entry => entry.source?.kind === "campaignTrophy");
-  assert.deepEqual(claim.source.bosses.map(boss => boss.endgameBossId), ["ten_dominion", "ten_creation", "ten_end", "ten_divinity"]);
-  assert.deepEqual(claim.source.fragmentAwards.map(entry => [entry.id, entry.amount]), [
-    ["ten_dominion", 30], ["ten_creation", 30], ["ten_end", 30], ["ten_divinity", 30],
+  const claims = owner.session.pendingRewards.filter(entry => entry.source?.kind === "campaignTrophy");
+  assert.equal(claims.length, 4);
+  assert.deepEqual(claims.map(claim => claim.source.bosses.map(boss => boss.endgameBossId)),
+    [["ten_dominion"], ["ten_creation"], ["ten_end"], ["ten_divinity"]]);
+  assert.deepEqual(claims.map(claim => claim.source.fragmentAwards.map(entry => [entry.id, entry.amount])), [
+    [["ten_dominion", 30]], [["ten_creation", 30]], [["ten_end", 30]], [["ten_divinity", 30]],
   ]);
 });
 

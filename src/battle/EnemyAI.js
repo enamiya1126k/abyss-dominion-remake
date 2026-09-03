@@ -1,7 +1,7 @@
-import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=2.11.0-build164";
-import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.0-build164";
-import{speciesLevelStats}from"../models/Monster.js?v=3.0.5-build305";
-import{floorBossActionInfo}from"../data/floorBosses.js?v=2.11.30-build195";
+import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=3.1.1-build311";
+import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=3.1.1-build311";
+import{speciesLevelStats}from"../models/Monster.js?v=3.1.1-build311";
+import{floorBossActionInfo}from"../data/floorBosses.js?v=3.1.1-build311";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
  devour:"devour",annihilate:"annihilate",wrathBurst:"wrathBurst",mirror:"mirror",sleepMist:"sleepMist",plunder:"plunder",sovereign:"sovereign",
@@ -74,7 +74,7 @@ export function createEnemyBattleState(species,source,floor){
  return{...source,speciesId:source.speciesId,name:depthName,level:source.level,hp:maxHp,maxHp,
   atk,matk,def,mdef,spd:Math.max(1,Math.floor(core.spd*profile.spd*depth.spd*Math.max(.5,Number(custom.spd)||1))),evasion:Math.min(75,Math.max(0,Number(source.evasion??core.evasion)||0)),accuracy:Math.max(20,Math.min(180,Number(source.accuracy??core.accuracy)||100)),
   emoji:species.emoji??"👾",color:boss?"#bb4cff":species.baseStats.atk>12?"#df6262":"#a58f59",boss,bossTier:profile.tier,bossStatusResist:Math.min(.9,(profile.statusResist??0)+depth.statusResist),bossHealRate:profile.healRate,bossPowerMultiplier:profile.powerMultiplier,depthTier:depth.label,depthStep:depth.step,depthPressure:depth.active?Math.round(depth.step*10):0,phase:1,enraged:false,guard:false,charging:false,healed:false,
-  intent:"様子を見ている",maxMp:maxEnemyMp,currentMp:Math.max(0,Math.min(maxEnemyMp,Number(source.currentMp??maxEnemyMp))),specialCooldown:0,divineBarrier:0,role:species.role??"balanced",race:species.race??null,strategicIdentity:species.strategicIdentity??null,element:species.element??"neutral"};
+  intent:"様子を見ている",maxMp:maxEnemyMp,currentMp:Math.max(0,Math.min(maxEnemyMp,Number(source.currentMp??maxEnemyMp))),specialCooldown:0,divineBarrier:0,role:source.role??species.role??"balanced",race:species.race??null,strategicIdentity:species.strategicIdentity??null,element:source.trialElement??source.attribute??source.element??species.element??"neutral"};
 }
 function setEnemySpecialCooldown(enemy,base){enemy.specialCooldown=Math.max(0,Math.floor(Number(base)||0))+1}
 function normalSpecialAction(enemy,hpRate){
@@ -127,10 +127,45 @@ export function enemyActionMpCost(enemy,action){
  return Math.max(1,Math.ceil(maximum*rate));
 }
 function canPay(enemy,action){return Math.max(0,Number(enemy.currentMp)||0)>=enemyActionMpCost(enemy,action)}
+function campaignHeroAction(enemy,context,hpRate){
+ const hero=String(enemy.campaignHeroId??""),allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(unit=>(unit.currentHp??0)>0),turn=Math.max(1,Number(context.battle?.turn)||1),wounded=allies.filter(unit=>unit.hp>0).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0],fallen=allies.find(unit=>unit.hp<=0);
+ if(hero==="myth_yori"){
+  enemy.campaignHeroTargetMode="weak";
+  if(!enemy._campaignObserved){enemy._campaignObserved=true;enemy.guard=true;enemy.intent="間合いと呼吸を観察する";return ENEMY_ACTIONS.guard}
+  if(enemy.charging){enemy.charging=false;enemy.intent="観察した急所へ拳を叩き込む";return ENEMY_ACTIONS.power}
+  if(turn%3===0&&canPay(enemy,ENEMY_ACTIONS.galeRend)){enemy.intent="拳圧で戦列を打ち抜く";return ENEMY_ACTIONS.galeRend}
+  enemy.charging=true;enemy.intent="渾身の一撃へ踏み込む";return ENEMY_ACTIONS.charge
+ }
+ if(hero==="myth_hide"){
+  enemy.campaignHeroTargetMode="threat";
+  const positiveKinds=new Set(["atkUp","defUp","spdUp","regen","taunt","guard","counter","lifeSteal"]),buffed=opponents.some(unit=>(context.battle?.allyEffects?.[unit.id]??[]).some(effect=>positiveKinds.has(effect.kind)));
+  if(buffed&&canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="強化の構造を解析して崩す";return ENEMY_ACTIONS.dispelWave}
+  if(opponents.length>=2&&canPay(enemy,ENEMY_ACTIONS.thunderChain)){enemy.intent="逃げ道を計算した連鎖術式を放つ";return ENEMY_ACTIONS.thunderChain}
+  if(canPay(enemy,ENEMY_ACTIONS.shadowCurse)){enemy.intent="最も危険な相手へ術式を固定";return ENEMY_ACTIONS.shadowCurse}
+ }
+ if(hero==="myth_enami"){
+  enemy.campaignHeroTargetMode="threat";
+  const allyUnderPressure=allies.some(unit=>unit!==enemy&&(unit.hp<=0||unit.hp/Math.max(1,unit.maxHp)<.7));
+  if(fallen&&canPay(enemy,ENEMY_ACTIONS.packRevive)){enemy.intent="笑みを消し、倒れた仲間を引き戻す";return ENEMY_ACTIONS.packRevive}
+  if(wounded&&wounded.hp/wounded.maxHp<.55&&canPay(enemy,ENEMY_ACTIONS.packMend)){enemy.intent="仲間を守るため戦線を立て直す";return ENEMY_ACTIONS.packMend}
+  if(allyUnderPressure&&canPay(enemy,ENEMY_ACTIONS.radiantVolley)){enemy.intent="仲間を傷つけた相手を広く捉える";return ENEMY_ACTIONS.radiantVolley}
+  if(!enemy._campaignGuardedAllies&&allies.length>1&&canPay(enemy,ENEMY_ACTIONS.packRally)){enemy._campaignGuardedAllies=true;enemy.intent="全員を俯瞰し守りを整える";return ENEMY_ACTIONS.packRally}
+ }
+ if(hero==="myth_rion"){
+  enemy.campaignHeroTargetMode="threat";
+  if(fallen&&canPay(enemy,ENEMY_ACTIONS.packRevive)){enemy.intent="仲間を舞台へ呼び戻す";return ENEMY_ACTIONS.packRevive}
+  if(wounded&&wounded.hp/wounded.maxHp<.62&&canPay(enemy,ENEMY_ACTIONS.packMend)){enemy.intent="交渉の余地を作るため全員を回復";return ENEMY_ACTIONS.packMend}
+  if(!enemy._campaignRallied&&allies.length>1&&canPay(enemy,ENEMY_ACTIONS.packRally)){enemy._campaignRallied=true;enemy.intent="勝ち筋を共有し全員を強化";return ENEMY_ACTIONS.packRally}
+  if((enemy.currentMp??0)<enemy.maxMp*.35&&opponents.some(unit=>(unit.currentMp??0)>0)&&canPay(enemy,ENEMY_ACTIONS.manaSiphon)){enemy.intent="相手の魔力をこちらの利益へ変える";return ENEMY_ACTIONS.manaSiphon}
+  if(canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="最大戦力の強みを封じる";return ENEMY_ACTIONS.dispelWave}
+ }
+ return null
+}
 export function chooseEnemyAction(enemy,context={}){
  if(enemy.speciesId==="ochuki"){enemy.guard=true;enemy.intent="巨大な盾の陰で逃げ道を探す";return ENEMY_ACTIONS.guard}
  const allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(monster=>(monster.currentHp??0)>0),hpRate=enemy.hp/enemy.maxHp,role=String(enemy.role??""),support=["healer","support","controller","debuffer","magic"].some(value=>role.includes(value)),rarity=String(enemy.combatRarity??enemy.rarity??"N"),rarityPower=({N:0,R:1,SR:2,SSR:3,UR:4,LR:5,"神話":6,"深淵":7,"十神":8})[rarity]??0,reviveRole=["healer","support"].some(value=>role.includes(value)),reviveEligible=enemy.speciesId!=="acid_slime"&&reviveRole&&(Boolean(enemy.boss)||Number(enemy.level)>=100||rarityPower>=4);
  const fallen=allies.find(ally=>ally.hp<=0),fallenSlime=allies.find(ally=>ally.hp<=0&&(ally.race==="slime"||String(ally.speciesId).includes("slime"))),wounded=[...allies].filter(ally=>ally.hp>0).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];
+ const heroAction=enemy.campaignHeroId?campaignHeroAction(enemy,context,hpRate):null;if(heroAction&&canPay(enemy,heroAction))return heroAction;
  if(enemy.speciesId==="acid_slime"&&fallenSlime&&!enemy._slimeSplitReviveUsed&&canPay(enemy,ENEMY_ACTIONS.slimeSplitRevive)){enemy._slimeSplitReviveUsed=true;enemy.intent="倒れたスライムを分裂核から再生";return ENEMY_ACTIONS.slimeSplitRevive}
  if(fallen&&reviveEligible&&canPay(enemy,ENEMY_ACTIONS.packRevive)){enemy.intent="倒れた味方を再構成";return ENEMY_ACTIONS.packRevive}
  if(wounded&&wounded.hp/wounded.maxHp<.42&&support&&canPay(enemy,ENEMY_ACTIONS.packMend)){enemy.intent="負傷した群れを再生";return ENEMY_ACTIONS.packMend}

@@ -33,11 +33,11 @@ test("build301 secret-room appearance still uses campaign display milestones",()
  assert.equal(state.secretRooms.run.id,"stable-run");
 });
 
-test("build305 all active secret-room consumers use the current cache identity",async()=>{
+test("build309 all active secret-room consumers use the current cache identity",async()=>{
  const files=await Promise.all([
   readFile(new URL("../src/main.js",import.meta.url),"utf8"),
   readFile(new URL("../src/services/SaveService.js",import.meta.url),"utf8"),
   readFile(new URL("../src/ui/screens/ShopScreen.js",import.meta.url),"utf8")
  ]);
- for(const source of files)assert.match(source,/SecretRoomSystem\.js\?v=3\.0\.5-build305/);
+ for(const source of files)assert.match(source,/SecretRoomSystem\.js\?v=3\.0\.9-build309/);
 });

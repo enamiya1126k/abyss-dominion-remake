@@ -9,6 +9,11 @@ import {
   normalizeCampaignState,
   recordCampaignEnding,
 } from "../src/core/Campaign100System.js";
+import {
+  CAMPAIGN_STORY_CHARACTERS,
+  CAMPAIGN_STORY_MILESTONES,
+  CAMPAIGN_STORY_SCENES,
+} from "../src/core/CampaignStorySystem.js";
 
 const source = async path => readFile(new URL(path, import.meta.url), "utf8");
 const section = (text, start, end) => {
@@ -74,7 +79,7 @@ test("Build304 migration permanently removes the detached eight-general roster a
   for (const key of ["selectedSairanType", "generalIds", "activeGeneralIds", "reserveGeneralIds", "storyDaysSeen"])
     assert.equal(Object.hasOwn(campaign, key), false, `${key} must not survive migration`);
   assert.deepEqual(campaign.finalPartyBackup, ["m1", "m2", "m3", "m4"]);
-  assert.deepEqual(campaign.heroCarry, [{ speciesId: "myth_enami", hp: 321 }]);
+  assert.equal(Object.hasOwn(campaign, "heroCarry"), false, "retired Sairan HP carry cannot survive Build309 normalization");
 });
 
 test("Build304 final preparation deploys exactly the current four party members with no extra roster UI", async () => {
@@ -105,46 +110,23 @@ test("Build304 final preparation deploys exactly the current four party members 
   assert.doesNotMatch(core, /export\s+(?:const|function)\s+(?:SAIRAN_TYPES|applyCampaignSairanType)\b/);
 });
 
-test("Build304 starts fixed Sairan only after party defeat and carries exact surviving hero HP", async () => {
+test("Build309 resolves the finale in one current-party battle with no Sairan stage or hero carry", async () => {
   const main = await source("../src/main.js");
   const encounter = section(main, "function campaignHeroEncounter", "function campaignFinalVitals");
   const finish = section(main, "function finishCampaignFinalBattle", "function openCampaignFinalPreparation");
-  const enemyBuilder = section(main, "function makeBattleEnemy", "function validBattlePartyMember");
 
-  assert.match(encounter, /filter\(entry=>Number\(entry\?\.carryHp\)>0\)/, "dead heroes are excluded");
-  assert.match(encounter, /carryHp:Math\.max\(1,Math\.floor\(Number\(entry\.carryHp\)\|\|1\)\)/, "the second encounter keeps exact integer HP");
-  assert.match(encounter, /filter\(enemy=>HERO_PARTY_IDS\.includes\(enemy\.speciesId\)&&Number\(enemy\.hp\)>0\)/);
-  assert.match(encounter, /carryHp:Math\.max\(1,Math\.floor\(Number\(enemy\.hp\)\|\|1\)\)/);
-
-  const winBranch = finish.indexOf("if(won)return showCampaignEnding");
-  const defeatBranch = finish.indexOf('if(stage==="party")');
-  const sairanCreation = finish.indexOf('createMonster("abyss_dominion"');
-  assert.ok(winBranch >= 0 && defeatBranch > winBranch && sairanCreation > defeatBranch, "Sairan is created only inside the party-defeat branch");
-  assert.match(finish, /nickname:"魔王サイラーン",title:"万魔の王"/);
-  assert.match(finish, /campaign\.heroCarry=survivors\.map\(entry=>\(\{speciesId:entry\.speciesId,hp:entry\.carryHp\}\)\)/);
-  assert.match(finish, /campaignHeroEncounter\(level,survivors\)/);
-  assert.match(finish, /勇者 \$\{survivors\.length\}\/4人/);
-  assert.doesNotMatch(finish, /SAIRAN_TYPES|applyCampaignSairanType|selectedSairanType/);
-  assert.ok(
-    enemyBuilder.indexOf("if(Number.isFinite(Number(prepared.carryHp)))") > enemyBuilder.indexOf("applyEnemyMagicCircleProfile(enemy,prepared.enemyMagicCircle)"),
-    "exact carry HP must be applied after magic-circle max-HP mutations",
-  );
-
-  const multiplierSource = section(main, "function applyEnemyMultiplier", "async function runSecretRoomAuto");
-  const applyMultiplier = new Function(`${multiplierSource};return applyEnemyMultiplier`)();
-  const carried = { maxHp: 100, hp: 7, campaignCarryHp: 7, atk: 10, matk: 10, def: 10, mdef: 10, spd: 10 };
-  applyMultiplier(carried, 2);
-  assert.equal(carried.maxHp, 200);
-  assert.equal(carried.hp, 7, "later terrain or synergy scaling must not heal a carried hero");
-  const fresh = { maxHp: 100, hp: 100, atk: 10, matk: 10, def: 10, mdef: 10, spd: 10 };
-  applyMultiplier(fresh, 2);
-  assert.equal(fresh.hp, 200, "ordinary freshly-created enemies still start at full HP");
+  assert.match(encounter, /return HERO_PARTY_IDS\.map\(\(speciesId,index\)=>prepareEnemyEntry/);
+  assert.doesNotMatch(encounter, /carryHp|campaignHeroSurvivors|heroCarry|sairan/i);
+  assert.match(finish, /const survivingAllies=\(battle\?\.party\?\?\[\]\)\.filter/);
+  assert.match(finish, /if\(!won\)return showCampaignEnding\("defeat"\)/);
+  assert.match(finish, /campaignEndingForResult\(\{partyWon:true,partySurvivors:survivingAllies,partySize:4\}\)/);
+  assert.doesNotMatch(finish, /createMonster\(|campaignStage:"sairan"|campaignHeroEncounter|heroCarry/i);
 });
 
-test("Build304 exposes exactly complete, comeback and defeat endings", async () => {
-  assert.equal(campaignEndingForResult({ partyWon: true }), "complete");
-  assert.equal(campaignEndingForResult({ partyWon: false, sairanWon: true }), "comeback");
-  assert.equal(campaignEndingForResult({ partyWon: false, sairanWon: false }), "defeat");
+test("Build309 exposes complete, comeback and defeat from the current party result", async () => {
+  assert.equal(campaignEndingForResult({ partyWon: true, partySurvivors: 4 }), "complete");
+  assert.equal(campaignEndingForResult({ won: true, partySurvivors: 2 }), "comeback");
+  assert.equal(campaignEndingForResult({ partyWon: false, sairanWon: true }), "defeat");
 
   for (const [ending, victorious] of [["complete", true], ["comeback", true], ["defeat", false]]) {
     const state = {};
@@ -161,23 +143,28 @@ test("Build304 exposes exactly complete, comeback and defeat endings", async () 
   assert.match(ending, /defeat:\{title:"敗北"/);
 });
 
-test("Build304 renders the daily invasion hierarchy with route progress and all four hero names", async () => {
+test("Build309 renders ten authored road conversations with portraits, bubbles, and an approaching castle", async () => {
   const main = await source("../src/main.js");
   const home = await source("../src/ui/screens/HomeScreen.js");
-  const styles = await source("../src/Styles/build304-final.css");
-  const invasion = section(main, "function showCampaignInvasionDay", "function bindExplore");
+  const styles = await source("../src/Styles/build309-story.css");
+  const story = section(main, "let campaignStoryQueueTimer", "function bindExplore");
 
-  assert.match(invasion, /予言 \$\{day\.day\}日目・\$\{day\.title\}/);
-  assert.match(invasion, /勇者侵攻・\$\{day\.day\}\/10/);
-  assert.match(invasion, /campaign-invasion-route/);
-  assert.match(invasion, /西の大陸/);
-  assert.match(invasion, /魔王城/);
-  assert.match(invasion, /\["えなみ","より","ひで","りおん"\]/);
-  assert.match(invasion, /--invasion-progress:\$\{advance\.progress\}%/);
+  assert.deepEqual(CAMPAIGN_STORY_MILESTONES, [10,20,30,40,50,60,70,80,90,100]);
+  assert.equal(CAMPAIGN_STORY_SCENES.length, 10);
+  assert.deepEqual(new Set(CAMPAIGN_STORY_SCENES.flatMap(scene => scene.dialogue.map(line => line.speakerId))), new Set(HERO_PARTY_IDS));
+  assert.deepEqual(HERO_PARTY_IDS.map(id => CAMPAIGN_STORY_CHARACTERS[id].name), ["えなみ","より","ひで","りおん"]);
+  assert.match(story, /campaign-story-route/);
+  assert.match(story, /campaign-story-dialogue/);
+  assert.match(story, /campaign-story-character-art/);
+  assert.match(story, /西の大陸/);
+  assert.match(story, /魔王城/);
+  assert.match(story, /--story-progress:\$\{progress\}%/);
   assert.match(home, /campaignHeroAdvance\(state\)/);
   assert.match(home, /id="openCampaignFinal"/);
-  assert.match(styles, /\.campaign-invasion-route/);
-  assert.match(styles, /@keyframes campaignHeroAdvance/);
+  assert.match(styles, /\.campaign-story-dialogue::before/);
+  assert.match(styles, /var\(--story-backdrop\)/);
+  assert.match(styles, /var\(--story-castle-opacity\)/);
+  assert.match(styles, /@keyframes storyRouteAdvance/);
 });
 
 test("Build304 final presentation loads after Build303 dungeon presentation", async () => {

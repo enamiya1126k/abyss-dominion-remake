@@ -221,8 +221,8 @@ test("main persistence gates floor unlock, boss first-clear, and host world by o
   const source = await readFile(new URL("../src/main.js", import.meta.url), "utf8");
   const saveSource = await readFile(new URL("../src/services/SaveService.js", import.meta.url), "utf8");
   const index = await readFile(new URL("../index.html", import.meta.url), "utf8");
-  assert.match(index, /ASSET_VERSION = "3\.0\.5"/);
-  assert.match(index, /ASSET_BUILD = "build305"/);
+  assert.match(index, /ASSET_VERSION = "3\.0\.9"/);
+  assert.match(index, /ASSET_BUILD = "build309"/);
   assert.match(source, /progressionEligible=Boolean\(worldOwnerId\)&&worldOwnerId===selfId&&\(!roomOwnerId\|\|roomOwnerId===selfId\)&&source\.progressionEligible!==false,leaderFloorUnlock=progressionEligible\?/);
   assert.match(source, /equipmentRarity=!source\.bossFirstClear&&/);
   assert.match(source, /legacyProgressRecoveryCandidate\(save\.state,\{selfId:ensureOnlinePartyController\(\)\.selfId\}\)/);

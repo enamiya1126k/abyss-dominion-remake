@@ -14,6 +14,7 @@ const MAX_SOURCE_BYTES = 64 * 1024;
 const MAX_PERSISTED_RECORD_BYTES = 8 * 1024;
 const MAX_STATE_BYTES = 64 * 1024 * 1024;
 const STALE_AFTER_MS = 30 * 24 * 60 * 60_000;
+const PRESENCE_ONLINE_MS = 90_000;
 const DAY_MS = 24 * 60 * 60_000;
 const WEEK_MS = 7 * DAY_MS;
 const JST_OFFSET_MS = 9 * 60 * 60_000;
@@ -239,11 +240,21 @@ function publicMonster(source, { icon = false } = {}) {
   if (!icon) Object.assign(result, { slot: source.slot, attribute: source.attribute, equipment: source.equipment.map(item => ({ ...item })), magicCircle: { ...source.magicCircle } });
   return result;
 }
-function publicEntry(record, rank) {
-  return { rank, playerId: record.playerId, displayName: record.displayName, power: record.power, maxFloor: record.maxFloor, updatedAt: record.updatedAt, icon: publicMonster(record.party[0], { icon: true }) };
+function publicPresence(source, recordUpdatedAt, at) {
+  const now = integer(at, 0, Number.MAX_SAFE_INTEGER, Date.now());
+  const reportedAt = integer(source?.lastActiveAt, 0, Number.MAX_SAFE_INTEGER, 0);
+  const fallbackAt = integer(recordUpdatedAt, 0, Number.MAX_SAFE_INTEGER, 0);
+  const lastActiveAt = Math.min(now, Math.max(reportedAt, fallbackAt));
+  return {
+    online: Boolean(source?.online === true && reportedAt > 0 && reportedAt <= now && now - reportedAt <= PRESENCE_ONLINE_MS),
+    lastActiveAt,
+  };
 }
-function publicProfile(record) {
-  return { playerId: record.playerId, displayName: record.displayName, power: record.power, maxFloor: record.maxFloor, updatedAt: record.updatedAt, party: record.party.map(entry => publicMonster(entry)) };
+function publicEntry(record, rank, presence, at) {
+  return { rank, playerId: record.playerId, displayName: record.displayName, power: record.power, maxFloor: record.maxFloor, updatedAt: record.updatedAt, ...publicPresence(presence, record.updatedAt, at), icon: publicMonster(record.party[0], { icon: true }) };
+}
+function publicProfile(record, presence, at) {
+  return { playerId: record.playerId, displayName: record.displayName, power: record.power, maxFloor: record.maxFloor, updatedAt: record.updatedAt, ...publicPresence(presence, record.updatedAt, at), party: record.party.map(entry => publicMonster(entry)) };
 }
 
 export function powerRankingSeason(value = Date.now()) {
@@ -277,8 +288,8 @@ function sanitizeReward(source) {
 }
 
 export class PlayerPowerRanking {
-  constructor({ now = () => Date.now(), stateFile = null, canView = () => true, maxRecords = MAX_RECORDS, maxAcknowledgedRewards = MAX_ACKNOWLEDGED_REWARDS, maxStateBytes = MAX_STATE_BYTES } = {}) {
-    this.now = now; this.stateFile = stateFile ? String(stateFile) : null; this.canView = canView;
+  constructor({ now = () => Date.now(), stateFile = null, canView = () => true, presenceOf = () => null, maxRecords = MAX_RECORDS, maxAcknowledgedRewards = MAX_ACKNOWLEDGED_REWARDS, maxStateBytes = MAX_STATE_BYTES } = {}) {
+    this.now = now; this.stateFile = stateFile ? String(stateFile) : null; this.canView = canView; this.presenceOf = presenceOf;
     this.maxRecords = integer(maxRecords, 1, MAX_RECORDS, MAX_RECORDS);
     this.maxAcknowledgedRewards = integer(maxAcknowledgedRewards, 0, MAX_ACKNOWLEDGED_REWARDS, MAX_ACKNOWLEDGED_REWARDS);
     this.maxStateBytes = integer(maxStateBytes, 1_024, MAX_STATE_BYTES, MAX_STATE_BYTES);
@@ -303,6 +314,9 @@ export class PlayerPowerRanking {
   }
   _syncSessionReceipts(session) {
     if (session) session.powerRankingReceipts = this._receiptLedger(session.playerId).map(entry => ({ requestId: entry.requestId, power: entry.power, updatedAt: entry.updatedAt }));
+  }
+  _presence(playerId, at) {
+    try { return this.presenceOf?.(playerId, at) ?? null; } catch { return null; }
   }
   _pruneRecordsAt(at) {
     const cutoff = Number(at) - STALE_AFTER_MS; let removed = 0;
@@ -378,7 +392,7 @@ export class PlayerPowerRanking {
     const sorted = this._activeSorted(at), rankById = new Map(sorted.map((entry, index) => [entry.playerId, index + 1]));
     const limit = integer(message.limit, 1, 100, 100), visible = sorted.slice(0, 100).filter(entry => this.canView(session.playerId, entry.playerId)).slice(0, limit);
     const selfRecord = this.records.get(session.playerId), selfRank = rankById.get(session.playerId);
-    return { ok: true, message: { type: "powerRankingState", requestId: text(message.requestId, 96) || null, serverNow: at, staleAfterMs: STALE_AFTER_MS, season: { ...this.season }, rewardPolicy: "TOP100・毎週月曜0:00(JST)確定", rankingRewards: this.pendingRewards(session.playerId), total: sorted.length, entries: visible.map(entry => publicEntry(entry, rankById.get(entry.playerId))), self: selfRecord && selfRank ? publicEntry(selfRecord, selfRank) : null } };
+    return { ok: true, message: { type: "powerRankingState", requestId: text(message.requestId, 96) || null, serverNow: at, staleAfterMs: STALE_AFTER_MS, presenceOnlineMs: PRESENCE_ONLINE_MS, season: { ...this.season }, rewardPolicy: "TOP100・毎週月曜0:00(JST)確定", rankingRewards: this.pendingRewards(session.playerId), total: sorted.length, entries: visible.map(entry => publicEntry(entry, rankById.get(entry.playerId), this._presence(entry.playerId, at), at)), self: selfRecord && selfRank ? publicEntry(selfRecord, selfRank, this._presence(selfRecord.playerId, at), at) : null } };
   }
   pendingRewards(playerId) {
     const id = String(playerId ?? "").toUpperCase();
@@ -403,7 +417,7 @@ export class PlayerPowerRanking {
     this.prune({ at, roll: false });
     const targetId = text(message.playerId, 24).toUpperCase(), record = this.records.get(targetId);
     if (!PLAYER_ID.test(targetId) || !record || !this.canView(session.playerId, targetId)) return { ok: false, code: "POWER_RANKING_PROFILE_MISSING", message: "このプレイヤーの最新パーティーは表示できません" };
-    return { ok: true, message: { type: "powerRankingProfileResult", requestId: text(message.requestId, 96) || null, profile: publicProfile(record) } };
+    return { ok: true, message: { type: "powerRankingProfileResult", requestId: text(message.requestId, 96) || null, serverNow: at, presenceOnlineMs: PRESENCE_ONLINE_MS, profile: publicProfile(record, this._presence(record.playerId, at), at) } };
   }
   prune({ persist = true, roll = true, at = this.now() } = {}) {
     const timestamp = Number(at), before = this.records.size;
@@ -486,3 +500,4 @@ export class PlayerPowerRanking {
 }
 
 export const POWER_RANKING_STALE_MS = STALE_AFTER_MS;
+export const POWER_RANKING_PRESENCE_ONLINE_MS = PRESENCE_ONLINE_MS;

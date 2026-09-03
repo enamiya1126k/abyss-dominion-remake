@@ -4,7 +4,7 @@ import{MYTHIC_SERIAL_SPECIES}from"./mythicSerialSpecies.js?v=2.11.2-build166";
 import{BUILD198_SPECIES}from"./build198Species.js?v=2.11.33-build198";
 import{RAID_SPECIES}from"./raidSpecies.js?v=2.11.82-build258";
 import{applyMonsterNameOverride}from"./monsterNameOverrides.js?v=2.11.2-build166";
-import{canonicalAttribute}from"./attributes.js?v=2.11.2-build166";
+import{canonicalAttribute}from"./attributes.js?v=3.0.9-build309";
 
 const BASE_SPECIES={
   slime:{id:"slime",emoji:"🫧",name:"スライム",element:"water",race:"slime",role:"balanced",rarity:"N",minFloor:1,captureRate:1.0,maxMp:16,growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp:46,atk:6,def:4,spd:10,crit:5,evasion:3},rankNames:["スライム","上位スライム","スライム王","深淵スライム"],skills:[{id:"slime_skill",name:"体当たり",unlock:{type:"level",value:1},description:"体当たりで戦う。"}]},

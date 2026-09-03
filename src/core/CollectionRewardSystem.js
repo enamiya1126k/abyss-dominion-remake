@@ -1,7 +1,8 @@
-import{SPECIES}from"../data/species.js?v=2.11.86-build262";
-import{orderedMonsterSpecies}from"../data/monsterCatalog.js?v=2.11.86-build262";
-import{FLOOR_BOSS_CATALOG}from"../data/floorBosses.js?v=2.11.86-build262";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.0.5-build305";
+import{SPECIES}from"../data/species.js?v=3.1.1-build311";
+import{orderedMonsterSpecies}from"../data/monsterCatalog.js?v=3.1.1-build311";
+import{FLOOR_BOSS_CATALOG}from"../data/floorBosses.js?v=3.1.1-build311";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.1-build311";
+import{floorBossCampaignDisplayFloor}from"./Campaign100System.js?v=3.1.1-build311";
 
 const LIMITED_TAGS=new Set(["mythicSerial","serialOnly","raidLimited","eventLimited","limited"]);
 const number=value=>Math.max(0,Math.floor(Number(value)||0));
@@ -26,10 +27,11 @@ function ordinaryEntry(species,index){
 }
 
 function floorBossEntry(boss,index){
+ const campaignFloor=floorBossCampaignDisplayFloor(boss)??boss.floor;
  return Object.freeze({
   key:`floorBoss:${boss.id}`,id:boss.id,kind:"floorBoss",group:"階層ボス",name:boss.name,rarity:"神話",element:boss.element??"neutral",
   visualId:boss.visualSpeciesId??boss.id,emoji:SPECIES[boss.speciesId]?.emoji??"♛",speciesId:boss.speciesId,floorBossCatalogId:boss.id,
-  sort:10000+index,source:`${boss.floor}階ボスの欠片契約`,floor:boss.floor,title:boss.title??"階層を統べる者"
+  sort:10000+index,source:`${campaignFloor}階ボスの欠片契約`,floor:campaignFloor,title:boss.title??"階層を統べる者"
  });
 }
 

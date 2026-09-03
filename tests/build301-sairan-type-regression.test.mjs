@@ -4,15 +4,21 @@ import{readFile}from"node:fs/promises";
 
 import{recordCampaignEnding}from"../src/core/Campaign100System.js";
 
-test("Build304 retires selectable Sairan types and keeps one authored king",async()=>{
- const[main,core]=await Promise.all([
+test("Build309 keeps Sairan in authored story only and forbids every active combat path",async()=>{
+ const[main,core,story]=await Promise.all([
   readFile(new URL("../src/main.js",import.meta.url),"utf8"),
-  readFile(new URL("../src/core/Campaign100System.js",import.meta.url),"utf8")
+  readFile(new URL("../src/core/Campaign100System.js",import.meta.url),"utf8"),
+  readFile(new URL("../src/core/CampaignStorySystem.js",import.meta.url),"utf8")
  ]);
  assert.doesNotMatch(main,/SAIRAN_TYPES|applyCampaignSairanType|data-sairan-type|selectedSairanType/);
  assert.doesNotMatch(core,/export const SAIRAN_TYPES|applyCampaignSairanType/);
- assert.match(main,/createMonster\("abyss_dominion",\{nickname:"魔王サイラーン",title:"万魔の王"/);
- assert.match(main,/sairan\.equippedSkills=recommendedSkillLoadout\(sairan\)\.slice\(0,4\)/);
+ assert.doesNotMatch(main,/createMonster\("abyss_dominion",\{nickname:"魔王サイラーン"/);
+ assert.doesNotMatch(main,/campaignStage:"sairan"/);
+ assert.doesNotMatch(main,/sairan\.equippedSkills|recommendedSkillLoadout\(sairan\)/);
+ assert.match(story,/name:"魔王サイラーン"/);
+ assert.match(story,/sairan:Object\.freeze\(\{storyOnly:true,battleEligible:false,finalBattleParticipant:false\}\)/);
+ assert.match(story,/finalBattle:Object\.freeze\(\{partySize:4,heroIds:HERO_PARTY_IDS,allowSairan:false\}\)/);
+ assert.match(main,/function retireLegacyCampaignSairanBattle\(\)/,"legacy interrupted battles keep a cleanup-only path");
 });
 
 test("only a victorious campaign ending becomes a true clear",async()=>{

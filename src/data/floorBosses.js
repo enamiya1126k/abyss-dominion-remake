@@ -87,7 +87,7 @@ const OPENING_FLOOR_THEMES=Object.freeze([
   {label:"虚無封界・沈黙葬列",pattern:"all",multiplier:.70,element:"dark",status:{id:"curse",name:"呪い",chance:.38,turns:3,power:.03}},
   {label:"虚鐘奥義・終刻葬送",pattern:"all",multiplier:1.374,element:"dark",drain:.18,slow:.12}
  ]},
- {name:"灼熱奈落",prefix:"火冠",title:"灼熱と岩漿が噴き上がる火冠奈落",element:"fire",weaponName:"火冠竜槍",quote:"「九つの試練を焼べ、冠は完成する。次の百階へ至る力を見せよ。」",actions:[
+ {name:"灼熱奈落",prefix:"火冠",title:"灼熱と岩漿が噴き上がる火冠奈落",element:"fire",weaponName:"火冠竜槍",quote:"「九つの試練を焼べ、冠は完成する。次の十階へ至る力を見せよ。」",actions:[
   {label:"火冠槍・熔界掃滅",pattern:"all",multiplier:.958,element:"fire"},
   {label:"冠竜勅令・灼熱統治",utility:true,heal:.07,effects:[{kind:"atkUp",value:.11,turns:3},{kind:"defUp",value:.11,turns:3},{kind:"spdUp",value:.07,turns:2}]},
   {label:"灼熱封界・九重噴炎",pattern:"all",multiplier:.703,element:"fire",status:{id:"burn",name:"火傷",chance:.45,turns:3,power:.035}},
@@ -233,7 +233,7 @@ const OPENING_BOSS_SIGNATURES=Object.freeze([
   stats:{hp:1.28,atk:1.17,matk:1.20,def:1.14,mdef:1.16,spd:1.03,evasion:8,accuracy:116,crit:.11},
   passive:{id:"nine_crown_laws",name:"火冠九律",description:"HP70%・40%到達時にATK/DEFを各8%強化し、障壁を1段展開する。",phaseBuffs:[{hp:.70,atk:.08,def:.08,barrier:1},{hp:.40,atk:.08,def:.08,barrier:1}]},
   domain:{id:"ninefold_fire_crown",name:"領域・九重火冠",description:"固有行動3回ごとに次の攻撃威力+25%。",effect:"everyNth",every:3,powerMultiplier:1.25},
-  ai:{id:"crowned_overlord",name:"火冠統治思考",description:"状態異常、全体圧力、段階解放を組み替え、90階の総合試験を行う。"},
+  ai:{id:"crowned_overlord",name:"火冠統治思考",description:"状態異常、全体圧力、段階解放を組み替え、9階の総合試験を行う。"},
   actions:[
    {label:"火冠槍・熔界王掃",pattern:"all",multiplier:.96,element:"fire",damageClass:"hybrid",defenseIgnore:.06,ai:{base:44}},
    {label:"冠竜勅令・九律統治",utility:true,heal:.08,effects:[{kind:"atkUp",value:.13,turns:3},{kind:"defUp",value:.13,turns:3},{kind:"spdUp",value:.09,turns:2}],mpCostRate:.22,ai:{base:35,opening:true,once:true}},
@@ -513,7 +513,7 @@ const TOXIC_STORM_FLOOR_THEMES=Object.freeze([
   {label:"雷晶封界・鳴葬列",pattern:"all",multiplier:.725,element:"lightning",status:{id:"paralysis",name:"麻痺",chance:.25,turns:2,power:0},slow:.10},
   {label:"雷鐘奥義・終刻轟葬",pattern:"all",multiplier:1.444,element:"lightning",drain:.18,slow:.12}
  ]},
- {name:"轟雷中枢",prefix:"轟冠",title:"万雷を戴く轟雷中枢",element:"lightning",weaponName:"轟冠竜雷槍",quote:"「九つの雷律は冠へ集った。次の百階へ至る者よ、万雷を越えよ。」",actions:[
+ {name:"轟雷中枢",prefix:"轟冠",title:"万雷を戴く轟雷中枢",element:"lightning",weaponName:"轟冠竜雷槍",quote:"「九つの雷律は冠へ集った。次の十階へ至る者よ、万雷を越えよ。」",actions:[
   {label:"轟冠槍・雷界掃滅",pattern:"all",multiplier:.994,element:"lightning"},
   {label:"冠竜勅令・天雷統治",utility:true,heal:.075,effects:[{kind:"atkUp",value:.13,turns:3},{kind:"defUp",value:.13,turns:3},{kind:"spdUp",value:.09,turns:2}]},
   {label:"轟雷封界・九重雷獄",pattern:"all",multiplier:.729,element:"lightning",status:{id:"paralysis",name:"麻痺",chance:.28,turns:2,power:0}},
@@ -726,7 +726,7 @@ const EARTH_WIND_FLOOR_THEMES=Object.freeze([
   {label:"燐光封界・蛍葬列",pattern:"all",multiplier:.738,element:"wind",status:{id:"bleed",name:"裂傷",chance:.38,turns:3,power:.032},slow:.10},
   {label:"燐鐘奥義・終刻風葬",pattern:"all",multiplier:1.479,element:"wind",drain:.18,slow:.12}
  ]},
- {name:"古樹中枢",prefix:"樹冠",title:"万葉の風律を戴く翠根密林の古樹中枢",element:"wind",weaponName:"古樹竜嵐槍",quote:"「九つの樹律は冠へ集った。次の百階へ至る者よ、万葉の嵐を越えよ。」",actions:[
+ {name:"古樹中枢",prefix:"樹冠",title:"万葉の風律を戴く翠根密林の古樹中枢",element:"wind",weaponName:"古樹竜嵐槍",quote:"「九つの樹律は冠へ集った。次の十階へ至る者よ、万葉の嵐を越えよ。」",actions:[
   {label:"樹冠槍・風界掃滅",pattern:"all",multiplier:1.012,element:"wind"},
   {label:"冠竜勅令・古樹統治",utility:true,heal:.08,effects:[{kind:"atkUp",value:.14,turns:3},{kind:"defUp",value:.14,turns:3},{kind:"spdUp",value:.10,turns:2}]},
   {label:"古樹封界・九重嵐獄",pattern:"all",multiplier:.742,element:"wind",status:{id:"bleed",name:"裂傷",chance:.40,turns:3,power:.033}},
@@ -1092,7 +1092,7 @@ const LIGHT_DARK_FLOOR_THEMES=Object.freeze([
   {label:"重力封界・沈降葬列",pattern:"all",multiplier:.750,element:"dark",status:{id:"curse",name:"呪い",chance:.40,turns:3,power:.034},slow:.11},
   {label:"重鐘奥義・終刻圧葬",pattern:"all",multiplier:1.514,element:"dark",drain:.19,slow:.13}
  ]},
- {name:"虚空深部",prefix:"虚冠",title:"星なき法則を戴く無明闇層の虚空深部",element:"dark",weaponName:"虚空冠竜槍",quote:"「九つの法則は虚冠へ沈んだ。次の百階へ至る者よ、星なき終界を越えよ。」",actions:[
+ {name:"虚空深部",prefix:"虚冠",title:"星なき法則を戴く無明闇層の虚空深部",element:"dark",weaponName:"虚空冠竜槍",quote:"「九つの法則は虚冠へ沈んだ。次の十階へ至る者よ、星なき終界を越えよ。」",actions:[
   {label:"虚冠槍・暗界掃滅",pattern:"all",multiplier:1.030,element:"dark"},
   {label:"冠竜勅令・虚空統治",utility:true,heal:.085,effects:[{kind:"atkUp",value:.15,turns:3},{kind:"defUp",value:.15,turns:3},{kind:"spdUp",value:.11,turns:2}]},
   {label:"虚空封界・九重無明獄",pattern:"all",multiplier:.754,element:"dark",status:{id:"curse",name:"呪い",chance:.42,turns:3,power:.035}},
@@ -1305,7 +1305,7 @@ const WATER_CHAOS_FLOOR_THEMES=Object.freeze([
   {label:"火脈封界・熔葬列",pattern:"all",multiplier:.763,element:"fire",status:{id:"burn",name:"火傷",chance:.45,turns:3,power:.036},effects:[{kind:"vulnerable",value:.10,turns:2,enemy:true}]},
   {label:"熔鐘奥義・終刻火葬",pattern:"all",multiplier:1.549,element:"fire",currentHpDamage:.025,drain:.20}
  ]},
- {name:"凍結心域",prefix:"凍界",title:"相反する氷律を戴く混沌境層の凍結心域",element:"ice",weaponName:"混氷冠竜槍",quote:"「九つの氷律は一つに凍らぬ。相反する冠を砕き、次の百階へ至れ。」",actions:[
+ {name:"凍結心域",prefix:"凍界",title:"相反する氷律を戴く混沌境層の凍結心域",element:"ice",weaponName:"混氷冠竜槍",quote:"「九つの氷律は一つに凍らぬ。相反する冠を砕き、次の十階へ至れ。」",actions:[
   {label:"混氷冠竜槍・凍界掃滅",pattern:"all",multiplier:1.048,element:"ice"},
   {label:"冠竜勅令・混氷統治",utility:true,heal:.09,effects:[{kind:"atkUp",value:.16,turns:3},{kind:"defUp",value:.16,turns:3},{kind:"spdUp",value:.12,turns:2}]},
   {label:"凍結封界・九重混氷獄",pattern:"all",multiplier:.767,element:"ice",status:{id:"freeze",name:"凍結",chance:.30,turns:1,power:0}},
@@ -1733,7 +1733,7 @@ const POISON_LIGHTNING_SECOND_FLOOR_THEMES=Object.freeze([
   {label:"群晶雷界・葬響麻痺",pattern:"all",multiplier:.788,element:"lightning",status:{id:"paralysis",name:"麻痺",chance:.32,turns:2,power:0},effects:[{kind:"spdDown",value:.14,turns:2,enemy:true}]},
   {label:"葬鐘極技・万晶終鳴",pattern:"all",multiplier:1.619,element:"lightning",currentHpDamage:.020,drain:.21}
  ]},
- {name:"轟雷中枢",prefix:"天轟",title:"七極の冠律が轟雷中枢を統べる第二雷鳴天層",element:"lightning",weaponName:"轟雷天帝槍",quote:"「七つの雷極は天冠へ集った。次の百階へ至る者よ、皇界の轟きを越えよ。」",actions:[
+ {name:"轟雷中枢",prefix:"天轟",title:"七極の冠律が轟雷中枢を統べる第二雷鳴天層",element:"lightning",weaponName:"轟雷天帝槍",quote:"「七つの雷極は天冠へ集った。次の十階へ至る者よ、皇界の轟きを越えよ。」",actions:[
   {label:"轟雷天帝槍・天冠掃滅",pattern:"all",multiplier:1.084,element:"lightning",defenseIgnore:.09},
   {label:"天轟勅令・雷界統治",utility:true,heal:.085,effects:[{kind:"atkUp",value:.16,turns:3,allies:true},{kind:"defUp",value:.16,turns:3,allies:true},{kind:"spdUp",value:.11,turns:2,allies:true}]},
   {label:"中枢雷界・七冠天獄",pattern:"all",multiplier:.792,element:"lightning",status:{id:"paralysis",name:"麻痺",chance:.34,turns:2,power:0}},
@@ -2092,7 +2092,7 @@ const LIGHT_DARK_SECOND_BOSS_SIGNATURES=Object.freeze([
  },
  {
   stats:{hp:1.72,atk:1.50,matk:1.54,def:1.51,mdef:1.55,spd:1.14,evasion:14,accuracy:136,crit:.17},
-  passive:{id:"final_star_crown_dragon",name:"終星王冠竜",description:"神域障壁3段で開戦。弱体耐性+20%・会心ダメージ180%を持つ1000階直前の冠位竜。",startingBarrier:3,statusResistBonus:.20,critDamageMultiplier:1.80},
+  passive:{id:"final_star_crown_dragon",name:"終星王冠竜",description:"神域障壁3段で開戦。弱体耐性+20%・会心ダメージ180%を持つ100階直前の冠位竜。",startingBarrier:3,statusResistBonus:.20,critDamageMultiplier:1.80},
   domain:{id:"eclipse_deadline",name:"領域・終星日蝕王座",description:"各ラウンドに最大HP8%以上を削れば日蝕を1段後退。届かなければ1段進行し、3段で次の終幕技が威力+38%・確定会心。",effect:"eclipseDeadline",thresholdRate:.08,maxStacks:3,powerMultiplier:1.38},
   ai:{id:"final_star_sovereign",name:"終星冠位思考",description:"毎ラウンドの火力試験で日蝕を進め、三段到達時は終幕奥義を最優先する。"},
   actions:[
@@ -2157,7 +2157,7 @@ const LIGHT_DARK_SECOND_FLOOR_THEMES=Object.freeze([
   {label:"歪曲暗界・銀鐘葬列",pattern:"all",multiplier:.816,element:"dark",status:{id:"curse",name:"呪い",chance:.49,turns:3,power:.040},effects:[{kind:"spdDown",value:.19,turns:3,enemy:true}]},
   {label:"葬鐘極技・終夜大夜想",pattern:"all",multiplier:1.694,element:"dark",currentHpDamage:.024,drain:.23,slow:.17}
  ]},
- {name:"虚空深部",prefix:"終星",title:"日蝕王冠と星座翼が統べる第二星界暗層・虚空深部",element:"dark",weaponName:"終星王冠槍",quote:"「九百九十の星路はここで一つの冠となる。終星を恐れず、その先の神域へ届く力を示せ。」",actions:[
+ {name:"虚空深部",prefix:"終星",title:"日蝕王冠と星座翼が統べる第二星界暗層・虚空深部",element:"dark",weaponName:"終星王冠槍",quote:"「九十九の星路はここで一つの冠となる。終星を恐れず、その先の神域へ届く力を示せ。」",actions:[
   {label:"終星王冠槍・星座掃界",pattern:"all",multiplier:1.120,element:"dark",defenseIgnore:.11},
   {label:"終星勅令・日蝕統治",utility:true,heal:.10,effects:[{kind:"atkUp",value:.18,turns:3,allies:true},{kind:"defUp",value:.18,turns:3,allies:true},{kind:"spdUp",value:.12,turns:2,allies:true}]},
   {label:"虚空暗界・九冠星蝕",pattern:"all",multiplier:.821,element:"dark",status:{id:"curse",name:"呪い",chance:.51,turns:3,power:.041},effects:[{kind:"vulnerable",value:.14,turns:2,enemy:true}]},

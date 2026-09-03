@@ -21,9 +21,9 @@ function lifecycleController(events) {
 test("build255 brackets a guest room across enter, resume, and clear without trusting leader fallback", () => {
   const events = [], controller = lifecycleController(events);
   const room = {
-    roomId: "AB12CD", ownerId: "host", leaderId: "guest", selectedFloor: 200,
-    coopRun: { runId: "run-200", startFloor: 200 },
-    expedition: { id: "floor-200", hostOwnerId: "host", floor: 200 },
+    roomId: "AB12CD", ownerId: "host", leaderId: "guest", selectedFloor: 80,
+    coopRun: { runId: "run-80", startFloor: 80 },
+    expedition: { id: "floor-80", hostOwnerId: "host", floor: 80 },
   };
 
   assert.equal(controller._canonicalRoomOwnerId({ leaderId: "guest" }), "", "leaderId alone is never world ownership");
@@ -115,11 +115,12 @@ test("build255 host-world mutations fail closed unless an explicit owner exactly
   controller._handleMessage({ type: "expeditionEvent", event: { kind: "hostChestOpened", ownerId: "guest", chestId: "self" } });
   assert.deepEqual(calls.filter(event => event.kind === "hostChestOpened").map(event => event.chestId), ["self"]);
 
-  controller._handleMessage({ type: "floorBossDefeated", floor: 200, firstClear: true });
-  controller._handleMessage({ type: "floorBossDefeated", ownerId: "host", floor: 200, firstClear: true });
-  controller._handleMessage({ type: "floorBossDefeated", ownerId: "guest", floor: 200, firstClear: true });
+  controller._handleMessage({ type: "floorBossDefeated", floor: 80, firstClear: true });
+  controller._handleMessage({ type: "floorBossDefeated", ownerId: "host", floor: 80, firstClear: true });
+  controller._handleMessage({ type: "floorBossDefeated", ownerId: "guest", floor: 80, firstClear: true });
   assert.equal(calls.filter(event => event.kind === "floorBossDefeated").length, 1);
-  assert.equal(calls.filter(event => event.kind === "floorBossCallback").length, 1);
+  assert.equal(calls.filter(event => event.kind === "floorBossCallback").length, 0,
+    "Build308 settles the reward at the per-boss trophy rather than the defeat event");
 });
 
 test("build255 expedition results expose progression eligibility only for explicit self ownership", async () => {
@@ -139,14 +140,14 @@ test("build255 expedition results expose progression eligibility only for explic
   await controller._receiveExpeditionResult({ ...base, resultId: "hosted", ownerId: "host", summary: {} }, 1);
   await controller._receiveExpeditionResult({
     runId: "assisted-run", resultId: "assisted", recipientId: "guest", ownerId: "host", progressionEligible: false,
-    assistedWorld: { ownerId: "host", startFloor: 200, endFloor: 203, floorsCleared: 3, nextFloor: 204 },
-    summary: { multiplayer: true, nextFloor: 204, ownerFloorUnlock: 204, leaderFloorUnlock: 204, floorUnlock: 204, unlockFloor: 204, unlockedFloor: 204, maxFloorUnlock: 204, maxFloor: 204, assistedWorld: { ownerId: "host", startFloor: 200, endFloor: 203, floorsCleared: 3, ownerFloorUnlock: 204 } },
+    assistedWorld: { ownerId: "host", startFloor: 20, endFloor: 23, floorsCleared: 3, nextFloor: 24 },
+    summary: { multiplayer: true, nextFloor: 24, ownerFloorUnlock: 24, leaderFloorUnlock: 24, floorUnlock: 24, unlockFloor: 24, unlockedFloor: 24, maxFloorUnlock: 24, maxFloor: 24, assistedWorld: { ownerId: "host", startFloor: 20, endFloor: 23, floorsCleared: 3, ownerFloorUnlock: 24 } },
   }, 1);
 
   assert.deepEqual(received.map(event => event.progressionEligible), [false, false, true, false, false]);
   assert.deepEqual(received.map(event => event.summary.progressionEligible), [false, false, true, false, false]);
   const assisted = received.at(-1);
-  assert.deepEqual(assisted.assistedWorld, { ownerId: "host", startFloor: 200, endFloor: 203, floorsCleared: 3 });
+  assert.deepEqual(assisted.assistedWorld, { ownerId: "host", startFloor: 20, endFloor: 23, floorsCleared: 3 });
   assert.deepEqual(assisted.summary.assistedWorld, assisted.assistedWorld);
   for (const field of ["startFloor", "endFloor", "floorsCleared", "floor", "nextFloor", "ownerFloorUnlock", "leaderFloorUnlock", "floorUnlock", "unlockFloor", "unlockedFloor", "maxFloorUnlock", "maxFloor"]) {
     assert.equal(Object.hasOwn(assisted, field), false, `guest callback omits progression field ${field}`);
@@ -169,9 +170,9 @@ test("build255 completed guest expedition toast reads the assisted world floor",
   });
   controller._handleMessage({
     type: "expeditionEnded",
-    summary: { completed: true, multiplayer: true, progressionEligible: false, assistedWorld: { ownerId: "host", startFloor: 200, endFloor: 203, floorsCleared: 3 } },
+    summary: { completed: true, multiplayer: true, progressionEligible: false, assistedWorld: { ownerId: "host", startFloor: 20, endFloor: 23, floorsCleared: 3 } },
   });
-  assert.deepEqual(notices, ["203F 踏破！"]);
+  assert.deepEqual(notices, ["23F 踏破！"]);
   assert.equal(notices.some(message => message.includes("undefinedF")), false);
 });
 
@@ -188,18 +189,18 @@ test("build255 guest result modal labels assisted-world floors without implying 
   vm.runInNewContext(`${mainSource.slice(from, to)}\nthis.show=showOnlineExpeditionSummary;`, context);
   context.show({
     guest: true, reason: "return",
-    summary: { progressionEligible: false, completed: true, ranking: [], assistedWorld: { ownerId: "host", startFloor: 200, endFloor: 203, floorsCleared: 3 } },
+    summary: { progressionEligible: false, completed: true, ranking: [], assistedWorld: { ownerId: "host", startFloor: 20, endFloor: 23, floorsCleared: 3 } },
   });
   assert.match(rendered, /部屋主の出発/);
-  assert.match(rendered, /200F/);
+  assert.match(rendered, /20F/);
   assert.match(rendered, /部屋主の帰還地点/);
-  assert.match(rendered, /203F/);
+  assert.match(rendered, /23F/);
   assert.match(rendered, /お手伝い踏破/);
   assert.match(rendered, /3階/);
 });
 
 test("build255 wires guest isolation through room resume, disconnect, and completed leave paths", () => {
-  assert.match(clientSource, /OnlineViews\.js\?v=2\.11\.82-build258/);
+  assert.match(clientSource, /OnlineViews\.js\?v=3\.0\.9-build309/);
   assert.match(clientSource, /onGuestProgressIsolation = \(\) => \(\{ ok: true \}\)/);
   assert.match(clientSource, /_applyRoomState\(message\.room, \{ reconnected: Boolean\(message\.resumed\) \}\)/);
   assert.match(clientSource, /this\._syncGuestProgressIsolation\(room, \{ reconnected \}\)/);

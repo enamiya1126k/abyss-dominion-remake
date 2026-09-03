@@ -1,0 +1,36 @@
+.campaign-hero-voice{
+  box-sizing:border-box;
+  margin:12px 0;
+  padding:10px 12px;
+  display:grid;
+  gap:4px;
+  border:1px solid rgba(225,188,92,.42);
+  border-left:3px solid #d9ad45;
+  border-radius:10px;
+  background:linear-gradient(135deg,rgba(47,27,63,.9),rgba(15,10,24,.94));
+  text-align:left;
+  box-shadow:inset 0 0 18px rgba(156,92,205,.1);
+}
+.campaign-hero-voice b{
+  color:#f4d88a;
+  font-size:.76rem;
+  letter-spacing:.08em;
+}
+.campaign-hero-voice span{
+  color:#fff8e7;
+  font-size:.9rem;
+  line-height:1.55;
+  overflow-wrap:anywhere;
+}
+.campaign-hero-final-voices{
+  margin:14px 0;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+}
+.campaign-hero-final-voices .campaign-hero-voice{margin:0;min-width:0}
+@media(max-width:560px){
+  .campaign-hero-final-voices{grid-template-columns:1fr}
+  .campaign-hero-voice{padding:9px 10px}
+  .campaign-hero-voice span{font-size:.86rem}
+}

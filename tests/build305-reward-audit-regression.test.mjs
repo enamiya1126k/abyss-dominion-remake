@@ -101,7 +101,7 @@ test("build305 safeCurrencyGrant saturates without exceeding MAX_SAFE_INTEGER", 
   assert.equal(safeCurrencyGrant(1.9, 2.9), 2);
 });
 
-test("build305 offline campaign trophy pays five crystals per remaining fragment pack and reveals them", async () => {
+test("build308 offline campaign trophy uses the boss chest economy and reveals its currency", async () => {
   const source = await readFile(new URL("../src/main.js", import.meta.url), "utf8");
   const start = source.indexOf("function showCampaignTrophyReveal");
   const end = source.indexOf("function interactExploreDecoration", start);
@@ -111,9 +111,11 @@ test("build305 offline campaign trophy pays five crystals per remaining fragment
 
   assert.match(trophySource, /function showCampaignTrophyReveal\s*\(\s*\{[^)]*\bcrystals\s*=\s*0/);
   assert.match(trophySource, /if\s*\(\s*crystals\s*>\s*0\s*\)\s*rewardRows\.push/);
-  assert.match(trophySource, /pixelIcon\s*\(\s*["']crystal["']/);
+  assert.match(trophySource, /currencyIcon\s*:\s*["']crystal["']/);
+  assert.match(trophySource, /pixelIcon\s*\(\s*row\.currencyIcon\s*\)/);
   assert.match(trophySource, /魔晶石/);
-  assert.match(trophySource, /safeCurrencyGrant\s*\(\s*currentCrystals\s*,\s*5\s*\*\s*claim\.fragmentPacks\s*\)/);
+  assert.match(trophySource, /campaignBossChestReward\s*\(\s*\{\s*floor\s*,\s*bossId\s*:\s*bossInfo/);
+  assert.match(trophySource, /safeCurrencyGrant\s*\(\s*currentCrystals\s*,\s*currency\?\.crystals\s*\?\?\s*0\s*\)/);
   assert.match(trophySource, /save\.state\.player\.crystals\s*=\s*currentCrystals\s*\+\s*crystals/);
   assert.match(trophySource, /reveal\s*=\s*\{[^}]*\bcrystals\b[^}]*\}/s);
 });

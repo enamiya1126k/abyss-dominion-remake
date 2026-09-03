@@ -1,6 +1,6 @@
-import{SPECIES}from"../data/species.js?v=2.11.82-build258";
-import{ENDGAME_CHARACTERS}from"../data/endgameCharacters.js?v=2.11.24-build188";
-import{RARITY_ORDER}from"../data/equipment.js?v=2.11.2-build166";
+import{SPECIES}from"../data/species.js?v=3.0.9-build309";
+import{ENDGAME_CHARACTERS,canonicalEndgameId}from"../data/endgameCharacters.js?v=2.11.24-build188";
+import{RARITY_ORDER,normalizeEquipmentIdentity}from"../data/equipment.js?v=2.11.2-build166";
 import{createEquipment}from"../models/Equipment.js?v=2.11.2-build166";
 
 const MYTHIC=Object.freeze({
@@ -26,8 +26,9 @@ const SLOT_PLAN=Object.freeze([
 const GENERIC_CACHE=new Map();
 const cleanName=value=>String(value??"").replace(/^深淵[ⅠⅡⅢⅣⅤⅥⅦ]\s*|^十神[ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩ]\s*/,"").trim();
 function hash(value){let result=2166136261;for(const char of String(value)){result^=char.codePointAt(0);result=Math.imul(result,16777619)}return result>>>0}
-function monsterOwnerId(monster){return String(monster?.endgameBossId??monster?.speciesId??"")||null}
-function ownerRecord(ownerId){return ENDGAME_CHARACTERS[ownerId]??SPECIES[ownerId]??null}
+function canonicalOwnerId(value){const raw=String(value??"");if(!raw)return null;const canonical=canonicalEndgameId(raw);return ENDGAME_CHARACTERS[canonical]?canonical:raw}
+function monsterOwnerId(monster){return canonicalOwnerId(monster?.endgameBossId??monster?.speciesId)}
+function ownerRecord(ownerId){ownerId=canonicalOwnerId(ownerId);return ENDGAME_CHARACTERS[ownerId]??SPECIES[ownerId]??null}
 function generatedDefinition(ownerId){
  if(GENERIC_CACHE.has(ownerId))return GENERIC_CACHE.get(ownerId);
  const source=ownerRecord(ownerId);if(!source)return null;
@@ -37,9 +38,15 @@ function generatedDefinition(ownerId){
  GENERIC_CACHE.set(ownerId,definition);return definition;
 }
 
-export function signatureEquipmentOwnerId(item){if(!item)return null;return String(item.ruleOverrides?.signatureOwnerId??item.ruleOverrides?.mythicOwner??item.signatureOwnerId??item.endgameBossId??"")||null}
+export function signatureEquipmentOwnerId(item){
+ if(!item)return null;
+ const values=[item.ruleOverrides?.signatureOwnerId,item.ruleOverrides?.mythicOwner,item.signatureOwnerId,item.endgameBossId];
+ if(item.ruleOverrides?.signature&&item.rewardOwnerId!=null)values.push(item.rewardOwnerId);
+ const owners=new Set(values.filter(value=>value!=null&&value!=="").map(canonicalOwnerId).filter(Boolean));
+ return owners.size===1?[...owners][0]:null;
+}
 export const signatureWeaponOwnerId=signatureEquipmentOwnerId;
-export function signatureWeaponDefinition(ownerId){return MYTHIC[String(ownerId??"")]??generatedDefinition(String(ownerId??""))}
+export function signatureWeaponDefinition(ownerId){ownerId=canonicalOwnerId(ownerId);return MYTHIC[String(ownerId??"")]??generatedDefinition(String(ownerId??""))}
 export function signatureEquipmentOwnerName(item){const id=signatureEquipmentOwnerId(item);return id?(item.ruleOverrides?.signatureOwnerName??signatureWeaponDefinition(id)?.ownerName??cleanName(ownerRecord(id)?.name??id)):null}
 export function signatureEquipmentMatchesMonster(item,monster){const ownerId=signatureEquipmentOwnerId(item);return Boolean(ownerId&&ownerId===monsterOwnerId(monster))}
 
@@ -69,12 +76,60 @@ export function permanentSignatureOwners(){return Object.values(SPECIES).filter(
 export function rollPermanentSignatureHit(random=Math.random){return Math.max(0,Math.min(.999999,Number(random?.())||0))<PERMANENT_SIGNATURE_RATE}
 export function normalizeSignatureWeaponItem(item){
  const ownerId=signatureEquipmentOwnerId(item),endgame=ENDGAME_CHARACTERS[ownerId],weapon=endgame?.signatureWeapon;if(!item||!weapon)return null;
- const storedIndex=Number(item.ruleOverrides?.signaturePieceIndex),pieceIndex=Number.isInteger(storedIndex)?storedIndex:item.ruleOverrides?.subslot==="weaponRight"?0:-1;if(pieceIndex!==0)return null;
+ item.ruleOverrides=item.ruleOverrides&&typeof item.ruleOverrides==="object"?item.ruleOverrides:{};item.ruleOverrides.signatureOwnerId=ownerId;item.ruleOverrides.signatureOwnerName=endgame.shortName??endgame.name;item.ruleOverrides.signature=true;item.ruleOverrides.endgame=true;item.ruleOverrides.unsellable=true;item.rewardOwnerId=ownerId;item.endgameBossId=ownerId;item.endgameFaction=endgame.faction;item.series=endgame.seriesId;item.seriesName=`${endgame.shortName??endgame.name}専用`;item.rarity=endgame.faction==="tenGod"?"十神":"深淵";
+ const storedIndex=Number(item.ruleOverrides?.signaturePieceIndex),pieceIndex=Number.isInteger(storedIndex)?storedIndex:item.ruleOverrides?.subslot==="weaponRight"?0:-1,gear=endgame.gear?.[pieceIndex];
+ if(gear){const factionIds=Object.values(ENDGAME_CHARACTERS).filter(entry=>entry.faction===endgame.faction).map(entry=>entry.id),designId=`endgame-${ownerId}-${pieceIndex+1}`;item.slot=gear.slot;item.ruleOverrides.signaturePieceIndex=pieceIndex;item.ruleOverrides.subslot=gear.subslot;delete item.ruleOverrides.preferredSubslot;item.handedness=gear.slot==="weapon"?"either":null;item.weaponType=gear.slot==="weapon"&&endgame.damageClass!=="physical"?"staff":null;item.name=gear.name;item.stats={...endgameSignatureEquipmentStats(ownerId,pieceIndex)};item.fixedEffects={...endgameSignatureEquipmentFixedEffects(ownerId,pieceIndex)};item.fixedEffectText=gear.effectText;item.affixes=Array.isArray(item.affixes)?item.affixes:[];item.bossEquipmentDesignId=designId;item.rewardEquipmentDesignId=designId;item.iconKey=designId;item.iconAtlas=`endgame-${endgame.faction==="tenGod"?"ten":"abyss"}`;item.iconIndex=pieceIndex;item.iconColumn=pieceIndex;item.iconRow=Math.max(0,factionIds.indexOf(ownerId));normalizeEquipmentIdentity(item)}
+ if(pieceIndex!==0)return null;
  item.name=weapon.name;item.stats={...(item.stats??{}),...(weapon.stats??{})};item.fixedEffects={...(item.fixedEffects??{}),...(weapon.fixedEffects??{})};item.fixedEffectText=`${weapon.description}${weapon.skill?`／装備中限定技「${weapon.skill.name}」` :""}`;item.signatureWeaponEffectId=`endgame-signature-${ownerId}`;
  if(weapon.skill)item.grantedSkillId=weapon.skill.id;
- return weapon
+ normalizeEquipmentIdentity(item);return weapon
 }
 export function signatureWeaponGrantedSkill(item){return normalizeSignatureWeaponItem(item)?.skill??null}
-export function createSignatureEquipment(ownerId,pieceIndex=Math.floor(Math.random()*6)){pieceIndex=Math.max(0,Math.min(5,Math.floor(Number(pieceIndex)||0)));const definition=signatureWeaponDefinition(ownerId),plan=SLOT_PLAN[pieceIndex];if(!definition||!plan)return null;const endgame=ENDGAME_CHARACTERS[ownerId],mythicGear=MYTHIC_GEAR[ownerId],rarity=endgame?.faction==="tenGod"?"十神":endgame?.faction==="abyss"?"深淵":SPECIES[ownerId]?.rarity==="神話"?"神話":"LR";const item=createEquipment(plan.slot,{rarity,handedness:plan.slot==="weapon"?(plan.subslot==="weaponRight"?"right":"left"):null,ruleOverrides:{signatureOwnerId:ownerId,signatureOwnerName:definition.ownerName,signaturePieceIndex:pieceIndex,subslot:plan.subslot,signature:true}});item.name=endgame?.gear?.[pieceIndex]?.name??mythicGear?.names?.[pieceIndex]??`${definition.ownerName}専用・${plan.suffix}`;item.series=endgame?.seriesId??`signature-${ownerId}`;item.seriesName=`${definition.ownerName}専用`;item.favorite=true;item.fixedEffectText=endgame?.gear?.[pieceIndex]?.effectText??`${pieceIndex+1}点目の専用共鳴。2・4・6点で権能が段階覚醒する。`;item.signatureSkill=definition.name;if(mythicGear){item.visualAsset=`./assets/ui/equipment/mythic/${mythicGear.asset}-${["weapon-1","weapon-2","armor-1","armor-2","accessory-1","accessory-2"][pieceIndex]}.png`;item.stats={...MYTHIC_GEAR_STATS[pieceIndex]}}if(endgame?.signatureWeapon&&pieceIndex===0){item.stats={};item.fixedEffects={}}normalizeSignatureWeaponItem(item);return item}
+
+export function endgameSignatureEquipmentStats(ownerId,pieceIndex){
+ const boss=ENDGAME_CHARACTERS[canonicalOwnerId(ownerId)];if(!boss)return null;
+ const index=Math.max(0,Math.min(5,Math.floor(Number(pieceIndex)||0))),weapon=boss.signatureWeapon;
+ if(index===0&&weapon)return Object.freeze({...weapon.stats});
+ const god=boss.faction==="tenGod",scale=god?1.58:1,magic=boss.damageClass!=="physical",templates=[
+  magic?{matk:150,crit:14,spd:20}:{atk:165,crit:14,spd:18},
+  {hp:480,def:110,mdef:105},
+  {hp:620,mp:36,heal:18},
+  {crit:16,spd:26,atk:magic?0:48,matk:magic?48:0},
+  {hp:820,def:145,mdef:135},
+  {mp:52,matk:110,mdef:90,heal:22}
+ ];
+ return Object.freeze(Object.fromEntries(Object.entries(templates[index]??{}).filter(([,value])=>value).map(([key,value])=>[key,Math.round(value*scale)])));
+}
+
+export function endgameSignatureEquipmentFixedEffects(ownerId,pieceIndex){
+ const boss=ENDGAME_CHARACTERS[canonicalOwnerId(ownerId)];if(!boss)return null;
+ const index=Math.max(0,Math.min(5,Math.floor(Number(pieceIndex)||0))),weapon=boss.signatureWeapon;
+ if(index===0&&weapon)return Object.freeze({...weapon.fixedEffects});
+ const god=boss.faction==="tenGod",base=[
+  {skillPower:god?18:12},
+  {damageReduction:god?12:8},
+  {hpPct:god?18:12,mpPct:god?12:8},
+  {critRate:god?12:8,critDamage:god?20:14},
+  {statusResistance:god?20:14,guardPower:god?16:10},
+  {healPower:god?18:12,mpCostReduction:god?10:6}
+ ][index]??{};
+ if(boss.id==="abyss_gluttony"&&index===0)base.lifeSteal=20;
+ if(boss.id==="abyss_wrath"&&index===0)base.critDamage=40;
+ if(boss.id==="ten_fate"&&index===0)base.critRate=20;
+ if(boss.id==="ten_end"&&index===1)base.burnChance=20;
+ if(boss.id==="ten_life"&&index===0)base.healPower=25;
+ return Object.freeze({...base});
+}
+
+export function createSignatureEquipment(ownerId,pieceIndex=Math.floor(Math.random()*6)){
+ ownerId=canonicalOwnerId(ownerId);pieceIndex=Math.max(0,Math.min(5,Math.floor(Number(pieceIndex)||0)));
+ const definition=signatureWeaponDefinition(ownerId),endgame=ENDGAME_CHARACTERS[ownerId],authoredGear=endgame?.gear?.[pieceIndex],plan=authoredGear?{slot:authoredGear.slot,subslot:authoredGear.subslot,suffix:authoredGear.name}:SLOT_PLAN[pieceIndex];
+ if(!definition||!plan)return null;
+ const mythicGear=MYTHIC_GEAR[ownerId],rarity=endgame?.faction==="tenGod"?"十神":endgame?.faction==="abyss"?"深淵":SPECIES[ownerId]?.rarity==="神話"?"神話":"LR",item=createEquipment(plan.slot,{rarity,handedness:plan.slot==="weapon"?(plan.subslot==="weaponRight"?"right":"left"):null,ruleOverrides:{signatureOwnerId:ownerId,signatureOwnerName:definition.ownerName,signaturePieceIndex:pieceIndex,subslot:plan.subslot,signature:true,...(endgame?{endgame:true,unsellable:true}:{})}});
+ item.name=authoredGear?.name??mythicGear?.names?.[pieceIndex]??`${definition.ownerName}専用・${plan.suffix}`;item.series=endgame?.seriesId??`signature-${ownerId}`;item.seriesName=`${definition.ownerName}専用`;item.favorite=true;item.fixedEffectText=authoredGear?.effectText??`${pieceIndex+1}点目の専用共鳴。2・4・6点で権能が段階覚醒する。`;item.signatureSkill=definition.name;
+ if(endgame){const factionIds=Object.values(ENDGAME_CHARACTERS).filter(entry=>entry.faction===endgame.faction).map(entry=>entry.id);item.rewardOwnerId=ownerId;item.endgameBossId=ownerId;item.endgameFaction=endgame.faction;item.locked=true;item.affixes=[];item.stats={...endgameSignatureEquipmentStats(ownerId,pieceIndex)};item.fixedEffects={...endgameSignatureEquipmentFixedEffects(ownerId,pieceIndex)};item.iconKey=`endgame-${ownerId}-${pieceIndex+1}`;item.iconAtlas=`endgame-${endgame.faction==="tenGod"?"ten":"abyss"}`;item.iconColumn=pieceIndex;item.iconRow=Math.max(0,factionIds.indexOf(ownerId))}
+ if(mythicGear){item.visualAsset=`./assets/ui/equipment/mythic/${mythicGear.asset}-${["weapon-1","weapon-2","armor-1","armor-2","accessory-1","accessory-2"][pieceIndex]}.png`;item.stats={...MYTHIC_GEAR_STATS[pieceIndex]}}
+ normalizeSignatureWeaponItem(item);return item
+}
 
 export const SIGNATURE_WEAPON_RESONANCES=MYTHIC;

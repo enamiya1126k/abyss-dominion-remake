@@ -1,11 +1,11 @@
-import{SPECIES}from"../../data/species.js?v=2.11.82-build258";
-import{displayName}from"../../models/Monster.js?v=3.0.5-build305";
-import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=3.0.5-build305";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.0.5-build305";
-import{equipmentDisplayRarity,equipmentSubslotLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=2.11.30-build195";
-import{monsterVisual}from"../MonsterVisual.js?v=3.0.5-build305";
-import{resourceHud,bottomNav}from"../components/GameChrome.js?v=3.0.5-build305";
-import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=2.11.0-build164";
+import{SPECIES}from"../../data/species.js?v=3.1.1-build311";
+import{displayName}from"../../models/Monster.js?v=3.1.1-build311";
+import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=3.1.1-build311";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.1-build311";
+import{equipmentDisplayRarity,equipmentSubslotLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=3.1.1-build311";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build311";
+import{resourceHud,bottomNav}from"../components/GameChrome.js?v=3.1.1-build311";
+import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=3.1.1-build311";
 
 const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],

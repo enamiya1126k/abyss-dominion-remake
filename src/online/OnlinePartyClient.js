@@ -1,23 +1,23 @@
 import {
   buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
   onlineSocialNotificationSummary, moveOnlineBattleRosterPriority, renderOnlineBattleRosterPicker,
-} from "../ui/screens/OnlinePartyScreen.js?v=3.0.5-build305";
+} from "../ui/screens/OnlinePartyScreen.js?v=3.1.1-build311";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=3.0.5-build305";
+} from "./OnlineViews.js?v=3.1.1-build311";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   rollbackOnlineTradeAssetReservation, commitOnlineTrade, recoverOrphanedTradeEscrows,
   parseOnlineTradeAmount, reconcileOnlineTradeEscrow, sameOnlineTradeAsset, sameLegacyOnlineTradeAsset,
-} from "./OnlineTradeSystem.js?v=2.11.82-build258";
-import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=3.0.5-build305";
-import { ONLINE_EXPEDITION_MOVE_INTERVAL_MS } from "./OnlineMovement.js?v=2.11.80-build256";
+} from "./OnlineTradeSystem.js?v=3.1.1-build311";
+import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=3.1.1-build311";
+import { ONLINE_EXPEDITION_MOVE_INTERVAL_MS } from "./OnlineMovement.js?v=3.1.1-build311";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
 const SOCIAL_FAB_ROUTES = new Set(["home", "chat"]);
 const LEGACY_RESONANCE_ROUTES = new Set(["resonance", "resonanceMaze", "resonance-maze"]);
-const ONLINE_PROTOCOL = "1.16.0";
+const ONLINE_PROTOCOL = "1.17.0";
 const CAMPAIGN_FLOOR_MIN = 1;
 const CAMPAIGN_FLOOR_MAX = 100;
 const ROOM_PURPOSES = new Set(["explore", "raid", "team", "social"]);
@@ -49,6 +49,9 @@ const MUTED_PLAYER_LIMIT = 200;
 const FULL_RESET_REQUEST_PATTERN = /^[A-Za-z0-9_-]{18,96}$/;
 const FULL_RESET_TIMEOUT_MS = 12_000;
 const POWER_RANKING_CAPABILITY = "powerRankingsV1";
+const POWER_RANKING_PRESENCE_CAPABILITY = "powerRankingPresenceV1";
+const POWER_RANKING_PRESENCE_INTERVAL_MS = 30_000;
+const POWER_RANKING_PRESENCE_DEBOUNCE_MS = 1_000;
 const BACKGROUND_CONNECTION_CAPABILITY = "backgroundConnectionV1";
 const TRADE_OFFER_RECEIPTS_CAPABILITY = "tradeOfferReceiptsV1";
 const POWER_RANKING_REQUEST_TIMEOUT_MS = 10_000;
@@ -191,13 +194,48 @@ function normalizedCampaignFloors(values) {
   return [...new Set((Array.isArray(values) ? values : []).map(Number).filter(floor => Number.isInteger(floor) && floor >= CAMPAIGN_FLOOR_MIN && floor <= CAMPAIGN_FLOOR_MAX))].slice(0, CAMPAIGN_FLOOR_MAX);
 }
 
+function normalizedCampaignBossIds(values) {
+  return [...new Set((Array.isArray(values) ? values : []).map(value => String(value ?? "").replace(/[\u0000-\u001f\u007f]/g, "").slice(0, 100)).filter(Boolean))].slice(0, 16);
+}
+
+function normalizedCampaignBossId(value) {
+  return normalizedCampaignBossIds([value?.bossId ?? value?.endgameBossId ?? value?.floorBossCatalogId ?? value?.id ?? value])[0] ?? null;
+}
+
+function normalizedCampaignBossPackReceipts(value) {
+  const result = {};
+  if (!value || typeof value !== "object" || Array.isArray(value)) return result;
+  for (const [rawBossId, rawCount] of Object.entries(value).slice(0, 16)) {
+    const bossId = normalizedCampaignBossId(rawBossId), count = boundedInteger(rawCount, 0, 3, 0);
+    if (bossId && count > 0) result[bossId] = count;
+  }
+  return result;
+}
+
+function mergedCampaignBossPackReceipts(...sources) {
+  const result = {};
+  for (const source of sources) for (const [bossId, count] of Object.entries(normalizedCampaignBossPackReceipts(source))) result[bossId] = Math.max(result[bossId] ?? 0, count);
+  return result;
+}
+
 function normalizedCampaignFloorState(source = {}) {
   const collectedKeyIds = [...new Set((Array.isArray(source?.collectedKeyIds) ? source.collectedKeyIds : [])
     .map(value => String(value ?? "").slice(0, 80)).filter(Boolean))].slice(0, 3);
   const rawLocks = boundedInteger(source?.trophyLocksOpened, 0, 3, 0);
   const trophyFragmentPacksClaimed = Math.max(rawLocks, boundedInteger(source?.trophyFragmentPacksClaimed, 0, 3, 0));
   const keysCollected = Math.max(collectedKeyIds.length, boundedInteger(source?.keysCollected, 0, 3, 0), rawLocks);
-  return {
+  const record = source && typeof source === "object" && !Array.isArray(source) ? source : {};
+  const owns = key => Object.prototype.hasOwnProperty.call(record, key);
+  const legacyClaimedBossIds = normalizedCampaignBossIds(source?.claimedBossIds);
+  const includeOpenedBossIds = owns("openedBossIds") || owns("claimedBossIds");
+  const includeMythicClaimedBossIds = owns("mythicClaimedBossIds") || owns("claimedBossIds");
+  const includeFragmentPacks = owns("fragmentPacksClaimedByBoss");
+  const openedBossIds = normalizedCampaignBossIds(owns("openedBossIds") ? source.openedBossIds : legacyClaimedBossIds);
+  const mythicClaimedBossIds = normalizedCampaignBossIds(owns("mythicClaimedBossIds") ? source.mythicClaimedBossIds : legacyClaimedBossIds);
+  const fragmentPacksClaimedByBoss = normalizedCampaignBossPackReceipts(source?.fragmentPacksClaimedByBoss);
+  const defeatedBossIds = normalizedCampaignBossIds([...(Array.isArray(source?.defeatedBossIds) ? source.defeatedBossIds : []), ...openedBossIds]);
+  const includeDefeatedBossIds = owns("defeatedBossIds") || includeOpenedBossIds;
+  const state = {
     runId: String(source?.runId ?? "").slice(0, 120) || null,
     keysCollected,
     trophyLocksOpened: rawLocks >= 3 ? 3 : 0,
@@ -206,8 +244,16 @@ function normalizedCampaignFloorState(source = {}) {
     hotSpringUsed: Boolean(source?.hotSpringUsed),
     trophyMythicClaimed: Boolean(source?.trophyMythicClaimed) || rawLocks >= 3,
     replayActive: Boolean(source?.replayActive),
-    bossDefeatedThisRun: Boolean(source?.bossDefeatedThisRun),
+    bossDefeatedThisRun: Boolean(source?.bossDefeatedThisRun) || defeatedBossIds.length > 0,
   };
+  if (includeDefeatedBossIds) state.defeatedBossIds = defeatedBossIds;
+  if (includeOpenedBossIds) {
+    state.openedBossIds = openedBossIds;
+    state.claimedBossIds = [...openedBossIds];
+  }
+  if (includeMythicClaimedBossIds) state.mythicClaimedBossIds = mythicClaimedBossIds;
+  if (includeFragmentPacks) state.fragmentPacksClaimedByBoss = fragmentPacksClaimedByBoss;
+  return state;
 }
 
 function normalizedCampaignFloorStates(source) {
@@ -221,7 +267,19 @@ function normalizedCampaignFloorStates(source) {
 }
 
 function campaignHostStateFromLocal(source = {}) {
-  return normalizedCampaignFloorState({
+  const progressSource = source?.bossProgress && typeof source.bossProgress === "object" && !Array.isArray(source.bossProgress) ? source.bossProgress : null;
+  const progressRows = progressSource ? Object.entries(progressSource).slice(0, 16).map(([key, value]) => {
+    const progress = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+    return { bossId: normalizedCampaignBossId(progress.bossId ?? key), progress };
+  }).filter(row => row.bossId) : [];
+  const progressDefeatedBossIds = normalizedCampaignBossIds(progressRows.filter(row => row.progress.defeated === true).map(row => row.bossId));
+  const progressOpenedBossIds = normalizedCampaignBossIds(progressRows.filter(row => boundedInteger(row.progress.trophyLocksOpened, 0, 3, 0) >= 3).map(row => row.bossId));
+  const progressMythicClaimedBossIds = normalizedCampaignBossIds(progressRows.filter(row => row.progress.trophyClaimed === true).map(row => row.bossId));
+  const progressFragmentPacksClaimedByBoss = Object.fromEntries(progressRows.map(row => [row.bossId, Math.max(
+    boundedInteger(row.progress.trophyFragmentPacksClaimed, 0, 3, 0),
+    boundedInteger(row.progress.trophyLocksOpened, 0, 3, 0),
+  )]).filter(([, count]) => count > 0));
+  const candidate = {
     runId: source?.runId,
     keysCollected: source?.keysCollected,
     trophyLocksOpened: source?.trophyLocksOpened,
@@ -229,18 +287,53 @@ function campaignHostStateFromLocal(source = {}) {
     collectedKeyIds: source?.keyIds,
     hotSpringUsed: source?.hotSpringUsed,
     trophyMythicClaimed: source?.trophyClaimed,
-    replayActive: false,
+    replayActive: Boolean(source?.replayActive),
     bossDefeatedThisRun: Boolean(source?.bossDefeated),
-  });
+  };
+  if (progressRows.length) {
+    candidate.defeatedBossIds = progressDefeatedBossIds;
+    candidate.openedBossIds = progressOpenedBossIds;
+    candidate.claimedBossIds = progressOpenedBossIds;
+    candidate.mythicClaimedBossIds = progressMythicClaimedBossIds;
+    candidate.fragmentPacksClaimedByBoss = progressFragmentPacksClaimedByBoss;
+  } else {
+    for (const key of ["defeatedBossIds", "openedBossIds", "claimedBossIds", "mythicClaimedBossIds", "fragmentPacksClaimedByBoss"]) {
+      if (Object.prototype.hasOwnProperty.call(source ?? {}, key)) candidate[key] = source[key];
+    }
+  }
+  return normalizedCampaignFloorState(candidate);
 }
 
 function mergeCampaignHostFloorState(onlineSource, localSource) {
   if (!onlineSource) return campaignHostStateFromLocal(localSource);
   const online = normalizedCampaignFloorState(onlineSource), local = campaignHostStateFromLocal(localSource);
-  if (local.runId && online.runId && local.runId !== online.runId) return { ...local, trophyMythicClaimed: online.trophyMythicClaimed || local.trophyMythicClaimed };
+  const owns = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
+  const includeDefeatedBossIds = owns(online, "defeatedBossIds") || owns(local, "defeatedBossIds");
+  const includeOpenedBossIds = owns(online, "openedBossIds") || owns(local, "openedBossIds") || owns(online, "claimedBossIds") || owns(local, "claimedBossIds");
+  const includeMythicClaimedBossIds = owns(online, "mythicClaimedBossIds") || owns(local, "mythicClaimedBossIds");
+  const includeFragmentPacks = owns(online, "fragmentPacksClaimedByBoss") || owns(local, "fragmentPacksClaimedByBoss");
+  const mythicClaimedBossIds = normalizedCampaignBossIds([...(online.mythicClaimedBossIds ?? []), ...(local.mythicClaimedBossIds ?? [])]);
+  if (local.runId && online.runId && local.runId !== online.runId && (online.replayActive || local.replayActive)) {
+    // Run-scoped receipts must never bleed into a replay. Prefer the locally
+    // active replay, or an explicitly newer replay received from the server,
+    // while carrying only lifetime mythic ownership across the boundary.
+    const currentRun = online.replayActive ? online : local;
+    const next = { ...currentRun, trophyMythicClaimed: online.trophyMythicClaimed || local.trophyMythicClaimed };
+    if (includeMythicClaimedBossIds) next.mythicClaimedBossIds = mythicClaimedBossIds;
+    if (includeOpenedBossIds) {
+      next.openedBossIds = normalizedCampaignBossIds(currentRun.openedBossIds ?? currentRun.claimedBossIds);
+      next.claimedBossIds = [...next.openedBossIds];
+    }
+    if (includeDefeatedBossIds) next.defeatedBossIds = normalizedCampaignBossIds([...(currentRun.defeatedBossIds ?? []), ...(next.openedBossIds ?? [])]);
+    if (includeFragmentPacks) next.fragmentPacksClaimedByBoss = normalizedCampaignBossPackReceipts(currentRun.fragmentPacksClaimedByBoss);
+    return normalizedCampaignFloorState(next);
+  }
   const collectedKeyIds = [...new Set([...online.collectedKeyIds, ...local.collectedKeyIds])].slice(0, 3);
   const keysCollected = Math.min(3, Math.max(online.keysCollected, local.keysCollected, collectedKeyIds.length));
-  return {
+  const openedBossIds = normalizedCampaignBossIds([...(online.openedBossIds ?? online.claimedBossIds ?? []), ...(local.openedBossIds ?? local.claimedBossIds ?? [])]);
+  const defeatedBossIds = normalizedCampaignBossIds([...(online.defeatedBossIds ?? []), ...(local.defeatedBossIds ?? []), ...openedBossIds]);
+  const fragmentPacksClaimedByBoss = mergedCampaignBossPackReceipts(online.fragmentPacksClaimedByBoss, local.fragmentPacksClaimedByBoss);
+  const next = {
     runId: local.runId || online.runId,
     keysCollected,
     trophyLocksOpened: Math.max(online.trophyLocksOpened, local.trophyLocksOpened) >= 3 ? 3 : 0,
@@ -248,9 +341,17 @@ function mergeCampaignHostFloorState(onlineSource, localSource) {
     collectedKeyIds,
     hotSpringUsed: online.hotSpringUsed || local.hotSpringUsed,
     trophyMythicClaimed: online.trophyMythicClaimed || local.trophyMythicClaimed,
-    replayActive: online.replayActive,
-    bossDefeatedThisRun: online.bossDefeatedThisRun || local.bossDefeatedThisRun,
+    replayActive: online.runId ? online.replayActive : local.replayActive,
+    bossDefeatedThisRun: online.bossDefeatedThisRun || local.bossDefeatedThisRun || defeatedBossIds.length > 0,
   };
+  if (includeDefeatedBossIds) next.defeatedBossIds = defeatedBossIds;
+  if (includeOpenedBossIds) {
+    next.openedBossIds = openedBossIds;
+    next.claimedBossIds = [...openedBossIds];
+  }
+  if (includeMythicClaimedBossIds) next.mythicClaimedBossIds = mythicClaimedBossIds;
+  if (includeFragmentPacks) next.fragmentPacksClaimedByBoss = fragmentPacksClaimedByBoss;
+  return next;
 }
 
 function rankingIdentifier(value, maximum = 120) {
@@ -389,6 +490,8 @@ function normalizePowerRankingEntry(source) {
     power: rankingPower(source.power),
     maxFloor: boundedInteger(source.maxFloor, 1, 100, 1),
     updatedAt: boundedInteger(source.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
+    online: source.online === true,
+    lastActiveAt: boundedInteger(source.lastActiveAt ?? source.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
     icon,
     leadMonster: icon,
   };
@@ -408,6 +511,7 @@ export function normalizePowerRankingState(source, { supported = true, loading =
     updatedAt: boundedInteger(source?.serverNow ?? source?.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
     serverNow: boundedInteger(source?.serverNow, 0, Number.MAX_SAFE_INTEGER, 0),
     staleAfterMs: boundedInteger(source?.staleAfterMs, 0, 365 * 24 * 60 * 60_000, 0),
+    presenceOnlineMs: boundedInteger(source?.presenceOnlineMs, 0, 24 * 60 * 60_000, 0),
     season: source?.season && typeof source.season === "object" ? {
       id: rankingText(source.season.id, 20),
       startsAt: boundedInteger(source.season.startsAt, 0, Number.MAX_SAFE_INTEGER, 0),
@@ -436,6 +540,10 @@ export function normalizePowerRankingProfile(source) {
     power: rankingPower(source.power),
     maxFloor: boundedInteger(source.maxFloor, 1, 100, 1),
     updatedAt: boundedInteger(source.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
+    online: source.online === true,
+    lastActiveAt: boundedInteger(source.lastActiveAt ?? source.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
+    serverNow: boundedInteger(source.serverNow, 0, Number.MAX_SAFE_INTEGER, 0),
+    presenceOnlineMs: boundedInteger(source.presenceOnlineMs, 0, 24 * 60 * 60_000, 0),
     party,
   };
 }
@@ -1066,6 +1174,9 @@ export class OnlinePartyController {
     this.latestPowerRankingSnapshot = null;
     this.lastPowerRankingSnapshotSignature = "";
     this.lastPowerRankingSnapshotAt = 0;
+    this.powerRankingPresenceTimer = null;
+    this.lastPowerRankingPresenceAt = 0;
+    this.onlineBattleBiomePanel = { key: "", collapsed: false, manual: false, timer: null };
     this.roomListings = [];
     this.friendState = { friends: [], incoming: [], outgoing: [], invites: [], blocked: [], muted: [] };
     this.guildState = emptyGuildState();
@@ -1218,6 +1329,7 @@ export class OnlinePartyController {
     this._bindStaticUi();
     this._renderTradeRecoveryStatus();
     this._startLoops();
+    if (connected) this._startPowerRankingPresenceLoop();
     if (connected) {
       if (wasBackgroundOnly && this.capabilities.has(POWER_RANKING_CAPABILITY) && this.capabilities.has(BACKGROUND_CONNECTION_CAPABILITY)) {
         this._requestConnectionMode(false);
@@ -1272,6 +1384,7 @@ export class OnlinePartyController {
       this.desiredBackgroundOnly = true;
       this._requestConnectionMode(true);
     }
+    if (!disconnect && !this.backgroundActive) this._stopPowerRankingPresenceLoop();
     this.root = null;
   }
 
@@ -1282,10 +1395,13 @@ export class OnlinePartyController {
       target.addEventListener(type, handler);
       this.backgroundBound.push([target, type, handler]);
     };
-    const resume = () => this._ensureConnectionAfterResume();
-    bind(globalThis.document, "visibilitychange", () => { if (globalThis.document?.visibilityState === "visible") resume(); });
+    const resume = () => { this._ensureConnectionAfterResume(); this._startPowerRankingPresenceLoop(); };
+    const suspend = () => this._stopPowerRankingPresenceLoop();
+    bind(globalThis.document, "visibilitychange", () => { if (globalThis.document?.visibilityState === "visible") resume(); else suspend(); });
+    bind(globalThis.window, "pagehide", suspend);
     bind(globalThis.window, "pageshow", resume);
     bind(globalThis.window, "online", resume);
+    bind(globalThis.window, "offline", suspend);
   }
 
   _removeBackgroundLifecycle() {
@@ -1311,11 +1427,11 @@ export class OnlinePartyController {
     this._bindBackgroundLifecycle();
     if (this.supersededConnection) return { ok: false, reason: "superseded" };
     if (this.backgroundConnectionBusy && !this.mounted) return { ok: false, reason: "busy" };
-    if (this.mounted) return { ok: true, connected: this._canMutateOnline(), foreground: true };
+    if (this.mounted) { this._startPowerRankingPresenceLoop(); return { ok: true, connected: this._canMutateOnline(), foreground: true }; }
     this.desiredBackgroundOnly = true;
     if (!this.connectionReady) this.backgroundOnly = true;
     if (!connect || this.ws && [WebSocket.OPEN, WebSocket.CONNECTING].includes(this.ws.readyState)) {
-      if (this.connectionReady && this.ws?.readyState === WebSocket.OPEN) this._requestConnectionMode(true);
+      if (this.connectionReady && this.ws?.readyState === WebSocket.OPEN) { this._requestConnectionMode(true); this._startPowerRankingPresenceLoop(); }
       return { ok: true, connected: Boolean(this.connectionReady && this.ws?.readyState === WebSocket.OPEN) };
     }
     this.manualClose = false;
@@ -1327,6 +1443,7 @@ export class OnlinePartyController {
     this.backgroundActive = false;
     this.desiredBackgroundOnly = false;
     this._removeBackgroundLifecycle();
+    if (!this.mounted) this._stopPowerRankingPresenceLoop();
     if (disconnect && !this.mounted) this.disconnect({ leave: false, quiet: true });
     return { ok: true };
   }
@@ -1420,13 +1537,14 @@ export class OnlinePartyController {
     });
     this._bind(window, "keyup", event => { const direction = keyDirection(event.key); if (direction) { this.heldDirections.delete(direction); if (!this.heldDirections.size) this.keyboardMoveMode = ""; } });
     this._bind(window, "blur", () => this._clearMoveInputs());
-    this._bind(window, "pagehide", () => this._clearMoveInputs());
+    this._bind(window, "pagehide", () => { this._clearMoveInputs(); this._stopPowerRankingPresenceLoop(); });
     this._bind(document, "visibilitychange", () => {
-      if (document.visibilityState === "visible") this._ensureConnectionAfterResume();
-      else this._clearMoveInputs();
+      if (document.visibilityState === "visible") { this._ensureConnectionAfterResume(); this._startPowerRankingPresenceLoop(); }
+      else { this._clearMoveInputs(); this._stopPowerRankingPresenceLoop(); }
     });
-    this._bind(window, "pageshow", () => this._ensureConnectionAfterResume());
-    this._bind(window, "online", () => this._ensureConnectionAfterResume());
+    this._bind(window, "pageshow", () => { this._ensureConnectionAfterResume(); this._startPowerRankingPresenceLoop(); });
+    this._bind(window, "online", () => { this._ensureConnectionAfterResume(); this._startPowerRankingPresenceLoop(); });
+    this._bind(window, "offline", () => this._stopPowerRankingPresenceLoop());
     this._bind(this.root, "pointerdown", event => {
       const button = event.target.closest?.("[data-online-move]");
       if (!button) return;
@@ -1714,6 +1832,7 @@ export class OnlinePartyController {
     if (button.matches("[data-online-team-swap]")) { this._send("teamSwapSides"); return; }
     if (button.matches("[data-online-team-ready]")) { const self = this._self(); this._send("teamReady", { ready: !self?.teamReady }); return; }
     if (button.matches("[data-online-start-team]")) { if (!this._contentStartBlockedByTrade()) { this.teamBattleReport = null; this._send("startTeamBattle"); } return; }
+    if (button.matches("[data-battle-biome-toggle]")) { this._toggleOnlineBattleBiomePanel(); return; }
     if (button.matches("[data-enemy-target]")) { this._selectBattleTarget(button.dataset.enemyTarget, "enemy"); return; }
     if (button.matches("[data-online-ally-target]")) { this._selectBattleTarget(button.dataset.onlineAllyTarget, "ally"); return; }
     if (button.matches("[data-command]")) { this._battleAction(this.route, button.dataset.command); return; }
@@ -2048,6 +2167,47 @@ export class OnlinePartyController {
     return Boolean(this.connectionReady && this.capabilities.has(POWER_RANKING_CAPABILITY));
   }
 
+  _powerRankingPresenceVisible() {
+    const visibility = globalThis.document?.visibilityState;
+    return Boolean((this.mounted || this.backgroundActive) && (visibility == null || visibility === "visible"));
+  }
+
+  publishPowerRankingPresence({ force = false } = {}) {
+    if (!this.connectionReady || !this.capabilities.has(POWER_RANKING_PRESENCE_CAPABILITY) || !this._powerRankingPresenceVisible()) return false;
+    const now = Date.now();
+    const minimumDelay = force ? POWER_RANKING_PRESENCE_DEBOUNCE_MS : POWER_RANKING_PRESENCE_INTERVAL_MS;
+    if (this.lastPowerRankingPresenceAt > 0 && now >= this.lastPowerRankingPresenceAt && now - this.lastPowerRankingPresenceAt < minimumDelay) return true;
+    if (!this._send("powerRankingPresence")) return false;
+    this.lastPowerRankingPresenceAt = now;
+    return true;
+  }
+
+  _stopPowerRankingPresenceLoop() {
+    clearTimeout(this.powerRankingPresenceTimer);
+    this.powerRankingPresenceTimer = null;
+  }
+
+  _schedulePowerRankingPresence() {
+    this._stopPowerRankingPresenceLoop();
+    if (!this.connectionReady || !this.capabilities.has(POWER_RANKING_PRESENCE_CAPABILITY) || !this._powerRankingPresenceVisible()) return;
+    const timer = setTimeout(() => {
+      if (this.powerRankingPresenceTimer !== timer) return;
+      this.powerRankingPresenceTimer = null;
+      if (!this._powerRankingPresenceVisible()) return;
+      this.publishPowerRankingPresence({ force: true });
+      this._schedulePowerRankingPresence();
+    }, POWER_RANKING_PRESENCE_INTERVAL_MS);
+    timer?.unref?.();
+    this.powerRankingPresenceTimer = timer;
+  }
+
+  _startPowerRankingPresenceLoop({ immediate = true } = {}) {
+    this._stopPowerRankingPresenceLoop();
+    if (!this.connectionReady || !this.capabilities.has(POWER_RANKING_PRESENCE_CAPABILITY) || !this._powerRankingPresenceVisible()) return;
+    if (immediate) this.publishPowerRankingPresence({ force: true });
+    this._schedulePowerRankingPresence();
+  }
+
   _nextPowerRankingRequestId(kind = "request") {
     this.powerRankingRequestSequence = (this.powerRankingRequestSequence + 1) % 1_000_000;
     const safeKind = String(kind).replace(/[^a-z]/gi, "").slice(0, 12) || "request";
@@ -2203,6 +2363,8 @@ export class OnlinePartyController {
 
   _flushPowerRankingAfterHandshake() {
     const supported = this.capabilities.has(POWER_RANKING_CAPABILITY);
+    if (this.capabilities.has(POWER_RANKING_PRESENCE_CAPABILITY)) this._startPowerRankingPresenceLoop();
+    else this._stopPowerRankingPresenceLoop();
     this.powerRankingState = { ...this.powerRankingState, supported, loading: supported && this.powerRankingWanted, error: "" };
     this._notifyPowerRankingCapability();
     this._notifyPowerRankingState();
@@ -2632,7 +2794,7 @@ export class OnlinePartyController {
     if (message.type === "powerRankingProfileResult") {
       const match = this._matchingPowerRankingRequest(message, "profile");
       if (!match) return;
-      const profile = normalizePowerRankingProfile(message.profile);
+      const profile = normalizePowerRankingProfile(message.profile ? { ...message.profile, serverNow: message.serverNow, presenceOnlineMs: message.presenceOnlineMs } : null);
       if (profile && profile.playerId !== match.pending.playerId) return;
       if (match.requestId === this.latestPowerRankingProfileRequestId) {
         this.powerRankingProfile = profile;
@@ -2710,10 +2872,10 @@ export class OnlinePartyController {
     if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); if (message.type === "expeditionStarted") this._settlePendingExpeditionStart(message.room); return; }
     if (message.type === "battleStarted" && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this.presentationKoIds.explore.clear(); this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
     if (message.type === "expeditionEvent") { if (message.event?.kind === "hostChestOpened") { const ownerId = this._explicitWorldOwnerId(message.event); if (ownerId && ownerId === this.selfId) this.onHostWorldUpdate({ ...message.event, ownerId }); } if (message.event?.tutorialGuide === "firstPickup") this._notifyTutorialGuide("explore_pickup"); this._announceExpeditionEvent(message.event); return; }
-    if (message.type === "floorBossDefeated") { this._clearPresentationTimers(); const ownerId = this._explicitWorldOwnerId(message), reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: ownerId || null, boss: message.boss ?? null, bosses: message.bosses ?? [] }, isWorldOwner = Boolean(ownerId && ownerId === this.selfId), multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this._closeBattleMenus("explore"); this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = null; if (isWorldOwner) this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId, boss: reward.boss, bosses: reward.bosses }); this.route = "explore"; this.toast(`${reward.floor || ""}F 階層支配者を撃破！ 戦利品は鍵付き宝箱へ`); this._render(); return; }
+    if (message.type === "floorBossDefeated") { this._clearPresentationTimers(); const ownerId = this._explicitWorldOwnerId(message), reward = { floor: Number(message.floor) || 0, firstClear: Boolean(message.firstClear), ownerId: ownerId || null, bossId: normalizedCampaignBossId(message.bossId ?? message.boss), boss: message.boss ?? null, bosses: message.bosses ?? [], defeatedBossIds: normalizedCampaignBossIds(message.defeatedBossIds) }, isWorldOwner = Boolean(ownerId && ownerId === this.selfId), multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2; this.floorBossConfirm = null; this.coopBossConfirm = null; this._closeBattleMenus("explore"); this.expeditionReport = multiplayer ? message.summary ?? null : null; this.pendingFloorBossReward = null; if (isWorldOwner) this.onHostWorldUpdate({ kind: "floorBossDefeated", floor: reward.floor, ownerId, bossId: reward.bossId, boss: reward.boss, bosses: reward.bosses, defeatedBossIds: reward.defeatedBossIds }); this.route = "explore"; this.toast(`${reward.floor || ""}階 階層支配者を撃破！ 戦利品は鍵付き宝箱へ`); this._render(); return; }
     if (message.type === "expeditionPing" && message.ping?.id) { if (this._isSocialHidden(message.ping.playerId)) return; this.coopPings.set(message.ping.id, { ...message.ping }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot() }); else this._render(); return; }
     if (message.type === "battleRound" || message.type === "battleResolved") { const previous = this.roomState?.expedition?.battle; this._captureHpTrails("explore", previous, message.battle); if (this.roomState?.expedition) this.roomState.expedition.battle = message.battle; if (message.type === "battleRound") this._closeBattleMenus("explore"); this._setRoute("explore", { silent: true }); this._queueBattlePresentation("explore", message.battle?.lastEvents); return; }
-    if (message.type === "expeditionEnded") { this._clearPresentationTimers(); const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2, completedFloor = message.summary?.floor ?? message.summary?.assistedWorld?.endFloor; this.presentationKoIds.explore.clear(); this.expeditionReport = multiplayer ? message.summary ?? null : null; if (this.roomState) this.roomState = { ...this.roomState, phase: "lobby", expedition: null, coopRun: null }; this._closeAllBattleMenus(); this.route = "explore"; this.toast(message.summary?.completed && Number.isFinite(Number(completedFloor)) ? `${Math.max(1, Math.min(100, Math.floor(Number(completedFloor))))}F 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
+    if (message.type === "expeditionEnded") { this._clearPresentationTimers(); const multiplayer = message.summary?.multiplayer ?? (this.roomState?.members?.length ?? 0) >= 2, completedFloor = message.summary?.floor ?? message.summary?.assistedWorld?.endFloor; this.presentationKoIds.explore.clear(); this.expeditionReport = multiplayer ? message.summary ?? null : null; if (this.roomState) this.roomState = { ...this.roomState, phase: "lobby", expedition: null, coopRun: null }; this._closeAllBattleMenus(); this.route = "explore"; this.toast(message.summary?.completed && Number.isFinite(Number(completedFloor)) ? `${Math.max(1, Math.min(100, Math.floor(Number(completedFloor))))}階 踏破！` : message.summary?.reason === "defeat" ? "パーティが全滅しました…" : "探索から帰還しました"); this._render(); return; }
     if (message.type === "battleEnded") { this._clearPresentationTimers(); this.coopBossConfirm = null; this.presentationKoIds.explore.clear(); this._closeBattleMenus("explore"); const bossName = message.coopBoss?.name || message.boss?.name; this.toast(message.result === "victory" ? bossName ? `${bossName}を撃破！` : "共闘バトル勝利！" : message.coopBoss ? "共闘ボスから退却。回復後に再挑戦できます" : "共闘パーティが全滅しました…"); return; }
     if (message.type === "raidStarted") {
       this.presentationKoIds.raid.clear();
@@ -3732,6 +3894,7 @@ export class OnlinePartyController {
     const renderedTradeId=String(this.trade?.tradeId??""),tradeOfferPending=Boolean(this.tradePendingOffer||this.tradeReconcilePending||this.tradeOfferInflight.has(renderedTradeId)||this.tradeReconcileInflight.has(renderedTradeId)||this.tradeCommitInflight.has(renderedTradeId)||this.tradeFinishInflight.has(renderedTradeId)),tradeOfferPendingLabel=this.tradePendingOffer?.status==="saving"?"保存中…":this.tradePendingOffer?.status==="sending"?"送信中…":this.tradeCommitInflight.has(renderedTradeId)?"確定保存中…":this.tradeFinishInflight.has(renderedTradeId)?"終了処理中…":tradeOfferPending?"照合中…":"";
     const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], presentationKoIds: [...(this.presentationKoIds[this.route] ?? [])], raidReport: this.raidReport, teamBattleReport: this.teamBattleReport, expeditionReport: this.expeditionReport, expeditionReturnReady: Boolean(this.pendingExpeditionReturnResult), expeditionStartPending: this.pendingExpeditionStart, floorBossConfirm: this.floorBossConfirm, coopBossConfirm: this.coopBossConfirm, exploreChatOpen: this.exploreChatOpen, hallGamesOpen: this.hallGamesOpen, hallGameTab: this.hallGameTab, hallGamesSupported: this.capabilities.has("hallMinigamesV1"), merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot(), socialNotice, trade: this.trade, tradeCatalog: this.trade ? this._tradeCatalog() : [], tradeFilter: this.tradeFilter, tradeQuery: this.tradeQuery, tradeDraftRef: this.tradeDraftRef, tradeDraftAsset: this.trade ? this._tradeDraftAsset() : null, tradeAmount: this.tradeAmount, tradeOfferPending, tradeOfferPendingLabel, tradeConsistent:this._tradeAdvanceAllowed(), tradeConfirmSeconds: Math.max(0, Math.ceil((this.tradeConfirmAvailableAt - Date.now()) / 1000)), raidExchangePending: this.raidExchangePending, roomListingPending: this.roomListingPending, roomMemberRemovalPendingId: this.roomMemberRemovalPendingId, guildRecruitmentActive: guildRecruitmentLock.active, guildRecruitmentLock, mutedPlayerIds, blockedPlayerIds, safetyCapability: this.capabilities.has("onlineSafetyV1") };
     state.battleAutoSupported = this.capabilities.has("battleAutoV1");
+    state.battleBiomeCollapsed = this._syncOnlineBattleBiomePanel();
     const activeInput = stage.contains(document.activeElement) ? document.activeElement : null;
     const restoreHallChatFocus = this.route === "home" && this.hallGamesOpen
       && activeInput?.matches?.("[data-online-explore-chat-input]");
@@ -3768,6 +3931,34 @@ export class OnlinePartyController {
   }
 
   _battle(mode) { return mode === "raid" ? this.roomState?.raid : mode === "team" ? this.roomState?.teamBattle : this.roomState?.expedition?.battle; }
+
+  _onlineBattleBiomeKey() {
+    if (!["explore", "raid", "team"].includes(this.route)) return "";
+    const battle = this._battle(this.route);
+    if (!battle) return "";
+    const identity = battle.id ?? battle.battleId ?? battle.encounterId ?? battle.startedAt ?? `${battle.floor ?? this.roomState?.selectedFloor ?? 1}:${battle.game ?? 1}`;
+    return `${this.route}:${identity}`;
+  }
+
+  _syncOnlineBattleBiomePanel() {
+    const panel = this.onlineBattleBiomePanel ??= { key: "", collapsed: false, manual: false, timer: null };
+    const key = this._onlineBattleBiomeKey();
+    if (!key) {
+      clearTimeout(panel.timer);Object.assign(panel,{key:"",collapsed:false,manual:false,timer:null});return false;
+    }
+    if (panel.key !== key) {
+      clearTimeout(panel.timer);Object.assign(panel,{key,collapsed:false,manual:false,timer:null});
+      panel.timer=setTimeout(()=>{if(panel.key!==key||panel.manual)return;panel.timer=null;panel.collapsed=true;if(this.mounted&&this._onlineBattleBiomeKey()===key)this._render()},1800);
+    }
+    return Boolean(panel.collapsed);
+  }
+
+  _toggleOnlineBattleBiomePanel() {
+    const panel = this.onlineBattleBiomePanel ??= { key: "", collapsed: false, manual: false, timer: null };
+    const key = this._onlineBattleBiomeKey();if(!key)return;
+    if(panel.key!==key)this._syncOnlineBattleBiomePanel();
+    clearTimeout(panel.timer);panel.timer=null;panel.manual=true;panel.collapsed=!panel.collapsed;this._render();
+  }
 
   _toggleOnlineBattleAuto(mode) {
     if (!["explore", "raid", "team"].includes(mode)) return this.toast("この戦闘では自動戦闘を利用できません");
@@ -4224,8 +4415,8 @@ export class OnlinePartyController {
 
   _receiveSocial(message) {
     if (this._isSocialHidden(message.playerId)) return;
-    const emoji = ({ wave: "👋", cheer: "✨", heart: "❤️", like: "👍", alert: "⚠️", question: "❓", surprise: "‼️", laugh: "😄", cry: "💧", clap: "👏", sparkle: "🌟" })[message.id] ?? "✨";
-    this.socialBubbles.set(message.playerId, { playerId: message.playerId, emoji, id: message.id, expiresAt: Date.now() + Math.max(1800, Number(message.duration) || 2800) });
+    const label = ({ wave: "挨拶", cheer: "応援", heart: "感謝", like: "了解", alert: "注意", question: "疑問", surprise: "驚き", laugh: "笑顔", cry: "涙", clap: "拍手", sparkle: "注目" })[message.id] ?? "合図";
+    this.socialBubbles.set(message.playerId, { playerId: message.playerId, emoji: label, label, id: message.id, expiresAt: Date.now() + Math.max(1800, Number(message.duration) || 2800) });
     if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { chatBubbles: this._chatBubbleSnapshot(), pings: this._pingSnapshot(), socialBubbles: this._socialBubbleSnapshot() });
     else if (!["explore", "raid", "team"].includes(this.route) || !this._battle(this.route)) {
       if (!this._refreshHallSocialDom()) this._render();
@@ -4265,7 +4456,7 @@ export class OnlinePartyController {
     event.preventDefault();
     event.stopPropagation();
     this.emoteGestureCleanup?.();
-    const choices = [["wave", "👋"], ["cheer", "✨"], ["heart", "❤️"], ["like", "👍"], ["alert", "⚠️"], ["question", "❓"]];
+    const choices = [["wave", "挨拶"], ["cheer", "応援"], ["heart", "感謝"], ["like", "了解"], ["alert", "注意"], ["question", "疑問"]];
     const pointerId = event.pointerId, origin = { x: event.clientX, y: event.clientY };
     const isHallGame = anchor.matches?.(".online-hall-game-emote-tool");
     const isHall = isHallGame || anchor.matches?.(".online-hall-emote-tool");
@@ -4407,6 +4598,7 @@ export class OnlinePartyController {
 
   _handleClose(closedSocket = null, closeEvent = null) {
     if (closedSocket && this.ws && this.ws !== closedSocket) return;
+    this._stopPowerRankingPresenceLoop(); this.lastPowerRankingPresenceAt = 0;
     this.ws = null; this.connectionReady = false; this.connectionModePending = false; this._clearPowerRankingRequests("offline"); this._notifyPowerRankingCapability(); this._clearGuildPlanTransitionTimer(); this._clearMoveInputs(); this._clearInteractionPending(false); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this.merchantPending = false; if (this.manualClose) return;
     if (Number(closeEvent?.code) === 4001) {
       clearTimeout(this.reconnectTimer); this.reconnectTimer = null;
@@ -4429,6 +4621,7 @@ export class OnlinePartyController {
 
   disconnect({ leave = true, quiet = false } = {}) {
     clearTimeout(this.reconnectTimer); this.reconnectTimer = null; this.manualClose = true;
+    this._stopPowerRankingPresenceLoop(); this.lastPowerRankingPresenceAt = 0;
     this.connectionReady = false; this.helloAckPending = false; this.connectionModePending = false; this.foregroundProfileSyncPending = false; this._clearPowerRankingRequests("offline"); this._notifyPowerRankingCapability(); this._clearMoveInputs();
     storageSet(ONLINE_STORAGE_KEYS.autoConnect, "0");
     if (leave) this._send("leaveRoom");

@@ -103,9 +103,9 @@ test("Build305 reconciles complete and partial trophy receipts without minting a
   const equipmentBefore = complete.equipment.length;
   const settled = service.migrate(complete);
   assert.equal(SAVE_SCHEMA_VERSION, 75);
-  assert.equal(APP_VERSION, "3.0.5");
+  assert.equal(APP_VERSION, "3.0.9");
   assert.equal(settled.schemaVersion, 75);
-  assert.equal(settled.appVersion, "3.0.5");
+  assert.equal(settled.appVersion, "3.0.9");
   assert.equal(settled.campaign100.floors[8].trophyClaimed, true);
   assert.equal(settled.campaign100.floors[8].trophyLocksOpened, 3);
   assert.equal(settled.campaign100.floors[8].keysConsumed, 3);

@@ -7,7 +7,7 @@ const between=(startName,endName)=>{
  const start=main.indexOf(`function ${startName}(`),end=main.indexOf(`function ${endName}(`,start+1);
  assert.ok(start>=0&&end>start);return main.slice(start,end)
 };
-const prepareSource=between("prepareEnemyEntry","ensureUniqueEnemyMagicCircles"),uniqueSource=between("ensureUniqueEnemyMagicCircles","speciesPoolForFloor");
+const prepareSource=between("prepareEnemyEntry","ensureUniqueEnemyMagicCircles"),uniqueSource=between("ensureUniqueEnemyMagicCircles","recordFieldEncounter");
 
 test("build301 campaign 100F enemy loadout keeps legacy-1000 equipment depth",()=>{
  const result=new Function(`

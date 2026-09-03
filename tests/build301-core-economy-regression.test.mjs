@@ -122,7 +122,8 @@ test("main wires paid pity, split idle clocks, and campaign milestone depth",asy
  assert.match(source,/GOLDは5分ごと／装備は2時間ごと/);
  assert.match(source,/result\.goldElapsedMs/);
  assert.match(source,/result\.equipmentElapsedMs/);
- assert.match(source,/milestoneBossEntry\(milestones\[0\],floor\)/);
+ assert.match(source,/milestoneId=milestones\.includes\(requested\)\?requested:!requested\?milestones\[0\]:null/,'a touched Ten God keeps its authored boss identity instead of always selecting the first milestone');
+ assert.match(source,/milestoneBossEntry\(milestoneId,floor\)/);
  assert.match(source,/economyFloor:legacyFloor/);
  assert.match(source,/goldForClearedFloor\(campaignFloorToLegacyFloor\(endFloor\)\)/,"online defeat caps use the same 100-floor-to-legacy economy depth as rewards");
  assert.match(source,/goldForClearedFloor\(campaignFloorToLegacyFloor\(save\.state\.player\.currentFloor\)\)/,"offline defeat caps use the same 100-floor-to-legacy economy depth as rewards");

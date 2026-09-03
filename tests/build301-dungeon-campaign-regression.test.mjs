@@ -250,7 +250,7 @@ test("all 100 campaign floors resolve to official legacy bosses or the declared 
  assert.equal(sixth.visualSpeciesId,"floor_boss_060","campaign 6F cannot fall back to an enlarged ordinary monster");
 });
 
-test("main integration keeps section transitions, persistent post-boss unlocks, and strong reward feedback wired",async()=>{
+test("main integration keeps section transitions, per-boss post-clear state, and strong reward feedback wired",async()=>{
  const[main,exploreScreen,build301Css,build303Css]=await Promise.all([
   readFile(new URL("../src/main.js",import.meta.url),"utf8"),
   readFile(new URL("../src/ui/screens/ExploreScreen.js",import.meta.url),"utf8"),
@@ -258,31 +258,34 @@ test("main integration keeps section transitions, persistent post-boss unlocks, 
   readFile(new URL("../src/Styles/build303-dungeon.css",import.meta.url),"utf8")
  ]);
  assert.match(main,/generateSectionDungeon\(\{count:cfg\.roomCount,attributes,random:rng\}\)/);
- assert.match(main,/layoutVersion:303/);
+ assert.match(main,/layoutVersion:308/);
  assert.match(main,/function transitionCampaignSection\(\)/);
  assert.match(main,/sectionPortals\.find\(entry=>entry\.sectionId===game\.world\.currentSectionId/);
  assert.doesNotMatch(main,/function connectRooms\(/,"old same-map corridor carver must stay removed");
  assert.match(main,/const campaignState=beginCampaignFloorRun\(/,"ordinary floor construction resumes campaign state");
  assert.doesNotMatch(main,/beginCampaignFloorReplay/,"ordinary gameplay must not call the explicit replay reset");
- assert.match(main,/const postBoss=campaignState\.bossDefeated,boss=postBoss\?null:/,"cleared floor re-entry does not respawn its boss");
- assert.match(main,/world\.boss=null;world\.bossDefeated=true;world\.nextEncounter=Number\.MAX_SAFE_INTEGER/,"boss clear despawns boss and random encounters");
- assert.match(main,/world\.trophyChest=\{[^;]+label:"支配者の戦利品"/s);
- assert.match(main,/world\.hotSpring=\{/);
+ assert.match(main,/bosses=bossPlans\.map\(plan=>\(\{[^;]+active:!plan\.progress\.defeated/s,"cleared bosses stay inactive when a Build308 floor is reconstructed");
+ assert.match(main,/trophyChests=defeatedPlans\.map\(plan=>\{.*?bossId:plan\.bossId/s,"each defeated boss reconstructs its own trophy chest");
+ assert.match(main,/world\.bosses=campaignWorldBosses\(world\);world\.boss=world\.bosses\.find\(entry=>entry\.active!==false\)\?\?null;world\.bossDefeated=true;world\.nextEncounter=Number\.MAX_SAFE_INTEGER/,"one clear despawns only that boss, keeps remaining gods available, and stops random encounters");
+ assert.match(main,/world\.trophyChests\.push\(\{id:`\$\{floor\}-trophy-\$\{bossId\}`[^;]+bossId[^;]+label:"支配者の戦利品"/s,"post-boss treasure is keyed to the defeated boss");
+ assert.match(main,/world\.hotSpring=\{\.\.\.spawns\.spring,active:true,used:Boolean\(state\.hotSpringUsed\)/,"the spring remains present and reflects its durable used state");
  assert.match(main,/world\.exit=\{\.\.\.spawns\.exit,locked:false,active:true/);
  assert.match(main,/!game\.world\.bossDefeated&&game\.world\.steps>=game\.world\.nextEncounter/,"cleared floors cannot roll normal enemies");
  assert.match(main,/MYTHIC GET!/);
  assert.match(main,/BOSS TROPHY/);
  assert.match(main,/次の階層へ/);
 
- const bossFactory=main.slice(main.indexOf("function floorBossEnemy(){"),main.indexOf("function floorBossParty("));
+ const bossFactory=main.slice(main.indexOf("function floorBossEnemy(source=null){"),main.indexOf("function floorBossParty("));
+ assert.match(bossFactory,/milestones\.includes\(requested\)\?requested/,'the field boss identity selects the matching authored milestone');
+ assert.match(bossFactory,/milestoneBossEntry\(milestoneId,floor\)/);
  assert.match(bossFactory,/campaignFloorToLegacyFloor\(floor\)/);
  assert.match(bossFactory,/floorBossDefinitionForFloor\(floor\)/);
  assert.match(bossFactory,/FLOOR_BOSS_CATALOG/,"even the emergency branch remains inside the official boss catalog");
  assert.doesNotMatch(bossFactory,/randomEnemy|speciesPool|STANDARD_ENCOUNTER_SPECIES/,"official boss construction cannot reuse a random enlarged mob");
 
  assert.match(exploreScreen,/class="campaign-key-counter"/);
- assert.match(exploreScreen,/Array\.from\(\{length:CAMPAIGN_KEYS_PER_FLOOR\}/);
- assert.match(exploreScreen,/\$\{keys\}\/\$\{CAMPAIGN_KEYS_PER_FLOOR\}/);
+ assert.match(exploreScreen,/\$\{pixelIcon\("key"\)\}<small>鍵<\/small><b>\$\{keys\}\/\$\{CAMPAIGN_KEYS_PER_FLOOR\}<\/b>/,"the counter is one compact semantic key chip");
+ assert.doesNotMatch(exploreScreen,/Array\.from\(\{length:CAMPAIGN_KEYS_PER_FLOOR\}/,"the superseded three-cell key display stays removed");
  assert.match(build301Css,/\.campaign-key-counter/);
  assert.match(build301Css,/\.campaign-loot-reveal/);
  assert.match(build301Css,/\.campaign-mythic-item/);

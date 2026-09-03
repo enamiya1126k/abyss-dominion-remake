@@ -1,6 +1,18 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import {
+  bossRewardEquipmentIdentity,
+  bossRewardIdentity,
+} from "../src/core/BossRewardMappingSystem.js";
+import {
+  campaignBossProgress,
+  campaignBossProgressList,
+  campaignFloorState,
+  campaignMilestoneBossIds,
+  defeatCampaignBoss,
+  isCampaignMultiBossFloor,
+} from "../src/core/Campaign100System.js";
 
 const main = readFileSync(new URL("../src/main.js", import.meta.url), "utf8");
 
@@ -10,20 +22,19 @@ function between(start, end) {
   return main.slice(from, to);
 }
 
-test("build301 campaign trophy equipment is dedicated for normal bosses and signature gear for milestones", () => {
+test("build308 campaign trophy equipment stays fixed to the defeated boss owner", () => {
   const source = between("function stableRewardIndex", "function applyOnlineCampaignTrophyFragments");
   const signatureCalls = [], dedicatedCalls = [];
   const factory = new Function(
-    "CAMPAIGN_MAX_FLOOR", "ENDGAME_BOSSES", "milestoneBossIdsForFloor", "createSignatureEquipment",
-    "dedicatedFloorBossEquipment", "bossRewardEquipment", "campaignFloorToLegacyFloor", "equipmentDropLevelForFloor",
+    "CAMPAIGN_MAX_FLOOR", "bossRewardIdentity", "bossRewardEquipmentIdentity", "createSignatureEquipment",
+    "dedicatedFloorBossEquipment", "campaignFloorToLegacyFloor", "equipmentDropLevelForFloor",
     `${source}; return campaignTrophyEquipment;`,
   )(
     100,
-    { abyss_pride: { faction: "abyss" }, ten_dominion: { faction: "tenGod" } },
-    floor => floor === 70 ? ["abyss_pride"] : floor === 100 ? ["ten_dominion"] : [],
+    bossRewardIdentity,
+    bossRewardEquipmentIdentity,
     (ownerId, pieceIndex) => { signatureCalls.push({ ownerId, pieceIndex }); return { name: ownerId, rarity: ownerId.startsWith("ten_") ? "十神" : "深淵", slot: "weapon", plus: 0 }; },
     (floor, boss, piece) => { dedicatedCalls.push({ floor, boss, piece }); return { name: "normal-dedicated", rarity: "神話", slot: piece, plus: 0, ruleOverrides: { floorBossDedicated: true } }; },
-    () => { throw new Error("normal campaign trophy unexpectedly fell back to generic boss gear"); },
     floor => floor * 10,
     floor => floor,
   );
@@ -34,9 +45,11 @@ test("build301 campaign trophy equipment is dedicated for normal bosses and sign
   const abyss = factory({ floor: 70, boss: { endgameBossId: "abyss_pride" }, rewardId: "abyss", level: 700 });
   const tenGod = factory({ floor: 100, boss: { endgameBossId: "ten_dominion" }, rewardId: "ten", level: 1000 });
   assert.deepEqual(signatureCalls.map(call => call.ownerId), ["abyss_pride", "ten_dominion"]);
+  assert.equal(dedicatedCalls[0].boss.floorBossCatalogId, "floor-boss-310");
   assert.equal(abyss.rarity, "深淵");
   assert.equal(tenGod.rarity, "十神");
   assert.equal(tenGod.obtainedMethod, "campaignTrophyChest");
+  assert.equal(factory({ floor: 100, boss: { endgameBossId: "unknown-boss" }, rewardId: "forged" }), null, "unknown explicit owners fail closed instead of falling back to another 100F god");
 });
 
 test("build301 online trophy claims apply authoritative fragmentAwards for every boss exactly once", () => {
@@ -61,13 +74,15 @@ test("build301 online trophy claims apply authoritative fragmentAwards for every
 });
 
 test("build301 host campaign progress merges forward and an explicit new replay resets only run-scoped fields", () => {
-  const source = between("function normalizedOnlineCampaignProgress", "function persistOnlineHostWorld");
+  const source = between("function normalizedOnlineCampaignBossIds", "function persistOnlineHostWorld");
   const entry = { runId: "run-a", keyIds: ["key-a"], keysCollected: 1, trophyLocksOpened: 1, trophyClaimed: false, hotSpringUsed: false, bossDiscovered: true, bossDefeated: true, exitUnlocked: true, visitedRoomIds: ["room"], postBossSpawns: {} };
   const save = { state: { player: { bossRewards: {} } } };
   const functions = new Function(
-    "CAMPAIGN_KEYS_PER_FLOOR", "save", "campaignFloorState",
+    "CAMPAIGN_KEYS_PER_FLOOR", "CAMPAIGN_MAX_FLOOR", "save", "campaignFloorState",
+    "campaignMilestoneBossIds", "campaignBossProgressList", "isCampaignMultiBossFloor",
+    "defeatCampaignBoss", "campaignBossProgress",
     `${source}; return { mergeOnlineCampaignProgress, mergeOnlineCampaignProgressIntoLocal };`,
-  )(3, save, () => entry);
+  )(3, 100, save, () => entry, () => [], () => [], () => false, () => entry, () => null);
 
   functions.mergeOnlineCampaignProgressIntoLocal(42, { runId: "run-a", keysCollected: 2, trophyLocksOpened: 2, collectedKeyIds: ["key-b"], hotSpringUsed: true });
   assert.equal(entry.keysCollected, 2);
@@ -81,6 +96,68 @@ test("build301 host campaign progress merges forward and an explicit new replay 
   assert.equal(entry.keysConsumed, 0);
   assert.equal(entry.trophyFragmentPacksClaimed, 0);
   assert.equal(entry.trophyClaimed, true, "replay cannot restore the first-clear signature entitlement");
+});
+
+test("build308 online per-boss receipts reset by replay run while lifetime mythic claims survive", () => {
+  const source = between("function normalizedOnlineCampaignBossIds", "function persistOnlineHostWorld");
+  const save = { state: { player: { bossRewards: {} } } };
+  const functions = new Function(
+    "CAMPAIGN_KEYS_PER_FLOOR", "CAMPAIGN_MAX_FLOOR", "save", "campaignFloorState",
+    "campaignMilestoneBossIds", "campaignBossProgressList", "isCampaignMultiBossFloor",
+    "defeatCampaignBoss", "campaignBossProgress",
+    `${source}; return { normalizedOnlineCampaignProgress, mergeOnlineCampaignProgress, mergeOnlineCampaignProgressIntoLocal };`,
+  )(
+    3, 100, save, campaignFloorState, campaignMilestoneBossIds, campaignBossProgressList,
+    isCampaignMultiBossFloor, defeatCampaignBoss, campaignBossProgress,
+  );
+  const ids = campaignMilestoneBossIds(80);
+  const [time, space, life] = ids;
+
+  functions.mergeOnlineCampaignProgressIntoLocal(80, {
+    runId: "first-run", keysCollected: 3, collectedKeyIds: ["key-1", "key-2", "key-3"],
+    defeatedBossIds: [time, space], openedBossIds: [time], mythicClaimedBossIds: [time],
+    fragmentPacksClaimedByBoss: { [time]: 3, [space]: 1 }, bossDefeatedThisRun: true,
+  });
+  let floor = campaignFloorState(save.state, 80);
+  assert.equal(floor.bossProgress[time].defeated, true);
+  assert.equal(floor.bossProgress[time].trophyLocksOpened, 3);
+  assert.equal(floor.bossProgress[time].trophyClaimed, true);
+  assert.equal(floor.bossProgress[space].defeated, true);
+  assert.equal(floor.bossProgress[space].trophyFragmentPacksClaimed, 1);
+  assert.equal(floor.bossProgress[space].trophyClaimed, false);
+  assert.equal(floor.bossProgress[life].defeated, false);
+
+  const replay = functions.mergeOnlineCampaignProgress({
+    runId: "first-run", defeatedBossIds: [time, space], openedBossIds: [time],
+    mythicClaimedBossIds: [time], fragmentPacksClaimedByBoss: { [time]: 3, [space]: 1 },
+  }, {
+    runId: "replay-run", replayActive: true, defeatedBossIds: [life], openedBossIds: [],
+    mythicClaimedBossIds: [time], fragmentPacksClaimedByBoss: { [life]: 2 },
+  });
+  assert.deepEqual(replay.defeatedBossIds, [life], "the replay cannot inherit first-run defeats");
+  assert.deepEqual(replay.openedBossIds, [], "the replay cannot inherit first-run opened chests");
+  assert.deepEqual(replay.fragmentPacksClaimedByBoss, { [life]: 2 }, "fragment receipts are scoped to the replay run");
+  assert.deepEqual(replay.mythicClaimedBossIds, [time], "mythic ownership is lifetime state");
+  assert.equal(replay.replayActive, true);
+
+  functions.mergeOnlineCampaignProgressIntoLocal(80, replay);
+  floor = campaignFloorState(save.state, 80);
+  assert.equal(floor.runId, "replay-run");
+  assert.equal(floor.replayActive, true);
+  assert.equal(floor.bossProgress[time].defeated, false);
+  assert.equal(floor.bossProgress[time].trophyLocksOpened, 0);
+  assert.equal(floor.bossProgress[time].trophyClaimed, true, "the prior mythic cannot be awarded again");
+  assert.equal(floor.bossProgress[space].defeated, false);
+  assert.equal(floor.bossProgress[space].trophyFragmentPacksClaimed, 0);
+  assert.equal(floor.bossProgress[life].defeated, true);
+  assert.equal(floor.bossProgress[life].trophyFragmentPacksClaimed, 2);
+  assert.equal(floor.bossProgress[life].trophyClaimed, false);
+
+  const openedWithoutMythic = functions.normalizedOnlineCampaignProgress({
+    runId: "replay-run", replayActive: true, trophyLocksOpened: 3,
+    openedBossIds: [life], mythicClaimedBossIds: [],
+  });
+  assert.equal(openedWithoutMythic.trophyMythicClaimed, false, "an opened replay chest does not mint a second mythic");
 });
 
 test("build301 main retires legacy choices and makes 100F boss clear a final gate, not a true ending", () => {

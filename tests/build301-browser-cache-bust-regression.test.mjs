@@ -5,7 +5,7 @@ import{dirname,relative,resolve}from"node:path";
 import{fileURLToPath}from"node:url";
 
 const SRC_ROOT=fileURLToPath(new URL("../src/",import.meta.url));
-const CURRENT_QUERY="?v=3.0.5-build305";
+const CURRENT_QUERY="?v=3.0.9-build309";
 // Build300 -> build301 logic changes plus the three dependency carriers whose
 // import URLs had to change so the new graph actually reaches the browser.
 const CHANGED_BROWSER_MODULES=new Set([
@@ -29,7 +29,7 @@ async function javascriptFiles(directory=SRC_ROOT){
  return result
 }
 
-test("build305 changed browser modules have no stale import-query edges",async()=>{
+test("build309 changed browser modules have no stale import-query edges",async()=>{
  const files=await javascriptFiles(),checked=[];
  for(const importer of files){
   const source=await readFile(importer,"utf8"),pattern=/(?:from\s*|import\s*\()(["'])([^"']+)\1/g;
@@ -41,12 +41,12 @@ test("build305 changed browser modules have no stale import-query edges",async()
    assert.equal(specifier,`${bare}${CURRENT_QUERY}`,`${relative(SRC_ROOT,importer)} imports changed ${target} through a stale cache identity`);
   }
  }
- assert.ok(checked.length>=70,`expected the active build305 dependency graph, checked only ${checked.length} edges`);
+ assert.ok(checked.length>=70,`expected the active build309 dependency graph, checked only ${checked.length} edges`);
 });
 
-test("build305 entry point is cache-busted by the active release identity",async()=>{
+test("build309 entry point is cache-busted by the active release identity",async()=>{
  const index=await readFile(new URL("../index.html",import.meta.url),"utf8");
- assert.match(index,/const ASSET_VERSION = "3\.0\.5"/);
- assert.match(index,/const ASSET_BUILD = "build305"/);
+ assert.match(index,/const ASSET_VERSION = "3\.0\.9"/);
+ assert.match(index,/const ASSET_BUILD = "build309"/);
  assert.match(index,/import\(`\.\/src\/main\.js\?v=\$\{ASSET_VERSION\}-\$\{ASSET_BUILD\}`\)/);
 });

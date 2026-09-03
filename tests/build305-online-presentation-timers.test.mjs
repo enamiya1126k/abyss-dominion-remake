@@ -37,14 +37,14 @@ function withFakeTimers(run) {
   }
 }
 
-test("build305 keeps package, lock, client, and server protocol metadata at 1.16.0", () => {
+test("build307 keeps package, lock, client, and server protocol metadata at 1.17.0", () => {
   const clientProtocol = clientSource.match(/const ONLINE_PROTOCOL = "([^"]+)"/)?.[1];
-  assert.equal(clientProtocol, "1.16.0");
+  assert.equal(clientProtocol, "1.17.0");
   assert.equal(packageJson.version, clientProtocol);
   assert.equal(packageLock.version, clientProtocol);
   assert.equal(packageLock.packages?.[""]?.version, clientProtocol);
-  assert.match(serverSource, /message\.protocol!=="1\.16\.0"/);
-  assert.match(serverSource, /protocol:"1\.16\.0"/);
+  assert.match(serverSource, /message\.protocol!=="1\.17\.0"/);
+  assert.match(serverSource, /protocol:"1\.17\.0"/);
 });
 
 test("build305 battle presentation delay follows current speed and caps acceleration at x2", () => {

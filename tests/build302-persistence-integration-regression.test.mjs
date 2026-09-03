@@ -27,7 +27,7 @@ test("schema 72 migrates to 75, discards stale field snapshots, and keeps prior 
     removeItem: key => values.delete(key),
   };
   try {
-    const { SaveService } = await import("../src/services/SaveService.js?build304-schema74-regression");
+    const { SaveService } = await import("../src/services/SaveService.js?build306-position-preservation-regression");
     const service = new SaveService(), legacy = structuredClone(service.state);
     legacy.schemaVersion = 72;
     legacy.appVersion = "3.0.2";
@@ -41,11 +41,11 @@ test("schema 72 migrates to 75, discards stale field snapshots, and keeps prior 
 
     const migrated = service.migrate(legacy);
     assert.equal(migrated.schemaVersion, 75);
-    assert.equal(migrated.appVersion, "3.0.5");
+    assert.equal(migrated.appVersion, "3.0.9");
     assert.equal(migrated.expeditionSnapshot, null);
     assert.equal(migrated.settings.exploreAutoMode, "floor");
     assert.equal(migrated.settings.exploreAutoMenuOpen, false);
-    assert.equal(migrated.settings.autoExploreButtonPosition, null);
+    assert.deepEqual(migrated.settings.autoExploreButtonPosition, { x: -900, y: 4000 });
     assert.equal(migrated.campaign100.floors["8"].trophyClaimed, true);
     assert.equal(migrated.equipment.length, equipmentBefore, "migration records receipts but never creates a reward");
     const migratedAgain = service.migrate(structuredClone(migrated));
@@ -53,6 +53,7 @@ test("schema 72 migrates to 75, discards stale field snapshots, and keeps prior 
     assert.deepEqual(migratedAgain.player.bossRewards, migrated.player.bossRewards);
     assert.equal(migratedAgain.expeditionSnapshot, null);
     assert.equal(migratedAgain.settings.exploreAutoMode, "floor");
+    assert.deepEqual(migratedAgain.settings.autoExploreButtonPosition, { x: -900, y: 4000 });
   } finally {
     if (previousStorage === undefined) delete globalThis.localStorage;
     else globalThis.localStorage = previousStorage;
@@ -92,11 +93,12 @@ test("a saved trophy settlement is never rolled back because its reveal UI faile
   assert.match(source, /Campaign trophy reveal skipped after a successful save/);
 });
 
-test("Build305 release identity reaches the entry point and changed modules", () => {
+test("Build308 release identity reaches the entry point and changed modules", () => {
   const index = fs.readFileSync(new URL("../index.html", import.meta.url), "utf8");
   const config = fs.readFileSync(new URL("../src/core/config.js", import.meta.url), "utf8");
-  assert.match(index, /ASSET_VERSION = "3\.0\.5"/);
-  assert.match(index, /ASSET_BUILD = "build305"/);
+  assert.match(index, /ASSET_VERSION = "3\.0\.9"/);
+  assert.match(index, /ASSET_BUILD = "build309"/);
+  assert.match(index, /build306-ui\.css\?v=3\.0\.6-build306/);
   assert.match(config, /SAVE_SCHEMA_VERSION=75/);
-  assert.match(config, /APP_VERSION="3\.0\.5"/);
+  assert.match(config, /APP_VERSION="3\.0\.9"/);
 });

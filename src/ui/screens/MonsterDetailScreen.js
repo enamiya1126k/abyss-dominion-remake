@@ -1,19 +1,28 @@
-import{SPECIES}from"../../data/species.js?v=2.11.82-build258";
-import{PERSONALITIES}from"../../data/personalities.js?v=2.11.0-build164";
-import{MONSTER_COLORS}from"../../data/colors.js?v=2.11.0-build164";
-import{ATTRIBUTES}from"../../data/attributes.js?v=2.11.0-build164";
-import{maxMp}from"../../battle/SkillSystem.js?v=3.0.5-build305";
-import{endgameCharacter}from"../../data/endgameCharacters.js?v=2.11.0-build164";
-import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=3.0.5-build305";
-import{monsterVisual}from"../MonsterVisual.js?v=3.0.5-build305";
-import{attributeVisual}from"../components/AttributeVisual.js?v=2.11.0-build164";
-import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=2.11.0-build164";
+import{SPECIES}from"../../data/species.js?v=3.1.1-build311";
+import{PERSONALITIES}from"../../data/personalities.js?v=3.1.1-build311";
+import{MONSTER_COLORS}from"../../data/colors.js?v=3.1.1-build311";
+import{ATTRIBUTES}from"../../data/attributes.js?v=3.1.1-build311";
+import{maxMp}from"../../battle/SkillSystem.js?v=3.1.1-build311";
+import{endgameCharacter}from"../../data/endgameCharacters.js?v=3.1.1-build311";
+import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=3.1.1-build311";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build311";
+import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
+import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=3.1.1-build311";
+import{floorBossDefinitionById}from"../../data/floorBosses.js?v=3.1.1-build311";
+import{floorBossCampaignDisplayFloor}from"../../core/Campaign100System.js?v=3.1.1-build311";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
 function nextAffection(aff){if(aff>=1000)return null;return Math.min(1000,Math.ceil((aff+1)/100)*100)}
 function sourceLabel(method){
   return({capture:"探索・捕獲",summon:"召喚",market:"闇市場",darkMarket:"闇市場",endgameContract:"契約",deepSummon:"深淵召喚",serialCode:"シリアルコード",onlineWeeklyRaidExchange:"週間レイド・核片交換"}[method]??method??"不明");
+}
+function obtainedFloorLabel(monster){
+ if(monster?.obtainedMethod==="floorBossContract"){
+  const definition=floorBossDefinitionById(monster.floorBossCatalogId??monster.floorBossId),campaignFloor=floorBossCampaignDisplayFloor(definition);
+  if(campaignFloor!=null)return campaignFloor
+ }
+ return Math.max(1,Math.floor(Number(monster?.obtainedFloor)||1))
 }
 
 export function MonsterDetailScreen(monster,state){
@@ -65,7 +74,7 @@ export function MonsterDetailScreen(monster,state){
       <div><small>探索での出現帯</small><b>${fieldEncounter?`${species.minFloor??1}階以降・近い階層帯ほど出現しやすい`:"通常探索には出現しません"}</b></div>
       <div><small>主な入手方法</small><b>${sources.join("・")}</b></div>
       <div><small>捕獲の目安</small><b>${fieldEncounter?`${Math.round((species.captureRate??0)*100)}%（残HPで変動）`:"召喚・販売限定"}</b></div>
-      <div><small>この個体の入手</small><b>${sourceLabel(monster.obtainedMethod)}・${monster.obtainedFloor??1}階時点</b></div>
+      <div><small>この個体の入手</small><b>${sourceLabel(monster.obtainedMethod)}・${obtainedFloorLabel(monster)}階時点</b></div>
      </div>
      <small>同名素材が必要な場合は、出現帯を探索するか召喚・闇市場を利用してください。</small>
     </div>

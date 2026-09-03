@@ -1,4 +1,5 @@
 import { randomBytes } from "node:crypto";
+import { attributeDamageMultiplier, canonicalAttribute } from "../../src/data/attributes.js";
 
 const SIDES = new Set(["sun", "moon", "spectator"]);
 const ACTIONS = new Set(["attack", "guard", "skill", "item"]);
@@ -15,18 +16,6 @@ const EFFECT_KINDS = new Set([
   "critUp", "critDown", "vulnerable", "regen", "counter", "guard", "taunt", "lifeSteal",
   "magicToPhysical", "guaranteedHit", "guaranteedCritical", "healDown", "reviveSeal", "stun",
 ]);
-const ATTRIBUTES = new Set(["neutral", "fire", "water", "lightning", "earth", "wind", "ice", "light", "dark"]);
-const ATTRIBUTE_RELATIONS = Object.freeze({
-  neutral: { strong: [], weak: [] },
-  fire: { strong: ["ice"], weak: ["water"] },
-  water: { strong: ["fire"], weak: ["lightning"] },
-  lightning: { strong: ["water"], weak: ["earth"] },
-  earth: { strong: ["lightning"], weak: ["wind"] },
-  wind: { strong: ["earth"], weak: ["ice"] },
-  ice: { strong: ["wind"], weak: ["fire"] },
-  light: { strong: ["dark"], weak: ["dark"] },
-  dark: { strong: ["light"], weak: ["light"] },
-});
 
 const token = (bytes = 10) => randomBytes(bytes).toString("base64url");
 const clamp = (value, min, max) => Math.max(min, Math.min(max, Number(value) || 0));
@@ -43,31 +32,6 @@ function healthRatio(entity) {
 
 function entityId(entity) {
   return String(entity?.playerId ?? entity?.id ?? "");
-}
-
-function stableHash(value = "") {
-  let hash = 2166136261;
-  for (const char of String(value)) {
-    hash ^= char.charCodeAt(0);
-    hash = Math.imul(hash, 16777619);
-  }
-  return hash >>> 0;
-}
-
-function canonicalAttribute(value) {
-  const key = String(value ?? "neutral").toLowerCase();
-  if (key === "thunder") return "lightning";
-  if (key === "poison") return ["dark", "water", "earth", "ice"][stableHash(key) % 4];
-  if (key === "nature") return ["wind", "earth", "light", "ice"][stableHash(key) % 4];
-  return ATTRIBUTES.has(key) ? key : "neutral";
-}
-
-function attributeDamageMultiplier(attacking, defending) {
-  const attack = canonicalAttribute(attacking), defense = canonicalAttribute(defending);
-  const relation = ATTRIBUTE_RELATIONS[attack] ?? ATTRIBUTE_RELATIONS.neutral;
-  if (relation.strong.includes(defense)) return 1.25;
-  if (relation.weak.includes(defense)) return 0.8;
-  return 1;
 }
 
 function skillTargetsAll(skill) {

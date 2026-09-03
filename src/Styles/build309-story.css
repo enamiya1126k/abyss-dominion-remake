@@ -1,0 +1,94 @@
+/* Build309: receipt-safe campaign story scenes and one-battle finale. */
+.campaign-story-modal{
+  z-index:90!important;
+  place-items:safe center!important;
+  padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left))!important;
+}
+.campaign-story-modal>.game-modal-card{
+  position:relative;
+  display:grid!important;
+  grid-template-rows:auto minmax(0,1fr) auto auto;
+  width:min(96vw,760px)!important;
+  height:min(94dvh,880px)!important;
+  max-height:calc(100dvh - max(12px,env(safe-area-inset-top)) - max(12px,env(safe-area-inset-bottom)))!important;
+  overflow:hidden!important;
+  padding:12px!important;
+  border:10px solid transparent!important;
+  border-image:var(--alpha115-frame-active,url("../../assets/ui/v2/ornate-frame-active.png")) 44 fill / 10px stretch!important;
+  border-radius:0!important;
+  background:linear-gradient(180deg,#100c13,#050608 65%,#09060b)!important;
+  box-shadow:0 18px 54px #000,0 0 32px #7c3f6733!important;
+}
+.campaign-story-modal>.game-modal-card>h2{
+  min-width:0;
+  margin:0 48px 7px 0!important;
+  color:#ead49f!important;
+  font:900 clamp(15px,3vw,21px)/1.2 Georgia,"Yu Mincho",serif!important;
+  letter-spacing:.08em;
+}
+.campaign-story-modal>.game-modal-card>.modal-x{
+  position:absolute!important;
+  z-index:20!important;
+  top:8px!important;
+  right:8px!important;
+  float:none!important;
+  width:44px!important;
+  height:44px!important;
+  min-height:44px!important;
+  margin:0!important;
+  border-radius:0!important;
+}
+.campaign-story-modal>.game-modal-card>.game-modal-body{
+  min-height:0;
+  margin:0!important;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  scrollbar-gutter:stable;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-y;
+}
+.campaign-story-presentation{display:grid;align-content:start;gap:9px;min-height:100%;padding:1px 1px 8px}
+.campaign-story-presentation>header{text-align:center}
+.campaign-story-presentation>header>small{color:#b88bd0;font:900 9px/1 ui-monospace,monospace;letter-spacing:.23em}
+.campaign-story-presentation>header>h3{margin:5px 0 2px;color:#ffe3a1;font:900 clamp(24px,6vw,42px)/1.04 Georgia,"Yu Mincho",serif;text-shadow:0 3px 8px #000,0 0 17px #b8687b55}
+.campaign-story-presentation>header>b{display:block;color:#e4c16f;font-size:12px}
+.campaign-story-presentation>header>p{max-width:620px;margin:5px auto 0;color:#bcb1c0;font-size:11px;line-height:1.55}
+.campaign-story-route{display:grid;grid-template-columns:auto minmax(80px,1fr) auto;align-items:center;gap:8px;padding:0 5px;color:#c8b99c;font:800 9px/1 sans-serif}
+.campaign-story-route>i{position:relative;height:6px;border:1px solid #73593a;background:#050405;box-shadow:inset 0 0 5px #000}
+.campaign-story-route>i>em{display:block;height:100%;background:linear-gradient(90deg,#71304e,#d35772 58%,#efca71);box-shadow:0 0 10px #c75576;animation:storyRouteAdvance .8s ease-out both}
+.campaign-story-route>i::after{content:"";position:absolute;left:var(--story-progress);top:50%;width:10px;height:10px;border:2px solid #ffe2a0;border-radius:50%;background:#8b2946;box-shadow:0 0 12px #ff6880;transform:translate(-50%,-50%)}
+.campaign-story-countdown{display:flex;align-items:center;justify-content:center;gap:10px;padding:7px;border-block:1px solid #60472d;background:#0d0808;color:#b9a990;font-size:10px}.campaign-story-countdown>b{color:#ffe09a;font-size:16px}
+.campaign-story-stage{position:relative;isolation:isolate;min-height:340px;overflow:hidden;border:1px solid #876339;background:#050407;box-shadow:inset 0 0 30px #000}
+.campaign-story-scenery{position:absolute;z-index:-2;inset:0;overflow:hidden;background:#070609}
+.campaign-story-scenery::before{content:"";position:absolute;inset:-2%;background-image:linear-gradient(180deg,#06030a2b,#050208a3 72%,#020103f2),var(--story-backdrop);background-position:center;background-size:cover;filter:saturate(.78) brightness(.7);transform:scale(1.03);animation:storyBackdropReveal 1s ease-out both}
+.campaign-story-scenery>i{position:absolute;z-index:1;inset:0;background:radial-gradient(circle at 50% 34%,transparent 0 18%,#04020725 48%,#020103d9 100%);box-shadow:inset 0 -70px 70px #020103}
+.campaign-story-scenery>u{position:absolute;z-index:0;right:-8%;bottom:8%;width:54%;height:72%;background:url("../../assets/ui/battle/boss-throne.png") center/cover no-repeat;opacity:var(--story-castle-opacity);filter:brightness(.34) contrast(1.35) drop-shadow(0 0 16px #a7425b);text-decoration:none;transform:scale(var(--story-castle-scale));transform-origin:bottom right;transition:opacity .5s,transform .8s}
+.campaign-story-cast{position:absolute;z-index:2;inset:28px 12px 111px;display:flex;align-items:end;justify-content:space-around;gap:2px;pointer-events:none}
+.campaign-story-cast>figure{position:relative;display:grid;justify-items:center;align-content:end;flex:1 1 0;min-width:0;height:100%;margin:0;opacity:.42;filter:saturate(.5) brightness(.62);transform:translateY(7px);transition:opacity .22s,filter .22s,transform .22s}
+.campaign-story-cast>figure.is-speaking{z-index:2;opacity:1;filter:saturate(1) brightness(1.1) drop-shadow(0 0 11px #c65e8c88);transform:translateY(0)}
+.campaign-story-cast>figure>i{display:grid;place-items:end center;width:clamp(60px,16vw,124px);height:clamp(74px,20vw,148px);font-style:normal}
+.campaign-story-character-art,.campaign-story-character-art>img{width:100%!important;height:100%!important;object-fit:contain!important;object-position:center bottom!important;image-rendering:pixelated}
+.campaign-story-cast>figure.is-right .campaign-story-character-art>img{transform:scaleX(-1)}
+.campaign-story-cast>figure>figcaption{max-width:100%;margin-top:-3px;padding:2px 6px;border:1px solid #705738;background:#080609d9;color:#e8d2a4;font:800 9px/1.2 sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.campaign-story-dialogue{position:absolute;z-index:4;left:12px;right:12px;bottom:11px;min-height:92px;padding:10px 12px;border:1px solid #b98e51;background:linear-gradient(135deg,#130d14f2,#070609f5);box-shadow:0 8px 20px #000,inset 0 0 14px #7a3c681f}
+.campaign-story-dialogue::before{content:"";position:absolute;left:clamp(16px,var(--story-speaker-x,30px),calc(100% - 30px));top:-9px;width:15px;height:15px;border-left:1px solid #b98e51;border-top:1px solid #b98e51;background:#120d14;transform:translateX(-50%) rotate(45deg);transition:left .22s ease}
+.campaign-story-dialogue>small{position:relative;display:block;color:#a985c1;font:800 8px/1 sans-serif;letter-spacing:.12em}
+.campaign-story-dialogue>b{position:relative;display:block;margin:3px 0 4px;color:#f1d38e;font:900 13px/1.1 Georgia,"Yu Mincho",serif}
+.campaign-story-dialogue>p{position:relative;margin:0;color:#f0e7ee;font-size:13px;line-height:1.55}
+.campaign-story-dialogue.is-narration{border-color:#6f6175;background:#08070beF}.campaign-story-dialogue.is-narration::before{display:none}.campaign-story-dialogue.is-narration>b{color:#c8bace}.campaign-story-dialogue.tone-cold{border-color:#75a6ba}.campaign-story-dialogue.tone-repelled{border-color:#ca596a}.campaign-story-dialogue.tone-wounded{border-color:#d49264}.campaign-story-dialogue.tone-command{border-color:#c89f4d}
+.campaign-story-line-progress{display:flex;justify-content:center;gap:5px;min-height:8px;padding:1px}.campaign-story-line-progress>i{width:18px;height:3px;background:#38303c}.campaign-story-line-progress>i.current{background:#e8c66d;box-shadow:0 0 7px #e8a94f}.campaign-story-line-progress>i.passed{background:#865a82}
+.campaign-story-skip{min-height:36px!important;margin:7px 0 0!important;padding:6px 10px!important;border:1px solid #504356!important;border-radius:0!important;background:#0a080d!important;color:#a99eab!important;font-size:10px!important;touch-action:manipulation}
+.campaign-story-modal>.game-modal-card>.modal-primary{min-height:48px!important;margin-top:6px!important;border-radius:0!important;background:linear-gradient(180deg,#6b4218,#281607)!important;color:#f4d898!important;font-size:14px!important;touch-action:manipulation}
+.campaign-story-modal:has([data-story-kind="opening"]) .campaign-story-cast{justify-content:space-between;padding-inline:8%}.campaign-story-modal:has([data-story-kind="opening"]) .campaign-story-cast>figure{max-width:42%}
+
+@keyframes storyRouteAdvance{from{width:0}to{width:var(--story-progress)}}
+@keyframes storyBackdropReveal{from{opacity:.3;transform:scale(1.1)}to{opacity:1;transform:scale(1.03)}}
+@media(max-width:560px){
+ .campaign-story-modal>.game-modal-card{width:calc(100vw - 12px)!important;height:calc(100dvh - max(12px,env(safe-area-inset-top)) - max(12px,env(safe-area-inset-bottom)))!important;padding:9px!important;border-width:8px!important;border-image-width:8px!important}
+ .campaign-story-modal>.game-modal-card>h2{font-size:14px!important}.campaign-story-presentation{gap:6px}.campaign-story-presentation>header>h3{font-size:25px}.campaign-story-presentation>header>p{font-size:10px;line-height:1.4}.campaign-story-stage{min-height:310px}.campaign-story-cast{inset:20px 5px 116px}.campaign-story-cast>figure>i{width:clamp(58px,20vw,84px);height:clamp(72px,24vw,104px)}.campaign-story-cast>figure>figcaption{padding-inline:3px;font-size:8px}.campaign-story-dialogue{left:6px;right:6px;bottom:6px;min-height:104px;padding:9px}.campaign-story-dialogue>p{font-size:12px;line-height:1.5}.campaign-story-line-progress>i{width:13px}
+}
+@media(orientation:landscape) and (max-height:540px){
+ .campaign-story-modal>.game-modal-card{width:min(94vw,860px)!important;height:calc(100dvh - 10px)!important;grid-template-columns:minmax(0,1fr) 150px;grid-template-rows:auto minmax(0,1fr) auto}.campaign-story-modal>.game-modal-card>h2{grid-column:1/3}.campaign-story-modal>.game-modal-card>.game-modal-body{grid-column:1;grid-row:2/4}.campaign-story-skip{grid-column:2;grid-row:2;align-self:end;margin:0 3px 4px!important}.campaign-story-modal>.game-modal-card>.modal-primary{grid-column:2;grid-row:3;margin:3px!important}.campaign-story-presentation>header{display:none}.campaign-story-stage{min-height:280px;height:calc(100dvh - 76px)}.campaign-story-route,.campaign-story-countdown{position:absolute;z-index:8;top:6px;left:8px;right:8px;background:#09070bc9}.campaign-story-cast{inset:30px 8px 104px}.campaign-story-dialogue{min-height:86px}.campaign-story-dialogue>p{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.campaign-story-scenery::before,.campaign-story-route>i>em{animation:none!important}.campaign-story-cast>figure{transition:none!important}}

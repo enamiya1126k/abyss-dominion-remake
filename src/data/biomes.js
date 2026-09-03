@@ -1,4 +1,4 @@
-import{ATTRIBUTE_RELATIONS,canonicalAttribute}from"./attributes.js?v=2.11.49-build214";
+import{ATTRIBUTE_RELATIONS,canonicalAttribute}from"./attributes.js?v=3.0.9-build309";
 
 export const BIOMES=[
  {id:"origin_cave",name:"始まりの洞窟",icon:"🟢",from:1,to:10,theme:"cave",accent:"#7bcf8b",description:"湿った岩肌と淡い魔力が満ちる入口。",elements:["water","earth","dark"]},
@@ -29,7 +29,10 @@ export function biomeForFloor(floor){
 }
 export function battleEnvironmentForFloor(floor){
  const biome=biomeForFloor(floor),primary=canonicalAttribute(biome.elements?.[0]??"neutral",`biome:${biome.id}`),adverse=[...new Set(ATTRIBUTE_RELATIONS[primary]?.weak??[])];
- return{id:biome.id,name:biome.name,theme:biome.theme,accent:biome.accent,primary,favorable:[primary],adverse,boost:1.22,penalty:.84};
+ // Build308: the room decides the defender's displayed element, while the
+ // formal cycle decides damage. Legacy boost/penalty fields remain readable by
+ // old snapshots, but new combat must not stack a hidden terrain multiplier.
+ return{id:biome.id,name:biome.name,theme:biome.theme,accent:biome.accent,primary,favorable:[primary],adverse,boost:1.22,penalty:.84,matchupOnly:true};
 }
 export function ensureBiomeProgress(state,biome){
  state.biomeProgress??={};
