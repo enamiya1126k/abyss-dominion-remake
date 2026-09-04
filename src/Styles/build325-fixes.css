@@ -1,0 +1,137 @@
+/* Build325: interaction fixes and a constant-width section passage. */
+
+/* COMPLETE CODEX ------------------------------------------------------- */
+.complete-codex-list > [data-complete-codex][hidden],
+.complete-codex-list > .complete-codex-empty[hidden] {
+  display: none !important;
+}
+
+/* HOME MEMORY HUB ----------------------------------------------------- */
+.memory-archive-hub {
+  display: grid;
+  gap: 9px;
+}
+
+.memory-archive-hub > button {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  gap: 11px;
+  align-items: center;
+  min-height: 86px;
+  padding: 11px;
+  border: 1px solid #72583a;
+  border-radius: 4px;
+  background: linear-gradient(115deg, #1c1710, #09090d 64%, #15101c);
+  color: #eee4cf;
+  text-align: left;
+  touch-action: manipulation;
+}
+
+.memory-archive-hub > button > span {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 1px solid #5f4b32;
+  background: #09090c;
+}
+
+.memory-archive-hub > button > span .home-pixel-icon {
+  transform: scale(.84);
+}
+
+.memory-archive-hub > button > div {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.memory-archive-hub > button small {
+  color: #a57dce;
+  font: 800 8px/1 ui-monospace, monospace;
+  letter-spacing: .12em;
+}
+
+.memory-archive-hub > button b {
+  color: #f1dca9;
+  font: 900 16px/1.15 "Yu Mincho", serif;
+}
+
+.memory-archive-hub > button em {
+  overflow: hidden;
+  color: #aaa1a0;
+  font-size: 9px;
+  font-style: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.memory-archive-hub > button > strong {
+  color: #d8bc79;
+  font: 900 11px/1.15 ui-monospace, monospace;
+  white-space: nowrap;
+}
+
+.memory-archive-hub > p {
+  margin: 2px 0 0;
+  color: #978e91;
+  font-size: 9px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* BATTLE ITEM MENU ---------------------------------------------------- */
+.battle-command.has-item-menu {
+  position: relative !important;
+  z-index: 80 !important;
+  isolation: isolate;
+  overflow: visible !important;
+}
+
+.battle-command.has-item-menu .battle-item-list {
+  position: relative !important;
+  z-index: 2 !important;
+  box-sizing: border-box !important;
+  display: grid !important;
+  align-content: start !important;
+  gap: 6px !important;
+  max-height: min(39dvh, 410px) !important;
+  padding: 8px 4px max(10px, env(safe-area-inset-bottom)) !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  scroll-padding-top: 8px;
+  -webkit-overflow-scrolling: touch;
+  background: #09070d;
+  pointer-events: auto !important;
+}
+
+.battle-command.has-item-menu .battle-item-list > button {
+  position: relative !important;
+  z-index: 3 !important;
+  min-height: 64px !important;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+}
+
+@media (max-width: 420px) {
+  .memory-archive-hub > button {
+    grid-template-columns: 46px minmax(0, 1fr) auto;
+    min-height: 76px;
+    padding: 9px;
+  }
+  .memory-archive-hub > button > span { width: 46px; height: 46px; }
+  .memory-archive-hub > button b { font-size: 14px; }
+  .memory-archive-hub > button > strong { font-size: 9px; }
+  .battle-command.has-item-menu .battle-item-list { max-height: 38dvh !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .memory-archive-hub *,
+  .battle-command.has-item-menu * {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}

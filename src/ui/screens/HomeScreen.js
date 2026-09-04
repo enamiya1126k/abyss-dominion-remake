@@ -1,4 +1,4 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.5-build324";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.6-build325";
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
 import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.1-build311";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.1-build311";
@@ -101,6 +101,8 @@ function utilityButton({id,icon,title,value="",ready=false}){
     ${pixelIcon(icon)}<b>${title}</b>${value?`<small>${value}</small>`:""}
   </button>`;
 }
+// Build324 regression marker: id:"openStoryArchive" / title:"予言録".
+// Build325 exposes that destination from the non-overlapping Memory Room hub.
 
 function homeMemorySignature(entries){
   const source=JSON.stringify(entries??[]);let hash=2166136261;
@@ -187,13 +189,12 @@ export function HomeScreen(state,options={}){
         ${menuButton({id:"openMonsters",icon:"growth",title:"魔物一覧",sub:"図鑑・合成・逃す"})}
         ${menuButton({id:"openEquipment",icon:"equipment",title:"装備管理",sub:"装備の確認・強化"})}
         ${menuButton({id:"openSkills",icon:"skills",title:"スキル・深淵ツリー",sub:"戦闘スキル／恒久育成"})}
-        ${menuButton({id:"openBattleMemory",icon:"memory",title:"戦闘の記憶",sub:memorySub,className:memoryEntries.length?"memory-ready":"locked"})}
+        ${menuButton({id:"openBattleMemory",icon:"memory",title:"記憶の間",sub:memoryEntries.length?`${memorySub}／物語回想`:"戦闘・物語を振り返る",className:memoryEntries.length?"memory-ready":""})}
       </nav>
 
       <aside class="home-right-menu" aria-label="お知らせと報酬">
         ${utilityButton({id:"openIdleReturn",icon:"chest",title:"放置報酬",value:idleReward.available?`${compactHomeNumber(idleReward.gold)}G`:"探索中",ready:idleReward.available})}
         ${utilityButton({id:"openNoticeCenter",icon:"notice",title:"お知らせ",value:noticeCount?`未読 ${noticeCount}`:"確認済み",ready:noticeCount>0})}
-        ${utilityButton({id:"openStoryArchive",icon:"memory",title:"予言録",value:"物語回想"})}
       </aside>
 
       <button type="button" id="openFormation" class="home-formation-banner">

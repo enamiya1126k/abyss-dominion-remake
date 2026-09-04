@@ -1,5 +1,5 @@
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.5-build324";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.5-build324";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.6-build325";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.6-build325";
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.1-build311";
 import{SPECIES}from"./data/species.js?v=3.1.1-build314";
@@ -8,7 +8,7 @@ import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/Expl
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.5-build324";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.6-build325";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.1-build311";
 import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.1-build311";
@@ -21,7 +21,7 @@ import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.1-build311";
 import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.1-build311";
 import{CampaignFinalFloorScreen}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.1-build320";
 import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.1-build311";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.2-build321";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.6-build325";
 import{Modal}from"./ui/components/Modal.js?v=3.1.1-build311";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=3.1.1-build311";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=3.1.1-build311";
@@ -1348,6 +1348,18 @@ function battleMemoryCost(memory){
  const base=Math.min(Number.MAX_SAFE_INTEGER,10*2**Math.min(attempts,49));
  return premiumCrystalCost(Math.min(Number.MAX_SAFE_INTEGER,memory.entries.some(entry=>entry.boss)?Math.ceil(base*1.5):base));
 }
+function openMemoryArchiveHub(){
+ const memory=save.state.recentBattleMemory,hasBattleMemory=Boolean(memory?.entries?.length),archive=createCampaignStoryArchiveModel(save.state);
+ app.insertAdjacentHTML("beforeend",Modal("記憶の間",`<div class="memory-archive-hub">
+  <button type="button" data-memory-room="battle"><span>${pixelIcon("memory")}</span><div><small>BATTLE MEMORY</small><b>戦闘の記憶</b><em>${hasBattleMemory?`直前の敵編成・${memory.entries.length}体を再現`:"敵と戦うと記録されます"}</em></div><strong>${hasBattleMemory?"挑戦する":"未記録"}</strong></button>
+  <button type="button" data-memory-room="story"><span>${pixelIcon("event")}</span><div><small>PROPHECY ARCHIVE</small><b>予言録・物語回想</b><em>序章／魔王軍／勇者一行</em></div><strong>${archive.read} / ${archive.total}</strong></button>
+  <p>戦闘の再現と物語の回想を、ここから選べます。</p>
+ </div>`,"閉じる"));
+ const modal=topModal();modal.classList.add("memory-archive-hub-modal");
+ modal.querySelector('[data-memory-room="battle"]').onclick=()=>{modal.remove();openBattleMemory()};
+ modal.querySelector('[data-memory-room="story"]').onclick=()=>{modal.remove();storyArchiveCategory="prologue";go("storyArchive")};
+ modal.querySelector("[data-modal-primary]").onclick=()=>modal.remove();
+}
 function openBattleMemory(){
  const memory=save.state.recentBattleMemory;
  if(!memory?.entries?.length){
@@ -1418,7 +1430,7 @@ function bindHome(){
  document.querySelectorAll("[data-home-attribute-help]").forEach(button=>button.addEventListener("click",event=>{event.stopPropagation();openAttributeHelp()}));
  document.getElementById("openMonsters").onclick=()=>go("monsters");
  document.getElementById("openSkills")?.addEventListener("click",()=>{completeContextGuide("skills_open",{quiet:true});skillNavigationOrigin="home";skillTarget=save.state.party[0]??save.state.monsters[0]?.id;skillSlotSelection=0;go("skills")});
- document.getElementById("openBattleMemory")?.addEventListener("click",openBattleMemory);
+ document.getElementById("openBattleMemory")?.addEventListener("click",openMemoryArchiveHub);
  document.getElementById("openStoryArchive")?.addEventListener("click",()=>{storyArchiveCategory="prologue";go("storyArchive")});
  document.getElementById("openItemShop")?.addEventListener("click",openHomeItemShop);
  document.getElementById("openTeamBattle")?.addEventListener("click",openTeamBattle);
@@ -2962,7 +2974,7 @@ function openCompleteMonsterCodex(){
  const summary=codexCollectionSummary(save.state),groups=["all","通常魔物","限定魔物","階層ボス","深淵","十神"],groupLabel={all:"すべて"},rows=COMPLETE_MONSTER_CODEX.map((entry,index)=>{const owned=summary.ownedKeys.has(entry.key),count=owned?completeCodexOwnedMonsters(entry).length:0,visual={speciesId:entry.speciesId,visualSpeciesId:entry.visualId,endgameBossId:entry.endgameBossId??null,floorBossCatalogId:entry.floorBossCatalogId??null};return`<button type="button" class="codex-row complete-codex-row ${owned?"owned":"unknown"}" data-complete-codex="${escapeAttribute(entry.key)}" data-codex-group="${escapeAttribute(entry.group)}" data-codex-search="${owned?escapeAttribute(`${entry.name} ${entry.group} ${entry.rarity} ${index+1}`.toLowerCase()):""}"><span>${owned?monsterVisual(visual,entry.emoji,{className:"codex-row-monster-visual"}):"❔"}</span><b>No.${String(index+1).padStart(3,"0")} ${owned?escapeAttribute(entry.name):"？？？？？"}</b><small>${owned?`${entry.group} / ${entry.rarity} / 所持 ${count}`:"未契約・情報非公開"}</small></button>`}).join("");
  const groupSummary=groups.slice(1).map(group=>{const value=summary.byGroup[group]??{owned:0,total:0};return`<span><b>${group}</b>${value.owned}/${value.total}</span>`}).join("");
  app.insertAdjacentHTML("beforeend",Modal("全魔物図鑑",`<section class="complete-codex-summary"><div><small>COMPLETE MONSTER ARCHIVE</small><strong>${summary.owned}<em> / ${summary.total}</em></strong><span>${summary.complete?"COMPLETE":"10種ごとに達成報酬"}</span></div><i style="--codex-progress:${Math.min(100,summary.owned/Math.max(1,summary.total)*100)}%"></i><div class="complete-codex-groups">${groupSummary}</div></section><div class="complete-codex-tools"><input type="search" data-complete-codex-search placeholder="名前・区分・レア度で検索"><div>${groups.map((group,index)=>`<button type="button" data-complete-codex-filter="${group}" class="${index?"":"active"}">${groupLabel[group]??group}</button>`).join("")}</div></div><div class="codex-list complete-codex-list">${rows}<p class="complete-codex-empty" hidden>該当する記録はありません。</p></div>`,"閉じる"));
- const modal=topModal(),input=modal.querySelector("[data-complete-codex-search]");let selectedGroup="all";const filter=()=>{const query=String(input?.value??"").trim().toLowerCase();let visible=0;modal.querySelectorAll("[data-complete-codex]").forEach(row=>{const show=(selectedGroup==="all"||row.dataset.codexGroup===selectedGroup)&&(!query||row.dataset.codexSearch.includes(query));row.hidden=!show;if(show)visible++});modal.querySelector(".complete-codex-empty").hidden=visible>0};
+ const modal=topModal(),input=modal.querySelector("[data-complete-codex-search]");let selectedGroup="all";const filter=()=>{const query=String(input?.value??"").trim().toLowerCase();let visible=0;modal.querySelectorAll("[data-complete-codex]").forEach(row=>{const show=(selectedGroup==="all"||row.dataset.codexGroup===selectedGroup)&&(!query||row.dataset.codexSearch.includes(query));row.hidden=!show;if(show){row.style.removeProperty("display");visible++}else row.style.setProperty("display","none","important")});const empty=modal.querySelector(".complete-codex-empty");empty.hidden=visible>0;if(visible>0)empty.style.setProperty("display","none","important");else empty.style.removeProperty("display")};
  input?.addEventListener("input",filter);modal.querySelectorAll("[data-complete-codex-filter]").forEach(button=>button.onclick=()=>{selectedGroup=button.dataset.completeCodexFilter;modal.querySelectorAll("[data-complete-codex-filter]").forEach(item=>item.classList.toggle("active",item===button));filter()});modal.querySelectorAll("[data-complete-codex]").forEach(button=>button.onclick=()=>{const index=COMPLETE_MONSTER_CODEX.findIndex(entry=>entry.key===button.dataset.completeCodex),entry=COMPLETE_MONSTER_CODEX[index];if(entry)openCompleteCodexDetail(entry,index,summary.ownedKeys.has(entry.key))});modal.querySelector("[data-modal-primary]").onclick=closeTopModal
 }
 function openEquipmentCodexDetail(name){const all=[...save.state.equipment,...save.state.reserveEquipment,...save.state.bossEquipmentVault],items=all.filter(i=>i.name===name);if(!items.length)return;const best=[...items].sort((a,b)=>(RARITY_ORDER[equipmentDisplayRarity(b)]??0)-(RARITY_ORDER[equipmentDisplayRarity(a)]??0)||(b.plus??0)-(a.plus??0))[0],displayRarity=equipmentDisplayRarity(best),stats=Object.entries(best.stats??{}).map(([k,v])=>`<span>${equipmentStatLabel(k)} +${v}</span>`).join("");app.insertAdjacentHTML("beforeend",Modal(name,`<div class="codex-detail"><div class="equipment-codex-hero">${equipmentVisual(best,{className:"equipment-codex-art"})}<p><b>[${codexVisibleRarity(displayRarity)}] ${slotLabel(best.slot)}</b></p></div><div class="detail-stat-grid">${stats||"<span>能力補正なし</span>"}</div><div class="codex-info-list"><p><b>所持数</b>${items.length}</p><p><b>最高強化</b>+${Math.max(...items.map(i=>i.plus??0))}</p><p><b>シリーズ</b>${best.series??"なし"}</p><p><b>装備規則</b>${best.slot==="weapon"?"右手・左手どちらでも装備可能":"通常"}</p></div></div>`,"図鑑へ戻る"));topModalButton().onclick=closeTopModal}
@@ -4382,23 +4394,21 @@ function drawExploreExit(position,image,theme){
  drawExploreParticles(position,theme.light,7,17,.78);const c=game.ctx,p=game.camera.world(position.x*TILE,position.y*TILE),size=TILE*game.camera.z;c.save();c.textAlign="center";c.textBaseline="middle";c.strokeStyle="#09070b";c.lineWidth=Math.max(3,size*.08);c.font=`900 ${Math.max(10,size*.16)}px serif`;c.strokeText(position.label??"次の階層へ",p.x+size*.5,p.y-size*.34);c.fillStyle="#ffe9a8";c.fillText(position.label??"次の階層へ",p.x+size*.5,p.y-size*.34);c.restore()
 }
 function drawCampaignSectionPortal(portal){
- if(!portal)return;const c=game.ctx,p=game.camera.world(portal.x*TILE,portal.y*TILE),size=TILE*game.camera.z,angle={north:0,east:Math.PI/2,south:Math.PI,west:-Math.PI/2}[portal.direction]??0,passageDepth=Math.max(3.15,Math.min(4.35,Number(portal.passageDepth)||3.8)),layers=game.performanceProfile?.constrained?3:4,fadeSlices=layers*2;
- // The connection is a real passage: the masonry narrows with perspective
- // and every flat slice grows gradually darker toward the unseen next area.
- // It avoids gradients and particles so the longer corridor remains cheap on
- // mobile while no longer reading as a temporary coloured door slab.
+ if(!portal)return;const c=game.ctx,p=game.camera.world(portal.x*TILE,portal.y*TILE),size=TILE*game.camera.z,angle={north:0,east:Math.PI/2,south:Math.PI,west:-Math.PI/2}[portal.direction]??0,passageDepth=Math.max(3.15,Math.min(4.35,Number(portal.passageDepth)||3.8)),layers=game.performanceProfile?.constrained?3:4,fadeSlices=layers*8;// Regression marker: fadeSlices=layers*2
+ // Top-down view: the passage keeps one width instead of using a perspective
+ // trapezoid. Flat slices darken only the distance, keeping this cheap on iOS.
  c.save();c.translate(p.x+size*.5,p.y+size*.5);c.rotate(angle);
- const nearY=size*.76,farY=-size*passageDepth,nearWidth=size*.68,farWidth=size*.32;
- c.fillStyle="rgba(0,0,0,.9)";c.beginPath();c.moveTo(-size*.98,nearY);c.lineTo(size*.98,nearY);c.lineTo(size*.48,farY-size*.2);c.lineTo(-size*.48,farY-size*.2);c.closePath();c.fill();
- c.fillStyle="#3b3832";c.beginPath();c.moveTo(-nearWidth,nearY);c.lineTo(nearWidth,nearY);c.lineTo(farWidth,farY);c.lineTo(-farWidth,farY);c.closePath();c.fill();
+ const nearY=size*.76,farY=-size*passageDepth,passageWidth=size*.68,wallWidth=size*.14,totalHeight=nearY-farY;
+ c.fillStyle="rgba(4,4,6,.94)";c.fillRect(-passageWidth-wallWidth,farY-size*.18,(passageWidth+wallWidth)*2,totalHeight+size*.36);
+ c.fillStyle="#3b3832";c.fillRect(-passageWidth,farY,passageWidth*2,totalHeight);
  for(let slice=0;slice<fadeSlices;slice++){
-  const t0=slice/fadeSlices,t1=(slice+1)/fadeSlices,y0=nearY+(farY-nearY)*t0,y1=nearY+(farY-nearY)*t1,w0=nearWidth+(farWidth-nearWidth)*t0,w1=nearWidth+(farWidth-nearWidth)*t1,darkness=.08+Math.pow(t1,1.72)*.87;
-  c.fillStyle=`rgba(0,0,0,${darkness.toFixed(3)})`;c.beginPath();c.moveTo(-w0,y0);c.lineTo(w0,y0);c.lineTo(w1,y1);c.lineTo(-w1,y1);c.closePath();c.fill();
-  c.strokeStyle=`rgba(151,139,113,${Math.max(.025,.23*(1-t1)).toFixed(3)})`;c.lineWidth=Math.max(.7,size*.018*(1-t1*.55));c.beginPath();c.moveTo(-w1,y1);c.lineTo(w1,y1);c.stroke();
+  const t0=slice/fadeSlices,t1=(slice+1)/fadeSlices,y0=nearY+(farY-nearY)*t0,y1=nearY+(farY-nearY)*t1,darkness=.06+Math.pow(t1,1.72)*.91;
+  c.fillStyle=`rgba(0,0,0,${darkness.toFixed(3)})`;c.fillRect(-passageWidth,y1,passageWidth*2,y0-y1+.5);
+  if(slice%4===3||slice===fadeSlices-1){c.strokeStyle=`rgba(151,139,113,${Math.max(.025,.23*(1-t1)).toFixed(3)})`;c.lineWidth=Math.max(.7,size*.018*(1-t1*.55));c.beginPath();c.moveTo(-passageWidth,y1);c.lineTo(passageWidth,y1);c.stroke()}
  }
- c.fillStyle="rgba(7,7,10,.92)";c.beginPath();c.moveTo(-size*.98,nearY);c.lineTo(-nearWidth,nearY);c.lineTo(-farWidth,farY);c.lineTo(-size*.48,farY-size*.2);c.closePath();c.fill();c.beginPath();c.moveTo(nearWidth,nearY);c.lineTo(size*.98,nearY);c.lineTo(size*.48,farY-size*.2);c.lineTo(farWidth,farY);c.closePath();c.fill();
- c.fillStyle="rgba(0,0,0,.98)";c.fillRect(-farWidth,farY-size*.25,farWidth*2,size*.3);
- c.strokeStyle="rgba(202,166,88,.54)";c.lineWidth=Math.max(1,size*.032);c.beginPath();c.moveTo(-nearWidth,nearY);c.lineTo(-farWidth,farY);c.moveTo(nearWidth,nearY);c.lineTo(farWidth,farY);c.stroke();
+ c.strokeStyle="rgba(112,103,87,.2)";c.lineWidth=Math.max(.7,size*.014);for(const x of[-.34,.35]){c.beginPath();c.moveTo(passageWidth*x,nearY);c.lineTo(passageWidth*x,farY);c.stroke()}
+ c.fillStyle="rgba(0,0,0,.99)";c.fillRect(-passageWidth,farY-size*.24,passageWidth*2,size*.42);
+ c.strokeStyle="rgba(202,166,88,.48)";c.lineWidth=Math.max(1,size*.03);c.beginPath();c.moveTo(-passageWidth,nearY);c.lineTo(-passageWidth,farY);c.moveTo(passageWidth,nearY);c.lineTo(passageWidth,farY);c.stroke();
  c.strokeStyle="rgba(241,211,139,.76)";c.lineWidth=Math.max(1,size*.025);c.beginPath();c.moveTo(-size*.74,nearY);c.lineTo(size*.74,nearY);c.stroke();c.restore()
 }
 function drawCampaignKey(key){
