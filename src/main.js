@@ -1,5 +1,5 @@
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.6-build325";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.6-build325";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.7-build326";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.7-build326";
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.1-build311";
 import{SPECIES}from"./data/species.js?v=3.1.1-build314";
@@ -8,7 +8,9 @@ import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/Expl
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.6-build325";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.7-build326";
+import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.7-build326";
+import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.7-build326";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.1-build311";
 import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.1-build311";
@@ -103,7 +105,7 @@ import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatur
 const TILE=88,COLS=39,ROWS=39,app=document.getElementById("app"),save=new SaveService(),audio=new AudioSystem(()=>save.state.settings);
 if(typeof MutationObserver!=="undefined")new MutationObserver(()=>app.classList.toggle("battle-active",Boolean(app.querySelector(".battle-screen")))).observe(app,{childList:true});
 const STANDARD_ENCOUNTER_SPECIES=Object.freeze(Object.values(SPECIES).filter(species=>species.id!=="baby_slime"));
-let screen="home",selected=null,equipmentTarget=null,equipmentFocusItemId=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",inventoryCategory="all",inventorySort="rarity",storyArchiveCategory="prologue",storyArchiveModel=null,game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",skillNavigationOrigin="home",inventoryNavigationOrigin="home",settingsNavigationOrigin="home",detailNavigationOrigin="monsters",formationOrigin="home",lastExploreCombatPower=null,battleBiomePanelTimer=null;
+let screen="home",selected=null,equipmentTarget=null,equipmentFocusItemId=null,skillTarget=null,skillSlotSelection=0,abyssSkillCategory="economy",inventoryCategory="all",inventorySort="rarity",storyArchiveCategory="prologue",storyArchiveModel=null,campaignIntelTab="map",campaignIntelLocationIndex=null,campaignIntelModel=null,game=null,battle=null,snapshot=null,activeEnemy=null,navigationOrigin="home",skillNavigationOrigin="home",inventoryNavigationOrigin="home",settingsNavigationOrigin="home",detailNavigationOrigin="monsters",formationOrigin="home",lastExploreCombatPower=null,battleBiomePanelTimer=null;
 
 function floorBossWasDefeated(player,floor){
  const key=String(Math.max(1,Math.floor(Number(floor)||1))),hasOwn=(record)=>Object.prototype.hasOwnProperty.call(record??{},key);
@@ -115,7 +117,7 @@ function campaignBattleBossWasDefeated(state,floor,boss){
  return floorBossWasDefeated(state?.player,floor)
 }
 function floorBossDisplayFloor(definition){return floorBossCampaignDisplayFloor(definition)??Math.max(1,Math.floor(Number(definition?.floor)||1))}
-const SCREEN_SESSION_KEY="abyss-dominion:current-screen",INVITE_SESSION_KEY="abyss-dominion:last-party-invite",REFRESHABLE_SCREENS=new Set(["home","formation","onlineParty","monsters","settings","explore","campaignFinalFloor","gauntlet","equipment","shop","skills","abyssSkills","inventory","armory","storyArchive"]);
+const SCREEN_SESSION_KEY="abyss-dominion:current-screen",INVITE_SESSION_KEY="abyss-dominion:last-party-invite",REFRESHABLE_SCREENS=new Set(["home","formation","onlineParty","monsters","settings","explore","campaignFinalFloor","gauntlet","equipment","shop","skills","abyssSkills","inventory","armory","storyArchive","campaignIntel"]);
 let exploreActionGeneration=0,secretRoomAutoRunning=false;
 let onlinePartyController=null,onlineSecretRoomContext=null,fullResetInFlight=false;
 let homeServerStatus={state:"checking",label:"サーバー確認中",checkedAt:0};
@@ -529,6 +531,7 @@ function render(){
  document.body.classList.toggle("phase2",hasCleared1000(save.state));
  if(!battle)audio.setScene(["explore","gauntlet"].includes(screen)?"explore":screen==="campaignFinalFloor"?"divine":"home");
  if(screen==="home"){app.innerHTML=HomeScreen(save.state,{serverStatus:homeServerStatus});bindHome()}
+ else if(screen==="campaignIntel"){campaignIntelModel=createCampaignInvasionIntelModel(save.state);app.innerHTML=CampaignIntelScreen(campaignIntelModel,{tab:campaignIntelTab,selectedLocationIndex:campaignIntelLocationIndex});bindCampaignIntel()}
  else if(screen==="storyArchive"){storyArchiveModel=createCampaignStoryArchiveModel(save.state);app.innerHTML=StoryArchiveScreen(storyArchiveModel,{category:storyArchiveCategory});bindStoryArchive()}
  else if(screen==="formation"){app.innerHTML=FormationScreen(save.state,{origin:formationOrigin});bindFormation()}
  else if(screen==="onlineParty"){app.innerHTML=OnlinePartyScreen(save.state);bindOnlineParty()}
@@ -1421,7 +1424,10 @@ function openBossMemory(){
  };
 }
 function bindHome(){
- document.getElementById("openCampaignFinal")?.addEventListener("click",enterCampaignFinalFloor);
+ const campaignFinal=document.getElementById("openCampaignFinal"),campaignIntel=document.getElementById("openCampaignIntel"),openCampaignIntel=()=>{campaignIntelTab="map";campaignIntelLocationIndex=null;go("campaignIntel")};
+ campaignFinal?.addEventListener("click",event=>{event.stopPropagation();enterCampaignFinalFloor()});
+ campaignIntel?.addEventListener("click",event=>{if(event.target.closest("#openCampaignFinal"))return;openCampaignIntel()});
+ campaignIntel?.addEventListener("keydown",event=>{if(!["Enter"," "].includes(event.key)||event.target.closest("#openCampaignFinal"))return;event.preventDefault();openCampaignIntel()});
  document.getElementById("openCampaignReincarnation")?.addEventListener("click",openCampaignReincarnationDialog);
  document.getElementById("openIdleReturn")?.addEventListener("click",openIdleReturnPreview);
  document.getElementById("openCombatPowerHistory")?.addEventListener("click",openCombatPowerHistory);
@@ -1443,6 +1449,11 @@ function bindHome(){
  document.getElementById("openExplore").onclick=()=>{completeContextGuide("home_dungeon",{quiet:true});openExploreFloorSelector()};
  document.getElementById("openEquipment").onclick=()=>{completeContextGuide("equipment_open",{quiet:true});equipmentTarget=save.state.party[0]??save.state.monsters[0]?.id;equipmentFocusItemId=null;navigationOrigin="home";go("equipment")};
  bindHomePartyDrag();
+}
+function bindCampaignIntel(){
+ document.querySelector("[data-campaign-intel-back]")?.addEventListener("click",()=>go("home"));
+ document.querySelectorAll("[data-campaign-intel-tab-button]").forEach(button=>button.addEventListener("click",()=>{campaignIntelTab=button.dataset.campaignIntelTabButton==="heroes"?"heroes":"map";campaignIntelLocationIndex=null;render()}));
+ document.querySelectorAll("[data-campaign-route-index]").forEach(button=>button.addEventListener("click",()=>{campaignIntelLocationIndex=Math.max(0,Number(button.dataset.campaignRouteIndex)||0);render()}));
 }
 function bindStoryArchive(){
  document.querySelector("[data-story-archive-back]")?.addEventListener("click",()=>go("home"));

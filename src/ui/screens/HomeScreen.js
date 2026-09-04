@@ -1,4 +1,4 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.6-build325";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.7-build326";
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
 import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.1-build311";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.1-build311";
@@ -154,10 +154,11 @@ export function HomeScreen(state,options={}){
         <i class="home-river-shimmer river-frame-3"></i>
       </div>
 
-      <header class="home-title-card">
+      <header class="home-title-card" id="openCampaignIntel" data-open-campaign-intel role="button" tabindex="0" aria-label="予言と勇者侵攻の詳細を見る">
         <small>${prophecyLabel}</small>
         <h1>${title}</h1>
         <${meterTag}${meterAction} class="home-invasion-meter ${completed?"is-complete":""} ${finalReady?"is-ready":""}"><i role="progressbar" aria-label="勇者の進軍度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${invasion.progress}"><em style="width:${invasion.progress}%"></em></i><b>${meterLabel}</b></${meterTag}>
+        <span class="home-intel-cue" aria-hidden="true">詳細 ›</span>
       </header>
 
       ${completed?`<section class="home-postgame-strip" aria-label="クリア後の進行"><span>クリア後もそのまま継続中</span><button type="button" id="openCampaignReincarnation">輪廻を選ぶ</button></section>`:reincarnation.active?`<section class="home-postgame-strip" aria-label="輪廻進行"><span>輪廻${reincarnation.cycle}・敵戦力 ×${campaignReincarnationDifficultyMultiplier(state).toFixed(2)}</span></section>`:""}
