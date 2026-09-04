@@ -1,5 +1,5 @@
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.1-build320";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.1-build320";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.2-build321";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.2-build321";
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.1-build311";
 import{SPECIES}from"./data/species.js?v=3.1.1-build314";
@@ -8,7 +8,7 @@ import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/Expl
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.1-build320";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.2-build321";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.1-build311";
 import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.1-build311";
 import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.1-build317";
@@ -20,7 +20,7 @@ import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.1-build311";
 import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.1-build311";
 import{CampaignFinalFloorScreen}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.1-build320";
 import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.1-build311";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.1-build317";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.2-build321";
 import{Modal}from"./ui/components/Modal.js?v=3.1.1-build311";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=3.1.1-build311";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=3.1.1-build311";
@@ -58,7 +58,7 @@ import{attackHits}from"./battle/HitSystem.js?v=3.1.1-build311";
 import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=3.1.1-build311";
 import{dangerConfig}from"./core/DangerSystem.js?v=3.1.1-build311";
 import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=3.1.1-build311";
-import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost,magicCircleLevelEffect,magicCircleProgressionStatus}from"./core/MagicCircleSystem.js?v=3.1.1-build316";
+import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost,magicCircleLevelEffect,magicCircleProgressionStatus}from"./core/MagicCircleSystem.js?v=3.1.2-build321";
 import{biomeForFloor,battleEnvironmentForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=3.1.1-build311";
 import{recordEncounterHistory,rollAttributeEncounterGroup}from"./core/EncounterPoolSystem.js?v=3.1.1-build311";
 import{dungeonThemeForFloor,dungeonThemeForAttribute}from"./data/dungeonThemes.js?v=3.1.1-build311";
@@ -66,7 +66,7 @@ import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_
 import{balanceTeamBattleEnemies}from"./core/TeamBattleBalanceSystem.js?v=3.1.1-build316";
 import{NORMAL_SUMMON_RATES,GUARANTEED_SUMMON_RATES,GACHA_PITY_LIMITS,rollSummonRarity,rollSummonRarityWithPity,normalizeGachaPityState,normalizeGachaDrawHistory,selectBalancedGachaEntry,recordGachaDraw}from"./core/GachaBalanceSystem.js?v=3.1.1-build311";
 import{CAMPAIGN_MAX_FLOOR,CAMPAIGN_KEYS_PER_FLOOR,HERO_PARTY_IDS,campaignFloorToLegacyFloor,campaignFloorState,campaignBossProgress,campaignBossProgressList,campaignDefeatedBossIds,campaignKeysHeld,beginCampaignFloorRun,beginCampaignFloorReplay,collectCampaignKey,defeatCampaignBoss,trophyChestEntitlements,claimTrophyChest,roomCountForRandom,roomAttributesForFloor,campaignRoomProfile,campaignEndingForResult,recordCampaignEnding,normalizeCampaignState,floorBossCampaignDisplayFloor,campaignMilestoneBossIds,isCampaignMultiBossFloor}from"./core/Campaign100System.js?v=3.1.1-build319";
-import{CAMPAIGN_STORY_OPENING_ID,acknowledgeCampaignStoryScene,nextCampaignStoryScene,campaignHeroVoiceLine,campaignHeroFinalVoiceLines}from"./core/CampaignStorySystem.js?v=3.1.1-build313";
+import{CAMPAIGN_STORY_OPENING_ID,acknowledgeCampaignStoryScene,nextCampaignStoryScene,campaignHeroVoiceLine,campaignHeroFinalVoiceLines}from"./core/CampaignStorySystem.js?v=3.1.2-build321";
 import{CAMPAIGN_HERO_IDS,CAMPAIGN_HERO_PROFILES,normalizeCampaignHeroInvasion,scheduledCampaignHeroForFloor,beginCampaignHeroFieldEncounter,recordCampaignHeroWound,settleCampaignHeroEncounter,campaignRemainingHeroes,advanceCampaignRewindFloor}from"./core/CampaignHeroEncounterSystem.js?v=3.1.1-build320";
 import{normalizeCampaignReincarnationState,campaignCanonicalEnding,recordCampaignConclusion,beginOptionalCampaignReincarnation,campaignReincarnationDifficultyMultiplier,campaignReincarnationRewardMultiplier,campaignReincarnationFloorLimit,recordCampaignReincarnationFloor}from"./core/CampaignReincarnationSystem.js?v=3.1.1-build320";
 import{campaignTrophyFragmentAwards}from"./core/CampaignRewardSystem.js?v=3.1.1-build311";
@@ -288,7 +288,7 @@ function completePartyAddGuide(){
  const guide=contextualGuideState();setGuidePending(guide,"partyAdd",false);guide.newestMonsterId=null;completeContextGuide("party_add",{quiet:true});save.save();
 }
 function scheduleContextGuide(){
- const guide=contextualGuideState();if(guide.disabled||document.querySelector(".context-guide,.game-modal,.battle-screen"))return;
+ const guide=contextualGuideState();if(guide.disabled||campaignStoryPresenting||nextCampaignStoryScene(save.state)||document.querySelector(".context-guide,.game-modal,.campaign-story-modal,.battle-screen"))return;
  if(screen==="home"){
   if(!contextGuideDone("home_dungeon"))return showContextGuide({id:"home_dungeon",title:"さっそくダンジョンへ挑戦しよう",text:"下の「ダンジョン」を押して、最初の探索へ進もう。",target:"#openExplore",placement:"top"});
   if(contextGuidePending("bedRecovery")&&!contextGuideDone("bed_recover"))return showContextGuide({id:"bed_recover",title:"寝台で仲間を回復しよう",text:"敗北した仲間はHP1。光っている寝台でHP・MP・状態異常を戻そう。",target:"#openRest",placement:"top"});
@@ -541,8 +541,8 @@ function render(){
  else if(screen==="armory"){app.innerHTML=ArmoryScreen(save.state,inventoryCategory,inventorySort);bindInventory()}
  bindSharedUi();
  pixelizeUiEmoji(app);
- requestAnimationFrame(scheduleContextGuide);
- queueCampaignStoryScenes({delay:220});
+ const legacyPromptOpen=showLegacyCampaignResetPrompt();
+ if(!legacyPromptOpen){requestAnimationFrame(scheduleContextGuide);queueCampaignStoryScenes({delay:220})}
 }
 function expeditionActive(){return Boolean(save.state.player.inRun)}
 function expeditionMenuOrigin(){return expeditionActive()?"explore":"home"}
@@ -1684,6 +1684,18 @@ async function redeemSettingsSerialCode(event){
  app.insertAdjacentHTML("beforeend",Modal(`${result.icon} ${result.title}`,`<div class="serial-reward-result"><div>${result.monster?monsterVisual(result.monster,result.icon,{className:"serial-reward-monster-visual"}):result.icon}</div><p><b>${result.message}</b></p><small>このコードは使用済みとして記録されました。</small></div>`,"確認"));
  topModalButton().onclick=()=>{closeTopModal();render()};
 }
+function showLegacyCampaignResetPrompt(){
+ const notice=save.state.migrationNotices?.legacyCampaignReset;
+ if(!notice?.pending)return false;
+ const existing=document.querySelector(".legacy-campaign-reset-modal");if(existing)return true;
+ clearContextGuide();
+ app.insertAdjacentHTML("beforeend",Modal("大幅アップデートのお知らせ",`<div class="legacy-campaign-reset-copy"><small>NEW STORY UPDATE</small><h3>新しい探索と物語が追加されました</h3><p>旧1000階層版の進行データでは、一部の物語やイベントを正常な順番で体験できない可能性があります。</p><strong>新しい内容を最初から楽しむため、セーブデータの初期化を強くおすすめします。</strong><button type="button" data-legacy-campaign-reset>初期化して最初から始める</button><em>初期化すると、所持仲間・装備・通貨・進行記録が削除されます。次の確認画面で中止できます。</em></div>`,`現在のデータで続ける`));
+ const modal=topModal();if(!modal)return false;modal.classList.add("legacy-campaign-reset-modal");modal.querySelector("[data-modal-dismiss]")?.remove();modal._onDismiss=()=>{};
+ const continueButton=modal.querySelector("[data-modal-primary]"),resetButton=modal.querySelector("[data-legacy-campaign-reset]");
+ continueButton?.addEventListener("click",()=>{notice.pending=false;notice.dismissedAt=new Date().toISOString();if(!save.save()){notice.pending=true;delete notice.dismissedAt;return showToast("選択を保存できませんでした")}modal.remove();queueCampaignStoryScenes({delay:80});requestAnimationFrame(scheduleContextGuide)});
+ resetButton?.addEventListener("click",async()=>{resetButton.disabled=true;await requestFullGameReset();if(modal.isConnected)resetButton.disabled=false});
+ requestAnimationFrame(()=>resetButton?.focus({preventScroll:true}));return true
+}
 async function requestFullGameReset(){
  if(fullResetInFlight)return showToast("初期化処理を確認中です。しばらくお待ちください。");
  const result=runConfirmedFullReset({
@@ -2000,8 +2012,8 @@ function togglePartyMember(id){
  if(!has&&save.state.party.length>=4)return alert("編成は4体まで");
  if(has){
   const beforeStats=m?calculatedStats(m):null,beforeMp=m?maxMp(m):1;
-  Object.values(m?.equipment??{}).forEach(itemId=>{const item=save.state.equipment.find(i=>i.id===itemId);if(item)item.equippedBy=null});
-  if(m){m.equipment=emptyEquipmentLoadout();preserveVitals(m,beforeStats,beforeMp)}
+ Object.values(m?.equipment??{}).forEach(itemId=>{const item=save.state.equipment.find(i=>i.id===itemId);if(item)item.equippedBy=null});
+  if(m){m.equipment=emptyEquipmentLoadout();m.magicCircleId="none";m.magicCircleInstanceId=null;preserveVitals(m,beforeStats,beforeMp)}
   save.state.party=save.state.party.filter(x=>x!==id)
  }else save.state.party.push(id);
  delete save.state.player.homePartySlots;
@@ -2029,6 +2041,7 @@ function replacePartyMember(outgoingId,incomingId,inherit=false){
  const inheritedLoadout={...emptyEquipmentLoadout(),...(outgoing.equipment??{})};
  for(const item of save.state.equipment)if(item.equippedBy===outgoing.id||item.equippedBy===incoming.id)item.equippedBy=null;
  outgoing.equipment=emptyEquipmentLoadout();
+ outgoing.magicCircleId="none";outgoing.magicCircleInstanceId=null;
  incoming.equipment=emptyEquipmentLoadout();
  save.state.party[index]=incoming.id;
  if(Array.isArray(save.state.player.homePartySlots)){
@@ -3478,6 +3491,7 @@ function campaignStoryPresentationBody(scene){
 }
 function showCampaignStoryScene(scene){
  if(!scene||campaignStoryPresenting)return false;
+ clearContextGuide();
  const campaign=save.state.campaign100??(save.state.campaign100={}),hadStory=Object.prototype.hasOwnProperty.call(campaign,"story309"),storyBefore=hadStory?(typeof structuredClone==="function"?structuredClone(campaign.story309):JSON.parse(JSON.stringify(campaign.story309))):null,receipt=acknowledgeCampaignStoryScene(save.state,scene.id,{seenAt:new Date().toISOString()});
  if(!receipt.recorded||!save.save()){if(hadStory)campaign.story309=storyBefore;else delete campaign.story309;if(receipt.recorded)showToast("物語の記録を保存できませんでした");return false}
  campaignStoryPresenting=true;const resumeRunningGame=Boolean(game?.running&&!game.paused);if(game?.running)game.paused=true;
@@ -3491,7 +3505,7 @@ function queueCampaignStoryScenes({clearedFloor=null,delay=180,onComplete=null}=
  if(Number.isFinite(Number(clearedFloor)))campaignStoryRequestedFloor=Math.max(Number(campaignStoryRequestedFloor)||0,Math.floor(Number(clearedFloor)));
  if(typeof onComplete==="function")campaignStoryCompletionCallback=onComplete;
  if(campaignStoryPresenting)return;if(campaignStoryQueueTimer)clearTimeout(campaignStoryQueueTimer);
- const attempt=()=>{campaignStoryQueueTimer=null;if(campaignStoryPresenting||battle||document.querySelector(".battle-screen"))return;if(!["home","explore"].includes(screen))return;if(document.querySelector(".game-modal")){campaignStoryQueueTimer=setTimeout(attempt,420);return}const options=campaignStoryRequestedFloor==null?{}:{clearedFloor:campaignStoryRequestedFloor},scene=nextCampaignStoryScene(save.state,options);if(!scene){campaignStoryRequestedFloor=null;const complete=campaignStoryCompletionCallback;campaignStoryCompletionCallback=null;if(complete)complete();return}if(!showCampaignStoryScene(scene))campaignStoryQueueTimer=setTimeout(attempt,900)};
+ const attempt=()=>{campaignStoryQueueTimer=null;if(campaignStoryPresenting||battle||document.querySelector(".battle-screen"))return;if(!["home","explore"].includes(screen))return;if(document.querySelector(".game-modal")){campaignStoryQueueTimer=setTimeout(attempt,420);return}const options=campaignStoryRequestedFloor==null?{}:{clearedFloor:campaignStoryRequestedFloor},scene=nextCampaignStoryScene(save.state,options);if(!scene){campaignStoryRequestedFloor=null;const complete=campaignStoryCompletionCallback;campaignStoryCompletionCallback=null;if(complete)complete();setTimeout(scheduleContextGuide,80);return}if(!showCampaignStoryScene(scene))campaignStoryQueueTimer=setTimeout(attempt,900)};
  campaignStoryQueueTimer=setTimeout(attempt,Math.max(0,Number(delay)||0))
 }
 function bindExplore(){
@@ -3950,7 +3964,7 @@ function syncExploreSectionPresentation(section=activeExploreSection()){
  if(badge){badge.setAttribute("aria-label",`現在の区画 ${profile.name}属性 ${theme.name}`);const logo=badge.querySelector("[data-section-attribute-logo]"),name=badge.querySelector("[data-section-attribute-name]"),themeName=badge.querySelector("[data-section-theme-name]");if(logo)logo.innerHTML=attributeVisual(profile.logoAttribute,{label:`${profile.name}属性`});if(name)name.textContent=`${profile.name}属性区画`;if(themeName)themeName.textContent=theme.name;badge.dataset.attribute=profile.id}
 }
 function showSectionTransition(section){
- syncExploreSectionPresentation(section);const stage=document.querySelector(".explore-stage");if(!stage)return;const profile=campaignRoomProfile(section?.attribute),previous=stage.querySelector(".section-transition-curtain, .section-passage-fade");previous?.remove();const node=document.createElement("div");node.className="section-passage-fade";node.setAttribute("role","status");node.innerHTML=`<span>${profile.name}属性区画</span>`;stage.appendChild(node);setTimeout(()=>node.remove(),620)
+ syncExploreSectionPresentation(section);const stage=document.querySelector(".explore-stage");if(!stage)return;const profile=campaignRoomProfile(section?.attribute),previous=stage.querySelector(".section-transition-curtain, .section-passage-fade");previous?.remove();const node=document.createElement("div");node.className="section-passage-fade";node.setAttribute("role","status");node.innerHTML=`<span><small>区画移動</small><b>${profile.name}属性区画</b></span>`;stage.appendChild(node);setTimeout(()=>node.remove(),720)
 }
 function showPostBossFieldUnlocks(){
  const stage=document.querySelector(".explore-stage");if(!stage)return;stage.querySelector(".post-boss-field-unlocks")?.remove();const firstUnlock=game?.world?.postBossRevealFirstUnlock!==false,node=document.createElement("div");node.className="post-boss-field-unlocks";node.setAttribute("role","status");node.innerHTML=`<small>支配者討伐完了</small><strong>${firstUnlock?"この階の封印が解けた":"新たな神の戦利品が現れた"}</strong><div><span class="trophy">${pixelIcon("chest")}<b>この支配者の戦利品宝箱</b><em>解放</em></span><span class="spring">${pixelIcon("rest")}<b>全回復の温泉</b><em>${firstUnlock?"出現":"利用状態を維持"}</em></span><span class="route">${pixelIcon("dungeon")}<b>${save.state.player.currentFloor>=CAMPAIGN_MAX_FLOOR?"勇者決戦への門":"次階層への道"}</b><em>${firstUnlock?"開通":"開通済み"}</em></span></div>`;stage.appendChild(node);setTimeout(()=>node.remove(),2600)
@@ -4340,14 +4354,17 @@ function drawExploreExit(position,image,theme){
  drawExploreParticles(position,theme.light,7,17,.78);const c=game.ctx,p=game.camera.world(position.x*TILE,position.y*TILE),size=TILE*game.camera.z;c.save();c.textAlign="center";c.textBaseline="middle";c.strokeStyle="#09070b";c.lineWidth=Math.max(3,size*.08);c.font=`900 ${Math.max(10,size*.16)}px serif`;c.strokeText(position.label??"次の階層へ",p.x+size*.5,p.y-size*.34);c.fillStyle="#ffe9a8";c.fillText(position.label??"次の階層へ",p.x+size*.5,p.y-size*.34);c.restore()
 }
 function drawCampaignSectionPortal(portal){
- if(!portal)return;const c=game.ctx,p=game.camera.world(portal.x*TILE,portal.y*TILE),size=TILE*game.camera.z,angle={north:0,east:Math.PI/2,south:Math.PI,west:-Math.PI/2}[portal.direction]??0,depth=Math.max(3,Math.min(5,Number(portal.passageDepth)||4)),layers=game.performanceProfile?.constrained?3:4;
- // A static, narrowing floor passage replaces the animated gate. Flat alpha
- // bands hide its destination without filters, shadows, particles or per-frame
- // gradients, keeping the mobile draw cost effectively constant.
- c.save();c.translate(p.x+size*.5,p.y+size*.5);c.rotate(angle);c.beginPath();c.moveTo(-size*.82,size*.7);c.lineTo(size*.82,size*.7);c.lineTo(size*.54,-size*depth);c.lineTo(-size*.54,-size*depth);c.closePath();c.fillStyle="rgba(12,12,15,.94)";c.fill();
- c.fillStyle="rgba(0,0,0,.48)";c.beginPath();c.moveTo(-size*.98,size*.72);c.lineTo(-size*.82,size*.7);c.lineTo(-size*.54,-size*depth);c.lineTo(-size*.86,-size*depth);c.closePath();c.fill();c.beginPath();c.moveTo(size*.98,size*.72);c.lineTo(size*.82,size*.7);c.lineTo(size*.54,-size*depth);c.lineTo(size*.86,-size*depth);c.closePath();c.fill();
- for(let layer=0;layer<layers;layer++){const start=layer/layers,end=(layer+1)/layers,y0=size*(.64-start*(depth+.64)),y1=size*(.64-end*(depth+.64)),width0=size*(.8-start*.24),width1=size*(.8-end*.24);c.fillStyle=`rgba(0,0,0,${(.14+end*.82).toFixed(2)})`;c.beginPath();c.moveTo(-width0,y0);c.lineTo(width0,y0);c.lineTo(width1,y1);c.lineTo(-width1,y1);c.closePath();c.fill()}
- c.fillStyle="#000";c.fillRect(-size*.57,-size*depth-size*.08,size*1.14,size*.3);c.strokeStyle="rgba(214,176,91,.28)";c.lineWidth=Math.max(1,size*.022);c.beginPath();c.moveTo(-size*.82,size*.7);c.lineTo(-size*.54,-size*depth);c.moveTo(size*.82,size*.7);c.lineTo(size*.54,-size*depth);c.stroke();c.restore()
+ if(!portal)return;const c=game.ctx,p=game.camera.world(portal.x*TILE,portal.y*TILE),size=TILE*game.camera.z,angle={north:0,east:Math.PI/2,south:Math.PI,west:-Math.PI/2}[portal.direction]??0,passageDepth=Math.max(.9,Math.min(1.35,(Number(portal.passageDepth)||4)*.27)),layers=game.performanceProfile?.constrained?3:4,targetSection=(game.world.sections??[]).find(section=>section.id===portal.targetSectionId),targetTheme=dungeonThemeForAttribute(targetSection?.attribute,save.state.player.currentFloor);
+ // A short masonry threshold now reads as an actual doorway between rooms.
+ // Flat fills keep the portal inexpensive on phones while avoiding the old
+ // long black trapezoid that looked like an unfinished mask.
+ c.save();c.translate(p.x+size*.5,p.y+size*.5);c.rotate(angle);
+ c.fillStyle="rgba(0,0,0,.72)";c.beginPath();c.moveTo(-size*.86,size*.7);c.lineTo(size*.86,size*.7);c.lineTo(size*.64,-size*passageDepth);c.lineTo(-size*.64,-size*passageDepth);c.closePath();c.fill();
+ c.fillStyle=targetTheme.minimapFloor??"#3a342d";c.beginPath();c.moveTo(-size*.62,size*.64);c.lineTo(size*.62,size*.64);c.lineTo(size*.48,-size*passageDepth);c.lineTo(-size*.48,-size*passageDepth);c.closePath();c.fill();
+ for(let layer=0;layer<layers;layer++){const t=layer/Math.max(1,layers-1),y=size*(.5-t*(passageDepth+.38)),width=size*(.57-t*.08);c.strokeStyle=layer===0?"rgba(229,190,104,.52)":"rgba(20,18,18,.68)";c.lineWidth=Math.max(1,size*(layer===0?.055:.028));c.beginPath();c.moveTo(-width,y);c.lineTo(width,y);c.stroke()}
+ c.fillStyle="rgba(7,7,10,.94)";c.fillRect(-size*.48,-size*(passageDepth+.12),size*.96,size*.22);
+ c.strokeStyle="rgba(214,176,91,.72)";c.lineWidth=Math.max(1.5,size*.045);c.beginPath();c.moveTo(-size*.66,size*.68);c.lineTo(-size*.49,-size*passageDepth);c.lineTo(size*.49,-size*passageDepth);c.lineTo(size*.66,size*.68);c.stroke();
+ c.strokeStyle="rgba(243,213,139,.86)";c.lineWidth=Math.max(1,size*.025);c.beginPath();c.moveTo(-size*.7,size*.66);c.lineTo(size*.7,size*.66);c.stroke();c.restore()
 }
 function drawCampaignKey(key){
  if(!key||key.collected)return;const c=game.ctx,p=game.camera.world(key.x*TILE,key.y*TILE),size=TILE*game.camera.z,pulse=.85+Math.sin(performance.now()/180)*.15;drawExploreGlow(key,"#ffe46b",2.2,.34*pulse);const image=explorationTexture("campaignKey");if(drawExplorationTileAsset(key,image,1.05))return;c.save();c.translate(p.x+size*.5,p.y+size*.48);c.rotate(-Math.PI/5);c.shadowColor="#fff3a2";c.shadowBlur=Math.max(5,size*.2);c.strokeStyle="#ffd84c";c.fillStyle="#8d5b13";c.lineWidth=Math.max(3,size*.09);c.beginPath();c.arc(-size*.2,0,size*.19,0,Math.PI*2);c.stroke();c.beginPath();c.moveTo(-size*.02,0);c.lineTo(size*.34,0);c.lineTo(size*.34,size*.15);c.lineTo(size*.2,size*.15);c.lineTo(size*.2,size*.05);c.stroke();c.restore()
@@ -4516,12 +4533,12 @@ function drawMini(theme=exploreBandTheme(game?.online?game.onlineFloor:save.stat
   const model=buildSectionMiniMapModel(w,{currentSectionId:w.currentSectionId}),transform=fitMiniMapTransform(model,m.width,m.height,Math.max(8,m.width*.045)),markerSignature=model.markers.map(marker=>`${marker.kind}:${marker.x},${marker.y}`).join("|"),cacheKey=`${m.width}x${m.height}:${model.layoutSignature}:${model.visitedIds.sort().join(",")}:${model.frontierIds.sort().join(",")}:${model.currentSectionId}:${markerSignature}`;
   if(game.miniMapTerrainCache?.key!==cacheKey){
    const layer=document.createElement("canvas");layer.width=m.width;layer.height=m.height;const map=layer.getContext("2d");map.fillStyle="rgba(2,3,7,.97)";map.fillRect(0,0,layer.width,layer.height);map.lineCap="round";map.lineJoin="round";
-   for(const edge of model.edges){const from=projectMiniMapPoint(transform,{x:edge.from.x+.5,y:edge.from.y+.5}),to=projectMiniMapPoint(transform,{x:edge.to.x+.5,y:edge.to.y+.5});map.save();map.strokeStyle=edge.discovered?"#8e6eb0":"#4b4059";map.lineWidth=Math.max(2,transform.scale*.82);if(!edge.discovered)map.setLineDash([Math.max(2,transform.scale*1.2),Math.max(2,transform.scale*.9)]);map.beginPath();map.moveTo(from.x,from.y);map.lineTo(to.x,to.y);map.stroke();map.restore()}
-   for(const section of model.sections){const sectionTheme=dungeonThemeForAttribute(section.attribute,save.state.player.currentFloor),cells=new Set(section.cells.map(cell=>`${cell.x},${cell.y}`)),frontier=section.mode==="frontier",active=section.id===model.currentSectionId;map.save();map.globalAlpha=frontier ? .34 : 1;map.fillStyle=frontier?"#17131d":sectionTheme.minimapFloor;for(const cell of section.cells){const point=projectMiniMapPoint(transform,cell),x0=Math.floor(point.x),y0=Math.floor(point.y),x1=Math.ceil(point.x+transform.scale+.15),y1=Math.ceil(point.y+transform.scale+.15);map.fillRect(x0,y0,Math.max(1,x1-x0),Math.max(1,y1-y0))}map.strokeStyle=active?"#ffe49a":frontier?"#675c70":sectionTheme.line;map.lineWidth=active?Math.max(1.7,transform.scale*.5):Math.max(1,transform.scale*.28);map.beginPath();for(const cell of section.cells){const point=projectMiniMapPoint(transform,cell),s=transform.scale;if(!cells.has(`${cell.x},${cell.y-1}`)){map.moveTo(point.x,point.y);map.lineTo(point.x+s,point.y)}if(!cells.has(`${cell.x+1},${cell.y}`)){map.moveTo(point.x+s,point.y);map.lineTo(point.x+s,point.y+s)}if(!cells.has(`${cell.x},${cell.y+1}`)){map.moveTo(point.x+s,point.y+s);map.lineTo(point.x,point.y+s)}if(!cells.has(`${cell.x-1},${cell.y}`)){map.moveTo(point.x,point.y+s);map.lineTo(point.x,point.y)}}map.stroke();if(frontier){const point=projectMiniMapPoint(transform,{x:section.center.x+.5,y:section.center.y+.5});map.globalAlpha=.9;map.fillStyle="#b8a9c2";map.textAlign="center";map.textBaseline="middle";map.font=`900 ${Math.max(9,transform.scale*3.2)}px serif`;map.fillText("?",point.x,point.y)}map.restore()}
+   for(const edge of model.edges){const from=projectMiniMapPoint(transform,{x:edge.from.x+.5,y:edge.from.y+.5}),to=projectMiniMapPoint(transform,{x:edge.to.x+.5,y:edge.to.y+.5}),outerWidth=Math.max(4,transform.scale*1.65),innerWidth=Math.max(2,transform.scale*.74);map.save();map.strokeStyle="#08070c";map.lineWidth=outerWidth;map.beginPath();map.moveTo(from.x,from.y);map.lineTo(to.x,to.y);map.stroke();map.strokeStyle=edge.discovered?"#756184":"#302b38";map.lineWidth=innerWidth;if(!edge.discovered)map.setLineDash([Math.max(2,transform.scale*.8),Math.max(2,transform.scale*.72)]);map.beginPath();map.moveTo(from.x,from.y);map.lineTo(to.x,to.y);map.stroke();map.restore()}
+   for(const section of model.sections){const sectionTheme=dungeonThemeForAttribute(section.attribute,save.state.player.currentFloor),cells=new Set(section.cells.map(cell=>`${cell.x},${cell.y}`)),frontier=section.mode==="frontier",active=section.id===model.currentSectionId;map.save();map.globalAlpha=frontier?.52:1;map.fillStyle=frontier?"#121119":sectionTheme.minimapFloor;for(const cell of section.cells){const point=projectMiniMapPoint(transform,cell),x0=Math.floor(point.x),y0=Math.floor(point.y),x1=Math.ceil(point.x+transform.scale+.15),y1=Math.ceil(point.y+transform.scale+.15);map.fillRect(x0,y0,Math.max(1,x1-x0),Math.max(1,y1-y0))}map.strokeStyle=active?"#f7d986":frontier?"#514a59":"#877b66";map.lineWidth=active?Math.max(2,transform.scale*.62):Math.max(1,transform.scale*.34);map.beginPath();for(const cell of section.cells){const point=projectMiniMapPoint(transform,cell),s=transform.scale;if(!cells.has(`${cell.x},${cell.y-1}`)){map.moveTo(point.x,point.y);map.lineTo(point.x+s,point.y)}if(!cells.has(`${cell.x+1},${cell.y}`)){map.moveTo(point.x+s,point.y);map.lineTo(point.x+s,point.y+s)}if(!cells.has(`${cell.x},${cell.y+1}`)){map.moveTo(point.x+s,point.y+s);map.lineTo(point.x,point.y+s)}if(!cells.has(`${cell.x-1},${cell.y}`)){map.moveTo(point.x,point.y+s);map.lineTo(point.x,point.y)}}map.stroke();if(frontier){const point=projectMiniMapPoint(transform,{x:section.center.x+.5,y:section.center.y+.5});map.globalAlpha=.92;map.fillStyle="#9f95a8";map.textAlign="center";map.textBaseline="middle";map.font=`900 ${Math.max(8,transform.scale*2.7)}px serif`;map.fillText("?",point.x,point.y)}map.restore()}
    const markerColor={key:"#ffe266",chest:"#e6b75a",boss:"#ff536f",trophy:"#d980ff",spring:"#69e5ff",exit:"#fff0a2"};for(const marker of model.markers){const point=projectMiniMapPoint(transform,{x:marker.x+.5,y:marker.y+.5}),radius=Math.max(2.2,transform.scale*.82);map.fillStyle=markerColor[marker.kind]??"#fff";map.strokeStyle="#08070c";map.lineWidth=Math.max(1,radius*.34);map.beginPath();if(["chest","trophy","exit"].includes(marker.kind)){map.rect(point.x-radius,point.y-radius,radius*2,radius*2)}else{map.arc(point.x,point.y,radius,0,Math.PI*2)}map.fill();map.stroke()}
    game.miniMapTerrainCache={key:cacheKey,canvas:layer,model,transform}
   }
-  c.drawImage(game.miniMapTerrainCache.canvas,0,0);const playerPoint=projectMiniMapPoint(transform,{x:Number(game.player.x)+.5,y:Number(game.player.y)+.5}),playerRadius=Math.max(3,transform.scale*1.05);c.save();c.fillStyle="#79ff9d";c.strokeStyle="#fff3bd";c.lineWidth=Math.max(1.5,playerRadius*.38);c.beginPath();c.arc(playerPoint.x,playerPoint.y,playerRadius,0,Math.PI*2);c.fill();c.stroke();const pursuit=w.campaignHeroPursuit;if(pursuit&&pursuit.sectionId===w.currentSectionId){const heroPoint=projectMiniMapPoint(transform,{x:Number(pursuit.x)+.5,y:Number(pursuit.y)+.5}),radius=Math.max(3.5,transform.scale*1.25);c.fillStyle="#e4475e";c.strokeStyle="#ffe2a0";c.beginPath();c.arc(heroPoint.x,heroPoint.y,radius,0,Math.PI*2);c.fill();c.stroke()}c.restore();m.setAttribute("aria-label",`ミニマップ：訪問 ${model.visitedIds.length}/${w.sections.length}区画、隣接する未探索 ${model.frontierIds.length}区画${pursuit?"、勇者追跡中":""}`);return
+  c.drawImage(game.miniMapTerrainCache.canvas,0,0);const playerPoint=projectMiniMapPoint(transform,{x:Number(game.player.x)+.5,y:Number(game.player.y)+.5}),playerRadius=Math.max(2.5,Math.min(5,transform.scale*.62));c.save();c.fillStyle="#72efa0";c.strokeStyle="#fff0b5";c.lineWidth=Math.max(1,playerRadius*.34);c.beginPath();c.arc(playerPoint.x,playerPoint.y,playerRadius,0,Math.PI*2);c.fill();c.stroke();const pursuit=w.campaignHeroPursuit;if(pursuit&&pursuit.sectionId===w.currentSectionId){const heroPoint=projectMiniMapPoint(transform,{x:Number(pursuit.x)+.5,y:Number(pursuit.y)+.5}),radius=Math.max(3.5,transform.scale*1.25);c.fillStyle="#e4475e";c.strokeStyle="#ffe2a0";c.beginPath();c.arc(heroPoint.x,heroPoint.y,radius,0,Math.PI*2);c.fill();c.stroke()}c.restore();m.setAttribute("aria-label",`ミニマップ：訪問 ${model.visitedIds.length}/${w.sections.length}区画、隣接する未探索 ${model.frontierIds.length}区画${pursuit?"、勇者追跡中":""}`);return
  }
  const cell=Math.min(m.width/w.cols,m.height/w.rows),ox=(m.width-w.cols*cell)/2,oy=(m.height-w.rows*cell)/2;
  const discovered=new Set(Array.isArray(w.discoveredCells)?w.discoveredCells:[]);

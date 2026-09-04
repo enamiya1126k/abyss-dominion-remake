@@ -1,0 +1,143 @@
+/* Build 321: phone-safe Home, compact status, readable enemy cards and story migration. */
+
+/* HOME ------------------------------------------------------------------- */
+.home-command-screen>.home-server-status{
+  top:3px!important;
+  left:50%!important;
+  right:auto!important;
+  z-index:42!important;
+  min-height:18px!important;
+  padding:3px 7px!important;
+  gap:4px!important;
+  transform:translateX(-50%)!important;
+  border-color:#665a45aa!important;
+  background:#08090bd9!important;
+  box-shadow:0 2px 7px #0008!important;
+  font-size:8.5px!important;
+  line-height:1!important;
+  letter-spacing:.01em!important;
+}
+.home-command-screen>.home-server-status>i{width:5px!important;height:5px!important}
+
+@media(max-width:720px){
+  .home-command-screen>.home-title-card{
+    min-height:104px!important;
+    max-height:104px!important;
+    padding:10px 10px 8px!important;
+    overflow:hidden!important;
+  }
+  .home-title-card>h1,
+  .home-invasion-meter>b{
+    overflow:visible!important;
+    text-overflow:clip!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+  }
+  .home-title-card>small{
+    display:block!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+    white-space:nowrap!important;
+    font-size:clamp(7px,1.75vw,9px)!important;
+    letter-spacing:0!important;
+  }
+  .home-title-card>h1{
+    display:block!important;
+    margin-block:6px 4px!important;
+    font-size:clamp(13px,3.55vw,18px)!important;
+    line-height:1.08!important;
+  }
+  .home-invasion-meter{
+    display:grid!important;
+    grid-template-columns:minmax(30px,54px) minmax(0,1fr)!important;
+    align-items:center!important;
+    gap:5px!important;
+  }
+  .home-invasion-meter>b{
+    min-width:0!important;
+    font-size:clamp(7px,1.85vw,9px)!important;
+    line-height:1.12!important;
+  }
+  .home-command-screen>.home-record-card{top:120px!important}
+  .home-command-screen>.home-left-menu{top:206px!important}
+}
+@media(max-width:420px) and (max-height:760px){
+  .home-command-screen>.home-title-card{min-height:100px!important;max-height:100px!important}
+  .home-command-screen>.home-record-card{top:112px!important}
+  .home-command-screen>.home-left-menu{top:194px!important}
+}
+
+/* ENEMY HUD -------------------------------------------------------------- */
+.enemy-info .enemy-name{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  min-height:18px!important;
+}
+.enemy-info .enemy-card-name,
+.enemy-info .enemy-mini-stats{display:none!important}
+.enemy-info .enemy-card-meta{margin-left:auto!important}
+
+/* SECTION PASSAGE -------------------------------------------------------- */
+.explore-stage .section-passage-fade{
+  background:
+    linear-gradient(90deg,#000 0 9%,transparent 27% 73%,#000 91% 100%),
+    radial-gradient(ellipse at 50% 46%,rgba(72,58,43,.36),rgba(7,7,10,.9) 62%,#000 100%)!important;
+  animation:build321-passage-threshold 720ms ease-in-out both!important;
+}
+.explore-stage .section-passage-fade::before,
+.explore-stage .section-passage-fade::after{
+  content:"";
+  position:absolute;
+  left:12%;
+  right:12%;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#c09a58aa,transparent);
+}
+.explore-stage .section-passage-fade::before{top:33%}
+.explore-stage .section-passage-fade::after{bottom:33%}
+.explore-stage .section-passage-fade span{
+  display:grid!important;
+  gap:6px!important;
+  min-width:min(58%,260px)!important;
+  padding:11px 18px!important;
+  border-block:1px solid #9a784e88!important;
+  color:#e9dbc0!important;
+  text-align:center!important;
+  opacity:0;
+  animation:build321-passage-label 720ms ease-in-out both!important;
+}
+.explore-stage .section-passage-fade span small{color:#9f8a69;font:700 7px/1 sans-serif;letter-spacing:.26em}
+.explore-stage .section-passage-fade span b{font:800 clamp(11px,2.7vw,14px)/1.15 "Yu Mincho",serif;letter-spacing:.1em}
+@keyframes build321-passage-threshold{0%{opacity:0}18%,48%{opacity:1}100%{opacity:0}}
+@keyframes build321-passage-label{0%,12%{opacity:0;transform:translateY(3px)}25%,55%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-3px)}}
+
+/* LEGACY CAMPAIGN NOTICE ------------------------------------------------- */
+.legacy-campaign-reset-modal{z-index:260!important;background:#030207f2!important}
+.legacy-campaign-reset-modal .game-modal-card{border-color:#b58a43!important;box-shadow:0 0 0 1px #e6c56a33,inset 0 0 42px #8e3d2318,0 16px 70px #000!important}
+.legacy-campaign-reset-copy{display:grid;gap:11px;text-align:left}
+.legacy-campaign-reset-copy>small{color:#e1b85e;font:800 9px/1 sans-serif;letter-spacing:.22em}
+.legacy-campaign-reset-copy>h3{margin:0;color:#fff0c7;font:900 clamp(19px,5vw,27px)/1.25 "Yu Mincho",serif}
+.legacy-campaign-reset-copy>p{margin:0;color:#d2cad0;font-weight:700;line-height:1.7}
+.legacy-campaign-reset-copy>strong{padding:11px;border-left:3px solid #e2a344;background:#5b321c3d;color:#ffdca3;line-height:1.55}
+.legacy-campaign-reset-copy>[data-legacy-campaign-reset]{
+  min-height:56px;
+  border:1px solid #dfae55;
+  background:linear-gradient(#8b541d,#53300e);
+  color:#fff0c8;
+  font:900 16px/1.25 "Yu Mincho",serif;
+  box-shadow:inset 0 0 0 1px #ffe6a029,0 5px 18px #0007;
+}
+.legacy-campaign-reset-copy>em{color:#ab9fa3;font:600 9px/1.55 sans-serif;font-style:normal}
+.legacy-campaign-reset-modal [data-modal-primary]{min-height:36px!important;background:#0a090d!important;border-color:#514b55!important;color:#afa8b2!important;font-size:11px!important}
+
+/* STORY ----------------------------------------------------------------- */
+body:has(.campaign-story-modal) .context-guide{display:none!important}
+.campaign-story-modal [data-story-character-id="sairan"] .campaign-story-character-art,
+.campaign-story-modal [data-story-character-id="lionel"] .campaign-story-character-art{image-rendering:auto!important}
+
+@media(prefers-reduced-motion:reduce){
+  .explore-stage .section-passage-fade,
+  .explore-stage .section-passage-fade span{animation-duration:360ms!important}
+}

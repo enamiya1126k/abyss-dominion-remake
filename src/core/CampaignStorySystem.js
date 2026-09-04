@@ -11,10 +11,10 @@ const HERO_ID_ALIASES=Object.freeze({
  rion:"myth_rion","りおん":"myth_rion",myth_rion:"myth_rion"
 });
 
-const portrait=(speciesId,folder)=>Object.freeze({type:"monster-sprite",speciesId,asset:`./assets/monsters/${folder}/idle1.png?v=3.1.0-build310`});
+const portrait=(speciesId,folder,asset=null)=>Object.freeze({type:"monster-sprite",speciesId,asset:asset??`./assets/monsters/${folder}/idle1.png?v=3.1.0-build310`});
 export const CAMPAIGN_STORY_CHARACTERS=Object.freeze({
- sairan:Object.freeze({id:"sairan",name:"魔王サイラーン",title:"万魔の王",storyOnly:true,battleEligible:false,portrait:portrait("abyss_dominion","210_abyss_dominion")}),
- lionel:Object.freeze({id:"lionel",name:"リオネル",title:"魔界随一の預言者",storyOnly:true,battleEligible:false,portrait:portrait("space_archon","196_star_oracle_noctiel")}),
+ sairan:Object.freeze({id:"sairan",name:"魔王サイラーン",title:"万魔の王",storyOnly:true,recurringStoryCharacter:true,battleEligible:false,portrait:portrait("campaign_sairan","campaign_sairan","./assets/story/campaign-sairan.png?v=3.1.2-build321")}),
+ lionel:Object.freeze({id:"lionel",name:"預言者リオネル",title:"魔界随一の預言者",storyOnly:true,recurringStoryCharacter:true,battleEligible:false,portrait:portrait("campaign_lionel","campaign_lionel","./assets/story/campaign-lionel.png?v=3.1.2-build321")}),
  myth_enami:Object.freeze({id:"myth_enami",name:"えなみ",title:"共感と論理の勇者",portrait:portrait("myth_enami","myth_enami")}),
  myth_yori:Object.freeze({id:"myth_yori",name:"より",title:"微笑む蒼拳",portrait:portrait("myth_yori","myth_yori")}),
  myth_hide:Object.freeze({id:"myth_hide",name:"ひで",title:"緻密なる魔導士",portrait:portrait("myth_hide","myth_hide")}),
@@ -83,8 +83,9 @@ export function campaignHeroFinalVoiceLines(moment,heroIds=HERO_PARTY_IDS){
 }
 
 export const CAMPAIGN_STORY_POLICY=Object.freeze({
- sairan:Object.freeze({storyOnly:true,battleEligible:false,finalBattleParticipant:false}),
- finalBattle:Object.freeze({partySize:4,heroIds:HERO_PARTY_IDS,allowSairan:false})
+ sairan:Object.freeze({storyOnly:true,recurring:true,battleEligible:false,finalBattleParticipant:false,summonEligible:false,codexEligible:false}),
+ lionel:Object.freeze({storyOnly:true,recurring:true,battleEligible:false,finalBattleParticipant:false,summonEligible:false,codexEligible:false}),
+ finalBattle:Object.freeze({partySize:4,heroIds:HERO_PARTY_IDS,allowSairan:false,allowLionel:false})
 });
 
 const line=(speakerId,text,tone="normal")=>Object.freeze({speakerId,text,tone});

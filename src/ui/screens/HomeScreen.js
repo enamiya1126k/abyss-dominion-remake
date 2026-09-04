@@ -1,4 +1,4 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.1-build320";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.2-build321";
 import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.1-build311";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.1-build311";
 import{SPECIES}from"../../data/species.js?v=3.1.1-build311";
@@ -8,7 +8,7 @@ import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.1-build311"
 import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=3.1.1-build317";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build311";
 import{attributeCycleVisual,attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.1-build311";
+import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.2-build321";
 import{campaignDayForFloor,campaignHeroAdvance}from"../../core/Campaign100System.js?v=3.1.1-build311";
 import{normalizeCampaignHeroInvasion}from"../../core/CampaignHeroEncounterSystem.js?v=3.1.1-build320";
 import{normalizeCampaignReincarnationState,campaignReincarnationDifficultyMultiplier,campaignReincarnationFloorLimit}from"../../core/CampaignReincarnationSystem.js?v=3.1.1-build320";

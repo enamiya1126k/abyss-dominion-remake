@@ -197,9 +197,12 @@ export function normalizeMagicCircleState(state){
  state.magicCircles={...source,unlocked,instances,goldSpent,version:MAGIC_CIRCLE_STATE_VERSION};
  rebuildOwnedCompatibility(state.magicCircles);
 
- // 出撃枠の左から優先し、各現物を必ず1人だけへ割り当てる。
+ // 魔法陣は出撃パーティー専用。旧版で控えへ残った装着情報もここで
+ // 自動修復し、一覧へ名前だけが残り続ける状態を防ぐ。
  const byId=new Map((state.monsters??[]).map(monster=>[monster.id,monster]));
- const partyIds=new Set(state.party??[]),ordered=[...(state.party??[]).map(id=>byId.get(id)).filter(Boolean),...(state.monsters??[]).filter(monster=>!partyIds.has(monster.id))],assigned=new Set(),byInstance=new Map(instances.map(item=>[item.instanceId,item]));
+ const partyIds=new Set((state.party??[]).filter(id=>byId.has(id)));
+ for(const monster of state.monsters??[])if(!partyIds.has(monster.id)){monster.magicCircleId="none";monster.magicCircleInstanceId=null}
+ const ordered=[...(state.party??[]).map(id=>byId.get(id)).filter(Boolean)],assigned=new Set(),byInstance=new Map(instances.map(item=>[item.instanceId,item]));
  for(const monster of ordered){
   let instance=byInstance.get(monster.magicCircleInstanceId);
   const legacyId=monster.magicCircleId;
