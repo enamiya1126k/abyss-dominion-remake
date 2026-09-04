@@ -1,4 +1,4 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.7-build326";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.8-build327";
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
 import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.1-build311";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.1-build311";

@@ -1,5 +1,5 @@
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.7-build326";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.7-build326";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.8-build327";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.8-build327";
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.1-build311";
 import{SPECIES}from"./data/species.js?v=3.1.1-build314";
@@ -8,7 +8,7 @@ import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/Expl
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.7-build326";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.8-build327";
 import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.7-build326";
 import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.7-build326";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";

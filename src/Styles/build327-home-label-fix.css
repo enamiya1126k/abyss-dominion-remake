@@ -1,0 +1,20 @@
+/* Build327: keep the Home invasion location readable after adding the detail route. */
+@media(max-width:720px){
+ .home-title-card[data-open-campaign-intel] .home-invasion-meter{
+  grid-template-columns:minmax(28px,46px) minmax(0,1fr)!important;
+  gap:4px!important;
+ }
+ .home-title-card[data-open-campaign-intel] .home-invasion-meter>b{
+  min-width:0!important;
+  padding-right:0!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+  white-space:nowrap!important;
+  overflow-wrap:normal!important;
+  word-break:keep-all!important;
+  font-size:clamp(6.5px,1.7vw,8.5px)!important;
+  letter-spacing:-.025em!important;
+ }
+ .home-title-card[data-open-campaign-intel] .home-intel-cue{display:none!important}
+}
+@media(max-width:360px){.home-title-card[data-open-campaign-intel] .home-invasion-meter>b{font-size:6.3px!important}}
