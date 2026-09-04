@@ -5,10 +5,10 @@ const skill=(id,name,{level=1,mp=8,type="attack",power=1.5,target="敵単体",de
 
 function mythic({id,name,element,role,maxMp,stats,skills}){
   return Object.freeze({
-    id,name,emoji:"✦",element,race:"human",role,rarity:"LR",minFloor:Number.MAX_SAFE_INTEGER,
+    id,name,emoji:"✦",element,race:"human",role,rarity:"神話",minFloor:Number.MAX_SAFE_INTEGER,
     maxMp,captureRate:0,fieldEncounter:false,serialOnly:true,gachaExcluded:true,
     acquisition:["専用シリアルコード限定"],growth:{hp:1,atk:1,def:1,spd:1},baseStats:stats,
-    rankNames:[name,`${name}・覚醒`,`${name}・LR`,`${name}・極`],skills:[skills[0]],authoredSkills:skills,
+    rankNames:[name,`${name}・覚醒`,`${name}・神話`,`${name}・極`],skills:[skills[0]],authoredSkills:skills,
     tags:["mythicSerial","invincibleAlliance"]
   });
 }

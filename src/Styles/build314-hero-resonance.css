@@ -1,0 +1,4 @@
+.invincible-alliance-status.resonance-2{--alliance-accent:#66c9ff;filter:saturate(.82)}
+.invincible-alliance-status.resonance-3{--alliance-accent:#c38cff;filter:saturate(.94)}
+.invincible-alliance-status.resonance-4{--alliance-accent:#ffd76a;box-shadow:0 0 18px color-mix(in srgb,var(--alliance-accent) 50%,transparent)}
+.invincible-alliance-status small{letter-spacing:.035em}

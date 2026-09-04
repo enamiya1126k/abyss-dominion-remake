@@ -7,6 +7,7 @@ import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.1-build311";
 import{ATTRIBUTE_MATCHUP_MULTIPLIERS,attributesEffectiveAgainst,attributesIneffectiveAgainst}from"../../data/attributes.js?v=3.1.1-build311";
+import{heroResonanceProfile}from"../../core/HeroResonanceSystem.js?v=3.1.1-build314";
 
 function battleInteger(value){return Math.round(Number(value)||0).toLocaleString("ja-JP")}
 function battleParty(battle){return(Array.isArray(battle?.party)?battle.party:[]).filter(monster=>monster&&typeof monster==="object"&&monster.id&&monster.speciesId)}
@@ -22,12 +23,11 @@ function renderTurnOrder(battle){
 }
 function growthText(unit){const plus=Math.max(0,Number(unit?.plus??unit?.sourcePlus)||0);return`+${plus}`}
 const BATTLE_ROLE_LABELS={balanced:"万能型",burst:"高火力型",controller:"妨害型",support:"支援型",speed:"高速型",tank:"防御型",healer:"回復型",magic:"魔法型",physical:"物理型",debuffer:"弱体型",poison:"毒撃型",burner:"炎撃型"};
-const BATTLE_EFFECT_LABELS={atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",evasionDown:"回避↓",accuracyDown:"命中↓",stun:"行動不能",vulnerable:"被ダメージ増加",taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",evasionUp:"回避↑",accuracyUp:"命中↑",regen:"再生",lifeSteal:"吸収",magicToPhysical:"魔力→物理"};
+const BATTLE_EFFECT_LABELS={atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",evasionDown:"回避↓",accuracyDown:"命中↓",healDown:"回復↓",mpRecoveryDown:"MP回復↓",stun:"行動不能",vulnerable:"被ダメージ増加",taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",evasionUp:"回避↑",accuracyUp:"命中↑",regen:"再生",lifeSteal:"吸収",magicToPhysical:"魔力→物理"};
 function battleRoleLabel(role){return BATTLE_ROLE_LABELS[String(role??"balanced").toLowerCase()]??String(role??"万能型")}
 function battleEffectLabel(effect){return BATTLE_EFFECT_LABELS[effect?.kind]??effect?.name??String(effect?.kind??"効果")}
 function battleStatusLabel(status){const labels={poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖"};return labels[status?.id]??status?.name??statusLabel(status)}
 function remainingTurns(turns,persistent=false){const value=Math.max(0,Number(turns)||0);return value?` 残${value}`:persistent?"・持続":""}
-const INVINCIBLE_ALLIANCE_IDS=Object.freeze(["myth_enami","myth_rion","myth_yori","myth_hide"]);
 const COMBAT_RANK_POWER=Object.freeze({UR:4,LR:5,"神話":6,"深淵":7,"十神":8});
 function combatRank(unit,species={}){
  const value=unit?.endgameFaction==="tenGod"||unit?.faction==="tenGod"?"十神":unit?.endgameFaction==="abyss"||unit?.faction==="abyss"?"深淵":unit?.summonTier??unit?.summonRarity??unit?.combatRarity??species.rarity??null;
@@ -43,7 +43,6 @@ function renderBiomeBadge(environment,{collapsed=false}={}){
  const primary=environment.primary??environment.favorable?.[0]??"neutral",effective=attributesEffectiveAgainst(primary),ineffective=attributesIneffectiveAgainst(primary),strong=ATTRIBUTE_MATCHUP_MULTIPLIERS.strong.toFixed(2),weak=ATTRIBUTE_MATCHUP_MULTIPLIERS.weak.toFixed(2),name=htmlText(environment.name),state=collapsed?"collapsed":"expanded";
  return`<button type="button" class="battle-biome-badge compact ${collapsed?"is-collapsed":"is-expanded"}" data-battle-biome-toggle data-battle-biome-state="${state}" aria-expanded="${!collapsed}" aria-label="${name}。正式な属性相性を${collapsed?"開く":"閉じる"}" style="--biome-accent:${htmlText(environment.accent??"#9d89bf")}"><b class="battle-biome-summary">${attributeVisual(primary,{className:"battle-biome-primary",label:"階層属性"})}<span>${name}</span><em class="battle-biome-toggle-cue" aria-hidden="true">${collapsed?"＋":"−"}</em></b><small data-battle-biome-details aria-hidden="${collapsed}" ${collapsed?"hidden":""}><span class="favorable"><em>攻撃有利</em>${effective.length?biomeAttributeMarks(effective,"この区画へ有利な属性"):'<b class="no-attribute">—</b>'}<strong>×${strong}</strong></span><i aria-hidden="true"></i><span class="adverse"><em>攻撃不利</em>${ineffective.length?biomeAttributeMarks(ineffective,"この区画へ不利な属性"):'<b class="no-attribute">—</b>'}<strong>×${weak}</strong></span></small></button>`;
 }
-function invincibleAllianceActive(battle){const ids=new Set(battleParty(battle).filter(monster=>Number(monster.currentHp)>0).map(monster=>monster.speciesId));return INVINCIBLE_ALLIANCE_IDS.every(id=>ids.has(id))}
 function hpBar(battle,id,rate,label,tone){
  const normalized=Math.max(0,Math.min(100,Number(rate)||0)),trail=battle.hpTrails?.[id],elapsed=trail?Math.max(0,Date.now()-(Number(trail.startedAt)||0)):Infinity,delay=Math.max(0,Number(trail?.delay)||0),duration=Math.max(1,Number(trail?.duration)||1400),from=Math.max(normalized,Number(trail?.from)||normalized),active=Boolean(trail&&elapsed<delay+duration&&from>normalized),animationDelay=elapsed<delay?delay-elapsed:-Math.min(elapsed-delay,duration);
  const timing=active?` style="--hp-from:${from.toFixed(3)}%;--hp-to:${normalized.toFixed(3)}%;--hp-trail-duration:${duration}ms;--hp-trail-delay:${animationDelay}ms"`:"";
@@ -164,7 +163,7 @@ export function BattleScreen(battle,inventory,settings,floor=1){
  const timingStyle=`--battle-lunge:${scaled(220)};--battle-skill-lunge:${scaled(300)};--battle-hit:${scaled(260)};--battle-critical-hit:${scaled(300)};--battle-defeat:${scaled(500)};--battle-float:1500ms;--battle-banner-in:${scaled(280)};--battle-banner-out:${scaled(220)};--battle-flash:${scaled(380)};--battle-particle:${Math.max(560,Math.round(920/speed))}ms`;
  const theme=String(battle.battleTheme??"default").replace(/[^a-z0-9-]/gi,"");
  const biomeBadge=battle.biomePanelCollapsed?renderBiomeBadge(battle.biomeBattle,{collapsed:true}):renderBiomeBadge(battle.biomeBattle);
- const invincibleBadge=invincibleAllianceActive(battle)?'<div class="invincible-alliance-status" role="status" aria-label="無敵・四LR連携が発動中"><span>無敵</span><small>四LR連携・常時発動</small></div>':"";
+ const heroResonance=heroResonanceProfile(party),invincibleBadge=heroResonance.count>=2?`<div class="invincible-alliance-status resonance-${heroResonance.count}" role="status" aria-label="${heroResonance.name}・${heroResonance.count}神話共鳴が発動中"><span>${heroResonance.name}</span><small>${heroResonance.count}神話共鳴・最大${heroResonance.totalActions}回発動</small></div>`:"";
  const onlineExit=battle.onlineMode==="explore"?'<button type="button" data-online-return>帰還</button>':'<button type="button" disabled>逃走不可</button>';
  const onlineAuto=battle.onlineAutoAvailable?`<button type="button" data-online-battle-auto="${htmlText(battle.onlineMode)}" aria-pressed="${Boolean(battle.auto)}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button>`:battle.onlineAutoUnsupported?'<button type="button" disabled class="online-sync-state" title="サーバー197更新後に利用できます"><span>自動</span><b>要更新</b></button>':'<button type="button" disabled class="enabled online-sync-state"><span>同期</span><b>有効</b></button>';
  const offlineExit=battle.specialBattle?`<button id="escapeBattle" type="button" ${battle.escapePending?"disabled":""}>${battle.escapePending?"撤退待ち":"撤退"}</button>`:`<button id="escapeBattle" type="button" ${battle.escapePending?"disabled":""}>${battle.escapePending?"逃走待ち":"逃げる"}</button>`;

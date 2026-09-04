@@ -1,8 +1,10 @@
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.1-build311";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.1-build311";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.1-build314";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.1-build314";
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.1-build311";
-import{SPECIES}from"./data/species.js?v=3.1.1-build311";
+import{SPECIES}from"./data/species.js?v=3.1.1-build314";
+import{heroResonanceMembers,heroResonanceProfile,isHeroResonanceSpecies,scaleHeroResonanceSkill,heroPersonalPressure,HERO_INVINCIBLE_PRESSURE}from"./core/HeroResonanceSystem.js?v=3.1.1-build314";
+import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/ExplorePerformanceSystem.js?v=3.1.1-build315";
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
@@ -18,7 +20,7 @@ import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.1-build311";
 import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.1-build311";
 import{CampaignFinalFloorScreen}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.1-build311";
 import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.1-build311";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.1-build311";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.1-build314";
 import{Modal}from"./ui/components/Modal.js?v=3.1.1-build311";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=3.1.1-build311";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=3.1.1-build311";
@@ -76,7 +78,7 @@ import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=3.1.1-build311";
 import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=3.1.1-build311";
 import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=3.1.1-build311";
 import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,casinoBetLimit,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=3.1.1-build311";
-import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=3.1.1-build311";
+import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=3.1.1-build314";
 import{runConfirmedFullReset}from"./core/FullResetSystem.js?v=3.1.1-build311";
 import{NOTICE_DEFINITIONS,DAILY_NOTICE_GIFT,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount,pendingNoticeRewards,claimNoticeReward,enqueueNoticeReward}from"./core/NoticeSystem.js?v=3.1.1-build311";
 import{COMPLETE_MONSTER_CODEX,codexCollectionSummary,syncCollectionRewardInbox,rewardDescription}from"./core/CollectionRewardSystem.js?v=3.1.1-build311";
@@ -658,7 +660,7 @@ function campaignHeroEncounterCycle(encounterId){const match=String(encounterId?
 function campaignHeroVoiceQuoteHtml(heroId,moment,options={}){const text=campaignHeroVoiceLine(heroId,moment,options);return text?`<p class="campaign-hero-voice"><b>${escapeAttribute(campaignHeroName(heroId))}</b><span>「${escapeAttribute(text)}」</span></p>`:""}
 function campaignHeroFinalVoiceHtml(moment,heroIds){const lines=campaignHeroFinalVoiceLines(moment,heroIds);return lines.length?`<div class="campaign-hero-final-voices">${lines.map(entry=>campaignHeroVoiceQuoteHtml(entry.heroId,moment)).join("")}</div>`:""}
 function campaignHeroBattleEntry(heroId,{encounterId=null,carryHpRate=1,final=false}={}){
- return prepareEnemyEntry({speciesId:heroId,visualSpeciesId:heroId,nameOverride:campaignHeroName(heroId),level:CAMPAIGN_HERO_PROFILES[heroId]?.fixedLevel??1000,boss:true,uncapturable:true,noItemDrops:true,statMultiplier:1,fixedTrialScaling:true,carryHpRate,campaignHeroId:heroId,campaignHeroEncounterId:encounterId,campaignHeroFinal:Boolean(final),enemyLoadoutVersion:4,equipped:false,enemyGear:[],enemyMagicCircle:null},CAMPAIGN_MAX_FLOOR,{economyFloor:campaignFloorToLegacyFloor(CAMPAIGN_MAX_FLOOR)})
+ return prepareEnemyEntry({speciesId:heroId,visualSpeciesId:heroId,nameOverride:campaignHeroName(heroId),combatRarity:"神話",level:CAMPAIGN_HERO_PROFILES[heroId]?.fixedLevel??1000,boss:true,uncapturable:true,noItemDrops:true,statMultiplier:1,fixedTrialScaling:true,carryHpRate,campaignHeroId:heroId,campaignHeroEncounterId:encounterId,campaignHeroFinal:Boolean(final),enemyLoadoutVersion:4,equipped:false,enemyGear:[],enemyMagicCircle:null},CAMPAIGN_MAX_FLOOR,{economyFloor:campaignFloorToLegacyFloor(CAMPAIGN_MAX_FLOOR)})
 }
 function campaignHeroEncounter({heroId=null,encounterId=null,final=false}={}){
  const ledger=campaignHeroLedger(),entries=final?campaignRemainingHeroes(ledger):heroId?[{heroId,carryHpRate:ledger.heroes?.[heroId]?.remainingHpRate??1}]:[];
@@ -2463,13 +2465,13 @@ function bindOnlineExploreInput(canvas,onDestination){
  canvas.onpointercancel=canvas.onlostpointercapture=finish;
 }
 function onlineExploreLoop(now){
- if(!game?.online||!game.running)return;const dt=Math.min(.05,(now-game.last)/1000||0);game.last=now;
+ if(!game?.online||!game.running)return;game.performanceProfile??=currentExplorePerformanceProfile();const dt=Math.min(.05,(now-game.last)/1000||0);game.last=now;
  for(const entity of game.onlineEntities.values())entity.move(dt,onlineMotionSpeed(entity));
- game.camera.follow(game.player.rx*TILE,game.player.ry*TILE);game.camera.clamp(game.world);draw();requestAnimationFrame(onlineExploreLoop)
+ game.camera.follow(game.player.rx*TILE,game.player.ry*TILE);game.camera.clamp(game.world);if(shouldPaintExploreFrame(game,now,game.performanceProfile?.frameInterval??1000/30))draw();requestAnimationFrame(onlineExploreLoop)
 }
 const onlineExploreCameraStates=new Map();
 function mountOnlineExploreCanvas(room,selfId,onDestination,chatBubbles=[],pings=[],socialBubbles=[]){
- const canvas=document.querySelector("[data-online-dungeon-canvas]");if(!canvas||!room?.expedition)return;stopGame();const rect=canvas.getBoundingClientRect(),density=Math.min(devicePixelRatio||1,2);canvas.width=Math.max(1,Math.round(rect.width*density));canvas.height=Math.max(1,Math.round(rect.height*density));const mini=document.getElementById("miniMap");if(mini){mini.width=132*density;mini.height=132*density}
+ const canvas=document.querySelector("[data-online-dungeon-canvas]");if(!canvas||!room?.expedition)return;stopGame();const rect=canvas.getBoundingClientRect(),performanceProfile=currentExplorePerformanceProfile(),density=performanceProfile.pixelRatio;canvas.width=Math.max(1,Math.round(rect.width*density));canvas.height=Math.max(1,Math.round(rect.height*density));const mini=document.getElementById("miniMap");if(mini){mini.width=132*density;mini.height=132*density}
  const viewKey=`${room.expedition.id}:${room.expedition.floor}:${room.expedition.coop?.rare?.realmActive?"realm":"world"}`;game={online:true,onlineViewKey:viewKey,onlineSelfId:selfId,onlineFloor:room.expedition.floor,onlineMembers:[],onlineEntities:new Map(),onlineChatBubbles:[...chatBubbles],onlinePings:[...pings],onlineSocialBubbles:[...socialBubbles],world:onlineExploreWorld(room),player:null,camera:null,canvas,ctx:canvas.getContext("2d"),paused:false,running:true,input:createInputState(),last:performance.now()};syncOnlineExploreMembers(room,selfId,{snap:true});game.camera=new Camera(canvas);const savedView=onlineExploreCameraStates.get(viewKey);if(savedView){game.camera.x=savedView.x;game.camera.y=savedView.y;game.camera.z=savedView.z;game.camera.ox=savedView.ox;game.camera.oy=savedView.oy;game.camera.manual=savedView.manual}else game.camera.reset(game.player.x*TILE,game.player.y*TILE);game.camera.clamp(game.world);bindOnlineExploreInput(canvas,onDestination);requestAnimationFrame(()=>bindMovableMapToggle());requestAnimationFrame(onlineExploreLoop)
 }
 function updateOnlineExploreCanvas(room,selfId,options={}){if(!game?.online)return;syncOnlineExploreMembers(room,selfId);game.world=onlineExploreWorld(room);if(Array.isArray(options.chatBubbles))game.onlineChatBubbles=[...options.chatBubbles];if(Array.isArray(options.pings))game.onlinePings=[...options.pings];if(Array.isArray(options.socialBubbles))game.onlineSocialBubbles=[...options.socialBubbles];if(options.center){game.camera.reset(game.player.rx*TILE,game.player.ry*TILE);game.camera.clamp(game.world)}}
@@ -3430,7 +3432,7 @@ function openManualReturnConfirmation(){
  };
 }
 function syncMiniMapBackingStore(map=document.getElementById("miniMap")){
- if(!map)return false;const rect=map.getBoundingClientRect(),style=getComputedStyle(map),cssWidth=Math.max(1,rect.width||parseFloat(style.width)||172),cssHeight=Math.max(1,rect.height||parseFloat(style.height)||cssWidth),density=Math.min(devicePixelRatio||1,2),width=Math.max(1,Math.round(cssWidth*density)),height=Math.max(1,Math.round(cssHeight*density));
+ if(!map)return false;const rect=map.getBoundingClientRect(),style=getComputedStyle(map),cssWidth=Math.max(1,rect.width||parseFloat(style.width)||172),cssHeight=Math.max(1,rect.height||parseFloat(style.height)||cssWidth),density=currentExplorePerformanceProfile().pixelRatio,width=Math.max(1,Math.round(cssWidth*density)),height=Math.max(1,Math.round(cssHeight*density));
  if(map.width===width&&map.height===height)return false;map.width=width;map.height=height;return true
 }
 let campaignStoryQueueTimer=null,campaignStoryPresenting=false,campaignStoryRequestedFloor=null,campaignStoryCompletionCallback=null;
@@ -3470,12 +3472,13 @@ function bindExplore(){
  explorationTexture("floor");explorationTexture("wall");explorationTexture("stairs");explorationTexture("props");
  if(save.state.player.currentFloor>=70&&!save.state.flags.secondWorldEntered){markSecondWorldEntered(save.state);save.save()}
  animateExploreCombatPower();
- const canvas=document.getElementById("gameCanvas"),r=canvas.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);
+ const canvas=document.getElementById("gameCanvas"),r=canvas.getBoundingClientRect(),performanceProfile=currentExplorePerformanceProfile(),d=performanceProfile.pixelRatio;
  canvas.width=r.width*d;canvas.height=r.height*d;
  const mini=document.getElementById("miniMap");syncMiniMapBackingStore(mini);
  if(!snapshot)snapshot=hydrateExpeditionSnapshot(save.state.expeditionSnapshot);
  game=snapshot??{world:maze(),player:null,camera:null,paused:false,running:true,input:createInputState()};
  ensureExploreDecorations(game.world);ensureFirstTutorialPickup(game.world);
+ game.performanceProfile=performanceProfile;game.lastPaintAt=0;game.lastMiniMapPaintAt=0;game.lastTutorialMarkerAt=0;
  game.input=createInputState();game.player??=new Entity(game.world.start.x,game.world.start.y);game.world.encountering=false;game.player.path=[];game.player.p=0;game.partyTrail=Array.isArray(game.partyTrail)&&game.partyTrail.length?game.partyTrail:[{x:game.player.rx??game.player.x,y:game.player.ry??game.player.y}];
  if(!Number.isFinite(game.player.x)||!Number.isFinite(game.player.y)){game.player.x=game.world.start.x;game.player.y=game.world.start.y}
  game.player.rx=game.player.x;game.player.ry=game.player.y;game.camera=new Camera(canvas);
@@ -3729,7 +3732,7 @@ function loop(now){
  const dt=Math.min(.05,(now-game.last)/1000||0);game.last=now;
  if(!game.paused)update(dt);
  if(!game?.running)return;
- draw();
+ if(shouldPaintExploreFrame(game,now,game.performanceProfile?.frameInterval??1000/30))draw();
  requestAnimationFrame(loop)
 }
 async function beginEncounter(enemyOverride=null,encounterOptions={}){
@@ -4133,7 +4136,7 @@ function drawExploreSoftAura(position,color,radius=2.6,alpha=.1){
  drawExploreGlow(position,color,radius,alpha)
 }
 function drawExploreParticles(position,color,count=7,phase=0,radius=.72){
- const p=game.camera.world(position.x*TILE,position.y*TILE),tileSize=TILE*game.camera.z,frame=Math.floor(performance.now()/280)%3;
+ count=Math.max(1,Math.ceil(count*(game.performanceProfile?.particleScale??1)));const p=game.camera.world(position.x*TILE,position.y*TILE),tileSize=TILE*game.camera.z,frame=Math.floor(performance.now()/280)%3;
  game.ctx.save();game.ctx.globalCompositeOperation="screen";
  for(let index=0;index<count;index++){
   const angle=(index/count)*Math.PI*2+phase*.013,drift=(.25+(index%4)*.1)*radius;
@@ -4161,9 +4164,9 @@ function activeExploreSection(world=game?.world){return(world?.sections??[]).fin
 function visibleExploreObject(world,object){return!world?.sections?.length||campaignObjectSection(world,object)===world.currentSectionId}
 function sectionRenderContains(world,x,y,padding=1){const bounds=sectionBounds(world,world.currentSectionId,padding);return x>=bounds.minX&&x<=bounds.maxX&&y>=bounds.minY&&y<=bounds.maxY}
 function drawExploreRaisedWalls(world,theme,wallTexture){
- const c=game.ctx,size=TILE*game.camera.z,depth=size*Math.max(.22,Math.min(.42,Number(theme.wallDepth)||.31)),side=depth*.46,bevel=Math.max(2,size*.075),entries=[];
- for(let y=0;y<world.rows;y++)for(let x=0;x<world.cols;x++){
-  if(!sectionRenderContains(world,x,y,1)||!world.tiles[y]?.[x])continue;
+ const c=game.ctx,size=TILE*game.camera.z,depth=size*Math.max(.22,Math.min(.42,Number(theme.wallDepth)||.31)),side=depth*.46,bevel=Math.max(2,size*.075),entries=[],bounds=sectionBounds(world,world.currentSectionId,1);
+ for(let y=bounds.minY;y<=bounds.maxY;y++)for(let x=bounds.minX;x<=bounds.maxX;x++){
+  if(!world.tiles[y]?.[x])continue;
   const open=exploreWallExposure(world,x,y),sides=Object.values(open).filter(Boolean).length;if(!sides)continue;
   const p=game.camera.world(x*TILE,y*TILE),margin=depth+side;
   if(p.x>game.canvas.width+margin||p.y>game.canvas.height+margin||p.x+size<-margin||p.y+size<-margin)continue;
@@ -4226,12 +4229,12 @@ function drawExploreRaisedWalls(world,theme,wallTexture){
  // inner corners and pillars join as one structure at every zoom level.
  const traceEdges=()=>{c.beginPath();for(const{p,open}of entries){if(open.top){c.moveTo(p.x,p.y);c.lineTo(p.x+size,p.y)}if(open.bottom){c.moveTo(p.x,p.y+size);c.lineTo(p.x+size,p.y+size)}if(open.left){c.moveTo(p.x,p.y);c.lineTo(p.x,p.y+size)}if(open.right){c.moveTo(p.x+size,p.y);c.lineTo(p.x+size,p.y+size)}}};
  c.lineCap="square";c.lineJoin="miter";c.strokeStyle="rgba(0,0,0,.86)";c.lineWidth=Math.max(2,game.camera.z*3.2);traceEdges();c.stroke();
- c.strokeStyle=theme.wallRim;c.lineWidth=Math.max(1,game.camera.z*1.25);c.shadowColor=theme.light;c.shadowBlur=Math.max(0,game.camera.z*2.2);traceEdges();c.stroke();c.restore()
+ c.strokeStyle=theme.wallRim;c.lineWidth=Math.max(1,game.camera.z*1.25);c.shadowColor=theme.light;c.shadowBlur=Math.max(0,game.camera.z*2.2*(game.performanceProfile?.shadowScale??1));traceEdges();c.stroke();c.restore()
 }
 function drawExploreWallArchitecture(world,theme){
- if(!theme.architecture)return;
- for(let y=0;y<world.rows;y++)for(let x=0;x<world.cols;x++){
-  if(!sectionRenderContains(world,x,y,1)||!world.tiles[y]?.[x])continue;
+ if(!theme.architecture||game.performanceProfile?.constrained)return;const bounds=sectionBounds(world,world.currentSectionId,1);
+ for(let y=bounds.minY;y<=bounds.maxY;y++)for(let x=bounds.minX;x<=bounds.maxX;x++){
+  if(!world.tiles[y]?.[x])continue;
   const open=exploreWallExposure(world,x,y);
   const sides=Object.values(open).filter(Boolean).length;if(!sides)continue;
   let index=EXPLORE_ATLAS.wall,rotation=0,scale=1.58;
@@ -4246,9 +4249,9 @@ function drawExploreWallArchitecture(world,theme){
  }
 }
 function drawExploreWallEdges(world,theme){
- const c=game.ctx;c.save();c.strokeStyle=theme.line;c.lineWidth=Math.max(1,game.camera.z*1.15);c.shadowColor=theme.light;c.shadowBlur=Math.max(0,game.camera.z*1.8);
- for(let y=0;y<world.rows;y++)for(let x=0;x<world.cols;x++){
-  if(!sectionRenderContains(world,x,y,1)||!world.tiles[y]?.[x])continue;
+ const c=game.ctx,bounds=sectionBounds(world,world.currentSectionId,1),shadowScale=game.performanceProfile?.shadowScale??1;c.save();c.strokeStyle=theme.line;c.lineWidth=Math.max(1,game.camera.z*1.15);c.shadowColor=theme.light;c.shadowBlur=Math.max(0,game.camera.z*1.8*shadowScale);
+ for(let y=bounds.minY;y<=bounds.maxY;y++)for(let x=bounds.minX;x<=bounds.maxX;x++){
+  if(!world.tiles[y]?.[x])continue;
   const p=game.camera.world(x*TILE,y*TILE),size=TILE*game.camera.z;c.beginPath();
   if(world.tiles[y-1]?.[x]===0){c.moveTo(p.x,p.y);c.lineTo(p.x+size,p.y)}
   if(world.tiles[y+1]?.[x]===0){c.moveTo(p.x,p.y+size);c.lineTo(p.x+size,p.y+size)}
@@ -4331,7 +4334,7 @@ function drawCampaignTrophy(chest){
 }
 function exploreParticleUnit(seed,index,salt=0){const value=Math.sin((seed+index*97+salt*131)*12.9898)*43758.5453;return value-Math.floor(value)}
 function drawExploreAmbientParticles(theme){
- const c=game.ctx,width=game.canvas.width,height=game.canvas.height,time=performance.now()/1000,count=Math.max(10,Math.min(24,Math.round(width/46))),motion=theme.particle,seed=theme.ambienceSeed??1,density=Math.min(devicePixelRatio||1,2);
+ const c=game.ctx,width=game.canvas.width,height=game.canvas.height,time=performance.now()/1000,particleScale=game.performanceProfile?.particleScale??1,count=Math.max(4,Math.ceil(Math.max(10,Math.min(24,Math.round(width/46)))*particleScale)),motion=theme.particle,seed=theme.ambienceSeed??1,density=game.performanceProfile?.pixelRatio??Math.min(devicePixelRatio||1,2);
  c.save();c.globalCompositeOperation="screen";c.fillStyle=theme.light;c.strokeStyle=theme.light;
  for(let index=0;index<count;index++){
   const ux=exploreParticleUnit(seed,index,1),uy=exploreParticleUnit(seed,index,2),speed=.025+exploreParticleUnit(seed,index,3)*.045,wave=Math.sin(time*(.55+speed*4)+index*1.73),size=Math.max(1,Math.round((1+exploreParticleUnit(seed,index,4)*1.7)*density));
@@ -4415,6 +4418,7 @@ function drawExploreSceneObjects(world,floor,theme,stairsTexture){
  objects.sort((a,b)=>a.y-b.y||a.order-b.order).forEach(entry=>entry.draw())
 }
 function showTutorialPickupMarker(){
+ const markerNow=performance.now(),markerInterval=game?.performanceProfile?.tutorialMarkerInterval??180;if(game?.lastTutorialMarkerAt&&markerNow-game.lastTutorialMarkerAt<markerInterval)return;if(game)game.lastTutorialMarkerAt=markerNow;
  if(game?.online){document.querySelector(".tutorial-world-marker")?.remove();return}
  const stage=document.querySelector(".explore-stage"),canvas=game?.canvas??document.getElementById("gameCanvas"),pickup=ensureFirstTutorialPickup(game?.world);if(!stage||!canvas||!pickup||pickup.used||contextGuideDone("explore_pickup")){document.querySelector(".tutorial-world-marker")?.remove();return}
  let marker=stage.querySelector(".tutorial-world-marker");if(!marker){marker=document.createElement("span");marker.className="tutorial-world-marker";marker.setAttribute("aria-hidden","true");stage.appendChild(marker)}
@@ -4480,6 +4484,7 @@ function drawMini(theme=exploreBandTheme(game?.online?game.onlineFloor:save.stat
  if(!m||!game?.running)return;
  const w=game.world;
  if(save.state.settings.minimapVisible===false){m.style.opacity=0;return}
+ const miniNow=performance.now(),miniInterval=game.performanceProfile?.miniMapInterval??140;if(game.lastMiniMapPaintAt&&miniNow-game.lastMiniMapPaintAt<miniInterval)return;game.lastMiniMapPaintAt=miniNow;
  m.style.opacity=1;
  const c=m.getContext("2d");
  c.fillStyle=theme.dark;c.fillRect(0,0,m.width,m.height);
@@ -4896,7 +4901,7 @@ function resumeSavedBattle(){
  save.state.player.currentFloor=data.floor??save.state.player.currentFloor;snapshot=hydrateExpeditionSnapshot(data.explorationSnapshot??save.state.expeditionSnapshot);
  const explorationAuto=data.specialBattleType==="campaignHero"?Boolean(data.explorationAuto):save.state.settings.exploreAutoMode!=="off"&&!data.specialBattle&&!data.memoryBattle;
  battle={...data,battleId:data.battleId??crypto.randomUUID?.()??`${Date.now()}-${Math.random()}`,party,species:SPECIES,busy:false,guideReady:true,skillMenu:false,itemMenu:false,enemy:data.enemies[0],auto:explorationAuto||data.auto,explorationAuto,reviveCount:data.reviveCount??0,delayedSkillEchoes:data.delayedSkillEchoes??[],performance:data.performance??Object.fromEntries(party.map(monster=>[monster.id,{damage:0,taken:0,healing:0,revives:0,kills:0}])),affectionDeathRecorded:data.affectionDeathRecorded??Object.fromEntries(party.map(monster=>[monster.id,monster.currentHp<=0])),circleTurnMultipliers:data.circleTurnMultipliers??{},circleTurnKeys:data.circleTurnKeys??{},circleCueKeys:data.circleCueKeys??{},enemyCircleTurnKeys:data.enemyCircleTurnKeys??{},circleShields:data.circleShields??{},signatureShields:data.signatureShields??{},signatureChains:data.signatureChains??{},signatureExtraRounds:data.signatureExtraRounds??{},signatureResonances:Object.fromEntries(activeSignatureResonances(save.state,party).map(entry=>[entry.monster.id,entry.definition])),magicCircleProfiles:data.magicCircleProfiles??Object.fromEntries(party.map(monster=>[monster.id,equippedMagicCircle(monster,save.state)])),magicCircleArt:data.magicCircleArt??Object.fromEntries(party.map(monster=>[monster.id,magicCircleMarkup(monster,save.state,{className:"battle-magic-circle"})])),enemyMagicCircleArt:Object.fromEntries((data.enemies??[]).map(enemy=>[enemy.id,enemyMagicCircleMarkup(enemy.enemyMagicCircle)])),openingCircleBuff:Boolean(data.openingCircleBuff),...createBattleRulesState(party),cooldowns:data.cooldowns??{},enemyStatuses:data.enemyStatuses??{},allyAilments:data.allyAilments??Object.fromEntries(party.map(monster=>[monster.id,normalizePersistentAilments(monster.ailments)])),allyEffects:data.allyEffects??{},enemyEffects:data.enemyEffects??{},lastStatusTurn:data.lastStatusTurn??0,log:data.log??[]};
- battle.hpDisplayRates={};battle.hpTrails={};if(!battle.floorBossAliveState)initializeFloorBossDeathTracking();battle.invincibleAlliance=invincibleAllianceReady();
+ battle.hpDisplayRates={};battle.hpTrails={};if(!battle.floorBossAliveState)initializeFloorBossDeathTracking();battle.heroResonanceCount=heroResonanceProfile(battle.party).count;battle.invincibleAlliance=invincibleAllianceReady();
  battle.enemies.forEach(enemy=>hydrateEndgameEnemy(enemy));battle.enemy=battle.enemies[0];syncPersistentAilments(battle);battle.turnQueue=data.turnQueue??[];battle.queueIndex=data.queueIndex??0;battle.targetEnemyId=data.targetEnemyId??aliveEnemies(battle)[0]?.id??null;screen="explore";renderBattle();setTimeout(()=>data.actionCommitted?finishCurrentAction():continueBattleFlow(),scaledBattleDelay(250));return true
 }
 function affixValue(monster,id,cap=Infinity){return Math.max(0,Math.min(cap,Number(monster?._equipmentAffixes?.[id]??0)))}
@@ -4997,6 +5002,9 @@ function recoverBattleMp(target,amount,source=null){
  if(!target||target.currentHp<=0)return 0;const maximum=maxMp(target),before=Math.max(0,target.currentMp??0);target.currentMp=Math.min(maximum,before+Math.max(0,Math.floor(amount)));const gained=target.currentMp-before;queueBattleRecovery(target,"mp",before,target.currentMp);
  if(gained&&hasCircleEffect(target,"manaReversal")){const hpCost=Math.max(1,Math.floor(gained*calculatedStats(target).hp/Math.max(1,maximum)*.08));target.currentHp=Math.max(1,target.currentHp-hpCost);addBattleLog(battle,`${displayName(target)}：魔力反転でHP-${hpCost}`);queueMagicCircleEvent(target,`MP +${gained.toLocaleString()} → HP -${hpCost.toLocaleString()}`,"回復した魔力の一部を生命力で支払った")}
  return gained;
+}
+function recoverEnemyBattleMp(enemy,amount){
+ if(!enemy||enemy.hp<=0)return 0;const maximum=Math.max(0,Number(enemy.maxMp)||0),before=Math.max(0,Number(enemy.currentMp)||0),rate=battle?Math.max(0,1-Math.min(1,effectValue(battle,enemy.id,"mpRecoveryDown","enemy"))):1,gain=Math.max(0,Math.floor((Number(amount)||0)*rate));enemy.currentMp=Math.min(maximum,before+gain);queueBattleRecovery(enemy,"mp",before,enemy.currentMp);return enemy.currentMp-before;
 }
 function magicCircleDamageMultiplier(monster){
  if(!monster||!battle)return 1;let value=Math.max(.5,Number(battle.circleTurnMultipliers?.[monster.id])||1),level=circleInfo(monster)?.level??1;
@@ -5160,7 +5168,7 @@ function startBattle(encounter,options={}){
  battle.tutorialCaptureEligible=tutorialCaptureEligible;battle.tutorialAttributeBattle=tutorialAttributeBattle;
  if(tutorialCaptureEligible){battle.auto=false;save.state.settings.autoBattle=false;save.state.settings.exploreAutoMode="off";const target=enemies[0];if(target){const oldHp=Math.max(1,target.maxHp);target.maxHp=Math.max(oldHp,Math.round(oldHp*6));target.hp=target.maxHp;target.atk=Math.max(1,Math.floor(target.atk*.28));target.matk=Math.max(1,Math.floor((target.matk??target.atk)*.28));save.state.inventory.captureCrystals=Math.max(Number(save.state.inventory.captureCrystals)||0,captureCrystalCost(target))}save.state.inventory.potions=Math.max(1,Number(save.state.inventory.potions)||0);save.save()}
  if(tutorialAttributeBattle){battle.auto=false;save.state.settings.autoBattle=false;save.save()}
- initializeFloorBossDeathTracking();battle.invincibleAlliance=invincibleAllianceReady();
+ initializeFloorBossDeathTracking();battle.heroResonanceCount=heroResonanceProfile(battle.party).count;battle.invincibleAlliance=invincibleAllianceReady();
  const shieldOwner=party.find(monster=>hasCircleEffect(monster,"shield"));if(shieldOwner){const shieldRate=circleEffectNumber(shieldOwner,"shieldRate",.5);party.forEach(monster=>battle.circleShields[monster.id]=Math.floor(calculatedStats(monster).hp*shieldRate))}
  audio.setScene(enemies.some(enemy=>enemy.faction==="tenGod")?"divine":enemies.some(enemy=>enemy.faction==="abyss")?"abyss":enemies.some(enemy=>enemy.elite)?"elite":enemies.some(enemy=>enemy.boss)?"boss":"battle");audio.sfx(enemies.some(enemy=>enemy.endgameBossId||enemy.boss)?"boss":"select");
  buildTurnQueue(battle);
@@ -5171,10 +5179,10 @@ function startBattle(encounter,options={}){
  for(const{monster,authority}of battleEquipmentAuthorityRows(party))addBattleLog(battle,`装備固有能力｜${displayName(monster)}・${authority.name} 有効：${authority.description}`);
  if(options.memoryBattle)addBattleLog(battle,`深淵の記憶から${enemies[0]?.name??"魔物"}が現れた`);
  for(const enemy of enemies.filter(unit=>unit.floorBossPassive&&unit.floorBossDomain)){addBattleLog(battle,`${enemy.floorBossPassive.name}／${enemy.floorBossDomain.name}が発動`)}
- if(battle.invincibleAlliance)addBattleLog(battle,"無敵・四LR連携が発動！");
+ {const resonance=heroResonanceProfile(battle.party);if(resonance.count>=2)addBattleLog(battle,`${resonance.name}・${resonance.count}神話共鳴が発動！ 最大${resonance.totalActions}回行動`)}
  for(const monster of party){const resonance=signatureResonance(monster);if(!resonance)continue;if(resonance.awakened)battle.signatureShields[monster.id]=Math.max(1,Math.floor(calculatedStats(monster).hp*.25));addBattleLog(battle,`${displayName(monster)}：専用共鳴「${resonance.name}」${resonance.awakened?"6点・完全覚醒":`${resonance.pieces}/6`} 発動中`)}
  addBattleLog(battle,`行動順：${battle.turnQueue.map(entry=>entry.name).join(" → ")}`);
- saveBattleCheckpoint();renderBattle();setTimeout(async()=>{await battleIntro(enemies);const authorityRows=battleEquipmentAuthorityRows(party);if(authorityRows.length){const labels=authorityRows.slice(0,3).map(({monster,authority})=>`${displayName(monster)}・${authority.name}`),remaining=authorityRows.length-labels.length;await battleBanner("装備固有能力 有効",`${labels.join("／")}${remaining?`／ほか${remaining}種`:""}`,"equipment-authority",650)}if(battle?.invincibleAlliance)await battleBanner("無敵","えなみ・りおん・より・ひで　四LR連携","synergy invincible",900,party[0]);for(const monster of party){const resonance=signatureResonance(monster);if(resonance)await battleBanner(resonance.awakened?"専用6点・完全覚醒":"専用共鳴 発動中",`${displayName(monster)}・${resonance.name} ${resonance.pieces}/6`,"synergy",resonance.awakened?720:480,monster)}await applyOpeningMagicCircles();if(!battle)return;battle.guideReady=true;renderBattle();continueBattleFlow()},scaledBattleDelay(120))
+ saveBattleCheckpoint();renderBattle();setTimeout(async()=>{await battleIntro(enemies);const authorityRows=battleEquipmentAuthorityRows(party);if(authorityRows.length){const labels=authorityRows.slice(0,3).map(({monster,authority})=>`${displayName(monster)}・${authority.name}`),remaining=authorityRows.length-labels.length;await battleBanner("装備固有能力 有効",`${labels.join("／")}${remaining?`／ほか${remaining}種`:""}`,"equipment-authority",650)}const heroResonance=heroResonanceProfile(battle?.party??[]);if(heroResonance.count>=2)await battleBanner(heroResonance.name,`${heroResonance.count}神話共鳴・1ラウンド最大${heroResonance.totalActions}回発動`,`synergy invincible`,900,party[0]);for(const monster of party){const resonance=signatureResonance(monster);if(resonance)await battleBanner(resonance.awakened?"専用6点・完全覚醒":"専用共鳴 発動中",`${displayName(monster)}・${resonance.name} ${resonance.pieces}/6`,"synergy",resonance.awakened?720:480,monster)}await applyOpeningMagicCircles();if(!battle)return;battle.guideReady=true;renderBattle();continueBattleFlow()},scaledBattleDelay(120))
 }
 function actor(){return currentAlly(battle)}
 function protectTutorialCaptureTarget(){
@@ -5324,7 +5332,7 @@ function allyAilment(target,statusId=null){
 function registerFloorBossDodge(enemy){
  const passive=enemy?.floorBossPassive??{},afterimageGain=Math.max(0,Math.floor(Number(passive.afterimageOnDodge)||0)),afterimageCap=Math.max(0,Math.floor(Number(passive.afterimageCap)||0));
  if(afterimageGain&&afterimageCap){const stacks=Math.max(0,Number(enemy._floorBossAfterimages)||0);enemy._floorBossAfterimages=Math.min(afterimageCap,stacks+afterimageGain);if(enemy._floorBossAfterimages>stacks)addBattleLog(battle,`${enemy.name}：${passive.name} 残像${enemy._floorBossAfterimages}/${afterimageCap}`)}
-	 if(Number(passive.mpOnDodgeRate)>0){const maximum=Math.max(0,Number(enemy.maxMp)||0),before=Math.max(0,Number(enemy.currentMp)||0),gain=Math.max(1,Math.floor(maximum*Math.min(.5,Number(passive.mpOnDodgeRate))));enemy.currentMp=Math.min(maximum,before+gain);if(enemy.currentMp>before)addBattleLog(battle,`${enemy.name}：${passive.name}でMP${enemy.currentMp-before}回収`)}
+	 if(Number(passive.mpOnDodgeRate)>0){const maximum=Math.max(0,Number(enemy.maxMp)||0),gain=recoverEnemyBattleMp(enemy,Math.max(1,Math.floor(maximum*Math.min(.5,Number(passive.mpOnDodgeRate)))));if(gain)addBattleLog(battle,`${enemy.name}：${passive.name}でMP${gain}回収`)}
 	 if(Number(passive.cooldownOnDodge)>0){const amount=Math.max(1,Math.floor(Number(passive.cooldownOnDodge)));enemy.specialCooldown=Math.max(0,Number(enemy.specialCooldown)||0)-amount;enemy.specialCooldown=Math.max(0,enemy.specialCooldown)}
 	 if(enemy.floorBossDomain?.effect==="undertowRiposte"){enemy._floorBossRiposteReady=true;addBattleLog(battle,`${enemy.floorBossDomain.name}：返潮反撃が成立`)}
  const momentum=passive.dodgeMomentum,cap=Math.max(0,Math.floor(Number(momentum?.cap)||0));if(!momentum||!cap)return;
@@ -5399,11 +5407,10 @@ async function resolveCompositeSkillRevive(skill,source){
  if(!target||!reviveBattleMonster(target,skill.revive??.01,skill.reviveMp??.25,source,{transferRate:skill.reviveTransferRate}))return null;
  applyRevivedSkillEffects(skill,target,source);await flushBattleRecoveries();addBattleLog(battle,`${displayName(source)}：${skill.name}の追加効果で${displayName(target)}が復帰`);return target;
 }
-const INVINCIBLE_ALLIANCE_IDS=Object.freeze(["myth_enami","myth_rion","myth_yori","myth_hide"]);
 const RANDOM_SKILL_ELEMENTS=Object.freeze(Object.keys(ATTRIBUTES).filter(id=>id!=="neutral"&&id!=="thunder"));
 function resolveRandomSkillElement(skill){return skill?.randomElement?{...skill,element:RANDOM_SKILL_ELEMENTS[Math.floor(Math.random()*RANDOM_SKILL_ELEMENTS.length)]??"neutral"}:skill}
 function turnPowerMultiplier(skill){const step=Math.max(0,Number(skill?.turnPowerStep)||0),cap=Math.max(0,Number(skill?.turnPowerCap)||0),elapsed=Math.max(0,(Number(battle?.turn)||1)-1);return 1+Math.min(cap,elapsed*step)}
-function invincibleAllianceReady(){const ids=new Set((battle?.party??[]).filter(monster=>monster.currentHp>0).map(monster=>monster.speciesId));return INVINCIBLE_ALLIANCE_IDS.every(id=>ids.has(id))}
+function invincibleAllianceReady(){return heroResonanceProfile(battle?.party??[]).invincible}
 function initializeFloorBossDeathTracking(){
  if(!battle)return;battle.floorBossAliveState={};for(const monster of battle.party??[])battle.floorBossAliveState[`ally:${monster.id}`]=monster.currentHp>0;for(const enemy of battle.enemies??[])battle.floorBossAliveState[`enemy:${enemy.id}`]=enemy.hp>0;
 }
@@ -5412,7 +5419,7 @@ function syncFloorBossDeathEvents(){
  const units=[...(battle.party??[]).map(unit=>({key:`ally:${unit.id}`,alive:unit.currentHp>0})),...(battle.enemies??[]).map(unit=>({key:`enemy:${unit.id}`,alive:unit.hp>0}))];
  for(const unit of units){const previous=battle.floorBossAliveState[unit.key];if(previous===true&&!unit.alive)deaths++;battle.floorBossAliveState[unit.key]=unit.alive}
  if(!deaths)return 0;
- for(const enemy of(battle.enemies??[]).filter(unit=>unit.hp>0&&unit.floorBossDomain?.effect==="deathCompost")){const domain=enemy.floorBossDomain,healed=recoverFloorBossHp(enemy,Math.max(1,Math.floor(enemy.maxHp*Math.max(0,Number(domain.healRate)||0)*deaths))),before=enemy.currentMp??0,gain=Math.max(1,Math.floor((enemy.maxMp??1)*Math.max(0,Number(domain.mpRate)||0)*deaths));enemy.currentMp=Math.min(enemy.maxMp??0,before+gain);queueBattleRecovery(enemy,"mp",before,enemy.currentMp);addBattleLog(battle,`${domain.name}：死${deaths}体を菌糧化 HP+${healed.toLocaleString()}・MP+${enemy.currentMp-before}`)}
+ for(const enemy of(battle.enemies??[]).filter(unit=>unit.hp>0&&unit.floorBossDomain?.effect==="deathCompost")){const domain=enemy.floorBossDomain,healed=recoverFloorBossHp(enemy,Math.max(1,Math.floor(enemy.maxHp*Math.max(0,Number(domain.healRate)||0)*deaths))),gain=recoverEnemyBattleMp(enemy,Math.max(1,Math.floor((enemy.maxMp??1)*Math.max(0,Number(domain.mpRate)||0)*deaths)));addBattleLog(battle,`${domain.name}：死${deaths}体を菌糧化 HP+${healed.toLocaleString()}・MP+${gain}`)}
  for(const enemy of(battle.enemies??[]).filter(unit=>unit.hp>0&&unit.floorBossDomain?.effect==="deathStack"))for(let count=0;count<deaths;count++){
   const domain=enemy.floorBossDomain,stacks=Math.max(0,Number(enemy._floorBossDeathStacks)||0),step=Number(domain.steps?.[stacks])||0,oldBonus=Math.min(Number(domain.cap)||1,Number(enemy._floorBossDeathBonus)||0),newBonus=Math.min(Number(domain.cap)||1,oldBonus+step);if(newBonus<=oldBonus)continue;
   const ratio=(1+newBonus)/(1+oldBonus);enemy.atk=Math.max(1,Math.floor(enemy.atk*ratio));enemy.matk=Math.max(1,Math.floor((enemy.matk??enemy.atk)*ratio));enemy.def=Math.max(0,Math.floor(enemy.def*ratio));enemy.mdef=Math.max(0,Math.floor((enemy.mdef??enemy.def)*ratio));enemy._floorBossDeathStacks=stacks+1;enemy._floorBossDeathBonus=newBonus;addBattleLog(battle,`${domain.name}：死を刻み攻防+${Math.round(newBonus*100)}%`)
@@ -5423,17 +5430,38 @@ function syncFloorBossDeathEvents(){
  return deaths;
 }
 function syncInvincibleAllianceState({announce=true}={}){
- if(!battle)return false;syncFloorBossDeathEvents();const previous=Boolean(battle.invincibleAlliance),next=invincibleAllianceReady();battle.invincibleAlliance=next;
- if(announce&&previous!==next){const label=next?"無敵・四LR連携が再発動！":"四LRの一角が倒れ、無敵が解除された";addBattleLog(battle,label);setTimeout(()=>{if(battle)battleBanner(next?"無敵・再発動":"無敵・解除",next?"四LR全員が戦線へ復帰":"四LR全員の生存が発動条件","synergy invincible",620,battle.party.find(monster=>monster.currentHp>0))},0)}
- return next;
+ if(!battle)return false;syncFloorBossDeathEvents();const previous=Math.max(0,Number(battle.heroResonanceCount)||0),profile=heroResonanceProfile(battle.party??[]),next=profile.count;battle.heroResonanceCount=next;battle.invincibleAlliance=profile.invincible;
+ if(announce&&previous!==next){const label=next>=2?`${profile.name}：${next}神話共鳴・1ラウンド最大${profile.totalActions}回発動`:next===1?"勇者共鳴が消失した":"四勇者が戦線を離脱した";addBattleLog(battle,label);setTimeout(()=>{if(battle)battleBanner(profile.name,next>=2?`${next}神話が生存・最大${profile.totalActions}回発動`:"仲間が復帰すると共鳴が再開","synergy invincible",620,battle.party.find(monster=>monster.currentHp>0&&isHeroResonanceSpecies(monster.speciesId)))},0)}
+ return profile.invincible;
 }
 function shuffledBattleEntries(entries){const next=[...entries];for(let index=next.length-1;index>0;index--){const swap=Math.floor(Math.random()*(index+1));[next[index],next[swap]]=[next[swap],next[index]]}return next}
+function usefulHeroResonanceSkill(member,skill){
+ if(!skill||Number(skill.selfSacrificeHpDamage)>0||cooldownRemaining(battle,member.id,skill.id)>0)return false;
+ const living=(battle.party??[]).filter(ally=>ally.currentHp>0),fallen=(battle.party??[]).filter(ally=>ally.currentHp<=0&&!hasEffect(battle,ally.id,"reviveSeal"));
+ if(skill.type==="revive")return fallen.length>0;
+ if(skill.type==="mpHeal")return living.some(ally=>(ally.currentMp??0)<maxMp(ally));
+ if(skill.type==="cleanse")return living.some(ally=>(ally.ailments??[]).length||(battle.allyEffects?.[ally.id]??[]).some(effect=>String(effect.kind).endsWith("Down")||String(effect.kind).startsWith("status:")));
+ if(skill.type==="allHeal")return living.some(ally=>ally.currentHp<calculatedStats(ally).hp)||Boolean(skill.cleanse)||fallen.length>0&&Boolean(skill.revive||skill.reviveTransferRate)||Boolean(skill.effects?.length);
+ if(skill.type==="selfHeal")return member.currentHp<calculatedStats(member).hp||Boolean(skill.cleanse)||Boolean(skill.effects?.length)||Number(skill.selfShieldRate)>0;
+ return true;
+}
+function applyHeroResonancePressure(member,count){
+ const enemies=aliveEnemies(battle);for(const enemy of enemies)for(const effect of heroPersonalPressure(member.speciesId,count))applyBattleEffect(battle,enemy.id,{...effect,chance:1,sourceKey:`hero-resonance:${member.speciesId}:${effect.kind}`,sourceMonsterId:member.id,sourceName:displayName(member),sourceSkillName:"勇者共鳴"},"enemy");
+ if(member.speciesId==="myth_rion")for(const enemy of enemies){const drain=Math.min(enemy.currentMp??0,Math.max(1,Math.floor((enemy.maxMp??1)*.1)));enemy.currentMp=Math.max(0,(enemy.currentMp??0)-drain);enemy.specialCooldown=Math.max(0,Number(enemy.specialCooldown)||0)+1}
+}
+function applyInvinciblePressure(){
+ if(!battle||battle._heroInvinciblePressureTurn===battle.turn)return;battle._heroInvinciblePressureTurn=battle.turn;
+ battle.enemyEffects??={};
+ for(const enemy of aliveEnemies(battle)){for(const effect of HERO_INVINCIBLE_PRESSURE.effects)applyBattleEffect(battle,enemy.id,{...effect,chance:1,sourceKey:`hero-invincible:${effect.kind}`,sourceName:"四勇者",sourceSkillName:"無敵"},"enemy");const effects=battle.enemyEffects?.[enemy.id]??[];for(const effect of effects)if(POSITIVE_ENEMY_EFFECTS.has(effect.kind))effect.turns=Math.max(0,(Number(effect.turns)||0)-HERO_INVINCIBLE_PRESSURE.buffTurnPenalty);battle.enemyEffects[enemy.id]=effects.filter(effect=>(Number(effect.turns)||0)>0)}
+ addBattleLog(battle,"無敵圧：敵全体の攻撃・防御・速度-25%、HP/MP回復-50%、強化を1ターン短縮");
+}
 async function performInvincibleAllianceSkill(member,skill){
  if(!member||member.currentHp<=0||!skill||!aliveEnemies(battle).length)return;
- skill=applySkillMastery(member,resolveRandomSkillElement(skill));
+ setSkillCooldown(battle,member.id,skill);skill=applySkillMastery(member,scaleHeroResonanceSkill(resolveRandomSkillElement(skill)));
  const target=aliveEnemies(battle)[Math.floor(Math.random()*aliveEnemies(battle).length)],stats=convertedAttackStats(calculatedStats(member),member.id);
- addBattleLog(battle,`無敵連携：${displayName(member)}が${skill.name}を追加発動`);
- await battleBanner(skill.name,"連携追加発動・MP消費なし","synergy",460,member);
+ addBattleLog(battle,`勇者共鳴：${displayName(member)}が${skill.name}を70%威力・MP消費なしで追加発動`);
+ await battleBanner(skill.name,"共鳴追加発動・威力70%・MP消費なし","synergy",460,member);
+ applyHeroResonancePressure(member,heroResonanceProfile(battle.party).count);
  if(skill.type==="selfHeal"||skill.type==="stance"&&skill.heal){const amount=Math.max(1,Math.floor(stats.hp*skillHealingRate(skill,.2)*healMultiplier(member))),gained=recoverBattleHp(member,amount,stats.hp);recordBattleHealing(member,gained);if(skill.cleanse){clearNegativeAllyEffects(battle,member.id);clearAilments(member)}applySkillEffects(skill,member,target);await flushBattleRecoveries();await floatText(`+${gained}`,member.id,"heal");return}
  if(skill.type==="allHeal"){let maximum=0;for(const ally of battle.party.filter(entry=>entry.currentHp>0)){const max=calculatedStats(ally).hp,amount=Math.max(1,Math.floor(max*(skill.heal??.25)*healMultiplier(member))),gained=recoverBattleHp(ally,amount,max);maximum=Math.max(maximum,gained);recordBattleHealing(member,gained)}if(skill.cleanse)battle.party.forEach(ally=>{clearNegativeAllyEffects(battle,ally.id);clearAilments(ally)});applySkillEffects(skill,member,target);await flushBattleRecoveries();await floatText(`全体 +${maximum}`,"party","heal");return}
  if(skill.type==="buff"||skill.type==="stance"){applySkillEffects(skill,member,target);await floatText("連携強化","party","guard");return}
@@ -5442,14 +5470,13 @@ async function performInvincibleAllianceSkill(member,skill){
  if(skill.type==="revive"){const ally=battle.party.filter(entry=>entry.currentHp<=0).sort((left,right)=>calculatedStats(right).hp-calculatedStats(left).hp)[0];if(ally&&reviveBattleMonster(ally,skill.revive??.35,skill.reviveMp??.25,member,{transferRate:skill.reviveTransferRate})){applyRevivedSkillEffects(skill,ally,member);await flushBattleRecoveries()}return}
  await animateAttack(member.id,true);
  const targets=skill.allEnemies?aliveEnemies(battle):[target],hits=Math.max(1,Number(skill.hits)||1);
-  for(const enemy of targets){let dealt=0;for(let hit=0;hit<hits&&enemy.hp>0;hit++){const critical=Boolean(skill.guaranteedCritical)||Math.random()<Math.min(.82,.12+(skill.critBonus??0)+(stats.spd??0)*.003),ignore=Math.max(0,Math.min(.9,Number(skill.defenseIgnore)||0)),statusBonus=skill.bonusVsStatus?.id&&(battle.enemyStatuses?.[enemy.id]??[]).some(status=>status.id===skill.bonusVsStatus.id)?Math.max(1,Number(skill.bonusVsStatus.multiplier)||1):1,effectBonus=skill.bonusVsEffect?.kind&&hasEffect(battle,enemy.id,skill.bonusVsEffect.kind,"enemy")?Math.max(1,Number(skill.bonusVsEffect.multiplier)||1):1,raw=skillDamage({...stats,_currentHpRatio:member.currentHp/Math.max(1,stats.hp)},{...enemy,def:enemy.def*(1-ignore),mdef:(enemy.mdef??enemy.def)*(1-ignore)},skill,critical)*statusBonus*effectBonus*turnPowerMultiplier(skill),damage=Math.max(1,Math.floor(raw*.72*attributeDamageMultiplier(skill.element??member.attribute??SPECIES[member.speciesId]?.element??"neutral",enemy.trialElement??enemy.element??SPECIES[enemy.speciesId]?.element??"neutral")*enemyDamageMultiplier(enemy)*(enemy.hiddenDamageTaken??1)*magicCircleDamageMultiplier(member))),applied=applyEnemyDamage(battle,enemy,damage,{sourceId:member.id,element:skill.element??SPECIES[member.speciesId]?.element??"neutral",damageClass:skill.damageClass??"physical"});dealt+=applied.damage;recordBattleDamage(member,applied.damage);registerWeaponFinisher(member,enemy,applied.beforeHp);await animateHit(enemy.id,critical);await floatText(applied.damage?`${critical?"会心 ":""}-${applied.damage}`:"完全ガード",enemy.id,applied.damage?(critical?"critical":"skill"):"guard")}if(dealt&&skill.status&&enemy.hp>0&&Math.random()<(skill.status.chance??0))applyEnemyStatus(battle,{...skill.status,sourceMonsterId:member.id},enemy.id)}
+  for(const enemy of targets){let dealt=0;for(let hit=0;hit<hits&&enemy.hp>0;hit++){const critical=Boolean(skill.guaranteedCritical)||Math.random()<Math.min(.82,.12+(skill.critBonus??0)+(stats.spd??0)*.003),ignore=Math.max(0,Math.min(.9,Number(skill.defenseIgnore)||0)),statusBonus=skill.bonusVsStatus?.id&&(battle.enemyStatuses?.[enemy.id]??[]).some(status=>status.id===skill.bonusVsStatus.id)?Math.max(1,Number(skill.bonusVsStatus.multiplier)||1):1,effectBonus=skill.bonusVsEffect?.kind&&hasEffect(battle,enemy.id,skill.bonusVsEffect.kind,"enemy")?Math.max(1,Number(skill.bonusVsEffect.multiplier)||1):1,raw=skillDamage({...stats,_currentHpRatio:member.currentHp/Math.max(1,stats.hp)},{...enemy,def:enemy.def*(1-ignore),mdef:(enemy.mdef??enemy.def)*(1-ignore)},skill,critical)*statusBonus*effectBonus*turnPowerMultiplier(skill),damage=Math.max(1,Math.floor(raw*attributeDamageMultiplier(skill.element??member.attribute??SPECIES[member.speciesId]?.element??"neutral",enemy.trialElement??enemy.element??SPECIES[enemy.speciesId]?.element??"neutral")*enemyDamageMultiplier(enemy)*(enemy.hiddenDamageTaken??1)*magicCircleDamageMultiplier(member))),applied=applyEnemyDamage(battle,enemy,damage,{sourceId:member.id,element:skill.element??SPECIES[member.speciesId]?.element??"neutral",damageClass:skill.damageClass??"physical"});dealt+=applied.damage;recordBattleDamage(member,applied.damage);registerWeaponFinisher(member,enemy,applied.beforeHp);await animateHit(enemy.id,critical);await floatText(applied.damage?`${critical?"会心 ":""}-${applied.damage}`:"完全ガード",enemy.id,applied.damage?(critical?"critical":"skill"):"guard")}if(dealt&&skill.status&&enemy.hp>0&&Math.random()<(skill.status.chance??0))applyEnemyStatus(battle,{...skill.status,sourceMonsterId:member.id},enemy.id)}
  applySkillEffects(skill,member,target);await resolveCompositeSkillRevive(skill,member);
 }
 async function triggerInvincibleAlliance(source){
- if(!battle||battle._invincibleAllianceRunning||!invincibleAllianceReady())return;
- const partners=shuffledBattleEntries(battle.party.filter(member=>member.id!==source.id&&member.currentHp>0&&INVINCIBLE_ALLIANCE_IDS.includes(member.speciesId)));if(!partners.length)return;
+ if(!battle||battle._invincibleAllianceRunning||!isHeroResonanceSpecies(source?.speciesId))return;const opening=heroResonanceProfile(battle.party??[]);if(opening.count<2)return;
  battle._invincibleAllianceRunning=true;
- try{battleFlash("critical");await battleBanner("無敵",`${displayName(source)}に続き、三神話が連続発動`,`synergy invincible`,720,source);for(const member of partners){if(!aliveEnemies(battle).length)break;const skills=allLearnedSkills(member).filter(Boolean),skill=skills[Math.floor(Math.random()*skills.length)];await performInvincibleAllianceSkill(member,skill)}}finally{battle._invincibleAllianceRunning=false}
+ try{if(opening.invincible)applyInvinciblePressure();battleFlash("critical");await battleBanner(opening.name,`${displayName(source)}に続き、残る${opening.followupsPerAction}人が共鳴発動`,`synergy invincible`,720,source);const used=new Set([source.speciesId]);while(aliveEnemies(battle).length){const profile=heroResonanceProfile(battle.party??[]);if(profile.count<2)break;const candidates=shuffledBattleEntries(heroResonanceMembers(battle.party).filter(member=>!used.has(member.speciesId))).map(member=>({member,skills:allLearnedSkills(member).filter(skill=>usefulHeroResonanceSkill(member,skill))})).filter(entry=>entry.skills.length);if(!candidates.length)break;const{member,skills}=candidates[0],skill=skills[Math.floor(Math.random()*skills.length)];used.add(member.speciesId);await performInvincibleAllianceSkill(member,skill)}}finally{battle._invincibleAllianceRunning=false;syncInvincibleAllianceState({announce:false})}
 }
 async function command(type,skillId=null,{skipRandomCircle=false}={}){
  if(!battle)return;
@@ -5566,7 +5593,7 @@ function chooseEnemyTarget(enemy=null,mode="normal"){
 }
 async function dealEnemyHit(e,target,multiplier=1,label="",criticalChance=.08,element=null,rules={}){
  const st=calculatedStats(target),guard=Boolean(battle.guards[target.id]),endgameNoCrit=hasCircleEffect(target,"endgameNoCrit")&&Boolean(e.endgameBossId||["abyss","tenGod"].includes(e.faction)),endgameCircleReduction=endgameNoCrit?circleEffectNumber(target,"damageReductionRate",0):0,criticalStatus=e.floorBossPassive?.criticalAgainstStatus,criticalEffects=e.floorBossPassive?.criticalAgainstEffects,critical=!endgameNoCrit&&(Boolean(rules.guaranteedCritical)||hasEffect(battle,e.id,"guaranteedCritical","enemy")||Boolean(e._floorBossForceCritical)||Boolean(criticalStatus&&allyAilment(target,criticalStatus))||Boolean(Array.isArray(criticalEffects)&&criticalEffects.length&&criticalEffects.every(kind=>hasEffect(battle,target.id,kind)))||Math.random()<Math.min(.9,criticalChance+(e.crit??0)+effectValue(battle,e.id,"critUp","enemy")));
- syncInvincibleAllianceState();if(battle.invincibleAlliance){addBattleLog(battle,`${displayName(target)}：四LR連携・無敵`);await floatText("無敵",target.id,"guard");return 0}
+ syncInvincibleAllianceState();if(battle.invincibleAlliance){addBattleLog(battle,`${displayName(target)}：四神話共鳴・無敵`);await floatText("無敵",target.id,"guard");return 0}
  const guaranteedStatus=e.floorBossPassive?.guaranteedHitAgainstStatus,guaranteedBuff=e.floorBossPassive?.guaranteedHitAgainstBuff&&(battle.allyEffects?.[target.id]??[]).some(effect=>POSITIVE_ENEMY_EFFECTS.has(effect.kind));if(!attackHits({accuracy:e.accuracy??100,accuracyUp:effectValue(battle,e.id,"accuracyUp","enemy"),accuracyDown:effectValue(battle,e.id,"accuracyDown","enemy"),evasion:st.evasion??0,evasionUp:effectValue(battle,target.id,"evasionUp"),evasionDown:effectValue(battle,target.id,"evasionDown"),guaranteedHit:Boolean(rules.guaranteedHit||hasEffect(battle,e.id,"guaranteedHit","enemy")||e.endgameUnavoidable||guaranteedBuff||(guaranteedStatus&&allyAilment(target,guaranteedStatus)))})){addBattleLog(battle,`${displayName(target)}が攻撃を回避した`);await floatText("MISS / 回避",target.id,"miss");return 0}
  const protector=battle.party.find(monster=>monster.id!==target.id&&monster.currentHp>0&&signatureResonance(monster)?.id==="hide-guardian"&&target.currentHp/Math.max(1,st.hp)<=signatureResonance(monster).lowHpThreshold),protection=protector?1-(signatureResonance(protector).damageReduction??.4):1;
  const ailmentIgnore=allyAilment(target)?Number(e.floorBossPassive?.defenseIgnoreAgainstAilment)||0:0,ignore=Math.max(0,Math.min(.9,(Number(rules.defenseIgnore)||0)+(Number(e.floorBossPassive?.defenseIgnoreBonus)||0)+ailmentIgnore)),execute=rules.execute&&target.currentHp/Math.max(1,st.hp)<=rules.execute?2:1;
@@ -5689,7 +5716,7 @@ async function resolveEnemySpecialAction(e,action){
 	  if(Number(info.reducePartyCooldowns)>0){const amount=Math.max(1,Math.floor(info.reducePartyCooldowns)),targets=battle.enemies.filter(enemy=>enemy.hp>0);for(const ally of targets)ally.specialCooldown=Math.max(0,Number(ally.specialCooldown)||0)-amount;addBattleLog(battle,`${e.name}：味方固有技の再使用を${amount}ターン短縮`)}
 	  if(Number(info.hpShieldRate)>0){const amount=Math.max(1,Math.floor(e.maxHp*Math.min(.8,Number(info.hpShieldRate))));e._floorBossHpShield=Math.max(Math.max(0,Number(e._floorBossHpShield)||0),amount);addBattleLog(battle,`${e.name}：増殖障壁 ${amount.toLocaleString()}`)}
 	  if(Number(info.restoreArmorLayers)>0){const cap=Math.max(1,Math.floor(Number(e.floorBossPassive?.startingArmorLayers)||Number(info.restoreArmorLayers))),before=Math.max(0,Math.floor(Number(e._floorBossArmorLayers)||0));e._floorBossArmorLayers=Math.min(cap,Math.max(before,Math.floor(Number(info.restoreArmorLayers))));if(e._floorBossArmorLayers>before)addBattleLog(battle,`${e.name}：${e.floorBossPassive?.name??"城甲"} ${e._floorBossArmorLayers}/${cap}層へ再構築`)}
-	  if(Number(info.selfMpHealRate)>0){const maximum=Math.max(1,Number(e.maxMp)||1),before=Math.max(0,Number(e.currentMp)||0),gain=Math.max(1,Math.floor(maximum*Math.min(.8,Number(info.selfMpHealRate))));e.currentMp=Math.min(maximum,before+gain);queueBattleRecovery(e,"mp",before,e.currentMp);if(e.currentMp>before){addBattleLog(battle,`${e.name}：磁力再充填 MP+${e.currentMp-before}`);await flushBattleRecoveries();await floatText(`MP +${e.currentMp-before}`,e.id,"heal")}}
+	  if(Number(info.selfMpHealRate)>0){const maximum=Math.max(1,Number(e.maxMp)||1),gain=recoverEnemyBattleMp(e,Math.max(1,Math.floor(maximum*Math.min(.8,Number(info.selfMpHealRate)))));if(gain){addBattleLog(battle,`${e.name}：磁力再充填 MP+${gain}`);await flushBattleRecoveries();await floatText(`MP +${gain}`,e.id,"heal")}}
 	  if(info.beginHealingChorus&&e.floorBossDomain?.effect==="healingChorusChannel"){e._floorBossHealingChorus={dueTurn:Math.max(1,Number(battle.turn)||1)+1,damage:0};addBattleLog(battle,`${e.floorBossDomain.name}：一巡後の満命聖歌を詠唱・最大HP${Math.round((Number(e.floorBossDomain.thresholdRate)||.10)*100)}%で阻止可能`)}
 	  if(info.applyPuppetLink&&e.floorBossDomain?.effect==="puppetLink"){const candidates=[...battle.party.filter(monster=>monster.currentHp>0)].sort(()=>Math.random()-.5).slice(0,2);if(candidates.length>=2){const duration=Math.max(1,Math.floor(Number(info.linkDuration)||Number(e.floorBossDomain.duration)||3));e._floorBossPuppetLink={ids:candidates.map(monster=>monster.id),expiresTurn:Math.max(1,Number(battle.turn)||1)+duration};addBattleLog(battle,`${e.floorBossDomain.name}：${candidates.map(displayName).join(" ↔ ")}を${duration}ターン連結`)}}
 	  if(info.selfHeal){const amount=Math.max(1,Math.floor(e.maxHp*info.selfHeal)),gained=recoverFloorBossHp(e,amount);await flushBattleRecoveries();await floatText(`+${gained}`,e.id,"heal")}if(info.barrier)e.divineBarrier=Math.max(Number(e.divineBarrier)||0,Math.max(1,Math.floor(Number(info.barrier)||1)));return true;
@@ -5702,7 +5729,7 @@ async function resolveEnemySpecialAction(e,action){
  else if(info.pattern==="singleStrong")targets=[chooseEnemyTarget(e,"threat")].filter(Boolean);
  else targets=[chooseEnemyTarget(e,"normal")].filter(Boolean);
  if(info.consumeMark&&targets.length===1){const marks=battle.floorBossTargetMarks?.[e.id]??{},marked=alive.filter(target=>marks[target.id]===info.consumeMark);if(marked.length)targets=[marked[Math.floor(Math.random()*marked.length)]]}
- if(info.fillHpDrain){const target=targets[0];if(!target)return true;syncInvincibleAllianceState();if(battle.invincibleAlliance){addBattleLog(battle,`${displayName(target)}：四LR連携で満命吸葬を無効化`);await floatText("無敵",target.id,"guard");return true}const missing=Math.max(0,e.maxHp-e.hp),amount=Math.min(missing,Math.max(0,target.currentHp)),before=e.hp;target.currentHp=Math.max(0,target.currentHp-amount);e.hp=Math.min(e.maxHp,e.hp+amount);if(amount&&e.floorBossDomain?.effect==="healingFlare")e._floorBossHealedPowerReady=true;recordBattleTaken(target,amount);queueBattleRecovery(e,"hp",before,e.hp);addBattleLog(battle,`${e.name}は防御を無視してHP${amount.toLocaleString()}を吸収`);if(target.currentHp<=0&&tryUnyielding(target))addBattleLog(battle,`${displayName(target)}は吸葬を耐えた`);if(target.currentHp<=0){handleMagicCircleDeath(target);syncInvincibleAllianceState()}await animateHit(target.id,true);if(target.currentHp<=0)await animateDefeat(target.id);await flushBattleRecoveries();await floatText(`吸収 -${amount}`,target.id,"critical");await floatText(`+${amount}`,e.id,"heal");return true}
+ if(info.fillHpDrain){const target=targets[0];if(!target)return true;syncInvincibleAllianceState();if(battle.invincibleAlliance){addBattleLog(battle,`${displayName(target)}：四神話共鳴で満命吸葬を無効化`);await floatText("無敵",target.id,"guard");return true}const missing=Math.max(0,e.maxHp-e.hp),amount=Math.min(missing,Math.max(0,target.currentHp)),before=e.hp;target.currentHp=Math.max(0,target.currentHp-amount);e.hp=Math.min(e.maxHp,e.hp+amount);if(amount&&e.floorBossDomain?.effect==="healingFlare")e._floorBossHealedPowerReady=true;recordBattleTaken(target,amount);queueBattleRecovery(e,"hp",before,e.hp);addBattleLog(battle,`${e.name}は防御を無視してHP${amount.toLocaleString()}を吸収`);if(target.currentHp<=0&&tryUnyielding(target))addBattleLog(battle,`${displayName(target)}は吸葬を耐えた`);if(target.currentHp<=0){handleMagicCircleDeath(target);syncInvincibleAllianceState()}await animateHit(target.id,true);if(target.currentHp<=0)await animateDefeat(target.id);await flushBattleRecoveries();await floatText(`吸収 -${amount}`,target.id,"critical");await floatText(`+${amount}`,e.id,"heal");return true}
  if(info.selfSacrificeHpDamage){const target=targets[0];if(!target)return true;const amount=Math.max(1,Math.floor(e.hp*Math.min(2,Number(info.selfSacrificeHpDamage)))),before=e.hp;syncInvincibleAllianceState();let dealt=0;if(!battle.invincibleAlliance){dealt=Math.min(target.currentHp,amount);target.currentHp=Math.max(0,target.currentHp-amount);recordBattleTaken(target,dealt);if(target.currentHp<=0&&tryUnyielding(target))addBattleLog(battle,`${displayName(target)}は自壊撃を耐えた`);if(target.currentHp<=0)handleMagicCircleDeath(target)}e.hp=0;addBattleLog(battle,`${e.name}は残HP${before.toLocaleString()}を自壊固定ダメージへ変換`);await animateHit(target.id,true);await floatText(battle.invincibleAlliance?"無敵":`自壊 -${dealt}`,target.id,battle.invincibleAlliance?"guard":"critical");await animateDefeat(e.id);syncInvincibleAllianceState();return true}
  if(e.enemyMimicArmor&&targets.length>1){const limit=Math.min(alive.length,Math.random()<.72?1:2);targets=[...targets].sort(()=>Math.random()-.5).slice(0,limit);addBattleLog(battle,`${e.name}の致死奇襲：対象 ${targets.length}体`)}
  const elements={inferno:"fire",tidal:"water",thunderstorm:"lightning",tempest:"wind",quake:"earth",radiance:"light",eclipse:"dark",absoluteZero:"ice",timeStop:"light",starfall:"wind"};
@@ -5811,7 +5838,7 @@ async function endRound(){
 	 for(const enemy of(battle.enemies??[]).filter(entry=>entry.hp>0&&entry.floorBossDomain?.effect==="eclipseDeadline")){const domain=enemy.floorBossDomain,threshold=Math.max(1,Math.floor(enemy.maxHp*Math.max(.01,Math.min(.8,Number(domain.thresholdRate)||.08)))),damage=enemy._floorBossEclipseDamageRound===Math.max(0,Number(battle.turn)||0)?Math.max(0,Math.floor(Number(enemy._floorBossEclipseRoundDamage)||0)):0,cap=Math.max(1,Math.floor(Number(domain.maxStacks)||3)),before=Math.max(0,Math.floor(Number(enemy._floorBossEclipseStacks)||0));if(damage>=threshold){enemy._floorBossEclipseStacks=Math.max(0,before-1);addBattleLog(battle,`${domain.name}：火力試験成功 ${damage.toLocaleString()}/${threshold.toLocaleString()}・日蝕${enemy._floorBossEclipseStacks}/${cap}`)}else{enemy._floorBossEclipseStacks=Math.min(cap,before+1);addBattleLog(battle,`${domain.name}：火力試験未達 ${damage.toLocaleString()}/${threshold.toLocaleString()}・日蝕${enemy._floorBossEclipseStacks}/${cap}`);if(enemy._floorBossEclipseStacks>=cap&&!enemy._floorBossEclipseReady){enemy._floorBossEclipseReady=true;addBattleLog(battle,`${domain.name}：三段日蝕完成・次の終幕技が確定会心`)}}enemy._floorBossEclipseRoundDamage=0}
 	 for(const enemy of(battle.enemies??[]).filter(entry=>entry._floorBossPuppetLink&&Math.max(0,Number(entry._floorBossPuppetLink.expiresTurn)||0)<=Math.max(1,Number(battle.turn)||1))){delete enemy._floorBossPuppetLink;addBattleLog(battle,`${enemy.floorBossDomain?.name??enemy.name}：双糸連結が終演`)}
 	 for(const enemy of(battle.enemies??[]).filter(entry=>entry.hp>0&&entry.floorBossDomain?.effect==="dreamEcho")){const pending=enemy._floorBossDreamEchoes??[],due=pending.filter(entry=>Math.max(0,Number(entry.dueTurn)||0)<=Math.max(1,Number(battle.turn)||1));enemy._floorBossDreamEchoes=pending.filter(entry=>!due.includes(entry));for(const echo of due){const target=battle.party.find(monster=>monster.id===echo.targetId&&monster.currentHp>0);if(!target)continue;syncInvincibleAllianceState();let damage=0;if(!battle.invincibleAlliance){damage=Math.min(target.currentHp,Math.max(1,Math.floor(Number(echo.amount)||0)));target.currentHp=Math.max(0,target.currentHp-damage);recordBattleTaken(target,damage);if(target.currentHp<=0&&tryUnyielding(target))addBattleLog(battle,`${displayName(target)}は夢鐘余韻を耐えた`);if(target.currentHp<=0){handleMagicCircleDeath(target);syncInvincibleAllianceState()}}addBattleLog(battle,`${enemy.floorBossDomain.name}：${displayName(target)}へ${battle.invincibleAlliance?"無敵":"防御無視"}余韻 ${damage.toLocaleString()}ダメージ`);await animateHit(target.id,true);await floatText(battle.invincibleAlliance?"無敵":`余韻 -${damage}`,target.id,battle.invincibleAlliance?"guard":"critical");if(target.currentHp<=0)await animateDefeat(target.id)}}
- for(const enemy of(battle.enemies??[]).filter(entry=>entry.hp>0)){const maximum=Math.max(0,Number(enemy.maxMp)||0),before=Math.max(0,Number(enemy.currentMp)||0),rate=enemy.floorBossDomain?.effect==="sealTide"?Math.max(.08,Number(enemy.floorBossDomain.mpRegen)||0):.08,gain=Math.max(1,Math.floor(maximum*rate));enemy.currentMp=Math.min(maximum,before+gain);queueBattleRecovery(enemy,"mp",before,enemy.currentMp)}
+ for(const enemy of(battle.enemies??[]).filter(entry=>entry.hp>0)){const maximum=Math.max(0,Number(enemy.maxMp)||0),rate=enemy.floorBossDomain?.effect==="sealTide"?Math.max(.08,Number(enemy.floorBossDomain.mpRegen)||0):.08;recoverEnemyBattleMp(enemy,Math.max(1,Math.floor(maximum*rate)))}
  for(const enemy of(battle.enemies??[]).filter(entry=>entry.hp>0&&entry.floorBossDomain?.effect==="frostAttrition")){const domain=enemy.floorBossDomain,cap=Math.max(1,Math.floor(Number(domain.cap)||5)),stacks=Math.max(0,Number(enemy._floorBossFrostStacks)||0);if(stacks<cap){enemy._floorBossFrostStacks=stacks+1;enemy.def=Math.max(0,Math.floor(enemy.def*(1+Math.max(0,Number(domain.defStep)||0))));enemy.mdef=Math.max(0,Math.floor((enemy.mdef??enemy.def)*(1+Math.max(0,Number(domain.defStep)||0))));enemy.spd=Math.max(1,Math.floor(enemy.spd*(1-Math.min(.5,Math.max(0,Number(domain.spdStep)||0)))));addBattleLog(battle,`${domain.name}：葬鐘 ${enemy._floorBossFrostStacks}/${cap}`)}}
  for(const enemy of(battle.enemies??[]).filter(entry=>entry.hp>0&&Number(entry.floorBossPassive?.healPerPoisonedRate)>0)){const count=battle.party.filter(monster=>monster.currentHp>0&&allyAilment(monster,"poison")).length;if(count){const healed=recoverFloorBossHp(enemy,Math.max(1,Math.floor(enemy.maxHp*enemy.floorBossPassive.healPerPoisonedRate*count)));addBattleLog(battle,`${enemy.name}：${enemy.floorBossPassive.name}で${healed.toLocaleString()}回復`);await floatText(`菌糧 +${healed}`,enemy.id,"heal")}}
  for(const enemy of(battle.enemies??[]).filter(e=>e.hp>0&&e.eliteRegen>0)){const healed=recoverFloorBossHp(enemy,Math.max(1,Math.floor(enemy.maxHp*enemy.eliteRegen)));addBattleLog(battle,`${enemy.name}は${healed}回復した`);await floatText(`+${healed}`,enemy.id,"heal")}

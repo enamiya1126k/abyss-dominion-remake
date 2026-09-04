@@ -1,6 +1,6 @@
 import{EXPANDED_SPECIES}from"./expandedSpecies.js?v=2.11.2-build166";
 import{ADDITIONAL_SPECIES}from"./additionalSpecies.js?v=3.0.0-build300";
-import{MYTHIC_SERIAL_SPECIES}from"./mythicSerialSpecies.js?v=2.11.2-build166";
+import{MYTHIC_SERIAL_SPECIES}from"./mythicSerialSpecies.js?v=3.1.1-build314";
 import{BUILD198_SPECIES}from"./build198Species.js?v=2.11.33-build198";
 import{RAID_SPECIES}from"./raidSpecies.js?v=2.11.82-build258";
 import{applyMonsterNameOverride}from"./monsterNameOverrides.js?v=2.11.2-build166";

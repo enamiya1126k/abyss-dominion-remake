@@ -46,7 +46,7 @@ test("Build313 loads the new voice layer and wires it into encounter and ending 
   const main = readFileSync(new URL("../src/main.js", import.meta.url), "utf8");
   const index = readFileSync(new URL("../index.html", import.meta.url), "utf8");
   const css = readFileSync(new URL("../src/Styles/build313-hero-voice.css", import.meta.url), "utf8");
-  assert.match(index, /ASSET_BUILD = "build313"/);
+  assert.match(index, /ASSET_BUILD = "build31[3-5]"/);
   assert.match(index, /build313-hero-voice\.css\?v=3\.1\.1-build313/);
   assert.match(main, /CampaignStorySystem\.js\?v=3\.1\.1-build313/);
   for (const moment of ["spotted", "contact", "repelled", "retreated", "heroVictory", "finalPlayerWin", "finalHeroesWin"]) assert.ok(main.includes(`"${moment}"`), `${moment} is wired into main`);

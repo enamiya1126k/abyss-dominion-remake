@@ -1,4 +1,4 @@
-import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.1-build311";
+import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.1-build314";
 import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=3.1.1-build311";
 import{maxMp,normalizeSkillProgress,allLearnedSkills,recommendedSkills,recommendedSkillLoadout,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.1-build311";
 import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=3.1.1-build311";
@@ -7,7 +7,7 @@ import{FLOOR_BOSS_CATALOG,floorBossDefinitionById,milestoneBossIdsForFloor}from"
 import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=3.1.1-build311";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=3.1.1-build311";
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=3.1.1-build311";
-import{SPECIES}from"../data/species.js?v=3.1.1-build311";
+import{SPECIES}from"../data/species.js?v=3.1.1-build314";
 import{JUVENILE_AMALGA_SKILLS}from"../data/raidSpecies.js?v=3.1.1-build311";
 import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=3.1.1-build311";
 import{normalizeWeaponMastery}from"./WeaponMastery.js?v=3.1.1-build311";
@@ -31,7 +31,7 @@ import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=3.1
 import{normalizeEquipmentIdentity}from"../data/equipment.js?v=3.1.1-build311";
 import{createContextualGuideState,normalizeContextualGuide}from"../core/ContextualGuideSystem.js?v=3.1.1-build311";
 import{normalizeEncounterHistory}from"../core/EncounterPoolSystem.js?v=3.1.1-build311";
-const LR_SERIAL_CHARACTER_IDS=new Set(["myth_enami","myth_yori","myth_rion","myth_hide"]);
+const MYTHIC_HERO_CHARACTER_IDS=new Set(["myth_enami","myth_yori","myth_rion","myth_hide"]);
 const RAID_JUVENILE_SPECIES_ID="juvenile_amalga";
 const RAID_JUVENILE_BOSS_ID="abyss-amalga";
 const RAID_JUVENILE_VISUAL_BASE="./assets/online/raid/juvenile-amalga";
@@ -648,8 +648,10 @@ export class SaveService{
    m.plus=Math.floor(finiteNumber(m.plus,0,0,Number.MAX_SAFE_INTEGER));
    m.ivs=m.ivs&&typeof m.ivs==="object"&&!Array.isArray(m.ivs)?m.ivs:{};
    for(const key of["hp","atk","def","spd"])m.ivs[key]=Math.floor(finiteNumber(m.ivs[key],75,0,100));
-   if(LR_SERIAL_CHARACTER_IDS.has(m.speciesId)){
-    m.summonTier="LR";m.summonRarity="LR";
+   if(MYTHIC_HERO_CHARACTER_IDS.has(m.speciesId)){
+    const previousNeed=Math.max(1,expNeedFor(m)),previousProgress=Math.max(0,Math.min(.999999,(Number(m.exp)||0)/previousNeed)),preservedLevel=m.level;
+    m.summonTier="神話";m.summonRarity="神話";
+    if(from<77){const rebasedExp=Math.floor(expNeedFor(m)*previousProgress),rebasedTotal=totalExperience({...m,totalExp:undefined,level:preservedLevel,exp:rebasedExp});applyTotalExperience(m,rebasedTotal)}
     for(const key of["hp","atk","def","spd"])m.ivs[key]=Math.min(94,m.ivs[key]);
     if(m.speciesId==="myth_rion")m.attribute="nature";
    }
