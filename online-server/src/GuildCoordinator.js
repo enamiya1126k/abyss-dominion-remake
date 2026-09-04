@@ -340,6 +340,31 @@ export class GuildCoordinator {
   transfer(session, rawTargetId) { const guild = this._guildFor(session?.playerId), targetId = playerId(rawTargetId); if (guild?.leaderId !== session?.playerId) return { ok: false, code: "GUILD_LEADER_ONLY", message: "ギルドマスターだけが権限を譲渡できます" }; if (!guild.memberIds.has(targetId) || targetId === guild.leaderId) return { ok: false, code: "GUILD_MEMBER_MISSING", message: "譲渡先を確認できません" }; guild.officerIds.delete(targetId); guild.officerIds.add(guild.leaderId); guild.leaderId = targetId; const failure = this._commit(); if (failure) return failure; this._pushGuild(guild); return { ok: true } }
   kick(session, rawTargetId) { const guild = this._guildFor(session?.playerId), targetId = playerId(rawTargetId); if (!this._authorized(guild, session?.playerId)) return { ok: false, code: "GUILD_OFFICER_ONLY", message: "幹部以上だけが除名できます" }; if (!guild.memberIds.has(targetId) || targetId === guild.leaderId || roleRank(roleOf(guild, session.playerId)) <= roleRank(roleOf(guild, targetId))) return { ok: false, code: "GUILD_ROLE", message: "このメンバーは除名できません" }; this._removeMember(guild, targetId); const failure = this._commit(); if (failure) return failure; this._pushRecruitmentGuilds(this._pruneRecruitments()); this.push(targetId); this._pushGuild(guild); return { ok: true } }
   leave(session) { const guild = this._guildFor(session?.playerId); if (!guild) return { ok: false, code: "GUILD_NOT_MEMBER", message: "ギルドへ所属していません" }; if (guild.leaderId === session.playerId && guild.memberIds.size > 1) return { ok: false, code: "GUILD_TRANSFER_REQUIRED", message: "先にギルドマスターを譲渡してください" }; if (guild.memberIds.size === 1) return this._disbandGuild(guild); this._removeMember(guild, session.playerId); const failure = this._commit(); if (failure) return failure; this._pushRecruitmentGuilds(this._pruneRecruitments()); this.push(session.playerId); this._pushGuild(guild); return { ok: true } }
+  fullReset(session) {
+    const id = playerId(session?.playerId); if (!id) return { ok: false, code: "NOT_READY", message: "本人確認済みの接続から初期化してください" };
+    const guild = this._guildFor(id), affected = new Set(guild?.memberIds ?? [id]), hadMembership = Boolean(guild), wasLeader = guild?.leaderId === id, guildIdValue = guild?.guildId ?? null;
+    if (guild) {
+      delete guild.week?.checkIns?.[id];
+      if (guild.memberIds.size === 1) {
+        this.guilds.delete(guild.guildId); this.memberships.delete(id); this.applications.delete(guild.guildId);
+        for (const [inviteId, entry] of this.invites) if (entry.guildId === guild.guildId) this.invites.delete(inviteId);
+      } else {
+        if (wasLeader) {
+          const successor = [...guild.memberIds].filter(memberId => memberId !== id).sort((left, right) => Number(!guild.officerIds.has(left)) - Number(!guild.officerIds.has(right)) || (Number(guild.joinedAt[left]) || 0) - (Number(guild.joinedAt[right]) || 0) || left.localeCompare(right))[0];
+          guild.leaderId = successor; guild.officerIds.delete(successor);
+        }
+        this._removeMember(guild, id);
+      }
+    }
+    let applicationCount = 0; for (const [targetGuildId, ids] of this.applications) { if (ids.delete(id)) applicationCount++; if (!ids.size) this.applications.delete(targetGuildId); }
+    let inviteCount = 0; for (const [inviteId, entry] of this.invites) if (entry.toId === id || entry.fromId === id) { this.invites.delete(inviteId); inviteCount++; }
+    const checkedIn = this.checkIns.delete(id); this.presenceSignatures.delete(id);
+    const failure = this._commit(); if (failure) return failure;
+    this._pushRecruitmentGuilds(this._pruneRecruitments());
+    for (const memberId of affected) this.push(memberId);
+    if (guildIdValue && this.guilds.has(guildIdValue)) this._pushGuild(this.guilds.get(guildIdValue));
+    return { ok: true, removed: { guild: hadMembership, leader: Boolean(wasLeader), applications: applicationCount, invites: inviteCount, checkIn: checkedIn } };
+  }
   disband(session, rawName) { const guild = this._guildFor(session?.playerId); if (guild?.leaderId !== session?.playerId) return { ok: false, code: "GUILD_LEADER_ONLY", message: "ギルドマスターだけが解散できます" }; if (text(rawName, 16) !== guild.name) return { ok: false, code: "GUILD_CONFIRM_NAME", message: "確認のためギルド名を正確に入力してください" }; return this._disbandGuild(guild) }
   _disbandGuild(guild) { const members = [...guild.memberIds], recruitments = [...this.recruitments.values()].filter(entry => entry.guildId === guild.guildId); for (const id of members) this.memberships.delete(id); this.guilds.delete(guild.guildId); this.applications.delete(guild.guildId); for (const [id, entry] of this.invites) if (entry.guildId === guild.guildId) this.invites.delete(id); const failure = this._commit(); if (failure) return failure; for (const entry of recruitments) this._dropRecruitment(entry); for (const id of members) this.push(id); return { ok: true } }
   _revokeInvitesFrom(guild, id) { for (const [inviteId, entry] of this.invites) if (entry.guildId === guild.guildId && entry.fromId === id) this.invites.delete(inviteId); }

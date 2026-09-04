@@ -28,12 +28,12 @@ function battleRoleLabel(role){return BATTLE_ROLE_LABELS[String(role??"balanced"
 function battleEffectLabel(effect){return BATTLE_EFFECT_LABELS[effect?.kind]??effect?.name??String(effect?.kind??"効果")}
 function battleStatusLabel(status){const labels={poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖"};return labels[status?.id]??status?.name??statusLabel(status)}
 function remainingTurns(turns,persistent=false){const value=Math.max(0,Number(turns)||0);return value?` 残${value}`:persistent?"・持続":""}
-const COMBAT_RANK_POWER=Object.freeze({N:0,R:1,SR:2,SSR:3,UR:4,LR:5,"神話":6,"深淵":7,"十神":8});
+const COMBAT_RANK_POWER=Object.freeze({N:0,R:1,SR:2,SSR:3,UR:4,LR:5,"神話":6,BOSS:7,"深淵":8,"十神":9});
 function combatRank(unit,species={}){
- const value=unit?.endgameFaction==="tenGod"||unit?.faction==="tenGod"?"十神":unit?.endgameFaction==="abyss"||unit?.faction==="abyss"?"深淵":unit?.summonTier??unit?.summonRarity??unit?.combatRarity??species.rarity??null;
+ const value=unit?.endgameFaction==="tenGod"||unit?.faction==="tenGod"?"十神":unit?.endgameFaction==="abyss"||unit?.faction==="abyss"?"深淵":unit?.boss?"BOSS":unit?.summonTier??unit?.summonRarity??unit?.combatRarity??species.rarity??null;
  return Object.prototype.hasOwnProperty.call(COMBAT_RANK_POWER,value)?value:null;
 }
-function rankTone(rank){return({N:"n",R:"r",SR:"sr",SSR:"ssr",UR:"ur",LR:"lr","神話":"mythic","深淵":"abyss","十神":"ten-god"})[rank]??""}
+function rankTone(rank){return({N:"n",R:"r",SR:"sr",SSR:"ssr",UR:"ur",LR:"lr","神話":"mythic",BOSS:"boss","深淵":"abyss","十神":"ten-god"})[rank]??""}
 function rankBadge(rank){return rank?`<span class="combat-rank-badge rank-${rankTone(rank)}">${rank}</span>`:""}
 function htmlText(value){return String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
 function equipmentAuthorityBadge(unit){const authorities=unit?._equipmentAuthorities??[];if(!authorities.length)return"";const first=authorities[0],extra=authorities.length-1,title=authorities.map(authority=>`${authority.name}：${authority.description}`).join("／");return`<span class="equipment-authority-badge" title="${htmlText(title)}"><i>◆</i><b>${htmlText(first.name)}</b>${extra?`<em>+${extra}</em>`:""}</span>`}
@@ -54,16 +54,16 @@ function renderEnemies(battle,enemies,target){
  return enemies.filter(Boolean).map((enemy,index)=>{
   const statuses=enemyStatusesFor(battle,enemy.id),effects=enemyEffectsFor(battle,enemy.id);
   const statusHtml=`<div class="status-row enemy-status-row" data-status-detail="${enemy.id}" ${statuses.length||effects.length?"":'aria-hidden="true"'}>${statuses.map(s=>`<span class="status-chip ${s.id}">${battleStatusLabel(s)}${remainingTurns(s.turns)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
-  const floorBoss=Boolean(enemy.floorBossCatalogId),badge=enemy.boss?`<span class="boss-badge">${floorBoss?"階層ボス":"ボス"}</span>`:enemy.elite?`<span class="elite-badge">${htmlText(enemy.eliteAffixIcon??"🜲")} 強敵・${htmlText(enemy.eliteAffixName??"変異")}</span>`:"",safeName=htmlText(enemy.name);const danger="";
+  const floorBoss=Boolean(enemy.floorBossCatalogId||enemy.boss&&enemy.campaignBossId&&!enemy.endgameBossId),endgameBoss=Boolean(enemy.endgameBossId||["abyss","tenGod"].includes(enemy.faction)),badge=enemy.boss?`<span class="boss-badge">${floorBoss?"階層BOSS":endgameBoss?(enemy.faction==="tenGod"?"十神":"深淵"):"BOSS"}</span>`:enemy.elite?`<span class="elite-badge">${htmlText(enemy.eliteAffixIcon??"🜲")} 強敵・${htmlText(enemy.eliteAffixName??"変異")}</span>`:"",safeName=htmlText(enemy.name);const danger="";
   const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
   const line=index<2?"front-line":"rear-line";
-  const dead=enemy.hp<=0,pendingKo=dead&&(battle.presentationKoIds??[]).map(String).includes(String(enemy.id)),element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",rank=combatRank(enemy,battle.species?.[enemy.speciesId])??"N",rankClass=`combat-rank-unit rank-${rankTone(rank)}`,rankMarkup=rankBadge(rank);
+  const dead=enemy.hp<=0,pendingKo=dead&&(battle.presentationKoIds??[]).map(String).includes(String(enemy.id)),element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",rank=combatRank(enemy,battle.species?.[enemy.speciesId])??"N",rankClass=floorBoss?"combat-rank-unit rank-floor-boss":`combat-rank-unit rank-${rankTone(rank)}`,rankMarkup=enemy.boss?"":rankBadge(rank);
   return `<button id="enemy-${enemy.id}" ${dead?`disabled${pendingKo?"":' aria-hidden="true"'}`:`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${pendingKo?"presentation-ko-pending":""} ${enemy.boss?"boss-enemy":""} ${enemy.raidMainBoss?"raid-main-boss":""} ${enemy.raidSubBoss?"raid-sub-boss":""} ${floorBoss?"floor-boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${rankClass} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
    <span class="battle-unit-floating-name battle-unit-floating-badges">${badge}${rankMarkup}<b title="${safeName}">${safeName}</b></span>
    <div class="side-unit-sprite enemy-orb">${battle.enemyMagicCircleArt?.[enemy.id]??""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.visualFrame??(enemy.hp<=0&&!pendingKo?"down":"idle"),className:"battle-enemy-visual"})}</div>
    <div class="side-unit-card enemy-info">
-    <div class="side-unit-name enemy-name">${danger}<span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
+    <div class="side-unit-name enemy-name">${danger}<b class="enemy-card-name" title="${safeName}">${safeName}</b><span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
     ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}`,"enemy-hp")}
     <!-- enemy-mini-stats retired in Build321: enemy cards intentionally expose HP only. -->

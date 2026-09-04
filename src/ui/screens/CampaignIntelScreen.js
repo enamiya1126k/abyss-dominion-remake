@@ -28,30 +28,39 @@ function mapPanel(model,selectedIndex){
  </section>`
 }
 
-function heroPanel(model){
+function heroSkillCards(hero,presentation){
+ const skills=presentation?.skills??[];
+ if(!skills.length)return'<p class="campaign-hero-no-skills">使用技を解析中です。</p>';
+ return`<div class="campaign-hero-skill-grid">${skills.map(skill=>`<article class="campaign-hero-skill-card"><header><small>${escapeHtml(skill.tag)}・${escapeHtml(skill.element)}属性</small><b>${escapeHtml(skill.name)}</b></header><p>${escapeHtml(skill.effect)}</p><footer><span>${escapeHtml(skill.target)}</span><em>MP ${skill.mp}</em><em>CT ${skill.cooldown}</em></footer></article>`).join("")}</div>`
+}
+
+function heroPanel(model,heroPresentation={}){
  const heroes=model.heroes??[];
  return`<section class="campaign-hero-intel-panel" aria-label="勇者一行の攻略情報">
-  <header><small>ROYAL HERO PARTY</small><h2>勇者一行・観測記録</h2><p>迷宮内での追跡傾向と戦闘特性。遭遇後の傷も十日目まで記録されます。</p></header>
-  <div class="campaign-hero-intel-grid">${heroes.map((hero,index)=>`<details class="campaign-hero-card ${hero.status==="撃退済み"?"is-defeated":hero.status==="遭遇済み"?"is-met":"is-unknown"}" ${index===0?"open":""}>
-   <summary><span class="campaign-hero-sigil" aria-hidden="true">${index+1}</span><span><small>${escapeHtml(hero.title)}</small><b>${escapeHtml(hero.name)}</b><em>${escapeHtml(hero.role)}</em></span><strong>${escapeHtml(hero.status)}<i></i></strong></summary>
+  <header><small>ROYAL HERO PARTY</small><h2>勇者一行・観測記録</h2><p>専用画像・使用技・行動条件を確認できます。遭遇後の傷も十日目まで記録されます。</p></header>
+  <div class="campaign-hero-intel-grid">${heroes.map((hero,index)=>{const presentation=heroPresentation?.[hero.id]??{};return`<details class="campaign-hero-card ${hero.status==="撃退済み"?"is-defeated":hero.status==="遭遇済み"?"is-met":"is-unknown"}" ${index===0?"open":""}>
+   <summary><span class="campaign-hero-summary-portrait" aria-hidden="true">${presentation.visual??`<b>${index+1}</b>`}</span><span><small>${escapeHtml(hero.title)}</small><b>${escapeHtml(hero.name)}</b><em>${escapeHtml(hero.role)}・${(presentation.skills??[]).length}技能</em></span><strong>${escapeHtml(hero.status)}<i></i></strong></summary>
    <div class="campaign-hero-card-body">
+    <div class="campaign-hero-profile-stage"><div class="campaign-hero-portrait">${presentation.visual??`<b>${escapeHtml(hero.name)}</b>`}</div><div><small>TACTICAL IDENTITY</small><b>${escapeHtml(presentation.attribute??"不明")}属性</b><span>${escapeHtml(presentation.speciesRole??hero.role)}</span><em>神話級・勇者軍</em></div></div>
     <div class="campaign-hero-vital"><span><small>予言上の残存HP</small><b>${hero.remainingHpPercent}%</b></span><i style="--hero-hp:${hero.remainingHpPercent}%"><em></em></i><small>${hero.encounters?`遭遇 ${hero.encounters}回・傷 ${hero.woundPercent}%`:"まだ直接の戦闘記録なし"}</small></div>
     <dl><div><dt>追跡</dt><dd>${escapeHtml(hero.field)}</dd></div><div><dt>戦闘</dt><dd>${escapeHtml(hero.combat)}</dd></div><div class="campaign-hero-counter"><dt>対策</dt><dd>${escapeHtml(hero.counter)}</dd></div></dl>
+    <section class="campaign-hero-skills"><header><small>REGISTERED SKILLS</small><h3>使用スキル</h3></header>${heroSkillCards(hero,presentation)}</section>
+    <section class="campaign-hero-decisions"><header><small>COMBAT PRIORITY</small><h3>発動条件・行動優先</h3></header><div>${(hero.decisionRules??[]).map((rule,ruleIndex)=>`<p><i>${ruleIndex+1}</i><span><small>${escapeHtml(rule.when)}</small><b>${escapeHtml(rule.action)}</b></span></p>`).join("")}</div></section>
    </div>
-  </details>`).join("")}</div>
+  </details>`}).join("")}</div>
  </section>`
 }
 
-export function CampaignIntelScreen(model,{tab="map",selectedLocationIndex=null}={}){
+export function CampaignIntelScreen(model,{tab="map",selectedLocationIndex=null,heroPresentation={}}={}){
  const activeTab=tab==="heroes"?"heroes":"map",currentIndex=Math.max(0,Number(model?.currentIndex)||0),selectedIndex=selectedLocationIndex==null?currentIndex:Math.max(0,Math.min((model?.route?.length??1)-1,Number(selectedLocationIndex)||0));
  return`<section class="screen campaign-intel-screen" data-campaign-intel-tab="${activeTab}">
   <header class="campaign-intel-header">
-   <button type="button" data-campaign-intel-back aria-label="ホームへ戻る"><i aria-hidden="true"></i></button>
+   <button type="button" data-campaign-intel-back aria-label="ホームへ戻る"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5 7.5 12l7 7"/></svg></button>
    <span><small>INVASION OBSERVATORY</small><h1>予言・勇者侵攻情報</h1><p>${escapeHtml(model?.partyStatus??"魔王城へ進軍中")}・予言 ${model?.day??1}/10</p></span>
    <div><small>侵攻度</small><b>${model?.progress??0}<em>%</em></b></div>
   </header>
   <nav class="campaign-intel-tabs" aria-label="侵攻情報の分類"><button type="button" data-campaign-intel-tab-button="map" class="${activeTab==="map"?"is-active":""}" aria-selected="${activeTab==="map"}"><small>WORLD ROUTE</small><b>進軍マップ</b></button><button type="button" data-campaign-intel-tab-button="heroes" class="${activeTab==="heroes"?"is-active":""}" aria-selected="${activeTab==="heroes"}"><small>TACTICAL FILE</small><b>勇者の特性・対策</b></button></nav>
-  <main class="campaign-intel-content">${activeTab==="map"?mapPanel(model,selectedIndex):heroPanel(model)}</main>
+  <main class="campaign-intel-content">${activeTab==="map"?mapPanel(model,selectedIndex):heroPanel(model,heroPresentation)}</main>
   <footer class="campaign-intel-footer"><i aria-hidden="true"></i><p>閲覧専用です。この画面では階層・報酬・進軍度・遭遇抽選は変化しません。</p></footer>
  </section>`
 }

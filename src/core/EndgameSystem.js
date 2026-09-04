@@ -324,10 +324,11 @@ export function createEmergencyEncounter(state,forcedId=null){
  const floor=state.player?.currentFloor||EMERGENCY_UNLOCK_FLOOR,rescue=emergencyRescueStatus(state),baseManifestation=manifestationForFloor(floor),rate=baseManifestation.rate,manifestation={...baseManifestation},pending=normalizeEndgameState(state).emergency.pendingEncounter;
  const available=Object.values(ENDGAME_BOSSES);
  const boss=ENDGAME_BOSSES[canonicalEndgameId(forcedId??pending?.bossId)]??available[Math.floor(Math.random()*available.length)],factionBase=boss.faction==="tenGod"?7:4,leaderMultiplier=factionBase*(.65+manifestation.rate*1.75),supportMultiplier=(boss.faction==="tenGod"?2.5:1.75)*(1+manifestation.rate),level=Math.max(150,Math.min(99999,Math.round(floor*(1.15+manifestation.rate*.45)))),leader=enemy(boss.speciesId,level,{boss:true,endgameBossId:boss.id,visualSpeciesId:boss.id,faction:boss.faction,nameOverride:`${boss.name}〈${manifestation.percent}%〉`,statMultiplier:leaderMultiplier,powerRate:manifestation.rate,manifestationLabel:manifestation.label,uncapturable:true,bossPassive:boss.passive,bossResistances:boss.resistances,elementMultipliers:boss.elementMultipliers,statusProfile:boss.statusProfile}),supportIds=boss.support.slice(0,Math.max(0,rescue.supportCap)),supports=supportIds.map((id,i)=>enemy(id,Math.max(1,level-10-i*3),{nameOverride:`${boss.faction==="tenGod"?"神兵":"眷属"}・${i+1}`,statMultiplier:supportMultiplier,endgameSupport:true,uncapturable:true})),finalWave=[leader,...supports];
- const unlocked=FLOOR_BOSS_CATALOG.filter(entry=>state?.floorBossChallenges?.discovered?.[entry.id]),wanted=boss.faction==="tenGod"?2:1,seed=[...boss.id].reduce((sum,char)=>sum+char.charCodeAt(0),Math.max(0,Math.floor(Number(state.player?.maxFloor)||floor))),preludeBosses=[];
- for(let index=0;index<Math.min(wanted,unlocked.length);index++){const candidate=unlocked[(seed+index)%unlocked.length];if(candidate)preludeBosses.push(candidate)}
- const preludeWaves=preludeBosses.map((entry,index)=>{const preludeLevel=Math.min(10000,Math.max(entry.floor,Math.round(level*(boss.faction==="tenGod"?.82:.74)))),preludeScale=Math.max(1,(boss.faction==="tenGod"?1.55:1.25)*(1+manifestation.rate)+index*.18),floorBoss=floorBossEnemyEntry(entry,{level:preludeLevel,statMultiplier:preludeScale,hpMultiplier:2.25,label:`前哨 WAVE ${index+1}`});floorBoss.endgamePrelude=true;floorBoss.endgamePreludeFor=boss.id;return[floorBoss]});
- return{boss,manifestation,rescue,enemies:finalWave,waves:[...preludeWaves,finalWave],preludeBossIds:preludeBosses.map(entry=>entry.id)}
+ // A manual Deep/Ten-God challenge must begin with the entity the player
+ // selected.  Older builds inserted unrelated campaign bosses as prelude
+ // waves, which made (for example) Gluttony open with a completely different
+ // boss.  Its own attendants remain in the same encounter.
+ return{boss,manifestation,rescue,enemies:finalWave,waves:[finalWave],preludeBossIds:[]}
 }
 
 export function endgamePreludeOptions(boss){

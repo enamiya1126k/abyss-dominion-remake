@@ -1,6 +1,6 @@
 import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=3.1.1-build316";
 
-export const ABYSS_SKILL_TREE_VERSION=8;
+export const ABYSS_SKILL_TREE_VERSION=9;
 
 export const ABYSS_SKILL_CATEGORIES=Object.freeze([
  {
@@ -479,8 +479,9 @@ export function abyssSkillNodeById(nodeId){
 }
 
 export function abyssSkillUnlockFloor(nodeOrId){
- const node=typeof nodeOrId==="string"?NODE_BY_ID.get(nodeOrId):nodeOrId;
- return node?.unlockFloor??unlockFloorForTier(node?.tier);
+ // Kept as a compatibility export for older UI modules.  Build332 removed
+ // every floor gate: GOLD is the only purchase requirement.
+ return 1;
 }
 
 export function abyssSkillCategoryById(categoryId){
@@ -505,13 +506,8 @@ export function normalizeAbyssSkillTree(state){
  const requested=new Set(Array.isArray(source.learned)?source.learned.filter(id=>NODE_BY_ID.has(id)):[]);
  const grandfathered=new Set(Array.isArray(source.grandfathered)?source.grandfathered.filter(id=>requested.has(id)):[]);
  if(sourceVersion<ABYSS_SKILL_TREE_VERSION)requested.forEach(id=>grandfathered.add(id));
- const learned=[];
- const learnedSet=new Set();
- for(const node of ABYSS_SKILL_NODES){
-  if(!requested.has(node.id)||!grandfathered.has(node.id)&&!prerequisitesMet(node,learnedSet))continue;
-  learned.push(node.id);
-  learnedSet.add(node.id);
- }
+ const learned=ABYSS_SKILL_NODES.filter(node=>requested.has(node.id)).map(node=>node.id);
+ const learnedSet=new Set(learned);
  const paidCosts={};
  let investedGold=0;
  let rebalanceRefund=0;
@@ -628,18 +624,6 @@ export function canLearnAbyssSkill(state,nodeId){
  const tree=normalizeAbyssSkillTree(state);
  const learned=new Set(tree.learned);
  if(learned.has(node.id))return{ok:false,reason:"learned",message:"すでに習得済みです。",node};
- const unlockFloor=abyssSkillUnlockFloor(node),maxFloor=safeInteger(state?.player?.maxFloor,0);
- if(maxFloor<unlockFloor)return{ok:false,reason:"floor",message:`${unlockFloor}階到達で解放されます。`,node,unlockFloor};
- const missing=node.requires.filter(id=>!learned.has(id));
- if(missing.length){
-  const names=missing.map(id=>NODE_BY_ID.get(id)?.name).filter(Boolean).join("・");
-  return{ok:false,reason:"prerequisite",message:`先に「${names}」を習得してください。`,node,missing};
- }
- const candidates=node.requiresAny??[],needed=Math.max(0,Number(node.requiresAnyCount)||0),owned=candidates.filter(id=>learned.has(id));
- if(needed&&owned.length<needed){
-  const names=candidates.map(id=>NODE_BY_ID.get(id)?.name).filter(Boolean).join("・");
-  return{ok:false,reason:"route",message:`前提候補「${names}」から${needed}個習得してください。`,node,missing:candidates.filter(id=>!learned.has(id)),needed};
- }
  const gold=safeInteger(state.player?.gold,0);
  if(gold<node.cost)return{ok:false,reason:"gold",message:`GOLD不足｜あと ${(node.cost-gold).toLocaleString()}G`,node};
  return{ok:true,node};

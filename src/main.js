@@ -1,5 +1,5 @@
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.12-build331";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.12-build331";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.13-build332";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.13-build332";
 // Regression markers only: SaveService.js?v=3.1.10-build329 / config.js?v=3.1.10-build329 / HomeScreen.js?v=3.1.10-build329
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.1-build311";
@@ -10,12 +10,12 @@ import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
 import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.11-build330";
-import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.11-build330";
+import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.13-build332";
 import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.11-build330";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.1-build311";
 import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.12-build331";
-import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.12-build331";
+import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.13-build332";
 import{reconcileOnlineMotion,onlineMotionSpeed}from"./online/OnlineMovement.js?v=3.1.1-build311";
 import{beginGuestProgressIsolation,finishGuestProgressIsolation,onlineProgressionAllowed,legacyProgressRecoveryCandidate,applyLegacyProgressRecovery,dismissLegacyProgressRecovery,undoLegacyProgressRecovery}from"./online/OnlineProgressIsolation.js?v=3.1.1-build311";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.1-build311";
@@ -24,7 +24,7 @@ import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.1-build311";
 import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.1-build311";
 import{CampaignFinalFloorScreen}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.1-build320";
 import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.1-build311";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.9-build328";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.13-build332";
 import{Modal}from"./ui/components/Modal.js?v=3.1.1-build311";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=3.1.1-build311";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=3.1.1-build311";
@@ -44,9 +44,9 @@ import{initialAffixCount,lockedAffixCount,maxLockableAffixes,normalizeEquipmentA
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=3.1.1-build311";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=3.1.1-build311";
 import{SkillScreen}from"./ui/screens/SkillScreen.js?v=3.1.1-build311";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=3.1.1-build316";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=3.1.13-build332";
 import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=3.1.1-build311";
-import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=3.1.1-build316";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=3.1.13-build332";
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=3.1.1-build311";
 import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=3.1.1-build311";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=3.1.1-build311";
@@ -64,9 +64,9 @@ import{dangerConfig}from"./core/DangerSystem.js?v=3.1.1-build311";
 import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=3.1.1-build311";
 import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost,magicCircleLevelEffect,magicCircleProgressionStatus}from"./core/MagicCircleSystem.js?v=3.1.2-build321";
 import{biomeForFloor,battleEnvironmentForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=3.1.1-build311";
-import{recordEncounterHistory,rollAttributeEncounterGroup}from"./core/EncounterPoolSystem.js?v=3.1.1-build311";
+import{campaignBossSupportCount,campaignEncounterPartySize,recordEncounterHistory,rollAttributeEncounterGroup}from"./core/EncounterPoolSystem.js?v=3.1.13-build332";
 import{dungeonThemeForFloor,dungeonThemeForAttribute}from"./data/dungeonThemes.js?v=3.1.1-build311";
-import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_TRIAL_BATTLE_COUNT,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,recordTeamBattleResult,teamBattleRewardEntitlements,safeCurrencyGrant,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=3.1.1-build316";
+import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,ENDGAME_TRIAL_BATTLE_COUNT,ENDGAME_BOSSES,ENDGAME_TRIALS,normalizeEndgameState,dailyTeamAttempts,dailyGauntletAttempts,teamBattleDayKey,createTeamBattleEncounter,createEndgameTrialEncounter,recordEndgameTrialResult,recordTeamBattleResult,teamBattleRewardEntitlements,safeCurrencyGrant,shouldTriggerEmergency,createEmergencyEncounter,recordEmergencyResult,awardEmergencyFragments,emergencyFragmentStatus,endgameContractStatus,craftEndgameEquipment,endgamePreludeOptions,resolveEndgamePrelude,applyPreludeToEncounter,attemptEndgameContract,specialBattleSettlement,recordSpecialBattleSettlement,hasCleared1000,mark1000FloorCleared,mark10000FloorCleared,worldRegionForFloor,endgameFactionStatMultiplier,manualEndgameChallengeStatus,manualEndgameTierStatus,consumeManualEndgameChallenge,recordManualEndgameClear,teamBattleRewardPreview}from"./core/EndgameSystem.js?v=3.1.13-build332";
 import{balanceTeamBattleEnemies}from"./core/TeamBattleBalanceSystem.js?v=3.1.1-build316";
 import{NORMAL_SUMMON_RATES,GUARANTEED_SUMMON_RATES,GACHA_PITY_LIMITS,rollSummonRarity,rollSummonRarityWithPity,normalizeGachaPityState,normalizeGachaDrawHistory,selectBalancedGachaEntry,recordGachaDraw}from"./core/GachaBalanceSystem.js?v=3.1.1-build311";
 import{CAMPAIGN_MAX_FLOOR,CAMPAIGN_KEYS_PER_FLOOR,HERO_PARTY_IDS,campaignFloorToLegacyFloor,campaignFloorState,campaignBossProgress,campaignBossProgressList,campaignDefeatedBossIds,campaignKeysHeld,beginCampaignFloorRun,beginCampaignFloorReplay,collectCampaignKey,defeatCampaignBoss,trophyChestEntitlements,claimTrophyChest,roomCountForRandom,roomAttributesForFloor,campaignRoomProfile,campaignEndingForResult,recordCampaignEnding,normalizeCampaignState,floorBossCampaignDisplayFloor,campaignMilestoneBossIds,isCampaignMultiBossFloor}from"./core/Campaign100System.js?v=3.1.1-build319";
@@ -88,7 +88,7 @@ import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBa
 import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=3.1.1-build311";
 import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,casinoBetLimit,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=3.1.1-build311";
 import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=3.1.1-build314";
-import{runConfirmedFullReset}from"./core/FullResetSystem.js?v=3.1.1-build311";
+import{runConfirmedFullReset}from"./core/FullResetSystem.js?v=3.1.13-build332";
 import{DAILY_NOTICE_GIFT,activeNoticeDefinitions,setServerMaintenanceState,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount,pendingNoticeRewards,claimNoticeReward,enqueueNoticeReward}from"./core/NoticeSystem.js?v=3.1.1-build317";
 import{COMPLETE_MONSTER_CODEX,codexCollectionSummary,syncCollectionRewardInbox,rewardDescription}from"./core/CollectionRewardSystem.js?v=3.1.1-build316";
 import{achievementSummary,syncAchievementRewardInbox,achievementIconKeyForId}from"./core/AchievementRewardSystem.js?v=3.1.1-build316";
@@ -522,7 +522,7 @@ function normalizeEquipmentState(){
 }
 function campaignHeroIntelPresentation(model){
  return Object.fromEntries((model?.heroes??[]).map(hero=>{
-  const species=SPECIES[hero.id]??{},skills=(species.skills??[]).filter(Boolean).slice(0,4).map(skill=>({
+  const species=SPECIES[hero.id]??{},skills=(species.authoredSkills??species.skills??[]).filter(Boolean).slice(0,6).map(skill=>({
    id:String(skill.id??skill.name??"skill"),name:String(skill.name??"名称不明"),tag:String(skill.tag??skill.type??"スキル"),element:skillElementLabel(skill),target:String(skill.target??"対象は戦況により変化"),mp:Math.max(0,Number(skill.mp)||0),cooldown:Math.max(0,Number(skill.cooldown)||0),effect:skillEffectSummary(skill," / ")
   }));
   return[hero.id,{visual:monsterVisual({speciesId:hero.id,visualSpeciesId:hero.id},hero.name,{className:"campaign-intel-hero-visual"}),attribute:elementLabel(species.element),speciesRole:String(species.role??hero.role??"勇者"),skills}]
@@ -1758,7 +1758,7 @@ async function requestFullGameReset(){
   return showToast("初期化を中止しました。");
  }
  fullResetInFlight=true;
- showToast("オンラインのレイド記録を安全に初期化しています…");
+ showToast("オンライン記録とギルド所属を安全に初期化しています…");
  onlinePartyController?.disconnect({leave:true,quiet:true});
  onlinePartyController?.stopBackground?.({disconnect:false});
  let onlineReset;
@@ -1773,7 +1773,7 @@ async function requestFullGameReset(){
  if(!save.reset()){fullResetInFlight=false;return showToast("初期データを保存できなかったため、初期化を完了できませんでした。もう一度お試しください。");}
  onlinePartyController=null;powerRankingUi={state:null,profile:null,selectedPlayerId:null,loadingList:false,loadingProfile:false,listTimedOut:false};powerRankingLastSignature="";powerRankingLastPublishedAt=0;game=null;battle=null;snapshot=null;activeEnemy=null;selected=null;equipmentTarget=null;skillTarget=null;
  monsterManage={editing:false,selected:new Set()};equipmentManage={editing:false,selected:new Set()};
- fullResetInFlight=false;screen="home";render();showToast("ゲームデータ・シリアルコード・今週のレイド記録を初期化しました");
+ fullResetInFlight=false;screen="home";render();showToast("ゲームデータ・レイド記録・ギルド所属を初期化しました");
 }
 async function redeemSettingsGameMasterCode(event){
  event?.preventDefault();
@@ -3626,23 +3626,34 @@ function updateCampaignHeroPursuitOnStep(){
 function transferCampaignHeroPursuit(section){const pursuit=game?.world?.campaignHeroPursuit;if(!pursuit)return;const point=campaignHeroSpawnPoint(section,{near:pursuit.heroId==="myth_rion"});pursuit.x=point.x;pursuit.y=point.y;pursuit.rx=point.x;pursuit.ry=point.y;pursuit.sectionId=section.id;pursuit.portalTransfers=(Number(pursuit.portalTransfers)||0)+1;pursuit.portalGraceSteps=pursuit.heroId==="myth_hide"?1:2;if(pursuit.portalTransfers>3)resolveEscapedCampaignHeroPursuit();else refreshCampaignHeroChaseHud()}
 function beginCampaignHeroContactBattle(pursuit){if(!pursuit||game.world.encountering)return;const enemy=campaignHeroEncounter({heroId:pursuit.heroId,encounterId:pursuit.encounterId})[0];if(!enemy)return resolveEscapedCampaignHeroPursuit();beginEncounter([enemy],{campaignHero:true,heroId:pursuit.heroId,encounterId:pursuit.encounterId,priorVitals:capturePartyVitals()})}
 
+function exploreAutoNavigation(){
+ if(!game?.world)return null;
+ const current=game.world.autoNavigation332;if(current&&typeof current==="object")return current;
+ return game.world.autoNavigation332={lastTransition:null,reverseCount:0,pauseUntil:0};
+}
 function nearestAutoTarget(candidates){
  if(!candidates.length||!game?.player)return null;
  const current=game.world.currentSectionId??sectionIdAt(game.world,game.player.x,game.player.y);
- return candidates.map(target=>{
+ const entries=candidates.map(target=>{
   const targetSection=campaignObjectSection(game.world,target);
   if(!game.world.sections?.length||targetSection===current){const route=path(game.world,game.player,target);return{target,route,score:route.length}}
   const sections=sectionRoute(game.world,current,targetSection),portal=portalTowardSection(game.world,current,targetSection),route=portal?path(game.world,game.player,portal):[];return{target,route,portal,score:sections.length*1000+route.length}
- }).filter(entry=>entry.route?.length).sort((a,b)=>a.score-b.score)[0]??null;
+ }).filter(entry=>entry.route?.length),last=exploreAutoNavigation()?.lastTransition,forward=entries.filter(entry=>!(last?.to===current&&entry.portal?.targetSectionId===last.from));
+ return(forward.length?forward:entries).sort((a,b)=>a.score-b.score)[0]??null;
 }
 function explorationPartyNeedsRecovery(){
  return explorationPartyMembers().some(monster=>{const hp=calculatedStats(monster).hp,mp=maxMp(monster);return Number(monster.currentHp??hp)<hp||Number(monster.currentMp??mp)<mp})
 }
 function fullFloorAutoTargets(){
  const world=game?.world;if(!world)return[];
- const floorState=campaignFloorState(save.state,save.state.player.currentFloor),discovered=new Set(world.discoveredSections??[world.startSectionId]);
- const keys=(world.campaignKeys??[]).filter(entry=>!entry.collected),chests=(world.chests??[]).filter(entry=>!entry.open&&!entry.autoSkipped),unvisited=(world.sections??[]).filter(section=>!discovered.has(section.id)).map(section=>({...section.center,sectionId:section.id,autoSectionTarget:true}));
- const remaining=[...keys,...chests,...unvisited];if(remaining.length)return remaining;
+ const floorState=campaignFloorState(save.state,save.state.player.currentFloor),current=world.currentSectionId??sectionIdAt(world,game.player.x,game.player.y),discovered=new Set(world.discoveredSections??[world.startSectionId]);
+ const keys=(world.campaignKeys??[]).filter(entry=>!entry.collected),chests=(world.chests??[]).filter(entry=>!entry.open&&!entry.autoSkipped),currentObjects=[...keys,...chests].filter(entry=>campaignObjectSection(world,entry)===current),unvisited=(world.sections??[]).filter(section=>!discovered.has(section.id)).map(section=>({...section.center,sectionId:section.id,autoSectionTarget:true}));
+ // AUTO priority: finish the present room, discover every untouched room,
+ // then backtrack for remaining keys/chests.  This prevents two portals from
+ // continuously winning the same nearest-target calculation.
+ if(currentObjects.length)return currentObjects;
+ if(unvisited.length)return unvisited;
+ const remaining=[...keys,...chests];if(remaining.length)return remaining;
  const bosses=campaignWorldBosses(world).filter(entry=>entry.active!==false);if(bosses.length)return bosses;
  const trophies=campaignWorldTrophyChests(world).filter(entry=>!entry.open);if(trophies.length&&campaignKeysHeld(floorState)>=CAMPAIGN_KEYS_PER_FLOOR)return trophies;
  if(world.hotSpring?.active&&!world.hotSpring.used&&explorationPartyNeedsRecovery())return[world.hotSpring];
@@ -3650,6 +3661,7 @@ function fullFloorAutoTargets(){
 }
 function applyExploreAutoPath(){
  if(!game?.running||game.paused||game.world.encountering||save.state.settings.exploreAutoMode==="off"||game.player.path?.length)return;
+ const navigation=exploreAutoNavigation();if(Date.now()<Number(navigation?.pauseUntil||0))return;
  const mode=save.state.settings.exploreAutoMode,targets=[];
  if(mode==="floor")targets.push(...fullFloorAutoTargets());
  if(mode==="items"){
@@ -3675,7 +3687,7 @@ function updateExploreAutoToggleState(){
 }
 function setExploreAutoMode(mode){
  const next=mode==="off"?"off":"floor";save.state.settings.exploreAutoMode=next;save.state.settings.exploreAutoMenuOpen=false;
- if(game?.player){game.player.path=[];game.player.p=0}save.save();updateExploreAutoToggleState();if(next!=="off"&&game?.running)requestAnimationFrame(applyExploreAutoPath);return next
+ if(game?.player){game.player.path=[];game.player.p=0}if(next!=="off"&&game?.world)game.world.autoNavigation332={lastTransition:null,reverseCount:0,pauseUntil:Date.now()+260};save.save();updateExploreAutoToggleState();if(next!=="off"&&game?.running)requestAnimationFrame(applyExploreAutoPath);return next
 }
 function stopExploreAuto(reason=""){
  if(save.state.settings?.exploreAutoMode==="off"){updateExploreAutoToggleState();return}
@@ -3797,9 +3809,7 @@ function specialFieldEncounter(floor,legacyDepth,rareEncounterRate){
 function randomEnemyGroup({forcedCount=null}={}){
  const floor=save.state.player.currentFloor,legacyDepth=campaignFloorToLegacyFloor(floor),fixedCount=forcedCount==null?NaN:Number(forcedCount);
  if(floor===1){recordFieldEncounter(SPECIES.slime);return[prepareEnemyEntry({speciesId:"slime",level:1,boss:false},floor,{economyFloor:legacyDepth})]}
- const roll=Math.random();let count=Number.isInteger(fixedCount)?Math.max(1,Math.min(4,fixedCount)):1;
- // 通常戦でも深層ほど4体編成が増える。1体編成も残して探索の緩急は保つ。
- if(!Number.isInteger(fixedCount)){if(floor<10)count=roll<.18?2:1;else if(floor<50)count=roll<.05?3:roll<.34?2:1;else if(floor<100)count=roll<.05?1:roll<.38?2:roll<.73?3:4;else count=roll<.01?1:roll<.09?2:roll<.27?3:4}
+ const roll=Math.random(),count=Number.isInteger(fixedCount)?Math.max(1,Math.min(4,fixedCount)):campaignEncounterPartySize(floor,roll);
  const rareEncounterRate=(save.state.party??[]).map(id=>save.state.monsters.find(monster=>monster.id===id)).filter(Boolean).reduce((sum,monster)=>sum+seriesEffectValue(monster,"rareEncounter",.5),0),special=specialFieldEncounter(floor,legacyDepth,rareEncounterRate);
  if(special){recordFieldEncounter(SPECIES[special.speciesId]);return[prepareEnemyEntry({...special,level:Math.max(1,enemyLevelForFloor(floor)),boss:false},floor,{economyFloor:legacyDepth})]}
  const attribute=game?.world?.currentAttribute??"neutral",rolled=rollAttributeEncounterGroup(STANDARD_ENCOUNTER_SPECIES,floor,attribute,{count,history:save.state.encounterHistory,rng:Math.random,campaign:true}),picked=rolled.species.length?rolled.species:[SPECIES.slime];
@@ -3821,12 +3831,17 @@ function floorBossEnemy(source=null){
  console.error("Official floor boss mapping missing",{floor,legacyFloor});return prepareEnemyEntry({speciesId:emergencyDefinition.speciesId,visualSpeciesId:emergencyDefinition.visualSpeciesId??emergencyDefinition.speciesId,level:Math.max(14,bossLevelForFloor(legacyFloor)),boss:true,nameOverride:emergencyDefinition.name,floorBossCatalogId:emergencyDefinition.id,uncapturable:true},floor,{forceGear:true,economyFloor:legacyFloor})
 }
 function floorBossParty(bossInfo,floor){
- return[bossInfo]
+ const wanted=campaignBossSupportCount(floor),bossSpecies=String(bossInfo?.speciesId??""),bossName=String(bossInfo?.nameOverride??""),supports=[],seenIds=new Set([bossSpecies]),seenNames=new Set([bossName]);
+ for(let attempt=0;attempt<4&&supports.length<wanted;attempt++)for(const entry of randomEnemyGroup({forcedCount:wanted-supports.length})){
+  const species=SPECIES[entry.speciesId],name=String(entry.nameOverride??species?.name??entry.speciesId);if(seenIds.has(entry.speciesId)||seenNames.has(name))continue;
+  seenIds.add(entry.speciesId);seenNames.add(name);supports.push({...entry,boss:false,statMultiplier:(Number(entry.statMultiplier)||1)*(.72+Math.min(100,Math.max(1,Number(floor)||1))*.0008),campaignBossSupport:true});if(supports.length>=wanted)break
+ }
+ return[bossInfo,...supports]
 }
 function openFloorBossChallenge(bossInfo,floor){
  const species=SPECIES[bossInfo.speciesId]??SPECIES.slime,endgame=bossInfo.endgameBossId?ENDGAME_BOSSES[bossInfo.endgameBossId]:null,name=bossInfo.nameOverride??endgame?.name??species.name,quote=bossInfo.floorBossQuote??endgame?.encounterText??["ここより先へ進む資格を、その力で示せ。","幾度挑もうと構わぬ。深淵は覚悟だけを量る。","この階層を越えるなら、恐れごと剣に変えてみせろ。"][Math.floor(Math.random()*3)],preview=createMonster(bossInfo.speciesId,{level:bossInfo.level,stars:1,rank:1}),partyPower=partyCombatPower(save.state),bossPower=Math.max(1,Math.round(monsterCombatPower(preview)*(bossInfo.statMultiplier??1.45))),tone=endgame?.faction==="tenGod"?"divine":endgame?.faction==="abyss"?"abyss":"floor",mechanics=bossInfo.floorBossPassive&&bossInfo.floorBossDomain?`<div class="floor-boss-mechanics"><span><small>固有能力</small><b>${bossInfo.floorBossPassive.name}</b><em>${bossInfo.floorBossPassive.description}</em></span><span><small>専用領域</small><b>${bossInfo.floorBossDomain.name}</b><em>${bossInfo.floorBossDomain.description}</em></span></div>`:"";
  app.insertAdjacentHTML("beforeend",Modal("階層支配者",`<div class="floor-boss-challenge-v3 tone-${tone}"><div class="boss-chain-frame" aria-hidden="true"><i></i><i></i></div><div class="boss-crest-v3"><span>階層</span><strong>${floor}</strong><em>支配者</em></div><div class="boss-visual-stage-v3"><div class="boss-fog-v3"></div>${monsterVisual({...bossInfo,visualSpeciesId:bossInfo.visualSpeciesId??bossInfo.endgameBossId},species.emoji??"BOSS",{className:"floor-boss-monster-visual-v3"})}</div><small>${bossInfo.floorBossTitle??endgame?.title??`第${floor}階層の支配者`}</small><h2>${name}</h2><b>Lv.${bossInfo.level}</b><blockquote>${quote}</blockquote>${mechanics}<div class="boss-power-versus-v3"><span><small>部隊戦力</small><b>${formatCombatPower(partyPower)}</b></span><i>対</i><span><small>ボス戦力</small><b>${formatCombatPower(bossPower)}</b></span></div><button type="button" class="boss-retreat-v3" data-boss-retreat>いったん退く</button></div>`,"支配者へ挑む"));
- const modal=topModal();modal.classList.add("floor-boss-modal-v3");const retreat=()=>{modal.remove();if(game)game.paused=false};modal._onDismiss=retreat;modal.querySelector("[data-boss-retreat]").onclick=retreat;const challenge=modal.querySelector("[data-modal-primary]");challenge.onclick=()=>{modal.remove();if(game)game.paused=false;beginEncounter([bossInfo])};if(exploreAutoActive()){const generation=exploreActionGeneration;setTimeout(()=>{if(generation===exploreActionGeneration&&modal.isConnected&&exploreAutoActive())challenge.click()},420)}
+ const modal=topModal();modal.classList.add("floor-boss-modal-v3");const retreat=()=>{modal.remove();if(game)game.paused=false};modal._onDismiss=retreat;modal.querySelector("[data-boss-retreat]").onclick=retreat;const challenge=modal.querySelector("[data-modal-primary]");challenge.onclick=()=>{modal.remove();if(game)game.paused=false;beginEncounter(floorBossParty(bossInfo,floor))};if(exploreAutoActive()){const generation=exploreActionGeneration;setTimeout(()=>{if(generation===exploreActionGeneration&&modal.isConnected&&exploreAutoActive())challenge.click()},420)}
 }
 function loop(now){
  if(!game?.running)return;
@@ -4031,6 +4046,7 @@ function showPostBossFieldUnlocks(){
 }
 function transitionCampaignSection(){
  if(game?.online||!game?.world?.sectionPortals?.length)return false;const portal=game.world.sectionPortals.find(entry=>entry.sectionId===game.world.currentSectionId&&entry.x===game.player.x&&entry.y===game.player.y);if(!portal)return false;
+ const from=game.world.currentSectionId,to=portal.targetSectionId,navigation=exploreAutoNavigation(),reverse=exploreAutoActive()&&navigation?.lastTransition?.from===to&&navigation.lastTransition.to===from;navigation.reverseCount=reverse?(Number(navigation.reverseCount)||0)+1:0;navigation.lastTransition={from,to,step:Number(game.world.steps)||0};navigation.pauseUntil=Date.now()+360;if(navigation.reverseCount>=2)stopExploreAuto("AUTO停止：同じ区画の往復を検知しました");
  const section=game.world.sections.find(entry=>entry.id===portal.targetSectionId);game.player.x=portal.arrivalX;game.player.y=portal.arrivalY;game.player.rx=portal.arrivalX;game.player.ry=portal.arrivalY;game.player.path=[];game.player.p=0;game.world.currentSectionId=portal.targetSectionId;game.world.currentRoomId=portal.targetSectionId;game.world.currentAttribute=section?.attribute??"neutral";game.partyTrail=[{x:game.player.x,y:game.player.y}];game.camera.reset(game.player.x*TILE,game.player.y*TILE);game.camera.clamp(game.world);revealCampaignArea();transferCampaignHeroPursuit(section);showSectionTransition(section);persistExpeditionSnapshot(expeditionSnapshotFromGame());return true
 }
 function update(dt){
@@ -4948,7 +4964,7 @@ function makeBattleEnemy(e,index=0){
   const hpMultiplier=Math.max(1,Number(prepared.fixedTrialHpMultiplier)||1);
   enemy.maxHp=Math.max(1,Math.round(enemy.maxHp*hpMultiplier));enemy.hp=enemy.maxHp;
  }
-	 enemy.endgameBossId=prepared.endgameBossId??null;enemy.visualSpeciesId=prepared.visualSpeciesId??prepared.endgameBossId??enemy.visualSpeciesId??null;enemy.faction=prepared.faction??profile?.faction??null;enemy.powerRate=prepared.powerRate??null;enemy.manifestationLabel=prepared.manifestationLabel??null;enemy.endgameSupport=Boolean(prepared.endgameSupport);enemy.uncapturable=Boolean(prepared.uncapturable);enemy.trialElement=normalizedElement(prepared.trialElement??prepared.attribute??profile?.element??sp?.element);enemy.id=`enemy-${Date.now()}-${index}-${Math.random().toString(36).slice(2,7)}`;
+	 enemy.boss=Boolean(prepared.boss||enemy.boss);enemy.endgameBossId=prepared.endgameBossId??null;enemy.floorBossCatalogId=prepared.floorBossCatalogId??null;enemy.campaignBossId=prepared.campaignBossId??prepared.endgameBossId??prepared.floorBossCatalogId??null;enemy.combatRarity=enemy.endgameBossId?(prepared.faction==="tenGod"?"十神":"深淵"):enemy.floorBossCatalogId?"BOSS":prepared.combatRarity??enemy.combatRarity??null;enemy.visualSpeciesId=prepared.visualSpeciesId??prepared.endgameBossId??enemy.visualSpeciesId??null;enemy.faction=prepared.faction??profile?.faction??null;enemy.powerRate=prepared.powerRate??null;enemy.manifestationLabel=prepared.manifestationLabel??null;enemy.endgameSupport=Boolean(prepared.endgameSupport);enemy.campaignBossSupport=Boolean(prepared.campaignBossSupport);enemy.uncapturable=Boolean(prepared.uncapturable);enemy.trialElement=normalizedElement(prepared.trialElement??prepared.attribute??profile?.element??sp?.element);enemy.id=`enemy-${Date.now()}-${index}-${Math.random().toString(36).slice(2,7)}`;
 	 enemy.campaignHeroId=prepared.campaignHeroId??null;enemy.campaignHeroEncounterId=prepared.campaignHeroEncounterId??null;enemy.campaignHeroFinal=Boolean(prepared.campaignHeroFinal);if(enemy.campaignHeroId)enemy.role=CAMPAIGN_HERO_PROFILES[enemy.campaignHeroId]?.combat?.role??enemy.role;
  applyEliteModifiers(enemy,prepared);hydrateEndgameEnemy(enemy,prepared);
  const hidden=enemyHiddenProfileForFloor(hiddenFloor,{rank:prepared.faction??sp?.rarity??"N",faction:prepared.faction,boss:Boolean(prepared.boss),equipped:Boolean(prepared.equipped),slots:prepared.enemyEquipmentSlots,gearLevel:prepared.enemyEquipmentLevel,rarity:prepared.enemyEquipmentRarity});enemy.hiddenProfile=hidden;enemy.hiddenDamageTaken=hidden.damageTaken??1;enemy.hiddenStatusResist=hidden.statusResist??0;enemy.hiddenCapturePressure=hidden.capturePressure??1;enemy.hiddenAi=hidden.ai??0;

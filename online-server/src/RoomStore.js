@@ -539,9 +539,18 @@ export class RoomStore{
    for(const backup of roomBackups)backup.room.raidProgress=backup.raidProgress;
    return{ok:false,code:"SETTLEMENT_PERSISTENCE",message:"レイド初期化を安全に保存できません。通信復旧後に再試行してください"}
   }
+  const guildReset=this.guilds.fullReset(session);
+  if(!guildReset.ok){
+   session.pendingRewards=sessionRewards;session.pendingMessages=sessionMessages;
+   if(outbox){outbox.pendingRewards=outboxRewards;outbox.pendingMessages=outboxMessages}
+   if(hadStored)this.raidProgressByOwner.set(playerId,stored);else this.raidProgressByOwner.delete(playerId);
+   for(const backup of roomBackups)backup.room.raidProgress=backup.raidProgress;
+   this._syncSettlementJournal();
+   return{ok:false,code:"GUILD_PERSISTENCE",message:"ギルド所属を安全に初期化できません。通信復旧後に再試行してください"}
+  }
   session.weeklyRaidResetReceipts=[...receipts.filter(value=>value!==id),id].slice(-FULL_RESET_RECEIPT_LIMIT);
   for(const room of ownedRooms)this._broadcastRoom(room);
-  return{ok:true,duplicate:false,requestId:id,weekId,removed:{rewards:sessionRewards.length-session.pendingRewards.length+outboxRewards.length-(outbox?.pendingRewards?.length??0),messages:sessionMessages.length-session.pendingMessages.length+outboxMessages.length-(outbox?.pendingMessages?.length??0),progress:Boolean(raidProgressBelongsToWeek(stored,weekId)||roomBackups.some(backup=>raidProgressBelongsToWeek(backup.raidProgress,weekId)))}}
+  return{ok:true,duplicate:false,requestId:id,weekId,removed:{rewards:sessionRewards.length-session.pendingRewards.length+outboxRewards.length-(outbox?.pendingRewards?.length??0),messages:sessionMessages.length-session.pendingMessages.length+outboxMessages.length-(outbox?.pendingMessages?.length??0),progress:Boolean(raidProgressBelongsToWeek(stored,weekId)||roomBackups.some(backup=>raidProgressBelongsToWeek(backup.raidProgress,weekId))),guild:guildReset.removed}}
  }
 	 _tradeContentGuard(room){if(!room)return null;const blocked=[...room.members].find(id=>this.trade.blocksContent(id));return blocked?{ok:false,code:"TRADE_ACTIVE",message:"交換を完了または中止してから開始してください",playerId:blocked}:null}
 	 _hallGameContentGuard(room){const game=room?.hallGame,waiting=game?.status==="waiting"&&Array.isArray(game.participantIds)&&game.participantIds.length>0;return this.hallMinigames.active(room)||waiting?{ok:false,code:"HALL_GAME_ACTIVE",message:"遊戯広場のゲームを終了してから開始してください"}:null}

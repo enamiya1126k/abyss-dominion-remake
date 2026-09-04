@@ -1,4 +1,4 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.12-build331";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.13-build332";
 // Regression marker only: config.js?v=3.1.10-build329
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
 import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.1-build311";

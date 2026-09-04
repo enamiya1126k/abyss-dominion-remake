@@ -5,7 +5,7 @@ import {
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=3.1.12-build331";
+} from "./OnlineViews.js?v=3.1.13-build332";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   rollbackOnlineTradeAssetReservation, commitOnlineTrade, recoverOrphanedTradeEscrows,
@@ -1028,8 +1028,8 @@ function storeStandaloneResumeToken(endpointValue, value) {
 }
 
 /**
- * Authenticate with the preserved online identity and clear only this
- * account's current weekly-raid state before the local save is erased.  The
+ * Authenticate with the preserved online identity, clear this account's
+ * current weekly-raid state, and leave its guild before the local save is erased. The
  * request id remains in localStorage until the server ACK arrives, so an
  * offline/timeout retry is safe and the local reset must not be committed.
  */
@@ -1072,7 +1072,7 @@ export function resetCurrentWeeklyRaidForFullReset(state, { timeoutMs = FULL_RES
         finish({ ok: false, reason, code: message.code, message: message.message }); return;
       }
       if (message?.type === "helloAck") {
-        if (message.protocol !== ONLINE_PROTOCOL || message.capabilities?.fullResetRaidV1 !== true) { finish({ ok: false, reason: "unsupported" }); return; }
+        if (message.protocol !== ONLINE_PROTOCOL || message.capabilities?.fullResetRaidV1 !== true || message.capabilities?.fullResetGuildV1 !== true) { finish({ ok: false, reason: "unsupported" }); return; }
         authenticated = true;
         if (!storeStandaloneResumeToken(endpoint, message.resumeToken)) { finish({ ok: false, reason: "auth" }); return; }
         if (Array.isArray(message.activeTradeIds) && message.activeTradeIds.length) { finish({ ok: false, reason: "tradePending" }); return; }

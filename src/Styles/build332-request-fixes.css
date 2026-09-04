@@ -1,0 +1,51 @@
+/* Build332: consolidated fixes requested after Build331. */
+.campaign-intel-header>button>svg{
+ display:block;width:28px;height:28px;margin:auto;overflow:visible;
+ fill:none;stroke:#f4e9cf;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;
+ filter:drop-shadow(0 1px 2px #000);
+}
+.campaign-hero-card>summary{grid-template-columns:58px minmax(0,1fr) auto!important;min-height:82px!important}
+.campaign-hero-summary-portrait{
+ display:grid;place-items:center;width:56px;height:66px;overflow:hidden;
+ border:1px solid #85639b;border-radius:8px;background:radial-gradient(circle,#39264b,#0b0a0e 72%);
+}
+.campaign-hero-summary-portrait .campaign-intel-hero-visual,
+.campaign-hero-summary-portrait .campaign-intel-hero-visual img{
+ width:62px!important;height:62px!important;max-width:62px!important;max-height:62px!important;
+ object-fit:contain!important;image-rendering:pixelated;
+}
+
+/* Boss class and full name remain visible even when the formation has four enemies. */
+.boss-enemy .battle-unit-floating-name{
+ display:grid!important;justify-items:center!important;gap:3px!important;width:max-content!important;
+ max-width:min(280px,72vw)!important;padding:5px 8px!important;border:1px solid #d7ae5f!important;
+ border-radius:6px!important;background:linear-gradient(180deg,#160e18ee,#050408f2)!important;
+ box-shadow:0 3px 12px #000c,0 0 12px #ad6a3580!important;
+}
+.boss-enemy .battle-unit-floating-name>b{
+ max-width:min(260px,68vw)!important;overflow:visible!important;text-overflow:clip!important;
+ white-space:normal!important;word-break:keep-all!important;text-align:center!important;
+ color:#fff4d5!important;font-size:clamp(12px,3.3vw,17px)!important;line-height:1.22!important;
+ text-shadow:0 2px 2px #000,0 0 7px #d49b51!important;
+}
+.boss-enemy .boss-badge{margin:0!important;padding:3px 8px!important;background:#6d3514!important;color:#ffe09a!important;font-size:8px!important}
+.side-unit-card.enemy-info .enemy-name{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;gap:3px!important}
+.side-unit-card.enemy-info .enemy-card-name{
+ display:-webkit-box!important;grid-column:1/-1;overflow:hidden!important;-webkit-box-orient:vertical;-webkit-line-clamp:2;
+ white-space:normal!important;text-overflow:clip!important;word-break:break-word;color:#f7ecd9!important;
+ font-size:clamp(9px,2.55vw,12px)!important;line-height:1.2!important;text-align:left;
+}
+.side-unit-card.enemy-info .enemy-card-meta{grid-column:1/-1;margin-left:0!important;justify-self:end}
+
+/* Lines still explain families, but neither floors nor routes lock a purchase. */
+.abyss-tree-node.short{opacity:.78!important;filter:none!important}
+.abyss-tree-node.short button{cursor:pointer!important}
+
+.online-hall-social-tools{justify-content:flex-end!important}
+
+@media(max-width:430px){
+ .campaign-hero-card>summary{grid-template-columns:52px minmax(0,1fr) auto!important;padding:8px!important}
+ .campaign-hero-summary-portrait{width:50px;height:60px}
+ .campaign-hero-summary-portrait .campaign-intel-hero-visual,.campaign-hero-summary-portrait .campaign-intel-hero-visual img{width:56px!important;height:56px!important}
+ .boss-enemy .battle-unit-floating-name{translate:0 34px!important}
+}

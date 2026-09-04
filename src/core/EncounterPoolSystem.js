@@ -30,6 +30,26 @@ const EXCEPTION_RARITY_WEIGHTS=Object.freeze({N:1,R:2,SR:4,SSR:8,UR:12,LR:16});
 const EXCEPTION_RARITIES=new Set(["SR","SSR","UR","LR"]);
 const HIGH_RARITY_SET=new Set(HIGH_RARITY_ENCOUNTERS);
 
+// Campaign fights are party battles.  The opening floor stays readable, then
+// groups quickly grow; from floor 50 onward three or four enemies are normal.
+export function campaignEncounterPartySize(floor,roll=Math.random()){
+ const value=Math.max(0,Math.min(.999999,Number(roll)||0)),depth=Math.max(1,Math.min(100,Math.floor(Number(floor)||1)));
+ if(depth===1)return 1;
+ if(depth<10)return value<.18?1:value<.70?2:3;
+ if(depth<30)return value<.12?2:value<.68?3:4;
+ if(depth<50)return value<.30?2:value<.72?3:4;
+ if(depth<80)return value<.36?3:4;
+ if(depth<100)return value<.22?3:4;
+ return 4;
+}
+
+export function campaignBossSupportCount(floor){
+ const depth=Math.max(1,Math.min(100,Math.floor(Number(floor)||1)));
+ if(depth<10)return 1;
+ if(depth<30)return 2;
+ return 3;
+}
+
 function uniqueSpecies(list){
  const ids=new Set(),names=new Set();
  return list.filter(species=>{
