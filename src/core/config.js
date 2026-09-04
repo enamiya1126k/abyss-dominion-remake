@@ -28,4 +28,4 @@ export function isContentUnlocked(stateOrFloor,productionFloor){
   const floor=typeof stateOrFloor==="number"?stateOrFloor:Number(stateOrFloor?.player?.maxFloor)||0;
   return floor>=contentUnlockFloor(productionFloor);
 }
-export const APP_VERSION="3.1.8";// Regression history: APP_VERSION="3.1.7" / APP_VERSION="3.1.6" / APP_VERSION="3.1.5" / APP_VERSION="3.1.4" / APP_VERSION="3.1.3"
+export const APP_VERSION="3.1.12";// Regression history: APP_VERSION="3.1.11" / APP_VERSION="3.1.10" / APP_VERSION="3.1.9" / APP_VERSION="3.1.8" / APP_VERSION="3.1.7" / APP_VERSION="3.1.6" / APP_VERSION="3.1.5" / APP_VERSION="3.1.4" / APP_VERSION="3.1.3"

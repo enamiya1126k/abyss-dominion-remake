@@ -37,9 +37,9 @@ export function enforceFixedOnlineServerUrl() {
   const previous = storageGet(ONLINE_STORAGE_KEYS.serverUrl).trim();
   if (previous && !isFixedOnlineServerHost(previous)) {
     storageSet(ONLINE_STORAGE_KEYS.resumeToken, "");
-    storageSet(ONLINE_STORAGE_KEYS.autoConnect, "0");
   }
   storageSet(ONLINE_STORAGE_KEYS.serverUrl, DEFAULT_ONLINE_SERVER_URL);
+  storageSet(ONLINE_STORAGE_KEYS.autoConnect, "1");
   return DEFAULT_ONLINE_SERVER_URL;
 }
 
@@ -960,41 +960,36 @@ export function OnlinePartyScreen(state) {
   return `<section class="screen online-v3-screen" data-online-v3-root>
     ${resourceHud(state, { backId: "backOnlineParty", title: "オンライン", eyebrow: "ABYSS DOMINION / CO-OP" })}
     <main class="online-v3-page">
-      <section class="online-v3-entry" data-online-entry>
-        <header><span class="online-v3-signal"><i></i></span><div><small>HOME PC CO-OP SERVER</small><h2>仲間と同じ世界へ</h2><p>最大4人で、探索・レイド・自由チーム戦・チャットを楽しめます。</p></div></header>
-        <div class="online-v3-id"><span><small>フレンドID</small><strong>${identity.friendId}</strong></span><button type="button" data-copy-friend-id>コピー</button></div>
-        <label class="online-v3-field"><span>表示名</span><input type="text" maxlength="16" data-online-display-name value="${escapeOnlineHtml(defaultName)}" autocomplete="nickname"></label>
-        <label class="online-v3-field"><span>サーバーURL（固定）</span><input type="url" inputmode="url" data-online-server-url value="${escapeOnlineHtml(server)}" readonly aria-readonly="true" autocapitalize="none"></label>
-        ${renderOnlineBattleRosterPicker(state, { monsterId: monster?.id })}
-        <button type="button" class="online-v3-primary" data-online-connect ${monster ? "" : "disabled"}>サーバーへ接続</button>
-        <div class="online-v3-status offline" data-online-status><i></i><b>オフライン</b><span>通常ゲームのセーブには影響しません</span></div>
+      <section class="online-v3-entry online-v3-auto-entry" data-online-entry>
+        <input type="hidden" data-online-server-url value="${escapeOnlineHtml(server)}">
+        <input type="hidden" data-online-pending-room-code value="${escapeOnlineHtml(invite.room)}">
+        <span class="online-v3-auto-sigil" aria-hidden="true"><i></i><i></i><i></i></span>
+        <small>ABYSS NETWORK</small><h2>冒険者集会所へ接続中</h2>
+        <p>回線の確認から前回の部屋への復帰まで、自動で行います。</p>
+        <div class="online-v3-status connecting" data-online-status><i></i><b>接続を確認中…</b><span>そのままお待ちください</span></div>
+        <button type="button" class="online-v3-primary online-v3-retry" data-online-connect ${monster ? "" : "disabled"}>もう一度接続する</button>
       </section>
 
-      <section class="online-v3-gate online-room-board-gate" data-online-gate hidden>
-        <header><button type="button" data-online-gate-back aria-label="接続設定へ戻る">←</button><div><small>ADVENTURER NOTICE BOARD</small><h2>冒険者募集掲示板</h2><p>公開募集へすぐ参加できます。招待専用の部屋は一覧へ表示されません。</p></div></header>
-        <section class="online-room-board" aria-labelledby="onlineRoomBoardTitle">
-          <header><div><small>OPEN ROOMS</small><h3 id="onlineRoomBoardTitle">募集中の部屋</h3></div></header>
-          <div class="online-room-board-content" data-online-room-board-content>${renderOnlineRoomDirectory([], { status: "loading" })}</div>
-        </section>
-        <section class="online-room-entry-actions" aria-label="部屋の作成またはルームID参加">
-          <div class="online-room-create-panel">
-            <label class="online-room-publish-choice"><input type="checkbox" data-online-create-listed><span><b>掲示板で仲間を募集</b><small>初期設定は非公開です</small></span></label>
-            <label><span>目的</span><select data-online-create-purpose>${roomOptionMarkup(ONLINE_ROOM_PURPOSES, "explore")}</select></label>
-            <label><span>遊び方</span><select data-online-create-style>${roomOptionMarkup(ONLINE_ROOM_STYLES, "anyone")}</select></label>
-            <button type="button" class="online-v3-create" data-online-create-room><span>${pixelIcon("party")}</span><b>部屋を作成</b><small>自分がリーダーになります</small></button>
-          </div>
-          <div class="online-v3-or"><span>ルームIDで直接参加</span></div>
-          <form data-online-join-form><label><span>ルームID／招待リンク</span><input type="text" maxlength="512" data-online-room-code value="${escapeOnlineHtml(invite.room)}" placeholder="AB12CD または招待リンク" autocapitalize="characters" autocomplete="off"></label><button type="submit">参加する</button></form>
-        </section>
-        <button type="button" class="online-v3-link" data-online-disconnect>サーバーから切断</button>
+      <section class="online-v3-gate online-v3-hub-entry" data-online-gate hidden>
+        <span class="online-v3-auto-sigil" aria-hidden="true"><i></i><i></i><i></i></span>
+        <small>GATHERING HALL</small><h2>集会所を準備しています</h2>
+        <p>前回の部屋を確認し、空いている場合は自分の広場を用意します。</p>
+        <div class="online-v3-status connecting"><i></i><b>入場処理中…</b><span>操作は必要ありません</span></div>
       </section>
 
       <section class="online-v3-room" data-online-room hidden>
         <header class="online-v3-roombar">
           <div><small>ROOM</small><strong data-online-room-id>------</strong></div>
           <button type="button" data-copy-room-id aria-label="ルームIDをコピー">コピー</button><button type="button" data-copy-invite aria-label="招待リンクを共有またはコピー">招待</button>
-          <span data-online-member-count>1 / 4</span><button type="button" class="danger" data-online-leave-room>退出</button>
+          <button type="button" data-online-profile-toggle aria-expanded="false">手帳</button><span data-online-member-count>1 / 4</span><button type="button" class="danger" data-online-leave-room>一人に戻る</button>
         </header>
+        <aside class="online-v3-profile-drawer" data-online-profile-panel hidden aria-label="旅人手帳">
+          <header><div><small>TRAVELER PROFILE</small><h2>旅人手帳</h2></div><button type="button" data-online-profile-close aria-label="旅人手帳を閉じる">×</button></header>
+          <div class="online-v3-id"><span><small>フレンドID</small><strong>${identity.friendId}</strong></span><button type="button" data-copy-friend-id>コピー</button></div>
+          <label class="online-v3-field"><span>オンライン表示名</span><input type="text" maxlength="16" data-online-display-name value="${escapeOnlineHtml(defaultName)}" autocomplete="nickname"></label>
+          ${renderOnlineBattleRosterPicker(state, { monsterId: monster?.id })}
+          <p class="online-v3-profile-note">変更内容は接続中の仲間へすぐ反映されます。</p>
+        </aside>
         <aside class="online-v3-connection-banner offline" data-online-connection-banner role="status" aria-live="polite" aria-atomic="true">
           <i aria-hidden="true"></i><b>オフライン</b><span>オンラインサーバーへ接続されていません</span>
         </aside>

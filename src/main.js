@@ -1,5 +1,6 @@
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.8-build327";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.8-build327";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.12-build331";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.12-build331";
+// Regression markers only: SaveService.js?v=3.1.10-build329 / config.js?v=3.1.10-build329 / HomeScreen.js?v=3.1.10-build329
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.1-build311";
 import{SPECIES}from"./data/species.js?v=3.1.1-build314";
@@ -8,13 +9,13 @@ import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/Expl
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.8-build327";
-import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.7-build326";
-import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.7-build326";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.11-build330";
+import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.11-build330";
+import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.11-build330";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.1-build311";
-import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.1-build311";
-import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.1-build317";
+import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.12-build331";
+import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.12-build331";
 import{reconcileOnlineMotion,onlineMotionSpeed}from"./online/OnlineMovement.js?v=3.1.1-build311";
 import{beginGuestProgressIsolation,finishGuestProgressIsolation,onlineProgressionAllowed,legacyProgressRecoveryCandidate,applyLegacyProgressRecovery,dismissLegacyProgressRecovery,undoLegacyProgressRecovery}from"./online/OnlineProgressIsolation.js?v=3.1.1-build311";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.1-build311";
@@ -23,7 +24,7 @@ import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.1-build311";
 import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.1-build311";
 import{CampaignFinalFloorScreen}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.1-build320";
 import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.1-build311";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.6-build325";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.9-build328";
 import{Modal}from"./ui/components/Modal.js?v=3.1.1-build311";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=3.1.1-build311";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=3.1.1-build311";
@@ -519,6 +520,14 @@ function normalizeEquipmentState(){
   if(m.currentMp==null||!Number.isFinite(m.currentMp))m.currentMp=mp;else m.currentMp=Math.max(0,Math.min(mp,m.currentMp));
  });
 }
+function campaignHeroIntelPresentation(model){
+ return Object.fromEntries((model?.heroes??[]).map(hero=>{
+  const species=SPECIES[hero.id]??{},skills=(species.skills??[]).filter(Boolean).slice(0,4).map(skill=>({
+   id:String(skill.id??skill.name??"skill"),name:String(skill.name??"名称不明"),tag:String(skill.tag??skill.type??"スキル"),element:skillElementLabel(skill),target:String(skill.target??"対象は戦況により変化"),mp:Math.max(0,Number(skill.mp)||0),cooldown:Math.max(0,Number(skill.cooldown)||0),effect:skillEffectSummary(skill," / ")
+  }));
+  return[hero.id,{visual:monsterVisual({speciesId:hero.id,visualSpeciesId:hero.id},hero.name,{className:"campaign-intel-hero-visual"}),attribute:elementLabel(species.element),speciesRole:String(species.role??hero.role??"勇者"),skills}]
+ }))
+}
 function render(){
  clearContextGuide();
  closeInventoryContext();
@@ -531,7 +540,7 @@ function render(){
  document.body.classList.toggle("phase2",hasCleared1000(save.state));
  if(!battle)audio.setScene(["explore","gauntlet"].includes(screen)?"explore":screen==="campaignFinalFloor"?"divine":"home");
  if(screen==="home"){app.innerHTML=HomeScreen(save.state,{serverStatus:homeServerStatus});bindHome()}
- else if(screen==="campaignIntel"){campaignIntelModel=createCampaignInvasionIntelModel(save.state);app.innerHTML=CampaignIntelScreen(campaignIntelModel,{tab:campaignIntelTab,selectedLocationIndex:campaignIntelLocationIndex});bindCampaignIntel()}
+ else if(screen==="campaignIntel"){campaignIntelModel=createCampaignInvasionIntelModel(save.state);app.innerHTML=CampaignIntelScreen(campaignIntelModel,{tab:campaignIntelTab,selectedLocationIndex:campaignIntelLocationIndex,heroPresentation:campaignHeroIntelPresentation(campaignIntelModel)});bindCampaignIntel()}
  else if(screen==="storyArchive"){storyArchiveModel=createCampaignStoryArchiveModel(save.state);app.innerHTML=StoryArchiveScreen(storyArchiveModel,{category:storyArchiveCategory});bindStoryArchive()}
  else if(screen==="formation"){app.innerHTML=FormationScreen(save.state,{origin:formationOrigin});bindFormation()}
  else if(screen==="onlineParty"){app.innerHTML=OnlinePartyScreen(save.state);bindOnlineParty()}
@@ -4897,7 +4906,7 @@ async function battleIntro(enemies){
  if(battle?.enemySynergy?.full){battleFlash("danger");await battleBanner(battle.enemySynergy.name,"敵軍4体の完全共鳴","synergy enemy",720)}
 }
 function hydrateEndgameEnemy(enemy,source={}){
- const profile=endgameCharacter(source.endgameBossId??enemy?.endgameBossId);if(!profile||!enemy)return enemy;enemy.endgameBossId=profile.id;enemy.faction=source.faction??enemy.faction??profile.faction;enemy.elementMultipliers=source.elementMultipliers??enemy.elementMultipliers??profile.elementMultipliers;enemy.statusProfile=source.statusProfile??enemy.statusProfile??profile.statusProfile;enemy.bossPassive=source.bossPassive??enemy.bossPassive??profile.passive;
+ const profile=endgameCharacter(source.endgameBossId??enemy?.endgameBossId);if(!profile||!enemy)return enemy;enemy.endgameBossId=profile.id;enemy.visualSpeciesId=profile.id;enemy.name=profile.name;enemy.faction=source.faction??enemy.faction??profile.faction;enemy.elementMultipliers=source.elementMultipliers??enemy.elementMultipliers??profile.elementMultipliers;enemy.statusProfile=source.statusProfile??enemy.statusProfile??profile.statusProfile;enemy.bossPassive=source.bossPassive??enemy.bossPassive??profile.passive;
  if(enemy._endgameStatProfileApplied!==profile.id&&profile.statProfile){const rates=profile.statProfile,hpRatio=enemy.hp/Math.max(1,enemy.maxHp);for(const key of["maxHp","atk","matk","def","mdef","spd"]){const sourceKey=key==="maxHp"?"hp":key,rate=Math.max(.25,Math.min(3,Number(rates[sourceKey])||1));enemy[key]=Math.max(["maxHp","atk","matk","spd"].includes(key)?1:0,Math.floor((Number(enemy[key])||0)*rate))}enemy.hp=Math.max(1,Math.min(enemy.maxHp,Math.round(enemy.maxHp*hpRatio)));enemy.crit=Math.max(0,(Number(enemy.crit)||0)+(Number(rates.crit)||0)/100);enemy.evasion=Math.max(0,Math.min(75,(Number(enemy.evasion)||0)+(Number(rates.evasion)||0)));enemy.accuracy=Math.max(20,Math.min(180,(Number(enemy.accuracy)||100)+(Number(rates.accuracy)||0)));enemy._endgameStatProfileApplied=profile.id}
  return enemy
 }
@@ -4939,7 +4948,7 @@ function makeBattleEnemy(e,index=0){
   const hpMultiplier=Math.max(1,Number(prepared.fixedTrialHpMultiplier)||1);
   enemy.maxHp=Math.max(1,Math.round(enemy.maxHp*hpMultiplier));enemy.hp=enemy.maxHp;
  }
-	 enemy.endgameBossId=prepared.endgameBossId??null;enemy.faction=prepared.faction??profile?.faction??null;enemy.powerRate=prepared.powerRate??null;enemy.manifestationLabel=prepared.manifestationLabel??null;enemy.endgameSupport=Boolean(prepared.endgameSupport);enemy.uncapturable=Boolean(prepared.uncapturable);enemy.trialElement=normalizedElement(prepared.trialElement??prepared.attribute??profile?.element??sp?.element);enemy.id=`enemy-${Date.now()}-${index}-${Math.random().toString(36).slice(2,7)}`;
+	 enemy.endgameBossId=prepared.endgameBossId??null;enemy.visualSpeciesId=prepared.visualSpeciesId??prepared.endgameBossId??enemy.visualSpeciesId??null;enemy.faction=prepared.faction??profile?.faction??null;enemy.powerRate=prepared.powerRate??null;enemy.manifestationLabel=prepared.manifestationLabel??null;enemy.endgameSupport=Boolean(prepared.endgameSupport);enemy.uncapturable=Boolean(prepared.uncapturable);enemy.trialElement=normalizedElement(prepared.trialElement??prepared.attribute??profile?.element??sp?.element);enemy.id=`enemy-${Date.now()}-${index}-${Math.random().toString(36).slice(2,7)}`;
 	 enemy.campaignHeroId=prepared.campaignHeroId??null;enemy.campaignHeroEncounterId=prepared.campaignHeroEncounterId??null;enemy.campaignHeroFinal=Boolean(prepared.campaignHeroFinal);if(enemy.campaignHeroId)enemy.role=CAMPAIGN_HERO_PROFILES[enemy.campaignHeroId]?.combat?.role??enemy.role;
  applyEliteModifiers(enemy,prepared);hydrateEndgameEnemy(enemy,prepared);
  const hidden=enemyHiddenProfileForFloor(hiddenFloor,{rank:prepared.faction??sp?.rarity??"N",faction:prepared.faction,boss:Boolean(prepared.boss),equipped:Boolean(prepared.equipped),slots:prepared.enemyEquipmentSlots,gearLevel:prepared.enemyEquipmentLevel,rarity:prepared.enemyEquipmentRarity});enemy.hiddenProfile=hidden;enemy.hiddenDamageTaken=hidden.damageTaken??1;enemy.hiddenStatusResist=hidden.statusResist??0;enemy.hiddenCapturePressure=hidden.capturePressure??1;enemy.hiddenAi=hidden.ai??0;
@@ -6126,12 +6135,12 @@ function lose(){
   const memoryModal=topModal(),finish=()=>{memoryModal?.remove();battle=null;go("home")};memoryModal._onDismiss=finish;memoryModal.querySelector("[data-modal-primary]").onclick=finish;return
  }
  if((battle?.enemies??[]).some(enemy=>enemy?.boss)&&snapshot?.world){
-  clearPartySynergy();stopExploreAuto("AUTO停止：支配者戦で敗北");syncPersistentAilments(battle);const lost=Math.min(Math.floor(save.state.player.gold*.05),Math.max(100,goldForClearedFloor(campaignFloorToLegacyFloor(save.state.player.currentFloor))));save.state.player.gold-=lost;battle.party.forEach(monster=>{monster.currentHp=Math.max(1,Math.round(calculatedStats(monster).hp*.3));monster.currentMp=Math.max(0,Math.round(maxMp(monster)*.2));clearAilments(monster)});snapshot.player.x=snapshot.world.start.x;snapshot.player.y=snapshot.world.start.y;snapshot.player.rx=snapshot.world.start.x;snapshot.player.ry=snapshot.world.start.y;snapshot.player.path=[];snapshot.world.encountering=false;persistExpeditionSnapshot(snapshot);clearBattleCheckpoint();document.querySelector(".battle-screen")?.remove();activeEnemy=null;save.save();app.insertAdjacentHTML("beforeend",Modal("支配者戦・敗北",`<div class="defeat-cinematic"><div class="defeat-mark">☠</div><h2>入口まで退いた</h2><p>${lost.toLocaleString()}Gを失ったが、地図と拾った鍵は保持されています。</p><small>部隊はHP30%・MP20%で救出。支配者へ再挑戦できます。</small></div>`,`同じ階の入口から再開`));const modal=topModal(),resume=()=>{modal.remove();battle=null;screen="explore";render()};modal._onDismiss=resume;modal.querySelector("[data-modal-primary]").onclick=resume;return
+  clearPartySynergy();stopExploreAuto("AUTO停止：支配者戦で敗北");cancelPendingExploreActions();syncPersistentAilments(battle);const lost=Math.min(Math.floor(save.state.player.gold*.05),Math.max(100,goldForClearedFloor(campaignFloorToLegacyFloor(save.state.player.currentFloor))));save.state.player.gold-=lost;save.state.player.inRun=false;abandonManualExpedition(save.state);battle.party.forEach(monster=>{monster.currentHp=Math.max(1,Math.round(calculatedStats(monster).hp*.3));monster.currentMp=Math.max(0,Math.round(maxMp(monster)*.2));clearAilments(monster)});delete save.state.expeditionAffectionDeaths;clearExpeditionSnapshot();clearBattleCheckpoint();snapshot=null;document.querySelector(".battle-screen")?.remove();activeEnemy=null;save.save();app.insertAdjacentHTML("beforeend",Modal("支配者戦・敗北",`<div class="defeat-cinematic"><div class="defeat-mark">☠</div><h2>魔王城へ撤退した</h2><p>${lost.toLocaleString()}Gを失い、探索を終了して拠点へ帰還します。</p><small>部隊はHP30%・MP20%で救出されました。</small></div>`,`拠点へ戻る`));const modal=topModal(),returnHome=()=>{modal?.remove();stopGame();battle=null;screen="home";render()};modal._onDismiss=returnHome;modal.querySelector("[data-modal-primary]").onclick=returnHome;return
  }
  clearPartySynergy();stopExploreAuto("AUTO停止：部隊が全滅しました");cancelPendingExploreActions();const lossCap=Math.max(100,goldForClearedFloor(campaignFloorToLegacyFloor(save.state.player.currentFloor))),lost=Math.min(Math.floor(save.state.player.gold*.10),lossCap),guide=contextualGuideState();bumpGuideCounter(guide,"defeats");setGuidePending(guide,"bedRecovery",true);save.state.player.gold-=lost;save.state.player.currentFloor=save.state.player.checkpoint;save.state.player.inRun=false;abandonManualExpedition(save.state);
  syncPersistentAilments(battle);battle.party.forEach(m=>{m.currentHp=1;m.currentMp=0;m.history??={};m.history.defeats=(m.history.defeats??0)+1;m.history.consecutiveDeployments=0});delete save.state.expeditionAffectionDeaths;clearExpeditionSnapshot();clearBattleCheckpoint();snapshot=null;document.querySelector(".battle-screen")?.remove();
  save.save();app.insertAdjacentHTML("beforeend",Modal("敗北",`<div class="defeat-cinematic"><div class="defeat-mark">☠</div><h2>深淵に敗れた…</h2><p><b>${lost}G</b>を失い、${save.state.player.checkpoint}階の拠点へ帰還します。</p><small>仲間はHP1で救出されました。拠点の寝台で回復できます。</small></div>`,"拠点へ戻る"));
- const modal=topModal(),returnHome=()=>{modal?.remove();battle=null;go("home")};modal._onDismiss=returnHome;modal.querySelector("[data-modal-primary]").onclick=returnHome
+ const modal=topModal(),returnHome=()=>{modal?.remove();stopGame();battle=null;activeEnemy=null;screen="home";render()};modal._onDismiss=returnHome;modal.querySelector("[data-modal-primary]").onclick=returnHome
 }
 if(retireLegacyCampaignSairanBattle())save.save();
 normalizeEquipmentState();

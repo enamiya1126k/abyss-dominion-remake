@@ -1,13 +1,13 @@
 import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=3.1.1-build311";
 import { battleEnvironmentForFloor } from "../data/biomes.js?v=3.1.1-build311";
 import {
-  onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml, ONLINE_ROOM_PURPOSES, ONLINE_ROOM_STYLES,
-} from "../ui/screens/OnlinePartyScreen.js?v=3.1.1-build311";
+  onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml, ONLINE_ROOM_PURPOSES, ONLINE_ROOM_STYLES, renderOnlineRoomDirectory,
+} from "../ui/screens/OnlinePartyScreen.js?v=3.1.12-build331";
 import { BattleScreen } from "../ui/screens/BattleScreen.js?v=3.1.1-build311";
 import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=3.1.1-build311";
 import { pixelIcon } from "../ui/components/GameChrome.js?v=3.1.1-build311";
 
-const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "共同探索", raid: "レイドボス", team: "自由チーム戦", chat: "募集・談話板" });
+const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "共同探索", raid: "レイドボス", team: "自由チーム戦", chat: "談話板" });
 const COOP_GIMMICK_GUIDES = Object.freeze({
   dualSwitch: Object.freeze({ label: "同時スイッチ", hint: "離れた2か所を仲間と同時に踏む" }),
   relaySeal: Object.freeze({ label: "連鎖封印", hint: "仲間とA→Bの順に封印を解除" }),
@@ -150,12 +150,12 @@ function readyGrid(room, { team = false } = {}) {
 }
 
 const HALL_DESTINATIONS = Object.freeze([
-  { route: "games", x: 50, y: 25, label: "遊戯広場", prompt: "遊びに行く", icon: "PLAY", asset: "./assets/monsters/034_mimic/idle1.png" },
+  { route: "tavern", x: 50, y: 25, label: "冒険者酒場", prompt: "酒場へ入る", icon: "TAVERN", asset: "./assets/online/hall/build331/adventurer-tavern.png" },
   { route: "raid", x: 18, y: 25, label: "レイド受付", prompt: "レイド戦へ行く", icon: "RAID", asset: "./assets/online/hall/build218/raid-pavilion.png" },
   { route: "explore", x: 82, y: 25, label: "共同探索受付", prompt: "共同探索へ行く", icon: "GATE", asset: "./assets/online/hall/build218/dungeon-gate.png" },
   { route: "social", x: 50, y: 49, label: "交流所", prompt: "交流所へ入る", icon: "SOCIAL", asset: "./assets/online/hall/build250/social-lodge.png" },
   { route: "team", x: 24, y: 78, label: "闘技場", prompt: "自由チーム戦へ行く", icon: "ARENA", asset: "./assets/online/hall/build218/arena.png" },
-  { route: "chat", x: 76, y: 78, label: "募集・談話板", prompt: "募集・会話を開く", icon: "BOARD", asset: "./assets/online/hall/build218/notice-board.png" },
+  { route: "chat", x: 76, y: 78, label: "談話板", prompt: "みんなの会話を開く", icon: "BOARD", asset: "./assets/online/hall/build218/notice-board.png" },
 ]);
 
 const HALL_GAME_LABELS = Object.freeze({ mimic: "爆弾ミミック回し", race: "魔物レース" });
@@ -345,6 +345,42 @@ function renderTradeOverlay(room, selfId, state) {
   return `<aside class="online-trade-modal" role="dialog" aria-modal="true" aria-label="プレイヤー間交換"><header><div><small>SAFE PLAYER TRADE</small><b>${escapeOnlineHtml(partner?.profile?.displayName || "冒険者")}との交換</b></div>${onlineAvatarVisual(partner?.profile ?? {}, { className: "online-trade-partner" })}</header>${body}</aside>`;
 }
 
+/** Build331: every public-room action now lives inside the in-world tavern. */
+export function renderAdventureTavern(room, selfId, state = {}) {
+  if (!state.tavernOpen) return "";
+  const phase = String(room?.phase ?? "lobby"), lobby = phase === "lobby";
+  const members = Math.max(1, Number(room?.members?.length) || 1);
+  const directory = renderOnlineRoomDirectory(state.roomListings ?? [], {
+    status: state.roomListingsStatus ?? "idle",
+    pendingId: state.pendingRoomJoinId ?? null,
+    purpose: state.roomListingPurposeFilter ?? "all",
+  });
+  return `<aside class="online-tavern-overlay" role="dialog" aria-modal="true" aria-labelledby="onlineTavernTitle">
+    <header class="online-tavern-header">
+      <img src="./assets/online/hall/build331/adventurer-tavern.png" alt="" draggable="false">
+      <div><small>ADVENTURER TAVERN</small><h2 id="onlineTavernTitle">冒険者酒場</h2><p>募集・参加・招待を、ここひとつで。</p></div>
+      <button type="button" data-online-tavern-close aria-label="冒険者酒場を閉じる">×</button>
+    </header>
+    <div class="online-tavern-scroll">
+      <section class="online-tavern-current ${lobby ? "" : "busy"}">
+        <div><small>CURRENT PARTY</small><b>いまの部屋</b><span>${escapeOnlineHtml(room?.roomId ?? "------")}・${members}/4人</span></div>
+        <div><button type="button" data-copy-room-id>ルームID</button><button type="button" data-copy-invite>招待を送る</button></div>
+        ${lobby ? "" : "<p>探索・戦闘中は新しい部屋へ移れません。現在のプレイを終えてから酒場をご利用ください。</p>"}
+      </section>
+      ${lobby ? renderRoomListingSettings(room, selfId, state) : ""}
+      <section class="online-tavern-board" aria-labelledby="onlineTavernBoardTitle">
+        <header><div><small>OPEN PARTIES</small><h3 id="onlineTavernBoardTitle">仲間を探す</h3></div><span>公開募集</span></header>
+        <div class="online-room-board-content" data-online-room-board-content>${directory}</div>
+      </section>
+      <section class="online-tavern-direct" aria-labelledby="onlineTavernDirectTitle">
+        <header><small>INVITATION</small><h3 id="onlineTavernDirectTitle">合言葉で合流</h3></header>
+        <form data-online-join-form><label><span>ルームID／招待リンク</span><input type="text" maxlength="512" data-online-room-code placeholder="AB12CD" autocapitalize="characters" autocomplete="off" ${lobby ? "" : "disabled"}></label><button type="submit" ${lobby ? "" : "disabled"}>参加する</button></form>
+      </section>
+      <p class="online-tavern-footnote">通常ゲームの進行とは分離されています。オンラインで得た報酬だけが安全に反映されます。</p>
+    </div>
+  </aside>`;
+}
+
 export function renderOnlineHome(room, selfId, state = {}) {
   const self = memberById(room, selfId), point = self?.position ?? { x: 50, y: 76 };
   const nearby = HALL_DESTINATIONS.find(zone => Math.hypot(zone.x - Number(point.x), zone.y - Number(point.y)) <= 10);
@@ -354,11 +390,11 @@ export function renderOnlineHome(room, selfId, state = {}) {
   const hiddenChatIds = new Set([...(state.mutedPlayerIds ?? []), ...(state.blockedPlayerIds ?? [])].map(String));
   const chats = new Map((state.chatBubbles ?? []).filter(entry => !hiddenChatIds.has(String(entry?.playerId ?? ""))).map(entry => [entry.playerId, entry]));
   const recentChat = (room?.chatHistory ?? []).filter(message => !hiddenChatIds.has(String(message?.playerId ?? ""))).slice(-3);
-  const quickChat = state.exploreChatOpen && !state.hallGamesOpen ? `<aside id="onlineHallQuickChat" class="online-hall-quick-chat" data-online-hall-quick-chat role="dialog" aria-label="集会所の簡易チャット">
+  const quickChat = state.exploreChatOpen && !state.tavernOpen ? `<aside id="onlineHallQuickChat" class="online-hall-quick-chat" data-online-hall-quick-chat role="dialog" aria-label="集会所の簡易チャット">
     <header hidden aria-hidden="true"><div><small>QUICK CHAT</small><b>集会所チャット</b></div></header>
     <div class="online-hall-quick-chat-log" role="log" aria-live="polite" hidden aria-hidden="true">${recentChat.length ? recentChat.map(message => `<article class="${message.playerId === selfId ? "own" : ""}"><b>${escapeOnlineHtml(message.name || "冒険者")}</b><p>${escapeOnlineHtml(message.text || "")}</p></article>`).join("") : `<p class="empty">まだ会話はありません</p>`}</div>
     <form class="online-hall-chat-bar open" data-online-explore-chat-form><input maxlength="80" enterkeyhint="send" autocomplete="off" data-online-explore-chat-input aria-label="集会所へのメッセージ" placeholder="仲間へひとこと" value="${escapeOnlineHtml(state.chatDraft ?? "")}"><button type="submit">送信</button><button type="button" data-online-chat-close aria-label="簡易チャットを閉じる">×</button></form>
-    <footer hidden aria-hidden="true"><button type="button" data-online-hall-full-chat>募集・談話板を開く</button></footer>
+    <footer hidden aria-hidden="true"><button type="button" data-online-hall-full-chat>談話板を開く</button></footer>
   </aside>` : "";
   return `<section class="online-gathering-hall" data-online-hall-stage aria-label="オンライン集会所">
     <div class="online-hall-backdrop" aria-hidden="true"></div>
@@ -381,9 +417,9 @@ export function renderOnlineHome(room, selfId, state = {}) {
         return `<${tag} class="online-hall-player ${member.playerId === selfId ? "self" : "tradeable"} ${member.connected ? "" : "offline"}" style="--hall-x:${clamp(position.x, 5, 95)}%;--hall-y:${clamp(position.y, 15, 96)}%" data-online-hall-player="${escapeOnlineHtml(member.playerId)}" ${trade}>${bubble ? `<span class="online-hall-emote">${escapeOnlineHtml(bubble.emoji)}</span>` : ""}${chat ? `<span class="online-hall-chat-bubble">${escapeOnlineHtml(chat.text)}</span>` : ""}${onlineAvatarVisual(member.profile ?? {}, { className: "online-hall-avatar" })}<span class="online-hall-player-name">${escapeOnlineHtml(member.profile?.displayName || "冒険者")}${member.playerId === selfId ? "" : "<small>タップで交換</small>"}</span></${tag}>`;
       }).join("")}</div>
       <div class="online-hall-social-tools"><button type="button" class="online-hall-emote-tool" data-online-emote-anchor aria-label="長押ししてエモートを選ぶ"><b>☺</b><small>長押し</small></button><button type="button" data-online-chat-toggle class="online-hall-chat-tool ${state.exploreChatOpen ? "active" : ""}" aria-controls="onlineHallQuickChat" aria-expanded="${state.exploreChatOpen ? "true" : "false"}">${pixelIcon("notice")}<small>チャット</small></button></div>
-      ${state.exploreChatOpen || state.hallGamesOpen ? "" : nearby ? `<aside class="online-hall-prompt"><small>${nearby.label}</small><button type="button" ${nearby.route === "social" ? "data-online-friends-toggle" : nearby.route === "games" ? "data-online-hall-games-toggle" : `data-online-go="${nearby.route}"`}>${nearby.prompt}</button></aside>` : `<aside class="online-hall-tip">行き先へ近づくと案内が表示されます</aside>`}
+      ${state.exploreChatOpen || state.tavernOpen ? "" : nearby ? `<aside class="online-hall-prompt"><small>${nearby.label}</small><button type="button" ${nearby.route === "social" ? "data-online-friends-toggle" : nearby.route === "tavern" ? "data-online-tavern-toggle" : `data-online-go="${nearby.route}"`}>${nearby.prompt}</button></aside>` : `<aside class="online-hall-tip">行き先へ近づくと案内が表示されます</aside>`}
       ${quickChat}
-      ${renderHallGamesOverlay(room, selfId, state)}
+      ${renderAdventureTavern(room, selfId, state)}
     </div>
     <footer class="online-hall-party-strip">${(room?.members ?? []).map(member => `<span class="${member.connected ? "online" : "offline"}"><i></i>${escapeOnlineHtml(member.profile?.displayName || "冒険者")}</span>`).join("")}</footer>
     ${renderTradeOverlay(room, selfId, state)}
@@ -740,8 +776,7 @@ export function renderOnlineChat(room, selfId, state = "") {
   const ui = typeof state === "string" ? {} : state ?? {};
   const hiddenChatIds = new Set([...(ui.mutedPlayerIds ?? []), ...(ui.blockedPlayerIds ?? [])].map(String));
   const messages = (room?.chatHistory ?? []).filter(message => !hiddenChatIds.has(String(message?.playerId ?? "")));
-  return `${screenHeader("chat", "RECRUITMENT & PARTY TALK", "部屋主は募集を管理でき、同じ部屋の全員はここで会話できます。")}
-    ${renderRoomListingSettings(room, selfId, ui)}
+  return `${screenHeader("chat", "PARTY TALK", "同じ部屋の仲間と、作戦や行き先を相談できます。募集と部屋移動は冒険者酒場にまとまりました。")}
     <section class="online-v3-chat"><div class="online-v3-chat-log" data-online-chat-log role="log">${messages.length ? messages.map(message => {
       const own = message.playerId === selfId;
       return `<article class="${own ? "own" : ""}"><header><b>${escapeOnlineHtml(message.name || "冒険者")}</b><time>${new Date(Number(message.createdAt) || Date.now()).toLocaleTimeString("ja-JP", { hour: "2-digit", minute: "2-digit" })}</time></header><p>${escapeOnlineHtml(message.text)}</p></article>`;

@@ -1,0 +1,143 @@
+/* Build331: seamless always-online entry and the in-world Adventurer Tavern. */
+
+.online-v3-auto-entry,
+.online-v3-hub-entry{
+  min-height:min(620px,calc(100dvh - 120px));
+  display:grid;
+  place-items:center;
+  align-content:center;
+  gap:12px;
+  text-align:center;
+  background:
+    radial-gradient(circle at 50% 36%,#7350842e,transparent 28%),
+    radial-gradient(circle at 50% 45%,#55d8e51a,transparent 46%),
+    linear-gradient(160deg,#11101af5,#05060bf8 68%);
+}
+.online-v3-auto-entry[hidden],.online-v3-hub-entry[hidden]{display:none!important}
+.online-v3-auto-entry>small,.online-v3-hub-entry>small{color:#79dfe9;letter-spacing:.22em;font:800 11px ui-monospace,monospace}
+.online-v3-auto-entry>h2,.online-v3-hub-entry>h2{margin:0;color:#f4dfad;font:700 clamp(25px,6vw,39px) serif}
+.online-v3-auto-entry>p,.online-v3-hub-entry>p{max-width:520px;margin:0;color:#b9b4c2;line-height:1.7}
+.online-v3-auto-entry .online-v3-status,.online-v3-hub-entry .online-v3-status{width:min(520px,100%);box-sizing:border-box}
+.online-v3-auto-entry .online-v3-retry{width:min(360px,100%);margin-top:4px}
+.online-v3-auto-entry .online-v3-retry:not(:focus-visible){opacity:.72}
+.online-v3-auto-sigil{position:relative;width:94px;height:94px;border:1px solid #8b6bac;border-radius:50%;box-shadow:0 0 34px #694c8c52,inset 0 0 24px #74dfe61f}
+.online-v3-auto-sigil::before,.online-v3-auto-sigil::after,.online-v3-auto-sigil i{content:"";position:absolute;border-radius:50%}
+.online-v3-auto-sigil::before{inset:14px;border:1px solid #63dbe3;animation:build331Pulse 1.6s ease-in-out infinite alternate}
+.online-v3-auto-sigil::after{inset:32px;background:#67d8e5;box-shadow:0 0 18px #67d8e5}
+.online-v3-auto-sigil i:nth-child(1){inset:-6px;border-top:2px solid #e3bc69;animation:build331Spin 2.8s linear infinite}
+.online-v3-auto-sigil i:nth-child(2){inset:23px;border-right:1px solid #dcb565;animation:build331Spin 2s linear infinite reverse}
+.online-v3-auto-sigil i:nth-child(3){inset:42px;background:#fff1bd}
+@keyframes build331Pulse{to{transform:scale(.88);opacity:.55}}
+@keyframes build331Spin{to{transform:rotate(360deg)}}
+
+.online-v3-profile-drawer{
+  position:absolute;
+  z-index:72;
+  top:62px;
+  right:10px;
+  width:min(540px,calc(100% - 20px));
+  max-height:calc(100% - 142px);
+  overflow:auto;
+  box-sizing:border-box;
+  padding:16px;
+  border:1px solid #9a7740;
+  border-radius:10px;
+  background:linear-gradient(155deg,#17111ff8,#07080dfb 72%);
+  box-shadow:0 18px 50px #000d,0 0 0 1px #65478380 inset;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+}
+.online-v3-profile-drawer[hidden]{display:none!important}
+.online-v3-profile-drawer>header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #7b6139}
+.online-v3-profile-drawer>header small{color:#74dce6;letter-spacing:.18em;font:800 10px ui-monospace,monospace}
+.online-v3-profile-drawer>header h2{margin:2px 0 0;color:#f4dfad;font-family:serif}
+.online-v3-profile-drawer>header button{width:42px;height:42px;border:1px solid #8065a2;border-radius:6px;background:#24172e;font-size:22px}
+.online-v3-profile-drawer .online-v3-character-picker{margin-top:14px}
+.online-v3-profile-note{margin:10px 0 0;color:#8e8997;font-size:12px;text-align:center}
+
+.online-hall-zone.zone-tavern{
+  --zone-tone:#e5b958;
+  width:clamp(108px,27vw,164px)!important;
+  min-height:96px!important;
+  border-color:#9f793f!important;
+  background:radial-gradient(circle at 50% 60%,#84472f3f,transparent 50%),radial-gradient(ellipse,#1b1120e8,#07060bd1 73%)!important;
+  box-shadow:0 8px 22px #000e,0 0 20px #d0a15742!important;
+}
+.online-hall-zone.zone-tavern .hall-facility-art{width:clamp(102px,26vw,154px)!important;height:clamp(72px,19vw,108px)!important;filter:drop-shadow(0 0 8px #d29c4a59) drop-shadow(0 10px 7px #000f)!important}
+.online-hall-zone.zone-tavern i{color:#8ce2e9}
+.online-hall-zone.zone-tavern b{color:#ffe4a1}
+
+.online-tavern-overlay{
+  --tavern-gold:#d8af5a;
+  position:absolute;
+  z-index:64;
+  inset:7px;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  overflow:hidden;
+  border:1px solid #a77e3f;
+  border-radius:12px;
+  background:linear-gradient(155deg,#171019fb,#07080dfd 64%);
+  box-shadow:0 22px 60px #000f,0 0 0 2px #35223f inset;
+  color:#eee7dc;
+}
+.online-tavern-header{position:relative;display:grid;grid-template-columns:90px minmax(0,1fr) 44px;align-items:center;gap:12px;min-height:94px;padding:10px 12px;border-bottom:1px solid #806334;background:radial-gradient(circle at 17% 30%,#ce8c3432,transparent 26%),linear-gradient(90deg,#24131b,#0b0c12)}
+.online-tavern-header>img{width:90px;height:76px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 6px 5px #000)}
+.online-tavern-header small,.online-tavern-board header small,.online-tavern-direct header small,.online-tavern-current small{color:#78dce6;letter-spacing:.17em;font:800 9px ui-monospace,monospace}
+.online-tavern-header h2{margin:1px 0;color:#f6dfa9;font:700 clamp(25px,5vw,35px) serif}
+.online-tavern-header p{margin:0;color:#b8aeb5;font-size:12px}
+.online-tavern-header>button{width:42px;height:42px;border:1px solid #9b7741;border-radius:7px;background:#211521;color:#ffe4a0;font-size:24px}
+.online-tavern-scroll{min-height:0;overflow:auto;display:grid;align-content:start;gap:12px;padding:14px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.online-tavern-current,.online-tavern-board,.online-tavern-direct{border:1px solid #5f4b35;background:#0a0a10e8;box-shadow:0 0 0 1px #26192c inset}
+.online-tavern-current{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px}
+.online-tavern-current>div:first-child{display:grid;gap:2px}
+.online-tavern-current>div:first-child>b{color:#f1d89e;font-family:serif;font-size:18px}
+.online-tavern-current>div:first-child>span{color:#aaa4ae;font-size:12px}
+.online-tavern-current>div:nth-child(2){display:flex;gap:7px}
+.online-tavern-current button{border:1px solid #8065a2;border-radius:6px;padding:8px 10px;background:#24172e}
+.online-tavern-current>p{flex-basis:100%;margin:0;color:#e6a7b3;font-size:12px}
+.online-tavern-current.busy{flex-wrap:wrap;border-color:#7b3345}
+.online-tavern-overlay .online-room-listing-settings{margin:0;max-width:none}
+.online-tavern-board>header{display:flex;justify-content:space-between;align-items:end;padding:12px;border-bottom:1px solid #4a3a2a}
+.online-tavern-board h3,.online-tavern-direct h3{margin:2px 0 0;color:#f2dca8;font:700 20px serif}
+.online-tavern-board>header>span{color:#9e9181;font-size:11px}
+.online-tavern-board .online-room-board-content{padding:12px}
+.online-tavern-board .online-room-board-list{max-height:none}
+.online-tavern-direct{padding:12px}
+.online-tavern-direct>header{margin-bottom:10px}
+.online-tavern-direct form{display:grid;grid-template-columns:minmax(0,1fr) 130px;gap:8px}
+.online-tavern-direct label{display:grid;gap:5px;color:#bdb4c0;font-size:12px}
+.online-tavern-direct input{min-width:0;border:1px solid #6b527f;border-radius:6px;padding:11px;background:#090710;color:#fff;text-align:center;letter-spacing:.16em;font-weight:900;text-transform:uppercase}
+.online-tavern-direct form>button{border:1px solid #d2aa55;border-radius:6px;background:linear-gradient(#674318,#2b1908);color:#ffe7a6;font-weight:900}
+.online-tavern-footnote{margin:0;padding:2px 8px 8px;color:#827c88;font-size:11px;text-align:center}
+
+@media(max-width:700px){
+  .online-v3-roombar{grid-template-columns:minmax(0,1fr) auto auto auto!important}
+  .online-v3-roombar [data-copy-room-id]{display:none}
+  .online-v3-roombar [data-online-profile-toggle]{display:block}
+  .online-v3-roombar .danger{max-width:58px;white-space:normal;line-height:1.15}
+  .online-v3-profile-drawer{top:54px;max-height:calc(100% - 126px)}
+}
+@media(max-width:430px){
+  .online-v3-auto-entry,.online-v3-hub-entry{min-height:calc(100dvh - 96px);padding:18px!important}
+  .online-v3-auto-entry>p,.online-v3-hub-entry>p{font-size:13px}
+  .online-v3-profile-drawer{right:5px;width:calc(100% - 10px);padding:11px}
+  .online-v3-profile-drawer .online-v3-id{align-items:center}
+  .online-tavern-overlay{inset:3px;border-radius:8px}
+  .online-tavern-header{grid-template-columns:68px minmax(0,1fr) 40px;gap:8px;min-height:76px;padding:7px 8px}
+  .online-tavern-header>img{width:68px;height:60px}
+  .online-tavern-header h2{font-size:23px}
+  .online-tavern-header p{font-size:10px}
+  .online-tavern-header>button{width:38px;height:38px}
+  .online-tavern-scroll{gap:9px;padding:8px}
+  .online-tavern-current{align-items:flex-start;padding:9px}
+  .online-tavern-current>div:nth-child(2){display:grid;grid-template-columns:1fr 1fr}
+  .online-tavern-current button{padding:7px 8px;font-size:11px}
+  .online-tavern-board .online-room-board-content{padding:8px}
+  .online-tavern-board .online-room-board-controls{grid-template-columns:minmax(0,1fr) auto!important}
+  .online-tavern-board [data-online-quick-join]{grid-column:1/-1}
+  .online-tavern-direct form{grid-template-columns:1fr}
+  .online-tavern-direct form>button{min-height:44px}
+}
+
+@media(prefers-reduced-motion:reduce){.online-v3-auto-sigil::before,.online-v3-auto-sigil i{animation:none!important}}

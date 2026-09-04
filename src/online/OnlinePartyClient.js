@@ -1,11 +1,11 @@
 import {
   buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
   onlineSocialNotificationSummary, moveOnlineBattleRosterPriority, renderOnlineBattleRosterPicker,
-} from "../ui/screens/OnlinePartyScreen.js?v=3.1.1-build311";
+} from "../ui/screens/OnlinePartyScreen.js?v=3.1.12-build331";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=3.1.1-build311";
+} from "./OnlineViews.js?v=3.1.12-build331";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   rollbackOnlineTradeAssetReservation, commitOnlineTrade, recoverOrphanedTradeEscrows,
@@ -94,14 +94,11 @@ const ONLINE_STATE_CONTROL_SELECTOR = [
   "[data-online-preset]", "[data-online-floor]", "[data-online-room-listing-toggle]", "[data-online-room-listing-purpose]",
   "[data-online-room-listing-style]", "[data-online-chat-input]", "[data-online-explore-chat-input]",
   "[data-online-user-block]", "[data-online-user-mute]", "[data-online-user-unmute]", "[data-online-friend-unblock]",
-  "[data-online-chat-form] button[type='submit']", "[data-online-explore-chat-form] button[type='submit']",
-  "[data-online-hall-games-toggle]", "[data-online-hall-game-join]", "[data-online-hall-game-leave]",
-  "[data-online-hall-game-ready]", "[data-online-hall-game-start]", "[data-online-hall-game-reset]",
-  "[data-online-hall-game-action]", "[data-online-hall-game-monster]",
+  "[data-online-chat-form] button[type='submit']", "[data-online-explore-chat-form] button[type='submit']", "[data-online-tavern-toggle]",
 ].join(",");
 const HALL_POINTS = Object.freeze([
   { route: "raid", x: 18, y: 25 }, { route: "explore", x: 82, y: 25 },
-  { route: "games", x: 50, y: 25 },
+  { route: "tavern", x: 50, y: 25 },
   { route: "social", x: 50, y: 49 },
   { route: "team", x: 24, y: 78 }, { route: "chat", x: 76, y: 78 },
 ]);
@@ -1040,7 +1037,7 @@ export function resetCurrentWeeklyRaidForFullReset(state, { timeoutMs = FULL_RES
   const requestId = fullResetRaidRequestId(), identity = ensureOnlineIdentity();
   if (typeof WebSocketImpl !== "function") return Promise.resolve({ ok: false, reason: "offline", requestId });
   let endpoint;
-  try { endpoint = websocketUrl(storageGet(ONLINE_STORAGE_KEYS.serverUrl) || DEFAULT_ONLINE_SERVER_URL); }
+  try { endpoint = websocketUrl(DEFAULT_ONLINE_SERVER_URL); storageSet(ONLINE_STORAGE_KEYS.serverUrl, DEFAULT_ONLINE_SERVER_URL); }
   catch (error) { return Promise.resolve({ ok: false, reason: "serverUrl", message: error?.message, requestId }); }
   const resumeToken = migrateLegacyResumeToken()[endpoint] ?? "", clientKey = storageGet(ONLINE_STORAGE_KEYS.clientKey), profile = buildOnlinePartyProfile(state ?? {}, { displayName: storageGet(ONLINE_STORAGE_KEYS.displayName) });
   return new Promise(resolve => {
@@ -1132,7 +1129,9 @@ export class OnlinePartyController {
     this.onPowerRankingReward = onPowerRankingReward;
     this.onConnectionStatus = onConnectionStatus;
     this.selfId = identity.friendId;
-    const initialServerUrl = storageGet(ONLINE_STORAGE_KEYS.serverUrl) || DEFAULT_ONLINE_SERVER_URL;
+    storageSet(ONLINE_STORAGE_KEYS.serverUrl, DEFAULT_ONLINE_SERVER_URL);
+    storageSet(ONLINE_STORAGE_KEYS.autoConnect, "1");
+    const initialServerUrl = DEFAULT_ONLINE_SERVER_URL;
     const initialResumeEndpoint = normalizedWebsocketEndpoint(initialServerUrl);
     const initialResumeTokens = migrateLegacyResumeToken();
     this.resumeTokenEndpoint = initialResumeEndpoint;
@@ -1209,6 +1208,9 @@ export class OnlinePartyController {
     this.pendingRoomJoinId = null;
     this.roomListingPending = false;
     this.roomMemberRemovalPendingId = null;
+    this.personalHubPending = false;
+    this.inviteJoinAttempted = false;
+    this.tavernOpen = false;
     this.mounted = false;
     this.manualClose = true;
     this.connectionReady = false;
@@ -1275,9 +1277,6 @@ export class OnlinePartyController {
     this.rewardReceiptAdvanceTimer = null;
     this.hallDestination = null;
     this.hallNearbyRoute = null;
-    this.hallGamesOpen = false;
-    this.hallGameTab = "";
-    this.hallGameRequestSequence = 0;
     this.exploreCanvasMounted = false;
     this.exploreCanvasUpdateFrame = null;
     this.pendingExploreCanvasUpdate = null;
@@ -1339,10 +1338,10 @@ export class OnlinePartyController {
         return;
       }
       this.backgroundOnly = false;
-      this._setStatus("online", "接続済み", this.roomState ? "オンライン探索へ戻りました" : "部屋を作るか、ルームIDで参加してください");
+      this._setStatus("online", "接続済み", this.roomState ? "前の集会所へ戻りました" : "集会所を準備しています");
       this._showConnectionStep(this.roomState ? "room" : "gate");
       if (this.roomState) this._render();
-      else this._requestRoomListings();
+      else this._ensurePersonalHub();
       this._flushExpeditionProfileSync();
       return;
     }
@@ -1351,12 +1350,10 @@ export class OnlinePartyController {
       this._setStatus("error", "別の画面で接続済み", "この画面の自動再接続を停止しました。再開する場合は接続を押してください");
       return;
     }
-    this._setStatus("offline", "オフライン", "通常ゲームのセーブには影響しません");
+    this._setStatus("connecting", "自動接続中…", "冒険者集会所の常設回線を確認しています");
     const awaitingInitialAck = Boolean(this.helloAckPending);
-    if (storageGet(ONLINE_STORAGE_KEYS.serverUrl) && (awaitingInitialAck || storageGet(ONLINE_STORAGE_KEYS.autoConnect) === "1" && this._refreshResumeTokenFromStorage())) {
-      if (awaitingInitialAck) this._setStatus("reconnecting", "認証確認中…", "初回接続の応答を安全に再確認しています");
-      queueMicrotask(() => { if (this.mounted) this.connect({ reconnect: true }); });
-    }
+    if (awaitingInitialAck) this._setStatus("reconnecting", "認証確認中…", "接続の応答を安全に再確認しています");
+    queueMicrotask(() => { if (this.mounted) this.connect({ reconnect: true }); });
   }
 
   unmount({ disconnect = true, backgroundTransition = true } = {}) {
@@ -1573,8 +1570,8 @@ export class OnlinePartyController {
       return;
     }
     const hall = event.target.closest?.("[data-online-hall-stage]");
-    if (hall && !event.target.closest?.("button,.online-hall-hud,.online-hall-prompt,.online-hall-party-strip,.online-hall-quick-chat,.online-hall-games-modal")) {
-      if (this.exploreChatOpen || this.hallGamesOpen || this.emoteGestureActive) return;
+    if (hall && !event.target.closest?.("button,.online-hall-hud,.online-hall-prompt,.online-hall-party-strip,.online-hall-quick-chat,.online-tavern-overlay")) {
+      if (this.exploreChatOpen || this.tavernOpen || this.emoteGestureActive) return;
       if (!this._canMutateOnline()) { this._announceConnectionPause(); return; }
       const world = hall.querySelector(".online-hall-world"), rect = world?.getBoundingClientRect();
       if (rect?.width && rect?.height) this.hallDestination = { x: clamp((event.clientX - rect.left) / rect.width * 100, 5, 95), y: clamp((event.clientY - rect.top) / rect.height * 100, 15, 96) };
@@ -1582,6 +1579,18 @@ export class OnlinePartyController {
     }
     const button = event.target.closest?.("button");
     if (!button) return;
+    if (button.matches("[data-online-profile-toggle]")) {
+      const panel = this._query("[data-online-profile-panel]"), opening = Boolean(panel?.hidden);
+      if (panel) panel.hidden = !opening;
+      button.setAttribute("aria-expanded", String(opening));
+      if (opening) requestAnimationFrame(() => panel?.querySelector("[data-online-profile-close]")?.focus());
+      return;
+    }
+    if (button.matches("[data-online-profile-close]")) {
+      const panel = this._query("[data-online-profile-panel]"); if (panel) panel.hidden = true;
+      this._query("[data-online-profile-toggle]")?.setAttribute("aria-expanded", "false");
+      return;
+    }
     if (button.matches("[data-online-guild-plan-attention]")) { this._openGuildPlanAttention(button.dataset.onlineGuildPlanAttention); return; }
     if (button.matches("[data-online-friends-toggle]")) { this.friendPanelOpen = true; this._renderFriendPanel(); requestAnimationFrame(() => this._query(".online-social-header [data-online-friends-close]")?.focus()); return; }
     if (button.matches("[data-online-friends-close]")) { this.friendPanelOpen = false; this._renderFriendPanel(); requestAnimationFrame(() => this._query("[data-online-friends-toggle]")?.focus()); return; }
@@ -1746,29 +1755,12 @@ export class OnlinePartyController {
       return;
     }
     if (button.matches("[data-online-chat-close]")) { this.exploreChatOpen = false; this._render(); requestAnimationFrame(() => this._query("[data-online-chat-toggle]")?.focus()); return; }
-    if (button.matches("[data-online-hall-games-toggle],[data-online-hall-game-close]")) {
-      const closing = button.matches("[data-online-hall-game-close]");
-      if (!closing && !this.capabilities.has("hallMinigamesV1")) { this.toast("遊戯広場を使うにはオンラインサーバーの193更新が必要です"); return; }
-      this.hallGamesOpen = closing ? false : !this.hallGamesOpen;
-      if (this.hallGamesOpen && !this.roomState?.hallGame) this.hallGameTab = "";
-      this.exploreChatOpen = false; this.hallDestination = null; this._clearMoveInputs(); this._render(); return;
-    }
-    if (button.matches("[data-online-hall-game-tab]")) { this.hallGameTab = button.dataset.onlineHallGameTab === "race" ? "race" : "mimic"; this._render(); return; }
-    if (button.matches("[data-online-hall-game-join],[data-online-hall-game-monster]")) {
-      const game = (button.dataset.onlineHallGameJoin || (button.hasAttribute("data-online-hall-game-monster") ? "race" : this.hallGameTab)) === "race" ? "race" : "mimic";
-      const monsterId = button.dataset.onlineHallGameMonster || undefined;
-      this.hallGameTab = game;
-      this._send("hallGameJoin", { game, monsterId, requestId: this._hallGameRequestId("join") }); return;
-    }
-    if (button.matches("[data-online-hall-game-leave]")) { this._send("hallGameLeave", { requestId: this._hallGameRequestId("leave") }); return; }
-    if (button.matches("[data-online-hall-game-ready]")) {
-      const participant = this.roomState?.hallGame?.participants?.find?.(entry => entry.playerId === this.selfId);
-      this._send("hallGameReady", { ready: !Boolean(participant?.ready), requestId: this._hallGameRequestId("ready") }); return;
-    }
-    if (button.matches("[data-online-hall-game-start]")) { this._send("hallGameStart", { requestId: this._hallGameRequestId("start") }); return; }
-    if (button.matches("[data-online-hall-game-reset]")) { this._send("hallGameReset", { requestId: this._hallGameRequestId("reset") }); return; }
-    if (button.matches("[data-online-hall-game-action]")) {
-      this._send("hallGameAction", { action: button.dataset.onlineHallGameAction, targetId: button.dataset.onlineHallGameTarget || undefined, requestId: this._hallGameRequestId("action") }); return;
+    if (button.matches("[data-online-tavern-toggle],[data-online-tavern-close]")) {
+      const closing = button.matches("[data-online-tavern-close]");
+      this.tavernOpen = closing ? false : !this.tavernOpen;
+      this.exploreChatOpen = false; this.hallDestination = null; this._clearMoveInputs();
+      if (this.tavernOpen) this._requestRoomListings({ force: true });
+      this._render(); return;
     }
     if (button.matches("[data-online-open-merchant]")) { this.rareMerchantOpen = true; this.merchantResult = null; this._render(); return; }
     if (button.matches("[data-online-close-merchant]")) { this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; clearTimeout(this.merchantPendingTimer); this._render(); return; }
@@ -1779,7 +1771,7 @@ export class OnlinePartyController {
     if (button.matches("[data-online-expedition-interact]")) { const action = button.dataset.onlineExpeditionInteract, targetId = button.dataset.onlineInteractionTarget; if (action === "challengeFloorBoss") { if (!this._beginInteractionPending(action,targetId)) return;if (!this._send("expeditionInteract",{action,targetId}))this._clearInteractionPending(false);this._render();return; } if (["challengeCoopElite", "challengeCoopBoss"].includes(action)) { const expedition = this.roomState?.expedition, interaction = expedition?.interactions?.[this.selfId] ?? {}, object = expedition?.objects?.find(entry => entry.id === targetId || entry.type === "coopElite") ?? {}, source = interaction.coopBoss ?? interaction.bossProfile ?? object, boss = { ...source, id: source.id ?? source.coopBossId, name: source.name ?? source.bossName, title: source.title ?? source.bossTitle, intro: source.intro ?? source.bossIntro, speciesId: source.speciesId ?? object.speciesId, visualSpeciesId: source.visualSpeciesId ?? object.visualSpeciesId, accent: source.accent ?? object.accent, mechanic: source.mechanic ?? object.mechanic }; this.coopBossConfirm = { action, targetId, boss, floor: Number(expedition?.floor) || 0 }; this._render(); return; } if (!this._beginInteractionPending(action, targetId)) return; if (!this._send("expeditionInteract", { action, targetId })) this._clearInteractionPending(false); this._render(); return; }
     if (button.matches("[data-online-merchant-offer]")) { if (this.merchantPending) return; const offer = button.dataset.onlineMerchantOffer; this.merchantPending = true; this.merchantResult = { offer, status: "pending" }; clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = setTimeout(() => { if (!this.merchantPending) return; this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "通信結果を確認できませんでした。もう一度お試しください。" }; this._render(); }, 3500); if (!this._send("rareMerchantClaim", { offer })) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { offer, status: "error", message: "サーバーへ接続されていません。" }; } this._render(); return; }
     if (button.matches("[data-online-battle-cheer]")) { this._send("battleCheer", { mode: button.dataset.onlineBattleCheer || this.route }); return; }
-    if (button.matches("[data-online-hall-destination]")) { if (!this.exploreChatOpen && !this.hallGamesOpen && !this.emoteGestureActive) this.hallDestination = { x: Number(button.dataset.hallX), y: Number(button.dataset.hallY) }; return; }
+    if (button.matches("[data-online-hall-destination]")) { if (!this.exploreChatOpen && !this.tavernOpen && !this.emoteGestureActive) this.hallDestination = { x: Number(button.dataset.hallX), y: Number(button.dataset.hallY) }; return; }
     if (button.id === "backOnlineParty") {
       this.requestExit();
       return;
@@ -2099,15 +2091,15 @@ export class OnlinePartyController {
       return;
     }
     this.manualClose = true;
-    storageSet(ONLINE_STORAGE_KEYS.autoConnect, "0");
-    this._setStatus("error", "認証できません", message?.message || "接続設定を確認して、もう一度接続してください");
+    storageSet(ONLINE_STORAGE_KEYS.autoConnect, "1");
+    this._setStatus("error", "認証できません", message?.message || "少し待ってから再試行してください");
     this._showConnectionStep("entry");
     try { socket?.close(1008, "hello rejected"); } catch {}
   }
 
   connect({ reconnect = false } = {}) {
     if (this.ws && [WebSocket.OPEN, WebSocket.CONNECTING].includes(this.ws.readyState)) return;
-    const input = this._query("[data-online-server-url]")?.value || storageGet(ONLINE_STORAGE_KEYS.serverUrl) || DEFAULT_ONLINE_SERVER_URL;
+    const input = DEFAULT_ONLINE_SERVER_URL;
     let url;
     try { url = websocketUrl(input); } catch (error) { this.toast(error.message); return; }
     if (!reconnect) { this.supersededConnection = false; this.handshakeTokenRetries = 0; this.reconnectAttempts = 0; }
@@ -2128,7 +2120,7 @@ export class OnlinePartyController {
     }
     this.connectionEndpoint = url;
     this._refreshResumeTokenFromStorage(url);
-    storageSet(ONLINE_STORAGE_KEYS.serverUrl, input.trim()); this.manualClose = false; this.connectionReady = false; this._clearGuildPlanTransitionTimer(); this._clearMoveInputs();
+    storageSet(ONLINE_STORAGE_KEYS.serverUrl, input.trim()); storageSet(ONLINE_STORAGE_KEYS.autoConnect, "1"); this.manualClose = false; this.connectionReady = false; this._clearGuildPlanTransitionTimer(); this._clearMoveInputs();
     this._setStatus(reconnect ? "reconnecting" : "connecting", reconnect ? "再接続中…" : "接続中…", "PCサーバーへ接続しています");this._notifyServerAvailability("checking");
     let socket;
     try { socket = new WebSocket(url); this.ws = socket; (this.socketEndpoints ??= new WeakMap()).set(socket, url); } catch (error) { this._setStatus("error", "接続できません", error.message); this._notifyServerAvailability("offline"); return; }
@@ -2542,7 +2534,6 @@ export class OnlinePartyController {
   }
 
   _requestRoomListings({ force = false } = {}) {
-    if (this.roomState || this.connectionStep === "room") return false;
     if (!this._supportsRoomListings()) {
       this.roomListingsStatus = "error";
       this._renderRoomBoard();
@@ -2559,8 +2550,10 @@ export class OnlinePartyController {
   }
 
   _joinListedRoom(roomIdValue, listingIdValue) {
-    if (this.pendingRoomJoinId || this.roomState) return;
+    if (this.pendingRoomJoinId) return;
+    if (this.roomState?.phase && this.roomState.phase !== "lobby") { this.toast("現在のプレイを終えてから別の部屋へ参加してください"); return; }
     const roomId = safeRoomId(roomIdValue), listingId = String(listingIdValue ?? "").slice(0, 96);
+    if (roomId === this.roomId) { this.toast("いま滞在している部屋です"); return; }
     const listing = this.roomListings.find(entry => entry.roomId === roomId && (!listingId || entry.listingId === listingId));
     if (roomId.length !== 6 || !listing?.listingId) { this.toast("この募集は終了しました。掲示板を更新してください"); return; }
     this.pendingRoomJoinId = roomId;
@@ -2572,7 +2565,8 @@ export class OnlinePartyController {
   }
 
   _quickJoinRoom() {
-    if (this.pendingRoomJoinId || this.roomState || !this.roomListings.length) return;
+    if (this.pendingRoomJoinId || !this.roomListings.length) return;
+    if (this.roomState?.phase && this.roomState.phase !== "lobby") { this.toast("現在のプレイを終えてから別の部屋へ参加してください"); return; }
     this.pendingRoomJoinId = "quick";
     this._renderRoomBoard();
     const purpose = ROOM_PURPOSES.has(this.roomListingPurposeFilter) ? this.roomListingPurposeFilter : undefined;
@@ -2626,6 +2620,33 @@ export class OnlinePartyController {
     if (!this._send("expeditionProfileSync", { profile: this.profile })) return false;
     this.pendingExpeditionProfileSync = false;
     return true;
+  }
+
+  _pendingInviteRoomId() {
+    const stored = this._query("[data-online-pending-room-code]")?.value;
+    if (stored) return safeRoomId(stored);
+    try { return safeRoomId(new URL(globalThis.location?.href ?? "http://localhost").searchParams.get("partyRoom")); }
+    catch { return ""; }
+  }
+
+  /** Enter Online as a place, not as a connection form. */
+  _ensurePersonalHub() {
+    if (!this.mounted || !this.connectionReady || this.backgroundOnly || this.roomState || this.personalHubPending) return false;
+    this._showConnectionStep("gate");
+    const invited = this._pendingInviteRoomId();
+    if (invited.length === 6 && !this.inviteJoinAttempted) {
+      this.inviteJoinAttempted = true;
+      this.pendingRoomJoinId = invited;
+      this.personalHubPending = this._send("joinRoom", { roomId: invited });
+      if (this.personalHubPending) {
+        this._setStatus("connecting", "招待先へ合流中…", `ルーム ${invited} を確認しています`);
+        return true;
+      }
+    }
+    this.pendingRoomJoinId = null;
+    this.personalHubPending = this._send("createRoom", { published: false, purpose: "social", style: "anyone", autoHub: true });
+    this._setStatus(this.personalHubPending ? "connecting" : "error", this.personalHubPending ? "集会所を準備中…" : "集会所を開けません", this.personalHubPending ? "自分の広場を用意しています" : "通信が戻ると自動で再試行します");
+    return this.personalHubPending;
   }
 
   _notifyTutorialGuide(id) {
@@ -2727,15 +2748,13 @@ export class OnlinePartyController {
         if (!this._send("leaveRoom")) { this.connectionReady = false; try { this.ws?.close(1012, "retry pending leave"); } catch {} }
         return;
       }
-      this._setStatus("online", "接続済み", message.resumed ? "前の部屋へ復帰しました" : "部屋を作るか、ルームIDで参加してください");
+      this._setStatus("online", "接続済み", message.resumed ? "前の集会所へ復帰しました" : "集会所へ入場します");
       this._showConnectionStep(message.room ? "room" : "gate");
       if (message.room) { this._applyRoomState(message.room, { reconnected: Boolean(message.resumed) }); this._settlePendingExpeditionStart(message.room, { rejected: message.room.phase !== "expedition" }); }
       else {
         this._clearRoom({ reason: message.resumed ? "resumeWithoutRoom" : "helloWithoutRoom" });
         this._settlePendingExpeditionStart(null, { rejected: true });
-        const invited = safeRoomId(this._query("[data-online-room-code]")?.value);
-        if (invited.length === 6) this._send("joinRoom", { roomId: invited });
-        else this._requestRoomListings();
+        this._ensurePersonalHub();
       }
       this._flushExpeditionProfileSync();
       return;
@@ -2766,10 +2785,10 @@ export class OnlinePartyController {
         this.tradeReconnectAuthoritativeIds = new Set(message.activeTradeIds.map(String));
         this._recoverOrphanedTradeEscrows(message.activeTradeIds);
       }
-      this._setStatus("online", "接続済み", message.room ? "オンライン探索へ戻りました" : "部屋を作るか、ルームIDで参加してください");
+      this._setStatus("online", "接続済み", message.room ? "オンライン探索へ戻りました" : "集会所へ入場します");
       this._showConnectionStep(message.room ? "room" : "gate");
       if (message.room) this._applyRoomState(message.room);
-      else { this._clearRoom({ reason: "connectionModeWithoutRoom" }); this._requestRoomListings({ force: true }); }
+      else { this._clearRoom({ reason: "connectionModeWithoutRoom" }); this._ensurePersonalHub(); }
       return;
     }
     if (message.type === "powerRankingRewards") {
@@ -2811,11 +2830,11 @@ export class OnlinePartyController {
       return;
     }
     if (message.type === "roomListings") {
-      if (this.roomState || this.connectionStep === "room") return;
       const generatedAt = Math.max(0, Number(message.generatedAt) || 0);
       if (generatedAt && generatedAt < this.roomListingsGeneratedAt) return;
       const normalized = normalizeRoomListings(message.listings);
-      this.roomListings = ROOM_PURPOSES.has(this.roomListingPurposeFilter) ? normalized.filter(listing => listing.purpose === this.roomListingPurposeFilter) : normalized;
+      const otherRooms = normalized.filter(listing => listing.roomId !== this.roomId);
+      this.roomListings = ROOM_PURPOSES.has(this.roomListingPurposeFilter) ? otherRooms.filter(listing => listing.purpose === this.roomListingPurposeFilter) : otherRooms;
       this.roomListingsGeneratedAt = generatedAt || Date.now();
       this.roomListingsStatus = "ready";
       this._renderRoomBoard();
@@ -2845,7 +2864,7 @@ export class OnlinePartyController {
       this._clearGuildPending();
       this._renderFriendPanel(); return;
     }
-    if (message.type === "roomState") { this._applyRoomState(message.room); this._settlePendingExpeditionStart(message.room); return; }
+    if (message.type === "roomState") { this.personalHubPending = false; this.pendingRoomJoinId = null; this._applyRoomState(message.room); this._settlePendingExpeditionStart(message.room); return; }
     if (["resonanceStarted", "resonanceState", "resonanceEnded"].includes(message.type)) {
       this.route = "explore";
       storageSet(ONLINE_STORAGE_KEYS.route, "explore");
@@ -2975,6 +2994,8 @@ export class OnlinePartyController {
       this._settlePendingExpeditionStart(null, { rejected: true });
       this._clearInteractionPending(false);
       const hadPendingRoomJoin = Boolean(this.pendingRoomJoinId);
+      const personalHubFailed = this.personalHubPending;
+      this.personalHubPending = false;
       this.pendingRoomJoinId = null;
       this.roomListingPending = false;
       this.roomMemberRemovalPendingId = null;
@@ -2982,6 +3003,7 @@ export class OnlinePartyController {
       if (this.merchantPending) { clearTimeout(this.merchantPendingTimer); this.merchantPending = false; this.merchantResult = { ...(this.merchantResult ?? {}), status: "error", message: message.message || "支援品を受け取れませんでした。" }; }
       this.toast(message.message || "オンライン処理に失敗しました");
       if (this.roomState) this._render(); else this._renderRoomBoard();
+      if (!this.roomState && this.mounted && this.connectionReady && personalHubFailed) setTimeout(() => this._ensurePersonalHub(), 900);
       return;
     }
   }
@@ -3540,6 +3562,7 @@ export class OnlinePartyController {
 
   _applyRoomState(room, { reconnected = false } = {}) {
     if (!room?.roomId) return false;
+    this.personalHubPending = false;
     if (room.phase === "resonance") {
       room = { ...room, phase: "lobby", resonance: null };
       this.route = "explore";
@@ -3564,6 +3587,7 @@ export class OnlinePartyController {
     this.roomListingPending = false;
     if (!room.members?.some(member => member.playerId === this.roomMemberRemovalPendingId)) this.roomMemberRemovalPendingId = null;
     const previousRoom = this.roomState;
+    const changedRoom = Boolean(previousRoom?.roomId && previousRoom.roomId !== room.roomId);
     const previousCount = this.roomState?.chatHistory?.length ?? 0;
     const hadInteractionPending = Boolean(this.interactionPending);
     const keepExploreCanvas = this.exploreCanvasMounted
@@ -3581,10 +3605,7 @@ export class OnlinePartyController {
     this._clearInteractionPending(false);
     this.roomState = room; this.roomId = room.roomId;
     this._syncActiveExpeditionRun(room);
-    const hallGame = room.hallGame, hallParticipant = hallGame?.participants?.some?.(entry => entry.playerId === this.selfId);
-    if (hallGame?.game) this.hallGameTab = hallGame.game === "race" ? "race" : "mimic";
-    if (hallParticipant && !["entry", "result"].includes(String(hallGame?.phase ?? ""))) this.hallGamesOpen = true;
-    if (room.phase !== "lobby") this.hallGamesOpen = false;
+    if (changedRoom || room.phase !== "lobby") this.tavernOpen = false;
     if (recruitmentJoinCompleted) {
       this._clearGuildPending();
       this.friendPanelOpen = false;
@@ -3834,7 +3855,7 @@ export class OnlinePartyController {
       return false;
     }
     this.emoteGestureCleanup?.();
-    const showReturnResult = Boolean(this.pendingExpeditionReturnResult); this.roomState = null; this.roomId = null; this.pendingExpeditionStart = false; this.pendingSecretRoomRun = null; this.syncedExpeditionStartKey = ""; this._clearMoveInputs(); this._closeAllBattleMenus(); this.unread = 0; this.floorBossConfirm = null; this.coopBossConfirm = null; this.pendingFloorBossReward = null; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; this.expeditionReport = null; this.raidReport = null; this.teamBattleReport = null; this.exploreChatOpen = false; this.hallGamesOpen = false; this.pingMenuOpen = false; this.pendingRoomJoinId = null; this.roomListingPending = false; this.roomMemberRemovalPendingId = null; this.processedCoopTechniqueEvents.clear(); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false); this._clearTradeUi();
+    const showReturnResult = Boolean(this.pendingExpeditionReturnResult); this.roomState = null; this.roomId = null; this.personalHubPending = false; this.pendingExpeditionStart = false; this.pendingSecretRoomRun = null; this.syncedExpeditionStartKey = ""; this._clearMoveInputs(); this._closeAllBattleMenus(); this.unread = 0; this.floorBossConfirm = null; this.coopBossConfirm = null; this.pendingFloorBossReward = null; this.rareMerchantOpen = false; this.merchantPending = false; this.merchantResult = null; this.expeditionReport = null; this.raidReport = null; this.teamBattleReport = null; this.exploreChatOpen = false; this.tavernOpen = false; this.pingMenuOpen = false; this.pendingRoomJoinId = null; this.roomListingPending = false; this.roomMemberRemovalPendingId = null; this.processedCoopTechniqueEvents.clear(); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this._clearInteractionPending(false); this._clearTradeUi();
     this.root?.querySelector(".online-v3-screen")?.classList.remove("online-shared-gameplay-active");
     this._unmountExploreCanvas();
     this._query("[data-online-room]")?.classList.remove("online-shared-gameplay");
@@ -3901,11 +3922,11 @@ export class OnlinePartyController {
       canJoinGathering: this._canMutateOnline() && !this.trade && (!this.roomState || this.roomState.phase === "lobby"),
     });
     const renderedTradeId=String(this.trade?.tradeId??""),tradeOfferPending=Boolean(this.tradePendingOffer||this.tradeReconcilePending||this.tradeOfferInflight.has(renderedTradeId)||this.tradeReconcileInflight.has(renderedTradeId)||this.tradeCommitInflight.has(renderedTradeId)||this.tradeFinishInflight.has(renderedTradeId)),tradeOfferPendingLabel=this.tradePendingOffer?.status==="saving"?"保存中…":this.tradePendingOffer?.status==="sending"?"送信中…":this.tradeCommitInflight.has(renderedTradeId)?"確定保存中…":this.tradeFinishInflight.has(renderedTradeId)?"終了処理中…":tradeOfferPending?"照合中…":"";
-    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], presentationKoIds: [...(this.presentationKoIds[this.route] ?? [])], raidReport: this.raidReport, teamBattleReport: this.teamBattleReport, expeditionReport: this.expeditionReport, expeditionReturnReady: Boolean(this.pendingExpeditionReturnResult), expeditionStartPending: this.pendingExpeditionStart, floorBossConfirm: this.floorBossConfirm, coopBossConfirm: this.coopBossConfirm, exploreChatOpen: this.exploreChatOpen, hallGamesOpen: this.hallGamesOpen, hallGameTab: this.hallGameTab, hallGamesSupported: this.capabilities.has("hallMinigamesV1"), merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot(), socialNotice, trade: this.trade, tradeCatalog: this.trade ? this._tradeCatalog() : [], tradeFilter: this.tradeFilter, tradeQuery: this.tradeQuery, tradeDraftRef: this.tradeDraftRef, tradeDraftAsset: this.trade ? this._tradeDraftAsset() : null, tradeAmount: this.tradeAmount, tradeOfferPending, tradeOfferPendingLabel, tradeConsistent:this._tradeAdvanceAllowed(), tradeConfirmSeconds: Math.max(0, Math.ceil((this.tradeConfirmAvailableAt - Date.now()) / 1000)), raidExchangePending: this.raidExchangePending, roomListingPending: this.roomListingPending, roomMemberRemovalPendingId: this.roomMemberRemovalPendingId, guildRecruitmentActive: guildRecruitmentLock.active, guildRecruitmentLock, mutedPlayerIds, blockedPlayerIds, safetyCapability: this.capabilities.has("onlineSafetyV1") };
+    const state = { selectedTarget: this.selectedTarget[this.route], selectedAlly: this.selectedAlly[this.route], skillMenu: this.skillMenu[this.route], itemMenu: this.itemMenu[this.route], itemTargetMenu: this.itemTargetMenu[this.route], hpTrails: this.hpTrails[this.route], presentationKoIds: [...(this.presentationKoIds[this.route] ?? [])], raidReport: this.raidReport, teamBattleReport: this.teamBattleReport, expeditionReport: this.expeditionReport, expeditionReturnReady: Boolean(this.pendingExpeditionReturnResult), expeditionStartPending: this.pendingExpeditionStart, floorBossConfirm: this.floorBossConfirm, coopBossConfirm: this.coopBossConfirm, exploreChatOpen: this.exploreChatOpen, tavernOpen: this.tavernOpen, roomListings: this.roomListings, roomListingsStatus: this.roomListingsStatus, pendingRoomJoinId: this.pendingRoomJoinId, roomListingPurposeFilter: this.roomListingPurposeFilter, merchantOpen: this.rareMerchantOpen, merchantPending: this.merchantPending, merchantResult: this.merchantResult, interactionPending: this.interactionPending, pingMenuOpen: this.pingMenuOpen, chatDraft: this.chatDraft, hudCollapsed: this.onlineHudCollapsed, gameState: this.getState?.(), socialBubbles: this._socialBubbleSnapshot(), chatBubbles: this._chatBubbleSnapshot(), socialNotice, trade: this.trade, tradeCatalog: this.trade ? this._tradeCatalog() : [], tradeFilter: this.tradeFilter, tradeQuery: this.tradeQuery, tradeDraftRef: this.tradeDraftRef, tradeDraftAsset: this.trade ? this._tradeDraftAsset() : null, tradeAmount: this.tradeAmount, tradeOfferPending, tradeOfferPendingLabel, tradeConsistent:this._tradeAdvanceAllowed(), tradeConfirmSeconds: Math.max(0, Math.ceil((this.tradeConfirmAvailableAt - Date.now()) / 1000)), raidExchangePending: this.raidExchangePending, roomListingPending: this.roomListingPending, roomMemberRemovalPendingId: this.roomMemberRemovalPendingId, guildRecruitmentActive: guildRecruitmentLock.active, guildRecruitmentLock, mutedPlayerIds, blockedPlayerIds, safetyCapability: this.capabilities.has("onlineSafetyV1") };
     state.battleAutoSupported = this.capabilities.has("battleAutoV1");
     state.battleBiomeCollapsed = this._syncOnlineBattleBiomePanel();
     const activeInput = stage.contains(document.activeElement) ? document.activeElement : null;
-    const restoreHallChatFocus = this.route === "home" && this.hallGamesOpen
+    const restoreHallChatFocus = this.route === "home" && this.exploreChatOpen && !this.tavernOpen
       && activeInput?.matches?.("[data-online-explore-chat-input]");
     const hallChatSelection = restoreHallChatFocus && Number.isFinite(activeInput.selectionStart)
       ? { start: activeInput.selectionStart, end: activeInput.selectionEnd }
@@ -4346,7 +4367,7 @@ export class OnlinePartyController {
   _moveStep(now) {
     if (!this._canMutateOnline()) { this._clearMoveInputs(); return; }
     if (this.route === "home" && this.roomState?.phase === "lobby") {
-      if (this.exploreChatOpen || this.hallGamesOpen || this.emoteGestureActive) { this.hallDestination = null; return; }
+      if (this.exploreChatOpen || this.tavernOpen || this.emoteGestureActive) { this.hallDestination = null; return; }
       this._moveHallStep(now); return;
     }
     if (this.route !== "explore" || this.roomState?.phase !== "expedition" || this.roomState?.expedition?.battle) return;
@@ -4563,11 +4584,6 @@ export class OnlinePartyController {
     return HALL_POINTS.find(point => Math.hypot(point.x - Number(position.x), point.y - Number(position.y)) <= 10)?.route ?? null;
   }
 
-  _hallGameRequestId(kind = "action") {
-    this.hallGameRequestSequence = (this.hallGameRequestSequence + 1) % 1_000_000;
-    return `hall-${String(kind).replace(/[^a-z]/gi, "").slice(0, 12) || "action"}-${Date.now().toString(36)}-${this.hallGameRequestSequence.toString(36)}`;
-  }
-
   _updateHallPlayerDom(playerId) {
     const member = this.roomState?.members?.find(entry => entry.playerId === playerId), node = this._query(`[data-online-hall-player="${CSS.escape(String(playerId))}"]`);
     if (member?.position && node) { node.style.setProperty("--hall-x", `${clamp(member.position.x, 5, 95)}%`); node.style.setProperty("--hall-y", `${clamp(member.position.y, 15, 96)}%`); }
@@ -4598,8 +4614,6 @@ export class OnlinePartyController {
   _ensureConnectionAfterResume() {
     if ((!this.mounted && !this.backgroundActive) || this.manualClose) return;
     this._refreshResumeTokenFromStorage();
-    const awaitingInitialAck = Boolean(this.helloAckPending);
-    if (!storageGet(ONLINE_STORAGE_KEYS.serverUrl) || !awaitingInitialAck && (storageGet(ONLINE_STORAGE_KEYS.autoConnect) !== "1" || !this.resumeToken)) return;
     if (this.ws && [WebSocket.OPEN, WebSocket.CONNECTING].includes(this.ws.readyState)) return;
     clearTimeout(this.reconnectTimer); this.reconnectTimer = null;
     this.connect({ reconnect: true });
@@ -4608,7 +4622,7 @@ export class OnlinePartyController {
   _handleClose(closedSocket = null, closeEvent = null) {
     if (closedSocket && this.ws && this.ws !== closedSocket) return;
     this._stopPowerRankingPresenceLoop(); this.lastPowerRankingPresenceAt = 0;
-    this.ws = null; this.connectionReady = false; this.connectionModePending = false; this._clearPowerRankingRequests("offline"); this._notifyPowerRankingCapability(); this._clearGuildPlanTransitionTimer(); this._clearMoveInputs(); this._clearInteractionPending(false); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this.merchantPending = false; if (this.manualClose) return;
+    this.ws = null; this.connectionReady = false; this.connectionModePending = false; this.personalHubPending = false; this._clearPowerRankingRequests("offline"); this._notifyPowerRankingCapability(); this._clearGuildPlanTransitionTimer(); this._clearMoveInputs(); this._clearInteractionPending(false); clearTimeout(this.merchantPendingTimer); this.merchantPendingTimer = null; this.merchantPending = false; if (this.manualClose) return;
     if (Number(closeEvent?.code) === 4001) {
       clearTimeout(this.reconnectTimer); this.reconnectTimer = null;
       clearTimeout(this.pendingLeaveTimer); this.pendingLeaveTimer = null;
@@ -4707,6 +4721,7 @@ export class OnlinePartyController {
       return true;
     }
     this._setStatus("online", "接続済み", "オンライン部屋から退出しました");
+    queueMicrotask(() => this._ensurePersonalHub());
     return true;
   }
 
@@ -4725,10 +4740,8 @@ export class OnlinePartyController {
   }
 
   requestExit(onComplete = null) {
-    if (!this._confirmRoomExit()) return false;
     const complete = typeof onComplete === "function" ? onComplete : this.onBack;
-    if (this.roomState) this._requestRoomLeave({ exitAfter: true, onComplete: complete });
-    else { this.disconnect({ leave: false, quiet: true }); complete(); }
+    complete();
     return true;
   }
 
@@ -4739,7 +4752,7 @@ export class OnlinePartyController {
 
   async copyInvite() {
     if (!this.roomId) return;
-    const source = this._query("[data-online-server-url]")?.value ?? storageGet(ONLINE_STORAGE_KEYS.serverUrl);
+    const source = DEFAULT_ONLINE_SERVER_URL;
     const url = new URL(location.href); url.searchParams.set("partyServer", source); url.searchParams.set("partyRoom", this.roomId);
     if (typeof navigator.share === "function") {
       try { await navigator.share({ title: "ABYSS DOMINION オンライン招待", text: `ルーム ${this.roomId} へ参加`, url: url.toString() }); return; }
