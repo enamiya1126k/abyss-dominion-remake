@@ -1,16 +1,17 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.1-build311";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.1-build320";
 import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.1-build311";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.1-build311";
 import{SPECIES}from"../../data/species.js?v=3.1.1-build311";
 import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.1-build311";
 import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.1-build311";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.1-build311";
-import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=3.1.1-build311";
+import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=3.1.1-build317";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build311";
 import{attributeCycleVisual,attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.1-build311";
 import{campaignDayForFloor,campaignHeroAdvance}from"../../core/Campaign100System.js?v=3.1.1-build311";
-import{normalizeCampaignHeroInvasion}from"../../core/CampaignHeroEncounterSystem.js?v=3.1.1-build311";
+import{normalizeCampaignHeroInvasion}from"../../core/CampaignHeroEncounterSystem.js?v=3.1.1-build320";
+import{normalizeCampaignReincarnationState,campaignReincarnationDifficultyMultiplier,campaignReincarnationFloorLimit}from"../../core/CampaignReincarnationSystem.js?v=3.1.1-build320";
 
 function homeAttributeChart(){
  return attributeCycleVisual({className:"home-attribute-chart",decorative:true});
@@ -112,7 +113,7 @@ function homeMemoryCost(state,memory){
   return Math.min(Number.MAX_SAFE_INTEGER,memory.entries.some(entry=>entry.boss)?Math.ceil(base*1.5):base);
 }
 
-export function HomeScreen(state){
+export function HomeScreen(state,options={}){
   const slotIds=homePartySlots(state);
   const party=slotIds.map(id=>id?state.monsters.find(monster=>monster.id===id):null);
   const activeParty=party.filter(Boolean);
@@ -125,7 +126,7 @@ export function HomeScreen(state){
   // The campaign floor ledger unlocks its exit as soon as one of the four
   // 100階 gods fall. The final arena is unlocked only after the player
   // actually reaches that exit, so its durable receipt owns this CTA.
-  const heroInvasion=normalizeCampaignHeroInvasion(state),completed=Boolean(state.campaign100?.finalCompleted||heroInvasion.finalArena?.completed),finalReady=Boolean(heroInvasion.finalArena?.unlocked&&!completed);
+  const heroInvasion=normalizeCampaignHeroInvasion(state),reincarnation=normalizeCampaignReincarnationState(state),completed=Boolean(state.campaign100?.finalCompleted||heroInvasion.finalArena?.completed),finalReady=Boolean(heroInvasion.finalArena?.unlocked&&!completed);
   const phase=worldPhase(state);
   const sceneSlots=Array.from({length:4},(_,index)=>scenePartySlot(party[index],index,state)).join("");
   const criticalCount=activeParty.filter(monster=>homeCriticalVitals(monster).critical).length;
@@ -134,7 +135,8 @@ export function HomeScreen(state){
   const recentMemory=state.recentBattleMemory,memoryEntries=recentMemory?.entries??[],memoryCost=homeMemoryCost(state,recentMemory);
   const memoryNames=memoryEntries.slice(0,2).map(entry=>entry.nameOverride??SPECIES[entry.speciesId]?.name??"魔物").join("＋");
   const memorySub=memoryEntries.length?`${memoryNames}${memoryEntries.length>2?`ほか${memoryEntries.length-2}体`:""}・${memoryCost.toLocaleString()}晶石`:"直近の敵編成を丸ごと記録";
-  const timelineFloor=heroInvasion.rewind?.active?heroInvasion.rewind.currentFloor:Math.max(state.player?.currentFloor??1,state.player?.maxFloor??1),day=campaignDayForFloor(timelineFloor),baseInvasion=campaignHeroAdvance(state),invasion=heroInvasion.rewind?.active?{...baseInvasion,progress:Math.min(99,Math.max(80,timelineFloor-1)),location:`予言9日目・${timelineFloor}階`,status:"リオネルの巻き戻し中"}:baseInvasion,title=completed?"勇者一行を撃退":invasion.status,prophecyLabel=completed?"予言達成・勇者軍撃退":`予言 ${day}/10・勇者侵攻 ${invasion.progress}%`,meterLabel=completed?"迎撃完了・勝利の記録":finalReady&&!heroInvasion.rewind?.active?"勇者軍最終決戦へ ›":invasion.location,meterTag=finalReady&&!heroInvasion.rewind?.active?"button":"span",meterAction=finalReady&&!heroInvasion.rewind?.active?' id="openCampaignFinal" type="button" aria-label="勇者軍最終決戦へ"':"";
+  const cycleFloor=campaignReincarnationFloorLimit(state),timelineFloor=heroInvasion.rewind?.active?heroInvasion.rewind.currentFloor:reincarnation.active?cycleFloor:Math.max(state.player?.currentFloor??1,state.player?.maxFloor??1),day=campaignDayForFloor(timelineFloor),baseInvasion=campaignHeroAdvance(reincarnation.active?timelineFloor:state),invasion=heroInvasion.rewind?.active?{...baseInvasion,progress:Math.min(99,Math.max(80,timelineFloor-1)),location:`予言9日目・${timelineFloor}階`,status:"旧予言の再踏破中"}:baseInvasion,title=completed?"勇者一行を撃退":reincarnation.active?`輪廻${reincarnation.cycle}・${invasion.status}`:invasion.status,prophecyLabel=completed?"予言達成・勇者軍撃退":`${reincarnation.active?`輪廻 ${reincarnation.cycle}・`:""}予言 ${day}/10・勇者侵攻 ${invasion.progress}%`,meterLabel=completed?"迎撃完了・勝利の記録":finalReady&&!heroInvasion.rewind?.active?"王室・勇者軍最終決戦へ ›":invasion.location,meterTag=finalReady&&!heroInvasion.rewind?.active?"button":"span",meterAction=finalReady&&!heroInvasion.rewind?.active?' id="openCampaignFinal" type="button" aria-label="勇者軍最終決戦へ"':"";
+  const requestedServerState=String(options.serverStatus?.state??"checking"),serverState=["online","offline"].includes(requestedServerState)?requestedServerState:"checking",serverLabel=serverState==="online"?"サーバーオンライン中":serverState==="offline"?"サーバーオフライン":"サーバー確認中";
 
   return`
     <section class="screen home-command-screen world-phase-${phase}${phase===1?" phase2":""}" data-world-phase="${phase}">
@@ -155,6 +157,8 @@ export function HomeScreen(state){
         <${meterTag}${meterAction} class="home-invasion-meter ${completed?"is-complete":""} ${finalReady?"is-ready":""}"><i role="progressbar" aria-label="勇者の進軍度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${invasion.progress}"><em style="width:${invasion.progress}%"></em></i><b>${meterLabel}</b></${meterTag}>
       </header>
 
+      ${completed?`<section class="home-postgame-strip" aria-label="クリア後の進行"><span>クリア後もそのまま継続中</span><button type="button" id="openCampaignReincarnation">輪廻を選ぶ</button></section>`:reincarnation.active?`<section class="home-postgame-strip" aria-label="輪廻進行"><span>輪廻${reincarnation.cycle}・敵戦力 ×${campaignReincarnationDifficultyMultiplier(state).toFixed(2)}</span></section>`:""}
+
       <div class="home-resource-bar" aria-label="所持資源">
         <span title="GOLD：${state.player.gold.toLocaleString()}" data-exact-number="${state.player.gold.toLocaleString()}G">${pixelIcon("coin")}<b>${compactHomeNumber(state.player.gold)}</b></span>
         <span title="魔晶石：${state.player.crystals.toLocaleString()}" data-exact-number="魔晶石 ${state.player.crystals.toLocaleString()}">${pixelIcon("crystal")}<b>${compactHomeNumber(state.player.crystals)}</b></span>
@@ -162,6 +166,8 @@ export function HomeScreen(state){
         <span title="深淵の鍵：${(state.inventory?.abyssKeys??0).toLocaleString()}" data-exact-number="深淵の鍵 ${(state.inventory?.abyssKeys??0).toLocaleString()}">${pixelIcon("key")}<b>${compactHomeNumber(state.inventory?.abyssKeys??0)}</b></span>
         <button type="button" id="openSettings" aria-label="設定">${pixelIcon("settings")}</button>
       </div>
+
+      <div class="home-server-status is-${serverState}" data-home-server-status data-server-state="${serverState}" role="status" aria-live="polite"><i aria-hidden="true"></i><span>${serverLabel}</span></div>
 
       <button type="button" class="home-attribute-orbit" data-home-attribute-help="neutral" aria-label="属性相性を確認">
         <small>属性相関</small>${homeAttributeChart()}<em>矢印方向が有利</em>

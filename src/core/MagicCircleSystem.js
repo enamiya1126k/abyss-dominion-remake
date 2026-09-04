@@ -257,6 +257,26 @@ export function magicCirclePrice(state,id){
 }
 export function magicCircleUpgradePrice(entryOrId,level=1){const entry=typeof entryOrId==="string"?magicCircleById(entryOrId):entryOrId;return roundedUpgradePrice(entry?.baseUpgrade,level,{coefficient:.0002,exponent:1.30})}
 
+export function magicCircleLevelCapForFloor(floor=1){
+ const value=Math.max(1,Math.floor(Number(floor)||1));
+ if(value<20)return 1;
+ if(value<40)return 3;
+ if(value<60)return 6;
+ if(value<80)return 10;
+ if(value<100)return 15;
+ if(value<200)return 25;
+ if(value<500)return 40;
+ if(value<1000)return 60;
+ if(value<5000)return 80;
+ return 99;
+}
+
+export function magicCircleProgressionStatus(state,level=1){
+ const floor=Math.max(1,Math.floor(Number(state?.player?.maxFloor)||1)),cap=magicCircleLevelCapForFloor(floor),current=Math.max(1,Math.floor(Number(level)||1));
+ const nextFloor=[20,40,60,80,100,200,500,1000,5000].find(value=>value>floor)??null;
+ return Object.freeze({floor,cap,current,atCap:current>=cap,nextFloor});
+}
+
 export function magicCircleNextEffect(entryOrId,level=0){
  const entry=typeof entryOrId==="string"?magicCircleById(entryOrId):entryOrId;
  if(entry.id==="none")return"強化なし";
@@ -285,6 +305,8 @@ export function buyOrUpgradeMagicCircle(state,id){
  if(!state.magicCircles.unlocked?.[entry.id])return{ok:false,message:"この術式の知識は深淵ツリーで未解禁です。"};
  if(!level)return{ok:false,message:"現物を所持していません。再構築または交換で入手してください。"};
  if(level>=99)return{ok:false,message:"最大Lv.99です。"};
+ const progression=magicCircleProgressionStatus(state,level);
+ if(progression.atCap)return{ok:false,reason:"floor",message:progression.nextFloor?`${progression.nextFloor}階到達でLv.${magicCircleLevelCapForFloor(progression.nextFloor)}まで強化可能です。`:"現在の到達階層では強化上限です。",progression};
  const price=magicCircleUpgradePrice(entry,level),gold=Math.max(0,Number(state.player?.gold)||0);
  if(gold<price)return{ok:false,message:`GOLDが${price.toLocaleString()}G必要です`};
  const instance=state.magicCircles.instances.find(item=>item.instanceId===instanceId);

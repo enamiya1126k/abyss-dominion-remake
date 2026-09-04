@@ -16,7 +16,11 @@ export const SECTION_SIZE_TIERS=Object.freeze({
  huge:Object.freeze({id:"huge",weight:10,minSpan:31,maxSpan:35,targetArea:565,coreRadius:5,walkers:9,minSteps:44,maxSteps:66,band:5})
 });
 
-export const SECTION_SHAPE_PATTERNS=Object.freeze(["irregular","cavern","ring","slender","branched"]);
+// Build318 does not roll a finished silhouette such as a ring or a symmetric
+// cross.  It rolls a procedural family and then varies its axis, bends,
+// offsets, pockets and erosion.  The old names are still accepted as forced
+// inputs and are translated to their non-symmetric successors below.
+export const SECTION_SHAPE_PATTERNS=Object.freeze(["drift","cavern","ribbon","crescent","terraces","chambers","fork","courtyard"]);
 
 const pointKey=(x,y)=>`${x},${y}`;
 const edgeKey=(a,b)=>[String(a),String(b)].sort().join("|");
@@ -85,125 +89,112 @@ function weightedSizeTier(random){
  return SECTION_SIZE_TIERS.standard
 }
 
-function weightedPattern(random){
- const roll=Math.max(0,Math.min(.999999,Number(random())||0));
- return roll<.31?"irregular":roll<.52?"cavern":roll<.70?"ring":roll<.88?"slender":"branched"
+function weightedPattern(random,excluded=new Set()){
+ // Near-even base weights keep one recognisable symbol from dominating the
+ // minimap.  A small random multiplier deliberately avoids a fixed cycle.
+ const entries=SECTION_SHAPE_PATTERNS.filter(id=>!excluded.has(id)).map(id=>({id,weight:.82+Math.max(0,Math.min(.999999,Number(random())||0))*.36})),pool=entries.length?entries:SECTION_SHAPE_PATTERNS.map(id=>({id,weight:1})),total=pool.reduce((sum,entry)=>sum+entry.weight,0);let roll=Math.max(0,Math.min(.999999,Number(random())||0))*total;
+ for(const entry of pool){roll-=entry.weight;if(roll<0)return entry.id}
+ return pool.at(-1)?.id??"drift"
 }
 
 function resolveSizeTier(value,random){return SECTION_SIZE_TIERS[String(value??"")]??weightedSizeTier(random)}
-function resolvePattern(value,random){return SECTION_SHAPE_PATTERNS.includes(String(value))?String(value):weightedPattern(random)}
+function resolvePattern(value,random){const legacy={irregular:"drift",slender:"ribbon",branched:"fork",ring:"crescent"},resolved=legacy[String(value??"")]??String(value??"");return SECTION_SHAPE_PATTERNS.includes(resolved)?resolved:weightedPattern(random)}
 
 function sectionShape(node,index,attribute,random,slot,linkedDirections=[],forcedTier=null,forcedPattern=null){
  const baseX=3+node.gx*slot,baseY=3+node.gy*slot,cx=baseX+Math.floor(slot/2),cy=baseY+Math.floor(slot/2),cells=new Set(),tier=resolveSizeTier(forcedTier,random),pattern=resolvePattern(forcedPattern,random),span=randomInteger(tier.minSpan,tier.maxSpan,random),half=Math.floor(span/2),innerMinX=baseX+4,innerMaxX=baseX+slot-5,innerMinY=baseY+4,innerMaxY=baseY+slot-5;
+ let origin={x:cx,y:cy},growthAccept=()=>true;
  const has=(x,y)=>cells.has(pointKey(x,y));
- const carve=(x,y,radius=0)=>{for(let oy=-radius;oy<=radius;oy++)for(let ox=-radius;ox<=radius;ox++){const tx=x+ox,ty=y+oy;if(tx>=innerMinX&&ty>=innerMinY&&tx<=innerMaxX&&ty<=innerMaxY)cells.add(pointKey(tx,ty))}};
- const carveLine=(from,to,radius=0)=>{let x=Math.round(from.x),y=Math.round(from.y),horizontalFirst=Math.abs(to.x-x)>=Math.abs(to.y-y);carve(x,y,radius);while(x!==to.x||y!==to.y){if(horizontalFirst&&x!==to.x)x+=Math.sign(to.x-x);else if(y!==to.y)y+=Math.sign(to.y-y);else x+=Math.sign(to.x-x);horizontalFirst=!horizontalFirst;carve(x,y,radius)}};
+ const carve=(x,y,radius=0)=>{for(let oy=-radius;oy<=radius;oy++)for(let ox=-radius;ox<=radius;ox++){const tx=Math.round(x+ox),ty=Math.round(y+oy);if(tx>=innerMinX&&ty>=innerMinY&&tx<=innerMaxX&&ty<=innerMaxY)cells.add(pointKey(tx,ty))}};
+ const carveLine=(from,to,radius=0)=>{let x=Math.round(from.x),y=Math.round(from.y),tx=Math.round(to.x),ty=Math.round(to.y),horizontalFirst=Math.abs(tx-x)>=Math.abs(ty-y);carve(x,y,radius);while(x!==tx||y!==ty){if(horizontalFirst&&x!==tx)x+=Math.sign(tx-x);else if(y!==ty)y+=Math.sign(ty-y);else x+=Math.sign(tx-x);horizontalFirst=!horizontalFirst;carve(x,y,radius)}};
  const carveDisc=(x,y,radius)=>{for(let oy=-radius;oy<=radius;oy++)for(let ox=-radius;ox<=radius;ox++)if(ox*ox+oy*oy<=radius*radius+radius*.7)carve(x+ox,y+oy)};
  const boundsX={min:clamp(cx-half,innerMinX,innerMaxX),max:clamp(cx+half,innerMinX,innerMaxX)},boundsY={min:clamp(cy-half,innerMinY,innerMaxY),max:clamp(cy+half,innerMinY,innerMaxY)};
 
  if(pattern==="cavern"){
-  const rx=Math.max(4,half),ry=Math.max(4,half-randomInteger(0,Math.max(1,Math.floor(half*.18)),random));
-  for(let y=cy-ry;y<=cy+ry;y++)for(let x=cx-rx;x<=cx+rx;x++){
-   const q=((x-cx)*(x-cx))/(rx*rx)+((y-cy)*(y-cy))/(ry*ry);
-   if(q<=.76||q<=1.08&&random()>(q-.76)*1.85)carve(x,y)
+  const wide=random()<.5,rx=Math.max(4,half-randomInteger(0,2,random)),ry=Math.max(4,half-randomInteger(0,2,random)),sx=wide?1:random()<.5?.72:1.18,sy=wide?random()<.5?.72:1.18:1,phase=random()*Math.PI*2;
+  for(let y=cy-half;y<=cy+half;y++)for(let x=cx-half;x<=cx+half;x++){
+   const dx=(x-cx)/(rx*sx),dy=(y-cy)/(ry*sy),angle=Math.atan2(dy,dx),edge=.88+.1*Math.sin(angle*3+phase)+.06*Math.sin(angle*5-phase),q=dx*dx+dy*dy;
+   if(q<=edge||q<=edge+.13&&random()>.54)carve(x,y)
   }
   carveDisc(cx,cy,tier.coreRadius)
- }else if(pattern==="ring"){
-  const rx=Math.max(5,half),ry=Math.max(5,half-randomInteger(0,Math.max(1,Math.floor(half*.14)),random)),innerRx=Math.max(2,rx-tier.band),innerRy=Math.max(2,ry-tier.band);
-  for(let y=cy-ry;y<=cy+ry;y++)for(let x=cx-rx;x<=cx+rx;x++){
-   const outer=((x-cx)*(x-cx))/(rx*rx)+((y-cy)*(y-cy))/(ry*ry),inner=((x-cx)*(x-cx))/(innerRx*innerRx)+((y-cy)*(y-cy))/(innerRy*innerRy);
-   if(outer<=1.08&&inner>=.88)carve(x,y)
-  }
-  // Keep the boss/object origin usable without filling the visual ring.
-  carveDisc(cx,cy,Math.max(1,Math.floor(tier.coreRadius/2)));carveLine({x:cx,y:cy},{x:cx,y:cy-ry+tier.band},0)
- }else if(pattern==="slender"){
-  const horizontal=random()<.5,longRadius=Math.max(6,half),thickness=Math.max(1,Math.min(5,tier.band-1)),start=horizontal?{x:cx-longRadius,y:cy}:{x:cx,y:cy-longRadius},end=horizontal?{x:cx+longRadius,y:cy}:{x:cx,y:cy+longRadius};
-  let x=start.x,y=start.y;carveDisc(x,y,thickness);
-  const length=horizontal?end.x-start.x:end.y-start.y;
-  for(let step=1;step<=length;step++){
-   if(horizontal)x=start.x+step;else y=start.y+step;
-   if(step%3===0){const drift=random()<.5?-1:1;if(horizontal)y=clamp(y+drift,cy-Math.max(2,half>>2),cy+Math.max(2,half>>2));else x=clamp(x+drift,cx-Math.max(2,half>>2),cx+Math.max(2,half>>2))}
-   carveDisc(x,y,thickness)
-   if(step%Math.max(4,8-tier.band)===0&&random()<.55)carveDisc(x+(horizontal?0:random()<.5?-thickness:thickness),y+(horizontal?(random()<.5?-thickness:thickness):0),thickness+1)
-  }
-  carveLine({x,y},{x:end.x,y:end.y},thickness);carveDisc(cx,cy,thickness+1)
- }else if(pattern==="branched"){
-  carveDisc(cx,cy,tier.coreRadius);
-  const branches=4+randomInteger(0,2,random),directions=shuffle(CARDINAL,random);
-  for(let branch=0;branch<branches;branch++){
-   const direction=directions[branch%directions.length],distance=Math.max(5,half-randomInteger(0,Math.max(1,half>>2),random)),side=randomInteger(-Math.max(1,half>>2),Math.max(1,half>>2),random),target={x:cx+direction.dx*distance+(direction.dy?side:0),y:cy+direction.dy*distance+(direction.dx?side:0)};
-   carveLine({x:cx,y:cy},target,Math.max(0,tier.band-2));carveDisc(target.x,target.y,tier.coreRadius+randomInteger(0,1,random))
-  }
+ }else if(pattern==="ribbon"){
+  const horizontal=random()<.5,thickness=Math.max(1,Math.min(4,tier.band-1)),long=Math.max(6,half),bend=Math.max(2,Math.floor(half*.45)),points=horizontal?[{x:cx-long,y:cy+randomInteger(-bend,bend,random)},{x:cx-Math.floor(long*.35),y:cy+randomInteger(-bend,bend,random)},{x:cx+Math.floor(long*.35),y:cy+randomInteger(-bend,bend,random)},{x:cx+long,y:cy+randomInteger(-bend,bend,random)}]:[{x:cx+randomInteger(-bend,bend,random),y:cy-long},{x:cx+randomInteger(-bend,bend,random),y:cy-Math.floor(long*.35)},{x:cx+randomInteger(-bend,bend,random),y:cy+Math.floor(long*.35)},{x:cx+randomInteger(-bend,bend,random),y:cy+long}];
+  for(let i=1;i<points.length;i++){carveLine(points[i-1],points[i],thickness);if(random()<.72)carveDisc(points[i].x,points[i].y,thickness+randomInteger(1,2,random))}
+  origin={x:Math.round(points[1].x),y:Math.round(points[1].y)};carveDisc(origin.x,origin.y,thickness+1)
+ }else if(pattern==="crescent"){
+  const direction=pick(CARDINAL,random),rx=Math.max(5,half),ry=Math.max(5,half-randomInteger(0,Math.max(1,half>>2),random)),cutRadius=Math.max(3,Math.floor(Math.min(rx,ry)*(.56+random()*.12))),cutX=cx+direction.dx*Math.floor(rx*.42),cutY=cy+direction.dy*Math.floor(ry*.42);
+  growthAccept=(x,y)=>(x-cutX)*(x-cutX)+(y-cutY)*(y-cutY)>cutRadius*cutRadius;
+  for(let y=cy-ry;y<=cy+ry;y++)for(let x=cx-rx;x<=cx+rx;x++){const outer=((x-cx)*(x-cx))/(rx*rx)+((y-cy)*(y-cy))/(ry*ry);if(outer<=1.05&&growthAccept(x,y))carve(x,y)}
+  origin={x:clamp(cx-direction.dx*Math.floor(rx*.34),innerMinX,innerMaxX),y:clamp(cy-direction.dy*Math.floor(ry*.34),innerMinY,innerMaxY)};carveDisc(origin.x,origin.y,Math.max(1,tier.band-2))
+ }else if(pattern==="terraces"){
+  const horizontal=random()<.5,levels=3+randomInteger(0,1,random),step=Math.max(3,Math.floor(span/(levels+1))),centers=[];
+  for(let i=0;i<levels;i++){const along=Math.round((i-(levels-1)/2)*step),side=randomInteger(-Math.max(2,half>>2),Math.max(2,half>>2),random),point=horizontal?{x:cx+along,y:cy+side}:{x:cx+side,y:cy+along},radius=Math.max(2,tier.coreRadius+randomInteger(-1,1,random));centers.push(point);carveDisc(point.x,point.y,radius);if(i)carveLine(centers[i-1],point,Math.max(1,tier.band-2))}
+  origin={x:Math.round(centers[Math.floor(centers.length/2)].x),y:Math.round(centers[Math.floor(centers.length/2)].y)}
+ }else if(pattern==="chambers"){
+  const count=3+randomInteger(0,2,random),centers=[{x:cx+randomInteger(-2,2,random),y:cy+randomInteger(-2,2,random)}];carveDisc(centers[0].x,centers[0].y,tier.coreRadius+1);
+  for(let i=1;i<count;i++){const prior=centers[i-1],direction=pick(CARDINAL,random),distance=Math.max(4,Math.floor(half*.55)+randomInteger(-1,2,random)),side=randomInteger(-Math.max(1,half>>3),Math.max(1,half>>3),random),point={x:clamp(prior.x+direction.dx*distance+(direction.dy?side:0),boundsX.min,boundsX.max),y:clamp(prior.y+direction.dy*distance+(direction.dx?side:0),boundsY.min,boundsY.max)};centers.push(point);carveLine(prior,point,Math.max(0,tier.band-3));carveDisc(point.x,point.y,tier.coreRadius+randomInteger(0,2,random))}
+  origin={...centers[0]}
+ }else if(pattern==="fork"){
+  const hub={x:cx+randomInteger(-Math.max(1,half>>3),Math.max(1,half>>3),random),y:cy+randomInteger(-Math.max(1,half>>3),Math.max(1,half>>3),random)},directions=shuffle(CARDINAL,random),branchCount=2+randomInteger(0,1,random);origin={...hub};carveDisc(hub.x,hub.y,tier.coreRadius);
+  for(let branch=0;branch<branchCount;branch++){const direction=directions[branch],distance=Math.max(5,half-randomInteger(0,Math.max(1,half>>2),random)),side=randomInteger(-Math.max(2,half>>2),Math.max(2,half>>2),random),target={x:hub.x+direction.dx*distance+(direction.dy?side:0),y:hub.y+direction.dy*distance+(direction.dx?side:0)};carveLine(hub,target,Math.max(0,tier.band-2));carveDisc(target.x,target.y,tier.coreRadius+randomInteger(0,1,random))}
+ }else if(pattern==="courtyard"){
+  const opening=pick(CARDINAL,random),outer=Math.max(5,half),inner=Math.max(2,outer-Math.max(3,tier.band+1));growthAccept=(x,y)=>Math.abs(x-cx)>=inner||Math.abs(y-cy)>=inner||x*opening.dx+y*opening.dy>(cx*opening.dx+cy*opening.dy)+inner-1;
+  for(let y=cy-outer;y<=cy+outer;y++)for(let x=cx-outer;x<=cx+outer;x++){const rim=Math.max(Math.abs(x-cx),Math.abs(y-cy));if(rim<=outer&&rim>=inner&&!(x*opening.dx+y*opening.dy>(cx*opening.dx+cy*opening.dy)+inner-2&&Math.abs(x*opening.dy-y*opening.dx-(cx*opening.dy-cy*opening.dx))<Math.max(2,tier.band)))carve(x,y)}
+  origin={x:clamp(cx-opening.dx*(inner+1),innerMinX,innerMaxX),y:clamp(cy-opening.dy*(inner+1),innerMinY,innerMaxY)};carveDisc(origin.x,origin.y,Math.max(1,tier.band-2))
  }else{
-  carveDisc(cx,cy,tier.coreRadius);
-  // Organic walkers all start in the core, so every added tile belongs to the
-  // same connected component.  Cardinally biased walkers give the outline
-  // readable lobes without turning it into a rectangular room.
-  for(let walker=0;walker<tier.walkers;walker++){
-   let x=cx,y=cy;const bias=shuffle(CARDINAL,random)[walker%CARDINAL.length],steps=randomInteger(tier.minSteps,tier.maxSteps,random);
-   for(let step=0;step<steps;step++){
-    const direction=random()<.42?bias:pick(CARDINAL,random);x=clamp(x+direction.dx,boundsX.min,boundsX.max);y=clamp(y+direction.dy,boundsY.min,boundsY.max);carve(x,y,random()<.34?Math.max(1,tier.band-2):0)
-   }
-  }
+  carveDisc(cx,cy,tier.coreRadius);const axis=pick(CARDINAL,random);
+  for(let walker=0;walker<tier.walkers;walker++){let x=cx+randomInteger(-1,1,random),y=cy+randomInteger(-1,1,random),steps=randomInteger(tier.minSteps,tier.maxSteps,random);for(let step=0;step<steps;step++){const direction=random()<.34?axis:pick(CARDINAL,random);x=clamp(x+direction.dx,boundsX.min,boundsX.max);y=clamp(y+direction.dy,boundsY.min,boundsY.max);carve(x,y,random()<.3?Math.max(1,tier.band-2):0)}}
  }
 
- // Grow only from the existing frontier.  It gives the four tiers stable area
- // separation while preserving each pattern's large-scale silhouette.
- const areaMultiplier=pattern==="slender"?.72:pattern==="ring"?.86:pattern==="branched"?.94:1,targetArea=Math.round(tier.targetArea*areaMultiplier),growthMinX=clamp(cx-half,innerMinX,innerMaxX),growthMaxX=clamp(cx+half,innerMinX,innerMaxX),growthMinY=clamp(cy-half,innerMinY,innerMaxY),growthMaxY=clamp(cy+half,innerMinY,innerMaxY);
- const growthCells=[...cells];let growthGuard=targetArea*20;
- while(cells.size<targetArea&&growthGuard-->0){
-  const origin=pointFromKey(pick(growthCells,random)),direction=pick(CARDINAL,random),x=origin.x+direction.dx,y=origin.y+direction.dy;
-  if(x>=growthMinX&&x<=growthMaxX&&y>=growthMinY&&y<=growthMaxY&&!has(x,y)){carve(x,y);growthCells.push(pointKey(x,y))}
- }
- carve(cx,cy);
- // No decorative edge pixel is allowed to become an unreachable island.  In
- // particular, noisy cavern rims can otherwise leave a one-cell fragment that
- // is visible on the minimap but impossible to walk to.
- const connected=new Set([pointKey(cx,cy)]),queue=[pointKey(cx,cy)];
- for(let cursor=0;cursor<queue.length;cursor++){
-  const current=pointFromKey(queue[cursor]);
-  for(const direction of CARDINAL){const next=pointKey(current.x+direction.dx,current.y+direction.dy);if(cells.has(next)&&!connected.has(next)){connected.add(next);queue.push(next)}}
- }
- for(const key of cells)if(!connected.has(key))cells.delete(key);
+ const areaMultiplier={ribbon:.62,crescent:.67,terraces:.72,chambers:.76,fork:.7,courtyard:.58}[pattern]??.92,targetArea=Math.round(tier.targetArea*areaMultiplier),growthMinX=clamp(cx-half,innerMinX,innerMaxX),growthMaxX=clamp(cx+half,innerMinX,innerMaxX),growthMinY=clamp(cy-half,innerMinY,innerMaxY),growthMaxY=clamp(cy+half,innerMinY,innerMaxY),growthCells=[...cells];let growthGuard=targetArea*16;
+ while(cells.size<targetArea&&growthCells.length&&growthGuard-->0){const from=pointFromKey(pick(growthCells,random)),direction=pick(CARDINAL,random),x=from.x+direction.dx,y=from.y+direction.dy;if(x>=growthMinX&&x<=growthMaxX&&y>=growthMinY&&y<=growthMaxY&&growthAccept(x,y)&&!has(x,y)){carve(x,y);growthCells.push(pointKey(x,y))}}
+ carve(origin.x,origin.y);
+ const startKey=pointKey(origin.x,origin.y),connected=new Set([startKey]),queue=[startKey];for(let cursor=0;cursor<queue.length;cursor++){const current=pointFromKey(queue[cursor]);for(const direction of CARDINAL){const next=pointKey(current.x+direction.dx,current.y+direction.dy);if(cells.has(next)&&!connected.has(next)){connected.add(next);queue.push(next)}}}for(const key of cells)if(!connected.has(key))cells.delete(key);
 
- const directionalAnchor=(direction,used)=>{
-  const candidates=[...cells].map(pointFromKey).filter(cell=>!used.has(pointKey(cell.x,cell.y))&&!has(cell.x+direction.dx,cell.y+direction.dy)&&has(cell.x-direction.dx,cell.y-direction.dy));
-  candidates.sort((a,b)=>{
-   const primaryA=a.x*direction.dx+a.y*direction.dy,primaryB=b.x*direction.dx+b.y*direction.dy;
-   if(primaryA!==primaryB)return primaryB-primaryA;
-   const perpendicularA=direction.dx?Math.abs(a.y-cy):Math.abs(a.x-cx),perpendicularB=direction.dx?Math.abs(b.y-cy):Math.abs(b.x-cx);
-   return perpendicularA-perpendicularB
-  });
-  return candidates[0]??{x:cx,y:cy}
- };
- const usedAnchors=new Set(),anchor={};
- for(const direction of CARDINAL){
-  if(linkedDirections.includes(direction.id)){
-   const selected=directionalAnchor(direction,usedAnchors);anchor[direction.id]={x:selected.x,y:selected.y};usedAnchors.add(pointKey(selected.x,selected.y))
-  }else{
-   const parsed=[...cells].map(pointFromKey),minX=Math.min(...parsed.map(cell=>cell.x)),maxX=Math.max(...parsed.map(cell=>cell.x)),minY=Math.min(...parsed.map(cell=>cell.y)),maxY=Math.max(...parsed.map(cell=>cell.y));
-   anchor[direction.id]=direction.id==="north"?{x:cx,y:minY-1}:direction.id==="east"?{x:maxX+1,y:cy}:direction.id==="south"?{x:cx,y:maxY+1}:{x:minX-1,y:cy}
-  }
- }
+ const directionalAnchor=(direction,used)=>{const candidates=[...cells].map(pointFromKey).filter(cell=>!used.has(pointKey(cell.x,cell.y))&&!has(cell.x+direction.dx,cell.y+direction.dy)&&has(cell.x-direction.dx,cell.y-direction.dy));candidates.sort((a,b)=>{const primaryA=a.x*direction.dx+a.y*direction.dy,primaryB=b.x*direction.dx+b.y*direction.dy;if(primaryA!==primaryB)return primaryB-primaryA;const perpendicularA=direction.dx?Math.abs(a.y-origin.y):Math.abs(a.x-origin.x),perpendicularB=direction.dx?Math.abs(b.y-origin.y):Math.abs(b.x-origin.x);return perpendicularA-perpendicularB});return candidates[0]??{...origin}};
+ const usedAnchors=new Set(),anchor={};for(const direction of CARDINAL){if(linkedDirections.includes(direction.id)){const selected=directionalAnchor(direction,usedAnchors);anchor[direction.id]={x:selected.x,y:selected.y};usedAnchors.add(pointKey(selected.x,selected.y))}else{const parsed=[...cells].map(pointFromKey),minX=Math.min(...parsed.map(cell=>cell.x)),maxX=Math.max(...parsed.map(cell=>cell.x)),minY=Math.min(...parsed.map(cell=>cell.y)),maxY=Math.max(...parsed.map(cell=>cell.y));anchor[direction.id]=direction.id==="north"?{x:origin.x,y:minY-1}:direction.id==="east"?{x:maxX+1,y:origin.y}:direction.id==="south"?{x:origin.x,y:maxY+1}:{x:minX-1,y:origin.y}}}
  const parsed=[...cells].map(pointFromKey),minX=Math.min(...parsed.map(cell=>cell.x)),maxX=Math.max(...parsed.map(cell=>cell.x)),minY=Math.min(...parsed.map(cell=>cell.y)),maxY=Math.max(...parsed.map(cell=>cell.y)),walkableArea=parsed.length;
- return{id:node.id,index,gx:node.gx,gy:node.gy,attribute,sizeTier:tier.id,layoutPattern:pattern,center:{x:cx,y:cy},anchor,linkedDirections:[...linkedDirections],cells:parsed,cellKeys:[...cells],walkableArea,footprint:{w:maxX-minX+1,h:maxY-minY+1,area:walkableArea},x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1,minX,maxX,minY,maxY}
+ return{id:node.id,index,gx:node.gx,gy:node.gy,attribute,sizeTier:tier.id,layoutPattern:pattern,center:{...origin},anchor,linkedDirections:[...linkedDirections],cells:parsed,cellKeys:[...cells],walkableArea,footprint:{w:maxX-minX+1,h:maxY-minY+1,area:walkableArea},x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1,minX,maxX,minY,maxY}
 }
 
-export function generateSectionDungeon({count=4,attributes=[],random=Math.random,slot=42,sizeTiers=[],patterns=[]}={}){
+function normalizedOccupancy(section,resolution=5){
+ const cells=section?.cells??[],minX=Math.min(...cells.map(cell=>cell.x)),maxX=Math.max(...cells.map(cell=>cell.x)),minY=Math.min(...cells.map(cell=>cell.y)),maxY=Math.max(...cells.map(cell=>cell.y)),width=Math.max(1,maxX-minX+1),height=Math.max(1,maxY-minY+1),bins=Array(resolution*resolution).fill(0);
+ for(const cell of cells){const x=Math.min(resolution-1,Math.floor((cell.x-minX)/width*resolution)),y=Math.min(resolution-1,Math.floor((cell.y-minY)/height*resolution));bins[y*resolution+x]++}
+ return bins.map(value=>value?"1":"0").join("")
+}
+
+export function sectionShapeSignature(section){
+ const width=Math.max(1,Number(section?.w)||Number(section?.footprint?.w)||1),height=Math.max(1,Number(section?.h)||Number(section?.footprint?.h)||1),area=Math.max(1,Number(section?.walkableArea)||Number(section?.footprint?.area)||1),aspect=Math.log2(width/height),fill=area/(width*height);
+ return[section?.layoutPattern??"unknown",section?.sizeTier??"unknown",aspect.toFixed(2),fill.toFixed(2),normalizedOccupancy(section)].join("|")
+}
+
+export function shapeSignatureSimilarity(left,right){
+ const a=String(left??"").split("|"),b=String(right??"").split("|");if(a.length<5||b.length<5)return 0;const aspect=Math.max(0,1-Math.abs(Number(a[2])-Number(b[2]))/1.4),fill=Math.max(0,1-Math.abs(Number(a[3])-Number(b[3]))/.55),gridA=a[4],gridB=b[4];let union=0,intersection=0;for(let index=0;index<Math.max(gridA.length,gridB.length);index++){const occupiedA=gridA[index]==="1",occupiedB=gridB[index]==="1";if(occupiedA||occupiedB)union++;if(occupiedA&&occupiedB)intersection++}const silhouette=union?intersection/union:0;return(a[0]===b[0] ? .22 : 0)+(a[1]===b[1] ? .06 : 0)+aspect*.18+fill*.14+silhouette*.4
+}
+
+export function generateSectionDungeon({count=4,attributes=[],random=Math.random,slot=42,sizeTiers=[],patterns=[],recentSignatures=[]}={}){
  const total=Math.max(4,Math.min(6,Math.floor(Number(count)||4))),topology=logicalTopology(total,random),directionsById=new Map(topology.nodes.map(node=>[node.id,new Set()]));
  for(const edge of topology.edges){const direction=CARDINAL.find(entry=>entry.id===edge.direction)??CARDINAL[0];directionsById.get(edge.a)?.add(direction.id);directionsById.get(edge.b)?.add(direction.opposite)}
- const sections=topology.nodes.map((node,index)=>sectionShape(node,index,attributes[index]??"neutral",random,slot,[...(directionsById.get(node.id)??[])],sizeTiers[index],patterns[index]));
+ // Shape candidates are generated once when entering a floor.  Comparing only
+ // 5x5 occupancy fingerprints is cheap, while it prevents a run of visually
+ // equivalent rooms even when their raw tile coordinates differ.
+ const memory=(Array.isArray(recentSignatures)?recentSignatures:[]).map(String).filter(signature=>signature.split("|").length>=5).slice(-12),sections=[];
+ for(const[nodeIndex,node]of topology.nodes.entries()){
+  const linked=[...(directionsById.get(node.id)??[])],forcedPattern=patterns[nodeIndex],forcedTier=sizeTiers[nodeIndex],candidateCount=forcedPattern?1:5,excludedFamilies=new Set(memory.slice(-2).map(signature=>signature.split("|")[0])),candidates=[];
+  for(let candidateIndex=0;candidateIndex<candidateCount;candidateIndex++){const pattern=forcedPattern??weightedPattern(random,excludedFamilies),tier=forcedTier??weightedSizeTier(random).id,section=sectionShape(node,nodeIndex,attributes[nodeIndex]??"neutral",random,slot,linked,tier,pattern),signature=sectionShapeSignature(section),similarity=memory.length?Math.max(...memory.slice(-8).map(previous=>shapeSignatureSimilarity(signature,previous))):0,frequency=memory.slice(-12).filter(previous=>previous.split("|")[0]===section.layoutPattern).length;candidates.push({section,signature,score:similarity+frequency*.028+random()*.018})}
+  candidates.sort((a,b)=>a.score-b.score);const selected=candidates[0];selected.section.shapeSignature=selected.signature;selected.section.noveltyScore=Number(Math.max(0,Math.min(1,1-selected.score)).toFixed(3));sections.push(selected.section);memory.push(selected.signature)
+ }
  const byId=Object.fromEntries(sections.map(section=>[section.id,section])),sectionByCell={};
  sections.forEach(section=>section.cellKeys.forEach(key=>{sectionByCell[key]=section.id}));
  const portals=[];
  for(const edge of topology.edges){
   const from=byId[edge.a],to=byId[edge.b],direction=CARDINAL.find(entry=>entry.id===edge.direction)??CARDINAL[0],reverse=CARDINAL.find(entry=>entry.id===direction.opposite),fromPoint=from.anchor[direction.id],toPoint=to.anchor[reverse.id];
-  portals.push({id:`portal-${from.id}-${to.id}`,sectionId:from.id,targetSectionId:to.id,direction:direction.id,targetDirection:reverse.id,arrivalFacing:direction.id,x:fromPoint.x,y:fromPoint.y,arrivalX:toPoint.x-reverse.dx,arrivalY:toPoint.y-reverse.dy});
-  portals.push({id:`portal-${to.id}-${from.id}`,sectionId:to.id,targetSectionId:from.id,direction:reverse.id,targetDirection:direction.id,arrivalFacing:reverse.id,x:toPoint.x,y:toPoint.y,arrivalX:fromPoint.x-direction.dx,arrivalY:fromPoint.y-direction.dy})
+  const passageDepth=3+randomInteger(0,2,random),passageSeed=randomInteger(1,997,random);
+  portals.push({id:`portal-${from.id}-${to.id}`,sectionId:from.id,targetSectionId:to.id,direction:direction.id,targetDirection:reverse.id,arrivalFacing:direction.id,x:fromPoint.x,y:fromPoint.y,arrivalX:toPoint.x-reverse.dx,arrivalY:toPoint.y-reverse.dy,passageDepth,passageSeed});
+  portals.push({id:`portal-${to.id}-${from.id}`,sectionId:to.id,targetSectionId:from.id,direction:reverse.id,targetDirection:direction.id,arrivalFacing:reverse.id,x:toPoint.x,y:toPoint.y,arrivalX:fromPoint.x-direction.dx,arrivalY:fromPoint.y-direction.dy,passageDepth,passageSeed})
  }
  const maxGX=Math.max(...sections.map(section=>section.gx)),maxGY=Math.max(...sections.map(section=>section.gy)),cols=(maxGX+1)*slot+6,rows=(maxGY+1)*slot+6,tiles=Array.from({length:rows},()=>Array(cols).fill(1));
  sections.forEach(section=>section.cells.forEach(cell=>{tiles[cell.y][cell.x]=0}));
- return{cols,rows,tiles,sections,rooms:sections,sectionGraph:topology.edges,sectionPortals:portals,sectionByCell,startSectionId:sections[0].id,start:{...sections[0].center,sectionId:sections[0].id},shape:"section-dungeons",sectionScale:1.65,generationVersion:307,slot}
+ return{cols,rows,tiles,sections,rooms:sections,sectionGraph:topology.edges,sectionPortals:portals,sectionByCell,startSectionId:sections[0].id,start:{...sections[0].center,sectionId:sections[0].id},shape:"section-dungeons",shapeSignatures:sections.map(section=>section.shapeSignature),sectionScale:1.65,generationVersion:318,slot}
 }
 
 export function sectionIdAt(world,x,y){return world?.sectionByCell?.[pointKey(Math.round(Number(x)||0),Math.round(Number(y)||0))]??world?.currentSectionId??world?.startSectionId??null}

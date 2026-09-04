@@ -161,11 +161,30 @@ function campaignHeroAction(enemy,context,hpRate){
  }
  return null
 }
+function teamBattleAction(enemy,context,hpRate){
+ if(!enemy.teamBattle)return null;
+ const role=String(enemy.teamBattleRole??"striker"),allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(unit=>(unit.currentHp??0)>0),turn=Math.max(1,Number(context.battle?.turn)||1),fallen=allies.find(unit=>unit.hp<=0),wounded=[...allies].filter(unit=>unit.hp>0).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];
+ enemy.teamBattleTargetMode=role==="disruptor"||role==="leader"?"threat":role==="support"?"weak":"normal";
+ if(role==="support"){
+  if(fallen&&!enemy._teamReviveUsed&&canPay(enemy,ENEMY_ACTIONS.packRevive)){enemy._teamReviveUsed=true;enemy.intent="倒れた味方を戦線へ復帰させる";return ENEMY_ACTIONS.packRevive}
+  if(wounded&&wounded.hp/wounded.maxHp<.72&&canPay(enemy,ENEMY_ACTIONS.packMend)){enemy.intent="傷の深い味方を優先して再生する";return ENEMY_ACTIONS.packMend}
+  if(!enemy._teamRallied&&canPay(enemy,ENEMY_ACTIONS.packRally)){enemy._teamRallied=true;enemy.intent="四体編成の攻守を同期する";return ENEMY_ACTIONS.packRally}
+ }
+ if(role==="guardian"&&wounded&&wounded.hp/wounded.maxHp<.68&&!enemy._teamGuardRallied&&canPay(enemy,ENEMY_ACTIONS.packRally)){enemy._teamGuardRallied=true;enemy.guard=true;enemy.intent="負傷した味方を守る陣形へ移る";return ENEMY_ACTIONS.packRally}
+ if(role==="disruptor"){
+  const positiveKinds=new Set(["atkUp","defUp","spdUp","regen","taunt","guard","counter","lifeSteal"]),buffed=opponents.some(unit=>(context.battle?.allyEffects?.[unit.id]??[]).some(effect=>positiveKinds.has(effect.kind)));
+  if(buffed&&canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="強化の重なった標的を解析して崩す";return ENEMY_ACTIONS.dispelWave}
+  if(turn%3===0&&opponents.some(unit=>(unit.currentMp??0)>0)&&canPay(enemy,ENEMY_ACTIONS.manaSiphon)){enemy.intent="主力の魔力をまとめて奪う";return ENEMY_ACTIONS.manaSiphon}
+ }
+ if(role==="leader"&&hpRate<.55&&!enemy._teamLeaderRallied&&canPay(enemy,ENEMY_ACTIONS.packRally)){enemy._teamLeaderRallied=true;enemy.intent="隊列を再編し反攻を命じる";return ENEMY_ACTIONS.packRally}
+ return null;
+}
 export function chooseEnemyAction(enemy,context={}){
  if(enemy.speciesId==="ochuki"){enemy.guard=true;enemy.intent="巨大な盾の陰で逃げ道を探す";return ENEMY_ACTIONS.guard}
  const allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(monster=>(monster.currentHp??0)>0),hpRate=enemy.hp/enemy.maxHp,role=String(enemy.role??""),support=["healer","support","controller","debuffer","magic"].some(value=>role.includes(value)),rarity=String(enemy.combatRarity??enemy.rarity??"N"),rarityPower=({N:0,R:1,SR:2,SSR:3,UR:4,LR:5,"神話":6,"深淵":7,"十神":8})[rarity]??0,reviveRole=["healer","support"].some(value=>role.includes(value)),reviveEligible=enemy.speciesId!=="acid_slime"&&reviveRole&&(Boolean(enemy.boss)||Number(enemy.level)>=100||rarityPower>=4);
  const fallen=allies.find(ally=>ally.hp<=0),fallenSlime=allies.find(ally=>ally.hp<=0&&(ally.race==="slime"||String(ally.speciesId).includes("slime"))),wounded=[...allies].filter(ally=>ally.hp>0).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];
  const heroAction=enemy.campaignHeroId?campaignHeroAction(enemy,context,hpRate):null;if(heroAction&&canPay(enemy,heroAction))return heroAction;
+ const teamAction=teamBattleAction(enemy,context,hpRate);if(teamAction&&canPay(enemy,teamAction))return teamAction;
  if(enemy.speciesId==="acid_slime"&&fallenSlime&&!enemy._slimeSplitReviveUsed&&canPay(enemy,ENEMY_ACTIONS.slimeSplitRevive)){enemy._slimeSplitReviveUsed=true;enemy.intent="倒れたスライムを分裂核から再生";return ENEMY_ACTIONS.slimeSplitRevive}
  if(fallen&&reviveEligible&&canPay(enemy,ENEMY_ACTIONS.packRevive)){enemy.intent="倒れた味方を再構成";return ENEMY_ACTIONS.packRevive}
  if(wounded&&wounded.hp/wounded.maxHp<.42&&support&&canPay(enemy,ENEMY_ACTIONS.packMend)){enemy.intent="負傷した群れを再生";return ENEMY_ACTIONS.packMend}

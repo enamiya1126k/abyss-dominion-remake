@@ -210,19 +210,18 @@ export function recordManualEndgameClear(state,bossId,tierId,won){
 function enemy(speciesId,level,extra={}){return{speciesId,level,boss:false,equipped:false,gear:null,...extra}}
 export function teamBattleStageMultiplier(stage=1){
  const s=Math.max(1,Math.floor(Number(stage)||1));
- // 毎戦は小さく、10戦区切りだけ一段強くする。旧式の50戦目×85という
- // 断崖は廃止し、編成を詰めれば次の試練へ進める連続曲線に統一する。
- return 1+.045*(s-1)+.12*Math.floor((s-1)/10);
+ // 第1試練から4体編成を要求する強さにし、10戦ごとに明確な壁を置く。
+ return 1.15+.07*(s-1)+.30*Math.floor((s-1)/10);
 }
 export function teamBattleRewardPreview(stage=1,floor=100){
- const s=Math.max(1,Math.floor(Number(stage)||1)),breakthrough=s%10===0,difficulty=teamBattleStageMultiplier(s);
+ const s=Math.max(1,Math.floor(Number(stage)||1)),breakthrough=s%10===0,rewardCurve=1+.045*(s-1)+.12*Math.floor((s-1)/10);
  void floor;
  return{
   // Rewards follow the same curve as enemy strength.  The former tier-squared
   // formula eventually produced thousands of pulls and one LR per ordinary
   // win even though difficulty only rose linearly.
-  goldMultiplier:Math.max(.5,Math.min(20,Math.round(difficulty*.5*100)/100)),
-  crystals:Math.max(25,Math.min(100,Math.round(25*Math.sqrt(difficulty)))),
+  goldMultiplier:Math.max(.5,Math.min(20,Math.round(rewardCurve*.5*100)/100)),
+  crystals:Math.max(25,Math.min(100,Math.round(25*Math.sqrt(rewardCurve)))),
   experienceMultiplier:Math.max(1,Math.min(20,1+Math.floor((s-1)/10))),
   breakthrough,
   breakthroughCrystals:breakthrough?100:0,
@@ -258,10 +257,11 @@ export function recordTeamBattleResult(state,won,{stage=null,attemptCharged=fals
 export function createTeamBattleEncounter(state){
  const team=dailyTeamAttempts(state),stage=Math.max(1,Math.floor(team.stage||1)),boss=FLOOR_BOSS_CATALOG[(stage-1)%FLOOR_BOSS_CATALOG.length];
  if(!state?.floorBossChallenges?.discovered?.[boss.id])return null;
- const cycle=Math.floor((stage-1)/FLOOR_BOSS_CATALOG.length),level=Math.min(10000,Math.max(boss.floor,Math.round((state.player?.maxFloor||boss.floor)*(.62+Math.min(1.2,stage*.008))+cycle*180))),scale=teamBattleStageMultiplier(stage);
- const leader=floorBossEnemyEntry(boss,{level,statMultiplier:scale,hpMultiplier:2.15,label:`4VS4 第${stage}試練`});leader.teamBattle=true;
- const source=Object.values(SPECIES).filter(species=>species.id!==boss.speciesId&&species.fieldEncounter!==false&&!species.ultraRareEncounter&&!species.isAbyss&&!species.isTenGod&&((species.element??"neutral")===boss.element||species.race===SPECIES[boss.speciesId]?.race)),fallback=Object.values(SPECIES).filter(species=>species.id!==boss.speciesId&&species.fieldEncounter!==false&&!species.isAbyss&&!species.isTenGod),pool=source.length>=3?source:fallback;
- const supports=Array.from({length:3},(_,index)=>pool[(Math.floor(boss.floor/10)*5+index*13)%Math.max(1,pool.length)]).filter(Boolean).map((species,index)=>enemy(species.id,Math.max(1,level-5-index*2),{nameOverride:`${boss.name.split("の")[0]}の連携兵・${index+1}`,teamBattle:true,statMultiplier:(.7+index*.06)*scale,trialElement:boss.element,uncapturable:true,fixedTrialScaling:true,fixedTrialHpMultiplier:1.15,enemyFloor:boss.floor}));
+ const party=(state.party??[]).map(id=>(state.monsters??[]).find(monster=>monster.id===id)).filter(Boolean),levels=party.map(monster=>Math.max(1,Number(monster.level)||1)),averageLevel=levels.length?levels.reduce((sum,value)=>sum+value,0)/levels.length:state.player?.maxFloor||boss.floor,highestLevel=Math.max(1,...levels),within=(stage-1)%10,tier=Math.floor((stage-1)/10),cycle=Math.floor((stage-1)/FLOOR_BOSS_CATALOG.length),level=Math.min(10000,Math.max(boss.floor,Math.ceil(averageLevel+8+within*3+tier*24),highestLevel+Math.ceil(3+within*.6),cycle*180)),scale=teamBattleStageMultiplier(stage),combatRarity=stage>=25?"LR":stage>=10?"UR":"SSR";
+ const leader=floorBossEnemyEntry(boss,{level,statMultiplier:scale,hpMultiplier:2.4,label:`4VS4 第${stage}試練`});Object.assign(leader,{teamBattle:true,teamBattleRole:"leader",teamBattleTargetMode:"threat",combatRarity});
+ const affinity=species=>((species.element??"neutral")===boss.element?3:0)+(species.race===SPECIES[boss.speciesId]?.race?2:0)+(Math.min(100,Number(species.minFloor)||1)/100),source=Object.values(SPECIES).filter(species=>species.id!==boss.speciesId&&species.fieldEncounter!==false&&!species.ultraRareEncounter&&!species.isAbyss&&!species.isTenGod).sort((a,b)=>affinity(b)-affinity(a)||a.id.localeCompare(b.id)),picked=new Set(),roleMatches={guardian:["tank","counter","bruiser"],support:["healer","support"],disruptor:["controller","debuffer","poison","magic"]};
+ const selectRole=role=>{const matches=roleMatches[role],choice=source.find(species=>!picked.has(species.id)&&matches.some(value=>String(species.role??"").includes(value)))??source.find(species=>!picked.has(species.id));if(choice)picked.add(choice.id);return choice},supportPlan=[["guardian","護衛"],["support","祈祷"],["disruptor","妨害"]];
+ const supports=supportPlan.map(([role,label],index)=>{const species=selectRole(role);return species?enemy(species.id,Math.max(1,level-2-index),{nameOverride:`${boss.name.split("の")[0]}の${label}役`,teamBattle:true,teamBattleRole:role,teamBattleTargetMode:role==="disruptor"?"threat":role==="support"?"weak":"normal",combatRarity,statMultiplier:(.9+index*.04)*scale,trialElement:species.element??boss.element,uncapturable:true,fixedTrialScaling:true,fixedTrialHpMultiplier:role==="guardian"?1.55:1.3,enemyFloor:Math.max(boss.floor,level)}):null}).filter(Boolean);
  return[leader,...supports];
 }
 

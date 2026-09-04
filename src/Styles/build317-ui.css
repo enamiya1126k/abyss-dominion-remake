@@ -1,0 +1,168 @@
+/* Build 317: phone-safe Home status, cleaner enemy identity and black-gold skill commands. */
+
+/* HOME ------------------------------------------------------------------- */
+.home-server-status{
+  position:absolute;
+  z-index:36;
+  top:72px;
+  right:12px;
+  box-sizing:border-box;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  min-height:24px;
+  padding:5px 9px;
+  border:1px solid #6e6045;
+  border-radius:999px;
+  background:#09090bd9;
+  box-shadow:0 3px 12px #0009,inset 0 0 10px #d5ae5c10;
+  color:#d8d1c3;
+  font:800 10px/1.1 -apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN",sans-serif;
+  letter-spacing:.03em;
+  white-space:nowrap;
+  pointer-events:none;
+}
+.home-server-status>i{width:8px;height:8px;border-radius:50%;background:#d0a33c;box-shadow:0 0 7px currentColor}
+.home-server-status.is-online{border-color:#386f50;color:#bce8c8}.home-server-status.is-online>i{background:#39d777;color:#39d777}
+.home-server-status.is-offline{border-color:#7f3940;color:#efc1c4}.home-server-status.is-offline>i{background:#ed4454;color:#ed4454}
+.home-server-status.is-checking>i{animation:build317-server-pulse 1.2s ease-in-out infinite}
+@keyframes build317-server-pulse{50%{opacity:.35;transform:scale(.75)}}
+
+/* An overflowing invasion line used to sit under the combat record on narrow
+   phones. Reserve distinct vertical lanes and clip only the decorative card. */
+@media(max-width:720px){
+  .home-command-screen>.home-title-card{
+    top:8px!important;
+    left:8px!important;
+    width:calc(40% - 10px)!important;
+    min-height:96px!important;
+    max-height:96px!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+  .home-title-card>small,.home-title-card>h1,.home-invasion-meter>b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .home-title-card>h1{font-size:clamp(15px,4.1vw,21px)!important;line-height:1.12!important}
+  .home-command-screen>.home-record-card{top:112px!important;left:8px!important}
+  .home-command-screen>.home-left-menu{top:198px!important;left:8px!important}
+  .home-command-screen>.home-server-status{top:72px!important;right:8px!important}
+}
+@media(max-width:420px) and (max-height:760px){
+  .home-command-screen>.home-record-card{top:106px!important}
+  .home-command-screen>.home-left-menu{top:188px!important}
+}
+
+/* BATTLE OVERLAY --------------------------------------------------------- */
+/* Exploration remains mounted behind encounters. Its high-z AUTO control
+   must never leak into the battlefield. */
+#app.battle-active .explore-auto-toggle,
+#app:has(>.battle-screen) .explore-auto-toggle{display:none!important;visibility:hidden!important;pointer-events:none!important}
+.battle-screen{z-index:120!important;isolation:isolate;background:#07070a}
+
+/* ENEMY CARDS ------------------------------------------------------------ */
+.enemy-combatant .battle-unit-floating-name{
+  display:flex!important;
+  align-items:center;
+  gap:4px;
+  max-width:min(180px,42vw);
+}
+.enemy-combatant .battle-unit-floating-name>b{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.enemy-combatant .combat-rank-badge{flex:0 0 auto}
+.combat-rank-badge.rank-n{border-color:#706b68!important;color:#d3ceca!important;background:#1a1919!important}
+.combat-rank-badge.rank-r{border-color:#547461!important;color:#c8e5d1!important;background:#101c16!important}
+.combat-rank-badge.rank-sr{border-color:#466f92!important;color:#c5e4ff!important;background:#101a24!important}
+.combat-rank-badge.rank-ssr{border-color:#7a5794!important;color:#ead0ff!important;background:#1b1024!important}
+.enemy-info .enemy-name{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:5px!important;align-items:center!important}
+.enemy-info .enemy-card-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.enemy-info .enemy-card-meta{display:inline-flex!important;align-items:center;gap:3px;white-space:nowrap}
+.enemy-info .enemy-mini-stats{
+  display:block!important;
+  margin-top:3px!important;
+  color:#bfb4c3!important;
+  font-size:clamp(7px,1.55vw,9px)!important;
+  line-height:1.35!important;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+
+/* BLACK-GOLD SKILL COMMAND ---------------------------------------------- */
+.battle-skill-panel-v317{
+  box-sizing:border-box;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr) auto;
+  gap:8px;
+  width:100%;
+  max-height:min(43dvh,440px);
+  padding:10px;
+  border:1px solid #9c7738;
+  background:linear-gradient(145deg,#151310 0%,#08090c 56%,#11100d 100%);
+  box-shadow:inset 0 0 0 1px #f2d79618,inset 0 0 30px #d4a43a0e,0 -8px 28px #0008;
+}
+.battle-skill-panel-v317>header{display:flex;align-items:end;justify-content:space-between;gap:12px;padding:1px 2px 8px;border-bottom:1px solid #6c5732}
+.battle-skill-panel-v317>header>span{display:grid;gap:2px;text-align:left}
+.battle-skill-panel-v317>header small{color:#a99264;font:800 8px/1 sans-serif;letter-spacing:.16em}
+.battle-skill-panel-v317>header b{color:#f5dfac;font:900 16px/1.1 serif;letter-spacing:.04em}
+.battle-skill-panel-v317>header>em{color:#d8c493;font:800 10px/1 ui-monospace,monospace;font-style:normal;white-space:nowrap}
+.skill-command-list.battle-skill-command-list-v317{
+  box-sizing:border-box!important;
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  align-content:start!important;
+  gap:6px!important;
+  max-height:none!important;
+  min-height:0!important;
+  padding:0 2px 0 0!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior:contain;
+  scrollbar-color:#8d6a31 #0b0a09;
+}
+.battle-skill-command-list-v317>.battle-skill-choice{
+  position:relative!important;
+  box-sizing:border-box!important;
+  display:grid!important;
+  grid-template-columns:3px minmax(0,1fr) auto!important;
+  align-items:stretch!important;
+  gap:9px!important;
+  min-height:74px!important;
+  margin:0!important;
+  padding:9px 10px 9px 0!important;
+  border:1px solid #675431!important;
+  border-radius:2px!important;
+  background:linear-gradient(100deg,#1a1711,#0b0b0e 68%)!important;
+  box-shadow:inset 0 0 0 1px #e4c16b0b!important;
+  color:#eee8dc!important;
+  text-align:left!important;
+}
+.battle-skill-command-list-v317>.battle-skill-choice:hover,.battle-skill-command-list-v317>.battle-skill-choice:focus-visible{border-color:#d5aa54!important;background:linear-gradient(100deg,#241c0f,#101014 68%)!important;box-shadow:inset 0 0 16px #d6a53e16,0 0 0 1px #d5aa5433!important}
+.battle-skill-choice>.battle-skill-edge{display:block;width:3px;height:100%;background:linear-gradient(#f2d78a,#936a25);box-shadow:0 0 8px #dfb45066}
+.battle-skill-copy{display:grid!important;align-content:start!important;gap:3px!important;min-width:0!important}
+.battle-skill-copy>small{color:#9d8b67!important;font:800 8px/1.15 sans-serif!important;letter-spacing:.06em!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.battle-skill-copy>b{color:#f6e7c1!important;font:900 13px/1.2 serif!important;white-space:normal!important}
+.battle-skill-copy>em{color:#c1b9aa!important;font:700 8px/1.25 sans-serif!important;font-style:normal!important}
+.battle-skill-choice>.battle-skill-cost{align-self:center;display:grid!important;justify-items:end;gap:5px;min-width:67px!important;text-align:right!important}
+.battle-skill-cost>b{color:#edd394!important;font:900 12px/1 ui-monospace,monospace!important;white-space:nowrap}
+.battle-skill-cost>small{color:#82c896!important;font:800 8px/1 sans-serif!important;white-space:nowrap}
+.battle-skill-spec{display:flex!important;flex-wrap:wrap;gap:3px 5px;margin:2px 0 0!important;padding:0!important;list-style:none!important}
+.battle-skill-spec>li{margin:0!important;padding:2px 5px!important;border:1px solid #3c3830;border-radius:999px;background:#08090b;color:#bdb5a7!important;font:700 7px/1.15 sans-serif!important}
+.battle-skill-command-list-v317>.battle-skill-choice:disabled{opacity:.48!important;filter:saturate(.35)!important}
+.battle-skill-command-list-v317>.battle-skill-choice:disabled .battle-skill-edge{background:#554d40;box-shadow:none}
+.battle-skill-command-list-v317>.battle-skill-choice:disabled .battle-skill-cost>small{color:#d27c7c!important}
+.battle-skill-panel-v317>.battle-skill-close{min-height:40px!important;margin:0!important;border:1px solid #584a31!important;border-radius:2px!important;background:#0b0b0d!important;color:#d9c99f!important;font-weight:800!important}
+
+@media(min-width:760px){
+  .skill-command-list.battle-skill-command-list-v317{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:420px){
+  .battle-skill-panel-v317{max-height:44dvh;padding:8px}
+  .battle-skill-command-list-v317>.battle-skill-choice{min-height:68px!important;gap:7px!important;padding-right:8px!important}
+  .battle-skill-copy>b{font-size:12px!important}
+  .battle-skill-choice>.battle-skill-cost{min-width:61px!important}
+  .enemy-info .enemy-mini-stats{font-size:7px!important;letter-spacing:-.03em}
+}
+
+@media(prefers-reduced-motion:reduce){.home-server-status.is-checking>i{animation:none}}

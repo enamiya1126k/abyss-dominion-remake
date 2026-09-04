@@ -1,4 +1,4 @@
-import{COMPLETE_MONSTER_CODEX,codexCollectionSummary,rewardDescription}from"./CollectionRewardSystem.js?v=3.1.1-build311";
+import{COMPLETE_MONSTER_CODEX,codexCollectionSummary,rewardDescription}from"./CollectionRewardSystem.js?v=3.1.1-build316";
 import{enqueueNoticeReward}from"./NoticeSystem.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CATALOG}from"../data/floorBosses.js?v=3.1.1-build311";
 import{floorBossCampaignDisplayFloor}from"./Campaign100System.js?v=3.1.1-build311";
@@ -8,29 +8,39 @@ const unique=value=>[...new Set(Array.isArray(value)?value.map(String).filter(Bo
 const reward=(gold,crystals,extra={})=>Object.freeze({gold,crystals,...extra});
 export const ACHIEVEMENT_ICON_KEYS=Object.freeze(["map","summon","event","crossed-swords","capture","chest","notice","formation","growth","equipment"]);
 const ACHIEVEMENT_ICON_KEY_SET=new Set(ACHIEVEMENT_ICON_KEYS);
+const REWARD_UNLOCK_FLOORS=Object.freeze({
+ "kills-100":10,"kills-1000":35,"kills-10000":75,
+ "captures-10":10,"captures-100":35,"captures-300":70,
+ "chests-10":10,"chests-100":40,
+ "bosses-1":10,"bosses-10":35,"bosses-50":75,"bosses-90":100,
+ "abyss-1":40,"abyss-7":70,"tengod-1":70,"tengod-10":100,"serial-4":30,
+ "coop-1":10,"coop-25":35,"coop-battles-100":50,"raid-1":40,"raid-10":70,"trade-1":20,
+ "power-10000":20,"power-100000":50,"power-1000000":90,"mythic-1":30,"mythic-10":70,"plus-100":70
+});
 const definition=(id,group,iconKey,title,description,metric,target,rewardValue)=>{
  if(!ACHIEVEMENT_ICON_KEY_SET.has(iconKey))throw new Error(`Unknown achievement icon key: ${iconKey}`);
- return Object.freeze({id,group,iconKey,title,description,metric,target,reward:rewardValue})
+ const floorMatch=id.match(/^floor-(\d+)$/),rewardUnlockFloor=floorMatch?number(floorMatch[1]):REWARD_UNLOCK_FLOORS[id]??10;
+ return Object.freeze({id,group,iconKey,title,description,metric,target,reward:rewardValue,rewardUnlockFloor})
 };
 
 export const ACHIEVEMENT_DEFINITIONS=Object.freeze([
- definition("floor-10","探索","map","地下世界への第一歩","最高到達階層10階", "maxFloor",10,reward(50000,50,{captureCrystals:10})),
+ definition("floor-10","探索","map","地下世界への第一歩","最高到達階層10階", "maxFloor",10,reward(10000,10,{captureCrystals:5})),
  definition("floor-30","探索","map","三日を越えし者","最高到達階層30階", "maxFloor",30,reward(250000,150,{captureCrystals:25})),
  definition("floor-50","探索","summon","予言の折り返し","最高到達階層50階", "maxFloor",50,reward(1000000,500,{abyssKeys:5,experienceItemsUltra:3})),
  definition("floor-70","探索","event","七深淵の支配者","最高到達階層70階", "maxFloor",70,reward(3000000,1000,{abyssKeys:10,mythicEquipment:1,equipmentPlus:30})),
  definition("floor-90","探索","event","神域を破る者","最高到達階層90階", "maxFloor",90,reward(10000000,2500,{abyssKeys:30,mythicEquipment:1,equipmentPlus:60})),
  definition("floor-100","探索","event","百階完全制覇","最高到達階層100階", "maxFloor",100,reward(50000000,10000,{abyssKeys:100,mythicEquipment:3,equipmentPlus:99})),
 
- definition("kills-100","戦闘","crossed-swords","百の討伐","累計撃破数100体", "kills",100,reward(100000,100,{experienceItemsUltra:1})),
+ definition("kills-100","戦闘","crossed-swords","百の討伐","累計撃破数100体", "kills",100,reward(20000,15)),
  definition("kills-1000","戦闘","crossed-swords","千の討伐","累計撃破数1,000体", "kills",1000,reward(1000000,400,{experienceItemsUltra:5})),
  definition("kills-10000","戦闘","crossed-swords","万魔撃滅","累計撃破数10,000体", "kills",10000,reward(10000000,1500,{mythicEquipment:1,equipmentPlus:50})),
- definition("captures-10","捕獲","capture","契約の始まり","累計捕獲数10体", "captures",10,reward(100000,100,{captureCrystals:30})),
+ definition("captures-10","捕獲","capture","契約の始まり","累計捕獲数10体", "captures",10,reward(15000,10,{captureCrystals:10})),
  definition("captures-100","捕獲","capture","百契約の盟主","累計捕獲数100体", "captures",100,reward(1000000,500,{captureCrystals:150})),
  definition("captures-300","捕獲","capture","万象との盟約","累計捕獲数300体", "captures",300,reward(5000000,1500,{captureCrystals:500,mythicEquipment:1,equipmentPlus:40})),
- definition("chests-10","収集","chest","宝箱探し","宝箱を10個開封", "chests",10,reward(100000,100,{fullHeals:1})),
+ definition("chests-10","収集","chest","宝箱探し","宝箱を10個開封", "chests",10,reward(15000,10,{fullHeals:1})),
  definition("chests-100","収集","chest","宝物庫の主","宝箱を100個開封", "chests",100,reward(2000000,750,{abyssKeys:10,experienceItemsUltra:5})),
 
- definition("bosses-1","ボス","event","最初の階層王","階層ボスを1種撃破", "floorBosses",1,reward(250000,150,{experienceItemsUltra:1})),
+ definition("bosses-1","ボス","event","最初の階層王","階層ボスを1種撃破", "floorBosses",1,reward(20000,15)),
  definition("bosses-10","ボス","event","十王撃破","階層ボスを10種撃破", "floorBosses",10,reward(1500000,500,{abyssKeys:10})),
  definition("bosses-50","ボス","event","半界制圧","階層ボスを50種撃破", "floorBosses",50,reward(7500000,2000,{abyssKeys:40,mythicEquipment:1,equipmentPlus:60})),
  definition("bosses-90","ボス","event","九十王完全制覇","階層ボス90種を撃破", "floorBosses",90,reward(25000000,5000,{abyssKeys:100,mythicEquipment:2,equipmentPlus:99})),
@@ -47,10 +57,10 @@ export const ACHIEVEMENT_DEFINITIONS=Object.freeze([
  definition("raid-10","オンライン","event","レイドブレイカー","ワールドレイドで10勝", "raidWins",10,reward(10000000,2500,{abyssKeys:50,mythicEquipment:1,equipmentPlus:70})),
  definition("trade-1","オンライン","formation","初めての安全交換","プレイヤー交換を1回完了", "trades",1,reward(500000,250,{captureCrystals:30})),
 
- definition("power-10000","育成","growth","戦力一万","歴代最高戦力10,000", "combatPower",10000,reward(500000,250,{experienceItemsUltra:3})),
+ definition("power-10000","育成","growth","戦力一万","歴代最高戦力10,000", "combatPower",10000,reward(50000,30,{experienceItemsUltra:1})),
  definition("power-100000","育成","growth","戦力十万","歴代最高戦力100,000", "combatPower",100000,reward(3000000,1000,{experienceItemsUltra:10})),
  definition("power-1000000","育成","growth","戦力百万","歴代最高戦力1,000,000", "combatPower",1000000,reward(15000000,3500,{mythicEquipment:1,equipmentPlus:80})),
- definition("mythic-1","育成","equipment","神話装備の所有者","神話装備を1個獲得", "mythicEquipment",1,reward(500000,300,{experienceItemsUltra:2})),
+ definition("mythic-1","育成","equipment","神話装備の所有者","神話装備を1個獲得", "mythicEquipment",1,reward(50000,30,{experienceItemsUltra:1})),
  definition("mythic-10","育成","equipment","神話武装庫","神話装備を10個獲得", "mythicEquipment",10,reward(5000000,1500,{abyssKeys:25,mythicEquipment:1,equipmentPlus:50})),
  definition("plus-100","育成","equipment","極限強化","装備の最高強化値+100", "equipmentPlus",100,reward(3000000,1000,{experienceItemsUltra:10,mythicEquipment:1,equipmentPlus:60}))
 ]);
@@ -86,10 +96,11 @@ function floorBossVictoryCount(state){
 function equipmentList(state){return[...(state?.equipment??[]),...(state?.reserveEquipment??[]),...(state?.bossEquipmentVault??[])]}
 
 export function achievementMetrics(state){
- const codex=codexCollectionSummary(state),capturesFromCodex=Object.values(state?.codex?.captures??{}).reduce((sum,value)=>sum+number(value),0),equipment=equipmentList(state),online=state?.onlineParty??{};
+ const codex=codexCollectionSummary(state),equipment=equipmentList(state),online=state?.onlineParty??{};
  const serialOwned=COMPLETE_MONSTER_CODEX.filter(entry=>entry.kind==="limited"&&entry.id!=="juvenile_amalga"&&codex.ownedKeys.has(entry.key)).length;
  return Object.freeze({
-  maxFloor:number(state?.player?.maxFloor),kills:number(state?.records?.kills),captures:Math.max(number(state?.records?.captures),capturesFromCodex,number(state?.monsters?.length)),
+  // 召喚・初期所持は「捕獲」に含めない。実戦で契約した回数だけを数える。
+  maxFloor:number(state?.player?.maxFloor),kills:number(state?.records?.kills),captures:number(state?.records?.captures),
   chests:Math.max(number(state?.records?.chests),openedChestCount(state)),floorBosses:floorBossVictoryCount(state),
   abyssOwned:number(codex.byGroup?.["深淵"]?.owned),tenGodOwned:number(codex.byGroup?.["十神"]?.owned),serialOwned,
   coopExpeditions:number(online.expeditionsCompleted),coopBattles:number(online.battlesWon),raidWins:number(online.raidWins),trades:Math.max(number(online.completedTradeIds?.length),number(online.tradeHistory?.length)),
@@ -108,7 +119,7 @@ export function normalizeAchievementState(state){
 export function achievementStatuses(state){
  const metrics=achievementMetrics(state),achievements=normalizeAchievementState(state),unlocked=new Set(achievements.unlockedIds),inbox=new Map((state?.notices?.rewardInbox??[]).map(entry=>[entry?.id,entry]));
  const queued=new Set(achievements.queuedIds);
- return ACHIEVEMENT_DEFINITIONS.map(entry=>{const current=number(metrics[entry.metric]),complete=unlocked.has(entry.id)||current>=entry.target,rewardEntry=inbox.get(`achievement-${entry.id}-v1`),wasQueued=queued.has(entry.id);return{...entry,current,complete,progress:Math.min(1,current/Math.max(1,entry.target)),claimed:Boolean(rewardEntry?.claimedAt||wasQueued&&!rewardEntry),queued:Boolean(rewardEntry||wasQueued)}})
+ return ACHIEVEMENT_DEFINITIONS.map(entry=>{const current=number(metrics[entry.metric]),complete=unlocked.has(entry.id)||current>=entry.target,rewardEntry=inbox.get(`achievement-${entry.id}-v1`),wasQueued=queued.has(entry.id),rewardReady=number(state?.player?.maxFloor)>=entry.rewardUnlockFloor;return{...entry,current,complete,rewardReady,progress:Math.min(1,current/Math.max(1,entry.target)),claimed:Boolean(rewardEntry?.claimedAt||wasQueued&&!rewardEntry),queued:Boolean(rewardEntry||wasQueued)}})
 }
 
 export function achievementSummary(state){
@@ -117,11 +128,14 @@ export function achievementSummary(state){
 }
 
 export function syncAchievementRewardInbox(state,{now=Date.now()}={}){
- const achievements=normalizeAchievementState(state),metrics=achievementMetrics(state),unlocked=new Set(achievements.unlockedIds),queued=new Set(achievements.queuedIds);let added=0,newlyUnlocked=0;
+ const achievements=normalizeAchievementState(state),metrics=achievementMetrics(state),maxFloor=number(state?.player?.maxFloor),unlocked=new Set(achievements.unlockedIds),queued=new Set(achievements.queuedIds);let added=0,newlyUnlocked=0;
  for(const entry of ACHIEVEMENT_DEFINITIONS){
   if(number(metrics[entry.metric])<entry.target)continue;
   if(!unlocked.has(entry.id)){unlocked.add(entry.id);achievements.unlockedAt[entry.id]=new Date(now).toISOString();newlyUnlocked++}
   if(queued.has(entry.id))continue;
+  // 達成記録は即時保存し、報酬だけを進行度に合わせて後日解禁する。
+  // 既にお知らせへ入った旧報酬は queued 判定でそのまま保護される。
+  if(maxFloor<entry.rewardUnlockFloor)continue;
   const queuedResult=enqueueNoticeReward(state,{id:achievementRewardId(entry.id),source:"achievement",kind:"gift",icon:entry.iconKey,label:"実績達成",title:entry.title,body:`${entry.description}・${rewardDescription(entry.reward)}`,reward:entry.reward,receivedAt:now});
   if(queuedResult.ok){queued.add(entry.id);if(!queuedResult.duplicate)added++}
  }

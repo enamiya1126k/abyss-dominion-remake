@@ -1,7 +1,7 @@
 import{SPECIES}from"../data/species.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"../data/monsterCatalog.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CATALOG}from"../data/floorBosses.js?v=3.1.1-build311";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.1-build311";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.1-build316";
 import{floorBossCampaignDisplayFloor}from"./Campaign100System.js?v=3.1.1-build311";
 
 const LIMITED_TAGS=new Set(["mythicSerial","serialOnly","raidLimited","eventLimited","limited"]);
@@ -95,11 +95,16 @@ export function codexRewardMilestones(total=COMPLETE_MONSTER_CODEX.length){
  return values;
 }
 
+export function collectionMilestoneUnlockFloor(milestone){
+ const count=Math.max(10,number(milestone));
+ return Math.min(100,Math.max(10,Math.ceil(count/10)*10));
+}
+
 export function collectionMilestoneReward(milestone,{complete=false}={}){
  const count=Math.max(1,number(milestone)),major=count%50===0||complete,century=count%100===0||complete;
  return Object.freeze({
-  gold:Math.max(250000,count*count*1000),crystals:Math.max(250,count*20),captureCrystals:Math.max(10,Math.ceil(count/2)),
-  abyssKeys:major?Math.max(10,Math.floor(count/5)):0,experienceItemsUltra:major?Math.max(3,Math.floor(count/10)):1,
+  gold:Math.max(15000,count*count*250),crystals:Math.max(10,count*2),captureCrystals:Math.max(5,Math.ceil(count/3)),
+  abyssKeys:major?Math.max(5,Math.floor(count/10)):0,experienceItemsUltra:major?Math.max(1,Math.floor(count/25)):0,
   fullHeals:century?Math.max(3,Math.floor(count/50)):0,partyFullHeals:century?1:0,
   mythicEquipment:major?1:0,equipmentPlus:major?Math.min(99,20+Math.floor(count/10)):0
  });
@@ -125,6 +130,7 @@ export function syncCollectionRewardInbox(state,{now=Date.now()}={}){
  const summary=codexCollectionSummary(state),queued=unique(state.collectionRewards.queuedMilestones),inbox=rewardInbox(state),known=new Set([...queued,...inbox.filter(entry=>entry?.source==="codex").map(entry=>String(entry.milestone))]);let added=0;
  for(const milestone of codexRewardMilestones(summary.total)){
   if(summary.owned<milestone||known.has(String(milestone)))continue;
+  if(number(state?.player?.maxFloor)<collectionMilestoneUnlockFloor(milestone))continue;
   const complete=milestone===summary.total,reward=collectionMilestoneReward(milestone,{complete}),id=`codex-milestone-${milestone}-v1`;
   inbox.unshift({id,source:"codex",kind:"gift",icon:complete?"👑":"📚",label:complete?"図鑑完全制覇":"図鑑達成報酬",title:complete?"全魔物図鑑 COMPLETE！":`魔物図鑑 ${milestone}種達成！`,body:rewardDescription(reward),reward,milestone,receivedAt:new Date(now).toISOString(),claimedAt:null});
   queued.push(String(milestone));known.add(String(milestone));added++;

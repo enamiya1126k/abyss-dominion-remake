@@ -1100,7 +1100,7 @@ async function copyText(value) {
 }
 
 export class OnlinePartyController {
-  constructor({ getState, toast = () => {}, onReward = async () => ({ ok: false }), onExpeditionStarted = () => ({ ok: true }), onExpeditionResult = async () => ({ ok: false }), onExpeditionOrphaned = async () => ({ ok: true, active: false }), onGuestProgressIsolation = () => ({ ok: true }), onShowExpeditionResult = () => {}, onBack = () => {}, onExploreCanvasMount = () => {}, onExploreCanvasUpdate = () => {}, onExploreCanvasUnmount = () => {}, onHostWorldUpdate = () => {}, onFloorBossDefeated = () => {}, onOnlineStateMutation = () => ({ ok: true }), onRaidWorldUpdate = () => {}, onRaidExchange = async () => ({ ok: false }), onOnlineVitalsUpdate = () => {}, onBattleDefeated = () => {}, onTeamBattleResult = () => {}, onSecretRoomEntered = () => {}, onBeginSecretRoomExpedition = () => {}, onTutorialGuide = () => {}, onScene = () => {}, onPowerRankingState = () => {}, onPowerRankingProfile = () => {}, onPowerRankingCapability = () => {}, onPowerRankingReward = async () => ({ ok: false }) } = {}) {
+  constructor({ getState, toast = () => {}, onReward = async () => ({ ok: false }), onExpeditionStarted = () => ({ ok: true }), onExpeditionResult = async () => ({ ok: false }), onExpeditionOrphaned = async () => ({ ok: true, active: false }), onGuestProgressIsolation = () => ({ ok: true }), onShowExpeditionResult = () => {}, onBack = () => {}, onExploreCanvasMount = () => {}, onExploreCanvasUpdate = () => {}, onExploreCanvasUnmount = () => {}, onHostWorldUpdate = () => {}, onFloorBossDefeated = () => {}, onOnlineStateMutation = () => ({ ok: true }), onRaidWorldUpdate = () => {}, onRaidExchange = async () => ({ ok: false }), onOnlineVitalsUpdate = () => {}, onBattleDefeated = () => {}, onTeamBattleResult = () => {}, onSecretRoomEntered = () => {}, onBeginSecretRoomExpedition = () => {}, onTutorialGuide = () => {}, onScene = () => {}, onPowerRankingState = () => {}, onPowerRankingProfile = () => {}, onPowerRankingCapability = () => {}, onPowerRankingReward = async () => ({ ok: false }), onConnectionStatus = () => {} } = {}) {
     const identity = ensureOnlineIdentity();
     this.getState = getState;
     this.toast = toast;
@@ -1130,6 +1130,7 @@ export class OnlinePartyController {
     this.onPowerRankingProfile = onPowerRankingProfile;
     this.onPowerRankingCapability = onPowerRankingCapability;
     this.onPowerRankingReward = onPowerRankingReward;
+    this.onConnectionStatus = onConnectionStatus;
     this.selfId = identity.friendId;
     const initialServerUrl = storageGet(ONLINE_STORAGE_KEYS.serverUrl) || DEFAULT_ONLINE_SERVER_URL;
     const initialResumeEndpoint = normalizedWebsocketEndpoint(initialServerUrl);
@@ -1427,14 +1428,16 @@ export class OnlinePartyController {
     this._bindBackgroundLifecycle();
     if (this.supersededConnection) return { ok: false, reason: "superseded" };
     if (this.backgroundConnectionBusy && !this.mounted) return { ok: false, reason: "busy" };
-    if (this.mounted) { this._startPowerRankingPresenceLoop(); return { ok: true, connected: this._canMutateOnline(), foreground: true }; }
+    if (this.mounted) { this._startPowerRankingPresenceLoop(); if(this.connectionReady)this._notifyServerAvailability("online"); return { ok: true, connected: this._canMutateOnline(), foreground: true }; }
     this.desiredBackgroundOnly = true;
     if (!this.connectionReady) this.backgroundOnly = true;
     if (!connect || this.ws && [WebSocket.OPEN, WebSocket.CONNECTING].includes(this.ws.readyState)) {
       if (this.connectionReady && this.ws?.readyState === WebSocket.OPEN) { this._requestConnectionMode(true); this._startPowerRankingPresenceLoop(); }
+      if(this.connectionReady)this._notifyServerAvailability("online");
       return { ok: true, connected: Boolean(this.connectionReady && this.ws?.readyState === WebSocket.OPEN) };
     }
     this.manualClose = false;
+    this._notifyServerAvailability("checking");
     this.connect({ reconnect: true });
     return { ok: true, connected: false, connecting: true };
   }
@@ -2126,9 +2129,9 @@ export class OnlinePartyController {
     this.connectionEndpoint = url;
     this._refreshResumeTokenFromStorage(url);
     storageSet(ONLINE_STORAGE_KEYS.serverUrl, input.trim()); this.manualClose = false; this.connectionReady = false; this._clearGuildPlanTransitionTimer(); this._clearMoveInputs();
-    this._setStatus(reconnect ? "reconnecting" : "connecting", reconnect ? "再接続中…" : "接続中…", "PCサーバーへ接続しています");
+    this._setStatus(reconnect ? "reconnecting" : "connecting", reconnect ? "再接続中…" : "接続中…", "PCサーバーへ接続しています");this._notifyServerAvailability("checking");
     let socket;
-    try { socket = new WebSocket(url); this.ws = socket; (this.socketEndpoints ??= new WeakMap()).set(socket, url); } catch (error) { this._setStatus("error", "接続できません", error.message); return; }
+    try { socket = new WebSocket(url); this.ws = socket; (this.socketEndpoints ??= new WeakMap()).set(socket, url); } catch (error) { this._setStatus("error", "接続できません", error.message); this._notifyServerAvailability("offline"); return; }
     socket.addEventListener("open", () => {
       if (this.ws !== socket) return;
       this.foregroundProfileSyncPending = false;
@@ -2142,7 +2145,7 @@ export class OnlinePartyController {
     });
     socket.addEventListener("message", event => { if (this.ws !== socket) return; try { this._handleMessage(JSON.parse(event.data), socket); } catch (error) { console.warn("Online message ignored", error); } });
     socket.addEventListener("close", event => this._handleClose(socket, event));
-    socket.addEventListener("error", () => { if (this.ws === socket) { this.connectionReady = false; this._setStatus("error", "通信エラー", "PCサーバーとトンネルを確認してください"); } });
+    socket.addEventListener("error", () => { if (this.ws === socket) { this.connectionReady = false; this._setStatus("error", "通信エラー", "PCサーバーとトンネルを確認してください"); this._notifyServerAvailability("offline"); } });
   }
 
   _beginInteractionPending(action, targetId) {
@@ -2636,6 +2639,7 @@ export class OnlinePartyController {
     if (!message || typeof message.type !== "string") return;
     if (sourceSocket && sourceSocket !== this.ws) return;
     if (message.type === "helloAck") {
+      this._notifyServerAvailability("online");
       if (message.protocol !== ONLINE_PROTOCOL) { this._handleHandshakeError({ code: "PROTOCOL_MISMATCH", message: "ゲームとオンラインサーバーのバージョンが一致しません" }); return; }
       this.connectionReady = true;
       this.helloAckPending = false;
@@ -3850,6 +3854,11 @@ export class OnlinePartyController {
     this._syncConnectionUi();
   }
 
+  _notifyServerAvailability(availability) {
+    const state=["online","offline"].includes(availability)?availability:"checking";
+    try{this.onConnectionStatus?.({availability:state,online:state==="online",kind:this.connectionStatus?.kind??state,title:this.connectionStatus?.title??"",detail:this.connectionStatus?.detail??"",checkedAt:Date.now()})}catch(error){console.warn("Connection status listener ignored",error)}
+  }
+
   _setRoute(route, { silent = false } = {}) {
     route = normalizedOnlineRoute(route, "");
     if (!route) return;
@@ -4606,12 +4615,14 @@ export class OnlinePartyController {
       this.manualClose = true; this.supersededConnection = true; this.helloAckPending = false; this.pendingLeaveOnReconnect = null;
       this._clearRoom({ reason: "superseded" });
       this._setStatus("error", "別の画面で接続済み", "この画面の自動再接続を停止しました。再開する場合は接続を押してください");
+      this._notifyServerAvailability("online");
       this.guildStatus = "別の画面で接続されています。この画面では操作できません。";
       if (this.friendPanelOpen) this._renderFriendPanel();
       return;
     }
     if (!this.roomState) { this.pendingRoomJoinId = null; this.roomListingsStatus = "error"; this._renderRoomBoard(); }
     this._setStatus("reconnecting", "再接続中…", "切断中はサーバーが自動行動を担当します");
+    this._notifyServerAvailability("offline");
     this.guildStatus = "再接続中です。接続が戻ると操作を再開できます。";
     if (this.friendPanelOpen) this._renderFriendPanel();
     if (!this.mounted && !this.backgroundActive) return;

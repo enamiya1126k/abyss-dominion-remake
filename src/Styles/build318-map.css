@@ -1,0 +1,37 @@
+/* Build318: the section handoff is a brief blackout, not another ornate gate. */
+.explore-stage .section-passage-fade {
+  position: absolute;
+  inset: 0;
+  z-index: 34;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  background: #000;
+  animation: build318-passage-blackout 620ms ease-in-out both;
+}
+
+.explore-stage .section-passage-fade span {
+  color: rgba(235, 224, 199, 0.72);
+  font: 700 clamp(10px, 2.4vw, 13px)/1.2 "Yu Mincho", serif;
+  letter-spacing: 0.16em;
+  opacity: 0;
+  animation: build318-passage-label 620ms ease-in-out both;
+}
+
+@keyframes build318-passage-blackout {
+  0%, 34% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes build318-passage-label {
+  0% { opacity: 0; }
+  12%, 38% { opacity: 1; }
+  72%, 100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .explore-stage .section-passage-fade,
+  .explore-stage .section-passage-fade span {
+    animation-duration: 360ms;
+  }
+}

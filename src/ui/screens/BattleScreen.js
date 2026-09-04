@@ -28,12 +28,12 @@ function battleRoleLabel(role){return BATTLE_ROLE_LABELS[String(role??"balanced"
 function battleEffectLabel(effect){return BATTLE_EFFECT_LABELS[effect?.kind]??effect?.name??String(effect?.kind??"効果")}
 function battleStatusLabel(status){const labels={poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖"};return labels[status?.id]??status?.name??statusLabel(status)}
 function remainingTurns(turns,persistent=false){const value=Math.max(0,Number(turns)||0);return value?` 残${value}`:persistent?"・持続":""}
-const COMBAT_RANK_POWER=Object.freeze({UR:4,LR:5,"神話":6,"深淵":7,"十神":8});
+const COMBAT_RANK_POWER=Object.freeze({N:0,R:1,SR:2,SSR:3,UR:4,LR:5,"神話":6,"深淵":7,"十神":8});
 function combatRank(unit,species={}){
  const value=unit?.endgameFaction==="tenGod"||unit?.faction==="tenGod"?"十神":unit?.endgameFaction==="abyss"||unit?.faction==="abyss"?"深淵":unit?.summonTier??unit?.summonRarity??unit?.combatRarity??species.rarity??null;
- return COMBAT_RANK_POWER[value]>=4?value:null;
+ return Object.prototype.hasOwnProperty.call(COMBAT_RANK_POWER,value)?value:null;
 }
-function rankTone(rank){return({UR:"ur",LR:"lr","神話":"mythic","深淵":"abyss","十神":"ten-god"})[rank]??""}
+function rankTone(rank){return({N:"n",R:"r",SR:"sr",SSR:"ssr",UR:"ur",LR:"lr","神話":"mythic","深淵":"abyss","十神":"ten-god"})[rank]??""}
 function rankBadge(rank){return rank?`<span class="combat-rank-badge rank-${rankTone(rank)}">${rank}</span>`:""}
 function htmlText(value){return String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
 function equipmentAuthorityBadge(unit){const authorities=unit?._equipmentAuthorities??[];if(!authorities.length)return"";const first=authorities[0],extra=authorities.length-1,title=authorities.map(authority=>`${authority.name}：${authority.description}`).join("／");return`<span class="equipment-authority-badge" title="${htmlText(title)}"><i>◆</i><b>${htmlText(first.name)}</b>${extra?`<em>+${extra}</em>`:""}</span>`}
@@ -57,15 +57,16 @@ function renderEnemies(battle,enemies,target){
   const floorBoss=Boolean(enemy.floorBossCatalogId),badge=enemy.boss?`<span class="boss-badge">${floorBoss?"階層ボス":"ボス"}</span>`:enemy.elite?`<span class="elite-badge">${htmlText(enemy.eliteAffixIcon??"🜲")} 強敵・${htmlText(enemy.eliteAffixName??"変異")}</span>`:"",safeName=htmlText(enemy.name);const danger="";
   const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
   const line=index<2?"front-line":"rear-line";
-  const dead=enemy.hp<=0,pendingKo=dead&&(battle.presentationKoIds??[]).map(String).includes(String(enemy.id)),element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",rank=combatRank(enemy,battle.species?.[enemy.speciesId]),rankClass=rank?`combat-rank-unit rank-${rankTone(rank)}`:"",rankMarkup=rankBadge(rank);
+  const dead=enemy.hp<=0,pendingKo=dead&&(battle.presentationKoIds??[]).map(String).includes(String(enemy.id)),element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",rank=combatRank(enemy,battle.species?.[enemy.speciesId])??"N",rankClass=`combat-rank-unit rank-${rankTone(rank)}`,rankMarkup=rankBadge(rank),enemyAtk=enemy.atk??enemy.stats?.atk??0,enemyMatk=enemy.matk??enemy.stats?.matk??enemyAtk,enemyDef=enemy.def??enemy.stats?.def??0,enemyMdef=enemy.mdef??enemy.stats?.mdef??enemyDef,enemySpd=enemy.spd??enemy.stats?.spd??0;
   return `<button id="enemy-${enemy.id}" ${dead?`disabled${pendingKo?"":' aria-hidden="true"'}`:`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${pendingKo?"presentation-ko-pending":""} ${enemy.boss?"boss-enemy":""} ${enemy.raidMainBoss?"raid-main-boss":""} ${enemy.raidSubBoss?"raid-sub-boss":""} ${floorBoss?"floor-boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${rankClass} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
-   <span class="battle-unit-floating-name battle-unit-floating-badges" aria-hidden="true">${badge}${rankMarkup}</span>
+   <span class="battle-unit-floating-name battle-unit-floating-badges">${badge}${rankMarkup}<b title="${safeName}">${safeName}</b></span>
    <div class="side-unit-sprite enemy-orb">${battle.enemyMagicCircleArt?.[enemy.id]??""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.visualFrame??(enemy.hp<=0&&!pendingKo?"down":"idle"),className:"battle-enemy-visual"})}</div>
    <div class="side-unit-card enemy-info">
     <div class="side-unit-name enemy-name">${danger}<b class="enemy-card-name" title="${safeName}">${safeName}</b><span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
     ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}`,"enemy-hp")}
+    <small class="battle-mini-stats enemy-mini-stats">物攻 ${battleInteger(enemyAtk)}　魔攻 ${battleInteger(enemyMatk)}<br>物防 ${battleInteger(enemyDef)}　魔防 ${battleInteger(enemyMdef)}　速度 ${battleInteger(enemySpd)}</small>
     ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
     ${statusHtml}
    </div>
@@ -100,12 +101,12 @@ function renderParty(battle,actor){
 function renderSkills(battle,actor,skills){
  const rows=skills.map(skill=>{
   const cd=Math.max(0,Number(cooldownRemaining(battle,actor.id,skill.id))||0),baseCd=Math.max(0,Number(skill.cooldown)||0),mpCost=skillMpCost(actor,skill),disabled=actor.currentMp<mpCost||cd>0;
-  const cost=cd>0?`残りCT ${cd} / MP ${mpCost}`:`MP ${mpCost}`,cooldownLabel=baseCd>0?`CT ${baseCd}`:"CTなし";
-  const details=skillCombatKeywords(skill).map(line=>`<li>${line}</li>`).join("");
-  const skillName=skill.equipmentGranted?`【装備技】${skill.name}`:skill.name,skillTag=skill.equipmentGranted?`${skill.equipmentAuthorityName??"装備固有"}・装備中限定`:skill.tag??"スキル";
-  return `<button data-skill-id="${skill.id}" ${disabled?"disabled":""}><span><b>${skillName}</b><small>${skillTag}・${skill.target??"敵単体"}・${skillElementLabel(skill)}属性・${cooldownLabel}</small><ul class="battle-skill-spec">${details}</ul></span><strong>${cost}</strong></button>`;
+  const cooldownLabel=baseCd>0?`CT ${baseCd}`:"CTなし",stateLabel=cd>0?`再使用まで ${cd}`:actor.currentMp<mpCost?"MP不足":"使用可能";
+  const details=skillCombatKeywords(skill).map(line=>`<li>${htmlText(line)}</li>`).join("");
+  const skillName=skill.equipmentGranted?`装備技・${skill.name}`:skill.name,skillTag=skill.equipmentGranted?`${skill.equipmentAuthorityName??"装備固有"}・装備中限定`:skill.tag??"スキル",element=skillElementLabel(skill);
+  return `<button class="battle-skill-choice" data-skill-id="${htmlText(skill.id)}" ${disabled?"disabled":""}><i class="battle-skill-edge" aria-hidden="true"></i><span class="battle-skill-copy"><small>${htmlText(skillTag)}</small><b>${htmlText(skillName)}</b><em>${htmlText(skill.target??"敵単体")}・${htmlText(element)}属性・${cooldownLabel}</em><ul class="battle-skill-spec">${details}</ul></span><span class="battle-skill-cost"><b>MP ${mpCost}</b><small>${stateLabel}</small></span></button>`;
  }).join("");
- return `<div class="skill-command-list">${rows}<button id="closeSkillMenu" class="secondary">戻る</button></div>`;
+ return `<section class="battle-skill-panel-v317"><header><span><small>SKILL COMMAND</small><b>スキルを選択</b></span><em>MP ${battleInteger(actor.currentMp)} / ${battleInteger(unitMaxMp(actor))}</em></header><div class="skill-command-list battle-skill-command-list-v317">${rows}</div><button id="closeSkillMenu" class="battle-skill-close secondary">戻る</button></section>`;
 }
 
 function renderItems(inventory){

@@ -1,6 +1,6 @@
-import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.1-build311";
+import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.1-build319";
 
-export const CAMPAIGN_HERO_ENCOUNTER_VERSION=1;
+export const CAMPAIGN_HERO_ENCOUNTER_VERSION=2;
 export const CAMPAIGN_HERO_FINAL_LEVEL=1000;
 export const CAMPAIGN_HERO_FINAL_ARENA_ID="prophecy-final-gate";
 export const CAMPAIGN_HERO_REWIND_DAY=9;
@@ -44,24 +44,24 @@ const appendBoundedId=(list,id,limit)=>{list.push(id);if(list.length>limit)list.
 
 export function canonicalCampaignHeroId(value){return HERO_ID_ALIASES[cleanId(value,40)]??null}
 
-const scheduleEntry=(heroId,day,floor,cycle)=>deepFreeze({
+const scheduleEntry=(heroId,day,cycle)=>deepFreeze({
  id:`hero-ambush-${heroId.slice(5)}-${cycle}`,
- heroId,day,floor,windowEnd:day*10-1,cycle,
+ heroId,day,floor:(day-1)*10+1,windowEnd:day*10-1,cycle,
  fixedLevel:CAMPAIGN_HERO_FINAL_LEVEL,
- finalStrength:true
+ finalStrength:true,randomized:true
 });
 
-// One authored ambush in each of days 2-9. The four heroes appear in the same
-// readable order twice; a missed window is never backfilled on a later day.
+// One pursuit window opens in each of days 2-9. The order teaches one hero at
+// a time, while the exact floor is a stable random roll inside that day.
 export const CAMPAIGN_HERO_ENCOUNTER_SCHEDULE=deepFreeze([
- scheduleEntry("myth_yori",2,15,1),
- scheduleEntry("myth_hide",3,25,1),
- scheduleEntry("myth_enami",4,35,1),
- scheduleEntry("myth_rion",5,45,1),
- scheduleEntry("myth_yori",6,55,2),
- scheduleEntry("myth_hide",7,65,2),
- scheduleEntry("myth_enami",8,75,2),
- scheduleEntry("myth_rion",9,85,2)
+ scheduleEntry("myth_yori",2,1),
+ scheduleEntry("myth_hide",3,1),
+ scheduleEntry("myth_enami",4,1),
+ scheduleEntry("myth_rion",5,1),
+ scheduleEntry("myth_yori",6,2),
+ scheduleEntry("myth_hide",7,2),
+ scheduleEntry("myth_enami",8,2),
+ scheduleEntry("myth_rion",9,2)
 ]);
 
 export const CAMPAIGN_HERO_FIELD_STATES=deepFreeze(["hidden","appearing","observing","pursuing","contact","withdrawing","resolved"]);
@@ -113,7 +113,8 @@ export const CAMPAIGN_HERO_ENCOUNTER_RULES=deepFreeze({
  offlineOnly:true,minimumVisitedSections:2,minimumStepsSinceBattle:6,minimumPartyHpRate:.5,
  excludedFloors:Object.freeze(Array.from({length:10},(_,index)=>(index+1)*10)),
  moveOnlyOnPlayerStep:true,maximumEncounters:CAMPAIGN_HERO_ENCOUNTER_SCHEDULE.length,
- defeatPenalty:"none",retreatPenalty:"none",missedWindowPolicy:"never-backfill"
+ defeatPenalty:"none",retreatPenalty:"none",missedWindowPolicy:"never-backfill",
+ randomChance:{opening:.2,closing:.82,guaranteedOnLastFloor:true}
 });
 
 export const CAMPAIGN_HERO_UI_COPY=deepFreeze({
@@ -123,7 +124,7 @@ export const CAMPAIGN_HERO_UI_COPY=deepFreeze({
  escaped:"気配が遠ざかった",
  contact:"勇者が行く手を阻んだ",
  permanentWound:"与えた傷は最終決戦まで残る",
- finalGate:"予言の決戦場が開いた",
+ finalGate:"魔王城の王室が開いた",
  rewind:"リオネルの予言が九日目へ巻き戻る"
 });
 
@@ -138,7 +139,7 @@ function emptyEventRecord(definition){return{
  ...definition,status:"scheduled",outcome:null,resultId:null,activatedFloor:null,resolvedFloor:null
 }}
 function emptyFinalArena(){return{
- id:CAMPAIGN_HERO_FINAL_ARENA_ID,unlocked:false,entered:false,battleStarted:false,completed:false,attempts:0,lastEnding:null
+ id:CAMPAIGN_HERO_FINAL_ARENA_ID,unlocked:false,entered:false,audienceCompleted:false,battleStarted:false,completed:false,attempts:0,lastEnding:null,lastEndingVariant:null
 }}
 function emptyRewind(){return{
  active:false,targetDay:CAMPAIGN_HERO_REWIND_DAY,targetFloor:CAMPAIGN_HERO_REWIND_FLOOR,
@@ -150,7 +151,7 @@ function emptyState(){return{
  heroes:Object.fromEntries(HERO_PARTY_IDS.map(heroId=>[heroId,emptyHeroRecord(heroId)])),
  events:Object.fromEntries(CAMPAIGN_HERO_ENCOUNTER_SCHEDULE.map(entry=>[entry.id,emptyEventRecord(entry)])),
  activeEncounterId:null,processedResultIds:[],processedWoundIds:[],processedRewindIds:[],
- finalArena:emptyFinalArena(),rewind:emptyRewind(),legacyMigrationApplied:false
+ finalArena:emptyFinalArena(),rewind:emptyRewind(),legacyMigrationApplied:false,legacyRewindRetired:false
 }}
 
 function sourceLedger(value){
@@ -263,9 +264,10 @@ export function normalizeCampaignHeroEncounterState(value,{migrationHighestFloor
  const finalSource=plainRecord(source.finalArena)?source.finalArena:{};
  state.finalArena={
   ...emptyFinalArena(),unlocked:finalSource.unlocked===true,entered:finalSource.entered===true,
-  battleStarted:finalSource.battleStarted===true,completed:finalSource.completed===true,
+  audienceCompleted:finalSource.audienceCompleted===true,battleStarted:finalSource.battleStarted===true,completed:finalSource.completed===true,
   attempts:boundedInteger(finalSource.attempts,0,0,999),
-  lastEnding:["complete","narrow","defeat","all-preempted","preemptive"].includes(finalSource.lastEnding)?(finalSource.lastEnding==="preemptive"?"all-preempted":finalSource.lastEnding):null
+  lastEnding:["complete","narrow","defeat","all-preempted","preemptive"].includes(finalSource.lastEnding)?(finalSource.lastEnding==="preemptive"?"all-preempted":finalSource.lastEnding):null,
+  lastEndingVariant:cleanId(finalSource.lastEndingVariant,40)||null
  };
  const rewindSource=plainRecord(source.rewind)?source.rewind:{};
  state.rewind={
@@ -274,7 +276,21 @@ export function normalizeCampaignHeroEncounterState(value,{migrationHighestFloor
   resultId:cleanId(rewindSource.resultId,120)||null,reason:cleanId(rewindSource.reason,80)||null
  };
  state.legacyMigrationApplied=source.legacyMigrationApplied===true||!hasAuthoredLedger&&migrationFloor!=null;
+ state.legacyRewindRetired=source.legacyRewindRetired===true;
  return state;
+}
+
+// Build319 retired the forced 81F rewind. A player who saved during that old
+// transition must regain the already-unlocked royal audience instead of being
+// trapped in a replay flow that the current ending no longer advances.
+export function retireLegacyCampaignRewind(value){
+ const state=normalizeCampaignHeroEncounterState(value),retired=state.rewind.active===true;
+ if(retired){
+  state.rewind={...state.rewind,active:false,reason:"retired-build320"};
+  state.finalArena={...state.finalArena,unlocked:true,entered:false,battleStarted:false,completed:false,lastEnding:"defeat"};
+  state.legacyRewindRetired=true;
+ }
+ return{state,retired};
 }
 
 export function normalizeCampaignHeroInvasion(value,options={}){
@@ -291,7 +307,13 @@ export function campaignHeroEncounterDefinition(value){
  return CAMPAIGN_HERO_ENCOUNTER_SCHEDULE.find(entry=>entry.id===id)??null;
 }
 
-export function campaignHeroEncounterCandidate(value,{floor,online=false,bossDefeated=false,postBoss=false,modalOpen=false,battleOpen=false,visitedSections=2,stepsSinceBattle=6,partyHpRate=1}={}){
+export function campaignHeroEncounterRoll(encounterId,floor){
+ const text=`${cleanId(encounterId)}:${boundedInteger(floor,1,1,CAMPAIGN_MAX_FLOOR)}`;let hash=2166136261;
+ for(let index=0;index<text.length;index++)hash=Math.imul(hash^text.charCodeAt(index),16777619);
+ return(hash>>>0)/4294967296
+}
+
+export function campaignHeroEncounterCandidate(value,{floor,encounterRoll=null,online=false,bossDefeated=false,postBoss=false,modalOpen=false,battleOpen=false,visitedSections=2,stepsSinceBattle=6,partyHpRate=1}={}){
  const state=normalizeCampaignHeroEncounterState(value),currentFloor=boundedInteger(floor,0,0,CAMPAIGN_MAX_FLOOR);
  if(!currentFloor||online||bossDefeated||postBoss||modalOpen||battleOpen||currentFloor%10===0)return null;
  if(boundedInteger(visitedSections,0,0,99)<CAMPAIGN_HERO_ENCOUNTER_RULES.minimumVisitedSections)return null;
@@ -299,9 +321,11 @@ export function campaignHeroEncounterCandidate(value,{floor,online=false,bossDef
  if(clampRate(partyHpRate,0)<CAMPAIGN_HERO_ENCOUNTER_RULES.minimumPartyHpRate)return null;
  for(const definition of CAMPAIGN_HERO_ENCOUNTER_SCHEDULE){
   const event=state.events[definition.id],hero=state.heroes[definition.heroId];
-  if(!hero.defeated&&["scheduled","armed"].includes(event.status)&&currentFloor>=definition.floor&&currentFloor<=definition.windowEnd)return{
-   ...definition,status:event.status,fieldProfile:CAMPAIGN_HERO_FIELD_PROFILES[definition.heroId],combatProfile:CAMPAIGN_HERO_COMBAT_PROFILES[definition.heroId]
-  };
+  if(!hero.defeated&&["scheduled","armed"].includes(event.status)&&currentFloor>=definition.floor&&currentFloor<=definition.windowEnd){
+   const span=Math.max(1,definition.windowEnd-definition.floor),progress=Math.max(0,Math.min(1,(currentFloor-definition.floor)/span)),chance=CAMPAIGN_HERO_ENCOUNTER_RULES.randomChance.opening+(CAMPAIGN_HERO_ENCOUNTER_RULES.randomChance.closing-CAMPAIGN_HERO_ENCOUNTER_RULES.randomChance.opening)*progress,rawRoll=finiteNumber(encounterRoll),roll=rawRoll==null?campaignHeroEncounterRoll(definition.id,currentFloor):Math.max(0,Math.min(.999999,rawRoll));
+   if(currentFloor<definition.windowEnd&&roll>chance)return null;
+   return{...definition,triggerFloor:currentFloor,status:event.status,encounterChance:currentFloor===definition.windowEnd?1:chance,encounterRoll:roll,fieldProfile:CAMPAIGN_HERO_FIELD_PROFILES[definition.heroId],combatProfile:CAMPAIGN_HERO_COMBAT_PROFILES[definition.heroId]};
+  }
  }
  return null;
 }

@@ -117,6 +117,17 @@ export const NOTICE_DEFINITIONS=Object.freeze([
  }
 ]);
 
+export const SERVER_MAINTENANCE_NOTICE=Object.freeze({
+ id:"server-maintenance-live",
+ kind:"maintenance",
+ icon:"🛠️",
+ label:"サーバー状態",
+ publishedAt:"現在",
+ title:"現在サーバーメンテナンス中です",
+ body:"オンライン機能を一時停止しています。通常の探索・育成・セーブはそのまま利用できます。",
+ details:["接続の復旧を自動で確認しています","サーバー復旧後、このお知らせは自動で取り下げられます"]
+});
+
 export const DAILY_NOTICE_GIFT=Object.freeze({captureCrystals:5,crystals:100});
 export function tokyoNoticeDayKey(value=Date.now()){
  const date=value instanceof Date?value:new Date(value),parts=new Intl.DateTimeFormat("en",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(date),part=type=>parts.find(entry=>entry.type===type)?.value;
@@ -133,8 +144,20 @@ export function normalizeNoticeState(state){
  // backfilled, which makes this a true same-day login gift.
  const dailyGift={dayKey:today,claimedDayKey:typeof stored.claimedDayKey==="string"?stored.claimedDayKey:null,claimedAt:typeof stored.claimedAt==="string"?stored.claimedAt:null};
  const rewardInbox=retainNoticeRewardInbox(source.rewardInbox);
- state.notices={...source,readIds:[...new Set(readIds)],dailyGift,rewardInbox};
+ const liveSource=source.serverMaintenance&&typeof source.serverMaintenance==="object"&&!Array.isArray(source.serverMaintenance)?source.serverMaintenance:{};
+ const serverMaintenance={active:Boolean(liveSource.active),changedAt:typeof liveSource.changedAt==="string"?liveSource.changedAt:null,checkedAt:typeof liveSource.checkedAt==="string"?liveSource.checkedAt:null};
+ state.notices={...source,readIds:[...new Set(readIds)],dailyGift,rewardInbox,serverMaintenance};
  return state.notices;
+}
+
+function noticeDefinitionsForState(notices){return notices.serverMaintenance.active?[SERVER_MAINTENANCE_NOTICE,...NOTICE_DEFINITIONS]:NOTICE_DEFINITIONS}
+export function activeNoticeDefinitions(state){return noticeDefinitionsForState(normalizeNoticeState(state))}
+
+export function setServerMaintenanceState(state,offline,{now=Date.now()}={}){
+ const notices=normalizeNoticeState(state),active=Boolean(offline),previous=Boolean(notices.serverMaintenance.active),timestamp=new Date(now).toISOString();
+ notices.serverMaintenance={active,changedAt:previous===active?notices.serverMaintenance.changedAt:timestamp,checkedAt:timestamp};
+ if(active&&!previous)notices.readIds=notices.readIds.filter(id=>id!==SERVER_MAINTENANCE_NOTICE.id);
+ return{changed:previous!==active,active,notice:SERVER_MAINTENANCE_NOTICE};
 }
 
 function validDate(value){const time=new Date(value).getTime();return Number.isFinite(time)?new Date(time).toISOString():new Date(0).toISOString()}
@@ -197,14 +220,14 @@ export function claimDailyNoticeGift(state,value=Date.now()){
 export function unreadNoticeIds(state){
  const notices=normalizeNoticeState(state);
  const read=new Set(notices.readIds);
- return NOTICE_DEFINITIONS.map(notice=>notice.id).filter(id=>!read.has(id));
+ return noticeDefinitionsForState(notices).map(notice=>notice.id).filter(id=>!read.has(id));
 }
 
 export function noticeAttentionCount(state){return unreadNoticeIds(state).length+(dailyNoticeGiftStatus(state).available?1:0)+pendingNoticeRewards(state).length}
 
 export function markNoticeRead(state,id){
  const notices=normalizeNoticeState(state),noticeId=String(id??"");
- if(!NOTICE_DEFINITIONS.some(notice=>notice.id===noticeId))return notices;
+ if(!noticeDefinitionsForState(notices).some(notice=>notice.id===noticeId))return notices;
  notices.readIds=[...new Set([...notices.readIds,noticeId])].slice(-200);
  notices.lastReadAt=new Date().toISOString();
  return notices;
@@ -212,7 +235,7 @@ export function markNoticeRead(state,id){
 
 export function markAllNoticesRead(state){
  const notices=normalizeNoticeState(state);
- notices.readIds=[...new Set([...notices.readIds,...NOTICE_DEFINITIONS.map(notice=>notice.id)])].slice(-200);
+ notices.readIds=[...new Set([...notices.readIds,...noticeDefinitionsForState(notices).map(notice=>notice.id)])].slice(-200);
  notices.lastReadAt=new Date().toISOString();
  return notices;
 }

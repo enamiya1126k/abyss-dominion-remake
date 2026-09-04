@@ -1,6 +1,6 @@
-import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=3.0.9-build309";
+import{unlockMagicCircleFromTree}from"./MagicCircleSystem.js?v=3.1.1-build316";
 
-export const ABYSS_SKILL_TREE_VERSION=7;
+export const ABYSS_SKILL_TREE_VERSION=8;
 
 export const ABYSS_SKILL_CATEGORIES=Object.freeze([
  {
@@ -424,10 +424,20 @@ function expansionNodesForCategory(category){
  }));
 }
 
+function unlockFloorForTier(tier){
+ const value=Math.max(1,Math.floor(Number(tier)||1));
+ if(value<=1)return 5;
+ if(value===2)return 10;
+ if(value===3)return 20;
+ if(value===4)return 30;
+ // 31段の専門ルートを30〜100階へ均等に配置する。
+ return Math.min(100,30+Math.ceil((value-4)*70/31));
+}
+
 export const ABYSS_SKILL_NODES=Object.freeze([
  ...FOUNDATION_SKILL_NODES,
  ...Object.keys(EXPANSION_BRANCHES).flatMap(expansionNodesForCategory)
-]);
+].map(node=>Object.freeze({...node,unlockFloor:unlockFloorForTier(node.tier)})));
 
 const NODE_BY_ID=new Map(ABYSS_SKILL_NODES.map(node=>[node.id,node]));
 const CATEGORY_BY_ID=new Map(ABYSS_SKILL_CATEGORIES.map(category=>[category.id,category]));
@@ -466,6 +476,11 @@ export function createAbyssSkillTreeState(){
 
 export function abyssSkillNodeById(nodeId){
  return NODE_BY_ID.get(nodeId)??null;
+}
+
+export function abyssSkillUnlockFloor(nodeOrId){
+ const node=typeof nodeOrId==="string"?NODE_BY_ID.get(nodeOrId):nodeOrId;
+ return node?.unlockFloor??unlockFloorForTier(node?.tier);
 }
 
 export function abyssSkillCategoryById(categoryId){
@@ -613,6 +628,8 @@ export function canLearnAbyssSkill(state,nodeId){
  const tree=normalizeAbyssSkillTree(state);
  const learned=new Set(tree.learned);
  if(learned.has(node.id))return{ok:false,reason:"learned",message:"すでに習得済みです。",node};
+ const unlockFloor=abyssSkillUnlockFloor(node),maxFloor=safeInteger(state?.player?.maxFloor,0);
+ if(maxFloor<unlockFloor)return{ok:false,reason:"floor",message:`${unlockFloor}階到達で解放されます。`,node,unlockFloor};
  const missing=node.requires.filter(id=>!learned.has(id));
  if(missing.length){
   const names=missing.map(id=>NODE_BY_ID.get(id)?.name).filter(Boolean).join("・");
