@@ -1,4 +1,5 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.2-build321";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.5-build324";
+// Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
 import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.1-build311";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.1-build311";
 import{SPECIES}from"../../data/species.js?v=3.1.1-build311";
@@ -10,8 +11,8 @@ import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build311";
 import{attributeCycleVisual,attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.2-build321";
 import{campaignDayForFloor,campaignHeroAdvance}from"../../core/Campaign100System.js?v=3.1.1-build311";
-import{normalizeCampaignHeroInvasion}from"../../core/CampaignHeroEncounterSystem.js?v=3.1.1-build320";
-import{normalizeCampaignReincarnationState,campaignReincarnationDifficultyMultiplier,campaignReincarnationFloorLimit}from"../../core/CampaignReincarnationSystem.js?v=3.1.1-build320";
+import{normalizeCampaignHeroInvasion}from"../../core/CampaignHeroEncounterSystem.js?v=3.1.5-build324";
+import{normalizeCampaignReincarnationState,campaignReincarnationDifficultyMultiplier,campaignReincarnationFloorLimit}from"../../core/CampaignReincarnationSystem.js?v=3.1.5-build324";
 
 function homeAttributeChart(){
  return attributeCycleVisual({className:"home-attribute-chart",decorative:true});
@@ -135,7 +136,7 @@ export function HomeScreen(state,options={}){
   const recentMemory=state.recentBattleMemory,memoryEntries=recentMemory?.entries??[],memoryCost=homeMemoryCost(state,recentMemory);
   const memoryNames=memoryEntries.slice(0,2).map(entry=>entry.nameOverride??SPECIES[entry.speciesId]?.name??"魔物").join("＋");
   const memorySub=memoryEntries.length?`${memoryNames}${memoryEntries.length>2?`ほか${memoryEntries.length-2}体`:""}・${memoryCost.toLocaleString()}晶石`:"直近の敵編成を丸ごと記録";
-  const cycleFloor=campaignReincarnationFloorLimit(state),timelineFloor=heroInvasion.rewind?.active?heroInvasion.rewind.currentFloor:reincarnation.active?cycleFloor:Math.max(state.player?.currentFloor??1,state.player?.maxFloor??1),day=campaignDayForFloor(timelineFloor),baseInvasion=campaignHeroAdvance(reincarnation.active?timelineFloor:state),invasion=heroInvasion.rewind?.active?{...baseInvasion,progress:Math.min(99,Math.max(80,timelineFloor-1)),location:`予言9日目・${timelineFloor}階`,status:"旧予言の再踏破中"}:baseInvasion,title=completed?"勇者一行を撃退":reincarnation.active?`輪廻${reincarnation.cycle}・${invasion.status}`:invasion.status,prophecyLabel=completed?"予言達成・勇者軍撃退":`${reincarnation.active?`輪廻 ${reincarnation.cycle}・`:""}予言 ${day}/10・勇者侵攻 ${invasion.progress}%`,meterLabel=completed?"迎撃完了・勝利の記録":finalReady&&!heroInvasion.rewind?.active?"王室・勇者軍最終決戦へ ›":invasion.location,meterTag=finalReady&&!heroInvasion.rewind?.active?"button":"span",meterAction=finalReady&&!heroInvasion.rewind?.active?' id="openCampaignFinal" type="button" aria-label="勇者軍最終決戦へ"':"";
+  const cycleFloor=campaignReincarnationFloorLimit(state),timelineFloor=heroInvasion.rewind?.active?heroInvasion.rewind.currentFloor:reincarnation.active?cycleFloor:Math.max(state.player?.currentFloor??1,state.player?.maxFloor??1),day=campaignDayForFloor(timelineFloor),remainingDays=Math.max(1,11-day),baseInvasion=campaignHeroAdvance(reincarnation.active?timelineFloor:state),invasion=heroInvasion.rewind?.active?{...baseInvasion,progress:Math.min(99,Math.max(80,timelineFloor-1)),location:`予言9日目・${timelineFloor}階`,status:"旧予言の再踏破中"}:baseInvasion,countdownTitle=day>=10?"勇者、魔王城へ到達":`魔王城まで残り${remainingDays}日`,title=completed?"勇者一行を撃退":reincarnation.active?`輪廻${reincarnation.cycle}・${countdownTitle}`:countdownTitle,prophecyLabel=completed?"予言達成・勇者軍撃退":`${reincarnation.active?`輪廻 ${reincarnation.cycle}・`:""}予言 ${day}/10・勇者侵攻 ${invasion.progress}%`,meterLabel=completed?"迎撃完了・勝利の記録":finalReady&&!heroInvasion.rewind?.active?"王室・勇者軍最終決戦へ ›":invasion.location,meterTag=finalReady&&!heroInvasion.rewind?.active?"button":"span",meterAction=finalReady&&!heroInvasion.rewind?.active?' id="openCampaignFinal" type="button" aria-label="勇者軍最終決戦へ"':"";
   const requestedServerState=String(options.serverStatus?.state??"checking"),serverState=["online","offline"].includes(requestedServerState)?requestedServerState:"checking",serverLabel=serverState==="online"?"サーバーオンライン中":serverState==="offline"?"サーバーオフライン":"サーバー確認中";
 
   return`
@@ -192,6 +193,7 @@ export function HomeScreen(state,options={}){
       <aside class="home-right-menu" aria-label="お知らせと報酬">
         ${utilityButton({id:"openIdleReturn",icon:"chest",title:"放置報酬",value:idleReward.available?`${compactHomeNumber(idleReward.gold)}G`:"探索中",ready:idleReward.available})}
         ${utilityButton({id:"openNoticeCenter",icon:"notice",title:"お知らせ",value:noticeCount?`未読 ${noticeCount}`:"確認済み",ready:noticeCount>0})}
+        ${utilityButton({id:"openStoryArchive",icon:"memory",title:"予言録",value:"物語回想"})}
       </aside>
 
       <button type="button" id="openFormation" class="home-formation-banner">

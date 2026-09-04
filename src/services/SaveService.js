@@ -1,4 +1,5 @@
-import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.2-build321";
+import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.5-build324";
+// Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323 / CampaignReincarnationSystem.js?v=3.1.4-build323
 import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=3.1.1-build311";
 import{maxMp,normalizeSkillProgress,allLearnedSkills,recommendedSkills,recommendedSkillLoadout,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.1-build311";
 import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=3.1.1-build311";
@@ -25,13 +26,14 @@ import{syncCollectionRewardInbox}from"../core/CollectionRewardSystem.js?v=3.1.1-
 import{normalizeAchievementState,syncAchievementRewardInbox}from"../core/AchievementRewardSystem.js?v=3.1.1-build311";
 import{normalizeGachaDrawHistory,normalizeGachaPityState}from"../core/GachaBalanceSystem.js?v=3.1.1-build311";
 import{CAMPAIGN_MAX_FLOOR,legacyFloorToCampaignFloor,floorBossCampaignDisplayFloor,normalizeCampaignState,campaignFloorState}from"../core/Campaign100System.js?v=3.1.1-build311";
-import{normalizeCampaignHeroInvasion,retireLegacyCampaignRewind}from"../core/CampaignHeroEncounterSystem.js?v=3.1.1-build320";
-import{normalizeCampaignReincarnationState}from"../core/CampaignReincarnationSystem.js?v=3.1.1-build320";
+import{normalizeCampaignHeroInvasion,retireLegacyCampaignRewind}from"../core/CampaignHeroEncounterSystem.js?v=3.1.5-build324";
+import{normalizeCampaignReincarnationState}from"../core/CampaignReincarnationSystem.js?v=3.1.5-build324";
 import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=3.1.2-build321";
 import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=3.1.1-build311";
 import{normalizeEquipmentIdentity}from"../data/equipment.js?v=3.1.1-build311";
 import{createContextualGuideState,normalizeContextualGuide}from"../core/ContextualGuideSystem.js?v=3.1.1-build311";
 import{normalizeEncounterHistory}from"../core/EncounterPoolSystem.js?v=3.1.1-build311";
+import{applyLionelAvatarIdentity,normalizeLionelAvatarState}from"../core/CampaignProtagonistSystem.js?v=3.1.3-build322";
 const MYTHIC_HERO_CHARACTER_IDS=new Set(["myth_enami","myth_yori","myth_rion","myth_hide"]);
 const RAID_JUVENILE_SPECIES_ID="juvenile_amalga";
 const RAID_JUVENILE_BOSS_ID="abyss-amalga";
@@ -391,7 +393,7 @@ export function recoverPendingCampaignFinalFlow(state){
 }
 function initialState(){
  const monsters=[
-  createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})
+  applyLionelAvatarIdentity(createMonster("slime",{nickname:"リオネル",colorId:"green",personalityId:"bold",obtainedMethod:"campaignProtagonist",obtainedFloor:1}),{rename:true})
  ];
 const state={schemaVersion:SAVE_SCHEMA_VERSION,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false,gameClear1000:false,ending1000Played:false,gameClear10000:false,ending10000Played:false,secondWorldEntered:false,tenGodObserved:false,individualValuesDisabled:true},worldPhase:0,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},dungeonShapeHistory:[],openedChests:{},bossRewards:{},pendingBossRewards:{},bossKills:{},dangerLevel:1,exploreRun:{id:null,floors:{}}},expeditionSnapshot:null,monsters,party:monsters.map(m=>m.id),recentEncounter:null,recentBossEncounter:null,recentBattleMemory:null,battleMemoryAttempts:{},encounterHistory:normalizeEncounterHistory({}),equipment:[],reserveEquipment:[],bossEquipmentVault:[],equipmentCrafting:{rerolls:0,goldSpent:0,maxLocksUsed:0},inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,highManaPotions:0,partyManaPotions:0,fullManaPotions:0,partyFullManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,experienceItems:0,experienceItemsMedium:0,experienceItemsLarge:0,experienceItemsUltra:0,captureCrystals:5,abyssKeys:0},onlineParty:{claimedRewards:[],totalGold:0,totalCaptureCrystals:0,expeditionsCompleted:0,battlesWon:0,captures:0,raidWins:0,raidMaterials:0,raidExchange:{},raidWorld:{},tradeEscrow:{},completedTradeIds:[],tradeHistory:[],processedVitalMutationIds:[],processedBattleEventIds:[],processedExpeditionResultIds:[],activeExpeditionRunId:null,activeManualExploreRunId:null,activeExpeditionOwnerId:null,progressIsolation:{version:1,activeGuestSession:null,interruptedRecovery:{},dismissedLegacyCandidates:[],lastLegacyRepair:null},hostWorld:{ownerId:null,openedChestIds:{},floorSeeds:{},defeatedBossFloors:[],claimedBossRewardFloors:[]}},shop:{captureDaily:{key:null,count:0}},magicCircles:{unlocked:{},instances:[],owned:{},goldSpent:0,version:3},settings:{minimapVisible:false,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,audioEnabled:true,musicVolume:.28,sfxVolume:.45,mapTogglePosition:null,minimapPanelPosition:null,autoExploreButtonPosition:null,explorePartyHudCollapsed:false,exploreAutoMode:"off",exploreAutoMenuOpen:false,gauntletPartyCollapsed:false,tutorialSeen:{},tutorialDefeatsSeen:0,contextualGuide:createContextualGuideState(monsters.length),gmFloorUnlockMax:0},gameMaster:{claimedAt:null,floorUnlockMax:0},gacha:{firstTenUsed:false,tutorialFreeSummons:0,lastDailyKey:null,guerrilla:{salt:null,lastCycle:null},drawHistory:{},pity:normalizeGachaPityState({})},notices:{readIds:[],dailyGift:{dayKey:null,claimedDayKey:null,claimedAt:null},rewardInbox:[]},collectionRewards:{queuedMilestones:[],lastOwnedCount:1,total:0},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{version:1,unlockedIds:[],queuedIds:[],unlockedAt:{}},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0,combatPower:{highest:0,previous:0,updatedAt:null,history:[]}},serialCodes:{redeemed:{}},secretRooms:{run:null,activeRoom:null},abyssSkillTree:createAbyssSkillTreeState(),secondWorld:{randomEvents:{resolvedFloors:[],counts:{}},elites:{encountered:0,defeated:0,byAffix:{},bySpecies:{}}},floorBossChallenges:{discovered:{},encounters:{},fragments:{},victories:{},contracts:{},processedResults:{}},endgame:{processedSpecialResults:{},teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0,highestRewardedStage:0},trials:{battle:1,loop:1,cleared:[],run:null,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastTriggeredFloor:0,records:{},fragments:{},craftCounts:{},craftedGear:[],processedFragmentResults:{},manualChallenges:{dailyKey:null,dailyAttempts:0,unlocks:{}},rescue:{post1000Encounters:0,consecutiveLosses:0,lastResult:null}}}};
  state.migrationNotices={legacyCampaignReset:{version:1,pending:false}};
@@ -404,6 +406,7 @@ const state={schemaVersion:SAVE_SCHEMA_VERSION,appVersion:APP_VERSION,flags:{aby
  normalizeSerialCodeState(state);
  normalizeMagicCircleState(state);
  normalizeCampaignState(state);
+ normalizeLionelAvatarState(state);
  state.campaign100.heroEncounters310=retireLegacyCampaignRewind(normalizeCampaignHeroInvasion(state)).state;normalizeCampaignReincarnationState(state);
  return state;
 }
@@ -481,7 +484,8 @@ export class SaveService{
   s.monsters=(Array.isArray(s.monsters)?s.monsters:[]).filter(monster=>monster&&typeof monster==="object"&&SPECIES[monster.speciesId]);
   const monsterIds=new Set();
   s.monsters=s.monsters.filter(monster=>{if(!monster.id||monsterIds.has(monster.id))return false;monsterIds.add(monster.id);return true});
-  if(!s.monsters.length)s.monsters=[createMonster("slime",{nickname:"ぷるん",colorId:"green",personalityId:"bold"})];
+  if(!s.monsters.length)s.monsters=[createMonster("slime",{nickname:"リオネル",colorId:"green",personalityId:"bold",obtainedMethod:"campaignProtagonist",obtainedFloor:1})];
+  normalizeLionelAvatarState(s,{createAvatar:()=>createMonster("slime",{nickname:"リオネル",colorId:"green",personalityId:"bold",obtainedMethod:"campaignProtagonist",obtainedFloor:1})});
   s.party=Array.isArray(s.party)?s.party:[];
   s.equipment=Array.isArray(s.equipment)?s.equipment:[];
   s.reserveEquipment=Array.isArray(s.reserveEquipment)?s.reserveEquipment:[];
@@ -784,7 +788,7 @@ export class SaveService{
   syncCollectionRewardInbox(s);
   normalizeAchievementState(s);
   syncAchievementRewardInbox(s);
-  normalizeCampaignState(s);s.campaign100.heroEncounters310=retireLegacyCampaignRewind(normalizeCampaignHeroInvasion(s)).state;normalizeCampaignReincarnationState(s);
+  normalizeCampaignState(s);normalizeLionelAvatarState(s);s.campaign100.heroEncounters310=retireLegacyCampaignRewind(normalizeCampaignHeroInvasion(s)).state;normalizeCampaignReincarnationState(s);
   if(from<73){s.expeditionSnapshot=null;if(s.activeBattle&&!s.activeBattle.specialBattle)s.activeBattle.explorationSnapshot=null}
   s.schemaVersion=SAVE_SCHEMA_VERSION;
   s.appVersion=APP_VERSION;
@@ -796,6 +800,7 @@ export class SaveService{
   // back to a fresh in-memory state. An explicit full reset is the only path
   // that releases this protection.
   if(this.loadFailed){this.lastSaveError={name:"RecoveryProtectedError",message:"Unreadable save is protected from overwrite",quota:false,bytes:0,at:Date.now()};return false}
+  normalizeLionelAvatarState(this.state);
   this.state.appVersion=APP_VERSION;
   this.state.flags??={};
   this.state.flags.abyssKeyExchangePreviewUnlocked=(this.state.inventory?.abyssKeys??0)>=250;

@@ -1,8 +1,16 @@
 import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.1-build311";
 
-export const CAMPAIGN_STORY_VERSION=1;
+export const CAMPAIGN_STORY_VERSION=2;
+export const CAMPAIGN_STORY_OPENING_VERSION=2;
 export const CAMPAIGN_STORY_OPENING_ID="opening-prophecy";
 export const CAMPAIGN_STORY_MILESTONES=Object.freeze(Array.from({length:10},(_,index)=>(index+1)*10));
+
+export const CAMPAIGN_WORLD_LORE=Object.freeze({
+ oldWorld:Object.freeze({state:"滅亡",lastSurvivorIds:Object.freeze(["sairan","lionel"])}),
+ newWorld:Object.freeze({rule:"旧世界の強大な存在と覇気を異物として感知する"}),
+ sairan:Object.freeze({role:"旧世界を留める楔",reason:"玉座を離れると魔王城に縫い留めた旧世界の残滓が崩れ、覇気も勇者へ即座に悟られる"}),
+ lionel:Object.freeze({role:"新世界の魔物を束ねる現地指揮官",avatar:"slime",reason:"力・姿・記憶の一部を封じ、新世界が受け入れる最弱の器へ潜伏する"})
+});
 
 const HERO_ID_ALIASES=Object.freeze({
  enami:"myth_enami","えなみ":"myth_enami",myth_enami:"myth_enami",
@@ -13,8 +21,8 @@ const HERO_ID_ALIASES=Object.freeze({
 
 const portrait=(speciesId,folder,asset=null)=>Object.freeze({type:"monster-sprite",speciesId,asset:asset??`./assets/monsters/${folder}/idle1.png?v=3.1.0-build310`});
 export const CAMPAIGN_STORY_CHARACTERS=Object.freeze({
- sairan:Object.freeze({id:"sairan",name:"魔王サイラーン",title:"万魔の王",storyOnly:true,recurringStoryCharacter:true,battleEligible:false,portrait:portrait("campaign_sairan","campaign_sairan","./assets/story/campaign-sairan.png?v=3.1.2-build321")}),
- lionel:Object.freeze({id:"lionel",name:"預言者リオネル",title:"魔界随一の預言者",storyOnly:true,recurringStoryCharacter:true,battleEligible:false,portrait:portrait("campaign_lionel","campaign_lionel","./assets/story/campaign-lionel.png?v=3.1.2-build321")}),
+ sairan:Object.freeze({id:"sairan",name:"魔王サイラーン",title:"万魔の王",origin:"old-world",lastOldWorldSurvivor:true,storyOnly:true,recurringStoryCharacter:true,battleEligible:false,portrait:portrait("campaign_sairan","campaign_sairan","./assets/story/campaign-sairan.png?v=3.1.2-build321")}),
+ lionel:Object.freeze({id:"lionel",name:"預言者リオネル",title:"魔界随一の預言者",origin:"old-world",lastOldWorldSurvivor:true,storyOnly:true,recurringStoryCharacter:true,battleEligible:false,avatarPlayable:true,avatarSpeciesId:"slime",portrait:portrait("campaign_lionel","campaign_lionel","./assets/story/campaign-lionel.png?v=3.1.2-build321")}),
  myth_enami:Object.freeze({id:"myth_enami",name:"えなみ",title:"共感と論理の勇者",portrait:portrait("myth_enami","myth_enami")}),
  myth_yori:Object.freeze({id:"myth_yori",name:"より",title:"微笑む蒼拳",portrait:portrait("myth_yori","myth_yori")}),
  myth_hide:Object.freeze({id:"myth_hide",name:"ひで",title:"緻密なる魔導士",portrait:portrait("myth_hide","myth_hide")}),
@@ -84,11 +92,11 @@ export function campaignHeroFinalVoiceLines(moment,heroIds=HERO_PARTY_IDS){
 
 export const CAMPAIGN_STORY_POLICY=Object.freeze({
  sairan:Object.freeze({storyOnly:true,recurring:true,battleEligible:false,finalBattleParticipant:false,summonEligible:false,codexEligible:false}),
- lionel:Object.freeze({storyOnly:true,recurring:true,battleEligible:false,finalBattleParticipant:false,summonEligible:false,codexEligible:false}),
+ lionel:Object.freeze({storyOnly:true,recurring:true,battleEligible:false,avatarPlayable:true,avatarSpeciesId:"slime",finalBattleParticipant:false,summonEligible:false,codexEligible:false}),
  finalBattle:Object.freeze({partySize:4,heroIds:HERO_PARTY_IDS,allowSairan:false,allowLionel:false})
 });
 
-const line=(speakerId,text,tone="normal")=>Object.freeze({speakerId,text,tone});
+const line=(speakerId,text,tone="normal",directives={})=>Object.freeze({speakerId,text,tone,...directives});
 const scene=(floor,location,summary,backgroundAsset,dialogue)=>Object.freeze({
  id:`road-${String(floor).padStart(3,"0")}`,kind:"milestone",floor,day:floor/10,location,summary,
  routeProgress:floor,backgroundAsset,dialogue:Object.freeze(dialogue)
@@ -97,14 +105,38 @@ const scene=(floor,location,summary,backgroundAsset,dialogue)=>Object.freeze({
 export const CAMPAIGN_STORY_OPENING=Object.freeze({
  id:CAMPAIGN_STORY_OPENING_ID,kind:"opening",floor:0,day:0,location:"魔王城・玉座の間",routeProgress:0,
  backgroundAsset:"./assets/ui/battle/boss-throne.png",
- title:"予言の十日間",summary:"西の大陸から来る四人を迎え撃つため、百階の迷宮を制する十日間が始まる。",
+ title:"滅びた世界、最弱の器",summary:"旧世界最後の生存者リオネルは、玉座を離れられないサイラーンに代わり、スライムの姿で新世界の迷宮へ潜入する。",
  dialogue:Object.freeze([
-  line(null,"魔王城。沈黙する玉座の前へ、預言者リオネルがひとつの未来を携えて現れた。","narration"),
-  line("lionel","サイラーン様。十日後、西の大陸から四人の勇者がこの城へ到達します。"),
+  line(null,"かつて栄えた旧世界は、名も残らぬ災厄によって滅びた。","narration"),
+  line(null,"最後まで残ったのは、魔王サイラーンと預言者リオネル。ただ二人だけだった。","narration"),
+  line("lionel","サイラーン様。崩壊の向こうに、新しい世界が生まれています。魔物も、人も、我らの名を知りません。","serious"),
+  line("sairan","好都合だ。ならば新世界の魔物を統べ、再び軍を起こす。","command"),
+  line("lionel","ですが、あの世界の法則は旧世界の強者を異物として感知します。私たちが近づけば、遠方からでも覇気を悟られます。","serious"),
+  line("sairan","余の覇気程度で騒ぐとは、繊細な世界だ。","dry"),
+  line(null,"サイラーンが玉座から左足をわずかに動かす。魔王城全体が、低く軋んだ。","narration"),
+  line("lionel","動かないでください。今、城の西塔が三センチほど沈みました。","urgent"),
+  line("sairan","立ってはいない。足を三センチ動かしただけだ。","dry"),
+  line("lionel","その三センチが問題です。玉座は旧世界の残滓を新世界へ縫い留める楔。あなたが離れれば、この城は崩れます。","serious"),
+  line("sairan","最強になった結果、椅子から動けぬとは聞いていないぞ。","dry"),
+  line("lionel","私も、そのような注意書きを未来で見落としておりました。","quiet"),
+  line("sairan","では余が一日だけ出る。残りの日は座る。","command"),
+  line("lionel","日割りの問題ではございません。出た瞬間に終わります。","dry"),
+  line(null,"リオネルの瞳に、まだ起きていない十日後の光景が映る。","narration"),
+  line("lionel","そして十日後、西の大陸から四人の勇者が、この魔王城へ到達します。","serious"),
   line("sairan","名を。力の輪郭まで、余さず告げよ。","command"),
-  line("lionel","えなみ、より、ひで、りおん。四人が揃った時、城門は破られると視えました。"),
-  line("sairan","ならば百階の迷宮を軍へ変える。余は玉座から全軍を束ねる。十日で選び抜いた四体を、城門へ立たせよ。","command"),
-  line(null,"予言を覆す軍を作るため、魔王軍は迷宮の第一階へ足を踏み入れた。","narration")
+  line("lionel","えなみ、より、ひで、りおん。単独なら未熟。しかし四人が揃った時、玉座の楔を断つ力になります。","serious"),
+  line("sairan","ならば百階の迷宮を軍へ変える。新世界の魔物を集め、選び、鍛えよ。","command"),
+  line("lionel","承知しました。私が迷宮へ降り、彼らを束ねます。","resolute"),
+  line("lionel","ただし、この姿と魔力のままでは勇者だけでなく、新世界そのものに発見されます。","serious"),
+  line("sairan","ならば隠せ。預言者なら、自分の姿くらい欺いてみせよ。","command"),
+  line("lionel","力、姿、そして記憶の一部を封じます。世界が異物と見なさぬ、最も弱い器へ。","resolute"),
+  line("sairan","最も弱い器とは。","normal"),
+  line("lionel","スライムです。小さく、柔らかく、誰からも警戒されません。","matter-of-fact"),
+  line("sairan","……軍を率いる者が、最初に踏まれぬことだけを祈ろう。","dry"),
+  line(null,"リオネルは魔法陣の中心へ立ち、自らの魔力を幾重もの封印へ沈めていく。","narration",{stageEffect:"lionel-seal"}),
+  line(null,"長衣も杖も光へほどけ、床には一体の青いスライムだけが残った。","narration",{stageEffect:"lionel-slime"}),
+  line("lionel","声まで軽い……。ですが、この姿なら誰にも悟られません。","quiet",{stageEffect:"lionel-slime"}),
+  line("sairan","姿が変わっても名はリオネルだ。第一階から軍を率い、十日後に余へ勝利を報告せよ。","command",{stageEffect:"lionel-slime"})
  ])
 });
 
@@ -268,10 +300,10 @@ function continuityFromSource(value){
 }
 function mergeContinuitySources(...sources){const result=Object.fromEntries(HERO_PARTY_IDS.map(id=>[id,emptyHeroContinuity(id)]));for(const source of sources){const normalized=continuityFromSource(source);for(const heroId of HERO_PARTY_IDS)result[heroId]=mergeHeroContinuity(result[heroId],normalized[heroId],heroId)}return result}
 
-function createStoryState(){return{version:CAMPAIGN_STORY_VERSION,openingSeen:false,seenSceneIds:[],heroContinuity:Object.fromEntries(HERO_PARTY_IDS.map(id=>[id,emptyHeroContinuity(id)])),legacyMigrationApplied:false}}
+function createStoryState(){return{version:CAMPAIGN_STORY_VERSION,openingVersion:0,openingSeen:false,seenSceneIds:[],heroContinuity:Object.fromEntries(HERO_PARTY_IDS.map(id=>[id,emptyHeroContinuity(id)])),legacyMigrationApplied:false}}
 export function normalizeCampaignStoryState(state){
- if(!plainRecord(state))return createStoryState();state.campaign100=plainRecord(state.campaign100)?state.campaign100:{};const campaign=state.campaign100,source=plainRecord(campaign.story309)?campaign.story309:{},story=createStoryState();story.openingSeen=source.openingSeen===true||source.introductionSeen===true;
- story.seenSceneIds=[...new Set((Array.isArray(source.seenSceneIds)?source.seenSceneIds:Array.isArray(source.receipts)?source.receipts:[]).map(value=>typeof value==="string"?value:value?.sceneId).map(validSceneId).filter(Boolean))];if(story.seenSceneIds.includes(CAMPAIGN_STORY_OPENING_ID))story.openingSeen=true;if(story.openingSeen&&!story.seenSceneIds.includes(CAMPAIGN_STORY_OPENING_ID))story.seenSceneIds.push(CAMPAIGN_STORY_OPENING_ID);
+ if(!plainRecord(state))return createStoryState();state.campaign100=plainRecord(state.campaign100)?state.campaign100:{};const campaign=state.campaign100,source=plainRecord(campaign.story309)?campaign.story309:{},story=createStoryState();
+ story.seenSceneIds=[...new Set((Array.isArray(source.seenSceneIds)?source.seenSceneIds:Array.isArray(source.receipts)?source.receipts:[]).map(value=>typeof value==="string"?value:value?.sceneId).map(validSceneId).filter(Boolean))];const legacyOpeningSeen=source.openingSeen===true||source.introductionSeen===true||story.seenSceneIds.includes(CAMPAIGN_STORY_OPENING_ID);story.openingVersion=boundedInteger(source.openingVersion??(legacyOpeningSeen?1:0),0,0,CAMPAIGN_STORY_OPENING_VERSION);story.openingSeen=story.openingVersion>=CAMPAIGN_STORY_OPENING_VERSION;if(legacyOpeningSeen&&!story.seenSceneIds.includes(CAMPAIGN_STORY_OPENING_ID))story.seenSceneIds.push(CAMPAIGN_STORY_OPENING_ID);
  if(source.legacyMigrationApplied!==true){const legacyDays=[...(Array.isArray(campaign.invasionDaysSeen)?campaign.invasionDaysSeen:[]),...(Array.isArray(campaign.storyDaysSeen)?campaign.storyDaysSeen:[])].map(Number);for(const day of legacyDays)if(Number.isInteger(day)&&day>=2&&day<=10)story.seenSceneIds.push(sceneIdForFloor((day-1)*10));story.legacyMigrationApplied=true}
  story.seenSceneIds=[...new Set(story.seenSceneIds.map(validSceneId).filter(Boolean))].sort((left,right)=>(STORY_BY_ID.get(left)?.floor??-1)-(STORY_BY_ID.get(right)?.floor??-1));
  story.heroContinuity=mergeContinuitySources(source.heroContinuity,campaign.heroContinuity,campaign.heroEncounterState,campaign.heroEncounterProgress,campaign.heroEncounters,campaign.heroAmbushes,campaign.heroWounds,state.heroEncounterState,state.heroEncounterProgress,state.heroEncounters,campaign.heroEncounters310?.heroes);story.seenAt={};if(plainRecord(source.seenAt))for(const[rawId,rawTimestamp]of Object.entries(source.seenAt)){const id=validSceneId(rawId),timestamp=safeText(rawTimestamp,40);if(id&&timestamp)story.seenAt[id]=timestamp}story.version=CAMPAIGN_STORY_VERSION;campaign.story309=story;return story
@@ -286,7 +318,7 @@ function inferredClearedFloor(state,explicitFloor){
 }
 
 export function pendingCampaignStoryScenes(state,{clearedFloor,includeOpening=true}={}){
- const story=normalizeCampaignStoryState(state),seen=new Set(story.seenSceneIds),eligibleFloor=inferredClearedFloor(state,clearedFloor),pending=[];if(includeOpening&&!story.openingSeen&&!seen.has(CAMPAIGN_STORY_OPENING_ID))pending.push(CAMPAIGN_STORY_OPENING);for(const entry of CAMPAIGN_STORY_SCENES)if(entry.floor<=eligibleFloor&&!seen.has(entry.id))pending.push(entry);return pending
+ const story=normalizeCampaignStoryState(state),seen=new Set(story.seenSceneIds),eligibleFloor=inferredClearedFloor(state,clearedFloor),pending=[];if(includeOpening&&story.openingVersion<CAMPAIGN_STORY_OPENING_VERSION)pending.push(CAMPAIGN_STORY_OPENING);for(const entry of CAMPAIGN_STORY_SCENES)if(entry.floor<=eligibleFloor&&!seen.has(entry.id))pending.push(entry);return pending
 }
 export function nextCampaignStoryScene(state,options={}){const next=pendingCampaignStoryScenes(state,options)[0];return next?resolveCampaignStoryScene(next.id,state):null}
 
@@ -333,7 +365,7 @@ export function resolveCampaignStoryScene(sceneId,state){
 }
 
 export function acknowledgeCampaignStoryScene(state,sceneId,{seenAt=null}={}){
- const id=validSceneId(sceneId);if(!id)return{recorded:false,reason:"unknown-scene"};const story=normalizeCampaignStoryState(state),alreadySeen=id===CAMPAIGN_STORY_OPENING_ID?story.openingSeen||story.seenSceneIds.includes(id):story.seenSceneIds.includes(id);if(!alreadySeen)story.seenSceneIds.push(id);if(id===CAMPAIGN_STORY_OPENING_ID)story.openingSeen=true;story.seenSceneIds=[...new Set(story.seenSceneIds)].sort((left,right)=>(STORY_BY_ID.get(left)?.floor??-1)-(STORY_BY_ID.get(right)?.floor??-1));const timestamp=safeText(seenAt,40);if(timestamp){story.seenAt=plainRecord(story.seenAt)?story.seenAt:{};story.seenAt[id]=timestamp}return{recorded:!alreadySeen,sceneId:id,seenSceneIds:[...story.seenSceneIds]}
+ const id=validSceneId(sceneId);if(!id)return{recorded:false,reason:"unknown-scene"};const story=normalizeCampaignStoryState(state),alreadySeen=id===CAMPAIGN_STORY_OPENING_ID?story.openingVersion>=CAMPAIGN_STORY_OPENING_VERSION:story.seenSceneIds.includes(id);if(!story.seenSceneIds.includes(id))story.seenSceneIds.push(id);if(id===CAMPAIGN_STORY_OPENING_ID){story.openingVersion=CAMPAIGN_STORY_OPENING_VERSION;story.openingSeen=true}story.seenSceneIds=[...new Set(story.seenSceneIds)].sort((left,right)=>(STORY_BY_ID.get(left)?.floor??-1)-(STORY_BY_ID.get(right)?.floor??-1));const timestamp=safeText(seenAt,40);if(timestamp){story.seenAt=plainRecord(story.seenAt)?story.seenAt:{};story.seenAt[id]=timestamp}return{recorded:!alreadySeen,sceneId:id,seenSceneIds:[...story.seenSceneIds]}
 }
 
 export function campaignStorySceneByFloor(floor,state){const value=boundedInteger(floor,0,0,CAMPAIGN_MAX_FLOOR),id=value===0?CAMPAIGN_STORY_OPENING_ID:CAMPAIGN_STORY_MILESTONES.includes(value)?sceneIdForFloor(value):null;return id?resolveCampaignStoryScene(id,state):null}

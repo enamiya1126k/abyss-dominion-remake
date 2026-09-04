@@ -1,6 +1,6 @@
 import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.1-build319";
 
-export const CAMPAIGN_HERO_ENCOUNTER_VERSION=2;
+export const CAMPAIGN_HERO_ENCOUNTER_VERSION=4;// Regression history: CAMPAIGN_HERO_ENCOUNTER_VERSION=3
 export const CAMPAIGN_HERO_FINAL_LEVEL=1000;
 export const CAMPAIGN_HERO_FINAL_ARENA_ID="prophecy-final-gate";
 export const CAMPAIGN_HERO_REWIND_DAY=9;
@@ -136,7 +136,7 @@ function emptyHeroRecord(heroId){return{
  lastOutcome:null,lastEncounterId:null,lastResultId:null,lastSeenFloor:null
 }}
 function emptyEventRecord(definition){return{
- ...definition,status:"scheduled",outcome:null,resultId:null,activatedFloor:null,resolvedFloor:null
+ ...definition,status:"scheduled",outcome:null,resultId:null,activatedFloor:null,resolvedFloor:null,preludeSeen:false,heroHpRate:null,hurtPercent:null
 }}
 function emptyFinalArena(){return{
  id:CAMPAIGN_HERO_FINAL_ARENA_ID,unlocked:false,entered:false,audienceCompleted:false,battleStarted:false,completed:false,attempts:0,lastEnding:null,lastEndingVariant:null
@@ -147,10 +147,11 @@ function emptyRewind(){return{
  preserveHeroWounds:true,preserveEncounterReceipts:true,suppressFirstClearRewards:true
 }}
 function emptyState(){return{
- version:CAMPAIGN_HERO_ENCOUNTER_VERSION,
+ version:CAMPAIGN_HERO_ENCOUNTER_VERSION,storyCycle:0,
  heroes:Object.fromEntries(HERO_PARTY_IDS.map(heroId=>[heroId,emptyHeroRecord(heroId)])),
  events:Object.fromEntries(CAMPAIGN_HERO_ENCOUNTER_SCHEDULE.map(entry=>[entry.id,emptyEventRecord(entry)])),
  activeEncounterId:null,processedResultIds:[],processedWoundIds:[],processedRewindIds:[],
+ branchStories323:{version:2,storyCycle:0,receipts:[],pending:[],history:[]},
  finalArena:emptyFinalArena(),rewind:emptyRewind(),legacyMigrationApplied:false,legacyRewindRetired:false
 }}
 
@@ -235,8 +236,9 @@ export function createCampaignHeroEncounterState(options={}){
  return normalizeCampaignHeroEncounterState(null,options);
 }
 
-export function normalizeCampaignHeroEncounterState(value,{migrationHighestFloor=null,heroContinuity=null}={}){
+export function normalizeCampaignHeroEncounterState(value,{migrationHighestFloor=null,heroContinuity=null,storyCycle=null}={}){
  const source=sourceLedger(value),hasAuthoredLedger=isAuthoredLedger(source),state=emptyState(),rawEvents=eventSourceById(source.events),rawHeroes=continuityByHero(source.heroes),storyHeroes=continuityByHero(value?.campaign100?.story309?.heroContinuity),legacyHeroes=continuityByHero(heroContinuity);
+ state.storyCycle=boundedInteger(storyCycle??source.storyCycle??value?.campaign100?.reincarnation319?.cycle,0,0,999);state.branchStories323=plainRecord(source.branchStories323)?source.branchStories323:{version:2,storyCycle:state.storyCycle,receipts:[],pending:[],history:[]};
  for(const heroId of HERO_PARTY_IDS){
   state.heroes[heroId]=mergeHeroRecord(state.heroes[heroId],rawHeroes[heroId],heroId);
   state.heroes[heroId]=mergeHeroRecord(state.heroes[heroId],storyHeroes[heroId],heroId);
@@ -246,11 +248,13 @@ export function normalizeCampaignHeroEncounterState(value,{migrationHighestFloor
  for(const definition of CAMPAIGN_HERO_ENCOUNTER_SCHEDULE){
   const sourceEvent=plainRecord(rawEvents[definition.id])?rawEvents[definition.id]:{},event=emptyEventRecord(definition),status=cleanId(sourceEvent.status,32);
   event.status=VALID_EVENT_STATUSES.has(status)?status:"scheduled";
+  event.preludeSeen=sourceEvent.preludeSeen===true||["active","resolved","legacy-missed","skipped-defeated"].includes(event.status);
   event.outcome=cleanId(sourceEvent.outcome,32)||null;
   event.resultId=cleanId(sourceEvent.resultId,120)||null;
   const activated=sourceEvent.activatedFloor==null||sourceEvent.activatedFloor===""?null:finiteNumber(sourceEvent.activatedFloor),resolved=sourceEvent.resolvedFloor==null||sourceEvent.resolvedFloor===""?null:finiteNumber(sourceEvent.resolvedFloor);
   event.activatedFloor=activated!=null?boundedInteger(activated,definition.floor,1,CAMPAIGN_MAX_FLOOR):null;
   event.resolvedFloor=resolved!=null?boundedInteger(resolved,definition.floor,1,CAMPAIGN_MAX_FLOOR):null;
+  const resolvedHpRate=finiteNumber(sourceEvent.heroHpRate),hurtPercent=finiteNumber(sourceEvent.hurtPercent);event.heroHpRate=resolvedHpRate==null?null:clampRate(resolvedHpRate);event.hurtPercent=hurtPercent==null?null:boundedInteger(hurtPercent,0,0,100);
   if(!hasAuthoredLedger&&migrationFloor!=null&&definition.windowEnd<migrationFloor)event.status="legacy-missed";
   if(state.heroes[definition.heroId].defeated&&!['resolved','legacy-missed'].includes(event.status))event.status="skipped-defeated";
   state.events[definition.id]=event;
@@ -297,6 +301,7 @@ export function normalizeCampaignHeroInvasion(value,options={}){
  const inferredFloor=finiteNumber(value?.player?.maxFloor??value?.player?.currentFloor),source=sourceLedger(value),hasLedger=isAuthoredLedger(source),hasMigrationOption=Object.prototype.hasOwnProperty.call(options,"migrationHighestFloor");
  return normalizeCampaignHeroEncounterState(value,{
   ...options,
+  storyCycle:options.storyCycle??value?.campaign100?.reincarnation319?.cycle,
   migrationHighestFloor:hasMigrationOption?options.migrationHighestFloor:(!hasLedger&&inferredFloor!=null?inferredFloor:null),
   heroContinuity:options.heroContinuity??value?.campaign100?.story309?.heroContinuity
  });
@@ -321,7 +326,7 @@ export function campaignHeroEncounterCandidate(value,{floor,encounterRoll=null,o
  if(clampRate(partyHpRate,0)<CAMPAIGN_HERO_ENCOUNTER_RULES.minimumPartyHpRate)return null;
  for(const definition of CAMPAIGN_HERO_ENCOUNTER_SCHEDULE){
   const event=state.events[definition.id],hero=state.heroes[definition.heroId];
-  if(!hero.defeated&&["scheduled","armed"].includes(event.status)&&currentFloor>=definition.floor&&currentFloor<=definition.windowEnd){
+  if(!hero.defeated&&event.preludeSeen===true&&["scheduled","armed"].includes(event.status)&&currentFloor>=definition.floor&&currentFloor<=definition.windowEnd){
    const span=Math.max(1,definition.windowEnd-definition.floor),progress=Math.max(0,Math.min(1,(currentFloor-definition.floor)/span)),chance=CAMPAIGN_HERO_ENCOUNTER_RULES.randomChance.opening+(CAMPAIGN_HERO_ENCOUNTER_RULES.randomChance.closing-CAMPAIGN_HERO_ENCOUNTER_RULES.randomChance.opening)*progress,rawRoll=finiteNumber(encounterRoll),roll=rawRoll==null?campaignHeroEncounterRoll(definition.id,currentFloor):Math.max(0,Math.min(.999999,rawRoll));
    if(currentFloor<definition.windowEnd&&roll>chance)return null;
    return{...definition,triggerFloor:currentFloor,status:event.status,encounterChance:currentFloor===definition.windowEnd?1:chance,encounterRoll:roll,fieldProfile:CAMPAIGN_HERO_FIELD_PROFILES[definition.heroId],combatProfile:CAMPAIGN_HERO_COMBAT_PROFILES[definition.heroId]};
@@ -342,6 +347,7 @@ export function activateCampaignHeroEncounter(value,{encounterId,floor}={}){
  if(hero.defeated||event.status==="skipped-defeated")return{state,activated:false,reason:"hero-defeated"};
  if(state.activeEncounterId&&state.activeEncounterId!==definition.id)return{state,activated:false,reason:"another-encounter-active"};
  if(event.status==="active")return{state,activated:false,duplicate:true,encounter:{...event}};
+ if(event.preludeSeen!==true)return{state,activated:false,reason:"prelude-required"};
  if(!["scheduled","armed"].includes(event.status))return{state,activated:false,reason:"encounter-settled"};
  if(currentFloor<definition.floor||currentFloor>definition.windowEnd)return{state,activated:false,reason:"outside-window"};
  state.events[definition.id]={...event,status:"active",activatedFloor:currentFloor};
@@ -381,7 +387,7 @@ export function settleCampaignHeroEncounter(value,{encounterId,resultId,heroId,s
   defeated:heroDefeated,encounters:prior.encounters+1,lastOutcome:normalizedOutcome,
   lastEncounterId:definition.id,lastResultId:receipt,lastSeenFloor:currentFloor
  };
- state.events[definition.id]={...event,status:"resolved",outcome:normalizedOutcome,resultId:receipt,resolvedFloor:currentFloor};
+ state.events[definition.id]={...event,status:"resolved",outcome:normalizedOutcome,resultId:receipt,resolvedFloor:currentFloor,heroHpRate:heroDefeated?0:nextRate,hurtPercent:Math.round((1-(heroDefeated?0:nextRate))*100)};
  if(heroDefeated)for(const future of CAMPAIGN_HERO_ENCOUNTER_SCHEDULE){
   const futureEvent=state.events[future.id];
   if(future.heroId===definition.heroId&&future.id!==definition.id&&!['resolved','legacy-missed'].includes(futureEvent.status))state.events[future.id]={...futureEvent,status:"skipped-defeated"};

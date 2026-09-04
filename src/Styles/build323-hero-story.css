@@ -1,0 +1,356 @@
+/* Build323: authored hero encounter stories and a readable field pursuit state. */
+.explore-stage.is-hero-hunt {
+  isolation: isolate;
+}
+
+.explore-stage.is-hero-hunt::after {
+  position: absolute;
+  z-index: 17;
+  inset: 0;
+  border: 2px solid rgba(238, 82, 108, .52);
+  box-shadow: inset 0 0 28px rgba(117, 11, 41, .24), inset 0 0 72px rgba(37, 1, 15, .18);
+  content: "";
+  pointer-events: none;
+  animation: build323-hunt-edge 1.35s ease-in-out infinite alternate;
+}
+
+.explore-stage[data-hero-hunt-state="observing"]::after {
+  border-color: rgba(171, 120, 255, .38);
+  box-shadow: inset 0 0 32px rgba(85, 36, 139, .18);
+}
+
+.explore-stage[data-hero-hunt-state="contact"]::after {
+  border-color: rgba(255, 221, 126, .95);
+  box-shadow: inset 0 0 42px rgba(217, 48, 57, .44), inset 0 0 100px rgba(88, 0, 17, .35);
+}
+
+.campaign-hero-chase-hud {
+  position: absolute;
+  z-index: 28;
+  top: clamp(68px, 9.5dvh, 104px);
+  left: 50%;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) minmax(86px, auto);
+  gap: 8px;
+  align-items: center;
+  width: min(calc(100% - 28px), 510px);
+  min-height: 68px;
+  padding: 7px 9px;
+  border: 1px solid rgba(198, 146, 255, .6);
+  border-radius: 7px;
+  background: linear-gradient(105deg, rgba(10, 6, 17, .97), rgba(35, 12, 31, .95));
+  box-shadow: 0 9px 24px rgba(0, 0, 0, .52), inset 0 0 0 1px rgba(255, 255, 255, .035);
+  color: #f7efff;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.campaign-hero-chase-hud.is-tracking {
+  border-color: rgba(255, 97, 122, .78);
+  background: linear-gradient(105deg, rgba(18, 5, 13, .98), rgba(74, 11, 29, .94));
+}
+
+.campaign-hero-chase-hud.is-contact {
+  border-color: #ffe293;
+  animation: build323-contact-flash .26s steps(2, end) infinite;
+}
+
+.campaign-hero-chase-portrait {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 52px;
+  overflow: hidden;
+  border: 1px solid rgba(232, 202, 255, .25);
+  background: radial-gradient(circle, rgba(156, 73, 196, .24), transparent 68%);
+}
+
+.campaign-hero-chase-visual {
+  width: 52px !important;
+  height: 52px !important;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.campaign-hero-chase-copy {
+  display: grid;
+  min-width: 0;
+  line-height: 1.13;
+}
+
+.campaign-hero-chase-copy small {
+  color: #ff8499;
+  font: 800 8px/1.2 ui-monospace, monospace;
+  letter-spacing: .12em;
+}
+
+.campaign-hero-chase-hud.is-observing .campaign-hero-chase-copy small {
+  color: #c9a4ff;
+}
+
+.campaign-hero-chase-copy b {
+  overflow: hidden;
+  font-size: 14px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.campaign-hero-chase-copy em {
+  overflow: hidden;
+  margin-top: 3px;
+  color: #c9bdcc;
+  font-size: 9px;
+  font-style: normal;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.campaign-hero-chase-state {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  min-width: 86px;
+  text-align: right;
+}
+
+.campaign-hero-chase-state b {
+  color: #ffe7a4;
+  font-size: 11px;
+}
+
+.campaign-hero-chase-state small {
+  color: #cbbfca;
+  font-size: 8px;
+}
+
+.campaign-hero-chase-timer,
+.campaign-hero-wound-meter {
+  display: block;
+  width: 100%;
+  height: 3px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .1);
+}
+
+.campaign-hero-chase-timer > i,
+.campaign-hero-wound-meter > i {
+  display: block;
+  height: 100%;
+}
+
+.campaign-hero-chase-timer > i {
+  width: var(--hero-chase);
+  background: linear-gradient(90deg, #9e5cff, #ff496e);
+}
+
+.campaign-hero-wound-meter > i {
+  width: var(--hero-hp);
+  background: linear-gradient(90deg, #e9bd54, #fff0a4);
+}
+
+.campaign-hero-edge-chip {
+  position: absolute;
+  z-index: 27;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid #ff7188;
+  border-radius: 50%;
+  background: rgba(30, 4, 14, .94);
+  box-shadow: 0 0 0 4px rgba(136, 16, 48, .18), 0 0 19px rgba(255, 50, 90, .42);
+  pointer-events: none;
+  animation: build323-edge-chip .72s ease-in-out infinite alternate;
+}
+
+.campaign-hero-edge-chip::after {
+  position: absolute;
+  color: #ffb2bd;
+  content: "▲";
+  font-size: 10px;
+}
+
+.campaign-hero-edge-chip.is-north { top: 160px; left: calc(50% - 23px); }
+.campaign-hero-edge-chip.is-north::after { top: -13px; }
+.campaign-hero-edge-chip.is-south { bottom: 94px; left: calc(50% - 23px); }
+.campaign-hero-edge-chip.is-south::after { bottom: -13px; transform: rotate(180deg); }
+.campaign-hero-edge-chip.is-east { top: 52%; right: 8px; }
+.campaign-hero-edge-chip.is-east::after { right: -13px; transform: rotate(90deg); }
+.campaign-hero-edge-chip.is-west { top: 52%; left: 8px; }
+.campaign-hero-edge-chip.is-west::after { left: -13px; transform: rotate(-90deg); }
+
+.campaign-hero-edge-visual {
+  width: 40px !important;
+  height: 40px !important;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.campaign-hero-field-reveal {
+  position: absolute;
+  z-index: 60;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(110px, 38%) 1fr;
+  align-items: center;
+  overflow: hidden;
+  background: linear-gradient(90deg, rgba(5, 1, 7, .95), rgba(68, 3, 22, .83) 65%, rgba(8, 2, 9, .96));
+  opacity: 0;
+  transform: scale(1.03);
+  transition: opacity .16s ease, transform .28s ease;
+  pointer-events: none;
+}
+
+.campaign-hero-field-reveal.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.campaign-hero-field-reveal-lines {
+  position: absolute;
+  inset: -30%;
+  background: repeating-linear-gradient(102deg, transparent 0 24px, rgba(255, 62, 96, .13) 25px 27px, transparent 28px 44px);
+  transform: skewX(-12deg);
+  animation: build323-reveal-lines .45s linear infinite;
+}
+
+.campaign-hero-field-reveal-portrait {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  height: 60%;
+  border-right: 1px solid rgba(255, 141, 159, .32);
+  background: radial-gradient(circle, rgba(206, 58, 112, .25), transparent 68%);
+}
+
+.campaign-hero-field-reveal-visual {
+  width: min(160px, 100%) !important;
+  height: min(220px, 100%) !important;
+  object-fit: contain;
+  image-rendering: pixelated;
+  transform: scale(1.35);
+}
+
+.campaign-hero-field-reveal-copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: center;
+  gap: 5px;
+  padding: 20px;
+  text-align: left;
+  text-shadow: 0 2px 8px #000;
+}
+
+.campaign-hero-field-reveal-copy small {
+  color: #ff7790;
+  font: 900 9px/1.2 ui-monospace, monospace;
+  letter-spacing: .18em;
+}
+
+.campaign-hero-field-reveal-copy b {
+  color: #fff2dc;
+  font-size: clamp(26px, 7vw, 40px);
+  letter-spacing: .08em;
+}
+
+.campaign-hero-field-reveal-copy strong {
+  color: #ff8ca0;
+  font-size: clamp(17px, 4.5vw, 25px);
+}
+
+.campaign-hero-field-reveal-copy em {
+  color: #dbcbd0;
+  font-size: 11px;
+  font-style: normal;
+}
+
+.campaign-story-presentation[data-story-track="hero-encounter"] {
+  --branch-accent: #bf82ff;
+}
+
+.campaign-story-presentation[data-story-track="hero-encounter"] > header {
+  border-color: color-mix(in srgb, var(--branch-accent), transparent 42%);
+}
+
+.campaign-story-presentation[data-story-track="hero-encounter"] > header > small {
+  color: var(--branch-accent);
+}
+
+.campaign-story-presentation[data-story-part="result"].variant-repelled { --branch-accent: #ff718d; }
+.campaign-story-presentation[data-story-part="result"].variant-hero-victory { --branch-accent: #79d7ff; }
+.campaign-story-presentation[data-story-part="result"].variant-escaped { --branch-accent: #cab5d7; }
+.campaign-story-presentation[data-story-part="report"] { --branch-accent: #e6b757; }
+.campaign-story-presentation[data-story-part="party"] { --branch-accent: #87aaff; }
+
+.campaign-story-presentation[data-story-part="report"] .campaign-story-stage::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: radial-gradient(circle at 72% 26%, rgba(206, 153, 66, .14), transparent 38%), linear-gradient(180deg, rgba(20, 8, 4, .16), rgba(4, 2, 8, .65));
+  content: "";
+  pointer-events: none;
+}
+
+.campaign-story-dialogue.tone-wounded {
+  border-color: rgba(255, 96, 119, .58);
+  box-shadow: inset 3px 0 #db4965;
+}
+
+.campaign-story-dialogue.tone-repelled {
+  border-color: rgba(255, 207, 99, .58);
+  box-shadow: inset 3px 0 #b88024;
+}
+
+@keyframes build323-hunt-edge {
+  from { opacity: .58; }
+  to { opacity: 1; }
+}
+
+@keyframes build323-contact-flash {
+  50% { box-shadow: 0 0 26px rgba(255, 70, 92, .78), inset 0 0 18px rgba(255, 219, 118, .16); }
+}
+
+@keyframes build323-edge-chip {
+  from { transform: scale(.94); }
+  to { transform: scale(1.06); }
+}
+
+@keyframes build323-reveal-lines {
+  to { transform: translateX(44px) skewX(-12deg); }
+}
+
+@media (max-width: 430px) {
+  .campaign-hero-chase-hud {
+    top: 64px;
+    grid-template-columns: 40px minmax(0, 1fr) 76px;
+    width: calc(100% - 18px);
+    min-height: 60px;
+    padding: 6px;
+  }
+
+  .campaign-hero-chase-portrait,
+  .campaign-hero-chase-visual {
+    width: 39px !important;
+    height: 44px !important;
+  }
+
+  .campaign-hero-chase-copy b { font-size: 12px; }
+  .campaign-hero-chase-copy em { font-size: 8px; }
+  .campaign-hero-chase-state { min-width: 74px; }
+  .campaign-hero-chase-state small { font-size: 7px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .explore-stage.is-hero-hunt::after,
+  .campaign-hero-chase-hud.is-contact,
+  .campaign-hero-edge-chip,
+  .campaign-hero-field-reveal-lines {
+    animation: none;
+  }
+
+  .campaign-hero-field-reveal {
+    transition: opacity .01s linear;
+  }
+}

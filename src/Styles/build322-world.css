@@ -1,0 +1,74 @@
+/* Build 322: world prologue, Lionel's avatar and deep section passages. */
+
+/* HOME ------------------------------------------------------------------- */
+.home-command-screen>.home-server-status{top:11px!important}
+
+@media(max-width:720px){
+  .home-title-card>h1{
+    display:block!important;
+    max-width:100%!important;
+    margin-block:6px 4px!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    white-space:nowrap!important;
+    overflow-wrap:normal!important;
+    word-break:keep-all!important;
+    font-size:clamp(11px,3vw,15px)!important;
+    line-height:1!important;
+    letter-spacing:-.035em!important;
+  }
+}
+
+/* OPENING STORY ---------------------------------------------------------- */
+.campaign-story-presentation[data-story-kind="opening"] .campaign-story-line-progress{
+  display:grid!important;
+  grid-template-columns:repeat(15,minmax(0,1fr))!important;
+  gap:3px!important;
+}
+.campaign-story-presentation[data-story-kind="opening"] .campaign-story-line-progress>i{
+  width:auto!important;
+  min-width:0!important;
+  height:2px!important;
+}
+.campaign-story-modal [data-story-character-id="lionel"]>i{position:relative!important;isolation:isolate}
+.campaign-story-lionel-human{display:block;width:100%;height:100%;transition:opacity .55s ease,filter .55s ease,transform .55s ease}
+.campaign-story-lionel-human>.campaign-story-character-art{width:100%;height:100%;object-fit:contain}
+.campaign-story-lionel-avatar{
+  position:absolute;
+  inset:8% 4% 0;
+  z-index:2;
+  display:grid;
+  place-items:end center;
+  opacity:0;
+  transform:translateY(-15%) scale(.24);
+  filter:brightness(2.1) blur(2px);
+  transition:opacity .55s ease,filter .55s ease,transform .55s cubic-bezier(.2,.75,.25,1.2);
+}
+.campaign-story-lionel-avatar .campaign-story-lionel-slime-art{
+  width:58%!important;
+  height:58%!important;
+  object-fit:contain!important;
+  image-rendering:pixelated!important;
+}
+.campaign-story-presentation[data-story-effect="lionel-seal"] [data-story-character-id="lionel"]>i{
+  animation:build322-lionel-seal .8s ease-in-out infinite alternate;
+}
+.campaign-story-presentation[data-story-effect="lionel-slime"] .campaign-story-lionel-human{
+  opacity:0;
+  transform:translateY(20%) scale(.12);
+  filter:brightness(2.3) blur(5px);
+}
+.campaign-story-presentation[data-story-effect="lionel-slime"] .campaign-story-lionel-avatar{
+  opacity:1;
+  transform:translateY(0) scale(1);
+  filter:none;
+}
+@keyframes build322-lionel-seal{
+  from{filter:drop-shadow(0 0 2px #c6a5ff);transform:translateY(0)}
+  to{filter:drop-shadow(0 0 13px #af76ff) brightness(1.18);transform:translateY(-2px)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .campaign-story-lionel-human,.campaign-story-lionel-avatar{transition:none!important}
+  .campaign-story-presentation[data-story-effect="lionel-seal"] [data-story-character-id="lionel"]>i{animation:none!important;filter:drop-shadow(0 0 8px #af76ff)}
+}

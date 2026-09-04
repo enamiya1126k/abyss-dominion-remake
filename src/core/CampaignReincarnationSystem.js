@@ -1,7 +1,7 @@
 import{CAMPAIGN_MAX_FLOOR,beginCampaignFloorReplay,normalizeCampaignState}from"./Campaign100System.js?v=3.1.1-build320";
-import{createCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.1-build320";
+import{createCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.5-build324";
 
-export const CAMPAIGN_REINCARNATION_VERSION=1;
+export const CAMPAIGN_REINCARNATION_VERSION=2;
 export const CAMPAIGN_FINAL_ENDING_IDS=Object.freeze(["complete","narrow","defeat"]);
 export const CAMPAIGN_REINCARNATION_MAX_HISTORY=32;
 
@@ -66,8 +66,8 @@ export function beginOptionalCampaignReincarnation(state,{resultId}={}){
  const oldFloors=Object.keys(campaign.floors??{}).map(Number).filter(floor=>Number.isInteger(floor)&&floor>=1&&floor<=CAMPAIGN_MAX_FLOOR);
  for(const floor of oldFloors)beginCampaignFloorReplay(state,floor,`reincarnation-${progress.cycle+1}`);
  campaign.invasionDaysSeen=[];delete campaign.story309;campaign.finalUnlocked=false;campaign.finalCompleted=false;campaign.finalPartyBackup=[];campaign.finalVitals={};campaign.finalStage=null;delete campaign.finalSessionPending;
- campaign.heroEncounters310=createCampaignHeroEncounterState();
- progress.cycle=Math.min(999,progress.cycle+1);progress.cycleMaxFloor=1;progress.active=true;progress.available=false;progress.lastReincarnationId=receipt||`reincarnation-${progress.cycle}`;campaign.reincarnation319=progress;
+ progress.cycle=Math.min(999,progress.cycle+1);campaign.heroEncounters310=createCampaignHeroEncounterState({storyCycle:progress.cycle});
+ progress.cycleMaxFloor=1;progress.active=true;progress.available=false;progress.lastReincarnationId=receipt||`reincarnation-${progress.cycle}`;campaign.reincarnation319=progress;
  state.player=plainRecord(state.player)?state.player:{};state.player.currentFloor=1;state.player.checkpoint=1;state.player.inRun=false;state.player.floorSeeds={};state.player.dungeonShapeHistory=[];state.player.openedChests=clearFloorLedger(state.player.openedChests);state.player.bossKills=clearFloorLedger(state.player.bossKills);state.player.bossRewards=clearFloorLedger(state.player.bossRewards);state.player.pendingBossRewards=clearFloorLedger(state.player.pendingBossRewards);
  state.expeditionSnapshot=null;delete state.activeBattle;delete state.expeditionAffectionDeaths;delete state.manualReturn;delete state.returnReward;
  if(plainRecord(state.flags))state.flags.ending10000Played=false;
