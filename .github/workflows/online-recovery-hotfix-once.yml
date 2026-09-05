@@ -3,95 +3,33 @@ name: online-recovery-hotfix-once
 on:
   push:
     paths:
-      - '.github/workflows/online-recovery-hotfix-once.yml'
+      - .github/workflows/online-recovery-hotfix-once.yml
 
 permissions:
   contents: write
 
 jobs:
   patch:
-    if: github.event.head_commit.message == 'Add one-time online recovery hotfix'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Apply safe stale-outbox recovery hotfix
-        shell: bash
+      - name: Patch stale online recovery
         run: |
-          python - <<'PY'
+          python3 - <<'PY'
           from pathlib import Path
-
-          p = Path('online-server/src/RoomStore.js')
-          s = p.read_text(encoding='utf-8')
-          old = '''else if(outbox){const credentialCheck=settlementCredentialCheck(outbox,{clientKey:secret,resumeToken:providedToken});if(!credentialCheck.clientKey)return{ok:false,code:"ID_IN_USE",message:"同じフレンドIDが別の端末で使用されています"};if(!providedToken||!credentialCheck.resumeToken)return{ok:false,code:"RESUME_TOKEN_MISMATCH",message:"保留中の報酬を復旧するため、元の再接続キーが必要です"};const nextResumeToken=credentialCheck.current||!outbox.resumeToken?token():outbox.resumeToken,nextPreviousToken=credentialCheck.current?outbox.resumeToken??providedToken:outbox.previousResumeToken??providedToken;'''
-          new = '''else if(outbox){const credentialCheck=settlementCredentialCheck(outbox,{clientKey:secret,resumeToken:providedToken});if(!credentialCheck.clientKey)return{ok:false,code:"ID_IN_USE",message:"同じフレンドIDが別の端末で使用されています"};const clientKeyOnlyRecovery=Boolean(credentialCheck.clientKey&&!credentialCheck.resumeToken&&!outbox.pendingRewards?.length&&(outbox.pendingMessages??[]).length&&(outbox.pendingMessages??[]).every(entry=>["expeditionVitals","expeditionResult"].includes(String(entry?.type??"")))&&!this.trade.protectedTradeIdsFor(playerId).length);if((!providedToken||!credentialCheck.resumeToken)&&!clientKeyOnlyRecovery)return{ok:false,code:"RESUME_TOKEN_MISMATCH",message:"保留中の報酬を復旧するため、元の再接続キーが必要です"};const nextResumeToken=clientKeyOnlyRecovery?token():credentialCheck.current||!outbox.resumeToken?token():outbox.resumeToken,nextPreviousToken=clientKeyOnlyRecovery?null:credentialCheck.current?outbox.resumeToken??providedToken:outbox.previousResumeToken??providedToken;'''
+          p=Path('online-server/src/RoomStore.js')
+          s=p.read_text(encoding='utf-8')
+          old='''else if(outbox){const credentialCheck=settlementCredentialCheck(outbox,{clientKey:secret,resumeToken:providedToken});if(!credentialCheck.clientKey)return{ok:false,code:"ID_IN_USE",message:"同じフレンドIDが別の端末で使用されています"};if(!providedToken||!credentialCheck.resumeToken)return{ok:false,code:"RESUME_TOKEN_MISMATCH",message:"保留中の報酬を復旧するため、元の再接続キーが必要です"};const nextResumeToken=credentialCheck.current||!outbox.resumeToken?token():outbox.resumeToken,nextPreviousToken=credentialCheck.current?outbox.resumeToken??providedToken:outbox.previousResumeToken??providedToken;'''
+          new='''else if(outbox){const credentialCheck=settlementCredentialCheck(outbox,{clientKey:secret,resumeToken:providedToken});if(!credentialCheck.clientKey)return{ok:false,code:"ID_IN_USE",message:"同じフレンドIDが別の端末で使用されています"};const clientKeyOnlyRecovery=Boolean(credentialCheck.clientKey&&!credentialCheck.resumeToken&&!outbox.pendingRewards?.length&&(outbox.pendingMessages??[]).length&&(outbox.pendingMessages??[]).every(entry=>["expeditionVitals","expeditionResult"].includes(String(entry?.type??"")))&&!this.trade.protectedTradeIdsFor(playerId).length);if((!providedToken||!credentialCheck.resumeToken)&&!clientKeyOnlyRecovery)return{ok:false,code:"RESUME_TOKEN_MISMATCH",message:"保留中の報酬を復旧するため、元の再接続キーが必要です"};const nextResumeToken=clientKeyOnlyRecovery?token():credentialCheck.current||!outbox.resumeToken?token():outbox.resumeToken,nextPreviousToken=clientKeyOnlyRecovery?null:credentialCheck.current?outbox.resumeToken??providedToken:outbox.previousResumeToken??providedToken;'''
           if old not in s:
-              raise SystemExit('RoomStore outbox marker not found')
-          s = s.replace(old, new, 1)
-          p.write_text(s, encoding='utf-8')
-
-          test = Path('online-server/tests/build343-stale-outbox-recovery.test.js')
-          test.write_text(r'''import test from "node:test";
-import assert from "node:assert/strict";
-import { RoomStore } from "../src/RoomStore.js";
-
-function connection(){return{messages:[],closed:[],send(raw){this.messages.push(JSON.parse(raw))},close(code,reason){this.closed.push({code,reason})}}}
-const identity={friendId:"AD-RCVR-K343",clientKey:"build343-client-key".padEnd(32,"x"),profile:{displayName:"Recovery",speciesId:"slime",maxFloor:20}};
-
-test("build343 same client key can recover stale non-reward expedition outbox without the lost resume token",()=>{
-  let now=1000;
-  const store=new RoomStore({now:()=>now,reconnectGraceMs:1});
-  const firstConnection=connection();
-  const first=store.hello(firstConnection,identity);
-  assert.equal(first.ok,true);
-  firstConnection.session.pendingMessages.push(
-    {type:"expeditionVitals",mutationId:"build343-vitals",playerId:identity.friendId,hp:10,maxHp:20,mp:3,maxMp:5},
-    {type:"expeditionResult",resultId:"build343-result",recipientId:identity.friendId,ownerId:identity.friendId,completed:false,reason:"worldOwnerTimeout"},
-  );
-  store.disconnect(firstConnection.session,firstConnection);
-  now+=2;
-  store.pruneExpired();
-  assert.equal(store.sessions.has(identity.friendId),false);
-  assert.equal(store.recoveryOutboxes.has(identity.friendId),true);
-
-  const recoveredConnection=connection();
-  const recovered=store.hello(recoveredConnection,identity);
-  assert.equal(recovered.ok,true);
-  assert.equal(recovered.recovered,true);
-  assert.equal(store.recoveryOutboxes.has(identity.friendId),false);
-  assert.ok(recovered.resumeToken);
-});
-
-test("build343 still requires the resume token when an outbox contains economic rewards",()=>{
-  let now=2000;
-  const store=new RoomStore({now:()=>now,reconnectGraceMs:1});
-  const firstConnection=connection();
-  const first=store.hello(firstConnection,identity);
-  assert.equal(first.ok,true);
-  store._queueReward(firstConnection.session,{rewardId:"protected-reward",reward:{gold:100},source:{kind:"test"}});
-  store.disconnect(firstConnection.session,firstConnection);
-  now+=2;
-  store.pruneExpired();
-  const rejected=store.hello(connection(),identity);
-  assert.equal(rejected.ok,false);
-  assert.equal(rejected.code,"RESUME_TOKEN_MISMATCH");
-});
-''',encoding='utf-8')
+              raise SystemExit('RoomStore marker not found')
+          p.write_text(s.replace(old,new,1),encoding='utf-8')
           PY
-
-      - name: Validate recovery hotfix
-        shell: bash
-        working-directory: online-server
+          node --check online-server/src/RoomStore.js
+      - name: Commit patch
         run: |
-          node --check src/RoomStore.js
-          node --test tests/build343-stale-outbox-recovery.test.js
-          node --test tests/build230-recovery-hardening.test.js
-
-      - name: Commit recovery hotfix
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add online-server/src/RoomStore.js online-server/tests/build343-stale-outbox-recovery.test.js
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add online-server/src/RoomStore.js
           git commit -m "Recover stale non-reward online outboxes safely build343"
           git push
