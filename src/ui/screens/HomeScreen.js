@@ -1,4 +1,4 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.19-build338";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.20-build339";
 // Regression marker only: config.js?v=3.1.10-build329
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
 import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.1-build311";
@@ -8,7 +8,7 @@ import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,has
 import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.1-build311";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.1-build311";
 import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=3.1.1-build317";
-import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build311";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.20-build339";
 import{attributeCycleVisual,attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.19-build338";
 import{campaignDayForFloor,campaignHeroAdvance}from"../../core/Campaign100System.js?v=3.1.1-build311";
@@ -41,7 +41,7 @@ function scenePartySlot(monster,index,state){
     <button type="button" class="home-scene-unit ${positions[index]} ${vitals.critical?"is-exhausted":""} ${formerFloorBoss?"is-floor-boss":""}" data-open-home-formation data-home-party-slot="${index}" data-home-party-member="${monster.id}" aria-label="${displayName(monster)}・編成スロット${index+1}${vitals.critical?`・${criticalReason}`:""}">
       <em class="home-slot-badge">${index+1}</em><span class="home-slot-attribute" data-home-attribute-help="${attribute}" title="属性相性を確認">${attributeVisual(attribute,{label:`${attribute}属性`})}</span>
       ${magicCircleMarkup(monster,state,{className:"home-character-circle"})}
-      ${monsterVisual(monster,species?.emoji??"MONSTER",{frame:vitals.critical?"down":"idle",className:"home-scene-monster-visual"})}
+      ${monsterVisual(monster,species?.emoji??"MONSTER",{frame:vitals.critical?"down":"idle",className:"home-scene-monster-visual",partyArt:true})}
       ${vitals.critical?`<span class="home-exhausted-state" aria-hidden="true">${criticalReason}</span>`:""}
       <span class="home-scene-name">${displayName(monster)}</span>
       <small>Lv.${monster.level}</small>

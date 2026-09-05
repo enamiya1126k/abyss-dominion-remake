@@ -2,7 +2,7 @@ import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monst
 import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.1-build311";
 import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.1-build311";
 import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.1-build311";
-import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build311";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.20-build339";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.1-build311";
@@ -87,8 +87,8 @@ function renderParty(battle,actor){
   const formerFloorBoss=Boolean(m.floorBossCatalogId||m.floorBossId||m.obtainedMethod==="floorBossContract");
   return `<button id="ally-${m.id}" data-battle-detail="${m.id}" ${battle.onlineMode?`data-online-ally-target="${m.id}"`:""} style="--formation-index:${index};--unit-color:${colorValue(m)}" class="battle-unit combatant side-battle-unit formation-slot-${index+1} ${line} ${formerFloorBoss?"party-floor-boss":""} ${rankClass} ${battle.onlineMode&&battle.onlineSelectedAlly===m.id?"online-selected-ally":""} ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
    <span class="active-turn-marker" aria-hidden="true">行動中</span>
-   <span class="battle-unit-floating-name">${rankBadge(rank)}<b>${unitName(m)}</b></span>
-   <div class="side-unit-sprite unit-orb">${battle.magicCircleArt?.[m.id]??""}${monsterVisual(m,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual"})}</div>
+   ${formerFloorBoss?"":`<span class="battle-unit-floating-name">${rankBadge(rank)}<b>${unitName(m)}</b></span>`}
+   <div class="side-unit-sprite unit-orb">${battle.magicCircleArt?.[m.id]??""}${formerFloorBoss?`<span class="battle-unit-floating-name">${rankBadge(rank)}<b>${unitName(m)}</b></span>`:""}${monsterVisual(m,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual",partyArt:true})}</div>
    <div class="side-unit-card ally-info">
     <div class="side-unit-name unit-head"><small>Lv.${battleInteger(m.level)}</small><em class="battle-unit-growth">${growthText(m)}</em>${equipmentAuthorityBadge(m)}<i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="side-unit-intent ally-circle-intent"><span>${circleLevel?`魔法陣 Lv.${circleLevel}`:"魔法陣"}</span><b>${circleName}</b></div>
