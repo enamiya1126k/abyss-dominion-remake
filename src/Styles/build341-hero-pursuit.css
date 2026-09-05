@@ -1,0 +1,18 @@
+/* Field controls stay narrow; the actual hero is drawn on the dungeon. */
+.explore-stage.is-hero-hunt::after{animation:none!important;box-shadow:none!important;border:1px solid #9b536a!important}
+.hero-tracker341{position:absolute;z-index:28;left:8px;right:8px;display:flex;align-items:stretch;gap:3px;max-width:400px;min-height:44px;padding:2px;border:1px solid #ad687b;border-radius:8px;background:#150d19ee;color:#fff0dd;box-sizing:border-box;pointer-events:auto}
+.hero-tracker341 button{position:relative!important;min-height:44px!important;min-width:44px!important;margin:0!important;padding:3px 5px!important;border:0!important;border-radius:5px!important;background:transparent!important;color:inherit!important;box-shadow:none!important;transform:none!important;font:700 11px/1.2 sans-serif!important;touch-action:manipulation}
+.hero-tracker-summary341{flex:1 1 auto;min-width:0!important;display:flex;align-items:center;gap:4px;text-align:left}
+.hero-tracker341 [data-hero-portrait]{flex:0 0 30px;width:30px;height:32px;display:grid;place-items:center}
+.hero-tracker341 .monster-visual,.hero-tracker341 .monster-visual img{width:30px!important;height:32px!important;max-width:30px!important;object-fit:contain;filter:none!important}
+.hero-tracker-copy341{display:grid;gap:2px;min-width:0;flex:1 1 auto}
+.hero-tracker-copy341 b{font-size:12px;white-space:nowrap}.hero-tracker-copy341 small{font-size:9px;color:#d9bdc8;white-space:nowrap}
+.hero-tracker-count341{font:700 10px/1.2 ui-monospace,monospace;white-space:nowrap;color:#f0c588}
+.hero-tracker341 .hero-tracker-locate341{flex:0 0 44px;font-size:19px!important;color:#f5cd83!important}
+.hero-tracker341 .hero-tracker-fight341{flex:0 0 66px;background:#603249!important;border:1px solid #b58379!important;white-space:nowrap}
+.hero-tracker341 button:focus-visible,.hero-direction341:focus-visible{outline:2px solid #ffe3a1!important;outline-offset:1px}
+.hero-tracker341 button:disabled{opacity:.45;pointer-events:none}
+.hero-tracker341.is-collapsed{right:auto;width:auto;max-width:calc(100% - 16px)}
+.hero-tracker341.is-collapsed .hero-tracker-copy341,.hero-tracker341.is-collapsed .hero-tracker-count341{display:none}
+.hero-direction341{position:absolute!important;z-index:27;width:44px!important;height:44px!important;min-height:44px!important;min-width:44px!important;padding:0!important;margin:0!important;transform:translate(-50%,-50%)!important;border:1px solid #b87c91!important;border-radius:50%!important;background:#21111cdd!important;color:#f6d187!important;font:700 22px/1 sans-serif!important;box-shadow:none!important;touch-action:manipulation}
+.campaign-hero-field-reveal{display:none!important}

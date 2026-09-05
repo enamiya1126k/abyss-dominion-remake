@@ -1,4 +1,4 @@
-import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.15-build334";
+import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.22-build341";
 // Regression marker only: config.js?v=3.1.10-build329
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323 / CampaignReincarnationSystem.js?v=3.1.4-build323
 import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=3.1.1-build311";
@@ -16,7 +16,7 @@ import{normalizeWeaponMastery}from"./WeaponMastery.js?v=3.1.1-build311";
 import{normalizeOnlineProgressIsolation,recoverInterruptedGuestProgress}from"../online/OnlineProgressIsolation.js?v=3.1.1-build311";
 
 import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=3.1.1-build311";
-import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=3.1.15-build334";
+import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=3.1.17-build336";
 import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=3.1.1-build311";
 import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=3.1.1-build311";
 import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=3.1.1-build311";
@@ -27,8 +27,8 @@ import{syncCollectionRewardInbox}from"../core/CollectionRewardSystem.js?v=3.1.1-
 import{normalizeAchievementState,syncAchievementRewardInbox}from"../core/AchievementRewardSystem.js?v=3.1.1-build311";
 import{normalizeGachaDrawHistory,normalizeGachaPityState}from"../core/GachaBalanceSystem.js?v=3.1.1-build311";
 import{CAMPAIGN_MAX_FLOOR,legacyFloorToCampaignFloor,floorBossCampaignDisplayFloor,normalizeCampaignState,campaignFloorState}from"../core/Campaign100System.js?v=3.1.1-build311";
-import{normalizeCampaignHeroInvasion,retireLegacyCampaignRewind}from"../core/CampaignHeroEncounterSystem.js?v=3.1.5-build324";
-import{normalizeCampaignReincarnationState}from"../core/CampaignReincarnationSystem.js?v=3.1.5-build324";
+import{normalizeCampaignHeroInvasion,retireLegacyCampaignRewind}from"../core/CampaignHeroEncounterSystem.js?v=3.1.22-build341";
+import{normalizeCampaignReincarnationState}from"../core/CampaignReincarnationSystem.js?v=3.1.22-build341";
 import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=3.1.2-build321";
 import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=3.1.1-build311";
 import{normalizeEquipmentIdentity}from"../data/equipment.js?v=3.1.1-build311";
@@ -180,7 +180,7 @@ function normalizeExpeditionSnapshot(value){
  world.steps=Math.floor(finiteNumber(world.steps,0,0,Number.MAX_SAFE_INTEGER));
  world.nextEncounter=Math.floor(finiteNumber(world.nextEncounter,8,0,Number.MAX_SAFE_INTEGER));
  world.heroStepsSinceBattle=Math.floor(finiteNumber(world.heroStepsSinceBattle,0,0,Number.MAX_SAFE_INTEGER));
- const pursuit=plainRecord(world.campaignHeroPursuit)?world.campaignHeroPursuit:null,heroByEncounter=new Map([["hero-ambush-yori-1","myth_yori"],["hero-ambush-hide-1","myth_hide"],["hero-ambush-enami-1","myth_enami"],["hero-ambush-rion-1","myth_rion"],["hero-ambush-yori-2","myth_yori"],["hero-ambush-hide-2","myth_hide"],["hero-ambush-enami-2","myth_enami"],["hero-ambush-rion-2","myth_rion"]]),encounterId=typeof pursuit?.encounterId==="string"?String(pursuit.encounterId).slice(0,120):"",heroId=String(pursuit?.heroId??""),expectedHero=heroByEncounter.get(encounterId),sectionIds=new Set((Array.isArray(world.sections)?world.sections:[]).map(section=>String(section?.id??"")).filter(Boolean)),sectionId=typeof pursuit?.sectionId==="string"&&sectionIds.has(String(pursuit.sectionId))?String(pursuit.sectionId).slice(0,100):null;world.campaignHeroPursuit=pursuit&&expectedHero===heroId?{...pursuit,encounterId,heroId,state:["appearing","observing","pursuing","contact","withdrawing"].includes(pursuit.state)?pursuit.state:"pursuing",x:finiteNumber(pursuit.x,world.start.x,0,world.cols-1),y:finiteNumber(pursuit.y,world.start.y,0,world.rows-1),rx:finiteNumber(pursuit.rx,pursuit.x,0,world.cols-1),ry:finiteNumber(pursuit.ry,pursuit.y,0,world.rows-1),sectionId,observeSteps:Math.floor(finiteNumber(pursuit.observeSteps,0,0,20)),chaseSteps:Math.floor(finiteNumber(pursuit.chaseSteps,0,0,999)),portalTransfers:Math.floor(finiteNumber(pursuit.portalTransfers,0,0,20)),portalGraceSteps:Math.floor(finiteNumber(pursuit.portalGraceSteps,0,0,20))}:null;
+ const pursuit=plainRecord(world.campaignHeroPursuit)?world.campaignHeroPursuit:null,heroByEncounter=new Map([["hero-ambush-yori-1","myth_yori"],["hero-ambush-hide-1","myth_hide"],["hero-ambush-enami-1","myth_enami"],["hero-ambush-rion-1","myth_rion"],["hero-ambush-yori-2","myth_yori"],["hero-ambush-hide-2","myth_hide"],["hero-ambush-enami-2","myth_enami"],["hero-ambush-rion-2","myth_rion"]]),encounterId=typeof pursuit?.encounterId==="string"?String(pursuit.encounterId).slice(0,120):"",heroId=String(pursuit?.heroId??""),expectedHero=heroByEncounter.get(encounterId),sectionIds=new Set((Array.isArray(world.sections)?world.sections:[]).map(section=>String(section?.id??"")).filter(Boolean)),sectionId=typeof pursuit?.sectionId==="string"&&sectionIds.has(String(pursuit.sectionId))?String(pursuit.sectionId).slice(0,100):null;world.campaignHeroPursuit=pursuit&&expectedHero===heroId?{...pursuit,encounterId,heroId,state:["appearing","observing","pursuing","contact","withdrawing"].includes(pursuit.state)?pursuit.state:"pursuing",x:finiteNumber(pursuit.x,world.start.x,0,world.cols-1),y:finiteNumber(pursuit.y,world.start.y,0,world.rows-1),rx:finiteNumber(pursuit.rx,pursuit.x,0,world.cols-1),ry:finiteNumber(pursuit.ry,pursuit.y,0,world.rows-1),sectionId,observeSteps:Math.floor(finiteNumber(pursuit.observeSteps,0,0,20)),chaseSteps:Math.floor(finiteNumber(pursuit.chaseSteps,0,0,Number.MAX_SAFE_INTEGER)),portalTransfers:Math.floor(finiteNumber(pursuit.portalTransfers,0,0,Number.MAX_SAFE_INTEGER)),portalGraceSteps:Math.floor(finiteNumber(pursuit.portalGraceSteps,0,0,20))}:null;
  world.chests=Array.isArray(world.chests)?world.chests.slice(0,120):[];
  world.decorations=Array.isArray(world.decorations)?world.decorations.slice(0,180):[];
  const x=finiteNumber(value.player?.x,world.start.x,0,world.cols-1),y=finiteNumber(value.player?.y,world.start.y,0,world.rows-1);
@@ -582,6 +582,7 @@ export class SaveService{
   s.settings.minimapPanelPosition=normalizeUiPosition(s.settings.minimapPanelPosition);
   s.settings.autoExploreButtonPosition=normalizeUiPosition(s.settings.autoExploreButtonPosition);
   s.settings.explorePartyHudCollapsed=Boolean(s.settings.explorePartyHudCollapsed);
+  s.settings.heroTrackerCollapsed341=Boolean(s.settings.heroTrackerCollapsed341);
   s.settings.exploreAutoMode=s.settings.exploreAutoMode==="off"?"off":["floor","items","exp"].includes(s.settings.exploreAutoMode)?"floor":"off";
   s.settings.exploreAutoMenuOpen=false;
   s.settings.gauntletPartyCollapsed=Boolean(s.settings.gauntletPartyCollapsed);

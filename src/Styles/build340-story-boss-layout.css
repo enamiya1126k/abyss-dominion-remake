@@ -1,0 +1,28 @@
+/* Build340: size is retained; the visible silhouette and card determine position. */
+.battle-screen.side-battle-v2 .party-floor-boss .side-unit-sprite>.battle-unit-floating-name{
+ top:var(--boss-name-y,0px)!important;
+ bottom:auto!important;
+ max-width:min(150px,30vw)!important;
+}
+.party-floor-boss:not([data-boss-layout="ready"]) .battle-unit-floating-name{visibility:hidden}
+.battle-screen.side-battle-v2 .party-floor-boss.boss-name-in-card .side-unit-card{
+ height:auto!important;overflow:visible!important;flex-shrink:0!important;
+}
+.battle-screen.side-battle-v2 .party-floor-boss.boss-name-in-card .side-unit-card>.battle-unit-floating-name{
+ position:relative!important;inset:auto!important;transform:none!important;translate:none!important;
+ display:flex!important;flex-wrap:wrap!important;justify-content:center!important;gap:2px 4px!important;
+ width:100%!important;max-width:100%!important;margin:0 0 4px!important;padding:0!important;
+}
+.battle-screen.side-battle-v2 .party-floor-boss.boss-name-in-card .side-unit-card>.battle-unit-floating-name>b{
+ white-space:normal!important;overflow:visible!important;overflow-wrap:anywhere!important;
+ text-overflow:clip!important;line-height:1.2!important;
+}
+.campaign-story-line-progress{flex-wrap:wrap!important;gap:3px!important;max-width:100%;padding-inline:8px;box-sizing:border-box}
+.campaign-story-line-progress i{flex:0 0 9px!important;width:9px!important}
+.campaign-story-cast figure>i{max-width:100%;box-sizing:border-box}
+/* Long dialogue expands below the cast instead of covering the name plates. */
+.campaign-story-stage{display:flex;flex-direction:column;justify-content:flex-end;height:auto!important}
+.campaign-story-cast{position:relative!important;inset:auto!important;flex:1 0 auto;min-height:140px;margin:24px 8px 16px;align-items:flex-end}
+.campaign-story-cast>figure{height:auto!important;opacity:.65;filter:saturate(.75) brightness(.8)}
+.campaign-story-cast>figure.is-speaking{opacity:1;filter:saturate(1) brightness(1.1)}
+.campaign-story-dialogue{position:relative!important;inset:auto!important;flex:0 0 auto;margin:0 8px 10px;box-sizing:border-box}

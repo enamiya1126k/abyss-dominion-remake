@@ -14,15 +14,15 @@ test("4対4は実際の部隊能力から最低耐久と攻撃力を再計算",(
  assert.ok(enemies.find(enemy=>enemy.teamBattleRole==="disruptor").spd>enemies.find(enemy=>enemy.teamBattleRole==="guardian").spd);
 });
 
-test("魔法陣は到達階層ごとの強化上限を持つ",()=>{
- assert.deepEqual([1,20,40,60,80,100,200,500,1000,5000].map(magicCircleLevelCapForFloor),[1,3,6,10,15,25,40,60,80,99]);
- assert.equal(magicCircleProgressionStatus({player:{maxFloor:40}},6).atCap,true);
+test("魔法陣の強化上限は到達階層に依存しない",()=>{
+ assert.deepEqual([1,20,40,60,80,100,200,500,1000,5000].map(magicCircleLevelCapForFloor),[99,99,99,99,99,99,99,99,99,99]);
+ assert.equal(magicCircleProgressionStatus({player:{maxFloor:40}},6).atCap,false);
  assert.equal(magicCircleProgressionStatus({player:{maxFloor:60}},6).atCap,false);
 });
 
-test("深淵ツリーは階層で段階解放し、既習得ノードは保護",()=>{
+test("深淵ツリーは順路判定を優先し、既習得ノードを保護",()=>{
  const node=abyssSkillNodeById("economy-gold-sense"),locked={player:{gold:999999,maxFloor:4},abyssSkillTree:{version:8,learned:[],grandfathered:[],paidCosts:{},investedGold:0},monsters:[],party:[],magicCircles:{unlocked:{},instances:[],owned:{},goldSpent:0,version:4}};
- assert.equal(node.unlockFloor,5);assert.equal(canLearnAbyssSkill(locked,node.id).reason,"floor");
+ assert.equal(node.unlockFloor,5);assert.equal(canLearnAbyssSkill(locked,node.id).ok,true);
  const learned={...locked,player:{...locked.player,maxFloor:1},abyssSkillTree:{...locked.abyssSkillTree,learned:[node.id],grandfathered:[node.id],paidCosts:{[node.id]:1000},investedGold:1000}};
  assert.equal(canLearnAbyssSkill(learned,node.id).reason,"learned");
 });

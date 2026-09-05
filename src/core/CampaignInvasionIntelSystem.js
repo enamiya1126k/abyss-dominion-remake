@@ -1,4 +1,4 @@
-import{normalizeCampaignHeroInvasion}from"./CampaignHeroEncounterSystem.js?v=3.1.7-build326";
+import{normalizeCampaignHeroInvasion}from"./CampaignHeroEncounterSystem.js?v=3.1.22-build341";
 
 export const CAMPAIGN_INVASION_INTEL_VERSION=1;
 
@@ -24,10 +24,10 @@ export const CAMPAIGN_INVASION_ROUTE=freeze([
 ]);
 
 export const CAMPAIGN_HERO_INTEL=freeze([
- {id:"myth_yori",name:"より",title:"微笑む蒼拳",role:"物理特化・瞬間火力",field:"二歩ほど観察したあと、こちらの進行方向を読んで最短距離で詰める。",combat:"自身を強化し、HPの少ない仲間を狙う。三体攻撃も持つ。",counter:"物理防御と攻撃低下を優先。観察中に距離を離す。"},
- {id:"myth_hide",name:"ひで",title:"緻密なる魔導士",role:"魔法攻撃・弱体・支援",field:"毎歩、最短経路を計算して直進。四歩ごとに一歩ぶん速くなる。",combat:"回復・強化と防御低下を使い分け、二体攻撃や連続魔法で崩す。",counter:"魔法防御とMP妨害が有効。直線を避け、区画移動で距離を作る。"},
- {id:"myth_enami",name:"えなみ",title:"共感と論理の勇者",role:"防護・反撃・高威力",field:"普段は六〜八マスの距離を保つが、仲間の傷が二割を超えると猛追する。",combat:"味方を守りつつ、高攻撃力の相手を狙う。範囲攻撃と大技にも注意。",counter:"勇者へ傷を付けると追跡が激化する。接触後は短期集中攻撃。"},
- {id:"myth_rion",name:"りおん",title:"即断の商略家",role:"蘇生・回復・強化・弱体",field:"出口と進行方向を読み、三〜五マス先や分岐点へ先回りする。",combat:"蘇生、回復、強化、防御低下、MP吸収で勇者一行を立て直す。",counter:"最優先で行動を止める。出口へ直進せず、途中で進路を変える。"}
+ {id:"myth_yori",name:"より",title:"微笑む蒼拳",role:"物理特化・瞬間火力",field:"二歩ほど観察したあと、こちらの進行方向を読んで最短距離で詰める。",combat:"自身を強化し、HPの少ない仲間を狙う。三体攻撃も持つ。",counter:"物理防御と攻撃低下を優先。観察中に距離を離す。",decisionRules:[{when:"奥義が使用可能",action:"最優先で奥義"},{when:"自身の強化が切れた",action:"物理攻撃を強化"},{when:"低HPの相手がいる",action:"単体集中攻撃"},{when:"相手が3体以上",action:"三体範囲攻撃"}]},
+ {id:"myth_hide",name:"ひで",title:"緻密なる魔導士",role:"魔法攻撃・弱体・支援",field:"毎歩、最短経路を計算して直進。四歩ごとに一歩ぶん速くなる。",combat:"回復・強化と防御低下を使い分け、二体攻撃や連続魔法で崩す。",counter:"魔法防御とMP妨害が有効。直線を避け、区画移動で距離を作る。",decisionRules:[{when:"味方の平均HPが55%未満",action:"回復または強化"},{when:"高戦力の相手がいる",action:"防御低下を付与"},{when:"相手が2体以上",action:"二体範囲魔法"},{when:"崩しの好機",action:"連続魔法"}]},
+ {id:"myth_enami",name:"えなみ",title:"共感と論理の勇者",role:"防護・反撃・高威力",field:"普段は六〜八マスの距離を保つが、仲間の傷が二割を超えると猛追する。",combat:"味方を守りつつ、高攻撃力の相手を狙う。範囲攻撃と大技にも注意。",counter:"勇者へ傷を付けると追跡が激化する。接触後は短期集中攻撃。",decisionRules:[{when:"味方が負傷",action:"障壁または強化"},{when:"高攻撃力の相手がいる",action:"優先して反撃"},{when:"相手が3体以上",action:"三体範囲攻撃"},{when:"奥義が使用可能",action:"高威力の決着技"}]},
+ {id:"myth_rion",name:"りおん",title:"即断の商略家",role:"蘇生・回復・強化・弱体",field:"出口と進行方向を読み、三〜五マス先や分岐点へ先回りする。",combat:"蘇生、回復、強化、防御低下、MP吸収で勇者一行を立て直す。",counter:"最優先で行動を止める。出口へ直進せず、途中で進路を変える。",decisionRules:[{when:"味方が戦闘不能",action:"最優先で蘇生"},{when:"味方HPが60%未満",action:"回復または状態解除"},{when:"味方の強化がない",action:"全体強化"},{when:"相手のMPが低い",action:"MP吸収"}]}
 ]);
 
 function campaignTimeline(state,ledger){

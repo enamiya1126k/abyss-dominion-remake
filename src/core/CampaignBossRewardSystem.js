@@ -49,7 +49,7 @@ function baseGoldForFloor(floor){
  return Math.max(20_000+floor*7_500,economyAnchor)
 }
 
-function baseCrystalsForFloor(floor){return 20+floor}
+function baseCrystalsForFloor(floor){return 30+floor*2}
 
 /**
  * Classifies one campaign boss without relying on its display name.

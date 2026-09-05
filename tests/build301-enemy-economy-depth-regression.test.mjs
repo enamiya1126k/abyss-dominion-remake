@@ -17,9 +17,9 @@ test("build301 campaign 100F enemy loadout keeps legacy-1000 equipment depth",()
   ${prepareSource}
   return prepareEnemyEntry({speciesId:"slime"},100,{forceGear:true,economyFloor:1000});
  `)();
- assert.equal(result.enemyFloor,100);assert.equal(result.enemyEconomyFloor,1000);assert.equal(result.enemyLoadoutVersion,4);
+ assert.equal(result.enemyFloor,100);assert.equal(result.enemyEconomyFloor,1000);assert.equal(result.enemyLoadoutVersion,5);
  assert.equal(result.enemyEquipmentSlots,4);assert.equal(result.enemyEquipmentLevel,820);assert.equal(result.enemyGear.length,4);
- assert.ok(result.enemyGear.every(item=>item.level===820&&item.plus===3));assert.equal(result.enemyMagicCircle.level,20);
+ assert.ok(result.enemyGear.every(item=>item.level===820&&item.plus===4));assert.equal(result.enemyMagicCircle.level,20);
 });
 
 test("build301 duplicate magic-circle replacement uses the preserved economic depth",()=>{
@@ -38,6 +38,6 @@ test("build301 duplicate magic-circle replacement uses the preserved economic de
 });
 
 test("build301 battle construction trusts current v4 loadouts",()=>{
- assert.match(main,/prepared=e\.enemyLoadoutVersion===4\?e:prepareEnemyEntry/);
+ assert.match(main,/prepared=e\.enemyLoadoutVersion===5\?e:prepareEnemyEntry/);
  assert.doesNotMatch(main,/prepared=e\.enemyLoadoutVersion===3\?e:prepareEnemyEntry/);
 });

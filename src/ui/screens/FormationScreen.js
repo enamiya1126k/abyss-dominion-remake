@@ -6,6 +6,7 @@ import{equipmentDisplayRarity,equipmentSubslotLabel,SLOT_UNLOCK_LEVEL}from"../..
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build311";
 import{resourceHud,bottomNav}from"../components/GameChrome.js?v=3.1.1-build311";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=3.1.1-build311";
+import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=3.1.19-build338";
 
 const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],
@@ -58,7 +59,7 @@ function skillSlot(monster,skill,slot){
 function memberCard(state,monster,index,{readOnly=false}={}){
  const species=SPECIES[monster.speciesId]??{},[elementIcon,elementName]=elementData(monster),rarity=monsterRarity(monster);
  normalizeSkillLoadout(monster);
- const skills=Array.from({length:4},(_,slot)=>skillById(monster.equippedSkills?.[slot]));
+ const circle=equippedMagicCircle(monster,state),circleLabel=circle.id==="none"?"魔法陣なし":`${circle.name} Lv.${circle.level}`;
  return`<article class="formation-member" data-formation-member="${monster.id}" data-formation-index="${index}">
   <div class="formation-member-drag" ${readOnly?"":`data-formation-member-drag="${monster.id}" title="長押しして並び替え"`}>
    <div class="formation-slot-label">SLOT ${index+1}</div>
@@ -72,10 +73,12 @@ function memberCard(state,monster,index,{readOnly=false}={}){
    <summary>装備6枠 <small>右手・左手 / 首・指 / 胴・補助</small></summary>
    <div class="formation-gear-grid">${LOADOUT_SLOTS.map(subslot=>equipmentSlot(state,monster,subslot)).join("")}</div>
   </details>
-  <details class="formation-section formation-skills" open>
-   <summary>設定中スキル <small>タップで開閉</small></summary>
-   <div class="formation-skill-list">${skills.map((skill,slot)=>skillSlot(monster,skill,slot)).join("")}</div>
-  </details>
+  <section class="formation-section formation-circle-section">
+   <h3>設定中魔法陣</h3>
+   <button type="button" class="formation-circle-card ${circle.id==="none"?"empty":""}" data-formation-circle="${monster.id}" aria-label="${circleLabel}を装備管理で開く">
+    <span>${circle.id==="none"?"◇":`<img src="${circle.asset}" alt="">`}</span><b>${circle.name}</b><small>${circle.level?`Lv.${circle.level}・`:""}タップで変更</small><i>›</i>
+   </button>
+  </section>
   ${readOnly?'<div class="formation-readonly-note">帰還後に順番・交代・スキルを変更できます</div>':`<div class="formation-actions compact"><button data-formation-skills="${monster.id}">スキル編集</button><button data-formation-replace="${monster.id}">交代</button><button class="danger formation-remove-action" data-formation-remove="${monster.id}">隊列から外す</button></div>`}
  </article>`;
 }
@@ -96,7 +99,7 @@ export function FormationScreen(state,{origin="home"}={}){
    <button type="button" data-party-tab="online" role="tab">${resourcePartyIcon("party")}<span><b>オンライン広場</b><small>友達と同じ部屋で遊ぶ</small></span></button>
   </div>
   <div class="formation-page">
-   <div class="formation-summary"><div><small>パーティ ${party.length}/4・総戦力</small><strong>${formatCombatPower(total)}</strong></div><p>${readOnly?"探索中は確認のみ・変更は帰還後":"長押しで隊列変更・交代・4スキル設定"}</p><button type="button" class="formation-rarity-help" data-formation-rarity-help aria-label="レア度一覧">？</button></div>
+   <div class="formation-summary"><div><small>パーティ ${party.length}/4・総戦力</small><strong>${formatCombatPower(total)}</strong></div><p>${readOnly?"探索中は確認のみ・変更は帰還後":"長押しで隊列変更・交代・魔法陣設定"}</p><button type="button" class="formation-rarity-help" data-formation-rarity-help aria-label="レア度一覧">？</button></div>
    <aside class="formation-rarity-drawer" data-formation-rarity-drawer aria-hidden="true"><button type="button" data-formation-rarity-close>▶</button><small>レア度・表示色</small><div>${["N","R","SR","SSR","UR","LR","神話","深淵","十神"].map(rarity=>`<span class="rarity-name-${rarityClass(rarity)}">${rarity}</span>`).join("")}</div></aside>
    <div class="formation-grid">${cards}</div>
   </div>

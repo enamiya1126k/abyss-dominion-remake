@@ -26,6 +26,13 @@ export function finalAudienceDialogue({heroes=[],party=[]}={}){
   myth_enami:"最初に聞く。降伏する気はある？ ……ないなら、その理不尽な支配を一個ずつ論理で詰める。まかセロリ。"
  };
  for(const hero of remaining)lines.push({speaker:hero.name,text:authored[hero.id]??"ここで決着をつける。"});
+ const resolve={
+  myth_enami:["ここへ来るまで、魔物にも守りたいもんがあるって何回も見た。せやから、話が通じる余地だけは最後まで残しとく。","でも、仲間を傷つけてええ理由にはならへん。そこだけは、何を言われても譲る気ないで。"],
+  myth_yori:["港では、帰ったら何飲むかしか考えてへんかったわ。今は、帰り道で聞きたい話の方が多い。","拳の出番は分かってる。今日は先走らへん。合図が出るまで、ちゃんと待てるからな。"],
+  myth_hide:["最後の作戦を確認する。退路、残る魔力、持ち帰る情報。……帰還後の予定まで、今回は書いてきた。","計算できないから捨てる、ではない。計算できないものを守るために、僕はここまで式を直してきた。"],
+  myth_rion:["遠征の帳簿を閉じようとしたら、値段の付かない項目ばかり残った。手間のかかる旅だったよ。","続きのページは空けてある。最後の一行を勝手に書かせるつもりはない。そこは、僕らの取り分だ。"]
+ };
+ for(let turn=0;turn<2;turn++)for(const hero of remaining)lines.push({speaker:hero.name,text:resolve[hero.id]?.[turn]??"交わした約束を、この先へ持っていく。"});
  const wounded=remaining.filter(hero=>heroState(hero).percent<100),defeated=heroes.length-remaining.length;
  if(wounded.length||defeated)lines.push({speaker:"地の文",text:`道中の戦いは消えていない。${defeated?`${defeated}人は撃破済み。`:""}${wounded.length?`${wounded.map(hero=>hero.name).join("・")}の傷も、そのまま最終戦へ持ち越される。`:""}`});
  if(remaining.length===4)lines.push({speaker:"勇者一行",text:"四人の呼吸が重なった瞬間、神話共鳴『無敵』が発動する。十神四体をも上回る圧力が王室を満たした。"});

@@ -1,5 +1,7 @@
 import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.1-build319";
 
+import{HERO_PURSUIT_STEPS,normalizeHeroPursuit}from"./CampaignHeroPursuitSystem.js?v=3.1.22-build341";
+
 export const CAMPAIGN_HERO_ENCOUNTER_VERSION=4;// Regression history: CAMPAIGN_HERO_ENCOUNTER_VERSION=3
 export const CAMPAIGN_HERO_FINAL_LEVEL=1000;
 export const CAMPAIGN_HERO_FINAL_ARENA_ID="prophecy-final-gate";
@@ -70,26 +72,26 @@ export const CAMPAIGN_HERO_FIELD_PROFILES=deepFreeze({
  myth_yori:{
   heroId:"myth_yori",label:"観察してから詰める",initialState:"observing",observePlayerSteps:2,
   detectionRange:10,spawnPathDistance:{min:7,max:11},moveTilesPerPlayerStep:1,predictAheadTiles:2,
-  portalGraceSteps:2,maxPursuitPlayerSteps:24,maxPortalTransfers:3,canBlockPortalLanding:false,
+  portalGraceSteps:2,maxPursuitPlayerSteps:HERO_PURSUIT_STEPS,maxPortalTransfers:null,canBlockPortalLanding:false,
   chaseRule:"観察後、現在地と直前の移動方向から予測した地点へ最短移動"
  },
  myth_hide:{
   heroId:"myth_hide",label:"真っすぐ精密に追う",initialState:"pursuing",observePlayerSteps:0,
   detectionRange:11,spawnPathDistance:{min:8,max:11},moveTilesPerPlayerStep:1,bonusMoveEveryPlayerSteps:4,
-  portalGraceSteps:1,maxPursuitPlayerSteps:22,maxPortalTransfers:3,canBlockPortalLanding:false,
+  portalGraceSteps:1,maxPursuitPlayerSteps:HERO_PURSUIT_STEPS,maxPortalTransfers:null,canBlockPortalLanding:false,
   chaseRule:"毎歩再計算した最短経路を追い、四歩ごとに一歩だけ追加移動"
  },
  myth_enami:{
   heroId:"myth_enami",label:"距離を保ち、仲間の傷で豹変",initialState:"observing",observePlayerSteps:1,
   detectionRange:9,spawnPathDistance:{min:7,max:10},preferredDistance:{min:6,max:8},moveTilesPerPlayerStep:1,
   huntDistance:3,huntWhenAnyHeroWoundRateAtLeast:.2,withdrawAfterDistantSteps:6,
-  portalGraceSteps:2,maxPursuitPlayerSteps:24,maxPortalTransfers:3,canBlockPortalLanding:false,
+  portalGraceSteps:2,maxPursuitPlayerSteps:HERO_PURSUIT_STEPS,maxPortalTransfers:null,canBlockPortalLanding:false,
   chaseRule:"通常は六〜八マスを保ち、接近または仲間の重傷後は最短追跡"
  },
  myth_rion:{
   heroId:"myth_rion",label:"出口を読み、先回りする",initialState:"observing",observePlayerSteps:1,
   detectionRange:10,spawnPathDistance:{min:7,max:11},interceptAheadTiles:{min:3,max:5},moveTilesPerPlayerStep:1,
-  portalGraceSteps:2,maxPursuitPlayerSteps:24,maxPortalTransfers:3,canBlockPortalLanding:false,
+  portalGraceSteps:2,maxPursuitPlayerSteps:HERO_PURSUIT_STEPS,maxPortalTransfers:null,canBlockPortalLanding:false,
   chaseRule:"進行方向の三〜五マス先か分岐点を狙い、経路変更時に先回り地点を更新"
  }
 });
@@ -264,6 +266,7 @@ export function normalizeCampaignHeroEncounterState(value,{migrationHighestFloor
  state.processedRewindIds=uniqueIds(source.processedRewindIds,CAMPAIGN_HERO_RECEIPT_LIMITS.rewinds);
  const requestedActiveId=cleanId(source.activeEncounterId,120),requestedActiveEvent=state.events[requestedActiveId],fallbackActive=CAMPAIGN_HERO_ENCOUNTER_SCHEDULE.find(entry=>state.events[entry.id]?.status==="active"),activeId=requestedActiveEvent?.status==="active"?requestedActiveId:fallbackActive?.id??null;
  state.activeEncounterId=activeId;
+ state.fieldPursuit341=normalizeHeroPursuit(source.fieldPursuit341,{encounterId:activeId,heroId:state.events[activeId]?.heroId});
  for(const definition of CAMPAIGN_HERO_ENCOUNTER_SCHEDULE)if(state.events[definition.id].status==="active"&&definition.id!==activeId)state.events[definition.id]={...state.events[definition.id],status:"armed"};
  const finalSource=plainRecord(source.finalArena)?source.finalArena:{};
  state.finalArena={
@@ -392,7 +395,7 @@ export function settleCampaignHeroEncounter(value,{encounterId,resultId,heroId,s
   const futureEvent=state.events[future.id];
   if(future.heroId===definition.heroId&&future.id!==definition.id&&!['resolved','legacy-missed'].includes(futureEvent.status))state.events[future.id]={...futureEvent,status:"skipped-defeated"};
  }
- if(state.activeEncounterId===definition.id)state.activeEncounterId=null;
+ if(state.activeEncounterId===definition.id){state.activeEncounterId=null;state.fieldPursuit341=null;}
  appendBoundedId(state.processedResultIds,receipt,CAMPAIGN_HERO_RECEIPT_LIMITS.results);
  return{state,recorded:true,hero:{...state.heroes[definition.heroId]},encounter:{...state.events[definition.id]},defeatedNow:!prior.defeated&&heroDefeated};
 }

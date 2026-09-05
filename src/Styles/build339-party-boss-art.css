@@ -1,0 +1,59 @@
+/* Build339: keep the slot, magic circle and card at their original positions.
+   Only the art layer is enlarged. (32,56) is the shared 64px sprite foot pivot. */
+.monster-visual.party-floor-boss-art{
+ position:relative!important;
+ overflow:visible!important;
+ transform:none!important;
+ scale:none!important;
+}
+.party-floor-boss-art>.party-monster-art-layer{
+ position:absolute!important;
+ inset:0!important;
+ display:block!important;
+ width:100%!important;
+ height:100%!important;
+ overflow:visible!important;
+ transform:scale(2)!important;
+ transform-origin:50% 87.5%!important;
+ pointer-events:none;
+}
+.party-floor-boss-art>.party-monster-art-layer>img{
+ display:block;
+ width:100%!important;
+ height:100%!important;
+ max-width:none!important;
+ max-height:none!important;
+ object-fit:contain!important;
+ transform:none!important;
+ scale:none!important;
+}
+.party-floor-boss-art>.party-monster-art-layer>[hidden]{display:none!important}
+.home-scene-unit.is-floor-boss{overflow:visible!important}
+.home-scene-unit.is-floor-boss .home-scene-power{position:relative;z-index:4}
+
+/* The label follows the expanded art, outside the layer being scaled. */
+.battle-screen.side-battle-v2 .party-floor-boss .side-unit-sprite>.battle-unit-floating-name{
+ position:absolute!important;
+ left:50%!important;
+ top:auto!important;
+ bottom:calc(187.5% + 3px)!important;
+ transform:translateX(-50%)!important;
+ translate:none!important;
+ width:max-content!important;
+ max-width:min(150px,36vw)!important;
+ display:flex!important;
+ flex-wrap:wrap!important;
+ justify-content:center!important;
+ align-items:center!important;
+ gap:2px 4px!important;
+ z-index:12!important;
+ pointer-events:none!important;
+}
+.battle-screen.side-battle-v2 .party-floor-boss .side-unit-sprite>.battle-unit-floating-name>b{
+ min-width:0!important;
+ white-space:normal!important;
+ overflow:visible!important;
+ text-overflow:clip!important;
+ overflow-wrap:anywhere!important;
+ line-height:1.2!important;
+}

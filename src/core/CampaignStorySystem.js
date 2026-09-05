@@ -276,6 +276,137 @@ export const CAMPAIGN_STORY_SCENES=Object.freeze([
  ])
 ]);
 
+// Optional camp beats extend the journey without changing battle progression.
+const JOURNEY_CONVERSATIONS={
+ 1:[
+  ["myth_rion","航海日誌の題名は『四人の英雄、魔王城へ』。初版には全員の署名を入れるよ。"],
+  ["myth_enami","僕まだ乗船すらしてへんのに、もう英雄なん？ ほな先に塩ください。"],
+  ["myth_hide","保存食は十日分。塩は二袋。えなみが使う量を入れると、二日分です。"],
+  ["myth_yori","塩だけ先に魔王城着く勢いやな。僕の荷物に半分入れとき。"],
+  ["myth_rion","僕の袋にも入るよ。追加料金は、帰ってきてから面白い話を一つ。"],
+  ["myth_enami","それなら払えるわ。さっきの羅針盤、実は……あれ、全員もう乗ってる？"],
+  ["myth_hide","人数確認、四人。……船員を入れ忘れた。"],
+  ["myth_yori","イージー！！ 最初の仕事、船長探しや！"]
+ ],
+ 2:[
+  ["myth_hide","海蛇が同じ音で三度鳴いた。警告か、感謝か、判別が必要だ。"],
+  ["myth_enami","餌、もう一個ほしいって。僕が昼飯のパンあげたから。"],
+  ["myth_rion","待って。通行料の契約より先に、こっちが給餌係になってない？"],
+  ["myth_yori","ええやん。卵の前で頑張ってたし。僕のパンも半分持っていき。"],
+  ["myth_hide","昼食を減らすと午後の戦力が落ちる。合理的ではない。"],
+  ["myth_enami","って言いながら、ひでのパンも割れてるで。"],
+  ["myth_hide","……検証用だ。感謝の鳴き声を、もう一度採取する。"],
+  ["myth_rion","航海日誌には『全員、海蛇に買収される』って書いとくね。"]
+ ],
+ 3:[
+  ["myth_yori","ひで、さっき肩かすめたん、ごめんな。波と一緒に動くから。"],
+  ["myth_hide","船に乗っている以上、全員が波と一緒に動きます。反省の前提を直してください。"],
+  ["myth_enami","より、そこは素直に謝っとこ。ひでの肩は海峡ちゃう。"],
+  ["myth_yori","はい。肩海峡、すみませんでした。"],
+  ["myth_rion","名所にしない。あとひで、手、震えてるよ。船酔い？"],
+  ["myth_hide","違う。誰かを落とさないための術式を、ずっと維持していた。"],
+  ["myth_enami","そっか。じゃあ今は休んどき。次の九十秒は僕が見る。"],
+  ["myth_yori","僕も見るわ。……酒は置いた。そこはほんまに。"]
+ ],
+ 4:[
+  ["myth_rion","村から毛布を四枚もらった。代金はいらないって。こういう取引が一番難しいな。"],
+  ["myth_enami","ありがとうでええんちゃう？ 相手がそうしたい理由も受け取ろ。"],
+  ["myth_hide","厚さに差がある。夜間の熱損失を計算して、配分を……。"],
+  ["myth_yori","ほな一番分厚いの、ずっと考えてて寝不足のひでに。"],
+  ["myth_hide","僕の睡眠時間まで観測されていたのか。"],
+  ["myth_rion","昨日、寝言で『錨』って三回言ってた。忘れ物は夢でも回収できてないよ。"],
+  ["myth_enami","僕も羅針盤ちょっと置いて寝るわ。毛布に穴開けたら申し訳ないし。"],
+  ["myth_yori","まず工具を寝床から出してくれへん？"]
+ ],
+ 5:[
+  ["myth_hide","門は開いた。よりの手も腫れた。予定していない修理箇所が増えました。"],
+  ["myth_yori","門が先に固かったんや。"],
+  ["myth_enami","門のせいにせんと手ぇ出して。話を聞くんと手当ては、同時にできる。"],
+  ["myth_rion","包帯は僕の在庫から。売値は高いけど、身内価格はゼロ。"],
+  ["myth_yori","おっと〜！？ 珍しいな。なんか裏ある？"],
+  ["myth_rion","その拳が壊れると、僕が重い荷物を持つことになる。大損だからね。"],
+  ["myth_hide","その説明なら、荷物を減らす方が安い。"],
+  ["myth_enami","ひで、今そこ計算せんでええとこやで。"]
+ ],
+ 6:[
+  ["myth_enami","石像、僕には『誰も傷つかん世界』って言うてきた。"],
+  ["myth_yori","ええ話っぽいな。なんで断ったん？"],
+  ["myth_enami","何も選ばんかったら誰も傷つかん、やって。間違えたあと謝ることも、できへんやん。"],
+  ["myth_hide","僕には『絶対に抜けのない計算』。魅力的だったが、未知の項目を全て消す方式だった。"],
+  ["myth_rion","僕は商権。でも契約したら全員ここで働くことになってた。無断採用はさすがにしないよ。"],
+  ["myth_yori","僕には酒やった。"],
+  ["myth_hide","君だけ審査が簡単すぎる。"],
+  ["myth_yori","一人で飲めって条件やったから断ったわ。帰って皆で飲む方がええやろ。"]
+ ],
+ 7:[
+  ["myth_rion","見本布、全部使っちゃったな。帰ったら新しい地図を刷らないと。"],
+  ["myth_hide","でも、斥候の分まで命綱が届いた。結果として最適な長さだった。"],
+  ["myth_enami","あの人、最後まで名前言わへんかったな。言うたら仲間に迷惑かかるんやろか。"],
+  ["myth_yori","言いたくなる時まで待ったらええ。僕らの名前は教えたし。"],
+  ["myth_rion","僕の名刺も渡した。困ったら連絡してって。裏に避難場所を書いたから。"],
+  ["myth_hide","名刺に商品一覧がない。珍しい。"],
+  ["myth_rion","今買ってほしい物、特にないからね。生きて帰ってくれたら、いつかお客さんになる。"],
+  ["myth_enami","うん。そういう商売なら僕も手伝うわ。"]
+ ],
+ 8:[
+  ["myth_hide","神域保険の約款を確認した。『神による損害は対象外』とは何ですか。"],
+  ["myth_rion","神域だからって、全部神のせいとは限らないよ。例えば、よりが門を殴った場合。"],
+  ["myth_yori","それは門が固かった場合やろ。"],
+  ["myth_enami","このやり取り、砦でも聞いたな。まず人の名前が出る免責条項やめよか。"],
+  ["myth_rion","じゃあ保険は廃止。治療費は四人で出し合う。そっちの方が早いね。"],
+  ["myth_hide","最初から、その方式でよかったのでは。"],
+  ["myth_rion","そういう結論に今すぐ切り替えられるのが、僕の強みってことで。"],
+  ["myth_yori","イージー！！ ほな全員、生きて請求しよか。"]
+ ],
+ 9:[
+  ["myth_yori","今日は飲まへん。明日、人の話も拳の話も、全部ちゃんと覚えときたいし。"],
+  ["myth_hide","驚いた。僕の計算より、ずっと良い判断だ。"],
+  ["myth_rion","僕も今日は帳簿を閉じる。帰った後の予定だけ決めようか。"],
+  ["myth_enami","もうちょっとどこか行きたい。魔王城見たあと、普通の景色も見たいやん。"],
+  ["myth_yori","ええな。海蛇のとこ戻ろ。卵、かえってるかもしれん。"],
+  ["myth_hide","経路を追加する。……今度は最短でなくても構わない。"],
+  ["myth_rion","航海日誌の続編が決まったね。題名は『帰り道は寄り道』。"],
+  ["myth_enami","売る気は閉じてへんのかい。まあ、僕もそれは読みたいわ。"]
+ ],
+ 10:[
+  ["myth_hide","最後に確認します。全員、退路は分かっていますか。"],
+  ["myth_yori","おう。拳より先に帰り道を覚えた。成長やろ。"],
+  ["myth_rion","僕は途中の扉も押さえた。今回は通行料なし。味方にも請求しない。"],
+  ["myth_enami","そこ当たり前やで。……でも、ありがとう。"],
+  ["myth_hide","僕が何かを見落としたら、言ってください。計算を止めるより、直す方が早い。"],
+  ["myth_yori","言う。僕が勢いで突っ込んだら止めてな。"],
+  ["myth_rion","止めるよ。帰り道の本、四人全員の名前で出すんだから。"],
+  ["myth_enami","ほな行こか。誰か一人が完璧になる必要はない。足りへんとこ、ここまでずっと補ってきたやろ。"]
+ ]
+};
+const SMALL_PARTY_ROUTES={
+ 1:"港で乗船の支度を整える。積み荷より先に、帰還のための余力を確かめた。",
+ 2:"卵を守る海蛇を前に武器を下ろし、遠回りでも争わずに通れる航路を選んだ。",
+ 3:"黒潮の周期を数え、船を進める。無理に波を割らず、静まる瞬間を待った。",
+ 4:"家族を人質に取られた沿岸の兵から事情を聞き、村へ通じる退路を開いた。",
+ 5:"境界砦では閉じ込められた民の出口を先に確保し、門の封鎖を一つずつ解いた。",
+ 6:"七罪の荒野で、望みを差し出す石像に出会う。仲間の不在を埋めるという誘いにも、足を止めなかった。",
+ 7:"崩れた橋に取り残された斥候を助け、魔王領への道をつないだ。",
+ 8:"十神の光壁を避けて干渉点を探る。正面から力を比べず、通れる道へ戦力を集中した。",
+ 9:"魔王城の外郭で荷を置き、残った戦力と傷を確かめる。最後の休息を急がず取った。",
+ 10:"王室へ続く道が開いた。戻らない仲間の役割を確かめ、今ここにいる者で最後の布陣を組んだ。"
+};
+function smallPartyDialogue(definition,ids,heroState){
+ const fallen=HERO_PARTY_IDS.filter(id=>heroState.heroes[id].defeated),away=heroState.awayHeroIds.filter(id=>!fallen.includes(id)),name=id=>CAMPAIGN_STORY_CHARACTERS[id].name;
+ if(!ids.length)return[line(null,fallen.length===4?"勇者一行の足音は、ここまで届かなかった。道中で四人全員が退けられ、予言にあった旅路だけが静かに残った。":"この場には誰もいない。単独行動中の仲間を待つ場所だけが残されていた。","narration")];
+ const dialogue=[line(null,`${definition.location}。${SMALL_PARTY_ROUTES[definition.day]}`,"narration")];
+ if(fallen.length)dialogue.push(line(null,`${fallen.map(name).join("と")}は道中で退けられ、ここには戻っていない。`,"narration"));
+ if(away.length)dialogue.push(line(null,`${away.map(name).join("と")}は別行動中だ。合流の約束を残し、この場では${ids.length}人で判断する。`,"narration"));
+ const words={
+  myth_enami:["進む理由は変わらへん。でも、今ここにおる仲間を削ってまで急ぐ理由もない。","相手にも守る事情があるなら聞く。そこを飛ばして勝った気には、なりたくないねん。","……話は聞いてるで。塩の残りを数えてただけ。帰り道の分は残しとく。"],
+  myth_yori:["話、最後まで聞こか。急いで殴っても、帰り道は増えへんしな。","僕が前に出る。でも、後ろがついて来られる速さにする。そこは約束や。","イージー、とは言わん。せやけど、まだ僕の拳は届く。笑って帰る分も残ってる。"],
+  myth_hide:["人数と残る傷を計算に入れ直す。以前と同じ作戦を、そのまま使うのは危険だ。","必要な確認は、足場、退路、食料。……今度は最後の項目も書きました。","計算は、誰かを切り捨てるためではない。戻れる可能性を一つでも増やすために使う。"],
+  myth_rion:["替えの利かないものから守ろう。荷物も帳簿も作り直せるけど、人はそうはいかない。","今日の利益は、明日も動けること。そういう日があっても帳尻は合わせるよ。","帰ったら、この遠回りも記録に残す。都合のいい武勇伝にはしない。約束だからね。"]
+ };
+ for(let turn=0;turn<3;turn++)for(const id of ids)dialogue.push(line(id,words[id][turn],turn===2?"gentle":"serious"));
+ dialogue.push(line(null,ids.length===1?"一人の足音が続く。独りになっても、交わした約束までは消えなかった。":`${ids.length}人は顔を見合わせ、互いの手が届く距離で歩き出した。`,"narration"));return dialogue;
+}
+
 const STORY_BY_ID=new Map([[CAMPAIGN_STORY_OPENING.id,CAMPAIGN_STORY_OPENING],...CAMPAIGN_STORY_SCENES.map(value=>[value.id,value])]);
 const plainRecord=value=>Boolean(value&&typeof value==="object"&&!Array.isArray(value));
 const boundedInteger=(value,fallback=0,min=0,max=Number.MAX_SAFE_INTEGER)=>{const number=Number(value);return Number.isFinite(number)?Math.max(min,Math.min(max,Math.floor(number))):fallback};
@@ -361,7 +492,22 @@ const HERO_WOUND_REACTIONS=Object.freeze({
 function rotatingFocus(candidates,day){if(!candidates.length)return null;const offset=Math.max(0,boundedInteger(day,1,1,10)-1)%candidates.length;return candidates[offset]}
 function continuityVariant(story,day=1){const heroes=HERO_PARTY_IDS.map(id=>story.heroContinuity[id]??emptyHeroContinuity(id)),repelled=heroes.filter(hero=>hero.defeated||hero.repelledCount>0).sort((a,b)=>b.repelledCount-a.repelledCount||b.damageRatio-a.damageRatio),wounded=heroes.filter(hero=>hero.damageRatio>=.08).sort((a,b)=>b.damageRatio-a.damageRatio);if(repelled.length){const top=repelled[0].repelledCount,candidates=repelled.filter(hero=>hero.repelledCount===top);return{variant:"repelled",focus:rotatingFocus(candidates,day)}}if(wounded.length)return{variant:"wounded",focus:rotatingFocus(wounded,day)};return{variant:"default",focus:null}}
 export function resolveCampaignStoryScene(sceneId,state){
- const id=validSceneId(sceneId),definition=id?STORY_BY_ID.get(id):null;if(!definition)return null;const story=normalizeCampaignStoryState(state),condition=definition.kind==="milestone"?continuityVariant(story,definition.day):{variant:"default",focus:null},dialogue=definition.dialogue.map(entry=>({...entry}));if(condition.focus){const band=definition.day<=3?"early":definition.day<=7?"mid":"late",text=HERO_WOUND_LINES[condition.focus.heroId]?.[condition.variant]?.[band],reaction=HERO_WOUND_REACTIONS[condition.focus.heroId]?.[condition.variant]?.[band];if(text)dialogue.push({speakerId:condition.focus.heroId,text,tone:condition.variant,continuity:true});if(reaction)dialogue.push({...reaction,continuity:true,reactionToHeroId:condition.focus.heroId})}return{...definition,dialogue,variant:condition.variant,focusHeroId:condition.focus?.heroId??null,characters:[...new Set(dialogue.map(entry=>entry.speakerId).filter(Boolean))].map(characterId=>CAMPAIGN_STORY_CHARACTERS[characterId]).filter(Boolean),heroContinuity:Object.fromEntries(HERO_PARTY_IDS.map(heroId=>[heroId,{...story.heroContinuity[heroId]}]))}
+ const id=validSceneId(sceneId),definition=id?STORY_BY_ID.get(id):null;if(!definition)return null;
+ const story=normalizeCampaignStoryState(state),ledger=state?.campaign100?.heroEncounters310,active=ledger?.events?.[ledger.activeEncounterId];
+ const heroState={heroes:Object.fromEntries(HERO_PARTY_IDS.map(heroId=>{const record=story.heroContinuity[heroId];return[heroId,{...record,defeated:record.defeated||record.damageRatio>=1,remainingHpRate:Math.max(0,1-record.damageRatio)}]})),awayHeroIds:active?.status==="active"?[active.heroId].filter(Boolean):[]};
+ const castIds=definition.kind==="opening"?["lionel","sairan"]:HERO_PARTY_IDS.filter(heroId=>!heroState.heroes[heroId].defeated&&!heroState.awayHeroIds.includes(heroId));
+ const condition=definition.kind==="milestone"?continuityVariant(story,definition.day):{variant:"default",focus:null};
+ let dialogue=definition.dialogue.map(entry=>({...entry})),summary=definition.summary;
+ if(definition.kind==="milestone"){
+  if(castIds.length<4){dialogue=smallPartyDialogue(definition,castIds,heroState);summary=castIds.length?`第${definition.day}日。${definition.location}で、今ここにいる${castIds.length}人が先へ進む方法を選ぶ。`:"勇者たちが歩むはずだった道に、静けさが残っている。"}
+  else{const extra=(JOURNEY_CONVERSATIONS[definition.day]??[]).map(([speakerId,text])=>({...line(speakerId,text)}));const at=dialogue.at(-1)?.speakerId==null?dialogue.length-1:dialogue.length;dialogue.splice(at,0,...extra)}
+ }
+ if(condition.focus&&condition.variant==="wounded"&&castIds.includes(condition.focus.heroId)){
+  const band=definition.day<=3?"early":definition.day<=7?"mid":"late",text=HERO_WOUND_LINES[condition.focus.heroId]?.wounded?.[band],reaction=HERO_WOUND_REACTIONS[condition.focus.heroId]?.wounded?.[band];
+  if(text)dialogue.push({speakerId:condition.focus.heroId,text:castIds.length===4?text:text.replaceAll("四人で帰る","仲間と帰る"),tone:"wounded",continuity:true});
+  if(reaction&&castIds.includes(reaction.speakerId))dialogue.push({...reaction,continuity:true,reactionToHeroId:condition.focus.heroId});
+ }
+ return{...definition,summary,dialogue,variant:condition.variant,focusHeroId:condition.focus?.heroId??null,castVersion:340,heroStoryState:heroState,characters:castIds.map(characterId=>CAMPAIGN_STORY_CHARACTERS[characterId]).filter(Boolean),heroContinuity:Object.fromEntries(HERO_PARTY_IDS.map(heroId=>[heroId,{...heroState.heroes[heroId]}]))}
 }
 
 export function acknowledgeCampaignStoryScene(state,sceneId,{seenAt=null}={}){

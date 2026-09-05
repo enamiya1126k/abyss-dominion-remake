@@ -1,0 +1,20 @@
+/* Build337: deliberate, untimed hero encounters; no new animated assets. */
+.hero-encounter-choice-modal .hero-encounter-choice {
+  color: #f1e7d1;
+  background: #10100f;
+  border: 1px solid #a68a50;
+  padding: clamp(16px, 4vw, 28px);
+  text-align: center;
+}
+.hero-encounter-choice > small { color: #c3a367; letter-spacing: .12em; font-size: 10px; }
+.hero-encounter-choice h3 { color: #f3d999; font-size: clamp(22px, 6vw, 30px); margin: 16px 0; }
+.hero-encounter-choice p { line-height: 1.7; overflow-wrap: anywhere; }
+.hero-encounter-choice .muted { color: #b8b3a9; font-size: 13px; }
+.hero-encounter-choice [data-hero-choice-flee] {
+  display: block; width: 100%; min-height: 48px; margin-top: 20px;
+  color: #ede0c2; background: #1b1a17; border: 1px solid #82704b; border-radius: 3px;
+  touch-action: manipulation;
+}
+.hero-encounter-choice-modal [data-modal-primary] { min-height: 48px; touch-action: manipulation; }
+.hero-encounter-choice-modal [data-modal-dismiss] { display: none !important; }
+.hero-encounter-choice-modal button:focus-visible { outline: 2px solid #ffe09a; outline-offset: 3px; }

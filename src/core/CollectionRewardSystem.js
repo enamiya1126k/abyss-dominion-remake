@@ -103,7 +103,7 @@ export function collectionMilestoneUnlockFloor(milestone){
 export function collectionMilestoneReward(milestone,{complete=false}={}){
  const count=Math.max(1,number(milestone)),major=count%50===0||complete,century=count%100===0||complete;
  return Object.freeze({
-  gold:Math.max(15000,count*count*250),crystals:Math.max(10,count*2),captureCrystals:Math.max(5,Math.ceil(count/3)),
+  gold:Math.max(15000,count*count*250),crystals:Math.max(20,count*4),captureCrystals:Math.max(5,Math.ceil(count/3)),
   abyssKeys:major?Math.max(5,Math.floor(count/10)):0,experienceItemsUltra:major?Math.max(1,Math.floor(count/25)):0,
   fullHeals:century?Math.max(3,Math.floor(count/50)):0,partyFullHeals:century?1:0,
   mythicEquipment:major?1:0,equipmentPlus:major?Math.min(99,20+Math.floor(count/10)):0

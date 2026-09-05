@@ -1,6 +1,9 @@
 const freeze=value=>Object.freeze(value);
 
 export const MAGIC_CIRCLE_STATE_VERSION=4;
+export const RAID_EXCLUSIVE_MAGIC_CIRCLE_IDS=freeze(["reincarnation","raid_zero_sovereign","raid_vajra_beast"]);
+const RAID_EXCLUSIVE_MAGIC_CIRCLE_SET=new Set(RAID_EXCLUSIVE_MAGIC_CIRCLE_IDS);
+export function isRaidExclusiveMagicCircle(id){return RAID_EXCLUSIVE_MAGIC_CIRCLE_SET.has(String(id??""))}
 
 function safeCircleLevel(level=1){return Math.max(1,Math.min(99,Math.floor(Number(level)||1)))}
 function circleLevelProgress(level=1){return(safeCircleLevel(level)-1)/98}
@@ -65,7 +68,7 @@ export function magicCircleLevelEffect(entryOrId,level=1){
   return freeze({...base,surviveHpRate:roundedRate(surviveHpRate),minimumHp:1,summary:surviveHpRate?`致死耐久後 HP${percentText(surviveHpRate)}で生存`:`致死耐久後 HP1で生存`});
  }
  if(entry.effect==="revive"){
-  const reviveHpRate=.40+.30*progress,reviveMpRate=.25+.25*progress;
+  const raidExclusive=isRaidExclusiveMagicCircle(entry.id),reviveHpRate=(raidExclusive?0.70:0.40)+(raidExclusive?0.30:0.30)*progress,reviveMpRate=(raidExclusive?0.50:0.25)+(raidExclusive?0.30:0.25)*progress;
   return freeze({...base,reviveHpRate:roundedRate(reviveHpRate),reviveMpRate:roundedRate(reviveMpRate),summary:`蘇生 HP${percentText(reviveHpRate)}・MP${percentText(reviveMpRate)}`});
  }
  if(entry.effect==="manaReversal"){
@@ -77,7 +80,7 @@ export function magicCircleLevelEffect(entryOrId,level=1){
   return freeze({...base,preventsCritical:true,damageReductionRate:roundedRate(damageReductionRate),summary:`深淵・十神の会心無効${damageReductionRate?`・被ダメージ${percentText(damageReductionRate)}軽減`:""}`});
  }
  if(entry.effect==="shield"){
-  const shieldRate=.50+.20*progress;
+  const raidExclusive=isRaidExclusiveMagicCircle(entry.id),shieldRate=(raidExclusive?1:0.50)+(raidExclusive?0.50:0.20)*progress;
   return freeze({...base,shieldRate:roundedRate(shieldRate),summary:`開戦障壁 最大HP${percentText(shieldRate)}`});
  }
  if(entry.effect==="openingBuff"){
@@ -89,8 +92,8 @@ export function magicCircleLevelEffect(entryOrId,level=1){
   return freeze({...base,triggerTurn,summary:`終焉発動 ${triggerTurn}ターン`});
  }
  if(entry.effect==="rage"){
-  const damagePerHit=.08+.02*progress,maxDamageBonus=1+.25*progress;
-  return freeze({...base,damagePerHit:roundedRate(damagePerHit),maxDamageBonus:roundedRate(maxDamageBonus),firstChainHits:4,secondChainHits:9,summary:`被弾ごと与ダメ +${percentText(damagePerHit)}・最大+${percentText(maxDamageBonus)}`});
+  const raidExclusive=isRaidExclusiveMagicCircle(entry.id),damagePerHit=(raidExclusive?0.14:0.08)+(raidExclusive?0.06:0.02)*progress,maxDamageBonus=(raidExclusive?1.5:1)+(raidExclusive?0.75:0.25)*progress;
+  return freeze({...base,damagePerHit:roundedRate(damagePerHit),maxDamageBonus:roundedRate(maxDamageBonus),firstChainHits:raidExclusive?2:4,secondChainHits:raidExclusive?5:9,summary:`被弾ごと与ダメ +${percentText(damagePerHit)}・最大+${percentText(maxDamageBonus)}`});
  }
  if(entry.effect==="weakCrit"){
   const criticalCeiling=.48+.12*progress;
@@ -263,23 +266,13 @@ export function magicCirclePrice(state,id){
 export function magicCircleUpgradePrice(entryOrId,level=1){const entry=typeof entryOrId==="string"?magicCircleById(entryOrId):entryOrId;return roundedUpgradePrice(entry?.baseUpgrade,level,{coefficient:.0002,exponent:1.30})}
 
 export function magicCircleLevelCapForFloor(floor=1){
- const value=Math.max(1,Math.floor(Number(floor)||1));
- if(value<20)return 1;
- if(value<40)return 3;
- if(value<60)return 6;
- if(value<80)return 10;
- if(value<100)return 15;
- if(value<200)return 25;
- if(value<500)return 40;
- if(value<1000)return 60;
- if(value<5000)return 80;
+ void floor;
  return 99;
 }
 
 export function magicCircleProgressionStatus(state,level=1){
- const floor=Math.max(1,Math.floor(Number(state?.player?.maxFloor)||1)),cap=magicCircleLevelCapForFloor(floor),current=Math.max(1,Math.floor(Number(level)||1));
- const nextFloor=[20,40,60,80,100,200,500,1000,5000].find(value=>value>floor)??null;
- return Object.freeze({floor,cap,current,atCap:current>=cap,nextFloor});
+ const floor=Math.max(1,Math.floor(Number(state?.player?.maxFloor)||1)),cap=99,current=Math.max(1,Math.floor(Number(level)||1));
+ return Object.freeze({floor,cap,current,atCap:current>=cap,nextFloor:null});
 }
 
 export function magicCircleNextEffect(entryOrId,level=0){
@@ -307,11 +300,9 @@ export function buyOrUpgradeMagicCircle(state,id){
  // 以後 normalize を呼ぶ公開ヘルパーを使わず、同じ現物IDを最後に再取得する。
  const exact=state.magicCircles.instances.find(item=>item.instanceId===id)??null,entry=magicCircleById(exact?.circleId??id),candidate=exact??state.magicCircles.instances.filter(item=>item.circleId===entry.id).sort((a,b)=>b.level-a.level)[0],instanceId=candidate?.instanceId??null,level=candidate?.level??0;
  if(entry.id==="none")return{ok:false,message:"魔法陣なしは強化できません。"};
- if(!state.magicCircles.unlocked?.[entry.id])return{ok:false,message:"この術式の知識は深淵ツリーで未解禁です。"};
+ if(!state.magicCircles.unlocked?.[entry.id])return{ok:false,message:isRaidExclusiveMagicCircle(entry.id)?"この術式はレイドボス交換所で未入手です。":"この術式の知識は深淵ツリーで未解禁です。"};
  if(!level)return{ok:false,message:"現物を所持していません。再構築または交換で入手してください。"};
  if(level>=99)return{ok:false,message:"最大Lv.99です。"};
- const progression=magicCircleProgressionStatus(state,level);
- if(progression.atCap)return{ok:false,reason:"floor",message:progression.nextFloor?`${progression.nextFloor}階到達でLv.${magicCircleLevelCapForFloor(progression.nextFloor)}まで強化可能です。`:"現在の到達階層では強化上限です。",progression};
  const price=magicCircleUpgradePrice(entry,level),gold=Math.max(0,Number(state.player?.gold)||0);
  if(gold<price)return{ok:false,message:`GOLDが${price.toLocaleString()}G必要です`};
  const instance=state.magicCircles.instances.find(item=>item.instanceId===instanceId);
@@ -328,7 +319,7 @@ export function equipMagicCircle(state,monster,idOrInstance){
  if(!monster)return{ok:false,message:"対象が見つかりません"};
  const exact=magicCircleInstanceById(state,idOrInstance),entry=magicCircleById(exact?.circleId??idOrInstance);
  if(entry.id==="none"){monster.magicCircleId="none";monster.magicCircleInstanceId=null;return{ok:true,circle:entry,instance:null}}
- if(!isMagicCircleUnlocked(state,entry.id))return{ok:false,message:"現物は所持していますが、深淵ツリーで術式の知識が未解禁です"};
+ if(!isMagicCircleUnlocked(state,entry.id))return{ok:false,message:isRaidExclusiveMagicCircle(entry.id)?"レイドボス交換所で入手すると装着できます":"現物は所持していますが、深淵ツリーで術式の知識が未解禁です"};
  const occupied=new Set((state.monsters??[]).filter(item=>item.id!==monster.id).map(item=>item.magicCircleInstanceId).filter(Boolean)),instance=exact??(monster.magicCircleId===entry.id?magicCircleInstanceById(state,monster.magicCircleInstanceId):null)??state.magicCircles.instances.find(item=>item.circleId===entry.id&&!occupied.has(item.instanceId));
  if(!instance)return{ok:false,message:"使用できる現物がありません。装着中の仲間から外すか、同じ種類をもう1個入手してください。"};
  const owner=magicCircleOwner(state,instance.instanceId,{excludeMonsterId:monster.id});
@@ -348,23 +339,23 @@ export function magicCircleMarkup(monster,state,{className=""}={}){return circle
 const ENEMY_CIRCLE_RANK_BONUS=Object.freeze({n:0,r:0,sr:1,ssr:2,ur:3,lr:4,"神話":5,"深淵":8,"十神":10,abyss:8,tengod:10});
 function normalizedEnemyRank(rank){return String(rank??"N").trim().toLowerCase()}
 export function enemyMagicCircleRateForFloor(floor,rank="N"){
- const f=Math.max(1,Math.floor(Number(floor)||1));
- void rank;
- if(f<120)return 0;
- if(f<200)return .05+(f-120)/80*.13;
- if(f<300)return .18+(f-200)/100*.12;
- if(f<500)return .30+(f-300)/200*.18;
- if(f<750)return .48+(f-500)/250*.14;
- if(f<1000)return .62+(f-750)/250*.13;
- if(f<2000)return .75+(f-1000)/1000*.11;
- if(f<5000)return .86+(f-2000)/3000*.07;
- return Math.min(.98,.93+(f-5000)/5000*.05);
+ const f=Math.max(1,Math.floor(Number(floor)||1)),rankBonus=Math.min(.18,(ENEMY_CIRCLE_RANK_BONUS[normalizedEnemyRank(rank)]??0)*.018);
+ let base=0;
+ if(f>=20&&f<50)base=.03;
+ else if(f<100)base=.10;
+ else if(f<200)base=.20;
+ else if(f<500)base=.34;
+ else if(f<1000)base=.50;
+ else if(f<2000)base=.66;
+ else if(f<5000)base=.78;
+ else base=.88;
+ return Math.min(.96,base+rankBonus);
 }
 export function enemyMagicCircleLevelForFloor(floor,{rank="N",random=Math.random}={}){
  const rankId=normalizedEnemyRank(rank);
  const f=Math.max(1,Math.floor(Number(floor)||1));
  const roll=Math.max(0,Math.min(.999999,Number(random())||0));
- const points=[[120,1,2],[200,2,4],[300,3,7],[500,6,12],[750,10,20],[1000,16,28],[2000,25,45],[5000,45,70],[10000,70,95]];
+ const points=[[20,1,1],[50,1,2],[100,1,4],[200,3,8],[500,7,16],[1000,14,28],[2000,25,45],[5000,45,70],[10000,70,95]];
  let lower=points[0],upper=points[points.length-1];
  for(let index=1;index<points.length;index++)if(f<=points[index][0]){lower=points[index-1];upper=points[index];break}
  const t=Math.max(0,Math.min(1,(f-lower[0])/Math.max(1,upper[0]-lower[0]))),minimum=lower[1]+(upper[1]-lower[1])*t,maximum=lower[2]+(upper[2]-lower[2])*t,rankBonus=(ENEMY_CIRCLE_RANK_BONUS[rankId]??0)*(.25+t*.35);
@@ -373,7 +364,7 @@ export function enemyMagicCircleLevelForFloor(floor,{rank="N",random=Math.random
 export function rollEnemyMagicCircle(floor,{rank="N",random=Math.random,force=false,excludeIds=[]}={}){
  const chance=force?1:enemyMagicCircleRateForFloor(floor,rank);
  if(Math.max(0,Math.min(.999999,Number(random())||0))>=chance)return null;
- const excluded=new Set(Array.isArray(excludeIds)?excludeIds:excludeIds instanceof Set?[...excludeIds]:[]),choices=MAGIC_CIRCLES.filter(entry=>entry.id!=="none"&&!excluded.has(entry.id)),roll=Math.max(0,Math.min(.999999,Number(random())||0)),entry=choices[Math.floor(roll*choices.length)]??choices[0];
+ const excluded=new Set(Array.isArray(excludeIds)?excludeIds:excludeIds instanceof Set?[...excludeIds]:[]),choices=MAGIC_CIRCLES.filter(entry=>entry.id!=="none"&&!isRaidExclusiveMagicCircle(entry.id)&&!excluded.has(entry.id)),roll=Math.max(0,Math.min(.999999,Number(random())||0)),entry=choices[Math.floor(roll*choices.length)]??choices[0];
  if(!entry)return null;
  const level=enemyMagicCircleLevelForFloor(floor,{rank,random});
  return{...entry,level,enemyOnly:true,chance};

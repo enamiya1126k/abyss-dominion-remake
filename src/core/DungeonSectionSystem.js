@@ -212,6 +212,18 @@ export function portalTowardSection(world,fromId,toId){
  const route=sectionRoute(world,fromId,toId);if(route.length<2)return null;return(world?.sectionPortals??[]).find(portal=>portal.sectionId===route[0]&&portal.targetSectionId===route[1])??null
 }
 
+export function portalTapDestination(world,target,currentSectionId=world?.currentSectionId){
+ if(!world||!target||!Number.isInteger(target.x)||!Number.isInteger(target.y)||world.tiles?.[target.y]?.[target.x]===0)return null;
+ const directionById={north:{dx:0,dy:-1},east:{dx:1,dy:0},south:{dx:0,dy:1},west:{dx:-1,dy:0}},matches=[];
+ for(const portal of world.sectionPortals??[]){
+  if(portal.sectionId!==currentSectionId)continue;
+  const direction=directionById[portal.direction];if(!direction)continue;
+  const offsetX=target.x-portal.x,offsetY=target.y-portal.y,forward=offsetX*direction.dx+offsetY*direction.dy,lateral=Math.abs(offsetX*direction.dy-offsetY*direction.dx),depth=Math.ceil(Math.max(3.15,Math.min(4.35,Number(portal.passageDepth)||3.8))+.35);
+  if(forward>=1&&forward<=depth&&lateral<=1)matches.push({portal,score:forward*4+lateral})
+ }
+ matches.sort((left,right)=>left.score-right.score);const portal=matches[0]?.portal;return portal?{x:portal.x,y:portal.y}:null
+}
+
 export function sectionBounds(world,sectionId,padding=1){
  const section=(world?.sections??[]).find(entry=>entry.id===sectionId)??(world?.sections??[])[0];if(!section)return{x:0,y:0,w:Number(world?.cols)||1,h:Number(world?.rows)||1,minX:0,minY:0,maxX:(Number(world?.cols)||1)-1,maxY:(Number(world?.rows)||1)-1};
  const savedCells=Array.isArray(section.cells)&&section.cells.length?section.cells:(section.cellKeys??[]).map(pointFromKey),cells=savedCells.filter(cell=>Number.isFinite(Number(cell?.x))&&Number.isFinite(Number(cell?.y))),xs=cells.map(cell=>Number(cell.x)),ys=cells.map(cell=>Number(cell.y)),numberOr=(value,fallback)=>Number.isFinite(Number(value))?Number(value):fallback,baseX=numberOr(section.x,xs.length?Math.min(...xs):0),baseY=numberOr(section.y,ys.length?Math.min(...ys):0),derivedMinX=numberOr(section.minX,xs.length?Math.min(...xs):baseX),derivedMinY=numberOr(section.minY,ys.length?Math.min(...ys):baseY),derivedMaxX=numberOr(section.maxX,xs.length?Math.max(...xs):baseX+Math.max(1,numberOr(section.w,1))-1),derivedMaxY=numberOr(section.maxY,ys.length?Math.max(...ys):baseY+Math.max(1,numberOr(section.h,1))-1),worldCols=Math.max(1,Math.floor(numberOr(world?.cols,derivedMaxX+1))),worldRows=Math.max(1,Math.floor(numberOr(world?.rows,derivedMaxY+1))),value=Math.max(0,Math.floor(Number(padding)||0)),minX=Math.max(0,Math.floor(derivedMinX)-value),minY=Math.max(0,Math.floor(derivedMinY)-value),maxX=Math.min(worldCols-1,Math.ceil(derivedMaxX)+value),maxY=Math.min(worldRows-1,Math.ceil(derivedMaxY)+value);return{x:minX,y:minY,w:maxX-minX+1,h:maxY-minY+1,minX,minY,maxX,maxY}

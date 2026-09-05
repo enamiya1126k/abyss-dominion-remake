@@ -128,7 +128,7 @@ export const SERVER_MAINTENANCE_NOTICE=Object.freeze({
  details:["接続の復旧を自動で確認しています","サーバー復旧後、このお知らせは自動で取り下げられます"]
 });
 
-export const DAILY_NOTICE_GIFT=Object.freeze({captureCrystals:5,crystals:100});
+export const DAILY_NOTICE_GIFT=Object.freeze({captureCrystals:5,crystals:150});
 export function tokyoNoticeDayKey(value=Date.now()){
  const date=value instanceof Date?value:new Date(value),parts=new Intl.DateTimeFormat("en",{timeZone:"Asia/Tokyo",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(date),part=type=>parts.find(entry=>entry.type===type)?.value;
  return`${part("year")}-${part("month")}-${part("day")}`;

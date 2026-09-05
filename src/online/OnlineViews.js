@@ -3,8 +3,8 @@ import { battleEnvironmentForFloor } from "../data/biomes.js?v=3.1.1-build311";
 import {
   onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml, ONLINE_ROOM_PURPOSES, ONLINE_ROOM_STYLES, renderOnlineRoomDirectory,
 } from "../ui/screens/OnlinePartyScreen.js?v=3.1.14-build333";
-import { BattleScreen } from "../ui/screens/BattleScreen.js?v=3.1.15-build334";
-import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=3.1.15-build334";
+import { BattleScreen } from "../ui/screens/BattleScreen.js?v=3.1.17-build336";
+import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=3.1.17-build336";
 import { pixelIcon } from "../ui/components/GameChrome.js?v=3.1.1-build311";
 
 const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "共同探索", raid: "レイドボス", team: "自由チーム戦", chat: "談話板" });
@@ -670,7 +670,7 @@ export function renderOnlineRaid(room, selfId, state = {}) {
     const enemies = [room.raid.boss, ...(room.raid.minions ?? [])];
     return renderSharedBattle({ mode: "raid", room, battle: room.raid, selfId, selectedTarget: state.selectedTarget, selectedAlly: state.selectedAlly, title: room.raid.name, enemies, skillMenu: state.skillMenu, itemMenu: state.itemMenu, itemTargetMenu: state.itemTargetMenu, hpTrails: state.hpTrails, presentationKoIds: state.presentationKoIds, autoSupported: state.battleAutoSupported, biomePanelCollapsed: state.battleBiomeCollapsed });
   }
-  const weekly = room?.weeklyRaid ?? {}, boss = weekly.boss ?? { id: "abyss-amalga", name: "終焉融骸・アビス＝マルガ", level: 50, maxHp: 50_000, heroAsset: "./assets/online/raid-abyss-amalgam.png", materialName: "融骸核片", contractName: "融骸幼体アマルガ", equipmentName: "終焉喰らいの大刃", circleId: "death_mirror", circleName: "即死返鏡陣", intro: "与ダメージ・回復・蘇生・防御・補助を貢献度として集計します。" }, modifier = weekly.modifier ?? { name: "通常環境", description: "特殊ルールなし" };
+  const weekly = room?.weeklyRaid ?? {}, boss = weekly.boss ?? { id: "abyss-amalga", name: "終焉融骸・アビス＝マルガ", level: 50, maxHp: 50_000, heroAsset: "./assets/online/raid-abyss-amalgam.png", materialName: "融骸核片", contractName: "融骸幼体アマルガ", equipmentName: "終焉喰らいの大刃", circleId: "reincarnation", circleName: "輪廻の魔法陣", intro: "与ダメージ・回復・蘇生・防御・補助を貢献度として集計します。" }, modifier = weekly.modifier ?? { name: "通常環境", description: "特殊ルールなし" };
   const progress = room?.raidProgress?.weekId && room.raidProgress.weekId !== weekly.weekId ? null : room?.raidProgress, completed = Boolean(progress?.completedAt), endsAt = Number(weekly.endsAt) || 0, endLabel = endsAt ? new Date(endsAt).toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "次週";
   const materials = Math.max(0, Number(state.gameState?.onlineParty?.raidMaterials) || 0), exchangeCount = state.gameState?.onlineParty?.raidExchange ?? {};
   const exchanges = [
