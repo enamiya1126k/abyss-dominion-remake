@@ -1,4 +1,4 @@
-import{APP_VERSION}from"../../core/config.js?v=3.1.16-build335";
+import{APP_VERSION}from"../../core/config.js?v=3.1.17-build336";
 import{calculatedStats,displayName}from"../../models/Monster.js?v=3.1.1-build311";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.1-build311";
 import{ENDGAME_BOSSES,ENDGAME_TRIALS}from"../../core/EndgameSystem.js?v=3.1.1-build311";
