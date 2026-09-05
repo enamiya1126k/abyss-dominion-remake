@@ -517,7 +517,7 @@ function circleDamageFactor(actor, round = 1, aliveCount = 2) {
   const effect = actor?.circleEffect ?? "none", missing = 1 - actor.hp / Math.max(1, actor.maxHp), level = Math.max(0, Number(actor?.circleLevel) || 0);
   if (effect === "openingBuff") return 1.2;
   if (effect === "manaReversal") return 1.15 + Math.min(.25, level * .004);
-  if (effect === "rage") return 1 + missing * .75;
+  if (effect === "rage") return actor?.circleId === "raid_vajra_beast" ? 1 + Math.min(2.25, missing * 3) : 1 + missing * .75;
   if (effect === "lowHpPower") return 1 + missing * 1.15;
   if (effect === "goldPower") return 1.12 + Math.min(.3, level * .004);
   if (effect === "soleSurvivor" && aliveCount === 1) return 1.65;
@@ -684,7 +684,8 @@ export class TeamBattleCoordinator {
       const sourceStats = profile.battleStats ?? member.profile.battleStats;
       const stats = settings.ruleset === "balanced" ? balancedStats(sourceStats, profile, combatants, sideCounts, side) : { ...sourceStats };
       const circleEffect = profile.circleEffect ?? "none";
-      const shield = circleEffect === "shield" ? Math.ceil(stats.hp * .5) : 0;
+      const circleLevel = Math.max(1, Number(profile.circleLevel) || 1), circleProgress = Math.max(0, Math.min(1, (circleLevel - 1) / 98));
+      const shield = circleEffect === "shield" ? Math.ceil(stats.hp * (profile.circleId === "raid_zero_sovereign" ? 1 + .5 * circleProgress : .5 + .2 * circleProgress)) : 0;
       const rosterIndex = Number.isInteger(Number(profile.rosterIndex)) ? Number(profile.rosterIndex) : memberOrder;
       players[actorId] = {
         playerId: actorId,
