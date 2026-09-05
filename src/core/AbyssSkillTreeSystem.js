@@ -457,7 +457,6 @@ const MAGIC_CIRCLE_UNLOCKS=Object.freeze({
  "combat-demonic-circuit-31":"weak_critical",
  "exploration-relic-map-05":"mana_reversal",
  "exploration-hunter-oath-08":"deep_silence",
- "exploration-fate-compass-12":"reincarnation",
  "exploration-relic-map-16":"death_drain",
  "exploration-hunter-oath-22":"crimson_threshold",
  "exploration-fate-compass-31":"death_mirror"

@@ -10,6 +10,7 @@ export{goldForClearedFloor}from"./GoldEconomySystem.js?v=3.1.1-build311";
 const EMPTY_MANUAL={active:false,startFloor:1,lastFloor:1,floorsCleared:0,pendingGold:0,startedAt:null};
 const IDLE_FLOOR_INTERVAL_MS=5*60*1000;
 const IDLE_REWARD_RATE=.1;
+const IDLE_CRYSTAL_INTERVAL_MS=30*60*1000;
 const IDLE_EQUIPMENT_INTERVAL_MS=2*60*60*1000;
 const IDLE_MAX_EQUIPMENT=12;
 
@@ -133,13 +134,14 @@ export function normalizeReturnRewards(state,at=Date.now()){
   state.returnRewards.history[key]=Math.max(0,Math.floor(Number(state.returnRewards.history[key])||0));
  }
  const idle=state.returnRewards.idle&&typeof state.returnRewards.idle==="object"?state.returnRewards.idle:{};
- const now=safeNow(at),rawLegacyLast=Number(idle.lastClaimAt),rawGoldLast=Number(idle.lastGoldClaimAt),rawEquipmentLast=Number(idle.lastEquipmentClaimAt),profile=idleRewardProfile(state.player?.maxFloor);
+ const now=safeNow(at),rawLegacyLast=Number(idle.lastClaimAt),rawGoldLast=Number(idle.lastGoldClaimAt),rawCrystalLast=Number(idle.lastCrystalClaimAt),rawEquipmentLast=Number(idle.lastEquipmentClaimAt),profile=idleRewardProfile(state.player?.maxFloor);
  const normalizeClock=(value,fallback)=>Number.isFinite(value)&&value>0?Math.min(value,now):fallback;
- const legacyLast=normalizeClock(rawLegacyLast,now),lastGoldClaimAt=normalizeClock(rawGoldLast,legacyLast),lastEquipmentClaimAt=normalizeClock(rawEquipmentLast,lastGoldClaimAt);
+ const legacyLast=normalizeClock(rawLegacyLast,now),lastGoldClaimAt=normalizeClock(rawGoldLast,legacyLast),lastCrystalClaimAt=normalizeClock(rawCrystalLast,lastGoldClaimAt),lastEquipmentClaimAt=normalizeClock(rawEquipmentLast,lastGoldClaimAt);
  state.returnRewards.idle={
   // lastClaimAt remains as a compatibility alias for pre-build301 saves.
   lastClaimAt:lastGoldClaimAt,
   lastGoldClaimAt,
+  lastCrystalClaimAt,
   lastEquipmentClaimAt,
   maxHours:profile.maxHours
  };
@@ -223,16 +225,18 @@ export function idleReturnPreview(state,now=Date.now()){
  normalizeReturnRewards(state,current);
  const idle=state.returnRewards.idle;
  const maxMs=idle.maxHours*60*60*1000;
- const rawGoldElapsedMs=Math.max(0,current-idle.lastGoldClaimAt),rawEquipmentElapsedMs=Math.max(0,current-idle.lastEquipmentClaimAt);
- const goldElapsedMs=Math.min(maxMs,rawGoldElapsedMs),equipmentElapsedMs=Math.min(maxMs,rawEquipmentElapsedMs);
+ const rawGoldElapsedMs=Math.max(0,current-idle.lastGoldClaimAt),rawCrystalElapsedMs=Math.max(0,current-idle.lastCrystalClaimAt),rawEquipmentElapsedMs=Math.max(0,current-idle.lastEquipmentClaimAt);
+ const goldElapsedMs=Math.min(maxMs,rawGoldElapsedMs),crystalElapsedMs=Math.min(maxMs,rawCrystalElapsedMs),equipmentElapsedMs=Math.min(maxMs,rawEquipmentElapsedMs);
  const floorUnits=Math.floor(goldElapsedMs/IDLE_FLOOR_INTERVAL_MS);
  const profile=idleRewardProfile(state.player?.maxFloor);
  const expeditionFloor=idleExpeditionFloor(state,current);
  const goldPerUnit=Math.max(1,Math.round(goldForClearedFloor(rewardDepth(expeditionFloor))*IDLE_REWARD_RATE));
  const baseGold=floorUnits*goldPerUnit;
+ const crystals=Math.floor(crystalElapsedMs/IDLE_CRYSTAL_INTERVAL_MS);
  return{
   elapsedMs:goldElapsedMs,
   goldElapsedMs,
+  crystalElapsedMs,
   equipmentElapsedMs,
   floorUnits,
   expeditionFloor,
@@ -240,12 +244,13 @@ export function idleReturnPreview(state,now=Date.now()){
   goldPerUnit,
   baseGold,
   gold:modifiedGoldReward(state,baseGold,"idleReturn"),
+  crystals,
   equipmentCount:idleEquipmentDropCount(equipmentElapsedMs),
   maxHours:idle.maxHours,
   expeditionRate:profile.expeditionRate,
   capped:rawGoldElapsedMs>=maxMs,
   equipmentCapped:rawEquipmentElapsedMs>=maxMs,
-  available:floorUnits>0||idleEquipmentDropCount(equipmentElapsedMs)>0
+  available:floorUnits>0||crystals>0||idleEquipmentDropCount(equipmentElapsedMs)>0
  };
 }
 
@@ -253,6 +258,7 @@ export function claimIdleReturn(state,now=Date.now()){
  const preview=idleReturnPreview(state,now);
  if(!preview.available)return preview;
  state.player.gold=saturatedNonNegativeAdd(state.player.gold,preview.gold);
+ state.player.crystals=saturatedNonNegativeAdd(state.player.crystals,preview.crystals);
  const equipment=[];
  for(let i=0;i<preview.equipmentCount;i++){
   const item=createIdleReturnEquipment(state,preview.expeditionFloor);
@@ -261,6 +267,7 @@ export function claimIdleReturn(state,now=Date.now()){
  }
  const current=safeNow(now),idle=state.returnRewards.idle;
  if(preview.floorUnits>0)idle.lastGoldClaimAt=preview.capped?current:Math.min(current,idle.lastGoldClaimAt+preview.floorUnits*IDLE_FLOOR_INTERVAL_MS);
+ if(preview.crystals>0)idle.lastCrystalClaimAt=Math.min(current,idle.lastCrystalClaimAt+preview.crystals*IDLE_CRYSTAL_INTERVAL_MS);
  if(preview.equipmentCount>0)idle.lastEquipmentClaimAt=preview.equipmentCapped?current:Math.min(current,idle.lastEquipmentClaimAt+preview.equipmentCount*IDLE_EQUIPMENT_INTERVAL_MS);
  idle.lastClaimAt=idle.lastGoldClaimAt;
  state.returnRewards.history.totalIdleClaims++;

@@ -27,12 +27,12 @@ export function enemyRankStatMultiplier(rank){return({N:1,R:1.015,SR:1.03,SSR:1.
 // 装備を持たない敵も最後まで残るため、すべてが六部位LRになることはない。
 export function equipmentHolderRateForFloor(floor){
  const f=safeFloor(floor);
- if(f<25)return 0;if(f<100)return lerp(.06,.18,(f-25)/75);if(f<300)return lerp(.18,.32,(f-100)/200);
- if(f<750)return lerp(.32,.48,(f-300)/450);if(f<1500)return lerp(.48,.62,(f-750)/750);return lerp(.62,.84,(f-1500)/8500);
+ if(f<20)return 0;if(f<50)return .04;if(f<100)return .12;if(f<200)return .22;if(f<500)return .36;
+ if(f<1000)return .50;if(f<2000)return .64;if(f<5000)return .76;return .84;
 }
 export function equipmentSlotsForFloor(floor){
  const f=safeFloor(floor);
- if(f<50)return 0;if(f<150)return 1;if(f<350)return 2;if(f<750)return 3;if(f<1500)return 4;if(f<3000)return 5;return 6;
+ if(f<20)return 0;if(f<50)return 1;if(f<100)return 1;if(f<200)return 2;if(f<500)return 3;if(f<1000)return 4;if(f<2000)return 5;return 6;
 }
 export function rollEnemyEquipmentRarity(floor,rank="N",roll=Math.random()){
  const f=safeFloor(floor),bonus=({N:0,R:.03,SR:.07,SSR:.12,UR:.18,LR:.25})[rank]??0,t=Math.min(.78,Math.pow(f/10000,.42)+bonus),r=clamp(Number(roll)||0,0,.999999);
