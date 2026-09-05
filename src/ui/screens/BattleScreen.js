@@ -22,7 +22,10 @@ function renderTurnOrder(battle){
  }).join("");
 }
 function growthText(unit){const plus=Math.max(0,Number(unit?.plus??unit?.sourcePlus)||0);return`+${plus}`}
-const BATTLE_ROLE_LABELS={balanced:"万能型",burst:"高火力型",controller:"妨害型",support:"支援型",speed:"高速型",tank:"防御型",healer:"回復型",magic:"魔法型",physical:"物理型",debuffer:"弱体型",poison:"毒撃型",burner:"炎撃型"};
+const BATTLE_ROLE_LABELS={
+ balanced:"万能型",burst:"高火力型",bruiser:"打撃型",controller:"妨害型",control:"制圧型",support:"支援型",speed:"高速型",tank:"防御型",healer:"回復型",magic:"魔法型",physical:"物理型",debuffer:"弱体型",poison:"毒撃型",burner:"炎撃型",assassin:"暗殺型",ambush:"奇襲型",counter:"反撃型",critical:"会心型",drain:"吸収型",hybrid:"複合型",ranged:"遠距離型",sovereign:"支配型",member:"戦闘員",striker:"攻撃型",guardian:"守護型",
+ attrition:"持久戦型","guardian-counter":"守護反撃型","magic-tactician":"魔法戦術型","physical-striker":"物理攻撃型","support-controller":"支援妨害型",subboss:"準ボス"
+};
 const BATTLE_EFFECT_LABELS={atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",evasionDown:"回避↓",accuracyDown:"命中↓",healDown:"回復↓",mpRecoveryDown:"MP回復↓",stun:"行動不能",vulnerable:"被ダメージ増加",taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",evasionUp:"回避↑",accuracyUp:"命中↑",regen:"再生",lifeSteal:"吸収",magicToPhysical:"魔力→物理"};
 function battleRoleLabel(role){return BATTLE_ROLE_LABELS[String(role??"balanced").toLowerCase()]??String(role??"万能型")}
 function battleEffectLabel(effect){return BATTLE_EFFECT_LABELS[effect?.kind]??effect?.name??String(effect?.kind??"効果")}
@@ -57,13 +60,13 @@ function renderEnemies(battle,enemies,target){
   const floorBoss=Boolean(enemy.floorBossCatalogId||enemy.boss&&enemy.campaignBossId&&!enemy.endgameBossId),endgameBoss=Boolean(enemy.endgameBossId||["abyss","tenGod"].includes(enemy.faction)),badge=enemy.boss?`<span class="boss-badge">${floorBoss?"階層BOSS":endgameBoss?(enemy.faction==="tenGod"?"十神":"深淵"):"BOSS"}</span>`:enemy.elite?`<span class="elite-badge">${htmlText(enemy.eliteAffixIcon??"🜲")} 強敵・${htmlText(enemy.eliteAffixName??"変異")}</span>`:"",safeName=htmlText(enemy.name);const danger="";
   const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
   const line=index<2?"front-line":"rear-line";
-  const dead=enemy.hp<=0,pendingKo=dead&&(battle.presentationKoIds??[]).map(String).includes(String(enemy.id)),element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",rank=combatRank(enemy,battle.species?.[enemy.speciesId])??"N",rankClass=floorBoss?"combat-rank-unit rank-floor-boss":`combat-rank-unit rank-${rankTone(rank)}`,rankMarkup=enemy.boss?"":rankBadge(rank);
+  const dead=enemy.hp<=0,pendingKo=dead&&(battle.presentationKoIds??[]).map(String).includes(String(enemy.id)),element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",rank=combatRank(enemy,battle.species?.[enemy.speciesId])??"N",rankClass=floorBoss?"combat-rank-unit rank-floor-boss":`combat-rank-unit rank-${rankTone(rank)}`,rankMarkup=enemy.boss?"":rankBadge(rank),floatingName=`<span class="battle-unit-floating-name battle-unit-floating-badges">${badge}${rankMarkup}<b title="${safeName}">${safeName}</b></span>`;
   return `<button id="enemy-${enemy.id}" ${dead?`disabled${pendingKo?"":' aria-hidden="true"'}`:`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${pendingKo?"presentation-ko-pending":""} ${enemy.boss?"boss-enemy":""} ${enemy.raidMainBoss?"raid-main-boss":""} ${enemy.raidSubBoss?"raid-sub-boss":""} ${floorBoss?"floor-boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${rankClass} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
-   <span class="battle-unit-floating-name battle-unit-floating-badges">${badge}${rankMarkup}<b title="${safeName}">${safeName}</b></span>
-   <div class="side-unit-sprite enemy-orb">${battle.enemyMagicCircleArt?.[enemy.id]??""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.visualFrame??(enemy.hp<=0&&!pendingKo?"down":"idle"),className:"battle-enemy-visual"})}</div>
+   ${enemy.boss?"":floatingName}
+   <div class="side-unit-sprite enemy-orb">${battle.enemyMagicCircleArt?.[enemy.id]??""}${enemy.boss?floatingName:""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.visualFrame??(enemy.hp<=0&&!pendingKo?"down":"idle"),className:"battle-enemy-visual"})}</div>
    <div class="side-unit-card enemy-info">
-    <div class="side-unit-name enemy-name">${danger}<b class="enemy-card-name" title="${safeName}">${safeName}</b><span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
+    <div class="side-unit-name enemy-name ${enemy.boss?"boss-meta-only":""}">${danger}${enemy.boss?"":`<b class="enemy-card-name" title="${safeName}">${safeName}</b>`}<span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
     ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}`,"enemy-hp")}
     <!-- enemy-mini-stats retired in Build321: enemy cards intentionally expose HP only. -->

@@ -624,6 +624,16 @@ export function canLearnAbyssSkill(state,nodeId){
  const tree=normalizeAbyssSkillTree(state);
  const learned=new Set(tree.learned);
  if(learned.has(node.id))return{ok:false,reason:"learned",message:"すでに習得済みです。",node};
+ const missing=node.requires.filter(id=>!learned.has(id));
+ if(missing.length){
+  const names=missing.map(id=>NODE_BY_ID.get(id)?.name).filter(Boolean).join("・");
+  return{ok:false,reason:"prerequisite",message:`先に「${names}」を習得してください。`,node,missing};
+ }
+ const candidates=node.requiresAny??[],needed=Math.max(0,Number(node.requiresAnyCount)||0),owned=candidates.filter(id=>learned.has(id));
+ if(needed&&owned.length<needed){
+  const names=candidates.map(id=>NODE_BY_ID.get(id)?.name).filter(Boolean).join("・");
+  return{ok:false,reason:"route",message:`前提候補「${names}」から${needed}個習得してください。`,node,missing:candidates.filter(id=>!learned.has(id)),needed};
+ }
  const gold=safeInteger(state.player?.gold,0);
  if(gold<node.cost)return{ok:false,reason:"gold",message:`GOLD不足｜あと ${(node.cost-gold).toLocaleString()}G`,node};
  return{ok:true,node};

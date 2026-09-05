@@ -10,11 +10,11 @@ function percentText(value,digits=1){
  return`${amount.toFixed(digits).replace(/\.0$/,"")}%`;
 }
 
-const circle=(id,name,glyph,tone,baseUpgrade,summary,effect,asset)=>{
+const circle=(id,name,glyph,tone,baseUpgrade,summary,effect,asset,{staticArt=false}={})=>{
  const assetId=asset??id,primary=`./assets/magic-circles/${assetId}.png`;
  return freeze({
   id,name,glyph,tone,baseUpgrade,summary,effect,asset:primary,
-  frames:freeze(id==="none"?[primary]:[primary,`./assets/magic-circles/${assetId}-2.png`,`./assets/magic-circles/${assetId}-3.png`])
+  frames:freeze(id==="none"||staticArt?[primary]:[primary,`./assets/magic-circles/${assetId}-2.png`,`./assets/magic-circles/${assetId}-3.png`])
  });
 };
 
@@ -37,7 +37,9 @@ export const MAGIC_CIRCLES=freeze([
  circle("sole_survivor","孤王覚醒陣","Ⅰ","black",620_000_000,"最後の生存者になると全能力と連撃率が大幅上昇。","soleSurvivor"),
  circle("death_drain","断末吸魔陣","MP","violet",380_000_000,"この者が倒れると、敵全体のMPを大量に奪う。","deathDrain"),
  circle("crimson_threshold","瀕死紅蓮陣","HP","red",460_000_000,"HPが少ないほど最終ダメージが上昇する。","lowHpPower"),
- circle("death_mirror","即死返鏡陣","鏡","cyan",760_000_000,"最初に受ける即死を無効化し、使用者へ反射する。","deathMirror")
+ circle("death_mirror","即死返鏡陣","鏡","cyan",760_000_000,"最初に受ける即死を無効化し、使用者へ反射する。","deathMirror"),
+ circle("raid_zero_sovereign","零界凍結陣","氷","blue",980_000_000,"戦闘開始時、氷晶の障壁で味方全体を守る。","shield","raid-zero-sovereign",{staticArt:true}),
+ circle("raid_vajra_beast","天雷轟界陣","雷","gold",1_080_000_000,"被弾するほど雷勢が高まり、連撃と最終ダメージが増す。","rage","raid-vajra-beast",{staticArt:true})
 ]);
 
 const BY_ID=new Map(MAGIC_CIRCLES.map(entry=>[entry.id,entry]));

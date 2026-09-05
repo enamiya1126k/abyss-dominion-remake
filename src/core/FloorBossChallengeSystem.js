@@ -61,14 +61,14 @@ export function createFloorBossChallengeEncounter(state,bossId){
  return{definition:boss,enemies:[leader,...supports]};
 }
 
-export function awardFloorBossChallengeFragments(state,bossId,won,battleId){
+export function awardFloorBossChallengeFragments(state,bossId,won,battleId,random=Math.random){
  const status=floorBossChallengeStatus(state,bossId);if(!status)return{ok:false,amount:0};
  const challenge=normalizeFloorBossChallengeState(state),key=String(battleId??"");
  if(key&&challenge.processedResults[key])return{...challenge.processedResults[key],duplicate:true};
  let amount=0,firstVictory=false;
  if(won){
   firstVictory=status.victories===0;
-  amount=firstVictory?10:Math.min(5,2+Math.floor(status.boss.floor/300));
+  amount=firstVictory?10:2+Math.min(2,Math.floor(Math.max(0,Math.min(.999999,Number(random())||0))*3));
   challenge.victories[bossId]=status.victories+1;challenge.fragments[bossId]=status.fragments+amount;
  }
  const result={ok:true,bossId,won:Boolean(won),amount,firstVictory,fragments:challenge.fragments[bossId],victories:challenge.victories[bossId]};

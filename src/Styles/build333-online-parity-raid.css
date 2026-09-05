@@ -1,0 +1,60 @@
+/* Build333: online/offline exploration parity, readable hero tactics and raid visuals. */
+
+/* Connection state belongs to the page flow and must never cover drawers/content. */
+.online-v3-room>.online-v3-connection-banner{
+ position:static!important;inset:auto!important;transform:none!important;z-index:1!important;
+ display:flex;align-items:center;justify-content:center;gap:7px;box-sizing:border-box;
+ width:100%;min-height:34px;margin:0;padding:6px 12px;
+ border-block:1px solid #315b52;background:#06221ddf;box-shadow:none!important;
+}
+.online-v3-room>.online-v3-connection-banner>span{display:none!important}
+.online-v3-profile-drawer:not([hidden])+.online-v3-connection-banner{display:none!important}
+
+/* The offline five-button bar is the canonical navigation in shared exploration. */
+.online-v3-stage .explore-nav{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+.online-v3-stage .explore-nav>button{min-width:0!important}
+.online-v3-stage .explore-nav>button>i{pointer-events:none}
+.online-explore-emote{display:none!important}
+
+/* Hero tactics: one skill per card and legible labels on a phone. */
+.campaign-hero-card-body{font-size:14px!important}
+.campaign-hero-profile-stage>div:last-child>small,
+.campaign-hero-skills>header small,.campaign-hero-decisions>header small{
+ color:#9ed9ec!important;font:800 10px/1.25 sans-serif!important;letter-spacing:.05em!important;
+}
+.campaign-hero-profile-stage>div:last-child>b{font-size:clamp(20px,5.5vw,28px)!important}
+.campaign-hero-profile-stage>div:last-child>span{font-size:13px!important}
+.campaign-hero-skill-grid{grid-template-columns:1fr!important;gap:10px!important}
+.campaign-hero-skill-card{min-height:0!important;padding:12px!important;border-color:#77617f!important}
+.campaign-hero-skill-card>header{display:grid!important;gap:7px!important}
+.campaign-hero-skill-card>header>span{display:flex;gap:6px;flex-wrap:wrap}
+.campaign-hero-skill-card>header small{overflow:visible!important;padding:4px 7px;border:1px solid #526c78;border-radius:999px;color:#bde7f1!important;font:800 10px/1 sans-serif!important;white-space:normal!important}
+.campaign-hero-skill-card>header b{font-size:17px!important;line-height:1.3!important}
+.campaign-hero-skill-card>dl{margin:0;padding:9px 0}
+.campaign-hero-skill-card>dl div{display:grid;grid-template-columns:42px minmax(0,1fr);gap:8px}
+.campaign-hero-skill-card>dl dt{color:#d9b86a;font-size:11px;font-weight:900}
+.campaign-hero-skill-card>dl dd{margin:0;color:#e2dce5;font-size:13px;line-height:1.55;overflow-wrap:anywhere}
+.campaign-hero-skill-card>footer{display:grid!important;grid-template-columns:minmax(0,1fr) auto auto;gap:6px!important}
+.campaign-hero-skill-card>footer span,.campaign-hero-skill-card>footer em{display:grid!important;gap:3px;min-width:0;padding:7px 8px!important;white-space:normal!important}
+.campaign-hero-skill-card>footer small{color:#91899a;font-size:9px}
+.campaign-hero-skill-card>footer b{color:#f1e7d6;font-size:11px;overflow-wrap:anywhere}
+
+/* Raid art must fit inside the battle unit instead of creating a giant empty box. */
+.raid-main-boss .battle-enemy-visual,.raid-sub-boss .battle-enemy-visual{
+ width:min(210px,46vw)!important;height:min(210px,46vw)!important;max-width:210px!important;max-height:210px!important;
+ object-fit:contain!important;image-rendering:pixelated;
+}
+.raid-main-boss .battle-enemy-visual img,.raid-sub-boss .battle-enemy-visual img{width:100%!important;height:100%!important;object-fit:contain!important}
+.enemy-battle-magic-circle{width:min(190px,42vw)!important;height:min(190px,42vw)!important;max-width:190px!important;max-height:190px!important;overflow:hidden!important}
+.enemy-battle-magic-circle>b{display:none!important}
+.enemy-battle-magic-circle .magic-circle-frame{width:100%!important;height:100%!important;object-fit:contain!important}
+.online-v3-raid-hero>img{object-fit:contain!important;image-rendering:pixelated}
+
+@media(max-width:430px){
+ .campaign-hero-profile-stage{grid-template-columns:96px minmax(0,1fr)!important}
+ .campaign-hero-portrait{min-height:104px!important}
+ .campaign-intel-hero-visual,.campaign-intel-hero-visual img{width:104px!important;height:104px!important;object-fit:contain!important}
+ .campaign-hero-skill-card>footer{grid-template-columns:1fr 1fr!important}
+ .campaign-hero-skill-card>footer span{grid-column:1/-1}
+ .online-v3-stage .explore-nav>button{font-size:clamp(9px,2.7vw,12px)!important;padding-inline:2px!important}
+}

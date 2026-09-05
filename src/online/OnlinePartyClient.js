@@ -5,7 +5,7 @@ import {
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=3.1.13-build332";
+} from "./OnlineViews.js?v=3.1.15-build334";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   rollbackOnlineTradeAssetReservation, commitOnlineTrade, recoverOrphanedTradeEscrows,
@@ -87,7 +87,7 @@ const ONLINE_STATE_CONTROL_SELECTOR = [
   "[data-online-trade-cancel]", "[data-online-trade-offer]", "[data-online-trade-ready]", "[data-online-trade-confirm]",
   "[data-online-raid-exchange]", "[data-online-ping-kind]", "[data-online-expedition-interact]", "[data-online-merchant-offer]",
   "[data-online-confirm-floor-boss]", "[data-online-confirm-coop-boss]", "[data-online-battle-cheer]", "[data-online-hall-destination]",
-  "[data-online-ready]", "[data-online-start-explore]", "[data-online-return]", "[data-online-complete]", "[data-online-start-raid]",
+  "[data-online-ready]", "[data-online-start-explore]", "[data-online-return]", "#returnHome", "[data-online-complete]", "[data-online-start-raid]",
   "[data-online-team-side]", "[data-online-team-ready]", "[data-online-team-ruleset]", "[data-online-team-series]", "[data-online-team-swap]", "[data-online-start-team]",
   "[data-online-move]", "[data-online-emote-anchor]", "[data-command]", "[data-skill-id]", "[data-online-battle-item]",
   "[data-online-item-target]", "[data-online-speed-cycle]", "[data-online-speed]", "[data-online-battle-auto]", "[data-online-battle-action]", "[data-online-battle-skill]",
@@ -1818,7 +1818,7 @@ export class OnlinePartyController {
       if (!this.pendingExpeditionStart) this.pendingSecretRoomRun = null; else this._render();
       return;
     }
-    if (button.matches("[data-online-return]")) { this._send("requestReturn"); return; }
+    if (button.matches("[data-online-return]") || button.id === "returnHome") { this._send("requestReturn"); return; }
     if (button.matches("[data-online-complete]")) { this._send("completeExpedition"); return; }
     if (button.matches("[data-online-start-raid]")) { if (!this._contentStartBlockedByTrade()) this._send("startRaid", { raidWorld: this._raidWorldSnapshot() }); return; }
     if (button.matches("[data-online-team-side]")) { this._send("teamSide", { side: button.dataset.onlineTeamSide }); return; }
@@ -1841,7 +1841,16 @@ export class OnlinePartyController {
     if (button.matches("[data-online-close-team-report]")) { this.teamBattleReport = null; this._render(); return; }
     if (button.matches("[data-online-close-expedition-report]")) { const reward = this.pendingFloorBossReward; this.expeditionReport = null; this.pendingFloorBossReward = null; if (reward) this.onFloorBossDefeated({ ...reward, resume: true }); this._render(); this._showPendingExpeditionReturnResult(); return; }
     if (button.matches("[data-online-speed-cycle]")) { const mode = button.dataset.onlineSpeedCycle, current = Number(this._battle(mode)?.speed) || 1, speeds = [.5, 1, 2], speed = speeds[(speeds.indexOf(current) + 1) % speeds.length]; this._send(mode === "raid" ? "raidSpeed" : mode === "team" ? "teamSpeed" : "battleSpeed", { speed }); return; }
-    if (button.matches("[data-online-center]")) { this.path = []; if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { center: true }); return; }
+    if (button.matches("[data-online-center]") || button.id === "centerCamera") { this.path = []; if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { center: true }); return; }
+    if (["pauseParty", "fieldEquipment"].includes(button.id)) {
+      const panel = this._query("[data-online-profile-panel]"), toggle = this._query("[data-online-profile-toggle]");
+      if (panel) panel.hidden = false;
+      toggle?.setAttribute("aria-expanded", "true");
+      this.toast(button.id === "pauseParty" ? "編成は旅人手帳で確認・並べ替えできます" : "共同探索中の装備変更は帰還後に行えます。現在の出撃装備を表示します");
+      requestAnimationFrame(() => panel?.querySelector("[data-online-profile-close]")?.focus());
+      return;
+    }
+    if (button.id === "pauseItems") { this.toast("持ち物は全員で共有せず、自分の所持品から戦闘中に使用します"); return; }
     if (button.matches("[data-online-party-hud-toggle]")) { this.onlineHudCollapsed = !this.onlineHudCollapsed; this._render(); return; }
     if (button.matches("[data-online-target]")) { this._selectBattleTarget(button.dataset.onlineTarget, button.dataset.onlineTargetSide); return; }
     if (button.matches("[data-online-speed]")) { const mode = button.dataset.onlineMode, speed = Number(button.dataset.onlineSpeed) || 1; this._send(mode === "raid" ? "raidSpeed" : mode === "team" ? "teamSpeed" : "battleSpeed", { speed }); return; }
@@ -2891,7 +2900,7 @@ export class OnlinePartyController {
     if (["raidWorld", "raidWorldState"].includes(message.type)) { const ownerId = this._explicitWorldOwnerId(message); if (ownerId && ownerId === this.selfId) this._syncRaidWorld(message.raidWorld ?? message.progress); return; }
     if (message.type === "leftRoom") { if (this.pendingLeaveOnReconnect) this._completePendingRoomLeave(); else this._clearRoom({ reason: "leftRoom" }); return; }
     if (message.type === "memberMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.position = { ...message.position }; if (this.route === "home") this._updateHallPlayerDom(message.playerId); return; }
-    if (message.type === "expeditionMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.dungeonPosition = { ...message.position }; if (message.playerId === this.selfId) this._notifyTutorialGuide("explore_move"); if (this.exploreCanvasMounted) this._queueExploreCanvasUpdate(); else this._render(); return; }
+    if (message.type === "expeditionMoved") { const member = this.roomState?.members?.find(entry => entry.playerId === message.playerId); if (member && message.position) member.dungeonPosition = { ...message.position }; if (message.playerId === this.selfId) { this._notifyTutorialGuide("explore_move"); if (message.sectionTransition) this.path = []; } if (this.exploreCanvasMounted) this._queueExploreCanvasUpdate({ center: Boolean(message.playerId === this.selfId && message.sectionTransition) }); else this._render(); return; }
     if (["expeditionStarted", "expeditionFloorAdvanced"].includes(message.type) && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this._applyRoomState(message.room); if (message.type === "expeditionStarted") this._settlePendingExpeditionStart(message.room); return; }
     if (message.type === "battleStarted" && message.room) { this.floorBossConfirm = null; this.coopBossConfirm = null; this.presentationKoIds.explore.clear(); this._applyRoomState(message.room); this._queueBattlePresentation("explore", message.events ?? message.room?.expedition?.battle?.lastEvents); return; }
     if (message.type === "expeditionEvent") { if (message.event?.kind === "hostChestOpened") { const ownerId = this._explicitWorldOwnerId(message.event); if (ownerId && ownerId === this.selfId) this.onHostWorldUpdate({ ...message.event, ownerId }); } if (message.event?.tutorialGuide === "firstPickup") this._notifyTutorialGuide("explore_pickup"); this._announceExpeditionEvent(message.event); return; }
@@ -4396,12 +4405,16 @@ export class OnlinePartyController {
     for (const [rawFloor, localFloorState] of Object.entries(campaignFloors)) { const floor = Number(rawFloor); if (!Number.isInteger(floor) || floor < CAMPAIGN_FLOOR_MIN || floor > CAMPAIGN_FLOOR_MAX) continue; const key = String(floor); campaignFloorStates[key] = mergeCampaignHostFloorState(campaignFloorStates[key], localFloorState); if (localFloorState?.bossDefeated) campaignDefeated.push(floor); }
     const savedSeeds = state.player?.floorSeeds && typeof state.player.floorSeeds === "object" ? state.player.floorSeeds : {}, onlineSeeds = source.floorSeeds && typeof source.floorSeeds === "object" ? source.floorSeeds : {};
     const claimedBossRewardFloors = normalizedCampaignFloors(claimed);
-    return { revision: Math.max(this.hostWorldRevision, Number(source.revision) || 0), openedChestIds: Object.fromEntries([...floors].map(floor => [String(floor), [...new Set([...(Array.isArray(opened[floor]) ? opened[floor] : []), ...(Array.isArray(soloOpened[floor]) ? soloOpened[floor] : [])].map(String).slice(0, 200))]])), floorSeeds: { ...savedSeeds, ...onlineSeeds }, defeatedBossFloors: normalizedCampaignFloors([...defeated, ...onlineClears, ...bossKills, ...bossRewards, ...campaignDefeated]), claimedBossRewardFloors, campaignFloorStates };
+    const dungeonShapeHistory = (Array.isArray(state.player?.dungeonShapeHistory) ? state.player.dungeonShapeHistory : [])
+      .filter(entry => Number.isInteger(Number(entry?.floor)) && Array.isArray(entry?.signatures))
+      .slice(-4)
+      .map(entry => ({ floor: Math.max(1, Number(entry.floor)), signatures: entry.signatures.map(String).filter(Boolean).slice(-6) }));
+    return { revision: Math.max(this.hostWorldRevision, Number(source.revision) || 0), openedChestIds: Object.fromEntries([...floors].map(floor => [String(floor), [...new Set([...(Array.isArray(opened[floor]) ? opened[floor] : []), ...(Array.isArray(soloOpened[floor]) ? soloOpened[floor] : [])].map(String).slice(0, 200))]])), floorSeeds: { ...savedSeeds, ...onlineSeeds }, defeatedBossFloors: normalizedCampaignFloors([...defeated, ...onlineClears, ...bossKills, ...bossRewards, ...campaignDefeated]), claimedBossRewardFloors, campaignFloorStates, dungeonShapeHistory };
   }
 
   _hostWorldNetworkSnapshot() {
     const full = this._hostWorldSnapshot(), selected = Math.max(1, Number(this.roomState?.selectedFloor) || 1);
-    const snapshot = { revision: full.revision, floorSeeds: {}, openedChestIds: {}, defeatedBossFloors: full.defeatedBossFloors, claimedBossRewardFloors: full.claimedBossRewardFloors, campaignFloorStates: full.campaignFloorStates };
+    const snapshot = { revision: full.revision, floorSeeds: {}, openedChestIds: {}, defeatedBossFloors: full.defeatedBossFloors, claimedBossRewardFloors: full.claimedBossRewardFloors, campaignFloorStates: full.campaignFloorStates, dungeonShapeHistory: full.dungeonShapeHistory };
     const secretRun = this.getState?.()?.secretRooms?.run;
     if (secretRun && typeof secretRun === "object") {
       const id = String(secretRun.id ?? "").slice(0, 120), seed = Math.max(1, Math.min(0x7fffffff, Math.floor(Number(secretRun.seed) || 1)));

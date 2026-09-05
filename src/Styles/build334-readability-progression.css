@@ -1,0 +1,95 @@
+/* Build334: readable battle labels and prerequisite-driven Abyss progression. */
+.battle-screen .combat-rank-badge{
+ box-shadow:none!important;
+ filter:none!important;
+ text-shadow:none!important;
+ animation:none!important;
+}
+
+/* Boss identity is anchored to the sprite so it always stays just above the
+   character's head instead of occupying a large independent overlay. */
+.battle-screen.side-battle-v2 .boss-enemy .side-unit-sprite>.battle-unit-floating-name{
+ position:absolute!important;
+ z-index:12!important;
+ left:50%!important;
+ bottom:calc(100% - 2px)!important;
+ translate:none!important;
+ transform:translateX(-50%)!important;
+ display:grid!important;
+ grid-template-columns:auto minmax(0,1fr)!important;
+ align-items:center!important;
+ justify-items:center!important;
+ gap:3px 5px!important;
+ width:max-content!important;
+ max-width:min(220px,48vw)!important;
+ min-width:0!important;
+ padding:3px 6px!important;
+ border:1px solid #9d793d!important;
+ border-radius:4px!important;
+ background:#09070cE8!important;
+ box-shadow:0 2px 5px #000c!important;
+ pointer-events:none!important;
+}
+.battle-screen.side-battle-v2 .boss-enemy .side-unit-sprite>.battle-unit-floating-name>.boss-badge{
+ grid-column:1!important;
+ margin:0!important;
+ padding:2px 5px!important;
+ border:1px solid #96672f!important;
+ background:#44250f!important;
+ color:#f2cf86!important;
+ box-shadow:none!important;
+ filter:none!important;
+ text-shadow:none!important;
+ font-size:7px!important;
+ line-height:1.1!important;
+}
+.battle-screen.side-battle-v2 .boss-enemy .side-unit-sprite>.battle-unit-floating-name>b{
+ grid-column:2!important;
+ min-width:0!important;
+ max-width:min(174px,38vw)!important;
+ overflow:visible!important;
+ text-overflow:clip!important;
+ white-space:normal!important;
+ overflow-wrap:anywhere!important;
+ word-break:keep-all!important;
+ color:#f8edd6!important;
+ font-size:clamp(9px,2.55vw,12px)!important;
+ line-height:1.16!important;
+ letter-spacing:0!important;
+ text-align:left!important;
+ text-shadow:0 1px 1px #000!important;
+}
+.battle-screen.side-battle-v2 .boss-enemy .enemy-name.boss-meta-only{
+ display:flex!important;
+ justify-content:flex-end!important;
+}
+.battle-screen.side-battle-v2 .boss-enemy .enemy-name.boss-meta-only .enemy-card-meta{
+ grid-column:auto!important;
+ justify-self:end!important;
+ margin-left:auto!important;
+}
+
+/* A locked route cannot be skipped even when the wallet already has enough. */
+.abyss-tree-node.locked{
+ opacity:.45!important;
+ filter:saturate(.35)!important;
+}
+.abyss-tree-node.locked button{
+ cursor:not-allowed!important;
+}
+.abyss-tree-node.short{
+ opacity:.78!important;
+ filter:none!important;
+}
+
+@media(max-width:430px){
+ .battle-screen.side-battle-v2 .boss-enemy .side-unit-sprite>.battle-unit-floating-name{
+  bottom:calc(100% - 1px)!important;
+  max-width:min(204px,50vw)!important;
+  padding:3px 5px!important;
+ }
+ .battle-screen.side-battle-v2 .boss-enemy .side-unit-sprite>.battle-unit-floating-name>b{
+  max-width:min(158px,39vw)!important;
+  font-size:clamp(8px,2.35vw,10px)!important;
+ }
+}
