@@ -45,16 +45,23 @@ export function hasMonsterSprite(subject){
   return Boolean(customSpriteBase(subject))||Boolean(typeof subject==="object"&&subject?.customVisualAsset)||Boolean(MONSTER_SPRITE_FOLDERS[monsterVisualId(subject)]);
 }
 
-export function monsterVisual(subject,fallbackEmoji="👹",{frame="idle",className=""}={}){
+// Call only for party members: enemy bosses have their own presentation scale.
+export function partyMonsterArtScale(monster){
+  return monster&&(monster.floorBossCatalogId||monster.floorBossId||monster.obtainedMethod==="floorBossContract")?2:1;
+}
+
+export function monsterVisual(subject,fallbackEmoji="👹",{frame="idle",className="",partyArt=false}={}){
   const visualId=monsterVisualId(subject),requestedFrame=safeFrame(frame),normalizedFrame=requestedFrame==="idle"?IDLE_FRAMES[idleStep]:fileFrame(requestedFrame),customBase=customSpriteBase(subject),custom=Boolean(customBase||typeof subject==="object"&&subject?.customVisualAsset),url=monsterSpriteUrl(subject,normalizedFrame);
-  const classes=["monster-visual",url?"has-pixel-sprite":"emoji-only",className].filter(Boolean).join(" ");
+  const enlarged=partyArt&&partyMonsterArtScale(subject)>1;
+  const classes=["monster-visual",url?"has-pixel-sprite":"emoji-only",className,enlarged?"party-floor-boss-art":""].filter(Boolean).join(" ");
+  const art=content=>enlarged?`<span class="party-monster-art-layer">${content}</span>`:content;
   const fallback=`<span class="monster-visual-fallback"${url?" hidden":""}>${escapeHtml(fallbackEmoji)}</span>`;
-  if(!url)return`<span class="${classes}" data-monster-species="${escapeHtml(visualId)}">${fallback}</span>`;
-  if(customBase){const animationState=requestedFrame==="idle"?"idle":"static";return`<span class="${classes} has-custom-sprite" data-monster-species="${escapeHtml(visualId)}"><img src="${escapeHtml(url)}" alt="" draggable="false" data-monster-custom data-monster-sprite data-custom-sprite-base="${escapeHtml(customBase)}" data-frame="${normalizedFrame}" data-animation-state="${animationState}" onerror="this.dataset.spriteFailed='1';this.hidden=true;this.nextElementSibling.hidden=false">${fallback}</span>`}
-  if(custom)return`<span class="${classes} has-custom-sprite" data-monster-species="${escapeHtml(visualId)}"><img src="${escapeHtml(url)}" alt="" draggable="false" data-monster-custom onerror="this.hidden=true;this.nextElementSibling.hidden=false">${fallback}</span>`;
+  if(!url)return`<span class="${classes}" data-monster-species="${escapeHtml(visualId)}">${art(fallback)}</span>`;
+  if(customBase){const animationState=requestedFrame==="idle"?"idle":"static";return`<span class="${classes} has-custom-sprite" data-monster-species="${escapeHtml(visualId)}">${art(`<img src="${escapeHtml(url)}" alt="" draggable="false" data-monster-custom data-monster-sprite data-custom-sprite-base="${escapeHtml(customBase)}" data-frame="${normalizedFrame}" data-animation-state="${animationState}" onerror="this.dataset.spriteFailed='1';this.hidden=true;this.nextElementSibling.hidden=false">${fallback}`)}</span>`}
+  if(custom)return`<span class="${classes} has-custom-sprite" data-monster-species="${escapeHtml(visualId)}">${art(`<img src="${escapeHtml(url)}" alt="" draggable="false" data-monster-custom onerror="this.hidden=true;this.nextElementSibling.hidden=false">${fallback}`)}</span>`;
   const base=url.slice(0,url.lastIndexOf("/"));
   const animationState=requestedFrame==="idle"?"idle":"static";
-  return`<span class="${classes}" data-monster-species="${escapeHtml(visualId)}"><img src="${url}" alt="" draggable="false" data-monster-sprite data-sprite-base="${base}" data-frame="${normalizedFrame}" data-animation-state="${animationState}" onerror="this.dataset.spriteFailed='1';this.hidden=true;this.nextElementSibling.hidden=false">${fallback}</span>`;
+  return`<span class="${classes}" data-monster-species="${escapeHtml(visualId)}">${art(`<img src="${url}" alt="" draggable="false" data-monster-sprite data-sprite-base="${base}" data-frame="${normalizedFrame}" data-animation-state="${animationState}" onerror="this.dataset.spriteFailed='1';this.hidden=true;this.nextElementSibling.hidden=false">${fallback}`)}</span>`;
 }
 
 export function setMonsterVisualFrame(root,frame="idle"){
