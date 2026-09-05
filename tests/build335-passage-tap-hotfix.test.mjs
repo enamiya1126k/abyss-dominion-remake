@@ -36,13 +36,13 @@ test("Build335 visible passage taps resolve to the real portal mouth", () => {
   }
 });
 
-test("Build335 applies the passage redirect to offline and shared exploration", () => {
+test("Build335 passage redirect remains active in Build336", () => {
   const main = readFileSync(new URL("../src/main.js", import.meta.url), "utf8");
   const index = readFileSync(new URL("../index.html", import.meta.url), "utf8");
-  assert.equal(APP_VERSION, "3.1.16");
-  assert.match(index, /ASSET_VERSION = "3\.1\.16"/);
-  assert.match(index, /ASSET_BUILD = "build335"/);
+  assert.equal(APP_VERSION, "3.1.17");
+  assert.match(index, /ASSET_VERSION = "3\.1\.17"/);
+  assert.match(index, /ASSET_BUILD = "build336"/);
   assert.match(main, /destination=portalTapDestination\(game\.world,target\)\?\?target;onDestination/);
   assert.match(main, /destination=portalTapDestination\(game\.world,g\)\?\?g,route=path/);
-  assert.match(main, /DungeonSectionSystem\.js\?v=3\.1\.16-build335/);
+  assert.match(main, /DungeonSectionSystem\.js\?v=3\.1\.17-build336/);
 });
