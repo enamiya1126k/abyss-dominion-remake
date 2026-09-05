@@ -1,5 +1,5 @@
 import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.17-build336";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.19-build338";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.20-build339";
 // Regression markers only: SaveService.js?v=3.1.10-build329 / config.js?v=3.1.10-build329 / HomeScreen.js?v=3.1.10-build329
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.1-build311";
@@ -9,7 +9,7 @@ import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/Expl
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.19-build338";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.20-build339";
 import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.14-build333";
 import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.11-build330";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";
@@ -24,7 +24,7 @@ import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.18-build337";
 import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.17-build336";
 import{CampaignFinalFloorScreen}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.1-build320";
 import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.17-build336";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.17-build336";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.20-build339";
 import{Modal}from"./ui/components/Modal.js?v=3.1.1-build311";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=3.1.1-build311";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=3.1.1-build311";
@@ -101,7 +101,7 @@ import{treasureRoomRateForFloor,treasureRoomChestCount,shouldPlaceTreasureMimic,
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionForFloor,floorBossDefinitionById,floorBossEquipmentDesignByPiece,milestoneBossIdsForFloor}from"./data/floorBosses.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CONTRACT_COST,FLOOR_BOSS_EQUIPMENT_COST,normalizeFloorBossChallengeState,recordFloorBossDiscovery,floorBossChallengeStatus,createFloorBossChallengeEncounter,awardFloorBossChallengeFragments,spendFloorBossFragments,restoreFloorBossFragments}from"./core/FloorBossChallengeSystem.js?v=3.1.17-build336";
 import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.1-build311";
-import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=3.1.1-build311";
+import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame,partyMonsterArtScale}from"./ui/MonsterVisual.js?v=3.1.20-build339";
 import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,permanentSignatureOwners,rollPermanentSignatureHit,PERMANENT_SIGNATURE_RATE,createSignatureEquipment,normalizeSignatureWeaponItem,signatureWeaponGrantedSkill}from"./core/SignatureWeaponSystem.js?v=3.1.1-build311";
 
 const TILE=88,COLS=39,ROWS=39,app=document.getElementById("app"),save=new SaveService(),audio=new AudioSystem(()=>save.state.settings);
@@ -4520,11 +4520,11 @@ function drawExploreAtmosphere(theme){
  game.ctx.fillStyle=gradient;game.ctx.fillRect(0,0,game.canvas.width,game.canvas.height);drawExploreAmbientParticles(theme)
 }
 function explorationPartySceneObjects(){
- if(game?.online){return(game.onlineMembers??[]).map((entry,index)=>{const entity=game.onlineEntities?.get(entry.member.playerId),position=entity?{x:entity.rx,y:entity.ry}:entry.member.dungeonPosition??game.world.start;return{y:position.y+.88,order:80+index,draw:()=>{drawOnlineExploreCircle(position,entry.member.profile);drawExplorationMonster(position,entry.monster,false,entry.member.playerId===game.onlineSelfId?1:.95,index)}}})}
+ if(game?.online){return(game.onlineMembers??[]).map((entry,index)=>{const entity=game.onlineEntities?.get(entry.member.playerId),position=entity?{x:entity.rx,y:entity.ry}:entry.member.dungeonPosition??game.world.start;return{y:position.y+.88,order:80+index,draw:()=>{drawOnlineExploreCircle(position,entry.member.profile);drawExplorationMonster(position,entry.monster,false,(entry.member.playerId===game.onlineSelfId?1:.95)*partyMonsterArtScale(entry.monster),index)}}})}
  const members=explorationPartyMembers();
  const entries=members.map((monster,index)=>{
   const position=index?explorationFollowerPosition(index):{x:game.player.rx,y:game.player.ry};
-  return{y:position.y+.88,order:80+index,draw:()=>drawExplorationMonster(position,monster,false,index ? .95 : 1,index)};
+  return{y:position.y+.88,order:80+index,draw:()=>drawExplorationMonster(position,monster,false,(index ? .95 : 1)*partyMonsterArtScale(monster),index)};
  });
  if(!entries.length){const position={x:game.player.rx,y:game.player.ry};entries.push({y:position.y+.88,order:80,draw:()=>drawExplorationMonster(position,{speciesId:"slime"},false,1,0)})}
  return entries
