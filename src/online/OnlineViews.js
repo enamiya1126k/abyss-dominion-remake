@@ -3,8 +3,8 @@ import { battleEnvironmentForFloor } from "../data/biomes.js?v=3.1.1-build311";
 import {
   onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml, ONLINE_ROOM_PURPOSES, ONLINE_ROOM_STYLES, renderOnlineRoomDirectory,
 } from "../ui/screens/OnlinePartyScreen.js?v=3.1.14-build333";
-import { BattleScreen } from "../ui/screens/BattleScreen.js?v=3.1.16-build335";
-import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=3.1.16-build335";
+import { BattleScreen } from "../ui/screens/BattleScreen.js?v=3.1.17-build336";
+import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=3.1.17-build336";
 import { pixelIcon } from "../ui/components/GameChrome.js?v=3.1.1-build311";
 
 const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "共同探索", raid: "レイドボス", team: "自由チーム戦", chat: "談話板" });

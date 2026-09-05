@@ -5,7 +5,7 @@ import {
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=3.1.16-build335";
+} from "./OnlineViews.js?v=3.1.17-build336";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   rollbackOnlineTradeAssetReservation, commitOnlineTrade, recoverOrphanedTradeEscrows,
@@ -4382,11 +4382,11 @@ export class OnlinePartyController {
     if (this.route !== "explore" || this.roomState?.phase !== "expedition" || this.roomState?.expedition?.battle) return;
     const self = this._self(), current = self?.dungeonPosition, expedition = this.roomState.expedition;
     if (!current || Number(self?.coopVitals?.hp) <= 0) { this._clearMoveInputs(); return; }
-    let direction = this._currentMoveDirection("explore"), target = null;
+    let direction = this._currentMoveDirection("explore"), target = null, continueThroughPortal = false;
     if (direction) { const [dx, dy] = DIRECTION[direction]; target = { x: current.x + dx, y: current.y + dy }; }
-    else if (this.path.length) { target = this.path.shift(); const dx = target.x - current.x, dy = target.y - current.y; direction = dx < 0 ? "left" : dx > 0 ? "right" : dy < 0 ? "up" : "down"; }
+    else if (this.path.length) { target = this.path.shift(); continueThroughPortal = this.path.length > 0; const dx = target.x - current.x, dy = target.y - current.y; direction = dx < 0 ? "left" : dx > 0 ? "right" : dy < 0 ? "up" : "down"; }
     if (!target || expedition.tiles?.[target.y]?.[target.x] !== ".") { if (target) this.path = []; return; }
-    this.lastMoveAt = now; self.dungeonPosition = { ...target, facing: direction }; this._send("expeditionMove", { position: self.dungeonPosition }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render();
+    this.lastMoveAt = now; self.dungeonPosition = { ...target, facing: direction }; this._send("expeditionMove", { position: { ...self.dungeonPosition, continueThroughPortal } }); if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId); else this._render();
   }
 
   _hostWorldSnapshot() {
