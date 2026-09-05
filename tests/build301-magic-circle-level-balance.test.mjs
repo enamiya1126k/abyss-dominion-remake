@@ -27,7 +27,7 @@ test("build301 magic-circle prices use the v4 bounded curve",()=>{
 });
 
 test("build301 every playable magic circle exposes a real bounded level effect",()=>{
- assert.equal(playable.length,18);
+ assert.equal(playable.length,20);
  for(const circle of playable){
   const first=magicCircleLevelEffect(circle,1),last=magicCircleLevelEffect(circle,99);
   assert.notDeepEqual(effectPayload(first),effectPayload(last),`${circle.id} must improve beyond cosmetic level text`);
@@ -37,8 +37,8 @@ test("build301 every playable magic circle exposes a real bounded level effect",
  }
  assert.equal(magicCircleLevelEffect("aegis",1).shieldRate,.5);
  assert.equal(magicCircleLevelEffect("aegis",99).shieldRate,.7);
- assert.equal(magicCircleLevelEffect("reincarnation",99).reviveHpRate,.7);
- assert.equal(magicCircleLevelEffect("reincarnation",99).reviveMpRate,.5);
+ assert.equal(magicCircleLevelEffect("reincarnation",99).reviveHpRate,1);
+ assert.equal(magicCircleLevelEffect("reincarnation",99).reviveMpRate,.8);
  assert.equal(magicCircleLevelEffect("judgment20",1).triggerTurn,20);
  assert.equal(magicCircleLevelEffect("judgment20",99).triggerTurn,12);
  assert.equal(slotDamageMultiplier(999,1),3);

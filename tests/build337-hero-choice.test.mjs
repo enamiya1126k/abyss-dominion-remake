@@ -138,8 +138,8 @@ test('Yori escape includes Hide without changing wounds, receipts or rewards',as
   assert.ok(scene.dialogue.some(l=>l.speakerId==='myth_hide'&&l.text.includes('配置、忘れてました')));
   assert.equal(B.queueCampaignHeroAftermathStories(queued.state,{encounterId:event.id,outcome:'escaped',floor:16,heroHpRate:1}).added,0);
 });
-test('new entry point and changed module imports use Build337 cache keys',()=>{
-  assert.match(read('index.html'),/const ASSET_BUILD = "build337"/);
+test('Build337 hero modules remain loaded under the Build338 entry point',()=>{
+  assert.match(read('index.html'),/const ASSET_BUILD = "build338"/);
   assert.match(read('index.html'),/build337-hero-choice\.css\?v=3\.1\.18-build337/);
   assert.match(main,/CampaignHeroBranchStorySystem\.js\?v=3\.1\.18-build337/);
   assert.match(read('src/core/CampaignStoryArchiveSystem.js'),/CampaignHeroBranchStorySystem\.js\?v=3\.1\.18-build337/);
