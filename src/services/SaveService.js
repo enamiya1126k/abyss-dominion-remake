@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.22-build341";
+=======
+import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.17-build336";
+>>>>>>> 3f0fc7e35c89b74a404ee4d4d1137b98f2669498
 // Regression marker only: config.js?v=3.1.10-build329
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323 / CampaignReincarnationSystem.js?v=3.1.4-build323
 import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=3.1.1-build311";

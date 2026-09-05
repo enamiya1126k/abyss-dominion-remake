@@ -209,7 +209,11 @@ function normalizeBranchState(ledger){
 export function normalizeCampaignHeroBranchStoryState(value){const ledger=normalizeCampaignHeroEncounterState(value);normalizeBranchState(ledger);return ledger}
 
 function charactersFor(dialogue){return[...new Set(dialogue.map(entry=>entry.speakerId).filter(Boolean))].map(id=>CHARACTERS[id]).filter(Boolean)}
+<<<<<<< HEAD
 function storyScene(definition,{id,part,title,summary,dialogue,castIds=null,heroState=null,location="勇者一行・野営地",eyebrow="HEROES / SIDE STORY",routeHidden=false,variant="default"}={}){return{id,kind:"hero-branch",storyTrack:"hero-encounter",storyPart:part,encounterId:definition.id,heroId:definition.heroId,floor:definition.floor,day:definition.day,routeProgress:(definition.day-1)*10,title,summary,location,eyebrow,routeHidden,variant,castVersion:340,heroStoryState:heroState,backgroundAsset:routeHidden?"./assets/ui/battle/boss-throne.png":"./assets/ui/trials/abyss-corridor-room.png",completeLabel:part==="prelude"?"探索へ戻る":part==="party"?"物語を閉じる":"次の場面",characters:castIds?castIds.map(id=>CHARACTERS[id]).filter(Boolean):charactersFor(dialogue),dialogue};}
+=======
+function storyScene(definition,{id,part,title,summary,dialogue,castIds=null,location="勇者一行・野営地",eyebrow="HEROES / SIDE STORY",routeHidden=false,variant="default"}={}){return{id,kind:"hero-branch",storyTrack:"hero-encounter",storyPart:part,encounterId:definition.id,heroId:definition.heroId,floor:definition.floor,day:definition.day,routeProgress:(definition.day-1)*10,title,summary,location,eyebrow,routeHidden,variant,backgroundAsset:routeHidden?"./assets/ui/battle/boss-throne.png":"./assets/ui/trials/abyss-corridor-room.png",completeLabel:part==="prelude"?"探索へ戻る":part==="party"?"物語を閉じる":"次の場面",characters:castIds?castIds.map(id=>CHARACTERS[id]).filter(Boolean):charactersFor(dialogue),dialogue};}
+>>>>>>> 3f0fc7e35c89b74a404ee4d4d1137b98f2669498
 function historyPreludeLine(ledger,definition){
  if(definition.cycle<2)return null;const record=ledger.heroes?.[definition.heroId];if(!record)return null;
  if(record.lastOutcome==="hero-victory")return line(definition.heroId,record.remainingHpRate<1?"前は勝ってる。でも、残った傷まで勝利とは言えへん。今度は無傷で戻る。":"前は無傷で帰れた。でも同じ手が通るとは限らない。退路から確かめて行く。","serious");
@@ -254,10 +258,14 @@ function reportScene(payload,definition){
  return storyScene(definition,{id:payload.id,part:"report",title:"玉座への進捗報告",summary:`スライムの姿を借りたリオネルが、${name}との遭遇結果をサイラーンへ伝える。`,dialogue,location:"魔王城・玉座の間",eyebrow:"DEMON LORD / REPORT",routeHidden:true,variant:outcome})
 }
 function partyScene(ledger,payload,definition){
+<<<<<<< HEAD
  const heroId=definition.heroId,name=HERO_NAMES[heroId],outcome=payload.outcome,hurt=payload.hurtPercent,heroState=cleanHeroStoryState(payload.heroStoryState)??heroStoryState(ledger);
  heroState.heroes[heroId]={defeated:outcome==="repelled",remainingHpRate:outcome==="repelled"?0:payload.heroHpRate};
  heroState.awayHeroIds=heroState.awayHeroIds.filter(id=>id!==heroId);
  const castIds=presentHeroes(heroState),others=castIds.filter(id=>id!==heroId),dialogue=[];
+=======
+ const heroId=definition.heroId,name=HERO_NAMES[heroId],outcome=payload.outcome,hurt=payload.hurtPercent,others=HERO_PARTY_IDS.filter(id=>id!==heroId&&!ledger.heroes?.[id]?.defeated),castIds=HERO_PARTY_IDS.filter(id=>!ledger.heroes?.[id]?.defeated&&(outcome!=="repelled"||id!==heroId)),dialogue=[];
+>>>>>>> 3f0fc7e35c89b74a404ee4d4d1137b98f2669498
  if(outcome==="repelled"){
   dialogue.push(line(null,`${name}は野営地へ戻らなかった。残された仲間は、途切れた足音の意味を理解した。`,"narration"));
   if(others.includes("myth_hide"))dialogue.push(line("myth_hide",`${name}の反応が消えた。捜索より先に、残った${others.length}人の生存率を計算する。`,"serious"));
@@ -269,6 +277,7 @@ function partyScene(ledger,payload,definition){
   if(hurt>0){if(heroId==="myth_hide"||others.includes("myth_hide"))dialogue.push(line("myth_hide",`損傷は${hurt}%。勝敗に関係なく、その傷は十日目まで残る。`,"serious"));else dialogue.push(line(null,`戦いで刻まれた${hurt}%の傷は、十日目まで消えずに残る。`,"narration"))}
   else if(others.includes("myth_hide"))dialogue.push(line("myth_hide",outcome==="escaped"?"待ってくださいよ〜！ 逃げ道は計算してました。……塞ぐ人の配置、忘れてました。":"いいゾ〜！コレ〜！ 無傷で帰還、計算どおりです。……帰還祝いの買い出し、忘れてました。","normal"));
   if(others.includes("myth_yori"))dialogue.push(line("myth_yori",outcome==="escaped"?"おっと〜！？ ほな次は僕も一緒に行くわ。帰ってこれたんやし、まず座り。":"イージー！！ ……って、僕は留守番やったな。おかえり。","gentle"));
+<<<<<<< HEAD
   if(heroId!=="myth_enami"&&others.includes("myth_enami"))dialogue.push(line("myth_enami",outcome==="hero-victory"?(hurt>0?"勝った顔してるけど、傷まで無かったことにはせえへんで。":"勝って、無傷で帰ったんやな。ほな今日は安心して話を聞けるわ。"):(castIds.length===4?"戻ってきたならええ。次は四人で話を終わらせる。":"戻ってきたならええ。次は残った仲間で、話を終わらせる。"),"gentle"));
   if(heroId!=="myth_rion"&&others.includes("myth_rion"))dialogue.push(line("myth_rion",outcome==="hero-victory"?"勝利の記録は残す。治療費を引いても価値はあるよ。":"逃げられた経路も商品になる。次の先回りに使おう。","normal"));
  }
@@ -295,6 +304,13 @@ function partyScene(ledger,payload,definition){
  const fallen=HERO_PARTY_IDS.filter(id=>heroState.heroes[id]?.defeated&&id!==heroId);if(fallen.length)dialogue.push(line(null,`会話の輪には、戻らない${fallen.map(id=>HERO_NAMES[id]).join("と")}の空白が残っていた。`,"narration"));
  if(!castIds.length)dialogue.splice(0,dialogue.length,line(null,"野営地に戻る勇者は、一人もいなかった。消えた足音を待つ者も、もういない。","narration"));
  return storyScene(definition,{id:payload.id,part:"party",title:"同じ頃、勇者一行は",summary:`第${payload.floor}階の遭遇結果は、勇者側の会話と次の判断にも残った。`,dialogue,castIds,heroState,location:"勇者一行・夜営地",eyebrow:"HEROES / SAME TIMELINE",variant:outcome})
+=======
+  if(heroId!=="myth_enami"&&others.includes("myth_enami"))dialogue.push(line("myth_enami",outcome==="hero-victory"?"勝った顔してるけど、傷まで無かったことにはせえへんで。":(castIds.length===4?"戻ってきたならええ。次は四人で話を終わらせる。":"戻ってきたならええ。次は残った仲間で、話を終わらせる。"),"gentle"));
+  if(heroId!=="myth_rion"&&others.includes("myth_rion"))dialogue.push(line("myth_rion",outcome==="hero-victory"?"勝利の記録は残す。治療費を引いても価値はあるよ。":"逃げられた経路も商品になる。次の先回りに使おう。","normal"));
+ }
+ const fallen=HERO_PARTY_IDS.filter(id=>ledger.heroes?.[id]?.defeated&&id!==heroId);if(fallen.length)dialogue.push(line(null,`会話の輪には、戻らない${fallen.map(id=>HERO_NAMES[id]).join("と")}の空白が残っていた。`,"narration"));
+ return storyScene(definition,{id:payload.id,part:"party",title:"同じ頃、勇者一行は",summary:`第${payload.floor}階の遭遇結果は、勇者側の会話と次の判断にも残った。`,dialogue,castIds,location:"勇者一行・夜営地",eyebrow:"HEROES / SAME TIMELINE",variant:outcome})
+>>>>>>> 3f0fc7e35c89b74a404ee4d4d1137b98f2669498
 }
 function aftermathScene(ledger,payload){const definition=campaignHeroEncounterDefinition(payload.encounterId);if(!definition)return null;if(payload.part==="result")return resultScene(ledger,payload,definition);if(payload.part==="report")return reportScene(payload,definition);return partyScene(ledger,payload,definition)}
 

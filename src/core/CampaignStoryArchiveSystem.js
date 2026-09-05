@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import{CAMPAIGN_STORY_OPENING,CAMPAIGN_STORY_SCENES,normalizeCampaignStoryState,resolveCampaignStoryScene}from"./CampaignStorySystem.js?v=3.1.21-build340";
 import{CAMPAIGN_HERO_ENCOUNTER_SCHEDULE,normalizeCampaignHeroInvasion,createCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.22-build341";
 import{CAMPAIGN_HERO_BRANCH_OUTCOMES,campaignHeroBranchStorySceneById,normalizeCampaignHeroBranchStoryState}from"./CampaignHeroBranchStorySystem.js?v=3.1.22-build341";
+=======
+import{CAMPAIGN_STORY_OPENING,CAMPAIGN_STORY_SCENES,normalizeCampaignStoryState,resolveCampaignStoryScene}from"./CampaignStorySystem.js?v=3.1.3-build322";
+import{CAMPAIGN_HERO_ENCOUNTER_SCHEDULE,normalizeCampaignHeroInvasion}from"./CampaignHeroEncounterSystem.js?v=3.1.5-build324";
+import{CAMPAIGN_HERO_BRANCH_OUTCOMES,campaignHeroBranchStorySceneById,normalizeCampaignHeroBranchStoryState}from"./CampaignHeroBranchStorySystem.js?v=3.1.18-build337";
+>>>>>>> 3f0fc7e35c89b74a404ee4d4d1137b98f2669498
 
 export const CAMPAIGN_STORY_ARCHIVE_VERSION=1;
 export const CAMPAIGN_STORY_ARCHIVE_CATEGORIES=Object.freeze([

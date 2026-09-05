@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.22-build341";
 // Regression marker only: config.js?v=3.1.21-build340
+=======
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.20-build339";
+// Regression marker only: config.js?v=3.1.10-build329
+>>>>>>> 3f0fc7e35c89b74a404ee4d4d1137b98f2669498
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
 import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.1-build311";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.1-build311";
