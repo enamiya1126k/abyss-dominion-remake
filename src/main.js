@@ -1,5 +1,5 @@
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.16-build335";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.16-build335";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.17-build336";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.18-build337";
 // Regression markers only: SaveService.js?v=3.1.10-build329 / config.js?v=3.1.10-build329 / HomeScreen.js?v=3.1.10-build329
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.1-build311";
@@ -9,22 +9,22 @@ import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/Expl
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.16-build335";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.18-build337";
 import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.14-build333";
 import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.11-build330";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.1-build311";
 import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.14-build333";
-import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.16-build335";
+import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.17-build336";
 import{reconcileOnlineMotion,onlineMotionSpeed}from"./online/OnlineMovement.js?v=3.1.1-build311";
 import{beginGuestProgressIsolation,finishGuestProgressIsolation,onlineProgressionAllowed,legacyProgressRecoveryCandidate,applyLegacyProgressRecovery,dismissLegacyProgressRecovery,undoLegacyProgressRecovery}from"./online/OnlineProgressIsolation.js?v=3.1.1-build311";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.1-build311";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=3.1.1-build311";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.16-build335";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.16-build335";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.18-build337";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.17-build336";
 import{CampaignFinalFloorScreen}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.1-build320";
-import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.16-build335";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.16-build335";
+import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.17-build336";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.17-build336";
 import{Modal}from"./ui/components/Modal.js?v=3.1.1-build311";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=3.1.1-build311";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=3.1.1-build311";
@@ -44,9 +44,9 @@ import{initialAffixCount,lockedAffixCount,maxLockableAffixes,normalizeEquipmentA
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=3.1.1-build311";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=3.1.1-build311";
 import{SkillScreen}from"./ui/screens/SkillScreen.js?v=3.1.1-build311";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=3.1.16-build335";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=3.1.17-build336";
 import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=3.1.1-build311";
-import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=3.1.16-build335";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=3.1.17-build336";
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=3.1.1-build311";
 import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=3.1.1-build311";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=3.1.1-build311";
@@ -73,13 +73,13 @@ import{CAMPAIGN_MAX_FLOOR,CAMPAIGN_KEYS_PER_FLOOR,HERO_PARTY_IDS,campaignFloorTo
 import{CAMPAIGN_STORY_OPENING_ID,acknowledgeCampaignStoryScene,nextCampaignStoryScene,campaignHeroVoiceLine,campaignHeroFinalVoiceLines}from"./core/CampaignStorySystem.js?v=3.1.3-build322";
 import{isLionelAvatar,lionelAvatarProtectionReason}from"./core/CampaignProtagonistSystem.js?v=3.1.3-build322";
 import{CAMPAIGN_HERO_IDS,CAMPAIGN_HERO_PROFILES,normalizeCampaignHeroInvasion,scheduledCampaignHeroForFloor,beginCampaignHeroFieldEncounter,recordCampaignHeroWound,settleCampaignHeroEncounter,campaignRemainingHeroes,advanceCampaignRewindFloor}from"./core/CampaignHeroEncounterSystem.js?v=3.1.5-build324";
-import{nextCampaignHeroBranchStoryScene,acknowledgeCampaignHeroBranchStoryScene,queueCampaignHeroAftermathStories}from"./core/CampaignHeroBranchStorySystem.js?v=3.1.5-build324";
-import{createCampaignStoryArchiveModel,recordCampaignStoryArchiveScene}from"./core/CampaignStoryArchiveSystem.js?v=3.1.5-build324";
+import{nextCampaignHeroBranchStoryScene,acknowledgeCampaignHeroBranchStoryScene,queueCampaignHeroAftermathStories}from"./core/CampaignHeroBranchStorySystem.js?v=3.1.18-build337";
+import{createCampaignStoryArchiveModel,recordCampaignStoryArchiveScene}from"./core/CampaignStoryArchiveSystem.js?v=3.1.18-build337";
 import{normalizeCampaignReincarnationState,campaignCanonicalEnding,recordCampaignConclusion,beginOptionalCampaignReincarnation,campaignReincarnationDifficultyMultiplier,campaignReincarnationRewardMultiplier,campaignReincarnationFloorLimit,recordCampaignReincarnationFloor}from"./core/CampaignReincarnationSystem.js?v=3.1.5-build324";
 import{campaignTrophyFragmentAwards}from"./core/CampaignRewardSystem.js?v=3.1.1-build311";
 import{bossRewardIdentity,bossRewardEquipmentIdentity,bossFragmentVisualIdentity}from"./core/BossRewardMappingSystem.js?v=3.1.1-build311";
 import{campaignBossChestReward}from"./core/CampaignBossRewardSystem.js?v=3.1.1-build311";
-import{generateSectionDungeon,sectionIdAt,sectionRoute,portalTowardSection,portalTapDestination,sectionBounds,safeSectionExitCandidates,chooseSafeSectionExitCell}from"./core/DungeonSectionSystem.js?v=3.1.16-build335";
+import{generateSectionDungeon,sectionIdAt,sectionRoute,portalTowardSection,portalTapDestination,sectionBounds,safeSectionExitCandidates,chooseSafeSectionExitCell}from"./core/DungeonSectionSystem.js?v=3.1.17-build336";
 import{createCampaignDungeonLayout}from"./core/CampaignDungeonLayoutSystem.js?v=3.1.14-build333";
 import{requiredCampaignBossSectionCount,shouldRegenerateCampaignBossSnapshot}from"./core/CampaignBossWorldSystem.js?v=3.1.1-build311";
 import{buildSectionMiniMapModel,fitMiniMapTransform,projectMiniMapPoint}from"./core/DungeonMiniMapSystem.js?v=3.1.1-build311";
@@ -99,7 +99,7 @@ import{bossExperiencePackReward}from"./core/BossRewardSystem.js?v=3.1.1-build311
 import{enemyExperienceReward}from"./core/ProgressionSystem.js?v=3.1.1-build311";
 import{treasureRoomRateForFloor,treasureRoomChestCount,shouldPlaceTreasureMimic,rollTreasureChestReward,mimicVictoryGold,mimicExperienceMultiplier,mimicVictoryCrystals}from"./core/TreasureSystem.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionForFloor,floorBossDefinitionById,floorBossEquipmentDesignByPiece,milestoneBossIdsForFloor}from"./data/floorBosses.js?v=3.1.1-build311";
-import{FLOOR_BOSS_CONTRACT_COST,FLOOR_BOSS_EQUIPMENT_COST,normalizeFloorBossChallengeState,recordFloorBossDiscovery,floorBossChallengeStatus,createFloorBossChallengeEncounter,awardFloorBossChallengeFragments,spendFloorBossFragments,restoreFloorBossFragments}from"./core/FloorBossChallengeSystem.js?v=3.1.16-build335";
+import{FLOOR_BOSS_CONTRACT_COST,FLOOR_BOSS_EQUIPMENT_COST,normalizeFloorBossChallengeState,recordFloorBossDiscovery,floorBossChallengeStatus,createFloorBossChallengeEncounter,awardFloorBossChallengeFragments,spendFloorBossFragments,restoreFloorBossFragments}from"./core/FloorBossChallengeSystem.js?v=3.1.17-build336";
 import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.1-build311";
 import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=3.1.1-build311";
 import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,permanentSignatureOwners,rollPermanentSignatureHit,PERMANENT_SIGNATURE_RATE,createSignatureEquipment,normalizeSignatureWeaponItem,signatureWeaponGrantedSkill}from"./core/SignatureWeaponSystem.js?v=3.1.1-build311";
@@ -3581,7 +3581,7 @@ function bindExplore(){
  if(!Number.isFinite(game.player.x)||!Number.isFinite(game.player.y)){game.player.x=game.world.start.x;game.player.y=game.world.start.y}
  game.player.rx=game.player.x;game.player.ry=game.player.y;game.camera=new Camera(canvas);
  if(snapshot?.cameraData)Object.assign(game.camera,snapshot.cameraData);else game.camera.reset(game.player.x*TILE,game.player.y*TILE);
- game.camera.clamp(game.world);game.ctx=canvas.getContext("2d");game.running=true;game.paused=false;game.world.heroStepsSinceBattle=Math.max(0,Number(game.world.heroStepsSinceBattle)||0);const heroLedger=campaignHeroLedger(),activeHeroId=heroLedger.activeEncounterId,pursuit=game.world.campaignHeroPursuit,pursuitEvent=heroLedger.events?.[pursuit?.encounterId];if(pursuit&&(pursuit.encounterId!==activeHeroId||pursuitEvent?.status!=="active"||pursuitEvent?.heroId!==pursuit.heroId))game.world.campaignHeroPursuit=null;else if(pursuit)repairCampaignHeroPursuit(pursuit);const resumableHeroBattle=campaignHeroCheckpointResumable(save.state.activeBattle,heroLedger);if(activeHeroId&&!game.world.campaignHeroPursuit&&!resumableHeroBattle){if(save.state.activeBattle?.specialBattleType==="campaignHero")delete save.state.activeBattle;settleAbandonedCampaignHeroPursuit("orphan-recovery");save.save()}revealCampaignArea();syncExploreSectionPresentation();bindInput(canvas);game.last=performance.now();requestAnimationFrame(loop);requestAnimationFrame(refreshCampaignHeroChaseHud);
+ game.camera.clamp(game.world);game.ctx=canvas.getContext("2d");game.running=true;game.paused=false;game.world.heroStepsSinceBattle=Math.max(0,Number(game.world.heroStepsSinceBattle)||0);const heroLedger=campaignHeroLedger(),activeHeroId=heroLedger.activeEncounterId,pursuit=game.world.campaignHeroPursuit,pursuitEvent=heroLedger.events?.[pursuit?.encounterId];if(pursuit&&(pursuit.encounterId!==activeHeroId||pursuitEvent?.status!=="active"||pursuitEvent?.heroId!==pursuit.heroId))game.world.campaignHeroPursuit=null;else if(pursuit)repairCampaignHeroPursuit(pursuit);const resumableHeroBattle=campaignHeroCheckpointResumable(save.state.activeBattle,heroLedger);if(activeHeroId&&!game.world.campaignHeroPursuit&&!resumableHeroBattle){if(save.state.activeBattle?.specialBattleType==="campaignHero")delete save.state.activeBattle;settleAbandonedCampaignHeroPursuit("orphan-recovery");save.save()}if(pursuit?.playerChoice337==="fight"&&!resumableHeroBattle)delete pursuit.playerChoice337;revealCampaignArea();syncExploreSectionPresentation();bindInput(canvas);game.last=performance.now();requestAnimationFrame(loop);requestAnimationFrame(refreshCampaignHeroChaseHud);
  if(typeof ResizeObserver!=="undefined"){game.miniMapResizeObserver?.disconnect?.();game.miniMapResizeObserver=new ResizeObserver(()=>syncMiniMapBackingStore(mini));game.miniMapResizeObserver.observe(document.querySelector(".explore-stage")??mini);game.miniMapResizeObserver.observe(mini)}
  const elapsed=document.querySelector("[data-explore-elapsed]");
  if(elapsed){
@@ -3613,13 +3613,40 @@ function refreshCampaignHeroChaseHud(){
  const heroId=pursuit.heroId,name=campaignHeroName(heroId),record=campaignHeroLedger().heroes?.[heroId],percent=Math.round(Math.max(0,Math.min(1,record?.remainingHpRate??1))*100),profile=CAMPAIGN_HERO_PROFILES[heroId]?.field??{},maxSteps=Math.max(12,Number(profile.maxPursuitPlayerSteps)||24),chaseSteps=Math.max(0,Number(pursuit.chaseSteps)||0),sameSection=pursuit.sectionId===game?.world?.currentSectionId,distance=sameSection?Math.abs(pursuit.x-game.player.x)+Math.abs(pursuit.y-game.player.y):null,stateLabel=pursuit.state==="observing"?"索敵中":pursuit.state==="contact"?"接触":"追跡中";stage.classList.add("is-hero-hunt");stage.dataset.heroHuntState=pursuit.state;let hud=stage.querySelector(".campaign-hero-chase-hud");if(!hud){hud=document.createElement("div");hud.className="campaign-hero-chase-hud is-discovered";stage.appendChild(hud)}hud.classList.toggle("is-tracking",pursuit.state==="pursuing");hud.classList.toggle("is-contact",pursuit.state==="contact");hud.classList.toggle("is-observing",pursuit.state==="observing");hud.innerHTML=`<span class="campaign-hero-chase-portrait">${monsterVisual({speciesId:heroId,visualSpeciesId:heroId},name,{className:"campaign-hero-chase-visual"})}</span><span class="campaign-hero-chase-copy"><small>HERO HUNT / ${stateLabel}</small><b>${escapeAttribute(name)}</b><em>${pursuit.state==="observing"?"まだ位置は悟られていない":pursuit.state==="contact"?"戦闘圏内へ侵入":"こちらへ迫っている"}</em></span><span class="campaign-hero-chase-state"><b>${distance==null?"別区画":`距離 ${distance}`}</b><small>追跡 ${Math.min(chaseSteps,maxSteps)}/${maxSteps}</small><i class="campaign-hero-chase-timer" style="--hero-chase:${Math.min(100,Math.round(chaseSteps/maxSteps*100))}%"><i></i></i><small>残存HP ${percent}%</small><i class="campaign-hero-wound-meter" style="--hero-hp:${percent}%"><i></i></i></span>`;
  const canvas=game.canvas,screenPoint=game.camera.world(pursuit.rx*TILE,pursuit.ry*TILE),inside=pursuit.sectionId===game.world.currentSectionId&&screenPoint.x>16&&screenPoint.y>16&&screenPoint.x<canvas.width-16&&screenPoint.y<canvas.height-16;stage.querySelector(".campaign-hero-edge-chip")?.remove();if(!inside){const chip=document.createElement("span"),dx=pursuit.x-game.player.x,dy=pursuit.y-game.player.y,direction=Math.abs(dx)>Math.abs(dy)?dx>0?"east":"west":dy>0?"south":"north";chip.className=`campaign-hero-edge-chip is-${direction} is-tracking`;chip.innerHTML=monsterVisual({speciesId:heroId,visualSpeciesId:heroId},name,{className:"campaign-hero-edge-visual"});stage.appendChild(chip)}
 }
+// A hero is a player decision, never an AUTO navigation objective.
+function campaignHeroChoicePending(pursuit=game?.world?.campaignHeroPursuit){
+ return Boolean(!game?.online&&pursuit&&!["fight","flee"].includes(pursuit.playerChoice337))
+}
+function showCampaignHeroEncounterChoice(){
+ const originGame=game,pursuit=game?.world?.campaignHeroPursuit;
+ if(!game?.running||game.online||battle||game.world.encountering||!campaignHeroChoicePending(pursuit))return false;
+ if(document.querySelector(".game-modal"))return false;
+ stopExploreAuto();cancelPendingExploreActions();game.paused=true;
+ persistExpeditionSnapshot(expeditionSnapshotFromGame());
+ const name=campaignHeroName(pursuit.heroId);
+ app.insertAdjacentHTML("beforeend",Modal("勇者と遭遇",`<section class="hero-encounter-choice"><small>HERO ENCOUNTER / CHOOSE YOUR ACTION</small><h3>${escapeAttribute(name)}が現れた</h3><p>自動探索を停止しました。どうするか選んでください。</p><p class="muted">選ぶまで追跡は進みません。「手動で逃げる」は探索を再開し、自分で退路を選びます。</p><button type="button" class="ghost" data-hero-choice-flee>手動で逃げる</button></section>`,"今すぐ戦う"));
+ const modal=topModal(),primary=modal.querySelector("[data-modal-primary]");let decided=false;
+ modal.classList.add("hero-encounter-choice-modal");modal.setAttribute("role","dialog");modal.setAttribute("aria-modal","true");modal.setAttribute("aria-label",`${name}との遭遇：行動を選択`);
+ // Closing or pressing Escape must not silently choose a result.
+ modal._onDismiss=()=>{};const dismiss=modal.querySelector("[data-modal-dismiss]");if(dismiss){dismiss.hidden=true;dismiss.disabled=true}
+ const choose=choice=>{
+  if(decided||game!==originGame||!game.running||game.world.campaignHeroPursuit!==pursuit)return;
+  pursuit.playerChoice337=choice;
+  const stored=persistExpeditionSnapshot(expeditionSnapshotFromGame(),{saveNow:false});
+  if(!stored||!save.save()){delete pursuit.playerChoice337;if(stored?.world?.campaignHeroPursuit)delete stored.world.campaignHeroPursuit.playerChoice337;showToast("選択を保存できませんでした。もう一度お試しください");return}
+  decided=true;modal.querySelectorAll("button").forEach(button=>button.disabled=true);modal.remove();game.paused=false;
+  if(choice==="fight"){pursuit.state="contact";refreshCampaignHeroChaseHud();beginCampaignHeroContactBattle(pursuit)}
+  else showExploreNotice("手動で退路を選ぼう。勇者に接触すると戦闘になります","warning")
+ };
+ primary.onclick=()=>choose("fight");modal.querySelector("[data-hero-choice-flee]").onclick=()=>choose("flee");requestAnimationFrame(()=>primary.focus());return true
+}
 function armCampaignHeroEncounter(){
  if(game?.online||game?.world?.campaignHeroPursuit||game?.world?.bossDefeated)return false;const floor=save.state.player.currentFloor,floorState=campaignFloorState(save.state,floor),encounterRoll=seeded((floorSeed(floor)^0x3190a11)>>>0)(),candidate=scheduledCampaignHeroForFloor(campaignHeroLedger(),{floor,encounterRoll,online:false,bossDefeated:Boolean(floorState.bossDefeated),postBoss:Boolean(game.world.bossDefeated),modalOpen:Boolean(document.querySelector(".game-modal")),battleOpen:Boolean(battle),visitedSections:new Set(game.world.discoveredSections??[]).size,stepsSinceBattle:Number(game.world.heroStepsSinceBattle)||0,partyHpRate:campaignHeroPartyHpRate()});if(!candidate)return false;
- const activated=beginCampaignHeroFieldEncounter(campaignHeroLedger(),{...candidate,floor});if(!activated.activated)return false;normalizeCampaignState(save.state).heroEncounters310=activated.state;const section=activeExploreSection(),point=campaignHeroSpawnPoint(section),profile=CAMPAIGN_HERO_PROFILES[candidate.heroId]?.field??{};game.world.campaignHeroPursuit={encounterId:candidate.id,heroId:candidate.heroId,state:profile.initialState??"pursuing",x:point.x,y:point.y,rx:point.x,ry:point.y,sectionId:section.id,observeSteps:Math.max(0,Number(profile.observePlayerSteps)||0),chaseSteps:0,portalTransfers:0,portalGraceSteps:1,revealed:true};game.world.nextEncounter=Number.MAX_SAFE_INTEGER;const voice=campaignHeroVoiceLine(candidate.heroId,"spotted",{cycle:candidate.cycle});showCampaignHeroFieldReveal(candidate.heroId);showExploreNotice(`${campaignHeroName(candidate.heroId)}「${voice}」――逃げ切るか、迎え撃て`,"warning",{live:true});audio.sfx?.("boss");persistExpeditionSnapshot(expeditionSnapshotFromGame());refreshCampaignHeroChaseHud();return true
+ const activated=beginCampaignHeroFieldEncounter(campaignHeroLedger(),{...candidate,floor});if(!activated.activated)return false;normalizeCampaignState(save.state).heroEncounters310=activated.state;const section=activeExploreSection(),point=campaignHeroSpawnPoint(section),profile=CAMPAIGN_HERO_PROFILES[candidate.heroId]?.field??{};game.world.campaignHeroPursuit={encounterId:candidate.id,heroId:candidate.heroId,state:profile.initialState??"pursuing",x:point.x,y:point.y,rx:point.x,ry:point.y,sectionId:section.id,observeSteps:Math.max(0,Number(profile.observePlayerSteps)||0),chaseSteps:0,portalTransfers:0,portalGraceSteps:1,revealed:true};game.world.nextEncounter=Number.MAX_SAFE_INTEGER;const voice=campaignHeroVoiceLine(candidate.heroId,"spotted",{cycle:candidate.cycle});showCampaignHeroFieldReveal(candidate.heroId);showExploreNotice(`${campaignHeroName(candidate.heroId)}「${voice}」――逃げ切るか、迎え撃て`,"warning",{live:true});audio.sfx?.("boss");refreshCampaignHeroChaseHud();showCampaignHeroEncounterChoice();return true
 }
 function resolveEscapedCampaignHeroPursuit(){const pursuit=game?.world?.campaignHeroPursuit;if(!pursuit)return false;const resultId=`${pursuit.encounterId}:field-escape:${save.state.player.currentFloor}`,settled=settleCampaignHeroEncounter(campaignHeroLedger(),{encounterId:pursuit.encounterId,resultId,heroId:pursuit.heroId,outcome:"escaped",floor:save.state.player.currentFloor});queueCampaignHeroAftermath(settled.state,{encounterId:pursuit.encounterId,outcome:"escaped",floor:save.state.player.currentFloor,heroHpRate:settled.hero?.remainingHpRate??1});const voice=campaignHeroVoiceLine(pursuit.heroId,"retreated",{cycle:campaignHeroEncounterCycle(pursuit.encounterId)}),name=campaignHeroName(pursuit.heroId);game.world.campaignHeroPursuit=null;game.world.nextEncounter=(Number(game.world.steps)||0)+8;showExploreNotice(`${name}「${voice}」――勇者の気配が遠ざかった`,"info",{live:true});persistExpeditionSnapshot(expeditionSnapshotFromGame());refreshCampaignHeroChaseHud();queueCampaignStoryScenes({delay:260});return true}
 function updateCampaignHeroPursuitOnStep(){
- const pursuit=game?.world?.campaignHeroPursuit;if(!pursuit){armCampaignHeroEncounter();return false}const profile=CAMPAIGN_HERO_PROFILES[pursuit.heroId]?.field??{};pursuit.chaseSteps=(Number(pursuit.chaseSteps)||0)+1;if(campaignHeroTouchesPlayer(pursuit)){pursuit.state="contact";refreshCampaignHeroChaseHud();beginCampaignHeroContactBattle(pursuit);return true}if(pursuit.chaseSteps>=Math.max(12,Number(profile.maxPursuitPlayerSteps)||24)){resolveEscapedCampaignHeroPursuit();return false}if(pursuit.portalGraceSteps>0){pursuit.portalGraceSteps--;refreshCampaignHeroChaseHud();return false}if(pursuit.observeSteps>0){pursuit.observeSteps--;pursuit.state="observing";refreshCampaignHeroChaseHud();return false}pursuit.state="pursuing";
+ const pursuit=game?.world?.campaignHeroPursuit;if(!pursuit)return armCampaignHeroEncounter();if(campaignHeroChoicePending(pursuit)){showCampaignHeroEncounterChoice();return true}const profile=CAMPAIGN_HERO_PROFILES[pursuit.heroId]?.field??{};pursuit.chaseSteps=(Number(pursuit.chaseSteps)||0)+1;if(campaignHeroTouchesPlayer(pursuit)){pursuit.state="contact";refreshCampaignHeroChaseHud();beginCampaignHeroContactBattle(pursuit);return true}if(pursuit.chaseSteps>=Math.max(12,Number(profile.maxPursuitPlayerSteps)||24)){resolveEscapedCampaignHeroPursuit();return false}if(pursuit.portalGraceSteps>0){pursuit.portalGraceSteps--;refreshCampaignHeroChaseHud();return false}if(pursuit.observeSteps>0){pursuit.observeSteps--;pursuit.state="observing";refreshCampaignHeroChaseHud();return false}pursuit.state="pursuing";
  const playerPath=game.player.path??[],ahead=pursuit.heroId==="myth_rion"?Math.min(playerPath.length-1,3):pursuit.heroId==="myth_yori"?Math.min(playerPath.length-1,1):-1,target=ahead>=0?playerPath[ahead]:game.player,distance=Math.abs(pursuit.x-game.player.x)+Math.abs(pursuit.y-game.player.y),enamiHunts=Object.values(campaignHeroLedger().heroes??{}).some(hero=>hero.heroId!==pursuit.heroId&&(1-hero.remainingHpRate)>=.2);if(pursuit.heroId==="myth_enami"&&!enamiHunts&&distance>3){pursuit.state="observing";refreshCampaignHeroChaseHud();return false}
  const route=path(game.world,pursuit,target),moves=1+(pursuit.heroId==="myth_hide"&&pursuit.chaseSteps%4===0?1:0);for(const step of route.slice(0,moves)){pursuit.x=step.x;pursuit.y=step.y;pursuit.rx=step.x;pursuit.ry=step.y}if(campaignHeroTouchesPlayer(pursuit)){pursuit.state="contact";refreshCampaignHeroChaseHud();beginCampaignHeroContactBattle(pursuit);return true}refreshCampaignHeroChaseHud();return false
 }
@@ -3686,6 +3713,7 @@ function updateExploreAutoToggleState(){
  const active=exploreAutoActive();button.classList.toggle("active",active);button.dataset.state=active?"on":"off";button.setAttribute("aria-pressed",String(active));button.setAttribute("aria-label",`自動攻略を${active?"停止":"開始"}`);const label=button.querySelector("[data-explore-auto-state]");if(label)label.textContent=active?"ON":"OFF"
 }
 function setExploreAutoMode(mode){
+ if(mode!=="off"&&game?.world?.campaignHeroPursuit){stopExploreAuto();showExploreNotice("勇者との遭遇中は手動で行動を選んでください","warning");return"off"}
  const next=mode==="off"?"off":"floor";save.state.settings.exploreAutoMode=next;save.state.settings.exploreAutoMenuOpen=false;
  if(game?.player){game.player.path=[];game.player.p=0}if(next!=="off"&&game?.world)game.world.autoNavigation332={lastTransition:null,reverseCount:0,pauseUntil:Date.now()+260};save.save();updateExploreAutoToggleState();if(next!=="off"&&game?.running)requestAnimationFrame(applyExploreAutoPath);return next
 }
@@ -3845,6 +3873,7 @@ function openFloorBossChallenge(bossInfo,floor){
 }
 function loop(now){
  if(!game?.running)return;
+ if(campaignHeroChoicePending()&&!battle&&!game.world.encountering&&!document.querySelector(".game-modal"))showCampaignHeroEncounterChoice();
  const dt=Math.min(.05,(now-game.last)/1000||0);game.last=now;
  if(!game.paused)update(dt);
  if(!game?.running)return;
@@ -4045,12 +4074,13 @@ function showPostBossFieldUnlocks(){
  const stage=document.querySelector(".explore-stage");if(!stage)return;stage.querySelector(".post-boss-field-unlocks")?.remove();const firstUnlock=game?.world?.postBossRevealFirstUnlock!==false,node=document.createElement("div");node.className="post-boss-field-unlocks";node.setAttribute("role","status");node.innerHTML=`<small>支配者討伐完了</small><strong>${firstUnlock?"この階の封印が解けた":"新たな神の戦利品が現れた"}</strong><div><span class="trophy">${pixelIcon("chest")}<b>この支配者の戦利品宝箱</b><em>解放</em></span><span class="spring">${pixelIcon("rest")}<b>全回復の温泉</b><em>${firstUnlock?"出現":"利用状態を維持"}</em></span><span class="route">${pixelIcon("dungeon")}<b>${save.state.player.currentFloor>=CAMPAIGN_MAX_FLOOR?"勇者決戦への門":"次階層への道"}</b><em>${firstUnlock?"開通":"開通済み"}</em></span></div>`;stage.appendChild(node);setTimeout(()=>node.remove(),2600)
 }
 function transitionCampaignSection(){
- if(game?.online||!game?.world?.sectionPortals?.length)return false;const portal=game.world.sectionPortals.find(entry=>entry.sectionId===game.world.currentSectionId&&entry.x===game.player.x&&entry.y===game.player.y);if(!portal)return false;
+ if(game?.online||!game?.world?.sectionPortals?.length||game?.player?.path?.length)return false;const portal=game.world.sectionPortals.find(entry=>entry.sectionId===game.world.currentSectionId&&entry.x===game.player.x&&entry.y===game.player.y);if(!portal)return false;
  const from=game.world.currentSectionId,to=portal.targetSectionId,navigation=exploreAutoNavigation(),reverse=exploreAutoActive()&&navigation?.lastTransition?.from===to&&navigation.lastTransition.to===from;navigation.reverseCount=reverse?(Number(navigation.reverseCount)||0)+1:0;navigation.lastTransition={from,to,step:Number(game.world.steps)||0};navigation.pauseUntil=Date.now()+360;if(navigation.reverseCount>=2)stopExploreAuto("AUTO停止：同じ区画の往復を検知しました");
  const section=game.world.sections.find(entry=>entry.id===portal.targetSectionId);game.player.x=portal.arrivalX;game.player.y=portal.arrivalY;game.player.rx=portal.arrivalX;game.player.ry=portal.arrivalY;game.player.path=[];game.player.p=0;game.world.currentSectionId=portal.targetSectionId;game.world.currentRoomId=portal.targetSectionId;game.world.currentAttribute=section?.attribute??"neutral";game.partyTrail=[{x:game.player.x,y:game.player.y}];game.camera.reset(game.player.x*TILE,game.player.y*TILE);game.camera.clamp(game.world);revealCampaignArea();transferCampaignHeroPursuit(section);showSectionTransition(section);persistExpeditionSnapshot(expeditionSnapshotFromGame());return true
 }
 function update(dt){
  if(game.world.encountering)return;
+ if(campaignHeroChoicePending()){showCampaignHeroEncounterChoice();return}
  applyBossHotSpringRecovery();
  if(transitionCampaignSection())return;
  applyExploreAutoPath();
