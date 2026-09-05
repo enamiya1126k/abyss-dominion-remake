@@ -1,11 +1,11 @@
 import {
   buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
   onlineSocialNotificationSummary, moveOnlineBattleRosterPriority, renderOnlineBattleRosterPicker,
-} from "../ui/screens/OnlinePartyScreen.js?v=3.1.12-build331";
+} from "../ui/screens/OnlinePartyScreen.js?v=3.1.23-build342";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=3.1.19-build338";
+} from "./OnlineViews.js?v=3.1.23-build342";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   rollbackOnlineTradeAssetReservation, commitOnlineTrade, recoverOrphanedTradeEscrows,
