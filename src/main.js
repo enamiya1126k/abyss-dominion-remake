@@ -1,5 +1,5 @@
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.15-build334";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.15-build334";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.16-build335";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.16-build335";
 // Regression markers only: SaveService.js?v=3.1.10-build329 / config.js?v=3.1.10-build329 / HomeScreen.js?v=3.1.10-build329
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.1-build311";
@@ -9,22 +9,22 @@ import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/Expl
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.15-build334";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.16-build335";
 import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.14-build333";
 import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.11-build330";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";
 import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.1-build311";
 import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.14-build333";
-import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.15-build334";
+import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.16-build335";
 import{reconcileOnlineMotion,onlineMotionSpeed}from"./online/OnlineMovement.js?v=3.1.1-build311";
 import{beginGuestProgressIsolation,finishGuestProgressIsolation,onlineProgressionAllowed,legacyProgressRecoveryCandidate,applyLegacyProgressRecovery,dismissLegacyProgressRecovery,undoLegacyProgressRecovery}from"./online/OnlineProgressIsolation.js?v=3.1.1-build311";
 import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.1-build311";
 import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=3.1.1-build311";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.15-build334";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.15-build334";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.16-build335";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.16-build335";
 import{CampaignFinalFloorScreen}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.1-build320";
-import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.15-build334";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.15-build334";
+import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.16-build335";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.16-build335";
 import{Modal}from"./ui/components/Modal.js?v=3.1.1-build311";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=3.1.1-build311";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=3.1.1-build311";
@@ -44,9 +44,9 @@ import{initialAffixCount,lockedAffixCount,maxLockableAffixes,normalizeEquipmentA
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=3.1.1-build311";
 import{ShopScreen}from"./ui/screens/ShopScreen.js?v=3.1.1-build311";
 import{SkillScreen}from"./ui/screens/SkillScreen.js?v=3.1.1-build311";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=3.1.15-build334";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=3.1.16-build335";
 import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=3.1.1-build311";
-import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=3.1.15-build334";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=3.1.16-build335";
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=3.1.1-build311";
 import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=3.1.1-build311";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=3.1.1-build311";
@@ -79,7 +79,7 @@ import{normalizeCampaignReincarnationState,campaignCanonicalEnding,recordCampaig
 import{campaignTrophyFragmentAwards}from"./core/CampaignRewardSystem.js?v=3.1.1-build311";
 import{bossRewardIdentity,bossRewardEquipmentIdentity,bossFragmentVisualIdentity}from"./core/BossRewardMappingSystem.js?v=3.1.1-build311";
 import{campaignBossChestReward}from"./core/CampaignBossRewardSystem.js?v=3.1.1-build311";
-import{generateSectionDungeon,sectionIdAt,sectionRoute,portalTowardSection,sectionBounds,safeSectionExitCandidates,chooseSafeSectionExitCell}from"./core/DungeonSectionSystem.js?v=3.1.1-build318";
+import{generateSectionDungeon,sectionIdAt,sectionRoute,portalTowardSection,portalTapDestination,sectionBounds,safeSectionExitCandidates,chooseSafeSectionExitCell}from"./core/DungeonSectionSystem.js?v=3.1.16-build335";
 import{createCampaignDungeonLayout}from"./core/CampaignDungeonLayoutSystem.js?v=3.1.14-build333";
 import{requiredCampaignBossSectionCount,shouldRegenerateCampaignBossSnapshot}from"./core/CampaignBossWorldSystem.js?v=3.1.1-build311";
 import{buildSectionMiniMapModel,fitMiniMapTransform,projectMiniMapPoint}from"./core/DungeonMiniMapSystem.js?v=3.1.1-build311";
@@ -99,7 +99,7 @@ import{bossExperiencePackReward}from"./core/BossRewardSystem.js?v=3.1.1-build311
 import{enemyExperienceReward}from"./core/ProgressionSystem.js?v=3.1.1-build311";
 import{treasureRoomRateForFloor,treasureRoomChestCount,shouldPlaceTreasureMimic,rollTreasureChestReward,mimicVictoryGold,mimicExperienceMultiplier,mimicVictoryCrystals}from"./core/TreasureSystem.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionForFloor,floorBossDefinitionById,floorBossEquipmentDesignByPiece,milestoneBossIdsForFloor}from"./data/floorBosses.js?v=3.1.1-build311";
-import{FLOOR_BOSS_CONTRACT_COST,FLOOR_BOSS_EQUIPMENT_COST,normalizeFloorBossChallengeState,recordFloorBossDiscovery,floorBossChallengeStatus,createFloorBossChallengeEncounter,awardFloorBossChallengeFragments,spendFloorBossFragments,restoreFloorBossFragments}from"./core/FloorBossChallengeSystem.js?v=3.1.15-build334";
+import{FLOOR_BOSS_CONTRACT_COST,FLOOR_BOSS_EQUIPMENT_COST,normalizeFloorBossChallengeState,recordFloorBossDiscovery,floorBossChallengeStatus,createFloorBossChallengeEncounter,awardFloorBossChallengeFragments,spendFloorBossFragments,restoreFloorBossFragments}from"./core/FloorBossChallengeSystem.js?v=3.1.16-build335";
 import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.1-build311";
 import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame}from"./ui/MonsterVisual.js?v=3.1.1-build311";
 import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,permanentSignatureOwners,rollPermanentSignatureHit,PERMANENT_SIGNATURE_RATE,createSignatureEquipment,normalizeSignatureWeaponItem,signatureWeaponGrantedSkill}from"./core/SignatureWeaponSystem.js?v=3.1.1-build311";
@@ -2543,7 +2543,7 @@ function bindOnlineExploreInput(canvas,onDestination){
  game.input=input;
  canvas.onpointerdown=event=>{canvas.setPointerCapture?.(event.pointerId);const point=scalePoint(event);input.pts.set(event.pointerId,{...point,startClientX:event.clientX,startClientY:event.clientY});if(input.pts.size===2){const[a,b]=[...input.pts.values()];input.pinch={distance:Math.hypot(a.x-b.x,a.y-b.y),zoom:game.camera.z};input.drag=true}};
  canvas.onpointermove=event=>{const prior=input.pts.get(event.pointerId);if(!prior||!game?.online)return;const point=scalePoint(event),dx=point.x-prior.x,dy=point.y-prior.y;prior.x=point.x;prior.y=point.y;if(input.pts.size>=2){const[a,b]=[...input.pts.values()],distance=Math.hypot(a.x-b.x,a.y-b.y),center={x:(a.x+b.x)/2,y:(a.y+b.y)/2},before=game.camera.screen(center.x,center.y);game.camera.z=Math.max(.45,Math.min(2.25,input.pinch.zoom*distance/Math.max(1,input.pinch.distance)));const after=game.camera.world(before.x,before.y);game.camera.ox+=center.x-after.x;game.camera.oy+=center.y-after.y;game.camera.manual=true;game.camera.clamp(game.world);input.drag=true;return}if(Math.hypot(event.clientX-prior.startClientX,event.clientY-prior.startClientY)>=CAMERA_DRAG_THRESHOLD_PX)input.drag=true;if(input.drag){game.camera.pan(dx,dy);game.camera.clamp(game.world)}};
- canvas.onpointerup=event=>{const prior=input.pts.get(event.pointerId),multiple=input.pinch,drag=input.drag;finish(event);if(!prior||multiple||drag||!game?.online)return;const point=scalePoint(event),worldPoint=game.camera.screen(point.x,point.y),target={x:Math.floor(worldPoint.x/TILE),y:Math.floor(worldPoint.y/TILE)};onDestination?.(target)};
+ canvas.onpointerup=event=>{const prior=input.pts.get(event.pointerId),multiple=input.pinch,drag=input.drag;finish(event);if(!prior||multiple||drag||!game?.online)return;const point=scalePoint(event),worldPoint=game.camera.screen(point.x,point.y),target={x:Math.floor(worldPoint.x/TILE),y:Math.floor(worldPoint.y/TILE)},destination=portalTapDestination(game.world,target)??target;onDestination?.(destination)};
  canvas.onpointercancel=canvas.onlostpointercapture=finish;
 }
 function onlineExploreLoop(now){
@@ -4687,7 +4687,7 @@ function bindInput(c){
    const distance=Math.abs(game.player.x-g.x)+Math.abs(game.player.y-g.y);
    if(distance<=1){game.player.path=[];interactExploreDecoration(decoration);return}
   }
-  const route=path(game.world,game.player,g);game.player.setPath(route);if(route.length)completeContextGuide("explore_move",{quiet:true})
+  const destination=portalTapDestination(game.world,g)??g,route=path(game.world,game.player,destination);game.player.setPath(route);if(route.length)completeContextGuide("explore_move",{quiet:true})
  };
  c.onpointercancel=c.onlostpointercapture=finish
 }
