@@ -1,4 +1,4 @@
-import {createMonster,calculatedStats} from '../models/Monster.js?v=3.1.35-build355';
+import {createMonster,calculatedStats} from '../models/Monster.js?v=3.1.36-build356';
 import {maxMp,effectiveSkillMpCost,allLearnedSkills} from '../battle/SkillSystem.js?v=3.1.35-build355';
 import {createSignatureEquipment,signatureStatBonuses,signatureSetState} from './SignatureWeaponSystem.js?v=3.1.35-build355';
 import {equipmentStatMultiplier,equipmentRequiredMonsterLevel} from '../models/Equipment.js';

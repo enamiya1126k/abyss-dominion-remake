@@ -1,10 +1,11 @@
-import{createMonster,calculatedStats}from"../models/Monster.js?v=3.1.35-build355";
+import{EQUIPMENT_BASES}from"../data/equipment.js?v=2.11.2-build166";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=3.1.36-build356";
 import{allLearnedSkills,maxMp,recommendedSkills,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.35-build355";
 import{SPECIES}from"../data/species.js?v=3.1.35-build355";
 import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.35-build355";
-import{MONSTER_STORAGE_CAP}from"./config.js?v=3.1.35-build355";
+import{MONSTER_STORAGE_CAP}from"./config.js?v=3.1.36-build356";
 import{createEquipment}from"../models/Equipment.js?v=3.1.1-build311";
-import{receiveEquipment}from"../services/EquipmentStorage.js?v=3.1.34-build354";
+import{receiveEquipment,EQUIPMENT_LIMIT}from"../services/EquipmentStorage.js?v=3.1.34-build354";
 
 const DEVICE_LEDGER_KEY="abyss-dominion-serial-ledger-v1";
 
@@ -32,6 +33,7 @@ const CODE_REWARDS=Object.freeze({
   ,"9d5c12ceb74d9ad485bdd55dbdc12916cd52e36ed38bbfbbab40f4920687b2ab":"mythicPackHide"
 });
 
+const GM_PROGRESS_PACK_HASH="55c5c028f98cd1991d73c2c031a40b84e7a673eb7950291490c982eddfdfd3cf";
 const GAME_MASTER_HASH="dd808decc6532af902eb00cc9a8aad1b5575db84d325c9732fe84256cbd1b15e";
 const GAME_MASTER_RESET_HASH="221eaa54f463cdeec89723e15eb5aa7d81a772eb62193c88b0a096a0684e8d6f";
 
@@ -285,6 +287,7 @@ export function applySerialReward(state,rewardId){
 export async function validateGameMasterCode(state,rawCode){
  const normalized=normalizeSerialInput(rawCode);if(!normalized)return{ok:false,message:"GMコードを入力してください。"};let hash;
  try{hash=await sha256(normalized)}catch(error){return{ok:false,message:error.message}}
+ if(hash===GM_PROGRESS_PACK_HASH){const check=validateGmProgressPack(state);return check.ok?{ok:true,kind:"progressPack356"}:check}
  if(hash===GAME_MASTER_RESET_HASH)return{ok:true,kind:"reset"};
  if(hash!==GAME_MASTER_HASH)return{ok:false,message:"GMコードが正しくありません。"};
  if(state.gameMaster?.claimedAt)return{ok:false,message:"GM支援パックはこのセーブで受取済みです。"};
@@ -292,7 +295,8 @@ export async function validateGameMasterCode(state,rawCode){
  return{ok:true,kind:"grant"}
 }
 
-export function applyGameMasterReward(state){
+export function applyGameMasterReward(state,kind="grant"){
+ if(kind==="progressPack356")return applyGmProgressPack(state);
  if(state.gameMaster?.claimedAt)return{ok:false,message:"GM支援パックは受取済みです。"};
  state.player??={};state.inventory??={};state.settings??={};state.monsters??=[];
  state.player.gold=finiteInteger(state.player.gold)+100000000;state.player.crystals=finiteInteger(state.player.crystals)+100000;
@@ -339,4 +343,38 @@ export function restoreSerialRedemptionLedgerAfterFailedReset(receipt){
     console.error("Serial redemption ledger rollback failed",error);
     return false;
   }
+}
+
+
+export const GM_PROGRESS_PACK=Object.freeze({
+ monsterLevel:1500,monsterPlus:10,equipmentLevel:3000,equipmentPlus:10,
+ gold:100000000,crystals:30000,captureCrystals:1000,
+ speciesIds:Object.freeze(["ancient_dragon","void_emperor","king_behemoth","primordial_phoenix"])
+});
+function validateGmProgressPack(state){
+ if(state.gameMaster?.progressPack356?.claimedAt)return{ok:false,message:"GM100階想定パックはこのセーブで受取済みです。"};
+ if((state.monsters?.length??0)>MONSTER_STORAGE_CAP-4)return{ok:false,message:"LR4体分のモンスター所持枠を空けてください。"};
+ if((state.equipment?.length??0)>EQUIPMENT_LIMIT-24)return{ok:false,message:"装備24点分の通常所持枠を空けてください。"};
+ return{ok:true};
+}
+function applyGmProgressPack(state){
+ const check=validateGmProgressPack(state);if(!check.ok)return check;
+ const pack=GM_PROGRESS_PACK;
+ // Stage every item before changing the save. No party, unlock or campaign mutation.
+ const monsters=pack.speciesIds.map(id=>createRarityRewardMonster(state,id,"LR",pack.monsterLevel,pack.monsterPlus,500,3));
+ const names=["虚空の魔剣","黄昏の魔典","王者の戦装","星幽ローブ","竜心の首輪","時渡りの時計"],slots=["weapon","weapon","armor","armor","accessory","accessory"],subslots=["weaponRight","weaponLeft","armorBody","armorSupport","accessoryNeck","accessoryFinger"];
+ const equipment=Array.from({length:24},(_,index)=>{
+  const i=index%6,slot=slots[i],base=EQUIPMENT_BASES[slot].find(b=>b.name===names[i]);
+  if(!base)throw new Error("GM配布装備のデータが見つかりません。");
+  const item=createEquipment(slot,{base,rarity:"LR",ruleOverrides:{subslot:subslots[i]}});
+  item.level=pack.equipmentLevel;item.plus=pack.equipmentPlus;item.favorite=true;
+  return item;
+ });
+ state.player??={};state.inventory??={};state.equipment??=[];
+ for(const key of ["gold","crystals"])state.player[key]=Math.min(Number.MAX_SAFE_INTEGER,finiteInteger(state.player[key])+pack[key]);
+ state.inventory.captureCrystals=Math.min(Number.MAX_SAFE_INTEGER,finiteInteger(state.inventory.captureCrystals)+pack.captureCrystals);
+ for(const monster of monsters)recordMonsterAcquisition(state,monster);
+ state.equipment.push(...equipment);
+ state.gameMaster={...state.gameMaster,progressPack356:{claimedAt:new Date().toISOString(),monsterIds:monsters.map(m=>m.id),equipmentIds:equipment.map(e=>e.id)}};
+ return{ok:true,kind:"progressPack356",monsters,equipment,message:"LR4体（Lv.1,500・+10）、LR装備24点（Lv.3,000・+10）、100,000,000G、魔晶石30,000個、捕獲結晶1,000個を受け取りました。仲間は控え、装備は所持品に追加しています。"};
 }

@@ -1,6 +1,6 @@
 import { SPECIES } from "../../data/species.js?v=3.1.35-build355";
-import { displayName, calculatedStats } from "../../models/Monster.js?v=3.1.35-build355";
-import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=3.1.35-build355";
+import { displayName, calculatedStats } from "../../models/Monster.js?v=3.1.36-build356";
+import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=3.1.36-build356";
 import { magicCircleById, equippedMagicCircle, goldPowerDamageMultiplier, goldPowerActionCost } from "../../core/MagicCircleSystem.js?v=3.1.34-build354";
 import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=3.1.35-build355";
 import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=3.1.35-build355";
