@@ -1,19 +1,19 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.22-build341";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.28-build348";
 // Regression marker only: config.js?v=3.1.21-build340
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.1-build311";
-import{maxMp}from"../../battle/SkillSystem.js?v=3.1.1-build311";
-import{SPECIES}from"../../data/species.js?v=3.1.1-build311";
-import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.1-build311";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.1-build311";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.28-build348";
+import{maxMp}from"../../battle/SkillSystem.js?v=3.1.28-build348";
+import{SPECIES}from"../../data/species.js?v=3.1.28-build348";
+import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.28-build348";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.28-build348";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.1-build311";
 import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=3.1.1-build317";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.20-build339";
 import{attributeCycleVisual,attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.19-build338";
 import{campaignDayForFloor,campaignHeroAdvance}from"../../core/Campaign100System.js?v=3.1.1-build311";
-import{normalizeCampaignHeroInvasion}from"../../core/CampaignHeroEncounterSystem.js?v=3.1.26-build346";
-import{normalizeCampaignReincarnationState,campaignReincarnationDifficultyMultiplier,campaignReincarnationFloorLimit}from"../../core/CampaignReincarnationSystem.js?v=3.1.22-build341";
+import{normalizeCampaignHeroInvasion}from"../../core/CampaignHeroEncounterSystem.js?v=3.1.28-build348";
+import{normalizeCampaignReincarnationState,campaignReincarnationDifficultyMultiplier,campaignReincarnationFloorLimit}from"../../core/CampaignReincarnationSystem.js?v=3.1.28-build348";
 
 function homeAttributeChart(){
  return attributeCycleVisual({className:"home-attribute-chart",decorative:true});

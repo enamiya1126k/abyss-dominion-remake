@@ -1,3 +1,4 @@
+import {onlineHeroAuto,reserveOnlineHeroNormal,resolveOnlineHero,onlineHeroIncoming,onlineHeroSurvive,onlineHeroFollowups} from './HeroAllianceAdapter.js';
 import { randomBytes } from "node:crypto";
 import { attributeDamageMultiplier, canonicalAttribute } from "../../src/data/attributes.js";
 
@@ -360,7 +361,7 @@ function resetPlayerForGame(player) {
   player.shield = initial.shield;
   player.guard = false;
   player.itemCharges = 1;
-  player.cooldowns = {};
+  player.cooldowns = {};player.heroShield348=0;delete player.heroChain348;
   player.effects = initialEffects(player.circleEffect);
   player.circleLastLifeUsed = false;
   player.circleReviveUsed = false;
@@ -718,7 +719,7 @@ export class TeamBattleCoordinator {
         shield,
         guard: false,
         itemCharges: 1,
-        cooldowns: {},
+        cooldowns: {},signatureResonance:profile.signatureResonance?.active?{...profile.signatureResonance}:null,equipmentCombatEffects:{...(profile.equipmentCombatEffects??{})},
         stats: { ...stats },
         skills: Array.isArray(profile.skills) ? profile.skills : [],
         effects: initialEffects(circleEffect),
@@ -909,7 +910,8 @@ export class TeamBattleCoordinator {
       for (const effect of player.effects ?? []) {
         if (!String(effect.kind).startsWith("status:") || effect.turns <= 0 || finite(effect.value) <= 0 || player.hp <= 0) continue;
         const before = player.hp, damage = Math.max(1, Math.ceil(player.maxHp * Math.min(.5, finite(effect.value))));
-        player.hp = Math.max(0, player.hp - damage);
+        player.hp = Math.max(0, player.hp - onlineHeroIncoming(battle,player,damage));
+        onlineHeroSurvive(battle,player,before,battle.lastEvents,this.random);
         const dealt = before - player.hp, source = battle.players?.[effect.sourcePlayerId];
         player.metrics.damageTaken += dealt;
         if (source?.metrics) source.metrics.damage += dealt;
@@ -934,7 +936,7 @@ export class TeamBattleCoordinator {
   }
 
   _openNextGame(room, battle, now) {
-    battle.game += 1;
+    battle.game += 1;delete battle.heroAlliance348;
     battle.round = 1;
     battle.phase = "command";
     battle.deadlineAt = now + battle.commandMs;
@@ -957,7 +959,7 @@ export class TeamBattleCoordinator {
   }
 
   _autoAction(battle, actor) {
-    return chooseTeamAutoAction(battle, actor, this.now());
+    return onlineHeroAuto(battle,actor,this.now())??chooseTeamAutoAction(battle, actor, this.now());
   }
 
   _resolve(room, battle) {
@@ -1048,6 +1050,8 @@ export class TeamBattleCoordinator {
       events.push({ kind: "statusSkip", actorId: actor.playerId, actorOwnerId: actor.ownerPlayerId, actorName, targetKind: "player", targetId: actor.playerId, label: "行動不能" });
       return;
     }
+    if(resolveOnlineHero(battle,actor,action,events,this.random))return;
+    if(!reserveOnlineHeroNormal(battle,actor))return;
     if (action.kind === "guard") {
       actor.guard = true;
       actor.metrics.guards += 1;
@@ -1168,12 +1172,14 @@ export class TeamBattleCoordinator {
         const guardEffect = Math.min(.9, effectValue(currentDefender, "guard"));
         if (guardEffect > 0) value = Math.max(1, Math.round(value * (1 - guardEffect)));
       }
+      value=onlineHeroIncoming(battle,currentDefender,value);
       const fixedDamage = fillHpDrain || sacrificeRate > 0;
       const absorbed = fixedDamage ? 0 : Math.min(currentDefender.shield ?? 0, value);
       currentDefender.shield = Math.max(0, (currentDefender.shield ?? 0) - absorbed);
       const before = currentDefender.hp;
       currentDefender.hp = Math.max(0, currentDefender.hp - (value - absorbed));
       let dealt = before - currentDefender.hp;
+      onlineHeroSurvive(battle,currentDefender,before,events,this.random);
       if (currentDefender.hp <= 0 && before > 0 && currentDefender.circleEffect === "lastLife" && !currentDefender.circleLastLifeUsed) { currentDefender.circleLastLifeUsed = true; currentDefender.hp = 1; events.push({ kind: "circleActivate", targetKind: "player", targetId: currentDefender.playerId, label: "不屈の残光" }); }
       if (currentDefender.hp <= 0 && before > 0 && currentDefender.circleEffect === "revive" && !currentDefender.circleReviveUsed) { currentDefender.circleReviveUsed = true; currentDefender.hp = Math.max(1, Math.ceil(currentDefender.maxHp * .35)); events.push({ kind: "circleActivate", targetKind: "player", targetId: currentDefender.playerId, label: "輪廻の魔法陣" }); }
       actor.metrics.damage += dealt;

@@ -1,7 +1,7 @@
 import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.1-build319";
-import{CAMPAIGN_HERO_ENCOUNTER_SCHEDULE,campaignHeroEncounterDefinition,normalizeCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.25-build345";
+import{CAMPAIGN_HERO_ENCOUNTER_SCHEDULE,campaignHeroEncounterDefinition,normalizeCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.28-build348";
 
-export const CAMPAIGN_HERO_BRANCH_STORY_VERSION=3;
+export const CAMPAIGN_HERO_BRANCH_STORY_VERSION=4;
 export const CAMPAIGN_HERO_BRANCH_OUTCOMES=Object.freeze(["repelled","hero-victory","escaped"]);
 
 const plainRecord=value=>Boolean(value&&typeof value==="object"&&!Array.isArray(value));
@@ -196,13 +196,14 @@ const PARTY_RETURN_LINES=Object.freeze({
  myth_rion:Object.freeze({"hero-victory":"やったぜ！ 勝ったけど、装備の修理で利益はゼロ。",escaped:"また今度やな。出口を一つ無料にしたのが失敗やった。"})
 });
 
+function encounterFacts348(value={}){return {battleKnown348:value.battleKnown348===true,battled348:value.battled348===true,newHurtPercent348:boundedInteger(value.newHurtPercent348,0,0,100),priorHurtPercent348:boundedInteger(value.priorHurtPercent348,value.hurtPercent??0,0,100)}}
 function normalizeBranchState(ledger){
  const source=plainRecord(ledger.branchStories323)?ledger.branchStories323:{},receipts=[...new Set((Array.isArray(source.receipts)?source.receipts:[]).map(value=>cleanText(value,180)).filter(Boolean))].slice(-256),pending=[],history=[];
  for(const entry of Array.isArray(source.pending)?source.pending:[]){
   if(!plainRecord(entry)||!["result","report","party"].includes(entry.part))continue;const encounter=campaignHeroEncounterDefinition(entry.encounterId),outcome=CAMPAIGN_HERO_BRANCH_OUTCOMES.includes(entry.outcome)?entry.outcome:null,id=cleanText(entry.id,180);if(!encounter||!outcome||!id||receipts.includes(id)||pending.some(item=>item.id===id))continue;
-  pending.push({id,encounterId:encounter.id,heroId:encounter.heroId,part:entry.part,outcome,floor:boundedInteger(entry.floor,encounter.floor,1,CAMPAIGN_MAX_FLOOR),heroHpRate:clampRate(entry.heroHpRate),hurtPercent:boundedInteger(entry.hurtPercent,0,0,100),storyCycle:boundedInteger(entry.storyCycle,ledger.storyCycle??0,0,999),heroStoryState:cleanHeroStoryState(entry.heroStoryState)});
+  pending.push({id,encounterId:encounter.id,heroId:encounter.heroId,part:entry.part,outcome,floor:boundedInteger(entry.floor,encounter.floor,1,CAMPAIGN_MAX_FLOOR),heroHpRate:clampRate(entry.heroHpRate),hurtPercent:boundedInteger(entry.hurtPercent,0,0,100),storyCycle:boundedInteger(entry.storyCycle,ledger.storyCycle??0,0,999),heroStoryState:cleanHeroStoryState(entry.heroStoryState),...encounterFacts348(entry)});
  }
- for(const entry of Array.isArray(source.history)?source.history:[]){const encounter=campaignHeroEncounterDefinition(entry?.encounterId),outcome=CAMPAIGN_HERO_BRANCH_OUTCOMES.includes(entry?.outcome)?entry.outcome:null;if(!encounter||!outcome)continue;const record={encounterId:encounter.id,heroId:encounter.heroId,outcome,floor:boundedInteger(entry.floor,encounter.floor,1,CAMPAIGN_MAX_FLOOR),heroHpRate:clampRate(entry.heroHpRate),hurtPercent:boundedInteger(entry.hurtPercent,0,0,100),storyCycle:boundedInteger(entry.storyCycle,ledger.storyCycle??0,0,999),heroStoryState:cleanHeroStoryState(entry.heroStoryState)};const index=history.findIndex(item=>item.encounterId===record.encounterId&&item.storyCycle===record.storyCycle);if(index>=0)history.splice(index,1);history.push(record)}
+ for(const entry of Array.isArray(source.history)?source.history:[]){const encounter=campaignHeroEncounterDefinition(entry?.encounterId),outcome=CAMPAIGN_HERO_BRANCH_OUTCOMES.includes(entry?.outcome)?entry.outcome:null;if(!encounter||!outcome)continue;const record={encounterId:encounter.id,heroId:encounter.heroId,outcome,floor:boundedInteger(entry.floor,encounter.floor,1,CAMPAIGN_MAX_FLOOR),heroHpRate:clampRate(entry.heroHpRate),hurtPercent:boundedInteger(entry.hurtPercent,0,0,100),storyCycle:boundedInteger(entry.storyCycle,ledger.storyCycle??0,0,999),heroStoryState:cleanHeroStoryState(entry.heroStoryState),...encounterFacts348(entry)};const index=history.findIndex(item=>item.encounterId===record.encounterId&&item.storyCycle===record.storyCycle);if(index>=0)history.splice(index,1);history.push(record)}
  ledger.branchStories323={version:CAMPAIGN_HERO_BRANCH_STORY_VERSION,storyCycle:boundedInteger(source.storyCycle,ledger.storyCycle??0,0,999),receipts,pending:pending.slice(-24),history:history.slice(-16)};return ledger.branchStories323
 }
 
@@ -237,24 +238,32 @@ function preludeScene(ledger,definition){
  return storyScene(definition,{id:`branch-prelude-${definition.id}`,part:"prelude",title:`${HERO_NAMES[heroId]}、単独行動`,summary:`勇者一行から${HERO_NAMES[heroId]}が一人で離れた。この会話の後から、迷宮内で遭遇する可能性が生まれる。`,dialogue,castIds,heroState,variant:context.length||castIds.length<4?"continuity":"default"})
 }
 
+function woundDescription348(payload){
+ const {newHurtPercent348:fresh,priorHurtPercent348:prior}=encounterFacts348(payload),total=payload.hurtPercent??0;
+ if(fresh>0)return `今回、新たに${fresh}%分の損傷が加わった。${prior>0?`以前の${prior}%分と合わせ、`:""}残る損傷は${total}%。十日目まで引き継がれる。`;
+ return total>0?`今回、新たな損傷は確認されていない。以前から残る${total}%の傷は、十日目まで引き継がれる。`:"今回、勇者に損傷はない。";
+}
 function resultScene(ledger,payload,definition){
- const name=HERO_NAMES[definition.heroId],hurt=payload.hurtPercent,outcome=payload.outcome,lead=outcome==="repelled"?`${name}は魔王軍に退けられ、勇者一行への帰路を失った。`:outcome==="hero-victory"?(hurt>0?`${name}は戦いに勝った。しかし刻まれた${hurt}%の傷は消えない。`:`${name}は戦いに勝ち、傷を負うことなく帰路についた。`):`追跡は途切れた。${name}は魔王軍を見失い、決着はつかなかった。`,dialogue=[line(null,lead,"narration"),line(definition.heroId,outcome==="hero-victory"&&hurt===0?({myth_yori:"イージー！！ 今日は腕も足も無事や。戻って、話の続きを聞こか。",myth_hide:"フォー！！！！ 勝利。損傷ゼロまで確認しました。……帰路も、今回は確認済みです。",myth_enami:"勝ったで。怪我もない。せやけど、勝ったことと相手の理由を知ることは別やな。",myth_rion:"やったぜ！ 今回は修理費ゼロ。帰ってからの食事を一品増やそう。"}[definition.heroId]):HERO_RESULT_LINES[definition.heroId]?.[outcome]??"この結果は、次へ持ち越す。",outcome==="repelled"?"repelled":outcome==="hero-victory"?"confident":"quiet")];
- if(outcome!=="escaped"&&hurt>0)dialogue.push(line(null,`この遭遇で残った損傷は ${hurt}%。十日目の戦いまで引き継がれる。`,"narration"));
- const parting={
-  myth_enami:{repelled:"最後まで話、聞けへんかったな。……でも、僕が守りたかった理由まで、なかったことにはさせへんよ。",other:"報告は順番にしよ。戦った理由、通れた道、それから帰ってきたこと。最後のは先に言おか。"},
-  myth_yori:{repelled:"勢いだけで行ったらあかんって、言われたのにな。……次の拳は、頼んだで。",other:"土産話、面白く盛ろうと思ったけどやめとくわ。聞くやつがおる時に、ちゃんとほんまの話をする。"},
-  myth_hide:{repelled:"記録は残す。僕の計算が、次に読む者の退路にはなるように。……そこだけは、間違えたくない。",other:"相手の動きは記録した。僕が迷った箇所も消さない。そこを隠すと、次の計算まで間違う。"},
-  myth_rion:{repelled:"最後の行、赤字だけで終わらせたくないな。残した情報で、誰かが一歩先へ行けるなら……。",other:"今日の記録、売る前に読み直そう。失敗のところを削ると、一番役に立つ部分がなくなるからね。"}
- };
- dialogue.push(line(definition.heroId,parting[definition.heroId][outcome==="repelled"?"repelled":"other"],outcome==="repelled"?"quiet":"resolute"),line(null,outcome==="repelled"?"一人の足音が途切れた。残された言葉だけが、まだ先へ続いていた。":"迷宮を離れる足取りは、来た時と同じではなかった。知ったことを抱え、帰りの道を選び直した。","narration"));
- return storyScene(definition,{id:payload.id,part:"result",title:outcome==="repelled"?"迷宮側の勝利":outcome==="hero-victory"?"勇者側の勝利":"追跡から離脱",summary:lead,dialogue,location:`第${payload.floor}階・遭遇地点`,eyebrow:"ENCOUNTER / RESULT",variant:outcome})
+ const id=definition.heroId,name=HERO_NAMES[id],outcome=payload.outcome,facts=encounterFacts348(payload);
+ const lead=outcome==="repelled"?`${name}は魔王軍に退けられ、勇者一行への帰路を失った。`:outcome==="hero-victory"?`${name}は戦いに勝ち、帰路についた。`:facts.battled348?`交戦後、魔王軍は撤退に成功した。${name}は追跡を続けたが、決着をつけられなかった。`:!facts.battleKnown348?`追跡は途切れた。${name}は魔王軍を取り逃がした。交戦の経緯は記録に残っていない。`:`魔王軍は${name}との戦闘を避けて逃げ切った。追跡は途切れ、刃を交えることはなかった。`;
+ const safeVictory={myth_yori:"イージー！！ 今回、傷は増えてへん。戻って、ほんまに起きたことから報告しよか。",myth_hide:"フォー！！！！ 勝利。新たな損傷は確認されていません。帰路も確認済みです。",myth_enami:"勝ったで。でも相手の理由は、まだ聞き終わってへん。戻って整理しよ。",myth_rion:"やったぜ！ 勝利の記録は回収済み。帰って報告しよう。"};
+ const words=outcome==="hero-victory"&&facts.newHurtPercent348===0?safeVictory[id]:HERO_RESULT_LINES[id]?.[outcome];
+ const dialogue=[line(null,lead,"narration"),line(id,words??"この結果は、次へ持ち越す。",outcome==="repelled"?"repelled":"quiet")];
+ if(outcome!=="repelled")dialogue.push(line(null,woundDescription348(payload),"narration"));
+ dialogue.push(line(id,outcome==="repelled"?({myth_yori:"勢いだけで行ったらあかんって、言われたのにな。……次の拳は、頼んだで。",myth_hide:"記録は残す。次に読む者の退路になるように。",myth_enami:"僕が守りたかった理由まで、なかったことにはさせへんよ。",myth_rion:"残した情報で、誰かが一歩先へ行けるなら……。"}[id]):"報告は、実際に起きたことから順番に。まず、戻ったことを伝えよう。","quiet"));
+ return storyScene(definition,{id:payload.id,part:"result",title:outcome==="repelled"?"迷宮側の勝利":outcome==="hero-victory"?"勇者側の勝利":"追跡から離脱",summary:lead,dialogue,location:`第${payload.floor}階・遭遇地点`,eyebrow:"ENCOUNTER / RESULT",variant:outcome});
 }
 function reportScene(payload,definition){
- const name=HERO_NAMES[definition.heroId],hurt=payload.hurtPercent,outcome=payload.outcome,report=outcome==="repelled"?`${name}を途中で撃退しました。十日目の勇者軍から一人が欠けます。`:outcome==="hero-victory"?(hurt>0?`先遣部隊は${name}に敗北。ただし、相手へ${hurt}%の傷を刻みました。`:`先遣部隊は${name}に敗北。相手は無傷です。行動の記録を持ち帰りました。`):`${name}との接触を回避しました。こちらの戦力は温存されています。`,reply=outcome==="repelled"?"よい。予言から一人を削った。余が足を動かさずとも、未来は動くようだ。":outcome==="hero-victory"?(hurt>0?"敗北は構わぬ。残した傷は、十日目に働く兵だ。記録して次を放て。":"無傷か。ならば、なぜ刃が届かなかったかを記せ。次も同じ敗北を買う気はない。"):"逃げ切ったのか、逃がしたのか。……報告書には前者と書いておけ。",dialogue=[line("lionel",`サイラーン様。第${payload.floor}階の報告です。${report}`,"serious",{stageEffect:"lionel-slime"}),line("sairan",reply,"command",{stageEffect:"lionel-slime"}),line("lionel","承知しました。次の区画にも、結果を引き継いで布陣します。","resolute",{stageEffect:"lionel-slime"})];
- return storyScene(definition,{id:payload.id,part:"report",title:"玉座への進捗報告",summary:`スライムの姿を借りたリオネルが、${name}との遭遇結果をサイラーンへ伝える。`,dialogue,location:"魔王城・玉座の間",eyebrow:"DEMON LORD / REPORT",routeHidden:true,variant:outcome})
+ const name=HERO_NAMES[definition.heroId],outcome=payload.outcome,facts=encounterFacts348(payload);
+ const report=outcome==="repelled"?`${name}を撃退しました。十日目の勇者軍から一人が欠けます。`:outcome==="hero-victory"?`先遣部隊は${name}に敗北しました。`:facts.battled348?`${name}と交戦した後、撤退に成功しました。`:!facts.battleKnown348?`${name}の追跡から離脱しました。交戦の経緯を確かめられる記録は残っていません。`:`${name}との戦闘を回避し、追跡から逃げ切りました。攻撃は加えていません。`;
+ const reply=outcome==="repelled"?"よい。予言から一人を削った。残る者たちの動きも記せ。":outcome==="escaped"?"戻った者から道筋を聞け。次に生かすための報告だ。":facts.newHurtPercent348>0?"敗北は構わぬ。今回残した傷と行動の記録を、次へ引き継げ。":"新たな傷はないか。刃が届かなかった理由を記せ。次に生かす。";
+ const dialogue=[line("lionel",`サイラーン様。第${payload.floor}階の報告です。${report}`,"serious",{stageEffect:"lionel-slime"})];
+ if(outcome!=="repelled")dialogue.push(line("lionel",woundDescription348(payload),"serious",{stageEffect:"lionel-slime"}));
+ dialogue.push(line("sairan",reply,"command",{stageEffect:"lionel-slime"}),line("lionel","承知しました。遭遇結果と損傷の記録を引き継いで布陣します。","resolute",{stageEffect:"lionel-slime"}));
+ return storyScene(definition,{id:payload.id,part:"report",title:"玉座への進捗報告",summary:`リオネルが、${name}との遭遇結果をサイラーンへ伝える。`,dialogue,location:"魔王城・玉座の間",eyebrow:"DEMON LORD / REPORT",routeHidden:true,variant:outcome});
 }
 function partyScene(ledger,payload,definition){
- const heroId=definition.heroId,name=HERO_NAMES[heroId],outcome=payload.outcome,hurt=payload.hurtPercent,heroState=cleanHeroStoryState(payload.heroStoryState)??heroStoryState(ledger);
+ const facts=encounterFacts348(payload);const heroId=definition.heroId,name=HERO_NAMES[heroId],outcome=payload.outcome,hurt=payload.hurtPercent,heroState=cleanHeroStoryState(payload.heroStoryState)??heroStoryState(ledger);
  heroState.heroes[heroId]={defeated:outcome==="repelled",remainingHpRate:outcome==="repelled"?0:payload.heroHpRate};
  heroState.awayHeroIds=heroState.awayHeroIds.filter(id=>id!==heroId);
  const castIds=presentHeroes(heroState),others=castIds.filter(id=>id!==heroId),dialogue=[];
@@ -265,12 +274,12 @@ function partyScene(ledger,payload,definition){
   if(others.includes("myth_rion"))dialogue.push(line("myth_rion","損失にはしない。残した情報も意思も、全部こっちの戦力にする。","serious"));
   if(others.includes("myth_yori"))dialogue.push(line("myth_yori",castIds.length===1?"もう僕しかおらんのか。……急いで終わらせようとはせえへん。あいつらが残した道、最後まで歩く。":"次は一人で行かへん。あいつの分まで、全員で殴りに行く。","serious"));
  }else{
-  dialogue.push(line(heroId,outcome==="hero-victory"&&hurt===0?({myth_yori:"イージー！！ ……ただいま。今日は傷も増やさず戻れたで。",myth_hide:"帰還しました。今回は損傷ゼロ。確認のために二度計算しました。",myth_enami:"戻ったで。話はまだ途中やけど、怪我はしてへん。まず報告するわ。",myth_rion:"やったぜ！ 無傷で帰還。今日は修理代より食事代に回せるよ。"}[heroId]):PARTY_RETURN_LINES[heroId]?.[outcome]??"戻った。次へ進もう。",outcome==="hero-victory"?"confident":"quiet"));
-  if(hurt>0){if(heroId==="myth_hide"||others.includes("myth_hide"))dialogue.push(line("myth_hide",`損傷は${hurt}%。勝敗に関係なく、その傷は十日目まで残る。`,"serious"));else dialogue.push(line(null,`戦いで刻まれた${hurt}%の傷は、十日目まで消えずに残る。`,"narration"))}
+  dialogue.push(line(heroId,outcome==="hero-victory"&&facts.newHurtPercent348===0?({myth_yori:"イージー！！ ……ただいま。今日は傷も増やさず戻れたで。",myth_hide:"帰還しました。今回は新たな損傷ゼロ。確認のために二度計算しました。",myth_enami:"戻ったで。話はまだ途中やけど、新しい怪我はしてへん。まず報告するわ。",myth_rion:"やったぜ！ 傷を増やさず帰還。まず報告しよう。"}[heroId]):PARTY_RETURN_LINES[heroId]?.[outcome]??"戻った。次へ進もう。",outcome==="hero-victory"?"confident":"quiet"));
+  if(hurt>0){if(heroId==="myth_hide"||others.includes("myth_hide"))dialogue.push(line("myth_hide",woundDescription348(payload),"serious"));else dialogue.push(line(null,woundDescription348(payload),"narration"))}
   else if(others.includes("myth_hide"))dialogue.push(line("myth_hide",outcome==="escaped"?"待ってくださいよ〜！ 逃げ道は計算してました。……塞ぐ人の配置、忘れてました。":"いいゾ〜！コレ〜！ 無傷で帰還、計算どおりです。……帰還祝いの買い出し、忘れてました。","normal"));
   if(others.includes("myth_yori"))dialogue.push(line("myth_yori",outcome==="escaped"?"おっと〜！？ ほな次は僕も一緒に行くわ。帰ってこれたんやし、まず座り。":"イージー！！ ……って、僕留守番やったわ。何もしてへんのに勝った顔しとこ。","gentle"));
   if(heroId!=="myth_enami"&&others.includes("myth_enami"))dialogue.push(line("myth_enami",outcome==="hero-victory"?(hurt>0?"勝った顔してるけど、傷まで無かったことにはせえへんで。":"無傷やん。なんやコイツ。僕の心配した時間、返して。塩で。"):(castIds.length===4?"戻ったな。次は四人で行こ。単独行動、会議で満場一致の廃止です。":"戻ったな。残ったメンバーで作戦会議。まず勝手に出発する人を議題にする。"),"gentle"));
-  if(heroId!=="myth_rion"&&others.includes("myth_rion"))dialogue.push(line("myth_rion",outcome==="hero-victory"?"勝利の記録は残す。治療費を引いても価値はあるよ。":"逃げられた経路も商品になる。次の先回りに使おう。","normal"));
+  if(heroId!=="myth_rion"&&others.includes("myth_rion"))dialogue.push(line("myth_rion",outcome==="hero-victory"?(hurt>0?"勝利の記録は残す。残っている傷の手当ても忘れずに。":"勝利の記録は残す。無傷の帰還も、ちゃんと成果に入れるよ。"):"逃げられた経路も商品になる。次の先回りに使おう。","normal"));
  }
  const campWords=outcome==="repelled"?{
   myth_enami:["なんやコイツ。人数減ったら会議まで静かになるやん。静かすぎて逆に腹立つ。","次から単独行動禁止。破ったら塩抜き。僕も困るけど、それくらいの罰で。"],
@@ -281,13 +290,13 @@ function partyScene(ledger,payload,definition){
   myth_enami:["まず座り。感動ちゃうで、立ったまま報告されたら首しんどい。","塩ください。報告はそのあと。優先順位は明確や。"],
   myth_yori:["おっと〜！？ 生きとるやん！ ほなイージー！！","帰還祝い？ まず酒。いや水でもええ、コップ大きいやつ。"],
   myth_hide:["帰還確認。フォー！！！！ 予定より三時間遅いです。","いいゾ〜！コレ〜！ 記録は完璧。字だけ僕にも読めません。"],
-  myth_rion:["おつかれナス。情報は黒字、治療費で赤字。トータル気分で黒字。","今日は豪遊するぞ！ 予算ないから水を高そうなグラスで飲もう。"]
+  myth_rion:[(hurt>0?"おつかれナス。情報も回収。残ってる傷の手当てもしておこう。":"おつかれナス。情報と本人、どっちも回収。トータル黒字やな。"),"今日は豪遊するぞ！ 予算ないから水を高そうなグラスで飲もう。"]
  };
  const returnedWords={
-  myth_enami:["戻ったで。まず塩ください。話はそれから。","なんやコイツ、思ったより強かった。あと帰り道でラーメン屋見つけた。"],
-  myth_yori:["ただいま！ イージー！！ ……いや普通にボコられたわ。","おっと〜！？ 次は勝つ。とりあえず一杯だけ。"],
+  myth_enami:["戻ったで。まず塩ください。話はそれから。",(facts.battled348?"戦った時の動き、忘れる前に記録しよ。あと塩ください。":"なんやコイツ、逃げ道よう知ってるやん。あと帰り道でラーメン屋見つけた。")],
+  myth_yori:[(facts.newHurtPercent348>0?"ただいま！ イージー！！ ……いや、今回は傷も増えてもうたわ。":facts.battled348?"ただいま！ 交戦したけど、今回は傷を増やさず戻れたで。":facts.battleKnown348?"ただいま！ おっと〜！？ 戦う前に逃げ切られてもうた。足、速すぎひん？":"ただいま！ おっと〜！？ 取り逃がしてもうた。次は逃げ道から読まなあかんな。"),(outcome==="hero-victory"?"イージー！！ 勝った話、順番にするわ。まず水ちょうだい。":"次は逃げ道から読まなあかんな。とりあえず水、一杯だけ。")],
   myth_hide:["帰還しました。計算どおりです。……到着時刻以外は。","フォー！！！！ 記録はあります。食料の残数だけ計算してません。"],
-  myth_rion:["ただいま。情報も僕も回収済み。治療費だけ未回収。","やったぜ！ 次は逃げ道に広告枠つけて元取るよ。"]};
+  myth_rion:[(hurt>0?"ただいま。情報も僕も回収済み。残ってる傷の手当て、頼むね。":"ただいま。情報も僕も回収済み。今回は治療費ゼロ。"),"やったぜ！ 次は逃げ道に広告枠つけて元取るよ。"]};
  for(let turn=0;turn<2;turn++)for(const id of castIds)dialogue.push(line(id,outcome!=="repelled"&&id===heroId?returnedWords[id][turn]:campWords[id][turn],outcome==="repelled"?"normal":"teasing"));
  if(castIds.length===1&&castIds[0]===heroId){
   const words={myth_enami:"ただいま。誰もおらん。なんやコイツ。独り言まで僕担当なん？ 塩ください。",myth_yori:"ただいま！ 誰もおらんけどイージー！！ ……返事ないとちょっと滑ったな。",myth_hide:"帰還しました。報告相手0名。フォー！！！！ ……ログだけ残します。",myth_rion:"帰還。観客0人。赤字イベントやな。また今度やな。"};
@@ -316,11 +325,11 @@ export function acknowledgeCampaignHeroBranchStoryScene(value,{sceneId}={}){
 
 export function queueCampaignHeroAftermathStories(value,{encounterId,outcome,floor,heroHpRate=1,storyCycle=null}={}){
  const ledger=normalizeCampaignHeroBranchStoryState(value),branch=ledger.branchStories323,definition=campaignHeroEncounterDefinition(encounterId),canonical=CAMPAIGN_HERO_BRANCH_OUTCOMES.includes(outcome)?outcome:null;if(!definition||!canonical)return{state:ledger,queued:false,reason:"invalid-outcome"};
- const rate=clampRate(heroHpRate),payload={encounterId:definition.id,heroId:definition.heroId,outcome:canonical,floor:boundedInteger(floor,definition.floor,1,CAMPAIGN_MAX_FLOOR),heroHpRate:rate,hurtPercent:Math.round((1-rate)*100),storyCycle:boundedInteger(storyCycle,ledger.storyCycle??0,0,999),heroStoryState:heroStoryState(ledger)},entries=["result","report","party"].map(part=>({...payload,part,id:`branch-${part}-${definition.id}-${canonical}`})),existing=new Set([...branch.receipts,...branch.pending.map(entry=>entry.id)]);let added=0;
+ const rate=clampRate(heroHpRate),payload={encounterId:definition.id,heroId:definition.heroId,outcome:canonical,floor:boundedInteger(floor,definition.floor,1,CAMPAIGN_MAX_FLOOR),heroHpRate:rate,hurtPercent:Math.round((1-rate)*100),storyCycle:boundedInteger(storyCycle,ledger.storyCycle??0,0,999),heroStoryState:heroStoryState(ledger),...encounterFacts348(ledger.events[definition.id])},entries=["result","report","party"].map(part=>({...payload,part,id:`branch-${part}-${definition.id}-${canonical}`})),existing=new Set([...branch.receipts,...branch.pending.map(entry=>entry.id)]);let added=0;
  for(const entry of entries)if(!existing.has(entry.id)){branch.pending.push(entry);existing.add(entry.id);added++}branch.pending=branch.pending.slice(-24);const historyIndex=branch.history.findIndex(entry=>entry.encounterId===payload.encounterId&&entry.storyCycle===payload.storyCycle);if(historyIndex>=0)branch.history.splice(historyIndex,1);branch.history.push({...payload});branch.history=branch.history.slice(-16);return{state:ledger,queued:added>0,added,sceneIds:entries.map(entry=>entry.id)}
 }
 
 export function campaignHeroBranchStorySceneById(value,sceneId){
  const ledger=normalizeCampaignHeroBranchStoryState(value),id=cleanText(sceneId,180),prelude=CAMPAIGN_HERO_ENCOUNTER_SCHEDULE.find(definition=>id===`branch-prelude-${definition.id}`);if(prelude)return preludeScene(ledger,prelude);
- for(const definition of CAMPAIGN_HERO_ENCOUNTER_SCHEDULE)for(const outcome of CAMPAIGN_HERO_BRANCH_OUTCOMES)for(const part of["result","report","party"]){if(id!==`branch-${part}-${definition.id}-${outcome}`)continue;const event=ledger.events?.[definition.id],history=[...(ledger.branchStories323?.history??[])].reverse().find(entry=>entry.encounterId===definition.id&&entry.outcome===outcome&&entry.storyCycle===ledger.storyCycle),heroHpRate=history?.heroHpRate??event?.heroHpRate??(outcome==="repelled"?0:ledger.heroes?.[definition.heroId]?.remainingHpRate??1),payload={id,part,encounterId:definition.id,heroId:definition.heroId,outcome,floor:history?.floor??event?.resolvedFloor??definition.floor,heroHpRate,hurtPercent:history?.hurtPercent??event?.hurtPercent??Math.round((1-clampRate(heroHpRate))*100),storyCycle:history?.storyCycle??ledger.storyCycle??0,heroStoryState:history?.heroStoryState??null};return aftermathScene(ledger,payload)}return null
+ for(const definition of CAMPAIGN_HERO_ENCOUNTER_SCHEDULE)for(const outcome of CAMPAIGN_HERO_BRANCH_OUTCOMES)for(const part of["result","report","party"]){if(id!==`branch-${part}-${definition.id}-${outcome}`)continue;const event=ledger.events?.[definition.id],history=[...(ledger.branchStories323?.history??[])].reverse().find(entry=>entry.encounterId===definition.id&&entry.outcome===outcome&&entry.storyCycle===ledger.storyCycle),heroHpRate=history?.heroHpRate??event?.heroHpRate??(outcome==="repelled"?0:ledger.heroes?.[definition.heroId]?.remainingHpRate??1),payload={id,part,encounterId:definition.id,heroId:definition.heroId,outcome,floor:history?.floor??event?.resolvedFloor??definition.floor,heroHpRate,hurtPercent:history?.hurtPercent??event?.hurtPercent??Math.round((1-clampRate(heroHpRate))*100),storyCycle:history?.storyCycle??ledger.storyCycle??0,heroStoryState:history?.heroStoryState??null,...encounterFacts348(history??event??{hurtPercent:Math.round((1-heroHpRate)*100)})};return aftermathScene(ledger,payload)}return null
 }

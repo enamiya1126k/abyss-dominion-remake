@@ -1,4 +1,4 @@
-import{COMPLETE_MONSTER_CODEX,codexCollectionSummary,rewardDescription}from"./CollectionRewardSystem.js?v=3.1.1-build316";
+import{COMPLETE_MONSTER_CODEX,codexCollectionSummary,rewardDescription}from"./CollectionRewardSystem.js?v=3.1.28-build348";
 import{enqueueNoticeReward}from"./NoticeSystem.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CATALOG}from"../data/floorBosses.js?v=3.1.1-build311";
 import{floorBossCampaignDisplayFloor}from"./Campaign100System.js?v=3.1.1-build311";

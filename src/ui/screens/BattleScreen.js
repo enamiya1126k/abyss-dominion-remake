@@ -1,13 +1,13 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.1-build311";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.1-build311";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.1-build311";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.1-build311";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.28-build348";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.28-build348";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.28-build348";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.28-build348";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.20-build339";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.1-build311";
+import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.28-build348";
 import{ATTRIBUTE_MATCHUP_MULTIPLIERS,attributesEffectiveAgainst,attributesIneffectiveAgainst}from"../../data/attributes.js?v=3.1.1-build311";
-import{heroResonanceProfile}from"../../core/HeroResonanceSystem.js?v=3.1.1-build314";
+import{heroResonanceProfile}from"../../core/HeroResonanceSystem.js?v=3.1.28-build348";
 
 function battleInteger(value){return Math.round(Number(value)||0).toLocaleString("ja-JP")}
 function battleParty(battle){return(Array.isArray(battle?.party)?battle.party:[]).filter(monster=>monster&&typeof monster==="object"&&monster.id&&monster.speciesId)}
@@ -68,7 +68,7 @@ function renderEnemies(battle,enemies,target){
    <div class="side-unit-card enemy-info">
     <div class="side-unit-name enemy-name ${enemy.boss?"boss-meta-only":""}">${danger}${enemy.boss?"":`<b class="enemy-card-name" title="${safeName}">${safeName}</b>`}<span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
-    ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}`,"enemy-hp")}
+    ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}${enemy.heroShield348>0?`　盾 ${battleInteger(enemy.heroShield348)}`:""}`,"enemy-hp")}
     <!-- enemy-mini-stats retired in Build321: enemy cards intentionally expose HP only. -->
     ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
     ${statusHtml}
@@ -92,7 +92,7 @@ function renderParty(battle,actor){
    <div class="side-unit-card ally-info">
     <div class="side-unit-name unit-head"><small>Lv.${battleInteger(m.level)}</small><em class="battle-unit-growth">${growthText(m)}</em>${equipmentAuthorityBadge(m)}<i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="side-unit-intent ally-circle-intent"><span>${circleLevel?`魔法陣 Lv.${circleLevel}`:"魔法陣"}</span><b>${circleName}</b></div>
-    ${hpBar(battle,`ally:${m.id}`,hpRate,`HP ${battleInteger(m.currentHp)}/${battleInteger(stats.hp)}`,"ally")}
+    ${hpBar(battle,`ally:${m.id}`,hpRate,`HP ${battleInteger(m.currentHp)}/${battleInteger(stats.hp)}${m.heroShield348>0?`　盾 ${battleInteger(m.heroShield348)}`:""}`,"ally")}
     <div class="battle-bar mp ally-mp"><span class="bar-label">MP ${battleInteger(m.currentMp)}/${battleInteger(mp)}</span><i class="resource-fill" style="width:${mpRate}%"></i></div>
     <small class="battle-mini-stats">物攻 ${battleInteger(stats.atk)}　魔攻 ${battleInteger(stats.matk??stats.atk)}<br>物防 ${battleInteger(stats.def)}　魔防 ${battleInteger(stats.mdef??stats.def)}　速度 ${battleInteger(stats.spd)}</small>${effectHtml}
     <div class="battle-exp-row" aria-hidden="true"><small>あと${battleInteger(Math.max(0,need-m.exp))}</small><div class="battle-bar exp"><i style="width:${Math.min(100,m.exp/Math.max(1,need)*100)}%"></i></div></div>
@@ -105,7 +105,7 @@ function renderSkills(battle,actor,skills){
  const rows=skills.map(skill=>{
   const cd=Math.max(0,Number(cooldownRemaining(battle,actor.id,skill.id))||0),baseCd=Math.max(0,Number(skill.cooldown)||0),mpCost=skillMpCost(actor,skill),disabled=actor.currentMp<mpCost||cd>0;
   const cooldownLabel=baseCd>0?`CT ${baseCd}`:"CTなし",stateLabel=cd>0?`再使用まで ${cd}`:actor.currentMp<mpCost?"MP不足":"使用可能";
-  const details=skillCombatKeywords(skill).map(line=>`<li>${htmlText(line)}</li>`).join("");
+  const details=[...(skill.description?[skill.description]:[]),...skillCombatKeywords(skill)].map(line=>`<li>${htmlText(line)}</li>`).join("");
   const skillName=skill.equipmentGranted?`装備技・${skill.name}`:skill.name,skillTag=skill.equipmentGranted?`${skill.equipmentAuthorityName??"装備固有"}・装備中限定`:skill.tag??"スキル",element=skillElementLabel(skill);
   return `<button class="battle-skill-choice" data-skill-id="${htmlText(skill.id)}" ${disabled?"disabled":""}><i class="battle-skill-edge" aria-hidden="true"></i><span class="battle-skill-copy"><small>${htmlText(skillTag)}</small><b>${htmlText(skillName)}</b><em>${htmlText(skill.target??"敵単体")}・${htmlText(element)}属性・${cooldownLabel}</em><ul class="battle-skill-spec">${details}</ul></span><span class="battle-skill-cost"><b>MP ${mpCost}</b><small>${stateLabel}</small></span></button>`;
  }).join("");
@@ -167,7 +167,7 @@ export function BattleScreen(battle,inventory,settings,floor=1){
  const timingStyle=`--battle-lunge:${scaled(220)};--battle-skill-lunge:${scaled(300)};--battle-hit:${scaled(260)};--battle-critical-hit:${scaled(300)};--battle-defeat:${scaled(500)};--battle-float:1500ms;--battle-banner-in:${scaled(280)};--battle-banner-out:${scaled(220)};--battle-flash:${scaled(380)};--battle-particle:${Math.max(560,Math.round(920/speed))}ms`;
  const theme=String(battle.battleTheme??"default").replace(/[^a-z0-9-]/gi,"");
  const biomeBadge=battle.biomePanelCollapsed?renderBiomeBadge(battle.biomeBattle,{collapsed:true}):renderBiomeBadge(battle.biomeBattle);
- const heroResonance=heroResonanceProfile(party),invincibleBadge=heroResonance.count>=2?`<div class="invincible-alliance-status resonance-${heroResonance.count}" role="status" aria-label="${heroResonance.name}・${heroResonance.count}神話共鳴が発動中"><span>${heroResonance.name}</span><small>${heroResonance.count}神話共鳴・最大${heroResonance.totalActions}回発動</small></div>`:"";
+ const heroResonance=heroResonanceProfile(party),invincibleBadge=heroResonance.count>=2?`<div class="invincible-alliance-status resonance-${heroResonance.count}" role="status" aria-label="${heroResonance.name}・${heroResonance.count}神話共鳴が発動中"><span>${heroResonance.name}</span><small>${heroResonance.count}人共鳴・最大${heroResonance.totalActions}行動・被ダメージ${Math.round(heroResonance.damageReduction*100)}%軽減</small></div>`:"";
  const onlineExit=battle.onlineMode==="explore"?'<button type="button" data-online-return>帰還</button>':'<button type="button" disabled>逃走不可</button>';
  const onlineAuto=battle.onlineAutoAvailable?`<button type="button" data-online-battle-auto="${htmlText(battle.onlineMode)}" aria-pressed="${Boolean(battle.auto)}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button>`:battle.onlineAutoUnsupported?'<button type="button" disabled class="online-sync-state" title="サーバー197更新後に利用できます"><span>自動</span><b>要更新</b></button>':'<button type="button" disabled class="enabled online-sync-state"><span>同期</span><b>有効</b></button>';
  const offlineExit=battle.specialBattle?`<button id="escapeBattle" type="button" ${battle.escapePending?"disabled":""}>${battle.escapePending?"撤退待ち":"撤退"}</button>`:`<button id="escapeBattle" type="button" ${battle.escapePending?"disabled":""}>${battle.escapePending?"逃走待ち":"逃げる"}</button>`;
@@ -177,7 +177,7 @@ export function BattleScreen(battle,inventory,settings,floor=1){
   <div class="battle-arena side-battle-arena multi-enemy">
    <div class="battle-stage-vignette" aria-hidden="true"></div>
    ${biomeBadge}
-   ${invincibleBadge}
+   ${invincibleBadge}${heroResonanceProfile(enemies).count>=2?`<div class="invincible-alliance-status" role="status"><span>敵・${heroResonanceProfile(enemies).name}</span><small>最大${heroResonanceProfile(enemies).totalActions}行動・被ダメージ${Math.round(heroResonanceProfile(enemies).damageReduction*100)}%軽減</small></div>`:""}
    <div class="battle-party side-party">${renderParty(battle,actor)}</div>
    <div class="battle-clash-line" aria-hidden="true"><span>対</span></div>
    <div class="enemy-party side-enemies">${renderEnemies(battle,enemies,target)}</div>

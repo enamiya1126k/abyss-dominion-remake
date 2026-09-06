@@ -1,7 +1,7 @@
-import{SPECIES}from"../data/species.js?v=3.1.1-build311";
+import{SPECIES}from"../data/species.js?v=3.1.28-build348";
 import{orderedMonsterSpecies}from"../data/monsterCatalog.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CATALOG}from"../data/floorBosses.js?v=3.1.1-build311";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.1-build316";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.28-build348";
 import{floorBossCampaignDisplayFloor}from"./Campaign100System.js?v=3.1.1-build311";
 
 const LIMITED_TAGS=new Set(["mythicSerial","serialOnly","raidLimited","eventLimited","limited"]);

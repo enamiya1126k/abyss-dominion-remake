@@ -3,11 +3,11 @@ export const HERO_MYTHIC_RARITY="神話";
 export const HERO_RESONANCE_FOLLOWUP_POWER=.70;
 
 const PROFILES=Object.freeze({
- 0:Object.freeze({count:0,active:false,name:"共鳴なし",followupsPerAction:0,totalActions:0,invincible:false}),
- 1:Object.freeze({count:1,active:false,name:"共鳴消失",followupsPerAction:0,totalActions:1,invincible:false}),
- 2:Object.freeze({count:2,active:true,name:"双星共鳴",followupsPerAction:1,totalActions:4,invincible:false}),
- 3:Object.freeze({count:3,active:true,name:"三位共鳴",followupsPerAction:2,totalActions:9,invincible:false}),
- 4:Object.freeze({count:4,active:true,name:"無敵",followupsPerAction:3,totalActions:16,invincible:true})
+ 0:Object.freeze({count:0,active:false,name:"共鳴なし",followupsPerAction:0,totalActions:0,invincible:false,damageReduction:0}),
+ 1:Object.freeze({count:1,active:false,name:"共鳴消失",followupsPerAction:0,totalActions:1,invincible:false,damageReduction:0}),
+ 2:Object.freeze({count:2,active:true,name:"双星共鳴",followupsPerAction:1,totalActions:4,invincible:false,damageReduction:.15}),
+ 3:Object.freeze({count:3,active:true,name:"三位共鳴",followupsPerAction:2,totalActions:9,invincible:false,damageReduction:.30}),
+ 4:Object.freeze({count:4,active:true,name:"四勇共鳴",followupsPerAction:3,totalActions:16,invincible:false,fullAlliance:true,damageReduction:.60})
 });
 
 export function isHeroResonanceSpecies(speciesId){return HERO_RESONANCE_IDS.includes(String(speciesId??""))}
@@ -30,7 +30,7 @@ export function heroResonanceProfile(partyOrCount){
 
 export function scaleHeroResonanceSkill(skill,power=HERO_RESONANCE_FOLLOWUP_POWER){
  if(!skill)return null;const rate=Math.max(0,Math.min(1,Number(power)||0)),scaled={...skill,mp:0,mpRate:0,resonanceFollowup:true};
- for(const key of["power","heal","selfHeal","mpHeal","partyShieldRate","selfShieldRate","hpShieldRate","revive","reviveTransferRate","barrier"])if(Number.isFinite(Number(scaled[key])))scaled[key]=Number(scaled[key])*rate;
+ for(const key of["power","heal","selfHeal","mpHeal","partyShieldRate","selfShieldRate","hpShieldRate","revive","reviveMp","reviveTransferRate","barrier"])if(Number.isFinite(Number(scaled[key])))scaled[key]=Number(scaled[key])*rate;
  if(Array.isArray(skill.effects))scaled.effects=skill.effects.map(effect=>({...effect,...(Number.isFinite(Number(effect?.value))?{value:Number(effect.value)*rate}:{})}));
  if(skill.status)scaled.status={...skill.status,...(Number.isFinite(Number(skill.status.power))?{power:Number(skill.status.power)*rate}:{})};
  return scaled;

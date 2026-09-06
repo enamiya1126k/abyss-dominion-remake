@@ -1,5 +1,5 @@
 import{CAMPAIGN_MAX_FLOOR,beginCampaignFloorReplay,normalizeCampaignState}from"./Campaign100System.js?v=3.1.1-build320";
-import{createCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.22-build341";
+import{createCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.28-build348";
 
 export const CAMPAIGN_REINCARNATION_VERSION=2;
 export const CAMPAIGN_FINAL_ENDING_IDS=Object.freeze(["complete","narrow","defeat"]);

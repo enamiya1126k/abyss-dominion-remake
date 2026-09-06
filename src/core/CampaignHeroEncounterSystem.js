@@ -4,8 +4,8 @@ import{HERO_PURSUIT_STEPS,normalizeHeroPursuit}from"./CampaignHeroPursuitSystem.
 
 export const CAMPAIGN_HERO_ENCOUNTER_VERSION=4;// Regression history: CAMPAIGN_HERO_ENCOUNTER_VERSION=3
 export const CAMPAIGN_HERO_FINAL_LEVEL=1000;
-export const CAMPAIGN_HERO_STAT_MULTIPLIER=1.30;
-export const CAMPAIGN_HERO_HP_MULTIPLIER=1.45;
+export const CAMPAIGN_HERO_STAT_MULTIPLIER=1;
+export const CAMPAIGN_HERO_HP_MULTIPLIER=1;
 export const CAMPAIGN_HERO_FINAL_ARENA_ID="prophecy-final-gate";
 export const CAMPAIGN_HERO_REWIND_DAY=9;
 export const CAMPAIGN_HERO_REWIND_FLOOR=81;
@@ -140,7 +140,7 @@ function emptyHeroRecord(heroId){return{
  lastOutcome:null,lastEncounterId:null,lastResultId:null,lastSeenFloor:null
 }}
 function emptyEventRecord(definition){return{
- ...definition,status:"scheduled",outcome:null,resultId:null,activatedFloor:null,resolvedFloor:null,preludeSeen:false,heroHpRate:null,hurtPercent:null
+ ...definition,status:"scheduled",outcome:null,resultId:null,activatedFloor:null,resolvedFloor:null,preludeSeen:false,heroHpRate:null,hurtPercent:null,entryHpRate348:null,battled348:false,battleKnown348:false,newHurtPercent348:0,priorHurtPercent348:0
 }}
 function emptyFinalArena(){return{
  id:CAMPAIGN_HERO_FINAL_ARENA_ID,unlocked:false,entered:false,audienceCompleted:false,battleStarted:false,completed:false,attempts:0,lastEnding:null,lastEndingVariant:null
@@ -259,6 +259,8 @@ export function normalizeCampaignHeroEncounterState(value,{migrationHighestFloor
   event.activatedFloor=activated!=null?boundedInteger(activated,definition.floor,1,CAMPAIGN_MAX_FLOOR):null;
   event.resolvedFloor=resolved!=null?boundedInteger(resolved,definition.floor,1,CAMPAIGN_MAX_FLOOR):null;
   const resolvedHpRate=finiteNumber(sourceEvent.heroHpRate),hurtPercent=finiteNumber(sourceEvent.hurtPercent);event.heroHpRate=resolvedHpRate==null?null:clampRate(resolvedHpRate);event.hurtPercent=hurtPercent==null?null:boundedInteger(hurtPercent,0,0,100);
+  event.entryHpRate348=sourceEvent.entryHpRate348==null?null:clampRate(sourceEvent.entryHpRate348);event.battled348=sourceEvent.battled348===true;event.battleKnown348=sourceEvent.battleKnown348===true;
+  event.newHurtPercent348=boundedInteger(sourceEvent.newHurtPercent348,0,0,100);event.priorHurtPercent348=boundedInteger(sourceEvent.priorHurtPercent348,Math.round((1-(event.entryHpRate348??event.heroHpRate??1))*100),0,100);
   if(!hasAuthoredLedger&&migrationFloor!=null&&definition.windowEnd<migrationFloor)event.status="legacy-missed";
   if(state.heroes[definition.heroId].defeated&&!['resolved','legacy-missed'].includes(event.status))event.status="skipped-defeated";
   state.events[definition.id]=event;
@@ -355,7 +357,7 @@ export function activateCampaignHeroEncounter(value,{encounterId,floor}={}){
  if(event.preludeSeen!==true)return{state,activated:false,reason:"prelude-required"};
  if(!["scheduled","armed"].includes(event.status))return{state,activated:false,reason:"encounter-settled"};
  if(currentFloor<definition.floor||currentFloor>definition.windowEnd)return{state,activated:false,reason:"outside-window"};
- state.events[definition.id]={...event,status:"active",activatedFloor:currentFloor};
+ state.events[definition.id]={...event,status:"active",activatedFloor:currentFloor,entryHpRate348:hero.remainingHpRate,priorHurtPercent348:Math.round((1-hero.remainingHpRate)*100),battled348:false,battleKnown348:true,newHurtPercent348:0};
  state.activeEncounterId=definition.id;
  return{state,activated:true,encounter:{...state.events[definition.id]}};
 }
@@ -377,7 +379,7 @@ export function recordCampaignHeroWound(value,{heroId,speciesId,woundId,resultId
  return{state,recorded:nextRate<prior.remainingHpRate||Boolean(receipt),hero:{...state.heroes[id]}};
 }
 
-export function settleCampaignHeroEncounter(value,{encounterId,resultId,heroId,speciesId,outcome="escaped",floor,minHpRate,hpRate,currentHp,hp,maxHp,damageRatio,woundRatio,repelled=false,defeated=false}={}){
+export function settleCampaignHeroEncounter(value,{encounterId,resultId,heroId,speciesId,outcome="escaped",floor,minHpRate,hpRate,currentHp,hp,maxHp,damageRatio,woundRatio,repelled=false,defeated=false,battled=false}={}){
  let state=normalizeCampaignHeroEncounterState(value);
  const receipt=cleanId(resultId,120),definition=campaignHeroEncounterDefinition(encounterId??state.activeEncounterId),requestedHero=canonicalCampaignHeroId(heroId??speciesId);
  if(!receipt)return{state,recorded:false,reason:"missing-result-id"};
@@ -392,7 +394,8 @@ export function settleCampaignHeroEncounter(value,{encounterId,resultId,heroId,s
   defeated:heroDefeated,encounters:prior.encounters+1,lastOutcome:normalizedOutcome,
   lastEncounterId:definition.id,lastResultId:receipt,lastSeenFloor:currentFloor
  };
- state.events[definition.id]={...event,status:"resolved",outcome:normalizedOutcome,resultId:receipt,resolvedFloor:currentFloor,heroHpRate:heroDefeated?0:nextRate,hurtPercent:Math.round((1-(heroDefeated?0:nextRate))*100)};
+ const entryRate=event.entryHpRate348??prior.remainingHpRate,finalRate=heroDefeated?0:nextRate;
+ state.events[definition.id]={...event,entryHpRate348:entryRate,battleKnown348:event.battleKnown348||battled||normalizedOutcome!=="escaped"||observed!=null,battled348:event.battled348||battled||normalizedOutcome!=="escaped"||observed!=null,newHurtPercent348:Math.max(0,Math.round((entryRate-finalRate)*100)),priorHurtPercent348:Math.round((1-entryRate)*100),status:"resolved",outcome:normalizedOutcome,resultId:receipt,resolvedFloor:currentFloor,heroHpRate:heroDefeated?0:nextRate,hurtPercent:Math.round((1-(heroDefeated?0:nextRate))*100)};
  if(heroDefeated)for(const future of CAMPAIGN_HERO_ENCOUNTER_SCHEDULE){
   const futureEvent=state.events[future.id];
   if(future.heroId===definition.heroId&&future.id!==definition.id&&!['resolved','legacy-missed'].includes(futureEvent.status))state.events[future.id]={...futureEvent,status:"skipped-defeated"};

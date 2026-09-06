@@ -1,3 +1,4 @@
+import{mitigateHeroDamage,tryHeroLastStand}from"../core/HeroAllianceSystem.js?v=3.1.28-build348";
 import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.11.2-build166";
 import{endgameCharacter}from"../data/endgameCharacters.js?v=2.11.24-build188";
 
@@ -31,10 +32,11 @@ export function applyEnemyStatus(battle,status,enemyId=battle.targetEnemyId){
  if(enemy?.floorBossPassive?.statusImmunities?.includes(status.id)){addBattleLog(battle,`${enemy.name}：${enemy.floorBossPassive.name}が${status.name??status.id}を無効化`);return false}
  const resistance=statusResistance(enemy,status.id,enemy?.bossStatusResist);if(resistance>=1||resistance&&Math.random()<resistance)return false;const statuses=enemyStatusesFor(battle,enemyId),existing=statuses.find(s=>s.id===status.id);if(existing){existing.turns=Math.max(existing.turns,status.turns);existing.power=Math.max(existing.power,status.power)}else statuses.push({...status});upsertControlSkip(battle,enemyId,status.id,status.turns,"enemy");if(enemy?.floorBossPassive?.ailmentMirror)enemy._floorBossAilmentMirrorReady=true;reflectFloorBossNegative(battle,enemy,status);return true
 }
-export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicArmor=false,element=null,damageClass=null}={}){
+export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicArmor=false,element=null,damageClass=null,heroRulesApplied=false}={}){
  if(!enemy||enemy.hp<=0)return{beforeHp:Math.max(0,Number(enemy?.hp)||0),damage:0,requested:0};
  const requested=Math.max(0,Math.floor(Number(amount)||0)),beforeHp=enemy.hp;
- let damage=requested,convertedFortressShield=0,armorLayersAtHit=0;
+ const heroEquipmentReduction=heroRulesApplied?0:Math.min(.75,Math.max(0,Number(enemy._affixes?.damageReduction)||0)/100+(enemy.heroSignature348?.damageReduction??0));
+ let damage=mitigateHeroDamage(battle,"enemy",enemy,Math.floor(requested*(1-heroEquipmentReduction))),convertedFortressShield=0,armorLayersAtHit=0;
  const passive=enemy.floorBossPassive??{},domain=enemy.floorBossDomain??{},round=Math.max(0,Number(battle?.turn??battle?.round)||0),damageSource=String(sourceId??""),directDamageSource=Boolean(damageSource&&!damageSource.startsWith("status:")),prismClass=["physical","magic"].includes(damageClass)?damageClass:null;
  if(damage>0&&Number(passive.firstHitReduction)>0&&enemy._floorBossGuardRound!==round){enemy._floorBossGuardRound=round;damage=Math.max(1,Math.floor(damage*(1-Math.min(.85,passive.firstHitReduction))));addBattleLog(battle,`${enemy.name}：${passive.name}で初撃を軽減`)}
 	 const reduction=passive.incomingReduction,hpRate=beforeHp/Math.max(1,enemy.maxHp);
@@ -66,7 +68,7 @@ export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicA
   if(sources.has(source)||sources.size>=4)damage=0;
   else{sources.add(source);enemy._mimicArmorSources=[...sources];damage=Math.min(1,damage)}
  }
-	 enemy.hp=Math.max(0,enemy.hp-damage);
+	 enemy.hp=Math.max(0,enemy.hp-damage);tryHeroLastStand(battle,"enemy",enemy,beforeHp);
 	 const directArmorHit=!String(sourceId??"").startsWith("status:");
 	 if(requested>0&&directArmorHit&&armorLayersAtHit>0){const next=Math.max(0,armorLayersAtHit-1);enemy._floorBossArmorLayers=next;addBattleLog(battle,`${enemy.name}：${passive.name} ${next}/${startingArmorLayers}層`);if(next===0&&domain.effect==="armorBreakCounter"){enemy._floorBossArmorBreakReady=true;addBattleLog(battle,`${domain.name}：最終城甲破損・反城準備`)} }
 	 let manaGuardTriggered=false;
@@ -145,4 +147,4 @@ export function effectValue(battle,targetId,kind,targetType="ally"){return effec
 export function hasEffect(battle,targetId,kind,targetType="ally"){const effects=targetType==="enemy"?enemyEffectsFor(battle,targetId):allyEffectsFor(battle,targetId);return effects.some(e=>e.kind===kind)||(targetType==="ally"&&allyAilmentsFor(battle,targetId).some(e=>e.id===kind||e.kind===kind))}
 export function clearNegativeAllyEffects(battle,id){battle.allyEffects??={};battle.allyEffects[id]=(battle.allyEffects[id]??[]).filter(e=>!["atkDown","defDown","spdDown","evasionDown","accuracyDown","poison","burn","stun","vulnerable","healDown","reviveSeal"].includes(e.kind))}
 export function tickBattleEffects(battle){for(const key of["allyEffects","enemyEffects"]){for(const[id,list]of Object.entries(battle[key]??{}))battle[key][id]=list.filter(e=>{e.turns--;return e.turns>0})}}
-export function processAllyEffects(battle,statsFor){const results=[];for(const m of battle.party??[]){if(m.currentHp<=0)continue;const effects=allyEffectsFor(battle,m.id),ailments=allyAilmentsFor(battle,m.id),max=statsFor(m).hp,healFactor=Math.max(.1,1-Math.min(.9,effectValue(battle,m.id,"healDown")));for(const e of effects){if(e.kind==="regen"){const amount=Math.max(1,Math.floor(max*(e.value??.1)*healFactor)),before=m.currentHp;m.currentHp=Math.min(max,m.currentHp+amount);results.push({monster:m,kind:"heal",amount:m.currentHp-before})}}for(const e of ailments){if(!["poison","burn","bleed"].includes(e.id)||!(Number(e.power)>0))continue;const abyssTaken=Math.max(0,1+(Number(m._abyssSkillEffects?.partyDamageTakenRate)||0)),equipmentTaken=1-Math.max(0,Math.min(.75,(Number(m._equipmentAffixes?.damageReduction)||0)/100)),amount=Math.max(1,Math.floor(max*Number(e.power)*abyssTaken*equipmentTaken));m.currentHp=Math.max(0,m.currentHp-amount);results.push({monster:m,kind:e.id,amount})}}syncPersistentAilments(battle);return results}
+export function processAllyEffects(battle,statsFor){const results=[];for(const m of battle.party??[]){if(m.currentHp<=0)continue;const effects=allyEffectsFor(battle,m.id),ailments=allyAilmentsFor(battle,m.id),max=statsFor(m).hp,healFactor=Math.max(.1,1-Math.min(.9,effectValue(battle,m.id,"healDown")));for(const e of effects){if(e.kind==="regen"){const amount=Math.max(1,Math.floor(max*(e.value??.1)*healFactor)),before=m.currentHp;m.currentHp=Math.min(max,m.currentHp+amount);results.push({monster:m,kind:"heal",amount:m.currentHp-before})}}for(const e of ailments){if(!["poison","burn","bleed"].includes(e.id)||!(Number(e.power)>0))continue;const abyssTaken=Math.max(0,1+(Number(m._abyssSkillEffects?.partyDamageTakenRate)||0)),equipmentTaken=1-Math.max(0,Math.min(.75,(Number(m._equipmentAffixes?.damageReduction)||0)/100)),amount=mitigateHeroDamage(battle,"ally",m,Math.max(1,Math.floor(max*Number(e.power)*abyssTaken*equipmentTaken))),before=m.currentHp;m.currentHp=Math.max(0,m.currentHp-amount);tryHeroLastStand(battle,"ally",m,before);results.push({monster:m,kind:e.id,amount})}}syncPersistentAilments(battle);return results}

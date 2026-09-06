@@ -43,14 +43,9 @@ test("既存の双星・三位・無敵共鳴を変更しない",()=>{
  assert.equal(heroResonanceProfile(4).invincible,true);
 });
 
-test("勇者敵AIは既存actionだけで仲間の状態を利用する",()=>{
- const target=player("p1"),battle={turn:2,allyEffects:{p1:[{kind:"defDown",value:.2}]},allyAilments:{}};
- const yori=hero("myth_yori",{role:"physical-striker"});
- assert.equal(chooseEnemyAction(yori,{allies:[yori],opponents:[target],battle}),ENEMY_ACTIONS.power);
- const rion=hero("myth_rion",{role:"support-controller"}),fallen=hero("myth_enami",{hp:0,currentMp:0});
- assert.equal(chooseEnemyAction(rion,{allies:[rion,fallen],opponents:[target],battle}),ENEMY_ACTIONS.packRevive);
- const hide=hero("myth_hide",{role:"magic-tactician"}),buffBattle={turn:2,allyEffects:{p1:[{kind:"atkUp",value:.2}]},allyAilments:{}};
- assert.equal(chooseEnemyAction(hide,{allies:[hide],opponents:[target],battle:buffBattle}),ENEMY_ACTIONS.dispelWave);
+test("勇者敵AIは本人の固有スキルを使用する",()=>{
+ const rion=hero("myth_rion"),fallen=hero("myth_enami",{hp:0,currentMp:0});
+ assert.equal(chooseEnemyAction(rion,{allies:[rion,fallen],opponents:[player()],battle:{turn:2}}),"campaignHero:rion_community");
 });
 
 test("勇者敵側は装備・魔法陣を追加しない",async()=>{

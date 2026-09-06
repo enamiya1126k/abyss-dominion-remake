@@ -1,6 +1,7 @@
+import{campaignHeroSkillInfo,campaignHeroSkillCost,chooseCampaignHeroSkill}from'./CampaignHeroSkillSystem.js?v=3.1.28-build348';
 import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=3.1.1-build311";
 import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=3.1.1-build311";
-import{speciesLevelStats}from"../models/Monster.js?v=3.1.1-build311";
+import{speciesLevelStats}from"../models/Monster.js?v=3.1.28-build348";
 import{floorBossActionInfo}from"../data/floorBosses.js?v=3.1.1-build311";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
@@ -112,6 +113,7 @@ function specialAction(enemy,hpRate){
  return null;
 }
 export function enemyActionMpCost(enemy,action){
+ const heroCost=campaignHeroSkillCost(enemy,action);if(heroCost!==null)return heroCost;
  if(!enemy||!action||[ENEMY_ACTIONS.attack,ENEMY_ACTIONS.guard,ENEMY_ACTIONS.charge,ENEMY_ACTIONS.power,ENEMY_ACTIONS.enrage,ENEMY_ACTIONS.manaSiphon].includes(action))return 0;
  const maximum=Math.max(1,Number(enemy.maxMp)||1);
  const rate=action===ENEMY_ACTIONS.heal?.14
@@ -127,46 +129,6 @@ export function enemyActionMpCost(enemy,action){
  return Math.max(1,Math.ceil(maximum*rate));
 }
 function canPay(enemy,action){return Math.max(0,Number(enemy.currentMp)||0)>=enemyActionMpCost(enemy,action)}
-function campaignHeroAction(enemy,context,hpRate){
- const hero=String(enemy.campaignHeroId??""),allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(unit=>(unit.currentHp??0)>0),turn=Math.max(1,Number(context.battle?.turn)||1),wounded=allies.filter(unit=>unit.hp>0).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0],fallen=allies.find(unit=>unit.hp<=0),battle=context.battle??{};
- const positiveKinds=new Set(["atkUp","defUp","spdUp","regen","taunt","guard","counter","lifeSteal"]),negativeKinds=new Set(["atkDown","defDown","spdDown","accuracyDown","evasionDown","vulnerable","healDown","mpRecoveryDown"]);
- const buffed=opponents.some(unit=>(battle.allyEffects?.[unit.id]??[]).some(effect=>positiveKinds.has(effect.kind))),exposed=opponents.some(unit=>(battle.allyEffects?.[unit.id]??[]).some(effect=>negativeKinds.has(effect.kind))||(battle.allyAilments?.[unit.id]??[]).length>0),pressured=opponents.some(unit=>unit.currentHp/Math.max(1,unit.maxHp??unit.currentHp)<.45),livingHeroes=allies.filter(unit=>unit.hp>0).length;
- if(hero==="myth_yori"){
-  enemy.campaignHeroTargetMode="weak";
-  if(exposed&&(pressured||turn%2===0)){enemy.charging=false;enemy.intent="仲間が崩した標的へ『イージー！！』";return ENEMY_ACTIONS.power}
-  if(enemy.charging){enemy.charging=false;enemy.intent="観察した急所へ拳を叩き込む";return ENEMY_ACTIONS.power}
-  if(turn%3===0&&canPay(enemy,ENEMY_ACTIONS.galeRend)){enemy.intent="『開けんかいコラァ！』で戦列を打ち抜く";return ENEMY_ACTIONS.galeRend}
-  enemy.charging=true;enemy.intent="『ディフィカルト』へ踏み込む";return ENEMY_ACTIONS.charge
- }
- if(hero==="myth_hide"){
-  enemy.campaignHeroTargetMode="threat";
-  if(buffed&&canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="強化の構造を解析して崩す";return ENEMY_ACTIONS.dispelWave}
-  if(exposed&&canPay(enemy,ENEMY_ACTIONS.shadowCurse)){enemy.intent="崩れた標的へ『計算外・零点崩壊』を重ねる";return ENEMY_ACTIONS.shadowCurse}
-  if(opponents.length>=2&&canPay(enemy,ENEMY_ACTIONS.thunderChain)){enemy.intent="『フォー！！！！』連鎖術式を放つ";return ENEMY_ACTIONS.thunderChain}
-  if(canPay(enemy,ENEMY_ACTIONS.shadowCurse)){enemy.intent="最も危険な相手へ術式を固定";return ENEMY_ACTIONS.shadowCurse}
- }
- if(hero==="myth_enami"){
-  enemy.campaignHeroTargetMode="threat";
-  const allyUnderPressure=allies.some(unit=>unit!==enemy&&(unit.hp<=0||unit.hp/Math.max(1,unit.maxHp)<.7));
-  if(fallen&&canPay(enemy,ENEMY_ACTIONS.packRevive)){enemy.intent="笑みを消し、倒れた仲間を引き戻す";return ENEMY_ACTIONS.packRevive}
-  if(wounded&&wounded.hp/wounded.maxHp<.58&&canPay(enemy,ENEMY_ACTIONS.packMend)){enemy.intent="『まかセロリ』で戦線を立て直す";return ENEMY_ACTIONS.packMend}
-  if(!enemy._campaignGuardedAllies&&livingHeroes>1&&canPay(enemy,ENEMY_ACTIONS.packRally)){enemy._campaignGuardedAllies=true;enemy.intent="全員を俯瞰して攻守を同期";return ENEMY_ACTIONS.packRally}
-  if(buffed&&canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="『メンタル！！』で強化ごと崩す";return ENEMY_ACTIONS.dispelWave}
-  if((allyUnderPressure||exposed)&&canPay(enemy,ENEMY_ACTIONS.radiantVolley)){enemy.intent="崩れた敵陣をまとめて射抜く";return ENEMY_ACTIONS.radiantVolley}
-  if(canPay(enemy,ENEMY_ACTIONS.flameSweep)){enemy.intent="敵陣全体へ圧をかける";return ENEMY_ACTIONS.flameSweep}
- }
- if(hero==="myth_rion"){
-  enemy.campaignHeroTargetMode="threat";
-  if(fallen&&canPay(enemy,ENEMY_ACTIONS.packRevive)){enemy.intent="『今日は豪遊するぞ！』仲間を舞台へ呼び戻す";return ENEMY_ACTIONS.packRevive}
-  if(wounded&&wounded.hp/wounded.maxHp<.66&&canPay(enemy,ENEMY_ACTIONS.packMend)){enemy.intent="『また今度やな』で全員を立て直す";return ENEMY_ACTIONS.packMend}
-  if(!enemy._campaignRallied&&livingHeroes>1&&canPay(enemy,ENEMY_ACTIONS.packRally)){enemy._campaignRallied=true;enemy.intent="『いこうぜ！』勝ち筋を共有して全員を強化";return ENEMY_ACTIONS.packRally}
-  if(buffed&&canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="相手の強みを先回りして封じる";return ENEMY_ACTIONS.dispelWave}
-  if(((enemy.currentMp??0)<enemy.maxMp*.45||turn%3===0)&&opponents.some(unit=>(unit.currentMp??0)>0)&&canPay(enemy,ENEMY_ACTIONS.manaSiphon)){enemy.intent="相手の魔力をこちらの利益へ変える";return ENEMY_ACTIONS.manaSiphon}
-  if(exposed&&canPay(enemy,ENEMY_ACTIONS.venomCloud)){enemy.intent="崩れた敵陣へ追撃の場を作る";return ENEMY_ACTIONS.venomCloud}
-  if(canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="最大戦力の強みを封じる";return ENEMY_ACTIONS.dispelWave}
- }
- return null
-}
 function teamBattleAction(enemy,context,hpRate){
  if(!enemy.teamBattle)return null;
  const role=String(enemy.teamBattleRole??"striker"),allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(unit=>(unit.currentHp??0)>0),turn=Math.max(1,Number(context.battle?.turn)||1),fallen=allies.find(unit=>unit.hp<=0),wounded=[...allies].filter(unit=>unit.hp>0).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];
@@ -189,7 +151,7 @@ export function chooseEnemyAction(enemy,context={}){
  if(enemy.speciesId==="ochuki"){enemy.guard=true;enemy.intent="巨大な盾の陰で逃げ道を探す";return ENEMY_ACTIONS.guard}
  const allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(monster=>(monster.currentHp??0)>0),hpRate=enemy.hp/enemy.maxHp,role=String(enemy.role??""),support=["healer","support","controller","debuffer","magic"].some(value=>role.includes(value)),rarity=String(enemy.combatRarity??enemy.rarity??"N"),rarityPower=({N:0,R:1,SR:2,SSR:3,UR:4,LR:5,"神話":6,"深淵":7,"十神":8})[rarity]??0,reviveRole=["healer","support"].some(value=>role.includes(value)),reviveEligible=enemy.speciesId!=="acid_slime"&&reviveRole&&(Boolean(enemy.boss)||Number(enemy.level)>=100||rarityPower>=4);
  const fallen=allies.find(ally=>ally.hp<=0),fallenSlime=allies.find(ally=>ally.hp<=0&&(ally.race==="slime"||String(ally.speciesId).includes("slime"))),wounded=[...allies].filter(ally=>ally.hp>0).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];
- const heroAction=enemy.campaignHeroId?campaignHeroAction(enemy,context,hpRate):null;if(heroAction&&canPay(enemy,heroAction))return heroAction;
+ if(enemy.campaignHeroId){const heroAction=chooseCampaignHeroSkill(enemy,context);if(heroAction)return heroAction;enemy.intent="魔力・再使用待ちのため通常攻撃";return ENEMY_ACTIONS.attack;}
  const teamAction=teamBattleAction(enemy,context,hpRate);if(teamAction&&canPay(enemy,teamAction))return teamAction;
  if(enemy.speciesId==="acid_slime"&&fallenSlime&&!enemy._slimeSplitReviveUsed&&canPay(enemy,ENEMY_ACTIONS.slimeSplitRevive)){enemy._slimeSplitReviveUsed=true;enemy.intent="倒れたスライムを分裂核から再生";return ENEMY_ACTIONS.slimeSplitRevive}
  if(fallen&&reviveEligible&&canPay(enemy,ENEMY_ACTIONS.packRevive)){enemy.intent="倒れた味方を再構成";return ENEMY_ACTIONS.packRevive}
@@ -221,5 +183,5 @@ function authorityInfo(action){
  const utility=["buff","stance","allHeal","selfHeal","revive","cleanse","mpHeal"].includes(skill.type);
  return{...skill,label:skill.name,pattern:utility?"self":skill.allEnemies?"all":skill.execute||skill.drain?"singleWeak":"singleStrong",multiplier:Math.max(0,Number(skill.power)||0),utility,element:skill.element};
 }
-export function specialActionMultiplier(action){return authorityInfo(action)?.multiplier??SPECIAL_ACTION_INFO[action]?.multiplier??1}
-export function specialActionInfo(action){return authorityInfo(action)??floorBossActionInfo(action)??SPECIAL_ACTION_INFO[action]??null}
+export function specialActionMultiplier(action){return campaignHeroSkillInfo(action)?.multiplier??authorityInfo(action)?.multiplier??SPECIAL_ACTION_INFO[action]?.multiplier??1}
+export function specialActionInfo(action){return campaignHeroSkillInfo(action)??authorityInfo(action)??floorBossActionInfo(action)??SPECIAL_ACTION_INFO[action]??null}
