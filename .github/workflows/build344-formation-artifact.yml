@@ -23,13 +23,19 @@ jobs:
           grep -q 'FormationScreen.js?v=3.1.24-build344' src/main.js
           grep -q 'formation-circle-level' src/ui/screens/FormationScreen.js
 
-      - name: Package
+      - name: Stage direct replacement files
         run: |
-          zip -9 -r ABYSS_Build344_formation_patch.zip index.html src/main.js src/core/config.js src/ui/screens/FormationScreen.js src/Styles/build344-formation.css README_BUILD344_FORMATION.txt
+          mkdir -p patch/src/core patch/src/ui/screens patch/src/Styles
+          cp index.html patch/index.html
+          cp src/main.js patch/src/main.js
+          cp src/core/config.js patch/src/core/config.js
+          cp src/ui/screens/FormationScreen.js patch/src/ui/screens/FormationScreen.js
+          cp src/Styles/build344-formation.css patch/src/Styles/build344-formation.css
+          cp README_BUILD344_FORMATION.txt patch/README_BUILD344_FORMATION.txt
 
-      - name: Upload
+      - name: Upload direct replacement ZIP
         uses: actions/upload-artifact@v4
         with:
-          name: ABYSS_Build344_formation_patch
-          path: ABYSS_Build344_formation_patch.zip
+          name: ABYSS_Build344_formation_patch_direct
+          path: patch/
           retention-days: 7
