@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Apply patch
-        run: python .github/build345_patch.py
+        run: python .github/build345_patch_wrapper.py
 
       - name: Validate JavaScript
         run: |
@@ -37,6 +37,8 @@ jobs:
           grep -q 'battle-skill-close-top' src/ui/screens/BattleScreen.js
           grep -q 'formation-circle-level' src/ui/screens/FormationScreen.js
           grep -q 'build345-balance-ui.css?v=3.1.25-build345' index.html
+          if grep -q '待ってくれてありがとう' src/core/CampaignHeroBranchStorySystem.js; then exit 1; fi
+          if grep -q 'おかえりって言えるん' src/core/CampaignHeroBranchStorySystem.js; then exit 1; fi
 
       - name: Package replacement ZIP
         run: |
