@@ -1,6 +1,6 @@
-import{CAMPAIGN_STORY_OPENING,CAMPAIGN_STORY_SCENES,normalizeCampaignStoryState,resolveCampaignStoryScene}from"./CampaignStorySystem.js?v=3.1.21-build340";
+import{CAMPAIGN_STORY_OPENING,CAMPAIGN_STORY_SCENES,CAMPAIGN_DEMON_STORY_SCENES,CAMPAIGN_ENDING_STORY_SCENES,normalizeCampaignStoryState,resolveCampaignStoryScene}from"./CampaignStorySystem.js?v=3.1.31-build351";
 import{CAMPAIGN_HERO_ENCOUNTER_SCHEDULE,normalizeCampaignHeroInvasion,createCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.28-build348";
-import{CAMPAIGN_HERO_BRANCH_OUTCOMES,campaignHeroBranchStorySceneById,normalizeCampaignHeroBranchStoryState}from"./CampaignHeroBranchStorySystem.js?v=3.1.28-build348";
+import{CAMPAIGN_HERO_BRANCH_OUTCOMES,campaignHeroBranchStorySceneById,normalizeCampaignHeroBranchStoryState}from"./CampaignHeroBranchStorySystem.js?v=3.1.31-build351";
 
 export const CAMPAIGN_STORY_ARCHIVE_VERSION=1;
 export const CAMPAIGN_STORY_ARCHIVE_CATEGORIES=Object.freeze([
@@ -50,7 +50,7 @@ function archivedHeroContext(record,records){
  return context;
 }
 function repairArchivedScene(record,records){
- const original=cloneSerializable(record.scene);if(!original||original.castVersion>=340)return original;
+ const original=cloneSerializable(record.scene);if(!original||(original.castVersion>=340&&original.storyTextVersion>=351))return original;
  const context=archivedHeroContext(record,records),definition=CAMPAIGN_HERO_ENCOUNTER_SCHEDULE.find(event=>event.id===original.encounterId);
  if(original.kind==="hero-branch"&&definition){
   const ledger=createCampaignHeroEncounterState({storyCycle:record.cycle});ledger.heroes={...ledger.heroes,...context.heroes};
@@ -59,6 +59,17 @@ function repairArchivedScene(record,records){
   const percentage=(original.dialogue??[]).map(line=>String(line.text??"").match(/(?:損傷は |損傷は|損傷|刻まれた|相手へ)(\d+)%/)).find(Boolean);
   if(percentage)ledger.heroes[definition.heroId].remainingHpRate=Math.max(0,1-Number(percentage[1])/100);
   if(original.storyPart!=="prelude"&&original.variant==="repelled")ledger.heroes[definition.heroId]={...ledger.heroes[definition.heroId],defeated:true,remainingHpRate:0};
+  if(original.storyPart!=="prelude"){
+   // Older archives held prose instead of encounter facts. Accept only explicit
+   // Build348 evidence; never convert an old boast into freshly inflicted damage.
+   const related=records.filter(entry=>entry.cycle===record.cycle&&entry.scene.encounterId===definition.id&&entry.scene.variant===original.variant);
+   const words=related.flatMap(entry=>entry.scene.dialogue??[]).map(entry=>String(entry.text??"")).join("\n");
+   const total=words.match(/(?:残る損傷は|以前から残る)(\d+)%/),fresh=Number(words.match(/今回、新たに(\d+)%/)?.[1]??0);
+   const rate=original.variant==="repelled"?0:total?Math.max(0,1-Number(total[1])/100):ledger.heroes[definition.heroId].remainingHpRate;
+   const hurt=Math.round((1-rate)*100),battled=original.variant==="hero-victory"||/交戦後|交戦した後|交戦したけど/.test(words);
+   const battleKnown=battled||/戦闘を避けて逃げ切|戦闘を回避し|戦う前に逃げ切|攻撃は加えていません/.test(words);
+   ledger.branchStories323={history:[{encounterId:definition.id,heroId:definition.heroId,outcome:original.variant,floor:original.floor,heroHpRate:rate,hurtPercent:hurt,storyCycle:record.cycle,heroStoryState:context,battled348:battled,battleKnown348:battleKnown,newHurtPercent348:fresh,priorHurtPercent348:Math.max(0,hurt-fresh)}]};
+  }
   return campaignHeroBranchStorySceneById(ledger,original.id)??original;
  }
  const away=CAMPAIGN_HERO_ENCOUNTER_SCHEDULE.find(event=>context.awayHeroIds.includes(event.heroId));
@@ -98,6 +109,18 @@ function categoryModel(definition,entries){const sorted=[...entries].sort((left,
 export function createCampaignStoryArchiveModel(state){
  const snapshot=cloneSerializable(state)??{},records=archiveRecords(snapshot),story=normalizeCampaignStoryState(snapshot),ledger=normalizeCampaignHeroBranchStoryState(normalizeCampaignHeroInvasion(snapshot)),canonicalReceipts=new Set(story.seenSceneIds??[]),branchReceipts=new Set(ledger.branchStories323?.receipts??[]),prologue=[],demon=[],heroes=[];
  const openingStored=storedScene(records,CAMPAIGN_STORY_OPENING.id),openingRead=Boolean(openingStored||canonicalReceipts.has(CAMPAIGN_STORY_OPENING.id)),openingScene=openingStored??(openingRead?resolveCampaignStoryScene(CAMPAIGN_STORY_OPENING.id,snapshot):null);prologue.push(sceneEntry({id:"archive-opening",title:"滅びた世界、最弱の器",subtitle:"魔王サイラーンと預言者リオネル",sortKey:0,scene:openingScene,available:openingRead}));
+ for(const definition of CAMPAIGN_DEMON_STORY_SCENES){
+  const stored=storedScene(records,definition.id),available=Boolean(stored||canonicalReceipts.has(definition.id)),scene=stored??(available?historicalMilestoneScene(ledger,definition):null);
+  demon.push(sceneEntry({id:`archive-${definition.id}`,title:definition.title,subtitle:`予言 ${definition.day}日目・魔王城`,sortKey:definition.floor*10,scene,available}));
+ }
+ for(const definition of CAMPAIGN_ENDING_STORY_SCENES){
+  const stored=storedScene(records,definition.id),key=definition.id.slice("ending-".length);
+  // Only a recorded matching conclusion unlocks a new epilogue. A generic
+  // "complete" flag cannot prove the separate all-preempted variant.
+  const conclusion=(snapshot.campaign100?.reincarnation319?.history??[]).some(entry=>(entry.variant==="all-preempted"||entry.ending==="all-preempted"?"all-preempted":entry.ending)===key);
+  const available=Boolean(stored||conclusion),scene=stored??(available?resolveCampaignStoryScene(definition.id,{}):null);
+  demon.push(sceneEntry({id:`archive-${definition.id}`,title:definition.title,subtitle:"決着後の魔王軍",sortKey:1010+CAMPAIGN_ENDING_STORY_SCENES.indexOf(definition),scene,available}));
+ }
  for(const definition of CAMPAIGN_STORY_SCENES){const stored=storedScene(records,definition.id),available=Boolean(stored||canonicalReceipts.has(definition.id)),scene=stored??(available?historicalMilestoneScene(ledger,definition):null);heroes.push(sceneEntry({id:`archive-${definition.id}`,title:`予言 ${definition.day}日目`,subtitle:definition.location,sortKey:definition.floor*10,scene,available}))}
  for(const definition of CAMPAIGN_HERO_ENCOUNTER_SCHEDULE){const heroName=HERO_NAMES[definition.heroId]??"勇者",preludeId=`branch-prelude-${definition.id}`,preludeStored=storedScene(records,preludeId),preludeRead=Boolean(preludeStored||branchReceipts.has(preludeId)),prelude=preludeStored??(preludeRead?historicalBranchScene(ledger,preludeId):null),sortBase=definition.floor*10;
   heroes.push(sceneEntry({id:`archive-prelude-${definition.id}`,title:`${heroName}、単独行動`,subtitle:`予言 ${definition.day}日目・遭遇前`,sortKey:sortBase+1,scene:prelude,available:preludeRead}));

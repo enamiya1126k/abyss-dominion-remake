@@ -1,0 +1,371 @@
+{
+  "build": 351,
+  "version": "3.1.31",
+  "files": [
+    {
+      "path": "BUILD348_README.txt",
+      "sha256": "833c85b7dd2e4d640c775d47edfc21b342afe11e92750d7fc5c781aff94be883",
+      "bytes": 3993
+    },
+    {
+      "path": "BUILD348_VERIFICATION.md",
+      "sha256": "c2b07d4e27c3ad62a6cbfd3690dd41494879f2a28cf4655e973860993a7de476",
+      "bytes": 2169
+    },
+    {
+      "path": "BUILD351_README.txt",
+      "sha256": "4e9b673ea0dfd6b1db925bc6ede88d9f1ca4e04dfad32d264b5edd3f0721de11",
+      "bytes": 4878
+    },
+    {
+      "path": "BUILD351_STORY_PREVIEW.txt",
+      "sha256": "1bf7a00979e16eea46719a17f3a172de1054bba4f578a32a827a8a1f9ad706f5",
+      "bytes": 54308
+    },
+    {
+      "path": "index.html",
+      "sha256": "d166dccc2a0837dc6b634f0c12705eba18fb9ff3fb8f1feebb95abb76e049fba",
+      "bytes": 15347
+    },
+    {
+      "path": "online-server/src/HeroAllianceAdapter.js",
+      "sha256": "1bfe39fdfd6de7d489cc73b1fe92f07ca9db39e9bade8f496dd4bf60b9a5c64c",
+      "bytes": 5268
+    },
+    {
+      "path": "online-server/src/RaidCoordinator.js",
+      "sha256": "8e310a86c36f861e40fe7e70a55c149bbff80bcfa0bd3fb57e3e4092cfcc09e9",
+      "bytes": 83829
+    },
+    {
+      "path": "online-server/src/RoomStore.js",
+      "sha256": "f94cd6fe23fcf549639572b61719130f184a3286374554284707a2a348ddec44",
+      "bytes": 454185
+    },
+    {
+      "path": "online-server/src/TeamBattleCoordinator.js",
+      "sha256": "e7cb0303e60587af594c756f009b268d8c8686f6c26d97e6e74f2098415e9f2d",
+      "bytes": 82097
+    },
+    {
+      "path": "online-server/tests/build248-raid-roster-integrity.test.js",
+      "sha256": "cac8a027c6d59eb7656440cc6432925e4564e5747c6406930e818f072c431b3c",
+      "bytes": 13807
+    },
+    {
+      "path": "online-server/tests/build249-auto-heal-and-mimic.test.js",
+      "sha256": "459a5edbc994379820c51a45eef8ab276c0a271f5ae3798aae0955c7e03dbbc6",
+      "bytes": 2247
+    },
+    {
+      "path": "src/Styles/build345-balance-ui.css",
+      "sha256": "44308857eea4f6e4d52d4e86b9cb59ea33ebbcdf54e4b20e5dbabc860f07212f",
+      "bytes": 5216
+    },
+    {
+      "path": "src/Styles/build349-formation-layout.css",
+      "sha256": "d6f7a8ebb0ca30d0148c09a7d7f0516f71ea4b1da880f6e3797e99588e380930",
+      "bytes": 5412
+    },
+    {
+      "path": "src/battle/BattleRules.js",
+      "sha256": "3eccf397a82e143731eaf75e880bd29b74a5c6b762909e5cadb939b7bca2148b",
+      "bytes": 33479
+    },
+    {
+      "path": "src/battle/CampaignHeroSkillSystem.js",
+      "sha256": "bd4b055024b56fd0b181df26a21543a7896144e29e77f255686aa779a10f155c",
+      "bytes": 3353
+    },
+    {
+      "path": "src/battle/EnemyAI.js",
+      "sha256": "106e5a78b4d3c5c84780747dad91815792b9a18623e7af3e3d275023184f8489",
+      "bytes": 21128
+    },
+    {
+      "path": "src/battle/SkillSystem.js",
+      "sha256": "93452fca614f3414cea6eea38afb3a998039b8ba50ff32023ef5281386b1efca",
+      "bytes": 62502
+    },
+    {
+      "path": "src/battle/TurnSystem.js",
+      "sha256": "f5931890568117e6cd5036d952f36189c47fb1ab01911a30ebde1298e49c786c",
+      "bytes": 3021
+    },
+    {
+      "path": "src/core/AchievementRewardSystem.js",
+      "sha256": "fb8b9872468bb6eb242f9025e7ce399db8757229d189b486f32b55906e104a04",
+      "bytes": 13861
+    },
+    {
+      "path": "src/core/CampaignHeroBranchStorySystem.js",
+      "sha256": "57f2b71c570d4fdb67e864808966aee3104fd622b6d32c8b16ea18f9f0b098c7",
+      "bytes": 50465
+    },
+    {
+      "path": "src/core/CampaignHeroEncounterSystem.js",
+      "sha256": "f72f460431f919acff386bc49d1f8576a266205ad455ec0aec7a2da50bd4b51a",
+      "bytes": 32891
+    },
+    {
+      "path": "src/core/CampaignHeroLoadoutSystem.js",
+      "sha256": "3ecf7231d927b363aaf5302d16785b5c019d80711c7cf856849c544e3a008c56",
+      "bytes": 2851
+    },
+    {
+      "path": "src/core/CampaignInvasionIntelSystem.js",
+      "sha256": "568f18f0f454add9534cab86a27e2942b97467352bf1b75ad14577d223a85917",
+      "bytes": 7213
+    },
+    {
+      "path": "src/core/CampaignReincarnationSystem.js",
+      "sha256": "37555915f038e80b3f66c49577ed4401b4907a07bca795333c0505838ed3212a",
+      "bytes": 8454
+    },
+    {
+      "path": "src/core/CampaignStoryArchiveSystem.js",
+      "sha256": "897eb18446149de8575fbd30fa8edd7baaec3b8a915fe7b30d3114fe38296dfd",
+      "bytes": 15241
+    },
+    {
+      "path": "src/core/CampaignStorySystem.js",
+      "sha256": "e1311341711627b86bf1af39a7b0794c7edfddccff080abad8fa79ee61ec759d",
+      "bytes": 83557
+    },
+    {
+      "path": "src/core/CollectionRewardSystem.js",
+      "sha256": "e822423c0c503b7823a45ec14adb5fcbbcae66d9a6553389d077b4546d7113a9",
+      "bytes": 9467
+    },
+    {
+      "path": "src/core/CombatPower.js",
+      "sha256": "92d80f619e3de401a91fc0ec78f91c220ed664a448e26720d72d9ae64c0d0aee",
+      "bytes": 5934
+    },
+    {
+      "path": "src/core/EndgameSystem.js",
+      "sha256": "27af808003e4717703a80f5a0b75060181cb20d73f871dc5613d506c4346e658",
+      "bytes": 55916
+    },
+    {
+      "path": "src/core/EquipmentAffixSystem.js",
+      "sha256": "2b7bfe03c8022ec74bbeedba2d41352c2ea2dfed6fec6ae3e06546a6c2f8a7f2",
+      "bytes": 1425
+    },
+    {
+      "path": "src/core/EquipmentDropSystem.js",
+      "sha256": "59b5f9013964d9a21d6c2db0f4bc7549c7d8d976bcec8de9ce5779094c905bd3",
+      "bytes": 718
+    },
+    {
+      "path": "src/core/ExperiencePackSystem.js",
+      "sha256": "4299d61bd90037f02f7a4dcba2338e03363f0991f68e308032224bd2de2ee21c",
+      "bytes": 2840
+    },
+    {
+      "path": "src/core/FloorBossChallengeSystem.js",
+      "sha256": "bb7b37d67c4ff07e726bc3bc93b89116353c540262074fcd386104c297e00cd9",
+      "bytes": 7031
+    },
+    {
+      "path": "src/core/HeroAllianceSystem.js",
+      "sha256": "b52cae429348fad4c73b8a56b7d44f954f07eb034ea1daf650548141aae586cf",
+      "bytes": 16898
+    },
+    {
+      "path": "src/core/HeroResonanceSystem.js",
+      "sha256": "6643be252f6eeffe0c6f07da3443d36a8599585ec1803a5050bc66b24f2fa9d7",
+      "bytes": 3550
+    },
+    {
+      "path": "src/core/ProgressionSystem.js",
+      "sha256": "261739039d6c6a7d654889d9d6d30ea96cf6b803acb81f12f2f4b3052e0ec990",
+      "bytes": 1979
+    },
+    {
+      "path": "src/core/SecondWorldEventSystem.js",
+      "sha256": "47ae021696aab9fa0c9e1abbdf6efb83b42b8fca331fe803b0642d5912b6b907",
+      "bytes": 4055
+    },
+    {
+      "path": "src/core/SecretRoomSystem.js",
+      "sha256": "4fb230d53053087762dd8168c7f6f434a46cadc0ddfbd2bf445c32db93ec1e8f",
+      "bytes": 30606
+    },
+    {
+      "path": "src/core/SerialCodeSystem.js",
+      "sha256": "e9adcbd6725e6a57ba9f7ddd8ec4607c61aa9319d9f446b7f7911875b1673d8a",
+      "bytes": 21855
+    },
+    {
+      "path": "src/core/SignatureWeaponSystem.js",
+      "sha256": "7544dd02174ca7e046786eafe043dd7394c03f40425116ddb596f06e3ff24eff",
+      "bytes": 16338
+    },
+    {
+      "path": "src/core/WorldSystem.js",
+      "sha256": "3491c37bb78347d32dcaaeca8e123bd7aa920d3092bbea3955f69adf83d42e30",
+      "bytes": 1381
+    },
+    {
+      "path": "src/core/config.js",
+      "sha256": "18e1c0e9502e0b17f0d57cd7939d6f7a53c5ef87ffb237a127fe73c8053c9e29",
+      "bytes": 2256
+    },
+    {
+      "path": "src/data/mythicSerialSpecies.js",
+      "sha256": "df4864278c881b97bdb22bda6ce9b830fd04d27bc730315e546f23a55433484e",
+      "bytes": 6823
+    },
+    {
+      "path": "src/data/species.js",
+      "sha256": "da5e77a40e73f2d38d7d544566041e14c363ebaadd0af06a35b08d89bdca1989",
+      "bytes": 24428
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "8fee23fd0b1cbe9954c59aeef20d20cdcc41da34daa617157c305e86ca9db310",
+      "bytes": 1003870
+    },
+    {
+      "path": "src/models/Monster.js",
+      "sha256": "aceadc723d1c89943f771f044471af4967f344c70834d16e73b863ce924177fc",
+      "bytes": 19328
+    },
+    {
+      "path": "src/online/OnlinePartyClient.js",
+      "sha256": "4edaf9f9e08cb33c24d6d7cb190d3f6ac1722d442b149ec0a04ab3c03a25c1c1",
+      "bytes": 329051
+    },
+    {
+      "path": "src/online/OnlineViews.js",
+      "sha256": "7c1e38023ac8ef02e90621872c94b03a19811070f6916e9ade355cc41285916c",
+      "bytes": 106460
+    },
+    {
+      "path": "src/services/EquipmentLoadoutSystem.js",
+      "sha256": "dc5241201710fb8de34b35da7ce5f121ecf00c25b6ab5de4a407a503d0bd8b81",
+      "bytes": 4256
+    },
+    {
+      "path": "src/services/SaveService.js",
+      "sha256": "13646439fe60a884df6133f76da2c7088dd574406bab79b386e09fd30f794af2",
+      "bytes": 89853
+    },
+    {
+      "path": "src/services/WeaponMastery.js",
+      "sha256": "1888f85c16482549799d36b12bc738c44f8d1c20b304760d5d6690dba175f31b",
+      "bytes": 4796
+    },
+    {
+      "path": "src/ui/components/MonsterCard.js",
+      "sha256": "929ac89610b1b988a0352f16736a44751dfb5ccc4da5b48459c934d2a322f892",
+      "bytes": 1708
+    },
+    {
+      "path": "src/ui/screens/BattleScreen.js",
+      "sha256": "4e561388c3da9d179ee15f6125c93069324b65ace441c100cbbafda99d9af5a8",
+      "bytes": 28618
+    },
+    {
+      "path": "src/ui/screens/CampaignFinalFloorScreen.js",
+      "sha256": "bc5dbc01dd724014f232944aa1bdbcc96bbfcd2bf03e7046af88653377cc5985",
+      "bytes": 7762
+    },
+    {
+      "path": "src/ui/screens/EquipmentScreen.js",
+      "sha256": "4039c7da34b74dd55976d0265c36965aed8b3c3dd1edd1b28d6aca0271c46049",
+      "bytes": 24342
+    },
+    {
+      "path": "src/ui/screens/ExploreScreen.js",
+      "sha256": "3771a195fc2ca9abf0176f4267413f9eedad2ac7ef2d74101c4537b882e105cd",
+      "bytes": 8437
+    },
+    {
+      "path": "src/ui/screens/FormationLayout.js",
+      "sha256": "d6fe4e1968cec7095868ccf2bf54c30b1eea753aac290efc5cbac97ebadc8484",
+      "bytes": 7112
+    },
+    {
+      "path": "src/ui/screens/FormationScreen.js",
+      "sha256": "a4bb3b765cd4f6a5c623474251263c2532c685e56ef1c8e0263011876fde92dc",
+      "bytes": 9523
+    },
+    {
+      "path": "src/ui/screens/GauntletScreen.js",
+      "sha256": "8ed5617f57b37470694c4630684f6ba89b7f34f72c0132993f67331fe86122e8",
+      "bytes": 5216
+    },
+    {
+      "path": "src/ui/screens/HomeScreen.js",
+      "sha256": "1f0324ed8476f73edee34e0a650d597f4b13df4b1bd1cca52f323ed008e488af",
+      "bytes": 17745
+    },
+    {
+      "path": "src/ui/screens/InventoryScreen.js",
+      "sha256": "1b32db397b32a9377e314deca05a054bcc488a094ed045a3febf5ae3e11d7c13",
+      "bytes": 8048
+    },
+    {
+      "path": "src/ui/screens/MonsterDetailScreen.js",
+      "sha256": "0290f16be7e8a79a910dfc06fe13aaafaa0a629e52505f91374110978cffeccd",
+      "bytes": 11027
+    },
+    {
+      "path": "src/ui/screens/MonsterListScreen.js",
+      "sha256": "ea247ead2f503ac4f3636da5e743b1c567d13f02623e4049923d1649f88b8003",
+      "bytes": 4781
+    },
+    {
+      "path": "src/ui/screens/OnlinePartyScreen.js",
+      "sha256": "1c947472bba5f99a9de5d3931b6749f4b34fd07e788e88e752b85d8d43fb9944",
+      "bytes": 95559
+    },
+    {
+      "path": "src/ui/screens/SettingsScreen.js",
+      "sha256": "cc3e227daa909099efa3d88f356bfb2e7fcbace58e9306a6345e0327d5567908",
+      "bytes": 5403
+    },
+    {
+      "path": "src/ui/screens/ShopScreen.js",
+      "sha256": "58f8e1d79e0e42e0f9c4f0e4ab0aab6b0b30d582098aeaa92dd40376c0b6b1d8",
+      "bytes": 2467
+    },
+    {
+      "path": "src/ui/screens/SkillScreen.js",
+      "sha256": "f5b4696a9dd662f17659a78f113de80c1c432f8dd3b437004b224cb0ac9b244b",
+      "bytes": 5212
+    },
+    {
+      "path": "tests/build340-story-continuity.test.mjs",
+      "sha256": "17075ffd8e90ce3b065d2c59d2b3376316209dea4ec9c12068ab4cdad30580df",
+      "bytes": 10500
+    },
+    {
+      "path": "tests/build348-hero-alliance.test.mjs",
+      "sha256": "c0e112873e75cdfe89cc59b7edb6fb85202f8a1d864cb5ce239c5530fb409a5b",
+      "bytes": 14850
+    },
+    {
+      "path": "tests/build348-story.test.mjs",
+      "sha256": "980bb3ceabec1ffde9300b8c30b0d74d3f932d427cd72e61d4283d5ee665e2ea",
+      "bytes": 4497
+    },
+    {
+      "path": "tests/build348-tengod-comparison.mjs",
+      "sha256": "3f7b27fe74c090cc6e968b614f869384107f309141ab88c7314bdf7f51f2bfa4",
+      "bytes": 3943
+    },
+    {
+      "path": "tests/build350-story-voice.test.mjs",
+      "sha256": "54ace2d15e1514609af0528b8c98717bc37f4b660d68b8d051d362a123e60325",
+      "bytes": 5381
+    },
+    {
+      "path": "tests/build351-demon-story.test.mjs",
+      "sha256": "557ce9de176337abbff84736f80910c283903a71a85176ffae457ae350967e1a",
+      "bytes": 6660
+    }
+  ]
+}

@@ -20,24 +20,24 @@ export function finalAudienceDialogue({heroes=[],party=[]}={}){
  const lines=[{speaker:"地の文",text:"百階の扉が閉じる。黒い回廊の先、王室には玉座と二つの陣営だけが残った。"},{speaker:partyLead,text:"ここが終点だ。城門ではない。この王室で、予言ごと決着をつける。"}];
  if(!remaining.length)return[...lines,{speaker:"地の文",text:"返事はない。勇者四人は道中ですでに退けられ、王室へ辿り着いた者はいなかった。"},{speaker:"リオネルの予言",text:"戦わずして十日目は終わる。これは敗北でも勝利でもなく、予言の外側にある完全制圧だ。"}];
  const authored={
-  myth_yori:"おっと〜！？ ここが王室か。イージー……とは言わせへんで。残った全員で開けんかいコラァ！",
-  myth_hide:"いやいやいや笑、玉座まで罠がゼロ。待ってくださいよ〜！ ……あ、退路の計算だけ入れ忘れました。",
+  myth_yori:"おっと〜！？ ここが王室か。イージー……とは言わせんで。残った全員で開けんかいコラァ！",
+  myth_hide:"玉座までの道を確認した。初めて見る術式は、分かったふりをせず確かめる。……僕の見落としは、声に出して教えて。",
   myth_rion:"ここまでの遠征費、勝った側にまとめて請求な。いこうぜ！ 勝てば今日は豪遊するぞ！",
   myth_enami:"最初に聞く。降伏する気はある？ ……ないなら、その理不尽な支配を一個ずつ論理で詰める。まかセロリ。"
  };
  for(const hero of remaining)lines.push({speaker:hero.name,text:authored[hero.id]??"ここで決着をつける。"});
  const resolve={
-  myth_enami:["ここへ来るまで、魔物にも守りたいもんがあるって何回も見た。せやから、話が通じる余地だけは最後まで残しとく。","でも、仲間を傷つけてええ理由にはならへん。そこだけは、何を言われても譲る気ないで。"],
-  myth_yori:["港では、帰ったら何飲むかしか考えてへんかったわ。今は、帰り道で聞きたい話の方が多い。","拳の出番は分かってる。今日は先走らへん。合図が出るまで、ちゃんと待てるからな。"],
+  myth_enami:["ここへ来るまで、魔物にも守りたいもんがあるって何回も見た。だから、話が通じる余地だけは最後まで残しとく。","でも、仲間を傷つけてええ理由にはならん。そこだけは、何を言われても譲る気ないで。"],
+  myth_yori:["港では、帰ったら何飲むかしか考えてなかったわ。今は、帰り道で聞きたい話の方が多い。","拳の出番は分かってる。今日は先走らん。今、全員がどこを見てるか分かったから。"],
   myth_hide:["最後の作戦を確認する。退路、残る魔力、持ち帰る情報。……帰還後の予定まで、今回は書いてきた。","計算できないから捨てる、ではない。計算できないものを守るために、僕はここまで式を直してきた。"],
-  myth_rion:["遠征の帳簿を閉じようとしたら、値段の付かない項目ばかり残った。手間のかかる旅だったよ。","続きのページは空けてある。最後の一行を勝手に書かせるつもりはない。そこは、僕らの取り分だ。"]
+  myth_rion:["遠征の帳簿を閉じようとしたら、値段の付かない項目ばかり残った。手間のかかる旅だったよ。","続きのページは空けてある。最後の一行を勝手に書かせるつもりはない。そこは、オレらの取り分や。"]
  };
  for(let turn=0;turn<2;turn++)for(const hero of remaining)lines.push({speaker:hero.name,text:resolve[hero.id]?.[turn]??"交わした約束を、この先へ持っていく。"});
  const wounded=remaining.filter(hero=>heroState(hero).percent<100),defeated=heroes.length-remaining.length;
  if(wounded.length||defeated)lines.push({speaker:"地の文",text:`道中の戦いは消えていない。${defeated?`${defeated}人は撃破済み。`:""}${wounded.length?`${wounded.map(hero=>hero.name).join("・")}の傷も、そのまま最終戦へ持ち越される。`:""}`});
- if(remaining.length===4)lines.push({speaker:"勇者一行",text:"四人の呼吸が重なった瞬間、神話共鳴『無敵』が発動する。十神四体をも上回る圧力が王室を満たした。"});
- else if(remaining.length>1)lines.push({speaker:"勇者一行",text:`残る${remaining.length}人の共鳴が傷を力へ変える。四人の『無敵』には届かなくても、単独の勇者とは別物だ。`});
- else lines.push({speaker:remaining[0].name,text:"一人でも退かへん。四人分の約束だけは、ここまで持ってきた。"});
+ if(remaining.length===4)lines.push({speaker:"勇者一行",text:"りおんの合図にえなみが道を開き、ひでの術式へよりの拳が重なる。四勇共鳴――一人を見ている間に、残る三人が次の手を終えている。神話の四人が、王室を逃げ場のない間合いに変えた。"});
+ else if(remaining.length>1)lines.push({speaker:"勇者一行",text:`残る${remaining.length}人が呼吸を合わせた。欠けた仲間の役割は戻らない。それでも、互いの動きへ次の一手を重ねていく。`});
+ else lines.push({speaker:remaining[0].name,text:"一人でも退かん。四人分の約束だけは、ここまで持ってきた。"});
  lines.push({speaker:partyLead,text:"ならば始めよう。魔王軍四体対、ここまで残った勇者たち――最後の戦いだ。"});return lines
 }
 

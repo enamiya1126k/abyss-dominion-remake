@@ -1,7 +1,8 @@
+import{FORMATION_LAYOUT_CSS}from"./FormationLayout.js?v=3.1.30-build350";
 import{SPECIES}from"../../data/species.js?v=3.1.28-build348";
-import{displayName}from"../../models/Monster.js?v=3.1.28-build348";
+import{displayName}from"../../models/Monster.js?v=3.1.31-build351";
 import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=3.1.28-build348";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.28-build348";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.31-build351";
 import{equipmentDisplayRarity,equipmentSubslotLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=3.1.1-build311";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build311";
 import{resourceHud,bottomNav}from"../components/GameChrome.js?v=3.1.1-build311";
@@ -65,14 +66,14 @@ function memberCard(state,monster,index,{readOnly=false}={}){
    <div class="formation-slot-label">SLOT ${index+1}</div>
    <div class="formation-member-icon">${monsterVisual(monster,species.emoji??"👹",{className:"formation-monster-visual"})}</div>
    <b class="formation-member-name rarity-name-${rarityClass(rarity)}">${displayName(monster)}</b>
-   <small class="formation-member-meta">${rarity}・${elementIcon}${elementName}・${formationRoleLabel(species)}<br>Lv.${monster.level}・+${monster.plus??0}</small>
+   <small class="formation-member-meta"><span>${rarity}・${elementIcon}${elementName}・${formationRoleLabel(species)}</span><span>Lv.${monster.level}・+${monster.plus??0}</span></small>
    <small class="formation-total-exp">${readOnly?"探索中・確認のみ":"長押しして順番を変更"}</small>
   </div>
   <div class="formation-power"><small>戦力</small><strong>${formatCombatPower(monsterCombatPower(monster))}</strong></div>
-  <details class="formation-section formation-loadout" open>
-   <summary>装備6枠 <small>右手・左手 / 首・指 / 胴・補助</small></summary>
+  <section class="formation-section formation-loadout" aria-label="装備6枠">
+   <h3 class="formation-loadout-title">装備6枠</h3>
    <div class="formation-gear-grid">${LOADOUT_SLOTS.map(subslot=>equipmentSlot(state,monster,subslot)).join("")}</div>
-  </details>
+  </section>
   <section class="formation-section formation-circle-section">
    <h3>設定中魔法陣</h3>
    <button type="button" class="formation-circle-card ${circle.id==="none"?"empty":""}" data-formation-circle="${monster.id}" aria-label="${circleLabel}を装備管理で開く">
@@ -92,7 +93,8 @@ export function FormationScreen(state,{origin="home"}={}){
  const party=(state.party??[]).map(id=>state.monsters?.find(monster=>monster.id===id)).filter(Boolean);
  const readOnly=origin==="explore",cards=Array.from({length:4},(_,index)=>party[index]?memberCard(state,party[index],index,{readOnly}):emptyCard(index,{readOnly})).join("");
  const total=party.reduce((sum,monster)=>sum+monsterCombatPower(monster),0);
- return`<section class="screen formation-screen v2-screen" data-origin="${origin}">
+ return`<section class="screen formation-screen v2-screen" data-origin="${origin}" data-formation-layout="350">
+  <style data-formation-layout-style="350">${FORMATION_LAYOUT_CSS}</style>
   ${resourceHud(state,{backId:"backFormation",title:"編成"})}
   <div class="party-mode-tabs" role="tablist" aria-label="パーティ機能">
    <button type="button" class="active" role="tab" aria-selected="true">${resourcePartyIcon("formation")}<span><b>部隊編成</b><small>いつもの4体編成</small></span></button>

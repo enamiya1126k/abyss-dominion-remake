@@ -1,11 +1,11 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.28-build348";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.31-build351";
 // Regression marker only: config.js?v=3.1.21-build340
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.28-build348";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.31-build351";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.28-build348";
 import{SPECIES}from"../../data/species.js?v=3.1.28-build348";
 import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.28-build348";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.28-build348";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.31-build351";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.1-build311";
 import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=3.1.1-build317";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.20-build339";
