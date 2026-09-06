@@ -35,5 +35,9 @@ export const BATTLE_ITEM_LAYOUT=`
 .battle-screen.side-battle-v2 .has-item-menu .battle-item-list>button>span{min-width:0;display:grid;gap:5px}
 .battle-screen.side-battle-v2 .has-item-menu .battle-item-list>button small{color:#bdb6a2!important;white-space:normal!important;line-height:1.5}
 .battle-screen.side-battle-v2 .has-item-menu .battle-item-list>button>strong{flex-shrink:0;color:#eed18a!important}
+.battle-screen.side-battle-v2 .battle-item-selection{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:4px 0;color:#efd99e}
+.battle-screen.side-battle-v2 .battle-item-selection>span{display:grid;gap:5px;min-width:0}
+.battle-screen.side-battle-v2 .battle-item-selection>button{flex:0 0 auto;min-width:64px;min-height:44px;padding:8px;border:1px solid #bd9b50;border-radius:2px;background:#211c12;color:#fff1c7;touch-action:manipulation}
+.battle-screen.side-battle-v2 .has-item-menu .battle-item-list>button:disabled{opacity:.45!important;cursor:default}
 .battle-screen.side-battle-v2 .has-item-menu button:focus-visible{outline:2px solid #ffe395!important;outline-offset:-3px}
 `;

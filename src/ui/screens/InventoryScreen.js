@@ -3,8 +3,8 @@ import{equipmentStatMultiplier}from"../../models/Equipment.js?v=3.1.1-build311";
 import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=3.1.1-build311";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=3.1.1-build311";
 import{equipmentVisual}from"../components/EquipmentVisual.js?v=3.1.1-build311";
-import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=3.1.37-build357";
-import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build311";
+import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=3.1.39-build359";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.38-build358";
 
 const CONSUMABLES=[
  ["potions","🧪","薬草","HPを回復"],

@@ -1,6 +1,7 @@
-import{SPECIES}from"../data/species.js?v=3.1.37-build357";
+import{isEndgameUltimate}from"../data/endgameUltimates.js?v=3.1.38-build358";
+import{SPECIES}from"../data/species.js?v=3.1.39-build359";
 import{SKILLS}from"../data/skills.js?v=2.11.0-build164";
-import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.0-build164";
+import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=3.1.38-build358";
 import{balanceIndividualSkillKit,buildIndividualSkillKit,isOffensiveSkill,skillProgressionScore}from"../data/individualSkillKits.js?v=2.11.83-build259";
 import{FLOOR_BOSS_CATALOG,floorBossWeaponSkillById}from"../data/floorBosses.js?v=2.11.30-build195";
 import{attributeDamageMultiplier,canonicalAttribute}from"../data/attributes.js?v=3.0.9-build309";
@@ -293,6 +294,7 @@ function playerSkillMpCostCap(skill){
  return Infinity;
 }
 export function skillMpCostBreakdown(monster,skill){
+ if(isEndgameUltimate(skill)){const cost=Math.ceil(maxMp(monster)*.6);return{base:cost,uncappedBase:cost,costCap:Infinity,beforeEquipment:cost,final:cost,equipmentReduction:0,masteryReduction:0,totalReduction:0,rawRate:.6,rate:.6}}
  const source=Number(monster?._equipmentAffixes?.mpCostReduction??0),equipmentReduction=Math.min(50,Number.isFinite(source)?Math.max(0,source):0),masteryReduction=skill?.id?skillMasteryBonuses(monster,skill).mpCostRate*100:0,reduction=Math.min(60,equipmentReduction+masteryReduction),listed=Number(skill?.mp??0),rawRate=Math.max(0,Number(skill?.mpRate??0)),rate=Math.min(rawRate,recoverySkillMpRateCap(skill)),rated=rate>0?Math.ceil(maxMp(monster)*rate):0,uncappedBase=Math.max(Number.isFinite(listed)?listed:0,Number.isFinite(rated)?rated:0),costCap=playerSkillMpCostCap(skill),base=Math.min(uncappedBase,costCap),beforeEquipment=Math.max(0,Math.ceil(base*(1-Math.min(60,masteryReduction)/100))),final=Math.max(0,Math.ceil(base*(1-reduction/100)));
  return{base,uncappedBase,costCap,beforeEquipment,final,equipmentReduction,masteryReduction,totalReduction:reduction,rawRate,rate};
 }

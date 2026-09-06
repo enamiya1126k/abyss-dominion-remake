@@ -1,3 +1,4 @@
+import{isEndgameUltimate,ultimateAvailability,ultimateBasicOnly}from'../src/core/EndgameUltimateSystem.js';
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import vm from 'node:vm';
 import {simulate} from './build357-balance-simulation.mjs';
 import * as H from '../src/core/HeroAllianceSystem.js';
@@ -15,6 +16,6 @@ test('solo authored skills have identical player/enemy damage and shields after 
 });
 test('shield starts outside the HP bar; skill effect markup includes every description line',()=>{
  const s=fs.readFileSync(new URL('../src/ui/screens/BattleScreen.js',import.meta.url),'utf8'),start=s.indexOf('function shieldLabel'),end=s.indexOf('function hpBar',start),c={battleInteger:n=>n.toLocaleString('ja-JP')};vm.createContext(c);vm.runInContext(s.slice(start,end),c);assert.equal(c.shieldLabel({heroShield348:53893}),'<div class="battle-shield-label">盾 53,893</div>');assert.equal(c.shieldLabel({heroShield348:0}),'');assert.doesNotMatch(s,/HP .*?盾/);
- const context={cooldownRemaining:()=>0,skillMpCost:()=>23,htmlText:s=>String(s),skillElementLabel:()=> '土',skillCombatKeywords:()=>['HP回復27%','防御上昇','回避上昇'],battleInteger:String,unitMaxMp:()=>100};vm.createContext(context);vm.runInContext(s.slice(s.indexOf('function renderSkills('),s.indexOf('\nfunction ',s.indexOf('function renderSkills(')+1)),context);const html=context.renderSkills({}, {currentMp:100},[{id:'long',name:'試験スキル',description:'長い効果説明。'.repeat(12)}]);for(const text of ['HP回復27%','防御上昇','回避上昇'])assert.ok(html.includes(text));assert.equal((html.match(/<li>/g)||[]).length,4);
+ const context={isEndgameUltimate,ultimateAvailability,ultimateBasicOnly,cooldownRemaining:()=>0,skillMpCost:()=>23,htmlText:s=>String(s),skillElementLabel:()=> '土',skillCombatKeywords:()=>['HP回復27%','防御上昇','回避上昇'],battleInteger:String,unitMaxMp:()=>100};vm.createContext(context);vm.runInContext(s.slice(s.indexOf('function renderSkills('),s.indexOf('\nfunction ',s.indexOf('function renderSkills(')+1)),context);const html=context.renderSkills({}, {currentMp:100},[{id:'long',name:'試験スキル',description:'長い効果説明。'.repeat(12)}]);for(const text of ['HP回復27%','防御上昇','回避上昇'])assert.ok(html.includes(text));assert.equal((html.match(/<li>/g)||[]).length,4);
  const css=fs.readFileSync(new URL('../src/Styles/build357-battle-readability.css',import.meta.url),'utf8');assert.match(css,/flex:0 0 auto!important/);assert.match(css,/max-height:none!important/);assert.match(css,/overflow-y:auto!important/);
 });

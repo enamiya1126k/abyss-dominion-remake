@@ -1,4 +1,4 @@
-import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build320";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.38-build358";
 import{pixelIcon}from"../components/GameChrome.js?v=3.1.1-build320";
 
 const escapeHtml=value=>String(value??"").replace(/[&<>"']/g,character=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[character]);

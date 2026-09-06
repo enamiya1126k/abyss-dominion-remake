@@ -1,0 +1,11 @@
+/* The same enlarged art and visible-pixel placement used by contracted bosses. */
+.battle-screen .endgame-boss-art .battle-unit-floating-name .home-pixel-icon,
+.battle-screen .endgame-boss-art .battle-unit-floating-name img{
+ width:12px!important;height:12px!important;min-width:12px!important;
+ max-width:12px!important;max-height:12px!important;flex:0 0 12px!important;
+ transform:none!important;scale:none!important;
+}
+.battle-screen .status-chip.ultimate-authority{
+ border-color:#d8b863;background:#17140bea;color:#ffe6a0;
+ white-space:normal;overflow-wrap:anywhere;line-height:1.2;
+}

@@ -7,7 +7,7 @@ import{
 import{
  ENDGAME_CHARACTERS,
  canonicalEndgameId
-}from"../data/endgameCharacters.js?v=3.0.9-build309";
+}from"../data/endgameCharacters.js?v=3.1.38-build358";
 
 /*
  * build308: boss reward identity is data, never a random selection.

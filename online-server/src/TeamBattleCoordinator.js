@@ -1,3 +1,4 @@
+import{prepareOnlineUltimates,resolveOnlineUltimateAction,resolveOnlineEnemyUltimate,onlineUltimateAuto,validateOnlineUltimate,endOnlineUltimateRound,onlineUltimateState,flushOnlineUltimates,beginUltimateAction,finishUltimateAction,ultimateExtraBlocked,ultimateBasicOnly,ultimateIsolated,isEndgameUltimate,cleanupUltimateBattle}from"./EndgameUltimateAdapter.js";
 import {onlineHeroAuto,reserveOnlineHeroNormal,resolveOnlineHero,onlineHeroIncoming,onlineHeroSurvive,onlineHeroFollowups} from './HeroAllianceAdapter.js';
 import { randomBytes } from "node:crypto";
 import { attributeDamageMultiplier, canonicalAttribute } from "../../src/data/attributes.js";
@@ -452,7 +453,7 @@ function addEffect(entity, effect) {
 }
 
 const NEGATIVE_EFFECT_KINDS = new Set([
-  "atkDown", "defDown", "spdDown", "evasionDown", "accuracyDown", "critDown", "vulnerable", "healDown", "reviveSeal", "stun",
+  "authorityPossession", "atkDown", "defDown", "spdDown", "evasionDown", "accuracyDown", "critDown", "vulnerable", "healDown", "reviveSeal", "stun",
 ]);
 
 function cleanseEffects(entity) {
@@ -545,7 +546,7 @@ function publicPlayer(player) {
 export function teamBattleSnapshot(battle) {
   if (!battle) return null;
   return {
-    id: battle.id,
+    ...onlineUltimateState(battle),id: battle.id,
     round: battle.round,
     phase: battle.phase,
     speed: battle.speed,
@@ -772,6 +773,7 @@ export class TeamBattleCoordinator {
     const kind = ACTIONS.has(source.kind) ? source.kind : "attack";
     const skill = kind === "skill" ? actor.skills.find(entry => entry.id === cleanText(source.skillId, 80)) : null;
     if (kind === "skill" && !skill) return { ok: false, code: "BAD_SKILL", message: "そのスキルは使用できません" };
+    if(skill&&isEndgameUltimate(skill.id)){const denied=validateOnlineUltimate(battle,actor,skill.id);if(denied)return denied}
     const remainingCooldown = skill ? Math.max(0, Math.floor(Number(actor.cooldowns?.[skill.id]) || 0)) : 0;
     if (remainingCooldown > 0) return { ok: false, code: "SKILL_COOLDOWN", message: "そのスキルは再使用待ちです", remainingCooldown };
     if (skill && actor.mp < skill.mp) return { ok: false, code: "NO_MP", message: "MPが足りません" };
@@ -958,7 +960,7 @@ export class TeamBattleCoordinator {
     return Object.values(battle.players).filter(player => player.hp > 0).every(player => battle.actions[player.playerId]);
   }
 
-  _autoAction(battle, actor) {
+  _autoAction(battle, actor) {const ultimate358=onlineUltimateAuto(battle,actor,this.now());if(ultimate358)return ultimate358;
     return onlineHeroAuto(battle,actor,this.now())??chooseTeamAutoAction(battle, actor, this.now());
   }
 
@@ -974,6 +976,7 @@ export class TeamBattleCoordinator {
       if (actor.hp <= 0) continue;
       this._resolveAction(battle, actor, battle.actions[actor.playerId], events);
     }
+    endOnlineUltimateRound(battle,events);
     const aliveSun = Object.values(battle.players).some(player => player.side === "sun" && player.hp > 0);
     const aliveMoon = Object.values(battle.players).some(player => player.side === "moon" && player.hp > 0);
     if (!aliveSun || !aliveMoon) {
@@ -998,7 +1001,8 @@ export class TeamBattleCoordinator {
     this.broadcast(room, { type: "roomRefresh" });
   }
 
-  _resolveAction(battle, actor, action, events) {
+  _resolveAction(battle, actor, action, events) {return resolveOnlineUltimateAction(battle,actor,action,events,next=>this._resolveActionLegacy358(battle,actor,next,events),{random:this.random})}
+  _resolveActionLegacy358(battle, actor, action, events) {
     if (!action) return;
     const session = this.sessions.get(actor.ownerPlayerId);
     const actorName = session?.profile?.displayName ?? actor.name ?? "挑戦者";

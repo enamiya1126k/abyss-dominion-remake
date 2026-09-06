@@ -1,6 +1,7 @@
-import{mitigateHeroDamage,tryHeroLastStand}from"../core/HeroAllianceSystem.js?v=3.1.37-build357";
+import{isEndgameUltimate,ultimateRemaining,ultimateIsolated,beginUltimateAction}from"../core/EndgameUltimateSystem.js?v=3.1.38-build358";
+import{mitigateHeroDamage,tryHeroLastStand}from"../core/HeroAllianceSystem.js?v=3.1.39-build359";
 import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.11.2-build166";
-import{endgameCharacter}from"../data/endgameCharacters.js?v=2.11.24-build188";
+import{endgameCharacter}from"../data/endgameCharacters.js?v=3.1.38-build358";
 
 const CONTROL_STATUS_IDS=new Set(["sleep","paralysis","freeze","charm","confusion","fear"]);
 const FLOOR_BOSS_NEGATIVE_KINDS=new Set(["stun","spdDown","atkDown","defDown","evasionDown","accuracyDown","vulnerable","healDown","reviveSeal","poison","burn","bleed","curse","paralysis","freeze","shock","sleep"]);
@@ -22,7 +23,7 @@ export function createBattleRulesState(party){
   allyEffects:{},enemyEffects:{},log:["戦闘開始"],lastStatusTurn:0
  }
 }
-export function cooldownRemaining(battle,monsterId,skillId){return battle.cooldowns?.[monsterId]?.[skillId]??0}
+export function cooldownRemaining(battle,monsterId,skillId){return isEndgameUltimate(skillId)?ultimateRemaining(battle,{id:monsterId},skillId):battle.cooldowns?.[monsterId]?.[skillId]??0}
 export function setSkillCooldown(battle,monsterId,skill){if(!skill?.cooldown)return;battle.cooldowns[monsterId]??={};battle.cooldowns[monsterId][skill.id]=skill.cooldown+1}
 export function tickCooldowns(battle){Object.values(battle.cooldowns??{}).forEach(map=>Object.keys(map).forEach(id=>{map[id]=Math.max(0,map[id]-1);if(map[id]===0)delete map[id]}))}
 export function addBattleLog(battle,text){battle.log??=[];battle.log.unshift(text);battle.log=battle.log.slice(0,6)}
@@ -30,10 +31,11 @@ export function enemyStatusesFor(battle,enemyId){battle.enemyStatuses??={};if(Ar
 export function applyEnemyStatus(battle,status,enemyId=battle.targetEnemyId){
  if(!status||!enemyId)return false;const enemy=(battle.enemies??[battle.enemy]).filter(Boolean).find(entry=>entry.id===enemyId);
  if(enemy?.floorBossPassive?.statusImmunities?.includes(status.id)){addBattleLog(battle,`${enemy.name}：${enemy.floorBossPassive.name}が${status.name??status.id}を無効化`);return false}
- const resistance=statusResistance(enemy,status.id,enemy?.bossStatusResist);if(resistance>=1||resistance&&Math.random()<resistance)return false;const statuses=enemyStatusesFor(battle,enemyId),existing=statuses.find(s=>s.id===status.id);if(existing){existing.turns=Math.max(existing.turns,status.turns);existing.power=Math.max(existing.power,status.power)}else statuses.push({...status});upsertControlSkip(battle,enemyId,status.id,status.turns,"enemy");if(enemy?.floorBossPassive?.ailmentMirror)enemy._floorBossAilmentMirrorReady=true;reflectFloorBossNegative(battle,enemy,status);return true
+ if(ultimateIsolated(battle,enemy))return false;const resistance=statusResistance(enemy,status.id,enemy?.bossStatusResist);if(resistance>=1||resistance&&Math.random()<resistance)return false;const statuses=enemyStatusesFor(battle,enemyId),existing=statuses.find(s=>s.id===status.id);if(existing){existing.turns=Math.max(existing.turns,status.turns);existing.power=Math.max(existing.power,status.power)}else statuses.push({...status});upsertControlSkip(battle,enemyId,status.id,status.turns,"enemy");if(enemy?.floorBossPassive?.ailmentMirror)enemy._floorBossAilmentMirrorReady=true;reflectFloorBossNegative(battle,enemy,status);return true
 }
 export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicArmor=false,element=null,damageClass=null,heroRulesApplied=false}={}){
- if(!enemy||enemy.hp<=0)return{beforeHp:Math.max(0,Number(enemy?.hp)||0),damage:0,requested:0};
+ if(!enemy||enemy.hp<=0||ultimateIsolated(battle,enemy))return{beforeHp:Math.max(0,Number(enemy?.hp)||0),damage:0,requested:0};
+ const previous358=battle._ultimateAction358;const source358=(battle.party??[]).find(u=>u.id===sourceId)??(battle.enemies??[]).find(u=>u.id===sourceId);beginUltimateAction(battle,source358,{element,damageClass},{direct:Boolean(sourceId&&!String(sourceId).startsWith('status:'))});
  const requested=Math.max(0,Math.floor(Number(amount)||0)),beforeHp=enemy.hp;
  const heroEquipmentReduction=heroRulesApplied?0:Math.min(.75,Math.max(0,Number(enemy._affixes?.damageReduction)||0)/100+(enemy.heroSignature348?.damageReduction??0));
  let damage=mitigateHeroDamage(battle,"enemy",enemy,Math.floor(requested*(1-heroEquipmentReduction))),convertedFortressShield=0,armorLayersAtHit=0;
@@ -98,7 +100,7 @@ export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicA
  if(applied>0&&domain.effect==="erosion"&&!enemy._floorBossErosionTriggered){enemy._floorBossDomainHits=(enemy._floorBossDomainHits??0)+1;if(enemy._floorBossDomainHits>=Math.max(1,Number(domain.hitThreshold)||4)){enemy._floorBossErosionTriggered=true;enemy.def=Math.max(0,Math.floor(enemy.def*Math.max(.1,Number(domain.defRate)||1)));enemy.mdef=Math.max(0,Math.floor((enemy.mdef??enemy.def)*Math.max(.1,Number(domain.defRate)||1)));enemy.atk=Math.max(1,Math.floor(enemy.atk*Math.max(1,Number(domain.atkRate)||1)));enemy.matk=Math.max(1,Math.floor((enemy.matk??enemy.atk)*Math.max(1,Number(domain.atkRate)||1)));addBattleLog(battle,`${domain.name}：装甲決壊・攻撃転化`)}}
  if(applied>0&&domain.effect==="siegeHeat"&&!enemy._floorBossPowerReady){enemy._floorBossHeat=(enemy._floorBossHeat??0)+1;if(enemy._floorBossHeat>=Math.max(1,Number(domain.hitThreshold)||5)){enemy._floorBossPowerReady=true;addBattleLog(battle,`${domain.name}：熱量最大・次撃強化`)}}
  for(const[index,phase]of(passive.phaseBuffs??[]).entries())if(!enemy._floorBossPhaseBuffs?.includes(index)&&beforeHp/Math.max(1,enemy.maxHp)>phase.hp&&enemy.hp/Math.max(1,enemy.maxHp)<=phase.hp){enemy._floorBossPhaseBuffs??=[];enemy._floorBossPhaseBuffs.push(index);enemy.atk=Math.max(1,Math.floor(enemy.atk*(1+(Number(phase.atk)||0))));enemy.matk=Math.max(1,Math.floor((enemy.matk??enemy.atk)*(1+(Number(phase.atk)||0))));enemy.def=Math.max(0,Math.floor(enemy.def*(1+(Number(phase.def)||0))));enemy.mdef=Math.max(0,Math.floor((enemy.mdef??enemy.def)*(1+(Number(phase.def)||0))));enemy.divineBarrier=Math.max(enemy.divineBarrier??0,Number(phase.barrier)||0);addBattleLog(battle,`${enemy.name}：${passive.name}・第${index+1}律解放`)}
- return{beforeHp,damage:applied,requested};
+ battle._ultimateAction358=previous358;return{beforeHp,damage:applied,requested};
 }
 export function processEnemyStatuses(battle){const results=[];(battle.enemies??[battle.enemy]).filter(Boolean).forEach(enemy=>{const statuses=enemyStatusesFor(battle,enemy.id);battle.enemyStatuses[enemy.id]=statuses.filter(status=>{let requested=0;if(["poison","burn","bleed"].includes(status.id))requested=Math.max(1,Math.floor(enemy.maxHp*status.power));if(requested){const hit=applyEnemyDamage(battle,enemy,requested,{sourceId:status.sourceMonsterId??`status:${status.id}`});results.push({enemy,id:status.id,name:status.name,damage:hit.damage,beforeHp:hit.beforeHp,sourceMonsterId:status.sourceMonsterId??null})}status.turns--;return status.turns>0&&enemy.hp>0})});return results}
 export function statusLabel(status){const turns=Math.max(0,Number(status?.turns)||0);return turns?`${status.name} ${turns}T`:String(status?.name??status?.id??"")}
@@ -128,6 +130,7 @@ export function syncPersistentAilments(battle,targetId=null){
 export function clearPersistentAilments(battle,targetId){battle.allyAilments??={};battle.allyAilments[targetId]=[];battle.allyEffects??={};battle.allyEffects[targetId]=(battle.allyEffects[targetId]??[]).filter(effect=>!effect.sourceStatusId);syncPersistentAilments(battle,targetId)}
 export function applyBattleEffect(battle,targetId,effect,targetType="ally"){
  if(!effect||!targetId)return false;
+ const isolatedTarget=(targetType==="enemy"?battle.enemies:battle.party)?.find(u=>u.id===targetId);if(ultimateIsolated(battle,isolatedTarget))return false;
  const persistentId=effect.id??effect.kind;
  if(targetType==="ally"&&isPersistentStatus(persistentId))return applyPersistentAilment(battle,targetId,{...effect,id:persistentId});
  const target=targetType==="enemy"?(battle.enemies??[battle.enemy]).filter(Boolean).find(entry=>entry.id===targetId):(battle.party??[]).find(entry=>entry.id===targetId);
@@ -145,6 +148,6 @@ export function effectStackBreakdown(battle,targetId,kind,targetType="ally"){
 }
 export function effectValue(battle,targetId,kind,targetType="ally"){return effectStackBreakdown(battle,targetId,kind,targetType).reduce((sum,effect)=>sum+effect.applied,0)}
 export function hasEffect(battle,targetId,kind,targetType="ally"){const effects=targetType==="enemy"?enemyEffectsFor(battle,targetId):allyEffectsFor(battle,targetId);return effects.some(e=>e.kind===kind)||(targetType==="ally"&&allyAilmentsFor(battle,targetId).some(e=>e.id===kind||e.kind===kind))}
-export function clearNegativeAllyEffects(battle,id){battle.allyEffects??={};battle.allyEffects[id]=(battle.allyEffects[id]??[]).filter(e=>!["atkDown","defDown","spdDown","evasionDown","accuracyDown","poison","burn","stun","vulnerable","healDown","reviveSeal"].includes(e.kind))}
+export function clearNegativeAllyEffects(battle,id){battle.allyEffects??={};battle.allyEffects[id]=(battle.allyEffects[id]??[]).filter(e=>!["authorityPossession","atkDown","defDown","spdDown","evasionDown","accuracyDown","poison","burn","stun","vulnerable","healDown","reviveSeal"].includes(e.kind))}
 export function tickBattleEffects(battle){for(const key of["allyEffects","enemyEffects"]){for(const[id,list]of Object.entries(battle[key]??{}))battle[key][id]=list.filter(e=>{e.turns--;return e.turns>0})}}
 export function processAllyEffects(battle,statsFor){const results=[];for(const m of battle.party??[]){if(m.currentHp<=0)continue;const effects=allyEffectsFor(battle,m.id),ailments=allyAilmentsFor(battle,m.id),max=statsFor(m).hp,healFactor=Math.max(.1,1-Math.min(.9,effectValue(battle,m.id,"healDown")));for(const e of effects){if(e.kind==="regen"){const amount=Math.max(1,Math.floor(max*(e.value??.1)*healFactor)),before=m.currentHp;m.currentHp=Math.min(max,m.currentHp+amount);results.push({monster:m,kind:"heal",amount:m.currentHp-before})}}for(const e of ailments){if(!["poison","burn","bleed"].includes(e.id)||!(Number(e.power)>0))continue;const abyssTaken=Math.max(0,1+(Number(m._abyssSkillEffects?.partyDamageTakenRate)||0)),equipmentTaken=1-Math.max(0,Math.min(.75,(Number(m._equipmentAffixes?.damageReduction)||0)/100)),amount=mitigateHeroDamage(battle,"ally",m,Math.max(1,Math.floor(max*Number(e.power)*abyssTaken*equipmentTaken))),before=m.currentHp;m.currentHp=Math.max(0,m.currentHp-amount);tryHeroLastStand(battle,"ally",m,before);results.push({monster:m,kind:e.id,amount})}}syncPersistentAilments(battle);return results}

@@ -1,7 +1,8 @@
-import{campaignHeroSkillInfo,campaignHeroSkillCost,chooseCampaignHeroSkill}from'./CampaignHeroSkillSystem.js?v=3.1.37-build357';
+import{isEndgameUltimate}from"../data/endgameUltimates.js?v=3.1.38-build358";
+import{campaignHeroSkillInfo,campaignHeroSkillCost,chooseCampaignHeroSkill}from'./CampaignHeroSkillSystem.js?v=3.1.39-build359';
 import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=3.1.1-build311";
-import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=3.1.1-build311";
-import{speciesLevelStats}from"../models/Monster.js?v=3.1.37-build357";
+import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=3.1.38-build358";
+import{speciesLevelStats}from"../models/Monster.js?v=3.1.39-build359";
 import{floorBossActionInfo}from"../data/floorBosses.js?v=3.1.1-build311";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
@@ -104,7 +105,7 @@ function specialAction(enemy,hpRate){
  if(enemy.specialCooldown>0)return null;
  const profile=endgameCharacter(enemy.endgameBossId);
  if(profile){
-  const authorities=profile.skills.slice(1),useUltimate=hpRate<=.32&&!enemy.authorityUltimateUsed||((enemy.authorityUses??0)+1)%5===0,index=useUltimate?authorities.length-1:(enemy.authorityIndex??0)%Math.max(1,authorities.length-1),skill=authorities[index];
+  const authorities=profile.skills.slice(1).filter(s=>!isEndgameUltimate(s)),useUltimate=hpRate<=.32&&!enemy.authorityUltimateUsed||((enemy.authorityUses??0)+1)%5===0,index=useUltimate?authorities.length-1:(enemy.authorityIndex??0)%Math.max(1,authorities.length-1),skill=authorities[index];
   if(skill&&Math.random()<(enemy.faction==="tenGod"?.52:.46)){enemy.authorityIndex=(index+1)%Math.max(1,authorities.length-1);enemy.authorityUses=(enemy.authorityUses??0)+1;if(useUltimate)enemy.authorityUltimateUsed=true;setEnemySpecialCooldown(enemy,Math.max(1,Math.min(4,Number(skill.cooldown)||2)));enemy.intent=`${skill.name}を発動`;return`authority:${skill.id}`}
   return null;
  }

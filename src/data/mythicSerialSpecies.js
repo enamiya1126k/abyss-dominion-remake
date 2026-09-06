@@ -1,3 +1,4 @@
+import {heroResonanceProfile,HERO_RESONANCE_FOLLOWUP_POWER} from '../core/HeroResonanceSystem.js?v=3.1.39-build359';
 export const HERO_SOLO_DAMAGE_RATES=Object.freeze({myth_enami:.35,myth_yori:.25,myth_rion:.50,myth_hide:.35});
 const unlock=value=>({type:"level",value});
 const skill=(id,name,{level=1,mp=8,type="attack",power=1.5,target="敵単体",description="",...extra}={})=>({
@@ -11,7 +12,7 @@ function mythic({id,name,element,role,maxMp,stats,skills}){
     acquisition:["専用シリアルコード限定"],growth:{hp:1,atk:1,def:1,spd:1},baseStats:stats,
     rankNames:[name,`${name}・覚醒`,`${name}・神話`,`${name}・極`],skills:[skills[0]],authoredSkills:skills,
     soloDamageRate:HERO_SOLO_DAMAGE_RATES[id],
-    passiveDescription:`勇者の胆力：生存する勇者が自分1人なら被ダメージ30%軽減・与ダメージ${Math.round(HERO_SOLO_DAMAGE_RATES[id]*100)}%。勇者2人以上で本来の火力を発揮。`+(id==="myth_yori"?"被弾で攻撃20%上昇（3ターン・重複なし）。":""),
+    passiveDescription:`勇者の胆力：生存する勇者が自分1人なら被ダメージ30%軽減・与ダメージ${Math.round(HERO_SOLO_DAMAGE_RATES[id]*100)}%。勇者2人以上では1回の与ダメージを分配して共鳴連携（${[2,3,4].map(n=>`${n}人：${Math.round(heroResonanceProfile(n).outgoingDamageRate*100)}%`).join('／')}）。追撃の威力・回復・強化は通常技の${Math.round(HERO_RESONANCE_FOLLOWUP_POWER*100)}%。4人なら最大16行動・被ダメージ${Math.round(heroResonanceProfile(4).damageReduction*100)}%軽減。`+(id==="myth_yori"?"被弾で攻撃20%上昇（3ターン・重複なし）。":""),
     tags:["mythicSerial","invincibleAlliance"]
   });
 }

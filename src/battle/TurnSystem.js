@@ -1,7 +1,8 @@
-import{calculatedStats,displayName}from"../models/Monster.js?v=3.1.37-build357";
+import{ultimateIsolated}from"../core/EndgameUltimateSystem.js?v=3.1.38-build358";
+import{calculatedStats,displayName}from"../models/Monster.js?v=3.1.39-build359";
 
 export function aliveEnemies(battle){return (battle.enemies??[battle.enemy]).filter(Boolean).filter(enemy=>enemy.hp>0)}
-export function selectedEnemy(battle){const alive=aliveEnemies(battle);let target=alive.find(e=>e.id===battle.targetEnemyId);if(!target){target=alive[0]??null;battle.targetEnemyId=target?.id??null}return target}
+export function selectedEnemy(battle){const alive=aliveEnemies(battle).filter(u=>!ultimateIsolated(battle,u));let target=alive.find(e=>e.id===battle.targetEnemyId);if(!target){target=alive[0]??null;battle.targetEnemyId=target?.id??null}return target}
 function battleParty(battle){return(Array.isArray(battle?.party)?battle.party:[]).filter(monster=>monster&&typeof monster==="object"&&monster.id)}
 function effectsFor(battle,type,id){return(type==="enemy"?battle.enemyEffects:battle.allyEffects)?.[id]??[]}
 function effectAmount(battle,type,id,kind){return effectsFor(battle,type,id).filter(effect=>effect.kind===kind).reduce((value,effect)=>Math.max(value,Number(effect.value??1)||0),0)}

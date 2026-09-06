@@ -1,6 +1,7 @@
-import {MYTHIC_SERIAL_SPECIES} from '../data/mythicSerialSpecies.js?v=3.1.37-build357';
+import{ultimateIsolated,ultimateExtraBlocked,afterUltimateOrdinary}from"./EndgameUltimateSystem.js?v=3.1.38-build358";
+import {MYTHIC_SERIAL_SPECIES} from '../data/mythicSerialSpecies.js?v=3.1.39-build359';
 import {attributeDamageMultiplier} from '../data/attributes.js';
-import {heroResonanceMembers,heroResonanceProfile,scaleHeroResonanceSkill,isHeroResonanceSpecies} from './HeroResonanceSystem.js?v=3.1.35-build355';
+import {heroResonanceMembers,heroResonanceProfile,scaleHeroResonanceSkill,isHeroResonanceSpecies} from './HeroResonanceSystem.js?v=3.1.39-build359';
 
 // One rules implementation for browser allies, campaign enemies and online actors.
 export const HERO_ORDER=Object.freeze(['myth_rion','myth_enami','myth_hide','myth_yori']);
@@ -24,7 +25,7 @@ export function heroAllianceState(b,side){
  s.limit=heroResonanceProfile(heroSideUnits(b,side)).totalActions;return s;
 }
 export function reserveHeroAction(b,side,u,{followup=false}={}){
- const s=heroAllianceState(b,side),id=heroId(u);if(heroHp(u)<=0)return false;
+ const s=heroAllianceState(b,side),id=heroId(u);if(heroHp(u)<=0||ultimateIsolated(b,u)||followup&&ultimateExtraBlocked(b,u))return false;
  if(s.actions>=s.limit)return false;
  // All normal, resonance and emergency actions share the current n² budget.
  if(!followup&&s.regular.includes(id))return false;
@@ -108,8 +109,8 @@ export function runHeroAllianceAction(b,side,u,skill,env={},options={}){
   const weakness=skill.bonusPerDebuff?1+Math.min(skill.debuffBonusCap??1,heroEffects(b,target,opposite).filter(e=>!HERO_POSITIVE.has(e.kind)&&(e.turns??1)>0).length*skill.bonusPerDebuff):1;
   const raw=Math.max(1,(magic?(a.matk??a.atk):a.atk)*af*power-(magic?(d.mdef??d.def):d.def)*df*(1-ignore)*.3);
   const element=skill.element??definition?.element??u.element??'neutral',targetElement=target.element??target.attribute??MYTHIC_SERIAL_SPECIES[target.speciesId]?.element??'neutral';
-  const soloDamageRate=isHeroResonanceSpecies(u.speciesId)&&heroResonanceProfile(allies).count===1?(definition.soloDamageRate??1):1;
-  const damage=Math.max(1,Math.floor(raw*soloDamageRate*bonus*weakness*((signature?.damageMultiplier??1)+chain*(signature?.damagePerStack??0))*(critical?1.65+(a._affixes?.critDamage??0)/100:1)*attributeDamageMultiplier(element,targetElement)*(1+heroEffect(b,target,opposite,'vulnerable'))*(1+(a._affixes?.skillPower??0)/100)));
+  const profile=heroResonanceProfile(allies),outgoingDamageRate=isHeroResonanceSpecies(u.speciesId)?(profile.count===1?(definition.soloDamageRate??1):(profile.outgoingDamageRate??1)):1;
+  const damage=Math.max(1,Math.floor(raw*outgoingDamageRate*bonus*weakness*((signature?.damageMultiplier??1)+chain*(signature?.damagePerStack??0))*(critical?1.65+(a._affixes?.critDamage??0)/100:1)*attributeDamageMultiplier(element,targetElement)*(1+heroEffect(b,target,opposite,'vulnerable'))*(1+(a._affixes?.skillPower??0)/100)));
   const targetSignature=target.heroSignature348??target.signatureResonance,defenderAffixes=d._affixes??target.equipmentCombatEffects??{};
   const protector=heroSideUnits(b,opposite).find(x=>x!==target&&heroHp(x)>0&&(x.heroSignature348??x.signatureResonance)?.id==='hide-guardian'&&heroHp(target)/Math.max(1,d.hp??target.maxHp)<=(x.heroSignature348??x.signatureResonance).lowHpThreshold);
   const reduction=Math.min(.75,(Math.max(0,defenderAffixes.damageReduction??0)/100)+(targetSignature?.damageReduction??0));
@@ -131,7 +132,7 @@ export function runHeroAllianceAction(b,side,u,skill,env={},options={}){
  if(skill.extendPartyBuffs&&!state.extended){state.extended=true;for(const target of alive())for(const e of heroEffects(b,target,side))if(HERO_POSITIVE.has(e.kind)&&(e.turns??0)>0)e.turns=Math.min(5,e.turns+1);emit('heroUtility',u,1,{label:'強化を1ターン延長'})}
  // Existing signature support/chain powers use the same scaled definition.
  if(signature?.id==='rion-care'&&['revive','allHeal'].includes(skill.type))for(const target of alive()){target.heroShield348=Math.max(target.heroShield348??0,Math.floor((stats(target).hp??target.maxHp)*(signature.shieldRate??0)*(options.followup?.7:1)));setHeroMp(target,Math.min(target.maxMp,heroMp(target)+Math.floor(target.maxMp*(signature.mpRate??0)*(options.followup?.7:1))))}
- env.onSkill?.(u,original,options);drainHeroReactions(b,env);
+ env.onSkill?.(u,original,options);if(!options.followup&&original)afterUltimateOrdinary(b,u,original);drainHeroReactions(b,env);
  if(!options.followup&&foes().length){triggerHeroAlliance(b,side,u,env);if(original&&heroHp(u)>0&&(signature?.extraActionChance??0)>0&&!state.signatureExtra.includes(actorId)&&random()<signature.extraActionChance){state.signatureExtra.push(actorId);runHeroAllianceAction(b,side,u,chooseHeroAllianceSkill(b,side,u,{free:true}),env,{followup:true})}}
  return true;
 }

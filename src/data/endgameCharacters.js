@@ -1,3 +1,4 @@
+import {ENDGAME_ULTIMATES} from "./endgameUltimates.js?v=3.1.38-build358";
 /*
  * 深淵七柱・十神十柱 Character Bible。
  * 表示、契約スキル、敵AI、固有装備、試練が同じ正本を参照する。
@@ -14,10 +15,11 @@ function character(source){
  const prefix=source.faction==="abyss"?`深淵${source.numeral}`:`十神${source.numeral}`;
  const name=`${prefix} ${source.epithet}`;
  const skills=[source.basic,...source.authorities].map((skill,index)=>({...skill,id:`endgame__${source.id}__${skill.key}`,unlock:{type:"level",value:1},element:skill.element??source.element,damageClass:skill.damageClass??source.damageClass??"magic",tag:skill.tag??(index===0?"固有基本":"権能")}));
+ const extraSkill=ENDGAME_ULTIMATES[source.id];if(extraSkill)skills.push({...extraSkill,element:source.element,damageClass:source.damageClass??"magic"});
  const weaponSkill=source.signatureWeapon?.skill?{...source.signatureWeapon.skill,id:`endgame_weapon__${source.id}__${source.signatureWeapon.skill.key}`,equipmentGranted:true,unlock:{type:"equipment",value:1},element:source.signatureWeapon.skill.element??source.element,damageClass:source.signatureWeapon.skill.damageClass??source.damageClass??"magic"}:null;
  const signatureWeapon=source.signatureWeapon?{...source.signatureWeapon,skill:weaponSkill}:null;
  const gear=equipment(source.gearNames,source.gearEffects);
- return{...source,signatureWeapon,name,shortName:source.epithet,title:source.title??source.role,skills,signature:skills.at(-1).name,signatureName:skills.at(-1).name,gear,gearNames:{weapon:gear[0].name,armor:gear[4].name,accessory:gear[2].name},resistances:Object.entries(source.elementMultipliers).map(([element,multiplier])=>`${element} ${Math.round(multiplier*100)}%`).concat((source.statusProfile.immune??[]).map(id=>`${id}無効`)),reward:`${source.epithet}の欠片・${source.epithet}シリーズ`};
+ return{...source,signatureWeapon,name,shortName:source.epithet,title:source.title??source.role,skills,signature:source.authorities.at(-1).name,signatureName:source.authorities.at(-1).name,gear,gearNames:{weapon:gear[0].name,armor:gear[4].name,accessory:gear[2].name},resistances:Object.entries(source.elementMultipliers).map(([element,multiplier])=>`${element} ${Math.round(multiplier*100)}%`).concat((source.statusProfile.immune??[]).map(id=>`${id}無効`)),reward:`${source.epithet}の欠片・${source.epithet}シリーズ`};
 }
 
 const RAW=[

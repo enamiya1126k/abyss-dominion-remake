@@ -1,15 +1,17 @@
-import{HERO_SOLO_DAMAGE_RATES}from"../../data/mythicSerialSpecies.js?v=3.1.37-build357";
-import{BATTLE_ITEM_LAYOUT}from"./BattleItemLayout.js?v=3.1.34-build354";
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.37-build357";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.37-build357";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.37-build357";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.37-build357";
-import{monsterVisual}from"../MonsterVisual.js?v=3.1.20-build339";
+import{enemyMagicCircleMarkup}from"../../core/MagicCircleSystem.js";
+import{ultimateCircle,ultimateLabels,ultimateIsolated,ultimateAvailability,ultimateBasicOnly,isEndgameUltimate}from"../../core/EndgameUltimateSystem.js?v=3.1.38-build358";
+import{HERO_SOLO_DAMAGE_RATES}from"../../data/mythicSerialSpecies.js?v=3.1.39-build359";
+import{BATTLE_ITEM_LAYOUT}from"./BattleItemLayout.js?v=3.1.38-build358";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.39-build359";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.39-build359";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.39-build359";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.39-build359";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.38-build358";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.37-build357";
+import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.39-build359";
 import{ATTRIBUTE_MATCHUP_MULTIPLIERS,attributesEffectiveAgainst,attributesIneffectiveAgainst}from"../../data/attributes.js?v=3.1.1-build311";
-import{heroResonanceProfile,isHeroResonanceSpecies}from"../../core/HeroResonanceSystem.js?v=3.1.35-build355";
+import{heroResonanceProfile,isHeroResonanceSpecies}from"../../core/HeroResonanceSystem.js?v=3.1.39-build359";
 
 function battleInteger(value){return Math.round(Number(value)||0).toLocaleString("ja-JP")}
 function battleParty(battle){return(Array.isArray(battle?.party)?battle.party:[]).filter(monster=>monster&&typeof monster==="object"&&monster.id&&monster.speciesId)}
@@ -28,9 +30,11 @@ const BATTLE_ROLE_LABELS={
  balanced:"万能型",burst:"高火力型",bruiser:"打撃型",controller:"妨害型",control:"制圧型",support:"支援型",speed:"高速型",tank:"防御型",healer:"回復型",magic:"魔法型",physical:"物理型",debuffer:"弱体型",poison:"毒撃型",burner:"炎撃型",assassin:"暗殺型",ambush:"奇襲型",counter:"反撃型",critical:"会心型",drain:"吸収型",hybrid:"複合型",ranged:"遠距離型",sovereign:"支配型",member:"戦闘員",striker:"攻撃型",guardian:"守護型",
  attrition:"持久戦型","guardian-counter":"守護反撃型","magic-tactician":"魔法戦術型","physical-striker":"物理攻撃型","support-controller":"支援妨害型",subboss:"準ボス"
 };
-const BATTLE_EFFECT_LABELS={guaranteedCritical:"確定会心",guaranteedHit:"必中",critUp:"会心率↑",reviveSeal:"蘇生封印",atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",evasionDown:"回避↓",accuracyDown:"命中↓",healDown:"回復↓",mpRecoveryDown:"MP回復↓",stun:"行動不能",vulnerable:"被ダメージ増加",taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",evasionUp:"回避↑",accuracyUp:"命中↑",regen:"再生",lifeSteal:"吸収",magicToPhysical:"魔力→物理"};
+const BATTLE_EFFECT_LABELS={authorityPossession:"王命上書き",guaranteedCritical:"確定会心",guaranteedHit:"必中",critUp:"会心率↑",reviveSeal:"蘇生封印",atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",evasionDown:"回避↓",accuracyDown:"命中↓",healDown:"回復↓",mpRecoveryDown:"MP回復↓",stun:"行動不能",vulnerable:"被ダメージ増加",taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",evasionUp:"回避↑",accuracyUp:"命中↑",regen:"再生",lifeSteal:"吸収",magicToPhysical:"魔力→物理"};
 function battleRoleLabel(role){return BATTLE_ROLE_LABELS[String(role??"balanced").toLowerCase()]??String(role??"万能型")}
 function soloHeroBadge(battle,unit,side){return isHeroResonanceSpecies(unit?.speciesId)&&heroResonanceProfile(side==="enemy"?battle.enemies:battle.party).count===1?`<span class="status-chip guard" title="生存する勇者が1人：被ダメージ30%軽減・与ダメージ${Math.round(HERO_SOLO_DAMAGE_RATES[unit.speciesId]*100)}%">勇者の胆力・軽減30%</span><span class="status-chip guard">単独火力 ${Math.round(HERO_SOLO_DAMAGE_RATES[unit.speciesId]*100)}%</span>`:"";}
+function circleArt358(b,u,original,ally=false){const borrowed=(b.ultimates358?.effects??[]).some(e=>e.kind==='borrow'&&!e.done&&(e.source===u.id||e.targets?.includes(u.id)));if(!borrowed)return original;return enemyMagicCircleMarkup(ultimateCircle(b,u,ally?b.magicCircleProfiles?.[u.id]:u.enemyMagicCircle),{className:ally?'battle-magic-circle':'enemy-battle-magic-circle'})}
+function ultimateBadges358(battle,unit){return ultimateLabels(battle,unit).map(label=>`<span class="status-chip ultimate-authority">${htmlText(label)}</span>`).join("")}
 function battleEffectLabel(effect){return BATTLE_EFFECT_LABELS[effect?.kind]??effect?.name??"特殊効果"}
 function battleStatusLabel(status){const labels={poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖"};return labels[status?.id]??status?.name??statusLabel(status)}
 function remainingTurns(turns,persistent=false){const value=Math.max(0,Number(turns)||0);return value?` 残${value}`:persistent?"・持続":""}
@@ -60,15 +64,15 @@ function hpBar(battle,id,rate,label,tone){
 function renderEnemies(battle,enemies,target){
  return enemies.filter(Boolean).map((enemy,index)=>{
   const statuses=enemyStatusesFor(battle,enemy.id),effects=enemyEffectsFor(battle,enemy.id);
-  const statusHtml=`<div class="status-row enemy-status-row" data-status-detail="${enemy.id}" ${statuses.length||effects.length||soloHeroBadge(battle,enemy,"enemy")?"":'aria-hidden="true"'}>${soloHeroBadge(battle,enemy,"enemy")}${statuses.map(s=>`<span class="status-chip ${s.id}">${battleStatusLabel(s)}${remainingTurns(s.turns)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
+  const statusHtml=`<div class="status-row enemy-status-row" data-status-detail="${enemy.id}" ${statuses.length||effects.length||ultimateBadges358(battle,enemy)||soloHeroBadge(battle,enemy,"enemy")?"":'aria-hidden="true"'}>${ultimateBadges358(battle,enemy)}${soloHeroBadge(battle,enemy,"enemy")}${statuses.map(s=>`<span class="status-chip ${s.id}">${battleStatusLabel(s)}${remainingTurns(s.turns)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
   const floorBoss=Boolean(enemy.floorBossCatalogId||enemy.boss&&enemy.campaignBossId&&!enemy.endgameBossId),endgameBoss=Boolean(enemy.endgameBossId||["abyss","tenGod"].includes(enemy.faction)),badge=enemy.boss?`<span class="boss-badge">${floorBoss?"階層BOSS":endgameBoss?(enemy.faction==="tenGod"?"十神":"深淵"):"BOSS"}</span>`:enemy.elite?`<span class="elite-badge">${htmlText(enemy.eliteAffixIcon??"🜲")} 強敵・${htmlText(enemy.eliteAffixName??"変異")}</span>`:"",safeName=htmlText(enemy.name);const danger="";
   const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
   const line=index<2?"front-line":"rear-line";
   const dead=enemy.hp<=0,pendingKo=dead&&(battle.presentationKoIds??[]).map(String).includes(String(enemy.id)),element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",rank=combatRank(enemy,battle.species?.[enemy.speciesId])??"N",rankClass=floorBoss?"combat-rank-unit rank-floor-boss":`combat-rank-unit rank-${rankTone(rank)}`,rankMarkup=enemy.boss?"":rankBadge(rank),floatingName=`<span class="battle-unit-floating-name battle-unit-floating-badges">${badge}${rankMarkup}<b title="${safeName}">${safeName}</b></span>`;
-  return `<button id="enemy-${enemy.id}" ${dead?`disabled${pendingKo?"":' aria-hidden="true"'}`:`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${pendingKo?"presentation-ko-pending":""} ${enemy.boss?"boss-enemy":""} ${enemy.raidMainBoss?"raid-main-boss":""} ${enemy.raidSubBoss?"raid-sub-boss":""} ${floorBoss?"floor-boss-enemy":""} ${enemy.elite?"elite-enemy":""} ${rankClass} ${target?.id===enemy.id?"targeted":""}">
+  return `<button id="enemy-${enemy.id}" ${dead||ultimateIsolated(battle,enemy)?`disabled${dead&&!pendingKo?' aria-hidden="true"':""}`:`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${pendingKo?"presentation-ko-pending":""} ${enemy.boss?"boss-enemy":""} ${enemy.raidMainBoss?"raid-main-boss":""} ${enemy.raidSubBoss?"raid-sub-boss":""} ${floorBoss?"floor-boss-enemy":""} ${endgameBoss?"party-floor-boss endgame-boss-art":""} ${enemy.elite?"elite-enemy":""} ${rankClass} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
    ${enemy.boss?"":floatingName}
-   <div class="side-unit-sprite enemy-orb">${battle.enemyMagicCircleArt?.[enemy.id]??""}${enemy.boss?floatingName:""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.visualFrame??(enemy.hp<=0&&!pendingKo?"down":"idle"),className:"battle-enemy-visual"})}</div>
+   <div class="side-unit-sprite enemy-orb">${circleArt358(battle,enemy,battle.enemyMagicCircleArt?.[enemy.id]??"")}${enemy.boss?floatingName:""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.visualFrame??(enemy.hp<=0&&!pendingKo?"down":"idle"),className:"battle-enemy-visual",partyArt:endgameBoss})}</div>
    <div class="side-unit-card enemy-info">
     <div class="side-unit-name enemy-name ${enemy.boss?"boss-meta-only":""}">${danger}${enemy.boss?"":`<b class="enemy-card-name" title="${safeName}">${safeName}</b>`}<span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
@@ -85,15 +89,15 @@ function renderEnemies(battle,enemies,target){
 function renderParty(battle,actor){
  return battleParty(battle).map((m,index)=>{
  const stats=unitStats(m),mp=unitMaxMp(m),need=expNeedFor(m);
- const circle=battle.magicCircleProfiles?.[m.id]??null,circleName=circle?.name??"魔法陣なし",circleLevel=Math.max(0,Number(circle?.level)||0);
- const ailments=allyAilmentsFor(battle,m.id),effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" data-status-detail="${m.id}" ${ailments.length||effects.length||soloHeroBadge(battle,m,"ally")?"":'aria-hidden="true"'}>${soloHeroBadge(battle,m,"ally")}${ailments.map(e=>`<span class="status-chip ${e.id}">${battleStatusLabel(e)}${remainingTurns(e.turns,true)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
+ const circle=ultimateCircle(battle,m,battle.magicCircleProfiles?.[m.id]??null),circleName=circle?.name??"魔法陣なし",circleLevel=Math.max(0,Number(circle?.level)||0);
+ const ailments=allyAilmentsFor(battle,m.id),effects=allyEffectsFor(battle,m.id),effectHtml=`<div class="status-row ally-status-row" data-status-detail="${m.id}" ${ailments.length||effects.length||ultimateBadges358(battle,m)||soloHeroBadge(battle,m,"ally")?"":'aria-hidden="true"'}>${ultimateBadges358(battle,m)}${soloHeroBadge(battle,m,"ally")}${ailments.map(e=>`<span class="status-chip ${e.id}">${battleStatusLabel(e)}${remainingTurns(e.turns,true)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
   const hpRate=Math.max(0,Math.min(100,m.currentHp/Math.max(1,stats.hp)*100)),mpRate=Math.max(0,Math.min(100,m.currentMp/Math.max(1,mp)*100));
   const line=index<2?"front-line":"rear-line",element=m.attribute??battle.species?.[m.speciesId]?.element??"neutral",rank=combatRank(m,battle.species?.[m.speciesId]),rankClass=rank?`combat-rank-unit rank-${rankTone(rank)}`:"";
-  const formerFloorBoss=Boolean(m.floorBossCatalogId||m.floorBossId||m.obtainedMethod==="floorBossContract");
+  const formerFloorBoss=Boolean(m.floorBossCatalogId||m.floorBossId||m.obtainedMethod==="floorBossContract"||m.endgameBossId);
   return `<button id="ally-${m.id}" data-battle-detail="${m.id}" ${battle.onlineMode?`data-online-ally-target="${m.id}"`:""} style="--formation-index:${index};--unit-color:${colorValue(m)}" class="battle-unit combatant side-battle-unit formation-slot-${index+1} ${line} ${formerFloorBoss?"party-floor-boss":""} ${rankClass} ${battle.onlineMode&&battle.onlineSelectedAlly===m.id?"online-selected-ally":""} ${actor?.id===m.id?"active":""} ${m.currentHp<=0?"dead":""}">
    <span class="active-turn-marker" aria-hidden="true">行動中</span>
    ${formerFloorBoss?"":`<span class="battle-unit-floating-name">${rankBadge(rank)}<b>${unitName(m)}</b></span>`}
-   <div class="side-unit-sprite unit-orb">${battle.magicCircleArt?.[m.id]??""}${formerFloorBoss?`<span class="battle-unit-floating-name">${rankBadge(rank)}<b>${unitName(m)}</b></span>`:""}${monsterVisual(m,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual",partyArt:true})}</div>
+   <div class="side-unit-sprite unit-orb">${circleArt358(battle,m,battle.magicCircleArt?.[m.id]??"",true)}${formerFloorBoss?`<span class="battle-unit-floating-name">${rankBadge(rank)}<b>${unitName(m)}</b></span>`:""}${monsterVisual(m,battle.species?.[m.speciesId]?.emoji??"●",{frame:m.currentHp<=0?"down":"idle",className:"battle-ally-visual",partyArt:true})}</div>
    <div class="side-unit-card ally-info">
     <div class="side-unit-name unit-head"><small>Lv.${battleInteger(m.level)}</small><em class="battle-unit-growth">${growthText(m)}</em>${equipmentAuthorityBadge(m)}<i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="side-unit-intent ally-circle-intent"><span>${circleLevel?`魔法陣 Lv.${circleLevel}`:"魔法陣"}</span><b>${circleName}</b></div>
@@ -109,8 +113,8 @@ function renderParty(battle,actor){
 
 function renderSkills(battle,actor,skills){
  const rows=skills.map(skill=>{
-  const cd=Math.max(0,Number(cooldownRemaining(battle,actor.id,skill.id))||0),baseCd=Math.max(0,Number(skill.cooldown)||0),mpCost=skillMpCost(actor,skill),disabled=actor.currentMp<mpCost||cd>0;
-  const cooldownLabel=baseCd>0?`CT ${baseCd}`:"CTなし",stateLabel=cd>0?`再使用まで ${cd}`:actor.currentMp<mpCost?"MP不足":"使用可能";
+  const ultimate358=isEndgameUltimate(skill)?ultimateAvailability(battle,actor,skill.id):null,cd=Math.max(0,Number(cooldownRemaining(battle,actor.id,skill.id))||0),baseCd=Math.max(0,Number(skill.cooldown)||0),mpCost=skillMpCost(actor,skill),disabled=actor.currentMp<mpCost||cd>0||ultimate358&&!ultimate358.ok||ultimateBasicOnly(battle,actor);
+  const cooldownLabel=baseCd>0?`CT ${baseCd}`:"CTなし",stateLabel=ultimate358&&!ultimate358.ok?htmlText(ultimate358.reason):ultimateBasicOnly(battle,actor)?"領域中は通常攻撃のみ":cd>0?`再使用まで ${cd}`:actor.currentMp<mpCost?"MP不足":"使用可能";
   const details=[...(skill.description?[skill.description]:[]),...skillCombatKeywords(skill)].map(line=>`<li>${htmlText(line)}</li>`).join("");
   const skillName=skill.equipmentGranted?`装備技・${skill.name}`:skill.name,skillTag=skill.equipmentGranted?`${skill.equipmentAuthorityName??"装備固有"}・装備中限定`:skill.tag??"スキル",element=skillElementLabel(skill);
   return `<button class="battle-skill-choice" data-skill-id="${htmlText(skill.id)}" ${disabled?"disabled":""}><i class="battle-skill-edge" aria-hidden="true"></i><span class="battle-skill-copy"><small>${htmlText(skillTag)}</small><b>${htmlText(skillName)}</b><em>${htmlText(skill.target??"敵単体")}・${htmlText(element)}属性・${cooldownLabel}</em><ul class="battle-skill-spec">${details}</ul></span><span class="battle-skill-cost"><b>MP ${mpCost}</b><small>${stateLabel}</small></span></button>`;
@@ -118,7 +122,7 @@ function renderSkills(battle,actor,skills){
  return `<section class="battle-skill-panel-v317"><header><span><small>SKILL COMMAND</small><b>スキルを選択</b></span><em>MP ${battleInteger(actor.currentMp)} / ${battleInteger(unitMaxMp(actor))}</em><button type="button" id="closeSkillMenu" class="battle-skill-close-top" aria-label="スキル一覧を閉じる">×</button></header><div class="skill-command-list battle-skill-command-list-v317">${rows}</div></section>`;
 }
 
-function renderItems(inventory){
+function renderItems(inventory,battle={}){
  const defs=[
   ["potions",itemIcon("potions"),"薬草","単体HP100＋最大HP10%回復"],
   ["highPotions",itemIcon("highPotions"),"ハイポーション","単体HP300＋最大HP25%回復"],
@@ -134,13 +138,20 @@ function renderItems(inventory){
   ["fullHeals",itemIcon("fullHeals"),"完全回復薬・単体","HP・MP・異常を全回復"],
   ["partyFullHeals",itemIcon("partyFullHeals"),"完全回復薬・全体","全員を完全回復"]
  ];
- const rows=defs.filter(d=>(inventory[d[0]]??0)>0).map(([id,icon,name,desc])=>`<button data-battle-item="${id}"><span><b>${icon} ${name}</b><small>${desc}</small></span><strong>×${inventory[id]??0}</strong></button>`).join("");
+ const selected=defs.find(([id])=>id===battle.itemTargetType);
+ if(selected){
+  const [id,icon,name,desc]=selected;
+  const targets=battleParty(battle).map(monster=>{const dead=monster.currentHp<=0,disabled=ultimateIsolated(battle,monster)||(id==="reviveLeaves"?!dead:dead);return`<button type="button" data-battle-item-target="${htmlText(monster.id)}" ${disabled?"disabled":""}><span><b>${htmlText(unitName(monster))} Lv.${battleInteger(monster.level)}</b><small>HP ${battleInteger(monster.currentHp)} / ${battleInteger(unitStats(monster).hp)}<br>MP ${battleInteger(monster.currentMp)} / ${battleInteger(unitMaxMp(monster))}</small></span><strong>${disabled?(dead?"戦闘不能":"生存中"):"選択"}</strong></button>`}).join("");
+  const summary=`<div class="battle-item-selection"><span><b>${icon} ${name} ×${inventory[id]??0}</b><small>${desc}</small></span><button type="button" id="backBattleItemMenu">戻る</button></div>`;
+  return renderItemPanel(`${summary}${targets}`,"closeItemMenu","閉じる","使用対象を選択");
+ }
+ const rows=defs.filter(d=>(inventory[d[0]]??0)>0).map(([id,icon,name,desc])=>`<button type="button" data-battle-item="${id}"><span><b>${icon} ${name}</b><small>${desc}</small></span><strong>×${inventory[id]??0}</strong></button>`).join("");
  const body=rows||'<div class="empty">使用できるアイテムがありません</div>';
  return renderItemPanel(body);
 }
 
-function renderItemPanel(body,closeId="closeItemMenu",closeLabel="閉じる"){
- return `<div class="battle-item-toolbar"><b>戦闘アイテム</b><button type="button" id="${closeId}" aria-label="${closeLabel}">${closeLabel}</button></div><div class="skill-command-list battle-item-list">${body}</div>`;
+function renderItemPanel(body,closeId="closeItemMenu",closeLabel="閉じる",title="戦闘アイテム"){
+ return `<div class="battle-item-toolbar"><b>${title}</b><button type="button" id="${closeId}" aria-label="${closeLabel}">${closeLabel}</button></div><div class="skill-command-list battle-item-list">${body}</div>`;
 }
 function renderOnlineItems(battle){
  if(battle.onlineItemTargetMenu){
@@ -161,7 +172,7 @@ function renderCommands(battle,actor,current,enemies,target,inventory,skills){
  else if(!actor)controls='<div class="enemy-thinking">敵の行動を処理しています…</div>';
  else if(battle.skillMenu)controls=renderSkills(battle,actor,skills);
  else if(battle.onlineMode&&(battle.itemMenu||battle.onlineItemTargetMenu))controls=renderOnlineItems(battle);
- else if(battle.itemMenu)controls=renderItems(inventory);
+ else if(battle.itemMenu)controls=renderItems(inventory,battle);
  else{const blocked=Boolean(battle.onlineMode&&!battle.onlineAllowCapture)||Boolean(target&&(target.boss||target.floorBossCatalogId||target.uncapturable||target.endgameBossId||["abyss","tenGod"].includes(target.faction)));controls=`<div class="command-grid"><button data-command="attack"><i>${pixelIcon("crossed-swords")}</i><span>たたかう</span></button><button data-command="guard"><i>${pixelIcon("equipment")}</i><span>ガード</span></button><button data-command="skill"><i>${pixelIcon("skills")}</i><span>スキル</span></button><button data-command="item"><i>${pixelIcon("growth")}</i><span>${battle.onlineMode?"応急薬":"アイテム"}</span></button><button data-command="capture" ${blocked?'disabled aria-label="この敵は捕獲できません"':""}><i>${pixelIcon("capture")}</i><span>${blocked?"捕獲不可":"捕獲"}</span></button></div>`}
  const itemOpen=Boolean(actor&&!battle.auto&&!battle.onlineReadOnly&&!battle.onlineActionSubmitted&&!battle.skillMenu&&(battle.itemMenu||battle.onlineItemTargetMenu));
  const countdown=battle.onlineCountdownMode?`<strong class="online-shared-countdown" data-online-countdown="${battle.onlineCountdownMode}">${battle.phase==="command"?"--.-":"処理中"}</strong>`:"";

@@ -1,5 +1,5 @@
-import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=3.1.37-build357";
-import{SERIAL_CODE_COUNT}from"../../core/SerialCodeSystem.js?v=3.1.37-build357";
+import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=3.1.39-build359";
+import{SERIAL_CODE_COUNT}from"../../core/SerialCodeSystem.js?v=3.1.39-build359";
 export function SettingsScreen(state){
   const redeemedCount=Object.keys(state.serialCodes?.redeemed??{}).length;
   return`
@@ -42,6 +42,7 @@ export function SettingsScreen(state){
             <button id="redeemGameMasterCode" type="submit">GM権限を認証する</button>
           </form>
           <small>100階想定パックは仲間・装備・資源の配布のみです（${state.gameMaster?.progressPack356?.claimedAt?"受取済み":"未受取"}）。旧支援コードの出発階層解放とは別に使用できます。</small>
+          <small>最終決戦想定パック：十神2体・深淵2体と専用装備・資源（${state.gameMaster?.finalePack359?.claimedAt?"受取済み":"未受取"}）。階層・討伐記録・編成は変更しません。</small>
         </div>
         ${CONTENT_TEST_MODE?`<div class="settings-test-plaque-v3"><b>TEST ACCESS ACTIVE</b><small>高難度コンテンツを${CONTENT_TEST_UNLOCK_FLOOR}階で試遊できます。正式条件の値は保持されています。</small></div>`:""}
         <div class="settings-version-plaque-v3"><small>ABYSS DOMINION</small><h3>REMAKE v${APP_VERSION}</h3><span>GDD v1.0同期 / 保存互換 / 製品モード</span></div>

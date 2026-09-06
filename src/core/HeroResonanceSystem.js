@@ -2,12 +2,15 @@ export const HERO_RESONANCE_IDS=Object.freeze(["myth_enami","myth_rion","myth_yo
 export const HERO_MYTHIC_RARITY="神話";
 export const HERO_RESONANCE_FOLLOWUP_POWER=.70;
 
+// Shared enemy/player output per hit. The 4/9/16 action budgets, followup
+// utilities and each hero's solo coefficient remain separate rules.
+// Calibrated against the 100F two-god/two-abyss reference inventory.
 const PROFILES=Object.freeze({
  0:Object.freeze({count:0,active:false,name:"共鳴なし",followupsPerAction:0,totalActions:0,invincible:false,damageReduction:0}),
  1:Object.freeze({count:1,active:false,name:"共鳴消失",followupsPerAction:0,totalActions:1,invincible:false,damageReduction:0}),
- 2:Object.freeze({count:2,active:true,name:"双星共鳴",followupsPerAction:1,totalActions:4,invincible:false,damageReduction:.15}),
- 3:Object.freeze({count:3,active:true,name:"三位共鳴",followupsPerAction:2,totalActions:9,invincible:false,damageReduction:.30}),
- 4:Object.freeze({count:4,active:true,name:"四勇共鳴",followupsPerAction:3,totalActions:16,invincible:false,fullAlliance:true,damageReduction:.60})
+ 2:Object.freeze({count:2,active:true,name:"双星共鳴",followupsPerAction:1,totalActions:4,invincible:false,damageReduction:.15,outgoingDamageRate:.12}),
+ 3:Object.freeze({count:3,active:true,name:"三位共鳴",followupsPerAction:2,totalActions:9,invincible:false,damageReduction:.30,outgoingDamageRate:.06}),
+ 4:Object.freeze({count:4,active:true,name:"四勇共鳴",followupsPerAction:3,totalActions:16,invincible:false,fullAlliance:true,damageReduction:.50,outgoingDamageRate:.04})
 });
 
 export function isHeroResonanceSpecies(speciesId){return HERO_RESONANCE_IDS.includes(String(speciesId??""))}

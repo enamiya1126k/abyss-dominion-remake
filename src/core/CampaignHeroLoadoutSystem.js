@@ -1,8 +1,8 @@
-import {createMonster,calculatedStats} from '../models/Monster.js?v=3.1.37-build357';
-import {maxMp,effectiveSkillMpCost,allLearnedSkills} from '../battle/SkillSystem.js?v=3.1.37-build357';
-import {createSignatureEquipment,signatureStatBonuses,signatureSetState} from './SignatureWeaponSystem.js?v=3.1.37-build357';
+import {createMonster,calculatedStats} from '../models/Monster.js?v=3.1.39-build359';
+import {maxMp,effectiveSkillMpCost,allLearnedSkills} from '../battle/SkillSystem.js?v=3.1.39-build359';
+import {createSignatureEquipment,signatureStatBonuses,signatureSetState} from './SignatureWeaponSystem.js?v=3.1.39-build359';
 import {equipmentStatMultiplier,equipmentRequiredMonsterLevel} from '../models/Equipment.js';
-import {aggregateSeriesEffects} from '../data/equipmentSeries.js';
+import {aggregateSeriesEffects} from '../data/equipmentSeries.js?v=3.1.38-build358';
 import {equipmentAffixesWithSeries} from './EquipmentAffixSystem.js?v=3.1.28-build348';
 
 export const CAMPAIGN_HERO_WEAPON_LEVEL=2000;

@@ -45,9 +45,9 @@ export function hasMonsterSprite(subject){
   return Boolean(customSpriteBase(subject))||Boolean(typeof subject==="object"&&subject?.customVisualAsset)||Boolean(MONSTER_SPRITE_FOLDERS[monsterVisualId(subject)]);
 }
 
-// Call only for party members: enemy bosses have their own presentation scale.
+// Floor bosses and endgame characters share the visible-pixel art layout.
 export function partyMonsterArtScale(monster){
-  return monster&&(monster.floorBossCatalogId||monster.floorBossId||monster.obtainedMethod==="floorBossContract")?2:1;
+  return monster&&(monster.floorBossCatalogId||monster.floorBossId||monster.obtainedMethod==="floorBossContract"||monster.endgameBossId)?2:1;
 }
 
 export function monsterVisual(subject,fallbackEmoji="👹",{frame="idle",className="",partyArt=false}={}){

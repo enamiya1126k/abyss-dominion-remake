@@ -2,9 +2,9 @@ import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=3.1.1-build311"
 import { battleEnvironmentForFloor } from "../data/biomes.js?v=3.1.1-build311";
 import {
   onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml, ONLINE_ROOM_PURPOSES, ONLINE_ROOM_STYLES, renderOnlineRoomDirectory,
-} from "../ui/screens/OnlinePartyScreen.js?v=3.1.37-build357";
-import { BattleScreen } from "../ui/screens/BattleScreen.js?v=3.1.37-build357";
-import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=3.1.37-build357";
+} from "../ui/screens/OnlinePartyScreen.js?v=3.1.39-build359";
+import { BattleScreen } from "../ui/screens/BattleScreen.js?v=3.1.39-build359";
+import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=3.1.39-build359";
 import { pixelIcon } from "../ui/components/GameChrome.js?v=3.1.1-build311";
 
 const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "共同探索", raid: "レイドボス", team: "自由チーム戦", chat: "談話板" });
@@ -555,7 +555,7 @@ export function renderSharedBattle({ mode, room, battle, selfId, selectedTarget 
   const onlineCooldowns = Object.fromEntries(players.map(player => [onlineBattleActorId(player), { ...(player.cooldowns ?? {}) }]));
   const autoPlayers = Array.isArray(battle?.autoPlayers) ? battle.autoPlayers : [];
   const uiBattle = {
-    onlineMode: mode, onlineReadOnly: effectiveReadOnly, onlineActionSubmitted: !activeActor || battle?.phase !== "command", onlineAllowCapture: allowCapture && Number(actionActor?.captureCharges ?? selfMember?.profile?.captureStock) > 0,
+    ultimates358:battle?.ultimates358??null,ultimateProfiles358:battle?.ultimateProfiles358??{},onlineMode: mode, onlineReadOnly: effectiveReadOnly, onlineActionSubmitted: !activeActor || battle?.phase !== "command", onlineAllowCapture: allowCapture && Number(actionActor?.captureCharges ?? selfMember?.profile?.captureStock) > 0,
     onlineCountdownMode: mode, onlineSelectedAlly: party.some(monster => monster.id === selectedAlly) ? selectedAlly : actorId, onlineSkills: actionSkills.map(onlineSkill),
     enemies: foes, enemy: foes[0], targetEnemyId: target?.id ?? null, party, species: {}, turn: Math.max(1, Number(battle?.round) || 1), turnQueue, queueIndex: 0, onlineActorId: actorId,
     auto: autoPlayers.includes(selfId), onlineAutoAvailable: autoSupported && !effectiveReadOnly, onlineAutoUnsupported: !autoSupported && !effectiveReadOnly, busy: false, phase: battle?.phase ?? "command", speed: battle?.speed ?? 1, skillMenu: Boolean(skillMenu), itemMenu: Boolean(itemMenu), onlineItemTargetMenu: Boolean(itemTargetMenu), onlineItemCharges: Math.max(0, Number(actionActor?.itemCharges) || 0),
