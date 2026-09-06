@@ -3,7 +3,7 @@ import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.1-bui
 import{HERO_PURSUIT_STEPS,normalizeHeroPursuit}from"./CampaignHeroPursuitSystem.js?v=3.1.22-build341";
 
 export const CAMPAIGN_HERO_ENCOUNTER_VERSION=4;// Regression history: CAMPAIGN_HERO_ENCOUNTER_VERSION=3
-export const CAMPAIGN_HERO_FINAL_LEVEL=1500;
+export const CAMPAIGN_HERO_FINAL_LEVEL=1000;
 export const CAMPAIGN_HERO_STAT_MULTIPLIER=1.30;
 export const CAMPAIGN_HERO_HP_MULTIPLIER=1.45;
 export const CAMPAIGN_HERO_FINAL_ARENA_ID="prophecy-final-gate";

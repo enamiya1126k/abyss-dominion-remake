@@ -1,4 +1,4 @@
-import{SPECIES}from"../data/species.js?v=3.0.9-build309";
+import{SPECIES}from"../data/species.js?v=3.1.26-build346";
 import{SKILLS}from"../data/skills.js?v=2.11.0-build164";
 import{endgameSkills,endgameSkillById}from"../data/endgameCharacters.js?v=2.11.0-build164";
 import{balanceIndividualSkillKit,buildIndividualSkillKit,isOffensiveSkill,skillProgressionScore}from"../data/individualSkillKits.js?v=2.11.83-build259";

@@ -18,40 +18,40 @@ export const MYTHIC_SERIAL_SPECIES=Object.freeze({
     id:"myth_enami",name:"えなみ",element:"fire",role:"support",maxMp:155,
     stats:{hp:380,atk:195,def:215,spd:108,crit:22,evasion:23},
     skills:[
-      skill("enami_world_create","万象創作",{mp:10,power:1.75,allEnemies:true,target:"敵全体",damageClass:"magic",description:"海・星・山・空を同時に創り出して敵陣を塗り替える。"}),
-      skill("enami_spicy_casino","スパイシーカジノ777",{level:20,mp:14,type:"multiAttack",power:.92,hits:3,description:"運命の数字を回し、熱い三連撃を叩き込む。"}),
-      skill("enami_hyper_focus","天才の多動領域",{level:45,mp:18,type:"buff",power:0,target:"味方全体",partyShieldRate:.22,effects:[{kind:"atkUp",value:.32,turns:3,allies:true},{kind:"defUp",value:.3,turns:3,allies:true}],description:"味方全体へ最大HP22%分のシールドを配り、攻撃と防御を引き上げる。"}),
-      skill("enami_genesis","創世遊戯・星海山空",{level:80,mp:34,power:3.4,allEnemies:true,target:"敵全体",damageClass:"magic",cooldown:4,description:"四つの世界を重ねて創世級の爆発を起こす。"})
+      skill("enami_world_create","メンタル！！",{mp:11,power:1.65,allEnemies:true,target:"敵全体",damageClass:"magic",effects:[{kind:"defDown",value:.22,turns:3,enemy:true},{kind:"vulnerable",value:.12,turns:3,enemy:true}],description:"敵陣全体の守りと立て直しを同時に崩し、後続の一撃が通る状況を作る。"}),
+      skill("enami_spicy_casino","塩ください・777",{level:20,mp:14,type:"multiAttack",power:1.05,hits:3,defenseIgnore:.18,effects:[{kind:"healDown",value:.28,turns:3,enemy:true}],description:"三連撃で回復の起点を潰す。より・ひでの追撃前に使うほど厄介。"}),
+      skill("enami_hyper_focus","まかセロリ",{level:45,mp:18,type:"buff",power:0,target:"味方全体",partyShieldRate:.25,effects:[{kind:"atkUp",value:.28,turns:3,allies:true},{kind:"defUp",value:.34,turns:3,allies:true},{kind:"spdUp",value:.12,turns:3,allies:true}],description:"味方全体へ最大HP25%分のシールドを配り、攻撃・防御・速度をまとめて底上げする。"}),
+      skill("enami_genesis","おいおい！そんなもんか？！",{level:80,mp:36,power:3.6,allEnemies:true,target:"敵全体",damageClass:"magic",defenseIgnore:.2,cooldown:4,effects:[{kind:"vulnerable",value:.18,turns:2,enemy:true}],description:"敵全体を大きく削り、さらに被ダメージを増幅して勇者一行の決定打へつなぐ。"})
     ]
   }),
   myth_rion:mythic({
     id:"myth_rion",name:"りおん",element:"nature",role:"support",maxMp:165,
     stats:{hp:405,atk:180,def:220,spd:122,crit:18,evasion:24},
     skills:[
-      skill("rion_talk","万能話術",{mp:7,power:1.32,damageClass:"magic",effects:[{kind:"defDown",value:.28,turns:3,enemy:true}],description:"軽妙な話術で相手の守りを崩す。"}),
-      skill("rion_arrange","主人公の段取り",{level:20,mp:12,type:"buff",power:0,target:"味方全体",effects:[{kind:"atkUp",value:.3,turns:3,allies:true},{kind:"defUp",value:.3,turns:3,allies:true},{kind:"spdUp",value:.28,turns:3,allies:true}],description:"全員が最も動きやすい状況を即座に整える。"}),
-      skill("rion_therapy","理学療法士の手",{level:45,mp:16,type:"allHeal",power:0,heal:.48,target:"味方全体",cleanse:true,description:"味方全体を回復し、弱体を浄化する。"}),
-      skill("rion_community","万界コミュニティ",{level:80,mp:30,mpRate:.65,type:"revive",power:0,revive:.28,reviveMp:.08,target:"戦闘不能の味方1体",cooldown:5,description:"最大MPの65%を捧げ、戦闘不能の味方1体をHP28%・MP8%で蘇生する。"})
+      skill("rion_talk","いこうぜ！",{mp:8,power:1.2,damageClass:"magic",effects:[{kind:"defDown",value:.24,turns:3,enemy:true},{kind:"spdDown",value:.22,turns:3,enemy:true}],description:"最速で相手の守りと行動速度を落とし、勇者一行の連携を始動させる。"}),
+      skill("rion_arrange","最高やな",{level:20,mp:13,type:"buff",power:0,target:"味方全体",effects:[{kind:"atkUp",value:.26,turns:3,allies:true},{kind:"defUp",value:.22,turns:3,allies:true},{kind:"spdUp",value:.38,turns:3,allies:true}],description:"全員の行動を一気に整える。特に速度上昇が大きく、4人揃うほど手数が止まらなくなる。"}),
+      skill("rion_therapy","また今度やな",{level:45,mp:18,type:"allHeal",power:0,heal:.44,target:"味方全体",cleanse:true,effects:[{kind:"spdUp",value:.15,turns:2,allies:true}],description:"味方全体を回復・浄化し、そのまま次の行動へつなげる。"}),
+      skill("rion_community","今日は豪遊するぞ！",{level:80,mp:30,mpRate:.58,type:"revive",power:0,revive:.38,reviveMp:.14,target:"戦闘不能の味方1体",cooldown:5,description:"戦闘不能の仲間をHP38%・MP14%で復帰させ、崩したはずの連携を再始動させる。"})
     ]
   }),
   myth_yori:mythic({
     id:"myth_yori",name:"より",element:"water",role:"burst",maxMp:112,
     stats:{hp:410,atk:278,def:212,spd:106,crit:30,evasion:16},
     skills:[
-      skill("yori_rifle","蒼晶銃剣",{mp:6,power:1.9,defenseIgnore:.2,description:"蒼い銃剣で狙撃と刺突を同時に行う。"}),
-      skill("yori_beautiful","ビューティフォー！",{level:20,mp:11,type:"buff",power:0,target:"自分",effects:[{kind:"atkUp",value:.55,turns:3},{kind:"defUp",value:.25,turns:3}],description:"完璧な立ち回りで自身を大幅強化する。"}),
-      skill("yori_tetrapod","因縁のテトラポット",{level:45,mp:19,power:2.25,allEnemies:true,target:"敵全体",noLifeSteal:true,description:"因縁の巨大テトラポットを戦場へ叩き落とす。装備の吸収効果は発動しない。"}),
-      skill("yori_difficult","ディフィカルト・暴走",{level:80,mp:32,type:"multiAttack",power:1.28,hits:5,defenseIgnore:.35,cooldown:4,description:"蒼黒の禍々しいオーラを解放した五連殲滅攻撃。"})
+      skill("yori_rifle","イージー！！",{mp:7,power:2.2,defenseIgnore:.32,bonusVsEffect:{kind:"defDown",multiplier:1.28},description:"防御低下中の相手へ威力が跳ね上がる単体物理。味方が崩した敵を迷わず殴り抜く。"}),
+      skill("yori_beautiful","ビューティフォー！",{level:20,mp:11,type:"buff",power:0,target:"自分",effects:[{kind:"atkUp",value:.62,turns:3},{kind:"defUp",value:.18,turns:3},{kind:"spdUp",value:.18,turns:3}],description:"自身の火力と速度を引き上げ、フィニッシャーとしての圧を最大化する。"}),
+      skill("yori_tetrapod","開けんかいコラァ！",{level:45,mp:20,power:2.5,allEnemies:true,target:"敵全体",defenseIgnore:.28,bonusVsEffect:{kind:"vulnerable",multiplier:1.2},noLifeSteal:true,description:"弱体化された敵陣へ防御無視の全体物理を叩き込む。"}),
+      skill("yori_difficult","ディフィカルト・暴走",{level:80,mp:34,type:"multiAttack",power:1.38,hits:5,defenseIgnore:.45,bonusVsEffect:{kind:"vulnerable",multiplier:1.35},cooldown:4,description:"被ダメージ増加中の標的へ五連撃を集中させる最終打。連携後は極端に危険。"})
     ]
   }),
   myth_hide:mythic({
-    id:"myth_hide",name:"ひで",element:"dark",role:"bruiser",maxMp:118,
+    id:"myth_hide",name:"ひで",element:"dark",role:"magic",maxMp:118,
     stats:{hp:440,atk:292,def:226,spd:94,crit:26,evasion:14},
     skills:[
-      skill("hide_crayfish","ザリガニ双爪",{mp:6,type:"multiAttack",power:.92,hits:2,description:"愛するザリガニの左右の爪で豪快に挟み込む。"}),
-      skill("hide_hunt","狩猟免許・山海ドブ",{level:20,mp:10,power:1.65,effects:[{kind:"defDown",value:.3,turns:3,enemy:true}],description:"どんな場所からでも獲物を仕留める野生の一撃。"}),
-      skill("hide_gourmet","狂宴料理フォー！",{level:45,mp:17,type:"allHeal",power:0,heal:.36,target:"味方全体",effects:[{kind:"atkUp",value:.38,turns:3,allies:true}],description:"常識外れの食材で仲間を回復・強化する。"}),
-      skill("hide_master_claw","修士爪・紅殻大暴走",{level:80,mp:33,power:3.65,allEnemies:true,target:"敵全体",cooldown:4,description:"巨大な紅殻双爪で戦場すべてを粉砕する。"})
+      skill("hide_crayfish","フォー！！！！",{mp:9,power:1.55,allEnemies:true,target:"敵全体",damageClass:"magic",effects:[{kind:"accuracyDown",value:.14,turns:3,enemy:true}],description:"全体魔法で命中を崩し、相手の反撃精度を落とす。"}),
+      skill("hide_hunt","待ってくださいよ〜！",{level:20,mp:12,power:1.75,damageClass:"magic",effects:[{kind:"defDown",value:.25,turns:3,enemy:true},{kind:"evasionDown",value:.18,turns:3,enemy:true}],description:"危険な相手を解析し、防御と回避を同時に崩す。"}),
+      skill("hide_gourmet","いいんすか！！",{level:45,mp:18,type:"allHeal",power:0,heal:.3,target:"味方全体",effects:[{kind:"atkUp",value:.32,turns:3,allies:true},{kind:"spdUp",value:.1,turns:3,allies:true}],description:"味方全体を立て直しながら攻撃と速度を上げる。"}),
+      skill("hide_master_claw","計算外・零点崩壊",{level:80,mp:36,power:3.9,allEnemies:true,target:"敵全体",damageClass:"magic",defenseIgnore:.25,bonusVsEffect:{kind:"defDown",multiplier:1.35},cooldown:4,description:"防御低下中の敵へ威力が大きく上がる全体魔法。えなみ・りおんの崩しから直結する。"})
     ]
   })
 });
