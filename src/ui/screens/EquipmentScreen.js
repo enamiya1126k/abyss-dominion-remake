@@ -9,15 +9,15 @@ import{
  compatibleSubslots,
  equipmentIdentity
 }from"../../data/equipment.js?v=3.1.1-build311";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.34-build354";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.35-build355";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=3.1.1-build311";
-import{maxMp}from"../../battle/SkillSystem.js?v=3.1.28-build348";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.34-build354";
+import{maxMp}from"../../battle/SkillSystem.js?v=3.1.35-build355";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.35-build355";
 import{ATTRIBUTES}from"../../data/attributes.js?v=3.1.1-build311";
 import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=3.1.1-build311";
-import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=3.1.28-build348";
+import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=3.1.35-build355";
 import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=3.1.1-build311";
-import{SPECIES}from"../../data/species.js?v=3.1.28-build348";
+import{SPECIES}from"../../data/species.js?v=3.1.35-build355";
 import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=3.1.1-build311";
 import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=3.1.34-build354";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=3.1.1-build311";
@@ -27,7 +27,7 @@ import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=3.1.1-
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=3.1.1-build311";
 import{equipmentVisual}from"../components/EquipmentVisual.js?v=3.1.1-build311";
 import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=3.1.34-build354";
-import{signatureWeaponState,signatureWeaponForMonster,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster}from"../../core/SignatureWeaponSystem.js?v=3.1.28-build348";
+import{signatureWeaponState,signatureWeaponForMonster,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster}from"../../core/SignatureWeaponSystem.js?v=3.1.35-build355";
 
 const EQUIPMENT_SCREEN_SLOT_LABELS={
  weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"

@@ -1,4 +1,4 @@
-import {MYTHIC_SERIAL_SPECIES} from '../data/mythicSerialSpecies.js?v=3.1.28-build348';
+import {MYTHIC_SERIAL_SPECIES} from '../data/mythicSerialSpecies.js?v=3.1.35-build355';
 
 const PREFIX='campaignHero:';
 const skills=Object.values(MYTHIC_SERIAL_SPECIES).flatMap(species=>species.authoredSkills.map(skill=>({...skill,element:species.element})));

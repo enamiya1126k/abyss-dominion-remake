@@ -1,5 +1,5 @@
-import {isHeroResonanceSpecies} from '../../src/core/HeroResonanceSystem.js';
-import {heroAuthoredSkills,reserveHeroAction,chooseHeroAllianceSkill,runHeroAllianceAction,triggerHeroAlliance,drainHeroReactions,mitigateHeroDamage,tryHeroLastStand,heroId} from '../../src/core/HeroAllianceSystem.js';
+import {isHeroResonanceSpecies,heroResonanceProfile} from '../../src/core/HeroResonanceSystem.js';
+import {heroAuthoredSkills,reserveHeroAction,chooseHeroAllianceSkill,chooseHeroAllianceTarget,runHeroAllianceAction,triggerHeroAlliance,drainHeroReactions,mitigateHeroDamage,tryHeroLastStand,heroId,heroSideUnits} from '../../src/core/HeroAllianceSystem.js';
 export function onlineHeroView(b,actor=null){
  if(b.boss){b.heroAlliance348??={};return {...b,enemies:[b.boss,...b.minions],heroAlliance348:b.heroAlliance348}}
  if(actor?.side){const sides=['sun','moon'],own=actor.side,other=sides.find(s=>s!==own);b.heroAlliance348??={};for(const s of sides)b.heroAlliance348[s]??={lastStandUsed:false,pending:[]};return {...b,players:Object.fromEntries(Object.entries(b.players).filter(([,u])=>u.side===own)),enemies:Object.values(b.players).filter(u=>u.side!==own),heroAlliance348:{ally:b.heroAlliance348[own],enemy:b.heroAlliance348[other]}}}
@@ -18,7 +18,7 @@ export function onlineHeroEnvironment(b,events,random=Math.random,{onDamage=null
  },onSkill:(u,s)=>{if(s){b.skillUses??={};b.skillUses[heroId(u)]??={};b.skillUses[heroId(u)][s.id]=(b.skillUses[heroId(u)][s.id]??0)+1}}};
 }
 export function onlineHeroAuto(b,actor,now=Date.now()){
- if(!isHeroResonanceSpecies(actor?.speciesId))return null;const view=onlineHeroView(b,actor);prepare(view);const side=view.enemies.includes(actor)?'enemy':'ally',skill=chooseHeroAllianceSkill(view,side,actor),target=(skill?.type==='revive'?Object.values(view.players).find(u=>u.hp<=0):view.enemies.find(u=>u.hp>0));return{actorId:heroId(actor),kind:skill?'skill':'attack',skillId:skill?.id??null,targetId:heroId(target),enemyTargetId:heroId(view.enemies.find(u=>u.hp>0)),auto:true,submittedAt:now};
+ if(!isHeroResonanceSpecies(actor?.speciesId))return null;const view=onlineHeroView(b,actor);prepare(view);const side=view.enemies.includes(actor)?'enemy':'ally',skill=chooseHeroAllianceSkill(view,side,actor),target=(skill?.type==='revive'?heroSideUnits(view,side).find(u=>u.hp<=0):heroResonanceProfile(heroSideUnits(view,side)).count===1?chooseHeroAllianceTarget(view,side,actor,skill):heroSideUnits(view,side==='ally'?'enemy':'ally').find(u=>u.hp>0));return{actorId:heroId(actor),kind:skill?'skill':'attack',skillId:skill?.id??null,targetId:heroId(target),enemyTargetId:heroId(target),auto:true,submittedAt:now};
 }
 export function resolveOnlineHero(b,actor,action,events,random=Math.random,hooks={}){
  if(!isHeroResonanceSpecies(actor?.speciesId)||!['attack','skill'].includes(action?.kind))return false;

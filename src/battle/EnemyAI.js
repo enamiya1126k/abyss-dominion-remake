@@ -1,7 +1,7 @@
-import{campaignHeroSkillInfo,campaignHeroSkillCost,chooseCampaignHeroSkill}from'./CampaignHeroSkillSystem.js?v=3.1.28-build348';
+import{campaignHeroSkillInfo,campaignHeroSkillCost,chooseCampaignHeroSkill}from'./CampaignHeroSkillSystem.js?v=3.1.35-build355';
 import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=3.1.1-build311";
 import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=3.1.1-build311";
-import{speciesLevelStats}from"../models/Monster.js?v=3.1.34-build354";
+import{speciesLevelStats}from"../models/Monster.js?v=3.1.35-build355";
 import{floorBossActionInfo}from"../data/floorBosses.js?v=3.1.1-build311";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",

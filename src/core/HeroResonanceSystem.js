@@ -30,7 +30,7 @@ export function heroResonanceProfile(partyOrCount){
 
 export function scaleHeroResonanceSkill(skill,power=HERO_RESONANCE_FOLLOWUP_POWER){
  if(!skill)return null;const rate=Math.max(0,Math.min(1,Number(power)||0)),scaled={...skill,mp:0,mpRate:0,resonanceFollowup:true};
- for(const key of["power","heal","selfHeal","mpHeal","partyShieldRate","selfShieldRate","hpShieldRate","revive","reviveMp","reviveTransferRate","barrier"])if(Number.isFinite(Number(scaled[key])))scaled[key]=Number(scaled[key])*rate;
+ for(const key of["power","heal","selfHeal","mpHeal","partyShieldRate","selfShieldRate","soloShieldRate","hpShieldRate","revive","reviveMp","reviveTransferRate","barrier"])if(Number.isFinite(Number(scaled[key])))scaled[key]=Number(scaled[key])*rate;
  if(Array.isArray(skill.effects))scaled.effects=skill.effects.map(effect=>({...effect,...(Number.isFinite(Number(effect?.value))?{value:Number(effect.value)*rate}:{})}));
  if(skill.status)scaled.status={...skill.status,...(Number.isFinite(Number(skill.status.power))?{power:Number(skill.status.power)*rate}:{})};
  return scaled;

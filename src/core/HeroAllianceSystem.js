@@ -1,6 +1,6 @@
-import {MYTHIC_SERIAL_SPECIES} from '../data/mythicSerialSpecies.js?v=3.1.28-build348';
+import {MYTHIC_SERIAL_SPECIES} from '../data/mythicSerialSpecies.js?v=3.1.35-build355';
 import {attributeDamageMultiplier} from '../data/attributes.js';
-import {heroResonanceMembers,heroResonanceProfile,scaleHeroResonanceSkill,isHeroResonanceSpecies} from './HeroResonanceSystem.js?v=3.1.28-build348';
+import {heroResonanceMembers,heroResonanceProfile,scaleHeroResonanceSkill,isHeroResonanceSpecies} from './HeroResonanceSystem.js?v=3.1.35-build355';
 
 // One rules implementation for browser allies, campaign enemies and online actors.
 export const HERO_ORDER=Object.freeze(['myth_rion','myth_enami','myth_hide','myth_yori']);
@@ -32,8 +32,10 @@ export function reserveHeroAction(b,side,u,{followup=false}={}){
 }
 export function mitigateHeroDamage(b,side,u,amount){
  let damage=Math.max(0,Math.floor(Number(amount)||0));if(!damage)return 0;
- const profile=heroResonanceProfile(heroSideUnits(b,side));damage=Math.max(1,Math.floor(damage*(1-profile.damageReduction)));
- const absorbed=Math.min(Math.max(0,Number(u.heroShield348)||0),damage);u.heroShield348=Math.max(0,(u.heroShield348??0)-absorbed);return damage-absorbed;
+ const profile=heroResonanceProfile(heroSideUnits(b,side)),solo=isHeroResonanceSpecies(u?.speciesId)&&profile.count===1;damage=Math.max(1,Math.floor(damage*(1-(solo ? .30 : profile.damageReduction))));
+ const absorbed=Math.min(Math.max(0,Number(u.heroShield348)||0),damage);u.heroShield348=Math.max(0,(u.heroShield348??0)-absorbed);
+ if(solo&&u.speciesId==='myth_yori'&&damage>absorbed){const effects=heroEffects(b,u,side),key='hero355:yori-retaliation',existing=effects.find(e=>e.sourceKey===key);if(existing)existing.turns=3;else effects.push({kind:'atkUp',name:'不屈の闘志',value:.20,turns:3,sourceKey:key});}
+ return damage-absorbed;
 }
 export function tryHeroLastStand(b,side,u,beforeHp){
  if(!isHeroResonanceSpecies(u?.speciesId)||heroHp(u)>0||beforeHp<=0)return false;
@@ -60,7 +62,7 @@ export function chooseHeroAllianceSkill(b,side,u,{free=false}={}){
   else if(s.type==='allHeal'){
    const hurt=Math.max(0,...alive.map(x=>1-heroHp(x)/Math.max(1,x.maxHp??x.stats?.hp??heroHp(x))));
    const dirty=s.cleanse&&alive.some(x=>heroEffects(b,x,side).some(e=>!HERO_POSITIVE.has(e.kind)));
-   score=hurt>=.18?500+hurt*100:dirty?450:alive.some(x=>!(x.heroShield348>0))&&heroResonanceProfile(allies).count>=2?30:-1;
+   score=hurt>=.18?(heroResonanceProfile(allies).count===1?1000:500)+hurt*100:dirty?450:alive.some(x=>!(x.heroShield348>0))&&heroResonanceProfile(allies).count>=2?30:-1;
   }else if(s.type==='buff')score=alive.some(x=>(s.effects??[]).some(e=>(e.allies||x===u)&&heroEffect(b,x,side,e.kind)<(e.value??0)*.7))?(u.speciesId==='myth_yori'?230:120):-1;
   else{
    const setup=(s.effects??[]).filter(e=>e.enemy&&['defDown','vulnerable','spdDown'].includes(e.kind));
@@ -68,9 +70,15 @@ export function chooseHeroAllianceSkill(b,side,u,{free=false}={}){
    const bonus=enemies.some(x=>heroEffect(b,x,opposite,s.bonusVsEffect?.kind)>0);
    score=(s.id==='enami_world_create'&&needed?300:0)+(s.power??1)*(s.hits??1)*(s.allEnemies?enemies.length:1)+(needed?180:0)+(bonus?160:0);
   }
+  if(heroResonanceProfile(allies).count===1&&s.soloShieldRate>0&&!(u.heroShield348>0))score+=400;
   return{s,score};
  }).filter(x=>x.score>=0).sort((a,c)=>c.score-a.score);
  return list[0]?.s??null;
+}
+export function chooseHeroAllianceTarget(b,side,u,skill,stats=x=>x.stats??x){
+ const opposite=side==='ally'?'enemy':'ally';
+ const score=x=>{const s=stats(x),rate=heroHp(x)/Math.max(1,x.maxHp??s.hp??heroHp(x));return (rate<=.25?1e9:0)+(skill?.bonusVsEffect?.kind&&heroEffect(b,x,opposite,skill.bonusVsEffect.kind)>0?1e8:0)+Math.max(s.atk??0,s.matk??0)+(s.spd??0)*2;};
+ return heroSideUnits(b,opposite).filter(x=>heroHp(x)>0).sort((a,c)=>score(c)-score(a)||heroHp(a)-heroHp(c))[0]??null;
 }
 export function runHeroAllianceAction(b,side,u,skill,env={},options={}){
  const events=env.events??[],random=env.random??Math.random,stats=env.stats??(x=>x.stats??x),opposite=side==='ally'?'enemy':'ally';
@@ -88,6 +96,7 @@ export function runHeroAllianceAction(b,side,u,skill,env={},options={}){
  if(skill.type==='revive'){
   const eligible=allies.filter(x=>heroHp(x)<=0&&!heroEffects(b,x,side).some(e=>e.kind==='reviveSeal'&&(e.turns??1)>0)),target=eligible.find(x=>heroId(x)===options.targetId)??eligible[0];if(target){setHeroHp(target,Math.max(1,Math.floor((stats(target).hp??target.maxHp)*skill.revive)));setHeroMp(target,Math.floor(target.maxMp*(skill.reviveMp??0)));emit('revive',target,heroHp(target));}
  }else if(skill.type==='allHeal')for(const target of alive()){heal(target,skill.heal??0);if(skill.cleanse){const list=heroEffects(b,target,side);list.splice(0,list.length,...list.filter(e=>HERO_POSITIVE.has(e.kind)));env.cleanse?.(target,side)}}
+ if(skill.soloShieldRate>0&&heroResonanceProfile(allies).count===1){const amount=Math.floor((stats(u).hp??u.maxHp)*skill.soloShieldRate);u.heroShield348=Math.max(u.heroShield348??0,amount);emit('shield',u,amount);}
  if(skill.partyShieldRate)for(const target of alive()){const amount=Math.floor((stats(target).hp??target.maxHp)*skill.partyShieldRate);target.heroShield348=Math.max(target.heroShield348??0,amount);emit('shield',target,amount)}
  let killed=false,affectedTargets=[];const signature=u.heroSignature348??u.signatureResonance;const buffs=heroEffects(b,u,side),guaranteed=Boolean(skill.guaranteedCritical)||buffs.some(e=>e.kind==='guaranteedCritical'&&(e.turns??1)>0);
  const hit=(target,power,finisher=false)=>{
@@ -110,7 +119,7 @@ export function runHeroAllianceAction(b,side,u,skill,env={},options={}){
   emit('damage',target,dealt,{critical,finisher});if(protector&&heroHp(u)>0){const sig=protector.heroSignature348??protector.signatureResonance,amount=Math.max(1,Math.floor((stats(protector).atk-a.def*.25)*(sig.counterPower??0))),old=heroHp(u);if(env.damage)env.damage(u,side,amount,{source:protector,element:protector.element,damageClass:'physical'});else{setHeroHp(u,Math.max(0,old-mitigateHeroDamage(b,side,u,amount)));tryHeroLastStand(b,side,u,old)}events.push({kind:'damage',actorId:heroId(protector),targetId:heroId(u),targetKind:side==='ally'?'player':'enemy',value:Math.max(0,old-heroHp(u)),label:'守護反撃'});}if(before>0&&heroHp(target)<=0){killed=true;emit('ko',target)}
  };
  if(!['buff','allHeal','revive'].includes(skill.type)){
-  const ordered=foes().sort((a,c)=>{const bonus=skill.bonusVsEffect?.kind;return (bonus?Number(heroEffect(b,c,opposite,bonus)>0)-Number(heroEffect(b,a,opposite,bonus)>0):0)||heroHp(a)-heroHp(c)}),chosen=options.targetId?ordered.find(x=>heroId(x)===options.targetId):null;
+  const ordered=foes().sort((a,c)=>{const bonus=skill.bonusVsEffect?.kind;return (bonus?Number(heroEffect(b,c,opposite,bonus)>0)-Number(heroEffect(b,a,opposite,bonus)>0):0)||heroHp(a)-heroHp(c)}),chosen=options.targetId?ordered.find(x=>heroId(x)===options.targetId):heroResonanceProfile(allies).count===1?chooseHeroAllianceTarget(b,side,u,skill,stats):null;
   const targets=affectedTargets=skill.allEnemies?ordered:[chosen??ordered[0]].filter(Boolean);
   for(const target of targets)for(let i=0;i<(skill.hits??1)&&heroHp(target)>0&&heroHp(u)>0;i++){hit(target,skill.power??1);drainHeroReactions(b,env)}
   if(guaranteed)for(let i=buffs.length-1;i>=0;i--)if(buffs[i].kind==='guaranteedCritical')buffs.splice(i,1);
@@ -132,5 +141,5 @@ export function triggerHeroAlliance(b,side,source,env={},memberIds=null){
 }
 export function drainHeroReactions(b,env={}){
  if(b._heroReaction348)return;b._heroReaction348=true;
- try{for(const side of ['ally','enemy']){const state=heroAllianceState(b,side);while(state.pending.length){const reaction=state.pending.shift(),source=heroSideUnits(b,side).find(x=>heroId(x)===reaction.sourceId);if(source){env.events?.push({kind:'heroLastStand',actorId:heroId(source),targetId:heroId(source),targetKind:side==='enemy'?'enemy':'player',value:1,label:'まだ終わってへんやろ'});triggerHeroAlliance(b,side,source,env,reaction.members)}}}}finally{b._heroReaction348=false}
+ try{for(const side of ['ally','enemy']){const state=heroAllianceState(b,side);while(state.pending.length){const reaction=state.pending.shift(),source=heroSideUnits(b,side).find(x=>heroId(x)===reaction.sourceId);if(source){env.events?.push({kind:'heroLastStand',actorId:heroId(source),targetId:heroId(source),targetKind:side==='enemy'?'enemy':'player',value:1,label:'まだ終わってないやろ'});triggerHeroAlliance(b,side,source,env,reaction.members)}}}}finally{b._heroReaction348=false}
 }

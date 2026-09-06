@@ -1,5 +1,5 @@
-import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=3.1.34-build354";
-import{SERIAL_CODE_COUNT}from"../../core/SerialCodeSystem.js?v=3.1.34-build354";
+import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=3.1.35-build355";
+import{SERIAL_CODE_COUNT}from"../../core/SerialCodeSystem.js?v=3.1.35-build355";
 export function SettingsScreen(state){
   const redeemedCount=Object.keys(state.serialCodes?.redeemed??{}).length;
   return`

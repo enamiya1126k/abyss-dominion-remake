@@ -1,4 +1,4 @@
-import{mitigateHeroDamage,tryHeroLastStand}from"../core/HeroAllianceSystem.js?v=3.1.28-build348";
+import{mitigateHeroDamage,tryHeroLastStand}from"../core/HeroAllianceSystem.js?v=3.1.35-build355";
 import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.11.2-build166";
 import{endgameCharacter}from"../data/endgameCharacters.js?v=2.11.24-build188";
 
