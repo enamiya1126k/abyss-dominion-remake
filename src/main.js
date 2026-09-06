@@ -1,9 +1,9 @@
 import{equipmentAffixesWithSeries}from"./core/EquipmentAffixSystem.js?v=3.1.28-build348";
-import{applyCampaignHeroLoadout}from"./core/CampaignHeroLoadoutSystem.js?v=3.1.33-build353";
+import{applyCampaignHeroLoadout}from"./core/CampaignHeroLoadoutSystem.js?v=3.1.34-build354";
 import{heroId,heroHp,heroEffects,heroEffect,heroCooldowns,heroAllianceState,heroAuthoredSkills,reserveHeroAction,chooseHeroAllianceSkill,runHeroAllianceAction,triggerHeroAlliance,drainHeroReactions,mitigateHeroDamage,tryHeroLastStand,heroOverheal}from"./core/HeroAllianceSystem.js?v=3.1.28-build348";
 import{commitCampaignHeroSkill}from'./battle/CampaignHeroSkillSystem.js?v=3.1.28-build348';
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.33-build353";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.33-build353";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.34-build354";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.34-build354";
 // Regression markers only: SaveService.js?v=3.1.10-build329 / config.js?v=3.1.21-build340 / HomeScreen.js?v=3.1.21-build340
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.1-build311";
@@ -13,22 +13,22 @@ import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/Expl
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.33-build353";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.34-build354";
 import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.14-build333";
 import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.32-build352";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.33-build353";
-import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.33-build353";
-import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.33-build353";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.34-build354";
+import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.34-build354";
+import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.34-build354";
 import{reconcileOnlineMotion,onlineMotionSpeed}from"./online/OnlineMovement.js?v=3.1.32-build352";
 import{beginGuestProgressIsolation,finishGuestProgressIsolation,onlineProgressionAllowed,legacyProgressRecoveryCandidate,applyLegacyProgressRecovery,dismissLegacyProgressRecovery,undoLegacyProgressRecovery}from"./online/OnlineProgressIsolation.js?v=3.1.1-build311";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.33-build353";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=3.1.33-build353";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.33-build353";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.33-build353";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.34-build354";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=3.1.34-build354";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.34-build354";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.34-build354";
 import{CampaignFinalFloorScreen}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.31-build351";
-import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.33-build353";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.33-build353";
+import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.34-build354";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.34-build354";
 import{HERO_PURSUIT_STEPS,normalizeHeroPursuit,heroFieldRoute,chooseHeroSpawn,prepareHeroArrival,heroCanEscape,heroInContact,advanceHeroField,heroScreenIndicator}from"./core/CampaignHeroPursuitSystem.js?v=3.1.32-build352";
 import{updateHeroTracker}from"./ui/HeroPursuitHud.js?v=3.1.22-build341";
 import{mountBattleBossLayout}from"./ui/BattleBossLayout.js?v=3.1.21-build340";
@@ -36,40 +36,40 @@ import{Modal}from"./ui/components/Modal.js?v=3.1.1-build311";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=3.1.1-build311";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=3.1.1-build311";
 import{attributeCycleVisual,attributeVisual}from"./ui/components/AttributeVisual.js?v=3.1.1-build311";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=3.1.33-build353";
-import{EXPERIENCE_PACK_TYPES,experiencePackType,availableExperiencePackTypes,consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=3.1.33-build353";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=3.1.34-build354";
+import{EXPERIENCE_PACK_TYPES,experiencePackType,availableExperiencePackTypes,consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=3.1.34-build354";
 import{createEquipment,equipmentPower,equipmentStatMultiplier,equipmentRequiredMonsterLevel}from"./models/Equipment.js?v=3.1.1-build311";
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=3.1.1-build311";
 import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=3.1.28-build348";
 import{normalizeSeriesMastery,recordSeriesBattle,seriesMasteryBonusForMonster,seriesMasterySummary}from"./services/SeriesMastery.js?v=3.1.1-build311";
-import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=3.1.1-build311";
+import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./services/EquipmentStorage.js?v=3.1.34-build354";
 import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=3.1.1-build311";
 import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=3.1.1-build311";
 import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=3.1.1-build311";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=3.1.33-build353";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=3.1.34-build354";
 import{initialAffixCount,lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=3.1.1-build311";
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=3.1.28-build348";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=3.1.33-build353";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=3.1.33-build353";
-import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=3.1.17-build336";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=3.1.34-build354";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=3.1.34-build354";
+import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=3.1.34-build354";
 import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=3.1.28-build348";
-import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=3.1.17-build336";
+import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=3.1.34-build354";
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=3.1.1-build311";
 import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=3.1.1-build311";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=3.1.1-build311";
 import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=3.1.28-build348";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=3.1.33-build353";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=3.1.34-build354";
 import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=3.1.1-build311";
 import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=3.1.1-build311";
 import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=3.1.1-build311";
 import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillMpCostBreakdown,skillDamage,affixOutgoingDamageMultiplier,chooseAutoBattleDecision,skillProgressFor,recordSkillUse,skillEffectSummary,skillCombatKeywords,applySkillMastery,recommendedSkills,recommendedSkillLoadout}from"./battle/SkillSystem.js?v=3.1.28-build348";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyDamageAfterDefense,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=3.1.33-build353";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyDamageAfterDefense,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=3.1.34-build354";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectStackBreakdown,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=3.1.28-build348";
 import{attackHits}from"./battle/HitSystem.js?v=3.1.1-build311";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=3.1.33-build353";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=3.1.34-build354";
 import{dangerConfig}from"./core/DangerSystem.js?v=3.1.1-build311";
 import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=3.1.25-build345";
-import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost,magicCircleLevelEffect,isRaidExclusiveMagicCircle}from"./core/MagicCircleSystem.js?v=3.1.19-build338";
+import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,autoEquipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost,magicCircleLevelEffect,isRaidExclusiveMagicCircle}from"./core/MagicCircleSystem.js?v=3.1.34-build354";
 import{biomeForFloor,battleEnvironmentForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=3.1.1-build311";
 import{campaignBossSupportCount,campaignEncounterPartySize,recordEncounterHistory,rollAttributeEncounterGroup}from"./core/EncounterPoolSystem.js?v=3.1.13-build332";
 import{dungeonThemeForFloor,dungeonThemeForAttribute}from"./data/dungeonThemes.js?v=3.1.1-build311";
@@ -90,12 +90,12 @@ import{generateSectionDungeon,sectionIdAt,sectionRoute,portalTowardSection,porta
 import{createCampaignDungeonLayout}from"./core/CampaignDungeonLayoutSystem.js?v=3.1.14-build333";
 import{requiredCampaignBossSectionCount,shouldRegenerateCampaignBossSnapshot}from"./core/CampaignBossWorldSystem.js?v=3.1.1-build311";
 import{buildSectionMiniMapModel,fitMiniMapTransform,projectMiniMapPoint}from"./core/DungeonMiniMapSystem.js?v=3.1.1-build311";
-import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=3.1.19-build338";
-import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=3.1.1-build311";
+import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=3.1.34-build354";
+import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=3.1.34-build354";
 import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=3.1.1-build311";
-import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=3.1.33-build353";
-import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,casinoBetLimit,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,darkMarketPlayerMaxLevel,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=3.1.33-build353";
-import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=3.1.33-build353";
+import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=3.1.34-build354";
+import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,casinoBetLimit,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,darkMarketPlayerMaxLevel,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=3.1.34-build354";
+import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=3.1.34-build354";
 import{runConfirmedFullReset}from"./core/FullResetSystem.js?v=3.1.13-build332";
 import{DAILY_NOTICE_GIFT,activeNoticeDefinitions,setServerMaintenanceState,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount,pendingNoticeRewards,claimNoticeReward,enqueueNoticeReward}from"./core/NoticeSystem.js?v=3.1.19-build338";
 import{COMPLETE_MONSTER_CODEX,codexCollectionSummary,syncCollectionRewardInbox,rewardDescription}from"./core/CollectionRewardSystem.js?v=3.1.28-build348";
@@ -103,11 +103,11 @@ import{achievementSummary,syncAchievementRewardInbox,achievementIconKeyForId}fro
 import{CONTEXT_GUIDE_STEPS,completeGuideStep,normalizeContextualGuide,setGuidePending,guidePending,guideStepDone,bumpGuideCounter,snoozeGuideStep,guideStepSnoozed,resetContextualGuide,contextualGuideProgress}from"./core/ContextualGuideSystem.js?v=3.1.1-build311";
 import{weekdayGachaSchedule,weekdayGachaCost,WEEKDAY_GACHA_CALENDAR,WEEKDAY_ENDGAME_RATE,rollWeekdayEndgameHit}from"./core/WeekdayGachaSystem.js?v=3.1.1-build311";
 import{bossExperiencePackReward}from"./core/BossRewardSystem.js?v=3.1.1-build311";
-import{enemyExperienceReward}from"./core/ProgressionSystem.js?v=3.1.33-build353";
+import{enemyExperienceReward}from"./core/ProgressionSystem.js?v=3.1.34-build354";
 import{treasureRoomRateForFloor,treasureRoomChestCount,shouldPlaceTreasureMimic,rollTreasureChestReward,mimicVictoryGold,mimicExperienceMultiplier,mimicVictoryCrystals}from"./core/TreasureSystem.js?v=3.1.19-build338";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionForFloor,floorBossDefinitionById,floorBossEquipmentDesignByPiece,milestoneBossIdsForFloor}from"./data/floorBosses.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CONTRACT_COST,FLOOR_BOSS_EQUIPMENT_COST,normalizeFloorBossChallengeState,recordFloorBossDiscovery,floorBossChallengeStatus,createFloorBossChallengeEncounter,awardFloorBossChallengeFragments,spendFloorBossFragments,restoreFloorBossFragments}from"./core/FloorBossChallengeSystem.js?v=3.1.28-build348";
-import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.33-build353";
+import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.34-build354";
 import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame,partyMonsterArtScale}from"./ui/MonsterVisual.js?v=3.1.20-build339";
 import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,permanentSignatureOwners,rollPermanentSignatureHit,PERMANENT_SIGNATURE_RATE,createSignatureEquipment,normalizeSignatureWeaponItem,signatureWeaponGrantedSkill}from"./core/SignatureWeaponSystem.js?v=3.1.28-build348";
 
@@ -633,7 +633,7 @@ function triggerEmergencyEncounter(forcedId=null,{testPreview=false,returnScreen
 function resumePendingEmergency(){const pending=normalizeEndgameState(save.state).emergency.pendingEncounter;if(!pending||battle||!save.state.player.inRun||document.querySelector(".game-modal,.battle-screen"))return false;if(game?.running){game.paused=true;game.world.encountering=false}triggerEmergencyEncounter(pending.bossId,{returnScreen:"explore"});return true}
 function startSpecialBattle(enemies,options={}){
  const waves=(Array.isArray(options.waves)&&options.waves.length?options.waves:[enemies]).filter(wave=>Array.isArray(wave)&&wave.length),waveIndex=Math.max(0,Math.min(waves.length-1,Math.floor(Number(options.waveIndex)||0))),waveTotal=waves.length,baseSubtitle=options.baseSubtitle??options.subtitle??"敗北ペナルティなし",waveLabel=waveTotal>1?(waveIndex===waveTotal-1?`FINAL WAVE ${waveTotal}/${waveTotal}`:`WAVE ${waveIndex+1}/${waveTotal}`):null;
- const battleOptions={specialBattle:true,specialBattleType:options.type,specialTitle:options.title,specialSubtitle:waveLabel?`${waveLabel}・${baseSubtitle}`:baseSubtitle,specialBaseSubtitle:baseSubtitle,specialWaves:waves,specialWaveIndex:waveIndex,specialWaveTotal:waveTotal,continuingSpecialWave:Boolean(options.continuingSpecialWave),priorVitals:options.priorVitals,specialBossId:options.bossId,powerPercent:options.powerPercent,specialFragmentReward:Math.max(0,Number(options.fragmentReward)||0),manualEndgameChallenge:Boolean(options.manualChallenge),preludeChoiceId:options.preludeChoiceId??null,preludeResultText:options.preludeResultText??null,specialTrialNumber:options.trialNumber??null,specialTrialLoop:options.trialLoop??null,specialTeamStage:options.teamStage??null,teamAttemptCharged:Boolean(options.teamAttemptCharged),teamAttemptDayKey:options.teamAttemptDayKey??null,specialReturnScreen:options.returnScreen??null,campaignStage:options.campaignStage??null,campaignHeroId:options.campaignHeroId??null,campaignHeroEncounterId:options.campaignHeroEncounterId??null,explorationAuto:Boolean(options.explorationAuto),auto:Boolean(options.explorationAuto)||save.state.settings.autoBattle};
+ const battleOptions={specialBattle:true,specialBattleType:options.type,specialTitle:options.title,specialSubtitle:waveLabel?`${waveLabel}・${baseSubtitle}`:baseSubtitle,specialBaseSubtitle:baseSubtitle,specialWaves:waves,specialWaveIndex:waveIndex,specialWaveTotal:waveTotal,continuingSpecialWave:Boolean(options.continuingSpecialWave),priorVitals:options.priorVitals,specialBossId:options.bossId,powerPercent:options.powerPercent,specialFragmentReward:Math.max(0,Number(options.fragmentReward)||0),manualEndgameChallenge:Boolean(options.manualChallenge),preludeChoiceId:options.preludeChoiceId??null,preludeResultText:options.preludeResultText??null,specialTrialNumber:options.trialNumber??null,specialTrialLoop:options.trialLoop??null,specialTeamStage:options.teamStage??null,teamAttemptCharged:Boolean(options.teamAttemptCharged),teamAttemptDayKey:options.teamAttemptDayKey??null,specialReturnScreen:options.returnScreen??null,campaignStage:options.campaignStage??null,campaignHeroId:options.campaignHeroId??null,campaignHeroEncounterId:options.campaignHeroEncounterId??null,explorationAuto:Boolean(options.explorationAuto),auto:Boolean(save.state.settings.autoBattle)};
  if(options.battleId)battleOptions.battleId=options.battleId;if(options.performance)battleOptions.performance=options.performance;if(Number.isFinite(options.reviveCount))battleOptions.reviveCount=options.reviveCount;
  startBattle(waves[waveIndex],battleOptions);
 }
@@ -1842,7 +1842,8 @@ function openEquipmentAffixCrafting(itemId){
 function openEquipmentSlotPicker(subslot){
  const target=save.state.monsters.find(monster=>monster.id===equipmentTarget);if(!target)return;
  const currentId=target.equipment?.[subslot]??null;
- const candidates=save.state.equipment.filter(item=>canEquipInSubslot(item,target,subslot)&&(!item.equippedBy||item.equippedBy===target.id)).sort((a,b)=>Number(signatureEquipmentMatchesMonster(b,target))-Number(signatureEquipmentMatchesMonster(a,target))||(RARITY_ORDER[equipmentDisplayRarity(b)]??0)-(RARITY_ORDER[equipmentDisplayRarity(a)]??0)||equipmentPower(b)-equipmentPower(a));
+ const equippedIds=new Set(save.state.monsters.flatMap(monster=>Object.values(monster.equipment??{})).filter(Boolean));
+ const candidates=save.state.equipment.filter(item=>canEquipInSubslot(item,target,subslot)&&!item.equippedBy&&!equippedIds.has(item.id)).sort((a,b)=>Number(signatureEquipmentMatchesMonster(b,target))-Number(signatureEquipmentMatchesMonster(a,target))||(RARITY_ORDER[equipmentDisplayRarity(b)]??0)-(RARITY_ORDER[equipmentDisplayRarity(a)]??0)||equipmentPower(b)-equipmentPower(a));
  const rows=candidates.map(item=>{
   const rarity=equipmentDisplayRarity(item),stats=Object.entries(item.stats??{}).map(([key,value])=>`${equipmentStatLabel(key)}+${Math.round(value*equipmentStatMultiplier(item))}`).join(" / "),filled=Math.min(4,item.affixes?.length??0),diamonds=Array.from({length:4},(_,index)=>index<filled?"◆":"◇").join("");
   const owner=signatureEquipmentOwnerName(item);return`<button type="button" class="equipment-slot-picker-row rarity-${rarityCssClass(rarity)} ${item.id===currentId?"current":""}" data-equipment-picker-item="${item.id}"><span class="equipment-picker-visual">${equipmentVisual(item,{className:"equipment-picker-art"})}</span><div><small>${rarity}・Lv.${item.level??1}${owner?`・${owner}専用`:""}</small><b>${item.name}</b><span>${stats||"能力補正なし"}</span><em>${diamonds}</em></div><strong>${item.id===currentId?"装備中":"装備"}</strong></button>`;
@@ -2076,6 +2077,7 @@ function replacePartyMember(outgoingId,incomingId,inherit=false){
  if(index<0||!outgoing||!incoming||save.state.party.includes(incomingId))return false;
  const outgoingVital=captureVitalSnapshot(outgoing),incomingVital=captureVitalSnapshot(incoming);
  const outgoingTotal=totalExperience(outgoing),incomingTotal=totalExperience(incoming);
+ const inheritedCircle=equippedMagicCircle(outgoing,save.state);
  const inheritedLoadout={...emptyEquipmentLoadout(),...(outgoing.equipment??{})};
  for(const item of save.state.equipment)if(item.equippedBy===outgoing.id||item.equippedBy===incoming.id)item.equippedBy=null;
  outgoing.equipment=emptyEquipmentLoadout();
@@ -2089,6 +2091,7 @@ function replacePartyMember(outgoingId,incomingId,inherit=false){
   applyTotalExperience(incoming,outgoingTotal);
   applyTotalExperience(outgoing,incomingTotal);
   incoming.equipment=inheritedLoadout;
+  equipMagicCircle(save.state,incoming,inheritedCircle.instanceId??"none");
   Object.values(inheritedLoadout).filter(Boolean).forEach(itemId=>{const item=save.state.equipment.find(entry=>entry.id===itemId);if(item)item.equippedBy=incoming.id});
  }
  normalizeEquipmentState();
@@ -2615,10 +2618,10 @@ function autoEquipMonster(monsterId){
   if(current&&signatureEquipmentMatchesMonster(current,monster)===signatureEquipmentMatchesMonster(best,monster)&&equipmentPower(current)>=equipmentPower(best))continue;
   assignEquipmentToSubslot(save.state,best.id,monsterId,subslot);
  }
- normalizeEquipmentState();restoreVitalSnapshot(monster,snapshot);
+ autoEquipMagicCircle(save.state,monster);normalizeEquipmentState();restoreVitalSnapshot(monster,snapshot);
 }
 function unequipItem(itemId){const item=save.state.equipment.find(i=>i.id===itemId);if(!item?.equippedBy)return;const monster=save.state.monsters.find(m=>m.id===item.equippedBy);if(!monster){item.equippedBy=null;save.save();return render()}const beforeStats=calculatedStats(monster),beforeMp=maxMp(monster);for(const key of Object.keys(monster.equipment??{}))if(monster.equipment[key]===item.id)monster.equipment[key]=null;item.equippedBy=null;preserveVitals(monster,beforeStats,beforeMp);save.save();render()}
-function unequipMonsterAll(monsterId,confirmFirst=true){const monster=save.state.monsters.find(m=>m.id===monsterId);if(!monster)return;const ids=Object.values(monster.equipment??{}).filter(Boolean);if(!ids.length){if(confirmFirst)alert("解除する装備がありません");return}if(confirmFirst&&!confirm(`${displayName(monster)}の装備をすべて解除しますか？`))return;const beforeStats=calculatedStats(monster),beforeMp=maxMp(monster);ids.forEach(id=>{const item=save.state.equipment.find(i=>i.id===id);if(item)item.equippedBy=null});monster.equipment=emptyEquipmentLoadout();preserveVitals(monster,beforeStats,beforeMp);save.save();if(confirmFirst)render()}
+function unequipMonsterAll(monsterId,confirmFirst=true){const monster=save.state.monsters.find(m=>m.id===monsterId);if(!monster)return;const ids=Object.values(monster.equipment??{}).filter(Boolean);if(!ids.length&&equippedMagicCircle(monster,save.state).id==="none"){if(confirmFirst)alert("解除する装備がありません");return}if(confirmFirst&&!confirm(`${displayName(monster)}の装備をすべて解除しますか？`))return;const beforeStats=calculatedStats(monster),beforeMp=maxMp(monster);ids.forEach(id=>{const item=save.state.equipment.find(i=>i.id===id);if(item)item.equippedBy=null});monster.equipment=emptyEquipmentLoadout();equipMagicCircle(save.state,monster,"none");preserveVitals(monster,beforeStats,beforeMp);save.save();if(confirmFirst)render()}
 
 function sellItem(itemId){
  const item=save.state.equipment.find(i=>i.id===itemId);
@@ -5133,7 +5136,7 @@ function resumeSavedBattle(){
  const party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);if(!party.length)return false;
  save.state.player.currentFloor=data.floor??save.state.player.currentFloor;snapshot=hydrateExpeditionSnapshot(data.explorationSnapshot??save.state.expeditionSnapshot);
  const explorationAuto=data.specialBattleType==="campaignHero"?Boolean(data.explorationAuto):save.state.settings.exploreAutoMode!=="off"&&!data.specialBattle&&!data.memoryBattle;
- battle={...data,battleId:data.battleId??crypto.randomUUID?.()??`${Date.now()}-${Math.random()}`,party,species:SPECIES,busy:false,guideReady:true,skillMenu:false,itemMenu:false,enemy:data.enemies[0],auto:explorationAuto||data.auto,explorationAuto,reviveCount:data.reviveCount??0,delayedSkillEchoes:data.delayedSkillEchoes??[],performance:data.performance??Object.fromEntries(party.map(monster=>[monster.id,{damage:0,taken:0,healing:0,revives:0,kills:0}])),affectionDeathRecorded:data.affectionDeathRecorded??Object.fromEntries(party.map(monster=>[monster.id,monster.currentHp<=0])),circleTurnMultipliers:data.circleTurnMultipliers??{},circleTurnKeys:data.circleTurnKeys??{},circleCueKeys:data.circleCueKeys??{},enemyCircleTurnKeys:data.enemyCircleTurnKeys??{},circleShields:data.circleShields??{},signatureShields:data.signatureShields??{},signatureChains:data.signatureChains??{},signatureExtraRounds:data.signatureExtraRounds??{},signatureResonances:Object.fromEntries(activeSignatureResonances(save.state,party).map(entry=>[entry.monster.id,entry.definition])),magicCircleProfiles:data.magicCircleProfiles??Object.fromEntries(party.map(monster=>[monster.id,equippedMagicCircle(monster,save.state)])),magicCircleArt:data.magicCircleArt??Object.fromEntries(party.map(monster=>[monster.id,magicCircleMarkup(monster,save.state,{className:"battle-magic-circle"})])),enemyMagicCircleArt:Object.fromEntries((data.enemies??[]).map(enemy=>[enemy.id,enemyMagicCircleMarkup(enemy.enemyMagicCircle)])),openingCircleBuff:Boolean(data.openingCircleBuff),...createBattleRulesState(party),cooldowns:data.cooldowns??{},enemyStatuses:data.enemyStatuses??{},allyAilments:data.allyAilments??Object.fromEntries(party.map(monster=>[monster.id,normalizePersistentAilments(monster.ailments)])),allyEffects:data.allyEffects??{},enemyEffects:data.enemyEffects??{},lastStatusTurn:data.lastStatusTurn??0,log:data.log??[]};
+ battle={...data,battleId:data.battleId??crypto.randomUUID?.()??`${Date.now()}-${Math.random()}`,party,species:SPECIES,busy:false,guideReady:true,skillMenu:false,itemMenu:false,enemy:data.enemies[0],auto:Boolean(save.state.settings.autoBattle??data.auto),explorationAuto,reviveCount:data.reviveCount??0,delayedSkillEchoes:data.delayedSkillEchoes??[],performance:data.performance??Object.fromEntries(party.map(monster=>[monster.id,{damage:0,taken:0,healing:0,revives:0,kills:0}])),affectionDeathRecorded:data.affectionDeathRecorded??Object.fromEntries(party.map(monster=>[monster.id,monster.currentHp<=0])),circleTurnMultipliers:data.circleTurnMultipliers??{},circleTurnKeys:data.circleTurnKeys??{},circleCueKeys:data.circleCueKeys??{},enemyCircleTurnKeys:data.enemyCircleTurnKeys??{},circleShields:data.circleShields??{},signatureShields:data.signatureShields??{},signatureChains:data.signatureChains??{},signatureExtraRounds:data.signatureExtraRounds??{},signatureResonances:Object.fromEntries(activeSignatureResonances(save.state,party).map(entry=>[entry.monster.id,entry.definition])),magicCircleProfiles:data.magicCircleProfiles??Object.fromEntries(party.map(monster=>[monster.id,equippedMagicCircle(monster,save.state)])),magicCircleArt:data.magicCircleArt??Object.fromEntries(party.map(monster=>[monster.id,magicCircleMarkup(monster,save.state,{className:"battle-magic-circle"})])),enemyMagicCircleArt:Object.fromEntries((data.enemies??[]).map(enemy=>[enemy.id,enemyMagicCircleMarkup(enemy.enemyMagicCircle)])),openingCircleBuff:Boolean(data.openingCircleBuff),...createBattleRulesState(party),cooldowns:data.cooldowns??{},enemyStatuses:data.enemyStatuses??{},allyAilments:data.allyAilments??Object.fromEntries(party.map(monster=>[monster.id,normalizePersistentAilments(monster.ailments)])),allyEffects:data.allyEffects??{},enemyEffects:data.enemyEffects??{},lastStatusTurn:data.lastStatusTurn??0,log:data.log??[]};
  for(const u of battle.party){u.heroShield348=Math.max(0,Number(data.heroShields348?.[u.id])||0);u.heroChain348=data.heroChains348?.[u.id]??null;}for(const e of battle.enemies)if(e.campaignHeroId&&!e.heroLoadoutVersion348){const rate=e.hp/Math.max(1,e.maxHp),mpRate=e.currentMp/Math.max(1,e.maxMp);applyCampaignHeroLoadout(e);e.hp=Math.round(e.maxHp*rate);e.currentMp=Math.floor(e.maxMp*mpRate)}
  battle.hpDisplayRates={};battle.hpTrails={};if(!battle.floorBossAliveState)initializeFloorBossDeathTracking();battle.heroResonanceCount=heroResonanceProfile(battle.party).count;battle.invincibleAlliance=invincibleAllianceReady();
  battle.enemies.forEach(enemy=>hydrateEndgameEnemy(enemy));battle.enemy=battle.enemies[0];syncPersistentAilments(battle);battle.turnQueue=data.turnQueue??[];battle.queueIndex=data.queueIndex??0;battle.targetEnemyId=data.targetEnemyId??aliveEnemies(battle)[0]?.id??null;screen="explore";renderBattle();setTimeout(()=>data.actionCommitted?finishCurrentAction():continueBattleFlow(),scaledBattleDelay(250));return true
@@ -5400,7 +5403,7 @@ function startBattle(encounter,options={}){
  enemies.filter(enemy=>enemy.elite).forEach(enemy=>recordEliteEncounter(save.state,enemy));save.save();
  const endgameFaction=enemies.find(enemy=>enemy.faction)?.faction,battleTheme=endgameFaction==="tenGod"?"ten-gods":endgameFaction==="abyss"?"abyss":roomProfile?.battleTheme??(enemies.some(enemy=>enemy.boss)?"boss":biomeBattle?.theme??"default");
  const explorationAuto=!tutorialCaptureEligible&&!tutorialAttributeBattle&&save.state.settings.exploreAutoMode!=="off"&&!options.specialBattle&&!options.memoryBattle;
- battle={battleId:crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`,enemies,enemy:enemies[0],targetEnemyId:enemies[0]?.id,party,species:SPECIES,turn:1,busy:false,guideReady:false,auto:explorationAuto||save.state.settings.autoBattle,explorationAuto,guards:{},escapePending:false,actionCommitted:false,skillMenu:false,itemMenu:false,allySynergy:synergy,enemySynergy,biomeBattle,battleTheme,battleRoomAttribute:roomProfile?.id??null,biomePanelCollapsed:false,biomePanelCollapseAt:Date.now()+(explorationAuto?900:1800),reviveCount:0,delayedSkillEchoes:[],equipmentAuthorityCueKeys:{},performance:Object.fromEntries(party.map(monster=>[monster.id,{damage:0,taken:0,healing:0,revives:0,kills:0}])),affectionDeathRecorded:Object.fromEntries(party.map(monster=>[monster.id,monster.currentHp<=0])),circleTurnMultipliers:{},circleTurnKeys:{},circleCueKeys:{},enemyCircleTurnKeys:{},circleShields:{},signatureShields:{},signatureChains:{},signatureExtraRounds:{},signatureResonances:Object.fromEntries(activeSignatureResonances(save.state,party).map(entry=>[entry.monster.id,entry.definition])),hpDisplayRates:{},hpTrails:{},magicCircleProfiles:Object.fromEntries(party.map(monster=>[monster.id,equippedMagicCircle(monster,save.state)])),magicCircleArt:Object.fromEntries(party.map(monster=>[monster.id,magicCircleMarkup(monster,save.state,{className:"battle-magic-circle"})])),enemyMagicCircleArt:Object.fromEntries(enemies.map(enemy=>[enemy.id,enemyMagicCircleMarkup(enemy.enemyMagicCircle)])),openingCircleBuff:party.some(monster=>hasCircleEffect(monster,"openingBuff")),...createBattleRulesState(party),...options};
+ battle={battleId:crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`,enemies,enemy:enemies[0],targetEnemyId:enemies[0]?.id,party,species:SPECIES,turn:1,busy:false,guideReady:false,auto:Boolean(save.state.settings.autoBattle),explorationAuto,guards:{},escapePending:false,actionCommitted:false,skillMenu:false,itemMenu:false,allySynergy:synergy,enemySynergy,biomeBattle,battleTheme,battleRoomAttribute:roomProfile?.id??null,biomePanelCollapsed:false,biomePanelCollapseAt:Date.now()+(explorationAuto?900:1800),reviveCount:0,delayedSkillEchoes:[],equipmentAuthorityCueKeys:{},performance:Object.fromEntries(party.map(monster=>[monster.id,{damage:0,taken:0,healing:0,revives:0,kills:0}])),affectionDeathRecorded:Object.fromEntries(party.map(monster=>[monster.id,monster.currentHp<=0])),circleTurnMultipliers:{},circleTurnKeys:{},circleCueKeys:{},enemyCircleTurnKeys:{},circleShields:{},signatureShields:{},signatureChains:{},signatureExtraRounds:{},signatureResonances:Object.fromEntries(activeSignatureResonances(save.state,party).map(entry=>[entry.monster.id,entry.definition])),hpDisplayRates:{},hpTrails:{},magicCircleProfiles:Object.fromEntries(party.map(monster=>[monster.id,equippedMagicCircle(monster,save.state)])),magicCircleArt:Object.fromEntries(party.map(monster=>[monster.id,magicCircleMarkup(monster,save.state,{className:"battle-magic-circle"})])),enemyMagicCircleArt:Object.fromEntries(enemies.map(enemy=>[enemy.id,enemyMagicCircleMarkup(enemy.enemyMagicCircle)])),openingCircleBuff:party.some(monster=>hasCircleEffect(monster,"openingBuff")),...createBattleRulesState(party),...options};
  battle.tutorialCaptureEligible=tutorialCaptureEligible;battle.tutorialAttributeBattle=tutorialAttributeBattle;
  if(tutorialCaptureEligible){battle.auto=false;save.state.settings.autoBattle=false;save.state.settings.exploreAutoMode="off";const target=enemies[0];if(target){const oldHp=Math.max(1,target.maxHp);target.maxHp=Math.max(oldHp,Math.round(oldHp*6));target.hp=target.maxHp;target.atk=Math.max(1,Math.floor(target.atk*.28));target.matk=Math.max(1,Math.floor((target.matk??target.atk)*.28));save.state.inventory.captureCrystals=Math.max(Number(save.state.inventory.captureCrystals)||0,captureCrystalCost(target))}save.state.inventory.potions=Math.max(1,Number(save.state.inventory.potions)||0);save.save()}
  if(tutorialAttributeBattle){battle.auto=false;save.state.settings.autoBattle=false;save.save()}
@@ -5474,7 +5477,7 @@ function renderBattle(){
   battle.auto=false;save.state.settings.autoBattle=false;saveBattleCheckpoint();showToast("手動操作へ切替");renderBattle();
  });
  const closeSkill=document.getElementById("closeSkillMenu");if(closeSkill)closeSkill.onclick=()=>{battle.skillMenu=false;renderBattle()};
- const closeItem=document.getElementById("closeItemMenu");if(closeItem)closeItem.onclick=()=>{battle.itemMenu=false;renderBattle()};
+ const closeItem=document.getElementById("closeItemMenu");if(closeItem){const close=()=>{if(!battle?.itemMenu)return;battle.itemMenu=false;renderBattle()};closeItem.onclick=close;closeItem.onpointerdown=event=>{if(event.button!=null&&event.button!==0)return;event.preventDefault();event.stopPropagation();close()}};
  document.getElementById("battleSpeed").onclick=()=>{const index=BATTLE_SPEED_OPTIONS.indexOf(battleSpeed());save.state.settings.battleSpeed=BATTLE_SPEED_OPTIONS[(index+1)%BATTLE_SPEED_OPTIONS.length];save.save();renderBattle()};
  const autoButton=document.getElementById("toggleBattleAuto"),toggleBattleAuto=()=>{
   if(!battle)return;

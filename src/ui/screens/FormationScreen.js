@@ -1,13 +1,13 @@
 import{FORMATION_LAYOUT_CSS}from"./FormationLayout.js?v=3.1.30-build350";
 import{SPECIES}from"../../data/species.js?v=3.1.28-build348";
-import{displayName}from"../../models/Monster.js?v=3.1.33-build353";
+import{displayName}from"../../models/Monster.js?v=3.1.34-build354";
 import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=3.1.28-build348";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.33-build353";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.34-build354";
 import{equipmentDisplayRarity,equipmentSubslotLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=3.1.1-build311";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build311";
 import{resourceHud,bottomNav}from"../components/GameChrome.js?v=3.1.1-build311";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=3.1.1-build311";
-import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=3.1.19-build338";
+import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=3.1.34-build354";
 
 const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],

@@ -1,11 +1,12 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.33-build353";
+import{BATTLE_ITEM_LAYOUT}from"./BattleItemLayout.js?v=3.1.34-build354";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.34-build354";
 import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.28-build348";
 import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.28-build348";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.33-build353";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.34-build354";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.20-build339";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.33-build353";
+import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.34-build354";
 import{ATTRIBUTE_MATCHUP_MULTIPLIERS,attributesEffectiveAgainst,attributesIneffectiveAgainst}from"../../data/attributes.js?v=3.1.1-build311";
 import{heroResonanceProfile}from"../../core/HeroResonanceSystem.js?v=3.1.28-build348";
 
@@ -130,16 +131,19 @@ function renderItems(inventory){
  ];
  const rows=defs.filter(d=>(inventory[d[0]]??0)>0).map(([id,icon,name,desc])=>`<button data-battle-item="${id}"><span><b>${icon} ${name}</b><small>${desc}</small></span><strong>×${inventory[id]??0}</strong></button>`).join("");
  const body=rows||'<div class="empty">使用できるアイテムがありません</div>';
- return `<div class="skill-command-list battle-item-list">${body}<button id="closeItemMenu" class="secondary">戻る</button></div>`;
+ return renderItemPanel(body);
 }
 
+function renderItemPanel(body,closeId="closeItemMenu",closeLabel="閉じる"){
+ return `<div class="battle-item-toolbar"><b>戦闘アイテム</b><button type="button" id="${closeId}" aria-label="${closeLabel}">${closeLabel}</button></div><div class="skill-command-list battle-item-list">${body}</div>`;
+}
 function renderOnlineItems(battle){
  if(battle.onlineItemTargetMenu){
   const targets=battleParty(battle).map(monster=>`<button type="button" data-online-item-target="${monster.id}" ${monster.currentHp<=0?"disabled":""}><span><b>${unitName(monster)}</b><small>HP ${battleInteger(monster.currentHp)} / ${battleInteger(unitStats(monster).hp)}　MP ${battleInteger(monster.currentMp)} / ${battleInteger(unitMaxMp(monster))}</small></span><strong>対象</strong></button>`).join("");
-  return`<div class="skill-command-list battle-item-list online-item-target-list"><div class="online-item-step"><b>2 / 2　使用対象を選択</b><small>選択後に行動が確定します</small></div>${targets}<button id="closeOnlineItemTarget" class="secondary">戻る</button></div>`
+  return renderItemPanel(`<div class="online-item-step"><b>2 / 2　使用対象を選択</b><small>選択後に行動が確定します</small></div>${targets}`,"closeOnlineItemTarget","戻る")
  }
  const count=Math.max(0,Number(battle.onlineItemCharges)||0),disabled=count<=0;
- return`<div class="skill-command-list battle-item-list"><div class="online-item-step"><b>1 / 2　使用アイテムを選択</b><small>このあと使用対象を選びます</small></div><button type="button" data-online-battle-item="emergency" ${disabled?"disabled":""}><span><b>${itemIcon("potions")} 共闘応急薬</b><small>味方単体のHP40%・MP25%を回復</small></span><strong>×${battleInteger(count)}</strong></button><button id="closeItemMenu" class="secondary">戻る</button></div>`
+ return renderItemPanel(`<div class="online-item-step"><b>1 / 2　使用アイテムを選択</b><small>このあと使用対象を選びます</small></div><button type="button" data-online-battle-item="emergency" ${disabled?"disabled":""}><span><b>${itemIcon("potions")} 共闘応急薬</b><small>味方単体のHP40%・MP25%を回復</small></span><strong>×${battleInteger(count)}</strong></button>`)
 }
 
 function renderCommands(battle,actor,current,enemies,target,inventory,skills){
@@ -154,8 +158,9 @@ function renderCommands(battle,actor,current,enemies,target,inventory,skills){
  else if(battle.onlineMode&&(battle.itemMenu||battle.onlineItemTargetMenu))controls=renderOnlineItems(battle);
  else if(battle.itemMenu)controls=renderItems(inventory);
  else{const blocked=Boolean(battle.onlineMode&&!battle.onlineAllowCapture)||Boolean(target&&(target.boss||target.floorBossCatalogId||target.uncapturable||target.endgameBossId||["abyss","tenGod"].includes(target.faction)));controls=`<div class="command-grid"><button data-command="attack"><i>${pixelIcon("crossed-swords")}</i><span>たたかう</span></button><button data-command="guard"><i>${pixelIcon("equipment")}</i><span>ガード</span></button><button data-command="skill"><i>${pixelIcon("skills")}</i><span>スキル</span></button><button data-command="item"><i>${pixelIcon("growth")}</i><span>${battle.onlineMode?"応急薬":"アイテム"}</span></button><button data-command="capture" ${blocked?'disabled aria-label="この敵は捕獲できません"':""}><i>${pixelIcon("capture")}</i><span>${blocked?"捕獲不可":"捕獲"}</span></button></div>`}
+ const itemOpen=Boolean(actor&&!battle.auto&&!battle.onlineReadOnly&&!battle.onlineActionSubmitted&&!battle.skillMenu&&(battle.itemMenu||battle.onlineItemTargetMenu));
  const countdown=battle.onlineCountdownMode?`<strong class="online-shared-countdown" data-online-countdown="${battle.onlineCountdownMode}">${battle.phase==="command"?"--.-":"処理中"}</strong>`:"";
- return `<div class="battle-command ${battle.auto?"is-auto":""} ${battle.itemMenu||battle.onlineItemTargetMenu?"has-item-menu":""}"><div class="battle-command-head spread"><h2>${title}</h2>${countdown}<span class="muted">${pixelIcon("capture")} 捕獲結晶 ${inventory.captureCrystals??0}</span></div>${targetHelp}${controls}</div>`;
+ return `<div class="battle-command ${battle.auto?"is-auto":""} ${itemOpen?"has-item-menu":""}"><div class="battle-command-head spread"><h2>${title}</h2>${countdown}<span class="muted">${pixelIcon("capture")} 捕獲結晶 ${inventory.captureCrystals??0}</span></div>${targetHelp}${controls}</div>`;
 }
 
 export function BattleScreen(battle,inventory,settings,floor=1){
@@ -171,7 +176,7 @@ export function BattleScreen(battle,inventory,settings,floor=1){
  const onlineExit=battle.onlineMode==="explore"?'<button type="button" data-online-return>帰還</button>':'<button type="button" disabled>逃走不可</button>';
  const onlineAuto=battle.onlineAutoAvailable?`<button type="button" data-online-battle-auto="${htmlText(battle.onlineMode)}" aria-pressed="${Boolean(battle.auto)}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button>`:battle.onlineAutoUnsupported?'<button type="button" disabled class="online-sync-state" title="サーバー197更新後に利用できます"><span>自動</span><b>要更新</b></button>':'<button type="button" disabled class="enabled online-sync-state"><span>同期</span><b>有効</b></button>';
  const offlineExit=battle.specialBattle?`<button id="escapeBattle" type="button" ${battle.escapePending?"disabled":""}>${battle.escapePending?"撤退待ち":"撤退"}</button>`:`<button id="escapeBattle" type="button" ${battle.escapePending?"disabled":""}>${battle.escapePending?"逃走待ち":"逃げる"}</button>`;
- return `<section class="battle-screen side-battle-v2 battle-history-hidden battle-theme-${theme} ${battle.auto?"auto-mode":"manual-mode"} ${battle.biomePanelCollapsed?"biome-panel-collapsed":"biome-panel-expanded"} ${battle.specialBattle?"special-battle":""} ${battle.onlineMode?"online-shared-battle":""}" ${battle.onlineMode?`data-online-battle-view="${battle.onlineMode}"`:""} data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}">${special}
+ return `<section class="battle-screen side-battle-v2 battle-history-hidden battle-theme-${theme} ${battle.auto?"auto-mode":"manual-mode"} ${battle.biomePanelCollapsed?"biome-panel-collapsed":"biome-panel-expanded"} ${battle.specialBattle?"special-battle":""} ${battle.onlineMode?"online-shared-battle":""}" ${battle.onlineMode?`data-online-battle-view="${battle.onlineMode}"`:""} data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}"><style>${BATTLE_ITEM_LAYOUT}</style>${special}
   <div class="battle-header"><div class="round-label"><small>ラウンド</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}階・遭遇戦`}</b><small>${battle.onlineMode?battle.auto?"サーバー同期・自動戦闘":"サーバー同期戦闘":battle.auto?"完全自動":"コマンド戦闘"}</small></div>${battle.onlineMode?onlineAuto:`<button id="toggleBattleAuto" type="button" aria-pressed="${battle.auto}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button>`}<button id="battleSpeed" ${battle.onlineMode?`data-online-speed-cycle="${battle.onlineMode}"`:""}>×${speed}</button>${battle.onlineMode?onlineExit:offlineExit}</div>
   <div class="turn-order"><span class="turn-order-title">行動順</span>${renderTurnOrder(battle)}</div>
   <div class="battle-arena side-battle-arena multi-enemy">

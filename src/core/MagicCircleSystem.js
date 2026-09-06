@@ -378,3 +378,12 @@ export function slotDamageMultiplier(value,level=1){
  const maximum=magicCircleLevelEffect("slot_fate",level).damageMax;
  return Number((.5+(roll/999)*(maximum-.5)).toFixed(3));
 }
+
+export function autoEquipMagicCircle(state,monster){
+ normalizeMagicCircleState(state);
+ if(!monster||!(state.party??[]).includes(monster.id))return{ok:false};
+ const occupied=new Set((state.monsters??[]).filter(m=>m.id!==monster.id).map(m=>m.magicCircleInstanceId).filter(Boolean));
+ const choices=state.magicCircles.instances.filter(i=>state.magicCircles.unlocked[i.circleId]&&!occupied.has(i.instanceId));
+ choices.sort((a,b)=>b.level-a.level||Number(b.instanceId===monster.magicCircleInstanceId)-Number(a.instanceId===monster.magicCircleInstanceId));
+ return choices.length?equipMagicCircle(state,monster,choices[0].instanceId):{ok:false};
+}

@@ -1,5 +1,5 @@
-import{ABYSS_SKILL_CATEGORIES,ABYSS_SKILL_NODES,abyssSkillBranches,abyssSkillCategoryById,abyssSkillEffectSummary,magicCircleUnlockForNode,abyssSkillNodeById,abyssSkillTreeSummary}from"../../core/AbyssSkillTreeSystem.js?v=3.1.17-build336";
-import{magicCircleById}from"../../core/MagicCircleSystem.js?v=3.1.1-build316";
+import{ABYSS_SKILL_CATEGORIES,ABYSS_SKILL_NODES,abyssSkillBranches,abyssSkillCategoryById,abyssSkillEffectSummary,magicCircleUnlockForNode,abyssSkillNodeById,abyssSkillTreeSummary}from"../../core/AbyssSkillTreeSystem.js?v=3.1.34-build354";
+import{magicCircleById}from"../../core/MagicCircleSystem.js?v=3.1.34-build354";
 import{pixelIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 
 const ROW_HEIGHT=144,CATEGORY_ICON={economy:"coin",combat:"crossed-swords",exploration:"dungeon"};

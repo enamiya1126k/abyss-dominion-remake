@@ -1,0 +1,163 @@
+{
+  "build": 354,
+  "version": "3.1.34",
+  "requires": "Build353",
+  "files": [
+    {
+      "path": "BUILD354_README.txt",
+      "sha256": "f63246e59befc8a6ec954382918a428a5df904c5cefb17729285aa6577161399"
+    },
+    {
+      "path": "index.html",
+      "sha256": "8a1073768e7d669f05326260f35d9911a7db58a0b41e4addce6ab9ed9e05290a"
+    },
+    {
+      "path": "src/battle/EnemyAI.js",
+      "sha256": "b73df4185f11fddc4663e34efec0fb98e056b99cff4cb2fe43cce6ca8c1b1679"
+    },
+    {
+      "path": "src/battle/TurnSystem.js",
+      "sha256": "c643899015bc1cdabb5be766dbe36160a337b6170961654d322329443a92a9e8"
+    },
+    {
+      "path": "src/core/AbyssSkillTreeSystem.js",
+      "sha256": "49dda61e648855d08457bbc6534e144159b4276d0894b440e1ef0392f453da33"
+    },
+    {
+      "path": "src/core/CampaignHeroLoadoutSystem.js",
+      "sha256": "f2ae0474133da74045f293679440a60b6a225aacf933547b3ffabe1f7b55d42a"
+    },
+    {
+      "path": "src/core/CombatPower.js",
+      "sha256": "0b3b92eaecaeab9d0382b10d5e601a5731268f48e191e807a42d3f6b2b9443e6"
+    },
+    {
+      "path": "src/core/EquipmentDropSystem.js",
+      "sha256": "4ad431fb769e37a180ef6b10556b1b90d84bcf90ec7695ceb8b1ffee5b604202"
+    },
+    {
+      "path": "src/core/ExperiencePackSystem.js",
+      "sha256": "6635145969fe826f14b31ecba23fa8b50aee60d035a238d091e486ca57ec9c83"
+    },
+    {
+      "path": "src/core/GoldRewardSystem.js",
+      "sha256": "470d8942e41384d48a202bf67d63dde1532ee44b393bcb89a7615cc738a924f8"
+    },
+    {
+      "path": "src/core/MagicCircleSystem.js",
+      "sha256": "72bfafe9ce51e09add128ec7d5e4f0164b480778f171573fa66f266731bd9e00"
+    },
+    {
+      "path": "src/core/ProgressionSystem.js",
+      "sha256": "4c86d22c5514c2266d0bfbbe9814fb446c809849ebcb93eb05791d985ce89c11"
+    },
+    {
+      "path": "src/core/ReturnRewardSystem.js",
+      "sha256": "d0576d9fcc5c98d0b9b970f3761bc6f31bd9fdf9b1b936230e2ce0694dc389aa"
+    },
+    {
+      "path": "src/core/SecondWorldEventSystem.js",
+      "sha256": "eadb2cc63647d40014d1172091e5cf4db56447bc2733fa8c2a9cb461cd63157a"
+    },
+    {
+      "path": "src/core/SecretRoomSystem.js",
+      "sha256": "b625c0bc1bbe7f235254dfc9b1872b5d3e57c35bf81baa299b4902dfce395e04"
+    },
+    {
+      "path": "src/core/SerialCodeSystem.js",
+      "sha256": "a2d5711ced302797b34174d75cec356ca28e3b77871fd3da3d37872656a8a061"
+    },
+    {
+      "path": "src/core/config.js",
+      "sha256": "4b470140cb4edc0297605207b1d59bb652f6009acdab15df91e87eecc0f4583e"
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "2f1dcdaa3e00c60819fc4c8673cc39e4e5571a99c88029f679c3bf8a051a69b3"
+    },
+    {
+      "path": "src/models/Monster.js",
+      "sha256": "e1216fee58aab6ee755f42ee17fb08ca2541e6c7c4d1383180eb61374726a483"
+    },
+    {
+      "path": "src/online/OnlinePartyClient.js",
+      "sha256": "85c0bb03ac6505a7714aa7b68a1c1abed6b57d5fa13b608a3811516d11c13a34"
+    },
+    {
+      "path": "src/online/OnlineViews.js",
+      "sha256": "6d5e51f4d4548a6fd0ddbdc34793c5f57aab54b21d6d35ef1b4dbd49f94d5ca4"
+    },
+    {
+      "path": "src/services/EquipmentStorage.js",
+      "sha256": "d21b263e122aacb4e0e24e31768d20209464203d729e46a7b034f5f938341a51"
+    },
+    {
+      "path": "src/services/SaveService.js",
+      "sha256": "2d98394d098cc4257634a6313049ccdc82f33118e3792957213366aa62d3b91e"
+    },
+    {
+      "path": "src/ui/components/MonsterCard.js",
+      "sha256": "5e851a6db7c1426784d7be2268365ede638c5f4885c409b5389238762f9acd3c"
+    },
+    {
+      "path": "src/ui/screens/AbyssSkillTreeScreen.js",
+      "sha256": "aa91a575d8997d8cdbfc39bf57c62a38868a4fffb9d483882fb22862fe20446f"
+    },
+    {
+      "path": "src/ui/screens/BattleItemLayout.js",
+      "sha256": "586c840bbbe29a344b4395b04e1c0ddf6dfe6b679a5154036ee8a2b41943e6dc"
+    },
+    {
+      "path": "src/ui/screens/BattleScreen.js",
+      "sha256": "ce598c06c794cb5333cdd692ddf1305b9416b74098c3fd306749cf2b1ad4c95e"
+    },
+    {
+      "path": "src/ui/screens/EquipmentScreen.js",
+      "sha256": "2610fb8c111d95a88f65d3d2747ff952e009bab0d08599a9202fd354916b940a"
+    },
+    {
+      "path": "src/ui/screens/ExploreScreen.js",
+      "sha256": "bd2c4ab9db3b7e14039abe24c451041fef258fa702e24484bb3e5f9b910e7315"
+    },
+    {
+      "path": "src/ui/screens/FormationScreen.js",
+      "sha256": "abdb33ed2e35d61c397de8ca04bd1241b2b41a7c3b625a61d4f910f2c869193d"
+    },
+    {
+      "path": "src/ui/screens/GauntletScreen.js",
+      "sha256": "ef6d760b6cb0aa963bd1e7072474eab1a9592e2cdcd8555eb91394ed399a11ef"
+    },
+    {
+      "path": "src/ui/screens/HomeScreen.js",
+      "sha256": "cae1ad99242fcf0f712f0638b51302e7cec62056196433b17c97cd04d40188c6"
+    },
+    {
+      "path": "src/ui/screens/MonsterDetailScreen.js",
+      "sha256": "f41471b6dff85ba13a409b45d346dc2665e0aae22fd7332e68a3cda41fd6c982"
+    },
+    {
+      "path": "src/ui/screens/MonsterListScreen.js",
+      "sha256": "fafced957ae260b3103bd62a9db066cda9fb89b8e8f39dc85934b15f2cadd2d8"
+    },
+    {
+      "path": "src/ui/screens/OnlinePartyScreen.js",
+      "sha256": "99b6d5d332e537489577e08dbfb9ec242ae69322bf529d72f3423fbf5a11b815"
+    },
+    {
+      "path": "src/ui/screens/SettingsScreen.js",
+      "sha256": "eaeaecb4e203cfc6f91cbafcfa37176170ae5fc9f2f3a86771e3dfd9a6c22841"
+    },
+    {
+      "path": "src/ui/screens/ShopScreen.js",
+      "sha256": "2f9937ccaf07ab3395821a64d4810d4ef331f986bc5a3cdd329a9664e465e1b4"
+    },
+    {
+      "path": "src/ui/screens/SkillScreen.js",
+      "sha256": "376d0bbf50b051ddc1c90deb9b66cef7329ab94e21e7275b893878cf39ba9860"
+    },
+    {
+      "path": "validation/check354.mjs",
+      "sha256": "43af7ee61f9dc75a119752c7551c79a4ab251fb4e3a0c5c25b8e482001add154"
+    }
+  ]
+}
