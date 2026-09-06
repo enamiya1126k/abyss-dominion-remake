@@ -1,0 +1,38 @@
+name: Build344 Formation Direct ZIP
+
+on:
+  push:
+    branches:
+      - build344-formation-artifact
+    paths:
+      - '.github/workflows/build344-formation-direct.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download previous Build344 artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p previous
+          gh run download 34001969214 --repo "$GITHUB_REPOSITORY" -n ABYSS_Build344_formation_patch -D previous
+          unzip -q previous/ABYSS_Build344_formation_patch.zip -d patch
+          test -f patch/index.html
+          test -f patch/src/main.js
+          test -f patch/src/core/config.js
+          test -f patch/src/ui/screens/FormationScreen.js
+          test -f patch/src/Styles/build344-formation.css
+          test -f patch/README_BUILD344_FORMATION.txt
+
+      - name: Upload direct replacement ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: ABYSS_Build344_formation_patch_direct
+          path: patch/
+          if-no-files-found: error
+          retention-days: 7
