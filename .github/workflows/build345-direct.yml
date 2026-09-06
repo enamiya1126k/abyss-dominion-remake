@@ -1,0 +1,41 @@
+name: Build345 Direct Replacement ZIP
+
+on:
+  push:
+    branches:
+      - build345-hero-balance-artifact
+    paths:
+      - '.github/workflows/build345-direct.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  direct:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download validated Build345 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ABYSS_Build345_hero_balance_patch
+          path: source
+          run-id: 34005289208
+          github-token: ${{ github.token }}
+
+      - name: Extract replacement files
+        run: |
+          mkdir -p direct
+          unzip -q source/ABYSS_Build345_hero_balance_patch.zip -d direct
+          test -f direct/index.html
+          test -f direct/src/main.js
+          test -f direct/src/core/CampaignHeroEncounterSystem.js
+          test -f direct/src/Styles/build345-balance-ui.css
+
+      - name: Upload direct replacement archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: ABYSS_Build345_hero_balance_patch_direct
+          path: direct/
+          if-no-files-found: error
+          retention-days: 7
