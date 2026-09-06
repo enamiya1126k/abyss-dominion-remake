@@ -76,7 +76,7 @@ function memberCard(state,monster,index,{readOnly=false}={}){
   <section class="formation-section formation-circle-section">
    <h3>設定中魔法陣</h3>
    <button type="button" class="formation-circle-card ${circle.id==="none"?"empty":""}" data-formation-circle="${monster.id}" aria-label="${circleLabel}を装備管理で開く">
-    <span>${circle.id==="none"?"◇":`<img src="${circle.asset}" alt="">`}</span><b>${circle.name}</b><small>${circle.level?`Lv.${circle.level}・`:""}タップで変更</small><i>›</i>
+    <span class="formation-circle-art">${circle.id==="none"?"◇":`<img src="${circle.asset}" alt="">`}</span>${circle.level?`<small class="formation-circle-level">Lv.${circle.level}</small>`:""}<i aria-hidden="true">›</i>
    </button>
   </section>
   ${readOnly?'<div class="formation-readonly-note">帰還後に順番・交代・スキルを変更できます</div>':`<div class="formation-actions compact"><button data-formation-skills="${monster.id}">スキル編集</button><button data-formation-replace="${monster.id}">交代</button><button class="danger formation-remove-action" data-formation-remove="${monster.id}">隊列から外す</button></div>`}

@@ -21,18 +21,18 @@ function weightedPick(entries,roll=Math.random()){
 }
 export function rollEnemyRank(floor,roll=Math.random()){return weightedPick(Object.entries(enemyRankRatesForFloor(floor)),roll)}
 export function visibleEnemyRank(rank){return String(rank??"N")}
-export function enemyRankStatMultiplier(rank){return({N:1,R:1.015,SR:1.03,SSR:1.05,UR:1.08,LR:1.12})[rank]??1}
+export function enemyRankStatMultiplier(rank){return({N:1.05,R:1.08,SR:1.12,SSR:1.18,UR:1.26,LR:1.36})[rank]??1}
 
 // 装備はプレイヤーが自然入手を始める時期に合わせて徐々に解禁する。
 // 装備を持たない敵も最後まで残るため、すべてが六部位LRになることはない。
 export function equipmentHolderRateForFloor(floor){
  const f=safeFloor(floor);
- if(f<20)return 0;if(f<50)return .04;if(f<100)return .12;if(f<200)return .22;if(f<500)return .36;
- if(f<1000)return .50;if(f<2000)return .64;if(f<5000)return .76;return .84;
+ if(f<8)return 0;if(f<20)return .08;if(f<50)return .20;if(f<100)return .38;if(f<200)return .52;if(f<500)return .66;
+ if(f<1000)return .76;if(f<2000)return .84;if(f<5000)return .90;return .94;
 }
 export function equipmentSlotsForFloor(floor){
  const f=safeFloor(floor);
- if(f<20)return 0;if(f<50)return 1;if(f<100)return 1;if(f<200)return 2;if(f<500)return 3;if(f<1000)return 4;if(f<2000)return 5;return 6;
+ if(f<8)return 0;if(f<20)return 1;if(f<50)return 2;if(f<100)return 3;if(f<200)return 4;if(f<500)return 5;return 6;
 }
 export function rollEnemyEquipmentRarity(floor,rank="N",roll=Math.random()){
  const f=safeFloor(floor),bonus=({N:0,R:.03,SR:.07,SSR:.12,UR:.18,LR:.25})[rank]??0,t=Math.min(.78,Math.pow(f/10000,.42)+bonus),r=clamp(Number(roll)||0,0,.999999);
@@ -46,13 +46,14 @@ export function enemyEquipmentLevelForFloor(floor,{rank="N",boss=false}={}){
 // 旧版の「表示されない数倍補正」は廃止。装備枠と階層に沿った小さな補正だけを
 // 残し、表示レベルと実際の強さが大きく食い違わないようにする。
 export function enemyHiddenProfileForFloor(floor,{rank="N",faction=null,boss=false,equipped=false,slots=null,gearLevel=null,rarity=null,roll=Math.random()}={}){
- const f=safeFloor(floor),slotCount=Math.max(0,Math.min(6,Math.floor(Number(slots??equipmentSlotsForFloor(f))||0))),hasLoadout=Boolean(equipped&&slotCount>0);
- if(!hasLoadout)return{active:false,floor:f,slots:0,gearLevel:0,rarity:null,socketGrade:null,hp:1,atk:1,def:1,spd:1,damageTaken:1,crit:.04,mastery:0,ai:0,statusResist:0,capturePressure:1};
- const resolvedRank=faction??rank,resolvedLevel=Math.max(1,Math.floor(Number(gearLevel)||enemyEquipmentLevelForFloor(f,{rank:resolvedRank,boss}))),depth=Math.min(1,f/10000),slotRate=slotCount/6,bossRate=boss?.035:0,factionRate=resolvedRank==="tenGod"?.16:resolvedRank==="abyss"?.10:0;
+ const f=safeFloor(floor),pressure=Math.min(1,Math.pow(Math.min(f,100)/100,.72)),slotCount=Math.max(0,Math.min(6,Math.floor(Number(slots??equipmentSlotsForFloor(f))||0))),hasLoadout=Boolean(equipped&&slotCount>0);
+ const baseCrit=Math.min(.18,.045+pressure*.035),baseStatus=Math.min(.24,pressure*.10),baseAi=Math.round(22+pressure*34);
+ if(!hasLoadout)return{active:true,floor:f,slots:0,gearLevel:0,rarity:null,socketGrade:null,hp:1.18+pressure*.42,atk:1.10+pressure*.25,def:1.14+pressure*.32,spd:1+pressure*.035,damageTaken:Math.max(.86,.96-pressure*.08),crit:baseCrit,mastery:Math.floor(f*.05),ai:baseAi,statusResist:baseStatus,capturePressure:1+pressure*.08};
+ const resolvedRank=faction??rank,resolvedLevel=Math.max(1,Math.floor(Number(gearLevel)||enemyEquipmentLevelForFloor(f,{rank:resolvedRank,boss}))),slotRate=slotCount/6,bossRate=boss?.06:0,factionRate=resolvedRank==="tenGod"?.16:resolvedRank==="abyss"?.10:0;
  return{
-  active:true,floor:f,slots:slotCount,gearLevel:resolvedLevel,rarity:rarity??rollEnemyEquipmentRarity(f,rank,roll),socketGrade:1+Math.floor(depth*9),socketRarity:null,affixGrade:1+Math.floor(depth*7),mastery:Math.floor(f*.08),ai:Math.round(18+depth*62),
-  hp:1+slotRate*.14+depth*.05+bossRate+factionRate,atk:1+slotRate*.12+depth*.05+bossRate+factionRate,def:1+slotRate*.15+depth*.06+bossRate+factionRate,spd:1+slotRate*.035+depth*.025,
-  damageTaken:Math.max(.84,1-slotRate*.07-depth*.04-factionRate*.18),crit:Math.min(.24,.04+slotRate*.035+depth*.035+factionRate*.08),statusResist:Math.min(.42,slotRate*.06+depth*.12+factionRate*.25),capturePressure:1+depth*.18
+  active:true,floor:f,slots:slotCount,gearLevel:resolvedLevel,rarity:rarity??rollEnemyEquipmentRarity(f,rank,roll),socketGrade:1+Math.floor(pressure*9),socketRarity:null,affixGrade:1+Math.floor(pressure*7),mastery:Math.floor(f*.10),ai:Math.round(baseAi+slotRate*30+factionRate*60),
+  hp:1.18+pressure*.42+slotRate*.22+bossRate+factionRate,atk:1.10+pressure*.25+slotRate*.16+bossRate+factionRate,def:1.14+pressure*.32+slotRate*.20+bossRate+factionRate,spd:1+pressure*.035+slotRate*.04,
+  damageTaken:Math.max(.74,.96-pressure*.08-slotRate*.08-factionRate*.18),crit:Math.min(.30,baseCrit+slotRate*.04+factionRate*.08),statusResist:Math.min(.55,baseStatus+slotRate*.08+factionRate*.25),capturePressure:1+pressure*.12
  };
 }
 

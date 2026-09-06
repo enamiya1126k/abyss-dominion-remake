@@ -109,7 +109,7 @@ function renderSkills(battle,actor,skills){
   const skillName=skill.equipmentGranted?`装備技・${skill.name}`:skill.name,skillTag=skill.equipmentGranted?`${skill.equipmentAuthorityName??"装備固有"}・装備中限定`:skill.tag??"スキル",element=skillElementLabel(skill);
   return `<button class="battle-skill-choice" data-skill-id="${htmlText(skill.id)}" ${disabled?"disabled":""}><i class="battle-skill-edge" aria-hidden="true"></i><span class="battle-skill-copy"><small>${htmlText(skillTag)}</small><b>${htmlText(skillName)}</b><em>${htmlText(skill.target??"敵単体")}・${htmlText(element)}属性・${cooldownLabel}</em><ul class="battle-skill-spec">${details}</ul></span><span class="battle-skill-cost"><b>MP ${mpCost}</b><small>${stateLabel}</small></span></button>`;
  }).join("");
- return `<section class="battle-skill-panel-v317"><header><span><small>SKILL COMMAND</small><b>スキルを選択</b></span><em>MP ${battleInteger(actor.currentMp)} / ${battleInteger(unitMaxMp(actor))}</em></header><div class="skill-command-list battle-skill-command-list-v317">${rows}</div><button id="closeSkillMenu" class="battle-skill-close secondary">戻る</button></section>`;
+ return `<section class="battle-skill-panel-v317"><header><span><small>SKILL COMMAND</small><b>スキルを選択</b></span><em>MP ${battleInteger(actor.currentMp)} / ${battleInteger(unitMaxMp(actor))}</em><button type="button" id="closeSkillMenu" class="battle-skill-close-top" aria-label="スキル一覧を閉じる">×</button></header><div class="skill-command-list battle-skill-command-list-v317">${rows}</div></section>`;
 }
 
 function renderItems(inventory){

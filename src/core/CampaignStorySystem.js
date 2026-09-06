@@ -227,9 +227,9 @@ export const CAMPAIGN_STORY_SCENES=Object.freeze([
   line("myth_rion","命綱は？","normal"),
   line("myth_hide","……ロープを港へ置いた。","quiet"),
   line("myth_yori","また一番いるやつ忘れたな。まあ、話は合ってるけど。","teasing"),
-  line("myth_rion","予約販売した地図の見本布を全部結ぶ。売り物は作り直せる。人は作り直せない。","serious"),
-  line("myth_enami","まかセロリ。急にええ話するやん。儲け話より説得力あるで。","teasing"),
-  line("myth_rion","損じゃないよ。四人で帰って、続編を売るための投資だ。","confident")
+  line("myth_rion","予約販売した地図の見本布、全部ロープにする。ひで海に落としたら再発行できへんし、その方が安い。","normal"),
+  line("myth_enami","まかセロリ。結局コスト計算なんかい。急に感動しかけた僕の時間返して。","teasing"),
+  line("myth_rion","損じゃないよ。四人そろってた方が続編を四冊売れる。最高やな。","confident")
  ]),
  scene(80,"魔都街道","第八日。十神の光が街道を覆い、魔王城への道を隠す。","./assets/ui/battle/ten-gods-domain.png",[
   line(null,"十神の声は『資格なき者を通さぬ試練』と告げ、出口のない光壁を築いた。","narration"),

@@ -12,7 +12,7 @@ import{monsterVisual}from"../MonsterVisual.js?v=3.1.20-build339";
 import{attributeCycleVisual,attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.19-build338";
 import{campaignDayForFloor,campaignHeroAdvance}from"../../core/Campaign100System.js?v=3.1.1-build311";
-import{normalizeCampaignHeroInvasion}from"../../core/CampaignHeroEncounterSystem.js?v=3.1.22-build341";
+import{normalizeCampaignHeroInvasion}from"../../core/CampaignHeroEncounterSystem.js?v=3.1.25-build345";
 import{normalizeCampaignReincarnationState,campaignReincarnationDifficultyMultiplier,campaignReincarnationFloorLimit}from"../../core/CampaignReincarnationSystem.js?v=3.1.22-build341";
 
 function homeAttributeChart(){

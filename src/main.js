@@ -1,5 +1,5 @@
 import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.22-build341";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.23-build342";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.25-build345";
 // Regression markers only: SaveService.js?v=3.1.10-build329 / config.js?v=3.1.21-build340 / HomeScreen.js?v=3.1.21-build340
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.1-build311";
@@ -13,7 +13,7 @@ import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.22-build3
 import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.14-build333";
 import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.22-build341";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.19-build338";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.25-build345";
 import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.23-build342";
 import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.23-build342";
 import{reconcileOnlineMotion,onlineMotionSpeed}from"./online/OnlineMovement.js?v=3.1.1-build311";
@@ -24,7 +24,7 @@ import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.18-build337";
 import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.17-build336";
 import{CampaignFinalFloorScreen}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.21-build340";
 import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.17-build336";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.20-build339";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.25-build345";
 import{HERO_PURSUIT_STEPS,normalizeHeroPursuit,heroFieldRoute,chooseHeroSpawn,prepareHeroArrival,heroCanEscape,heroInContact,advanceHeroField,heroScreenIndicator}from"./core/CampaignHeroPursuitSystem.js?v=3.1.22-build341";
 import{updateHeroTracker}from"./ui/HeroPursuitHud.js?v=3.1.22-build341";
 import{mountBattleBossLayout}from"./ui/BattleBossLayout.js?v=3.1.21-build340";
@@ -64,7 +64,7 @@ import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,a
 import{attackHits}from"./battle/HitSystem.js?v=3.1.1-build311";
 import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=3.1.1-build311";
 import{dangerConfig}from"./core/DangerSystem.js?v=3.1.1-build311";
-import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=3.1.19-build338";
+import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=3.1.25-build345";
 import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost,magicCircleLevelEffect,isRaidExclusiveMagicCircle}from"./core/MagicCircleSystem.js?v=3.1.19-build338";
 import{biomeForFloor,battleEnvironmentForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=3.1.1-build311";
 import{campaignBossSupportCount,campaignEncounterPartySize,recordEncounterHistory,rollAttributeEncounterGroup}from"./core/EncounterPoolSystem.js?v=3.1.13-build332";
@@ -73,10 +73,10 @@ import{WORLD_MAX_FLOOR,TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_
 import{balanceTeamBattleEnemies}from"./core/TeamBattleBalanceSystem.js?v=3.1.1-build316";
 import{NORMAL_SUMMON_RATES,GUARANTEED_SUMMON_RATES,GACHA_PITY_LIMITS,rollSummonRarity,rollSummonRarityWithPity,normalizeGachaPityState,normalizeGachaDrawHistory,selectBalancedGachaEntry,recordGachaDraw}from"./core/GachaBalanceSystem.js?v=3.1.1-build311";
 import{CAMPAIGN_MAX_FLOOR,CAMPAIGN_KEYS_PER_FLOOR,HERO_PARTY_IDS,campaignFloorToLegacyFloor,campaignFloorState,campaignBossProgress,campaignBossProgressList,campaignDefeatedBossIds,campaignKeysHeld,beginCampaignFloorRun,beginCampaignFloorReplay,collectCampaignKey,defeatCampaignBoss,trophyChestEntitlements,claimTrophyChest,roomCountForRandom,roomAttributesForFloor,campaignRoomProfile,campaignEndingForResult,recordCampaignEnding,normalizeCampaignState,floorBossCampaignDisplayFloor,campaignMilestoneBossIds,isCampaignMultiBossFloor}from"./core/Campaign100System.js?v=3.1.1-build319";
-import{CAMPAIGN_STORY_OPENING_ID,acknowledgeCampaignStoryScene,nextCampaignStoryScene,campaignHeroVoiceLine,campaignHeroFinalVoiceLines}from"./core/CampaignStorySystem.js?v=3.1.21-build340";
+import{CAMPAIGN_STORY_OPENING_ID,acknowledgeCampaignStoryScene,nextCampaignStoryScene,campaignHeroVoiceLine,campaignHeroFinalVoiceLines}from"./core/CampaignStorySystem.js?v=3.1.25-build345";
 import{isLionelAvatar,lionelAvatarProtectionReason}from"./core/CampaignProtagonistSystem.js?v=3.1.3-build322";
-import{CAMPAIGN_HERO_IDS,CAMPAIGN_HERO_PROFILES,normalizeCampaignHeroInvasion,scheduledCampaignHeroForFloor,beginCampaignHeroFieldEncounter,recordCampaignHeroWound,settleCampaignHeroEncounter,campaignRemainingHeroes,advanceCampaignRewindFloor}from"./core/CampaignHeroEncounterSystem.js?v=3.1.22-build341";
-import{nextCampaignHeroBranchStoryScene,acknowledgeCampaignHeroBranchStoryScene,queueCampaignHeroAftermathStories}from"./core/CampaignHeroBranchStorySystem.js?v=3.1.22-build341";
+import{CAMPAIGN_HERO_IDS,CAMPAIGN_HERO_PROFILES,CAMPAIGN_HERO_STAT_MULTIPLIER,CAMPAIGN_HERO_HP_MULTIPLIER,normalizeCampaignHeroInvasion,scheduledCampaignHeroForFloor,beginCampaignHeroFieldEncounter,recordCampaignHeroWound,settleCampaignHeroEncounter,campaignRemainingHeroes,advanceCampaignRewindFloor}from"./core/CampaignHeroEncounterSystem.js?v=3.1.25-build345";
+import{nextCampaignHeroBranchStoryScene,acknowledgeCampaignHeroBranchStoryScene,queueCampaignHeroAftermathStories}from"./core/CampaignHeroBranchStorySystem.js?v=3.1.25-build345";
 import{createCampaignStoryArchiveModel,recordCampaignStoryArchiveScene}from"./core/CampaignStoryArchiveSystem.js?v=3.1.22-build341";
 import{normalizeCampaignReincarnationState,campaignCanonicalEnding,recordCampaignConclusion,beginOptionalCampaignReincarnation,campaignReincarnationDifficultyMultiplier,campaignReincarnationRewardMultiplier,campaignReincarnationFloorLimit,recordCampaignReincarnationFloor}from"./core/CampaignReincarnationSystem.js?v=3.1.22-build341";
 import{campaignTrophyFragmentAwards}from"./core/CampaignRewardSystem.js?v=3.1.1-build311";
@@ -692,7 +692,7 @@ function campaignHeroEncounterCycle(encounterId){const match=String(encounterId?
 function campaignHeroVoiceQuoteHtml(heroId,moment,options={}){const text=campaignHeroVoiceLine(heroId,moment,options);return text?`<p class="campaign-hero-voice"><b>${escapeAttribute(campaignHeroName(heroId))}</b><span>「${escapeAttribute(text)}」</span></p>`:""}
 function campaignHeroFinalVoiceHtml(moment,heroIds){const lines=campaignHeroFinalVoiceLines(moment,heroIds);return lines.length?`<div class="campaign-hero-final-voices">${lines.map(entry=>campaignHeroVoiceQuoteHtml(entry.heroId,moment)).join("")}</div>`:""}
 function campaignHeroBattleEntry(heroId,{encounterId=null,carryHpRate=1,final=false}={}){
- return prepareEnemyEntry({speciesId:heroId,visualSpeciesId:heroId,nameOverride:campaignHeroName(heroId),combatRarity:"神話",level:CAMPAIGN_HERO_PROFILES[heroId]?.fixedLevel??1000,boss:true,uncapturable:true,noItemDrops:true,statMultiplier:campaignReincarnationDifficultyMultiplier(save.state),fixedTrialScaling:true,carryHpRate,campaignHeroId:heroId,campaignHeroEncounterId:encounterId,campaignHeroFinal:Boolean(final),enemyLoadoutVersion:5,equipped:false,enemyGear:[],enemyMagicCircle:null},CAMPAIGN_MAX_FLOOR,{economyFloor:campaignFloorToLegacyFloor(CAMPAIGN_MAX_FLOOR)})
+ return prepareEnemyEntry({speciesId:heroId,visualSpeciesId:heroId,nameOverride:campaignHeroName(heroId),combatRarity:"神話",level:CAMPAIGN_HERO_PROFILES[heroId]?.fixedLevel??1500,boss:true,uncapturable:true,noItemDrops:true,statMultiplier:campaignReincarnationDifficultyMultiplier(save.state)*CAMPAIGN_HERO_STAT_MULTIPLIER,fixedTrialScaling:true,fixedTrialHpMultiplier:CAMPAIGN_HERO_HP_MULTIPLIER,carryHpRate,campaignHeroId:heroId,campaignHeroEncounterId:encounterId,campaignHeroFinal:Boolean(final),enemyLoadoutVersion:5,equipped:false,enemyGear:[],enemyMagicCircle:null},CAMPAIGN_MAX_FLOOR,{economyFloor:campaignFloorToLegacyFloor(CAMPAIGN_MAX_FLOOR)})
 }
 function campaignHeroEncounter({heroId=null,encounterId=null,final=false}={}){
  const ledger=campaignHeroLedger(),entries=final?campaignRemainingHeroes(ledger):heroId?[{heroId,carryHpRate:ledger.heroes?.[heroId]?.remainingHpRate??1}]:[];

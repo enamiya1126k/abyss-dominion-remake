@@ -1,5 +1,5 @@
 import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.1-build319";
-import{CAMPAIGN_HERO_ENCOUNTER_SCHEDULE,campaignHeroEncounterDefinition,normalizeCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.22-build341";
+import{CAMPAIGN_HERO_ENCOUNTER_SCHEDULE,campaignHeroEncounterDefinition,normalizeCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.25-build345";
 
 export const CAMPAIGN_HERO_BRANCH_STORY_VERSION=3;
 export const CAMPAIGN_HERO_BRANCH_OUTCOMES=Object.freeze(["repelled","hero-victory","escaped"]);
@@ -114,8 +114,8 @@ const PRELUDE_EXTRA={
   ["myth_rion","ひで、待って。経路の計算は信じるけど、その袋、中身を見せて。"],
   ["myth_hide","観測器具、予備の杖、記録用紙。必要な物は揃っている。"],
   ["myth_yori","食い物ないって、さっき自分で言うてたやん。僕の分も持っていき。"],
-  ["myth_hide","重量配分が変わる。だが……ありがとう。帰り道の分まであるのか。"],
-  ["myth_enami","計算どおり行かへん時もあるやろ。そういう時は、帰ってきてから考えよ。"],
+  ["myth_hide","いやいやいや笑、食料まで入ってる。計算表にない荷物が一番役立ちそうです。"],
+  ["myth_enami","計算外れたら帰ってきて会議な。議題は『ひで、また何忘れた？』で。"],
   ["myth_hide","観測を途中で打ち切るのは、僕の計画では……。"],
   ["myth_rion","計画に『自分を持ち帰る』って一行足して。記録だけ返ってきても困る。"],
   ["myth_hide","了解。最優先項目にします。……いいゾ〜！コレ〜！ 抜けのない計画になった。"]
@@ -268,25 +268,29 @@ function partyScene(ledger,payload,definition){
   dialogue.push(line(heroId,outcome==="hero-victory"&&hurt===0?({myth_yori:"イージー！！ ……ただいま。今日は傷も増やさず戻れたで。",myth_hide:"帰還しました。今回は損傷ゼロ。確認のために二度計算しました。",myth_enami:"戻ったで。話はまだ途中やけど、怪我はしてへん。まず報告するわ。",myth_rion:"やったぜ！ 無傷で帰還。今日は修理代より食事代に回せるよ。"}[heroId]):PARTY_RETURN_LINES[heroId]?.[outcome]??"戻った。次へ進もう。",outcome==="hero-victory"?"confident":"quiet"));
   if(hurt>0){if(heroId==="myth_hide"||others.includes("myth_hide"))dialogue.push(line("myth_hide",`損傷は${hurt}%。勝敗に関係なく、その傷は十日目まで残る。`,"serious"));else dialogue.push(line(null,`戦いで刻まれた${hurt}%の傷は、十日目まで消えずに残る。`,"narration"))}
   else if(others.includes("myth_hide"))dialogue.push(line("myth_hide",outcome==="escaped"?"待ってくださいよ〜！ 逃げ道は計算してました。……塞ぐ人の配置、忘れてました。":"いいゾ〜！コレ〜！ 無傷で帰還、計算どおりです。……帰還祝いの買い出し、忘れてました。","normal"));
-  if(others.includes("myth_yori"))dialogue.push(line("myth_yori",outcome==="escaped"?"おっと〜！？ ほな次は僕も一緒に行くわ。帰ってこれたんやし、まず座り。":"イージー！！ ……って、僕は留守番やったな。おかえり。","gentle"));
-  if(heroId!=="myth_enami"&&others.includes("myth_enami"))dialogue.push(line("myth_enami",outcome==="hero-victory"?(hurt>0?"勝った顔してるけど、傷まで無かったことにはせえへんで。":"勝って、無傷で帰ったんやな。ほな今日は安心して話を聞けるわ。"):(castIds.length===4?"戻ってきたならええ。次は四人で話を終わらせる。":"戻ってきたならええ。次は残った仲間で、話を終わらせる。"),"gentle"));
+  if(others.includes("myth_yori"))dialogue.push(line("myth_yori",outcome==="escaped"?"おっと〜！？ ほな次は僕も一緒に行くわ。帰ってこれたんやし、まず座り。":"イージー！！ ……って、僕留守番やったわ。何もしてへんのに勝った顔しとこ。","gentle"));
+  if(heroId!=="myth_enami"&&others.includes("myth_enami"))dialogue.push(line("myth_enami",outcome==="hero-victory"?(hurt>0?"勝った顔してるけど、傷まで無かったことにはせえへんで。":"無傷やん。なんやコイツ。僕の心配した時間、返して。塩で。"):(castIds.length===4?"戻ったな。次は四人で行こ。単独行動、会議で満場一致の廃止です。":"戻ったな。残ったメンバーで作戦会議。まず勝手に出発する人を議題にする。"),"gentle"));
   if(heroId!=="myth_rion"&&others.includes("myth_rion"))dialogue.push(line("myth_rion",outcome==="hero-victory"?"勝利の記録は残す。治療費を引いても価値はあるよ。":"逃げられた経路も商品になる。次の先回りに使おう。","normal"));
  }
  const campWords=outcome==="repelled"?{
-  myth_enami:["戻らんかったことを、仕方ないの一言で終わらせたくない。次に何を守るか、僕はもう決めた。","あいつが残した話、ちゃんと覚えてる。ここから先は、僕らが続きを持っていく。"],
-  myth_yori:["今日は飲まへん。聞いた声まで曖昧にしたくないから。","拳を振るう前に周りを見る。今ここにおる仲間を、同じように失くさんために。"],
-  myth_hide:["計算表に空欄ができた。別の数値で埋めれば済む欄ではない。","残った戦力で作戦を組み直す。無駄に急いで、空欄を増やすことはしない。"],
-  myth_rion:["帳簿には損失って書ける。でも、それで片付く話じゃないのは分かってる。","ここに残した荷物は預かる。帰り道の記録から、名前を消すつもりはないよ。"]
+  myth_enami:["なんやコイツ。人数減ったら会議まで静かになるやん。静かすぎて逆に腹立つ。","次から単独行動禁止。破ったら塩抜き。僕も困るけど、それくらいの罰で。"],
+  myth_yori:["ディフィカルト。偵察の意味を『殴って帰る』から『帰って報告する』に直すわ。","一人減った分、僕が二人分しゃべる。うるさい？ 知らん、イージー！！"],
+  myth_hide:["計算上、一人減ると戦力が下がります。……いやいやいや笑、今さら気づく式ではない。","次の作戦は完璧です。『大事な前提を忘れない』を一番上に書きました。"],
+  myth_rion:["損失って言葉、今日は使用禁止。代わりに『単独行動保証金1000万G』でいこう。","単独行動保険を作る。加入条件は『単独行動しない』。最高やな。"]
  }:{
-  myth_enami:["報告の前に座ろ。言いたいこと、飯食いながらでも聞けるやろ。","帰ってきた顔見たら安心したわ。……塩探してただけちゃうで、今の話は聞いてた。"],
-  myth_yori:["おかえりって言えるん、ええな。結果の話より先に、それ言いたかってん。","次は無理する前に呼びや。僕の拳、助けに行く分も残しとくから。"],
-  myth_hide:["報告書には経路と損傷、それから帰還を記録する。最後の項目が最も重要です。","帰還祝いの準備は……いやいやいや笑、食器が一つ足りない。書類用の皿まで数えていました。"],
-  myth_rion:["情報は持ち帰ってこそ価値がある。でも一番替えが利かないのは、持って帰ってきた本人だよ。","食事代は僕持ち。今日の記録は売る前に、まず皆で読む。都合の悪い失敗も、ちゃんと残そう。"]
+  myth_enami:["まず座り。感動ちゃうで、立ったまま報告されたら首しんどい。","塩ください。報告はそのあと。優先順位は明確や。"],
+  myth_yori:["おっと〜！？ 生きとるやん！ ほなイージー！！","帰還祝い？ まず酒。いや水でもええ、コップ大きいやつ。"],
+  myth_hide:["帰還確認。フォー！！！！ 予定より三時間遅いです。","いいゾ〜！コレ〜！ 記録は完璧。字だけ僕にも読めません。"],
+  myth_rion:["おつかれナス。情報は黒字、治療費で赤字。トータル気分で黒字。","今日は豪遊するぞ！ 予算ないから水を高そうなグラスで飲もう。"]
  };
- const returnedWords={myth_enami:["戻ったで。顔見たら、言いたかった話の順番どっか行ったわ。まず座ってもええ？","待ってくれてありがとう。次も、寄り道だけで終わらせんと、ちゃんとここへ帰る。"],myth_yori:["ただいま。戻って座る場所があるん、思ってたより助かるな。","次は勢いだけで決めへん。今は聞いてほしいことがあるから、最後まで付き合ってな。"],myth_hide:["帰還しました。記録は揃っています。……ただいま、と先に言うべきでしたね。","計算が外れた箇所も報告する。一人で隠すより、次に直せる方がいい。"],myth_rion:["ただいま。情報も僕も、まとめて持ち帰ったよ。今日はそれで黒字ってことにしよう。","待ってくれてありがとう。次の先回りは、合流するところまで含めて組み直すよ。"]};
- for(let turn=0;turn<2;turn++)for(const id of castIds)dialogue.push(line(id,outcome!=="repelled"&&id===heroId?returnedWords[id][turn]:campWords[id][turn],outcome==="repelled"?"serious":"gentle"));
+ const returnedWords={
+  myth_enami:["戻ったで。まず塩ください。話はそれから。","なんやコイツ、思ったより強かった。あと帰り道でラーメン屋見つけた。"],
+  myth_yori:["ただいま！ イージー！！ ……いや普通にボコられたわ。","おっと〜！？ 次は勝つ。とりあえず一杯だけ。"],
+  myth_hide:["帰還しました。計算どおりです。……到着時刻以外は。","フォー！！！！ 記録はあります。食料の残数だけ計算してません。"],
+  myth_rion:["ただいま。情報も僕も回収済み。治療費だけ未回収。","やったぜ！ 次は逃げ道に広告枠つけて元取るよ。"]};
+ for(let turn=0;turn<2;turn++)for(const id of castIds)dialogue.push(line(id,outcome!=="repelled"&&id===heroId?returnedWords[id][turn]:campWords[id][turn],outcome==="repelled"?"normal":"teasing"));
  if(castIds.length===1&&castIds[0]===heroId){
-  const words={myth_enami:"ただいま。……聞く相手がおらんくても、戻ったって言うとく。約束したからな。",myth_yori:"ただいま。今日は大声出すの、やめとこ。まず火を起こして、報告を残すわ。",myth_hide:"帰還時刻を記録する。報告を聞く者はいない。それでも、この欄は空けない。",myth_rion:"帰還。情報も荷物も持ち帰ったよ。記録だけは、僕がちゃんと続ける。"};
+  const words={myth_enami:"ただいま。誰もおらん。なんやコイツ。独り言まで僕担当なん？ 塩ください。",myth_yori:"ただいま！ 誰もおらんけどイージー！！ ……返事ないとちょっと滑ったな。",myth_hide:"帰還しました。報告相手0名。フォー！！！！ ……ログだけ残します。",myth_rion:"帰還。観客0人。赤字イベントやな。また今度やな。"};
   dialogue.splice(0,dialogue.length,line(null,heroState.awayHeroIds.length?"野営地へ戻ると、別行動中の仲間の荷物が残っていた。合流まで、火を絶やさず待つ。":"野営地へ戻った。出迎える声はなく、以前の焚き火の跡だけが残っていた。","narration"),line(heroId,heroState.awayHeroIds.length?"先に戻った。報告をまとめて、ここで合流を待とう。":words[heroId],"quiet"),line(null,hurt>0?`残る損傷は${hurt}%。手当てと休息の支度を、ひとりで始めた。`:"荷物を下ろし、次の道と帰りの道を、どちらも記録に残した。","narration"));
  }
  if(outcome==="repelled"&&castIds.length===1){
