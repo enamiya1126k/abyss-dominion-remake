@@ -1,4 +1,4 @@
-import{SPECIES}from"../data/species.js?v=3.1.1-build311";
+import{SPECIES}from"../data/species.js?v=3.1.26-build346";
 import{PERSONALITIES}from"../data/personalities.js?v=3.1.1-build311";
 import{MONSTER_COLORS}from"../data/colors.js?v=3.1.1-build311";
 import{normalizedResistances}from"../data/attributes.js?v=3.1.1-build311";

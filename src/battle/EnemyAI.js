@@ -128,35 +128,41 @@ export function enemyActionMpCost(enemy,action){
 }
 function canPay(enemy,action){return Math.max(0,Number(enemy.currentMp)||0)>=enemyActionMpCost(enemy,action)}
 function campaignHeroAction(enemy,context,hpRate){
- const hero=String(enemy.campaignHeroId??""),allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(unit=>(unit.currentHp??0)>0),turn=Math.max(1,Number(context.battle?.turn)||1),wounded=allies.filter(unit=>unit.hp>0).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0],fallen=allies.find(unit=>unit.hp<=0);
+ const hero=String(enemy.campaignHeroId??""),allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(unit=>(unit.currentHp??0)>0),turn=Math.max(1,Number(context.battle?.turn)||1),wounded=allies.filter(unit=>unit.hp>0).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0],fallen=allies.find(unit=>unit.hp<=0),battle=context.battle??{};
+ const positiveKinds=new Set(["atkUp","defUp","spdUp","regen","taunt","guard","counter","lifeSteal"]),negativeKinds=new Set(["atkDown","defDown","spdDown","accuracyDown","evasionDown","vulnerable","healDown","mpRecoveryDown"]);
+ const buffed=opponents.some(unit=>(battle.allyEffects?.[unit.id]??[]).some(effect=>positiveKinds.has(effect.kind))),exposed=opponents.some(unit=>(battle.allyEffects?.[unit.id]??[]).some(effect=>negativeKinds.has(effect.kind))||(battle.allyAilments?.[unit.id]??[]).length>0),pressured=opponents.some(unit=>unit.currentHp/Math.max(1,unit.maxHp??unit.currentHp)<.45),livingHeroes=allies.filter(unit=>unit.hp>0).length;
  if(hero==="myth_yori"){
   enemy.campaignHeroTargetMode="weak";
-  if(!enemy._campaignObserved){enemy._campaignObserved=true;enemy.guard=true;enemy.intent="間合いと呼吸を観察する";return ENEMY_ACTIONS.guard}
+  if(exposed&&(pressured||turn%2===0)){enemy.charging=false;enemy.intent="仲間が崩した標的へ『イージー！！』";return ENEMY_ACTIONS.power}
   if(enemy.charging){enemy.charging=false;enemy.intent="観察した急所へ拳を叩き込む";return ENEMY_ACTIONS.power}
-  if(turn%3===0&&canPay(enemy,ENEMY_ACTIONS.galeRend)){enemy.intent="拳圧で戦列を打ち抜く";return ENEMY_ACTIONS.galeRend}
-  enemy.charging=true;enemy.intent="渾身の一撃へ踏み込む";return ENEMY_ACTIONS.charge
+  if(turn%3===0&&canPay(enemy,ENEMY_ACTIONS.galeRend)){enemy.intent="『開けんかいコラァ！』で戦列を打ち抜く";return ENEMY_ACTIONS.galeRend}
+  enemy.charging=true;enemy.intent="『ディフィカルト』へ踏み込む";return ENEMY_ACTIONS.charge
  }
  if(hero==="myth_hide"){
   enemy.campaignHeroTargetMode="threat";
-  const positiveKinds=new Set(["atkUp","defUp","spdUp","regen","taunt","guard","counter","lifeSteal"]),buffed=opponents.some(unit=>(context.battle?.allyEffects?.[unit.id]??[]).some(effect=>positiveKinds.has(effect.kind)));
   if(buffed&&canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="強化の構造を解析して崩す";return ENEMY_ACTIONS.dispelWave}
-  if(opponents.length>=2&&canPay(enemy,ENEMY_ACTIONS.thunderChain)){enemy.intent="逃げ道を計算した連鎖術式を放つ";return ENEMY_ACTIONS.thunderChain}
+  if(exposed&&canPay(enemy,ENEMY_ACTIONS.shadowCurse)){enemy.intent="崩れた標的へ『計算外・零点崩壊』を重ねる";return ENEMY_ACTIONS.shadowCurse}
+  if(opponents.length>=2&&canPay(enemy,ENEMY_ACTIONS.thunderChain)){enemy.intent="『フォー！！！！』連鎖術式を放つ";return ENEMY_ACTIONS.thunderChain}
   if(canPay(enemy,ENEMY_ACTIONS.shadowCurse)){enemy.intent="最も危険な相手へ術式を固定";return ENEMY_ACTIONS.shadowCurse}
  }
  if(hero==="myth_enami"){
   enemy.campaignHeroTargetMode="threat";
   const allyUnderPressure=allies.some(unit=>unit!==enemy&&(unit.hp<=0||unit.hp/Math.max(1,unit.maxHp)<.7));
   if(fallen&&canPay(enemy,ENEMY_ACTIONS.packRevive)){enemy.intent="笑みを消し、倒れた仲間を引き戻す";return ENEMY_ACTIONS.packRevive}
-  if(wounded&&wounded.hp/wounded.maxHp<.55&&canPay(enemy,ENEMY_ACTIONS.packMend)){enemy.intent="仲間を守るため戦線を立て直す";return ENEMY_ACTIONS.packMend}
-  if(allyUnderPressure&&canPay(enemy,ENEMY_ACTIONS.radiantVolley)){enemy.intent="仲間を傷つけた相手を広く捉える";return ENEMY_ACTIONS.radiantVolley}
-  if(!enemy._campaignGuardedAllies&&allies.length>1&&canPay(enemy,ENEMY_ACTIONS.packRally)){enemy._campaignGuardedAllies=true;enemy.intent="全員を俯瞰し守りを整える";return ENEMY_ACTIONS.packRally}
+  if(wounded&&wounded.hp/wounded.maxHp<.58&&canPay(enemy,ENEMY_ACTIONS.packMend)){enemy.intent="『まかセロリ』で戦線を立て直す";return ENEMY_ACTIONS.packMend}
+  if(!enemy._campaignGuardedAllies&&livingHeroes>1&&canPay(enemy,ENEMY_ACTIONS.packRally)){enemy._campaignGuardedAllies=true;enemy.intent="全員を俯瞰して攻守を同期";return ENEMY_ACTIONS.packRally}
+  if(buffed&&canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="『メンタル！！』で強化ごと崩す";return ENEMY_ACTIONS.dispelWave}
+  if((allyUnderPressure||exposed)&&canPay(enemy,ENEMY_ACTIONS.radiantVolley)){enemy.intent="崩れた敵陣をまとめて射抜く";return ENEMY_ACTIONS.radiantVolley}
+  if(canPay(enemy,ENEMY_ACTIONS.flameSweep)){enemy.intent="敵陣全体へ圧をかける";return ENEMY_ACTIONS.flameSweep}
  }
  if(hero==="myth_rion"){
   enemy.campaignHeroTargetMode="threat";
-  if(fallen&&canPay(enemy,ENEMY_ACTIONS.packRevive)){enemy.intent="仲間を舞台へ呼び戻す";return ENEMY_ACTIONS.packRevive}
-  if(wounded&&wounded.hp/wounded.maxHp<.62&&canPay(enemy,ENEMY_ACTIONS.packMend)){enemy.intent="交渉の余地を作るため全員を回復";return ENEMY_ACTIONS.packMend}
-  if(!enemy._campaignRallied&&allies.length>1&&canPay(enemy,ENEMY_ACTIONS.packRally)){enemy._campaignRallied=true;enemy.intent="勝ち筋を共有し全員を強化";return ENEMY_ACTIONS.packRally}
-  if((enemy.currentMp??0)<enemy.maxMp*.35&&opponents.some(unit=>(unit.currentMp??0)>0)&&canPay(enemy,ENEMY_ACTIONS.manaSiphon)){enemy.intent="相手の魔力をこちらの利益へ変える";return ENEMY_ACTIONS.manaSiphon}
+  if(fallen&&canPay(enemy,ENEMY_ACTIONS.packRevive)){enemy.intent="『今日は豪遊するぞ！』仲間を舞台へ呼び戻す";return ENEMY_ACTIONS.packRevive}
+  if(wounded&&wounded.hp/wounded.maxHp<.66&&canPay(enemy,ENEMY_ACTIONS.packMend)){enemy.intent="『また今度やな』で全員を立て直す";return ENEMY_ACTIONS.packMend}
+  if(!enemy._campaignRallied&&livingHeroes>1&&canPay(enemy,ENEMY_ACTIONS.packRally)){enemy._campaignRallied=true;enemy.intent="『いこうぜ！』勝ち筋を共有して全員を強化";return ENEMY_ACTIONS.packRally}
+  if(buffed&&canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="相手の強みを先回りして封じる";return ENEMY_ACTIONS.dispelWave}
+  if(((enemy.currentMp??0)<enemy.maxMp*.45||turn%3===0)&&opponents.some(unit=>(unit.currentMp??0)>0)&&canPay(enemy,ENEMY_ACTIONS.manaSiphon)){enemy.intent="相手の魔力をこちらの利益へ変える";return ENEMY_ACTIONS.manaSiphon}
+  if(exposed&&canPay(enemy,ENEMY_ACTIONS.venomCloud)){enemy.intent="崩れた敵陣へ追撃の場を作る";return ENEMY_ACTIONS.venomCloud}
   if(canPay(enemy,ENEMY_ACTIONS.dispelWave)){enemy.intent="最大戦力の強みを封じる";return ENEMY_ACTIONS.dispelWave}
  }
  return null
