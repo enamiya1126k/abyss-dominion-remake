@@ -1,12 +1,12 @@
 import{createEquipment,equipmentPower}from"../models/Equipment.js?v=3.1.1-build311";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=3.1.31-build351";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=3.1.33-build353";
 import{allLearnedSkills,maxMp,recommendedSkills,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.28-build348";
 import{SPECIES}from"../data/species.js?v=3.1.28-build348";
 import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=3.1.1-build311";
 import{equipmentStatLabel}from"../data/equipment.js?v=3.1.1-build311";
 import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=3.1.1-build311";
 import{goldForClearedFloor}from"./GoldEconomySystem.js?v=3.1.1-build311";
-import{MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=3.1.31-build351";
+import{MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=3.1.33-build353";
 import{campaignFloorToLegacyFloor}from"./Campaign100System.js?v=3.1.1-build311";
 
 export const SECRET_ROOM_CHANCE=.09;
@@ -128,18 +128,20 @@ export function isDarkMarketMonsterAllowed(speciesOrMonster,offer=null){
 const MARKET_RARITY_MONSTER_RATE=Object.freeze(Object.fromEntries(MARKET_RARITIES.map(entry=>[entry.id,entry.monsterRate])));
 const MARKET_GRADE_PRICE_RATE=Object.freeze({rough:1,standard:1,surge:1.15,jackpot:1.35});
 
-export function darkMarketMonsterPriceFloor(floor,monsterOrLevel,rarity="SR",powerGrade="standard"){
+export function darkMarketPlayerMaxLevel(state){
+ return (Array.isArray(state?.monsters)?state.monsters:[]).reduce((max,monster)=>Math.max(max,safeInteger(monster?.level,1,1,9999)),1);
+}
+
+export function darkMarketMonsterPriceFloor(playerMaxLevel,monsterOrLevel,rarity="SR",powerGrade="standard"){
  const monster=monsterOrLevel&&typeof monsterOrLevel==="object"?monsterOrLevel:null;
  const level=safeInteger(monster?.level??monsterOrLevel,1,1,9999);
- const safeBand=Math.max(3,economicDepth(floor)*3);
+ const safeBand=safeInteger(playerMaxLevel,1,1,9999)+100;
  const numericReference=typeof rarity==="number"?safeInteger(rarity,0):0;
  if(level<=safeBand)return numericReference;
  const rarityId=typeof rarity==="string"?rarity:String(monster?.summonTier??monster?.summonRarity??SPECIES[monster?.speciesId]?.rarity??"SR");
  const rarityRate=MARKET_RARITY_MONSTER_RATE[rarityId]??MARKET_RARITY_MONSTER_RATE.SR;
- // The first three floor-equivalents stay in the old random-price lottery.
- // Beyond that point the logarithmic curve rises sharply enough that a
- // several-hundred-level monster cannot remain a casual bargain, while even
- // Lv.9999 still fits inside the game's safe integer economy.
+ // Up to the highest owned level + 100, every rarity keeps the random quote.
+ // Above it, retain the level/rarity/strength valuation and excess-level curve.
  const ratio=level/safeBand,overlevelRate=1+8*Math.pow(Math.max(0,Math.log2(ratio)),2.4);
  const plusRate=1+safeInteger(monster?.plus,0,0,999)*.025,gradeRate=MARKET_GRADE_PRICE_RATE[powerGrade]??1;
  const species=SPECIES[monster?.speciesId],base=species?.baseStats??{},baseScore=(Number(base.hp)||40)*.1+(Number(base.atk)||8)+(Number(base.def)||5)+(Number(base.spd)||8);
@@ -148,8 +150,13 @@ export function darkMarketMonsterPriceFloor(floor,monsterOrLevel,rarity="SR",pow
  return Math.max(numericReference,roundedPrice(minimum));
 }
 
-function applyMonsterPriceFloor(quote,floor,monster,rarity,powerGrade){
- const minimum=darkMarketMonsterPriceFloor(floor,monster,rarity,powerGrade);
+function applyMonsterPriceFloor(quote,playerMaxLevel,monster,rarity,powerGrade){
+ // Keep the original roll so training can move an offer into the random band
+ // without rerolling prices or retaining a previously imposed minimum.
+ const original=quote.randomQuote353??quote;
+ const randomQuote353={price:safeInteger(original.price,1,1),referencePrice:safeInteger(original.referencePrice,1,1),priceLabel:String(original.priceLabel??"裏街価格"),priceTone:["bargain","fair","high","extreme"].includes(original.priceTone)?original.priceTone:"fair"};
+ quote={...quote,...randomQuote353,randomQuote353};
+ const minimum=darkMarketMonsterPriceFloor(playerMaxLevel,monster,rarity,powerGrade);
  if(!minimum||quote.price>=minimum)return quote;
  return{
   ...quote,
@@ -190,7 +197,7 @@ function marketEquipmentOffer(floor,index,random){
  const reference=Math.max(500,goldForClearedFloor(economicDepth(floor))*profile.equipmentRate+equipmentPower(item)*12),price=marketPrice(reference,random);
  return maybeMysteryOffer({id:`equipment-${index}`,kind:"equipment",rarity:profile.id,name:item.name,icon:{weapon:"⚔️",armor:"🛡️",accessory:"💍"}[slot],description:`${powerProfile.label}・${equipmentDescription(item)}`,powerGrade:powerProfile.id,powerLabel:powerProfile.label,sold:false,payload:item,...price},random);
 }
-function marketMonsterOffer(floor,index,random){
+function marketMonsterOffer(floor,index,random,playerMaxLevel){
  const profile=rarityProfile(random),powerProfile=marketPowerProfile(floor,random,true);
  let pool=Object.values(SPECIES).filter(species=>species.rarity===profile.id&&isDarkMarketMonsterAllowed(species));
  if(!pool.length)pool=Object.values(SPECIES).filter(species=>isDarkMarketMonsterAllowed(species));
@@ -201,22 +208,23 @@ function marketMonsterOffer(floor,index,random){
  const monster=createMonster(species.id,{nickname:species.name,level,plus,affection,obtainedFloor:floor,obtainedMethod:"darkMarket"});
  monster.summonRarity=profile.id;if(profile.id==="神話")monster.summonTier="神話";
  monster.marketGrade=powerProfile.id;monster.marketGradeLabel=powerProfile.label;applyMarketSkillPackage(monster,powerProfile.id,random);
- const reference=Math.max(800,goldForClearedFloor(economicDepth(floor))*profile.monsterRate*powerProfile.priceRate*(1+Math.min(300,level)*.012+plus*.05)),price=applyMonsterPriceFloor(marketPrice(reference,random),floor,monster,profile.id,powerProfile.id);
+ const reference=Math.max(800,goldForClearedFloor(economicDepth(floor))*profile.monsterRate*powerProfile.priceRate*(1+Math.min(300,level)*.012+plus*.05)),price=applyMonsterPriceFloor(marketPrice(reference,random),playerMaxLevel,monster,profile.id,powerProfile.id);
  return maybeMysteryOffer({id:`monster-${index}`,kind:"monster",rarity:profile.id,name:displayName(monster),icon:species.emoji??"👹",description:`${powerProfile.label}・${monsterDescription(monster)}${monster.marketSkillGrade?`・${monster.marketSkillGrade}`:""}`,powerGrade:powerProfile.id,powerLabel:powerProfile.label,sold:false,payload:monster,...price},random);
 }
-function createRoom(roomId,floor,random=Math.random){
+function createRoom(roomId,floor,random=Math.random,playerMaxLevel=1){
  const offers=[
   marketEquipmentOffer(floor,1,random),
   marketEquipmentOffer(floor,2,random),
   marketEquipmentOffer(floor,3,random),
-  marketMonsterOffer(floor,1,random),
-  marketMonsterOffer(floor,2,random),
-  marketMonsterOffer(floor,3,random)
+  marketMonsterOffer(floor,1,random,playerMaxLevel),
+  marketMonsterOffer(floor,2,random,playerMaxLevel),
+  marketMonsterOffer(floor,3,random,playerMaxLevel)
  ];
  return{
   id:String(roomId),floor:safeInteger(floor,1,1,10000),createdAt:new Date().toISOString(),rested:false,
   casino:{used:false,entryPaid:false,spins:0,wins:0,totalBet:0,totalPayout:0,netGold:0,crystalsSpent:0,bestMultiplier:0,biggestPayout:0,lastBet:0,history:[],processedSpinIds:[],lastResult:null},
   offers,
+  recoveryPrices:Object.fromEntries(SECRET_ROOM_RECOVERY_ITEMS.map(item=>[item.id,marketPrice(item.price,random).price])),
   recoveryPurchased:Object.fromEntries(SECRET_ROOM_RECOVERY_ITEMS.map(item=>[item.id,0]))
  };
 }
@@ -287,9 +295,13 @@ export function normalizeSecretRoomState(state){
     actualIcon:offer.actualIcon==null?null:String(offer.actualIcon),
     actualDescription:offer.actualDescription==null?null:String(offer.actualDescription)
    };
-   if(normalized.kind==="monster"&&!normalized.sold&&normalized.payload)Object.assign(normalized,applyMonsterPriceFloor(normalized,room.floor,normalized.payload,normalized.rarity,normalized.powerGrade));
+   if(normalized.kind==="monster"&&!normalized.sold&&normalized.payload)Object.assign(normalized,applyMonsterPriceFloor(normalized,darkMarketPlayerMaxLevel(state),normalized.payload,normalized.rarity,normalized.powerGrade));
    return normalized;
   }):[];
+ // Older rooms get a stable draw once; opening or reloading cannot reroll it.
+ room.recoveryPrices=room.recoveryPrices&&typeof room.recoveryPrices==="object"&&!Array.isArray(room.recoveryPrices)?room.recoveryPrices:{};
+ const recoveryRandom=seeded(mixSeed(state.secretRooms.run?.seed??1,room.floor));
+ for(const item of SECRET_ROOM_RECOVERY_ITEMS){const fallback=marketPrice(item.price,recoveryRandom).price;room.recoveryPrices[item.id]=safeInteger(room.recoveryPrices[item.id],fallback,1);}
  room.recoveryPurchased=room.recoveryPurchased&&typeof room.recoveryPurchased==="object"?room.recoveryPurchased:{};
  for(const item of SECRET_ROOM_RECOVERY_ITEMS)room.recoveryPurchased[item.id]=safeInteger(room.recoveryPurchased[item.id],0,0,DARK_MARKET_ITEM_LIMIT);
  return state.secretRooms;
@@ -315,7 +327,7 @@ export function secretRoomPlan(state,floor){
 
 export function enterSecretRoom(state,roomId,floor,random=Math.random){
  normalizeSecretRoomState(state);
- if(state.secretRooms.activeRoom?.id!==String(roomId))state.secretRooms.activeRoom=createRoom(roomId,floor,random);
+ if(state.secretRooms.activeRoom?.id!==String(roomId))state.secretRooms.activeRoom=createRoom(roomId,floor,random,darkMarketPlayerMaxLevel(state));
  return state.secretRooms.activeRoom;
 }
 
@@ -417,8 +429,9 @@ export function buyDarkMarketRecovery(state,itemId){
  if(!room||!definition)return{ok:false,message:"商品が見つかりません。"};
  const purchased=safeInteger(room.recoveryPurchased[itemId],0,0,DARK_MARKET_ITEM_LIMIT);
  if(purchased>=DARK_MARKET_ITEM_LIMIT)return{ok:false,message:"この商品の購入上限10個に達しました。"};
- if((state.player?.gold??0)<definition.price)return{ok:false,message:`GOLDが足りません。必要 ${definition.price.toLocaleString()}G`};
- state.player.gold-=definition.price;state.inventory??={};state.inventory[itemId]=(state.inventory[itemId]??0)+1;
+ const price=room.recoveryPrices[itemId];
+ if((state.player?.gold??0)<price)return{ok:false,message:`GOLDが足りません。必要 ${price.toLocaleString()}G`};
+ state.player.gold-=price;state.inventory??={};state.inventory[itemId]=(state.inventory[itemId]??0)+1;
  room.recoveryPurchased[itemId]=purchased+1;state.records??={};state.records.purchases=(state.records.purchases??0)+1;
- return{ok:true,item:definition,purchased:purchased+1,remaining:DARK_MARKET_ITEM_LIMIT-purchased-1,message:`${definition.name}を購入（${purchased+1}/${DARK_MARKET_ITEM_LIMIT}）`};
+ return{ok:true,item:{...definition,price},purchased:purchased+1,remaining:DARK_MARKET_ITEM_LIMIT-purchased-1,message:`${definition.name}を購入（${purchased+1}/${DARK_MARKET_ITEM_LIMIT}）`};
 }

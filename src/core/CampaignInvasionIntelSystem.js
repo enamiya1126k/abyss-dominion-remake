@@ -1,4 +1,4 @@
-import{normalizeCampaignHeroInvasion}from"./CampaignHeroEncounterSystem.js?v=3.1.28-build348";
+import{normalizeCampaignHeroInvasion}from"./CampaignHeroEncounterSystem.js?v=3.1.32-build352";
 
 export const CAMPAIGN_INVASION_INTEL_VERSION=1;
 

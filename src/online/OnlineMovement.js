@@ -45,6 +45,7 @@ export function reconcileOnlineMotion(entity, source, options = {}) {
   if (samePoint(target, latest) || path.some(point => samePoint(point, target))) return "unchanged";
   if (options.snap || distance(visual, target) > snapDistance || distance(latest, target) > snapDistance) {
     snapOnlineMotion(entity, target);
+    if (source.facing === "left" || source.facing === "right") entity.facing = source.facing;
     return "snapped";
   }
 

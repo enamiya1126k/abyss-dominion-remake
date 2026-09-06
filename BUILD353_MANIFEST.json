@@ -1,0 +1,411 @@
+{
+  "build": 353,
+  "version": "3.1.33",
+  "files": [
+    {
+      "path": "BUILD348_README.txt",
+      "sha256": "833c85b7dd2e4d640c775d47edfc21b342afe11e92750d7fc5c781aff94be883",
+      "bytes": 3993
+    },
+    {
+      "path": "BUILD348_VERIFICATION.md",
+      "sha256": "c2b07d4e27c3ad62a6cbfd3690dd41494879f2a28cf4655e973860993a7de476",
+      "bytes": 2169
+    },
+    {
+      "path": "BUILD351_README.txt",
+      "sha256": "4e9b673ea0dfd6b1db925bc6ede88d9f1ca4e04dfad32d264b5edd3f0721de11",
+      "bytes": 4878
+    },
+    {
+      "path": "BUILD351_STORY_PREVIEW.txt",
+      "sha256": "1bf7a00979e16eea46719a17f3a172de1054bba4f578a32a827a8a1f9ad706f5",
+      "bytes": 54308
+    },
+    {
+      "path": "BUILD352_README.txt",
+      "sha256": "cebafd037d9d35ab4b6b918fb5bf83539bef67279731a9b4fa90d0cb420120e1",
+      "bytes": 2707
+    },
+    {
+      "path": "BUILD353_README.txt",
+      "sha256": "d72128ef3d75cd9c8c7a2648ce10ba3d58523f5d8a66d5414a2d10f7e4a46eaf",
+      "bytes": 3267
+    },
+    {
+      "path": "index.html",
+      "sha256": "3a9593605c2a0fa4019121785734555c2e62497945981283e28a6bd845050a90",
+      "bytes": 15347
+    },
+    {
+      "path": "online-server/src/HeroAllianceAdapter.js",
+      "sha256": "1bfe39fdfd6de7d489cc73b1fe92f07ca9db39e9bade8f496dd4bf60b9a5c64c",
+      "bytes": 5268
+    },
+    {
+      "path": "online-server/src/RaidCoordinator.js",
+      "sha256": "8e310a86c36f861e40fe7e70a55c149bbff80bcfa0bd3fb57e3e4092cfcc09e9",
+      "bytes": 83829
+    },
+    {
+      "path": "online-server/src/RoomStore.js",
+      "sha256": "f94cd6fe23fcf549639572b61719130f184a3286374554284707a2a348ddec44",
+      "bytes": 454185
+    },
+    {
+      "path": "online-server/src/TeamBattleCoordinator.js",
+      "sha256": "e7cb0303e60587af594c756f009b268d8c8686f6c26d97e6e74f2098415e9f2d",
+      "bytes": 82097
+    },
+    {
+      "path": "online-server/tests/build248-raid-roster-integrity.test.js",
+      "sha256": "cac8a027c6d59eb7656440cc6432925e4564e5747c6406930e818f072c431b3c",
+      "bytes": 13807
+    },
+    {
+      "path": "online-server/tests/build249-auto-heal-and-mimic.test.js",
+      "sha256": "459a5edbc994379820c51a45eef8ab276c0a271f5ae3798aae0955c7e03dbbc6",
+      "bytes": 2247
+    },
+    {
+      "path": "src/Styles/build345-balance-ui.css",
+      "sha256": "44308857eea4f6e4d52d4e86b9cb59ea33ebbcdf54e4b20e5dbabc860f07212f",
+      "bytes": 5216
+    },
+    {
+      "path": "src/Styles/build349-formation-layout.css",
+      "sha256": "d6f7a8ebb0ca30d0148c09a7d7f0516f71ea4b1da880f6e3797e99588e380930",
+      "bytes": 5412
+    },
+    {
+      "path": "src/battle/BattleRules.js",
+      "sha256": "3eccf397a82e143731eaf75e880bd29b74a5c6b762909e5cadb939b7bca2148b",
+      "bytes": 33479
+    },
+    {
+      "path": "src/battle/CampaignHeroSkillSystem.js",
+      "sha256": "bd4b055024b56fd0b181df26a21543a7896144e29e77f255686aa779a10f155c",
+      "bytes": 3353
+    },
+    {
+      "path": "src/battle/EnemyAI.js",
+      "sha256": "d05d4ba534da6f843aa30baf3f03a4f7f059c76fe39a3b9d5caebb2b96634219",
+      "bytes": 21128
+    },
+    {
+      "path": "src/battle/SkillSystem.js",
+      "sha256": "93452fca614f3414cea6eea38afb3a998039b8ba50ff32023ef5281386b1efca",
+      "bytes": 62502
+    },
+    {
+      "path": "src/battle/TurnSystem.js",
+      "sha256": "d04b74d00fb38b41706cc190fb87ee8782d12cfc98d325b4da57febcf38ce5b6",
+      "bytes": 3021
+    },
+    {
+      "path": "src/core/AchievementRewardSystem.js",
+      "sha256": "fb8b9872468bb6eb242f9025e7ce399db8757229d189b486f32b55906e104a04",
+      "bytes": 13861
+    },
+    {
+      "path": "src/core/CampaignHeroBranchStorySystem.js",
+      "sha256": "45698084c4c84525d66c69fd350be69e73dd2a22433062eec98ced5c78a8c39e",
+      "bytes": 50465
+    },
+    {
+      "path": "src/core/CampaignHeroEncounterSystem.js",
+      "sha256": "09cd867f0176fc910b378448683562e3a641a856fb454bc541c4243b4d95d312",
+      "bytes": 32891
+    },
+    {
+      "path": "src/core/CampaignHeroLoadoutSystem.js",
+      "sha256": "9e87a7196c4f29e201832a2c638286e14f68a430b8785bee1239c27995e94a6a",
+      "bytes": 2851
+    },
+    {
+      "path": "src/core/CampaignHeroPursuitSystem.js",
+      "sha256": "0acd7f75cff3e41bf55ff09b56c3af295ba2f53873c052e5971962e7ab9b6b3e",
+      "bytes": 6579
+    },
+    {
+      "path": "src/core/CampaignInvasionIntelSystem.js",
+      "sha256": "83103ef6b046a36a78246f42be0cea68fa5637422e0131a6d0cadd5ab74be345",
+      "bytes": 7213
+    },
+    {
+      "path": "src/core/CampaignReincarnationSystem.js",
+      "sha256": "fe67588af06b0cef71bd0c68b5e551c212d7178fa0fa34d92b3c896c6564b670",
+      "bytes": 8454
+    },
+    {
+      "path": "src/core/CampaignStoryArchiveSystem.js",
+      "sha256": "2ab7e8201f3fbaa1a27c635c9852a219273dbb7840b2e17369837b70eace91dc",
+      "bytes": 15241
+    },
+    {
+      "path": "src/core/CampaignStorySystem.js",
+      "sha256": "e1311341711627b86bf1af39a7b0794c7edfddccff080abad8fa79ee61ec759d",
+      "bytes": 83557
+    },
+    {
+      "path": "src/core/CollectionRewardSystem.js",
+      "sha256": "e822423c0c503b7823a45ec14adb5fcbbcae66d9a6553389d077b4546d7113a9",
+      "bytes": 9467
+    },
+    {
+      "path": "src/core/CombatPower.js",
+      "sha256": "9e74aaa2a668544547bd5b43ef9f74d56ed96ccc770652b5ce1e06db22d4d787",
+      "bytes": 5934
+    },
+    {
+      "path": "src/core/EndgameSystem.js",
+      "sha256": "27af808003e4717703a80f5a0b75060181cb20d73f871dc5613d506c4346e658",
+      "bytes": 55916
+    },
+    {
+      "path": "src/core/EquipmentAffixSystem.js",
+      "sha256": "2b7bfe03c8022ec74bbeedba2d41352c2ea2dfed6fec6ae3e06546a6c2f8a7f2",
+      "bytes": 1425
+    },
+    {
+      "path": "src/core/EquipmentDropSystem.js",
+      "sha256": "85b41aeb9643b22cad6ec5ecc4afc0c8a3d6cb945fb259e5d54e4ff9295291e6",
+      "bytes": 718
+    },
+    {
+      "path": "src/core/ExperiencePackSystem.js",
+      "sha256": "220813dc01eed6ed8ae0d95cc152c9d465e917296f05a1d336eef66480889e53",
+      "bytes": 2840
+    },
+    {
+      "path": "src/core/FloorBossChallengeSystem.js",
+      "sha256": "bb7b37d67c4ff07e726bc3bc93b89116353c540262074fcd386104c297e00cd9",
+      "bytes": 7031
+    },
+    {
+      "path": "src/core/HeroAllianceSystem.js",
+      "sha256": "b52cae429348fad4c73b8a56b7d44f954f07eb034ea1daf650548141aae586cf",
+      "bytes": 16898
+    },
+    {
+      "path": "src/core/HeroResonanceSystem.js",
+      "sha256": "6643be252f6eeffe0c6f07da3443d36a8599585ec1803a5050bc66b24f2fa9d7",
+      "bytes": 3550
+    },
+    {
+      "path": "src/core/ProgressionSystem.js",
+      "sha256": "2fa1057031ccc6e6bd93bccc825161fe8a80ed674dde912edba16249749fba0d",
+      "bytes": 1979
+    },
+    {
+      "path": "src/core/SecondWorldEventSystem.js",
+      "sha256": "db2924adcd427848ae045b16d90d92c6ca9528379e5a44a11417672675ed191a",
+      "bytes": 4055
+    },
+    {
+      "path": "src/core/SecretRoomSystem.js",
+      "sha256": "5be5385d983fc865b11c223667a45d7ca941cc8326eaba4b5541c5573a7df62f",
+      "bytes": 31995
+    },
+    {
+      "path": "src/core/SerialCodeSystem.js",
+      "sha256": "164966c07018cb95a0da45b9709ec1b53cf2f75f6296ca1208d304dfe8e813d4",
+      "bytes": 21855
+    },
+    {
+      "path": "src/core/SignatureWeaponSystem.js",
+      "sha256": "7544dd02174ca7e046786eafe043dd7394c03f40425116ddb596f06e3ff24eff",
+      "bytes": 16338
+    },
+    {
+      "path": "src/core/WorldSystem.js",
+      "sha256": "3491c37bb78347d32dcaaeca8e123bd7aa920d3092bbea3955f69adf83d42e30",
+      "bytes": 1381
+    },
+    {
+      "path": "src/core/config.js",
+      "sha256": "6003f0311dbe3dc8019f775b47b6e2b22b10209af06f701dd1aec97d55d0fdd7",
+      "bytes": 2256
+    },
+    {
+      "path": "src/data/mythicSerialSpecies.js",
+      "sha256": "df4864278c881b97bdb22bda6ce9b830fd04d27bc730315e546f23a55433484e",
+      "bytes": 6823
+    },
+    {
+      "path": "src/data/species.js",
+      "sha256": "da5e77a40e73f2d38d7d544566041e14c363ebaadd0af06a35b08d89bdca1989",
+      "bytes": 24428
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "5074d44b663e1ec73ec564ada796a862a86bcca8300a38e1b8a512217d458e16",
+      "bytes": 1004864
+    },
+    {
+      "path": "src/models/Monster.js",
+      "sha256": "5e11ebc8b90b6559484d60c5b556ac3020c776934de697ed8294e05b7e7a2f43",
+      "bytes": 19328
+    },
+    {
+      "path": "src/online/OnlineMovement.js",
+      "sha256": "e645cb05e75c1c0c965f877de3c4d72bae9c385269fe289efc74970f72d349d3",
+      "bytes": 2636
+    },
+    {
+      "path": "src/online/OnlinePartyClient.js",
+      "sha256": "491ec3b79b788eff3d13b476797217a07f45e213a802c768db019113b64a3ab0",
+      "bytes": 329052
+    },
+    {
+      "path": "src/online/OnlineViews.js",
+      "sha256": "473158de2e454e61881b49f2794a61a14d4e4957162958bf990c28adebdb0b3d",
+      "bytes": 106460
+    },
+    {
+      "path": "src/services/EquipmentLoadoutSystem.js",
+      "sha256": "dc5241201710fb8de34b35da7ce5f121ecf00c25b6ab5de4a407a503d0bd8b81",
+      "bytes": 4256
+    },
+    {
+      "path": "src/services/SaveService.js",
+      "sha256": "38e818b78faec4e54c07254fe83e90983d199e12e9da092ee404cb2dbc4a120c",
+      "bytes": 89853
+    },
+    {
+      "path": "src/services/WeaponMastery.js",
+      "sha256": "1888f85c16482549799d36b12bc738c44f8d1c20b304760d5d6690dba175f31b",
+      "bytes": 4796
+    },
+    {
+      "path": "src/ui/components/MonsterCard.js",
+      "sha256": "90e6eefd3c69e1645a30401716550f59b7668f30ee06918a1ae02c9aacb26048",
+      "bytes": 1708
+    },
+    {
+      "path": "src/ui/screens/BattleScreen.js",
+      "sha256": "f03ff1606144adec28570ed1870167ab2fcdc97cca2bd9fc8b446cd3908a92fd",
+      "bytes": 28618
+    },
+    {
+      "path": "src/ui/screens/CampaignFinalFloorScreen.js",
+      "sha256": "bc5dbc01dd724014f232944aa1bdbcc96bbfcd2bf03e7046af88653377cc5985",
+      "bytes": 7762
+    },
+    {
+      "path": "src/ui/screens/EquipmentScreen.js",
+      "sha256": "3261d3515278177e1c5b9654e257254da4273c423c3f3103b1d7952938e74515",
+      "bytes": 24342
+    },
+    {
+      "path": "src/ui/screens/ExploreScreen.js",
+      "sha256": "f28414be09f5a663112d4c14d3aad7781de09d03bab5cb411898cc183ad12908",
+      "bytes": 8437
+    },
+    {
+      "path": "src/ui/screens/FormationLayout.js",
+      "sha256": "d6fe4e1968cec7095868ccf2bf54c30b1eea753aac290efc5cbac97ebadc8484",
+      "bytes": 7112
+    },
+    {
+      "path": "src/ui/screens/FormationScreen.js",
+      "sha256": "5672f98e66393ec4cc0be26eea60a7c1632a4332a92f5cb02cbe89ecc7a1890c",
+      "bytes": 9523
+    },
+    {
+      "path": "src/ui/screens/GauntletScreen.js",
+      "sha256": "3c58660f0840c2c56dba0bbc505f91853e30888b4ba96ee4065e01fc041e84dc",
+      "bytes": 5216
+    },
+    {
+      "path": "src/ui/screens/HomeScreen.js",
+      "sha256": "2c2e7d519faaeb7bb34cbe9d6c4b1681b9ddd1c4f7f81402bfebee151bd980c7",
+      "bytes": 17745
+    },
+    {
+      "path": "src/ui/screens/InventoryScreen.js",
+      "sha256": "1b32db397b32a9377e314deca05a054bcc488a094ed045a3febf5ae3e11d7c13",
+      "bytes": 8048
+    },
+    {
+      "path": "src/ui/screens/MonsterDetailScreen.js",
+      "sha256": "9735728f8246441040ad2bf35f955d801f6d3b4a2e6bc1d535d3219ffc2570ca",
+      "bytes": 11027
+    },
+    {
+      "path": "src/ui/screens/MonsterListScreen.js",
+      "sha256": "83d8837c060720041ed8ed7c2597671e666f81befcddc4be68efe70452cdbd83",
+      "bytes": 4781
+    },
+    {
+      "path": "src/ui/screens/OnlinePartyScreen.js",
+      "sha256": "178c396206991c3e6aba1461bdca2b9caa67a5145b42cae045d328ce57b56df7",
+      "bytes": 95559
+    },
+    {
+      "path": "src/ui/screens/SettingsScreen.js",
+      "sha256": "c324f8810429ec8dc602c561612d8969c6e373fbd1f8d05e3558c7361b727ab8",
+      "bytes": 5403
+    },
+    {
+      "path": "src/ui/screens/ShopScreen.js",
+      "sha256": "06cfb5dcc190cd4a24e97a17e6d04b101f61c85079d1c87eef9fe4cac3aaa3a4",
+      "bytes": 2467
+    },
+    {
+      "path": "src/ui/screens/SkillScreen.js",
+      "sha256": "6d1045ec9d31f43b6397d04d64892e004b430f0755c016309707f197a07702f0",
+      "bytes": 5212
+    },
+    {
+      "path": "tests/build256-online-movement-smoothing.test.mjs",
+      "sha256": "05b1d0aeccee8356f17759fddc494ee005bbff428cb0199be8df2157a336ff36",
+      "bytes": 3693
+    },
+    {
+      "path": "tests/build340-story-continuity.test.mjs",
+      "sha256": "17075ffd8e90ce3b065d2c59d2b3376316209dea4ec9c12068ab4cdad30580df",
+      "bytes": 10500
+    },
+    {
+      "path": "tests/build341-hero-pursuit.test.mjs",
+      "sha256": "f055688f54e78633f7bedac79cd32d81dea75ade16c7b28303bb591dc7d39013",
+      "bytes": 14167
+    },
+    {
+      "path": "tests/build348-hero-alliance.test.mjs",
+      "sha256": "c0e112873e75cdfe89cc59b7edb6fb85202f8a1d864cb5ce239c5530fb409a5b",
+      "bytes": 14850
+    },
+    {
+      "path": "tests/build348-story.test.mjs",
+      "sha256": "980bb3ceabec1ffde9300b8c30b0d74d3f932d427cd72e61d4283d5ee665e2ea",
+      "bytes": 4497
+    },
+    {
+      "path": "tests/build348-tengod-comparison.mjs",
+      "sha256": "3f7b27fe74c090cc6e968b614f869384107f309141ab88c7314bdf7f51f2bfa4",
+      "bytes": 3943
+    },
+    {
+      "path": "tests/build350-story-voice.test.mjs",
+      "sha256": "54ace2d15e1514609af0528b8c98717bc37f4b660d68b8d051d362a123e60325",
+      "bytes": 5381
+    },
+    {
+      "path": "tests/build351-demon-story.test.mjs",
+      "sha256": "557ce9de176337abbff84736f80910c283903a71a85176ffae457ae350967e1a",
+      "bytes": 6660
+    },
+    {
+      "path": "tests/build352-walking-facing.test.mjs",
+      "sha256": "1ad47a51300e6888eb643db90ea0f50307ae2690ecafc8cf23450cb3999689ba",
+      "bytes": 7051
+    },
+    {
+      "path": "tests/build353-market-pricing.test.mjs",
+      "sha256": "68c7956c1ee9330622370380bd9a535ead1e3d2e5b5ea64768ce865a743b11ba",
+      "bytes": 6399
+    }
+  ]
+}

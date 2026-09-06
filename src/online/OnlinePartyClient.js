@@ -1,18 +1,18 @@
 import {
   buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
   onlineSocialNotificationSummary, moveOnlineBattleRosterPriority, renderOnlineBattleRosterPicker,
-} from "../ui/screens/OnlinePartyScreen.js?v=3.1.31-build351";
+} from "../ui/screens/OnlinePartyScreen.js?v=3.1.33-build353";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=3.1.31-build351";
+} from "./OnlineViews.js?v=3.1.33-build353";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   rollbackOnlineTradeAssetReservation, commitOnlineTrade, recoverOrphanedTradeEscrows,
   parseOnlineTradeAmount, reconcileOnlineTradeEscrow, sameOnlineTradeAsset, sameLegacyOnlineTradeAsset,
 } from "./OnlineTradeSystem.js?v=3.1.1-build311";
 import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=3.1.1-build311";
-import { ONLINE_EXPEDITION_MOVE_INTERVAL_MS } from "./OnlineMovement.js?v=3.1.1-build311";
+import { ONLINE_EXPEDITION_MOVE_INTERVAL_MS } from "./OnlineMovement.js?v=3.1.32-build352";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
 const SOCIAL_FAB_ROUTES = new Set(["home", "chat"]);

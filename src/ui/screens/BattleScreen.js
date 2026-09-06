@@ -1,11 +1,11 @@
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.31-build351";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.33-build353";
 import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.28-build348";
 import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.28-build348";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.31-build351";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.33-build353";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.20-build339";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.31-build351";
+import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.33-build353";
 import{ATTRIBUTE_MATCHUP_MULTIPLIERS,attributesEffectiveAgainst,attributesIneffectiveAgainst}from"../../data/attributes.js?v=3.1.1-build311";
 import{heroResonanceProfile}from"../../core/HeroResonanceSystem.js?v=3.1.28-build348";
 

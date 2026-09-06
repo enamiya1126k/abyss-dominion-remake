@@ -1,6 +1,6 @@
 import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.1-build319";
 
-import{HERO_PURSUIT_STEPS,normalizeHeroPursuit}from"./CampaignHeroPursuitSystem.js?v=3.1.22-build341";
+import{HERO_PURSUIT_STEPS,normalizeHeroPursuit}from"./CampaignHeroPursuitSystem.js?v=3.1.32-build352";
 
 export const CAMPAIGN_HERO_ENCOUNTER_VERSION=4;// Regression history: CAMPAIGN_HERO_ENCOUNTER_VERSION=3
 export const CAMPAIGN_HERO_FINAL_LEVEL=1000;

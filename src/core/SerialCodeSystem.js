@@ -1,8 +1,8 @@
-import{createMonster,calculatedStats}from"../models/Monster.js?v=3.1.31-build351";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=3.1.33-build353";
 import{allLearnedSkills,maxMp,recommendedSkills,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.28-build348";
 import{SPECIES}from"../data/species.js?v=3.1.28-build348";
 import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.28-build348";
-import{MONSTER_STORAGE_CAP}from"./config.js?v=3.1.31-build351";
+import{MONSTER_STORAGE_CAP}from"./config.js?v=3.1.33-build353";
 import{createEquipment}from"../models/Equipment.js?v=3.1.1-build311";
 import{receiveEquipment}from"../services/EquipmentStorage.js?v=3.1.1-build311";
 

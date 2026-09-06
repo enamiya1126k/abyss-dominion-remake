@@ -7,7 +7,7 @@ const key=p=>`${p.x},${p.y}`;
 export function normalizeHeroPursuit(value,{encounterId,heroId}={}){
  if(!value||typeof value!=="object"||!encounterId||value.encounterId!==encounterId||value.heroId!==heroId)return null;
  const p=point(value);
- return{version:341,encounterId,heroId,...p,rx:p.x,ry:p.y,sectionId:value.sectionId??null,
+ return{version:341,encounterId,heroId,...p,rx:p.x,ry:p.y,facing:value.facing==="left"?"left":"right",sectionId:value.sectionId??null,
   floor:Math.max(1,Math.floor(number(value.floor,1))),state:value.state==="resolved"?"resolved":value.state==="contact"?"contact":"pursuing",
   chaseSteps:Math.max(0,Math.floor(number(value.chaseSteps))),portalTransfers:Math.max(0,Math.floor(number(value.portalTransfers))),
   playerChoice337:["fight","flee"].includes(value.playerChoice337)?value.playerChoice337:undefined,
@@ -75,6 +75,7 @@ export function advanceHeroField(pursuit,{world,player,dt=0,paused=false}){
   const next=route[0];step=pursuit.move341={fromX:pursuit.x,fromY:pursuit.y,x:next.x,y:next.y,progress:0};
  }
  const speed={myth_enami:4.8,myth_yori:6.2,myth_hide:5.8,myth_rion:5.6}[pursuit.heroId]??5.6;
+ if(seconds>0&&step.x!==step.fromX)pursuit.facing=step.x<step.fromX?"left":"right";
  step.progress=Math.min(1,step.progress+seconds*speed);pursuit.rx=step.fromX+(step.x-step.fromX)*step.progress;pursuit.ry=step.fromY+(step.y-step.fromY)*step.progress;pursuit.moving341=true;
  let moved=false;if(step.progress>=1){pursuit.x=step.x;pursuit.y=step.y;pursuit.move341=null;moved=true}
  return{contact:heroInContact(pursuit,destination),moved};

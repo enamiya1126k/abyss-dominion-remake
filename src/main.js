@@ -1,9 +1,9 @@
 import{equipmentAffixesWithSeries}from"./core/EquipmentAffixSystem.js?v=3.1.28-build348";
-import{applyCampaignHeroLoadout}from"./core/CampaignHeroLoadoutSystem.js?v=3.1.31-build351";
+import{applyCampaignHeroLoadout}from"./core/CampaignHeroLoadoutSystem.js?v=3.1.33-build353";
 import{heroId,heroHp,heroEffects,heroEffect,heroCooldowns,heroAllianceState,heroAuthoredSkills,reserveHeroAction,chooseHeroAllianceSkill,runHeroAllianceAction,triggerHeroAlliance,drainHeroReactions,mitigateHeroDamage,tryHeroLastStand,heroOverheal}from"./core/HeroAllianceSystem.js?v=3.1.28-build348";
 import{commitCampaignHeroSkill}from'./battle/CampaignHeroSkillSystem.js?v=3.1.28-build348';
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.31-build351";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.31-build351";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.33-build353";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.33-build353";
 // Regression markers only: SaveService.js?v=3.1.10-build329 / config.js?v=3.1.21-build340 / HomeScreen.js?v=3.1.21-build340
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.1-build311";
@@ -13,31 +13,31 @@ import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/Expl
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.31-build351";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.33-build353";
 import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.14-build333";
-import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.28-build348";
+import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.32-build352";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.31-build351";
-import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.31-build351";
-import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.31-build351";
-import{reconcileOnlineMotion,onlineMotionSpeed}from"./online/OnlineMovement.js?v=3.1.1-build311";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.33-build353";
+import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.33-build353";
+import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.33-build353";
+import{reconcileOnlineMotion,onlineMotionSpeed}from"./online/OnlineMovement.js?v=3.1.32-build352";
 import{beginGuestProgressIsolation,finishGuestProgressIsolation,onlineProgressionAllowed,legacyProgressRecoveryCandidate,applyLegacyProgressRecovery,dismissLegacyProgressRecovery,undoLegacyProgressRecovery}from"./online/OnlineProgressIsolation.js?v=3.1.1-build311";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.31-build351";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=3.1.31-build351";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.31-build351";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.31-build351";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.33-build353";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=3.1.33-build353";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.33-build353";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.33-build353";
 import{CampaignFinalFloorScreen}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.31-build351";
-import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.31-build351";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.31-build351";
-import{HERO_PURSUIT_STEPS,normalizeHeroPursuit,heroFieldRoute,chooseHeroSpawn,prepareHeroArrival,heroCanEscape,heroInContact,advanceHeroField,heroScreenIndicator}from"./core/CampaignHeroPursuitSystem.js?v=3.1.22-build341";
+import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.33-build353";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.33-build353";
+import{HERO_PURSUIT_STEPS,normalizeHeroPursuit,heroFieldRoute,chooseHeroSpawn,prepareHeroArrival,heroCanEscape,heroInContact,advanceHeroField,heroScreenIndicator}from"./core/CampaignHeroPursuitSystem.js?v=3.1.32-build352";
 import{updateHeroTracker}from"./ui/HeroPursuitHud.js?v=3.1.22-build341";
 import{mountBattleBossLayout}from"./ui/BattleBossLayout.js?v=3.1.21-build340";
 import{Modal}from"./ui/components/Modal.js?v=3.1.1-build311";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=3.1.1-build311";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=3.1.1-build311";
 import{attributeCycleVisual,attributeVisual}from"./ui/components/AttributeVisual.js?v=3.1.1-build311";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=3.1.31-build351";
-import{EXPERIENCE_PACK_TYPES,experiencePackType,availableExperiencePackTypes,consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=3.1.31-build351";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=3.1.33-build353";
+import{EXPERIENCE_PACK_TYPES,experiencePackType,availableExperiencePackTypes,consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=3.1.33-build353";
 import{createEquipment,equipmentPower,equipmentStatMultiplier,equipmentRequiredMonsterLevel}from"./models/Equipment.js?v=3.1.1-build311";
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=3.1.1-build311";
 import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=3.1.28-build348";
@@ -46,11 +46,11 @@ import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./serv
 import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=3.1.1-build311";
 import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=3.1.1-build311";
 import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=3.1.1-build311";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=3.1.31-build351";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=3.1.33-build353";
 import{initialAffixCount,lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=3.1.1-build311";
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=3.1.28-build348";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=3.1.31-build351";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=3.1.31-build351";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=3.1.33-build353";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=3.1.33-build353";
 import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=3.1.17-build336";
 import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=3.1.28-build348";
 import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=3.1.17-build336";
@@ -58,15 +58,15 @@ import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=3.1.1-build311";
 import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=3.1.1-build311";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=3.1.1-build311";
 import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=3.1.28-build348";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=3.1.31-build351";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=3.1.33-build353";
 import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=3.1.1-build311";
 import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=3.1.1-build311";
 import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=3.1.1-build311";
 import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillMpCostBreakdown,skillDamage,affixOutgoingDamageMultiplier,chooseAutoBattleDecision,skillProgressFor,recordSkillUse,skillEffectSummary,skillCombatKeywords,applySkillMastery,recommendedSkills,recommendedSkillLoadout}from"./battle/SkillSystem.js?v=3.1.28-build348";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyDamageAfterDefense,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=3.1.31-build351";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyDamageAfterDefense,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=3.1.33-build353";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectStackBreakdown,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=3.1.28-build348";
 import{attackHits}from"./battle/HitSystem.js?v=3.1.1-build311";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=3.1.31-build351";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=3.1.33-build353";
 import{dangerConfig}from"./core/DangerSystem.js?v=3.1.1-build311";
 import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=3.1.25-build345";
 import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost,magicCircleLevelEffect,isRaidExclusiveMagicCircle}from"./core/MagicCircleSystem.js?v=3.1.19-build338";
@@ -79,10 +79,10 @@ import{NORMAL_SUMMON_RATES,GUARANTEED_SUMMON_RATES,GACHA_PITY_LIMITS,rollSummonR
 import{CAMPAIGN_MAX_FLOOR,CAMPAIGN_KEYS_PER_FLOOR,HERO_PARTY_IDS,campaignFloorToLegacyFloor,campaignFloorState,campaignBossProgress,campaignBossProgressList,campaignDefeatedBossIds,campaignKeysHeld,beginCampaignFloorRun,beginCampaignFloorReplay,collectCampaignKey,defeatCampaignBoss,trophyChestEntitlements,claimTrophyChest,roomCountForRandom,roomAttributesForFloor,campaignRoomProfile,campaignEndingForResult,recordCampaignEnding,normalizeCampaignState,floorBossCampaignDisplayFloor,campaignMilestoneBossIds,isCampaignMultiBossFloor}from"./core/Campaign100System.js?v=3.1.1-build319";
 import{CAMPAIGN_STORY_OPENING_ID,campaignEndingStoryScene,acknowledgeCampaignStoryScene,nextCampaignStoryScene,campaignHeroVoiceLine,campaignHeroFinalVoiceLines}from"./core/CampaignStorySystem.js?v=3.1.31-build351";
 import{isLionelAvatar,lionelAvatarProtectionReason}from"./core/CampaignProtagonistSystem.js?v=3.1.3-build322";
-import{CAMPAIGN_HERO_IDS,CAMPAIGN_HERO_PROFILES,CAMPAIGN_HERO_STAT_MULTIPLIER,CAMPAIGN_HERO_HP_MULTIPLIER,normalizeCampaignHeroInvasion,scheduledCampaignHeroForFloor,beginCampaignHeroFieldEncounter,recordCampaignHeroWound,settleCampaignHeroEncounter,campaignRemainingHeroes,advanceCampaignRewindFloor}from"./core/CampaignHeroEncounterSystem.js?v=3.1.28-build348";
-import{nextCampaignHeroBranchStoryScene,acknowledgeCampaignHeroBranchStoryScene,queueCampaignHeroAftermathStories}from"./core/CampaignHeroBranchStorySystem.js?v=3.1.31-build351";
-import{createCampaignStoryArchiveModel,recordCampaignStoryArchiveScene}from"./core/CampaignStoryArchiveSystem.js?v=3.1.31-build351";
-import{normalizeCampaignReincarnationState,campaignCanonicalEnding,recordCampaignConclusion,beginOptionalCampaignReincarnation,campaignReincarnationDifficultyMultiplier,campaignReincarnationRewardMultiplier,campaignReincarnationFloorLimit,recordCampaignReincarnationFloor}from"./core/CampaignReincarnationSystem.js?v=3.1.28-build348";
+import{CAMPAIGN_HERO_IDS,CAMPAIGN_HERO_PROFILES,CAMPAIGN_HERO_STAT_MULTIPLIER,CAMPAIGN_HERO_HP_MULTIPLIER,normalizeCampaignHeroInvasion,scheduledCampaignHeroForFloor,beginCampaignHeroFieldEncounter,recordCampaignHeroWound,settleCampaignHeroEncounter,campaignRemainingHeroes,advanceCampaignRewindFloor}from"./core/CampaignHeroEncounterSystem.js?v=3.1.32-build352";
+import{nextCampaignHeroBranchStoryScene,acknowledgeCampaignHeroBranchStoryScene,queueCampaignHeroAftermathStories}from"./core/CampaignHeroBranchStorySystem.js?v=3.1.32-build352";
+import{createCampaignStoryArchiveModel,recordCampaignStoryArchiveScene}from"./core/CampaignStoryArchiveSystem.js?v=3.1.32-build352";
+import{normalizeCampaignReincarnationState,campaignCanonicalEnding,recordCampaignConclusion,beginOptionalCampaignReincarnation,campaignReincarnationDifficultyMultiplier,campaignReincarnationRewardMultiplier,campaignReincarnationFloorLimit,recordCampaignReincarnationFloor}from"./core/CampaignReincarnationSystem.js?v=3.1.32-build352";
 import{campaignTrophyFragmentAwards}from"./core/CampaignRewardSystem.js?v=3.1.1-build311";
 import{bossRewardIdentity,bossRewardEquipmentIdentity,bossFragmentVisualIdentity}from"./core/BossRewardMappingSystem.js?v=3.1.1-build311";
 import{campaignBossChestReward}from"./core/CampaignBossRewardSystem.js?v=3.1.19-build338";
@@ -93,9 +93,9 @@ import{buildSectionMiniMapModel,fitMiniMapTransform,projectMiniMapPoint}from"./c
 import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=3.1.19-build338";
 import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=3.1.1-build311";
 import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=3.1.1-build311";
-import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=3.1.31-build351";
-import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,casinoBetLimit,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=3.1.31-build351";
-import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=3.1.31-build351";
+import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=3.1.33-build353";
+import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,casinoBetLimit,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,darkMarketPlayerMaxLevel,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=3.1.33-build353";
+import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=3.1.33-build353";
 import{runConfirmedFullReset}from"./core/FullResetSystem.js?v=3.1.13-build332";
 import{DAILY_NOTICE_GIFT,activeNoticeDefinitions,setServerMaintenanceState,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount,pendingNoticeRewards,claimNoticeReward,enqueueNoticeReward}from"./core/NoticeSystem.js?v=3.1.19-build338";
 import{COMPLETE_MONSTER_CODEX,codexCollectionSummary,syncCollectionRewardInbox,rewardDescription}from"./core/CollectionRewardSystem.js?v=3.1.28-build348";
@@ -103,11 +103,11 @@ import{achievementSummary,syncAchievementRewardInbox,achievementIconKeyForId}fro
 import{CONTEXT_GUIDE_STEPS,completeGuideStep,normalizeContextualGuide,setGuidePending,guidePending,guideStepDone,bumpGuideCounter,snoozeGuideStep,guideStepSnoozed,resetContextualGuide,contextualGuideProgress}from"./core/ContextualGuideSystem.js?v=3.1.1-build311";
 import{weekdayGachaSchedule,weekdayGachaCost,WEEKDAY_GACHA_CALENDAR,WEEKDAY_ENDGAME_RATE,rollWeekdayEndgameHit}from"./core/WeekdayGachaSystem.js?v=3.1.1-build311";
 import{bossExperiencePackReward}from"./core/BossRewardSystem.js?v=3.1.1-build311";
-import{enemyExperienceReward}from"./core/ProgressionSystem.js?v=3.1.31-build351";
+import{enemyExperienceReward}from"./core/ProgressionSystem.js?v=3.1.33-build353";
 import{treasureRoomRateForFloor,treasureRoomChestCount,shouldPlaceTreasureMimic,rollTreasureChestReward,mimicVictoryGold,mimicExperienceMultiplier,mimicVictoryCrystals}from"./core/TreasureSystem.js?v=3.1.19-build338";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionForFloor,floorBossDefinitionById,floorBossEquipmentDesignByPiece,milestoneBossIdsForFloor}from"./data/floorBosses.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CONTRACT_COST,FLOOR_BOSS_EQUIPMENT_COST,normalizeFloorBossChallengeState,recordFloorBossDiscovery,floorBossChallengeStatus,createFloorBossChallengeEncounter,awardFloorBossChallengeFragments,spendFloorBossFragments,restoreFloorBossFragments}from"./core/FloorBossChallengeSystem.js?v=3.1.28-build348";
-import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.31-build351";
+import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.33-build353";
 import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame,partyMonsterArtScale}from"./ui/MonsterVisual.js?v=3.1.20-build339";
 import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,permanentSignatureOwners,rollPermanentSignatureHit,PERMANENT_SIGNATURE_RATE,createSignatureEquipment,normalizeSignatureWeaponItem,signatureWeaponGrantedSkill}from"./core/SignatureWeaponSystem.js?v=3.1.28-build348";
 
@@ -473,7 +473,7 @@ document.addEventListener("click",e=>{const b=e.target.closest?.("[data-modal-di
 document.addEventListener("contextmenu",e=>{if(!e.target.closest("input,textarea"))e.preventDefault()});
 document.addEventListener("selectstart",e=>{if(!e.target.closest("input,textarea"))e.preventDefault()});
 document.addEventListener("keydown",event=>{if(event.key!=="Escape")return;const open=document.querySelectorAll(".equipment-screen-v2 .equipped-slot-card[open]");if(open.length){open.forEach(detail=>detail.removeAttribute("open"));event.preventDefault();return}const modal=topModal();if(modal){event.preventDefault();if(typeof modal._onDismiss==="function")modal._onDismiss();else modal.remove()}});
-class Entity{constructor(x,y){this.x=x;this.y=y;this.rx=x;this.ry=y;this.path=[];this.p=0}setPath(p){this.path=p;this.p=0}move(dt,s){if(!this.path.length)return false;const t=this.path[0];this.p+=dt*s;const n=Math.min(1,this.p);this.rx=this.x+(t.x-this.x)*n;this.ry=this.y+(t.y-this.y)*n;if(this.p>=1){this.x=t.x;this.y=t.y;this.rx=this.x;this.ry=this.y;this.path.shift();this.p=0;return true}return false}}
+class Entity{constructor(x,y,facing="right"){this.x=x;this.y=y;this.rx=x;this.ry=y;this.facing=facing==="left"?"left":"right";this.path=[];this.p=0}setPath(p){this.path=p;this.p=0}move(dt,s){if(!this.path.length)return false;const t=this.path[0];if(dt*s>0&&t.x!==this.x)this.facing=t.x<this.x?"left":"right";this.p+=dt*s;const n=Math.min(1,this.p);this.rx=this.x+(t.x-this.x)*n;this.ry=this.y+(t.y-this.y)*n;if(this.p>=1){this.x=t.x;this.y=t.y;this.rx=this.x;this.ry=this.y;this.path.shift();this.p=0;return true}return false}}
 class Camera{constructor(c){this.c=c;this.x=TILE;this.y=TILE;this.z=.85;this.ox=0;this.oy=0;this.manual=false}world(wx,wy){return{x:(wx-this.x)*this.z+this.c.width/2+this.ox,y:(wy-this.y)*this.z+this.c.height/2+this.oy}}screen(sx,sy){return{x:(sx-this.c.width/2-this.ox)/this.z+this.x,y:(sy-this.c.height/2-this.oy)/this.z+this.y}}pan(dx,dy){this.ox+=dx;this.oy+=dy;this.manual=true}reset(px,py){this.x=px;this.y=py;this.ox=0;this.oy=0;this.z=.85;this.manual=false}follow(px,py,dt=1/60){if(this.manual)return;const p=this.world(px,py),l=this.c.width*.34,r=this.c.width*.66,t=this.c.height*.34,b=this.c.height*.66,alpha=1-Math.pow(.88,Math.max(.25,Math.min(4,(Number(dt)||1/60)*60)));if(p.x<l)this.x+=(p.x-l)/this.z*alpha;if(p.x>r)this.x+=(p.x-r)/this.z*alpha;if(p.y<t)this.y+=(p.y-t)/this.z*alpha;if(p.y>b)this.y+=(p.y-b)/this.z*alpha}clamp(w){const bounds=w?.sections?.length?sectionBounds(w,w.currentSectionId,2):{minX:0,minY:0,maxX:(w.cols??1)-1,maxY:(w.rows??1)-1},edge=30,left=bounds.minX*TILE,top=bounds.minY*TILE,mw=(bounds.maxX-bounds.minX+1)*TILE*this.z,mh=(bounds.maxY-bounds.minY+1)*TILE*this.z,baseLeft=this.c.width/2+(left-this.x)*this.z,baseTop=this.c.height/2+(top-this.y)*this.z,minOx=this.c.width-edge-(baseLeft+mw),maxOx=edge-baseLeft,minOy=this.c.height-edge-(baseTop+mh),maxOy=edge-baseTop;this.ox=mw<=this.c.width-edge*2?(this.c.width-mw)/2-baseLeft:Math.max(minOx,Math.min(maxOx,this.ox));this.oy=mh<=this.c.height-edge*2?(this.c.height-mh)/2-baseTop:Math.max(minOy,Math.min(maxOy,this.oy))}}
 normalizeEndgameState(save.state);
 function normalizeFloorBossDedicatedItem(item){
@@ -2526,7 +2526,7 @@ function syncOnlineExploreMembers(room,selfId,{snap=false}={}){
  if(!game?.online)return;
  game.onlineRoom=room;game.onlineFloor=Math.max(1,Number(room?.expedition?.floor)||1);game.onlineMembers=(room?.members??[]).map(member=>({member,monster:onlineExploreMonster(member)}));
  const active=new Set();
- for(const entry of game.onlineMembers){const position=entry.member.dungeonPosition??room?.expedition?.start;if(!position)continue;active.add(entry.member.playerId);let entity=game.onlineEntities.get(entry.member.playerId);if(!entity){entity=new Entity(position.x,position.y);game.onlineEntities.set(entry.member.playerId,entity)}else reconcileOnlineMotion(entity,position,{snap});if(entry.member.playerId===selfId)game.player=entity}
+ for(const entry of game.onlineMembers){const position=entry.member.dungeonPosition??room?.expedition?.start;if(!position)continue;active.add(entry.member.playerId);let entity=game.onlineEntities.get(entry.member.playerId);if(!entity){entity=new Entity(position.x,position.y,position.facing);game.onlineEntities.set(entry.member.playerId,entity)}else reconcileOnlineMotion(entity,position,{snap});if(entry.member.playerId===selfId)game.player=entity}
  for(const id of game.onlineEntities.keys())if(!active.has(id))game.onlineEntities.delete(id);
  if(!game.player){const start=room?.expedition?.start??{x:1,y:1};game.player=new Entity(start.x,start.y)}
 }
@@ -3156,8 +3156,8 @@ function openSecretRoomInn(){
 function darkMarketBody(){
  const room=activeSecretRoom(save.state),offers=room?.offers??[];
  const offerRows=offers.map(offer=>{const rarity=String(offer.rarity??"SR"),rarityClass=({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase(),grade=offer.mystery&&!offer.revealed?"未鑑定":offer.powerLabel??"出所不明",hidden=offer.mystery&&!offer.revealed,showMonster=offer.kind==="monster"&&offer.payload&&!hidden,species=showMonster?SPECIES[offer.payload.speciesId]:null,icon=showMonster?monsterVisual(offer.payload,species?.emoji??offer.icon,{className:"market-list-monster-visual"}):offer.kind==="equipment"&&offer.payload&&!hidden?equipmentVisual(offer.payload,{className:"market-list-equipment-visual"}):offer.icon;return`<article class="dark-market-offer rarity-name-${rarityClass} ${offer.sold?"sold":""} ${offer.priceTone} grade-${offer.powerGrade??"standard"}"><span>${icon}</span><div><small>${offer.kind==="monster"?"MONSTER":"EQUIPMENT"}・${rarity}・${grade}</small><b>${offer.name}</b><p>${offer.description}</p><em class="market-price-label">${offer.priceLabel}</em></div><div class="dark-market-offer-actions"><button type="button" data-market-detail="${offer.id}">詳細</button><button type="button" data-market-offer="${offer.id}" ${offer.sold?"disabled":""}>${offer.sold?"売切":`${offer.price.toLocaleString()}G`}</button></div></article>`}).join("");
- const recoveryRows=SECRET_ROOM_RECOVERY_ITEMS.map(item=>{const purchased=room?.recoveryPurchased?.[item.id]??0,remaining=Math.max(0,DARK_MARKET_ITEM_LIMIT-purchased);return`<article class="dark-market-recovery"><span>${item.icon}</span><div><b>${item.name}</b><small>${item.description}<br>所持 ${save.state.inventory[item.id]??0}</small></div><button data-market-recovery="${item.id}" ${remaining?"":"disabled"}>${remaining?`${item.price}G`:"完売"}<small>${purchased}/${DARK_MARKET_ITEM_LIMIT}</small></button></article>`}).join("");
- return`<div class="dark-market"><div class="dark-market-wallet">所持 <b>${save.state.player.gold.toLocaleString()}G</b></div><small class="muted">装備・モンスターは各1点限り。階層の3倍以内は完全ランダム価格、超高Lv魔物だけ能力相応の最低価格が付きます。</small><h3>一点物</h3><div class="dark-market-offers">${offerRows}</div><h3>激安回復用品</h3><div class="dark-market-recovery-list">${recoveryRows}</div></div>`;
+ const recoveryRows=SECRET_ROOM_RECOVERY_ITEMS.map(item=>{const purchased=room?.recoveryPurchased?.[item.id]??0,remaining=Math.max(0,DARK_MARKET_ITEM_LIMIT-purchased);return`<article class="dark-market-recovery"><span>${item.icon}</span><div><b>${item.name}</b><small>${item.description}<br>所持 ${save.state.inventory[item.id]??0}</small></div><button data-market-recovery="${item.id}" ${remaining?"":"disabled"}>${remaining?`${(room?.recoveryPrices?.[item.id]??item.price).toLocaleString()}G`:"完売"}<small>${purchased}/${DARK_MARKET_ITEM_LIMIT}</small></button></article>`}).join("");
+ return`<div class="dark-market"><div class="dark-market-wallet">所持 <b>${save.state.player.gold.toLocaleString()}G</b></div><small class="muted">装備・モンスターは各1点限り。所持魔物の最高Lv.${darkMarketPlayerMaxLevel(save.state)}＋100（Lv.${darkMarketPlayerMaxLevel(save.state)+100}）まではランダム価格。それを超える魔物にはLv・能力相応の最低価格が付きます。装備・回復用品はランダム価格です。</small><h3>一点物</h3><div class="dark-market-offers">${offerRows}</div><h3>回復用品</h3><div class="dark-market-recovery-list">${recoveryRows}</div></div>`;
 }
 function darkMarketOfferDetail(offer){
  if(offer.mystery&&!offer.revealed)return`<div class="market-mystery-detail"><span>❔</span><h3>${offer.name}</h3><p>商人すら鑑定していない一点物。種類と中身は購入した瞬間に判明します。</p><small>${offer.kind==="monster"?"モンスター契約":"装備"} / 表示ランク ${offer.rarity} / 返品不可</small></div>`;
@@ -3408,7 +3408,7 @@ function hydrateExpeditionSnapshot(source){
  // never resurrect a boss or a chest, nor preserve a false legacy clear.
  if([308,310,318].includes(Number(world.layoutVersion))){const savedDefeated=new Set(milestoneBossIdsForFloor(source.floor).length?campaignDefeatedBossIds(floorState):savedBossDefeated?bossIds:[]),activeBossIds=new Set(campaignWorldBosses(world).filter(entry=>entry.active!==false).map(entry=>entry.campaignBossId??entry.bossId)),trophyByBoss=new Map(campaignWorldTrophyChests(world).map(entry=>[entry.bossId??entry.bossInfo?.campaignBossId,entry]));if(savedBossDefeated!==snapshotBossDefeated)return null;for(const bossId of bossIds){if(activeBossIds.has(bossId)===savedDefeated.has(bossId)||trophyByBoss.has(bossId)!==savedDefeated.has(bossId))return null;const expectedOpen=campaignBossStateAtFloor(floorState,source.floor,bossId).trophyLocksOpened>=CAMPAIGN_KEYS_PER_FLOOR;if(savedDefeated.has(bossId)&&Boolean(trophyByBoss.get(bossId)?.open)!==expectedOpen)return null}if(savedBossDefeated&&(!world.hotSpring||!world.exit||world.exit.locked||world.exit.active===false)||savedBossDefeated&&savedSpringUsed!==snapshotSpringUsed)return null}
  else{const savedTrophyOpened=floorState.trophyLocksOpened>=CAMPAIGN_KEYS_PER_FLOOR,snapshotTrophyOpened=Boolean(world.trophyChest?.open);if(savedBossDefeated!==snapshotBossDefeated||savedBossDefeated&&Boolean(world.boss)||savedBossDefeated&&(!world.trophyChest||!world.hotSpring||!world.exit||world.exit.locked||world.exit.active===false)||savedBossDefeated&&(savedTrophyOpened!==snapshotTrophyOpened||savedSpringUsed!==snapshotSpringUsed))return null}
- const player=new Entity(Number(playerData.x)||world.start.x,Number(playerData.y)||world.start.y);player.rx=Number.isFinite(Number(playerData.rx))?Number(playerData.rx):player.x;player.ry=Number.isFinite(Number(playerData.ry))?Number(playerData.ry):player.y;
+ const player=new Entity(Number(playerData.x)||world.start.x,Number(playerData.y)||world.start.y,playerData.facing);player.rx=Number.isFinite(Number(playerData.rx))?Number(playerData.rx):player.x;player.ry=Number.isFinite(Number(playerData.ry))?Number(playerData.ry):player.y;
  world.currentSectionId=sectionIdAt(world,player.x,player.y);world.encountering=false;return{world,player,partyTrail:cloneSerializable(source.partyTrail)??[],cameraData:cloneSerializable(source.cameraData)??null,paused:false,running:true,input:createInputState()}
 }
 function clearExpeditionSnapshot({saveNow=false,settleHeroPursuit=true}={}){if(settleHeroPursuit)settleAbandonedCampaignHeroPursuit("snapshot-cleared");if(expeditionSaveTimer){clearTimeout(expeditionSaveTimer);expeditionSaveTimer=null}save.state.expeditionSnapshot=null;normalizeEndgameState(save.state).emergency.pendingEncounter=null;if(saveNow)save.save()}
@@ -3570,7 +3570,7 @@ function bindExplore(){
  game=snapshot??{world:maze(),player:null,camera:null,paused:false,running:true,input:createInputState()};
  ensureExploreDecorations(game.world);ensureFirstTutorialPickup(game.world);
  game.performanceProfile=performanceProfile;game.lastPaintAt=0;game.lastMiniMapPaintAt=0;game.lastTutorialMarkerAt=0;
- game.input=createInputState();game.player??=new Entity(game.world.start.x,game.world.start.y);game.world.encountering=false;game.player.path=[];game.player.p=0;game.partyTrail=Array.isArray(game.partyTrail)&&game.partyTrail.length?game.partyTrail:[{x:game.player.rx??game.player.x,y:game.player.ry??game.player.y}];
+ game.input=createInputState();game.player??=new Entity(game.world.start.x,game.world.start.y);game.world.encountering=false;game.player.path=[];game.player.p=0;game.partyTrail=Array.isArray(game.partyTrail)&&game.partyTrail.length?game.partyTrail:[{x:game.player.rx??game.player.x,y:game.player.ry??game.player.y,facing:game.player.facing}];
  if(!Number.isFinite(game.player.x)||!Number.isFinite(game.player.y)){game.player.x=game.world.start.x;game.player.y=game.world.start.y}
  game.player.rx=game.player.x;game.player.ry=game.player.y;game.camera=new Camera(canvas);
  if(snapshot?.cameraData)Object.assign(game.camera,snapshot.cameraData);else game.camera.reset(game.player.x*TILE,game.player.y*TILE);
@@ -4146,7 +4146,7 @@ function showPostBossFieldUnlocks(){
 function transitionCampaignSection(){
  if(game?.online||!game?.world?.sectionPortals?.length||game?.player?.path?.length)return false;const portal=game.world.sectionPortals.find(entry=>entry.sectionId===game.world.currentSectionId&&entry.x===game.player.x&&entry.y===game.player.y);if(!portal)return false;
  const from=game.world.currentSectionId,to=portal.targetSectionId,navigation=exploreAutoNavigation(),reverse=exploreAutoActive()&&navigation?.lastTransition?.from===to&&navigation.lastTransition.to===from;navigation.reverseCount=reverse?(Number(navigation.reverseCount)||0)+1:0;navigation.lastTransition={from,to,step:Number(game.world.steps)||0};navigation.pauseUntil=Date.now()+360;if(navigation.reverseCount>=2)stopExploreAuto("AUTO停止：同じ区画の往復を検知しました");
- const section=game.world.sections.find(entry=>entry.id===portal.targetSectionId);game.player.x=portal.arrivalX;game.player.y=portal.arrivalY;game.player.rx=portal.arrivalX;game.player.ry=portal.arrivalY;game.player.path=[];game.player.p=0;game.world.currentSectionId=portal.targetSectionId;game.world.currentRoomId=portal.targetSectionId;game.world.currentAttribute=section?.attribute??"neutral";game.partyTrail=[{x:game.player.x,y:game.player.y}];game.camera.reset(game.player.x*TILE,game.player.y*TILE);game.camera.clamp(game.world);revealCampaignArea();transferCampaignHeroPursuit(section);showSectionTransition(section);persistExpeditionSnapshot(expeditionSnapshotFromGame());return true
+ const section=game.world.sections.find(entry=>entry.id===portal.targetSectionId);game.player.x=portal.arrivalX;game.player.y=portal.arrivalY;game.player.rx=portal.arrivalX;game.player.ry=portal.arrivalY;game.player.path=[];game.player.p=0;game.world.currentSectionId=portal.targetSectionId;game.world.currentRoomId=portal.targetSectionId;game.world.currentAttribute=section?.attribute??"neutral";game.partyTrail=[{x:game.player.x,y:game.player.y,facing:game.player.facing}];game.camera.reset(game.player.x*TILE,game.player.y*TILE);game.camera.clamp(game.world);revealCampaignArea();transferCampaignHeroPursuit(section);showSectionTransition(section);persistExpeditionSnapshot(expeditionSnapshotFromGame());return true
 }
 function update(dt){
  if(game.world.encountering||battle||document.querySelector(".game-modal"))return;
@@ -4267,30 +4267,30 @@ function explorationSpriteImage(monster,frame){
 }
 function updateExplorationPartyTrail(){
  if(!game?.player)return;
- const point={x:game.player.rx,y:game.player.ry};
+ const point={x:game.player.rx,y:game.player.ry,facing:game.player.facing};
  game.partyTrail??=[point];
  const latest=game.partyTrail[0];
  if(!latest||Math.hypot(point.x-latest.x,point.y-latest.y)>=.025)game.partyTrail.unshift(point);
  if(game.partyTrail.length>260)game.partyTrail.length=260
 }
 function explorationFollowerPosition(index){
- const spacing=2.25*index,trail=game.partyTrail??[],fallback={x:game.player.rx,y:game.player.ry};
+ const spacing=2.25*index,trail=game.partyTrail??[],fallback={x:game.player.rx,y:game.player.ry,facing:game.player.facing};
  if(trail.length<2){
   const standby=[null,{x:-1.15,y:.78},{x:1.15,y:.78},{x:0,y:1.72}][index]??{x:0,y:index*.8};
-  return{x:fallback.x+standby.x,y:fallback.y+standby.y}
+  return{x:fallback.x+standby.x,y:fallback.y+standby.y,facing:fallback.facing}
  }
  let remaining=spacing;
  for(let i=0;i<trail.length-1;i++){
   const a=trail[i],b=trail[i+1],segment=Math.hypot(b.x-a.x,b.y-a.y);
-  if(segment>=remaining){const ratio=segment?remaining/segment:0;return{x:a.x+(b.x-a.x)*ratio,y:a.y+(b.y-a.y)*ratio}}
+  if(segment>=remaining){const ratio=segment?remaining/segment:0;return{x:a.x+(b.x-a.x)*ratio,y:a.y+(b.y-a.y)*ratio,facing:a.x!==b.x?(a.x<b.x?"left":"right"):a.facing??b.facing??"right"}}
   remaining-=segment
  }
  const tail=trail[trail.length-1]??fallback,prior=trail[trail.length-2]??tail,segment=Math.hypot(tail.x-prior.x,tail.y-prior.y);
- if(segment>.001)return{x:tail.x+(tail.x-prior.x)/segment*remaining,y:tail.y+(tail.y-prior.y)/segment*remaining};
+ if(segment>.001)return{x:tail.x+(tail.x-prior.x)/segment*remaining,y:tail.y+(tail.y-prior.y)/segment*remaining,facing:prior.x!==tail.x?(prior.x<tail.x?"left":"right"):prior.facing??tail.facing??"right"};
  return tail
 }
 function drawCampaignHeroField(pursuit){
- const position={x:pursuit.rx??pursuit.x,y:pursuit.ry??pursuit.y,moving341:Boolean(pursuit.moving341&&!game.paused&&!game.world.encountering)};
+ const position={x:pursuit.rx??pursuit.x,y:pursuit.ry??pursuit.y,facing:pursuit.facing,moving341:Boolean(pursuit.moving341&&!game.paused&&!game.world.encountering)};
  drawExplorationMonster(position,{speciesId:pursuit.heroId,visualSpeciesId:pursuit.heroId,currentHp:1,onlineStats:{hp:1}},false,1.7,27);
  const point=game.camera.world(position.x*TILE,position.y*TILE),size=TILE*game.camera.z,c=game.ctx;
  c.save();c.font=`bold ${Math.max(10,12*game.camera.z)}px sans-serif`;c.textAlign="center";c.textBaseline="bottom";c.lineWidth=3;c.strokeStyle="#100811";c.fillStyle="#ffe0b0";
@@ -4314,7 +4314,9 @@ function drawExplorationMonster(position,monster,glow=false,scale=1,index=0){
  const p=game.camera.world(position.x*TILE,position.y*TILE),pixelScale=game.camera.z*2.65*scale,contactX=p.x+TILE*game.camera.z/2,contactY=p.y+TILE*game.camera.z*.9;
  game.ctx.save();game.ctx.imageSmoothingEnabled=false;if(critical)game.ctx.globalAlpha=Math.floor(performance.now()/230)%2?.22:1;
  if(glow){game.ctx.shadowColor="#ffe36f";game.ctx.shadowBlur=18}
- game.ctx.drawImage(image,contactX-32*pixelScale,contactY-56*pixelScale,64*pixelScale,64*pixelScale);
+ // All source sprites face right. Mirror only the sprite around its foot anchor.
+ game.ctx.translate(contactX,contactY);if(position.facing==="left")game.ctx.scale(-1,1);
+ game.ctx.drawImage(image,-32*pixelScale,-56*pixelScale,64*pixelScale,64*pixelScale);
  game.ctx.restore();
 }
 function drawExplorationTileAsset(position,image,scale=1.45){
@@ -4592,13 +4594,13 @@ function drawExploreAtmosphere(theme){
  game.ctx.fillStyle=gradient;game.ctx.fillRect(0,0,game.canvas.width,game.canvas.height);drawExploreAmbientParticles(theme)
 }
 function explorationPartySceneObjects(){
- if(game?.online){return(game.onlineMembers??[]).map((entry,index)=>{const entity=game.onlineEntities?.get(entry.member.playerId),position=entity?{x:entity.rx,y:entity.ry}:entry.member.dungeonPosition??game.world.start;return{y:position.y+.88,order:80+index,draw:()=>{drawOnlineExploreCircle(position,entry.member.profile);drawExplorationMonster(position,entry.monster,false,(entry.member.playerId===game.onlineSelfId?1:.95)*partyMonsterArtScale(entry.monster),index)}}})}
+ if(game?.online){return(game.onlineMembers??[]).map((entry,index)=>{const entity=game.onlineEntities?.get(entry.member.playerId),position=entity?{x:entity.rx,y:entity.ry,facing:entity.facing,moving341:Boolean(entity.path?.length)}:{...(entry.member.dungeonPosition??game.world.start),moving341:false};return{y:position.y+.88,order:80+index,draw:()=>{drawOnlineExploreCircle(position,entry.member.profile);drawExplorationMonster(position,entry.monster,false,(entry.member.playerId===game.onlineSelfId?1:.95)*partyMonsterArtScale(entry.monster),index)}}})}
  const members=explorationPartyMembers();
  const entries=members.map((monster,index)=>{
-  const position=index?explorationFollowerPosition(index):{x:game.player.rx,y:game.player.ry};
+  const position=index?explorationFollowerPosition(index):{x:game.player.rx,y:game.player.ry,facing:game.player.facing};
   return{y:position.y+.88,order:80+index,draw:()=>drawExplorationMonster(position,monster,false,(index ? .95 : 1)*partyMonsterArtScale(monster),index)};
  });
- if(!entries.length){const position={x:game.player.rx,y:game.player.ry};entries.push({y:position.y+.88,order:80,draw:()=>drawExplorationMonster(position,{speciesId:"slime"},false,1,0)})}
+ if(!entries.length){const position={x:game.player.rx,y:game.player.ry,facing:game.player.facing};entries.push({y:position.y+.88,order:80,draw:()=>drawExplorationMonster(position,{speciesId:"slime"},false,1,0)})}
  return entries
 }
 function onlineExploreObjectFoot(object){
