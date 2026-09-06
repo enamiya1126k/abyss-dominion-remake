@@ -1,12 +1,12 @@
-import{APP_VERSION}from"../../core/config.js?v=3.1.36-build356";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=3.1.36-build356";
-import{maxMp}from"../../battle/SkillSystem.js?v=3.1.35-build355";
-import{ENDGAME_BOSSES,ENDGAME_TRIALS}from"../../core/EndgameSystem.js?v=3.1.35-build355";
+import{APP_VERSION}from"../../core/config.js?v=3.1.37-build357";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=3.1.37-build357";
+import{maxMp}from"../../battle/SkillSystem.js?v=3.1.37-build357";
+import{ENDGAME_BOSSES,ENDGAME_TRIALS}from"../../core/EndgameSystem.js?v=3.1.37-build357";
 import{floorBossDefinitionById}from"../../data/floorBosses.js?v=3.1.1-build311";
-import{SPECIES}from"../../data/species.js?v=3.1.35-build355";
+import{SPECIES}from"../../data/species.js?v=3.1.37-build357";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.36-build356";
+import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.37-build357";
 import{pixelIcon,resourceHud}from"../components/GameChrome.js?v=3.1.1-build311";
 
 function partyCard(monster,index){

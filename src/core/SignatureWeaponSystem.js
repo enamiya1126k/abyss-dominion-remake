@@ -1,4 +1,4 @@
-import{SPECIES}from"../data/species.js?v=3.1.35-build355";
+import{SPECIES}from"../data/species.js?v=3.1.37-build357";
 import{ENDGAME_CHARACTERS,canonicalEndgameId}from"../data/endgameCharacters.js?v=2.11.24-build188";
 import{RARITY_ORDER,normalizeEquipmentIdentity}from"../data/equipment.js?v=2.11.2-build166";
 import{createEquipment}from"../models/Equipment.js?v=2.11.2-build166";
@@ -7,7 +7,7 @@ const MYTHIC=Object.freeze({
  myth_enami:Object.freeze({id:"enami-multitask",ownerId:"myth_enami",ownerName:"えなみ",name:"多動共鳴",description:"創作衝動が加速し、スキル後に追加行動を狙う。",extraActionChance:.35,theme:"連続行動"}),
  myth_yori:Object.freeze({id:"yori-chain",ownerId:"myth_yori",ownerName:"より",name:"照準連鎖",description:"同じ敵を狙い続けるほど与ダメージと会心率が上昇。",damagePerStack:.1,critPerStack:.05,maxStacks:4,theme:"集中射撃"}),
  myth_rion:Object.freeze({id:"rion-care",ownerId:"myth_rion",ownerName:"りおん",name:"支援共鳴",description:"回復・蘇生が味方全体の盾とMP回復へ連鎖する。",shieldRate:.12,mpRate:.08,theme:"全体支援"}),
- myth_hide:Object.freeze({id:"hide-guardian",ownerId:"myth_hide",ownerName:"ひで",name:"守護反撃",description:"瀕死の味方をかばい、軽減した一撃へ反撃する。",lowHpThreshold:.35,damageReduction:.4,counterPower:.75,theme:"かばう反撃"})
+ myth_hide:Object.freeze({id:"hide-guardian",ownerId:"myth_hide",ownerName:"ひで",name:"守護反撃",description:"瀕死の味方をかばい、軽減した一撃へ反撃する。",lowHpThreshold:.35,damageReduction:.16,counterPower:.75,theme:"かばう反撃"})
 });
 
 const MYTHIC_GEAR=Object.freeze({

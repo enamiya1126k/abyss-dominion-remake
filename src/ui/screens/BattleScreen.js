@@ -1,12 +1,13 @@
+import{HERO_SOLO_DAMAGE_RATES}from"../../data/mythicSerialSpecies.js?v=3.1.37-build357";
 import{BATTLE_ITEM_LAYOUT}from"./BattleItemLayout.js?v=3.1.34-build354";
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.36-build356";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.35-build355";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.35-build355";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.36-build356";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.37-build357";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.37-build357";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.37-build357";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.37-build357";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.20-build339";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.36-build356";
+import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.37-build357";
 import{ATTRIBUTE_MATCHUP_MULTIPLIERS,attributesEffectiveAgainst,attributesIneffectiveAgainst}from"../../data/attributes.js?v=3.1.1-build311";
 import{heroResonanceProfile,isHeroResonanceSpecies}from"../../core/HeroResonanceSystem.js?v=3.1.35-build355";
 
@@ -29,7 +30,7 @@ const BATTLE_ROLE_LABELS={
 };
 const BATTLE_EFFECT_LABELS={guaranteedCritical:"確定会心",guaranteedHit:"必中",critUp:"会心率↑",reviveSeal:"蘇生封印",atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",evasionDown:"回避↓",accuracyDown:"命中↓",healDown:"回復↓",mpRecoveryDown:"MP回復↓",stun:"行動不能",vulnerable:"被ダメージ増加",taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",evasionUp:"回避↑",accuracyUp:"命中↑",regen:"再生",lifeSteal:"吸収",magicToPhysical:"魔力→物理"};
 function battleRoleLabel(role){return BATTLE_ROLE_LABELS[String(role??"balanced").toLowerCase()]??String(role??"万能型")}
-function soloHeroBadge(battle,unit,side){return isHeroResonanceSpecies(unit?.speciesId)&&heroResonanceProfile(side==="enemy"?battle.enemies:battle.party).count===1?'<span class="status-chip guard" title="生存する勇者が1人：被ダメージ30%軽減">勇者の胆力・軽減30%</span>':"";}
+function soloHeroBadge(battle,unit,side){return isHeroResonanceSpecies(unit?.speciesId)&&heroResonanceProfile(side==="enemy"?battle.enemies:battle.party).count===1?`<span class="status-chip guard" title="生存する勇者が1人：被ダメージ30%軽減・与ダメージ${Math.round(HERO_SOLO_DAMAGE_RATES[unit.speciesId]*100)}%">勇者の胆力・軽減30%</span><span class="status-chip guard">単独火力 ${Math.round(HERO_SOLO_DAMAGE_RATES[unit.speciesId]*100)}%</span>`:"";}
 function battleEffectLabel(effect){return BATTLE_EFFECT_LABELS[effect?.kind]??effect?.name??"特殊効果"}
 function battleStatusLabel(status){const labels={poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖"};return labels[status?.id]??status?.name??statusLabel(status)}
 function remainingTurns(turns,persistent=false){const value=Math.max(0,Number(turns)||0);return value?` 残${value}`:persistent?"・持続":""}
@@ -48,6 +49,7 @@ function renderBiomeBadge(environment,{collapsed=false}={}){
  const primary=environment.primary??environment.favorable?.[0]??"neutral",effective=attributesEffectiveAgainst(primary),ineffective=attributesIneffectiveAgainst(primary),strong=ATTRIBUTE_MATCHUP_MULTIPLIERS.strong.toFixed(2),weak=ATTRIBUTE_MATCHUP_MULTIPLIERS.weak.toFixed(2),name=htmlText(environment.name),state=collapsed?"collapsed":"expanded";
  return`<button type="button" class="battle-biome-badge compact ${collapsed?"is-collapsed":"is-expanded"}" data-battle-biome-toggle data-battle-biome-state="${state}" aria-expanded="${!collapsed}" aria-label="${name}。正式な属性相性を${collapsed?"開く":"閉じる"}" style="--biome-accent:${htmlText(environment.accent??"#9d89bf")}"><b class="battle-biome-summary">${attributeVisual(primary,{className:"battle-biome-primary",label:"階層属性"})}<span>${name}</span><em class="battle-biome-toggle-cue" aria-hidden="true">${collapsed?"＋":"−"}</em></b><small data-battle-biome-details aria-hidden="${collapsed}" ${collapsed?"hidden":""}><span class="favorable"><em>攻撃有利</em>${effective.length?biomeAttributeMarks(effective,"この区画へ有利な属性"):'<b class="no-attribute">—</b>'}<strong>×${strong}</strong></span><i aria-hidden="true"></i><span class="adverse"><em>攻撃不利</em>${ineffective.length?biomeAttributeMarks(ineffective,"この区画へ不利な属性"):'<b class="no-attribute">—</b>'}<strong>×${weak}</strong></span></small></button>`;
 }
+function shieldLabel(unit){return unit.heroShield348>0?`<div class="battle-shield-label">盾 ${battleInteger(unit.heroShield348)}</div>`:"";}
 function hpBar(battle,id,rate,label,tone){
  const normalized=Math.max(0,Math.min(100,Number(rate)||0)),trail=battle.hpTrails?.[id],elapsed=trail?Math.max(0,Date.now()-(Number(trail.startedAt)||0)):Infinity,delay=Math.max(0,Number(trail?.delay)||0),duration=Math.max(1,Number(trail?.duration)||1400),from=Math.max(normalized,Number(trail?.from)||normalized),active=Boolean(trail&&elapsed<delay+duration&&from>normalized),animationDelay=elapsed<delay?delay-elapsed:-Math.min(elapsed-delay,duration);
  const timing=active?` style="--hp-from:${from.toFixed(3)}%;--hp-to:${normalized.toFixed(3)}%;--hp-trail-duration:${duration}ms;--hp-trail-delay:${animationDelay}ms"`:"";
@@ -70,7 +72,8 @@ function renderEnemies(battle,enemies,target){
    <div class="side-unit-card enemy-info">
     <div class="side-unit-name enemy-name ${enemy.boss?"boss-meta-only":""}">${danger}${enemy.boss?"":`<b class="enemy-card-name" title="${safeName}">${safeName}</b>`}<span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
-    ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}${enemy.heroShield348>0?`　盾 ${battleInteger(enemy.heroShield348)}`:""}`,"enemy-hp")}
+    ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}`,"enemy-hp")}
+    ${shieldLabel(enemy)}
     <!-- enemy-mini-stats retired in Build321: enemy cards intentionally expose HP only. -->
     ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
     ${statusHtml}
@@ -94,7 +97,8 @@ function renderParty(battle,actor){
    <div class="side-unit-card ally-info">
     <div class="side-unit-name unit-head"><small>Lv.${battleInteger(m.level)}</small><em class="battle-unit-growth">${growthText(m)}</em>${equipmentAuthorityBadge(m)}<i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></div>
     <div class="side-unit-intent ally-circle-intent"><span>${circleLevel?`魔法陣 Lv.${circleLevel}`:"魔法陣"}</span><b>${circleName}</b></div>
-    ${hpBar(battle,`ally:${m.id}`,hpRate,`HP ${battleInteger(m.currentHp)}/${battleInteger(stats.hp)}${m.heroShield348>0?`　盾 ${battleInteger(m.heroShield348)}`:""}`,"ally")}
+    ${hpBar(battle,`ally:${m.id}`,hpRate,`HP ${battleInteger(m.currentHp)}/${battleInteger(stats.hp)}`,"ally")}
+    ${shieldLabel(m)}
     <div class="battle-bar mp ally-mp"><span class="bar-label">MP ${battleInteger(m.currentMp)}/${battleInteger(mp)}</span><i class="resource-fill" style="width:${mpRate}%"></i></div>
     <small class="battle-mini-stats">物攻 ${battleInteger(stats.atk)}　魔攻 ${battleInteger(stats.matk??stats.atk)}<br>物防 ${battleInteger(stats.def)}　魔防 ${battleInteger(stats.mdef??stats.def)}　速度 ${battleInteger(stats.spd)}</small>${effectHtml}
     <div class="battle-exp-row" aria-hidden="true"><small>あと${battleInteger(Math.max(0,need-m.exp))}</small><div class="battle-bar exp"><i style="width:${Math.min(100,m.exp/Math.max(1,need)*100)}%"></i></div></div>

@@ -1,9 +1,9 @@
-import { SPECIES } from "../../data/species.js?v=3.1.35-build355";
-import { displayName, calculatedStats } from "../../models/Monster.js?v=3.1.36-build356";
-import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=3.1.36-build356";
+import { SPECIES } from "../../data/species.js?v=3.1.37-build357";
+import { displayName, calculatedStats } from "../../models/Monster.js?v=3.1.37-build357";
+import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=3.1.37-build357";
 import { magicCircleById, equippedMagicCircle, goldPowerDamageMultiplier, goldPowerActionCost } from "../../core/MagicCircleSystem.js?v=3.1.34-build354";
-import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=3.1.35-build355";
-import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=3.1.35-build355";
+import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=3.1.37-build357";
+import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=3.1.37-build357";
 import { monsterVisual } from "../MonsterVisual.js?v=3.1.1-build311";
 import { resourceHud, pixelIcon } from "../components/GameChrome.js?v=3.1.1-build311";
 

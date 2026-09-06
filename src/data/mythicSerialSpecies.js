@@ -1,3 +1,4 @@
+export const HERO_SOLO_DAMAGE_RATES=Object.freeze({myth_enami:.35,myth_yori:.25,myth_rion:.50,myth_hide:.35});
 const unlock=value=>({type:"level",value});
 const skill=(id,name,{level=1,mp=8,type="attack",power=1.5,target="敵単体",description="",...extra}={})=>({
   id,name,unlock:unlock(level),mp,type,power,target,description,...extra
@@ -9,7 +10,8 @@ function mythic({id,name,element,role,maxMp,stats,skills}){
     maxMp,captureRate:0,fieldEncounter:false,serialOnly:true,gachaExcluded:true,
     acquisition:["専用シリアルコード限定"],growth:{hp:1,atk:1,def:1,spd:1},baseStats:stats,
     rankNames:[name,`${name}・覚醒`,`${name}・神話`,`${name}・極`],skills:[skills[0]],authoredSkills:skills,
-    passiveDescription:"勇者の胆力：生存する勇者が自分1人なら被ダメージ30%軽減。"+(id==="myth_yori"?"被弾で攻撃20%上昇（3ターン・重複なし）。":""),
+    soloDamageRate:HERO_SOLO_DAMAGE_RATES[id],
+    passiveDescription:`勇者の胆力：生存する勇者が自分1人なら被ダメージ30%軽減・与ダメージ${Math.round(HERO_SOLO_DAMAGE_RATES[id]*100)}%。勇者2人以上で本来の火力を発揮。`+(id==="myth_yori"?"被弾で攻撃20%上昇（3ターン・重複なし）。":""),
     tags:["mythicSerial","invincibleAlliance"]
   });
 }

@@ -1,12 +1,12 @@
-import {createMonster,calculatedStats} from '../models/Monster.js?v=3.1.36-build356';
-import {maxMp,effectiveSkillMpCost,allLearnedSkills} from '../battle/SkillSystem.js?v=3.1.35-build355';
-import {createSignatureEquipment,signatureStatBonuses,signatureSetState} from './SignatureWeaponSystem.js?v=3.1.35-build355';
+import {createMonster,calculatedStats} from '../models/Monster.js?v=3.1.37-build357';
+import {maxMp,effectiveSkillMpCost,allLearnedSkills} from '../battle/SkillSystem.js?v=3.1.37-build357';
+import {createSignatureEquipment,signatureStatBonuses,signatureSetState} from './SignatureWeaponSystem.js?v=3.1.37-build357';
 import {equipmentStatMultiplier,equipmentRequiredMonsterLevel} from '../models/Equipment.js';
 import {aggregateSeriesEffects} from '../data/equipmentSeries.js';
 import {equipmentAffixesWithSeries} from './EquipmentAffixSystem.js?v=3.1.28-build348';
 
 export const CAMPAIGN_HERO_WEAPON_LEVEL=2000;
-export const CAMPAIGN_HERO_WEAPON_PLUS=100;
+export const CAMPAIGN_HERO_WEAPON_PLUS=0;
 export function createCampaignHeroLoadout(speciesId,level=1000){
  const monster=createMonster(speciesId,{level,rank:4,plus:0});
  const equipment=[0,1,2,3,4,5].map(index=>{const item=createSignatureEquipment(speciesId,index);item.id=`hero348:${speciesId}:weapon:${index}`;item.level=CAMPAIGN_HERO_WEAPON_LEVEL;item.plus=CAMPAIGN_HERO_WEAPON_PLUS;item.affixes=[];item.equippedBy=monster.id;return item});
@@ -20,6 +20,6 @@ export function createCampaignHeroLoadout(speciesId,level=1000){
 export function applyCampaignHeroLoadout(enemy){
  if(!enemy?.campaignHeroId)return enemy;
  const {monster,equipment,stats,maxMp,signature}=createCampaignHeroLoadout(enemy.campaignHeroId,enemy.level??1000);
- Object.assign(enemy,{...stats,hp:stats.hp,maxHp:stats.hp,maxMp,currentMp:maxMp,rank:monster.rank,enemyGear:equipment,equipped:true,enemyEquipmentSlots:6,enemyEquipmentLevel:CAMPAIGN_HERO_WEAPON_LEVEL,enemyEquipmentRarity:'神話',enemyMagicCircle:null,heroSignature348:signature,heroSkillCosts348:monster.heroSkillCosts348,heroLoadoutVersion348:2,bossStatusResist:0,bossPowerMultiplier:1,hiddenDamageTaken:1,hiddenStatusResist:0,hiddenProfile:{active:false},enraged:false});
+ Object.assign(enemy,{...stats,hp:stats.hp,maxHp:stats.hp,maxMp,currentMp:maxMp,rank:monster.rank,enemyGear:equipment,equipped:true,enemyEquipmentSlots:6,enemyEquipmentLevel:CAMPAIGN_HERO_WEAPON_LEVEL,enemyEquipmentRarity:'神話',enemyMagicCircle:null,heroSignature348:signature,heroSkillCosts348:monster.heroSkillCosts348,heroLoadoutVersion348:3,bossStatusResist:0,bossPowerMultiplier:1,hiddenDamageTaken:1,hiddenStatusResist:0,hiddenProfile:{active:false},enraged:false});
  return enemy;
 }

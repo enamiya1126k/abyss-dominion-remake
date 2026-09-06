@@ -1,4 +1,4 @@
-import {MYTHIC_SERIAL_SPECIES} from '../data/mythicSerialSpecies.js?v=3.1.35-build355';
+import {MYTHIC_SERIAL_SPECIES} from '../data/mythicSerialSpecies.js?v=3.1.37-build357';
 import {attributeDamageMultiplier} from '../data/attributes.js';
 import {heroResonanceMembers,heroResonanceProfile,scaleHeroResonanceSkill,isHeroResonanceSpecies} from './HeroResonanceSystem.js?v=3.1.35-build355';
 
@@ -108,7 +108,8 @@ export function runHeroAllianceAction(b,side,u,skill,env={},options={}){
   const weakness=skill.bonusPerDebuff?1+Math.min(skill.debuffBonusCap??1,heroEffects(b,target,opposite).filter(e=>!HERO_POSITIVE.has(e.kind)&&(e.turns??1)>0).length*skill.bonusPerDebuff):1;
   const raw=Math.max(1,(magic?(a.matk??a.atk):a.atk)*af*power-(magic?(d.mdef??d.def):d.def)*df*(1-ignore)*.3);
   const element=skill.element??definition?.element??u.element??'neutral',targetElement=target.element??target.attribute??MYTHIC_SERIAL_SPECIES[target.speciesId]?.element??'neutral';
-  const damage=Math.max(1,Math.floor(raw*bonus*weakness*((signature?.damageMultiplier??1)+chain*(signature?.damagePerStack??0))*(critical?1.65+(a._affixes?.critDamage??0)/100:1)*attributeDamageMultiplier(element,targetElement)*(1+heroEffect(b,target,opposite,'vulnerable'))*(1+(a._affixes?.skillPower??0)/100)));
+  const soloDamageRate=isHeroResonanceSpecies(u.speciesId)&&heroResonanceProfile(allies).count===1?(definition.soloDamageRate??1):1;
+  const damage=Math.max(1,Math.floor(raw*soloDamageRate*bonus*weakness*((signature?.damageMultiplier??1)+chain*(signature?.damagePerStack??0))*(critical?1.65+(a._affixes?.critDamage??0)/100:1)*attributeDamageMultiplier(element,targetElement)*(1+heroEffect(b,target,opposite,'vulnerable'))*(1+(a._affixes?.skillPower??0)/100)));
   const targetSignature=target.heroSignature348??target.signatureResonance,defenderAffixes=d._affixes??target.equipmentCombatEffects??{};
   const protector=heroSideUnits(b,opposite).find(x=>x!==target&&heroHp(x)>0&&(x.heroSignature348??x.signatureResonance)?.id==='hide-guardian'&&heroHp(target)/Math.max(1,d.hp??target.maxHp)<=(x.heroSignature348??x.signatureResonance).lowHpThreshold);
   const reduction=Math.min(.75,(Math.max(0,defenderAffixes.damageReduction??0)/100)+(targetSignature?.damageReduction??0));
