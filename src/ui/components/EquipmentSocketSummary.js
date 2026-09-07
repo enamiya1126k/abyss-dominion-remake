@@ -1,3 +1,4 @@
+import{RAID_VAJRA_WEAPON_DESCRIPTION}from"../../core/RaidPresentation.js?v=3.1.48-build368";
 import{ensureEquipmentAffixes,affixQuality}from"../../data/equipmentAffixes.js?v=2.11.2-build166";
 
 export function equipmentSocketCapacity(item){
@@ -12,5 +13,5 @@ export function equipmentSocketSummary(item,{compact=false}={}){
   const quality=affixQuality(affix);
   return`<i class="socket-filled" style="--socket-color:${quality.color}" title="${quality.name}オプション">◆</i>`;
  }).join("");
- return`<span class="equipment-socket-summary${compact?" compact":""}" aria-label="オプションスロット">${slots}</span>`;
+ return`<span class="equipment-socket-summary${compact?" compact":""}" aria-label="オプションスロット">${slots}</span>${item?.signatureWeaponEffectId==="raid-vajra-fang368"&&!compact?`<small class="raid-weapon-description">${RAID_VAJRA_WEAPON_DESCRIPTION}</small>`:""}`;
 }

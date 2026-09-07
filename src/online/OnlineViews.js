@@ -1,10 +1,11 @@
+import{raidSpriteBase,RAID_VAJRA_WEAPON_ART,RAID_VAJRA_WEAPON_DESCRIPTION}from"../core/RaidPresentation.js?v=3.1.48-build368";
 import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=3.1.1-build311";
 import { battleEnvironmentForFloor } from "../data/biomes.js?v=3.1.1-build311";
 import {
   onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml, ONLINE_ROOM_PURPOSES, ONLINE_ROOM_STYLES, renderOnlineRoomDirectory,
-} from "../ui/screens/OnlinePartyScreen.js?v=3.1.47-build367";
-import { BattleScreen } from "../ui/screens/BattleScreen.js?v=3.1.47-build367";
-import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=3.1.47-build367";
+} from "../ui/screens/OnlinePartyScreen.js?v=3.1.48-build368";
+import { BattleScreen } from "../ui/screens/BattleScreen.js?v=3.1.48-build368";
+import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=3.1.48-build368";
 import { pixelIcon } from "../ui/components/GameChrome.js?v=3.1.1-build311";
 
 const ROUTE_LABELS = Object.freeze({ home: "ホーム", explore: "共同探索", raid: "レイドボス", team: "自由チーム戦", chat: "談話板" });
@@ -451,8 +452,9 @@ function onlineEnemy(room, enemy) {
   const profile = enemy.playerId ? battleProfile(room, enemy) : null;
   const raidVisualBase = enemy.id === "abyss-amalga" ? "./assets/online/raid/abyss-amalga" : enemy.id === "juvenile-amalga" ? "./assets/online/raid/juvenile-amalga" : null;
   const raidUnit = Boolean(enemy.raidMainBoss || enemy.role === "subBoss");
-  const staticRaidAsset = raidUnit ? enemy.heroAsset ?? enemy.asset ?? null : null;
-  const selectedVisualBase = staticRaidAsset ? null : enemy.visualBase ?? raidVisualBase;
+  const authoredRaidBase = raidSpriteBase(enemy.id);
+  const staticRaidAsset = authoredRaidBase ? null : raidUnit ? enemy.heroAsset ?? enemy.asset ?? null : null;
+  const selectedVisualBase = authoredRaidBase ?? (staticRaidAsset ? null : enemy.visualBase ?? raidVisualBase);
   return {
     ...enemy, id: enemy.id ?? enemy.playerId, speciesId: profile?.speciesId ?? enemy.speciesId ?? "slime",
     visualSpeciesId: profile?.visualSpeciesId ?? enemy.visualSpeciesId ?? null, endgameBossId: profile?.endgameBossId ?? enemy.endgameBossId ?? null,
@@ -686,9 +688,10 @@ export function renderOnlineRaid(room, selfId, state = {}) {
   const blocker = tradeActive ? "交換を完了または中止してから開始できます。" : completed ? "今週は討伐済みです。" : !leader ? "開始操作は部屋主が行います。" : !allReady ? "全員が接続し、準備完了になると開始できます。" : "";
   return `${screenHeader("raid", "WEEKLY WORLD RAID", "毎週月曜9:00更新。部屋主の世界に残HP・累積貢献・討伐結果を保存します。")}
     <section class="online-weekly-raid-meta"><span>WEEKLY ROTATION</span><b>${endLabel}まで</b></section>
-    <section class="online-v3-raid-hero" style="--raid-accent:${escapeOnlineHtml(boss.accent || "#b45cff")}"><img src="${escapeOnlineHtml(boss.heroAsset || "./assets/online/raid-abyss-amalgam.png")}" alt="${escapeOnlineHtml(boss.name)}"><div><small>週替わりレイドボス・Lv.${number(boss.level)}</small><h3>${escapeOnlineHtml(boss.name)}</h3><p>${escapeOnlineHtml(boss.intro)}</p></div></section>
+    <section class="online-v3-raid-hero" style="--raid-accent:${escapeOnlineHtml(boss.accent || "#b45cff")}"><img src="${escapeOnlineHtml((raidSpriteBase(boss.id) ? `${raidSpriteBase(boss.id)}-idle1.png` : boss.heroAsset) || "./assets/online/raid-abyss-amalgam.png")}" alt="${escapeOnlineHtml(boss.name)}"><div><small>週替わりレイドボス・Lv.${number(boss.level)}</small><h3>${escapeOnlineHtml(boss.name)}</h3><p>${escapeOnlineHtml(boss.intro)}</p></div></section>
     <section class="online-weekly-rule"><i>${escapeOnlineHtml(modifier.icon || "✦")}</i><div><small>THIS WEEK'S RULE</small><b>${escapeOnlineHtml(modifier.name)}</b><p>${escapeOnlineHtml(modifier.description)}</p></div></section>
     <section class="online-v3-raid-progress ${completed ? "completed" : ""}"><header><b>${completed ? "今週の討伐完了" : "部屋主の累積討伐進行"}</b><span>${progress ? `${number(progress.attempts)}回挑戦` : "未挑戦"}</span></header>${meter("boss", progress?.hp ?? boss.maxHp, progress?.maxHp ?? boss.maxHp)}<p>${completed ? "討伐済み。次回更新時に新しいボスへ切り替わります" : progress ? `残りHP ${number(progress.hp)} / ${number(progress.maxHp)}` : `HP ${number(boss.maxHp)}・Lv.${number(boss.level)}`}</p><div class="online-raid-milestones">${milestones}</div></section>
+    ${boss.id==="vajra-beast"?`<section class="online-weekly-rule"><img src="${RAID_VAJRA_WEAPON_ART}" alt="天雷轟断牙" style="width:80px;height:80px;object-fit:contain"><div><b>天雷轟断牙・固定能力</b><p>${RAID_VAJRA_WEAPON_DESCRIPTION}</p><small>神話武器／右手・左手／核片180個</small></div></section>`:""}
     <section class="online-raid-exchange"><header><div><small>週替わり交換</small><b>レイド核片 交換所</b></div><strong>${number(materials)}<small>個</small></strong></header><div>${exchanges.map(([kind,cost,label,name,uniqueClaimed]) => `<article><span><small>${escapeOnlineHtml(label)}</small><b>${escapeOnlineHtml(name)}</b></span><button type="button" data-online-raid-exchange="${escapeOnlineHtml(kind)}" data-online-raid-cost="${cost}" ${uniqueClaimed || materials < cost || state.raidExchangePending ? "disabled" : ""}>${uniqueClaimed ? "交換済み" : state.raidExchangePending === kind ? "交換中…" : `${number(cost)}個`}</button></article>`).join("")}</div><p>限定仲間と専用魔法陣はボスごとに1回。武器は繰り返し交換できます。</p></section>
     ${readyGrid(room)}<div class="online-v3-ready-actions"><button type="button" data-online-ready aria-pressed="${Boolean(self?.ready)}" ${completed ? "disabled" : ""}>${self?.ready ? "準備を解除" : "準備完了"}</button><button type="button" class="online-v3-primary danger" data-online-start-raid ${startEnabled ? "" : "disabled"}>${completed ? "今週は討伐済み" : "週替わりレイド開始"}</button></div>
     ${blocker ? `<p class="online-v3-start-blocker" role="status">${escapeOnlineHtml(blocker)}</p>` : ""}`;

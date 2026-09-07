@@ -22,11 +22,11 @@ export const WEEKLY_RAID_BOSSES=Object.freeze([
  }),
  Object.freeze({
   id:"vajra-beast",name:"雷獄天獣・ヴァジュリオン",shortName:"雷獄天獣",level:320,maxHp:70_000,
-  element:"lightning",accent:"#ffd95a",heroAsset:"./assets/monsters/104_thunder_emperor/idle1.png",visualBase:"./assets/monsters/104_thunder_emperor",
-  materialName:"雷獄核片",contractName:"雷帝獣ヴァジュラ",contractSpeciesId:"thunder_emperor",contractVisualBase:"./assets/monsters/104_thunder_emperor",
+  element:"lightning",accent:"#ffd95a",heroAsset:"./assets/online/raid/vajurlion368-idle1.png",visualBase:"./assets/online/raid/vajurlion368",
+  materialName:"雷獄核片",contractName:"雷帝獣ヴァジュラ",contractSpeciesId:"thunder_emperor",contractVisualBase:"./assets/online/raid/vajurlion368",
   equipmentName:"天雷轟断牙",circleName:"雷獄連環陣",circleId:"thunder_prison",
   intro:"雷を食らって加速する天獣。標的を連続で狙い、後半ほど行動が苛烈になる。",
-  subBoss:{id:"thunder-core",name:"雷獄眷属・スパークコア",level:360,maxHp:16_000,element:"lightning",visualBase:"./assets/monsters/049_spark_moth",attackName:"連雷牙"},
+  subBoss:{id:"thunder-core",name:"雷獄眷属・スパークコア",level:360,maxHp:16_000,element:"lightning",heroAsset:"./assets/online/raid/spark-core368-idle1.png",visualBase:"./assets/online/raid/spark-core368",attackName:"連雷牙"},
   patterns:[{name:"迅雷穿牙",count:1,rate:.76,magic:false},{name:"雷鎖追撃",count:2,rate:.52,magic:false},{name:"天獄落雷",count:99,rate:.38,magic:true},{name:"神速雷葬",count:1,rate:.9,magic:false}],
  }),
 ]);

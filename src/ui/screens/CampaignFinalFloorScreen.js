@@ -1,5 +1,5 @@
-import{ExploreScreen}from"./ExploreScreen.js?v=3.1.47-build367";
-import{monsterVisual}from"../MonsterVisual.js?v=3.1.38-build358";
+import{ExploreScreen}from"./ExploreScreen.js?v=3.1.48-build368";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
 import{pixelIcon}from"../components/GameChrome.js?v=3.1.1-build320";
 
 const escapeHtml=value=>String(value??"").replace(/[&<>"']/g,character=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[character]);

@@ -1,3 +1,4 @@
+import{RAID_VAJRA_SPRITE}from"../core/RaidPresentation.js?v=3.1.48-build368";
 import{MONSTER_SPRITE_FOLDERS,MONSTER_CUSTOM_SPRITE_BASES}from"../data/monsterCatalog.js?v=3.0.9-build309";
 
 const IDLE_FRAMES=Object.freeze(["idle1","idle2","idle3","idle2"]);
@@ -29,6 +30,7 @@ export function monsterVisualId(subject){
 }
 
 function customSpriteBase(subject){
+ if(typeof subject==="object"&&subject?.weeklyRaidBossId==="vajra-beast")return RAID_VAJRA_SPRITE;
  if(typeof subject==="object"&&subject?.customVisualBase)return String(subject.customVisualBase);
  return MONSTER_CUSTOM_SPRITE_BASES[monsterVisualId(subject)]??null;
 }

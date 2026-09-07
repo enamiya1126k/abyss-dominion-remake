@@ -1,4 +1,5 @@
-import{royalRevengeRewards,grantRoyalRevengeRewards}from'./core/RoyalRevengeRewards.js?v=3.1.47-build367';
+import{RAID_VAJRA_SPRITE,normalizeVajraRaidWeapon}from"./core/RaidPresentation.js?v=3.1.48-build368";
+import{royalRevengeRewards,grantRoyalRevengeRewards}from'./core/RoyalRevengeRewards.js?v=3.1.48-build368';
 import{runBattleGaugeAnimation}from'./ui/BattleGaugeAnimation.js?v=3.1.45-build365';
 import{syncCycleEquipment,revengeStage,revengeExperience,tuneFinalHero,canPostclearEncounter,rearmPostclearEncounters,reincarnationPreview}from'./core/Postgame361System.js?v=3.1.41-build361';
 import{hasHeroFortitude,heroFortitudeUsed,tryHeroFortitude}from'./core/HeroFortitudeSystem.js?v=3.1.41-build361';
@@ -8,11 +9,11 @@ import{royalVictoryDialogue,royalDefeatDialogue}from"./data/royalChamberStory.js
 import{applyCampaignEndgameBalance,campaignEndgameCircle}from"./core/CampaignEndgameBalance.js?v=3.1.41-build361";
 import{prepareUltimateBattle,beginUltimateAction,finishUltimateAction,ultimateAvailability,chooseEndgameUltimate,castEndgameUltimate,beforeUltimateAction,afterUltimateOrdinary,endUltimateRound,cleanupUltimateBattle,drainUltimateEvents,ultimateIsolated,ultimateExtraBlocked,ultimateBasicOnly,isEndgameUltimate,ultimateCircle,ultimateLabels}from"./core/EndgameUltimateSystem.js?v=3.1.41-build361";
 import{equipmentAffixesWithSeries}from"./core/EquipmentAffixSystem.js?v=3.1.28-build348";
-import{applyCampaignHeroLoadout}from"./core/CampaignHeroLoadoutSystem.js?v=3.1.47-build367";
+import{applyCampaignHeroLoadout}from"./core/CampaignHeroLoadoutSystem.js?v=3.1.48-build368";
 import{heroId,heroHp,heroEffects,heroEffect,heroCooldowns,heroAllianceState,heroAuthoredSkills,reserveHeroAction,chooseHeroAllianceSkill,runHeroAllianceAction,triggerHeroAlliance,drainHeroReactions,mitigateHeroDamage,tryHeroLastStand,heroOverheal}from"./core/HeroAllianceSystem.js?v=3.1.41-build361";
 import{commitCampaignHeroSkill}from'./battle/CampaignHeroSkillSystem.js?v=3.1.39-build359';
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.47-build367";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.47-build367";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.48-build368";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.48-build368";
 // Regression markers only: SaveService.js?v=3.1.10-build329 / config.js?v=3.1.21-build340 / HomeScreen.js?v=3.1.21-build340
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.38-build358";
@@ -22,24 +23,24 @@ import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/Expl
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.47-build367";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.48-build368";
 import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.14-build333";
 import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.42-build362";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.47-build367";
-import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.47-build367";
-import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.47-build367";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.48-build368";
+import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.48-build368";
+import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.48-build368";
 import{reconcileOnlineMotion,onlineMotionSpeed}from"./online/OnlineMovement.js?v=3.1.32-build352";
 import{beginGuestProgressIsolation,finishGuestProgressIsolation,onlineProgressionAllowed,legacyProgressRecoveryCandidate,applyLegacyProgressRecovery,dismissLegacyProgressRecovery,undoLegacyProgressRecovery}from"./online/OnlineProgressIsolation.js?v=3.1.1-build311";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.47-build367";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=3.1.47-build367";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.47-build367";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.48-build368";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=3.1.48-build368";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.48-build368";
 import{readPlayerName}from"./core/PlayerNameSystem.js?v=3.1.43-build363";
 import{PlayerNameForm}from"./ui/components/PlayerNameForm.js?v=3.1.43-build363";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.47-build367";
-import{CampaignFinalFloorScreen,finalAudienceDialogue}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.47-build367";
-import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.47-build367";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.47-build367";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.48-build368";
+import{CampaignFinalFloorScreen,finalAudienceDialogue}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.48-build368";
+import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.48-build368";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.48-build368";
 import{HERO_PURSUIT_STEPS,normalizeHeroPursuit,heroFieldRoute,chooseHeroSpawn,prepareHeroArrival,heroCanEscape,heroInContact,advanceHeroField,heroScreenIndicator}from"./core/CampaignHeroPursuitSystem.js?v=3.1.32-build352";
 import{updateHeroTracker}from"./ui/HeroPursuitHud.js?v=3.1.22-build341";
 import{mountBattleBossLayout}from"./ui/BattleBossLayout.js?v=3.1.21-build340";
@@ -47,8 +48,8 @@ import{Modal}from"./ui/components/Modal.js?v=3.1.1-build311";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=3.1.1-build311";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=3.1.1-build311";
 import{attributeCycleVisual,attributeVisual}from"./ui/components/AttributeVisual.js?v=3.1.1-build311";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=3.1.47-build367";
-import{EXPERIENCE_PACK_TYPES,experiencePackType,availableExperiencePackTypes,consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=3.1.47-build367";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=3.1.48-build368";
+import{EXPERIENCE_PACK_TYPES,experiencePackType,availableExperiencePackTypes,consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=3.1.48-build368";
 import{createEquipment,equipmentPower,equipmentStatMultiplier,equipmentRequiredMonsterLevel}from"./models/Equipment.js?v=3.1.41-build361";
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=3.1.1-build311";
 import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=3.1.39-build359";
@@ -57,27 +58,27 @@ import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./serv
 import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=3.1.1-build311";
 import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=3.1.38-build358";
 import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=3.1.1-build311";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=3.1.47-build367";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=3.1.48-build368";
 import{initialAffixCount,lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=3.1.1-build311";
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=3.1.41-build361";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=3.1.47-build367";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=3.1.47-build367";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=3.1.48-build368";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=3.1.48-build368";
 import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=3.1.41-build361";
-import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=3.1.42-build362";
+import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=3.1.48-build368";
 import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=3.1.41-build361";
 import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=3.1.1-build311";
 import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=3.1.1-build311";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=3.1.1-build311";
 import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=3.1.42-build362";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=3.1.47-build367";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=3.1.48-build368";
 import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=3.1.1-build311";
 import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=3.1.1-build311";
 import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=3.1.1-build311";
 import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillMpCostBreakdown,skillDamage,affixOutgoingDamageMultiplier,chooseAutoBattleDecision,skillProgressFor,recordSkillUse,skillEffectSummary,skillCombatKeywords,applySkillMastery,recommendedSkills,recommendedSkillLoadout}from"./battle/SkillSystem.js?v=3.1.39-build359";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyDamageAfterDefense,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=3.1.47-build367";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyDamageAfterDefense,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=3.1.48-build368";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectStackBreakdown,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=3.1.41-build361";
 import{attackHits}from"./battle/HitSystem.js?v=3.1.1-build311";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=3.1.47-build367";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=3.1.48-build368";
 import{dangerConfig}from"./core/DangerSystem.js?v=3.1.1-build311";
 import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=3.1.25-build345";
 import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,autoEquipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost,magicCircleLevelEffect,isRaidExclusiveMagicCircle}from"./core/MagicCircleSystem.js?v=3.1.41-build361";
@@ -104,9 +105,9 @@ import{buildSectionMiniMapModel,fitMiniMapTransform,projectMiniMapPoint}from"./c
 import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=3.1.42-build362";
 import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=3.1.41-build361";
 import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=3.1.1-build311";
-import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=3.1.47-build367";
-import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,casinoBetLimit,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,darkMarketPlayerMaxLevel,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=3.1.47-build367";
-import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=3.1.47-build367";
+import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=3.1.48-build368";
+import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,casinoBetLimit,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,darkMarketPlayerMaxLevel,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=3.1.48-build368";
+import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=3.1.48-build368";
 import{runConfirmedFullReset}from"./core/FullResetSystem.js?v=3.1.13-build332";
 import{DAILY_NOTICE_GIFT,activeNoticeDefinitions,setServerMaintenanceState,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount,pendingNoticeRewards,claimNoticeReward,enqueueNoticeReward}from"./core/NoticeSystem.js?v=3.1.19-build338";
 import{COMPLETE_MONSTER_CODEX,codexCollectionSummary,syncCollectionRewardInbox,rewardDescription}from"./core/CollectionRewardSystem.js?v=3.1.42-build362";
@@ -114,12 +115,12 @@ import{achievementSummary,syncAchievementRewardInbox,achievementIconKeyForId}fro
 import{CONTEXT_GUIDE_STEPS,completeGuideStep,normalizeContextualGuide,setGuidePending,guidePending,guideStepDone,bumpGuideCounter,snoozeGuideStep,guideStepSnoozed,resetContextualGuide,contextualGuideProgress}from"./core/ContextualGuideSystem.js?v=3.1.1-build311";
 import{weekdayGachaSchedule,weekdayGachaCost,WEEKDAY_GACHA_CALENDAR,WEEKDAY_ENDGAME_RATE,WEEKDAY_SIGNATURE_MISSING_PRIORITY,rollWeekdayEndgameHit}from"./core/WeekdayGachaSystem.js?v=3.1.47-build367";
 import{bossExperiencePackReward}from"./core/BossRewardSystem.js?v=3.1.1-build311";
-import{enemyExperienceReward}from"./core/ProgressionSystem.js?v=3.1.47-build367";
+import{enemyExperienceReward}from"./core/ProgressionSystem.js?v=3.1.48-build368";
 import{treasureRoomRateForFloor,treasureRoomChestCount,shouldPlaceTreasureMimic,rollTreasureChestReward,mimicVictoryGold,mimicExperienceMultiplier,mimicVictoryCrystals}from"./core/TreasureSystem.js?v=3.1.19-build338";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionForFloor,floorBossDefinitionById,floorBossEquipmentDesignByPiece,milestoneBossIdsForFloor}from"./data/floorBosses.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CONTRACT_COST,FLOOR_BOSS_EQUIPMENT_COST,normalizeFloorBossChallengeState,recordFloorBossDiscovery,floorBossChallengeStatus,createFloorBossChallengeEncounter,awardFloorBossChallengeFragments,spendFloorBossFragments,restoreFloorBossFragments}from"./core/FloorBossChallengeSystem.js?v=3.1.39-build359";
-import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.47-build367";
-import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame,partyMonsterArtScale}from"./ui/MonsterVisual.js?v=3.1.38-build358";
+import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.48-build368";
+import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame,partyMonsterArtScale}from"./ui/MonsterVisual.js?v=3.1.48-build368";
 import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,permanentSignatureOwners,rollPermanentSignatureHit,PERMANENT_SIGNATURE_RATE,createSignatureEquipment,normalizeSignatureWeaponItem,signatureWeaponGrantedSkill}from"./core/SignatureWeaponSystem.js?v=3.1.41-build361";
 
 const TILE=88,COLS=39,ROWS=39,app=document.getElementById("app"),save=new SaveService(),audio=new AudioSystem(()=>save.state.settings);
@@ -501,7 +502,7 @@ function normalizeEquipmentState(){
  save.state.equipment??=[];save.state.reserveEquipment??=[];save.state.bossEquipmentVault??=[];save.state.settings??={};
  save.state.settings.equipmentSort??="rarity";save.state.settings.equipmentSlot??="weapon";save.state.settings.equipmentStorage??="inventory";
  save.state.gacha??={firstTenUsed:false,lastDailyKey:null};save.state.codex??={encounters:{},captures:{},equipment:{}};save.state.codex.encounters??={};save.state.codex.captures??={};save.state.codex.equipment??={};save.state.rest??={lastFreeKey:null};
-  for(const item of[...save.state.equipment,...save.state.reserveEquipment,...save.state.bossEquipmentVault]){if(item?.slot==="weapon")item.handedness="either";normalizeFloorBossDedicatedItem(item);normalizeSignatureWeaponItem(item)}
+  for(const item of[...save.state.equipment,...save.state.reserveEquipment,...save.state.bossEquipmentVault]){if(item?.slot==="weapon")item.handedness="either";normalizeFloorBossDedicatedItem(item);normalizeSignatureWeaponItem(item);normalizeVajraRaidWeapon(item)}
  const{byId}=normalizeEquipmentLoadouts(save.state);
  const abyssEffects=abyssSkillEffects(save.state);
  save.state.monsters.forEach(m=>{
@@ -2356,7 +2357,7 @@ const ONLINE_RAID_EXCHANGE_PRICES=Object.freeze({character:240,equipment:180,cir
 const ONLINE_WEEKLY_RAID_REWARDS=Object.freeze({
  "abyss-amalga":Object.freeze({name:"終焉融骸・アビス＝マルガ",contractName:"融骸幼体アマルガ",speciesId:"juvenile_amalga",attribute:"dark",visualBase:"./assets/online/raid/juvenile-amalga",equipmentName:"終焉喰らいの大刃",circleId:"reincarnation",circleName:"輪廻の魔法陣"}),
  "zero-sovereign":Object.freeze({name:"零界凍皇・ニヴル＝レギア",contractName:"零界皇ニヴルシア",speciesId:"frost_sovereign",attribute:"ice",visualBase:"./assets/monsters/169_frost_sovereign",equipmentName:"凍星断界剣",circleId:"raid_zero_sovereign",circleName:"零界凍結陣"}),
- "vajra-beast":Object.freeze({name:"雷獄天獣・ヴァジュリオン",contractName:"雷帝獣ヴァジュラ",speciesId:"thunder_emperor",attribute:"lightning",visualBase:"./assets/monsters/104_thunder_emperor",equipmentName:"天雷轟断牙",circleId:"raid_vajra_beast",circleName:"天雷轟界陣"})
+ "vajra-beast":Object.freeze({name:"雷獄天獣・ヴァジュリオン",contractName:"雷帝獣ヴァジュラ",speciesId:"thunder_emperor",attribute:"lightning",visualBase:RAID_VAJRA_SPRITE,equipmentName:"天雷轟断牙",circleId:"raid_vajra_beast",circleName:"天雷轟界陣"})
 });
 function onlinePartyPersistentState(){
  const online=save.state.onlineParty&&typeof save.state.onlineParty==="object"?save.state.onlineParty:{};save.state.onlineParty=online;
@@ -2512,7 +2513,7 @@ function claimOnlinePartyReward({rewardId,reward={},source={}}={}){
 function exchangeOnlineRaidReward(kind,cost){
  const raw=String(kind??"").slice(0,120),parts=raw.split(":"),base=parts[0],bossId=parts[1]&&ONLINE_WEEKLY_RAID_REWARDS[parts[1]]?parts[1]:"abyss-amalga",rewardDef=ONLINE_WEEKLY_RAID_REWARDS[bossId],price=ONLINE_RAID_EXCHANGE_PRICES[base],online=onlinePartyPersistentState();if(!price)return{ok:false,message:"交換報酬が見つかりません"};const materials=Math.max(0,Math.floor(Number(online.raidMaterials)||0));if(materials<price)return{ok:false,message:`レイド核片が足りません（${materials}/${price}）`};online.raidExchange??={};const exchangeKey=base==="crystals"?base:`${base}:${bossId}`;if(["character","circle"].includes(base)&&Number(online.raidExchange[exchangeKey]??(bossId==="abyss-amalga"?online.raidExchange[base]:0))>0)return{ok:false,message:"この限定報酬は交換済みです"};let message="";
  if(base==="character"){if(save.state.monsters.length>=MONSTER_STORAGE_CAP)return{ok:false,message:"魔物庫が満杯です。先に整理してください"};const level=Math.max(1,Math.min(ENDGAME_MAX_LEVEL,Number(save.state.player.maxFloor)||1)),monster=createMonster(rewardDef.speciesId,{nickname:rewardDef.contractName,level,stars:MONSTER_STAR_MAX,rank:4,plus:12,attribute:rewardDef.attribute,obtainedMethod:"onlineWeeklyRaidExchange",obtainedFloor:save.state.player.maxFloor});monster.customVisualBase=rewardDef.visualBase;monster.raidLimited=true;monster.weeklyRaidBossId=bossId;monster.summonTier="神話";monster.summonRarity="神話";monster.tags=[...(monster.tags??[]),"raid","weekly",bossId,"raidJuvenile"];monster.equippedSkills=allLearnedSkills(monster).slice(0,4).map(skill=>skill.id);while(monster.equippedSkills.length<4)monster.equippedSkills.push(null);monster.skillLoadoutInitialized=true;monster.raidContractProfileVersion=1;monster.currentHp=calculatedStats(monster).hp;monster.currentMp=maxMp(monster);save.state.monsters.push(monster);save.state.codex??={encounters:{},captures:{},equipment:{}};save.state.codex.encounters??={};save.state.codex.captures??={};save.state.codex.encounters[monster.speciesId]=(Number(save.state.codex.encounters[monster.speciesId])||0)+1;save.state.codex.captures[monster.speciesId]=(Number(save.state.codex.captures[monster.speciesId])||0)+1;message=`限定仲間「${rewardDef.contractName}」と契約しました`}
- else if(base==="equipment"){const item=createEquipment("weapon",{rarity:"神話"});item.name=rewardDef.equipmentName;item.level=Math.max(1,Math.min(10000,Math.round((Number(save.state.player.maxFloor)||1)*1.35)));item.plus=30;item.raidLimited=true;item.weeklyRaidBossId=bossId;item.ruleOverrides={...(item.ruleOverrides??{}),unsellable:true,raidResonance:true,weeklyRaidBossId:bossId};const result=receiveEquipment(save.state,item,{bossReward:true});message=`限定神話武器「${rewardDef.equipmentName}」を獲得（${result.message}）`}
+ else if(base==="equipment"){const item=createEquipment("weapon",{rarity:"神話"});item.name=rewardDef.equipmentName;item.level=Math.max(1,Math.min(10000,Math.round((Number(save.state.player.maxFloor)||1)*1.35)));item.plus=30;item.raidLimited=true;item.weeklyRaidBossId=bossId;item.ruleOverrides={...(item.ruleOverrides??{}),unsellable:true,raidResonance:true,weeklyRaidBossId:bossId};normalizeVajraRaidWeapon(item);const result=receiveEquipment(save.state,item,{bossReward:true});message=`限定神話武器「${rewardDef.equipmentName}」を獲得（${result.message}）`}
  else if(base==="circle"){if(!rewardDef.circleId)return{ok:false,message:"このボスに交換可能な魔法陣はありません"};const instance=createMagicCircleInstance(save.state,rewardDef.circleId,{level:1,source:"weeklyRaidExchange",locked:false});if(!instance)return{ok:false,message:"魔法陣の現物を追加できませんでした"};save.state.magicCircles.unlocked[rewardDef.circleId]=true;message=`専用魔法陣「${rewardDef.circleName}」を獲得しました。通常の魔法陣として装備できます`}
  online.raidMaterials=materials-price;online.raidExchange[exchangeKey]=(Number(online.raidExchange[exchangeKey])||0)+1;save.save();return{ok:true,message,price}
 }
