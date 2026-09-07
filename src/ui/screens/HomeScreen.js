@@ -1,11 +1,11 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.49-build369";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.50-build370";
 // Regression marker only: config.js?v=3.1.21-build340
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.49-build369";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.50-build370";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.49-build369";
 import{SPECIES}from"../../data/species.js?v=3.1.39-build359";
 import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.42-build362";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.49-build369";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.50-build370";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.42-build362";
 import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=3.1.1-build317";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
@@ -36,16 +36,17 @@ function scenePartySlot(monster,index,state){
     </button>`;
   const species=SPECIES[monster.speciesId];
   const attribute=monster.attribute??species?.element??"neutral";
+  const power=formatCombatPower(monsterCombatPower(monster));
   const vitals=homeCriticalVitals(monster),criticalReason=vitals.hp<=0?"戦闘不能":vitals.hpRate<=.05?"HP残量わずか":"MP残量わずか",formerFloorBoss=Boolean(monster.floorBossCatalogId||monster.floorBossId||monster.obtainedMethod==="floorBossContract");
   return`
     <button type="button" class="home-scene-unit ${positions[index]} ${vitals.critical?"is-exhausted":""} ${formerFloorBoss?"is-floor-boss":""}" data-open-home-formation data-home-party-slot="${index}" data-home-party-member="${monster.id}" aria-label="${displayName(monster)}・編成スロット${index+1}${vitals.critical?`・${criticalReason}`:""}">
-      <em class="home-slot-badge">${index+1}</em><span class="home-slot-attribute" data-home-attribute-help="${attribute}" title="属性相性を確認">${attributeVisual(attribute,{label:`${attribute}属性`})}</span>
+      <em class="home-slot-badge">${index+1}</em>
       ${magicCircleMarkup(monster,state,{className:"home-character-circle"})}
       ${monsterVisual(monster,species?.emoji??"MONSTER",{frame:vitals.critical?"down":"idle",className:"home-scene-monster-visual",partyArt:true})}
       ${vitals.critical?`<span class="home-exhausted-state" aria-hidden="true">${criticalReason}</span>`:""}
       <span class="home-scene-name">${displayName(monster)}</span>
       <small>Lv.${monster.level}</small>
-      <strong class="home-scene-power"><i>戦力</i>${formatCombatPower(monsterCombatPower(monster))}</strong>
+      <strong class="home-scene-power"><span class="home-slot-attribute" data-home-attribute-help="${attribute}" title="属性相性を確認">${attributeVisual(attribute,{label:`${attribute}属性`})}</span><i>戦力</i><span class="home-scene-power-value" title="${power}">${power}</span></strong>
     </button>`;
 }
 
@@ -155,11 +156,11 @@ export function HomeScreen(state,options={}){
         <i class="home-river-shimmer river-frame-3"></i>
       </div>
 
-      <header class="home-title-card" id="openCampaignIntel" data-open-campaign-intel role="button" tabindex="0" aria-label="予言と勇者侵攻の詳細を見る">
+      <header class="home-title-card" id="openCampaignIntel" data-open-campaign-intel role="button" tabindex="0" aria-label="勇者情報を見る">
         <small>${prophecyLabel}</small>
         <h1>${title}</h1>
         <${meterTag}${meterAction} class="home-invasion-meter ${completed?"is-complete":""} ${finalReady?"is-ready":""}"><i role="progressbar" aria-label="勇者の進軍度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${invasion.progress}"><em style="width:${invasion.progress}%"></em></i><b>${meterLabel}</b></${meterTag}>
-        <span class="home-intel-cue" aria-hidden="true">詳細 ›</span>
+        <span class="home-intel-cue" aria-hidden="true">勇者情報を見る ›</span>
       </header>
 
       ${completed?`<section class="home-postgame-strip" aria-label="クリア後の進行"><span>クリア後もそのまま継続中</span><button type="button" id="openCampaignReincarnation">輪廻を選ぶ</button></section>`:reincarnation.active?`<section class="home-postgame-strip" aria-label="輪廻進行"><span>輪廻${reincarnation.cycle}・敵戦力 ×${campaignReincarnationDifficultyMultiplier(state).toFixed(2)}</span></section>`:""}
@@ -178,11 +179,11 @@ export function HomeScreen(state,options={}){
         <small>属性相関</small>${homeAttributeChart()}<em>矢印方向が有利</em>
       </button>
 
-      <button type="button" id="openCombatPowerHistory" class="home-record-card">
+      <button type="button" id="openCombatPowerHistory" class="home-record-card" aria-label="戦力の記録・全体ランキングを見る">
         <small>モンスター基盤</small>
         <strong title="最高 ${state.player.maxFloor.toLocaleString()}階">${reincarnation.cycle>0?`今周回 <em>${cycleFloor}</em> 階<small>歴代最高 ${state.player.maxFloor}階</small>`:`最高 <em>${compactHomeNumber(state.player.maxFloor)}</em> 階`}</strong>
         <i></i>
-        <span>戦力・記録</span>
+        <span class="home-record-cue">戦力・ランキングを見る ›</span>
         <b title="戦力 ${formatCombatPower(combatPower)}">${pixelIcon("crossed-swords","record-power-icon")} ${compactHomeNumber(combatPower)}</b>
       </button>
 

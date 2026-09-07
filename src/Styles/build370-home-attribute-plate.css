@@ -1,0 +1,71 @@
+/* The attribute belongs to the power plate, independently of sprite size. */
+.home-scene-unit .home-scene-power{
+ position:relative;
+ z-index:31!important;
+ box-sizing:border-box;
+ min-width:78px;
+ max-width:calc(100% - 9px);
+ margin-left:9px;
+ padding-left:18px;
+ overflow:visible!important;
+ white-space:nowrap;
+}
+.home-scene-unit .home-scene-power>i{flex:0 0 auto}
+.home-scene-unit .home-scene-power-value{
+ min-width:0;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+}
+.home-scene-unit .home-scene-power .home-slot-attribute{
+ position:absolute!important;
+ top:50%!important;
+ right:auto!important;
+ bottom:auto!important;
+ left:-9px!important;
+ width:24px!important;
+ height:24px!important;
+ min-width:0;
+ padding:0;
+ transform:translateY(-50%);
+ background:transparent!important;
+ border:0!important;
+ border-radius:0!important;
+ box-shadow:none!important;
+ cursor:pointer;
+}
+.home-scene-unit .home-scene-power .home-slot-attribute .attribute-pixel-art{
+ width:24px!important;
+ height:24px!important;
+}
+
+/* Reuse the existing card footer and the prophecy card's bottom margin. */
+.home-title-card[data-open-campaign-intel] .home-intel-cue{
+ display:block!important;
+ left:8px;
+ right:8px;
+ bottom:3px;
+ max-width:calc(100% - 16px);
+ color:#f1d58e;
+ font-size:clamp(8px,2vw,10px);
+ line-height:1.1;
+ letter-spacing:0;
+ text-align:right;
+ white-space:nowrap;
+ text-shadow:0 1px 2px #000;
+}
+.home-title-card[data-open-campaign-intel] .home-invasion-meter>b{
+ padding-right:0!important;
+}
+.home-record-card>.home-record-cue{
+ color:#f1d58e;
+ font-size:clamp(6px,1.6vw,9px);
+ font-weight:800;
+ line-height:1.2;
+ letter-spacing:0;
+ white-space:nowrap;
+ text-shadow:0 1px 2px #000;
+}
+@media(max-width:360px){
+ .home-record-card>.home-record-cue{font-size:5.5px}
+}
