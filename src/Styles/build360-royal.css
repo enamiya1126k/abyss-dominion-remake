@@ -1,0 +1,38 @@
+/* Build360: compact combat resources and stable layering. */
+.home-scene-unit .home-slot-attribute{position:absolute!important;z-index:30!important;isolation:isolate;pointer-events:auto!important}
+.home-scene-unit .home-slot-badge{z-index:30!important}
+.battle-screen .battle-unit .party-floor-boss-art>.party-monster-art-layer{transform:scale(1.12)!important}
+.battle-screen.side-battle-v2 .battle-unit.party-floor-boss .side-unit-sprite>.battle-unit-floating-name{bottom:calc(110.5% + 3px)!important;max-width:100%!important}
+.battle-screen .battle-shield-gauge{position:relative;display:block!important;box-sizing:border-box;height:10px!important;min-height:10px!important;max-height:10px!important;margin:2px 0!important;padding:0!important;overflow:hidden;border:1px solid #8f7741;background:#191711;border-radius:2px;line-height:8px!important;font-size:7px!important}
+.battle-shield-gauge>i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#a17b2a,#edcf77);transition:width .2s}
+.battle-shield-gauge>span{position:relative;z-index:1;display:block;text-align:center;color:#fff7d7;text-shadow:0 1px 2px #000,1px 0 #000;font:800 7px/8px sans-serif!important;white-space:nowrap}
+.battle-screen .battle-shield-gauge.is-empty{visibility:hidden}
+.campaign-story-scenery>u{display:none!important}
+
+/* Same exploration chrome, with a single playable room. No document-height controls. */
+#app:has(.royal-explore-360){height:100dvh;overflow:hidden;display:flex;flex-direction:column;box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px)}
+.royal-explore-360{height:calc(100% - 42px)!important;min-height:0!important;flex:1;display:flex!important;flex-direction:column;overflow:hidden!important}
+.royal-explore-360 .explore-command-header,.royal-explore-360 .campaign-key-counter,.royal-explore-360 .explore-scenery-badge,.royal-explore-360 .explore-run-clock,.royal-explore-360 .explore-version{display:none!important}
+.royal-explore-360 .explore-party-hud{flex:none;max-height:100px;overflow:auto}
+.royal-explore-360 .explore-stage{position:relative!important;flex:1!important;min-height:150px!important;height:auto!important;width:100%!important;overflow:hidden;background:#08070a}
+#royalCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.royal-explore-360 .explore-nav{position:relative!important;inset:auto!important;flex:none;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));height:52px!important;margin:0!important}
+.royal-explore-360 .explore-nav button{min-width:0;min-height:44px;font-size:11px!important;display:flex;align-items:center;justify-content:center;gap:3px;background:#100d0d;border:1px solid #957744;color:#efdcad}
+.royal-explore-360 .explore-nav .home-pixel-icon{width:20px!important;height:20px!important}
+.royal-location-seal{position:absolute;top:12px;left:50%;transform:translateX(-50%);display:grid;text-align:center;padding:8px 18px;border-block:1px solid #a48449;background:#0a090bd9;color:#efddb1;pointer-events:none;white-space:nowrap}
+.royal-location-seal small{font:8px Georgia;letter-spacing:.18em;color:#b79c66}.royal-location-seal b{font:700 16px/1.5 Georgia,serif}
+.royal-objective-360{flex:none;min-height:38px;box-sizing:border-box;padding:6px 12px;border-top:1px solid #9b7a45;background:#0a090d;color:#edddb4;font:11px/1.4 sans-serif;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.royal-objective-360 span{font-size:10px;color:#b9a78a;white-space:nowrap}
+.royal-dialogue-360{position:fixed;inset:0;z-index:15000;display:flex;align-items:end;justify-content:center;padding:14px 14px max(14px,env(safe-area-inset-bottom));box-sizing:border-box;background:linear-gradient(transparent,#02020588)}
+.royal-dialogue-360 .royal-story-box{width:min(680px,100%);box-sizing:border-box;max-height:78dvh;display:flex;flex-direction:column;border:3px double #bd9d5c;box-shadow:0 0 0 4px #110e09,0 12px 40px #000;background:linear-gradient(135deg,#17130eeF,#07070cF5);padding:18px;color:#e9ddc7}
+.royal-story-box header{display:flex;align-items:center;justify-content:space-between;color:#dec080;border-bottom:1px solid #79613a;padding-bottom:10px;gap:8px}.royal-story-box header b{font:700 19px Georgia,serif}.royal-story-box header small{font:10px sans-serif}
+.royal-story-box p{overflow:auto;min-height:90px;white-space:pre-line;font:15px/1.9 Georgia,serif;margin:18px 0;overscroll-behavior:contain}
+.royal-story-box nav{display:flex;gap:12px;flex:none}.royal-story-box button{min-height:46px;flex:1;border:1px solid #a1854f;background:linear-gradient(#382b16,#15120e);color:#f2dfab;font-weight:bold}.royal-story-box [data-royal-skip]{flex:0 0 90px;background:#111014;font-size:11px;color:#bfb6a6}
+.royal-dialogue-360[data-effect="rewind"]{animation:royal-rewind-light 2s ease-in-out;background:#d8c88822}
+@keyframes royal-rewind-light{0%,100%{box-shadow:inset 0 0 0 #eddfaa00}45%{box-shadow:inset 0 0 150px #eddfaaaa}}
+@media(prefers-reduced-motion:reduce){.royal-dialogue-360{animation:none!important}}
+
+.royal-postgame{display:grid;gap:12px;color:#eddfbf}.royal-postgame>button{min-height:50px;border:2px double #a48953;background:linear-gradient(#2d2418,#0c0a09);color:#edd8a4;font-weight:700}.royal-postgame>b{display:block;padding:10px;border-block:1px solid #bb9654;color:#f7d87d}
+
+.home-scene-unit .home-slot-attribute{top:0!important;right:5px!important;left:auto!important;display:grid!important;place-items:center;width:28px!important;height:28px!important;background:#08090dde;border:1px solid #9f834b;border-radius:50%;box-shadow:0 1px 5px #000}
+.home-scene-unit .home-slot-attribute .attribute-pixel-art{width:24px!important;height:24px!important}

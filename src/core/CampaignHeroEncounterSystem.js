@@ -327,7 +327,7 @@ export function campaignHeroEncounterRoll(encounterId,floor){
 
 export function campaignHeroEncounterCandidate(value,{floor,encounterRoll=null,online=false,bossDefeated=false,postBoss=false,modalOpen=false,battleOpen=false,visitedSections=2,stepsSinceBattle=6,partyHpRate=1}={}){
  const state=normalizeCampaignHeroEncounterState(value),currentFloor=boundedInteger(floor,0,0,CAMPAIGN_MAX_FLOOR);
- if(!currentFloor||online||bossDefeated||postBoss||modalOpen||battleOpen||currentFloor%10===0)return null;
+ if(state.finalArena.completed||!currentFloor||online||bossDefeated||postBoss||modalOpen||battleOpen||currentFloor%10===0)return null;
  if(boundedInteger(visitedSections,0,0,99)<CAMPAIGN_HERO_ENCOUNTER_RULES.minimumVisitedSections)return null;
  if(boundedInteger(stepsSinceBattle,0,0,999)<CAMPAIGN_HERO_ENCOUNTER_RULES.minimumStepsSinceBattle)return null;
  if(clampRate(partyHpRate,0)<CAMPAIGN_HERO_ENCOUNTER_RULES.minimumPartyHpRate)return null;

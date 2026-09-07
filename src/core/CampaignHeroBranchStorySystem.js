@@ -1,5 +1,5 @@
 import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.1-build319";
-import{CAMPAIGN_HERO_ENCOUNTER_SCHEDULE,campaignHeroEncounterDefinition,normalizeCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.32-build352";
+import{CAMPAIGN_HERO_ENCOUNTER_SCHEDULE,campaignHeroEncounterDefinition,normalizeCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.40-build360";
 
 export const CAMPAIGN_HERO_BRANCH_STORY_VERSION=4;
 export const CAMPAIGN_HERO_BRANCH_OUTCOMES=Object.freeze(["repelled","hero-victory","escaped"]);

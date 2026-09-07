@@ -338,18 +338,12 @@ export function magicCircleMarkup(monster,state,{className=""}={}){return circle
 
 const ENEMY_CIRCLE_RANK_BONUS=Object.freeze({n:0,r:0,sr:1,ssr:2,ur:3,lr:4,"神話":5,"深淵":8,"十神":10,abyss:8,tengod:10});
 function normalizedEnemyRank(rank){return String(rank??"N").trim().toLowerCase()}
+// This low-level API takes legacy depth (campaign floor × 10).
 export function enemyMagicCircleRateForFloor(floor,rank="N"){
- const f=Math.max(1,Math.floor(Number(floor)||1)),rankBonus=Math.min(.18,(ENEMY_CIRCLE_RANK_BONUS[normalizedEnemyRank(rank)]??0)*.018);
- let base=0;
- if(f>=20&&f<50)base=.03;
- else if(f<100)base=.10;
- else if(f<200)base=.20;
- else if(f<500)base=.34;
- else if(f<1000)base=.50;
- else if(f<2000)base=.66;
- else if(f<5000)base=.78;
- else base=.88;
- return Math.min(.96,base+rankBonus);
+ const f=Math.max(1,Math.floor(Number(floor)||1)),bonus=Math.min(.12,(ENEMY_CIRCLE_RANK_BONUS[normalizedEnemyRank(rank)]??0)*.012);
+ if(f>=400)return 1;
+ if(f<100)return Math.min(.25,.03+bonus);
+ return Math.min(1,.15+(f-100)/300*.85+bonus);
 }
 export function enemyMagicCircleLevelForFloor(floor,{rank="N",random=Math.random}={}){
  const rankId=normalizedEnemyRank(rank);

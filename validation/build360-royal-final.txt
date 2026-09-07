@@ -1,0 +1,19 @@
+✔ single room walkable geometry has one connected component and reachable throne (25.561087ms)
+✔ all 16 surviving hero combinations get only living actors and valid encounter copy (0.811214ms)
+✔ defeat restores exact battle consumables and gold, retains road wounds, floor and loot receipts; one rewind only (2.402497ms)
+✔ victory is saved before the ending and reload retains the walk-to-throne phase (0.411551ms)
+✔ memory battles restore supplies, never alter campaign heroes, and award title only once (0.506232ms)
+✔ retreat restores inventory and allows a fresh attempt without clearing the campaign (0.344201ms)
+✔ floor 40 through 100 all ranks always receive circles; 39 to 40 is a gradual change (2.372853ms)
+✔ new state survives actual SaveService reload, completed chamber remains accessible and reincarnation resets only room progress (44.614001ms)
+✔ actual final-result dispatch reaches handler exactly once (1.563351ms)
+✔ real exploration movement and royal controller require a second approach after dialogue and dispose listeners (11.233186ms)
+✔ actual final battle settlement enters victory/rewind/memory phases without a Sairan combat (3.031811ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 305.011305

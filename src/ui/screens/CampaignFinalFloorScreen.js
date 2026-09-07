@@ -1,3 +1,4 @@
+import{ExploreScreen}from"./ExploreScreen.js?v=3.1.40-build360";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.38-build358";
 import{pixelIcon}from"../components/GameChrome.js?v=3.1.1-build320";
 
@@ -41,15 +42,8 @@ export function finalAudienceDialogue({heroes=[],party=[]}={}){
  lines.push({speaker:partyLead,text:"ならば始めよう。魔王軍四体対、ここまで残った勇者たち――最後の戦いだ。"});return lines
 }
 
-export function CampaignFinalFloorScreen({heroes=[],party=[],audienceCompleted=false,reincarnationCycle=0}={}){
- const remaining=heroes.filter(hero=>!heroState(hero).defeated),allRepelled=remaining.length===0,dialogue=finalAudienceDialogue({heroes,party}),initialIndex=audienceCompleted?dialogue.length-1:0;
- return`<section class="screen campaign-final-floor-screen royal-audience-screen" data-final-floor="royal-audience" data-final-dialogue-index="${initialIndex}">
-  <header class="campaign-final-floor-header"><div><small>予言10日目・王室専用フィールド${reincarnationCycle?`・輪廻${reincarnationCycle}`:""}</small><h1>魔王城・謁見の王室</h1></div><span class="campaign-final-floor-progress"><small>勇者軍・残存戦力</small><b>${remaining.length}/4人</b></span></header>
-  <main class="royal-audience-field">
-   <div class="royal-throne" aria-hidden="true"><i></i><b>ABYSS THRONE</b></div><div class="royal-field-depth" aria-hidden="true"></div>
-   <section class="royal-side royal-side-party" aria-label="魔王軍">${party.map(partyActor).join("")}</section><span class="royal-versus" aria-hidden="true">対</span><section class="royal-side royal-side-heroes" aria-label="勇者一行">${heroes.map(heroActor).join("")}</section>
-   <section class="royal-dialogue" aria-live="polite"><small>FINAL AUDIENCE</small>${dialogue.map((line,index)=>`<p data-final-dialogue-line="${index}" ${index===initialIndex?"":"hidden"}><b>${escapeHtml(line.speaker)}</b><span>「${escapeHtml(line.text)}」</span></p>`).join("")}<div><button type="button" data-final-audience-next ${audienceCompleted?"hidden":""}>会話を進める</button><button type="button" data-final-floor-approach ${audienceCompleted?"":"hidden"}>${allRepelled?"予言外の結末へ":`最終決戦を開始（勇者${remaining.length}/4人）`}</button></div></section>
-  </main>
-  <footer class="campaign-final-floor-footer"><p>王室では通常探索・鍵・雑魚戦は発生しません。道中の傷と撃破状態を固定したまま最終戦へ移行します。</p><nav><button type="button" data-final-floor-formation>${pixelIcon("formation")} 編成</button><button type="button" data-final-floor-return>${pixelIcon("home")} 戻る</button></nav></footer>
- </section>`
+export function CampaignFinalFloorScreen({heroes=[],party=[],state,room}={}){
+ const remaining=heroes.filter(hero=>!heroState(hero).defeated).length;
+ const hint=room.phase==='cleared'?'玉座で「決戦の記憶」や輪廻を選べます':room.phase==='victory'?'玉座へ進み、守り抜いた世界の結末を見届けよう':room.phase==='ready'?'準備ができたら、勇者に触れて最終決戦へ':'絨毯の先へ進み、王室で待つ者と対面しよう';
+ return ExploreScreen(state,{title:'魔王城-王室',party,className:'royal-explore-360',stageContentHtml:'<canvas id="royalCanvas" tabindex="0" aria-label="王室。床をタップで移動、ドラッグでカメラ移動"></canvas><div class="royal-location-seal"><small>THE LAST THRESHOLD</small><b>魔王城-王室</b></div>',stageToolsHtml:'',autoToggleHtml:'',miniMapHtml:'',navHtml:`<button data-royal-formation>${pixelIcon('formation')}編成</button><button data-royal-equipment>${pixelIcon('equipment')}装備</button><button data-royal-center>${pixelIcon('event')}現在地</button><button data-royal-exit>${pixelIcon('rest')}拠点へ</button>`})+`<aside class="royal-objective-360" role="status">${hint}<span>${room.phase==='cleared'?'予言を越えた世界':`勇者 ${remaining}/4人`}</span></aside>`;
 }

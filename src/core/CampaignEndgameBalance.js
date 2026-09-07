@@ -1,4 +1,4 @@
-import {rollEnemyMagicCircle} from './MagicCircleSystem.js';
+import {rollEnemyMagicCircle} from './MagicCircleSystem.js?v=3.1.40-build360';
 // Campaign manifestations are tuned to the floor's ordinary progression.
 // This never changes contracted characters, manual trials, or the authored skills.
 export function campaignEndgameRates(floor){
@@ -15,5 +15,5 @@ export function applyCampaignEndgameBalance(enemy,floor,{campaign=true}={}){
 export function campaignEndgameCircle(floor,bossId,rank='tenGod'){
  let seed=2166136261;for(const ch of `campaign358:${Math.floor(floor)}:${bossId}`)seed=Math.imul(seed^ch.charCodeAt(0),16777619)>>>0;
  const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296};
- return rollEnemyMagicCircle(Math.max(1,Math.floor(floor)*10),{rank,random});
+ return rollEnemyMagicCircle(Math.max(1,Math.floor(floor)*10),{rank,random,force:floor>=40});
 }
