@@ -2,7 +2,7 @@ import{isEndgameUltimate}from"../data/endgameUltimates.js?v=3.1.38-build358";
 import{campaignHeroSkillInfo,campaignHeroSkillCost,chooseCampaignHeroSkill}from'./CampaignHeroSkillSystem.js?v=3.1.39-build359';
 import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=3.1.1-build311";
 import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=3.1.38-build358";
-import{speciesLevelStats}from"../models/Monster.js?v=3.1.48-build368";
+import{speciesLevelStats}from"../models/Monster.js?v=3.1.49-build369";
 import{floorBossActionInfo}from"../data/floorBosses.js?v=3.1.1-build311";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
@@ -149,6 +149,7 @@ function teamBattleAction(enemy,context,hpRate){
  return null;
 }
 export function chooseEnemyAction(enemy,context={}){
+ if(enemy.firstCaptureProfileVersion===369){enemy.intent="傷をかばいながら噛みつく";return ENEMY_ACTIONS.attack}
  if(enemy.speciesId==="ochuki"){enemy.guard=true;enemy.intent="巨大な盾の陰で逃げ道を探す";return ENEMY_ACTIONS.guard}
  const allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(monster=>(monster.currentHp??0)>0),hpRate=enemy.hp/enemy.maxHp,role=String(enemy.role??""),support=["healer","support","controller","debuffer","magic"].some(value=>role.includes(value)),rarity=String(enemy.combatRarity??enemy.rarity??"N"),rarityPower=({N:0,R:1,SR:2,SSR:3,UR:4,LR:5,"神話":6,"深淵":7,"十神":8})[rarity]??0,reviveRole=["healer","support"].some(value=>role.includes(value)),reviveEligible=enemy.speciesId!=="acid_slime"&&reviveRole&&(Boolean(enemy.boss)||Number(enemy.level)>=100||rarityPower>=4);
  const fallen=allies.find(ally=>ally.hp<=0),fallenSlime=allies.find(ally=>ally.hp<=0&&(ally.race==="slime"||String(ally.speciesId).includes("slime"))),wounded=[...allies].filter(ally=>ally.hp>0).sort((a,b)=>a.hp/a.maxHp-b.hp/b.maxHp)[0];

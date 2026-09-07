@@ -1,3 +1,4 @@
+import{LIONEL_STARTER_SKILL,lionelStarterSkills}from"../core/LionelStarterSystem.js?v=3.1.49-build369";
 import{isEndgameUltimate}from"../data/endgameUltimates.js?v=3.1.38-build358";
 import{SPECIES}from"../data/species.js?v=3.1.39-build359";
 import{SKILLS}from"../data/skills.js?v=2.11.0-build164";
@@ -303,7 +304,7 @@ export function allSpeciesSkills(speciesId){return GENERATED[speciesId]??[]}
 export function allLearnedSkills(monster){
  if(!monster||typeof monster!=="object")return[];
  const source=monster?.endgameBossId?endgameSkills(monster.endgameBossId):monster?.floorBossCatalogId?FLOOR_BOSS_SKILLS.get(monster.floorBossCatalogId)??allSpeciesSkills(monster.speciesId):allSpeciesSkills(monster.speciesId),equipment=Array.isArray(monster?._equipmentSkills)?monster._equipmentSkills:[],seen=new Set();
- return[...source,...equipment].filter(skill=>skill&&monster.level>=(skill.unlock?.value??1)&&!seen.has(skill.id)&&seen.add(skill.id));
+ return[...lionelStarterSkills(monster),...source,...equipment].filter(skill=>skill&&monster.level>=(skill.unlock?.value??1)&&!seen.has(skill.id)&&seen.add(skill.id));
 }
 function recoveryOnly(skill){return!isOffensiveSkill(skill)&&["allHeal","selfHeal","revive","mpHeal","cleanse"].includes(skill?.type)}
 export function recommendedSkills(monster,limit=4){
@@ -336,6 +337,12 @@ export function normalizeSkillLoadout(monster){
   const id=canonicalSkillId(monster.equippedSkills[index]);
   return valid.has(id)?id:null;
  });
+ // Add the new personal skill once when an existing avatar has a free slot.
+ // A deliberate removal stays removed on later renders and reloads.
+ if(lionelStarterSkills(monster).length&&monster.lionelStarterSkillVersion!==369){
+  if(!saved.includes(LIONEL_STARTER_SKILL.id)&&saved.some(Boolean)){const free=saved.indexOf(null);if(free>=0)saved[free]=LIONEL_STARTER_SKILL.id}
+  monster.lionelStarterSkillVersion=369;
+ }
  const used=new Set();
  monster.equippedSkills=saved.map(id=>{if(!id||used.has(id))return null;used.add(id);return id});
  return monster.equippedSkills;
@@ -358,7 +365,7 @@ export function normalizeSkillProgress(monster,{normalizeLoadout=true}={}){
  return monster.skillProgress;
 }
 export function recordSkillUse(monster,skillId,multiplier=1){const progress=skillProgressFor(monster,skillId);progress.uses++;if(progress.level>=SKILL_MASTERY_MAX_LEVEL)return progress;progress.exp+=Math.max(.01,Math.max(0,Number(multiplier)||0));while(progress.level<SKILL_MASTERY_MAX_LEVEL&&progress.exp>=skillMasteryNeedForLevel(progress.level)){progress.exp-=skillMasteryNeedForLevel(progress.level);progress.level++}progress.exp=Math.round(progress.exp*100)/100;progress.need=skillMasteryNeedForLevel(progress.level);return progress}
-export function skillById(id){const canonical=canonicalSkillId(id);return endgameSkillById(canonical)??floorBossWeaponSkillById(canonical)??FLOOR_BOSS_SKILL_BY_ID.get(canonical)??BY_ID.get(canonical)??SKILLS[canonical]??null}
+export function skillById(id){const canonical=canonicalSkillId(id);return (canonical===LIONEL_STARTER_SKILL.id?LIONEL_STARTER_SKILL:null)??endgameSkillById(canonical)??floorBossWeaponSkillById(canonical)??FLOOR_BOSS_SKILL_BY_ID.get(canonical)??BY_ID.get(canonical)??SKILLS[canonical]??null}
 export function canUseSkill(monster,skill,cooldown=0){return Boolean(skill)&&monster.currentMp>=effectiveSkillMpCost(monster,skill)&&cooldown<=0}
 export function affixOutgoingDamageMultiplier(stats,enemy,element="neutral"){
  const a=stats?._affixes??{};

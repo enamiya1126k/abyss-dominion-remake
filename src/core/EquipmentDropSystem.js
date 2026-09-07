@@ -1,4 +1,4 @@
-import{ENDGAME_MAX_LEVEL}from"./config.js?v=3.1.48-build368";
+import{ENDGAME_MAX_LEVEL}from"./config.js?v=3.1.49-build369";
 
 /**
  * Field drops are intentionally close to the floor that produced them.
