@@ -155,7 +155,25 @@
 <body>
   <div id="app"></div>
   <script>
+    window.__abyssBootComplete = false;
+    window.__abyssOpaqueErrors = [];
+    function runtimeErrorText(value) {
+      return String(value).replace(/[&<>"']/g, function(c) {
+        return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c];
+      });
+    }
     window.addEventListener("error", function(event) {
+      // Redacted errors can be raised while Safari opens native UI. They
+      // contain no actionable app location: retain diagnostics, never destroy
+      // a successfully booted game's DOM just because this notification fires.
+      const opaque = /^script error\.?$/i.test(String(event.message || "").trim())
+        && !event.error && !event.filename && !Number(event.lineno) && !Number(event.colno);
+      if (window.__abyssBootComplete === true && opaque) {
+        window.__abyssOpaqueErrors.push({ message: String(event.message), at: Date.now() });
+        if (window.__abyssOpaqueErrors.length > 20) window.__abyssOpaqueErrors.shift();
+        console.warn("[ABYSS] Opaque script error; preserving the running game", event.message);
+        return;
+      }
       const app = document.getElementById("app");
       if (!app) return;
       app.innerHTML =
@@ -163,7 +181,7 @@
         '<h1 style="color:#ff7785">起動エラー</h1>' +
         '<p>一度再読み込みしてください。解消しない場合は、下のエラー内容を添えてお問い合わせください。</p>' +
         '<pre style="white-space:pre-wrap;background:#1b1223;padding:12px;border-radius:12px">' +
-        String(event.message || "Unknown error") +
+        runtimeErrorText(event.message || "Unknown error") +
         '</pre></div>';
     });
     window.addEventListener("unhandledrejection", function(event) {
@@ -174,7 +192,7 @@
         '<h1 style="color:#ff7785">処理エラー</h1>' +
         '<p>一度再読み込みしてください。解消しない場合は、下のエラー内容を添えてお問い合わせください。</p>' +
         '<pre style="white-space:pre-wrap;background:#1b1223;padding:12px;border-radius:12px">' +
-        String(event.reason?.message || event.reason || "Unknown rejection") +
+        runtimeErrorText(event.reason?.message || event.reason || "Unknown rejection") +
         '</pre></div>';
     });
   </script>
@@ -185,11 +203,11 @@
   <link rel="stylesheet" href="./src/Styles/build357-battle-readability.css?v=3.1.37-build357">
   <link rel="stylesheet" href="./src/Styles/build358-endgame.css?v=3.1.38-build358">
   <link rel="stylesheet" href="./src/Styles/build360-royal.css?v=3.1.42-build360">
-  <link rel="stylesheet" href="./src/Styles/build370-home-attribute-plate.css?v=3.1.52-build372">
-  <link rel="stylesheet" href="./src/Styles/build371-ranking-profile.css?v=3.1.52-build372">
+  <link rel="stylesheet" href="./src/Styles/build370-home-attribute-plate.css?v=3.1.53-build373">
+  <link rel="stylesheet" href="./src/Styles/build371-ranking-profile.css?v=3.1.53-build373">
   <script type="module">
-    const ASSET_VERSION = "3.1.52";
-    const ASSET_BUILD = "build372";
+    const ASSET_VERSION = "3.1.53";
+    const ASSET_BUILD = "build373";
     const CACHE_VERSION = `${ASSET_VERSION}-${ASSET_BUILD}`;
     const VERSION_KEY = "abyss-dominion-asset-version";
     async function refreshStaleAssets() {
@@ -210,6 +228,7 @@
         localStorage.setItem(VERSION_KEY, CACHE_VERSION);
       }
       await import(`./src/main.js?v=${ASSET_VERSION}-${ASSET_BUILD}`);
+      window.__abyssBootComplete = true;
     }
     refreshStaleAssets();
   </script>
