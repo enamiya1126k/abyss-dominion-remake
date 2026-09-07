@@ -1,5 +1,6 @@
 const DAY_NAMES=Object.freeze(["日","月","火","水","木","金","土"]);
-export const WEEKDAY_ENDGAME_RATE=.001;
+export const WEEKDAY_ENDGAME_RATE=.01;
+export const WEEKDAY_SIGNATURE_MISSING_PRIORITY=.95;
 
 function jstParts(date=new Date()){
  try{
@@ -25,7 +26,7 @@ export function isTenGodSunday(date=new Date()){
 
 export function weekdayGachaSchedule(date=new Date()){
  const {day,key}=jstParts(date),name=DAY_NAMES[day];
- if(day===0)return{day,key,dayName:name,kind:"sunday",title:"日曜・深淵召喚",copy:"毎週日曜の深淵召喚。当選率は深淵カテゴリ全体で0.1%。",factions:["abyss"],tenGodOpen:false};
+ if(day===0)return{day,key,dayName:name,kind:"sunday",title:"日曜・深淵召喚",copy:`毎週日曜の深淵召喚。当選率は深淵カテゴリ全体で${(WEEKDAY_ENDGAME_RATE*100).toFixed(1)}%。`,factions:["abyss"],tenGodOpen:false};
  if([1,3,5].includes(day))return{day,key,dayName:name,kind:"experience",title:"経験値パック召喚",copy:"育成用の経験値パックを獲得。月・水・金に開催。",factions:[]};
  return{day,key,dayName:name,kind:"signature",title:"専用装備召喚",copy:"所持しているLR以上の仲間の専用6部位を狙う。火・木・土に開催。",factions:[]};
 }

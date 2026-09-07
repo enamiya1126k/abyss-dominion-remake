@@ -4,8 +4,8 @@ import{MONSTER_COLORS}from"../data/colors.js?v=3.1.1-build311";
 import{normalizedResistances}from"../data/attributes.js?v=3.1.1-build311";
 import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=3.1.38-build358";
 import{normalizePersistentAilments}from"../data/statusEffects.js?v=3.1.1-build311";
-import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=3.1.46-build366";
-import{baseExperienceNeedForLevel}from"../core/ProgressionSystem.js?v=3.1.46-build366";
+import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=3.1.47-build367";
+import{baseExperienceNeedForLevel}from"../core/ProgressionSystem.js?v=3.1.47-build367";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
