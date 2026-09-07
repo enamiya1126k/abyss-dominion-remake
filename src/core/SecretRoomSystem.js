@@ -1,12 +1,12 @@
 import{createEquipment,equipmentPower}from"../models/Equipment.js?v=3.1.41-build361";
-import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=3.1.44-build364";
+import{createMonster,calculatedStats,displayName}from"../models/Monster.js?v=3.1.45-build365";
 import{allLearnedSkills,maxMp,recommendedSkills,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.39-build359";
 import{SPECIES}from"../data/species.js?v=3.1.39-build359";
 import{receiveEquipment,EQUIPMENT_LIMIT,RESERVE_LIMIT,slotLabel}from"../services/EquipmentStorage.js?v=3.1.41-build361";
 import{equipmentStatLabel}from"../data/equipment.js?v=3.1.1-build311";
 import{AFFIX_DEFINITIONS,formatAffix}from"../data/equipmentAffixes.js?v=3.1.1-build311";
 import{goldForClearedFloor}from"./GoldEconomySystem.js?v=3.1.1-build311";
-import{MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=3.1.44-build364";
+import{MONSTER_STORAGE_CAP,premiumCrystalCost}from"./config.js?v=3.1.45-build365";
 import{campaignFloorToLegacyFloor}from"./Campaign100System.js?v=3.1.42-build362";
 
 export const SECRET_ROOM_CHANCE=.09;

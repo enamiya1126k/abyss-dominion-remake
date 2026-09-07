@@ -21,7 +21,7 @@ test('all effects survive rendering for both sides, including effects after the 
  const b=fixture(),kinds=['atkUp','defUp','spdUp','accuracyUp','evasionDown','vulnerable','regen','counter','healDown','mpRecoveryDown'];
  const effects=kinds.map((kind,i)=>({kind,value:.2,turns:i+1}));b.allyEffects[b.party[0].id]=effects;b.enemyEffects.enemy=effects;
  const html=render(b);for(const kind of kinds)assert.equal((html.match(new RegExp(`class="status-chip ${kind}"`,'g'))||[]).length,2);
- assert.ok(html.includes('被ダメ↑'));assert.ok(!html.includes('被ダメージ増加'));assert.ok(html.includes('残10'));
+ assert.ok(html.includes('被ダメ↑'));assert.ok(!html.includes('被ダメージ増加'));assert.ok(html.includes('10T'));
 });
 test('pointerdown opens once before rerender, suppresses bubbling, and keyboard activation still works',()=>{
  const ctx=vm.createContext({});vm.runInContext(main.slice(main.indexOf('function bindBattleDetailTap('),main.indexOf('function openBattleStatusDetail(')),ctx);

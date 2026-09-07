@@ -3,14 +3,14 @@ import{enemyMagicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.41-buil
 import{ultimateCircle,ultimateLabels,ultimateIsolated,ultimateAvailability,ultimateBasicOnly,isEndgameUltimate}from"../../core/EndgameUltimateSystem.js?v=3.1.41-build361";
 import{HERO_SOLO_DAMAGE_RATES}from"../../data/mythicSerialSpecies.js?v=3.1.39-build359";
 import{BATTLE_ITEM_LAYOUT}from"./BattleItemLayout.js?v=3.1.38-build358";
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.44-build364";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.45-build365";
 import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.39-build359";
 import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.41-build361";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.44-build364";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.45-build365";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.38-build358";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.44-build364";
+import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.45-build365";
 import{ATTRIBUTE_MATCHUP_MULTIPLIERS,attributesEffectiveAgainst,attributesIneffectiveAgainst}from"../../data/attributes.js?v=3.1.1-build311";
 import{heroResonanceProfile,isHeroResonanceSpecies}from"../../core/HeroResonanceSystem.js?v=3.1.39-build359";
 
@@ -38,7 +38,7 @@ function circleArt358(b,u,original,ally=false){const borrowed=(b.ultimates358?.e
 function ultimateBadges358(battle,unit){return ultimateLabels(battle,unit).map(label=>`<span class="status-chip ultimate-authority">${htmlText(label)}</span>`).join("")}
 function battleEffectLabel(effect){return BATTLE_EFFECT_LABELS[effect?.kind]??effect?.name??"特殊効果"}
 function battleStatusLabel(status){const labels={poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖"};return labels[status?.id]??status?.name??statusLabel(status)}
-function remainingTurns(turns,persistent=false){const value=Math.max(0,Number(turns)||0);return value?` 残${value}`:persistent?"・持続":""}
+function remainingTurns(turns,persistent=false){const value=Math.max(0,Number(turns)||0);return value?` ${value}T`:persistent?"・持続":""}
 const COMBAT_RANK_POWER=Object.freeze({N:0,R:1,SR:2,SSR:3,UR:4,LR:5,"神話":6,BOSS:7,"深淵":8,"十神":9});
 function combatRank(unit,species={}){
  const value=unit?.endgameFaction==="tenGod"||unit?.faction==="tenGod"?"十神":unit?.endgameFaction==="abyss"||unit?.faction==="abyss"?"深淵":unit?.boss?"BOSS":unit?.summonTier??unit?.summonRarity??unit?.combatRarity??species.rarity??null;

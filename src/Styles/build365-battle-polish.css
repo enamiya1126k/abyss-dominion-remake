@@ -1,0 +1,15 @@
+.battle-screen.side-battle-v2 .side-unit-card .status-row{gap:1px!important;margin-bottom:3px!important}
+.battle-screen.side-battle-v2 .status-row .status-chip{
+ flex:0 1 auto!important;width:auto!important;min-width:0!important;max-width:100%!important;
+ padding:1px 2px!important;font:700 5px/1.15 sans-serif!important;letter-spacing:0!important;
+ border-width:1px!important;border-radius:3px!important;
+}
+.royal-reward365{display:grid;gap:14px;text-align:center}
+.royal-reward365>small{color:#dcb871;letter-spacing:.14em}
+.royal-reward365 h3{margin:0;color:#ffe4a2}
+.royal-reward365 .reward-currency365{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.royal-reward365 .reward-currency365>div{padding:14px 8px;border:1px solid #aa874b;background:#231827;display:grid;gap:6px}
+.royal-reward365 .reward-members365{display:grid;gap:8px;text-align:left}
+.royal-reward365 article{padding:10px;border:1px solid #68547b;background:#110e18;display:grid;gap:5px}
+.royal-reward365 article strong{color:#a8e7cf}.royal-reward365 article small{color:#cfbddb}
+.royal-reward365 p{margin:0;font-size:14px;line-height:1.6}

@@ -1,3 +1,5 @@
+import{royalRevengeRewards,grantRoyalRevengeRewards}from'./core/RoyalRevengeRewards.js?v=3.1.45-build365';
+import{runBattleGaugeAnimation}from'./ui/BattleGaugeAnimation.js?v=3.1.45-build365';
 import{syncCycleEquipment,revengeStage,revengeExperience,tuneFinalHero,canPostclearEncounter,rearmPostclearEncounters,reincarnationPreview}from'./core/Postgame361System.js?v=3.1.41-build361';
 import{hasHeroFortitude,heroFortitudeUsed,tryHeroFortitude}from'./core/HeroFortitudeSystem.js?v=3.1.41-build361';
 import{royalState,beginRoyalAttempt,settleRoyalAttempt,rewindRoyalAttempt,abandonRoyalAttempt}from"./core/RoyalChamberSystem.js?v=3.1.41-build361";
@@ -6,11 +8,11 @@ import{royalVictoryDialogue,royalDefeatDialogue}from"./data/royalChamberStory.js
 import{applyCampaignEndgameBalance,campaignEndgameCircle}from"./core/CampaignEndgameBalance.js?v=3.1.41-build361";
 import{prepareUltimateBattle,beginUltimateAction,finishUltimateAction,ultimateAvailability,chooseEndgameUltimate,castEndgameUltimate,beforeUltimateAction,afterUltimateOrdinary,endUltimateRound,cleanupUltimateBattle,drainUltimateEvents,ultimateIsolated,ultimateExtraBlocked,ultimateBasicOnly,isEndgameUltimate,ultimateCircle,ultimateLabels}from"./core/EndgameUltimateSystem.js?v=3.1.41-build361";
 import{equipmentAffixesWithSeries}from"./core/EquipmentAffixSystem.js?v=3.1.28-build348";
-import{applyCampaignHeroLoadout}from"./core/CampaignHeroLoadoutSystem.js?v=3.1.44-build364";
+import{applyCampaignHeroLoadout}from"./core/CampaignHeroLoadoutSystem.js?v=3.1.45-build365";
 import{heroId,heroHp,heroEffects,heroEffect,heroCooldowns,heroAllianceState,heroAuthoredSkills,reserveHeroAction,chooseHeroAllianceSkill,runHeroAllianceAction,triggerHeroAlliance,drainHeroReactions,mitigateHeroDamage,tryHeroLastStand,heroOverheal}from"./core/HeroAllianceSystem.js?v=3.1.41-build361";
 import{commitCampaignHeroSkill}from'./battle/CampaignHeroSkillSystem.js?v=3.1.39-build359';
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.44-build364";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.44-build364";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.45-build365";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.45-build365";
 // Regression markers only: SaveService.js?v=3.1.10-build329 / config.js?v=3.1.21-build340 / HomeScreen.js?v=3.1.21-build340
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.38-build358";
@@ -20,24 +22,24 @@ import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/Expl
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.44-build364";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.45-build365";
 import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.14-build333";
 import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.42-build362";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.44-build364";
-import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.44-build364";
-import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.44-build364";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.45-build365";
+import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.45-build365";
+import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.45-build365";
 import{reconcileOnlineMotion,onlineMotionSpeed}from"./online/OnlineMovement.js?v=3.1.32-build352";
 import{beginGuestProgressIsolation,finishGuestProgressIsolation,onlineProgressionAllowed,legacyProgressRecoveryCandidate,applyLegacyProgressRecovery,dismissLegacyProgressRecovery,undoLegacyProgressRecovery}from"./online/OnlineProgressIsolation.js?v=3.1.1-build311";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.44-build364";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=3.1.44-build364";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.44-build364";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.45-build365";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=3.1.45-build365";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.45-build365";
 import{readPlayerName}from"./core/PlayerNameSystem.js?v=3.1.43-build363";
 import{PlayerNameForm}from"./ui/components/PlayerNameForm.js?v=3.1.43-build363";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.44-build364";
-import{CampaignFinalFloorScreen,finalAudienceDialogue}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.44-build364";
-import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.44-build364";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.44-build364";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.45-build365";
+import{CampaignFinalFloorScreen,finalAudienceDialogue}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.45-build365";
+import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.45-build365";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.45-build365";
 import{HERO_PURSUIT_STEPS,normalizeHeroPursuit,heroFieldRoute,chooseHeroSpawn,prepareHeroArrival,heroCanEscape,heroInContact,advanceHeroField,heroScreenIndicator}from"./core/CampaignHeroPursuitSystem.js?v=3.1.32-build352";
 import{updateHeroTracker}from"./ui/HeroPursuitHud.js?v=3.1.22-build341";
 import{mountBattleBossLayout}from"./ui/BattleBossLayout.js?v=3.1.21-build340";
@@ -45,8 +47,8 @@ import{Modal}from"./ui/components/Modal.js?v=3.1.1-build311";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=3.1.1-build311";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=3.1.1-build311";
 import{attributeCycleVisual,attributeVisual}from"./ui/components/AttributeVisual.js?v=3.1.1-build311";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=3.1.44-build364";
-import{EXPERIENCE_PACK_TYPES,experiencePackType,availableExperiencePackTypes,consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=3.1.44-build364";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=3.1.45-build365";
+import{EXPERIENCE_PACK_TYPES,experiencePackType,availableExperiencePackTypes,consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=3.1.45-build365";
 import{createEquipment,equipmentPower,equipmentStatMultiplier,equipmentRequiredMonsterLevel}from"./models/Equipment.js?v=3.1.41-build361";
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=3.1.1-build311";
 import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=3.1.39-build359";
@@ -55,11 +57,11 @@ import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./serv
 import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=3.1.1-build311";
 import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=3.1.38-build358";
 import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=3.1.1-build311";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=3.1.44-build364";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=3.1.45-build365";
 import{initialAffixCount,lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=3.1.1-build311";
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=3.1.41-build361";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=3.1.44-build364";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=3.1.44-build364";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=3.1.45-build365";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=3.1.45-build365";
 import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=3.1.41-build361";
 import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=3.1.42-build362";
 import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=3.1.41-build361";
@@ -67,15 +69,15 @@ import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=3.1.1-build311";
 import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=3.1.1-build311";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=3.1.1-build311";
 import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=3.1.42-build362";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=3.1.44-build364";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=3.1.45-build365";
 import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=3.1.1-build311";
 import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=3.1.1-build311";
 import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=3.1.1-build311";
 import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillMpCostBreakdown,skillDamage,affixOutgoingDamageMultiplier,chooseAutoBattleDecision,skillProgressFor,recordSkillUse,skillEffectSummary,skillCombatKeywords,applySkillMastery,recommendedSkills,recommendedSkillLoadout}from"./battle/SkillSystem.js?v=3.1.39-build359";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyDamageAfterDefense,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=3.1.44-build364";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyDamageAfterDefense,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=3.1.45-build365";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectStackBreakdown,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=3.1.41-build361";
 import{attackHits}from"./battle/HitSystem.js?v=3.1.1-build311";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=3.1.44-build364";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=3.1.45-build365";
 import{dangerConfig}from"./core/DangerSystem.js?v=3.1.1-build311";
 import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=3.1.25-build345";
 import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,autoEquipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost,magicCircleLevelEffect,isRaidExclusiveMagicCircle}from"./core/MagicCircleSystem.js?v=3.1.41-build361";
@@ -102,9 +104,9 @@ import{buildSectionMiniMapModel,fitMiniMapTransform,projectMiniMapPoint}from"./c
 import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=3.1.42-build362";
 import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=3.1.41-build361";
 import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=3.1.1-build311";
-import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=3.1.44-build364";
-import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,casinoBetLimit,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,darkMarketPlayerMaxLevel,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=3.1.44-build364";
-import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=3.1.44-build364";
+import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=3.1.45-build365";
+import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,casinoBetLimit,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,darkMarketPlayerMaxLevel,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=3.1.45-build365";
+import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=3.1.45-build365";
 import{runConfirmedFullReset}from"./core/FullResetSystem.js?v=3.1.13-build332";
 import{DAILY_NOTICE_GIFT,activeNoticeDefinitions,setServerMaintenanceState,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount,pendingNoticeRewards,claimNoticeReward,enqueueNoticeReward}from"./core/NoticeSystem.js?v=3.1.19-build338";
 import{COMPLETE_MONSTER_CODEX,codexCollectionSummary,syncCollectionRewardInbox,rewardDescription}from"./core/CollectionRewardSystem.js?v=3.1.42-build362";
@@ -112,11 +114,11 @@ import{achievementSummary,syncAchievementRewardInbox,achievementIconKeyForId}fro
 import{CONTEXT_GUIDE_STEPS,completeGuideStep,normalizeContextualGuide,setGuidePending,guidePending,guideStepDone,bumpGuideCounter,snoozeGuideStep,guideStepSnoozed,resetContextualGuide,contextualGuideProgress}from"./core/ContextualGuideSystem.js?v=3.1.1-build311";
 import{weekdayGachaSchedule,weekdayGachaCost,WEEKDAY_GACHA_CALENDAR,WEEKDAY_ENDGAME_RATE,rollWeekdayEndgameHit}from"./core/WeekdayGachaSystem.js?v=3.1.1-build311";
 import{bossExperiencePackReward}from"./core/BossRewardSystem.js?v=3.1.1-build311";
-import{enemyExperienceReward}from"./core/ProgressionSystem.js?v=3.1.44-build364";
+import{enemyExperienceReward}from"./core/ProgressionSystem.js?v=3.1.45-build365";
 import{treasureRoomRateForFloor,treasureRoomChestCount,shouldPlaceTreasureMimic,rollTreasureChestReward,mimicVictoryGold,mimicExperienceMultiplier,mimicVictoryCrystals}from"./core/TreasureSystem.js?v=3.1.19-build338";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionForFloor,floorBossDefinitionById,floorBossEquipmentDesignByPiece,milestoneBossIdsForFloor}from"./data/floorBosses.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CONTRACT_COST,FLOOR_BOSS_EQUIPMENT_COST,normalizeFloorBossChallengeState,recordFloorBossDiscovery,floorBossChallengeStatus,createFloorBossChallengeEncounter,awardFloorBossChallengeFragments,spendFloorBossFragments,restoreFloorBossFragments}from"./core/FloorBossChallengeSystem.js?v=3.1.39-build359";
-import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.44-build364";
+import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.45-build365";
 import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame,partyMonsterArtScale}from"./ui/MonsterVisual.js?v=3.1.38-build358";
 import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,permanentSignatureOwners,rollPermanentSignatureHit,PERMANENT_SIGNATURE_RATE,createSignatureEquipment,normalizeSignatureWeaponItem,signatureWeaponGrantedSkill}from"./core/SignatureWeaponSystem.js?v=3.1.41-build361";
 
@@ -726,13 +728,21 @@ function finishCampaignFinalBattle(won){
  if(!royalState(save.state).attempt)beginRoyalAttempt(save.state,ledger);
  const result=settleRoyalAttempt(save.state,{won,ending:resolved.ending,variant:resolved.variant,resultId});
  cleanupUltimateBattle(current);restoreCampaignFinalParty();
- if(result.memory&&won&&!result.duplicate){result.experience=revengeExperience(result.stage);for(const id of result.partyIds??save.state.party){const m=save.state.monsters.find(x=>x.id===id);if(m)applyTotalExperience(m,totalExperience(m)+result.experience);}}
+ if(result.memory&&won&&!result.duplicate){result.rewards=grantRoyalRevengeRewards(save.state,result,resultId);}
  fullyRecoverParty();clearPartySynergy();delete save.state.activeBattle;
  ledger.finalArena={...ledger.finalArena,battleStarted:false};normalizeCampaignState(save.state).heroEncounters310=ledger;
  if(!won&&!result.memory)recordCampaignConclusion(save.state,{ending:'defeat',resultId});
  if(!save.save()){save.state=checkpoint;current.resultSettled=false;current.party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);app.insertAdjacentHTML('beforeend',Modal('決着の保存待ち','<p>空き容量を確認してから、保存を再試行してください。決着の内容は保持しています。</p>','保存を再試行'));const retry=topModal();const again=()=>{retry.remove();finishCampaignFinalBattle(won)};retry._onDismiss=again;retry.querySelector('[data-modal-primary]').onclick=again;return}
  document.querySelector('.battle-screen')?.remove();activeEnemy=null;battle=null;snapshot=null;save.state.player.inRun=false;audio.setScene(won?'victory':'defeat');go('campaignFinalFloor');
- if(result.memory){showToast(won?`第${result.stage}次リベンジ突破！ 各員EXP +${result.experience.toLocaleString()}・次回はさらに強くなる`:result.awarded?'決戦の記憶を制覇！ 称号「四勇を越えし者」を獲得':won?'決戦の記憶：勝利':'決戦の記憶：敗北。物資は挑戦前へ戻りました')}
+ if(result.memory){if(won&&result.rewards)showRoyalRevengeRewards365(result.rewards);else showToast('決戦の記憶：敗北。物資は挑戦前へ戻りました')}
+
+}
+function showRoyalRevengeRewards365(receipt){
+ if(!receipt)return;
+ const number=value=>Math.max(0,Number(value)||0).toLocaleString();
+ const members=(receipt.members??[]).map(m=>`<article><b>${escapeAttribute(m.name)}</b><strong>EXP +${number(m.experience)}</strong><small>Lv.${number(m.beforeLevel)} → Lv.${number(m.afterLevel)}</small></article>`).join('');
+ app.insertAdjacentHTML('beforeend',Modal(`第${number(receipt.stage)}次リベンジ・勝利報酬`,`<div class="royal-reward365"><small>VICTORY REWARD</small><h3>四勇の記憶を越えた</h3><div class="reward-currency365"><div><small>GOLD</small><b>+${number(receipt.gold)}G</b></div><div><small>魔晶石</small><b>+${number(receipt.crystals)}</b></div></div><div class="reward-members365">${members}</div>${receipt.titleAwarded?'<p>称号「四勇を越えし者」を獲得</p>':''}<p>報酬は受取済みです。次のリベンジでは勇者も報酬も強化されます。</p></div>`,'王室へ戻る'));
+ const modal=topModal(),close=()=>modal.remove();modal._onDismiss=close;modal.querySelector('[data-modal-primary]').onclick=close;
 }
 function openRoyalDialogue360(lines,kind,onComplete){
  if(document.querySelector('.royal-dialogue-360'))return;
@@ -756,8 +766,8 @@ function openRoyalThrone360(){
   const pending=room.pendingEnding??{ending:'complete',variant:'all-preempted',resultId:`royal-empty:${room.cycle}`};room.phase='cleared';room.attempt=null;room.pendingEnding=null;stopGame();audio.setScene('victory');audio.sfx('victory');showCampaignEnding(pending.ending,pending);return;
  }
  if(room.phase!=='cleared')return;
- app.insertAdjacentHTML('beforeend',Modal('予言を越えた玉座',`<div class="royal-postgame"><p>この世界を歩き続けるか。記憶の中で四勇に挑むか。新しい予言を始めるか。</p>${save.state.campaign100.royalMemoryChampion360?'<b>称号：四勇を越えし者</b>':''}${room.cycle>0?`<b>輪廻 ${room.cycle}・予言の踏破者</b>`:''}<p>第${revengeStage(save.state)}次リベンジ：勇者4人・全員健在。今周回 ${room.memoryWins??0}勝／歴代最高 ${save.state.campaign100.revengeBest361??0}段階</p><p>勝利で次の強さへ。各員EXP +${revengeExperience(revengeStage(save.state)).toLocaleString()}。敗北・撤退では段階は進みません。使用物資は戻ります。</p><button type="button" data-royal-memory>決戦の記憶へ挑む</button><button type="button" data-royal-cycle>次の輪廻を選ぶ</button><button type="button" data-royal-free>拠点へ・自由探索を続ける</button></div>`,'王室へ戻る'));
- const modal=topModal();modal.querySelector('[data-royal-memory]').onclick=()=>{modal.remove();openCampaignFinalPreparation({memory:true})};modal.querySelector('[data-royal-cycle]').onclick=()=>{modal.remove();openCampaignReincarnationDialog()};modal.querySelector('[data-royal-free]').onclick=()=>{modal.remove();stopGame();go('home')};
+ app.insertAdjacentHTML('beforeend',Modal('予言を越えた玉座',`<div class="royal-postgame"><p>この世界を歩き続けるか。記憶の中で四勇に挑むか。新しい予言を始めるか。</p>${save.state.campaign100.royalMemoryChampion360?'<b>称号：四勇を越えし者</b>':''}${room.cycle>0?`<b>輪廻 ${room.cycle}・予言の踏破者</b>`:''}<p>第${revengeStage(save.state)}次リベンジ：勇者4人・全員健在。今周回 ${room.memoryWins??0}勝／歴代最高 ${save.state.campaign100.revengeBest361??0}段階</p><p>勝利で次の強さへ。各員EXP +${revengeExperience(revengeStage(save.state)).toLocaleString()}・GOLD +${royalRevengeRewards(revengeStage(save.state)).gold.toLocaleString()}・魔晶石 +${royalRevengeRewards(revengeStage(save.state)).crystals.toLocaleString()}。敗北・撤退では報酬なし・段階は進みません。使用物資は戻ります。</p>${room.rewardReceipt365?'<button type="button" data-royal-last-reward>前回の勝利報酬を見る</button>':''}<button type="button" data-royal-memory>決戦の記憶へ挑む</button><button type="button" data-royal-cycle>次の輪廻を選ぶ</button><button type="button" data-royal-free>拠点へ・自由探索を続ける</button></div>`,'王室へ戻る'));
+ const modal=topModal();modal.querySelector('[data-royal-last-reward]')?.addEventListener('click',()=>showRoyalRevengeRewards365(room.rewardReceipt365));modal.querySelector('[data-royal-memory]').onclick=()=>{modal.remove();openCampaignFinalPreparation({memory:true})};modal.querySelector('[data-royal-cycle]').onclick=()=>{modal.remove();openCampaignReincarnationDialog()};modal.querySelector('[data-royal-free]').onclick=()=>{modal.remove();stopGame();go('home')};
 }
 function rejoinCampaignHeroAtFinalGate(ledger){
  const encounterId=ledger.activeEncounterId;if(!encounterId)return ledger;
@@ -4959,7 +4969,8 @@ async function animateBattleRecoveryGauge(entry){
  fill.style.animation="none";fill.style.transition="none";fill.style.width=`${fromRate}%`;label.textContent=`${resource.toUpperCase()} ${Math.round(fromValue)}/${state.max}`;void fill.offsetWidth;
  if(reduceMotion){fill.style.width=`${toRate}%`;label.textContent=`${resource.toUpperCase()} ${state.current}/${state.max}`;bar.classList.remove(`is-${kind}-recovering`);setTimeout(()=>{element.classList.remove(`fx-${kind}-recover`);flash.remove()},20);return}
  fill.style.transition=`width ${duration}ms cubic-bezier(.2,.76,.18,1)`;fill.style.width=`${toRate}%`;
- await new Promise(resolve=>{const started=performance.now(),finish=()=>{fill.style.transition="none";fill.style.width=`${toRate}%`;label.textContent=`${resource.toUpperCase()} ${state.current}/${state.max}`;bar.classList.remove(`is-${kind}-recovering`);element.classList.remove(`fx-${kind}-recover`);flash.remove();resolve()},tick=now=>{if(!bar.isConnected)return finish();const progress=Math.min(1,(now-started)/Math.max(1,duration)),eased=1-Math.pow(1-progress,3),shown=Math.min(state.current,Math.round(fromValue+gain*eased));label.textContent=`${resource.toUpperCase()} ${shown}/${state.max}`;if(progress<1)requestAnimationFrame(tick);else finish()};requestAnimationFrame(tick)});
+ await runBattleGaugeAnimation({duration,isConnected:()=>bar.isConnected,update:progress=>{const eased=1-Math.pow(1-progress,3),shown=Math.min(state.current,Math.round(fromValue+gain*eased));label.textContent=`${resource.toUpperCase()} ${shown}/${state.max}`},complete:()=>{fill.style.transition="none";fill.style.width=`${toRate}%`;label.textContent=`${resource.toUpperCase()} ${state.current}/${state.max}`;bar.classList.remove(`is-${kind}-recovering`);element.classList.remove(`fx-${kind}-recover`);flash.remove()}});
+
 }
 async function playBattleResurrectionFx(revives,recoveries){
  const arena=document.querySelector(".battle-arena");
@@ -4992,11 +5003,9 @@ function animateBattleHpGauge(target,element=battleTarget(target)){
  if(reduceMotion){battle.hpDisplayRates[state.key]=toRate;delete battle.hpTrails[state.key];fill.style.width=`${toRate}%`;label.textContent=`HP ${state.current}/${state.max}`;return Promise.resolve()}
  bar.classList.add("is-hp-draining");fill.classList.remove("hp-fill-draining");fill.style.animation="none";fill.style.transition="none";fill.style.width=`${fromRate}%`;label.textContent=`HP ${fromHp}/${state.max}`;void fill.offsetWidth;
  fill.style.transition=`width ${duration}ms cubic-bezier(.18,.72,.2,1)`;fill.style.width=`${toRate}%`;
- return new Promise(resolve=>{
-  const started=performance.now(),finish=()=>{battle.hpDisplayRates[state.key]=toRate;delete battle.hpTrails[state.key];bar.classList.remove("is-hp-draining");fill.style.transition="none";fill.style.width=`${toRate}%`;label.textContent=`HP ${state.current}/${state.max}`;resolve()};
-  const tick=now=>{if(!bar.isConnected)return finish();const progress=Math.min(1,(now-started)/Math.max(1,duration)),eased=1-Math.pow(1-progress,3),shown=Math.max(state.current,Math.round(fromHp+(state.current-fromHp)*eased));label.textContent=`HP ${shown}/${state.max}`;if(progress<1)requestAnimationFrame(tick);else finish()};
-  requestAnimationFrame(tick);
- });
+ const animationBattle=battle;
+ return runBattleGaugeAnimation({duration,isConnected:()=>bar.isConnected,update:progress=>{const eased=1-Math.pow(1-progress,3),shown=Math.max(state.current,Math.round(fromHp+(state.current-fromHp)*eased));label.textContent=`HP ${shown}/${state.max}`},complete:()=>{animationBattle.hpDisplayRates[state.key]=toRate;delete animationBattle.hpTrails[state.key];bar.classList.remove("is-hp-draining");fill.style.transition="none";fill.style.width=`${toRate}%`;label.textContent=`HP ${state.current}/${state.max}`}});
+
 }
 function triggerBattleImpact(element,critical=false){
  const arena=document.querySelector(".battle-arena");
@@ -5642,17 +5651,17 @@ function openBattleItemTarget(type){
  battle.itemTargetType=type;battle.itemTargetActorId=actor().id;renderBattle();
 }
 async function useBattleItem(type,targetId,{automatic=false}={}){
- if(!battle||battle.busy||(!automatic&&(battle.auto||!battle.itemMenu))||(automatic&&!battle.auto))return;const a=actor();if(!a)return;
- if(!["potions","highPotions","partyPotions","manaPotions","highManaPotions","partyManaPotions","fullManaPotions","partyFullManaPotions","reviveLeaves","statusCures","partyStatusCures","fullHeals","partyFullHeals"].includes(type)||(save.state.inventory[type]??0)<=0)return;
+ if(!battle||battle.busy||(!automatic&&(battle.auto||!battle.itemMenu))||(automatic&&!battle.auto))return;const a=actor();if(!a)return;const reject=message=>automatic?command("attack",null,{skipRandomCircle:true}):alert(message);
+ if(!["potions","highPotions","partyPotions","manaPotions","highManaPotions","partyManaPotions","fullManaPotions","partyFullManaPotions","reviveLeaves","statusCures","partyStatusCures","fullHeals","partyFullHeals"].includes(type)||(save.state.inventory[type]??0)<=0)return automatic?command("attack",null,{skipRandomCircle:true}):undefined;
  const party=battle.party,target=party.find(m=>m.id===targetId),single=["potions","highPotions","manaPotions","highManaPotions","fullManaPotions","reviveLeaves","statusCures","fullHeals"].includes(type),list=single?[target]:party;
  if(single&&(!target||(!automatic&&(battle.itemTargetType!==type||battle.itemTargetActorId!==a.id))))return;
- if(type==="reviveLeaves"&&target.currentHp>0)return alert("戦闘不能の仲間を選んでください");
- if(type!=="reviveLeaves"&&single&&target.currentHp<=0)return alert("戦闘不能の仲間には使用できません");
+ if(type==="reviveLeaves"&&target.currentHp>0)return reject("戦闘不能の仲間を選んでください");
+ if(type!=="reviveLeaves"&&single&&target.currentHp<=0)return reject("戦闘不能の仲間には使用できません");
  const hasAilment=m=>(battle.allyAilments?.[m.id]?.length??0)||(m.statuses?.length??0)||(m.ailments?.length??0)||m.status;
  const usable=type==="potions"?target.currentHp<calculatedStats(target).hp:type==="highPotions"?target.currentHp<calculatedStats(target).hp:type==="partyPotions"?list.some(m=>m.currentHp>0&&m.currentHp<calculatedStats(m).hp):["manaPotions","highManaPotions","fullManaPotions"].includes(type)?target.currentMp<maxMp(target):["partyManaPotions","partyFullManaPotions"].includes(type)?list.some(m=>m.currentHp>0&&m.currentMp<maxMp(m)):type==="reviveLeaves"?target.currentHp<=0:type==="statusCures"?hasAilment(target):type==="partyStatusCures"?list.some(hasAilment):type==="fullHeals"?(target.currentHp<calculatedStats(target).hp||target.currentMp<maxMp(target)||hasAilment(target)):list.some(m=>m.currentHp>0&&(m.currentHp<calculatedStats(m).hp||m.currentMp<maxMp(m)||hasAilment(m)));
- if(!usable)return alert("今は使用する必要がありません");
- if(type==="reviveLeaves"&&!canBattleRevive())return alert("この戦闘の蘇生上限99回に達しました");
- if(type==="reviveLeaves"&&hasEffect(battle,target.id,"reviveSeal"))return alert("蘇生封印中のため使用できません");
+ if(!usable)return reject("今は使用する必要がありません");
+ if(type==="reviveLeaves"&&!canBattleRevive())return reject("この戦闘の蘇生上限99回に達しました");
+ if(type==="reviveLeaves"&&hasEffect(battle,target.id,"reviveSeal"))return reject("蘇生封印中のため使用できません");
  battle.busy=true;battle.itemMenu=false;battle.itemTargetType=null;battle.itemTargetActorId=null;battle.actionCommitted=true;save.state.inventory[type]--;
  if(type==="potions"){const max=calculatedStats(target).hp;recordBattleHealing(a,recoverBattleHp(target,scaledRecovery(100,max,.10),max))}
  if(type==="highPotions"){const max=calculatedStats(target).hp;recordBattleHealing(a,recoverBattleHp(target,scaledRecovery(300,max,.25),max))}
@@ -5855,7 +5864,7 @@ async function flushUltimateEvents358(){
 }
 async function performUltimate358(unit,skillId){
  prepareBattleUltimates358();const result=castEndgameUltimate(battle,unit,skillId,{targetId:battle.targetEnemyId});
- if(!result.ok){battle.busy=false;if(!battle.auto)alert(result.reason);return}
+ if(!result.ok){battle.busy=false;finishUltimateAction(battle);const ally=battle.party.includes(unit);if(ally&&!battle.auto){alert(result.reason);return}addBattleLog(battle,`${unit.name??unit.nickname??'行動者'}：${result.reason}・代替行動へ切替`);return ally?command('attack',null,{skipRandomCircle:true}):enemyTurn({skipUltimate:true})}
  battle.actionCommitted=true;battle.skillMenu=false;
  await battleBanner(result.skill.name,result.skill.description,'skill',650,unit);await flushUltimateEvents358();
  saveBattleCheckpoint();renderBattle();battle.busy=false;
@@ -5871,7 +5880,7 @@ async function command(type,skillId=null,{skipRandomCircle=false}={}){
  if(ultimateIsolated(battle,a))return finishCurrentAction();
  if(ultimateBasicOnly(battle,a)&&type!=='attack'){if(battle.auto)return command('attack');return alert('領域中は通常攻撃のみ使用できます')}
  battle.busy=true;beginUltimateAction(battle,a,skillId?skillById(skillId):null);
- if(type==='skill'&&isEndgameUltimate(skillId)){if(!learnedSkills(a).some(s=>s.id===skillId)){battle.busy=false;return}return performUltimate358(a,skillId)}
+ if(type==='skill'&&isEndgameUltimate(skillId)){if(!learnedSkills(a).some(s=>s.id===skillId)){battle.busy=false;finishUltimateAction(battle);if(battle.auto)return command("attack",null,{skipRandomCircle:true});return}return performUltimate358(a,skillId)}
  if(isHeroResonanceSpecies(a.speciesId)&&(type==="attack"||type==="skill"&&heroAuthoredSkills(a).some(s=>s.id===skillId))){const chosen=type==="skill"?heroAuthoredSkills(a).find(s=>s.id===skillId):null;return performHeroCommand348(a,"ally",chosen,battle.targetEnemyId)}
  if(isHeroResonanceSpecies(a.speciesId)&&!reserveHeroAction(battle,"ally",a)){battle.busy=false;return finishCurrentAction()}
  const s=calculatedStats(a),e=selectedEnemy(battle);if(!e){battle.busy=false;if(!aliveEnemies(battle).length)return win(false,null);return finishCurrentAction()};battle.enemy=e;let triggerAlliance=false,signatureExtraAction=false;
@@ -6196,9 +6205,9 @@ async function resolveEnemyFlee(e){
  const body=`<div class="battle-result-cinematic escape-result"><div class="victory-crest">💨</div><small>希少遭遇</small><div class="victory-title"><span>逃走</span><em>逃げられた</em></div><div class="victory-subtitle">おちゅきは戦利品を残さず逃げ切った</div></div>`;
  app.insertAdjacentHTML("beforeend",Modal("逃げられた！",body,"探索を続ける"));const modal=topModal();let closed=false;const finish=()=>{if(closed)return;closed=true;modal?.remove();battle=null;screen="explore";render()};modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish;if(explorationAuto)setTimeout(finish,1000)
 }
-async function enemyTurn(){
+async function enemyTurn({skipUltimate=false}={}){
  if(battle.busy)return;const entry=currentTurnEntry(battle);if(entry?.type!=="enemy")return continueBattleFlow();
- battle.busy=true;const e=currentEnemy(battle);if(!e){battle.busy=false;return finishCurrentAction()}battle.enemy=e;prepareBattleUltimates358();const ultimate358=chooseEndgameUltimate(battle,e);if(ultimate358)return performUltimate358(e,ultimate358.id);beginUltimateAction(battle,e);if(isHeroResonanceSpecies(e.speciesId)){heroBattleEnvironment348();return performHeroCommand348(e,"enemy",chooseHeroAllianceSkill(battle,"enemy",e))}if(e.fleeAfterTurns&&battle.turn>=e.fleeAfterTurns)return resolveEnemyFlee(e);let action=ultimateBasicOnly(battle,e)?ENEMY_ACTIONS.attack:chooseEnemyAction(e,{allies:battle.enemies,opponents:battle.party,battle}),mpCost=enemyActionMpCost(e,action);if(mpCost>(e.currentMp??0)){e.intent="魔力不足で通常攻撃へ切替";action=ENEMY_ACTIONS.attack;mpCost=0}e.currentMp=Math.max(0,(e.currentMp??0)-mpCost);addBattleLog(battle,`${e.name}：${e.intent}${mpCost?`（内部MP -${mpCost}）`:""}`);battle.actionCommitted=true;
+ battle.busy=true;const e=currentEnemy(battle);if(!e){battle.busy=false;return finishCurrentAction()}battle.enemy=e;prepareBattleUltimates358();const ultimate358=skipUltimate?null:chooseEndgameUltimate(battle,e);if(ultimate358)return performUltimate358(e,ultimate358.id);beginUltimateAction(battle,e);if(isHeroResonanceSpecies(e.speciesId)){heroBattleEnvironment348();return performHeroCommand348(e,"enemy",chooseHeroAllianceSkill(battle,"enemy",e))}if(e.fleeAfterTurns&&battle.turn>=e.fleeAfterTurns)return resolveEnemyFlee(e);let action=ultimateBasicOnly(battle,e)?ENEMY_ACTIONS.attack:chooseEnemyAction(e,{allies:battle.enemies,opponents:battle.party,battle}),mpCost=enemyActionMpCost(e,action);if(mpCost>(e.currentMp??0)){e.intent="魔力不足で通常攻撃へ切替";action=ENEMY_ACTIONS.attack;mpCost=0}e.currentMp=Math.max(0,(e.currentMp??0)-mpCost);addBattleLog(battle,`${e.name}：${e.intent}${mpCost?`（内部MP -${mpCost}）`:""}`);battle.actionCommitted=true;
  if(action===ENEMY_ACTIONS.guard){await floatText("防御",e.id,"guard")}
  else if(action===ENEMY_ACTIONS.charge){await floatText("力溜め",e.id,"charge")}
  else if(action===ENEMY_ACTIONS.heal){const h=recoverFloorBossHp(e,enemyHealAmount(e));await flushBattleRecoveries();await floatText(`+${h}`,e.id,"heal")}
@@ -6216,6 +6225,7 @@ async function finishCurrentAction(){
  if(battle?.escapePending){battle.busy=false;const escaped=await resolveEscape();if(escaped||!battle)return;if(!battle.escapePending&&battle.busy)return}
  const finished=currentTurnEntry(battle);if(finished?.type==="ally"&&battle.circleTurnMultipliers)delete battle.circleTurnMultipliers[finished.id];if(finished?.type==="enemy"){const enemy=(battle.enemies??[]).find(entry=>entry.id===finished.id);if(enemy)delete enemy._circleActionMultiplier}
  advanceQueue(battle);
+ battle.busy=false;
  battle.actionCommitted=false;
  if(queueFinished(battle))return endRound();
  renderBattle();
@@ -6268,7 +6278,7 @@ async function continueBattleFlow(){
  if(active358&&battle.ultimateActionKey358!==key358){battle.ultimateActionKey358=key358;if(beforeUltimateAction(battle,active358)){battle.busy=true;await flushUltimateEvents358();battle.busy=false;if(!aliveEnemies(battle).length)return win(false,null);if(!battle.party.some(u=>u.currentHp>0))return lose();return finishCurrentAction()}}
  renderBattle();
  if(entry?.type==="enemy"){const current=currentEnemy(battle);if(current&&await prepareEnemyMagicCircleTurn(current))return;return enemyTurn()}
- if(entry?.type==="ally"){const current=currentAlly(battle);if(current&&await prepareMagicCircleTurn(current))return;if(battle.auto){await wait(220);const a=currentAlly(battle);if(a){const ultimate358=chooseEndgameUltimate(battle,a,learnedSkills(a));if(ultimate358)return command("skill",ultimate358.id);for(const member of battle.party??[])member._maxHp=calculatedStats(member).hp;if(isHeroResonanceSpecies(a.speciesId)){heroBattleEnvironment348();const skill348=chooseHeroAllianceSkill(battle,"ally",a);return command(skill348?"skill":"attack",skill348?.id)}const hpRate=a.currentHp/Math.max(1,a._maxHp),rageFirstHit=hasCircleEffect(a,"rage")?rageCircleValues(a).firstChainHits:Infinity;if(hasCircleEffect(a,"rage")&&(a._circleRage??0)>=rageFirstHit&&Math.random()<Math.min(.75,(a._circleRage??0)*.06))return command("attack");const decision=chooseAutoBattleDecision(a,{...battle,autoBattleStats:{...(battle.autoBattleStats??{}),[a.id]:calculatedStats(a)}});if(decision.targetId&&(battle.enemies??[]).some(enemy=>enemy.id===decision.targetId&&enemy.hp>0))battle.targetEnemyId=decision.targetId;if(decision.kind==="skill"&&decision.skill&&["selfHeal","allHeal","revive","cleanse","mpHeal"].includes(decision.skill.type))return command("skill",decision.skill.id);if(hpRate<=.25){const item=["fullHeals","highPotions","potions"].find(type=>(save.state.inventory[type]??0)>0);if(item)return useBattleItem(item,a.id,{automatic:true})}if(decision.kind==="guard")return command("guard");if(decision.kind==="skill"&&decision.skill)return command("skill",decision.skill.id)}return command("attack")}}
+ if(entry?.type==="ally"){const current=currentAlly(battle);if(current&&await prepareMagicCircleTurn(current))return;if(battle.auto){const expectedBattle=battle,expectedTurn=battle.turn,expectedIndex=battle.queueIndex;await wait(220);if(battle!==expectedBattle||!battle.auto||battle.busy||battle.turn!==expectedTurn||battle.queueIndex!==expectedIndex)return;const a=currentAlly(battle);if(a){const ultimate358=chooseEndgameUltimate(battle,a,learnedSkills(a));if(ultimate358)return command("skill",ultimate358.id);for(const member of battle.party??[])member._maxHp=calculatedStats(member).hp;if(isHeroResonanceSpecies(a.speciesId)){heroBattleEnvironment348();const skill348=chooseHeroAllianceSkill(battle,"ally",a);return command(skill348?"skill":"attack",skill348?.id)}const hpRate=a.currentHp/Math.max(1,a._maxHp),rageFirstHit=hasCircleEffect(a,"rage")?rageCircleValues(a).firstChainHits:Infinity;if(hasCircleEffect(a,"rage")&&(a._circleRage??0)>=rageFirstHit&&Math.random()<Math.min(.75,(a._circleRage??0)*.06))return command("attack");const decision=chooseAutoBattleDecision(a,{...battle,autoBattleStats:{...(battle.autoBattleStats??{}),[a.id]:calculatedStats(a)}});if(decision.targetId&&(battle.enemies??[]).some(enemy=>enemy.id===decision.targetId&&enemy.hp>0))battle.targetEnemyId=decision.targetId;if(decision.kind==="skill"&&decision.skill&&["selfHeal","allHeal","revive","cleanse","mpHeal"].includes(decision.skill.type))return command("skill",decision.skill.id);if(hpRate<=.25){const item=["fullHeals","highPotions","potions"].find(type=>(save.state.inventory[type]??0)>0);if(item)return useBattleItem(item,a.id,{automatic:true})}if(decision.kind==="guard")return command("guard");if(decision.kind==="skill"&&decision.skill)return command("skill",decision.skill.id)}return command("attack")}}
 }
 function expNeed(m){return expNeedFor(m)}
 function finishBossMemoryVictory(caught,monster){
