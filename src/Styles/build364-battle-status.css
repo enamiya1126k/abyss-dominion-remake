@@ -1,0 +1,30 @@
+/* All active effects wrap upward over the art, outside the compact vitals card. */
+.battle-screen.side-battle-v2 .side-unit-card .status-row{
+ display:flex!important;flex-flow:row wrap!important;grid-template-rows:none!important;
+ position:absolute!important;left:0!important;right:0!important;bottom:100%!important;top:auto!important;
+ width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;
+ overflow:visible!important;align-items:flex-start!important;align-content:flex-start!important;
+ justify-content:flex-start!important;gap:2px!important;margin:0 0 4px!important;
+ z-index:12;pointer-events:auto!important;cursor:pointer!important;
+}
+.battle-screen.side-battle-v2 .side-unit-card .status-row[aria-hidden="true"]{display:none!important}
+.battle-screen.side-battle-v2 .status-row .status-chip{
+ flex:0 1 auto!important;box-sizing:border-box;min-width:0!important;max-width:100%!important;
+ height:auto!important;max-height:none!important;overflow:visible!important;text-overflow:clip!important;
+ white-space:normal!important;overflow-wrap:anywhere!important;
+ padding:2px 3px!important;font:700 8px/1.25 sans-serif!important;
+ background:#080a12f2!important;border:1px solid currentColor!important;border-radius:4px!important;
+}
+.battle-screen.side-battle-v2 .status-chip:is(.atkUp,.defUp,.spdUp,.accuracyUp,.evasionUp,.critUp,.regen,.guard,.counter,.lifeSteal){color:#a9e9ed!important}
+.battle-screen.side-battle-v2 .status-chip:is(.atkDown,.defDown,.spdDown,.accuracyDown,.evasionDown,.healDown,.mpRecoveryDown,.vulnerable,.reviveSeal,.stun,.poison,.burn,.bleed,.curse,.freeze,.shock,.sleep,.paralysis,.confusion,.charm,.fear){color:#ffabb7!important}
+.battle-screen.side-battle-v2 .side-unit-card{
+ height:auto!important;min-height:0!important;grid-template-rows:none!important;grid-auto-rows:max-content!important;
+ align-content:end!important;row-gap:2px!important;
+}
+.battle-screen.side-battle-v2 .side-unit-card .ally-mp{margin:0!important}
+.battle-screen .battle-shield-gauge.is-empty{display:none!important}
+.battle-status-detail-modal{z-index:22000!important}
+.battle-status-detail-modal>.game-modal-card{overflow-y:auto!important;max-height:90dvh!important}
+.battle-status-detail-list>small{display:block;margin-bottom:10px;color:#b9afbf}
+.battle-status-special364{padding:10px;border:1px solid #af9256;background:#211829}
+.battle-status-detail-list [data-battle-unit-info]{width:100%;min-height:44px;margin-top:12px;padding:10px;background:#2c2039;border:1px solid #ac8b53;color:#f4dfae}
