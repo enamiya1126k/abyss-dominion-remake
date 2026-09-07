@@ -1,19 +1,19 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.40-build360";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.41-build361";
 // Regression marker only: config.js?v=3.1.21-build340
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.40-build360";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.41-build361";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.39-build359";
 import{SPECIES}from"../../data/species.js?v=3.1.39-build359";
-import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.39-build359";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.40-build360";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.40-build360";
+import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.41-build361";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.41-build361";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.41-build361";
 import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=3.1.1-build317";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.38-build358";
 import{attributeCycleVisual,attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.40-build360";
-import{campaignDayForFloor,campaignHeroAdvance}from"../../core/Campaign100System.js?v=3.1.1-build311";
-import{normalizeCampaignHeroInvasion}from"../../core/CampaignHeroEncounterSystem.js?v=3.1.40-build360";
-import{normalizeCampaignReincarnationState,campaignReincarnationDifficultyMultiplier,campaignReincarnationFloorLimit}from"../../core/CampaignReincarnationSystem.js?v=3.1.40-build360";
+import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.41-build361";
+import{campaignDayForFloor,campaignHeroAdvance}from"../../core/Campaign100System.js?v=3.1.41-build361";
+import{normalizeCampaignHeroInvasion}from"../../core/CampaignHeroEncounterSystem.js?v=3.1.41-build361";
+import{normalizeCampaignReincarnationState,campaignReincarnationDifficultyMultiplier,campaignReincarnationFloorLimit}from"../../core/CampaignReincarnationSystem.js?v=3.1.41-build361";
 
 function homeAttributeChart(){
  return attributeCycleVisual({className:"home-attribute-chart",decorative:true});
@@ -180,7 +180,7 @@ export function HomeScreen(state,options={}){
 
       <button type="button" id="openCombatPowerHistory" class="home-record-card">
         <small>モンスター基盤</small>
-        <strong title="最高 ${state.player.maxFloor.toLocaleString()}階">最高 <em>${compactHomeNumber(state.player.maxFloor)}</em> 階</strong>
+        <strong title="最高 ${state.player.maxFloor.toLocaleString()}階">${reincarnation.cycle>0?`今周回 <em>${cycleFloor}</em> 階<small>歴代最高 ${state.player.maxFloor}階</small>`:`最高 <em>${compactHomeNumber(state.player.maxFloor)}</em> 階`}</strong>
         <i></i>
         <span>戦力・記録</span>
         <b title="戦力 ${formatCombatPower(combatPower)}">${pixelIcon("crossed-swords","record-power-icon")} ${compactHomeNumber(combatPower)}</b>

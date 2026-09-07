@@ -4,12 +4,12 @@ import{MONSTER_COLORS}from"../../data/colors.js?v=3.1.1-build311";
 import{ATTRIBUTES}from"../../data/attributes.js?v=3.1.1-build311";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.39-build359";
 import{endgameCharacter}from"../../data/endgameCharacters.js?v=3.1.38-build358";
-import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=3.1.40-build360";
+import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=3.1.41-build361";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.38-build358";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=3.1.1-build311";
 import{floorBossDefinitionById}from"../../data/floorBosses.js?v=3.1.1-build311";
-import{floorBossCampaignDisplayFloor}from"../../core/Campaign100System.js?v=3.1.1-build311";
+import{floorBossCampaignDisplayFloor}from"../../core/Campaign100System.js?v=3.1.41-build361";
 
 function monsterRarity(monster){return monster.summonTier??monster.summonRarity??SPECIES[monster.speciesId]?.rarity??"N"}
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}

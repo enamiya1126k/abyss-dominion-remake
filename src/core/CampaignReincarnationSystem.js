@@ -1,5 +1,6 @@
-import{CAMPAIGN_MAX_FLOOR,beginCampaignFloorReplay,normalizeCampaignState}from"./Campaign100System.js?v=3.1.1-build320";
-import{createCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.40-build360";
+import{REINCARNATION_START_GOLD,syncCycleEquipment}from'./Postgame361System.js?v=3.1.41-build361';
+import{CAMPAIGN_MAX_FLOOR,beginCampaignFloorReplay,normalizeCampaignState}from"./Campaign100System.js?v=3.1.41-build361";
+import{createCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.41-build361";
 
 export const CAMPAIGN_REINCARNATION_VERSION=2;
 export const CAMPAIGN_FINAL_ENDING_IDS=Object.freeze(["complete","narrow","defeat"]);
@@ -69,7 +70,10 @@ export function beginOptionalCampaignReincarnation(state,{resultId}={}){
  progress.cycle=Math.min(999,progress.cycle+1);campaign.heroEncounters310=createCampaignHeroEncounterState({storyCycle:progress.cycle});
  progress.cycleMaxFloor=1;progress.active=true;progress.available=false;progress.lastReincarnationId=receipt||`reincarnation-${progress.cycle}`;campaign.reincarnation319=progress;
  state.player=plainRecord(state.player)?state.player:{};state.player.currentFloor=1;state.player.checkpoint=1;state.player.inRun=false;state.player.floorSeeds={};state.player.dungeonShapeHistory=[];state.player.openedChests=clearFloorLedger(state.player.openedChests);state.player.bossKills=clearFloorLedger(state.player.bossKills);state.player.bossRewards=clearFloorLedger(state.player.bossRewards);state.player.pendingBossRewards=clearFloorLedger(state.player.pendingBossRewards);
+ state.player.gold=REINCARNATION_START_GOLD;
+ for(const monster of state.monsters??[]){monster.level=1;monster.exp=0;monster.totalExp=0;monster.currentHp=null;monster.currentMp=null;monster.ailments=[];delete monster._equipmentStats;delete monster._equipmentAffixes;}
+ campaign.revengeBest361=Math.max(Number(campaign.revengeBest361)||0,Number(campaign.royal360?.memoryWins)||0);delete campaign.royal360;syncCycleEquipment(state);
  state.expeditionSnapshot=null;delete state.activeBattle;delete state.expeditionAffectionDeaths;delete state.manualReturn;delete state.returnReward;
  if(plainRecord(state.flags))state.flags.ending10000Played=false;
- return{ok:true,state:progress,cycle:progress.cycle,difficultyMultiplier:campaignReincarnationDifficultyMultiplier(state),rewardMultiplier:campaignReincarnationRewardMultiplier(state),preserved:{monsters:true,equipment:true,currency:true,inventory:true,endingHistory:true}}
+ return{ok:true,state:progress,cycle:progress.cycle,difficultyMultiplier:campaignReincarnationDifficultyMultiplier(state),rewardMultiplier:campaignReincarnationRewardMultiplier(state),preserved:{monsters:true,equipment:true,currency:false,inventory:true,endingHistory:true}}
 }

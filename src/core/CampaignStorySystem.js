@@ -1,4 +1,4 @@
-import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.1-build311";
+import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.41-build361";
 
 export const CAMPAIGN_STORY_VERSION=2;
 export const CAMPAIGN_STORY_OPENING_VERSION=2;
@@ -1453,6 +1453,7 @@ export function normalizeCampaignStoryState(state){
  story.seenSceneIds=[...new Set((Array.isArray(source.seenSceneIds)?source.seenSceneIds:Array.isArray(source.receipts)?source.receipts:[]).map(value=>typeof value==="string"?value:value?.sceneId).map(validSceneId).filter(Boolean))];const legacyOpeningSeen=source.openingSeen===true||source.introductionSeen===true||story.seenSceneIds.includes(CAMPAIGN_STORY_OPENING_ID);story.openingVersion=boundedInteger(source.openingVersion??(legacyOpeningSeen?1:0),0,0,CAMPAIGN_STORY_OPENING_VERSION);story.openingSeen=story.openingVersion>=CAMPAIGN_STORY_OPENING_VERSION;if(legacyOpeningSeen&&!story.seenSceneIds.includes(CAMPAIGN_STORY_OPENING_ID))story.seenSceneIds.push(CAMPAIGN_STORY_OPENING_ID);
  if(source.legacyMigrationApplied!==true){const legacyDays=[...(Array.isArray(campaign.invasionDaysSeen)?campaign.invasionDaysSeen:[]),...(Array.isArray(campaign.storyDaysSeen)?campaign.storyDaysSeen:[])].map(Number);for(const day of legacyDays)if(Number.isInteger(day)&&day>=2&&day<=10)story.seenSceneIds.push(sceneIdForFloor((day-1)*10));story.legacyMigrationApplied=true}
  story.seenSceneIds=[...new Set(story.seenSceneIds.map(validSceneId).filter(Boolean))].sort((left,right)=>(STORY_BY_ID.get(left)?.floor??-1)-(STORY_BY_ID.get(right)?.floor??-1));
+ if(campaign.reincarnation319?.active&&campaign.reincarnation319.cycle>0){const limit=inferredClearedFloor(state);story.seenSceneIds=story.seenSceneIds.filter(id=>id===CAMPAIGN_STORY_OPENING_ID||(STORY_BY_ID.get(id)?.floor??0)<=limit);}
  story.heroContinuity=mergeContinuitySources(source.heroContinuity,campaign.heroContinuity,campaign.heroEncounterState,campaign.heroEncounterProgress,campaign.heroEncounters,campaign.heroAmbushes,campaign.heroWounds,state.heroEncounterState,state.heroEncounterProgress,state.heroEncounters,campaign.heroEncounters310?.heroes);story.seenAt={};if(plainRecord(source.seenAt))for(const[rawId,rawTimestamp]of Object.entries(source.seenAt)){const id=validSceneId(rawId),timestamp=safeText(rawTimestamp,40);if(id&&timestamp)story.seenAt[id]=timestamp}story.version=CAMPAIGN_STORY_VERSION;campaign.story309=story;return story
 }
 
@@ -1461,7 +1462,7 @@ export function recordCampaignHeroStoryOutcome(state,{heroId,speciesId,outcome,r
 }
 
 function inferredClearedFloor(state,explicitFloor){
- if(explicitFloor!=null&&Number.isFinite(Number(explicitFloor)))return boundedInteger(explicitFloor,0,0,CAMPAIGN_MAX_FLOOR);if(!plainRecord(state))return 0;const campaign=plainRecord(state.campaign100)?state.campaign100:{},floorEntries=plainRecord(campaign.floors)?campaign.floors:{},cleared=Math.max(0,...Object.entries(floorEntries).filter(([,entry])=>plainRecord(entry)&&(entry.cleared===true||entry.bossDefeated===true)).map(([floor])=>boundedInteger(floor,0,0,CAMPAIGN_MAX_FLOOR))),advanced=Math.max(0,boundedInteger(state.player?.maxFloor,1,1,CAMPAIGN_MAX_FLOOR)-1);return campaign.finalUnlocked===true?CAMPAIGN_MAX_FLOOR:Math.max(cleared,advanced)
+ if(explicitFloor!=null&&Number.isFinite(Number(explicitFloor)))return boundedInteger(state?.campaign100?.reincarnation319?.cycle>0?Math.min(Number(explicitFloor),(state.campaign100.finalUnlocked?100:Math.max(0,(Number(state.campaign100.reincarnation319.cycleMaxFloor)||1)-1))):explicitFloor,0,0,CAMPAIGN_MAX_FLOOR);if(!plainRecord(state))return 0;const campaign=plainRecord(state.campaign100)?state.campaign100:{},floorEntries=plainRecord(campaign.floors)?campaign.floors:{},cleared=Math.max(0,...Object.entries(floorEntries).filter(([,entry])=>plainRecord(entry)&&(entry.cleared===true||entry.bossDefeated===true)).map(([floor])=>boundedInteger(floor,0,0,CAMPAIGN_MAX_FLOOR))),advanced=Math.max(0,boundedInteger(campaign.reincarnation319?.cycle>0?campaign.reincarnation319.cycleMaxFloor:state.player?.maxFloor,1,1,CAMPAIGN_MAX_FLOOR)-1);return campaign.finalUnlocked===true?CAMPAIGN_MAX_FLOOR:Math.max(cleared,advanced)
 }
 
 export function pendingCampaignStoryScenes(state,{clearedFloor,includeOpening=true}={}){

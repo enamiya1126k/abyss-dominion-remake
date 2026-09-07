@@ -1,4 +1,5 @@
-import{ultimateIsolated,ultimateExtraBlocked,afterUltimateOrdinary}from"./EndgameUltimateSystem.js?v=3.1.38-build358";
+import{tryHeroFortitude}from'./HeroFortitudeSystem.js?v=3.1.41-build361';
+import{ultimateIsolated,ultimateExtraBlocked,afterUltimateOrdinary}from"./EndgameUltimateSystem.js?v=3.1.41-build361";
 import {MYTHIC_SERIAL_SPECIES} from '../data/mythicSerialSpecies.js?v=3.1.39-build359';
 import {attributeDamageMultiplier} from '../data/attributes.js';
 import {heroResonanceMembers,heroResonanceProfile,scaleHeroResonanceSkill,isHeroResonanceSpecies} from './HeroResonanceSystem.js?v=3.1.39-build359';
@@ -39,10 +40,10 @@ export function mitigateHeroDamage(b,side,u,amount){
  return damage-absorbed;
 }
 export function tryHeroLastStand(b,side,u,beforeHp){
- if(!isHeroResonanceSpecies(u?.speciesId)||heroHp(u)>0||beforeHp<=0)return false;
- const s=heroAllianceState(b,side);if(s.lastStandUsed)return false;
- const members=heroResonanceMembers(heroSideUnits(b,side).map(x=>x===u?{...x,currentHp:beforeHp,hp:beforeHp}:x));if(members.length!==4)return false;
- setHeroHp(u,1);s.lastStandUsed=true;s.pending.push({sourceId:heroId(u),members:members.filter(x=>heroId(x)!==heroId(u)).map(heroId)});return true;
+ if(!tryHeroFortitude(b,u,beforeHp))return false;
+ const s=heroAllianceState(b,side),members=heroResonanceMembers(heroSideUnits(b,side));
+ if(members.length===4&&!s.lastStandUsed){s.lastStandUsed=true;s.pending.push({sourceId:heroId(u),members:members.filter(x=>heroId(x)!==heroId(u)).map(heroId)})}
+ return true;
 }
 export function heroOverheal(b,side,u,overflow,maxHp){
  if(!b||!isHeroResonanceSpecies(u?.speciesId)||heroHp(u)<=0||heroResonanceProfile(heroSideUnits(b,side)).count<2)return 0;

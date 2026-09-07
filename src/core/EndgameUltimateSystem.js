@@ -1,3 +1,4 @@
+import{tryHeroFortitude}from'./HeroFortitudeSystem.js?v=3.1.41-build361';
 import {ENDGAME_ULTIMATES,ENDGAME_ULTIMATE_BY_ID,isEndgameUltimate} from '../data/endgameUltimates.js?v=3.1.38-build358';
 import {attributeDamageMultiplier} from '../data/attributes.js';
 
@@ -104,7 +105,7 @@ export function ultimateHealingAmount(b,u,requested,maximum=maxHp(b,u)){
  return Math.max(0,requested-stolen);
 }
 function heal(b,u,amount,source,label){if(ultimateHp(u)<=0||ultimateIsolated(b,u))return 0;const before=ultimateHp(u),received=ultimateHealingAmount(b,u,Math.floor(amount*Math.max(0,1-value(b,u,'healDown'))));setHp(u,Math.min(maxHp(b,u),before+received));emit(b,'heal',u,label,ultimateHp(u)-before,source);return ultimateHp(u)-before}
-function forceDeath(b,u,source,label){if(ultimateHp(u)<=0)return;const before=ultimateHp(u);setHp(u,0);emit(b,'ultimateDeath',u,label,before,source)}
+function forceDeath(b,u,source,label){if(ultimateHp(u)<=0)return;const before=ultimateHp(u);setHp(u,0);if(tryHeroFortitude(b,u,before)){emit(b,'damage',u,'勇者のふんばり！',before-1,source);return}emit(b,'ultimateDeath',u,label,before,source)}
 export function ultimateIncomingDamage(b,target,amount,{source=null,element=null,damageClass=null,direct=true}={}){
  if(!b?.ultimates358)return amount;
  if(ultimateIsolated(b,target))return 0;
@@ -123,7 +124,7 @@ export function ultimateAfterDamage(b,target,dealt,{source=null,direct=true}={})
 function damage(b,source,target,amount,{element=null,damageClass=null,direct=true,label='権能',ignoreShield=false}={}){
  const before=ultimateHp(target);let n=Math.max(0,Math.floor(amount));
  if(!ignoreShield){for(const key of ['shield','heroShield348','_floorBossHpShield']){const absorbed=Math.min(Number(target[key])||0,n);if(absorbed){target[key]-=absorbed;n-=absorbed}}for(const store of [b.circleShields,b.signatureShields]){const absorbed=Math.min(Number(store?.[ultimateUnitId(target)])||0,n);if(absorbed){store[ultimateUnitId(target)]-=absorbed;n-=absorbed}}}
- n=ultimateIncomingDamage(b,target,n,{source,element,damageClass,direct});setHp(target,ultimateHp(target)-n);const dealt=Math.max(0,before-ultimateHp(target));ultimateAfterDamage(b,target,dealt,{source,direct});emit(b,'damage',target,label,dealt,source);return dealt;
+ n=ultimateIncomingDamage(b,target,n,{source,element,damageClass,direct});setHp(target,ultimateHp(target)-n);tryHeroFortitude(b,target,before);const dealt=Math.max(0,before-ultimateHp(target));ultimateAfterDamage(b,target,dealt,{source,direct});emit(b,'damage',target,label,dealt,source);return dealt;
 }
 export function ultimateCircle(b,u,fallback){if(!b?.ultimates358)return fallback;const e=matching(b,'borrow').find(e=>e.source===ultimateUnitId(u)||e.targets.includes(ultimateUnitId(u)));if(!e)return fallback;return e.source===ultimateUnitId(u)?e.circle:null}
 function circleOf(b,u){return u.enemyMagicCircle??b.magicCircleProfiles?.[ultimateUnitId(u)]??(u.circleEffect&&u.circleEffect!=='none'?{id:u.circleId,name:u.circleName??'魔法陣',effect:u.circleEffect,level:u.circleLevel}:null)}

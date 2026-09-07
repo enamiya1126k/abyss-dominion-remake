@@ -1,7 +1,7 @@
-import{COMPLETE_MONSTER_CODEX,codexCollectionSummary,rewardDescription}from"./CollectionRewardSystem.js?v=3.1.39-build359";
+import{COMPLETE_MONSTER_CODEX,codexCollectionSummary,rewardDescription}from"./CollectionRewardSystem.js?v=3.1.41-build361";
 import{enqueueNoticeReward}from"./NoticeSystem.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CATALOG}from"../data/floorBosses.js?v=3.1.1-build311";
-import{floorBossCampaignDisplayFloor}from"./Campaign100System.js?v=3.1.1-build311";
+import{floorBossCampaignDisplayFloor}from"./Campaign100System.js?v=3.1.41-build361";
 
 const number=value=>Math.max(0,Math.floor(Number(value)||0));
 const unique=value=>[...new Set(Array.isArray(value)?value.map(String).filter(Boolean):[])];

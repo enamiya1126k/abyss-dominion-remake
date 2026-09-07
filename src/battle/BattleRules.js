@@ -1,5 +1,5 @@
-import{isEndgameUltimate,ultimateRemaining,ultimateIsolated,beginUltimateAction}from"../core/EndgameUltimateSystem.js?v=3.1.38-build358";
-import{mitigateHeroDamage,tryHeroLastStand}from"../core/HeroAllianceSystem.js?v=3.1.39-build359";
+import{isEndgameUltimate,ultimateRemaining,ultimateIsolated,beginUltimateAction}from"../core/EndgameUltimateSystem.js?v=3.1.41-build361";
+import{mitigateHeroDamage,tryHeroLastStand}from"../core/HeroAllianceSystem.js?v=3.1.41-build361";
 import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=2.11.2-build166";
 import{endgameCharacter}from"../data/endgameCharacters.js?v=3.1.38-build358";
 

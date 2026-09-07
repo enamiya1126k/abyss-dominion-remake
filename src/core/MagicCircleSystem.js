@@ -250,7 +250,8 @@ export function unlockMagicCircleFromTree(state,id){
 
 export function equippedMagicCircle(monster,state){
  normalizeMagicCircleState(state);const instance=state.magicCircles.instances.find(item=>item.instanceId===monster?.magicCircleInstanceId),entry=magicCircleById(instance?.circleId??monster?.magicCircleId),level=entry.id==="none"?0:instance?.level??magicCircleLevel(state,entry.id);
- return{...entry,level,levelEffect:magicCircleLevelEffect(entry,level||1),instanceId:instance?.instanceId??null};
+ const p=state.campaign100?.reincarnation319,cap=p?.cycle>0?Math.max(1,Math.floor((Number(p.cycleMaxFloor)||1)*.99)):99,effectiveLevel=Math.min(level,cap);
+ return{...entry,level:effectiveLevel,originalLevel:level,levelEffect:magicCircleLevelEffect(entry,effectiveLevel||1),instanceId:instance?.instanceId??null};
 }
 
 export function magicCircleLevel(state,idOrInstance){

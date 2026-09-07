@@ -1,15 +1,16 @@
-import{enemyMagicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.40-build360";
-import{ultimateCircle,ultimateLabels,ultimateIsolated,ultimateAvailability,ultimateBasicOnly,isEndgameUltimate}from"../../core/EndgameUltimateSystem.js?v=3.1.38-build358";
+import{hasHeroFortitude,heroFortitudeUsed}from'../../core/HeroFortitudeSystem.js?v=3.1.41-build361';
+import{enemyMagicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.41-build361";
+import{ultimateCircle,ultimateLabels,ultimateIsolated,ultimateAvailability,ultimateBasicOnly,isEndgameUltimate}from"../../core/EndgameUltimateSystem.js?v=3.1.41-build361";
 import{HERO_SOLO_DAMAGE_RATES}from"../../data/mythicSerialSpecies.js?v=3.1.39-build359";
 import{BATTLE_ITEM_LAYOUT}from"./BattleItemLayout.js?v=3.1.38-build358";
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.40-build360";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.41-build361";
 import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.39-build359";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.39-build359";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.40-build360";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.41-build361";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.41-build361";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.38-build358";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.40-build360";
+import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.41-build361";
 import{ATTRIBUTE_MATCHUP_MULTIPLIERS,attributesEffectiveAgainst,attributesIneffectiveAgainst}from"../../data/attributes.js?v=3.1.1-build311";
 import{heroResonanceProfile,isHeroResonanceSpecies}from"../../core/HeroResonanceSystem.js?v=3.1.39-build359";
 
@@ -32,7 +33,7 @@ const BATTLE_ROLE_LABELS={
 };
 const BATTLE_EFFECT_LABELS={authorityPossession:"王命上書き",guaranteedCritical:"確定会心",guaranteedHit:"必中",critUp:"会心率↑",reviveSeal:"蘇生封印",atkDown:"攻撃↓",defDown:"防御↓",spdDown:"速度↓",evasionDown:"回避↓",accuracyDown:"命中↓",healDown:"回復↓",mpRecoveryDown:"MP回復↓",stun:"行動不能",vulnerable:"被ダメージ増加",taunt:"挑発",guard:"防御",counter:"反撃",atkUp:"攻撃↑",defUp:"防御↑",spdUp:"速度↑",evasionUp:"回避↑",accuracyUp:"命中↑",regen:"再生",lifeSteal:"吸収",magicToPhysical:"魔力→物理"};
 function battleRoleLabel(role){return BATTLE_ROLE_LABELS[String(role??"balanced").toLowerCase()]??String(role??"万能型")}
-function soloHeroBadge(battle,unit,side){return isHeroResonanceSpecies(unit?.speciesId)&&heroResonanceProfile(side==="enemy"?battle.enemies:battle.party).count===1?`<span class="status-chip guard" title="生存する勇者が1人：被ダメージ30%軽減・与ダメージ${Math.round(HERO_SOLO_DAMAGE_RATES[unit.speciesId]*100)}%">勇者の胆力・軽減30%</span><span class="status-chip guard">単独火力 ${Math.round(HERO_SOLO_DAMAGE_RATES[unit.speciesId]*100)}%</span>`:"";}
+function soloHeroBadge(battle,unit,side){const fortitude=hasHeroFortitude(unit)?`<span class="status-chip guard">${heroFortitudeUsed(battle,unit)?'ふんばり 使用済み':'勇者のふんばり・残1'}</span>`:'';return fortitude+(isHeroResonanceSpecies(unit?.speciesId)&&heroResonanceProfile(side==="enemy"?battle.enemies:battle.party).count===1?`<span class="status-chip guard" title="生存する勇者が1人：被ダメージ30%軽減・与ダメージ${Math.round(HERO_SOLO_DAMAGE_RATES[unit.speciesId]*100)}%">勇者の胆力・軽減30%</span><span class="status-chip guard">単独火力 ${Math.round(HERO_SOLO_DAMAGE_RATES[unit.speciesId]*100)}%</span>`:"");}
 function circleArt358(b,u,original,ally=false){const borrowed=(b.ultimates358?.effects??[]).some(e=>e.kind==='borrow'&&!e.done&&(e.source===u.id||e.targets?.includes(u.id)));if(!borrowed)return original;return enemyMagicCircleMarkup(ultimateCircle(b,u,ally?b.magicCircleProfiles?.[u.id]:u.enemyMagicCircle),{className:ally?'battle-magic-circle':'enemy-battle-magic-circle'})}
 function ultimateBadges358(battle,unit){return ultimateLabels(battle,unit).map(label=>`<span class="status-chip ultimate-authority">${htmlText(label)}</span>`).join("")}
 function battleEffectLabel(effect){return BATTLE_EFFECT_LABELS[effect?.kind]??effect?.name??"特殊効果"}

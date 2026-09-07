@@ -42,7 +42,7 @@ export function equipmentStatMultiplier(item){
  const levelGrowth=Math.min(levelProgress,250)*.025
   +Math.min(Math.max(0,levelProgress-250),750)*.012
   +Math.max(0,levelProgress-1000)*.004;
- return(1+plusGrowth)*(1+levelGrowth);
+ return(1+plusGrowth)*(1+levelGrowth)*Math.max(.01,Math.min(1,Number(item._cyclePower361??1)));
 }
 
 // ドロップ装備のLvは性能Lvであり、その半分を装備者Lvの目安にする。
@@ -50,7 +50,7 @@ export function equipmentStatMultiplier(item){
 export function equipmentRequiredMonsterLevel(item){
  const level=Math.max(1,Math.floor(Number(item?.level)||1));
  if(item?.ruleOverrides?.signature||item?.endgameBossId||item?.isEndgameEquipment)return 1;
- return Math.max(1,Math.ceil(level*.5));
+ return Math.max(1,Math.ceil(level*.5*Math.max(.01,Math.min(1,Number(item._cyclePower361??1)))));
 }
 export function equipmentPower(item){
  return Object.values(item.stats).reduce((a,b)=>a+b,0)*equipmentStatMultiplier(item)+(item.plus??0)*3+(item.level??1)*2+equipmentAffixPower(item);

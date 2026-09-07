@@ -1,0 +1,700 @@
+TAP version 13
+# Subtest: enemy stats equal legitimate player loadout; six actual dedicated pieces and legal level
+ok 1 - enemy stats equal legitimate player loadout; six actual dedicated pieces and legal level
+  ---
+  duration_ms: 26.99829
+  type: 'test'
+  ...
+# Subtest: all 16 skills produce identical damage, MP, cooldown and effects for ally and enemy
+ok 2 - all 16 skills produce identical damage, MP, cooldown and effects for ally and enemy
+  ---
+  duration_ms: 9.902981
+  type: 'test'
+  ...
+# Subtest: 2/3/4 heroes share 4/9/16 action budgets without recursive followups and retain MP on echoes
+ok 3 - 2/3/4 heroes share 4/9/16 action budgets without recursive followups and retain MP on echoes
+  ---
+  duration_ms: 23.016149
+  type: 'test'
+  ...
+# Subtest: ordered setup: Rion defense break, Enami vulnerability, Hide finisher, Yori guaranteed critical setup
+ok 4 - ordered setup: Rion defense break, Enami vulnerability, Hide finisher, Yori guaranteed critical setup
+  ---
+  duration_ms: 0.586491
+  type: 'test'
+  ...
+# Subtest: 70% followups scale damage, healing and shields; cooldowns apply and normal MP costs remain
+ok 5 - 70% followups scale damage, healing and shields; cooldowns apply and normal MP costs remain
+  ---
+  duration_ms: 2.568603
+  type: 'test'
+  ...
+# Subtest: living count changes reduction immediately; shields cap at 40% and can fully absorb
+ok 6 - living count changes reduction immediately; shields cap at 40% and can fully absorb
+  ---
+  duration_ms: 0.224844
+  type: 'test'
+  ...
+# Subtest: first lethal hit survives once, three emergency actions, JSON reload and revival do not reset it
+ok 7 - first lethal hit survives once, three emergency actions, JSON reload and revival do not reset it
+  ---
+  duration_ms: 1.059693
+  type: 'test'
+  ...
+# Subtest: Rion restores HP50%/MP25%, revive seal is a flag, Yori gets just one nonrecursive kill punch
+ok 8 - Rion restores HP50%/MP25%, revive seal is a flag, Yori gets just one nonrecursive kill punch
+  ---
+  duration_ms: 0.829582
+  type: 'test'
+  ...
+# Subtest: buff refresh cannot overwrite a stronger regular buff; cooldown/extension once per round
+ok 9 - buff refresh cannot overwrite a stronger regular buff; cooldown/extension once per round
+  ---
+  duration_ms: 0.818324
+  type: 'test'
+  ...
+# Subtest: real co-op, raid and team resolvers execute canonical skills and bound chain counts
+ok 10 - real co-op, raid and team resolvers execute canonical skills and bound chain counts
+  ---
+  duration_ms: 10.602069
+  type: 'test'
+  ...
+# Subtest: generic co-op enemy attacks trigger hero reduction and emergency response
+ok 11 - generic co-op enemy attacks trigger hero reduction and emergency response
+  ---
+  duration_ms: 3.330104
+  type: 'test'
+  ...
+# Subtest: browser resume keeps spent emergency response, shield, chains and action budget
+ok 12 - browser resume keeps spent emergency response, shield, chains and action budget
+  ---
+  duration_ms: 9.86846
+  type: 'test'
+  ...
+# Subtest: browser hero damage adapter uses actual enemy mitigation once and respects guards on allies
+ok 13 - browser hero damage adapter uses actual enemy mitigation once and respects guards on allies
+  ---
+  duration_ms: 8.809518
+  type: 'test'
+  ...
+# Subtest: four solo heroes survive one 65,611 post-defense hit without shields
+ok 14 - four solo heroes survive one 65,611 post-defense hit without shields
+  ---
+  duration_ms: 14.969142
+  type: 'test'
+  ...
+# Subtest: actual shared damage resolver accepts normal, critical, multi-hit and defense ignore with finite damage
+ok 15 - actual shared damage resolver accepts normal, critical, multi-hit and defense ignore with finite damage
+  ---
+  duration_ms: 19.410986
+  type: 'test'
+  ...
+# Subtest: each solo opening attacks and grants the specified non-stacking shield on both sides
+ok 16 - each solo opening attacks and grants the specified non-stacking shield on both sides
+  ---
+  duration_ms: 7.318365
+  type: 'test'
+  ...
+# Subtest: wounded Rion and Hide prioritize recovery; solo never spends its turn reviving itself
+ok 17 - wounded Rion and Hide prioritize recovery; solo never spends its turn reviving itself
+  ---
+  duration_ms: 11.06073
+  type: 'test'
+  ...
+# Subtest: solo reduction follows living hero count and does not grant non-heroes a solo passive
+ok 18 - solo reduction follows living hero count and does not grant non-heroes a solo passive
+  ---
+  duration_ms: 1.167273
+  type: 'test'
+  ...
+# Subtest: Yori retaliation refreshes for three turns without stacking and shields block its trigger
+ok 19 - Yori retaliation refreshes for three turns without stacking and shields block its trigger
+  ---
+  duration_ms: 0.496357
+  type: 'test'
+  ...
+# Subtest: same solo incoming damage on player, enemy and online actors
+ok 20 - same solo incoming damage on player, enemy and online actors
+  ---
+  duration_ms: 7.387607
+  type: 'test'
+  ...
+# Subtest: solo AI prioritizes a nearly defeated target, otherwise the greater threat; online agrees
+ok 21 - solo AI prioritizes a nearly defeated target, otherwise the greater threat; online agrees
+  ---
+  duration_ms: 0.922249
+  type: 'test'
+  ...
+# Subtest: battle effect labels localize guaranteed critical/hit and never expose an unknown internal key
+ok 22 - battle effect labels localize guaranteed critical/hit and never expose an unknown internal key
+  ---
+  duration_ms: 1.884077
+  type: 'test'
+  ...
+# Subtest: new GM code normalizes, rejects invalid codes and is independent of the old claim
+ok 23 - new GM code normalizes, rejects invalid codes and is independent of the old claim
+  ---
+  duration_ms: 7.970483
+  type: 'test'
+  ...
+# Subtest: grants four distinct LR at 1500, 24 usable LR pieces at 3000 and exact resources without changing progression
+ok 24 - grants four distinct LR at 1500, 24 usable LR pieces at 3000 and exact resources without changing progression
+  ---
+  duration_ms: 28.622892
+  type: 'test'
+  ...
+# Subtest: insufficient storage rejects all rewards without consuming the code, even when called directly
+ok 25 - insufficient storage rejects all rewards without consuming the code, even when called directly
+  ---
+  duration_ms: 6.99205
+  type: 'test'
+  ...
+# Subtest: claim and level survive real SaveService save/load; fresh reset has no claim
+ok 26 - claim and level survive real SaveService save/load; fresh reset has no claim
+  ---
+  duration_ms: 82.921535
+  type: 'test'
+  ...
+# Subtest: GM loadout balance model: every solo hero can win and lose; the quartet stays overwhelming
+ok 27 - GM loadout balance model: every solo hero can win and lose; the quartet stays overwhelming
+  ---
+  duration_ms: 477.9932
+  type: 'test'
+  ...
+# Subtest: solo authored skills have identical player/enemy damage and shields after tuning
+ok 28 - solo authored skills have identical player/enemy damage and shields after tuning
+  ---
+  duration_ms: 8.500189
+  type: 'test'
+  ...
+# Subtest: shield starts outside the HP bar; skill effect markup includes every description line
+ok 29 - shield starts outside the HP bar; skill effect markup includes every description line
+  ---
+  duration_ms: 14.703728
+  type: 'test'
+  ...
+# Subtest: 80F retry keeps circle type, presence and level; scaling applies once only to campaign enemies
+ok 30 - 80F retry keeps circle type, presence and level; scaling applies once only to campaign enemies
+  ---
+  duration_ms: 98.672147
+  type: 'test'
+  ...
+# Subtest: 80F comparison fixture improves ordinary-progress odds and makes the GM pack reliable
+ok 31 - 80F comparison fixture improves ordinary-progress odds and makes the GM pack reliable
+  ---
+  duration_ms: 1235.540112
+  type: 'test'
+  ...
+# Subtest: 17 art layers share boss scale without changing ordinary monsters
+ok 32 - 17 art layers share boss scale without changing ordinary monsters
+  ---
+  duration_ms: 0.40425
+  type: 'test'
+  ...
+# Subtest: item click opens visible inline targets; choosing a wounded ally heals once and spends one action
+ok 33 - item click opens visible inline targets; choosing a wounded ally heals once and spends one action
+  ---
+  duration_ms: 17.517085
+  type: 'test'
+  ...
+# Subtest: MP and revival targets use the actual recovery helpers
+ok 34 - MP and revival targets use the actual recovery helpers
+  ---
+  duration_ms: 13.412281
+  type: 'test'
+  ...
+# Subtest: back and touch-close spend no item or turn; reopening clears the target
+ok 35 - back and touch-close spend no item or turn; reopening clears the target
+  ---
+  duration_ms: 13.05467
+  type: 'test'
+  ...
+# Subtest: unnecessary, exhausted, stale-turn and sealed-revival selections never consume stock
+ok 36 - unnecessary, exhausted, stale-turn and sealed-revival selections never consume stock
+  ---
+  duration_ms: 11.684726
+  type: 'test'
+  ...
+# Subtest: status cure sees battle-only ailments and clears them
+ok 37 - status cure sees battle-only ailments and clears them
+  ---
+  duration_ms: 12.707124
+  type: 'test'
+  ...
+# Subtest: group items and automatic emergency healing still work
+ok 38 - group items and automatic emergency healing still work
+  ---
+  duration_ms: 14.786591
+  type: 'test'
+  ...
+# Subtest: online emergency item retains its separate target flow
+ok 39 - online emergency item retains its separate target flow
+  ---
+  duration_ms: 14.551261
+  type: 'test'
+  ...
+# Subtest: room: actual resolver casts canonical ultimate once, preserves MP and rejects early reuse
+ok 40 - room: actual resolver casts canonical ultimate once, preserves MP and rejects early reuse
+  ---
+  duration_ms: 4.888868
+  type: 'test'
+  ...
+# Subtest: team: actual resolver casts canonical ultimate once, preserves MP and rejects early reuse
+ok 41 - team: actual resolver casts canonical ultimate once, preserves MP and rejects early reuse
+  ---
+  duration_ms: 0.377841
+  type: 'test'
+  ...
+# Subtest: raid: actual resolver casts canonical ultimate once, preserves MP and rejects early reuse
+ok 42 - raid: actual resolver casts canonical ultimate once, preserves MP and rejects early reuse
+  ---
+  duration_ms: 0.397981
+  type: 'test'
+  ...
+# Subtest: RoomStore enemy AI cannot fire a new skill during opening and uses shared cast when ready
+ok 43 - RoomStore enemy AI cannot fire a new skill during opening and uses shared cast when ready
+  ---
+  duration_ms: 1.426057
+  type: 'test'
+  ...
+# Subtest: raid and 4v4 ordinary item recovery is intercepted by active enemy healing theft
+ok 44 - raid and 4v4 ordinary item recovery is intercepted by active enemy healing theft
+  ---
+  duration_ms: 2.191503
+  type: 'test'
+  ...
+# Subtest: existing skills preserved; exactly one innate addition for all 17
+ok 45 - existing skills preserved; exactly one innate addition for all 17
+  ---
+  duration_ms: 1.646445
+  type: 'test'
+  ...
+# Subtest: ten_time: shared cast, MP and protected CT
+ok 46 - ten_time: shared cast, MP and protected CT
+  ---
+  duration_ms: 3.620545
+  type: 'test'
+  ...
+# Subtest: ten_space: shared cast, MP and protected CT
+ok 47 - ten_space: shared cast, MP and protected CT
+  ---
+  duration_ms: 0.490308
+  type: 'test'
+  ...
+# Subtest: ten_life: shared cast, MP and protected CT
+ok 48 - ten_life: shared cast, MP and protected CT
+  ---
+  duration_ms: 0.852335
+  type: 'test'
+  ...
+# Subtest: ten_death: shared cast, MP and protected CT
+ok 49 - ten_death: shared cast, MP and protected CT
+  ---
+  duration_ms: 0.924873
+  type: 'test'
+  ...
+# Subtest: ten_fate: shared cast, MP and protected CT
+ok 50 - ten_fate: shared cast, MP and protected CT
+  ---
+  duration_ms: 0.442928
+  type: 'test'
+  ...
+# Subtest: ten_chaos: shared cast, MP and protected CT
+ok 51 - ten_chaos: shared cast, MP and protected CT
+  ---
+  duration_ms: 0.420594
+  type: 'test'
+  ...
+# Subtest: ten_dominion: shared cast, MP and protected CT
+ok 52 - ten_dominion: shared cast, MP and protected CT
+  ---
+  duration_ms: 0.481044
+  type: 'test'
+  ...
+# Subtest: ten_creation: shared cast, MP and protected CT
+ok 53 - ten_creation: shared cast, MP and protected CT
+  ---
+  duration_ms: 0.598608
+  type: 'test'
+  ...
+# Subtest: ten_end: shared cast, MP and protected CT
+ok 54 - ten_end: shared cast, MP and protected CT
+  ---
+  duration_ms: 0.446393
+  type: 'test'
+  ...
+# Subtest: ten_divinity: shared cast, MP and protected CT
+ok 55 - ten_divinity: shared cast, MP and protected CT
+  ---
+  duration_ms: 0.374135
+  type: 'test'
+  ...
+# Subtest: abyss_gluttony: shared cast, MP and protected CT
+ok 56 - abyss_gluttony: shared cast, MP and protected CT
+  ---
+  duration_ms: 1.178039
+  type: 'test'
+  ...
+# Subtest: abyss_wrath: shared cast, MP and protected CT
+ok 57 - abyss_wrath: shared cast, MP and protected CT
+  ---
+  duration_ms: 0.36372
+  type: 'test'
+  ...
+# Subtest: abyss_envy: shared cast, MP and protected CT
+ok 58 - abyss_envy: shared cast, MP and protected CT
+  ---
+  duration_ms: 2.056783
+  type: 'test'
+  ...
+# Subtest: abyss_sloth: shared cast, MP and protected CT
+ok 59 - abyss_sloth: shared cast, MP and protected CT
+  ---
+  duration_ms: 0.361486
+  type: 'test'
+  ...
+# Subtest: abyss_greed: shared cast, MP and protected CT
+ok 60 - abyss_greed: shared cast, MP and protected CT
+  ---
+  duration_ms: 0.610126
+  type: 'test'
+  ...
+# Subtest: abyss_lust: shared cast, MP and protected CT
+ok 61 - abyss_lust: shared cast, MP and protected CT
+  ---
+  duration_ms: 1.466848
+  type: 'test'
+  ...
+# Subtest: abyss_pride: shared cast, MP and protected CT
+ok 62 - abyss_pride: shared cast, MP and protected CT
+  ---
+  duration_ms: 0.368417
+  type: 'test'
+  ...
+# Subtest: doom survives JSON save and fires after ten complete rounds; forced death bypasses shield and rage
+ok 63 - doom survives JSON save and fires after ten complete rounds; forced death bypasses shield and rage
+  ---
+  duration_ms: 1.028968
+  type: 'test'
+  ...
+# Subtest: caster death cancels doom and isolation without winning a living isolated side
+ok 64 - caster death cancels doom and isolation without winning a living isolated side
+  ---
+  duration_ms: 0.395137
+  type: 'test'
+  ...
+# Subtest: death register threshold and revival seal
+ok 65 - death register threshold and revival seal
+  ---
+  duration_ms: 0.312845
+  type: 'test'
+  ...
+# Subtest: absolute wall exactly once; wrath expires and cannot heal; native HP writers obey rules
+ok 66 - absolute wall exactly once; wrath expires and cannot heal; native HP writers obey rules
+  ---
+  duration_ms: 0.373915
+  type: 'test'
+  ...
+# Subtest: furnace accumulates actual enemy HP loss, excludes friendly damage, releases once
+ok 67 - furnace accumulates actual enemy HP loss, excludes friendly damage, releases once
+  ---
+  duration_ms: 0.252445
+  type: 'test'
+  ...
+# Subtest: ordinary echoes pay MP, cannot echo twice or copy ultimates
+ok 68 - ordinary echoes pay MP, cannot echo twice or copy ultimates
+  ---
+  duration_ms: 0.447094
+  type: 'test'
+  ...
+# Subtest: possession respects immunity/cleanse and spends a normal action; pride has recovery window
+ok 69 - possession respects immunity/cleanse and spends a normal action; pride has recovery window
+  ---
+  duration_ms: 0.536707
+  type: 'test'
+  ...
+# Subtest: greed borrows active circle only and restores on death and cleanup
+ok 70 - greed borrows active circle only and restores on death and cleanup
+  ---
+  duration_ms: 0.560702
+  type: 'test'
+  ...
+# Subtest: lust only diverts real healing, not overheal or revival; sloth suppresses extras
+ok 71 - lust only diverts real healing, not overheal or revival; sloth suppresses extras
+  ---
+  duration_ms: 0.323601
+  type: 'test'
+  ...
+# Subtest: GM 2G2A code authenticates independently of both old rewards and rejects altered codes
+ok 72 - GM 2G2A code authenticates independently of both old rewards and rejects altered codes
+  ---
+  duration_ms: 11.51905
+  type: 'test'
+  ...
+# Subtest: four named contracts have legal complete dedicated sets and the intended four skills
+ok 73 - four named contracts have legal complete dedicated sets and the intended four skills
+  ---
+  duration_ms: 41.816758
+  type: 'test'
+  ...
+# Subtest: full storage and repeated redemption are atomic no-ops
+ok 74 - full storage and repeated redemption are atomic no-ops
+  ---
+  duration_ms: 12.050529
+  type: 'test'
+  ...
+# Subtest: real save reload preserves reserve contracts, loose sets, skill selections and claim
+ok 75 - real save reload preserves reserve contracts, loose sets, skill selections and claim
+  ---
+  duration_ms: 96.568875
+  type: 'test'
+  ...
+# Subtest: single room walkable geometry has one connected component and reachable throne
+ok 76 - single room walkable geometry has one connected component and reachable throne
+  ---
+  duration_ms: 53.273912
+  type: 'test'
+  ...
+# Subtest: all 16 surviving hero combinations get only living actors and valid encounter copy
+ok 77 - all 16 surviving hero combinations get only living actors and valid encounter copy
+  ---
+  duration_ms: 1.177218
+  type: 'test'
+  ...
+# Subtest: defeat restores exact battle consumables and gold, retains road wounds, floor and loot receipts; one rewind only
+ok 78 - defeat restores exact battle consumables and gold, retains road wounds, floor and loot receipts; one rewind only
+  ---
+  duration_ms: 3.955773
+  type: 'test'
+  ...
+# Subtest: victory is saved before the ending and reload retains the walk-to-throne phase
+ok 79 - victory is saved before the ending and reload retains the walk-to-throne phase
+  ---
+  duration_ms: 0.586701
+  type: 'test'
+  ...
+# Subtest: memory battles restore supplies, never alter campaign heroes, and award title only once
+ok 80 - memory battles restore supplies, never alter campaign heroes, and award title only once
+  ---
+  duration_ms: 0.866927
+  type: 'test'
+  ...
+# Subtest: retreat restores inventory and allows a fresh attempt without clearing the campaign
+ok 81 - retreat restores inventory and allows a fresh attempt without clearing the campaign
+  ---
+  duration_ms: 0.455155
+  type: 'test'
+  ...
+# Subtest: floor 40 through 100 all ranks always receive circles; 39 to 40 is a gradual change
+ok 82 - floor 40 through 100 all ranks always receive circles; 39 to 40 is a gradual change
+  ---
+  duration_ms: 4.795829
+  type: 'test'
+  ...
+# Subtest: new state survives actual SaveService reload, completed chamber remains accessible and reincarnation resets only room progress
+ok 83 - new state survives actual SaveService reload, completed chamber remains accessible and reincarnation resets only room progress
+  ---
+  duration_ms: 74.691912
+  type: 'test'
+  ...
+# Subtest: actual final-result dispatch reaches handler exactly once
+ok 84 - actual final-result dispatch reaches handler exactly once
+  ---
+  duration_ms: 1.376083
+  type: 'test'
+  ...
+# Subtest: real exploration movement and royal controller require a second approach after dialogue and dispose listeners
+ok 85 - real exploration movement and royal controller require a second approach after dialogue and dispose listeners
+  ---
+  duration_ms: 13.718256
+  type: 'test'
+  ...
+# Subtest: actual final battle settlement enters victory/rewind/memory phases without a Sairan combat
+ok 86 - actual final battle settlement enters victory/rewind/memory phases without a Sairan combat
+  ---
+  duration_ms: 9.528976
+  type: 'test'
+  ...
+# ReferenceError: localStorage is not defined
+#     at SaveService.load (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:416:23)
+#     at new SaveService (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:415:54)
+#     at state (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:15:26)
+#     at TestContext.<anonymous> (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:17:112)
+#     at Test.runInAsyncScope (node:async_hooks:227:14)
+#     at Test.run (node:internal/test_runner/test:1382:25)
+#     at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+#     at Test.postRun (node:internal/test_runner/test:1522:19)
+#     at Test.run (node:internal/test_runner/test:1447:12)
+#     at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+# ReferenceError: localStorage is not defined
+#     at SaveService.load (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:416:23)
+#     at new SaveService (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:415:54)
+#     at state (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:15:26)
+#     at TestContext.<anonymous> (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:18:102)
+#     at Test.runInAsyncScope (node:async_hooks:227:14)
+#     at Test.run (node:internal/test_runner/test:1382:25)
+#     at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+#     at Test.postRun (node:internal/test_runner/test:1522:19)
+#     at Test.run (node:internal/test_runner/test:1447:12)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+# ReferenceError: localStorage is not defined
+#     at SaveService.load (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:416:23)
+#     at new SaveService (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:415:54)
+#     at state (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:15:26)
+#     at TestContext.<anonymous> (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:20:119)
+#     at Test.runInAsyncScope (node:async_hooks:227:14)
+#     at Test.run (node:internal/test_runner/test:1382:25)
+#     at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+#     at Test.postRun (node:internal/test_runner/test:1522:19)
+#     at Test.run (node:internal/test_runner/test:1447:12)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+# ReferenceError: localStorage is not defined
+#     at SaveService.load (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:416:23)
+#     at new SaveService (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:415:54)
+#     at state (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:15:26)
+#     at TestContext.<anonymous> (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:21:102)
+#     at Test.runInAsyncScope (node:async_hooks:227:14)
+#     at Test.run (node:internal/test_runner/test:1382:25)
+#     at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+#     at Test.postRun (node:internal/test_runner/test:1522:19)
+#     at Test.run (node:internal/test_runner/test:1447:12)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+# ReferenceError: localStorage is not defined
+#     at SaveService.load (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:416:23)
+#     at new SaveService (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:415:54)
+#     at state (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:15:26)
+#     at TestContext.<anonymous> (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:25:112)
+#     at Test.runInAsyncScope (node:async_hooks:227:14)
+#     at Test.run (node:internal/test_runner/test:1382:25)
+#     at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+#     at Test.postRun (node:internal/test_runner/test:1522:19)
+#     at Test.run (node:internal/test_runner/test:1447:12)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+# ReferenceError: localStorage is not defined
+#     at SaveService.load (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:416:23)
+#     at new SaveService (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:415:54)
+#     at state (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:15:26)
+#     at TestContext.<anonymous> (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:26:181)
+#     at async Test.run (node:internal/test_runner/test:1389:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+# ReferenceError: localStorage is not defined
+#     at SaveService.load (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:416:23)
+#     at new SaveService (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:415:54)
+#     at state (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:15:26)
+#     at TestContext.<anonymous> (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:27:346)
+#     at async Test.run (node:internal/test_runner/test:1389:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+# ReferenceError: localStorage is not defined
+#     at SaveService.load (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:416:23)
+#     at new SaveService (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:415:54)
+#     at state (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:15:26)
+#     at TestContext.<anonymous> (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:27:346)
+#     at async Test.run (node:internal/test_runner/test:1389:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+# ReferenceError: localStorage is not defined
+#     at SaveService.load (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:416:23)
+#     at new SaveService (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:415:54)
+#     at state (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:15:26)
+#     at TestContext.<anonymous> (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:27:346)
+#     at async Test.run (node:internal/test_runner/test:1389:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+# ReferenceError: localStorage is not defined
+#     at SaveService.load (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:416:23)
+#     at new SaveService (file:///workspace/scratch/a3ee18560f7b/build361/src/services/SaveService.js:415:54)
+#     at state (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:15:26)
+#     at TestContext.<anonymous> (file:///workspace/scratch/a3ee18560f7b/build361/tests/build361-postgame.test.mjs:28:190)
+#     at async Test.run (node:internal/test_runner/test:1389:7)
+#     at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+# Subtest: reincarnation resets progression only on commit, preserves owned items and permanent growth across a real save reload
+ok 87 - reincarnation resets progression only on commit, preserves owned items and permanent growth across a real save reload
+  ---
+  duration_ms: 47.483981
+  type: 'test'
+  ...
+# Subtest: historical floor 100 and stale queued floor 100 cannot play later stories in cycle floor 1
+ok 88 - historical floor 100 and stale queued floor 100 cannot play later stories in cycle floor 1
+  ---
+  duration_ms: 60.693441
+  type: 'test'
+  ...
+# Subtest: reincarnation gear progressively unlocks without changing original level or plus
+ok 89 - reincarnation gear progressively unlocks without changing original level or plus
+  ---
+  duration_ms: 2.74857
+  type: 'test'
+  ...
+# Subtest: every hero withstands one lethal hit independently; repeat damage, revive, JSON resume and a new battle behave correctly
+ok 90 - every hero withstands one lethal hit independently; repeat damage, revive, JSON resume and a new battle behave correctly
+  ---
+  duration_ms: 2.678927
+  type: 'test'
+  ...
+# Subtest: revenge wins advance once, refund supplies, preserve story heroes; defeats and retreat keep stage
+ok 91 - revenge wins advance once, refund supplies, preserve story heroes; defeats and retreat keep stage
+  ---
+  duration_ms: 2.02779
+  type: 'test'
+  ...
+# Subtest: cleared exploration continues spawning ordinary enemies, never in the royal room
+ok 92 - cleared exploration continues spawning ordinary enemies, never in the royal room
+  ---
+  duration_ms: 1.017791
+  type: 'test'
+  ...
+# Subtest: old exploration frame terminates when update swaps to royal field; no old draw or next frame
+ok 93 - old exploration frame terminates when update swaps to royal field; no old draw or next frame
+  ---
+  duration_ms: 1.823076
+  type: 'test'
+  ...
+# Subtest: finale tuning grows monotonically, preserves hero identity and does not change speed
+ok 94 - finale tuning grows monotonically, preserves hero identity and does not change speed
+  ---
+  duration_ms: 0.414305
+  type: 'test'
+  ...
+# Subtest: reference battle: Enami and Hide no longer disappear in the opening action; stronger revenge is harder
+ok 95 - reference battle: Enami and Hide no longer disappear in the opening action; stronger revenge is harder
+  ---
+  duration_ms: 474.503054
+  type: 'test'
+  ...
+# Subtest: magic circle effective level unlocks with the cycle while original investment stays intact
+ok 96 - magic circle effective level unlocks with the cycle while original investment stays intact
+  ---
+  duration_ms: 2.864363
+  type: 'test'
+  ...
+# Subtest: old cleared-floor MAX_SAFE_INTEGER encounter timer is rearmed after clear
+ok 97 - old cleared-floor MAX_SAFE_INTEGER encounter timer is rearmed after clear
+  ---
+  duration_ms: 0.954316
+  type: 'test'
+  ...
+# Subtest: confirmation cancel and failed save do not reset the roster or currency; success commits only once
+ok 98 - confirmation cancel and failed save do not reset the roster or currency; success commits only once
+  ---
+  duration_ms: 7.695184
+  type: 'test'
+  ...
+# Subtest: owned trophy evidence cannot re-mark a future boss as defeated after reincarnation
+ok 99 - owned trophy evidence cannot re-mark a future boss as defeated after reincarnation
+  ---
+  duration_ms: 1.911007
+  type: 'test'
+  ...
+# Subtest: online raid and team views share the spent fortitude receipt rather than granting another life
+ok 100 - online raid and team views share the spent fortitude receipt rather than granting another life
+  ---
+  duration_ms: 0.681401
+  type: 'test'
+  ...
+1..100
+# tests 100
+# suites 0
+# pass 100
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1661.282495

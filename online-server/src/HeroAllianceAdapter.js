@@ -1,6 +1,7 @@
 import {isHeroResonanceSpecies,heroResonanceProfile} from '../../src/core/HeroResonanceSystem.js';
 import {heroAuthoredSkills,reserveHeroAction,chooseHeroAllianceSkill,chooseHeroAllianceTarget,runHeroAllianceAction,triggerHeroAlliance,drainHeroReactions,mitigateHeroDamage,tryHeroLastStand,heroId,heroSideUnits} from '../../src/core/HeroAllianceSystem.js';
 export function onlineHeroView(b,actor=null){
+ b.heroFortitude361??={};
  if(b.boss){b.heroAlliance348??={};return {...b,enemies:[b.boss,...b.minions],heroAlliance348:b.heroAlliance348}}
  if(actor?.side){const sides=['sun','moon'],own=actor.side,other=sides.find(s=>s!==own);b.heroAlliance348??={};for(const s of sides)b.heroAlliance348[s]??={lastStandUsed:false,pending:[]};return {...b,players:Object.fromEntries(Object.entries(b.players).filter(([,u])=>u.side===own)),enemies:Object.values(b.players).filter(u=>u.side!==own),heroAlliance348:{ally:b.heroAlliance348[own],enemy:b.heroAlliance348[other]}}}
  b.heroAlliance348??={};return b;
