@@ -1,0 +1,25 @@
+/* One bounded scrolling body; title and close controls stay outside it. */
+.game-modal.battle-status-detail-modal > .game-modal-card {
+  box-sizing: border-box;
+  min-height: 0 !important;
+  max-height: calc(100vh - 40px) !important;
+  max-height: calc(100dvh - max(24px, env(safe-area-inset-top)) - max(24px, env(safe-area-inset-bottom))) !important;
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) auto !important;
+  overflow: hidden !important;
+}
+.game-modal.battle-status-detail-modal > .game-modal-card > .game-modal-body {
+  min-height: 0 !important;
+  min-width: 0;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+.game-modal.battle-status-detail-modal .battle-status-detail-list.detailed {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding-bottom: 12px;
+}
