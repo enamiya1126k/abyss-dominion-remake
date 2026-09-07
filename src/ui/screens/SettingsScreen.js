@@ -1,6 +1,7 @@
-import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=3.1.42-build362";
-import{SERIAL_CODE_COUNT}from"../../core/SerialCodeSystem.js?v=3.1.42-build362";
-export function SettingsScreen(state){
+import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=3.1.43-build363";
+import{SERIAL_CODE_COUNT}from"../../core/SerialCodeSystem.js?v=3.1.43-build363";
+import { PlayerNameForm } from "../components/PlayerNameForm.js?v=3.1.43-build363";
+export function SettingsScreen(state,{playerName}={}){
   const redeemedCount=Object.keys(state.serialCodes?.redeemed??{}).length;
   return`
     <section class="screen settings-screen-v3">
@@ -10,6 +11,7 @@ export function SettingsScreen(state){
         <span class="settings-gear-v3" aria-hidden="true">⚙</span>
       </header>
       <div class="settings-page-v3">
+        ${PlayerNameForm(playerName)}
         <div class="settings-control-card-v3">
           <div><small>BATTLE</small><b>戦闘AUTO初期値</b></div>
           <button id="toggleAuto" class="metal-toggle-v3 ${state.settings.autoBattle?"on":"off"}" aria-pressed="${state.settings.autoBattle}"><i></i><span>${state.settings.autoBattle?"ON":"OFF"}</span></button>

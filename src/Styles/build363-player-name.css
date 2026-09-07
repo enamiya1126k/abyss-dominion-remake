@@ -1,0 +1,22 @@
+/* Player identity shares the existing gold / black settings furniture. */
+.player-name-form363{display:grid;gap:10px;min-width:0;padding:18px 16px;border:1px solid #a88b50;background:linear-gradient(135deg,#25162c,#09090e 70%);color:#e8dec8;box-shadow:inset 0 0 0 3px #09090d}
+.player-name-form363 header{display:grid;gap:4px}
+.player-name-form363 header small{color:#c8b079;font-size:11px;letter-spacing:.16em}
+.player-name-form363 label{font:700 22px Georgia,"Yu Mincho",serif;color:#f4dda0}
+.player-name-form363 p{margin:0;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.player-name-form363>small{font-size:12px;color:#b3a7ba}
+.player-name-controls363{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:stretch}
+.player-name-controls363 input{width:100%;min-width:0;box-sizing:border-box;min-height:48px;padding:10px 12px;border:1px solid #8a729b;border-radius:5px;background:#07070c;color:#fff3d7;font-size:16px;line-height:1.4}
+.player-name-controls363 button,.player-name-shortcut363 button{min-height:46px;padding:10px 14px;border:1px solid #c5a15a;border-radius:5px;background:linear-gradient(#674519,#27190b);color:#fff0c4;font-size:14px;font-weight:700;white-space:nowrap}
+.player-name-form363 [data-player-name-status]{min-height:1.6em;color:#9fe3bb;font-size:13px}
+.player-name-form363 [data-player-name-status].is-error{color:#ffacb5}
+.player-name-controls363 input[aria-invalid="true"]{border-color:#ff8798}
+.player-name-form363 :focus-visible,.player-name-shortcut363 button:focus-visible{outline:2px solid #f8dd95;outline-offset:3px}
+.player-name-shortcut363{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px;margin:0 0 12px;border:1px solid #735584;background:#140d1b}
+.player-name-shortcut363>div{min-width:0;display:grid;gap:3px}
+.player-name-shortcut363 small{font-size:12px;color:#b8a2c6}
+.player-name-shortcut363 b{font-size:17px;color:#f3e4c6;overflow-wrap:anywhere}
+.player-name-shortcut363 button{flex:none}
+.player-name-modal363{z-index:22000}
+.player-name-modal363 .game-modal-card{max-height:calc(100dvh - 24px);overflow-y:auto}
+@media(max-width:380px){.player-name-controls363{grid-template-columns:minmax(0,1fr)}.player-name-shortcut363{gap:8px;padding:10px}.player-name-shortcut363 button{padding:10px;font-size:13px}}

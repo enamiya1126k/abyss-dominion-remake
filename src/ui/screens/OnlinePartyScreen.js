@@ -1,11 +1,13 @@
 import { SPECIES } from "../../data/species.js?v=3.1.39-build359";
-import { displayName, calculatedStats } from "../../models/Monster.js?v=3.1.42-build362";
-import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=3.1.42-build362";
+import { displayName, calculatedStats } from "../../models/Monster.js?v=3.1.43-build363";
+import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=3.1.43-build363";
 import { magicCircleById, equippedMagicCircle, goldPowerDamageMultiplier, goldPowerActionCost } from "../../core/MagicCircleSystem.js?v=3.1.41-build361";
 import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=3.1.39-build359";
 import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=3.1.41-build361";
 import { monsterVisual } from "../MonsterVisual.js?v=3.1.38-build358";
 import { resourceHud, pixelIcon } from "../components/GameChrome.js?v=3.1.1-build311";
+
+import { PLAYER_NAME_STORAGE_KEY, readPlayerName } from "../../core/PlayerNameSystem.js?v=3.1.43-build363";
 
 export const ONLINE_STORAGE_KEYS = Object.freeze({
   friendId: "abyss-dominion-online-friend-id",
@@ -14,7 +16,7 @@ export const ONLINE_STORAGE_KEYS = Object.freeze({
   resumeTokenMap: "abyss-dominion-online-resume-token-map-v1",
   resumeTokenMigration: "abyss-dominion-online-resume-token-map-migrated-v1",
   serverUrl: "abyss-dominion-online-server-url",
-  displayName: "abyss-dominion-online-display-name",
+  displayName: PLAYER_NAME_STORAGE_KEY,
   monsterId: "abyss-dominion-online-monster-id",
   battleRosterOrder: "abyss-dominion-online-battle-roster-order-v1",
   route: "abyss-dominion-online-route",
@@ -955,7 +957,7 @@ export function OnlinePartyScreen(state) {
   const invite = inviteParameters();
   const { monster: requestedMonster } = selectedPartyMonster(state);
   const monster = onlineBattleRosterPriority(state, { monsterId: requestedMonster?.id })[0] ?? requestedMonster;
-  const defaultName = storageGet(ONLINE_STORAGE_KEYS.displayName) || (monster ? displayName(monster) : "冒険者");
+  const defaultName = readPlayerName(monster ? displayName(monster) : "冒険者");
   const server = enforceFixedOnlineServerUrl();
   return `<section class="screen online-v3-screen" data-online-v3-root>
     ${resourceHud(state, { backId: "backOnlineParty", title: "オンライン", eyebrow: "ABYSS DOMINION / CO-OP" })}
@@ -986,7 +988,7 @@ export function OnlinePartyScreen(state) {
         <aside class="online-v3-profile-drawer" data-online-profile-panel hidden aria-label="旅人手帳">
           <header><div><small>TRAVELER PROFILE</small><h2>旅人手帳</h2></div><button type="button" data-online-profile-close aria-label="旅人手帳を閉じる">×</button></header>
           <div class="online-v3-id"><span><small>フレンドID</small><strong>${identity.friendId}</strong></span><button type="button" data-copy-friend-id>コピー</button></div>
-          <label class="online-v3-field"><span>オンライン表示名</span><input type="text" maxlength="16" data-online-display-name value="${escapeOnlineHtml(defaultName)}" autocomplete="nickname"></label>
+          <label class="online-v3-field"><span>プレイヤー名（ランキング共通）</span><input type="text" maxlength="16" data-online-display-name value="${escapeOnlineHtml(defaultName)}" autocomplete="nickname"></label>
           ${renderOnlineBattleRosterPicker(state, { monsterId: monster?.id })}
           <p class="online-v3-profile-note">変更内容は接続中の仲間へすぐ反映されます。</p>
         </aside>

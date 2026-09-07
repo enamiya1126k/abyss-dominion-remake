@@ -1,11 +1,11 @@
 import {
   buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
   onlineSocialNotificationSummary, moveOnlineBattleRosterPriority, renderOnlineBattleRosterPicker,
-} from "../ui/screens/OnlinePartyScreen.js?v=3.1.42-build362";
+} from "../ui/screens/OnlinePartyScreen.js?v=3.1.43-build363";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=3.1.42-build362";
+} from "./OnlineViews.js?v=3.1.43-build363";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   rollbackOnlineTradeAssetReservation, commitOnlineTrade, recoverOrphanedTradeEscrows,
@@ -13,6 +13,7 @@ import {
 } from "./OnlineTradeSystem.js?v=3.1.1-build311";
 import { setMonsterVisualFrame } from "../ui/MonsterVisual.js?v=3.1.38-build358";
 import { ONLINE_EXPEDITION_MOVE_INTERVAL_MS } from "./OnlineMovement.js?v=3.1.32-build352";
+import { readPlayerName, savePlayerName } from "../core/PlayerNameSystem.js?v=3.1.43-build363";
 
 const ROUTES = new Set(["home", "explore", "raid", "team", "chat"]);
 const SOCIAL_FAB_ROUTES = new Set(["home", "chat"]);
@@ -1975,9 +1976,6 @@ export class OnlinePartyController {
       const max = Math.max(1, Number(self?.profile?.maxFloor) || 1);
       const floor = Math.round(clamp(event.target.value, 1, max)); event.target.value = String(floor); this._send("setFloor", { floor });
     }
-    if (event.target.matches("[data-online-display-name]")) {
-      storageSet(ONLINE_STORAGE_KEYS.displayName, event.target.value.trim().slice(0, 16)); this._refreshProfile(); this._send("profile", { profile: this.profile });
-    }
     if (event.target.matches("[data-online-server-url]")) storageSet(ONLINE_STORAGE_KEYS.serverUrl, event.target.value.trim());
     if (event.target.matches("[data-online-trade-query]")) { this.tradeQuery = String(event.target.value ?? "").slice(0, 40); this._render(); requestAnimationFrame(() => { const input = this._query("[data-online-trade-query]"); if (input) { input.focus(); input.setSelectionRange(this.tradeQuery.length, this.tradeQuery.length); } }); }
     if (event.target.matches("[data-online-trade-amount]")) {
@@ -1992,6 +1990,13 @@ export class OnlinePartyController {
   }
 
   _handleChange(event) {
+    if (event.target.matches("[data-online-display-name]")) {
+      const result = this.setDisplayName(event.target.value);
+      if (!result.ok) { event.target.value = readPlayerName(this.profile?.displayName); this.toast(result.message); return; }
+      if (this.latestPowerRankingSnapshot) this.publishPowerRankingSnapshot(this.latestPowerRankingSnapshot, { force: true }).catch(() => {});
+      this.toast("プレイヤー名を保存しました");
+      return;
+    }
     if (event.target.matches("[data-online-guild-plan-purpose]")) this.guildPlanDraft.purpose = normalizedRoomPurpose(event.target.value);
     if (event.target.matches("[data-online-guild-plan-style]")) this.guildPlanDraft.style = ROOM_STYLES.has(event.target.value) ? event.target.value : "anyone";
     if (event.target.matches("[data-online-guild-recruitment-purpose]")) this.guildRecruitmentDraft.purpose = normalizedRoomPurpose(event.target.value);
@@ -2036,8 +2041,21 @@ export class OnlinePartyController {
     this._refreshProfile(); this._send("profile", { profile: this.profile });
   }
 
+  setDisplayName(value) {
+    const result = savePlayerName(value);
+    if (!result.ok) return result;
+    const input = this._query("[data-online-display-name]");
+    if (input) input.value = result.name;
+    this._refreshProfile();
+    if (this.latestPowerRankingSnapshot) this.latestPowerRankingSnapshot = { ...this.latestPowerRankingSnapshot, displayName: result.name };
+    // An offline rename is picked up by the existing hello/reconnect flow.
+    const sent = Boolean(this.connectionReady && this._send("profile", { profile: this.profile }));
+    return { ...result, sent };
+  }
+
   _refreshProfile() {
-    const name = this._query("[data-online-display-name]")?.value ?? storageGet(ONLINE_STORAGE_KEYS.displayName);
+    // Unsaved IME input must not leak into a profile refresh or reconnect.
+    const name = readPlayerName("");
     this.profile = buildOnlinePartyProfile(this.getState?.(), { monsterId: this.selectedMonsterId, displayName: name });
     this.selectedMonsterId = this.profile.primaryMonsterId ?? this.selectedMonsterId;
   }

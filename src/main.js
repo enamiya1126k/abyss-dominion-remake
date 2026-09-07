@@ -6,11 +6,11 @@ import{royalVictoryDialogue,royalDefeatDialogue}from"./data/royalChamberStory.js
 import{applyCampaignEndgameBalance,campaignEndgameCircle}from"./core/CampaignEndgameBalance.js?v=3.1.41-build361";
 import{prepareUltimateBattle,beginUltimateAction,finishUltimateAction,ultimateAvailability,chooseEndgameUltimate,castEndgameUltimate,beforeUltimateAction,afterUltimateOrdinary,endUltimateRound,cleanupUltimateBattle,drainUltimateEvents,ultimateIsolated,ultimateExtraBlocked,ultimateBasicOnly,isEndgameUltimate,ultimateCircle}from"./core/EndgameUltimateSystem.js?v=3.1.41-build361";
 import{equipmentAffixesWithSeries}from"./core/EquipmentAffixSystem.js?v=3.1.28-build348";
-import{applyCampaignHeroLoadout}from"./core/CampaignHeroLoadoutSystem.js?v=3.1.42-build362";
+import{applyCampaignHeroLoadout}from"./core/CampaignHeroLoadoutSystem.js?v=3.1.43-build363";
 import{heroId,heroHp,heroEffects,heroEffect,heroCooldowns,heroAllianceState,heroAuthoredSkills,reserveHeroAction,chooseHeroAllianceSkill,runHeroAllianceAction,triggerHeroAlliance,drainHeroReactions,mitigateHeroDamage,tryHeroLastStand,heroOverheal}from"./core/HeroAllianceSystem.js?v=3.1.41-build361";
 import{commitCampaignHeroSkill}from'./battle/CampaignHeroSkillSystem.js?v=3.1.39-build359';
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.42-build362";
-import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.42-build362";
+import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.43-build363";
+import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.43-build363";
 // Regression markers only: SaveService.js?v=3.1.10-build329 / config.js?v=3.1.21-build340 / HomeScreen.js?v=3.1.21-build340
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
 import{endgameCharacter}from"./data/endgameCharacters.js?v=3.1.38-build358";
@@ -20,22 +20,24 @@ import{currentExplorePerformanceProfile,shouldPaintExploreFrame}from"./core/Expl
 import{captureStatusBonus,normalizePersistentAilments}from"./data/statusEffects.js?v=3.1.1-build311";
 import{attributeDamageMultiplier,attributeGuideRows,canonicalAttribute,compactAttributeChart,ATTRIBUTES,ATTRIBUTE_RELATIONS}from"./data/attributes.js?v=3.1.1-build311";
 import{orderedMonsterSpecies}from"./data/monsterCatalog.js?v=3.1.1-build311";
-import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.42-build362";
+import{HomeScreen,homePartySlots}from"./ui/screens/HomeScreen.js?v=3.1.43-build363";
 import{CampaignIntelScreen}from"./ui/screens/CampaignIntelScreen.js?v=3.1.14-build333";
 import{createCampaignInvasionIntelModel}from"./core/CampaignInvasionIntelSystem.js?v=3.1.42-build362";
 import{StoryArchiveScreen}from"./ui/screens/StoryArchiveScreen.js?v=3.1.5-build324";
-import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.42-build362";
-import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.42-build362";
-import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.42-build362";
+import{FormationScreen}from"./ui/screens/FormationScreen.js?v=3.1.43-build363";
+import{OnlinePartyScreen,ONLINE_STORAGE_KEYS}from"./ui/screens/OnlinePartyScreen.js?v=3.1.43-build363";
+import{OnlinePartyController,resetCurrentWeeklyRaidForFullReset}from"./online/OnlinePartyClient.js?v=3.1.43-build363";
 import{reconcileOnlineMotion,onlineMotionSpeed}from"./online/OnlineMovement.js?v=3.1.32-build352";
 import{beginGuestProgressIsolation,finishGuestProgressIsolation,onlineProgressionAllowed,legacyProgressRecoveryCandidate,applyLegacyProgressRecovery,dismissLegacyProgressRecovery,undoLegacyProgressRecovery}from"./online/OnlineProgressIsolation.js?v=3.1.1-build311";
-import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.42-build362";
-import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=3.1.42-build362";
-import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.42-build362";
-import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.42-build362";
-import{CampaignFinalFloorScreen,finalAudienceDialogue}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.42-build362";
-import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.42-build362";
-import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.42-build362";
+import{MonsterListScreen}from"./ui/screens/MonsterListScreen.js?v=3.1.43-build363";
+import{MonsterDetailScreen}from"./ui/screens/MonsterDetailScreen.js?v=3.1.43-build363";
+import{SettingsScreen}from"./ui/screens/SettingsScreen.js?v=3.1.43-build363";
+import{readPlayerName}from"./core/PlayerNameSystem.js?v=3.1.43-build363";
+import{PlayerNameForm}from"./ui/components/PlayerNameForm.js?v=3.1.43-build363";
+import{ExploreScreen}from"./ui/screens/ExploreScreen.js?v=3.1.43-build363";
+import{CampaignFinalFloorScreen,finalAudienceDialogue}from"./ui/screens/CampaignFinalFloorScreen.js?v=3.1.43-build363";
+import{GauntletScreen}from"./ui/screens/GauntletScreen.js?v=3.1.43-build363";
+import{BattleScreen}from"./ui/screens/BattleScreen.js?v=3.1.43-build363";
 import{HERO_PURSUIT_STEPS,normalizeHeroPursuit,heroFieldRoute,chooseHeroSpawn,prepareHeroArrival,heroCanEscape,heroInContact,advanceHeroField,heroScreenIndicator}from"./core/CampaignHeroPursuitSystem.js?v=3.1.32-build352";
 import{updateHeroTracker}from"./ui/HeroPursuitHud.js?v=3.1.22-build341";
 import{mountBattleBossLayout}from"./ui/BattleBossLayout.js?v=3.1.21-build340";
@@ -43,8 +45,8 @@ import{Modal}from"./ui/components/Modal.js?v=3.1.1-build311";
 import{pixelIcon}from"./ui/components/GameChrome.js?v=3.1.1-build311";
 import{equipmentVisual}from"./ui/components/EquipmentVisual.js?v=3.1.1-build311";
 import{attributeCycleVisual,attributeVisual}from"./ui/components/AttributeVisual.js?v=3.1.1-build311";
-import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=3.1.42-build362";
-import{EXPERIENCE_PACK_TYPES,experiencePackType,availableExperiencePackTypes,consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=3.1.42-build362";
+import{createMonster,displayName,calculatedStats,TRAITS,expNeedFor,experienceCrystalValue,limitBreakGrowth,affectionBonuses,totalExperience,applyTotalExperience}from"./models/Monster.js?v=3.1.43-build363";
+import{EXPERIENCE_PACK_TYPES,experiencePackType,availableExperiencePackTypes,consumeExperiencePacks,experiencePackCapacity,previewExperiencePacks}from"./core/ExperiencePackSystem.js?v=3.1.43-build363";
 import{createEquipment,equipmentPower,equipmentStatMultiplier,equipmentRequiredMonsterLevel}from"./models/Equipment.js?v=3.1.41-build361";
 import{equipmentExpNeed,equipmentMaterialExp,enhancementMaterialCandidates,consumeEquipmentMaterials,projectEquipmentGrowth}from"./services/EquipmentEnhancement.js?v=3.1.1-build311";
 import{recordWeaponKill,weaponMasteryDamageMultiplier,weaponMasterySummary}from"./services/WeaponMastery.js?v=3.1.39-build359";
@@ -53,11 +55,11 @@ import{receiveEquipment,takeFromStorage,equipmentSellPrice,slotLabel}from"./serv
 import{RARITY_ORDER,EQUIPMENT_BASES,equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel,equipmentSubslotLabel,compatibleSubslots,SLOT_UNLOCK_LEVEL}from"./data/equipment.js?v=3.1.1-build311";
 import{EQUIPMENT_SERIES,aggregateSeriesEffects}from"./data/equipmentSeries.js?v=3.1.38-build358";
 import{AFFIX_QUALITY,aggregateAffixes,affixQuality,formatAffix,affixDefinition}from"./data/equipmentAffixes.js?v=3.1.1-build311";
-import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=3.1.42-build362";
+import{EquipmentScreen}from"./ui/screens/EquipmentScreen.js?v=3.1.43-build363";
 import{initialAffixCount,lockedAffixCount,maxLockableAffixes,normalizeEquipmentAffixLocks,rerollGoldCost,rerollUnlockedAffixes,toggleAffixLock}from"./services/EquipmentAffixCrafting.js?v=3.1.1-build311";
 import{assignEquipmentToSubslot,canEquipInSubslot,emptyEquipmentLoadout,normalizeEquipmentLoadouts}from"./services/EquipmentLoadoutSystem.js?v=3.1.41-build361";
-import{ShopScreen}from"./ui/screens/ShopScreen.js?v=3.1.42-build362";
-import{SkillScreen}from"./ui/screens/SkillScreen.js?v=3.1.42-build362";
+import{ShopScreen}from"./ui/screens/ShopScreen.js?v=3.1.43-build363";
+import{SkillScreen}from"./ui/screens/SkillScreen.js?v=3.1.43-build363";
 import{AbyssSkillTreeScreen}from"./ui/screens/AbyssSkillTreeScreen.js?v=3.1.41-build361";
 import{InventoryScreen,ArmoryScreen}from"./ui/screens/InventoryScreen.js?v=3.1.42-build362";
 import{abyssEquipmentRarityBonus,abyssExplorationChance,abyssSkillEffectTotal,abyssSkillEffects,abyssSkillMultiplier,abyssSkillNodeById,abyssSkillTreeSummary,learnAbyssSkill}from"./core/AbyssSkillTreeSystem.js?v=3.1.41-build361";
@@ -65,15 +67,15 @@ import{Ending1000Screen}from"./ui/screens/Ending1000Screen.js?v=3.1.1-build311";
 import{Ending10000Screen}from"./ui/screens/Ending10000Screen.js?v=3.1.1-build311";
 import{SecondWorldIntroScreen}from"./ui/screens/SecondWorldIntroScreen.js?v=3.1.1-build311";
 import{worldPresentationForFloor,shouldPlaySecondWorldIntro,markSecondWorldEntered}from"./core/WorldSystem.js?v=3.1.42-build362";
-import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=3.1.42-build362";
+import{randomEventForFloor,markRandomEventResolved,randomEventCosts}from"./core/SecondWorldEventSystem.js?v=3.1.43-build363";
 import{shouldSpawnSecondWorldElite,createEliteEncounter,applyEliteModifiers,recordEliteEncounter,recordEliteDefeat,eliteRewards}from"./core/SecondWorldEliteSystem.js?v=3.1.1-build311";
 import{shouldPlayTenGodFirstContact,tenGodContactChoices,resolveTenGodFirstContact}from"./core/TenGodContactSystem.js?v=3.1.1-build311";
 import{TenGodContactScreen}from"./ui/screens/TenGodContactScreen.js?v=3.1.1-build311";
 import{maxMp,learnedSkills,allLearnedSkills,equipSkill,skillById,skillElementLabel,canUseSkill,effectiveSkillMpCost,skillMpCostBreakdown,skillDamage,affixOutgoingDamageMultiplier,chooseAutoBattleDecision,skillProgressFor,recordSkillUse,skillEffectSummary,skillCombatKeywords,applySkillMastery,recommendedSkills,recommendedSkillLoadout}from"./battle/SkillSystem.js?v=3.1.39-build359";
-import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyDamageAfterDefense,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=3.1.42-build362";
+import{ENEMY_ACTIONS,createEnemyBattleState,chooseEnemyAction,enemyActionMpCost,enemyDamageMultiplier,enemyDamageAfterDefense,enemyHealAmount,enemyAttackMultiplier,specialActionMultiplier,specialActionInfo}from"./battle/EnemyAI.js?v=3.1.43-build363";
 import{createBattleRulesState,cooldownRemaining,setSkillCooldown,tickCooldowns,addBattleLog,applyEnemyStatus,applyEnemyDamage,processEnemyStatuses,applyBattleEffect,effectStackBreakdown,effectValue,hasEffect,clearNegativeAllyEffects,clearPersistentAilments,syncPersistentAilments,tickBattleEffects,processAllyEffects}from"./battle/BattleRules.js?v=3.1.41-build361";
 import{attackHits}from"./battle/HitSystem.js?v=3.1.1-build311";
-import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=3.1.42-build362";
+import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=3.1.43-build363";
 import{dangerConfig}from"./core/DangerSystem.js?v=3.1.1-build311";
 import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=3.1.25-build345";
 import{MAGIC_CIRCLES,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,autoEquipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost,magicCircleLevelEffect,isRaidExclusiveMagicCircle}from"./core/MagicCircleSystem.js?v=3.1.41-build361";
@@ -100,9 +102,9 @@ import{buildSectionMiniMapModel,fitMiniMapTransform,projectMiniMapPoint}from"./c
 import{beginManualExpedition,recordManualFloorClear,claimManualReturn,abandonManualExpedition,idleReturnPreview,claimIdleReturn,returnRarityRates,returnRewardGrade,goldForClearedFloor}from"./core/ReturnRewardSystem.js?v=3.1.42-build362";
 import{modifiedGoldReward}from"./core/GoldRewardSystem.js?v=3.1.41-build361";
 import{battleGoldBase,chestGoldBase,secondWorldEventGoldBase,specialBattleGoldBase}from"./core/GoldEconomySystem.js?v=3.1.1-build311";
-import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=3.1.42-build362";
-import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,casinoBetLimit,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,darkMarketPlayerMaxLevel,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=3.1.42-build362";
-import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=3.1.42-build362";
+import{monsterCombatPower,partyCombatPower,partyCombatPowerBreakdown,formatCombatPower,recordPartyCombatPower}from"./core/CombatPower.js?v=3.1.43-build363";
+import{beginSecretRoomExpedition,ensureSecretRoomExpedition,secretRoomPlan,enterSecretRoom,activeSecretRoom,spinSecretRoomCasino,casinoBetLimit,useSecretRoomInn,buyDarkMarketOffer,buyDarkMarketRecovery,isDarkMarketBargain,darkMarketPlayerMaxLevel,SECRET_ROOM_RECOVERY_ITEMS,DARK_MARKET_ITEM_LIMIT,CASINO_CRYSTAL_COST,CASINO_MULTIPLIER_RATES}from"./core/SecretRoomSystem.js?v=3.1.43-build363";
+import{applyGameMasterReward,applySerialReward,commitSerialRedemption,validateGameMasterCode,validateSerialCode}from"./core/SerialCodeSystem.js?v=3.1.43-build363";
 import{runConfirmedFullReset}from"./core/FullResetSystem.js?v=3.1.13-build332";
 import{DAILY_NOTICE_GIFT,activeNoticeDefinitions,setServerMaintenanceState,markNoticeRead,normalizeNoticeState,dailyNoticeGiftStatus,claimDailyNoticeGift,noticeAttentionCount,pendingNoticeRewards,claimNoticeReward,enqueueNoticeReward}from"./core/NoticeSystem.js?v=3.1.19-build338";
 import{COMPLETE_MONSTER_CODEX,codexCollectionSummary,syncCollectionRewardInbox,rewardDescription}from"./core/CollectionRewardSystem.js?v=3.1.42-build362";
@@ -110,11 +112,11 @@ import{achievementSummary,syncAchievementRewardInbox,achievementIconKeyForId}fro
 import{CONTEXT_GUIDE_STEPS,completeGuideStep,normalizeContextualGuide,setGuidePending,guidePending,guideStepDone,bumpGuideCounter,snoozeGuideStep,guideStepSnoozed,resetContextualGuide,contextualGuideProgress}from"./core/ContextualGuideSystem.js?v=3.1.1-build311";
 import{weekdayGachaSchedule,weekdayGachaCost,WEEKDAY_GACHA_CALENDAR,WEEKDAY_ENDGAME_RATE,rollWeekdayEndgameHit}from"./core/WeekdayGachaSystem.js?v=3.1.1-build311";
 import{bossExperiencePackReward}from"./core/BossRewardSystem.js?v=3.1.1-build311";
-import{enemyExperienceReward}from"./core/ProgressionSystem.js?v=3.1.42-build362";
+import{enemyExperienceReward}from"./core/ProgressionSystem.js?v=3.1.43-build363";
 import{treasureRoomRateForFloor,treasureRoomChestCount,shouldPlaceTreasureMimic,rollTreasureChestReward,mimicVictoryGold,mimicExperienceMultiplier,mimicVictoryCrystals}from"./core/TreasureSystem.js?v=3.1.19-build338";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionForFloor,floorBossDefinitionById,floorBossEquipmentDesignByPiece,milestoneBossIdsForFloor}from"./data/floorBosses.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CONTRACT_COST,FLOOR_BOSS_EQUIPMENT_COST,normalizeFloorBossChallengeState,recordFloorBossDiscovery,floorBossChallengeStatus,createFloorBossChallengeEncounter,awardFloorBossChallengeFragments,spendFloorBossFragments,restoreFloorBossFragments}from"./core/FloorBossChallengeSystem.js?v=3.1.39-build359";
-import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.42-build362";
+import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.43-build363";
 import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame,partyMonsterArtScale}from"./ui/MonsterVisual.js?v=3.1.38-build358";
 import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,permanentSignatureOwners,rollPermanentSignatureHit,PERMANENT_SIGNATURE_RATE,createSignatureEquipment,normalizeSignatureWeaponItem,signatureWeaponGrantedSkill}from"./core/SignatureWeaponSystem.js?v=3.1.41-build361";
 
@@ -541,7 +543,7 @@ function render(){
  else if(screen==="onlineParty"){app.innerHTML=OnlinePartyScreen(save.state);bindOnlineParty()}
  else if(screen==="monsters"){app.innerHTML=MonsterListScreen(save.state,{...monsterManage,...monsterListState});bindList()}
  else if(screen==="detail"){const m=save.state.monsters.find(x=>x.id===selected);app.innerHTML=MonsterDetailScreen(m,save.state);bindDetail(m)}
- else if(screen==="settings"){app.innerHTML=SettingsScreen(save.state);bindSettings()}
+ else if(screen==="settings"){app.innerHTML=SettingsScreen(save.state,{playerName:powerRankingDisplayName()});bindSettings()}
  else if(screen==="explore"){app.innerHTML=ExploreScreen(save.state);bindExplore()}
  else if(screen==="campaignFinalFloor"){renderCampaignFinalFloor()}
  else if(screen==="gauntlet"){app.innerHTML=GauntletScreen(save.state);bindGauntlet()}
@@ -902,9 +904,7 @@ function compactElapsedText(elapsedMs){
  return hours>0?`${hours}時間${minutePart}分`:`${minutePart}分`;
 }
 function powerRankingDisplayName(){
- const live=String(onlinePartyController?.profile?.displayName??"").trim();if(live)return live.slice(0,16);
- let stored="";try{stored=String(localStorage.getItem(ONLINE_STORAGE_KEYS.displayName)??"").trim()}catch{}
- return(stored||"冒険者").slice(0,16)
+ return readPlayerName(onlinePartyController?.profile?.displayName||"冒険者")
 }
 function powerRankingPublicSnapshot(){
  const allEquipment=[...(save.state.equipment??[]),...(save.state.reserveEquipment??[]),...(save.state.bossEquipmentVault??[])],byId=new Map(allEquipment.map(item=>[item.id,item]));
@@ -1020,7 +1020,7 @@ function combatPowerOwnMarkup(){
 }
 function powerRankingEntryMarkup(entry,{self=false,serverNow=0,receivedAt=0,presenceOnlineMs=90000}={}){
  const icon=entry?.icon??entry?.party?.[0]??{},rank=Math.max(1,Math.floor(Number(entry?.rank)||1)),fallback=icon.fallbackEmoji??SPECIES[icon.speciesId]?.emoji??"魔";
- return`<button type="button" class="power-ranking-row ${self?"is-self":""}" data-power-ranking-player="${escapeAttribute(entry?.playerId??"")}"><span class="power-ranking-position ${rank<=3?`rank-${rank}`:""}">${rank<=3?["","Ⅰ","Ⅱ","Ⅲ"][rank]:`#${rank}`}</span><span class="power-ranking-avatar">${monsterVisual(icon,fallback,{className:"power-ranking-monster-visual"})}</span><span class="power-ranking-identity"><small>${self?"YOU・":""}${escapeAttribute(icon.name??"スロット1")}</small><b>${escapeAttribute(entry?.displayName??"冒険者")}</b><em>最高 ${Math.max(1,Math.floor(Number(entry?.maxFloor)||1)).toLocaleString()}階</em>${rankingPresenceMarkup(entry,{serverNow,receivedAt,presenceOnlineMs})}</span><strong>${formatCombatPower(entry?.power)}</strong><i aria-hidden="true">›</i></button>`
+ return`<button type="button" class="power-ranking-row ${self?"is-self":""}" data-power-ranking-player="${escapeAttribute(entry?.playerId??"")}"><span class="power-ranking-position ${rank<=3?`rank-${rank}`:""}">${rank<=3?["","Ⅰ","Ⅱ","Ⅲ"][rank]:`#${rank}`}</span><span class="power-ranking-avatar">${monsterVisual(icon,fallback,{className:"power-ranking-monster-visual"})}</span><span class="power-ranking-identity"><small>${self?"YOU・":""}${escapeAttribute(icon.name??"スロット1")}</small><b>${escapeAttribute(self?powerRankingDisplayName():entry?.displayName??"冒険者")}</b><em>最高 ${Math.max(1,Math.floor(Number(entry?.maxFloor)||1)).toLocaleString()}階</em>${rankingPresenceMarkup(entry,{serverNow,receivedAt,presenceOnlineMs})}</span><strong>${formatCombatPower(entry?.power)}</strong><i aria-hidden="true">›</i></button>`
 }
 function combatPowerRankingMarkup(){
  const controller=onlinePartyController,state=powerRankingUi.state,connected=Boolean(controller?.connectionReady),supported=powerRankingSupported();
@@ -1046,9 +1046,10 @@ function requestPowerRankings({force=false}={}){
 }
 function renderCombatPowerRecordModal(modal,tab="own"){
  if(!modal)return;clearTimeout(modal._powerRankingPresenceTimer);modal._powerRankingPresenceTimer=null;const previousList=modal.querySelector(".power-ranking-list");if(previousList)modal._powerRankingScrollTop=previousList.scrollTop;modal.dataset.powerRecordTab=tab;const body=modal.querySelector(".game-modal-body");if(!body)return;if(tab!=="ranking"){clearTimeout(modal._powerRankingListTimer);modal._powerRankingListTimer=null;powerRankingUi.loadingList=false}
- body.innerHTML=`<div class="power-record-tabs" role="tablist" aria-label="戦力記録の表示"><button type="button" role="tab" data-power-record-tab="own" aria-selected="${tab==="own"}">自分の記録</button><button type="button" role="tab" data-power-record-tab="ranking" aria-selected="${tab==="ranking"}">全体ランキング</button></div><div class="power-record-panel">${tab==="ranking"?combatPowerRankingMarkup():combatPowerOwnMarkup()}</div>`;
+ body.innerHTML=`<div class="power-record-tabs" role="tablist" aria-label="戦力記録の表示"><button type="button" role="tab" data-power-record-tab="own" aria-selected="${tab==="own"}">自分の記録</button><button type="button" role="tab" data-power-record-tab="ranking" aria-selected="${tab==="ranking"}">全体ランキング</button></div><div class="power-record-panel">${tab==="ranking"?`<div class="player-name-shortcut363"><div><small>あなたのプレイヤー名</small><b>${escapeAttribute(powerRankingDisplayName())}</b></div><button type="button" data-player-name-edit>名前を変更</button></div>${combatPowerRankingMarkup()}`:combatPowerOwnMarkup()}</div>`;
  const rankingList=body.querySelector(".power-ranking-list");if(rankingList){rankingList.scrollTop=Math.max(0,Number(modal._powerRankingScrollTop)||0);rankingList.addEventListener("scroll",()=>{modal._powerRankingScrollTop=rankingList.scrollTop},{passive:true})}
  body.querySelectorAll("[data-power-record-tab]").forEach(button=>button.onclick=()=>{const next=button.dataset.powerRecordTab;renderCombatPowerRecordModal(modal,next);if(next==="ranking")requestPowerRankings({force:Boolean(powerRankingUi.state)})});
+ body.querySelector("[data-player-name-edit]")?.addEventListener("click",()=>openPlayerNameEditor(modal));
  body.querySelector("[data-power-ranking-refresh]")?.addEventListener("click",()=>requestPowerRankings({force:true}));
  body.querySelector("[data-power-ranking-retry]")?.addEventListener("click",()=>{ensurePowerRankingConnection({force:true});requestPowerRankings({force:true})});
  body.querySelectorAll("[data-power-ranking-player]").forEach(button=>button.onclick=()=>openPowerRankingProfile(button.dataset.powerRankingPlayer));
@@ -1062,6 +1063,7 @@ function renderPowerRankingProfileModal(modal,profile){
  if(powerRankingUi.loadingProfile&&!profile){body.innerHTML='<div class="power-ranking-profile-loading"><i></i><p>公開パーティーを読み込み中…</p></div>';return}
  clearTimeout(modal._powerRankingProfileTimer);modal._powerRankingProfileTimer=null;
  if(!profile){body.innerHTML='<div class="power-ranking-unavailable"><h3>パーティー情報を取得できませんでした</h3><p>相手がランキング更新後に編成を変更した可能性があります。</p></div>';return}
+ if(String(profile.playerId??"")===String(onlinePartyController?.selfId??""))profile={...profile,displayName:powerRankingDisplayName()};
  const party=Array.isArray(profile.party)?profile.party.slice(0,4):[],cards=party.map((monster,index)=>{const fallback=monster?.fallbackEmoji??SPECIES[monster?.speciesId]?.emoji??"魔",equipment=(monster.equipment??[]).slice(0,6).map(rankingEquipmentMarkup).join(""),circle=monster.magicCircle??{};return`<article class="power-ranking-party-card"><header><span>${index+1}</span>${monsterVisual(monster,fallback,{className:"power-ranking-profile-monster"})}<div><small>${escapeAttribute(monster.rarity??"N")}・Lv.${Math.max(1,Math.floor(Number(monster.level)||1)).toLocaleString()}</small><b>${escapeAttribute(monster.name??"仲間")}</b><strong>戦力 ${formatCombatPower(monster.power)}</strong></div></header><div class="power-ranking-circle"><span>${pixelIcon("event")}</span><div><small>魔法陣</small><b>${escapeAttribute(circle.name??"魔法陣なし")}${Number(circle.level)>0?` Lv.${Math.floor(Number(circle.level))}`:""}</b></div></div><ul>${equipment||'<li class="empty"><div><b>装備なし</b><small>公開装備はありません</small></div></li>'}</ul></article>`}).join("");
  const presenceOptions={serverNow:profile.serverNow,receivedAt:profile._receivedAt,presenceOnlineMs:profile.presenceOnlineMs};body.innerHTML=`<div class="power-ranking-profile-head"><span>${pixelIcon("formation")}</span><div><small>PUBLIC PARTY・最高 ${Math.max(1,Math.floor(Number(profile.maxFloor)||1)).toLocaleString()}階</small><h3>${escapeAttribute(profile.displayName??"冒険者")}</h3><b>部隊戦力 ${formatCombatPower(profile.power)}</b></div>${rankingPresenceMarkup(profile,presenceOptions)}</div><div class="power-ranking-party-list">${cards||'<p class="muted">公開パーティーはありません。</p>'}</div>`;schedulePowerRankingPresenceRefresh(modal,[profile],presenceOptions,()=>renderPowerRankingProfileModal(modal,profile))
 }
@@ -1857,7 +1859,32 @@ async function redeemSettingsGameMasterCode(event){
  app.insertAdjacentHTML("beforeend",Modal(result.kind==="floor99Unlock362"?"GM出発先の解放完了":"GM支援パック認証完了",`<div class="serial-reward-result"><div>🛠️</div><p><b>${result.message}</b></p><small>${["progressPack356","finalePack359"].includes(result.kind)?"配布のみです。階層・討伐記録・現在の編成は変更していません。":"出発階層の解放は最高到達階・実績・クリア状態を変更しません。"}</small></div>`,`確認`));
  topModalButton().onclick=()=>{closeTopModal();render()};
 }
+function bindPlayerNameForm(root){
+ const form=root.querySelector("[data-player-name-form]");if(!form)return;
+ const input=form.querySelector("[data-player-name-input]"),status=form.querySelector("[data-player-name-status]");let composing=false;
+ form.addEventListener("compositionstart",()=>{composing=true});form.addEventListener("compositionend",()=>{composing=false});
+ input.addEventListener("keydown",event=>{if(event.key==="Enter"&&(composing||event.isComposing||event.keyCode===229))event.preventDefault()});
+ input.addEventListener("input",()=>{input.removeAttribute("aria-invalid");status.textContent="";status.classList.remove("is-error")});
+ form.addEventListener("submit",event=>{
+  event.preventDefault();if(composing)return;
+  const controller=ensureOnlinePartyController(),result=controller.setDisplayName(input.value);
+  status.classList.toggle("is-error",!result.ok);input.setAttribute("aria-invalid",String(!result.ok));
+  if(!result.ok){status.textContent=result.message;input.focus();return}
+  input.value=result.name;input.blur();
+  publishPowerRankingSnapshot({force:true});
+  status.textContent=controller.connectionReady?"名前を保存しました。ランキングの更新を送信しています。":"名前を保存しました。オンラインに接続するとランキングにも反映されます。";
+  const ranking=document.querySelector("[data-power-record-modal]");if(ranking?.dataset.powerRecordTab==="ranking")renderCombatPowerRecordModal(ranking,"ranking");
+ });
+}
+function openPlayerNameEditor(ranking){
+ app.insertAdjacentHTML("beforeend",Modal("プレイヤー名",PlayerNameForm(powerRankingDisplayName(),"rankingPlayerName"),"閉じる"));
+ const modal=topModal();modal.classList.add("player-name-modal363");bindPlayerNameForm(modal);
+ const close=()=>{modal.remove();ranking?.querySelector("[data-player-name-edit]")?.focus()};
+ modal._onDismiss=close;modal.querySelector("[data-modal-primary]").onclick=close;
+ modal.querySelector("[data-player-name-input]")?.focus();
+}
 function bindSettings(){
+ bindPlayerNameForm(app);
  document.getElementById("backHome").onclick=()=>{const target=settingsNavigationOrigin;settingsNavigationOrigin="home";returnFromMenu(target)};
  document.getElementById("toggleAuto").onclick=()=>{save.state.settings.autoBattle=!save.state.settings.autoBattle;save.save();render()};
  document.getElementById("toggleMinimap").onclick=()=>{save.state.settings.minimapVisible=!save.state.settings.minimapVisible;save.save();render()};
