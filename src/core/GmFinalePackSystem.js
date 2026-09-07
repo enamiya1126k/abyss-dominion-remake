@@ -1,11 +1,11 @@
-import {createMonster,calculatedStats} from '../models/Monster.js?v=3.1.50-build370';
+import {createMonster,calculatedStats} from '../models/Monster.js?v=3.1.52-build372';
 import {endgameCharacter} from '../data/endgameCharacters.js';
 import {createSignatureEquipment,signatureStatBonuses,signatureSetState,signatureWeaponGrantedSkill} from './SignatureWeaponSystem.js?v=3.1.41-build361';
 import {equipmentStatMultiplier,equipmentRequiredMonsterLevel} from '../models/Equipment.js?v=3.1.41-build361';
 import {aggregateSeriesEffects} from '../data/equipmentSeries.js';
 import {equipmentAffixesWithSeries} from './EquipmentAffixSystem.js';
 import {maxMp,skillMasteryNeedForLevel} from '../battle/SkillSystem.js?v=3.1.49-build369';
-import {MONSTER_STORAGE_CAP} from './config.js?v=3.1.50-build370';
+import {MONSTER_STORAGE_CAP} from './config.js?v=3.1.52-build372';
 import {EQUIPMENT_LIMIT} from '../services/EquipmentStorage.js?v=3.1.41-build361';
 
 // A fixed, reproducible 100F reference party, independent of earlier GM claims.

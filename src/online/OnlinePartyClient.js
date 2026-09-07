@@ -1,11 +1,11 @@
 import {
   buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
   onlineSocialNotificationSummary, moveOnlineBattleRosterPriority, renderOnlineBattleRosterPicker,
-} from "../ui/screens/OnlinePartyScreen.js?v=3.1.50-build370";
+} from "../ui/screens/OnlinePartyScreen.js?v=3.1.52-build372";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=3.1.50-build370";
+} from "./OnlineViews.js?v=3.1.52-build372";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   rollbackOnlineTradeAssetReservation, commitOnlineTrade, recoverOrphanedTradeEscrows,
@@ -435,6 +435,7 @@ function normalizePowerRankingMonster(source, fallbackSlot = 1) {
     power: rankingPower(source.power),
     battleStats: normalizePowerRankingBattleStats(source.battleStats),
     equipment,
+    equipmentStatus: ["complete", "partial"].includes(source.equipmentStatus) ? source.equipmentStatus : "unknown",
     magicCircle: {
       name: rankingText(circleSource?.name, 32, "魔法陣なし"),
       level: boundedInteger(circleSource?.level, 0, 99, 0),

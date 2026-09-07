@@ -1,0 +1,6 @@
+/* Empty equipment messages occupy the full row, not the 34px icon column. */
+.power-ranking-party-card li.empty{grid-template-columns:minmax(0,1fr)}
+.power-ranking-party-card li.empty b,.power-ranking-party-card li.empty small{white-space:normal;overflow-wrap:anywhere}
+.power-ranking-profile-refresh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 0;color:#b9a8be}
+.power-ranking-profile-refresh small{font-size:10px;min-width:0}
+.power-ranking-profile-refresh button{flex:none;padding:8px 12px;border:1px solid #907344;border-radius:8px;background:#211827;color:#f4e7c4;font-size:12px;touch-action:manipulation}

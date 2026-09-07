@@ -143,6 +143,7 @@ function sanitizeMonster(source, index, { maxFloor = 1, enforcePlausibility = tr
     attribute: text(source.attribute, 20) || "neutral",
     battleStats,
     equipment,
+    equipmentStatus: ["complete", "partial"].includes(source.equipmentStatus) ? source.equipmentStatus : "unknown",
     magicCircle: { name: text(circle.name ?? source.circleName, 32) || "魔法陣なし", level: integer(circle.level ?? source.circleLevel, 0, 99, 0) },
   } };
 }
@@ -196,6 +197,7 @@ function persistedMonster(source, { dropAssets = false } = {}) {
     rarity: rarity(source?.rarity),
     power: integer(source?.power, 1, Number.MAX_SAFE_INTEGER, 1),
     attribute: text(source?.attribute, 20) || "neutral",
+    equipmentStatus: ["complete", "partial"].includes(source?.equipmentStatus) ? source.equipmentStatus : "unknown",
     equipment: sanitizeEquipment(source?.equipment).map(item => dropAssets ? { ...item, visualAsset: null } : item),
     magicCircle: {
       name: text(source?.magicCircle?.name, 32) || "魔法陣なし",
@@ -237,7 +239,7 @@ function publicMonster(source, { icon = false } = {}) {
     floorBossCatalogId: source.floorBossCatalogId, customVisualAsset: source.customVisualAsset, customVisualBase: source.customVisualBase,
     name: source.name, level: source.level, rarity: source.rarity, power: source.power,
   };
-  if (!icon) Object.assign(result, { slot: source.slot, attribute: source.attribute, equipment: source.equipment.map(item => ({ ...item })), magicCircle: { ...source.magicCircle } });
+  if (!icon) Object.assign(result, { slot: source.slot, attribute: source.attribute, equipmentStatus: source.equipmentStatus ?? "unknown", equipment: source.equipment.map(item => ({ ...item })), magicCircle: { ...source.magicCircle } });
   return result;
 }
 function publicPresence(source, recordUpdatedAt, at) {
