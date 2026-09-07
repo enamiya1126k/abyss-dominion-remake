@@ -1,12 +1,12 @@
-import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.41-build361";
+import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.42-build362";
 // Regression marker only: config.js?v=3.1.10-build329
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323 / CampaignReincarnationSystem.js?v=3.1.4-build323
-import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=3.1.41-build361";
+import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=3.1.42-build362";
 import{maxMp,normalizeSkillProgress,allLearnedSkills,recommendedSkills,recommendedSkillLoadout,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.39-build359";
-import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=3.1.41-build361";
+import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=3.1.42-build362";
 import{normalizeFloorBossChallengeState}from"../core/FloorBossChallengeSystem.js?v=3.1.39-build359";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionById,milestoneBossIdsForFloor}from"../data/floorBosses.js?v=3.1.1-build311";
-import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=3.1.41-build361";
+import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=3.1.42-build362";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=3.1.1-build311";
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=3.1.1-build311";
 import{SPECIES}from"../data/species.js?v=3.1.39-build359";
@@ -15,20 +15,20 @@ import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects
 import{normalizeWeaponMastery}from"./WeaponMastery.js?v=3.1.39-build359";
 import{normalizeOnlineProgressIsolation,recoverInterruptedGuestProgress}from"../online/OnlineProgressIsolation.js?v=3.1.1-build311";
 
-import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=3.1.41-build361";
+import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=3.1.42-build362";
 import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=3.1.41-build361";
 import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=3.1.41-build361";
 import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=3.1.1-build311";
-import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=3.1.41-build361";
-import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=3.1.41-build361";
-import{clearSerialRedemptionLedgerForFullReset,normalizeSerialCodeState,restoreSerialRedemptionLedgerAfterFailedReset}from"../core/SerialCodeSystem.js?v=3.1.41-build361";
+import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=3.1.42-build362";
+import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=3.1.42-build362";
+import{clearSerialRedemptionLedgerForFullReset,normalizeSerialCodeState,restoreSerialRedemptionLedgerAfterFailedReset}from"../core/SerialCodeSystem.js?v=3.1.42-build362";
 import{normalizeNoticeState}from"../core/NoticeSystem.js?v=3.1.1-build317";
-import{syncCollectionRewardInbox}from"../core/CollectionRewardSystem.js?v=3.1.41-build361";
-import{normalizeAchievementState,syncAchievementRewardInbox}from"../core/AchievementRewardSystem.js?v=3.1.41-build361";
+import{syncCollectionRewardInbox}from"../core/CollectionRewardSystem.js?v=3.1.42-build362";
+import{normalizeAchievementState,syncAchievementRewardInbox}from"../core/AchievementRewardSystem.js?v=3.1.42-build362";
 import{normalizeGachaDrawHistory,normalizeGachaPityState}from"../core/GachaBalanceSystem.js?v=3.1.1-build311";
-import{CAMPAIGN_MAX_FLOOR,legacyFloorToCampaignFloor,floorBossCampaignDisplayFloor,normalizeCampaignState,campaignFloorState}from"../core/Campaign100System.js?v=3.1.41-build361";
-import{normalizeCampaignHeroInvasion,retireLegacyCampaignRewind}from"../core/CampaignHeroEncounterSystem.js?v=3.1.41-build361";
-import{normalizeCampaignReincarnationState}from"../core/CampaignReincarnationSystem.js?v=3.1.41-build361";
+import{CAMPAIGN_MAX_FLOOR,legacyFloorToCampaignFloor,floorBossCampaignDisplayFloor,normalizeCampaignState,campaignFloorState}from"../core/Campaign100System.js?v=3.1.42-build362";
+import{normalizeCampaignHeroInvasion,retireLegacyCampaignRewind}from"../core/CampaignHeroEncounterSystem.js?v=3.1.42-build362";
+import{normalizeCampaignReincarnationState}from"../core/CampaignReincarnationSystem.js?v=3.1.42-build362";
 import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=3.1.41-build361";
 import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=3.1.1-build311";
 import{normalizeEquipmentIdentity}from"../data/equipment.js?v=3.1.1-build311";

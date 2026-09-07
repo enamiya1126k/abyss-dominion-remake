@@ -1,4 +1,4 @@
-import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.41-build361";
+import{CAMPAIGN_MAX_FLOOR,HERO_PARTY_IDS}from"./Campaign100System.js?v=3.1.42-build362";
 
 export const CAMPAIGN_STORY_VERSION=2;
 export const CAMPAIGN_STORY_OPENING_VERSION=2;

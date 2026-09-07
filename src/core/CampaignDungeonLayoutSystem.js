@@ -1,4 +1,4 @@
-import { roomAttributesForFloor, roomCountForRandom } from "./Campaign100System.js?v=3.1.41-build361";
+import { roomAttributesForFloor, roomCountForRandom } from "./Campaign100System.js?v=3.1.42-build362";
 import { requiredCampaignBossSectionCount } from "./CampaignBossWorldSystem.js";
 import { generateSectionDungeon } from "./DungeonSectionSystem.js";
 

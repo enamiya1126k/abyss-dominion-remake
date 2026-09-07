@@ -3,7 +3,7 @@ import{receiveEquipment}from"../services/EquipmentStorage.js?v=3.1.41-build361";
 import{abyssEquipmentRarityBonus}from"./AbyssSkillTreeSystem.js?v=3.1.41-build361";
 import{modifiedGoldReward}from"./GoldRewardSystem.js?v=3.1.41-build361";
 import{goldForClearedFloor}from"./GoldEconomySystem.js?v=3.1.1-build311";
-import{CAMPAIGN_MAX_FLOOR,campaignFloorToLegacyFloor}from"./Campaign100System.js?v=3.1.41-build361";
+import{CAMPAIGN_MAX_FLOOR,campaignFloorToLegacyFloor}from"./Campaign100System.js?v=3.1.42-build362";
 
 export{goldForClearedFloor}from"./GoldEconomySystem.js?v=3.1.1-build311";
 

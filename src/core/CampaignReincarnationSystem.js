@@ -1,6 +1,6 @@
 import{REINCARNATION_START_GOLD,syncCycleEquipment}from'./Postgame361System.js?v=3.1.41-build361';
-import{CAMPAIGN_MAX_FLOOR,beginCampaignFloorReplay,normalizeCampaignState}from"./Campaign100System.js?v=3.1.41-build361";
-import{createCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.41-build361";
+import{CAMPAIGN_MAX_FLOOR,beginCampaignFloorReplay,normalizeCampaignState}from"./Campaign100System.js?v=3.1.42-build362";
+import{createCampaignHeroEncounterState}from"./CampaignHeroEncounterSystem.js?v=3.1.42-build362";
 
 export const CAMPAIGN_REINCARNATION_VERSION=2;
 export const CAMPAIGN_FINAL_ENDING_IDS=Object.freeze(["complete","narrow","defeat"]);

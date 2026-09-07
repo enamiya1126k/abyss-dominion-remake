@@ -1,10 +1,10 @@
-import {validateGmFinalePack,applyGmFinalePack} from './GmFinalePackSystem.js?v=3.1.41-build361';
+import {validateGmFinalePack,applyGmFinalePack} from './GmFinalePackSystem.js?v=3.1.42-build362';
 import{EQUIPMENT_BASES}from"../data/equipment.js?v=2.11.2-build166";
-import{createMonster,calculatedStats}from"../models/Monster.js?v=3.1.41-build361";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=3.1.42-build362";
 import{allLearnedSkills,maxMp,recommendedSkills,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.39-build359";
 import{SPECIES}from"../data/species.js?v=3.1.39-build359";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.41-build361";
-import{MONSTER_STORAGE_CAP}from"./config.js?v=3.1.41-build361";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.42-build362";
+import{MONSTER_STORAGE_CAP}from"./config.js?v=3.1.42-build362";
 import{createEquipment}from"../models/Equipment.js?v=3.1.41-build361";
 import{receiveEquipment,EQUIPMENT_LIMIT}from"../services/EquipmentStorage.js?v=3.1.41-build361";
 
@@ -34,6 +34,7 @@ const CODE_REWARDS=Object.freeze({
   ,"9d5c12ceb74d9ad485bdd55dbdc12916cd52e36ed38bbfbbab40f4920687b2ab":"mythicPackHide"
 });
 
+const GM_FLOOR99_HASH="623175bfb0aa02aa1abed1a8ea8f61a7082219a889bb05e6045e7f3beb84fbfd";
 const GM_FINALE_PACK_HASH="2225505eec400f3b7390af9f7cea986e9f7fb7c1a97ac648961b941b781ebce3";
 const GM_PROGRESS_PACK_HASH="55c5c028f98cd1991d73c2c031a40b84e7a673eb7950291490c982eddfdfd3cf";
 const GAME_MASTER_HASH="dd808decc6532af902eb00cc9a8aad1b5575db84d325c9732fe84256cbd1b15e";
@@ -289,6 +290,7 @@ export function applySerialReward(state,rewardId){
 export async function validateGameMasterCode(state,rawCode){
  const normalized=normalizeSerialInput(rawCode);if(!normalized)return{ok:false,message:"GMコードを入力してください。"};let hash;
  try{hash=await sha256(normalized)}catch(error){return{ok:false,message:error.message}}
+ if(hash===GM_FLOOR99_HASH)return{ok:true,kind:"floor99Unlock362"};
  if(hash===GM_FINALE_PACK_HASH){const check=validateGmFinalePack(state);return check.ok?{ok:true,kind:"finalePack359"}:check}
  if(hash===GM_PROGRESS_PACK_HASH){const check=validateGmProgressPack(state);return check.ok?{ok:true,kind:"progressPack356"}:check}
  if(hash===GAME_MASTER_RESET_HASH)return{ok:true,kind:"reset"};
@@ -299,6 +301,7 @@ export async function validateGameMasterCode(state,rawCode){
 }
 
 export function applyGameMasterReward(state,kind="grant"){
+ if(kind==="floor99Unlock362"){state.settings??={};state.settings.gmFloorUnlockMax=Math.max(99,Number(state.settings.gmFloorUnlockMax)||0,Number(state.gameMaster?.floorUnlockMax)||0);return{ok:true,kind,message:"試運転用：99階まで出発先を解放しました。ホームのダンジョンから99階を選択できます。"};}
  if(kind==="finalePack359")return applyGmFinalePack(state);
  if(kind==="progressPack356")return applyGmProgressPack(state);
  if(state.gameMaster?.claimedAt)return{ok:false,message:"GM支援パックは受取済みです。"};

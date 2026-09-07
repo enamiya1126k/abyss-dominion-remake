@@ -1,16 +1,16 @@
-import{APP_VERSION}from"../../core/config.js?v=3.1.41-build361";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=3.1.41-build361";
+import{APP_VERSION}from"../../core/config.js?v=3.1.42-build362";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=3.1.42-build362";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.39-build359";
 import{biomeForFloor}from"../../data/biomes.js?v=3.1.1-build311";
 import{dungeonThemeForFloor,dungeonThemeForAttribute}from"../../data/dungeonThemes.js?v=3.1.1-build311";
-import{worldPresentationForFloor}from"../../core/WorldSystem.js?v=3.1.41-build361";
-import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.41-build361";
-import{manualReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.41-build361";
+import{worldPresentationForFloor}from"../../core/WorldSystem.js?v=3.1.42-build362";
+import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.42-build362";
+import{manualReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.42-build362";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.38-build358";
 import{SPECIES}from"../../data/species.js?v=3.1.39-build359";
 import{resourceHud,pixelIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{CAMPAIGN_KEYS_PER_FLOOR,campaignDayDefinition,campaignFloorState,campaignKeysHeld,campaignRegionProgress,campaignRoomProfile}from"../../core/Campaign100System.js?v=3.1.41-build361";
+import{CAMPAIGN_KEYS_PER_FLOOR,campaignDayDefinition,campaignFloorState,campaignKeysHeld,campaignRegionProgress,campaignRoomProfile}from"../../core/Campaign100System.js?v=3.1.42-build362";
 
 const RARITY_TONE={N:"n",R:"r",SR:"sr",SSR:"ssr",UR:"ur",LR:"lr","神話":"mythic","深淵":"abyss","十神":"ten-god"};
 function runTime(startedAt){
