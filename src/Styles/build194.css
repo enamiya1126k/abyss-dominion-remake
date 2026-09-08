@@ -30,7 +30,7 @@
  letter-spacing:.08em;
 }
 .battle-screen.side-battle-v2 .floor-boss-enemy .side-unit-sprite{
- filter:drop-shadow(0 8px 7px #000e) drop-shadow(0 0 14px #8f2bc477)!important;
+ filter:none!important;
 }
 
 /* Forward-compatible presentation for a floor ruler that later joins the

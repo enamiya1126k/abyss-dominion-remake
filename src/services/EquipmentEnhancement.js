@@ -1,4 +1,4 @@
-import{equipmentDisplayRarity}from"../data/equipment.js?v=2.11.2-build166";
+import{equipmentDisplayRarity}from"../data/equipment.js?v=3.1.55-build375";
 
 const RARITY_MATERIAL_EXP={N:20,R:45,SR:100,SSR:220,UR:350,LR:500,"神話":850,"深淵":1400,"十神":2400};
 

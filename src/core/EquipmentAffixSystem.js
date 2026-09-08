@@ -1,4 +1,4 @@
-import{aggregateAffixes}from"../data/equipmentAffixes.js";
+import{aggregateAffixes}from"../data/equipmentAffixes.js?v=3.1.55-build375";
 export function equipmentAffixesWithSeries(items,seriesEffects){
  const result=aggregateAffixes(items);
  const appliedAuthorities=new Set();

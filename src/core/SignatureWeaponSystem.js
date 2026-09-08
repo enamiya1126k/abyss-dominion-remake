@@ -1,7 +1,7 @@
 import{SPECIES}from"../data/species.js?v=3.1.39-build359";
 import{ENDGAME_CHARACTERS,canonicalEndgameId}from"../data/endgameCharacters.js?v=3.1.38-build358";
-import{RARITY_ORDER,normalizeEquipmentIdentity}from"../data/equipment.js?v=2.11.2-build166";
-import{createEquipment}from"../models/Equipment.js?v=3.1.41-build361";
+import{RARITY_ORDER,normalizeEquipmentIdentity}from"../data/equipment.js?v=3.1.55-build375";
+import{createEquipment}from"../models/Equipment.js?v=3.1.55-build375";
 
 const MYTHIC=Object.freeze({
  myth_enami:Object.freeze({id:"enami-multitask",ownerId:"myth_enami",ownerName:"えなみ",name:"多動共鳴",description:"創作衝動が加速し、スキル後に追加行動を狙う。",extraActionChance:.35,theme:"連続行動"}),

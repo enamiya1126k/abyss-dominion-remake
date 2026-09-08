@@ -14,7 +14,7 @@
 .side-battle-v2 .combat-rank-unit.rank-mythic .side-unit-sprite{filter:drop-shadow(0 0 9px #ff8f62) drop-shadow(0 0 18px #ffd36b99)!important}
 .side-battle-v2 .combat-rank-unit.rank-abyss .side-unit-sprite{filter:drop-shadow(0 0 10px #ff406e) drop-shadow(0 0 20px #7d20baaa)!important}
 .side-battle-v2 .combat-rank-unit.rank-ten-god .side-unit-sprite{filter:drop-shadow(0 0 10px #fff4ac) drop-shadow(0 0 22px #ffd951bb)!important}
-.side-battle-v2 .floor-boss-enemy.combat-rank-unit .side-unit-sprite{filter:drop-shadow(0 8px 7px #000e) drop-shadow(0 0 13px currentColor) drop-shadow(0 0 22px #8f2bc477)!important}
+.side-battle-v2 .floor-boss-enemy.combat-rank-unit .side-unit-sprite{filter:none!important}
 
 .skill-reserve-modal-v2{background:#020208e8!important;backdrop-filter:blur(7px)}
 .skill-reserve-modal-v2>.game-modal-card{width:min(95vw,620px)!important;height:min(90dvh,760px)!important;max-height:90dvh!important;display:grid!important;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden!important;padding:10px!important;border:9px solid transparent!important;border-image:var(--alpha115-frame) 44 fill / 9px!important;background:radial-gradient(circle at 50% 0,#68417625,transparent 35%),#08080c!important}
