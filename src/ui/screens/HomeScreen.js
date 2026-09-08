@@ -1,11 +1,12 @@
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.55-build375";
+import{chapterTwoUnlocked}from"../../chapterTwo/ChapterTwoSystem.js?v=3.1.56-build376";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.56-build376";
 // Regression marker only: config.js?v=3.1.21-build340
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.55-build375";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.56-build376";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.49-build369";
 import{SPECIES}from"../../data/species.js?v=3.1.39-build359";
 import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.55-build375";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.55-build375";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.56-build376";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.55-build375";
 import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=3.1.1-build317";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
@@ -163,7 +164,7 @@ export function HomeScreen(state,options={}){
         <span class="home-intel-cue" aria-hidden="true">勇者情報を見る ›</span>
       </header>
 
-      ${completed?`<section class="home-postgame-strip" aria-label="クリア後の進行"><span>クリア後もそのまま継続中</span><button type="button" id="openCampaignReincarnation">輪廻を選ぶ</button></section>`:reincarnation.active?`<section class="home-postgame-strip" aria-label="輪廻進行"><span>輪廻${reincarnation.cycle}・敵戦力 ×${campaignReincarnationDifficultyMultiplier(state).toFixed(2)}</span></section>`:""}
+      ${chapterTwoUnlocked(state)?`<section class="home-postgame-strip" aria-label="クリア後の進行"><span>勝利の先に、新たな物語</span><button type="button" id="openChapterTwo">第二章へ</button></section>`:reincarnation.active?`<section class="home-postgame-strip" aria-label="輪廻進行"><span>輪廻${reincarnation.cycle}・敵戦力 ×${campaignReincarnationDifficultyMultiplier(state).toFixed(2)}</span></section>`:""}
 
       <div class="home-resource-bar" aria-label="所持資源">
         <span title="GOLD：${state.player.gold.toLocaleString()}" data-exact-number="${state.player.gold.toLocaleString()}G">${pixelIcon("coin")}<b>${compactHomeNumber(state.player.gold)}</b></span>
