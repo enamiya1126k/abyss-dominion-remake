@@ -4,7 +4,7 @@ import {SaveService} from '../src/services/SaveService.js';
 import {HomeScreen} from '../src/ui/screens/HomeScreen.js';
 import {ChapterTwoScreen} from '../src/chapterTwo/ChapterTwoScreen.js';
 import {SPECIES} from '../src/data/species.js';
-import {chapterTwoUnlocked,chapterTwoState,beginChapterTwoRun,moveChapterTwoRoom,beginChapterTwoEncounter,settleChapterTwoEncounter,openChapterTwoChest,chapterTwoEnemyEntries,tuneChapterTwoEnemy,ROOMS,ENCOUNTERS,chapterTwoWorld} from '../src/chapterTwo/ChapterTwoSystem.js';
+import {chapterTwoUnlocked,chapterTwoState,beginChapterTwoRun,moveChapterTwoRoom,beginChapterTwoEncounter,settleChapterTwoEncounter,openChapterTwoChest,chapterTwoEnemyEntries,tuneChapterTwoEnemy,ROOMS,ENCOUNTERS,chapterTwoWorld,chapterTwoObjective} from '../src/chapterTwo/ChapterTwoSystem.js';
 import {CHAPTER_TWO_INTRO,CHAPTER_TWO_EPILOGUE} from '../src/chapterTwo/ChapterTwoStory.js';
 const clone=s=>JSON.parse(JSON.stringify(s));
 function fresh(){const mem=new Map();globalThis.localStorage={getItem:k=>mem.get(k)??null,setItem:(k,v)=>mem.set(k,String(v)),removeItem:k=>mem.delete(k)};return new SaveService();}
@@ -22,7 +22,7 @@ test('locked accounts never acquire chapter data or entry; reaching 100 and losi
 });
 test('win plus 100 unlocks; a lower-floor victory flag alone does not',()=>{
  const s=fresh().state;s.player.maxFloor=99;s.campaign100.finalCompleted=true;assert.equal(chapterTwoUnlocked(s),false);
- s.player.maxFloor=100;assert.equal(chapterTwoUnlocked(s),true);assert.match(HomeScreen(s),/id="openChapterTwo"/);assert.doesNotMatch(HomeScreen(s),/openCampaignReincarnation/);
+ s.player.maxFloor=100;assert.equal(chapterTwoUnlocked(s),true);assert.doesNotMatch(HomeScreen(s),/id="openChapterTwo"/);assert.doesNotMatch(HomeScreen(s),/openCampaignReincarnation/);
  for(const ending of ['complete','narrow','all-preempted']){s.campaign100.finalCompleted=false;s.campaign100.heroEncounters310.finalArena={completed:true,lastEnding:ending};assert.equal(chapterTwoUnlocked(s),true);}
 });
 test('sequence requires intro, two seals, and local encounters; no off-room rewards',()=>{
@@ -48,16 +48,16 @@ test('actual SaveService preserves room position, story and pending battle token
 });
 test('authored enemies and portraits exist; all six rooms are connected and walkable',()=>{
  const seen=new Set([0]),queue=[0];while(queue.length){const id=queue.shift();for(const next of Object.values(ROOMS[id].links))if(!seen.has(next)){seen.add(next);queue.push(next)}}assert.equal(seen.size,6);
- const w=chapterTwoWorld();for(const p of [{x:9,y:2},{x:9,y:16},{x:16,y:9},{x:2,y:9},{x:9,y:7},{x:6,y:7},{x:12,y:7}])assert.equal(w.tiles[p.y][p.x],0);
+ const w=chapterTwoWorld(start().state.chapterTwo376.run);for(const portal of w.sectionPortals){assert.equal(w.tiles[portal.y][portal.x],0);assert.equal(w.tiles[portal.arrivalY][portal.arrivalX],0)}
  for(const [id,profile] of Object.entries(ENCOUNTERS))for(const [i,e] of chapterTwoEnemyEntries(id).entries()){assert.ok(SPECIES[e.speciesId]);tuneChapterTwoEnemy(e,id,i);assert.ok(e.hp>0&&e.hp===e.maxHp&&e.atk>0);assert.ok(e.level>=1000);}
  for(const [,id] of [...CHAPTER_TWO_INTRO,...CHAPTER_TWO_EPILOGUE])if(id)assert.ok(SPECIES[id],id);
- const s=start().state;assert.match(ChapterTwoScreen(s,{field:true}),/chapterTwoCanvas/);assert.match(ChapterTwoScreen(s),/序章を読み返す/);
+ const s=start().state;assert.match(ChapterTwoScreen(s,{field:true}),/gameCanvas/);assert.match(ChapterTwoScreen(s),/現在の目的/);
 });
 const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
 const finishSource=main.slice(main.indexOf('function finishChapterTwoBattle('),main.indexOf('\nfunction openExploreFloorSelector',main.indexOf('function finishChapterTwoBattle(')));
 function finishFixture({saveFails=false}={}){
  const save=start(),attempt=battleAt(save.state,'patrol');save.state.activeBattle={specialBattleType:'chapterTwo',chapterTwoToken:attempt.token};const modals=[];const modal={classList:{add(){}},querySelector:()=>({}),remove(){}};
- const context={save:{state:save.state,save:()=>!saveFails},battle:{specialBattleType:'chapterTwo',chapterTwoToken:attempt.token,party:save.state.monsters},settleChapterTwoEncounter,CHAPTER_TWO_ENCOUNTERS:ENCOUNTERS,syncPersistentAilments(){},clearPartySynergy(){},restorePartyVitals(){},cleanupUltimateBattle(){},document:{querySelector:()=>({remove(){}})},app:{insertAdjacentHTML:(_,html)=>modals.push(html)},audio:{sfx(){}},render(){},Modal:(title,body)=>title+body,topModal:()=>modal,activeEnemy:null,snapshot:null,screen:'chapterTwoField'};
+ const context={save:{state:save.state,save:()=>!saveFails},battle:{specialBattleType:'chapterTwo',chapterTwoToken:attempt.token,party:save.state.monsters},settleChapterTwoEncounter,chapterTwoObjective,chapterTwoState,CHAPTER_TWO_ENCOUNTERS:ENCOUNTERS,syncPersistentAilments(){},clearPartySynergy(){},restorePartyVitals(){},cleanupUltimateBattle(){},document:{querySelector:()=>({remove(){}})},app:{insertAdjacentHTML:(_,html)=>modals.push(html)},audio:{sfx(){}},render(){},Modal:(title,body)=>title+body,topModal:()=>modal,activeEnemy:null,snapshot:null,screen:'chapterTwoField'};
  vm.createContext(context);vm.runInContext(finishSource,context);return{context,modals};
 }
 test('actual battle settlement integration clears the checkpoint and commits rewards together',()=>{

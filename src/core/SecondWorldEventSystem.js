@@ -1,5 +1,5 @@
 import{abyssKeyGoldCost}from"./GoldEconomySystem.js?v=3.1.1-build311";
-import{premiumCrystalCost}from"./config.js?v=3.1.56-build376";
+import{premiumCrystalCost}from"./config.js?v=3.1.57-build377";
 
 export const SECOND_WORLD_STORY_EVENTS=[
  {id:"arrival",floor:1001,title:"未知領域"},

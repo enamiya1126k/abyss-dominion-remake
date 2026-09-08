@@ -10,7 +10,7 @@ export const CHAPTER_TWO_INTRO=[
  ['りおん','myth_rion','世界を守るために、住んでるやつを消すんか。そんな取引、誰が得すんねん。'],
  ['サイラーン','demon_lord','我らと戦った勇者が、今度は我らに助けを求めるか。'],
  ['えなみ','myth_enami','従うとは言ってへん。一緒に止めようって言ってんねん。ここで暮らしてるやつに罪はないやろ。'],
- ['リオネル','slime','まずは境界の森です。二本の封印樹が、侵食の根源を守っています。魔王軍の部隊なら、内側へ入れます。'],
+ ['リオネル','slime','まずは境界の森へ。東西の封印樹を守る敵を倒し、封印を二つ解いてください。東の封印樹から北へ進めば、侵食の根源に辿り着けます。'],
  ['より','myth_yori','こっちは村の連中を逃がす。森の奥は任せたで。'],
  ['ひで','myth_hide','再生を支える個体がいるはずです。護衛を先に止めるか、回復を崩すか。部隊に合う方法で。'],
  ['りおん','myth_rion','道が開いたら、物資はこっちで通す。いこうぜ、世界の続き、取り返しに！'],
@@ -27,3 +27,8 @@ export const CHAPTER_TWO_EPILOGUE=[
  ['リオネル','slime','次に調べるのは、空に刻まれた白い亀裂。けれど今は、この森を取り戻した皆さんに感謝を。'],
  ['語り',null,'第二章・境界の森、解放。残響は再び集まる。部隊を鍛える探索路として、森への道は開かれた。']
 ];
+
+export function chapterTwoStoryScene(kind,characters){
+ const lines=kind==='epilogue'?CHAPTER_TWO_EPILOGUE:CHAPTER_TWO_INTRO;
+ return {id:`chapter-two-${kind}`,kind:'chapter-two',storyTrack:'demon',routeHidden:true,title:kind==='epilogue'?'境界の森・解放':'理の外に生きる者たち',eyebrow:'CHAPTER II / 第二章',location:'魔王城・王室',backgroundAsset:'./assets/ui/campaign/royal-hall-360.png',characters:['lionel','sairan','myth_enami','myth_yori','myth_hide','myth_rion'].map(id=>characters[id]),dialogue:lines.map(([name,id,text])=>({speakerId:id==='slime'?'lionel':id==='demon_lord'?'sairan':id,text,tone:id?'normal':'narration'}))};
+}

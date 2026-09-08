@@ -1,4 +1,5 @@
-import {applyTotalExperience,totalExperience} from '../models/Monster.js?v=3.1.56-build376';
+import {chapterTwoSpawn,chapterTwoPortal,createChapterTwoWorld} from './ChapterTwoMap.js?v=3.1.57-build377';
+import {applyTotalExperience,totalExperience} from '../models/Monster.js?v=3.1.57-build377';
 export const CHAPTER_TWO_KEY='chapterTwo376';
 const victories=new Set(['complete','narrow','all-preempted']);
 export function chapterTwoUnlocked(state){
@@ -30,18 +31,18 @@ export function chapterTwoState(state){
  if(!p||typeof p!=='object'||Array.isArray(p))p=state[CHAPTER_TWO_KEY]={version:1,introIndex:0,introComplete:false,epilogueIndex:0,epilogueComplete:false,clears:0,serial:0,run:null};
  p.clears=count(p.clears);p.serial=count(p.serial);p.introIndex=count(p.introIndex);p.epilogueIndex=count(p.epilogueIndex);p.introComplete=p.introComplete===true;p.epilogueComplete=p.epilogueComplete===true;
  if(p.run&&(!Number.isInteger(p.run.room)||!ROOMS[p.run.room]||!Number.isInteger(p.run.serial)))p.run=null;
- if(p.run){const r=p.run;r.defeated=[...new Set((Array.isArray(r.defeated)?r.defeated:[]).filter(id=>ENCOUNTERS[id]))];r.visited=[...new Set([0,r.room,...(Array.isArray(r.visited)?r.visited:[])].filter(id=>ROOMS[id]))];r.completed=r.defeated.includes('heart');if(r.pending&&(!ENCOUNTERS[r.pending.encounter]||r.pending.token!==`forest:${r.serial}:${r.pending.encounter}`||!Array.isArray(r.pending.partyIds)))r.pending=null;if(!walkable(r.position?.x,r.position?.y))r.position={x:9,y:15};}
+ if(p.run){const r=p.run;r.defeated=[...new Set((Array.isArray(r.defeated)?r.defeated:[]).filter(id=>ENCOUNTERS[id]))];r.visited=[...new Set([0,r.room,...(Array.isArray(r.visited)?r.visited:[])].filter(id=>ROOMS[id]))];r.completed=r.defeated.includes('heart');if(r.pending&&(!ENCOUNTERS[r.pending.encounter]||r.pending.token!==`forest:${r.serial}:${r.pending.encounter}`||!Array.isArray(r.pending.partyIds)))r.pending=null;if(r.geometryVersion!==377||!Number.isInteger(r.position?.x)||!Number.isInteger(r.position?.y)){r.position=chapterTwoSpawn(r);r.geometryVersion=377;}r.startedAt??=Date.now();}
  return p;
 }
 export function beginChapterTwoRun(state){
  const p=chapterTwoState(state);if(!p?.introComplete||state.player?.inRun||state.activeBattle||!(state.party??[]).some(id=>state.monsters?.some(m=>m.id===id)))return{ok:false};
- p.serial++;p.run={serial:p.serial,room:0,position:{x:9,y:15},visited:[0],defeated:[],chest:false,pending:null,completed:false};return{ok:true,run:p.run};
+ p.serial++;p.run={serial:p.serial,room:0,position:{x:9,y:15},visited:[0],defeated:[],chest:false,pending:null,completed:false,geometryVersion:377,startedAt:Date.now()};p.run.position=chapterTwoSpawn(p.run);p.dungeonHint377=false;return{ok:true,run:p.run};
 }
 export function moveChapterTwoRoom(state,direction){
  const p=chapterTwoState(state),r=p?.run;if(!r||r.pending)return{ok:false};
  const next=ROOMS[r.room].links[direction];if(next==null)return{ok:false};
  if(next===5&&!['west','east'].every(id=>r.defeated.includes(id)))return{ok:false,message:'西と東、2つの封印樹を先に解放してください。'};
- r.room=next;r.position=copy({north:{x:9,y:15},south:{x:9,y:3},east:{x:3,y:9},west:{x:15,y:9}}[direction]);
+ const portal=chapterTwoPortal(r,direction);if(!portal)return{ok:false};r.room=next;r.position={x:portal.arrivalX,y:portal.arrivalY};
  if(!r.visited.includes(next))r.visited.push(next);return{ok:true};
 }
 export function beginChapterTwoEncounter(state,id){
@@ -80,4 +81,13 @@ export function tuneChapterTwoEnemy(enemy,id,index=0){
  if(support)enemy.role='healer';
 }
 export function walkable(x,y){return Number.isInteger(x)&&Number.isInteger(y)&&x>=2&&x<=16&&y>=2&&y<=16;}
-export function chapterTwoWorld(){return{cols:19,rows:19,tiles:Array.from({length:19},(_,y)=>Array.from({length:19},(_,x)=>walkable(x,y)?0:1)),sections:[],start:{x:9,y:15},enemies:[],chests:[],decorations:[],rooms:[],bossDefeated:false,currentAttribute:'nature'};}
+export function chapterTwoWorld(run){return createChapterTwoWorld(run,ROOMS,ENCOUNTERS)}
+
+export function chapterTwoObjective(run){
+ const defeated=run?.defeated??[],seals=['west','east'].filter(id=>defeated.includes(id)).length;
+ if(run?.completed)return {title:'境界の森を解放した',detail:'帰還して、森の結末を読もう。再探索でも育成報酬を獲得できます。',seals,targetRoom:null};
+ if(seals===2)return {title:run?.room===5?'世界樹の残響を倒す':'最深部へ向かう',detail:run?.room===5?'侵食の根源を鎮め、森を取り戻そう。':'東の封印樹から北へ。最深部への道が開いています。',seals,targetRoom:5};
+ return {title:`東西の封印樹を解放する【${seals}/2】`,detail:seals?'残る封印樹の守護者を倒そう。':'東西それぞれの守護者を倒すと、森の奥へ進めます。',seals,targetRoom:defeated.includes('west')?4:3};
+}
+export function chapterTwoNeedsIntroduction(state){return chapterTwoUnlocked(state)&&state.chapterTwo376?.introComplete!==true;}
+export function chapterTwoDungeonHint(state){return chapterTwoUnlocked(state)&&state.chapterTwo376?.introComplete===true&&state.chapterTwo376?.dungeonHint377!==false;}

@@ -1,12 +1,12 @@
-import{chapterTwoUnlocked}from"../../chapterTwo/ChapterTwoSystem.js?v=3.1.56-build376";
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.56-build376";
+import{chapterTwoUnlocked,chapterTwoDungeonHint}from"../../chapterTwo/ChapterTwoSystem.js?v=3.1.57-build377";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.57-build377";
 // Regression marker only: config.js?v=3.1.21-build340
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.56-build376";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.57-build377";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.49-build369";
 import{SPECIES}from"../../data/species.js?v=3.1.39-build359";
 import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.55-build375";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.56-build376";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.57-build377";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.55-build375";
 import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=3.1.1-build317";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
@@ -164,7 +164,7 @@ export function HomeScreen(state,options={}){
         <span class="home-intel-cue" aria-hidden="true">勇者情報を見る ›</span>
       </header>
 
-      ${chapterTwoUnlocked(state)?`<section class="home-postgame-strip" aria-label="クリア後の進行"><span>勝利の先に、新たな物語</span><button type="button" id="openChapterTwo">第二章へ</button></section>`:reincarnation.active?`<section class="home-postgame-strip" aria-label="輪廻進行"><span>輪廻${reincarnation.cycle}・敵戦力 ×${campaignReincarnationDifficultyMultiplier(state).toFixed(2)}</span></section>`:""}
+      ${chapterTwoUnlocked(state)?"":reincarnation.active?`<section class="home-postgame-strip" aria-label="輪廻進行"><span>輪廻${reincarnation.cycle}・敵戦力 ×${campaignReincarnationDifficultyMultiplier(state).toFixed(2)}</span></section>`:""}
 
       <div class="home-resource-bar" aria-label="所持資源">
         <span title="GOLD：${state.player.gold.toLocaleString()}" data-exact-number="${state.player.gold.toLocaleString()}G">${pixelIcon("coin")}<b>${compactHomeNumber(state.player.gold)}</b></span>
@@ -220,7 +220,7 @@ export function HomeScreen(state,options={}){
       <nav class="home-bottom-nav" aria-label="画面メニュー">
         <button type="button" class="active" aria-current="page">${pixelIcon("home")}<b>ホーム</b></button>
         <button type="button" id="openOnlineParty">${pixelIcon("party")}<b>パーティ</b></button>
-        <button type="button" id="openExplore">${pixelIcon("dungeon")}<b>ダンジョン</b></button>
+        <button type="button" id="openExplore"${chapterTwoDungeonHint(state)?' class="chapter-two-dungeon-hint" aria-label="ダンジョン：第二章の新たな行き先"':""}>${pixelIcon("dungeon")}<b>ダンジョン</b>${chapterTwoDungeonHint(state)?'<small class="chapter-two-new-destination">新たな行き先</small>':""}</button>
         <button type="button" id="openItemShop">${pixelIcon("shop")}<b>ショップ</b></button>
         <button type="button" id="openEventHub" class="${eventReady?"ready":""}">${eventReady?'<i class="home-notification-dot"></i>':""}${pixelIcon("event")}<b>試練</b></button>
       </nav>

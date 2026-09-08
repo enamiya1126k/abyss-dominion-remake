@@ -171,8 +171,8 @@ export function shapeSignatureSimilarity(left,right){
  const a=String(left??"").split("|"),b=String(right??"").split("|");if(a.length<5||b.length<5)return 0;const aspect=Math.max(0,1-Math.abs(Number(a[2])-Number(b[2]))/1.4),fill=Math.max(0,1-Math.abs(Number(a[3])-Number(b[3]))/.55),gridA=a[4],gridB=b[4];let union=0,intersection=0;for(let index=0;index<Math.max(gridA.length,gridB.length);index++){const occupiedA=gridA[index]==="1",occupiedB=gridB[index]==="1";if(occupiedA||occupiedB)union++;if(occupiedA&&occupiedB)intersection++}const silhouette=union?intersection/union:0;return(a[0]===b[0] ? .22 : 0)+(a[1]===b[1] ? .06 : 0)+aspect*.18+fill*.14+silhouette*.4
 }
 
-export function generateSectionDungeon({count=4,attributes=[],random=Math.random,slot=42,sizeTiers=[],patterns=[],recentSignatures=[]}={}){
- const total=Math.max(4,Math.min(6,Math.floor(Number(count)||4))),topology=logicalTopology(total,random),directionsById=new Map(topology.nodes.map(node=>[node.id,new Set()]));
+export function generateSectionDungeon({count=4,attributes=[],random=Math.random,slot=42,sizeTiers=[],patterns=[],recentSignatures=[],customTopology=null}={}){
+ const total=Math.max(4,Math.min(6,Math.floor(Number(count)||4))),topology=customTopology??logicalTopology(total,random),directionsById=new Map(topology.nodes.map(node=>[node.id,new Set()]));
  for(const edge of topology.edges){const direction=CARDINAL.find(entry=>entry.id===edge.direction)??CARDINAL[0];directionsById.get(edge.a)?.add(direction.id);directionsById.get(edge.b)?.add(direction.opposite)}
  // Shape candidates are generated once when entering a floor.  Comparing only
  // 5x5 occupancy fingerprints is cheap, while it prevents a run of visually

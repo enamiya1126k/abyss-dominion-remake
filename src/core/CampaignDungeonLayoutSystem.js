@@ -1,6 +1,6 @@
 import { roomAttributesForFloor, roomCountForRandom } from "./Campaign100System.js?v=3.1.42-build362";
-import { requiredCampaignBossSectionCount } from "./CampaignBossWorldSystem.js";
-import { generateSectionDungeon } from "./DungeonSectionSystem.js";
+import { requiredCampaignBossSectionCount } from "./CampaignBossWorldSystem.js?v=3.1.57-build377";
+import { generateSectionDungeon } from "./DungeonSectionSystem.js?v=3.1.57-build377";
 
 /**
  * Canonical campaign floor layout used by both local and online exploration.
