@@ -209,9 +209,10 @@
   <link rel="stylesheet" href="./src/Styles/build371-ranking-profile.css?v=3.1.55-build375">
   <link rel="stylesheet" href="./src/Styles/build375-battle-equipment.css?v=3.1.55-build375">
 <link rel="stylesheet" href="./src/Styles/build376-chapter-two.css?v=3.1.56-build376">
+<link rel="stylesheet" href="./src/Styles/build379-departure.css?v=3.1.59-build379">
 <script type="module">
-    const ASSET_VERSION = "3.1.58";
-    const ASSET_BUILD = "build378";
+    const ASSET_VERSION = "3.1.59";
+    const ASSET_BUILD = "build379";
     const CACHE_VERSION = `${ASSET_VERSION}-${ASSET_BUILD}`;
     const VERSION_KEY = "abyss-dominion-asset-version";
     async function refreshStaleAssets() {
@@ -231,7 +232,7 @@
         }
         localStorage.setItem(VERSION_KEY, CACHE_VERSION);
       }
-      await import(`./src/main.js?v=3.1.58-build378`);
+      await import(`./src/main.js?v=3.1.59-build379`);
       window.__abyssBootComplete = true;
     }
     refreshStaleAssets();

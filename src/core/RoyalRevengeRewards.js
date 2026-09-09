@@ -1,5 +1,5 @@
 import { revengeExperience } from './Postgame361System.js';
-import { applyTotalExperience, totalExperience, displayName } from '../models/Monster.js?v=3.1.58-build378';
+import { applyTotalExperience, totalExperience, displayName } from '../models/Monster.js?v=3.1.59-build379';
 
 export function royalRevengeRewards(stage=1){
  const n=Math.max(1,Math.floor(Number(stage)||1));

@@ -3,7 +3,7 @@ import {createEquipment} from '../models/Equipment.js';
 import {receiveEquipment} from '../services/EquipmentStorage.js';
 import {EQUIPMENT_BASES} from '../data/equipment.js';
 import {chapterTwoSpawn,chapterTwoPortal,createChapterTwoWorld} from './ChapterTwoMap.js?v=3.1.58-build378';
-import {applyTotalExperience,totalExperience} from '../models/Monster.js?v=3.1.58-build378';
+import {applyTotalExperience,totalExperience} from '../models/Monster.js?v=3.1.59-build379';
 export const CHAPTER_TWO_KEY='chapterTwo376';
 const victories=new Set(['complete','narrow','all-preempted']);
 export function chapterTwoUnlocked(state){

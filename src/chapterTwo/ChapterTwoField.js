@@ -1,4 +1,4 @@
-import {chapterTwoRooms,ENCOUNTERS,chapterTwoWorld,chapterTwoObjective} from './ChapterTwoSystem.js?v=3.1.58-build378';
+import {chapterTwoRooms,ENCOUNTERS,chapterTwoWorld,chapterTwoObjective} from './ChapterTwoSystem.js?v=3.1.59-build379';
 import {portalTowardSection} from '../core/DungeonSectionSystem.js?v=3.1.57-build377';
 export function mountChapterTwoField(g,{canvas,Entity,Camera,findPath,drawScene,bindInput,updateTrail,TILE,run,onSave,onContact,onAutoChange=()=>{},blocked=()=>false}){
  const ROOMS=chapterTwoRooms(run),room=ROOMS[run.room];g.chapterTwo=true;g.world=chapterTwoWorld(run);
@@ -18,7 +18,7 @@ export function mountChapterTwoField(g,{canvas,Entity,Camera,findPath,drawScene,
  const key=e=>{if(busy()||e.target?.matches('input,textarea,button')||document.querySelector('.game-modal'))return;const d={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[e.key];if(!d)return;e.preventDefault();if(!g.player.path.length)walk({x:g.player.x+d[0],y:g.player.y+d[1]},{manual:true})};document.addEventListener('keydown',key);
  function persist(){if(run.room===room.id)run.position={x:g.player.x,y:g.player.y};if(!g.discardChapterTwoSave)onSave?.()}
  function targetRoom(n){if(n===run.room)return objects.find(o=>o.type==='enemy')??objects.find(o=>o.type==='chest');const portal=portalTowardSection(g.world,g.world.currentSectionId,`forest-${n}`);return portal?objects.find(o=>o.type==='door'&&o.id===portal.direction):null;}
- function autoStep(){if(!run.auto377||g.player.path.length||busy())return;if(run.completed){run.auto377=false;onAutoChange(false);return}const target=objects.find(o=>o.type==='enemy')??targetRoom(chapterTwoObjective(run).targetRoom);if(target)walk(target);}
+ function autoStep(){if(!run.auto377||g.player.path.length||busy())return;if(run.completed){const target=objects.find(o=>o.type==='chest')??targetRoom(2);if(!run.chest&&target)walk(target);else if(run.room!==0){const exit=targetRoom(0);if(exit)walk(exit)}return}const target=objects.find(o=>o.type==='enemy')??targetRoom(chapterTwoObjective(run).targetRoom);if(target)walk(target);}
  function tick(now){if(disposed||!g.running||!canvas.isConnected)return;const dt=Math.min(.05,(now-last)/1000);last=now;
   if(!busy()){autoStep();const moved=g.player.move(dt,5);if(g.player.path.length||moved){updateTrail();g.camera.follow(g.player.rx*TILE,g.player.ry*TILE,dt);g.camera.clamp(g.world)}
    if(moved&&now-lastSave>1000){persist();lastSave=now}

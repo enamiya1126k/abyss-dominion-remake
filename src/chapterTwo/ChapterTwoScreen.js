@@ -1,6 +1,6 @@
-import {chapterTwoState,chapterTwoObjective,chapterTwoArea,chapterTwoRooms,CHAPTER_TWO_AREAS,chapterTwoAreaUnlocked} from './ChapterTwoSystem.js?v=3.1.58-build378';
+import {chapterTwoState,chapterTwoObjective,chapterTwoArea,chapterTwoRooms,CHAPTER_TWO_AREAS,chapterTwoAreaUnlocked} from './ChapterTwoSystem.js?v=3.1.59-build379';
 import {chapterTwoTheme} from './ChapterTwoMap.js?v=3.1.58-build378';
-import {ExploreScreen} from '../ui/screens/ExploreScreen.js?v=3.1.58-build378';
+import {ExploreScreen} from '../ui/screens/ExploreScreen.js?v=3.1.59-build379';
 import {pixelIcon} from '../ui/components/GameChrome.js';
 import {buildSectionMiniMapModel,fitMiniMapTransform,projectMiniMapPoint} from '../core/DungeonMiniMapSystem.js';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -20,7 +20,7 @@ export function chapterTwoDestinations(state){
 }
 export function chapterTwoHelp(run){
  const a=chapterTwoArea(run),objective=chapterTwoObjective(run);
- return `<div class="chapter-two-help"><h3>${objective.title}</h3><p>${objective.detail}</p><ol><li>6区画を探索して、${a.rooms[3].name}と${a.rooms[4].name}へ。</li><li>それぞれの守護者を倒し、${a.gate}を2つ揃える。</li><li>${a.rooms[5].name}で地域のボスを倒す。</li></ol><p>地面をタップで移動。通路の入口へ歩くと隣の区画へ進みます。ドラッグで視点移動、2本指で拡大できます。</p><p>マップは短くタップで詳細、長押ししてスライドで配置変更。自動ボタンも移動できます。</p><p>宝箱はGOLD、泉は部隊の全回復。強敵の報酬で部隊を鍛え、次の地域へ進もう。</p><p>帰還しても討伐・宝箱の記録は残ります。自動をONにすると守護者とボスを順番に目指します。</p>${run?.challenge?'<p>強化再戦中：敵の能力と報酬が増加しています。</p>':''}</div>`;
+ return `<div class="chapter-two-help"><h3>${objective.title}</h3><p>${objective.detail}</p><ol><li>6区画を探索して、${a.rooms[3].name}と${a.rooms[4].name}へ。</li><li>それぞれの守護者を倒し、${a.gate}を2つ揃える。</li><li>${a.rooms[5].name}で地域のボスを倒す。</li></ol><p>地面をタップで移動。通路の入口へ歩くと隣の区画へ進みます。ドラッグで視点移動、2本指で拡大できます。</p><p>マップボタンで地図を表示／非表示。地図本体をタップすると詳細を開きます。地図・マップボタン・自動ボタンは長押ししてスライドで配置変更できます。</p><p>宝箱はGOLD、泉は部隊の全回復。強敵の報酬で部隊を鍛え、次の地域へ進もう。</p><p>帰還しても討伐・宝箱の記録は残ります。自動をONにすると守護者とボスを順番に目指します。</p>${run?.challenge?'<p>強化再戦中：敵の能力と報酬が増加しています。</p>':''}</div>`;
 }
 export function chapterTwoMapMarkup(world,run){
  const ROOMS=chapterTwoRooms(run),model=buildSectionMiniMapModel(world),transform=fitMiniMapTransform(model,360,320,12),point=p=>projectMiniMapPoint(transform,p),objective=chapterTwoObjective(run);

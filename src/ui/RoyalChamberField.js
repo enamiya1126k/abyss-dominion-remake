@@ -1,4 +1,4 @@
-import{ROYAL_ASSET,createRoyalWorld,royalHeroPositions,royalContact}from'../core/RoyalChamberSystem.js?v=3.1.41-build361';
+import{ROYAL_ASSET,createRoyalWorld,royalHeroPositions,royalContact}from'../core/RoyalChamberSystem.js?v=3.1.59-build379';
 // Uses the same Entity, Camera, route finder and sprite renderer as exploration.
 export function mountRoyalChamber(g,{canvas,Entity,Camera,findPath,drawMonster,TILE,room,party,heroes,onSave,onApproach,onContact,onThrone,blocked=()=>false}){
  g.royal=true;g.world=createRoyalWorld();g.player=new Entity(room.position.x,room.position.y);g.canvas=canvas;g.ctx=canvas.getContext('2d');g.running=true;g.paused=false;g.last=performance.now();g.camera=new Camera(canvas);

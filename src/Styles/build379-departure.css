@@ -1,0 +1,31 @@
+.departure379-modal>.game-modal-card{display:flex!important;flex-direction:column!important;max-height:calc(100dvh - 24px)!important;overflow:hidden!important}
+.departure379-modal .game-modal-body{min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important;touch-action:pan-y!important;overscroll-behavior:contain;padding-bottom:12px}
+.departure379-modal .game-modal-card>h2{flex:none;padding:0 45px!important;text-align:center;font-size:clamp(24px,6vw,36px)!important}
+.departure379-modal .modal-x{left:auto!important;right:10px!important;top:10px!important;width:40px!important;height:40px!important;min-height:40px!important}
+.departure379-modal .modal-primary{flex:none!important}
+.departure379-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:14px 0}
+.departure379-tabs button,.departure379-options button{border:1px solid #a58a54!important;border-radius:0!important;background:#0b090e!important;color:#cfbb91;padding:10px 6px;min-height:42px;font-size:14px!important}
+.departure379-tabs button.active{background:linear-gradient(#493225,#171016)!important;color:#ffe5a0;box-shadow:inset 0 0 0 2px #9d7b46}
+.departure379-modal .selector379{grid-template-columns:48px minmax(0,1fr) 48px!important;gap:8px!important;margin:14px 0!important}
+.departure379-modal .selector379.is-fixed{grid-template-columns:minmax(0,1fr)!important}
+.selector379 button{width:48px!important;min-width:0!important;height:65px!important;font-size:30px!important;padding:0!important}
+.selector379 button:disabled{opacity:.3}
+.destination379-name{min-width:0;min-height:96px;padding:14px 5px;display:flex;flex-direction:column;justify-content:center;border:1px solid #bb975b;background:linear-gradient(#03030896,#030308dc),var(--destination-skin) center/cover!important;text-shadow:0 2px 3px #000}
+.destination379-name strong{font:900 clamp(18px,4.4vw,30px)/1.4 Georgia,'Yu Mincho',serif!important;color:#f4d99b;overflow-wrap:anywhere}
+.destination379-name small{font-size:11px;color:#c8b58e;margin-bottom:6px}
+.departure379-modal .destination379-status{font-size:14px!important;line-height:1.6!important;color:#ecd7ab!important;margin:10px 0!important}
+.destination379-status small{display:block;font-size:12px;color:#b5a5bb}
+.departure379-modal .departure-party-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:5px!important}
+.departure379-modal .departure-party-card{min-width:0!important;padding:5px 2px!important}
+.departure379-modal .departure-party-card b{font-size:11px!important;white-space:normal!important;overflow-wrap:anywhere;line-height:1.4!important}
+.departure379-modal .departure-party-card small{font-size:11px!important}
+.departure379-modal .departure-monster-visual{width:100%!important;max-width:82px!important;height:75px!important}
+.departure379-options{margin-top:14px;text-align:left;border-top:1px solid #655337;padding:10px 0}
+.departure379-options summary{cursor:pointer;color:#d7c095;font-size:13px;padding:8px 0}
+.departure379-options p{font-size:13px!important;line-height:1.7!important}
+.departure379-options button{width:100%;margin-top:7px}
+.departure379-rewards{grid-template-columns:repeat(3,minmax(0,1fr))!important;margin-top:12px!important}
+.departure379-rewards article{min-width:0;padding:7px 3px!important}
+.departure379-rewards b{font-size:12px!important;overflow-wrap:anywhere}
+.departure379-rewards small{font-size:10px!important}
+.chapter-two-explore #miniMap[hidden]{display:none!important;pointer-events:none!important}
