@@ -7,7 +7,7 @@ import * as oldShield from '../../build377/src/core/HeroAllianceSystem.js';
 import {shieldCapacity,rememberShieldCapacity} from '../src/core/HeroShieldDisplay.js';
 const clone=x=>JSON.parse(JSON.stringify(x));
 function fresh(){const mem=new Map();globalThis.localStorage={getItem:k=>mem.get(k)??null,setItem:(k,v)=>mem.set(k,String(v)),removeItem:k=>mem.delete(k)};const save=new SaveService();save.state.player.maxFloor=100;save.state.campaign100.finalCompleted=true;C.chapterTwoState(save.state).introComplete=true;return save;}
-function win(s,key){const r=C.chapterTwoState(s).run;r.room=C.chapterTwoRooms(r).find(x=>x.encounter===key).id;const attempt=C.beginChapterTwoEncounter(s,key);assert.equal(attempt.ok,true,key);const result=C.settleChapterTwoEncounter(s,attempt.token,{won:true});assert.equal(result.ok,true);return result;}
+function win(s,key){const r=C.chapterTwoState(s).run;r.room=C.chapterTwoRooms(r).find(x=>x.encounter===key).id;const attempt=C.beginChapterTwoEncounter(s,key);assert.equal(attempt.ok,true,key);const result=C.settleChapterTwoEncounter(s,attempt.token,{won:true});assert.equal(result.ok,true);if(C.ENCOUNTERS[key].seal)assert.equal(C.pickupChapterTwoKey380(s,key).ok,true);return result;}
 function clear(s){return C.chapterTwoArea(C.chapterTwoState(s).run).keys.map(k=>win(s,k));}
 test('five-region progression awards once, preserves chapter one and resumes each saved region',()=>{
  const save=fresh(),s=save.state,first=clone(s.campaign100),tokens=new Set();let gear=0;

@@ -1,6 +1,6 @@
-import {chapterTwoState,chapterTwoObjective,chapterTwoArea,chapterTwoRooms,CHAPTER_TWO_AREAS,chapterTwoAreaUnlocked} from './ChapterTwoSystem.js?v=3.1.59-build379';
-import {chapterTwoTheme} from './ChapterTwoMap.js?v=3.1.58-build378';
-import {ExploreScreen} from '../ui/screens/ExploreScreen.js?v=3.1.59-build379';
+import {chapterTwoState,chapterTwoObjective,chapterTwoArea,chapterTwoRooms,CHAPTER_TWO_AREAS,chapterTwoAreaUnlocked} from './ChapterTwoSystem.js?v=3.1.60-build380';
+import {chapterTwoTheme} from './ChapterTwoMap.js?v=3.1.60-build380';
+import {ExploreScreen} from '../ui/screens/ExploreScreen.js?v=3.1.60-build380';
 import {pixelIcon} from '../ui/components/GameChrome.js';
 import {buildSectionMiniMapModel,fitMiniMapTransform,projectMiniMapPoint} from '../core/DungeonMiniMapSystem.js';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -20,13 +20,13 @@ export function chapterTwoDestinations(state){
 }
 export function chapterTwoHelp(run){
  const a=chapterTwoArea(run),objective=chapterTwoObjective(run);
- return `<div class="chapter-two-help"><h3>${objective.title}</h3><p>${objective.detail}</p><ol><li>6区画を探索して、${a.rooms[3].name}と${a.rooms[4].name}へ。</li><li>それぞれの守護者を倒し、${a.gate}を2つ揃える。</li><li>${a.rooms[5].name}で地域のボスを倒す。</li></ol><p>地面をタップで移動。通路の入口へ歩くと隣の区画へ進みます。ドラッグで視点移動、2本指で拡大できます。</p><p>マップボタンで地図を表示／非表示。地図本体をタップすると詳細を開きます。地図・マップボタン・自動ボタンは長押ししてスライドで配置変更できます。</p><p>宝箱はGOLD、泉は部隊の全回復。強敵の報酬で部隊を鍛え、次の地域へ進もう。</p><p>帰還しても討伐・宝箱の記録は残ります。自動をONにすると守護者とボスを順番に目指します。</p>${run?.challenge?'<p>強化再戦中：敵の能力と報酬が増加しています。</p>':''}</div>`;
+ return `<div class="chapter-two-help"><h3>${objective.title}</h3><p>${objective.detail}</p><ol><li>6区画を探索して、${a.rooms[3].name}と${a.rooms[4].name}へ。</li><li>それぞれの守護者を倒して落ちた鍵を拾い、${a.gate}を2つ揃える。</li><li>${a.rooms[5].name}で地域のボスを倒す。</li></ol><p>地面をタップで移動。通路の入口へ歩くと隣の区画へ進みます。ドラッグで視点移動、2本指で拡大できます。</p><p>マップボタンで地図を表示／非表示。地図本体をタップすると詳細を開きます。地図・マップボタン・自動ボタンは長押ししてスライドで配置変更できます。</p><p>宝箱はGOLD、泉は部隊の全回復。泉の区画には任意挑戦の宝物庫の番人がいます。勝つと宝箱10個を一度だけ開けられます。強敵の報酬で部隊を鍛え、次の地域へ進もう。</p><p>帰還しても討伐・拾った鍵・宝箱の記録は残ります。踏破後の再入場では残党が再出現します。自動をONにすると守護者とボスを順番に目指します。</p>${run?.challenge?'<p>強化再戦中：敵の能力と報酬が増加しています。</p>':''}</div>`;
 }
 export function chapterTwoMapMarkup(world,run){
  const ROOMS=chapterTwoRooms(run),model=buildSectionMiniMapModel(world),transform=fitMiniMapTransform(model,360,320,12),point=p=>projectMiniMapPoint(transform,p),objective=chapterTwoObjective(run);
  const edges=model.edges.map(e=>{const a=point(e.from),b=point(e.to),locked=[e.a,e.b].includes('forest-5')&&objective.seals<2;return `<path d="M${a.x},${a.y} L${b.x},${b.y}" stroke="${locked?'#a55869':'#c6ac76'}" stroke-width="2" ${e.discovered?'':'stroke-dasharray="4 4"'}/>`}).join('');
  const sections=model.sections.map(s=>{const center=point(s.center),current=s.id===model.currentSectionId;return `<g><path d="${s.cells.map(c=>{const p=point(c);return `M${p.x},${p.y}h${transform.scale}v${transform.scale}h-${transform.scale}z`}).join(' ')}" fill="${s.mode==='frontier'?'#302a37':current?'#587652':'#524739'}"/><text x="${center.x}" y="${center.y}" text-anchor="middle" fill="#fff0bb" font-size="12">${s.mode==='frontier'?'?':s.index+1}</text></g>`}).join('');
- const colors={boss:'#ff7d8f',chest:'#efca70',spring:'#8be3ee'};
+ const colors={key:'#efca70',boss:'#ff7d8f',chest:'#efca70',spring:'#8be3ee'};
  const markers=model.markers.map(m=>{const p=point(m);return `<circle cx="${p.x}" cy="${p.y}" r="3" fill="${colors[m.kind]??'#eee'}"/>`}).join('');
  const player=point(run.position);
  return `<div class="chapter-two-map-dialog"><h3>${objective.title}</h3><svg viewBox="0 0 360 320" role="img" aria-label="${chapterTwoArea(run).name}の接続マップ。緑の丸が現在地">${edges}${sections}${markers}<circle cx="${player.x}" cy="${player.y}" r="4" fill="#7cffaf" stroke="#fff"/></svg><p>緑：現在地 ／ 赤：敵・守護者 ／ 金：宝箱 ／ 水色：泉<br>？：隣接する未探索区画 ／ 点線：未探索への道</p><div class="chapter-two-map-places">${model.sections.map(s=>{const n=s.index,known=s.mode!=='frontier';return `<button type="button" data-ch2-map-room="${n}"><b>${known?`${n+1} ${esc(ROOMS[n].name)}`:'？ 未探索の区画'}</b><small>${known?(run.defeated.includes(ROOMS[n].encounter)?'討伐済み':ROOMS[n].hint):'入口まで進んで確かめよう'}</small></button>`}).join('')}</div><small>区画を選ぶと、そこへ向かう通路を案内します。</small></div>`;

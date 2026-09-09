@@ -1,4 +1,4 @@
-import{safeSectionExitCandidates}from"./DungeonSectionSystem.js?v=3.1.57-build377";
+import{safeSectionExitCandidates}from"./DungeonSectionSystem.js?v=3.1.60-build380";
 
 /*
  * Build308 keeps campaign-boss field state separate from reward entitlement

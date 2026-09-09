@@ -9,10 +9,10 @@ import{
  compatibleSubslots,
  equipmentIdentity
 }from"../../data/equipment.js?v=3.1.55-build375";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.59-build379";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.60-build380";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=3.1.55-build375";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.49-build369";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.59-build379";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.60-build380";
 import{ATTRIBUTES}from"../../data/attributes.js?v=3.1.1-build311";
 import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=3.1.55-build375";
 import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=3.1.39-build359";
@@ -27,7 +27,7 @@ import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=3.1.1-
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=3.1.55-build375";
 import{equipmentVisual}from"../components/EquipmentVisual.js?v=3.1.55-build375";
 import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=3.1.41-build361";
-import{signatureWeaponState,signatureWeaponForMonster,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster}from"../../core/SignatureWeaponSystem.js?v=3.1.55-build375";
+import{signatureWeaponState,signatureWeaponForMonster,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster}from"../../core/SignatureWeaponSystem.js?v=3.1.60-build380";
 
 const EQUIPMENT_SCREEN_SLOT_LABELS={
  weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"

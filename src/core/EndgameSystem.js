@@ -3,7 +3,7 @@ import{SPECIES}from"../data/species.js?v=3.1.39-build359";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionById}from"../data/floorBosses.js?v=3.1.1-build311";
 import{floorBossEnemyEntry}from"./FloorBossChallengeSystem.js?v=3.1.39-build359";
 import{floorBossCampaignDisplayFloor}from"./Campaign100System.js?v=3.1.42-build362";
-import{createSignatureEquipment,normalizeSignatureWeaponItem}from"./SignatureWeaponSystem.js?v=3.1.55-build375";
+import{createSignatureEquipment,normalizeSignatureWeaponItem}from"./SignatureWeaponSystem.js?v=3.1.60-build380";
 
 const plainRecord=value=>Boolean(value&&typeof value==="object"&&!Array.isArray(value));
 

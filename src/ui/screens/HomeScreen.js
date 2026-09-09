@@ -1,12 +1,12 @@
-import{chapterTwoUnlocked,chapterTwoDungeonHint}from"../../chapterTwo/ChapterTwoSystem.js?v=3.1.59-build379";
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.59-build379";
+import{chapterTwoUnlocked,chapterTwoDungeonHint,chapterTwoArea,chapterTwoObjective,CHAPTER_TWO_AREAS}from"../../chapterTwo/ChapterTwoSystem.js?v=3.1.60-build380";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.60-build380";
 // Regression marker only: config.js?v=3.1.21-build340
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.59-build379";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.60-build380";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.49-build369";
 import{SPECIES}from"../../data/species.js?v=3.1.39-build359";
-import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.55-build375";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.59-build379";
+import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.60-build380";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.60-build380";
 import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.55-build375";
 import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=3.1.1-build317";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
@@ -157,12 +157,12 @@ export function HomeScreen(state,options={}){
         <i class="home-river-shimmer river-frame-3"></i>
       </div>
 
-      <header class="home-title-card" id="openCampaignIntel" data-open-campaign-intel role="button" tabindex="0" aria-label="勇者情報を見る">
+      ${chapterTwoUnlocked(state)?`<header class="home-title-card home-chapter380" id="chapterTwoHome380" role="button" tabindex="0"><small>第一章クリア</small><h1>第二章・${chapterTwoArea(state.chapterTwo376?.run).name}</h1><p>${state.chapterTwo376?.run?(state.chapterTwo376.run.completed?(state.chapterTwo376.run.area<4?`次の目的：${CHAPTER_TWO_AREAS[state.chapterTwo376.run.area+1].name}へ`:'世界の結末へ'):chapterTwoObjective(state.chapterTwo376.run).title):'勇者たちと新たな旅へ'}</p><span>行き先を見る ›</span></header>`:`<header class="home-title-card" id="openCampaignIntel" data-open-campaign-intel role="button" tabindex="0" aria-label="勇者情報を見る">
         <small>${prophecyLabel}</small>
         <h1>${title}</h1>
         <${meterTag}${meterAction} class="home-invasion-meter ${completed?"is-complete":""} ${finalReady?"is-ready":""}"><i role="progressbar" aria-label="勇者の進軍度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${invasion.progress}"><em style="width:${invasion.progress}%"></em></i><b>${meterLabel}</b></${meterTag}>
         <span class="home-intel-cue" aria-hidden="true">勇者情報を見る ›</span>
-      </header>
+      </header>`}
 
       ${chapterTwoUnlocked(state)?"":reincarnation.active?`<section class="home-postgame-strip" aria-label="輪廻進行"><span>輪廻${reincarnation.cycle}・敵戦力 ×${campaignReincarnationDifficultyMultiplier(state).toFixed(2)}</span></section>`:""}
 

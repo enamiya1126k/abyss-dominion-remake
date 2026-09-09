@@ -1,5 +1,5 @@
-import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=3.1.59-build379";
-import{SERIAL_CODE_COUNT}from"../../core/SerialCodeSystem.js?v=3.1.59-build379";
+import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=3.1.60-build380";
+import{SERIAL_CODE_COUNT}from"../../core/SerialCodeSystem.js?v=3.1.60-build380";
 import { PlayerNameForm } from "../components/PlayerNameForm.js?v=3.1.43-build363";
 export function SettingsScreen(state,{playerName}={}){
   const redeemedCount=Object.keys(state.serialCodes?.redeemed??{}).length;

@@ -1,3 +1,4 @@
+import {pickupChapterTwoKey380} from '../src/chapterTwo/ChapterTwoSystem.js';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';import vm from 'node:vm';
 import {SaveService} from '../src/services/SaveService.js';
@@ -28,15 +29,15 @@ test('win plus 100 unlocks; a lower-floor victory flag alone does not',()=>{
 test('sequence requires intro, two seals, and local encounters; no off-room rewards',()=>{
  const save=unlocked(),s=save.state;chapterTwoState(s).introComplete=false;assert.equal(beginChapterTwoRun(s).ok,false);chapterTwoState(s).introComplete=true;beginChapterTwoRun(s);
  assert.equal(beginChapterTwoEncounter(s,'heart').ok,false);assert.equal(moveChapterTwoRoom(s,'east').ok,true);assert.equal(moveChapterTwoRoom(s,'north').ok,true);assert.equal(moveChapterTwoRoom(s,'east').ok,true);assert.equal(moveChapterTwoRoom(s,'north').ok,false);
- for(const id of ['west','east']){const a=battleAt(s,id);assert.equal(a.ok,true);assert.equal(settleChapterTwoEncounter(s,a.token,{won:true}).ok,true);}
+ for(const id of ['west','east']){const a=battleAt(s,id);assert.equal(a.ok,true);assert.equal(settleChapterTwoEncounter(s,a.token,{won:true}).ok,true);assert.equal(pickupChapterTwoKey380(s,id).ok,true);}
  s.chapterTwo376.run.room=4;assert.equal(moveChapterTwoRoom(s,'north').ok,true);
 });
 test('victory, chest, replays and first clear rewards are idempotent and leave chapter one intact',()=>{
  const save=start(),s=save.state,before=clone(s.campaign100),floor=s.player.currentFloor,max=s.player.maxFloor;
- s.chapterTwo376.run.defeated=['west','east'];const a=battleAt(s,'heart'),r=settleChapterTwoEncounter(s,a.token,{won:true});assert.equal(r.crystals,300);assert.equal(r.experience,300000);const gold=s.player.gold;
+ s.chapterTwo376.run.defeated=['west','east'];s.chapterTwo376.run.keys380=['west','east'];const a=battleAt(s,'heart'),r=settleChapterTwoEncounter(s,a.token,{won:true});assert.equal(r.crystals,300);assert.equal(r.experience,300000);const gold=s.player.gold;
  assert.equal(settleChapterTwoEncounter(s,a.token,{won:true}).duplicate,true);assert.equal(s.player.gold,gold);
  s.chapterTwo376.run.room=2;assert.equal(openChapterTwoChest(s).ok,true);assert.equal(openChapterTwoChest(s).ok,false);
- assert.equal(beginChapterTwoRun(s).ok,true);s.chapterTwo376.run.defeated=['west','east'];const b=battleAt(s,'heart');assert.notEqual(a.token,b.token);const again=settleChapterTwoEncounter(s,b.token,{won:true});assert.equal(again.crystals,0);assert.equal(again.experience,120000);assert.equal(s.chapterTwo376.clears,2);
+ assert.equal(beginChapterTwoRun(s).ok,true);s.chapterTwo376.run.defeated=['west','east'];s.chapterTwo376.run.keys380=['west','east'];const b=battleAt(s,'heart');assert.notEqual(a.token,b.token);const again=settleChapterTwoEncounter(s,b.token,{won:true});assert.equal(again.crystals,0);assert.equal(again.experience,120000);assert.equal(s.chapterTwo376.clears,2);
  assert.deepEqual(s.campaign100,before);assert.equal(s.player.currentFloor,floor);assert.equal(s.player.maxFloor,max);
 });
 test('defeat and retreat award nothing and leave an encounter available',()=>{
@@ -57,7 +58,7 @@ const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
 const finishSource=main.slice(main.indexOf('function finishChapterTwoBattle('),main.indexOf('\nfunction openExploreFloorSelector',main.indexOf('function finishChapterTwoBattle(')));
 function finishFixture({saveFails=false}={}){
  const save=start(),attempt=battleAt(save.state,'patrol');save.state.activeBattle={specialBattleType:'chapterTwo',chapterTwoToken:attempt.token};const modals=[];const modal={classList:{add(){}},querySelector:()=>({}),remove(){}};
- const context={battleContributionSnapshot:()=>({}),chapterTwoRewardBody:()=>'',openBattleContributionReport:(_,cb)=>cb(),showChapterTwoProgress:()=>{},save:{state:save.state,save:()=>!saveFails},battle:{specialBattleType:'chapterTwo',chapterTwoToken:attempt.token,party:save.state.monsters},settleChapterTwoEncounter,chapterTwoObjective,chapterTwoState,CHAPTER_TWO_ENCOUNTERS:ENCOUNTERS,syncPersistentAilments(){},clearPartySynergy(){},restorePartyVitals(){},cleanupUltimateBattle(){},document:{querySelector:()=>({remove(){}})},app:{insertAdjacentHTML:(_,html)=>modals.push(html)},audio:{sfx(){}},render(){},Modal:(title,body)=>title+body,topModal:()=>modal,activeEnemy:null,snapshot:null,screen:'chapterTwoField'};
+ const context={chapterTwoAutoModal380(){},battleContributionSnapshot:()=>({}),chapterTwoRewardBody:()=>'',openBattleContributionReport:(_,cb)=>cb(),showChapterTwoProgress:()=>{},save:{state:save.state,save:()=>!saveFails},battle:{specialBattleType:'chapterTwo',chapterTwoToken:attempt.token,party:save.state.monsters},settleChapterTwoEncounter,chapterTwoObjective,chapterTwoState,CHAPTER_TWO_ENCOUNTERS:ENCOUNTERS,syncPersistentAilments(){},clearPartySynergy(){},restorePartyVitals(){},cleanupUltimateBattle(){},document:{querySelector:()=>({remove(){}})},app:{insertAdjacentHTML:(_,html)=>modals.push(html)},audio:{sfx(){}},render(){},Modal:(title,body)=>title+body,topModal:()=>modal,activeEnemy:null,snapshot:null,screen:'chapterTwoField'};
  vm.createContext(context);vm.runInContext(finishSource,context);return{context,modals};
 }
 test('actual battle settlement integration clears the checkpoint and commits rewards together',()=>{

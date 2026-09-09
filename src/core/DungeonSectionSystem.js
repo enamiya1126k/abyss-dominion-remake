@@ -98,7 +98,7 @@ function weightedPattern(random,excluded=new Set()){
 }
 
 function resolveSizeTier(value,random){return SECTION_SIZE_TIERS[String(value??"")]??weightedSizeTier(random)}
-function resolvePattern(value,random){const legacy={irregular:"drift",slender:"ribbon",branched:"fork",ring:"crescent"},resolved=legacy[String(value??"")]??String(value??"");return SECTION_SHAPE_PATTERNS.includes(resolved)?resolved:weightedPattern(random)}
+function resolvePattern(value,random){const legacy={irregular:"drift",slender:"ribbon",branched:"fork",ring:"crescent"},resolved=legacy[String(value??"")]??String(value??"");return [...SECTION_SHAPE_PATTERNS,"abyssIslands","rootClaws","sanctumCross","coreRings","rootRing"].includes(resolved)?resolved:weightedPattern(random)}
 
 function sectionShape(node,index,attribute,random,slot,linkedDirections=[],forcedTier=null,forcedPattern=null){
  const baseX=3+node.gx*slot,baseY=3+node.gy*slot,cx=baseX+Math.floor(slot/2),cy=baseY+Math.floor(slot/2),cells=new Set(),tier=resolveSizeTier(forcedTier,random),pattern=resolvePattern(forcedPattern,random),span=randomInteger(tier.minSpan,tier.maxSpan,random),half=Math.floor(span/2),innerMinX=baseX+4,innerMaxX=baseX+slot-5,innerMinY=baseY+4,innerMaxY=baseY+slot-5;
@@ -109,7 +109,14 @@ function sectionShape(node,index,attribute,random,slot,linkedDirections=[],force
  const carveDisc=(x,y,radius)=>{for(let oy=-radius;oy<=radius;oy++)for(let ox=-radius;ox<=radius;ox++)if(ox*ox+oy*oy<=radius*radius+radius*.7)carve(x+ox,y+oy)};
  const boundsX={min:clamp(cx-half,innerMinX,innerMaxX),max:clamp(cx+half,innerMinX,innerMaxX)},boundsY={min:clamp(cy-half,innerMinY,innerMaxY),max:clamp(cy+half,innerMinY,innerMaxY)};
 
- if(pattern==="cavern"){
+ if(["abyssIslands","rootClaws","sanctumCross","coreRings","rootRing"].includes(pattern)){
+  growthAccept=()=>false;
+  const arm=Math.max(5,half-2),radius=Math.max(2,Math.floor(half*.22));
+  if(pattern==='abyssIslands'){const points=[{x:cx,y:cy},{x:cx-arm,y:cy-arm},{x:cx+arm,y:cy-arm},{x:cx+arm,y:cy+arm},{x:cx-arm,y:cy+arm}];for(const q of points){carveLine({x:cx,y:cy},q,0);carveDisc(q.x,q.y,radius)}}
+  else if(pattern==='rootClaws'){carveDisc(cx,cy,radius);for(let i=-1;i<=1;i++){const q={x:cx+i*arm,y:cy-arm};carveLine({x:cx,y:cy+arm},q,1);carveLine(q,{x:q.x+2,y:q.y-2},0)}}
+  else if(pattern==='sanctumCross'){carveLine({x:cx-arm,y:cy},{x:cx+arm,y:cy},1);carveLine({x:cx,y:cy-arm},{x:cx,y:cy+arm},1);for(const d of CARDINAL)carveDisc(cx+d.dx*arm,cy+d.dy*arm,radius);carveDisc(cx,cy,radius+1)}
+  else{for(const rad of pattern==='coreRings'?[Math.max(3,arm>>1),arm]:[arm])for(let t=0;t<360;t++){const a=t*Math.PI/180;carve(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad,1)}carveLine({x:cx-arm,y:cy},{x:cx+arm,y:cy},0);carveLine({x:cx,y:cy-arm},{x:cx,y:cy+arm},0);carveDisc(cx,cy,radius)}
+ }else if(pattern==="cavern"){
   const wide=random()<.5,rx=Math.max(4,half-randomInteger(0,2,random)),ry=Math.max(4,half-randomInteger(0,2,random)),sx=wide?1:random()<.5?.72:1.18,sy=wide?random()<.5?.72:1.18:1,phase=random()*Math.PI*2;
   for(let y=cy-half;y<=cy+half;y++)for(let x=cx-half;x<=cx+half;x++){
    const dx=(x-cx)/(rx*sx),dy=(y-cy)/(ry*sy),angle=Math.atan2(dy,dx),edge=.88+.1*Math.sin(angle*3+phase)+.06*Math.sin(angle*5-phase),q=dx*dx+dy*dy;

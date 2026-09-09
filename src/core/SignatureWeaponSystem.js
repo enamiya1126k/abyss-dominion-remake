@@ -1,3 +1,4 @@
+import {vaultSkill380} from '../chapterTwo/VaultGear380.js?v=3.1.60-build380';
 import{SPECIES}from"../data/species.js?v=3.1.39-build359";
 import{ENDGAME_CHARACTERS,canonicalEndgameId}from"../data/endgameCharacters.js?v=3.1.38-build358";
 import{RARITY_ORDER,normalizeEquipmentIdentity}from"../data/equipment.js?v=3.1.55-build375";
@@ -84,7 +85,7 @@ export function normalizeSignatureWeaponItem(item){
  if(weapon.skill)item.grantedSkillId=weapon.skill.id;
  normalizeEquipmentIdentity(item);return weapon
 }
-export function signatureWeaponGrantedSkill(item){return normalizeSignatureWeaponItem(item)?.skill??null}
+export function signatureWeaponGrantedSkill(item){return vaultSkill380(item)??normalizeSignatureWeaponItem(item)?.skill??null}
 
 export function endgameSignatureEquipmentStats(ownerId,pieceIndex){
  const boss=ENDGAME_CHARACTERS[canonicalOwnerId(ownerId)];if(!boss)return null;
