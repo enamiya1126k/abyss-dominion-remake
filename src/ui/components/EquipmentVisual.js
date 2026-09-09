@@ -1,3 +1,4 @@
+import{ENDGAME_CHARACTERS}from"../../data/endgameCharacters.js?v=3.1.38-build358";
 import{equipmentIconMeta}from"../../data/equipment.js?v=3.1.55-build375";
 
 const EQUIPMENT_ART_ROOT="../../assets/ui/equipment";
@@ -9,6 +10,15 @@ function safeToken(value){return String(value??"").replace(/[^a-zA-Z0-9_-]/g,"")
  * URL は app.css のカスタムプロパティとして使われるため、CSS からの相対パス。
  */
 export function equipmentVisual(item,{className="",label=""}={}){
+ // Public snapshots from older servers retain names but omit atlas metadata.
+ if(item&&!item.iconAtlas&&!item.visualAsset){
+  for(const owner of Object.values(ENDGAME_CHARACTERS)){
+   const index=owner.gear?.findIndex(gear=>gear.name===item.name&&gear.slot===item.slot)??-1;
+   if(index<0)continue;
+   const row=Object.values(ENDGAME_CHARACTERS).filter(entry=>entry.faction===owner.faction).findIndex(entry=>entry.id===owner.id);
+   item={...item,iconAtlas:`endgame-${owner.faction==='tenGod'?'ten':'abyss'}`,iconColumn:index,iconRow:row,iconIndex:index};break;
+  }
+ }
  if(item?.visualAsset){
   const source=String(item.visualAsset).replace(/["'<>]/g,"");
   return`<span class="equipment-pixel-art equipment-direct-art ${className}" role="img" aria-label="${label||item?.name||"装備"}"><img src="${source}" alt="" draggable="false"></span>`;

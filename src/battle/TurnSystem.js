@@ -1,5 +1,5 @@
 import{ultimateIsolated}from"../core/EndgameUltimateSystem.js?v=3.1.58-build378";
-import{calculatedStats,displayName}from"../models/Monster.js?v=3.1.60-build380";
+import{calculatedStats,displayName}from"../models/Monster.js?v=3.1.61-build381";
 
 export function aliveEnemies(battle){return (battle.enemies??[battle.enemy]).filter(Boolean).filter(enemy=>enemy.hp>0)}
 export function selectedEnemy(battle){const alive=aliveEnemies(battle).filter(u=>!ultimateIsolated(battle,u));let target=alive.find(e=>e.id===battle.targetEnemyId);if(!target){target=alive[0]??null;battle.targetEnemyId=target?.id??null}return target}

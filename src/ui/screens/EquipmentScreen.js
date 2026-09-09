@@ -9,10 +9,10 @@ import{
  compatibleSubslots,
  equipmentIdentity
 }from"../../data/equipment.js?v=3.1.55-build375";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.60-build380";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.61-build381";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=3.1.55-build375";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.49-build369";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.60-build380";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.61-build381";
 import{ATTRIBUTES}from"../../data/attributes.js?v=3.1.1-build311";
 import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=3.1.55-build375";
 import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=3.1.39-build359";
@@ -25,7 +25,7 @@ import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=3.1.55-build375";
-import{equipmentVisual}from"../components/EquipmentVisual.js?v=3.1.55-build375";
+import{equipmentVisual}from"../components/EquipmentVisual.js?v=3.1.61-build381";
 import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=3.1.41-build361";
 import{signatureWeaponState,signatureWeaponForMonster,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster}from"../../core/SignatureWeaponSystem.js?v=3.1.60-build380";
 

@@ -2,7 +2,7 @@ import{SPECIES}from"../../data/species.js?v=3.1.39-build359";
 import{orderedMonsterSpecies}from"../../data/monsterCatalog.js?v=3.1.1-build311";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
 import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=3.1.1-build311";
-import{MONSTER_STORAGE_CAP}from"../../core/config.js?v=3.1.60-build380";
+import{MONSTER_STORAGE_CAP}from"../../core/config.js?v=3.1.61-build381";
 import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=3.1.60-build380";
 
 const RARITY_VALUE={N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9};

@@ -2,7 +2,7 @@ import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../..
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=3.1.55-build375";
 import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=3.1.1-build311";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=3.1.55-build375";
-import{equipmentVisual}from"../components/EquipmentVisual.js?v=3.1.55-build375";
+import{equipmentVisual}from"../components/EquipmentVisual.js?v=3.1.61-build381";
 import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=3.1.60-build380";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
 

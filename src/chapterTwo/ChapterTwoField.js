@@ -1,4 +1,4 @@
-import {chapterTwoRooms,ENCOUNTERS,chapterTwoWorld,chapterTwoObjective} from './ChapterTwoSystem.js?v=3.1.60-build380';
+import {chapterTwoRooms,ENCOUNTERS,chapterTwoWorld,chapterTwoObjective} from './ChapterTwoSystem.js?v=3.1.61-build381';
 import {portalTowardSection} from '../core/DungeonSectionSystem.js?v=3.1.60-build380';
 export function mountChapterTwoField(g,{canvas,Entity,Camera,findPath,drawScene,bindInput,updateTrail,TILE,run,onSave,onContact,onAutoChange=()=>{},blocked=()=>false}){
  const ROOMS=chapterTwoRooms(run),room=ROOMS[run.room];g.chapterTwo=true;g.world=chapterTwoWorld(run);

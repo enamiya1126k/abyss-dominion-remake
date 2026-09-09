@@ -1,10 +1,10 @@
-import{APP_VERSION}from"../../core/config.js?v=3.1.60-build380";
-import{calculatedStats,displayName}from"../../models/Monster.js?v=3.1.60-build380";
+import{APP_VERSION}from"../../core/config.js?v=3.1.61-build381";
+import{calculatedStats,displayName}from"../../models/Monster.js?v=3.1.61-build381";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.49-build369";
 import{biomeForFloor}from"../../data/biomes.js?v=3.1.1-build311";
 import{dungeonThemeForFloor,dungeonThemeForAttribute}from"../../data/dungeonThemes.js?v=3.1.1-build311";
 import{worldPresentationForFloor}from"../../core/WorldSystem.js?v=3.1.60-build380";
-import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.60-build380";
+import{partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.61-build381";
 import{manualReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.55-build375";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
 import{SPECIES}from"../../data/species.js?v=3.1.39-build359";

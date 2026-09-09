@@ -1,10 +1,10 @@
-import {validateGmFinalePack,applyGmFinalePack} from './GmFinalePackSystem.js?v=3.1.60-build380';
+import {validateGmFinalePack,applyGmFinalePack} from './GmFinalePackSystem.js?v=3.1.61-build381';
 import{EQUIPMENT_BASES}from"../data/equipment.js?v=3.1.55-build375";
-import{createMonster,calculatedStats}from"../models/Monster.js?v=3.1.60-build380";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=3.1.61-build381";
 import{allLearnedSkills,maxMp,recommendedSkills,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.49-build369";
 import{SPECIES}from"../data/species.js?v=3.1.39-build359";
 import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.60-build380";
-import{MONSTER_STORAGE_CAP}from"./config.js?v=3.1.60-build380";
+import{MONSTER_STORAGE_CAP}from"./config.js?v=3.1.61-build381";
 import{createEquipment}from"../models/Equipment.js?v=3.1.55-build375";
 import{receiveEquipment,EQUIPMENT_LIMIT}from"../services/EquipmentStorage.js?v=3.1.55-build375";
 
