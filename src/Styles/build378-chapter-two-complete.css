@@ -1,0 +1,24 @@
+/* Chapter Two follows the shared exploration UI and gesture positions. */
+.chapter-two-explore #miniMap,.chapter-two-explore #miniMapToggle,.chapter-two-explore #exploreAutoToggle{touch-action:none!important;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:grab}
+.chapter-two-explore #miniMap.visible{pointer-events:auto!important}
+.chapter-two-explore .dragging{cursor:grabbing!important;outline:1px solid #ecd598}
+.chapter-two-explore .explore-stage{padding-bottom:0}
+.chapter-two-region{display:grid;gap:7px;padding:0 0 14px;border-bottom:1px solid #6b563f}
+.chapter-two-region>button{min-height:42px;white-space:normal;line-height:1.5}
+.chapter-two-region>button[data-ch2-enter]{display:flex;gap:12px;align-items:center;padding:14px 10px;text-align:left;border:1px solid var(--region-accent);background:linear-gradient(135deg,#1c1720,#090a0e);border-radius:0;color:#edd9a7}
+.chapter-two-region>button[data-ch2-enter]>span:not(.chapter-two-region-art){flex:1;min-width:0;display:grid;gap:5px}
+.chapter-two-region-art{width:52px;height:64px;background-size:200% 100%;background-position:left;image-rendering:pixelated;border:1px solid #8b7856;flex:none}
+.chapter-two-region>button[disabled]{opacity:.43}
+.chapter-two-region em{font:18px/1 serif}
+.chapter-two-region button[data-ch2-new],.chapter-two-region button[data-ch2-challenge],.chapter-two-region button[data-ch2-story]{font-size:12px;background:#19121f;border:1px solid #5d4c65;color:#decba6;padding:8px}
+.chapter-two-reward-modal .battle-result-cinematic{min-height:155px}
+.chapter-two-unlock-modal>.game-modal-card{max-height:85dvh;overflow:auto}
+.chapter-two-unlock-modal .modal-x{left:auto!important;right:10px!important;top:10px!important}
+.chapter-two-unlock-modal .game-modal-card>h2{font-size:20px;padding-right:45px}
+.chapter-two-unlock{text-align:center;padding:20px 8px;color:#e5d8b9}
+.chapter-two-unlock>span>.home-pixel-icon{width:76px;height:76px;filter:drop-shadow(0 0 8px #c69a4c)}
+.chapter-two-unlock h3{font:700 25px/1.5 'Yu Mincho',serif;color:#f0d291}
+.chapter-two-unlock p{font-size:15px;line-height:1.8}
+.side-battle-v2 .battle-shield-gauge{border:1px solid #8f7741;box-sizing:border-box;background:#16150f}
+.side-battle-v2 .battle-shield-gauge>i{background:linear-gradient(90deg,#a17b2a,#edcf77)}
+.chapter-two-reward-modal[hidden]{display:none!important}

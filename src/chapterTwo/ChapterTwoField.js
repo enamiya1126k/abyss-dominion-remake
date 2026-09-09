@@ -1,7 +1,7 @@
-import {ROOMS,ENCOUNTERS,chapterTwoWorld,chapterTwoObjective} from './ChapterTwoSystem.js?v=3.1.57-build377';
+import {chapterTwoRooms,ENCOUNTERS,chapterTwoWorld,chapterTwoObjective} from './ChapterTwoSystem.js?v=3.1.58-build378';
 import {portalTowardSection} from '../core/DungeonSectionSystem.js?v=3.1.57-build377';
 export function mountChapterTwoField(g,{canvas,Entity,Camera,findPath,drawScene,bindInput,updateTrail,TILE,run,onSave,onContact,onAutoChange=()=>{},blocked=()=>false}){
- const room=ROOMS[run.room];g.chapterTwo=true;g.world=chapterTwoWorld(run);
+ const ROOMS=chapterTwoRooms(run),room=ROOMS[run.room];g.chapterTwo=true;g.world=chapterTwoWorld(run);
  if(g.world.sectionByCell[`${run.position.x},${run.position.y}`]!==g.world.currentSectionId)run.position={...g.world.sections[run.room].center};
  g.player=new Entity(run.position.x,run.position.y);g.canvas=canvas;g.ctx=canvas.getContext('2d');g.camera=new Camera(canvas);g.running=true;g.paused=false;g.partyTrail=[];
  let frame=0,disposed=false,last=performance.now(),lastPaint=0,lastSave=0,armed=false,contactLock=null;
@@ -32,6 +32,6 @@ export function mountChapterTwoField(g,{canvas,Entity,Camera,findPath,drawScene,
  g.chapterTwoNavigate=n=>{const object=targetRoom(n);if(object){g.chapterTwoTarget=object;walk(object,{manual:true});return object.label}return null};
  g.chapterTwoToggleAuto=()=>{run.auto377=!run.auto377;g.player.path=[];onAutoChange(run.auto377);persist()};
  g.saveChapterTwo=persist;
- g.disposeChapterTwo=()=>{if(disposed)return;disposed=true;cancelAnimationFrame(frame);observer?.disconnect();document.removeEventListener('keydown',key);canvas.onpointerdown=canvas.onpointermove=canvas.onpointerup=canvas.onpointercancel=canvas.onlostpointercapture=null;persist()};
+ g.disposeChapterTwo=()=>{if(disposed)return;disposed=true;cancelAnimationFrame(frame);observer?.disconnect();g.movableControlsResizeObserver?.disconnect();document.removeEventListener('keydown',key);canvas.onpointerdown=canvas.onpointermove=canvas.onpointerup=canvas.onpointercancel=canvas.onlostpointercapture=null;persist()};
  frame=requestAnimationFrame(tick);return g;
 }

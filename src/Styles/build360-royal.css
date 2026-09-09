@@ -3,10 +3,7 @@
 .home-scene-unit .home-slot-badge{z-index:30!important}
 .battle-screen .battle-unit .party-floor-boss-art>.party-monster-art-layer{transform:scale(1.12)!important}
 .battle-screen.side-battle-v2 .battle-unit.party-floor-boss .side-unit-sprite>.battle-unit-floating-name{bottom:calc(110.5% + 3px)!important;max-width:100%!important}
-.battle-screen .battle-shield-gauge{position:relative;display:block!important;box-sizing:border-box;height:10px!important;min-height:10px!important;max-height:10px!important;margin:2px 0!important;padding:0!important;overflow:hidden;border:1px solid #8f7741;background:#191711;border-radius:2px;line-height:8px!important;font-size:7px!important}
 .battle-shield-gauge>i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#a17b2a,#edcf77);transition:width .2s}
-.battle-shield-gauge>span{position:relative;z-index:1;display:block;text-align:center;color:#fff7d7;text-shadow:0 1px 2px #000,1px 0 #000;font:800 7px/8px sans-serif!important;white-space:nowrap}
-.battle-screen .battle-shield-gauge.is-empty{visibility:hidden}
 .campaign-story-scenery>u{display:none!important}
 
 /* Same exploration chrome, with a single playable room. No document-height controls. */

@@ -1,4 +1,4 @@
-import{ExploreScreen}from"./ExploreScreen.js?v=3.1.57-build377";
+import{ExploreScreen}from"./ExploreScreen.js?v=3.1.58-build378";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
 import{pixelIcon}from"../components/GameChrome.js?v=3.1.1-build320";
 

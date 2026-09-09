@@ -9,10 +9,10 @@ import{
  compatibleSubslots,
  equipmentIdentity
 }from"../../data/equipment.js?v=3.1.55-build375";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.57-build377";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.58-build378";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=3.1.55-build375";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.49-build369";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.57-build377";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.58-build378";
 import{ATTRIBUTES}from"../../data/attributes.js?v=3.1.1-build311";
 import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=3.1.55-build375";
 import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=3.1.39-build359";

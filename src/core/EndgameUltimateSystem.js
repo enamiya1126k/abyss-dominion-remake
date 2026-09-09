@@ -1,3 +1,4 @@
+import {rememberShieldCapacity} from './HeroShieldDisplay.js?v=3.1.58-build378';
 import{tryHeroFortitude}from'./HeroFortitudeSystem.js?v=3.1.41-build361';
 import {ENDGAME_ULTIMATES,ENDGAME_ULTIMATE_BY_ID,isEndgameUltimate} from '../data/endgameUltimates.js?v=3.1.38-build358';
 import {attributeDamageMultiplier} from '../data/attributes.js';
@@ -123,7 +124,7 @@ export function ultimateAfterDamage(b,target,dealt,{source=null,direct=true}={})
 }
 function damage(b,source,target,amount,{element=null,damageClass=null,direct=true,label='権能',ignoreShield=false}={}){
  const before=ultimateHp(target);let n=Math.max(0,Math.floor(amount));
- if(!ignoreShield){for(const key of ['shield','heroShield348','_floorBossHpShield']){const absorbed=Math.min(Number(target[key])||0,n);if(absorbed){target[key]-=absorbed;n-=absorbed}}for(const store of [b.circleShields,b.signatureShields]){const absorbed=Math.min(Number(store?.[ultimateUnitId(target)])||0,n);if(absorbed){store[ultimateUnitId(target)]-=absorbed;n-=absorbed}}}
+ if(!ignoreShield){rememberShieldCapacity(target);for(const key of ['shield','heroShield348','_floorBossHpShield']){const absorbed=Math.min(Number(target[key])||0,n);if(absorbed){target[key]-=absorbed;n-=absorbed}}for(const store of [b.circleShields,b.signatureShields]){const absorbed=Math.min(Number(store?.[ultimateUnitId(target)])||0,n);if(absorbed){store[ultimateUnitId(target)]-=absorbed;n-=absorbed}}}
  n=ultimateIncomingDamage(b,target,n,{source,element,damageClass,direct});setHp(target,ultimateHp(target)-n);tryHeroFortitude(b,target,before);const dealt=Math.max(0,before-ultimateHp(target));ultimateAfterDamage(b,target,dealt,{source,direct});emit(b,'damage',target,label,dealt,source);return dealt;
 }
 export function ultimateCircle(b,u,fallback){if(!b?.ultimates358)return fallback;const e=matching(b,'borrow').find(e=>e.source===ultimateUnitId(u)||e.targets.includes(ultimateUnitId(u)));if(!e)return fallback;return e.source===ultimateUnitId(u)?e.circle:null}
@@ -146,7 +147,7 @@ export function replayUltimateOrdinary(b,u,s,{team=ultimateTeam(b,u),scale=1,cha
  if(['selfHeal','allHeal','heal'].includes(type)||['stance','buff'].includes(type)&&s.heal)for(const target of friendly){heal(b,target,maxHp(b,target)*(s.heal??.25)*scale,u,s.name);if(s.cleanse)cleanse(b,target)}
  if(type==='mpHeal')for(const target of friendly)setMp(target,Math.min(maxMp(b,target),ultimateMp(target)+Math.floor(maxMp(b,target)*(s.mpHeal??.25)*scale)));
  if(s.clearNegativeSelf)cleanse(b,u);if(type==='cleanse'||s.cleanse&&['buff','stance'].includes(type))for(const target of friendly)cleanse(b,target);
- if(s.partyShieldRate)for(const target of living)target.heroShield348=Math.max(target.heroShield348??0,Math.floor(maxHp(b,target)*s.partyShieldRate*scale));
+ if(s.partyShieldRate)for(const target of living){target.heroShield348=Math.max(target.heroShield348??0,Math.floor(maxHp(b,target)*s.partyShieldRate*scale));rememberShieldCapacity(target);}
  let total=0;const stats=ultimateStats(b,u),affixes=stats._affixes??u.equipmentCombatEffects??{};
  if(s.selfHpCostRate)setHp(u,Math.max(1,ultimateHp(u)-Math.floor(ultimateHp(u)*s.selfHpCostRate)));
  if((s.power??0)>0)for(const target of targets)for(let hit=0;hit<(s.hits??1)&&ultimateHp(target)>0;hit++){

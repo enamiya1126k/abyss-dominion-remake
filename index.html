@@ -151,7 +151,8 @@
 <link rel="stylesheet" href="./src/Styles/build364-battle-status.css?v=3.1.44-build364">
 <link rel="stylesheet" href="./src/Styles/build365-battle-polish.css?v=3.1.45-build365">
 <link rel="stylesheet" href="./src/Styles/build366-status-scroll.css?v=3.1.46-build366">
-  <link rel="stylesheet" href="./src/Styles/build377-chapter-two-flow.css?v=3.1.57-build377">
+  <link rel="stylesheet" href="./src/Styles/build377-chapter-two-flow.css?v=3.1.58-build378">
+  <link rel="stylesheet" href="./src/Styles/build378-chapter-two-complete.css?v=3.1.58-build378">
 </head>
 <body>
   <div id="app"></div>
@@ -203,14 +204,14 @@
   <link rel="stylesheet" href="./src/Styles/build345-balance-ui.css?v=3.1.27-build347" />
   <link rel="stylesheet" href="./src/Styles/build357-battle-readability.css?v=3.1.37-build357">
   <link rel="stylesheet" href="./src/Styles/build358-endgame.css?v=3.1.38-build358">
-  <link rel="stylesheet" href="./src/Styles/build360-royal.css?v=3.1.42-build360">
+  <link rel="stylesheet" href="./src/Styles/build360-royal.css?v=3.1.58-build378">
   <link rel="stylesheet" href="./src/Styles/build370-home-attribute-plate.css?v=3.1.55-build375">
   <link rel="stylesheet" href="./src/Styles/build371-ranking-profile.css?v=3.1.55-build375">
   <link rel="stylesheet" href="./src/Styles/build375-battle-equipment.css?v=3.1.55-build375">
 <link rel="stylesheet" href="./src/Styles/build376-chapter-two.css?v=3.1.56-build376">
 <script type="module">
-    const ASSET_VERSION = "3.1.57";
-    const ASSET_BUILD = "build377";
+    const ASSET_VERSION = "3.1.58";
+    const ASSET_BUILD = "build378";
     const CACHE_VERSION = `${ASSET_VERSION}-${ASSET_BUILD}`;
     const VERSION_KEY = "abyss-dominion-asset-version";
     async function refreshStaleAssets() {
@@ -230,7 +231,7 @@
         }
         localStorage.setItem(VERSION_KEY, CACHE_VERSION);
       }
-      await import(`./src/main.js?v=3.1.55-build375`);
+      await import(`./src/main.js?v=3.1.58-build378`);
       window.__abyssBootComplete = true;
     }
     refreshStaleAssets();

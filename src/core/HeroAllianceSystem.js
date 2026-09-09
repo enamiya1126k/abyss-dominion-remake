@@ -1,5 +1,6 @@
+import {rememberShieldCapacity} from './HeroShieldDisplay.js?v=3.1.58-build378';
 import{tryHeroFortitude}from'./HeroFortitudeSystem.js?v=3.1.41-build361';
-import{ultimateIsolated,ultimateExtraBlocked,afterUltimateOrdinary}from"./EndgameUltimateSystem.js?v=3.1.41-build361";
+import{ultimateIsolated,ultimateExtraBlocked,afterUltimateOrdinary}from"./EndgameUltimateSystem.js?v=3.1.58-build378";
 import {MYTHIC_SERIAL_SPECIES} from '../data/mythicSerialSpecies.js?v=3.1.39-build359';
 import {attributeDamageMultiplier} from '../data/attributes.js';
 import {heroResonanceMembers,heroResonanceProfile,scaleHeroResonanceSkill,isHeroResonanceSpecies} from './HeroResonanceSystem.js?v=3.1.39-build359';
@@ -35,7 +36,7 @@ export function reserveHeroAction(b,side,u,{followup=false}={}){
 export function mitigateHeroDamage(b,side,u,amount){
  let damage=Math.max(0,Math.floor(Number(amount)||0));if(!damage)return 0;
  const profile=heroResonanceProfile(heroSideUnits(b,side)),solo=isHeroResonanceSpecies(u?.speciesId)&&profile.count===1;damage=Math.max(1,Math.floor(damage*(1-(solo ? .30 : profile.damageReduction))));
- const absorbed=Math.min(Math.max(0,Number(u.heroShield348)||0),damage);u.heroShield348=Math.max(0,(u.heroShield348??0)-absorbed);
+ rememberShieldCapacity(u);const absorbed=Math.min(Math.max(0,Number(u.heroShield348)||0),damage);u.heroShield348=Math.max(0,(u.heroShield348??0)-absorbed);
  if(solo&&u.speciesId==='myth_yori'&&damage>absorbed){const effects=heroEffects(b,u,side),key='hero355:yori-retaliation',existing=effects.find(e=>e.sourceKey===key);if(existing)existing.turns=3;else effects.push({kind:'atkUp',name:'不屈の闘志',value:.20,turns:3,sourceKey:key});}
  return damage-absorbed;
 }
@@ -47,7 +48,7 @@ export function tryHeroLastStand(b,side,u,beforeHp){
 }
 export function heroOverheal(b,side,u,overflow,maxHp){
  if(!b||!isHeroResonanceSpecies(u?.speciesId)||heroHp(u)<=0||heroResonanceProfile(heroSideUnits(b,side)).count<2)return 0;
- const cap=Math.floor(maxHp*.4),before=Math.max(0,Number(u.heroShield348)||0);u.heroShield348=Math.min(cap,before+Math.max(0,Math.floor(overflow)));return Math.max(0,u.heroShield348-before);
+ const cap=Math.floor(maxHp*.4),before=Math.max(0,Number(u.heroShield348)||0);u.heroShield348=Math.min(cap,before+Math.max(0,Math.floor(overflow)));rememberShieldCapacity(u,cap);return Math.max(0,u.heroShield348-before);
 }
 function putEffect(b,u,side,e,source){
  const list=heroEffects(b,u,side),key=`hero348:${heroId(source)}:${e.kind}`,existing=list.find(x=>x.sourceKey===key);
@@ -98,8 +99,8 @@ export function runHeroAllianceAction(b,side,u,skill,env={},options={}){
  if(skill.type==='revive'){
   const eligible=allies.filter(x=>heroHp(x)<=0&&!heroEffects(b,x,side).some(e=>e.kind==='reviveSeal'&&(e.turns??1)>0)),target=eligible.find(x=>heroId(x)===options.targetId)??eligible[0];if(target){setHeroHp(target,Math.max(1,Math.floor((stats(target).hp??target.maxHp)*skill.revive)));setHeroMp(target,Math.floor(target.maxMp*(skill.reviveMp??0)));emit('revive',target,heroHp(target));}
  }else if(skill.type==='allHeal')for(const target of alive()){heal(target,skill.heal??0);if(skill.cleanse){const list=heroEffects(b,target,side);list.splice(0,list.length,...list.filter(e=>HERO_POSITIVE.has(e.kind)));env.cleanse?.(target,side)}}
- if(skill.soloShieldRate>0&&heroResonanceProfile(allies).count===1){const amount=Math.floor((stats(u).hp??u.maxHp)*skill.soloShieldRate);u.heroShield348=Math.max(u.heroShield348??0,amount);emit('shield',u,amount);}
- if(skill.partyShieldRate)for(const target of alive()){const amount=Math.floor((stats(target).hp??target.maxHp)*skill.partyShieldRate);target.heroShield348=Math.max(target.heroShield348??0,amount);emit('shield',target,amount)}
+ if(skill.soloShieldRate>0&&heroResonanceProfile(allies).count===1){const amount=Math.floor((stats(u).hp??u.maxHp)*skill.soloShieldRate);u.heroShield348=Math.max(u.heroShield348??0,amount);rememberShieldCapacity(u,amount);emit('shield',u,amount);}
+ if(skill.partyShieldRate)for(const target of alive()){const amount=Math.floor((stats(target).hp??target.maxHp)*skill.partyShieldRate);target.heroShield348=Math.max(target.heroShield348??0,amount);rememberShieldCapacity(target,amount);emit('shield',target,amount)}
  let killed=false,affectedTargets=[];const signature=u.heroSignature348??u.signatureResonance;const buffs=heroEffects(b,u,side),guaranteed=Boolean(skill.guaranteedCritical)||buffs.some(e=>e.kind==='guaranteedCritical'&&(e.turns??1)>0);
  const hit=(target,power,finisher=false)=>{
   const a=stats(u),d=stats(target),magic=skill.damageClass==='magic',af=Math.max(.2,1+heroEffect(b,u,side,'atkUp')-heroEffect(b,u,side,'atkDown')),df=Math.max(.2,1+heroEffect(b,target,opposite,'defUp')-heroEffect(b,target,opposite,'defDown'));
@@ -132,7 +133,7 @@ export function runHeroAllianceAction(b,side,u,skill,env={},options={}){
  if(skill.reducePartyCooldowns&&!state.shortened){state.shortened=true;for(const target of alive()){const cd=heroCooldowns(b,target);for(const id of Object.keys(cd))cd[id]=Math.max(0,cd[id]-1)}emit('heroUtility',u,1,{label:'いこうぜ！ 再使用を1ターン短縮'})}
  if(skill.extendPartyBuffs&&!state.extended){state.extended=true;for(const target of alive())for(const e of heroEffects(b,target,side))if(HERO_POSITIVE.has(e.kind)&&(e.turns??0)>0)e.turns=Math.min(5,e.turns+1);emit('heroUtility',u,1,{label:'強化を1ターン延長'})}
  // Existing signature support/chain powers use the same scaled definition.
- if(signature?.id==='rion-care'&&['revive','allHeal'].includes(skill.type))for(const target of alive()){target.heroShield348=Math.max(target.heroShield348??0,Math.floor((stats(target).hp??target.maxHp)*(signature.shieldRate??0)*(options.followup?.7:1)));setHeroMp(target,Math.min(target.maxMp,heroMp(target)+Math.floor(target.maxMp*(signature.mpRate??0)*(options.followup?.7:1))))}
+ if(signature?.id==='rion-care'&&['revive','allHeal'].includes(skill.type))for(const target of alive()){target.heroShield348=Math.max(target.heroShield348??0,Math.floor((stats(target).hp??target.maxHp)*(signature.shieldRate??0)*(options.followup?.7:1)));rememberShieldCapacity(target);setHeroMp(target,Math.min(target.maxMp,heroMp(target)+Math.floor(target.maxMp*(signature.mpRate??0)*(options.followup?.7:1))))}
  env.onSkill?.(u,original,options);if(!options.followup&&original)afterUltimateOrdinary(b,u,original);drainHeroReactions(b,env);
  if(!options.followup&&foes().length){triggerHeroAlliance(b,side,u,env);if(original&&heroHp(u)>0&&(signature?.extraActionChance??0)>0&&!state.signatureExtra.includes(actorId)&&random()<signature.extraActionChance){state.signatureExtra.push(actorId);runHeroAllianceAction(b,side,u,chooseHeroAllianceSkill(b,side,u,{free:true}),env,{followup:true})}}
  return true;

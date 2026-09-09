@@ -8,7 +8,7 @@ test('10 pre-clear home renderings are identical to Build375 aside from release 
  for(const floor of [1,10,50,99,100])for(const lost of [false,true]){
   const s=new SaveService().state;s.player.maxFloor=floor;s.player.currentFloor=floor;
   if(lost){s.campaign100.endings=['defeat'];s.campaign100.heroEncounters310.finalArena.lastEnding='defeat';}
-  assert.equal(HomeScreen(structuredClone(s)).replaceAll('3.1.57','VERSION'),oldHome(structuredClone(s)).replaceAll('3.1.55','VERSION'),`floor ${floor}, defeat ${lost}`);
+  assert.equal(HomeScreen(structuredClone(s)).replaceAll('3.1.58','VERSION'),oldHome(structuredClone(s)).replaceAll('3.1.55','VERSION'),`floor ${floor}, defeat ${lost}`);
  }
 });
 test('campaign generation, hero stats, rewards, skills and existing online logic are unchanged',{skip:!oldHome},()=>{
