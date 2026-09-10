@@ -1,0 +1,22 @@
+ABYSS DOMINION 引継ぎ Build398 / v3.1.78
+完了：③ 全魔法陣点検。既存25中8を強化、17の全Lv性能を維持、新3種追加。
+次の予定：④ Build399 深淵・十神のキャラ欠け／誤透過の修正。既存テイスト維持。
+以後⑤400モーション付きホームスキン、⑥401第二章導線・物語回想、⑦402統合確認。
+
+新陣はchapterTwo/MagicCircleResearch398で、第二章解放後の明示受取を処理。
+magicCircleResearch398.claimed＋決定的instanceIdで1セーブ1回、素材消費なし、Lv.1各1個。
+SaveServiceの移行版は上げない。MagicCircleSystemのversion=4も維持し、旧還元処理を再発火させない。
+新陣定義・有限係数・条件計算はdata/magicCircles398。BattleRulesの実直接ダメージ確定直前に適用。
+新陣はgoldやweakCritの一般倍率と別の条件補正。DOT・割合・HP転写・即死はrelicKind394/excludedで対象外。
+MagicCircleCombat398はultimateCircleと隔離を尊重。MPはSkillSystem.maxMpを利用。
+online-serverはOnlineMagicCircles398を通常共闘とレイド、勇者アダプターから使用。
+オンラインのモード別反映範囲はREADME参照。対人の魔法陣ルールは追加していない。
+万象抽選の従来処理は通常＝所持仲間の習得技、共闘＝サーバー共通プール。説明だけも合わせた。
+新陣は通常敵ランダム抽選から除外。第一章や第二章編成の入替はなし。
+
+検証404件成功。維持1,683条件、強化792条件、通常敵抽選1,000条件、セーブ6条件。
+JS56＋サーバー4構文、参照535。ブラウザー/iPhone実機の描画は未確認。
+以前のブラウザープレビュー拒否を迂回しない。
+Git HEADはBuild381。作業木に382〜398が適用済み。reset/checkoutで戻さない。
+基準はbase397-files.json・baseline397。次回はBuild398のハッシュ基準を保存してから編集。
+公開コミット／Push／デプロイは実行していない。

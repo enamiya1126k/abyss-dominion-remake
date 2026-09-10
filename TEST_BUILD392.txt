@@ -1,0 +1,39 @@
+ABYSS DOMINION Build392 / v3.1.72 検証結果
+
+231件成功 / 失敗0件。うち本弾の追加テスト11件。
+59変更モジュールの構文、543件の相対モジュール参照、変更先へのキャッシュ更新を確認。
+図鑑プレビューのスクリプト構文、9つのモーション切替（自動＋8ポーズ）、3組の連携説明を確認。
+元PNGと配布PNGのSHA-256一致。7シートともRGBA、1774×887。
+56ポーズの主要シルエット保持100%、他ポーズの主要シルエット混入0画素。
+PNGの加工はせず、描画時の多角形領域を独立に再構成して確認。
+
+追加確認
+・敵と味方のAIが睡眠を仕込み、相方が睡眠特効を選ぶ。MP不足は通常攻撃へ戻る。
+・睡眠特効は連携時の状態に応じて判定し、浄化後には持ち越さない。
+・双竜は各生存対象の強化を1つずつ攻撃前に解除。隔離・戦闘不能の相手を除外。
+・解除は他の強化・弱体・HP障壁・魔法陣を消去しない。障壁には通常のダメージ処理が続く。
+・双冠は同ラウンドの2人目で終剣。HP35%以下と35%超の境界を各敵で判定。
+・味方HP/currentHpと敵HP/hp、それぞれの最大HPを実際のmainアダプターで使い分ける。
+・どちらの姉妹が先に動いても発動。複製・セーブ再開で回数は増えず、次ラウンドに戻る。
+・戦闘不能・捕獲・隔離した相方がいれば終剣は停止。
+・全70体、各ランク10体、全24組、全280固有技。全体の捕獲経路と1部隊4人の制限を維持。
+・新3部隊は既存部隊と再訪で交代。旧エルミナ（Build389）と新エルミゼを別種族で維持。
+・7体の固有4技、消耗したHP/MP、ペアIDがSaveService往復で維持される。
+・旧ビルドの敗北時HP/MP、頭上名札、物語、鍵、報酬、旧ペア、再訪・保留戦闘・重複報酬防止を回帰確認。
+
+実行したゲート
+node --test --test-concurrency=1 --test-skip-pattern='new geometry is opt-in'
+build360-royal / build373* / build375* / build376-chapter-two / build376-field /
+build377-renderer / build377-story-flow / build378-controls / build378-flow /
+build379* / build380* / build381* / build382-chapter-two /
+build383-native-monsters / build384-native-monsters / build385-twins /
+build386-pairs / build387-finale / build388-oath-heroines / build389-keys-thunder /
+build390-crystal-oaths / build391-wings-bells / build392-dreams-crowns
+（testsフォルダーの .test.mjs を指定）
+
+制限
+ブラウザー実描画とiPhone実機の見た目・性能は未確認。
+戦闘テストはNode/VMで実処理を呼び出し、DOM・アニメーションなどを代替して検証。
+オンラインのサーバー戦闘へのペア共鳴の移植は含まない。
+公開push/deployは実施していない。
+詳細ログはvalidation/build392-tests.txt。

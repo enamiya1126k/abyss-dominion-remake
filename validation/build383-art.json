@@ -1,0 +1,483 @@
+{
+  "totalFrames": 56,
+  "checksPassed": true,
+  "note": "Alpha analysis only; browser/iPhone appearance is not verified. Principal connected silhouettes retain >99.5%; see per-frame measurements.",
+  "sheets": [
+    {
+      "species": "ch2_kororu",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "minAlpha": 0,
+      "maxAlpha": 255,
+      "frames": [
+        {
+          "name": "idle1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 43951,
+          "alphaFingerprint": "4c94afbf17bd4d88b9ad608147097634e4e672cd4fa4fba4dc337f38fb009f35"
+        },
+        {
+          "name": "idle2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 48930,
+          "alphaFingerprint": "e33664f7fdc867b936d361f4a46ff94f86b242ac7ede62f8e5bbb697aa478ffa"
+        },
+        {
+          "name": "idle3",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 43368,
+          "alphaFingerprint": "0c519f4fedb44d679ddd51909555da4c11e99ba0534ea3498e11f4c475fa57da"
+        },
+        {
+          "name": "walk1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 45907,
+          "alphaFingerprint": "69e811ff312e12a4414083de9d82c866638e5a0d0d1738ae597e86b627d87247"
+        },
+        {
+          "name": "walk2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 45569,
+          "alphaFingerprint": "9924ae03cd4ff4129ea9ec6a233ae4fd18fbe66791248f7848f1c19f73332ecd"
+        },
+        {
+          "name": "attack",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 50186,
+          "alphaFingerprint": "614f165deaca5a151ceeadfb728a4ca6c8f84dda4a92faf353904b8fb9e5e148"
+        },
+        {
+          "name": "damage",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 43145,
+          "alphaFingerprint": "6286cca907653f91bb6ce3764240e683998c881ff7d39863041a2cdd9ae73e3a"
+        },
+        {
+          "name": "down",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 33521,
+          "alphaFingerprint": "6789100a121aae6b7ae22d2288a16945563f425fbf6adc9d4f49e424294dbd06"
+        }
+      ]
+    },
+    {
+      "species": "ch2_balk",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "minAlpha": 0,
+      "maxAlpha": 255,
+      "frames": [
+        {
+          "name": "idle1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 86671,
+          "alphaFingerprint": "d4450a6a80d08a80e2d2086fd0a57cf73679a6a2c668fdc26abf7ec7dc1fa921"
+        },
+        {
+          "name": "idle2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 85957,
+          "alphaFingerprint": "b6d1d4b0c1dd7c78bdc1fc506f6e1a8cf8de7c4fdc20508213fe44c065538948"
+        },
+        {
+          "name": "idle3",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 82545,
+          "alphaFingerprint": "192c2ad1dcad2ff62711c68309e64dd7bf807556ef8b31c722b0e4dd842b94fc"
+        },
+        {
+          "name": "walk1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 80022,
+          "alphaFingerprint": "39c818f48d47246989e878c3ee71846e0e76ca71f2c9656cd913fea9a09f739e"
+        },
+        {
+          "name": "walk2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 82033,
+          "alphaFingerprint": "8a75ec6b046883c337fbc1f25182805946406e70fdf6e76f170389864c1d3fab"
+        },
+        {
+          "name": "attack",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 83456,
+          "alphaFingerprint": "d3c83789233a09b34e4be62aa1d1ab69c16d98866dcd95bc5aa988a4bfb7e730"
+        },
+        {
+          "name": "damage",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 74784,
+          "alphaFingerprint": "6a60d95769a02287735f569d4bcbb85141ebf61090751a217d93ee4812dac89b"
+        },
+        {
+          "name": "down",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 59934,
+          "alphaFingerprint": "b1dbf102618300f3feae4f8efc6471c6046afd3d779a207ff18f4ce970d48a23"
+        }
+      ]
+    },
+    {
+      "species": "ch2_shelza",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "minAlpha": 0,
+      "maxAlpha": 255,
+      "frames": [
+        {
+          "name": "idle1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 58062,
+          "alphaFingerprint": "36053b51a4e21158fad22faaf46c9c98e004396332983c75459ba408348ff8ad"
+        },
+        {
+          "name": "idle2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 52968,
+          "alphaFingerprint": "7ca8d132e7f3b919b1d94f1e765cb5d55d6dfacc4991e4ba59b959024294d5c8"
+        },
+        {
+          "name": "idle3",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 54648,
+          "alphaFingerprint": "7f568cebfcbac2cfdcead5d48544d7eab419aed9fec37cf12cccdc4c9b03e06d"
+        },
+        {
+          "name": "walk1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 53729,
+          "alphaFingerprint": "0fec4c7467a6f88370231799b6501a60b9ab0d0018b168a5bbfe61390d24570c"
+        },
+        {
+          "name": "walk2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 52060,
+          "alphaFingerprint": "d89da2b530fe117b51e601c34fa57f9534e9c309e02b3a9e14da04dafda5f490"
+        },
+        {
+          "name": "attack",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 66282,
+          "alphaFingerprint": "0a3a6079223f57b8b2a43897d036cea078f01f0fa3bb1d273a49cc4f5eb0c2a5"
+        },
+        {
+          "name": "damage",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 51578,
+          "alphaFingerprint": "6fad8c47ba63a7aa396dd707361f31e0633a0081e96f070215ba91f8599053dd"
+        },
+        {
+          "name": "down",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 44915,
+          "alphaFingerprint": "080e0b23cb45d26a3e708dde6f9dc505e73df618b5ae2f135ca9ed671734ef76"
+        }
+      ]
+    },
+    {
+      "species": "ch2_noctia",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "minAlpha": 0,
+      "maxAlpha": 255,
+      "frames": [
+        {
+          "name": "idle1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 81131,
+          "alphaFingerprint": "1872d05bd3e5e2b9794e677c5cfc0d5d86320533cc341d773405a2a46eec20a5"
+        },
+        {
+          "name": "idle2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 85089,
+          "alphaFingerprint": "fffdc6189eeffa033247dcbad3f1d74876a28d13174d3b7bd45efe09d5f01400"
+        },
+        {
+          "name": "idle3",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 79525,
+          "alphaFingerprint": "b7b674ad3644b7148f7076663e2fb8441c72032561257967714f86de6fb67239"
+        },
+        {
+          "name": "walk1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 82641,
+          "alphaFingerprint": "eb345dc73ffe03f452938813386443d3c4bc9fb3f9d645e154309bcd810be566"
+        },
+        {
+          "name": "walk2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 87129,
+          "alphaFingerprint": "0a244cd558170a60b0a97faae23a49c90c8ed1f5fd3afe1316ce0e24f691d365"
+        },
+        {
+          "name": "attack",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 112695,
+          "alphaFingerprint": "865c005cd799ebf16d3281287b69cac0f31ffe8c5ad3dc07a7c0bdaa90fac7a0"
+        },
+        {
+          "name": "damage",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 84389,
+          "alphaFingerprint": "6c93add22fa784293306a3c8c680bc8f4ea97bab9ff6cafd6b8f9b8b171c250c"
+        },
+        {
+          "name": "down",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 59490,
+          "alphaFingerprint": "6a0cb5eea1e504217e333762afa049208651aec6a538ff6ecfc4ac59251dbd2a"
+        }
+      ]
+    },
+    {
+      "species": "ch2_velg",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "minAlpha": 0,
+      "maxAlpha": 255,
+      "frames": [
+        {
+          "name": "idle1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 94589,
+          "alphaFingerprint": "f48b2164201752c509a33ed748a2d8927a0f8739b6211ae11767dc672ce0cf68"
+        },
+        {
+          "name": "idle2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 95671,
+          "alphaFingerprint": "2c8591f11d60e7054904971886cc59579f7948054e9fb9e83e0032820e7eccc2"
+        },
+        {
+          "name": "idle3",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 88068,
+          "alphaFingerprint": "9ad74152795106c656e375fd935f93c6cc71368e3679c48f9aeec33443daf62f"
+        },
+        {
+          "name": "walk1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 87795,
+          "alphaFingerprint": "fef21b4f21f7baf5c62939954dba35396f308e1b8143db79ab6dc9ac0d0bb860"
+        },
+        {
+          "name": "walk2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 90440,
+          "alphaFingerprint": "95847c9adb858b990f92b4fd7932fd2eb18fe41f62e91a1aa5215b307ef90e39"
+        },
+        {
+          "name": "attack",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 89325,
+          "alphaFingerprint": "98fc13d1695be189075a6122f183e42e03c7e6f662cb9601a36d062053535bce"
+        },
+        {
+          "name": "damage",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 82665,
+          "alphaFingerprint": "1e8d69316f2dd7d06916467351e29f7091e7b95c07b9d2306d303643222b8486"
+        },
+        {
+          "name": "down",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 53433,
+          "alphaFingerprint": "b812d82f746f3d31140330f5160a5fbc85814ec1ecd704c48562b1cdc2d2d801"
+        }
+      ]
+    },
+    {
+      "species": "ch2_astera",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "minAlpha": 0,
+      "maxAlpha": 255,
+      "frames": [
+        {
+          "name": "idle1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 74536,
+          "alphaFingerprint": "f52b4cfe75c1b600b994368150bf7129ff34a1af2a3d386e2f4be4a038daedb2"
+        },
+        {
+          "name": "idle2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 80758,
+          "alphaFingerprint": "d8044bcb6dcb145d1e51be866619704864f75daad7a3f463f308569170fe2185"
+        },
+        {
+          "name": "idle3",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 67691,
+          "alphaFingerprint": "5d1db74772c2602fd87f2b635e9d3346567e978792aaa1fd55b22e60a2c4fea3"
+        },
+        {
+          "name": "walk1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 70981,
+          "alphaFingerprint": "7ea2a6e85ac069f1930a83277438c9341fffa5c58b5595b7be493ede2754142d"
+        },
+        {
+          "name": "walk2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 12,
+          "visiblePixels": 68780,
+          "alphaFingerprint": "a2d67f7658bef39ab7339e3f4a800b9cb3f9c719467a233ddf45402b61c75fc4"
+        },
+        {
+          "name": "attack",
+          "principalSilhouetteRetained": 0.9998567572034599,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 90800,
+          "alphaFingerprint": "64035a18ca587b093e65b237e3adfefb54eff3c5b4569255e299a919cf2cace3"
+        },
+        {
+          "name": "damage",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 65570,
+          "alphaFingerprint": "3b4f2729a48e52f40e7c2ba1c53886df798798d91490a116dd48f5003a61befb"
+        },
+        {
+          "name": "down",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 52034,
+          "alphaFingerprint": "2b5b854f032751e3efce675f6483685a6d2ffd710b217af456bab977a4fe07d2"
+        }
+      ]
+    },
+    {
+      "species": "ch2_ordia",
+      "sourceSize": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "minAlpha": 0,
+      "maxAlpha": 255,
+      "frames": [
+        {
+          "name": "idle1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 62471,
+          "alphaFingerprint": "036eddf9f26880f2b546a1078e115eb4297d7b763623f495d4df16c6e7ac38f8"
+        },
+        {
+          "name": "idle2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 64798,
+          "alphaFingerprint": "546c014491219b542f9412b986d908ffbce53c6e279eb29b01f41afde84b8bd5"
+        },
+        {
+          "name": "idle3",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 62676,
+          "alphaFingerprint": "b30a9151d46ed448621d6f0ee76580a9b788aa11c0b399cc8f92cbbf62ebdfee"
+        },
+        {
+          "name": "walk1",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 60542,
+          "alphaFingerprint": "fa0dec1ebe154092aa5403f691070e044d96e7e4c3dff46afbf5d586901bcf2c"
+        },
+        {
+          "name": "walk2",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 59340,
+          "alphaFingerprint": "e1e24f428614b177b6e924f3cf3b3be93822444320bb5ea45bdc5c202a266865"
+        },
+        {
+          "name": "attack",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 70755,
+          "alphaFingerprint": "a8033bc8f7a43b123b60cab9265065923dac4cea736b72160240e8fa646be9ff"
+        },
+        {
+          "name": "damage",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 61165,
+          "alphaFingerprint": "12e78b4cd266fa2d12e8f6087a36f8bcb20fce05fce9086af90615e082e51901"
+        },
+        {
+          "name": "down",
+          "principalSilhouetteRetained": 1.0,
+          "foreignPrincipalPixels": 0,
+          "visiblePixels": 41557,
+          "alphaFingerprint": "34bf9f2ea446a4afb2acff12a915f6d1db8c4fdd873ab72c2c8692ef8d25c778"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+ABYSS DOMINION 引継ぎ：Build388 / v3.1.68、第二章追加第六弾
+
+予定の全5弾はBuild387で完了。本弾はユーザーが続けて希望した追加弾。
+全42体（N/R/SR/SSR/UR/LR/神話各6体）・168技・336ポーズ・12ペア。
+第二章を充実させる方針。第三章の追加は未依頼。
+最新のビジュアル基準は添付2枚（旧リリカの黒金フード剣士／旧オーレのピンク髪白金天使騎士）。
+可愛い顔、約4頭身、精緻な装飾・大きな武器・限定的な攻撃エフェクト、正面〜右向き、各8モーション。
+本弾の7体はこの基準で制作。以前の頭身変更案より、今回の2枚を優先すること。
+
+388の7体
+ch2_fiora N 夜灯の従騎フィオラ：境界の森・再探索「東の封印樹」
+ch2_lyriet R 蒼刃の誓姫リリエット：黒根の侵食域・再探索「飢えた根脈」
+ch2_rosette SR 紅盾の誓姫ロゼット：黒根の侵食域・再探索「飢えた根脈」
+ch2_noctelle SSR 黒薔薇の刃姫ノクテル：深淵の回廊・再探索「眠りの裁定」
+ch2_auriane UR 白薔薇の衛姫オーリアン：深淵の回廊・再探索「眠りの裁定」
+ch2_eirene LR 蒼刻の星姫エイレーネ：天律の聖域・再探索「生命の聖壇」
+ch2_iridelle 神話 緋刻の星姫イリデル：天律の聖域・再探索「生命の聖壇」
+roam0_4 ryune/rose/balk/fiora。
+roam1_3 senela/grant/lyriet/rosette。
+roam2_3 razil/senela/noctelle/auriane。
+roam3_3 ione/nerik/eirene/iridelle、Lv4800。
+旧35体と既存9ペアの捕獲場所を維持。再探索部屋数は各地域3つのまま。
+
+実装
+chapterTwoSpecies388 / chapterTwoPairs388 / chapterTwoSprites388 / ChapterTwoMonsters388。
+species、capture helper、Monsters383、Tactics382、EnemyAI、ChapterTwoSystem、SkillSystem、main、ChapterTwoSprite383へ登録。
+rosetteのtacticRole383はguardian（tankではない）。実装備・魔法陣の既存ロール名を使う。
+RESONANCE_PAIRS385へ新3組追加。既存のpair engine mechanicsを使用。
+oathguard：全体物理2.1、全体障壁18%、攻撃12%/2T。
+rosevow：物理1.3x3、防御25%無視、全体回復12%。ペアのHP40%以下で1.65x3/回復20%。
+twinclock：全体hybrid2.4、防御20%無視、全体障壁10%/速度18%/2T。spdDown+defDownの両方がある標的にはx1.6。
+共有準備AIは387と388のbonusVsEffectsペアを見る。味方オートのネイティブ判定に388を追加。
+新ペアのどちらかがHP32%以下なら、対象を回復できる全体回復の効率条件を緩和して救援する。
+従来のMP可否・蘇生・浄化・生存判定とペア予約回数を維持。
+オンライン戦闘の共鳴は未移植。
+
+素材
+assets/monsters/ch2_388_KEY/sheet.pngに元RGBAをそのまま配置。
+chapterTwoSprites388.jsにright/8frame box/clip/paths。共通256枠、最大224、足元244。
+古い左向き素材はそのまま扱い、今回の右向き素材は戦闘時に敵のみ左へ反転。
+artifacts/build388/monsters.html / prompts.json / provenance.jsonを同梱。
+
+検証と納品
+174テスト成功（新規11）、58モジュール構文/URL検査、56ポーズ保持100%/混入0。
+ブラウザー/iPhone実描画は未確認。以前のローカルプレビュー拒否は迂回しない。
+Build388はBuild387への差分ZIP。Build386以前には先に387まで適用する。
+Git HEADはBuild381のまま。git diffは387との差分ではない。次回変更前に現388をスナップショット。
+外部push/deployは未実施、online-server/dataは配布対象外。

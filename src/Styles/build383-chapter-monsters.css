@@ -1,0 +1,10 @@
+.monster-visual.has-chapter-atlas383>svg{display:block;width:100%;height:100%;overflow:hidden;image-rendering:pixelated;filter:none;pointer-events:none}
+.monster-visual.has-chapter-atlas383{filter:none}
+.battle-screen.side-battle-v2 .side-party .side-unit-sprite>.monster-visual.has-chapter-atlas383{transform:scaleX(-1)!important}
+.battle-screen.side-battle-v2 .side-enemies .side-unit-sprite>.monster-visual.has-chapter-atlas383{transform:none!important;filter:none!important}
+.chapter-two-codex383{font-size:12px;line-height:1.7;color:#cbbd9f}
+.chapter-two-codex383>p{margin:10px 0}
+.chapter-two-codex383 article{padding:10px 12px;margin:7px 0;border:1px solid #68583c;background:linear-gradient(120deg,#171822,#101014)}
+.chapter-two-codex383 article>b{color:#eedba9;display:block}
+.chapter-two-codex383 small{color:#a79ab7;font-size:10px}
+.chapter-two-codex383 article>p{margin:3px 0 0}

@@ -1,0 +1,63 @@
+ABYSS DOMINION Build384 / v3.1.64 制作引継ぎ
+
+ユーザーとの合意
+第二章限定魔物は全5回。各回N/R/SR/SSR/UR/LR/神話を1体ずつ、計7体。
+今回で2/5回、計14体。残り3回で計35体。第3章より第二章の充実を優先。
+今回の追加希望「人型多め」。6体を人型、1体を星機匣にした。次回もこの希望を引き継ぐ。
+ドット絵風、128〜512px程度、正面〜左向き、既存形式の8モーション。
+画像はチャット内でも提示。完成ZIPで渡し、未検証の実機描画を確認済みとしない。
+
+第二弾の実体
+src/data/chapterTwoSpecies384.js：7体・28固有技。chapterTwoSet384=true。
+ch2_nerik / grant / senela / razil / ione / mimelia / luxion。
+chapterTwoOnlyと*383プロパティは第一弾と共通のインターフェースとして残した。
+種族登録、捕獲上限、敵の装備選択、図鑑、標準スキル自動生成除外まで接続済み。
+src/chapterTwo/ChapterTwoMonsters384.js：28敵行動、固定再探索配置、両陣営共通の吸魔移転。
+共有AI chooseChapterTwoAction383は両セットを認識し、384固有の蘇生・回復阻害・吸魔・蘇生封印・強化中への攻撃も判断する。
+EnemyAIの行動情報・威力・MP消費を全て384へ接続している。
+
+出現場所
+第一弾の配置を全て上書きしてはならない。全14体が再探索で捕獲可能なことをテスト済み。
+roam0_3：nerik/grant/kororu。
+roam1_3：senela/grant/shelza。
+roam2_3：razil/senela/velg。
+roam3_3：ione/grant/noctia/nerik。
+roam4_1：mimelia/nerik/astera。
+roam4_3：luxion/razil/ione/grant（Lv4900、既存オルディアと同じ遭遇基礎値）。
+roam4_4は第一弾ordia/velg/noctia/asteraを維持。
+通常物語ボス・封印・鍵・宝物庫条件は変更しない。
+
+挙動の注意
+・蘇生/回復/浄化の3種類を持つイオネが初期装備3技になる問題を修正。
+  recommendedSkillsはchapterTwoOnlyに限り回復技上限4。既に編集した装備スキルを上書きしない。
+・新セットの吸魔は実ダメージが出た対象だけ。最大MP12%を残MPで制限、空の相手からMPを生成しない。
+・新セットの蘇生は味方側も残MPを維持し、必要な場合だけ最大MP5%へ補充。
+・新セットの全体浄化は生存者のみ。戦闘不能者の蘇生封印を勝手に解かない。
+・新セットの物理/魔法武器選択は役割だけでなく固有攻撃の分類を参照する。
+・旧コードのguard/regenには永続フラグも立つ処理がある。新技へ安易に付けない。
+・敵側counterは通常/英雄/奥義など全経路に実装されていない。未対応効果を説明だけで付けない。
+
+絵と描画
+assets/monsters/ch2_384_{key}/sheet.png：元の透過PNGを改変せず同梱。
+src/data/chapterTwoSprites384.js：8ポーズのbox/clip/paths。
+第一弾の列境界だけでは武器が混ざるため、第二弾は主要シルエットの最近傍領域からクリップ経路を作成。
+ChapterTwoSprite383.jsは両セットに対応。SVG pathのevenoddとCanvasのevenoddを揃える。
+待機3/歩行2/攻撃/被撃/戦闘不能、256枠、最大描画224、足元244。
+MonsterVisual/BattleBossLayout/探索Canvasは共通経路。既存CSSのside-party反転/side-enemies無反転を利用。
+artifacts/build384/monsters.html は自己完結スクリプトと相対PNG参照の一覧。
+artifacts/build384/prompts.json に内蔵画像生成機能へ渡した全プロンプト。
+
+検証
+111件成功。tests/build384-native-monsters.test.mjsは新規14件。
+実際のmain.js処理をVMへ抽出して蘇生/回復阻害/追撃/吸魔を確認。
+旧完了セーブの全14体へのアクセス、捕獲後セーブ往復、6装備/魔法陣、8ポーズCanvasも確認。
+validation/build384-art.json：56ポーズ、主要シルエット保持1.0、他主要シルエット混入0。
+ブラウザー/iPhone未確認。ローカルプレビューURLはブラウザーのポリシーで拒否済み。迂回しない。
+
+配布
+ABYSS_Build384_chapter_two_monsters_02.zip はBuild381/382/383対応の累積パッチ。
+BUILD384_MANIFEST.jsonが今回の正しいファイルハッシュ一覧。
+旧Git HEADはBuild381 ffe072437c97e689f3fffd38f26fd8f09c62a7c7のまま。git diffは383差分ではない。
+次回は384の現ファイルを基準に差分を保存してから制作する。
+オンラインのfriends/power-rankings/settlements等の実行時データを配布ZIPに混ぜない。
+公開サイトへのpush/deployは行っていない。

@@ -1,0 +1,62 @@
+{
+  "build": 389,
+  "method": "built-in image generation",
+  "references": [
+    "81E468E4-B7DF-4092-881A-90D0ADAFAD26.jpeg",
+    "02A12963-404F-4F0E-8280-6F34CE23A275.jpeg"
+  ],
+  "style": "Cute expressive face, approximately four heads tall, ornate black/gold or white/gold armor, crisp pixel-style detail, compact attack effects.",
+  "facing": "front/right",
+  "imageEditing": "None. Original RGBA PNG bytes preserved. Runtime polygon clips isolate eight poses.",
+  "assets": [
+    {
+      "species": "ch2_lumea",
+      "file": "assets/monsters/ch2_389_lumea/sheet.png",
+      "generatedSource": "exec-990558bc-8657-4199-b9d4-a1908b5a332a.png",
+      "promptKey": "lumea",
+      "sha256": "d699406b8ae833ec8a3332f078fd1b6ef365ef8864b36e96e3465cad0ef30e04"
+    },
+    {
+      "species": "ch2_nevia",
+      "file": "assets/monsters/ch2_389_nevia/sheet.png",
+      "generatedSource": "exec-f2976335-3f22-4d97-bdb9-43d5ec8186aa.png",
+      "promptKey": "nevia",
+      "sha256": "08b08bca42cbacf1b3f256632c7ea7990a313221c2b628c99e27a3f879cd8de7"
+    },
+    {
+      "species": "ch2_elmina",
+      "file": "assets/monsters/ch2_389_elmina/sheet.png",
+      "generatedSource": "exec-4fbb082a-cd55-48ae-81ab-5eb164fc5b17.png",
+      "promptKey": "elmina",
+      "sha256": "e54e758024b824b9e26428b6c464b949dc094d7d232541529ca9709d6c827e24"
+    },
+    {
+      "species": "ch2_calista",
+      "file": "assets/monsters/ch2_389_calista/sheet.png",
+      "generatedSource": "exec-f8b2f783-b686-4908-947c-f694b6680f66.png",
+      "promptKey": "calista",
+      "sha256": "01ba046361fd8a83f6f4519650b5165f1ec26e1fe7bfa380bda94dd970435fbe"
+    },
+    {
+      "species": "ch2_solenne",
+      "file": "assets/monsters/ch2_389_solenne/sheet.png",
+      "generatedSource": "exec-c897bbfe-a2b4-4fd3-86b8-6bd8374bc602.png",
+      "promptKey": "solenne",
+      "sha256": "b63151a305007ed6176b4f04d8d3b055f738ef6cdde9d7547f909eacc5f5172b"
+    },
+    {
+      "species": "ch2_meliora",
+      "file": "assets/monsters/ch2_389_meliora/sheet.png",
+      "generatedSource": "exec-0d2d3d33-fda6-44a9-85ba-8e2c76c71f33.png",
+      "promptKey": "meliora",
+      "sha256": "e15e0de626036ced772f15eacddf0eaea66e53c70f587072e0c09e4c3941ffe8"
+    },
+    {
+      "species": "ch2_elyselle",
+      "file": "assets/monsters/ch2_389_elyselle/sheet.png",
+      "generatedSource": "exec-1caced2e-8ecf-40af-a396-ac39b2163894.png",
+      "promptKey": "elyselle",
+      "sha256": "881f6fce9c242a6d2c4e23a692ac3ca4475756fdd116f97bccd0dc2c540f021c"
+    }
+  ]
+}

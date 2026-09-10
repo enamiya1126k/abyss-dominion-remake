@@ -1,0 +1,242 @@
+{
+  "build": 387,
+  "version": "3.1.67",
+  "modulesChecked": 58,
+  "missingRelativeImports": [],
+  "staleChangedImports": [],
+  "checksPassed": true,
+  "modules": [
+    {
+      "module": "src/battle/EnemyAI.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/battle/SkillSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/battle/TurnSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/battle/TwinResonance385.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/chapterTwo/ChapterTwoField.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/chapterTwo/ChapterTwoMonsters383.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/chapterTwo/ChapterTwoMonsters387.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/chapterTwo/ChapterTwoScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/chapterTwo/ChapterTwoSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/chapterTwo/ChapterTwoTactics382.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/AchievementRewardSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/CampaignHeroLoadoutSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/CollectionRewardSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/CombatPower.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/EndgameSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/EquipmentDropSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/ExperiencePackSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/FloorBossChallengeSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/GmFinalePackSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/ProgressionSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/RoyalRevengeRewards.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/SecondWorldEventSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/SecretRoomSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/SerialCodeSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/SignatureWeaponSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/WorldSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/core/config.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/data/chapterTwoPairs387.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/data/chapterTwoSpecies383.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/data/chapterTwoSpecies387.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/data/chapterTwoSprites387.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/data/species.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/main.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/models/Monster.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/online/OnlinePartyClient.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/online/OnlineViews.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/services/EquipmentLoadoutSystem.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/services/SaveService.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/services/WeaponMastery.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/BattleBossLayout.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/ChapterTwoSprite383.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/MonsterVisual.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/TwinStatus385.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/components/MonsterCard.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/BattleScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/CampaignFinalFloorScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/EquipmentScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/ExploreScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/FormationScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/GauntletScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/HomeScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/InventoryScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/MonsterDetailScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/MonsterListScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/OnlinePartyScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/SettingsScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/ShopScreen.js",
+      "syntax": "passed"
+    },
+    {
+      "module": "src/ui/screens/SkillScreen.js",
+      "syntax": "passed"
+    }
+  ]
+}

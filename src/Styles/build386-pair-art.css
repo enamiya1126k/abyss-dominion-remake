@@ -1,0 +1,3 @@
+/* Front/right source atlases: party faces right, enemies face left. */
+.battle-screen.side-battle-v2 .side-party .side-unit-sprite>.monster-visual.has-chapter-atlas383[data-source-facing="right"]{transform:none!important}
+.battle-screen.side-battle-v2 .side-enemies .side-unit-sprite>.monster-visual.has-chapter-atlas383[data-source-facing="right"]{transform:scaleX(-1)!important}

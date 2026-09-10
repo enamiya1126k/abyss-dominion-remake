@@ -1,0 +1,62 @@
+{
+  "build": 392,
+  "method": "built-in image generation",
+  "style": "Cute expressive face, approximately four heads tall, ornate black/gold or white/gold armor, crisp pixel-style detail, compact effects.",
+  "facing": "front/right",
+  "imageEditing": "None. Original generated RGBA PNG bytes preserved; runtime polygons isolate eight poses.",
+  "designReferenceNames": [
+    "81E468E4-B7DF-4092-881A-90D0ADAFAD26.jpeg",
+    "02A12963-404F-4F0E-8280-6F34CE23A275.jpeg"
+  ],
+  "assets": [
+    {
+      "species": "ch2_tillea",
+      "file": "assets/monsters/ch2_392_tillea/sheet.png",
+      "generatedSource": "exec-4573a74c-d750-4a71-8a41-44eda8d9480d.png",
+      "promptKey": "tillea",
+      "sha256": "732a7735f4c5c144dbd5065e9006e68962ec3da784b5e6e1b0abfff61ad95382"
+    },
+    {
+      "species": "ch2_morina",
+      "file": "assets/monsters/ch2_392_morina/sheet.png",
+      "generatedSource": "exec-494c8d74-48de-4cbe-889a-202661831991.png",
+      "promptKey": "morina",
+      "sha256": "8bd11ee898690d106dd280bf8a154dc4e3dac4d3af933edb7e493ca88316ccc5"
+    },
+    {
+      "species": "ch2_elmize",
+      "file": "assets/monsters/ch2_392_elmize/sheet.png",
+      "generatedSource": "exec-352eff2b-e3f3-4f76-a8b8-a3fff8f19399.png",
+      "promptKey": "elmize",
+      "sha256": "8839244475887ee61fdd90b7a79da490a971ca1a98d24487d319240fb388c852"
+    },
+    {
+      "species": "ch2_dracia",
+      "file": "assets/monsters/ch2_392_dracia/sheet.png",
+      "generatedSource": "exec-a09e04c2-d045-47a4-99f1-66645a75af8d.png",
+      "promptKey": "dracia",
+      "sha256": "d6c745fb8cc9c4ce53adf64fdc0523e0f187c1496516c2d2924686ad8445e392"
+    },
+    {
+      "species": "ch2_rucie",
+      "file": "assets/monsters/ch2_392_rucie/sheet.png",
+      "generatedSource": "exec-61abd879-eb7f-4534-aa26-d4e9e1c4d3ef.png",
+      "promptKey": "rucie",
+      "sha256": "a841ba876093701ec8dc465192f45b3791d9e78528aa772727c7be81098840bc"
+    },
+    {
+      "species": "ch2_nemesia",
+      "file": "assets/monsters/ch2_392_nemesia/sheet.png",
+      "generatedSource": "exec-d3aa9de8-3b32-4c9a-bdc1-fa8e813163ef.png",
+      "promptKey": "nemesia",
+      "sha256": "39928fc5c1bfe9e947f83c7b31172dce7e231f4e96d1aafd512af53b9e1f596b"
+    },
+    {
+      "species": "ch2_everia",
+      "file": "assets/monsters/ch2_392_everia/sheet.png",
+      "generatedSource": "exec-a25766bd-dee7-40fa-92f1-705a72300f45.png",
+      "promptKey": "everia",
+      "sha256": "cb080815bc48324dc5b0af3c59e66c6742a5caeb0ce7fa149cd91ff5761c8b2c"
+    }
+  ]
+}

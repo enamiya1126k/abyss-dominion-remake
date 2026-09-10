@@ -1,5 +1,5 @@
 import {vaultSkill380} from '../chapterTwo/VaultGear380.js?v=3.1.60-build380';
-import{SPECIES}from"../data/species.js?v=3.1.39-build359";
+import{SPECIES}from"../data/species.js?v=3.1.72-build392";
 import{ENDGAME_CHARACTERS,canonicalEndgameId}from"../data/endgameCharacters.js?v=3.1.38-build358";
 import{RARITY_ORDER,normalizeEquipmentIdentity}from"../data/equipment.js?v=3.1.55-build375";
 import{createEquipment}from"../models/Equipment.js?v=3.1.55-build375";

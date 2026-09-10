@@ -1,0 +1,49 @@
+/* Chapter II shares Chapter I's card/formation layout. Only the art changes. */
+.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-battle-unit .battle-unit-floating-name{
+ opacity:1!important;visibility:visible!important;display:flex!important;
+ position:absolute!important;left:50%!important;top:var(--chapter-name-y,0px)!important;bottom:auto!important;
+ translate:none!important;transform:translateX(-50%)!important;
+ width:calc(100% - 4px)!important;max-width:calc(100% - 4px)!important;
+ min-height:0!important;height:auto!important;flex-wrap:wrap!important;align-items:center!important;justify-content:center!important;
+ gap:2px 3px!important;padding:0!important;margin:0!important;z-index:20!important;
+ background:none!important;border:0!important;box-shadow:none!important;filter:none!important;text-shadow:0 1px 2px #000!important;
+ pointer-events:none!important;
+}
+.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-battle-unit .battle-unit-floating-name>b{
+ font-size:clamp(8px,2vw,11px)!important;line-height:1.2!important;
+ white-space:normal!important;word-break:normal!important;overflow-wrap:anywhere!important;
+ overflow:visible!important;text-overflow:clip!important;max-width:100%!important;text-align:center!important;
+}
+.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .combat-rank-badge{font-size:7px!important;line-height:1.15!important;padding:1px 4px!important}
+.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-unit-sprite{
+ filter:none!important;box-shadow:none!important;overflow:visible!important;
+}
+.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-unit-sprite>.monster-visual{
+ filter:none!important;box-shadow:none!important;transform:scaleX(-1)!important;
+}
+.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-unit-sprite .party-monster-art-layer{transform:scale(1.5)!important}
+.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .monster-visual img{filter:none!important;box-shadow:none!important}
+.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-unit-sprite::before,
+.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-unit-sprite::after{display:none!important}
+.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .enemy-battle-magic-circle{opacity:.24!important;filter:none!important}
+.battle-screen.side-battle-v2.chapter-two-battle380 .chapter-two-loadout382{font-size:7px!important;line-height:1.2!important;color:#c2b799;display:block;margin:2px 0}
+
+.chapter-two-defeat382>.game-modal-card{width:min(94vw,520px)!important;max-height:calc(100dvh - 24px)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important;padding:18px 14px 14px!important}
+.chapter-two-defeat382>.game-modal-card>h2{font-size:18px!important;line-height:1.3!important;margin:0 48px 12px 0!important;text-align:left!important;color:#d8c498}
+.chapter-two-defeat382 .modal-x{position:absolute!important;top:10px!important;right:10px!important;left:auto!important;width:36px!important;height:36px!important;min-height:36px!important;padding:0!important;font-size:22px!important;line-height:1!important}
+.chapter-two-defeat382 .game-modal-body{min-height:0;overflow:auto;font-size:12px;line-height:1.6}
+.chapter-two-defeat-hero382{text-align:center;padding:10px 4px 14px;background:linear-gradient(180deg,#28151b88,#0b090d00)}
+.chapter-two-defeat-hero382>span{display:block;opacity:.72;filter:grayscale(.5)}
+.chapter-two-defeat-hero382 .home-pixel-icon{width:48px!important;height:48px!important}
+.chapter-two-defeat-hero382>small{display:block;color:#ab9289;font-size:10px;margin:7px 0}
+.chapter-two-defeat-hero382>h3{color:#e5cc9a;font-size:18px;line-height:1.4;margin:4px 0 9px}
+.chapter-two-defeat-hero382>p{color:#c1b8b3;font-size:12px;line-height:1.7;margin:0}
+.chapter-two-defeat-party382{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.chapter-two-defeat-party382>article{min-width:0;text-align:center;padding:7px 3px;border:1px solid #584735;background:#0a090c;display:flex;flex-direction:column;align-items:center}
+.chapter-two-defeat-party382 .monster-visual{display:block;width:54px!important;height:54px!important;max-width:100%!important;filter:saturate(.65)}
+.chapter-two-defeat-party382 b{font-size:9px;line-height:1.4;overflow-wrap:anywhere;min-height:25px;color:#d5c5aa}
+.chapter-two-defeat-party382 small{font-size:8px;line-height:1.6;color:#bda2a5;overflow-wrap:anywhere}
+.chapter-two-defeat-note382{margin-top:12px;padding-top:10px;border-top:1px solid #473a2d;color:#b8afa5;font-size:11px;line-height:1.6}
+.chapter-two-defeat-note382>b{color:#dec694;font-size:11px}
+.chapter-two-defeat-note382 p{margin:5px 0}
+.chapter-two-defeat382 .modal-primary{flex:0 0 auto;min-height:46px!important;font-size:15px!important;line-height:1.3!important;padding:10px!important}

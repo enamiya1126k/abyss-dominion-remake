@@ -1,0 +1,6 @@
+.twin-status385{display:grid;gap:6px;margin:8px 0;color:#e9dcc0;min-width:0}
+.twin-card385{display:grid;gap:4px;padding:10px 12px;border:1px solid #745d43;border-radius:5px;background:linear-gradient(115deg,#201426,#111018);min-width:0;overflow-wrap:anywhere}
+.twin-card385.active{border-color:#c7a86c}.twin-card385>b{color:#ecd298;font-size:13px}.twin-card385>span{color:#8ddbd4;font-size:11px}.twin-card385.dormant>span{color:#bcacb9}.twin-card385>small,.twin-status385>p{font-size:11px;line-height:1.6;margin:0}.twin-status385>p{padding:3px 8px;color:#b9aebc}
+.twin-status385.compact{gap:3px;margin:3px 0}.twin-status385.compact .twin-card385{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:2px 8px;padding:4px 8px}.twin-status385.compact b{font-size:10px}.twin-status385.compact span{font-size:9px}.twin-codex385{border-color:#bd9b63!important;background:#211628!important}
+.battle-cinematic-banner.twin-resonance385{border-top-color:#dac18a;border-bottom-color:#dac18a;background:linear-gradient(90deg,#191027e8,#352245f5,#15101ce8)}
+@media(prefers-reduced-motion:reduce){.battle-cinematic-banner.twin-resonance385{animation:none}}

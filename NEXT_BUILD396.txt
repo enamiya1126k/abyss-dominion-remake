@@ -1,0 +1,33 @@
+ABYSS DOMINION 引継ぎ：Build396 / v3.1.76
+対象：旧初期化案内廃止、勇者4人加入ウィンドウ、勇者配布シリアル終了。
+前回Build395の機能・敵・ペア・装備・バランス・素材は維持。次はユーザーの② Build397。
+
+実装
+main.js：showLegacyCampaignResetPrompt本体とrender呼出を削除。SettingsのrequestFullGameResetは維持。
+SaveService：初期/読込時のmigrationNotices.legacyCampaignResetをpending:false,retiredBuild:396に。旧検出情報は保持。
+Styles/build321-polish.css：旧案内専用CSSを撤去し、indexの同CSS読込をキャッシュ更新。
+ChapterTwoSystem：既存recruitChapterTwoHeroes380の対象をCHAPTER_TWO_HERO_IDS396として共有。
+新規受取alliance380にpresentationVersion396:1,presentationAcknowledged396:falseを追加。付与条件・レベル・保護・武器数は従来どおり。
+chapterTwo/HeroAlliance396：既存の加入記録を読む純粋ビューと確認済み更新。ビューからの再付与なし。
+ui/HeroAlliance396、Styles/build396-alliance.css：4人横並び。既存MonsterVisualの待機アニメ使用。正方形素材はcontainで全身表示。
+main.maybeShowHeroAlliance396：ホーム/非探索/非戦闘のみ。他モーダルや物語中は450ms後に再判定。二重モーダル防止。
+primary、×/Escape、編成ボタンの全てでchapterTwoCommitを経て確認済みを保存。失敗なら閉じず再試行。
+タイマーで自動閉じはしない。編成ボタンは既存openFormationFromHomeへ。初回付与後にHomeScreenを描き直してからイベントをbind。
+既存加入者にはretrospective表示を一度だけ出す。現在未所持の勇者は「現在は未所持」と表示し再配布しない。
+加入順序は王室勝利→既存の第二章序章→ホーム加入。初回王室戦の戦闘結果や報酬順序は今回変更なし。
+SerialCodeSystem：MYTHIC_PACKSに属する4rewardIdをvalidate/apply/commitで拒否。終了メッセージを使用済み/満杯より優先。
+コードのハッシュと過去の端末台帳/受取記録は保持し、既存取得物を消さない。その他のシリアルとGM支援は維持。
+
+検証：304テスト成功、新規16。41モジュール構文と相対参照、6条件でBuild395の移行結果と比較。
+ブラウザー/iPhone未確認。前のプレビュー拒否は迂回しない。
+バージョン3.1.76/build396。インポートキャッシュは変更モジュールとその参照元を伝播更新。
+Git HEADはBuild381のffe0724で382〜396が作業木に適用済み。リセットしない。
+Build395の基準：base395-files.json、baseline395/srcとindex.html。次回は396基準を保存してから編集。
+配布ZIPはBuild395向け上書き差分。公開コミット/Push/deployなし。
+
+次の予定②397（まだ未着手）
+第二章の敵を専用70体＋深淵＋十神へ整理し、通常は専用70体、精鋭/一部ボスに深淵や十神を1体混ぜる。
+第二章ガチャを解禁と同時に追加、第二章70体のみ。各ランク10体均等。
+N5/R15/SR35/SSR25/UR15/LR4/神話1%。1回100晶石、10回1000晶石、SSR保証なし。
+深淵/十神は別ガチャ、捕獲継続。第一章の既存進行・表示に影響させない。
+以後③398魔法陣調整、④399深淵/十神素材修正、⑤400モーション付きホームスキン、⑥401第二章導線/物語回想、⑦402統合確認。

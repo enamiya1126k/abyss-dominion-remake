@@ -1,0 +1,965 @@
+{
+  "build": 394,
+  "version": "3.1.74",
+  "profiles": [
+    {
+      "id": "ch2_mirror394",
+      "area": 0,
+      "room": 1,
+      "encounter": "roam0_1_elite393",
+      "name": "双鏡の誓剣",
+      "slot": "weapon",
+      "stats": {
+        "atk": 28,
+        "spd": 7,
+        "crit": 6
+      },
+      "effects": {
+        "pair": 0.18
+      },
+      "hint": "リュネ＆ロゼなど、連携追撃を持つペアの攻撃役へ。",
+      "iconIndex": 17,
+      "subslot": null,
+      "weaponType": "sword",
+      "fixedEffects": {},
+      "areaName": "境界の森",
+      "squad": "鏡刃の護衛隊",
+      "roomName": "倒木の小径",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 1150,
+          "plus": 12,
+          "effect": "ペア連携の与ダメージ +19.8%",
+          "refinePrice": 325000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 1350,
+          "plus": 18,
+          "effect": "ペア連携の与ダメージ +20.7%",
+          "refinePrice": 475000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 1600,
+          "plus": 24,
+          "effect": "ペア連携の与ダメージ +21.6%",
+          "refinePrice": 625000
+        }
+      ],
+      "at30": "ペア連携の与ダメージ +22.5%"
+    },
+    {
+      "id": "ch2_thread394",
+      "area": 0,
+      "room": 3,
+      "encounter": "roam0_3_elite393",
+      "name": "紅糸の追刃",
+      "slot": "weapon",
+      "stats": {
+        "atk": 26,
+        "spd": 12,
+        "crit": 5
+      },
+      "effects": {
+        "chain": 0.16
+      },
+      "hint": "連撃で同じ敵を狙うニゼル＆シャルネに。",
+      "iconIndex": 16,
+      "subslot": null,
+      "weaponType": "sword",
+      "fixedEffects": {},
+      "areaName": "境界の森",
+      "squad": "紅糸の追跡隊",
+      "roomName": "西の封印樹",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 1150,
+          "plus": 12,
+          "effect": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +17.6%",
+          "refinePrice": 325000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 1350,
+          "plus": 18,
+          "effect": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +18.4%",
+          "refinePrice": 475000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 1600,
+          "plus": 24,
+          "effect": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +19.2%",
+          "refinePrice": 625000
+        }
+      ],
+      "at30": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +20%"
+    },
+    {
+      "id": "ch2_garden394",
+      "area": 0,
+      "room": 4,
+      "encounter": "roam0_4_elite393",
+      "name": "封樹の薬花飾り",
+      "slot": "accessory",
+      "stats": {
+        "hp": 44,
+        "matk": 10,
+        "heal": 9
+      },
+      "effects": {
+        "poison": 0.22
+      },
+      "hint": "毒を仕込むミレア＆ヴィオラと組み合わせよう。",
+      "iconIndex": 5,
+      "subslot": "accessoryNeck",
+      "weaponType": null,
+      "fixedEffects": {
+        "healPower": 12
+      },
+      "areaName": "境界の森",
+      "squad": "薬毒の封樹庭園",
+      "roomName": "東の封印樹",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 1150,
+          "plus": 12,
+          "effect": "毒状態の敵への直接与ダメージ +24.2%",
+          "refinePrice": 325000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 1350,
+          "plus": 18,
+          "effect": "毒状態の敵への直接与ダメージ +25.3%",
+          "refinePrice": 475000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 1600,
+          "plus": 24,
+          "effect": "毒状態の敵への直接与ダメージ +26.4%",
+          "refinePrice": 625000
+        }
+      ],
+      "at30": "毒状態の敵への直接与ダメージ +27.5%"
+    },
+    {
+      "id": "ch2_wisteria394",
+      "area": 1,
+      "room": 1,
+      "encounter": "roam1_1_elite393",
+      "name": "白藤の鎖杖",
+      "slot": "weapon",
+      "stats": {
+        "matk": 30,
+        "mp": 22,
+        "spd": 5
+      },
+      "effects": {
+        "poison": 0.26
+      },
+      "hint": "ネヴィア＆エルミナの毒が残る間に魔法で追撃。",
+      "iconIndex": 23,
+      "subslot": null,
+      "weaponType": "staff",
+      "fixedEffects": {},
+      "areaName": "黒根の侵食域",
+      "squad": "白藤の毒鎖結社",
+      "roomName": "吸命の荒野",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 1610,
+          "plus": 12,
+          "effect": "毒状態の敵への直接与ダメージ +28.6%",
+          "refinePrice": 650000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 1890,
+          "plus": 18,
+          "effect": "毒状態の敵への直接与ダメージ +29.9%",
+          "refinePrice": 950000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 2240,
+          "plus": 24,
+          "effect": "毒状態の敵への直接与ダメージ +31.2%",
+          "refinePrice": 1250000
+        }
+      ],
+      "at30": "毒状態の敵への直接与ダメージ +32.5%"
+    },
+    {
+      "id": "ch2_dream394",
+      "area": 1,
+      "room": 3,
+      "encounter": "roam1_3_elite393",
+      "name": "夢縫いの魔典",
+      "slot": "weapon",
+      "stats": {
+        "matk": 32,
+        "mp": 24,
+        "crit": 5
+      },
+      "effects": {
+        "sleep": 0.32
+      },
+      "hint": "モリナが眠らせ、エルミゼが刈り取る編成に。",
+      "iconIndex": 25,
+      "subslot": null,
+      "weaponType": "book",
+      "fixedEffects": {},
+      "areaName": "黒根の侵食域",
+      "squad": "縫い留められた夢境",
+      "roomName": "飢えた根脈",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 1610,
+          "plus": 12,
+          "effect": "睡眠中の敵への直接与ダメージ +35.2%",
+          "refinePrice": 650000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 1890,
+          "plus": 18,
+          "effect": "睡眠中の敵への直接与ダメージ +36.8%",
+          "refinePrice": 950000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 2240,
+          "plus": 24,
+          "effect": "睡眠中の敵への直接与ダメージ +38.4%",
+          "refinePrice": 1250000
+        }
+      ],
+      "at30": "睡眠中の敵への直接与ダメージ +40%"
+    },
+    {
+      "id": "ch2_stage394",
+      "area": 1,
+      "room": 4,
+      "encounter": "roam1_4_elite393",
+      "name": "焔月の舞踏環",
+      "slot": "accessory",
+      "stats": {
+        "mp": 24,
+        "spd": 14,
+        "crit": 7
+      },
+      "effects": {
+        "burn": 0.26
+      },
+      "hint": "カグラ＆サヨの狐火で火傷を維持して攻めよう。",
+      "iconIndex": 3,
+      "subslot": "accessoryFinger",
+      "weaponType": null,
+      "fixedEffects": {},
+      "areaName": "黒根の侵食域",
+      "squad": "焔月と硝子の舞台",
+      "roomName": "焼け跡の根脈",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 1610,
+          "plus": 12,
+          "effect": "火傷中の敵への直接与ダメージ +28.6%",
+          "refinePrice": 650000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 1890,
+          "plus": 18,
+          "effect": "火傷中の敵への直接与ダメージ +29.9%",
+          "refinePrice": 950000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 2240,
+          "plus": 24,
+          "effect": "火傷中の敵への直接与ダメージ +31.2%",
+          "refinePrice": 1250000
+        }
+      ],
+      "at30": "火傷中の敵への直接与ダメージ +32.5%"
+    },
+    {
+      "id": "ch2_talisman394",
+      "area": 2,
+      "room": 1,
+      "encounter": "roam2_1_elite393",
+      "name": "忘却の双符",
+      "slot": "accessory",
+      "stats": {
+        "hp": 48,
+        "matk": 15,
+        "mp": 18
+      },
+      "effects": {
+        "ailment": 0.18
+      },
+      "hint": "シオン＆スイレンなど、状態異常を使う部隊の攻撃役に。",
+      "iconIndex": 9,
+      "subslot": "accessoryNeck",
+      "weaponType": null,
+      "fixedEffects": {},
+      "areaName": "深淵の回廊",
+      "squad": "双符の忘却葬列",
+      "roomName": "忘却の鎖道",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 2300,
+          "plus": 12,
+          "effect": "状態異常中の敵への直接与ダメージ +19.8%",
+          "refinePrice": 975000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 2700,
+          "plus": 18,
+          "effect": "状態異常中の敵への直接与ダメージ +20.7%",
+          "refinePrice": 1425000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 3200,
+          "plus": 24,
+          "effect": "状態異常中の敵への直接与ダメージ +21.6%",
+          "refinePrice": 1875000
+        }
+      ],
+      "at30": "状態異常中の敵への直接与ダメージ +22.5%"
+    },
+    {
+      "id": "ch2_rose394",
+      "area": 2,
+      "room": 3,
+      "encounter": "roam2_3_elite393",
+      "name": "宵暁の聖衣",
+      "slot": "armor",
+      "stats": {
+        "hp": 88,
+        "def": 25,
+        "mdef": 28
+      },
+      "effects": {
+        "guard": 0.12,
+        "counter": 0.2
+      },
+      "hint": "ガードや反撃スキルを持つ仲間を守る。反撃の発動能力は別途必要。",
+      "iconIndex": 8,
+      "subslot": "armorBody",
+      "weaponType": null,
+      "fixedEffects": {},
+      "areaName": "深淵の回廊",
+      "squad": "宵暁の薔薇聖堂",
+      "roomName": "眠りの裁定",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 2300,
+          "plus": 12,
+          "effect": "ガード中に自身が受ける敵の直接攻撃を軽減 −13.2% ／ 既存の反撃の与ダメージ +22%",
+          "refinePrice": 975000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 2700,
+          "plus": 18,
+          "effect": "ガード中に自身が受ける敵の直接攻撃を軽減 −13.8% ／ 既存の反撃の与ダメージ +23%",
+          "refinePrice": 1425000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 3200,
+          "plus": 24,
+          "effect": "ガード中に自身が受ける敵の直接攻撃を軽減 −14.4% ／ 既存の反撃の与ダメージ +24%",
+          "refinePrice": 1875000
+        }
+      ],
+      "at30": "ガード中に自身が受ける敵の直接攻撃を軽減 −15% ／ 既存の反撃の与ダメージ +25%"
+    },
+    {
+      "id": "ch2_key394",
+      "area": 2,
+      "room": 4,
+      "encounter": "roam2_4_elite393",
+      "name": "双鍵の封剣",
+      "slot": "weapon",
+      "stats": {
+        "atk": 29,
+        "matk": 23,
+        "crit": 8
+      },
+      "effects": {
+        "buff": 0.24
+      },
+      "hint": "敵の強化が残る間に攻める剣。解除後は特効が消えるため攻撃順も大切。",
+      "iconIndex": 29,
+      "subslot": null,
+      "weaponType": "sword",
+      "fixedEffects": {},
+      "areaName": "深淵の回廊",
+      "squad": "双鍵の加護狩り",
+      "roomName": "王権の裁定",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 2300,
+          "plus": 12,
+          "effect": "強化中の敵への直接与ダメージ +26.4%",
+          "refinePrice": 975000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 2700,
+          "plus": 18,
+          "effect": "強化中の敵への直接与ダメージ +27.6%",
+          "refinePrice": 1425000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 3200,
+          "plus": 24,
+          "effect": "強化中の敵への直接与ダメージ +28.8%",
+          "refinePrice": 1875000
+        }
+      ],
+      "at30": "強化中の敵への直接与ダメージ +30%"
+    },
+    {
+      "id": "ch2_dragon394",
+      "area": 3,
+      "room": 1,
+      "encounter": "roam3_1_elite393",
+      "name": "天鎖断ちの竜槍",
+      "slot": "weapon",
+      "stats": {
+        "atk": 34,
+        "spd": 10,
+        "crit": 8
+      },
+      "effects": {
+        "buff": 0.2,
+        "pair": 0.12
+      },
+      "hint": "双竜の連携を伸ばす。強化解除後もペア特効は有効。",
+      "iconIndex": 27,
+      "subslot": null,
+      "weaponType": "spear",
+      "fixedEffects": {},
+      "areaName": "天律の聖域",
+      "squad": "天鎖を断つ双竜騎団",
+      "roomName": "天秤の回廊",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 3220,
+          "plus": 12,
+          "effect": "強化中の敵への直接与ダメージ +22% ／ ペア連携の与ダメージ +13.2%",
+          "refinePrice": 1300000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 3780,
+          "plus": 18,
+          "effect": "強化中の敵への直接与ダメージ +23% ／ ペア連携の与ダメージ +13.8%",
+          "refinePrice": 1900000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 4480,
+          "plus": 24,
+          "effect": "強化中の敵への直接与ダメージ +24% ／ ペア連携の与ダメージ +14.4%",
+          "refinePrice": 2500000
+        }
+      ],
+      "at30": "強化中の敵への直接与ダメージ +25% ／ ペア連携の与ダメージ +15%"
+    },
+    {
+      "id": "ch2_oath394",
+      "area": 3,
+      "room": 3,
+      "encounter": "roam3_3_elite393",
+      "name": "黒雷の護誓盾",
+      "slot": "armor",
+      "stats": {
+        "hp": 68,
+        "def": 32,
+        "mdef": 24
+      },
+      "effects": {
+        "guard": 0.12,
+        "counter": 0.3
+      },
+      "hint": "ロスティア＆アルテアの護誓反撃へ。盾自体は反撃を発動しない。",
+      "iconIndex": 3,
+      "subslot": "armorSupport",
+      "weaponType": null,
+      "fixedEffects": {},
+      "areaName": "天律の聖域",
+      "squad": "黒盾と双雷の聖衛",
+      "roomName": "生命の聖壇",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 3220,
+          "plus": 12,
+          "effect": "ガード中に自身が受ける敵の直接攻撃を軽減 −13.2% ／ 既存の反撃の与ダメージ +33%",
+          "refinePrice": 1300000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 3780,
+          "plus": 18,
+          "effect": "ガード中に自身が受ける敵の直接攻撃を軽減 −13.8% ／ 既存の反撃の与ダメージ +34.5%",
+          "refinePrice": 1900000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 4480,
+          "plus": 24,
+          "effect": "ガード中に自身が受ける敵の直接攻撃を軽減 −14.4% ／ 既存の反撃の与ダメージ +36%",
+          "refinePrice": 2500000
+        }
+      ],
+      "at30": "ガード中に自身が受ける敵の直接攻撃を軽減 −15% ／ 既存の反撃の与ダメージ +37.5%"
+    },
+    {
+      "id": "ch2_frost394",
+      "area": 3,
+      "room": 4,
+      "encounter": "roam3_4_elite393",
+      "name": "氷晶の聖歌杖",
+      "slot": "weapon",
+      "stats": {
+        "matk": 34,
+        "mp": 24,
+        "heal": 9
+      },
+      "effects": {
+        "freeze": 0.32
+      },
+      "hint": "イゼル＆ヴィレルの凍結から大技へつなぐ。",
+      "iconIndex": 24,
+      "subslot": null,
+      "weaponType": "staff",
+      "fixedEffects": {},
+      "areaName": "天律の聖域",
+      "squad": "氷晶の天穹聖歌",
+      "roomName": "因果の聖壇",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 3220,
+          "plus": 12,
+          "effect": "凍結中の敵への直接与ダメージ +35.2%",
+          "refinePrice": 1300000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 3780,
+          "plus": 18,
+          "effect": "凍結中の敵への直接与ダメージ +36.8%",
+          "refinePrice": 1900000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 4480,
+          "plus": 24,
+          "effect": "凍結中の敵への直接与ダメージ +38.4%",
+          "refinePrice": 2500000
+        }
+      ],
+      "at30": "凍結中の敵への直接与ダメージ +40%"
+    },
+    {
+      "id": "ch2_clock394",
+      "area": 4,
+      "room": 1,
+      "encounter": "roam4_1_elite393",
+      "name": "終演の星律時計",
+      "slot": "accessory",
+      "stats": {
+        "mp": 28,
+        "spd": 18,
+        "crit": 10
+      },
+      "effects": {
+        "chain": 0.12,
+        "pair": 0.12
+      },
+      "hint": "星律の連撃・ペア追撃を同じ相手に重ねよう。",
+      "iconIndex": 10,
+      "subslot": "accessoryFinger",
+      "weaponType": null,
+      "fixedEffects": {},
+      "areaName": "理の中枢",
+      "squad": "星律の終演機構",
+      "roomName": "輪廻の歯車",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 4370,
+          "plus": 12,
+          "effect": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +13.2% ／ ペア連携の与ダメージ +13.2%",
+          "refinePrice": 1625000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 5130,
+          "plus": 18,
+          "effect": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +13.8% ／ ペア連携の与ダメージ +13.8%",
+          "refinePrice": 2375000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 6080,
+          "plus": 24,
+          "effect": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +14.4% ／ ペア連携の与ダメージ +14.4%",
+          "refinePrice": 3125000
+        }
+      ],
+      "at30": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +15% ／ ペア連携の与ダメージ +15%"
+    },
+    {
+      "id": "ch2_crown394",
+      "area": 4,
+      "room": 3,
+      "encounter": "roam4_3_elite393",
+      "name": "黒白終冠の裁剣",
+      "slot": "weapon",
+      "stats": {
+        "atk": 38,
+        "matk": 20,
+        "crit": 10
+      },
+      "effects": {
+        "execute": 0.28
+      },
+      "hint": "ネメシア＆エヴェリアなど、HP35%以下の敵を仕留める役に。",
+      "iconIndex": 19,
+      "subslot": null,
+      "weaponType": "sword",
+      "fixedEffects": {},
+      "areaName": "理の中枢",
+      "squad": "黒白の四冠裁定",
+      "roomName": "記録の中枢",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 4370,
+          "plus": 12,
+          "effect": "HP35%以下の敵への直接与ダメージ +30.8%",
+          "refinePrice": 1625000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 5130,
+          "plus": 18,
+          "effect": "HP35%以下の敵への直接与ダメージ +32.2%",
+          "refinePrice": 2375000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 6080,
+          "plus": 24,
+          "effect": "HP35%以下の敵への直接与ダメージ +33.6%",
+          "refinePrice": 3125000
+        }
+      ],
+      "at30": "HP35%以下の敵への直接与ダメージ +35%"
+    },
+    {
+      "id": "ch2_star394",
+      "area": 4,
+      "room": 4,
+      "encounter": "roam4_4_elite393",
+      "name": "日月の星門飾り",
+      "slot": "accessory",
+      "stats": {
+        "hp": 52,
+        "mp": 32,
+        "matk": 20
+      },
+      "effects": {
+        "pair": 0.2
+      },
+      "hint": "セフィラ＆アストレルの詠唱を支え、合体魔法を強化。",
+      "iconIndex": 11,
+      "subslot": "accessoryNeck",
+      "weaponType": null,
+      "fixedEffects": {
+        "mpCostReduction": 12
+      },
+      "areaName": "理の中枢",
+      "squad": "日月を巡る星門",
+      "roomName": "修復の中枢",
+      "tiers": [
+        {
+          "tier": 1,
+          "rarity": "LR",
+          "level": 4370,
+          "plus": 12,
+          "effect": "ペア連携の与ダメージ +22%",
+          "refinePrice": 1625000
+        },
+        {
+          "tier": 2,
+          "rarity": "神話",
+          "level": 5130,
+          "plus": 18,
+          "effect": "ペア連携の与ダメージ +23%",
+          "refinePrice": 2375000
+        },
+        {
+          "tier": 3,
+          "rarity": "神話",
+          "level": 6080,
+          "plus": 24,
+          "effect": "ペア連携の与ダメージ +24%",
+          "refinePrice": 3125000
+        }
+      ],
+      "at30": "ペア連携の与ダメージ +25%"
+    }
+  ],
+  "circles": [
+    {
+      "id": "ch2_chain394",
+      "area": 0,
+      "name": "鏡糸連環陣",
+      "glyph": "連",
+      "tone": "rose",
+      "effect": "chapterTwoRelic394",
+      "baseUpgrade": 260000000,
+      "summary": "同一ラウンドで、同じ敵への2撃目以降の直接与ダメージが増加。命中してHPを削った攻撃を数える。",
+      "effects": {
+        "chain": [
+          0.12,
+          0.24
+        ]
+      },
+      "asset": "./assets/magic-circles/ch2_chain394.svg",
+      "frames": [
+        "./assets/magic-circles/ch2_chain394.svg"
+      ],
+      "areaName": "境界の森",
+      "tiers": [
+        {
+          "level": 5,
+          "summary": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +12.5%"
+        },
+        {
+          "level": 15,
+          "summary": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +13.7%"
+        },
+        {
+          "level": 30,
+          "summary": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +15.6%"
+        }
+      ],
+      "max": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +24%"
+    },
+    {
+      "id": "ch2_dream394",
+      "area": 1,
+      "name": "夢喰封花陣",
+      "glyph": "夢",
+      "tone": "violet",
+      "effect": "chapterTwoRelic394",
+      "baseUpgrade": 260000000,
+      "summary": "睡眠中の敵への直接与ダメージが増加。睡眠が解けると特効も終了。",
+      "effects": {
+        "sleep": [
+          0.25,
+          0.5
+        ]
+      },
+      "asset": "./assets/magic-circles/ch2_dream394.svg",
+      "frames": [
+        "./assets/magic-circles/ch2_dream394.svg"
+      ],
+      "areaName": "黒根の侵食域",
+      "tiers": [
+        {
+          "level": 5,
+          "summary": "睡眠中の敵への直接与ダメージ +26%"
+        },
+        {
+          "level": 15,
+          "summary": "睡眠中の敵への直接与ダメージ +28.6%"
+        },
+        {
+          "level": 30,
+          "summary": "睡眠中の敵への直接与ダメージ +32.4%"
+        }
+      ],
+      "max": "睡眠中の敵への直接与ダメージ +50%"
+    },
+    {
+      "id": "ch2_pair394",
+      "area": 2,
+      "name": "双誓共鳴陣",
+      "glyph": "誓",
+      "tone": "gold",
+      "effect": "chapterTwoRelic394",
+      "baseUpgrade": 260000000,
+      "summary": "指定ペアが生存し連携可能な間、装着者が行うペア追撃・合体魔法の与ダメージが増加。",
+      "effects": {
+        "pair": [
+          0.15,
+          0.35
+        ]
+      },
+      "asset": "./assets/magic-circles/ch2_pair394.svg",
+      "frames": [
+        "./assets/magic-circles/ch2_pair394.svg"
+      ],
+      "areaName": "深淵の回廊",
+      "tiers": [
+        {
+          "level": 5,
+          "summary": "ペア連携の与ダメージ +15.8%"
+        },
+        {
+          "level": 15,
+          "summary": "ペア連携の与ダメージ +17.9%"
+        },
+        {
+          "level": 30,
+          "summary": "ペア連携の与ダメージ +20.9%"
+        }
+      ],
+      "max": "ペア連携の与ダメージ +35%"
+    },
+    {
+      "id": "ch2_guard394",
+      "area": 3,
+      "name": "天鎖護誓陣",
+      "glyph": "護",
+      "tone": "blue",
+      "effect": "chapterTwoRelic394",
+      "baseUpgrade": 260000000,
+      "summary": "ガード中の敵からの直接攻撃を軽減し、既存の反撃の与ダメージを強化。反撃自体は追加しない。",
+      "effects": {
+        "guard": [
+          0.1,
+          0.2
+        ],
+        "counter": [
+          0.2,
+          0.4
+        ]
+      },
+      "asset": "./assets/magic-circles/ch2_guard394.svg",
+      "frames": [
+        "./assets/magic-circles/ch2_guard394.svg"
+      ],
+      "areaName": "天律の聖域",
+      "tiers": [
+        {
+          "level": 5,
+          "summary": "ガード中に自身が受ける敵の直接攻撃を軽減 −10.4% ／ 既存の反撃の与ダメージ +20.8%"
+        },
+        {
+          "level": 15,
+          "summary": "ガード中に自身が受ける敵の直接攻撃を軽減 −11.4% ／ 既存の反撃の与ダメージ +22.9%"
+        },
+        {
+          "level": 30,
+          "summary": "ガード中に自身が受ける敵の直接攻撃を軽減 −13% ／ 既存の反撃の与ダメージ +25.9%"
+        }
+      ],
+      "max": "ガード中に自身が受ける敵の直接攻撃を軽減 −20% ／ 既存の反撃の与ダメージ +40%"
+    },
+    {
+      "id": "ch2_crown394",
+      "area": 4,
+      "name": "終冠星律陣",
+      "glyph": "冠",
+      "tone": "gold",
+      "effect": "chapterTwoRelic394",
+      "baseUpgrade": 260000000,
+      "summary": "残りHP35%以下の敵への直接与ダメージが増加。各命中の直前のHPで判定。",
+      "effects": {
+        "execute": [
+          0.2,
+          0.4
+        ]
+      },
+      "asset": "./assets/magic-circles/ch2_crown394.svg",
+      "frames": [
+        "./assets/magic-circles/ch2_crown394.svg"
+      ],
+      "areaName": "理の中枢",
+      "tiers": [
+        {
+          "level": 5,
+          "summary": "HP35%以下の敵への直接与ダメージ +20.8%"
+        },
+        {
+          "level": 15,
+          "summary": "HP35%以下の敵への直接与ダメージ +22.9%"
+        },
+        {
+          "level": 30,
+          "summary": "HP35%以下の敵への直接与ダメージ +25.9%"
+        }
+      ],
+      "max": "HP35%以下の敵への直接与ダメージ +40%"
+    }
+  ]
+}

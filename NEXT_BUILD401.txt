@@ -1,0 +1,20 @@
+ABYSS DOMINION 引継ぎ Build401 / v3.1.81
+完了：⑥ ホーム上部の第二章進行パネル／記憶の間への第二章回想統合／開始前非表示／第一章記録保護。
+次に予定されている作業：⑦ Build402 統合確認。
+
+追加
+chapterTwo/ChapterTwoProgress401：開始判定（解禁＋introComplete）、既存11場面の読了判定、進行の読み取りモデル。
+core/ChapterTwoArchive401：第一章モデルの3分類を保持し、開始後だけ第二章を追加。既存場面をコピーして回想へ渡す。
+ui/ChapterTwoProgress401：上部カード、専用進行パネル、記憶の間の第二章欄。
+Styles/build401-progress-archive：新UIのみ対象。スマホの回想タブは2列。
+main：上部カードは専用パネルへ。既存の探索開始は地域選択用として維持。
+回想はshowCampaignStoryReplaySequenceを使用。showChapterTwoDialogueは未読本編の継続専用導線へ。
+本編の既読保存関数、第一章のArchiveSystem、セーブスキーマは変更しない。
+chapterTwoStateは正規化でセーブを変更するため、新しい一覧や進行表示の読み取りに使用しない。
+Build400の既存背景サムネイルを再利用。新規画像なし。
+
+検証368件。第一章HTML等20条件・セーブ移行6条件比較。iPhone／ブラウザー描画は未確認。
+以前のブラウザープレビュー拒否を迂回しない。
+Git HEADはBuild381、作業木は382〜401が適用済み。reset/checkoutで戻さない。
+次回はBuild401のハッシュ基準を保存してから編集すること。
+公開コミット・Push・デプロイは実行していない。

@@ -1,0 +1,5 @@
+export const CHAPTER_TWO_PAIRS392=Object.freeze([
+ {id:'dreamharvest',kind:'双子',name:'双夢・夢境刈り',members:['ch2_morina','ch2_elmize'],names:['モリナ','エルミゼ'],power:3.2,hits:1,damageClass:'hybrid',defenseIgnore:.3,scope:'twins',bonusVsStatus:{id:'sleep',multiplier:1.8},description:'相方が単体へ3.20倍、防御30%無視（攻撃・魔力の高い方）。睡眠中の標的には5.76倍。眠らせた直後の一撃を狙う双子の連携。'},
+ {id:'dragonliberation',kind:'姉妹',name:'双竜・天鎖解放',members:['ch2_dracia','ch2_rucie'],names:['ドラシア','リュシエ'],power:2.7,hits:1,all:true,damageClass:'physical',defenseIgnore:.25,scope:'twins',dispelEach392:true,shield:.2,description:'敵全体それぞれの解除可能な強化を1つ剥がし、相方が物理2.70倍、防御25%無視の追撃。姉妹に最大HP20%の障壁。解除対象は強化効果で、HP障壁や魔法陣そのものは破壊しない。'},
+ {id:'crownsfinale',kind:'姉妹',name:'双冠・夜明けの誓剣',members:['ch2_nemesia','ch2_everia'],names:['ネメシア','エヴェリア'],power:2.1,hits:1,all:true,damageClass:'physical',defenseIgnore:.2,scope:'party',shield:.1,burst:{threshold:2,name:'双冠・黒白の終剣',power:3.8,defenseIgnore:.35,shield:.18,bonusVsHp392:{threshold:.35,multiplier:1.6}},description:'1回目は敵全体へ物理2.10倍、防御20%無視、全体HP10%障壁。同ラウンドにもう一方が連携すると「黒白の終剣」：全体3.80倍、防御35%無視、全体HP18%障壁。終剣の命中直前にHP35%以下の敵には6.08倍。各敵の残HPを個別に判定する。'}
+]);

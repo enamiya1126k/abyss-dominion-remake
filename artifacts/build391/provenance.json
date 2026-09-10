@@ -1,0 +1,62 @@
+{
+  "build": 391,
+  "method": "built-in image generation",
+  "references": [
+    "81E468E4-B7DF-4092-881A-90D0ADAFAD26.jpeg",
+    "02A12963-404F-4F0E-8280-6F34CE23A275.jpeg"
+  ],
+  "style": "Cute expressive face, approximately four heads tall, ornate black/gold or white/gold armor, crisp pixel-style detail, compact attack effects.",
+  "facing": "front/right",
+  "imageEditing": "None. Original RGBA PNG bytes preserved. Runtime polygon clips isolate eight poses.",
+  "assets": [
+    {
+      "species": "ch2_rithia",
+      "file": "assets/monsters/ch2_391_rithia/sheet.png",
+      "generatedSource": "exec-2a31ff02-0759-4ed3-837c-8d5466b01c64.png",
+      "promptKey": "rithia",
+      "sha256": "fa2e0910fe4c821ef7bc6ae10beb5f12915cb8b57154b5cf441da40345e77a33"
+    },
+    {
+      "species": "ch2_nizelle",
+      "file": "assets/monsters/ch2_391_nizelle/sheet.png",
+      "generatedSource": "exec-291c9db3-8ab6-48a5-aada-f1935ab0c8f4.png",
+      "promptKey": "nizelle",
+      "sha256": "398e4f67f85cb993fcca92b9fd9454806c6342115f6302f72deb1897441cec7b"
+    },
+    {
+      "species": "ch2_charne",
+      "file": "assets/monsters/ch2_391_charne/sheet.png",
+      "generatedSource": "exec-cc01f916-99ec-4479-a332-7384d19473f3.png",
+      "promptKey": "charne",
+      "sha256": "38083a0430d0ae46becf88f2e47589de8532f7b78a748e3f0f7f4b92cc10643b"
+    },
+    {
+      "species": "ch2_ferne",
+      "file": "assets/monsters/ch2_391_ferne/sheet.png",
+      "generatedSource": "exec-4b0ee310-a2ad-4be9-876c-91de8a531cd2.png",
+      "promptKey": "ferne",
+      "sha256": "f6e576e32e38f37c589797ff4258d4ccb1966f45f01bd1c0ce63da198117b1ad"
+    },
+    {
+      "species": "ch2_clarisse",
+      "file": "assets/monsters/ch2_391_clarisse/sheet.png",
+      "generatedSource": "exec-70715fd9-a76d-48b3-a833-29f8aea9d0a2.png",
+      "promptKey": "clarisse",
+      "sha256": "5c14af69e6c08862d362b58814c7329cfd6af5e4e8b3ca81eb4bbbe2f4571efa"
+    },
+    {
+      "species": "ch2_lunaria",
+      "file": "assets/monsters/ch2_391_lunaria/sheet.png",
+      "generatedSource": "exec-f96a2f5a-c8db-4e10-b002-dddaa21c40bf.png",
+      "promptKey": "lunaria",
+      "sha256": "748b1618174ccc5b0a62b69d4e202a7eaaf866d582454d6f9d6bb7bd33689967"
+    },
+    {
+      "species": "ch2_solaria",
+      "file": "assets/monsters/ch2_391_solaria/sheet.png",
+      "generatedSource": "exec-663d5064-d83f-46cc-a1d5-1e4f56b5c83f.png",
+      "promptKey": "solaria",
+      "sha256": "3454b3730f7662f53d68c0cb12d71319b8dce938763b7f35c8a7650defff2314"
+    }
+  ]
+}

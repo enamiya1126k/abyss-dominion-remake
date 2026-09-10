@@ -1,11 +1,11 @@
-import{SPECIES}from"../data/species.js?v=3.1.39-build359";
+import{SPECIES}from"../data/species.js?v=3.1.72-build392";
 import{PERSONALITIES}from"../data/personalities.js?v=3.1.1-build311";
 import{MONSTER_COLORS}from"../data/colors.js?v=3.1.1-build311";
 import{normalizedResistances}from"../data/attributes.js?v=3.1.1-build311";
 import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=3.1.38-build358";
 import{normalizePersistentAilments}from"../data/statusEffects.js?v=3.1.1-build311";
-import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=3.1.61-build381";
-import{baseExperienceNeedForLevel}from"../core/ProgressionSystem.js?v=3.1.61-build381";
+import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=3.1.82-build402";
+import{baseExperienceNeedForLevel}from"../core/ProgressionSystem.js?v=3.1.82-build402";
 
 function uid(){
   return crypto.randomUUID?.()??`${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -221,7 +221,7 @@ export function speciesLevelStats(speciesOrId,level,{rarity=null,rank=1,plus=0}=
   return Math.max(key==="hp"||key==="atk"||key==="spd"?1:0,Math.floor(base*rankMultiplier*rarityMultiplier*levelGrowthMultiplier(safeLevel,key,growth[key]??1,raceGrowth[key]??1)));
  };
  const role=String(species.role??""),magicalRole=["magic","support","healer","controller","debuffer","poison","burner"].some(value=>role.includes(value)),atk=calc("atk"),def=calc("def");
- return{hp:calc("hp"),atk,matk:Math.max(1,Math.floor(atk*(magicalRole?1.08:.72))),def,mdef:Math.max(1,Math.floor(def*(magicalRole?1.08:.82))),spd:calc("spd"),crit:Math.max(0,Number(species.baseStats?.crit)||0),evasion:Math.max(0,Number(species.baseStats?.evasion)||0),accuracy:Math.max(20,Math.min(180,Number(species.baseStats?.accuracy)||100))};
+ return{hp:calc("hp"),atk,matk:species.chapterTwoOnly?Math.max(1,calc("matk")):Math.max(1,Math.floor(atk*(magicalRole?1.08:.72))),def,mdef:species.chapterTwoOnly?Math.max(1,calc("mdef")):Math.max(1,Math.floor(def*(magicalRole?1.08:.82))),spd:calc("spd"),crit:Math.max(0,Number(species.baseStats?.crit)||0),evasion:Math.max(0,Number(species.baseStats?.evasion)||0),accuracy:Math.max(20,Math.min(180,Number(species.baseStats?.accuracy)||100))};
 }
 
 export function calculatedStats(monster){

@@ -1,13 +1,15 @@
+import {relicLoadout394} from '../ChapterTwoRelics394.js?v=3.1.78-build398';
+import {twinStatus385} from '../TwinStatus385.js?v=3.1.75-build395';
 import{FORMATION_LAYOUT_CSS}from"./FormationLayout.js?v=3.1.30-build350";
-import{SPECIES}from"../../data/species.js?v=3.1.39-build359";
-import{displayName}from"../../models/Monster.js?v=3.1.61-build381";
-import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=3.1.49-build369";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.61-build381";
+import{SPECIES}from"../../data/species.js?v=3.1.72-build392";
+import{displayName}from"../../models/Monster.js?v=3.1.82-build402";
+import{effectiveSkillMpCost,maxMp,normalizeSkillLoadout,skillById,skillElementLabel,skillProgressFor,skillEffectSummary}from"../../battle/SkillSystem.js?v=3.1.75-build395";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.82-build402";
 import{equipmentDisplayRarity,equipmentSubslotLabel,SLOT_UNLOCK_LEVEL}from"../../data/equipment.js?v=3.1.55-build375";
-import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.82-build402";
 import{resourceHud,bottomNav}from"../components/GameChrome.js?v=3.1.1-build311";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=3.1.55-build375";
-import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=3.1.41-build361";
+import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=3.1.78-build398";
 
 const ELEMENTS={
  neutral:["⚪","無"],fire:["🔥","火"],water:["💧","水"],ice:["❄️","氷"],lightning:["⚡","雷"],thunder:["⚡","雷"],
@@ -80,6 +82,7 @@ function memberCard(state,monster,index,{readOnly=false}={}){
     <span class="formation-circle-art">${circle.id==="none"?"◇":`<img src="${circle.asset}" alt="">`}</span>${circle.level?`<small class="formation-circle-level">Lv.${circle.level}</small>`:""}<i aria-hidden="true">›</i>
    </button>
   </section>
+  ${relicLoadout394(state,monster)}
   ${readOnly?'<div class="formation-readonly-note">帰還後に順番・交代・スキルを変更できます</div>':`<div class="formation-actions compact"><button data-formation-skills="${monster.id}">スキル編集</button><button data-formation-replace="${monster.id}">交代</button><button class="danger formation-remove-action" data-formation-remove="${monster.id}">隊列から外す</button></div>`}
  </article>`;
 }
@@ -103,7 +106,7 @@ export function FormationScreen(state,{origin="home"}={}){
   <div class="formation-page">
    <div class="formation-summary"><div><small>パーティ ${party.length}/4・総戦力</small><strong>${formatCombatPower(total)}</strong></div><p>${readOnly?"探索中は確認のみ・変更は帰還後":"長押しで隊列変更・交代・魔法陣設定"}</p><button type="button" class="formation-rarity-help" data-formation-rarity-help aria-label="レア度一覧">？</button></div>
    <aside class="formation-rarity-drawer" data-formation-rarity-drawer aria-hidden="true"><button type="button" data-formation-rarity-close>▶</button><small>レア度・表示色</small><div>${["N","R","SR","SSR","UR","LR","神話","深淵","十神"].map(rarity=>`<span class="rarity-name-${rarityClass(rarity)}">${rarity}</span>`).join("")}</div></aside>
-   <div class="formation-grid">${cards}</div>
+   ${twinStatus385(party)}<div class="formation-grid">${cards}</div>
   </div>
   ${bottomNav("formation")}
  </section>`;

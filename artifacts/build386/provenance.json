@@ -1,0 +1,56 @@
+{
+  "tool": "image_gen.imagegen",
+  "build": 386,
+  "note": "Accepted PNGs are unchanged; discarded iterations remain in prompts for traceability.",
+  "files": [
+    {
+      "species": "ch2_ticta",
+      "file": "assets/monsters/ch2_386_ticta/sheet.png",
+      "sourceGeneratedFile": "exec-de30d7ba-af29-4488-bf3c-343908ec2857.png",
+      "sha256": "c040a8eaaec0ff469bc6f07533bdb6df708b22eb04fdbd11f2df4794ee9119c3",
+      "sourceFacing": "front/right"
+    },
+    {
+      "species": "ch2_mirea",
+      "file": "assets/monsters/ch2_386_mirea/sheet.png",
+      "sourceGeneratedFile": "exec-e55530b9-02ee-4f0f-a3ff-96dc9707b010.png",
+      "sha256": "c85c5e1a423f53a9ee847b70958e6eb1f1253453cf345b8fb3bb6ffa8807fdec",
+      "sourceFacing": "front/right"
+    },
+    {
+      "species": "ch2_viola",
+      "file": "assets/monsters/ch2_386_viola/sheet.png",
+      "sourceGeneratedFile": "exec-2d0ae0fd-1e2e-4084-a2bc-b8d3d096c9bb.png",
+      "sha256": "351cfb6ef6d293373de4df43f7736080efaabce09f0510afc1d1b1d614126a67",
+      "sourceFacing": "front/right"
+    },
+    {
+      "species": "ch2_kagura",
+      "file": "assets/monsters/ch2_386_kagura/sheet.png",
+      "sourceGeneratedFile": "exec-d64d7b7f-426f-4b23-9e84-c9559237df69.png",
+      "sha256": "67f08d220ce892cf14555eba7c8f4f2427029de9de49269f86a4066e925ac110",
+      "sourceFacing": "front/right"
+    },
+    {
+      "species": "ch2_sayo",
+      "file": "assets/monsters/ch2_386_sayo/sheet.png",
+      "sourceGeneratedFile": "exec-44794a7d-e277-4c8a-a2d7-da323c3a4c47.png",
+      "sha256": "776c1fcea7cd38771993a1baecddc53d4ef62e0f5607031d5406726cf22fbd1b",
+      "sourceFacing": "front/right"
+    },
+    {
+      "species": "ch2_celes",
+      "file": "assets/monsters/ch2_386_celes/sheet.png",
+      "sourceGeneratedFile": "exec-f2822f11-0f9b-41c2-afc9-0c1a7370dc97.png",
+      "sha256": "85f512c72a2edc9fd402721eef9767ea453112b09eb02d73c1e5b336a5b9ba2c",
+      "sourceFacing": "front/right"
+    },
+    {
+      "species": "ch2_lumina",
+      "file": "assets/monsters/ch2_386_lumina/sheet.png",
+      "sourceGeneratedFile": "exec-d0e214cb-3713-43b5-9e18-254edf9d7c27.png",
+      "sha256": "98f634bd8fe4ab8a45d8b088a844844da86ebcd97b6a0a58859a0c448a3151cc",
+      "sourceFacing": "front/right"
+    }
+  ]
+}

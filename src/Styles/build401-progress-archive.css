@@ -1,0 +1,57 @@
+/* All selectors are opt-in after the chapter-two introduction is complete. */
+.home-command-screen>.home-title-card.home-progress401>p {
+ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.home-progress401:focus-visible {outline:2px solid #efce83;outline-offset:3px}
+.chapter-progress401-modal>.game-modal-card {
+ position:relative!important;box-sizing:border-box;width:min(94vw,560px)!important;max-height:calc(100vh - 24px)!important;max-height:calc(100dvh - 24px)!important;
+ overflow-y:auto!important;padding:20px!important;color:#eee3cb;
+}
+.chapter-progress401-modal .game-modal-card>h2 {padding:0 46px 0 0;margin:0 0 14px;font-size:clamp(19px,5vw,25px);line-height:1.4}
+.chapter-progress401-modal .modal-x {position:absolute!important;float:none!important;top:14px!important;right:14px!important;left:auto!important;width:36px!important;height:36px!important;min-width:36px;min-height:36px!important;font-size:23px}
+.chapter-progress401 {font-size:13px;text-align:left}
+.chapter-progress401 * {box-sizing:border-box}
+.chapter-progress401-hero {position:relative;isolation:isolate;min-height:112px;display:flex;align-items:end;overflow:hidden;border:1px solid #887041;padding:16px;background:#101018}
+.chapter-progress401-hero img {position:absolute;z-index:-2;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;image-rendering:pixelated}
+.chapter-progress401-hero::after {content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(5,5,12,.9),rgba(5,5,12,.18)),linear-gradient(0deg,rgba(5,5,12,.5),transparent)}
+.chapter-progress401-hero small {color:#cfb6e6;letter-spacing:.16em;font-size:9px;font-weight:800}
+.chapter-progress401 h3 {margin:6px 0;font-size:19px;line-height:1.45;overflow-wrap:anywhere}
+.chapter-progress401-hero p {font-size:11px;color:#d5c9b9;margin:0}
+.chapter-progress401-objective {padding:15px;margin-top:10px;border:1px solid #655034;background:linear-gradient(120deg,#261b15,#110e17)}
+.chapter-progress401-objective>small {font-size:10px;color:#d6b674;font-weight:800;letter-spacing:.1em}
+.chapter-progress401-objective h3 {font-size:16px;color:#f1d28c}
+.chapter-progress401-objective p {margin:7px 0 13px;color:#c5bbc6;font-size:12px;line-height:1.75;overflow-wrap:anywhere}
+.chapter-progress401-objective button {width:100%;min-height:46px;padding:10px;font-size:14px}
+.chapter-progress401-count {display:flex;justify-content:space-between;gap:10px;align-items:center;margin:20px 0 9px;font-size:12px}
+.chapter-progress401-count>span {color:#cbae76;font-size:11px}
+.chapter-progress401-areas {display:grid;gap:6px;list-style:none;margin:0;padding:0}
+.chapter-progress401-areas li {margin:0;padding:0;min-width:0}
+.chapter-progress401-areas button,.chapter-progress401-locked {
+ display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:10px;align-items:center;
+ width:100%;min-height:58px;margin:0;padding:9px 10px;text-align:left;
+ border:1px solid #4c414c;border-radius:2px;background:#100e15;color:#e3d9c3;
+}
+.chapter-progress401-areas .is-current button {border-color:#be9758;background:linear-gradient(110deg,#302416,#1b1323)}
+.chapter-progress401-number {display:grid;place-items:center;width:24px;height:24px;border:1px solid #887145;color:#efd58e;font:700 12px/1 ui-monospace,monospace}
+.chapter-progress401-areas b {display:block;font-size:13px;line-height:1.4;overflow-wrap:anywhere}
+.chapter-progress401-areas small {display:block;margin-top:3px;color:#9e94a5;font-size:9px;line-height:1.4}
+.chapter-progress401-areas em {font-size:10px;font-style:normal;color:#c6aa76;white-space:nowrap}
+.chapter-progress401-locked {border-color:#2b2730;background:#0d0c12;color:#817985}
+.chapter-progress401-locked .chapter-progress401-number {border-color:#443e45;color:#817985}
+.chapter-progress401-locked em {color:#827988}
+.chapter-progress401-memory {display:flex;justify-content:space-between;gap:10px;align-items:center;width:100%;min-height:62px;margin-top:14px;padding:12px;border:1px solid #8e6caa;border-radius:2px;background:linear-gradient(110deg,#27192f,#100d17);color:#eddfc1;text-align:left}
+.chapter-progress401-memory b {display:block;font-size:13px;line-height:1.4}
+.chapter-progress401-memory small {display:block;margin-top:4px;font-size:10px;color:#b79acb}
+.chapter-progress401-memory strong {white-space:nowrap;font-size:12px;color:#e5c382}
+.chapter-progress401 button {touch-action:manipulation;cursor:pointer}
+.chapter-progress401 button:disabled {opacity:.5;cursor:default}
+.chapter-progress401 button:focus-visible {outline:2px solid #f5d895;outline-offset:2px}
+.chapter-progress401-objective p.chapter-progress401-blocked {margin-bottom:0;color:#c8ae94}
+.memory-archive-hub .chapter-memory401-mark {display:grid;place-items:center;color:#e5c389;font:bold 26px/1 Georgia,serif;border:1px solid #8c6b42;background:linear-gradient(145deg,#382141,#100e1a)}
+.story-archive-screen.has-chapter-two401 .story-archive-tabs {grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:480px){
+ .story-archive-screen.has-chapter-two401 .story-archive-tabs {grid-template-columns:repeat(2,minmax(0,1fr))}
+ .story-archive-screen.has-chapter-two401 .story-archive-tabs>button {min-height:46px}
+ .chapter-progress401-modal>.game-modal-card {padding:16px!important}
+ .chapter-progress401-areas button,.chapter-progress401-locked {gap:7px;padding:8px}
+}

@@ -1,3 +1,5 @@
+import {relicLoadout394} from '../ChapterTwoRelics394.js?v=3.1.78-build398';
+import {relicItemText394} from '../../data/chapterTwoRelics394.js?v=3.1.74-build394';
 import{
  RARITY_ORDER,
  RARITY_COLORS,
@@ -9,25 +11,25 @@ import{
  compatibleSubslots,
  equipmentIdentity
 }from"../../data/equipment.js?v=3.1.55-build375";
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.61-build381";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.82-build402";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=3.1.55-build375";
-import{maxMp}from"../../battle/SkillSystem.js?v=3.1.49-build369";
-import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.61-build381";
+import{maxMp}from"../../battle/SkillSystem.js?v=3.1.75-build395";
+import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.82-build402";
 import{ATTRIBUTES}from"../../data/attributes.js?v=3.1.1-build311";
 import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=3.1.55-build375";
-import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=3.1.39-build359";
+import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=3.1.72-build392";
 import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=3.1.38-build358";
-import{SPECIES}from"../../data/species.js?v=3.1.39-build359";
+import{SPECIES}from"../../data/species.js?v=3.1.72-build392";
 import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data/equipmentSeries.js?v=3.1.38-build358";
-import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=3.1.55-build375";
+import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=3.1.78-build398";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=3.1.55-build375";
-import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.82-build402";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=3.1.55-build375";
 import{equipmentVisual}from"../components/EquipmentVisual.js?v=3.1.61-build381";
-import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=3.1.41-build361";
-import{signatureWeaponState,signatureWeaponForMonster,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster}from"../../core/SignatureWeaponSystem.js?v=3.1.60-build380";
+import{equippedMagicCircle}from"../../core/MagicCircleSystem.js?v=3.1.78-build398";
+import{signatureWeaponState,signatureWeaponForMonster,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster}from"../../core/SignatureWeaponSystem.js?v=3.1.72-build392";
 
 const EQUIPMENT_SCREEN_SLOT_LABELS={
  weaponRight:"右手",weaponLeft:"左手",accessoryNeck:"首",accessoryFinger:"指",armorBody:"胴",armorSupport:"補助"
@@ -80,7 +82,7 @@ function itemAffixes(item,{compact=false}={}){
  }).join("");
  return`<div class="equipment-affixes ${compact?"compact":""}">${body}</div>`;
 }
-function itemFixedEffect(item){return item.fixedEffectText?`<div class="equipment-fixed-authority"><b>固有能力</b><span>${item.fixedEffectText}</span></div>`:""}
+function itemFixedEffect(item){const text=relicItemText394(item);return text?`<div class="equipment-fixed-authority"><b>固有能力</b><span>${text}</span></div>`:""}
 function itemIdentityTags(item){const identity=equipmentIdentity(item),series=item.series?EQUIPMENT_SERIES[item.series]:null,slot=identity.subslot?screenSubslotLabel(identity.subslot):"武器";return`<span class="equipment-archetype-chip"><i>${slot}</i>${identity.label}</span>${series?`<span class="equipment-series-chip">◆ ${series.name}シリーズ</span>`:""}`}
 function signatureWeaponBadge(state,target,item){const resonance=signatureWeaponState(state,target,item);if(!resonance)return"";return`<div class="signature-weapon-badge ${resonance.active?"active":"inactive"}"><b>${resonance.status}</b><span>${resonance.definition.ownerName}専用・${resonance.definition.name}</span><small>${resonance.nextText}／${resonance.definition.description}</small></div>`}
 
@@ -114,6 +116,7 @@ function equippedSlotCard(state,target,subslot,focusItemId=null){
    <div class="equipped-slot-actions">
     ${equipmentCommand({label:"装備変更",icon:"equipment",attributes:`data-open-equipment-slot="${subslot}"`,tone:"primary",note:screenSubslotLabel(subslot)})}
     ${equipmentCommand({label:"装備育成",icon:"growth",attributes:`data-enhance-equipment="${item.id}"`,note:`Lv.${level} ∞`})}
+    ${item.chapterTwoRelic394?equipmentCommand({label:"固有鍛錬",icon:"growth",attributes:`data-relic-refine="${item.id}"`,tone:"forge",note:`＋${item.plus??0} → ＋30`,disabled:(item.plus??0)>=30}):""}
     ${equipmentCommand({label:"スロット厳選",icon:"summon",attributes:`data-reroll-equipment="${item.id}"`,tone:"forge",note:affixes.length?`${affixes.length}枠を調整`:"初回スロット抽選"})}
     ${equipmentCommand({label:item.favorite?"お気に入り解除":"お気に入り",icon:"event",attributes:`data-favorite-equipment="${item.id}"`,tone:"quiet",note:item.favorite?"登録中":"未登録"})}
     ${equipmentCommand({label:item.locked?"ロック解除":"ロック",icon:"key",attributes:`data-lock-equipment="${item.id}"`,tone:"quiet",note:item.locked?"保護中":"保護なし"})}
@@ -164,6 +167,7 @@ function card(item,state,target,storage,{editing=false,selected=false,focused=fa
    else if(item.ruleOverrides?.unsellable)actionMarkup+=equipmentCommand({label:"売却不可",icon:"coin",tone:"quiet",note:"保護装備",disabled:true});
    else actionMarkup+=equipmentCommand({label:"売却",icon:"coin",attributes:`data-sell="${item.id}"`,tone:"danger",note:`${equipmentSellPrice(item).toLocaleString()}G`});
    actionMarkup+=equipmentCommand({label:"装備育成",icon:"growth",attributes:`data-enhance-equipment="${item.id}"`,note:`Lv.${level} ∞`});
+   if(item.chapterTwoRelic394)actionMarkup+=equipmentCommand({label:"固有鍛錬",icon:"growth",attributes:`data-relic-refine="${item.id}"`,tone:"forge",note:`＋${item.plus??0} → ＋30`,disabled:(item.plus??0)>=30});
    actionMarkup+=equipmentCommand({label:"スロット厳選",icon:"summon",attributes:`data-reroll-equipment="${item.id}"`,tone:"forge",note:affixes.length?`${affixes.length}枠を調整`:"初回スロット抽選"});
    actionMarkup+=equipmentCommand({label:item.favorite?"お気に入り解除":"お気に入り",icon:"event",attributes:`data-favorite-equipment="${item.id}"`,tone:"quiet",note:item.favorite?"登録中":"未登録"});
    actionMarkup+=equipmentCommand({label:item.locked?"ロック解除":"ロック",icon:"key",attributes:`data-lock-equipment="${item.id}"`,tone:"quiet",note:item.locked?"保護中":"保護なし"});
@@ -249,6 +253,7 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
       <div class="selected-equipment-identity">${coloredMonsterName(target)}<small class="selected-equipment-growth">Lv.${target.level}　+${target.plus??0}</small><button type="button" class="equipment-affection-button" data-affection-info="${target.id}"><em class="attribute-chip">${attributeVisual(attributeId,{label:`${attribute.name}属性`})}${attribute.name}属性</em><span>なつき ${target.affection??0}/1000</span><i>詳細</i></button></div>
       <div class="selected-equipment-power"><small>戦力</small><strong>${formatCombatPower(power)}</strong></div>
       ${signature?.active?`<div class="signature-loadout-status active ${signature.pieces>=6?"awakened":""}"><small>${signature.status}・${signature.nextText}</small><b>${signature.definition.name}${signature.pieces>=6?"・完全覚醒":""}</b><span>${signature.pieces>=6?(signature.definition.awakenedText??signature.definition.description):signature.definition.description}</span></div>`:""}
+      ${relicLoadout394(state,target)}
       <div class="selected-equipment-stats" aria-label="装備反映後ステータス">
        <span><small>HP</small><b>${stats.hp.toLocaleString()}</b></span>
        <span><small>MP</small><b>${maxMp(target).toLocaleString()}</b></span>

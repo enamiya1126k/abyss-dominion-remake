@@ -1,0 +1,37 @@
+{
+  "environment": "Node.js container; CPU model generation only, not browser FPS",
+  "fixture": {
+    "monsters": 3000,
+    "equipment": 3000,
+    "jsonBytes": 5298059
+  },
+  "archiveBefore": {
+    "medianMs": 40.077,
+    "p95Ms": 46.526,
+    "samples": 25
+  },
+  "archiveAfter": {
+    "medianMs": 0.254,
+    "p95Ms": 0.477,
+    "samples": 25
+  },
+  "medianReductionPercent": 99.4,
+  "home": {
+    "medianMs": 2.095,
+    "p95Ms": 2.563,
+    "samples": 10
+  },
+  "progress": {
+    "medianMs": 0.014,
+    "p95Ms": 0.045,
+    "samples": 25
+  },
+  "canvasCache": {
+    "nativeCharacters": 70,
+    "heldAtlasesBefore": 70,
+    "heldAtlasesAfter": 12,
+    "rgbaBeforeMiB": 420.2,
+    "rgbaAfterUpperMiB": 72,
+    "note": "Upper bound for application-held decoded sheet pixels only; browser-managed caching and DOM textures are additional."
+  }
+}

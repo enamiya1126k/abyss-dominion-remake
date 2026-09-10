@@ -1,8 +1,20 @@
+import {chooseChapterTwoCommander397} from '../chapterTwo/ChapterTwoCommander397.js?v=3.1.77-build397';
+import {CHAPTER_TWO_ACTIONS392} from '../chapterTwo/ChapterTwoMonsters392.js?v=3.1.72-build392';
+import {CHAPTER_TWO_ACTIONS391} from '../chapterTwo/ChapterTwoMonsters391.js?v=3.1.73-build393';
+import {CHAPTER_TWO_ACTIONS390} from '../chapterTwo/ChapterTwoMonsters390.js?v=3.1.70-build390';
+import {CHAPTER_TWO_ACTIONS389} from '../chapterTwo/ChapterTwoMonsters389.js?v=3.1.69-build389';
+import {CHAPTER_TWO_ACTIONS388} from '../chapterTwo/ChapterTwoMonsters388.js?v=3.1.68-build388';
+import {CHAPTER_TWO_ACTIONS387} from '../chapterTwo/ChapterTwoMonsters387.js?v=3.1.67-build387';
+import {CHAPTER_TWO_ACTIONS386} from '../chapterTwo/ChapterTwoMonsters386.js?v=3.1.66-build386';
+import {CHAPTER_TWO_ACTIONS385} from '../chapterTwo/ChapterTwoMonsters385.js?v=3.1.65-build385';
+import {CHAPTER_TWO_ACTIONS384} from '../chapterTwo/ChapterTwoMonsters384.js?v=3.1.70-build390';
+import {CHAPTER_TWO_ACTIONS383,chooseChapterTwoAction383} from '../chapterTwo/ChapterTwoMonsters383.js?v=3.1.82-build402';
+import {CHAPTER_TWO_ACTIONS,chooseChapterTwoAction382} from '../chapterTwo/ChapterTwoTactics382.js?v=3.1.78-build398';
 import{isEndgameUltimate}from"../data/endgameUltimates.js?v=3.1.38-build358";
 import{campaignHeroSkillInfo,campaignHeroSkillCost,chooseCampaignHeroSkill}from'./CampaignHeroSkillSystem.js?v=3.1.39-build359';
 import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.js?v=3.1.1-build311";
 import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=3.1.38-build358";
-import{speciesLevelStats}from"../models/Monster.js?v=3.1.61-build381";
+import{speciesLevelStats}from"../models/Monster.js?v=3.1.82-build402";
 import{floorBossActionInfo}from"../data/floorBosses.js?v=3.1.1-build311";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
@@ -114,6 +126,18 @@ function specialAction(enemy,hpRate){
  return null;
 }
 export function enemyActionMpCost(enemy,action){
+ if(enemy?.chapterTwoTactics382?.commander397&&String(action).startsWith('authority:'))return Math.max(0,Number(endgameSkillById(action.slice(10))?.mp)||0);
+ if(CHAPTER_TWO_ACTIONS392[action])return CHAPTER_TWO_ACTIONS392[action].mp;
+ if(CHAPTER_TWO_ACTIONS391[action])return CHAPTER_TWO_ACTIONS391[action].mp;
+ if(CHAPTER_TWO_ACTIONS390[action])return CHAPTER_TWO_ACTIONS390[action].mp;
+ if(CHAPTER_TWO_ACTIONS389[action])return CHAPTER_TWO_ACTIONS389[action].mp;
+ if(CHAPTER_TWO_ACTIONS388[action])return CHAPTER_TWO_ACTIONS388[action].mp;
+ if(CHAPTER_TWO_ACTIONS387[action])return CHAPTER_TWO_ACTIONS387[action].mp;
+ if(CHAPTER_TWO_ACTIONS386[action])return CHAPTER_TWO_ACTIONS386[action].mp;
+ if(CHAPTER_TWO_ACTIONS385[action])return CHAPTER_TWO_ACTIONS385[action].mp;
+ if(CHAPTER_TWO_ACTIONS384[action])return CHAPTER_TWO_ACTIONS384[action].mp;
+ if(CHAPTER_TWO_ACTIONS383[action])return CHAPTER_TWO_ACTIONS383[action].mp;
+ if(CHAPTER_TWO_ACTIONS[action])return CHAPTER_TWO_ACTIONS[action].mp;
  const heroCost=campaignHeroSkillCost(enemy,action);if(heroCost!==null)return heroCost;
  if(!enemy||!action||[ENEMY_ACTIONS.attack,ENEMY_ACTIONS.guard,ENEMY_ACTIONS.charge,ENEMY_ACTIONS.power,ENEMY_ACTIONS.enrage,ENEMY_ACTIONS.manaSiphon].includes(action))return 0;
  const maximum=Math.max(1,Number(enemy.maxMp)||1);
@@ -149,6 +173,9 @@ function teamBattleAction(enemy,context,hpRate){
  return null;
 }
 export function chooseEnemyAction(enemy,context={}){
+ const commanderAction397=chooseChapterTwoCommander397(enemy,context);if(commanderAction397)return commanderAction397;
+ const nativeAction=chooseChapterTwoAction383(enemy,context);if(nativeAction)return nativeAction;
+ const chapterAction=chooseChapterTwoAction382(enemy,context);if(chapterAction)return chapterAction;
  if(enemy.firstCaptureProfileVersion===369){enemy.intent="傷をかばいながら噛みつく";return ENEMY_ACTIONS.attack}
  if(enemy.speciesId==="ochuki"){enemy.guard=true;enemy.intent="巨大な盾の陰で逃げ道を探す";return ENEMY_ACTIONS.guard}
  const allies=(context.allies??[enemy]).filter(Boolean),opponents=(context.opponents??[]).filter(monster=>(monster.currentHp??0)>0),hpRate=enemy.hp/enemy.maxHp,role=String(enemy.role??""),support=["healer","support","controller","debuffer","magic"].some(value=>role.includes(value)),rarity=String(enemy.combatRarity??enemy.rarity??"N"),rarityPower=({N:0,R:1,SR:2,SSR:3,UR:4,LR:5,"神話":6,"深淵":7,"十神":8})[rarity]??0,reviveRole=["healer","support"].some(value=>role.includes(value)),reviveEligible=enemy.speciesId!=="acid_slime"&&reviveRole&&(Boolean(enemy.boss)||Number(enemy.level)>=100||rarityPower>=4);
@@ -185,5 +212,5 @@ function authorityInfo(action){
  const utility=["buff","stance","allHeal","selfHeal","revive","cleanse","mpHeal"].includes(skill.type);
  return{...skill,label:skill.name,pattern:utility?"self":skill.allEnemies?"all":skill.execute||skill.drain?"singleWeak":"singleStrong",multiplier:Math.max(0,Number(skill.power)||0),utility,element:skill.element};
 }
-export function specialActionMultiplier(action){return campaignHeroSkillInfo(action)?.multiplier??authorityInfo(action)?.multiplier??SPECIAL_ACTION_INFO[action]?.multiplier??1}
-export function specialActionInfo(action){return campaignHeroSkillInfo(action)??authorityInfo(action)??floorBossActionInfo(action)??SPECIAL_ACTION_INFO[action]??null}
+export function specialActionMultiplier(action){return CHAPTER_TWO_ACTIONS392[action]?.multiplier??CHAPTER_TWO_ACTIONS391[action]?.multiplier??CHAPTER_TWO_ACTIONS390[action]?.multiplier??CHAPTER_TWO_ACTIONS389[action]?.multiplier??CHAPTER_TWO_ACTIONS388[action]?.multiplier??CHAPTER_TWO_ACTIONS387[action]?.multiplier??CHAPTER_TWO_ACTIONS386[action]?.multiplier??CHAPTER_TWO_ACTIONS385[action]?.multiplier??CHAPTER_TWO_ACTIONS384[action]?.multiplier??CHAPTER_TWO_ACTIONS383[action]?.multiplier??CHAPTER_TWO_ACTIONS[action]?.multiplier??campaignHeroSkillInfo(action)?.multiplier??authorityInfo(action)?.multiplier??SPECIAL_ACTION_INFO[action]?.multiplier??1}
+export function specialActionInfo(action){return CHAPTER_TWO_ACTIONS392[action]??CHAPTER_TWO_ACTIONS391[action]??CHAPTER_TWO_ACTIONS390[action]??CHAPTER_TWO_ACTIONS389[action]??CHAPTER_TWO_ACTIONS388[action]??CHAPTER_TWO_ACTIONS387[action]??CHAPTER_TWO_ACTIONS386[action]??CHAPTER_TWO_ACTIONS385[action]??CHAPTER_TWO_ACTIONS384[action]??CHAPTER_TWO_ACTIONS383[action]??CHAPTER_TWO_ACTIONS[action]??campaignHeroSkillInfo(action)??authorityInfo(action)??floorBossActionInfo(action)??SPECIAL_ACTION_INFO[action]??null}

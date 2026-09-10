@@ -1,0 +1,20 @@
+/* Keep the whole sprite canvas, including hair, halo and attack effects.
+   Individual scale/translate set by BattleBossLayout preserve facing. */
+.monster-visual.has-endgame-sprite399,
+.monster-visual.has-endgame-sprite399>.party-monster-art-layer{
+ overflow:visible!important;
+ clip-path:none!important;
+ mask-image:none!important;
+ -webkit-mask-image:none!important;
+}
+.monster-visual.has-endgame-sprite399 img{
+ object-fit:contain!important;
+ object-position:50% 50%!important;
+ clip-path:none!important;
+ mask-image:none!important;
+ -webkit-mask-image:none!important;
+}
+.battle-screen.side-battle-v2 .side-enemies .side-unit-sprite>.monster-visual.has-endgame-sprite399{
+ transform:scaleX(-1)!important;
+}
+.monster-visual.has-endgame-sprite399 img[hidden]{display:none!important}

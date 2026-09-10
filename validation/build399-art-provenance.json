@@ -1,0 +1,65 @@
+{
+  "build": 399,
+  "mode": "built-in image_gen.imagegen, image-to-image restoration",
+  "source": "Build398 existing 17-character assets; only 13 characters replaced",
+  "outputs": "13 characters x 8 motions = 104 transparent 512x512 PNG files",
+  "process": "Restoration sheets split mechanically, transparent fringes retained, common reference scale and visible foot baseline. ten_chaos used an ImageGen-restored opaque sheet with a deterministic background cutout and explicit protection of white cloth. No gameplay stats changed.",
+  "prompts": [
+    {
+      "key": "image399-divinity-prompt",
+      "prompt": "Use case: precise-object-edit. Edit target: the attached transparent 2048x1024 RPG sprite atlas, 4 columns by 2 rows, eight 512x512 cells of ONE existing character. Repair this SAME atlas, preserving character identity, pose in each cell, scale, pixel-art texture, blue eyes, pale silver-blue bob hair, white/navy/gold ornate costume, hornlike halo ornaments and blue-white crescent bow. The severe defect is accidental transparency holes through the TOP OF THE HAIR in cells 1,2,3,4,7,8 and pale costume/ribbon areas. Restore opaque silver-blue hair and opaque cloth where material was accidentally removed. Cell 5 (bottom left walking pose) and cell 6 show how the intact silver-blue hair must look. Do NOT fill the open center of the halo or intentional gaps between ribbon strips, arms, bow, legs. Preserve those as true transparency. Also complete any abruptly cut off ribbon/weapon/effect tips inside each cell. No redesign, no changed face, no extra limbs, no new ornaments, no captions, no cell lines. Keep the same eight distinct motions in row-major order: idle1, idle2, idle3, walk1, walk2, attack, damage, down. Maintain a small clear transparent gap between cells and transparent margins; nothing from one cell enters another. Result must be a genuine RGBA PNG with transparent background, NOT black/white/checkerboard painted background. Output 2048x1024 if possible, exact 2:1 aspect ratio and 4x2 evenly spaced cell layout."
+    },
+    {
+      "key": "image399-divinity-alpha-prompt",
+      "prompt": "Use case: background-extraction. Edit the provided 4x2 sprite atlas. Remove the gray CHECKERBOARD and faint watermark-like background pattern completely. Deliver an actual transparent PNG cutout, with an alpha channel where the background was. Keep all eight existing sprites, their exact positions, shape, color, silver hair, pale cloth, and pale weapons unchanged. White and silver material must remain opaque. The centers of halos and gaps between limbs and ribbons should be transparent. No new painted background, no simulated checkerboard, no text. True transparent background output."
+    },
+    {
+      "key": "image399-ten_life-v2-prompt",
+      "prompt": "Repair this transparent RPG sprite sheet. Complete the cut-off right staff head in the three idle poses and damage pose. Complete the cut ends of the dragon-water effect in the attack pose. Preserve her face, long blue hair, blue eyes, antlers, blue-white-gold dress, pearl water halo, crescent staff and all eight poses and facing. Keep all tips inside each pose with generous empty padding. 4 columns and 2 rows. Output isolated sprites on transparent background."
+    },
+    {
+      "key": "image399-ten_space-prompt",
+      "prompt": "Repair this transparent RPG sprite sheet. Complete the cut-off left cape and halo in the attack pose (bottom row, second character) and the cut left cape in the down pose (bottom right). Preserve her face, long purple hair, gold star-trimmed dark dress, star portal halo, thin glowing sword, all eight poses and facing. Keep all tips inside each pose with generous empty padding. 4 columns and 2 rows. Output isolated sprites on transparent background."
+    },
+    {
+      "key": "image399-ten_time-v2-prompt",
+      "prompt": "Repair this transparent RPG sprite sheet. Complete the abruptly cut-off left cape in the attack pose (bottom row, second character). Preserve his face, black hair with white streak, gold eyes, gold clock halo with its WHITE clock face, hourglass staff, dark gold-trimmed coat and all eight poses and facing. Keep all tips inside each pose with generous empty padding. 4 columns and 2 rows. Output isolated sprites on transparent background."
+    },
+    {
+      "key": "image399-abyss_lust-v2-prompt",
+      "prompt": "Repair this transparent RPG sprite sheet. Complete the chopped top and right side of the blue scythe slash in the attack pose. Preserve his face, silver hair, blue eyes, dark armour, skull scythe, blue lantern and all eight poses and facing. Keep all tips inside each pose with generous empty padding. 4 columns and 2 rows. Output isolated sprites on transparent background."
+    },
+    {
+      "key": "image399-abyss_pride-prompt",
+      "prompt": "Repair this transparent RPG sprite sheet. Complete the cut-off right edge of the teal attack slash and any clipped halo tip. Preserve her face, silver hair, green eyes, gold black crown and armour, teal sword, all eight poses and facing. Keep all parts entirely inside each pose with generous empty padding. 4 columns and 2 rows. Output isolated sprites on transparent background."
+    },
+    {
+      "key": "image399-abyss_gluttony-prompt",
+      "prompt": "Repair this transparent RPG sprite sheet. Complete the cut-off right edge of the red attack slash and weapon tip. Preserve his face, dark hair with pale streak, red eyes, black-gold armour, crimson tattered cape, huge curved black-red sword and all eight poses and facing. Keep all parts entirely inside each pose with generous empty padding. 4 columns and 2 rows. Output isolated sprites on transparent background."
+    },
+    {
+      "key": "image399-abyss_greed-prompt",
+      "prompt": "Repair this transparent RPG sprite sheet. Complete the chopped LEFT cape and gold attack flash tips in attack and the cut sword/cloth tips in down and idle3. Preserve his face, golden hair and crown, black-gold coat, red gem sword, floating coins, all eight poses and facing. Generous empty padding around every pose. 4 columns and 2 rows. Output isolated sprites on transparent background."
+    },
+    {
+      "key": "image399-ten_end-prompt",
+      "prompt": "Repair this transparent RPG pixel-art sprite sheet. Complete the clipped left cape tip and sword edges, and remove stray white BACKGROUND patches between flowing hair strands and outside clothing. Preserve his face, red hair, gold horns, white-gold clock halo, black-red-gold armour, huge burning sword, eight poses and facing. Generous empty padding around each pose. 4 columns and 2 rows. Output isolated sprites on transparent background."
+    },
+    {
+      "key": "image399-abyss_wrath-prompt",
+      "prompt": "Repair this transparent RPG pixel-art sprite sheet. Finish the red attack slash with an uncut rounded outer edge and tapering tips. Preserve his face, red hair, dark crimson armour and cape, heavy black-red weapon, all eight poses and facing. Make each whole pose slightly smaller so every weapon and effect fits entirely with clear margins. 4 columns and 2 rows. Output isolated sprites on transparent background."
+    },
+    {
+      "key": "image399-ten_death-prompt",
+      "prompt": "Repair this transparent RPG pixel-art sprite sheet. Complete the chopped LEFT edge of her flowing cape in the attack, damage and lying-down poses and the outer scythe tip. Preserve her face, lavender hair, purple eyes, crescent halo, black-white-gold outfit and moon scythe, all eight poses and facing. Make each whole pose slightly smaller so every part fits with clear margins. 4 columns and 2 rows. Output isolated sprites on transparent background."
+    },
+    {
+      "key": "image399-ten_fate-prompt",
+      "prompt": "Repair this transparent RPG pixel-art sprite sheet. Complete the chopped LEFT cape edge in damage, and the clipped weapon or lightning tips in attack and down. Remove stray white background patches in hair gaps; keep the white-gold clock halo solid. Preserve her face, purple hair, gold eyes, violet-gold armour and staff, all eight poses and facing. Make each whole pose slightly smaller so every part fits with clear margins. 4 columns and 2 rows. Output isolated sprites on transparent background."
+    },
+    {
+      "key": "image399-ten_chaos-v4-prompt",
+      "prompt": "第一画像のキャラの頭頂部・前髪にある黒い大きな穴を、第二画像のような不透明の銀青色の髪に修復してください。8ポーズ全部です。顔や衣装やポーズは第一画像のまま。髪を黒くしないでください。背景は透明にしてください。"
+    }
+  ]
+}

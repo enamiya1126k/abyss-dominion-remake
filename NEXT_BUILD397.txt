@@ -1,0 +1,36 @@
+ABYSS DOMINION 引継ぎ：Build397 / v3.1.77
+今回完了：② 第二章の敵編成・深淵/十神の混成部隊・第二章専用ガチャ。
+次の依頼予定：③ Build398 魔法陣調整。強い既存陣は維持し、用途の弱い陣を改善。必要なら新陣追加。
+以後④399深淵/十神素材修正、⑤400モーション付きホームスキン、⑥401第二章導線/物語回想、⑦402統合確認。
+
+実装メモ
+ChapterTwoRoster397：既存61戦闘の最後に適用する27編成差分。species/authorities/roles/circles/hint/名前とroster397を追加。
+深淵6種・十神8種を各混成に1体ずつ採用。混成21＝物語/宝物庫14＋精鋭7。通常21巡回ルートはそのまま。
+既存ENCOUNTERSのID、name、level、HP等基礎値、報酬、story/seal/vault判定を維持。
+chapterTwoEnemyEntriesはmemberNames397を優先。指揮官にはcommander397を付ける。
+chapterTwoTactics382にroster397を記録。役割別実装備と固有魔法陣で強敵を設計。
+ChapterTwoCommander397：既存権能の先頭通常技以外の3技を選び、MPと個別CTを使用。ultimate358は既存ゲート。
+EnemyAIの新分岐はcommander397だけ。従来の第二章以外のAIとMP消費式は維持。
+main.resolveEnemySpecialActionで指揮官の蘇生を成功時のみ1回に制限。回復兼蘇生は以後回復だけ。
+指揮官のregen効果にcommanderEffect397印を付けて期間内のみ回復。guardは一時効果を利用し、旧恒久eliteRegen/二重障壁を付与しない。
+指揮官の再使用短縮はchapterTwoCooldowns383とcommanderCooldowns397の期限に反映し、最短で次ラウンド。rechargeは短縮対象外。
+main.resumeSavedBattleはroster397がある戦闘の正規名を保持。保存中の戦闘を現在の編成から作り直さない。
+ElitePanel393は旧テンプレートではなく実ENCOUNTERSから表示。ChapterTwoWorldは交代した精鋭のauthority画像を保持。
+
+ガチャ
+chapterTwo/ChapterTwoGacha397：70体のみ（7ランク×10）、N5/R15/SR35/SSR25/UR15/LR4/神話1、各体均等。
+1回100/10回1000晶石。保証・天井なし。既存SPECIESのgachaExcludedはtrueのまま。
+解禁はchapterTwoUnlockedと同じ100F＋勇者勝利。introCompleteを要求しない。
+新規root章用カウンターchapterTwoGacha397（draws,lastReceipt）。通常gachaのpity/historyを変更しない。
+mainはchapterTwoCommitで原子的に保存してから既存結果演出へ。失敗は全復元、ボタンは成功後1回限り。
+結果画面からは第二章召喚へ戻る。獲得方法chapterTwoSummonを図鑑に表示。
+ui/ChapterTwoGacha397とStyles/build397-gacha.cssで既存素材4体のバナーと全70体の率表示。
+十神は既存の核片/契約経路を維持。前回NEXT_BUILD396の「深淵/十神は別ガチャ」は十神ガチャ追加を意味しない。
+
+検証
+320テスト成功、新規16。45モジュール構文・493参照、6保存移行、24通常AI比較。
+ブラウザー/iPhoneの描画は未確認。以前のプレビュー拒否を迂回しない。
+バージョン3.1.77/build397。変更JSへ依存するモジュールまでインポートクエリを伝播更新。
+Git HEADはBuild381、作業木に382〜397適用済み。git resetやcheckoutで巻き戻さない。
+基準はbase396-files.jsonとbaseline396。次回は397のSHA256基準を保存してから作業。
+差分ZIPはBuild396向け。公開コミット/Push/deployなし。

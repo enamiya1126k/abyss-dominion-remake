@@ -1,0 +1,21 @@
+ABYSS DOMINION 引継ぎ Build402 / v3.1.82
+依頼①〜⑦（396〜402）の実装・修正版作成まで完了。次の分割実装は未設定。
+今回のZIPはBuild401への差分。Build399素材補修とBuild400背景など既存ファイルが必要。
+公開コミット・Push・デプロイは実行していない。
+
+変更点
+core/ChapterTwoRecovery402：ロード時／不正チェックポイント破棄時だけ孤立したpendingを解除。
+activeBattleが存在するときは何も変えない。chapterTwoState内では実行しないこと。
+戦闘開始はpendingの保存がactiveBattle生成より先になるため、その間の解除は危険。
+main/chapterTwoCommit：ok:false、例外、保存失敗のすべてで操作前を復元。
+main/enterChapterTwoForest：巡回更新とヒント変更も同じ保存に統合。
+ChapterTwoField：busy／document.hidden時は連続描画・移動を休止。
+CampaignStoryArchiveSystem：不要な所持品等を除いてストーリー入力を複製。
+ChapterTwoSprite383：Canvas用のLRUシートキャッシュ12件、フレームは8種に正規化。
+index：存在しない旧CSS328・330のlinkを削除。
+セーブスキーマ84、キャラ・装備・魔法陣の数値と敵編成は401から変更しない。
+
+検証459件。第一章表示20条件、セーブ比較6条件、地形12条件。
+ブラウザー／iPhone実機確認は未実施。以前のプレビュー拒否を迂回しない。
+Git HEADはBuild381。作業木は累積Build402。reset/checkoutで戻さない。
+次の変更前にBuild402のファイルハッシュ基準を保存すること。

@@ -44,7 +44,7 @@ test('defeat and retreat award nothing and leave an encounter available',()=>{
  const s=start().state,before=clone(s.player),a=battleAt(s,'west');assert.equal(settleChapterTwoEncounter(s,a.token,{won:false}).won,false);assert.deepEqual(s.player,before);assert.equal(s.chapterTwo376.run.defeated.length,0);assert.equal(battleAt(s,'west').ok,true);
 });
 test('actual SaveService preserves room position, story and pending battle token after reload',()=>{
- const save=start(),s=save.state;moveChapterTwoRoom(s,'east');s.chapterTwo376.introIndex=CHAPTER_TWO_INTRO.length;s.chapterTwo376.run.position={x:7,y:8};const a=beginChapterTwoEncounter(s,'patrol');save.save();const reload=new SaveService();assert.deepEqual(reload.state.chapterTwo376,s.chapterTwo376);assert.equal(beginChapterTwoEncounter(reload.state,'patrol').token,a.token);
+ const save=start(),s=save.state;moveChapterTwoRoom(s,'east');s.chapterTwo376.introIndex=CHAPTER_TWO_INTRO.length;s.chapterTwo376.run.position={x:7,y:8};const a=beginChapterTwoEncounter(s,'patrol');s.activeBattle={specialBattle:true,specialBattleType:'chapterTwo',chapterTwoToken:a.token,chapterTwoEncounter:a.encounter,enemies:[{id:'resume-fixture',speciesId:'slime',hp:100,maxHp:100}]};save.save();const reload=new SaveService();assert.deepEqual(reload.state.chapterTwo376,s.chapterTwo376);assert.equal(beginChapterTwoEncounter(reload.state,'patrol').token,a.token);
  const r=settleChapterTwoEncounter(reload.state,a.token,{won:true});assert.equal(r.ok,true);reload.save();const third=new SaveService();assert.equal(settleChapterTwoEncounter(third.state,a.token,{won:true}).duplicate,true);
 });
 test('authored enemies and portraits exist; all six rooms are connected and walkable',()=>{

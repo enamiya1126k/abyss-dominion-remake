@@ -1,0 +1,5 @@
+export const CHAPTER_TWO_PAIRS389=Object.freeze([
+ {id:'wisteria',kind:'双子',name:'双藤・毒鎖の刈舞',members:['ch2_nevia','ch2_elmina'],names:['ネヴィア','エルミナ'],power:1.1,hits:3,damageClass:'physical',defenseIgnore:.2,scope:'party',bonusVsStatus:{id:'poison',multiplier:1.6},debuff:{kind:'healDown',value:.25,turns:2},description:'相方が単体へ物理1.10倍×3連撃、防御20%無視。毒状態の敵には各打撃1.76倍。命中した敵の受けるHP回復25%低下（2ターン）。毒を先に付けると大幅強化。'},
+ {id:'twinthunder',kind:'姉妹',name:'双雷・天穿の連星',members:['ch2_calista','ch2_solenne'],names:['カリスタ','ソレーヌ'],power:2,hits:1,all:true,damageClass:'physical',defenseIgnore:0,shield:.08,scope:'party',partyEffect:{kind:'spdUp',value:.15,turns:2},burst:{threshold:2,name:'双雷・天穿の終雷',power:4.4,defenseIgnore:.35,shield:.18},description:'1回目は敵全体へ物理2.00倍、全体にHP8%障壁・速度15%上昇（2ターン）。同ラウンド2回目は「天穿の終雷」：全体4.40倍、防御35%無視、HP18%障壁。同じキャラの複数個体では2回目を発動できない。'},
+ {id:'twinkeys',kind:'姉妹機',name:'双鍵・封界解放',members:['ch2_meliora','ch2_elyselle'],names:['メリオラ','エリゼル'],power:1.1,hits:4,damageClass:'hybrid',defenseIgnore:.4,heal:.12,shield:.14,scope:'party',dispelOne:true,description:'最初の対象の解除可能な強化を1つ剥がし、相方が単体へ1.10倍×4連撃、防御40%無視。高い方の攻撃・魔力を使用。生存味方全体HP12%回復・HP14%障壁。倒すと残りの打撃は別の生存敵へ。'}
+]);

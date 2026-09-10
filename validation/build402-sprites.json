@@ -1,0 +1,585 @@
+{
+  "nativeCharacters": 70,
+  "nativeFrames": 560,
+  "atlasAndClipBounds": "pass",
+  "canvas256Bounds": "pass",
+  "sheets": [
+    {
+      "id": "ch2_kororu",
+      "file": "assets/monsters/ch2_383_kororu/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_nerik",
+      "file": "assets/monsters/ch2_384_nerik/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_lilica",
+      "file": "assets/monsters/ch2_385_lilica/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_ticta",
+      "file": "assets/monsters/ch2_386_ticta/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_pipia",
+      "file": "assets/monsters/ch2_387_pipia/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_fiora",
+      "file": "assets/monsters/ch2_388_fiora/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_lumea",
+      "file": "assets/monsters/ch2_389_lumea/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_miretta",
+      "file": "assets/monsters/ch2_390_miretta/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_rithia",
+      "file": "assets/monsters/ch2_391_rithia/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_tillea",
+      "file": "assets/monsters/ch2_392_tillea/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_balk",
+      "file": "assets/monsters/ch2_383_balk/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_grant",
+      "file": "assets/monsters/ch2_384_grant/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_ryune",
+      "file": "assets/monsters/ch2_385_ryune/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_mirea",
+      "file": "assets/monsters/ch2_386_mirea/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_rikka",
+      "file": "assets/monsters/ch2_387_rikka/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_lyriet",
+      "file": "assets/monsters/ch2_388_lyriet/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_nevia",
+      "file": "assets/monsters/ch2_389_nevia/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_iselle",
+      "file": "assets/monsters/ch2_390_iselle/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_nizelle",
+      "file": "assets/monsters/ch2_391_nizelle/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_morina",
+      "file": "assets/monsters/ch2_392_morina/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_shelza",
+      "file": "assets/monsters/ch2_383_shelza/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_senela",
+      "file": "assets/monsters/ch2_384_senela/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_rose",
+      "file": "assets/monsters/ch2_385_rose/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_viola",
+      "file": "assets/monsters/ch2_386_viola/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_rinne",
+      "file": "assets/monsters/ch2_387_rinne/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_rosette",
+      "file": "assets/monsters/ch2_388_rosette/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_elmina",
+      "file": "assets/monsters/ch2_389_elmina/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_virelle",
+      "file": "assets/monsters/ch2_390_virelle/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_charne",
+      "file": "assets/monsters/ch2_391_charne/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_elmize",
+      "file": "assets/monsters/ch2_392_elmize/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_noctia",
+      "file": "assets/monsters/ch2_383_noctia/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_razil",
+      "file": "assets/monsters/ch2_384_razil/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_shion",
+      "file": "assets/monsters/ch2_385_shion/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_kagura",
+      "file": "assets/monsters/ch2_386_kagura/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_seria",
+      "file": "assets/monsters/ch2_387_seria/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_noctelle",
+      "file": "assets/monsters/ch2_388_noctelle/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_calista",
+      "file": "assets/monsters/ch2_389_calista/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_rostia",
+      "file": "assets/monsters/ch2_390_rostia/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_ferne",
+      "file": "assets/monsters/ch2_391_ferne/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_dracia",
+      "file": "assets/monsters/ch2_392_dracia/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_velg",
+      "file": "assets/monsters/ch2_383_velg/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_ione",
+      "file": "assets/monsters/ch2_384_ione/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_suiren",
+      "file": "assets/monsters/ch2_385_suiren/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_sayo",
+      "file": "assets/monsters/ch2_386_sayo/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_carmia",
+      "file": "assets/monsters/ch2_387_carmia/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_auriane",
+      "file": "assets/monsters/ch2_388_auriane/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_solenne",
+      "file": "assets/monsters/ch2_389_solenne/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_althea",
+      "file": "assets/monsters/ch2_390_althea/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_clarisse",
+      "file": "assets/monsters/ch2_391_clarisse/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_rucie",
+      "file": "assets/monsters/ch2_392_rucie/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_astera",
+      "file": "assets/monsters/ch2_383_astera/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_mimelia",
+      "file": "assets/monsters/ch2_384_mimelia/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_aure",
+      "file": "assets/monsters/ch2_385_aure/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_celes",
+      "file": "assets/monsters/ch2_386_celes/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_aeriel",
+      "file": "assets/monsters/ch2_387_aeriel/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_eirene",
+      "file": "assets/monsters/ch2_388_eirene/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_meliora",
+      "file": "assets/monsters/ch2_389_meliora/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_sephira",
+      "file": "assets/monsters/ch2_390_sephira/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_lunaria",
+      "file": "assets/monsters/ch2_391_lunaria/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_nemesia",
+      "file": "assets/monsters/ch2_392_nemesia/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_ordia",
+      "file": "assets/monsters/ch2_383_ordia/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_luxion",
+      "file": "assets/monsters/ch2_384_luxion/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_noelle",
+      "file": "assets/monsters/ch2_385_noelle/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_lumina",
+      "file": "assets/monsters/ch2_386_lumina/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_vespera",
+      "file": "assets/monsters/ch2_387_vespera/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_iridelle",
+      "file": "assets/monsters/ch2_388_iridelle/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_elyselle",
+      "file": "assets/monsters/ch2_389_elyselle/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_astrelle",
+      "file": "assets/monsters/ch2_390_astrelle/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_solaria",
+      "file": "assets/monsters/ch2_391_solaria/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    },
+    {
+      "id": "ch2_everia",
+      "file": "assets/monsters/ch2_392_everia/sheet.png",
+      "width": 1774,
+      "height": 887,
+      "frames": 8
+    }
+  ],
+  "skins": [
+    {
+      "id": "town",
+      "kind": "background",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 3166304
+    },
+    {
+      "id": "town",
+      "kind": "thumbnail",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 3166304
+    },
+    {
+      "id": "forest",
+      "kind": "background",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 650274
+    },
+    {
+      "id": "forest",
+      "kind": "thumbnail",
+      "width": 256,
+      "height": 384,
+      "bytes": 46612
+    },
+    {
+      "id": "invasion",
+      "kind": "background",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 561638
+    },
+    {
+      "id": "invasion",
+      "kind": "thumbnail",
+      "width": 256,
+      "height": 384,
+      "bytes": 41588
+    },
+    {
+      "id": "abyss",
+      "kind": "background",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 392642
+    },
+    {
+      "id": "abyss",
+      "kind": "thumbnail",
+      "width": 256,
+      "height": 384,
+      "bytes": 32612
+    },
+    {
+      "id": "sanctum",
+      "kind": "background",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 526720
+    },
+    {
+      "id": "sanctum",
+      "kind": "thumbnail",
+      "width": 256,
+      "height": 384,
+      "bytes": 43112
+    },
+    {
+      "id": "core",
+      "kind": "background",
+      "width": 1024,
+      "height": 1536,
+      "bytes": 434646
+    },
+    {
+      "id": "core",
+      "kind": "thumbnail",
+      "width": 256,
+      "height": 384,
+      "bytes": 34666
+    }
+  ],
+  "visualReview": "Static asset decoding and coordinate checks. Browser and iPhone rendering not verified."
+}

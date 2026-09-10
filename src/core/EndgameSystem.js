@@ -1,9 +1,9 @@
 import{ENDGAME_CHARACTERS,ENDGAME_LEGACY_ID_MAP,canonicalEndgameId,endgameCharacter}from"../data/endgameCharacters.js?v=3.1.38-build358";
-import{SPECIES}from"../data/species.js?v=3.1.39-build359";
+import{SPECIES}from"../data/species.js?v=3.1.72-build392";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionById}from"../data/floorBosses.js?v=3.1.1-build311";
-import{floorBossEnemyEntry}from"./FloorBossChallengeSystem.js?v=3.1.39-build359";
+import{floorBossEnemyEntry}from"./FloorBossChallengeSystem.js?v=3.1.72-build392";
 import{floorBossCampaignDisplayFloor}from"./Campaign100System.js?v=3.1.42-build362";
-import{createSignatureEquipment,normalizeSignatureWeaponItem}from"./SignatureWeaponSystem.js?v=3.1.60-build380";
+import{createSignatureEquipment,normalizeSignatureWeaponItem}from"./SignatureWeaponSystem.js?v=3.1.72-build392";
 
 const plainRecord=value=>Boolean(value&&typeof value==="object"&&!Array.isArray(value));
 

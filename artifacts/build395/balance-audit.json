@@ -1,0 +1,945 @@
+{
+  "build": 395,
+  "method": "実際の生成・装備計算・ペア追撃処理を使用。精鋭は15部隊×3段階×16固定シードの能力値比較。ペアは24組×4条件×3ラウンド、各組2人対4体。",
+  "limitations": "勝率や完全自動戦闘の試験ではない。追撃比較は必中・会心なし・属性等倍・継続する標的で通常技と敵の行動を除外。反撃・時間経過での異常解除・装備厳選・既存魔法陣の自動発動・シリーズ効果・権能・転生は含めない。回復/障壁型を総ダメージだけで順位付けしない。",
+  "presets": {
+    "standard": "同地域・覇者の敵と同じ6枠装備、個体Lvは地域目安、＋値は敵装備設定、追加厳選なし・陣なし。",
+    "limited": "同Lvの限定6枠装備＋30・指定魔法陣Lv99。ペアの睡眠/毒/凍結等の特効条件なし。",
+    "prepared": "limitedと同じ装備、固有の状態異常・弱体・瀕死/敵HP条件を設定。",
+    "stopped": "limitedと同じ装備、相方を凍結。"
+  },
+  "eliteConfigurations": 720,
+  "pairScenarios": 96,
+  "elite": [
+    {
+      "id": "roam0_1_elite393",
+      "name": "鏡刃の護衛隊",
+      "area": 0,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 568294,
+      "meanOffense": 13782,
+      "meanDefense": 8517,
+      "meanSpeed": 4946
+    },
+    {
+      "id": "roam0_1_elite393",
+      "name": "鏡刃の護衛隊",
+      "area": 0,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 789971,
+      "meanOffense": 20823,
+      "meanDefense": 11196,
+      "meanSpeed": 5977
+    },
+    {
+      "id": "roam0_1_elite393",
+      "name": "鏡刃の護衛隊",
+      "area": 0,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 1100906,
+      "meanOffense": 31640,
+      "meanDefense": 14841,
+      "meanSpeed": 9400
+    },
+    {
+      "id": "roam0_3_elite393",
+      "name": "紅糸の追跡隊",
+      "area": 0,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 510666,
+      "meanOffense": 14381,
+      "meanDefense": 7611,
+      "meanSpeed": 5714
+    },
+    {
+      "id": "roam0_3_elite393",
+      "name": "紅糸の追跡隊",
+      "area": 0,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 717853,
+      "meanOffense": 21500,
+      "meanDefense": 10011,
+      "meanSpeed": 6994
+    },
+    {
+      "id": "roam0_3_elite393",
+      "name": "紅糸の追跡隊",
+      "area": 0,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 1008005,
+      "meanOffense": 31212,
+      "meanDefense": 13547,
+      "meanSpeed": 11669
+    },
+    {
+      "id": "roam0_4_elite393",
+      "name": "薬毒の封樹庭園",
+      "area": 0,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 446712,
+      "meanOffense": 15627,
+      "meanDefense": 6437,
+      "meanSpeed": 6305
+    },
+    {
+      "id": "roam0_4_elite393",
+      "name": "薬毒の封樹庭園",
+      "area": 0,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 605954,
+      "meanOffense": 24147,
+      "meanDefense": 8401,
+      "meanSpeed": 6820
+    },
+    {
+      "id": "roam0_4_elite393",
+      "name": "薬毒の封樹庭園",
+      "area": 0,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 877718,
+      "meanOffense": 37877,
+      "meanDefense": 12253,
+      "meanSpeed": 12267
+    },
+    {
+      "id": "roam1_1_elite393",
+      "name": "白藤の毒鎖結社",
+      "area": 1,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 4714260,
+      "meanOffense": 52971,
+      "meanDefense": 24872,
+      "meanSpeed": 12857
+    },
+    {
+      "id": "roam1_1_elite393",
+      "name": "白藤の毒鎖結社",
+      "area": 1,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 6211480,
+      "meanOffense": 70664,
+      "meanDefense": 29601,
+      "meanSpeed": 15121
+    },
+    {
+      "id": "roam1_1_elite393",
+      "name": "白藤の毒鎖結社",
+      "area": 1,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 8165146,
+      "meanOffense": 94969,
+      "meanDefense": 37059,
+      "meanSpeed": 25013
+    },
+    {
+      "id": "roam1_3_elite393",
+      "name": "縫い留められた夢境",
+      "area": 1,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 1202025,
+      "meanOffense": 29559,
+      "meanDefense": 11374,
+      "meanSpeed": 10770
+    },
+    {
+      "id": "roam1_3_elite393",
+      "name": "縫い留められた夢境",
+      "area": 1,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 1611874,
+      "meanOffense": 40621,
+      "meanDefense": 14133,
+      "meanSpeed": 12257
+    },
+    {
+      "id": "roam1_3_elite393",
+      "name": "縫い留められた夢境",
+      "area": 1,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 2191110,
+      "meanOffense": 57737,
+      "meanDefense": 18882,
+      "meanSpeed": 18984
+    },
+    {
+      "id": "roam1_4_elite393",
+      "name": "焔月と硝子の舞台",
+      "area": 1,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 1198282,
+      "meanOffense": 28933,
+      "meanDefense": 11287,
+      "meanSpeed": 10853
+    },
+    {
+      "id": "roam1_4_elite393",
+      "name": "焔月と硝子の舞台",
+      "area": 1,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 1604214,
+      "meanOffense": 40273,
+      "meanDefense": 14264,
+      "meanSpeed": 11974
+    },
+    {
+      "id": "roam1_4_elite393",
+      "name": "焔月と硝子の舞台",
+      "area": 1,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 2154077,
+      "meanOffense": 57569,
+      "meanDefense": 18716,
+      "meanSpeed": 18984
+    },
+    {
+      "id": "roam2_1_elite393",
+      "name": "双符の忘却葬列",
+      "area": 2,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 1889950,
+      "meanOffense": 46274,
+      "meanDefense": 18267,
+      "meanSpeed": 13669
+    },
+    {
+      "id": "roam2_1_elite393",
+      "name": "双符の忘却葬列",
+      "area": 2,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 2539693,
+      "meanOffense": 63605,
+      "meanDefense": 22866,
+      "meanSpeed": 19995
+    },
+    {
+      "id": "roam2_1_elite393",
+      "name": "双符の忘却葬列",
+      "area": 2,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 3381828,
+      "meanOffense": 97631,
+      "meanDefense": 28454,
+      "meanSpeed": 24535
+    },
+    {
+      "id": "roam2_3_elite393",
+      "name": "宵暁の薔薇聖堂",
+      "area": 2,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 2065952,
+      "meanOffense": 41847,
+      "meanDefense": 20818,
+      "meanSpeed": 12603
+    },
+    {
+      "id": "roam2_3_elite393",
+      "name": "宵暁の薔薇聖堂",
+      "area": 2,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 2754502,
+      "meanOffense": 56922,
+      "meanDefense": 24999,
+      "meanSpeed": 18066
+    },
+    {
+      "id": "roam2_3_elite393",
+      "name": "宵暁の薔薇聖堂",
+      "area": 2,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 3800800,
+      "meanOffense": 94011,
+      "meanDefense": 35505,
+      "meanSpeed": 20153
+    },
+    {
+      "id": "roam2_4_elite393",
+      "name": "双鍵の加護狩り",
+      "area": 2,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 2180085,
+      "meanOffense": 49243,
+      "meanDefense": 20002,
+      "meanSpeed": 12821
+    },
+    {
+      "id": "roam2_4_elite393",
+      "name": "双鍵の加護狩り",
+      "area": 2,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 2901418,
+      "meanOffense": 67334,
+      "meanDefense": 24282,
+      "meanSpeed": 18445
+    },
+    {
+      "id": "roam2_4_elite393",
+      "name": "双鍵の加護狩り",
+      "area": 2,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 3968139,
+      "meanOffense": 104402,
+      "meanDefense": 32840,
+      "meanSpeed": 20403
+    },
+    {
+      "id": "roam3_1_elite393",
+      "name": "天鎖を断つ双竜騎団",
+      "area": 3,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 4096560,
+      "meanOffense": 63686,
+      "meanDefense": 33656,
+      "meanSpeed": 13797
+    },
+    {
+      "id": "roam3_1_elite393",
+      "name": "天鎖を断つ双竜騎団",
+      "area": 3,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 5436438,
+      "meanOffense": 84505,
+      "meanDefense": 40079,
+      "meanSpeed": 18321
+    },
+    {
+      "id": "roam3_1_elite393",
+      "name": "天鎖を断つ双竜騎団",
+      "area": 3,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 7392002,
+      "meanOffense": 133447,
+      "meanDefense": 52537,
+      "meanSpeed": 20128
+    },
+    {
+      "id": "roam3_3_elite393",
+      "name": "黒盾と双雷の聖衛",
+      "area": 3,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 9481890,
+      "meanOffense": 89219,
+      "meanDefense": 47067,
+      "meanSpeed": 16519
+    },
+    {
+      "id": "roam3_3_elite393",
+      "name": "黒盾と双雷の聖衛",
+      "area": 3,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 12471686,
+      "meanOffense": 118691,
+      "meanDefense": 56195,
+      "meanSpeed": 22728
+    },
+    {
+      "id": "roam3_3_elite393",
+      "name": "黒盾と双雷の聖衛",
+      "area": 3,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 16618882,
+      "meanOffense": 188887,
+      "meanDefense": 74126,
+      "meanSpeed": 25300
+    },
+    {
+      "id": "roam3_4_elite393",
+      "name": "氷晶の天穹聖歌",
+      "area": 3,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 6630722,
+      "meanOffense": 81730,
+      "meanDefense": 33302,
+      "meanSpeed": 15406
+    },
+    {
+      "id": "roam3_4_elite393",
+      "name": "氷晶の天穹聖歌",
+      "area": 3,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 8754414,
+      "meanOffense": 111453,
+      "meanDefense": 40866,
+      "meanSpeed": 23902
+    },
+    {
+      "id": "roam3_4_elite393",
+      "name": "氷晶の天穹聖歌",
+      "area": 3,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 11655825,
+      "meanOffense": 171043,
+      "meanDefense": 55070,
+      "meanSpeed": 28956
+    },
+    {
+      "id": "roam4_1_elite393",
+      "name": "星律の終演機構",
+      "area": 4,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 11822006,
+      "meanOffense": 122161,
+      "meanDefense": 52253,
+      "meanSpeed": 27249
+    },
+    {
+      "id": "roam4_1_elite393",
+      "name": "星律の終演機構",
+      "area": 4,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 15588442,
+      "meanOffense": 176102,
+      "meanDefense": 64301,
+      "meanSpeed": 32565
+    },
+    {
+      "id": "roam4_1_elite393",
+      "name": "星律の終演機構",
+      "area": 4,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 20213813,
+      "meanOffense": 227811,
+      "meanDefense": 76981,
+      "meanSpeed": 37282
+    },
+    {
+      "id": "roam4_3_elite393",
+      "name": "黒白の四冠裁定",
+      "area": 4,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 9524210,
+      "meanOffense": 111992,
+      "meanDefense": 46045,
+      "meanSpeed": 23884
+    },
+    {
+      "id": "roam4_3_elite393",
+      "name": "黒白の四冠裁定",
+      "area": 4,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 12753559,
+      "meanOffense": 167945,
+      "meanDefense": 60786,
+      "meanSpeed": 23437
+    },
+    {
+      "id": "roam4_3_elite393",
+      "name": "黒白の四冠裁定",
+      "area": 4,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 16613923,
+      "meanOffense": 217972,
+      "meanDefense": 73618,
+      "meanSpeed": 25891
+    },
+    {
+      "id": "roam4_4_elite393",
+      "name": "日月を巡る星門",
+      "area": 4,
+      "tier": 1,
+      "samples": 16,
+      "meanTotalHp": 10557604,
+      "meanOffense": 113990,
+      "meanDefense": 50315,
+      "meanSpeed": 25766
+    },
+    {
+      "id": "roam4_4_elite393",
+      "name": "日月を巡る星門",
+      "area": 4,
+      "tier": 2,
+      "samples": 16,
+      "meanTotalHp": 14017724,
+      "meanOffense": 164891,
+      "meanDefense": 66601,
+      "meanSpeed": 30439
+    },
+    {
+      "id": "roam4_4_elite393",
+      "name": "日月を巡る星門",
+      "area": 4,
+      "tier": 3,
+      "samples": 16,
+      "meanTotalHp": 18187930,
+      "meanOffense": 214819,
+      "meanDefense": 80707,
+      "meanSpeed": 34693
+    }
+  ],
+  "pairs": [
+    {
+      "id": "mirrors",
+      "name": "双鏡狂奏",
+      "members": [
+        "リュネ",
+        "ロゼ"
+      ],
+      "description": "相方が敵単体へ1.10倍×3連撃（防御30%無視）。双子に最大HP12%の障壁。",
+      "scenarios": {
+        "standard": 113409,
+        "limited": 517272,
+        "prepared": 517272,
+        "stopped": 0
+      },
+      "area": 0,
+      "level": 1000,
+      "conditionalRatio": 1
+    },
+    {
+      "id": "talismans",
+      "name": "双符百鬼夜行",
+      "members": [
+        "シオン",
+        "スイレン"
+      ],
+      "description": "相方が敵全体へ2.20倍の魔法追撃。命中した敵のHP回復35%低下（2ターン）。生存味方全体のHP12%回復。",
+      "scenarios": {
+        "standard": 880695,
+        "limited": 1495203,
+        "prepared": 1495203,
+        "stopped": 0
+      },
+      "area": 2,
+      "level": 2000,
+      "conditionalRatio": 1
+    },
+    {
+      "id": "wings",
+      "name": "天穹・双翼聖歌",
+      "members": [
+        "アウレ",
+        "ノエル"
+      ],
+      "description": "相方が敵全体へ3.00倍の追撃（高い方の攻撃・魔力で判定）。生存味方全体のHP20%回復＋最大HP20%の障壁。",
+      "scenarios": {
+        "standard": 2152836,
+        "limited": 2983482,
+        "prepared": 2983482,
+        "stopped": 0
+      },
+      "area": 3,
+      "level": 2800,
+      "conditionalRatio": 1
+    },
+    {
+      "id": "garden",
+      "name": "薬毒・豊穣輪舞",
+      "members": [
+        "ミレア",
+        "ヴィオラ"
+      ],
+      "description": "相方が敵全体へ魔法2.00倍、毒状態の敵には3.00倍。生存味方全体のHP15%回復。先に毒を付けると大幅強化。",
+      "scenarios": {
+        "standard": 413118,
+        "limited": 1068978,
+        "prepared": 2024460,
+        "stopped": 0
+      },
+      "area": 0,
+      "level": 1000,
+      "conditionalRatio": 1.894
+    },
+    {
+      "id": "foxmoon",
+      "name": "霊狐・焔月神楽",
+      "members": [
+        "カグラ",
+        "サヨ"
+      ],
+      "description": "相方が敵単体へ物理1.15倍×3連撃（防御20%無視）。火傷中には各打撃1.45倍。生存味方全体の命中18%上昇（2ターン）。",
+      "scenarios": {
+        "standard": 156312,
+        "limited": 644469,
+        "prepared": 1010376,
+        "stopped": 0
+      },
+      "area": 1,
+      "level": 1400,
+      "conditionalRatio": 1.568
+    },
+    {
+      "id": "starthread",
+      "name": "星糸のデュエット",
+      "members": [
+        "セレス",
+        "ルミナ"
+      ],
+      "description": "1回目は敵全体1.60倍＋生存味方全体にHP8%障壁。同ラウンド2回目は「星幕・終演のアリア」へ変化：敵全体4.20倍、防御45%無視、HP22%障壁。高い方の攻撃・魔力を使用。",
+      "scenarios": {
+        "standard": 3581934,
+        "limited": 3251796,
+        "prepared": 3251796,
+        "stopped": 0
+      },
+      "area": 4,
+      "level": 3800,
+      "conditionalRatio": 1
+    },
+    {
+      "id": "stitch",
+      "name": "白黒・綴命の契り",
+      "members": [
+        "リッカ",
+        "リンネ"
+      ],
+      "description": "相方が敵全体へ物理2.20倍、全体にHP12%障壁。発動時に姉妹のどちらかがHP35%以下なら「繕命の奇跡」へ変化：全体3.10倍＋生存味方全体HP18%回復・HP18%障壁。両方の生存が必要。",
+      "scenarios": {
+        "standard": 441627,
+        "limited": 1639899,
+        "prepared": 1770851,
+        "stopped": 0
+      },
+      "area": 1,
+      "level": 1400,
+      "conditionalRatio": 1.08
+    },
+    {
+      "id": "glassaria",
+      "name": "氷紅・硝子の二重奏",
+      "members": [
+        "セリア",
+        "カルミア"
+      ],
+      "description": "相方が敵全体へ魔法2.20倍、防御15%無視。速度低下と回避低下の両方がある敵には3.63倍。生存味方全体HP10%回復。どちらかの弱体を消すと強化が解除される。",
+      "scenarios": {
+        "standard": 632763,
+        "limited": 1464036,
+        "prepared": 2535105,
+        "stopped": 0
+      },
+      "area": 1,
+      "level": 1400,
+      "conditionalRatio": 1.732
+    },
+    {
+      "id": "eclipsecrown",
+      "name": "終始・双冠の断罪",
+      "members": [
+        "アエリエル",
+        "ヴェスペラ"
+      ],
+      "description": "最初の対象の解除可能な強化を1つ取り除き、相方が単体1.25倍×3連撃、防御35%無視。攻撃・魔力の高い方を使用。生存味方全体HP12%回復。倒すと残りの打撃は別の生存敵へ向かう。",
+      "scenarios": {
+        "standard": 1180926,
+        "limited": 1073433,
+        "prepared": 1073433,
+        "stopped": 0
+      },
+      "area": 4,
+      "level": 3800,
+      "conditionalRatio": 1
+    },
+    {
+      "id": "oathguard",
+      "name": "誓約・双剣の護陣",
+      "members": [
+        "リリエット",
+        "ロゼット"
+      ],
+      "description": "相方が敵全体へ物理2.10倍。生存味方全体に最大HP18%の障壁と攻撃12%上昇（2ターン）。連撃をしのいで攻勢へ移る双子の護陣。障壁は加算されない。",
+      "scenarios": {
+        "standard": 847640,
+        "limited": 1977162,
+        "prepared": 1977162,
+        "stopped": 0
+      },
+      "area": 3,
+      "level": 2800,
+      "conditionalRatio": 1
+    },
+    {
+      "id": "rosevow",
+      "name": "薔薇・黎闇の契り",
+      "members": [
+        "ノクテル",
+        "オーリアン"
+      ],
+      "description": "相方が単体へ物理1.30倍×3連撃、防御25%無視。生存味方全体HP12%回復。発動時に姉妹のどちらかがHP40%以下なら「不滅の黎明」：1.65倍×3連撃＋全体HP20%回復。両方の生存が必要。",
+      "scenarios": {
+        "standard": 256554,
+        "limited": 773505,
+        "prepared": 821891,
+        "stopped": 0
+      },
+      "area": 2,
+      "level": 2000,
+      "conditionalRatio": 1.063
+    },
+    {
+      "id": "twinclock",
+      "name": "双刻・星律の終奏",
+      "members": [
+        "エイレーネ",
+        "イリデル"
+      ],
+      "description": "相方が敵全体へ2.40倍、防御20%無視。速度低下と防御低下の両方がある敵には3.84倍。高い方の攻撃・魔力を使用。生存味方全体にHP10%障壁と速度18%上昇（2ターン）。",
+      "scenarios": {
+        "standard": 3091137,
+        "limited": 2938266,
+        "prepared": 5177346,
+        "stopped": 0
+      },
+      "area": 4,
+      "level": 3800,
+      "conditionalRatio": 1.762
+    },
+    {
+      "id": "wisteria",
+      "name": "双藤・毒鎖の刈舞",
+      "members": [
+        "ネヴィア",
+        "エルミナ"
+      ],
+      "description": "相方が単体へ物理1.10倍×3連撃、防御20%無視。毒状態の敵には各打撃1.76倍。命中した敵の受けるHP回復25%低下（2ターン）。毒を先に付けると大幅強化。",
+      "scenarios": {
+        "standard": 152469,
+        "limited": 186132,
+        "prepared": 566448,
+        "stopped": 0
+      },
+      "area": 1,
+      "level": 1400,
+      "conditionalRatio": 3.043
+    },
+    {
+      "id": "twinthunder",
+      "name": "双雷・天穿の連星",
+      "members": [
+        "カリスタ",
+        "ソレーヌ"
+      ],
+      "description": "1回目は敵全体へ物理2.00倍、全体にHP8%障壁・速度15%上昇（2ターン）。同ラウンド2回目は「天穿の終雷」：全体4.40倍、防御35%無視、HP18%障壁。同じキャラの複数個体では2回目を発動できない。",
+      "scenarios": {
+        "standard": 1912086,
+        "limited": 3173904,
+        "prepared": 3173904,
+        "stopped": 0
+      },
+      "area": 3,
+      "level": 2800,
+      "conditionalRatio": 1
+    },
+    {
+      "id": "twinkeys",
+      "name": "双鍵・封界解放",
+      "members": [
+        "メリオラ",
+        "エリゼル"
+      ],
+      "description": "最初の対象の解除可能な強化を1つ剥がし、相方が単体へ1.10倍×4連撃、防御40%無視。高い方の攻撃・魔力を使用。生存味方全体HP12%回復・HP14%障壁。倒すと残りの打撃は別の生存敵へ。",
+      "scenarios": {
+        "standard": 509280,
+        "limited": 1050432,
+        "prepared": 1050432,
+        "stopped": 0
+      },
+      "area": 2,
+      "level": 2000,
+      "conditionalRatio": 1
+    },
+    {
+      "id": "frostshatter",
+      "name": "双晶・氷紋粉砕",
+      "members": [
+        "イゼル",
+        "ヴィレル"
+      ],
+      "description": "単体へ1.15倍×3連撃、防御25%無視。凍結中の標的には各打撃1.955倍。相方の攻撃・魔力の高い方で判定。先に氷紋で凍らせて粉砕する。",
+      "scenarios": {
+        "standard": 502101,
+        "limited": 616473,
+        "prepared": 1520691,
+        "stopped": 0
+      },
+      "area": 3,
+      "level": 2800,
+      "conditionalRatio": 2.467
+    },
+    {
+      "id": "oathreturn",
+      "name": "双誓・黒盾紅剣",
+      "members": [
+        "ロスティア",
+        "アルテア"
+      ],
+      "description": "単体へ物理1.70倍、防御20%無視。姉妹にHP18%障壁・被ダメージ25%軽減（2ターン）。この護誓中に攻撃を受けると、攻撃行動後に相方が攻撃者へ2.40倍の反撃（防御25%無視）。各姉妹の被弾につき1ラウンド1回、合計最大2回。反撃から反撃・共鳴は連鎖しない。",
+      "scenarios": {
+        "standard": 198837,
+        "limited": 310773,
+        "prepared": 310773,
+        "stopped": 0
+      },
+      "area": 3,
+      "level": 2800,
+      "conditionalRatio": 1
+    },
+    {
+      "id": "starconfluence",
+      "name": "双星・星門詠唱",
+      "members": [
+        "セフィラ",
+        "アストレル"
+      ],
+      "description": "共鳴1・2回目は魔力を1つ蓄積し、生存味方全体にHP12%障壁。3回目は蓄積を消費して敵全体へ魔法5.50倍、防御35%無視、全体HP20%障壁。蓄積はラウンドをまたいで保持。各キャラ1ラウンド1回のため、最速で2ラウンド目に合体魔法。",
+      "scenarios": {
+        "standard": 2488804,
+        "limited": 2277088,
+        "prepared": 2277088,
+        "stopped": 0
+      },
+      "area": 4,
+      "level": 3800,
+      "conditionalRatio": 1
+    },
+    {
+      "id": "crimsonwings",
+      "name": "双羽・紅糸乱舞",
+      "members": [
+        "ニゼル",
+        "シャルネ"
+      ],
+      "description": "相方が単体へ物理1.20倍×3連撃、防御25%無視。出血中の標的には各打撃1.92倍。姉の出血から妹の双剣へつなぐ。",
+      "scenarios": {
+        "standard": 172305,
+        "limited": 665016,
+        "prepared": 1119384,
+        "stopped": 0
+      },
+      "area": 0,
+      "level": 1000,
+      "conditionalRatio": 1.683
+    },
+    {
+      "id": "absolutionbells",
+      "name": "双鐘・宵暁の赦し",
+      "members": [
+        "フェルネ",
+        "クラリス"
+      ],
+      "description": "相方が敵全体へ2.30倍、防御20%無視（攻撃・魔力の高い方）。追撃後、生存味方全体の状態異常・弱体を浄化してHP10%回復。戦闘不能の復活や固有スキルの再使用待ち解除は行わない。",
+      "scenarios": {
+        "standard": 949815,
+        "limited": 2024163,
+        "prepared": 2024163,
+        "stopped": 0
+      },
+      "area": 2,
+      "level": 2000,
+      "conditionalRatio": 1
+    },
+    {
+      "id": "eclipserenewal",
+      "name": "双輪・日月巡環",
+      "members": [
+        "ルナリア",
+        "ソラリア"
+      ],
+      "description": "相方が敵全体へ魔法2.60倍、防御30%無視。追撃後、姉妹2人のMPを最大MPの12%ずつ回復。MP回復阻害の影響を受ける。1組1ラウンド最大2回、複製個体では回数を増やせない。",
+      "scenarios": {
+        "standard": 3313452,
+        "limited": 2777088,
+        "prepared": 2777088,
+        "stopped": 0
+      },
+      "area": 4,
+      "level": 3800,
+      "conditionalRatio": 1
+    },
+    {
+      "id": "dreamharvest",
+      "name": "双夢・夢境刈り",
+      "members": [
+        "モリナ",
+        "エルミゼ"
+      ],
+      "description": "相方が単体へ3.20倍、防御30%無視（攻撃・魔力の高い方）。睡眠中の標的には5.76倍。眠らせた直後の一撃を狙う双子の連携。",
+      "scenarios": {
+        "standard": 223716,
+        "limited": 382929,
+        "prepared": 1333893,
+        "stopped": 0
+      },
+      "area": 1,
+      "level": 1400,
+      "conditionalRatio": 3.483
+    },
+    {
+      "id": "dragonliberation",
+      "name": "双竜・天鎖解放",
+      "members": [
+        "ドラシア",
+        "リュシエ"
+      ],
+      "description": "敵全体それぞれの解除可能な強化を1つ剥がし、相方が物理2.70倍、防御25%無視の追撃。姉妹に最大HP20%の障壁。解除対象は強化効果で、HP障壁や魔法陣そのものは破壊しない。",
+      "scenarios": {
+        "standard": 1392156,
+        "limited": 3179832,
+        "prepared": 3179832,
+        "stopped": 0
+      },
+      "area": 3,
+      "level": 2800,
+      "conditionalRatio": 1
+    },
+    {
+      "id": "crownsfinale",
+      "name": "双冠・夜明けの誓剣",
+      "members": [
+        "ネメシア",
+        "エヴェリア"
+      ],
+      "description": "1回目は敵全体へ物理2.10倍、防御20%無視、全体HP10%障壁。同ラウンドにもう一方が連携すると「黒白の終剣」：全体3.80倍、防御35%無視、全体HP18%障壁。終剣の命中直前にHP35%以下の敵には6.08倍。各敵の残HPを個別に判定する。",
+      "scenarios": {
+        "standard": 3611313,
+        "limited": 4536201,
+        "prepared": 8004330,
+        "stopped": 0
+      },
+      "area": 4,
+      "level": 3800,
+      "conditionalRatio": 1.765
+    }
+  ],
+  "decision": "全15部隊で段階ごとの平均総HP・攻撃力の上昇を確認。基本の敵倍率と24組の固有威力は維持。行動不能中の連携のみ停止する共通条件を追加。"
+}

@@ -1,36 +1,38 @@
+import{recoverChapterTwoPending402}from"../core/ChapterTwoRecovery402.js?v=3.1.82-build402";
 import{normalizeVajraRaidWeapon,RAID_VAJRA_SPRITE}from"../core/RaidPresentation.js?v=3.1.48-build368";
-import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.61-build381";
+import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.82-build402";
 // Regression marker only: config.js?v=3.1.10-build329
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323 / CampaignReincarnationSystem.js?v=3.1.4-build323
-import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=3.1.61-build381";
-import{maxMp,normalizeSkillProgress,allLearnedSkills,recommendedSkills,recommendedSkillLoadout,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.49-build369";
-import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=3.1.60-build380";
-import{normalizeFloorBossChallengeState}from"../core/FloorBossChallengeSystem.js?v=3.1.39-build359";
+import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=3.1.82-build402";
+import{maxMp,normalizeSkillProgress,allLearnedSkills,recommendedSkills,recommendedSkillLoadout,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.75-build395";
+import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=3.1.72-build392";
+import{normalizeFloorBossChallengeState}from"../core/FloorBossChallengeSystem.js?v=3.1.72-build392";
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionById,milestoneBossIdsForFloor}from"../data/floorBosses.js?v=3.1.1-build311";
-import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=3.1.61-build381";
+import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=3.1.82-build402";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=3.1.1-build311";
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=3.1.1-build311";
-import{SPECIES}from"../data/species.js?v=3.1.39-build359";
+import{SPECIES}from"../data/species.js?v=3.1.72-build392";
 import{JUVENILE_AMALGA_SKILLS}from"../data/raidSpecies.js?v=3.1.1-build311";
 import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=3.1.1-build311";
-import{normalizeWeaponMastery}from"./WeaponMastery.js?v=3.1.39-build359";
+import{normalizeWeaponMastery}from"./WeaponMastery.js?v=3.1.72-build392";
 import{normalizeOnlineProgressIsolation,recoverInterruptedGuestProgress}from"../online/OnlineProgressIsolation.js?v=3.1.1-build311";
 
-import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=3.1.55-build375";
-import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=3.1.41-build361";
-import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=3.1.60-build380";
+import{normalizeReturnRewards}from"../core/ReturnRewardSystem.js?v=3.1.78-build398";
+import{createAbyssSkillTreeState,normalizeAbyssSkillTree}from"../core/AbyssSkillTreeSystem.js?v=3.1.78-build398";
+import{normalizeEquipmentLoadouts}from"./EquipmentLoadoutSystem.js?v=3.1.72-build392";
 import{normalizeEquipmentAffixLocks,normalizeEquipmentCraftingState}from"./EquipmentAffixCrafting.js?v=3.1.55-build375";
-import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=3.1.61-build381";
-import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=3.1.61-build381";
-import{clearSerialRedemptionLedgerForFullReset,normalizeSerialCodeState,restoreSerialRedemptionLedgerAfterFailedReset}from"../core/SerialCodeSystem.js?v=3.1.61-build381";
+import{normalizeSecretRoomState}from"../core/SecretRoomSystem.js?v=3.1.82-build402";
+import{normalizeCombatPowerRecord}from"../core/CombatPower.js?v=3.1.82-build402";
+import{clearSerialRedemptionLedgerForFullReset,normalizeSerialCodeState,restoreSerialRedemptionLedgerAfterFailedReset}from"../core/SerialCodeSystem.js?v=3.1.82-build402";
 import{normalizeNoticeState}from"../core/NoticeSystem.js?v=3.1.1-build317";
-import{syncCollectionRewardInbox}from"../core/CollectionRewardSystem.js?v=3.1.60-build380";
-import{normalizeAchievementState,syncAchievementRewardInbox}from"../core/AchievementRewardSystem.js?v=3.1.60-build380";
+import{syncCollectionRewardInbox}from"../core/CollectionRewardSystem.js?v=3.1.72-build392";
+import{normalizeAchievementState,syncAchievementRewardInbox}from"../core/AchievementRewardSystem.js?v=3.1.72-build392";
 import{normalizeGachaDrawHistory,normalizeGachaPityState}from"../core/GachaBalanceSystem.js?v=3.1.1-build311";
 import{CAMPAIGN_MAX_FLOOR,legacyFloorToCampaignFloor,floorBossCampaignDisplayFloor,normalizeCampaignState,campaignFloorState}from"../core/Campaign100System.js?v=3.1.42-build362";
 import{normalizeCampaignHeroInvasion,retireLegacyCampaignRewind}from"../core/CampaignHeroEncounterSystem.js?v=3.1.42-build362";
 import{normalizeCampaignReincarnationState}from"../core/CampaignReincarnationSystem.js?v=3.1.42-build362";
-import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=3.1.41-build361";
+import {normalizeChapterTwoCollection395} from '../chapterTwo/ChapterTwoCollection395.js?v=3.1.75-build395';
+import{normalizeMagicCircleState}from"../core/MagicCircleSystem.js?v=3.1.78-build398";
 import{canonicalAttribute,normalizedResistances}from"../data/attributes.js?v=3.1.1-build311";
 import{normalizeEquipmentIdentity}from"../data/equipment.js?v=3.1.55-build375";
 import{createContextualGuideState,normalizeContextualGuide}from"../core/ContextualGuideSystem.js?v=3.1.1-build311";
@@ -398,7 +400,7 @@ function initialState(){
   applyLionelAvatarIdentity(createMonster("slime",{nickname:"リオネル",colorId:"green",personalityId:"bold",obtainedMethod:"campaignProtagonist",obtainedFloor:1}),{rename:true})
  ];
 const state={schemaVersion:SAVE_SCHEMA_VERSION,appVersion:APP_VERSION,flags:{abyssUnlocked:false,trueLevelCapRevealed:false,deepAbyssUnlocked:false,gameClear1000:false,ending1000Played:false,gameClear10000:false,ending10000Played:false,secondWorldEntered:false,tenGodObserved:false,individualValuesDisabled:true},worldPhase:0,player:{gold:1000,crystals:20,maxFloor:1,currentFloor:1,checkpoint:1,inRun:false,nextShopFloor:4,floorSeeds:{},dungeonShapeHistory:[],openedChests:{},bossRewards:{},pendingBossRewards:{},bossKills:{},dangerLevel:1,exploreRun:{id:null,floors:{}}},expeditionSnapshot:null,monsters,party:monsters.map(m=>m.id),recentEncounter:null,recentBossEncounter:null,recentBattleMemory:null,battleMemoryAttempts:{},encounterHistory:normalizeEncounterHistory({}),equipment:[],reserveEquipment:[],bossEquipmentVault:[],equipmentCrafting:{rerolls:0,goldSpent:0,maxLocksUsed:0},inventory:{potions:3,highPotions:0,partyPotions:1,manaPotions:1,highManaPotions:0,partyManaPotions:0,fullManaPotions:0,partyFullManaPotions:0,reviveLeaves:1,statusCures:1,partyStatusCures:0,fullHeals:0,partyFullHeals:0,experienceItems:0,experienceItemsMedium:0,experienceItemsLarge:0,experienceItemsUltra:0,captureCrystals:5,abyssKeys:0},onlineParty:{claimedRewards:[],totalGold:0,totalCaptureCrystals:0,expeditionsCompleted:0,battlesWon:0,captures:0,raidWins:0,raidMaterials:0,raidExchange:{},raidWorld:{},tradeEscrow:{},completedTradeIds:[],tradeHistory:[],processedVitalMutationIds:[],processedBattleEventIds:[],processedExpeditionResultIds:[],activeExpeditionRunId:null,activeManualExploreRunId:null,activeExpeditionOwnerId:null,progressIsolation:{version:1,activeGuestSession:null,interruptedRecovery:{},dismissedLegacyCandidates:[],lastLegacyRepair:null},hostWorld:{ownerId:null,openedChestIds:{},floorSeeds:{},defeatedBossFloors:[],claimedBossRewardFloors:[]}},shop:{captureDaily:{key:null,count:0}},magicCircles:{unlocked:{},instances:[],owned:{},goldSpent:0,version:3},settings:{minimapVisible:false,shopDiscountSeed:null,autoBattle:true,equipmentSort:"rarity",battleSpeed:1,audioEnabled:true,musicVolume:.28,sfxVolume:.45,mapTogglePosition:null,minimapPanelPosition:null,autoExploreButtonPosition:null,explorePartyHudCollapsed:false,exploreAutoMode:"off",exploreAutoMenuOpen:false,gauntletPartyCollapsed:false,tutorialSeen:{},tutorialDefeatsSeen:0,contextualGuide:createContextualGuideState(monsters.length),gmFloorUnlockMax:0},gameMaster:{claimedAt:null,floorUnlockMax:0},gacha:{firstTenUsed:false,tutorialFreeSummons:0,lastDailyKey:null,guerrilla:{salt:null,lastCycle:null},drawHistory:{},pity:normalizeGachaPityState({})},notices:{readIds:[],dailyGift:{dayKey:null,claimedDayKey:null,claimedAt:null},rewardInbox:[]},collectionRewards:{queuedMilestones:[],lastOwnedCount:1,total:0},codex:{encounters:{slime:1},captures:{slime:1},equipment:{}},biomeProgress:{},achievements:{version:1,unlockedIds:[],queuedIds:[],unlockedAt:{}},quests:{},rest:{lastFreeKey:null},records:{kills:0,captures:0,chests:0,purchases:0,combatPower:{highest:0,previous:0,updatedAt:null,history:[]}},serialCodes:{redeemed:{}},secretRooms:{run:null,activeRoom:null},abyssSkillTree:createAbyssSkillTreeState(),secondWorld:{randomEvents:{resolvedFloors:[],counts:{}},elites:{encountered:0,defeated:0,byAffix:{},bySpecies:{}}},floorBossChallenges:{discovered:{},encounters:{},fragments:{},victories:{},contracts:{},processedResults:{}},endgame:{processedSpecialResults:{},teamBattle:{unlocked:false,stage:1,totalWins:0,totalLosses:0,dailyKey:null,dailyAttempts:0,highestRewardedStage:0},trials:{battle:1,loop:1,cleared:[],run:null,dailyKey:null,dailyAttempts:0},emergency:{encounters:0,wins:0,losses:0,lastFloor:0,lastTriggeredFloor:0,records:{},fragments:{},craftCounts:{},craftedGear:[],processedFragmentResults:{},manualChallenges:{dailyKey:null,dailyAttempts:0,unlocks:{}},rescue:{post1000Encounters:0,consecutiveLosses:0,lastResult:null}}}};
- state.migrationNotices={legacyCampaignReset:{version:1,pending:false}};
+ state.migrationNotices={legacyCampaignReset:{version:1,pending:false,retiredBuild:396}};
  state.onlineParty.firstCoopBossClears=[];
  state.onlineParty.completedExpeditionRunIds=[];
  state.onlineParty.coopContributionHistory=[];
@@ -430,7 +432,7 @@ export class SaveService{
   const previousLegacyOrigin=Number(s.lastMigration?.from),legacyHeroLedger=s.campaign100?.heroEncounters310,legacyMissedEncounter=Object.values(plainRecord(legacyHeroLedger?.events)?legacyHeroLedger.events:{}).some(event=>event?.status==="legacy-missed"),legacyClearWithoutAuthoredFinal=s.flags.gameClear1000===true&&legacyHeroLedger?.legacyMigrationApplied===true&&s.campaign100?.finalCompleted!==true,legacyCampaignSource=progressFrom<70||(Number.isFinite(previousLegacyOrigin)&&previousLegacyOrigin<70)||legacyMissedEncounter||legacyClearWithoutAuthoredFinal;
   s.migrationNotices=plainRecord(s.migrationNotices)?s.migrationNotices:{};
   const legacyNotice=plainRecord(s.migrationNotices.legacyCampaignReset)?s.migrationNotices.legacyCampaignReset:{},dismissedAt=typeof legacyNotice.dismissedAt==="string"?legacyNotice.dismissedAt:null;
-  s.migrationNotices.legacyCampaignReset={...legacyNotice,version:1,pending:dismissedAt?false:(legacyCampaignSource||legacyNotice.pending===true),detectedSchema:Math.max(0,Math.floor(Number(legacyNotice.detectedSchema??(legacyCampaignSource?(progressFrom<70?progressFrom:previousLegacyOrigin):from))||0)),legacyMaxFloor:Math.max(0,Math.floor(Number(legacyNotice.legacyMaxFloor??legacyMaxFloor)||0)),dismissedAt};
+  s.migrationNotices.legacyCampaignReset={...legacyNotice,version:1,pending:false,retiredBuild:396,detectedSchema:Math.max(0,Math.floor(Number(legacyNotice.detectedSchema??(legacyCampaignSource?(progressFrom<70?progressFrom:previousLegacyOrigin):from))||0)),legacyMaxFloor:Math.max(0,Math.floor(Number(legacyNotice.legacyMaxFloor??legacyMaxFloor)||0)),dismissedAt};
   const legacy1000Clear=progressFrom<70&&(legacyMaxFloor>1000||Boolean(s.player?.bossRewards?.[1000])||Number(s.player?.bossKills?.[1000]??0)>0||s.flags.deepAbyssUnlocked===true);
   s.flags.gameClear1000=s.flags.gameClear1000===true||legacy1000Clear;
   s.flags.ending1000Played=s.flags.ending1000Played===true;
@@ -789,12 +791,13 @@ export class SaveService{
    }
   }));
   reconcilePartyAndEquipment(s);
-  normalizeMagicCircleState(s);
+  normalizeMagicCircleState(s);normalizeChapterTwoCollection395(s);
   syncCollectionRewardInbox(s);
   normalizeAchievementState(s);
   syncAchievementRewardInbox(s);
   normalizeCampaignState(s);normalizeLionelAvatarState(s);s.campaign100.heroEncounters310=retireLegacyCampaignRewind(normalizeCampaignHeroInvasion(s)).state;normalizeCampaignReincarnationState(s);
   if(from<73){s.expeditionSnapshot=null;if(s.activeBattle&&!s.activeBattle.specialBattle)s.activeBattle.explorationSnapshot=null}
+  recoverChapterTwoPending402(s);
   s.schemaVersion=SAVE_SCHEMA_VERSION;
   s.appVersion=APP_VERSION;
   if(from<SAVE_SCHEMA_VERSION)s.lastMigration={from,to:SAVE_SCHEMA_VERSION,at:new Date().toISOString()};

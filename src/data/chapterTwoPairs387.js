@@ -1,0 +1,5 @@
+export const CHAPTER_TWO_PAIRS387=Object.freeze([
+ {id:'stitch',kind:'姉妹',name:'白黒・綴命の契り',members:['ch2_rikka','ch2_rinne'],names:['リッカ','リンネ'],power:2.2,hits:1,all:true,damageClass:'physical',defenseIgnore:0,shield:.12,scope:'party',emergency:{threshold:.35,name:'白黒・繕命の奇跡',power:3.1,heal:.18,shield:.18},description:'相方が敵全体へ物理2.20倍、全体にHP12%障壁。発動時に姉妹のどちらかがHP35%以下なら「繕命の奇跡」へ変化：全体3.10倍＋生存味方全体HP18%回復・HP18%障壁。両方の生存が必要。'},
+ {id:'glassaria',kind:'姉妹',name:'氷紅・硝子の二重奏',members:['ch2_seria','ch2_carmia'],names:['セリア','カルミア'],power:2.2,hits:1,all:true,damageClass:'magic',defenseIgnore:.15,heal:.1,scope:'party',bonusVsEffects:{kinds:['spdDown','evasionDown'],multiplier:1.65},description:'相方が敵全体へ魔法2.20倍、防御15%無視。速度低下と回避低下の両方がある敵には3.63倍。生存味方全体HP10%回復。どちらかの弱体を消すと強化が解除される。'},
+ {id:'eclipsecrown',kind:'姉妹',name:'終始・双冠の断罪',members:['ch2_aeriel','ch2_vespera'],names:['アエリエル','ヴェスペラ'],power:1.25,hits:3,damageClass:'hybrid',defenseIgnore:.35,heal:.12,scope:'party',dispelOne:true,description:'最初の対象の解除可能な強化を1つ取り除き、相方が単体1.25倍×3連撃、防御35%無視。攻撃・魔力の高い方を使用。生存味方全体HP12%回復。倒すと残りの打撃は別の生存敵へ向かう。'}
+]);

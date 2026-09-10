@@ -6,7 +6,7 @@ export function equipmentAffixesWithSeries(items,seriesEffects){
   // Two different weapon instances may share one authored authority. Their
   // normal stats/affixes both count, but the named fixed authority only fires
   // once so equipping a duplicate in both hands cannot double it.
-  const authorityId=item?.floorBossWeaponEffectId??item?.signatureWeaponEffectId??null;
+  const authorityId=item?.floorBossWeaponEffectId??item?.signatureWeaponEffectId??item?.chapterTwoRelic394??null;
   if(authorityId&&appliedAuthorities.has(authorityId))continue;
   if(authorityId)appliedAuthorities.add(authorityId);
   for(const[key,value]of Object.entries(item.fixedEffects??{})){const amount=Number(value);if(Number.isFinite(amount))result[key]=(result[key]??0)+amount}

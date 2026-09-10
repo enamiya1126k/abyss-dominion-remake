@@ -1,0 +1,5 @@
+export const CHAPTER_TWO_PAIRS386=Object.freeze([
+ {id:'garden',kind:'相棒',name:'薬毒・豊穣輪舞',members:['ch2_mirea','ch2_viola'],names:['ミレア','ヴィオラ'],power:2,hits:1,all:true,damageClass:'magic',defenseIgnore:0,heal:.15,scope:'party',bonusVsStatus:{id:'poison',multiplier:1.5},description:'相方が敵全体へ魔法2.00倍、毒状態の敵には3.00倍。生存味方全体のHP15%回復。先に毒を付けると大幅強化。'},
+ {id:'foxmoon',kind:'姉妹',name:'霊狐・焔月神楽',members:['ch2_kagura','ch2_sayo'],names:['カグラ','サヨ'],power:1.15,hits:3,damageClass:'physical',defenseIgnore:.20,scope:'party',bonusVsStatus:{id:'burn',multiplier:1.45},partyEffect:{kind:'accuracyUp',value:.18,turns:2},description:'相方が敵単体へ物理1.15倍×3連撃（防御20%無視）。火傷中には各打撃1.45倍。生存味方全体の命中18%上昇（2ターン）。'},
+ {id:'starthread',kind:'姉妹機',name:'星糸のデュエット',members:['ch2_celes','ch2_lumina'],names:['セレス','ルミナ'],power:1.6,hits:1,all:true,damageClass:'hybrid',defenseIgnore:0,shield:.08,scope:'party',burst:{threshold:2,name:'星幕・終演のアリア',power:4.2,defenseIgnore:.45,shield:.22},description:'1回目は敵全体1.60倍＋生存味方全体にHP8%障壁。同ラウンド2回目は「星幕・終演のアリア」へ変化：敵全体4.20倍、防御45%無視、HP22%障壁。高い方の攻撃・魔力を使用。'}
+]);

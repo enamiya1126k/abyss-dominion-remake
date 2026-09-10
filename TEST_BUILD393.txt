@@ -1,0 +1,40 @@
+ABYSS DOMINION Build393 / v3.1.73 検証結果
+
+244件成功 / 失敗0件（追加13件）。41変更モジュール構文・457相対参照を確認。
+Build392の46 encounter定義は同一。新規15を加え61定義。
+部隊図鑑は5地域×3段階の15表示で、各3部隊・画像参照・段階切替をNode/VMで確認。
+元キャラクター画像と旧スプライト定義の変更なし。
+
+本弾の検証
+・15部隊に既存60体を編成し、24組すべてのペアが1部隊ずつに同席。
+・既存セーブの踏破済み地域から段階1へ。HP/MP、鍵、宝箱、宝物庫、物語の記録を維持。
+・未踏破、未解放段階、不正な数値、戦闘中の地域/段階変更を拒否。
+・マップの部隊ID・レベル、戦闘エントリー、保存済みpending、部屋判定が一致。
+・3部屋で装備報酬は1回。地域ごとに次段階を解放。段階3で打ち止め。
+・GOLD、経験値、LR/神話装備、＋値、装備Lvの段階差を確認。
+・敗北は無報酬。重複決済・保存後の再実行で追加報酬を与えない。
+・SaveService往復で途中の討伐、訪問、段階、pendingと解放済み段階を保持。
+・最終報酬の保存失敗時はGOLD・装備・段階解放を戻し、pendingを維持して再試行できる。
+・通常再入場で精鋭モードを解除。通常2回の訪問で全70体の捕獲経路が残る。
+・3段階×15部隊×4人に6枠の実装備と指定の魔法陣。段階が上がると能力と装備Lvも上昇。
+・既存の強化再戦フラグが精鋭の装備・レベルへ二重に倍率を掛けない。
+・精鋭AIが支援役、負傷者、ペア、強化中の相手を優先。挑発・捕獲・隔離を考慮。
+・睡眠の仕込みから特効攻撃への実AI経路とMP/再使用待ちを確認。
+・実際の出発処理で精鋭の開始と再開を確認。通常再入場のリセット処理を呼ばない。
+・画面の3段階、未解放表示、装備紹介、再開ボタン、討伐目標を確認。
+
+回帰ゲート
+node --test --test-concurrency=1 --test-skip-pattern='new geometry is opt-in'
+build360-royal / build373* / build375* / build376-chapter-two / build376-field /
+build377-renderer / build377-story-flow / build378-controls / build378-flow /
+build379* / build380* / build381* / build382-chapter-two /
+build383-native-monsters / build384-native-monsters / build385-twins /
+build386-pairs / build387-finale / build388-oath-heroines / build389-keys-thunder /
+build390-crystal-oaths / build391-wings-bells / build392-dreams-crowns / build393-elite-patrols
+（testsフォルダーの .test.mjs を指定）
+ログはvalidation/build393-tests.txt。
+
+検証範囲
+Nodeの実処理とVMアダプターで検証し、描画・アニメーション等は代替。
+ブラウザー実描画、iPhone実機でのレイアウト・操作感・体感難易度は未確認。
+以前のプレビュー制限を迂回していない。公開push/deployは実施していない。

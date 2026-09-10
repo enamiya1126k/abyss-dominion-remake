@@ -1,0 +1,1128 @@
+{
+  "unchangedProfiles": 1683,
+  "buffedProfiles": 792,
+  "unchangedEnemyRolls": 1000,
+  "unchangedUpgradePrices": true,
+  "unchangedV4Instances": true,
+  "researchSurvivesSaveMigration": true,
+  "rows": [
+    {
+      "id": "slot_fate",
+      "name": "運命の三桁環",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "slot_fate",
+        "effect": "slot",
+        "level": 1,
+        "progress": 0,
+        "damageMin": 0.5,
+        "damageMax": 3,
+        "instantKillRoll": 999,
+        "summary": "通常抽選 0.5〜3.00倍"
+      },
+      "oldLevel99": {
+        "id": "slot_fate",
+        "effect": "slot",
+        "level": 99,
+        "progress": 1,
+        "damageMin": 0.5,
+        "damageMax": 3.5,
+        "instantKillRoll": 999,
+        "summary": "通常抽選 0.5〜3.50倍"
+      },
+      "level1": {
+        "id": "slot_fate",
+        "effect": "slot",
+        "level": 1,
+        "progress": 0,
+        "damageMin": 0.5,
+        "damageMax": 3,
+        "instantKillRoll": 999,
+        "summary": "通常抽選 0.5〜3.00倍"
+      },
+      "level99": {
+        "id": "slot_fate",
+        "effect": "slot",
+        "level": 99,
+        "progress": 1,
+        "damageMin": 0.5,
+        "damageMax": 3.5,
+        "instantKillRoll": 999,
+        "summary": "通常抽選 0.5〜3.50倍"
+      }
+    },
+    {
+      "id": "last_life",
+      "name": "不屈の残光",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "last_life",
+        "effect": "lastLife",
+        "level": 1,
+        "progress": 0,
+        "surviveHpRate": 0,
+        "minimumHp": 1,
+        "summary": "致死耐久後 HP1で生存"
+      },
+      "oldLevel99": {
+        "id": "last_life",
+        "effect": "lastLife",
+        "level": 99,
+        "progress": 1,
+        "surviveHpRate": 0.25,
+        "minimumHp": 1,
+        "summary": "致死耐久後 HP25%で生存"
+      },
+      "level1": {
+        "id": "last_life",
+        "effect": "lastLife",
+        "level": 1,
+        "progress": 0,
+        "surviveHpRate": 0,
+        "minimumHp": 1,
+        "summary": "致死耐久後 HP1で生存"
+      },
+      "level99": {
+        "id": "last_life",
+        "effect": "lastLife",
+        "level": 99,
+        "progress": 1,
+        "surviveHpRate": 0.25,
+        "minimumHp": 1,
+        "summary": "致死耐久後 HP25%で生存"
+      }
+    },
+    {
+      "id": "reincarnation",
+      "name": "輪廻の魔法陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "reincarnation",
+        "effect": "revive",
+        "level": 1,
+        "progress": 0,
+        "reviveHpRate": 0.7,
+        "reviveMpRate": 0.5,
+        "summary": "蘇生 HP70%・MP50%"
+      },
+      "oldLevel99": {
+        "id": "reincarnation",
+        "effect": "revive",
+        "level": 99,
+        "progress": 1,
+        "reviveHpRate": 1,
+        "reviveMpRate": 0.8,
+        "summary": "蘇生 HP100%・MP80%"
+      },
+      "level1": {
+        "id": "reincarnation",
+        "effect": "revive",
+        "level": 1,
+        "progress": 0,
+        "reviveHpRate": 0.7,
+        "reviveMpRate": 0.5,
+        "summary": "蘇生 HP70%・MP50%"
+      },
+      "level99": {
+        "id": "reincarnation",
+        "effect": "revive",
+        "level": 99,
+        "progress": 1,
+        "reviveHpRate": 1,
+        "reviveMpRate": 0.8,
+        "summary": "蘇生 HP100%・MP80%"
+      }
+    },
+    {
+      "id": "mana_reversal",
+      "name": "魔力反転陣",
+      "change": "強化",
+      "oldLevel1": {
+        "id": "mana_reversal",
+        "effect": "manaReversal",
+        "level": 1,
+        "progress": 0,
+        "damageMultiplier": 1.124,
+        "summary": "与ダメージ ×1.124"
+      },
+      "oldLevel99": {
+        "id": "mana_reversal",
+        "effect": "manaReversal",
+        "level": 99,
+        "progress": 1,
+        "damageMultiplier": 1.3,
+        "summary": "与ダメージ ×1.300"
+      },
+      "level1": {
+        "id": "mana_reversal",
+        "effect": "manaReversal",
+        "level": 1,
+        "progress": 0,
+        "damageMultiplier": 1.3,
+        "summary": "与ダメージ ×1.300"
+      },
+      "level99": {
+        "id": "mana_reversal",
+        "effect": "manaReversal",
+        "level": 99,
+        "progress": 1,
+        "damageMultiplier": 1.55,
+        "summary": "与ダメージ ×1.550"
+      }
+    },
+    {
+      "id": "deep_silence",
+      "name": "深神封殺陣",
+      "change": "強化",
+      "oldLevel1": {
+        "id": "deep_silence",
+        "effect": "endgameNoCrit",
+        "level": 1,
+        "progress": 0,
+        "preventsCritical": true,
+        "damageReductionRate": 0,
+        "summary": "深淵・十神の会心無効"
+      },
+      "oldLevel99": {
+        "id": "deep_silence",
+        "effect": "endgameNoCrit",
+        "level": 99,
+        "progress": 1,
+        "preventsCritical": true,
+        "damageReductionRate": 0.15,
+        "summary": "深淵・十神の会心無効・被ダメージ15%軽減"
+      },
+      "level1": {
+        "id": "deep_silence",
+        "effect": "endgameNoCrit",
+        "level": 1,
+        "progress": 0,
+        "preventsCritical": true,
+        "damageReductionRate": 0.15,
+        "summary": "深淵・十神の会心無効・被ダメージ15%軽減"
+      },
+      "level99": {
+        "id": "deep_silence",
+        "effect": "endgameNoCrit",
+        "level": 99,
+        "progress": 1,
+        "preventsCritical": true,
+        "damageReductionRate": 0.3,
+        "summary": "深淵・十神の会心無効・被ダメージ30%軽減"
+      }
+    },
+    {
+      "id": "aegis",
+      "name": "半月障壁陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "aegis",
+        "effect": "shield",
+        "level": 1,
+        "progress": 0,
+        "shieldRate": 0.5,
+        "summary": "開戦障壁 最大HP50%"
+      },
+      "oldLevel99": {
+        "id": "aegis",
+        "effect": "shield",
+        "level": 99,
+        "progress": 1,
+        "shieldRate": 0.7,
+        "summary": "開戦障壁 最大HP70%"
+      },
+      "level1": {
+        "id": "aegis",
+        "effect": "shield",
+        "level": 1,
+        "progress": 0,
+        "shieldRate": 0.5,
+        "summary": "開戦障壁 最大HP50%"
+      },
+      "level99": {
+        "id": "aegis",
+        "effect": "shield",
+        "level": 99,
+        "progress": 1,
+        "shieldRate": 0.7,
+        "summary": "開戦障壁 最大HP70%"
+      }
+    },
+    {
+      "id": "opening_rite",
+      "name": "開戦共鳴陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "opening_rite",
+        "effect": "openingBuff",
+        "level": 1,
+        "progress": 0,
+        "damageRate": 0.2,
+        "criticalRate": 0.2,
+        "summary": "味方全体 与ダメ・会心率 +20%"
+      },
+      "oldLevel99": {
+        "id": "opening_rite",
+        "effect": "openingBuff",
+        "level": 99,
+        "progress": 1,
+        "damageRate": 0.3,
+        "criticalRate": 0.3,
+        "summary": "味方全体 与ダメ・会心率 +30%"
+      },
+      "level1": {
+        "id": "opening_rite",
+        "effect": "openingBuff",
+        "level": 1,
+        "progress": 0,
+        "damageRate": 0.2,
+        "criticalRate": 0.2,
+        "summary": "味方全体 与ダメ・会心率 +20%"
+      },
+      "level99": {
+        "id": "opening_rite",
+        "effect": "openingBuff",
+        "level": 99,
+        "progress": 1,
+        "damageRate": 0.3,
+        "criticalRate": 0.3,
+        "summary": "味方全体 与ダメ・会心率 +30%"
+      }
+    },
+    {
+      "id": "judgment20",
+      "name": "二十刻終焉陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "judgment20",
+        "effect": "turn20",
+        "level": 1,
+        "progress": 0,
+        "triggerTurn": 20,
+        "summary": "終焉発動 20ターン"
+      },
+      "oldLevel99": {
+        "id": "judgment20",
+        "effect": "turn20",
+        "level": 99,
+        "progress": 1,
+        "triggerTurn": 12,
+        "summary": "終焉発動 12ターン"
+      },
+      "level1": {
+        "id": "judgment20",
+        "effect": "turn20",
+        "level": 1,
+        "progress": 0,
+        "triggerTurn": 20,
+        "summary": "終焉発動 20ターン"
+      },
+      "level99": {
+        "id": "judgment20",
+        "effect": "turn20",
+        "level": 99,
+        "progress": 1,
+        "triggerTurn": 12,
+        "summary": "終焉発動 12ターン"
+      }
+    },
+    {
+      "id": "blood_acceleration",
+      "name": "血走加速陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "blood_acceleration",
+        "effect": "rage",
+        "level": 1,
+        "progress": 0,
+        "damagePerHit": 0.08,
+        "maxDamageBonus": 1,
+        "firstChainHits": 4,
+        "secondChainHits": 9,
+        "summary": "被弾ごと与ダメ +8%・最大+100%"
+      },
+      "oldLevel99": {
+        "id": "blood_acceleration",
+        "effect": "rage",
+        "level": 99,
+        "progress": 1,
+        "damagePerHit": 0.1,
+        "maxDamageBonus": 1.25,
+        "firstChainHits": 4,
+        "secondChainHits": 9,
+        "summary": "被弾ごと与ダメ +10%・最大+125%"
+      },
+      "level1": {
+        "id": "blood_acceleration",
+        "effect": "rage",
+        "level": 1,
+        "progress": 0,
+        "damagePerHit": 0.08,
+        "maxDamageBonus": 1,
+        "firstChainHits": 4,
+        "secondChainHits": 9,
+        "summary": "被弾ごと与ダメ +8%・最大+100%"
+      },
+      "level99": {
+        "id": "blood_acceleration",
+        "effect": "rage",
+        "level": 99,
+        "progress": 1,
+        "damagePerHit": 0.1,
+        "maxDamageBonus": 1.25,
+        "firstChainHits": 4,
+        "secondChainHits": 9,
+        "summary": "被弾ごと与ダメ +10%・最大+125%"
+      }
+    },
+    {
+      "id": "weak_critical",
+      "name": "弱撃必殺陣",
+      "change": "強化",
+      "oldLevel1": {
+        "id": "weak_critical",
+        "effect": "weakCrit",
+        "level": 1,
+        "progress": 0,
+        "criticalCeiling": 0.48,
+        "minimumCriticalBonus": 0.05,
+        "summary": "弱攻撃の会心補正 最大+38%"
+      },
+      "oldLevel99": {
+        "id": "weak_critical",
+        "effect": "weakCrit",
+        "level": 99,
+        "progress": 1,
+        "criticalCeiling": 0.6,
+        "minimumCriticalBonus": 0.05,
+        "summary": "弱攻撃の会心補正 最大+50%"
+      },
+      "level1": {
+        "id": "weak_critical",
+        "effect": "weakCrit",
+        "level": 1,
+        "progress": 0,
+        "criticalCeiling": 0.48,
+        "minimumCriticalBonus": 0.05,
+        "damageRate": 0.15,
+        "summary": "与ダメ +15%・弱攻撃の会心補正 最大+38%"
+      },
+      "level99": {
+        "id": "weak_critical",
+        "effect": "weakCrit",
+        "level": 99,
+        "progress": 1,
+        "criticalCeiling": 0.6,
+        "minimumCriticalBonus": 0.05,
+        "damageRate": 0.25,
+        "summary": "与ダメ +25%・弱攻撃の会心補正 最大+50%"
+      }
+    },
+    {
+      "id": "sacrifice_lottery",
+      "name": "等価滅殺陣",
+      "change": "強化",
+      "oldLevel1": {
+        "id": "sacrifice_lottery",
+        "effect": "sacrifice",
+        "level": 1,
+        "progress": 0,
+        "survivorShieldRate": 0,
+        "summary": "味方1体と敵1体へ即死判定"
+      },
+      "oldLevel99": {
+        "id": "sacrifice_lottery",
+        "effect": "sacrifice",
+        "level": 99,
+        "progress": 1,
+        "survivorShieldRate": 0.25,
+        "summary": "等価滅殺後、生存者へ最大HP25%障壁"
+      },
+      "level1": {
+        "id": "sacrifice_lottery",
+        "effect": "sacrifice",
+        "level": 1,
+        "progress": 0,
+        "survivorShieldRate": 0.25,
+        "summary": "等価滅殺後、生存者へ最大HP25%障壁"
+      },
+      "level99": {
+        "id": "sacrifice_lottery",
+        "effect": "sacrifice",
+        "level": 99,
+        "progress": 1,
+        "survivorShieldRate": 0.5,
+        "summary": "等価滅殺後、生存者へ最大HP50%障壁"
+      }
+    },
+    {
+      "id": "inheritance",
+      "name": "継承の葬環",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "inheritance",
+        "effect": "inheritance",
+        "level": 1,
+        "progress": 0,
+        "attackRate": 0.3,
+        "defenseRate": 0.3,
+        "speedRate": 0.2,
+        "turns": 5,
+        "summary": "継承 ATK・DEF+30%／SPD+20%・5T"
+      },
+      "oldLevel99": {
+        "id": "inheritance",
+        "effect": "inheritance",
+        "level": 99,
+        "progress": 1,
+        "attackRate": 0.45,
+        "defenseRate": 0.45,
+        "speedRate": 0.3,
+        "turns": 8,
+        "summary": "継承 ATK・DEF+45%／SPD+30%・8T"
+      },
+      "level1": {
+        "id": "inheritance",
+        "effect": "inheritance",
+        "level": 1,
+        "progress": 0,
+        "attackRate": 0.3,
+        "defenseRate": 0.3,
+        "speedRate": 0.2,
+        "turns": 5,
+        "summary": "継承 ATK・DEF+30%／SPD+20%・5T"
+      },
+      "level99": {
+        "id": "inheritance",
+        "effect": "inheritance",
+        "level": 99,
+        "progress": 1,
+        "attackRate": 0.45,
+        "defenseRate": 0.45,
+        "speedRate": 0.3,
+        "turns": 8,
+        "summary": "継承 ATK・DEF+45%／SPD+30%・8T"
+      }
+    },
+    {
+      "id": "gold_power",
+      "name": "黄金換力陣",
+      "change": "強化",
+      "oldLevel1": {
+        "id": "gold_power",
+        "effect": "goldPower",
+        "level": 1,
+        "progress": 0,
+        "damageCap": 0.18,
+        "summary": "所持GOLD換力 最大+18%"
+      },
+      "oldLevel99": {
+        "id": "gold_power",
+        "effect": "goldPower",
+        "level": 99,
+        "progress": 1,
+        "damageCap": 0.3,
+        "summary": "所持GOLD換力 最大+30%"
+      },
+      "level1": {
+        "id": "gold_power",
+        "effect": "goldPower",
+        "level": 1,
+        "progress": 0,
+        "damageCap": 0.3,
+        "summary": "所持GOLD換力 最大+30%"
+      },
+      "level99": {
+        "id": "gold_power",
+        "effect": "goldPower",
+        "level": 99,
+        "progress": 1,
+        "damageCap": 0.5,
+        "summary": "所持GOLD換力 最大+50%"
+      }
+    },
+    {
+      "id": "random_arsenal",
+      "name": "万象抽選陣",
+      "change": "強化",
+      "oldLevel1": {
+        "id": "random_arsenal",
+        "effect": "randomSkill",
+        "level": 1,
+        "progress": 0,
+        "randomSkillDamageRate": 0,
+        "summary": "全スキルからランダム発動"
+      },
+      "oldLevel99": {
+        "id": "random_arsenal",
+        "effect": "randomSkill",
+        "level": 99,
+        "progress": 1,
+        "randomSkillDamageRate": 0.25,
+        "summary": "ランダム発動スキル 与ダメ+25%"
+      },
+      "level1": {
+        "id": "random_arsenal",
+        "effect": "randomSkill",
+        "level": 1,
+        "progress": 0,
+        "randomSkillDamageRate": 0.2,
+        "summary": "ランダム発動スキル 与ダメ+20%"
+      },
+      "level99": {
+        "id": "random_arsenal",
+        "effect": "randomSkill",
+        "level": 99,
+        "progress": 1,
+        "randomSkillDamageRate": 0.45,
+        "summary": "ランダム発動スキル 与ダメ+45%"
+      }
+    },
+    {
+      "id": "sole_survivor",
+      "name": "孤王覚醒陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "sole_survivor",
+        "effect": "soleSurvivor",
+        "level": 1,
+        "progress": 0,
+        "damageMultiplier": 2,
+        "damageReductionRate": 0.4,
+        "summary": "最後の生存者 与ダメ×2.00・被ダメ40%軽減"
+      },
+      "oldLevel99": {
+        "id": "sole_survivor",
+        "effect": "soleSurvivor",
+        "level": 99,
+        "progress": 1,
+        "damageMultiplier": 2.4,
+        "damageReductionRate": 0.55,
+        "summary": "最後の生存者 与ダメ×2.40・被ダメ55%軽減"
+      },
+      "level1": {
+        "id": "sole_survivor",
+        "effect": "soleSurvivor",
+        "level": 1,
+        "progress": 0,
+        "damageMultiplier": 2,
+        "damageReductionRate": 0.4,
+        "summary": "最後の生存者 与ダメ×2.00・被ダメ40%軽減"
+      },
+      "level99": {
+        "id": "sole_survivor",
+        "effect": "soleSurvivor",
+        "level": 99,
+        "progress": 1,
+        "damageMultiplier": 2.4,
+        "damageReductionRate": 0.55,
+        "summary": "最後の生存者 与ダメ×2.40・被ダメ55%軽減"
+      }
+    },
+    {
+      "id": "death_drain",
+      "name": "断末吸魔陣",
+      "change": "強化",
+      "oldLevel1": {
+        "id": "death_drain",
+        "effect": "deathDrain",
+        "level": 1,
+        "progress": 0,
+        "enemyMpDrainRate": 0.65,
+        "summary": "戦闘不能時、敵全体MPを65%減少"
+      },
+      "oldLevel99": {
+        "id": "death_drain",
+        "effect": "deathDrain",
+        "level": 99,
+        "progress": 1,
+        "enemyMpDrainRate": 0.9,
+        "summary": "戦闘不能時、敵全体MPを90%減少"
+      },
+      "level1": {
+        "id": "death_drain",
+        "effect": "deathDrain",
+        "level": 1,
+        "progress": 0,
+        "enemyMpDrainRate": 0.65,
+        "allyMpRecoveryRate": 0.2,
+        "summary": "戦闘不能時、敵MP −65%・生存味方MP +20%（1戦1回）"
+      },
+      "level99": {
+        "id": "death_drain",
+        "effect": "deathDrain",
+        "level": 99,
+        "progress": 1,
+        "enemyMpDrainRate": 0.9,
+        "allyMpRecoveryRate": 0.35,
+        "summary": "戦闘不能時、敵MP −90%・生存味方MP +35%（1戦1回）"
+      }
+    },
+    {
+      "id": "crimson_threshold",
+      "name": "瀕死紅蓮陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "crimson_threshold",
+        "effect": "lowHpPower",
+        "level": 1,
+        "progress": 0,
+        "maximumDamageBonus": 1.25,
+        "summary": "瀕死時の最大与ダメージ +125%"
+      },
+      "oldLevel99": {
+        "id": "crimson_threshold",
+        "effect": "lowHpPower",
+        "level": 99,
+        "progress": 1,
+        "maximumDamageBonus": 1.6,
+        "summary": "瀕死時の最大与ダメージ +160%"
+      },
+      "level1": {
+        "id": "crimson_threshold",
+        "effect": "lowHpPower",
+        "level": 1,
+        "progress": 0,
+        "maximumDamageBonus": 1.25,
+        "summary": "瀕死時の最大与ダメージ +125%"
+      },
+      "level99": {
+        "id": "crimson_threshold",
+        "effect": "lowHpPower",
+        "level": 99,
+        "progress": 1,
+        "maximumDamageBonus": 1.6,
+        "summary": "瀕死時の最大与ダメージ +160%"
+      }
+    },
+    {
+      "id": "death_mirror",
+      "name": "即死返鏡陣",
+      "change": "強化",
+      "oldLevel1": {
+        "id": "death_mirror",
+        "effect": "deathMirror",
+        "level": 1,
+        "progress": 0,
+        "reflectedHealRate": 0,
+        "summary": "最初の即死を無効化・反射"
+      },
+      "oldLevel99": {
+        "id": "death_mirror",
+        "effect": "deathMirror",
+        "level": 99,
+        "progress": 1,
+        "reflectedHealRate": 0.3,
+        "summary": "即死反射後 HP30%回復"
+      },
+      "level1": {
+        "id": "death_mirror",
+        "effect": "deathMirror",
+        "level": 1,
+        "progress": 0,
+        "reflectedHealRate": 0,
+        "openingShieldRate": 0.25,
+        "summary": "開戦時に自身へHP25%障壁・最初の即死を反射"
+      },
+      "level99": {
+        "id": "death_mirror",
+        "effect": "deathMirror",
+        "level": 99,
+        "progress": 1,
+        "reflectedHealRate": 0.3,
+        "openingShieldRate": 0.45,
+        "summary": "開戦時に自身へHP45%障壁・最初の即死を反射・反射後HP30%回復"
+      }
+    },
+    {
+      "id": "raid_zero_sovereign",
+      "name": "零界凍結陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "raid_zero_sovereign",
+        "effect": "shield",
+        "level": 1,
+        "progress": 0,
+        "shieldRate": 1,
+        "summary": "開戦障壁 最大HP100%"
+      },
+      "oldLevel99": {
+        "id": "raid_zero_sovereign",
+        "effect": "shield",
+        "level": 99,
+        "progress": 1,
+        "shieldRate": 1.5,
+        "summary": "開戦障壁 最大HP150%"
+      },
+      "level1": {
+        "id": "raid_zero_sovereign",
+        "effect": "shield",
+        "level": 1,
+        "progress": 0,
+        "shieldRate": 1,
+        "summary": "開戦障壁 最大HP100%"
+      },
+      "level99": {
+        "id": "raid_zero_sovereign",
+        "effect": "shield",
+        "level": 99,
+        "progress": 1,
+        "shieldRate": 1.5,
+        "summary": "開戦障壁 最大HP150%"
+      }
+    },
+    {
+      "id": "raid_vajra_beast",
+      "name": "天雷轟界陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "raid_vajra_beast",
+        "effect": "rage",
+        "level": 1,
+        "progress": 0,
+        "damagePerHit": 0.14,
+        "maxDamageBonus": 1.5,
+        "firstChainHits": 2,
+        "secondChainHits": 5,
+        "summary": "被弾ごと与ダメ +14%・最大+150%"
+      },
+      "oldLevel99": {
+        "id": "raid_vajra_beast",
+        "effect": "rage",
+        "level": 99,
+        "progress": 1,
+        "damagePerHit": 0.2,
+        "maxDamageBonus": 2.25,
+        "firstChainHits": 2,
+        "secondChainHits": 5,
+        "summary": "被弾ごと与ダメ +20%・最大+225%"
+      },
+      "level1": {
+        "id": "raid_vajra_beast",
+        "effect": "rage",
+        "level": 1,
+        "progress": 0,
+        "damagePerHit": 0.14,
+        "maxDamageBonus": 1.5,
+        "firstChainHits": 2,
+        "secondChainHits": 5,
+        "summary": "被弾ごと与ダメ +14%・最大+150%"
+      },
+      "level99": {
+        "id": "raid_vajra_beast",
+        "effect": "rage",
+        "level": 99,
+        "progress": 1,
+        "damagePerHit": 0.2,
+        "maxDamageBonus": 2.25,
+        "firstChainHits": 2,
+        "secondChainHits": 5,
+        "summary": "被弾ごと与ダメ +20%・最大+225%"
+      }
+    },
+    {
+      "id": "ch2_chain394",
+      "name": "鏡糸連環陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "ch2_chain394",
+        "effect": "chapterTwoRelic394",
+        "level": 1,
+        "progress": 0,
+        "relicEffects394": {
+          "chain": 0.12
+        },
+        "summary": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +12%"
+      },
+      "oldLevel99": {
+        "id": "ch2_chain394",
+        "effect": "chapterTwoRelic394",
+        "level": 99,
+        "progress": 1,
+        "relicEffects394": {
+          "chain": 0.24
+        },
+        "summary": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +24%"
+      },
+      "level1": {
+        "id": "ch2_chain394",
+        "effect": "chapterTwoRelic394",
+        "level": 1,
+        "progress": 0,
+        "relicEffects394": {
+          "chain": 0.12
+        },
+        "summary": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +12%"
+      },
+      "level99": {
+        "id": "ch2_chain394",
+        "effect": "chapterTwoRelic394",
+        "level": 99,
+        "progress": 1,
+        "relicEffects394": {
+          "chain": 0.24
+        },
+        "summary": "同一ラウンド・同じ敵への2撃目以降の与ダメージ +24%"
+      }
+    },
+    {
+      "id": "ch2_dream394",
+      "name": "夢喰封花陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "ch2_dream394",
+        "effect": "chapterTwoRelic394",
+        "level": 1,
+        "progress": 0,
+        "relicEffects394": {
+          "sleep": 0.25
+        },
+        "summary": "睡眠中の敵への直接与ダメージ +25%"
+      },
+      "oldLevel99": {
+        "id": "ch2_dream394",
+        "effect": "chapterTwoRelic394",
+        "level": 99,
+        "progress": 1,
+        "relicEffects394": {
+          "sleep": 0.5
+        },
+        "summary": "睡眠中の敵への直接与ダメージ +50%"
+      },
+      "level1": {
+        "id": "ch2_dream394",
+        "effect": "chapterTwoRelic394",
+        "level": 1,
+        "progress": 0,
+        "relicEffects394": {
+          "sleep": 0.25
+        },
+        "summary": "睡眠中の敵への直接与ダメージ +25%"
+      },
+      "level99": {
+        "id": "ch2_dream394",
+        "effect": "chapterTwoRelic394",
+        "level": 99,
+        "progress": 1,
+        "relicEffects394": {
+          "sleep": 0.5
+        },
+        "summary": "睡眠中の敵への直接与ダメージ +50%"
+      }
+    },
+    {
+      "id": "ch2_pair394",
+      "name": "双誓共鳴陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "ch2_pair394",
+        "effect": "chapterTwoRelic394",
+        "level": 1,
+        "progress": 0,
+        "relicEffects394": {
+          "pair": 0.15
+        },
+        "summary": "ペア連携の与ダメージ +15%"
+      },
+      "oldLevel99": {
+        "id": "ch2_pair394",
+        "effect": "chapterTwoRelic394",
+        "level": 99,
+        "progress": 1,
+        "relicEffects394": {
+          "pair": 0.35
+        },
+        "summary": "ペア連携の与ダメージ +35%"
+      },
+      "level1": {
+        "id": "ch2_pair394",
+        "effect": "chapterTwoRelic394",
+        "level": 1,
+        "progress": 0,
+        "relicEffects394": {
+          "pair": 0.15
+        },
+        "summary": "ペア連携の与ダメージ +15%"
+      },
+      "level99": {
+        "id": "ch2_pair394",
+        "effect": "chapterTwoRelic394",
+        "level": 99,
+        "progress": 1,
+        "relicEffects394": {
+          "pair": 0.35
+        },
+        "summary": "ペア連携の与ダメージ +35%"
+      }
+    },
+    {
+      "id": "ch2_guard394",
+      "name": "天鎖護誓陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "ch2_guard394",
+        "effect": "chapterTwoRelic394",
+        "level": 1,
+        "progress": 0,
+        "relicEffects394": {
+          "guard": 0.1,
+          "counter": 0.2
+        },
+        "summary": "ガード中に自身が受ける敵の直接攻撃を軽減 −10% ／ 既存の反撃の与ダメージ +20%"
+      },
+      "oldLevel99": {
+        "id": "ch2_guard394",
+        "effect": "chapterTwoRelic394",
+        "level": 99,
+        "progress": 1,
+        "relicEffects394": {
+          "guard": 0.2,
+          "counter": 0.4
+        },
+        "summary": "ガード中に自身が受ける敵の直接攻撃を軽減 −20% ／ 既存の反撃の与ダメージ +40%"
+      },
+      "level1": {
+        "id": "ch2_guard394",
+        "effect": "chapterTwoRelic394",
+        "level": 1,
+        "progress": 0,
+        "relicEffects394": {
+          "guard": 0.1,
+          "counter": 0.2
+        },
+        "summary": "ガード中に自身が受ける敵の直接攻撃を軽減 −10% ／ 既存の反撃の与ダメージ +20%"
+      },
+      "level99": {
+        "id": "ch2_guard394",
+        "effect": "chapterTwoRelic394",
+        "level": 99,
+        "progress": 1,
+        "relicEffects394": {
+          "guard": 0.2,
+          "counter": 0.4
+        },
+        "summary": "ガード中に自身が受ける敵の直接攻撃を軽減 −20% ／ 既存の反撃の与ダメージ +40%"
+      }
+    },
+    {
+      "id": "ch2_crown394",
+      "name": "終冠星律陣",
+      "change": "性能維持",
+      "oldLevel1": {
+        "id": "ch2_crown394",
+        "effect": "chapterTwoRelic394",
+        "level": 1,
+        "progress": 0,
+        "relicEffects394": {
+          "execute": 0.2
+        },
+        "summary": "HP35%以下の敵への直接与ダメージ +20%"
+      },
+      "oldLevel99": {
+        "id": "ch2_crown394",
+        "effect": "chapterTwoRelic394",
+        "level": 99,
+        "progress": 1,
+        "relicEffects394": {
+          "execute": 0.4
+        },
+        "summary": "HP35%以下の敵への直接与ダメージ +40%"
+      },
+      "level1": {
+        "id": "ch2_crown394",
+        "effect": "chapterTwoRelic394",
+        "level": 1,
+        "progress": 0,
+        "relicEffects394": {
+          "execute": 0.2
+        },
+        "summary": "HP35%以下の敵への直接与ダメージ +20%"
+      },
+      "level99": {
+        "id": "ch2_crown394",
+        "effect": "chapterTwoRelic394",
+        "level": 99,
+        "progress": 1,
+        "relicEffects394": {
+          "execute": 0.4
+        },
+        "summary": "HP35%以下の敵への直接与ダメージ +40%"
+      }
+    },
+    {
+      "id": "ch2_prism398",
+      "name": "異彩協奏陣",
+      "change": "新規",
+      "oldLevel1": null,
+      "oldLevel99": null,
+      "level1": {
+        "id": "ch2_prism398",
+        "effect": "circle398_prism",
+        "level": 1,
+        "progress": 0,
+        "perExtraElement": 0.1,
+        "maxExtraElements": 3,
+        "summary": "生存味方の属性が1種類増すごとに与ダメ +10%（2種類以上・最大+30%）"
+      },
+      "level99": {
+        "id": "ch2_prism398",
+        "effect": "circle398_prism",
+        "level": 99,
+        "progress": 1,
+        "perExtraElement": 0.15,
+        "maxExtraElements": 3,
+        "summary": "生存味方の属性が1種類増すごとに与ダメ +15%（2種類以上・最大+45%）"
+      }
+    },
+    {
+      "id": "ch2_hex398",
+      "name": "百禍織刻陣",
+      "change": "新規",
+      "oldLevel1": null,
+      "oldLevel99": null,
+      "level1": {
+        "id": "ch2_hex398",
+        "effect": "circle398_hex",
+        "level": 1,
+        "progress": 0,
+        "perAilment": 0.12,
+        "maxAilments": 3,
+        "summary": "敵の状態異常1種類ごとに与ダメ +12%（最大3種類・+36%）"
+      },
+      "level99": {
+        "id": "ch2_hex398",
+        "effect": "circle398_hex",
+        "level": 99,
+        "progress": 1,
+        "perAilment": 0.18,
+        "maxAilments": 3,
+        "summary": "敵の状態異常1種類ごとに与ダメ +18%（最大3種類・+54%）"
+      }
+    },
+    {
+      "id": "ch2_reserve398",
+      "name": "澄明蓄魔陣",
+      "change": "新規",
+      "oldLevel1": null,
+      "oldLevel99": null,
+      "level1": {
+        "id": "ch2_reserve398",
+        "effect": "circle398_reserve",
+        "level": 1,
+        "progress": 0,
+        "damageRate": 0.3,
+        "mpThreshold": 0.8,
+        "summary": "命中直前のMP80%以上で与ダメ +30%（消費後のMPで判定）"
+      },
+      "level99": {
+        "id": "ch2_reserve398",
+        "effect": "circle398_reserve",
+        "level": 99,
+        "progress": 1,
+        "damageRate": 0.5,
+        "mpThreshold": 0.8,
+        "summary": "命中直前のMP80%以上で与ダメ +50%（消費後のMPで判定）"
+      }
+    }
+  ]
+}

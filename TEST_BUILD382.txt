@@ -1,0 +1,114 @@
+ABYSS DOMINION Build382 / v3.1.62 検証記録
+
+実行環境：Node.js v24.19.0
+基準：Build381 / ffe072437c97e689f3fffd38f26fd8f09c62a7c7
+
+node --test --test-skip-pattern='new geometry is opt-in' tests/build360-royal.test.mjs tests/build373*.test.mjs tests/build375*.test.mjs tests/build376-chapter-two.test.mjs tests/build376-field.test.mjs tests/build377-renderer.test.mjs tests/build377-story-flow.test.mjs tests/build378-controls.test.mjs tests/build378-flow.test.mjs tests/build379*.test.mjs tests/build380*.test.mjs tests/build381*.test.mjs tests/build382-chapter-two.test.mjs
+
+✔ single room walkable geometry has one connected component and reachable throne (37.240834ms)
+✔ all 16 surviving hero combinations get only living actors and valid encounter copy (1.125004ms)
+✔ defeat restores exact battle consumables and gold, retains road wounds, floor and loot receipts; one rewind only (5.237388ms)
+✔ victory is saved before the ending and reload retains the walk-to-throne phase (0.44376ms)
+✔ memory battles restore supplies, never alter campaign heroes, and award title only once (0.601695ms)
+✔ retreat restores inventory and allows a fresh attempt without clearing the campaign (1.179774ms)
+✔ floor 40 through 100 all ranks always receive circles; 39 to 40 is a gradual change (3.19429ms)
+✔ new state survives actual SaveService reload, completed chamber remains accessible and reincarnation resets only room progress (68.592462ms)
+✔ actual final-result dispatch reaches handler exactly once (2.139472ms)
+✔ real exploration movement and royal controller require a second approach after dialogue and dispose listeners (31.796944ms)
+✔ actual final battle settlement enters victory/rewind/memory phases without a Sairan combat (8.011765ms)
+✔ redacted share-style notification keeps the live DOM and bounded diagnostics (2.184199ms)
+✔ boot-time errors still display a failure screen (1.005606ms)
+✔ real errors with message, source, location, or error object are not suppressed (2.466818ms)
+✔ promise rejections stay visible and error text is escaped (0.764567ms)
+✔ readiness is set only after a successful main import (0.277273ms)
+✔ weapon: old fixed slots accept both positions (2.481871ms)
+✔ armor: old fixed slots accept both positions (0.57153ms)
+✔ accessory: old fixed slots accept both positions (0.337282ms)
+✔ level, owner and category restrictions remain (0.334998ms)
+✔ two separate pieces coexist; a piece moves between owners without duplication (0.318323ms)
+✔ battle updates retain the connected strip and its horizontal position (1.47317ms)
+✔ all eight turn entries are rendered and named boss uses a compact label (13.658643ms)
+✔ locked accounts never acquire chapter data or entry; reaching 100 and losing is insufficient (74.83832ms)
+✔ win plus 100 unlocks; a lower-floor victory flag alone does not (3.661786ms)
+✔ sequence requires intro, two seals, and local encounters; no off-room rewards (111.279506ms)
+✔ victory, chest, replays and first clear rewards are idempotent and leave chapter one intact (22.519121ms)
+✔ defeat and retreat award nothing and leave an encounter available (0.990573ms)
+✔ actual SaveService preserves room position, story and pending battle token after reload (17.270575ms)
+✔ authored enemies and portraits exist; all six rooms are connected and walkable (54.025908ms)
+✔ actual battle settlement integration clears the checkpoint and commits rewards together (2.984097ms)
+✔ failed result save rolls rewards and progress back and retains a retryable battle (2.520859ms)
+✔ area gate rejects a corrupted jump to the final room without seals (1.017683ms)
+✔ tap reaches a doorway; a new-room spawn is not overwritten on disposal (144.201758ms)
+✔ map directions walk the party; entering a room never triggers a battle without movement (18.393765ms)
+✔ tapping a visible enemy reaches a single encounter and disposes cleanly (11.846639ms)
+✔ actual first-chapter renderer and minimap draw all 30 chapter-two rooms at mobile/desktop widths (1157.842744ms)
+✔ title transitions directly to the cast conversation exactly once (12.463366ms)
+✔ intro completion saves, returns home and enables dungeon hint; replay never rolls progress back (6.920192ms)
+✔ story save failure does not advance; closing mid-story resumes at the unread line (3.768895ms)
+✔ automatic introduction does not open before clear, during battle or exploration, or after completion (9.330451ms)
+✔ new-region stories resume and final outro opens ending; rematches unlock only after last line (12.584987ms)
+✔ shared controls: short tap opens detail once, hold-drag saves independent positions and avoids bottom menu (5.357989ms)
+✔ first-chapter defaults retain immediate drag, minimap visibility toggle and auto mode toggle (1.25041ms)
+✔ second-chapter map button toggles visibility while map body opens details and click-only auto works (0.935361ms)
+✔ actual chapter-two screen binds shared map controls and completed-region return without missing nodes (61.787526ms)
+✔ actual contribution report precedes reward and a separate unlock modal; clicks cannot duplicate payouts (15.374796ms)
+✔ memory levels unlock by highest defeated stage, replay does not advance, and defeats restore supplies (39.913479ms)
+✔ legacy victories migrate once, old in-flight battle keeps its stage, and level cap is explicit (2.260693ms)
+✔ selected memory level creates actual stronger hero stats; first encounter scaling remains the same (18.626081ms)
+✔ auto remains on after clearing and still walks to a remaining objective (72.896312ms)
+✔ auto walks towards an enemy in an uncleared room (6.853262ms)
+✔ departure selector uses unlocked stages, switches backgrounds, and royal selection has no +/- (48.634059ms)
+✔ memory selector shows selected level and matching rewards then passes exactly that stage to battle (4.920058ms)
+✔ automatic battle advances contribution and reward exactly once; key progress waits for pickup (82.418835ms)
+✔ manual battle waits for input at report and reward (9.19192ms)
+✔ old automatic timer cannot dismiss another modal after a manual click (4.602305ms)
+✔ four second-chapter enemies including boss expose individual name, HP and touch targets above sprites (18.906598ms)
+✔ guardian defeat drops persistent key; pickup alone unlocks the gate, once (71.842515ms)
+✔ old cleared seals migrate without relocking; old in-flight fight remains settleable (6.177177ms)
+✔ five optional vaults: gate before victory, ten unique boxes, protected weapon and no reset exploit (168.368069ms)
+✔ cleared areas respawn three normal encounters per visit, without resetting seals or initial rewards (25.312395ms)
+✔ hero alliance grants missing heroes and four weapons once, preserves an existing trained hero and original party (17.808836ms)
+✔ vault granted skills use supported combat types and produce finite damage (0.595186ms)
+✔ legacy public equipment snapshots recover every endgame atlas cell without mutating snapshot (1.900686ms)
+✔ royal reward receipt uses shared victory and party layout without awarding currency again (17.130107ms)
+✔ all 40 encounter profiles have six real gear pieces, distinct role circles and finite tuned stats (68.680517ms)
+✔ equipment choices and levels affect combat, and magical attackers select magical weapons (2.997988ms)
+✔ shared encounter preparation preserves authored loadout metadata without random rerolls (2.527749ms)
+✔ real circle profile is applied after authored stats and gear, retaining reversible circle multipliers (2.463955ms)
+✔ AI chooses heal, cleanse and one revive, respecting MP, cooldowns, seals and reload (3.184767ms)
+✔ AI targets prepared victims and responds to player buffs and recast delay (0.684037ms)
+✔ chapter authority ultimates begin at round four for the leader, once; other modes retain eligibility (1.149589ms)
+✔ real resolver applies timed party buffs without permanently inflating stats (5.454131ms)
+✔ real resolver heals, cleanses, revives and restores MP by the advertised amounts (2.824841ms)
+✔ real resolver performs defense-break combos and follows the AI-selected poisoned victim (3.134582ms)
+✔ actual defeat settlement and SaveService reload preserve KO, MP, consumables and progress; all-KO exits home once (56.23916ms)
+✔ retreat preserves remaining HP and MP and offers exploration; failed save can retry without recovery (4.621914ms)
+✔ alpha-aware sizing enlarges small normal silhouettes and fits boss silhouettes to mobile columns and label headroom (0.237043ms)
+✔ second-chapter markup gives each enemy an overhead name and rank outside its scaled art (3.854312ms)
+ℹ tests 80
+ℹ suites 0
+ℹ pass 80
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1419.423785
+
+追加検証
+・変更したJavaScript 37モジュール：node --check 成功
+・変更したモジュールの相対import先：全件存在
+・新しいCSSを既存の戦闘CSSより後に読み込むことを確認
+・配布ファイルのハッシュとZIP展開内容を確認
+
+検証上の制限
+・ブラウザー描画とiPhone Safari実機の見た目は未確認。
+  この環境のブラウザーからローカル確認ページへの接続が制限されました。
+・旧版との差分比較専用の build377-flow-map / build378-complete と、
+  build380-progression 内の new geometry is opt-in は、参照する過去版
+  build376 / build377 / build379 の外部ディレクトリーが不足するため対象外。
+・参考実行した build347-audit は4件失敗。未改変のBuild381でも同じ4件が失敗し、
+  旧スキル値（強化28%、蘇生38%）・廃止済み関数等を前提とする検証であることを確認。
+  第一章のスキルや期待値をこのパッチに合わせて変更する対応は行っていません。
+  Build382の新しい戦術には別途14件の検証を実行し、すべて成功しています。
+・基準元index.htmlには過去のbuild328/build330のCSSへの参照が残っていますが、
+  その2ファイルは基準リポジトリーにありません。今回追加したCSSは存在を検証済みです。

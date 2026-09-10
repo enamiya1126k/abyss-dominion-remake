@@ -1,0 +1,72 @@
+ABYSS DOMINION 引継ぎ：Build385 / v3.1.65、第三弾完了
+
+依頼の軸
+第二章を充実させ、第三章へはまだ進めない。
+全5回、各回N/R/SR/SSR/UR/LR/神話を各1体、計7体。今回まで21体。残り2回14体。
+ユーザーの最新希望：全員美少女寄り、双子を多め。参考はメイド・ゴシック・天使・キョンシー。
+128〜512px程度のドット絵風、正面〜左向き、8モーション。
+次回も7体＋4固有技ずつ、捕獲・育成・敵の実装備と魔法陣・相性を考えるAI。
+既存の双子3組はIDを保ち、揃えた時に強い専用連携を維持する。
+
+今回の7体
+ch2_lilica N 煤紫の剣魔リリカ
+ch2_ryune R 湖鏡の侍女リュネ／ch2_rose SR 紅鏡の侍女ロゼ
+ch2_shion SSR 幽符の姉シオン／ch2_suiren UR 霊鈴の妹スイレン
+ch2_aure LR 暁翼の祈姫アウレ／ch2_noelle 神話 宵翼の詠姫ノエル
+
+配置
+roam0_1 lilica/kororu/balk：倒木の小径
+roam0_4 ryune/rose/balk：東の封印樹
+roam2_4 shion/suiren/velg：王権の裁定
+roam3_4 aure/noelle：因果の聖壇、任意の追加強敵Lv4300
+384の6部隊を維持。383の残り7体の出現経路も維持。全21体の再探索アクセスをテスト済み。
+
+実装
+src/data/chapterTwoSpecies385.js：28固有技。383の共通フィールドを継承、chapterTwoSet385フラグ。
+species / ChapterTwoMonsters383 / ChapterTwoTactics382 / EnemyAI / capture helperへ登録。
+ChapterTwoMonsters385.js：敵技情報と固定の再探索部隊。
+384だけを条件にしていた吸魔・蘇生の残MP保持・浄化・武器分類・敵強化ボーナスの判定は385にも対応。
+通常物語ボス・鍵・封印・宝物庫条件は変更しない。
+
+双子共鳴
+src/battle/TwinResonance385.js にペア情報、成立判定、発動予約、非同期の連携進行。
+main.js resolveTwinResonance385 が既存の命中・ダメージ・回復・障壁処理へ接続。
+通常commandのtriggerAlliance=true後と、enemyTurnの行動後に発動。
+対象はオフラインの通常戦闘（第一章/第二章/王室など）。オンラインサーバーには今回移植していない。
+TwinStatus385.jsは編成・図鑑・通常戦闘の状態表示。onlineModeでは共鳴バッジを表示しない。
+使用履歴は battle.twinResonance385.used['ally|enemy:pair:speciesId']=turn。
+saveBattleCheckpointが明示保存し、resumeSavedBattleのdata展開で復帰。
+同じ姉妹の複製、同ラウンドの蘇生や再開で回数は戻らない。
+WeakSetで実行中の再入を拒否。反撃などで片方が倒れたら残りの追撃・回復を中止。
+メイド3×1.10物理、防御30%無視＋双子障壁12%。
+キョンシー全体2.20魔法＋被回復35%低下2T、全体回復12%。
+天使全体3.00、ATK/MATK高い方＋全体回復20%・障壁20%。
+SkillSystem.skillDamage自体はhybridに非対応なので、共鳴の味方処理内で高い攻撃能力の分類へ変換している。
+敵側は既存dealEnemyHitのhybrid対応を利用。
+回復はrecoverBattleHp/recoverFloorBossHp、障壁はcircleShields/_floorBossHpShieldの残量比較。
+追加MP消費なし。各姉妹1ラウンド1回。追加追撃から再発動なし。
+
+絵
+7枚のPNGは画像生成ツールで制作し、そのまま同梱。
+assets/monsters/ch2_385_{key}/sheet.png
+src/data/chapterTwoSprites385.js：8モーションのbox/clip/paths。
+ChapterTwoSprite383.jsが3セット21体のSVG/Canvasを共通で描画。
+待機3・歩行2・攻撃・被撃・戦闘不能。256枠／最大224px／足元244。
+assetsの元画像を変えず、主要シルエットの最近傍領域をクリップして他のポーズを分離。
+artifacts/build385/monsters.html：7体＋双子効果の一覧、8モーションボタン。
+artifacts/build385/prompts.json：全生成プロンプト。
+
+検証
+131件成功（新規20件）。validation/build385-art.jsonは56ポーズ保持率1.0、他主要画素混入0。
+validation/build385-modules.jsonは更新57モジュール構文/参照検査。
+ブラウザー/iPhone実機の見た目は未確認。以前のプレビューURLポリシー拒否を迂回しない。
+将来オンライン対応するならRoomStoreだけでなくRaid/Team系の別エンジン、状態同期、UIも確認が必要。
+オンライン未対応を「共鳴中」と表示しないようにする。
+
+配布
+ABYSS_Build385_chapter_two_monsters_03.zip
+Build381/382/383/384へ上書きできる累積パッチ。最新の推奨ベースは384。
+BUILD385_MANIFEST.jsonが今回の正しいファイルハッシュ一覧。
+Git HEADは以前のBuild381 ffe072437c97e689f3fffd38f26fd8f09c62a7c7のまま。
+Git差分は384からの差分ではない。次回は385の現ファイルをスナップショットしてから作業する。
+公開push/deployは行っていない。実行時ランキング・友達・決済JSONは同梱しない。

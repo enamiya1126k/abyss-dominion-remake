@@ -1,3 +1,5 @@
+import {CHAPTER_TWO_CIRCLES394,isChapterTwoCircle394,chapterTwoCircleEffects394,RELIC_EFFECT_LABELS394,relicPercent394} from '../data/chapterTwoRelics394.js?v=3.1.74-build394';
+import {MAGIC_CIRCLES398,isMagicCircle398,magicCircleEffects398} from '../data/magicCircles398.js?v=3.1.78-build398';
 const freeze=value=>Object.freeze(value);
 
 export const MAGIC_CIRCLE_STATE_VERSION=4;
@@ -27,22 +29,24 @@ export const MAGIC_CIRCLES=freeze([
  circle("last_life","不屈の残光","1","gold",120_000_000,"戦闘中1回、致死ダメージをHP1で耐える。","lastLife"),
  circle("reincarnation","輪廻の魔法陣","∞","rose",360_000_000,"戦闘不能時に一度だけ蘇生する。戦闘全体の蘇生上限は99回。","revive"),
  circle("mana_reversal","魔力反転陣","MP","cyan",160_000_000,"与ダメージ上昇。MP回復時、回復量に応じてHPを失う。","manaReversal"),
- circle("deep_silence","深神封殺陣","×","black",900_000_000,"深淵・十神から受ける攻撃はクリティカルにならない。","endgameNoCrit"),
+ circle("deep_silence","深神封殺陣","×","black",900_000_000,"深淵・十神からの会心を無効化し、被ダメージも軽減する。","endgameNoCrit"),
  circle("aegis","半月障壁陣","50","blue",220_000_000,"戦闘開始時、最大HP50%分のシールドを得る。","shield"),
  circle("opening_rite","開戦共鳴陣","20","red",280_000_000,"戦闘開始時、味方全体の最終ダメージ・会心率+20%。","openingBuff"),
  circle("judgment20","二十刻終焉陣","XX","black",1_600_000_000,"20ターン生存すると、自分以外の敵味方を終焉へ導く。","turn20"),
  circle("blood_acceleration","血走加速陣","≫","red",420_000_000,"被弾するほど速度・連撃率・最終ダメージが増す。","rage"),
- circle("weak_critical","弱撃必殺陣","!","gold",240_000_000,"弱い攻撃ほどクリティカル率が高くなる。","weakCrit"),
+ circle("weak_critical","弱撃必殺陣","!","gold",240_000_000,"与ダメージが常時上昇。弱い攻撃ほどクリティカル率も高くなる。","weakCrit"),
  circle("sacrifice_lottery","等価滅殺陣","⇄","rose",720_000_000,"味方をランダムに1体失い、敵をランダムに1体即死させる。","sacrifice"),
  circle("inheritance","継承の葬環","†","violet",300_000_000,"この者が倒れると、生存する味方へ力を継承する。","inheritance"),
- circle("gold_power","黄金換力陣","G","gold",1_100_000_000,"所持GOLDに応じて攻撃上昇（強い逓減・Lv.1は最大+18%、Lv.99は最大+30%）。行動ごとの消費は最大10万G。","goldPower"),
- circle("random_arsenal","万象抽選陣","?","rainbow",1_800_000_000,"固有スキルを封じ、全スキルから毎行動ランダムに発動。","randomSkill"),
+ circle("gold_power","黄金換力陣","G","gold",1_100_000_000,"所持GOLDに応じて攻撃上昇（強い逓減・Lv.1は最大+30%、Lv.99は最大+50%）。行動ごとの消費は最大10万G。","goldPower"),
+ circle("random_arsenal","万象抽選陣","?","rainbow",1_800_000_000,"通常攻撃・おまかせスキルで抽選し、その技を強化。通常戦闘は所持仲間の習得技、オンライン共闘は共通の抽選候補から選ぶ。","randomSkill"),
  circle("sole_survivor","孤王覚醒陣","Ⅰ","black",620_000_000,"最後の生存者になると全能力と連撃率が大幅上昇。","soleSurvivor"),
- circle("death_drain","断末吸魔陣","MP","violet",380_000_000,"この者が倒れると、敵全体のMPを大量に奪う。","deathDrain"),
+ circle("death_drain","断末吸魔陣","MP","violet",380_000_000,"この者が倒れると、敵全体のMPを減らし、生存味方のMPを回復する（1戦1回）。","deathDrain"),
  circle("crimson_threshold","瀕死紅蓮陣","HP","red",460_000_000,"HPが少ないほど最終ダメージが上昇する。","lowHpPower"),
- circle("death_mirror","即死返鏡陣","鏡","cyan",760_000_000,"最初に受ける即死を無効化し、使用者へ反射する。","deathMirror"),
+ circle("death_mirror","即死返鏡陣","鏡","cyan",760_000_000,"開戦時に自身へ障壁。最初に受ける即死を無効化し、使用者へ反射する。","deathMirror"),
  circle("raid_zero_sovereign","零界凍結陣","氷","blue",980_000_000,"戦闘開始時、氷晶の障壁で味方全体を守る。","shield","raid-zero-sovereign",{staticArt:true}),
- circle("raid_vajra_beast","天雷轟界陣","雷","gold",1_080_000_000,"被弾するほど雷勢が高まり、連撃と最終ダメージが増す。","rage","raid-vajra-beast",{staticArt:true})
+ circle("raid_vajra_beast","天雷轟界陣","雷","gold",1_080_000_000,"被弾するほど雷勢が高まり、連撃と最終ダメージが増す。","rage","raid-vajra-beast",{staticArt:true}),
+ ...CHAPTER_TWO_CIRCLES394,
+ ...MAGIC_CIRCLES398
 ]);
 
 const BY_ID=new Map(MAGIC_CIRCLES.map(entry=>[entry.id,entry]));
@@ -52,13 +56,15 @@ export function magicCircleById(id){return BY_ID.get(id)??BY_ID.get("none")}
  * Canonical player-side values for a magic circle at a given level.
  *
  * Keeping the progression contract here prevents the workshop, battle and
- * online profile from inventing different values.  Level 1 deliberately
- * preserves the pre-v4 battle values; levels 2-99 add bounded improvements.
+ * online profile from inventing different values.  Build398 raises eight underused effects without changing the other seventeen.
+ * Balance patches do not change the inventory migration version.
  */
 export function magicCircleLevelEffect(entryOrId,level=1){
  const entry=typeof entryOrId==="string"?magicCircleById(entryOrId):entryOrId??magicCircleById("none"),safeLevel=entry.id==="none"?0:safeCircleLevel(level),progress=entry.id==="none"?0:circleLevelProgress(safeLevel);
  const base={id:entry.id,effect:entry.effect,level:safeLevel,progress:roundedRate(progress)};
  if(entry.effect==="none")return freeze({...base,summary:"効果なし"});
+ if(isMagicCircle398(entry.id))return freeze({...base,...magicCircleEffects398(entry.id,safeLevel)});
+ if(isChapterTwoCircle394(entry.id)){const relicEffects394=chapterTwoCircleEffects394(entry.id,safeLevel);return freeze({...base,relicEffects394,summary:Object.entries(relicEffects394).map(([k,v])=>`${RELIC_EFFECT_LABELS394[k]} ${k==='guard'?'−':'+'}${relicPercent394(v)}`).join(' ／ ')});}
  if(entry.effect==="slot"){
   const damageMin=.5,damageMax=3+.5*progress;
   return freeze({...base,damageMin,damageMax:roundedRate(damageMax),instantKillRoll:999,summary:`通常抽選 ${damageMin.toFixed(1)}〜${damageMax.toFixed(2)}倍`});
@@ -72,11 +78,11 @@ export function magicCircleLevelEffect(entryOrId,level=1){
   return freeze({...base,reviveHpRate:roundedRate(reviveHpRate),reviveMpRate:roundedRate(reviveMpRate),summary:`蘇生 HP${percentText(reviveHpRate)}・MP${percentText(reviveMpRate)}`});
  }
  if(entry.effect==="manaReversal"){
-  const damageMultiplier=1.12+Math.min(.18,safeLevel*.004);
+  const damageMultiplier=1.30+.25*progress;
   return freeze({...base,damageMultiplier:roundedRate(damageMultiplier),summary:`与ダメージ ×${damageMultiplier.toFixed(3)}`});
  }
  if(entry.effect==="endgameNoCrit"){
-  const damageReductionRate=.15*progress;
+  const damageReductionRate=.15+.15*progress;
   return freeze({...base,preventsCritical:true,damageReductionRate:roundedRate(damageReductionRate),summary:`深淵・十神の会心無効${damageReductionRate?`・被ダメージ${percentText(damageReductionRate)}軽減`:""}`});
  }
  if(entry.effect==="shield"){
@@ -97,10 +103,10 @@ export function magicCircleLevelEffect(entryOrId,level=1){
  }
  if(entry.effect==="weakCrit"){
   const criticalCeiling=.48+.12*progress;
-  return freeze({...base,criticalCeiling:roundedRate(criticalCeiling),minimumCriticalBonus:.05,summary:`弱攻撃の会心補正 最大+${percentText(criticalCeiling-.10)}`});
+  return freeze({...base,criticalCeiling:roundedRate(criticalCeiling),minimumCriticalBonus:.05,damageRate:roundedRate(.15+.10*progress),summary:`与ダメ +${percentText(.15+.10*progress)}・弱攻撃の会心補正 最大+${percentText(criticalCeiling-.10)}`});
  }
  if(entry.effect==="sacrifice"){
-  const survivorShieldRate=.25*progress;
+  const survivorShieldRate=.25+.25*progress;
   return freeze({...base,survivorShieldRate:roundedRate(survivorShieldRate),summary:survivorShieldRate?`等価滅殺後、生存者へ最大HP${percentText(survivorShieldRate)}障壁`:`味方1体と敵1体へ即死判定`});
  }
  if(entry.effect==="inheritance"){
@@ -108,11 +114,11 @@ export function magicCircleLevelEffect(entryOrId,level=1){
   return freeze({...base,attackRate:roundedRate(attackRate),defenseRate:roundedRate(defenseRate),speedRate:roundedRate(speedRate),turns,summary:`継承 ATK・DEF+${percentText(attackRate)}／SPD+${percentText(speedRate)}・${turns}T`});
  }
  if(entry.effect==="goldPower"){
-  const damageCap=.18+.12*progress;
+  const damageCap=.30+.20*progress;
   return freeze({...base,damageCap:roundedRate(damageCap),summary:`所持GOLD換力 最大+${percentText(damageCap)}`});
  }
  if(entry.effect==="randomSkill"){
-  const randomSkillDamageRate=.25*progress;
+  const randomSkillDamageRate=.20+.25*progress;
   return freeze({...base,randomSkillDamageRate:roundedRate(randomSkillDamageRate),summary:randomSkillDamageRate?`ランダム発動スキル 与ダメ+${percentText(randomSkillDamageRate)}`:`全スキルからランダム発動`});
  }
  if(entry.effect==="soleSurvivor"){
@@ -121,7 +127,7 @@ export function magicCircleLevelEffect(entryOrId,level=1){
  }
  if(entry.effect==="deathDrain"){
   const enemyMpDrainRate=.65+.25*progress;
-  return freeze({...base,enemyMpDrainRate:roundedRate(enemyMpDrainRate),summary:`戦闘不能時、敵全体MPを${percentText(enemyMpDrainRate)}減少`});
+  return freeze({...base,enemyMpDrainRate:roundedRate(enemyMpDrainRate),allyMpRecoveryRate:roundedRate(.20+.15*progress),summary:`戦闘不能時、敵MP −${percentText(enemyMpDrainRate)}・生存味方MP +${percentText(.20+.15*progress)}（1戦1回）`});
  }
  if(entry.effect==="lowHpPower"){
   const maximumDamageBonus=1.25+.35*progress;
@@ -129,7 +135,7 @@ export function magicCircleLevelEffect(entryOrId,level=1){
  }
  if(entry.effect==="deathMirror"){
   const reflectedHealRate=.30*progress;
-  return freeze({...base,reflectedHealRate:roundedRate(reflectedHealRate),summary:reflectedHealRate?`即死反射後 HP${percentText(reflectedHealRate)}回復`:`最初の即死を無効化・反射`});
+  return freeze({...base,reflectedHealRate:roundedRate(reflectedHealRate),openingShieldRate:roundedRate(.25+.20*progress),summary:`開戦時に自身へHP${percentText(.25+.20*progress)}障壁・最初の即死を反射${reflectedHealRate?`・反射後HP${percentText(reflectedHealRate)}回復`:""}`});
  }
  return freeze({...base,genericPowerRate:roundedRate(.25*progress),summary:`基礎効果 +${percentText(.25*progress)}`});
 }
@@ -286,10 +292,10 @@ export function magicCircleNextEffect(entryOrId,level=0){
 
 // GOLDを際限なく貯めても火力が発散しないよう、対数逓減とLv別の
 // 明確な上限を両方設ける。所持資産の楽しさは残しつつ、Lv.1で最大
-// +18%、Lv.99でも最大+30%までに限定する。
+// +30%、Lv.99でも最大+50%までに限定する。
 export function goldPowerDamageMultiplier(gold=0,level=1){
  const safeGold=Math.max(0,Number(gold)||0),safeLevel=Math.max(1,Math.min(99,Math.floor(Number(level)||1)));
- const cap=.18+(safeLevel-1)/98*.12;
+ const cap=magicCircleLevelEffect("gold_power",safeLevel).damageCap;
  const progress=Math.min(1,Math.log10(1+safeGold/100_000)/4);
  return Number((1+cap*Math.max(0,progress)).toFixed(6));
 }
@@ -301,7 +307,7 @@ export function buyOrUpgradeMagicCircle(state,id){
  // 以後 normalize を呼ぶ公開ヘルパーを使わず、同じ現物IDを最後に再取得する。
  const exact=state.magicCircles.instances.find(item=>item.instanceId===id)??null,entry=magicCircleById(exact?.circleId??id),candidate=exact??state.magicCircles.instances.filter(item=>item.circleId===entry.id).sort((a,b)=>b.level-a.level)[0],instanceId=candidate?.instanceId??null,level=candidate?.level??0;
  if(entry.id==="none")return{ok:false,message:"魔法陣なしは強化できません。"};
- if(!state.magicCircles.unlocked?.[entry.id])return{ok:false,message:isRaidExclusiveMagicCircle(entry.id)?"この術式はレイドボス交換所で未入手です。":"この術式の知識は深淵ツリーで未解禁です。"};
+ if(!state.magicCircles.unlocked?.[entry.id])return{ok:false,message:isMagicCircle398(entry.id)?"第二章を解放後、魔法陣画面で術式を受け取ってください。":isChapterTwoCircle394(entry.id)?"第二章の対応地域で精鋭3部隊を制圧すると入手・解禁できます。":isRaidExclusiveMagicCircle(entry.id)?"この術式はレイドボス交換所で未入手です。":"この術式の知識は深淵ツリーで未解禁です。"};
  if(!level)return{ok:false,message:"現物を所持していません。再構築または交換で入手してください。"};
  if(level>=99)return{ok:false,message:"最大Lv.99です。"};
  const price=magicCircleUpgradePrice(entry,level),gold=Math.max(0,Number(state.player?.gold)||0);
@@ -320,7 +326,7 @@ export function equipMagicCircle(state,monster,idOrInstance){
  if(!monster)return{ok:false,message:"対象が見つかりません"};
  const exact=magicCircleInstanceById(state,idOrInstance),entry=magicCircleById(exact?.circleId??idOrInstance);
  if(entry.id==="none"){monster.magicCircleId="none";monster.magicCircleInstanceId=null;return{ok:true,circle:entry,instance:null}}
- if(!isMagicCircleUnlocked(state,entry.id))return{ok:false,message:isRaidExclusiveMagicCircle(entry.id)?"レイドボス交換所で入手すると装着できます":"現物は所持していますが、深淵ツリーで術式の知識が未解禁です"};
+ if(!isMagicCircleUnlocked(state,entry.id))return{ok:false,message:isMagicCircle398(entry.id)?"第二章を解放後、魔法陣画面で術式を受け取ってください。":isChapterTwoCircle394(entry.id)?"第二章の対応地域で精鋭3部隊を制圧すると装着できます":isRaidExclusiveMagicCircle(entry.id)?"レイドボス交換所で入手すると装着できます":"現物は所持していますが、深淵ツリーで術式の知識が未解禁です"};
  const occupied=new Set((state.monsters??[]).filter(item=>item.id!==monster.id).map(item=>item.magicCircleInstanceId).filter(Boolean)),instance=exact??(monster.magicCircleId===entry.id?magicCircleInstanceById(state,monster.magicCircleInstanceId):null)??state.magicCircles.instances.find(item=>item.circleId===entry.id&&!occupied.has(item.instanceId));
  if(!instance)return{ok:false,message:"使用できる現物がありません。装着中の仲間から外すか、同じ種類をもう1個入手してください。"};
  const owner=magicCircleOwner(state,instance.instanceId,{excludeMonsterId:monster.id});
@@ -359,7 +365,7 @@ export function enemyMagicCircleLevelForFloor(floor,{rank="N",random=Math.random
 export function rollEnemyMagicCircle(floor,{rank="N",random=Math.random,force=false,excludeIds=[]}={}){
  const chance=force?1:enemyMagicCircleRateForFloor(floor,rank);
  if(Math.max(0,Math.min(.999999,Number(random())||0))>=chance)return null;
- const excluded=new Set(Array.isArray(excludeIds)?excludeIds:excludeIds instanceof Set?[...excludeIds]:[]),choices=MAGIC_CIRCLES.filter(entry=>entry.id!=="none"&&!isRaidExclusiveMagicCircle(entry.id)&&!excluded.has(entry.id)),roll=Math.max(0,Math.min(.999999,Number(random())||0)),entry=choices[Math.floor(roll*choices.length)]??choices[0];
+ const excluded=new Set(Array.isArray(excludeIds)?excludeIds:excludeIds instanceof Set?[...excludeIds]:[]),choices=MAGIC_CIRCLES.filter(entry=>entry.id!=="none"&&!isRaidExclusiveMagicCircle(entry.id)&&!isChapterTwoCircle394(entry.id)&&!isMagicCircle398(entry.id)&&!excluded.has(entry.id)),roll=Math.max(0,Math.min(.999999,Number(random())||0)),entry=choices[Math.floor(roll*choices.length)]??choices[0];
  if(!entry)return null;
  const level=enemyMagicCircleLevelForFloor(floor,{rank,random});
  return{...entry,level,enemyOnly:true,chance};

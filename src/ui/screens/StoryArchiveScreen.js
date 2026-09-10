@@ -18,7 +18,7 @@ function branchCard(entry){
 
 export function StoryArchiveScreen(model,{category="prologue"}={}){
  const categories=Array.isArray(model?.categories)?model.categories:[],active=categories.find(entry=>entry.id===category)??categories[0]??{id:"prologue",label:"序章",entries:[],read:0,total:0},progress=model?.total?Math.round(model.read/model.total*100):0;
- return`<section class="screen story-archive-screen" data-story-archive-category="${escapeHtml(active.id)}">
+ return`<section class="screen story-archive-screen${categories.some(c=>c.id==="chapterTwo")?" has-chapter-two401":""}" data-story-archive-category="${escapeHtml(active.id)}">
   <header class="story-archive-header">
    <button type="button" data-story-archive-back aria-label="ホームへ戻る"><i aria-hidden="true"></i></button>
    <span><small>PROPHECY ARCHIVE</small><h1>予言録・物語回想</h1><p>読了した物語だけを、進行に影響なく読み返せます。</p></span>

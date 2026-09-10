@@ -1,0 +1,736 @@
+{
+  "totalFrames": 56,
+  "checksPassed": true,
+  "originalPNGsUnchanged": true,
+  "method": "RGBA connected silhouettes; independently reconstructed even-odd polygons",
+  "frames": [
+    {
+      "species": "ch2_tillea",
+      "frame": "idle1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        47,
+        12,
+        368,
+        437
+      ],
+      "alphaFingerprint": "e1fe3d6f64ffd9492d5c32effcf27f27b39bf3cd74a241e3346e9e9f10a13d0a"
+    },
+    {
+      "species": "ch2_tillea",
+      "frame": "idle2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        491,
+        12,
+        818,
+        437
+      ],
+      "alphaFingerprint": "4d6cba3b44ada300c41e4259e28af06d476ccd366b9cd904ecc1f8c42f655769"
+    },
+    {
+      "species": "ch2_tillea",
+      "frame": "idle3",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        929,
+        18,
+        1359,
+        437
+      ],
+      "alphaFingerprint": "b758c31726db60b561051950c2040768ddde58a0b2a298c01d061b9907501aeb"
+    },
+    {
+      "species": "ch2_tillea",
+      "frame": "walk1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1420,
+        18,
+        1750,
+        433
+      ],
+      "alphaFingerprint": "2e8a8b9cf251ed4107153971209d1ea5cd90b6e2fd42ac1172a3487645ea4ec6"
+    },
+    {
+      "species": "ch2_tillea",
+      "frame": "walk2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        50,
+        451,
+        368,
+        870
+      ],
+      "alphaFingerprint": "ca52c6ac385631e33bccedf84f91260e8964a183c5fe52a03cc265c52bde0c6d"
+    },
+    {
+      "species": "ch2_tillea",
+      "frame": "attack",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        419,
+        476,
+        964,
+        863
+      ],
+      "alphaFingerprint": "b1cc230ea5287d81b0a133bc699e9c1cecaa95e7d9e108a6b519a3e5bde87aff"
+    },
+    {
+      "species": "ch2_tillea",
+      "frame": "damage",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1009,
+        455,
+        1350,
+        865
+      ],
+      "alphaFingerprint": "c1d345e195ad8aebf8f07f84389ce46259cfbf11927883d1b35551c55cdea04d"
+    },
+    {
+      "species": "ch2_tillea",
+      "frame": "down",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1405,
+        523,
+        1764,
+        842
+      ],
+      "alphaFingerprint": "09ae97c4077f4ae3182723a8cb1c5bd27d7d93903efca581e3f0b6e1758f58e0"
+    },
+    {
+      "species": "ch2_morina",
+      "frame": "idle1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        32,
+        20,
+        432,
+        448
+      ],
+      "alphaFingerprint": "8bb983f52995f2bfbcc215ae1e152cc27227a3228edff8559760cd8bc6298c3b"
+    },
+    {
+      "species": "ch2_morina",
+      "frame": "idle2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        486,
+        23,
+        886,
+        448
+      ],
+      "alphaFingerprint": "557e2e97299a0cfdc6f218032d571d3c9bc62ca6db4c71ccc1b4fed74b6ec0ca"
+    },
+    {
+      "species": "ch2_morina",
+      "frame": "idle3",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        927,
+        0,
+        1332,
+        444
+      ],
+      "alphaFingerprint": "b41f757590cc2a60d852278aeba2b826dc84220a4ecf000b79b37b7cdd9b99ae"
+    },
+    {
+      "species": "ch2_morina",
+      "frame": "walk1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1375,
+        22,
+        1774,
+        438
+      ],
+      "alphaFingerprint": "4bada0a817a7ee2485a955f6169b73bc862dabe8fc96742b51f3d91decb472af"
+    },
+    {
+      "species": "ch2_morina",
+      "frame": "walk2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        17,
+        456,
+        443,
+        858
+      ],
+      "alphaFingerprint": "61d278b12dabd7d5e831b979dabbd331f846eed8514a9312692411d2d1ecf87f"
+    },
+    {
+      "species": "ch2_morina",
+      "frame": "attack",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        447,
+        470,
+        1047,
+        860
+      ],
+      "alphaFingerprint": "d82c737bf5bf6c845e1b40b70fe1022bbc112eca3e09dd4638418e1b477d2f87"
+    },
+    {
+      "species": "ch2_morina",
+      "frame": "damage",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1044,
+        485,
+        1382,
+        858
+      ],
+      "alphaFingerprint": "3769266406efef71698979aaf0f364ff31b16ba1250f0152a0e96f97830e15f6"
+    },
+    {
+      "species": "ch2_morina",
+      "frame": "down",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1412,
+        561,
+        1763,
+        857
+      ],
+      "alphaFingerprint": "a1345c7667907e17abb5ed8412635f4032f2c4a4f65a7e012a43ea7ca005ca07"
+    },
+    {
+      "species": "ch2_dracia",
+      "frame": "idle1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        16,
+        11,
+        447,
+        437
+      ],
+      "alphaFingerprint": "8422ca997a15e507933d01e71619f981baca40b8af056ae05f88e63a49c94479"
+    },
+    {
+      "species": "ch2_dracia",
+      "frame": "idle2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        439,
+        13,
+        886,
+        437
+      ],
+      "alphaFingerprint": "4cf6815692da50c71a2451dd6b759221ec169d397eaeb640513a4c34382476fd"
+    },
+    {
+      "species": "ch2_dracia",
+      "frame": "idle3",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        935,
+        6,
+        1297,
+        435
+      ],
+      "alphaFingerprint": "594250388b390f6537d79a8f0e297646f16991e0877816bf8d21e93d6dddb983"
+    },
+    {
+      "species": "ch2_dracia",
+      "frame": "walk1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1349,
+        12,
+        1774,
+        435
+      ],
+      "alphaFingerprint": "ef5587611acf049c16fe767627f5088a9be3b8e51da5ef4094f22f4546c96d2a"
+    },
+    {
+      "species": "ch2_dracia",
+      "frame": "walk2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        5,
+        451,
+        425,
+        871
+      ],
+      "alphaFingerprint": "aac57409aab3ece09400900286b9743941c61d275e86b442b30cf69942bcee01"
+    },
+    {
+      "species": "ch2_dracia",
+      "frame": "attack",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        469,
+        456,
+        1020,
+        860
+      ],
+      "alphaFingerprint": "0f65e835ef177cacc2219992021aa0efcb28f471baccfbde5dd21f47f5c6b92d"
+    },
+    {
+      "species": "ch2_dracia",
+      "frame": "damage",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1026,
+        451,
+        1300,
+        860
+      ],
+      "alphaFingerprint": "8d602f6343864d5b1376e5de1e47049deef28cf9b8cdb8ed5580a69fd21eb6da"
+    },
+    {
+      "species": "ch2_dracia",
+      "frame": "down",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1369,
+        538,
+        1752,
+        860
+      ],
+      "alphaFingerprint": "639407671c017c4607bf95a832813b5bd8b9a5a6ea81b103640988b19f78711a"
+    },
+    {
+      "species": "ch2_rucie",
+      "frame": "idle1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        10,
+        14,
+        427,
+        422
+      ],
+      "alphaFingerprint": "f2f51143927b33cabba1ff9b2b14017f25b6fe9c680868b0cb41a0b046cbf78e"
+    },
+    {
+      "species": "ch2_rucie",
+      "frame": "idle2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        410,
+        13,
+        854,
+        458
+      ],
+      "alphaFingerprint": "20f669622357a06de551b68015d7d95bbdd115397506c785e48f59ec55a5b5d1"
+    },
+    {
+      "species": "ch2_rucie",
+      "frame": "idle3",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        825,
+        29,
+        1342,
+        419
+      ],
+      "alphaFingerprint": "9e2d319a83e3c9f05d9ec22f2cf542578ec83984ad03dc783ecaac9e324392ff"
+    },
+    {
+      "species": "ch2_rucie",
+      "frame": "walk1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1306,
+        14,
+        1754,
+        422
+      ],
+      "alphaFingerprint": "f327ad8ddbb790a6cb2b461993c5b3a12ab9f4d3726f3165c388977a21ae7fe6"
+    },
+    {
+      "species": "ch2_rucie",
+      "frame": "walk2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        9,
+        448,
+        440,
+        856
+      ],
+      "alphaFingerprint": "d08bf065c0376d9a047e8777597ffd5595cbd16e6316b7d5971074fa833e06d2"
+    },
+    {
+      "species": "ch2_rucie",
+      "frame": "attack",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        437,
+        453,
+        1023,
+        843
+      ],
+      "alphaFingerprint": "a356c651985058448513024c42b824e404a5dc13377be66a73c9d08cfcfb1c86"
+    },
+    {
+      "species": "ch2_rucie",
+      "frame": "damage",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1035,
+        463,
+        1398,
+        860
+      ],
+      "alphaFingerprint": "c9374db6c200fb9d3254934d882cd7fe4ee72ce1b9a6499a01d0891a27aa684b"
+    },
+    {
+      "species": "ch2_rucie",
+      "frame": "down",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1392,
+        530,
+        1769,
+        845
+      ],
+      "alphaFingerprint": "369ea26bf0cca88aa67c671b0afa16e6b88446868934ca9b85345d7c5720d651"
+    },
+    {
+      "species": "ch2_nemesia",
+      "frame": "idle1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        40,
+        17,
+        412,
+        445
+      ],
+      "alphaFingerprint": "5aee04951d0df235a5c978bbbcdd544883881669ecc873a95d6bb52acf1fcafc"
+    },
+    {
+      "species": "ch2_nemesia",
+      "frame": "idle2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        465,
+        17,
+        840,
+        445
+      ],
+      "alphaFingerprint": "a34d65886471a00f9664e90957a06b6036822a3a1e7c7a9b6929b9ff40473105"
+    },
+    {
+      "species": "ch2_nemesia",
+      "frame": "idle3",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        865,
+        4,
+        1386,
+        445
+      ],
+      "alphaFingerprint": "a8d96f0b48f31f6897b20e9e649c63e9f3c1f15646f3109a9708eb3d63b6cf0d"
+    },
+    {
+      "species": "ch2_nemesia",
+      "frame": "walk1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1372,
+        17,
+        1753,
+        448
+      ],
+      "alphaFingerprint": "2820014447543df336d12c8b28419756076301e60b4997773e2c861a811eb625"
+    },
+    {
+      "species": "ch2_nemesia",
+      "frame": "walk2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        20,
+        457,
+        398,
+        868
+      ],
+      "alphaFingerprint": "0a7b61e7176787db178158a8fd5e07f13935e01125173e009847094b31bfe6a6"
+    },
+    {
+      "species": "ch2_nemesia",
+      "frame": "attack",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        421,
+        476,
+        1007,
+        862
+      ],
+      "alphaFingerprint": "9f9419f5bf3dbadbe24e6e0182b7ae2ebdd9274af384972edf1e518bd9ed580e"
+    },
+    {
+      "species": "ch2_nemesia",
+      "frame": "damage",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        938,
+        488,
+        1371,
+        868
+      ],
+      "alphaFingerprint": "d55b9e110c0d4b0da11eba382ae20121a8cb5af86e9dab1122441f71b65d47a6"
+    },
+    {
+      "species": "ch2_nemesia",
+      "frame": "down",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1376,
+        567,
+        1768,
+        853
+      ],
+      "alphaFingerprint": "4f5563e7c9a0361c22e1375a66967899483710f85b0d25293bc44f262632f9ea"
+    },
+    {
+      "species": "ch2_everia",
+      "frame": "idle1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        18,
+        23,
+        344,
+        433
+      ],
+      "alphaFingerprint": "8346009b097270a6b37a81789fd5fa4684ab2aad30351f082b23853c79adce59"
+    },
+    {
+      "species": "ch2_everia",
+      "frame": "idle2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        444,
+        23,
+        775,
+        433
+      ],
+      "alphaFingerprint": "5a400d851ce75ec5299c8b60067920b423fdd4364f419f968002a519dd3b3544"
+    },
+    {
+      "species": "ch2_everia",
+      "frame": "idle3",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        857,
+        10,
+        1273,
+        432
+      ],
+      "alphaFingerprint": "9024e4574e466120c9d9260df2c01b7a13a5ee4053184e69f846b805598eca8d"
+    },
+    {
+      "species": "ch2_everia",
+      "frame": "walk1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1357,
+        38,
+        1753,
+        436
+      ],
+      "alphaFingerprint": "0f20e44580592245cc81ee4a4f1138a6a473e0d6c8b669a56b38fce40d1acc15"
+    },
+    {
+      "species": "ch2_everia",
+      "frame": "walk2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        33,
+        453,
+        384,
+        853
+      ],
+      "alphaFingerprint": "d72e238ee495d6617dbf67c5d6423696ffd4c62a92341e987d00917702a44c8c"
+    },
+    {
+      "species": "ch2_everia",
+      "frame": "attack",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        428,
+        467,
+        992,
+        842
+      ],
+      "alphaFingerprint": "0be2b2431dc38d230d3cedeaf386654f5ab12bd70a435fa8d48b2ab28b99dbd7"
+    },
+    {
+      "species": "ch2_everia",
+      "frame": "damage",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        978,
+        459,
+        1315,
+        843
+      ],
+      "alphaFingerprint": "5c400427abb13abfedbd5ee7eee036918133ce317ba18125b107812d9235a6fc"
+    },
+    {
+      "species": "ch2_everia",
+      "frame": "down",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1370,
+        553,
+        1764,
+        836
+      ],
+      "alphaFingerprint": "df670a6554a772a4739043a36c2a358f0a0af02092e04cc9259e68bfb45d8ffa"
+    },
+    {
+      "species": "ch2_elmize",
+      "frame": "idle1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        13,
+        18,
+        419,
+        434
+      ],
+      "alphaFingerprint": "2dd91c600bd5f41bfaedd9166369370272398ed828f41cacd9f06a9f51954369"
+    },
+    {
+      "species": "ch2_elmize",
+      "frame": "idle2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        462,
+        16,
+        875,
+        437
+      ],
+      "alphaFingerprint": "2ffadf16b4bfe455ae872a5b850eb3df9e5c473adede8b2c0280dae127278b57"
+    },
+    {
+      "species": "ch2_elmize",
+      "frame": "idle3",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        900,
+        5,
+        1347,
+        436
+      ],
+      "alphaFingerprint": "7994a69f72e09b4eaa9fb6cbcdb8b6b571ad520a00c2dd9f9b093b57759625cf"
+    },
+    {
+      "species": "ch2_elmize",
+      "frame": "walk1",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1434,
+        182,
+        1445,
+        183
+      ],
+      "alphaFingerprint": "8cbb45b910b72812e7382ae03d591650a0197bb04a51e6958a022534926e56c7"
+    },
+    {
+      "species": "ch2_elmize",
+      "frame": "walk2",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1359,
+        43,
+        1774,
+        431
+      ],
+      "alphaFingerprint": "af8c2a28c2883d745e0116ef1b4d33ac71e1d9517990d9b4c6c014a918c5216e"
+    },
+    {
+      "species": "ch2_elmize",
+      "frame": "attack",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        12,
+        464,
+        423,
+        860
+      ],
+      "alphaFingerprint": "16bea9b68637d2d803260f64b2342f3f4153d48d1fe7432dd984785e59639cf8"
+    },
+    {
+      "species": "ch2_elmize",
+      "frame": "damage",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        441,
+        440,
+        1337,
+        854
+      ],
+      "alphaFingerprint": "d2d8e7eb848ff0420ca475539268846ed1503926845ee1d3d753856313302974"
+    },
+    {
+      "species": "ch2_elmize",
+      "frame": "down",
+      "principalRetained": 1,
+      "foreignPrincipalPixels": 0,
+      "box": [
+        1350,
+        564,
+        1764,
+        867
+      ],
+      "alphaFingerprint": "ed836f877351355a8ea9c7aed16b04ab4c45dd19fd7a752fe3dc58c7c1c434de"
+    }
+  ]
+}

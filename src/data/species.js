@@ -1,3 +1,13 @@
+import {CHAPTER_TWO_SPECIES392} from './chapterTwoSpecies392.js?v=3.1.72-build392';
+import {CHAPTER_TWO_SPECIES391} from './chapterTwoSpecies391.js?v=3.1.71-build391';
+import {CHAPTER_TWO_SPECIES390} from './chapterTwoSpecies390.js?v=3.1.70-build390';
+import {CHAPTER_TWO_SPECIES389} from './chapterTwoSpecies389.js?v=3.1.69-build389';
+import {CHAPTER_TWO_SPECIES388} from './chapterTwoSpecies388.js?v=3.1.68-build388';
+import {CHAPTER_TWO_SPECIES387} from './chapterTwoSpecies387.js?v=3.1.67-build387';
+import {CHAPTER_TWO_SPECIES386} from './chapterTwoSpecies386.js?v=3.1.66-build386';
+import {CHAPTER_TWO_SPECIES385} from './chapterTwoSpecies385.js?v=3.1.65-build385';
+import {CHAPTER_TWO_SPECIES384} from './chapterTwoSpecies384.js?v=3.1.70-build390';
+import {CHAPTER_TWO_SPECIES383} from './chapterTwoSpecies383.js?v=3.1.72-build392';
 import{EXPANDED_SPECIES}from"./expandedSpecies.js?v=2.11.2-build166";
 import{ADDITIONAL_SPECIES}from"./additionalSpecies.js?v=3.0.0-build300";
 import{MYTHIC_SERIAL_SPECIES}from"./mythicSerialSpecies.js?v=3.1.39-build359";
@@ -60,7 +70,7 @@ const BASE_SPECIES={
 const STRATEGY_RARITY=Object.freeze({N:0,R:1,SR:2,SSR:3,UR:4,LR:5,"神話":6,"深淵":7,"十神":8});
 const STRATEGY_EXCLUDED=new Set(["myth_enami","myth_yori","myth_rion","myth_hide","juvenile_amalga"]);
 function highRarityStrategicIdentity(species){
- if(!species||(STRATEGY_RARITY[species.rarity]??0)<STRATEGY_RARITY.SSR||STRATEGY_EXCLUDED.has(species.id)||species.isAbyss||species.isTenGod||species.tags?.includes?.("abyss")||species.tags?.includes?.("tenGod"))return species;
+ if(!species||species.chapterTwoOnly||(STRATEGY_RARITY[species.rarity]??0)<STRATEGY_RARITY.SSR||STRATEGY_EXCLUDED.has(species.id)||species.isAbyss||species.isTenGod||species.tags?.includes?.("abyss")||species.tags?.includes?.("tenGod"))return species;
  const role=String(species.role??"balanced"),tier=Math.max(0,(STRATEGY_RARITY[species.rarity]??3)-STRATEGY_RARITY.SSR),base={...(species.baseStats??{})};let kind="breaker",label="突破・会心",evasion=10+tier*2,accuracy=116+tier*2;
  if(["tank","guard","defense","bruiser"].some(value=>role.includes(value))){kind="tank";label="守護・障壁・肩代わり";base.hp=Math.round((base.hp??1)*1.08);base.def=Math.round((base.def??1)*1.12);evasion=5+tier;accuracy=106+tier*2}
  else if(["support","healer","heal"].some(value=>role.includes(value))){kind="support";label="回復・浄化・全体支援";base.hp=Math.round((base.hp??1)*1.06);base.def=Math.round((base.def??1)*1.06);evasion=16+tier*2;accuracy=108+tier*2}
@@ -69,7 +79,7 @@ function highRarityStrategicIdentity(species){
  base.evasion=Math.min(40,Math.max(Number(base.evasion)||0,evasion));base.accuracy=Math.min(135,Math.max(Number(base.accuracy)||100,accuracy));
  return{...species,baseStats:base,strategicIdentity:{kind,label,evasion:base.evasion,accuracy:base.accuracy}};
 }
-const ALL_SPECIES={...BASE_SPECIES,...EXPANDED_SPECIES,...ADDITIONAL_SPECIES,...MYTHIC_SERIAL_SPECIES,...BUILD198_SPECIES,...RAID_SPECIES};
+const ALL_SPECIES={...BASE_SPECIES,...EXPANDED_SPECIES,...ADDITIONAL_SPECIES,...MYTHIC_SERIAL_SPECIES,...BUILD198_SPECIES,...RAID_SPECIES,...CHAPTER_TWO_SPECIES383,...CHAPTER_TWO_SPECIES384,...CHAPTER_TWO_SPECIES385,...CHAPTER_TWO_SPECIES386,...CHAPTER_TWO_SPECIES387,...CHAPTER_TWO_SPECIES388,...CHAPTER_TWO_SPECIES389,...CHAPTER_TWO_SPECIES390,...CHAPTER_TWO_SPECIES391,...CHAPTER_TWO_SPECIES392};
 export const SPECIES=Object.freeze(Object.fromEntries(
   Object.entries(ALL_SPECIES).map(([id,species])=>[id,applyMonsterNameOverride(highRarityStrategicIdentity({...species,element:canonicalAttribute(species.element,id)}))])
 ));

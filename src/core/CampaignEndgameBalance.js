@@ -1,4 +1,4 @@
-import {rollEnemyMagicCircle} from './MagicCircleSystem.js?v=3.1.41-build361';
+import {rollEnemyMagicCircle} from './MagicCircleSystem.js?v=3.1.78-build398';
 // Campaign manifestations are tuned to the floor's ordinary progression.
 // This never changes contracted characters, manual trials, or the authored skills.
 export function campaignEndgameRates(floor){

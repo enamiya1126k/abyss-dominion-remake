@@ -1,0 +1,22 @@
+.chapter397-gacha-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 16px}
+.chapter397-gacha-tabs button{min-height:44px;border:1px solid #655272;background:#100c18;color:#d3c5df;font-size:14px}
+.chapter397-gacha-tabs button[aria-current="page"]{border-color:#dfb869;background:linear-gradient(#4b354e,#23172c);color:#ffe9b5;box-shadow:inset 0 -2px #deb469}
+.chapter397-gacha{text-align:center;color:#e5d8ea}
+.chapter397-gacha header{padding:16px 6px;background:linear-gradient(90deg,transparent,#69408a44,transparent)}
+.chapter397-gacha header small{color:#ccb06b;font-size:12px;letter-spacing:.12em}
+.chapter397-gacha header h3{margin:8px 0;font-size:clamp(20px,5vw,29px);color:#fff0c6}
+.chapter397-gacha header p{margin:0;font-size:13px;color:#cfc1da}
+.chapter397-banner{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:20px 0 12px;background:radial-gradient(ellipse at bottom,#7040a43d,transparent 70%);border-bottom:1px solid #b9965955}
+.chapter397-banner figure{min-width:0;margin:0}
+.chapter397-banner .chapter397-banner-sprite{display:block!important;width:100%!important;height:clamp(95px,26vw,180px)!important;max-width:100%!important;transform:none!important;filter:none!important}
+.chapter397-banner figcaption{color:#ecddf2;overflow-wrap:anywhere;font-size:11px;line-height:1.55}
+.chapter397-pair-copy{font-size:13px;line-height:1.8}.chapter397-pair-copy small{font-size:10px;color:#b6a4c1}
+.chapter397-wallet{font-size:12px;color:#bea9d1;margin:16px 0}.chapter397-wallet b{font-size:21px;color:#9ee2ff;margin-left:10px}
+.chapter397-pulls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chapter397-pulls button{display:grid;gap:6px;padding:14px 4px;min-height:68px;border:1px solid #c6a05a;background:linear-gradient(#63442c,#302022);color:#fff0cc}
+.chapter397-pulls b{font-size:18px}.chapter397-pulls span{font-size:12px}.chapter397-pulls button:disabled{opacity:.4}
+.chapter397-gacha-note{font-size:12px;line-height:1.8;color:#c6b9d1}
+.chapter397-rates-button{width:100%;min-height:44px;font-size:13px;border:1px solid #816b9b;background:#191123;color:#f2e4fc}
+.chapter397-rates{font-size:13px;line-height:1.8;overflow-wrap:anywhere}.chapter397-rates table{border-collapse:collapse;width:100%;text-align:center}.chapter397-rates th,.chapter397-rates td{border:1px solid #755e83;padding:6px}.chapter397-rates th{color:#efd3a0}.chapter397-rates details{padding:8px 0;border-top:1px solid #7b5c8855}.chapter397-rates summary{cursor:pointer;color:#e5c1ef}.chapter397-rates ul{padding-left:20px}.chapter397-rates li{margin:5px 0}
+
+.chapter397-banner .chapter397-banner-sprite>svg{width:100%!important;height:100%!important;overflow:visible}

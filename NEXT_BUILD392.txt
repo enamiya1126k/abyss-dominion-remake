@@ -1,0 +1,45 @@
+ABYSS DOMINION 引継ぎ：Build392 / v3.1.72、第二章追加第十弾
+
+全70体（N/R/SR/SSR/UR/LR/神話 各10体）・280技・560ポーズ・24ペア。
+ユーザーの「各ランク10体」目標に到達。次回は最新データを基準に、第二章の編成・難易度・やり込みを充実させる方向が候補。次工程は未実装・未着手。
+第三章を急がず第二章を充実させる方針。可愛い顔、約4頭身、精緻な黒金/白金、正面〜右向き、各8モーションを維持。
+
+本弾
+ch2_tillea N 栞の書姫ティレア
+ch2_morina R 幻眠の扇姫モリナ
+ch2_elmize SR 醒夢の鎌姫エルミゼ（旧ch2_elminaと別）
+ch2_dracia SSR 黒鎖の竜姫ドラシア
+ch2_rucie UR 白翼の竜姫リュシエ
+ch2_nemesia LR 夜冠の剣姫ネメシア
+ch2_everia 神話 暁冠の剣姫エヴェリア
+
+登録：chapterTwoSpecies392 / chapterTwoPairs392 / chapterTwoSprites392 / ChapterTwoMonsters392。
+種族・捕獲・装備・敵AI・味方AI・固有技・ペア・描画へ登録。Habitat392は391の後に適用。
+dreamharvest：hybrid3.2、防御30%無視、sleep×1.8。連携時の状態確認。通常の睡眠持続・解除規則を利用。
+dragonliberation：全体physical2.7、防御25%無視、dispelEach392、姉妹shield.2。対象別に強化を1個解除後に攻撃。
+crownsfinale：全体physical2.1、防御20%無視、全体shield.1。burst threshold2で3.8、防御35%無視、shield.18。
+終剣だけbonusVsHp392 threshold.35/multiplier1.6。命中直前の相手HP比を個別確認。
+main.pairBattleEnvironment385にopponentHpRatioを追加。既存hpRatioは自陣営用なので混同しない。
+TwinResonance385の使用回数は従来の保存キーと種族別1回枠を共用。
+EnemyAIの睡眠仕込みはペア同席時に未睡眠相手を選ぶ。MP不足・緊急回復・浄化の優先を維持。
+
+再訪交代
+roam1_3_392：morina/elmize/tillea/grant。
+roam3_1_392：dracia/rucie/ione/noctia。
+roam4_3_392：nemesia/everia/aeriel/vespera。
+391のroamingAlternates391/roamingBase391とchapterTwoRoamingId391を再利用。
+元の15部隊と391の3追加部隊は変更しない。全46 encounter定義。
+今後も旧キャラの捕獲経路、4人枠、ペア同席、pending維持、1部屋1報酬を保つ。
+
+素材・配布
+assets/monsters/ch2_392_KEY/sheet.pngは元RGBAそのまま。right/8frame box/clip/paths。
+共通256px枠、最大224px、足元244。artifacts/build392にmonsters.html / prompts.json / provenance.json。
+231テスト、59モジュール構文、543相対参照。56ポーズ保持100%・混入0。
+ブラウザー/iPhone実描画は未確認。以前のプレビュー拒否を迂回しない。
+Build392はBuild391への差分ZIP。次回は変更前に現392のファイルSHA一覧を保存すること。
+
+作業環境の復元情報
+今回、古いscratch消失から復元した。公開repo enamiya1126k/abyss-dominion-remake をcloneし、382〜391のパッチを順番に適用。
+Git HEAD ffe072437c97e689f3fffd38f26fd8f09c62a7c7（Build381）。その後の変更はパッチ適用分なのでgit diffを391差分として使わない。
+392変更前の基準はbase391-files.json / baseline391。巨大な旧全体ZIPの取得失敗を、公開repo＋段階パッチで解消した。
+公開push/deployは未実施。online-server/dataは配布対象外。

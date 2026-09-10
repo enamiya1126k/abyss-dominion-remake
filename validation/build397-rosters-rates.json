@@ -1,0 +1,5195 @@
+{
+  "rates": {
+    "N": 5,
+    "R": 15,
+    "SR": 35,
+    "SSR": 25,
+    "UR": 15,
+    "LR": 4,
+    "神話": 1
+  },
+  "pools": {
+    "N": [
+      "ch2_kororu",
+      "ch2_nerik",
+      "ch2_lilica",
+      "ch2_ticta",
+      "ch2_pipia",
+      "ch2_fiora",
+      "ch2_lumea",
+      "ch2_miretta",
+      "ch2_rithia",
+      "ch2_tillea"
+    ],
+    "R": [
+      "ch2_balk",
+      "ch2_grant",
+      "ch2_ryune",
+      "ch2_mirea",
+      "ch2_rikka",
+      "ch2_lyriet",
+      "ch2_nevia",
+      "ch2_iselle",
+      "ch2_nizelle",
+      "ch2_morina"
+    ],
+    "SR": [
+      "ch2_shelza",
+      "ch2_senela",
+      "ch2_rose",
+      "ch2_viola",
+      "ch2_rinne",
+      "ch2_rosette",
+      "ch2_elmina",
+      "ch2_virelle",
+      "ch2_charne",
+      "ch2_elmize"
+    ],
+    "SSR": [
+      "ch2_noctia",
+      "ch2_razil",
+      "ch2_shion",
+      "ch2_kagura",
+      "ch2_seria",
+      "ch2_noctelle",
+      "ch2_calista",
+      "ch2_rostia",
+      "ch2_ferne",
+      "ch2_dracia"
+    ],
+    "UR": [
+      "ch2_velg",
+      "ch2_ione",
+      "ch2_suiren",
+      "ch2_sayo",
+      "ch2_carmia",
+      "ch2_auriane",
+      "ch2_solenne",
+      "ch2_althea",
+      "ch2_clarisse",
+      "ch2_rucie"
+    ],
+    "LR": [
+      "ch2_astera",
+      "ch2_mimelia",
+      "ch2_aure",
+      "ch2_celes",
+      "ch2_aeriel",
+      "ch2_eirene",
+      "ch2_meliora",
+      "ch2_sephira",
+      "ch2_lunaria",
+      "ch2_nemesia"
+    ],
+    "神話": [
+      "ch2_ordia",
+      "ch2_luxion",
+      "ch2_noelle",
+      "ch2_lumina",
+      "ch2_vespera",
+      "ch2_iridelle",
+      "ch2_elyselle",
+      "ch2_astrelle",
+      "ch2_solaria",
+      "ch2_everia"
+    ]
+  },
+  "roster": [
+    {
+      "id": "a1_patrol",
+      "name": "黒根の狩猟群",
+      "area": 1,
+      "level": 1400,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_shelza",
+          "commander": null,
+          "name": "玻璃蠍シェルザ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 19,
+          "gearLevel": 1008,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_kororu",
+          "commander": null,
+          "name": "芽灯虫コロル",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 19,
+          "gearLevel": 1008,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "雷鳥の羽根",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_balk",
+          "commander": null,
+          "name": "棘盾獣バルク",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 19,
+          "gearLevel": 1008,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "聖堂騎士の剣",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a1_west",
+      "name": "飢根の捕食者",
+      "area": 1,
+      "level": 1460,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_mirea",
+          "commander": null,
+          "name": "翠薬の魔女ミレア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 29,
+          "gearLevel": 1343,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_viola",
+          "commander": null,
+          "name": "毒花の魔女ヴィオラ",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 29,
+          "gearLevel": 1343,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_shelza",
+          "commander": null,
+          "name": "玻璃蠍シェルザ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 29,
+          "gearLevel": 1343,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_balk",
+          "commander": null,
+          "name": "棘盾獣バルク",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 29,
+          "gearLevel": 1343,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "聖堂騎士の剣",
+            "聖騎士重鎧",
+            "王者の戦装",
+            "賢者の宝珠",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a1_east",
+      "name": "灰燼の憤怒",
+      "area": 1,
+      "level": 1520,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_kagura",
+          "commander": null,
+          "name": "紅月の巫狐カグラ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 29,
+          "gearLevel": 1398,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_sayo",
+          "commander": null,
+          "name": "蒼月の巫狐サヨ",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 29,
+          "gearLevel": 1398,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "魔女の夜衣",
+            "王者の戦装",
+            "賢者の宝珠",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_miretta",
+          "commander": null,
+          "name": "繕糸の針姫ミレッタ",
+          "role": "support",
+          "circle": "継承の葬環",
+          "circleLevel": 29,
+          "gearLevel": 1398,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "魔女の夜衣",
+            "王者の戦装",
+            "賢者の宝珠",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_grant",
+          "commander": null,
+          "name": "封樹の衛兵グラント",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 29,
+          "gearLevel": 1398,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "王家の大剣",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a1_heart",
+      "name": "黒根の王・喰界",
+      "area": 1,
+      "level": 1580,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ogre",
+          "commander": "abyss_gluttony",
+          "name": "深淵Ⅰ 暴食",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 29,
+          "gearLevel": 1454,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "王家の大剣",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_nevia",
+          "commander": null,
+          "name": "藤影の鎖姫ネヴィア",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 29,
+          "gearLevel": 1454,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "雷鳥の羽根",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_elmina",
+          "commander": null,
+          "name": "白藤の鎌姫エルミナ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 29,
+          "gearLevel": 1454,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_tillea",
+          "commander": null,
+          "name": "栞の書姫ティレア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 29,
+          "gearLevel": 1454,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "魔女の夜衣",
+            "王者の戦装",
+            "賢者の宝珠",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a2_patrol",
+      "name": "鎖翼の狩猟群",
+      "area": 2,
+      "level": 2000,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_velg",
+          "commander": null,
+          "name": "鎖翼竜ヴェルグ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 30,
+          "gearLevel": 1440,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_shelza",
+          "commander": null,
+          "name": "玻璃蠍シェルザ",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 30,
+          "gearLevel": 1440,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_kororu",
+          "commander": null,
+          "name": "芽灯虫コロル",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 30,
+          "gearLevel": 1440,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "賢者の宝珠",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a2_west",
+      "name": "静寂の深淵",
+      "area": 2,
+      "level": 2060,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "stone_golem",
+          "commander": "abyss_sloth",
+          "name": "深淵Ⅳ 怠惰",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 40,
+          "gearLevel": 1895,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_morina",
+          "commander": null,
+          "name": "幻眠の扇姫モリナ",
+          "role": "disruptor",
+          "circle": "深神封殺陣",
+          "circleLevel": 40,
+          "gearLevel": 1895,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_elmize",
+          "commander": null,
+          "name": "醒夢の鎌姫エルミゼ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 40,
+          "gearLevel": 1895,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "星幽ローブ",
+            "時渡りの時計",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_tillea",
+          "commander": null,
+          "name": "栞の書姫ティレア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 40,
+          "gearLevel": 1895,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "天穿の槍",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a2_east",
+      "name": "奪う者の王権",
+      "area": 2,
+      "level": 2120,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "goblin_shaman",
+          "commander": "abyss_greed",
+          "name": "深淵Ⅴ 強欲",
+          "role": "disruptor",
+          "circle": "断末吸魔陣",
+          "circleLevel": 40,
+          "gearLevel": 1950,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "天穿の槍",
+            "星幽ローブ",
+            "王者の戦装",
+            "時渡りの時計",
+            "雷鳥の羽根"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_meliora",
+          "commander": null,
+          "name": "冥鍵の剣姫メリオラ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 40,
+          "gearLevel": 1950,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "星幽ローブ",
+            "時渡りの時計",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_elyselle",
+          "commander": null,
+          "name": "聖鍵の冠姫エリゼル",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 40,
+          "gearLevel": 1950,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_grant",
+          "commander": null,
+          "name": "封樹の衛兵グラント",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 40,
+          "gearLevel": 1950,
+          "gearRarity": "LR",
+          "gearNames": [
+            "星砕きの鎚",
+            "龍哭刀",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a2_heart",
+      "name": "深淵の総意",
+      "area": 2,
+      "level": 2180,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ancient_dragon",
+          "commander": "abyss_pride",
+          "name": "深淵Ⅶ 傲慢",
+          "role": "leader",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 40,
+          "gearLevel": 2006,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "炎の指輪"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_noctelle",
+          "commander": null,
+          "name": "黒薔薇の刃姫ノクテル",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 40,
+          "gearLevel": 2006,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "星幽ローブ",
+            "時渡りの時計",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_auriane",
+          "commander": null,
+          "name": "白薔薇の衛姫オーリアン",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 40,
+          "gearLevel": 2006,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "天穿の槍",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_velg",
+          "commander": null,
+          "name": "鎖翼竜ヴェルグ",
+          "role": "striker",
+          "circle": "半月障壁陣",
+          "circleLevel": 40,
+          "gearLevel": 2006,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "星幽ローブ",
+            "時渡りの時計",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a3_patrol",
+      "name": "霜鐘の聖域守",
+      "area": 3,
+      "level": 2800,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_noctia",
+          "commander": null,
+          "name": "霜鐘梟ノクティア",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 41,
+          "gearLevel": 2016,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_balk",
+          "commander": null,
+          "name": "棘盾獣バルク",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 41,
+          "gearLevel": 2016,
+          "gearRarity": "LR",
+          "gearNames": [
+            "星砕きの鎚",
+            "聖堂騎士の剣",
+            "聖騎士重鎧",
+            "王者の戦装",
+            "賢者の宝珠",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_astera",
+          "commander": null,
+          "name": "星糸司アステラ",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 41,
+          "gearLevel": 2016,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a3_west",
+      "name": "生命を守る神々",
+      "area": 3,
+      "level": 2860,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "water_spirit",
+          "commander": "ten_life",
+          "name": "十神Ⅲ 生命",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 51,
+          "gearLevel": 2631,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黄昏の魔典",
+            "虚空の魔剣",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_iselle",
+          "commander": null,
+          "name": "氷紋の杖姫イゼル",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 51,
+          "gearLevel": 2631,
+          "gearRarity": "神話",
+          "gearNames": [
+            "虚空の魔剣",
+            "黄昏の魔典",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_virelle",
+          "commander": null,
+          "name": "砕氷の槌姫ヴィレル",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 51,
+          "gearLevel": 2631,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "王者の戦装",
+            "星幽ローブ",
+            "天命の王冠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_ione",
+          "commander": null,
+          "name": "天秤の祭司イオネ",
+          "role": "support",
+          "circle": "半月障壁陣",
+          "circleLevel": 51,
+          "gearLevel": 2631,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黄昏の魔典",
+            "虚空の魔剣",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a3_east",
+      "name": "因果を測る神々",
+      "area": 3,
+      "level": 2920,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "clockwork",
+          "commander": "ten_time",
+          "name": "十神Ⅰ 時間",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 51,
+          "gearLevel": 2686,
+          "gearRarity": "神話",
+          "gearNames": [
+            "虚空の魔剣",
+            "黄昏の魔典",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_calista",
+          "commander": null,
+          "name": "蒼雷の槍姫カリスタ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 51,
+          "gearLevel": 2686,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "王者の戦装",
+            "星幽ローブ",
+            "天命の王冠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_solenne",
+          "commander": null,
+          "name": "金雷の盾姫ソレーヌ",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 51,
+          "gearLevel": 2686,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "天穹の神鎧",
+            "王者の戦装",
+            "天命の王冠",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rithia",
+          "commander": null,
+          "name": "根灯の短剣姫リティア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 51,
+          "gearLevel": 2686,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "星幽ローブ",
+            "天穹の神鎧",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a3_heart",
+      "name": "十神の最終審理",
+      "area": 3,
+      "level": 2980,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ancient_dragon",
+          "commander": "ten_divinity",
+          "name": "十神Ⅹ 神格",
+          "role": "leader",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 51,
+          "gearLevel": 2742,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "天穹の神鎧",
+            "王者の戦装",
+            "天命の王冠",
+            "竜心の首輪"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_aure",
+          "commander": null,
+          "name": "暁翼の祈姫アウレ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 51,
+          "gearLevel": 2742,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "王者の戦装",
+            "星幽ローブ",
+            "天命の王冠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_noelle",
+          "commander": null,
+          "name": "宵翼の詠姫ノエル",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 51,
+          "gearLevel": 2742,
+          "gearRarity": "神話",
+          "gearNames": [
+            "虚空の魔剣",
+            "黄昏の魔典",
+            "星幽ローブ",
+            "天穹の神鎧",
+            "賢者の宝珠",
+            "天命の王冠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rostia",
+          "commander": null,
+          "name": "黒盾の誓姫ロスティア",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 51,
+          "gearLevel": 2742,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "天穹の神鎧",
+            "王者の戦装",
+            "天命の王冠",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a4_patrol",
+      "name": "星糸の中枢衛",
+      "area": 4,
+      "level": 3800,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_velg",
+          "commander": null,
+          "name": "鎖翼竜ヴェルグ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 52,
+          "gearLevel": 2736,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "星幽ローブ",
+            "時渡りの時計",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_noctia",
+          "commander": null,
+          "name": "霜鐘梟ノクティア",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 52,
+          "gearLevel": 2736,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_astera",
+          "commander": null,
+          "name": "星糸司アステラ",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 52,
+          "gearLevel": 2736,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a4_west",
+      "name": "記録を閉ざす者",
+      "area": 4,
+      "level": 3860,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "goblin_shaman",
+          "commander": "ten_dominion",
+          "name": "十神Ⅶ 支配",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 62,
+          "gearLevel": 3551,
+          "gearRarity": "神話",
+          "gearNames": [
+            "虚空の魔剣",
+            "黄昏の魔典",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_eirene",
+          "commander": null,
+          "name": "蒼刻の星姫エイレーネ",
+          "role": "disruptor",
+          "circle": "深神封殺陣",
+          "circleLevel": 62,
+          "gearLevel": 3551,
+          "gearRarity": "神話",
+          "gearNames": [
+            "虚空の魔剣",
+            "黄昏の魔典",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_iridelle",
+          "commander": null,
+          "name": "緋刻の星姫イリデル",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 62,
+          "gearLevel": 3551,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "天穹の神鎧",
+            "王者の戦装",
+            "天命の王冠",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_grant",
+          "commander": null,
+          "name": "封樹の衛兵グラント",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 62,
+          "gearLevel": 3551,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "天穹の神鎧",
+            "王者の戦装",
+            "天命の王冠",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a4_east",
+      "name": "修復を続ける者",
+      "area": 4,
+      "level": 3920,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "angelic_orb",
+          "commander": "ten_creation",
+          "name": "十神Ⅷ 創造",
+          "role": "support",
+          "circle": "半月障壁陣",
+          "circleLevel": 62,
+          "gearLevel": 3606,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黄昏の魔典",
+            "虚空の魔剣",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_lunaria",
+          "commander": null,
+          "name": "月冥の翼姫ルナリア",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 62,
+          "gearLevel": 3606,
+          "gearRarity": "神話",
+          "gearNames": [
+            "虚空の魔剣",
+            "黄昏の魔典",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_solaria",
+          "commander": null,
+          "name": "日輪の翼姫ソラリア",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 62,
+          "gearLevel": 3606,
+          "gearRarity": "神話",
+          "gearNames": [
+            "虚空の魔剣",
+            "黄昏の魔典",
+            "星幽ローブ",
+            "天穹の神鎧",
+            "賢者の宝珠",
+            "天命の王冠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_noctia",
+          "commander": null,
+          "name": "霜鐘梟ノクティア",
+          "role": "disruptor",
+          "circle": "断末吸魔陣",
+          "circleLevel": 62,
+          "gearLevel": 3606,
+          "gearRarity": "神話",
+          "gearNames": [
+            "虚空の魔剣",
+            "黄昏の魔典",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "a4_heart",
+      "name": "天律の裁定者",
+      "area": 4,
+      "level": 3980,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "salamander",
+          "commander": "ten_end",
+          "name": "十神Ⅸ 終焉",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 62,
+          "gearLevel": 3662,
+          "gearRarity": "神話",
+          "gearNames": [
+            "虚空の魔剣",
+            "黎明の聖剣",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "天命の王冠",
+            "賢者の宝珠"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_sephira",
+          "commander": null,
+          "name": "星詠の魔導姫セフィラ",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 62,
+          "gearLevel": 3662,
+          "gearRarity": "神話",
+          "gearNames": [
+            "虚空の魔剣",
+            "黄昏の魔典",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_astrelle",
+          "commander": null,
+          "name": "天環の魔導姫アストレル",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 62,
+          "gearLevel": 3662,
+          "gearRarity": "神話",
+          "gearNames": [
+            "虚空の魔剣",
+            "黄昏の魔典",
+            "星幽ローブ",
+            "天穹の神鎧",
+            "賢者の宝珠",
+            "天命の王冠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_ione",
+          "commander": null,
+          "name": "天秤の祭司イオネ",
+          "role": "support",
+          "circle": "半月障壁陣",
+          "circleLevel": 62,
+          "gearLevel": 3662,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黄昏の魔典",
+            "虚空の魔剣",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "patrol",
+      "name": "芽灯の群れ",
+      "area": 0,
+      "level": 1050,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_kororu",
+          "commander": null,
+          "name": "芽灯虫コロル",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 8,
+          "gearLevel": 756,
+          "gearRarity": "SR",
+          "gearNames": [
+            "精霊樹の杖",
+            "黒曜の魔導杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "雷鳥の羽根",
+            "旅人の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_balk",
+          "commander": null,
+          "name": "棘盾獣バルク",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 8,
+          "gearLevel": 756,
+          "gearRarity": "SR",
+          "gearNames": [
+            "聖堂騎士の剣",
+            "破城槌",
+            "白銀板金",
+            "守護者の外套",
+            "毒避け護石",
+            "生命の首飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "west",
+      "name": "西封樹の守護者",
+      "area": 0,
+      "level": 1100,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_balk",
+          "commander": null,
+          "name": "棘盾獣バルク",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 18,
+          "gearLevel": 1012,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "聖堂騎士の剣",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_kororu",
+          "commander": null,
+          "name": "芽灯虫コロル",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 18,
+          "gearLevel": 1012,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "雷鳥の羽根",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_pipia",
+          "commander": null,
+          "name": "露鈴の案内姫ピピア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 18,
+          "gearLevel": 1012,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "精霊樹の杖",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "月光の耳飾り",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "east",
+      "name": "東封樹の守護者",
+      "area": 0,
+      "level": 1100,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_grant",
+          "commander": null,
+          "name": "封樹の衛兵グラント",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 18,
+          "gearLevel": 1012,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_lilica",
+          "commander": null,
+          "name": "煤紫の剣魔リリカ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 18,
+          "gearLevel": 1012,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_lumea",
+          "commander": null,
+          "name": "封書の小剣姫ルメア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 18,
+          "gearLevel": 1012,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "heart",
+      "name": "世界樹の残響・侵食体",
+      "area": 0,
+      "level": 1200,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_ryune",
+          "commander": null,
+          "name": "湖鏡の侍女リュネ",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 18,
+          "gearLevel": 1104,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_rose",
+          "commander": null,
+          "name": "紅鏡の侍女ロゼ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 18,
+          "gearLevel": 1104,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_mirea",
+          "commander": null,
+          "name": "翠薬の魔女ミレア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 18,
+          "gearLevel": 1104,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "精霊樹の杖",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "月光の耳飾り",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_kororu",
+          "commander": null,
+          "name": "芽灯虫コロル",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 18,
+          "gearLevel": 1104,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "雷鳥の羽根",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "vault0",
+      "name": "境界の森・宝物庫の番人",
+      "area": 0,
+      "level": 1650,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_nevia",
+          "commander": null,
+          "name": "藤影の鎖姫ネヴィア",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 26,
+          "gearLevel": 1518,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "雷鳥の羽根",
+            "竜心の首輪"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_elmina",
+          "commander": null,
+          "name": "白藤の鎌姫エルミナ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 26,
+          "gearLevel": 1518,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rithia",
+          "commander": null,
+          "name": "根灯の短剣姫リティア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 26,
+          "gearLevel": 1518,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_grant",
+          "commander": null,
+          "name": "封樹の衛兵グラント",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 26,
+          "gearLevel": 1518,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam0_1",
+      "name": "封書と夜露の案内隊",
+      "area": 0,
+      "level": 1050,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_ryune",
+          "commander": null,
+          "name": "湖鏡の侍女リュネ",
+          "role": "guardian",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rose",
+          "commander": null,
+          "name": "紅鏡の侍女ロゼ",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rithia",
+          "commander": null,
+          "name": "根灯の短剣姫リティア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_grant",
+          "commander": null,
+          "name": "封樹の衛兵グラント",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam0_3",
+      "name": "封樹を巡る双藤の鎖隊",
+      "area": 0,
+      "level": 1050,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_nizelle",
+          "commander": null,
+          "name": "黒羽の細剣姫ニゼル",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "雷鳥の羽根",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_charne",
+          "commander": null,
+          "name": "紅羽の双剣姫シャルネ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_tillea",
+          "commander": null,
+          "name": "栞の書姫ティレア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_balk",
+          "commander": null,
+          "name": "棘盾獣バルク",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "聖堂騎士の剣",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam0_4",
+      "name": "夜灯と蒼紅の巡察隊",
+      "area": 0,
+      "level": 1050,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_mirea",
+          "commander": null,
+          "name": "翠薬の魔女ミレア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "精霊樹の杖",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "月光の耳飾り",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_viola",
+          "commander": null,
+          "name": "毒花の魔女ヴィオラ",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "月光の耳飾り",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_kororu",
+          "commander": null,
+          "name": "芽灯虫コロル",
+          "role": "disruptor",
+          "circle": "継承の葬環",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "雷鳥の羽根",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_lilica",
+          "commander": null,
+          "name": "煤紫の剣魔リリカ",
+          "role": "striker",
+          "circle": "半月障壁陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "vault1",
+      "name": "黒根の侵食域・宝物庫の番人",
+      "area": 1,
+      "level": 2310,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "dark_knight",
+          "commander": "abyss_wrath",
+          "name": "深淵Ⅱ 憤怒",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 37,
+          "gearLevel": 2125,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_kagura",
+          "commander": null,
+          "name": "紅月の巫狐カグラ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 37,
+          "gearLevel": 2125,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_sayo",
+          "commander": null,
+          "name": "蒼月の巫狐サヨ",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 37,
+          "gearLevel": 2125,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "魔女の夜衣",
+            "王者の戦装",
+            "賢者の宝珠",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_grant",
+          "commander": null,
+          "name": "封樹の衛兵グラント",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 37,
+          "gearLevel": 2125,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "王家の大剣",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam1_1",
+      "name": "黒根を護る双誓の姉妹",
+      "area": 1,
+      "level": 2600,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ogre",
+          "commander": "abyss_gluttony",
+          "name": "深淵Ⅰ 暴食",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 27,
+          "gearLevel": 2990,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_nevia",
+          "commander": null,
+          "name": "藤影の鎖姫ネヴィア",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 27,
+          "gearLevel": 2990,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "雷鳥の羽根",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_elmina",
+          "commander": null,
+          "name": "白藤の鎌姫エルミナ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 27,
+          "gearLevel": 2990,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_tillea",
+          "commander": null,
+          "name": "栞の書姫ティレア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 27,
+          "gearLevel": 2990,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam1_3",
+      "name": "蒼紅の誓姫と封印の衛",
+      "area": 1,
+      "level": 1400,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_morina",
+          "commander": null,
+          "name": "幻眠の扇姫モリナ",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "月光の耳飾り",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_elmize",
+          "commander": null,
+          "name": "醒夢の鎌姫エルミゼ",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rikka",
+          "commander": null,
+          "name": "白兎の縫姫リッカ",
+          "role": "support",
+          "circle": "半月障壁陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rinne",
+          "commander": null,
+          "name": "黒兎の鋏姫リンネ",
+          "role": "striker",
+          "circle": "不屈の残光",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam1_4",
+      "name": "焼け跡を繕う根脈の部隊",
+      "area": 1,
+      "level": 1400,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_kagura",
+          "commander": null,
+          "name": "紅月の巫狐カグラ",
+          "role": "striker",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_sayo",
+          "commander": null,
+          "name": "蒼月の巫狐サヨ",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_seria",
+          "commander": null,
+          "name": "氷硝の歌姫セリア",
+          "role": "disruptor",
+          "circle": "半月障壁陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "月光の耳飾り",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_carmia",
+          "commander": null,
+          "name": "紅硝の奏姫カルミア",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "月光の耳飾り",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "vault2",
+      "name": "深淵の回廊・宝物庫の番人",
+      "area": 2,
+      "level": 3300,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "wraith",
+          "commander": "abyss_lust",
+          "name": "深淵Ⅵ 色欲",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 48,
+          "gearLevel": 3036,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_shion",
+          "commander": null,
+          "name": "幽符の姉シオン",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 48,
+          "gearLevel": 3036,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_suiren",
+          "commander": null,
+          "name": "霊鈴の妹スイレン",
+          "role": "support",
+          "circle": "継承の葬環",
+          "circleLevel": 48,
+          "gearLevel": 3036,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_velg",
+          "commander": null,
+          "name": "鎖翼竜ヴェルグ",
+          "role": "striker",
+          "circle": "半月障壁陣",
+          "circleLevel": 48,
+          "gearLevel": 3036,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "星幽ローブ",
+            "時渡りの時計",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam2_1",
+      "name": "忘却を砕く双晶の鎖隊",
+      "area": 2,
+      "level": 2000,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "wraith",
+          "commander": "abyss_lust",
+          "name": "深淵Ⅵ 色欲",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_shion",
+          "commander": null,
+          "name": "幽符の姉シオン",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_suiren",
+          "commander": null,
+          "name": "霊鈴の妹スイレン",
+          "role": "support",
+          "circle": "継承の葬環",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_velg",
+          "commander": null,
+          "name": "鎖翼竜ヴェルグ",
+          "role": "striker",
+          "circle": "半月障壁陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam2_3",
+      "name": "黒白の薔薇聖堂",
+      "area": 2,
+      "level": 2000,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_ferne",
+          "commander": null,
+          "name": "宵鐘の護姫フェルネ",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "王家の大剣",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_clarisse",
+          "commander": null,
+          "name": "暁鐘の聖姫クラリス",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_noctelle",
+          "commander": null,
+          "name": "黒薔薇の刃姫ノクテル",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_auriane",
+          "commander": null,
+          "name": "白薔薇の衛姫オーリアン",
+          "role": "support",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "魔女の夜衣",
+            "王者の戦装",
+            "賢者の宝珠",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam2_4",
+      "name": "冥路の双符姉妹",
+      "area": 2,
+      "level": 2000,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "goblin_shaman",
+          "commander": "abyss_greed",
+          "name": "深淵Ⅴ 強欲",
+          "role": "disruptor",
+          "circle": "断末吸魔陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "雷鳥の羽根",
+            "竜心の首輪"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_meliora",
+          "commander": null,
+          "name": "冥鍵の剣姫メリオラ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_elyselle",
+          "commander": null,
+          "name": "聖鍵の冠姫エリゼル",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "聖騎士重鎧",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_senela",
+          "commander": null,
+          "name": "灰燭の呪術師セネラ",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "vault3",
+      "name": "天律の聖域・宝物庫の番人",
+      "area": 3,
+      "level": 4620,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "wyvern",
+          "commander": "ten_fate",
+          "name": "十神Ⅴ 運命",
+          "role": "leader",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 59,
+          "gearLevel": 4250,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "天穹の神鎧",
+            "王者の戦装",
+            "天命の王冠",
+            "竜心の首輪"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_dracia",
+          "commander": null,
+          "name": "黒鎖の竜姫ドラシア",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 59,
+          "gearLevel": 4250,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "天穹の神鎧",
+            "王者の戦装",
+            "天命の王冠",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rucie",
+          "commander": null,
+          "name": "白翼の竜姫リュシエ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 59,
+          "gearLevel": 4250,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "王者の戦装",
+            "星幽ローブ",
+            "天命の王冠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_clarisse",
+          "commander": null,
+          "name": "暁鐘の聖姫クラリス",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 59,
+          "gearLevel": 4250,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黄昏の魔典",
+            "虚空の魔剣",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam3_1",
+      "name": "天律の狐巫女姉妹",
+      "area": 3,
+      "level": 2800,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "angelic_orb",
+          "commander": "ten_creation",
+          "name": "十神Ⅷ 創造",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 41,
+          "gearLevel": 3220,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_dracia",
+          "commander": null,
+          "name": "黒鎖の竜姫ドラシア",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 41,
+          "gearLevel": 3220,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "王家の大剣",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rucie",
+          "commander": null,
+          "name": "白翼の竜姫リュシエ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 41,
+          "gearLevel": 3220,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_noctia",
+          "commander": null,
+          "name": "霜鐘梟ノクティア",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 41,
+          "gearLevel": 3220,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "賢者の宝珠",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam3_3",
+      "name": "双刻の星姫と天文台の記録",
+      "area": 3,
+      "level": 4800,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_rostia",
+          "commander": null,
+          "name": "黒盾の誓姫ロスティア",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 41,
+          "gearLevel": 5520,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "王家の大剣",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_althea",
+          "commander": null,
+          "name": "紅剣の返誓姫アルテア",
+          "role": "striker",
+          "circle": "血走加速陣",
+          "circleLevel": 41,
+          "gearLevel": 5520,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_calista",
+          "commander": null,
+          "name": "蒼雷の槍姫カリスタ",
+          "role": "striker",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 41,
+          "gearLevel": 5520,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_solenne",
+          "commander": null,
+          "name": "金雷の盾姫ソレーヌ",
+          "role": "guardian",
+          "circle": "不屈の残光",
+          "circleLevel": 41,
+          "gearLevel": 5520,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "王家の大剣",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam3_4",
+      "name": "双翼と双雷の聖壇衛",
+      "area": 3,
+      "level": 4300,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "water_spirit",
+          "commander": "ten_life",
+          "name": "十神Ⅲ 生命",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 41,
+          "gearLevel": 4945,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_iselle",
+          "commander": null,
+          "name": "氷紋の杖姫イゼル",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 41,
+          "gearLevel": 4945,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_virelle",
+          "commander": null,
+          "name": "砕氷の槌姫ヴィレル",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 41,
+          "gearLevel": 4945,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_aure",
+          "commander": null,
+          "name": "暁翼の祈姫アウレ",
+          "role": "striker",
+          "circle": "半月障壁陣",
+          "circleLevel": 41,
+          "gearLevel": 4945,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "vault4",
+      "name": "理の中枢・宝物庫の番人",
+      "area": 4,
+      "level": 6270,
+      "changed": true,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "frost_dragon",
+          "commander": "ten_chaos",
+          "name": "十神Ⅵ 混沌",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 70,
+          "gearLevel": 5768,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "星幽ローブ",
+            "王者の戦装",
+            "時渡りの時計",
+            "天命の王冠"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_nemesia",
+          "commander": null,
+          "name": "夜冠の剣姫ネメシア",
+          "role": "disruptor",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 70,
+          "gearLevel": 5768,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "星幽ローブ",
+            "王者の戦装",
+            "時渡りの時計",
+            "天命の王冠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_everia",
+          "commander": null,
+          "name": "暁冠の剣姫エヴェリア",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 70,
+          "gearLevel": 5768,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黎明の聖剣",
+            "虚空の魔剣",
+            "天穹の神鎧",
+            "王者の戦装",
+            "天命の王冠",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_clarisse",
+          "commander": null,
+          "name": "暁鐘の聖姫クラリス",
+          "role": "support",
+          "circle": "半月障壁陣",
+          "circleLevel": 70,
+          "gearLevel": 5768,
+          "gearRarity": "神話",
+          "gearNames": [
+            "黄昏の魔典",
+            "虚空の魔剣",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam4_1",
+      "name": "輪廻を巡る星門の詠唱隊",
+      "area": 4,
+      "level": 5600,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "clockwork",
+          "commander": "ten_time",
+          "name": "十神Ⅰ 時間",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 48,
+          "gearLevel": 6440,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_celes",
+          "commander": null,
+          "name": "星糸の織姫セレス",
+          "role": "disruptor",
+          "circle": "半月障壁陣",
+          "circleLevel": 48,
+          "gearLevel": 6440,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_lumina",
+          "commander": null,
+          "name": "星刃の舞姫ルミナ",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 48,
+          "gearLevel": 6440,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "星幽ローブ",
+            "時渡りの時計",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_iridelle",
+          "commander": null,
+          "name": "緋刻の星姫イリデル",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 48,
+          "gearLevel": 6440,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "炎の指輪"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam4_3",
+      "name": "記録を護る光冠と玻璃姫",
+      "area": 4,
+      "level": 5200,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_nemesia",
+          "commander": null,
+          "name": "夜冠の剣姫ネメシア",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 48,
+          "gearLevel": 5980,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "天穿の槍",
+            "星幽ローブ",
+            "王者の戦装",
+            "時渡りの時計",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_everia",
+          "commander": null,
+          "name": "暁冠の剣姫エヴェリア",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 48,
+          "gearLevel": 5980,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_aeriel",
+          "commander": null,
+          "name": "終律の聖姫アエリエル",
+          "role": "leader",
+          "circle": "半月障壁陣",
+          "circleLevel": 48,
+          "gearLevel": 5980,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_vespera",
+          "commander": null,
+          "name": "始淵の魔姫ヴェスペラ",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 48,
+          "gearLevel": 5980,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "太陽の神弓",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam4_4",
+      "name": "修復の中枢と双鍵の姫",
+      "area": 4,
+      "level": 5400,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "wyvern",
+          "commander": "ten_fate",
+          "name": "十神Ⅴ 運命",
+          "role": "leader",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 48,
+          "gearLevel": 6210,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "炎の指輪"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_sephira",
+          "commander": null,
+          "name": "星詠の魔導姫セフィラ",
+          "role": "disruptor",
+          "circle": "半月障壁陣",
+          "circleLevel": 48,
+          "gearLevel": 6210,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_astrelle",
+          "commander": null,
+          "name": "天環の魔導姫アストレル",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 48,
+          "gearLevel": 6210,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_solaria",
+          "commander": null,
+          "name": "日輪の翼姫ソラリア",
+          "role": "leader",
+          "circle": "継承の葬環",
+          "circleLevel": 48,
+          "gearLevel": 6210,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam0_1_391",
+      "name": "根灯に導かれた黒紅の双羽",
+      "area": 0,
+      "level": 1050,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_ryune",
+          "commander": null,
+          "name": "湖鏡の侍女リュネ",
+          "role": "guardian",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rose",
+          "commander": null,
+          "name": "紅鏡の侍女ロゼ",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rithia",
+          "commander": null,
+          "name": "根灯の短剣姫リティア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_grant",
+          "commander": null,
+          "name": "封樹の衛兵グラント",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam2_3_391",
+      "name": "宵暁の鐘が響く薔薇聖堂",
+      "area": 2,
+      "level": 2000,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_ferne",
+          "commander": null,
+          "name": "宵鐘の護姫フェルネ",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "王家の大剣",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_clarisse",
+          "commander": null,
+          "name": "暁鐘の聖姫クラリス",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_noctelle",
+          "commander": null,
+          "name": "黒薔薇の刃姫ノクテル",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_auriane",
+          "commander": null,
+          "name": "白薔薇の衛姫オーリアン",
+          "role": "support",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "魔女の夜衣",
+            "王者の戦装",
+            "賢者の宝珠",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam4_4_391",
+      "name": "日月を巡らせる双輪と双鍵",
+      "area": 4,
+      "level": 5400,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "wyvern",
+          "commander": "ten_fate",
+          "name": "十神Ⅴ 運命",
+          "role": "leader",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 48,
+          "gearLevel": 6210,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "炎の指輪"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_sephira",
+          "commander": null,
+          "name": "星詠の魔導姫セフィラ",
+          "role": "disruptor",
+          "circle": "半月障壁陣",
+          "circleLevel": 48,
+          "gearLevel": 6210,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_astrelle",
+          "commander": null,
+          "name": "天環の魔導姫アストレル",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 48,
+          "gearLevel": 6210,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_solaria",
+          "commander": null,
+          "name": "日輪の翼姫ソラリア",
+          "role": "leader",
+          "circle": "継承の葬環",
+          "circleLevel": 48,
+          "gearLevel": 6210,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam1_3_392",
+      "name": "悪夢を刈る双子と栞の書姫",
+      "area": 1,
+      "level": 1400,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_morina",
+          "commander": null,
+          "name": "幻眠の扇姫モリナ",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "月光の耳飾り",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_elmize",
+          "commander": null,
+          "name": "醒夢の鎌姫エルミゼ",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rikka",
+          "commander": null,
+          "name": "白兎の縫姫リッカ",
+          "role": "support",
+          "circle": "半月障壁陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rinne",
+          "commander": null,
+          "name": "黒兎の鋏姫リンネ",
+          "role": "striker",
+          "circle": "不屈の残光",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam3_1_392",
+      "name": "天秤を解き放つ黒白の双竜",
+      "area": 3,
+      "level": 2800,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "angelic_orb",
+          "commander": "ten_creation",
+          "name": "十神Ⅷ 創造",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 41,
+          "gearLevel": 3220,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_dracia",
+          "commander": null,
+          "name": "黒鎖の竜姫ドラシア",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 41,
+          "gearLevel": 3220,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "王家の大剣",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rucie",
+          "commander": null,
+          "name": "白翼の竜姫リュシエ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 41,
+          "gearLevel": 3220,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_noctia",
+          "commander": null,
+          "name": "霜鐘梟ノクティア",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 41,
+          "gearLevel": 3220,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "賢者の宝珠",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam4_3_392",
+      "name": "夜明けを刻む二組の双冠",
+      "area": 4,
+      "level": 5200,
+      "changed": false,
+      "elite": false,
+      "members": [
+        {
+          "speciesId": "ch2_nemesia",
+          "commander": null,
+          "name": "夜冠の剣姫ネメシア",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 48,
+          "gearLevel": 5980,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "天穿の槍",
+            "星幽ローブ",
+            "王者の戦装",
+            "時渡りの時計",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_everia",
+          "commander": null,
+          "name": "暁冠の剣姫エヴェリア",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 48,
+          "gearLevel": 5980,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_aeriel",
+          "commander": null,
+          "name": "終律の聖姫アエリエル",
+          "role": "leader",
+          "circle": "半月障壁陣",
+          "circleLevel": 48,
+          "gearLevel": 5980,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_vespera",
+          "commander": null,
+          "name": "始淵の魔姫ヴェスペラ",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 48,
+          "gearLevel": 5980,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "太陽の神弓",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam0_1_elite393",
+      "name": "精鋭・鏡刃の護衛隊",
+      "area": 0,
+      "level": 1050,
+      "changed": false,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "ch2_ryune",
+          "commander": null,
+          "name": "湖鏡の侍女リュネ",
+          "role": "guardian",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rose",
+          "commander": null,
+          "name": "紅鏡の侍女ロゼ",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rithia",
+          "commander": null,
+          "name": "根灯の短剣姫リティア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_grant",
+          "commander": null,
+          "name": "封樹の衛兵グラント",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam0_3_elite393",
+      "name": "精鋭・紅糸の追跡隊",
+      "area": 0,
+      "level": 1050,
+      "changed": false,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "ch2_nizelle",
+          "commander": null,
+          "name": "黒羽の細剣姫ニゼル",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "雷鳥の羽根",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_charne",
+          "commander": null,
+          "name": "紅羽の双剣姫シャルネ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_tillea",
+          "commander": null,
+          "name": "栞の書姫ティレア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_balk",
+          "commander": null,
+          "name": "棘盾獣バルク",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "聖堂騎士の剣",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam0_4_elite393",
+      "name": "精鋭・薬毒の封樹庭園",
+      "area": 0,
+      "level": 1050,
+      "changed": false,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "ch2_mirea",
+          "commander": null,
+          "name": "翠薬の魔女ミレア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "精霊樹の杖",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "月光の耳飾り",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_viola",
+          "commander": null,
+          "name": "毒花の魔女ヴィオラ",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "月光の耳飾り",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_kororu",
+          "commander": null,
+          "name": "芽灯虫コロル",
+          "role": "disruptor",
+          "circle": "継承の葬環",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "雷鳥の羽根",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_lilica",
+          "commander": null,
+          "name": "煤紫の剣魔リリカ",
+          "role": "striker",
+          "circle": "半月障壁陣",
+          "circleLevel": 20,
+          "gearLevel": 1208,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam1_1_elite393",
+      "name": "精鋭・白藤の毒鎖結社",
+      "area": 1,
+      "level": 2600,
+      "changed": true,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "ogre",
+          "commander": "abyss_gluttony",
+          "name": "深淵Ⅰ 暴食",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 27,
+          "gearLevel": 2990,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "聖騎士重鎧",
+            "氷竜外套",
+            "竜心の首輪",
+            "毒避け護石"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_nevia",
+          "commander": null,
+          "name": "藤影の鎖姫ネヴィア",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 27,
+          "gearLevel": 2990,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "雷鳥の羽根",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_elmina",
+          "commander": null,
+          "name": "白藤の鎌姫エルミナ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 27,
+          "gearLevel": 2990,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_tillea",
+          "commander": null,
+          "name": "栞の書姫ティレア",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 27,
+          "gearLevel": 2990,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam1_3_elite393",
+      "name": "精鋭・縫い留められた夢境",
+      "area": 1,
+      "level": 1400,
+      "changed": false,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "ch2_morina",
+          "commander": null,
+          "name": "幻眠の扇姫モリナ",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "月光の耳飾り",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_elmize",
+          "commander": null,
+          "name": "醒夢の鎌姫エルミゼ",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rikka",
+          "commander": null,
+          "name": "白兎の縫姫リッカ",
+          "role": "support",
+          "circle": "半月障壁陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rinne",
+          "commander": null,
+          "name": "黒兎の鋏姫リンネ",
+          "role": "striker",
+          "circle": "不屈の残光",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam1_4_elite393",
+      "name": "精鋭・焔月と硝子の舞台",
+      "area": 1,
+      "level": 1400,
+      "changed": false,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "ch2_kagura",
+          "commander": null,
+          "name": "紅月の巫狐カグラ",
+          "role": "striker",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "雷鳴槍",
+            "魔女の夜衣",
+            "鎖帷子",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_sayo",
+          "commander": null,
+          "name": "蒼月の巫狐サヨ",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "星砕きの鎚",
+            "破城槌",
+            "魔女の夜衣",
+            "氷竜外套",
+            "雷鳥の羽根",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_seria",
+          "commander": null,
+          "name": "氷硝の歌姫セリア",
+          "role": "disruptor",
+          "circle": "半月障壁陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "月光の耳飾り",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_carmia",
+          "commander": null,
+          "name": "紅硝の奏姫カルミア",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 27,
+          "gearLevel": 1610,
+          "gearRarity": "SSR",
+          "gearNames": [
+            "氷晶の杖",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "月光の耳飾り",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam2_1_elite393",
+      "name": "精鋭・双符の忘却葬列",
+      "area": 2,
+      "level": 2000,
+      "changed": true,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "wraith",
+          "commander": "abyss_lust",
+          "name": "深淵Ⅵ 色欲",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_shion",
+          "commander": null,
+          "name": "幽符の姉シオン",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_suiren",
+          "commander": null,
+          "name": "霊鈴の妹スイレン",
+          "role": "support",
+          "circle": "継承の葬環",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_velg",
+          "commander": null,
+          "name": "鎖翼竜ヴェルグ",
+          "role": "striker",
+          "circle": "半月障壁陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam2_3_elite393",
+      "name": "精鋭・宵暁の薔薇聖堂",
+      "area": 2,
+      "level": 2000,
+      "changed": false,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "ch2_ferne",
+          "commander": null,
+          "name": "宵鐘の護姫フェルネ",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "王家の大剣",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_clarisse",
+          "commander": null,
+          "name": "暁鐘の聖姫クラリス",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_noctelle",
+          "commander": null,
+          "name": "黒薔薇の刃姫ノクテル",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_auriane",
+          "commander": null,
+          "name": "白薔薇の衛姫オーリアン",
+          "role": "support",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "魔女の夜衣",
+            "王者の戦装",
+            "賢者の宝珠",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam2_4_elite393",
+      "name": "精鋭・双鍵の加護狩り",
+      "area": 2,
+      "level": 2000,
+      "changed": true,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "goblin_shaman",
+          "commander": "abyss_greed",
+          "name": "深淵Ⅴ 強欲",
+          "role": "disruptor",
+          "circle": "断末吸魔陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "雷鳥の羽根",
+            "竜心の首輪"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_meliora",
+          "commander": null,
+          "name": "冥鍵の剣姫メリオラ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_elyselle",
+          "commander": null,
+          "name": "聖鍵の冠姫エリゼル",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "聖騎士重鎧",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_senela",
+          "commander": null,
+          "name": "灰燭の呪術師セネラ",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 34,
+          "gearLevel": 2300,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam3_1_elite393",
+      "name": "精鋭・天鎖を断つ双竜騎団",
+      "area": 3,
+      "level": 2800,
+      "changed": true,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "angelic_orb",
+          "commander": "ten_creation",
+          "name": "十神Ⅷ 創造",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 41,
+          "gearLevel": 3220,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_dracia",
+          "commander": null,
+          "name": "黒鎖の竜姫ドラシア",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 41,
+          "gearLevel": 3220,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "王家の大剣",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_rucie",
+          "commander": null,
+          "name": "白翼の竜姫リュシエ",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 41,
+          "gearLevel": 3220,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_noctia",
+          "commander": null,
+          "name": "霜鐘梟ノクティア",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 41,
+          "gearLevel": 3220,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "賢者の宝珠",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam3_3_elite393",
+      "name": "精鋭・黒盾と双雷の聖衛",
+      "area": 3,
+      "level": 4800,
+      "changed": false,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "ch2_rostia",
+          "commander": null,
+          "name": "黒盾の誓姫ロスティア",
+          "role": "guardian",
+          "circle": "半月障壁陣",
+          "circleLevel": 41,
+          "gearLevel": 5520,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "王家の大剣",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_althea",
+          "commander": null,
+          "name": "紅剣の返誓姫アルテア",
+          "role": "striker",
+          "circle": "血走加速陣",
+          "circleLevel": 41,
+          "gearLevel": 5520,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_calista",
+          "commander": null,
+          "name": "蒼雷の槍姫カリスタ",
+          "role": "striker",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 41,
+          "gearLevel": 5520,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_solenne",
+          "commander": null,
+          "name": "金雷の盾姫ソレーヌ",
+          "role": "guardian",
+          "circle": "不屈の残光",
+          "circleLevel": 41,
+          "gearLevel": 5520,
+          "gearRarity": "UR",
+          "gearNames": [
+            "星砕きの鎚",
+            "王家の大剣",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam3_4_elite393",
+      "name": "精鋭・氷晶の天穹聖歌",
+      "area": 3,
+      "level": 4300,
+      "changed": true,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "water_spirit",
+          "commander": "ten_life",
+          "name": "十神Ⅲ 生命",
+          "role": "support",
+          "circle": "不屈の残光",
+          "circleLevel": 41,
+          "gearLevel": 4945,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "精霊樹の杖",
+            "魔女の夜衣",
+            "氷竜外套",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_iselle",
+          "commander": null,
+          "name": "氷紋の杖姫イゼル",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 41,
+          "gearLevel": 4945,
+          "gearRarity": "UR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "魔女の夜衣",
+            "鎖帷子",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_virelle",
+          "commander": null,
+          "name": "砕氷の槌姫ヴィレル",
+          "role": "striker",
+          "circle": "弱撃必殺陣",
+          "circleLevel": 41,
+          "gearLevel": 4945,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_aure",
+          "commander": null,
+          "name": "暁翼の祈姫アウレ",
+          "role": "striker",
+          "circle": "半月障壁陣",
+          "circleLevel": 41,
+          "gearLevel": 4945,
+          "gearRarity": "UR",
+          "gearNames": [
+            "天穿の槍",
+            "王家の大剣",
+            "王者の戦装",
+            "魔女の夜衣",
+            "竜心の首輪",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam4_1_elite393",
+      "name": "精鋭・星律の終演機構",
+      "area": 4,
+      "level": 5600,
+      "changed": true,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "clockwork",
+          "commander": "ten_time",
+          "name": "十神Ⅰ 時間",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 48,
+          "gearLevel": 6440,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_celes",
+          "commander": null,
+          "name": "星糸の織姫セレス",
+          "role": "disruptor",
+          "circle": "半月障壁陣",
+          "circleLevel": 48,
+          "gearLevel": 6440,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_lumina",
+          "commander": null,
+          "name": "星刃の舞姫ルミナ",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 48,
+          "gearLevel": 6440,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "星幽ローブ",
+            "時渡りの時計",
+            "竜心の首輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_iridelle",
+          "commander": null,
+          "name": "緋刻の星姫イリデル",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 48,
+          "gearLevel": 6440,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "炎の指輪"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam4_3_elite393",
+      "name": "精鋭・黒白の四冠裁定",
+      "area": 4,
+      "level": 5200,
+      "changed": false,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "ch2_nemesia",
+          "commander": null,
+          "name": "夜冠の剣姫ネメシア",
+          "role": "disruptor",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 48,
+          "gearLevel": 5980,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "天穿の槍",
+            "星幽ローブ",
+            "王者の戦装",
+            "時渡りの時計",
+            "雷鳥の羽根"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_everia",
+          "commander": null,
+          "name": "暁冠の剣姫エヴェリア",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 48,
+          "gearLevel": 5980,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_aeriel",
+          "commander": null,
+          "name": "終律の聖姫アエリエル",
+          "role": "leader",
+          "circle": "半月障壁陣",
+          "circleLevel": 48,
+          "gearLevel": 5980,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "炎の指輪"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_vespera",
+          "commander": null,
+          "name": "始淵の魔姫ヴェスペラ",
+          "role": "striker",
+          "circle": "瀕死紅蓮陣",
+          "circleLevel": 48,
+          "gearLevel": 5980,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "太陽の神弓",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "時渡りの時計"
+          ],
+          "capturable": true
+        }
+      ]
+    },
+    {
+      "id": "roam4_4_elite393",
+      "name": "精鋭・日月を巡る星門",
+      "area": 4,
+      "level": 5400,
+      "changed": true,
+      "elite": true,
+      "members": [
+        {
+          "speciesId": "wyvern",
+          "commander": "ten_fate",
+          "name": "十神Ⅴ 運命",
+          "role": "leader",
+          "circle": "開戦共鳴陣",
+          "circleLevel": 48,
+          "gearLevel": 6210,
+          "gearRarity": "LR",
+          "gearNames": [
+            "龍哭刀",
+            "太陽の神弓",
+            "王者の戦装",
+            "聖騎士重鎧",
+            "竜心の首輪",
+            "炎の指輪"
+          ],
+          "capturable": false
+        },
+        {
+          "speciesId": "ch2_sephira",
+          "commander": null,
+          "name": "星詠の魔導姫セフィラ",
+          "role": "disruptor",
+          "circle": "半月障壁陣",
+          "circleLevel": 48,
+          "gearLevel": 6210,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "時渡りの時計",
+            "賢者の宝珠"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_astrelle",
+          "commander": null,
+          "name": "天環の魔導姫アストレル",
+          "role": "leader",
+          "circle": "不屈の残光",
+          "circleLevel": 48,
+          "gearLevel": 6210,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        },
+        {
+          "speciesId": "ch2_solaria",
+          "commander": null,
+          "name": "日輪の翼姫ソラリア",
+          "role": "leader",
+          "circle": "継承の葬環",
+          "circleLevel": 48,
+          "gearLevel": 6210,
+          "gearRarity": "LR",
+          "gearNames": [
+            "黄昏の魔典",
+            "氷晶の杖",
+            "星幽ローブ",
+            "魔女の夜衣",
+            "賢者の宝珠",
+            "月光の耳飾り"
+          ],
+          "capturable": true
+        }
+      ]
+    }
+  ],
+  "unchangedEncounterIdsAndRewardBudgets": true,
+  "nonChapterAIComparisons": 24
+}

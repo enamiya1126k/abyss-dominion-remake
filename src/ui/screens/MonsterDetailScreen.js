@@ -1,11 +1,11 @@
-import{SPECIES}from"../../data/species.js?v=3.1.39-build359";
+import{SPECIES}from"../../data/species.js?v=3.1.72-build392";
 import{PERSONALITIES}from"../../data/personalities.js?v=3.1.1-build311";
 import{MONSTER_COLORS}from"../../data/colors.js?v=3.1.1-build311";
 import{ATTRIBUTES}from"../../data/attributes.js?v=3.1.1-build311";
-import{maxMp}from"../../battle/SkillSystem.js?v=3.1.49-build369";
+import{maxMp}from"../../battle/SkillSystem.js?v=3.1.75-build395";
 import{endgameCharacter}from"../../data/endgameCharacters.js?v=3.1.38-build358";
-import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=3.1.61-build381";
-import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
+import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=3.1.82-build402";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.82-build402";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=3.1.1-build311";
 import{floorBossDefinitionById}from"../../data/floorBosses.js?v=3.1.1-build311";

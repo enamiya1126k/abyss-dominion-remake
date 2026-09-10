@@ -1,9 +1,9 @@
-import{SPECIES}from"../../data/species.js?v=3.1.39-build359";
+import{SPECIES}from"../../data/species.js?v=3.1.72-build392";
 import{orderedMonsterSpecies}from"../../data/monsterCatalog.js?v=3.1.1-build311";
-import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.82-build402";
 import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=3.1.1-build311";
-import{MONSTER_STORAGE_CAP}from"../../core/config.js?v=3.1.61-build381";
-import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=3.1.60-build380";
+import{MONSTER_STORAGE_CAP}from"../../core/config.js?v=3.1.82-build402";
+import{ENDGAME_BOSSES}from"../../core/EndgameSystem.js?v=3.1.72-build392";
 
 const RARITY_VALUE={N:1,R:2,SR:3,SSR:4,UR:5,LR:6,"神話":7,"深淵":8,"十神":9};
 function safe(value){return String(value??"").replaceAll("&","&amp;").replaceAll('"',"&quot;").replaceAll("<","&lt;").replaceAll(">","&gt;")}

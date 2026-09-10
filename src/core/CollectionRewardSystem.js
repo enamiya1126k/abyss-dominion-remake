@@ -1,7 +1,7 @@
-import{SPECIES}from"../data/species.js?v=3.1.39-build359";
+import{SPECIES}from"../data/species.js?v=3.1.72-build392";
 import{orderedMonsterSpecies}from"../data/monsterCatalog.js?v=3.1.1-build311";
 import{FLOOR_BOSS_CATALOG}from"../data/floorBosses.js?v=3.1.1-build311";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.60-build380";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.72-build392";
 import{floorBossCampaignDisplayFloor}from"./Campaign100System.js?v=3.1.42-build362";
 
 const LIMITED_TAGS=new Set(["mythicSerial","serialOnly","raidLimited","eventLimited","limited"]);
@@ -20,9 +20,9 @@ function limitedSource(species){
 function ordinaryEntry(species,index){
  const limited=isLimitedSpecies(species);
  return Object.freeze({
-  key:`species:${species.id}`,id:species.id,kind:limited?"limited":"ordinary",group:limited?"限定魔物":"通常魔物",
+  key:`species:${species.id}`,id:species.id,kind:limited?"limited":"ordinary",group:species.chapterTwoOnly?"第二章":limited?"限定魔物":"通常魔物",
   name:species.name,rarity:species.rarity??"N",element:species.element??"neutral",visualId:species.id,emoji:species.emoji??"魔",
-  speciesId:species.id,sort:index,source:limited?limitedSource(species):"探索・召喚・交換"
+  speciesId:species.id,sort:index,source:species.chapterTwoOnly?`${species.habitat383}で捕獲`:limited?limitedSource(species):"探索・召喚・交換"
  });
 }
 

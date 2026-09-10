@@ -1,3 +1,4 @@
+import {onlineConditionalCircle398} from './OnlineMagicCircles398.js';
 import {isHeroResonanceSpecies,heroResonanceProfile} from '../../src/core/HeroResonanceSystem.js';
 import {heroAuthoredSkills,reserveHeroAction,chooseHeroAllianceSkill,chooseHeroAllianceTarget,runHeroAllianceAction,triggerHeroAlliance,drainHeroReactions,mitigateHeroDamage,tryHeroLastStand,heroId,heroSideUnits} from '../../src/core/HeroAllianceSystem.js';
 export function onlineHeroView(b,actor=null){
@@ -11,7 +12,7 @@ export function onlineHeroEnvironment(b,events,random=Math.random,{onDamage=null
  prepare(b);
  return {events,random,stats:u=>({...u,...u.stats,hp:u.maxHp,_affixes:u.equipmentCombatEffects??u._affixes??{}}),
  damage:(target,side,amount,{source})=>{
-  const cap=target.enemyMimicArmor?1:target.side?Math.ceil(target.maxHp*.55):!b.boss&&side==='enemy'?Math.ceil(target.maxHp*.9):Infinity;const before=target.hp,damage=mitigateHeroDamage(b,side,target,Math.min(amount,cap)),absorbed=Math.min(target.shield??0,damage);target.shield=Math.max(0,(target.shield??0)-absorbed);target.hp=Math.max(0,before-damage+absorbed);
+  const cap=target.enemyMimicArmor?1:target.side?Math.ceil(target.maxHp*.55):!b.boss&&side==='enemy'?Math.ceil(target.maxHp*.9):Infinity;const before=target.hp,damage=mitigateHeroDamage(b,side,target,Math.min(amount*(side==='enemy'?onlineConditionalCircle398(b,source,target):1),cap)),absorbed=Math.min(target.shield??0,damage);target.shield=Math.max(0,(target.shield??0)-absorbed);target.hp=Math.max(0,before-damage+absorbed);
   tryHeroLastStand(b,side,target,before);
   const dealt=Math.max(0,before-target.hp);onDamage?.(source,target,dealt,before);
   if(target.hp<=0){if(onDeath)onDeath(target,source);else if(target.circleEffect==='lastLife'&&!target.circleLastLifeUsed){target.circleLastLifeUsed=true;target.hp=1}else if(target.circleEffect==='revive'&&!target.circleReviveUsed){target.circleReviveUsed=true;target.hp=Math.max(1,Math.ceil(target.maxHp*.35))}}

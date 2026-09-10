@@ -1,0 +1,109 @@
+{
+  "build": 400,
+  "syntaxCheckedModules": 45,
+  "relativeReferencesChecked": 486,
+  "cacheOnlyModules": 39,
+  "linkedStylesheets": 151,
+  "unchangedMissingPriorStyles": [
+    "./src/Styles/build328-floor-boss-name.css",
+    "./src/Styles/build330-intel-endgame-fix.css"
+  ],
+  "saveComparisons": [
+    {
+      "phase": "first",
+      "pending": false,
+      "unchangedExceptAppVersion": true
+    },
+    {
+      "phase": "first",
+      "pending": true,
+      "unchangedExceptAppVersion": true
+    },
+    {
+      "phase": "second",
+      "pending": false,
+      "unchangedExceptAppVersion": true
+    },
+    {
+      "phase": "second",
+      "pending": true,
+      "unchangedExceptAppVersion": true
+    },
+    {
+      "phase": "recruited",
+      "pending": false,
+      "unchangedExceptAppVersion": true
+    },
+    {
+      "phase": "recruited",
+      "pending": true,
+      "unchangedExceptAppVersion": true
+    }
+  ],
+  "browserOrIphoneVerified": false,
+  "modules": [
+    "src/battle/EnemyAI.js",
+    "src/battle/TurnSystem.js",
+    "src/chapterTwo/ChapterTwoElitePanel393.js",
+    "src/chapterTwo/ChapterTwoField.js",
+    "src/chapterTwo/ChapterTwoGacha397.js",
+    "src/chapterTwo/ChapterTwoMonsters383.js",
+    "src/chapterTwo/ChapterTwoRepeat395.js",
+    "src/chapterTwo/ChapterTwoScreen.js",
+    "src/chapterTwo/ChapterTwoSystem.js",
+    "src/chapterTwo/ChapterTwoTargeting393.js",
+    "src/chapterTwo/HeroAlliance396.js",
+    "src/chapterTwo/MagicCircleResearch398.js",
+    "src/core/CampaignHeroLoadoutSystem.js",
+    "src/core/CombatPower.js",
+    "src/core/EquipmentDropSystem.js",
+    "src/core/ExperiencePackSystem.js",
+    "src/core/GmFinalePackSystem.js",
+    "src/core/HomeSkinSystem400.js",
+    "src/core/ProgressionSystem.js",
+    "src/core/RoyalRevengeRewards.js",
+    "src/core/SecondWorldEventSystem.js",
+    "src/core/SecretRoomSystem.js",
+    "src/core/SerialCodeSystem.js",
+    "src/core/config.js",
+    "src/main.js",
+    "src/models/Monster.js",
+    "src/online/OnlinePartyClient.js",
+    "src/online/OnlineViews.js",
+    "src/services/SaveService.js",
+    "src/ui/ChapterTwoGacha397.js",
+    "src/ui/HomeSkin400.js",
+    "src/ui/components/MonsterCard.js",
+    "src/ui/screens/BattleScreen.js",
+    "src/ui/screens/CampaignFinalFloorScreen.js",
+    "src/ui/screens/EquipmentScreen.js",
+    "src/ui/screens/ExploreScreen.js",
+    "src/ui/screens/FormationScreen.js",
+    "src/ui/screens/GauntletScreen.js",
+    "src/ui/screens/HomeScreen.js",
+    "src/ui/screens/MonsterDetailScreen.js",
+    "src/ui/screens/MonsterListScreen.js",
+    "src/ui/screens/OnlinePartyScreen.js",
+    "src/ui/screens/SettingsScreen.js",
+    "src/ui/screens/ShopScreen.js",
+    "src/ui/screens/SkillScreen.js"
+  ],
+  "firstChapterMarkupComparisons": [
+    "home/1",
+    "settings/1",
+    "home/40",
+    "settings/40",
+    "home/99",
+    "settings/99"
+  ],
+  "visualSceneReview": {
+    "method": "Five generated backgrounds reviewed and SVG overlay positions checked with static PNG-embedded rasterization; no browser rendering",
+    "file": "HOME_SKINS_BUILD400.jpg",
+    "backgrounds": 5
+  },
+  "assetBytes": 2764510,
+  "totalTestsPassed": 348,
+  "newTestsPassed": 9,
+  "newHomeSkins": 5,
+  "includingOriginal": 6
+}

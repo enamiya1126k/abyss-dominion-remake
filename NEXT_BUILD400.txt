@@ -1,0 +1,18 @@
+ABYSS DOMINION 引継ぎ Build400 / v3.1.80
+完了：⑤ 第二章ホームスキン5種＋環境モーション／解禁／オプション内の選択・保存。
+次：⑥ Build401 第二章ホームの上部導線と物語回想。第一章へ影響を与えず、第二章から専用表示。
+以後：⑦ Build402 統合確認。
+
+core/HomeSkinSystem400：静的6候補、既存chapterTwoUnlockedの共通条件、optional settings.homeSkin400={id,motion}。
+読み取りは無変更。解禁前・不明IDはtown。初期表示はtown、ユーザーの選択を明示保存。
+SaveServiceの追加移行・スキーマ更新は不要。既存のsettings保存を利用。
+ui/HomeSkin400：ホームの環境DOM、設定パネル、保存と失敗時復帰、visibilitychangeの解除。
+新背景はSVG image＋局所SVGレイヤー。viewBox 1024 1536、xMidYMid sliceで同じ座標を共有。
+旧城下町は従来の水面3枚と葉2枚を維持。設定でモーションOFF、OS reduceも尊重。
+生成画像5枚＋サムネイル5枚はassets/ui/home-skins400。原画の方針と最終プロンプトはvalidation内。
+性能・キャラ・第二章編成・ガチャ・進行は変更していない。
+検証348件、旧セーブ6条件、第一章HTML6条件。iPhoneとブラウザーの実描画は未確認。
+過去のプレビュー拒否を迂回しない。
+Git HEADはBuild381、作業木は382〜400が適用済み。reset/checkoutで戻さない。
+次回はBuild400のハッシュ基準を保存してから編集すること。
+公開コミット・Push・デプロイは実行していない。

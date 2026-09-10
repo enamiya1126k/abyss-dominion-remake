@@ -113,25 +113,6 @@
 @keyframes build321-passage-threshold{0%{opacity:0}18%,48%{opacity:1}100%{opacity:0}}
 @keyframes build321-passage-label{0%,12%{opacity:0;transform:translateY(3px)}25%,55%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-3px)}}
 
-/* LEGACY CAMPAIGN NOTICE ------------------------------------------------- */
-.legacy-campaign-reset-modal{z-index:260!important;background:#030207f2!important}
-.legacy-campaign-reset-modal .game-modal-card{border-color:#b58a43!important;box-shadow:0 0 0 1px #e6c56a33,inset 0 0 42px #8e3d2318,0 16px 70px #000!important}
-.legacy-campaign-reset-copy{display:grid;gap:11px;text-align:left}
-.legacy-campaign-reset-copy>small{color:#e1b85e;font:800 9px/1 sans-serif;letter-spacing:.22em}
-.legacy-campaign-reset-copy>h3{margin:0;color:#fff0c7;font:900 clamp(19px,5vw,27px)/1.25 "Yu Mincho",serif}
-.legacy-campaign-reset-copy>p{margin:0;color:#d2cad0;font-weight:700;line-height:1.7}
-.legacy-campaign-reset-copy>strong{padding:11px;border-left:3px solid #e2a344;background:#5b321c3d;color:#ffdca3;line-height:1.55}
-.legacy-campaign-reset-copy>[data-legacy-campaign-reset]{
-  min-height:56px;
-  border:1px solid #dfae55;
-  background:linear-gradient(#8b541d,#53300e);
-  color:#fff0c8;
-  font:900 16px/1.25 "Yu Mincho",serif;
-  box-shadow:inset 0 0 0 1px #ffe6a029,0 5px 18px #0007;
-}
-.legacy-campaign-reset-copy>em{color:#ab9fa3;font:600 9px/1.55 sans-serif;font-style:normal}
-.legacy-campaign-reset-modal [data-modal-primary]{min-height:36px!important;background:#0a090d!important;border-color:#514b55!important;color:#afa8b2!important;font-size:11px!important}
-
 /* STORY ----------------------------------------------------------------- */
 body:has(.campaign-story-modal) .context-guide{display:none!important}
 .campaign-story-modal [data-story-character-id="sairan"] .campaign-story-character-art,

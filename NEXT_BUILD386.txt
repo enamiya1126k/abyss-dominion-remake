@@ -1,0 +1,49 @@
+ABYSS DOMINION 引継ぎ：Build386 / v3.1.66、第四弾完了
+
+次回は第五弾：各ランク1体、計7体追加でN/R/SR/SSR/UR/LR/神話を各5体、総計35体。
+最新希望は美少女中心、ペアで強い固有連携、全新キャラ正面〜右向き、128〜512px程度のドット絵風、8モーション。
+第三章を急がず第二章を充実させる。既存28体の捕獲場所と6ペアを維持。
+
+386のIDと配置
+ch2_ticta N 巻鍵の工姫ティクタ：roam0_3 nerik/grant/kororu/ticta。
+ch2_mirea R 翠薬の魔女ミレア / ch2_viola SR 毒花の魔女ヴィオラ：roam1_1 mirea/viola/shelza。
+ch2_kagura SSR 紅月の巫狐カグラ / ch2_sayo UR 蒼月の巫狐サヨ：roam3_1 kagura/sayo/noctia。
+ch2_celes LR 星糸の織姫セレス / ch2_lumina 神話 星刃の舞姫ルミナ：roam4_1 celes/lumina/mimelia/nerik。
+roam4_1はLv4900。383〜385の全キャラは別の再探索編成でも確保。
+
+実装
+chapterTwoSpecies386.jsに28技。chapterTwoSet386フラグ。
+ChapterTwoMonsters386.jsに敵技/配置。species/capture/EnemyAI/Tactics/Monsters383に登録。
+既存384/385に限定した実装備・浄化・吸魔・蘇生MPなどの適用条件を386へ拡張。
+
+ペア
+chapterTwoPairs386.jsに3組。TwinResonance385.jsのTWIN_PAIRS385は旧3組のまま。
+RESONANCE_PAIRS385で旧3＋新3を結合し、全検索とUIは6組を扱う。
+garden：魔法全体2、毒なら3、全体回復15%。
+foxmoon：物理単体1.15×3、防御20%無視、火傷なら1.45倍、全体命中18%2T。
+starthread：全体1.6＋障壁8%、同ラウンド2人目は全体4.2/防御45%無視/障壁22%。
+発動予約のused[side:pair:species]=turnを利用し、2種が今のturnならburstをplanに合成。
+同じ種の複数個体では追加予約不能。元のペア定義は変更しない。
+各打撃直前にenv.hasStatusを再判定。env.boostはsourceKey=pair:IDで同バフ無限加算を防ぐ。
+mainの実ダメージ/回復/障壁へ接続。385のWeakSet再入防止、生存/隔離の再判定を継続。
+敵AIは386の毒/火傷の仕込みを回復阻害より先にする。
+味方オートは386の生存ペアがいる場合、準備/条件付き追撃を通常の構えより優先。
+倒し切り、緊急回復・浄化、MP維持は従来どおり先に判定。
+オンラインのペア共鳴は未移植。UIもonlineModeでは発動中表示しない。
+
+向きと素材
+新7枚は生成された元RGBAをそのままassets/monsters/ch2_386_KEY/sheet.pngへコピー。
+chapterTwoSprites386.jsにはfacing:'right'。既存383/384/385は暗黙left。
+MonsterVisualのdata-source-facingとbuild386-pair-art.cssで味方右/敵左へ映す。
+main.drawExplorationMonsterは素材の向きと歩く向きを比較して反転。
+単独素材/図鑑は正面〜右向き。PNG自体を反転しない。
+8モーション、256枠、最大224、足元244、隣接の主要輪郭はクリップで分離。
+artifacts/build386/monsters.htmlが7体・ペア3組・8モーションのローカル一覧。
+
+検証と配布
+147テスト成功、新規16、更新58モジュール、56ポーズ主要保持100%/混入0。
+ブラウザー/iPhone未確認。以前のブラウザーポリシー拒否は迂回しない。
+Build386はBuild385への差分ZIP。Build384以前には先にBuild385を適用。
+今回の正しいハッシュはBUILD386_MANIFEST.json。Git HEADはBuild381のままなのでgit diffは385差分ではない。
+次回変更前に現386ファイルをSHA-256スナップショットして新しい差分基準を作ること。
+ゲームを公開push/deployしない。実行時online-server/data JSONを同梱しない。

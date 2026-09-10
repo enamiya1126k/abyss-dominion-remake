@@ -1,12 +1,12 @@
-import {createMonster,calculatedStats} from '../models/Monster.js?v=3.1.61-build381';
+import {createMonster,calculatedStats} from '../models/Monster.js?v=3.1.82-build402';
 import {endgameCharacter} from '../data/endgameCharacters.js';
-import {createSignatureEquipment,signatureStatBonuses,signatureSetState,signatureWeaponGrantedSkill} from './SignatureWeaponSystem.js?v=3.1.60-build380';
+import {createSignatureEquipment,signatureStatBonuses,signatureSetState,signatureWeaponGrantedSkill} from './SignatureWeaponSystem.js?v=3.1.72-build392';
 import {equipmentStatMultiplier,equipmentRequiredMonsterLevel} from '../models/Equipment.js?v=3.1.55-build375';
 import {aggregateSeriesEffects} from '../data/equipmentSeries.js';
-import {equipmentAffixesWithSeries} from './EquipmentAffixSystem.js?v=3.1.55-build375';
-import {maxMp,skillMasteryNeedForLevel} from '../battle/SkillSystem.js?v=3.1.49-build369';
-import {MONSTER_STORAGE_CAP} from './config.js?v=3.1.61-build381';
-import {EQUIPMENT_LIMIT} from '../services/EquipmentStorage.js?v=3.1.55-build375';
+import {equipmentAffixesWithSeries} from './EquipmentAffixSystem.js?v=3.1.74-build394';
+import {maxMp,skillMasteryNeedForLevel} from '../battle/SkillSystem.js?v=3.1.75-build395';
+import {MONSTER_STORAGE_CAP} from './config.js?v=3.1.82-build402';
+import {EQUIPMENT_LIMIT} from '../services/EquipmentStorage.js?v=3.1.78-build398';
 
 // A fixed, reproducible 100F reference party, independent of earlier GM claims.
 export const GM_FINALE_PACK=Object.freeze({

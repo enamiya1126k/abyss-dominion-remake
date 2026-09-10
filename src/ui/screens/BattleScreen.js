@@ -1,17 +1,18 @@
+import {twinStatus385} from '../TwinStatus385.js?v=3.1.75-build395';
 import {shieldCapacity} from '../../core/HeroShieldDisplay.js?v=3.1.58-build378';
 import{hasHeroFortitude,heroFortitudeUsed}from'../../core/HeroFortitudeSystem.js?v=3.1.41-build361';
-import{enemyMagicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.41-build361";
+import{enemyMagicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.78-build398";
 import{ultimateCircle,ultimateLabels,ultimateIsolated,ultimateAvailability,ultimateBasicOnly,isEndgameUltimate}from"../../core/EndgameUltimateSystem.js?v=3.1.58-build378";
 import{HERO_SOLO_DAMAGE_RATES}from"../../data/mythicSerialSpecies.js?v=3.1.39-build359";
 import{BATTLE_ITEM_LAYOUT}from"./BattleItemLayout.js?v=3.1.38-build358";
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.61-build381";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.49-build369";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.58-build378";
-import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.61-build381";
-import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.82-build402";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.75-build395";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.78-build398";
+import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.82-build402";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.82-build402";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.61-build381";
+import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.82-build402";
 import{ATTRIBUTE_MATCHUP_MULTIPLIERS,attributesEffectiveAgainst,attributesIneffectiveAgainst}from"../../data/attributes.js?v=3.1.1-build311";
 import{heroResonanceProfile,isHeroResonanceSpecies}from"../../core/HeroResonanceSystem.js?v=3.1.39-build359";
 
@@ -71,14 +72,15 @@ function renderEnemies(battle,enemies,target){
   const floorBoss=Boolean(enemy.floorBossCatalogId||enemy.boss&&enemy.campaignBossId&&!enemy.endgameBossId),endgameBoss=Boolean(enemy.endgameBossId||["abyss","tenGod"].includes(enemy.faction)),badge=enemy.boss?`<span class="boss-badge">${floorBoss?"階層BOSS":endgameBoss?(enemy.faction==="tenGod"?"十神":"深淵"):"BOSS"}</span>`:enemy.elite?`<span class="elite-badge">${htmlText(enemy.eliteAffixIcon??"🜲")} 強敵・${htmlText(enemy.eliteAffixName??"変異")}</span>`:"",safeName=htmlText(String(enemy.name??"").replace(/^[\s⚔\uFE0F]+/u,""));const danger="";
   const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
   const line=index<2?"front-line":"rear-line";
-  const dead=enemy.hp<=0,pendingKo=dead&&(battle.presentationKoIds??[]).map(String).includes(String(enemy.id)),element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",rank=combatRank(enemy,battle.species?.[enemy.speciesId])??"N",rankClass=floorBoss?"combat-rank-unit rank-floor-boss":`combat-rank-unit rank-${rankTone(rank)}`,rankMarkup=enemy.boss&&battle.specialBattleType!=="chapterTwo"?"":rankBadge(rank),floatingName=`<span class="battle-unit-floating-name battle-unit-floating-badges ${endgameBoss?"compact-boss-name375":""}">${endgameBoss?"":badge}${rankMarkup}<b title="${safeName}">${safeName}</b></span>`;
+  const isChapterTwo=battle.specialBattleType==='chapterTwo',dead=enemy.hp<=0,pendingKo=dead&&(battle.presentationKoIds??[]).map(String).includes(String(enemy.id)),element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",rank=combatRank(enemy,battle.species?.[enemy.speciesId])??"N",rankClass=floorBoss?"combat-rank-unit rank-floor-boss":`combat-rank-unit rank-${rankTone(rank)}`,rankMarkup=enemy.boss&&battle.specialBattleType!=="chapterTwo"?"":rankBadge(rank),floatingName=`<span class="battle-unit-floating-name battle-unit-floating-badges ${endgameBoss?"compact-boss-name375":""}">${endgameBoss?"":badge}${rankMarkup}<b title="${safeName}">${safeName}</b></span>`;
   return `<button id="enemy-${enemy.id}" ${dead||ultimateIsolated(battle,enemy)?`disabled${dead&&!pendingKo?' aria-hidden="true"':""}`:`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${pendingKo?"presentation-ko-pending":""} ${enemy.boss?"boss-enemy":""} ${enemy.raidMainBoss?"raid-main-boss":""} ${enemy.raidSubBoss?"raid-sub-boss":""} ${floorBoss?"floor-boss-enemy":""} ${endgameBoss?"party-floor-boss endgame-boss-art":""} ${enemy.elite?"elite-enemy":""} ${rankClass} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
-   ${enemy.boss?"":floatingName}
-   <div class="side-unit-sprite enemy-orb">${circleArt358(battle,enemy,battle.enemyMagicCircleArt?.[enemy.id]??"")}${enemy.boss?floatingName:""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.visualFrame??(enemy.hp<=0&&!pendingKo?"down":"idle"),className:"battle-enemy-visual",partyArt:endgameBoss})}</div>
+   ${enemy.boss&&!isChapterTwo?"":floatingName}
+   <div class="side-unit-sprite enemy-orb">${circleArt358(battle,enemy,battle.enemyMagicCircleArt?.[enemy.id]??"")}${enemy.boss&&!isChapterTwo?floatingName:""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.visualFrame??(enemy.hp<=0&&!pendingKo?"down":"idle"),className:"battle-enemy-visual",partyArt:endgameBoss})}</div>
    <div class="side-unit-card enemy-info">
     <div class="side-unit-name enemy-name ${enemy.boss?"boss-meta-only":""}">${danger}${enemy.boss||battle.specialBattleType==='chapterTwo'?"":`<b class="enemy-card-name" title="${safeName}">${safeName}</b>`}<span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
+    ${isChapterTwo&&enemy.chapterTwoTactics382?`<small class="chapter-two-loadout382">装備6枠・${htmlText(enemy.enemyEquipmentRarity)} Lv.${battleInteger(enemy.enemyEquipmentLevel)} +${battleInteger(enemy.enemyGear?.[0]?.plus)}</small>`:""}
     ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}`,"enemy-hp")}
     ${shieldLabel(enemy,enemy.maxHp)}
     <!-- enemy-mini-stats retired in Build321: enemy cards intentionally expose HP only. -->
@@ -198,6 +200,7 @@ export function BattleScreen(battle,inventory,settings,floor=1){
  return `<section class="battle-screen side-battle-v2 ${battle.specialBattleType==='chapterTwo'?'chapter-two-battle380':''} battle-history-hidden battle-theme-${theme} ${battle.auto?"auto-mode":"manual-mode"} ${battle.biomePanelCollapsed?"biome-panel-collapsed":"biome-panel-expanded"} ${battle.specialBattle?"special-battle":""} ${battle.onlineMode?"online-shared-battle":""}" ${battle.onlineMode?`data-online-battle-view="${battle.onlineMode}"`:""} data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}"><style>${BATTLE_ITEM_LAYOUT}</style>${special}
   <div class="battle-header"><div class="round-label"><small>ラウンド</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}階・遭遇戦`}</b><small>${battle.onlineMode?battle.auto?"サーバー同期・自動戦闘":"サーバー同期戦闘":battle.auto?"完全自動":"コマンド戦闘"}</small></div>${battle.onlineMode?onlineAuto:`<button id="toggleBattleAuto" type="button" aria-pressed="${battle.auto}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button>`}<button id="battleSpeed" ${battle.onlineMode?`data-online-speed-cycle="${battle.onlineMode}"`:""}>×${speed}</button>${battle.onlineMode?onlineExit:offlineExit}</div>
   <div class="turn-order" tabindex="0" role="region" aria-label="行動順・左右にスワイプして全員を確認"><span class="turn-order-title">行動順</span>${renderTurnOrder(battle)}</div>
+  ${battle.onlineMode?"":twinStatus385(party,{battle,compact:true})+twinStatus385(battle.enemies??[],{side:"enemy",battle,compact:true})}
   <div class="battle-arena side-battle-arena multi-enemy">
    <div class="battle-stage-vignette" aria-hidden="true"></div>
    ${biomeBadge}

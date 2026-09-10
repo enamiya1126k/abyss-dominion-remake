@@ -1,0 +1,62 @@
+{
+  "build": 390,
+  "method": "built-in image generation",
+  "references": [
+    "81E468E4-B7DF-4092-881A-90D0ADAFAD26.jpeg",
+    "02A12963-404F-4F0E-8280-6F34CE23A275.jpeg"
+  ],
+  "style": "Cute expressive face, approximately four heads tall, ornate black/gold or white/gold armor, crisp pixel-style detail, compact attack effects.",
+  "facing": "front/right",
+  "imageEditing": "None. Original RGBA PNG bytes preserved. Runtime polygon clips isolate eight poses.",
+  "assets": [
+    {
+      "species": "ch2_miretta",
+      "file": "assets/monsters/ch2_390_miretta/sheet.png",
+      "generatedSource": "exec-544b15a6-cb7a-451a-aa7c-5ea101498121.png",
+      "promptKey": "miretta",
+      "sha256": "5920a8ca1aa52d4c452830026e898ef4e4eb53f2097dfe897bb2930ac3616c5e"
+    },
+    {
+      "species": "ch2_iselle",
+      "file": "assets/monsters/ch2_390_iselle/sheet.png",
+      "generatedSource": "exec-c88d15bd-a8ce-4434-b876-acad19e04753.png",
+      "promptKey": "iselle",
+      "sha256": "75863d1c71c18c4b31809dbe21fd4d0aab2f6eb008e2a827f8f735fd9c953c50"
+    },
+    {
+      "species": "ch2_virelle",
+      "file": "assets/monsters/ch2_390_virelle/sheet.png",
+      "generatedSource": "exec-c34c83cf-4d6d-439f-ba7b-dc6ad208ab25.png",
+      "promptKey": "virelle",
+      "sha256": "c2b1cfc815fa94137c941cb6e47d38c9a3f89a4e4785653585f8f60370079534"
+    },
+    {
+      "species": "ch2_rostia",
+      "file": "assets/monsters/ch2_390_rostia/sheet.png",
+      "generatedSource": "exec-4d923f6c-a303-44aa-8b5c-0d9745203e5b.png",
+      "promptKey": "rostia",
+      "sha256": "6196c9571927799bda7b88077a24be7be93bf01bc3ee8ce193626e66e46f9236"
+    },
+    {
+      "species": "ch2_althea",
+      "file": "assets/monsters/ch2_390_althea/sheet.png",
+      "generatedSource": "exec-e3c56057-5687-4250-8747-05d79dd32453.png",
+      "promptKey": "althea",
+      "sha256": "973a4c82815451968d07022f106f2ba0281e0e6181c5cfd261062ab6252bf61b"
+    },
+    {
+      "species": "ch2_sephira",
+      "file": "assets/monsters/ch2_390_sephira/sheet.png",
+      "generatedSource": "exec-81481f9f-4dc9-4e61-a200-b6e6ddb92db7.png",
+      "promptKey": "sephira",
+      "sha256": "f48895aa7631a07b4d28567a1a986e92df8866cd43ae49cf1846703611d157d3"
+    },
+    {
+      "species": "ch2_astrelle",
+      "file": "assets/monsters/ch2_390_astrelle/sheet.png",
+      "generatedSource": "exec-2d9748f1-91a4-4be5-afa2-b7e5af5b3902.png",
+      "promptKey": "astrelle",
+      "sha256": "c12b9eaed5da7c71b708cdd8edaf0195f320aa781b05a50f306815e90250a455"
+    }
+  ]
+}

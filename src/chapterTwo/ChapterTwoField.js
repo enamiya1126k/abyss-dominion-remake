@@ -1,4 +1,4 @@
-import {chapterTwoRooms,ENCOUNTERS,chapterTwoWorld,chapterTwoObjective} from './ChapterTwoSystem.js?v=3.1.61-build381';
+import {chapterTwoRooms,ENCOUNTERS,chapterTwoWorld,chapterTwoObjective} from './ChapterTwoSystem.js?v=3.1.82-build402';
 import {portalTowardSection} from '../core/DungeonSectionSystem.js?v=3.1.60-build380';
 export function mountChapterTwoField(g,{canvas,Entity,Camera,findPath,drawScene,bindInput,updateTrail,TILE,run,onSave,onContact,onAutoChange=()=>{},blocked=()=>false}){
  const ROOMS=chapterTwoRooms(run),room=ROOMS[run.room];g.chapterTwo=true;g.world=chapterTwoWorld(run);
@@ -26,12 +26,13 @@ export function mountChapterTwoField(g,{canvas,Entity,Camera,findPath,drawScene,
  }
 
  function tick(now){if(disposed||!g.running||!canvas.isConnected)return;const dt=Math.min(.05,(now-last)/1000);last=now;
-  if(!busy()){autoStep();const moved=g.player.move(dt,5);if(g.player.path.length||moved){updateTrail();g.camera.follow(g.player.rx*TILE,g.player.ry*TILE,dt);g.camera.clamp(g.world)}
+  const suspended=busy()||document.hidden===true;
+  if(!suspended){autoStep();const moved=g.player.move(dt,5);if(g.player.path.length||moved){updateTrail();g.camera.follow(g.player.rx*TILE,g.player.ry*TILE,dt);g.camera.clamp(g.world)}
    if(moved&&now-lastSave>1000){persist();lastSave=now}
    if(contactLock&&Math.hypot(g.player.rx-contactLock.x,g.player.ry-contactLock.y)>1.2)contactLock=null;
    if(armed){const object=objects.find(o=>o!==contactLock&&Math.hypot(g.player.rx-o.x,g.player.ry-o.y)<.8);if(object){armed=false;contactLock=object;g.player.path=[];persist();onContact(object)}}
   }
-  if(!disposed&&now-lastPaint>=1000/30){drawScene();lastPaint=now}if(!disposed)frame=requestAnimationFrame(tick);
+  if(!disposed&&!suspended&&now-lastPaint>=1000/30){drawScene();lastPaint=now}if(!disposed)frame=requestAnimationFrame(tick);
  }
  g.centerChapterTwo=()=>{g.camera.reset(g.player.rx*TILE,g.player.ry*TILE);fit()};
  g.chapterTwoDoor=direction=>{const object=objects.find(o=>o.type==='door'&&o.id===direction);if(object)walk(object,{manual:true})};

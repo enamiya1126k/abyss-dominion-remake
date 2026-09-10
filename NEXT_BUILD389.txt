@@ -1,0 +1,52 @@
+ABYSS DOMINION 引継ぎ：Build389 / v3.1.69、第二章追加第七弾
+
+予定の全5弾はBuild387で完了。本弾はユーザーが続けて希望した追加弾。
+全49体（N/R/SR/SSR/UR/LR/神話各7体）・196技・392ポーズ・15ペア。
+第二章を充実させる方針。第三章の追加は未依頼。
+最新のビジュアル基準は添付2枚（旧リリカの黒金フード剣士／旧オーレのピンク髪白金天使騎士）。
+可愛い顔、約4頭身、精緻な装飾・大きな武器・限定的な攻撃エフェクト、正面〜右向き、各8モーション。
+直前388はこのスタイルでユーザーが「いいね！」と承認。389も引き継ぐ。
+
+389の7体
+ch2_lumea N 封書の小剣姫ルメア：境界の森・再探索「倒木の小径」
+ch2_nevia R 藤影の鎖姫ネヴィア：境界の森・再探索「西の封印樹」
+ch2_elmina SR 白藤の鎌姫エルミナ：境界の森・再探索「西の封印樹」
+ch2_calista SSR 蒼雷の槍姫カリスタ：天律の聖域・再探索「因果の聖壇」
+ch2_solenne UR 金雷の盾姫ソレーヌ：天律の聖域・再探索「因果の聖壇」
+ch2_meliora LR 冥鍵の剣姫メリオラ：理の中枢・再探索「修復の中枢」
+ch2_elyselle 神話 聖鍵の冠姫エリゼル：理の中枢・再探索「修復の中枢」
+roam0_1 lilica/kororu/pipia/lumea。
+roam0_3 nerik/ticta/nevia/elmina。
+roam3_4 aure/noelle/calista/solenne、Lv4300、2組同時共鳴。
+roam4_4 ordia/astera/meliora/elyselle、Lv5400。
+過去42体と既存12ペアの捕獲場所を維持。再探索部屋数は各地域3つのまま。
+grantは1_3/1_4、balkは0_4、velgは2_1/2_4、noctiaは3_1に残る。
+chapterTwoSpecies384のgrant図鑑habitatを黒根の再探索2部屋へ修正。
+
+実装
+chapterTwoSpecies389 / chapterTwoPairs389 / chapterTwoSprites389 / ChapterTwoMonsters389。
+species、capture helper383、Monsters383、Tactics382、EnemyAI、ChapterTwoSystem、SkillSystem、main、ChapterTwoSprite383へ登録。
+installChapterTwoHabitats389を388の後に適用。
+RESONANCE_PAIRS385へ3組追加、既存pair mechanicsを使用。
+wisteria：physical1.1x3、防御20%無視、毒相手x1.6、命中でhealDown25%/2T。
+twinthunder：全体physical2.0、障壁8%、速度15%/2T。同ラウンド2人目は4.4、防御35%無視、障壁18%。
+twinkeys：hybrid1.1x4、防御40%無視、初手標的の強化1つ解除、生存全体回復12%/障壁14%。
+共有glassPair387一覧に389追加。敵pairSetup386に389を追加し毒準備を優先。
+味方オートのネイティブ判定に389を追加、瀕死相方救援条件は388||389。
+TwinStatus385の「次は終演」はescaped pair.burst.nameで実際の大技名を表示。
+mainの強化解除ログを「共鳴で強化を1つ解除」に汎用化。
+従来のMP可否・蘇生・浄化・生存判定とペア予約回数を維持。オンライン戦闘の共鳴は未移植。
+
+素材
+assets/monsters/ch2_389_KEY/sheet.pngに元RGBAをそのまま配置。
+chapterTwoSprites389.jsにright/8frame box/clip/paths。共通256枠、最大224、足元244。
+今回の右向き素材は戦闘時に敵のみ左へ反転。
+artifacts/build389/monsters.html / prompts.json / provenance.jsonを同梱。
+
+検証と納品
+186テスト成功（新規12）、60モジュール構文、594相対参照、56ポーズ保持100%/混入0。
+ブラウザー/iPhone実描画は未確認。以前のローカルプレビュー拒否は迂回しない。
+Build389はBuild388への差分ZIP。Build387以前には先に388まで適用する。
+Git HEADはBuild381のまま。git diffは388との差分ではない。次回変更前に現389をスナップショット。
+今回の比較基準はbase388-files.jsonとbaseline388。次回はbase389-files.jsonを新設する。
+外部push/deployは未実施、online-server/dataは配布対象外。

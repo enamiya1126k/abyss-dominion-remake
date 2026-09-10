@@ -1,0 +1,62 @@
+{
+  "build": 388,
+  "method": "built-in image generation",
+  "references": [
+    "81E468E4-B7DF-4092-881A-90D0ADAFAD26.jpeg",
+    "02A12963-404F-4F0E-8280-6F34CE23A275.jpeg"
+  ],
+  "style": "Cute expressive face, approximately four heads tall, ornate black/gold or white/gold armor, crisp pixel-style detail, compact attack effects.",
+  "facing": "front/right",
+  "imageEditing": "None. Original RGBA PNG bytes preserved. Runtime polygon clips isolate eight poses.",
+  "assets": [
+    {
+      "species": "ch2_fiora",
+      "file": "assets/monsters/ch2_388_fiora/sheet.png",
+      "generatedSource": "exec-8059cdc8-6f4e-4dd2-96eb-e9a36e882850.png",
+      "promptKey": "fiora",
+      "sha256": "e170fbe0da1c4d16071f156322cbb4a3fc66b518ad0ddbc5537328f0a582ba81"
+    },
+    {
+      "species": "ch2_lyriet",
+      "file": "assets/monsters/ch2_388_lyriet/sheet.png",
+      "generatedSource": "exec-27bbcf5e-040c-4dee-b3ee-b94543534715.png",
+      "promptKey": "lyriet",
+      "sha256": "b29f508df18dc1e197f5786061acc949b9506048e09b8b8dbe90e13696b69afd"
+    },
+    {
+      "species": "ch2_rosette",
+      "file": "assets/monsters/ch2_388_rosette/sheet.png",
+      "generatedSource": "exec-208cebcb-7759-4256-bcd4-f0a0c8d13898.png",
+      "promptKey": "rosette",
+      "sha256": "4dc830c0b93471fc643ca78d19311d76af3fc828299885e8f4069c351afa589f"
+    },
+    {
+      "species": "ch2_noctelle",
+      "file": "assets/monsters/ch2_388_noctelle/sheet.png",
+      "generatedSource": "exec-efa52828-685a-430f-844e-37caec81ee82.png",
+      "promptKey": "noctelle",
+      "sha256": "18483fb0398b44e0e38bb6e3dc39cf3159bf3b575c10dc455ea504ed6c16f30d"
+    },
+    {
+      "species": "ch2_auriane",
+      "file": "assets/monsters/ch2_388_auriane/sheet.png",
+      "generatedSource": "exec-3c74ee45-e220-49e8-939d-4c44c288165d.png",
+      "promptKey": "auriane",
+      "sha256": "744bad9c677398a5e4a66b096ec9da60c19b7e6f266c4e120e0d3c750c7d95df"
+    },
+    {
+      "species": "ch2_eirene",
+      "file": "assets/monsters/ch2_388_eirene/sheet.png",
+      "generatedSource": "exec-aad26f61-2f3f-40dd-9179-28181b2af8f7.png",
+      "promptKey": "eirene",
+      "sha256": "f6ebe59c920dae733fda73d1c554855e11c63e544a14c2a02e7d321f634bf600"
+    },
+    {
+      "species": "ch2_iridelle",
+      "file": "assets/monsters/ch2_388_iridelle/sheet.png",
+      "generatedSource": "exec-ae689dc4-5693-4554-a6e0-0c5cd8178a4e.png",
+      "promptKey": "iridelle",
+      "sha256": "689306c03a01e033c41ca50eabf921a71b6e7b8c19965d1ade85b4d586aee5c6"
+    }
+  ]
+}

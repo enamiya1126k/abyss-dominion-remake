@@ -1,0 +1,54 @@
+ABYSS DOMINION 引継ぎ：Build390 / v3.1.70、第二章追加第八弾
+
+全56体（N/R/SR/SSR/UR/LR/神話各8体）・224技・448ポーズ・18ペア。
+Build389納品後、「各ランク10体を目指すなら390〜392のあと3回」と提案し、ユーザーは390を依頼。
+次の希望が出れば391：第九弾7体、392：第十弾7体で合計70体を目指す流れ。
+第三章の追加は未依頼。第二章の厚みを増す方針。
+見た目は旧リリカの黒金フード剣士／旧アウレのピンク髪白金天使騎士が基準。
+可愛い顔、約4頭身、精緻な装飾、大きな武器、限定的な攻撃エフェクト、正面〜右向き、各8モーション。
+
+390の7体
+ch2_miretta N 繕糸の針姫ミレッタ：黒根の侵食域・再探索「焼け跡の根脈」
+ch2_iselle R 氷紋の杖姫イゼル：深淵の回廊・再探索「忘却の鎖道」
+ch2_virelle SR 砕氷の槌姫ヴィレル：深淵の回廊・再探索「忘却の鎖道」
+ch2_rostia SSR 黒盾の誓姫ロスティア：黒根の侵食域・再探索「吸命の荒野」
+ch2_althea UR 紅剣の返誓姫アルテア：黒根の侵食域・再探索「吸命の荒野」
+ch2_sephira LR 星詠の魔導姫セフィラ：理の中枢・再探索「輪廻の歯車」
+ch2_astrelle 神話 天環の魔導姫アストレル：理の中枢・再探索「輪廻の歯車」
+roam1_1 mirea/viola/rostia/althea、Lv2600。
+roam1_4 rikka/rinne/shelza/miretta。
+roam2_1 seria/carmia/iselle/virelle。
+roam4_1 celes/lumina/sephira/astrelle、Lv5600。
+roam4_3 luxion/aeriel/vespera/mimelia。mimeliaの図鑑habitatを記録の中枢へ更新。
+Ioneは3_3、Grantは1_3、Velgは2_4に残る。全56体・18ペアの捕獲経路を確認。
+
+実装
+chapterTwoSpecies390 / chapterTwoPairs390 / chapterTwoSprites390 / ChapterTwoMonsters390。
+種族、捕獲、装備、AI、固有技、描画へ登録。Habitat390は389の後に適用。
+frostshatter：hybrid1.15x3、防御25%無視、凍結相手x1.7。敵AIの390凍結準備は通常障壁より優先。
+oathreturn：physical1.7単体、防御20%無視、姉妹HP18%障壁＋guard25%/2T、sourceKey pair:oathreturn。
+queuePairCounter390 / resolvePairCounters390をTwinResonance385に実装。
+護誓を付与された姉妹への命中で反撃を予約。相方が元の攻撃者へphysical2.4、防御25%無視。
+各被弾種族1ラウンド1回、通常共鳴とは別枠。JSONで保存し、複製や再開で回数を増やさない。
+反撃前に死亡・捕獲・離脱・護誓解除・隔離・追加行動封印・凍結/睡眠/stunを再確認。
+BattleRules.applyEnemyDamageで物理/魔法等の直接命中を予約、main.dealEnemyHitで味方側を予約。
+mainのpairBattleEnvironment385を通常共鳴と反撃で共有。resolveTwinResonance385前後・finishCurrentActionでキューを消化。
+WeakSetとnoCounter390で反撃の再帰を抑制。finishCurrentActionの勝敗確認は反撃が起きた場合のみ追加。
+starconfluence：1・2回は攻撃なしで共有魔力+1/全体障壁12%。3回目に全体magic5.5/防御35%無視/全体障壁20%、蓄積0。
+state.charge390はside:pairキー、state.counterUsed390はside:pair:speciesキー、state.counterQueue390はIDだけの配列。
+すべて既存battle.twinResonance385内でチェックポイント保存。蓄積はラウンドをまたぐが、各種族の共鳴は既存の1回枠。
+TwinStatus385は魔力0〜2/3を表示。mainの演出ログは蓄積・合体魔法・護誓反撃を区別。
+オンライン戦闘の共鳴は未移植。
+
+素材
+assets/monsters/ch2_390_KEY/sheet.pngに元RGBAをそのまま配置。
+chapterTwoSprites390.jsにright/8frame box/clip/paths。共通256枠、最大224、足元244。
+artifacts/build390/monsters.html / prompts.json / provenance.jsonを同梱。
+
+検証・納品
+203テスト成功（新規17）、61モジュール構文、607相対参照、56ポーズ保持100%/混入0。
+ブラウザー/iPhone実描画は未確認。以前のローカルプレビュー拒否は迂回しない。
+Build390はBuild389への差分ZIP。Build388以前には先に389まで適用する。
+Git HEADはBuild381のまま。git diffは389との差分ではない。次回変更前に現390をスナップショット。
+今回比較基準はbase389-files.jsonとbaseline389。次回はbase390-files.jsonを新設する。
+外部push/deployは未実施、online-server/dataは配布対象外。

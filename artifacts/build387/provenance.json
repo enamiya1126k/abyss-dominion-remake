@@ -1,0 +1,63 @@
+{
+  "tool": "image_gen.imagegen",
+  "build": 387,
+  "note": "Unmodified accepted PNGs. Aeriel and Vespera use the pre-chibi-revision armored designs, matching the final preference for about four heads tall.",
+  "files": [
+    {
+      "species": "ch2_pipia",
+      "file": "assets/monsters/ch2_387_pipia/sheet.png",
+      "sourceGeneratedFile": "exec-8c2cbf38-56d8-4dac-a337-97face983a19.png",
+      "sha256": "f383d11bf5926f406648e5f2e139df05a4ae5e2cd89df8c7ac10256c3bd24e27",
+      "acceptedPromptIndex": 0,
+      "sourceFacing": "front/right"
+    },
+    {
+      "species": "ch2_rikka",
+      "file": "assets/monsters/ch2_387_rikka/sheet.png",
+      "sourceGeneratedFile": "exec-4f00d6df-149d-4598-9cc2-d3274fb43b54.png",
+      "sha256": "50ca3a61e733c58cf53358b4312717fa51becd7c9bc01880b528dc8299d1ee4d",
+      "acceptedPromptIndex": 1,
+      "sourceFacing": "front/right"
+    },
+    {
+      "species": "ch2_rinne",
+      "file": "assets/monsters/ch2_387_rinne/sheet.png",
+      "sourceGeneratedFile": "exec-4c082c41-8937-42ce-aa23-1b6404c3f4df.png",
+      "sha256": "3fac10fc039a973243f22086a7744f54057a28ea1c3e9e5da1e04f403a3ab328",
+      "acceptedPromptIndex": 2,
+      "sourceFacing": "front/right"
+    },
+    {
+      "species": "ch2_seria",
+      "file": "assets/monsters/ch2_387_seria/sheet.png",
+      "sourceGeneratedFile": "exec-bb842d89-3856-41ca-92a3-abdf5689cc73.png",
+      "sha256": "9c71757d3433f9c99b88a0984fda7870629215f66bb0db34650b1cec57750ec7",
+      "acceptedPromptIndex": 3,
+      "sourceFacing": "front/right"
+    },
+    {
+      "species": "ch2_carmia",
+      "file": "assets/monsters/ch2_387_carmia/sheet.png",
+      "sourceGeneratedFile": "exec-430c20c6-cec1-4e88-8535-57067638d3d0.png",
+      "sha256": "74cb8d2336e4e2a2f4af7a38c959f653124d24cd79c086b4c93478cdf1538eb3",
+      "acceptedPromptIndex": 4,
+      "sourceFacing": "front/right"
+    },
+    {
+      "species": "ch2_aeriel",
+      "file": "assets/monsters/ch2_387_aeriel/sheet.png",
+      "sourceGeneratedFile": "exec-bf7a3953-1e6a-49e7-96da-43a4fa0a2b7a.png",
+      "sha256": "c46f7d1463aaa35e0603768e141d3c56169b43db0b35fa0635a63d9e01494bc0",
+      "acceptedPromptIndex": 7,
+      "sourceFacing": "front/right"
+    },
+    {
+      "species": "ch2_vespera",
+      "file": "assets/monsters/ch2_387_vespera/sheet.png",
+      "sourceGeneratedFile": "exec-2ade1baf-3236-4980-a0bf-d09ff1e5529b.png",
+      "sha256": "f166986761fe78c2bab67a4eeb826a5ebce27090082a8247750ed59f5dbb3eaf",
+      "acceptedPromptIndex": 8,
+      "sourceFacing": "front/right"
+    }
+  ]
+}

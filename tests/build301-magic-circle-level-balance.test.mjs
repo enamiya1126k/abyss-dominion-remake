@@ -27,7 +27,7 @@ test("build301 magic-circle prices use the v4 bounded curve",()=>{
 });
 
 test("build301 every playable magic circle exposes a real bounded level effect",()=>{
- assert.equal(playable.length,20);
+ assert.equal(playable.length,28);
  for(const circle of playable){
   const first=magicCircleLevelEffect(circle,1),last=magicCircleLevelEffect(circle,99);
   assert.notDeepEqual(effectPayload(first),effectPayload(last),`${circle.id} must improve beyond cosmetic level text`);

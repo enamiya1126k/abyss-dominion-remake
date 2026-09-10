@@ -1,0 +1,24 @@
+/* One row of four full-body sprites, including narrow phones. */
+.hero-alliance396-modal .game-modal-card{position:relative}
+.hero-alliance396-modal .modal-x{position:absolute!important;float:none!important}
+.hero-alliance396-modal .game-modal-card{width:min(700px,calc(100vw - 24px))!important;max-width:700px!important;padding:22px 16px 16px!important;border:1px solid #c59b54!important;background:radial-gradient(ellipse at 50% 22%,#45315955,transparent 65%),linear-gradient(150deg,#17131e,#09080d)!important;box-shadow:inset 0 0 0 3px #09080d,inset 0 0 0 4px #c59b5455,0 20px 70px #000b!important}
+.hero-alliance396-modal .game-modal-card>h2{padding:0 28px 0 0!important;margin:0 0 12px!important;color:#ffe9ba;font-size:clamp(18px,4.7vw,27px)!important;line-height:1.5!important;overflow-wrap:anywhere}
+.hero-alliance396-modal .modal-x{top:10px!important;right:10px!important;left:auto!important;width:32px!important;height:32px!important;min-height:32px!important;font-size:22px!important}
+.hero-alliance396{text-align:center;color:#e4dace}
+.hero-alliance396-eyebrow{display:block;color:#cda9e6;font:700 10px/1.5 sans-serif;letter-spacing:.22em}
+.hero-alliance396-lead{margin:12px auto 16px;font-size:13px;line-height:1.8;max-width:34em}
+.hero-alliance396-party{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0;padding:14px 0;border-top:1px solid #b5945155;border-bottom:1px solid #b5945155}
+.hero-alliance396-hero{min-width:0;margin:0;padding:0 3px 12px;border:1px solid #8d733852;background:linear-gradient(0deg,#36234644,transparent 75%);animation:hero-arrival396 .55s both;animation-delay:var(--hero-arrival396)}
+.hero-alliance396-art{display:flex;align-items:center;justify-content:center;height:clamp(106px,29vw,210px);position:relative}
+.hero-alliance396 .hero-alliance396-sprite{display:flex!important;align-items:center;justify-content:center;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;overflow:visible!important;filter:none!important;transform:none!important;background:none!important}
+.hero-alliance396 .hero-alliance396-sprite img{display:block;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;image-rendering:pixelated;transform:none!important;filter:none!important}
+.hero-alliance396-hero figcaption{display:grid;gap:5px;min-width:0}
+.hero-alliance396-hero figcaption small{font-size:10px;color:#dab979;letter-spacing:.14em}
+.hero-alliance396-hero figcaption b{font-size:clamp(12px,3.2vw,17px);line-height:1.4;overflow-wrap:anywhere;color:#fff0d5}
+.hero-alliance396-hero figcaption span{font-size:10px;color:#b2a6b8;line-height:1.5;overflow-wrap:anywhere}
+.hero-alliance396-note{margin:16px 0;font-size:12px;line-height:1.8;color:#c5b8c9}
+.hero-alliance396 .hero-alliance396-formation{width:100%;min-height:48px;border:1px solid #d8ae62;background:linear-gradient(#644521,#302113);color:#fff1ce;font:700 17px/1.4 "Yu Mincho",serif}
+.hero-alliance396-modal .modal-primary{min-height:40px!important;margin-top:10px!important;font-size:14px!important}
+@keyframes hero-arrival396{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(max-width:360px){.hero-alliance396-modal .game-modal-card{padding:20px 10px 12px!important}.hero-alliance396-party{gap:4px}.hero-alliance396-hero figcaption span{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.hero-alliance396-hero{animation:none}}

@@ -1,0 +1,49 @@
+ABYSS DOMINION 引継ぎ：Build387 / v3.1.67、第五弾完了
+
+全5弾でN/R/SR/SSR/UR/LR/神話各5体、合計35体、140固有技、280ポーズ、専用9ペア。
+第二章の充実を優先し、第三章へはまだ進めていない。
+最新の素材希望：正面〜右向き、約4頭身。3頭身への修正前のデザインが好み。
+顔の可愛さに、装飾・武器・マント・エフェクトのかっこよさを足す。各8モーション、128〜512px程度。
+今回の上位2人は頭身が高い白銀の女騎士/黒鎧の魔姫を採用し直した。3頭身の最終生成候補は不採用。
+
+387追加
+pipia N 露鈴の案内姫ピピア：roam0_1 lilica/kororu/balk/pipia。
+rikka R 白兎の縫姫リッカ、rinne SR 黒兎の鋏姫リンネ：roam1_4 rikka/rinne/grant。
+seria SSR 氷硝の歌姫セリア、carmia UR 紅硝の奏姫カルミア：roam2_1 seria/carmia/velg。
+aeriel LR 終律の聖姫アエリエル、vespera 神話 始淵の魔姫ヴェスペラ：roam4_3 luxion/aeriel/ione/vespera、Lv5200。
+すべてIDはch2_接頭辞。以前の全28体の再探索捕獲経路を維持。
+
+技/AI/装備
+chapterTwoSpecies387.jsに28技。chapterTwoSet387フラグ。
+species / capture helper / Monsters383 / Tactics382 / EnemyAI / ChapterTwoSystemに登録。
+既存384〜386の実装備、浄化、蘇生時MP保持、吸魔、敵強化ボーナスの判定を387へ拡張。
+音楽姉妹は両者の生存中、欠けている速度低下・回避低下の準備を強打より先にする。
+味方オートは通常の緊急回復・浄化・倒し切り・MP温存を維持して専用準備判断を追加。
+
+新3ペア
+chapterTwoPairs387.jsにデータ。TwinResonance385.jsのRESONANCE_PAIRS385に結合、合計9組。
+stitch：全体物理2.2＋全体障壁12%。発動時にペアの一方がHP35%以下なら3.1/全体回復18%/障壁18%。
+glassaria：全体魔法2.2、防御15%無視、全体回復10%。速度低下と回避低下の両方で3.63。
+eclipsecrown：最初の対象の強化1つを除去しhybrid1.25×3、防御35%無視、全体回復12%。
+resolveTwin385にhpRatio/hasEffect/dispelフック。mainの通常回復・命中・ダメージ・障壁・効果配列へ接続。
+救援は発動時点のペアのHP割合を使用し、planに合成。元のペアデータを変更しない。
+複合弱体条件は各標的/打撃で判定。強化解除は最初に1回だけ、再標的化しても増やさない。
+既存のWeakSet再入防止、同陣営・生存・捕獲/隔離判定、種族ごとの各ラウンド1回の予約を維持。
+オンラインサーバーへは未移植。onlineModeのUIも共鳴中表示を出さない。
+
+素材/確認
+assets/monsters/ch2_387_KEY/sheet.png：採用元RGBAをそのまま収録。
+chapterTwoSprites387.jsはfacing:right、8ポーズのbox/clip/paths。
+旧383〜385の暗黙leftと386/387のrightを共通描画で扱う。
+256枠/最大224/足元244。図鑑は元の右向き、戦闘は味方右・敵左、探索は移動方向へ反転。
+artifacts/build387/monsters.htmlに新7体・8モーション・固有技・3連携。
+provenance.jsonが採用ファイルと採用プロンプトの記録。prompts.jsonには不採用候補の履歴も含む。
+
+検証/配布
+163件成功（新規16）、58モジュール構文/参照、56ポーズ主要保持100%/混入0。
+ブラウザー/iPhone未確認。以前のプレビュー拒否は迂回しない。
+Build387はBuild386への差分ZIP。Build385以前には先に386を適用。
+BUILD387_MANIFEST.jsonが現在のハッシュ。
+Git HEADはBuild381のままなのでgit diffは386との差分ではない。次回変更前に現387をスナップショット。
+外部push/deployは未実行、online-server/dataはパッチ対象外。
+追加制作や章を進める場合は次のユーザー依頼に沿って判断する。

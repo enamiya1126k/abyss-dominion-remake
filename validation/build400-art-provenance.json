@@ -1,0 +1,54 @@
+{
+  "build": 400,
+  "mode": "built-in image_gen.imagegen",
+  "reference": "assets/ui/home-town-bg.png (style and composition only)",
+  "outputs": [
+    {
+      "id": "forest",
+      "image": "assets/ui/home-skins400/forest.webp",
+      "thumbnail": "assets/ui/home-skins400/forest-thumb.webp"
+    },
+    {
+      "id": "invasion",
+      "image": "assets/ui/home-skins400/invasion.webp",
+      "thumbnail": "assets/ui/home-skins400/invasion-thumb.webp"
+    },
+    {
+      "id": "abyss",
+      "image": "assets/ui/home-skins400/abyss.webp",
+      "thumbnail": "assets/ui/home-skins400/abyss-thumb.webp"
+    },
+    {
+      "id": "sanctum",
+      "image": "assets/ui/home-skins400/sanctum.webp",
+      "thumbnail": "assets/ui/home-skins400/sanctum-thumb.webp"
+    },
+    {
+      "id": "core",
+      "image": "assets/ui/home-skins400/core.webp",
+      "thumbnail": "assets/ui/home-skins400/core-thumb.webp"
+    }
+  ],
+  "prompts": [
+    {
+      "id": "forest",
+      "prompt": "Use case: stylized-concept. Asset type: a finished portrait 1024x1536 pixel-art background for ABYSS DOMINION RPG home screen. Input image is a STYLE and COMPOSITION REFERENCE ONLY: match its rich clean hand-placed pixel clusters, dark fantasy RPG texture and depth. Create a NEW distinct environment; no castle village copy. No characters, creatures, text, logos, UI, icons or borders. Camera eye-level tilted slightly toward a broad foreground walkway; foreground lower half (y 780-1536) is a mostly quiet, traversable textured platform/path with clear center for four game characters to be overlaid. Scenic focal landmark upper central third; rich framing at sides, readable silhouette and low clutter at lower center. Crisp pixel texture, no photographic surface, no soft painted illustration. Full bleed portrait. Light sources localized and restrained, preserve moody shadows; no huge glow washes.\nScene: 境界の森: a mystical old forest at blue-green twilight, gigantic ancient tree and carved stone arch in the upper center (x 400-700,y250-650), layered teal foliage frames upper left and right. A calm narrow moonlit stream flows through the midground x380-650 y590-880, with small highlights; an old stone footbridge at y850 separates it from a broad mossy earthen path in the foreground. A few tiny fireflies, distant beams between trees, cool emerald and turquoise with warm moss ochre. Quiet adventurous sanctuary, not sinister."
+    },
+    {
+      "id": "invasion",
+      "prompt": "Use case: stylized-concept. Asset type: a finished portrait 1024x1536 pixel-art background for ABYSS DOMINION RPG home screen. Input image is a STYLE and COMPOSITION REFERENCE ONLY: match its rich clean hand-placed pixel clusters, dark fantasy RPG texture and depth. Create a NEW distinct environment; no castle village copy. No characters, creatures, text, logos, UI, icons or borders. Camera eye-level tilted slightly toward a broad foreground walkway; foreground lower half (y 780-1536) is a mostly quiet, traversable textured platform/path with clear center for four game characters to be overlaid. Scenic focal landmark upper central third; rich framing at sides, readable silhouette and low clutter at lower center. Crisp pixel texture, no photographic surface, no soft painted illustration. Full bleed portrait. Light sources localized and restrained, preserve moody shadows; no huge glow washes.\nScene: 黒根の侵食域: a solemn ruined forest waystation overrun with dark twisted roots, old root-wrapped stone gateway upper center, burgundy foliage on both upper sides, distant fissures glow subtle amber red. Two small fire bowls fixed approximately at (210,730) and (820,710); sparse embers, weathered brickwork and black roots around edges. Foreground broad empty basalt cobblestone path, warm gray with burnt sienna texture; distant purple twilight sky. Dramatic dark crimson/obsidian/copper, detailed and beautiful, readable rather than pitch black. No flames covering the path."
+    },
+    {
+      "id": "abyss",
+      "prompt": "Use case: stylized-concept. Asset type: a finished portrait 1024x1536 pixel-art background for ABYSS DOMINION RPG home screen. Input image is a STYLE and COMPOSITION REFERENCE ONLY: match its rich clean hand-placed pixel clusters, dark fantasy RPG texture and depth. Create a NEW distinct environment; no castle village copy. No characters, creatures, text, logos, UI, icons or borders. Camera eye-level tilted slightly toward a broad foreground walkway; foreground lower half (y 780-1536) is a mostly quiet, traversable textured platform/path with clear center for four game characters to be overlaid. Scenic focal landmark upper central third; rich framing at sides, readable silhouette and low clutter at lower center. Crisp pixel texture, no photographic surface, no soft painted illustration. Full bleed portrait. Light sources localized and restrained, preserve moody shadows; no huge glow washes.\nScene: 深淵の回廊: an ancient underground hall open to a vast starry purple chasm beyond tall gothic arches in the upper center. Broken columns with fine gold inlay left and right, layered depth of abandoned arcades; faint cool violet mist lies behind the arches and across the middle distant floor. A narrow channel of violet reflected light in midground at x430-630 y590-850. Foreground broad quiet dark stone promenade with subtle worn geometric floor inlays, center unobstructed. Deep navy, amethyst, antique gold, eerie calm old-world grandeur. No giant magic circle filling foreground."
+    },
+    {
+      "id": "sanctum",
+      "prompt": "Use case: stylized-concept. Asset type: a finished portrait 1024x1536 pixel-art background for ABYSS DOMINION RPG home screen. Input image is a STYLE and COMPOSITION REFERENCE ONLY: match its rich clean hand-placed pixel clusters, dark fantasy RPG texture and depth. Create a NEW distinct environment; no castle village copy. No characters, creatures, text, logos, UI, icons or borders. Camera eye-level tilted slightly toward a broad foreground walkway; foreground lower half (y 780-1536) is a mostly quiet, traversable textured platform/path with clear center for four game characters to be overlaid. Scenic focal landmark upper central third; rich framing at sides, readable silhouette and low clutter at lower center. Crisp pixel texture, no photographic surface, no soft painted illustration. Full bleed portrait. Light sources localized and restrained, preserve moody shadows; no huge glow washes.\nScene: 天律の聖域: a magnificent elevated sanctuary above a sea of clouds, slender white ivory and aged gold columns on the far sides, a distant intricate cathedral arch at upper center, serene blue sky seen through openings. Three long pale gold ceremonial banners hanging high near columns (left x200,y180-550; right x850,y180-550), soft morning sunlight and faint star-like golden motes. Clouds below horizon across y420-750. Broad empty ivory marble terrace in lower half with fine worn gold inlay, gentle blue shadows. Noble sacred elegant architecture fitting a dark fantasy pixel RPG. No throne, characters or foreground obstruction."
+    },
+    {
+      "id": "core",
+      "prompt": "Use case: stylized-concept. Asset type: a finished portrait 1024x1536 pixel-art background for ABYSS DOMINION RPG home screen. Input image is a STYLE and COMPOSITION REFERENCE ONLY: match its rich clean hand-placed pixel clusters, dark fantasy RPG texture and depth. Create a NEW distinct environment; no castle village copy. No characters, creatures, text, logos, UI, icons or borders. Camera eye-level tilted slightly toward a broad foreground walkway; foreground lower half (y 780-1536) is a mostly quiet, traversable textured platform/path with clear center for four game characters to be overlaid. Scenic focal landmark upper central third; rich framing at sides, readable silhouette and low clutter at lower center. Crisp pixel texture, no photographic surface, no soft painted illustration. Full bleed portrait. Light sources localized and restrained, preserve moody shadows; no huge glow washes.\nScene: 理の中枢: an immense ancient celestial mechanism inside a dark domed observatory, engraved brass gears and stationary interlocking rings surround a restrained blue-gold central orrery high at x512,y400; tall carved dark teal columns at sides. Small fine starlight constellations visible beyond glass vaults in upper background. Two little floating metallic fragments at sides in midground, thin turquoise energy conduits run along architecture, not across the empty center. Broad unobstructed dark bronze stone platform in lower half with worn radial inlay. Palette midnight blue, oxidized teal, antique brass; calm powerful clockwork cosmic atmosphere. Rings finely machined, no huge bright circular glow, no digital sci-fi interface."
+    }
+  ]
+}

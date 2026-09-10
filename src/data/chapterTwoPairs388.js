@@ -1,0 +1,6 @@
+// Chapter II additional release: oath knights, rose sisters and the twin clocks.
+export const CHAPTER_TWO_PAIRS388=Object.freeze([
+ {id:'oathguard',kind:'双子',name:'誓約・双剣の護陣',members:['ch2_lyriet','ch2_rosette'],names:['リリエット','ロゼット'],power:2.1,hits:1,all:true,damageClass:'physical',defenseIgnore:0,shield:.18,scope:'party',partyEffect:{kind:'atkUp',value:.12,turns:2},description:'相方が敵全体へ物理2.10倍。生存味方全体に最大HP18%の障壁と攻撃12%上昇（2ターン）。連撃をしのいで攻勢へ移る双子の護陣。障壁は加算されない。'},
+ {id:'rosevow',kind:'姉妹',name:'薔薇・黎闇の契り',members:['ch2_noctelle','ch2_auriane'],names:['ノクテル','オーリアン'],power:1.3,hits:3,damageClass:'physical',defenseIgnore:.25,heal:.12,scope:'party',emergency:{threshold:.4,name:'薔薇・不滅の黎明',power:1.65,heal:.2},description:'相方が単体へ物理1.30倍×3連撃、防御25%無視。生存味方全体HP12%回復。発動時に姉妹のどちらかがHP40%以下なら「不滅の黎明」：1.65倍×3連撃＋全体HP20%回復。両方の生存が必要。'},
+ {id:'twinclock',kind:'姉妹',name:'双刻・星律の終奏',members:['ch2_eirene','ch2_iridelle'],names:['エイレーネ','イリデル'],power:2.4,hits:1,all:true,damageClass:'hybrid',defenseIgnore:.2,shield:.1,scope:'party',partyEffect:{kind:'spdUp',value:.18,turns:2},bonusVsEffects:{kinds:['spdDown','defDown'],multiplier:1.6},description:'相方が敵全体へ2.40倍、防御20%無視。速度低下と防御低下の両方がある敵には3.84倍。高い方の攻撃・魔力を使用。生存味方全体にHP10%障壁と速度18%上昇（2ターン）。'}
+]);

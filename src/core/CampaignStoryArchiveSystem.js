@@ -107,7 +107,10 @@ function branchVariants({ledger,records,receipts,definition,parts}){
 function categoryModel(definition,entries){const sorted=[...entries].sort((left,right)=>left.sortKey-right.sortKey||left.title.localeCompare(right.title,"ja")),total=sorted.reduce((sum,entry)=>sum+(entry.type==="branch"?entry.variants.length:1),0),read=sorted.reduce((sum,entry)=>sum+(entry.type==="branch"?entry.variants.filter(variant=>variant.available).length:entry.available?1:0),0);return{...definition,entries:sorted,total,read}}
 
 export function createCampaignStoryArchiveModel(state){
- const snapshot=cloneSerializable(state)??{},records=archiveRecords(snapshot),story=normalizeCampaignStoryState(snapshot),ledger=normalizeCampaignHeroBranchStoryState(normalizeCampaignHeroInvasion(snapshot)),canonicalReceipts=new Set(story.seenSceneIds??[]),branchReceipts=new Set(ledger.branchStories323?.receipts??[]),prologue=[],demon=[],heroes=[];
+ // Archive reconstruction needs story and hero ledgers, not owned assets or
+ // battle/field snapshots. Keep every legacy story field, clone only this view.
+ const {monsters,equipment,magicCircles,inventory,activeBattle,expeditionSnapshot,chapterTwo376,settings,...storySource}=state??{};
+ const snapshot=cloneSerializable(storySource)??{},records=archiveRecords(snapshot),story=normalizeCampaignStoryState(snapshot),ledger=normalizeCampaignHeroBranchStoryState(normalizeCampaignHeroInvasion(snapshot)),canonicalReceipts=new Set(story.seenSceneIds??[]),branchReceipts=new Set(ledger.branchStories323?.receipts??[]),prologue=[],demon=[],heroes=[];
  const openingStored=storedScene(records,CAMPAIGN_STORY_OPENING.id),openingRead=Boolean(openingStored||canonicalReceipts.has(CAMPAIGN_STORY_OPENING.id)),openingScene=openingStored??(openingRead?resolveCampaignStoryScene(CAMPAIGN_STORY_OPENING.id,snapshot):null);prologue.push(sceneEntry({id:"archive-opening",title:"滅びた世界、最弱の器",subtitle:"魔王サイラーンと預言者リオネル",sortKey:0,scene:openingScene,available:openingRead}));
  for(const definition of CAMPAIGN_DEMON_STORY_SCENES){
   const stored=storedScene(records,definition.id),available=Boolean(stored||canonicalReceipts.has(definition.id)),scene=stored??(available?historicalMilestoneScene(ledger,definition):null);

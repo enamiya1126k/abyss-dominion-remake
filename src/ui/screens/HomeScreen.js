@@ -1,17 +1,20 @@
-import{chapterTwoUnlocked,chapterTwoDungeonHint,chapterTwoArea,chapterTwoObjective,CHAPTER_TWO_AREAS}from"../../chapterTwo/ChapterTwoSystem.js?v=3.1.61-build381";
-import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.61-build381";
+import {chapterTwoHomeCard401} from '../ChapterTwoProgress401.js?v=3.1.82-build402';
+import {homeSkinState400} from '../../core/HomeSkinSystem400.js?v=3.1.82-build402';
+import {homeEnvironment400} from '../HomeSkin400.js?v=3.1.82-build402';
+import{chapterTwoUnlocked,chapterTwoDungeonHint}from"../../chapterTwo/ChapterTwoSystem.js?v=3.1.82-build402";
+import{APP_VERSION,isContentUnlocked}from"../../core/config.js?v=3.1.82-build402";
 // Regression marker only: config.js?v=3.1.21-build340
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323
-import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.61-build381";
-import{maxMp}from"../../battle/SkillSystem.js?v=3.1.49-build369";
-import{SPECIES}from"../../data/species.js?v=3.1.39-build359";
-import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.60-build380";
-import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.61-build381";
-import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.55-build375";
+import{displayName,calculatedStats}from"../../models/Monster.js?v=3.1.82-build402";
+import{maxMp}from"../../battle/SkillSystem.js?v=3.1.75-build395";
+import{SPECIES}from"../../data/species.js?v=3.1.72-build392";
+import{TEAM_BATTLE_UNLOCK_FLOOR,GAUNTLET_UNLOCK_FLOOR,EMERGENCY_UNLOCK_FLOOR,hasCleared1000,worldPhase}from"../../core/EndgameSystem.js?v=3.1.72-build392";
+import{monsterCombatPower,partyCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.82-build402";
+import{idleReturnPreview}from"../../core/ReturnRewardSystem.js?v=3.1.78-build398";
 import{noticeAttentionCount}from"../../core/NoticeSystem.js?v=3.1.1-build317";
-import{monsterVisual}from"../MonsterVisual.js?v=3.1.48-build368";
+import{monsterVisual}from"../MonsterVisual.js?v=3.1.82-build402";
 import{attributeCycleVisual,attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.41-build361";
+import{magicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.78-build398";
 import{campaignDayForFloor,campaignHeroAdvance}from"../../core/Campaign100System.js?v=3.1.42-build362";
 import{normalizeCampaignHeroInvasion}from"../../core/CampaignHeroEncounterSystem.js?v=3.1.42-build362";
 import{normalizeCampaignReincarnationState,campaignReincarnationDifficultyMultiplier,campaignReincarnationFloorLimit}from"../../core/CampaignReincarnationSystem.js?v=3.1.42-build362";
@@ -120,6 +123,7 @@ function homeMemoryCost(state,memory){
 }
 
 export function HomeScreen(state,options={}){
+  const homeSkin400=homeSkinState400(state),chapterCard401=chapterTwoHomeCard401(state);
   const slotIds=homePartySlots(state);
   const party=slotIds.map(id=>id?state.monsters.find(monster=>monster.id===id):null);
   const activeParty=party.filter(Boolean);
@@ -145,19 +149,11 @@ export function HomeScreen(state,options={}){
   const requestedServerState=String(options.serverStatus?.state??"checking"),serverState=["online","offline"].includes(requestedServerState)?requestedServerState:"checking",serverLabel=serverState==="online"?"サーバーオンライン中":serverState==="offline"?"サーバーオフライン":"サーバー確認中";
 
   return`
-    <section class="screen home-command-screen world-phase-${phase}${phase===1?" phase2":""}" data-world-phase="${phase}">
+    <section class="screen home-command-screen world-phase-${phase}${phase===1?" phase2":""}" data-world-phase="${phase}" data-home-skin400="${homeSkin400.skin.id}" data-motion400="${homeSkin400.motion?'on':'off'}">
       <div class="home-command-shade" aria-hidden="true"></div>
-      <div class="home-environment-motion" aria-hidden="true">
-        <i class="home-moving-sky sky-left"></i>
-        <i class="home-moving-sky sky-right"></i>
-        <i class="home-moving-foliage foliage-left"></i>
-        <i class="home-moving-foliage foliage-right"></i>
-        <i class="home-river-shimmer river-frame-1"></i>
-        <i class="home-river-shimmer river-frame-2"></i>
-        <i class="home-river-shimmer river-frame-3"></i>
-      </div>
+      ${homeEnvironment400(state)}
 
-      ${chapterTwoUnlocked(state)?`<header class="home-title-card home-chapter380" id="chapterTwoHome380" role="button" tabindex="0"><small>第一章クリア</small><h1>第二章・${chapterTwoArea(state.chapterTwo376?.run).name}</h1><p>${state.chapterTwo376?.run?(state.chapterTwo376.run.completed?(state.chapterTwo376.run.area<4?`次の目的：${CHAPTER_TWO_AREAS[state.chapterTwo376.run.area+1].name}へ`:'世界の結末へ'):chapterTwoObjective(state.chapterTwo376.run).title):'勇者たちと新たな旅へ'}</p><span>行き先を見る ›</span></header>`:`<header class="home-title-card" id="openCampaignIntel" data-open-campaign-intel role="button" tabindex="0" aria-label="勇者情報を見る">
+      ${chapterCard401?chapterCard401:`<header class="home-title-card" id="openCampaignIntel" data-open-campaign-intel role="button" tabindex="0" aria-label="勇者情報を見る">
         <small>${prophecyLabel}</small>
         <h1>${title}</h1>
         <${meterTag}${meterAction} class="home-invasion-meter ${completed?"is-complete":""} ${finalReady?"is-ready":""}"><i role="progressbar" aria-label="勇者の進軍度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${invasion.progress}"><em style="width:${invasion.progress}%"></em></i><b>${meterLabel}</b></${meterTag}>

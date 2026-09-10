@@ -1,0 +1,52 @@
+ABYSS DOMINION 引継ぎ：Build391 / v3.1.71、第二章追加第九弾
+
+全63体（各ランク9体）・252技・504ポーズ・21ペア。
+次の依頼があればBuild392（第十弾）で7体追加し、合計70体・各ランク10体を目指す予定。
+第三章を急がず第二章の内容を充実させる方針。
+可愛い顔、約4頭身、精緻な黒金/白金装飾、正面〜右向き、各8モーションがユーザーの希望。
+
+今回の種族
+ch2_rithia N 根灯の短剣姫リティア：境界の森・再探索「倒木の小径」（再訪で交代）
+ch2_nizelle R 黒羽の細剣姫ニゼル：境界の森・再探索「倒木の小径」（再訪で交代）
+ch2_charne SR 紅羽の双剣姫シャルネ：境界の森・再探索「倒木の小径」（再訪で交代）
+ch2_ferne SSR 宵鐘の護姫フェルネ：深淵の回廊・再探索「眠りの裁定」（再訪で交代）
+ch2_clarisse UR 暁鐘の聖姫クラリス：深淵の回廊・再探索「眠りの裁定」（再訪で交代）
+ch2_lunaria LR 月冥の翼姫ルナリア：理の中枢・再探索「修復の中枢」（再訪で交代）
+ch2_solaria 神話 日輪の翼姫ソラリア：理の中枢・再探索「修復の中枢」（再訪で交代）
+
+実装
+chapterTwoSpecies391 / chapterTwoPairs391 / chapterTwoSprites391 / ChapterTwoMonsters391。
+種族・捕獲・装備・AI・固有技・ペア・描画へ登録済み。Habitat391は390の後に適用。
+crimsonwings：物理1.2x3、防御25%無視、出血x1.6。各ヒットで状態を確認。
+absolutionbells：全体hybrid2.3、防御20%無視。生存味方全体をcleanse391で浄化後heal.1。
+eclipserenewal：全体magic2.6、防御30%無視。scope twins、mpHeal391=.12。
+TwinResonance385の共通処理にcleanse/restoreMpを追加。各await後に相方と受益者の生存・所属・捕獲・隔離を確認。
+main.pairBattleEnvironment385が既存HP/MP回復・状態ストアに接続。味方のMP回復阻害を差し引き、敵はrecoverEnemyBattleMpの阻害処理を利用。
+BattleRules.clearNegativeAllyEffectsにmpRecoveryDownを追加。敵のnative浄化AIも同じ弱体を認識。
+従来の種族別1ラウンド1回枠を共用。新しい保存キーの追加は不要。
+オンライン戦闘の共鳴は未移植。
+
+再訪交代
+15部屋・4人までの枠で全63体を維持するため、3部屋に追加部隊を設けた。
+roam0_1_391：nizelle/charne/rithia/lilica。
+roam2_3_391：ferne/clarisse/noctelle/auriane。
+roam4_4_391：lunaria/solaria/meliora/elyselle。
+各baseにroamingAlternates391、variantにroamingBase391を持たせる。旧15部隊は変更していない。
+chapterTwoRoamingId391(run,id,ENCOUNTERS)：visit380の偶奇で部隊選択。runなしなら指定IDそのまま。
+保存済みpendingが候補内ならそれを優先し、旧戦闘を破棄しない。
+beginでbase要求を選択済みIDに解決、未選択のvariant要求は拒否。tokenとpendingは実ID。
+settleはroamingBase391を達成キーに使い、1部屋の新旧重複報酬を防止。
+chapterTwoWorldはbaseのactive判定を維持し、表示IDとspeciesをその訪問のvariantへ変更。
+entries/tuneも同じ選択関数。main.openChapterTwoBattleはattempt.encounterをタイトル・保存・開始IDに使う。
+refreshChapterTwoRoaming380は従来からpending中無効、visit++、roaming[]をリセット。
+敗北では訪問番号を変えない。通常の3部屋目LR報酬・鍵・物語・宝物庫を維持。
+392で追加部隊を設ける場合も同じ仕組みを使い、旧キャラの捕獲経路を保つこと。
+
+素材・配布
+元RGBAをassets/monsters/ch2_391_KEY/sheet.pngへコピー。right/8frame box/clip/paths。
+共通256px枠、最大224px、足元244。artifacts/build391にmonsters.html / prompts.json / provenance.json。
+220テスト、59モジュール構文、617相対参照。56ポーズ保持100%・混入0。
+ブラウザー/iPhone実描画は未確認。以前のローカルプレビュー拒否を迂回しない。
+Build391はBuild390への差分ZIP。更新前比較はbase390-files.json / baseline390。
+Git HEADはBuild381のまま。git diffを390との差分として使わない。次回変更前に現391のスナップショットを作ること。
+公開push/deployは未実施。online-server/dataは配布対象外。

@@ -1,0 +1,2994 @@
+[
+  {
+    "id": "abyss_gluttony",
+    "name": "深淵Ⅰ 暴食",
+    "folder": "abyss_gluttony",
+    "frame": "idle1",
+    "file": "assets/monsters/abyss_gluttony/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      26,
+      74,
+      487,
+      452
+    ],
+    "transparentPixels": 165370,
+    "opaquePixels": 65092,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "cbe98f93e232ebcb32445ccefd460fb61cd789fa5dc35401615d1aca9f1c8c12"
+  },
+  {
+    "id": "abyss_gluttony",
+    "name": "深淵Ⅰ 暴食",
+    "folder": "abyss_gluttony",
+    "frame": "idle2",
+    "file": "assets/monsters/abyss_gluttony/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      27,
+      78,
+      485,
+      453
+    ],
+    "transparentPixels": 164929,
+    "opaquePixels": 65406,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "680fa8244ef9de862dfecb9c170318f3f96125e5fee8a23edfa8729a175a4a19"
+  },
+  {
+    "id": "abyss_gluttony",
+    "name": "深淵Ⅰ 暴食",
+    "folder": "abyss_gluttony",
+    "frame": "idle3",
+    "file": "assets/monsters/abyss_gluttony/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      19,
+      91,
+      492,
+      453
+    ],
+    "transparentPixels": 149870,
+    "opaquePixels": 67903,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "42acc73ab7a1fad81c375ca3bd5d879757d9818d4c34c7f2e13ee378dd8498eb"
+  },
+  {
+    "id": "abyss_gluttony",
+    "name": "深淵Ⅰ 暴食",
+    "folder": "abyss_gluttony",
+    "frame": "walk1",
+    "file": "assets/monsters/abyss_gluttony/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      23,
+      78,
+      489,
+      453
+    ],
+    "transparentPixels": 166466,
+    "opaquePixels": 64330,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "659756c8388c531acb56e71b89a954db72a1e0045ff3a3c3c05b835339b23149"
+  },
+  {
+    "id": "abyss_gluttony",
+    "name": "深淵Ⅰ 暴食",
+    "folder": "abyss_gluttony",
+    "frame": "walk2",
+    "file": "assets/monsters/abyss_gluttony/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      27,
+      74,
+      485,
+      452
+    ],
+    "transparentPixels": 163264,
+    "opaquePixels": 65341,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "c450aa7f741044458d757b66a1fc772342ab929ed28b9ae635b16205296601cd"
+  },
+  {
+    "id": "abyss_gluttony",
+    "name": "深淵Ⅰ 暴食",
+    "folder": "abyss_gluttony",
+    "frame": "attack",
+    "file": "assets/monsters/abyss_gluttony/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      92,
+      496,
+      453
+    ],
+    "transparentPixels": 139260,
+    "opaquePixels": 72346,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "907d8e059ff401f684dda45fea6ba1c787d466d38905678af6b3ac23a3cafb08"
+  },
+  {
+    "id": "abyss_gluttony",
+    "name": "深淵Ⅰ 暴食",
+    "folder": "abyss_gluttony",
+    "frame": "damage",
+    "file": "assets/monsters/abyss_gluttony/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      70,
+      87,
+      439,
+      453
+    ],
+    "transparentPixels": 163125,
+    "opaquePixels": 61756,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "a043368aaa198c7e920338804113aaaf31c23c98e87a4e2b7dc1adc9e02f8809"
+  },
+  {
+    "id": "abyss_gluttony",
+    "name": "深淵Ⅰ 暴食",
+    "folder": "abyss_gluttony",
+    "frame": "down",
+    "file": "assets/monsters/abyss_gluttony/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      20,
+      225,
+      489,
+      450
+    ],
+    "transparentPixels": 197371,
+    "opaquePixels": 40358,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "fd3e3503aa20f7809e2bf2c35477381fe957c6d7dadb7aec57404324608faa20"
+  },
+  {
+    "id": "abyss_wrath",
+    "name": "深淵Ⅱ 憤怒",
+    "folder": "abyss_wrath",
+    "frame": "idle1",
+    "file": "assets/monsters/abyss_wrath/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      36,
+      86,
+      475,
+      452
+    ],
+    "transparentPixels": 165600,
+    "opaquePixels": 65868,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "c145b840178762a74aa1b4339198b33c2873cdbd56435d934370ad2cf2d1b45f"
+  },
+  {
+    "id": "abyss_wrath",
+    "name": "深淵Ⅱ 憤怒",
+    "folder": "abyss_wrath",
+    "frame": "idle2",
+    "file": "assets/monsters/abyss_wrath/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      35,
+      69,
+      476,
+      453
+    ],
+    "transparentPixels": 158909,
+    "opaquePixels": 67375,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "3c386d889f21bff88ef73d1d5235c066054af9e87f3e7daad4a85538c799f5ca"
+  },
+  {
+    "id": "abyss_wrath",
+    "name": "深淵Ⅱ 憤怒",
+    "folder": "abyss_wrath",
+    "frame": "idle3",
+    "file": "assets/monsters/abyss_wrath/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      45,
+      69,
+      466,
+      452
+    ],
+    "transparentPixels": 158777,
+    "opaquePixels": 67193,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "00c692cba372b5027344331115bb42b760c53659ed081d8083c979f58c1b0a94"
+  },
+  {
+    "id": "abyss_wrath",
+    "name": "深淵Ⅱ 憤怒",
+    "folder": "abyss_wrath",
+    "frame": "walk1",
+    "file": "assets/monsters/abyss_wrath/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      77,
+      111,
+      435,
+      452
+    ],
+    "transparentPixels": 181047,
+    "opaquePixels": 56734,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "1f1b9a00425859341c65e0e02b82b9629cd145a6133af9264502e4864e43919c"
+  },
+  {
+    "id": "abyss_wrath",
+    "name": "深淵Ⅱ 憤怒",
+    "folder": "abyss_wrath",
+    "frame": "walk2",
+    "file": "assets/monsters/abyss_wrath/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      80,
+      74,
+      429,
+      452
+    ],
+    "transparentPixels": 184678,
+    "opaquePixels": 53013,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "bf17409fcbfcf6d08b07e3d88d3911df37c92fd686bdbf8a026d29eb195ed1df"
+  },
+  {
+    "id": "abyss_wrath",
+    "name": "深淵Ⅱ 憤怒",
+    "folder": "abyss_wrath",
+    "frame": "attack",
+    "file": "assets/monsters/abyss_wrath/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      100,
+      496,
+      452
+    ],
+    "transparentPixels": 133012,
+    "opaquePixels": 80169,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "bb43463b505fa2eefccbbb848aa51875282e207f9b66f746d9e133496c2afa44"
+  },
+  {
+    "id": "abyss_wrath",
+    "name": "深淵Ⅱ 憤怒",
+    "folder": "abyss_wrath",
+    "frame": "damage",
+    "file": "assets/monsters/abyss_wrath/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      81,
+      91,
+      431,
+      453
+    ],
+    "transparentPixels": 179071,
+    "opaquePixels": 52854,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "5587681da9266f98591271578eeac98cc2bb6d19f824bd6fe32eafe275f70d3d"
+  },
+  {
+    "id": "abyss_wrath",
+    "name": "深淵Ⅱ 憤怒",
+    "folder": "abyss_wrath",
+    "frame": "down",
+    "file": "assets/monsters/abyss_wrath/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      25,
+      233,
+      486,
+      453
+    ],
+    "transparentPixels": 202618,
+    "opaquePixels": 37707,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "f0853b6a1fa5c8185b7604ca68f2629542c2f30ccf5940a9c1d8a7bc05a236e0"
+  },
+  {
+    "id": "abyss_envy",
+    "name": "深淵Ⅲ 嫉妬",
+    "folder": "abyss_envy",
+    "frame": "idle1",
+    "file": "assets/monsters/abyss_envy/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      58,
+      32,
+      453,
+      448
+    ],
+    "transparentPixels": 163677,
+    "opaquePixels": 93658,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "e908d51a5a1a4ca10d10f0e3e9d13fc6364265fbb8698271f8b58ae14229b073"
+  },
+  {
+    "id": "abyss_envy",
+    "name": "深淵Ⅲ 嫉妬",
+    "folder": "abyss_envy",
+    "frame": "idle2",
+    "file": "assets/monsters/abyss_envy/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      42,
+      35,
+      447,
+      448
+    ],
+    "transparentPixels": 158048,
+    "opaquePixels": 98145,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "980775dc0a9015e45deb78225967911ae18e33558f9feccccabcc3ea178226ef"
+  },
+  {
+    "id": "abyss_envy",
+    "name": "深淵Ⅲ 嫉妬",
+    "folder": "abyss_envy",
+    "frame": "idle3",
+    "file": "assets/monsters/abyss_envy/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      27,
+      1,
+      442,
+      448
+    ],
+    "transparentPixels": 150858,
+    "opaquePixels": 105207,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "b9bcae8486dc4cf62ae6c32d9dc3ffb019b623f0ba3b2d43442da29943c42bc0"
+  },
+  {
+    "id": "abyss_envy",
+    "name": "深淵Ⅲ 嫉妬",
+    "folder": "abyss_envy",
+    "frame": "walk1",
+    "file": "assets/monsters/abyss_envy/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      48,
+      32,
+      463,
+      448
+    ],
+    "transparentPixels": 165602,
+    "opaquePixels": 91361,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "b7375b3047b7fce81531f022369cd0137f0d515cfe914c81fa76ff5bdd1e13c4"
+  },
+  {
+    "id": "abyss_envy",
+    "name": "深淵Ⅲ 嫉妬",
+    "folder": "abyss_envy",
+    "frame": "walk2",
+    "file": "assets/monsters/abyss_envy/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      60,
+      32,
+      479,
+      446
+    ],
+    "transparentPixels": 168136,
+    "opaquePixels": 88990,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "b162dec41758e11375d5d480ef6c22193717e06db809304fa39f1d93507bee67"
+  },
+  {
+    "id": "abyss_envy",
+    "name": "深淵Ⅲ 嫉妬",
+    "folder": "abyss_envy",
+    "frame": "attack",
+    "file": "assets/monsters/abyss_envy/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      20,
+      32,
+      491,
+      448
+    ],
+    "transparentPixels": 134048,
+    "opaquePixels": 119424,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "6b042d6f1d1894b0ff0a049f5d4485d3cc4f91e6f73d5d5112d744d7826d1651"
+  },
+  {
+    "id": "abyss_envy",
+    "name": "深淵Ⅲ 嫉妬",
+    "folder": "abyss_envy",
+    "frame": "damage",
+    "file": "assets/monsters/abyss_envy/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      57,
+      32,
+      454,
+      448
+    ],
+    "transparentPixels": 180820,
+    "opaquePixels": 74764,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "d0b74366cf09dcd827f7d59b7e8927e80fb17de48cded7896af5257c57e9fe75"
+  },
+  {
+    "id": "abyss_envy",
+    "name": "深淵Ⅲ 嫉妬",
+    "folder": "abyss_envy",
+    "frame": "down",
+    "file": "assets/monsters/abyss_envy/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      20,
+      32,
+      491,
+      448
+    ],
+    "transparentPixels": 156753,
+    "opaquePixels": 98359,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "64172c758e358f28dff5b3ffcf65a9f33d31410c45c565727c50896d2a1684cc"
+  },
+  {
+    "id": "abyss_sloth",
+    "name": "深淵Ⅳ 怠惰",
+    "folder": "abyss_sloth",
+    "frame": "idle1",
+    "file": "assets/monsters/abyss_sloth/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      49,
+      32,
+      462,
+      448
+    ],
+    "transparentPixels": 162998,
+    "opaquePixels": 99146,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "3dcb17c603b75492a34c48037df4417e8c9a9a2a0ffc16a1ae74d0508d4907c1"
+  },
+  {
+    "id": "abyss_sloth",
+    "name": "深淵Ⅳ 怠惰",
+    "folder": "abyss_sloth",
+    "frame": "idle2",
+    "file": "assets/monsters/abyss_sloth/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      49,
+      29,
+      461,
+      448
+    ],
+    "transparentPixels": 163132,
+    "opaquePixels": 99012,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "ed82c65e8fc87ff206d1fbf1dad4510a6918098d5bd317141c177057145b293d"
+  },
+  {
+    "id": "abyss_sloth",
+    "name": "深淵Ⅳ 怠惰",
+    "folder": "abyss_sloth",
+    "frame": "idle3",
+    "file": "assets/monsters/abyss_sloth/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      28,
+      37,
+      468,
+      448
+    ],
+    "transparentPixels": 161702,
+    "opaquePixels": 100442,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "4ffe32a78136c29f4b49c38e540d217878cc1ce7c5077086c61b8ca37ee3edeb"
+  },
+  {
+    "id": "abyss_sloth",
+    "name": "深淵Ⅳ 怠惰",
+    "folder": "abyss_sloth",
+    "frame": "walk1",
+    "file": "assets/monsters/abyss_sloth/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      52,
+      32,
+      460,
+      448
+    ],
+    "transparentPixels": 165754,
+    "opaquePixels": 96390,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "a9e1dfe64920f36df9bd34bbaee359e953ad698b0721e1c252ee8404adc27961"
+  },
+  {
+    "id": "abyss_sloth",
+    "name": "深淵Ⅳ 怠惰",
+    "folder": "abyss_sloth",
+    "frame": "walk2",
+    "file": "assets/monsters/abyss_sloth/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      27,
+      32,
+      462,
+      448
+    ],
+    "transparentPixels": 160883,
+    "opaquePixels": 101261,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "f596cbe5edab43c01f5b8e9e7e8dc5d2fd72f999362a95b82791521daab04505"
+  },
+  {
+    "id": "abyss_sloth",
+    "name": "深淵Ⅳ 怠惰",
+    "folder": "abyss_sloth",
+    "frame": "attack",
+    "file": "assets/monsters/abyss_sloth/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      52,
+      496,
+      448
+    ],
+    "transparentPixels": 153176,
+    "opaquePixels": 108968,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "d64765eb8f1c2f76c4b6601953d915e6c811207d4541a1e406ecf861d418cfa8"
+  },
+  {
+    "id": "abyss_sloth",
+    "name": "深淵Ⅳ 怠惰",
+    "folder": "abyss_sloth",
+    "frame": "damage",
+    "file": "assets/monsters/abyss_sloth/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      54,
+      97,
+      409,
+      448
+    ],
+    "transparentPixels": 195318,
+    "opaquePixels": 65533,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "623f46b5a42edfbfb610fa51f9efa63b5cf09928083c88ad6dd633cb5269c046"
+  },
+  {
+    "id": "abyss_sloth",
+    "name": "深淵Ⅳ 怠惰",
+    "folder": "abyss_sloth",
+    "frame": "down",
+    "file": "assets/monsters/abyss_sloth/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      201,
+      496,
+      448
+    ],
+    "transparentPixels": 197973,
+    "opaquePixels": 64171,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "443afe066ff6c8c000b680e46cc8b581eae0dabad2add1f60b2959bab915fc84"
+  },
+  {
+    "id": "abyss_greed",
+    "name": "深淵Ⅴ 強欲",
+    "folder": "abyss_greed",
+    "frame": "idle1",
+    "file": "assets/monsters/abyss_greed/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      32,
+      27,
+      482,
+      450
+    ],
+    "transparentPixels": 144792,
+    "opaquePixels": 79831,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "a2a0ac3e82454aeeed42620f9ddb49d8a0725298c9e285a31da4336a55130ec2"
+  },
+  {
+    "id": "abyss_greed",
+    "name": "深淵Ⅴ 強欲",
+    "folder": "abyss_greed",
+    "frame": "idle2",
+    "file": "assets/monsters/abyss_greed/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      27,
+      34,
+      484,
+      453
+    ],
+    "transparentPixels": 152121,
+    "opaquePixels": 79313,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "17e91da0263da4b0459126d56c1f46efdef468e3fd7e2e63f311e854d9f605ef"
+  },
+  {
+    "id": "abyss_greed",
+    "name": "深淵Ⅴ 強欲",
+    "folder": "abyss_greed",
+    "frame": "idle3",
+    "file": "assets/monsters/abyss_greed/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      57,
+      496,
+      452
+    ],
+    "transparentPixels": 127470,
+    "opaquePixels": 70686,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "d58f1a03dfcaf17f9281f9612007f14801fbdde1dde9df9e857f8d295a7b03c4"
+  },
+  {
+    "id": "abyss_greed",
+    "name": "深淵Ⅴ 強欲",
+    "folder": "abyss_greed",
+    "frame": "walk1",
+    "file": "assets/monsters/abyss_greed/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      35,
+      496,
+      453
+    ],
+    "transparentPixels": 157785,
+    "opaquePixels": 74117,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "d8d90e6f843d07ff0560fd77d2ed098236295d1139e4ff7ca72d1154116c7c7d"
+  },
+  {
+    "id": "abyss_greed",
+    "name": "深淵Ⅴ 強欲",
+    "folder": "abyss_greed",
+    "frame": "walk2",
+    "file": "assets/monsters/abyss_greed/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      47,
+      67,
+      467,
+      453
+    ],
+    "transparentPixels": 162951,
+    "opaquePixels": 67615,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "b2fecbbdb308c742c5570f867430b2902be9c348420eb0f6a2e8a81f0dd3135a"
+  },
+  {
+    "id": "abyss_greed",
+    "name": "深淵Ⅴ 強欲",
+    "folder": "abyss_greed",
+    "frame": "attack",
+    "file": "assets/monsters/abyss_greed/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      154,
+      496,
+      451
+    ],
+    "transparentPixels": 172465,
+    "opaquePixels": 49282,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "19b4535554fb8b13270aed4e9880d84901446f879f9bc952f45cd4337fbba1be"
+  },
+  {
+    "id": "abyss_greed",
+    "name": "深淵Ⅴ 強欲",
+    "folder": "abyss_greed",
+    "frame": "damage",
+    "file": "assets/monsters/abyss_greed/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      44,
+      95,
+      466,
+      452
+    ],
+    "transparentPixels": 158994,
+    "opaquePixels": 62872,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "5cecf5f34c0dc31679359c8abf4fc68648bfa1a16a96385c01727df8fdc84d46"
+  },
+  {
+    "id": "abyss_greed",
+    "name": "深淵Ⅴ 強欲",
+    "folder": "abyss_greed",
+    "frame": "down",
+    "file": "assets/monsters/abyss_greed/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      206,
+      495,
+      452
+    ],
+    "transparentPixels": 199194,
+    "opaquePixels": 38863,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "8d324885a10fc55773e1c43cfb58be8440598a7d55876f29fd70e81fb3360414"
+  },
+  {
+    "id": "abyss_lust",
+    "name": "深淵Ⅵ 色欲",
+    "folder": "abyss_extinction",
+    "frame": "idle1",
+    "file": "assets/monsters/abyss_extinction/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      32,
+      49,
+      480,
+      453
+    ],
+    "transparentPixels": 145629,
+    "opaquePixels": 80341,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "7703484419af47f5e1c586ec6ee4f724aedcdc5475f677f10905da22828d9138"
+  },
+  {
+    "id": "abyss_lust",
+    "name": "深淵Ⅵ 色欲",
+    "folder": "abyss_extinction",
+    "frame": "idle2",
+    "file": "assets/monsters/abyss_extinction/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      37,
+      32,
+      474,
+      452
+    ],
+    "transparentPixels": 142999,
+    "opaquePixels": 81934,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "78b051528a55aadf855d1eaceaaba8565e87f32c44b41d4bcab0992bf7b37a4a"
+  },
+  {
+    "id": "abyss_lust",
+    "name": "深淵Ⅵ 色欲",
+    "folder": "abyss_extinction",
+    "frame": "idle3",
+    "file": "assets/monsters/abyss_extinction/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      40,
+      49,
+      472,
+      453
+    ],
+    "transparentPixels": 142831,
+    "opaquePixels": 78472,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "bf33b83a1e17974706defa39269c8d228eb01c45bcb835ae5d3d56c9e22ac214"
+  },
+  {
+    "id": "abyss_lust",
+    "name": "深淵Ⅵ 色欲",
+    "folder": "abyss_extinction",
+    "frame": "walk1",
+    "file": "assets/monsters/abyss_extinction/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      26,
+      39,
+      485,
+      452
+    ],
+    "transparentPixels": 142912,
+    "opaquePixels": 80045,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "ddbbe34f1063f0a5183e98244a87c5919cb342acf1cc4a61eacaf98d20c0c477"
+  },
+  {
+    "id": "abyss_lust",
+    "name": "深淵Ⅵ 色欲",
+    "folder": "abyss_extinction",
+    "frame": "walk2",
+    "file": "assets/monsters/abyss_extinction/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      37,
+      37,
+      474,
+      452
+    ],
+    "transparentPixels": 142222,
+    "opaquePixels": 80891,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "f253e5527255c2de3a31b4ca6b0cb62777ed5c7680f3d10739179fa0443df776"
+  },
+  {
+    "id": "abyss_lust",
+    "name": "深淵Ⅵ 色欲",
+    "folder": "abyss_extinction",
+    "frame": "attack",
+    "file": "assets/monsters/abyss_extinction/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      70,
+      496,
+      452
+    ],
+    "transparentPixels": 126178,
+    "opaquePixels": 90248,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "b76e49651fadfc28202b47ac0c63ae24fc0ee2a54c96168a6a11a1752688ec4b"
+  },
+  {
+    "id": "abyss_lust",
+    "name": "深淵Ⅵ 色欲",
+    "folder": "abyss_extinction",
+    "frame": "damage",
+    "file": "assets/monsters/abyss_extinction/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      60,
+      78,
+      452,
+      453
+    ],
+    "transparentPixels": 149604,
+    "opaquePixels": 65032,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "6e4f8094c9daece381b2ab900c7194d442a2583e6120053be8338cb618425685"
+  },
+  {
+    "id": "abyss_lust",
+    "name": "深淵Ⅵ 色欲",
+    "folder": "abyss_extinction",
+    "frame": "down",
+    "file": "assets/monsters/abyss_extinction/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      232,
+      495,
+      453
+    ],
+    "transparentPixels": 188059,
+    "opaquePixels": 54353,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "c812fdcc1e6159a3d5c7ca8dfb9a26c11120e13bc25cf2edbd6a49fa91a6876f"
+  },
+  {
+    "id": "abyss_pride",
+    "name": "深淵Ⅶ 傲慢",
+    "folder": "abyss_pride",
+    "frame": "idle1",
+    "file": "assets/monsters/abyss_pride/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      99,
+      32,
+      414,
+      452
+    ],
+    "transparentPixels": 174168,
+    "opaquePixels": 60515,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "84a4902fe0d489c390e93f8ae5375ba05d66c74733edb6308c8850097cbcfab1"
+  },
+  {
+    "id": "abyss_pride",
+    "name": "深淵Ⅶ 傲慢",
+    "folder": "abyss_pride",
+    "frame": "idle2",
+    "file": "assets/monsters/abyss_pride/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      99,
+      32,
+      411,
+      452
+    ],
+    "transparentPixels": 175744,
+    "opaquePixels": 60601,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "72c2c8408c6bcdb03acccea63f29ff4429fef2970b624578310af29e0d9d5a7a"
+  },
+  {
+    "id": "abyss_pride",
+    "name": "深淵Ⅶ 傲慢",
+    "folder": "abyss_pride",
+    "frame": "idle3",
+    "file": "assets/monsters/abyss_pride/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      44,
+      36,
+      468,
+      452
+    ],
+    "transparentPixels": 166094,
+    "opaquePixels": 63274,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "23acc773a1a80651e8f8e79ac5a9a483f062957aff3933924facee7d85af8082"
+  },
+  {
+    "id": "abyss_pride",
+    "name": "深淵Ⅶ 傲慢",
+    "folder": "abyss_pride",
+    "frame": "walk1",
+    "file": "assets/monsters/abyss_pride/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      95,
+      29,
+      416,
+      450
+    ],
+    "transparentPixels": 176459,
+    "opaquePixels": 59563,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "fb6572aef5554714d59c231b181d81ff352382fb1e89c4c17f909bd0e22d183c"
+  },
+  {
+    "id": "abyss_pride",
+    "name": "深淵Ⅶ 傲慢",
+    "folder": "abyss_pride",
+    "frame": "walk2",
+    "file": "assets/monsters/abyss_pride/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      89,
+      25,
+      421,
+      451
+    ],
+    "transparentPixels": 171680,
+    "opaquePixels": 63839,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "2ca624053ad54c821ff76ed31e7d84cf3700a00ec19cb0182131bd1cfc037e92"
+  },
+  {
+    "id": "abyss_pride",
+    "name": "深淵Ⅶ 傲慢",
+    "folder": "abyss_pride",
+    "frame": "attack",
+    "file": "assets/monsters/abyss_pride/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      57,
+      496,
+      451
+    ],
+    "transparentPixels": 130847,
+    "opaquePixels": 82134,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "a5c66c461074582438833656b6af45ecfc8a9c3cbad8abe4b43dd4a94f12b3a5"
+  },
+  {
+    "id": "abyss_pride",
+    "name": "深淵Ⅶ 傲慢",
+    "folder": "abyss_pride",
+    "frame": "damage",
+    "file": "assets/monsters/abyss_pride/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      68,
+      27,
+      444,
+      450
+    ],
+    "transparentPixels": 160617,
+    "opaquePixels": 71581,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "8e6c46b611d4b6411f136e24bcc13a995e2ebefe3de92f5c333e32c026b9b0b6"
+  },
+  {
+    "id": "abyss_pride",
+    "name": "深淵Ⅶ 傲慢",
+    "folder": "abyss_pride",
+    "frame": "down",
+    "file": "assets/monsters/abyss_pride/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      39,
+      258,
+      473,
+      452
+    ],
+    "transparentPixels": 202069,
+    "opaquePixels": 49690,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "94bba98b67739f82fed7d1b6a07df80a7f3de851fd8050af9b403eb3221555e2"
+  },
+  {
+    "id": "ten_time",
+    "name": "十神Ⅰ 時間",
+    "folder": "ten_time",
+    "frame": "idle1",
+    "file": "assets/monsters/ten_time/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      75,
+      23,
+      434,
+      450
+    ],
+    "transparentPixels": 171807,
+    "opaquePixels": 71993,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "73d2b2339144612bcd2836a1ac0c528028c2aa45b18bdc58078a4f1691f17038"
+  },
+  {
+    "id": "ten_time",
+    "name": "十神Ⅰ 時間",
+    "folder": "ten_time",
+    "frame": "idle2",
+    "file": "assets/monsters/ten_time/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      76,
+      31,
+      435,
+      453
+    ],
+    "transparentPixels": 173204,
+    "opaquePixels": 70383,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "501b82cd3fe78f9d2b7248aa3282e2b9da292cdab8319fa3435720feca28970b"
+  },
+  {
+    "id": "ten_time",
+    "name": "十神Ⅰ 時間",
+    "folder": "ten_time",
+    "frame": "idle3",
+    "file": "assets/monsters/ten_time/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      76,
+      57,
+      437,
+      451
+    ],
+    "transparentPixels": 164419,
+    "opaquePixels": 72370,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "78ed31d55bc014633c016130eac02ac5b7c4290f1aabd7f3ad3389a1aeec9592"
+  },
+  {
+    "id": "ten_time",
+    "name": "十神Ⅰ 時間",
+    "folder": "ten_time",
+    "frame": "walk1",
+    "file": "assets/monsters/ten_time/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      55,
+      28,
+      456,
+      452
+    ],
+    "transparentPixels": 166929,
+    "opaquePixels": 74976,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "0d77d248b1a483cfa251e51030efb906371dfaa6040435d6b0e9db2fc90d0406"
+  },
+  {
+    "id": "ten_time",
+    "name": "十神Ⅰ 時間",
+    "folder": "ten_time",
+    "frame": "walk2",
+    "file": "assets/monsters/ten_time/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      61,
+      37,
+      451,
+      452
+    ],
+    "transparentPixels": 169178,
+    "opaquePixels": 72739,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "d269c75736678c6499eb7503497ec1396fed9d5d202a66b01ab9dd097723646f"
+  },
+  {
+    "id": "ten_time",
+    "name": "十神Ⅰ 時間",
+    "folder": "ten_time",
+    "frame": "attack",
+    "file": "assets/monsters/ten_time/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      72,
+      496,
+      450
+    ],
+    "transparentPixels": 127352,
+    "opaquePixels": 92313,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "757899e18ed350e75268c42a8d8a578934a27292cb03d15ebfef5148d13b81f4"
+  },
+  {
+    "id": "ten_time",
+    "name": "十神Ⅰ 時間",
+    "folder": "ten_time",
+    "frame": "damage",
+    "file": "assets/monsters/ten_time/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      47,
+      31,
+      462,
+      453
+    ],
+    "transparentPixels": 143906,
+    "opaquePixels": 81981,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "5f1022a6101340ac6c3dcb5e43b42081aca5b3b2ea22b874f9d0b069a7cd5849"
+  },
+  {
+    "id": "ten_time",
+    "name": "十神Ⅰ 時間",
+    "folder": "ten_time",
+    "frame": "down",
+    "file": "assets/monsters/ten_time/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      152,
+      496,
+      452
+    ],
+    "transparentPixels": 198074,
+    "opaquePixels": 51359,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "6156ab377fcf0362bba83e9a19ad5dd4fffb84c27c4544cfdfce3638f731b08d"
+  },
+  {
+    "id": "ten_space",
+    "name": "十神Ⅱ 空間",
+    "folder": "ten_space",
+    "frame": "idle1",
+    "file": "assets/monsters/ten_space/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      58,
+      31,
+      455,
+      453
+    ],
+    "transparentPixels": 158417,
+    "opaquePixels": 82938,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "9dd6f6661a577ded2072457c36aa4d67a4824248078fa9fd5623ea5a88d7fe68"
+  },
+  {
+    "id": "ten_space",
+    "name": "十神Ⅱ 空間",
+    "folder": "ten_space",
+    "frame": "idle2",
+    "file": "assets/monsters/ten_space/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      58,
+      30,
+      457,
+      453
+    ],
+    "transparentPixels": 155749,
+    "opaquePixels": 83295,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "28e916e605d80f9891f43a13abb4b0bf258d57d1c6204375a5b1d6c41adfb457"
+  },
+  {
+    "id": "ten_space",
+    "name": "十神Ⅱ 空間",
+    "folder": "ten_space",
+    "frame": "idle3",
+    "file": "assets/monsters/ten_space/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      54,
+      28,
+      459,
+      453
+    ],
+    "transparentPixels": 154337,
+    "opaquePixels": 84287,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "482072054f42ded797af3935f0509c578bdd16641e1f7e7a7689487ba5688f6c"
+  },
+  {
+    "id": "ten_space",
+    "name": "十神Ⅱ 空間",
+    "folder": "ten_space",
+    "frame": "walk1",
+    "file": "assets/monsters/ten_space/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      79,
+      25,
+      434,
+      452
+    ],
+    "transparentPixels": 167074,
+    "opaquePixels": 74727,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "80bbb0ceb32305d1632909567b13f482eefb1b5e75910325670672831b239692"
+  },
+  {
+    "id": "ten_space",
+    "name": "十神Ⅱ 空間",
+    "folder": "ten_space",
+    "frame": "walk2",
+    "file": "assets/monsters/ten_space/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      71,
+      40,
+      440,
+      451
+    ],
+    "transparentPixels": 163541,
+    "opaquePixels": 76462,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "041914f6f7060e0a61d27bd8a1137c88196a1ea9a5f6efca3b5b5394da003c99"
+  },
+  {
+    "id": "ten_space",
+    "name": "十神Ⅱ 空間",
+    "folder": "ten_space",
+    "frame": "attack",
+    "file": "assets/monsters/ten_space/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      18,
+      60,
+      496,
+      452
+    ],
+    "transparentPixels": 121072,
+    "opaquePixels": 101241,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "16bd11800c193fdb53dcdc42de9404dd490bc9a3b6ca94352c8d66f50081a207"
+  },
+  {
+    "id": "ten_space",
+    "name": "十神Ⅱ 空間",
+    "folder": "ten_space",
+    "frame": "damage",
+    "file": "assets/monsters/ten_space/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      70,
+      72,
+      442,
+      452
+    ],
+    "transparentPixels": 161335,
+    "opaquePixels": 68463,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "5de15c941c6911c4b641364bf61f45488586cfc1c90b6ae6313a3a048f120c9e"
+  },
+  {
+    "id": "ten_space",
+    "name": "十神Ⅱ 空間",
+    "folder": "ten_space",
+    "frame": "down",
+    "file": "assets/monsters/ten_space/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      160,
+      496,
+      452
+    ],
+    "transparentPixels": 191546,
+    "opaquePixels": 55606,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "645b3bdbab87c0b1fdf13ba8369fb2ffbd941692141d3f4141819a895e2606a7"
+  },
+  {
+    "id": "ten_life",
+    "name": "十神Ⅲ 生命",
+    "folder": "ten_water",
+    "frame": "idle1",
+    "file": "assets/monsters/ten_water/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      64,
+      97,
+      447,
+      451
+    ],
+    "transparentPixels": 162119,
+    "opaquePixels": 68248,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "2be45dc4cb53d1f3e66814d02f239e3490126da9df1858e45d564735fe1efbd3"
+  },
+  {
+    "id": "ten_life",
+    "name": "十神Ⅲ 生命",
+    "folder": "ten_water",
+    "frame": "idle2",
+    "file": "assets/monsters/ten_water/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      64,
+      94,
+      447,
+      452
+    ],
+    "transparentPixels": 158915,
+    "opaquePixels": 69013,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "e0f32ed67aa4c15bed65be17e057052f46165fbec1a8bb5890a18fd69c6958c4"
+  },
+  {
+    "id": "ten_life",
+    "name": "十神Ⅲ 生命",
+    "folder": "ten_water",
+    "frame": "idle3",
+    "file": "assets/monsters/ten_water/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      69,
+      89,
+      443,
+      452
+    ],
+    "transparentPixels": 156625,
+    "opaquePixels": 70181,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "e1768212ca4a93b61e5d394915088463cbe14fac4e8413b14e461c2cfd83ee56"
+  },
+  {
+    "id": "ten_life",
+    "name": "十神Ⅲ 生命",
+    "folder": "ten_water",
+    "frame": "walk1",
+    "file": "assets/monsters/ten_water/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      73,
+      97,
+      438,
+      451
+    ],
+    "transparentPixels": 163874,
+    "opaquePixels": 66814,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "14384bb6c7be7a1bd175ace2c0bebec1c4c8bb03384ce40d54752e4ca42e60f4"
+  },
+  {
+    "id": "ten_life",
+    "name": "十神Ⅲ 生命",
+    "folder": "ten_water",
+    "frame": "walk2",
+    "file": "assets/monsters/ten_water/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      65,
+      100,
+      446,
+      452
+    ],
+    "transparentPixels": 165079,
+    "opaquePixels": 64974,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "d6da1196c9404b3704e095dfb372823ddc52a1d4cdb50d77b558ff5c7250c248"
+  },
+  {
+    "id": "ten_life",
+    "name": "十神Ⅲ 生命",
+    "folder": "ten_water",
+    "frame": "attack",
+    "file": "assets/monsters/ten_water/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      68,
+      496,
+      452
+    ],
+    "transparentPixels": 109987,
+    "opaquePixels": 104179,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "3cc9e75fc0c9a0f423f5df35f526e72231fda7b8de2d0c57a145658c69ed3212"
+  },
+  {
+    "id": "ten_life",
+    "name": "十神Ⅲ 生命",
+    "folder": "ten_water",
+    "frame": "damage",
+    "file": "assets/monsters/ten_water/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      61,
+      121,
+      450,
+      452
+    ],
+    "transparentPixels": 165134,
+    "opaquePixels": 59726,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "cdb3cdbd1ba403755286e9b561122940cf0cfbf376cd4b1e35951d92412eda10"
+  },
+  {
+    "id": "ten_life",
+    "name": "十神Ⅲ 生命",
+    "folder": "ten_water",
+    "frame": "down",
+    "file": "assets/monsters/ten_water/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      58,
+      181,
+      454,
+      451
+    ],
+    "transparentPixels": 194108,
+    "opaquePixels": 41320,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "1afa5e8fc1891682698b21dfe7b30c4ba82d8a2d2c2e5c843046b460cefb40df"
+  },
+  {
+    "id": "ten_death",
+    "name": "十神Ⅳ 死",
+    "folder": "ten_dark",
+    "frame": "idle1",
+    "file": "assets/monsters/ten_dark/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      22,
+      496,
+      452
+    ],
+    "transparentPixels": 127657,
+    "opaquePixels": 100317,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "406802c66ba0e3885ccabdd4524edc3743f0d1df32bc6cf0c7b8bbf8d60b53e0"
+  },
+  {
+    "id": "ten_death",
+    "name": "十神Ⅳ 死",
+    "folder": "ten_dark",
+    "frame": "idle2",
+    "file": "assets/monsters/ten_dark/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      25,
+      21,
+      487,
+      453
+    ],
+    "transparentPixels": 131403,
+    "opaquePixels": 97668,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "ee5145f056d120004a958eca232ade4148ab3face1c0422de71be048e20b4833"
+  },
+  {
+    "id": "ten_death",
+    "name": "十神Ⅳ 死",
+    "folder": "ten_dark",
+    "frame": "idle3",
+    "file": "assets/monsters/ten_dark/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      20,
+      21,
+      491,
+      453
+    ],
+    "transparentPixels": 127451,
+    "opaquePixels": 99116,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "76036b27e2e3cfe021049d065e58ebc4cc0b5c6b9c8437421859239d73f6f7bd"
+  },
+  {
+    "id": "ten_death",
+    "name": "十神Ⅳ 死",
+    "folder": "ten_dark",
+    "frame": "walk1",
+    "file": "assets/monsters/ten_dark/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      21,
+      21,
+      491,
+      453
+    ],
+    "transparentPixels": 130530,
+    "opaquePixels": 98373,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "2e15a831852db3130d1e20fb861cb886712d4705f93315598a696e14590b4058"
+  },
+  {
+    "id": "ten_death",
+    "name": "十神Ⅳ 死",
+    "folder": "ten_dark",
+    "frame": "walk2",
+    "file": "assets/monsters/ten_dark/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      51,
+      41,
+      463,
+      453
+    ],
+    "transparentPixels": 151815,
+    "opaquePixels": 85464,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "256942507d402fa2934629e4f0dff5807cd29571b4b8d3bdf77a8ff545391e61"
+  },
+  {
+    "id": "ten_death",
+    "name": "十神Ⅳ 死",
+    "folder": "ten_dark",
+    "frame": "attack",
+    "file": "assets/monsters/ten_dark/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      154,
+      496,
+      452
+    ],
+    "transparentPixels": 156774,
+    "opaquePixels": 68648,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "a1e30f7226168fda834d3794d69f54e1193c0e7b3b4f1af961cd851b25546dbb"
+  },
+  {
+    "id": "ten_death",
+    "name": "十神Ⅳ 死",
+    "folder": "ten_dark",
+    "frame": "damage",
+    "file": "assets/monsters/ten_dark/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      21,
+      67,
+      490,
+      452
+    ],
+    "transparentPixels": 148212,
+    "opaquePixels": 83289,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "90df946dc5fc8bdec07182a521a525c8c14c0872cc10cadec835904ab9e834de"
+  },
+  {
+    "id": "ten_death",
+    "name": "十神Ⅳ 死",
+    "folder": "ten_dark",
+    "frame": "down",
+    "file": "assets/monsters/ten_dark/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      153,
+      494,
+      452
+    ],
+    "transparentPixels": 172933,
+    "opaquePixels": 67231,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "d4dc9aff80bd15e244b61bf5f02cd437db3bc0effd4b79b4cf365c66aed97b36"
+  },
+  {
+    "id": "ten_fate",
+    "name": "十神Ⅴ 運命",
+    "folder": "ten_thunder",
+    "frame": "idle1",
+    "file": "assets/monsters/ten_thunder/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      26,
+      41,
+      489,
+      453
+    ],
+    "transparentPixels": 159832,
+    "opaquePixels": 71143,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "b7d179ad4f9118859f850a43b082085fc9f79266dc7f6b8f7a3f3d5030c784e5"
+  },
+  {
+    "id": "ten_fate",
+    "name": "十神Ⅴ 運命",
+    "folder": "ten_thunder",
+    "frame": "idle2",
+    "file": "assets/monsters/ten_thunder/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      19,
+      39,
+      490,
+      451
+    ],
+    "transparentPixels": 160689,
+    "opaquePixels": 70275,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "2872a2ba17c87724e6365746e9649d5d6c71e6974124219c81b449d784786922"
+  },
+  {
+    "id": "ten_fate",
+    "name": "十神Ⅴ 運命",
+    "folder": "ten_thunder",
+    "frame": "idle3",
+    "file": "assets/monsters/ten_thunder/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      31,
+      39,
+      480,
+      452
+    ],
+    "transparentPixels": 129190,
+    "opaquePixels": 83385,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "33025655b8b2381a04ba3f734f2fcb8ff5e3f74090eae15eddff3a03fee8d7c2"
+  },
+  {
+    "id": "ten_fate",
+    "name": "十神Ⅴ 運命",
+    "folder": "ten_thunder",
+    "frame": "walk1",
+    "file": "assets/monsters/ten_thunder/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      23,
+      30,
+      488,
+      453
+    ],
+    "transparentPixels": 156271,
+    "opaquePixels": 69271,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "ed6206aeb83b2989fe800cec52d5d21dc457dfa6e8aa377d1ad7cbcbafed5ef5"
+  },
+  {
+    "id": "ten_fate",
+    "name": "十神Ⅴ 運命",
+    "folder": "ten_thunder",
+    "frame": "walk2",
+    "file": "assets/monsters/ten_thunder/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      48,
+      39,
+      463,
+      452
+    ],
+    "transparentPixels": 157629,
+    "opaquePixels": 68936,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "c8480afdbb14612c261bf402f71fc8fe1835db43ac0099f3b0ff9ccd00a02865"
+  },
+  {
+    "id": "ten_fate",
+    "name": "十神Ⅴ 運命",
+    "folder": "ten_thunder",
+    "frame": "attack",
+    "file": "assets/monsters/ten_thunder/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      90,
+      496,
+      453
+    ],
+    "transparentPixels": 144850,
+    "opaquePixels": 77823,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "0471f72f96627b38a6df5f8add5f3e0cbda0987b08af4e9537fff01f18c4d916"
+  },
+  {
+    "id": "ten_fate",
+    "name": "十神Ⅴ 運命",
+    "folder": "ten_thunder",
+    "frame": "damage",
+    "file": "assets/monsters/ten_thunder/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      41,
+      44,
+      471,
+      452
+    ],
+    "transparentPixels": 151311,
+    "opaquePixels": 72818,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "3670ffb5a0252938d8ebb5fed4a260caddd180c2d292671d2eead8337cd38512"
+  },
+  {
+    "id": "ten_fate",
+    "name": "十神Ⅴ 運命",
+    "folder": "ten_thunder",
+    "frame": "down",
+    "file": "assets/monsters/ten_thunder/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      186,
+      496,
+      452
+    ],
+    "transparentPixels": 190978,
+    "opaquePixels": 49452,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "0cf1abbc5f3b6657e25e5e9379361350f50038361f3707890c5f71dfff6692bc"
+  },
+  {
+    "id": "ten_chaos",
+    "name": "十神Ⅵ 混沌",
+    "folder": "ten_ice",
+    "frame": "idle1",
+    "file": "assets/monsters/ten_ice/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      41,
+      35,
+      472,
+      449
+    ],
+    "transparentPixels": 191254,
+    "opaquePixels": 70890,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "e1a15561473ad4b969ca230d6ad42dbd9e659b7552d9235a414c5e703ff740b8"
+  },
+  {
+    "id": "ten_chaos",
+    "name": "十神Ⅵ 混沌",
+    "folder": "ten_ice",
+    "frame": "idle2",
+    "file": "assets/monsters/ten_ice/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      25,
+      37,
+      487,
+      448
+    ],
+    "transparentPixels": 184577,
+    "opaquePixels": 77567,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "e997064a773d40f02a50b79000ce31b6dc20e0f82bc2966e87bcbe7cf5558a2b"
+  },
+  {
+    "id": "ten_chaos",
+    "name": "十神Ⅵ 混沌",
+    "folder": "ten_ice",
+    "frame": "idle3",
+    "file": "assets/monsters/ten_ice/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      36,
+      56,
+      476,
+      448
+    ],
+    "transparentPixels": 188690,
+    "opaquePixels": 73454,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "c744b4d788572ebc345cebc60df40497757da1fcc65a05084290daef60ced032"
+  },
+  {
+    "id": "ten_chaos",
+    "name": "十神Ⅵ 混沌",
+    "folder": "ten_ice",
+    "frame": "walk1",
+    "file": "assets/monsters/ten_ice/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      76,
+      43,
+      438,
+      448
+    ],
+    "transparentPixels": 190861,
+    "opaquePixels": 71283,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "8a0dcbb238c486d6d7e9388e4489003fc13ded716b911ed9a7f4cfedade74150"
+  },
+  {
+    "id": "ten_chaos",
+    "name": "十神Ⅵ 混沌",
+    "folder": "ten_ice",
+    "frame": "walk2",
+    "file": "assets/monsters/ten_ice/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      27,
+      49,
+      486,
+      448
+    ],
+    "transparentPixels": 191566,
+    "opaquePixels": 70578,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "e89536459568dc88bda188840703fc0e0bca5e974008f5d7ed7684355c1acf2f"
+  },
+  {
+    "id": "ten_chaos",
+    "name": "十神Ⅵ 混沌",
+    "folder": "ten_ice",
+    "frame": "attack",
+    "file": "assets/monsters/ten_ice/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      21,
+      97,
+      493,
+      448
+    ],
+    "transparentPixels": 178080,
+    "opaquePixels": 84064,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "a1f56e86607918f423ff76c278aee9a4b8b8eb896b0b81f7391f6d89c6b4ac63"
+  },
+  {
+    "id": "ten_chaos",
+    "name": "十神Ⅵ 混沌",
+    "folder": "ten_ice",
+    "frame": "damage",
+    "file": "assets/monsters/ten_ice/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      75,
+      52,
+      437,
+      449
+    ],
+    "transparentPixels": 191763,
+    "opaquePixels": 70381,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "c7e93b0355663d0e58693c2dc853a98cf18da9be5d7da9e2f6ab83800615f111"
+  },
+  {
+    "id": "ten_chaos",
+    "name": "十神Ⅵ 混沌",
+    "folder": "ten_ice",
+    "frame": "down",
+    "file": "assets/monsters/ten_ice/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      21,
+      212,
+      493,
+      449
+    ],
+    "transparentPixels": 216971,
+    "opaquePixels": 45173,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "ad9e9d9c2ac07e8ef720ac45ac71b1dfedd547a311dad716c92b925e244276bf"
+  },
+  {
+    "id": "ten_dominion",
+    "name": "十神Ⅶ 支配",
+    "folder": "ten_earth",
+    "frame": "idle1",
+    "file": "assets/monsters/ten_earth/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      96,
+      34,
+      415,
+      448
+    ],
+    "transparentPixels": 179794,
+    "opaquePixels": 82350,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "859068b3784ff9abf76211ad8ec5a3a377246bf96645a7ff51889a0383cbeab7"
+  },
+  {
+    "id": "ten_dominion",
+    "name": "十神Ⅶ 支配",
+    "folder": "ten_earth",
+    "frame": "idle2",
+    "file": "assets/monsters/ten_earth/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      102,
+      32,
+      413,
+      448
+    ],
+    "transparentPixels": 180474,
+    "opaquePixels": 81670,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "7c8af0cd80ec23809e3820f900ba9615385229593c7627fb2854b9778b8f67c6"
+  },
+  {
+    "id": "ten_dominion",
+    "name": "十神Ⅶ 支配",
+    "folder": "ten_earth",
+    "frame": "idle3",
+    "file": "assets/monsters/ten_earth/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      85,
+      24,
+      414,
+      448
+    ],
+    "transparentPixels": 177482,
+    "opaquePixels": 84662,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "5e059b554093de87e42e3df28f7631b215ecb3852ddf58b3199fff0ffbb9c95b"
+  },
+  {
+    "id": "ten_dominion",
+    "name": "十神Ⅶ 支配",
+    "folder": "ten_earth",
+    "frame": "walk1",
+    "file": "assets/monsters/ten_earth/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      79,
+      32,
+      433,
+      448
+    ],
+    "transparentPixels": 185049,
+    "opaquePixels": 77095,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "e64a1f1c5786fd8bc35896b478b06d43af2c64f7b4a106a428cceb89ebdeebf2"
+  },
+  {
+    "id": "ten_dominion",
+    "name": "十神Ⅶ 支配",
+    "folder": "ten_earth",
+    "frame": "walk2",
+    "file": "assets/monsters/ten_earth/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      79,
+      32,
+      448,
+      448
+    ],
+    "transparentPixels": 184023,
+    "opaquePixels": 78121,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "71b41090b890d22c93a9f9a796713fba4cce85339508301bb4e1f5207e435b56"
+  },
+  {
+    "id": "ten_dominion",
+    "name": "十神Ⅶ 支配",
+    "folder": "ten_earth",
+    "frame": "attack",
+    "file": "assets/monsters/ten_earth/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      25,
+      32,
+      486,
+      448
+    ],
+    "transparentPixels": 142973,
+    "opaquePixels": 119171,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "b58afabc004aa0ba5ff3ecec5a599841a866e9195b4fac78ca08660d81d8b9b8"
+  },
+  {
+    "id": "ten_dominion",
+    "name": "十神Ⅶ 支配",
+    "folder": "ten_earth",
+    "frame": "damage",
+    "file": "assets/monsters/ten_earth/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      82,
+      32,
+      429,
+      448
+    ],
+    "transparentPixels": 182239,
+    "opaquePixels": 79905,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "82cfd94bdf637a1a1b22abeae3b39d75d0776a9281df7236652649976b1d13e3"
+  },
+  {
+    "id": "ten_dominion",
+    "name": "十神Ⅶ 支配",
+    "folder": "ten_earth",
+    "frame": "down",
+    "file": "assets/monsters/ten_earth/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      199,
+      496,
+      448
+    ],
+    "transparentPixels": 208944,
+    "opaquePixels": 53200,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "3414be3894a98b5ba1227d8ead7dfb751417ba9abd3050b0768afde68bd643b1"
+  },
+  {
+    "id": "ten_creation",
+    "name": "十神Ⅷ 創造",
+    "folder": "ten_light",
+    "frame": "idle1",
+    "file": "assets/monsters/ten_light/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      44,
+      29,
+      467,
+      448
+    ],
+    "transparentPixels": 189689,
+    "opaquePixels": 72455,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "0f8a73e0db4e43705483437ae47181353f64622aec1629501bbd716ee7296747"
+  },
+  {
+    "id": "ten_creation",
+    "name": "十神Ⅷ 創造",
+    "folder": "ten_light",
+    "frame": "idle2",
+    "file": "assets/monsters/ten_light/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      52,
+      32,
+      465,
+      448
+    ],
+    "transparentPixels": 190972,
+    "opaquePixels": 69572,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "dcf112caf62024cf91e87128c3569b9213cf73a97e447fd5395ad75d375fc144"
+  },
+  {
+    "id": "ten_creation",
+    "name": "十神Ⅷ 創造",
+    "folder": "ten_light",
+    "frame": "idle3",
+    "file": "assets/monsters/ten_light/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      49,
+      48,
+      423,
+      448
+    ],
+    "transparentPixels": 192737,
+    "opaquePixels": 67767,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "c6ff5b54078e0e0e21fc6fbd0cae653e7b8e5a26f34a0acf5a7d29efc9701597"
+  },
+  {
+    "id": "ten_creation",
+    "name": "十神Ⅷ 創造",
+    "folder": "ten_light",
+    "frame": "walk1",
+    "file": "assets/monsters/ten_light/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      61,
+      32,
+      451,
+      448
+    ],
+    "transparentPixels": 194271,
+    "opaquePixels": 67873,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "7aa8a96f9a8b3b24d4d38c46e6f47931ac1a49dbd1a2f2a19f2bbc7474d7e817"
+  },
+  {
+    "id": "ten_creation",
+    "name": "十神Ⅷ 創造",
+    "folder": "ten_light",
+    "frame": "walk2",
+    "file": "assets/monsters/ten_light/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      72,
+      32,
+      414,
+      448
+    ],
+    "transparentPixels": 194452,
+    "opaquePixels": 67692,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "f258cc1da0d38136d8654d02055fc8facb8b6ed4a2a53e92cd52698c333f0027"
+  },
+  {
+    "id": "ten_creation",
+    "name": "十神Ⅷ 創造",
+    "folder": "ten_light",
+    "frame": "attack",
+    "file": "assets/monsters/ten_light/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      17,
+      122,
+      466,
+      448
+    ],
+    "transparentPixels": 190234,
+    "opaquePixels": 68296,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "9cd0fac375de5077951e4df36039138406cf3984a1dc1023caad5f6d57c31bbb"
+  },
+  {
+    "id": "ten_creation",
+    "name": "十神Ⅷ 創造",
+    "folder": "ten_light",
+    "frame": "damage",
+    "file": "assets/monsters/ten_light/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      33,
+      32,
+      424,
+      448
+    ],
+    "transparentPixels": 185161,
+    "opaquePixels": 75521,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "a6c16a81d38cb95b58d02821dda80c28959d3488d22674df53ce662aad823af7"
+  },
+  {
+    "id": "ten_creation",
+    "name": "十神Ⅷ 創造",
+    "folder": "ten_light",
+    "frame": "down",
+    "file": "assets/monsters/ten_light/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      205,
+      496,
+      448
+    ],
+    "transparentPixels": 212030,
+    "opaquePixels": 50114,
+    "edgePixels": 0,
+    "changed": false,
+    "sha256": "ef601ef983f264d47924b97cf4e20aeff1e6ce7214bd0b06c0ee97299032c895"
+  },
+  {
+    "id": "ten_end",
+    "name": "十神Ⅸ 終焉",
+    "folder": "ten_fire",
+    "frame": "idle1",
+    "file": "assets/monsters/ten_fire/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      50,
+      496,
+      453
+    ],
+    "transparentPixels": 166235,
+    "opaquePixels": 68026,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "e6696b5f3654626296bfb4ed4b1c0c060a684808466ce2ef4b80b2c3f4b93eb9"
+  },
+  {
+    "id": "ten_end",
+    "name": "十神Ⅸ 終焉",
+    "folder": "ten_fire",
+    "frame": "idle2",
+    "file": "assets/monsters/ten_fire/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      77,
+      36,
+      434,
+      451
+    ],
+    "transparentPixels": 169935,
+    "opaquePixels": 66860,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "bd204391026e199d9a40cf2dbed0519171da72e879ee2e9664935e397f9dd7ee"
+  },
+  {
+    "id": "ten_end",
+    "name": "十神Ⅸ 終焉",
+    "folder": "ten_fire",
+    "frame": "idle3",
+    "file": "assets/monsters/ten_fire/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      65,
+      496,
+      452
+    ],
+    "transparentPixels": 155400,
+    "opaquePixels": 68163,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "7fb25dc14cf8da245802ac8a3cbf638c2f6d2fd8c3f7b7dac957eb51ef85ccf2"
+  },
+  {
+    "id": "ten_end",
+    "name": "十神Ⅸ 終焉",
+    "folder": "ten_fire",
+    "frame": "walk1",
+    "file": "assets/monsters/ten_fire/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      63,
+      496,
+      452
+    ],
+    "transparentPixels": 170193,
+    "opaquePixels": 64361,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "2368fab8d8cf8ef18b53cc5d80131e365e00df2899771e01c4f9266e5b3617b4"
+  },
+  {
+    "id": "ten_end",
+    "name": "十神Ⅸ 終焉",
+    "folder": "ten_fire",
+    "frame": "walk2",
+    "file": "assets/monsters/ten_fire/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      67,
+      496,
+      453
+    ],
+    "transparentPixels": 170760,
+    "opaquePixels": 64866,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "98edc993fc20567a9c787412486a2d3adb0a26e6029144a2f1c0c8579a033b8a"
+  },
+  {
+    "id": "ten_end",
+    "name": "十神Ⅸ 終焉",
+    "folder": "ten_fire",
+    "frame": "attack",
+    "file": "assets/monsters/ten_fire/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      25,
+      20,
+      486,
+      452
+    ],
+    "transparentPixels": 98621,
+    "opaquePixels": 106470,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "202b769d0d9d50f0a6f19f96fa486a0e97e9c0a67fd1b01ad51c2d717954144d"
+  },
+  {
+    "id": "ten_end",
+    "name": "十神Ⅸ 終焉",
+    "folder": "ten_fire",
+    "frame": "damage",
+    "file": "assets/monsters/ten_fire/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      25,
+      24,
+      486,
+      453
+    ],
+    "transparentPixels": 133616,
+    "opaquePixels": 84401,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "ec8f8550d8217a0b3d3550b530bd307c26af24e70b8332bd66b4e6038dc6ebaa"
+  },
+  {
+    "id": "ten_end",
+    "name": "十神Ⅸ 終焉",
+    "folder": "ten_fire",
+    "frame": "down",
+    "file": "assets/monsters/ten_fire/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      181,
+      496,
+      453
+    ],
+    "transparentPixels": 195379,
+    "opaquePixels": 44240,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "350a447a2b4b2ca4a2cc895cc3eeb518d08f5d4d9dc056115ac6c7c352e6dd0e"
+  },
+  {
+    "id": "ten_divinity",
+    "name": "十神Ⅹ 神格",
+    "folder": "ten_wind",
+    "frame": "idle1",
+    "file": "assets/monsters/ten_wind/idle1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      64,
+      34,
+      445,
+      453
+    ],
+    "transparentPixels": 158523,
+    "opaquePixels": 71761,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "f8ed2b4dff71b8594f96c84d373c0143641f326cb278da4c831475a7f5f454a9"
+  },
+  {
+    "id": "ten_divinity",
+    "name": "十神Ⅹ 神格",
+    "folder": "ten_wind",
+    "frame": "idle2",
+    "file": "assets/monsters/ten_wind/idle2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      65,
+      29,
+      446,
+      452
+    ],
+    "transparentPixels": 151305,
+    "opaquePixels": 76817,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "ab9a5cb3486090735dc90e57a517cbf3eaedfd86c2cec8b6be785f30565d5b5e"
+  },
+  {
+    "id": "ten_divinity",
+    "name": "十神Ⅹ 神格",
+    "folder": "ten_wind",
+    "frame": "idle3",
+    "file": "assets/monsters/ten_wind/idle3.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      51,
+      31,
+      458,
+      452
+    ],
+    "transparentPixels": 143067,
+    "opaquePixels": 74301,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "916399cce99f02a346c68a9af059929065a0cc5f2e26604e63cf578595bf10f3"
+  },
+  {
+    "id": "ten_divinity",
+    "name": "十神Ⅹ 神格",
+    "folder": "ten_wind",
+    "frame": "walk1",
+    "file": "assets/monsters/ten_wind/walk1.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      44,
+      34,
+      468,
+      453
+    ],
+    "transparentPixels": 149639,
+    "opaquePixels": 76797,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "b97e57cabdbefd17c304f9722009b7c2a9ddde6a305fcce729abb65ed1f7a6d3"
+  },
+  {
+    "id": "ten_divinity",
+    "name": "十神Ⅹ 神格",
+    "folder": "ten_wind",
+    "frame": "walk2",
+    "file": "assets/monsters/ten_wind/walk2.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      53,
+      27,
+      461,
+      453
+    ],
+    "transparentPixels": 147273,
+    "opaquePixels": 78983,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "e2fb70fe4e7143e53a5ce7ab3a621f93d9b197ce9bc3720b4f7230a7279dae16"
+  },
+  {
+    "id": "ten_divinity",
+    "name": "十神Ⅹ 神格",
+    "folder": "ten_wind",
+    "frame": "attack",
+    "file": "assets/monsters/ten_wind/attack.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      125,
+      496,
+      452
+    ],
+    "transparentPixels": 144732,
+    "opaquePixels": 52945,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "a0dee0ea99516cd3c5278ff96a377fbf84644ca5d9572719b79a3b47c088e3d3"
+  },
+  {
+    "id": "ten_divinity",
+    "name": "十神Ⅹ 神格",
+    "folder": "ten_wind",
+    "frame": "damage",
+    "file": "assets/monsters/ten_wind/damage.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      74,
+      25,
+      439,
+      452
+    ],
+    "transparentPixels": 150906,
+    "opaquePixels": 70131,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "d619872ee2f4b7dd80d2c8b83b9966a7e0a23f7fa343c0d2f4c4a6b0944219d5"
+  },
+  {
+    "id": "ten_divinity",
+    "name": "十神Ⅹ 神格",
+    "folder": "ten_wind",
+    "frame": "down",
+    "file": "assets/monsters/ten_wind/down.png",
+    "size": [
+      512,
+      512
+    ],
+    "bounds": [
+      16,
+      202,
+      496,
+      452
+    ],
+    "transparentPixels": 194176,
+    "opaquePixels": 42072,
+    "edgePixels": 0,
+    "changed": true,
+    "sha256": "eeffa1c2b6c55025e2b1074b7ff325309214d8c24f3baa7549b29c5cd8705050"
+  }
+]

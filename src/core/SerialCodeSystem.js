@@ -1,12 +1,12 @@
-import {validateGmFinalePack,applyGmFinalePack} from './GmFinalePackSystem.js?v=3.1.61-build381';
+import {validateGmFinalePack,applyGmFinalePack} from './GmFinalePackSystem.js?v=3.1.82-build402';
 import{EQUIPMENT_BASES}from"../data/equipment.js?v=3.1.55-build375";
-import{createMonster,calculatedStats}from"../models/Monster.js?v=3.1.61-build381";
-import{allLearnedSkills,maxMp,recommendedSkills,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.49-build369";
-import{SPECIES}from"../data/species.js?v=3.1.39-build359";
-import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.60-build380";
-import{MONSTER_STORAGE_CAP}from"./config.js?v=3.1.61-build381";
+import{createMonster,calculatedStats}from"../models/Monster.js?v=3.1.82-build402";
+import{allLearnedSkills,maxMp,recommendedSkills,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.75-build395";
+import{SPECIES}from"../data/species.js?v=3.1.72-build392";
+import{ENDGAME_BOSSES}from"./EndgameSystem.js?v=3.1.72-build392";
+import{MONSTER_STORAGE_CAP}from"./config.js?v=3.1.82-build402";
 import{createEquipment}from"../models/Equipment.js?v=3.1.55-build375";
-import{receiveEquipment,EQUIPMENT_LIMIT}from"../services/EquipmentStorage.js?v=3.1.55-build375";
+import{receiveEquipment,EQUIPMENT_LIMIT}from"../services/EquipmentStorage.js?v=3.1.78-build398";
 
 const DEVICE_LEDGER_KEY="abyss-dominion-serial-ledger-v1";
 
@@ -70,6 +70,10 @@ const MYTHIC_PACKS=Object.freeze({
   mythicPackYori:{speciesId:"myth_yori",owner:"yori",names:["ライフル","剛腕の素手","ヘルメット","迷彩服","アルコール","テトラポット"]},
   mythicPackHide:{speciesId:"myth_hide",owner:"hide",names:["ザリガニの左腕","ザリガニの右腕","ザリガニの甲冑","ピンクタイツ","狩猟免許","修士号"]}
 });
+
+export const HERO_SERIAL_ENDED_MESSAGE396="このシリアルコードの配布は終了しました。";
+const retiredHeroSerial396=rewardId=>Object.hasOwn(MYTHIC_PACKS,rewardId);
+const endedHeroSerial396=()=>({ok:false,reason:'distributionEnded',message:HERO_SERIAL_ENDED_MESSAGE396});
 
 export const SERIAL_CODE_COUNT=Object.keys(CODE_REWARDS).length;
 
@@ -242,6 +246,7 @@ export async function validateSerialCode(state,rawCode){
   try{hash=await sha256(normalized)}catch(error){return{ok:false,message:error.message}};
   const rewardId=CODE_REWARDS[hash];
   if(!rewardId)return{ok:false,message:"コードが正しくないか、期限外です。"};
+  if(retiredHeroSerial396(rewardId))return endedHeroSerial396();
   const redeemed=normalizeSerialCodeState(state).redeemed;
   if(redeemed[rewardId]||loadDeviceLedger()[rewardId])return{ok:false,message:"このコードはすでに使用済みです。"};
   if(rewardMonsterRequired(rewardId)&&monsterCapacityReached(state))return{ok:false,message:`モンスター所持数が${MONSTER_STORAGE_CAP}体で満杯です。整理してからもう一度入力してください。`};
@@ -249,6 +254,7 @@ export async function validateSerialCode(state,rawCode){
 }
 
 export function applySerialReward(state,rewardId){
+  if(retiredHeroSerial396(rewardId))return endedHeroSerial396();
   const info=REWARD_INFO[rewardId];
   if(!info)return{ok:false,message:"報酬データが見つかりません。"};
   if(rewardMonsterRequired(rewardId)&&monsterCapacityReached(state))return{ok:false,message:`モンスター所持数が${MONSTER_STORAGE_CAP}体で満杯です。`};
@@ -316,6 +322,7 @@ export function applyGameMasterReward(state,kind="grant"){
 }
 
 export function commitSerialRedemption(rewardId){
+  if(retiredHeroSerial396(rewardId))return false;
   const ledger=loadDeviceLedger();
   ledger[rewardId]={at:new Date().toISOString()};
   try{

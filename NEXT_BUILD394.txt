@@ -1,0 +1,56 @@
+ABYSS DOMINION 引継ぎ：Build394 / v3.1.74
+
+第二章装備・魔法陣の収集育成を実装済み。Build393への差分ZIP。
+70体・280技・560ポーズ・24ペア・精鋭15部隊/3段階を維持。
+今回は新キャラクターなし。新規装備15種、魔法陣5種（SVG）、固有鍛錬。
+ユーザーは第三章へ急がず第二章を充実させたい。顔は可愛い約4頭身、黒金/白金の装飾、正面〜右向きの趣味を維持。
+
+コード
+src/data/chapterTwoRelics394.js：15品と5陣、正規の効果数値・上限・説明文。
+ChapterTwoRewards394：生成、保護付き確定受領と魔法陣解禁。
+ChapterTwoRefining394：価格・安全な素材候補・鍛錬の変異処理。
+battle/ChapterTwoRelicCombat394：装備集計、直接与ダメ補正、ガード軽減、連撃カウンタ。
+ui/ChapterTwoRelics394：部隊のドロップ予告・地域魔法陣・編成表示・報酬表示。
+MagicCircleSystemに新5種を末尾追加。通常敵のランダム魔法陣からは除外し、既存抽選順序と成長を維持。
+EquipmentAffixSystemではchapterTwoRelic394を固有権能IDとして、HP回復/MP節約などの既存固定効果も同品重複を禁止。
+
+報酬
+settleChapterTwoEncounterの既存訪問・部屋・pendingトークン勝利決済後に追加する。
+result.spoils394.relic：その部隊の固有装備1個。result.spoils394.circle：3部隊制圧時の地域専用陣1個。
+result.equipmentは従来の3部隊制圧装備を維持。従って3部隊制圧で装備は計4個、魔法陣1個。
+段階1 LR＋12・陣Lv.5／2 神話＋18・Lv.15／3 神話＋24・Lv.30。
+装備Lvは地域Lv×1.15/1.35/1.60。アイテムはlocked=true、通常の追加厳選枠あり。
+receiveEquipment(bossReward:true)で満杯時は予備→王装保管庫。固有品を自動売却しない。
+魔法陣は現物を追加して知識を解禁。保存と同じchapterTwoCommitトランザクション内。
+既にBuild393で倒した部隊へ遡及付与はしない。次の訪問から獲得。進行中の未討伐部隊を倒せばその分は獲得できる。
+
+戦闘
+normalizeEquipmentStateで装備品からm._chapterTwoRelics394を再計算。周回のcycleRateを適用。
+同じ品の条件付き効果は＋値の最高個体だけ。別品は加算し種類別上限、攻撃条件の合計上限は＋150%。魔法陣は別倍率（新陣は1種1効果系統）。
+強化倍率＝1＋0.25×min(30,plus)/30。一般装備Lvは従来の能力値計算。
+BattleRules.applyEnemyDamageのHP計算前に1回だけ条件判定。sourceIdが味方、damageClassがphysical/magic/hybrid/splitの直接攻撃に適用。
+relicKind394：direct / pair / pairCounter / counter / excluded。
+mainのペアアダプターと通常反撃にタグを付けた。HP吸収特殊技・自爆HP技・割合追加攻撃・時間差残響はexcluded。
+DOTはdamageClassなしで除外。時間差残響は元の攻撃量に反映済みの補正を再適用しない。
+連撃：battle.relicHits394={round,counts:{'actor:target':1}}。HPダメージが通った時に記録。saveBattleCheckpointに追加し、resumeSavedBattleの...dataで保持。
+通常の敵攻撃dealEnemyHitと勇者アダプターの受け側にガード補正。既存反撃の発動条件・回数は変えない。
+ペア特効はtwinReady385で生存/捕獲/隔離/追加行動禁止を再判定。魔法陣はultimateCircleを通して借用・封印状態を考慮。
+独立したオンライン対戦のシミュレーターや、敵のプレイヤー装備再現に新しい条件付き効果を移植する作業は本弾の範囲外。
+
+育成UI
+装備の展開部と所持カードに固有鍛錬。main.openRelicRefine394で素材と金額を表示し明示選択。
+同じ定義の未装備・お気に入り解除・ロック解除済み1個とGOLDを消費し＋1、上限30。
+価格＝25000×(現在plus+1)×(area+1)。targetのLv・厳選を保持。
+探索中/戦闘中/素材保護/不足/上限を拒否。chapterTwoCommitで保存失敗を全体復元。二重クリックはcommittedで防止。
+候補には全モンスターの実装備IDも照合し、古いequippedByだけで素材可否を判断しない。
+入手品はlocked=trueなので素材にする予備だけ手動でロック解除する。
+
+配布と検証
+265件成功。新規17＋既存魔法陣4＋従来244。旧テストのVMに追加の実ヘルパーを注入し、魔法陣総数を25へ更新。
+53モジュール構文・502参照・旧61部隊一致・旧魔法陣63設定一致。手帳15表示をVM確認。
+assets/magic-circles/ch2_*394.svgの5枚は新しいベクターUI。キャラ画像は変更なし。
+ブラウザー/iPhone実機は未確認。以前のプレビュー拒否を迂回しない。
+artifacts/build394/relic-guide.htmlとrelics.json、README/TEST、manifestとログを同梱。
+公開push/deployはしていない。Git HEADはBuild381のffe0724のまま、パッチ適用を積み重ねた作業木。
+次回は必ずBuild394のファイルSHA一覧とsrc/indexのスナップショットを先に作る。
+次の未着手候補：実戦フィードバックを受けた精鋭難度と報酬・鍛錬価格の調整、収集目標の発展。追加実装の承認待ち。
