@@ -1,0 +1,40 @@
+{
+  "build": 412,
+  "version": "3.1.92",
+  "requires": "Build411",
+  "saveSchema": 84,
+  "files": [
+    {
+      "path": "index.html",
+      "sha256": "adac8a426d440558b11d695407c112a9d5475279a28d70a8526bd14f5a53f12f"
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "92f1b1757cf8200d2fb793db3826dcba614569b0edf6e84de7bde70e02908bb1"
+    },
+    {
+      "path": "src/core/config.js",
+      "sha256": "23dfb0c5be75d3a5b6579a584e69bc6e17db79f658e1765f9139a33fe67780a5"
+    },
+    {
+      "path": "src/services/EquipmentProtection404.js",
+      "sha256": "9079647a119f746c29555b318b79ce15e23b71aa92c9f4ff9fae9b5c5b8a8281"
+    },
+    {
+      "path": "src/ui/EquipmentLockManager404.js",
+      "sha256": "a3b163b65f2e4ee7da437a64993d5b09d109cebf8fe654f93f832a89ceed0aed"
+    },
+    {
+      "path": "tests/build412-operations.test.mjs",
+      "sha256": "cfa3f4d99462c9dbdf62bb0e7d9c9a74d1b095e2041b74139da33af580c8af5e"
+    },
+    {
+      "path": "docs/build412/operations.tap",
+      "sha256": "2276dea22a41c74de45c0622db10b3a30a2a7f0ce7f5cd04297474e5fe9440e1"
+    },
+    {
+      "path": "README_BUILD412.txt",
+      "sha256": "5221b73d11016e7e240615380bd3d339aa13bd2b67b79e18497135af3439017c"
+    }
+  ]
+}

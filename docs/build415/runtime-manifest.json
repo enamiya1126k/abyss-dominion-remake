@@ -1,0 +1,92 @@
+[
+  {
+    "path": "index.html",
+    "before_sha256": "d205e223351956c5d3af5de9fe1803b48b18a502939e2aa932d2bc8d45e8cf9d",
+    "after_sha256": "82f9dcce8390b961a0c128f23a6fc67f2a945813daf01a0e4bb4d93460bdd207"
+  },
+  {
+    "path": "src/Styles/build415-pair-state.css",
+    "before_sha256": null,
+    "after_sha256": "9347645a45423869357d85f5d21f99b10b0aa402fe710d8fb9ee6a084ba1f31b"
+  },
+  {
+    "path": "src/battle/BattleRules.js",
+    "before_sha256": "8fd6fa80bf30dc586a5b98682d14c04341295869bd9afdacb153572b5f1654c9",
+    "after_sha256": "cc76c3f3dbe2a72d50be9647a30d1fb19c1c89498214cf3fc6c60628d7eee0e5"
+  },
+  {
+    "path": "src/battle/ChapterTwoAbilityRuntime408.js",
+    "before_sha256": "c8996f2c7a2aa254b02ee73f6776bc6f51771f3734eae4fa21cf553016d4de4e",
+    "after_sha256": "39c688754652baf780e55154ebf18c08bb8b67471f150a6d46f13dbdecec6c13"
+  },
+  {
+    "path": "src/battle/PairPreparation415.js",
+    "before_sha256": null,
+    "after_sha256": "734dc03edcfb78a6da163c430a54b18170d3104166d844805fd1b8ad40050a7e"
+  },
+  {
+    "path": "src/battle/PairSynergy409.js",
+    "before_sha256": "0d28b7dfbd04a0b7c9fcc709887f68146dba29994e484bd4dd261897ff4f2a0d",
+    "after_sha256": "7d1d344ef0e4cf0320486c29028768af83ed06ddc97083d62ae4e4d52aeeb21b"
+  },
+  {
+    "path": "src/battle/SingleTraits410.js",
+    "before_sha256": "11a5b52807c1785d53462c792431ba57b614671db8aef4240cd739074ac8125c",
+    "after_sha256": "e678d90e4f8517304b5b9c8faea3f789fa1d6ca1693fde4f55b574e32d09f6a7"
+  },
+  {
+    "path": "src/battle/SkillSystem.js",
+    "before_sha256": "9fa36d7cb152c10fb83d3fd2b811e70f3da3d3e281b28419b420834ce5130384",
+    "after_sha256": "1e600fa54c432f8f725e3819147ed40c7034c5ff7f036e5d06b557e0681030d6"
+  },
+  {
+    "path": "src/battle/TrialAdaptation415.js",
+    "before_sha256": null,
+    "after_sha256": "8946b0a7bbb95ba5cf1a4d67ff74f812b43de42e119adf4c99ffcc4fc912b86d"
+  },
+  {
+    "path": "src/battle/TwinResonance385.js",
+    "before_sha256": "736a808a06222b8e93603a556244cf75e0ff4254b132205b93e6ac1e6cca610a",
+    "after_sha256": "e8cf78431c4ab87a76257711ac688ee35dc994f61e66e34616c600f6b421d398"
+  },
+  {
+    "path": "src/core/config.js",
+    "before_sha256": "5bbc1007bda012641e1d053c487ac0b304586e235ffc64f60e0f6ecbdaa322f4",
+    "after_sha256": "9cb5da1ccbf830c40a68d6677ec42de1f377a75993ec2e7db492deb07eca9be8"
+  },
+  {
+    "path": "src/data/ChapterTwoAbilityDesign408.js",
+    "before_sha256": "63996a272d96177a31f2f4a55a26d5c4519d034af76793577d0b4ceb2dee7993",
+    "after_sha256": "5ed30b47836c6593abc9e2625e0b48743b9f81cd2cf529dee5a900ad684dca09"
+  },
+  {
+    "path": "src/main.js",
+    "before_sha256": "92f1b1757cf8200d2fb793db3826dcba614569b0edf6e84de7bde70e02908bb1",
+    "after_sha256": "59a94874ac949961f7fb4981830ee8610ff0a354c2b5a591e2ddc1a24208535e"
+  },
+  {
+    "path": "src/models/Monster.js",
+    "before_sha256": "ac783cbd9ac8895a24ad19e722d4df0d70e174ea2f45e30015c10442be55f749",
+    "after_sha256": "01615a3f325e6e2858c196343818b24ed4dbd40694a9928223b12317433b53ce"
+  },
+  {
+    "path": "src/online/OnlineTraitCompatibility411.js",
+    "before_sha256": "b9d8ffc4cb07b858096ffd8f658fbf5df99f9d9d39df28ad350ac453475bccbe",
+    "after_sha256": "801a4cfeadf39124dfb1dd5544b977dcff0617794b0234189420a1e8a84565ce"
+  },
+  {
+    "path": "src/ui/BattlePreparation415.js",
+    "before_sha256": null,
+    "after_sha256": "67207009e9b52dfd7d27e6ffa13db0d458f9db1f85c019ea08c5d85cc1cfd853"
+  },
+  {
+    "path": "src/ui/TwinStatus385.js",
+    "before_sha256": "5d2f9dbb88404e3aa26a2f6bbfbc03758c64cf8bfc0505f6e575e8278de98f1d",
+    "after_sha256": "5e987991fea8f821ade1f4aa344f0c1d73abb408eab6d8e71af2a169dc7e0ff2"
+  },
+  {
+    "path": "src/ui/screens/FormationScreen.js",
+    "before_sha256": "a0ba4daa76de49d27612384834f848b71d67cbee2b9e11d2374af2b4976b1d9b",
+    "after_sha256": "c47bd75fcb1b2e72d94687e5e233111dbd21799ad66e4ca7eec3600dbf240477"
+  }
+]

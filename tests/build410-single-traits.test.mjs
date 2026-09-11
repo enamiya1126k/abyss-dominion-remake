@@ -32,7 +32,7 @@ for(const side of ['ally','enemy']){
   const f=fixture(['ch2_senela',ordinary],side);f.kill(f.own[0],f.own[1]);f.settle();assert.ok(f.hp(f.enemy[0])>0);
  });
  test(`${side}: pact killer selection and protected MATK coefficient`,()=>{
-  const f=fixture(['ch2_senela'],side);f.enemy[1].boss=true;f.kill(f.own[0],f.enemy[1]);f.settle();assert.equal(f.calls.length,1);assert.equal(f.calls[0].u,f.enemy[1]);const raw=T.singleState410(f.b).entries[JSON.stringify([side,f.own[0].id])].raw;assert.equal(f.calls[0].p.requestedDamage,Math.floor(raw.matk*.5)*2);
+  const f=fixture(['ch2_senela'],side);f.enemy[1].boss=true;f.kill(f.own[0],f.enemy[1]);f.settle();assert.equal(f.calls.length,1);assert.equal(f.calls[0].u,f.enemy[1]);const raw=T.singleState410(f.b).entries[JSON.stringify([side,f.own[0].id])].raw;assert.equal(f.calls[0].p.requestedDamage,Math.floor(raw.matk*.5)*4);
  });
  test(`${side}: hibernation skips ten actions, discharges on eleven, no extra ticks`,()=>{
   const f=fixture(['ch2_noctia'],side);for(let i=1;i<=10;i++){f.b.turn=i;assert.equal(T.naturalSingleAction410(f.b,f.own[0],side).kind,'skip');T.naturalSingleAction410(f.b,f.own[0],side,{natural:false});T.naturalSingleAction410(f.b,f.own[0],side);assert.equal(Object.values(f.b.chapterTwoAbilities408.sleepers)[0].ticks,i);}

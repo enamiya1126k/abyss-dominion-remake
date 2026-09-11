@@ -9,6 +9,7 @@ import{mitigateHeroDamage,tryHeroLastStand}from"../core/HeroAllianceSystem.js?v=
 import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=3.1.90-build410";
 import{endgameCharacter}from"../data/endgameCharacters.js?v=3.1.38-build358";
 
+import {hardImmune415,recordImmunePreparation415} from './PairPreparation415.js';
 const CONTROL_STATUS_IDS=new Set(["sleep","paralysis","freeze","charm","confusion","fear"]);
 const FLOOR_BOSS_NEGATIVE_KINDS=new Set(["stun","spdDown","atkDown","defDown","evasionDown","accuracyDown","vulnerable","healDown","reviveSeal","poison","burn","bleed","curse","paralysis","freeze","shock","sleep"]);
 function statusProfileFor(target){return target?.statusProfile??endgameCharacter(target?.endgameBossId)?.statusProfile??null}
@@ -38,10 +39,10 @@ export function enemyStatusesFor(battle,enemyId){battle.enemyStatuses??={};if(Ar
 export function applyEnemyStatus(battle,status,enemyId=battle.targetEnemyId){
  status=singleEffectOrigin410(battle,status);if(!status||!enemyId)return false;const enemy=(battle.enemies??[battle.enemy]).filter(Boolean).find(entry=>entry.id===enemyId);
  if(!ultimateIsolated(battle,enemy)&&invertSingleDebuff410(battle,enemy,status,"enemy"))return true;
- if(enemy?.floorBossPassive?.statusImmunities?.includes(status.id)){addBattleLog(battle,`${enemy.name}：${enemy.floorBossPassive.name}が${status.name??status.id}を無効化`);return false}
+ if(!ultimateIsolated(battle,enemy)&&hardImmune415(enemy,status.id)){recordImmunePreparation415(battle,enemy,status,"enemy");addBattleLog(battle,`${enemy.name}：${enemy.floorBossPassive?.name??"耐性"}が${status.name??status.id}を無効化`);return false}
  if(ultimateIsolated(battle,enemy))return false;const resistance=statusResistance(enemy,status.id,enemy?.bossStatusResist);if(resistance>=1||resistance&&Math.random()<resistance)return false;const statuses=enemyStatusesFor(battle,enemyId),existing=statuses.find(s=>s.id===status.id);if(existing){if((Number(status.power)||0)>=(Number(existing.power)||0)){existing.sourceMonsterId=status.sourceMonsterId??existing.sourceMonsterId;existing.fromSide=status.fromSide??existing.fromSide;}existing.turns=Math.max(existing.turns,status.turns);existing.power=Math.max(existing.power,status.power)}else statuses.push({...status});upsertControlSkip(battle,enemyId,status.id,status.turns,"enemy");if(enemy?.floorBossPassive?.ailmentMirror)enemy._floorBossAilmentMirrorReady=true;reflectFloorBossNegative(battle,enemy,status);return true
 }
-export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicArmor=false,element=null,damageClass=null,heroRulesApplied=false,relicKind394='direct',traitCause410=null}={}){
+export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicArmor=false,element=null,damageClass=null,heroRulesApplied=false,relicKind394='direct',traitCause410=null,maximumDamage415=Infinity}={}){
  if(!enemy||enemy.hp<=0||ultimateIsolated(battle,enemy))return{beforeHp:Math.max(0,Number(enemy?.hp)||0),damage:0,requested:0};
  enforcePaperBody410(battle);
  const pairShieldBefore409=Number(enemy._floorBossHpShield)||0;
@@ -84,7 +85,7 @@ export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicA
   if(sources.has(source)||sources.size>=4)damage=0;
   else{sources.add(source);enemy._mimicArmorSources=[...sources];damage=Math.min(1,damage)}
  }
-	 enemy.hp=Math.max(0,enemy.hp-damage);tryHeroLastStand(battle,"enemy",enemy,beforeHp);
+	 damage=Math.min(damage,Math.max(0,maximumDamage415));enemy.hp=Math.max(0,enemy.hp-damage);tryHeroLastStand(battle,"enemy",enemy,beforeHp);
 	 const directArmorHit=!String(sourceId??"").startsWith("status:");
 	 if(requested>0&&directArmorHit&&armorLayersAtHit>0){const next=Math.max(0,armorLayersAtHit-1);enemy._floorBossArmorLayers=next;addBattleLog(battle,`${enemy.name}：${passive.name} ${next}/${startingArmorLayers}層`);if(next===0&&domain.effect==="armorBreakCounter"){enemy._floorBossArmorBreakReady=true;addBattleLog(battle,`${domain.name}：最終城甲破損・反城準備`)} }
 	 let manaGuardTriggered=false;
@@ -131,6 +132,7 @@ export function applyPersistentAilment(battle,targetId,ailment){
  const target=(battle.party??[]).find(entry=>entry.id===targetId),id=ailment?.id??ailment?.kind;
  if(!target||!isPersistentStatus(id))return false;
  const inverse=inversionCandidate410(battle,target,ailment,"ally");if(inverse){if(Math.random()>=(ailment.chance??1))return false;return invertSingleDebuff410(battle,target,ailment,"ally");}
+ if(hardImmune415(target,id)){if(Math.random()<(ailment.chance??1))recordImmunePreparation415(battle,target,{...ailment,id},"ally");return false;}
  const resistance=statusResistance(target,id,(Number(target?._equipmentAffixes?.statusResistance)||0)/100),chance=ailment.chance==null?1:Math.max(0,Math.min(1,Number(ailment.chance)||0));
  if(Math.random()>=chance*(1-resistance))return false;
  const list=allyAilmentsFor(battle,targetId),normalized=normalizePersistentAilments({...ailment,id})[0];if(!normalized)return false;
@@ -155,7 +157,7 @@ export function applyBattleEffect(battle,targetId,effect,targetType="ally"){
  if(targetType==="ally"&&isPersistentStatus(persistentId))return applyPersistentAilment(battle,targetId,{...effect,id:persistentId});
  const target=targetType==="enemy"?(battle.enemies??[battle.enemy]).filter(Boolean).find(entry=>entry.id===targetId):(battle.party??[]).find(entry=>entry.id===targetId);
  if(inversionCandidate410(battle,target,effect,targetType)){if(Math.random()>=(effect.chance??1))return false;return invertSingleDebuff410(battle,target,effect,targetType);}
- if(targetType==="enemy"&&target?.floorBossPassive?.effectImmunities?.includes(effect.kind)){addBattleLog(battle,`${target.name}：${target.floorBossPassive.name}が${effect.name??effect.kind}を無効化`);return false}
+ if(!effect.selfCost&&hardImmune415(target,effect.statusId??effect.id??effect.kind)){if(Math.random()<(effect.chance??1))recordImmunePreparation415(battle,target,effect,targetType);addBattleLog(battle,`${target.name}：${target.floorBossPassive?.name??"耐性"}が${effect.name??effect.kind}を無効化`);return false}
  const statusId=effect.statusId??effect.id??effect.kind,resistance=targetType==="enemy"?statusResistance(target,statusId,target?.bossStatusResist):statusResistance(target,statusId,(Number(target?._equipmentAffixes?.statusResistance)||0)/100);
  const chance=effect.chance==null?1:Math.max(0,Math.min(1,Number(effect.chance)||0));
  // A voluntary trade-off (for example SPD down in exchange for evasion) is a

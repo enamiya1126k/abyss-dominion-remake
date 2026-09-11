@@ -1,0 +1,8 @@
+{
+  "src/main.js": "59a94874ac949961f7fb4981830ee8610ff0a354c2b5a591e2ddc1a24208535e",
+  "src/battle/TrialAdaptation415.js": "8946b0a7bbb95ba5cf1a4d67ff74f812b43de42e119adf4c99ffcc4fc912b86d",
+  "src/battle/SkillSystem.js": "1e600fa54c432f8f725e3819147ed40c7034c5ff7f036e5d06b557e0681030d6",
+  "src/battle/PairSynergy409.js": "7d1d344ef0e4cf0320486c29028768af83ed06ddc97083d62ae4e4d52aeeb21b",
+  "tools/build415/native-harness.mjs": "a7a736308de02392e25503e1f1024ddb79a72902ab1bce398911fb5df8fd4507",
+  "tools/build415/encounters.mjs": "25aee7117c31d5c85cbe689bfde60f0c5d7d274584a227423739b05b81a845d3"
+}

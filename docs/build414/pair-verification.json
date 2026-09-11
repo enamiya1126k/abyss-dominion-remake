@@ -1,0 +1,341 @@
+{
+  "scope": "real pair resolver + real UI + real isolation/single-trait modules; damage and healing callbacks are fixtures; not full battle or win-rate",
+  "cases": [
+    {
+      "pair": "mirrors",
+      "side": "ally",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "mirrors",
+      "side": "enemy",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "talismans",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "talismans",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "wings",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "wings",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "garden",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "garden",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "foxmoon",
+      "side": "ally",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "foxmoon",
+      "side": "enemy",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "starthread",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "starthread",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "stitch",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "stitch",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "glassaria",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "glassaria",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "eclipsecrown",
+      "side": "ally",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "eclipsecrown",
+      "side": "enemy",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "oathguard",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "oathguard",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "rosevow",
+      "side": "ally",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "rosevow",
+      "side": "enemy",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "twinclock",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "twinclock",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "wisteria",
+      "side": "ally",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "wisteria",
+      "side": "enemy",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "twinthunder",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "twinthunder",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "twinkeys",
+      "side": "ally",
+      "hitsRound1": 8,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "twinkeys",
+      "side": "enemy",
+      "hitsRound1": 8,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "frostshatter",
+      "side": "ally",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "frostshatter",
+      "side": "enemy",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "oathreturn",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "oathreturn",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "starconfluence",
+      "side": "ally",
+      "hitsRound1": 0,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "starconfluence",
+      "side": "enemy",
+      "hitsRound1": 0,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "crimsonwings",
+      "side": "ally",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "crimsonwings",
+      "side": "enemy",
+      "hitsRound1": 6,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "absolutionbells",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "absolutionbells",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "eclipserenewal",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "eclipserenewal",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "dreamharvest",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "dreamharvest",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "dragonliberation",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "dragonliberation",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "crownsfinale",
+      "side": "ally",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    },
+    {
+      "pair": "crownsfinale",
+      "side": "enemy",
+      "hitsRound1": 2,
+      "quota": "2→1→0→次ラウンド2",
+      "extraCallBlocked": true
+    }
+  ]
+}

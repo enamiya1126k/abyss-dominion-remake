@@ -1,0 +1,1348 @@
+{
+  "repository": "enamiya1126k/abyss-dominion-remake",
+  "commit": "89540f22fcad9fa9ae952ed71b59fb1c6ca7078c",
+  "githubBlobHashesVerified": 267,
+  "overlay": [
+    "Build412 operations",
+    "Build413 display"
+  ],
+  "runtimeVersion": "3.1.93",
+  "saveSchema": 84,
+  "sources": [
+    {
+      "path": "online-server/server.js",
+      "githubBlob": "8d2d7062fae32bafc39d2d26edbb02b8bad2cc74",
+      "auditSha256": "2f31a02ac9e5718b9ef1c1fd188fd0ec495ccbeef42584aecc1dffbf6595f0ec"
+    },
+    {
+      "path": "online-server/src/AutoBattleSupport.js",
+      "githubBlob": "6c88ef8a2fddb745b42068d71dd3c409156b3e87",
+      "auditSha256": "06520f85ddadcbe6d7a7f0229bc5d6f51cf6193c8803f75e057478a2ab4c3a3c"
+    },
+    {
+      "path": "online-server/src/CampaignFloorScale.js",
+      "githubBlob": "d1bd1d851498879aacd5fc7a5fdd942312df9595",
+      "auditSha256": "0c52a00bcd61139372f4aa2fa36bd33db67da1bb7d897ec4ce0f1f1812a6c9ce"
+    },
+    {
+      "path": "online-server/src/CoopBossCatalog.js",
+      "githubBlob": "e256c330aa2dcf857493b67061be27f6420a817e",
+      "auditSha256": "54c8a58dd09332ee43939c09027f6091f34377b97e835b24d2035b3d56accc98"
+    },
+    {
+      "path": "online-server/src/CoopGimmicks.js",
+      "githubBlob": "0d464fe8d5e32b47eb453e416b610f51c2a9a863",
+      "auditSha256": "d569f267dc12661e70a76e983203cfb1114a6744a0813d8067411268361bb7e0"
+    },
+    {
+      "path": "online-server/src/CoopTechniqueCatalog.js",
+      "githubBlob": "9fc82a059a035a1f41d654e83df279a49778fd33",
+      "auditSha256": "4092691346278604926991a11bac6e8c7dbdc8ea6582549c10c007b7bad9856d"
+    },
+    {
+      "path": "online-server/src/EndgameUltimateAdapter.js",
+      "githubBlob": "9b27cef8cc94ed9e65f10d2f069c87418f6dd445",
+      "auditSha256": "ec6355764a2df92bc4a0b9a0f70e13bcea0b6ad0b15da40544824f8f9771dfe8"
+    },
+    {
+      "path": "online-server/src/FriendCoordinator.js",
+      "githubBlob": "986ba42df2629ae14b10d2b65d640a6ee2f96cb3",
+      "auditSha256": "630d3afeb93e6d3c9268374f39cbbf3bc899ad196ca2ea6fa073bd481b807ffd"
+    },
+    {
+      "path": "online-server/src/GuildCoordinator.js",
+      "githubBlob": "2c22cb216b4a2dca7ec8895082cbe26761c6b0bd",
+      "auditSha256": "7f32dcd970147c3430d307b724db56f735aa5a80aa272ed52f555e0f0f703d54"
+    },
+    {
+      "path": "online-server/src/HallMinigameCoordinator.js",
+      "githubBlob": "2446d8757afc7be0c5c8b06705d4097580d53151",
+      "auditSha256": "f856cca65e377ea64ddf0a0c0df30aec2d42d2601fea22650da92eaa8a6e5e49"
+    },
+    {
+      "path": "online-server/src/HeroAllianceAdapter.js",
+      "githubBlob": "027f3882cc2a6f19e801d4342b08f6e88021845b",
+      "auditSha256": "5cdd7dafaea028a6350a70dec17c7e0c0dc9efccaf2fe8d79a5cb5b8847c812e"
+    },
+    {
+      "path": "online-server/src/OfflineDungeonRules.js",
+      "githubBlob": "f3f49f94a5371fccaf2eadef1b7c5c6a7fc1914f",
+      "auditSha256": "f49d2a5a50abfa923b9016c745caac1646ed289c234ebb90205c619363119e12"
+    },
+    {
+      "path": "online-server/src/OnlineBattleAI.js",
+      "githubBlob": "06c09e5888c39fdd0c145f889f18fbfa6b596b9d",
+      "auditSha256": "508932a91cf2b04a126102be3ff06c1f168b9f0278cfe8fb20ad048c7c22ffdb"
+    },
+    {
+      "path": "online-server/src/OnlineExpansion207.js",
+      "githubBlob": "3a1b863b0cca57d5e817ea4a6498cef90538c177",
+      "auditSha256": "f498bd4f27f7b3715d57532360f617acb9ab2232527f0cd50a7b0c4e35300c27"
+    },
+    {
+      "path": "online-server/src/OnlineExpansion208.js",
+      "githubBlob": "b0b358a3cc5866e0bd54e89c4360548f4599a22c",
+      "auditSha256": "6a91544a8f1cf93af6c6290ff27aa4daecf12140b21293851af2a5dee98ce9c1"
+    },
+    {
+      "path": "online-server/src/OnlineMagicCircles398.js",
+      "githubBlob": "2815778f01dbc974a28e55ee25e9220f7b61ad41",
+      "auditSha256": "291e768cb5120cc7629a1fc76f48852b1c9eca0ba6339978a7c0b9fb82e4e32d"
+    },
+    {
+      "path": "online-server/src/PlayerPowerRanking.js",
+      "githubBlob": "da3e2116ede5821a0920c5833924a13331b9749f",
+      "auditSha256": "baf7396ea83e98fda5ce456e04e7587ccb4e50408bc306742e03ba87d3b3e54e"
+    },
+    {
+      "path": "online-server/src/RaidCoordinator.js",
+      "githubBlob": "6e5edd5f0dfef237dcffdec8437316d933b8feac",
+      "auditSha256": "d4593615a697d0a423c4f2f09bf0fba8ca999326e572a7c3d3d099b43b1ebcb8"
+    },
+    {
+      "path": "online-server/src/ResonanceMazeCoordinator.js",
+      "githubBlob": "81a267ffd32891cdd9e6d9745b24f99f4da6a2c2",
+      "auditSha256": "67149ca80c218f391224739b4181c404239244dfc311c74bdce9ee44e526fccf"
+    },
+    {
+      "path": "online-server/src/RoomStore.js",
+      "githubBlob": "61240491b9b86d9c51de106ca0265bfadf3ed732",
+      "auditSha256": "007eed405bbe0e7357e5b98c98f9f9fc2684d952f620426c6fc1a22ad1cc6a44"
+    },
+    {
+      "path": "online-server/src/SettlementJournal.js",
+      "githubBlob": "4f093b5be414b231070531976f0f7a5a4c931b1b",
+      "auditSha256": "9bb5e5a498d7746c1846f7876a1c2a2b0fa16c5be5acca2e0b8ef0535e632050"
+    },
+    {
+      "path": "online-server/src/TeamBattleCoordinator.js",
+      "githubBlob": "cf58a722abd0eb61c6977b0dbc4d809db51e77be",
+      "auditSha256": "02a6ee01034c6587f1a08b8ffbf3c8a7dad5c4980008a37063b6a58af5f50190"
+    },
+    {
+      "path": "online-server/src/TradeCoordinator.js",
+      "githubBlob": "0f7745c6a6fbf6d1ab63287bd80d92faed9a41d2",
+      "auditSha256": "b596b8e9edf1f57c802a10fa29a98db41daa3a6530346eb8d502594b84c84e9a"
+    },
+    {
+      "path": "online-server/src/WeeklyRaidCatalog.js",
+      "githubBlob": "2c23be3923cf50c77207cd4e8dcc2c95aa2086c9",
+      "auditSha256": "7408eb8b38c043d47080a277d7c55a4e8181291b4d275bc07560605d80df9d46"
+    },
+    {
+      "path": "src/app.bundle.js",
+      "githubBlob": "d8f66636ed8c588a67f6372f492481f92d4be57d",
+      "auditSha256": "d6e2dfc82c1fb1943a4596dc47c9ef9dcbeb86701c0ccb844385fec5ce0c3a1c"
+    },
+    {
+      "path": "src/battle/BattleRules.js",
+      "githubBlob": "f3b6e5d3417fd254007de55d19f34c36502f12bd",
+      "auditSha256": "8fd6fa80bf30dc586a5b98682d14c04341295869bd9afdacb153572b5f1654c9"
+    },
+    {
+      "path": "src/battle/CampaignHeroSkillSystem.js",
+      "githubBlob": "581a9fd300fe6a39e83c31afe2bf23db85370a0d",
+      "auditSha256": "147ee5f98e13d5171535f8412f0b78f95e659ea85cd9b0d0a13bc3fbc1d60b14"
+    },
+    {
+      "path": "src/battle/ChapterTwoAbilityRuntime408.js",
+      "githubBlob": "cc472bf7a76f6c7f68e93884eb780bf22ce581c1",
+      "auditSha256": "c8996f2c7a2aa254b02ee73f6776bc6f51771f3734eae4fa21cf553016d4de4e"
+    },
+    {
+      "path": "src/battle/ChapterTwoRelicCombat394.js",
+      "githubBlob": "b0c0d04d4703d10902fc1624a07b2468b2735fe1",
+      "auditSha256": "e15ce7734af62476ec3afa0dd4f36692673577eae2ba4c0f1c56385fdbde43f2"
+    },
+    {
+      "path": "src/battle/EnemyAI.js",
+      "githubBlob": "d02f0a3d95146ce899cd85b1fe91709a79acc2fe",
+      "auditSha256": "01b2b7c085d137def69de0a9e15d83510fd249d44cab0f00a48c4aaa9a9664e2"
+    },
+    {
+      "path": "src/battle/HitSystem.js",
+      "githubBlob": "1f80b446f935f83d5565656d2e0d40d406ace8e0",
+      "auditSha256": "deaeaa72cf9aea4e15169596e98215ce7f640487166cafbc2da05a21a925f4d2"
+    },
+    {
+      "path": "src/battle/MagicCircleCombat398.js",
+      "githubBlob": "5aae51c5e33cbd8e98f3fc71d37f78deb0d085c8",
+      "auditSha256": "d9dcafc4685f9e1e6bbc5fb5957a8c0f2f49cd7699b3a9411cbecd7ad4ba7586"
+    },
+    {
+      "path": "src/battle/PairSynergy409.js",
+      "githubBlob": "3e148c07f085d16652675ce9f1dc5472168ad7e9",
+      "auditSha256": "0d28b7dfbd04a0b7c9fcc709887f68146dba29994e484bd4dd261897ff4f2a0d"
+    },
+    {
+      "path": "src/battle/SingleTraits410.js",
+      "githubBlob": "3e40a2807dcc4299481979084708119f9e7f2194",
+      "auditSha256": "11a5b52807c1785d53462c792431ba57b614671db8aef4240cd739074ac8125c"
+    },
+    {
+      "path": "src/battle/SkillSystem.js",
+      "githubBlob": "64a8d14b915961dd9bb5389b44a36ba82e6773a6",
+      "auditSha256": "9fa36d7cb152c10fb83d3fd2b811e70f3da3d3e281b28419b420834ce5130384"
+    },
+    {
+      "path": "src/battle/TurnSystem.js",
+      "githubBlob": "86774d2080120adb43338e710ca515f2f279387a",
+      "auditSha256": "56c7346ee07508172904727e37b33202f0e25aae4a07e3dac0a13d093f7e6f35"
+    },
+    {
+      "path": "src/battle/TwinResonance385.js",
+      "githubBlob": "06b51647e215765afe86462496689aa104134dfa",
+      "auditSha256": "736a808a06222b8e93603a556244cf75e0ff4254b132205b93e6ac1e6cca610a"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoCollection395.js",
+      "githubBlob": "fdfb47d9024e951a2d2300d48734a20ad8cb71f7",
+      "auditSha256": "dbb2faf38f26ab00ac52328b79b2e9447542f18824a1096dd40d2b0bc8e8575b"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoCommander397.js",
+      "githubBlob": "8fa9238f35f51b8134ed59ef1bb9c78a15d7f451",
+      "auditSha256": "a9f956d13c213b7e9571596b504c7de9d4a8a2e7b3f52a406d2173951d59e68d"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoContent.js",
+      "githubBlob": "1e369638dd9edb9db16987a5860d6a30c7b0cb90",
+      "auditSha256": "d07d04449d045e66590dba1fe4b6160709d2063c2cfd1e8994af451f207387d5"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoElite393.js",
+      "githubBlob": "9d6e4fcd21e61b8d5524eb8b8f92ce851c3d4ce6",
+      "auditSha256": "e10ebb2d8f087a5ffaaa72f17a2b99c7fe0f4f9568e13201302be488c3241631"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoElitePanel393.js",
+      "githubBlob": "d7ceda6ebd2ba3b38a7668d465a9289e6d39eb78",
+      "auditSha256": "8c9921b995dacf952d51bc83d8b7d127cf7eb03529c7d88e403649de7671af02"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoField.js",
+      "githubBlob": "57de3c1444c472cd1816810151d5065e4b5047c2",
+      "auditSha256": "6d4637e5b60f084c61e733632111174dd3c4c53afa720c20c82932bd77a85115"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoGacha397.js",
+      "githubBlob": "aac3b075e89adf8319a49943069c269af95e0ad2",
+      "auditSha256": "f559b59d16d9f079cd943596af5e49933ecef53f7e1fb05240110b4ffaa0e223"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoMap.js",
+      "githubBlob": "858a585f22a1cf25d244cfa11d86b5de46aeb4ea",
+      "auditSha256": "98783a05b7a373887eeea38bc5a9ba6269f82628cdcce3fd3c9c49804ca601b1"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoMonsters383.js",
+      "githubBlob": "64f3dcd7c35cca6da5a0ff8883b48aa494c2abaa",
+      "auditSha256": "0db9a5ddb9854c33a8192ab4ca32f55682c979866311c9acbcf44d8ac964b878"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoMonsters384.js",
+      "githubBlob": "4a3260c350b52ef0a1f675ed72bfb554337571a8",
+      "auditSha256": "4c8068a4c3a0bdbb01c5e99dc95450e1e17b60f92dd614f14ba99453b5ec4dd2"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoMonsters385.js",
+      "githubBlob": "7831ba6760d037c50c7804b6c95c6dacd2a730e4",
+      "auditSha256": "3367cbdd7b6a2d6a7ce934f487419b0f80a1daf80459140d0403499c2d2f7f12"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoMonsters386.js",
+      "githubBlob": "9bae84f69fae44e83d256f6fd38ef5506d63395a",
+      "auditSha256": "6656dc8da70426504e504ca3e5e11b9e7c77340936f5eedc712a3375467fe00a"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoMonsters387.js",
+      "githubBlob": "caa33fe3a227428d8fc06eac82c77fd0f8d7621f",
+      "auditSha256": "0003297de71927e1e71af758d89617e90219949733d130ca0de56a239a5b6388"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoMonsters388.js",
+      "githubBlob": "6915e90a2fdeba402e3349f19623ae36e89d539c",
+      "auditSha256": "5423bd303e6667c8ea77a42316956e819002933bd7a5164d5aa2c0360d3c57f2"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoMonsters389.js",
+      "githubBlob": "14c2ecdb66a2f94ccabddf5aa2f33cbad1c71337",
+      "auditSha256": "744b6375fffca936fe6e580acfb0312927fc4a3dd1d466ab5c18bc30c64d57c0"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoMonsters390.js",
+      "githubBlob": "ef25177704330b07016ce681cb3532ebe1c1b1b7",
+      "auditSha256": "58e676a82da7d114741efc8e39b8eb119e7b2212fc7a0385508cd2f7475601b0"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoMonsters391.js",
+      "githubBlob": "53f29589abd295dba5e8b046262d2fd7cc7cdda6",
+      "auditSha256": "5b51e9ed1b9a878da6d3db44d44d248c7502558a312f3644063803fb4fa768a4"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoMonsters392.js",
+      "githubBlob": "ebee659f4b43ff5dc735344e9a2f65cb97a43822",
+      "auditSha256": "9b6d8d77a4d0eb83cf5b9be94f987187ac40ed347c3405bb4fd6b2f6766d529b"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoProgress401.js",
+      "githubBlob": "430d069ac1dab11fdf31f2c8c709358609727376",
+      "auditSha256": "8e5c8806c5860bb4540d03fab195c019dc4b74ad5e36bcc08802416c6e8341ec"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoRefining394.js",
+      "githubBlob": "2602edf44275394ddea1d2cce09fda5c297fd812",
+      "auditSha256": "2b465ed113a7cb34281114b89589e45cc50dbfa16277af7d169e373144e7a8e1"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoRefining395.js",
+      "githubBlob": "f8c60845c1318b603b713b8829a8dec1d4514c9d",
+      "auditSha256": "aaf024dfae19566ee9726b2cc373daf8ba9a71a7047cdb8bb86f9f082216205c"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoRepeat395.js",
+      "githubBlob": "4ccbef1012919652fb037e85e45988d9c7d74264",
+      "auditSha256": "74351a33d4a8bb865f872e567a0003d0016572b67af509213d38c26f4485c7fc"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoRewards394.js",
+      "githubBlob": "c8516bd30df46d0cd29e29c66c04b3297bef6934",
+      "auditSha256": "c3499b6a621463f2d99a87cbb91995e497ed2c5826f11166acddce3a5f4350ce"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoRoster397.js",
+      "githubBlob": "56b123f420c71d6d458467e14c703ea9643e36af",
+      "auditSha256": "24664ce172e7025a63b55736231b03e5238b73595abb0ed5d699593e5a12cfe9"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoScreen.js",
+      "githubBlob": "804fcf3673440d9db4140e707129d0dd1342cba7",
+      "auditSha256": "ef18d5259b200eb2081ac2c5f2122efe85cedd8227d0faf454a127b75f361fbd"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoStory.js",
+      "githubBlob": "57ec9c129ac7e1dda4ce3336e5872288a629e1f1",
+      "auditSha256": "9406ad16cb3ccd4ee16020c8ada80ee7615af13e94de5274af75be7decd27e06"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoSystem.js",
+      "githubBlob": "7ecdb37eae9b857e825c9d231cb90944b2744966",
+      "auditSha256": "07ac068f864d2ddd9a0c6f169f29a411c510d480d62e3e78e2e37cb26ac982b7"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoTactics382.js",
+      "githubBlob": "ce539b8c3667ecbcf6097f94c6b3749234215136",
+      "auditSha256": "2a8c578fe690748a5c5f2aa3f3d5583ce89ab61f08de9d12d142f8a02ad1897d"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoTargeting393.js",
+      "githubBlob": "85888e0a0278bbe0418817be36be90793c495683",
+      "auditSha256": "6fbc2ed024cebbd07f321956feeb53d6fe357d639bf0ed197e9fe917ddaa89df"
+    },
+    {
+      "path": "src/chapterTwo/HeroAlliance396.js",
+      "githubBlob": "9a191739df626ef176a8992b0802cbbd9cd757cc",
+      "auditSha256": "00ec5d4bd3484e93e53a6526aad924b541ec2495c0f404b7d750d9e13ab0bb8a"
+    },
+    {
+      "path": "src/chapterTwo/MagicCircleResearch398.js",
+      "githubBlob": "482f9cf6eb38737eee7947a8bb6b52ca69bc8510",
+      "auditSha256": "bb39ceb6d0d4fe668063783c9a9979393d9ea4bbc6289efabdd0acfaf2dc9110"
+    },
+    {
+      "path": "src/chapterTwo/VaultGear380.js",
+      "githubBlob": "7dbf5907c7b9c878460767794016cf98464b60fa",
+      "auditSha256": "34d286333c7dacdc570a19c755edad4662b385e3fcbf8db0e0ebff3fbf439f16"
+    },
+    {
+      "path": "src/core/AbyssSkillTreeSystem.js",
+      "githubBlob": "eccd6cec95e275840e5844e4db42bb8936c3c9a3",
+      "auditSha256": "5e62a05c13e23b25796c7f9069996c21647d5f8ff026e2a19adf734d0e96e25a"
+    },
+    {
+      "path": "src/core/AchievementRewardSystem.js",
+      "githubBlob": "b6285f39e1cc00e4780ecff1b4b3843a8fb53f27",
+      "auditSha256": "b24bd3830a85fd803c0c77f7c70e6711f600fb780b3662f88c2fd60334b3f413"
+    },
+    {
+      "path": "src/core/AudioSystem.js",
+      "githubBlob": "8025f4f90f7468c224277b3142d077f0d8b28c13",
+      "auditSha256": "85ca5a9d8986bb32b9e720e5728569071c6c5dffc275cde04b73fa7b494ccdbc"
+    },
+    {
+      "path": "src/core/BossRewardMappingSystem.js",
+      "githubBlob": "3b374dc7b4bb2e75a6a6f122bf39634172881e2d",
+      "auditSha256": "50468cb347d78566dc02e6c867e7399b191511fada846c65ba76c8e700468534"
+    },
+    {
+      "path": "src/core/BossRewardSystem.js",
+      "githubBlob": "925a2716499f99247fedc7c8cc1596e12b9102b7",
+      "auditSha256": "ca7009054b3eb490a94072bf7d29dac671958b1d0ebe767c464b2f4190406b96"
+    },
+    {
+      "path": "src/core/Campaign100System.js",
+      "githubBlob": "d6323b821c163a0da6a73c903136b4da27d08d37",
+      "auditSha256": "004572e2ee4fe72d05ec94416386f10ad60d699a0f5d4daa97b919cbd5e79149"
+    },
+    {
+      "path": "src/core/CampaignBossRewardSystem.js",
+      "githubBlob": "90e63c9f5499694b6eb748a28d438ddb192bee41",
+      "auditSha256": "5a8afb07be87979bcac62d6b91cf684f333702738c1d89bc01ac2e3b6edcfc68"
+    },
+    {
+      "path": "src/core/CampaignBossWorldSystem.js",
+      "githubBlob": "27f3579f0d08919b7652c697c2f60d2115190348",
+      "auditSha256": "f676ea659ae37ffe9d17f629f9b3963fae8aba17391146043049ffbfa7f6f6ee"
+    },
+    {
+      "path": "src/core/CampaignDungeonLayoutSystem.js",
+      "githubBlob": "8bab470b11ea0e8215c632f64ca9577502a881c2",
+      "auditSha256": "6eb16a639fee7a4388f159fd13f35c6c058c5a3f939ca817cd95b5ff45553aae"
+    },
+    {
+      "path": "src/core/CampaignEndgameBalance.js",
+      "githubBlob": "4d9a3396640ca670a2a460c3caaaa5e20d79b8f1",
+      "auditSha256": "3ae9bdaa1e52fd1897fd2c4d975af85806d9a23b01697ad8238856be2d911ff1"
+    },
+    {
+      "path": "src/core/CampaignHeroBranchStorySystem.js",
+      "githubBlob": "5bd89a339a54e124b0f5c4f543803bbdb373bb25",
+      "auditSha256": "eaa30068d7689a2260a9fc43aafff77b1ef729f35e29391e23c3f5bb136f3cd6"
+    },
+    {
+      "path": "src/core/CampaignHeroEncounterSystem.js",
+      "githubBlob": "d59562f3e599369be62a2082720b7e2c9333d8d3",
+      "auditSha256": "d6a05c59bc0dd4cb88dcb753ec937842f199f81413f343a4cd274659335c44e7"
+    },
+    {
+      "path": "src/core/CampaignHeroLoadoutSystem.js",
+      "githubBlob": "fa62fdf003f8752249c7e9bebb6d964d85086b1b",
+      "auditSha256": "e20edd47fec226eb4d24f723305b58c5e50be049ac88e88b5facccd1cd490212"
+    },
+    {
+      "path": "src/core/CampaignHeroPursuitSystem.js",
+      "githubBlob": "9e401917299d5487edc634ce4c47bd7618d87ce8",
+      "auditSha256": "0acd7f75cff3e41bf55ff09b56c3af295ba2f53873c052e5971962e7ab9b6b3e"
+    },
+    {
+      "path": "src/core/CampaignInvasionIntelSystem.js",
+      "githubBlob": "e6af2aa74d1b7ae876d082839ac332b82367741a",
+      "auditSha256": "92b4ff41946cda25f880ed98fd10052193214a5d312d5978a5992da104993d56"
+    },
+    {
+      "path": "src/core/CampaignProtagonistSystem.js",
+      "githubBlob": "61edcab282b62d6ccd73928caa40b9bb6bb030aa",
+      "auditSha256": "aad250eea13bdb919c3e1130252e3ff9446b1b1eaf29336dbbd3b019994a39d2"
+    },
+    {
+      "path": "src/core/CampaignReincarnationSystem.js",
+      "githubBlob": "2fb311c75a6962a033f6e87031213da01411d9c7",
+      "auditSha256": "d51b972a1e753c074386665085fb695f9ee42675d3506314b5c99509f5d0defa"
+    },
+    {
+      "path": "src/core/CampaignRewardSystem.js",
+      "githubBlob": "f019287eacdc5b48d53e35c06437d307ba145f38",
+      "auditSha256": "7524672703ba911d9e166a8b81c7dc24780be74779e9e63a94d2f083e11c3a03"
+    },
+    {
+      "path": "src/core/CampaignStoryArchiveSystem.js",
+      "githubBlob": "03c2bf91f29e1bc08e4ba4602bb8bd4cda69d282",
+      "auditSha256": "cad419c73ff871ceeda6058093ea776594290344d4e409b481c888a73d7b95c2"
+    },
+    {
+      "path": "src/core/CampaignStorySystem.js",
+      "githubBlob": "f88a5cff9ff95958f4f8c1c0abe3cefb4279dfdb",
+      "auditSha256": "fb0d850cb8ec1ebc539990d07f4c2937ac5e3d273dedb577b41f1e867693a86f"
+    },
+    {
+      "path": "src/core/ChapterTwoArchive401.js",
+      "githubBlob": "b71b7457a2717fb08ffa73bf49f10b2a6ef8f167",
+      "auditSha256": "f7a57167f5edb78c3225ff3bc97808cc59a0845ed31b55adf7df431d7b723187"
+    },
+    {
+      "path": "src/core/ChapterTwoRecovery402.js",
+      "githubBlob": "5979ae0a657d5d0300e2f4a7394dc17f29da590b",
+      "auditSha256": "d49cb8efce5e1ff575f1d3f6fd00043d602b7816b928ab7a0d4aab4570d375e9"
+    },
+    {
+      "path": "src/core/CollectionRewardSystem.js",
+      "githubBlob": "6ca1b8509badf4f86f0d7a46a27dffd7d4f7b21e",
+      "auditSha256": "9a8766513b23303c8333cf0097766aafa5e3cf110095d163f8afc325090b1cba"
+    },
+    {
+      "path": "src/core/CombatPower.js",
+      "githubBlob": "785c6c6d32a00b419604be804b5182d6e90e66d7",
+      "auditSha256": "a7a6167070c124083f775a9e27925142dcbb4511e14f6034f9d2699e07918f88"
+    },
+    {
+      "path": "src/core/ContextualGuideSystem.js",
+      "githubBlob": "a61053ed4cfe8b7fb3806f2c0ecb338889560751",
+      "auditSha256": "96279dda059a1d1d5f106230a504e38f067d6c9bf8c2eec034487933d883a8d0"
+    },
+    {
+      "path": "src/core/DangerSystem.js",
+      "githubBlob": "339266584c2d1c5da4de4d94c02165b7b6f7b6b7",
+      "auditSha256": "7bd0183c20f04f109c19183ab4fa61430741dfaa7a2ff536ca48ad838508c7d6"
+    },
+    {
+      "path": "src/core/DungeonMiniMapSystem.js",
+      "githubBlob": "b712c5fbb0b8465e3a41e0b85a56e113e221c430",
+      "auditSha256": "bbb5b791a7ba339393723d6c55f4b4b6dcf457b8a169829f0d4c475f0350b30e"
+    },
+    {
+      "path": "src/core/DungeonSectionSystem.js",
+      "githubBlob": "9b1753d4acf90423bab4a0a5d2184c0c90803e26",
+      "auditSha256": "03bdc1e0fe91603d88b41bc85c1fae2d795fc52b7c05d5ec4fa7d4f8c36f888f"
+    },
+    {
+      "path": "src/core/EncounterPoolSystem.js",
+      "githubBlob": "1807226c8b7e8bcd3a3149601a383fbb5daf7010",
+      "auditSha256": "f7b446bea7e9942f3e8873636f82b315a203c8d0b8188ea446d87774695653e6"
+    },
+    {
+      "path": "src/core/EndgameSystem.js",
+      "githubBlob": "dcdd554a02e4ddae1673502ff9b2993c1140cef9",
+      "auditSha256": "848d95938bd650746fd50fe4b79e68778c46a2296d5a6505c818af951f5b6958"
+    },
+    {
+      "path": "src/core/EndgameUltimateSystem.js",
+      "githubBlob": "5cbce301c91c430defab56a08abd36447b014f2e",
+      "auditSha256": "ae2f2ba0870ee7b84a75a0f545a9a4d69399678742bda5cbb76e9438c478e661"
+    },
+    {
+      "path": "src/core/EnemyScalingSystem.js",
+      "githubBlob": "cea9fa52f69d5c22f075652942a4a4185fbdd9bf",
+      "auditSha256": "26c12e62835a3515bf8bc6db2d9eb339abd2c0071e7464783b86013228995af4"
+    },
+    {
+      "path": "src/core/EquipmentAffixSystem.js",
+      "githubBlob": "5bcca171738e37dcaa0ee761a0a7fa681c8a7524",
+      "auditSha256": "ea53cd1e822438ef82bde993f596c9c0f4f669a1076a503bccdaf3c2edfe8733"
+    },
+    {
+      "path": "src/core/EquipmentDropSystem.js",
+      "githubBlob": "0149b94cae4ca4b2a71b5b1b2bfb906eb358b274",
+      "auditSha256": "969701c26bad52dce8d82c128988d5a275b88b35764b25dbf98b16ad14f8ed8a"
+    },
+    {
+      "path": "src/core/ExperiencePackSystem.js",
+      "githubBlob": "634ddf8576e1bd9819e18b0415513e0f050cf070",
+      "auditSha256": "7f6f65676025e82f0a73c88071fa937cd09e9a2a3b2a7245135feb0346b94eb1"
+    },
+    {
+      "path": "src/core/ExplorePerformanceSystem.js",
+      "githubBlob": "9ca354162732f2ffa0b02e191b1ba32bafcb8794",
+      "auditSha256": "8ea19eb5447d08482c59eacd800ca441d4286b27802d96e48e082ce98f2645df"
+    },
+    {
+      "path": "src/core/FloorBossChallengeSystem.js",
+      "githubBlob": "58a252a72b36c1e35cc1891930c1f517b18f6c2e",
+      "auditSha256": "788cce09c16f25008e9c456fe603c0d79830fa1123dd32f3d1075a785eb12386"
+    },
+    {
+      "path": "src/core/FullResetSystem.js",
+      "githubBlob": "d88d4d82074fa4e72ce3e44b69bd1b9807cf6751",
+      "auditSha256": "ca73bbc13372c3998bacebc079784f0f95cff53a1388fce12c4cdfa5ac6b0f9a"
+    },
+    {
+      "path": "src/core/GachaBalanceSystem.js",
+      "githubBlob": "6fa6d101587b271f1d6c6110fe3cd2a82bd1ed00",
+      "auditSha256": "25825cfe50c16e8df90327e82f3ffc8093f43f22db9d9e8e7b463411305f402f"
+    },
+    {
+      "path": "src/core/GmFinalePackSystem.js",
+      "githubBlob": "e0eaf605142a9b5801801501b13c5fa5d9f9f209",
+      "auditSha256": "58b8ea98d6287874af2b9f4d22610308b62f7159c32cf5be037ff7a0b38dd0a2"
+    },
+    {
+      "path": "src/core/GoldEconomySystem.js",
+      "githubBlob": "75810c87f2dfbc73e67a4211bd68d1c0bd5da20e",
+      "auditSha256": "b6ad4a18e0471c16e66277b3ba65bb1d154c1cc181470ea841fb91577a3cc6bb"
+    },
+    {
+      "path": "src/core/GoldRewardSystem.js",
+      "githubBlob": "d70027cd845dcdb951ed6f5fc9770534e7016c36",
+      "auditSha256": "e36276c158954e7e28dfd8d4f3d2ec893cbd150bf6dbdc169861d490664c0c3c"
+    },
+    {
+      "path": "src/core/HeroAllianceSystem.js",
+      "githubBlob": "c0288da36b317b3c3c3fdfe581c4da603d1aa5b1",
+      "auditSha256": "bc271f582d469b95c4ab10b3d5457da051268b59f2ad46fcbc082cfaa5043649"
+    },
+    {
+      "path": "src/core/HeroFortitudeSystem.js",
+      "githubBlob": "2c4a37a980a35b90e4339f7cbd7761106c68eb3e",
+      "auditSha256": "831cab0e6834388a03649a3a251de88c183471aa6522f9631318fd1481307e7f"
+    },
+    {
+      "path": "src/core/HeroResonanceSystem.js",
+      "githubBlob": "9ac83dc4a63045bd0a3aeadece290289c8679eda",
+      "auditSha256": "0bfaf29f031ddb1e015f8d13419eda41e783d5f7acf4db887e96ec618032f118"
+    },
+    {
+      "path": "src/core/HeroShieldDisplay.js",
+      "githubBlob": "d214938a39ba93ca6d3394981821b981a82ca885",
+      "auditSha256": "b51ac629bbdd0aa1201438acaf1b06a65de86039063f4c9ef75e1ed763ea6113"
+    },
+    {
+      "path": "src/core/HomeSkinSystem400.js",
+      "githubBlob": "1eefa16d70bfd8c883193912d8f585244e354c1e",
+      "auditSha256": "13aa7b473a27e8b4f9264b47be147e0cf1a5e010218a39c113506f06c8e2d67a"
+    },
+    {
+      "path": "src/core/LionelStarterSystem.js",
+      "githubBlob": "8b8faf1d3bcb8b23c6e02850e5355722b58f9417",
+      "auditSha256": "2fd1682b9f043fde36e58bc8725cf4888fb4e076ff5646bcb20a79b13181b96b"
+    },
+    {
+      "path": "src/core/MagicCircleSystem.js",
+      "githubBlob": "1017c9bb99011f11ce3229a48dae6af35c21c925",
+      "auditSha256": "4fe8cbd3982649e353809e72f5e36de459b83a2e74c833e1fc2414d58411f1e9"
+    },
+    {
+      "path": "src/core/NoticeSystem.js",
+      "githubBlob": "b16e7446ed5b45ad2be669a8de8fa0cab0c05341",
+      "auditSha256": "b7f8911aebce4d10b3a55d583621510adc378338e2f50e9ea368d8b82a7ea2b3"
+    },
+    {
+      "path": "src/core/PlayerNameSystem.js",
+      "githubBlob": "3a14dba36f4a5df2e39f56713b9d182349667427",
+      "auditSha256": "65824fcc05976c20581a0dc237490a51c8f58d1fdbecba9c2dda7faf5eab305b"
+    },
+    {
+      "path": "src/core/Postgame361System.js",
+      "githubBlob": "76a6772bafbe1a4018fb274b552b71ced8e2d855",
+      "auditSha256": "d1ac487735bc9a31b6c7d1c0fcda1371efb60fd12c7598165851963dba77828c"
+    },
+    {
+      "path": "src/core/ProgressionSystem.js",
+      "githubBlob": "7b77bbdc602d0cbe003c8b240ff46a1e4959bb47",
+      "auditSha256": "38839d14ac2a51b4c0868ea2f5173a3753ee3edbee34bda790c37561440f4c26"
+    },
+    {
+      "path": "src/core/RaidPresentation.js",
+      "githubBlob": "2d9451e9c98aeba8992776c497926c9a2ee5f910",
+      "auditSha256": "0a1bd37a1fe2207e90ca7f9ecb789f29793a78b2c712f690dde9963dd3490c7e"
+    },
+    {
+      "path": "src/core/ReturnRewardSystem.js",
+      "githubBlob": "3846ae461811ced5e7867b8238b28630615cfa56",
+      "auditSha256": "edab9dcbac92814118c0e9ee75d1e791e10275ef424d31214c092199f568dc3c"
+    },
+    {
+      "path": "src/core/RoyalChamberSystem.js",
+      "githubBlob": "3f46e871812da7bad609f9a0fe50a2c280d43b65",
+      "auditSha256": "d7ecbacab6040901545f3178c51f35d491006ce11d7dda11ecc7d92b67505eb9"
+    },
+    {
+      "path": "src/core/RoyalMemory379.js",
+      "githubBlob": "b26f3a601e579805c68c83383ec6f949b39ba439",
+      "auditSha256": "e12a1be673d2267fac05f375fcd16cd03f59320f8faa6891297a167f2dc482a0"
+    },
+    {
+      "path": "src/core/RoyalRevengeRewards.js",
+      "githubBlob": "4ae8975af1ba2e0f290a513ec2cc840ac19dde28",
+      "auditSha256": "4096e98ddc545ebcfd0a95dd40177728793c1aa81931430e4c3f3ad9ed79411c"
+    },
+    {
+      "path": "src/core/SecondWorldEliteSystem.js",
+      "githubBlob": "a854d8f4e370dfb9096558ffd73fd55f68974c9d",
+      "auditSha256": "7d6765c70b9e6b30aec58ba0e29859936adc60ea47075ea63fea832d38949d75"
+    },
+    {
+      "path": "src/core/SecondWorldEventSystem.js",
+      "githubBlob": "952cf706cec63a9651ec7838a3b1642e989d3a8d",
+      "auditSha256": "5b760d06ec5ef7e770064a3c9128c353147318e6ca82b8d3112ad7d4d3715fa6"
+    },
+    {
+      "path": "src/core/SecretRoomSystem.js",
+      "githubBlob": "c144eeef140dcc9f107432846bd45941755625f3",
+      "auditSha256": "4a5e1480a1a2f12d5e575cac3f8ac4b6b80a62712c7a1d4056ef96c7fe0a1d80"
+    },
+    {
+      "path": "src/core/SerialCodeSystem.js",
+      "githubBlob": "21c0149b9e151ce582a4bde663e98482999d9f24",
+      "auditSha256": "84850662fa2388080d04a5a876f15e2f131026816ccadfff4551559822f5a099"
+    },
+    {
+      "path": "src/core/SignatureWeaponSystem.js",
+      "githubBlob": "c7c7457305b8dec8bce26020291a6b8fe2d16993",
+      "auditSha256": "f021b3086b028cb4764a7717a96035f59ae6482b7dd615993fe5134bd8341a03"
+    },
+    {
+      "path": "src/core/TeamBattleBalanceSystem.js",
+      "githubBlob": "11524f73e2e50c4f9c2ca42c602914ac3f405b3e",
+      "auditSha256": "821f7303aeb936f1ddd26ee82e59d6e86cb3fbf8a0e8238ea74eec28e6b4d0e6"
+    },
+    {
+      "path": "src/core/TenGodContactSystem.js",
+      "githubBlob": "624fe15b18f4a0b7b9d924f459daf8dff94248d1",
+      "auditSha256": "39435a0c7899e91032c4013225299ae07f76bef0f0d9dbad6cb36a3d776cb104"
+    },
+    {
+      "path": "src/core/TreasureSystem.js",
+      "githubBlob": "f116af177dfc2131633c9f5d777cb4f13aab2c4f",
+      "auditSha256": "dd4bf9e30dcd9981c75d2ddfe486c0048008375f8f3978d62d883aab24f4ab7b"
+    },
+    {
+      "path": "src/core/WeekdayGachaSystem.js",
+      "githubBlob": "56750eff2206fb9f3607d501b652b45c1a859b37",
+      "auditSha256": "c4f0005dc0768e6f31e8950f392aa7efa2774068f1eb71356a12d8ffa3d49313"
+    },
+    {
+      "path": "src/core/WorldSystem.js",
+      "githubBlob": "e7801e5878790c4364e21b78997062e9f7e26e9f",
+      "auditSha256": "2447beb115b52a202bf7090e0351b178d99541724b4f57c827e9d275f5608500"
+    },
+    {
+      "path": "src/core/config.js",
+      "githubBlob": "badf8f112808c926daf61fe2cde2577a47f7c2a3",
+      "auditSha256": "5bbc1007bda012641e1d053c487ac0b304586e235ffc64f60e0f6ecbdaa322f4"
+    },
+    {
+      "path": "src/data/ChapterTwoAbilityDesign408.js",
+      "githubBlob": "f1a13351e4c6e9e832be5cee87bd8c3ccc43c021",
+      "auditSha256": "63996a272d96177a31f2f4a55a26d5c4519d034af76793577d0b4ceb2dee7993"
+    },
+    {
+      "path": "src/data/additionalSpecies.js",
+      "githubBlob": "3df99408ef4851f57906731de2c9c539fd16860b",
+      "auditSha256": "1b6bb2d78633c83ebe99eabf58909abd5ac97dc541f90f0a883ceaf1b12a2f67"
+    },
+    {
+      "path": "src/data/attributes.js",
+      "githubBlob": "22780374346a09d31ee7c239e004e8261799ac96",
+      "auditSha256": "63474168f88e8b9ee5dd1879331b733b2e096ae14624c3953dee668c0c547c39"
+    },
+    {
+      "path": "src/data/biomes.js",
+      "githubBlob": "cf5f15ed32e4b9a9280a8828c148d6d3438c8eef",
+      "auditSha256": "5efc850b860b7dacd3e35eb698d6193939c4edcfb87dfe77e0e49af6562d1083"
+    },
+    {
+      "path": "src/data/build198Species.js",
+      "githubBlob": "a31cdb239fae78251612ad971a9d1fa7c1760668",
+      "auditSha256": "949296ef803a0d39838745c1b248b30f30198b76e672527647cfe9381d8e8bd2"
+    },
+    {
+      "path": "src/data/chapterTwoPairNames406.js",
+      "githubBlob": "25ba03ae8d5a29afa5c124f07c4193f1522328d5",
+      "auditSha256": "dea44131636b62f0a1709ddc074003326a0695e64e011b53c6f6e4bbd3cf2943"
+    },
+    {
+      "path": "src/data/chapterTwoPairs386.js",
+      "githubBlob": "8927efd58c631fab9ba5999b863e8da9875e0511",
+      "auditSha256": "88d50dc356b2e1b96f2b8e6d251e6f9b8c3ecd25bcf2acc28e8803a77bef666e"
+    },
+    {
+      "path": "src/data/chapterTwoPairs387.js",
+      "githubBlob": "813ccc95d017662488c78fdb3c6df3bf81b1ba4e",
+      "auditSha256": "be63281e4c0b6c33f51c5230e68b1ba46e8d2ea7f0b28b59484dbbebfcc92a23"
+    },
+    {
+      "path": "src/data/chapterTwoPairs388.js",
+      "githubBlob": "60673b8961c2d5b9324ed739f36d61976e0de9f2",
+      "auditSha256": "697e69889e5d62c4e617029c53c3ec0efdcf41d86285c4971eb7c1f888559880"
+    },
+    {
+      "path": "src/data/chapterTwoPairs389.js",
+      "githubBlob": "c176eae961d049698305e503c28b03b4ed097a7b",
+      "auditSha256": "caea1d12e61e7cd13775fd6e8126a8d2fa02bc95d62911fbe484cbbab16038bb"
+    },
+    {
+      "path": "src/data/chapterTwoPairs390.js",
+      "githubBlob": "fbf5f873e11f28d01a3e0388eab5a263a03602c2",
+      "auditSha256": "37471ea88c17e191d0c9174f85550d71699ba16ae1fa7dd8ed52547e6dce2d2d"
+    },
+    {
+      "path": "src/data/chapterTwoPairs391.js",
+      "githubBlob": "ce25ad9cc4576b3387af5f58cca5296b44c8232a",
+      "auditSha256": "303f14fe784dbfa952a9a97c761e4d2425ea74cff4389567ce53186091d35425"
+    },
+    {
+      "path": "src/data/chapterTwoPairs392.js",
+      "githubBlob": "c2fb0b0f86f9823bffd0f9a1e495ef1eb6111a5c",
+      "auditSha256": "76bdd9cf74c5e5aad7820c4212e2be5331a506b44b02d3c44bd628fc2fa063f2"
+    },
+    {
+      "path": "src/data/chapterTwoRelics394.js",
+      "githubBlob": "dbe9c74d2aa80b9b76162c92abbf06f77934fb92",
+      "auditSha256": "210b19a366a44ffc48010cd1fcbc4696fd59b6aeda591cf685d1dce3822b6552"
+    },
+    {
+      "path": "src/data/chapterTwoSpecies383.js",
+      "githubBlob": "38f80d7b54bf97150395d2883626dbe44d63be31",
+      "auditSha256": "a2f35dd70197f8927b952826c7f7d035d2c55f794d2926a674d688c338e1c2da"
+    },
+    {
+      "path": "src/data/chapterTwoSpecies384.js",
+      "githubBlob": "a0dbf5bb89ca7d4c8aa3646b920c305d98032686",
+      "auditSha256": "c6b783204fb7ea025f4afb0d9457ce6b1a2d36648be2f8ba24a816802db6516c"
+    },
+    {
+      "path": "src/data/chapterTwoSpecies385.js",
+      "githubBlob": "5018a7eeca12b6f1829a2d72c8df2fdfd060642a",
+      "auditSha256": "d88ed10dc35a324bc60e3478a583fcffad3e09529051ab7303c81a8e95923e90"
+    },
+    {
+      "path": "src/data/chapterTwoSpecies386.js",
+      "githubBlob": "fc4f4401ad9a5c1281f33d795bf5ac58c267ee4d",
+      "auditSha256": "7f4c78354f9410c41b7861c63f409d05873e04d8014cd2850d4a133e4f6bf09b"
+    },
+    {
+      "path": "src/data/chapterTwoSpecies387.js",
+      "githubBlob": "c10b504485225e13db29caabb250c99d43715086",
+      "auditSha256": "0bbd7994269e228d3bacabc3ff744d276fb6de0837786eab603504f18bc7e2c9"
+    },
+    {
+      "path": "src/data/chapterTwoSpecies388.js",
+      "githubBlob": "f1c940ba73a595614cf69434a18cccc9879c8ef6",
+      "auditSha256": "018a24c42f9ec9ce78080e871b28afda6a370e12ed32fc9ac0cb52303a85e8be"
+    },
+    {
+      "path": "src/data/chapterTwoSpecies389.js",
+      "githubBlob": "39e4546b91de5d9671b61b2b5687539fb2541ee6",
+      "auditSha256": "042a14b90b9cf790d5c8cfc41b9f264615adb12b8fa05795ef7dfc95bb4a5394"
+    },
+    {
+      "path": "src/data/chapterTwoSpecies390.js",
+      "githubBlob": "717d0ee4927494b18b0ab8832768b3a499f3c8eb",
+      "auditSha256": "5131ffbe1325a1fccbc4ddfb7db6da8bc5479c13a20e3f847068b9eecec20c84"
+    },
+    {
+      "path": "src/data/chapterTwoSpecies391.js",
+      "githubBlob": "216e7305492f3fa6f4161445923b0def7f43d02e",
+      "auditSha256": "e21a5f6240162faa0fe9371ef591b64087b9c2d3dce3ba6f13fad5aa974f1ed9"
+    },
+    {
+      "path": "src/data/chapterTwoSpecies392.js",
+      "githubBlob": "ab2c2536dbd4235e3bb33964944e34eb93d6671d",
+      "auditSha256": "ddae9bbaaf608205f6ef77b8b2e7ff27b643e09ca143b6facf78eb49a9cb159b"
+    },
+    {
+      "path": "src/data/chapterTwoSprites383.js",
+      "githubBlob": "fb5cdfe2b59aafb072fee2fe7376165e6b8573df",
+      "auditSha256": "c7234eca51c21eb309703447a92da82d05c3458cc7f2908325f257e0169e8278"
+    },
+    {
+      "path": "src/data/chapterTwoSprites384.js",
+      "githubBlob": "e74cb6ccb97a7b3192e553fe656a22cb62c4eba1",
+      "auditSha256": "876fb9601e4435ebe09399722d4858c8ce4fac4f3623f6603265aab9cac174b4"
+    },
+    {
+      "path": "src/data/chapterTwoSprites385.js",
+      "githubBlob": "cb23f0fefe13771b51b0a196e1bae52b52cc26df",
+      "auditSha256": "53cb1b320f443231bbebe21f1fd014a4412436d4c34fedbf6a1d8e91415f355d"
+    },
+    {
+      "path": "src/data/chapterTwoSprites386.js",
+      "githubBlob": "94f39a56a0799723dd3afffe2d593a18bd11fa9a",
+      "auditSha256": "f653f656c35edbd6599d0c9f618a8b000e24fde8ebfdbfcc8912b7edff3bcb72"
+    },
+    {
+      "path": "src/data/chapterTwoSprites387.js",
+      "githubBlob": "942f059ee29fda26a667a4c71e9dda9cb91b62cd",
+      "auditSha256": "34846750bcd1ea9910ae8eb54bab2c3e0d10356d085395ea319b38f861c8df74"
+    },
+    {
+      "path": "src/data/chapterTwoSprites388.js",
+      "githubBlob": "bd74b6cd83773bea730bf0186680bc097acb15a2",
+      "auditSha256": "73fab30f8cf9bc8350bbf2fc82e29015aa6b86d3d57b3c2801dc4783b50ffa15"
+    },
+    {
+      "path": "src/data/chapterTwoSprites389.js",
+      "githubBlob": "ef1822d57ea0c7c907ffa6d773242a2e68c685b9",
+      "auditSha256": "5ee99b554860f923a89eb73d0e5b6919670f97d500515ee5e4adc3079c417e81"
+    },
+    {
+      "path": "src/data/chapterTwoSprites390.js",
+      "githubBlob": "66ff5af18f01e2a5b26fb90f291f8a8d4fc90553",
+      "auditSha256": "b896d45045512004244cb923b019532ceeaf438ca85fd72258a61bbdede494d0"
+    },
+    {
+      "path": "src/data/chapterTwoSprites391.js",
+      "githubBlob": "6b1760b048caa32236a5e2cc128660a72e435923",
+      "auditSha256": "2c64c56160a60823cc8c20b9fcb778af39bc70bed83d04b1870a30ca590280fa"
+    },
+    {
+      "path": "src/data/chapterTwoSprites392.js",
+      "githubBlob": "e44ea5fa53a464515f51bd342cb15c16ed9ebade",
+      "auditSha256": "5bdd5a8ed55d4c6fda9d4a4e90d9728f86cb864b3d3dbe60aabf85983b2c655d"
+    },
+    {
+      "path": "src/data/colors.js",
+      "githubBlob": "3e9b3e6e95158669c998fa346169c8262d28cb82",
+      "auditSha256": "bd0e9cb958f136718bae2148bb5b6da7da2c5d0ad1b74f9f192fd9e9490363d3"
+    },
+    {
+      "path": "src/data/dungeonThemes.js",
+      "githubBlob": "664cde48dc7d0bad4bb4a36a744e48a762b82b86",
+      "auditSha256": "835b2a68ea4598fb59e404506fb1cdf8d9e101805a64a0f2edcfebff0fd270bc"
+    },
+    {
+      "path": "src/data/endgameCharacters.js",
+      "githubBlob": "54d5bbab0966375e15bcfb1ad68d32f6fa1c14db",
+      "auditSha256": "7ac3759698cdecf26924e72f1e2c9494528e06b78728977aa0be7a7f646e9f57"
+    },
+    {
+      "path": "src/data/endgameSpriteBounds399.js",
+      "githubBlob": "64d759cf41a1c15469624e36e33de8a131d5b379",
+      "auditSha256": "ddb2fd92d18d355e57e2f671a8c369ab9b0c47ee27c4eb692d8c239dff32d39d"
+    },
+    {
+      "path": "src/data/endgameUltimates.js",
+      "githubBlob": "d363b202042ce3af9771afd63509878d319a4db6",
+      "auditSha256": "2266ca6a0e7fbed3261ccc050daaa8350ffd8c8ee54707a5eca0f74884da0e58"
+    },
+    {
+      "path": "src/data/equipment.js",
+      "githubBlob": "c8b43e4c46f561e95c69282268b8e2da940b5066",
+      "auditSha256": "480c1112fb785ccf22565afe97812fee4d9eb27c21f8aeac1286686de44afe87"
+    },
+    {
+      "path": "src/data/equipmentAffixes.js",
+      "githubBlob": "1400b67ce83e05de20024aa85d11881858aa6dfb",
+      "auditSha256": "617eb34172b728337e9f191e407668937fa112d5142b32d2c52e355fbe1a729a"
+    },
+    {
+      "path": "src/data/equipmentSeries.js",
+      "githubBlob": "8fe357c191dec48bc43303e0f5056c46166d7f82",
+      "auditSha256": "2de9aa1dc3c06b13d0f77edc28a0a401d0b4b3de50159aa6a262a65ab7cc9165"
+    },
+    {
+      "path": "src/data/expandedSpecies.js",
+      "githubBlob": "1ac84c2045b8e58b929cac05a5b5fb85fe32d9d3",
+      "auditSha256": "65bd9dea61b51e8cc04ee31d8843aff19336cd817aaea28b9c998e70e8c126fa"
+    },
+    {
+      "path": "src/data/floorBossEquipment.js",
+      "githubBlob": "a6b996901b240d32cc285052c130763cea11018f",
+      "auditSha256": "7cf4a2dbc1f97be66b85543300671e6d3d258d509f5ec654461627c57288bc89"
+    },
+    {
+      "path": "src/data/floorBosses.js",
+      "githubBlob": "97aecf871eb2c8613ebbf1f9894ae723e620afb8",
+      "auditSha256": "bbb8ba91f3ff012de3f07c300d4c6a95c4894014f19b826c3665860a96c230d2"
+    },
+    {
+      "path": "src/data/formationBonuses.js",
+      "githubBlob": "ad2fa309a633f4b19a728a0de72a2fe28dcbdea1",
+      "auditSha256": "9506f36a6271173f2eb43db091a330c4fdfb6e511fa3423bb02db90bf9026dfb"
+    },
+    {
+      "path": "src/data/individualSkillKits.js",
+      "githubBlob": "b6f1724d7267e0d083da7ef4be6d63c8d4d632e5",
+      "auditSha256": "e08a660db676c6e1a2caaef52bf0d4b90bc9112067e93ecfc3c89f80e0c69c13"
+    },
+    {
+      "path": "src/data/magicCircles398.js",
+      "githubBlob": "ca10ca8106a7888d055d24f18c18eb3762fdfa83",
+      "auditSha256": "51283f6fb1ed0eb1e6a587361fd880d934ddb11904a6476c09b75071a1d00db8"
+    },
+    {
+      "path": "src/data/monsterCatalog.js",
+      "githubBlob": "4532d6592e2785adc2b5f5cf0b096bfca4c2cec4",
+      "auditSha256": "a86468db63d59f38053ea50f260d926cf6029a994084c2de0456ca7fb8905e93"
+    },
+    {
+      "path": "src/data/monsterNameOverrides.js",
+      "githubBlob": "e6af017f6a6bcf3f565cadbe9691a8974fce2808",
+      "auditSha256": "5afba325bdad7d4b2589228d1fb5eef96316db7e5ae60ec2ddfd4c614eca26cd"
+    },
+    {
+      "path": "src/data/monsterRoles.js",
+      "githubBlob": "5f0d0dcb089edc23121d1e8aec461ff295f8d8db",
+      "auditSha256": "b8d78ce614e5841a87ed22c037290f80bbc3fa6664bce8282f95a5beef192f17"
+    },
+    {
+      "path": "src/data/mythicSerialSpecies.js",
+      "githubBlob": "16fa4876f7c776e38828293e7938bb4e0eeef1a3",
+      "auditSha256": "534d40f77f63edfb5c3cc424af767604f8d98d95f17b0e10c200bb2922a0d900"
+    },
+    {
+      "path": "src/data/personalities.js",
+      "githubBlob": "d65f6053f51611ec49b77853b21cead0b461d178",
+      "auditSha256": "810cd9cca88abee9bb2851eb739d306032df8b3b0396159ea240fb8399c4fc42"
+    },
+    {
+      "path": "src/data/raidSpecies.js",
+      "githubBlob": "a7c2b76b6bb80414596a38223101e2d5bafca036",
+      "auditSha256": "addeb83c84365dd7bf93a5907170973555f21658d449ec63f946e3c0f2b233ec"
+    },
+    {
+      "path": "src/data/royalChamberStory.js",
+      "githubBlob": "abf14a29db42d475e81de710dead24f4a0ea91c7",
+      "auditSha256": "01f26bc0ab84f391033062a3823d9309d8616c91de4fbc80cd14c333cba4c49c"
+    },
+    {
+      "path": "src/data/skills.js",
+      "githubBlob": "e23f4d5e8e82176ad3b5d42335235b38e2941da2",
+      "auditSha256": "7fa3e209a5ddda93f17bcebfff240c2ffb90306e82946a80206fa6c5e40fa511"
+    },
+    {
+      "path": "src/data/species.js",
+      "githubBlob": "50d2b6bd21ba19125fbc96e52cf186f1eca30f85",
+      "auditSha256": "3a0290c625618297db3cce612c758baccadc71b471bf8fab929926df58785dd3"
+    },
+    {
+      "path": "src/data/statusEffects.js",
+      "githubBlob": "3168fdc2decf0d5bdd83c5b9828e0c0ada1f8df2",
+      "auditSha256": "616c7e444b98ba10f28405b3dc76a349fa790e876fc706bd16bcca29c9838564"
+    },
+    {
+      "path": "src/events/TenGodPrelude.js",
+      "githubBlob": "bce0c1977a69bd180a7f33a74165a1fde8fdce85",
+      "auditSha256": "dd80b71f684de9b3f82039c64e46951e9a2f2e6773b4d5a3e12ddf18e3fb4339"
+    },
+    {
+      "path": "src/events/TenGodTrial.js",
+      "githubBlob": "aaab126813b5015444fa0011ec97fac155ffa4a1",
+      "auditSha256": "e43d7e5e2ae464a329860a73a0fdd4b0534b1b9c692f1ee764f493f9f47abd6f"
+    },
+    {
+      "path": "src/main.js",
+      "githubBlob": "f20499732942defe52472724f351db19324d466f",
+      "auditSha256": "92f1b1757cf8200d2fb793db3826dcba614569b0edf6e84de7bde70e02908bb1"
+    },
+    {
+      "path": "src/models/Equipment.js",
+      "githubBlob": "7780913140d65385d9019aa4396304b8b84cf875",
+      "auditSha256": "2fa7a98842ae06a56e3f5a225917961bf4f9befc0387130d3c416083e0f02c9d"
+    },
+    {
+      "path": "src/models/Monster.js",
+      "githubBlob": "b18c7e24b951816a8e7803c4bcb75231c8e477e8",
+      "auditSha256": "ac783cbd9ac8895a24ad19e722d4df0d70e174ea2f45e30015c10442be55f749"
+    },
+    {
+      "path": "src/online/OnlineMovement.js",
+      "githubBlob": "353981bb2ecf54ac6be0751deadae169c460406c",
+      "auditSha256": "e645cb05e75c1c0c965f877de3c4d72bae9c385269fe289efc74970f72d349d3"
+    },
+    {
+      "path": "src/online/OnlinePartyClient.js",
+      "githubBlob": "eab1bbe24a7e75eedde9b49f117fdb83dcbef2ff",
+      "auditSha256": "c450beeb4505421d53115def2474c7fdeeb17361541dc9f7a5bc99f58299b052"
+    },
+    {
+      "path": "src/online/OnlineProgressIsolation.js",
+      "githubBlob": "0d0f8fa9ee2ea45a54a259a4e167704793a265ca",
+      "auditSha256": "c874f219415af304fe4a3431a7285febc2289b1bc027efdd8b595c6e514c50b6"
+    },
+    {
+      "path": "src/online/OnlineTradeSystem.js",
+      "githubBlob": "cdf49d2f78274a0be2dc79719f4ebcf2ba210495",
+      "auditSha256": "55294def59f31d486bdf896ec579a0aa0de6928dab40c376357227362f42db9a"
+    },
+    {
+      "path": "src/online/OnlineTraitCompatibility411.js",
+      "githubBlob": "f95d4b5ec2b06e632f221611ef0becc11ac76ca3",
+      "auditSha256": "b9d8ffc4cb07b858096ffd8f658fbf5df99f9d9d39df28ad350ac453475bccbe"
+    },
+    {
+      "path": "src/online/OnlineViews.js",
+      "githubBlob": "17aea7e04f5cb429c1de05928b32c030fd54abd3",
+      "auditSha256": "79a0aab3396a4a71bace0bafade0bb378f61da0a9e3bbb34c3abe2314ab32897"
+    },
+    {
+      "path": "src/services/EquipmentAffixCrafting.js",
+      "githubBlob": "ccc8ef959b8ac52806d4ef569689f52c418e1ac3",
+      "auditSha256": "843c0aea9d3b3032c791e559862abb2e01adb30b2b47070c21d39d6ddb8b88b0"
+    },
+    {
+      "path": "src/services/EquipmentEnhancement.js",
+      "githubBlob": "718ff49addcd12fa0fe20056cfb53057602555cb",
+      "auditSha256": "2b1a08387c3c174b8f16c823959b9fc2d03e5fd38bfc52eeddaabfdb896a21cd"
+    },
+    {
+      "path": "src/services/EquipmentLoadoutSystem.js",
+      "githubBlob": "41b90d69bfdab095de2e29e55b6a771396df96c0",
+      "auditSha256": "3a235993afb7809ed70d7b6260d43e81f916be006e4a921873bb9fded7c5ab8f"
+    },
+    {
+      "path": "src/services/EquipmentProtection404.js",
+      "githubBlob": "61932211cbe05e6fd5b9c8ab801b5ca4343e5a27",
+      "auditSha256": "9079647a119f746c29555b318b79ce15e23b71aa92c9f4ff9fae9b5c5b8a8281"
+    },
+    {
+      "path": "src/services/EquipmentStorage.js",
+      "githubBlob": "cb34f3ca3cb934e9421549226146f0eb80ca6e25",
+      "auditSha256": "6966be90158208a57eda818a3f708f5b2bab1d2f2e611917e74e5676da16cbfc"
+    },
+    {
+      "path": "src/services/SaveService.js",
+      "githubBlob": "7f209d80b6426ba2ca1b560383abe165247d7851",
+      "auditSha256": "310fbfe647e5f7c86ce7944443988663a3d4bfe98a28695a899e88ab29365494"
+    },
+    {
+      "path": "src/services/SeriesMastery.js",
+      "githubBlob": "54f247d4b95ce97f2d83022db72c63450051cccb",
+      "auditSha256": "85c7fff82a46dc421c1f5b0ec8068dd243ac92e7d8baf9cc67b979d8e65e2318"
+    },
+    {
+      "path": "src/services/WeaponMastery.js",
+      "githubBlob": "c2d28f40cd498e636dca3bd631d496139bf97058",
+      "auditSha256": "3592b0e39f6be28a9046673f2a285d922385ab58a96d02874a47e21ce5531146"
+    },
+    {
+      "path": "src/ui/BattleBossLayout.js",
+      "githubBlob": "1b68d467cf44ee6cb2c54351750f44d485a9102b",
+      "auditSha256": "49cac89afcc68617bdc8dafc8edacf974f85829e398c0c84688160c9afc549c7"
+    },
+    {
+      "path": "src/ui/BattleCircleLayout405.js",
+      "githubBlob": "15137760055e3ffb19532b646afb57f4b5808373",
+      "auditSha256": "49521be743c460922399e53c542d9de7356617457f5c3c36de7b154e67296d8a"
+    },
+    {
+      "path": "src/ui/BattleGaugeAnimation.js",
+      "githubBlob": "6e41c3749249ba8214bd2de3391a70d2cc98564d",
+      "auditSha256": "31b1be791299576bc7e580e1fdd7d2e3f23b58e5d3b5b8c7a556a298d77614c5"
+    },
+    {
+      "path": "src/ui/BattleScreenMount.js",
+      "githubBlob": "10d5ea3fd45bd92ad94f0d07cb8ad5ca14f210c1",
+      "auditSha256": "e9c4d10dbf3339a436d273065865fb5ed8c049017687b25963b4b29af9ebbfb8"
+    },
+    {
+      "path": "src/ui/ChapterTwoCollection395.js",
+      "githubBlob": "83bb3b2ff87ce692d544c8abcc09f784873495ec",
+      "auditSha256": "5d82c753623c3e6584cc6f17e42a8297cd4522fb995b43206498fd635eb403d4"
+    },
+    {
+      "path": "src/ui/ChapterTwoGacha397.js",
+      "githubBlob": "08492b045e4524be26e73500f20318bdda0b78e5",
+      "auditSha256": "a0469c000119558480b9719723a758e40b19ca8660d624aa9b1d4fd75262c632"
+    },
+    {
+      "path": "src/ui/ChapterTwoProgress401.js",
+      "githubBlob": "3a5f7ed567407d7f214a6b9485b48c0adc1fd399",
+      "auditSha256": "30cf7513b05890eff5e8176cfe882c8c6feadaedf80250d737f35c3e4400ef14"
+    },
+    {
+      "path": "src/ui/ChapterTwoRelics394.js",
+      "githubBlob": "baecc1ee2e57309af1dae728a40d491c4d6be1d8",
+      "auditSha256": "58f367c8631624a3369cd16f6dc2e91651b880910f7ee462bd89f328e2353f8c"
+    },
+    {
+      "path": "src/ui/ChapterTwoSprite383.js",
+      "githubBlob": "9ac786725b5c5467c49f022c3791fdb28316186c",
+      "auditSha256": "ad6711b7d893e79f14e63d4d2789959de1da2d0fc1b8eb014d3307f06c7d6db5"
+    },
+    {
+      "path": "src/ui/EndgameSprite399.js",
+      "githubBlob": "f940d7d5d91a7a0a634c7b7c2d2f5b19d9e146f0",
+      "auditSha256": "4990a27cd32e50c9d7c6dff591bdf54a8ef53302aef76e90fbaa61b24de61c8b"
+    },
+    {
+      "path": "src/ui/EquipmentLockManager404.js",
+      "githubBlob": "c42baa8ea675632e12f4bef27bd224a7d0f807d6",
+      "auditSha256": "a3b163b65f2e4ee7da437a64993d5b09d109cebf8fe654f93f832a89ceed0aed"
+    },
+    {
+      "path": "src/ui/HeroAlliance396.js",
+      "githubBlob": "606231982383b916d7111f35b6ce4547002d35c1",
+      "auditSha256": "6d83d076034c903edafd9b13ae4348f6b6779a245b7b01ffb5dd45ec94f01d17"
+    },
+    {
+      "path": "src/ui/HeroPursuitHud.js",
+      "githubBlob": "93d16036709ac61a5ba1885f0296393eb61f8a09",
+      "auditSha256": "769dfc24435e7e3db163d0a61a3e48144cce70f9696d4674a2e4fc76eee347c2"
+    },
+    {
+      "path": "src/ui/HomeMotion407.js",
+      "githubBlob": "16196c10f661b7e4df0e1f21a9147c775f224e5d",
+      "auditSha256": "4e7fafdc3ee4582ad87d1231dc0f7078115bb88f14fd30c66c3d71dbc6069934"
+    },
+    {
+      "path": "src/ui/HomeSkin400.js",
+      "githubBlob": "03581542f915ebd1d885636f584580b9d10407f5",
+      "auditSha256": "7a3a4ab92317b513d9787d553eee657cce866c338150cefa2fc772d773db5d30"
+    },
+    {
+      "path": "src/ui/MagicCircleWorkshop405.js",
+      "githubBlob": "8f91be320fa21ff53e5e954d662b8257d0c68db9",
+      "auditSha256": "1b5271abe75dbccdc904d54b9b8bde9e0381aba74ab93f3a503b63df2341310d"
+    },
+    {
+      "path": "src/ui/MonsterVisual.js",
+      "githubBlob": "f19aa41bfd0883336514a9a97d7c811b313fd080",
+      "auditSha256": "14166eaaac4abb66428396455d6f0392b24f2ea8fc6323470c5c0f5fc19e696d"
+    },
+    {
+      "path": "src/ui/PairEffects409.js",
+      "githubBlob": "1ac4d16752c9358d348bd1b992b9777b2cf12722",
+      "auditSha256": "657e0987232740e8cbd9f8a5a1b4d3978df59caab0ac6826e691bf0ccf5876ee"
+    },
+    {
+      "path": "src/ui/RoyalChamberField.js",
+      "githubBlob": "6e39aeadbdeda7399c0ff07da002e4eb4e21e0d8",
+      "auditSha256": "86629364ef5a0543d68f6fbf8e7d5ac6b6e1b865bdd34efce6e982863b4cabd4"
+    },
+    {
+      "path": "src/ui/TwinStatus385.js",
+      "githubBlob": "22893ca5b4b4a17cf8791606205fd6ae77293504",
+      "auditSha256": "5d2f9dbb88404e3aa26a2f6bbfbc03758c64cf8bfc0505f6e575e8278de98f1d"
+    },
+    {
+      "path": "src/ui/components/AttributeVisual.js",
+      "githubBlob": "318f19d370d4e2899421b8994993574014810f85",
+      "auditSha256": "97582017d2a91366620f6ad64e8d8c9d5cb3165be9a2ed377c74d8a151a4e479"
+    },
+    {
+      "path": "src/ui/components/EquipmentDetails404.js",
+      "githubBlob": "78ee7b680458405f63de19829212bd4ffdf107dd",
+      "auditSha256": "38a42c7b45bf10fa744070d6f4cd5bcb474b9281f25ab9bba6c0b08cf2770e64"
+    },
+    {
+      "path": "src/ui/components/EquipmentSocketSummary.js",
+      "githubBlob": "a7d77907e92912fb4021f14be9c45193ea782848",
+      "auditSha256": "b53c75b2a53f8ed19fe28c780317a81d6fafa964ad15e029e19121633c7308ae"
+    },
+    {
+      "path": "src/ui/components/EquipmentVisual.js",
+      "githubBlob": "3dcbf2ab6e0ca6fd0dd98039725b0eb96dbbb200",
+      "auditSha256": "71091c86cc442f594eac8bec2bfe155da96e9cb2b8c1e6135790f1cdea9282ea"
+    },
+    {
+      "path": "src/ui/components/GameChrome.js",
+      "githubBlob": "d2f8becf8f3ca095b252da5e82eefd85d58dd9ff",
+      "auditSha256": "3711abc5ff5d27d4d18d61b759802b49df87114447ae070b699879672aab1d49"
+    },
+    {
+      "path": "src/ui/components/Modal.js",
+      "githubBlob": "0f3337af6503240ad4b510c923d43a49e6c29bcd",
+      "auditSha256": "4111614374c955f50415fd9b64a64a10c2f6e4884159cd5ad980011a8ad5501d"
+    },
+    {
+      "path": "src/ui/components/MonsterCard.js",
+      "githubBlob": "f196a76f709239119989aaaf0b8290c1a6ac2d0a",
+      "auditSha256": "0854729a1155e463eab0a7c6c4e5e746ef0127c13f2940fed31ed631f8355450"
+    },
+    {
+      "path": "src/ui/components/PlayerNameForm.js",
+      "githubBlob": "cb75aa3f11363a7e106f5dd90ae4db4bcca857f0",
+      "auditSha256": "0e0fa5ed4b34baa45a59a2c8d0abed6260b0c58e2deca61d9af1b1edab4bad25"
+    },
+    {
+      "path": "src/ui/components/SkillPanel.js",
+      "githubBlob": "fbe16a154ca9a34cac126c028514094f9d5a24fd",
+      "auditSha256": "7940a5711bfb475822ed60ab492759abd85e4736d70519179420334e462a99b9"
+    },
+    {
+      "path": "src/ui/screens/AbyssSkillTreeScreen.js",
+      "githubBlob": "7ec655274af76eaea18798546e60a99cecaf9acf",
+      "auditSha256": "4ffaddb850a0b0b57b2aca25e6d52da69679c94bcb8c4ff2c146dd4cba99e333"
+    },
+    {
+      "path": "src/ui/screens/BattleItemLayout.js",
+      "githubBlob": "59bbfc470e2f20acc19c9d9a4acf82d243685b8d",
+      "auditSha256": "3cb4c000d72ff26f69eb2bae9ea6a07a3d75c39bbe7f999cdfdb9be83ba74dac"
+    },
+    {
+      "path": "src/ui/screens/BattleScreen.js",
+      "githubBlob": "b279fd154d361feae89f204c0ba08590d52e1476",
+      "auditSha256": "07d062c74011268bc701346c9491f0a902813b47cbe6acdae5afd355cf9fbe28"
+    },
+    {
+      "path": "src/ui/screens/CampaignFinalFloorScreen.js",
+      "githubBlob": "305b9500e2b2b6a6839e2e919c773ce021456131",
+      "auditSha256": "9b7fb42d89aa3267fc9046798c2c272de233bd5dc93ba3d70c151ec19057a9f9"
+    },
+    {
+      "path": "src/ui/screens/CampaignIntelScreen.js",
+      "githubBlob": "4cfa250f271349383a284bedd5ac9bdf65c88048",
+      "auditSha256": "160070da70e6344c88fbe332f666f951575e3fc6746fbcad2e7eb9e50c895a2f"
+    },
+    {
+      "path": "src/ui/screens/Ending10000Screen.js",
+      "githubBlob": "2a31512d6393ee228758b285b66141bbe88b987c",
+      "auditSha256": "6a3c4854492eda83880d9ad18d2728b3c52d6187ae9e34fdb577b0068c370917"
+    },
+    {
+      "path": "src/ui/screens/Ending1000Screen.js",
+      "githubBlob": "2fc747d1fc4fa3fa718a4758da0862558263c747",
+      "auditSha256": "c280455826c0608af185c356bc28586b025a9dccfed05d1bb81825d7e9bb8712"
+    },
+    {
+      "path": "src/ui/screens/EquipmentScreen.js",
+      "githubBlob": "3532c9a80d83993648bfef23aa19a12fb6b7c52b",
+      "auditSha256": "b712db7c7782fa07156c93214bb4e4596b0745e18bb26d0616e71bfc6d4c12b1"
+    },
+    {
+      "path": "src/ui/screens/ExploreScreen.js",
+      "githubBlob": "560fc3f3247f0cc37a6125718b5b63144845a67f",
+      "auditSha256": "a5f9b60bd6467685855af0390f963c7cf8b4bc1b6ab8d07896511449cb02c195"
+    },
+    {
+      "path": "src/ui/screens/FormationLayout.js",
+      "githubBlob": "4279e004ad42579333a99b28721287dbb675a08f",
+      "auditSha256": "d6fe4e1968cec7095868ccf2bf54c30b1eea753aac290efc5cbac97ebadc8484"
+    },
+    {
+      "path": "src/ui/screens/FormationScreen.js",
+      "githubBlob": "31916068df8d458b3b47f33b9496cb1408f5e127",
+      "auditSha256": "a0ba4daa76de49d27612384834f848b71d67cbee2b9e11d2374af2b4976b1d9b"
+    },
+    {
+      "path": "src/ui/screens/GauntletScreen.js",
+      "githubBlob": "16c81d177fa62fa881cd70b100f5ea10d1c53fd4",
+      "auditSha256": "7dccf99c73a5040c51a422e228169130c293e3524e8dd46a8c3022fada58d266"
+    },
+    {
+      "path": "src/ui/screens/HomeScreen.js",
+      "githubBlob": "b625f7b1d6996805a18a9ad243159f60bad5c560",
+      "auditSha256": "7614a1b857582b3ebc9425ea24e35d362e95ea33c894920acdc407ab7f3c4da5"
+    },
+    {
+      "path": "src/ui/screens/InventoryScreen.js",
+      "githubBlob": "4642c60537e202bad849dae6f962cf2c11198bb5",
+      "auditSha256": "c928d810ac33d6ae051856cb345b97affeac00543e2ac837e952f7eea40d836a"
+    },
+    {
+      "path": "src/ui/screens/MonsterDetailScreen.js",
+      "githubBlob": "02a1972f37688f1f00af3198498e13bc73a7eb69",
+      "auditSha256": "6a5d61fd3afff6f8afe0b2b1e145ffd53c402ed5b4d383ced7d627c64d58448c"
+    },
+    {
+      "path": "src/ui/screens/MonsterListScreen.js",
+      "githubBlob": "5181e1c49da429c2d9e167ffece6f319627c030a",
+      "auditSha256": "8ed5563932f40fe0316bb40187a26170ee52687cdbb79a5e4d70661f3e9e19b2"
+    },
+    {
+      "path": "src/ui/screens/OnlinePartyScreen.js",
+      "githubBlob": "ec475e36d49b3e8357e34d1b011c583ad7c4c90b",
+      "auditSha256": "55e3bfc2e0f84e100e94e29179abd6fadc3f1c4f1391a5fb4cae57cc034e7aac"
+    },
+    {
+      "path": "src/ui/screens/SecondWorldIntroScreen.js",
+      "githubBlob": "255501b38b191fd317e2d0b873af3df322b38a56",
+      "auditSha256": "d9267e7447d7579279e9808ee5d079b135d24076fd23ce538e9f33057d06b684"
+    },
+    {
+      "path": "src/ui/screens/SettingsScreen.js",
+      "githubBlob": "4cbe8ca9425cb9a5efd5735aa8abbd812e71b29d",
+      "auditSha256": "6523918b70904e760cfbb9c30c941139048a86331ec21c39ee389405a9caba2f"
+    },
+    {
+      "path": "src/ui/screens/ShopScreen.js",
+      "githubBlob": "8ddb9a58d649b2bb03ea8177665ec0832de50aac",
+      "auditSha256": "5d359a808c432e27f7728d32106af5b7683c906d162e4fbb1383704c4c78cc0a"
+    },
+    {
+      "path": "src/ui/screens/SkillScreen.js",
+      "githubBlob": "30532d5ee5204e2683ed5bcbd9c5dd48a614e5d9",
+      "auditSha256": "62f5fc803b3c7a75b9c28d66bc5ea723caeb8ac00def97c1f142ce13a00ed754"
+    },
+    {
+      "path": "src/ui/screens/StoryArchiveScreen.js",
+      "githubBlob": "0c2b503ac72dda544b3b12682e7e8a84a88f704b",
+      "auditSha256": "26c88d3ec4788299f64035221c75cd040cf2dd3ec3b076333d6001cc8347ae44"
+    },
+    {
+      "path": "src/ui/screens/TenGodContactScreen.js",
+      "githubBlob": "aa93ebe23559f4e37a15bb8d337f69bf2bed45a7",
+      "auditSha256": "a51623409063b8d2531114f85d89de35ae2976c4fe088ff9fc957983656e7f31"
+    }
+  ]
+}

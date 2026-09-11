@@ -1,0 +1,1898 @@
+{
+  "slime": {
+    "name": "スライム",
+    "rarity": "N",
+    "role": "balanced",
+    "minFloor": 1
+  },
+  "baby_slime": {
+    "name": "ベビースライム",
+    "rarity": "N",
+    "role": "support",
+    "minFloor": 2
+  },
+  "acid_slime": {
+    "name": "酸スライム",
+    "rarity": "N",
+    "role": "debuffer",
+    "minFloor": 5
+  },
+  "ember_slime": {
+    "name": "火種スライム",
+    "rarity": "N",
+    "role": "burner",
+    "minFloor": 8
+  },
+  "frost_slime": {
+    "name": "氷結スライム",
+    "rarity": "N",
+    "role": "controller",
+    "minFloor": 12
+  },
+  "king_slime": {
+    "name": "蒼冠王アズルメルム",
+    "rarity": "SR",
+    "role": "tank",
+    "minFloor": 35
+  },
+  "cave_rat": {
+    "name": "洞窟ネズミ",
+    "rarity": "N",
+    "role": "speed",
+    "minFloor": 2
+  },
+  "fang_rat": {
+    "name": "牙ネズミ",
+    "rarity": "N",
+    "role": "critical",
+    "minFloor": 7
+  },
+  "bat": {
+    "name": "コウモリ",
+    "rarity": "N",
+    "role": "speed",
+    "minFloor": 2
+  },
+  "vampire_bat": {
+    "name": "吸血コウモリ",
+    "rarity": "R",
+    "role": "drain",
+    "minFloor": 10
+  },
+  "caterpillar": {
+    "name": "洞窟イモムシ",
+    "rarity": "N",
+    "role": "tank",
+    "minFloor": 3
+  },
+  "centipede": {
+    "name": "岩ムカデ",
+    "rarity": "N",
+    "role": "poison",
+    "minFloor": 6
+  },
+  "beetle": {
+    "name": "甲冑カブト",
+    "rarity": "N",
+    "role": "tank",
+    "minFloor": 12
+  },
+  "mantis": {
+    "name": "刃カマキリ",
+    "rarity": "R",
+    "role": "assassin",
+    "minFloor": 18
+  },
+  "skeleton": {
+    "name": "スケルトン",
+    "rarity": "N",
+    "role": "balanced",
+    "minFloor": 3
+  },
+  "skeleton_archer": {
+    "name": "骸骨弓兵",
+    "rarity": "N",
+    "role": "ranged",
+    "minFloor": 8
+  },
+  "skeleton_guard": {
+    "name": "骸骨兵士",
+    "rarity": "R",
+    "role": "tank",
+    "minFloor": 14
+  },
+  "zombie": {
+    "name": "ゾンビ",
+    "rarity": "N",
+    "role": "tank",
+    "minFloor": 9
+  },
+  "ghost": {
+    "name": "ゴースト",
+    "rarity": "N",
+    "role": "magic",
+    "minFloor": 15
+  },
+  "wraith": {
+    "name": "冥哭霊ネクロシア",
+    "rarity": "SR",
+    "role": "debuffer",
+    "minFloor": 32
+  },
+  "goblin": {
+    "name": "ゴブリン",
+    "rarity": "N",
+    "role": "speed",
+    "minFloor": 4
+  },
+  "goblin_guard": {
+    "name": "ゴブリン兵",
+    "rarity": "R",
+    "role": "tank",
+    "minFloor": 10
+  },
+  "goblin_shaman": {
+    "name": "ゴブリン呪術師",
+    "rarity": "R",
+    "role": "magic",
+    "minFloor": 16
+  },
+  "orc": {
+    "name": "オーク",
+    "rarity": "N",
+    "role": "bruiser",
+    "minFloor": 18
+  },
+  "ogre": {
+    "name": "オーガ",
+    "rarity": "R",
+    "role": "bruiser",
+    "minFloor": 28
+  },
+  "mushroom": {
+    "name": "毒キノコ",
+    "rarity": "N",
+    "role": "poison",
+    "minFloor": 5
+  },
+  "healing_mushroom": {
+    "name": "癒しキノコ",
+    "rarity": "N",
+    "role": "healer",
+    "minFloor": 14
+  },
+  "thorn_bud": {
+    "name": "トゲツボミ",
+    "rarity": "N",
+    "role": "counter",
+    "minFloor": 11
+  },
+  "mandrake": {
+    "name": "マンドラゴラ",
+    "rarity": "N",
+    "role": "debuffer",
+    "minFloor": 22
+  },
+  "fairy": {
+    "name": "妖精",
+    "rarity": "N",
+    "role": "healer",
+    "minFloor": 12
+  },
+  "willowisp": {
+    "name": "鬼火",
+    "rarity": "N",
+    "role": "magic",
+    "minFloor": 17
+  },
+  "water_spirit": {
+    "name": "水精",
+    "rarity": "N",
+    "role": "support",
+    "minFloor": 21
+  },
+  "stone_golem": {
+    "name": "石ゴーレム",
+    "rarity": "N",
+    "role": "tank",
+    "minFloor": 25
+  },
+  "clockwork": {
+    "name": "機装兵ギアハルト",
+    "rarity": "N",
+    "role": "balanced",
+    "minFloor": 33
+  },
+  "wolf": {
+    "name": "洞窟ウルフ",
+    "rarity": "N",
+    "role": "speed",
+    "minFloor": 16
+  },
+  "dire_wolf": {
+    "name": "月喰狼ディアヴォルグ",
+    "rarity": "SR",
+    "role": "bruiser",
+    "minFloor": 38
+  },
+  "bear": {
+    "name": "岩砕獣グランガルド",
+    "rarity": "N",
+    "role": "tank",
+    "minFloor": 30
+  },
+  "lizardman": {
+    "name": "リザードマン",
+    "rarity": "N",
+    "role": "balanced",
+    "minFloor": 24
+  },
+  "salamander": {
+    "name": "焔尾竜サラマンディア",
+    "rarity": "R",
+    "role": "burner",
+    "minFloor": 36
+  },
+  "harpy": {
+    "name": "天裂鳥ハルピュリア",
+    "rarity": "N",
+    "role": "speed",
+    "minFloor": 31
+  },
+  "gargoyle": {
+    "name": "石翼魔ガルゴディア",
+    "rarity": "R",
+    "role": "tank",
+    "minFloor": 40
+  },
+  "wyvern": {
+    "name": "翠嵐竜ヴァイゼル",
+    "rarity": "SR",
+    "role": "bruiser",
+    "minFloor": 45
+  },
+  "dragon": {
+    "name": "紅蓮竜ドラグニール",
+    "rarity": "SSR",
+    "role": "burst",
+    "minFloor": 70
+  },
+  "frost_dragon": {
+    "name": "氷獄竜グレイシオン",
+    "rarity": "SSR",
+    "role": "controller",
+    "minFloor": 110
+  },
+  "ancient_dragon": {
+    "name": "太古竜エルドラグーン",
+    "rarity": "LR",
+    "role": "burst",
+    "minFloor": 180
+  },
+  "mimic": {
+    "name": "ミミック",
+    "rarity": "SR",
+    "role": "ambush",
+    "minFloor": 28
+  },
+  "dark_knight": {
+    "name": "黒葬騎ディアブロス",
+    "rarity": "SSR",
+    "role": "tank",
+    "minFloor": 75
+  },
+  "angelic_orb": {
+    "name": "聖環精ルミナリエ",
+    "rarity": "SR",
+    "role": "support",
+    "minFloor": 55
+  },
+  "ash_hound": {
+    "name": "灰燼牙アッシュガルム",
+    "rarity": "R",
+    "role": "speed",
+    "minFloor": 48
+  },
+  "mud_crab": {
+    "name": "泥殻将グラブロス",
+    "rarity": "R",
+    "role": "tank",
+    "minFloor": 62
+  },
+  "spark_moth": {
+    "name": "雷燐蛾ヴォルモルフォ",
+    "rarity": "R",
+    "role": "speed",
+    "minFloor": 76
+  },
+  "reef_serpent": {
+    "name": "珊瑚蛇コラルナーガ",
+    "rarity": "R",
+    "role": "poison",
+    "minFloor": 92
+  },
+  "forest_ape": {
+    "name": "森厳猿グロウコング",
+    "rarity": "R",
+    "role": "bruiser",
+    "minFloor": 108
+  },
+  "lantern_ghost": {
+    "name": "灯幽霊ルクスファントム",
+    "rarity": "R",
+    "role": "support",
+    "minFloor": 124
+  },
+  "iron_turtle": {
+    "name": "鉄城亀フェルムトルタ",
+    "rarity": "R",
+    "role": "tank",
+    "minFloor": 140
+  },
+  "storm_crow": {
+    "name": "嵐告鴉テンペストクロウ",
+    "rarity": "R",
+    "role": "critical",
+    "minFloor": 156
+  },
+  "cinder_imp": {
+    "name": "火葬鬼シンダーグリム",
+    "rarity": "R",
+    "role": "burner",
+    "minFloor": 172
+  },
+  "moss_golem": {
+    "name": "苔王機モスゴリアス",
+    "rarity": "R",
+    "role": "tank",
+    "minFloor": 188
+  },
+  "moon_hare": {
+    "name": "月迅兎ルナレプス",
+    "rarity": "R",
+    "role": "speed",
+    "minFloor": 204
+  },
+  "venom_frog": {
+    "name": "毒瘴蛙ヴェノムガマ",
+    "rarity": "R",
+    "role": "debuffer",
+    "minFloor": 220
+  },
+  "sand_scorpion": {
+    "name": "砂鉄蠍サンドレギオン",
+    "rarity": "R",
+    "role": "poison",
+    "minFloor": 236
+  },
+  "mist_jelly": {
+    "name": "霧海母ミストメドゥーサ",
+    "rarity": "R",
+    "role": "support",
+    "minFloor": 252
+  },
+  "blade_boar": {
+    "name": "断角猪ブレイドボア",
+    "rarity": "R",
+    "role": "bruiser",
+    "minFloor": 268
+  },
+  "crystal_bee": {
+    "name": "晶針蜂クリスタヴェスパ",
+    "rarity": "R",
+    "role": "critical",
+    "minFloor": 284
+  },
+  "dusk_owl": {
+    "name": "宵眼梟ノクティス",
+    "rarity": "R",
+    "role": "magic",
+    "minFloor": 300
+  },
+  "root_guard": {
+    "name": "根城兵ルートバスティオン",
+    "rarity": "R",
+    "role": "tank",
+    "minFloor": 316
+  },
+  "ember_fox": {
+    "name": "焔妖狐イグナレナード",
+    "rarity": "R",
+    "role": "magic",
+    "minFloor": 332
+  },
+  "river_kappa": {
+    "name": "水門妖カワロウ",
+    "rarity": "R",
+    "role": "controller",
+    "minFloor": 348
+  },
+  "copper_automaton": {
+    "name": "銅機将カッパーレギス",
+    "rarity": "R",
+    "role": "balanced",
+    "minFloor": 364
+  },
+  "shade_cat": {
+    "name": "影爪猫ノワールフェレス",
+    "rarity": "R",
+    "role": "ambush",
+    "minFloor": 380
+  },
+  "flame_lion": {
+    "name": "炎冠獅レオイグニス",
+    "rarity": "SR",
+    "role": "bruiser",
+    "minFloor": 420
+  },
+  "tide_siren": {
+    "name": "蒼歌姫セイレーネ",
+    "rarity": "SR",
+    "role": "support",
+    "minFloor": 460
+  },
+  "thunder_raptor": {
+    "name": "雷迅鳥ヴォルトラプター",
+    "rarity": "SR",
+    "role": "speed",
+    "minFloor": 500
+  },
+  "grave_bishop": {
+    "name": "葬列司祭ネクロビショップ",
+    "rarity": "SR",
+    "role": "healer",
+    "minFloor": 540
+  },
+  "jade_mantis": {
+    "name": "翡翠刃ジェイドリーパー",
+    "rarity": "SR",
+    "role": "assassin",
+    "minFloor": 580
+  },
+  "iron_minotaur": {
+    "name": "鉄角王ミノスフェルム",
+    "rarity": "SR",
+    "role": "tank",
+    "minFloor": 620
+  },
+  "snow_leopard": {
+    "name": "雪影豹ニヴァルパルド",
+    "rarity": "SR",
+    "role": "critical",
+    "minFloor": 660
+  },
+  "lava_tortoise": {
+    "name": "溶界亀マグナトルタ",
+    "rarity": "SR",
+    "role": "tank",
+    "minFloor": 700
+  },
+  "dream_eater": {
+    "name": "夢蝕獣モルフェイーター",
+    "rarity": "SR",
+    "role": "debuffer",
+    "minFloor": 740
+  },
+  "sky_stag": {
+    "name": "天角聖鹿セレススタッグ",
+    "rarity": "SR",
+    "role": "support",
+    "minFloor": 780
+  },
+  "rune_golem": {
+    "name": "魔紋巨兵ルーンゴリアス",
+    "rarity": "SR",
+    "role": "tank",
+    "minFloor": 820
+  },
+  "venom_wyvern": {
+    "name": "毒翼竜ヴェノヴァイゼル",
+    "rarity": "SR",
+    "role": "poison",
+    "minFloor": 860
+  },
+  "rose_knight": {
+    "name": "薔薇葬騎ローゼンヴァイス",
+    "rarity": "SR",
+    "role": "counter",
+    "minFloor": 900
+  },
+  "sea_basilisk": {
+    "name": "海魔眼バシリオス",
+    "rarity": "SR",
+    "role": "controller",
+    "minFloor": 940
+  },
+  "storm_djinn": {
+    "name": "嵐魔公ジンテンペスタ",
+    "rarity": "SR",
+    "role": "magic",
+    "minFloor": 980
+  },
+  "bone_chimera": {
+    "name": "骨縫獣キメラモルド",
+    "rarity": "SR",
+    "role": "bruiser",
+    "minFloor": 1020
+  },
+  "golden_jackal": {
+    "name": "黄金冥犬アウルム",
+    "rarity": "SR",
+    "role": "speed",
+    "minFloor": 1060
+  },
+  "magma_beetle": {
+    "name": "熔甲王マグマスカラベ",
+    "rarity": "SR",
+    "role": "tank",
+    "minFloor": 1100
+  },
+  "frost_dryad": {
+    "name": "氷樹姫ニヴルドリアード",
+    "rarity": "SR",
+    "role": "healer",
+    "minFloor": 1140
+  },
+  "clockwork_mage": {
+    "name": "機巧賢者クロノマギア",
+    "rarity": "SR",
+    "role": "magic",
+    "minFloor": 1180
+  },
+  "shadow_panther": {
+    "name": "影葬豹ノワールパンサー",
+    "rarity": "SR",
+    "role": "assassin",
+    "minFloor": 1220
+  },
+  "sun_priestess": {
+    "name": "日輪聖女ソラリア",
+    "rarity": "SR",
+    "role": "healer",
+    "minFloor": 1260
+  },
+  "deep_octopus": {
+    "name": "深海魔皇オクトクラーケン",
+    "rarity": "SR",
+    "role": "controller",
+    "minFloor": 1300
+  },
+  "crystal_gryphon": {
+    "name": "晶翼王グリフォンアルカ",
+    "rarity": "SR",
+    "role": "balanced",
+    "minFloor": 1340
+  },
+  "inferno_cerberus": {
+    "name": "煉獄番犬ケルベロスイグナ",
+    "rarity": "SSR",
+    "role": "burst",
+    "minFloor": 1380
+  },
+  "leviathan_spawn": {
+    "name": "海嘯幼竜リヴァイアス",
+    "rarity": "SSR",
+    "role": "tank",
+    "minFloor": 1450
+  },
+  "storm_phoenix": {
+    "name": "雷鳴不死鳥フェニクスヴォルト",
+    "rarity": "SSR",
+    "role": "burst",
+    "minFloor": 1520
+  },
+  "abyss_reaper": {
+    "name": "冥淵死神アビスモルテ",
+    "rarity": "SSR",
+    "role": "assassin",
+    "minFloor": 1590
+  },
+  "world_tree_guardian": {
+    "name": "世界樹護王ユグドガルド",
+    "rarity": "SSR",
+    "role": "tank",
+    "minFloor": 1660
+  },
+  "moon_valkyrie": {
+    "name": "月影戦姫ヴァルキュリア",
+    "rarity": "SSR",
+    "role": "balanced",
+    "minFloor": 1730
+  },
+  "adamant_golem": {
+    "name": "金剛神機アダマント",
+    "rarity": "SSR",
+    "role": "tank",
+    "minFloor": 1800
+  },
+  "nine_tail_fox": {
+    "name": "九天妖狐クズノハ",
+    "rarity": "SSR",
+    "role": "magic",
+    "minFloor": 1870
+  },
+  "kraken_knight": {
+    "name": "海魔騎クラーケンロード",
+    "rarity": "SSR",
+    "role": "bruiser",
+    "minFloor": 1940
+  },
+  "thunder_emperor": {
+    "name": "雷帝獣ヴァジュラ",
+    "rarity": "SSR",
+    "role": "burst",
+    "minFloor": 2010
+  },
+  "void_mantis": {
+    "name": "虚無刃ヴォイドリーパー",
+    "rarity": "SSR",
+    "role": "assassin",
+    "minFloor": 2080
+  },
+  "aurora_unicorn": {
+    "name": "極光聖獣アウロラ",
+    "rarity": "SSR",
+    "role": "support",
+    "minFloor": 2150
+  },
+  "plague_dragon": {
+    "name": "疫界竜ペスティドラ",
+    "rarity": "SSR",
+    "role": "poison",
+    "minFloor": 2220
+  },
+  "cyclone_garuda": {
+    "name": "天颶鳥ガルーダテンペスト",
+    "rarity": "SSR",
+    "role": "speed",
+    "minFloor": 2290
+  },
+  "earth_colossus": {
+    "name": "地殻巨神テラコロッサス",
+    "rarity": "SSR",
+    "role": "tank",
+    "minFloor": 2360
+  },
+  "blood_count": {
+    "name": "血月侯ヴラドノクス",
+    "rarity": "SSR",
+    "role": "drain",
+    "minFloor": 2430
+  },
+  "solar_sphinx": {
+    "name": "日輪賢獣ソルスフィンクス",
+    "rarity": "SSR",
+    "role": "controller",
+    "minFloor": 2500
+  },
+  "glacier_queen": {
+    "name": "氷界女帝グラシエラ",
+    "rarity": "SSR",
+    "role": "magic",
+    "minFloor": 2570
+  },
+  "volcano_titan": {
+    "name": "爆界巨神ヴォルカノス",
+    "rarity": "SSR",
+    "role": "bruiser",
+    "minFloor": 2640
+  },
+  "oracle_owl": {
+    "name": "神託梟オラクルノクス",
+    "rarity": "SSR",
+    "role": "support",
+    "minFloor": 2710
+  },
+  "hell_butterfly": {
+    "name": "冥炎蝶ヘルモルフォ",
+    "rarity": "SSR",
+    "role": "debuffer",
+    "minFloor": 2780
+  },
+  "jade_dragon": {
+    "name": "翠命竜エメラルディア",
+    "rarity": "SSR",
+    "role": "balanced",
+    "minFloor": 2850
+  },
+  "dread_centaur": {
+    "name": "戦慄騎ケンタウロス",
+    "rarity": "SSR",
+    "role": "bruiser",
+    "minFloor": 2920
+  },
+  "star_automaton": {
+    "name": "星辰機神アステリオン",
+    "rarity": "SSR",
+    "role": "balanced",
+    "minFloor": 2990
+  },
+  "tempest_serpent": {
+    "name": "天嵐蛇王テンペストナーガ",
+    "rarity": "SSR",
+    "role": "controller",
+    "minFloor": 3060
+  },
+  "royal_mimic": {
+    "name": "王喰箱ミミックレガリア",
+    "rarity": "SSR",
+    "role": "ambush",
+    "minFloor": 3130
+  },
+  "celestial_whale": {
+    "name": "天穹鯨セレスティア",
+    "rarity": "SSR",
+    "role": "tank",
+    "minFloor": 3200
+  },
+  "ragnarok_wolf": {
+    "name": "終刻狼ラグナロク",
+    "rarity": "UR",
+    "role": "assassin",
+    "minFloor": 3300
+  },
+  "genesis_slime": {
+    "name": "創界粘神ジェネシス",
+    "rarity": "UR",
+    "role": "balanced",
+    "minFloor": 3400
+  },
+  "abyssal_hydra": {
+    "name": "冥毒九頭竜ヒュドラ",
+    "rarity": "UR",
+    "role": "poison",
+    "minFloor": 3500
+  },
+  "seraphim": {
+    "name": "熾天聖セラフィエル",
+    "rarity": "UR",
+    "role": "healer",
+    "minFloor": 3600
+  },
+  "demon_lord": {
+    "name": "魔皇ディアボロス",
+    "rarity": "UR",
+    "role": "burst",
+    "minFloor": 3700
+  },
+  "sea_empress": {
+    "name": "海皇姫ネレイディア",
+    "rarity": "UR",
+    "role": "controller",
+    "minFloor": 3800
+  },
+  "thunder_kirin": {
+    "name": "雷霆麒麟ヴァジュラン",
+    "rarity": "UR",
+    "role": "speed",
+    "minFloor": 3900
+  },
+  "time_keeper": {
+    "name": "刻律機クロノギア",
+    "rarity": "UR",
+    "role": "support",
+    "minFloor": 4000
+  },
+  "eclipse_dragon": {
+    "name": "蝕界竜エクリプシア",
+    "rarity": "UR",
+    "role": "burst",
+    "minFloor": 4100
+  },
+  "emerald_behemoth": {
+    "name": "翠嶺巨獣ベヒモルド",
+    "rarity": "UR",
+    "role": "tank",
+    "minFloor": 4200
+  },
+  "frost_fenrir": {
+    "name": "氷獄狼フェンリシア",
+    "rarity": "UR",
+    "role": "critical",
+    "minFloor": 4300
+  },
+  "flame_ifrit": {
+    "name": "獄炎魔公イフリート",
+    "rarity": "UR",
+    "role": "burner",
+    "minFloor": 4400
+  },
+  "celestial_pegasus": {
+    "name": "天翔聖馬ペガシエル",
+    "rarity": "UR",
+    "role": "support",
+    "minFloor": 4500
+  },
+  "underworld_king": {
+    "name": "冥府皇ハデスノクス",
+    "rarity": "UR",
+    "role": "drain",
+    "minFloor": 4600
+  },
+  "mechanical_deity": {
+    "name": "雷装機神デウスマキナ",
+    "rarity": "UR",
+    "role": "tank",
+    "minFloor": 4700
+  },
+  "poison_queen": {
+    "name": "蠱毒女帝ヴェネフィカ",
+    "rarity": "UR",
+    "role": "debuffer",
+    "minFloor": 4800
+  },
+  "storm_leviathan": {
+    "name": "嵐海覇竜リヴァイオン",
+    "rarity": "UR",
+    "role": "controller",
+    "minFloor": 4900
+  },
+  "moon_rabbit_sage": {
+    "name": "月仙兎アルミラージュ",
+    "rarity": "UR",
+    "role": "magic",
+    "minFloor": 5000
+  },
+  "sun_garuda": {
+    "name": "日輪神鳥ソルガルーダ",
+    "rarity": "UR",
+    "role": "burst",
+    "minFloor": 5100
+  },
+  "obsidian_titan": {
+    "name": "黒曜巨神オブシディア",
+    "rarity": "UR",
+    "role": "tank",
+    "minFloor": 5200
+  },
+  "dream_dragon": {
+    "name": "夢幻竜モルフェドラ",
+    "rarity": "UR",
+    "role": "controller",
+    "minFloor": 5300
+  },
+  "sacred_turtle": {
+    "name": "玄天聖亀ゲンブロス",
+    "rarity": "UR",
+    "role": "tank",
+    "minFloor": 5400
+  },
+  "chaos_chimera": {
+    "name": "混沌獣キメラカオス",
+    "rarity": "UR",
+    "role": "bruiser",
+    "minFloor": 5500
+  },
+  "crystal_empress": {
+    "name": "晶界女帝クリスタリア",
+    "rarity": "UR",
+    "role": "magic",
+    "minFloor": 5600
+  },
+  "blood_valkyrie": {
+    "name": "血月戦姫ヴァルブラッド",
+    "rarity": "UR",
+    "role": "drain",
+    "minFloor": 5700
+  },
+  "lightning_raijin": {
+    "name": "轟雷鬼神ライジオウ",
+    "rarity": "UR",
+    "role": "burst",
+    "minFloor": 5800
+  },
+  "forest_cernunnos": {
+    "name": "森羅王ケルヌンノス",
+    "rarity": "UR",
+    "role": "support",
+    "minFloor": 5900
+  },
+  "ocean_poseidon": {
+    "name": "蒼海神王ポセイドン",
+    "rarity": "UR",
+    "role": "bruiser",
+    "minFloor": 6000
+  },
+  "desert_anubis": {
+    "name": "砂冥神アヌビス",
+    "rarity": "UR",
+    "role": "assassin",
+    "minFloor": 6100
+  },
+  "astral_sphinx": {
+    "name": "星界賢王アストラスフィンクス",
+    "rarity": "UR",
+    "role": "controller",
+    "minFloor": 6200
+  },
+  "omega_slime": {
+    "name": "極粘神オメガメルム",
+    "rarity": "LR",
+    "role": "balanced",
+    "minFloor": 6400
+  },
+  "bahamut": {
+    "name": "天壊竜帝バハムート",
+    "rarity": "LR",
+    "role": "burst",
+    "minFloor": 6520
+  },
+  "apocalypse_dragon": {
+    "name": "黙示滅竜アポカリオン",
+    "rarity": "LR",
+    "role": "burst",
+    "minFloor": 6640
+  },
+  "primordial_phoenix": {
+    "name": "原初不死鳥フェニクシア",
+    "rarity": "LR",
+    "role": "healer",
+    "minFloor": 6760
+  },
+  "king_behemoth": {
+    "name": "獣界覇王ベヒモルク",
+    "rarity": "LR",
+    "role": "tank",
+    "minFloor": 6880
+  },
+  "abyssal_leviathan": {
+    "name": "冥海竜皇リヴァイアサン",
+    "rarity": "LR",
+    "role": "controller",
+    "minFloor": 7000
+  },
+  "god_machine_ark": {
+    "name": "神滅機アーク・ノア",
+    "rarity": "LR",
+    "role": "balanced",
+    "minFloor": 7120
+  },
+  "void_emperor": {
+    "name": "虚無皇ヴォイドレクス",
+    "rarity": "LR",
+    "role": "magic",
+    "minFloor": 7240
+  },
+  "eternal_valkyrie": {
+    "name": "永劫戦姫エタルキア",
+    "rarity": "LR",
+    "role": "bruiser",
+    "minFloor": 7360
+  },
+  "world_serpent": {
+    "name": "終環蛇ヨルムンガルド",
+    "rarity": "LR",
+    "role": "tank",
+    "minFloor": 7480
+  },
+  "fallen_seraph": {
+    "name": "堕天熾使アザリエル",
+    "rarity": "LR",
+    "role": "debuffer",
+    "minFloor": 7600
+  },
+  "chaos_king": {
+    "name": "混沌魔皇カオスディア",
+    "rarity": "LR",
+    "role": "burst",
+    "minFloor": 7720
+  },
+  "genesis_golem": {
+    "name": "創世巨神ジェネゴリア",
+    "rarity": "LR",
+    "role": "tank",
+    "minFloor": 7840
+  },
+  "death_lord": {
+    "name": "死界覇王モルディウス",
+    "rarity": "LR",
+    "role": "drain",
+    "minFloor": 7960
+  },
+  "celestial_kirin": {
+    "name": "天帝麒麟セイラン",
+    "rarity": "LR",
+    "role": "speed",
+    "minFloor": 8080
+  },
+  "infinite_hydra": {
+    "name": "無窮九頭竜インフィニドラ",
+    "rarity": "LR",
+    "role": "poison",
+    "minFloor": 8200
+  },
+  "flame_sovereign": {
+    "name": "炎界皇イグナシオン",
+    "rarity": "LR",
+    "role": "burner",
+    "minFloor": 8320
+  },
+  "frost_sovereign": {
+    "name": "氷界皇ニヴルシア",
+    "rarity": "LR",
+    "role": "controller",
+    "minFloor": 8440
+  },
+  "storm_sovereign": {
+    "name": "星葬姫ルミナリア",
+    "rarity": "LR",
+    "role": "speed",
+    "minFloor": 8560
+  },
+  "earth_sovereign": {
+    "name": "黒曜竜ヴァルグリム",
+    "rarity": "LR",
+    "role": "tank",
+    "minFloor": 8680
+  },
+  "light_sovereign": {
+    "name": "月蝕狼ルナファング",
+    "rarity": "LR",
+    "role": "support",
+    "minFloor": 8800
+  },
+  "dark_sovereign": {
+    "name": "機神アークノヴァ",
+    "rarity": "LR",
+    "role": "magic",
+    "minFloor": 8920
+  },
+  "time_dragon": {
+    "name": "深淵海姫セイレーネ",
+    "rarity": "LR",
+    "role": "controller",
+    "minFloor": 9040
+  },
+  "space_whale": {
+    "name": "天雷獅子レグルス",
+    "rarity": "LR",
+    "role": "tank",
+    "minFloor": 9160
+  },
+  "fate_weaver": {
+    "name": "夢妖精ルミエラ",
+    "rarity": "LR",
+    "role": "support",
+    "minFloor": 9280
+  },
+  "dream_emperor": {
+    "name": "翠嵐グリフォン",
+    "rarity": "LR",
+    "role": "magic",
+    "minFloor": 9400
+  },
+  "nightmare_empress": {
+    "name": "灰燼鬼カグラ",
+    "rarity": "LR",
+    "role": "debuffer",
+    "minFloor": 9520
+  },
+  "crownless_hero": {
+    "name": "虚無鯨アビサリス",
+    "rarity": "LR",
+    "role": "bruiser",
+    "minFloor": 9640
+  },
+  "abyss_gatekeeper": {
+    "name": "暁剣姫アウレリア",
+    "rarity": "LR",
+    "role": "tank",
+    "minFloor": 9760
+  },
+  "creator_dragon": {
+    "name": "紅蓮不死鳥イグニフェル",
+    "rarity": "神話",
+    "role": "burst",
+    "minFloor": 7000
+  },
+  "end_bringer": {
+    "name": "霊樹王ユグレシア",
+    "rarity": "神話",
+    "role": "assassin",
+    "minFloor": 7100
+  },
+  "abyss_overlord": {
+    "name": "蒼海竜リヴァニオン",
+    "rarity": "神話",
+    "role": "bruiser",
+    "minFloor": 7200
+  },
+  "eternal_sun": {
+    "name": "白夜狐ミコト",
+    "rarity": "神話",
+    "role": "healer",
+    "minFloor": 7300
+  },
+  "eternal_moon": {
+    "name": "星鋼騎士オルデネス",
+    "rarity": "神話",
+    "role": "controller",
+    "minFloor": 7400
+  },
+  "sea_origin": {
+    "name": "時輪兎ラピディア",
+    "rarity": "神話",
+    "role": "tank",
+    "minFloor": 7500
+  },
+  "earth_mother": {
+    "name": "砂海賢獣スフィレオン",
+    "rarity": "神話",
+    "role": "support",
+    "minFloor": 7600
+  },
+  "sky_father": {
+    "name": "夢織人形エルメリア",
+    "rarity": "神話",
+    "role": "burst",
+    "minFloor": 7700
+  },
+  "thunder_origin": {
+    "name": "古代亀ガイアトラス",
+    "rarity": "神話",
+    "role": "burst",
+    "minFloor": 7800
+  },
+  "flame_origin": {
+    "name": "月蝕魔女セレノヴァ",
+    "rarity": "神話",
+    "role": "burner",
+    "minFloor": 7900
+  },
+  "frost_origin": {
+    "name": "雷帝獣ヴァジリオン",
+    "rarity": "神話",
+    "role": "controller",
+    "minFloor": 8000
+  },
+  "wind_origin": {
+    "name": "冥界歌姫オルフェリア",
+    "rarity": "神話",
+    "role": "speed",
+    "minFloor": 8100
+  },
+  "life_tree": {
+    "name": "天空機神アルカノヴァ",
+    "rarity": "神話",
+    "role": "healer",
+    "minFloor": 8200
+  },
+  "death_arbiter": {
+    "name": "翠聖鹿フィオルネス",
+    "rarity": "神話",
+    "role": "drain",
+    "minFloor": 8300
+  },
+  "time_archon": {
+    "name": "終炎鬼カグラ",
+    "rarity": "神話",
+    "role": "controller",
+    "minFloor": 8400
+  },
+  "space_archon": {
+    "name": "星詠ノクティエル",
+    "rarity": "神話",
+    "role": "magic",
+    "minFloor": 8500
+  },
+  "fate_archon": {
+    "name": "双界竜姫ヴェルディア",
+    "rarity": "神話",
+    "role": "support",
+    "minFloor": 8600
+  },
+  "dream_archon": {
+    "name": "虚無鯨アストラリス",
+    "rarity": "神話",
+    "role": "magic",
+    "minFloor": 8700
+  },
+  "nightmare_archon": {
+    "name": "天界守護神アルクゼオン",
+    "rarity": "神話",
+    "role": "debuffer",
+    "minFloor": 8800
+  },
+  "chaos_archon": {
+    "name": "終月剣聖ルナセリオ",
+    "rarity": "神話",
+    "role": "burst",
+    "minFloor": 8900
+  },
+  "order_archon": {
+    "name": "天雷巫女イシュラナ",
+    "rarity": "神話",
+    "role": "balanced",
+    "minFloor": 9000
+  },
+  "light_archon": {
+    "name": "冥炎皇子ヴァルグレイ",
+    "rarity": "神話",
+    "role": "healer",
+    "minFloor": 9100
+  },
+  "dark_archon": {
+    "name": "聖海歌姫ネレイディア",
+    "rarity": "神話",
+    "role": "assassin",
+    "minFloor": 9200
+  },
+  "star_archon": {
+    "name": "時空魔導士クロノエル",
+    "rarity": "神話",
+    "role": "burst",
+    "minFloor": 9300
+  },
+  "void_archon": {
+    "name": "神樹守姫アルヴェリア",
+    "rarity": "神話",
+    "role": "controller",
+    "minFloor": 9400
+  },
+  "infinite_dragon": {
+    "name": "白銀拳帝レグナード",
+    "rarity": "神話",
+    "role": "balanced",
+    "minFloor": 9500
+  },
+  "thousand_arms": {
+    "name": "夢幻術師リュミエラ",
+    "rarity": "神話",
+    "role": "bruiser",
+    "minFloor": 9600
+  },
+  "divine_machine": {
+    "name": "黒曜銃聖ゼクスレイン",
+    "rarity": "神話",
+    "role": "tank",
+    "minFloor": 9700
+  },
+  "first_monster": {
+    "name": "星冠女帝アステリア",
+    "rarity": "神話",
+    "role": "poison",
+    "minFloor": 9800
+  },
+  "abyss_dominion": {
+    "name": "零界覇王ネメシアル",
+    "rarity": "神話",
+    "role": "burst",
+    "minFloor": 9900
+  },
+  "eraser_slime": {
+    "name": "深海灯クラゲ",
+    "rarity": "N",
+    "role": "tank",
+    "minFloor": 6
+  },
+  "pushpin_roller": {
+    "name": "蒼殻ダイオウグソク",
+    "rarity": "N",
+    "role": "critical",
+    "minFloor": 13
+  },
+  "pencil_mouse": {
+    "name": "深棘ハリウオ",
+    "rarity": "N",
+    "role": "speed",
+    "minFloor": 20
+  },
+  "stapler_crab": {
+    "name": "古殻要塞ガニ",
+    "rarity": "R",
+    "role": "tank",
+    "minFloor": 58
+  },
+  "compass_beetle": {
+    "name": "星盤オオグソク",
+    "rarity": "R",
+    "role": "assassin",
+    "minFloor": 74
+  },
+  "gluepot_mimic": {
+    "name": "深淵壺イソギンチャク",
+    "rarity": "R",
+    "role": "controller",
+    "minFloor": 92
+  },
+  "fountain_pen_mage": {
+    "name": "深淵魔導イカ",
+    "rarity": "SR",
+    "role": "magic",
+    "minFloor": 210
+  },
+  "correction_ghost": {
+    "name": "幽光オバケクラゲ",
+    "rarity": "SR",
+    "role": "support",
+    "minFloor": 245
+  },
+  "scissor_mantis": {
+    "name": "鋏刃アビスロブスター",
+    "rarity": "SR",
+    "role": "assassin",
+    "minFloor": 285
+  },
+  "pencilcase_parade": {
+    "name": "深海サルパ百鬼夜行",
+    "rarity": "SSR",
+    "role": "controller",
+    "minFloor": 620
+  },
+  "chalkboard_dragon": {
+    "name": "深海龍ネレイド",
+    "rarity": "SSR",
+    "role": "burst",
+    "minFloor": 720
+  },
+  "forbidden_paper_cutter": {
+    "name": "禁海の断頭魚",
+    "rarity": "SSR",
+    "role": "bruiser",
+    "minFloor": 820
+  },
+  "ochuki": {
+    "name": "おちゅき",
+    "rarity": "UR",
+    "role": "tank",
+    "minFloor": 777
+  },
+  "bechi": {
+    "name": "ベチー",
+    "rarity": "LR",
+    "role": "controller",
+    "minFloor": 6400
+  },
+  "kiara": {
+    "name": "セラフィナ",
+    "rarity": "神話",
+    "role": "healer",
+    "minFloor": 9000
+  },
+  "roxy": {
+    "name": "ネレイア",
+    "rarity": "神話",
+    "role": "magic",
+    "minFloor": 9000
+  },
+  "milim": {
+    "name": "ミルヴァ",
+    "rarity": "神話",
+    "role": "burst",
+    "minFloor": 9000
+  },
+  "ai": {
+    "name": "アイクシア",
+    "rarity": "神話",
+    "role": "support",
+    "minFloor": 9000
+  },
+  "eris": {
+    "name": "イリディア",
+    "rarity": "神話",
+    "role": "assassin",
+    "minFloor": 9000
+  },
+  "golden_darkness": {
+    "name": "宵金のノクティア",
+    "rarity": "神話",
+    "role": "assassin",
+    "minFloor": 9000
+  },
+  "dev_familiar_chappy": {
+    "name": "開発使魔チャッピー",
+    "rarity": "SECRET",
+    "role": "balanced",
+    "minFloor": 10000
+  },
+  "myth_enami": {
+    "name": "えなみ",
+    "rarity": "神話",
+    "role": "support",
+    "minFloor": 9007199254740991
+  },
+  "myth_rion": {
+    "name": "りおん",
+    "rarity": "神話",
+    "role": "support",
+    "minFloor": 9007199254740991
+  },
+  "myth_yori": {
+    "name": "より",
+    "rarity": "神話",
+    "role": "burst",
+    "minFloor": 9007199254740991
+  },
+  "myth_hide": {
+    "name": "ひで",
+    "rarity": "神話",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "static_hopper": {
+    "name": "帯電トビネズミ",
+    "rarity": "N",
+    "role": "speed",
+    "minFloor": 32
+  },
+  "thunder_shell_beetle": {
+    "name": "雷針カブト",
+    "rarity": "R",
+    "role": "tank",
+    "minFloor": 120
+  },
+  "storm_quill_boar": {
+    "name": "紫電針獣",
+    "rarity": "SR",
+    "role": "critical",
+    "minFloor": 240
+  },
+  "volt_veil_arcanist": {
+    "name": "雷衣術師エレノア",
+    "rarity": "SSR",
+    "role": "controller",
+    "minFloor": 520
+  },
+  "stormfang_behemoth": {
+    "name": "天雷牙獣ライガルム",
+    "rarity": "UR",
+    "role": "speed",
+    "minFloor": 1350
+  },
+  "thunder_crown_dragon": {
+    "name": "雷冠竜ヴォルトレクス",
+    "rarity": "LR",
+    "role": "burst",
+    "minFloor": 3200
+  },
+  "frost_mole": {
+    "name": "氷晶モグラ",
+    "rarity": "R",
+    "role": "ambush",
+    "minFloor": 95
+  },
+  "aurora_mantis": {
+    "name": "極光鎌虫",
+    "rarity": "SR",
+    "role": "assassin",
+    "minFloor": 260
+  },
+  "frozen_mirror_knight": {
+    "name": "凍鏡騎士グラシエル",
+    "rarity": "UR",
+    "role": "counter",
+    "minFloor": 1450
+  },
+  "ember_gecko": {
+    "name": "火種ヤモリ",
+    "rarity": "N",
+    "role": "burner",
+    "minFloor": 25
+  },
+  "juvenile_amalga": {
+    "name": "融骸幼体アマルガ",
+    "rarity": "神話",
+    "role": "speed",
+    "minFloor": 1
+  },
+  "ch2_kororu": {
+    "name": "芽灯虫コロル",
+    "rarity": "N",
+    "role": "poison",
+    "minFloor": 9007199254740991
+  },
+  "ch2_balk": {
+    "name": "棘盾獣バルク",
+    "rarity": "R",
+    "role": "tank",
+    "minFloor": 9007199254740991
+  },
+  "ch2_shelza": {
+    "name": "玻璃蠍シェルザ",
+    "rarity": "SR",
+    "role": "assassin",
+    "minFloor": 9007199254740991
+  },
+  "ch2_noctia": {
+    "name": "霜鐘梟ノクティア",
+    "rarity": "SSR",
+    "role": "controller",
+    "minFloor": 9007199254740991
+  },
+  "ch2_velg": {
+    "name": "鎖翼竜ヴェルグ",
+    "rarity": "UR",
+    "role": "bruiser",
+    "minFloor": 9007199254740991
+  },
+  "ch2_astera": {
+    "name": "星糸司アステラ",
+    "rarity": "LR",
+    "role": "healer",
+    "minFloor": 9007199254740991
+  },
+  "ch2_ordia": {
+    "name": "境律獣オルディア",
+    "rarity": "神話",
+    "role": "balanced",
+    "minFloor": 9007199254740991
+  },
+  "ch2_nerik": {
+    "name": "根継ぎの斥候ネリク",
+    "rarity": "N",
+    "role": "controller",
+    "minFloor": 9007199254740991
+  },
+  "ch2_grant": {
+    "name": "封樹の衛兵グラント",
+    "rarity": "R",
+    "role": "tank",
+    "minFloor": 9007199254740991
+  },
+  "ch2_senela": {
+    "name": "灰燭の呪術師セネラ",
+    "rarity": "SR",
+    "role": "controller",
+    "minFloor": 9007199254740991
+  },
+  "ch2_razil": {
+    "name": "忘却の鎖士ラズィル",
+    "rarity": "SSR",
+    "role": "assassin",
+    "minFloor": 9007199254740991
+  },
+  "ch2_ione": {
+    "name": "天秤の祭司イオネ",
+    "rarity": "UR",
+    "role": "healer",
+    "minFloor": 9007199254740991
+  },
+  "ch2_mimelia": {
+    "name": "星機匣ミメリア",
+    "rarity": "LR",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_luxion": {
+    "name": "白紙の執政官ルクシオン",
+    "rarity": "神話",
+    "role": "balanced",
+    "minFloor": 9007199254740991
+  },
+  "ch2_lilica": {
+    "name": "煤紫の剣魔リリカ",
+    "rarity": "N",
+    "role": "assassin",
+    "minFloor": 9007199254740991
+  },
+  "ch2_ryune": {
+    "name": "【鏡侍女】リュネ",
+    "rarity": "R",
+    "role": "tank",
+    "minFloor": 9007199254740991
+  },
+  "ch2_rose": {
+    "name": "【鏡侍女】ロゼ",
+    "rarity": "SR",
+    "role": "assassin",
+    "minFloor": 9007199254740991
+  },
+  "ch2_shion": {
+    "name": "【霊符】シオン",
+    "rarity": "SSR",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_suiren": {
+    "name": "【霊符】スイレン",
+    "rarity": "UR",
+    "role": "healer",
+    "minFloor": 9007199254740991
+  },
+  "ch2_aure": {
+    "name": "【聖翼】アウレ",
+    "rarity": "LR",
+    "role": "assassin",
+    "minFloor": 9007199254740991
+  },
+  "ch2_noelle": {
+    "name": "【聖翼】ノエル",
+    "rarity": "神話",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_ticta": {
+    "name": "巻鍵の工姫ティクタ",
+    "rarity": "N",
+    "role": "controller",
+    "minFloor": 9007199254740991
+  },
+  "ch2_mirea": {
+    "name": "【薬毒】ミレア",
+    "rarity": "R",
+    "role": "healer",
+    "minFloor": 9007199254740991
+  },
+  "ch2_viola": {
+    "name": "【薬毒】ヴィオラ",
+    "rarity": "SR",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_kagura": {
+    "name": "【月狐】カグラ",
+    "rarity": "SSR",
+    "role": "assassin",
+    "minFloor": 9007199254740991
+  },
+  "ch2_sayo": {
+    "name": "【月狐】サヨ",
+    "rarity": "UR",
+    "role": "support",
+    "minFloor": 9007199254740991
+  },
+  "ch2_celes": {
+    "name": "【星糸】セレス",
+    "rarity": "LR",
+    "role": "controller",
+    "minFloor": 9007199254740991
+  },
+  "ch2_lumina": {
+    "name": "【星糸】ルミナ",
+    "rarity": "神話",
+    "role": "assassin",
+    "minFloor": 9007199254740991
+  },
+  "ch2_pipia": {
+    "name": "露鈴の案内姫ピピア",
+    "rarity": "N",
+    "role": "healer",
+    "minFloor": 9007199254740991
+  },
+  "ch2_rikka": {
+    "name": "【縫兎】リッカ",
+    "rarity": "R",
+    "role": "support",
+    "minFloor": 9007199254740991
+  },
+  "ch2_rinne": {
+    "name": "【縫兎】リンネ",
+    "rarity": "SR",
+    "role": "assassin",
+    "minFloor": 9007199254740991
+  },
+  "ch2_seria": {
+    "name": "【硝子】セリア",
+    "rarity": "SSR",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_carmia": {
+    "name": "【硝子】カルミア",
+    "rarity": "UR",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_aeriel": {
+    "name": "【終始】アエリエル",
+    "rarity": "LR",
+    "role": "support",
+    "minFloor": 9007199254740991
+  },
+  "ch2_vespera": {
+    "name": "【終始】ヴェスペラ",
+    "rarity": "神話",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_fiora": {
+    "name": "夜灯の従騎フィオラ",
+    "rarity": "N",
+    "role": "support",
+    "minFloor": 9007199254740991
+  },
+  "ch2_lyriet": {
+    "name": "【誓姫】リリエット",
+    "rarity": "R",
+    "role": "attack",
+    "minFloor": 9007199254740991
+  },
+  "ch2_rosette": {
+    "name": "【誓姫】ロゼット",
+    "rarity": "SR",
+    "role": "tank",
+    "minFloor": 9007199254740991
+  },
+  "ch2_noctelle": {
+    "name": "【薔薇】ノクテル",
+    "rarity": "SSR",
+    "role": "attack",
+    "minFloor": 9007199254740991
+  },
+  "ch2_auriane": {
+    "name": "【薔薇】オーリアン",
+    "rarity": "UR",
+    "role": "support",
+    "minFloor": 9007199254740991
+  },
+  "ch2_eirene": {
+    "name": "【星刻】エイレーネ",
+    "rarity": "LR",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_iridelle": {
+    "name": "【星刻】イリデル",
+    "rarity": "神話",
+    "role": "attack",
+    "minFloor": 9007199254740991
+  },
+  "ch2_lumea": {
+    "name": "封書の小剣姫ルメア",
+    "rarity": "N",
+    "role": "support",
+    "minFloor": 9007199254740991
+  },
+  "ch2_nevia": {
+    "name": "【双藤】ネヴィア",
+    "rarity": "R",
+    "role": "controller",
+    "minFloor": 9007199254740991
+  },
+  "ch2_elmina": {
+    "name": "【双藤】エルミナ",
+    "rarity": "SR",
+    "role": "assassin",
+    "minFloor": 9007199254740991
+  },
+  "ch2_calista": {
+    "name": "【双雷】カリスタ",
+    "rarity": "SSR",
+    "role": "attack",
+    "minFloor": 9007199254740991
+  },
+  "ch2_solenne": {
+    "name": "【双雷】ソレーヌ",
+    "rarity": "UR",
+    "role": "tank",
+    "minFloor": 9007199254740991
+  },
+  "ch2_meliora": {
+    "name": "【封鍵】メリオラ",
+    "rarity": "LR",
+    "role": "attack",
+    "minFloor": 9007199254740991
+  },
+  "ch2_elyselle": {
+    "name": "【封鍵】エリゼル",
+    "rarity": "神話",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_miretta": {
+    "name": "繕糸の針姫ミレッタ",
+    "rarity": "N",
+    "role": "support",
+    "minFloor": 9007199254740991
+  },
+  "ch2_iselle": {
+    "name": "【氷晶】イゼル",
+    "rarity": "R",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_virelle": {
+    "name": "【氷晶】ヴィレル",
+    "rarity": "SR",
+    "role": "attack",
+    "minFloor": 9007199254740991
+  },
+  "ch2_rostia": {
+    "name": "【返誓】ロスティア",
+    "rarity": "SSR",
+    "role": "tank",
+    "minFloor": 9007199254740991
+  },
+  "ch2_althea": {
+    "name": "【返誓】アルテア",
+    "rarity": "UR",
+    "role": "attack",
+    "minFloor": 9007199254740991
+  },
+  "ch2_sephira": {
+    "name": "【魔導姫】セフィラ",
+    "rarity": "LR",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_astrelle": {
+    "name": "【魔導姫】アストレル",
+    "rarity": "神話",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_rithia": {
+    "name": "根灯の短剣姫リティア",
+    "rarity": "N",
+    "role": "support",
+    "minFloor": 9007199254740991
+  },
+  "ch2_nizelle": {
+    "name": "【紅羽】ニゼル",
+    "rarity": "R",
+    "role": "attack",
+    "minFloor": 9007199254740991
+  },
+  "ch2_charne": {
+    "name": "【紅羽】シャルネ",
+    "rarity": "SR",
+    "role": "attack",
+    "minFloor": 9007199254740991
+  },
+  "ch2_ferne": {
+    "name": "【双鐘】フェルネ",
+    "rarity": "SSR",
+    "role": "tank",
+    "minFloor": 9007199254740991
+  },
+  "ch2_clarisse": {
+    "name": "【双鐘】クラリス",
+    "rarity": "UR",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_lunaria": {
+    "name": "【日月】ルナリア",
+    "rarity": "LR",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_solaria": {
+    "name": "【日月】ソラリア",
+    "rarity": "神話",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_tillea": {
+    "name": "栞の書姫ティレア",
+    "rarity": "N",
+    "role": "support",
+    "minFloor": 9007199254740991
+  },
+  "ch2_morina": {
+    "name": "【夢境】モリナ",
+    "rarity": "R",
+    "role": "magic",
+    "minFloor": 9007199254740991
+  },
+  "ch2_elmize": {
+    "name": "【夢境】エルミゼ",
+    "rarity": "SR",
+    "role": "attack",
+    "minFloor": 9007199254740991
+  },
+  "ch2_dracia": {
+    "name": "【竜姫】ドラシア",
+    "rarity": "SSR",
+    "role": "tank",
+    "minFloor": 9007199254740991
+  },
+  "ch2_rucie": {
+    "name": "【竜姫】リュシエ",
+    "rarity": "UR",
+    "role": "attack",
+    "minFloor": 9007199254740991
+  },
+  "ch2_nemesia": {
+    "name": "【剣姫】ネメシア",
+    "rarity": "LR",
+    "role": "attack",
+    "minFloor": 9007199254740991
+  },
+  "ch2_everia": {
+    "name": "【剣姫】エヴェリア",
+    "rarity": "神話",
+    "role": "attack",
+    "minFloor": 9007199254740991
+  }
+}

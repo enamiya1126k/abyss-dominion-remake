@@ -1,0 +1,439 @@
+{
+  "scope": "repository server code; deployed server state not inspected",
+  "coop": [
+    {
+      "id": "stormfang-lygalm",
+      "name": "雷鎖牙獣・ライガルム",
+      "title": "双雷を束ねる共鳴獣",
+      "speciesId": "stormfang_behemoth",
+      "visualSpeciesId": "stormfang_behemoth",
+      "emoji": "🐺",
+      "element": "lightning",
+      "accent": "#6ee7ff",
+      "intro": "同じラウンドに2人以上で攻撃し、雷鎖を逆流させろ。",
+      "mechanic": {
+        "id": "linked-assault",
+        "name": "双牙共振",
+        "shortLabel": "2人以上で攻撃",
+        "instruction": "このラウンドに2人以上が攻撃すると共鳴成功。ボスへ被ダメージ+35%を付与。",
+        "success": "雷鎖逆流",
+        "failure": "雷鎖暴走"
+      },
+      "stats": {
+        "hp": 9,
+        "atk": 1.42,
+        "matk": 1.35,
+        "def": 1.28,
+        "mdef": 1.25,
+        "spd": 1.28
+      },
+      "actions": [
+        {
+          "id": "thunder-fang",
+          "label": "雷鎖牙",
+          "type": "attack",
+          "pattern": "random2",
+          "power": 0.82,
+          "element": "lightning",
+          "ai": {
+            "base": 58
+          }
+        },
+        {
+          "id": "sky-chain-roar",
+          "label": "天雷鎖咆",
+          "type": "attack",
+          "pattern": "all",
+          "power": 0.7,
+          "element": "lightning",
+          "status": {
+            "id": "paralysis",
+            "name": "感電",
+            "chance": 0.14,
+            "power": 0,
+            "turns": 1
+          },
+          "cooldown": 2,
+          "ai": {
+            "base": 34,
+            "partySizeAtLeast": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "frozen-mirror-graciel",
+      "name": "凍鏡騎王・グラシエル",
+      "title": "守りを試す凍界の騎王",
+      "speciesId": "frozen_mirror_knight",
+      "visualSpeciesId": "frozen_mirror_knight",
+      "emoji": "🛡️",
+      "element": "ice",
+      "accent": "#9bdcff",
+      "intro": "仲間と同時に防御し、凍鏡の反射を受け流せ。",
+      "mechanic": {
+        "id": "mirror-guard",
+        "name": "凍鏡反照",
+        "shortLabel": "2人で防御",
+        "instruction": "このラウンドに2人以上が防御すると共鳴成功。全員へHP10%の障壁を展開。",
+        "success": "凍鏡防壁",
+        "failure": "反照増幅"
+      },
+      "stats": {
+        "hp": 10,
+        "atk": 1.34,
+        "matk": 1.42,
+        "def": 1.52,
+        "mdef": 1.5,
+        "spd": 1.05
+      },
+      "actions": [
+        {
+          "id": "mirror-sword",
+          "label": "凍鏡反閃",
+          "type": "attack",
+          "pattern": "singleStrong",
+          "power": 1.02,
+          "element": "ice",
+          "ai": {
+            "base": 55
+          }
+        },
+        {
+          "id": "zero-mirror",
+          "label": "零界鏡陣",
+          "type": "attack",
+          "pattern": "all",
+          "power": 0.66,
+          "element": "ice",
+          "status": {
+            "id": "freeze",
+            "name": "凍結",
+            "chance": 0.12,
+            "power": 0,
+            "turns": 1
+          },
+          "cooldown": 2,
+          "ai": {
+            "base": 38,
+            "partySizeAtLeast": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "void-gate-arcanos",
+      "name": "虚環門主・アルカノス",
+      "title": "攻守の分担を喰らう虚無門",
+      "speciesId": "void_archon",
+      "visualSpeciesId": "void_archon",
+      "emoji": "◉",
+      "element": "dark",
+      "accent": "#d78cff",
+      "intro": "攻撃役と支援役に分かれ、虚環の位相を同時に崩せ。",
+      "mechanic": {
+        "id": "dual-role",
+        "name": "虚環二相",
+        "shortLabel": "攻撃＋支援",
+        "instruction": "同じラウンドに攻撃役と支援役が1人ずつ行動すると共鳴成功。",
+        "success": "二相崩壊",
+        "failure": "虚環侵蝕"
+      },
+      "stats": {
+        "hp": 11,
+        "atk": 1.38,
+        "matk": 1.52,
+        "def": 1.36,
+        "mdef": 1.42,
+        "spd": 1.16
+      },
+      "actions": [
+        {
+          "id": "void-lance",
+          "label": "虚環穿ち",
+          "type": "attack",
+          "pattern": "random3",
+          "power": 0.68,
+          "damageClass": "magic",
+          "element": "dark",
+          "mpDrain": 0.08,
+          "ai": {
+            "base": 55
+          }
+        },
+        {
+          "id": "hollow-domain",
+          "label": "無響界門",
+          "type": "attack",
+          "pattern": "all",
+          "power": 0.62,
+          "damageClass": "magic",
+          "element": "dark",
+          "effects": [
+            {
+              "enemy": true,
+              "kind": "healDown",
+              "value": 0.25,
+              "turns": 2,
+              "chance": 0.55
+            }
+          ],
+          "cooldown": 2,
+          "ai": {
+            "base": 38,
+            "partySizeAtLeast": 2
+          }
+        }
+      ]
+    }
+  ],
+  "raid": [
+    {
+      "id": "abyss-amalga",
+      "name": "終焉融骸・アビス＝マルガ",
+      "shortName": "終焉融骸",
+      "level": 50,
+      "maxHp": 50000,
+      "element": "dark",
+      "accent": "#b45cff",
+      "heroAsset": "./assets/online/raid-abyss-amalgam.png",
+      "visualBase": "./assets/online/raid/abyss-amalga",
+      "materialName": "融骸核片",
+      "contractName": "融骸幼体アマルガ",
+      "contractSpeciesId": "juvenile_amalga",
+      "contractVisualBase": "./assets/online/raid/juvenile-amalga",
+      "equipmentName": "終焉喰らいの大刃",
+      "circleName": "即死返鏡陣",
+      "circleId": "death_mirror",
+      "intro": "千の命を取り込んだ融骸。倒れた仲間の影を作り、残った者へ襲いかかる。",
+      "subBoss": {
+        "id": "juvenile-amalga",
+        "name": "深淵の融骸幼体アマルガ",
+        "level": 200,
+        "maxHp": 12500,
+        "element": "dark",
+        "visualBase": "./assets/online/raid/juvenile-amalga",
+        "attackName": "幼体融解爪",
+        "respawnDelayRounds": 1,
+        "maxRespawnsPerAttempt": 2,
+        "rewardableKillsPerCampaign": 1
+      },
+      "patterns": [
+        {
+          "name": "赤核穿孔",
+          "count": 1,
+          "rate": 0.72,
+          "magic": false
+        },
+        {
+          "name": "千口同哭",
+          "count": 2,
+          "rate": 0.5,
+          "magic": true
+        },
+        {
+          "name": "腐界圧壊",
+          "count": 99,
+          "rate": 0.36,
+          "magic": true
+        },
+        {
+          "name": "崩星捕食",
+          "count": 1,
+          "rate": 0.82,
+          "magic": false
+        }
+      ]
+    },
+    {
+      "id": "zero-sovereign",
+      "name": "零界凍皇・ニヴル＝レギア",
+      "shortName": "零界凍皇",
+      "level": 180,
+      "maxHp": 60000,
+      "element": "ice",
+      "accent": "#65d9ff",
+      "heroAsset": "./assets/monsters/169_frost_sovereign/idle1.png",
+      "visualBase": "./assets/monsters/169_frost_sovereign",
+      "materialName": "零界核片",
+      "contractName": "零界皇ニヴルシア",
+      "contractSpeciesId": "frost_sovereign",
+      "contractVisualBase": "./assets/monsters/169_frost_sovereign",
+      "equipmentName": "凍星断界剣",
+      "circleName": "絶零封界陣",
+      "circleId": "absolute_zero",
+      "intro": "熱と回復を封じる氷界の皇。長引くほど凍結圧が増し、守りを削り取る。",
+      "subBoss": {
+        "id": "frost-core",
+        "name": "零界核・フロストコア",
+        "level": 220,
+        "maxHp": 14000,
+        "element": "ice",
+        "visualBase": "./assets/monsters/018_frost_slime",
+        "attackName": "凍核衝"
+      },
+      "patterns": [
+        {
+          "name": "氷葬槍",
+          "count": 1,
+          "rate": 0.7,
+          "magic": true
+        },
+        {
+          "name": "凍界連鎖",
+          "count": 2,
+          "rate": 0.48,
+          "magic": true
+        },
+        {
+          "name": "白夜零落",
+          "count": 99,
+          "rate": 0.34,
+          "magic": true
+        },
+        {
+          "name": "絶対零圧",
+          "count": 1,
+          "rate": 0.86,
+          "magic": false
+        }
+      ]
+    },
+    {
+      "id": "vajra-beast",
+      "name": "雷獄天獣・ヴァジュリオン",
+      "shortName": "雷獄天獣",
+      "level": 320,
+      "maxHp": 70000,
+      "element": "lightning",
+      "accent": "#ffd95a",
+      "heroAsset": "./assets/online/raid/vajurlion368-idle1.png",
+      "visualBase": "./assets/online/raid/vajurlion368",
+      "materialName": "雷獄核片",
+      "contractName": "雷帝獣ヴァジュラ",
+      "contractSpeciesId": "thunder_emperor",
+      "contractVisualBase": "./assets/online/raid/vajurlion368",
+      "equipmentName": "天雷轟断牙",
+      "circleName": "雷獄連環陣",
+      "circleId": "thunder_prison",
+      "intro": "雷を食らって加速する天獣。標的を連続で狙い、後半ほど行動が苛烈になる。",
+      "subBoss": {
+        "id": "thunder-core",
+        "name": "雷獄眷属・スパークコア",
+        "level": 360,
+        "maxHp": 16000,
+        "element": "lightning",
+        "heroAsset": "./assets/online/raid/spark-core368-idle1.png",
+        "visualBase": "./assets/online/raid/spark-core368",
+        "attackName": "連雷牙"
+      },
+      "patterns": [
+        {
+          "name": "迅雷穿牙",
+          "count": 1,
+          "rate": 0.76,
+          "magic": false
+        },
+        {
+          "name": "雷鎖追撃",
+          "count": 2,
+          "rate": 0.52,
+          "magic": false
+        },
+        {
+          "name": "天獄落雷",
+          "count": 99,
+          "rate": 0.38,
+          "magic": true
+        },
+        {
+          "name": "神速雷葬",
+          "count": 1,
+          "rate": 0.9,
+          "magic": false
+        }
+      ]
+    }
+  ],
+  "modifiers": [
+    {
+      "id": "overdrive",
+      "name": "攻勢共鳴",
+      "icon": "⚔",
+      "description": "味方の与ダメージ+15%。敵から受けるダメージも+10%。",
+      "playerDamage": 1.15,
+      "incomingDamage": 1.1
+    },
+    {
+      "id": "healing_lock",
+      "name": "治癒封鎖",
+      "icon": "◆",
+      "description": "HP回復量が50%に低下。蘇生による回復は低下しない。",
+      "healing": 0.5
+    },
+    {
+      "id": "silent_critical",
+      "name": "無響結界",
+      "icon": "◇",
+      "description": "敵味方ともにクリティカルが発生しない。",
+      "disableCritical": true
+    },
+    {
+      "id": "rescue_chain",
+      "name": "救命連鎖",
+      "icon": "✦",
+      "description": "仲間を蘇生すると、生存者全員の攻撃・防御+20%（2ターン）。",
+      "reviveBoost": 0.2
+    },
+    {
+      "id": "collapse_accel",
+      "name": "崩壊加速",
+      "icon": "‼",
+      "description": "第6ラウンド以降、ボスの攻撃が毎ターン5%ずつ上昇（最大40%）。",
+      "lateDamagePerRound": 0.05,
+      "lateDamageMax": 0.4
+    }
+  ],
+  "techniques": [
+    {
+      "id": "triad-dominion",
+      "name": "三位深淵陣",
+      "shortLabel": "攻＋防＋支",
+      "effectText": "敵へ被ダメージ+15%・味方へHP10%障壁・攻撃/魔力+10%",
+      "points": 3,
+      "linkLabel": "TRINITY LINK"
+    },
+    {
+      "id": "resonance-break",
+      "name": "共鳴連撃",
+      "shortLabel": "同敵へ攻撃×2",
+      "effectText": "対象へ被ダメージ+35%",
+      "points": 1,
+      "linkLabel": "LINK"
+    },
+    {
+      "id": "aegis-cross",
+      "name": "護刃結界",
+      "shortLabel": "攻撃＋防御",
+      "effectText": "生存者全員へ最大HP10%の障壁",
+      "points": 2,
+      "linkLabel": "AEGIS LINK"
+    },
+    {
+      "id": "battle-chorus",
+      "name": "戦脈鼓舞",
+      "shortLabel": "攻撃＋支援",
+      "effectText": "生存者全員の攻撃・魔力+10%",
+      "points": 2,
+      "linkLabel": "BRAVE LINK"
+    },
+    {
+      "id": "life-chorus",
+      "name": "命脈唱和",
+      "shortLabel": "支援×2",
+      "effectText": "生存者全員のHP10%・MP6%回復",
+      "points": 2,
+      "linkLabel": "LIFE LINK"
+    }
+  ]
+}

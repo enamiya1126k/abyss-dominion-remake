@@ -1,0 +1,151 @@
+✔ first chapter: real checkpoint → SaveService migration → resume preserves HP, MP, effects and turn ownership (false) (80.699532ms)
+✔ first chapter: real checkpoint → SaveService migration → resume preserves HP, MP, effects and turn ownership (true) (14.372684ms)
+✔ chapter two: real checkpoint → SaveService migration → resume preserves HP, MP, effects and turn ownership (false) (33.458162ms)
+✔ chapter two: real checkpoint → SaveService migration → resume preserves HP, MP, effects and turn ownership (true) (11.307306ms)
+✔ manual trial: real checkpoint → SaveService migration → resume preserves HP, MP, effects and turn ownership (false) (14.781538ms)
+✔ manual trial: real checkpoint → SaveService migration → resume preserves HP, MP, effects and turn ownership (true) (10.456167ms)
+✖ normal victory grants gold, EXP, kills and history only once while its result remains open (299.244974ms)
+✖ victory result HP and level gains use ordinary post-battle stats (8.539436ms)
+✔ storage quota failure keeps the last valid save and retry writes the current state once (3.051506ms)
+✖ 1 battle HP remains alive through serialization and removing large trial multipliers; KO remains zero (6.083514ms)
+✖ native manual skill picker waits; choosing an authored skill consumes MP and exactly one turn (20.507566ms)
+✔ native auto wait honors switching to manual before committing the queued action (12.665037ms)
+✖ memory defeat rescues every member at HP1 and does not charge a second loss (7.282757ms)
+✖ chapter victory saves the same normal HP displayed after rewards, including storage retry (false) (475.706919ms)
+✔ chapter victory saves the same normal HP displayed after rewards, including storage retry (true) (13.067572ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 9
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1530.657206
+
+✖ failing tests:
+
+test at tests/build416-integration.test.mjs:60:1
+✖ normal victory grants gold, EXP, kills and history only once while its result remains open (299.244974ms)
+  AssertionError [ERR_ASSERTION]: second settlement changed rewards or history
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/verify416-before/tests/build416-integration.test.mjs:64:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/build416-integration.test.mjs:67:1
+✖ victory result HP and level gains use ordinary post-battle stats (8.539436ms)
+  AssertionError [ERR_ASSERTION]: ch2_ryune
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/verify416-before/tests/build416-integration.test.mjs:71:32)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/build416-integration.test.mjs:82:1
+✖ 1 battle HP remains alive through serialization and removing large trial multipliers; KO remains zero (6.083514ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/verify416-before/tests/build416-integration.test.mjs:85:56)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/build416-integration.test.mjs:89:1
+✖ native manual skill picker waits; choosing an authored skill consumes MP and exactly one turn (20.507566ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  233 !== 249
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/verify416-before/tests/build416-integration.test.mjs:96:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 233,
+    expected: 249,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/build416-integration.test.mjs:113:1
+✖ memory defeat rescues every member at HP1 and does not charge a second loss (7.282757ms)
+  AssertionError [ERR_ASSERTION]: ch2_ryune
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/verify416-before/tests/build416-integration.test.mjs:116:41)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/build416-integration.test.mjs:120:35
+✖ chapter victory saves the same normal HP displayed after rewards, including storage retry (false) (475.706919ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      {
+  +     hp: 3738,
+  -     hp: 3751,
+        id: 'ch2_ryune',
+        level: 1001,
+        mp: 265
+      },
+      {
+  +     hp: 2929,
+  -     hp: 2940,
+        id: 'ch2_rose',
+        level: 1001,
+        mp: 338
+      },
+      {
+  +     hp: 3667,
+  -     hp: 3408,
+        id: 'ch2_mirea',
+        level: 1001,
+        mp: 456
+      },
+      {
+  +     hp: 3416,
+  -     hp: 3175,
+        id: 'ch2_viola',
+        level: 1001,
+        mp: 459
+      }
+    ]
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/verify416-before/tests/build416-integration.test.mjs:131:42)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { id: 'ch2_ryune', hp: 3738, mp: 265, level: 1001 }, { id: 'ch2_rose', hp: 2929, mp: 338, level: 1001 }, { id: 'ch2_mirea', hp: 3667, mp: 456, level: 1001 }, { id: 'ch2_viola', hp: 3416, mp: 459, level: 1001 } ],
+    expected: [ { id: 'ch2_ryune', hp: 3751, mp: 265, level: 1001 }, { id: 'ch2_rose', hp: 2940, mp: 338, level: 1001 }, { id: 'ch2_mirea', hp: 3408, mp: 456, level: 1001 }, { id: 'ch2_viola', hp: 3175, mp: 459, level: 1001 } ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

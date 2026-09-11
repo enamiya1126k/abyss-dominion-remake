@@ -1,0 +1,101 @@
+{
+  "build": 416,
+  "targets": 808,
+  "comparisons": 2424,
+  "matches": 2419,
+  "differences": [
+    {
+      "target": "campaign:2:boss",
+      "team": 1,
+      "ids": [
+        "healing_mushroom",
+        "stapler_crab",
+        "reef_serpent",
+        "compass_beetle"
+      ],
+      "level": 60,
+      "seed": 1000,
+      "expectedWin": true,
+      "win": true,
+      "expectedRounds": 3,
+      "rounds": 7,
+      "match": false
+    },
+    {
+      "target": "campaign:3:boss",
+      "team": 0,
+      "ids": [
+        "lantern_ghost",
+        "moss_golem",
+        "gluepot_mimic",
+        "storm_crow"
+      ],
+      "level": 90,
+      "seed": 1000,
+      "expectedWin": true,
+      "win": true,
+      "expectedRounds": 3,
+      "rounds": 4,
+      "match": false
+    },
+    {
+      "target": "campaign:5:boss",
+      "team": 5,
+      "ids": [
+        "healing_mushroom",
+        "mud_crab",
+        "sand_scorpion",
+        "copper_automaton"
+      ],
+      "level": 150,
+      "seed": 1000,
+      "expectedWin": true,
+      "win": true,
+      "expectedRounds": 7,
+      "rounds": 8,
+      "match": false
+    },
+    {
+      "target": "rematch:floor-boss-390",
+      "team": 5,
+      "ids": [
+        "ch2_dracia",
+        "ch2_rucie",
+        "ch2_mirea",
+        "ch2_viola"
+      ],
+      "level": 390,
+      "seed": 1000,
+      "expectedWin": true,
+      "win": true,
+      "expectedRounds": 12,
+      "rounds": 6,
+      "match": false
+    },
+    {
+      "target": "corridor:107",
+      "team": "counter-11",
+      "ids": [
+        "celestial_pegasus",
+        "world_serpent",
+        "bechi",
+        "storm_sovereign"
+      ],
+      "level": 7852,
+      "seed": 1000,
+      "expectedWin": false,
+      "win": true,
+      "expectedRounds": 41,
+      "rounds": 10,
+      "match": false
+    }
+  ],
+  "seconds": 65.05338900299999,
+  "sourceHashes": {
+    "src/main.js": "c316e968418824158e89e65c61c9af4d0a7a3abc055507891f700573ade5d880",
+    "src/battle/TrialAdaptation415.js": "1c0fddb3356484963b978efa9aad72b17d76348cffbae0cb15c09aecba5955d8",
+    "src/battle/SkillSystem.js": "1e600fa54c432f8f725e3819147ed40c7034c5ff7f036e5d06b557e0681030d6",
+    "src/battle/PairSynergy409.js": "7d1d344ef0e4cf0320486c29028768af83ed06ddc97083d62ae4e4d52aeeb21b"
+  },
+  "method": "Actual main.js battle loop; first recorded seed per accepted Build415 composition. Compare outcome and round count; presentation/network/storage are stubbed."
+}

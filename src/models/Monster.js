@@ -1,3 +1,4 @@
+import {projectTrialStats415} from '../battle/TrialAdaptation415.js';
 import {projectSingleStats410} from '../battle/SingleTraits410.js?v=3.1.90-build410';
 import {chapterTwoPairDisplayName406,chapterTwoPairMember406} from '../data/chapterTwoPairNames406.js?v=3.1.86-build406';
 import{SPECIES}from"../data/species.js?v=3.1.86-build406";
@@ -228,7 +229,8 @@ export function speciesLevelStats(speciesOrId,level,{rarity=null,rank=1,plus=0}=
 }
 
 export function calculatedStats(monster){return projectSingleStats410(rawCalculatedStats410(monster),monster);}
-export function rawCalculatedStats410(monster){
+export function rawCalculatedStats410(monster){return projectTrialStats415(ordinaryCalculatedStats415(monster),monster);}
+export function ordinaryCalculatedStats415(monster){
   const species=SPECIES[monster?.speciesId];
   if(!monster||typeof monster!=="object"||!species)return{...EMPTY_MONSTER_STATS};
   const personality=PERSONALITIES[monster.personalityId]??PERSONALITIES.bold??Object.values(PERSONALITIES)[0];

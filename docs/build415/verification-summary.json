@@ -1,0 +1,60 @@
+{
+  "version": "3.1.94",
+  "build": 415,
+  "expected_offline_targets": 808,
+  "passed_offline_targets": 808,
+  "selected_compositions": 2424,
+  "selected_battles": 242400,
+  "all_recorded_composition_attempts": 2489,
+  "all_recorded_battles": 248900,
+  "unmet": [],
+  "modes": {
+    "campaign": {
+      "expected": 107,
+      "passed": 107,
+      "min_win_rate": 0.73
+    },
+    "rematch": {
+      "expected": 90,
+      "passed": 90,
+      "min_win_rate": 0.8
+    },
+    "corridor": {
+      "expected": 112,
+      "passed": 112,
+      "min_win_rate": 0.73
+    },
+    "team": {
+      "expected": 90,
+      "passed": 90,
+      "min_win_rate": 0.88
+    },
+    "manual": {
+      "expected": 68,
+      "passed": 68,
+      "min_win_rate": 0.98
+    },
+    "chapter": {
+      "expected": 321,
+      "passed": 321,
+      "min_win_rate": 0.88
+    },
+    "heroes": {
+      "expected": 20,
+      "passed": 20,
+      "min_win_rate": 0.83
+    }
+  },
+  "online": {
+    "raid": {
+      "targets": 15,
+      "passed": 15,
+      "battles": 4500
+    },
+    "coop": {
+      "targets": 3,
+      "passed": 3,
+      "battles": 900
+    }
+  }
+}

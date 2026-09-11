@@ -1,0 +1,48 @@
+{
+  "build": 416,
+  "app_version": "3.1.95",
+  "save_schema": 84,
+  "base_build": 411,
+  "base_repository": "enamiya1126k/abyss-dominion-remake",
+  "base_commit": "89540f22fcad9fa9ae952ed71b59fb1c6ca7078c",
+  "cumulative_runtime_files": 23,
+  "regression": {
+    "tests": 224,
+    "passed": 224,
+    "failed": 0
+  },
+  "clean_overwrite_from411": {
+    "tests": 224,
+    "passed": 224,
+    "failed": 0
+  },
+  "combat_replay": {
+    "targets": 808,
+    "compositions": 2424,
+    "seeds_per_composition": 1,
+    "matched_outcome_and_rounds": 2424,
+    "differences": 0,
+    "fixture_initialization_contexts_restored": 5
+  },
+  "online_local_simulation": {
+    "battles": 270,
+    "victories": 270,
+    "live_network": false
+  },
+  "protected_characters": {
+    "characters": 17,
+    "profiles": 68,
+    "modified": false
+  },
+  "server_js_unchanged": 24,
+  "render_generation_iterations": 900,
+  "motion_replacements_without_leaks": 100,
+  "mobile_visual_verified": false,
+  "browser_limitation": "Local page navigation blocked with net::ERR_BLOCKED_BY_CLIENT; no iPhone/Safari touch, real scrolling, GPU/FPS or live multiplayer verification.",
+  "final_source_hashes": {
+    "src/main.js": "1953b175092fc2ba1e637766e059cddac5a8d709be5f19326a8d9d2560b7133f",
+    "src/battle/TrialAdaptation415.js": "1c0fddb3356484963b978efa9aad72b17d76348cffbae0cb15c09aecba5955d8",
+    "src/battle/SkillSystem.js": "1e600fa54c432f8f725e3819147ed40c7034c5ff7f036e5d06b557e0681030d6",
+    "src/battle/PairSynergy409.js": "7d1d344ef0e4cf0320486c29028768af83ed06ddc97083d62ae4e4d52aeeb21b"
+  }
+}

@@ -1,3 +1,4 @@
+import {preparationHelp415} from '../BattlePreparation415.js';
 import {relicLoadout394} from '../ChapterTwoRelics394.js?v=3.1.78-build398';
 import {twinStatus385} from '../TwinStatus385.js?v=3.1.75-build395';
 import{FORMATION_LAYOUT_CSS}from"./FormationLayout.js?v=3.1.30-build350";
@@ -106,7 +107,7 @@ export function FormationScreen(state,{origin="home"}={}){
   <div class="formation-page">
    <div class="formation-summary"><div><small>パーティ ${party.length}/4・総戦力</small><strong>${formatCombatPower(total)}</strong></div><p>${readOnly?"探索中は確認のみ・変更は帰還後":"長押しで隊列変更・交代・魔法陣設定"}</p><button type="button" class="formation-rarity-help" data-formation-rarity-help aria-label="レア度一覧">？</button></div>
    <aside class="formation-rarity-drawer" data-formation-rarity-drawer aria-hidden="true"><button type="button" data-formation-rarity-close>▶</button><small>レア度・表示色</small><div>${["N","R","SR","SSR","UR","LR","神話","深淵","十神"].map(rarity=>`<span class="rarity-name-${rarityClass(rarity)}">${rarity}</span>`).join("")}</div></aside>
-   ${twinStatus385(party)}<div class="formation-grid">${cards}</div>
+   ${preparationHelp415(party)}${twinStatus385(party)}<div class="formation-grid">${cards}</div>
   </div>
   ${bottomNav("formation")}
  </section>`;

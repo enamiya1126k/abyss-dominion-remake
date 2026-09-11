@@ -1,0 +1,354 @@
+[
+  {
+    "tierId": "projection50",
+    "level": 999,
+    "referenceSpecies": [
+      "ancient_dragon",
+      "omega_slime",
+      "bahamut",
+      "apocalypse_dragon",
+      "primordial_phoenix",
+      "king_behemoth",
+      "abyssal_leviathan",
+      "god_machine_ark",
+      "void_emperor",
+      "eternal_valkyrie",
+      "world_serpent",
+      "fallen_seraph",
+      "chaos_king",
+      "genesis_golem",
+      "death_lord",
+      "celestial_kirin",
+      "infinite_hydra",
+      "flame_sovereign",
+      "frost_sovereign",
+      "storm_sovereign",
+      "earth_sovereign",
+      "light_sovereign",
+      "dark_sovereign",
+      "time_dragon",
+      "space_whale",
+      "fate_weaver",
+      "dream_emperor",
+      "nightmare_empress",
+      "crownless_hero",
+      "abyss_gatekeeper",
+      "bechi",
+      "thunder_crown_dragon"
+    ],
+    "equipmentPlan": [
+      [
+        "weapon",
+        "炎刃"
+      ],
+      [
+        "weapon",
+        "星詠みの杖"
+      ],
+      [
+        "armor",
+        "魔布のローブ"
+      ],
+      [
+        "armor",
+        "守護者の外套"
+      ],
+      [
+        "accessory",
+        "旅人の指輪"
+      ],
+      [
+        "accessory",
+        "生命の首飾り"
+      ]
+    ],
+    "reference": {
+      "hp": 28129.5,
+      "atk": 5376,
+      "matk": 4599,
+      "def": 3421.5,
+      "mdef": 3546.5,
+      "spd": 838.5
+    },
+    "maxEnemy": {
+      "maxHp": 5037406,
+      "atk": 168362,
+      "matk": 143601,
+      "def": 93312,
+      "mdef": 93489,
+      "spd": 7952
+    },
+    "coefficients": {
+      "offense": 18,
+      "defense": 48,
+      "hp": 24,
+      "spd": 9
+    },
+    "designOnly": true,
+    "combatValidated": false
+  },
+  {
+    "tierId": "projection100",
+    "level": 4999,
+    "referenceSpecies": [
+      "ancient_dragon",
+      "omega_slime",
+      "bahamut",
+      "apocalypse_dragon",
+      "primordial_phoenix",
+      "king_behemoth",
+      "abyssal_leviathan",
+      "god_machine_ark",
+      "void_emperor",
+      "eternal_valkyrie",
+      "world_serpent",
+      "fallen_seraph",
+      "chaos_king",
+      "genesis_golem",
+      "death_lord",
+      "celestial_kirin",
+      "infinite_hydra",
+      "flame_sovereign",
+      "frost_sovereign",
+      "storm_sovereign",
+      "earth_sovereign",
+      "light_sovereign",
+      "dark_sovereign",
+      "time_dragon",
+      "space_whale",
+      "fate_weaver",
+      "dream_emperor",
+      "nightmare_empress",
+      "crownless_hero",
+      "abyss_gatekeeper",
+      "bechi",
+      "thunder_crown_dragon"
+    ],
+    "equipmentPlan": [
+      [
+        "weapon",
+        "炎刃"
+      ],
+      [
+        "weapon",
+        "星詠みの杖"
+      ],
+      [
+        "armor",
+        "魔布のローブ"
+      ],
+      [
+        "armor",
+        "守護者の外套"
+      ],
+      [
+        "accessory",
+        "旅人の指輪"
+      ],
+      [
+        "accessory",
+        "生命の首飾り"
+      ]
+    ],
+    "reference": {
+      "hp": 78513,
+      "atk": 15234,
+      "matk": 12920,
+      "def": 9589,
+      "mdef": 9611,
+      "spd": 2303
+    },
+    "maxEnemy": {
+      "maxHp": 30032246,
+      "atk": 999064,
+      "matk": 854872,
+      "def": 552920,
+      "mdef": 557269,
+      "spd": 42572
+    },
+    "coefficients": {
+      "offense": 37,
+      "defense": 104,
+      "hp": 51,
+      "spd": 17
+    },
+    "designOnly": true,
+    "combatValidated": false
+  },
+  {
+    "tierId": "manifest50",
+    "level": 9999,
+    "referenceSpecies": [
+      "ancient_dragon",
+      "omega_slime",
+      "bahamut",
+      "apocalypse_dragon",
+      "primordial_phoenix",
+      "king_behemoth",
+      "abyssal_leviathan",
+      "god_machine_ark",
+      "void_emperor",
+      "eternal_valkyrie",
+      "world_serpent",
+      "fallen_seraph",
+      "chaos_king",
+      "genesis_golem",
+      "death_lord",
+      "celestial_kirin",
+      "infinite_hydra",
+      "flame_sovereign",
+      "frost_sovereign",
+      "storm_sovereign",
+      "earth_sovereign",
+      "light_sovereign",
+      "dark_sovereign",
+      "time_dragon",
+      "space_whale",
+      "fate_weaver",
+      "dream_emperor",
+      "nightmare_empress",
+      "crownless_hero",
+      "abyss_gatekeeper",
+      "bechi",
+      "thunder_crown_dragon"
+    ],
+    "equipmentPlan": [
+      [
+        "weapon",
+        "炎刃"
+      ],
+      [
+        "weapon",
+        "星詠みの杖"
+      ],
+      [
+        "armor",
+        "魔布のローブ"
+      ],
+      [
+        "armor",
+        "守護者の外套"
+      ],
+      [
+        "accessory",
+        "旅人の指輪"
+      ],
+      [
+        "accessory",
+        "生命の首飾り"
+      ]
+    ],
+    "reference": {
+      "hp": 129240,
+      "atk": 25096,
+      "matk": 21276.5,
+      "def": 15790,
+      "mdef": 15803,
+      "spd": 3596
+    },
+    "maxEnemy": {
+      "maxHp": 247816890,
+      "atk": 8249294,
+      "matk": 7036037,
+      "def": 4547070,
+      "mdef": 4579264,
+      "spd": 322970
+    },
+    "coefficients": {
+      "offense": 183,
+      "defense": 523,
+      "hp": 256,
+      "spd": 82
+    },
+    "designOnly": true,
+    "combatValidated": false
+  },
+  {
+    "tierId": "manifest100",
+    "level": 10000,
+    "referenceSpecies": [
+      "ancient_dragon",
+      "omega_slime",
+      "bahamut",
+      "apocalypse_dragon",
+      "primordial_phoenix",
+      "king_behemoth",
+      "abyssal_leviathan",
+      "god_machine_ark",
+      "void_emperor",
+      "eternal_valkyrie",
+      "world_serpent",
+      "fallen_seraph",
+      "chaos_king",
+      "genesis_golem",
+      "death_lord",
+      "celestial_kirin",
+      "infinite_hydra",
+      "flame_sovereign",
+      "frost_sovereign",
+      "storm_sovereign",
+      "earth_sovereign",
+      "light_sovereign",
+      "dark_sovereign",
+      "time_dragon",
+      "space_whale",
+      "fate_weaver",
+      "dream_emperor",
+      "nightmare_empress",
+      "crownless_hero",
+      "abyss_gatekeeper",
+      "bechi",
+      "thunder_crown_dragon"
+    ],
+    "equipmentPlan": [
+      [
+        "weapon",
+        "炎刃"
+      ],
+      [
+        "weapon",
+        "星詠みの杖"
+      ],
+      [
+        "armor",
+        "魔布のローブ"
+      ],
+      [
+        "armor",
+        "守護者の外套"
+      ],
+      [
+        "accessory",
+        "旅人の指輪"
+      ],
+      [
+        "accessory",
+        "生命の首飾り"
+      ]
+    ],
+    "reference": {
+      "hp": 129249.5,
+      "atk": 25098,
+      "matk": 21277.5,
+      "def": 15791,
+      "mdef": 15805,
+      "spd": 3596
+    },
+    "maxEnemy": {
+      "maxHp": 18341667593,
+      "atk": 609295183,
+      "matk": 520676029,
+      "def": 335773569,
+      "mdef": 338871937,
+      "spd": 23544874
+    },
+    "coefficients": {
+      "offense": 13502,
+      "defense": 38551,
+      "hp": 18857,
+      "spd": 5953
+    },
+    "designOnly": true,
+    "combatValidated": false
+  }
+]

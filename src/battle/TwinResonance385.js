@@ -1,4 +1,4 @@
-import {beginPairSequence409,beforePairHit409,afterPairHit409,finishPairSequence409,notePairDispel409,notePairCleanse409,notePairMp409,writePairShield409} from './PairSynergy409.js?v=3.1.89-build409';
+import {pairPreparationBonus415,beginPairSequence409,beforePairHit409,afterPairHit409,finishPairSequence409,notePairDispel409,notePairCleanse409,notePairMp409,writePairShield409} from './PairSynergy409.js?v=3.1.89-build409';
 import {reserveRound408} from './ChapterTwoAbilityRuntime408.js?v=3.1.88-build408';
 import {CHAPTER_TWO_PAIRS392} from '../data/chapterTwoPairs392.js?v=3.1.72-build392';
 import {CHAPTER_TWO_PAIRS391} from '../data/chapterTwoPairs391.js?v=3.1.71-build391';
@@ -102,7 +102,7 @@ export async function resolveTwin385(battle,actor,side,env){
     if(pair.dispelEach392&&!dispelledTargets392.has(target)){notePairDispel409(synergy409,env.dispel(target));dispelledTargets392.add(target);}
     const statusBonus=pair.bonusVsStatus&&env.hasStatus?.(target,pair.bonusVsStatus.id)?pair.bonusVsStatus.multiplier:1;
     const hpBonus=pair.bonusVsHp392&&env.opponentHpRatio?.(target)<=pair.bonusVsHp392.threshold?pair.bonusVsHp392.multiplier:1;
-    const effectBonus=pair.bonusVsEffects&&pair.bonusVsEffects.kinds.every(kind=>env.hasEffect?.(target,kind))?pair.bonusVsEffects.multiplier:1,bonus=statusBonus*effectBonus*hpBonus;
+    const effectBonus=pair.bonusVsEffects&&pair.bonusVsEffects.kinds.every(kind=>env.hasEffect?.(target,kind))?pair.bonusVsEffects.multiplier:1,bonus=statusBonus*effectBonus*hpBonus*pairPreparationBonus415(synergy409,pair,target);
     const hitPair409=await beforePairHit409(synergy409,bonus===1?pair:{...pair,power:pair.power*bonus},target,i,chosen);
     const damage=await env.hit(plan.partner,target,hitPair409);
     if(!valid())return true;

@@ -135,13 +135,13 @@ export function convertDebuff408(effect, {fromSide,toSide,landed = false} = {}) 
 
 // Plans describe terminal HP rules; the adapter must honour shields/invulnerability/rescue.
 // Protected targets include all bosses, raid/PvP/online actors, immortals and story actors.
-export function terminalDamagePlan408(target, kind, {mode = 'ordinary',attackerPower = 0} = {}) {
+export function terminalDamagePlan408(target, kind, {mode = 'ordinary',attackerPower = 0,balance415 = false} = {}) {
  const hp = Math.max(0,number(target?.hp));
  if (!target || hp <= 0 || target.captured || !['deathPact','hibernation'].includes(kind)) return null;
  const protectedTarget = mode !== 'ordinary' || Boolean(target.boss || target.raidBoss || target.storyProtected || target.instantDeathImmune || target.immortal);
  if (!protectedTarget) return {kind:'terminal',targetId:target.id,hpFloor:kind==='hibernation'?1:0,requestedDamage:Math.max(0,hp-(kind==='hibernation'?1:0)),source:'trait',ignoreDefense:true,ignoreBarrier:true,allowRescue:true,canReflect:false};
- const coefficient = kind === 'deathPact' ? 2 : 4;
- return {kind:'damage',targetId:target.id,requestedDamage:Math.max(0,Math.floor(number(attackerPower)*coefficient)),coefficient,source:'trait',ignoreDefense:false,ignoreBarrier:false,allowRescue:true,canReflect:false};
+ const coefficient = balance415?(kind==='deathPact'?4:10):(kind==='deathPact'?2:4);
+ return {kind:'damage',defenseIgnore:balance415?(kind==='deathPact'?.30:.50):0,maximumHpRate:balance415?(kind==='deathPact'?.08:.10):null,targetId:target.id,requestedDamage:Math.max(0,Math.floor(number(attackerPower)*coefficient)),coefficient,source:'trait',ignoreDefense:false,ignoreBarrier:false,allowRescue:true,canReflect:false};
 }
 
 export function selectPactTarget408(owner, targets, killerId = null) {

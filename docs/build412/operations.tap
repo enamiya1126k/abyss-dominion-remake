@@ -1,0 +1,154 @@
+TAP version 13
+# Subtest: favorite-only gear is visible in protection filter after lock removal
+ok 1 - favorite-only gear is visible in protection filter after lock removal
+  ---
+  duration_ms: 2.531124
+  type: 'test'
+  ...
+# Subtest: explicit combined release makes eligible materials available, retaining equipped/permanent protection
+ok 2 - explicit combined release makes eligible materials available, retaining equipped/permanent protection
+  ---
+  duration_ms: 1.573295
+  type: 'test'
+  ...
+# Subtest: lock-only release keeps favorites; failed combined release restores exact flags
+ok 3 - lock-only release keeps favorites; failed combined release restores exact flags
+  ---
+  duration_ms: 0.850068
+  type: 'test'
+  ...
+# Subtest: released material can be consumed once; selected base and protected items survive
+ok 4 - released material can be consumed once; selected base and protected items survive
+  ---
+  duration_ms: 1.01773
+  type: 'test'
+  ...
+# Subtest: skill menu opens repeatedly without random-circle, hero quota or turn hooks
+ok 5 - skill menu opens repeatedly without random-circle, hero quota or turn hooks
+  ---
+  duration_ms: 4.141365
+  type: 'test'
+  ...
+# Subtest: item menu opens repeatedly without random-circle, hero quota or turn hooks
+ok 6 - item menu opens repeatedly without random-circle, hero quota or turn hooks
+  ---
+  duration_ms: 1.061775
+  type: 'test'
+  ...
+# Subtest: picker rejects busy battle state
+ok 7 - picker rejects busy battle state
+  ---
+  duration_ms: 0.971109
+  type: 'test'
+  ...
+# Subtest: picker rejects auto battle state
+ok 8 - picker rejects auto battle state
+  ---
+  duration_ms: 0.817308
+  type: 'test'
+  ...
+# Subtest: picker rejects actionCommitted battle state
+ok 9 - picker rejects actionCommitted battle state
+  ---
+  duration_ms: 0.980494
+  type: 'test'
+  ...
+# Subtest: enemy turn and intro block menu; switching pickers closes the other one
+ok 10 - enemy turn and intro block menu; switching pickers closes the other one
+  ---
+  duration_ms: 1.047554
+  type: 'test'
+  ...
+# Subtest: actual submitted skill and attack still enter action pipeline
+ok 11 - actual submitted skill and attack still enter action pipeline
+  ---
+  duration_ms: 1.895389
+  type: 'test'
+  ...
+# Subtest: summon [data-modal-primary] closes during intro and preserves all rewards
+ok 12 - summon [data-modal-primary] closes during intro and preserves all rewards
+  ---
+  duration_ms: 13.956774
+  type: 'test'
+  ...
+# Subtest: summon [data-modal-primary] closes during premium and preserves all rewards
+ok 13 - summon [data-modal-primary] closes during premium and preserves all rewards
+  ---
+  duration_ms: 1.049737
+  type: 'test'
+  ...
+# Subtest: summon [data-modal-primary] closes during transition and preserves all rewards
+ok 14 - summon [data-modal-primary] closes during transition and preserves all rewards
+  ---
+  duration_ms: 0.715105
+  type: 'test'
+  ...
+# Subtest: summon [data-modal-primary] closes during complete and preserves all rewards
+ok 15 - summon [data-modal-primary] closes during complete and preserves all rewards
+  ---
+  duration_ms: 0.807754
+  type: 'test'
+  ...
+# Subtest: summon [data-modal-dismiss] closes during intro and preserves all rewards
+ok 16 - summon [data-modal-dismiss] closes during intro and preserves all rewards
+  ---
+  duration_ms: 0.858671
+  type: 'test'
+  ...
+# Subtest: summon [data-modal-dismiss] closes during premium and preserves all rewards
+ok 17 - summon [data-modal-dismiss] closes during premium and preserves all rewards
+  ---
+  duration_ms: 0.77185
+  type: 'test'
+  ...
+# Subtest: summon [data-modal-dismiss] closes during transition and preserves all rewards
+ok 18 - summon [data-modal-dismiss] closes during transition and preserves all rewards
+  ---
+  duration_ms: 0.658039
+  type: 'test'
+  ...
+# Subtest: summon [data-modal-dismiss] closes during complete and preserves all rewards
+ok 19 - summon [data-modal-dismiss] closes during complete and preserves all rewards
+  ---
+  duration_ms: 0.730888
+  type: 'test'
+  ...
+# Subtest: beginner early dismissal uses correct return destination
+ok 20 - beginner early dismissal uses correct return destination
+  ---
+  duration_ms: 0.780213
+  type: 'test'
+  ...
+# Subtest: chapterTwo397 early dismissal uses correct return destination
+ok 21 - chapterTwo397 early dismissal uses correct return destination
+  ---
+  duration_ms: 0.843368
+  type: 'test'
+  ...
+# Subtest: boot cache maps all changed modules to build412 and preserves dynamic entry
+ok 22 - boot cache maps all changed modules to build412 and preserves dynamic entry
+  ---
+  duration_ms: 1.143559
+  type: 'test'
+  ...
+# Subtest: item selection commits one inventory item and hero action; duplicate taps and invalid targets consume nothing
+ok 23 - item selection commits one inventory item and hero action; duplicate taps and invalid targets consume nothing
+  ---
+  duration_ms: 1.587135
+  type: 'test'
+  ...
+# Subtest: protection manager renders an explicit combined release and favorites filter
+ok 24 - protection manager renders an explicit combined release and favorites filter
+  ---
+  duration_ms: 1.363319
+  type: 'test'
+  ...
+1..24
+# tests 24
+# suites 0
+# pass 24
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 146.985135

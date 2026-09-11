@@ -337,8 +337,9 @@ export function equipMagicCircle(state,monster,idOrInstance){
 
 function circleMarkup(entry,{className=""}={}){
  const high=entry.level>=20?"magic-circle-high":"",slot=entry.effect==="slot"?"magic-circle-slot":"";
- const frames=(entry.frames?.length?entry.frames:[entry.asset]).map((source,index)=>`<img class="magic-circle-frame magic-circle-frame-${index+1}" src="${source}" alt="" draggable="false">`).join("");
- return`<span class="magic-circle magic-circle-${entry.tone} ${high} ${slot} ${className}" data-circle-id="${entry.id}" data-circle-level="${entry.level}" aria-hidden="true">${frames}<i class="magic-circle-ring-a"></i><i class="magic-circle-ring-b"></i><b>${entry.glyph}</b></span>`;
+ const sources=entry.frames?.length?entry.frames:[entry.asset];
+ const frames=sources.map((source,index)=>`<img class="magic-circle-frame magic-circle-frame-${index+1}" src="${source}" alt="" draggable="false">`).join("");
+ return`<span class="magic-circle magic-circle-${entry.tone} ${high} ${slot} ${sources.length===1?"magic-circle-static413":""} ${className}" data-circle-id="${entry.id}" data-circle-level="${entry.level}" aria-hidden="true">${frames}<i class="magic-circle-ring-a"></i><i class="magic-circle-ring-b"></i><b>${entry.glyph}</b></span>`;
 }
 
 export function magicCircleMarkup(monster,state,{className=""}={}){return circleMarkup(equippedMagicCircle(monster,state),{className})}

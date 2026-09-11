@@ -32,12 +32,12 @@ export function chapterTwoArtScale382({width,height,slotWidth,headroom,normalSiz
 }
 function layoutChapterTwoEnemies382(root,arena){
  const arenaRect=arena.getBoundingClientRect();
- for(const unit of root.querySelectorAll('.side-enemies .side-battle-unit')){
+ for(const unit of root.querySelectorAll(root.classList.contains('chapter-two-battle380')?'.side-enemies .side-battle-unit,.side-party .side-battle-unit:not(.party-floor-boss)':'.side-party .side-battle-unit:not(.party-floor-boss)')){
   const art=unit.querySelector('.side-unit-sprite>.monster-visual'),image=art?.querySelector('svg[data-monster-atlas],img:not([hidden])'),card=unit.querySelector('.side-unit-card'),label=unit.querySelector('.battle-unit-floating-name');
   if(!art||!image||!image.dataset.monsterAtlas&&(!image.complete||!image.naturalWidth)||!card||!label)continue;
   unit.prepend(label);unit.classList.remove('boss-name-in-card');
   art.style.setProperty('translate','none','important');art.style.setProperty('scale','1','important');
-  const native=chapterTwoFrameBounds383(image.dataset.monsterAtlas),source=native??visibleBounds(image),b=native??{...source,left:1-source.right,right:1-source.left};
+  const ally=Boolean(unit.closest(".side-party")),native=chapterTwoFrameBounds383(image.dataset.monsterAtlas),source=native??visibleBounds(image),mirrored=ally?Boolean(native):!native,b=mirrored?{...source,left:1-source.right,right:1-source.left}:source;
   const ur=unit.getBoundingClientRect(),cr=card.getBoundingClientRect(),initial=image.getBoundingClientRect(),labelHeight=label.getBoundingClientRect().height;
   const top=Math.max(ur.top,arenaRect.top+4),headroom=cr.top-top-labelHeight-12;
   const scale=chapterTwoArtScale382({width:initial.width*(b.right-b.left),height:initial.height*(b.bottom-b.top),slotWidth:ur.width,headroom,normalSize:Math.max(54,Math.min(88,(globalThis.innerWidth||390)*.16)),boss:unit.classList.contains('party-floor-boss')});
@@ -103,7 +103,7 @@ export function layoutPartyBosses(root){
   }
   if(!changed)break;
  }
- if(root.classList.contains('chapter-two-battle380'))layoutChapterTwoEnemies382(root,arena);
+ layoutChapterTwoEnemies382(root,arena);
  // Circle placement must follow all silhouette and name/card adjustments.
  layoutBattleCircles405(root,visibleBounds);
 }

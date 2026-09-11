@@ -1,0 +1,58 @@
+TAP version 13
+# Subtest: one-frame chapter-two and raid circles receive stable-frame treatment; three-frame animation remains
+ok 1 - one-frame chapter-two and raid circles receive stable-frame treatment; three-frame animation remains
+  ---
+  duration_ms: 1.435688
+  type: 'test'
+  ...
+# Subtest: visible art and circle fit at 320px, including narrow/tall artwork
+ok 2 - visible art and circle fit at 320px, including narrow/tall artwork
+  ---
+  duration_ms: 0.780754
+  type: 'test'
+  ...
+# Subtest: visible art and circle fit at 390px, including narrow/tall artwork
+ok 3 - visible art and circle fit at 390px, including narrow/tall artwork
+  ---
+  duration_ms: 0.324779
+  type: 'test'
+  ...
+# Subtest: visible art and circle fit at 430px, including narrow/tall artwork
+ok 4 - visible art and circle fit at 430px, including narrow/tall artwork
+  ---
+  duration_ms: 0.210977
+  type: 'test'
+  ...
+# Subtest: visible art and circle fit at 768px, including narrow/tall artwork
+ok 5 - visible art and circle fit at 768px, including narrow/tall artwork
+  ---
+  duration_ms: 0.288814
+  type: 'test'
+  ...
+# Subtest: visible art and circle fit at 1280px, including narrow/tall artwork
+ok 6 - visible art and circle fit at 1280px, including narrow/tall artwork
+  ---
+  duration_ms: 0.223767
+  type: 'test'
+  ...
+# Subtest: real fitting positions ally visible feet above HP and labels above art; repeat fitting is stable
+ok 7 - real fitting positions ally visible feet above HP and labels above art; repeat fitting is stable
+  ---
+  duration_ms: 13.469818
+  type: 'test'
+  ...
+# Subtest: latest cache targets and CSS ordering preserve Build412 logic
+ok 8 - latest cache targets and CSS ordering preserve Build412 logic
+  ---
+  duration_ms: 70.187652
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 319.455127

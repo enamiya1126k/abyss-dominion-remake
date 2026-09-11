@@ -120,7 +120,7 @@ export function invertSingleDebuff410(b,target,effect,side){
 export function protectedSingleTarget410(b,u){return Boolean(b.onlineMode||b.raid||b.pvp||b.isPvp||['raid','pvp','online'].includes(b.mode)||u.boss||u.isBoss||u.raidBoss||u.floorBossCatalogId||u.endgameBossId||['tenGod','abyss'].includes(u.faction??u.endgameFaction)||u.storyProtected||u.instantDeathImmune||u.immortal);}
 function executeTerminal410(b,owner,side,target,targetSide,kind){
  const entry=singleState410(b).entries[key(side,owner.id)],power=kind==='hibernation'?entry?.raw.matk:traitStats408(entry?.raw??{},singleTrait410(owner)).matk;
- const plan=terminalDamagePlan408({...target,hp:hp(target),boss:protectedSingleTarget410(b,target)},kind,{attackerPower:power});if(!plan)return;
+ const plan=terminalDamagePlan408({...target,hp:hp(target),boss:protectedSingleTarget410(b,target)},kind,{attackerPower:power,balance415:!b.onlineMode&&!b.raid&&!b.pvp&&!b.isPvp&&!['raid','pvp','online'].includes(b.mode)});if(!plan)return;
  return withSingleCause410(b,{kind:'trait',sourceId:owner.id,fromSide:side},()=>{if(plan.kind==='terminal')b._singleEnv410?.terminal?.(target,targetSide,plan,owner);else b._singleEnv410?.damage?.(target,targetSide,plan,owner,kind==='hibernation'?'ice':'dark');});
 }
 export function settleSingleDeaths410(b){

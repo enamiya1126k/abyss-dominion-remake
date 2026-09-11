@@ -1,0 +1,30 @@
+{
+  "baseline_commit": "89540f22fcad9fa9ae952ed71b59fb1c6ca7078c",
+  "unchanged_files": 24,
+  "files": {
+    "online-server/server.js": "d86f4f4f0e08c8160c2bd4c63e8433ca5acf1faa9ff2482f6574277fb8202b8c",
+    "online-server/src/EndgameUltimateAdapter.js": "ec6355764a2df92bc4a0b9a0f70e13bcea0b6ad0b15da40544824f8f9771dfe8",
+    "online-server/src/WeeklyRaidCatalog.js": "7408eb8b38c043d47080a277d7c55a4e8181291b4d275bc07560605d80df9d46",
+    "online-server/src/TradeCoordinator.js": "b596b8e9edf1f57c802a10fa29a98db41daa3a6530346eb8d502594b84c84e9a",
+    "online-server/src/OnlineMagicCircles398.js": "291e768cb5120cc7629a1fc76f48852b1c9eca0ba6339978a7c0b9fb82e4e32d",
+    "online-server/src/OnlineExpansion208.js": "6a91544a8f1cf93af6c6290ff27aa4daecf12140b21293851af2a5dee98ce9c1",
+    "online-server/src/OfflineDungeonRules.js": "f49d2a5a50abfa923b9016c745caac1646ed289c234ebb90205c619363119e12",
+    "online-server/src/RaidCoordinator.js": "d4593615a697d0a423c4f2f09bf0fba8ca999326e572a7c3d3d099b43b1ebcb8",
+    "online-server/src/PlayerPowerRanking.js": "baf7396ea83e98fda5ce456e04e7587ccb4e50408bc306742e03ba87d3b3e54e",
+    "online-server/src/AutoBattleSupport.js": "06520f85ddadcbe6d7a7f0229bc5d6f51cf6193c8803f75e057478a2ab4c3a3c",
+    "online-server/src/ResonanceMazeCoordinator.js": "67149ca80c218f391224739b4181c404239244dfc311c74bdce9ee44e526fccf",
+    "online-server/src/HallMinigameCoordinator.js": "f856cca65e377ea64ddf0a0c0df30aec2d42d2601fea22650da92eaa8a6e5e49",
+    "online-server/src/SettlementJournal.js": "9bb5e5a498d7746c1846f7876a1c2a2b0fa16c5be5acca2e0b8ef0535e632050",
+    "online-server/src/CoopGimmicks.js": "d569f267dc12661e70a76e983203cfb1114a6744a0813d8067411268361bb7e0",
+    "online-server/src/TeamBattleCoordinator.js": "02a6ee01034c6587f1a08b8ffbf3c8a7dad5c4980008a37063b6a58af5f50190",
+    "online-server/src/CoopBossCatalog.js": "54c8a58dd09332ee43939c09027f6091f34377b97e835b24d2035b3d56accc98",
+    "online-server/src/CoopTechniqueCatalog.js": "4092691346278604926991a11bac6e8c7dbdc8ea6582549c10c007b7bad9856d",
+    "online-server/src/OnlineBattleAI.js": "508932a91cf2b04a126102be3ff06c1f168b9f0278cfe8fb20ad048c7c22ffdb",
+    "online-server/src/CampaignFloorScale.js": "0c52a00bcd61139372f4aa2fa36bd33db67da1bb7d897ec4ce0f1f1812a6c9ce",
+    "online-server/src/OnlineExpansion207.js": "f498bd4f27f7b3715d57532360f617acb9ab2232527f0cd50a7b0c4e35300c27",
+    "online-server/src/HeroAllianceAdapter.js": "5cdd7dafaea028a6350a70dec17c7e0c0dc9efccaf2fe8d79a5cb5b8847c812e",
+    "online-server/src/GuildCoordinator.js": "7f32dcd970147c3430d307b724db56f735aa5a80aa272ed52f555e0f0f703d54",
+    "online-server/src/FriendCoordinator.js": "630d3afeb93e6d3c9268374f39cbbf3bc899ad196ca2ea6fa073bd481b807ffd",
+    "online-server/src/RoomStore.js": "007eed405bbe0e7357e5b98c98f9f9fc2684d952f620426c6fc1a22ad1cc6a44"
+  }
+}

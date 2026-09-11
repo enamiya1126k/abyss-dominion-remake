@@ -1,0 +1,217 @@
+--- build415/index.html
++++ build416/index.html
+@@ -243,18 +243,18 @@
+     "./src/core/HomeSkinSystem400.js": "./src/core/HomeSkinSystem400.js?v=3.1.87-build407",
+     "./src/core/HomeSkinSystem400.js?v=3.1.82-build402": "./src/core/HomeSkinSystem400.js?v=3.1.87-build407",
+     "./src/core/HomeSkinSystem400.js?v=3.1.87-build407": "./src/core/HomeSkinSystem400.js?v=3.1.87-build407",
+-    "./src/core/config.js": "./src/core/config.js?v=3.1.94-build415",
+-    "./src/core/config.js?v=3.1.82-build402": "./src/core/config.js?v=3.1.94-build415",
+-    "./src/core/config.js?v=3.1.85-build405": "./src/core/config.js?v=3.1.94-build415",
+-    "./src/core/config.js?v=3.1.86-build406": "./src/core/config.js?v=3.1.94-build415",
+-    "./src/core/config.js?v=3.1.87-build407": "./src/core/config.js?v=3.1.94-build415",
++    "./src/core/config.js": "./src/core/config.js?v=3.1.95-build416",
++    "./src/core/config.js?v=3.1.82-build402": "./src/core/config.js?v=3.1.95-build416",
++    "./src/core/config.js?v=3.1.85-build405": "./src/core/config.js?v=3.1.95-build416",
++    "./src/core/config.js?v=3.1.86-build406": "./src/core/config.js?v=3.1.95-build416",
++    "./src/core/config.js?v=3.1.87-build407": "./src/core/config.js?v=3.1.95-build416",
+     "./src/data/species.js": "./src/data/species.js?v=3.1.86-build406",
+     "./src/data/species.js?v=3.1.72-build392": "./src/data/species.js?v=3.1.86-build406",
+     "./src/data/species.js?v=3.1.86-build406": "./src/data/species.js?v=3.1.86-build406",
+-    "./src/main.js": "./src/main.js?v=3.1.94-build415",
+-    "./src/main.js?v=3.1.85-build405": "./src/main.js?v=3.1.94-build415",
+-    "./src/main.js?v=3.1.86-build406": "./src/main.js?v=3.1.94-build415",
+-    "./src/main.js?v=3.1.89-build409": "./src/main.js?v=3.1.94-build415",
++    "./src/main.js": "./src/main.js?v=3.1.95-build416",
++    "./src/main.js?v=3.1.85-build405": "./src/main.js?v=3.1.95-build416",
++    "./src/main.js?v=3.1.86-build406": "./src/main.js?v=3.1.95-build416",
++    "./src/main.js?v=3.1.89-build409": "./src/main.js?v=3.1.95-build416",
+     "./src/models/Monster.js": "./src/models/Monster.js?v=3.1.94-build415",
+     "./src/models/Monster.js?v=3.1.82-build402": "./src/models/Monster.js?v=3.1.94-build415",
+     "./src/models/Monster.js?v=3.1.86-build406": "./src/models/Monster.js?v=3.1.94-build415",
+@@ -293,7 +293,7 @@
+     "./src/ui/screens/SettingsScreen.js": "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407",
+     "./src/ui/screens/SettingsScreen.js?v=3.1.82-build402": "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407",
+     "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407": "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407",
+-    "./src/core/config.js?v=3.1.88-build408": "./src/core/config.js?v=3.1.94-build415",
++    "./src/core/config.js?v=3.1.88-build408": "./src/core/config.js?v=3.1.95-build416",
+     "./src/services/SaveService.js?v=3.1.88-build408": "./src/services/SaveService.js?v=3.1.88-build408",
+     "./src/battle/BattleRules.js?v=3.1.78-build398": "./src/battle/BattleRules.js?v=3.1.94-build415",
+     "./src/battle/BattleRules.js": "./src/battle/BattleRules.js?v=3.1.94-build415",
+@@ -306,7 +306,7 @@
+     "./src/ui/PairEffects409.js": "./src/ui/PairEffects409.js?v=3.1.89-build409",
+     "./src/battle/TwinResonance385.js?v=3.1.89-build409": "./src/battle/TwinResonance385.js?v=3.1.94-build415",
+     "./src/ui/TwinStatus385.js?v=3.1.89-build409": "./src/ui/TwinStatus385.js?v=3.1.94-build415",
+-    "./src/core/config.js?v=3.1.89-build409": "./src/core/config.js?v=3.1.94-build415",
++    "./src/core/config.js?v=3.1.89-build409": "./src/core/config.js?v=3.1.95-build416",
+     "./src/ui/screens/BattleScreen.js?v=3.1.89-build409": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
+     "./src/battle/SkillSystem.js?v=3.1.89-build409": "./src/battle/SkillSystem.js?v=3.1.94-build415",
+     "./src/battle/PairSynergy409.js?v=3.1.89-build409": "./src/battle/PairSynergy409.js?v=3.1.94-build415",
+@@ -328,7 +328,7 @@
+     "./src/data/statusEffects.js": "./src/data/statusEffects.js?v=3.1.90-build410",
+     "./src/ui/TwinStatus385.js?v=3.1.90-build410": "./src/ui/TwinStatus385.js?v=3.1.94-build415",
+     "./src/core/HeroAllianceSystem.js?v=3.1.90-build410": "./src/core/HeroAllianceSystem.js?v=3.1.90-build410",
+-    "./src/core/config.js?v=3.1.90-build410": "./src/core/config.js?v=3.1.94-build415",
++    "./src/core/config.js?v=3.1.90-build410": "./src/core/config.js?v=3.1.95-build416",
+     "./src/data/statusEffects.js?v=3.1.90-build410": "./src/data/statusEffects.js?v=3.1.90-build410",
+     "./src/ui/screens/BattleScreen.js?v=3.1.90-build410": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
+     "./src/battle/BattleRules.js?v=3.1.90-build410": "./src/battle/BattleRules.js?v=3.1.94-build415",
+@@ -336,7 +336,7 @@
+     "./src/core/CombatPower.js?v=3.1.82-build402": "./src/core/CombatPower.js?v=3.1.91-build411",
+     "./src/core/CombatPower.js": "./src/core/CombatPower.js?v=3.1.91-build411",
+     "./src/online/OnlineTraitCompatibility411.js?v=3.1.91-build411": "./src/online/OnlineTraitCompatibility411.js?v=3.1.94-build415",
+-    "./src/core/config.js?v=3.1.91-build411": "./src/core/config.js?v=3.1.94-build415",
++    "./src/core/config.js?v=3.1.91-build411": "./src/core/config.js?v=3.1.95-build416",
+     "./src/ui/screens/OnlinePartyScreen.js?v=3.1.91-build411": "./src/ui/screens/OnlinePartyScreen.js?v=3.1.91-build411",
+     "./src/core/CombatPower.js?v=3.1.91-build411": "./src/core/CombatPower.js?v=3.1.91-build411",
+     "./src/services/EquipmentProtection404.js": "./src/services/EquipmentProtection404.js?v=3.1.92-build412",
+@@ -349,7 +349,7 @@
+     "./src/ui/BattleBossLayout.js?v=3.1.85-build405": "./src/ui/BattleBossLayout.js?v=3.1.93-build413",
+     "./src/battle/ChapterTwoAbilityRuntime408.js": "./src/battle/ChapterTwoAbilityRuntime408.js?v=3.1.94-build415",
+     "./src/ui/BattlePreparation415.js": "./src/ui/BattlePreparation415.js?v=3.1.94-build415",
+-    "./src/battle/TrialAdaptation415.js": "./src/battle/TrialAdaptation415.js?v=3.1.94-build415",
++    "./src/battle/TrialAdaptation415.js": "./src/battle/TrialAdaptation415.js?v=3.1.95-build416",
+     "./src/data/ChapterTwoAbilityDesign408.js": "./src/data/ChapterTwoAbilityDesign408.js?v=3.1.94-build415",
+     "./src/battle/PairPreparation415.js": "./src/battle/PairPreparation415.js?v=3.1.94-build415",
+     "./src/ui/screens/FormationScreen.js": "./src/ui/screens/FormationScreen.js?v=3.1.94-build415",
+@@ -361,8 +361,8 @@
+ }
+ </script>
+ <script type="module">
+-    const ASSET_VERSION = "3.1.94";
+-    const ASSET_BUILD = "build415";
++    const ASSET_VERSION = "3.1.95";
++    const ASSET_BUILD = "build416";
+     const CACHE_VERSION = `${ASSET_VERSION}-${ASSET_BUILD}`;
+     const VERSION_KEY = "abyss-dominion-asset-version";
+     async function refreshStaleAssets() {
+--- build415/src/battle/TrialAdaptation415.js
++++ build416/src/battle/TrialAdaptation415.js
+@@ -31,6 +31,9 @@
+  const out={...stats};for(const [field,factor]of Object.entries(binding.rates))out[field]=Math.floor((Number(stats[field])||0)*factor);return out;
+ }
+ const ratio=(hp,max)=>Math.max(0,Math.min(1,(Number(hp)||0)/Math.max(1,max)));
++// Rounding a living unit back from a large trial HP scale must never turn it
++// into a KO. A defeated unit remains at zero.
++const normalHp415=(hp,maximum,natural)=>Number(hp)>0?Math.max(1,Math.min(natural,Math.round(natural*ratio(hp,maximum)))):0;
+ export function prepareTrial415(b,statsFor){
+  const rates=trialTier415(b);if(!rates)return false;
+  const saved=b.trialAdaptation415?.tier===contextKey415(b)?b.trialAdaptation415.units??{}:{};
+@@ -46,7 +49,7 @@
+   // own checkpoint below, so boot-time equipment normalization cannot truncate it.
+   Object.defineProperty(u,'toJSON',{configurable:true,enumerable:false,value(){
+    const copy={...this},binding=bindings.get(this);if(!binding)return copy;
+-   copy.currentHp=Math.round(binding.naturalHp*ratio(this.currentHp,binding.statsFor(this).hp));
++   copy.currentHp=normalHp415(this.currentHp,binding.statsFor(this).hp,binding.naturalHp);
+    copy.maxHp=binding.naturalHp;copy._maxHp=binding.naturalHp;
+    copy.heroShield348=0;copy.heroShieldMax378=0;return copy;
+   }});
+@@ -59,8 +62,8 @@
+ }
+ export function cleanupTrial415(b){
+  for(const u of b?.party??[]){const x=bindings.get(u);if(!x)continue;
+-  const hpRatio=ratio(u.currentHp,x.statsFor(u).hp);bindings.delete(u);delete u.toJSON;
+-  const maximum=x.statsFor(u).hp;u.currentHp=Math.round(maximum*hpRatio);u.maxHp=maximum;u._maxHp=maximum;
++  const hp=u.currentHp,previousMaximum=x.statsFor(u).hp;bindings.delete(u);delete u.toJSON;
++  const maximum=x.statsFor(u).hp;u.currentHp=normalHp415(hp,previousMaximum,maximum);u.maxHp=maximum;u._maxHp=maximum;
+  }
+ }
+ export function trialDescription415(id,floor=100,tier=0){
+--- build415/src/core/config.js
++++ build416/src/core/config.js
+@@ -28,4 +28,4 @@
+   const floor=typeof stateOrFloor==="number"?stateOrFloor:Number(stateOrFloor?.player?.maxFloor)||0;
+   return floor>=contentUnlockFloor(productionFloor);
+ }
+-export const APP_VERSION="3.1.94";// Regression history: APP_VERSION="3.1.16" / APP_VERSION="3.1.15" / APP_VERSION="3.1.14" / APP_VERSION="3.1.13" / APP_VERSION="3.1.12" / APP_VERSION="3.1.11" / APP_VERSION="3.1.10" / APP_VERSION="3.1.9" / APP_VERSION="3.1.8" / APP_VERSION="3.1.7" / APP_VERSION="3.1.6" / APP_VERSION="3.1.5" / APP_VERSION="3.1.4" / APP_VERSION="3.1.3"
++export const APP_VERSION="3.1.95";// Regression history: APP_VERSION="3.1.16" / APP_VERSION="3.1.15" / APP_VERSION="3.1.14" / APP_VERSION="3.1.13" / APP_VERSION="3.1.12" / APP_VERSION="3.1.11" / APP_VERSION="3.1.10" / APP_VERSION="3.1.9" / APP_VERSION="3.1.8" / APP_VERSION="3.1.7" / APP_VERSION="3.1.6" / APP_VERSION="3.1.5" / APP_VERSION="3.1.4" / APP_VERSION="3.1.3"
+--- build415/src/main.js
++++ build416/src/main.js
+@@ -1435,8 +1435,12 @@
+  const current=battle;if(!current||current.resultSettled||current.specialBattleType!=='chapterTwo')return;
+  current.busy=true;
+  const contribution=battleContributionSnapshot(current);
++ // End temporary HP scaling before taking the transaction snapshot or granting
++ // EXP. The saved roster and the result screen must share the same normal HP.
++ cleanupUltimateBattle(current);cleanupSingles410(current);cleanupTrial415(current);
++ syncPersistentAilments(current);clearPartySynergy();
++ for(const unit of current.party){const hp=calculatedStats(unit).hp;unit.currentHp=Math.min(hp,Math.max(0,unit.currentHp));unit.maxHp=hp;unit._maxHp=hp;}
+  const backup=JSON.parse(JSON.stringify(save.state));
+- syncPersistentAilments(current);clearPartySynergy();
+  // Build382: defeat and retreat retain the actual wounds, MP and KO state.
+  const result=settleChapterTwoEncounter(save.state,current.chapterTwoToken,{won});result.auto380=Boolean(current.auto||current.explorationAuto);if(!won&&chapterTwoState(save.state)?.run)chapterTwoState(save.state).run.auto377=false;
+  delete save.state.activeBattle;
+@@ -6413,10 +6417,10 @@
+  if(!aliveEnemies(battle).length)return win(false,null);if(!battle.party.some(u=>u.currentHp>0))return lose();return finishCurrentAction();
+ }
+ async function command(type,skillId=null,{skipRandomCircle=false}={}){
+- if(!battle)return;
++ if(!battle||battle.resultSettled)return;
+  sanitizeBattleParty();
+  if(battle.busy||battle.guideReady===false)return;
+- const entry=currentTurnEntry(battle),a=actor();
++ const entry=currentTurnEntry(battle),a=actor(),commandBattle416=battle,commandTurn416=battle.turn,commandIndex416=battle.queueIndex;
+  if(entry?.type!=="ally"||!a||battle.actionCommitted)return;
+  // Opening a picker is not an action: no quotas, random skills or turn hooks.
+  if(type==="item"||(type==="skill"&&!skillId)){
+@@ -6430,6 +6434,9 @@
+  prepareBattleUltimates358();
+  if(ultimateIsolated(battle,a))return finishCurrentAction();
+  if(await runSingleNatural410(a,"ally"))return;
++ // A second tap can enter while the natural-trait promise is yielding. Only
++ // the first action that still owns this exact turn may spend MP or advance it.
++ if(battle!==commandBattle416||battle.busy||battle.resultSettled||battle.actionCommitted||battle.turn!==commandTurn416||battle.queueIndex!==commandIndex416||actor()!==a)return;
+  if(ultimateBasicOnly(battle,a)&&type!=='attack'){if(battle.auto)return command('attack');return alert('領域中は通常攻撃のみ使用できます')}
+  battle.busy=true;beginUltimateAction(battle,a,skillId?skillById(skillId):null);
+  if(type==='skill'&&isEndgameUltimate(skillId)){if(!learnedSkills(a).some(s=>s.id===skillId)){battle.busy=false;finishUltimateAction(battle);if(battle.auto)return command("attack",null,{skipRandomCircle:true});return}return performUltimate358(a,skillId)}
+@@ -6826,7 +6833,7 @@
+  return continueBattleFlow();
+ }
+ async function continueBattleFlow(){
+- if(!battle||battle.busy)return;
++ if(!battle||battle.busy||battle.resultSettled)return;
+  sanitizeBattleParty();
+  if(battle.escapePending)return resolveEscape();
+  skipInvalidEntries(battle);
+@@ -6857,9 +6864,11 @@
+  modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish
+ }
+ function win(caught,m){
++ if(!battle||battle.resultSettled)return;
+  settleSingleDeaths410(battle);if(battle&&!battle.party.some(u=>u.currentHp>0))return lose();
+  if(battle?.specialBattle&&advanceSpecialBattleWave())return;
+  if(battle?.specialBattle)return finishSpecialBattle(true);
++ battle.resultSettled=true;battle.busy=true;
+  audio.setScene("victory");audio.sfx("victory");
+  const contributionSnapshot=battleContributionSnapshot();
+  const memoryBattle=Boolean(battle?.memoryBattle),defeated=(battle.enemies??[battle.enemy]).filter(Boolean),floor=memoryBattle?(battle.memorySourceFloor??save.state.player.currentFloor):save.state.player.currentFloor,boss=defeated.find(e=>e.boss),eliteDefeated=defeated.filter(e=>e.elite&&!e.captured),firstBoss=!!boss&&!memoryBattle&&!campaignBattleBossWasDefeated(save.state,floor,boss),suppressItemDrops=defeated.some(e=>e.noItemDrops);
+@@ -6891,7 +6900,7 @@
+  battle.party.forEach(monster=>{monster.affection=Math.min(1000,(monster.affection??monster.bond??0)+(boss?5:2));monster.bond=monster.affection;monster.history??={};monster.history.adventures=(monster.history.adventures??0)+1;monster.history.battles=(monster.history.battles??0)+1;monster.history.victories=(monster.history.victories??0)+1;monster.history.kills=(monster.history.kills??0)+participationKills;monster.history.bossDefeats=(monster.history.bossDefeats??0)+(boss?1:0);monster.history.highestFloor=Math.max(monster.history.highestFloor??1,floor);monster.history.lastDeployedAt=new Date().toISOString();monster.history.consecutiveDeployments=(monster.history.consecutiveDeployments??0)+1;monster.history.longestConsecutiveDeployments=Math.max(monster.history.longestConsecutiveDeployments??0,monster.history.consecutiveDeployments);monster.battles=(monster.battles??0)+1;});
+  const progress=battle.party.map(monster=>{
+   const alive=monster.currentHp>0;
+-  const before={level:monster.level,exp:monster.exp,need:expNeed(monster),stats:{...calculatedStats(monster)},hp:monster.currentHp,mp:monster.currentMp};
++  const before={level:monster.level,exp:monster.exp,need:expNeed(monster),stats:{...calculatedStats({...monster,_synergy:null})},hp:monster.currentHp,mp:monster.currentMp};
+   const personalExpBonus=(affixValue(monster,"expGain",200)+affixValue(monster,"abyssGrowth",200))/100;const gain=alive?Math.round((share+(remainder-->0?1:0))*(1+personalExpBonus)):0;
+   const previousLevel=monster.level;
+   applyTotalExperience(monster,totalExperience(monster)+gain);
+@@ -6914,6 +6923,7 @@
+ 
+  if(boss&&!memoryBattle){if(snapshot?.world)applyCampaignBossClearToWorld(snapshot.world,boss,floor);else{const bossId=boss.campaignBossId??boss.endgameBossId??boss.floorBossCatalogId??null,campaignState=defeatCampaignBoss(save.state,floor,bossId);campaignState.lastBossInfo={speciesId:boss.speciesId,name:boss.name??boss.nameOverride,floorBossCatalogId:boss.floorBossCatalogId??null,endgameBossId:boss.endgameBossId??null,campaignBossId:bossId,milestoneBossIds:milestoneBossIdsForFloor(floor)}}}
+  syncPersistentAilments(battle);persistExpeditionSnapshot(snapshot,{saveNow:false});clearPartySynergy();clearBattleCheckpoint();
++ for(const row of progress)row.afterStats={...calculatedStats(row.x)};
+  activeEnemy=null;
+  document.querySelector(".battle-screen")?.remove();
+ 
+@@ -6980,8 +6990,13 @@
+ function dedicatedFloorBossWeapon(floor,boss){return dedicatedFloorBossEquipment(floor,boss,"weapon")}
+ 
+ function lose(){
++ if(!battle||battle.resultSettled)return;
+  settleSingleDeaths410(battle);if(battle?.party.some(u=>u.currentHp>0))return aliveEnemies(battle).length?continueBattleFlow():win(false,null);
+  if(battle?.specialBattle)return finishSpecialBattle(false);
++ battle.resultSettled=true;battle.busy=true;
++ // Formal rescue HP (1 or 30%) is assigned in normal units, after battle-only
++ // multipliers and death absorption have been removed.
++ cleanupUltimateBattle(battle);cleanupSingles410(battle);cleanupTrial415(battle);
+  audio.setScene("defeat");audio.sfx("defeat");
+  if(battle?.memoryBattle){
+   clearPartySynergy();syncPersistentAilments(battle);battle.party.forEach(monster=>{monster.currentHp=Math.max(1,monster.currentHp??1);monster.currentMp=Math.max(0,monster.currentMp??0)});

@@ -1,0 +1,15 @@
+{
+  "build": 416,
+  "targets": 808,
+  "comparisons": 2424,
+  "matches": 2424,
+  "differences": [],
+  "seconds": 80.98827865599999,
+  "sourceHashes": {
+    "src/main.js": "1953b175092fc2ba1e637766e059cddac5a8d709be5f19326a8d9d2560b7133f",
+    "src/battle/TrialAdaptation415.js": "1c0fddb3356484963b978efa9aad72b17d76348cffbae0cb15c09aecba5955d8",
+    "src/battle/SkillSystem.js": "1e600fa54c432f8f725e3819147ed40c7034c5ff7f036e5d06b557e0681030d6",
+    "src/battle/PairSynergy409.js": "7d1d344ef0e4cf0320486c29028768af83ed06ddc97083d62ae4e4d52aeeb21b"
+  },
+  "method": "Actual main.js battle loop; first recorded seed per accepted Build415 composition. Compare outcome and round count; presentation/network/storage are stubbed."
+}

@@ -126,3 +126,10 @@ test('current entry preserves guide/name and motion module aliases',()=>{
  for(const target of Object.values(map))assert.ok(fs.existsSync(new URL('../'+target.split('?')[0],import.meta.url)));
  for(const css of ['build406-chapter-guide-summon','build407-home-motion'])assert.ok(html.includes(css));
 });
+
+test('100 home/preview replacements leave no listeners or observers after disposal',()=>{
+ const environments=[];
+ for(let i=0;i<100;i++){const e=environment(i%2===0);environments.push(e);mountHomeEnvironment400(e.root,e.doc);}
+ mountHomeEnvironment400(null,environments.at(-1).doc);
+ for(const e of environments){assert.equal(e.doc.count()+e.view.count()+e.media.count()+e.connection.count(),0);assert.ok(e.intersections.every(o=>o.disconnected));assert.ok(e.mutations.every(o=>o.disconnected));}
+});

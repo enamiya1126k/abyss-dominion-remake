@@ -1,0 +1,638 @@
+{
+  "repository": "enamiya1126k/abyss-dominion-remake",
+  "commit": "89540f22fcad9fa9ae952ed71b59fb1c6ca7078c",
+  "files": [
+    {
+      "path": "src/Styles/reset.css",
+      "sha": "7968577f80a7606c4977bce71a2e33339e5440a9"
+    },
+    {
+      "path": "src/Styles/theme.css",
+      "sha": "e27cc39a01fe75db30a902ce5b6bc361e0852f7b"
+    },
+    {
+      "path": "src/Styles/app.css",
+      "sha": "00eefebd5dffc2c9a9bd220a92e15e652b23027c"
+    },
+    {
+      "path": "src/Styles/v2.2.0.css",
+      "sha": "3b4d1aa607fc2ce4ae874b1c681857d84615b132"
+    },
+    {
+      "path": "src/Styles/v2.3.1.css",
+      "sha": "7d3e2448536e0eaf2ad6750e483cef7ff39dfa70"
+    },
+    {
+      "path": "src/Styles/v2.4.0.css",
+      "sha": "c856747b872cdee19b49cba40856d76e385a01d1"
+    },
+    {
+      "path": "src/Styles/v2.5.0.css",
+      "sha": "e3ca525c79df6f479a7eb56b93d235840a01f5ba"
+    },
+    {
+      "path": "src/Styles/v2.6.0.css",
+      "sha": "83749b214a102e9534b8befc0f3b64f02b2aa58a"
+    },
+    {
+      "path": "src/Styles/v2.9.0.css",
+      "sha": "0f7770225c09df0f0356fc815ce2490f2dc992da"
+    },
+    {
+      "path": "src/Styles/v2.10.0.css",
+      "sha": "5ca63449b1578d6891b5faa085d4c7285225893f"
+    },
+    {
+      "path": "src/Styles/online-v3.css",
+      "sha": "6489d5c197406ad8b91052fc38dd0a3e2d3cdd5f"
+    },
+    {
+      "path": "src/Styles/build163.css",
+      "sha": "0eb9b4c890106fc9ddd2d9977058556ae9da176c"
+    },
+    {
+      "path": "src/Styles/build164.css",
+      "sha": "5c9b0777d9e291c2d79ecae2c3b536dd5d971a21"
+    },
+    {
+      "path": "src/Styles/build165.css",
+      "sha": "a23c134edddc32343303f8591aa946195e82f933"
+    },
+    {
+      "path": "src/Styles/build166.css",
+      "sha": "8c35ffa8dd032c437cf9f31214f3fca4542ebbd4"
+    },
+    {
+      "path": "src/Styles/build167.css",
+      "sha": "9454084b3f05c8e197e83feaf2480bb82f260494"
+    },
+    {
+      "path": "src/Styles/build168.css",
+      "sha": "77b318276dc0209cf2bad3e1f56c8d3a7b84ad08"
+    },
+    {
+      "path": "src/Styles/build169.css",
+      "sha": "c35d9a675eb1b19ac47a4420088d96fc09c65e09"
+    },
+    {
+      "path": "src/Styles/build170.css",
+      "sha": "2ba5500b5a87167a4fd183c77ccdeba3c61eb140"
+    },
+    {
+      "path": "src/Styles/build171.css",
+      "sha": "41096e7159ff87c7834013e34376d9397ad170cd"
+    },
+    {
+      "path": "src/Styles/build172.css",
+      "sha": "2eb42b59af0f4ca293f609e7d77c3b44613f22be"
+    },
+    {
+      "path": "src/Styles/build173.css",
+      "sha": "df0cd1d2491e0e1be8939bba0a906f7ef49bcc14"
+    },
+    {
+      "path": "src/Styles/build174.css",
+      "sha": "1afe73af71e1644998aaca71ebd8a8bbfd43f541"
+    },
+    {
+      "path": "src/Styles/build175.css",
+      "sha": "2aca654e9c2b46b087f1daaee7042a56fd2a28e2"
+    },
+    {
+      "path": "src/Styles/build176.css",
+      "sha": "c706a97c7a5019d55b40cc2ece9ff1fafd76ff85"
+    },
+    {
+      "path": "src/Styles/build177.css",
+      "sha": "fd59d8c8926e250d40e42cfb81ef372f724aa270"
+    },
+    {
+      "path": "src/Styles/build178.css",
+      "sha": "951e3e4e5ae17b34b11116794ee3f1ff8d36d792"
+    },
+    {
+      "path": "src/Styles/build179.css",
+      "sha": "7db89e5ab59d85f130171fc3ccfc669e2b88a7cf"
+    },
+    {
+      "path": "src/Styles/build180.css",
+      "sha": "a1f318f3d2a8cbffee3f425ba0da0779447dfe7b"
+    },
+    {
+      "path": "src/Styles/build181.css",
+      "sha": "b0ea0586237ffe74d54c6f0b0d22aa6b4693fff6"
+    },
+    {
+      "path": "src/Styles/build182.css",
+      "sha": "23e21e64d65fa67eb82a765f830f09aea5fb433f"
+    },
+    {
+      "path": "src/Styles/build183.css",
+      "sha": "2bf816461af0d05df247cd1e51803ae9b4fb8607"
+    },
+    {
+      "path": "src/Styles/build184.css",
+      "sha": "df3e6dcd9bdf8891e230ae64ddf6bb4b3456b5fe"
+    },
+    {
+      "path": "src/Styles/build185.css",
+      "sha": "7495e3d293ffb08a480eea93c7b3258e4cb55575"
+    },
+    {
+      "path": "src/Styles/build186.css",
+      "sha": "346d6246b65dca5eaccd6588890f5804a4f9172e"
+    },
+    {
+      "path": "src/Styles/build187.css",
+      "sha": "de1ce9809cb864254026f246eb5f452f86a64e07"
+    },
+    {
+      "path": "src/Styles/build188.css",
+      "sha": "07ebd26f5067a1b59522855eb4458246837d5164"
+    },
+    {
+      "path": "src/Styles/build189.css",
+      "sha": "fec16ecc8163925f14c4abce4d8115b103f148d9"
+    },
+    {
+      "path": "src/Styles/build190.css",
+      "sha": "7a3e3679dabddf30302addd5d4369f2af78c77ef"
+    },
+    {
+      "path": "src/Styles/build191.css",
+      "sha": "697f626068cdf73af3d831243f9bf2f2251c797d"
+    },
+    {
+      "path": "src/Styles/build192.css",
+      "sha": "f33dc42fe52c6735dafabd3b8e81f492eaf4fc02"
+    },
+    {
+      "path": "src/Styles/build193.css",
+      "sha": "b531d185f620e090e2fe535002445ed8f2737328"
+    },
+    {
+      "path": "src/Styles/build194.css",
+      "sha": "1900f198ef468573f60767e79871bb7732b10c06"
+    },
+    {
+      "path": "src/Styles/build195.css",
+      "sha": "15f256d0db9fec516d7c781e651153361617bd75"
+    },
+    {
+      "path": "src/Styles/build196.css",
+      "sha": "64a9e01903b49e993da5f97d293a09d42470e1fd"
+    },
+    {
+      "path": "src/Styles/build199.css",
+      "sha": "b22f866b5e3331051f743db9d6156ccd5ea9fd3d"
+    },
+    {
+      "path": "src/Styles/build200.css",
+      "sha": "7c8a31caad161455a531841823e1c9e0c47e6de8"
+    },
+    {
+      "path": "src/Styles/build202.css",
+      "sha": "27569895952f66eea0216b6d698293f73ee7e7fa"
+    },
+    {
+      "path": "src/Styles/build203.css",
+      "sha": "65e8c4822d2437e34a511e8d8afa4bee8b15ed32"
+    },
+    {
+      "path": "src/Styles/build204.css",
+      "sha": "3f4dbd74333c6e94ba82122945d8da32392f96e0"
+    },
+    {
+      "path": "src/Styles/build205.css",
+      "sha": "20145a1eac5a0e3d47a08571b57fdd4542d10804"
+    },
+    {
+      "path": "src/Styles/build206.css",
+      "sha": "cb35643f1c9bf53e800824c5e1d1b807fe3a5125"
+    },
+    {
+      "path": "src/Styles/build207.css",
+      "sha": "8ec512b46504a86eeb94b0e3cb79d00d585776ce"
+    },
+    {
+      "path": "src/Styles/build208.css",
+      "sha": "9291cb1ac4ecc4202948b0b57c51d6e553d29e35"
+    },
+    {
+      "path": "src/Styles/build209.css",
+      "sha": "09e3fb2493aa59268b0fb4e7f1cee1d6b2989ad6"
+    },
+    {
+      "path": "src/Styles/build210.css",
+      "sha": "42bdf3516c7f6cc369bcbb3623768f58f99cbcca"
+    },
+    {
+      "path": "src/Styles/build211.css",
+      "sha": "50d39c53edc92669d7ade31ceb1627b8657e1321"
+    },
+    {
+      "path": "src/Styles/build212.css",
+      "sha": "bc81293352be3be1b8efab1f13a4c63c8faff140"
+    },
+    {
+      "path": "src/Styles/build216.css",
+      "sha": "2e4e7bb38f20aa9e28f64923913675f48d1a6db9"
+    },
+    {
+      "path": "src/Styles/build217.css",
+      "sha": "c528a57cfee0beebfb614cf18eb5f76dd23b46c7"
+    },
+    {
+      "path": "src/Styles/build218.css",
+      "sha": "ef4b2657dadaea667a9a4712f82e2b4cf6fddcb9"
+    },
+    {
+      "path": "src/Styles/build225.css",
+      "sha": "ab77ce6f304feb137fc3c7e8302a9a968818a990"
+    },
+    {
+      "path": "src/Styles/build226.css",
+      "sha": "7108d16cc7276ed5a32fadb0c3b0ad25923c0e1b"
+    },
+    {
+      "path": "src/Styles/build227.css",
+      "sha": "45ee558a41dd4c90cb853ce33c3a1b41d47f9004"
+    },
+    {
+      "path": "src/Styles/build228.css",
+      "sha": "678d286e45ead20003ab43ad8b8ed31b32e05799"
+    },
+    {
+      "path": "src/Styles/build229.css",
+      "sha": "983252c3c8200d7eac01c0d77f013935456b77fb"
+    },
+    {
+      "path": "src/Styles/build230.css",
+      "sha": "cec59adcea2b5b12c880b8ad4bf36357ac4b010f"
+    },
+    {
+      "path": "src/Styles/build231.css",
+      "sha": "6dfec059a1542b4b3cce6db791287c1aa3fa7bd4"
+    },
+    {
+      "path": "src/Styles/build232.css",
+      "sha": "c0931b8e60634e8846a2d4dc72d6678d7debe5bb"
+    },
+    {
+      "path": "src/Styles/build233.css",
+      "sha": "a34aebfecfc99b389f0c54320682330ca36bb155"
+    },
+    {
+      "path": "src/Styles/build234.css",
+      "sha": "0bee3ee8f909f15fcdea5a9a35a0f1f66ea95b0e"
+    },
+    {
+      "path": "src/Styles/build235.css",
+      "sha": "79485bafb6b5f1497053f0afd2b896041d82e075"
+    },
+    {
+      "path": "src/Styles/build236.css",
+      "sha": "8bd15e96fd2c77d0f9a67bada7a2c4a4664bb83a"
+    },
+    {
+      "path": "src/Styles/build237.css",
+      "sha": "73723a813b1a89bed30e02336c8ccb586547bea0"
+    },
+    {
+      "path": "src/Styles/build238.css",
+      "sha": "714ed58a812b2c86f47e8b0fa116d607149ede86"
+    },
+    {
+      "path": "src/Styles/build239.css",
+      "sha": "31c3a6ea27e270201295778fcf2d2414be208790"
+    },
+    {
+      "path": "src/Styles/build242.css",
+      "sha": "979f0c371e8b2264b6cd10ca530f4d6c4f22870c"
+    },
+    {
+      "path": "src/Styles/build245.css",
+      "sha": "afcb3744f8b34d5ff414f1723d073ff3d9b81f9f"
+    },
+    {
+      "path": "src/Styles/build247.css",
+      "sha": "225eb2c101c8fea8ab5a484f4bee5f0d16d07ff2"
+    },
+    {
+      "path": "src/Styles/build248.css",
+      "sha": "7e307828619089393e284cde38b04173ed2dd1e1"
+    },
+    {
+      "path": "src/Styles/build249.css",
+      "sha": "5dfe32a8fe9e42c3afdfac0268118c746b97d04e"
+    },
+    {
+      "path": "src/Styles/build250.css",
+      "sha": "2b357efdc8fbe8d09f645de525de1bf1687508a5"
+    },
+    {
+      "path": "src/Styles/build251.css",
+      "sha": "a38890d4ebfa4b59503eaa53c976baa57efbfec2"
+    },
+    {
+      "path": "src/Styles/build252.css",
+      "sha": "24b3f4bcb44dae7f5f0d71485449a88759906708"
+    },
+    {
+      "path": "src/Styles/build253.css",
+      "sha": "e715edfbaa3629cc49c92c56a861ba99dabef1f7"
+    },
+    {
+      "path": "src/Styles/build257.css",
+      "sha": "43e3aab3daabce2e7d8f63cc587a8818b9519b35"
+    },
+    {
+      "path": "src/Styles/build258-trade.css",
+      "sha": "85cd09ee3b73c5c36c4734f30874e307bef8452c"
+    },
+    {
+      "path": "src/Styles/build261.css",
+      "sha": "31b3e6e77b0384fdf74e43f51835bc0acedd1983"
+    },
+    {
+      "path": "src/Styles/build263.css",
+      "sha": "f4909d565f115f667548ad1a3d0150f22d696b12"
+    },
+    {
+      "path": "src/Styles/build300.css",
+      "sha": "b79f1034e5fb8e55b25612bffaf6055a35ae37c2"
+    },
+    {
+      "path": "src/Styles/build301.css",
+      "sha": "a80f3f3361f2bacbecc81258170fe729ba0c767a"
+    },
+    {
+      "path": "src/Styles/build302-auto.css",
+      "sha": "d8b4847e1f9785ee97f7c1cbbc79c14bcfe299ac"
+    },
+    {
+      "path": "src/Styles/build303-dungeon.css",
+      "sha": "aca90af609ae4af43b87e024a47004aa7bb69f8c"
+    },
+    {
+      "path": "src/Styles/build304-final.css",
+      "sha": "375d67a368cb9d0dd880dabde19539ba1b22e272"
+    },
+    {
+      "path": "src/Styles/build305-final-audit.css",
+      "sha": "282c5e5abba840aff95da08e4c8200ca869c3829"
+    },
+    {
+      "path": "src/Styles/build306-ui.css",
+      "sha": "89fd436ea3ceb3d90f5eedafd7c7efa243231439"
+    },
+    {
+      "path": "src/Styles/build308-boss.css",
+      "sha": "2eb38bd548d3742a1ad06aa8ffecbd93a13660c3"
+    },
+    {
+      "path": "src/Styles/build309-story.css",
+      "sha": "28f1d6d805d4a87ced3e17a1baec3ba312f29b81"
+    },
+    {
+      "path": "src/Styles/build310-hero-final.css",
+      "sha": "626eddf2e6c0f92b91ce00aa66c9130603409030"
+    },
+    {
+      "path": "src/Styles/build311-audit.css",
+      "sha": "dae8ed6c32a4d230c262e226f9e9583598fad5b7"
+    },
+    {
+      "path": "src/Styles/build313-hero-voice.css",
+      "sha": "f2830d1d9716409e07e838fa018529e34a92fd60"
+    },
+    {
+      "path": "src/Styles/build314-hero-resonance.css",
+      "sha": "3d1c0341e4f2243e14827824170950469c4b0502"
+    },
+    {
+      "path": "src/Styles/build317-ui.css",
+      "sha": "06d6bdf210c1c3979a12c6c2d33aad3c2bfc95ad"
+    },
+    {
+      "path": "src/Styles/build318-map.css",
+      "sha": "63c8ec0eeebe0256613d7740fe994a8be99adfb2"
+    },
+    {
+      "path": "src/Styles/build319-finale.css",
+      "sha": "bfb4ec0b8e71e4f7145ced6965c954fdca57350e"
+    },
+    {
+      "path": "src/Styles/build320-audit.css",
+      "sha": "5bb3bdbed3229483cfb6fcd936453eec70254d38"
+    },
+    {
+      "path": "src/Styles/build321-polish.css",
+      "sha": "2301d030659e57af1804bd8487c7243b72874cf2"
+    },
+    {
+      "path": "src/Styles/build322-world.css",
+      "sha": "ae662e3f4974b13cd149bb038003197ba6fb096c"
+    },
+    {
+      "path": "src/Styles/build323-hero-story.css",
+      "sha": "170e372707c96da50867272cd7d31ec5ba1932a0"
+    },
+    {
+      "path": "src/Styles/build324-story-archive.css",
+      "sha": "46f37435dd2e91a2b1561253f304e19d02ad7f21"
+    },
+    {
+      "path": "src/Styles/build325-fixes.css",
+      "sha": "cc17a616195cb2d548c1f88daf1bdfdf948755dc"
+    },
+    {
+      "path": "src/Styles/build326-invasion-intel.css",
+      "sha": "5d9090299118d4d1764cfa71ed2f95eefa92d4b5"
+    },
+    {
+      "path": "src/Styles/build327-home-label-fix.css",
+      "sha": "9e712b6ce852d0f0fabeea47e0b3a8ba05018ca4"
+    },
+    {
+      "path": "src/Styles/build331-online-tavern.css",
+      "sha": "a2191ad95f38a85e62ede52209ad61e205ea2174"
+    },
+    {
+      "path": "src/Styles/build332-request-fixes.css",
+      "sha": "eddc5ff31008fae0ee79d9e8d4e4c899c277cb76"
+    },
+    {
+      "path": "src/Styles/build333-online-parity-raid.css",
+      "sha": "b0740b00d15dee7f026e08953434b98eef6b2879"
+    },
+    {
+      "path": "src/Styles/build334-readability-progression.css",
+      "sha": "9f7f65e92ac5c8e03199be5492964d6cebd86cf7"
+    },
+    {
+      "path": "src/Styles/build340-story-boss-layout.css",
+      "sha": "84c0b3658f7f9e9cf7a8c1f668611a7daecc7dec"
+    },
+    {
+      "path": "src/Styles/build341-hero-pursuit.css",
+      "sha": "79e07e6bee85e461f6f85a59a2cdcd4e35a53b33"
+    },
+    {
+      "path": "src/Styles/build361-postgame.css",
+      "sha": "39c785e9cb595d22afe8fa2fb98e663f6fe719cb"
+    },
+    {
+      "path": "src/Styles/build363-player-name.css",
+      "sha": "aece9d5ae89bcdd833eee7f1951b9dde6e9118eb"
+    },
+    {
+      "path": "src/Styles/build364-battle-status.css",
+      "sha": "e3d527078edf456bc31623f98ed78501cee91265"
+    },
+    {
+      "path": "src/Styles/build365-battle-polish.css",
+      "sha": "ceae2440ffd6e1b095289b9edb53888b31697c77"
+    },
+    {
+      "path": "src/Styles/build366-status-scroll.css",
+      "sha": "b33f12dfb393cefefc9c4c7e63ab66489251d5c2"
+    },
+    {
+      "path": "src/Styles/build377-chapter-two-flow.css",
+      "sha": "9e76ca25fe5e4e1f0f5a8a6b5bc4af9e4558a1e2"
+    },
+    {
+      "path": "src/Styles/build378-chapter-two-complete.css",
+      "sha": "21e1d6d413c027e812f45d464cf3d5b29319b622"
+    },
+    {
+      "path": "src/Styles/build385-twin-resonance.css",
+      "sha": "14d97345a89277a506eb712620f66ae708c58fd1"
+    },
+    {
+      "path": "src/Styles/build386-pair-art.css",
+      "sha": "7df8602e37dfba3535364d4cbf4ff32daac43e77"
+    },
+    {
+      "path": "src/Styles/build398-circles.css",
+      "sha": "cf396fe68517b297fc16bab9ec166bb8d87bcf9c"
+    },
+    {
+      "path": "src/Styles/build400-home-skins.css",
+      "sha": "802fdd44f0c533480c54d9567f4b194deb1caa10"
+    },
+    {
+      "path": "src/Styles/build401-progress-archive.css",
+      "sha": "041723f17210114b472cd4bdd4461a0297140fa6"
+    },
+    {
+      "path": "src/Styles/build409-pair-series.css",
+      "sha": "0b43be4f2b61db4cdc8d9a8cda1a6662778517e6"
+    },
+    {
+      "path": "src/Styles/build337-hero-choice.css",
+      "sha": "42a06eca316096826395e31753804ac7b45d7e78"
+    },
+    {
+      "path": "src/Styles/build338-request-batch.css",
+      "sha": "6bbcf9686152a68a34c2f940833d5e37195dc047"
+    },
+    {
+      "path": "src/Styles/build339-party-boss-art.css",
+      "sha": "0eb1cafe1c6c5ae90ce0ef55b56e9ced3466bddc"
+    },
+    {
+      "path": "src/Styles/build345-balance-ui.css",
+      "sha": "cf55e2fd51915bcdc2cd7a77495ec79b3f7d7b09"
+    },
+    {
+      "path": "src/Styles/build357-battle-readability.css",
+      "sha": "661f6a561032250b14b638293adf158d73c70483"
+    },
+    {
+      "path": "src/Styles/build358-endgame.css",
+      "sha": "412d9596e5a3e508066b11fe042940950cc7baf1"
+    },
+    {
+      "path": "src/Styles/build360-royal.css",
+      "sha": "daf08e748fb040ab2e6840323ce0970e033df594"
+    },
+    {
+      "path": "src/Styles/build370-home-attribute-plate.css",
+      "sha": "2effbde336ab7ab42c301c0ca69263d53b2f8b77"
+    },
+    {
+      "path": "src/Styles/build371-ranking-profile.css",
+      "sha": "6490e072900b83932c9d4d4deb0a4c54fb023ac3"
+    },
+    {
+      "path": "src/Styles/build375-battle-equipment.css",
+      "sha": "81c454784a5c015a9351c0b3f02d1d1788a4418d"
+    },
+    {
+      "path": "src/Styles/build376-chapter-two.css",
+      "sha": "d4fce44f90840ae386da300981719b91cc8f3ead"
+    },
+    {
+      "path": "src/Styles/build379-departure.css",
+      "sha": "f8006f2f7b13f620d97febae786fd95aefa625d7"
+    },
+    {
+      "path": "src/Styles/build380-chapter-two.css",
+      "sha": "34568c301caaabba53431b3d9e861941114e7adc"
+    },
+    {
+      "path": "src/Styles/build382-chapter-two.css",
+      "sha": "24cf5d1881e079f37f24693a44eb85866e606f0f"
+    },
+    {
+      "path": "src/Styles/build383-chapter-monsters.css",
+      "sha": "2fa4798e7e31c0f3a73355ef8a682d6f1b80f679"
+    },
+    {
+      "path": "src/Styles/build393-elite.css",
+      "sha": "0a6b3cac23c2dc34de97549cc04bfcbfd670bace"
+    },
+    {
+      "path": "src/Styles/build394-relics.css",
+      "sha": "c11ed52c45141a012481ccbdddc05ef392202704"
+    },
+    {
+      "path": "src/Styles/build395-collection.css",
+      "sha": "90c40be33eea2b8bae277fa4b55933f80d2f980e"
+    },
+    {
+      "path": "src/Styles/build396-alliance.css",
+      "sha": "aac3ce1d2a0d595f173244f4f91e1171c7c90e31"
+    },
+    {
+      "path": "src/Styles/build397-gacha.css",
+      "sha": "e0181a661fcb37dab6997a4962a225898f00922a"
+    },
+    {
+      "path": "src/Styles/build399-endgame-sprites.css",
+      "sha": "be6675f972e594ee00b958f36217939314520d6c"
+    },
+    {
+      "path": "src/Styles/build403-common-ui.css",
+      "sha": "73a3da38d05e358788a0b29ecc210dc7c4c5c53c"
+    },
+    {
+      "path": "src/Styles/build404-equipment.css",
+      "sha": "c20f732c7cddc6d1c8072f3e34cd79ef2e21160f"
+    },
+    {
+      "path": "src/Styles/build405-battle-circles.css",
+      "sha": "eaafb0d9775ada6c8d5094e3c53b668affbfe6ea"
+    },
+    {
+      "path": "src/Styles/build406-chapter-guide-summon.css",
+      "sha": "7172d2251bbde16aa6ad0f30ac70129687866229"
+    },
+    {
+      "path": "src/Styles/build407-home-motion.css",
+      "sha": "e143370eb911da893c3af6accaddaff4b7d0f263"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "kind": "design-only",
+  "replaces": "prior stage3 design",
+  "base": "Build413 after Build412",
+  "runtimeChanged": false,
+  "files": [
+    {
+      "path": "README_414.md",
+      "sha256": "8666f98271f7b4e7c3167aecd7e8de11bd09840be9e11bb16291a480073b520b"
+    },
+    {
+      "path": "docs/build414/DESIGN.md",
+      "sha256": "3bd515df83bc4f2a94f7f81edf2efba24f982d6bb93196b1c26da7871b1e857d"
+    },
+    {
+      "path": "docs/build414/campaign-bosses.json",
+      "sha256": "68119a4fe69abbcf95a52c858c4cc13627790fb485c087b959a84b2c24aeba3d"
+    },
+    {
+      "path": "docs/build414/chapter-two.json",
+      "sha256": "2fccf58f65b95111f53f154908eb791330930c59912f48a6bf14bce3424bc6eb"
+    },
+    {
+      "path": "docs/build414/characters.json",
+      "sha256": "879104dde799b4e2139e8d58d0209289db7343e99a8298812a66dff3d4d3dc5d"
+    },
+    {
+      "path": "docs/build414/corridor.json",
+      "sha256": "a136d7f1fcfa14c82cf9aa3c2dcf1d030e28e56b7f4b8fc75a8d9d9c1df4cec5"
+    },
+    {
+      "path": "docs/build414/countermeasures.json",
+      "sha256": "c46bc03be5395067122f5071d92b33735ee85814b09085d6649099f15cacc02f"
+    },
+    {
+      "path": "docs/build414/endgame-characters.json",
+      "sha256": "5a655755bff64cc43a408026fd3cf629886b76818560bc280a41fe42dc7c768b"
+    },
+    {
+      "path": "docs/build414/floor-boss-definitions.json",
+      "sha256": "fda07e2d0bbc0a0e654c6855bf6bf402c36c491911dc5a734059a4b58caf96f7"
+    },
+    {
+      "path": "docs/build414/floor-boss-skills.json",
+      "sha256": "e5de07476bd932201455237e28e88903a68b24a207e94ff7fd6c2bb5914a308a"
+    },
+    {
+      "path": "docs/build414/floor-rematches.json",
+      "sha256": "4511cba20d2a398f6543ff001c071f9f8872302b0e807e06fb157b1e784cbf92"
+    },
+    {
+      "path": "docs/build414/heroes.json",
+      "sha256": "a7718503899454423427efab502734ae8080aab63613860102d24a3f9b5b7647"
+    },
+    {
+      "path": "docs/build414/manual-trials.json",
+      "sha256": "08bb8a681a80d83c429a0c4588dae4017ffafa53e7adc3fda7028c180db8a91d"
+    },
+    {
+      "path": "docs/build414/online.json",
+      "sha256": "39276c87aa1fd9ebf6116c4e15c88991627598b47f759b67b4624600e3ee3fef"
+    },
+    {
+      "path": "docs/build414/pair-verification.json",
+      "sha256": "3d60ee6455d37357373ae50e593329efde862945a7f9b2d8c6bd17bffd0e8b9d"
+    },
+    {
+      "path": "docs/build414/provenance.json",
+      "sha256": "92d5da540b10cafba388c407b576853ac68957fce7499db870fccbbb98f562e0"
+    },
+    {
+      "path": "docs/build414/summary.json",
+      "sha256": "d08fe35d12f4be473fba5589a52da471a04ce517df52bfeb80f52de5b01f5932"
+    },
+    {
+      "path": "docs/build414/targets.csv",
+      "sha256": "5a930342be081f2c68b1870a9a3b2e9d11b4483f27c1ae2371255d5d310e4977"
+    },
+    {
+      "path": "docs/build414/team-trials.json",
+      "sha256": "67741798bb9b2a206107f27d026fab66c54dbafcaee75d64654bf0348fecdb51"
+    },
+    {
+      "path": "docs/build414/trial-calibration.json",
+      "sha256": "50fddf2edcffd184f7a8f8558270886bf891eac6227a08619061b0f37b486e00"
+    },
+    {
+      "path": "tools/build414/catalogue.mjs",
+      "sha256": "26bf2078037242dcc2ba34c1de2f4487614dfe174b22e0167aaaecc84d69e136"
+    },
+    {
+      "path": "tools/build414/countermeasures.mjs",
+      "sha256": "83fabbef37dddaace2a41f4b73b3d19d0d34261d763ce0f246d7ba011f6656b4"
+    },
+    {
+      "path": "tools/build414/pair-audit.mjs",
+      "sha256": "6d48b0aa7bc67795f5ae53f079fb2114dac643bc67f33d3eec1b4abf1dd45b13"
+    }
+  ]
+}

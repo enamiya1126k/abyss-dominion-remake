@@ -1,0 +1,80 @@
+{
+  "build": 416,
+  "runtime": "v24.19.0",
+  "platform": "linux",
+  "method": "Production HTML generation only. Node timing excludes browser layout, painting, GPU, image decoding and network; these values are not FPS or mobile frame times.",
+  "rows": [
+    {
+      "name": "home:forest",
+      "iterations": 100,
+      "medianMs": 1.483741000000009,
+      "p95Ms": 5.963345000000004,
+      "maxMs": 14.331433999999945,
+      "htmlBytes": 38186
+    },
+    {
+      "name": "home:invasion",
+      "iterations": 100,
+      "medianMs": 1.0999329999999645,
+      "p95Ms": 2.5924969999998666,
+      "maxMs": 11.557653999999957,
+      "htmlBytes": 38160
+    },
+    {
+      "name": "home:abyss",
+      "iterations": 100,
+      "medianMs": 0.7906279999999697,
+      "p95Ms": 1.581187,
+      "maxMs": 11.003591000000142,
+      "htmlBytes": 37639
+    },
+    {
+      "name": "home:sanctum",
+      "iterations": 100,
+      "medianMs": 0.7620150000000194,
+      "p95Ms": 1.9472270000001117,
+      "maxMs": 5.787258999999949,
+      "htmlBytes": 37893
+    },
+    {
+      "name": "home:core",
+      "iterations": 100,
+      "medianMs": 0.987233999999944,
+      "p95Ms": 2.791966999999886,
+      "maxMs": 14.203160999999909,
+      "htmlBytes": 37802
+    },
+    {
+      "name": "formation",
+      "iterations": 100,
+      "medianMs": 0.6246289999999135,
+      "p95Ms": 0.8962570000001051,
+      "maxMs": 11.824004000000059,
+      "htmlBytes": 40247
+    },
+    {
+      "name": "battle:command",
+      "iterations": 100,
+      "medianMs": 0.6132319999999254,
+      "p95Ms": 3.562466000000086,
+      "maxMs": 9.736875999999938,
+      "htmlBytes": 57682
+    },
+    {
+      "name": "battle:skill",
+      "iterations": 100,
+      "medianMs": 0.44279599999981656,
+      "p95Ms": 0.8738140000000385,
+      "maxMs": 11.97496000000001,
+      "htmlBytes": 59330
+    },
+    {
+      "name": "battle:item",
+      "iterations": 100,
+      "medianMs": 0.37579500000015287,
+      "p95Ms": 0.7884149999999863,
+      "maxMs": 4.264065000000073,
+      "htmlBytes": 57462
+    }
+  ]
+}

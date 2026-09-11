@@ -1,6 +1,7 @@
 import {CHAPTER_TWO_ABILITY_DESIGN408} from '../data/ChapterTwoAbilityDesign408.js?v=3.1.88-build408';
 import {ultimateIsolated,ultimateExtraBlocked} from '../core/EndgameUltimateSystem.js';
 export const PAIR_SERIES409=Object.freeze(Object.fromEntries(CHAPTER_TWO_ABILITY_DESIGN408.pairs.map(p=>[p.id,Object.freeze({id:p.id,label:p.label,members:p.members,identity:p.identity,feature:p.plannedFeature,counterplay:p.counterplay})])));
+import {takePreparation415,preparationAvailable415} from './PairPreparation415.js';
 const bySpecies=new Map(Object.values(PAIR_SERIES409).flatMap(p=>p.members.map(id=>[id,p])));
 const n=v=>Math.max(0,Number(v)||0),round=b=>Math.max(1,Math.floor(n(b?.turn))),key=(side,id)=>`${side}:${id}`;
 const own=(o,k)=>Object.prototype.hasOwnProperty.call(o,k);
@@ -91,7 +92,7 @@ function clearOne(b,side,u,only=null){
 }
 export function beginPairSequence409(b,plan,env){
  const p=PAIR_SERIES409[plan.pair.id];if(!p||b.pairEnhancements409===false)return null;
- const c={b,plan,env,p,side:plan.side,other:plan.side==='enemy'?'ally':'enemy',hitTargets:new Set(),statusHits:new Set(),dispelled:0,cleansed:0,overflow:0,retargeted:false,triggered:false,hitIndex:0};
+ const c={prepared415:new Map(),fallbackHits415:new Set(),b,plan,env,p,side:plan.side,other:plan.side==='enemy'?'ally':'enemy',hitTargets:new Set(),statusHits:new Set(),dispelled:0,cleansed:0,overflow:0,retargeted:false,triggered:false,hitIndex:0};
  const momentum=pairState409(b).momentum[key(c.side,p.id)];if(momentum?.round===round(b)){c.momentum=.1;delete pairState409(b).momentum[key(c.side,p.id)];}
  return c;
 }
@@ -102,7 +103,7 @@ export async function beforePairHit409(c,pair,target,index,chosen){
  if(!c)return pair;
  const {b,p,side,other,env}=c;let out={...pair,damageMultiplier409:(pair.damageMultiplier409??1)*(1+(c.momentum??0))};
  if(p.id==='mirrors'&&matchedTarget(b,side,p,target.id)&&(c.triggered||claim(b,side,p))){c.triggered=true;out.damageMultiplier409*=1.20;}
- if(p.id==='foxmoon'&&has(b,other,target,'burn')&&matchedTarget(b,side,p,target.id)&&(c.triggered||claim(b,side,p))){c.triggered=true;out.guaranteedHit409=true;}
+ if(p.id==='foxmoon'&&(has(b,other,target,'burn')||c.prepared415.get(target.id)?.has('burn'))&&matchedTarget(b,side,p,target.id)&&(c.triggered||claim(b,side,p))){c.triggered=true;if(has(b,other,target,'burn'))out.guaranteedHit409=true;else out.accuracyBonus415=.20;}
  if(p.id==='starconfluence'&&pair.finisher390&&(c.triggered||claim(b,side,p))){c.triggered=true;out.guaranteedHit409=true;}
  if(p.id==='eclipsecrown'&&target!==chosen&&!c.retargeted&&canClaim(b,side,p)){
   c.retargeted=true;const removed=env.dispel?.(target);if(removed){claim(b,side,p);c.triggered=true;c.dispelled++;}
@@ -111,12 +112,13 @@ export async function beforePairHit409(c,pair,target,index,chosen){
  c.beforeStatuses=new Set(['poison','burn','freeze','bleed','sleep'].filter(id=>has(b,other,target,id)));
  c.beforeHealDown=has(b,other,target,'healDown');
  c.beforeDouble=pair.bonusVsEffects?.kinds.every(kind=>has(b,other,target,kind));
+ c.fallbackCurrent415=c.prepared415.get(target.id)??new Set();
  c.beforeHpRatio=env.opponentHpRatio?.(target)??1;c.hitIndex++;return out;
 }
 export function afterPairHit409(c,target,damage,pair){
- if(!c)return;c.lastHitLanded=damage>0;if(damage<=0)return;const {b,p,side,other}=c;c.hitTargets.add(target.id);
+ if(!c)return;c.lastHitLanded=damage>0;if(damage<=0)return;const {b,p,side,other}=c;c.hitTargets.add(target.id);for(const type of c.fallbackCurrent415??[])c.fallbackHits415.add(type);
  for(const status of ['poison','burn','freeze','bleed','sleep'])if(c.beforeStatuses?.has(status)||has(b,other,target,status))c.statusHits.add(status);
- if(c.beforeDouble||pair.bonusVsEffects?.kinds.every(kind=>has(b,other,target,kind)))c.doubleDebuffHit=true;
+ if(c.beforeDouble||pair.bonusVsEffects?.kinds.every(kind=>has(b,other,target,kind)))c.doubleDebuffHit=true;else if(pair.bonusVsEffects?.kinds.every(kind=>has(b,other,target,kind)||c.fallbackCurrent415?.has(kind)))c.fallbackDouble415=true;
  if(pair.finisher386)c.burstHit=true;
  if(pair.finisher386&&c.beforeHpRatio<=.35)c.finaleHit=true;
  const set=(kind,value,turns)=>{c.env.weaken?.(target,{kind,value,turns,sourceKey:`pair:${p.id}`,pairMaximum409:true});};
@@ -124,21 +126,21 @@ export function afterPairHit409(c,target,damage,pair){
   const e=effects(b,other,target).find(e=>e.kind==='healDown'&&active(e));if(e&&n(e.turns)<3&&claim(b,side,p)){e.turns=Math.min(3,e.turns+1);c.triggered=true;}
  }
  if(p.id==='wisteria'&&has(b,other,target,'poison')&&claim(b,side,p)){set('healDown',.40,2);c.triggered=true;}
- if(p.id==='crimsonwings'&&has(b,other,target,'bleed')&&claim(b,side,p)){set('healDown',.20,2);c.triggered=true;}
+ if(p.id==='crimsonwings'&&(has(b,other,target,'bleed')||c.fallbackCurrent415?.has('bleed'))&&claim(b,side,p)){set('healDown',has(b,other,target,'bleed')?.20:.10,2);c.triggered=true;}
  if(p.id==='dreamharvest'&&c.statusHits.has('sleep')&&claim(b,side,p)){set('accuracyDown',.15,2);c.triggered=true;}
 }
 export async function finishPairSequence409(c,valid){
  if(!c||!valid())return;const {b,p,side,env,plan}=c,members=plan.members;
  const run=async(condition,fn,owner='')=>{if(condition&&valid()&&claim(b,side,p,owner)){c.triggered=true;await fn();}};
  const heal=async(u,rate)=>{if(u&&valid())await env.heal?.(u,rate,plan.partner);};
- await run(p.id==='garden'&&c.statusHits.has('poison'),()=>heal(lowest(b,side,env),.08));
+ await run(p.id==='garden'&&(c.statusHits.has('poison')||c.fallbackHits415.has('poison')),()=>heal(lowest(b,side,env),c.statusHits.has('poison')?.08:.04));
  await run(p.id==='starthread'&&c.burstHit,()=>{const u=lowest(b,side,env);if(u)putEffect(b,side,u,'guard',.20,1,p);});
  await run(p.id==='stitch'&&plan.pair.rescue387&&c.hitTargets.size>0,()=>{for(const u of members)clearOne(b,side,u);});
- await run(p.id==='glassaria'&&c.doubleDebuffHit,async()=>{for(const u of members)if(valid())await env.restoreMp?.(u,.04,plan.partner);});
+ await run(p.id==='glassaria'&&(c.doubleDebuffHit||c.fallbackDouble415),async()=>{for(const u of members)if(valid())await env.restoreMp?.(u,c.doubleDebuffHit?.04:.02,plan.partner);});
  await run(p.id==='rosevow'&&plan.pair.rescue387&&c.lastHitLanded,()=>{const u=[...members].sort((a,c)=>(env.hpRatio?.(a)??1)-(env.hpRatio?.(c)??1))[0];clearOne(b,side,u,'healDown');});
  await run(p.id==='twinclock'&&c.doubleDebuffHit,()=>{for(const u of members){const e=effects(b,side,u).find(e=>e.kind==='spdUp'&&e.sourceKey===`pair:${p.id}`);if(e){e.value=.25;e.pairMaximum409=true;}else putEffect(b,side,u,'spdUp',.25,2,p);}});
  await run(p.id==='twinthunder'&&c.burstHit,()=>grantDiscount(b,side,p,members));
- await run(p.id==='frostshatter'&&c.statusHits.has('freeze'),()=>{for(const u of members)pairState409(b).guards[key(side,u.id)]={rate:.10,expires:round(b)+1,pairId:p.id};});
+ await run(p.id==='frostshatter'&&(c.statusHits.has('freeze')||c.fallbackHits415.has('freeze')),()=>{for(const u of members)pairState409(b).guards[key(side,u.id)]={rate:c.statusHits.has('freeze')?.10:.05,expires:round(b)+1,pairId:p.id};});
  await run(p.id==='oathreturn'&&plan.pair.reaction390&&c.hitTargets.size>0,()=>heal(plan.actor,.05),plan.actor.speciesId);
  await run(p.id==='absolutionbells'&&c.cleansed>0,()=>{for(const u of members)writePairShield409(b,side,u,.10,p.id);});
  await run(p.id==='eclipserenewal'&&c.overflow>0,()=>grantDiscount(b,side,p,members));
@@ -151,9 +153,23 @@ export function pairCondition409(b,side,pairId){
  if(!b)return p.identity;
  if(!ready(b,side,p))return '相乗効果は休止中';
  const s=pairState409(b),k=key(side,p.id),mark=s.marks[k];
- if(p.id==='wings')return n(s.totals[k])?'救援済み':'HP30%以下で救援';
+ if(p.id==='wings')return n(s.totals[k])?'相乗：戦闘中使用済み':'HP30%以下で救援';
  if(['mirrors','foxmoon'].includes(p.id))return mark?.round===round(b)&&p.members.every(id=>mark.targets[id])?(new Set(Object.values(mark.targets)).size===1?'標的一致':'標的が別'):'同じ敵を狙う';
  if(['twinthunder','eclipserenewal'].includes(p.id)&&p.members.some(id=>s.discounts[key(side,id)]?.expires>=round(b)))return '次の固有技 MP−10%';
  if(p.id==='crownsfinale'&&s.momentum[k]?.round===round(b))return '次の共鳴 +10%';
- const used=s.used[k];return used?.round===round(b)?'相乗効果 発動済み':p.identity;
+ const used=s.used[k];return used?.round===round(b)?'相乗：今R発動済み':p.identity;
+}
+
+// Cache consumed marks for this one sequence, including multi-hit attacks.
+export function pairPreparationBonus415(c,pair,target){
+ if(!c)return 1;const {b,side,other,p,plan}=c;
+ let cached=c.prepared415.get(target.id);if(!cached){
+  cached=new Set();c.prepared415.set(target.id,cached);
+  const required=pair.bonusVsEffects?.kinds??(pair.bonusVsStatus?[pair.bonusVsStatus.id]:({garden:['poison'],wisteria:['poison'],crimsonwings:['bleed'],frostshatter:['freeze'],foxmoon:['burn']}[p.id]??[]));
+  if(required.every(type=>has(b,other,target,type)||preparationAvailable415(b,side,p.id,target.id,type,plan.partner.speciesId)))for(const type of required)if(!has(b,other,target,type)&&takePreparation415(b,side,p.id,target.id,type,plan.partner.speciesId))cached.add(type);
+ }
+ let bonus=1;
+ if(pair.bonusVsStatus&&!has(b,other,target,pair.bonusVsStatus.id)&&cached.has(pair.bonusVsStatus.id))bonus*=1+(pair.bonusVsStatus.multiplier-1)*.5;
+ if(pair.bonusVsEffects&&!pair.bonusVsEffects.kinds.every(type=>has(b,other,target,type))&&pair.bonusVsEffects.kinds.every(type=>has(b,other,target,type)||cached.has(type)))bonus*=1+(pair.bonusVsEffects.multiplier-1)*.5;
+ return bonus;
 }

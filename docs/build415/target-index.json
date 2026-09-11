@@ -1,0 +1,6311 @@
+[
+  {
+    "mode": "campaign",
+    "floor": 1,
+    "id": null,
+    "key": "campaign:1:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 2,
+    "id": null,
+    "key": "campaign:2:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 3,
+    "id": null,
+    "key": "campaign:3:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 4,
+    "id": null,
+    "key": "campaign:4:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 5,
+    "id": null,
+    "key": "campaign:5:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 6,
+    "id": null,
+    "key": "campaign:6:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 7,
+    "id": null,
+    "key": "campaign:7:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 8,
+    "id": null,
+    "key": "campaign:8:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 9,
+    "id": null,
+    "key": "campaign:9:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 10,
+    "id": "abyss_gluttony",
+    "key": "campaign:10:abyss_gluttony"
+  },
+  {
+    "mode": "campaign",
+    "floor": 11,
+    "id": null,
+    "key": "campaign:11:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 12,
+    "id": null,
+    "key": "campaign:12:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 13,
+    "id": null,
+    "key": "campaign:13:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 14,
+    "id": null,
+    "key": "campaign:14:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 15,
+    "id": null,
+    "key": "campaign:15:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 16,
+    "id": null,
+    "key": "campaign:16:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 17,
+    "id": null,
+    "key": "campaign:17:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 18,
+    "id": null,
+    "key": "campaign:18:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 19,
+    "id": null,
+    "key": "campaign:19:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 20,
+    "id": "abyss_wrath",
+    "key": "campaign:20:abyss_wrath"
+  },
+  {
+    "mode": "campaign",
+    "floor": 21,
+    "id": null,
+    "key": "campaign:21:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 22,
+    "id": null,
+    "key": "campaign:22:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 23,
+    "id": null,
+    "key": "campaign:23:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 24,
+    "id": null,
+    "key": "campaign:24:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 25,
+    "id": null,
+    "key": "campaign:25:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 26,
+    "id": null,
+    "key": "campaign:26:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 27,
+    "id": null,
+    "key": "campaign:27:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 28,
+    "id": null,
+    "key": "campaign:28:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 29,
+    "id": null,
+    "key": "campaign:29:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 30,
+    "id": "abyss_envy",
+    "key": "campaign:30:abyss_envy"
+  },
+  {
+    "mode": "campaign",
+    "floor": 31,
+    "id": null,
+    "key": "campaign:31:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 32,
+    "id": null,
+    "key": "campaign:32:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 33,
+    "id": null,
+    "key": "campaign:33:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 34,
+    "id": null,
+    "key": "campaign:34:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 35,
+    "id": null,
+    "key": "campaign:35:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 36,
+    "id": null,
+    "key": "campaign:36:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 37,
+    "id": null,
+    "key": "campaign:37:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 38,
+    "id": null,
+    "key": "campaign:38:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 39,
+    "id": null,
+    "key": "campaign:39:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 40,
+    "id": "abyss_sloth",
+    "key": "campaign:40:abyss_sloth"
+  },
+  {
+    "mode": "campaign",
+    "floor": 41,
+    "id": null,
+    "key": "campaign:41:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 42,
+    "id": null,
+    "key": "campaign:42:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 43,
+    "id": null,
+    "key": "campaign:43:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 44,
+    "id": null,
+    "key": "campaign:44:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 45,
+    "id": null,
+    "key": "campaign:45:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 46,
+    "id": null,
+    "key": "campaign:46:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 47,
+    "id": null,
+    "key": "campaign:47:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 48,
+    "id": null,
+    "key": "campaign:48:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 49,
+    "id": null,
+    "key": "campaign:49:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 50,
+    "id": "abyss_greed",
+    "key": "campaign:50:abyss_greed"
+  },
+  {
+    "mode": "campaign",
+    "floor": 51,
+    "id": null,
+    "key": "campaign:51:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 52,
+    "id": null,
+    "key": "campaign:52:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 53,
+    "id": null,
+    "key": "campaign:53:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 54,
+    "id": null,
+    "key": "campaign:54:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 55,
+    "id": null,
+    "key": "campaign:55:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 56,
+    "id": null,
+    "key": "campaign:56:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 57,
+    "id": null,
+    "key": "campaign:57:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 58,
+    "id": null,
+    "key": "campaign:58:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 59,
+    "id": null,
+    "key": "campaign:59:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 60,
+    "id": "abyss_lust",
+    "key": "campaign:60:abyss_lust"
+  },
+  {
+    "mode": "campaign",
+    "floor": 61,
+    "id": null,
+    "key": "campaign:61:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 62,
+    "id": null,
+    "key": "campaign:62:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 63,
+    "id": null,
+    "key": "campaign:63:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 64,
+    "id": null,
+    "key": "campaign:64:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 65,
+    "id": null,
+    "key": "campaign:65:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 66,
+    "id": null,
+    "key": "campaign:66:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 67,
+    "id": null,
+    "key": "campaign:67:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 68,
+    "id": null,
+    "key": "campaign:68:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 69,
+    "id": null,
+    "key": "campaign:69:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 70,
+    "id": "abyss_pride",
+    "key": "campaign:70:abyss_pride"
+  },
+  {
+    "mode": "campaign",
+    "floor": 71,
+    "id": null,
+    "key": "campaign:71:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 72,
+    "id": null,
+    "key": "campaign:72:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 73,
+    "id": null,
+    "key": "campaign:73:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 74,
+    "id": null,
+    "key": "campaign:74:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 75,
+    "id": null,
+    "key": "campaign:75:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 76,
+    "id": null,
+    "key": "campaign:76:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 77,
+    "id": null,
+    "key": "campaign:77:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 78,
+    "id": null,
+    "key": "campaign:78:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 79,
+    "id": null,
+    "key": "campaign:79:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 80,
+    "id": "ten_time",
+    "key": "campaign:80:ten_time"
+  },
+  {
+    "mode": "campaign",
+    "floor": 80,
+    "id": "ten_space",
+    "key": "campaign:80:ten_space"
+  },
+  {
+    "mode": "campaign",
+    "floor": 80,
+    "id": "ten_life",
+    "key": "campaign:80:ten_life"
+  },
+  {
+    "mode": "campaign",
+    "floor": 81,
+    "id": null,
+    "key": "campaign:81:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 82,
+    "id": null,
+    "key": "campaign:82:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 83,
+    "id": null,
+    "key": "campaign:83:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 84,
+    "id": null,
+    "key": "campaign:84:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 85,
+    "id": null,
+    "key": "campaign:85:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 86,
+    "id": null,
+    "key": "campaign:86:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 87,
+    "id": null,
+    "key": "campaign:87:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 88,
+    "id": null,
+    "key": "campaign:88:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 89,
+    "id": null,
+    "key": "campaign:89:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 90,
+    "id": "ten_death",
+    "key": "campaign:90:ten_death"
+  },
+  {
+    "mode": "campaign",
+    "floor": 90,
+    "id": "ten_fate",
+    "key": "campaign:90:ten_fate"
+  },
+  {
+    "mode": "campaign",
+    "floor": 90,
+    "id": "ten_chaos",
+    "key": "campaign:90:ten_chaos"
+  },
+  {
+    "mode": "campaign",
+    "floor": 91,
+    "id": null,
+    "key": "campaign:91:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 92,
+    "id": null,
+    "key": "campaign:92:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 93,
+    "id": null,
+    "key": "campaign:93:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 94,
+    "id": null,
+    "key": "campaign:94:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 95,
+    "id": null,
+    "key": "campaign:95:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 96,
+    "id": null,
+    "key": "campaign:96:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 97,
+    "id": null,
+    "key": "campaign:97:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 98,
+    "id": null,
+    "key": "campaign:98:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 99,
+    "id": null,
+    "key": "campaign:99:boss"
+  },
+  {
+    "mode": "campaign",
+    "floor": 100,
+    "id": "ten_dominion",
+    "key": "campaign:100:ten_dominion"
+  },
+  {
+    "mode": "campaign",
+    "floor": 100,
+    "id": "ten_creation",
+    "key": "campaign:100:ten_creation"
+  },
+  {
+    "mode": "campaign",
+    "floor": 100,
+    "id": "ten_end",
+    "key": "campaign:100:ten_end"
+  },
+  {
+    "mode": "campaign",
+    "floor": 100,
+    "id": "ten_divinity",
+    "key": "campaign:100:ten_divinity"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-10",
+    "floor": 100,
+    "key": "rematch:floor-boss-10"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-20",
+    "floor": 100,
+    "key": "rematch:floor-boss-20"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-30",
+    "floor": 100,
+    "key": "rematch:floor-boss-30"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-40",
+    "floor": 100,
+    "key": "rematch:floor-boss-40"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-50",
+    "floor": 100,
+    "key": "rematch:floor-boss-50"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-60",
+    "floor": 100,
+    "key": "rematch:floor-boss-60"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-70",
+    "floor": 100,
+    "key": "rematch:floor-boss-70"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-80",
+    "floor": 100,
+    "key": "rematch:floor-boss-80"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-90",
+    "floor": 100,
+    "key": "rematch:floor-boss-90"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-110",
+    "floor": 100,
+    "key": "rematch:floor-boss-110"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-120",
+    "floor": 100,
+    "key": "rematch:floor-boss-120"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-130",
+    "floor": 100,
+    "key": "rematch:floor-boss-130"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-140",
+    "floor": 100,
+    "key": "rematch:floor-boss-140"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-150",
+    "floor": 100,
+    "key": "rematch:floor-boss-150"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-160",
+    "floor": 100,
+    "key": "rematch:floor-boss-160"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-170",
+    "floor": 100,
+    "key": "rematch:floor-boss-170"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-180",
+    "floor": 100,
+    "key": "rematch:floor-boss-180"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-190",
+    "floor": 100,
+    "key": "rematch:floor-boss-190"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-210",
+    "floor": 100,
+    "key": "rematch:floor-boss-210"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-220",
+    "floor": 100,
+    "key": "rematch:floor-boss-220"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-230",
+    "floor": 100,
+    "key": "rematch:floor-boss-230"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-240",
+    "floor": 100,
+    "key": "rematch:floor-boss-240"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-250",
+    "floor": 100,
+    "key": "rematch:floor-boss-250"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-260",
+    "floor": 100,
+    "key": "rematch:floor-boss-260"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-270",
+    "floor": 100,
+    "key": "rematch:floor-boss-270"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-280",
+    "floor": 100,
+    "key": "rematch:floor-boss-280"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-290",
+    "floor": 100,
+    "key": "rematch:floor-boss-290"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-310",
+    "floor": 100,
+    "key": "rematch:floor-boss-310"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-320",
+    "floor": 100,
+    "key": "rematch:floor-boss-320"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-330",
+    "floor": 100,
+    "key": "rematch:floor-boss-330"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-340",
+    "floor": 100,
+    "key": "rematch:floor-boss-340"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-350",
+    "floor": 100,
+    "key": "rematch:floor-boss-350"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-360",
+    "floor": 100,
+    "key": "rematch:floor-boss-360"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-370",
+    "floor": 100,
+    "key": "rematch:floor-boss-370"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-380",
+    "floor": 100,
+    "key": "rematch:floor-boss-380"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-390",
+    "floor": 100,
+    "key": "rematch:floor-boss-390"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-410",
+    "floor": 100,
+    "key": "rematch:floor-boss-410"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-420",
+    "floor": 100,
+    "key": "rematch:floor-boss-420"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-430",
+    "floor": 100,
+    "key": "rematch:floor-boss-430"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-440",
+    "floor": 100,
+    "key": "rematch:floor-boss-440"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-450",
+    "floor": 100,
+    "key": "rematch:floor-boss-450"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-460",
+    "floor": 100,
+    "key": "rematch:floor-boss-460"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-470",
+    "floor": 100,
+    "key": "rematch:floor-boss-470"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-480",
+    "floor": 100,
+    "key": "rematch:floor-boss-480"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-490",
+    "floor": 100,
+    "key": "rematch:floor-boss-490"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-510",
+    "floor": 100,
+    "key": "rematch:floor-boss-510"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-520",
+    "floor": 100,
+    "key": "rematch:floor-boss-520"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-530",
+    "floor": 100,
+    "key": "rematch:floor-boss-530"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-540",
+    "floor": 100,
+    "key": "rematch:floor-boss-540"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-550",
+    "floor": 100,
+    "key": "rematch:floor-boss-550"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-560",
+    "floor": 100,
+    "key": "rematch:floor-boss-560"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-570",
+    "floor": 100,
+    "key": "rematch:floor-boss-570"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-580",
+    "floor": 100,
+    "key": "rematch:floor-boss-580"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-590",
+    "floor": 100,
+    "key": "rematch:floor-boss-590"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-610",
+    "floor": 100,
+    "key": "rematch:floor-boss-610"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-620",
+    "floor": 100,
+    "key": "rematch:floor-boss-620"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-630",
+    "floor": 100,
+    "key": "rematch:floor-boss-630"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-640",
+    "floor": 100,
+    "key": "rematch:floor-boss-640"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-650",
+    "floor": 100,
+    "key": "rematch:floor-boss-650"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-660",
+    "floor": 100,
+    "key": "rematch:floor-boss-660"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-670",
+    "floor": 100,
+    "key": "rematch:floor-boss-670"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-680",
+    "floor": 100,
+    "key": "rematch:floor-boss-680"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-690",
+    "floor": 100,
+    "key": "rematch:floor-boss-690"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-710",
+    "floor": 100,
+    "key": "rematch:floor-boss-710"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-720",
+    "floor": 100,
+    "key": "rematch:floor-boss-720"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-730",
+    "floor": 100,
+    "key": "rematch:floor-boss-730"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-740",
+    "floor": 100,
+    "key": "rematch:floor-boss-740"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-750",
+    "floor": 100,
+    "key": "rematch:floor-boss-750"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-760",
+    "floor": 100,
+    "key": "rematch:floor-boss-760"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-770",
+    "floor": 100,
+    "key": "rematch:floor-boss-770"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-780",
+    "floor": 100,
+    "key": "rematch:floor-boss-780"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-790",
+    "floor": 100,
+    "key": "rematch:floor-boss-790"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-810",
+    "floor": 100,
+    "key": "rematch:floor-boss-810"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-820",
+    "floor": 100,
+    "key": "rematch:floor-boss-820"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-830",
+    "floor": 100,
+    "key": "rematch:floor-boss-830"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-840",
+    "floor": 100,
+    "key": "rematch:floor-boss-840"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-850",
+    "floor": 100,
+    "key": "rematch:floor-boss-850"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-860",
+    "floor": 100,
+    "key": "rematch:floor-boss-860"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-870",
+    "floor": 100,
+    "key": "rematch:floor-boss-870"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-880",
+    "floor": 100,
+    "key": "rematch:floor-boss-880"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-890",
+    "floor": 100,
+    "key": "rematch:floor-boss-890"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-910",
+    "floor": 100,
+    "key": "rematch:floor-boss-910"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-920",
+    "floor": 100,
+    "key": "rematch:floor-boss-920"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-930",
+    "floor": 100,
+    "key": "rematch:floor-boss-930"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-940",
+    "floor": 100,
+    "key": "rematch:floor-boss-940"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-950",
+    "floor": 100,
+    "key": "rematch:floor-boss-950"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-960",
+    "floor": 100,
+    "key": "rematch:floor-boss-960"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-970",
+    "floor": 100,
+    "key": "rematch:floor-boss-970"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-980",
+    "floor": 100,
+    "key": "rematch:floor-boss-980"
+  },
+  {
+    "mode": "rematch",
+    "id": "floor-boss-990",
+    "floor": 100,
+    "key": "rematch:floor-boss-990"
+  },
+  {
+    "mode": "corridor",
+    "i": 1,
+    "floor": 100,
+    "key": "corridor:1"
+  },
+  {
+    "mode": "corridor",
+    "i": 2,
+    "floor": 100,
+    "key": "corridor:2"
+  },
+  {
+    "mode": "corridor",
+    "i": 3,
+    "floor": 100,
+    "key": "corridor:3"
+  },
+  {
+    "mode": "corridor",
+    "i": 4,
+    "floor": 100,
+    "key": "corridor:4"
+  },
+  {
+    "mode": "corridor",
+    "i": 5,
+    "floor": 100,
+    "key": "corridor:5"
+  },
+  {
+    "mode": "corridor",
+    "i": 6,
+    "floor": 100,
+    "key": "corridor:6"
+  },
+  {
+    "mode": "corridor",
+    "i": 7,
+    "floor": 100,
+    "key": "corridor:7"
+  },
+  {
+    "mode": "corridor",
+    "i": 8,
+    "floor": 100,
+    "key": "corridor:8"
+  },
+  {
+    "mode": "corridor",
+    "i": 9,
+    "floor": 100,
+    "key": "corridor:9"
+  },
+  {
+    "mode": "corridor",
+    "i": 10,
+    "floor": 100,
+    "key": "corridor:10"
+  },
+  {
+    "mode": "corridor",
+    "i": 11,
+    "floor": 100,
+    "key": "corridor:11"
+  },
+  {
+    "mode": "corridor",
+    "i": 12,
+    "floor": 100,
+    "key": "corridor:12"
+  },
+  {
+    "mode": "corridor",
+    "i": 13,
+    "floor": 100,
+    "key": "corridor:13"
+  },
+  {
+    "mode": "corridor",
+    "i": 14,
+    "floor": 100,
+    "key": "corridor:14"
+  },
+  {
+    "mode": "corridor",
+    "i": 15,
+    "floor": 100,
+    "key": "corridor:15"
+  },
+  {
+    "mode": "corridor",
+    "i": 16,
+    "floor": 100,
+    "key": "corridor:16"
+  },
+  {
+    "mode": "corridor",
+    "i": 17,
+    "floor": 100,
+    "key": "corridor:17"
+  },
+  {
+    "mode": "corridor",
+    "i": 18,
+    "floor": 100,
+    "key": "corridor:18"
+  },
+  {
+    "mode": "corridor",
+    "i": 19,
+    "floor": 100,
+    "key": "corridor:19"
+  },
+  {
+    "mode": "corridor",
+    "i": 20,
+    "floor": 100,
+    "key": "corridor:20"
+  },
+  {
+    "mode": "corridor",
+    "i": 21,
+    "floor": 100,
+    "key": "corridor:21"
+  },
+  {
+    "mode": "corridor",
+    "i": 22,
+    "floor": 100,
+    "key": "corridor:22"
+  },
+  {
+    "mode": "corridor",
+    "i": 23,
+    "floor": 100,
+    "key": "corridor:23"
+  },
+  {
+    "mode": "corridor",
+    "i": 24,
+    "floor": 100,
+    "key": "corridor:24"
+  },
+  {
+    "mode": "corridor",
+    "i": 25,
+    "floor": 100,
+    "key": "corridor:25"
+  },
+  {
+    "mode": "corridor",
+    "i": 26,
+    "floor": 100,
+    "key": "corridor:26"
+  },
+  {
+    "mode": "corridor",
+    "i": 27,
+    "floor": 100,
+    "key": "corridor:27"
+  },
+  {
+    "mode": "corridor",
+    "i": 28,
+    "floor": 100,
+    "key": "corridor:28"
+  },
+  {
+    "mode": "corridor",
+    "i": 29,
+    "floor": 100,
+    "key": "corridor:29"
+  },
+  {
+    "mode": "corridor",
+    "i": 30,
+    "floor": 100,
+    "key": "corridor:30"
+  },
+  {
+    "mode": "corridor",
+    "i": 31,
+    "floor": 100,
+    "key": "corridor:31"
+  },
+  {
+    "mode": "corridor",
+    "i": 32,
+    "floor": 100,
+    "key": "corridor:32"
+  },
+  {
+    "mode": "corridor",
+    "i": 33,
+    "floor": 100,
+    "key": "corridor:33"
+  },
+  {
+    "mode": "corridor",
+    "i": 34,
+    "floor": 100,
+    "key": "corridor:34"
+  },
+  {
+    "mode": "corridor",
+    "i": 35,
+    "floor": 100,
+    "key": "corridor:35"
+  },
+  {
+    "mode": "corridor",
+    "i": 36,
+    "floor": 100,
+    "key": "corridor:36"
+  },
+  {
+    "mode": "corridor",
+    "i": 37,
+    "floor": 100,
+    "key": "corridor:37"
+  },
+  {
+    "mode": "corridor",
+    "i": 38,
+    "floor": 100,
+    "key": "corridor:38"
+  },
+  {
+    "mode": "corridor",
+    "i": 39,
+    "floor": 100,
+    "key": "corridor:39"
+  },
+  {
+    "mode": "corridor",
+    "i": 40,
+    "floor": 100,
+    "key": "corridor:40"
+  },
+  {
+    "mode": "corridor",
+    "i": 41,
+    "floor": 100,
+    "key": "corridor:41"
+  },
+  {
+    "mode": "corridor",
+    "i": 42,
+    "floor": 100,
+    "key": "corridor:42"
+  },
+  {
+    "mode": "corridor",
+    "i": 43,
+    "floor": 100,
+    "key": "corridor:43"
+  },
+  {
+    "mode": "corridor",
+    "i": 44,
+    "floor": 100,
+    "key": "corridor:44"
+  },
+  {
+    "mode": "corridor",
+    "i": 45,
+    "floor": 100,
+    "key": "corridor:45"
+  },
+  {
+    "mode": "corridor",
+    "i": 46,
+    "floor": 100,
+    "key": "corridor:46"
+  },
+  {
+    "mode": "corridor",
+    "i": 47,
+    "floor": 100,
+    "key": "corridor:47"
+  },
+  {
+    "mode": "corridor",
+    "i": 48,
+    "floor": 100,
+    "key": "corridor:48"
+  },
+  {
+    "mode": "corridor",
+    "i": 49,
+    "floor": 100,
+    "key": "corridor:49"
+  },
+  {
+    "mode": "corridor",
+    "i": 50,
+    "floor": 100,
+    "key": "corridor:50"
+  },
+  {
+    "mode": "corridor",
+    "i": 51,
+    "floor": 100,
+    "key": "corridor:51"
+  },
+  {
+    "mode": "corridor",
+    "i": 52,
+    "floor": 100,
+    "key": "corridor:52"
+  },
+  {
+    "mode": "corridor",
+    "i": 53,
+    "floor": 100,
+    "key": "corridor:53"
+  },
+  {
+    "mode": "corridor",
+    "i": 54,
+    "floor": 100,
+    "key": "corridor:54"
+  },
+  {
+    "mode": "corridor",
+    "i": 55,
+    "floor": 100,
+    "key": "corridor:55"
+  },
+  {
+    "mode": "corridor",
+    "i": 56,
+    "floor": 100,
+    "key": "corridor:56"
+  },
+  {
+    "mode": "corridor",
+    "i": 57,
+    "floor": 100,
+    "key": "corridor:57"
+  },
+  {
+    "mode": "corridor",
+    "i": 58,
+    "floor": 100,
+    "key": "corridor:58"
+  },
+  {
+    "mode": "corridor",
+    "i": 59,
+    "floor": 100,
+    "key": "corridor:59"
+  },
+  {
+    "mode": "corridor",
+    "i": 60,
+    "floor": 100,
+    "key": "corridor:60"
+  },
+  {
+    "mode": "corridor",
+    "i": 61,
+    "floor": 100,
+    "key": "corridor:61"
+  },
+  {
+    "mode": "corridor",
+    "i": 62,
+    "floor": 100,
+    "key": "corridor:62"
+  },
+  {
+    "mode": "corridor",
+    "i": 63,
+    "floor": 100,
+    "key": "corridor:63"
+  },
+  {
+    "mode": "corridor",
+    "i": 64,
+    "floor": 100,
+    "key": "corridor:64"
+  },
+  {
+    "mode": "corridor",
+    "i": 65,
+    "floor": 100,
+    "key": "corridor:65"
+  },
+  {
+    "mode": "corridor",
+    "i": 66,
+    "floor": 100,
+    "key": "corridor:66"
+  },
+  {
+    "mode": "corridor",
+    "i": 67,
+    "floor": 100,
+    "key": "corridor:67"
+  },
+  {
+    "mode": "corridor",
+    "i": 68,
+    "floor": 100,
+    "key": "corridor:68"
+  },
+  {
+    "mode": "corridor",
+    "i": 69,
+    "floor": 100,
+    "key": "corridor:69"
+  },
+  {
+    "mode": "corridor",
+    "i": 70,
+    "floor": 100,
+    "key": "corridor:70"
+  },
+  {
+    "mode": "corridor",
+    "i": 71,
+    "floor": 100,
+    "key": "corridor:71"
+  },
+  {
+    "mode": "corridor",
+    "i": 72,
+    "floor": 100,
+    "key": "corridor:72"
+  },
+  {
+    "mode": "corridor",
+    "i": 73,
+    "floor": 100,
+    "key": "corridor:73"
+  },
+  {
+    "mode": "corridor",
+    "i": 74,
+    "floor": 100,
+    "key": "corridor:74"
+  },
+  {
+    "mode": "corridor",
+    "i": 75,
+    "floor": 100,
+    "key": "corridor:75"
+  },
+  {
+    "mode": "corridor",
+    "i": 76,
+    "floor": 100,
+    "key": "corridor:76"
+  },
+  {
+    "mode": "corridor",
+    "i": 77,
+    "floor": 100,
+    "key": "corridor:77"
+  },
+  {
+    "mode": "corridor",
+    "i": 78,
+    "floor": 100,
+    "key": "corridor:78"
+  },
+  {
+    "mode": "corridor",
+    "i": 79,
+    "floor": 100,
+    "key": "corridor:79"
+  },
+  {
+    "mode": "corridor",
+    "i": 80,
+    "floor": 100,
+    "key": "corridor:80"
+  },
+  {
+    "mode": "corridor",
+    "i": 81,
+    "floor": 100,
+    "key": "corridor:81"
+  },
+  {
+    "mode": "corridor",
+    "i": 82,
+    "floor": 100,
+    "key": "corridor:82"
+  },
+  {
+    "mode": "corridor",
+    "i": 83,
+    "floor": 100,
+    "key": "corridor:83"
+  },
+  {
+    "mode": "corridor",
+    "i": 84,
+    "floor": 100,
+    "key": "corridor:84"
+  },
+  {
+    "mode": "corridor",
+    "i": 85,
+    "floor": 100,
+    "key": "corridor:85"
+  },
+  {
+    "mode": "corridor",
+    "i": 86,
+    "floor": 100,
+    "key": "corridor:86"
+  },
+  {
+    "mode": "corridor",
+    "i": 87,
+    "floor": 100,
+    "key": "corridor:87"
+  },
+  {
+    "mode": "corridor",
+    "i": 88,
+    "floor": 100,
+    "key": "corridor:88"
+  },
+  {
+    "mode": "corridor",
+    "i": 89,
+    "floor": 100,
+    "key": "corridor:89"
+  },
+  {
+    "mode": "corridor",
+    "i": 90,
+    "floor": 100,
+    "key": "corridor:90"
+  },
+  {
+    "mode": "corridor",
+    "i": 91,
+    "floor": 100,
+    "key": "corridor:91"
+  },
+  {
+    "mode": "corridor",
+    "i": 92,
+    "floor": 100,
+    "key": "corridor:92"
+  },
+  {
+    "mode": "corridor",
+    "i": 93,
+    "floor": 100,
+    "key": "corridor:93"
+  },
+  {
+    "mode": "corridor",
+    "i": 94,
+    "floor": 100,
+    "key": "corridor:94"
+  },
+  {
+    "mode": "corridor",
+    "i": 95,
+    "floor": 100,
+    "key": "corridor:95"
+  },
+  {
+    "mode": "corridor",
+    "i": 96,
+    "floor": 100,
+    "key": "corridor:96"
+  },
+  {
+    "mode": "corridor",
+    "i": 97,
+    "floor": 100,
+    "key": "corridor:97"
+  },
+  {
+    "mode": "corridor",
+    "i": 98,
+    "floor": 100,
+    "key": "corridor:98"
+  },
+  {
+    "mode": "corridor",
+    "i": 99,
+    "floor": 100,
+    "key": "corridor:99"
+  },
+  {
+    "mode": "corridor",
+    "i": 100,
+    "floor": 100,
+    "key": "corridor:100"
+  },
+  {
+    "mode": "corridor",
+    "i": 101,
+    "floor": 100,
+    "key": "corridor:101"
+  },
+  {
+    "mode": "corridor",
+    "i": 102,
+    "floor": 100,
+    "key": "corridor:102"
+  },
+  {
+    "mode": "corridor",
+    "i": 103,
+    "floor": 100,
+    "key": "corridor:103"
+  },
+  {
+    "mode": "corridor",
+    "i": 104,
+    "floor": 100,
+    "key": "corridor:104"
+  },
+  {
+    "mode": "corridor",
+    "i": 105,
+    "floor": 100,
+    "key": "corridor:105"
+  },
+  {
+    "mode": "corridor",
+    "i": 106,
+    "floor": 100,
+    "key": "corridor:106"
+  },
+  {
+    "mode": "corridor",
+    "i": 107,
+    "floor": 100,
+    "key": "corridor:107"
+  },
+  {
+    "mode": "corridor",
+    "i": 108,
+    "floor": 100,
+    "key": "corridor:108"
+  },
+  {
+    "mode": "corridor",
+    "i": 109,
+    "floor": 100,
+    "key": "corridor:109"
+  },
+  {
+    "mode": "corridor",
+    "i": 110,
+    "floor": 100,
+    "key": "corridor:110"
+  },
+  {
+    "mode": "corridor",
+    "i": 111,
+    "floor": 100,
+    "key": "corridor:111"
+  },
+  {
+    "mode": "corridor",
+    "i": 112,
+    "floor": 100,
+    "key": "corridor:112"
+  },
+  {
+    "mode": "team",
+    "i": 1,
+    "floor": 100,
+    "key": "team:1"
+  },
+  {
+    "mode": "team",
+    "i": 2,
+    "floor": 100,
+    "key": "team:2"
+  },
+  {
+    "mode": "team",
+    "i": 3,
+    "floor": 100,
+    "key": "team:3"
+  },
+  {
+    "mode": "team",
+    "i": 4,
+    "floor": 100,
+    "key": "team:4"
+  },
+  {
+    "mode": "team",
+    "i": 5,
+    "floor": 100,
+    "key": "team:5"
+  },
+  {
+    "mode": "team",
+    "i": 6,
+    "floor": 100,
+    "key": "team:6"
+  },
+  {
+    "mode": "team",
+    "i": 7,
+    "floor": 100,
+    "key": "team:7"
+  },
+  {
+    "mode": "team",
+    "i": 8,
+    "floor": 100,
+    "key": "team:8"
+  },
+  {
+    "mode": "team",
+    "i": 9,
+    "floor": 100,
+    "key": "team:9"
+  },
+  {
+    "mode": "team",
+    "i": 10,
+    "floor": 100,
+    "key": "team:10"
+  },
+  {
+    "mode": "team",
+    "i": 11,
+    "floor": 100,
+    "key": "team:11"
+  },
+  {
+    "mode": "team",
+    "i": 12,
+    "floor": 100,
+    "key": "team:12"
+  },
+  {
+    "mode": "team",
+    "i": 13,
+    "floor": 100,
+    "key": "team:13"
+  },
+  {
+    "mode": "team",
+    "i": 14,
+    "floor": 100,
+    "key": "team:14"
+  },
+  {
+    "mode": "team",
+    "i": 15,
+    "floor": 100,
+    "key": "team:15"
+  },
+  {
+    "mode": "team",
+    "i": 16,
+    "floor": 100,
+    "key": "team:16"
+  },
+  {
+    "mode": "team",
+    "i": 17,
+    "floor": 100,
+    "key": "team:17"
+  },
+  {
+    "mode": "team",
+    "i": 18,
+    "floor": 100,
+    "key": "team:18"
+  },
+  {
+    "mode": "team",
+    "i": 19,
+    "floor": 100,
+    "key": "team:19"
+  },
+  {
+    "mode": "team",
+    "i": 20,
+    "floor": 100,
+    "key": "team:20"
+  },
+  {
+    "mode": "team",
+    "i": 21,
+    "floor": 100,
+    "key": "team:21"
+  },
+  {
+    "mode": "team",
+    "i": 22,
+    "floor": 100,
+    "key": "team:22"
+  },
+  {
+    "mode": "team",
+    "i": 23,
+    "floor": 100,
+    "key": "team:23"
+  },
+  {
+    "mode": "team",
+    "i": 24,
+    "floor": 100,
+    "key": "team:24"
+  },
+  {
+    "mode": "team",
+    "i": 25,
+    "floor": 100,
+    "key": "team:25"
+  },
+  {
+    "mode": "team",
+    "i": 26,
+    "floor": 100,
+    "key": "team:26"
+  },
+  {
+    "mode": "team",
+    "i": 27,
+    "floor": 100,
+    "key": "team:27"
+  },
+  {
+    "mode": "team",
+    "i": 28,
+    "floor": 100,
+    "key": "team:28"
+  },
+  {
+    "mode": "team",
+    "i": 29,
+    "floor": 100,
+    "key": "team:29"
+  },
+  {
+    "mode": "team",
+    "i": 30,
+    "floor": 100,
+    "key": "team:30"
+  },
+  {
+    "mode": "team",
+    "i": 31,
+    "floor": 100,
+    "key": "team:31"
+  },
+  {
+    "mode": "team",
+    "i": 32,
+    "floor": 100,
+    "key": "team:32"
+  },
+  {
+    "mode": "team",
+    "i": 33,
+    "floor": 100,
+    "key": "team:33"
+  },
+  {
+    "mode": "team",
+    "i": 34,
+    "floor": 100,
+    "key": "team:34"
+  },
+  {
+    "mode": "team",
+    "i": 35,
+    "floor": 100,
+    "key": "team:35"
+  },
+  {
+    "mode": "team",
+    "i": 36,
+    "floor": 100,
+    "key": "team:36"
+  },
+  {
+    "mode": "team",
+    "i": 37,
+    "floor": 100,
+    "key": "team:37"
+  },
+  {
+    "mode": "team",
+    "i": 38,
+    "floor": 100,
+    "key": "team:38"
+  },
+  {
+    "mode": "team",
+    "i": 39,
+    "floor": 100,
+    "key": "team:39"
+  },
+  {
+    "mode": "team",
+    "i": 40,
+    "floor": 100,
+    "key": "team:40"
+  },
+  {
+    "mode": "team",
+    "i": 41,
+    "floor": 100,
+    "key": "team:41"
+  },
+  {
+    "mode": "team",
+    "i": 42,
+    "floor": 100,
+    "key": "team:42"
+  },
+  {
+    "mode": "team",
+    "i": 43,
+    "floor": 100,
+    "key": "team:43"
+  },
+  {
+    "mode": "team",
+    "i": 44,
+    "floor": 100,
+    "key": "team:44"
+  },
+  {
+    "mode": "team",
+    "i": 45,
+    "floor": 100,
+    "key": "team:45"
+  },
+  {
+    "mode": "team",
+    "i": 46,
+    "floor": 100,
+    "key": "team:46"
+  },
+  {
+    "mode": "team",
+    "i": 47,
+    "floor": 100,
+    "key": "team:47"
+  },
+  {
+    "mode": "team",
+    "i": 48,
+    "floor": 100,
+    "key": "team:48"
+  },
+  {
+    "mode": "team",
+    "i": 49,
+    "floor": 100,
+    "key": "team:49"
+  },
+  {
+    "mode": "team",
+    "i": 50,
+    "floor": 100,
+    "key": "team:50"
+  },
+  {
+    "mode": "team",
+    "i": 51,
+    "floor": 100,
+    "key": "team:51"
+  },
+  {
+    "mode": "team",
+    "i": 52,
+    "floor": 100,
+    "key": "team:52"
+  },
+  {
+    "mode": "team",
+    "i": 53,
+    "floor": 100,
+    "key": "team:53"
+  },
+  {
+    "mode": "team",
+    "i": 54,
+    "floor": 100,
+    "key": "team:54"
+  },
+  {
+    "mode": "team",
+    "i": 55,
+    "floor": 100,
+    "key": "team:55"
+  },
+  {
+    "mode": "team",
+    "i": 56,
+    "floor": 100,
+    "key": "team:56"
+  },
+  {
+    "mode": "team",
+    "i": 57,
+    "floor": 100,
+    "key": "team:57"
+  },
+  {
+    "mode": "team",
+    "i": 58,
+    "floor": 100,
+    "key": "team:58"
+  },
+  {
+    "mode": "team",
+    "i": 59,
+    "floor": 100,
+    "key": "team:59"
+  },
+  {
+    "mode": "team",
+    "i": 60,
+    "floor": 100,
+    "key": "team:60"
+  },
+  {
+    "mode": "team",
+    "i": 61,
+    "floor": 100,
+    "key": "team:61"
+  },
+  {
+    "mode": "team",
+    "i": 62,
+    "floor": 100,
+    "key": "team:62"
+  },
+  {
+    "mode": "team",
+    "i": 63,
+    "floor": 100,
+    "key": "team:63"
+  },
+  {
+    "mode": "team",
+    "i": 64,
+    "floor": 100,
+    "key": "team:64"
+  },
+  {
+    "mode": "team",
+    "i": 65,
+    "floor": 100,
+    "key": "team:65"
+  },
+  {
+    "mode": "team",
+    "i": 66,
+    "floor": 100,
+    "key": "team:66"
+  },
+  {
+    "mode": "team",
+    "i": 67,
+    "floor": 100,
+    "key": "team:67"
+  },
+  {
+    "mode": "team",
+    "i": 68,
+    "floor": 100,
+    "key": "team:68"
+  },
+  {
+    "mode": "team",
+    "i": 69,
+    "floor": 100,
+    "key": "team:69"
+  },
+  {
+    "mode": "team",
+    "i": 70,
+    "floor": 100,
+    "key": "team:70"
+  },
+  {
+    "mode": "team",
+    "i": 71,
+    "floor": 100,
+    "key": "team:71"
+  },
+  {
+    "mode": "team",
+    "i": 72,
+    "floor": 100,
+    "key": "team:72"
+  },
+  {
+    "mode": "team",
+    "i": 73,
+    "floor": 100,
+    "key": "team:73"
+  },
+  {
+    "mode": "team",
+    "i": 74,
+    "floor": 100,
+    "key": "team:74"
+  },
+  {
+    "mode": "team",
+    "i": 75,
+    "floor": 100,
+    "key": "team:75"
+  },
+  {
+    "mode": "team",
+    "i": 76,
+    "floor": 100,
+    "key": "team:76"
+  },
+  {
+    "mode": "team",
+    "i": 77,
+    "floor": 100,
+    "key": "team:77"
+  },
+  {
+    "mode": "team",
+    "i": 78,
+    "floor": 100,
+    "key": "team:78"
+  },
+  {
+    "mode": "team",
+    "i": 79,
+    "floor": 100,
+    "key": "team:79"
+  },
+  {
+    "mode": "team",
+    "i": 80,
+    "floor": 100,
+    "key": "team:80"
+  },
+  {
+    "mode": "team",
+    "i": 81,
+    "floor": 100,
+    "key": "team:81"
+  },
+  {
+    "mode": "team",
+    "i": 82,
+    "floor": 100,
+    "key": "team:82"
+  },
+  {
+    "mode": "team",
+    "i": 83,
+    "floor": 100,
+    "key": "team:83"
+  },
+  {
+    "mode": "team",
+    "i": 84,
+    "floor": 100,
+    "key": "team:84"
+  },
+  {
+    "mode": "team",
+    "i": 85,
+    "floor": 100,
+    "key": "team:85"
+  },
+  {
+    "mode": "team",
+    "i": 86,
+    "floor": 100,
+    "key": "team:86"
+  },
+  {
+    "mode": "team",
+    "i": 87,
+    "floor": 100,
+    "key": "team:87"
+  },
+  {
+    "mode": "team",
+    "i": 88,
+    "floor": 100,
+    "key": "team:88"
+  },
+  {
+    "mode": "team",
+    "i": 89,
+    "floor": 100,
+    "key": "team:89"
+  },
+  {
+    "mode": "team",
+    "i": 90,
+    "floor": 100,
+    "key": "team:90"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_gluttony",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:abyss_gluttony:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_gluttony",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:abyss_gluttony:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_gluttony",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:abyss_gluttony:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_gluttony",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:abyss_gluttony:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_wrath",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:abyss_wrath:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_wrath",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:abyss_wrath:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_wrath",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:abyss_wrath:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_wrath",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:abyss_wrath:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_envy",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:abyss_envy:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_envy",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:abyss_envy:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_envy",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:abyss_envy:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_envy",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:abyss_envy:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_sloth",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:abyss_sloth:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_sloth",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:abyss_sloth:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_sloth",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:abyss_sloth:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_sloth",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:abyss_sloth:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_greed",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:abyss_greed:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_greed",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:abyss_greed:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_greed",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:abyss_greed:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_greed",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:abyss_greed:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_lust",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:abyss_lust:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_lust",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:abyss_lust:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_lust",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:abyss_lust:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_lust",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:abyss_lust:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_pride",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:abyss_pride:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_pride",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:abyss_pride:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_pride",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:abyss_pride:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "abyss_pride",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:abyss_pride:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_time",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:ten_time:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_time",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:ten_time:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_time",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:ten_time:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_time",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:ten_time:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_space",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:ten_space:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_space",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:ten_space:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_space",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:ten_space:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_space",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:ten_space:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_life",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:ten_life:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_life",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:ten_life:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_life",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:ten_life:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_life",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:ten_life:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_death",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:ten_death:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_death",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:ten_death:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_death",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:ten_death:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_death",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:ten_death:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_fate",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:ten_fate:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_fate",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:ten_fate:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_fate",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:ten_fate:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_fate",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:ten_fate:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_chaos",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:ten_chaos:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_chaos",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:ten_chaos:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_chaos",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:ten_chaos:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_chaos",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:ten_chaos:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_dominion",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:ten_dominion:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_dominion",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:ten_dominion:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_dominion",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:ten_dominion:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_dominion",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:ten_dominion:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_creation",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:ten_creation:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_creation",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:ten_creation:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_creation",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:ten_creation:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_creation",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:ten_creation:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_end",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:ten_end:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_end",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:ten_end:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_end",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:ten_end:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_end",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:ten_end:manifest100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_divinity",
+    "tier": "projection50",
+    "level": 999,
+    "floor": 100,
+    "key": "manual:ten_divinity:projection50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_divinity",
+    "tier": "projection100",
+    "level": 4999,
+    "floor": 100,
+    "key": "manual:ten_divinity:projection100"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_divinity",
+    "tier": "manifest50",
+    "level": 9999,
+    "floor": 100,
+    "key": "manual:ten_divinity:manifest50"
+  },
+  {
+    "mode": "manual",
+    "id": "ten_divinity",
+    "tier": "manifest100",
+    "level": 10000,
+    "floor": 100,
+    "key": "manual:ten_divinity:manifest100"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_patrol",
+    "run": {
+      "area": 1,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a1_patrol:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_patrol",
+    "run": {
+      "area": 1,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a1_patrol:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_patrol",
+    "run": {
+      "area": 1,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a1_patrol:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_patrol",
+    "run": {
+      "area": 1,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a1_patrol:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_patrol",
+    "run": {
+      "area": 1,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a1_patrol:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_patrol",
+    "run": {
+      "area": 1,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a1_patrol:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_west",
+    "run": {
+      "area": 1,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a1_west:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_west",
+    "run": {
+      "area": 1,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a1_west:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_west",
+    "run": {
+      "area": 1,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a1_west:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_west",
+    "run": {
+      "area": 1,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a1_west:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_west",
+    "run": {
+      "area": 1,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a1_west:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_west",
+    "run": {
+      "area": 1,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a1_west:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_east",
+    "run": {
+      "area": 1,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a1_east:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_east",
+    "run": {
+      "area": 1,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a1_east:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_east",
+    "run": {
+      "area": 1,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a1_east:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_east",
+    "run": {
+      "area": 1,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a1_east:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_east",
+    "run": {
+      "area": 1,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a1_east:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_east",
+    "run": {
+      "area": 1,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a1_east:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_heart",
+    "run": {
+      "area": 1,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a1_heart:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_heart",
+    "run": {
+      "area": 1,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a1_heart:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_heart",
+    "run": {
+      "area": 1,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a1_heart:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_heart",
+    "run": {
+      "area": 1,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a1_heart:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_heart",
+    "run": {
+      "area": 1,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a1_heart:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a1_heart",
+    "run": {
+      "area": 1,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a1_heart:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_patrol",
+    "run": {
+      "area": 2,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a2_patrol:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_patrol",
+    "run": {
+      "area": 2,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a2_patrol:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_patrol",
+    "run": {
+      "area": 2,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a2_patrol:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_patrol",
+    "run": {
+      "area": 2,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a2_patrol:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_patrol",
+    "run": {
+      "area": 2,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a2_patrol:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_patrol",
+    "run": {
+      "area": 2,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a2_patrol:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_west",
+    "run": {
+      "area": 2,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a2_west:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_west",
+    "run": {
+      "area": 2,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a2_west:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_west",
+    "run": {
+      "area": 2,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a2_west:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_west",
+    "run": {
+      "area": 2,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a2_west:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_west",
+    "run": {
+      "area": 2,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a2_west:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_west",
+    "run": {
+      "area": 2,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a2_west:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_east",
+    "run": {
+      "area": 2,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a2_east:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_east",
+    "run": {
+      "area": 2,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a2_east:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_east",
+    "run": {
+      "area": 2,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a2_east:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_east",
+    "run": {
+      "area": 2,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a2_east:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_east",
+    "run": {
+      "area": 2,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a2_east:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_east",
+    "run": {
+      "area": 2,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a2_east:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_heart",
+    "run": {
+      "area": 2,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a2_heart:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_heart",
+    "run": {
+      "area": 2,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a2_heart:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_heart",
+    "run": {
+      "area": 2,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a2_heart:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_heart",
+    "run": {
+      "area": 2,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a2_heart:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_heart",
+    "run": {
+      "area": 2,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a2_heart:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a2_heart",
+    "run": {
+      "area": 2,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a2_heart:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_patrol",
+    "run": {
+      "area": 3,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a3_patrol:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_patrol",
+    "run": {
+      "area": 3,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a3_patrol:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_patrol",
+    "run": {
+      "area": 3,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a3_patrol:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_patrol",
+    "run": {
+      "area": 3,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a3_patrol:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_patrol",
+    "run": {
+      "area": 3,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a3_patrol:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_patrol",
+    "run": {
+      "area": 3,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a3_patrol:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_west",
+    "run": {
+      "area": 3,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a3_west:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_west",
+    "run": {
+      "area": 3,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a3_west:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_west",
+    "run": {
+      "area": 3,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a3_west:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_west",
+    "run": {
+      "area": 3,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a3_west:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_west",
+    "run": {
+      "area": 3,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a3_west:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_west",
+    "run": {
+      "area": 3,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a3_west:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_east",
+    "run": {
+      "area": 3,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a3_east:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_east",
+    "run": {
+      "area": 3,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a3_east:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_east",
+    "run": {
+      "area": 3,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a3_east:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_east",
+    "run": {
+      "area": 3,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a3_east:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_east",
+    "run": {
+      "area": 3,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a3_east:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_east",
+    "run": {
+      "area": 3,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a3_east:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_heart",
+    "run": {
+      "area": 3,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a3_heart:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_heart",
+    "run": {
+      "area": 3,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a3_heart:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_heart",
+    "run": {
+      "area": 3,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a3_heart:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_heart",
+    "run": {
+      "area": 3,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a3_heart:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_heart",
+    "run": {
+      "area": 3,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a3_heart:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a3_heart",
+    "run": {
+      "area": 3,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a3_heart:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_patrol",
+    "run": {
+      "area": 4,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a4_patrol:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_patrol",
+    "run": {
+      "area": 4,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a4_patrol:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_patrol",
+    "run": {
+      "area": 4,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a4_patrol:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_patrol",
+    "run": {
+      "area": 4,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a4_patrol:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_patrol",
+    "run": {
+      "area": 4,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a4_patrol:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_patrol",
+    "run": {
+      "area": 4,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a4_patrol:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_west",
+    "run": {
+      "area": 4,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a4_west:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_west",
+    "run": {
+      "area": 4,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a4_west:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_west",
+    "run": {
+      "area": 4,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a4_west:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_west",
+    "run": {
+      "area": 4,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a4_west:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_west",
+    "run": {
+      "area": 4,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a4_west:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_west",
+    "run": {
+      "area": 4,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a4_west:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_east",
+    "run": {
+      "area": 4,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a4_east:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_east",
+    "run": {
+      "area": 4,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a4_east:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_east",
+    "run": {
+      "area": 4,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a4_east:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_east",
+    "run": {
+      "area": 4,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a4_east:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_east",
+    "run": {
+      "area": 4,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a4_east:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_east",
+    "run": {
+      "area": 4,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a4_east:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_heart",
+    "run": {
+      "area": 4,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:a4_heart:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_heart",
+    "run": {
+      "area": 4,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:a4_heart:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_heart",
+    "run": {
+      "area": 4,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:a4_heart:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_heart",
+    "run": {
+      "area": 4,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:a4_heart:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_heart",
+    "run": {
+      "area": 4,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:a4_heart:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "a4_heart",
+    "run": {
+      "area": 4,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:a4_heart:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "patrol",
+    "run": {
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:patrol:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "patrol",
+    "run": {
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:patrol:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "patrol",
+    "run": {
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:patrol:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "patrol",
+    "run": {
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:patrol:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "patrol",
+    "run": {
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:patrol:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "patrol",
+    "run": {
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:patrol:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "west",
+    "run": {
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:west:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "west",
+    "run": {
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:west:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "west",
+    "run": {
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:west:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "west",
+    "run": {
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:west:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "west",
+    "run": {
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:west:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "west",
+    "run": {
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:west:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "east",
+    "run": {
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:east:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "east",
+    "run": {
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:east:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "east",
+    "run": {
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:east:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "east",
+    "run": {
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:east:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "east",
+    "run": {
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:east:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "east",
+    "run": {
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:east:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "heart",
+    "run": {
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:heart:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "heart",
+    "run": {
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:heart:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "heart",
+    "run": {
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:heart:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "heart",
+    "run": {
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:heart:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "heart",
+    "run": {
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:heart:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "heart",
+    "run": {
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:heart:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault0",
+    "run": {
+      "area": 0,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:vault0:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault0",
+    "run": {
+      "area": 0,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:vault0:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault0",
+    "run": {
+      "area": 0,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:vault0:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault0",
+    "run": {
+      "area": 0,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:vault0:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault0",
+    "run": {
+      "area": 0,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:vault0:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault0",
+    "run": {
+      "area": 0,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:vault0:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1",
+    "run": {
+      "area": 0,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1",
+    "run": {
+      "area": 0,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1",
+    "run": {
+      "area": 0,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1",
+    "run": {
+      "area": 0,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1",
+    "run": {
+      "area": 0,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1",
+    "run": {
+      "area": 0,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_3",
+    "run": {
+      "area": 0,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam0_3:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_3",
+    "run": {
+      "area": 0,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam0_3:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_3",
+    "run": {
+      "area": 0,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam0_3:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_3",
+    "run": {
+      "area": 0,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam0_3:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_3",
+    "run": {
+      "area": 0,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam0_3:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_3",
+    "run": {
+      "area": 0,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam0_3:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_4",
+    "run": {
+      "area": 0,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam0_4:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_4",
+    "run": {
+      "area": 0,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam0_4:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_4",
+    "run": {
+      "area": 0,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam0_4:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_4",
+    "run": {
+      "area": 0,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam0_4:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_4",
+    "run": {
+      "area": 0,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam0_4:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_4",
+    "run": {
+      "area": 0,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam0_4:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault1",
+    "run": {
+      "area": 1,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:vault1:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault1",
+    "run": {
+      "area": 1,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:vault1:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault1",
+    "run": {
+      "area": 1,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:vault1:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault1",
+    "run": {
+      "area": 1,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:vault1:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault1",
+    "run": {
+      "area": 1,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:vault1:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault1",
+    "run": {
+      "area": 1,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:vault1:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_1",
+    "run": {
+      "area": 1,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam1_1:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_1",
+    "run": {
+      "area": 1,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam1_1:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_1",
+    "run": {
+      "area": 1,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam1_1:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_1",
+    "run": {
+      "area": 1,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam1_1:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_1",
+    "run": {
+      "area": 1,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam1_1:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_1",
+    "run": {
+      "area": 1,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam1_1:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3",
+    "run": {
+      "area": 1,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3",
+    "run": {
+      "area": 1,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3",
+    "run": {
+      "area": 1,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3",
+    "run": {
+      "area": 1,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3",
+    "run": {
+      "area": 1,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3",
+    "run": {
+      "area": 1,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_4",
+    "run": {
+      "area": 1,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam1_4:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_4",
+    "run": {
+      "area": 1,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam1_4:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_4",
+    "run": {
+      "area": 1,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam1_4:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_4",
+    "run": {
+      "area": 1,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam1_4:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_4",
+    "run": {
+      "area": 1,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam1_4:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_4",
+    "run": {
+      "area": 1,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam1_4:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault2",
+    "run": {
+      "area": 2,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:vault2:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault2",
+    "run": {
+      "area": 2,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:vault2:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault2",
+    "run": {
+      "area": 2,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:vault2:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault2",
+    "run": {
+      "area": 2,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:vault2:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault2",
+    "run": {
+      "area": 2,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:vault2:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault2",
+    "run": {
+      "area": 2,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:vault2:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_1",
+    "run": {
+      "area": 2,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam2_1:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_1",
+    "run": {
+      "area": 2,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam2_1:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_1",
+    "run": {
+      "area": 2,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam2_1:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_1",
+    "run": {
+      "area": 2,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam2_1:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_1",
+    "run": {
+      "area": 2,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam2_1:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_1",
+    "run": {
+      "area": 2,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam2_1:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3",
+    "run": {
+      "area": 2,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3",
+    "run": {
+      "area": 2,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3",
+    "run": {
+      "area": 2,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3",
+    "run": {
+      "area": 2,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3",
+    "run": {
+      "area": 2,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3",
+    "run": {
+      "area": 2,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_4",
+    "run": {
+      "area": 2,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam2_4:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_4",
+    "run": {
+      "area": 2,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam2_4:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_4",
+    "run": {
+      "area": 2,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam2_4:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_4",
+    "run": {
+      "area": 2,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam2_4:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_4",
+    "run": {
+      "area": 2,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam2_4:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_4",
+    "run": {
+      "area": 2,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam2_4:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault3",
+    "run": {
+      "area": 3,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:vault3:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault3",
+    "run": {
+      "area": 3,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:vault3:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault3",
+    "run": {
+      "area": 3,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:vault3:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault3",
+    "run": {
+      "area": 3,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:vault3:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault3",
+    "run": {
+      "area": 3,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:vault3:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault3",
+    "run": {
+      "area": 3,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:vault3:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1",
+    "run": {
+      "area": 3,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1",
+    "run": {
+      "area": 3,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1",
+    "run": {
+      "area": 3,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1",
+    "run": {
+      "area": 3,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1",
+    "run": {
+      "area": 3,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1",
+    "run": {
+      "area": 3,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_3",
+    "run": {
+      "area": 3,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam3_3:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_3",
+    "run": {
+      "area": 3,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam3_3:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_3",
+    "run": {
+      "area": 3,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam3_3:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_3",
+    "run": {
+      "area": 3,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam3_3:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_3",
+    "run": {
+      "area": 3,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam3_3:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_3",
+    "run": {
+      "area": 3,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam3_3:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_4",
+    "run": {
+      "area": 3,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam3_4:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_4",
+    "run": {
+      "area": 3,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam3_4:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_4",
+    "run": {
+      "area": 3,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam3_4:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_4",
+    "run": {
+      "area": 3,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam3_4:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_4",
+    "run": {
+      "area": 3,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam3_4:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_4",
+    "run": {
+      "area": 3,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam3_4:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault4",
+    "run": {
+      "area": 4,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:vault4:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault4",
+    "run": {
+      "area": 4,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:vault4:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault4",
+    "run": {
+      "area": 4,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:vault4:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault4",
+    "run": {
+      "area": 4,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:vault4:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault4",
+    "run": {
+      "area": 4,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:vault4:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "vault4",
+    "run": {
+      "area": 4,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:vault4:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_1",
+    "run": {
+      "area": 4,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam4_1:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_1",
+    "run": {
+      "area": 4,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam4_1:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_1",
+    "run": {
+      "area": 4,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam4_1:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_1",
+    "run": {
+      "area": 4,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam4_1:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_1",
+    "run": {
+      "area": 4,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam4_1:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_1",
+    "run": {
+      "area": 4,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam4_1:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3",
+    "run": {
+      "area": 4,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3",
+    "run": {
+      "area": 4,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3",
+    "run": {
+      "area": 4,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3",
+    "run": {
+      "area": 4,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3",
+    "run": {
+      "area": 4,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3",
+    "run": {
+      "area": 4,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4",
+    "run": {
+      "area": 4,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4",
+    "run": {
+      "area": 4,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4",
+    "run": {
+      "area": 4,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4",
+    "run": {
+      "area": 4,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4",
+    "run": {
+      "area": 4,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4",
+    "run": {
+      "area": 4,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1_391",
+    "run": {
+      "area": 0,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1_391:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1_391",
+    "run": {
+      "area": 0,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1_391:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1_391",
+    "run": {
+      "area": 0,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1_391:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1_391",
+    "run": {
+      "area": 0,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1_391:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1_391",
+    "run": {
+      "area": 0,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1_391:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1_391",
+    "run": {
+      "area": 0,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1_391:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3_391",
+    "run": {
+      "area": 2,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3_391:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3_391",
+    "run": {
+      "area": 2,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3_391:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3_391",
+    "run": {
+      "area": 2,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3_391:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3_391",
+    "run": {
+      "area": 2,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3_391:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3_391",
+    "run": {
+      "area": 2,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3_391:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3_391",
+    "run": {
+      "area": 2,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3_391:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4_391",
+    "run": {
+      "area": 4,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4_391:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4_391",
+    "run": {
+      "area": 4,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4_391:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4_391",
+    "run": {
+      "area": 4,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4_391:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4_391",
+    "run": {
+      "area": 4,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4_391:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4_391",
+    "run": {
+      "area": 4,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4_391:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4_391",
+    "run": {
+      "area": 4,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4_391:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3_392",
+    "run": {
+      "area": 1,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3_392:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3_392",
+    "run": {
+      "area": 1,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3_392:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3_392",
+    "run": {
+      "area": 1,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3_392:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3_392",
+    "run": {
+      "area": 1,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3_392:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3_392",
+    "run": {
+      "area": 1,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3_392:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3_392",
+    "run": {
+      "area": 1,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3_392:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1_392",
+    "run": {
+      "area": 3,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1_392:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1_392",
+    "run": {
+      "area": 3,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1_392:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1_392",
+    "run": {
+      "area": 3,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1_392:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1_392",
+    "run": {
+      "area": 3,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1_392:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1_392",
+    "run": {
+      "area": 3,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1_392:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1_392",
+    "run": {
+      "area": 3,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1_392:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3_392",
+    "run": {
+      "area": 4,
+      "challengeTier": 0
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3_392:0"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3_392",
+    "run": {
+      "area": 4,
+      "challengeTier": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3_392:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3_392",
+    "run": {
+      "area": 4,
+      "challengeTier": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3_392:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3_392",
+    "run": {
+      "area": 4,
+      "challengeTier": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3_392:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3_392",
+    "run": {
+      "area": 4,
+      "challengeTier": 4
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3_392:4"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3_392",
+    "run": {
+      "area": 4,
+      "challengeTier": 5
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3_392:5"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1_elite393",
+    "run": {
+      "area": 0,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1_elite393",
+    "run": {
+      "area": 0,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_1_elite393",
+    "run": {
+      "area": 0,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam0_1_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_3_elite393",
+    "run": {
+      "area": 0,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam0_3_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_3_elite393",
+    "run": {
+      "area": 0,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam0_3_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_3_elite393",
+    "run": {
+      "area": 0,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam0_3_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_4_elite393",
+    "run": {
+      "area": 0,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam0_4_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_4_elite393",
+    "run": {
+      "area": 0,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam0_4_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam0_4_elite393",
+    "run": {
+      "area": 0,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam0_4_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_1_elite393",
+    "run": {
+      "area": 1,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam1_1_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_1_elite393",
+    "run": {
+      "area": 1,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam1_1_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_1_elite393",
+    "run": {
+      "area": 1,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam1_1_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3_elite393",
+    "run": {
+      "area": 1,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3_elite393",
+    "run": {
+      "area": 1,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_3_elite393",
+    "run": {
+      "area": 1,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam1_3_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_4_elite393",
+    "run": {
+      "area": 1,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam1_4_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_4_elite393",
+    "run": {
+      "area": 1,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam1_4_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam1_4_elite393",
+    "run": {
+      "area": 1,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam1_4_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_1_elite393",
+    "run": {
+      "area": 2,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam2_1_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_1_elite393",
+    "run": {
+      "area": 2,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam2_1_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_1_elite393",
+    "run": {
+      "area": 2,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam2_1_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3_elite393",
+    "run": {
+      "area": 2,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3_elite393",
+    "run": {
+      "area": 2,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_3_elite393",
+    "run": {
+      "area": 2,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam2_3_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_4_elite393",
+    "run": {
+      "area": 2,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam2_4_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_4_elite393",
+    "run": {
+      "area": 2,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam2_4_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam2_4_elite393",
+    "run": {
+      "area": 2,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam2_4_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1_elite393",
+    "run": {
+      "area": 3,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1_elite393",
+    "run": {
+      "area": 3,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_1_elite393",
+    "run": {
+      "area": 3,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam3_1_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_3_elite393",
+    "run": {
+      "area": 3,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam3_3_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_3_elite393",
+    "run": {
+      "area": 3,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam3_3_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_3_elite393",
+    "run": {
+      "area": 3,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam3_3_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_4_elite393",
+    "run": {
+      "area": 3,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam3_4_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_4_elite393",
+    "run": {
+      "area": 3,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam3_4_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam3_4_elite393",
+    "run": {
+      "area": 3,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam3_4_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_1_elite393",
+    "run": {
+      "area": 4,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam4_1_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_1_elite393",
+    "run": {
+      "area": 4,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam4_1_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_1_elite393",
+    "run": {
+      "area": 4,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam4_1_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3_elite393",
+    "run": {
+      "area": 4,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3_elite393",
+    "run": {
+      "area": 4,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_3_elite393",
+    "run": {
+      "area": 4,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam4_3_elite393:3"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4_elite393",
+    "run": {
+      "area": 4,
+      "challengeTier": 0,
+      "eliteTier393": 1
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4_elite393:1"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4_elite393",
+    "run": {
+      "area": 4,
+      "challengeTier": 0,
+      "eliteTier393": 2
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4_elite393:2"
+  },
+  {
+    "mode": "chapter",
+    "id": "roam4_4_elite393",
+    "run": {
+      "area": 4,
+      "challengeTier": 0,
+      "eliteTier393": 3
+    },
+    "floor": 100,
+    "key": "chapter:roam4_4_elite393:3"
+  },
+  {
+    "mode": "heroes",
+    "stage": 0,
+    "floor": 100,
+    "level": 1000,
+    "key": "heroes:0"
+  },
+  {
+    "mode": "heroes",
+    "stage": 1,
+    "floor": 100,
+    "level": 1000,
+    "key": "heroes:1"
+  },
+  {
+    "mode": "heroes",
+    "stage": 2,
+    "floor": 100,
+    "level": 1500,
+    "key": "heroes:2"
+  },
+  {
+    "mode": "heroes",
+    "stage": 3,
+    "floor": 100,
+    "level": 2000,
+    "key": "heroes:3"
+  },
+  {
+    "mode": "heroes",
+    "stage": 4,
+    "floor": 100,
+    "level": 2500,
+    "key": "heroes:4"
+  },
+  {
+    "mode": "heroes",
+    "stage": 5,
+    "floor": 100,
+    "level": 3000,
+    "key": "heroes:5"
+  },
+  {
+    "mode": "heroes",
+    "stage": 6,
+    "floor": 100,
+    "level": 3500,
+    "key": "heroes:6"
+  },
+  {
+    "mode": "heroes",
+    "stage": 7,
+    "floor": 100,
+    "level": 4000,
+    "key": "heroes:7"
+  },
+  {
+    "mode": "heroes",
+    "stage": 8,
+    "floor": 100,
+    "level": 4500,
+    "key": "heroes:8"
+  },
+  {
+    "mode": "heroes",
+    "stage": 9,
+    "floor": 100,
+    "level": 5000,
+    "key": "heroes:9"
+  },
+  {
+    "mode": "heroes",
+    "stage": 10,
+    "floor": 100,
+    "level": 5500,
+    "key": "heroes:10"
+  },
+  {
+    "mode": "heroes",
+    "stage": 11,
+    "floor": 100,
+    "level": 6000,
+    "key": "heroes:11"
+  },
+  {
+    "mode": "heroes",
+    "stage": 12,
+    "floor": 100,
+    "level": 6500,
+    "key": "heroes:12"
+  },
+  {
+    "mode": "heroes",
+    "stage": 13,
+    "floor": 100,
+    "level": 7000,
+    "key": "heroes:13"
+  },
+  {
+    "mode": "heroes",
+    "stage": 14,
+    "floor": 100,
+    "level": 7500,
+    "key": "heroes:14"
+  },
+  {
+    "mode": "heroes",
+    "stage": 15,
+    "floor": 100,
+    "level": 8000,
+    "key": "heroes:15"
+  },
+  {
+    "mode": "heroes",
+    "stage": 16,
+    "floor": 100,
+    "level": 8500,
+    "key": "heroes:16"
+  },
+  {
+    "mode": "heroes",
+    "stage": 17,
+    "floor": 100,
+    "level": 9000,
+    "key": "heroes:17"
+  },
+  {
+    "mode": "heroes",
+    "stage": 18,
+    "floor": 100,
+    "level": 9500,
+    "key": "heroes:18"
+  },
+  {
+    "mode": "heroes",
+    "stage": 19,
+    "floor": 100,
+    "level": 10000,
+    "key": "heroes:19"
+  }
+]

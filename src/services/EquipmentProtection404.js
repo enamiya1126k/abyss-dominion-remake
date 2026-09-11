@@ -18,7 +18,7 @@ export function equipmentMaterialSummary404(state,targetId){
  return summary;
 }
 export function equipmentLockEntries404(state,{slot='all',status='all',rarity='all',targetId=null}={}){
- return (state.equipment??[]).filter(item=>item.id!==targetId&&(slot==='all'||item.slot===slot)&&(rarity==='all'||equipmentDisplayRarity(item)===rarity)&&(status==='all'||(status==='locked'?item.locked:!item.locked)));
+ return (state.equipment??[]).filter(item=>item.id!==targetId&&(slot==='all'||item.slot===slot)&&(rarity==='all'||equipmentDisplayRarity(item)===rarity)&&(status==='all'||(status==='protected'?item.locked||item.favorite:status==='favorite'?item.favorite:status==='locked'?item.locked:!item.locked)));
 }
 export function equipmentLockPreset404(entries,mode,target=null){
  return entries.filter(item=>mode==='all'||mode==='low'&&['N','R'].includes(equipmentDisplayRarity(item))||mode==='same'&&target&&item.name===target.name).map(item=>item.id);

@@ -1,0 +1,44 @@
+{
+  "build": 413,
+  "version": "3.1.93",
+  "requires": "Build412",
+  "saveSchema": 84,
+  "files": [
+    {
+      "path": "index.html",
+      "sha256": "d205e223351956c5d3af5de9fe1803b48b18a502939e2aa932d2bc8d45e8cf9d"
+    },
+    {
+      "path": "src/core/config.js",
+      "sha256": "5bbc1007bda012641e1d053c487ac0b304586e235ffc64f60e0f6ecbdaa322f4"
+    },
+    {
+      "path": "src/core/MagicCircleSystem.js",
+      "sha256": "4fe8cbd3982649e353809e72f5e36de459b83a2e74c833e1fc2414d58411f1e9"
+    },
+    {
+      "path": "src/ui/BattleBossLayout.js",
+      "sha256": "49cac89afcc68617bdc8dafc8edacf974f85829e398c0c84688160c9afc549c7"
+    },
+    {
+      "path": "src/Styles/build413-character-circles.css",
+      "sha256": "b709a82d2a52901758e562bd2f082c3604881069cef4e9a58c53e95d6dc4ef1c"
+    },
+    {
+      "path": "tests/build413-display.test.mjs",
+      "sha256": "0b30b8dd2842c262f0bb5e2bb6dcb86f59674e338a8b106ba240ee4586ef8ce2"
+    },
+    {
+      "path": "docs/build413/display.tap",
+      "sha256": "f49df903b9d5eb606b49087a9c3ca2c82238f89867ce3f6ebba24c1f10e38c44"
+    },
+    {
+      "path": "docs/build413/operations-regression.tap",
+      "sha256": "6f81b15ed1f4a460a6eab63f8a6160633b6b228bc6e0d3c199fdd64456532383"
+    },
+    {
+      "path": "README_BUILD413.txt",
+      "sha256": "fc2e8256cab9813918828aa5591b08cc81b7bf7df1491306c6f339293001c323"
+    }
+  ]
+}

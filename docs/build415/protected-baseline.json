@@ -1,0 +1,3076 @@
+{
+  "source": "Build413 runtime supplied with completed Build414 design",
+  "hashes": {
+    "src/data/endgameCharacters.js": "7ac3759698cdecf26924e72f1e2c9494528e06b78728977aa0be7a7f646e9f57",
+    "src/data/endgameUltimates.js": "2266ca6a0e7fbed3261ccc050daaa8350ffd8c8ee54707a5eca0f74884da0e58",
+    "src/core/EndgameUltimateSystem.js": "ae2f2ba0870ee7b84a75a0f545a9a4d69399678742bda5cbb76e9438c478e661",
+    "src/core/CampaignEndgameBalance.js": "3ae9bdaa1e52fd1897fd2c4d975af85806d9a23b01697ad8238856be2d911ff1",
+    "src/core/TeamBattleBalanceSystem.js": "821f7303aeb936f1ddd26ee82e59d6e86cb3fbf8a0e8238ea74eec28e6b4d0e6",
+    "online-server/src/RoomStore.js": "007eed405bbe0e7357e5b98c98f9f9fc2684d952f620426c6fc1a22ad1cc6a44",
+    "online-server/src/RaidCoordinator.js": "d4593615a697d0a423c4f2f09bf0fba8ca999326e572a7c3d3d099b43b1ebcb8",
+    "online-server/src/CoopBossCatalog.js": "54c8a58dd09332ee43939c09027f6091f34377b97e835b24d2035b3d56accc98",
+    "online-server/src/WeeklyRaidCatalog.js": "7408eb8b38c043d47080a277d7c55a4e8181291b4d275bc07560605d80df9d46"
+  },
+  "rows": [
+    {
+      "id": "abyss_gluttony",
+      "speciesId": "ogre",
+      "faction": "abyss",
+      "level": 1,
+      "stats": {
+        "hp": 139,
+        "atk": 26,
+        "matk": 18,
+        "def": 11,
+        "mdef": 9,
+        "spd": 5,
+        "crit": 8,
+        "evasion": 1,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 63,
+      "skills": [
+        {
+          "id": "endgame__abyss_gluttony__devour",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_gluttony__rend",
+          "mp": 20
+        },
+        {
+          "id": "endgame__abyss_gluttony__roar",
+          "mp": 30
+        },
+        {
+          "id": "endgame__abyss_gluttony__manaFeast",
+          "mp": 26
+        },
+        {
+          "id": "endgame__abyss_gluttony__allFeast",
+          "mp": 62
+        },
+        {
+          "id": "endgame_ultimate__abyss_gluttony__allDevour",
+          "mp": 38
+        }
+      ]
+    },
+    {
+      "id": "abyss_gluttony",
+      "speciesId": "ogre",
+      "faction": "abyss",
+      "level": 999,
+      "stats": {
+        "hp": 9191,
+        "atk": 1783,
+        "matk": 1283,
+        "def": 698,
+        "mdef": 572,
+        "spd": 183,
+        "crit": 8,
+        "evasion": 1,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 364,
+      "skills": [
+        {
+          "id": "endgame__abyss_gluttony__devour",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_gluttony__rend",
+          "mp": 20
+        },
+        {
+          "id": "endgame__abyss_gluttony__roar",
+          "mp": 30
+        },
+        {
+          "id": "endgame__abyss_gluttony__manaFeast",
+          "mp": 26
+        },
+        {
+          "id": "endgame__abyss_gluttony__allFeast",
+          "mp": 62
+        },
+        {
+          "id": "endgame_ultimate__abyss_gluttony__allDevour",
+          "mp": 219
+        }
+      ]
+    },
+    {
+      "id": "abyss_gluttony",
+      "speciesId": "ogre",
+      "faction": "abyss",
+      "level": 10000,
+      "stats": {
+        "hp": 45154,
+        "atk": 8767,
+        "matk": 6312,
+        "def": 3427,
+        "mdef": 2810,
+        "spd": 781,
+        "crit": 8,
+        "evasion": 1,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 1654,
+      "skills": [
+        {
+          "id": "endgame__abyss_gluttony__devour",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_gluttony__rend",
+          "mp": 20
+        },
+        {
+          "id": "endgame__abyss_gluttony__roar",
+          "mp": 30
+        },
+        {
+          "id": "endgame__abyss_gluttony__manaFeast",
+          "mp": 26
+        },
+        {
+          "id": "endgame__abyss_gluttony__allFeast",
+          "mp": 62
+        },
+        {
+          "id": "endgame_ultimate__abyss_gluttony__allDevour",
+          "mp": 993
+        }
+      ]
+    },
+    {
+      "id": "abyss_gluttony",
+      "speciesId": "ogre",
+      "faction": "abyss",
+      "level": 99999,
+      "stats": {
+        "hp": 334084,
+        "atk": 64877,
+        "matk": 46711,
+        "def": 25355,
+        "mdef": 20791,
+        "spd": 5758,
+        "crit": 8,
+        "evasion": 1,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 8421,
+      "skills": [
+        {
+          "id": "endgame__abyss_gluttony__devour",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_gluttony__rend",
+          "mp": 20
+        },
+        {
+          "id": "endgame__abyss_gluttony__roar",
+          "mp": 30
+        },
+        {
+          "id": "endgame__abyss_gluttony__manaFeast",
+          "mp": 26
+        },
+        {
+          "id": "endgame__abyss_gluttony__allFeast",
+          "mp": 62
+        },
+        {
+          "id": "endgame_ultimate__abyss_gluttony__allDevour",
+          "mp": 5053
+        }
+      ]
+    },
+    {
+      "id": "abyss_wrath",
+      "speciesId": "dark_knight",
+      "faction": "abyss",
+      "level": 1,
+      "stats": {
+        "hp": 175,
+        "atk": 29,
+        "matk": 20,
+        "def": 29,
+        "mdef": 23,
+        "spd": 11,
+        "crit": 10,
+        "evasion": 5,
+        "accuracy": 106,
+        "_affixes": {}
+      },
+      "mp": 58,
+      "skills": [
+        {
+          "id": "endgame__abyss_wrath__crush",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_wrath__rageBlow",
+          "mp": 20
+        },
+        {
+          "id": "endgame__abyss_wrath__reprisal",
+          "mp": 26
+        },
+        {
+          "id": "endgame__abyss_wrath__berserker",
+          "mp": 34
+        },
+        {
+          "id": "endgame__abyss_wrath__rageRelease",
+          "mp": 64
+        },
+        {
+          "id": "endgame_ultimate__abyss_wrath__undyingRage",
+          "mp": 35
+        }
+      ]
+    },
+    {
+      "id": "abyss_wrath",
+      "speciesId": "dark_knight",
+      "faction": "abyss",
+      "level": 999,
+      "stats": {
+        "hp": 11380,
+        "atk": 1679,
+        "matk": 1208,
+        "def": 1796,
+        "mdef": 1472,
+        "spd": 333,
+        "crit": 10,
+        "evasion": 5,
+        "accuracy": 106,
+        "_affixes": {}
+      },
+      "mp": 290,
+      "skills": [
+        {
+          "id": "endgame__abyss_wrath__crush",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_wrath__rageBlow",
+          "mp": 20
+        },
+        {
+          "id": "endgame__abyss_wrath__reprisal",
+          "mp": 26
+        },
+        {
+          "id": "endgame__abyss_wrath__berserker",
+          "mp": 34
+        },
+        {
+          "id": "endgame__abyss_wrath__rageRelease",
+          "mp": 64
+        },
+        {
+          "id": "endgame_ultimate__abyss_wrath__undyingRage",
+          "mp": 174
+        }
+      ]
+    },
+    {
+      "id": "abyss_wrath",
+      "speciesId": "dark_knight",
+      "faction": "abyss",
+      "level": 10000,
+      "stats": {
+        "hp": 55899,
+        "atk": 8234,
+        "matk": 5928,
+        "def": 8820,
+        "mdef": 7232,
+        "spd": 1418,
+        "crit": 10,
+        "evasion": 5,
+        "accuracy": 106,
+        "_affixes": {}
+      },
+      "mp": 1285,
+      "skills": [
+        {
+          "id": "endgame__abyss_wrath__crush",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_wrath__rageBlow",
+          "mp": 20
+        },
+        {
+          "id": "endgame__abyss_wrath__reprisal",
+          "mp": 26
+        },
+        {
+          "id": "endgame__abyss_wrath__berserker",
+          "mp": 34
+        },
+        {
+          "id": "endgame__abyss_wrath__rageRelease",
+          "mp": 64
+        },
+        {
+          "id": "endgame_ultimate__abyss_wrath__undyingRage",
+          "mp": 771
+        }
+      ]
+    },
+    {
+      "id": "abyss_wrath",
+      "speciesId": "dark_knight",
+      "faction": "abyss",
+      "level": 99999,
+      "stats": {
+        "hp": 413569,
+        "atk": 60904,
+        "matk": 43850,
+        "def": 65252,
+        "mdef": 53506,
+        "spd": 10447,
+        "crit": 10,
+        "evasion": 5,
+        "accuracy": 106,
+        "_affixes": {}
+      },
+      "mp": 6505,
+      "skills": [
+        {
+          "id": "endgame__abyss_wrath__crush",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_wrath__rageBlow",
+          "mp": 20
+        },
+        {
+          "id": "endgame__abyss_wrath__reprisal",
+          "mp": 26
+        },
+        {
+          "id": "endgame__abyss_wrath__berserker",
+          "mp": 34
+        },
+        {
+          "id": "endgame__abyss_wrath__rageRelease",
+          "mp": 64
+        },
+        {
+          "id": "endgame_ultimate__abyss_wrath__undyingRage",
+          "mp": 3903
+        }
+      ]
+    },
+    {
+      "id": "abyss_envy",
+      "speciesId": "mimic",
+      "faction": "abyss",
+      "level": 1,
+      "stats": {
+        "hp": 107,
+        "atk": 24,
+        "matk": 17,
+        "def": 17,
+        "mdef": 13,
+        "spd": 11,
+        "crit": 15,
+        "evasion": 4,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 66,
+      "skills": [
+        {
+          "id": "endgame__abyss_envy__trace",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_envy__copy",
+          "mp": 18
+        },
+        {
+          "id": "endgame__abyss_envy__covetEye",
+          "mp": 24
+        },
+        {
+          "id": "endgame__abyss_envy__jealousy",
+          "mp": 32
+        },
+        {
+          "id": "endgame__abyss_envy__perfectCopy",
+          "mp": 58
+        },
+        {
+          "id": "endgame_ultimate__abyss_envy__betterThanYou",
+          "mp": 40
+        }
+      ]
+    },
+    {
+      "id": "abyss_envy",
+      "speciesId": "mimic",
+      "faction": "abyss",
+      "level": 999,
+      "stats": {
+        "hp": 7458,
+        "atk": 1527,
+        "matk": 1099,
+        "def": 1249,
+        "mdef": 1024,
+        "spd": 308,
+        "crit": 15,
+        "evasion": 4,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 368,
+      "skills": [
+        {
+          "id": "endgame__abyss_envy__trace",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_envy__copy",
+          "mp": 18
+        },
+        {
+          "id": "endgame__abyss_envy__covetEye",
+          "mp": 24
+        },
+        {
+          "id": "endgame__abyss_envy__jealousy",
+          "mp": 32
+        },
+        {
+          "id": "endgame__abyss_envy__perfectCopy",
+          "mp": 58
+        },
+        {
+          "id": "endgame_ultimate__abyss_envy__betterThanYou",
+          "mp": 221
+        }
+      ]
+    },
+    {
+      "id": "abyss_envy",
+      "speciesId": "mimic",
+      "faction": "abyss",
+      "level": 10000,
+      "stats": {
+        "hp": 36665,
+        "atk": 7497,
+        "matk": 5397,
+        "def": 6146,
+        "mdef": 5039,
+        "spd": 1310,
+        "crit": 15,
+        "evasion": 4,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 1657,
+      "skills": [
+        {
+          "id": "endgame__abyss_envy__trace",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_envy__copy",
+          "mp": 18
+        },
+        {
+          "id": "endgame__abyss_envy__covetEye",
+          "mp": 24
+        },
+        {
+          "id": "endgame__abyss_envy__jealousy",
+          "mp": 32
+        },
+        {
+          "id": "endgame__abyss_envy__perfectCopy",
+          "mp": 58
+        },
+        {
+          "id": "endgame_ultimate__abyss_envy__betterThanYou",
+          "mp": 995
+        }
+      ]
+    },
+    {
+      "id": "abyss_envy",
+      "speciesId": "mimic",
+      "faction": "abyss",
+      "level": 99999,
+      "stats": {
+        "hp": 271313,
+        "atk": 55464,
+        "matk": 39934,
+        "def": 45487,
+        "mdef": 37299,
+        "spd": 9644,
+        "crit": 15,
+        "evasion": 4,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 8424,
+      "skills": [
+        {
+          "id": "endgame__abyss_envy__trace",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_envy__copy",
+          "mp": 18
+        },
+        {
+          "id": "endgame__abyss_envy__covetEye",
+          "mp": 24
+        },
+        {
+          "id": "endgame__abyss_envy__jealousy",
+          "mp": 32
+        },
+        {
+          "id": "endgame__abyss_envy__perfectCopy",
+          "mp": 58
+        },
+        {
+          "id": "endgame_ultimate__abyss_envy__betterThanYou",
+          "mp": 5055
+        }
+      ]
+    },
+    {
+      "id": "abyss_sloth",
+      "speciesId": "stone_golem",
+      "faction": "abyss",
+      "level": 1,
+      "stats": {
+        "hp": 147,
+        "atk": 15,
+        "matk": 10,
+        "def": 24,
+        "mdef": 19,
+        "spd": 2,
+        "crit": 3,
+        "evasion": 0,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 43,
+      "skills": [
+        {
+          "id": "endgame__abyss_sloth__drowse",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_sloth__deepSleep",
+          "mp": 18
+        },
+        {
+          "id": "endgame__abyss_sloth__gravity",
+          "mp": 28
+        },
+        {
+          "id": "endgame__abyss_sloth__timeField",
+          "mp": 38
+        },
+        {
+          "id": "endgame__abyss_sloth__eternalSleep",
+          "mp": 60
+        },
+        {
+          "id": "endgame_ultimate__abyss_sloth__idleWorld",
+          "mp": 26
+        }
+      ]
+    },
+    {
+      "id": "abyss_sloth",
+      "speciesId": "stone_golem",
+      "faction": "abyss",
+      "level": 999,
+      "stats": {
+        "hp": 10280,
+        "atk": 988,
+        "matk": 711,
+        "def": 1770,
+        "mdef": 1451,
+        "spd": 77,
+        "crit": 3,
+        "evasion": 0,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 275,
+      "skills": [
+        {
+          "id": "endgame__abyss_sloth__drowse",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_sloth__deepSleep",
+          "mp": 18
+        },
+        {
+          "id": "endgame__abyss_sloth__gravity",
+          "mp": 28
+        },
+        {
+          "id": "endgame__abyss_sloth__timeField",
+          "mp": 38
+        },
+        {
+          "id": "endgame__abyss_sloth__eternalSleep",
+          "mp": 60
+        },
+        {
+          "id": "endgame_ultimate__abyss_sloth__idleWorld",
+          "mp": 165
+        }
+      ]
+    },
+    {
+      "id": "abyss_sloth",
+      "speciesId": "stone_golem",
+      "faction": "abyss",
+      "level": 10000,
+      "stats": {
+        "hp": 50538,
+        "atk": 4851,
+        "matk": 3492,
+        "def": 8707,
+        "mdef": 7139,
+        "spd": 327,
+        "crit": 3,
+        "evasion": 0,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 1270,
+      "skills": [
+        {
+          "id": "endgame__abyss_sloth__drowse",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_sloth__deepSleep",
+          "mp": 18
+        },
+        {
+          "id": "endgame__abyss_sloth__gravity",
+          "mp": 28
+        },
+        {
+          "id": "endgame__abyss_sloth__timeField",
+          "mp": 38
+        },
+        {
+          "id": "endgame__abyss_sloth__eternalSleep",
+          "mp": 60
+        },
+        {
+          "id": "endgame_ultimate__abyss_sloth__idleWorld",
+          "mp": 762
+        }
+      ]
+    },
+    {
+      "id": "abyss_sloth",
+      "speciesId": "stone_golem",
+      "faction": "abyss",
+      "level": 99999,
+      "stats": {
+        "hp": 373973,
+        "atk": 35889,
+        "matk": 25840,
+        "def": 64440,
+        "mdef": 52840,
+        "spd": 2411,
+        "crit": 3,
+        "evasion": 0,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 6491,
+      "skills": [
+        {
+          "id": "endgame__abyss_sloth__drowse",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_sloth__deepSleep",
+          "mp": 18
+        },
+        {
+          "id": "endgame__abyss_sloth__gravity",
+          "mp": 28
+        },
+        {
+          "id": "endgame__abyss_sloth__timeField",
+          "mp": 38
+        },
+        {
+          "id": "endgame__abyss_sloth__eternalSleep",
+          "mp": 60
+        },
+        {
+          "id": "endgame_ultimate__abyss_sloth__idleWorld",
+          "mp": 3895
+        }
+      ]
+    },
+    {
+      "id": "abyss_greed",
+      "speciesId": "goblin_shaman",
+      "faction": "abyss",
+      "level": 1,
+      "stats": {
+        "hp": 60,
+        "atk": 17,
+        "matk": 18,
+        "def": 5,
+        "mdef": 5,
+        "spd": 17,
+        "crit": 7,
+        "evasion": 6,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 97,
+      "skills": [
+        {
+          "id": "endgame__abyss_greed__collect",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_greed__plunder",
+          "mp": 22
+        },
+        {
+          "id": "endgame__abyss_greed__goldenSeizure",
+          "mp": 32
+        },
+        {
+          "id": "endgame__abyss_greed__ownership",
+          "mp": 36
+        },
+        {
+          "id": "endgame__abyss_greed__allMine",
+          "mp": 64
+        },
+        {
+          "id": "endgame_ultimate__abyss_greed__ownershipTransfer",
+          "mp": 59
+        }
+      ]
+    },
+    {
+      "id": "abyss_greed",
+      "speciesId": "goblin_shaman",
+      "faction": "abyss",
+      "level": 999,
+      "stats": {
+        "hp": 3455,
+        "atk": 1027,
+        "matk": 1109,
+        "def": 322,
+        "mdef": 347,
+        "spd": 648,
+        "crit": 7,
+        "evasion": 6,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 510,
+      "skills": [
+        {
+          "id": "endgame__abyss_greed__collect",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_greed__plunder",
+          "mp": 22
+        },
+        {
+          "id": "endgame__abyss_greed__goldenSeizure",
+          "mp": 32
+        },
+        {
+          "id": "endgame__abyss_greed__ownership",
+          "mp": 36
+        },
+        {
+          "id": "endgame__abyss_greed__allMine",
+          "mp": 64
+        },
+        {
+          "id": "endgame_ultimate__abyss_greed__ownershipTransfer",
+          "mp": 306
+        }
+      ]
+    },
+    {
+      "id": "abyss_greed",
+      "speciesId": "goblin_shaman",
+      "faction": "abyss",
+      "level": 10000,
+      "stats": {
+        "hp": 16941,
+        "atk": 5041,
+        "matk": 5444,
+        "def": 1579,
+        "mdef": 1705,
+        "spd": 2776,
+        "crit": 7,
+        "evasion": 6,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 2279,
+      "skills": [
+        {
+          "id": "endgame__abyss_greed__collect",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_greed__plunder",
+          "mp": 22
+        },
+        {
+          "id": "endgame__abyss_greed__goldenSeizure",
+          "mp": 32
+        },
+        {
+          "id": "endgame__abyss_greed__ownership",
+          "mp": 36
+        },
+        {
+          "id": "endgame__abyss_greed__allMine",
+          "mp": 64
+        },
+        {
+          "id": "endgame_ultimate__abyss_greed__ownershipTransfer",
+          "mp": 1368
+        }
+      ]
+    },
+    {
+      "id": "abyss_greed",
+      "speciesId": "goblin_shaman",
+      "faction": "abyss",
+      "level": 99999,
+      "stats": {
+        "hp": 125290,
+        "atk": 37288,
+        "matk": 40271,
+        "def": 11683,
+        "mdef": 12617,
+        "spd": 20487,
+        "crit": 7,
+        "evasion": 6,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 11560,
+      "skills": [
+        {
+          "id": "endgame__abyss_greed__collect",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_greed__plunder",
+          "mp": 22
+        },
+        {
+          "id": "endgame__abyss_greed__goldenSeizure",
+          "mp": 32
+        },
+        {
+          "id": "endgame__abyss_greed__ownership",
+          "mp": 36
+        },
+        {
+          "id": "endgame__abyss_greed__allMine",
+          "mp": 64
+        },
+        {
+          "id": "endgame_ultimate__abyss_greed__ownershipTransfer",
+          "mp": 6936
+        }
+      ]
+    },
+    {
+      "id": "abyss_lust",
+      "speciesId": "wraith",
+      "faction": "abyss",
+      "level": 1,
+      "stats": {
+        "hp": 69,
+        "atk": 17,
+        "matk": 18,
+        "def": 7,
+        "mdef": 7,
+        "spd": 26,
+        "crit": 12,
+        "evasion": 17,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 100,
+      "skills": [
+        {
+          "id": "endgame__abyss_lust__kiss",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_lust__temptation",
+          "mp": 20
+        },
+        {
+          "id": "endgame__abyss_lust__pet",
+          "mp": 26
+        },
+        {
+          "id": "endgame__abyss_lust__sweetDream",
+          "mp": 42
+        },
+        {
+          "id": "endgame__abyss_lust__mindControl",
+          "mp": 62
+        },
+        {
+          "id": "endgame_ultimate__abyss_lust__stolenLove",
+          "mp": 60
+        }
+      ]
+    },
+    {
+      "id": "abyss_lust",
+      "speciesId": "wraith",
+      "faction": "abyss",
+      "level": 999,
+      "stats": {
+        "hp": 4514,
+        "atk": 1007,
+        "matk": 1087,
+        "def": 449,
+        "mdef": 484,
+        "spd": 749,
+        "crit": 12,
+        "evasion": 17,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 513,
+      "skills": [
+        {
+          "id": "endgame__abyss_lust__kiss",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_lust__temptation",
+          "mp": 20
+        },
+        {
+          "id": "endgame__abyss_lust__pet",
+          "mp": 26
+        },
+        {
+          "id": "endgame__abyss_lust__sweetDream",
+          "mp": 42
+        },
+        {
+          "id": "endgame__abyss_lust__mindControl",
+          "mp": 62
+        },
+        {
+          "id": "endgame_ultimate__abyss_lust__stolenLove",
+          "mp": 308
+        }
+      ]
+    },
+    {
+      "id": "abyss_lust",
+      "speciesId": "wraith",
+      "faction": "abyss",
+      "level": 10000,
+      "stats": {
+        "hp": 22175,
+        "atk": 4940,
+        "matk": 5335,
+        "def": 2205,
+        "mdef": 2381,
+        "spd": 3191,
+        "crit": 12,
+        "evasion": 17,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 2281,
+      "skills": [
+        {
+          "id": "endgame__abyss_lust__kiss",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_lust__temptation",
+          "mp": 20
+        },
+        {
+          "id": "endgame__abyss_lust__pet",
+          "mp": 26
+        },
+        {
+          "id": "endgame__abyss_lust__sweetDream",
+          "mp": 42
+        },
+        {
+          "id": "endgame__abyss_lust__mindControl",
+          "mp": 62
+        },
+        {
+          "id": "endgame_ultimate__abyss_lust__stolenLove",
+          "mp": 1369
+        }
+      ]
+    },
+    {
+      "id": "abyss_lust",
+      "speciesId": "wraith",
+      "faction": "abyss",
+      "level": 99999,
+      "stats": {
+        "hp": 164060,
+        "atk": 36542,
+        "matk": 39465,
+        "def": 16313,
+        "mdef": 17618,
+        "spd": 23506,
+        "crit": 12,
+        "evasion": 17,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 11562,
+      "skills": [
+        {
+          "id": "endgame__abyss_lust__kiss",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_lust__temptation",
+          "mp": 20
+        },
+        {
+          "id": "endgame__abyss_lust__pet",
+          "mp": 26
+        },
+        {
+          "id": "endgame__abyss_lust__sweetDream",
+          "mp": 42
+        },
+        {
+          "id": "endgame__abyss_lust__mindControl",
+          "mp": 62
+        },
+        {
+          "id": "endgame_ultimate__abyss_lust__stolenLove",
+          "mp": 6938
+        }
+      ]
+    },
+    {
+      "id": "abyss_pride",
+      "speciesId": "ancient_dragon",
+      "faction": "abyss",
+      "level": 1,
+      "stats": {
+        "hp": 253,
+        "atk": 44,
+        "matk": 31,
+        "def": 24,
+        "mdef": 19,
+        "spd": 4,
+        "crit": 10,
+        "evasion": 14,
+        "accuracy": 120,
+        "_affixes": {}
+      },
+      "mp": 76,
+      "skills": [
+        {
+          "id": "endgame__abyss_pride__royalStrike",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_pride__royalAura",
+          "mp": 24
+        },
+        {
+          "id": "endgame__abyss_pride__overlordOrder",
+          "mp": 34
+        },
+        {
+          "id": "endgame__abyss_pride__kingsJudgment",
+          "mp": 40
+        },
+        {
+          "id": "endgame__abyss_pride__endDeclaration",
+          "mp": 76
+        },
+        {
+          "id": "endgame_ultimate__abyss_pride__kneelAll",
+          "mp": 46
+        }
+      ]
+    },
+    {
+      "id": "abyss_pride",
+      "speciesId": "ancient_dragon",
+      "faction": "abyss",
+      "level": 999,
+      "stats": {
+        "hp": 19995,
+        "atk": 3489,
+        "matk": 2512,
+        "def": 1684,
+        "mdef": 1380,
+        "spd": 103,
+        "crit": 10,
+        "evasion": 14,
+        "accuracy": 120,
+        "_affixes": {}
+      },
+      "mp": 377,
+      "skills": [
+        {
+          "id": "endgame__abyss_pride__royalStrike",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_pride__royalAura",
+          "mp": 24
+        },
+        {
+          "id": "endgame__abyss_pride__overlordOrder",
+          "mp": 34
+        },
+        {
+          "id": "endgame__abyss_pride__kingsJudgment",
+          "mp": 40
+        },
+        {
+          "id": "endgame__abyss_pride__endDeclaration",
+          "mp": 76
+        },
+        {
+          "id": "endgame_ultimate__abyss_pride__kneelAll",
+          "mp": 227
+        }
+      ]
+    },
+    {
+      "id": "abyss_pride",
+      "speciesId": "ancient_dragon",
+      "faction": "abyss",
+      "level": 10000,
+      "stats": {
+        "hp": 98431,
+        "atk": 17176,
+        "matk": 12366,
+        "def": 8280,
+        "mdef": 6789,
+        "spd": 437,
+        "crit": 10,
+        "evasion": 14,
+        "accuracy": 120,
+        "_affixes": {}
+      },
+      "mp": 1667,
+      "skills": [
+        {
+          "id": "endgame__abyss_pride__royalStrike",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_pride__royalAura",
+          "mp": 24
+        },
+        {
+          "id": "endgame__abyss_pride__overlordOrder",
+          "mp": 34
+        },
+        {
+          "id": "endgame__abyss_pride__kingsJudgment",
+          "mp": 40
+        },
+        {
+          "id": "endgame__abyss_pride__endDeclaration",
+          "mp": 76
+        },
+        {
+          "id": "endgame_ultimate__abyss_pride__kneelAll",
+          "mp": 1001
+        }
+      ]
+    },
+    {
+      "id": "abyss_pride",
+      "speciesId": "ancient_dragon",
+      "faction": "abyss",
+      "level": 99999,
+      "stats": {
+        "hp": 728585,
+        "atk": 127138,
+        "matk": 91539,
+        "def": 61272,
+        "mdef": 50243,
+        "spd": 3215,
+        "crit": 10,
+        "evasion": 14,
+        "accuracy": 120,
+        "_affixes": {}
+      },
+      "mp": 8434,
+      "skills": [
+        {
+          "id": "endgame__abyss_pride__royalStrike",
+          "mp": 0
+        },
+        {
+          "id": "endgame__abyss_pride__royalAura",
+          "mp": 24
+        },
+        {
+          "id": "endgame__abyss_pride__overlordOrder",
+          "mp": 34
+        },
+        {
+          "id": "endgame__abyss_pride__kingsJudgment",
+          "mp": 40
+        },
+        {
+          "id": "endgame__abyss_pride__endDeclaration",
+          "mp": 76
+        },
+        {
+          "id": "endgame_ultimate__abyss_pride__kneelAll",
+          "mp": 5061
+        }
+      ]
+    },
+    {
+      "id": "ten_time",
+      "speciesId": "clockwork",
+      "faction": "tenGod",
+      "level": 1,
+      "stats": {
+        "hp": 113,
+        "atk": 21,
+        "matk": 15,
+        "def": 18,
+        "mdef": 14,
+        "spd": 21,
+        "crit": 8,
+        "evasion": 5,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 77,
+      "skills": [
+        {
+          "id": "endgame__ten_time__hourHand",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_time__acceleration",
+          "mp": 26
+        },
+        {
+          "id": "endgame__ten_time__stop",
+          "mp": 40
+        },
+        {
+          "id": "endgame__ten_time__rewind",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_time__eternity",
+          "mp": 74
+        },
+        {
+          "id": "endgame_ultimate__ten_time__finalHour",
+          "mp": 47
+        }
+      ]
+    },
+    {
+      "id": "ten_time",
+      "speciesId": "clockwork",
+      "faction": "tenGod",
+      "level": 999,
+      "stats": {
+        "hp": 7882,
+        "atk": 1338,
+        "matk": 963,
+        "def": 1293,
+        "mdef": 1060,
+        "spd": 574,
+        "crit": 8,
+        "evasion": 5,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 416,
+      "skills": [
+        {
+          "id": "endgame__ten_time__hourHand",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_time__acceleration",
+          "mp": 26
+        },
+        {
+          "id": "endgame__ten_time__stop",
+          "mp": 40
+        },
+        {
+          "id": "endgame__ten_time__rewind",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_time__eternity",
+          "mp": 74
+        },
+        {
+          "id": "endgame_ultimate__ten_time__finalHour",
+          "mp": 250
+        }
+      ]
+    },
+    {
+      "id": "ten_time",
+      "speciesId": "clockwork",
+      "faction": "tenGod",
+      "level": 10000,
+      "stats": {
+        "hp": 38749,
+        "atk": 6570,
+        "matk": 4730,
+        "def": 6358,
+        "mdef": 5213,
+        "spd": 2439,
+        "crit": 8,
+        "evasion": 5,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 1867,
+      "skills": [
+        {
+          "id": "endgame__ten_time__hourHand",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_time__acceleration",
+          "mp": 26
+        },
+        {
+          "id": "endgame__ten_time__stop",
+          "mp": 40
+        },
+        {
+          "id": "endgame__ten_time__rewind",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_time__eternity",
+          "mp": 74
+        },
+        {
+          "id": "endgame_ultimate__ten_time__finalHour",
+          "mp": 1121
+        }
+      ]
+    },
+    {
+      "id": "ten_time",
+      "speciesId": "clockwork",
+      "faction": "tenGod",
+      "level": 99999,
+      "stats": {
+        "hp": 286738,
+        "atk": 48602,
+        "matk": 34993,
+        "def": 47056,
+        "mdef": 38585,
+        "spd": 17958,
+        "crit": 8,
+        "evasion": 5,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 9480,
+      "skills": [
+        {
+          "id": "endgame__ten_time__hourHand",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_time__acceleration",
+          "mp": 26
+        },
+        {
+          "id": "endgame__ten_time__stop",
+          "mp": 40
+        },
+        {
+          "id": "endgame__ten_time__rewind",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_time__eternity",
+          "mp": 74
+        },
+        {
+          "id": "endgame_ultimate__ten_time__finalHour",
+          "mp": 5688
+        }
+      ]
+    },
+    {
+      "id": "ten_space",
+      "speciesId": "ancient_dragon",
+      "faction": "tenGod",
+      "level": 1,
+      "stats": {
+        "hp": 315,
+        "atk": 55,
+        "matk": 39,
+        "def": 30,
+        "mdef": 24,
+        "spd": 5,
+        "crit": 10,
+        "evasion": 14,
+        "accuracy": 120,
+        "_affixes": {}
+      },
+      "mp": 86,
+      "skills": [
+        {
+          "id": "endgame__ten_space__sever",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_space__spaceRend",
+          "mp": 28
+        },
+        {
+          "id": "endgame__ten_space__transpose",
+          "mp": 34
+        },
+        {
+          "id": "endgame__ten_space__void",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_space__worldCut",
+          "mp": 78
+        },
+        {
+          "id": "endgame_ultimate__ten_space__voidExile",
+          "mp": 52
+        }
+      ]
+    },
+    {
+      "id": "ten_space",
+      "speciesId": "ancient_dragon",
+      "faction": "tenGod",
+      "level": 999,
+      "stats": {
+        "hp": 24822,
+        "atk": 4332,
+        "matk": 3119,
+        "def": 2091,
+        "mdef": 1714,
+        "spd": 128,
+        "crit": 10,
+        "evasion": 14,
+        "accuracy": 120,
+        "_affixes": {}
+      },
+      "mp": 424,
+      "skills": [
+        {
+          "id": "endgame__ten_space__sever",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_space__spaceRend",
+          "mp": 28
+        },
+        {
+          "id": "endgame__ten_space__transpose",
+          "mp": 34
+        },
+        {
+          "id": "endgame__ten_space__void",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_space__worldCut",
+          "mp": 78
+        },
+        {
+          "id": "endgame_ultimate__ten_space__voidExile",
+          "mp": 255
+        }
+      ]
+    },
+    {
+      "id": "ten_space",
+      "speciesId": "ancient_dragon",
+      "faction": "tenGod",
+      "level": 10000,
+      "stats": {
+        "hp": 122190,
+        "atk": 21322,
+        "matk": 15351,
+        "def": 10279,
+        "mdef": 8428,
+        "spd": 542,
+        "crit": 10,
+        "evasion": 14,
+        "accuracy": 120,
+        "_affixes": {}
+      },
+      "mp": 1875,
+      "skills": [
+        {
+          "id": "endgame__ten_space__sever",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_space__spaceRend",
+          "mp": 28
+        },
+        {
+          "id": "endgame__ten_space__transpose",
+          "mp": 34
+        },
+        {
+          "id": "endgame__ten_space__void",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_space__worldCut",
+          "mp": 78
+        },
+        {
+          "id": "endgame_ultimate__ten_space__voidExile",
+          "mp": 1125
+        }
+      ]
+    },
+    {
+      "id": "ten_space",
+      "speciesId": "ancient_dragon",
+      "faction": "tenGod",
+      "level": 99999,
+      "stats": {
+        "hp": 904451,
+        "atk": 157826,
+        "matk": 113634,
+        "def": 76062,
+        "mdef": 62370,
+        "spd": 3991,
+        "crit": 10,
+        "evasion": 14,
+        "accuracy": 120,
+        "_affixes": {}
+      },
+      "mp": 9488,
+      "skills": [
+        {
+          "id": "endgame__ten_space__sever",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_space__spaceRend",
+          "mp": 28
+        },
+        {
+          "id": "endgame__ten_space__transpose",
+          "mp": 34
+        },
+        {
+          "id": "endgame__ten_space__void",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_space__worldCut",
+          "mp": 78
+        },
+        {
+          "id": "endgame_ultimate__ten_space__voidExile",
+          "mp": 5693
+        }
+      ]
+    },
+    {
+      "id": "ten_life",
+      "speciesId": "water_spirit",
+      "faction": "tenGod",
+      "level": 1,
+      "stats": {
+        "hp": 82,
+        "atk": 12,
+        "matk": 12,
+        "def": 10,
+        "mdef": 10,
+        "spd": 27,
+        "crit": 5,
+        "evasion": 10,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 112,
+      "skills": [
+        {
+          "id": "endgame__ten_life__sprout",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_life__lifeCycle",
+          "mp": 28
+        },
+        {
+          "id": "endgame__ten_life__worldTree",
+          "mp": 42
+        },
+        {
+          "id": "endgame__ten_life__rebirth",
+          "mp": 58
+        },
+        {
+          "id": "endgame__ten_life__lifeBlessing",
+          "mp": 86
+        },
+        {
+          "id": "endgame_ultimate__ten_life__allRebirth",
+          "mp": 68
+        }
+      ]
+    },
+    {
+      "id": "ten_life",
+      "speciesId": "water_spirit",
+      "faction": "tenGod",
+      "level": 999,
+      "stats": {
+        "hp": 4217,
+        "atk": 802,
+        "matk": 866,
+        "def": 562,
+        "mdef": 606,
+        "spd": 1102,
+        "crit": 5,
+        "evasion": 10,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 577,
+      "skills": [
+        {
+          "id": "endgame__ten_life__sprout",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_life__lifeCycle",
+          "mp": 28
+        },
+        {
+          "id": "endgame__ten_life__worldTree",
+          "mp": 42
+        },
+        {
+          "id": "endgame__ten_life__rebirth",
+          "mp": 58
+        },
+        {
+          "id": "endgame__ten_life__lifeBlessing",
+          "mp": 86
+        },
+        {
+          "id": "endgame_ultimate__ten_life__allRebirth",
+          "mp": 347
+        }
+      ]
+    },
+    {
+      "id": "ten_life",
+      "speciesId": "water_spirit",
+      "faction": "tenGod",
+      "level": 10000,
+      "stats": {
+        "hp": 20643,
+        "atk": 3941,
+        "matk": 4256,
+        "def": 2754,
+        "mdef": 2974,
+        "spd": 4728,
+        "crit": 5,
+        "evasion": 10,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 2567,
+      "skills": [
+        {
+          "id": "endgame__ten_life__sprout",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_life__lifeCycle",
+          "mp": 28
+        },
+        {
+          "id": "endgame__ten_life__worldTree",
+          "mp": 42
+        },
+        {
+          "id": "endgame__ten_life__rebirth",
+          "mp": 58
+        },
+        {
+          "id": "endgame__ten_life__lifeBlessing",
+          "mp": 86
+        },
+        {
+          "id": "endgame_ultimate__ten_life__allRebirth",
+          "mp": 1541
+        }
+      ]
+    },
+    {
+      "id": "ten_life",
+      "speciesId": "water_spirit",
+      "faction": "tenGod",
+      "level": 99999,
+      "stats": {
+        "hp": 152609,
+        "atk": 29160,
+        "matk": 31492,
+        "def": 20368,
+        "mdef": 21997,
+        "spd": 34905,
+        "crit": 5,
+        "evasion": 10,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 13007,
+      "skills": [
+        {
+          "id": "endgame__ten_life__sprout",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_life__lifeCycle",
+          "mp": 28
+        },
+        {
+          "id": "endgame__ten_life__worldTree",
+          "mp": 42
+        },
+        {
+          "id": "endgame__ten_life__rebirth",
+          "mp": 58
+        },
+        {
+          "id": "endgame__ten_life__lifeBlessing",
+          "mp": 86
+        },
+        {
+          "id": "endgame_ultimate__ten_life__allRebirth",
+          "mp": 7805
+        }
+      ]
+    },
+    {
+      "id": "ten_death",
+      "speciesId": "dark_knight",
+      "faction": "tenGod",
+      "level": 1,
+      "stats": {
+        "hp": 217,
+        "atk": 36,
+        "matk": 25,
+        "def": 36,
+        "mdef": 29,
+        "spd": 14,
+        "crit": 10,
+        "evasion": 5,
+        "accuracy": 106,
+        "_affixes": {}
+      },
+      "mp": 65,
+      "skills": [
+        {
+          "id": "endgame__ten_death__lifespan",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_death__executionMark",
+          "mp": 24
+        },
+        {
+          "id": "endgame__ten_death__reapLife",
+          "mp": 34
+        },
+        {
+          "id": "endgame__ten_death__yomiSeal",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_death__deathArrival",
+          "mp": 78
+        },
+        {
+          "id": "endgame_ultimate__ten_death__deathRegister",
+          "mp": 39
+        }
+      ]
+    },
+    {
+      "id": "ten_death",
+      "speciesId": "dark_knight",
+      "faction": "tenGod",
+      "level": 999,
+      "stats": {
+        "hp": 14128,
+        "atk": 2084,
+        "matk": 1500,
+        "def": 2230,
+        "mdef": 1828,
+        "spd": 413,
+        "crit": 10,
+        "evasion": 5,
+        "accuracy": 106,
+        "_affixes": {}
+      },
+      "mp": 326,
+      "skills": [
+        {
+          "id": "endgame__ten_death__lifespan",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_death__executionMark",
+          "mp": 24
+        },
+        {
+          "id": "endgame__ten_death__reapLife",
+          "mp": 34
+        },
+        {
+          "id": "endgame__ten_death__yomiSeal",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_death__deathArrival",
+          "mp": 78
+        },
+        {
+          "id": "endgame_ultimate__ten_death__deathRegister",
+          "mp": 196
+        }
+      ]
+    },
+    {
+      "id": "ten_death",
+      "speciesId": "dark_knight",
+      "faction": "tenGod",
+      "level": 10000,
+      "stats": {
+        "hp": 69393,
+        "atk": 10222,
+        "matk": 7359,
+        "def": 10950,
+        "mdef": 8979,
+        "spd": 1760,
+        "crit": 10,
+        "evasion": 5,
+        "accuracy": 106,
+        "_affixes": {}
+      },
+      "mp": 1445,
+      "skills": [
+        {
+          "id": "endgame__ten_death__lifespan",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_death__executionMark",
+          "mp": 24
+        },
+        {
+          "id": "endgame__ten_death__reapLife",
+          "mp": 34
+        },
+        {
+          "id": "endgame__ten_death__yomiSeal",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_death__deathArrival",
+          "mp": 78
+        },
+        {
+          "id": "endgame_ultimate__ten_death__deathRegister",
+          "mp": 867
+        }
+      ]
+    },
+    {
+      "id": "ten_death",
+      "speciesId": "dark_knight",
+      "faction": "tenGod",
+      "level": 99999,
+      "stats": {
+        "hp": 513396,
+        "atk": 75605,
+        "matk": 54435,
+        "def": 81003,
+        "mdef": 66422,
+        "spd": 12969,
+        "crit": 10,
+        "evasion": 5,
+        "accuracy": 106,
+        "_affixes": {}
+      },
+      "mp": 7318,
+      "skills": [
+        {
+          "id": "endgame__ten_death__lifespan",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_death__executionMark",
+          "mp": 24
+        },
+        {
+          "id": "endgame__ten_death__reapLife",
+          "mp": 34
+        },
+        {
+          "id": "endgame__ten_death__yomiSeal",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_death__deathArrival",
+          "mp": 78
+        },
+        {
+          "id": "endgame_ultimate__ten_death__deathRegister",
+          "mp": 4391
+        }
+      ]
+    },
+    {
+      "id": "ten_fate",
+      "speciesId": "wyvern",
+      "faction": "tenGod",
+      "level": 1,
+      "stats": {
+        "hp": 165,
+        "atk": 34,
+        "matk": 24,
+        "def": 16,
+        "mdef": 13,
+        "spd": 21,
+        "crit": 10,
+        "evasion": 6,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 80,
+      "skills": [
+        {
+          "id": "endgame__ten_fate__fateLine",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_fate__inevitable",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_fate__futureRewrite",
+          "mp": 42
+        },
+        {
+          "id": "endgame__ten_fate__fateDenial",
+          "mp": 46
+        },
+        {
+          "id": "endgame__ten_fate__fateFixed",
+          "mp": 80
+        },
+        {
+          "id": "endgame_ultimate__ten_fate__onlyFuture",
+          "mp": 48
+        }
+      ]
+    },
+    {
+      "id": "ten_fate",
+      "speciesId": "wyvern",
+      "faction": "tenGod",
+      "level": 999,
+      "stats": {
+        "hp": 13049,
+        "atk": 2655,
+        "matk": 1911,
+        "def": 1107,
+        "mdef": 907,
+        "spd": 513,
+        "crit": 10,
+        "evasion": 6,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 419,
+      "skills": [
+        {
+          "id": "endgame__ten_fate__fateLine",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_fate__inevitable",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_fate__futureRewrite",
+          "mp": 42
+        },
+        {
+          "id": "endgame__ten_fate__fateDenial",
+          "mp": 46
+        },
+        {
+          "id": "endgame__ten_fate__fateFixed",
+          "mp": 80
+        },
+        {
+          "id": "endgame_ultimate__ten_fate__onlyFuture",
+          "mp": 252
+        }
+      ]
+    },
+    {
+      "id": "ten_fate",
+      "speciesId": "wyvern",
+      "faction": "tenGod",
+      "level": 10000,
+      "stats": {
+        "hp": 64237,
+        "atk": 13068,
+        "matk": 9408,
+        "def": 5442,
+        "mdef": 4462,
+        "spd": 2170,
+        "crit": 10,
+        "evasion": 6,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 1870,
+      "skills": [
+        {
+          "id": "endgame__ten_fate__fateLine",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_fate__inevitable",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_fate__futureRewrite",
+          "mp": 42
+        },
+        {
+          "id": "endgame__ten_fate__fateDenial",
+          "mp": 46
+        },
+        {
+          "id": "endgame__ten_fate__fateFixed",
+          "mp": 80
+        },
+        {
+          "id": "endgame_ultimate__ten_fate__onlyFuture",
+          "mp": 1122
+        }
+      ]
+    },
+    {
+      "id": "ten_fate",
+      "speciesId": "wyvern",
+      "faction": "tenGod",
+      "level": 99999,
+      "stats": {
+        "hp": 475482,
+        "atk": 96732,
+        "matk": 69647,
+        "def": 40268,
+        "mdef": 33019,
+        "spd": 15965,
+        "crit": 10,
+        "evasion": 6,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 9483,
+      "skills": [
+        {
+          "id": "endgame__ten_fate__fateLine",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_fate__inevitable",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_fate__futureRewrite",
+          "mp": 42
+        },
+        {
+          "id": "endgame__ten_fate__fateDenial",
+          "mp": 46
+        },
+        {
+          "id": "endgame__ten_fate__fateFixed",
+          "mp": 80
+        },
+        {
+          "id": "endgame_ultimate__ten_fate__onlyFuture",
+          "mp": 5690
+        }
+      ]
+    },
+    {
+      "id": "ten_chaos",
+      "speciesId": "frost_dragon",
+      "faction": "tenGod",
+      "level": 1,
+      "stats": {
+        "hp": 237,
+        "atk": 39,
+        "matk": 42,
+        "def": 23,
+        "mdef": 24,
+        "spd": 7,
+        "crit": 7,
+        "evasion": 18,
+        "accuracy": 112,
+        "_affixes": {}
+      },
+      "mp": 104,
+      "skills": [
+        {
+          "id": "endgame__ten_chaos__collapse",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_chaos__chaoticize",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_chaos__worldReverse",
+          "mp": 38
+        },
+        {
+          "id": "endgame__ten_chaos__resistCollapse",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_chaos__chaosWorld",
+          "mp": 82
+        },
+        {
+          "id": "endgame_ultimate__ten_chaos__reverseWorld",
+          "mp": 63
+        }
+      ]
+    },
+    {
+      "id": "ten_chaos",
+      "speciesId": "frost_dragon",
+      "faction": "tenGod",
+      "level": 999,
+      "stats": {
+        "hp": 18723,
+        "atk": 3074,
+        "matk": 3319,
+        "def": 1599,
+        "mdef": 1726,
+        "spd": 171,
+        "crit": 7,
+        "evasion": 18,
+        "accuracy": 112,
+        "_affixes": {}
+      },
+      "mp": 569,
+      "skills": [
+        {
+          "id": "endgame__ten_chaos__collapse",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_chaos__chaoticize",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_chaos__worldReverse",
+          "mp": 38
+        },
+        {
+          "id": "endgame__ten_chaos__resistCollapse",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_chaos__chaosWorld",
+          "mp": 82
+        },
+        {
+          "id": "endgame_ultimate__ten_chaos__reverseWorld",
+          "mp": 342
+        }
+      ]
+    },
+    {
+      "id": "ten_chaos",
+      "speciesId": "frost_dragon",
+      "faction": "tenGod",
+      "level": 10000,
+      "stats": {
+        "hp": 92166,
+        "atk": 15132,
+        "matk": 16342,
+        "def": 7860,
+        "mdef": 8488,
+        "spd": 723,
+        "crit": 7,
+        "evasion": 18,
+        "accuracy": 112,
+        "_affixes": {}
+      },
+      "mp": 2559,
+      "skills": [
+        {
+          "id": "endgame__ten_chaos__collapse",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_chaos__chaoticize",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_chaos__worldReverse",
+          "mp": 38
+        },
+        {
+          "id": "endgame__ten_chaos__resistCollapse",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_chaos__chaosWorld",
+          "mp": 82
+        },
+        {
+          "id": "endgame_ultimate__ten_chaos__reverseWorld",
+          "mp": 1536
+        }
+      ]
+    },
+    {
+      "id": "ten_chaos",
+      "speciesId": "frost_dragon",
+      "faction": "tenGod",
+      "level": 99999,
+      "stats": {
+        "hp": 682214,
+        "atk": 112005,
+        "matk": 120965,
+        "def": 58165,
+        "mdef": 62818,
+        "spd": 5321,
+        "crit": 7,
+        "evasion": 18,
+        "accuracy": 112,
+        "_affixes": {}
+      },
+      "mp": 12999,
+      "skills": [
+        {
+          "id": "endgame__ten_chaos__collapse",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_chaos__chaoticize",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_chaos__worldReverse",
+          "mp": 38
+        },
+        {
+          "id": "endgame__ten_chaos__resistCollapse",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_chaos__chaosWorld",
+          "mp": 82
+        },
+        {
+          "id": "endgame_ultimate__ten_chaos__reverseWorld",
+          "mp": 7800
+        }
+      ]
+    },
+    {
+      "id": "ten_dominion",
+      "speciesId": "goblin_shaman",
+      "faction": "tenGod",
+      "level": 1,
+      "stats": {
+        "hp": 75,
+        "atk": 21,
+        "matk": 22,
+        "def": 7,
+        "mdef": 7,
+        "spd": 21,
+        "crit": 7,
+        "evasion": 6,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 109,
+      "skills": [
+        {
+          "id": "endgame__ten_dominion__order",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_dominion__dominionOrder",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_dominion__royalDecree",
+          "mp": 40
+        },
+        {
+          "id": "endgame__ten_dominion__subordination",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_dominion__absoluteDominion",
+          "mp": 84
+        },
+        {
+          "id": "endgame_ultimate__ten_dominion__royalOverride",
+          "mp": 66
+        }
+      ]
+    },
+    {
+      "id": "ten_dominion",
+      "speciesId": "goblin_shaman",
+      "faction": "tenGod",
+      "level": 999,
+      "stats": {
+        "hp": 4289,
+        "atk": 1275,
+        "matk": 1377,
+        "def": 400,
+        "mdef": 432,
+        "spd": 804,
+        "crit": 7,
+        "evasion": 6,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 574,
+      "skills": [
+        {
+          "id": "endgame__ten_dominion__order",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_dominion__dominionOrder",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_dominion__royalDecree",
+          "mp": 40
+        },
+        {
+          "id": "endgame__ten_dominion__subordination",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_dominion__absoluteDominion",
+          "mp": 84
+        },
+        {
+          "id": "endgame_ultimate__ten_dominion__royalOverride",
+          "mp": 345
+        }
+      ]
+    },
+    {
+      "id": "ten_dominion",
+      "speciesId": "goblin_shaman",
+      "faction": "tenGod",
+      "level": 10000,
+      "stats": {
+        "hp": 21030,
+        "atk": 6258,
+        "matk": 6758,
+        "def": 1961,
+        "mdef": 2117,
+        "spd": 3446,
+        "crit": 7,
+        "evasion": 6,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 2564,
+      "skills": [
+        {
+          "id": "endgame__ten_dominion__order",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_dominion__dominionOrder",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_dominion__royalDecree",
+          "mp": 40
+        },
+        {
+          "id": "endgame__ten_dominion__subordination",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_dominion__absoluteDominion",
+          "mp": 84
+        },
+        {
+          "id": "endgame_ultimate__ten_dominion__royalOverride",
+          "mp": 1539
+        }
+      ]
+    },
+    {
+      "id": "ten_dominion",
+      "speciesId": "goblin_shaman",
+      "faction": "tenGod",
+      "level": 99999,
+      "stats": {
+        "hp": 155533,
+        "atk": 46288,
+        "matk": 49991,
+        "def": 14504,
+        "mdef": 15664,
+        "spd": 25432,
+        "crit": 7,
+        "evasion": 6,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 13005,
+      "skills": [
+        {
+          "id": "endgame__ten_dominion__order",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_dominion__dominionOrder",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_dominion__royalDecree",
+          "mp": 40
+        },
+        {
+          "id": "endgame__ten_dominion__subordination",
+          "mp": 48
+        },
+        {
+          "id": "endgame__ten_dominion__absoluteDominion",
+          "mp": 84
+        },
+        {
+          "id": "endgame_ultimate__ten_dominion__royalOverride",
+          "mp": 7803
+        }
+      ]
+    },
+    {
+      "id": "ten_creation",
+      "speciesId": "angelic_orb",
+      "faction": "tenGod",
+      "level": 1,
+      "stats": {
+        "hp": 99,
+        "atk": 23,
+        "matk": 24,
+        "def": 12,
+        "mdef": 12,
+        "spd": 37,
+        "crit": 8,
+        "evasion": 16,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 117,
+      "skills": [
+        {
+          "id": "endgame__ten_creation__creationLight",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_creation__genesis",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_creation__divineWall",
+          "mp": 44
+        },
+        {
+          "id": "endgame__ten_creation__createWorld",
+          "mp": 52
+        },
+        {
+          "id": "endgame__ten_creation__creationDomain",
+          "mp": 86
+        },
+        {
+          "id": "endgame_ultimate__ten_creation__absoluteWall",
+          "mp": 71
+        }
+      ]
+    },
+    {
+      "id": "ten_creation",
+      "speciesId": "angelic_orb",
+      "faction": "tenGod",
+      "level": 999,
+      "stats": {
+        "hp": 5042,
+        "atk": 1490,
+        "matk": 1609,
+        "def": 656,
+        "mdef": 708,
+        "spd": 1543,
+        "crit": 8,
+        "evasion": 16,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 582,
+      "skills": [
+        {
+          "id": "endgame__ten_creation__creationLight",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_creation__genesis",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_creation__divineWall",
+          "mp": 44
+        },
+        {
+          "id": "endgame__ten_creation__createWorld",
+          "mp": 52
+        },
+        {
+          "id": "endgame__ten_creation__creationDomain",
+          "mp": 86
+        },
+        {
+          "id": "endgame_ultimate__ten_creation__absoluteWall",
+          "mp": 350
+        }
+      ]
+    },
+    {
+      "id": "ten_creation",
+      "speciesId": "angelic_orb",
+      "faction": "tenGod",
+      "level": 10000,
+      "stats": {
+        "hp": 24681,
+        "atk": 7320,
+        "matk": 7905,
+        "def": 3214,
+        "mdef": 3471,
+        "spd": 6619,
+        "crit": 8,
+        "evasion": 16,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 2572,
+      "skills": [
+        {
+          "id": "endgame__ten_creation__creationLight",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_creation__genesis",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_creation__divineWall",
+          "mp": 44
+        },
+        {
+          "id": "endgame__ten_creation__createWorld",
+          "mp": 52
+        },
+        {
+          "id": "endgame__ten_creation__creationDomain",
+          "mp": 86
+        },
+        {
+          "id": "endgame_ultimate__ten_creation__absoluteWall",
+          "mp": 1544
+        }
+      ]
+    },
+    {
+      "id": "ten_creation",
+      "speciesId": "angelic_orb",
+      "faction": "tenGod",
+      "level": 99999,
+      "stats": {
+        "hp": 182468,
+        "atk": 54155,
+        "matk": 58487,
+        "def": 23763,
+        "mdef": 25664,
+        "spd": 48867,
+        "crit": 8,
+        "evasion": 16,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 13013,
+      "skills": [
+        {
+          "id": "endgame__ten_creation__creationLight",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_creation__genesis",
+          "mp": 30
+        },
+        {
+          "id": "endgame__ten_creation__divineWall",
+          "mp": 44
+        },
+        {
+          "id": "endgame__ten_creation__createWorld",
+          "mp": 52
+        },
+        {
+          "id": "endgame__ten_creation__creationDomain",
+          "mp": 86
+        },
+        {
+          "id": "endgame_ultimate__ten_creation__absoluteWall",
+          "mp": 7808
+        }
+      ]
+    },
+    {
+      "id": "ten_end",
+      "speciesId": "salamander",
+      "faction": "tenGod",
+      "level": 1,
+      "stats": {
+        "hp": 122,
+        "atk": 27,
+        "matk": 29,
+        "def": 14,
+        "mdef": 15,
+        "spd": 23,
+        "crit": 9,
+        "evasion": 7,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 104,
+      "skills": [
+        {
+          "id": "endgame__ten_end__ash",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_end__worldBurn",
+          "mp": 34
+        },
+        {
+          "id": "endgame__ten_end__collapseEnd",
+          "mp": 46
+        },
+        {
+          "id": "endgame__ten_end__ashMark",
+          "mp": 50
+        },
+        {
+          "id": "endgame__ten_end__lastJudge",
+          "mp": 92
+        },
+        {
+          "id": "endgame_ultimate__ten_end__finalFurnace",
+          "mp": 63
+        }
+      ]
+    },
+    {
+      "id": "ten_end",
+      "speciesId": "salamander",
+      "faction": "tenGod",
+      "level": 999,
+      "stats": {
+        "hp": 7797,
+        "atk": 1657,
+        "matk": 1789,
+        "def": 934,
+        "mdef": 1008,
+        "spd": 738,
+        "crit": 9,
+        "evasion": 7,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 569,
+      "skills": [
+        {
+          "id": "endgame__ten_end__ash",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_end__worldBurn",
+          "mp": 34
+        },
+        {
+          "id": "endgame__ten_end__collapseEnd",
+          "mp": 46
+        },
+        {
+          "id": "endgame__ten_end__ashMark",
+          "mp": 50
+        },
+        {
+          "id": "endgame__ten_end__lastJudge",
+          "mp": 92
+        },
+        {
+          "id": "endgame_ultimate__ten_end__finalFurnace",
+          "mp": 342
+        }
+      ]
+    },
+    {
+      "id": "ten_end",
+      "speciesId": "salamander",
+      "faction": "tenGod",
+      "level": 10000,
+      "stats": {
+        "hp": 38290,
+        "atk": 8134,
+        "matk": 8784,
+        "def": 4587,
+        "mdef": 4953,
+        "spd": 3152,
+        "crit": 9,
+        "evasion": 7,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 2559,
+      "skills": [
+        {
+          "id": "endgame__ten_end__ash",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_end__worldBurn",
+          "mp": 34
+        },
+        {
+          "id": "endgame__ten_end__collapseEnd",
+          "mp": 46
+        },
+        {
+          "id": "endgame__ten_end__ashMark",
+          "mp": 50
+        },
+        {
+          "id": "endgame__ten_end__lastJudge",
+          "mp": 92
+        },
+        {
+          "id": "endgame_ultimate__ten_end__finalFurnace",
+          "mp": 1536
+        }
+      ]
+    },
+    {
+      "id": "ten_end",
+      "speciesId": "salamander",
+      "faction": "tenGod",
+      "level": 99999,
+      "stats": {
+        "hp": 283276,
+        "atk": 60174,
+        "matk": 64987,
+        "def": 33943,
+        "mdef": 36658,
+        "spd": 23234,
+        "crit": 9,
+        "evasion": 7,
+        "accuracy": 100,
+        "_affixes": {}
+      },
+      "mp": 12999,
+      "skills": [
+        {
+          "id": "endgame__ten_end__ash",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_end__worldBurn",
+          "mp": 34
+        },
+        {
+          "id": "endgame__ten_end__collapseEnd",
+          "mp": 46
+        },
+        {
+          "id": "endgame__ten_end__ashMark",
+          "mp": 50
+        },
+        {
+          "id": "endgame__ten_end__lastJudge",
+          "mp": 92
+        },
+        {
+          "id": "endgame_ultimate__ten_end__finalFurnace",
+          "mp": 7800
+        }
+      ]
+    },
+    {
+      "id": "ten_divinity",
+      "speciesId": "ancient_dragon",
+      "faction": "tenGod",
+      "level": 1,
+      "stats": {
+        "hp": 315,
+        "atk": 55,
+        "matk": 39,
+        "def": 30,
+        "mdef": 24,
+        "spd": 5,
+        "crit": 10,
+        "evasion": 14,
+        "accuracy": 120,
+        "_affixes": {}
+      },
+      "mp": 86,
+      "skills": [
+        {
+          "id": "endgame__ten_divinity__divinePunish",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_divinity__sanctuary",
+          "mp": 40
+        },
+        {
+          "id": "endgame__ten_divinity__divineJudgment",
+          "mp": 58
+        },
+        {
+          "id": "endgame__ten_divinity__genesisRevive",
+          "mp": 76
+        },
+        {
+          "id": "endgame__ten_divinity__divineDescent",
+          "mp": 94
+        },
+        {
+          "id": "endgame_ultimate__ten_divinity__tenLaws",
+          "mp": 52
+        }
+      ]
+    },
+    {
+      "id": "ten_divinity",
+      "speciesId": "ancient_dragon",
+      "faction": "tenGod",
+      "level": 999,
+      "stats": {
+        "hp": 24822,
+        "atk": 4332,
+        "matk": 3119,
+        "def": 2091,
+        "mdef": 1714,
+        "spd": 128,
+        "crit": 10,
+        "evasion": 14,
+        "accuracy": 120,
+        "_affixes": {}
+      },
+      "mp": 424,
+      "skills": [
+        {
+          "id": "endgame__ten_divinity__divinePunish",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_divinity__sanctuary",
+          "mp": 40
+        },
+        {
+          "id": "endgame__ten_divinity__divineJudgment",
+          "mp": 58
+        },
+        {
+          "id": "endgame__ten_divinity__genesisRevive",
+          "mp": 76
+        },
+        {
+          "id": "endgame__ten_divinity__divineDescent",
+          "mp": 94
+        },
+        {
+          "id": "endgame_ultimate__ten_divinity__tenLaws",
+          "mp": 255
+        }
+      ]
+    },
+    {
+      "id": "ten_divinity",
+      "speciesId": "ancient_dragon",
+      "faction": "tenGod",
+      "level": 10000,
+      "stats": {
+        "hp": 122190,
+        "atk": 21322,
+        "matk": 15351,
+        "def": 10279,
+        "mdef": 8428,
+        "spd": 542,
+        "crit": 10,
+        "evasion": 14,
+        "accuracy": 120,
+        "_affixes": {}
+      },
+      "mp": 1875,
+      "skills": [
+        {
+          "id": "endgame__ten_divinity__divinePunish",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_divinity__sanctuary",
+          "mp": 40
+        },
+        {
+          "id": "endgame__ten_divinity__divineJudgment",
+          "mp": 58
+        },
+        {
+          "id": "endgame__ten_divinity__genesisRevive",
+          "mp": 76
+        },
+        {
+          "id": "endgame__ten_divinity__divineDescent",
+          "mp": 94
+        },
+        {
+          "id": "endgame_ultimate__ten_divinity__tenLaws",
+          "mp": 1125
+        }
+      ]
+    },
+    {
+      "id": "ten_divinity",
+      "speciesId": "ancient_dragon",
+      "faction": "tenGod",
+      "level": 99999,
+      "stats": {
+        "hp": 904451,
+        "atk": 157826,
+        "matk": 113634,
+        "def": 76062,
+        "mdef": 62370,
+        "spd": 3991,
+        "crit": 10,
+        "evasion": 14,
+        "accuracy": 120,
+        "_affixes": {}
+      },
+      "mp": 9488,
+      "skills": [
+        {
+          "id": "endgame__ten_divinity__divinePunish",
+          "mp": 0
+        },
+        {
+          "id": "endgame__ten_divinity__sanctuary",
+          "mp": 40
+        },
+        {
+          "id": "endgame__ten_divinity__divineJudgment",
+          "mp": 58
+        },
+        {
+          "id": "endgame__ten_divinity__genesisRevive",
+          "mp": 76
+        },
+        {
+          "id": "endgame__ten_divinity__divineDescent",
+          "mp": 94
+        },
+        {
+          "id": "endgame_ultimate__ten_divinity__tenLaws",
+          "mp": 5693
+        }
+      ]
+    }
+  ]
+}

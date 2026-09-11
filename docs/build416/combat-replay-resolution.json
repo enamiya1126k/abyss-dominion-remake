@@ -1,0 +1,55 @@
+{
+  "comparisons": 2424,
+  "targets": 808,
+  "matched_with_existing_save_fixture": 2419,
+  "matched_with_initial_save_fixture": 5,
+  "unresolved": 0,
+  "reason": "The harness creates SaveService inside the seeded run. First-time save initialization consumes seeded RNG values. Separate Build415 workers/counter jobs therefore have cold-start first samples. Recreating a missing save reproduces all five archived results. Current Build415 and416 produce identical results under the same fixture state.",
+  "rows": [
+    {
+      "target": "campaign:2:boss",
+      "team": 1,
+      "seed": 1000,
+      "old_new_current_fixture_equal": true,
+      "cold_start_matches_archived415": true,
+      "cold_win": true,
+      "cold_rounds": 3
+    },
+    {
+      "target": "campaign:3:boss",
+      "team": 0,
+      "seed": 1000,
+      "old_new_current_fixture_equal": true,
+      "cold_start_matches_archived415": true,
+      "cold_win": true,
+      "cold_rounds": 3
+    },
+    {
+      "target": "campaign:5:boss",
+      "team": 5,
+      "seed": 1000,
+      "old_new_current_fixture_equal": true,
+      "cold_start_matches_archived415": true,
+      "cold_win": true,
+      "cold_rounds": 7
+    },
+    {
+      "target": "rematch:floor-boss-390",
+      "team": 5,
+      "seed": 1000,
+      "old_new_current_fixture_equal": true,
+      "cold_start_matches_archived415": true,
+      "cold_win": true,
+      "cold_rounds": 12
+    },
+    {
+      "target": "corridor:107",
+      "team": "counter-11",
+      "seed": 1000,
+      "old_new_current_fixture_equal": true,
+      "cold_start_matches_archived415": true,
+      "cold_win": false,
+      "cold_rounds": 41
+    }
+  ]
+}
