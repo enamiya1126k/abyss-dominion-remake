@@ -1,10 +1,11 @@
+import {chapterTwoPairDisplayName406} from '../data/chapterTwoPairNames406.js?v=3.1.86-build406';
 import{raidSpriteBase,RAID_VAJRA_WEAPON_ART,RAID_VAJRA_WEAPON_DESCRIPTION}from"../core/RaidPresentation.js?v=3.1.48-build368";
 import { dungeonThemeForFloor } from "../data/dungeonThemes.js?v=3.1.1-build311";
 import { battleEnvironmentForFloor } from "../data/biomes.js?v=3.1.1-build311";
 import {
   onlineAvatarVisual, onlineMagicCircleArt, escapeOnlineHtml, ONLINE_ROOM_PURPOSES, ONLINE_ROOM_STYLES, renderOnlineRoomDirectory,
-} from "../ui/screens/OnlinePartyScreen.js?v=3.1.82-build402";
-import { BattleScreen } from "../ui/screens/BattleScreen.js?v=3.1.82-build402";
+} from "../ui/screens/OnlinePartyScreen.js?v=3.1.86-build406";
+import { BattleScreen } from "../ui/screens/BattleScreen.js?v=3.1.86-build406";
 import { ExploreScreen } from "../ui/screens/ExploreScreen.js?v=3.1.82-build402";
 import { pixelIcon } from "../ui/components/GameChrome.js?v=3.1.1-build311";
 
@@ -93,7 +94,7 @@ function memberCard(member, { compact = false, state = "" } = {}) {
   const profile = member?.profile ?? {};
   return `<article class="online-v3-member ${member?.connected ? "" : "offline"} ${member?.leader ? "leader" : ""} ${compact ? "compact" : ""}">
     ${onlineAvatarVisual(profile, { className: "online-v3-member-art" })}
-    <div><small>${member?.leader ? "LEADER" : member?.connected ? "ONLINE" : "RECONNECTING"}</small><b>${escapeOnlineHtml(profile.displayName || "冒険者")}</b><span>${escapeOnlineHtml(profile.monsterName || "魔物")}・Lv.${number(profile.level || 1)}</span><span class="online-circle-loadout">◉ ${escapeOnlineHtml(profile.circleId && profile.circleId !== "none" ? `${profile.circleName || "魔法陣"} Lv.${number(profile.circleLevel || 1)}` : "魔法陣なし")}</span>${state ? `<em>${escapeOnlineHtml(state)}</em>` : ""}</div>
+    <div><small>${member?.leader ? "LEADER" : member?.connected ? "ONLINE" : "RECONNECTING"}</small><b>${escapeOnlineHtml(profile.displayName || "冒険者")}</b><span>${escapeOnlineHtml(chapterTwoPairDisplayName406(profile,profile.monsterName || "魔物"))}・Lv.${number(profile.level || 1)}</span><span class="online-circle-loadout">◉ ${escapeOnlineHtml(profile.circleId && profile.circleId !== "none" ? `${profile.circleName || "魔法陣"} Lv.${number(profile.circleLevel || 1)}` : "魔法陣なし")}</span>${state ? `<em>${escapeOnlineHtml(state)}</em>` : ""}</div>
   </article>`;
 }
 
@@ -212,7 +213,7 @@ function hallGameParticipantCard(room, game, entry, selfId) {
   const playerId = hallGamePlayerId(entry), member = memberById(room, playerId), profile = hallGameMonsterProfile(entry, member), ready = hallGameReady(game, entry, playerId), connected = entry.connected ?? member?.connected ?? true;
   return `<article class="hall-game-participant ${playerId === selfId ? "self" : ""} ${ready ? "ready" : ""} ${connected ? "" : "offline"}">
     ${onlineAvatarVisual(profile, { className: "hall-game-participant-art" })}
-    <div><small>${playerId === selfId ? "YOU" : connected ? ready ? "READY" : "WAIT" : "RECONNECTING"}</small><b>${escapeOnlineHtml(member?.profile?.displayName ?? entry?.displayName ?? entry?.name ?? "冒険者")}</b><span>${escapeOnlineHtml(profile.monsterName)}・Lv.${number(profile.level)}</span></div>
+    <div><small>${playerId === selfId ? "YOU" : connected ? ready ? "READY" : "WAIT" : "RECONNECTING"}</small><b>${escapeOnlineHtml(member?.profile?.displayName ?? entry?.displayName ?? entry?.name ?? "冒険者")}</b><span>${escapeOnlineHtml(chapterTwoPairDisplayName406(profile,profile.monsterName))}・Lv.${number(profile.level)}</span></div>
   </article>`;
 }
 
@@ -221,7 +222,7 @@ function hallGameLobby(room, selfId, state, game, kind) {
   const roster = (memberById(room, selfId)?.profile?.battleRoster ?? []).filter(entry => entry && typeof entry === "object").slice(0, 4), phase = String(game?.phase ?? "entry"), locked = !["waiting", "entry", "result"].includes(phase), countdown = hallGameCountdown(game);
   const rosterPicker = kind === "race" && !locked ? `<section class="hall-game-roster"><header><small>YOUR RACER</small><b>出走する魔物を選ぶ</b></header><div>${roster.map(monster => {
     const selectedId = String(selfEntry?.monsterId ?? selfEntry?.monster?.monsterId ?? selfEntry?.monster?.id ?? ""), selected = selectedId && selectedId === String(monster.monsterId ?? monster.id ?? "");
-    return `<button type="button" class="${selected ? "selected" : ""}" data-online-hall-game-join="race" data-online-hall-game-monster="${escapeOnlineHtml(monster.monsterId ?? monster.id ?? "")}" aria-pressed="${selected}">${onlineAvatarVisual(monster, { className: "hall-game-roster-art" })}<span><b>${escapeOnlineHtml(monster.monsterName ?? "魔物")}</b><small>Lv.${number(monster.level ?? 1)}</small></span></button>`;
+    return `<button type="button" class="${selected ? "selected" : ""}" data-online-hall-game-join="race" data-online-hall-game-monster="${escapeOnlineHtml(monster.monsterId ?? monster.id ?? "")}" aria-pressed="${selected}">${onlineAvatarVisual(monster, { className: "hall-game-roster-art" })}<span><b>${escapeOnlineHtml(chapterTwoPairDisplayName406(monster,monster.monsterName ?? "魔物"))}</b><small>Lv.${number(monster.level ?? 1)}</small></span></button>`;
   }).join("") || "<p>オンライン編成に魔物がいません</p>"}</div></section>` : "";
   return `<section class="online-hall-game-lobby hall-game-lobby">
     <header><div><small>${escapeOnlineHtml(HALL_GAME_PHASE_LABELS[phase] ?? "WAITING")}</small><b>${escapeOnlineHtml(HALL_GAME_LABELS[kind] ?? "集会所ゲーム")}</b></div>${countdown ? `<strong>${number(countdown)}</strong>` : ""}</header>
@@ -286,7 +287,7 @@ function renderHallRace(room, selfId, state, game) {
     const ownerId = hallGamePlayerId(runner), member = memberById(room, ownerId), profile = hallGameMonsterProfile(runner, member), progress = hallGameProgress(runner.progress ?? runner.distance), rank = Math.max(0, Number(runner.rank ?? runner.place) || 0), targetId = String(runner.runnerId ?? runner.id ?? ownerId ?? `lane-${lane + 1}`), ownerName = runner.npc || !ownerId ? "NPC" : member?.profile?.displayName ?? runner.ownerName ?? runner.name ?? "冒険者";
     const raceDuration = Math.max(1200, Number(runner.durationMs ?? game?.durationMs) || 9000), raceElapsed = Math.max(0, (Number(game?.serverNow) || Date.now()) - (Number(game?.startedAt) || Date.now()));
     return `<article class="online-hall-race-lane hall-game-race-lane ${ownerId === selfId ? "self" : ""} ${rank === 1 && phase === "result" ? "winner" : ""}" data-lane="${lane + 1}">
-      <header><small>LANE ${lane + 1}</small><b>${escapeOnlineHtml(profile.monsterName)}</b><span>${escapeOnlineHtml(ownerName)}${rank ? `・${number(rank)}位` : ""}${phase === "result" ? `・通算 ${number(hallGameRoomWins(game, ownerId, "race"))}勝` : ""}</span></header>
+      <header><small>LANE ${lane + 1}</small><b>${escapeOnlineHtml(chapterTwoPairDisplayName406(profile,profile.monsterName))}</b><span>${escapeOnlineHtml(ownerName)}${rank ? `・${number(rank)}位` : ""}${phase === "result" ? `・通算 ${number(hallGameRoomWins(game, ownerId, "race"))}勝` : ""}</span></header>
       <div class="hall-game-race-rail"><span class="hall-game-racer" style="--race-progress:${progress}%;--race-duration:${raceDuration}ms;--race-delay:-${Math.min(raceElapsed, raceDuration)}ms">${onlineAvatarVisual(profile, { className: "hall-game-racer-art", frame: phase === "running" ? "walk1" : "idle" })}<em>${escapeOnlineHtml(runner.eventLabel ?? runner.event ?? "")}</em></span><i class="hall-game-finish">GOAL</i></div>
       ${phase === "running" ? `<button type="button" data-online-hall-game-action="cheer" data-online-hall-game-target="${escapeOnlineHtml(targetId)}" ${cheered ? "disabled" : ""}>${cheered ? "応援済み" : "推しを応援"}</button>` : ""}
     </article>`;
@@ -762,7 +763,7 @@ function renderRoomListingSettings(room, selfId, state) {
   const memberTools = isLeader || safetyCapability ? `<div class="online-room-member-management online-room-safety-management"><header><b>${safetyCapability ? "参加者の安全設定" : "参加者管理"}</b><small>${safetyCapability ? "ミュートは自分の画面でチャットとスタンプだけを非表示にします" : "誤操作防止の確認後に退出します"}</small></header><div>${others.map(member => {
     const targetPending = state.roomMemberRemovalPendingId === member.playerId;
     const playerId = String(member.playerId ?? ""), name = member.profile?.displayName || "冒険者", muted = mutedIds.has(playerId), blocked = blockedIds.has(playerId);
-    return `<span><b>${escapeOnlineHtml(name)}</b><small>${escapeOnlineHtml(member.profile?.monsterName || "仲間")}</small><span class="online-room-safety-actions">${safetyCapability ? `<button type="button" data-online-user-${muted ? "unmute" : "mute"}="${escapeOnlineHtml(playerId)}" aria-label="${escapeOnlineHtml(`${name}のチャットとスタンプを${muted ? "表示する" : "非表示にする"}`)}">${muted ? "ミュート解除" : "ミュート"}</button>${blocked ? `<button type="button" class="danger" data-online-friend-unblock="${escapeOnlineHtml(playerId)}" aria-label="${escapeOnlineHtml(`${name}のブロックを解除する`)}">ブロック解除</button>` : `<button type="button" class="danger" data-online-user-block="${escapeOnlineHtml(playerId)}" aria-label="${escapeOnlineHtml(`${name}をブロックする`)}">ブロック</button>`}` : ""}${isLeader ? `<button type="button" data-online-remove-room-member="${escapeOnlineHtml(playerId)}" aria-label="${escapeOnlineHtml(`${name}を部屋から退出させる`)}" ${state.roomMemberRemovalPendingId ? "disabled" : ""}>${targetPending ? "退出処理中…" : "退出させる"}</button>` : ""}</span></span>`;
+    return `<span><b>${escapeOnlineHtml(name)}</b><small>${escapeOnlineHtml(chapterTwoPairDisplayName406(member.profile,member.profile?.monsterName || "仲間"))}</small><span class="online-room-safety-actions">${safetyCapability ? `<button type="button" data-online-user-${muted ? "unmute" : "mute"}="${escapeOnlineHtml(playerId)}" aria-label="${escapeOnlineHtml(`${name}のチャットとスタンプを${muted ? "表示する" : "非表示にする"}`)}">${muted ? "ミュート解除" : "ミュート"}</button>${blocked ? `<button type="button" class="danger" data-online-friend-unblock="${escapeOnlineHtml(playerId)}" aria-label="${escapeOnlineHtml(`${name}のブロックを解除する`)}">ブロック解除</button>` : `<button type="button" class="danger" data-online-user-block="${escapeOnlineHtml(playerId)}" aria-label="${escapeOnlineHtml(`${name}をブロックする`)}">ブロック</button>`}` : ""}${isLeader ? `<button type="button" data-online-remove-room-member="${escapeOnlineHtml(playerId)}" aria-label="${escapeOnlineHtml(`${name}を部屋から退出させる`)}" ${state.roomMemberRemovalPendingId ? "disabled" : ""}>${targetPending ? "退出処理中…" : "退出させる"}</button>` : ""}</span></span>`;
   }).join("") || "<small>現在、ほかの参加者はいません。</small>"}</div></div>` : "";
   const controls = isLeader && guildRestricted ? `<p class="online-room-listing-guild-lock"><b>${plannedGathering ? "遠征予定の集合中" : "ギルド限定で募集中"}</b><span>${plannedGathering ? "交流パネルの遠征予定カードで集合状況を確認／予定取消できます。" : "交流パネルの「ギルド共闘募集」で募集を終了すると、公開掲示板へ切り替えられます。"}</span></p>` : isLeader ? `<div class="online-room-listing-controls">
       <label class="online-room-listing-switch"><input type="checkbox" data-online-room-listing-toggle ${published ? "checked" : ""} ${pending ? "disabled" : ""}><span><b>${published ? "募集中" : "招待専用"}</b><small>${published ? "公開ロビーとして掲示中" : "ルームIDを知る人だけ参加"}</small></span></label>

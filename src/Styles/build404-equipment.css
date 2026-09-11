@@ -1,0 +1,184 @@
+/* Build404: equipment uses the existing black-and-gold frame artwork. */
+#app .affix-forge-sockets > .affix-forge-socket404 {
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  flex: 0 0 10px;
+  width: 10px;
+  height: 10px;
+  min-width: 0;
+  min-height: 0;
+  max-width: 10px;
+  max-height: 10px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #8c816f;
+  border-radius: 0;
+  background: #050607;
+  transform: rotate(45deg);
+  box-shadow: inset 0 0 4px #000;
+}
+#app .affix-forge-sockets > .affix-forge-socket404.is-filled {
+  border-color: var(--socket-quality404);
+  background: color-mix(in srgb,var(--socket-quality404) 68%,#15121b);
+  box-shadow: 0 0 7px color-mix(in srgb,var(--socket-quality404) 72%,transparent);
+}
+#app :is(.v2-inventory-item.equipment,.equipment-card,.equipped-slot-card > summary) { position: relative; }
+#app .equipment-lock-badge404 {
+  position: absolute;
+  inset: auto 4px 4px auto;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  padding: 0;
+  margin: 0;
+  z-index: 3;
+  pointer-events: none;
+  line-height: 1;
+}
+#app .equipment-lock-badge404 > img {
+  display: block;
+  width: 28px !important;
+  height: 28px !important;
+  max-width: none !important;
+  object-fit: contain;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 1px 2px #000);
+}
+#app .equipment-lock-entry404 {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: 44px;
+  padding: 5px 8px;
+  border: 5px solid transparent;
+  border-image: var(--alpha115-frame) 44 fill / 5px stretch;
+  border-radius: 0;
+  background: #101113;
+  color: #efdfb9;
+  font-size: 12px;
+}
+#app .equipment-lock-entry404 > img { width: 24px; height: 24px; object-fit: contain; }
+#app .armory-screen-v2 .v2-inventory-toolbar { display: flex; flex-wrap: wrap; gap: 8px; }
+#app .armory-screen-v2 .v2-inventory-toolbar > span:not(.v2-inventory-mode) { display: none; }
+#app .armory-screen-v2 .v2-inventory-toolbar > select { margin-left: auto; min-width: 0; min-height: 44px; }
+
+/* Full item art and actual level-scaled stats, with optional compact notes. */
+#app .equipment-reward404 {
+  box-sizing: border-box;
+  display: grid;
+  gap: 10px;
+  margin: 8px 0;
+  padding: 12px;
+  border: 5px solid transparent;
+  border-image: var(--alpha115-frame) 44 fill / 5px stretch;
+  border-radius: 0;
+  background: linear-gradient(135deg,#211b11,#090b0e 65%);
+  text-align: left;
+  color: #e9dfcb;
+}
+#app .equipment-reward404 > header { display: grid; grid-template-columns: 66px minmax(0,1fr); align-items: center; gap: 10px; }
+#app .equipment-reward-art404 { position: relative; display: grid; place-items: center; width: 66px; height: 66px; }
+#app .equipment-reward-art404 > .equipment-pixel-art { width: 64px !important; height: 64px !important; }
+#app .equipment-reward404 h3 { margin: 3px 0 !important; font-size: 19px !important; line-height: 1.4; overflow-wrap: anywhere; color: var(--reward-rarity) !important; }
+#app .equipment-reward404 small { display: block; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+#app .equipment-reward-stats404 { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 5px 12px; margin: 0; padding: 8px 0; border-block: 1px solid #675333; }
+#app .equipment-reward-stats404 > div { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px; min-width: 0; font-size: 12px; }
+#app .equipment-reward-stats404 :is(dt,dd) { margin: 0; }
+#app .equipment-reward-stats404 dd { color: #f2dc9f; font-weight: 800; }
+#app .equipment-reward-affixes404 { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 4px 8px; }
+#app .equipment-reward-notes404 { display: grid; gap: 3px; }
+#app .equipment-reward-notes404 > b { font-size: 12px; color: #d4bd87; }
+#app .equipment-reward404 .equipment-reward-receipt404 { margin: 0; font-size: 12px; line-height: 1.4; color: #b8b4aa; }
+
+/* Bounded dialogs: title, scrollable body, and a separate action footer. */
+#app :is(.equipment-lock-modal404,.equipment-enhancement-modal404) > .game-modal-card {
+  box-sizing: border-box !important;
+  display: grid !important;
+  grid-template-rows: auto minmax(0,1fr) auto !important;
+  gap: 8px !important;
+  height: min(900px,calc(100dvh - max(18px,env(safe-area-inset-top)) - max(18px,env(safe-area-inset-bottom)))) !important;
+  max-height: calc(100dvh - max(18px,env(safe-area-inset-top)) - max(18px,env(safe-area-inset-bottom))) !important;
+  min-height: 0 !important;
+  padding: 13px !important;
+  overflow: hidden !important;
+}
+#app :is(.equipment-lock-modal404,.equipment-enhancement-modal404) > .game-modal-card > h2 { font-size: clamp(20px,5vw,28px) !important; margin-bottom: 0 !important; }
+#app :is(.equipment-lock-modal404,.equipment-enhancement-modal404) > .game-modal-card > .game-modal-body { min-height: 0 !important; margin: 0 !important; padding: 0 2px 14px !important; }
+#app .equipment-lock-modal404 > .game-modal-card > .game-modal-body { display: grid !important; overflow: hidden !important; padding-bottom: 0 !important; }
+#app .equipment-lock-modal404 > .game-modal-card > .modal-primary { min-height: 44px !important; padding: 5px !important; margin: 0 !important; font-size: 16px !important; }
+#app .equipment-lock-manager404 { display: grid; grid-template-rows: auto minmax(0,1fr) auto; gap: 8px; min-height: 0; overflow: hidden; }
+#app .equipment-lock-controls404 { display: grid; gap: 7px; }
+#app .equipment-lock-filters404 { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 6px; }
+#app .equipment-lock-filters404 label { display: grid; gap: 3px; min-width: 0; font-size: 12px; }
+#app .equipment-lock-filters404 select { width: 100%; min-width: 0; min-height: 40px; padding: 4px; font-size: 13px; }
+#app .equipment-lock-presets404 { display: flex; flex-wrap: wrap; gap: 5px; }
+#app .equipment-lock-presets404 button { flex: 1 1 auto; min-height: 40px; padding: 4px; font-size: 12px; }
+#app .equipment-lock-controls404 > small { color: #d7c295; font-size: 12px; }
+#app .equipment-lock-list404 { display: flex; flex-direction: column; gap: 6px; min-height: 0; overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; padding: 2px 2px 14px; -webkit-overflow-scrolling: touch; }
+#app .equipment-lock-row404 { flex: none; display: grid; grid-template-columns: 22px 44px minmax(0,1fr); align-items: center; gap: 8px; min-height: 70px; padding: 8px; border: 1px solid #665334; background: #0b0c0f; cursor: pointer; }
+#app .equipment-lock-row404:has(input:checked) { border-color: #f0cb6d; background: #292114; }
+#app .equipment-lock-row404 > span:last-child { display: grid; gap: 3px; min-width: 0; }
+#app .equipment-lock-row404 b { font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+#app .equipment-lock-row404 small { font-size: 12px; line-height: 1.4; color: #b8b2a5; }
+#app .equipment-lock-art404 { position: relative; width: 44px; height: 44px; }
+#app .equipment-lock-art404 > .equipment-pixel-art { width: 44px !important; height: 44px !important; }
+#app .equipment-lock-art404 .equipment-lock-badge404 { right: -5px; bottom: -5px; }
+#app :is(.equipment-lock-row404,.equipment-lock-favorites404,.equipment-material-row) > input[type="checkbox"] { appearance: auto; accent-color: #b18b3f; flex: none; width: 20px; height: 20px; margin: 0; }
+#app .equipment-lock-footer404 { display: grid; gap: 6px; border-top: 1px solid #655131; padding-top: 8px; }
+#app .equipment-lock-favorites404 { display: flex; align-items: center; gap: 7px; font-size: 12px; }
+#app .equipment-lock-footer404 > div { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 6px; }
+#app .equipment-lock-footer404 button { display: flex; align-items: center; justify-content: center; gap: 4px; min-height: 44px; padding: 5px; font-size: 12px; }
+#app .equipment-lock-footer404 button img { width: 24px; height: 24px; object-fit: contain; }
+#app .equipment-lock-footer404 > small { font-size: 12px; color: #b4ac9b; line-height: 1.4; }
+#app .equipment-empty404 { margin: 0; padding: 12px; font-size: 13px; color: #c9bea7; line-height: 1.5; }
+
+/* Synthesis has one scrollbar; its last material never sits under the action. */
+#app .equipment-enhancement-modal404 .equipment-enhancement { display: grid; gap: 10px; }
+#app .equipment-enhancement-modal404 :is(.enhancement-target,.equipment-growth-records,.equipment-feed-panel) { margin: 0; padding: 10px; border: 1px solid #665333; border-radius: 0; background: linear-gradient(135deg,#171714,#090a0d 80%); }
+#app .equipment-enhancement-modal404 .enhancement-title-row { display: grid; grid-template-columns: 50px minmax(0,1fr); gap: 10px; align-items: center; }
+#app .equipment-enhancement-modal404 .enhancement-target-art404 { width: 50px !important; height: 50px !important; }
+#app .equipment-enhancement-modal404 .enhancement-title-row > div { min-width: 0; }
+#app .equipment-enhancement-modal404 .enhancement-title-row h3 { font-size: 16px; line-height: 1.35; margin: 3px 0; overflow-wrap: anywhere; }
+#app .equipment-enhancement-modal404 .enhancement-title-row strong { font-size: 16px; color: #efce83; }
+#app .equipment-enhancement-modal404 .enhancement-target small { font-size: 12px; color: #b9ad94; line-height: 1.4; }
+#app .equipment-enhancement-modal404 .equipment-exp i { background: linear-gradient(90deg,#836025,#efd188); }
+#app .equipment-enhancement-modal404 .equipment-growth-records summary { min-height: 28px; font-size: 13px; cursor: pointer; }
+#app .equipment-enhancement-modal404 .section-label { font-size: 14px; color: #ead7ad; }
+#app .enhancement-excluded404 { display: grid; gap: 5px; padding: 8px; background: #080a0c; border: 1px solid #584930; }
+#app .enhancement-excluded404 b { font-size: 13px; }
+#app .enhancement-excluded404 small { font-size: 12px; line-height: 1.5; color: #bcb29e; }
+#app .enhancement-excluded404 button { min-height: 40px; font-size: 13px; padding: 4px; }
+#app .equipment-enhancement-modal404 .enhancement-tools { gap: 5px; margin: 10px 0; }
+#app .equipment-enhancement-modal404 .enhancement-tools button { min-height: 44px; font-size: 12px; padding: 4px 2px; }
+#app .equipment-enhancement-modal404 .compact-note { font-size: 12px; line-height: 1.4; }
+#app .equipment-enhancement-modal404 .equipment-material-list { display: flex !important; flex-direction: column; gap: 8px; max-height: none !important; height: auto !important; overflow: visible !important; padding: 0 0 10px !important; }
+#app .equipment-enhancement-modal404 .equipment-material-row { display: grid; grid-template-columns: 20px 38px minmax(0,1fr); gap: 7px; flex: none; box-sizing: border-box; width: 100%; min-height: 76px; margin: 0; padding: 8px; border: 4px solid transparent; border-image: var(--alpha115-frame) 44 fill / 4px stretch; border-radius: 0; background: #0b0d0f; }
+#app .equipment-enhancement-modal404 .equipment-material-row:has(input:checked) { border-image-source: var(--alpha115-frame-active); background: #261f12; }
+#app .equipment-enhancement-modal404 .equipment-material-art404 { width: 38px !important; height: 38px !important; }
+#app .equipment-enhancement-modal404 .equipment-material-row > span:last-of-type { min-width: 0; }
+#app .equipment-enhancement-modal404 .equipment-material-row b { font-size: 13px; line-height: 1.4; overflow-wrap: anywhere; }
+#app .equipment-enhancement-modal404 .equipment-material-row small { font-size: 12px; line-height: 1.4; }
+#app .equipment-enhancement-modal404 .equipment-material-row > strong { grid-column: 3; font-size: 12px; white-space: normal; color: #edce85; }
+#app .enhancement-footer404 { display: grid; gap: 6px; padding-top: 6px; border-top: 1px solid #80683b; }
+#app .enhancement-footer404 .enhancement-preview { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; margin: 0; padding: 4px 2px; border: 0; border-radius: 0; background: none; font-size: 13px; }
+#app .enhancement-footer404 .enhancement-preview small { font-size: 12px; color: #d0bc8c; }
+#app .enhancement-footer404 > div:last-child { display: grid; grid-template-columns: minmax(0,1fr) 72px; gap: 6px; }
+#app .enhancement-footer404 button { box-sizing: border-box; width: 100%; min-height: 48px; padding: 6px; border: 6px solid transparent !important; border-image: var(--alpha115-frame-active) 44 fill / 6px stretch !important; border-radius: 0 !important; background: linear-gradient(#332614,#0b0c0d) !important; color: #f8e6b7 !important; font-size: 14px; }
+#app .enhancement-footer404 button:disabled { opacity: .45; }
+#app :is(.enhancement-footer404 button,.equipment-lock-entry404):focus-visible { outline: 2px solid #efd088; outline-offset: -3px; }
+@media (max-width:360px) {
+  #app :is(.equipment-lock-modal404,.equipment-enhancement-modal404) > .game-modal-card { padding: 10px !important; }
+  #app .equipment-reward-stats404 { grid-template-columns: 1fr; }
+  #app .equipment-lock-row404 { grid-template-columns: 20px 34px minmax(0,1fr); gap: 6px; padding: 6px; }
+  #app .equipment-lock-art404,#app .equipment-lock-art404 > .equipment-pixel-art { width: 34px !important; height: 34px !important; }
+}
+@media (max-height:480px) {
+  #app .equipment-lock-modal404 > .game-modal-card > .game-modal-body { overflow-y: auto !important; }
+  #app .equipment-lock-manager404 { display: flex; flex-direction: column; overflow: visible; }
+  #app .equipment-lock-manager404 > * { flex: none; }
+  #app .equipment-lock-list404 { overflow: visible; }
+}

@@ -156,6 +156,7 @@
 <link rel="stylesheet" href="./src/Styles/build398-circles.css?v=3.1.78-build398">
 <link rel="stylesheet" href="./src/Styles/build400-home-skins.css?v=3.1.80-build400">
 <link rel="stylesheet" href="./src/Styles/build401-progress-archive.css?v=3.1.81-build401">
+<link rel="stylesheet" href="./src/Styles/build409-pair-series.css?v=3.1.89-build409">
 </head>
 <body>
   <div id="app"></div>
@@ -222,13 +223,131 @@
   <link rel="stylesheet" href="./src/Styles/build396-alliance.css?v=3.1.76-build396">
   <link rel="stylesheet" href="./src/Styles/build397-gacha.css?v=3.1.77-build397">
   <link rel="stylesheet" href="./src/Styles/build399-endgame-sprites.css?v=3.1.79-build399">
+  <link rel="stylesheet" href="./src/Styles/build403-common-ui.css?v=3.1.83-build403">
+  <link rel="stylesheet" href="./src/Styles/build404-equipment.css?v=3.1.84-build404">
+  <link rel="stylesheet" href="./src/Styles/build405-battle-circles.css?v=3.1.85-build405">
+<link rel="stylesheet" href="./src/Styles/build406-chapter-guide-summon.css?v=3.1.86-build406">
+<link rel="stylesheet" href="./src/Styles/build407-home-motion.css?v=3.1.87-build407">
+<!-- Keep shared display modules consistent across older cached importers. -->
+<script type="importmap">
+{
+  "imports": {
+    "./src/chapterTwo/ChapterTwoMonsters383.js": "./src/chapterTwo/ChapterTwoMonsters383.js?v=3.1.89-build409",
+    "./src/chapterTwo/ChapterTwoMonsters383.js?v=3.1.82-build402": "./src/chapterTwo/ChapterTwoMonsters383.js?v=3.1.89-build409",
+    "./src/chapterTwo/ChapterTwoMonsters383.js?v=3.1.86-build406": "./src/chapterTwo/ChapterTwoMonsters383.js?v=3.1.89-build409",
+    "./src/chapterTwo/ChapterTwoScreen.js": "./src/chapterTwo/ChapterTwoScreen.js?v=3.1.86-build406",
+    "./src/chapterTwo/ChapterTwoScreen.js?v=3.1.82-build402": "./src/chapterTwo/ChapterTwoScreen.js?v=3.1.86-build406",
+    "./src/chapterTwo/ChapterTwoScreen.js?v=3.1.86-build406": "./src/chapterTwo/ChapterTwoScreen.js?v=3.1.86-build406",
+    "./src/core/HomeSkinSystem400.js": "./src/core/HomeSkinSystem400.js?v=3.1.87-build407",
+    "./src/core/HomeSkinSystem400.js?v=3.1.82-build402": "./src/core/HomeSkinSystem400.js?v=3.1.87-build407",
+    "./src/core/HomeSkinSystem400.js?v=3.1.87-build407": "./src/core/HomeSkinSystem400.js?v=3.1.87-build407",
+    "./src/core/config.js": "./src/core/config.js?v=3.1.91-build411",
+    "./src/core/config.js?v=3.1.82-build402": "./src/core/config.js?v=3.1.91-build411",
+    "./src/core/config.js?v=3.1.85-build405": "./src/core/config.js?v=3.1.91-build411",
+    "./src/core/config.js?v=3.1.86-build406": "./src/core/config.js?v=3.1.91-build411",
+    "./src/core/config.js?v=3.1.87-build407": "./src/core/config.js?v=3.1.91-build411",
+    "./src/data/species.js": "./src/data/species.js?v=3.1.86-build406",
+    "./src/data/species.js?v=3.1.72-build392": "./src/data/species.js?v=3.1.86-build406",
+    "./src/data/species.js?v=3.1.86-build406": "./src/data/species.js?v=3.1.86-build406",
+    "./src/main.js": "./src/main.js?v=3.1.91-build411",
+    "./src/main.js?v=3.1.85-build405": "./src/main.js?v=3.1.91-build411",
+    "./src/main.js?v=3.1.86-build406": "./src/main.js?v=3.1.91-build411",
+    "./src/main.js?v=3.1.89-build409": "./src/main.js?v=3.1.91-build411",
+    "./src/models/Monster.js": "./src/models/Monster.js?v=3.1.90-build410",
+    "./src/models/Monster.js?v=3.1.82-build402": "./src/models/Monster.js?v=3.1.90-build410",
+    "./src/models/Monster.js?v=3.1.86-build406": "./src/models/Monster.js?v=3.1.90-build410",
+    "./src/online/OnlinePartyClient.js": "./src/online/OnlinePartyClient.js?v=3.1.86-build406",
+    "./src/online/OnlinePartyClient.js?v=3.1.85-build405": "./src/online/OnlinePartyClient.js?v=3.1.86-build406",
+    "./src/online/OnlinePartyClient.js?v=3.1.86-build406": "./src/online/OnlinePartyClient.js?v=3.1.86-build406",
+    "./src/online/OnlineViews.js": "./src/online/OnlineViews.js?v=3.1.86-build406",
+    "./src/online/OnlineViews.js?v=3.1.85-build405": "./src/online/OnlineViews.js?v=3.1.86-build406",
+    "./src/online/OnlineViews.js?v=3.1.86-build406": "./src/online/OnlineViews.js?v=3.1.86-build406",
+    "./src/services/SaveService.js": "./src/services/SaveService.js?v=3.1.88-build408",
+    "./src/services/SaveService.js?v=3.1.85-build405": "./src/services/SaveService.js?v=3.1.88-build408",
+    "./src/services/SaveService.js?v=3.1.86-build406": "./src/services/SaveService.js?v=3.1.88-build408",
+    "./src/services/SaveService.js?v=3.1.87-build407": "./src/services/SaveService.js?v=3.1.88-build408",
+    "./src/ui/ChapterTwoGacha397.js": "./src/ui/ChapterTwoGacha397.js?v=3.1.86-build406",
+    "./src/ui/ChapterTwoGacha397.js?v=3.1.82-build402": "./src/ui/ChapterTwoGacha397.js?v=3.1.86-build406",
+    "./src/ui/ChapterTwoGacha397.js?v=3.1.86-build406": "./src/ui/ChapterTwoGacha397.js?v=3.1.86-build406",
+    "./src/ui/HomeSkin400.js": "./src/ui/HomeSkin400.js?v=3.1.87-build407",
+    "./src/ui/HomeSkin400.js?v=3.1.82-build402": "./src/ui/HomeSkin400.js?v=3.1.87-build407",
+    "./src/ui/HomeSkin400.js?v=3.1.87-build407": "./src/ui/HomeSkin400.js?v=3.1.87-build407",
+    "./src/ui/TwinStatus385.js": "./src/ui/TwinStatus385.js?v=3.1.90-build410",
+    "./src/ui/TwinStatus385.js?v=3.1.75-build395": "./src/ui/TwinStatus385.js?v=3.1.90-build410",
+    "./src/ui/TwinStatus385.js?v=3.1.86-build406": "./src/ui/TwinStatus385.js?v=3.1.90-build410",
+    "./src/ui/screens/BattleScreen.js": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
+    "./src/ui/screens/BattleScreen.js?v=3.1.85-build405": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
+    "./src/ui/screens/BattleScreen.js?v=3.1.86-build406": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
+    "./src/ui/screens/HomeScreen.js": "./src/ui/screens/HomeScreen.js?v=3.1.87-build407",
+    "./src/ui/screens/HomeScreen.js?v=3.1.85-build405": "./src/ui/screens/HomeScreen.js?v=3.1.87-build407",
+    "./src/ui/screens/HomeScreen.js?v=3.1.86-build406": "./src/ui/screens/HomeScreen.js?v=3.1.87-build407",
+    "./src/ui/screens/HomeScreen.js?v=3.1.87-build407": "./src/ui/screens/HomeScreen.js?v=3.1.87-build407",
+    "./src/ui/screens/MonsterDetailScreen.js": "./src/ui/screens/MonsterDetailScreen.js?v=3.1.86-build406",
+    "./src/ui/screens/MonsterDetailScreen.js?v=3.1.82-build402": "./src/ui/screens/MonsterDetailScreen.js?v=3.1.86-build406",
+    "./src/ui/screens/MonsterDetailScreen.js?v=3.1.86-build406": "./src/ui/screens/MonsterDetailScreen.js?v=3.1.86-build406",
+    "./src/ui/screens/OnlinePartyScreen.js": "./src/ui/screens/OnlinePartyScreen.js?v=3.1.91-build411",
+    "./src/ui/screens/OnlinePartyScreen.js?v=3.1.82-build402": "./src/ui/screens/OnlinePartyScreen.js?v=3.1.91-build411",
+    "./src/ui/screens/OnlinePartyScreen.js?v=3.1.86-build406": "./src/ui/screens/OnlinePartyScreen.js?v=3.1.91-build411",
+    "./src/ui/screens/SettingsScreen.js": "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407",
+    "./src/ui/screens/SettingsScreen.js?v=3.1.82-build402": "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407",
+    "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407": "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407",
+    "./src/core/config.js?v=3.1.88-build408": "./src/core/config.js?v=3.1.91-build411",
+    "./src/services/SaveService.js?v=3.1.88-build408": "./src/services/SaveService.js?v=3.1.88-build408",
+    "./src/battle/BattleRules.js?v=3.1.78-build398": "./src/battle/BattleRules.js?v=3.1.90-build410",
+    "./src/battle/BattleRules.js": "./src/battle/BattleRules.js?v=3.1.90-build410",
+    "./src/battle/BattleRules.js?v=3.1.88-build408": "./src/battle/BattleRules.js?v=3.1.90-build410",
+    "./src/battle/TwinResonance385.js?v=3.1.88-build408": "./src/battle/TwinResonance385.js?v=3.1.89-build409",
+    "./src/battle/TwinResonance385.js": "./src/battle/TwinResonance385.js?v=3.1.89-build409",
+    "./src/battle/TwinResonance385.js?v=3.1.75-build395": "./src/battle/TwinResonance385.js?v=3.1.89-build409",
+    "./src/battle/SkillSystem.js": "./src/battle/SkillSystem.js?v=3.1.89-build409",
+    "./src/battle/PairSynergy409.js": "./src/battle/PairSynergy409.js?v=3.1.89-build409",
+    "./src/ui/PairEffects409.js": "./src/ui/PairEffects409.js?v=3.1.89-build409",
+    "./src/battle/TwinResonance385.js?v=3.1.89-build409": "./src/battle/TwinResonance385.js?v=3.1.89-build409",
+    "./src/ui/TwinStatus385.js?v=3.1.89-build409": "./src/ui/TwinStatus385.js?v=3.1.90-build410",
+    "./src/core/config.js?v=3.1.89-build409": "./src/core/config.js?v=3.1.91-build411",
+    "./src/ui/screens/BattleScreen.js?v=3.1.89-build409": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
+    "./src/battle/SkillSystem.js?v=3.1.89-build409": "./src/battle/SkillSystem.js?v=3.1.89-build409",
+    "./src/battle/PairSynergy409.js?v=3.1.89-build409": "./src/battle/PairSynergy409.js?v=3.1.89-build409",
+    "./src/ui/PairEffects409.js?v=3.1.89-build409": "./src/ui/PairEffects409.js?v=3.1.89-build409",
+    "./src/battle/BattleRules.js?v=3.1.89-build409": "./src/battle/BattleRules.js?v=3.1.90-build410",
+    "./src/battle/SkillSystem.js?v=3.1.75-build395": "./src/battle/SkillSystem.js?v=3.1.89-build409",
+    "./src/battle/SingleTraits410.js?v=3.1.90-build410": "./src/battle/SingleTraits410.js?v=3.1.91-build411",
+    "./src/models/Monster.js?v=3.1.90-build410": "./src/models/Monster.js?v=3.1.90-build410",
+    "./src/core/EndgameUltimateSystem.js?v=3.1.90-build410": "./src/core/EndgameUltimateSystem.js?v=3.1.90-build410",
+    "./src/core/EndgameUltimateSystem.js?v=3.1.58-build378": "./src/core/EndgameUltimateSystem.js?v=3.1.90-build410",
+    "./src/core/HeroAllianceSystem.js?v=3.1.58-build378": "./src/core/HeroAllianceSystem.js?v=3.1.90-build410",
+    "./src/data/statusEffects.js?v=3.1.1-build311": "./src/data/statusEffects.js?v=3.1.90-build410",
+    "./src/core/EndgameUltimateSystem.js": "./src/core/EndgameUltimateSystem.js?v=3.1.90-build410",
+    "./src/data/chapterTwoSpecies388.js?v=3.1.68-build388": "./src/data/chapterTwoSpecies388.js?v=3.1.90-build410",
+    "./src/data/statusEffects.js?v=2.11.2-build166": "./src/data/statusEffects.js?v=3.1.90-build410",
+    "./src/battle/SingleTraits410.js": "./src/battle/SingleTraits410.js?v=3.1.91-build411",
+    "./src/core/HeroAllianceSystem.js": "./src/core/HeroAllianceSystem.js?v=3.1.90-build410",
+    "./src/data/chapterTwoSpecies388.js": "./src/data/chapterTwoSpecies388.js?v=3.1.90-build410",
+    "./src/data/statusEffects.js": "./src/data/statusEffects.js?v=3.1.90-build410",
+    "./src/ui/TwinStatus385.js?v=3.1.90-build410": "./src/ui/TwinStatus385.js?v=3.1.90-build410",
+    "./src/core/HeroAllianceSystem.js?v=3.1.90-build410": "./src/core/HeroAllianceSystem.js?v=3.1.90-build410",
+    "./src/core/config.js?v=3.1.90-build410": "./src/core/config.js?v=3.1.91-build411",
+    "./src/data/statusEffects.js?v=3.1.90-build410": "./src/data/statusEffects.js?v=3.1.90-build410",
+    "./src/ui/screens/BattleScreen.js?v=3.1.90-build410": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
+    "./src/battle/BattleRules.js?v=3.1.90-build410": "./src/battle/BattleRules.js?v=3.1.90-build410",
+    "./src/online/OnlineTraitCompatibility411.js": "./src/online/OnlineTraitCompatibility411.js?v=3.1.91-build411",
+    "./src/core/CombatPower.js?v=3.1.82-build402": "./src/core/CombatPower.js?v=3.1.91-build411",
+    "./src/core/CombatPower.js": "./src/core/CombatPower.js?v=3.1.91-build411",
+    "./src/online/OnlineTraitCompatibility411.js?v=3.1.91-build411": "./src/online/OnlineTraitCompatibility411.js?v=3.1.91-build411",
+    "./src/core/config.js?v=3.1.91-build411": "./src/core/config.js?v=3.1.91-build411",
+    "./src/ui/screens/OnlinePartyScreen.js?v=3.1.91-build411": "./src/ui/screens/OnlinePartyScreen.js?v=3.1.91-build411",
+    "./src/core/CombatPower.js?v=3.1.91-build411": "./src/core/CombatPower.js?v=3.1.91-build411"
+  }
+}
+  </script>
 <script type="module">
-    const ASSET_VERSION = "3.1.82";
-    const ASSET_BUILD = "build402";
+    const ASSET_VERSION = "3.1.91";
+    const ASSET_BUILD = "build411";
     const CACHE_VERSION = `${ASSET_VERSION}-${ASSET_BUILD}`;
     const VERSION_KEY = "abyss-dominion-asset-version";
     async function refreshStaleAssets() {
-      const previous = localStorage.getItem(VERSION_KEY);
+      let previous = null;
+      try { previous = localStorage.getItem(VERSION_KEY); } catch (error) { console.warn("Cache version unavailable", error); }
       if (previous !== CACHE_VERSION) {
         try {
           if ("caches" in window) {
@@ -242,9 +361,9 @@
         } catch (error) {
           console.warn("Cache cleanup skipped", error);
         }
-        localStorage.setItem(VERSION_KEY, CACHE_VERSION);
+        try { localStorage.setItem(VERSION_KEY, CACHE_VERSION); } catch (error) { console.warn("Cache version not saved", error); }
       }
-      await import(`./src/main.js?v=3.1.82-build402`);
+      await import(`./src/main.js?v=${CACHE_VERSION}`);
       window.__abyssBootComplete = true;
     }
     refreshStaleAssets();

@@ -1,0 +1,110 @@
+{
+  "build": 406,
+  "version": "3.1.86",
+  "base_build": 405,
+  "save_schema_version": 84,
+  "test_count": 81,
+  "browser_or_iphone_qa": false,
+  "files": [
+    {
+      "path": "index.html",
+      "sha256": "9be263964e62c970d4dc70b7c28ac87880ee45b923327947ac0e06483fa835fd",
+      "before_sha256": "8df96f49db9d9a67d511cc7621a893826a3ab9d96afba65476909bbd1814343e"
+    },
+    {
+      "path": "src/Styles/build406-chapter-guide-summon.css",
+      "sha256": "42cb6929d8e45776c4e5746af79b78f894c13ec6394a1f64f8b50e7dcf7cc650",
+      "before_sha256": null
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoMonsters383.js",
+      "sha256": "332cfa1d4cd7a2a07aca7092dfa39b044e843e55aa21ce397e85ca1f7de15678",
+      "before_sha256": "cd69175c9fe16df81222e78e30a6b32055fa2504e17553d5c221bd84eac84ec1"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoScreen.js",
+      "sha256": "ef18d5259b200eb2081ac2c5f2122efe85cedd8227d0faf454a127b75f361fbd",
+      "before_sha256": "ce63333d8dabb2f7eb9467e986b661da37581dc8974b4073b04b7f0e44dea9db"
+    },
+    {
+      "path": "src/core/config.js",
+      "sha256": "ada478d721a41e93eb00021fc982ca9c943a7e0f5476b3a712b3197f33eee8fc",
+      "before_sha256": "c71ee76deb64a650f2430800c6eb51b020d7aa0f91f3b6a61d729b8b1edb40d9"
+    },
+    {
+      "path": "src/data/chapterTwoPairNames406.js",
+      "sha256": "dea44131636b62f0a1709ddc074003326a0695e64e011b53c6f6e4bbd3cf2943",
+      "before_sha256": null
+    },
+    {
+      "path": "src/data/species.js",
+      "sha256": "3a0290c625618297db3cce612c758baccadc71b471bf8fab929926df58785dd3",
+      "before_sha256": "34f5e459038fb25417d4ecddd5975e91331973e74832a92452ddfc3d8f9184f6"
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "2cffe67388a39cbb37e1281c265ccd88eacc0da62ebe4dc9a8204530d2bbcfaa",
+      "before_sha256": "e606873cd7eaefe9d8e35b483da671d2c9720f4c9151f785986acad3e431b7b0"
+    },
+    {
+      "path": "src/models/Monster.js",
+      "sha256": "54ae40ec88efe84e0f7c814a7be82d0f0c4a6dcbfffcf80152f3a0ba48714ccb",
+      "before_sha256": "7392734d857f3ebf9bc12c2e6535fd49c512dfa0e3d8f044668dc87480b78f5e"
+    },
+    {
+      "path": "src/online/OnlinePartyClient.js",
+      "sha256": "c450beeb4505421d53115def2474c7fdeeb17361541dc9f7a5bc99f58299b052",
+      "before_sha256": "86db03f52899f397b88c1571b03f696168bf0344a639c1d3afa37af57b0579a6"
+    },
+    {
+      "path": "src/online/OnlineViews.js",
+      "sha256": "79a0aab3396a4a71bace0bafade0bb378f61da0a9e3bbb34c3abe2314ab32897",
+      "before_sha256": "bf339f3816e80e039beb9530ea8ce0dbf10a901ab33c5de39730ca1f3304aec4"
+    },
+    {
+      "path": "src/services/SaveService.js",
+      "sha256": "a9a4caa13f0a1f567b97788566831e57d058eddc6aba7ad20e6bdab891b05a63",
+      "before_sha256": "accd0b5b092d175810a9408e5274e9364a739d905a962188efc016fdfcc068cd"
+    },
+    {
+      "path": "src/ui/ChapterTwoGacha397.js",
+      "sha256": "a0469c000119558480b9719723a758e40b19ca8660d624aa9b1d4fd75262c632",
+      "before_sha256": "dfe8cd562f459a297803062c770d2f08956918fa3610c2ba0fe193f14644c7ad"
+    },
+    {
+      "path": "src/ui/TwinStatus385.js",
+      "sha256": "8c2e3b13242a2c6e2aa0fb4959b6df05301647fee77fbeba2ce86cd1ceca8562",
+      "before_sha256": "240541d0a8e8751e33a408d4e68decf411e24fa21d11296efbf0a178946a3353"
+    },
+    {
+      "path": "src/ui/screens/BattleScreen.js",
+      "sha256": "9172e5df734ecae49ff9b1b89dafb53914ef2f9c617881c00839dac4bbc7889d",
+      "before_sha256": "d076323566d53a9b516f0f2ad3edfab7c8407f8d52ae5f38dbfbe96dc3efacda"
+    },
+    {
+      "path": "src/ui/screens/HomeScreen.js",
+      "sha256": "8b225a822a936a6b64e600b93797a179fbaed4d54e71bf7f011457d9f4decf32",
+      "before_sha256": "0596f4ae469fcca141bb2e02f25882287afb6bd4c2636e7f43c7b6829151090c"
+    },
+    {
+      "path": "src/ui/screens/MonsterDetailScreen.js",
+      "sha256": "6a5d61fd3afff6f8afe0b2b1e145ffd53c402ed5b4d383ced7d627c64d58448c",
+      "before_sha256": "bc8040dbef13e7fc542fe4807418cae95ea205ace70a1827e30ba0a31d0ae2b3"
+    },
+    {
+      "path": "src/ui/screens/OnlinePartyScreen.js",
+      "sha256": "986bb87a09bb366bfad3144f1971eae40adff9a92ba0c0d930193974b31518f6",
+      "before_sha256": "0430adb801203ff9787b1a7914b820de3d2da01d24df5d29645362a398181a0e"
+    },
+    {
+      "path": "tests/build397-rosters-gacha.test.mjs",
+      "sha256": "c347fe2a2bc207f49ef34433f9f7716eb30683a4a566a48f799bb374784dcde1",
+      "before_sha256": "e9c449d8d14368cfda9bf377b2c981670b1246fe8695e6fc8de20fa283df619f"
+    },
+    {
+      "path": "tests/build406-guide-summon-names.test.mjs",
+      "sha256": "b7d13f0bf10db0b6261af1d92b12b05fd0a1d4e733f410f9f0869d31a7be52bd",
+      "before_sha256": null
+    }
+  ]
+}

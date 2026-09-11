@@ -1,3 +1,4 @@
+import {cleanupSingles410} from '../src/battle/SingleTraits410.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -103,7 +104,7 @@ function lossFixture({retreated=false,allDown=true,failFirst=false}={}){
  const party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id));party.forEach(m=>{m.currentHp=allDown?0:17;m.currentMp=3});save.state.inventory.potions=2;
  save.state.activeBattle={specialBattleType:'chapterTwo',chapterTwoToken:attempt.token};let failed=failFirst,homeCalls=0;const button={},modal={classList:{add(){}},querySelector:()=>button,remove(){}};
  const actualSave=save.save.bind(save);save.save=()=>{if(failed){failed=false;return false}return actualSave()};
- const c={save,battle:{specialBattleType:'chapterTwo',chapterTwoToken:attempt.token,chapterTwoEncounter:'patrol',party,priorVitals:party.map(m=>({id:m.id,hp:99999,mp:99999}))},battleContributionSnapshot:()=>({}),settleChapterTwoEncounter,chapterTwoState,CHAPTER_TWO_ENCOUNTERS:ENCOUNTERS,chapterTwoHint380:()=>'',syncPersistentAilments(){},clearPartySynergy(){},cleanupUltimateBattle(){},document:{querySelector:()=>({remove(){}})},app:{insertAdjacentHTML:(_,html)=>c.html=html},audio:{sfx(){}},render(){},Modal:(title,body,button)=>title+body+button,topModal:()=>modal,activeEnemy:null,snapshot:null,screen:'chapterTwoField',pixelIcon:()=>'',monsterVisual:()=>'',SPECIES,displayName:m=>m.name??m.speciesId,escapeAttribute:x=>x,stopGame(){},go:s=>{if(s==='home')homeCalls++}};
+ const c={save,battle:{specialBattleType:'chapterTwo',chapterTwoToken:attempt.token,chapterTwoEncounter:'patrol',party,priorVitals:party.map(m=>({id:m.id,hp:99999,mp:99999}))},battleContributionSnapshot:()=>({}),settleChapterTwoEncounter,chapterTwoState,CHAPTER_TWO_ENCOUNTERS:ENCOUNTERS,chapterTwoHint380:()=>'',syncPersistentAilments(){},clearPartySynergy(){},cleanupUltimateBattle(){},cleanupSingles410,document:{querySelector:()=>({remove(){}})},app:{insertAdjacentHTML:(_,html)=>c.html=html},audio:{sfx(){}},render(){},Modal:(title,body,button)=>title+body+button,topModal:()=>modal,activeEnemy:null,snapshot:null,screen:'chapterTwoField',pixelIcon:()=>'',monsterVisual:()=>'',SPECIES,displayName:m=>m.name??m.speciesId,escapeAttribute:x=>x,stopGame(){},go:s=>{if(s==='home')homeCalls++}};
  vm.createContext(c);vm.runInContext(extract('function chapterTwoDefeatBody382(','\nfunction openExploreFloorSelector'),c);
  const gold=save.state.player.gold;c.finishChapterTwoBattle(false,{retreated});return {c,button,modal,save,party,gold,homeCalls:()=>homeCalls};
 }
@@ -125,6 +126,6 @@ test('alpha-aware sizing enlarges small normal silhouettes and fits boss silhoue
 });
 test('second-chapter markup gives each enemy an overhead name and rank outside its scaled art',()=>{
  const enemies=team('vault4'),html=BattleScreen({specialBattle:true,specialBattleType:'chapterTwo',party:[],enemies,turnQueue:[],turn:1},{},{});
- assert.equal((html.match(/chapter-two-loadout382/g)??[]).length,4);
+ assert.equal((html.match(/chapter-two-loadout382/g)??[]).length,0);
  for(const e of enemies){const start=html.indexOf(`data-enemy-target="${e.id}"`),end=html.indexOf('side-unit-sprite',start);assert.ok(html.slice(start,end).includes('battle-unit-floating-name'));assert.ok(html.slice(start,end).includes('combat-rank-badge'))}
 });

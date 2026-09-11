@@ -1,0 +1,773 @@
+{
+  "allPairs": [
+    {
+      "pair": "mirrors",
+      "seed": 1,
+      "won": true,
+      "rounds": 10,
+      "synergy": {
+        "ally:mirrors": {
+          "activations": 4
+        }
+      }
+    },
+    {
+      "pair": "mirrors",
+      "seed": 2,
+      "won": true,
+      "rounds": 10,
+      "synergy": {
+        "ally:mirrors": {
+          "activations": 3
+        }
+      }
+    },
+    {
+      "pair": "mirrors",
+      "seed": 3,
+      "won": true,
+      "rounds": 10,
+      "synergy": {
+        "ally:mirrors": {
+          "activations": 3
+        }
+      }
+    },
+    {
+      "pair": "talismans",
+      "seed": 1,
+      "won": true,
+      "rounds": 6,
+      "synergy": {
+        "ally:talismans": {
+          "activations": 5
+        }
+      }
+    },
+    {
+      "pair": "talismans",
+      "seed": 2,
+      "won": true,
+      "rounds": 6,
+      "synergy": {
+        "ally:talismans": {
+          "activations": 5
+        }
+      }
+    },
+    {
+      "pair": "talismans",
+      "seed": 3,
+      "won": true,
+      "rounds": 6,
+      "synergy": {
+        "ally:talismans": {
+          "activations": 5
+        }
+      }
+    },
+    {
+      "pair": "wings",
+      "seed": 1,
+      "won": true,
+      "rounds": 3,
+      "synergy": {}
+    },
+    {
+      "pair": "wings",
+      "seed": 2,
+      "won": true,
+      "rounds": 3,
+      "synergy": {}
+    },
+    {
+      "pair": "wings",
+      "seed": 3,
+      "won": true,
+      "rounds": 3,
+      "synergy": {}
+    },
+    {
+      "pair": "garden",
+      "seed": 1,
+      "won": true,
+      "rounds": 6,
+      "synergy": {
+        "ally:garden": {
+          "activations": 5
+        }
+      }
+    },
+    {
+      "pair": "garden",
+      "seed": 2,
+      "won": true,
+      "rounds": 5,
+      "synergy": {
+        "ally:garden": {
+          "activations": 5
+        }
+      }
+    },
+    {
+      "pair": "garden",
+      "seed": 3,
+      "won": true,
+      "rounds": 6,
+      "synergy": {
+        "ally:garden": {
+          "activations": 3
+        }
+      }
+    },
+    {
+      "pair": "foxmoon",
+      "seed": 1,
+      "won": true,
+      "rounds": 7,
+      "synergy": {}
+    },
+    {
+      "pair": "foxmoon",
+      "seed": 2,
+      "won": true,
+      "rounds": 7,
+      "synergy": {}
+    },
+    {
+      "pair": "foxmoon",
+      "seed": 3,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:foxmoon": {
+          "activations": 1
+        }
+      }
+    },
+    {
+      "pair": "starthread",
+      "seed": 1,
+      "won": true,
+      "rounds": 3,
+      "synergy": {
+        "ally:starthread": {
+          "activations": 3
+        }
+      }
+    },
+    {
+      "pair": "starthread",
+      "seed": 2,
+      "won": true,
+      "rounds": 3,
+      "synergy": {
+        "ally:starthread": {
+          "activations": 3
+        }
+      }
+    },
+    {
+      "pair": "starthread",
+      "seed": 3,
+      "won": true,
+      "rounds": 3,
+      "synergy": {
+        "ally:starthread": {
+          "activations": 2
+        }
+      }
+    },
+    {
+      "pair": "stitch",
+      "seed": 1,
+      "won": true,
+      "rounds": 7,
+      "synergy": {}
+    },
+    {
+      "pair": "stitch",
+      "seed": 2,
+      "won": true,
+      "rounds": 7,
+      "synergy": {}
+    },
+    {
+      "pair": "stitch",
+      "seed": 3,
+      "won": true,
+      "rounds": 7,
+      "synergy": {}
+    },
+    {
+      "pair": "glassaria",
+      "seed": 1,
+      "won": true,
+      "rounds": 4,
+      "synergy": {
+        "ally:glassaria": {
+          "activations": 3
+        }
+      }
+    },
+    {
+      "pair": "glassaria",
+      "seed": 2,
+      "won": true,
+      "rounds": 4,
+      "synergy": {
+        "ally:glassaria": {
+          "activations": 2
+        }
+      }
+    },
+    {
+      "pair": "glassaria",
+      "seed": 3,
+      "won": true,
+      "rounds": 4,
+      "synergy": {
+        "ally:glassaria": {
+          "activations": 3
+        }
+      }
+    },
+    {
+      "pair": "eclipsecrown",
+      "seed": 1,
+      "won": true,
+      "rounds": 5,
+      "synergy": {}
+    },
+    {
+      "pair": "eclipsecrown",
+      "seed": 2,
+      "won": true,
+      "rounds": 4,
+      "synergy": {}
+    },
+    {
+      "pair": "eclipsecrown",
+      "seed": 3,
+      "won": true,
+      "rounds": 4,
+      "synergy": {}
+    },
+    {
+      "pair": "oathguard",
+      "seed": 1,
+      "won": true,
+      "rounds": 6,
+      "synergy": {
+        "ally:oathguard": {
+          "activations": 1
+        }
+      }
+    },
+    {
+      "pair": "oathguard",
+      "seed": 2,
+      "won": true,
+      "rounds": 6,
+      "synergy": {
+        "ally:oathguard": {
+          "activations": 4
+        }
+      }
+    },
+    {
+      "pair": "oathguard",
+      "seed": 3,
+      "won": true,
+      "rounds": 6,
+      "synergy": {
+        "ally:oathguard": {
+          "activations": 2
+        }
+      }
+    },
+    {
+      "pair": "rosevow",
+      "seed": 1,
+      "won": true,
+      "rounds": 6,
+      "synergy": {}
+    },
+    {
+      "pair": "rosevow",
+      "seed": 2,
+      "won": true,
+      "rounds": 6,
+      "synergy": {}
+    },
+    {
+      "pair": "rosevow",
+      "seed": 3,
+      "won": true,
+      "rounds": 7,
+      "synergy": {}
+    },
+    {
+      "pair": "twinclock",
+      "seed": 1,
+      "won": true,
+      "rounds": 3,
+      "synergy": {
+        "ally:twinclock": {
+          "activations": 2
+        }
+      }
+    },
+    {
+      "pair": "twinclock",
+      "seed": 2,
+      "won": true,
+      "rounds": 2,
+      "synergy": {
+        "ally:twinclock": {
+          "activations": 2
+        }
+      }
+    },
+    {
+      "pair": "twinclock",
+      "seed": 3,
+      "won": true,
+      "rounds": 3,
+      "synergy": {
+        "ally:twinclock": {
+          "activations": 2
+        }
+      }
+    },
+    {
+      "pair": "wisteria",
+      "seed": 1,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:wisteria": {
+          "activations": 1
+        }
+      }
+    },
+    {
+      "pair": "wisteria",
+      "seed": 2,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:wisteria": {
+          "activations": 2
+        }
+      }
+    },
+    {
+      "pair": "wisteria",
+      "seed": 3,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:wisteria": {
+          "activations": 1
+        }
+      }
+    },
+    {
+      "pair": "twinthunder",
+      "seed": 1,
+      "won": true,
+      "rounds": 5,
+      "synergy": {
+        "ally:twinthunder": {
+          "activations": 4
+        }
+      }
+    },
+    {
+      "pair": "twinthunder",
+      "seed": 2,
+      "won": true,
+      "rounds": 5,
+      "synergy": {
+        "ally:twinthunder": {
+          "activations": 5
+        }
+      }
+    },
+    {
+      "pair": "twinthunder",
+      "seed": 3,
+      "won": true,
+      "rounds": 5,
+      "synergy": {
+        "ally:twinthunder": {
+          "activations": 5
+        }
+      }
+    },
+    {
+      "pair": "twinkeys",
+      "seed": 1,
+      "won": true,
+      "rounds": 4,
+      "synergy": {}
+    },
+    {
+      "pair": "twinkeys",
+      "seed": 2,
+      "won": true,
+      "rounds": 4,
+      "synergy": {}
+    },
+    {
+      "pair": "twinkeys",
+      "seed": 3,
+      "won": true,
+      "rounds": 4,
+      "synergy": {}
+    },
+    {
+      "pair": "frostshatter",
+      "seed": 1,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:frostshatter": {
+          "activations": 1
+        }
+      }
+    },
+    {
+      "pair": "frostshatter",
+      "seed": 2,
+      "won": true,
+      "rounds": 7,
+      "synergy": {}
+    },
+    {
+      "pair": "frostshatter",
+      "seed": 3,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:frostshatter": {
+          "activations": 1
+        }
+      }
+    },
+    {
+      "pair": "oathreturn",
+      "seed": 1,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:oathreturn": {
+          "activations": 4
+        }
+      }
+    },
+    {
+      "pair": "oathreturn",
+      "seed": 2,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:oathreturn": {
+          "activations": 3
+        }
+      }
+    },
+    {
+      "pair": "oathreturn",
+      "seed": 3,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:oathreturn": {
+          "activations": 5
+        }
+      }
+    },
+    {
+      "pair": "starconfluence",
+      "seed": 1,
+      "won": true,
+      "rounds": 5,
+      "synergy": {
+        "ally:starconfluence": {
+          "activations": 2
+        }
+      }
+    },
+    {
+      "pair": "starconfluence",
+      "seed": 2,
+      "won": true,
+      "rounds": 5,
+      "synergy": {
+        "ally:starconfluence": {
+          "activations": 3
+        }
+      }
+    },
+    {
+      "pair": "starconfluence",
+      "seed": 3,
+      "won": true,
+      "rounds": 5,
+      "synergy": {
+        "ally:starconfluence": {
+          "activations": 2
+        }
+      }
+    },
+    {
+      "pair": "crimsonwings",
+      "seed": 1,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:crimsonwings": {
+          "activations": 1
+        }
+      }
+    },
+    {
+      "pair": "crimsonwings",
+      "seed": 2,
+      "won": true,
+      "rounds": 6,
+      "synergy": {
+        "ally:crimsonwings": {
+          "activations": 1
+        }
+      }
+    },
+    {
+      "pair": "crimsonwings",
+      "seed": 3,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:crimsonwings": {
+          "activations": 2
+        }
+      }
+    },
+    {
+      "pair": "absolutionbells",
+      "seed": 1,
+      "won": true,
+      "rounds": 5,
+      "synergy": {}
+    },
+    {
+      "pair": "absolutionbells",
+      "seed": 2,
+      "won": true,
+      "rounds": 5,
+      "synergy": {}
+    },
+    {
+      "pair": "absolutionbells",
+      "seed": 3,
+      "won": true,
+      "rounds": 5,
+      "synergy": {}
+    },
+    {
+      "pair": "eclipserenewal",
+      "seed": 1,
+      "won": true,
+      "rounds": 4,
+      "synergy": {
+        "ally:eclipserenewal": {
+          "activations": 3
+        }
+      }
+    },
+    {
+      "pair": "eclipserenewal",
+      "seed": 2,
+      "won": true,
+      "rounds": 3,
+      "synergy": {
+        "ally:eclipserenewal": {
+          "activations": 3
+        }
+      }
+    },
+    {
+      "pair": "eclipserenewal",
+      "seed": 3,
+      "won": true,
+      "rounds": 3,
+      "synergy": {
+        "ally:eclipserenewal": {
+          "activations": 3
+        }
+      }
+    },
+    {
+      "pair": "dreamharvest",
+      "seed": 1,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:dreamharvest": {
+          "activations": 1
+        }
+      }
+    },
+    {
+      "pair": "dreamharvest",
+      "seed": 2,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:dreamharvest": {
+          "activations": 1
+        }
+      }
+    },
+    {
+      "pair": "dreamharvest",
+      "seed": 3,
+      "won": true,
+      "rounds": 7,
+      "synergy": {
+        "ally:dreamharvest": {
+          "activations": 1
+        }
+      }
+    },
+    {
+      "pair": "dragonliberation",
+      "seed": 1,
+      "won": true,
+      "rounds": 3,
+      "synergy": {}
+    },
+    {
+      "pair": "dragonliberation",
+      "seed": 2,
+      "won": true,
+      "rounds": 3,
+      "synergy": {}
+    },
+    {
+      "pair": "dragonliberation",
+      "seed": 3,
+      "won": true,
+      "rounds": 3,
+      "synergy": {}
+    },
+    {
+      "pair": "crownsfinale",
+      "seed": 1,
+      "won": true,
+      "rounds": 3,
+      "synergy": {
+        "ally:crownsfinale": {
+          "activations": 1
+        }
+      }
+    },
+    {
+      "pair": "crownsfinale",
+      "seed": 2,
+      "won": true,
+      "rounds": 3,
+      "synergy": {}
+    },
+    {
+      "pair": "crownsfinale",
+      "seed": 3,
+      "won": true,
+      "rounds": 3,
+      "synergy": {
+        "ally:crownsfinale": {
+          "activations": 2
+        }
+      }
+    }
+  ],
+  "consistency": [
+    {
+      "name": "finishers",
+      "seed": 1,
+      "match": true
+    },
+    {
+      "name": "finishers",
+      "seed": 2,
+      "match": true
+    },
+    {
+      "name": "finishers",
+      "seed": 3,
+      "match": true
+    },
+    {
+      "name": "finishers",
+      "seed": 4,
+      "match": true
+    },
+    {
+      "name": "finishers",
+      "seed": 5,
+      "match": true
+    },
+    {
+      "name": "guard",
+      "seed": 1,
+      "match": true
+    },
+    {
+      "name": "guard",
+      "seed": 2,
+      "match": true
+    },
+    {
+      "name": "guard",
+      "seed": 3,
+      "match": true
+    },
+    {
+      "name": "guard",
+      "seed": 4,
+      "match": true
+    },
+    {
+      "name": "guard",
+      "seed": 5,
+      "match": true
+    },
+    {
+      "name": "mixed",
+      "seed": 1,
+      "match": true
+    },
+    {
+      "name": "mixed",
+      "seed": 2,
+      "match": true
+    },
+    {
+      "name": "mixed",
+      "seed": 3,
+      "match": true
+    },
+    {
+      "name": "mixed",
+      "seed": 4,
+      "match": true
+    },
+    {
+      "name": "mixed",
+      "seed": 5,
+      "match": true
+    }
+  ]
+}

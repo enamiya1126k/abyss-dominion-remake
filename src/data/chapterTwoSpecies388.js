@@ -4,7 +4,7 @@ const creatures=[
  {key:'fiora',name:'夜灯の従騎フィオラ',rarity:'N',element:'wind',race:'spirit',role:'support',tacticRole383:'support',stats:[116,25,13,22,19,25],maxMp:46,captureCap383:.65,habitat383:'境界の森・再探索「東の封印樹」',lore383:'境界の森に残された誓いの灯を守る従騎。小さな剣とランタンを頼りに、主を失った甲冑たちを夜明けへ導く。',counter383:'命中支援と攻撃低下で前衛を支える。従騎を先に止めると誓姫の攻めが不安定になる。',skills:[
  skill('lamp','迷い照らす夜灯',11,3,'味方全体の命中18%上昇（2ターン）。',{type:'buff',power:0,target:'味方全体',effects:[{kind:'accuracyUp',value:.18,turns:2,allies:true}],ai383:'rally'}),
  skill('moth','灯蛾の牽制',9,2,'風属性0.95倍。攻撃15%低下（2ターン）。',{power:.95,effects:[{kind:'atkDown',value:.15,turns:2,enemy:true}],ai383:'setup'}),
- skill('guard','従騎の小さな盾',12,3,'味方全体に最大HP10%の障壁。',{type:'buff',power:0,target:'味方全体',partyShieldRate:.1,ai383:'shield'}),
+ skill('guard','従騎の小さな盾',12,3,'本人以外へ開戦時HP8%の盾を2ラウンド。特殊能力と1ラウンド1回を共有。',{type:'buff',power:0,target:'味方全体',paperShield410:true,partyShieldRate:.08,ai383:'shield'}),
  skill('path','夜道の一閃',10,1,'風属性1.15倍。攻撃低下中には威力1.35倍。',{power:1.15,bonusVsEffect:{kind:'atkDown',multiplier:1.35},ai383:'strike'})]},
  {key:'lyriet',name:'蒼刃の誓姫リリエット',rarity:'R',element:'ice',race:'golem',role:'attack',tacticRole383:'striker',stats:[136,34,13,24,20,28],maxMp:54,captureCap383:.55,habitat383:'黒根の侵食域・再探索「飢えた根脈」',lore383:'失われた騎士団の誓約から生まれた蒼い自動人形。双子の妹ロゼットに背を預け、退く者を守るために剣を振るう。',counter383:'妹の障壁と共鳴で攻守を整える剣士。速度低下を浄化し、共鳴相手を集中攻撃して分断する。',skills:[
  skill('frost','蒼誓・凍てる切先',12,2,'氷属性1.05倍。速度18%低下（2ターン）。',{power:1.05,effects:[{kind:'spdDown',value:.18,turns:2,enemy:true}],ai383:'setup'}),

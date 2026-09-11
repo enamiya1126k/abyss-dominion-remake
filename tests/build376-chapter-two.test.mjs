@@ -1,3 +1,4 @@
+import {cleanupSingles410} from '../src/battle/SingleTraits410.js';
 import {pickupChapterTwoKey380} from '../src/chapterTwo/ChapterTwoSystem.js';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';import vm from 'node:vm';
@@ -58,7 +59,7 @@ const main=readFileSync(new URL('../src/main.js',import.meta.url),'utf8');
 const finishSource=main.slice(main.indexOf('function finishChapterTwoBattle('),main.indexOf('\nfunction openExploreFloorSelector',main.indexOf('function finishChapterTwoBattle(')));
 function finishFixture({saveFails=false}={}){
  const save=start(),attempt=battleAt(save.state,'patrol');save.state.activeBattle={specialBattleType:'chapterTwo',chapterTwoToken:attempt.token};const modals=[];const modal={classList:{add(){}},querySelector:()=>({}),remove(){}};
- const context={chapterTwoAutoModal380(){},battleContributionSnapshot:()=>({}),chapterTwoRewardBody:()=>'',openBattleContributionReport:(_,cb)=>cb(),showChapterTwoProgress:()=>{},save:{state:save.state,save:()=>!saveFails},battle:{specialBattleType:'chapterTwo',chapterTwoToken:attempt.token,party:save.state.monsters},settleChapterTwoEncounter,chapterTwoObjective,chapterTwoState,CHAPTER_TWO_ENCOUNTERS:ENCOUNTERS,syncPersistentAilments(){},clearPartySynergy(){},restorePartyVitals(){},cleanupUltimateBattle(){},document:{querySelector:()=>({remove(){}})},app:{insertAdjacentHTML:(_,html)=>modals.push(html)},audio:{sfx(){}},render(){},Modal:(title,body)=>title+body,topModal:()=>modal,activeEnemy:null,snapshot:null,screen:'chapterTwoField'};
+ const context={chapterTwoAutoModal380(){},battleContributionSnapshot:()=>({}),chapterTwoRewardBody:()=>'',openBattleContributionReport:(_,cb)=>cb(),showChapterTwoProgress:()=>{},save:{state:save.state,save:()=>!saveFails},battle:{specialBattleType:'chapterTwo',chapterTwoToken:attempt.token,party:save.state.monsters},settleChapterTwoEncounter,chapterTwoObjective,chapterTwoState,CHAPTER_TWO_ENCOUNTERS:ENCOUNTERS,syncPersistentAilments(){},clearPartySynergy(){},restorePartyVitals(){},cleanupUltimateBattle(){},cleanupSingles410,document:{querySelector:()=>({remove(){}})},app:{insertAdjacentHTML:(_,html)=>modals.push(html)},audio:{sfx(){}},render(){},Modal:(title,body)=>title+body,topModal:()=>modal,activeEnemy:null,snapshot:null,screen:'chapterTwoField'};
  vm.createContext(context);vm.runInContext(finishSource,context);return{context,modals};
 }
 test('actual battle settlement integration clears the checkpoint and commits rewards together',()=>{

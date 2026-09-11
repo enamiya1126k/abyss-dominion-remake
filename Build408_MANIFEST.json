@@ -1,0 +1,85 @@
+{
+  "build": 408,
+  "version": "3.1.88",
+  "base_build": 407,
+  "save_schema_version": 84,
+  "new_tests_passed": 30,
+  "regression_tests_passed": 132,
+  "preexisting_ui_assertions_excluded": 3,
+  "online_magic_circle_suite": "blocked_by_missing_CoopBossCatalog",
+  "individual_traits_enabled": false,
+  "pair_enhancements_enabled": false,
+  "browser_or_iphone_qa": false,
+  "files": [
+    {
+      "path": "index.html",
+      "sha256": "62aa0c19b6085cb0fc9623671cb2b74172b9bd934358b5df2d15b7725c99ede9",
+      "before_sha256": "2ace02b5bc0f486274a98a5c6faf3e72c5d78a67d4aa649e176cf941ae6560e8"
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "3698ba08d15997f205f4c69cb86634c63b498d5902fc5165426ad9b91f04b5a3",
+      "before_sha256": "8ad91b2ee327e5ced3c988f3121b19e427d8ed31ca2550802dbab74a3fc8352b"
+    },
+    {
+      "path": "src/core/config.js",
+      "sha256": "e0fdc2f46a064e61c25315048ec267038694e60008ce3c1010c8dd3958d66887",
+      "before_sha256": "a3a9eec2c3027bda3883bc48543e8de4d4a8699ba77e015e9043bea65e9137de"
+    },
+    {
+      "path": "src/services/SaveService.js",
+      "sha256": "310fbfe647e5f7c86ce7944443988663a3d4bfe98a28695a899e88ab29365494",
+      "before_sha256": "2e67553505613b87af19020b28fe14d594649b1a91dbd4df2d26bc68c8b8dcd2"
+    },
+    {
+      "path": "src/battle/BattleRules.js",
+      "sha256": "30810c58646728d510f304b561825869d62f4a7ad72d09f2aa8cca90cdc1547b",
+      "before_sha256": "b68e1583c3e61ea8d4f5b0f5a7a7fd60f67e6a1897d7c3f09d979ff05c90bc9b"
+    },
+    {
+      "path": "src/battle/TwinResonance385.js",
+      "sha256": "a8e2e136141a10645605ed386723de7c25ea8bb45b5af738f3dd94d67f949115",
+      "before_sha256": "d01172d1a22d5f3d39696d30b16f3c598708f92cb1fc11dcf4aac01149bd383a"
+    },
+    {
+      "path": "src/battle/ChapterTwoAbilityRuntime408.js",
+      "sha256": "c8996f2c7a2aa254b02ee73f6776bc6f51771f3734eae4fa21cf553016d4de4e",
+      "before_sha256": null
+    },
+    {
+      "path": "src/data/ChapterTwoAbilityDesign408.js",
+      "sha256": "63996a272d96177a31f2f4a55a26d5c4519d034af76793577d0b4ceb2dee7993",
+      "before_sha256": null
+    },
+    {
+      "path": "tests/build408-ability-foundation.test.mjs",
+      "sha256": "c1c8beccea89ae0700ba11e15aaf02005b50470c812ff87c104adb43db009a09",
+      "before_sha256": null
+    },
+    {
+      "path": "README_BUILD408.txt",
+      "sha256": "180b9e5407a0250986e48fa110724a54fc3d3d1d4a74ab9ca5a11172a911f904",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build408/ABILITY_DESIGN.md",
+      "sha256": "f5bb9a6c3fe751491e7b76778d58209d85ce1758e4394531cb164b7e5aa1e17e",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build408/VALIDATION.md",
+      "sha256": "cb174f7a1d97c3e5c944d7ecceadcede45cce0776e3b46b73ba5ec0b74405e2f",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build408/current-roster-and-skills.json",
+      "sha256": "383d46da97c060e4a7d13965deac38ab8e724f2280e700d422ec5e9c3666c614",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build408/ten-gods-reference.json",
+      "sha256": "655b9d1896be127f9358614369415a55f8f6a94bfc9c87d7e60c798323463b04",
+      "before_sha256": null
+    }
+  ]
+}

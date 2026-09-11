@@ -1,0 +1,41 @@
+{
+  "saveCases": [
+    "fresh402",
+    "schema72",
+    "schema75",
+    "first99",
+    "first100defeat",
+    "secondUnlock",
+    "secondActive"
+  ],
+  "firstChapterGeometryCases": 60,
+  "firstChapterArchiveCases": 10,
+  "performance": {
+    "environment": "Node CPU only; browser/iPhone FPS and GPU memory unmeasured",
+    "fixture": {
+      "monsters": 3000,
+      "equipment": 3000,
+      "jsonBytes": 4401161
+    },
+    "archive": {
+      "samples": 25,
+      "medianMs": 0.282,
+      "p95Ms": 0.432
+    },
+    "home": {
+      "samples": 25,
+      "medianMs": 2.869,
+      "p95Ms": 3.318
+    },
+    "progress": {
+      "samples": 25,
+      "medianMs": 0.014,
+      "p95Ms": 0.043
+    },
+    "serialization": {
+      "samples": 25,
+      "medianMs": 26.977,
+      "p95Ms": 29.404
+    }
+  }
+}

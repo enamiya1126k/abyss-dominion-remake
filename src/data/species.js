@@ -1,3 +1,4 @@
+import {applyChapterTwoPairName406} from './chapterTwoPairNames406.js?v=3.1.86-build406';
 import {CHAPTER_TWO_SPECIES392} from './chapterTwoSpecies392.js?v=3.1.72-build392';
 import {CHAPTER_TWO_SPECIES391} from './chapterTwoSpecies391.js?v=3.1.71-build391';
 import {CHAPTER_TWO_SPECIES390} from './chapterTwoSpecies390.js?v=3.1.70-build390';
@@ -81,5 +82,5 @@ function highRarityStrategicIdentity(species){
 }
 const ALL_SPECIES={...BASE_SPECIES,...EXPANDED_SPECIES,...ADDITIONAL_SPECIES,...MYTHIC_SERIAL_SPECIES,...BUILD198_SPECIES,...RAID_SPECIES,...CHAPTER_TWO_SPECIES383,...CHAPTER_TWO_SPECIES384,...CHAPTER_TWO_SPECIES385,...CHAPTER_TWO_SPECIES386,...CHAPTER_TWO_SPECIES387,...CHAPTER_TWO_SPECIES388,...CHAPTER_TWO_SPECIES389,...CHAPTER_TWO_SPECIES390,...CHAPTER_TWO_SPECIES391,...CHAPTER_TWO_SPECIES392};
 export const SPECIES=Object.freeze(Object.fromEntries(
-  Object.entries(ALL_SPECIES).map(([id,species])=>[id,applyMonsterNameOverride(highRarityStrategicIdentity({...species,element:canonicalAttribute(species.element,id)}))])
+  Object.entries(ALL_SPECIES).map(([id,species])=>[id,applyChapterTwoPairName406(applyMonsterNameOverride(highRarityStrategicIdentity({...species,element:canonicalAttribute(species.element,id)})))])
 ));

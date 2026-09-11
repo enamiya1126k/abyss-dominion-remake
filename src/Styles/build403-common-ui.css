@@ -1,0 +1,416 @@
+/* Build403: reuse the existing black / gold furniture. The ID scope wins over
+   historical screen-specific !important rules without changing rarity art. */
+#app .game-modal > .game-modal-card {
+  border-radius: 0 !important;
+  border-image: var(--alpha115-frame) 44 fill / 9px stretch !important;
+  background: linear-gradient(180deg,#141413f7,#08090af9 46%,#050608fc),
+    repeating-linear-gradient(90deg,#ffffff08 0 1px,transparent 1px 4px) !important;
+}
+/* Only the shared header/body/footer contract is normalized. Bespoke battle
+   rewards and cutscenes without those children retain their own layout. */
+#app .game-modal > .game-modal-card:where(:has(> .game-modal-body):has(> .modal-primary)) {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 0 !important;
+  max-height: calc(100dvh - max(20px,env(safe-area-inset-top)) - max(20px,env(safe-area-inset-bottom))) !important;
+  overflow: hidden !important;
+}
+#app .game-modal > .game-modal-card > .game-modal-body {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: auto;
+}
+#app .game-modal > .game-modal-card > :is(h2,.modal-primary) { flex: 0 0 auto !important; }
+#app .game-modal > .game-modal-card > .modal-x {
+  position: absolute !important;
+  left: auto !important;
+  right: 10px !important;
+  top: 10px !important;
+  float: none !important;
+  width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 6 !important;
+}
+#app .game-modal > .game-modal-card > h2 {
+  box-sizing: border-box;
+  min-height: 44px;
+  margin: 0 50px 8px 0 !important;
+  padding: 0 !important;
+  overflow-wrap: anywhere;
+}
+#app .game-modal .game-modal-card .game-modal-body
+  :is(button, input[type="button"], input[type="submit"]):not(:where(.gacha-carousel-dots button, .monster-card, .equipment-card)) {
+  box-sizing: border-box;
+  border: 5px solid transparent !important;
+  border-image: var(--alpha115-frame) 44 fill / 5px stretch !important;
+  border-radius: 0 !important;
+  background: linear-gradient(160deg,#201e18,#090a0c 75%) !important;
+  color: #f3ead7 !important;
+  box-shadow: inset 0 0 12px #0007,0 2px 5px #0006 !important;
+  touch-action: manipulation;
+}
+#app .game-modal .game-modal-body
+  :is(button, input[type="button"], input[type="submit"]):not(:where(.gacha-carousel-dots button, .monster-card, .equipment-card))
+  :is(b, strong) { color: inherit; }
+#app .game-modal .game-modal-card .game-modal-body
+  :is(button.active, button.selected, button[aria-selected="true"], button[aria-pressed="true"], button[aria-current="page"], button:enabled:active) {
+  border-image-source: var(--alpha115-frame-active) !important;
+  background: linear-gradient(160deg,#4b361b,#15110b) !important;
+  color: #ffe8ad !important;
+}
+#app .game-modal .game-modal-card .game-modal-body .gacha-carousel-dots button {
+  border: 0 !important;
+  border-image: none !important;
+  background: #716550 !important;
+  box-shadow: none !important;
+}
+#app .game-modal .game-modal-card .game-modal-body .gacha-carousel-dots button.active {
+  background: #e1bc68 !important;
+  box-shadow: 0 0 7px #d9b75c88 !important;
+}
+#app .game-modal .game-modal-body :is(button, select, input):focus-visible {
+  outline: 2px solid #f4d588 !important;
+  outline-offset: -3px;
+}
+#app .game-modal .game-modal-body :is(select, input:not([type="checkbox"]):not([type="radio"]):not([type="range"])) {
+  border-radius: 2px !important;
+  border-color: #967841 !important;
+  background: #0c0d0f !important;
+  color: #f0e4c9 !important;
+}
+#app .game-modal .game-modal-body :is(
+  .power-record-tabs, .player-name-shortcut363, .power-ranking-row,
+  .power-ranking-board > header, .power-ranking-season,
+  .magic-circle-workshop > header, .magic-circle-row, .circle-research398,
+  .collection395-progress, .collection395-item, .replay395, .refine395-preview,
+  .chapter397-gacha > header, .chapter397-banner
+) {
+  border-radius: 0 !important;
+  border-color: #75613c;
+  background: linear-gradient(130deg,#1b1914,#090a0d 80%) !important;
+  color: #e9dfcc;
+}
+
+/* The two long-list dialogs have one bounded card. The title and close button
+   are fixed grid rows, never overlays on top of the scrolling contents. */
+#app :is(.magic-circle-modal, [data-power-record-modal]) > .game-modal-card {
+  display: grid !important;
+  grid-template-rows: auto minmax(0,1fr) auto !important;
+  gap: 8px !important;
+  box-sizing: border-box !important;
+  width: min(100%,680px) !important;
+  height: min(900px,calc(100vh - 32px)) !important;
+  height: min(900px,calc(100dvh - max(16px,env(safe-area-inset-top)) - max(16px,env(safe-area-inset-bottom)))) !important;
+  min-height: 0 !important;
+  max-height: calc(100dvh - max(16px,env(safe-area-inset-top)) - max(16px,env(safe-area-inset-bottom))) !important;
+  padding: 14px !important;
+  overflow: hidden !important;
+}
+#app :is(.magic-circle-modal, [data-power-record-modal]) > .game-modal-card > h2 {
+  font-size: clamp(20px,5vw,28px) !important;
+  line-height: 1.4 !important;
+  margin-bottom: 0 !important;
+}
+#app :is(.magic-circle-modal, [data-power-record-modal]) > .game-modal-card > .modal-primary {
+  position: relative !important;
+  inset: auto !important;
+  margin: 0 !important;
+  width: 100% !important;
+  min-height: 48px !important;
+  height: auto !important;
+  padding: 6px 10px !important;
+  font-size: 18px !important;
+  flex: none !important;
+}
+#app :is(.magic-circle-modal, [data-power-record-modal]) > .game-modal-card > .game-modal-body {
+  display: grid !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+/* Research is an entry inside this scrollport, not an extra implicit grid row. */
+#app .magic-circle-modal .magic-circle-workshop {
+  display: grid !important;
+  grid-template-rows: auto minmax(0,1fr) auto !important;
+  gap: 8px !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+#app .magic-circle-modal .magic-circle-workshop > header {
+  grid-template-columns: 72px minmax(0,1fr) !important;
+  min-height: 0 !important;
+  padding: 8px !important;
+  gap: 8px;
+}
+#app .magic-circle-modal .workshop-circle {
+  width: 70px !important;
+  height: 70px !important;
+  min-height: 0 !important;
+  max-width: 70px !important;
+}
+#app .magic-circle-modal .workshop-circle img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+}
+#app .magic-circle-modal .magic-circle-workshop > header h3 { font-size: 17px !important; }
+#app .magic-circle-modal .magic-circle-workshop > header :is(small,p,strong) {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+#app .magic-circle-modal .magic-circle-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  box-sizing: border-box !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 2px 2px 14px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  scroll-padding-block: 8px 14px;
+}
+#app .magic-circle-modal .magic-circle-list > * {
+  position: relative !important;
+  inset: auto !important;
+  flex: 0 0 auto !important;
+  min-height: min-content;
+  margin: 0 !important;
+}
+#app .magic-circle-modal .circle-research398 { padding: 10px !important; }
+#app .magic-circle-modal .circle-research398 h3 { font-size: 16px !important; }
+#app .magic-circle-modal .circle-research398 p { font-size: 12px !important; }
+#app .magic-circle-modal :is(.circle-research398,.magic-circle-row) button {
+  min-height: 44px !important;
+  padding: 6px 5px !important;
+  line-height: 1.4 !important;
+  white-space: normal !important;
+}
+#app .magic-circle-modal .magic-circle-workshop > .muted {
+  position: static !important;
+  margin: 0 !important;
+  padding: 4px 0 !important;
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+
+/* Tabs stay visible. Everything beneath them shares ONE scrollport, so neither
+   the player card nor the season note can consume a hidden list's last rows. */
+#app [data-power-record-modal] .game-modal-body {
+  grid-template-rows: auto minmax(0,1fr) !important;
+  gap: 8px !important;
+}
+#app [data-power-record-modal] .power-record-tabs {
+  display: grid !important;
+  grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+  gap: 6px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+#app [data-power-record-modal] .power-record-tabs button {
+  min-height: 44px !important;
+  padding: 7px 6px !important;
+  font-size: 14px !important;
+}
+#app [data-power-record-modal] .power-record-panel {
+  display: block !important;
+  box-sizing: border-box !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 2px 16px !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  scroll-padding-block: 8px 16px;
+}
+#app [data-power-record-modal] .power-ranking-board {
+  display: block !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+#app [data-power-record-modal] .power-ranking-board > .power-ranking-toolbar403 {
+  position: static !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  min-height: 44px !important;
+  margin: 0 0 8px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+#app [data-power-record-modal] .power-ranking-toolbar403 h3 {
+  margin: 0 !important;
+  min-width: 0;
+  color: #eed9aa !important;
+  font-size: clamp(16px,4.2vw,21px) !important;
+  line-height: 1.35 !important;
+}
+#app [data-power-record-modal] .power-ranking-toolbar403 button {
+  flex: none !important;
+  width: auto !important;
+  min-width: 64px !important;
+  min-height: 44px !important;
+  padding: 6px 9px !important;
+  font-size: 14px !important;
+}
+#app [data-power-record-modal] .player-name-shortcut363 {
+  gap: 8px !important;
+  margin: 0 0 8px !important;
+  padding: 8px !important;
+}
+#app [data-power-record-modal] .player-name-shortcut363 b { font-size: 14px !important; }
+#app [data-power-record-modal] .player-name-shortcut363 small { font-size: 11px !important; }
+#app [data-power-record-modal] .player-name-shortcut363 button {
+  min-height: 44px !important;
+  padding: 5px 8px !important;
+  font-size: 12px !important;
+}
+#app [data-power-record-modal] .power-ranking-season {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin: 0 0 8px !important;
+  padding: 8px !important;
+  min-height: 0 !important;
+}
+#app [data-power-record-modal] .power-ranking-season > span,
+#app [data-power-record-modal] .power-ranking-season > span .pixel-icon {
+  flex: 0 0 28px !important;
+  width: 28px !important;
+  height: 28px !important;
+}
+#app [data-power-record-modal] .power-ranking-season > div { min-width: 0; }
+#app [data-power-record-modal] .power-ranking-season b { display: block; font-size: 14px !important; }
+#app [data-power-record-modal] .power-ranking-season small { display: block; font-size: 11px !important; line-height: 1.5; }
+#app [data-power-record-modal] .power-ranking-note {
+  position: static !important;
+  margin: 6px 0 8px !important;
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+}
+#app [data-power-record-modal] .power-ranking-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+#app [data-power-record-modal] .power-ranking-list > * { flex: 0 0 auto !important; }
+#app [data-power-record-modal] .game-modal-card .power-ranking-list > .power-ranking-row {
+  width: 100% !important;
+  min-height: 76px !important;
+  height: auto !important;
+  border-width: 5px !important;
+  padding: 8px 6px !important;
+}
+
+/* A skill menu is a temporary bottom panel, like the existing item menu. Its
+   scrollport shrinks with the available viewport, not with its content height. */
+#app .battle-screen.side-battle-v2 .battle-command.has-skill-menu {
+  position: fixed !important;
+  inset: auto max(10px,env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left)) !important;
+  box-sizing: border-box !important;
+  width: auto !important;
+  height: min(62vh,580px) !important;
+  height: min(62dvh,580px) !important;
+  min-height: 0 !important;
+  max-height: calc(100dvh - max(20px,env(safe-area-inset-top)) - max(20px,env(safe-area-inset-bottom))) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+  overflow: hidden !important;
+  padding: 10px !important;
+  z-index: 90 !important;
+  border: 8px solid transparent !important;
+  border-image: var(--alpha115-frame-active) 44 fill / 8px stretch !important;
+  border-radius: 0 !important;
+  background: #090a0d !important;
+  box-shadow: 0 -8px 30px #000b !important;
+}
+#app .battle-screen .has-skill-menu > :is(.battle-command-head,.target-help) { flex: 0 0 auto !important; }
+#app .battle-screen .has-skill-menu > .battle-skill-panel-v317 {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  padding: 6px !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+}
+#app .battle-screen .has-skill-menu .battle-skill-panel-v317 > header {
+  position: static !important;
+  flex: 0 0 auto !important;
+  grid-template-columns: minmax(0,1fr) auto 44px !important;
+}
+#app .battle-screen .has-skill-menu .battle-skill-close-top {
+  width: 44px !important;
+  min-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+}
+#app .battle-screen .has-skill-menu .battle-skill-command-list-v317 {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 2px 2px 16px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scroll-padding-block: 8px 16px;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+#app .battle-screen .has-skill-menu .battle-skill-choice {
+  flex: 0 0 auto !important;
+  height: auto !important;
+  max-height: none !important;
+}
+@media (max-width:360px) {
+  #app :is(.magic-circle-modal,[data-power-record-modal]) > .game-modal-card { padding: 10px !important; }
+  #app .magic-circle-modal .magic-circle-workshop > header { grid-template-columns: 52px minmax(0,1fr) !important; }
+  #app .magic-circle-modal .workshop-circle { width: 50px !important; height: 50px !important; }
+}
+@media (max-height:480px) {
+  #app .magic-circle-modal .magic-circle-workshop > header { grid-template-columns: 44px minmax(0,1fr) !important; padding: 4px !important; }
+  #app .magic-circle-modal .workshop-circle { width: 42px !important; height: 42px !important; }
+  #app .magic-circle-modal .magic-circle-workshop > header p { display: none; }
+  #app .battle-screen.side-battle-v2 .battle-command.has-skill-menu { height: 88dvh !important; }
+  #app .battle-screen .has-skill-menu > .target-help { display: none; }
+}

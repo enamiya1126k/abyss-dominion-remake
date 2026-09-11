@@ -1,0 +1,158 @@
+{
+  "build": 410,
+  "version": "3.1.90",
+  "base_build": 409,
+  "save_schema_version": 84,
+  "tests_passed": 321,
+  "new_tests_passed": 83,
+  "regression_tests_passed": 238,
+  "excluded_tests": 0,
+  "native_matrix_battles": 320,
+  "individual_traits_enabled": true,
+  "pair_enhancements_enabled": true,
+  "browser_visual_qa": false,
+  "iphone_qa": false,
+  "online_server_integration": false,
+  "files": [
+    {
+      "path": "docs/build410/SINGLE_TRAITS.md",
+      "sha256": "9fd2215c496aae954b721dbe4b8adc64b75df838bba23c52f233f72873cde6d6",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build410/VALIDATION.md",
+      "sha256": "3d33f08485fb3e15f00233a4df04533f2bda03f30adf224594b20c7cf4318739",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build410/combat-samples.json",
+      "sha256": "11dbcf5bbef74e1b818d4c718f8445d6cd568ea1b2eca20ce411fa3d638e57e2",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build410/combat-summary.json",
+      "sha256": "985f85eb7f86ed5de616c584d7819f49ac205e38d6fc8fc5e7eab6d29c943ab4",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build410/regression.tap",
+      "sha256": "f7e93a78c9f74f911a0ab3a88f1d42619e9d784b8d04ba2f7cf3a649f9c74960",
+      "before_sha256": null
+    },
+    {
+      "path": "index.html",
+      "sha256": "e75d21c7b0ac94ed83c6a2fd7c2fb54c1f3b14392cf2766784e4e82e804379f8",
+      "before_sha256": "e6b2607daebc8d8670ac105f410869ea90cb5909043459c1a8bf384f4a702210"
+    },
+    {
+      "path": "src/battle/BattleRules.js",
+      "sha256": "8fd6fa80bf30dc586a5b98682d14c04341295869bd9afdacb153572b5f1654c9",
+      "before_sha256": "d99b74544d754f4b9e1984ee122f401d7d4277f8ef501b8febc3440d27994b6a"
+    },
+    {
+      "path": "src/battle/SingleTraits410.js",
+      "sha256": "6bcc70dacbe10ed0b1778647504d047fc7b6ce0e07f8b3532d19be3fce69859d",
+      "before_sha256": null
+    },
+    {
+      "path": "src/core/EndgameUltimateSystem.js",
+      "sha256": "ae2f2ba0870ee7b84a75a0f545a9a4d69399678742bda5cbb76e9438c478e661",
+      "before_sha256": "66e98563fa3eaf906cf51aafc55198bb1ff91eebe60b99c6b31f0c41bdb06db5"
+    },
+    {
+      "path": "src/core/HeroAllianceSystem.js",
+      "sha256": "bc271f582d469b95c4ab10b3d5457da051268b59f2ad46fcbc082cfaa5043649",
+      "before_sha256": "5c7c7efe07cc8cb0fa5b42908d652682a93c36735dda8b093bef4fe730afe533"
+    },
+    {
+      "path": "src/core/config.js",
+      "sha256": "534962e8f5528c8c470cc3ff2ea98d5bb865192c8052fe53bb694b83b4486cc5",
+      "before_sha256": "478362959ddcda3b20d9d0c6e76f7607d4d2392454b1ba3223da3cc5a105c599"
+    },
+    {
+      "path": "src/data/chapterTwoSpecies388.js",
+      "sha256": "018a24c42f9ec9ce78080e871b28afda6a370e12ed32fc9ac0cb52303a85e8be",
+      "before_sha256": "a98790950998298f4bb4d896d1acc352c78b83a9bf0d01136832a6edbeeb97f8"
+    },
+    {
+      "path": "src/data/statusEffects.js",
+      "sha256": "616c7e444b98ba10f28405b3dc76a349fa790e876fc706bd16bcca29c9838564",
+      "before_sha256": "bb05d23d2a5431f0c0c8513540b182fa4324fb503525e45d8e8848ba8ee1054e"
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "47a58f8cd7b1d3b682b71fffcee075cd7d83fb6a3bee7dfc3f0e8c47730cb62b",
+      "before_sha256": "7826af6e1b220fd656308ddd572674fab60f1e885b9a71ce82beda8c50bed3cc"
+    },
+    {
+      "path": "src/models/Monster.js",
+      "sha256": "ac783cbd9ac8895a24ad19e722d4df0d70e174ea2f45e30015c10442be55f749",
+      "before_sha256": "54ae40ec88efe84e0f7c814a7be82d0f0c4a6dcbfffcf80152f3a0ba48714ccb"
+    },
+    {
+      "path": "src/ui/TwinStatus385.js",
+      "sha256": "5d2f9dbb88404e3aa26a2f6bbfbc03758c64cf8bfc0505f6e575e8278de98f1d",
+      "before_sha256": "6bf0c77ff5fe68fdd9937272cc9895a998f06e581b5676dff95fd58fbecc19bd"
+    },
+    {
+      "path": "src/ui/screens/BattleScreen.js",
+      "sha256": "07d062c74011268bc701346c9491f0a902813b47cbe6acdae5afd355cf9fbe28",
+      "before_sha256": "e2096faab69c35f01432ac43496beb1cdf817df98c4bc22d9449270ca994cb70"
+    },
+    {
+      "path": "tests/build388-oath-heroines.test.mjs",
+      "sha256": "aba1ab5a5a3ff4a5a398575bd3d2c1a860b07c75e27b5388711ace51856d8356",
+      "before_sha256": "b7b371eb6c0524a7a94a157e3eac0922ccc68d3d3e8b12723f8b0b120e4f7135"
+    },
+    {
+      "path": "tests/build389-keys-thunder.test.mjs",
+      "sha256": "15b2a425f362134032b70212f2e531d2ba6b10f6330a34664ad1a240f3653745",
+      "before_sha256": "f5c3c1f11c9e5a649a00b2e58e7bb40dcc0e02af8e81648252f8a48ef4ceb23e"
+    },
+    {
+      "path": "tests/build395-polish.test.mjs",
+      "sha256": "86a9add74298d2a1f9683c85147ca9cd32d6bebe17261ea83eef39e0171f339d",
+      "before_sha256": "355f0ae17dd7924a55a6fdf7dd44fc26f480d42008a6ffb2ccf1934898979c04"
+    },
+    {
+      "path": "tests/build410-native-combat.test.mjs",
+      "sha256": "136b3b8d0dae4b875b54158611531bf7d40ec1596f3adb32f846739bc4f80fad",
+      "before_sha256": null
+    },
+    {
+      "path": "tests/build410-single-traits.test.mjs",
+      "sha256": "6ffab2679536be3d88739925890e3071ba18f88b2822e36b7d3c334f25126358",
+      "before_sha256": null
+    },
+    {
+      "path": "tests/helpers/pair409-vm.mjs",
+      "sha256": "cb11ce3ddadac303b97550a54aca2af2179ea43d0987887d1cccc046514c4b28",
+      "before_sha256": "bcda1f210a599ed802d04188c884827199d0955e5d4e7b59d667a5fc7d31aab2"
+    },
+    {
+      "path": "tools/build410/compare.mjs",
+      "sha256": "356cbe97b58dbcf3ae662bea3b0fdc6d940012b24447259044463e0939802a9b",
+      "before_sha256": null
+    },
+    {
+      "path": "tools/build410/native-harness.mjs",
+      "sha256": "16ba877b4e8ebd91767cac252e64449265b836219aeaea7bced4f7d48533f61f",
+      "before_sha256": null
+    },
+    {
+      "path": "tools/build410/native-source-map.json",
+      "sha256": "60e06a373416f1b3e19d8e12e0e65843bf879730b1830f9b0006f9930dd1655b",
+      "before_sha256": null
+    },
+    {
+      "path": "tools/build410/source-identity.json",
+      "sha256": "1ad779168cfb37c9bdb26ccbc61db5e45510b8d0c671b3e4201b29f05df99875",
+      "before_sha256": null
+    },
+    {
+      "path": "README_BUILD410.txt",
+      "sha256": "fd4dc6a100848a889bf20f51e777769462e3c7effefeae808c12eef51ee198bc",
+      "before_sha256": null
+    }
+  ]
+}

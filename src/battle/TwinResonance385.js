@@ -1,3 +1,5 @@
+import {beginPairSequence409,beforePairHit409,afterPairHit409,finishPairSequence409,notePairDispel409,notePairCleanse409,notePairMp409,writePairShield409} from './PairSynergy409.js?v=3.1.89-build409';
+import {reserveRound408} from './ChapterTwoAbilityRuntime408.js?v=3.1.88-build408';
 import {CHAPTER_TWO_PAIRS392} from '../data/chapterTwoPairs392.js?v=3.1.72-build392';
 import {CHAPTER_TWO_PAIRS391} from '../data/chapterTwoPairs391.js?v=3.1.71-build391';
 import {CHAPTER_TWO_PAIRS390} from '../data/chapterTwoPairs390.js?v=3.1.70-build390';
@@ -40,8 +42,7 @@ export function reserveTwin385(battle,actor,side='ally',blocked=()=>false){
  const plan=twinReady385(battle,actor,side,blocked);if(!plan)return null;
  const turn=Math.max(1,Math.floor(Number(battle.turn)||1)),key=`${side}:${plan.pair.id}:${actor.speciesId}`;
  const state=battle.twinResonance385??(battle.twinResonance385={used:{}});state.used??={};
- if(Number(state.used[key])>=turn)return null;
- state.used[key]=turn;
+ if(!reserveRound408(state.used,key,turn))return null;
  const count=plan.pair.members.filter(id=>Number(state.used[`${side}:${plan.pair.id}:${id}`])===turn).length;
  if(plan.pair.burst&&count>=plan.pair.burst.threshold)plan.pair={...plan.pair,...plan.pair.burst,finisher386:true};
  if(plan.pair.charge390){
@@ -62,8 +63,8 @@ export function queuePairCounter390(battle,defender,attacker,side='ally',landed=
  const plan=twinReady385(battle,defender,side,u=>counterBlocked390(battle,u)),other=side==='enemy'?'ally':'enemy';
  if(!plan?.pair.counter390||!twinRoster385(battle,other).includes(attacker)||!twinAlive385(attacker,other)||!guarded390(battle,defender,side,plan.pair))return false;
  const state=battle.twinResonance385??(battle.twinResonance385={used:{}}),turn=Math.max(1,Math.floor(Number(battle.turn)||1)),key=`${side}:${plan.pair.id}:${defender.speciesId}`;
- state.counterUsed390??={};if(Number(state.counterUsed390[key])>=turn)return false;
- state.counterUsed390[key]=turn;(state.counterQueue390??=[]).push({side,defenderId:defender.id,attackerId:attacker.id,pairId:plan.pair.id,turn});return true;
+ state.counterUsed390??={};if(!reserveRound408(state.counterUsed390,key,turn))return false;
+ (state.counterQueue390??=[]).push({side,defenderId:defender.id,attackerId:attacker.id,pairId:plan.pair.id,turn});return true;
 }
 export async function resolvePairCounters390(battle,environment){
  if(counterRunning390.has(battle)||!battle?.twinResonance385?.counterQueue390?.length)return 0;
@@ -75,7 +76,9 @@ export async function resolvePairCounters390(battle,environment){
   const env=environment(defender,side),pair={...plan.pair,...plan.pair.counter390,hits:1,shield:0,partyEffect:null,reaction390:true};
   const valid=()=>plan.members.every(u=>twinRoster385(battle,side).includes(u)&&twinAlive385(u,side)&&!twinActionBlocked395(battle,u,side)&&!env.blocked(u))&&guarded390(battle,defender,side,plan.pair)&&env.opponents().includes(attacker);
   if(!valid())continue;await env.cue({...plan,pair});if(!valid())continue;
-  await env.hit(plan.partner,attacker,pair);count++;
+  const response409={...plan,pair},synergy409=beginPairSequence409(battle,response409,env);
+  const damage409=await env.hit(plan.partner,attacker,pair);afterPairHit409(synergy409,attacker,damage409,pair);
+  await finishPairSequence409(synergy409,()=>plan.members.every(u=>twinRoster385(battle,side).includes(u)&&twinAlive385(u,side)&&!twinActionBlocked395(battle,u,side)&&!env.blocked(u)));count++;
  }}finally{counterRunning390.delete(battle);}return count;
 }
 // Shared orchestration keeps followups finite and rechecks deaths caused by counters.
@@ -86,6 +89,7 @@ export async function resolveTwin385(battle,actor,side,env){
  const valid=()=>plan.members.every(u=>twinRoster385(battle,side).includes(u)&&twinAlive385(u,side)&&!twinActionBlocked395(battle,u,side)&&!env.blocked(u));
  try{
   if(plan.pair.emergency&&plan.members.some(u=>env.hpRatio?.(u)<=plan.pair.emergency.threshold))plan.pair={...plan.pair,...plan.pair.emergency,rescue387:true};
+  const synergy409=beginPairSequence409(battle,plan,env);
   await env.cue(plan);
   if(!valid())return true;
   const pair=plan.pair,targets=pair.all?[...env.opponents()]:[env.opponents().find(u=>u.id===env.targetId)??env.opponents()[0]];
@@ -94,13 +98,16 @@ export async function resolveTwin385(battle,actor,side,env){
    for(let i=0;i<pair.hits;i++){
     if(!valid())return true;
     const foes=env.opponents(),target=foes.includes(chosen)?chosen:pair.all?null:foes[0];if(!target)break;
-    if(pair.dispelOne&&!dispelled){env.dispel(target);dispelled=true;}
-    if(pair.dispelEach392&&!dispelledTargets392.has(target)){env.dispel(target);dispelledTargets392.add(target);}
+    if(pair.dispelOne&&!dispelled){notePairDispel409(synergy409,env.dispel(target));dispelled=true;}
+    if(pair.dispelEach392&&!dispelledTargets392.has(target)){notePairDispel409(synergy409,env.dispel(target));dispelledTargets392.add(target);}
     const statusBonus=pair.bonusVsStatus&&env.hasStatus?.(target,pair.bonusVsStatus.id)?pair.bonusVsStatus.multiplier:1;
     const hpBonus=pair.bonusVsHp392&&env.opponentHpRatio?.(target)<=pair.bonusVsHp392.threshold?pair.bonusVsHp392.multiplier:1;
     const effectBonus=pair.bonusVsEffects&&pair.bonusVsEffects.kinds.every(kind=>env.hasEffect?.(target,kind))?pair.bonusVsEffects.multiplier:1,bonus=statusBonus*effectBonus*hpBonus;
-    const damage=await env.hit(plan.partner,target,bonus===1?pair:{...pair,power:pair.power*bonus});
+    const hitPair409=await beforePairHit409(synergy409,bonus===1?pair:{...pair,power:pair.power*bonus},target,i,chosen);
+    const damage=await env.hit(plan.partner,target,hitPair409);
+    if(!valid())return true;
     if(damage>0&&pair.debuff&&env.opponents().includes(target))env.weaken(target,pair.debuff);
+    afterPairHit409(synergy409,target,damage,hitPair409);
    }
   }
   if(!valid())return true;
@@ -109,14 +116,15 @@ export async function resolveTwin385(battle,actor,side,env){
    if(!valid())return true;
    const eligible=()=>twinRoster385(battle,side).includes(u)&&twinAlive385(u,side)&&!env.blocked(u);
    if(!eligible())continue;
-   if(pair.cleanse391)env.cleanse(u);
+   if(pair.cleanse391)notePairCleanse409(synergy409,env.cleanse(u));
    if(pair.heal)await env.heal(u,pair.heal,plan.partner);
    if(!valid())return true;if(!eligible())continue;
-   if(pair.mpHeal391)await env.restoreMp(u,pair.mpHeal391,plan.partner);
+   if(pair.mpHeal391)notePairMp409(synergy409,await env.restoreMp(u,pair.mpHeal391,plan.partner));
    if(!valid())return true;if(!eligible())continue;
-   if(pair.shield)env.shield(u,pair.shield);
+   if(pair.shield){env.shield(u,pair.shield);if(synergy409&&env.maxHp){battle.pairSynergy409.maxHp[`${side}:${u.id}`]=env.maxHp(u);writePairShield409(battle,side,u,pair.shield,pair.id);}}
    if(pair.partyEffect)env.boost(u,{...pair.partyEffect,sourceKey:`pair:${pair.id}`});
   }
+  await finishPairSequence409(synergy409,valid);
   return true;
  }finally{running.delete(battle);}
 }

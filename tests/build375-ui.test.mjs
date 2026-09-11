@@ -3,10 +3,12 @@ import {BattleScreen} from '../src/ui/screens/BattleScreen.js';
 import {mountBattleScreen} from '../src/ui/BattleScreenMount.js';
 class Element{
  constructor(cls='',children=[]){this.cls=cls;this.childNodes=[];this.attrs={class:cls};this.scrollLeft=0;children.forEach(c=>this.append(c))}
+ get firstChild(){return this.childNodes[0]??null}
+ get nextSibling(){return this.parent?.childNodes[this.parent.childNodes.indexOf(this)+1]??null}
  get attributes(){return Object.entries(this.attrs).map(([name,value])=>({name,value}))}
  removeAttribute(n){delete this.attrs[n]}setAttribute(n,v){this.attrs[n]=v}
  append(c){c.remove();this.childNodes.push(c);c.parent=this}
- insertBefore(c,b){c.remove();this.childNodes.splice(this.childNodes.indexOf(b),0,c);c.parent=this}
+ insertBefore(c,b){c.remove();this.childNodes.splice(b?this.childNodes.indexOf(b):this.childNodes.length,0,c);c.parent=this}
  remove(){if(this.parent){this.parent.childNodes.splice(this.parent.childNodes.indexOf(this),1);this.parent=null;this.removals=(this.removals||0)+1}}
  querySelector(s){return this.childNodes.find(c=>c.cls===s.slice(1))??null}
 }

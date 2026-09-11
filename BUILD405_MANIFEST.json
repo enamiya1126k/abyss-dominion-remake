@@ -1,0 +1,85 @@
+{
+  "build": 405,
+  "version": "3.1.85",
+  "base_build": 404,
+  "type": "incremental_patch",
+  "automated_tests": {
+    "passed": 52,
+    "new": 17,
+    "existing": 35
+  },
+  "iphone_verified": false,
+  "browser_visual_verified": false,
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 19323,
+      "sha256": "8df96f49db9d9a67d511cc7621a893826a3ab9d96afba65476909bbd1814343e"
+    },
+    {
+      "path": "src/Styles/build405-battle-circles.css",
+      "bytes": 5604,
+      "sha256": "97f2ef29707f5b7a3939da3936c38f1e951e4bc869f4dd33b6a0c1cce93174fc"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2256,
+      "sha256": "c71ee76deb64a650f2430800c6eb51b020d7aa0f91f3b6a61d729b8b1edb40d9"
+    },
+    {
+      "path": "src/main.js",
+      "bytes": 1100134,
+      "sha256": "e606873cd7eaefe9d8e35b483da671d2c9720f4c9151f785986acad3e431b7b0"
+    },
+    {
+      "path": "src/online/OnlinePartyClient.js",
+      "bytes": 330242,
+      "sha256": "86db03f52899f397b88c1571b03f696168bf0344a639c1d3afa37af57b0579a6"
+    },
+    {
+      "path": "src/online/OnlineViews.js",
+      "bytes": 107187,
+      "sha256": "bf339f3816e80e039beb9530ea8ce0dbf10a901ab33c5de39730ca1f3304aec4"
+    },
+    {
+      "path": "src/services/SaveService.js",
+      "bytes": 90314,
+      "sha256": "accd0b5b092d175810a9408e5274e9364a739d905a962188efc016fdfcc068cd"
+    },
+    {
+      "path": "src/ui/BattleBossLayout.js",
+      "bytes": 8468,
+      "sha256": "51494849ada0b2e0b057a79744e21ce0a38880f68233b3972d4263686d152d2d"
+    },
+    {
+      "path": "src/ui/BattleCircleLayout405.js",
+      "bytes": 2931,
+      "sha256": "49521be743c460922399e53c542d9de7356617457f5c3c36de7b154e67296d8a"
+    },
+    {
+      "path": "src/ui/BattleScreenMount.js",
+      "bytes": 1349,
+      "sha256": "e9c4d10dbf3339a436d273065865fb5ed8c049017687b25963b4b29af9ebbfb8"
+    },
+    {
+      "path": "src/ui/MagicCircleWorkshop405.js",
+      "bytes": 4312,
+      "sha256": "1b5271abe75dbccdc904d54b9b8bde9e0381aba74ab93f3a503b63df2341310d"
+    },
+    {
+      "path": "src/ui/screens/BattleScreen.js",
+      "bytes": 34566,
+      "sha256": "d076323566d53a9b516f0f2ad3edfab7c8407f8d52ae5f38dbfbe96dc3efacda"
+    },
+    {
+      "path": "src/ui/screens/HomeScreen.js",
+      "bytes": 18253,
+      "sha256": "0596f4ae469fcca141bb2e02f25882287afb6bd4c2636e7f43c7b6829151090c"
+    },
+    {
+      "path": "tests/build405-battle-circles.test.mjs",
+      "bytes": 17311,
+      "sha256": "a0f60039ffdd75fc66d8f9d60002c5105afdd04e9898ee96498babea64975799"
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+{
+  "build": 409,
+  "version": "3.1.89",
+  "base_build": 408,
+  "save_schema_version": 84,
+  "tests_passed": 238,
+  "new_tests_passed": 56,
+  "regression_tests_passed": 182,
+  "excluded_tests": 0,
+  "native_comparison_battles": 17280,
+  "all_pair_native_runs": 72,
+  "speed_and_pair_state_restore_matched_triples": 15,
+  "individual_traits_enabled": false,
+  "pair_enhancements_enabled": true,
+  "browser_visual_qa": false,
+  "iphone_qa": false,
+  "online_balance_qa": false,
+  "files": [
+    {
+      "path": "docs/build409/PAIR_SERIES.md",
+      "sha256": "b1bc773aae3ad851bf75fc82da3a3f9039ab307c585d1cfc5830e92fcdeb4455",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build409/VALIDATION.md",
+      "sha256": "087152251fc06a3e615cfb53ed58ca92fac5077801d317bb2fecf32908948cc0",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build409/comparison.csv",
+      "sha256": "920eeaed6f357d29ea73fd8e95e441dcce1b759144f899778d7ecc308d759d54",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build409/comparison.json",
+      "sha256": "08189ad4a8581aa38ebbb84e2dc0d6fade0c97e555aa49cef011703fe7762835",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build409/extra-checks.json",
+      "sha256": "a8d640c9afbcad9042030bd3a97d9ca9978871bdaeb4232ccbe6bc520b2df0d2",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build409/pair-series.json",
+      "sha256": "1f287007fd7d7d1c4636bec5f6e8032f60d8fdb1986ebf7d5120731fe6fafd38",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build409/regression.tap",
+      "sha256": "51fa277651ab564fc99f8022551e09467e816c5508693d25ed53f16a9e475ed8",
+      "before_sha256": null
+    },
+    {
+      "path": "docs/build409/samples.jsonl",
+      "sha256": "9263d7296239c97925027645ac89a6d767ec63a4ae44eb9a8c0cf357d5f2bc39",
+      "before_sha256": null
+    },
+    {
+      "path": "index.html",
+      "sha256": "e6b2607daebc8d8670ac105f410869ea90cb5909043459c1a8bf384f4a702210",
+      "before_sha256": "62aa0c19b6085cb0fc9623671cb2b74172b9bd934358b5df2d15b7725c99ede9"
+    },
+    {
+      "path": "src/Styles/build409-pair-series.css",
+      "sha256": "c8069036b58664b66b83069cdc2350761b2f3d9b46a5ae09198600a627febf25",
+      "before_sha256": null
+    },
+    {
+      "path": "src/battle/BattleRules.js",
+      "sha256": "d99b74544d754f4b9e1984ee122f401d7d4277f8ef501b8febc3440d27994b6a",
+      "before_sha256": "30810c58646728d510f304b561825869d62f4a7ad72d09f2aa8cca90cdc1547b"
+    },
+    {
+      "path": "src/battle/PairSynergy409.js",
+      "sha256": "0d28b7dfbd04a0b7c9fcc709887f68146dba29994e484bd4dd261897ff4f2a0d",
+      "before_sha256": null
+    },
+    {
+      "path": "src/battle/SkillSystem.js",
+      "sha256": "9fa36d7cb152c10fb83d3fd2b811e70f3da3d3e281b28419b420834ce5130384",
+      "before_sha256": "41d969c666079f1a028025972859cdfb669c28858c88f56add5c5fbb47a4f247"
+    },
+    {
+      "path": "src/battle/TwinResonance385.js",
+      "sha256": "736a808a06222b8e93603a556244cf75e0ff4254b132205b93e6ac1e6cca610a",
+      "before_sha256": "a8e2e136141a10645605ed386723de7c25ea8bb45b5af738f3dd94d67f949115"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoMonsters383.js",
+      "sha256": "0db9a5ddb9854c33a8192ab4ca32f55682c979866311c9acbcf44d8ac964b878",
+      "before_sha256": "332cfa1d4cd7a2a07aca7092dfa39b044e843e55aa21ce397e85ca1f7de15678"
+    },
+    {
+      "path": "src/core/config.js",
+      "sha256": "478362959ddcda3b20d9d0c6e76f7607d4d2392454b1ba3223da3cc5a105c599",
+      "before_sha256": "e0fdc2f46a064e61c25315048ec267038694e60008ce3c1010c8dd3958d66887"
+    },
+    {
+      "path": "src/main.js",
+      "sha256": "7826af6e1b220fd656308ddd572674fab60f1e885b9a71ce82beda8c50bed3cc",
+      "before_sha256": "3698ba08d15997f205f4c69cb86634c63b498d5902fc5165426ad9b91f04b5a3"
+    },
+    {
+      "path": "src/ui/PairEffects409.js",
+      "sha256": "657e0987232740e8cbd9f8a5a1b4d3978df59caab0ac6826e691bf0ccf5876ee",
+      "before_sha256": null
+    },
+    {
+      "path": "src/ui/TwinStatus385.js",
+      "sha256": "6bf0c77ff5fe68fdd9937272cc9895a998f06e581b5676dff95fd58fbecc19bd",
+      "before_sha256": "8c2e3b13242a2c6e2aa0fb4959b6df05301647fee77fbeba2ce86cd1ceca8562"
+    },
+    {
+      "path": "src/ui/screens/BattleScreen.js",
+      "sha256": "e2096faab69c35f01432ac43496beb1cdf817df98c4bc22d9449270ca994cb70",
+      "before_sha256": "9172e5df734ecae49ff9b1b89dafb53914ef2f9c617881c00839dac4bbc7889d"
+    },
+    {
+      "path": "tests/build385-twins.test.mjs",
+      "sha256": "3c63a20fd5a20696ef15eeaf42a9c04cfa541aa3e45ac75403c51dbc6b790633",
+      "before_sha256": "fbdaba74da40fe504dc1b1bb5dbbeb1f787445779a4456efc893e11c18d5cada"
+    },
+    {
+      "path": "tests/build386-pairs.test.mjs",
+      "sha256": "08bbdef72e72e2c39c23f0a0ae67404c81d5e465d3984075415c1184a39e70ee",
+      "before_sha256": "67f46bef25153bd6faa99daf1c4be0267c5afa859bd3d64743f041a5d5f92018"
+    },
+    {
+      "path": "tests/build387-finale.test.mjs",
+      "sha256": "cf97eed43245b7ebe93205f7854fc16a5a66bb566ebcbfc058cd87c70e71fb07",
+      "before_sha256": "7c2a26f8969e83aa5074adf17dcdbab1dab21a616e0c931eb5dad1ff9ec339d0"
+    },
+    {
+      "path": "tests/build388-oath-heroines.test.mjs",
+      "sha256": "b7b371eb6c0524a7a94a157e3eac0922ccc68d3d3e8b12723f8b0b120e4f7135",
+      "before_sha256": "87e3a44fac3f8c7ed368a7dcf3d647d1deca739bafc879d4cb3d4d76da4a8fcf"
+    },
+    {
+      "path": "tests/build389-keys-thunder.test.mjs",
+      "sha256": "f5c3c1f11c9e5a649a00b2e58e7bb40dcc0e02af8e81648252f8a48ef4ceb23e",
+      "before_sha256": "5ff86616e2ec7501362a1394cd5980ef4a948618891953b5edb89012eff1a1dd"
+    },
+    {
+      "path": "tests/build390-crystal-oaths.test.mjs",
+      "sha256": "4ecc622f771b17f0154d1f407f3e27242fd990d75415f4b73125f8c533b9cec2",
+      "before_sha256": "78116fe32f8685cda91032f68fae8a26875fab490856407b047fb78000ab6f1d"
+    },
+    {
+      "path": "tests/build391-wings-bells.test.mjs",
+      "sha256": "69e38f2642fc00356514542ce0812654672894b89982e490c7fd5d7dc7cfc170",
+      "before_sha256": "5d3f614c4181adf5e0e028e0dbb8a4b21922c6276ecb9a39cee48943715e04f8"
+    },
+    {
+      "path": "tests/build392-dreams-crowns.test.mjs",
+      "sha256": "509388324fad668ebac3d55da956f61c09c89b41b86763d1fc2acbf5da3f2021",
+      "before_sha256": "0a0c2e43edb89282ec1ef1bac287c53bed326d3b690560f98da3db389b98a576"
+    },
+    {
+      "path": "tests/build394-relics.test.mjs",
+      "sha256": "f79cb8704055a14d1e127a207baf28de9617afff6a464b61b15c401446c0faca",
+      "before_sha256": "5d8979890d6531e9e07550e653a015d1d3c287b081ffc9546dde9061661ceea4"
+    },
+    {
+      "path": "tests/build408-ability-foundation.test.mjs",
+      "sha256": "1b343c2ccd1287fa10acbce337bce989f34f48b735f54e4de6fa40a68c46bc02",
+      "before_sha256": "c1c8beccea89ae0700ba11e15aaf02005b50470c812ff87c104adb43db009a09"
+    },
+    {
+      "path": "tests/build409-pair-series.test.mjs",
+      "sha256": "334336a99bb5131cc807cf423231234ca03464ce7fbf611d1587cf5f69c5505a",
+      "before_sha256": null
+    },
+    {
+      "path": "tests/helpers/pair409-vm.mjs",
+      "sha256": "bcda1f210a599ed802d04188c884827199d0955e5d4e7b59d667a5fc7d31aab2",
+      "before_sha256": null
+    },
+    {
+      "path": "tools/build409/compare.mjs",
+      "sha256": "b3011d0a95ee6d15d6ed0b9150edc059fdd0c28392ec536be6f148bb7d521f57",
+      "before_sha256": null
+    },
+    {
+      "path": "tools/build409/extra-checks.mjs",
+      "sha256": "0bdae3fa944cbe3ba9a49ec01d63ad2659bc31ae531fecb0731ea03d1e3c82c1",
+      "before_sha256": null
+    },
+    {
+      "path": "tools/build409/native-harness.mjs",
+      "sha256": "045838da9f4af1f9d17892f3f53ec2e533a6557bccfa7fa1b351af9a0b0da114",
+      "before_sha256": null
+    },
+    {
+      "path": "tools/build409/native-source-map.json",
+      "sha256": "575a30f5da681148e57d8390e0973b26f9612231bac651d4b078840e20fb4bf3",
+      "before_sha256": null
+    },
+    {
+      "path": "tools/build409/scenarios.mjs",
+      "sha256": "5bf1d25004721f11f09c908a8b5c71a0448c7929a926c978e122a94c25608069",
+      "before_sha256": null
+    },
+    {
+      "path": "tools/build409/source-identity.json",
+      "sha256": "38f65018f05b3a79d795fc155b3d8c01fcd536cc1d0acf81b26cd8e7aac4e86a",
+      "before_sha256": null
+    },
+    {
+      "path": "README_BUILD409.txt",
+      "sha256": "d12aee17512c27a6572d1be0f17337506c5d2f393e60da076a3e3974af2b18c5",
+      "before_sha256": null
+    }
+  ]
+}

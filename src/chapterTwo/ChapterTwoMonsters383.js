@@ -1,3 +1,5 @@
+import {pairSkillCost409} from '../battle/PairSynergy409.js?v=3.1.89-build409';
+import {chapterTwoPairDisplayName406} from '../data/chapterTwoPairNames406.js?v=3.1.86-build406';
 import {prioritizeChapterTwoTargets393} from './ChapterTwoTargeting393.js?v=3.1.82-build402';
 import {CHAPTER_TWO_PAIRS392} from '../data/chapterTwoPairs392.js?v=3.1.72-build392';
 import {CHAPTER_TWO_SPECIES392} from '../data/chapterTwoSpecies392.js?v=3.1.72-build392';
@@ -28,7 +30,7 @@ export function chooseChapterTwoAction383(enemy,{allies=[enemy],opponents=[],bat
  enemy.specialCooldown=Math.max(0,(Number(enemy.specialCooldown)||0)-1);
  if(enemy.specialCooldown>0){enemy.intent='再唱封印のため通常攻撃';return 'attack';}
  const turn=Math.max(1,Number(battle.turn)||1),cooldowns=enemy.chapterTwoCooldowns383??={},team=allies.filter(x=>x.hp>0),foes=opponents.filter(x=>x.currentHp>0),effects=battle.allyEffects??{},ownEffects=battle.enemyEffects??{},ailments=battle.allyAilments??{};
- const ready=k=>(cooldowns[k.id]??0)<=turn&&(enemy.currentMp??0)>=k.mp;
+ const ready=k=>(cooldowns[k.id]??0)<=turn&&(enemy.currentMp??0)>=pairSkillCost409(battle,enemy,k,k.mp,'enemy');
  const choose=k=>{if(!k||!ready(k))return null;cooldowns[k.id]=turn+k.cooldown+1;enemy.intent=k.name;return k.id;};
  const find=role=>species.authoredSkills.find(k=>k.ai383===role&&ready(k));
  const marked=k=>foes.find(x=>k?.bonusVsStatus&&(ailments[x.id]??x.ailments??[]).some(e=>e.id===k.bonusVsStatus.id)||k?.bonusVsEffect&&(effects[x.id]??[]).some(e=>e.kind===k.bonusVsEffect.kind));
@@ -82,5 +84,5 @@ export function installChapterTwoHabitats383(encounters){
 }
 export function chapterTwoNativeHint383(encounter){
  if(!encounter?.chapterTwoNative383)return null;
- return encounter.species.map(id=>natives[id]).filter(Boolean).map(s=>`${s.name}：${s.counter383}`).join(' ');
+ return encounter.species.map(id=>natives[id]).filter(Boolean).map(s=>`${chapterTwoPairDisplayName406(s,s.name)}：${s.counter383}`).join(' ');
 }

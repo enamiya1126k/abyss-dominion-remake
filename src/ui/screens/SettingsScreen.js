@@ -1,5 +1,5 @@
-import {homeSkinSettings400} from '../HomeSkin400.js?v=3.1.82-build402';
-import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=3.1.82-build402";
+import {homeSkinSettings400} from '../HomeSkin400.js?v=3.1.87-build407';
+import{APP_VERSION,CONTENT_TEST_MODE,CONTENT_TEST_UNLOCK_FLOOR}from"../../core/config.js?v=3.1.87-build407";
 import{SERIAL_CODE_COUNT}from"../../core/SerialCodeSystem.js?v=3.1.82-build402";
 import { PlayerNameForm } from "../components/PlayerNameForm.js?v=3.1.43-build363";
 export function SettingsScreen(state,{playerName}={}){

@@ -33,6 +33,7 @@ function normalizeOnePersistentAilment(value){
  const captureBonus=Number(source.captureBonus);
  if(Number.isFinite(captureBonus)&&captureBonus>0)ailment.captureBonus=Math.max(0,Math.min(1,captureBonus));
  if(source.sourceMonsterId)ailment.sourceMonsterId=String(source.sourceMonsterId);
+ if(["ally","enemy"].includes(source.fromSide))ailment.fromSide=source.fromSide;
  return ailment;
 }
 

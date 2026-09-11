@@ -1,0 +1,82 @@
+{
+  "javascriptModules": 243,
+  "stylesheets": 158,
+  "cssAssetReferences": 155,
+  "importAliases": 105,
+  "missingLocalBaselineStyles": [
+    "./src/Styles/build164.css?v=2.11.2-build166",
+    "./src/Styles/build165.css?v=2.11.2-build166",
+    "./src/Styles/build166.css?v=2.11.2-build166",
+    "./src/Styles/build167.css?v=2.11.3-build167",
+    "./src/Styles/build168.css?v=2.11.4-build168",
+    "./src/Styles/build169.css?v=2.11.5-build169",
+    "./src/Styles/build170.css?v=2.11.6-build170",
+    "./src/Styles/build171.css?v=2.11.7-build171",
+    "./src/Styles/build172.css?v=2.11.8-build172",
+    "./src/Styles/build173.css?v=2.11.9-build173",
+    "./src/Styles/build174.css?v=2.11.10-build174",
+    "./src/Styles/build175.css?v=2.11.11-build175",
+    "./src/Styles/build176.css?v=2.11.12-build176",
+    "./src/Styles/build177.css?v=2.11.13-build177",
+    "./src/Styles/build178.css?v=2.11.14-build178",
+    "./src/Styles/build179.css?v=2.11.15-build179",
+    "./src/Styles/build180.css?v=2.11.16-build180",
+    "./src/Styles/build181.css?v=2.11.17-build181",
+    "./src/Styles/build182.css?v=2.11.18-build182",
+    "./src/Styles/build183.css?v=2.11.19-build183",
+    "./src/Styles/build184.css?v=2.11.20-build184",
+    "./src/Styles/build185.css?v=2.11.21-build185",
+    "./src/Styles/build186.css?v=2.11.22-build186",
+    "./src/Styles/build187.css?v=2.11.23-build187",
+    "./src/Styles/build188.css?v=2.11.24-build188",
+    "./src/Styles/build189.css?v=2.11.24-build189",
+    "./src/Styles/build190.css?v=2.11.25-build190",
+    "./src/Styles/build191.css?v=2.11.26-build191",
+    "./src/Styles/build192.css?v=2.11.27-build192",
+    "./src/Styles/build193.css?v=2.11.28-build193",
+    "./src/Styles/build202.css?v=2.11.37-build202",
+    "./src/Styles/build203.css?v=2.11.38-build203",
+    "./src/Styles/build204.css?v=2.11.39-build204",
+    "./src/Styles/build205.css?v=2.11.40-build205",
+    "./src/Styles/build206.css?v=2.11.41-build206",
+    "./src/Styles/build207.css?v=2.11.42-build207",
+    "./src/Styles/build208.css?v=2.11.43-build208",
+    "./src/Styles/build209.css?v=2.11.44-build209",
+    "./src/Styles/build210.css?v=2.11.45-build210",
+    "./src/Styles/build211.css?v=2.11.46-build211",
+    "./src/Styles/build212.css?v=2.11.47-build212",
+    "./src/Styles/build216.css?v=2.11.51-build216",
+    "./src/Styles/build217.css?v=2.11.52-build217",
+    "./src/Styles/build218.css?v=2.11.53-build218",
+    "./src/Styles/build225.css?v=2.11.54-build225",
+    "./src/Styles/build226.css?v=2.11.54-build226",
+    "./src/Styles/build227.css?v=2.11.54-build227",
+    "./src/Styles/build228.css?v=2.11.54-build228",
+    "./src/Styles/build229.css?v=2.11.55-build229",
+    "./src/Styles/build230.css?v=2.11.56-build230",
+    "./src/Styles/build231.css?v=2.11.57-build231",
+    "./src/Styles/build257.css?v=2.11.81-build257",
+    "./src/Styles/build258-trade.css?v=2.11.82-build258",
+    "./src/Styles/build261.css?v=2.11.86-build262"
+  ],
+  "introducedMissingReferences": [],
+  "allFrontendJsImportsPresent": true,
+  "changedModuleTargets": {
+    "src/battle/SingleTraits410.js": [
+      "./src/battle/SingleTraits410.js?v=3.1.91-build411"
+    ],
+    "src/core/CombatPower.js": [
+      "./src/core/CombatPower.js?v=3.1.91-build411"
+    ],
+    "src/core/config.js": [
+      "./src/core/config.js?v=3.1.91-build411"
+    ],
+    "src/main.js": [],
+    "src/online/OnlineTraitCompatibility411.js": [
+      "./src/online/OnlineTraitCompatibility411.js?v=3.1.91-build411"
+    ],
+    "src/ui/screens/OnlinePartyScreen.js": [
+      "./src/ui/screens/OnlinePartyScreen.js?v=3.1.91-build411"
+    ]
+  }
+}

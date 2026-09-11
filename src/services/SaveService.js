@@ -1,9 +1,10 @@
+import {normalizeChapterTwoPairNicknames406} from '../data/chapterTwoPairNames406.js?v=3.1.86-build406';
 import{recoverChapterTwoPending402}from"../core/ChapterTwoRecovery402.js?v=3.1.82-build402";
 import{normalizeVajraRaidWeapon,RAID_VAJRA_SPRITE}from"../core/RaidPresentation.js?v=3.1.48-build368";
-import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.82-build402";
+import{SAVE_KEY,APP_VERSION,SAVE_SCHEMA_VERSION,MAX_PARTY_SIZE,TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX,normalizeBattleSpeed}from"../core/config.js?v=3.1.88-build408";
 // Regression marker only: config.js?v=3.1.10-build329
 // Regression history: CampaignHeroEncounterSystem.js?v=3.1.4-build323 / CampaignReincarnationSystem.js?v=3.1.4-build323
-import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=3.1.82-build402";
+import{createMonster,totalExperience,applyTotalExperience,expNeedFor}from"../models/Monster.js?v=3.1.86-build406";
 import{maxMp,normalizeSkillProgress,allLearnedSkills,recommendedSkills,recommendedSkillLoadout,skillMasteryNeedForLevel}from"../battle/SkillSystem.js?v=3.1.75-build395";
 import{normalizeEndgameState,ENDGAME_BOSSES}from"../core/EndgameSystem.js?v=3.1.72-build392";
 import{normalizeFloorBossChallengeState}from"../core/FloorBossChallengeSystem.js?v=3.1.72-build392";
@@ -11,7 +12,7 @@ import{FLOOR_BOSS_CATALOG,floorBossDefinitionById,milestoneBossIdsForFloor}from"
 import{normalizeSecondWorldEvents}from"../core/SecondWorldEventSystem.js?v=3.1.82-build402";
 import{normalizeEliteRecords}from"../core/SecondWorldEliteSystem.js?v=3.1.1-build311";
 import{normalizeTenGodContact}from"../core/TenGodContactSystem.js?v=3.1.1-build311";
-import{SPECIES}from"../data/species.js?v=3.1.72-build392";
+import{SPECIES}from"../data/species.js?v=3.1.86-build406";
 import{JUVENILE_AMALGA_SKILLS}from"../data/raidSpecies.js?v=3.1.1-build311";
 import{isPersistentStatus,normalizePersistentAilments}from"../data/statusEffects.js?v=3.1.1-build311";
 import{normalizeWeaponMastery}from"./WeaponMastery.js?v=3.1.72-build392";
@@ -798,6 +799,7 @@ export class SaveService{
   normalizeCampaignState(s);normalizeLionelAvatarState(s);s.campaign100.heroEncounters310=retireLegacyCampaignRewind(normalizeCampaignHeroInvasion(s)).state;normalizeCampaignReincarnationState(s);
   if(from<73){s.expeditionSnapshot=null;if(s.activeBattle&&!s.activeBattle.specialBattle)s.activeBattle.explorationSnapshot=null}
   recoverChapterTwoPending402(s);
+  normalizeChapterTwoPairNicknames406(s);
   s.schemaVersion=SAVE_SCHEMA_VERSION;
   s.appVersion=APP_VERSION;
   if(from<SAVE_SCHEMA_VERSION)s.lastMigration={from,to:SAVE_SCHEMA_VERSION,at:new Date().toISOString()};

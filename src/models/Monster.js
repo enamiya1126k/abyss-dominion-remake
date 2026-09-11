@@ -1,10 +1,12 @@
-import{SPECIES}from"../data/species.js?v=3.1.72-build392";
+import {projectSingleStats410} from '../battle/SingleTraits410.js?v=3.1.90-build410';
+import {chapterTwoPairDisplayName406,chapterTwoPairMember406} from '../data/chapterTwoPairNames406.js?v=3.1.86-build406';
+import{SPECIES}from"../data/species.js?v=3.1.86-build406";
 import{PERSONALITIES}from"../data/personalities.js?v=3.1.1-build311";
 import{MONSTER_COLORS}from"../data/colors.js?v=3.1.1-build311";
 import{normalizedResistances}from"../data/attributes.js?v=3.1.1-build311";
 import{activeSeriesBonuses}from"../data/equipmentSeries.js?v=3.1.38-build358";
-import{normalizePersistentAilments}from"../data/statusEffects.js?v=3.1.1-build311";
-import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=3.1.82-build402";
+import{normalizePersistentAilments}from"../data/statusEffects.js?v=3.1.90-build410";
+import{TRUE_MAX_LEVEL,ENDGAME_MAX_LEVEL,MONSTER_STAR_MAX}from"../core/config.js?v=3.1.90-build410";
 import{baseExperienceNeedForLevel}from"../core/ProgressionSystem.js?v=3.1.82-build402";
 
 function uid(){
@@ -162,6 +164,7 @@ export function displayName(monster){
   const species=SPECIES[monster.speciesId];
   const nickname=String(monster.nickname??"").trim();
   if(!species)return nickname||"不明な魔物";
+  if(chapterTwoPairMember406(monster))return chapterTwoPairDisplayName406(monster,nickname);
   if(!nickname||nickname===species.legacyName)return species.name;
   return nickname;
 }
@@ -224,7 +227,8 @@ export function speciesLevelStats(speciesOrId,level,{rarity=null,rank=1,plus=0}=
  return{hp:calc("hp"),atk,matk:species.chapterTwoOnly?Math.max(1,calc("matk")):Math.max(1,Math.floor(atk*(magicalRole?1.08:.72))),def,mdef:species.chapterTwoOnly?Math.max(1,calc("mdef")):Math.max(1,Math.floor(def*(magicalRole?1.08:.82))),spd:calc("spd"),crit:Math.max(0,Number(species.baseStats?.crit)||0),evasion:Math.max(0,Number(species.baseStats?.evasion)||0),accuracy:Math.max(20,Math.min(180,Number(species.baseStats?.accuracy)||100))};
 }
 
-export function calculatedStats(monster){
+export function calculatedStats(monster){return projectSingleStats410(rawCalculatedStats410(monster),monster);}
+export function rawCalculatedStats410(monster){
   const species=SPECIES[monster?.speciesId];
   if(!monster||typeof monster!=="object"||!species)return{...EMPTY_MONSTER_STATS};
   const personality=PERSONALITIES[monster.personalityId]??PERSONALITIES.bold??Object.values(PERSONALITIES)[0];

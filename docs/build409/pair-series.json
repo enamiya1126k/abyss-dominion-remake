@@ -1,0 +1,415 @@
+{
+  "build": 409,
+  "pairEnhancementsEnabled": true,
+  "individualTraitsEnabled": false,
+  "pairs": {
+    "mirrors": {
+      "id": "mirrors",
+      "label": "鏡侍女",
+      "members": [
+        "ch2_ryune",
+        "ch2_rose"
+      ],
+      "identity": "標的をそろえる連撃",
+      "feature": {
+        "id": "sameTarget",
+        "value": 0.2,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "二人が同じ敵へ自然な攻撃行動を行ったラウンドは、後手の共鳴だけ最終ダメージ+20%。標的を変えると不成立。"
+      },
+      "counterplay": "相方の行動前に標的を倒す・挑発で標的を分ける。"
+    },
+    "talismans": {
+      "id": "talismans",
+      "label": "霊符",
+      "members": [
+        "ch2_shion",
+        "ch2_suiren"
+      ],
+      "identity": "回復を封じる結界",
+      "feature": {
+        "id": "extendHealBlock",
+        "value": 1,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "共鳴が回復阻害中の敵に命中すると、その敵の回復阻害を1ラウンド延長（残り最大3）。"
+      },
+      "counterplay": "浄化・回復に頼らない部隊で対処。"
+    },
+    "wings": {
+      "id": "wings",
+      "label": "聖翼",
+      "members": [
+        "ch2_aure",
+        "ch2_noelle"
+      ],
+      "identity": "壊れた翼を守る救援",
+      "feature": {
+        "id": "rescueBarrier",
+        "value": 0.25,
+        "perRound": 1,
+        "perBattle": 1,
+        "description": "いずれかのHPが30%以下になり二人とも生存なら、二人に最大HP25%の専用障壁。死亡後は発動しない。"
+      },
+      "counterplay": "障壁の解除・単発の致死攻撃・相方の行動不能。"
+    },
+    "garden": {
+      "id": "garden",
+      "label": "薬毒",
+      "members": [
+        "ch2_mirea",
+        "ch2_viola"
+      ],
+      "identity": "毒を薬に変える回復",
+      "feature": {
+        "id": "poisonMedicine",
+        "value": 0.08,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "共鳴時に毒状態の敵が1体以上いれば、生存味方の最低HP割合1人を追加で8%回復。人数で増えない。"
+      },
+      "counterplay": "毒無効・浄化・回復阻害。"
+    },
+    "foxmoon": {
+      "id": "foxmoon",
+      "label": "月狐",
+      "members": [
+        "ch2_kagura",
+        "ch2_sayo"
+      ],
+      "identity": "火傷を狙う必中",
+      "feature": {
+        "id": "burnAccuracy",
+        "value": 1,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "二人が同じ敵へ自然な攻撃行動した後の共鳴は、その敵が火傷中なら必中。会心確定は付けない。"
+      },
+      "counterplay": "火傷解除・挑発・相方の行動不能。"
+    },
+    "starthread": {
+      "id": "starthread",
+      "label": "星糸",
+      "members": [
+        "ch2_celes",
+        "ch2_lumina"
+      ],
+      "identity": "同ラウンドの合流",
+      "feature": {
+        "id": "burstGuard",
+        "value": 0.2,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "後手の4.20倍共鳴に限り、味方の最低HP割合1人へ1ラウンドの被ダメージ20%軽減。既存軽減とは最大値。"
+      },
+      "counterplay": "行動順の分断・後手の拘束。"
+    },
+    "stitch": {
+      "id": "stitch",
+      "label": "縫兎",
+      "members": [
+        "ch2_rikka",
+        "ch2_rinne"
+      ],
+      "identity": "瀕死からの縫合",
+      "feature": {
+        "id": "rescueCleanse",
+        "value": 1,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "既存のHP35%以下の救援共鳴が発動した時、二人の行動不能以外の弱体を1個ずつ解除（古い順）。"
+      },
+      "counterplay": "致死攻撃・複数弱体・行動不能は残る。"
+    },
+    "glassaria": {
+      "id": "glassaria",
+      "label": "硝子",
+      "members": [
+        "ch2_seria",
+        "ch2_carmia"
+      ],
+      "identity": "鈍化と回避低下を割る",
+      "feature": {
+        "id": "doubleDebuffMp",
+        "value": 0.04,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "速度低下・回避低下の両方がある敵へ強化共鳴が命中すると、二人のMPを各最大値4%回復。"
+      },
+      "counterplay": "どちらかの弱体を浄化・MP回復阻害。"
+    },
+    "eclipsecrown": {
+      "id": "eclipsecrown",
+      "label": "終始",
+      "members": [
+        "ch2_aeriel",
+        "ch2_vespera"
+      ],
+      "identity": "倒した後に次を刈る",
+      "feature": {
+        "id": "retargetDispel",
+        "value": 1,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "共鳴の残り打撃が別の敵へ移った時、最初の移動先1人の強化を1個解除。追加攻撃は生成しない。"
+      },
+      "counterplay": "高耐久の単体・解除不能強化。"
+    },
+    "oathguard": {
+      "id": "oathguard",
+      "label": "誓姫",
+      "members": [
+        "ch2_lyriet",
+        "ch2_rosette"
+      ],
+      "identity": "障壁が砕けたら守る",
+      "feature": {
+        "id": "brokenShieldDefense",
+        "value": 0.15,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "自分たちの共鳴障壁が敵の攻撃で全消費された時、二人に防御15%上昇を2ラウンド。期限切れ・上書きでは発動しない。"
+      },
+      "counterplay": "防御無視・障壁解除・消耗の時間差。"
+    },
+    "rosevow": {
+      "id": "rosevow",
+      "label": "薔薇",
+      "members": [
+        "ch2_noctelle",
+        "ch2_auriane"
+      ],
+      "identity": "窮地を越える誓い",
+      "feature": {
+        "id": "emergencyHealCleanse",
+        "value": 1,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "HP40%以下で始まる強化共鳴の最後の一撃が命中したら、低HP側1人の回復阻害を1個解除。"
+      },
+      "counterplay": "相方を拘束・命中を落とす・致死攻撃。"
+    },
+    "twinclock": {
+      "id": "twinclock",
+      "label": "星刻",
+      "members": [
+        "ch2_eirene",
+        "ch2_iridelle"
+      ],
+      "identity": "遅らせて刻む一撃",
+      "feature": {
+        "id": "clockTempo",
+        "value": 0.25,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "速度低下と防御低下の両方がある敵への強化共鳴が命中すると、二人だけ既存の速度18%上昇を25%へ置換（2ラウンド）。"
+      },
+      "counterplay": "弱体解除・速度低下無効・全体CT操作は持たない。"
+    },
+    "wisteria": {
+      "id": "wisteria",
+      "label": "双藤",
+      "members": [
+        "ch2_nevia",
+        "ch2_elmina"
+      ],
+      "identity": "毒から回復封鎖",
+      "feature": {
+        "id": "poisonHealSeal",
+        "value": 0.4,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "毒への強化共鳴が命中した敵の回復阻害を25%から40%へ置換（2ラウンド）。"
+      },
+      "counterplay": "毒無効・浄化・回復以外で耐える。"
+    },
+    "twinthunder": {
+      "id": "twinthunder",
+      "label": "双雷",
+      "members": [
+        "ch2_calista",
+        "ch2_solenne"
+      ],
+      "identity": "二人目が落とす雷",
+      "feature": {
+        "id": "burstDiscount",
+        "value": 0.1,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "後手の4.40倍共鳴が敵1体以上へ命中すると、二人の次の固有スキルのMP消費を各10%軽減。1回使うか次ラウンド末に消失。"
+      },
+      "counterplay": "後手を止める・MPを枯らす。CTは減らさない。"
+    },
+    "twinkeys": {
+      "id": "twinkeys",
+      "label": "封鍵",
+      "members": [
+        "ch2_meliora",
+        "ch2_elyselle"
+      ],
+      "identity": "強化を鍵にする連撃",
+      "feature": {
+        "id": "dispelPierce",
+        "value": 0.6,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "共鳴の強化解除が成功すると、最後の1打のみ防御無視を40%から60%へ置換。対象死亡時は残り打撃の移動先に適用。"
+      },
+      "counterplay": "解除可能な強化を置かない・解除不能強化。"
+    },
+    "frostshatter": {
+      "id": "frostshatter",
+      "label": "氷晶",
+      "members": [
+        "ch2_iselle",
+        "ch2_virelle"
+      ],
+      "identity": "凍結の破砕",
+      "feature": {
+        "id": "frostGuard",
+        "value": 0.1,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "凍結相手への強化共鳴後、凍結を延長せず二人に次の被ダメージ10%軽減を付与（1回・次ラウンド末まで）。"
+      },
+      "counterplay": "凍結無効・浄化。永久凍結はできない。"
+    },
+    "oathreturn": {
+      "id": "oathreturn",
+      "label": "返誓",
+      "members": [
+        "ch2_rostia",
+        "ch2_althea"
+      ],
+      "identity": "防いだ側と相方の反撃",
+      "feature": {
+        "id": "counterMend",
+        "value": 0.05,
+        "perRound": 2,
+        "perBattle": 999,
+        "description": "既存の相方カウンターが命中すると、守られた本人を最大HP5%回復。反撃1回ごと、同一被防御種はラウンド1回。"
+      },
+      "counterplay": "ガード解除・相方拘束・回復阻害。"
+    },
+    "starconfluence": {
+      "id": "starconfluence",
+      "label": "魔導姫",
+      "members": [
+        "ch2_sephira",
+        "ch2_astrelle"
+      ],
+      "identity": "二人で溜めて放つ",
+      "feature": {
+        "id": "chargedAccuracy",
+        "value": 1,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "既存の3回目・5.50倍の解放共鳴は、開始時に二人が生存かつ行動可能なら必中。会心は通常判定。"
+      },
+      "counterplay": "解放前に片方を拘束・倒す。単独では充填しない。"
+    },
+    "crimsonwings": {
+      "id": "crimsonwings",
+      "label": "紅羽",
+      "members": [
+        "ch2_nizelle",
+        "ch2_charne"
+      ],
+      "identity": "出血から追い詰める",
+      "feature": {
+        "id": "bleedPressure",
+        "value": 0.2,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "出血への強化共鳴が命中した敵1体に、被回復量20%低下を2ラウンド。既存阻害とは最大値。"
+      },
+      "counterplay": "出血無効・浄化・回復以外の防御。"
+    },
+    "absolutionbells": {
+      "id": "absolutionbells",
+      "label": "双鐘",
+      "members": [
+        "ch2_ferne",
+        "ch2_clarisse"
+      ],
+      "identity": "浄化した数を防壁に",
+      "feature": {
+        "id": "cleanseShield",
+        "value": 0.1,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "既存の共鳴浄化が味方から1個以上を解除した時、二人に最大HP10%の障壁。異常数で増えない。"
+      },
+      "counterplay": "異常を使わず火力で押す・障壁解除。"
+    },
+    "eclipserenewal": {
+      "id": "eclipserenewal",
+      "label": "日月",
+      "members": [
+        "ch2_lunaria",
+        "ch2_solaria"
+      ],
+      "identity": "魔力の昼夜循環",
+      "feature": {
+        "id": "overflowDiscount",
+        "value": 0.1,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "既存の共鳴MP回復が満タンであふれた場合、二人へ次の固有スキルのMP消費10%軽減（各1回・次ラウンド末まで）。"
+      },
+      "counterplay": "MP回復阻害・MP吸収。MPを超えて蓄積しない。"
+    },
+    "dreamharvest": {
+      "id": "dreamharvest",
+      "label": "夢境",
+      "members": [
+        "ch2_morina",
+        "ch2_elmize"
+      ],
+      "identity": "眠りを逃がさない刈取り",
+      "feature": {
+        "id": "dreamAfterimage",
+        "value": 0.15,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "睡眠への5.76倍共鳴が命中した場合、対象に命中15%低下を2ラウンド。睡眠は通常どおり解除され得る。"
+      },
+      "counterplay": "睡眠無効・浄化・必中攻撃。"
+    },
+    "dragonliberation": {
+      "id": "dragonliberation",
+      "label": "竜姫",
+      "members": [
+        "ch2_dracia",
+        "ch2_rucie"
+      ],
+      "identity": "敵の加護を奪う盾",
+      "feature": {
+        "id": "dispelBarrier",
+        "value": 0.28,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "共鳴で敵の強化を1個以上解除した場合、二人の共鳴障壁を20%から28%へ置換。解除数で増えない。"
+      },
+      "counterplay": "解除できる強化を置かない・障壁解除。"
+    },
+    "crownsfinale": {
+      "id": "crownsfinale",
+      "label": "剣姫",
+      "members": [
+        "ch2_nemesia",
+        "ch2_everia"
+      ],
+      "identity": "二人で作る終幕",
+      "feature": {
+        "id": "finaleMomentum",
+        "value": 0.1,
+        "perRound": 1,
+        "perBattle": 999,
+        "description": "後手の強化共鳴でHP35%以下の敵へ命中した場合、次ラウンドの最初の共鳴だけ攻撃者自身の計算に対して最終ダメージ+10%。持越し1回まで。"
+      },
+      "counterplay": "35%を割る前に回復・後手を止める。追加ラウンドは得ない。"
+    }
+  }
+}

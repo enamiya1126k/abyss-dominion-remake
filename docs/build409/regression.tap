@@ -1,0 +1,1438 @@
+TAP version 13
+# Subtest: seven new heroines retain seven ranks and four usable authored skills apiece
+ok 1 - seven new heroines retain seven ranks and four usable authored skills apiece
+  ---
+  duration_ms: 8.526705
+  type: 'test'
+  ...
+# Subtest: all current natives remain obtainable in repeatable rooms with six real gear slots and matching codex locations
+ok 2 - all current natives remain obtainable in repeatable rooms with six real gear slots and matching codex locations
+  ---
+  duration_ms: 42.452244
+  type: 'test'
+  ...
+# Subtest: new capture caps, learned skills and dead HP survive a real save roundtrip
+ok 3 - new capture caps, learned skills and dead HP survive a real save roundtrip
+  ---
+  duration_ms: 50.364922
+  type: 'test'
+  ...
+# Subtest: maid AI sets up defense reduction and the other twin selects the prepared strike
+ok 4 - maid AI sets up defense reduction and the other twin selects the prepared strike
+  ---
+  duration_ms: 7.815663
+  type: 'test'
+  ...
+# Subtest: twin healer auto can revive her partner but cannot revive a sealed partner
+ok 5 - twin healer auto can revive her partner but cannot revive a sealed partner
+  ---
+  duration_ms: 5.516042
+  type: 'test'
+  ...
+# Subtest: resonance requires both real species on the same side, alive and present
+ok 6 - resonance requires both real species on the same side, alive and present
+  ---
+  duration_ms: 0.573075
+  type: 'test'
+  ...
+# Subtest: each sister triggers once per round; duplicate copies, death/revival and JSON resume cannot reset the quota
+ok 7 - each sister triggers once per round; duplicate copies, death/revival and JSON resume cannot reset the quota
+  ---
+  duration_ms: 2.069883
+  type: 'test'
+  ...
+# Subtest: two different twin pairs in four slots get independent quotas
+ok 8 - two different twin pairs in four slots get independent quotas
+  ---
+  duration_ms: 2.559131
+  type: 'test'
+  ...
+# Subtest: a dead target is retargeted across the three mirror hits without wasting quota or MP
+ok 9 - a dead target is retargeted across the three mirror hits without wasting quota or MP
+  ---
+  duration_ms: 0.766086
+  type: 'test'
+  ...
+# Subtest: followups cannot recursively trigger themselves, even through callback reentry
+ok 10 - followups cannot recursively trigger themselves, even through callback reentry
+  ---
+  duration_ms: 0.804494
+  type: 'test'
+  ...
+# Subtest: a counter killing either sister cancels the remaining hits and recovery
+ok 11 - a counter killing either sister cancels the remaining hits and recovery
+  ---
+  duration_ms: 0.307774
+  type: 'test'
+  ...
+# Subtest: isolation during the activation cue stops damage; an empty battle consumes no activation
+ok 12 - isolation during the activation cue stops damage; an empty battle consumes no activation
+  ---
+  duration_ms: 0.362767
+  type: 'test'
+  ...
+# Subtest: actual mirror runtime deals three stats-based hits and adds bounded shields
+ok 13 - actual mirror runtime deals three stats-based hits and adds bounded shields
+  ---
+  duration_ms: 7.613287
+  type: 'test'
+  ...
+# Subtest: actual talisman runtime debuffs only damaged targets and honors heal suppression without resurrecting
+ok 14 - actual talisman runtime debuffs only damaged targets and honors heal suppression without resurrecting
+  ---
+  duration_ms: 2.916461
+  type: 'test'
+  ...
+# Subtest: actual angel runtime uses the stronger attack stat, hits all enemies and restores HP plus shield
+ok 15 - actual angel runtime uses the stronger attack stat, hits all enemies and restores HP plus shield
+  ---
+  duration_ms: 3.641534
+  type: 'test'
+  ...
+# Subtest: actual enemy twin runtime calls the ordinary defended damage path with matching signature rules
+ok 16 - actual enemy twin runtime calls the ordinary defended damage path with matching signature rules
+  ---
+  duration_ms: 2.709038
+  type: 'test'
+  ...
+# Subtest: both sides may use the same twins without sharing the saved activation quota
+ok 17 - both sides may use the same twins without sharing the saved activation quota
+  ---
+  duration_ms: 6.120875
+  type: 'test'
+  ...
+# Subtest: actual command, enemy turn and checkpoint contain the twin integration in their executable paths
+ok 18 - actual command, enemy turn and checkpoint contain the twin integration in their executable paths
+  ---
+  duration_ms: 1.560124
+  type: 'test'
+  ...
+# Subtest: formation and battle show the partner requirement, active state and used quotas without losing overhead names
+ok 19 - formation and battle show the partner requirement, active state and used quotas without losing overhead names
+  ---
+  duration_ms: 10.202433
+  type: 'test'
+  ...
+# Subtest: 56 transparent new poses all fit 256px and use the live canvas renderer
+ok 20 - 56 transparent new poses all fit 256px and use the live canvas renderer
+  ---
+  duration_ms: 22.557655
+  type: 'test'
+  ...
+# Subtest: fourth installment adds seven ranks, 28 shared skills, seven captures and six pair members
+ok 21 - fourth installment adds seven ranks, 28 shared skills, seven captures and six pair members
+  ---
+  duration_ms: 11.892624
+  type: 'test'
+  ...
+# Subtest: repeatable habitats contain all new species and pairs together with real appropriate equipment
+ok 22 - repeatable habitats contain all new species and pairs together with real appropriate equipment
+  ---
+  duration_ms: 19.927888
+  type: 'test'
+  ...
+# Subtest: all seven new captures survive SaveService with learned skills and depleted resources
+ok 23 - all seven new captures survive SaveService with learned skills and depleted resources
+  ---
+  duration_ms: 62.494234
+  type: 'test'
+  ...
+# Subtest: poison and fox enemy AI establish their status then focus the prepared enemy
+ok 24 - poison and fox enemy AI establish their status then focus the prepared enemy
+  ---
+  duration_ms: 4.415873
+  type: 'test'
+  ...
+# Subtest: garden scales each target separately and heals only the living allies
+ok 25 - garden scales each target separately and heals only the living allies
+  ---
+  duration_ms: 1.971865
+  type: 'test'
+  ...
+# Subtest: fox checks fire on every retargeted hit and applies a bounded two-turn party accuracy buff
+ok 26 - fox checks fire on every retargeted hit and applies a bounded two-turn party accuracy buff
+  ---
+  duration_ms: 1.804843
+  type: 'test'
+  ...
+# Subtest: star pair finishes on its second different member, in either order, and resets per round
+ok 27 - star pair finishes on its second different member, in either order, and resets per round
+  ---
+  duration_ms: 6.441018
+  type: 'test'
+  ...
+# Subtest: star finisher quota persists through JSON, duplicates, death and revival without touching pair definitions
+ok 28 - star finisher quota persists through JSON, duplicates, death and revival without touching pair definitions
+  ---
+  duration_ms: 0.461406
+  type: 'test'
+  ...
+# Subtest: star ally and enemy quotas stay independent, and a missing/captured partner blocks the finisher
+ok 29 - star ally and enemy quotas stay independent, and a missing/captured partner blocks the finisher
+  ---
+  duration_ms: 1.586113
+  type: 'test'
+  ...
+# Subtest: actual garden runtime uses enemy poison and normal recovery suppression, not resurrection
+ok 30 - actual garden runtime uses enemy poison and normal recovery suppression, not resurrection
+  ---
+  duration_ms: 7.591604
+  type: 'test'
+  ...
+# Subtest: actual enemy garden and fox use ally status and ordinary enemy damage rules
+ok 31 - actual enemy garden and fox use ally status and ordinary enemy damage rules
+  ---
+  duration_ms: 13.064522
+  type: 'test'
+  ...
+# Subtest: actual star finisher uses stronger ATK/MATK, all targets, 45% defense ignore and 22% shield
+ok 32 - actual star finisher uses stronger ATK/MATK, all targets, 45% defense ignore and 22% shield
+  ---
+  duration_ms: 3.133007
+  type: 'test'
+  ...
+# Subtest: new pair UI names the partner, shows the approaching finisher and keeps enemy names overhead
+ok 33 - new pair UI names the partner, shows the approaching finisher and keeps enemy names overhead
+  ---
+  duration_ms: 10.312459
+  type: 'test'
+  ...
+# Subtest: new right-facing and old left-facing atlases both turn correctly in the actual exploration draw function
+ok 34 - new right-facing and old left-facing atlases both turn correctly in the actual exploration draw function
+  ---
+  duration_ms: 2.196515
+  type: 'test'
+  ...
+# Subtest: 56 true RGBA new poses fit 256px and the gallery has all motion controls and pair descriptions
+ok 35 - 56 true RGBA new poses fit 256px and the gallery has all motion controls and pair descriptions
+  ---
+  duration_ms: 22.577466
+  type: 'test'
+  ...
+# Subtest: player auto prepares and follows pair conditions while recovery and a missing partner retain priority
+ok 36 - player auto prepares and follows pair conditions while recovery and a missing partner retain priority
+  ---
+  duration_ms: 11.543347
+  type: 'test'
+  ...
+# Subtest: all current releases retain an equal rank roster and complete capturable pairs
+ok 37 - all current releases retain an equal rank roster and complete capturable pairs
+  ---
+  duration_ms: 47.111724
+  type: 'test'
+  ...
+# Subtest: all new habitats match the codex, use six real gear slots and keep each pair together
+ok 38 - all new habitats match the codex, use six real gear slots and keep each pair together
+  ---
+  duration_ms: 4.127087
+  type: 'test'
+  ...
+# Subtest: the seven new captures preserve four learned skills, depleted HP/MP and pair identity across SaveService
+ok 39 - the seven new captures preserve four learned skills, depleted HP/MP and pair identity across SaveService
+  ---
+  duration_ms: 50.332924
+  type: 'test'
+  ...
+# Subtest: rabbit rescue triggers at 35 percent on a living sister, not on an unrelated ally or a dead sister
+ok 40 - rabbit rescue triggers at 35 percent on a living sister, not on an unrelated ally or a dead sister
+  ---
+  duration_ms: 2.581835
+  type: 'test'
+  ...
+# Subtest: rescue threshold uses fresh HP and does not mutate normal pair data or reset quota on JSON reload
+ok 41 - rescue threshold uses fresh HP and does not mutate normal pair data or reset quota on JSON reload
+  ---
+  duration_ms: 0.877354
+  type: 'test'
+  ...
+# Subtest: actual rabbit rescue applies recovery suppression and bounded shields without resurrection
+ok 42 - actual rabbit rescue applies recovery suppression and bounded shields without resurrection
+  ---
+  duration_ms: 7.733098
+  type: 'test'
+  ...
+# Subtest: glass duet requires BOTH effects per target, and expires when either mark clears
+ok 43 - glass duet requires BOTH effects per target, and expires when either mark clears
+  ---
+  duration_ms: 1.35205
+  type: 'test'
+  ...
+# Subtest: glass enemy AI prepares the missing second mark before spending the first-mark bonus strike
+ok 44 - glass enemy AI prepares the missing second mark before spending the first-mark bonus strike
+  ---
+  duration_ms: 6.966812
+  type: 'test'
+  ...
+# Subtest: player auto prepares both duet marks before normal stances and then switches to the strong skill
+ok 45 - player auto prepares both duet marks before normal stances and then switches to the strong skill
+  ---
+  duration_ms: 7.512715
+  type: 'test'
+  ...
+# Subtest: actual glass runtime uses enemy effects on ally attacks and ally effects on enemy attacks
+ok 46 - actual glass runtime uses enemy effects on ally attacks and ally effects on enemy attacks
+  ---
+  duration_ms: 8.006131
+  type: 'test'
+  ...
+# Subtest: crown removes one initial buff and one on the first retarget
+ok 47 - crown removes one initial buff and one on the first retarget
+  ---
+  duration_ms: 1.280542
+  type: 'test'
+  ...
+# Subtest: actual crown clears only one positive effect on the selected target and preserves negatives and shields
+ok 48 - actual crown clears only one positive effect on the selected target and preserves negatives and shields
+  ---
+  duration_ms: 6.176329
+  type: 'test'
+  ...
+# Subtest: enemy crown uses the actual ally-buff removal path and 35 percent defense penetration
+ok 49 - enemy crown uses the actual ally-buff removal path and 35 percent defense penetration
+  ---
+  duration_ms: 6.382951
+  type: 'test'
+  ...
+# Subtest: new pairs stop when one member dies during the cue, and same-species copies cannot give extra activations
+ok 50 - new pairs stop when one member dies during the cue, and same-species copies cannot give extra activations
+  ---
+  duration_ms: 2.870531
+  type: 'test'
+  ...
+# Subtest: the new pair requirements and all enemy names/ranks appear in live battle markup
+ok 51 - the new pair requirements and all enemy names/ranks appear in live battle markup
+  ---
+  duration_ms: 9.177988
+  type: 'test'
+  ...
+# Subtest: all 56 new poses are true RGBA, right-facing and within the 256px live renderer bounds
+ok 52 - all 56 new poses are true RGBA, right-facing and within the 256px live renderer bounds
+  ---
+  duration_ms: 28.431248
+  type: 'test'
+  ...
+# Subtest: oath guard buffs only living allies and refreshes bounded shields without spending extra MP
+ok 53 - oath guard buffs only living allies and refreshes bounded shields without spending extra MP
+  ---
+  duration_ms: 19.863561
+  type: 'test'
+  ...
+# Subtest: rose rescue changes at exactly 40 percent, uses three hits and respects healing suppression
+ok 54 - rose rescue changes at exactly 40 percent, uses three hits and respects healing suppression
+  ---
+  duration_ms: 5.297002
+  type: 'test'
+  ...
+# Subtest: twin clocks read BOTH target marks on each side and lose the bonus when either expires
+ok 55 - twin clocks read BOTH target marks on each side and lose the bonus when either expires
+  ---
+  duration_ms: 24.224611
+  type: 'test'
+  ...
+# Subtest: enemy clocks prepare the missing shared mark before their bonus strike and fall back at zero MP
+ok 56 - enemy clocks prepare the missing shared mark before their bonus strike and fall back at zero MP
+  ---
+  duration_ms: 5.446397
+  type: 'test'
+  ...
+# Subtest: player auto prepares the other clock mark before a strong skill and prioritizes emergency healing
+ok 57 - player auto prepares the other clock mark before a strong skill and prioritizes emergency healing
+  ---
+  duration_ms: 4.571738
+  type: 'test'
+  ...
+# Subtest: all three new pairs stop on capture during the cue and cannot refresh quotas through clones or reload
+ok 58 - all three new pairs stop on capture during the cue and cannot refresh quotas through clones or reload
+  ---
+  duration_ms: 1.260582
+  type: 'test'
+  ...
+# Subtest: the new pair conditions and enemy overhead names and ranks appear in actual battle markup
+ok 59 - the new pair conditions and enemy overhead names and ranks appear in actual battle markup
+  ---
+  duration_ms: 33.870906
+  type: 'test'
+  ...
+# Subtest: all current releases retain an equal rank roster and complete capturable pairs
+ok 60 - all current releases retain an equal rank roster and complete capturable pairs
+  ---
+  duration_ms: 26.314704
+  type: 'test'
+  ...
+# Subtest: all new habitats match the codex, use six real gear slots and keep each pair together
+ok 61 - all new habitats match the codex, use six real gear slots and keep each pair together
+  ---
+  duration_ms: 3.668435
+  type: 'test'
+  ...
+# Subtest: the seven new captures preserve four learned skills, depleted HP/MP and pair identity across SaveService
+ok 62 - the seven new captures preserve four learned skills, depleted HP/MP and pair identity across SaveService
+  ---
+  duration_ms: 50.407005
+  type: 'test'
+  ...
+# Subtest: all 56 new poses are true RGBA, right-facing and within the 256px live renderer bounds
+ok 63 - all 56 new poses are true RGBA, right-facing and within the 256px live renderer bounds
+  ---
+  duration_ms: 27.186069
+  type: 'test'
+  ...
+# Subtest: wisteria retargeting recalculates poison bonuses and a missed hit never adds suppression
+ok 64 - wisteria retargeting recalculates poison bonuses and a missed hit never adds suppression
+  ---
+  duration_ms: 8.96684
+  type: 'test'
+  ...
+# Subtest: wisteria uses actual ally and enemy status stores for poison and healing suppression
+ok 65 - wisteria uses actual ally and enemy status stores for poison and healing suppression
+  ---
+  duration_ms: 27.822769
+  type: 'test'
+  ...
+# Subtest: new poison enemy and player AI establish venom before the scythe bonus strike
+ok 66 - new poison enemy and player AI establish venom before the scythe bonus strike
+  ---
+  duration_ms: 8.610162
+  type: 'test'
+  ...
+# Subtest: thunder burst accepts either action order, stays finite across reload and shows its actual finisher
+ok 67 - thunder burst accepts either action order, stays finite across reload and shows its actual finisher
+  ---
+  duration_ms: 2.888668
+  type: 'test'
+  ...
+# Subtest: four enemy heroines can use wings and thunder independently while sharing bounded support effects
+ok 68 - four enemy heroines can use wings and thunder independently while sharing bounded support effects
+  ---
+  duration_ms: 6.54858
+  type: 'test'
+  ...
+# Subtest: keys remove exactly one initial buff before four retargeted hits and preserve both support effects
+ok 69 - keys remove exactly one initial buff before four retargeted hits and preserve both support effects
+  ---
+  duration_ms: 6.556503
+  type: 'test'
+  ...
+# Subtest: new supports cleanse and save a critical living partner before pursuing resonance damage
+ok 70 - new supports cleanse and save a critical living partner before pursuing resonance damage
+  ---
+  duration_ms: 2.707656
+  type: 'test'
+  ...
+# Subtest: all new pairs stop when captured during their cue and enemy names and ranks remain overhead
+ok 71 - all new pairs stop when captured during their cue and enemy names and ranks remain overhead
+  ---
+  duration_ms: 18.715839
+  type: 'test'
+  ...
+# Subtest: all current releases retain an equal rank roster and complete capturable pairs
+ok 72 - all current releases retain an equal rank roster and complete capturable pairs
+  ---
+  duration_ms: 33.050066
+  type: 'test'
+  ...
+# Subtest: all new habitats match the codex, use six real gear slots and keep each pair together
+ok 73 - all new habitats match the codex, use six real gear slots and keep each pair together
+  ---
+  duration_ms: 4.255551
+  type: 'test'
+  ...
+# Subtest: the seven new captures preserve four learned skills, depleted HP/MP and pair identity across SaveService
+ok 74 - the seven new captures preserve four learned skills, depleted HP/MP and pair identity across SaveService
+  ---
+  duration_ms: 62.352118
+  type: 'test'
+  ...
+# Subtest: all 56 new poses are true RGBA, right-facing and within the 256px live renderer bounds
+ok 75 - all 56 new poses are true RGBA, right-facing and within the 256px live renderer bounds
+  ---
+  duration_ms: 41.096867
+  type: 'test'
+  ...
+# Subtest: ice twins prepare freeze and select shatter in enemy AI and player auto, with an MP fallback
+ok 76 - ice twins prepare freeze and select shatter in enemy AI and player auto, with an MP fallback
+  ---
+  duration_ms: 24.265593
+  type: 'test'
+  ...
+# Subtest: frost bonus is checked per strike, retargets without carrying ice, and works in actual enemy and ally paths
+ok 77 - frost bonus is checked per strike, retargets without carrying ice, and works in actual enemy and ally paths
+  ---
+  duration_ms: 19.632552
+  type: 'test'
+  ...
+# Subtest: spell charge crosses rounds, costs no extra MP, releases once on the third resonance and resets
+ok 78 - spell charge crosses rounds, costs no extra MP, releases once on the third resonance and resets
+  ---
+  duration_ms: 4.133707
+  type: 'test'
+  ...
+# Subtest: spell charge is isolated between sides and pauses when a partner leaves or dies
+ok 79 - spell charge is isolated between sides and pauses when a partner leaves or dies
+  ---
+  duration_ms: 3.099006
+  type: 'test'
+  ...
+# Subtest: actual player and enemy spell paths apply zero preparation damage and the magical finisher
+ok 80 - actual player and enemy spell paths apply zero preparation damage and the magical finisher
+  ---
+  duration_ms: 7.09173
+  type: 'test'
+  ...
+# Subtest: guard counter uses the partner, original attacker and independent per-species quotas
+ok 81 - guard counter uses the partner, original attacker and independent per-species quotas
+  ---
+  duration_ms: 3.18136
+  type: 'test'
+  ...
+# Subtest: counter reservations survive JSON checkpoints and duplicate sisters cannot add reactions
+ok 82 - counter reservations survive JSON checkpoints and duplicate sisters cannot add reactions
+  ---
+  duration_ms: 0.74222
+  type: 'test'
+  ...
+# Subtest: guard dispel, death, capture, removal and isolation cancel pending counters; ordinary guard does not arm one
+ok 83 - guard dispel, death, capture, removal and isolation cancel pending counters; ordinary guard does not arm one
+  ---
+  duration_ms: 4.883619
+  type: 'test'
+  ...
+# Subtest: counter cues recheck living partners and counter hits never queue an endless response
+ok 84 - counter cues recheck living partners and counter hits never queue an endless response
+  ---
+  duration_ms: 2.103974
+  type: 'test'
+  ...
+# Subtest: actual enemy damage queues a response through absorbed barriers; status damage and lethal hits do not
+ok 85 - actual enemy damage queues a response through absorbed barriers; status damage and lethal hits do not
+  ---
+  duration_ms: 13.597826
+  type: 'test'
+  ...
+# Subtest: actual oath resonance arms only the two living sisters and keeps shield and guard bounded
+ok 86 - actual oath resonance arms only the two living sisters and keeps shield and guard bounded
+  ---
+  duration_ms: 4.691799
+  type: 'test'
+  ...
+# Subtest: actual incoming-hit path queues protected ally counters, ignores misses and respects an enemy counter reaction flag
+ok 87 - actual incoming-hit path queues protected ally counters, ignores misses and respects an enemy counter reaction flag
+  ---
+  duration_ms: 4.875116
+  type: 'test'
+  ...
+# Subtest: new healer rescues a critical partner and all three pair names and ranks are visible overhead
+ok 88 - new healer rescues a critical partner and all three pair names and ranks are visible overhead
+  ---
+  duration_ms: 34.139665
+  type: 'test'
+  ...
+# Subtest: all current releases retain an equal rank roster and complete capturable pairs
+ok 89 - all current releases retain an equal rank roster and complete capturable pairs
+  ---
+  duration_ms: 56.615889
+  type: 'test'
+  ...
+# Subtest: all new habitats match the codex, use six real gear slots and keep each pair together
+ok 90 - all new habitats match the codex, use six real gear slots and keep each pair together
+  ---
+  duration_ms: 12.011554
+  type: 'test'
+  ...
+# Subtest: the seven new captures preserve four learned skills, depleted HP/MP and pair identity across SaveService
+ok 91 - the seven new captures preserve four learned skills, depleted HP/MP and pair identity across SaveService
+  ---
+  duration_ms: 52.825269
+  type: 'test'
+  ...
+# Subtest: all 56 new poses are true RGBA, right-facing and within the 256px live renderer bounds
+ok 92 - all 56 new poses are true RGBA, right-facing and within the 256px live renderer bounds
+  ---
+  duration_ms: 30.551667
+  type: 'test'
+  ...
+# Subtest: crimson twins prepare bleeding and pursue it in both AIs, with a real MP fallback
+ok 93 - crimson twins prepare bleeding and pursue it in both AIs, with a real MP fallback
+  ---
+  duration_ms: 22.185594
+  type: 'test'
+  ...
+# Subtest: bleeding bonus is recalculated after retargeting and actual enemy strikes remain physical
+ok 94 - bleeding bonus is recalculated after retargeting and actual enemy strikes remain physical
+  ---
+  duration_ms: 15.72066
+  type: 'test'
+  ...
+# Subtest: actual bell resonance cleanses living allies before healing, preserves buffs and does not revive or reset cooldowns
+ok 95 - actual bell resonance cleanses living allies before healing, preserves buffs and does not revive or reset cooldowns
+  ---
+  duration_ms: 5.315059
+  type: 'test'
+  ...
+# Subtest: actual enemy bell resonance clears ailments and MP recovery weakness but retains positive effects and dead allies
+ok 96 - actual enemy bell resonance clears ailments and MP recovery weakness but retains positive effects and dead allies
+  ---
+  duration_ms: 4.730928
+  type: 'test'
+  ...
+# Subtest: actual eclipse resonance refills only the two sisters and applies MP recovery suppression on both sides
+ok 97 - actual eclipse resonance refills only the two sisters and applies MP recovery suppression on both sides
+  ---
+  duration_ms: 17.487726
+  type: 'test'
+  ...
+# Subtest: eclipse cannot refund infinitely through repeat actions, duplicates or checkpoint reloads
+ok 98 - eclipse cannot refund infinitely through repeat actions, duplicates or checkpoint reloads
+  ---
+  duration_ms: 6.453978
+  type: 'test'
+  ...
+# Subtest: support effects stop when a sister is captured or dies during animation
+ok 99 - support effects stop when a sister is captured or dies during animation
+  ---
+  duration_ms: 0.693176
+  type: 'test'
+  ...
+# Subtest: support AI recognizes the new MP recovery weakness and rescues a critical partner
+ok 100 - support AI recognizes the new MP recovery weakness and rescues a critical partner
+  ---
+  duration_ms: 3.230825
+  type: 'test'
+  ...
+# Subtest: revisit alternates preserve all 70 capture routes and both old and new complete pairs
+ok 101 - revisit alternates preserve all 70 capture routes and both old and new complete pairs
+  ---
+  duration_ms: 33.855262
+  type: 'test'
+  ...
+# Subtest: world, battle entries, title and tuning agree on the saved alternate encounter
+ok 102 - world, battle entries, title and tuning agree on the saved alternate encounter
+  ---
+  duration_ms: 43.468421
+  type: 'test'
+  ...
+# Subtest: loss, save reload and attempted refresh cannot reroll a pending patrol
+ok 103 - loss, save reload and attempted refresh cannot reroll a pending patrol
+  ---
+  duration_ms: 48.194543
+  type: 'test'
+  ...
+# Subtest: legacy pending fights are honored and only one base-or-alternate patrol pays per room
+ok 104 - legacy pending fights are honored and only one base-or-alternate patrol pays per room
+  ---
+  duration_ms: 10.626142
+  type: 'test'
+  ...
+# Subtest: alternate patrols keep three-room rewards, room gates and tokens across the next visit
+ok 105 - alternate patrols keep three-room rewards, room gates and tokens across the next visit
+  ---
+  duration_ms: 5.906893
+  type: 'test'
+  ...
+# Subtest: all current releases retain an equal rank roster and complete capturable pairs
+ok 106 - all current releases retain an equal rank roster and complete capturable pairs
+  ---
+  duration_ms: 27.791553
+  type: 'test'
+  ...
+# Subtest: all new habitats match the codex, use six real gear slots and keep each pair together
+ok 107 - all new habitats match the codex, use six real gear slots and keep each pair together
+  ---
+  duration_ms: 6.679057
+  type: 'test'
+  ...
+# Subtest: the seven new captures preserve four learned skills, depleted HP/MP and pair identity across SaveService
+ok 108 - the seven new captures preserve four learned skills, depleted HP/MP and pair identity across SaveService
+  ---
+  duration_ms: 23.30965
+  type: 'test'
+  ...
+# Subtest: all 56 new poses are true RGBA, right-facing and within the 256px live renderer bounds
+ok 109 - all 56 new poses are true RGBA, right-facing and within the 256px live renderer bounds
+  ---
+  duration_ms: 18.368645
+  type: 'test'
+  ...
+# Subtest: dream twins deliberately prepare sleep and pursue it in both AIs; zero MP falls back to attack
+ok 110 - dream twins deliberately prepare sleep and pursue it in both AIs; zero MP falls back to attack
+  ---
+  duration_ms: 19.378689
+  type: 'test'
+  ...
+# Subtest: sleep amplification is recalculated after cleansing and enemy followups pass the same hybrid rules
+ok 111 - sleep amplification is recalculated after cleansing and enemy followups pass the same hybrid rules
+  ---
+  duration_ms: 14.341348
+  type: 'test'
+  ...
+# Subtest: dragon resonance removes exactly one positive effect per living target before damage on both sides
+ok 112 - dragon resonance removes exactly one positive effect per living target before damage on both sides
+  ---
+  duration_ms: 16.260715
+  type: 'test'
+  ...
+# Subtest: crowns second resonance checks each opponents current HP at the boundary, in either member order
+ok 113 - crowns second resonance checks each opponents current HP at the boundary, in either member order
+  ---
+  duration_ms: 3.548289
+  type: 'test'
+  ...
+# Subtest: actual crown enemy adapter uses player currentHp and calculated max HP and player adapter uses enemy hp/maxHp
+ok 114 - actual crown enemy adapter uses player currentHp and calculated max HP and player adapter uses enemy hp/maxHp
+  ---
+  duration_ms: 7.179302
+  type: 'test'
+  ...
+# Subtest: crown quota survives duplicate copies and checkpoint reload, and a dead or captured sister prevents the finisher
+ok 115 - crown quota survives duplicate copies and checkpoint reload, and a dead or captured sister prevents the finisher
+  ---
+  duration_ms: 2.301072
+  type: 'test'
+  ...
+# Subtest: new alternate patrols appear on the next revisit without replacing any earlier capture or pair
+ok 116 - new alternate patrols appear on the next revisit without replacing any earlier capture or pair
+  ---
+  duration_ms: 46.267029
+  type: 'test'
+  ...
+# Subtest: all current releases retain an equal rank roster and complete capturable pairs
+ok 117 - all current releases retain an equal rank roster and complete capturable pairs
+  ---
+  duration_ms: 21.514962
+  type: 'test'
+  ...
+# Subtest: all new habitats match the codex, use six real gear slots and keep each pair together
+ok 118 - all new habitats match the codex, use six real gear slots and keep each pair together
+  ---
+  duration_ms: 4.44734
+  type: 'test'
+  ...
+# Subtest: the seven new captures preserve four learned skills, depleted HP/MP and pair identity across SaveService
+ok 119 - the seven new captures preserve four learned skills, depleted HP/MP and pair identity across SaveService
+  ---
+  duration_ms: 39.699029
+  type: 'test'
+  ...
+# Subtest: all 56 new poses are true RGBA, right-facing and within the 256px live renderer bounds
+ok 120 - all 56 new poses are true RGBA, right-facing and within the 256px live renderer bounds
+  ---
+  duration_ms: 23.261478
+  type: 'test'
+  ...
+# Subtest: 15 squad-specific relics and five regional circles are outside generic equipment and enemy circle rolls
+ok 121 - 15 squad-specific relics and five regional circles are outside generic equipment and enemy circle rolls
+  ---
+  duration_ms: 10.032066
+  type: 'test'
+  ...
+# Subtest: all 45 elite victories pay the authored item, all 15 sweeps grant the right circle and preserve the prior bonus
+ok 122 - all 45 elite victories pay the authored item, all 15 sweeps grant the right circle and preserve the prior bonus
+  ---
+  duration_ms: 125.075937
+  type: 'test'
+  ...
+# Subtest: ordinary encounters and defeat do not grant new trophies; full storage never sells a trophy
+ok 123 - ordinary encounters and defeat do not grant new trophies; full storage never sells a trophy
+  ---
+  duration_ms: 1.270998
+  type: 'test'
+  ...
+# Subtest: failed victory save rolls back both new rewards and unlock, then one retry survives a full reload
+ok 124 - failed victory save rolls back both new rewards and unlock, then one retry survives a full reload
+  ---
+  duration_ms: 32.23665
+  type: 'test'
+  ...
+# Subtest: relic plus growth is capped; duplicate authorities use the strongest copy, including fixed generic bonuses
+ok 125 - relic plus growth is capped; duplicate authorities use the strongest copy, including fixed generic bonuses
+  ---
+  duration_ms: 1.34549
+  type: 'test'
+  ...
+# Subtest: sleep, poison, burn, freeze, general ailments, enemy buffs and execution check current target state
+ok 126 - sleep, poison, burn, freeze, general ailments, enemy buffs and execution check current target state
+  ---
+  duration_ms: 3.457487
+  type: 'test'
+  ...
+# Subtest: successful same-target hits enable chain, shields and periodic damage do not, and resume preserves the round
+ok 127 - successful same-target hits enable chain, shields and periodic damage do not, and resume preserves the round
+  ---
+  duration_ms: 1.277988
+  type: 'test'
+  ...
+# Subtest: circle and equipment bonuses multiply once; percentage and echo damage stay excluded
+ok 128 - circle and equipment bonuses multiply once; percentage and echo damage stay excluded
+  ---
+  duration_ms: 1.655138
+  type: 'test'
+  ...
+# Subtest: pair bonuses require an actual living partner and only affect pair damage; counter boosts require counter tags
+ok 129 - pair bonuses require an actual living partner and only affect pair damage; counter boosts require counter tags
+  ---
+  duration_ms: 1.313612
+  type: 'test'
+  ...
+# Subtest: guard reduction combines gear and circle, expires with guard, and never gives passive immunity
+ok 130 - guard reduction combines gear and circle, expires with guard, and never gives passive immunity
+  ---
+  duration_ms: 0.435317
+  type: 'test'
+  ...
+# Subtest: new circle growth is real and bounded, with separate instances and the existing gold upgrade path
+ok 131 - new circle growth is real and bounded, with separate instances and the existing gold upgrade path
+  ---
+  duration_ms: 5.855585
+  type: 'test'
+  ...
+# Subtest: formation derives current gear and circle effects, explains missing partner, and updates immediately on unequip
+ok 132 - formation derives current gear and circle effects, explains missing partner, and updates immediately on unequip
+  ---
+  duration_ms: 33.74115
+  type: 'test'
+  ...
+# Subtest: actual enemy-hit function applies relic guard before shields and preserves the existing damage path
+ok 133 - actual enemy-hit function applies relic guard before shields and preserves the existing damage path
+  ---
+  duration_ms: 42.707358
+  type: 'test'
+  ...
+# Subtest: real battle checkpoint writes the chain counter, and SaveService reload keeps it without resetting a pending fight
+ok 134 - real battle checkpoint writes the chain counter, and SaveService reload keeps it without resetting a pending fight
+  ---
+  duration_ms: 25.541447
+  type: 'test'
+  ...
+# Subtest: relic refining consumes exactly one chosen unprotected duplicate and gold, preserves level/affixes, and stops at 30
+ok 135 - relic refining consumes exactly one chosen unprotected duplicate and gold, preserves level/affixes, and stops at 30
+  ---
+  duration_ms: 1.782901
+  type: 'test'
+  ...
+# Subtest: failed refine save restores material, plus and gold; successful retry is atomic
+ok 136 - failed refine save restores material, plus and gold; successful retry is atomic
+  ---
+  duration_ms: 6.348378
+  type: 'test'
+  ...
+# Subtest: refining dialog requires selecting the displayed material and a second press cannot spend twice
+ok 137 - refining dialog requires selecting the displayed material and a second press cannot spend twice
+  ---
+  duration_ms: 3.460281
+  type: 'test'
+  ...
+# Subtest: all 24 pairs on both sides stop for six active control ailments and resume without spending blocked quota
+ok 138 - all 24 pairs on both sides stop for six active control ailments and resume without spending blocked quota
+  ---
+  duration_ms: 54.30001
+  type: 'test'
+  ...
+# Subtest: control rechecks after cue and between hits stop followups and support, while poison and expired stun do not
+ok 139 - control rechecks after cue and between hits stop followups and support, while poison and expired stun do not
+  ---
+  duration_ms: 0.636411
+  type: 'test'
+  ...
+# Subtest: healthy cleanse pair can still cure sleeping third-party allies and UI reports incapacitated pairs
+ok 140 - healthy cleanse pair can still cure sleeping third-party allies and UI reports incapacitated pairs
+  ---
+  duration_ms: 1.963933
+  type: 'test'
+  ...
+# Subtest: collection counts deduplicated owned gear across three stores and circles, without inventing historical losses
+ok 141 - collection counts deduplicated owned gear across three stores and circles, without inventing historical losses
+  ---
+  duration_ms: 99.083785
+  type: 'test'
+  ...
+# Subtest: discovery survives consuming all copies and SaveService reload; malformed discovery is bounded to valid definitions
+ok 142 - discovery survives consuming all copies and SaveService reload; malformed discovery is bounded to valid definitions
+  ---
+  duration_ms: 35.939656
+  type: 'test'
+  ...
+# Subtest: all 45 elite loot receipts update discovery and return reports show four gear plus one circle without granting twice
+ok 143 - all 45 elite loot receipts update discovery and return reports show four gear plus one circle without granting twice
+  ---
+  duration_ms: 18.007049
+  type: 'test'
+  ...
+# Subtest: collection filters cover all 20 sources, distinguish acquired/owned, and locked areas cannot be selected
+ok 144 - collection filters cover all 20 sources, distinguish acquired/owned, and locked areas cannot be selected
+  ---
+  duration_ms: 5.125985
+  type: 'test'
+  ...
+# Subtest: batch refine sums each successive price, consumes exactly selected materials and preserves all growth and protections
+ok 145 - batch refine sums each successive price, consumes exactly selected materials and preserves all growth and protections
+  ---
+  duration_ms: 1.822711
+  type: 'test'
+  ...
+# Subtest: batch refine rejects overcap, duplicate IDs, stale protection, equipped orphan IDs and low gold atomically
+ok 146 - batch refine rejects overcap, duplicate IDs, stale protection, equipped orphan IDs and low gold atomically
+  ---
+  duration_ms: 8.182065
+  type: 'test'
+  ...
+# Subtest: batch refine save rollback restores full material set and gold then retries once
+ok 147 - batch refine save rollback restores full material set and gold then retries once
+  ---
+  duration_ms: 9.539684
+  type: 'test'
+  ...
+# Subtest: same-tier replay preserves vitals, story, storage and rewards while renewing all three patrol tokens
+ok 148 - same-tier replay preserves vitals, story, storage and rewards while renewing all three patrol tokens
+  ---
+  duration_ms: 7.013803
+  type: 'test'
+  ...
+# Subtest: replay rejects incomplete, all-down and pending runs; save failure restores the completed visit for retry
+ok 149 - replay rejects incomplete, all-down and pending runs; save failure restores the completed visit for retry
+  ---
+  duration_ms: 6.951829
+  type: 'test'
+  ...
+# Subtest: real replay controller detaches old field before dispose and cannot process a second click
+ok 150 - real replay controller detaches old field before dispose and cannot process a second click
+  ---
+  duration_ms: 1.795369
+  type: 'test'
+  ...
+# Subtest: multi-material dialog previews exact total, supports deselection, and commits only the displayed selection
+ok 151 - multi-material dialog previews exact total, supports deselection, and commits only the displayed selection
+  ---
+  duration_ms: 2.165798
+  type: 'test'
+  ...
+# Subtest: completed elite victory keeps contribution before receipt and disables auto-dismiss until replay is explicitly chosen
+ok 152 - completed elite victory keeps contribution before receipt and disables auto-dismiss until replay is explicitly chosen
+  ---
+  duration_ms: 2.575937
+  type: 'test'
+  ...
+# Subtest: design covers the real 70 characters / 280 skills / 24 complete pairs, without enabling traits
+ok 153 - design covers the real 70 characters / 280 skills / 24 complete pairs, without enabling traits
+  ---
+  duration_ms: 3.319498
+  type: 'test'
+  ...
+# Subtest: five distinct unpaired owners retain current rarity and four skills until individual integration
+ok 154 - five distinct unpaired owners retain current rarity and four skills until individual integration
+  ---
+  duration_ms: 0.243918
+  type: 'test'
+  ...
+# Subtest: round quota matches the saved legacy shape; advancing a round never resets another side
+ok 155 - round quota matches the saved legacy shape; advancing a round never resets another side
+  ---
+  duration_ms: 0.163747
+  type: 'test'
+  ...
+# Subtest: live twin reservation still shares quotas between duplicate copies and JSON resume
+ok 156 - live twin reservation still shares quotas between duplicate copies and JSON resume
+  ---
+  duration_ms: 0.620937
+  type: 'test'
+  ...
+# Subtest: ability receipts survive checkpoint restore and separate opposing sides
+ok 157 - ability receipts survive checkpoint restore and separate opposing sides
+  ---
+  duration_ms: 0.561948
+  type: 'test'
+  ...
+# Subtest: secondary attacks and counter/reflection reentry cannot reserve primary activations
+ok 158 - secondary attacks and counter/reflection reentry cannot reserve primary activations
+  ---
+  duration_ms: 0.154944
+  type: 'test'
+  ...
+# Subtest: per-round limit advances without refilling battle allowance, and stale rounds fail
+ok 159 - per-round limit advances without refilling battle allowance, and stale rounds fail
+  ---
+  duration_ms: 0.196517
+  type: 'test'
+  ...
+# Subtest: receipt saturation fails closed instead of forgetting spent activations
+ok 160 - receipt saturation fails closed instead of forgetting spent activations
+  ---
+  duration_ms: 9.008162
+  type: 'test'
+  ...
+# Subtest: state loader bounds imported arrays, ignores prototype keys and normalizes counts
+ok 161 - state loader bounds imported arrays, ignores prototype keys and normalizes counts
+  ---
+  duration_ms: 0.292221
+  type: 'test'
+  ...
+# Subtest: death events wait for automatic resurrection and exclude living/captured/summoned/removed actors
+ok 162 - death events wait for automatic resurrection and exclude living/captured/summoned/removed actors
+  ---
+  duration_ms: 9.494325
+  type: 'test'
+  ...
+# Subtest: a revived unit never donates another death; IDs on opposite sides are independent
+ok 163 - a revived unit never donates another death; IDs on opposite sides are independent
+  ---
+  duration_ms: 0.787228
+  type: 'test'
+  ...
+# Subtest: simultaneous deaths use deterministic ordering independent of input iteration
+ok 164 - simultaneous deaths use deterministic ordering independent of input iteration
+  ---
+  duration_ms: 0.362968
+  type: 'test'
+  ...
+# Subtest: shared meter retains charge across checkpoints and releases once at threshold
+ok 165 - shared meter retains charge across checkpoints and releases once at threshold
+  ---
+  duration_ms: 0.334534
+  type: 'test'
+  ...
+# Subtest: hibernation skips ten natural turns and releases on eleven, including a mid-sleep restore
+ok 166 - hibernation skips ten natural turns and releases on eleven, including a mid-sleep restore
+  ---
+  duration_ms: 10.25288
+  type: 'test'
+  ...
+# Subtest: extra actions and control do not accelerate sleep; duplicate owners cannot take over
+ok 167 - extra actions and control do not accelerate sleep; duplicate owners cannot take over
+  ---
+  duration_ms: 0.261885
+  type: 'test'
+  ...
+# Subtest: death cancels hibernation permanently even if the actor revives
+ok 168 - death cancels hibernation permanently even if the actor revives
+  ---
+  duration_ms: 0.231739
+  type: 'test'
+  ...
+# Subtest: all 21 supported debuffs convert without generating the original condition or a recursive effect
+ok 169 - all 21 supported debuffs convert without generating the original condition or a recursive effect
+  ---
+  duration_ms: 0.469739
+  type: 'test'
+  ...
+# Subtest: reflection excludes allied costs, misses, ultimates, isolation and MP drain
+ok 170 - reflection excludes allied costs, misses, ultimates, isolation and MP drain
+  ---
+  duration_ms: 0.13917
+  type: 'test'
+  ...
+# Subtest: ordinary targets get a terminal HP floor; no negative healing when already at HP1
+ok 171 - ordinary targets get a terminal HP floor; no negative healing when already at HP1
+  ---
+  duration_ms: 0.199211
+  type: 'test'
+  ...
+# Subtest: bosses, raid, PvP, online, story and instant-death protection get ordinary damage instead
+ok 172 - bosses, raid, PvP, online, story and instant-death protection get ordinary damage instead
+  ---
+  duration_ms: 0.194494
+  type: 'test'
+  ...
+# Subtest: pact targets the living killer, otherwise deterministic threat without friendly fire
+ok 173 - pact targets the living killer, otherwise deterministic threat without friendly fire
+  ---
+  duration_ms: 0.283908
+  type: 'test'
+  ...
+# Subtest: absorption requires a real settled death and caps three deaths across allied/enemy casualties
+ok 174 - absorption requires a real settled death and caps three deaths across allied/enemy casualties
+  ---
+  duration_ms: 0.422838
+  type: 'test'
+  ...
+# Subtest: dead absorbers gain nothing; duplicate copies share three receipts rather than creating more
+ok 175 - dead absorbers gain nothing; duplicate copies share three receipts rather than creating more
+  ---
+  duration_ms: 0.184899
+  type: 'test'
+  ...
+# Subtest: growth is a pure projection, never exponential speed, free healing, or permanent stat mutation
+ok 176 - growth is a pure projection, never exponential speed, free healing, or permanent stat mutation
+  ---
+  duration_ms: 0.326292
+  type: 'test'
+  ...
+# Subtest: paper shield uses recipient entry HP, fixed source, two turns, no additive rule
+ok 177 - paper shield uses recipient entry HP, fixed source, two turns, no additive rule
+  ---
+  duration_ms: 0.167303
+  type: 'test'
+  ...
+# Subtest: batch replay returns no plans and failed oversized batches leave previous state untouched
+ok 178 - batch replay returns no plans and failed oversized batches leave previous state untouched
+  ---
+  duration_ms: 0.38425
+  type: 'test'
+  ...
+# Subtest: new battle state and optional legacy restore start empty, with no shared references
+ok 179 - new battle state and optional legacy restore start empty, with no shared references
+  ---
+  duration_ms: 0.423229
+  type: 'test'
+  ...
+# Subtest: SaveService roundtrip retains spent traits and sleep counters with active battle state
+ok 180 - SaveService roundtrip retains spent traits and sleep counters with active battle state
+  ---
+  duration_ms: 32.785567
+  type: 'test'
+  ...
+# Subtest: main checkpoint and resume preserve the optional state after the fresh rules-state spread
+ok 181 - main checkpoint and resume preserve the optional state after the fresh rules-state spread
+  ---
+  duration_ms: 4.89798
+  type: 'test'
+  ...
+# Subtest: trait stat projections apply the five agreed costs and keep paper maximum HP at 100 at any level
+ok 182 - trait stat projections apply the five agreed costs and keep paper maximum HP at 100 at any level
+  ---
+  duration_ms: 0.249316
+  type: 'test'
+  ...
+# Subtest: ally: mirrors triggers its actual shared resonance effect
+ok 183 - ally: mirrors triggers its actual shared resonance effect
+  ---
+  duration_ms: 4.377104
+  type: 'test'
+  ...
+# Subtest: ally: talismans triggers its actual shared resonance effect
+ok 184 - ally: talismans triggers its actual shared resonance effect
+  ---
+  duration_ms: 1.751653
+  type: 'test'
+  ...
+# Subtest: ally: wings triggers its actual shared resonance effect
+ok 185 - ally: wings triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.707929
+  type: 'test'
+  ...
+# Subtest: ally: garden triggers its actual shared resonance effect
+ok 186 - ally: garden triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.782651
+  type: 'test'
+  ...
+# Subtest: ally: foxmoon triggers its actual shared resonance effect
+ok 187 - ally: foxmoon triggers its actual shared resonance effect
+  ---
+  duration_ms: 1.281314
+  type: 'test'
+  ...
+# Subtest: ally: starthread triggers its actual shared resonance effect
+ok 188 - ally: starthread triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.95455
+  type: 'test'
+  ...
+# Subtest: ally: stitch triggers its actual shared resonance effect
+ok 189 - ally: stitch triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.825386
+  type: 'test'
+  ...
+# Subtest: ally: glassaria triggers its actual shared resonance effect
+ok 190 - ally: glassaria triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.853969
+  type: 'test'
+  ...
+# Subtest: ally: eclipsecrown triggers its actual shared resonance effect
+ok 191 - ally: eclipsecrown triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.734699
+  type: 'test'
+  ...
+# Subtest: ally: oathguard triggers its actual shared resonance effect
+ok 192 - ally: oathguard triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.901049
+  type: 'test'
+  ...
+# Subtest: ally: rosevow triggers its actual shared resonance effect
+ok 193 - ally: rosevow triggers its actual shared resonance effect
+  ---
+  duration_ms: 2.072978
+  type: 'test'
+  ...
+# Subtest: ally: twinclock triggers its actual shared resonance effect
+ok 194 - ally: twinclock triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.685855
+  type: 'test'
+  ...
+# Subtest: ally: wisteria triggers its actual shared resonance effect
+ok 195 - ally: wisteria triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.33127
+  type: 'test'
+  ...
+# Subtest: ally: twinthunder triggers its actual shared resonance effect
+ok 196 - ally: twinthunder triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.777924
+  type: 'test'
+  ...
+# Subtest: ally: twinkeys triggers its actual shared resonance effect
+ok 197 - ally: twinkeys triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.241414
+  type: 'test'
+  ...
+# Subtest: ally: frostshatter triggers its actual shared resonance effect
+ok 198 - ally: frostshatter triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.452573
+  type: 'test'
+  ...
+# Subtest: ally: oathreturn triggers its actual shared resonance effect
+ok 199 - ally: oathreturn triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.911465
+  type: 'test'
+  ...
+# Subtest: ally: starconfluence triggers its actual shared resonance effect
+ok 200 - ally: starconfluence triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.710441
+  type: 'test'
+  ...
+# Subtest: ally: crimsonwings triggers its actual shared resonance effect
+ok 201 - ally: crimsonwings triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.222266
+  type: 'test'
+  ...
+# Subtest: ally: absolutionbells triggers its actual shared resonance effect
+ok 202 - ally: absolutionbells triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.295405
+  type: 'test'
+  ...
+# Subtest: ally: eclipserenewal triggers its actual shared resonance effect
+ok 203 - ally: eclipserenewal triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.255475
+  type: 'test'
+  ...
+# Subtest: ally: dreamharvest triggers its actual shared resonance effect
+ok 204 - ally: dreamharvest triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.145459
+  type: 'test'
+  ...
+# Subtest: ally: dragonliberation triggers its actual shared resonance effect
+ok 205 - ally: dragonliberation triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.209817
+  type: 'test'
+  ...
+# Subtest: ally: crownsfinale triggers its actual shared resonance effect
+ok 206 - ally: crownsfinale triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.756311
+  type: 'test'
+  ...
+# Subtest: enemy: mirrors triggers its actual shared resonance effect
+ok 207 - enemy: mirrors triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.694127
+  type: 'test'
+  ...
+# Subtest: enemy: talismans triggers its actual shared resonance effect
+ok 208 - enemy: talismans triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.173061
+  type: 'test'
+  ...
+# Subtest: enemy: wings triggers its actual shared resonance effect
+ok 209 - enemy: wings triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.082034
+  type: 'test'
+  ...
+# Subtest: enemy: garden triggers its actual shared resonance effect
+ok 210 - enemy: garden triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.186131
+  type: 'test'
+  ...
+# Subtest: enemy: foxmoon triggers its actual shared resonance effect
+ok 211 - enemy: foxmoon triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.326623
+  type: 'test'
+  ...
+# Subtest: enemy: starthread triggers its actual shared resonance effect
+ok 212 - enemy: starthread triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.253672
+  type: 'test'
+  ...
+# Subtest: enemy: stitch triggers its actual shared resonance effect
+ok 213 - enemy: stitch triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.340634
+  type: 'test'
+  ...
+# Subtest: enemy: glassaria triggers its actual shared resonance effect
+ok 214 - enemy: glassaria triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.26547
+  type: 'test'
+  ...
+# Subtest: enemy: eclipsecrown triggers its actual shared resonance effect
+ok 215 - enemy: eclipsecrown triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.207623
+  type: 'test'
+  ...
+# Subtest: enemy: oathguard triggers its actual shared resonance effect
+ok 216 - enemy: oathguard triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.2384
+  type: 'test'
+  ...
+# Subtest: enemy: rosevow triggers its actual shared resonance effect
+ok 217 - enemy: rosevow triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.230038
+  type: 'test'
+  ...
+# Subtest: enemy: twinclock triggers its actual shared resonance effect
+ok 218 - enemy: twinclock triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.183046
+  type: 'test'
+  ...
+# Subtest: enemy: wisteria triggers its actual shared resonance effect
+ok 219 - enemy: wisteria triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.425272
+  type: 'test'
+  ...
+# Subtest: enemy: twinthunder triggers its actual shared resonance effect
+ok 220 - enemy: twinthunder triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.356097
+  type: 'test'
+  ...
+# Subtest: enemy: twinkeys triggers its actual shared resonance effect
+ok 221 - enemy: twinkeys triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.15914
+  type: 'test'
+  ...
+# Subtest: enemy: frostshatter triggers its actual shared resonance effect
+ok 222 - enemy: frostshatter triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.358712
+  type: 'test'
+  ...
+# Subtest: enemy: oathreturn triggers its actual shared resonance effect
+ok 223 - enemy: oathreturn triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.330709
+  type: 'test'
+  ...
+# Subtest: enemy: starconfluence triggers its actual shared resonance effect
+ok 224 - enemy: starconfluence triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.27206
+  type: 'test'
+  ...
+# Subtest: enemy: crimsonwings triggers its actual shared resonance effect
+ok 225 - enemy: crimsonwings triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.153261
+  type: 'test'
+  ...
+# Subtest: enemy: absolutionbells triggers its actual shared resonance effect
+ok 226 - enemy: absolutionbells triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.210768
+  type: 'test'
+  ...
+# Subtest: enemy: eclipserenewal triggers its actual shared resonance effect
+ok 227 - enemy: eclipserenewal triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.162105
+  type: 'test'
+  ...
+# Subtest: enemy: dreamharvest triggers its actual shared resonance effect
+ok 228 - enemy: dreamharvest triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.150657
+  type: 'test'
+  ...
+# Subtest: enemy: dragonliberation triggers its actual shared resonance effect
+ok 229 - enemy: dragonliberation triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.145629
+  type: 'test'
+  ...
+# Subtest: enemy: crownsfinale triggers its actual shared resonance effect
+ok 230 - enemy: crownsfinale triggers its actual shared resonance effect
+  ---
+  duration_ms: 0.322957
+  type: 'test'
+  ...
+# Subtest: 24 pairs stop on partner control, death, capture and isolation; copies do not add activations
+ok 231 - 24 pairs stop on partner control, death, capture and isolation; copies do not add activations
+  ---
+  duration_ms: 2.55179
+  type: 'test'
+  ...
+# Subtest: no false conditional benefits from misses, plain targets, empty cleansing or empty dispel
+ok 232 - no false conditional benefits from misses, plain targets, empty cleansing or empty dispel
+  ---
+  duration_ms: 5.191282
+  type: 'test'
+  ...
+# Subtest: only natural attacks record focus; effects use maximum rather than sum
+ok 233 - only natural attacks record focus; effects use maximum rather than sum
+  ---
+  duration_ms: 2.937792
+  type: 'test'
+  ...
+# Subtest: defensive event attribution, one battle rescue, lethal hits and DoT crossing
+ok 234 - defensive event attribution, one battle rescue, lethal hits and DoT crossing
+  ---
+  duration_ms: 1.05355
+  type: 'test'
+  ...
+# Subtest: save and restore keeps quotas, focus, charge and consumption without copying cues
+ok 235 - save and restore keeps quotas, focus, charge and consumption without copying cues
+  ---
+  duration_ms: 0.829812
+  type: 'test'
+  ...
+# Subtest: cutins have 24 themes, two escaped names, distinct phases and no input controls
+ok 236 - cutins have 24 themes, two escaped names, distinct phases and no input controls
+  ---
+  duration_ms: 0.826677
+  type: 'test'
+  ...
+# Subtest: lowest-HP aid may heal a sleeping third member; no late perk after a partner falls mid-hit
+ok 237 - lowest-HP aid may heal a sleeping third member; no late perk after a partner falls mid-hit
+  ---
+  duration_ms: 0.336768
+  type: 'test'
+  ...
+# Subtest: pair discount agrees between MP affordability, battle skill buttons and enemy native AI
+ok 238 - pair discount agrees between MP affordability, battle skill buttons and enemy native AI
+  ---
+  duration_ms: 139.705156
+  type: 'test'
+  ...
+1..238
+# tests 238
+# suites 0
+# pass 238
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1462.749025

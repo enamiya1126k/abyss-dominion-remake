@@ -35,6 +35,7 @@ function resultFixture({ monsters = [monster("m1"), monster("m2"), monster("m3")
   };
   const save = { state, save: () => { saveCalls += 1; return true; } };
   const context = {
+    localHp411:(m,hp)=>Math.max(0,Math.min(m.hpMax,Math.floor(hp))),
     save, structuredClone: undefined, WORLD_MAX_FLOOR: 10_000,
     onlinePartyController: { selfId: "SELF" },
     onlinePartyPersistentState: () => save.state.onlineParty,
@@ -64,6 +65,7 @@ function rewardFixture() {
   };
   const save = { state, save: () => { saveCalls += 1; return saveSucceeds; } };
   const context = {
+    localHp411:(m,hp)=>Math.max(0,Math.min(m.hpMax,Math.floor(hp))),
     save, structuredClone: undefined, WORLD_MAX_FLOOR: 10_000, MONSTER_STORAGE_CAP: 500, SPECIES: {},
     onlinePartyController: { selectedMonsterId: "m1" },
     onlinePartyPersistentState: () => save.state.onlineParty,

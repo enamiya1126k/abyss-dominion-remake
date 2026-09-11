@@ -1,18 +1,20 @@
-import {twinStatus385} from '../TwinStatus385.js?v=3.1.75-build395';
+import {singleTraitLabel410} from '../../battle/SingleTraits410.js?v=3.1.90-build410';
+import {chapterTwoPairDisplayName406} from '../../data/chapterTwoPairNames406.js?v=3.1.86-build406';
+import {twinStatus385} from '../TwinStatus385.js?v=3.1.90-build410';
 import {shieldCapacity} from '../../core/HeroShieldDisplay.js?v=3.1.58-build378';
 import{hasHeroFortitude,heroFortitudeUsed}from'../../core/HeroFortitudeSystem.js?v=3.1.41-build361';
 import{enemyMagicCircleMarkup}from"../../core/MagicCircleSystem.js?v=3.1.78-build398";
-import{ultimateCircle,ultimateLabels,ultimateIsolated,ultimateAvailability,ultimateBasicOnly,isEndgameUltimate}from"../../core/EndgameUltimateSystem.js?v=3.1.58-build378";
+import{ultimateCircle,ultimateLabels,ultimateIsolated,ultimateAvailability,ultimateBasicOnly,isEndgameUltimate}from"../../core/EndgameUltimateSystem.js?v=3.1.90-build410";
 import{HERO_SOLO_DAMAGE_RATES}from"../../data/mythicSerialSpecies.js?v=3.1.39-build359";
 import{BATTLE_ITEM_LAYOUT}from"./BattleItemLayout.js?v=3.1.38-build358";
-import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.82-build402";
-import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.75-build395";
-import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.78-build398";
+import{displayName,calculatedStats,colorValue,expNeedFor}from"../../models/Monster.js?v=3.1.90-build410";
+import{learnedSkills,maxMp,skillElementLabel,effectiveSkillMpCost,skillCombatKeywords}from"../../battle/SkillSystem.js?v=3.1.89-build409";
+import{cooldownRemaining,statusLabel,enemyStatusesFor,allyAilmentsFor,allyEffectsFor,enemyEffectsFor}from"../../battle/BattleRules.js?v=3.1.90-build410";
 import{currentAlly,currentTurnEntry,aliveEnemies,selectedEnemy}from"../../battle/TurnSystem.js?v=3.1.82-build402";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.82-build402";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
-import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.82-build402";
+import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.90-build410";
 import{ATTRIBUTE_MATCHUP_MULTIPLIERS,attributesEffectiveAgainst,attributesIneffectiveAgainst}from"../../data/attributes.js?v=3.1.1-build311";
 import{heroResonanceProfile,isHeroResonanceSpecies}from"../../core/HeroResonanceSystem.js?v=3.1.39-build359";
 
@@ -20,12 +22,13 @@ function battleInteger(value){return Math.round(Number(value)||0).toLocaleString
 function battleParty(battle){return(Array.isArray(battle?.party)?battle.party:[]).filter(monster=>monster&&typeof monster==="object"&&monster.id&&monster.speciesId)}
 function unitStats(unit){return unit?.onlineStats??calculatedStats(unit)}
 function unitMaxMp(unit){return Math.max(0,Number(unit?.onlineMaxMp??maxMp(unit))||0)}
-function unitName(unit){return unit?.onlineName??displayName(unit)}
-function skillMpCost(actor,skill){return Math.max(0,Number(skill?.onlineMpCost??effectiveSkillMpCost(actor,skill))||0)}
+function unitName(unit){return chapterTwoPairDisplayName406(unit,unit?.onlineName??displayName(unit))}
+function skillMpCost(actor,skill,battle){return Math.max(0,Number(skill?.onlineMpCost??effectiveSkillMpCost(actor,skill,battle))||0)}
 function renderTurnOrder(battle){
  return (battle.turnQueue??[]).map((entry,index)=>{
   const classes=["turn-chip",entry.type,index===battle.queueIndex?"current":"",index<battle.queueIndex?"done":""].filter(Boolean).join(" ");
-  return `<span class="${classes}" title="${entry.name}"><b>${entry.name}</b><small>速度 ${battleInteger(entry.spd)}</small></span>`;
+  const unit=(entry.type==="enemy"?battle.enemies:battle.party)?.find(u=>u.id===entry.id),name=chapterTwoPairDisplayName406(unit,entry.name);
+  return `<span class="${classes}" title="${htmlText(name)}"><b>${htmlText(name)}</b><small>速度 ${battleInteger(entry.spd)}</small></span>`;
  }).join("");
 }
 function growthText(unit){const plus=Math.max(0,Number(unit?.plus??unit?.sourcePlus)||0);return`+${plus}`}
@@ -37,7 +40,7 @@ const BATTLE_EFFECT_LABELS={authorityPossession:"王命上書き",guaranteedCrit
 function battleRoleLabel(role){return BATTLE_ROLE_LABELS[String(role??"balanced").toLowerCase()]??String(role??"万能型")}
 function soloHeroBadge(battle,unit,side){const fortitude=hasHeroFortitude(unit)?`<span class="status-chip guard">${heroFortitudeUsed(battle,unit)?'ふんばり 使用済み':'ふんばり 残1'}</span>`:'';return fortitude+(isHeroResonanceSpecies(unit?.speciesId)&&heroResonanceProfile(side==="enemy"?battle.enemies:battle.party).count===1?`<span class="status-chip guard" title="生存する勇者が1人：被ダメージ30%軽減・与ダメージ${Math.round(HERO_SOLO_DAMAGE_RATES[unit.speciesId]*100)}%">被ダメ↓30%</span><span class="status-chip guard">単独火力 ${Math.round(HERO_SOLO_DAMAGE_RATES[unit.speciesId]*100)}%</span>`:"");}
 function circleArt358(b,u,original,ally=false){const borrowed=(b.ultimates358?.effects??[]).some(e=>e.kind==='borrow'&&!e.done&&(e.source===u.id||e.targets?.includes(u.id)));if(!borrowed)return original;return enemyMagicCircleMarkup(ultimateCircle(b,u,ally?b.magicCircleProfiles?.[u.id]:u.enemyMagicCircle),{className:ally?'battle-magic-circle':'enemy-battle-magic-circle'})}
-function ultimateBadges358(battle,unit){return ultimateLabels(battle,unit).map(label=>`<span class="status-chip ultimate-authority">${htmlText(label)}</span>`).join("")}
+function ultimateBadges358(battle,unit){const side=battle.party?.includes(unit)?"ally":"enemy",trait=singleTraitLabel410(battle,unit,side),shield=battle.singleTraits410?.shields?.[JSON.stringify([side,String(unit.id)])],extra=[trait,...(shield?.amount>0&&(battle.turn??1)<=shield.expires?[`従騎盾 ${Math.floor(shield.amount)}`]:[])].filter(Boolean);return [...ultimateLabels(battle,unit),...extra].map(label=>`<span class="status-chip ultimate-authority">${htmlText(label)}</span>`).join("")}
 function battleEffectLabel(effect){return BATTLE_EFFECT_LABELS[effect?.kind]??effect?.name??"特殊効果"}
 function battleStatusLabel(status){const labels={poison:"毒",burn:"炎上",bleed:"出血",curse:"呪い",paralysis:"麻痺",freeze:"凍結",shock:"感電",sleep:"睡眠",charm:"魅了",confusion:"混乱",fear:"恐怖"};return labels[status?.id]??status?.name??statusLabel(status)}
 function remainingTurns(turns,persistent=false){const value=Math.max(0,Number(turns)||0);return value?` ${value}T`:persistent?"・持続":""}
@@ -45,6 +48,12 @@ const COMBAT_RANK_POWER=Object.freeze({N:0,R:1,SR:2,SSR:3,UR:4,LR:5,"神話":6,B
 function combatRank(unit,species={}){
  const value=unit?.endgameFaction==="tenGod"||unit?.faction==="tenGod"?"十神":unit?.endgameFaction==="abyss"||unit?.faction==="abyss"?"深淵":unit?.boss?"BOSS":unit?.summonTier??unit?.summonRarity??unit?.combatRarity??species.rarity??null;
  return Object.prototype.hasOwnProperty.call(COMBAT_RANK_POWER,value)?value:null;
+}
+// A boss is an encounter role; the badge beside it uses the unit's rarity.
+function displayRank405(unit,species={}){
+ if(unit?.endgameFaction==='tenGod'||unit?.faction==='tenGod')return '十神';
+ if(unit?.endgameFaction==='abyss'||unit?.faction==='abyss')return '深淵';
+ return [unit?.summonTier,unit?.summonRarity,unit?.combatRarity,unit?.rarity,species?.rarity].find(rank=>rank!=='BOSS'&&Object.prototype.hasOwnProperty.call(COMBAT_RANK_POWER,rank))??null;
 }
 function rankTone(rank){return({N:"n",R:"r",SR:"sr",SSR:"ssr",UR:"ur",LR:"lr","神話":"mythic",BOSS:"boss","深淵":"abyss","十神":"ten-god"})[rank]??""}
 function rankBadge(rank){return rank?`<span class="combat-rank-badge rank-${rankTone(rank)}">${rank}</span>`:""}
@@ -69,10 +78,10 @@ function renderEnemies(battle,enemies,target){
  return enemies.filter(Boolean).map((enemy,index)=>{
   const statuses=enemyStatusesFor(battle,enemy.id),effects=enemyEffectsFor(battle,enemy.id);
   const statusHtml=`<div class="status-row enemy-status-row" data-status-detail="${enemy.id}" ${statuses.length||effects.length||ultimateBadges358(battle,enemy)||soloHeroBadge(battle,enemy,"enemy")?"":'aria-hidden="true"'}>${ultimateBadges358(battle,enemy)}${soloHeroBadge(battle,enemy,"enemy")}${statuses.map(s=>`<span class="status-chip ${s.id}">${battleStatusLabel(s)}${remainingTurns(s.turns)}</span>`).join("")}${effects.map(e=>`<span class="status-chip ${e.kind}">${battleEffectLabel(e)}${remainingTurns(e.turns)}</span>`).join("")}</div>`;
-  const floorBoss=Boolean(enemy.floorBossCatalogId||enemy.boss&&enemy.campaignBossId&&!enemy.endgameBossId),endgameBoss=Boolean(enemy.endgameBossId||["abyss","tenGod"].includes(enemy.faction)),badge=enemy.boss?`<span class="boss-badge">${floorBoss?"階層BOSS":endgameBoss?(enemy.faction==="tenGod"?"十神":"深淵"):"BOSS"}</span>`:enemy.elite?`<span class="elite-badge">${htmlText(enemy.eliteAffixIcon??"🜲")} 強敵・${htmlText(enemy.eliteAffixName??"変異")}</span>`:"",safeName=htmlText(String(enemy.name??"").replace(/^[\s⚔\uFE0F]+/u,""));const danger="";
+  const floorBoss=Boolean(enemy.floorBossCatalogId||enemy.boss&&enemy.campaignBossId&&!enemy.endgameBossId),endgameBoss=Boolean(enemy.endgameBossId||["abyss","tenGod"].includes(enemy.faction)),badge=enemy.boss?`<span class="boss-badge">${floorBoss?"階層BOSS":endgameBoss?(enemy.faction==="tenGod"?"十神":"深淵"):"BOSS"}</span>`:enemy.elite?`<span class="elite-badge">${htmlText(enemy.eliteAffixIcon??"🜲")} 強敵・${htmlText(enemy.eliteAffixName??"変異")}</span>`:"",safeName=htmlText(chapterTwoPairDisplayName406(enemy,enemy.name??"").replace(/^[\s⚔\uFE0F]+/u,""));const danger="";
   const hpRate=Math.max(0,Math.min(100,enemy.hp/Math.max(1,enemy.maxHp)*100));
   const line=index<2?"front-line":"rear-line";
-  const isChapterTwo=battle.specialBattleType==='chapterTwo',dead=enemy.hp<=0,pendingKo=dead&&(battle.presentationKoIds??[]).map(String).includes(String(enemy.id)),element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",rank=combatRank(enemy,battle.species?.[enemy.speciesId])??"N",rankClass=floorBoss?"combat-rank-unit rank-floor-boss":`combat-rank-unit rank-${rankTone(rank)}`,rankMarkup=enemy.boss&&battle.specialBattleType!=="chapterTwo"?"":rankBadge(rank),floatingName=`<span class="battle-unit-floating-name battle-unit-floating-badges ${endgameBoss?"compact-boss-name375":""}">${endgameBoss?"":badge}${rankMarkup}<b title="${safeName}">${safeName}</b></span>`;
+  const isChapterTwo=battle.specialBattleType==='chapterTwo',dead=enemy.hp<=0,pendingKo=dead&&(battle.presentationKoIds??[]).map(String).includes(String(enemy.id)),element=enemy.trialElement??enemy.element??battle.species?.[enemy.speciesId]?.element??"neutral",rank=combatRank(enemy,battle.species?.[enemy.speciesId])??"N",rankClass=floorBoss?"combat-rank-unit rank-floor-boss":`combat-rank-unit rank-${rankTone(rank)}`,rankMarkup=enemy.boss&&battle.specialBattleType!=="chapterTwo"?"":rankBadge(displayRank405(enemy,battle.species?.[enemy.speciesId])??(enemy.boss?null:rank)),floatingName=`<span class="battle-unit-floating-name battle-unit-floating-badges ${endgameBoss?"compact-boss-name375":""}">${endgameBoss?"":badge}${rankMarkup}<b title="${safeName}">${safeName}</b></span>`;
   return `<button id="enemy-${enemy.id}" ${dead||ultimateIsolated(battle,enemy)?`disabled${dead&&!pendingKo?' aria-hidden="true"':""}`:`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${pendingKo?"presentation-ko-pending":""} ${enemy.boss?"boss-enemy":""} ${enemy.raidMainBoss?"raid-main-boss":""} ${enemy.raidSubBoss?"raid-sub-boss":""} ${floorBoss?"floor-boss-enemy":""} ${endgameBoss?"party-floor-boss endgame-boss-art":""} ${enemy.elite?"elite-enemy":""} ${rankClass} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
    ${enemy.boss&&!isChapterTwo?"":floatingName}
@@ -80,7 +89,7 @@ function renderEnemies(battle,enemies,target){
    <div class="side-unit-card enemy-info">
     <div class="side-unit-name enemy-name ${enemy.boss?"boss-meta-only":""}">${danger}${enemy.boss||battle.specialBattleType==='chapterTwo'?"":`<b class="enemy-card-name" title="${safeName}">${safeName}</b>`}<span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
-    ${isChapterTwo&&enemy.chapterTwoTactics382?`<small class="chapter-two-loadout382">装備6枠・${htmlText(enemy.enemyEquipmentRarity)} Lv.${battleInteger(enemy.enemyEquipmentLevel)} +${battleInteger(enemy.enemyGear?.[0]?.plus)}</small>`:""}
+    
     ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}`,"enemy-hp")}
     ${shieldLabel(enemy,enemy.maxHp)}
     <!-- enemy-mini-stats retired in Build321: enemy cards intentionally expose HP only. -->
@@ -118,7 +127,7 @@ function renderParty(battle,actor){
 
 function renderSkills(battle,actor,skills){
  const rows=skills.map(skill=>{
-  const ultimate358=isEndgameUltimate(skill)?ultimateAvailability(battle,actor,skill.id):null,cd=Math.max(0,Number(cooldownRemaining(battle,actor.id,skill.id))||0),baseCd=Math.max(0,Number(skill.cooldown)||0),mpCost=skillMpCost(actor,skill),disabled=actor.currentMp<mpCost||cd>0||ultimate358&&!ultimate358.ok||ultimateBasicOnly(battle,actor);
+  const ultimate358=isEndgameUltimate(skill)?ultimateAvailability(battle,actor,skill.id):null,cd=Math.max(0,Number(cooldownRemaining(battle,actor.id,skill.id))||0),baseCd=Math.max(0,Number(skill.cooldown)||0),mpCost=skillMpCost(actor,skill,battle),disabled=actor.currentMp<mpCost||cd>0||ultimate358&&!ultimate358.ok||ultimateBasicOnly(battle,actor);
   const cooldownLabel=baseCd>0?`CT ${baseCd}`:"CTなし",stateLabel=ultimate358&&!ultimate358.ok?htmlText(ultimate358.reason):ultimateBasicOnly(battle,actor)?"領域中は通常攻撃のみ":cd>0?`再使用まで ${cd}`:actor.currentMp<mpCost?"MP不足":"使用可能";
   const details=[...(skill.description?[skill.description]:[]),...skillCombatKeywords(skill)].map(line=>`<li>${htmlText(line)}</li>`).join("");
   const skillName=skill.equipmentGranted?`装備技・${skill.name}`:skill.name,skillTag=skill.equipmentGranted?`${skill.equipmentAuthorityName??"装備固有"}・装備中限定`:skill.tag??"スキル",element=skillElementLabel(skill);
@@ -168,8 +177,8 @@ function renderOnlineItems(battle){
 }
 
 function renderCommands(battle,actor,current,enemies,target,inventory,skills){
- const title=battle.onlineReadOnly?"観戦中":actor?`${unitName(actor)}の行動`:current?.type==="enemy"?`${(battle.enemies??[]).find(e=>e.id===current.id)?.name??"敵"}が行動中`:"ラウンド処理中";
- const targetHelp=actor&&enemies.length>1?`<small class="target-help">攻撃対象：${target?.name??"なし"}（敵をタップして変更）</small>`:"";
+ const title=battle.onlineReadOnly?"観戦中":actor?`${unitName(actor)}の行動`:current?.type==="enemy"?`${(()=>{const unit=(battle.enemies??[]).find(e=>e.id===current.id);return htmlText(chapterTwoPairDisplayName406(unit,unit?.name??"敵"))})()}が行動中`:"ラウンド処理中";
+ const targetHelp=actor&&enemies.length>1?`<small class="target-help">攻撃対象：${target?htmlText(chapterTwoPairDisplayName406(target,target.name)):"なし"}（敵をタップして変更）</small>`:"";
  let controls;
  if(battle.onlineReadOnly)controls='<div class="enemy-thinking">両チームの戦況を同期しています…</div>';
  else if(battle.auto)controls=`<div class="auto-command-wait"><span>${pixelIcon("crossed-swords")}</span><div><b>完全自動戦闘 進行中</b><small>戦場をタップ、または上の自動ボタンで手動操作へ</small></div></div>`;
@@ -180,13 +189,15 @@ function renderCommands(battle,actor,current,enemies,target,inventory,skills){
  else if(battle.itemMenu)controls=renderItems(inventory,battle);
  else{const blocked=Boolean(battle.onlineMode&&!battle.onlineAllowCapture)||Boolean(target&&(target.boss||target.floorBossCatalogId||target.uncapturable||target.endgameBossId||["abyss","tenGod"].includes(target.faction)));controls=`<div class="command-grid"><button data-command="attack"><i>${pixelIcon("crossed-swords")}</i><span>たたかう</span></button><button data-command="guard"><i>${pixelIcon("equipment")}</i><span>ガード</span></button><button data-command="skill"><i>${pixelIcon("skills")}</i><span>スキル</span></button><button data-command="item"><i>${pixelIcon("growth")}</i><span>${battle.onlineMode?"応急薬":"アイテム"}</span></button><button data-command="capture" ${blocked?'disabled aria-label="この敵は捕獲できません"':""}><i>${pixelIcon("capture")}</i><span>${blocked?"捕獲不可":"捕獲"}</span></button></div>`}
  const itemOpen=Boolean(actor&&!battle.auto&&!battle.onlineReadOnly&&!battle.onlineActionSubmitted&&!battle.skillMenu&&(battle.itemMenu||battle.onlineItemTargetMenu));
+ const skillOpen=Boolean(actor&&!battle.auto&&!battle.onlineReadOnly&&!battle.onlineActionSubmitted&&battle.skillMenu);
  const countdown=battle.onlineCountdownMode?`<strong class="online-shared-countdown" data-online-countdown="${battle.onlineCountdownMode}">${battle.phase==="command"?"--.-":"処理中"}</strong>`:"";
- return `<div class="battle-command ${battle.auto?"is-auto":""} ${itemOpen?"has-item-menu":""}"><div class="battle-command-head spread"><h2>${title}</h2>${countdown}<span class="muted">${pixelIcon("capture")} 捕獲結晶 ${inventory.captureCrystals??0}</span></div>${targetHelp}${controls}</div>`;
+ return `<div class="battle-command ${battle.auto?"is-auto":""} ${itemOpen?"has-item-menu":""} ${skillOpen?"has-skill-menu":""}"><div class="battle-command-head spread"><h2>${title}</h2>${countdown}<span class="muted">${pixelIcon("capture")} 捕獲結晶 ${inventory.captureCrystals??0}</span></div>${targetHelp}${controls}</div>`;
 }
 
 export function BattleScreen(battle,inventory,settings,floor=1){
  const party=battleParty(battle);if(party.length!==(Array.isArray(battle?.party)?battle.party.length:0))battle={...battle,party};
  const actor=battle.onlineActorId?party.find(monster=>monster.id===battle.onlineActorId&&monster.currentHp>0)??null:currentAlly(battle),current=currentTurnEntry(battle),livingEnemies=aliveEnemies(battle),enemies=(battle.enemies??[]).filter(Boolean),target=selectedEnemy(battle),skills=actor?(battle.onlineSkills??learnedSkills(actor)):[];
+ const pairStatus405=battle.onlineMode?"":twinStatus385(party,{battle,compact:true})+twinStatus385(battle.enemies??[],{side:"enemy",battle,compact:true});
  const special=battle.specialBattle?`<div class="special-battle-strip ${battle.specialBattleType}"><b>${battle.specialTitle??"特別戦"}</b><small>${battle.specialSubtitle??"敗北ペナルティなし"}</small></div>`:"";
  const floorBand=Math.max(1,Math.min(20,Math.floor((Math.max(1,Number(floor)||1)-1)/50)+1));
  const speed=normalizeBattleSpeed(battle.onlineMode?battle.speed??settings.battleSpeed:settings.battleSpeed),scaled=ms=>`${Math.max(1,Math.round(ms/speed))}ms`;
@@ -197,10 +208,10 @@ export function BattleScreen(battle,inventory,settings,floor=1){
  const onlineExit=battle.onlineMode==="explore"?'<button type="button" data-online-return>帰還</button>':'<button type="button" disabled>逃走不可</button>';
  const onlineAuto=battle.onlineAutoAvailable?`<button type="button" data-online-battle-auto="${htmlText(battle.onlineMode)}" aria-pressed="${Boolean(battle.auto)}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button>`:battle.onlineAutoUnsupported?'<button type="button" disabled class="online-sync-state" title="サーバー197更新後に利用できます"><span>自動</span><b>要更新</b></button>':'<button type="button" disabled class="enabled online-sync-state"><span>同期</span><b>有効</b></button>';
  const offlineExit=battle.specialBattle?`<button id="escapeBattle" type="button" ${battle.escapePending?"disabled":""}>${battle.escapePending?"撤退待ち":"撤退"}</button>`:`<button id="escapeBattle" type="button" ${battle.escapePending?"disabled":""}>${battle.escapePending?"逃走待ち":"逃げる"}</button>`;
- return `<section class="battle-screen side-battle-v2 ${battle.specialBattleType==='chapterTwo'?'chapter-two-battle380':''} battle-history-hidden battle-theme-${theme} ${battle.auto?"auto-mode":"manual-mode"} ${battle.biomePanelCollapsed?"biome-panel-collapsed":"biome-panel-expanded"} ${battle.specialBattle?"special-battle":""} ${battle.onlineMode?"online-shared-battle":""}" ${battle.onlineMode?`data-online-battle-view="${battle.onlineMode}"`:""} data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}"><style>${BATTLE_ITEM_LAYOUT}</style>${special}
+ return `<section class="battle-screen side-battle-v2 ${pairStatus405?"has-pair-resonance405":""} ${battle.specialBattleType==='chapterTwo'?'chapter-two-battle380':''} battle-history-hidden battle-theme-${theme} ${battle.auto?"auto-mode":"manual-mode"} ${battle.biomePanelCollapsed?"biome-panel-collapsed":"biome-panel-expanded"} ${battle.specialBattle?"special-battle":""} ${battle.onlineMode?"online-shared-battle":""}" ${battle.onlineMode?`data-online-battle-view="${battle.onlineMode}"`:""} data-speed="${speed}" style="${timingStyle}" data-floor-band="${floorBand}"><style>${BATTLE_ITEM_LAYOUT}</style>${special}
   <div class="battle-header"><div class="round-label"><small>ラウンド</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}階・遭遇戦`}</b><small>${battle.onlineMode?battle.auto?"サーバー同期・自動戦闘":"サーバー同期戦闘":battle.auto?"完全自動":"コマンド戦闘"}</small></div>${battle.onlineMode?onlineAuto:`<button id="toggleBattleAuto" type="button" aria-pressed="${battle.auto}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button>`}<button id="battleSpeed" ${battle.onlineMode?`data-online-speed-cycle="${battle.onlineMode}"`:""}>×${speed}</button>${battle.onlineMode?onlineExit:offlineExit}</div>
   <div class="turn-order" tabindex="0" role="region" aria-label="行動順・左右にスワイプして全員を確認"><span class="turn-order-title">行動順</span>${renderTurnOrder(battle)}</div>
-  ${battle.onlineMode?"":twinStatus385(party,{battle,compact:true})+twinStatus385(battle.enemies??[],{side:"enemy",battle,compact:true})}
+  ${pairStatus405?`<div class="battle-resonance405" tabindex="0" role="region" aria-label="ペア共鳴・左右にスワイプして確認">${pairStatus405}</div>`:""}
   <div class="battle-arena side-battle-arena multi-enemy">
    <div class="battle-stage-vignette" aria-hidden="true"></div>
    ${biomeBadge}

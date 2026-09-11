@@ -1,0 +1,133 @@
+/* Build405 — give every battle section its own grid row. Pair status used to
+   occupy the arena's flexible row while the arena covered the next line. */
+#app .battle-screen.side-battle-v2 {
+ grid-template-columns: minmax(0,1fr) !important;
+ grid-template-rows: auto auto minmax(0,1fr) auto !important;
+ grid-template-areas: "header" "order" "arena" "commands" !important;
+}
+#app .battle-screen.side-battle-v2.special-battle {
+ grid-template-rows: auto auto auto minmax(0,1fr) auto !important;
+ grid-template-areas: "special" "header" "order" "arena" "commands" !important;
+}
+#app .battle-screen.side-battle-v2.has-pair-resonance405 {
+ grid-template-rows: auto auto 28px minmax(0,1fr) auto !important;
+ grid-template-areas: "header" "order" "resonance" "arena" "commands" !important;
+}
+#app .battle-screen.side-battle-v2.special-battle.has-pair-resonance405 {
+ grid-template-rows: auto auto auto 28px minmax(0,1fr) auto !important;
+ grid-template-areas: "special" "header" "order" "resonance" "arena" "commands" !important;
+}
+#app .battle-screen > .special-battle-strip { grid-area: special !important; }
+#app .battle-screen > .battle-header { grid-area: header !important; }
+#app .battle-screen > .turn-order { grid-area: order !important; }
+#app .battle-screen > .battle-arena { grid-area: arena !important; min-height: 0 !important; }
+#app .battle-screen > .battle-command { grid-area: commands !important; }
+#app .battle-screen > .battle-resonance405 {
+ grid-area: resonance !important;
+ display: flex !important;
+ align-items: stretch !important;
+ gap: 6px !important;
+ box-sizing: border-box !important;
+ min-width: 0 !important;
+ height: 28px !important;
+ margin: 0 !important;
+ padding: 0 !important;
+ overflow-x: auto !important;
+ overflow-y: hidden !important;
+ overscroll-behavior-x: contain;
+ touch-action: pan-x;
+ scrollbar-width: none;
+ -webkit-overflow-scrolling: touch;
+}
+#app .battle-resonance405::-webkit-scrollbar { display: none; }
+#app .battle-resonance405:focus-visible { outline: 1px solid #d6b972; outline-offset: -1px; }
+#app .battle-resonance405 > .twin-status385 {
+ display: contents !important;
+}
+#app .battle-resonance405 .twin-card385 {
+ display: flex !important;
+ flex: 0 0 auto !important;
+ flex-wrap: nowrap !important;
+ align-items: center !important;
+ gap: 8px !important;
+ height: 28px !important;
+ box-sizing: border-box !important;
+ margin: 0 !important;
+ padding: 3px 8px !important;
+ border: 1px solid #756246 !important;
+ border-left-width: 3px !important;
+ border-radius: 0 !important;
+ background: linear-gradient(100deg,#1d1b14,#0b0c0e) !important;
+ white-space: nowrap !important;
+}
+#app .battle-resonance405 .twin-card385.active { border-left-color: #e0c479 !important; }
+#app .battle-resonance405 .twin-card385 > :is(b,span) {
+ flex: 0 0 auto !important;
+ white-space: nowrap !important;
+ font-size: 11px !important;
+ line-height: 16px !important;
+}
+
+/* The layout routine writes precise positions after fitting the visible art.
+   The fallback is centered too, while images are still loading. */
+#app .battle-screen.side-battle-v2 .side-unit-sprite > :is(.battle-magic-circle,.enemy-battle-magic-circle) {
+ left: 50% !important;
+ top: 50% !important;
+ width: 118% !important;
+ height: 118% !important;
+ max-width: none !important;
+ max-height: none !important;
+ transform: translate(-50%,-50%) !important;
+ opacity: .72 !important;
+ filter: brightness(1.2) saturate(1.25) drop-shadow(0 0 4px currentColor) !important;
+ overflow: visible !important;
+ pointer-events: none !important;
+ z-index: 0 !important;
+}
+#app .battle-screen.side-battle-v2 .side-unit-sprite > .magic-circle[data-circle-id="none"] {
+ opacity: .2 !important;
+ filter: grayscale(1) !important;
+}
+#app .battle-screen.side-battle-v2 .magic-circle > b { display: none !important; }
+
+/* Stable scroll and button locations during successive upgrades. */
+#app .magic-circle-modal .magic-circle-list { overflow-anchor: none; }
+#app .magic-circle-modal .magic-circle-row { overflow-anchor: none; }
+#app .magic-circle-modal [data-circle-buy] {
+ touch-action: manipulation;
+ min-height: 44px !important;
+ font-variant-numeric: tabular-nums;
+}
+#app .magic-circle-modal .circle-copy405 strong { min-height: 1.5em; font-variant-numeric: tabular-nums; }
+#app .magic-circle-modal .circle-feedback405 {
+ display: block;
+ height: 2.8em;
+ min-height: 2.8em;
+ overflow: hidden;
+ margin-top: 3px;
+ color: #dbca9b;
+ font-size: 11px;
+ line-height: 1.4;
+ overflow-wrap: anywhere;
+}
+
+@media (orientation:landscape) and (max-height:520px) {
+ #app .battle-screen.side-battle-v2 {
+  grid-template-columns: minmax(0,1fr) minmax(250px,.48fr) !important;
+  grid-template-rows: auto auto minmax(0,1fr) !important;
+  grid-template-areas: "header header" "order order" "arena commands" !important;
+ }
+ #app .battle-screen.side-battle-v2.special-battle {
+  grid-template-rows: auto auto auto minmax(0,1fr) !important;
+  grid-template-areas: "special special" "header header" "order order" "arena commands" !important;
+ }
+ #app .battle-screen.side-battle-v2.has-pair-resonance405 {
+  grid-template-rows: auto auto 28px minmax(0,1fr) !important;
+  grid-template-areas: "header header" "order order" "resonance resonance" "arena commands" !important;
+ }
+ #app .battle-screen.side-battle-v2.special-battle.has-pair-resonance405 {
+  grid-template-rows: auto auto auto 28px minmax(0,1fr) !important;
+  grid-template-areas: "special special" "header header" "order order" "resonance resonance" "arena commands" !important;
+ }
+ #app .battle-screen > .battle-command { align-self: start; max-height: 100%; overflow-y: auto; }
+}

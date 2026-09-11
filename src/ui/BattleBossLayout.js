@@ -1,5 +1,6 @@
 import {endgameSpriteBounds399,endgameArtFit399} from './EndgameSprite399.js?v=3.1.79-build399';
 import {chapterTwoFrameBounds383} from './ChapterTwoSprite383.js?v=3.1.82-build402';
+import {layoutBattleCircles405} from './BattleCircleLayout405.js?v=3.1.85-build405';
 // Position against visible pixels, not the transparent sprite canvas. Cache
 // one alpha scan per URL; idle animation does not trigger repeated layout work.
 const boundsCache=new Map();
@@ -103,13 +104,15 @@ export function layoutPartyBosses(root){
   if(!changed)break;
  }
  if(root.classList.contains('chapter-two-battle380'))layoutChapterTwoEnemies382(root,arena);
+ // Circle placement must follow all silhouette and name/card adjustments.
+ layoutBattleCircles405(root,visibleBounds);
 }
 
 export function mountBattleBossLayout(root){
- observer?.disconnect();observer=null;if(queuedFrame)cancelAnimationFrame(queuedFrame);
- if(!root?.querySelector('.party-floor-boss')&&!root?.classList.contains('chapter-two-battle380'))return;
+ observer?.disconnect();observer=null;if(queuedFrame)cancelAnimationFrame(queuedFrame);queuedFrame=0;
+ if(!root?.querySelector('.side-unit-sprite'))return;
  const schedule=()=>{if(!root.isConnected||queuedFrame)return;queuedFrame=requestAnimationFrame(()=>{queuedFrame=0;layoutPartyBosses(root)})};
  queuedFrame=0;schedule();
- for(const image of root.querySelectorAll('.party-floor-boss-art img,.chapter-two-battle380 .side-enemies img'))if(!image.complete){image.addEventListener('load',schedule,{once:true});image.addEventListener('error',schedule,{once:true})}
+ for(const image of root.querySelectorAll('.side-unit-sprite .monster-visual img'))if(!image.complete){image.addEventListener('load',schedule,{once:true});image.addEventListener('error',schedule,{once:true})}
  if(typeof ResizeObserver==='function'){observer=new ResizeObserver(schedule);observer.observe(root.querySelector('.battle-arena')??root)}
 }

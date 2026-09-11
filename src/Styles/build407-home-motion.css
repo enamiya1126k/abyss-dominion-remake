@@ -1,0 +1,110 @@
+/* Same background files and coordinates. Motion stays behind the party/UI. */
+#app .home-motion407 { pointer-events:none !important; contain:paint; }
+#app .home-motion407 * { pointer-events:none !important; }
+#app .home-command-screen > .home-motion407 { z-index:1; }
+#app .home-command-screen[data-home-skin400]:not([data-home-skin400="town"])::before {
+ z-index:2;
+ background:linear-gradient(90deg,#0005,transparent 34%,transparent 72%,#0003),
+  linear-gradient(180deg,#0001,transparent 30%,#0000 47%,#0003 75%,#0005);
+}
+#app .home-command-screen[data-home-skin400]:not([data-home-skin400="town"]) .home-scene-power {
+ background:#090b10 !important;
+ color:#ffe9b0;
+ text-shadow:0 1px 2px #000;
+}
+.home-motion407 .skin400-base { transform:none; animation:none; }
+.home-motion407 .skin407-particle {
+ animation:skin407Drift var(--duration,6s) ease-in-out var(--delay,0s) infinite;
+ opacity:0;
+}
+.home-motion407 .skin407-ember { animation-name:skin407Ember; animation-timing-function:linear; }
+.home-motion407 .skin407-leaves {
+ animation:skin407Leaves 4.8s ease-in-out infinite;
+ transform-origin:120px 110px;
+ opacity:.65;
+}
+.home-motion407 .skin407-leaves.right { animation-delay:-2.3s; transform-origin:900px 110px; }
+.home-motion407 .skin407-waterfall { animation:skin407Flow 1.1s linear infinite; }
+.home-motion407 .skin407-ripples { animation:skin407Ripples 1.9s linear infinite; }
+.home-motion407 .skin407-canopy-light { animation:skin407Canopy 5.6s ease-in-out infinite alternate; }
+.home-motion407 .skin407-firelight { animation:skin407Firelight 2.6s ease-in-out infinite; }
+.home-motion407 .skin407-flame {
+ transform-origin:22px 96px;
+ animation:skin407Flame .85s steps(6,end) var(--delay,0s) infinite;
+}
+.home-motion407 .skin407-haze { animation:skin407Mist 9s ease-in-out infinite alternate; opacity:.7; }
+.home-motion407 .skin407-cloud { animation-duration:10s; opacity:.72; }
+.home-motion407 .skin407-haze-back { animation-name:skin407MistBack; animation-duration:12s; opacity:.48; }
+.home-motion407 .skin407-abyss-pulse { animation:skin407Abyss 5s ease-in-out infinite alternate; }
+.home-motion407 .skin407-startrail { animation:skin407Startrail 5.4s ease-out -1.7s infinite; }
+.home-motion407 .skin407-banner {
+ animation:skin407Banner 3.8s ease-in-out infinite alternate;
+ transform-origin:200px 62px;
+ opacity:.82;
+}
+.home-motion407 .skin407-banner.right { animation-delay:-1.5s; transform-origin:823px 62px; }
+.home-motion407 .skin407-holy-light { animation:skin407Holy 7s ease-in-out infinite alternate; }
+.home-motion407 .skin407-orbit { animation:skin407Orbit 12s linear infinite; opacity:.8; }
+.home-motion407 .skin407-orbit-inner { animation-duration:8s; animation-direction:reverse; opacity:.72; }
+.home-motion407 .skin407-core-pulse { animation:skin407CorePulse 3.6s ease-in-out infinite alternate; transform-origin:512px 315px; }
+.home-motion407 .skin407-core-stream { animation:skin407CoreStream 2s linear infinite; }
+
+@keyframes skin407Drift {
+ 0% { transform:translate(0,24px);opacity:0; }
+ 18% { opacity:.92; }
+ 55% { transform:translate(calc(var(--dx) * -.32),calc(var(--dy) * .38));opacity:.58; }
+ 78% { opacity:.95; }
+ 100% { transform:translate(var(--dx),var(--dy));opacity:0; }
+}
+@keyframes skin407Ember {
+ 0% { transform:translate(0,12px) scale(1);opacity:0; }
+ 12%,52% { opacity:.95; }
+ 100% { transform:translate(var(--dx),var(--dy));opacity:0; }
+}
+@keyframes skin407Leaves {
+ 0%,100% { transform:translate(-5px,0) rotate(-.7deg); }
+ 45% { transform:translate(12px,-4px) rotate(1deg); }
+ 70% { transform:translate(3px,2px) rotate(.2deg); }
+}
+@keyframes skin407Flow { to { stroke-dashoffset:-76; } }
+@keyframes skin407Ripples {
+ 0% { transform:translate(0,-12px);opacity:.08; }
+ 35%,65% { opacity:.65; }
+ 100% { transform:translate(-14px,20px);opacity:.08; }
+}
+@keyframes skin407Canopy { from { transform:translate(-32px,0);opacity:.45; } to { transform:translate(46px,6px);opacity:.9; } }
+@keyframes skin407Firelight { 0%,100% { opacity:.4; } 35% { opacity:.84; } 70% { opacity:.52; } }
+@keyframes skin407Flame {
+ 0%,100% { transform:scale(.95,.82) skewX(-4deg);opacity:.78; }
+ 35% { transform:scale(1.12,1.22) skewX(5deg);opacity:.98; }
+ 65% { transform:scale(.87,1.08) skewX(-3deg);opacity:.9; }
+}
+@keyframes skin407Mist { from { transform:translate(-175px,12px); } to { transform:translate(175px,-18px); } }
+@keyframes skin407MistBack { from { transform:translate(150px,0); } to { transform:translate(-190px,18px); } }
+@keyframes skin407Abyss { from { opacity:.24; } to { opacity:.72; } }
+@keyframes skin407Startrail {
+ 0%,58%,100% { transform:translate(80px,-85px);opacity:0; }
+ 64% { opacity:.72; }
+ 82% { transform:translate(-165px,145px);opacity:0; }
+}
+@keyframes skin407Banner { from { transform:skewX(-1.4deg) scaleX(.97); } to { transform:skewX(1.8deg) scaleX(1.02); } }
+@keyframes skin407Holy { from { transform:translate(-135px,0);opacity:.25; } to { transform:translate(125px,0);opacity:.88; } }
+@keyframes skin407Orbit { to { transform:rotate(360deg); } }
+@keyframes skin407CorePulse { from { transform:scale(.88);opacity:.3; } to { transform:scale(1.12);opacity:.9; } }
+@keyframes skin407CoreStream { to { stroke-dashoffset:-182; } }
+
+/* Removing the effect layer makes OFF exactly the original stationary art. */
+.home-motion407[data-motion400="off"] .skin407-effects,
+.home-motion407.skin400-image-failed .skin407-effects { display:none !important; }
+.home-motion407[data-motion400="off"] .skin400-moving { animation:none !important; }
+[data-environment-paused400="true"] .home-motion407 .skin400-moving { animation-play-state:paused !important; }
+[data-home-motion-quality407="light"] .home-motion407 [data-motion-detail407],
+.home-motion407[data-preview407="true"] [data-motion-detail407] { display:none !important; animation:none !important; }
+/* Keep the main movement large; reduce only optional details on small screens. */
+@media(max-width:600px) {
+ .home-motion407 [data-motion-detail407] { display:none !important; animation:none !important; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .home-motion407 .skin407-effects { display:none !important; }
+ .home-motion407 .skin400-moving { animation:none !important; }
+}

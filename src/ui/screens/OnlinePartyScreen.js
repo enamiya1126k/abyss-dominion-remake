@@ -1,6 +1,8 @@
-import { SPECIES } from "../../data/species.js?v=3.1.72-build392";
-import { displayName, calculatedStats } from "../../models/Monster.js?v=3.1.82-build402";
-import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=3.1.82-build402";
+import {onlineStats411,onlineHp411} from '../../online/OnlineTraitCompatibility411.js?v=3.1.91-build411';
+import {chapterTwoPairDisplayName406} from '../../data/chapterTwoPairNames406.js?v=3.1.86-build406';
+import { SPECIES } from "../../data/species.js?v=3.1.86-build406";
+import { displayName, calculatedStats } from "../../models/Monster.js?v=3.1.86-build406";
+import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=3.1.91-build411";
 import { magicCircleById, equippedMagicCircle, goldPowerDamageMultiplier, goldPowerActionCost } from "../../core/MagicCircleSystem.js?v=3.1.78-build398";
 import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=3.1.75-build395";
 import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=3.1.72-build392";
@@ -226,7 +228,7 @@ function onlineSkillProfile(monster) {
     return {
       id: skill.id,
       name: skill.name ?? "スキル",
-      description: skill.description ?? "特殊効果を発動",
+      description: skill.id === "ch2_fiora__guard" ? "味方全体に最大HP10%の障壁を付与する。" : skill.description ?? "特殊効果を発動",
       kind: onlineSkillKind(skill),
       mp: effectiveSkillMpCost(monster, skill),
       power: Math.max(.1, Number(skill.power) || 1),
@@ -257,7 +259,7 @@ function onlineSkillProfile(monster) {
       equipmentAuthorityId: skill.equipmentAuthorityId ?? null,
       equipmentAuthorityName: skill.equipmentAuthorityName ?? null,
       tag: skill.tag ?? null,
-      partyShieldRate: Math.max(0, Number(skill.partyShieldRate) || 0),
+      partyShieldRate: skill.id === "ch2_fiora__guard" ? .10 : Math.max(0, Number(skill.partyShieldRate) || 0),
       hpShieldRate: Math.max(0, Number(skill.hpShieldRate) || 0),
       cooldown: Math.max(0, Number(skill.cooldown) || 0),
       dispelEnemyBuff: Boolean(skill.dispelEnemyBuff), dispelOne: Boolean(skill.dispelOne),
@@ -340,7 +342,7 @@ function onlineRewardModifiers(state) {
 function onlineBattleMonsterProfile(state, monster) {
   const species = SPECIES[monster.speciesId] ?? {};
   const circle = equippedMagicCircle(monster, state);
-  const stats = calculatedStats(monster);
+  const stats = onlineStats411(monster);
   const maximumMp = maxMp(monster);
   const signature = signatureWeaponForMonster(state, monster);
   return {
@@ -349,7 +351,7 @@ function onlineBattleMonsterProfile(state, monster) {
     summonTier: monster.summonTier ?? monster.summonRarity ?? null, summonRarity: monster.summonRarity ?? monster.summonTier ?? null, endgameFaction: monster.endgameFaction ?? null,
     monsterName: displayName(monster), fallbackEmoji: species.emoji ?? "魔",
     level: Math.max(1, Number(monster.level) || 1), stars: Math.max(1, Number(monster.stars) || 1),
-    plus: Math.max(0, Number(monster.plus) || 0), power: monsterCombatPower(monster),
+    plus: Math.max(0, Number(monster.plus) || 0), power: monsterCombatPower(monster, stats),
     attribute: monster.attribute ?? species.element ?? "neutral",
     circleId: circle.id, circleName: circle.name, circleLevel: circle.id === "none" ? 0 : Math.max(1, Number(circle.level) || 1),
     circleEffect: circle.effect ?? "none", goldPowerMultiplier: circle.effect === "goldPower" ? goldPowerDamageMultiplier(state.player?.gold ?? 0, circle.level) : 1, goldPowerActionCost: circle.effect === "goldPower" ? goldPowerActionCost(state.player?.gold ?? 0) : 0, goldPowerGold: circle.effect === "goldPower" ? Math.max(0, Math.floor(Number(state.player?.gold) || 0)) : 0, equipment: equipmentProfile(state, monster), equipmentAuthorities: onlineEquipmentAuthorities(monster), equipmentCombatEffects: onlineEquipmentCombatEffects(monster), abyssSkillEffects: onlineAbyssSkillEffects(monster),
@@ -363,7 +365,7 @@ function onlineBattleMonsterProfile(state, monster) {
       spd: Math.max(1, stats.spd), crit: Math.max(0, stats.crit), evasion: Math.max(0, stats.evasion),
       accuracy: Math.max(20, Number(stats.accuracy) || 100),
     },
-    currentHp: Math.max(0, Math.min(stats.hp, monster.currentHp == null ? stats.hp : Number(monster.currentHp) || 0)),
+    currentHp: onlineHp411(monster, stats),
     currentMp: Math.max(0, Math.min(maximumMp, monster.currentMp == null ? maximumMp : Number(monster.currentMp) || 0)),
     skills: onlineSkillProfile(monster),
   };
@@ -481,7 +483,7 @@ export function renderOnlineRoomDirectory(listings = [], { status = "idle", pend
     const roomId = String(listing?.roomId ?? "").slice(0, 6);
     const listingId = String(listing?.listingId ?? "").slice(0, 96);
     const hostName = String(listing?.host?.displayName ?? "冒険者").slice(0, 16);
-    const monsterName = String(listing?.host?.monsterName ?? "仲間").slice(0, 40);
+    const monsterName = chapterTwoPairDisplayName406(listing?.host,listing?.host?.monsterName ?? "仲間").slice(0, 40);
     const floor = Math.max(1, Math.min(100, Math.floor(Number(listing?.floor) || 1)));
     const count = Math.max(1, Math.min(4, Math.floor(Number(listing?.count) || 1)));
     const maximum = Math.max(count, Math.min(4, Math.floor(Number(listing?.max) || 4)));

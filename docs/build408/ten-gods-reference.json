@@ -1,0 +1,903 @@
+[
+  {
+    "id": "ten_time",
+    "name": "十神Ⅰ 時間",
+    "role": "高速CT支配・時相回復",
+    "passive": "時相演算：高い魔法ATKとSPDで先行し、味方のCTを縮めながら敵のCTを延ばす。物理火力は低い。",
+    "stats": {
+      "hp": 1.6,
+      "atk": 0.75,
+      "matk": 2.4,
+      "def": 1.4,
+      "mdef": 1.65,
+      "spd": 1.8,
+      "crit": 8,
+      "evasion": 14,
+      "accuracy": 18
+    },
+    "skills": [
+      {
+        "id": "endgame__ten_time__hourHand",
+        "name": "遅刻の時針",
+        "description": "敵単体へ190%。SPDを15%低下し、固有技の再使用を1ターン遅延。"
+      },
+      {
+        "id": "endgame__ten_time__acceleration",
+        "name": "時間加速・先刻",
+        "description": "味方全体のSPDを35%・命中を15%上げ、発動中のCTを1短縮。"
+      },
+      {
+        "id": "endgame__ten_time__stop",
+        "name": "時間停止・凍秒界",
+        "description": "敵全体へ160%。50%で行動不能、SPDを40%低下し、固有技の再使用を1ターン遅延。"
+      },
+      {
+        "id": "endgame__ten_time__rewind",
+        "name": "時間逆行・生環",
+        "description": "味方全体を38%回復・浄化し、再生を付与。発動中のCTを1短縮。"
+      },
+      {
+        "id": "endgame__ten_time__eternity",
+        "name": "永劫・無限秒針",
+        "description": "敵全体へ640%の必中魔法。現在HP8%を追加で削り、SPDを45%低下、固有技の再使用を2ターン遅延。"
+      },
+      {
+        "id": "endgame_ultimate__ten_time__finalHour",
+        "name": "終刻宣告",
+        "description": "10ラウンド後、敵全員を強制戦闘不能にする。使用者を倒すと解除。1戦闘1回。 開幕3ラウンド使用不可・最大MP60%消費・CT短縮不可。"
+      }
+    ],
+    "weapon": {
+      "key": "zeroHourReplay",
+      "name": "零刻再演",
+      "type": "buff",
+      "power": 0,
+      "mp": 0,
+      "cooldown": 11,
+      "description": "味方全体の発動中CTをすべて解消し、SPD+50%・命中+30%・必中を2ターン付与。",
+      "target": "味方全体",
+      "tag": "固有武器技",
+      "mpRate": 0.58,
+      "reducePartyCooldowns": 99,
+      "effects": [
+        {
+          "kind": "spdUp",
+          "value": 0.5,
+          "turns": 2,
+          "allies": true
+        },
+        {
+          "kind": "accuracyUp",
+          "value": 0.3,
+          "turns": 2,
+          "allies": true
+        },
+        {
+          "kind": "guaranteedHit",
+          "value": 1,
+          "turns": 2,
+          "allies": true
+        }
+      ],
+      "id": "endgame_weapon__ten_time__zeroHourReplay",
+      "equipmentGranted": true,
+      "unlock": {
+        "type": "equipment",
+        "value": 1
+      },
+      "element": "light",
+      "damageClass": "magic"
+    }
+  },
+  {
+    "id": "ten_space",
+    "name": "十神Ⅱ 空間",
+    "role": "境界破壊・障壁前衛",
+    "passive": "界殻巨体：五神最大のHPと物理ATKを持ち、必中・防御無視で境界を越える。代わりにSPDと魔法ATKは低い。",
+    "stats": {
+      "hp": 1.1,
+      "atk": 1.3,
+      "matk": 0.55,
+      "def": 1.25,
+      "mdef": 1.4,
+      "spd": 1.4,
+      "crit": 12,
+      "evasion": 4,
+      "accuracy": 20
+    },
+    "skills": [
+      {
+        "id": "endgame__ten_space__sever",
+        "name": "境界裂断",
+        "description": "敵単体へ200%の必中斬撃。物理DEFを20%無視。"
+      },
+      {
+        "id": "endgame__ten_space__spaceRend",
+        "name": "空間断裂・多界",
+        "description": "敵全体へ380%の必中斬撃。物理DEFを35%無視。"
+      },
+      {
+        "id": "endgame__ten_space__transpose",
+        "name": "転位結界",
+        "description": "味方全体の回避を30%上げ、被ダメージ20%軽減と最大HP15%障壁を付与。"
+      },
+      {
+        "id": "endgame__ten_space__void",
+        "name": "虚空・陣界消失",
+        "description": "敵単体へ700%の必中斬撃。物理DEF65%無視・現在HP10%追加・敵側魔法陣を1つ破壊。"
+      },
+      {
+        "id": "endgame__ten_space__worldCut",
+        "name": "世界切断・万境離断",
+        "description": "敵全体へ850%の必中斬撃。物理DEF55%を無視し、強化を1つ解除。"
+      },
+      {
+        "id": "endgame_ultimate__ten_space__voidExile",
+        "name": "虚空隔離",
+        "description": "敵1体を次のラウンド終了まで隔離する。行動・攻撃対象・回復対象にならない。使用者撃破で解除。 開幕3ラウンド使用不可・最大MP60%消費・CT短縮不可。"
+      }
+    ],
+    "weapon": {
+      "key": "coordinateErase",
+      "name": "存在座標消去",
+      "type": "attack",
+      "power": 10.5,
+      "mp": 0,
+      "cooldown": 11,
+      "description": "敵単体へ1050%の必中斬撃。物理DEF80%を無視し、現在HP15%を追加で削る。",
+      "target": "敵単体",
+      "tag": "固有武器技",
+      "mpRate": 0.58,
+      "guaranteedHit": true,
+      "defenseIgnore": 0.8,
+      "currentHpDamage": 0.15,
+      "id": "endgame_weapon__ten_space__coordinateErase",
+      "equipmentGranted": true,
+      "unlock": {
+        "type": "equipment",
+        "value": 1
+      },
+      "element": "earth",
+      "damageClass": "physical"
+    }
+  },
+  {
+    "id": "ten_life",
+    "name": "十神Ⅲ 生命",
+    "role": "分命蘇生・全体再生",
+    "passive": "世界樹心：高い魔法ATK・魔法DEFと回復性能を持つ。蘇生は必ず自分の現在HP50%と大きなMPを分け与える。",
+    "stats": {
+      "hp": 3,
+      "atk": 0.6,
+      "matk": 3,
+      "def": 2.8,
+      "mdef": 3,
+      "spd": 0.85,
+      "crit": 3,
+      "evasion": 12,
+      "accuracy": 15
+    },
+    "skills": [
+      {
+        "id": "endgame__ten_life__sprout",
+        "name": "命芽の光",
+        "description": "敵単体へ160%の魔法攻撃。命中後、自分を最大HP10%回復。"
+      },
+      {
+        "id": "endgame__ten_life__lifeCycle",
+        "name": "生命循環・樹心",
+        "description": "自分を52%回復・浄化し、3ターン再生12%・被ダメージ18%軽減。"
+      },
+      {
+        "id": "endgame__ten_life__worldTree",
+        "name": "世界樹・万葉障壁",
+        "description": "味方全体へ再生12%・DEF25%・18%軽減と最大HP14%障壁を付与。"
+      },
+      {
+        "id": "endgame__ten_life__rebirth",
+        "name": "再誕・分命の芽",
+        "description": "自分の現在HP50%を分け与えて味方1体を蘇生。蘇生者はMP25%・再生・軽減を得る。"
+      },
+      {
+        "id": "endgame__ten_life__lifeBlessing",
+        "name": "命の祝福・万命帰樹",
+        "description": "味方全体を70%回復・浄化し、戦闘不能1体へ自分の現在HP50%を分けて蘇生。"
+      },
+      {
+        "id": "endgame_ultimate__ten_life__allRebirth",
+        "name": "万命再誕",
+        "description": "自分以外の味方を全回復・蘇生。蘇生封印は無効化できない。発動後、自分はHP1・MP0。1戦闘1回。 開幕3ラウンド使用不可・最大MP60%消費・CT短縮不可。"
+      }
+    ],
+    "weapon": {
+      "key": "greatLifeCycle",
+      "name": "命脈大循環",
+      "type": "allHeal",
+      "power": 0,
+      "mp": 0,
+      "cooldown": 12,
+      "description": "味方全体を100%回復・浄化し、戦闘不能1体へ自分の現在HP50%を分与。25%障壁を展開。",
+      "target": "味方全体",
+      "tag": "固有武器技",
+      "mpRate": 0.62,
+      "heal": 1,
+      "cleanse": true,
+      "revive": 0.01,
+      "reviveTransferRate": 0.5,
+      "reviveMp": 0.4,
+      "partyShieldRate": 0.25,
+      "revivedEffects": [
+        {
+          "kind": "regen",
+          "value": 0.15,
+          "turns": 4
+        },
+        {
+          "kind": "guard",
+          "value": 0.35,
+          "turns": 3
+        }
+      ],
+      "id": "endgame_weapon__ten_life__greatLifeCycle",
+      "equipmentGranted": true,
+      "unlock": {
+        "type": "equipment",
+        "value": 1
+      },
+      "element": "light",
+      "damageClass": "magic"
+    }
+  },
+  {
+    "id": "ten_death",
+    "name": "十神Ⅳ 死",
+    "role": "回復封殺・不可逆処刑",
+    "passive": "終命骸：高い物理ATKと処刑性能を持ち、回復量低下と蘇生封印で損耗を不可逆化する。魔法ATKは低い。",
+    "stats": {
+      "hp": 1.25,
+      "atk": 2.3,
+      "matk": 0.5,
+      "def": 1.1,
+      "mdef": 1.1,
+      "spd": 1.2,
+      "crit": 20,
+      "evasion": 5,
+      "accuracy": 18
+    },
+    "skills": [
+      {
+        "id": "endgame__ten_death__lifespan",
+        "name": "寿命流出",
+        "description": "敵単体へ190%。現在HP2%を追加で削り、2ターン回復量を20%低下。"
+      },
+      {
+        "id": "endgame__ten_death__executionMark",
+        "name": "処刑印・首級指定",
+        "description": "敵単体へ300%。HP25%以下で威力2倍、被ダメージ+25%・蘇生封印2ターン。"
+      },
+      {
+        "id": "endgame__ten_death__reapLife",
+        "name": "寿命刈り・黒穂",
+        "description": "敵単体へ320%。物理DEF30%無視・現在HP15%追加・与ダメージ25%吸収。"
+      },
+      {
+        "id": "endgame__ten_death__yomiSeal",
+        "name": "黄泉封じ・無帰門",
+        "description": "敵全体へ220%。回復量60%低下・蘇生封印3ターン、敵側魔法陣を1つ破壊。"
+      },
+      {
+        "id": "endgame__ten_death__deathArrival",
+        "name": "死神の迎え・終命",
+        "description": "敵単体へ920%の必中処刑。物理DEF50%無視・現在HP15%追加、HP35%以下で威力2倍。"
+      },
+      {
+        "id": "endgame_ultimate__ten_death__deathRegister",
+        "name": "黄泉の名簿",
+        "description": "3ラウンド後、HP40%以下の敵を強制戦闘不能・蘇生封印3ラウンド。使用者撃破で解除。待機中は自分の両DEF-30%。 開幕3ラウンド使用不可・最大MP60%消費・CT短縮不可。"
+      }
+    ],
+    "weapon": {
+      "key": "irreversibleEnd",
+      "name": "不可逆終端",
+      "type": "attack",
+      "power": 6.4,
+      "mp": 0,
+      "cooldown": 11,
+      "description": "敵全体へ640%の必中処刑。HP30%以下で威力2倍、回復量90%低下・蘇生封印3ターン。",
+      "target": "敵全体",
+      "tag": "固有武器技",
+      "mpRate": 0.6,
+      "allEnemies": true,
+      "guaranteedHit": true,
+      "execute": 0.3,
+      "currentHpDamage": 0.08,
+      "defenseIgnore": 0.45,
+      "effects": [
+        {
+          "kind": "healDown",
+          "value": 0.9,
+          "chance": 1,
+          "turns": 3,
+          "enemy": true
+        },
+        {
+          "kind": "reviveSeal",
+          "value": 1,
+          "chance": 1,
+          "turns": 3,
+          "enemy": true
+        }
+      ],
+      "id": "endgame_weapon__ten_death__irreversibleEnd",
+      "equipmentGranted": true,
+      "unlock": {
+        "type": "equipment",
+        "value": 1
+      },
+      "element": "dark",
+      "damageClass": "physical"
+    }
+  },
+  {
+    "id": "ten_fate",
+    "name": "十神Ⅴ 運命",
+    "role": "必中会心・結果確定",
+    "passive": "因果眼：五神最高のSPD・会心・命中を持ち、回避や偶然に左右されない一撃を作る。耐久は控えめ。",
+    "stats": {
+      "hp": 0.85,
+      "atk": 1.6,
+      "matk": 0.8,
+      "def": 0.8,
+      "mdef": 0.9,
+      "spd": 2.4,
+      "crit": 30,
+      "evasion": 22,
+      "accuracy": 50
+    },
+    "skills": [
+      {
+        "id": "endgame__ten_fate__fateLine",
+        "name": "運命線・必中縫い",
+        "description": "敵単体へ210%の必中攻撃。会心率+25%。"
+      },
+      {
+        "id": "endgame__ten_fate__inevitable",
+        "name": "必然・一点収束",
+        "description": "敵単体へ480%。必中・確定会心、物理DEF20%無視。"
+      },
+      {
+        "id": "endgame__ten_fate__futureRewrite",
+        "name": "未来改変・勝機固定",
+        "description": "味方全体へATK+30%・SPD+25%・命中+30%、必中・確定会心を2ターン付与。"
+      },
+      {
+        "id": "endgame__ten_fate__fateDenial",
+        "name": "運命否定・可能性剥離",
+        "description": "敵全体へ250%。命中・回避を35%低下し、強化と敵側魔法陣を1つずつ消す。"
+      },
+      {
+        "id": "endgame__ten_fate__fateFixed",
+        "name": "運命確定・唯一終点",
+        "description": "敵単体へ1000%。必中・確定会心、物理DEF40%無視、HP25%以下を処刑。"
+      },
+      {
+        "id": "endgame_ultimate__ten_fate__onlyFuture",
+        "name": "唯一未来・結果確定",
+        "description": "2ラウンド、味方全員が必中・確定会心。終了後の1ラウンドは敵全員が必中・確定会心になる。 開幕3ラウンド使用不可・最大MP60%消費・CT短縮不可。"
+      }
+    ],
+    "weapon": {
+      "key": "onlyFuture",
+      "name": "唯一未来",
+      "type": "buff",
+      "power": 0,
+      "mp": 0,
+      "cooldown": 10,
+      "description": "味方全体へATK+35%と必中・確定会心を2ターン付与し、発動中CTを1短縮。",
+      "target": "味方全体",
+      "tag": "固有武器技",
+      "mpRate": 0.56,
+      "reducePartyCooldowns": 1,
+      "effects": [
+        {
+          "kind": "atkUp",
+          "value": 0.35,
+          "turns": 2,
+          "allies": true
+        },
+        {
+          "kind": "guaranteedHit",
+          "value": 1,
+          "turns": 2,
+          "allies": true
+        },
+        {
+          "kind": "guaranteedCritical",
+          "value": 1,
+          "turns": 2,
+          "allies": true
+        }
+      ],
+      "id": "endgame_weapon__ten_fate__onlyFuture",
+      "equipmentGranted": true,
+      "unlock": {
+        "type": "equipment",
+        "value": 1
+      },
+      "element": "lightning",
+      "damageClass": "physical"
+    }
+  },
+  {
+    "id": "ten_chaos",
+    "name": "十神Ⅵ 混沌",
+    "role": "属性変異・強化反転",
+    "passive": "無相竜核：物理／魔法ATKを高水準で併せ持ち、発動ごとに属性を変える。耐久は高いが行動速度は控えめ。",
+    "stats": {
+      "hp": 0.95,
+      "atk": 1.25,
+      "matk": 1.25,
+      "def": 1.15,
+      "mdef": 1.25,
+      "spd": 2.8,
+      "crit": 12,
+      "evasion": 14,
+      "accuracy": 22
+    },
+    "skills": [
+      {
+        "id": "endgame__ten_chaos__collapse",
+        "name": "無相崩壊",
+        "description": "敵単体へ220%。発動ごとに属性が変化する物理・魔法複合攻撃。"
+      },
+      {
+        "id": "endgame__ten_chaos__chaoticize",
+        "name": "混沌化・加護反転",
+        "description": "敵全体へ200%。強化を1つ80%相当の弱体へ反転し、命中・回避を18%低下。"
+      },
+      {
+        "id": "endgame__ten_chaos__worldReverse",
+        "name": "世界反転・魔零換力",
+        "description": "3ターン魔法ATKを0にし、その100%を物理ATKへ加算。ATK・回避を上げる代わりにSPDを20%失う。"
+      },
+      {
+        "id": "endgame__ten_chaos__resistCollapse",
+        "name": "耐性崩壊・六相破陣",
+        "description": "敵全体へ380%。被ダメージ・DEFを30%悪化させ、敵側魔法陣を1つ破壊。"
+      },
+      {
+        "id": "endgame__ten_chaos__chaosWorld",
+        "name": "混沌世界・万象未定",
+        "description": "敵全体へ700%の必中複合攻撃。強化を反転し、混乱・SPD低下・命中低下を与える。"
+      },
+      {
+        "id": "endgame_ultimate__ten_chaos__reverseWorld",
+        "name": "世界反転・逆相法則",
+        "description": "2ラウンド、敵味方全員の属性相性を逆転。属性耐性は弱点へ、弱点は耐性へ変わる。 開幕3ラウンド使用不可・最大MP60%消費・CT短縮不可。"
+      }
+    ],
+    "weapon": {
+      "key": "undefinedWorld",
+      "name": "無定義世界",
+      "type": "attack",
+      "power": 7.8,
+      "mp": 0,
+      "cooldown": 11,
+      "description": "敵全体へ780%の必中複合攻撃。強化を完全反転し、敵側魔法陣を1つ破壊、混乱を刻む。",
+      "target": "敵全体",
+      "tag": "固有武器技",
+      "mpRate": 0.6,
+      "damageClass": "hybrid",
+      "allEnemies": true,
+      "randomElement": true,
+      "guaranteedHit": true,
+      "defenseIgnore": 0.35,
+      "invertEnemyBuffRate": 1,
+      "invertOneBuff": true,
+      "invertRate": 1,
+      "removeEnemyMagicCircle": true,
+      "breakAllyMagicCircle": true,
+      "status": {
+        "id": "confusion",
+        "name": "未定義",
+        "chance": 0.7,
+        "turns": 2
+      },
+      "id": "endgame_weapon__ten_chaos__undefinedWorld",
+      "equipmentGranted": true,
+      "unlock": {
+        "type": "equipment",
+        "value": 1
+      },
+      "element": "dark"
+    }
+  },
+  {
+    "id": "ten_dominion",
+    "name": "十神Ⅶ 支配",
+    "role": "命令上書き・行動封殺",
+    "passive": "帝王術式：高い魔法ATKと状態命中を持つ制圧役。混乱・能力低下・CT延長を重ね、敵の有効行動を減らす。",
+    "stats": {
+      "hp": 3,
+      "atk": 0.7,
+      "matk": 3,
+      "def": 3,
+      "mdef": 3,
+      "spd": 0.9,
+      "crit": 5,
+      "evasion": 5,
+      "accuracy": 28
+    },
+    "skills": [
+      {
+        "id": "endgame__ten_dominion__order",
+        "name": "王命刻印",
+        "description": "敵単体へ180%。30%で命令上書き、命中を12%低下。"
+      },
+      {
+        "id": "endgame__ten_dominion__dominionOrder",
+        "name": "支配命令・優先律",
+        "description": "敵単体へ260%。75%で2ターン支配し、ATK35%・命中30%低下、固有技CTを1延長。"
+      },
+      {
+        "id": "endgame__ten_dominion__royalDecree",
+        "name": "王命・列序剥奪",
+        "description": "敵全体へ210%。強化を1つ解除し、45%で命令上書き、SPD・回避を25%低下。"
+      },
+      {
+        "id": "endgame__ten_dominion__subordination",
+        "name": "従属・王権接収",
+        "description": "敵単体へ420%。強化を1つ100%複写し、与ダメージ25%を吸収。"
+      },
+      {
+        "id": "endgame__ten_dominion__absoluteDominion",
+        "name": "絶対支配・万軍停止",
+        "description": "敵全体へ540%の必中魔法。75%で2ターン支配し、全攻防・SPD・命中を35%低下、CTを2延長。"
+      },
+      {
+        "id": "endgame_ultimate__ten_dominion__royalOverride",
+        "name": "王命上書き",
+        "description": "敵1体の次の行動を奪い、その通常スキル1回を自軍のために使用させる。支配耐性・浄化で対抗可能。待機中、自分の被ダメージ+40%。 開幕3ラウンド使用不可・最大MP60%消費・CT短縮不可。"
+      }
+    ],
+    "weapon": {
+      "key": "allArmySubmit",
+      "name": "万軍臣従",
+      "type": "buff",
+      "power": 0,
+      "mp": 0,
+      "cooldown": 11,
+      "description": "敵の強化を1つ完全接収。味方全体へATK・DEF+35%、命中+25%、20%軽減を3ターン付与しCTを1短縮。",
+      "target": "味方全体",
+      "tag": "固有武器技",
+      "mpRate": 0.58,
+      "stealEnemyBuffRate": 1,
+      "reducePartyCooldowns": 1,
+      "effects": [
+        {
+          "kind": "atkUp",
+          "value": 0.35,
+          "turns": 3,
+          "allies": true
+        },
+        {
+          "kind": "defUp",
+          "value": 0.35,
+          "turns": 3,
+          "allies": true
+        },
+        {
+          "kind": "accuracyUp",
+          "value": 0.25,
+          "turns": 3,
+          "allies": true
+        },
+        {
+          "kind": "guard",
+          "value": 0.2,
+          "turns": 3,
+          "allies": true
+        }
+      ],
+      "id": "endgame_weapon__ten_dominion__allArmySubmit",
+      "equipmentGranted": true,
+      "unlock": {
+        "type": "equipment",
+        "value": 1
+      },
+      "element": "dark",
+      "damageClass": "magic"
+    }
+  },
+  {
+    "id": "ten_creation",
+    "name": "十神Ⅷ 創造",
+    "role": "創具障壁・全体修復",
+    "passive": "原型光核：高いHP・両DEF・魔法ATKを持つ守護術師。速度と物理ATKを抑え、回復・障壁・強化へ性能を集中する。",
+    "stats": {
+      "hp": 3,
+      "atk": 0.5,
+      "matk": 2.2,
+      "def": 3,
+      "mdef": 3,
+      "spd": 0.55,
+      "crit": 4,
+      "evasion": 8,
+      "accuracy": 15
+    },
+    "skills": [
+      {
+        "id": "endgame__ten_creation__creationLight",
+        "name": "創光・修復粒子",
+        "description": "敵単体へ170%。命中後、自分を最大HP10%回復。"
+      },
+      {
+        "id": "endgame__ten_creation__genesis",
+        "name": "創世・原型付与",
+        "description": "味方全体へATK・DEF+25%、命中+15%を3ターン付与し、最大HP10%障壁を創造。"
+      },
+      {
+        "id": "endgame__ten_creation__divineWall",
+        "name": "神壁・多層創甲",
+        "description": "味方全体へ最大HP25%障壁、DEF+35%、被ダメージ30%軽減を3ターン付与。"
+      },
+      {
+        "id": "endgame__ten_creation__createWorld",
+        "name": "創界・生命設計",
+        "description": "味方全体へATK・DEF・SPD+30%と再生8%を4ターン付与し、発動中CTを1短縮。"
+      },
+      {
+        "id": "endgame__ten_creation__creationDomain",
+        "name": "創造神域・万象再築",
+        "description": "味方全体を65%回復・浄化。最大HP25%障壁、再生10%、35%軽減を付与。"
+      },
+      {
+        "id": "endgame_ultimate__ten_creation__absoluteWall",
+        "name": "絶対神壁",
+        "description": "2ラウンド、味方全員へ致死ダメージを1回無効化する壁。壁が割れるたび使用者の最大HP10%を消費。 開幕3ラウンド使用不可・最大MP60%消費・CT短縮不可。"
+      }
+    ],
+    "weapon": {
+      "key": "infiniteArmament",
+      "name": "無限創装",
+      "type": "allHeal",
+      "power": 0,
+      "mp": 0,
+      "cooldown": 12,
+      "description": "味方全体を50%回復・浄化。最大HP35%障壁、DEF+45%、40%軽減を3ターン創造。",
+      "target": "味方全体",
+      "tag": "固有武器技",
+      "mpRate": 0.62,
+      "heal": 0.5,
+      "cleanse": true,
+      "partyShieldRate": 0.35,
+      "effects": [
+        {
+          "kind": "defUp",
+          "value": 0.45,
+          "turns": 3,
+          "allies": true
+        },
+        {
+          "kind": "guard",
+          "value": 0.4,
+          "turns": 3,
+          "allies": true
+        }
+      ],
+      "id": "endgame_weapon__ten_creation__infiniteArmament",
+      "equipmentGranted": true,
+      "unlock": {
+        "type": "equipment",
+        "value": 1
+      },
+      "element": "light",
+      "damageClass": "magic"
+    }
+  },
+  {
+    "id": "ten_end",
+    "name": "十神Ⅸ 終焉",
+    "role": "炎上収束・長期戦処刑",
+    "passive": "終焉カウント：高い魔法ATK・SPD・会心と引き換えに耐久が低い。対応技は経過ターンごとに威力+2%（上限40%）。",
+    "stats": {
+      "hp": 0.9,
+      "atk": 0.55,
+      "matk": 3,
+      "def": 0.6,
+      "mdef": 0.65,
+      "spd": 1.4,
+      "crit": 25,
+      "evasion": 10,
+      "accuracy": 25
+    },
+    "skills": [
+      {
+        "id": "endgame__ten_end__ash",
+        "name": "灰化・余燼",
+        "description": "敵単体へ210%。65%で3ターン炎上。"
+      },
+      {
+        "id": "endgame__ten_end__worldBurn",
+        "name": "世界炎上・赫灼圏",
+        "description": "敵全体へ280%。80%で4ターン、最大HP6%の炎上を刻む。"
+      },
+      {
+        "id": "endgame__ten_end__collapseEnd",
+        "name": "崩壊・焼滅収束",
+        "description": "敵全体へ380%。現在HP12%を追加で削り、炎上中の対象へ威力+50%。"
+      },
+      {
+        "id": "endgame__ten_end__ashMark",
+        "name": "灰の刻印・回生焼却",
+        "description": "敵全体へ260%。被ダメージ+30%・回復量35%低下を4ターン刻む。"
+      },
+      {
+        "id": "endgame__ten_end__lastJudge",
+        "name": "ラストジャッジ・終刻",
+        "description": "敵全体へ1200%の必中終焉魔法。炎上中は威力+50%、現在HP10%追加、HP25%以下を処刑。経過ターンごとに威力上昇。"
+      },
+      {
+        "id": "endgame_ultimate__ten_end__finalFurnace",
+        "name": "終末炉",
+        "description": "3ラウンド、自軍が敵HPへ与えた直接ダメージの50%を蓄積し、敵全体へ均等放出。上限は自分の最大HP150%。撃破で解除。放出後、現在HP30%消費。 開幕3ラウンド使用不可・最大MP60%消費・CT短縮不可。"
+      }
+    ],
+    "weapon": {
+      "key": "finalAshJudgment",
+      "name": "灰燼最終審判",
+      "type": "attack",
+      "power": 14.5,
+      "mp": 0,
+      "cooldown": 12,
+      "description": "敵全体へ1450%の必中・確定会心。魔法DEF50%無視、現在HP12%追加、HP30%以下を処刑し炎上を刻む。",
+      "target": "敵全体",
+      "tag": "固有武器技",
+      "mpRate": 0.7,
+      "allEnemies": true,
+      "guaranteedHit": true,
+      "guaranteedCritical": true,
+      "defenseIgnore": 0.5,
+      "currentHpDamage": 0.12,
+      "execute": 0.3,
+      "turnPowerStep": 0.03,
+      "turnPowerCap": 0.45,
+      "status": {
+        "id": "burn",
+        "name": "最終灰燼",
+        "chance": 0.9,
+        "turns": 4,
+        "power": 0.07
+      },
+      "id": "endgame_weapon__ten_end__finalAshJudgment",
+      "equipmentGranted": true,
+      "unlock": {
+        "type": "equipment",
+        "value": 1
+      },
+      "element": "fire",
+      "damageClass": "magic"
+    }
+  },
+  {
+    "id": "ten_divinity",
+    "name": "十神Ⅹ 神格",
+    "role": "全体適応・十律統合",
+    "passive": "十律均衡体：最高級のHPと両防御、物理／魔法攻撃を併せ持つ総合型。各専門神の尖った一分野ではなく、戦線全体を補完する。",
+    "stats": {
+      "hp": 1.15,
+      "atk": 1.15,
+      "matk": 1.5,
+      "def": 1.3,
+      "mdef": 1.6,
+      "spd": 3,
+      "crit": 18,
+      "evasion": 12,
+      "accuracy": 28
+    },
+    "skills": [
+      {
+        "id": "endgame__ten_divinity__divinePunish",
+        "name": "神罰・双律裁定",
+        "description": "敵単体へ250%の必中複合攻撃。防御20%無視、強化を1つ解除。"
+      },
+      {
+        "id": "endgame__ten_divinity__sanctuary",
+        "name": "神域・均衡聖環",
+        "description": "味方全体へATK・DEF・SPD・命中+25%、20%軽減と最大HP18%障壁を3ターン付与。"
+      },
+      {
+        "id": "endgame__ten_divinity__divineJudgment",
+        "name": "神罰・全界十字",
+        "description": "敵全体へ680%の必中複合攻撃。防御35%無視、現在HP5%追加、強化と敵側魔法陣を1つずつ消す。"
+      },
+      {
+        "id": "endgame__ten_divinity__genesisRevive",
+        "name": "創世再誕・分命神環",
+        "description": "味方全体を55%回復・浄化し、自分の現在HP50%を分けて戦闘不能1体を蘇生。"
+      },
+      {
+        "id": "endgame__ten_divinity__divineDescent",
+        "name": "神格降臨・全軍適応",
+        "description": "生存中の味方全体へATK・DEF+40%、SPD+35%、必中・再生12%、最大HP20%障壁を4ターン付与。"
+      },
+      {
+        "id": "endgame_ultimate__ten_divinity__tenLaws",
+        "name": "十律統合・再演神格",
+        "description": "2ラウンド、味方の通常スキルを威力60%で追加発動。各自1ラウンド1回、MPも消費。切り札は対象外。終了後、自分の通常技CT+2。 開幕3ラウンド使用不可・最大MP60%消費・CT短縮不可。"
+      }
+    ],
+    "weapon": {
+      "key": "completeDivinity",
+      "name": "十律統合・完全神格",
+      "type": "buff",
+      "power": 0,
+      "mp": 0,
+      "cooldown": 12,
+      "description": "味方全体へATK・DEF・SPD+50%、命中+35%、必中・確定会心・再生15%・30%軽減・30%障壁を2ターン付与。CTを2短縮。",
+      "target": "味方全体",
+      "tag": "固有武器技",
+      "mpRate": 0.68,
+      "partyShieldRate": 0.3,
+      "reducePartyCooldowns": 2,
+      "effects": [
+        {
+          "kind": "atkUp",
+          "value": 0.5,
+          "turns": 2,
+          "allies": true
+        },
+        {
+          "kind": "defUp",
+          "value": 0.5,
+          "turns": 2,
+          "allies": true
+        },
+        {
+          "kind": "spdUp",
+          "value": 0.5,
+          "turns": 2,
+          "allies": true
+        },
+        {
+          "kind": "accuracyUp",
+          "value": 0.35,
+          "turns": 2,
+          "allies": true
+        },
+        {
+          "kind": "guaranteedHit",
+          "value": 1,
+          "turns": 2,
+          "allies": true
+        },
+        {
+          "kind": "guaranteedCritical",
+          "value": 1,
+          "turns": 2,
+          "allies": true
+        },
+        {
+          "kind": "regen",
+          "value": 0.15,
+          "turns": 2,
+          "allies": true
+        },
+        {
+          "kind": "guard",
+          "value": 0.3,
+          "turns": 2,
+          "allies": true
+        }
+      ],
+      "id": "endgame_weapon__ten_divinity__completeDivinity",
+      "equipmentGranted": true,
+      "unlock": {
+        "type": "equipment",
+        "value": 1
+      },
+      "element": "light",
+      "damageClass": "hybrid"
+    }
+  }
+]

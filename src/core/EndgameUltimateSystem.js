@@ -1,3 +1,4 @@
+import {absorbPaperShield410,enforcePaperBody410} from '../battle/SingleTraits410.js?v=3.1.90-build410';
 import {rememberShieldCapacity} from './HeroShieldDisplay.js?v=3.1.58-build378';
 import{tryHeroFortitude}from'./HeroFortitudeSystem.js?v=3.1.41-build361';
 import {ENDGAME_ULTIMATES,ENDGAME_ULTIMATE_BY_ID,isEndgameUltimate} from '../data/endgameUltimates.js?v=3.1.38-build358';
@@ -124,7 +125,7 @@ export function ultimateAfterDamage(b,target,dealt,{source=null,direct=true}={})
 }
 function damage(b,source,target,amount,{element=null,damageClass=null,direct=true,label='権能',ignoreShield=false}={}){
  const before=ultimateHp(target);let n=Math.max(0,Math.floor(amount));
- if(!ignoreShield){rememberShieldCapacity(target);for(const key of ['shield','heroShield348','_floorBossHpShield']){const absorbed=Math.min(Number(target[key])||0,n);if(absorbed){target[key]-=absorbed;n-=absorbed}}for(const store of [b.circleShields,b.signatureShields]){const absorbed=Math.min(Number(store?.[ultimateUnitId(target)])||0,n);if(absorbed){store[ultimateUnitId(target)]-=absorbed;n-=absorbed}}}
+ if(!ignoreShield){enforcePaperBody410(b);n=absorbPaperShield410(b,target,n);rememberShieldCapacity(target);for(const key of ['shield','heroShield348','_floorBossHpShield']){const absorbed=Math.min(Number(target[key])||0,n);if(absorbed){target[key]-=absorbed;n-=absorbed}}for(const store of [b.circleShields,b.signatureShields]){const absorbed=Math.min(Number(store?.[ultimateUnitId(target)])||0,n);if(absorbed){store[ultimateUnitId(target)]-=absorbed;n-=absorbed}}}
  n=ultimateIncomingDamage(b,target,n,{source,element,damageClass,direct});setHp(target,ultimateHp(target)-n);tryHeroFortitude(b,target,before);const dealt=Math.max(0,before-ultimateHp(target));ultimateAfterDamage(b,target,dealt,{source,direct});emit(b,'damage',target,label,dealt,source);return dealt;
 }
 export function ultimateCircle(b,u,fallback){if(!b?.ultimates358)return fallback;const e=matching(b,'borrow').find(e=>e.source===ultimateUnitId(u)||e.targets.includes(ultimateUnitId(u)));if(!e)return fallback;return e.source===ultimateUnitId(u)?e.circle:null}
@@ -233,3 +234,10 @@ export function cleanupUltimateBattle(b){if(!b)return;for(const u of ultimateUni
 export function drainUltimateEvents(b){const events=b?.ultimates358?.events??[];if(b?.ultimates358)b.ultimates358.events=[];return events}
 const LABELS={doom:'終刻宣告',register:'黄泉の名簿',exile:'虚空隔離',possession:'王命上書き',wall:'絶対神壁',furnace:'終末炉',echo:'十律統合',rage:'不死狂戦',reverse:'世界反転',borrow:'所有権移転',stolenLove:'恋獄',idle:'追撃封印',kneel:'跪伏'};
 export function ultimateLabels(b,u){return(b?.ultimates358?.effects??[]).filter(e=>active(b,e)&&(e.targets?.includes(ultimateUnitId(u))||e.source===ultimateUnitId(u))).map(e=>`${LABELS[e.kind]??'権能'} ${e.due!=null?`残${Math.max(0,e.due-round(b))}T`:`残${Math.max(1,e.until-round(b)+1)}T`}`)}
+
+// Trait terminal hits bypass ordinary armor/barriers, but retain ultimate walls and rescue.
+export function singleTerminalVital410(b,target,floor,source){
+ const before=ultimateHp(target),amount=Math.max(0,before-Math.max(0,floor));
+ const allowed=ultimateIncomingDamage(b,target,amount,{source,direct:false});
+ setHp(target,Math.max(floor,before-allowed));tryHeroFortitude(b,target,before);return Math.max(0,before-ultimateHp(target));
+}

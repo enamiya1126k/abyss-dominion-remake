@@ -1,0 +1,26 @@
+{
+  "src/core/CampaignRewardSystem.js": {
+    "unchangedFrom402": true,
+    "sha256": "7524672703ba911d9e166a8b81c7dc24780be74779e9e63a94d2f083e11c3a03"
+  },
+  "src/core/Campaign100System.js": {
+    "unchangedFrom402": true,
+    "sha256": "004572e2ee4fe72d05ec94416386f10ad60d699a0f5d4daa97b919cbd5e79149"
+  },
+  "src/core/DungeonSectionSystem.js": {
+    "unchangedFrom402": true,
+    "sha256": "03bdc1e0fe91603d88b41bc85c1fae2d795fc52b7c05d5ec4fa7d4f8c36f888f"
+  },
+  "online-server/src/TeamBattleCoordinator.js": {
+    "unchangedFrom402": true,
+    "sha256": "02a6ee01034c6587f1a08b8ffbf3c8a7dad5c4980008a37063b6a58af5f50190"
+  },
+  "online-server/src/RaidCoordinator.js": {
+    "unchangedFrom402": true,
+    "sha256": "d4593615a697d0a423c4f2f09bf0fba8ca999326e572a7c3d3d099b43b1ebcb8"
+  },
+  "online-server/src/PlayerPowerRanking.js": {
+    "unchangedFrom402": true,
+    "sha256": "baf7396ea83e98fda5ce456e04e7587ccb4e50408bc306742e03ba87d3b3e54e"
+  }
+}

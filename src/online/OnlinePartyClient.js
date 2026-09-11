@@ -1,11 +1,12 @@
+import {mountBattleBossLayout} from '../ui/BattleBossLayout.js?v=3.1.85-build405';
 import {
   buildOnlinePartyProfile, DEFAULT_ONLINE_SERVER_URL, ONLINE_STORAGE_KEYS, ensureOnlineIdentity, renderOnlineRoomDirectory, renderOnlineFriendPanel,
   onlineSocialNotificationSummary, moveOnlineBattleRosterPriority, renderOnlineBattleRosterPicker,
-} from "../ui/screens/OnlinePartyScreen.js?v=3.1.82-build402";
+} from "../ui/screens/OnlinePartyScreen.js?v=3.1.86-build406";
 import {
   renderOnlineHome, renderOnlineExplore, renderOnlineRaid, renderOnlineTeam, renderOnlineChat,
   onlineBattleActorId, onlineBattleOwnerId, onlineBattleActorProfile, onlineOwnedBattleActors, onlinePendingBattleActor,
-} from "./OnlineViews.js?v=3.1.82-build402";
+} from "./OnlineViews.js?v=3.1.86-build406";
 import {
   buildOnlineTradeCatalog, reserveOnlineTradeAsset, releaseOnlineTradeAsset,
   rollbackOnlineTradeAssetReservation, commitOnlineTrade, recoverOrphanedTradeEscrows,
@@ -3964,6 +3965,7 @@ export class OnlinePartyController {
       : this.route === "team" ? renderOnlineTeam(this.roomState, this.selfId, state)
       : this.route === "chat" ? renderOnlineChat(this.roomState, this.selfId, state)
       : renderOnlineHome(this.roomState, this.selfId, state);
+    mountBattleBossLayout(stage.querySelector('.battle-screen'));
     if (restoreHallChatFocus) requestAnimationFrame(() => {
       const input = this._query("[data-online-explore-chat-input]");
       if (!input) return;

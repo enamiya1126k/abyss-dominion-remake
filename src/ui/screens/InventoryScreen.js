@@ -1,3 +1,4 @@
+import {equipmentLockBadge404,EQUIPMENT_LOCK_ART404} from '../components/EquipmentDetails404.js?v=3.1.84-build404';
 import{equipmentDisplayRarity,equipmentRarityColor,equipmentStatLabel}from"../../data/equipment.js?v=3.1.55-build375";
 import{equipmentStatMultiplier}from"../../models/Equipment.js?v=3.1.55-build375";
 import{resourceHud,bottomNav,sectionTitle}from"../components/GameChrome.js?v=3.1.1-build311";
@@ -53,7 +54,7 @@ function equipmentCard(item){
   <b style="color:${color}">${item.name}</b>
   <small>Lv.${item.level??1}${item.plus?`・+${item.plus}`:""}<br>${equipmentStats(item)}</small>
   ${equipmentSocketSummary(item,{compact:true})}
-  ${item.equippedBy?'<em>Ｅ</em>':""}
+  ${item.equippedBy?'<em>Ｅ</em>':""}${equipmentLockBadge404(item)}
  </button>`;
 }
 
@@ -90,7 +91,7 @@ export function ArmoryScreen(state,category="all",sort="rarity"){
    ${sectionTitle("武器庫",`${equipment.length}個 / 全装備 ${(state.equipment??[]).length}個`)}
    <div class="v2-category-tabs">${ARMORY_CATEGORIES.map(([id,label])=>`<button type="button" data-inventory-category="${id}" class="${category===id?"active":""}">${label}</button>`).join("")}</div>
    <div class="v2-inventory-toolbar">
-    <span class="v2-inventory-mode">装備管理</span>
+    <button type="button" class="equipment-lock-entry404" data-equipment-lock-manager404><img src="${EQUIPMENT_LOCK_ART404}" alt="">一括ロック管理</button>
     <span>タップで装着・強化・スロット・売却</span>
     <select id="inventorySort" aria-label="並び替え"><option value="rarity" ${sort==="rarity"?"selected":""}>レア度順</option><option value="level" ${sort==="level"?"selected":""}>レベル順</option><option value="name" ${sort==="name"?"selected":""}>名前順</option></select>
    </div>

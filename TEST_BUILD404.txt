@@ -1,0 +1,39 @@
+Build404 validation
+
+Node.js v24.19.0
+node --test tests/build404-equipment-ui.test.mjs tests/build375-equipment.test.mjs tests/build403-ui.test.mjs tests/build402-integration.test.mjs
+35 passed / 0 failed
+
+Build404: 12 tests
+- Bulk changes only selected protection flags; favorite removal requires opt-in.
+- Save failure/exception restores all changed flags and originally missing fields.
+- Filters and presets include locked equipment, use visible rarity and exclude the enhancement target.
+- Equipped references, favorites and permanent restrictions remain ineligible after unlocking.
+- Material duplicates consume once; stale IDs fail atomically; EXP matches existing rules.
+- Real SaveService reload retains unlocked vault gear and optional favorite removal.
+- Reward details resolve art and scaled stats from inventory/reserve/vault without rolling affixes.
+- Elite equipment presentation retains magic-circle rewards and optional effect notes.
+- Forge colors match each slot's quality; unidentified sockets do not use the global empty class.
+- All 149 eligible materials render in the 150-material fixture, with icons and exclusion counts.
+- Armory uses the custom badge exactly for locked equipment.
+- Real synthesis click handler: cancel, failed persistence rollback, successful retry, duplicate-click guard.
+
+Existing regression checks: 23 tests
+Build375 equipment compatibility/loadouts: 5
+Build403 skills/circles/ranking: 6
+Build402 Chapter Two transactions/recovery/receipts/unlocks/persistence/render lifecycle: 12
+
+Static/package checks
+All 11 changed production JavaScript files pass node --check.
+Updated entry imports and newly added module paths are present.
+Build404 stylesheet loads after Build403 stylesheet.
+Save key and save schema are unchanged; APP_VERSION is 3.1.84.
+Asset PNG exists; generated original was inspected: RGBA 1254x1254 with transparent background.
+Changed existing files were compared with the working Build403 baseline.
+CRC and hashes are verified during packaging.
+
+Limits
+No browser rendering, screenshots, computed layout or iPhone/Safari touch testing was performed.
+The working source is the same source set used for Build403, assembled from available archives.
+All replaced files were grounded in the latest relevant supplied patches, then Build403 changes.
+This ZIP is a difference patch and requires the complete existing Build403 game and its assets.

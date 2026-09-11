@@ -1,0 +1,92 @@
+{
+  "build": 404,
+  "version": "3.1.84",
+  "requires": "Build403 / v3.1.83",
+  "type": "difference_patch",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 19231,
+      "sha256": "ba8466a806b4f3813c5f3c97c5162210551331e325014b09b0bdffa745bd0091",
+      "build403_sha256": "be11906984fee794374413771a7458fb52851d0b792d87db59983df756209702"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2256,
+      "sha256": "c9f6b7a2d9255c6933fbb733739fbb73780cdbd68a9a9b464b84ae977f5160ee",
+      "build403_sha256": "9c054be7818a3cbe2c4b6960368f49c3d762d07d76ee841e7ab25fbe11e146f1"
+    },
+    {
+      "path": "src/main.js",
+      "bytes": 1101072,
+      "sha256": "ceeaaf4d536aaa3a6f863e986d8d25539cd368b230c34fd247eb90460a91810e",
+      "build403_sha256": "343fce838fa89737095a8f9de4177bdd640377ab460d4a4576d4aee575dc5e15"
+    },
+    {
+      "path": "src/services/EquipmentEnhancement.js",
+      "bytes": 3477,
+      "sha256": "2b1a08387c3c174b8f16c823959b9fc2d03e5fd38bfc52eeddaabfdb896a21cd",
+      "build403_sha256": "251b602983e4482e15153140b00a12c4a59c48737b2525f70aaaff89d393a3d9"
+    },
+    {
+      "path": "src/services/SaveService.js",
+      "bytes": 90314,
+      "sha256": "215d95e462629b7d614ddbdc5cd12083206b7a4c4bc147d269365aa18f95391d",
+      "build403_sha256": "a4183f80246b9c221e0a60e5de341c679b335656270893040dcf4d2091147918"
+    },
+    {
+      "path": "src/ui/ChapterTwoRelics394.js",
+      "bytes": 4233,
+      "sha256": "58f367c8631624a3369cd16f6dc2e91651b880910f7ee462bd89f328e2353f8c",
+      "build403_sha256": "a52aea029376e4eae8e41c4dd5bf58cc121b9baf37f6825946aebb926a9eaa49"
+    },
+    {
+      "path": "src/ui/screens/EquipmentScreen.js",
+      "bytes": 25659,
+      "sha256": "b712db7c7782fa07156c93214bb4e4596b0745e18bb26d0616e71bfc6d4c12b1",
+      "build403_sha256": "e4a4d62805666e58a73ff0b8c5643a418ec3d7ccf53e0c88a1ef8bfeea8cadff"
+    },
+    {
+      "path": "src/ui/screens/HomeScreen.js",
+      "bytes": 18253,
+      "sha256": "7a6c69cee6430b5936214db4f0a78885539c027ca22e464a2b8a2fa36afc264d",
+      "build403_sha256": "77b5136a52aaa6becc03a69bbe9f81e58711500bbff1cf29df8198d7d0e727a6"
+    },
+    {
+      "path": "src/ui/screens/InventoryScreen.js",
+      "bytes": 8306,
+      "sha256": "c928d810ac33d6ae051856cb345b97affeac00543e2ac837e952f7eea40d836a",
+      "build403_sha256": "d612ef2a07c911613e57dcdd96d27ba3f2fa46f45c25348b819b270601a9de7a"
+    },
+    {
+      "path": "src/services/EquipmentProtection404.js",
+      "bytes": 3177,
+      "sha256": "94bd1f04db07035cee455a32c70f7d06cf219cad47e4d3a35e497af70efd5ac4"
+    },
+    {
+      "path": "src/ui/components/EquipmentDetails404.js",
+      "bytes": 3644,
+      "sha256": "38a42c7b45bf10fa744070d6f4cd5bcb474b9281f25ab9bba6c0b08cf2770e64"
+    },
+    {
+      "path": "src/ui/EquipmentLockManager404.js",
+      "bytes": 3421,
+      "sha256": "6a90d02dfd97e9d904c2c308eeb2e8adfb15313767ab230dac2e956329f6b716"
+    },
+    {
+      "path": "src/Styles/build404-equipment.css",
+      "bytes": 13474,
+      "sha256": "111e2aa5c8858cae17c9df8b955944df4414054143378cbc547249f54d641f2b"
+    },
+    {
+      "path": "assets/ui/items/equipment-lock404.png",
+      "bytes": 901751,
+      "sha256": "1338eda3dd9e880b103729dca6e2fe13bdbb0a0e5d8b495059974e54a1532b42"
+    },
+    {
+      "path": "tests/build404-equipment-ui.test.mjs",
+      "bytes": 13113,
+      "sha256": "e9d7eca5031f280453cce7dc8713e00c1fd3291b3ea2b2c5601b913a92650d2b"
+    }
+  ]
+}

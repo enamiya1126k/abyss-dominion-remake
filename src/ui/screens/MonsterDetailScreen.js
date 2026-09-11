@@ -1,10 +1,12 @@
-import{SPECIES}from"../../data/species.js?v=3.1.72-build392";
+import {chapterTwoPairEditableName406,chapterTwoPairMember406} from '../../data/chapterTwoPairNames406.js?v=3.1.86-build406';
+const escapeName406=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+import{SPECIES}from"../../data/species.js?v=3.1.86-build406";
 import{PERSONALITIES}from"../../data/personalities.js?v=3.1.1-build311";
 import{MONSTER_COLORS}from"../../data/colors.js?v=3.1.1-build311";
 import{ATTRIBUTES}from"../../data/attributes.js?v=3.1.1-build311";
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.75-build395";
 import{endgameCharacter}from"../../data/endgameCharacters.js?v=3.1.38-build358";
-import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=3.1.82-build402";
+import{displayName,rankName,colorValue,calculatedStats,TRAITS,limitBreakGrowth,affectionBonuses,expNeedFor,totalExperience}from"../../models/Monster.js?v=3.1.86-build406";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.82-build402";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{normalizePersistentAilments,persistentAilmentLabel}from"../../data/statusEffects.js?v=3.1.1-build311";
@@ -82,7 +84,7 @@ export function MonsterDetailScreen(monster,state){
     <div class="growth-quick-actions">${state.party.includes(monster.id)?'<button id="openMonsterEquipment">⚔️ 装備を変更</button>':'<button disabled>⚔️ 編成後に装備可能</button>'}<button type="button" data-open-codex-species="${monster.speciesId}">📖 図鑑で記録を見る</button></div>
 
     <details class="panel detail-fold"><summary>個体設定</summary><div class="fold-content">
-     <h3>名前</h3><div class="edit-row"><input id="nicknameInput" maxlength="12" value="${displayName(monster)}"><button id="saveNickname">変更</button></div>
+     <h3>名前</h3>${chapterTwoPairMember406(monster)?`<p class="muted">共通名【${chapterTwoPairMember406(monster).group}】は名前の先頭に付きます。</p>`:''}<div class="edit-row"><input id="nicknameInput" maxlength="12" value="${escapeName406(chapterTwoPairEditableName406(monster,displayName(monster)))}"><button id="saveNickname">変更</button></div>
      <h3>個体カラー</h3><div class="color-row">${MONSTER_COLORS.map(color=>`<button class="color-dot ${monster.colorId===color.id?"selected":""}" style="background:${color.value}" data-color-id="${color.id}" aria-label="${color.name}"></button>`).join("")}</div>
      <p><b>固有特性：${trait.name}</b><br><small class="muted">${trait.description}</small></p>
      <p><b>性格：${personality?.name??"不明"}</b><br><small class="muted">${personality?.description??""}</small></p>

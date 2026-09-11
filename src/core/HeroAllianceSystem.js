@@ -1,6 +1,6 @@
 import {rememberShieldCapacity} from './HeroShieldDisplay.js?v=3.1.58-build378';
 import{tryHeroFortitude}from'./HeroFortitudeSystem.js?v=3.1.41-build361';
-import{ultimateIsolated,ultimateExtraBlocked,afterUltimateOrdinary}from"./EndgameUltimateSystem.js?v=3.1.58-build378";
+import{ultimateIsolated,ultimateExtraBlocked,afterUltimateOrdinary}from"./EndgameUltimateSystem.js?v=3.1.90-build410";
 import {MYTHIC_SERIAL_SPECIES} from '../data/mythicSerialSpecies.js?v=3.1.39-build359';
 import {attributeDamageMultiplier} from '../data/attributes.js';
 import {heroResonanceMembers,heroResonanceProfile,scaleHeroResonanceSkill,isHeroResonanceSpecies} from './HeroResonanceSystem.js?v=3.1.39-build359';
@@ -118,9 +118,9 @@ export function runHeroAllianceAction(b,side,u,skill,env={},options={}){
   const reduction=Math.min(.75,(Math.max(0,defenderAffixes.damageReduction??0)/100)+(targetSignature?.damageReduction??0));
   const received=Math.max(1,Math.floor(damage*(1-reduction)*(protector?1-((protector.heroSignature348??protector.signatureResonance).damageReduction??0):1)*((target.guard||b.guards?.[heroId(target)])?.45:1)*(1-Math.min(.8,heroEffect(b,target,opposite,'guard')))));
   const before=heroHp(target);let dealt;
-  if(env.damage)dealt=env.damage(target,opposite,received,{source:u,element,damageClass:magic?'magic':'physical',critical,skill});
+  if(env.damage)dealt=env.damage(target,opposite,received,{source:u,element,damageClass:magic?'magic':'physical',critical,skill,traitCause410:options.followup?'followup':'primary'});
   else{const amount=mitigateHeroDamage(b,opposite,target,received),absorbed=Math.min(target.shield??0,amount);target.shield=Math.max(0,(target.shield??0)-absorbed);setHeroHp(target,Math.max(0,before-amount+absorbed));tryHeroLastStand(b,opposite,target,before);dealt=Math.max(0,before-heroHp(target))}
-  emit('damage',target,dealt,{critical,finisher});if(protector&&heroHp(u)>0){const sig=protector.heroSignature348??protector.signatureResonance,amount=Math.max(1,Math.floor((stats(protector).atk-a.def*.25)*(sig.counterPower??0))),old=heroHp(u);if(env.damage)env.damage(u,side,amount,{source:protector,element:protector.element,damageClass:'physical'});else{setHeroHp(u,Math.max(0,old-mitigateHeroDamage(b,side,u,amount)));tryHeroLastStand(b,side,u,old)}events.push({kind:'damage',actorId:heroId(protector),targetId:heroId(u),targetKind:side==='ally'?'player':'enemy',value:Math.max(0,old-heroHp(u)),label:'守護反撃'});}if(before>0&&heroHp(target)<=0){killed=true;emit('ko',target)}
+  emit('damage',target,dealt,{critical,finisher});if(protector&&heroHp(u)>0){const sig=protector.heroSignature348??protector.signatureResonance,amount=Math.max(1,Math.floor((stats(protector).atk-a.def*.25)*(sig.counterPower??0))),old=heroHp(u);if(env.damage)env.damage(u,side,amount,{source:protector,element:protector.element,damageClass:'physical',traitCause410:'counter'});else{setHeroHp(u,Math.max(0,old-mitigateHeroDamage(b,side,u,amount)));tryHeroLastStand(b,side,u,old)}events.push({kind:'damage',actorId:heroId(protector),targetId:heroId(u),targetKind:side==='ally'?'player':'enemy',value:Math.max(0,old-heroHp(u)),label:'守護反撃'});}if(before>0&&heroHp(target)<=0){killed=true;emit('ko',target)}
  };
  if(!['buff','allHeal','revive'].includes(skill.type)){
   const ordered=foes().sort((a,c)=>{const bonus=skill.bonusVsEffect?.kind;return (bonus?Number(heroEffect(b,c,opposite,bonus)>0)-Number(heroEffect(b,a,opposite,bonus)>0):0)||heroHp(a)-heroHp(c)}),chosen=options.targetId?ordered.find(x=>heroId(x)===options.targetId):heroResonanceProfile(allies).count===1?chooseHeroAllianceTarget(b,side,u,skill,stats):null;

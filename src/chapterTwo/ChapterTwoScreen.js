@@ -20,7 +20,7 @@ export function chapterTwoDestinations(state){
 }
 export function chapterTwoHelp(run){
  const a=chapterTwoArea(run),objective=chapterTwoObjective(run);
- return `<div class="chapter-two-help"><h3>${objective.title}</h3><p>${objective.detail}</p><ol><li>6区画を探索して、${a.rooms[3].name}と${a.rooms[4].name}へ。</li><li>それぞれの守護者を倒して落ちた鍵を拾い、${a.gate}を2つ揃える。</li><li>${a.rooms[5].name}で地域のボスを倒す。</li></ol><p>地面をタップで移動。通路の入口へ歩くと隣の区画へ進みます。ドラッグで視点移動、2本指で拡大できます。</p><p>マップボタンで地図を表示／非表示。地図本体をタップすると詳細を開きます。地図・マップボタン・自動ボタンは長押ししてスライドで配置変更できます。</p><p>宝箱はGOLD、泉は部隊の全回復。泉の区画には任意挑戦の宝物庫の番人がいます。勝つと宝箱10個を一度だけ開けられます。強敵の報酬で部隊を鍛え、次の地域へ進もう。</p><p>帰還しても討伐・拾った鍵・宝箱の記録は残ります。踏破後の再入場では残党が再出現します。自動をONにすると守護者とボスを順番に目指します。</p>${run?.eliteTier393?`<p>精鋭再探索・段階${run.eliteTier393}。残党の3部屋を討伐すると装備報酬を獲得します。途中帰還した場合は、探索開始の「精鋭再探索」から再開できます。HP・MPは引き継ぎます。</p>`:''}${run?.challenge&&!run?.eliteTier393?'<p>強化再戦中：敵の能力と報酬が増加しています。</p>':''}</div>`;
+ return `<div class="chapter-two-help"><h3>${objective.title}</h3><p>${objective.detail}</p><ol><li>6区画を探索して、${a.rooms[3].name}と${a.rooms[4].name}へ。</li><li>それぞれの守護者を倒して落ちた鍵を拾い、${a.gate}を2つ揃える。</li><li>${a.rooms[5].name}で地域のボスを倒す。</li></ol><p>泉の区画には任意挑戦の宝物庫の番人がいます。勝つと宝箱10個を一度だけ開けられます。強敵の報酬で部隊を鍛え、次の地域へ進もう。</p><p>帰還しても討伐・拾った鍵・宝箱の記録は残ります。踏破後の再入場では残党が再出現します。自動をONにすると守護者とボスを順番に目指します。</p>${run?.eliteTier393?`<p>精鋭再探索・段階${run.eliteTier393}。残党の3部屋を討伐すると装備報酬を獲得します。途中帰還した場合は、探索開始の「精鋭再探索」から再開できます。HP・MPは引き継ぎます。</p>`:''}${run?.challenge&&!run?.eliteTier393?'<p>強化再戦中：敵の能力と報酬が増加しています。</p>':''}</div>`;
 }
 export function chapterTwoMapMarkup(world,run){
  const ROOMS=chapterTwoRooms(run),model=buildSectionMiniMapModel(world),transform=fitMiniMapTransform(model,360,320,12),point=p=>projectMiniMapPoint(transform,p),objective=chapterTwoObjective(run);

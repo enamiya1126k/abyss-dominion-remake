@@ -1,3 +1,4 @@
+import {equipmentLockBadge404} from '../components/EquipmentDetails404.js?v=3.1.84-build404';
 import {relicLoadout394} from '../ChapterTwoRelics394.js?v=3.1.78-build398';
 import {relicItemText394} from '../../data/chapterTwoRelics394.js?v=3.1.74-build394';
 import{
@@ -16,7 +17,7 @@ import{equipmentStatMultiplier}from"../../models/Equipment.js?v=3.1.55-build375"
 import{maxMp}from"../../battle/SkillSystem.js?v=3.1.75-build395";
 import{monsterCombatPower,formatCombatPower}from"../../core/CombatPower.js?v=3.1.82-build402";
 import{ATTRIBUTES}from"../../data/attributes.js?v=3.1.1-build311";
-import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=3.1.55-build375";
+import{equipmentExpNeed}from"../../services/EquipmentEnhancement.js?v=3.1.84-build404";
 import{weaponMasteryBadge}from"../../services/WeaponMastery.js?v=3.1.72-build392";
 import{seriesMasterySummary}from"../../services/SeriesMastery.js?v=3.1.38-build358";
 import{SPECIES}from"../../data/species.js?v=3.1.72-build392";
@@ -107,7 +108,7 @@ function equippedSlotCard(state,target,subslot,focusItemId=null){
    <span class="equipped-slot-label">${screenSubslotLabel(subslot)}</span>
    ${equipmentVisual(item,{className:"equipped-slot-art"})}
    <div>${coloredEquipmentName(item)}<small>Lv.${level} ∞　${itemStats(item)||"能力補正なし"}</small><span class="equipment-identity-chips">${itemIdentityTags(item)}</span>${equipmentSocketSummary(item,{compact:true})}</div>
-   <i>${item.favorite?"★":""}${item.locked?"L":""}${item.ruleOverrides?.unsellable?"P":""}⌄</i>
+   <i>${item.favorite?"★":""}${equipmentLockBadge404(item)}${item.ruleOverrides?.unsellable?"P":""}⌄</i>
   </summary>
   <div class="equipped-slot-detail">
    ${signatureWeaponBadge(state,target,item)}
@@ -174,8 +175,8 @@ function card(item,state,target,storage,{editing=false,selected=false,focused=fa
   }
  }
  return`<article class="equipment-card ${selected?"selected":""} ${protectedItem?"protected-entry":""} ${focused?"focused-equipment":""}" data-equipment-card-id="${item.id}">
- ${editing&&inventory?`<label class="manage-check"><input type="checkbox" data-select-equipment-id="${item.id}" ${selected?"checked":""} ${protectedItem?"disabled":""}><span></span></label>`:""}
-  <div class="equipment-card-identity">${equipmentVisual(item,{className:"equipment-list-art"})}<div class="spread">${coloredEquipmentName(item)}<span>${item.favorite?"★":""}${item.locked?"L":""}${item.ruleOverrides?.unsellable?"P":""}</span>${signatureEquipmentOwnerName(item)?`<small class="signature-owner-chip">${signatureEquipmentOwnerName(item)}専用</small>`:""}</div></div>
+ ${editing&&inventory?`<label class="manage-check"><input type="checkbox" data-select-equipment-id="${item.id}" ${selected?"checked":""}><span></span></label>`:""}
+  <div class="equipment-card-identity">${equipmentVisual(item,{className:"equipment-list-art"})}<div class="spread">${coloredEquipmentName(item)}<span>${item.favorite?"★":""}${equipmentLockBadge404(item)}${item.ruleOverrides?.unsellable?"P":""}</span>${signatureEquipmentOwnerName(item)?`<small class="signature-owner-chip">${signatureEquipmentOwnerName(item)}専用</small>`:""}</div></div>
   <div class="subline">
    <span class="equipment-level">Lv.${level} ∞</span> ${slotLabel(item.slot)} ${handLabel(item)} / ${itemStats(item)||"能力補正なし"}
    <span class="equipment-identity-chips">${itemIdentityTags(item)}</span>
@@ -287,9 +288,9 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
     <button type="button" data-equipment-storage="reserve" class="${storage==="reserve"?"active":""}" ${home?"":"disabled"}>予備BOX<small>${state.reserveEquipment.length}</small></button>
     <button type="button" data-equipment-storage="bossVault" class="${storage==="bossVault"?"active":""}" ${home?"":"disabled"}>王装保管庫<small>${state.bossEquipmentVault.length}</small></button>
    </nav>
-   <div class="panel equipment-manage-panel ${editing&&canManageInventory?"manage-editing":""}">
+   <div class="panel equipment-manage-panel ${editing&&canManageInventory?"manage-editing":""}">${canManageInventory?'<button type="button" class="equipment-lock-entry404" data-equipment-lock-manager404>一括ロック管理</button>':""}
     <div class="spread"><div><b>${slotLabel(slot)}一覧</b><small>${canManageInventory?"装備カードの部位ボタンから、選択中の仲間へ装着できます。":"カードから所持品へ戻すと、装備・育成できるようになります。"}</small></div>${canManageInventory?`<button type="button" id="toggleEquipmentEdit" class="manage-edit-button">${editing?"完了":"整理"}</button>`:""}</div>
-    ${canManageInventory?(editing?`<div class="bulk-manager"><div class="bulk-presets"><button type="button" data-select-equipment="all">全選択</button><button type="button" data-select-equipment="N">N</button><button type="button" data-select-equipment="R">R</button><button type="button" data-select-equipment="plus0">未強化</button><button type="button" data-select-equipment="duplicate">重複</button><button type="button" data-select-equipment="none">解除</button></div><button type="button" id="lockSelectedEquipment" class="bulk-secondary">選択装備をロック</button><button type="button" id="sellSelectedEquipment" class="bulk-primary danger">選択装備を売却</button></div>`:`<button type="button" id="bulkSellEquipment" class="bulk-secondary">未装備のN・Rを一括売却</button>`):""}
+    ${canManageInventory?(editing?`<div class="bulk-manager"><div class="bulk-presets"><button type="button" data-select-equipment="all">全選択</button><button type="button" data-select-equipment="N">N</button><button type="button" data-select-equipment="R">R</button><button type="button" data-select-equipment="plus0">未強化</button><button type="button" data-select-equipment="duplicate">重複</button><button type="button" data-select-equipment="none">解除</button></div><button type="button" id="lockSelectedEquipment" class="bulk-secondary">選択装備をロック</button><button type="button" id="unlockSelectedEquipment" class="bulk-secondary">選択のロック解除</button><button type="button" id="sellSelectedEquipment" class="bulk-primary danger">選択装備を売却</button></div>`:`<button type="button" id="bulkSellEquipment" class="bulk-secondary">未装備のN・Rを一括売却</button>`):""}
    </div>
    <div class="panel equipment-sort-panel"><div class="spread"><b>${slotLabel(slot)} ${list.length}件</b><select id="equipmentSort" aria-label="装備の並び順">${sortOption("rarity","レア度順",sort)}${sortOption("power","総合能力順",sort)}${sortOption("atk","ATK順",sort)}${sortOption("def","DEF順",sort)}${sortOption("hp","HP順",sort)}${sortOption("spd","SPD順",sort)}${sortOption("newest","新しい順",sort)}${sortOption("favorite","お気に入り順",sort)}${sortOption("name","名前順",sort)}</select></div></div>
    <div class="equipment-list ${editing&&canManageInventory?"manage-editing":""}">${list.map(item=>card(item,state,target,storage,{editing:editing&&canManageInventory,selected:selected.has(item.id),focused:item.id===focusItemId})).join("")||'<div class="empty">この条件の装備はありません</div>'}</div>

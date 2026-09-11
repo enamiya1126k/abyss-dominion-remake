@@ -1,0 +1,40 @@
+Build403 validation
+
+Environment: Node.js v24.19.0
+Command:
+node --test tests/build403-ui.test.mjs tests/build402-integration.test.mjs tests/build306-ranking-presence-client.test.mjs
+Result: 20 passed / 0 failed
+
+Build403: 6 passed
+- 12 skill choices including enabled final skill and independent close action.
+- MP availability, automatic battle, read-only and submitted online actions, item menu preserved.
+- Ranking output includes final entry for 7 and 100 players and a separate self entry.
+- Ranking scroll owner retains position through redraw and switching to own records.
+- Empty, cached and loading ranking states preserved.
+- Circle research appears inside the list, grants exactly three once, and keeps equipment unchanged.
+
+Build402 integration: 12 passed
+Chapter Two recovery, transactions, departure persistence, unlock boundary, recruitment/circles/
+summon/skins/archive persistence, reward retry, exploration lifecycle and canvas cache.
+
+Build306 ranking presence client: 2 passed
+Presence normalization and heartbeat lifecycle.
+
+Static checks:
+- node --check passed for all seven changed JavaScript files.
+- New stylesheet is the last stylesheet loaded by index.html.
+- Boot entry and changed module import paths updated to 3.1.83-build403.
+- Referenced frame assets exist; this patch reuses them.
+- Save key and schema version match authoritative Build402 files.
+- All eight replaced production files were compared directly with the supplied Build402 patch.
+- Patch ZIP CRC checked, with file hashes listed in BUILD403_MANIFEST.json.
+
+Limits:
+No browser rendering, screenshots, layout measurement or iPhone/Safari touch testing was performed.
+The latest full uploaded source archive could not be fully downloaded. Supporting, untouched files
+for local Node checks were assembled from available archives. All replaced production files come
+from the latest Build402 patch; this deliverable is a difference patch for an existing Build402 install.
+The full historical test suite was not verified. Additional exploratory old tests were unavailable:
+Build398 server import lacked online-server/src/SettlementJournal.js in the local source set;
+Build371's extracted UI fixture lacked the later enemyMagicCircleMarkup dependency.
+These are not counted among the 20 passing tests. No server files are included in this patch.

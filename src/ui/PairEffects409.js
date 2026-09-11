@@ -1,0 +1,18 @@
+import {PAIR_SERIES409} from '../battle/PairSynergy409.js?v=3.1.89-build409';
+const escape=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const themes=[['#9ceaff','#ec97ac','mirror'],['#abbee9','#f4d398','seal'],['#ffe3a0','#d7f5ff','wings'],['#9ae8b7','#dba8e8','bloom'],['#ff9f77','#a9dfff','moon'],['#b5d6ff','#f5c5f3','star'],['#d4e5ef','#edafaf','thread'],['#abdcff','#e7a9d0','mirror'],['#f1e7b5','#b5a6ee','crown'],['#94c8ef','#eabd98','seal'],['#d99aac','#f1eac3','bloom'],['#abcfff','#f6c79c','clock'],['#be9cde','#e9ddec','bloom'],['#99cafa','#ffe199','bolt'],['#bea8e7','#f7e5a5','seal'],['#a3def5','#c6acee','crystal'],['#b7b6d0','#f4af93','seal'],['#a7c5ff','#fce5c2','star'],['#d68d9b','#eea98f','wings'],['#b3c2e4','#f5e2af','bell'],['#b8b8f2','#ffe8a5','moon'],['#beb0e9','#c6e1df','moon'],['#ceaaa2','#b6d8f7','wings'],['#b6abe8','#fff0b9','crown']];
+export const PAIR_THEMES409=Object.freeze(Object.fromEntries(Object.keys(PAIR_SERIES409).map((id,i)=>[id,Object.freeze({a:themes[i][0],b:themes[i][1],motif:themes[i][2]})])));
+const paths={mirror:'M50 8 83 50 50 92 17 50Z M50 22 70 50 50 78 30 50Z',seal:'M50 9 85 29 85 70 50 91 15 70 15 29Z M15 29 85 70 M85 29 15 70 M50 9V91',wings:'M50 75 12 45 7 20 37 39 50 58 63 39 93 20 88 45Z M12 45 42 56 M88 45 58 56',bloom:'M50 82C0 55 10 5 50 35C90 5 100 55 50 82Z M50 35C20 60 35 75 50 82C65 75 80 60 50 35Z',moon:'M65 12C17 2 5 71 49 86C64 91 78 86 85 75C44 86 22 32 65 12Z',star:'M50 6 60 37 92 50 60 62 50 94 38 62 8 50 38 37Z M25 25 75 75 M75 25 25 75',thread:'M10 25C75 0 0 100 90 75 M10 75C75 100 0 0 90 25 M20 50H80',crown:'M15 28 32 44 50 12 68 44 85 28 78 80H22Z M22 67H78',clock:'M50 12A38 38 0 1 0 50 88A38 38 0 1 0 50 12 M50 25V50L69 62 M50 12V18 M88 50H82 M50 88V82 M12 50H18',bolt:'M60 5 23 57 47 54 39 96 79 40 56 44Z',crystal:'M50 5V95 M12 28 88 72 M12 72 88 28 M30 15 50 30 70 15 M30 85 50 70 70 85',bell:'M25 69C39 57 21 21 50 20C79 21 61 57 75 69Z M35 69Q50 96 65 69 M45 15H55'};
+export function pairCutinMarkup409(plan,renderUnit=()=>'',name=u=>u.name??u.speciesId){
+ const p=PAIR_SERIES409[plan.pair.id],t=PAIR_THEMES409[plan.pair.id];if(!p||!t)return '';
+ const phase=plan.pair.reaction390?'護誓反撃':plan.pair.charging390?`共鳴充填 ${plan.pair.chargeCount390}/3`:plan.pair.finisher390?'合体魔法・解放':plan.pair.finisher386?'双奏・終撃':'ペア共鳴';
+ return `<div class="pair-cutin409 motif-${t.motif} phase-${plan.pair.reaction390?'counter':plan.pair.charging390?'charge':plan.pair.finisher390?'release':plan.pair.finisher386?'burst':'resonance'}" data-pair-id="${p.id}" style="--pair-a:${t.a};--pair-b:${t.b}" role="status" aria-live="polite"><svg class="pair-emblem409" viewBox="0 0 100 100" aria-hidden="true"><path d="${paths[t.motif]}"/></svg><i class="pair-link409" aria-hidden="true"></i><div class="pair-portraits409">${plan.members.map((u,i)=>`<div class="pair-partner409 partner-${i}">${renderUnit(u)}<small>${escape(name(u))}</small></div>`).join('')}</div><div class="pair-title409"><small>${plan.side==='enemy'?'敵・':''}${phase}【${escape(p.label)}】</small><strong>${escape(plan.pair.name)}</strong></div></div>`;
+}
+export async function playPairCutin409({arena,plan,renderUnit,name,wait,duration=720}){
+ if(!arena)return;arena.querySelector('.pair-cutin409')?.remove();
+ const html=pairCutinMarkup409(plan,renderUnit,name);if(!html)return;
+ const reduced=typeof matchMedia==='function'&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+ arena.insertAdjacentHTML('beforeend',html);const node=arena.querySelector('.pair-cutin409');if(!node)return;
+ node.style.setProperty('--pair-duration',`${Math.max(150,duration)}ms`);if(reduced)node.classList.add('static409');
+ try{await wait(reduced?360:720);}finally{node.remove();}
+}

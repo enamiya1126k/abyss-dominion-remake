@@ -1,14 +1,14 @@
 import{calculatedStats}from"../models/Monster.js?v=3.1.82-build402";
-import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=3.1.82-build402";
+import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=3.1.91-build411";
 
 /**
  * 表示用の戦力値。
  * 実戦で使われる最終ステータスを基礎にし、HP・攻撃・防御・速度・会心・回避を
  * ひとつの比較しやすい数値へ圧縮する。戦闘処理そのものには影響しない。
  */
-export function monsterCombatPower(monster){
+export function monsterCombatPower(monster,stats=null){
   if(!monster)return 0;
-  const s=calculatedStats(monster);
+  const s=stats??calculatedStats(monster);
   const highAttack=Math.max(Math.max(0,s.atk),Math.max(0,s.matk??0));
   const lowAttack=Math.min(Math.max(0,s.atk),Math.max(0,s.matk??0));
   const highDefense=Math.max(Math.max(0,s.def),Math.max(0,s.mdef??0));

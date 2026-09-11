@@ -1,0 +1,66 @@
+{
+  "build": 403,
+  "version": "3.1.83",
+  "requires": "Build402 / 3.1.82",
+  "type": "difference_patch",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 19144,
+      "sha256": "be11906984fee794374413771a7458fb52851d0b792d87db59983df756209702",
+      "build402_sha256": "a348e704630386177888c208f977775135486645817ac9dab6b7257691a4b3e5"
+    },
+    {
+      "path": "src/main.js",
+      "bytes": 1094443,
+      "sha256": "343fce838fa89737095a8f9de4177bdd640377ab460d4a4576d4aee575dc5e15",
+      "build402_sha256": "144dba57c6b832a21baf90a4c84d0041a0f8d41f3d07458c6b2c5bcf7cd24a8c"
+    },
+    {
+      "path": "src/Styles/build403-common-ui.css",
+      "bytes": 15940,
+      "sha256": "20b1ec6cb223ba64c7388c191a02a137b09d3208049be8f46d01527524becda7"
+    },
+    {
+      "path": "src/ui/screens/BattleScreen.js",
+      "bytes": 34036,
+      "sha256": "a172ab128b2f1a0f742aa42e204cf47acdeda77a66e5db3ec6a0ac39a817ee98",
+      "build402_sha256": "64c193706200e74fe58f6588a975685bf384593262f3b903d62e458e549f7328"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2256,
+      "sha256": "9c054be7818a3cbe2c4b6960368f49c3d762d07d76ee841e7ab25fbe11e146f1",
+      "build402_sha256": "eecf42319c3890498276d6c1d04840a95a29692a9aa69b9e03d60f608248f7ab"
+    },
+    {
+      "path": "src/ui/screens/HomeScreen.js",
+      "bytes": 18253,
+      "sha256": "77b5136a52aaa6becc03a69bbe9f81e58711500bbff1cf29df8198d7d0e727a6",
+      "build402_sha256": "3670d31122b3386f3296d351d7555767271e9d3a9f52af4ae0dde3522d5935eb"
+    },
+    {
+      "path": "src/services/SaveService.js",
+      "bytes": 90314,
+      "sha256": "a4183f80246b9c221e0a60e5de341c679b335656270893040dcf4d2091147918",
+      "build402_sha256": "349c387d1d5793da68e28d38696e2db3318fbd144ca074b7020c9654975d9ed2"
+    },
+    {
+      "path": "src/online/OnlineViews.js",
+      "bytes": 107187,
+      "sha256": "66f2d813a56b4973e0b66f367695b0fb06e692e9688f867d79292b603ac6a77f",
+      "build402_sha256": "9d256f204463f35717c9852b6577320bde6ef3cb0f8b21af8ea545211de01a90"
+    },
+    {
+      "path": "src/online/OnlinePartyClient.js",
+      "bytes": 330093,
+      "sha256": "cec1335aca075f3cbd1ac99ec4d692613db6483bfa20030612e807a7386ec8bc",
+      "build402_sha256": "f08073e2ad0c6e314741302abf47fae4f7d4fcc38ee778ed8ecef83a5cfac6ed"
+    },
+    {
+      "path": "tests/build403-ui.test.mjs",
+      "bytes": 7589,
+      "sha256": "0a7be1c688951fd6b3a52f926c546b8e318d4fb0df7768ec19a3afaca90f0f80"
+    }
+  ]
+}
