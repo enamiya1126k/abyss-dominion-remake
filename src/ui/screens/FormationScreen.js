@@ -83,8 +83,8 @@ function memberCard(state,monster,index,{readOnly=false}={}){
     <span class="formation-circle-art">${circle.id==="none"?"◇":`<img src="${circle.asset}" alt="">`}</span>${circle.level?`<small class="formation-circle-level">Lv.${circle.level}</small>`:""}<i aria-hidden="true">›</i>
    </button>
   </section>
-  ${relicLoadout394(state,monster)}
   ${readOnly?'<div class="formation-readonly-note">帰還後に順番・交代・スキルを変更できます</div>':`<div class="formation-actions compact"><button data-formation-skills="${monster.id}">スキル編集</button><button data-formation-replace="${monster.id}">交代</button><button class="danger formation-remove-action" data-formation-remove="${monster.id}">隊列から外す</button></div>`}
+  ${relicLoadout394(state,monster)}
  </article>`;
 }
 function emptyCard(index,{readOnly=false}={}){

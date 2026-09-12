@@ -1,0 +1,18 @@
+{
+  "index.html": {
+    "before416": "d7ebfc73a48fb2c46bda4df829de0f0fa20aad9787c17b5f9ee0fd6973e1fdb2",
+    "after417": "0260cf09150b8edcf0ba95de0d7133935490406b7432e567fe6c8ef7ddba9d66"
+  },
+  "src/core/config.js": {
+    "before416": "80ff2e1610dd9eb6b870dd853bf8ea66039faba6248f14d54c4d5a7917597907",
+    "after417": "ef62d5abea4a8987f9ae465200d6c836294e9ab17a45d087c8548ff50a178741"
+  },
+  "src/main.js": {
+    "before416": "1953b175092fc2ba1e637766e059cddac5a8d709be5f19326a8d9d2560b7133f",
+    "after417": "03072ea665e269f474ed573b1fd38fdcdf162f576b595f350ce1657692e6fb52"
+  },
+  "src/services/SaveService.js": {
+    "before416": "310fbfe647e5f7c86ce7944443988663a3d4bfe98a28695a899e88ab29365494",
+    "after417": "2af959be70a014d1b9f8532dd9b9ed0df0004aeb46b6677bd3acc9708bd9b64c"
+  }
+}

@@ -10,11 +10,6 @@
 .home-title-card.home-chapter380>span{display:block;font-size:10px;color:#e6c785;margin-top:5px}
 /* Reuse Chapter I formation, sprite scale and facing. */
 .battle-screen.chapter-two-battle380 .side-enemies .target-reticle{display:none!important}
-.battle-screen.chapter-two-battle380 .side-enemies .enemy-card-name{display:none!important}
-.battle-screen.chapter-two-battle380 .side-enemies .side-unit-card{min-height:42px!important;height:auto!important;padding:4px 3px 3px!important}
-.battle-screen.chapter-two-battle380 .side-enemies .battle-bar .bar-label{font-size:.3rem!important;white-space:nowrap;letter-spacing:0}
-.battle-screen.chapter-two-battle380 .side-enemies .battle-unit-floating-name{display:flex!important;align-items:center;justify-content:center;gap:3px;white-space:normal!important;line-height:1.2!important}
-.battle-screen.chapter-two-battle380 .side-enemies .battle-unit-floating-name>b{font-size:.3rem!important;line-height:1.2!important}
 .home-command-screen>.home-title-card.home-chapter380{box-sizing:border-box!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:3px!important;padding:8px 12px!important}
 .home-command-screen>.home-title-card.home-chapter380>small{font-size:7px!important;line-height:1.1!important;margin:0!important}
 .home-command-screen>.home-title-card.home-chapter380>h1{font-size:clamp(10px,2.7vw,15px)!important;line-height:1.2!important;margin:0!important}
@@ -22,7 +17,4 @@
 .home-command-screen>.home-title-card.home-chapter380>span{font-size:8px!important;line-height:1.1!important;margin:0!important}
 .power-ranking-circle .ranking-circle381{position:relative!important;inset:auto!important;display:block!important;width:34px!important;height:34px!important;transform:none!important}
 .battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-unit-sprite>.monster-visual{transform:scaleX(-1)!important}
-.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-unit-name.enemy-name{display:flex!important;min-height:0!important;height:auto!important;margin:0!important;padding:0!important}
-.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .enemy-card-meta{display:flex!important;justify-content:space-between!important;align-items:center!important;width:100%!important}
-.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-battle-unit .battle-unit-floating-name>b{font-size:.3rem!important;line-height:1.2!important}
-.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-battle-unit .battle-unit-floating-name{display:flex!important;flex-wrap:wrap!important;gap:3px!important;max-width:100%!important;border:0!important;background:none!important;box-shadow:none!important;padding:0!important}
+

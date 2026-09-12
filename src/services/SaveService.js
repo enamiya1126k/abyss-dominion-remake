@@ -415,6 +415,16 @@ const state={schemaVersion:SAVE_SCHEMA_VERSION,appVersion:APP_VERSION,flags:{aby
  state.campaign100.heroEncounters310=retireLegacyCampaignRewind(normalizeCampaignHeroInvasion(state)).state;normalizeCampaignReincarnationState(state);
  return state;
 }
+// A normal encounter belongs to an active expedition. Older delayed renders /
+// pagehide callbacks could save the defeated battle after rescue ended that run.
+// Preserve the already settled gold, vitals and floor records; never settle twice.
+export function recoverEndedExpeditionBattle417(state){
+ const active=state?.activeBattle;
+ if(!active||active.specialBattle||active.memoryBattle||active.onlineMode||state.player?.inRun!==false)return false;
+ delete state.activeBattle;state.expeditionSnapshot=null;
+ return true;
+}
+
 export class SaveService{
  constructor(){this.loadFailed=false;this.state=this.load();if(!this.loadFailed)this.save()}
  load(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw)return initialState();const parsed=JSON.parse(raw);if(!plainRecord(parsed))throw new TypeError("Saved data root must be an object");return this.migrate(parsed)}catch(e){console.error(e);this.loadFailed=true;this.lastLoadError={name:e?.name??"LoadError",message:String(e?.message??e),at:Date.now()};return initialState()}}
@@ -465,6 +475,7 @@ export class SaveService{
   s.player.currentFloor=Math.floor(finiteNumber(s.player.currentFloor,1,1,CAMPAIGN_MAX_FLOOR));
   s.player.checkpoint=Math.floor(finiteNumber(s.player.checkpoint,1,1,CAMPAIGN_MAX_FLOOR));
   s.player.inRun=s.player.inRun===true;
+  recoverEndedExpeditionBattle417(s);
   s.player.nextShopFloor??=4;
   s.player.floorSeeds=plainRecord(s.player.floorSeeds)?s.player.floorSeeds:{};
   s.player.dungeonShapeHistory=normalizeDungeonShapeHistory(s.player.dungeonShapeHistory);

@@ -87,7 +87,7 @@ function renderEnemies(battle,enemies,target){
    ${enemy.boss&&!isChapterTwo?"":floatingName}
    <div class="side-unit-sprite enemy-orb">${circleArt358(battle,enemy,battle.enemyMagicCircleArt?.[enemy.id]??"")}${enemy.boss&&!isChapterTwo?floatingName:""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.visualFrame??(enemy.hp<=0&&!pendingKo?"down":"idle"),className:"battle-enemy-visual",partyArt:endgameBoss})}</div>
    <div class="side-unit-card enemy-info">
-    <div class="side-unit-name enemy-name ${enemy.boss?"boss-meta-only":""}">${danger}${enemy.boss||battle.specialBattleType==='chapterTwo'?"":`<b class="enemy-card-name" title="${safeName}">${safeName}</b>`}<span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
+    <div class="side-unit-name enemy-name ${enemy.boss&&!isChapterTwo?"boss-meta-only":""}">${danger}${enemy.boss&&!isChapterTwo?"":`<b class="enemy-card-name" title="${safeName}">${safeName}</b>`}<span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
     
     ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}`,"enemy-hp")}

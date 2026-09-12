@@ -1,0 +1,26 @@
+[
+  {
+    "case": "formation-chapterTwoField",
+    "cards": 4,
+    "edit_buttons": 12,
+    "passed": true
+  },
+  {
+    "case": "formation-home",
+    "cards": 4,
+    "edit_buttons": 12,
+    "passed": true
+  },
+  {
+    "case": "formation-empty",
+    "cards": 4,
+    "edit_buttons": 0,
+    "passed": true
+  },
+  {
+    "case": "formation-explore",
+    "cards": 4,
+    "edit_buttons": 0,
+    "passed": true
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "path": "index.html",
+    "base_sha256": "9a62f6c0fc20b7dba6717f89d10237ac66cee41990a1b567e180d26c3d694bc0",
+    "sha256": "8540c72898b036eb2f40364d34a492da4347a5eb89c837ce6b1c1e05de0904be"
+  },
+  {
+    "path": "src/Styles/build380-chapter-two.css",
+    "base_sha256": "da8c2849aab2725a0cc1381bd1b66a6a178b7aedd5c2516124e7c43b54d45583",
+    "sha256": "5db97614341d3529dc23fa582b3e224b1598a34f03f303ef578b317055be7eae"
+  },
+  {
+    "path": "src/Styles/build382-chapter-two.css",
+    "base_sha256": "caa6699c9c8e6c4e7d968f25c820ff43d59cadf46bff9c65ddaf30161897a60d",
+    "sha256": "20bcfa5914f019f62cf7718bd9a2739bb42f78d1fe39974a605147536e468bc9"
+  },
+  {
+    "path": "src/battle/TrialAdaptation415.js",
+    "base_sha256": "1c0fddb3356484963b978efa9aad72b17d76348cffbae0cb15c09aecba5955d8",
+    "sha256": "39936942df848d20c0b518225e22be368293244c557b3413fbc14b52b9390807"
+  },
+  {
+    "path": "src/core/config.js",
+    "base_sha256": "c73492e7a4f407f05c2f63ab443c1da4d7477e4107894231f2df5fa31702923b",
+    "sha256": "f5ed5c10bfaee3b2cf9fb1cf22e31c2a22a9ce00baa22d45c7e7f82b335183b8"
+  },
+  {
+    "path": "src/main.js",
+    "base_sha256": "892e0a333f03140d5b33f657798920f1cc603983e824353057f0dbed624a8aeb",
+    "sha256": "948650df6f077b7a5da2fd507b0a38d663d25fee707a37b2eb5be30a42495b5e"
+  },
+  {
+    "path": "src/ui/BattlePreparation415.js",
+    "base_sha256": "67207009e9b52dfd7d27e6ffa13db0d458f9db1f85c019ea08c5d85cc1cfd853",
+    "sha256": "a95b3213d2edac6668b7ed2709f649a072bc6fabf69dae35e697db36b0e775b2"
+  },
+  {
+    "path": "src/ui/screens/BattleScreen.js",
+    "base_sha256": "07d062c74011268bc701346c9491f0a902813b47cbe6acdae5afd355cf9fbe28",
+    "sha256": "520dedbcab2d0fab8ef794b964b727952fd3cf4b3971cfb8f1c3557255f14d6e"
+  }
+]

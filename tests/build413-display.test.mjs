@@ -37,7 +37,7 @@ test('real fitting positions ally visible feet above HP and labels above art; re
 });
 test('latest cache targets and CSS ordering preserve Build412 logic',()=>{
  const html=read('index.html'),m=JSON.parse(html.match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]).imports;
- for(const p of ['core/config','core/MagicCircleSystem','ui/BattleBossLayout'])assert.equal(m[`./src/${p}.js`],`./src/${p}.js?v=${p==='core/config'?'3.1.95-build416':'3.1.93-build413'}`);
+ for(const p of ['core/config','core/MagicCircleSystem','ui/BattleBossLayout'])assert.equal(m[`./src/${p}.js`],`./src/${p}.js?v=${p==='core/config'?'3.1.99-build420':'3.1.93-build413'}`);
  assert.ok(html.indexOf('build413-character-circles.css')>html.indexOf('build405-battle-circles.css'));
  assert.match(read('src/main.js'),/Opening a picker is not an action/);
  assert.match(read('src/core/config.js'),/SAVE_SCHEMA_VERSION=84/);

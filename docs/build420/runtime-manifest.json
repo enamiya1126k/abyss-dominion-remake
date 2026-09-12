@@ -1,0 +1,74 @@
+[
+  {
+    "path": "index.html",
+    "base_build": 416,
+    "base_sha256": "d7ebfc73a48fb2c46bda4df829de0f0fa20aad9787c17b5f9ee0fd6973e1fdb2",
+    "sha256": "66a0bb6242b1bfb583eb46565b464854445a18a08ca14124060c294f8a55cd99"
+  },
+  {
+    "path": "src/Styles/build380-chapter-two.css",
+    "base_build": 416,
+    "base_sha256": "da8c2849aab2725a0cc1381bd1b66a6a178b7aedd5c2516124e7c43b54d45583",
+    "sha256": "5db97614341d3529dc23fa582b3e224b1598a34f03f303ef578b317055be7eae"
+  },
+  {
+    "path": "src/Styles/build382-chapter-two.css",
+    "base_build": 416,
+    "base_sha256": "caa6699c9c8e6c4e7d968f25c820ff43d59cadf46bff9c65ddaf30161897a60d",
+    "sha256": "20bcfa5914f019f62cf7718bd9a2739bb42f78d1fe39974a605147536e468bc9"
+  },
+  {
+    "path": "src/battle/TrialAdaptation415.js",
+    "base_build": 416,
+    "base_sha256": "1c0fddb3356484963b978efa9aad72b17d76348cffbae0cb15c09aecba5955d8",
+    "sha256": "39936942df848d20c0b518225e22be368293244c557b3413fbc14b52b9390807"
+  },
+  {
+    "path": "src/chapterTwo/ChapterTwoField.js",
+    "base_build": 416,
+    "base_sha256": "6d4637e5b60f084c61e733632111174dd3c4c53afa720c20c82932bd77a85115",
+    "sha256": "5ec05f9b6b0af8511eb8b0c4c6ebfb7e237e0a0c5c902cd4f67f83978e5f82e8"
+  },
+  {
+    "path": "src/core/config.js",
+    "base_build": 416,
+    "base_sha256": "80ff2e1610dd9eb6b870dd853bf8ea66039faba6248f14d54c4d5a7917597907",
+    "sha256": "8cd235b1e680ed93df58b09470a860bca40504ae4c988fd311cfe19d83dbf183"
+  },
+  {
+    "path": "src/main.js",
+    "base_build": 416,
+    "base_sha256": "1953b175092fc2ba1e637766e059cddac5a8d709be5f19326a8d9d2560b7133f",
+    "sha256": "948650df6f077b7a5da2fd507b0a38d663d25fee707a37b2eb5be30a42495b5e"
+  },
+  {
+    "path": "src/services/SaveService.js",
+    "base_build": 416,
+    "base_sha256": "310fbfe647e5f7c86ce7944443988663a3d4bfe98a28695a899e88ab29365494",
+    "sha256": "2af959be70a014d1b9f8532dd9b9ed0df0004aeb46b6677bd3acc9708bd9b64c"
+  },
+  {
+    "path": "src/ui/BattlePreparation415.js",
+    "base_build": 416,
+    "base_sha256": "67207009e9b52dfd7d27e6ffa13db0d458f9db1f85c019ea08c5d85cc1cfd853",
+    "sha256": "a95b3213d2edac6668b7ed2709f649a072bc6fabf69dae35e697db36b0e775b2"
+  },
+  {
+    "path": "src/ui/screens/BattleScreen.js",
+    "base_build": 416,
+    "base_sha256": "07d062c74011268bc701346c9491f0a902813b47cbe6acdae5afd355cf9fbe28",
+    "sha256": "520dedbcab2d0fab8ef794b964b727952fd3cf4b3971cfb8f1c3557255f14d6e"
+  },
+  {
+    "path": "src/ui/screens/FormationLayout.js",
+    "base_build": 416,
+    "base_sha256": "d6fe4e1968cec7095868ccf2bf54c30b1eea753aac290efc5cbac97ebadc8484",
+    "sha256": "1d4564987803d3061b6f566976b5cb4a5c5b71b179f1202c196a5caeb4a4f8ff"
+  },
+  {
+    "path": "src/ui/screens/FormationScreen.js",
+    "base_build": 416,
+    "base_sha256": "c47bd75fcb1b2e72d94687e5e233111dbd21799ad66e4ca7eec3600dbf240477",
+    "sha256": "7d00ffcf93afe54099b0b66f89e134275f394a1d63ff15b1e323d51947b71729"
+  }
+]

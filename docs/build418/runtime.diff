@@ -1,0 +1,272 @@
+--- Build417/index.html
++++ Build418/index.html
+@@ -243,18 +243,18 @@
+     "./src/core/HomeSkinSystem400.js": "./src/core/HomeSkinSystem400.js?v=3.1.87-build407",
+     "./src/core/HomeSkinSystem400.js?v=3.1.82-build402": "./src/core/HomeSkinSystem400.js?v=3.1.87-build407",
+     "./src/core/HomeSkinSystem400.js?v=3.1.87-build407": "./src/core/HomeSkinSystem400.js?v=3.1.87-build407",
+-    "./src/core/config.js": "./src/core/config.js?v=3.1.96-build417",
+-    "./src/core/config.js?v=3.1.82-build402": "./src/core/config.js?v=3.1.96-build417",
+-    "./src/core/config.js?v=3.1.85-build405": "./src/core/config.js?v=3.1.96-build417",
+-    "./src/core/config.js?v=3.1.86-build406": "./src/core/config.js?v=3.1.96-build417",
+-    "./src/core/config.js?v=3.1.87-build407": "./src/core/config.js?v=3.1.96-build417",
++    "./src/core/config.js": "./src/core/config.js?v=3.1.97-build418",
++    "./src/core/config.js?v=3.1.82-build402": "./src/core/config.js?v=3.1.97-build418",
++    "./src/core/config.js?v=3.1.85-build405": "./src/core/config.js?v=3.1.97-build418",
++    "./src/core/config.js?v=3.1.86-build406": "./src/core/config.js?v=3.1.97-build418",
++    "./src/core/config.js?v=3.1.87-build407": "./src/core/config.js?v=3.1.97-build418",
+     "./src/data/species.js": "./src/data/species.js?v=3.1.86-build406",
+     "./src/data/species.js?v=3.1.72-build392": "./src/data/species.js?v=3.1.86-build406",
+     "./src/data/species.js?v=3.1.86-build406": "./src/data/species.js?v=3.1.86-build406",
+-    "./src/main.js": "./src/main.js?v=3.1.96-build417",
+-    "./src/main.js?v=3.1.85-build405": "./src/main.js?v=3.1.96-build417",
+-    "./src/main.js?v=3.1.86-build406": "./src/main.js?v=3.1.96-build417",
+-    "./src/main.js?v=3.1.89-build409": "./src/main.js?v=3.1.96-build417",
++    "./src/main.js": "./src/main.js?v=3.1.97-build418",
++    "./src/main.js?v=3.1.85-build405": "./src/main.js?v=3.1.97-build418",
++    "./src/main.js?v=3.1.86-build406": "./src/main.js?v=3.1.97-build418",
++    "./src/main.js?v=3.1.89-build409": "./src/main.js?v=3.1.97-build418",
+     "./src/models/Monster.js": "./src/models/Monster.js?v=3.1.94-build415",
+     "./src/models/Monster.js?v=3.1.82-build402": "./src/models/Monster.js?v=3.1.94-build415",
+     "./src/models/Monster.js?v=3.1.86-build406": "./src/models/Monster.js?v=3.1.94-build415",
+@@ -293,7 +293,7 @@
+     "./src/ui/screens/SettingsScreen.js": "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407",
+     "./src/ui/screens/SettingsScreen.js?v=3.1.82-build402": "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407",
+     "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407": "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407",
+-    "./src/core/config.js?v=3.1.88-build408": "./src/core/config.js?v=3.1.96-build417",
++    "./src/core/config.js?v=3.1.88-build408": "./src/core/config.js?v=3.1.97-build418",
+     "./src/services/SaveService.js?v=3.1.88-build408": "./src/services/SaveService.js?v=3.1.96-build417",
+     "./src/battle/BattleRules.js?v=3.1.78-build398": "./src/battle/BattleRules.js?v=3.1.94-build415",
+     "./src/battle/BattleRules.js": "./src/battle/BattleRules.js?v=3.1.94-build415",
+@@ -306,7 +306,7 @@
+     "./src/ui/PairEffects409.js": "./src/ui/PairEffects409.js?v=3.1.89-build409",
+     "./src/battle/TwinResonance385.js?v=3.1.89-build409": "./src/battle/TwinResonance385.js?v=3.1.94-build415",
+     "./src/ui/TwinStatus385.js?v=3.1.89-build409": "./src/ui/TwinStatus385.js?v=3.1.94-build415",
+-    "./src/core/config.js?v=3.1.89-build409": "./src/core/config.js?v=3.1.96-build417",
++    "./src/core/config.js?v=3.1.89-build409": "./src/core/config.js?v=3.1.97-build418",
+     "./src/ui/screens/BattleScreen.js?v=3.1.89-build409": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
+     "./src/battle/SkillSystem.js?v=3.1.89-build409": "./src/battle/SkillSystem.js?v=3.1.94-build415",
+     "./src/battle/PairSynergy409.js?v=3.1.89-build409": "./src/battle/PairSynergy409.js?v=3.1.94-build415",
+@@ -328,7 +328,7 @@
+     "./src/data/statusEffects.js": "./src/data/statusEffects.js?v=3.1.90-build410",
+     "./src/ui/TwinStatus385.js?v=3.1.90-build410": "./src/ui/TwinStatus385.js?v=3.1.94-build415",
+     "./src/core/HeroAllianceSystem.js?v=3.1.90-build410": "./src/core/HeroAllianceSystem.js?v=3.1.90-build410",
+-    "./src/core/config.js?v=3.1.90-build410": "./src/core/config.js?v=3.1.96-build417",
++    "./src/core/config.js?v=3.1.90-build410": "./src/core/config.js?v=3.1.97-build418",
+     "./src/data/statusEffects.js?v=3.1.90-build410": "./src/data/statusEffects.js?v=3.1.90-build410",
+     "./src/ui/screens/BattleScreen.js?v=3.1.90-build410": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
+     "./src/battle/BattleRules.js?v=3.1.90-build410": "./src/battle/BattleRules.js?v=3.1.94-build415",
+@@ -336,7 +336,7 @@
+     "./src/core/CombatPower.js?v=3.1.82-build402": "./src/core/CombatPower.js?v=3.1.91-build411",
+     "./src/core/CombatPower.js": "./src/core/CombatPower.js?v=3.1.91-build411",
+     "./src/online/OnlineTraitCompatibility411.js?v=3.1.91-build411": "./src/online/OnlineTraitCompatibility411.js?v=3.1.94-build415",
+-    "./src/core/config.js?v=3.1.91-build411": "./src/core/config.js?v=3.1.96-build417",
++    "./src/core/config.js?v=3.1.91-build411": "./src/core/config.js?v=3.1.97-build418",
+     "./src/ui/screens/OnlinePartyScreen.js?v=3.1.91-build411": "./src/ui/screens/OnlinePartyScreen.js?v=3.1.91-build411",
+     "./src/core/CombatPower.js?v=3.1.91-build411": "./src/core/CombatPower.js?v=3.1.91-build411",
+     "./src/services/EquipmentProtection404.js": "./src/services/EquipmentProtection404.js?v=3.1.92-build412",
+@@ -352,20 +352,27 @@
+     "./src/battle/TrialAdaptation415.js": "./src/battle/TrialAdaptation415.js?v=3.1.95-build416",
+     "./src/data/ChapterTwoAbilityDesign408.js": "./src/data/ChapterTwoAbilityDesign408.js?v=3.1.94-build415",
+     "./src/battle/PairPreparation415.js": "./src/battle/PairPreparation415.js?v=3.1.94-build415",
+-    "./src/ui/screens/FormationScreen.js": "./src/ui/screens/FormationScreen.js?v=3.1.94-build415",
++    "./src/ui/screens/FormationScreen.js": "./src/ui/screens/FormationScreen.js?v=3.1.97-build418",
+     "./src/battle/SingleTraits410.js?v=3.1.91-build411": "./src/battle/SingleTraits410.js?v=3.1.94-build415",
+-    "./src/ui/screens/FormationScreen.js?v=3.1.82-build402": "./src/ui/screens/FormationScreen.js?v=3.1.94-build415",
++    "./src/ui/screens/FormationScreen.js?v=3.1.82-build402": "./src/ui/screens/FormationScreen.js?v=3.1.97-build418",
+     "./src/battle/ChapterTwoAbilityRuntime408.js?v=3.1.88-build408": "./src/battle/ChapterTwoAbilityRuntime408.js?v=3.1.94-build415",
+     "./src/data/ChapterTwoAbilityDesign408.js?v=3.1.88-build408": "./src/data/ChapterTwoAbilityDesign408.js?v=3.1.94-build415",
+-    "./src/main.js?v=3.1.95-build416": "./src/main.js?v=3.1.96-build417",
+-    "./src/core/config.js?v=3.1.95-build416": "./src/core/config.js?v=3.1.96-build417",
+-    "./src/services/SaveService.js?v=3.1.95-build416": "./src/services/SaveService.js?v=3.1.96-build417"
++    "./src/main.js?v=3.1.95-build416": "./src/main.js?v=3.1.97-build418",
++    "./src/core/config.js?v=3.1.95-build416": "./src/core/config.js?v=3.1.97-build418",
++    "./src/services/SaveService.js?v=3.1.95-build416": "./src/services/SaveService.js?v=3.1.96-build417",
++    "./src/main.js?v=3.1.96-build417": "./src/main.js?v=3.1.97-build418",
++    "./src/core/config.js?v=3.1.96-build417": "./src/core/config.js?v=3.1.97-build418",
++    "./src/ui/screens/FormationScreen.js?v=3.1.94-build415": "./src/ui/screens/FormationScreen.js?v=3.1.97-build418",
++    "./src/ui/screens/FormationLayout.js": "./src/ui/screens/FormationLayout.js?v=3.1.97-build418",
++    "./src/ui/screens/FormationLayout.js?v=3.1.30-build350": "./src/ui/screens/FormationLayout.js?v=3.1.97-build418",
++    "./src/chapterTwo/ChapterTwoField.js": "./src/chapterTwo/ChapterTwoField.js?v=3.1.97-build418",
++    "./src/chapterTwo/ChapterTwoField.js?v=3.1.82-build402": "./src/chapterTwo/ChapterTwoField.js?v=3.1.97-build418"
+   }
+ }
+-  </script>
++</script>
+ <script type="module">
+-    const ASSET_VERSION = "3.1.96";
+-    const ASSET_BUILD = "build417";
++    const ASSET_VERSION = "3.1.97";
++    const ASSET_BUILD = "build418";
+     const CACHE_VERSION = `${ASSET_VERSION}-${ASSET_BUILD}`;
+     const VERSION_KEY = "abyss-dominion-asset-version";
+     async function refreshStaleAssets() {
+--- Build417/src/main.js
++++ Build418/src/main.js
+@@ -1388,7 +1388,7 @@
+  game={};mountChapterTwoField(game,{canvas:document.getElementById('gameCanvas'),Entity,Camera,findPath:path,drawScene:draw,bindInput,updateTrail:updateExplorationPartyTrail,TILE,run:p.run,party,onSave:()=>save.save(),onAutoChange:syncAuto,blocked:()=>Boolean(battle||document.querySelector('.game-modal')),onContact:object=>{
+   if(object.type==='door'){const result=chapterTwoCommit(()=>moveChapterTwoRoom(save.state,object.id));if(result.ok){render();const curtain=document.createElement('div');curtain.className='section-passage-fade';curtain.innerHTML=`<span><small>区画移動</small><b>${chapterTwoRooms(p.run)[p.run.room].name}</b></span>`;document.querySelector('.explore-stage')?.append(curtain);setTimeout(()=>curtain.remove(),720)}else if(result.message)showToast(result.message);return}
+   if(object.type==='chest'){const result=chapterTwoCommit(()=>object.vaultIndex!=null?openVaultChest380(save.state,object.vaultIndex):(()=>{const x=openChapterTwoChest(save.state);if(x.ok)recordChapterTwo380(save.state,x);return x})());if(result.ok){render();app.insertAdjacentHTML('beforeend',Modal('宝箱を開いた',`<div class="chapter-two-reward">${result.equipment?equipmentReward404(result.equipment,save.state):`${pixelIcon('chest')}<h3>${result.experiencePacks?`経験値パック（超） ×${result.experiencePacks}`:`GOLD +${result.gold.toLocaleString()}`}</h3><p>探索で見つけた宝を獲得した。</p>`}</div>`,'探索へ戻る'));const m=topModal();m.classList.add('chapter-two-reward-modal');m.querySelector('[data-modal-primary]').onclick=()=>m.remove();chapterTwoAutoModal380(m,()=>m.remove(),p.run.auto377)}return}
+-  if(object.type==='spring'){if(chapterTwoCommit(()=>{fullyRecoverParty();return{ok:true}}).ok){const point={...object};render();game.hotSpringRecoveryFx={...point,startedAt:performance.now(),until:performance.now()+1800};showToast('泉の光で部隊のHP・MP・状態異常が回復した')}return}
++  if(object.type==='spring'){recoverChapterTwoSpring418(object);return}
+   if(object.type==='key'){const result=chapterTwoCommit(()=>pickupChapterTwoKey380(save.state,object.id));if(result.ok){render();showChapterTwoProgress(result)}return}
+   if(object.type==='enemy'){const e=CHAPTER_TWO_ENCOUNTERS[object.id];if(e.roaming)openChapterTwoBattle(object.id);else{const info=chapterTwoEnemyEntries(object.id,p.run)[0];openFloorBossChallenge({...info,nameOverride:e.name,floorBossQuote:chapterTwoHint380(object.id),floorBossTitle:e.vault?'宝箱10個を守る強敵':chapterTwoArea(p.run).name},p.run.area+1,{chapterTwoId:object.id})}}
+  }});
+@@ -1402,6 +1402,14 @@
+  document.getElementById('toggleExplorePartyHud').onclick=()=>{save.state.settings.explorePartyHudCollapsed=!save.state.settings.explorePartyHudCollapsed;save.save();render()};
+  document.querySelectorAll('[data-explore-monster]').forEach(b=>b.onclick=()=>{equipmentTarget=b.dataset.exploreMonster;menu('equipment')});
+  if(!p.guideSeen377){requestAnimationFrame(()=>{if(screen!=='chapterTwoField'||battle||document.querySelector('.game-modal'))return;showChapterTwoHelp();chapterTwoCommit(()=>{chapterTwoState(save.state).guideSeen377=true;return{ok:true}})})}
++}
++function recoverChapterTwoSpring418(spring,now=performance.now()){
++ if(!game?.chapterTwo||!chapterTwoCommit(()=>{fullyRecoverParty();return{ok:true}}).ok)return false;
++ // Refresh only the vitals: rebuilding the field loses the path and contact latch.
++ refreshExplorePartyHud();
++ game.hotSpringRecoveryFx={...spring,startedAt:now,until:now+1800};
++ showToast('泉の光で部隊のHP・MP・状態異常が回復した');
++ return true;
+ }
+ function openChapterTwoBattle(id){
+  if(battle||!chapterTwoUnlocked(save.state))return;
+@@ -4542,7 +4550,7 @@
+  return ensureExploreDecorations(game?.world).find(entry=>entry.x===x&&entry.y===y&&EXPLORE_INTERACTIVE_DECORATIONS.has(entry.type)&&!entry.destroyed)??null
+ }
+ function refreshExplorePartyHud(){
+- if(screen!=="explore")return;
++ if(screen!=="explore"&&screen!=="chapterTwoField")return;
+  explorationPartyMembers().forEach(monster=>{
+   const card=document.querySelector(`[data-explore-hud-id="${monster.id}"]`);
+   if(!card)return;
+--- Build417/src/core/config.js
++++ Build418/src/core/config.js
+@@ -28,4 +28,4 @@
+   const floor=typeof stateOrFloor==="number"?stateOrFloor:Number(stateOrFloor?.player?.maxFloor)||0;
+   return floor>=contentUnlockFloor(productionFloor);
+ }
+-export const APP_VERSION="3.1.96";// Regression history: APP_VERSION="3.1.16" / APP_VERSION="3.1.15" / APP_VERSION="3.1.14" / APP_VERSION="3.1.13" / APP_VERSION="3.1.12" / APP_VERSION="3.1.11" / APP_VERSION="3.1.10" / APP_VERSION="3.1.9" / APP_VERSION="3.1.8" / APP_VERSION="3.1.7" / APP_VERSION="3.1.6" / APP_VERSION="3.1.5" / APP_VERSION="3.1.4" / APP_VERSION="3.1.3"
++export const APP_VERSION="3.1.97";// Regression history: APP_VERSION="3.1.16" / APP_VERSION="3.1.15" / APP_VERSION="3.1.14" / APP_VERSION="3.1.13" / APP_VERSION="3.1.12" / APP_VERSION="3.1.11" / APP_VERSION="3.1.10" / APP_VERSION="3.1.9" / APP_VERSION="3.1.8" / APP_VERSION="3.1.7" / APP_VERSION="3.1.6" / APP_VERSION="3.1.5" / APP_VERSION="3.1.4" / APP_VERSION="3.1.3"
+--- Build417/src/chapterTwo/ChapterTwoField.js
++++ Build418/src/chapterTwo/ChapterTwoField.js
+@@ -4,7 +4,7 @@
+  const ROOMS=chapterTwoRooms(run),room=ROOMS[run.room];g.chapterTwo=true;g.world=chapterTwoWorld(run);
+  if(g.world.sectionByCell[`${run.position.x},${run.position.y}`]!==g.world.currentSectionId)run.position={...g.world.sections[run.room].center};
+  g.player=new Entity(run.position.x,run.position.y);g.canvas=canvas;g.ctx=canvas.getContext('2d');g.camera=new Camera(canvas);g.running=true;g.paused=false;g.partyTrail=[];
+- let frame=0,disposed=false,last=performance.now(),lastPaint=0,lastSave=0,armed=false,contactLock=null;
++ let frame=0,disposed=false,last=performance.now(),lastPaint=0,lastSave=0,armed=false,contactLock=null,springContact=null;
+  const objects=g.world.sectionPortals.filter(p=>p.sectionId===g.world.currentSectionId).map(p=>({...p,id:p.direction,type:'door',label:ROOMS[Number(p.targetSectionId.split('-').at(-1))].name}));
+  for(const e of g.world.bosses)if(e.active&&e.sectionId===g.world.currentSectionId)objects.push({...e,type:'enemy',label:ENCOUNTERS[e.id].name});
+  for(const c of g.world.chests)if(!c.open&&c.sectionId===g.world.currentSectionId)objects.push({...c,id:c.id,vaultIndex:c.vaultIndex,type:'chest',label:c.vaultIndex===9?'地域限定武器・大宝箱':c.vaultIndex!=null?'宝物庫の宝箱':'宝箱'});
+@@ -30,7 +30,11 @@
+   if(!suspended){autoStep();const moved=g.player.move(dt,5);if(g.player.path.length||moved){updateTrail();g.camera.follow(g.player.rx*TILE,g.player.ry*TILE,dt);g.camera.clamp(g.world)}
+    if(moved&&now-lastSave>1000){persist();lastSave=now}
+    if(contactLock&&Math.hypot(g.player.rx-contactLock.x,g.player.ry-contactLock.y)>1.2)contactLock=null;
+-   if(armed){const object=objects.find(o=>o!==contactLock&&Math.hypot(g.player.rx-o.x,g.player.ry-o.y)<.8);if(object){armed=false;contactLock=object;g.player.path=[];persist();onContact(object)}}
++   // Springs heal on entry without consuming the destination or stopping the walk.
++   // The wider release radius prevents repeated healing while standing at the edge.
++   if(springContact&&Math.hypot(g.player.rx-springContact.x,g.player.ry-springContact.y)>1.2)springContact=null;
++   if(armed){const spring=objects.find(o=>o.type==='spring'&&o!==springContact&&Math.hypot(g.player.rx-o.x,g.player.ry-o.y)<.8);if(spring){springContact=spring;persist();onContact(spring)}}
++   if(armed&&!disposed&&!busy()){const object=objects.find(o=>o.type!=='spring'&&o!==contactLock&&Math.hypot(g.player.rx-o.x,g.player.ry-o.y)<.8);if(object){armed=false;contactLock=object;g.player.path=[];persist();onContact(object)}}
+   }
+   if(!disposed&&!suspended&&now-lastPaint>=1000/30){drawScene();lastPaint=now}if(!disposed)frame=requestAnimationFrame(tick);
+  }
+--- Build417/src/ui/screens/FormationScreen.js
++++ Build418/src/ui/screens/FormationScreen.js
+@@ -83,8 +83,8 @@
+     <span class="formation-circle-art">${circle.id==="none"?"◇":`<img src="${circle.asset}" alt="">`}</span>${circle.level?`<small class="formation-circle-level">Lv.${circle.level}</small>`:""}<i aria-hidden="true">›</i>
+    </button>
+   </section>
++  ${readOnly?'<div class="formation-readonly-note">帰還後に順番・交代・スキルを変更できます</div>':`<div class="formation-actions compact"><button data-formation-skills="${monster.id}">スキル編集</button><button data-formation-replace="${monster.id}">交代</button><button class="danger formation-remove-action" data-formation-remove="${monster.id}">隊列から外す</button></div>`}
+   ${relicLoadout394(state,monster)}
+-  ${readOnly?'<div class="formation-readonly-note">帰還後に順番・交代・スキルを変更できます</div>':`<div class="formation-actions compact"><button data-formation-skills="${monster.id}">スキル編集</button><button data-formation-replace="${monster.id}">交代</button><button class="danger formation-remove-action" data-formation-remove="${monster.id}">隊列から外す</button></div>`}
+  </article>`;
+ }
+ function emptyCard(index,{readOnly=false}={}){
+--- Build417/src/ui/screens/FormationLayout.js
++++ Build418/src/ui/screens/FormationLayout.js
+@@ -1,28 +1,29 @@
+ // Keep the layout with the screen module: an old HTML shell cannot omit this CSS.
+-// Every occupied card uses the same rows; equipment never depends on spare height.
++// Card content grows in document flow; optional relic details cannot consume action rows.
+ export const FORMATION_LAYOUT_CSS = `
+ .formation-screen.v2-screen[data-formation-layout="350"] .formation-page {
+   min-width:0!important; max-width:100%!important;
+-  grid-template-columns:minmax(0,1fr)!important;
+-  grid-template-rows:auto minmax(404px,1fr)!important;
++  box-sizing:border-box!important; display:block!important; min-height:0!important;
++  flex:1 1 0!important; margin:0 auto!important;
++  padding-bottom:calc(var(--v2-nav-height,68px) + env(safe-area-inset-bottom,0px) + 20px)!important;
++  scroll-padding-bottom:calc(var(--v2-nav-height,68px) + 20px);
+   overflow-x:hidden!important; overflow-y:auto!important;
+   -webkit-overflow-scrolling:touch;
+ }
+ .formation-screen[data-formation-layout="350"] .formation-grid {
+   display:grid!important; grid-template-columns:repeat(4,minmax(0,1fr))!important;
+-  align-items:stretch!important; width:100%!important; min-width:0!important;
+-  min-height:404px!important; gap:4px!important;
++  align-items:start!important; width:100%!important; min-width:0!important;
++  height:auto!important; min-height:0!important; gap:4px!important; margin-top:10px!important;
+ }
+ .formation-screen.v2-screen[data-formation-layout="350"] .formation-member {
+-  box-sizing:border-box!important; display:grid!important;
+-  grid-template-columns:minmax(0,1fr)!important;
+-  grid-template-rows:106px 30px 130px minmax(46px,1fr) 58px!important;
++  box-sizing:border-box!important; display:flex!important; flex-direction:column!important;
++  align-self:start!important;
+   width:100%!important; min-width:0!important; max-width:100%!important;
+-  height:100%!important; min-height:404px!important; padding:4px 3px!important;
+-  gap:4px!important; overflow:hidden!important;
++  height:auto!important; min-height:0!important; max-height:none!important; padding:4px 3px!important;
++  gap:6px!important; overflow:visible!important;
+ }
+ .formation-screen[data-formation-layout="350"] .formation-member>* {
+-  box-sizing:border-box!important; min-width:0!important; max-width:100%!important;
++  box-sizing:border-box!important; min-width:0!important; max-width:100%!important; flex:0 0 auto!important;
+ }
+ .formation-screen[data-formation-layout="350"] .formation-member-drag {
+   display:grid!important; grid-template-columns:minmax(0,1fr)!important;
+@@ -93,18 +94,18 @@
+ .formation-screen[data-formation-layout="350"] .formation-gear-slot em,
+ .formation-screen[data-formation-layout="350"] .formation-gear-slot .equipment-socket-summary {display:none!important}
+ .formation-screen.v2-screen[data-formation-layout="350"] .formation-circle-section {
+-  display:flex!important; align-self:end!important; align-items:center!important;
++  display:flex!important; align-self:stretch!important; align-items:center!important;
+   height:44px!important; min-height:44px!important; margin:0!important; padding:0!important;
+ }
+ .formation-screen[data-formation-layout="350"] .formation-circle-section h3 {display:none!important}
+ .formation-screen[data-formation-layout="350"] .formation-actions.compact {
+   display:grid!important; grid-template-columns:repeat(2,minmax(0,1fr))!important;
+-  grid-template-rows:repeat(2,27px)!important; height:58px!important;
++  grid-template-rows:repeat(2,minmax(44px,auto))!important; height:auto!important;
+   margin:0!important; gap:4px!important;
+ }
+ .formation-screen[data-formation-layout="350"] .formation-actions.compact button {
+-  width:100%!important; min-width:0!important; min-height:27px!important; height:27px!important;
+-  padding:2px 0!important; font-size:clamp(5.5px,1.5vw,9px)!important; overflow:hidden!important;
++  width:100%!important; min-width:0!important; min-height:44px!important; height:auto!important;
++  padding:2px 0!important; font-size:clamp(7px,1.8vw,10px)!important; white-space:normal!important; overflow-wrap:anywhere!important; touch-action:manipulation;
+ }
+ .formation-screen[data-formation-layout="350"] .formation-remove-action {grid-column:1/-1!important}
+ .formation-screen[data-formation-layout="350"] .formation-readonly-note {
+@@ -113,6 +114,23 @@
+ }
+ .formation-screen.v2-screen[data-formation-layout="350"] .formation-empty {
+   display:flex!important; flex-direction:column!important; justify-content:center!important;
+-  align-items:center!important;
++  align-items:center!important; min-height:404px!important;
++}
++#app .formation-screen[data-formation-layout="350"] .formation-member > .relic394-loadout {
++  display:block!important; flex:0 0 auto!important; align-self:stretch!important;
++  box-sizing:border-box!important; width:100%!important; min-width:0!important;
++  height:auto!important; min-height:0!important; max-height:none!important;
++  margin:2px 0 0!important; padding:6px!important; overflow:visible!important;
++}
++#app .formation-screen[data-formation-layout="350"] .relic394-loadout > summary {
++  display:list-item!important; position:static!important; inset:auto!important;
++  box-sizing:border-box!important; width:auto!important; height:auto!important;
++  min-height:44px!important; max-height:none!important; margin:0!important; padding:4px 0!important;
++  transform:none!important; white-space:normal!important; overflow-wrap:anywhere!important;
++  font-size:11px!important; line-height:1.55!important; touch-action:manipulation;
++}
++#app .formation-screen[data-formation-layout="350"] .relic394-loadout :is(p,small,li,span,b) {
++  min-width:0!important; white-space:normal!important; overflow-wrap:anywhere!important;
+ }
+ `;
++

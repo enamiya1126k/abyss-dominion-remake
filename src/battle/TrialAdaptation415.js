@@ -71,3 +71,10 @@ export function trialDescription415(id,floor=100,tier=0){
 }
 
 export function battleAdaptationDescription415(b){const r=trialTier415(b);if(!r)return '';const n=x=>x.toLocaleString('ja-JP',{maximumFractionDigits:2});return `戦闘中の備え：HP×${n(r.hp)}／攻撃・魔力×${n(r.atk)}／防御・魔防×${n(r.def)}／速度×${n(r.spd)}。通常キャラに適用。HP100固定の能力は100を維持。`;}
+
+// Read the rates actually bound to this unit, not the eligibility of its teammates.
+// This is display-only; it must not prepare, remove, or recalculate a binding.
+export function appliedTrial419(b,u){
+ const entry=bindings.get(u);if(!entry||entry.b!==b)return null;
+ return {naturalHp:entry.naturalHp,rates:{...entry.rates}};
+}

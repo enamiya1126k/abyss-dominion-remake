@@ -1,3 +1,4 @@
+import {unitPreparationHelp419} from './ui/BattlePreparation415.js';
 import {prepareTrial415,snapshotTrial415,cleanupTrial415,trialTier415,trialDescription415,contextKey415,battleAdaptationDescription415} from './battle/TrialAdaptation415.js';
 import {localHp411} from './online/OnlineTraitCompatibility411.js?v=3.1.91-build411';
 import {savedSingleStats410,prepareSingles410,createSingleState410,snapshotSingles410,settleSingleDeaths410,cleanupSingles410,naturalSingleAction410,refreshPaperShield410,noteSingleDamage410,absorbPaperShield410,enforcePaperBody410,withSingleCause410,takeSingleCues410} from './battle/SingleTraits410.js?v=3.1.91-build411';
@@ -57,7 +58,7 @@ import{equipmentAffixesWithSeries}from"./core/EquipmentAffixSystem.js?v=3.1.74-b
 import{applyCampaignHeroLoadout}from"./core/CampaignHeroLoadoutSystem.js?v=3.1.82-build402";
 import{heroId,heroHp,heroEffects,heroEffect,heroCooldowns,heroAllianceState,heroAuthoredSkills,reserveHeroAction,chooseHeroAllianceSkill,runHeroAllianceAction,triggerHeroAlliance,drainHeroReactions,mitigateHeroDamage,tryHeroLastStand,heroOverheal}from"./core/HeroAllianceSystem.js?v=3.1.90-build410";
 import{commitCampaignHeroSkill}from'./battle/CampaignHeroSkillSystem.js?v=3.1.39-build359';
-import{SaveService,normalizeRaidJuvenileContract}from"./services/SaveService.js?v=3.1.88-build408";
+import{SaveService,normalizeRaidJuvenileContract,recoverEndedExpeditionBattle417}from"./services/SaveService.js?v=3.1.88-build408";
 import{CONTENT_TEST_MODE,BATTLE_SPEED_OPTIONS,CAMERA_DRAG_THRESHOLD_PX,WATER_RULES,MONSTER_STAR_MAX,MONSTER_STORAGE_CAP,ENDGAME_MAX_LEVEL,premiumCrystalCost,normalizeBattleSpeed,contentUnlockFloor,isContentUnlocked}from"./core/config.js?v=3.1.91-build411";
 // Regression markers only: SaveService.js?v=3.1.10-build329 / config.js?v=3.1.21-build340 / HomeScreen.js?v=3.1.21-build340
 import{AudioSystem}from"./core/AudioSystem.js?v=3.1.1-build311";
@@ -577,6 +578,7 @@ function campaignHeroIntelPresentation(model){
  }))
 }
 function render(){
+ if(screen==="explore"&&!save.state.player.inRun&&!battle){stopGame();snapshot=null;activeEnemy=null;screen="home";}
  mountHomeEnvironment400(null);
  if(game?.chapterTwo)stopGame();
  if(screen.startsWith("chapterTwo")&&!chapterTwoUnlocked(save.state))screen="home";
@@ -1387,7 +1389,7 @@ function renderChapterTwo(field=false){
  game={};mountChapterTwoField(game,{canvas:document.getElementById('gameCanvas'),Entity,Camera,findPath:path,drawScene:draw,bindInput,updateTrail:updateExplorationPartyTrail,TILE,run:p.run,party,onSave:()=>save.save(),onAutoChange:syncAuto,blocked:()=>Boolean(battle||document.querySelector('.game-modal')),onContact:object=>{
   if(object.type==='door'){const result=chapterTwoCommit(()=>moveChapterTwoRoom(save.state,object.id));if(result.ok){render();const curtain=document.createElement('div');curtain.className='section-passage-fade';curtain.innerHTML=`<span><small>区画移動</small><b>${chapterTwoRooms(p.run)[p.run.room].name}</b></span>`;document.querySelector('.explore-stage')?.append(curtain);setTimeout(()=>curtain.remove(),720)}else if(result.message)showToast(result.message);return}
   if(object.type==='chest'){const result=chapterTwoCommit(()=>object.vaultIndex!=null?openVaultChest380(save.state,object.vaultIndex):(()=>{const x=openChapterTwoChest(save.state);if(x.ok)recordChapterTwo380(save.state,x);return x})());if(result.ok){render();app.insertAdjacentHTML('beforeend',Modal('宝箱を開いた',`<div class="chapter-two-reward">${result.equipment?equipmentReward404(result.equipment,save.state):`${pixelIcon('chest')}<h3>${result.experiencePacks?`経験値パック（超） ×${result.experiencePacks}`:`GOLD +${result.gold.toLocaleString()}`}</h3><p>探索で見つけた宝を獲得した。</p>`}</div>`,'探索へ戻る'));const m=topModal();m.classList.add('chapter-two-reward-modal');m.querySelector('[data-modal-primary]').onclick=()=>m.remove();chapterTwoAutoModal380(m,()=>m.remove(),p.run.auto377)}return}
-  if(object.type==='spring'){if(chapterTwoCommit(()=>{fullyRecoverParty();return{ok:true}}).ok){const point={...object};render();game.hotSpringRecoveryFx={...point,startedAt:performance.now(),until:performance.now()+1800};showToast('泉の光で部隊のHP・MP・状態異常が回復した')}return}
+  if(object.type==='spring'){recoverChapterTwoSpring418(object);return}
   if(object.type==='key'){const result=chapterTwoCommit(()=>pickupChapterTwoKey380(save.state,object.id));if(result.ok){render();showChapterTwoProgress(result)}return}
   if(object.type==='enemy'){const e=CHAPTER_TWO_ENCOUNTERS[object.id];if(e.roaming)openChapterTwoBattle(object.id);else{const info=chapterTwoEnemyEntries(object.id,p.run)[0];openFloorBossChallenge({...info,nameOverride:e.name,floorBossQuote:chapterTwoHint380(object.id),floorBossTitle:e.vault?'宝箱10個を守る強敵':chapterTwoArea(p.run).name},p.run.area+1,{chapterTwoId:object.id})}}
  }});
@@ -1401,6 +1403,14 @@ function renderChapterTwo(field=false){
  document.getElementById('toggleExplorePartyHud').onclick=()=>{save.state.settings.explorePartyHudCollapsed=!save.state.settings.explorePartyHudCollapsed;save.save();render()};
  document.querySelectorAll('[data-explore-monster]').forEach(b=>b.onclick=()=>{equipmentTarget=b.dataset.exploreMonster;menu('equipment')});
  if(!p.guideSeen377){requestAnimationFrame(()=>{if(screen!=='chapterTwoField'||battle||document.querySelector('.game-modal'))return;showChapterTwoHelp();chapterTwoCommit(()=>{chapterTwoState(save.state).guideSeen377=true;return{ok:true}})})}
+}
+function recoverChapterTwoSpring418(spring,now=performance.now()){
+ if(!game?.chapterTwo||!chapterTwoCommit(()=>{fullyRecoverParty();return{ok:true}}).ok)return false;
+ // Refresh only the vitals: rebuilding the field loses the path and contact latch.
+ refreshExplorePartyHud();
+ game.hotSpringRecoveryFx={...spring,startedAt:now,until:now+1800};
+ showToast('泉の光で部隊のHP・MP・状態異常が回復した');
+ return true;
 }
 function openChapterTwoBattle(id){
  if(battle||!chapterTwoUnlocked(save.state))return;
@@ -4494,17 +4504,19 @@ function loop(now){
  requestAnimationFrame(loop)
 }
 async function beginEncounter(enemyOverride=null,encounterOptions={}){
- if(!game?.running||game.world.encountering)return;
- const originGame=game,generation=exploreActionGeneration;
+ if(!game?.running||game.world.encountering||battle)return;
+ if(!save.state.player.inRun){cancelPendingExploreActions();stopGame();snapshot=null;activeEnemy=null;screen="home";render();return;}
+ const originGame=game,generation=exploreActionGeneration,encounterToken417={};originGame.encounterToken417=encounterToken417;
  game.world.encountering=true;
  game.player.path=[];
  game.paused=true;
+ let fx=null,canvas=null,transferred417=false;try{
  const heroEncounter=encounterOptions.campaignHero===true,emergency=!enemyOverride&&shouldTriggerEmergency(save.state,game.world.steps),encounterEnemies=enemyOverride?(Array.isArray(enemyOverride)?enemyOverride:[enemyOverride]):emergency?[]:randomEnemyGroup(),bossTone=!heroEncounter&&(emergency||encounterEnemies.some(enemy=>enemy?.boss)),eliteTone=!heroEncounter&&!bossTone&&encounterEnemies.some(enemy=>enemy?.elite||enemy?.forcedElite),tone=heroEncounter?"hero":bossTone?"boss":eliteTone?"elite":"normal";game.world.heroStepsSinceBattle=0;
  if(emergency){const pending=normalizeEndgameState(save.state).emergency.pendingEncounter;if(pending&&!pending.priorVitals)pending.priorVitals=capturePartyVitals();save.save()}
- const canvas=document.getElementById("gameCanvas");
+ canvas=document.getElementById("gameCanvas");
  const stage=document.querySelector(".explore-stage");
  if(canvas)canvas.classList.add("encounter-shake");
- const fx=document.createElement("div");
+ fx=document.createElement("div");
  fx.className=`encounter-transition encounter-${tone}`;
  fx.innerHTML=`<div class="encounter-mist"></div><div class="encounter-vignette"></div><div class="encounter-sparks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="encounter-slashes" aria-hidden="true"><i></i><i></i></div><div class="encounter-warning"><small>${heroEncounter?"勇者に接触された":"深淵との遭遇"}</small><strong>${heroEncounter?campaignHeroName(encounterOptions.heroId):"敵影接近"}</strong><em></em></div><div class="encounter-curtain left"></div><div class="encounter-curtain right"></div>`;
  (stage??document.body).appendChild(fx);
@@ -4513,19 +4525,33 @@ async function beginEncounter(enemyOverride=null,encounterOptions={}){
  await wait(390);fx.classList.add("is-closing");
  await wait(280);
  if(generation!==exploreActionGeneration||game!==originGame||!game?.running||!save.state.player.inRun||screen!=="explore"){fx.remove();canvas?.classList.remove("encounter-shake");return}
- if(emergency){fx.remove();game.world.encountering=false;game.paused=true;triggerEmergencyEncounter();return}
+ if(emergency){fx.remove();game.world.encountering=false;game.paused=true;triggerEmergencyEncounter();transferred417=true;return}
  activeEnemy=encounterEnemies;
  snapshot=currentSnapshot();
  stopGame();
  if(heroEncounter){const voice=campaignHeroVoiceLine(encounterOptions.heroId,"contact",{cycle:campaignHeroEncounterCycle(encounterOptions.encounterId)});startSpecialBattle(activeEnemy,{type:"campaignHero",title:`勇者・${campaignHeroName(encounterOptions.heroId)}`,subtitle:`「${voice}」 / 与えた傷は永久保存`,priorVitals:encounterOptions.priorVitals,campaignHeroId:encounterOptions.heroId,campaignHeroEncounterId:encounterOptions.encounterId,returnScreen:"explore",explorationAuto:save.state.settings.exploreAutoMode!=="off"})}else startBattle(activeEnemy);
- setTimeout(()=>fx.remove(),240)
+ transferred417=true;setTimeout(()=>fx?.remove(),240);
+ }finally{
+  canvas?.classList.remove("encounter-shake");
+  if(originGame.encounterToken417===encounterToken417){
+   delete originGame.encounterToken417;
+   if(!transferred417){
+    originGame.world.encountering=false;
+    if(game===originGame&&originGame.running&&!battle){
+     originGame.paused=Boolean(document.querySelector(".game-modal"));
+     if(!save.state.player.inRun){stopGame();snapshot=null;activeEnemy=null;if(screen==="explore"){screen="home";render();}}
+    }
+   }
+  }
+  if(game!==originGame||!battle)fx?.remove();
+ }
 }
 const EXPLORE_INTERACTIVE_DECORATIONS=new Set(["barrel","crate","bones","crystal","water"]);
 function exploreDecorationAt(x,y){
  return ensureExploreDecorations(game?.world).find(entry=>entry.x===x&&entry.y===y&&EXPLORE_INTERACTIVE_DECORATIONS.has(entry.type)&&!entry.destroyed)??null
 }
 function refreshExplorePartyHud(){
- if(screen!=="explore")return;
+ if(screen!=="explore"&&screen!=="chapterTwoField")return;
  explorationPartyMembers().forEach(monster=>{
   const card=document.querySelector(`[data-explore-hud-id="${monster.id}"]`);
   if(!card)return;
@@ -5656,6 +5682,7 @@ function sanitizeBattleParty(){
  return repaired;
 }
 function saveBattleCheckpoint(){
+ if(!battle||battle.resultSettled)return;
  if(battle)settleSingleDeaths410(battle);
  if(!battle)return;
  sanitizeBattleParty();
@@ -5680,8 +5707,9 @@ function saveBattleCheckpoint(){
  }
  save.save()
 }
-function clearBattleCheckpoint(){cleanupUltimateBattle(battle);cleanupSingles410(battle);cleanupTrial415(battle);const options=arguments[0]&&typeof arguments[0]==="object"?arguments[0]:{},saveNow=options.saveNow!==false;delete save.state.activeBattle;if(saveNow)save.save()}
+function clearBattleCheckpoint(){clearTimeout(battleBiomePanelTimer);battleBiomePanelTimer=null;cleanupUltimateBattle(battle);cleanupSingles410(battle);cleanupTrial415(battle);const options=arguments[0]&&typeof arguments[0]==="object"?arguments[0]:{},saveNow=options.saveNow!==false;delete save.state.activeBattle;if(saveNow)save.save()}
 function resumeSavedBattle(){
+ if(recoverEndedExpeditionBattle417(save.state)){snapshot=null;activeEnemy=null;screen="home";save.save();return false;}
  if(save.state.activeBattle?.specialBattleType==='chapterTwo'&&(!chapterTwoUnlocked(save.state)||chapterTwoState(save.state)?.run?.pending?.token!==save.state.activeBattle.chapterTwoToken)){delete save.state.activeBattle;recoverChapterTwoPending402(save.state);save.save();screen='home';return false}
  const data=save.state.activeBattle;if(data?.specialBattleType==="campaignHero"&&!campaignHeroCheckpointResumable(data)){delete save.state.activeBattle;settleAbandonedCampaignHeroPursuit("invalid-battle-recovery");save.save();return false}if(!data?.enemies?.length)return false;
  const party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);if(!party.length)return false;
@@ -5991,7 +6019,7 @@ function startBattle(encounter,options={}){
  {const resonance=heroResonanceProfile(battle.party);if(resonance.count>=2)addBattleLog(battle,`${resonance.name}・${resonance.count}神話共鳴が発動！ 最大${resonance.totalActions}回行動`)}
  for(const monster of party){const resonance=signatureResonance(monster);if(!resonance)continue;if(resonance.awakened)battle.signatureShields[monster.id]=Math.max(1,Math.floor(calculatedStats(monster).hp*.25));addBattleLog(battle,`${displayName(monster)}：専用共鳴「${resonance.name}」${resonance.awakened?"6点・完全覚醒":`${resonance.pieces}/6`} 発動中`)}
  addBattleLog(battle,`行動順：${battle.turnQueue.map(entry=>entry.name).join(" → ")}`);
- saveBattleCheckpoint();renderBattle();setTimeout(async()=>{await battleIntro(enemies);const authorityRows=battleEquipmentAuthorityRows(party);if(authorityRows.length){const labels=authorityRows.slice(0,3).map(({monster,authority})=>`${displayName(monster)}・${authority.name}`),remaining=authorityRows.length-labels.length;await battleBanner("装備固有能力 有効",`${labels.join("／")}${remaining?`／ほか${remaining}種`:""}`,"equipment-authority",650)}const heroResonance=heroResonanceProfile(battle?.party??[]);if(heroResonance.count>=2)await battleBanner(heroResonance.name,`${heroResonance.count}神話共鳴・1ラウンド最大${heroResonance.totalActions}回発動`,`synergy invincible`,900,party[0]);for(const monster of party){const resonance=signatureResonance(monster);if(resonance)await battleBanner(resonance.awakened?"専用6点・完全覚醒":"専用共鳴 発動中",`${displayName(monster)}・${resonance.name} ${resonance.pieces}/6`,"synergy",resonance.awakened?720:480,monster)}await applyOpeningMagicCircles();if(!battle)return;battle.guideReady=true;renderBattle();continueBattleFlow()},scaledBattleDelay(120))
+ const startedBattle417=battle,isCurrent417=()=>battle===startedBattle417&&!startedBattle417.resultSettled;saveBattleCheckpoint();renderBattle();setTimeout(async()=>{if(!isCurrent417())return;await battleIntro(enemies);if(!isCurrent417())return;const authorityRows=battleEquipmentAuthorityRows(party);if(authorityRows.length){const labels=authorityRows.slice(0,3).map(({monster,authority})=>`${displayName(monster)}・${authority.name}`),remaining=authorityRows.length-labels.length;await battleBanner("装備固有能力 有効",`${labels.join("／")}${remaining?`／ほか${remaining}種`:""}`,"equipment-authority",650)}if(!isCurrent417())return;const heroResonance=heroResonanceProfile(battle?.party??[]);if(heroResonance.count>=2)await battleBanner(heroResonance.name,`${heroResonance.count}神話共鳴・1ラウンド最大${heroResonance.totalActions}回発動`,`synergy invincible`,900,party[0]);if(!isCurrent417())return;for(const monster of party){if(!isCurrent417())return;const resonance=signatureResonance(monster);if(resonance)await battleBanner(resonance.awakened?"専用6点・完全覚醒":"専用共鳴 発動中",`${displayName(monster)}・${resonance.name} ${resonance.pieces}/6`,"synergy",resonance.awakened?720:480,monster)}if(!isCurrent417())return;await applyOpeningMagicCircles();if(!isCurrent417())return;battle.guideReady=true;renderBattle();continueBattleFlow()},scaledBattleDelay(120))
 }
 function actor(){return currentAlly(battle)}
 function protectTutorialCaptureTarget(){
@@ -6025,7 +6053,7 @@ function openBattleStatusDetail(id){
  const rawEffects=targetType==="ally"?(battle.allyEffects?.[id]??[]):(battle.enemyEffects?.[id]??[]),ailments=targetType==="ally"?(battle.allyAilments?.[id]??[]):(battle.enemyStatuses?.[id]??[]),kinds=[...new Set(rawEffects.map(effect=>effect.kind))],stats=ally?calculatedStats(ally):target,sourceName=ally?displayName(ally):target.name,percent=value=>`${(Number(value)*100).toLocaleString("ja-JP",{maximumFractionDigits:1})}%`;
  const groups=kinds.map(kind=>{const detail=BATTLE_EFFECT_DETAIL[kind]??[kind,null,1],stack=effectStackBreakdown(battle,id,kind,targetType),total=stack.reduce((sum,effect)=>sum+effect.applied,0),base=detail[1]?Number(stats[detail[1]])||0:null,opposite=kind.endsWith("Up")?kind.replace(/Up$/,"Down"):kind.endsWith("Down")?kind.replace(/Down$/,"Up"):null,oppositeTotal=opposite?effectValue(battle,id,opposite,targetType):0,final=base==null?null:base*Math.max(.2,1+(kind.endsWith("Up")?total-oppositeTotal:oppositeTotal-total));return`<section class="battle-status-detail-group ${detail[2]<0?"negative":"positive"}"><header><span><small>${detail[2]<0?"DEBUFF":"BUFF"}</small><b>${detail[0]}</b></span><strong>${kind==="vulnerable"?"＋":detail[2]<0?"−":"＋"}${percent(total)}</strong></header>${base==null?"":`<p class="battle-status-final"><span><small>基礎値</small>${formatBattleInteger(base)}</span><b><small>効果反映後</small>${formatBattleInteger(final)}</b></p>`}<div class="battle-status-effect-entries">${stack.map(effect=>`<article><header><b>${effect.sourceSkillName??effect.name??kind}</b><em>残り${Math.max(0,Number(effect.turns)||0)}ターン</em></header><small class="battle-status-effect-source">発動元：${effect.sourceName??"効果元不明"}</small><dl><div><dt>元効果</dt><dd>${percent(effect.original)}</dd></div><div><dt>減衰率</dt><dd>${percent(effect.attenuation)}</dd></div><div class="applied"><dt>最終効果</dt><dd>${percent(effect.applied)}</dd></div></dl></article>`).join("")}</div><footer><span>この項目の合計</span><strong>${kind==="vulnerable"?"＋":detail[2]<0?"−":"＋"}${percent(total)}</strong></footer></section>`}).join("");
  const ailmentRows=ailments.map(effect=>`<article class="battle-status-ailment"><header><small>状態異常</small><b>${effect.name??effect.id??effect.kind}</b></header><strong>残り${Math.max(0,Number(effect.turns)||0)}ターン</strong><small>発動元：${effect.sourceName??effect.sourceSkillName??"継続状態"}</small></article>`).join("");
- const special=(ally&&trialTier415(battle)?`<p>${battleAdaptationDescription415(battle)}</p>`:'')+ultimateLabels(battle,target).map(label=>`<p>${escapeAttribute(label)}</p>`).join("")+(hasHeroFortitude(target)?`<p><b>勇者のふんばり</b>：${heroFortitudeUsed(battle,target)?"使用済み":"残り1回・致死ダメージをHP1で耐える"}</p>`:"")+(Number(target.heroShield348)>0?`<p><b>盾</b>：残り ${formatBattleInteger(target.heroShield348)}</p>`:"");
+ const special=(ally?unitPreparationHelp419(battle,ally,stats):'')+ultimateLabels(battle,target).map(label=>`<p>${escapeAttribute(label)}</p>`).join("")+(hasHeroFortitude(target)?`<p><b>勇者のふんばり</b>：${heroFortitudeUsed(battle,target)?"使用済み":"残り1回・致死ダメージをHP1で耐える"}</p>`:"")+(Number(target.heroShield348)>0?`<p><b>盾</b>：残り ${formatBattleInteger(target.heroShield348)}</p>`:"");
  app.insertAdjacentHTML("beforeend",Modal(`${escapeAttribute(sourceName)}・状態効果`,`<div class="battle-status-detail-list detailed"><small>開いた時点の状態です</small>${special?`<section class="battle-status-special364">${special}</section>`:""}${groups}${ailmentRows||""}${groups||ailmentRows||special?"":"<p>状態効果はありません</p>"}${ally?'<button type="button" data-battle-unit-info>能力・装備・スキルを見る</button>':""}</div>`,"閉じる"));
  const modal=topModal(),close=()=>modal.remove();modal.classList.add("battle-status-detail-modal");modal._onDismiss=close;modal.querySelector("[data-modal-primary]").onclick=close;
  modal.querySelector("[data-battle-unit-info]")?.addEventListener("click",()=>{close();showBattleMonsterDetail(id)});
@@ -6033,12 +6061,13 @@ function openBattleStatusDetail(id){
 }
 function scheduleBattleBiomePanelCollapse(){
  clearTimeout(battleBiomePanelTimer);battleBiomePanelTimer=null;
- const activeBattle=battle;if(!activeBattle?.biomeBattle||activeBattle.biomePanelCollapsed||activeBattle.biomePanelManual)return;
+ const activeBattle=battle;if(!activeBattle?.biomeBattle||activeBattle.resultSettled||activeBattle.biomePanelCollapsed||activeBattle.biomePanelManual)return;
  const deadline=Number(activeBattle.biomePanelCollapseAt)||Date.now()+1800;activeBattle.biomePanelCollapseAt=deadline;const remaining=deadline-Date.now();
- if(remaining<=0){activeBattle.biomePanelCollapsed=true;requestAnimationFrame(()=>{if(battle===activeBattle)renderBattle()});return}
- battleBiomePanelTimer=setTimeout(()=>{battleBiomePanelTimer=null;if(battle!==activeBattle||activeBattle.biomePanelManual)return;activeBattle.biomePanelCollapsed=true;renderBattle()},remaining)
+ if(remaining<=0){activeBattle.biomePanelCollapsed=true;requestAnimationFrame(()=>{if(battle===activeBattle&&!activeBattle.resultSettled)renderBattle()});return}
+ battleBiomePanelTimer=setTimeout(()=>{battleBiomePanelTimer=null;if(battle!==activeBattle||activeBattle.resultSettled||activeBattle.biomePanelManual)return;activeBattle.biomePanelCollapsed=true;renderBattle()},remaining)
 }
 function renderBattle(){
+ if(!battle||battle.resultSettled)return;
  mountHomeEnvironment400(null);
  prepareBattleUltimates358();
  if(!battle)return;
@@ -6146,6 +6175,7 @@ function showBattleMonsterDetail(id){
  const body=`<div class="battle-detail battle-detail-v2">
   <div class="battle-detail-hero">${monsterVisual(m,sp.emoji??"👹",{className:"modal-monster-visual"})}<div><small>PARTY MEMBER</small><h3>${displayName(m)}</h3><b>Lv.${m.level}　+${m.plus}</b><span>${attributeVisual(element,{label:`${ATTRIBUTES[element]?.name??element}属性`})}<strong>${ATTRIBUTES[element]?.name??element}属性</strong></span></div></div>
   <section><h4>現在値</h4><div class="battle-detail-vitals"><span><small>HP</small><b>${m.currentHp??st.hp} / ${st.hp}</b></span><span><small>MP</small><b>${m.currentMp??mp} / ${mp}</b></span></div></section>
+  ${unitPreparationHelp419(battle,m,st)}
   <section><h4>戦闘能力</h4><div class="battle-detail-stat-grid"><span><small>物理ATK</small><b>${st.atk.toLocaleString()}</b></span><span><small>魔法ATK</small><b>${(st.matk??st.atk).toLocaleString()}</b></span><span><small>物理DEF</small><b>${st.def.toLocaleString()}</b></span><span><small>魔法DEF</small><b>${(st.mdef??st.def).toLocaleString()}</b></span><span><small>SPD</small><b>${st.spd.toLocaleString()}</b></span><span><small>会心 / 回避</small><b>${st.crit}% / ${st.evasion}%</b></span></div></section>
   <section class="battle-affection-detail"><h4>なつき度 <b>${affection}/1000</b></h4><div class="battle-bar affection"><i style="width:${affection/10}%"></i></div><p>${affectionEffects}</p></section>
   <section><h4>個体情報</h4><div class="battle-detail-profile"><p><small>種族</small><b>${sp.race??"不明"}族</b></p><p><small>役割</small><b>${roleLabels[sp.role]??sp.role??"万能型"}</b></p><p><small>特性</small><b>${trait.name}</b><span>${trait.description}</span></p><p><small>魔法陣</small><b>${circle.name}${circle.level?` Lv.${circle.level}`:""}</b><span>${circle.summary}</span></p></div></section>
@@ -6392,6 +6422,7 @@ async function runSingleNatural410(u,side){
 }
 
 function prepareBattleUltimates358(){
+ if(!battle||battle.resultSettled)return;
  if(battle)prepareSingleBattle410();
  if(battle)preparePairVitals409(battle,(u,side)=>side==='enemy'?u.maxHp:calculatedStats(u).hp);
  if(!battle)return;
@@ -6771,6 +6802,7 @@ async function resolveEnemyFlee(e){
  app.insertAdjacentHTML("beforeend",Modal("逃げられた！",body,"探索を続ける"));const modal=topModal();let closed=false;const finish=()=>{if(closed)return;closed=true;modal?.remove();battle=null;screen="explore";render()};modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish;if(explorationAuto)setTimeout(finish,1000)
 }
 async function enemyTurn({skipUltimate=false}={}){
+ if(!battle||battle.resultSettled)return;
  if(battle.busy)return;const entry=currentTurnEntry(battle);if(entry?.type!=="enemy")return continueBattleFlow();
  battle.busy=true;const e=currentEnemy(battle);if(!e){battle.busy=false;return finishCurrentAction()}battle.enemy=e;prepareBattleUltimates358();const ultimate358=skipUltimate||!chapterTwoUltimateAllowed382(e,battle.turn)?null:chooseEndgameUltimate(battle,e);if(ultimate358){if(e.chapterTwoTactics382)e.chapterTwoUltimateUsed382=true;return performUltimate358(e,ultimate358.id)}beginUltimateAction(battle,e);if(isHeroResonanceSpecies(e.speciesId)){heroBattleEnvironment348();return performHeroCommand348(e,"enemy",chooseHeroAllianceSkill(battle,"enemy",e))}if(e.fleeAfterTurns&&battle.turn>=e.fleeAfterTurns)return resolveEnemyFlee(e);let action=ultimateBasicOnly(battle,e)?ENEMY_ACTIONS.attack:chooseEnemyAction(e,{allies:battle.enemies,opponents:battle.party,battle}),mpCost=pairSkillCost409(battle,e,specialActionInfo(action),enemyActionMpCost(e,action),'enemy');if(mpCost>(e.currentMp??0)){e.intent="魔力不足で通常攻撃へ切替";action=ENEMY_ACTIONS.attack;mpCost=0}e.currentMp=Math.max(0,(e.currentMp??0)-mpCost);consumePairDiscount409(battle,e,'enemy',specialActionInfo(action));battle._pairNaturalEnemy409=e.id;addBattleLog(battle,`${e.name}：${e.intent}${mpCost?`（内部MP -${mpCost}）`:""}`);battle.actionCommitted=true;
  if(action===ENEMY_ACTIONS.guard){await floatText("防御",e.id,"guard")}
@@ -6786,6 +6818,7 @@ async function enemyTurn({skipUltimate=false}={}){
  battle._pairNaturalEnemy409=null;await resolveTwinResonance385(e,"enemy");await flushBattleRecoveries();saveBattleCheckpoint();renderBattle();await wait(300);battle.busy=false;if(!battle.party.some(m=>m.currentHp>0))return lose();await finishCurrentAction();
 }
 async function finishCurrentAction(){
+ if(!battle||battle.resultSettled)return;
  if(!battle)return;settleSingleDeaths410(battle);await flushSingleCues410();for(const side of ['ally','enemy'])for(const u of side==='ally'?battle.party:battle.enemies)observePairImpact409(battle,u,side);await flushPairSynergyCues409();const counters390=await flushPairCounters390();if(counters390){if(!aliveEnemies(battle).length)return win(false,null);if(!battle.party.some(u=>u.currentHp>0))return lose();}await flushUltimateEvents358();
  if(battle?.escapePending){battle.busy=false;const escaped=await resolveEscape();if(escaped||!battle)return;if(!battle.escapePending&&battle.busy)return}
  const finished=currentTurnEntry(battle);if(finished?.type==="ally"&&battle.circleTurnMultipliers)delete battle.circleTurnMultipliers[finished.id];if(finished?.type==="enemy"){const enemy=(battle.enemies??[]).find(entry=>entry.id===finished.id);if(enemy)delete enemy._circleActionMultiplier}
@@ -6798,6 +6831,7 @@ async function finishCurrentAction(){
  return continueBattleFlow();
 }
 async function endRound(){
+ if(!battle||battle.resultSettled)return;
  battle.busy=true;prepareBattleUltimates358();finishUltimateAction(battle);
  const dueSkillEchoes=(battle.delayedSkillEchoes??[]).filter(entry=>Math.max(0,Number(entry.dueTurn)||0)<=Math.max(1,Number(battle.turn)||1));battle.delayedSkillEchoes=(battle.delayedSkillEchoes??[]).filter(entry=>!dueSkillEchoes.includes(entry));
  for(const echo of dueSkillEchoes){const source=battle.party.find(monster=>monster.id===echo.sourceId),target=(battle.enemies??[]).find(enemy=>enemy.id===echo.targetId&&enemy.hp>0)??aliveEnemies(battle)[0];if(!target||ultimateExtraBlocked(battle,source))continue;const applied=applyEnemyDamage(battle,target,Math.max(1,Math.floor(Number(echo.amount)||0)),{sourceId:echo.sourceId,element:echo.element??source?.attribute??"neutral",damageClass:echo.damageClass??"physical",relicKind394:"excluded"});if(source){recordBattleDamage(source,applied.damage);registerWeaponFinisher(source,target,applied.beforeHp)}addBattleLog(battle,`${source?displayName(source):"時の残響"}：${echo.skillName??"残響"}が再来し ${applied.damage.toLocaleString()}ダメージ`);await animateHit(target.id,true);await floatText(applied.damage?`残響 -${applied.damage}`:"完全ガード",target.id,applied.damage?"skill":"guard")}
@@ -6841,10 +6875,12 @@ async function continueBattleFlow(){
  const entry=currentTurnEntry(battle);prepareBattleUltimates358();
  const active358=entry?.type==='enemy'?currentEnemy(battle):currentAlly(battle),key358=`${battle.turn}:${battle.queueIndex}:${entry?.id}`;
  if(active358&&battle.ultimateActionKey358!==key358){battle.ultimateActionKey358=key358;if(beforeUltimateAction(battle,active358)){battle.busy=true;await flushUltimateEvents358();battle.busy=false;if(!aliveEnemies(battle).length)return win(false,null);if(!battle.party.some(u=>u.currentHp>0))return lose();return finishCurrentAction()}}
+ const preparingBattle417=battle,preparingTurn417=battle.turn,preparingIndex417=battle.queueIndex;
  if(active358&&await runSingleNatural410(active358,entry.type))return;
+ if(battle!==preparingBattle417||battle.resultSettled||battle.busy||battle.turn!==preparingTurn417||battle.queueIndex!==preparingIndex417)return;
  renderBattle();
- if(entry?.type==="enemy"){const current=currentEnemy(battle);if(current&&await prepareEnemyMagicCircleTurn(current))return;return enemyTurn()}
- if(entry?.type==="ally"){const current=currentAlly(battle);if(current&&await prepareMagicCircleTurn(current))return;if(battle.auto){const expectedBattle=battle,expectedTurn=battle.turn,expectedIndex=battle.queueIndex;await wait(220);if(battle!==expectedBattle||!battle.auto||battle.busy||battle.turn!==expectedTurn||battle.queueIndex!==expectedIndex)return;const a=currentAlly(battle);if(a){const ultimate358=chooseEndgameUltimate(battle,a,learnedSkills(a));if(ultimate358)return command("skill",ultimate358.id);for(const member of battle.party??[])member._maxHp=calculatedStats(member).hp;if(isHeroResonanceSpecies(a.speciesId)){heroBattleEnvironment348();const skill348=chooseHeroAllianceSkill(battle,"ally",a);return command(skill348?"skill":"attack",skill348?.id)}const hpRate=a.currentHp/Math.max(1,a._maxHp),rageFirstHit=hasCircleEffect(a,"rage")?rageCircleValues(a).firstChainHits:Infinity;if(hasCircleEffect(a,"rage")&&(a._circleRage??0)>=rageFirstHit&&Math.random()<Math.min(.75,(a._circleRage??0)*.06))return command("attack");const decision=chooseAutoBattleDecision(a,{...battle,autoBattleStats:{...(battle.autoBattleStats??{}),[a.id]:calculatedStats(a)}});if(decision.targetId&&(battle.enemies??[]).some(enemy=>enemy.id===decision.targetId&&enemy.hp>0))battle.targetEnemyId=decision.targetId;if(decision.kind==="skill"&&decision.skill&&["selfHeal","allHeal","revive","cleanse","mpHeal"].includes(decision.skill.type))return command("skill",decision.skill.id);if(hpRate<=.25){const item=["fullHeals","highPotions","potions"].find(type=>(save.state.inventory[type]??0)>0);if(item)return useBattleItem(item,a.id,{automatic:true})}if(decision.kind==="guard")return command("guard");if(decision.kind==="skill"&&decision.skill)return command("skill",decision.skill.id)}return command("attack")}}
+ if(entry?.type==="enemy"){const current=currentEnemy(battle);if(current&&await prepareEnemyMagicCircleTurn(current))return;if(battle!==preparingBattle417||battle.resultSettled||battle.busy||battle.turn!==preparingTurn417||battle.queueIndex!==preparingIndex417)return;return enemyTurn()}
+ if(entry?.type==="ally"){const current=currentAlly(battle);if(current&&await prepareMagicCircleTurn(current))return;if(battle!==preparingBattle417||battle.resultSettled||battle.busy||battle.turn!==preparingTurn417||battle.queueIndex!==preparingIndex417)return;if(battle.auto){const expectedBattle=battle,expectedTurn=battle.turn,expectedIndex=battle.queueIndex;await wait(220);if(battle!==expectedBattle||!battle.auto||battle.busy||battle.turn!==expectedTurn||battle.queueIndex!==expectedIndex)return;const a=currentAlly(battle);if(a){const ultimate358=chooseEndgameUltimate(battle,a,learnedSkills(a));if(ultimate358)return command("skill",ultimate358.id);for(const member of battle.party??[])member._maxHp=calculatedStats(member).hp;if(isHeroResonanceSpecies(a.speciesId)){heroBattleEnvironment348();const skill348=chooseHeroAllianceSkill(battle,"ally",a);return command(skill348?"skill":"attack",skill348?.id)}const hpRate=a.currentHp/Math.max(1,a._maxHp),rageFirstHit=hasCircleEffect(a,"rage")?rageCircleValues(a).firstChainHits:Infinity;if(hasCircleEffect(a,"rage")&&(a._circleRage??0)>=rageFirstHit&&Math.random()<Math.min(.75,(a._circleRage??0)*.06))return command("attack");const decision=chooseAutoBattleDecision(a,{...battle,autoBattleStats:{...(battle.autoBattleStats??{}),[a.id]:calculatedStats(a)}});if(decision.targetId&&(battle.enemies??[]).some(enemy=>enemy.id===decision.targetId&&enemy.hp>0))battle.targetEnemyId=decision.targetId;if(decision.kind==="skill"&&decision.skill&&["selfHeal","allHeal","revive","cleanse","mpHeal"].includes(decision.skill.type))return command("skill",decision.skill.id);if(hpRate<=.25){const item=["fullHeals","highPotions","potions"].find(type=>(save.state.inventory[type]??0)>0);if(item)return useBattleItem(item,a.id,{automatic:true})}if(decision.kind==="guard")return command("guard");if(decision.kind==="skill"&&decision.skill)return command("skill",decision.skill.id)}return command("attack")}}
 }
 function expNeed(m){return expNeedFor(m)}
 function finishBossMemoryVictory(caught,monster){

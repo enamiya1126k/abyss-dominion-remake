@@ -1,0 +1,259 @@
+--- Build418/index.html
++++ Build419/index.html
+@@ -214,8 +214,8 @@
+   <link rel="stylesheet" href="./src/Styles/build375-battle-equipment.css?v=3.1.55-build375">
+ <link rel="stylesheet" href="./src/Styles/build376-chapter-two.css?v=3.1.56-build376">
+ <link rel="stylesheet" href="./src/Styles/build379-departure.css?v=3.1.59-build379">
+-<link rel="stylesheet" href="./src/Styles/build380-chapter-two.css?v=3.1.61-build381">
+-  <link rel="stylesheet" href="./src/Styles/build382-chapter-two.css?v=3.1.62-build382">
++<link rel="stylesheet" href="./src/Styles/build380-chapter-two.css?v=3.1.98-build419">
++  <link rel="stylesheet" href="./src/Styles/build382-chapter-two.css?v=3.1.98-build419">
+   <link rel="stylesheet" href="./src/Styles/build383-chapter-monsters.css?v=3.1.63-build383">
+   <link rel="stylesheet" href="./src/Styles/build393-elite.css?v=3.1.73-build393">
+   <link rel="stylesheet" href="./src/Styles/build394-relics.css?v=3.1.74-build394">
+@@ -243,18 +243,18 @@
+     "./src/core/HomeSkinSystem400.js": "./src/core/HomeSkinSystem400.js?v=3.1.87-build407",
+     "./src/core/HomeSkinSystem400.js?v=3.1.82-build402": "./src/core/HomeSkinSystem400.js?v=3.1.87-build407",
+     "./src/core/HomeSkinSystem400.js?v=3.1.87-build407": "./src/core/HomeSkinSystem400.js?v=3.1.87-build407",
+-    "./src/core/config.js": "./src/core/config.js?v=3.1.97-build418",
+-    "./src/core/config.js?v=3.1.82-build402": "./src/core/config.js?v=3.1.97-build418",
+-    "./src/core/config.js?v=3.1.85-build405": "./src/core/config.js?v=3.1.97-build418",
+-    "./src/core/config.js?v=3.1.86-build406": "./src/core/config.js?v=3.1.97-build418",
+-    "./src/core/config.js?v=3.1.87-build407": "./src/core/config.js?v=3.1.97-build418",
++    "./src/core/config.js": "./src/core/config.js?v=3.1.98-build419",
++    "./src/core/config.js?v=3.1.82-build402": "./src/core/config.js?v=3.1.98-build419",
++    "./src/core/config.js?v=3.1.85-build405": "./src/core/config.js?v=3.1.98-build419",
++    "./src/core/config.js?v=3.1.86-build406": "./src/core/config.js?v=3.1.98-build419",
++    "./src/core/config.js?v=3.1.87-build407": "./src/core/config.js?v=3.1.98-build419",
+     "./src/data/species.js": "./src/data/species.js?v=3.1.86-build406",
+     "./src/data/species.js?v=3.1.72-build392": "./src/data/species.js?v=3.1.86-build406",
+     "./src/data/species.js?v=3.1.86-build406": "./src/data/species.js?v=3.1.86-build406",
+-    "./src/main.js": "./src/main.js?v=3.1.97-build418",
+-    "./src/main.js?v=3.1.85-build405": "./src/main.js?v=3.1.97-build418",
+-    "./src/main.js?v=3.1.86-build406": "./src/main.js?v=3.1.97-build418",
+-    "./src/main.js?v=3.1.89-build409": "./src/main.js?v=3.1.97-build418",
++    "./src/main.js": "./src/main.js?v=3.1.98-build419",
++    "./src/main.js?v=3.1.85-build405": "./src/main.js?v=3.1.98-build419",
++    "./src/main.js?v=3.1.86-build406": "./src/main.js?v=3.1.98-build419",
++    "./src/main.js?v=3.1.89-build409": "./src/main.js?v=3.1.98-build419",
+     "./src/models/Monster.js": "./src/models/Monster.js?v=3.1.94-build415",
+     "./src/models/Monster.js?v=3.1.82-build402": "./src/models/Monster.js?v=3.1.94-build415",
+     "./src/models/Monster.js?v=3.1.86-build406": "./src/models/Monster.js?v=3.1.94-build415",
+@@ -277,9 +277,9 @@
+     "./src/ui/TwinStatus385.js": "./src/ui/TwinStatus385.js?v=3.1.94-build415",
+     "./src/ui/TwinStatus385.js?v=3.1.75-build395": "./src/ui/TwinStatus385.js?v=3.1.94-build415",
+     "./src/ui/TwinStatus385.js?v=3.1.86-build406": "./src/ui/TwinStatus385.js?v=3.1.94-build415",
+-    "./src/ui/screens/BattleScreen.js": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
+-    "./src/ui/screens/BattleScreen.js?v=3.1.85-build405": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
+-    "./src/ui/screens/BattleScreen.js?v=3.1.86-build406": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
++    "./src/ui/screens/BattleScreen.js": "./src/ui/screens/BattleScreen.js?v=3.1.98-build419",
++    "./src/ui/screens/BattleScreen.js?v=3.1.85-build405": "./src/ui/screens/BattleScreen.js?v=3.1.98-build419",
++    "./src/ui/screens/BattleScreen.js?v=3.1.86-build406": "./src/ui/screens/BattleScreen.js?v=3.1.98-build419",
+     "./src/ui/screens/HomeScreen.js": "./src/ui/screens/HomeScreen.js?v=3.1.87-build407",
+     "./src/ui/screens/HomeScreen.js?v=3.1.85-build405": "./src/ui/screens/HomeScreen.js?v=3.1.87-build407",
+     "./src/ui/screens/HomeScreen.js?v=3.1.86-build406": "./src/ui/screens/HomeScreen.js?v=3.1.87-build407",
+@@ -293,7 +293,7 @@
+     "./src/ui/screens/SettingsScreen.js": "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407",
+     "./src/ui/screens/SettingsScreen.js?v=3.1.82-build402": "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407",
+     "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407": "./src/ui/screens/SettingsScreen.js?v=3.1.87-build407",
+-    "./src/core/config.js?v=3.1.88-build408": "./src/core/config.js?v=3.1.97-build418",
++    "./src/core/config.js?v=3.1.88-build408": "./src/core/config.js?v=3.1.98-build419",
+     "./src/services/SaveService.js?v=3.1.88-build408": "./src/services/SaveService.js?v=3.1.96-build417",
+     "./src/battle/BattleRules.js?v=3.1.78-build398": "./src/battle/BattleRules.js?v=3.1.94-build415",
+     "./src/battle/BattleRules.js": "./src/battle/BattleRules.js?v=3.1.94-build415",
+@@ -306,8 +306,8 @@
+     "./src/ui/PairEffects409.js": "./src/ui/PairEffects409.js?v=3.1.89-build409",
+     "./src/battle/TwinResonance385.js?v=3.1.89-build409": "./src/battle/TwinResonance385.js?v=3.1.94-build415",
+     "./src/ui/TwinStatus385.js?v=3.1.89-build409": "./src/ui/TwinStatus385.js?v=3.1.94-build415",
+-    "./src/core/config.js?v=3.1.89-build409": "./src/core/config.js?v=3.1.97-build418",
+-    "./src/ui/screens/BattleScreen.js?v=3.1.89-build409": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
++    "./src/core/config.js?v=3.1.89-build409": "./src/core/config.js?v=3.1.98-build419",
++    "./src/ui/screens/BattleScreen.js?v=3.1.89-build409": "./src/ui/screens/BattleScreen.js?v=3.1.98-build419",
+     "./src/battle/SkillSystem.js?v=3.1.89-build409": "./src/battle/SkillSystem.js?v=3.1.94-build415",
+     "./src/battle/PairSynergy409.js?v=3.1.89-build409": "./src/battle/PairSynergy409.js?v=3.1.94-build415",
+     "./src/ui/PairEffects409.js?v=3.1.89-build409": "./src/ui/PairEffects409.js?v=3.1.89-build409",
+@@ -328,15 +328,15 @@
+     "./src/data/statusEffects.js": "./src/data/statusEffects.js?v=3.1.90-build410",
+     "./src/ui/TwinStatus385.js?v=3.1.90-build410": "./src/ui/TwinStatus385.js?v=3.1.94-build415",
+     "./src/core/HeroAllianceSystem.js?v=3.1.90-build410": "./src/core/HeroAllianceSystem.js?v=3.1.90-build410",
+-    "./src/core/config.js?v=3.1.90-build410": "./src/core/config.js?v=3.1.97-build418",
++    "./src/core/config.js?v=3.1.90-build410": "./src/core/config.js?v=3.1.98-build419",
+     "./src/data/statusEffects.js?v=3.1.90-build410": "./src/data/statusEffects.js?v=3.1.90-build410",
+-    "./src/ui/screens/BattleScreen.js?v=3.1.90-build410": "./src/ui/screens/BattleScreen.js?v=3.1.90-build410",
++    "./src/ui/screens/BattleScreen.js?v=3.1.90-build410": "./src/ui/screens/BattleScreen.js?v=3.1.98-build419",
+     "./src/battle/BattleRules.js?v=3.1.90-build410": "./src/battle/BattleRules.js?v=3.1.94-build415",
+     "./src/online/OnlineTraitCompatibility411.js": "./src/online/OnlineTraitCompatibility411.js?v=3.1.94-build415",
+     "./src/core/CombatPower.js?v=3.1.82-build402": "./src/core/CombatPower.js?v=3.1.91-build411",
+     "./src/core/CombatPower.js": "./src/core/CombatPower.js?v=3.1.91-build411",
+     "./src/online/OnlineTraitCompatibility411.js?v=3.1.91-build411": "./src/online/OnlineTraitCompatibility411.js?v=3.1.94-build415",
+-    "./src/core/config.js?v=3.1.91-build411": "./src/core/config.js?v=3.1.97-build418",
++    "./src/core/config.js?v=3.1.91-build411": "./src/core/config.js?v=3.1.98-build419",
+     "./src/ui/screens/OnlinePartyScreen.js?v=3.1.91-build411": "./src/ui/screens/OnlinePartyScreen.js?v=3.1.91-build411",
+     "./src/core/CombatPower.js?v=3.1.91-build411": "./src/core/CombatPower.js?v=3.1.91-build411",
+     "./src/services/EquipmentProtection404.js": "./src/services/EquipmentProtection404.js?v=3.1.92-build412",
+@@ -348,8 +348,8 @@
+     "./src/ui/BattleBossLayout.js": "./src/ui/BattleBossLayout.js?v=3.1.93-build413",
+     "./src/ui/BattleBossLayout.js?v=3.1.85-build405": "./src/ui/BattleBossLayout.js?v=3.1.93-build413",
+     "./src/battle/ChapterTwoAbilityRuntime408.js": "./src/battle/ChapterTwoAbilityRuntime408.js?v=3.1.94-build415",
+-    "./src/ui/BattlePreparation415.js": "./src/ui/BattlePreparation415.js?v=3.1.94-build415",
+-    "./src/battle/TrialAdaptation415.js": "./src/battle/TrialAdaptation415.js?v=3.1.95-build416",
++    "./src/ui/BattlePreparation415.js": "./src/ui/BattlePreparation415.js?v=3.1.98-build419",
++    "./src/battle/TrialAdaptation415.js": "./src/battle/TrialAdaptation415.js?v=3.1.98-build419",
+     "./src/data/ChapterTwoAbilityDesign408.js": "./src/data/ChapterTwoAbilityDesign408.js?v=3.1.94-build415",
+     "./src/battle/PairPreparation415.js": "./src/battle/PairPreparation415.js?v=3.1.94-build415",
+     "./src/ui/screens/FormationScreen.js": "./src/ui/screens/FormationScreen.js?v=3.1.97-build418",
+@@ -357,22 +357,26 @@
+     "./src/ui/screens/FormationScreen.js?v=3.1.82-build402": "./src/ui/screens/FormationScreen.js?v=3.1.97-build418",
+     "./src/battle/ChapterTwoAbilityRuntime408.js?v=3.1.88-build408": "./src/battle/ChapterTwoAbilityRuntime408.js?v=3.1.94-build415",
+     "./src/data/ChapterTwoAbilityDesign408.js?v=3.1.88-build408": "./src/data/ChapterTwoAbilityDesign408.js?v=3.1.94-build415",
+-    "./src/main.js?v=3.1.95-build416": "./src/main.js?v=3.1.97-build418",
+-    "./src/core/config.js?v=3.1.95-build416": "./src/core/config.js?v=3.1.97-build418",
++    "./src/main.js?v=3.1.95-build416": "./src/main.js?v=3.1.98-build419",
++    "./src/core/config.js?v=3.1.95-build416": "./src/core/config.js?v=3.1.98-build419",
+     "./src/services/SaveService.js?v=3.1.95-build416": "./src/services/SaveService.js?v=3.1.96-build417",
+-    "./src/main.js?v=3.1.96-build417": "./src/main.js?v=3.1.97-build418",
+-    "./src/core/config.js?v=3.1.96-build417": "./src/core/config.js?v=3.1.97-build418",
++    "./src/main.js?v=3.1.96-build417": "./src/main.js?v=3.1.98-build419",
++    "./src/core/config.js?v=3.1.96-build417": "./src/core/config.js?v=3.1.98-build419",
+     "./src/ui/screens/FormationScreen.js?v=3.1.94-build415": "./src/ui/screens/FormationScreen.js?v=3.1.97-build418",
+     "./src/ui/screens/FormationLayout.js": "./src/ui/screens/FormationLayout.js?v=3.1.97-build418",
+     "./src/ui/screens/FormationLayout.js?v=3.1.30-build350": "./src/ui/screens/FormationLayout.js?v=3.1.97-build418",
+     "./src/chapterTwo/ChapterTwoField.js": "./src/chapterTwo/ChapterTwoField.js?v=3.1.97-build418",
+-    "./src/chapterTwo/ChapterTwoField.js?v=3.1.82-build402": "./src/chapterTwo/ChapterTwoField.js?v=3.1.97-build418"
++    "./src/chapterTwo/ChapterTwoField.js?v=3.1.82-build402": "./src/chapterTwo/ChapterTwoField.js?v=3.1.97-build418",
++    "./src/main.js?v=3.1.97-build418": "./src/main.js?v=3.1.98-build419",
++    "./src/core/config.js?v=3.1.97-build418": "./src/core/config.js?v=3.1.98-build419",
++    "./src/ui/BattlePreparation415.js?v=3.1.94-build415": "./src/ui/BattlePreparation415.js?v=3.1.98-build419",
++    "./src/battle/TrialAdaptation415.js?v=3.1.95-build416": "./src/battle/TrialAdaptation415.js?v=3.1.98-build419"
+   }
+ }
+ </script>
+ <script type="module">
+-    const ASSET_VERSION = "3.1.97";
+-    const ASSET_BUILD = "build418";
++    const ASSET_VERSION = "3.1.98";
++    const ASSET_BUILD = "build419";
+     const CACHE_VERSION = `${ASSET_VERSION}-${ASSET_BUILD}`;
+     const VERSION_KEY = "abyss-dominion-asset-version";
+     async function refreshStaleAssets() {
+--- Build418/src/Styles/build380-chapter-two.css
++++ Build419/src/Styles/build380-chapter-two.css
+@@ -10,11 +10,6 @@
+ .home-title-card.home-chapter380>span{display:block;font-size:10px;color:#e6c785;margin-top:5px}
+ /* Reuse Chapter I formation, sprite scale and facing. */
+ .battle-screen.chapter-two-battle380 .side-enemies .target-reticle{display:none!important}
+-.battle-screen.chapter-two-battle380 .side-enemies .enemy-card-name{display:none!important}
+-.battle-screen.chapter-two-battle380 .side-enemies .side-unit-card{min-height:42px!important;height:auto!important;padding:4px 3px 3px!important}
+-.battle-screen.chapter-two-battle380 .side-enemies .battle-bar .bar-label{font-size:.3rem!important;white-space:nowrap;letter-spacing:0}
+-.battle-screen.chapter-two-battle380 .side-enemies .battle-unit-floating-name{display:flex!important;align-items:center;justify-content:center;gap:3px;white-space:normal!important;line-height:1.2!important}
+-.battle-screen.chapter-two-battle380 .side-enemies .battle-unit-floating-name>b{font-size:.3rem!important;line-height:1.2!important}
+ .home-command-screen>.home-title-card.home-chapter380{box-sizing:border-box!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:3px!important;padding:8px 12px!important}
+ .home-command-screen>.home-title-card.home-chapter380>small{font-size:7px!important;line-height:1.1!important;margin:0!important}
+ .home-command-screen>.home-title-card.home-chapter380>h1{font-size:clamp(10px,2.7vw,15px)!important;line-height:1.2!important;margin:0!important}
+@@ -22,8 +17,4 @@
+ .home-command-screen>.home-title-card.home-chapter380>span{font-size:8px!important;line-height:1.1!important;margin:0!important}
+ .power-ranking-circle .ranking-circle381{position:relative!important;inset:auto!important;display:block!important;width:34px!important;height:34px!important;transform:none!important}
+ .battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-unit-sprite>.monster-visual{transform:scaleX(-1)!important}
+-.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-unit-name.enemy-name{display:flex!important;min-height:0!important;height:auto!important;margin:0!important;padding:0!important}
+-.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .enemy-card-meta{display:flex!important;justify-content:space-between!important;align-items:center!important;width:100%!important}
+-.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-battle-unit .battle-unit-floating-name>b{font-size:.3rem!important;line-height:1.2!important}
+-.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-battle-unit .battle-unit-floating-name{display:flex!important;flex-wrap:wrap!important;gap:3px!important;max-width:100%!important;border:0!important;background:none!important;box-shadow:none!important;padding:0!important}
+ 
+--- Build418/src/Styles/build382-chapter-two.css
++++ Build419/src/Styles/build382-chapter-two.css
+@@ -4,17 +4,16 @@
+  position:absolute!important;left:50%!important;top:var(--chapter-name-y,0px)!important;bottom:auto!important;
+  translate:none!important;transform:translateX(-50%)!important;
+  width:calc(100% - 4px)!important;max-width:calc(100% - 4px)!important;
+- min-height:0!important;height:auto!important;flex-wrap:wrap!important;align-items:center!important;justify-content:center!important;
+- gap:2px 3px!important;padding:0!important;margin:0!important;z-index:20!important;
++ min-height:0!important;height:auto!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:center!important;
++ gap:4px!important;padding:0!important;font-size:.37rem!important;margin:0!important;z-index:20!important;
+  background:none!important;border:0!important;box-shadow:none!important;filter:none!important;text-shadow:0 1px 2px #000!important;
+  pointer-events:none!important;
+ }
+ .battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-battle-unit .battle-unit-floating-name>b{
+- font-size:clamp(8px,2vw,11px)!important;line-height:1.2!important;
+- white-space:normal!important;word-break:normal!important;overflow-wrap:anywhere!important;
+- overflow:visible!important;text-overflow:clip!important;max-width:100%!important;text-align:center!important;
++ flex:0 1 auto!important;min-width:0!important;font-size:inherit!important;line-height:1.15!important;
++ white-space:nowrap!important;word-break:normal!important;overflow-wrap:normal!important;
++ overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important;text-align:center!important;
+ }
+-.battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .combat-rank-badge{font-size:7px!important;line-height:1.15!important;padding:1px 4px!important}
+ .battle-screen.side-battle-v2.chapter-two-battle380 .side-enemies .side-unit-sprite{
+  filter:none!important;box-shadow:none!important;overflow:visible!important;
+ }
+--- Build418/src/battle/TrialAdaptation415.js
++++ Build419/src/battle/TrialAdaptation415.js
+@@ -71,3 +71,10 @@
+ }
+ 
+ export function battleAdaptationDescription415(b){const r=trialTier415(b);if(!r)return '';const n=x=>x.toLocaleString('ja-JP',{maximumFractionDigits:2});return `戦闘中の備え：HP×${n(r.hp)}／攻撃・魔力×${n(r.atk)}／防御・魔防×${n(r.def)}／速度×${n(r.spd)}。通常キャラに適用。HP100固定の能力は100を維持。`;}
++
++// Read the rates actually bound to this unit, not the eligibility of its teammates.
++// This is display-only; it must not prepare, remove, or recalculate a binding.
++export function appliedTrial419(b,u){
++ const entry=bindings.get(u);if(!entry||entry.b!==b)return null;
++ return {naturalHp:entry.naturalHp,rates:{...entry.rates}};
++}
+--- Build418/src/core/config.js
++++ Build419/src/core/config.js
+@@ -28,4 +28,4 @@
+   const floor=typeof stateOrFloor==="number"?stateOrFloor:Number(stateOrFloor?.player?.maxFloor)||0;
+   return floor>=contentUnlockFloor(productionFloor);
+ }
+-export const APP_VERSION="3.1.97";// Regression history: APP_VERSION="3.1.16" / APP_VERSION="3.1.15" / APP_VERSION="3.1.14" / APP_VERSION="3.1.13" / APP_VERSION="3.1.12" / APP_VERSION="3.1.11" / APP_VERSION="3.1.10" / APP_VERSION="3.1.9" / APP_VERSION="3.1.8" / APP_VERSION="3.1.7" / APP_VERSION="3.1.6" / APP_VERSION="3.1.5" / APP_VERSION="3.1.4" / APP_VERSION="3.1.3"
++export const APP_VERSION="3.1.98";// Regression history: APP_VERSION="3.1.16" / APP_VERSION="3.1.15" / APP_VERSION="3.1.14" / APP_VERSION="3.1.13" / APP_VERSION="3.1.12" / APP_VERSION="3.1.11" / APP_VERSION="3.1.10" / APP_VERSION="3.1.9" / APP_VERSION="3.1.8" / APP_VERSION="3.1.7" / APP_VERSION="3.1.6" / APP_VERSION="3.1.5" / APP_VERSION="3.1.4" / APP_VERSION="3.1.3"
+--- Build418/src/main.js
++++ Build419/src/main.js
+@@ -1,3 +1,4 @@
++import {unitPreparationHelp419} from './ui/BattlePreparation415.js';
+ import {prepareTrial415,snapshotTrial415,cleanupTrial415,trialTier415,trialDescription415,contextKey415,battleAdaptationDescription415} from './battle/TrialAdaptation415.js';
+ import {localHp411} from './online/OnlineTraitCompatibility411.js?v=3.1.91-build411';
+ import {savedSingleStats410,prepareSingles410,createSingleState410,snapshotSingles410,settleSingleDeaths410,cleanupSingles410,naturalSingleAction410,refreshPaperShield410,noteSingleDamage410,absorbPaperShield410,enforcePaperBody410,withSingleCause410,takeSingleCues410} from './battle/SingleTraits410.js?v=3.1.91-build411';
+@@ -6052,7 +6053,7 @@
+  const rawEffects=targetType==="ally"?(battle.allyEffects?.[id]??[]):(battle.enemyEffects?.[id]??[]),ailments=targetType==="ally"?(battle.allyAilments?.[id]??[]):(battle.enemyStatuses?.[id]??[]),kinds=[...new Set(rawEffects.map(effect=>effect.kind))],stats=ally?calculatedStats(ally):target,sourceName=ally?displayName(ally):target.name,percent=value=>`${(Number(value)*100).toLocaleString("ja-JP",{maximumFractionDigits:1})}%`;
+  const groups=kinds.map(kind=>{const detail=BATTLE_EFFECT_DETAIL[kind]??[kind,null,1],stack=effectStackBreakdown(battle,id,kind,targetType),total=stack.reduce((sum,effect)=>sum+effect.applied,0),base=detail[1]?Number(stats[detail[1]])||0:null,opposite=kind.endsWith("Up")?kind.replace(/Up$/,"Down"):kind.endsWith("Down")?kind.replace(/Down$/,"Up"):null,oppositeTotal=opposite?effectValue(battle,id,opposite,targetType):0,final=base==null?null:base*Math.max(.2,1+(kind.endsWith("Up")?total-oppositeTotal:oppositeTotal-total));return`<section class="battle-status-detail-group ${detail[2]<0?"negative":"positive"}"><header><span><small>${detail[2]<0?"DEBUFF":"BUFF"}</small><b>${detail[0]}</b></span><strong>${kind==="vulnerable"?"＋":detail[2]<0?"−":"＋"}${percent(total)}</strong></header>${base==null?"":`<p class="battle-status-final"><span><small>基礎値</small>${formatBattleInteger(base)}</span><b><small>効果反映後</small>${formatBattleInteger(final)}</b></p>`}<div class="battle-status-effect-entries">${stack.map(effect=>`<article><header><b>${effect.sourceSkillName??effect.name??kind}</b><em>残り${Math.max(0,Number(effect.turns)||0)}ターン</em></header><small class="battle-status-effect-source">発動元：${effect.sourceName??"効果元不明"}</small><dl><div><dt>元効果</dt><dd>${percent(effect.original)}</dd></div><div><dt>減衰率</dt><dd>${percent(effect.attenuation)}</dd></div><div class="applied"><dt>最終効果</dt><dd>${percent(effect.applied)}</dd></div></dl></article>`).join("")}</div><footer><span>この項目の合計</span><strong>${kind==="vulnerable"?"＋":detail[2]<0?"−":"＋"}${percent(total)}</strong></footer></section>`}).join("");
+  const ailmentRows=ailments.map(effect=>`<article class="battle-status-ailment"><header><small>状態異常</small><b>${effect.name??effect.id??effect.kind}</b></header><strong>残り${Math.max(0,Number(effect.turns)||0)}ターン</strong><small>発動元：${effect.sourceName??effect.sourceSkillName??"継続状態"}</small></article>`).join("");
+- const special=(ally&&trialTier415(battle)?`<p>${battleAdaptationDescription415(battle)}</p>`:'')+ultimateLabels(battle,target).map(label=>`<p>${escapeAttribute(label)}</p>`).join("")+(hasHeroFortitude(target)?`<p><b>勇者のふんばり</b>：${heroFortitudeUsed(battle,target)?"使用済み":"残り1回・致死ダメージをHP1で耐える"}</p>`:"")+(Number(target.heroShield348)>0?`<p><b>盾</b>：残り ${formatBattleInteger(target.heroShield348)}</p>`:"");
++ const special=(ally?unitPreparationHelp419(battle,ally,stats):'')+ultimateLabels(battle,target).map(label=>`<p>${escapeAttribute(label)}</p>`).join("")+(hasHeroFortitude(target)?`<p><b>勇者のふんばり</b>：${heroFortitudeUsed(battle,target)?"使用済み":"残り1回・致死ダメージをHP1で耐える"}</p>`:"")+(Number(target.heroShield348)>0?`<p><b>盾</b>：残り ${formatBattleInteger(target.heroShield348)}</p>`:"");
+  app.insertAdjacentHTML("beforeend",Modal(`${escapeAttribute(sourceName)}・状態効果`,`<div class="battle-status-detail-list detailed"><small>開いた時点の状態です</small>${special?`<section class="battle-status-special364">${special}</section>`:""}${groups}${ailmentRows||""}${groups||ailmentRows||special?"":"<p>状態効果はありません</p>"}${ally?'<button type="button" data-battle-unit-info>能力・装備・スキルを見る</button>':""}</div>`,"閉じる"));
+  const modal=topModal(),close=()=>modal.remove();modal.classList.add("battle-status-detail-modal");modal._onDismiss=close;modal.querySelector("[data-modal-primary]").onclick=close;
+  modal.querySelector("[data-battle-unit-info]")?.addEventListener("click",()=>{close();showBattleMonsterDetail(id)});
+@@ -6174,6 +6175,7 @@
+  const body=`<div class="battle-detail battle-detail-v2">
+   <div class="battle-detail-hero">${monsterVisual(m,sp.emoji??"👹",{className:"modal-monster-visual"})}<div><small>PARTY MEMBER</small><h3>${displayName(m)}</h3><b>Lv.${m.level}　+${m.plus}</b><span>${attributeVisual(element,{label:`${ATTRIBUTES[element]?.name??element}属性`})}<strong>${ATTRIBUTES[element]?.name??element}属性</strong></span></div></div>
+   <section><h4>現在値</h4><div class="battle-detail-vitals"><span><small>HP</small><b>${m.currentHp??st.hp} / ${st.hp}</b></span><span><small>MP</small><b>${m.currentMp??mp} / ${mp}</b></span></div></section>
++  ${unitPreparationHelp419(battle,m,st)}
+   <section><h4>戦闘能力</h4><div class="battle-detail-stat-grid"><span><small>物理ATK</small><b>${st.atk.toLocaleString()}</b></span><span><small>魔法ATK</small><b>${(st.matk??st.atk).toLocaleString()}</b></span><span><small>物理DEF</small><b>${st.def.toLocaleString()}</b></span><span><small>魔法DEF</small><b>${(st.mdef??st.def).toLocaleString()}</b></span><span><small>SPD</small><b>${st.spd.toLocaleString()}</b></span><span><small>会心 / 回避</small><b>${st.crit}% / ${st.evasion}%</b></span></div></section>
+   <section class="battle-affection-detail"><h4>なつき度 <b>${affection}/1000</b></h4><div class="battle-bar affection"><i style="width:${affection/10}%"></i></div><p>${affectionEffects}</p></section>
+   <section><h4>個体情報</h4><div class="battle-detail-profile"><p><small>種族</small><b>${sp.race??"不明"}族</b></p><p><small>役割</small><b>${roleLabels[sp.role]??sp.role??"万能型"}</b></p><p><small>特性</small><b>${trait.name}</b><span>${trait.description}</span></p><p><small>魔法陣</small><b>${circle.name}${circle.level?` Lv.${circle.level}`:""}</b><span>${circle.summary}</span></p></div></section>
+--- Build418/src/ui/BattlePreparation415.js
++++ Build419/src/ui/BattlePreparation415.js
+@@ -1,5 +1,12 @@
+-import {chapterPreparationReady415} from '../battle/TrialAdaptation415.js';
++import {chapterPreparationReady415,appliedTrial419} from '../battle/TrialAdaptation415.js';
+ export function preparationHelp415(party=[]){
+  const active=chapterPreparationReady415({party});
+- return `<details class="preparation-help415"><summary>部隊の備え：${active?'編成条件を満たしています':'編成条件を確認'}</summary><p>攻撃役と支援・防御・妨害役を含む、通常キャラ3体以上で有効。特定の名前やペアの指定はありません。</p><p>第一章・欠片試練は階層、第二章は挑戦段階、4対4・回廊・王室は各試練に応じた固定補正で戦います。倍率は開戦時と戦闘中のキャラ詳細に表示します。</p><p>魔法陣の障壁、強化解除、異常への対策を組み合わせましょう。第一章終盤・王室初回の検証目安はLv.3,000、決戦の記憶はLv.3,000〜10,000。最大顕現も通常キャラはLv.10,000以内です。</p><p>基礎能力・レア度・MPは変わりません。深淵・十神にはこの補正を付けず、オンラインでは無効です。フィオラのHP100も維持します。</p></details><style>.preparation-help415{border:1px solid #8e774a;background:#100d14;padding:10px 12px;margin:8px 0;color:#d9cba9;overflow-wrap:anywhere}.preparation-help415 summary{cursor:pointer;min-height:36px;display:flex;align-items:center;font-weight:700}.preparation-help415 summary::before{content:'▸';margin-right:.5em}.preparation-help415[open] summary::before{content:'▾'}.preparation-help415 p{font-size:12px;line-height:1.6;margin:8px 0}</style>`;
++ return `<details class="preparation-help415"><summary>部隊の備え：${active?'編成条件を満たしています':'編成条件を確認'}</summary><p>攻撃役と支援・防御・妨害役を含む、通常キャラ3体以上で有効。特定の名前やペアの指定はありません。ペア連携とは別の補正です。</p><p>第一章・欠片試練は階層、第二章は挑戦段階、4対4・回廊・王室は各試練に応じた固定補正で戦います。倍率は開戦時と戦闘中のキャラ詳細に表示します。</p><p>第二章の通常探索はHP×28。宝物庫の番人戦は追加で1.5倍（HP×42）です。強化再戦・精鋭再探索では段階に応じて変わります。最大HP割合の回復・障壁は、補正後のHPを基準に計算します。</p><p>魔法陣の障壁、強化解除、異常への対策を組み合わせましょう。第一章終盤・王室初回の検証目安はLv.3,000、決戦の記憶はLv.3,000〜10,000。最大顕現も通常キャラはLv.10,000以内です。</p><p>基礎能力・レア度・MPは変わりません。深淵・十神にはこの補正を付けず、オンラインでは無効です。フィオラのHP100も維持します。</p></details><style>.preparation-help415{border:1px solid #8e774a;background:#100d14;padding:10px 12px;margin:8px 0;color:#d9cba9;overflow-wrap:anywhere}.preparation-help415 summary{cursor:pointer;min-height:36px;display:flex;align-items:center;font-weight:700}.preparation-help415 summary::before{content:'▸';margin-right:.5em}.preparation-help415[open] summary::before{content:'▾'}.preparation-help415 p{font-size:12px;line-height:1.6;margin:8px 0}</style>`;
+ }
++
++export function unitPreparationHelp419(b,unit,stats){
++ const entry=appliedTrial419(b,unit);if(!entry)return '';
++ const n=value=>Number(value).toLocaleString('ja-JP',{maximumFractionDigits:2}),r=entry.rates;
++ const hp=unit.speciesId==='ch2_fiora'?'HP100固定の能力を優先し、最大HPは100のままです。':`戦闘開始時の補正前HP ${n(entry.naturalHp)} ／ HP×${n(r.hp)}。現在の最大HP ${n(stats.hp)}。`;
++ return `<section class="battle-preparation419"><h4>部隊の備え（ペア連携とは別）</h4><p>${hp}</p><p>攻撃・魔力×${n(r.atk)} ／ 防御・魔防×${n(r.def)} ／ 速度×${n(r.spd)}。MPは変わりません。この戦闘中のみ有効です。</p><p>特定のペアを揃えなくても編成条件で発動します。最大HP割合の回復・障壁は、補正後の最大HPを基準に計算します。</p></section>`;
++}
+--- Build418/src/ui/screens/BattleScreen.js
++++ Build419/src/ui/screens/BattleScreen.js
+@@ -87,7 +87,7 @@
+    ${enemy.boss&&!isChapterTwo?"":floatingName}
+    <div class="side-unit-sprite enemy-orb">${circleArt358(battle,enemy,battle.enemyMagicCircleArt?.[enemy.id]??"")}${enemy.boss&&!isChapterTwo?floatingName:""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.visualFrame??(enemy.hp<=0&&!pendingKo?"down":"idle"),className:"battle-enemy-visual",partyArt:endgameBoss})}</div>
+    <div class="side-unit-card enemy-info">
+-    <div class="side-unit-name enemy-name ${enemy.boss?"boss-meta-only":""}">${danger}${enemy.boss||battle.specialBattleType==='chapterTwo'?"":`<b class="enemy-card-name" title="${safeName}">${safeName}</b>`}<span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
++    <div class="side-unit-name enemy-name ${enemy.boss&&!isChapterTwo?"boss-meta-only":""}">${danger}${enemy.boss&&!isChapterTwo?"":`<b class="enemy-card-name" title="${safeName}">${safeName}</b>`}<span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
+     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
+     
+     ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}`,"enemy-hp")}

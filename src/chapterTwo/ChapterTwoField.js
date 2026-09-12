@@ -4,7 +4,7 @@ export function mountChapterTwoField(g,{canvas,Entity,Camera,findPath,drawScene,
  const ROOMS=chapterTwoRooms(run),room=ROOMS[run.room];g.chapterTwo=true;g.world=chapterTwoWorld(run);
  if(g.world.sectionByCell[`${run.position.x},${run.position.y}`]!==g.world.currentSectionId)run.position={...g.world.sections[run.room].center};
  g.player=new Entity(run.position.x,run.position.y);g.canvas=canvas;g.ctx=canvas.getContext('2d');g.camera=new Camera(canvas);g.running=true;g.paused=false;g.partyTrail=[];
- let frame=0,disposed=false,last=performance.now(),lastPaint=0,lastSave=0,armed=false,contactLock=null;
+ let frame=0,disposed=false,last=performance.now(),lastPaint=0,lastSave=0,armed=false,contactLock=null,springContact=null;
  const objects=g.world.sectionPortals.filter(p=>p.sectionId===g.world.currentSectionId).map(p=>({...p,id:p.direction,type:'door',label:ROOMS[Number(p.targetSectionId.split('-').at(-1))].name}));
  for(const e of g.world.bosses)if(e.active&&e.sectionId===g.world.currentSectionId)objects.push({...e,type:'enemy',label:ENCOUNTERS[e.id].name});
  for(const c of g.world.chests)if(!c.open&&c.sectionId===g.world.currentSectionId)objects.push({...c,id:c.id,vaultIndex:c.vaultIndex,type:'chest',label:c.vaultIndex===9?'地域限定武器・大宝箱':c.vaultIndex!=null?'宝物庫の宝箱':'宝箱'});
@@ -30,7 +30,11 @@ export function mountChapterTwoField(g,{canvas,Entity,Camera,findPath,drawScene,
   if(!suspended){autoStep();const moved=g.player.move(dt,5);if(g.player.path.length||moved){updateTrail();g.camera.follow(g.player.rx*TILE,g.player.ry*TILE,dt);g.camera.clamp(g.world)}
    if(moved&&now-lastSave>1000){persist();lastSave=now}
    if(contactLock&&Math.hypot(g.player.rx-contactLock.x,g.player.ry-contactLock.y)>1.2)contactLock=null;
-   if(armed){const object=objects.find(o=>o!==contactLock&&Math.hypot(g.player.rx-o.x,g.player.ry-o.y)<.8);if(object){armed=false;contactLock=object;g.player.path=[];persist();onContact(object)}}
+   // Springs heal on entry without consuming the destination or stopping the walk.
+   // The wider release radius prevents repeated healing while standing at the edge.
+   if(springContact&&Math.hypot(g.player.rx-springContact.x,g.player.ry-springContact.y)>1.2)springContact=null;
+   if(armed){const spring=objects.find(o=>o.type==='spring'&&o!==springContact&&Math.hypot(g.player.rx-o.x,g.player.ry-o.y)<.8);if(spring){springContact=spring;persist();onContact(spring)}}
+   if(armed&&!disposed&&!busy()){const object=objects.find(o=>o.type!=='spring'&&o!==contactLock&&Math.hypot(g.player.rx-o.x,g.player.ry-o.y)<.8);if(object){armed=false;contactLock=object;g.player.path=[];persist();onContact(object)}}
   }
   if(!disposed&&!suspended&&now-lastPaint>=1000/30){drawScene();lastPaint=now}if(!disposed)frame=requestAnimationFrame(tick);
  }

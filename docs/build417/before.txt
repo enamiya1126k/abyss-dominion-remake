@@ -1,0 +1,118 @@
+✖ defeat at floor100 stays on its result when the biome collapse callback arrives late (67.812204ms)
+✖ pagehide checkpoint after defeat cannot resurrect a settled battle or its exploration snapshot (19.716784ms)
+✖ loading an old orphaned normal battle preserves rescue state and drops only inactive encounter data (30.237642ms)
+✖ runtime resume refuses an ordinary checkpoint belonging to an ended run (11.934073ms)
+✖ an ended field cannot start a transition and leave encountering/paused stuck (5.701061ms)
+✖ cancelling an encounter transition releases its own field lock (5.534331ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 0
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 666.825982
+
+✖ failing tests:
+
+test at tests/build417-progression.test.mjs:34:1
+✖ defeat at floor100 stays on its result when the biome collapse callback arrives late (67.812204ms)
+  AssertionError [ERR_ASSERTION]: finished battle remounted above defeat result
+  
+  1 !== 0
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/work417/tests/build417-progression.test.mjs:39:43)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 0,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/build417-progression.test.mjs:42:1
+✖ pagehide checkpoint after defeat cannot resurrect a settled battle or its exploration snapshot (19.716784ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(f.context.save.state.activeBattle===undefined)
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/work417/tests/build417-progression.test.mjs:44:24)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/build417-progression.test.mjs:48:1
+✖ loading an old orphaned normal battle preserves rescue state and drops only inactive encounter data (30.237642ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(reloaded.state.activeBattle===undefined)
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/work417/tests/build417-progression.test.mjs:53:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at tests/build417-progression.test.mjs:57:1
+✖ runtime resume refuses an ordinary checkpoint belonging to an ended run (11.934073ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/work417/tests/build417-progression.test.mjs:59:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/build417-progression.test.mjs:61:1
+✖ an ended field cannot start a transition and leave encountering/paused stuck (5.701061ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/work417/tests/build417-progression.test.mjs:66:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/build417-progression.test.mjs:68:1
+✖ cancelling an encounter transition releases its own field lock (5.534331ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  true !== false
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/work417/tests/build417-progression.test.mjs:73:9)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: true,
+    expected: false,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

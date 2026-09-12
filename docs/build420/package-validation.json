@@ -1,0 +1,37 @@
+{
+  "archive_integrity": "passed",
+  "combined_runtime_files": 12,
+  "all_fix_batches_included": [
+    417,
+    418,
+    419
+  ],
+  "overwrite_checks": [
+    {
+      "base_build": 416,
+      "runtime_files_compared": 407,
+      "result": "identical to Build420"
+    },
+    {
+      "base_build": 417,
+      "runtime_files_compared": 407,
+      "result": "identical to Build420"
+    },
+    {
+      "base_build": 418,
+      "runtime_files_compared": 407,
+      "result": "identical to Build420"
+    },
+    {
+      "base_build": 419,
+      "runtime_files_compared": 407,
+      "result": "identical to Build420"
+    }
+  ],
+  "tests_on_build416_plus_zip": {
+    "total": 256,
+    "passed": 256,
+    "failed": 0
+  },
+  "browser_visual_qa": "blocked: ERR_BLOCKED_BY_CLIENT; no device rendering result"
+}

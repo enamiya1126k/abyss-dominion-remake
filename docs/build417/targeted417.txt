@@ -1,0 +1,21 @@
+✔ defeat at floor100 stays on its result when the biome collapse callback arrives late (52.551991ms)
+✔ pagehide checkpoint after defeat cannot resurrect a settled battle or its exploration snapshot (28.79316ms)
+✔ loading an old orphaned normal battle preserves rescue state and drops only inactive encounter data (12.96348ms)
+✔ runtime resume refuses an ordinary checkpoint belonging to an ended run (7.630763ms)
+✔ an ended field cannot start a transition and leave encountering/paused stuck (5.382672ms)
+✔ cancelling an encounter transition releases its own field lock (5.669203ms)
+✔ native cancellation during a transition releases pause even when it already cleared encountering (5.48036ms)
+✔ cancelled transition cannot release a newer encounter or another screen modal (11.327822ms)
+✔ normal floor100 encounters still start with HP1 / MP0 and the selected floor is retained (22.590234ms)
+✔ HP1 / MP0 / poison at floor100 completes enemy turns and defeat once, including late timers (38.812203ms)
+✔ late turn completion after settlement cannot advance the queue or modify saved rescue HP (7.126465ms)
+✔ legitimate memory and special battle saves remain resumable outside a normal expedition (33.146054ms)
+✔ reported Serene / Fairy / Shade Cat / Thorn Bud encounter uses native AI and exits at low HP (10 seeds) (425.744017ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1183.8962

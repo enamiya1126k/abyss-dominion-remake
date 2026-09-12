@@ -1,0 +1,40 @@
+[
+  {
+    "screen": "formation",
+    "origin": "home",
+    "cards": 4,
+    "edit_buttons": 12,
+    "growing_descriptions": 3,
+    "passed": true
+  },
+  {
+    "screen": "formation",
+    "origin": "chapterTwoField",
+    "cards": 4,
+    "edit_buttons": 12,
+    "growing_descriptions": 3,
+    "passed": true
+  },
+  {
+    "screen": "formation",
+    "origin": "explore",
+    "cards": 4,
+    "edit_buttons": 0,
+    "growing_descriptions": 3,
+    "passed": true
+  },
+  {
+    "screen": "formation",
+    "origin": "empty",
+    "cards": 4,
+    "edit_buttons": 0,
+    "growing_descriptions": 0,
+    "passed": true
+  },
+  {
+    "screen": "battle",
+    "enemy_cards": 4,
+    "chapter1_and_chapter2_information_identical": true,
+    "passed": true
+  }
+]
