@@ -1,3 +1,4 @@
+import {MOTHER_STORY_ENTRIES423,motherStoryRead423} from '../primordial/Story422.js';
 import {chapterTwoUnlocked,chapterTwoObjective} from './ChapterTwoSystem.js?v=3.1.82-build402';
 import {CHAPTER_TWO_AREAS} from './ChapterTwoContent.js?v=3.1.58-build378';
 
@@ -58,8 +59,10 @@ export function chapterTwoProgress401(state){
   action={type:'explore',area:target.id,eliteResume:Boolean(eliteActive&&target===current),label:eliteActive&&target===current?'精鋭討伐を再開する':'探索を再開する'};
  }else if(!target.cleared){title=`${target.name}へ出発`;detail='部隊を整えて、次の地域へ。探索は保存されている地点から続けられます。';action={type:'explore',area:target.id,label:'この地域へ出発する'};}
  else {title='理の外に続く旅';detail='各地の精鋭討伐や宝物庫で仲間を鍛えよう。歩んだ物語は「記憶の間」で振り返れます。';action={type:'destinations',area:target.id,label:'再探索・精鋭討伐を選ぶ'};}
+ if(!pending&&clears[4]>0&&!state.primordial422?.endingRead){title='原初の聖胎・十神の母';detail='第二章・第5節（最終戦）が解放されました。部隊を整え、十神の母へ答えを届けよう。';action={type:'destinations',area:5,label:'最終戦の行き先を見る'};}
+ const motherEntries=MOTHER_STORY_ENTRIES423.filter(e=>e.kind!=='defeat'||motherStoryRead423(state,e.kind));
  const blocked=Boolean(state.activeBattle||p.run?.pending||Object.values(p.runs378??{}).some(r=>r?.pending)||state.player?.inRun);
  return {areas,area:target.id,name:target.name,skin:target.skin,title,detail,action,blocked,
   completed:chapterTwoStoryRead401(state,'ending'),cleared:areas.filter(a=>a.cleared).length,total:areas.length,
-  read:CHAPTER_TWO_STORIES401.filter(s=>chapterTwoStoryRead401(state,s.kind)).length,storyTotal:CHAPTER_TWO_STORIES401.length};
+  read:CHAPTER_TWO_STORIES401.filter(s=>chapterTwoStoryRead401(state,s.kind)).length+motherEntries.filter(e=>motherStoryRead423(state,e.kind)).length,storyTotal:CHAPTER_TWO_STORIES401.length+motherEntries.length};
 }

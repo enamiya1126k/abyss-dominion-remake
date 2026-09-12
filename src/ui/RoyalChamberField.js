@@ -1,7 +1,8 @@
 import{ROYAL_ASSET,createRoyalWorld,royalHeroPositions,royalContact}from'../core/RoyalChamberSystem.js?v=3.1.59-build379';
 // Uses the same Entity, Camera, route finder and sprite renderer as exploration.
-export function mountRoyalChamber(g,{canvas,Entity,Camera,findPath,drawMonster,TILE,room,party,heroes,onSave,onApproach,onContact,onThrone,blocked=()=>false,asset=ROYAL_ASSET,throneLabel=null}){
+export function mountRoyalChamber(g,{canvas,Entity,Camera,findPath,drawMonster,TILE,room,party,heroes,onSave,onApproach,onContact,onThrone,blocked=()=>false,asset=ROYAL_ASSET,throneLabel=null,drawHeroBackdrop=null}){
  g.royal=true;g.world=createRoyalWorld();g.player=new Entity(room.position.x,room.position.y);g.canvas=canvas;g.ctx=canvas.getContext('2d');g.running=true;g.paused=false;g.last=performance.now();g.camera=new Camera(canvas);
+ const reducedMotion=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches??false;
  const image=new Image();image.src=asset;let frame=0,lastPaint=0,lastSave=0,disposed=false,armed=false,drag=false,pinch=null;const points=new Map(),heroActors=royalHeroPositions(heroes),trail=[];
  function fit(){const rect=canvas.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);canvas.width=Math.max(1,Math.round(rect.width*d));canvas.height=Math.max(1,Math.round(rect.height*d));g.camera.reset(g.player.rx*TILE,g.player.ry*TILE);g.camera.z=canvas.width/(TILE*20);g.camera.clamp(g.world)}
  fit();const observer=new ResizeObserver(fit);observer.observe(canvas);
@@ -18,7 +19,7 @@ export function mountRoyalChamber(g,{canvas,Entity,Camera,findPath,drawMonster,T
  const activeHeroes=room.phase==='victory'?[]:room.phase==='cleared'?heroActors.map((h,i)=>({...h,x:7+i*2,y:9})):heroActors;
  const actors=activeHeroes.map(h=>({position:{x:h.x,y:h.y,moving341:false,facing:'left'},monster:{speciesId:h.id,visualSpeciesId:h.id},name:h.name,hero:true}));
  party.forEach((m,i)=>{const p=trail[Math.min(trail.length-1,i*12)]??{x:g.player.rx,y:g.player.ry+i*.8,facing:g.player.facing};actors.push({position:{...p,moving341:g.player.path.length>0},monster:m,index:i})});
- actors.sort((a,b)=>a.position.y-b.position.y).forEach(a=>{drawMonster(a.position,a.monster,a.hero,1,a.index??0);if(a.hero)label(a.name,a.position.x,a.position.y)});
+ actors.sort((a,b)=>a.position.y-b.position.y).forEach(a=>{if(a.hero&&drawHeroBackdrop)drawHeroBackdrop({ctx,camera,TILE,actor:a,time:performance.now(),reducedMotion:reducedMotion||busy()||document.hidden});drawMonster(a.position,a.monster,a.hero,1,a.index??0);if(a.hero)label(a.name,a.position.x,a.position.y)});
  if(room.phase==='victory'||room.phase==='cleared'||!activeHeroes.length)label(throneLabel??(room.phase==='cleared'?'玉座・決戦の記憶':'玉座へ'),10,6);
  if(g.player.path.length){const end=g.player.path.at(-1),p=camera.world((end.x+.5)*TILE,(end.y+.5)*TILE);ctx.strokeStyle='#e7cc7e';ctx.lineWidth=2;ctx.beginPath();ctx.ellipse(p.x,p.y,12,5,0,0,Math.PI*2);ctx.stroke()}
  }

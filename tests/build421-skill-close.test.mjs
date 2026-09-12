@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {run} from '../tools/build422/native-harness.mjs';
+import {run} from '../tools/build423/native-harness.mjs';
 import {BattleScreen} from '../src/ui/screens/BattleScreen.js';
 import {cleanupSingles410} from '../src/battle/SingleTraits410.js';
 import {cleanupTrial415} from '../src/battle/TrialAdaptation415.js';

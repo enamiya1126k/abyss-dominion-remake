@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {run} from '../tools/build422/native-harness.mjs';
+import {run} from '../tools/build423/native-harness.mjs';
 import {SaveService} from '../src/services/SaveService.js';
 import {SAVE_KEY} from '../src/core/config.js';
 import {calculatedStats} from '../src/models/Monster.js';

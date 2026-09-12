@@ -1,3 +1,5 @@
+import {motherIntent423} from '../../primordial/Mother422.js';
+import {motherHalo423} from '../../primordial/Presentation423.js';
 import {singleTraitLabel410} from '../../battle/SingleTraits410.js?v=3.1.90-build410';
 import {chapterTwoPairDisplayName406} from '../../data/chapterTwoPairNames406.js?v=3.1.86-build406';
 import {twinStatus385} from '../TwinStatus385.js?v=3.1.90-build410';
@@ -85,13 +87,14 @@ function renderEnemies(battle,enemies,target){
   return `<button id="enemy-${enemy.id}" ${dead||ultimateIsolated(battle,enemy)?`disabled${dead&&!pendingKo?' aria-hidden="true"':""}`:`data-enemy-target="${enemy.id}"`} style="--formation-index:${index};--unit-color:${enemy.color}" class="combatant enemy-combatant side-battle-unit formation-slot-${index+1} ${line} ${dead?"dead":""} ${pendingKo?"presentation-ko-pending":""} ${enemy.boss?"boss-enemy":""} ${enemy.raidMainBoss?"raid-main-boss":""} ${enemy.raidSubBoss?"raid-sub-boss":""} ${floorBoss?"floor-boss-enemy":""} ${endgameBoss?"party-floor-boss endgame-boss-art":""} ${enemy.elite?"elite-enemy":""} ${rankClass} ${target?.id===enemy.id?"targeted":""}">
    <span class="target-reticle" aria-hidden="true"></span>
    ${enemy.boss&&!isChapterTwo?"":floatingName}
-   <div class="side-unit-sprite enemy-orb">${circleArt358(battle,enemy,battle.enemyMagicCircleArt?.[enemy.id]??"")}${enemy.boss&&!isChapterTwo?floatingName:""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.visualFrame??(enemy.hp<=0&&!pendingKo?"down":"idle"),className:"battle-enemy-visual",partyArt:endgameBoss})}</div>
+   <div class="side-unit-sprite enemy-orb">${battle.specialBattleType==='mother422'?motherHalo423():''}${circleArt358(battle,enemy,battle.enemyMagicCircleArt?.[enemy.id]??"")}${enemy.boss&&!isChapterTwo?floatingName:""}${monsterVisual(enemy,enemy.emoji??"👾",{frame:enemy.visualFrame??(enemy.hp<=0&&!pendingKo?"down":"idle"),className:"battle-enemy-visual",partyArt:endgameBoss})}</div>
    <div class="side-unit-card enemy-info">
     <div class="side-unit-name enemy-name ${enemy.boss&&!isChapterTwo?"boss-meta-only":""}">${danger}${enemy.boss&&!isChapterTwo?"":`<b class="enemy-card-name" title="${safeName}">${safeName}</b>`}<span class="enemy-card-meta"><small>Lv.${battleInteger(enemy.level)}</small><em class="battle-unit-growth">${growthText(enemy)}</em><i class="unit-attribute-logo">${attributeVisual(element,{label:`${element}属性`})}</i></span></div>
     <div class="side-unit-intent enemy-intent"><span>${enemy.magicCircleName?`魔法陣 Lv.${enemy.magicCircleLevel}`:"戦闘特性"}</span><b>${enemy.magicCircleName??`${enemy.enraged?"狂暴化・":""}${battleRoleLabel(enemy.role)}`}</b></div>
     
     ${hpBar(battle,`enemy:${enemy.id}`,hpRate,`HP ${battleInteger(enemy.hp)}/${battleInteger(enemy.maxHp)}`,"enemy-hp")}
     ${shieldLabel(enemy,enemy.maxHp)}
+    ${battle.specialBattleType==='mother422'&&enemy._floorBossHpShield>0?`<small class="mother-shield423">HP障壁 ${battleInteger(enemy._floorBossHpShield)}</small>`:''}
     <!-- enemy-mini-stats retired in Build321: enemy cards intentionally expose HP only. -->
     ${enemy.elite?`<small class="elite-description">${enemy.eliteDescription??"第二世界で変異した強敵"}</small>`:""}
     ${statusHtml}
@@ -212,6 +215,7 @@ export function BattleScreen(battle,inventory,settings,floor=1){
   <div class="battle-header"><div class="round-label"><small>ラウンド</small><b>${battle.turn}</b></div><div class="battle-header-title"><b>${battle.specialTitle??`${floor}階・遭遇戦`}</b><small>${battle.onlineMode?battle.auto?"サーバー同期・自動戦闘":"サーバー同期戦闘":battle.auto?"完全自動":"コマンド戦闘"}</small></div>${battle.onlineMode?onlineAuto:`<button id="toggleBattleAuto" type="button" aria-pressed="${battle.auto}" aria-label="自動戦闘を${battle.auto?"無効":"有効"}にする" class="${battle.auto?"enabled":""}"><span>自動</span><b>${battle.auto?"有効":"無効"}</b></button>`}<button id="battleSpeed" ${battle.onlineMode?`data-online-speed-cycle="${battle.onlineMode}"`:""}>×${speed}</button>${battle.onlineMode?onlineExit:offlineExit}</div>
   <div class="turn-order" tabindex="0" role="region" aria-label="行動順・左右にスワイプして全員を確認"><span class="turn-order-title">行動順</span>${renderTurnOrder(battle)}</div>
   ${pairStatus405?`<div class="battle-resonance405" tabindex="0" role="region" aria-label="ペア共鳴・左右にスワイプして確認">${pairStatus405}</div>`:""}
+  ${battle.specialBattleType==='mother422'&&enemies.some(e=>e.motherRevision423===423&&e.hp>0)?`<div class="mother-intent423" role="status"><b>十神の母</b><span>${motherIntent423(battle.turn)}</span></div>`:''}
   <div class="battle-arena side-battle-arena multi-enemy">
    <div class="battle-stage-vignette" aria-hidden="true"></div>
    ${biomeBadge}

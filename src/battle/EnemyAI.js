@@ -1,3 +1,4 @@
+import {chooseMotherAction423} from '../primordial/Mother422.js';
 import {chooseChapterTwoCommander397} from '../chapterTwo/ChapterTwoCommander397.js?v=3.1.77-build397';
 import {CHAPTER_TWO_ACTIONS392} from '../chapterTwo/ChapterTwoMonsters392.js?v=3.1.72-build392';
 import {CHAPTER_TWO_ACTIONS391} from '../chapterTwo/ChapterTwoMonsters391.js?v=3.1.73-build393';
@@ -174,6 +175,7 @@ function teamBattleAction(enemy,context,hpRate){
 }
 export function chooseEnemyAction(enemy,context={}){
  const commanderAction397=chooseChapterTwoCommander397(enemy,context);if(commanderAction397)return commanderAction397;
+ const motherAction423=chooseMotherAction423(enemy,context);if(motherAction423)return motherAction423;
  const nativeAction=chooseChapterTwoAction383(enemy,context);if(nativeAction)return nativeAction;
  const chapterAction=chooseChapterTwoAction382(enemy,context);if(chapterAction)return chapterAction;
  if(enemy.firstCaptureProfileVersion===369){enemy.intent="傷をかばいながら噛みつく";return ENEMY_ACTIONS.attack}

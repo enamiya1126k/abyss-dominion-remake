@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
-import {run,monster} from '../tools/build422/native-harness.mjs';
+import {run,monster} from '../tools/build423/native-harness.mjs';
 import {calculatedStats} from '../src/models/Monster.js';
 import {trialTier415,prepareTrial415,cleanupTrial415} from '../src/battle/TrialAdaptation415.js';
 import {motherState422,motherUnlocked422,beginMother422,settleMother422} from '../src/primordial/State422.js';
@@ -33,7 +33,7 @@ test('native mother save checkpoint resumes in sanctum with its attempt and acti
 });
 test('native mother dialogue preserves index on dismiss and only completes after final confirmation',async()=>{
  const f=await run(ids,['slime'],{inspect:true}),c=f.context;supply();function supply(){c.save.state.player.inRun=false;c.save.state.chapterTwo376={areaClears378:{4:1}};c.save.save=()=>true;c.campaignStoryPresenting=false;c.screen='home';c.showToast=()=>{};}
- const nodes=new Map(),node=key=>{if(!nodes.has(key))nodes.set(key,{textContent:''});return nodes.get(key)},modal={querySelector:node,remove(){},classList:{add(){}}};c.topModal=()=>modal;c.app.insertAdjacentHTML=()=>{};
+ const nodes=new Map(),node=key=>{if(!nodes.has(key))nodes.set(key,{textContent:'',style:{setProperty(){}},querySelector:node,focus(){}});return nodes.get(key)},modal={querySelector:node,querySelectorAll:()=>[],setAttribute(){},addEventListener(){},remove(){},classList:{add(){}}};c.topModal=()=>modal;c.app.insertAdjacentHTML=()=>{};c.requestAnimationFrame=fn=>fn();
  c.showMotherStory422('introduction');node('[data-modal-primary]').onclick();assert.equal(motherState422(c.save.state).dialogues.introduction.index,1);modal._onDismiss();assert.equal(c.campaignStoryPresenting,false);assert.equal(motherState422(c.save.state).introRead,false);
- c.showMotherStory422('introduction');assert.match(node('[data-mother-page]').textContent,/2 \/ 4/);for(let i=0;i<3;i++)node('[data-modal-primary]').onclick();assert.equal(motherState422(c.save.state).introRead,true);assert.equal(c.campaignStoryPresenting,false);
+ c.showMotherStory422('introduction');assert.equal(node('[data-story-text]').textContent,MOTHER_STORIES422.introduction[1].text);for(let i=1;i<MOTHER_STORIES422.introduction.length;i++)node('[data-modal-primary]').onclick();assert.equal(motherState422(c.save.state).introRead,true);assert.equal(c.campaignStoryPresenting,false);
 });

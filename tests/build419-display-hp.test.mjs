@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {run,monster} from '../tools/build422/native-harness.mjs';
+import {run,monster} from '../tools/build423/native-harness.mjs';
 import {calculatedStats} from '../src/models/Monster.js';
 import {prepareTrial415,cleanupTrial415,appliedTrial419} from '../src/battle/TrialAdaptation415.js';
 import {cleanupSingles410} from '../src/battle/SingleTraits410.js';
@@ -101,7 +101,7 @@ test('battle display aliases retain their verified build and config resolves to 
  const map=JSON.parse(html.match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]).imports;
  for(const path of ['src/main.js','src/core/config.js','src/ui/screens/BattleScreen.js','src/battle/TrialAdaptation415.js','src/ui/BattlePreparation415.js']){
   const entries=Object.entries(map).filter(([key])=>key.split('?')[0]==='./'+path);assert.ok(entries.length);
-  for(const [,value] of entries)assert.equal(value,`./${path}?v=${'3.1.101-build422'}`);
+  for(const [,value] of entries)assert.equal(value,`./${path}?v=${['src/main.js','src/core/config.js','src/ui/screens/BattleScreen.js'].includes(path)?'3.1.102-build423':'3.1.101-build422'}`);
  }
  for(const build of [380,382])assert.ok(html.includes(`build${build}-chapter-two.css?v=3.1.98-build419`));
 });
