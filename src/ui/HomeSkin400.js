@@ -1,5 +1,5 @@
 import {mountHomeMotion407} from './HomeMotion407.js?v=3.1.87-build407';
-import {HOME_SKINS400,homeSkinState400,commitHomeSkin400} from '../core/HomeSkinSystem400.js?v=3.1.87-build407';
+import {HOME_SKINS400,homeSkinState400,commitHomeSkin400,homeSkinAvailable424,MOTHER_HOME_SKIN424} from '../core/HomeSkinSystem400.js?v=3.1.87-build407';
 
 const legacyMotion=`<div class="home-environment-motion" aria-hidden="true">
  <i class="home-moving-sky sky-left"></i><i class="home-moving-sky sky-right"></i>
@@ -61,10 +61,10 @@ export function homeEnvironment400(state){
 export function homeSkinSettings400(state){
  const {skin,motion,unlocked}=homeSkinState400(state);if(!unlocked)return '';
  return `<section class="home-skin-settings400" data-home-skin-settings400 aria-labelledby="homeSkinTitle400" data-motion400="${motion?'on':'off'}">
- <header><small>第二章 解放記念</small><h3 id="homeSkinTitle400">ホームの風景</h3><p>新しい風景5種類が解放されました。選ぶと保存され、ホームに反映されます。</p></header>
+ <header><small>第二章 解放記念</small><h3 id="homeSkinTitle400">ホームの風景</h3><p>風景を選ぶとホームに反映されます。原初の聖胎の限定スキンは、十神の母を初めて倒すと解放されます。</p></header>
  <div class="home-skin-preview400"><div class="home-skin-preview-art400">${homeSkinScene400(state,'preview')}</div><div><small>選択中</small><h4>${skin.name}</h4><p>${skin.description}</p><span>${skin.motion}</span></div></div>
  <div class="home-skin-grid400" role="group" aria-label="ホームスキンを選ぶ">
- ${HOME_SKINS400.map(s=>`<button type="button" data-select-home-skin400="${s.id}" aria-pressed="${s.id===skin.id}" class="home-skin-choice400${s.id===skin.id?' is-selected':''}"><img src="${s.thumbnail}" alt="" width="1024" height="1536" loading="lazy" decoding="async"><span><b>${s.name}</b><small>${s.id===skin.id?'選択中':s.id==='town'?'いつもの風景':'第二章'}</small></span></button>`).join('')}
+ ${HOME_SKINS400.map(s=>`<button type="button" data-select-home-skin400="${s.id}" ${homeSkinAvailable424(state,s.id)?'':'disabled'} aria-pressed="${s.id===skin.id}" class="home-skin-choice400${s.id===skin.id?' is-selected':''}"><img src="${s.thumbnail}" alt="" width="1024" height="1536" loading="lazy" decoding="async"><span><b>${s.name}</b><small>${!homeSkinAvailable424(state,s.id)?'十神の母を撃破で解放':s.id===skin.id?'選択中':s.id===MOTHER_HOME_SKIN424?'第二章・最終決戦の証':s.id==='town'?'いつもの風景':'第二章'}</small></span></button>`).join('')}
  </div><div class="home-skin-motion-row400"><span><b>環境モーション</b><small>風景に合わせた動き。端末の「視差効果を減らす」がONのときは静止します。</small></span><button type="button" data-toggle-home-motion400 aria-pressed="${motion}">${motion?'ON':'OFF'}</button></div>
  <p class="home-skin-status400" data-home-skin-status400 role="status" aria-live="polite"></p>
  </section>`;
@@ -75,7 +75,7 @@ export function bindHomeSkinSettings400(root,save){
  let busy=false;
  panel.addEventListener('click',async event=>{
   const button=event.target.closest('[data-select-home-skin400],[data-toggle-home-motion400]');
-  if(!button||!panel.contains(button)||busy)return;
+  if(!button||button.disabled||!panel.contains(button)||busy)return;
   busy=true;panel.setAttribute('aria-busy','true');
   const isSkin=button.hasAttribute('data-select-home-skin400'),id=button.dataset.selectHomeSkin400;
   panel.querySelectorAll('button').forEach(b=>b.disabled=true);
@@ -89,7 +89,7 @@ export function bindHomeSkinSettings400(root,save){
    next.querySelector('[data-home-skin-status400]').textContent=result.message;
    mountHomeEnvironment400(next);
   }else{
-   busy=false;panel.removeAttribute('aria-busy');panel.querySelectorAll('button').forEach(b=>b.disabled=false);
+   busy=false;panel.removeAttribute('aria-busy');panel.querySelectorAll('button').forEach(b=>b.disabled=b.dataset.selectHomeSkin400?!homeSkinAvailable424(save.state,b.dataset.selectHomeSkin400):false);
    panel.querySelector('[data-home-skin-status400]').textContent=result.message;
   }
  });

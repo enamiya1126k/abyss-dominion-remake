@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
-import {run,monster} from '../tools/build423/native-harness.mjs';
+import {run,monster} from '../tools/build424/native-harness.mjs';
 import {calculatedStats} from '../src/models/Monster.js';
 import {trialTier415,prepareTrial415,cleanupTrial415} from '../src/battle/TrialAdaptation415.js';
 import {motherState422,motherUnlocked422,beginMother422,settleMother422} from '../src/primordial/State422.js';

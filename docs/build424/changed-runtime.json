@@ -1,0 +1,16 @@
+[
+  "assets/ui/primordial/home-dawn424.png",
+  "index.html",
+  "src/Styles/build424-dial.css",
+  "src/battle/EnemyAI.js",
+  "src/core/HomeSkinSystem400.js",
+  "src/core/config.js",
+  "src/main.js",
+  "src/primordial/Dial424.js",
+  "src/primordial/Mother422.js",
+  "src/primordial/Presentation423.js",
+  "src/ui/BattleBossLayout.js",
+  "src/ui/BattleCircleLayout405.js",
+  "src/ui/HomeSkin400.js",
+  "src/ui/screens/BattleScreen.js"
+]

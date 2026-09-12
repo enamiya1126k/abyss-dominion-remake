@@ -9,13 +9,13 @@ import {SaveService} from '../src/services/SaveService.js';
 import {APP_VERSION,SAVE_SCHEMA_VERSION} from '../src/core/config.js';
 
 const read=file=>fs.readFileSync(new URL('../'+file,import.meta.url),'utf8');
-const state=(id,motion=true)=>({player:{maxFloor:100},campaign100:{finalCompleted:true},settings:{homeSkin400:{id,motion}}});
+const state=(id,motion=true)=>({player:{maxFloor:100},campaign100:{finalCompleted:true},primordial422:{cleared:true},settings:{homeSkin400:{id,motion}}});
 const css=read('src/Styles/build407-home-motion.css');
 
-test('five scenes retain their original background URLs and do not load another selected scene',()=>{
+test('original scenes retain their URLs and the new scene loads only its own image',()=>{
  for(const skin of HOME_SKINS400.slice(1)){
   const html=homeSkinScene400(state(skin.id));
-  assert.match(skin.image,new RegExp(`/home-skins400/${skin.id}\\.webp\\?v=3\\.1\\.80-build400$`));
+  if(skin.id==='primordial-dawn')assert.equal(skin.image,'./assets/ui/primordial/home-dawn424.png');else assert.match(skin.image,new RegExp(`/home-skins400/${skin.id}\\.webp\\?v=3\\.1\\.80-build400$`));
   assert.equal((html.match(/class="skin400-base"/g)??[]).length,1);
   assert.ok(html.includes(`class="skin400-base" href="${skin.image}"`));
   for(const other of HOME_SKINS400.slice(1).filter(s=>s.id!==skin.id))assert.ok(!html.includes(other.image));
@@ -101,9 +101,9 @@ test('resource-constrained devices reduce optional details, including after a li
  assert.equal(e.root.dataset.homeMotionQuality407,'full');e.connection.saveData=true;e.connection.emit('change');assert.equal(e.root.dataset.homeMotionQuality407,'light');dispose();
 });
 
-test('all five homes retain formation controls, menu actions and untouched party stats',()=>{
+test('all unlocked homes retain formation controls, menu actions and untouched party stats',()=>{
  const memory=new Map();globalThis.localStorage={getItem:k=>memory.get(k)??null,setItem:(k,v)=>memory.set(k,String(v)),removeItem:k=>memory.delete(k)};
- const save=new SaveService();save.state.player.maxFloor=100;save.state.campaign100.finalCompleted=true;
+ const save=new SaveService();save.state.player.maxFloor=100;save.state.campaign100.finalCompleted=true;save.state.primordial422={cleared:true};
  const before=JSON.stringify({party:save.state.party,equipment:save.state.equipment,monsters:save.state.monsters.map(m=>({id:m.id,level:m.level,hp:m.currentHp,mp:m.currentMp}))});
  for(const skin of HOME_SKINS400.slice(1)){
   save.state.settings.homeSkin400={id:skin.id,motion:true};const html=HomeScreen(save.state);

@@ -30,7 +30,7 @@ function containedImageBox(image,rect){
 }
 export function layoutBattleCircles405(root,visibleBounds){
  for(const unit of root.querySelectorAll('.side-battle-unit')){
-  const sprite=unit.querySelector('.side-unit-sprite'),circle=sprite?.querySelector('.battle-magic-circle,.enemy-battle-magic-circle');
+  const sprite=unit.querySelector('.side-unit-sprite'),circle=sprite?.querySelector('.battle-magic-circle,.enemy-battle-magic-circle,.mother-halo423');
   const image=sprite?.querySelector('.monster-visual svg[data-monster-atlas],.monster-visual img:not([hidden])');
   if(!circle||!image||(!image.dataset.monsterAtlas&&(!image.complete||!image.naturalWidth)))continue;
   const sr=sprite.getBoundingClientRect(),rect=containedImageBox(image,image.getBoundingClientRect());
