@@ -1,0 +1,17 @@
+[
+  {
+    "path": "index.html",
+    "base_sha256": "66a0bb6242b1bfb583eb46565b464854445a18a08ca14124060c294f8a55cd99",
+    "sha256": "848fa719f3f0b71d79197b917e5bbc7160abe5d3e1f0ece2713fa8be22d35632"
+  },
+  {
+    "path": "src/main.js",
+    "base_sha256": "948650df6f077b7a5da2fd507b0a38d663d25fee707a37b2eb5be30a42495b5e",
+    "sha256": "9e682f253a7a8aa0b903bed1081aaad38de078b0c24a0754c74938fa180645de"
+  },
+  {
+    "path": "src/core/config.js",
+    "base_sha256": "8cd235b1e680ed93df58b09470a860bca40504ae4c988fd311cfe19d83dbf183",
+    "sha256": "c5e524df84c8acac38c83cb143a11dc5a221294ff653e5e136a546aed8a0dedd"
+  }
+]

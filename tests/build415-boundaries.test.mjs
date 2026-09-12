@@ -12,10 +12,10 @@ const read=p=>fs.readFileSync(new URL('../'+p,import.meta.url),'utf8');
 test('all modified browser modules, including old importer aliases, resolve to the current code',()=>{
  const imports=JSON.parse(read('index.html').match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]).imports;
  for(const path of JSON.parse(read('docs/build415/changed-runtime.json')).filter(p=>p.endsWith('.js')&&p!=='src/main.js')){
-  const version=path==='src/core/config.js'?'3.1.99-build420':['src/battle/TrialAdaptation415.js','src/ui/BattlePreparation415.js'].includes(path)?'3.1.98-build419':path==='src/ui/screens/FormationScreen.js'?'3.1.97-build418':'3.1.94-build415';
+  const version=path==='src/core/config.js'?'3.1.100-build421':['src/battle/TrialAdaptation415.js','src/ui/BattlePreparation415.js'].includes(path)?'3.1.98-build419':path==='src/ui/screens/FormationScreen.js'?'3.1.97-build418':'3.1.94-build415';
   assert.equal(imports['./'+path],'./'+path+'?v='+version);for(const[k,v]of Object.entries(imports))if(k.split('?')[0]==='./'+path)assert.equal(v,'./'+path+'?v='+version);
  }
- assert.match(read('index.html'),/const ASSET_BUILD = "build420"/);assert.match(read('src/core/config.js'),/SAVE_SCHEMA_VERSION=84/);
+ assert.match(read('index.html'),/const ASSET_BUILD = "build421"/);assert.match(read('src/core/config.js'),/SAVE_SCHEMA_VERSION=84/);
 });
 test('online combat cannot acquire trial stats; role condition is explicit',()=>{
  const party=['ch2_ryune','ch2_rose','ch2_noelle'].map(speciesId=>createMonster(speciesId,{level:1000}));

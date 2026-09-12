@@ -6378,8 +6378,14 @@ async function showHeroEvents348(events){
  syncInvincibleAllianceState({announce:false});
 }
 async function flushHeroReactions348(){if(!battle)return;const env=heroBattleEnvironment348();drainHeroReactions(battle,env);await showHeroEvents348(env.events)}
+function closeCommittedSkillMenu421(){
+ if(!battle?.skillMenu)return;
+ battle.skillMenu=false;
+ // Update the mounted command panel before any skill/attack presentation awaits.
+ renderBattle();
+}
 async function performHeroCommand348(unit,side,skill,targetId=null){
- const env=heroBattleEnvironment348();battle.actionCommitted=true;runHeroAllianceAction(battle,side,unit,skill,env,{targetId});await showHeroEvents348(env.events);saveBattleCheckpoint();renderBattle();
+ const env=heroBattleEnvironment348();battle.actionCommitted=true;if(side==="ally")closeCommittedSkillMenu421();runHeroAllianceAction(battle,side,unit,skill,env,{targetId});await showHeroEvents348(env.events);saveBattleCheckpoint();renderBattle();
  if(!battle.party.some(m=>m.currentHp>0))return lose();if(!aliveEnemies(battle).length)return win(false,null);battle.busy=false;return finishCurrentAction();
 }
 function prepareSingleBattle410(){
@@ -6417,7 +6423,7 @@ async function flushSingleCues410(){
 }
 async function runSingleNatural410(u,side){
  const result=naturalSingleAction410(battle,u,side);if(!['skip','discharge'].includes(result.kind))return false;
- battle.busy=true;battle.actionCommitted=true;battle.skillMenu=false;battle.itemMenu=false;await flushSingleCues410();saveBattleCheckpoint();battle.busy=false;
+ battle.busy=true;battle.actionCommitted=true;closeCommittedSkillMenu421();battle.itemMenu=false;await flushSingleCues410();saveBattleCheckpoint();battle.busy=false;
  if(!battle.party.some(x=>x.currentHp>0))await lose();else if(!aliveEnemies(battle).length)await win(false,null);else await finishCurrentAction();return true;
 }
 
@@ -6442,7 +6448,7 @@ async function flushUltimateEvents358(){
 async function performUltimate358(unit,skillId){
  prepareBattleUltimates358();const result=castEndgameUltimate(battle,unit,skillId,{targetId:battle.targetEnemyId});
  if(!result.ok){battle.busy=false;finishUltimateAction(battle);const ally=battle.party.includes(unit);if(ally&&!battle.auto){alert(result.reason);return}addBattleLog(battle,`${unit.name??unit.nickname??'行動者'}：${result.reason}・代替行動へ切替`);return ally?command('attack',null,{skipRandomCircle:true}):enemyTurn({skipUltimate:true})}
- battle.actionCommitted=true;battle.skillMenu=false;
+ battle.actionCommitted=true;closeCommittedSkillMenu421();
  await battleBanner(result.skill.name,result.skill.description,'skill',650,unit);await flushUltimateEvents358();
  saveBattleCheckpoint();renderBattle();battle.busy=false;
  if(!aliveEnemies(battle).length)return win(false,null);if(!battle.party.some(u=>u.currentHp>0))return lose();return finishCurrentAction();
@@ -6501,7 +6507,7 @@ async function command(type,skillId=null,{skipRandomCircle=false}={}){
  if(type==="skill"&&skillId){
   const equippedSkill=learnedSkills(a).find(candidate=>candidate.id===skillId);let skill=equippedSkill??skillById(skillId);skill=resolveRandomSkillElement(skill);const cd=cooldownRemaining(battle,a.id,skillId),randomCircleSkill=Boolean(a._randomCircleSkill),knownSkill=randomCircleSkill||Boolean(equippedSkill);
   if(!knownSkill||!canUseSkill(a,skill,cd,battle)){a._randomCircleSkill=false;battle.busy=false;if(battle.auto){addBattleLog(battle,`${displayName(a)}：使用できないスキルを通常攻撃へ切替`);return command("attack",null,{skipRandomCircle:true})}return alert(cd>0?`あと${cd}ラウンド使用できない`:skill?"MPが足りない":"スキルを使用できない")}
-  const mpBreakdown=skillMpCostBreakdown(a,skill,battle),listedMpCost=mpBreakdown.final,freeSkill=listedMpCost>0&&Math.random()<affixValue(a,"freeSkillChance",60)/100,mpCost=freeSkill?0:listedMpCost;skill=applySkillMastery(a,skill);battle.skillMenu=false;let skillCompleted=true;addBattleLog(battle,`${displayName(a)}：${skill.name}（${freeSkill?"MP消費なし":`MP-${mpCost}`}）`);if(!freeSkill&&mpBreakdown.equipmentReduction>0&&mpBreakdown.beforeEquipment>mpBreakdown.final){const mpAuthorities=(a._equipmentAuthorities??[]).filter(authority=>Number(authority.fixedEffects?.mpCostReduction)>0),authorityRate=Math.min(50,mpAuthorities.reduce((sum,authority)=>sum+Number(authority.fixedEffects.mpCostReduction||0),0)),rateLabel=authorityRate===mpBreakdown.equipmentReduction?`-${authorityRate}%`:`固有-${authorityRate}%・装備合計-${mpBreakdown.equipmentReduction}%`;if(mpAuthorities.length)addBattleLog(battle,`装備固有能力｜${mpAuthorities.map(authority=>authority.name).join("・")}：MP ${mpBreakdown.beforeEquipment}→${mpBreakdown.final}（${rateLabel}）`)}showEquipmentAuthorityActivation(a,{element:skill.element??a.attribute??SPECIES[a.speciesId]?.element??"neutral",target:e,isSkill:true});await battleBanner(skill.name,battleSkillMechanics(skill),"skill",430,a);battle.actionCommitted=true;a.currentMp=Math.max(0,a.currentMp-mpCost);consumePairDiscount409(battle,a,'ally',skill);recordNaturalPairAction409(battle,a,'ally',e,{offensive:Number(skill.power)>0});setSkillCooldown(battle,a.id,skill);
+  const mpBreakdown=skillMpCostBreakdown(a,skill,battle),listedMpCost=mpBreakdown.final,freeSkill=listedMpCost>0&&Math.random()<affixValue(a,"freeSkillChance",60)/100,mpCost=freeSkill?0:listedMpCost;skill=applySkillMastery(a,skill);closeCommittedSkillMenu421();let skillCompleted=true;addBattleLog(battle,`${displayName(a)}：${skill.name}（${freeSkill?"MP消費なし":`MP-${mpCost}`}）`);if(!freeSkill&&mpBreakdown.equipmentReduction>0&&mpBreakdown.beforeEquipment>mpBreakdown.final){const mpAuthorities=(a._equipmentAuthorities??[]).filter(authority=>Number(authority.fixedEffects?.mpCostReduction)>0),authorityRate=Math.min(50,mpAuthorities.reduce((sum,authority)=>sum+Number(authority.fixedEffects.mpCostReduction||0),0)),rateLabel=authorityRate===mpBreakdown.equipmentReduction?`-${authorityRate}%`:`固有-${authorityRate}%・装備合計-${mpBreakdown.equipmentReduction}%`;if(mpAuthorities.length)addBattleLog(battle,`装備固有能力｜${mpAuthorities.map(authority=>authority.name).join("・")}：MP ${mpBreakdown.beforeEquipment}→${mpBreakdown.final}（${rateLabel}）`)}showEquipmentAuthorityActivation(a,{element:skill.element??a.attribute??SPECIES[a.speciesId]?.element??"neutral",target:e,isSkill:true});await battleBanner(skill.name,battleSkillMechanics(skill),"skill",430,a);battle.actionCommitted=true;a.currentMp=Math.max(0,a.currentMp-mpCost);consumePairDiscount409(battle,a,'ally',skill);recordNaturalPairAction409(battle,a,'ally',e,{offensive:Number(skill.power)>0});setSkillCooldown(battle,a.id,skill);
   if(Number(skill.selfHpCostRate)>0&&a.currentHp>1){const cost=Math.min(a.currentHp-1,Math.max(1,Math.floor(a.currentHp*Math.min(.8,Number(skill.selfHpCostRate)))));a.currentHp=Math.max(1,a.currentHp-cost);addBattleLog(battle,`${displayName(a)}：${skill.name}の代価 HP-${cost.toLocaleString()}`);await floatText(`代価 -${cost}`,a.id,"enemy")}
   if(skill.type==="selfHeal"||skill.type==="stance"&&skill.heal){
    const h=Math.max(1,Math.floor(s.hp*skillHealingRate(skill)*healMultiplier(a))),gained=recoverBattleHp(a,h,s.hp);recordBattleHealing(a,gained);if(skill.cleanse){clearNegativeAllyEffects(battle,a.id);clearAilments(a)}await flushBattleRecoveries();if(gained>0)await floatText(`+${gained}`,a.id,"heal");applySkillEffects(skill,a,e);
