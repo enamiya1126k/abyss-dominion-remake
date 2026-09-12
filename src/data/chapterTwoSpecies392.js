@@ -1,3 +1,4 @@
+import {MOTHER_SPECIES422} from '../primordial/Mother422.js';
 // Installment ten: dream harvest, dragon dispel and a low-HP crown finisher.
 const skill=(key,name,mp,cooldown,description,fields={})=>({key,name,mp,cooldown,description,type:'attack',power:1,target:'敵単体',tag:'第二章固有',chapterTwoSet392:true,unlock:{type:'level',value:1},...fields});
 const creatures=[
@@ -40,4 +41,4 @@ const creatures=[
 export const CHAPTER_TWO_SPECIES392=Object.freeze(Object.fromEntries(creatures.map(c=>{
  const id=`ch2_${c.key}`,[hp,atk,matk,def,mdef,spd]=c.stats,skills=c.skills.map(s=>({...s,id:`${id}__${s.key}`,element:c.element,damageClass:s.damageClass??'physical'}));
  return[id,{...c,id,emoji:'✦',chapterTwoOnly:true,chapterTwoSet392:true,fieldEncounter:false,gachaExcluded:true,minFloor:Number.MAX_SAFE_INTEGER,captureRate:c.captureCap383,acquisition:[c.habitat383,'捕獲'],growth:{hp:1,atk:1,def:1,spd:1},baseStats:{hp,atk,matk,def,mdef,spd,crit:8,evasion:8,accuracy:112},rankNames:[c.name,c.name,c.name,c.name],skills,authoredSkills:skills}];
-})));
+}).concat([[MOTHER_SPECIES422.id,MOTHER_SPECIES422]])));

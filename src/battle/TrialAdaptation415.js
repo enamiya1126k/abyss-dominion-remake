@@ -19,6 +19,8 @@ export function tacticalRates415(floor=1){const progress=Math.max(0,Math.min(1,(
 export function trialTier415(b){
  if(!b||b.onlineMode||b.pvp||b.raid||b.isPvp||['online','raid','pvp'].includes(b.mode))return null;
  if(b.manualEndgameChallenge&&b.specialBattleType==='emergency')return TRIAL_ADAPTATION415[b.preludeChoiceId]??null;
+ if(b.specialBattleType==='mother422')return null;
+ if(b.specialBattleType==='chapterTwo'&&!b.trialAdaptation415?.units)return null;
  if(!chapterPreparationReady415(b))return null;
  if(b.specialBattleType==='chapterTwo')return chapterRates415(b.chapterPreparationTier415,b.chapterPreparationElite415,b.chapterPreparationVault415);
  if(contextKey415(b)==='team')return teamRates415(b.specialTeamStage);

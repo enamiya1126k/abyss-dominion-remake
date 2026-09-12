@@ -8,10 +8,11 @@ import {CHAPTER_TWO_SPRITES386} from '../data/chapterTwoSprites386.js?v=3.1.66-b
 import {CHAPTER_TWO_SPRITES385} from '../data/chapterTwoSprites385.js?v=3.1.65-build385';
 import {CHAPTER_TWO_SPRITES383} from '../data/chapterTwoSprites383.js?v=3.1.63-build383';
 import {CHAPTER_TWO_SPRITES384} from '../data/chapterTwoSprites384.js?v=3.1.64-build384';
+import {MOTHER_ATLAS422,MOTHER_ID422} from '../primordial/Mother422.js';
 let serial=0;
 const cache=new Map();
 export const CHAPTER_TWO_CANVAS_CACHE_LIMIT402=12;
-export function chapterTwoSprite383(subject){const id=typeof subject==='string'?subject:subject?.visualSpeciesId??subject?.speciesId;return CHAPTER_TWO_SPRITES383[id]??CHAPTER_TWO_SPRITES384[id]??CHAPTER_TWO_SPRITES385[id]??CHAPTER_TWO_SPRITES386[id]??CHAPTER_TWO_SPRITES387[id]??CHAPTER_TWO_SPRITES388[id]??CHAPTER_TWO_SPRITES389[id]??CHAPTER_TWO_SPRITES390[id]??CHAPTER_TWO_SPRITES391[id]??CHAPTER_TWO_SPRITES392[id]??null;}
+export function chapterTwoSprite383(subject){const id=typeof subject==='string'?subject:subject?.visualSpeciesId??subject?.speciesId;return (id===MOTHER_ID422?MOTHER_ATLAS422:null)??CHAPTER_TWO_SPRITES383[id]??CHAPTER_TWO_SPRITES384[id]??CHAPTER_TWO_SPRITES385[id]??CHAPTER_TWO_SPRITES386[id]??CHAPTER_TWO_SPRITES387[id]??CHAPTER_TWO_SPRITES388[id]??CHAPTER_TWO_SPRITES389[id]??CHAPTER_TWO_SPRITES390[id]??CHAPTER_TWO_SPRITES391[id]??CHAPTER_TWO_SPRITES392[id]??null;}
 export function chapterTwoFrame383(subject,frame='idle1'){
  const atlas=chapterTwoSprite383(subject);if(!atlas)return null;
  const region=atlas.frames[frame==='idle'?'idle1':frame]??atlas.frames.idle1,[left,top,right,bottom]=region.box,scale=224/atlas.extent,width=(right-left)*scale,height=(bottom-top)*scale;

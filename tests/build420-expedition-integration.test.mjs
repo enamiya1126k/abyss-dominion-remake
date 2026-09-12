@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import {run} from '../tools/build421/native-harness.mjs';
+import {run} from '../tools/build422/native-harness.mjs';
 import {SaveService} from '../src/services/SaveService.js';
 import {SAVE_KEY} from '../src/core/config.js';
 import {cleanupTrial415} from '../src/battle/TrialAdaptation415.js';

@@ -164,6 +164,12 @@ export function tuneChapterTwoEnemy(enemy,id,index=0,run=null){
  if(e.area||e.vault){enemy.teamBattle=true;enemy.teamBattleRole=enemy.chapterTwoTactics382?.role??e.roles?.[index];enemy.hiddenDamageTaken=1;if(e.memberNames397?.[index])enemy.name=e.memberNames397[index];else if(index===0&&(e.boss||e.seal||e.vault))enemy.name=e.name;const factor=e.elite393?1:1+(run?.challengeTier??0)*.3;for(const key of ['maxHp','hp','atk','matk','def','mdef','spd'])enemy[key]=Math.round(enemy[key]*factor);if(e.area>=3&&index===0&&!e.chapterTwoNative383){enemy.heroShield348=Math.floor(enemy.maxHp*.18);enemy.heroShieldMax378=enemy.heroShield348;}}
  applyChapterTwoGear382(enemy);
  tuneChapterTwoElite393(enemy,e,run);
+ // Build422: remove the old encounter inflation, not a player-dependent handicap.
+ for(const [key,divisor] of Object.entries({maxHp:14,hp:14,atk:24,matk:24,def:12,mdef:12,spd:5}))enemy[key]=Math.max(1,Math.round(enemy[key]/divisor));
+ for(const key of ['heroShield348','heroShieldMax378','_floorBossHpShield'])if(enemy[key])enemy[key]=Math.round(enemy[key]/14);
+ if(e.vault&&e.area>=3){for(const key of ['maxHp','hp'])enemy[key]=Math.round(enemy[key]*.65);for(const key of ['atk','matk'])enemy[key]=Math.round(enemy[key]*.5);for(const key of ['def','mdef','spd'])enemy[key]=Math.round(enemy[key]*.8);}
+ else if(e.boss&&e.area>=3){for(const key of ['atk','matk'])enemy[key]=Math.round(enemy[key]*.8);}
+ enemy.balanceVersion422=422;
 }
 export function walkable(x,y){return Number.isInteger(x)&&Number.isInteger(y)&&x>=2&&x<=16&&y>=2&&y<=16;}
 export function chapterTwoWorld(run){

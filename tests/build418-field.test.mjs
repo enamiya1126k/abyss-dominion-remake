@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {fieldFixture} from './helpers/chapterTwoField.mjs';
-import {run as nativeFixture} from '../tools/build421/native-harness.mjs';
+import {run as nativeFixture} from '../tools/build422/native-harness.mjs';
 import {createMonster,calculatedStats} from '../src/models/Monster.js';
 import {maxMp} from '../src/battle/SkillSystem.js';
 

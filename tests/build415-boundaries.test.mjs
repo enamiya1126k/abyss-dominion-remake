@@ -12,16 +12,16 @@ const read=p=>fs.readFileSync(new URL('../'+p,import.meta.url),'utf8');
 test('all modified browser modules, including old importer aliases, resolve to the current code',()=>{
  const imports=JSON.parse(read('index.html').match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]).imports;
  for(const path of JSON.parse(read('docs/build415/changed-runtime.json')).filter(p=>p.endsWith('.js')&&p!=='src/main.js')){
-  const version=path==='src/core/config.js'?'3.1.100-build421':['src/battle/TrialAdaptation415.js','src/ui/BattlePreparation415.js'].includes(path)?'3.1.98-build419':path==='src/ui/screens/FormationScreen.js'?'3.1.97-build418':'3.1.94-build415';
+  const version=path==='src/core/config.js'?'3.1.101-build422':['src/battle/TrialAdaptation415.js','src/ui/BattlePreparation415.js'].includes(path)?'3.1.101-build422':path==='src/ui/screens/FormationScreen.js'?'3.1.97-build418':'3.1.94-build415';
   assert.equal(imports['./'+path],'./'+path+'?v='+version);for(const[k,v]of Object.entries(imports))if(k.split('?')[0]==='./'+path)assert.equal(v,'./'+path+'?v='+version);
  }
- assert.match(read('index.html'),/const ASSET_BUILD = "build421"/);assert.match(read('src/core/config.js'),/SAVE_SCHEMA_VERSION=84/);
+ assert.match(read('index.html'),/const ASSET_BUILD = "build422"/);assert.match(read('src/core/config.js'),/SAVE_SCHEMA_VERSION=84/);
 });
 test('online combat cannot acquire trial stats; role condition is explicit',()=>{
  const party=['ch2_ryune','ch2_rose','ch2_noelle'].map(speciesId=>createMonster(speciesId,{level:1000}));
- assert.ok(trialTier415({party,specialBattleType:'chapterTwo'}));assert.equal(trialTier415({party:party.slice(0,2),specialBattleType:'chapterTwo'}),null);
+ assert.equal(trialTier415({party,specialBattleType:'chapterTwo'}),null);assert.equal(trialTier415({party:party.slice(0,2),specialBattleType:'chapterTwo'}),null);
  for(const flag of [{onlineMode:true},{pvp:true},{raid:true},{isPvp:true},{mode:'online'},{mode:'raid'},{mode:'pvp'}])assert.equal(trialTier415({party,...flag}),null);
- const b={party,specialBattleType:'chapterTwo',chapterPreparationElite415:3};assert.match(battleAdaptationDescription415(b),/HP×70/);
+ const b={party,specialBattleType:'chapterTwo',chapterPreparationElite415:3,trialAdaptation415:{tier:'chapterTwo',units:{}}};assert.match(battleAdaptationDescription415(b),/HP×70/);
 });
 test('enemy-side preparation belongs to its side, pair, target and status type',()=>{
  const pair=RESONANCE_PAIRS385.find(p=>p.id==='glassaria'),enemies=pair.members.map((speciesId,i)=>({id:'enemy'+i,speciesId,hp:100,maxHp:100})),target={id:'ally',currentHp:100,statusProfile:{immune:['spdDown']}};

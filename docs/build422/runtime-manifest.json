@@ -1,0 +1,18 @@
+{
+  "src/main.js": "47e406078a69b577c358c301ecd83bc0ad90fa43eaba8f8252c3bc24d480f268",
+  "src/chapterTwo/ChapterTwoSystem.js": "1bcef2eefd80322c639980a4528ae0b6709c1b1f54a7a3cc077d06d41f181b08",
+  "src/ui/RoyalChamberField.js": "f2721e83d468c400cbf91ea1127cf7d6acfb46167466b9647fe7dc80f17b2e3f",
+  "src/ui/BattlePreparation415.js": "fa19a98629e37501934a43133a2b9776bcd89a20462768c2dd012185d1873530",
+  "src/ui/ChapterTwoSprite383.js": "572a0a051f5704496e918b82fb19e2c5617aba40f22c99761b6fcac7c93ae750",
+  "src/core/config.js": "dea495d400685d7b3e540774b01fd44e7246553038aedb133ad2bb4613fe7c27",
+  "src/battle/TrialAdaptation415.js": "4c22dc8986c98cff0428dd6bac5aee7b432488df18428541762db908cfbbc683",
+  "src/primordial/Mother422.js": "e0ae69bf100e04efcff750d5e5024091f469b6ebac506614c95e011d955b60bc",
+  "src/primordial/State422.js": "de805cb1f912e002d29c244e26e17c3781821d430968edf83b95e52b8243c16d",
+  "src/primordial/Story422.js": "3d393652d42cefa219eff699a1a58b0294d08d4f57cb0e002d3d5078861ea107",
+  "src/Styles/build422-primordial.css": "aa7b210c30a8a617038f5b6dc41bf9bc23c12f68ea78dcc994ce9f80af263520",
+  "src/data/chapterTwoSpecies392.js": "c4bdba00a14fa5aae8e54207fa34f7f492c245b81e7537a359f4613cbe07274e",
+  "src/ui/screens/BattleScreen.js": "2ca2c291d7c4cdf444d311997ef274bbc1f944b28b1d6d052e092d8aa2d068c1",
+  "index.html": "66c16e1054da2c348e6c7c3e9b03704f1bb277c6a517ae0cf9618a7e3338950e",
+  "assets/ui/primordial/ionea422.png": "1a92d2c1cbb09666bd30b3fb18e1c2f4c0fb7fbaeff6fdea315d80db9569d321",
+  "assets/ui/primordial/sanctum422.png": "06dfc161ed7f36cf96c180dc0de9d0ecbf85ffe5807e7e128d1087a726c697e6"
+}

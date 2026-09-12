@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import {run,monster} from '../tools/build421/native-harness.mjs';
+import {run,monster} from '../tools/build422/native-harness.mjs';
 import {calculatedStats} from '../src/models/Monster.js';
 import {prepareTrial415,cleanupTrial415,appliedTrial419} from '../src/battle/TrialAdaptation415.js';
 import {cleanupSingles410} from '../src/battle/SingleTraits410.js';
@@ -11,11 +11,12 @@ import {unitPreparationHelp419} from '../src/ui/BattlePreparation415.js';
 
 const pairs=RESONANCE_PAIRS385.filter(p=>['glassaria','oathreturn'].includes(p.id));
 const ids=pairs.flatMap(p=>p.members);
-const options={specialBattle:true,specialBattleType:'chapterTwo',chapterPreparationTier415:0,chapterPreparationElite415:0};
+// Legacy checkpoint fixtures retain the old battle scale until settlement.
+const options={trialAdaptation415:{tier:'chapterTwo',units:{}},specialBattle:true,specialBattleType:'chapterTwo',chapterPreparationTier415:0,chapterPreparationElite415:0};
 const dispose=f=>{cleanupSingles410(f.b);cleanupTrial415(f.b)};
 const cards=html=>html.match(/<button id="enemy-[\s\S]*?<\/button>/g);
 
-for(const [vault,factor] of [[false,28],[true,42]])test(`native preparation and both reported pairs: HP×${factor} is independent of followups; heal and shield use prepared HP`,async()=>{
+for(const [vault,factor] of [[false,28],[true,42]])test(`legacy checkpoint preparation and both reported pairs: HP×${factor} is independent of followups; heal and shield use prepared HP`,async()=>{
  const f=await run(ids,['slime'],{inspect:true,circles:false,battleOptions:{...options,chapterPreparationVault415:vault}});
  try{
   const {b,context:c,party}=f,maximum=party.map(u=>calculatedStats(u).hp);
@@ -100,7 +101,7 @@ test('battle display aliases retain their verified build and config resolves to 
  const map=JSON.parse(html.match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]).imports;
  for(const path of ['src/main.js','src/core/config.js','src/ui/screens/BattleScreen.js','src/battle/TrialAdaptation415.js','src/ui/BattlePreparation415.js']){
   const entries=Object.entries(map).filter(([key])=>key.split('?')[0]==='./'+path);assert.ok(entries.length);
-  for(const [,value] of entries)assert.equal(value,`./${path}?v=${['src/core/config.js','src/main.js'].includes(path)?'3.1.100-build421':'3.1.98-build419'}`);
+  for(const [,value] of entries)assert.equal(value,`./${path}?v=${'3.1.101-build422'}`);
  }
  for(const build of [380,382])assert.ok(html.includes(`build${build}-chapter-two.css?v=3.1.98-build419`));
 });
