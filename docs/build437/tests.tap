@@ -1,0 +1,1324 @@
+TAP version 13
+# Subtest: four deployed members gain EXP including fallen members; restored supplies precede net currency reward; receipt survives reload
+ok 1 - four deployed members gain EXP including fallen members; restored supplies precede net currency reward; receipt survives reload
+  ---
+  duration_ms: 82.394602
+  type: 'test'
+  ...
+# Subtest: defeat and retreat pay nothing; higher stages increase rewards; capped wallets cannot overflow
+ok 2 - defeat and retreat pay nothing; higher stages increase rewards; capped wallets cannot overflow
+  ---
+  duration_ms: 15.663776
+  type: 'test'
+  ...
+# Subtest: failed final save rolls rewards back; retry commits once and shows the persisted result
+ok 3 - failed final save rolls rewards back; retry commits once and shows the persisted result
+  ---
+  duration_ms: 4.814485
+  type: 'test'
+  ...
+# Subtest: failed ultimate takes a normal action in auto, preserves manual choice, and enemy retry bypasses the same ultimate
+ok 4 - failed ultimate takes a normal action in auto, preserves manual choice, and enemy retry bypasses the same ultimate
+  ---
+  duration_ms: 4.951857
+  type: 'test'
+  ...
+# Subtest: finishing an action releases busy state before the next action; last action reaches endRound once
+ok 5 - finishing an action releases busy state before the next action; last action reaches endRound once
+  ---
+  duration_ms: 3.818755
+  type: 'test'
+  ...
+# Subtest: auto delay does not execute stale commands after auto is disabled, queue changes, or battle is replaced
+ok 6 - auto delay does not execute stale commands after auto is disabled, queue changes, or battle is replaced
+  ---
+  duration_ms: 20.398778
+  type: 'test'
+  ...
+# Subtest: gauge completes exactly once even if rAF never arrives; late frames cannot restart it
+ok 7 - gauge completes exactly once even if rAF never arrives; late frames cannot restart it
+  ---
+  duration_ms: 0.562691
+  type: 'test'
+  ...
+# Subtest: memory levels unlock by highest defeated stage, replay does not advance, and defeats restore supplies
+ok 8 - memory levels unlock by highest defeated stage, replay does not advance, and defeats restore supplies
+  ---
+  duration_ms: 46.907492
+  type: 'test'
+  ...
+# Subtest: legacy victories migrate once, old in-flight battle keeps its stage, and level cap is explicit
+ok 9 - legacy victories migrate once, old in-flight battle keeps its stage, and level cap is explicit
+  ---
+  duration_ms: 5.187035
+  type: 'test'
+  ...
+# Subtest: selected memory level creates actual stronger hero stats; first encounter scaling remains the same
+ok 10 - selected memory level creates actual stronger hero stats; first encounter scaling remains the same
+  ---
+  duration_ms: 18.329459
+  type: 'test'
+  ...
+# Subtest: auto remains on after clearing and still walks to a remaining objective
+ok 11 - auto remains on after clearing and still walks to a remaining objective
+  ---
+  duration_ms: 76.780343
+  type: 'test'
+  ...
+# Subtest: auto walks towards an enemy in an uncleared room
+ok 12 - auto walks towards an enemy in an uncleared room
+  ---
+  duration_ms: 7.289117
+  type: 'test'
+  ...
+# Subtest: enemy equipment stays in battle data but never appears in its rendered card
+ok 13 - enemy equipment stays in battle data but never appears in its rendered card
+  ---
+  duration_ms: 25.325704
+  type: 'test'
+  ...
+# Subtest: a Chapter II boss has one BOSS role badge and the actual rarity alongside it
+ok 14 - a Chapter II boss has one BOSS role badge and the actual rarity alongside it
+  ---
+  duration_ms: 4.782708
+  type: 'test'
+  ...
+# Subtest: ordinary, floor and endgame boss targeting, faction and art classes remain intact
+ok 15 - ordinary, floor and endgame boss targeting, faction and art classes remain intact
+  ---
+  duration_ms: 2.47363
+  type: 'test'
+  ...
+# Subtest: both pair statuses share one strip and retain quota, rest and unavailable-member messages
+ok 16 - both pair statuses share one strip and retain quota, rest and unavailable-member messages
+  ---
+  duration_ms: 3.386317
+  type: 'test'
+  ...
+# Subtest: circle centers on visible pixels including asymmetric mirrored enemy canvases
+ok 17 - circle centers on visible pixels including asymmetric mirrored enemy canvases
+  ---
+  duration_ms: 0.280894
+  type: 'test'
+  ...
+# Subtest: circle follows fitted art and converts viewport scale back to sprite coordinates
+ok 18 - circle follows fitted art and converts viewport scale back to sprite coordinates
+  ---
+  duration_ms: 0.190501
+  type: 'test'
+  ...
+# Subtest: ten taps reuse the same button and scrollport, charge each new price once, and survive reload
+ok 19 - ten taps reuse the same button and scrollport, charge each new price once, and survive reload
+  ---
+  duration_ms: 46.089901
+  type: 'test'
+  ...
+# Subtest: copy reflow compensates the clicked button offset without moving focus or rebuilding it
+ok 20 - copy reflow compensates the clicked button offset without moving focus or rebuilding it
+  ---
+  duration_ms: 5.055741
+  type: 'test'
+  ...
+# Subtest: last affordable upgrade disables all unaffordable purchases; extra taps spend nothing
+ok 21 - last affordable upgrade disables all unaffordable purchases; extra taps spend nothing
+  ---
+  duration_ms: 3.966543
+  type: 'test'
+  ...
+# Subtest: level 99 disables the existing button and never charges a level 100 purchase
+ok 22 - level 99 disables the existing button and never charges a level 100 purchase
+  ---
+  duration_ms: 4.123615
+  type: 'test'
+  ...
+# Subtest: false or thrown saves roll back level and GOLD; a retry on the same button works
+ok 23 - false or thrown saves roll back level and GOLD; a retry on the same button works
+  ---
+  duration_ms: 14.542186
+  type: 'test'
+  ...
+# Subtest: reentrant clicks during persistence commit only one upgrade
+ok 24 - reentrant clicks during persistence commit only one upgrade
+  ---
+  duration_ms: 4.328617
+  type: 'test'
+  ...
+# Subtest: upgrading a circle worn by another ally does not transfer its ownership
+ok 25 - upgrading a circle worn by another ally does not transfer its ownership
+  ---
+  duration_ms: 9.415725
+  type: 'test'
+  ...
+# Subtest: workshop close and X use the same refresh callback
+ok 26 - workshop close and X use the same refresh callback
+  ---
+  duration_ms: 4.005231
+  type: 'test'
+  ...
+# Subtest: Build405 stylesheet is loaded after the shared and equipment styles and save schema is unchanged
+ok 27 - Build405 stylesheet is loaded after the shared and equipment styles and save schema is unchanged
+  ---
+  duration_ms: 0.885297
+  type: 'test'
+  ...
+# Subtest: research rollback and retry grant exactly three instances once without spending GOLD
+ok 28 - research rollback and retry grant exactly three instances once without spending GOLD
+  ---
+  duration_ms: 4.732093
+  type: 'test'
+  ...
+# Subtest: battle updates retain both connected swipe surfaces and remove a vanished resonance row
+ok 29 - battle updates retain both connected swipe surfaces and remove a vanished resonance row
+  ---
+  duration_ms: 1.442839
+  type: 'test'
+  ...
+# Subtest: fresh second chapter and mother battles use natural stats for every party size
+ok 30 - fresh second chapter and mother battles use natural stats for every party size
+  ---
+  duration_ms: 10.100556
+  type: 'test'
+  ...
+# Subtest: cleared second chapter unlocks the sanctum without replaying or changing chapter one
+ok 31 - cleared second chapter unlocks the sanctum without replaying or changing chapter one
+  ---
+  duration_ms: 19.003464
+  type: 'test'
+  ...
+# Subtest: attempt IDs, defeat, retreat-equivalent settlement and first rewards are idempotent
+ok 32 - attempt IDs, defeat, retreat-equivalent settlement and first rewards are idempotent
+  ---
+  duration_ms: 27.542495
+  type: 'test'
+  ...
+# Subtest: dead parties cannot begin; partial dialogue and independent progression survive actual save reload
+ok 33 - dead parties cannot begin; partial dialogue and independent progression survive actual save reload
+  ---
+  duration_ms: 36.102227
+  type: 'test'
+  ...
+# Subtest: both enemy and allied glass pairs use two followups, 10% healing and the same round reset
+ok 34 - both enemy and allied glass pairs use two followups, 10% healing and the same round reset
+  ---
+  duration_ms: 27.851832
+  type: 'test'
+  ...
+# Subtest: mother uses registered native authored skills, complete atlas frames and existing battle markup
+ok 35 - mother uses registered native authored skills, complete atlas frames and existing battle markup
+  ---
+  duration_ms: 19.144632
+  type: 'test'
+  ...
+# Subtest: all mother dialogue is authored, ending stays replayable and leaves an optional continuation
+ok 36 - all mother dialogue is authored, ending stays replayable and leaves an optional continuation
+  ---
+  duration_ms: 0.524544
+  type: 'test'
+  ...
+# Subtest: mother native command reaches real enemy AI and can finish without a progress stall
+ok 37 - mother native command reaches real enemy AI and can finish without a progress stall
+  ---
+  duration_ms: 159.297595
+  type: 'test'
+  ...
+# Subtest: native mother result persists restored supplies/vitals before revealing contribution and cannot award twice
+ok 38 - native mother result persists restored supplies/vitals before revealing contribution and cannot award twice
+  ---
+  duration_ms: 7.818708
+  type: 'test'
+  ...
+# Subtest: native mother save checkpoint resumes in sanctum with its attempt and action commit preserved
+ok 39 - native mother save checkpoint resumes in sanctum with its attempt and action commit preserved
+  ---
+  duration_ms: 8.737794
+  type: 'test'
+  ...
+# Subtest: native mother dialogue preserves index on dismiss and only completes after final confirmation
+ok 40 - native mother dialogue preserves index on dismiss and only completes after final confirmation
+  ---
+  duration_ms: 10.71388
+  type: 'test'
+  ...
+# Subtest: destination navigates section 4 -> 5 -> 4; primary enters the sanctum, never region 5
+ok 41 - destination navigates section 4 -> 5 -> 4; primary enters the sanctum, never region 5
+  ---
+  duration_ms: 71.576958
+  type: 'test'
+  ...
+# Subtest: locked core cannot route to final battle; old cleared saves default to section 5
+ok 42 - locked core cannot route to final battle; old cleared saves default to section 5
+  ---
+  duration_ms: 22.106633
+  type: 'test'
+  ...
+# Subtest: existing and new endings appear in chronological archive; counts and home agree without editing saves
+ok 43 - existing and new endings appear in chronological archive; counts and home agree without editing saves
+  ---
+  duration_ms: 9.157635
+  type: 'test'
+  ...
+# Subtest: unseen stories remain locked; optional defeat is counted only when read
+ok 44 - unseen stories remain locked; optional defeat is counted only when read
+  ---
+  duration_ms: 5.60441
+  type: 'test'
+  ...
+# Subtest: all mother scenes use native cast presentation; ending has lines for all seven characters
+ok 45 - all mother scenes use native cast presentation; ending has lines for all seven characters
+  ---
+  duration_ms: 6.86451
+  type: 'test'
+  ...
+# Subtest: legacy partial scenes restart safely, new partial scenes resume and completed replay writes nothing
+ok 46 - legacy partial scenes restart safely, new partial scenes resume and completed replay writes nothing
+  ---
+  duration_ms: 12.131393
+  type: 'test'
+  ...
+# Subtest: mother cadence respects cooldowns and mana, and leaves old encounters unchanged
+ok 47 - mother cadence respects cooldowns and mana, and leaves old encounters unchanged
+  ---
+  duration_ms: 0.514659
+  type: 'test'
+  ...
+# Subtest: native mother veil is a removable guard and HP shield, without extra divineBarrier
+ok 48 - native mother veil is a removable guard and HP shield, without extra divineBarrier
+  ---
+  duration_ms: 22.125872
+  type: 'test'
+  ...
+# Subtest: all-enemy gold thread damages each survivor and applies recovery suppression through native effects
+ok 49 - all-enemy gold thread damages each survivor and applies recovery suppression through native effects
+  ---
+  duration_ms: 27.881766
+  type: 'test'
+  ...
+# Subtest: mother decoration is absent in other battles and never changes sprite/card ordering
+ok 50 - mother decoration is absent in other battles and never changes sprite/card ordering
+  ---
+  duration_ms: 17.634574
+  type: 'test'
+  ...
+# Subtest: native cue delegates to the in-arena animation and publishes phases only to this battle
+ok 51 - native cue delegates to the in-arena animation and publishes phases only to this battle
+  ---
+  duration_ms: 48.46467
+  type: 'test'
+  ...
+# Subtest: manual command waits until the round law ends, then spends exactly one normal skill turn
+ok 52 - manual command waits until the round law ends, then spends exactly one normal skill turn
+  ---
+  duration_ms: 53.394175
+  type: 'test'
+  ...
+# Subtest: ten Roman laws map to the actual ten signatures without mutating the characters
+ok 53 - ten Roman laws map to the actual ten signatures without mutating the characters
+  ---
+  duration_ms: 1.859013
+  type: 'test'
+  ...
+# Subtest: all ten laws occur once per cycle; rematches and reloads use the same preview
+ok 54 - all ten laws occur once per cycle; rematches and reloads use the same preview
+  ---
+  duration_ms: 2.452779
+  type: 'test'
+  ...
+# Subtest: dial fires once despite zero MP, sealed skill cooldown and action-stopping effects; does not spend a natural turn
+ok 55 - dial fires once despite zero MP, sealed skill cooldown and action-stopping effects; does not spend a natural turn
+  ---
+  duration_ms: 7.94191
+  type: 'test'
+  ...
+# Subtest: two callbacks during the spin cannot trigger twice, and the overlay finishes before the attack
+ok 56 - two callbacks during the spin cannot trigger twice, and the overlay finishes before the attack
+  ---
+  duration_ms: 16.959138
+  type: 'test'
+  ...
+# Subtest: ordinary, older active mother, dead mother and settled battles do not receive the new dial
+ok 57 - ordinary, older active mother, dead mother and settled battles do not receive the new dial
+  ---
+  duration_ms: 5.579915
+  type: 'test'
+  ...
+# Subtest: native turn flow resolves the round law before the enemy natural action
+ok 58 - native turn flow resolves the round law before the enemy natural action
+  ---
+  duration_ms: 6.153731
+  type: 'test'
+  ...
+# Subtest: native projection damage passes through defensive shields and damages the real party
+ok 59 - native projection damage passes through defensive shields and damages the real party
+  ---
+  duration_ms: 21.543032
+  type: 'test'
+  ...
+# Subtest: mother healing projection uses native heal suppression and expiring, removable guard/regen
+ok 60 - mother healing projection uses native heal suppression and expiring, removable guard/regen
+  ---
+  duration_ms: 8.173792
+  type: 'test'
+  ...
+# Subtest: native checkpoint includes the completed round receipt; reopening does not repeat its law
+ok 61 - native checkpoint includes the completed round receipt; reopening does not repeat its law
+  ---
+  duration_ms: 11.040643
+  type: 'test'
+  ...
+# Subtest: exclusive home skin stays locked until a real victory and selection rejects forged settings
+ok 62 - exclusive home skin stays locked until a real victory and selection rejects forged settings
+  ---
+  duration_ms: 8.197197
+  type: 'test'
+  ...
+# Subtest: old cleared saves unlock the skin on read without migration, extra currency or a rematch
+ok 63 - old cleared saves unlock the skin on read without migration, extra currency or a rematch
+  ---
+  duration_ms: 10.147224
+  type: 'test'
+  ...
+# Subtest: skin selection and completion survive SaveService reload; failed skin saves roll back
+ok 64 - skin selection and completion survive SaveService reload; failed skin saves roll back
+  ---
+  duration_ms: 30.354615
+  type: 'test'
+  ...
+# Subtest: completion is gated by victory and ending; viewing grants no additional rewards
+ok 65 - completion is gated by victory and ending; viewing grants no additional rewards
+  ---
+  duration_ms: 7.862173
+  type: 'test'
+  ...
+# Subtest: completion dismiss waits for its receipt to save and exclusive skin is only equipped by its button
+ok 66 - completion dismiss waits for its receipt to save and exclusive skin is only equipped by its button
+  ---
+  duration_ms: 8.948186
+  type: 'test'
+  ...
+# Subtest: pixel dial contains all ten pixel-drawn Roman numerals and no thin circle primitives
+ok 67 - pixel dial contains all ten pixel-drawn Roman numerals and no thin circle primitives
+  ---
+  duration_ms: 0.292101
+  type: 'test'
+  ...
+# Subtest: field halo center follows the actual sprite body and zoom rather than an unrelated tile offset
+ok 68 - field halo center follows the actual sprite body and zoom rather than an unrelated tile offset
+  ---
+  duration_ms: 0.447661
+  type: 'test'
+  ...
+# Subtest: shared visible-pixel fitter lifts the mother entirely above her HP card
+ok 69 - shared visible-pixel fitter lifts the mother entirely above her HP card
+  ---
+  duration_ms: 0.953417
+  type: 'test'
+  ...
+# Subtest: HP barrier reuses the shield meter, remembers capacity after absorption, and preserves zero
+ok 70 - HP barrier reuses the shield meter, remembers capacity after absorption, and preserves zero
+  ---
+  duration_ms: 77.367473
+  type: 'test'
+  ...
+# Subtest: native mother shield grants remember the full value before it can be consumed
+ok 71 - native mother shield grants remember the full value before it can be consumed
+  ---
+  duration_ms: 48.277484
+  type: 'test'
+  ...
+# Subtest: mother art seeks triple ordinary size, respecting width and card/status headroom
+ok 72 - mother art seeks triple ordinary size, respecting width and card/status headroom
+  ---
+  duration_ms: 0.266573
+  type: 'test'
+  ...
+# Subtest: challenge center uses visible atlas bounds and the battle supplies a dedicated solo mother target
+ok 73 - challenge center uses visible atlas bounds and the battle supplies a dedicated solo mother target
+  ---
+  duration_ms: 8.956017
+  type: 'test'
+  ...
+# Subtest: upcoming result is absent until stopping, including a new round after checkpoint resume
+ok 74 - upcoming result is absent until stopping, including a new round after checkpoint resume
+  ---
+  duration_ms: 0.262167
+  type: 'test'
+  ...
+# Subtest: all ten stops point to the selected numeral after multiple full revolutions
+ok 75 - all ten stops point to the selected numeral after multiple full revolutions
+  ---
+  duration_ms: 0.278371
+  type: 'test'
+  ...
+# Subtest: expanded dial stays inside the arena at narrow and wide viewports
+ok 76 - expanded dial stays inside the arena at narrow and wide viewports
+  ---
+  duration_ms: 0.353071
+  type: 'test'
+  ...
+# Subtest: in-arena spin at x1 reveals only at stop, then releases the existing backdrop
+ok 77 - in-arena spin at x1 reveals only at stop, then releases the existing backdrop
+  ---
+  duration_ms: 1.556727
+  type: 'test'
+  ...
+# Subtest: in-arena spin at x2 reveals only at stop, then releases the existing backdrop
+ok 78 - in-arena spin at x2 reveals only at stop, then releases the existing backdrop
+  ---
+  duration_ms: 0.217672
+  type: 'test'
+  ...
+# Subtest: in-arena spin at x4 reveals only at stop, then releases the existing backdrop
+ok 79 - in-arena spin at x4 reveals only at stop, then releases the existing backdrop
+  ---
+  duration_ms: 0.30474
+  type: 'test'
+  ...
+# Subtest: rerender during spin joins the same elapsed animation without a result preview
+ok 80 - rerender during spin joins the same elapsed animation without a result preview
+  ---
+  duration_ms: 0.314934
+  type: 'test'
+  ...
+# Subtest: reduced motion does not rotate before reveal; interrupted battles clean up without revealing
+ok 81 - reduced motion does not rotate before reveal; interrupted battles clean up without revealing
+  ---
+  duration_ms: 0.633415
+  type: 'test'
+  ...
+# Subtest: ordinary hits summon once per attack, use at most three slots, and join next round
+ok 82 - ordinary hits summon once per attack, use at most three slots, and join next round
+  ---
+  duration_ms: 61.406059
+  type: 'test'
+  ...
+# Subtest: poison, counters, reflection, echoes and guarded hits do not summon
+ok 83 - poison, counters, reflection, echoes and guarded hits do not summon
+  ---
+  duration_ms: 70.825589
+  type: 'test'
+  ...
+# Subtest: one battle-local guts works through native damage and direct ultimate HP writers
+ok 84 - one battle-local guts works through native damage and direct ultimate HP writers
+  ---
+  duration_ms: 51.938947
+  type: 'test'
+  ...
+# Subtest: countdown starts after death round, survives five complete rounds, then returns exactly 30% once
+ok 85 - countdown starts after death round, survives five complete rounds, then returns exactly 30% once
+  ---
+  duration_ms: 10.344266
+  type: 'test'
+  ...
+# Subtest: last child defeated on the fifth round prevents revival; native flow awards victory
+ok 86 - last child defeated on the fifth round prevents revival; native flow awards victory
+  ---
+  duration_ms: 12.658671
+  type: 'test'
+  ...
+# Subtest: generic healing/revive cannot bring back the mother early or mint a second revival
+ok 87 - generic healing/revive cannot bring back the mother early or mint a second revival
+  ---
+  duration_ms: 10.860577
+  type: 'test'
+  ...
+# Subtest: checkpoint serialization carries roster, rolled equipment, guts and exact remaining rounds
+ok 88 - checkpoint serialization carries roster, rolled equipment, guts and exact remaining rounds
+  ---
+  duration_ms: 8.136918
+  type: 'test'
+  ...
+# Subtest: old active 425 mothers do not gain new abilities in the middle of a fight
+ok 89 - old active 425 mothers do not gain new abilities in the middle of a fight
+  ---
+  duration_ms: 11.120752
+  type: 'test'
+  ...
+# Subtest: real automatic command follows native multi-target and turn flow with dynamic summons
+ok 90 - real automatic command follows native multi-target and turn flow with dynamic summons
+  ---
+  duration_ms: 113.992452
+  type: 'test'
+  ...
+# Subtest: actual resume path preserves a fallen mother and does not replay an already committed summon
+ok 91 - actual resume path preserves a fallen mother and does not replay an already committed summon
+  ---
+  duration_ms: 9.625355
+  type: 'test'
+  ...
+# Subtest: poison from a named player can consume guts but cannot trigger a summon
+ok 92 - poison from a named player can consume guts but cannot trigger a summon
+  ---
+  duration_ms: 8.811253
+  type: 'test'
+  ...
+# Subtest: summon death before the mother does not arm a revival countdown
+ok 93 - summon death before the mother does not arm a revival countdown
+  ---
+  duration_ms: 7.118775
+  type: 'test'
+  ...
+# Subtest: a partner follow-up can trigger the one summon even when the first attacker missed
+ok 94 - a partner follow-up can trigger the one summon even when the first attacker missed
+  ---
+  duration_ms: 7.533427
+  type: 'test'
+  ...
+# Subtest: native endRound itself advances the full death grace period and revives before the next queue
+ok 95 - native endRound itself advances the full death grace period and revives before the next queue
+  ---
+  duration_ms: 17.390183
+  type: 'test'
+  ...
+# Subtest: daily raid uses JST midnight; a boss change never refreshes the three daily entries
+ok 96 - daily raid uses JST midnight; a boss change never refreshes the three daily entries
+  ---
+  duration_ms: 9.25014
+  type: 'test'
+  ...
+# Subtest: retry of a start receipt and active encounter rejection consume exactly one entry
+ok 97 - retry of a start receipt and active encounter rejection consume exactly one entry
+  ---
+  duration_ms: 1.28088
+  type: 'test'
+  ...
+# Subtest: two independent parties cumulatively damage one server HP; client damage fields are ignored
+ok 98 - two independent parties cumulatively damage one server HP; client damage fields are ignored
+  ---
+  duration_ms: 7.253554
+  type: 'test'
+  ...
+# Subtest: last hit advances exactly once, credits only remaining HP, and closes other old encounters
+ok 99 - last hit advances exactly once, credits only remaining HP, and closes other old encounters
+  ---
+  duration_ms: 3.175927
+  type: 'test'
+  ...
+# Subtest: boss does not rotate by date and rejects a stale boss start without charging
+ok 100 - boss does not rotate by date and rejects a stale boss start without charging
+  ---
+  duration_ms: 0.369385
+  type: 'test'
+  ...
+# Subtest: boss waits for five full rounds while level 100 minions act, then attacks in round six
+ok 101 - boss waits for five full rounds while level 100 minions act, then attacks in round six
+  ---
+  duration_ms: 7.066788
+  type: 'test'
+  ...
+# Subtest: a surviving party finishes at ten rounds without resetting the campaign or issuing legacy rewards
+ok 102 - a surviving party finishes at ten rounds without resetting the campaign or issuing legacy rewards
+  ---
+  duration_ms: 6.943958
+  type: 'test'
+  ...
+# Subtest: another player cannot operate the attempt and stale rounds cannot hit twice
+ok 103 - another player cannot operate the attempt and stale rounds cannot hit twice
+  ---
+  duration_ms: 1.780037
+  type: 'test'
+  ...
+# Subtest: disconnect pauses the same battle and reconnect keeps its quota and damage
+ok 104 - disconnect pauses the same battle and reconnect keeps its quota and damage
+  ---
+  duration_ms: 2.35139
+  type: 'test'
+  ...
+# Subtest: server restart restores active battle, shared HP, receipt and daily count
+ok 105 - server restart restores active battle, shared HP, receipt and daily count
+  ---
+  duration_ms: 4.491278
+  type: 'test'
+  ...
+# Subtest: failed durable writes roll back entry, damage, actions and next-boss advancement
+ok 106 - failed durable writes roll back entry, damage, actions and next-boss advancement
+  ---
+  duration_ms: 2.32411
+  type: 'test'
+  ...
+# Subtest: invalid ledger cannot silently reset daily limits or shared HP
+ok 107 - invalid ledger cannot silently reset daily limits or shared HP
+  ---
+  duration_ms: 0.842604
+  type: 'test'
+  ...
+# Subtest: current online room and trade block starting a separate raid
+ok 108 - current online room and trade block starting a separate raid
+  ---
+  duration_ms: 0.228987
+  type: 'test'
+  ...
+# Subtest: damage over time uses 1.6 million reference HP only on the world boss
+ok 109 - damage over time uses 1.6 million reference HP only on the world boss
+  ---
+  duration_ms: 1.957359
+  type: 'test'
+  ...
+# Subtest: old completed battle payloads compact without losing their start receipts or reports
+ok 110 - old completed battle payloads compact without losing their start receipts or reports
+  ---
+  duration_ms: 1.15862
+  type: 'test'
+  ...
+# Subtest: same damage shares rank and reward; zero damage never ranks
+ok 111 - same damage shares rank and reward; zero damage never ranks
+  ---
+  duration_ms: 1.54502
+  type: 'test'
+  ...
+# Subtest: all ranking tier boundaries have the intended additive rewards
+ok 112 - all ranking tier boundaries have the intended additive rewards
+  ---
+  duration_ms: 0.225903
+  type: 'test'
+  ...
+# Subtest: ranking accumulates across attempts and returns the personal row outside page one
+ok 113 - ranking accumulates across attempts and returns the personal row outside page one
+  ---
+  duration_ms: 11.748908
+  type: 'test'
+  ...
+# Subtest: simultaneous finishing requests settle every player once with exactly one last hit
+ok 114 - simultaneous finishing requests settle every player once with exactly one last hit
+  ---
+  duration_ms: 4.359314
+  type: 'test'
+  ...
+# Subtest: a past boss freezes ranks; next boss begins without carrying scores
+ok 115 - a past boss freezes ranks; next boss begins without carrying scores
+  ---
+  duration_ms: 2.864458
+  type: 'test'
+  ...
+# Subtest: disconnected contributors keep rewards, while zero-damage attempts get none
+ok 116 - disconnected contributors keep rewards, while zero-damage attempts get none
+  ---
+  duration_ms: 1.519433
+  type: 'test'
+  ...
+# Subtest: save failure rolls back boss death, all rewards, scores, and next boss together
+ok 117 - save failure rolls back boss death, all rewards, scores, and next boss together
+  ---
+  duration_ms: 1.866745
+  type: 'test'
+  ...
+# Subtest: receipt ownership, ack retry, and failed ack persistence cannot double settle or lose pending rewards
+ok 118 - receipt ownership, ack retry, and failed ack persistence cannot double settle or lose pending rewards
+  ---
+  duration_ms: 2.574119
+  type: 'test'
+  ...
+# Subtest: server restart preserves outstanding and acknowledged rewards with their original IDs
+ok 119 - server restart preserves outstanding and acknowledged rewards with their original IDs
+  ---
+  duration_ms: 4.094181
+  type: 'test'
+  ...
+# Subtest: Build428 completed records migrate to rewards once without resetting HP, attempts or daily count
+ok 120 - Build428 completed records migrate to rewards once without resetting HP, attempts or daily count
+  ---
+  duration_ms: 3.34065
+  type: 'test'
+  ...
+# Subtest: ranking and reward listing require the authenticated connected session
+ok 121 - ranking and reward listing require the authenticated connected session
+  ---
+  duration_ms: 0.246784
+  type: 'test'
+  ...
+# Subtest: incomplete reward data stops delivery without overwriting the saved ledger
+ok 122 - incomplete reward data stops delivery without overwriting the saved ledger
+  ---
+  duration_ms: 2.783197
+  type: 'test'
+  ...
+# Subtest: backlog delivery is paged, and acknowledged pages never appear again
+ok 123 - backlog delivery is paged, and acknowledged pages never appear again
+  ---
+  duration_ms: 38.593293
+  type: 'test'
+  ...
+# Subtest: service worker caches boot files, then serves modules with version queries and navigation offline
+ok 124 - service worker caches boot files, then serves modules with version queries and navigation offline
+  ---
+  duration_ms: 8.499172
+  type: 'test'
+  ...
+# Subtest: offline cache never intercepts WebSocket, API POSTs or external origins
+ok 125 - offline cache never intercepts WebSocket, API POSTs or external origins
+  ---
+  duration_ms: 0.700814
+  type: 'test'
+  ...
+# Subtest: failed prefetch reports failure and cannot claim offline readiness
+ok 126 - failed prefetch reports failure and cannot claim offline readiness
+  ---
+  duration_ms: 0.810507
+  type: 'test'
+  ...
+# Subtest: offline boot manifest includes every runtime dependency and only files that exist
+ok 127 - offline boot manifest includes every runtime dependency and only files that exist
+  ---
+  duration_ms: 4.558407
+  type: 'test'
+  ...
+# Subtest: offline commands are saved before presentation; failed saves retain the previous recoverable battle
+ok 128 - offline commands are saved before presentation; failed saves retain the previous recoverable battle
+  ---
+  duration_ms: 18.395387
+  type: 'test'
+  ...
+# Subtest: reload resumes a partially played ticket and saves a completed result before attempting upload
+ok 129 - reload resumes a partially played ticket and saves a completed result before attempting upload
+  ---
+  duration_ms: 40.478776
+  type: 'test'
+  ...
+# Subtest: receipt loss retries the same result, and a later ticket list recovers acknowledgement without duplicate damage
+ok 130 - receipt loss retries the same result, and a later ticket list recovers acknowledgement without duplicate damage
+  ---
+  duration_ms: 14.859934
+  type: 'test'
+  ...
+# Subtest: reservation request persists with its original profile; lost response resends the same request ID
+ok 131 - reservation request persists with its original profile; lost response resends the same request ID
+  ---
+  duration_ms: 4.973139
+  type: 'test'
+  ...
+# Subtest: failed offline data preparation cannot consume quota or send a reservation
+ok 132 - failed offline data preparation cannot consume quota or send a reservation
+  ---
+  duration_ms: 0.605353
+  type: 'test'
+  ...
+# Subtest: old sockets and other-account tickets cannot change the local ticket bank
+ok 133 - old sockets and other-account tickets cannot change the local ticket bank
+  ---
+  duration_ms: 1.961364
+  type: 'test'
+  ...
+# Subtest: offline lobby keeps the real ticket quota and explains delayed reward finalization
+ok 134 - offline lobby keeps the real ticket quota and explains delayed reward finalization
+  ---
+  duration_ms: 20.303613
+  type: 'test'
+  ...
+# Subtest: native manual action, speed and auto controls route locally with no network connection
+ok 135 - native manual action, speed and auto controls route locally with no network connection
+  ---
+  duration_ms: 18.434514
+  type: 'test'
+  ...
+# Subtest: ticket bank and pending results survive native SaveService serialization
+ok 136 - ticket bank and pending results survive native SaveService serialization
+  ---
+  duration_ms: 34.364954
+  type: 'test'
+  ...
+# Subtest: expired tickets cannot start; replay after a lost terminal response stops retrying on receipt
+ok 137 - expired tickets cannot start; replay after a lost terminal response stops retrying on receipt
+  ---
+  duration_ms: 1.828749
+  type: 'test'
+  ...
+# Subtest: provisional rankings clearly distinguish pending settlement from final rewards
+ok 138 - provisional rankings clearly distinguish pending settlement from final rewards
+  ---
+  duration_ms: 0.720082
+  type: 'test'
+  ...
+# Subtest: an expired paused battle does not block another still-valid reserved ticket
+ok 139 - an expired paused battle does not block another still-valid reserved ticket
+  ---
+  duration_ms: 2.334785
+  type: 'test'
+  ...
+# Subtest: online attempts and reserved tickets use the same 3-per-day quota; retries do not reserve twice
+ok 140 - online attempts and reserved tickets use the same 3-per-day quota; retries do not reserve twice
+  ---
+  duration_ms: 9.714245
+  type: 'test'
+  ...
+# Subtest: JST midnight resets only the new day; old tickets remain charged to their issue day
+ok 141 - JST midnight resets only the new day; old tickets remain charged to their issue day
+  ---
+  duration_ms: 3.761641
+  type: 'test'
+  ...
+# Subtest: reservation persistence failure changes neither quota nor tickets; same request succeeds on retry
+ok 142 - reservation persistence failure changes neither quota nor tickets; same request succeeds on retry
+  ---
+  duration_ms: 1.589325
+  type: 'test'
+  ...
+# Subtest: manual and automatic offline combat replay identically after JSON checkpoint reload
+ok 143 - manual and automatic offline combat replay identically after JSON checkpoint reload
+  ---
+  duration_ms: 25.186759
+  type: 'test'
+  ...
+# Subtest: result values and forged roster are ignored; only replayed commands determine accepted damage
+ok 144 - result values and forged roster are ignored; only replayed commands determine accepted damage
+  ---
+  duration_ms: 5.183339
+  type: 'test'
+  ...
+# Subtest: duplicate uploads including concurrent arrivals settle a ticket exactly once
+ok 145 - duplicate uploads including concurrent arrivals settle a ticket exactly once
+  ---
+  duration_ms: 6.236203
+  type: 'test'
+  ...
+# Subtest: another account, unknown tickets, incomplete battle and invalid commands cannot affect the ledger
+ok 146 - another account, unknown tickets, incomplete battle and invalid commands cannot affect the ledger
+  ---
+  duration_ms: 1.032203
+  type: 'test'
+  ...
+# Subtest: submit persistence failure rolls back HP, contribution, ticket receipt and rewards
+ok 147 - submit persistence failure rolls back HP, contribution, ticket receipt and rewards
+  ---
+  duration_ms: 11.688249
+  type: 'test'
+  ...
+# Subtest: late results rank on the original killed boss; next HP and original last-hit bonus remain intact
+ok 148 - late results rank on the original killed boss; next HP and original last-hit bonus remain intact
+  ---
+  duration_ms: 14.076493
+  type: 'test'
+  ...
+# Subtest: all outstanding tickets must settle or expire before rank rewards are fixed
+ok 149 - all outstanding tickets must settle or expire before rank rewards are fixed
+  ---
+  duration_ms: 9.909193
+  type: 'test'
+  ...
+# Subtest: expired uploads cannot change finalized ranks or get last-hit rewards; quota stays consumed
+ok 150 - expired uploads cannot change finalized ranks or get last-hit rewards; quota stays consumed
+  ---
+  duration_ms: 5.483022
+  type: 'test'
+  ...
+# Subtest: an offline finishing blow transitions boss once and waits for other outstanding tickets
+ok 151 - an offline finishing blow transitions boss once and waits for other outstanding tickets
+  ---
+  duration_ms: 6.409388
+  type: 'test'
+  ...
+# Subtest: server restart preserves tickets, seed, pending settlement and one-time result receipts
+ok 152 - server restart preserves tickets, seed, pending settlement and one-time result receipts
+  ---
+  duration_ms: 14.755405
+  type: 'test'
+  ...
+# Subtest: existing Build429 final rewards stay frozen during upgrade
+ok 153 - existing Build429 final rewards stay frozen during upgrade
+  ---
+  duration_ms: 5.432097
+  type: 'test'
+  ...
+# Subtest: upgrade waits for the new worker, preserves saved results and warms code without reserving another ticket
+ok 154 - upgrade waits for the new worker, preserves saved results and warms code without reserving another ticket
+  ---
+  duration_ms: 3.983388
+  type: 'test'
+  ...
+# Subtest: same-build reload keeps the existing cache and does not download all boot files again
+ok 155 - same-build reload keeps the existing cache and does not download all boot files again
+  ---
+  duration_ms: 2.206947
+  type: 'test'
+  ...
+# Subtest: offline worker registration failure does not delete native battle or result records or block game boot
+ok 156 - offline worker registration failure does not delete native battle or result records or block game boot
+  ---
+  duration_ms: 0.848503
+  type: 'test'
+  ...
+# Subtest: native raid exchange saves actual items and a unique circle only once
+ok 157 - native raid exchange saves actual items and a unique circle only once
+  ---
+  duration_ms: 61.930307
+  type: 'test'
+  ...
+# Subtest: native exchange rolls back material, reward, codex and receipt when saving fails, then retries once
+ok 158 - native exchange rolls back material, reward, codex and receipt when saving fails, then retries once
+  ---
+  duration_ms: 24.380213
+  type: 'test'
+  ...
+# Subtest: all three bosses equip the exchange-exclusive circle; matching children are Lv100 and unequipped
+ok 159 - all three bosses equip the exchange-exclusive circle; matching children are Lv100 and unequipped
+  ---
+  duration_ms: 5.323405
+  type: 'test'
+  ...
+# Subtest: revival happens once for the shared boss, then a second death settles rewards and advances once
+ok 160 - revival happens once for the shared boss, then a second death settles rewards and advances once
+  ---
+  duration_ms: 9.95467
+  type: 'test'
+  ...
+# Subtest: shield damage counts as contribution and the shield is shared between independent attempts
+ok 161 - shield damage counts as contribution and the shield is shared between independent attempts
+  ---
+  duration_ms: 5.295134
+  type: 'test'
+  ...
+# Subtest: thunder circle increases boss damage and chains only the boss, while the first five rounds remain quiet
+ok 162 - thunder circle increases boss damage and chains only the boss, while the first five rounds remain quiet
+  ---
+  duration_ms: 0.824627
+  type: 'test'
+  ...
+# Subtest: version-2 replay resumes identically, includes performance, and submits exactly once
+ok 163 - version-2 replay resumes identically, includes performance, and submits exactly once
+  ---
+  duration_ms: 21.997402
+  type: 'test'
+  ...
+# Subtest: previously issued version-1 tickets still run the frozen engine
+ok 164 - previously issued version-1 tickets still run the frozen engine
+  ---
+  duration_ms: 2.880911
+  type: 'test'
+  ...
+# Subtest: failed persistence rolls back shield, HP, performance and quota together
+ok 165 - failed persistence rolls back shield, HP, performance and quota together
+  ---
+  duration_ms: 2.346122
+  type: 'test'
+  ...
+# Subtest: late version-2 results never damage the next boss or change the last hit
+ok 166 - late version-2 results never damage the next boss or change the last hit
+  ---
+  duration_ms: 9.326594
+  type: 'test'
+  ...
+# Subtest: upgrading a saved active online attempt preserves its quota, damage and issued legacy ticket
+ok 167 - upgrading a saved active online attempt preserves its quota, damage and issued legacy ticket
+  ---
+  duration_ms: 12.097132
+  type: 'test'
+  ...
+# Subtest: summoning begins strictly below half HP, including a hit crossing the threshold
+ok 168 - summoning begins strictly below half HP, including a hit crossing the threshold
+  ---
+  duration_ms: 105.82564
+  type: 'test'
+  ...
+# Subtest: every eligible species and each distinct abyss / ten-god record can be drawn without touching source data
+ok 169 - every eligible species and each distinct abyss / ten-god record can be drawn without touching source data
+  ---
+  duration_ms: 34.612128
+  type: 'test'
+  ...
+# Subtest: all ten native skill banners name the stopped god and the actual projected skill
+ok 170 - all ten native skill banners name the stopped god and the actual projected skill
+  ---
+  duration_ms: 65.109234
+  type: 'test'
+  ...
+# Subtest: dial growth stays centered on the mother and within the enemy-side budget
+ok 171 - dial growth stays centered on the mother and within the enemy-side budget
+  ---
+  duration_ms: 0.244791
+  type: 'test'
+  ...
+# Subtest: hit area encloses actual visible body and name at every zoom
+ok 172 - hit area encloses actual visible body and name at every zoom
+  ---
+  duration_ms: 0.492497
+  type: 'test'
+  ...
+# Subtest: native challenge confirmation cancels safely, prevents stale/double starts and uses short rematch copy
+ok 173 - native challenge confirmation cancels safely, prevents stale/double starts and uses short rematch copy
+  ---
+  duration_ms: 12.490262
+  type: 'test'
+  ...
+# Subtest: altar only opens the ending; rematch victory returns to the mother with no repeated first reward
+ok 174 - altar only opens the ending; rematch victory returns to the mother with no repeated first reward
+  ---
+  duration_ms: 6.656403
+  type: 'test'
+  ...
+# Subtest: cache maps route every edited module to the new build while frozen raid runtime stays isolated
+ok 175 - cache maps route every edited module to the new build while frozen raid runtime stays isolated
+  ---
+  duration_ms: 2.290761
+  type: 'test'
+  ...
+# Subtest: four first conversation gifts survive real save reload and do not depend on group stages
+ok 176 - four first conversation gifts survive real save reload and do not depend on group stages
+  ---
+  duration_ms: 100.123555
+  type: 'test'
+  ...
+# Subtest: locked heroes, missing party, another battle and concurrent group attempts cannot grant or start
+ok 177 - locked heroes, missing party, another battle and concurrent group attempts cannot grant or start
+  ---
+  duration_ms: 18.584575
+  type: 'test'
+  ...
+# Subtest: each personal opponent uses its real skills and six equipment slots at fixed level; first campaign roster is untouched
+ok 178 - each personal opponent uses its real skills and six equipment slots at fixed level; first campaign roster is untouched
+  ---
+  duration_ms: 26.748974
+  type: 'test'
+  ...
+# Subtest: win, defeat and interrupted start restore supplies and vitals; only first win gives its own signature
+ok 179 - win, defeat and interrupted start restore supplies and vitals; only first win gives its own signature
+  ---
+  duration_ms: 12.092125
+  type: 'test'
+  ...
+# Subtest: full inventory and reserve send the unique weapon to the vault, without selling it
+ok 180 - full inventory and reserve send the unique weapon to the vault, without selling it
+  ---
+  duration_ms: 22.467036
+  type: 'test'
+  ...
+# Subtest: native menu displays the chosen hero; failed gift save rolls back and can retry exactly once
+ok 181 - native menu displays the chosen hero; failed gift save rolls back and can retry exactly once
+  ---
+  duration_ms: 7.672463
+  type: 'test'
+  ...
+# Subtest: native start passes the selected single hero, saved attempt ID and return destination; double click cannot start twice
+ok 182 - native start passes the selected single hero, saved attempt ID and return destination; double click cannot start twice
+  ---
+  duration_ms: 27.154723
+  type: 'test'
+  ...
+# Subtest: native terminal dispatch uses personal settlement, supports retry on save failure, then shows contribution before reward
+ok 183 - native terminal dispatch uses personal settlement, supports retry on save failure, then shows contribution before reward
+  ---
+  duration_ms: 9.482003
+  type: 'test'
+  ...
+# Subtest: group rematches remain available from all four heroes; throne only replays the recorded ending
+ok 184 - group rematches remain available from all four heroes; throne only replays the recorded ending
+  ---
+  duration_ms: 29.002179
+  type: 'test'
+  ...
+# Subtest: tap overlap selects the nearest hero, while walking contact preserves identity at all four positions
+ok 185 - tap overlap selects the nearest hero, while walking contact preserves identity at all four positions
+  ---
+  duration_ms: 0.972145
+  type: 'test'
+  ...
+# Subtest: 434 boot maps updated modules and retains 433 mother CSS and frozen offline raid runtime
+ok 186 - 434 boot maps updated modules and retains 433 mother CSS and frozen offline raid runtime
+  ---
+  duration_ms: 2.085287
+  type: 'test'
+  ...
+# Subtest: native checkpoint resumes the same single opponent and attempt after a real save reload
+ok 187 - native checkpoint resumes the same single opponent and attempt after a real save reload
+  ---
+  duration_ms: 21.287966
+  type: 'test'
+  ...
+# Subtest: stale personal checkpoints cannot resume or pay rewards, and retreat restores the original supplies
+ok 188 - stale personal checkpoints cannot resume or pay rewards, and retreat restores the original supplies
+  ---
+  duration_ms: 8.424843
+  type: 'test'
+  ...
+# Subtest: mother with an unread ending stays visible and can rematch after a real reload
+ok 189 - mother with an unread ending stays visible and can rematch after a real reload
+  ---
+  duration_ms: 90.713078
+  type: 'test'
+  ...
+# Subtest: personal levels advance independently from 1500, survive saving, and losses do not advance
+ok 190 - personal levels advance independently from 1500, survive saving, and losses do not advance
+  ---
+  duration_ms: 39.598958
+  type: 'test'
+  ...
+# Subtest: 434 reward flags and an in-flight Lv1000 fight migrate without duplicated gifts or inferred wins
+ok 191 - 434 reward flags and an in-flight Lv1000 fight migrate without duplicated gifts or inferred wins
+  ---
+  duration_ms: 7.470955
+  type: 'test'
+  ...
+# Subtest: failed personal result save rolls back the stage, reward and receipt; retry advances once
+ok 192 - failed personal result save rolls back the stage, reward and receipt; retry advances once
+  ---
+  duration_ms: 8.632429
+  type: 'test'
+  ...
+# Subtest: native personal menu starts the selected hero at the saved challenge level
+ok 193 - native personal menu starts the selected hero at the saved challenge level
+  ---
+  duration_ms: 9.108371
+  type: 'test'
+  ...
+# Subtest: personal maximum matches the existing 10000 battle limit
+ok 194 - personal maximum matches the existing 10000 battle limit
+  ---
+  duration_ms: 14.075461
+  type: 'test'
+  ...
+# Subtest: a completed original group fight unlocks 1500; default retries select the next won stage
+ok 195 - a completed original group fight unlocks 1500; default retries select the next won stage
+  ---
+  duration_ms: 17.296465
+  type: 'test'
+  ...
+# Subtest: reserved daily slots show 3,2,1,0 while server remaining stays zero; submissions cannot inflate quota
+ok 196 - reserved daily slots show 3,2,1,0 while server remaining stays zero; submissions cannot inflate quota
+  ---
+  duration_ms: 17.603308
+  type: 'test'
+  ...
+# Subtest: JST rollover lists previous-day tickets separately and never trusts yesterday cached quota
+ok 197 - JST rollover lists previous-day tickets separately and never trusts yesterday cached quota
+  ---
+  duration_ms: 0.309136
+  type: 'test'
+  ...
+# Subtest: 435 boot includes all generated art and routes updates without redirecting frozen replay code
+ok 198 - 435 boot includes all generated art and routes updates without redirecting frozen replay code
+  ---
+  duration_ms: 1.00325
+  type: 'test'
+  ...
+# Subtest: role filters use real effect fields, not names, AI tags or conditional bonuses
+ok 199 - role filters use real effect fields, not names, AI tags or conditional bonuses
+  ---
+  duration_ms: 14.578484
+  type: 'test'
+  ...
+# Subtest: viewing every role, detail and filter leaves all save fields unchanged
+ok 200 - viewing every role, detail and filter leaves all save fields unchanged
+  ---
+  duration_ms: 17.456481
+  type: 'test'
+  ...
+# Subtest: learned and equipped skills are distinguished, with locked skills and exact unlock level
+ok 201 - learned and equipped skills are distinguished, with locked skills and exact unlock level
+  ---
+  duration_ms: 0.710138
+  type: 'test'
+  ...
+# Subtest: real equipped weapon skills and endgame identity participate without granting unowned skills
+ok 202 - real equipped weapon skills and endgame identity participate without granting unowned skills
+  ---
+  duration_ms: 2.50062
+  type: 'test'
+  ...
+# Subtest: search is stable, escaped, and has an empty result without inventing a candidate
+ok 203 - search is stable, escaped, and has an empty result without inventing a candidate
+  ---
+  duration_ms: 2.8662
+  type: 'test'
+  ...
+# Subtest: mother description is based on the scaled projection, not the original 920% skill
+ok 204 - mother description is based on the scaled projection, not the original 920% skill
+  ---
+  duration_ms: 0.52192
+  type: 'test'
+  ...
+# Subtest: reading hold is at least 3 wall-clock seconds for every speed and reattaches after arena replacement
+ok 205 - reading hold is at least 3 wall-clock seconds for every speed and reattaches after arena replacement
+  ---
+  duration_ms: 0.952966
+  type: 'test'
+  ...
+# Subtest: 3000 owned characters can be filtered locally without changing save or skill data
+ok 206 - 3000 owned characters can be filtered locally without changing save or skill data
+  ---
+  duration_ms: 231.261274
+  type: 'test'
+  ...
+# Subtest: 436 cache and import aliases include the new UI and art without touching frozen replay modules
+ok 207 - 436 cache and import aliases include the new UI and art without touching frozen replay modules
+  ---
+  duration_ms: 2.427437
+  type: 'test'
+  ...
+# Subtest: 437 all three bosses allow living parties through round 10 and stop at 99
+ok 208 - 437 all three bosses allow living parties through round 10 and stop at 99
+  ---
+  duration_ms: 112.030847
+  type: 'test'
+  ...
+# Subtest: old v1 and v2 ticket JSON replays remain at their original 10 rounds
+ok 209 - old v1 and v2 ticket JSON replays remain at their original 10 rounds
+  ---
+  duration_ms: 9.925788
+  type: 'test'
+  ...
+# Subtest: 99-round manual play with speed changes exceeds old command cap and resumes identically within transport budget
+ok 210 - 99-round manual play with speed changes exceeds old command cap and resumes identically within transport budget
+  ---
+  duration_ms: 209.784786
+  type: 'test'
+  ...
+# Subtest: online server stops only at 99, publishes the actual cap, and charges once
+ok 211 - online server stops only at 99, publishes the actual cap, and charges once
+  ---
+  duration_ms: 87.979744
+  type: 'test'
+  ...
+# Subtest: v3 offline submission is verified, persisted once, and duplicate submission cannot double damage
+ok 212 - v3 offline submission is verified, persisted once, and duplicate submission cannot double damage
+  ---
+  duration_ms: 46.052541
+  type: 'test'
+  ...
+# Subtest: restarting with active online attempt extends its cap without rewriting issued v2 ticket or charging quota
+ok 213 - restarting with active online attempt extends its cap without rewriting issued v2 ticket or charging quota
+  ---
+  duration_ms: 5.183379
+  type: 'test'
+  ...
+# Subtest: boss one-time revival on round 98 keeps the living party fighting; round 99 still ends
+ok 214 - boss one-time revival on round 98 keeps the living party fighting; round 99 still ends
+  ---
+  duration_ms: 1.847166
+  type: 'test'
+  ...
+# Subtest: defeat and retreat still finish before the limit
+ok 215 - defeat and retreat still finish before the limit
+  ---
+  duration_ms: 0.93503
+  type: 'test'
+  ...
+# Subtest: compact contribution keeps exact recorded numbers and original MVP weighting without modifying input
+ok 216 - compact contribution keeps exact recorded numbers and original MVP weighting without modifying input
+  ---
+  duration_ms: 6.45794
+  type: 'test'
+  ...
+# Subtest: combined raid result shows legacy result round count, actual sync status, and no premature rewards
+ok 217 - combined raid result shows legacy result round count, actual sync status, and no premature rewards
+  ---
+  duration_ms: 0.4409
+  type: 'test'
+  ...
+# Subtest: 437 cache includes added art and replay dispatcher; frozen legacy engine is not aliased
+ok 218 - 437 cache includes added art and replay dispatcher; frozen legacy engine is not aliased
+  ---
+  duration_ms: 0.774483
+  type: 'test'
+  ...
+# Subtest: one combined result returns directly to the lobby for online and offline attempts
+ok 219 - one combined result returns directly to the lobby for online and offline attempts
+  ---
+  duration_ms: 112.143473
+  type: 'test'
+  ...
+1..219
+# tests 219
+# suites 0
+# pass 219
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2702.125982

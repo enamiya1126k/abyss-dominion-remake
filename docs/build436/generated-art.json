@@ -1,0 +1,8 @@
+{
+  "build": 436,
+  "mode": "built-in image_gen",
+  "prompt": "Use case: stylized-concept. Asset type: production raster artwork for a luxurious fantasy RPG summon button, wide 3:1 aspect ratio. Create one single front-facing rectangular enchanted metal button plate filling the image, sharp polished antique gold bevels, richly carved small gothic filigree at four corners, a small luminous violet gemstone on the top edge, deep black plum enamel interior, warm amber light along the rim, restrained scattered golden sparks at the outside corners. The entire middle 75 percent must remain dark, quiet, empty, flat enough to overlay very readable large Japanese type in live HTML; no letters, no numbers, no logos, no icons in the center. Premium collectible fantasy game art, tactile embossed gold, meticulous details, exciting warm inner glow, sophisticated black/gold/purple palette. No characters, no extra plates, no mockup screen, no text, no watermark. Full button fully visible with minimal edge margins, straight-on view. High quality polished game UI asset.",
+  "source": "generated_images/exec-185bcd8b-d0b8-4a97-b87c-312f60c1e4fd.png",
+  "asset": "assets/ui/build436/summon-button.webp",
+  "conversion": "sharp WebP quality 92; full original dimensions 2172x724; no crop or compositing"
+}

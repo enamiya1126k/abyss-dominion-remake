@@ -45,6 +45,6 @@ test('JST rollover lists previous-day tickets separately and never trusts yester
 });
 test('435 boot includes all generated art and routes updates without redirecting frozen replay code',()=>{
  const html=fs.readFileSync('index.html','utf8'),map=JSON.parse(html.match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]).imports,assets=JSON.parse(fs.readFileSync('world-raid-offline435-assets.json'));
- for(const p of ['src/core/RoyalMemory379.js','src/core/RoyalHero434.js','src/primordial/State422.js','src/worldRaid/WorldRaidView432.js','src/worldRaid/WorldRaidQuota435.js']){assert.ok(map['./'+p].endsWith('3.1.114-build435'));assert.ok(assets.includes('./'+p));}
+ for(const p of ['src/core/RoyalMemory379.js','src/core/RoyalHero434.js','src/primordial/State422.js','src/worldRaid/WorldRaidView432.js','src/worldRaid/WorldRaidQuota435.js']){assert.ok(map['./'+p].endsWith(p==='src/worldRaid/WorldRaidView432.js'?'3.1.116-build437':'3.1.114-build435'));assert.ok(assets.includes('./'+p));}
  for(const n of ['ranking-frame','summon-banner','gift-seal'])assert.ok(assets.includes('./assets/ui/build435/'+n+'.webp'));assert.ok(!Object.keys(map).some(k=>k.includes('/runtime430/')));assert.match(html,/build435-polish.css/);
 });

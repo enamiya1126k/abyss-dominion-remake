@@ -1,0 +1,99 @@
+/* Additive controls: the existing formation grid and its cards are untouched. */
+#app .role-guide-entry436{display:flex;justify-content:flex-end;margin:6px 0}
+#app .role-guide-entry436 button{min-height:44px;padding:8px 14px;font-size:13px;color:#ffe4a5}
+#app .role-guide-modal436>.game-modal-card{width:min(620px,94vw)!important;max-height:calc(100dvh - 24px)!important;display:flex!important;flex-direction:column!important;overflow:hidden!important}
+#app .role-guide-modal436 .game-modal-body{flex:1 1 auto!important;min-height:0!important;overflow:auto!important;overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch}
+#app .role-guide-modal436 h2{font-size:clamp(18px,5vw,28px)!important;padding-right:35px}
+#app .role-guide-modal436 .modal-primary{flex-shrink:0!important;min-height:46px!important;margin-top:8px!important}
+#app .role-guide436,#app .role-detail436{font-size:14px;line-height:1.65;color:#eee4d0}
+#app .role-guide436>p{margin:0 0 10px}
+#app .role-guide436 label{display:block;margin:8px 0;font-size:12px;color:#d4c5ac}
+#app .role-guide436 :is(select,input[type=search]){display:block;box-sizing:border-box;width:100%;max-width:100%;height:44px;min-height:44px;padding:8px;color:#fff3d4;border:1px solid #927445;background:#121018;font-size:16px;border-radius:4px}
+#app .role-guide436 .role-check436{display:flex;align-items:center;gap:9px;min-height:40px}
+#app .role-check436 input{width:20px;height:20px;accent-color:#d5b465}
+#app [data-role-hint436]{padding:10px;background:#20192a;border-left:2px solid #c4a160;font-size:12px}
+#app [data-role-count436]{display:block;color:#bcb4a9;font-size:11px;margin-bottom:10px}
+#app [data-role-results436]{display:grid;gap:12px}
+#app .role-result436{border:1px solid #756043;border-radius:5px;padding:12px;background:#101015;min-width:0}
+#app .role-result436>header,#app .role-detail436>header{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+#app .role-result436 header>div{min-width:0}
+#app .role-result436 strong{font-size:16px;overflow-wrap:anywhere;color:#f8e3b4}
+#app .role-result436 :is(b,small){display:block}
+#app .role-result436 small{font-size:11px;color:#c3bbad;line-height:1.6}
+#app .role-result436 p{font-size:13px;margin:8px 0;overflow-wrap:anywhere}
+#app .role-result436>button,#app [data-role-open-character436]{width:100%;min-height:44px!important;margin-top:12px;font-size:13px!important}
+#app .role-portrait436{display:block!important;flex:0 0 60px!important;width:60px!important;height:66px!important;max-width:60px!important;overflow:hidden!important;position:relative!important}
+#app .role-portrait436 :is(img,svg){width:100%!important;height:100%!important;object-fit:contain!important}
+#app .role-ready436{display:inline-block!important;width:fit-content;margin:4px 0 8px;padding:2px 6px;border:1px solid #598c81;color:#bdebe0;font-size:11px;border-radius:3px}
+#app .role-ready436.locked{border-color:#927342;color:#e0c58e}
+#app [data-role-pages436]{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:12px}
+#app [data-role-pages436] button{min-height:44px;min-width:70px}
+#app .role-empty436{border:1px solid #756043;padding:16px;font-size:14px}
+#app .role-stats436{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:10px 0}
+#app .role-stats436 span{background:#0e0c13;border:1px solid #685439;padding:6px;font-size:11px}
+#app .role-stats436 b{display:block;font-size:15px;color:#fff0c1}
+#app .role-detail436 section{border-top:1px solid #927445;padding:14px 0}
+#app .role-detail436 section h3{font-size:17px;margin:0;color:#ffe0a0}
+#app .role-detail436 section p{font-size:13px;margin:8px 0}
+#app .role-detail436 ul{padding-left:20px;font-size:13px;overflow-wrap:anywhere}
+#app .role-detail436 aside{padding:10px;background:#231b2a;border-left:2px solid #c4a160}
+#app .role-detail436 aside b{font-size:13px;color:#f8d892}
+#app .role-detail436 .muted{font-size:12px;color:#c3b8a8}
+
+/* Compact chapter II pair introduction with live, readable names. */
+#app .chapter397-gacha-modal .chapter406-summon{gap:8px!important}
+#app .chapter397-gacha-modal .chapter406-summon-banner{display:grid!important;grid-template-columns:minmax(0,1fr)!important;min-height:0!important;gap:8px!important;padding:10px!important;background-position:center!important}
+#app .chapter397-gacha-modal .chapter406-summon-banner>header{padding:6px 9px;background:#090911dd;border-left:2px solid #c9a25c}
+#app .chapter397-gacha-modal .chapter406-summon-banner h3{font-size:22px!important;margin:0!important;line-height:1.4!important}
+#app .chapter397-gacha-modal .chapter406-summon-banner header p{font-size:11px!important;margin:3px 0 0!important}
+#app .chapter397-gacha-modal .chapter406-summon-banner header small{font-size:10px!important;padding:0!important;border:0!important}
+#app .chapter397-gacha-modal .chapter406-summon-banner>header{display:grid;gap:1px;padding:4px 8px!important}
+#app .chapter397-gacha-modal .chapter406-summon-banner>header>small{line-height:1.3!important;min-height:0!important;margin:0!important;width:auto!important}
+#app .chapter397-gacha-modal .chapter436-pair-help{font-size:11px;line-height:1.5;color:#c6b998;border-top:1px solid #79613e}
+#app .chapter397-gacha-modal .chapter436-pair-help>summary{min-height:36px;padding:8px 0;box-sizing:border-box}
+#app .chapter397-gacha-modal .chapter436-pair-help p{margin:4px 0 8px;font-size:11px}
+#app .chapter397-gacha-modal .chapter406-featured-pairs{position:relative;z-index:1;width:100%!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+#app .chapter397-gacha-modal .chapter406-featured-pair{background:#070711cc;padding:5px 3px!important;border:1px solid #85663c88!important}
+#app .chapter397-gacha-modal .chapter406-pair-members{gap:3px!important}
+#app .chapter397-gacha-modal .chapter406-pair-members .chapter397-banner-sprite{height:54px!important}
+#app .chapter397-gacha-modal .chapter406-pair-members figcaption{font-size:11px!important;line-height:1.45!important;overflow-wrap:normal!important;word-break:normal!important;background:#090911b8}
+#app .chapter397-gacha-modal .chapter406-pair-members figcaption small{display:block!important;font-size:9px!important;padding:0!important;border:0!important;white-space:nowrap!important;color:#cbb89c}
+#app .chapter397-gacha-modal .chapter406-pair-members figcaption b{display:block;font-size:11px!important;font-weight:700;white-space:nowrap!important;letter-spacing:0!important}
+#app .chapter397-gacha-modal .chapter406-featured-pair>small{font-size:9px!important;line-height:1.4!important;margin-top:4px!important}
+#app .chapter397-gacha-modal .chapter406-pair-note{padding:6px!important;background:#080811e8;font-size:11px!important;line-height:1.5!important}
+#app .chapter397-gacha-modal .chapter406-pair-note>small{font-size:10px!important;margin-top:2px!important;line-height:1.5!important}
+#app .chapter397-gacha-modal .chapter406-pull-section>.spread{gap:4px!important;margin-bottom:7px}
+#app .chapter397-gacha-modal .chapter406-pull-section h3{font-size:16px!important;margin:0}
+#app .chapter397-gacha-modal [data-chapter397-rates]{font-size:11px!important;min-height:36px!important;padding:6px!important}
+#app .chapter397-gacha-modal .gacha-v2-wallet{padding:5px 8px!important}
+#app .chapter397-gacha-modal .gacha-v2-wallet>span{font-size:12px!important}
+#app .chapter397-gacha-modal .gacha-v2-wallet>b{font-size:20px!important}
+
+/* Generated decorative plate is a separate layer, unaffected by old button skins. */
+#app .game-modal :is(.summon-pull436,[data-chapter397-pull]){position:relative!important;isolation:isolate;overflow:hidden!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:2px!important;min-height:88px!important;padding:12px 6px!important;border:1px solid #d3a453!important;border-image:none!important;background:#16101e!important;border-radius:5px!important;color:#fff0c5!important;box-shadow:0 2px 6px #000a!important}
+#app .game-modal :is(.summon-pull436,[data-chapter397-pull])::before,#app .game-modal :is(.summon-pull436,[data-chapter397-pull])::after{display:none!important}
+#app .game-modal .summon-button-art436{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;object-fit:fill!important;z-index:-1!important;pointer-events:none!important;opacity:.8}
+#app .game-modal :is(.summon-pull436,[data-chapter397-pull])>b{display:flex!important;align-items:baseline;justify-content:center;white-space:nowrap!important;gap:3px;font-family:'Yu Mincho','Hiragino Mincho ProN',serif!important;font-size:clamp(15px,3.9vw,23px)!important;font-weight:900!important;line-height:1.12!important;color:#fff0bd!important;text-shadow:0 2px 1px #321707,0 0 8px #bc692855!important;letter-spacing:0!important}
+#app .game-modal :is(.summon-pull436,[data-chapter397-pull])>b>em{font:900 clamp(32px,8.5vw,48px)/1 Georgia,serif!important;font-style:normal!important;color:#ffdd87!important;text-shadow:0 2px #5c3008,0 0 12px #f7b32766!important}
+#app .game-modal :is(.summon-pull436,[data-chapter397-pull])>:is(span,small){font:700 11px/1.5 sans-serif!important;color:#fff2d1!important;white-space:nowrap;letter-spacing:0!important}
+#app .gacha-count-modal .summon-pull436>b{font-size:14px!important}
+#app .gacha-count-modal .summon-pull436>b>em{font-size:clamp(24px,6.5vw,32px)!important}
+#app .game-modal :is([data-chapter397-pull='10'],[data-gacha-count='10'],[data-weekday-count='10'],[data-permanent-signature-count='10']){border-color:#ffe9a9!important;box-shadow:0 0 13px #e8ac4050,inset 0 0 12px #ffc96625!important}
+#app .game-modal :is(.summon-pull436,[data-chapter397-pull]):not(:disabled):active{transform:translateY(1px);filter:brightness(1.18)}
+#app .game-modal :is(.summon-pull436,[data-chapter397-pull]):focus-visible{outline:2px solid #fff0aa;outline-offset:3px}
+#app .game-modal :is(.summon-pull436,[data-chapter397-pull]):disabled{opacity:.42!important;filter:grayscale(.5)!important}
+
+/* Mother's values remain exact, in a smaller type size. */
+#app .battle-screen.mother-battle422 [data-mother-unit425] .enemy-info .bar-label{font-size:clamp(7px,1.85vw,9px)!important;line-height:1.15!important;letter-spacing:0!important;white-space:nowrap!important}
+#app .battle-screen.mother-battle422 [data-mother-unit425] .enemy-card-name{font-size:clamp(9px,2.3vw,12px)!important;line-height:1.25!important}
+#app .battle-screen.mother-battle422 [data-mother-unit425] .enemy-card-meta{font-size:clamp(6px,1.65vw,8px)!important;letter-spacing:0!important}
+
+/* Only descriptions carrying actual mother-action data use the reading hold. */
+#app .battle-screen .battle-cinematic-banner.readable-skill436{top:40%!important;left:3%!important;right:3%!important;width:94%!important;min-height:0!important;height:auto!important;box-sizing:border-box!important;padding:13px 12px!important;display:grid!important;grid-template-columns:40px minmax(0,1fr)!important;gap:8px!important;transform:translateY(-50%)!important;animation:none!important;opacity:1!important;background:linear-gradient(105deg,#160d24f5,#291533f8,#130b1df7)!important;border-color:#d6b56d!important;z-index:80!important}
+#app .battle-screen .readable-skill436 .battle-banner-source{width:40px!important;height:54px!important;min-width:0!important}
+#app .battle-screen .readable-skill436 .battle-banner-copy{display:flex!important;flex-direction:column!important;gap:4px!important;min-width:0!important;text-align:left!important;align-items:flex-start!important}
+#app .battle-screen .readable-skill436 .battle-banner-copy>strong{font-size:clamp(16px,4.4vw,26px)!important;line-height:1.35!important;white-space:normal!important;overflow-wrap:anywhere!important;letter-spacing:0!important}
+#app .battle-screen .readable-skill436 .battle-banner-copy>small{font:700 10px/1.4 sans-serif!important;white-space:normal!important;letter-spacing:0!important;color:#e7d4b5!important}
+#app .battle-screen .readable-skill436 .skill-description436{display:block!important;font:500 clamp(11px,2.8vw,14px)/1.7 sans-serif!important;color:#fff4dc!important;letter-spacing:0!important;white-space:normal!important;overflow:visible!important;margin:5px 0 0!important;max-width:100%!important;text-shadow:none!important}
+#app .battle-screen .battle-cinematic-banner.readable-skill436.leaving{transition:opacity .22s!important;opacity:0!important}
+@media(min-width:600px){#app .chapter397-gacha-modal .chapter406-pair-members .chapter397-banner-sprite{height:84px!important}#app .chapter397-gacha-modal .chapter406-pair-members figcaption b{font-size:13px!important}}

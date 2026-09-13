@@ -1,0 +1,106 @@
+{
+  "checks": [
+    "chapter II full names and live summon labels fit",
+    "generated button asset loaded",
+    "unchanged 100 and 1000 affordability",
+    "formation opens matching owned heal suppression candidates",
+    "candidate details show actual effects and stat guidance",
+    "filtering and reading preserve the entire save state",
+    "return restores unchanged formation",
+    "exploration guide remains read only",
+    "mother exact HP and shield values fit smaller type",
+    "real cue lasts at least 3 seconds at x4 and survives speed rerender",
+    "summon readable at 375x540",
+    "summon readable at 430x760",
+    "summon readable at 1280x800"
+  ],
+  "errors": [],
+  "missing": [],
+  "metrics": {
+    "gacha": {
+      "names": [
+        {
+          "text": "ネメシア",
+          "w": 65,
+          "sw": 65,
+          "h": 16
+        },
+        {
+          "text": "エヴェリア",
+          "w": 65,
+          "sw": 65,
+          "h": 16
+        },
+        {
+          "text": "セフィラ",
+          "w": 65,
+          "sw": 65,
+          "h": 16
+        },
+        {
+          "text": "アストレル",
+          "w": 65,
+          "sw": 65,
+          "h": 16
+        }
+      ],
+      "buttons": [
+        {
+          "text": "1回召喚魔晶石 100個",
+          "rect": {
+            "x": 32,
+            "y": 516.265625,
+            "width": 159.5,
+            "height": 88,
+            "top": 516.265625,
+            "right": 191.5,
+            "bottom": 604.265625,
+            "left": 32
+          },
+          "w": 150,
+          "sw": 150
+        },
+        {
+          "text": "10回召喚魔晶石 1000個",
+          "rect": {
+            "x": 201.5,
+            "y": 516.265625,
+            "width": 159.5,
+            "height": 88,
+            "top": 516.265625,
+            "right": 361,
+            "bottom": 604.265625,
+            "left": 201.5
+          },
+          "w": 150,
+          "sw": 150
+        }
+      ],
+      "body": {
+        "x": 32,
+        "y": 106,
+        "width": 329,
+        "height": 502,
+        "top": 106,
+        "right": 361,
+        "bottom": 608,
+        "left": 32
+      }
+    },
+    "mother": [
+      {
+        "text": "HP 1,600,000/1,600,000",
+        "font": "7.2705px",
+        "w": 151,
+        "sw": 151
+      },
+      {
+        "text": "HP障壁 96,000/96,000",
+        "font": "7.2705px",
+        "w": 149,
+        "sw": 149
+      }
+    ],
+    "cueMs": 3563.39999999851
+  }
+}

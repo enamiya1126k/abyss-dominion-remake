@@ -1,0 +1,104 @@
+/* Generated material art only: no grid, spacing, size or type metrics changed
+   on the formation / equipment / skills screens. */
+:root{--frame437:url('../../assets/ui/build437/frame.webp');--plate437:url('../../assets/ui/build437/button.webp');--sanctum437:url('../../assets/ui/build437/sanctum.webp')}
+#app :is(.formation-screen,.equipment-screen-v2,.skill-screen){background-image:linear-gradient(#0b0814e8,#08070def),var(--sanctum437)!important;background-size:cover!important;background-attachment:fixed!important}
+#app :is(.formation-screen,.equipment-screen-v2,.skill-screen) :is(.v2-screen-hud,.v2-bottom-nav,.panel){border-image:var(--frame437) 128 fill / 14px stretch!important;box-shadow:0 4px 18px #0008!important}
+#app :is(.formation-screen,.equipment-screen-v2,.skill-screen) :is(.v2-screen-hud,.v2-bottom-nav){border-image-width:10px!important}
+#app .formation-screen :is(.formation-summary,.twin-card385,.formation-member,.formation-loadout),
+#app .equipment-screen-v2 :is(.equipment-paper-doll,.equipment-card,.equipped-slot-card),
+#app .skill-screen .skill-slot-card{border-image:var(--frame437) 128 fill / 9px stretch!important;box-shadow:0 3px 13px #0007!important}
+#app .formation-screen .twin-card385{border-image-width:13px!important;color:#e7d7bf!important}
+#app .formation-screen .twin-card385>b{color:#ffe4a4!important;text-shadow:0 1px 3px #000,0 0 12px #bd813540!important}
+#app .formation-screen .twin-card385.active>span{color:#a9e6d7!important}
+#app :is(.formation-screen,.equipment-screen-v2,.skill-screen) :is(.party-mode-tabs button,.formation-actions button,.role-guide-entry436 button,.skill-owner-actions button,.equipment-command,.auto-equip-row button){border-image:var(--plate437) 110 235 fill / 9px 13px stretch!important;background-color:#160e23!important;color:#f8eacb!important;text-shadow:0 1px 2px #000!important;box-shadow:0 3px 8px #0008!important}
+#app :is(.formation-screen,.equipment-screen-v2,.skill-screen) :is(.party-mode-tabs button.active,.skill-monster-tabs button.active,.equipment-target-list button.active,.v2-bottom-nav button.active){border-image:var(--plate437) 110 235 fill / 8px 11px stretch!important;box-shadow:inset 0 0 20px #a960db44,0 0 10px #d5a95366!important}
+#app .formation-screen .formation-actions button.danger{border-image:var(--frame437) 128 / 7px stretch!important;background:linear-gradient(#66263c,#351323)!important;color:#ffe2dc!important}
+#app .formation-screen :is(.formation-member-drag,.formation-circle-card),
+#app .equipment-screen-v2 :is(.equipment-paper-doll-portrait,.equipment-target-list button),
+#app .skill-screen :is(.skill-monster-tabs button,.skill-owner-icon){background-image:radial-gradient(ellipse at 50% 70%,#75458b44,transparent 70%),var(--sanctum437)!important;background-size:cover!important;background-position:right center!important}
+#app :is(.formation-screen,.equipment-screen-v2,.skill-screen) :is(.formation-power,.selected-equipment-power){background:linear-gradient(100deg,#17101e,#392b1d,#17101e)!important;border-color:#ac8655!important;box-shadow:inset 0 1px #ffe3a866,inset 0 -1px #d39d4633!important}
+#app :is(.formation-screen,.equipment-screen-v2,.skill-screen) :is(.formation-power strong,.selected-equipment-power strong){color:#ffe7a6!important;text-shadow:0 0 14px #d7a24760!important}
+#app .formation-screen .formation-gear-slot{background:linear-gradient(130deg,#221a2a,#0e0b15)!important;border-color:#6f5a70!important;box-shadow:inset 0 1px #c3a68033!important}
+#app .equipment-screen-v2 .selected-equipment-stats>span{background:linear-gradient(120deg,#1d1626,#100d17)!important;border-color:#63506d!important;box-shadow:inset 0 1px #dbc29522!important}
+#app .equipment-screen-v2 .selected-equipment-stats small{color:#c0aec7!important}
+#app .skill-screen .skill-mastery-meter{background:#0d0913!important;border-color:#a179aa!important;box-shadow:inset 0 1px 5px #000!important}
+#app .skill-screen .skill-mastery-meter>i{background:linear-gradient(#e2acf9,#8155a1)!important;box-shadow:0 0 9px #b47ada66!important}
+#app .skill-screen .skill-slot-details>i{background:linear-gradient(#302138,#17111f)!important;border-color:#866a86!important;color:#eee0f3!important}
+#app .skill-screen .skill-slot-heading>strong{color:#e5baff!important;text-shadow:0 0 10px #bf7cda44!important}
+#app .equipment-screen-v2 .equipment-magic-circle-button,
+#app .skill-screen .abyss-tree-gateway{border-image:var(--frame437) 128 / 13px stretch!important;background-image:linear-gradient(90deg,#100b1cee,#120c1ba8,#100a1755),var(--sanctum437)!important;background-size:cover!important;background-position:center,right center!important;box-shadow:inset 0 0 20px #060309,0 4px 18px #0008!important}
+#app :is(.formation-screen,.equipment-screen-v2,.skill-screen) :is(.equipment-magic-circle-button>img,.abyss-tree-gateway .home-pixel-icon,.formation-circle-art img){filter:drop-shadow(0 0 8px #b885e877)!important}
+#app :is(.formation-screen,.equipment-screen-v2,.skill-screen) button:focus-visible{outline:2px solid #ffe3a0!important;outline-offset:2px!important}
+@media(hover:hover){#app :is(.formation-screen,.equipment-screen-v2,.skill-screen) button:not(:disabled):hover{filter:brightness(1.13)}}
+
+/* Exact raid vitals: battle layout stays in the existing viewport. */
+#app .world-raid432.is-battle432 .battle-screen .side-unit-card .bar-label{font:700 7px/1.15 Arial,sans-serif!important;letter-spacing:0!important;text-shadow:0 1px 1px #0009!important;white-space:nowrap!important;padding:0!important;display:flex!important;align-items:center!important;justify-content:center!important}
+#app .world-raid432.is-battle432 .raid-main-boss .side-unit-card .bar-label{font-size:8px!important}
+
+/* A compact report shared by chapter battles and the combined raid result. */
+#app .contribution437{color:#eee3d1;font:12px/1.45 Arial,sans-serif}
+#app .contribution437>header{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 9px}
+#app .contribution437 h3{margin:0;font-size:15px;color:#f4d99c}
+#app .contribution437>header>span{color:#b7a9bd;font-size:10px}
+#app .contribution-totals437{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-bottom:9px}
+#app .contribution-totals437>span{display:flex;flex-direction:column;padding:8px 10px;background:linear-gradient(120deg,#282032,#141019);border:1px solid #635064;font-size:10px;color:#c5b6ca}
+#app .contribution-totals437 b{font-size:18px;color:#ffdfa0;font-variant-numeric:tabular-nums}
+#app .contribution-rows437{display:grid;gap:6px}
+#app .contribution-row437{display:grid;grid-template-columns:40px minmax(0,1fr) auto;column-gap:7px;align-items:center;padding:7px 9px 6px;min-width:0;background:linear-gradient(110deg,#241c2d,#110e17);border:1px solid #65536d;border-radius:4px}
+#app .contribution-row437.mvp437{border-color:#caa463;background:linear-gradient(110deg,#393023,#18121d);box-shadow:inset 0 0 12px #d5a34a15}
+#app .contribution-face437{width:40px;height:43px;display:grid;place-items:center;overflow:hidden}
+#app .contribution-face437 .monster-visual{width:40px!important;height:40px!important}
+#app .contribution-unit437{min-width:0}
+#app .contribution-unit437>strong{display:block;font-size:12px;overflow-wrap:anywhere;line-height:1.4}
+#app .contribution-unit437>small{display:block;font-size:9px;color:#b9aebd}
+#app .contribution-unit437 small b{color:#ffdf92;margin-left:4px;font-size:8px;white-space:nowrap}
+#app .contribution-numbers437{font-size:9px;text-align:right;white-space:nowrap}
+#app .contribution-numbers437>span{display:block;color:#bdadbf}
+#app .contribution-numbers437 b{display:inline-block;min-width:62px;font-size:12px;color:#fff0ca;font-variant-numeric:tabular-nums}
+#app .contribution-numbers437>span+span b{color:#afe2ce}
+#app .contribution-meter437{grid-column:2/-1;height:3px;background:#0c0811;margin-top:4px;border-radius:2px;overflow:hidden}
+#app .contribution-meter437>i{display:block;height:100%;background:linear-gradient(90deg,#866248,#f6d28d)}
+#app .contribution-detail437{margin:9px 0 0;border-top:1px solid #66523b}
+#app .contribution-detail437>summary{cursor:pointer;padding:10px 0;font-size:11px;color:#dcc49c}
+#app .contribution-table437{overflow-x:auto}
+#app .contribution-table437 table{width:100%;border-collapse:collapse;font-size:10px;font-variant-numeric:tabular-nums}
+#app .contribution-table437 :is(th,td){padding:6px 4px;border-bottom:1px solid #4b3b52;text-align:right}
+#app .contribution-table437 th:first-child{text-align:left;overflow-wrap:anywhere;max-width:115px}
+#app .contribution-detail437>p{font-size:10px;color:#bcb0bd}
+#app .raid-result437{font:12px/1.45 Arial,sans-serif}
+#app .raid-result-hero437{text-align:center;padding:10px 6px 12px;margin-bottom:12px;border-bottom:1px solid #80673d;background:radial-gradient(ellipse at top,#8c652132,transparent 75%)}
+#app .raid-result-hero437>small{font-size:11px;color:#cbb9a3}
+#app .raid-result-hero437 h2{font:700 23px/1.35 Georgia,serif;color:#ffe4a1;margin:5px 0}
+#app .raid-result-hero437>span{font-size:10px;color:#b7a7bb}
+#app .raid-result-hero437>p{margin:8px 0 0;font-size:10px;color:#dbcba9}
+#app .raid-result-hero437 strong{display:block;font:700 30px/1.25 Arial,sans-serif;color:#ffe3a1;font-variant-numeric:tabular-nums}
+#app .raid-result-note437{display:block;margin:7px 0;color:#b3a5b4;font-size:9px}
+#app .raid-result-status437{padding:9px 10px;margin-top:10px;background:#18131d;border:1px solid #705a3c}
+#app .raid-result-status437 p{margin:3px 0;font-size:11px}
+#app .raid-result-status437>small{display:block;color:#b8acbb;font-size:9px;margin-top:6px}
+#app .raid-result-status437 .home-pixel-icon{width:18px;height:18px;vertical-align:middle}
+#app .raid-result-status437 summary{cursor:pointer;padding:6px 0;color:#dcc595}
+/* Smooth metal artwork; existing sprite elements retain their pixel rendering. */
+#app :is(.formation-screen,.equipment-screen-v2,.skill-screen),
+#app :is(.formation-screen,.equipment-screen-v2,.skill-screen) :is(.v2-screen-hud,.v2-bottom-nav,.panel,button,.formation-summary,.twin-card385,.formation-member,.formation-loadout,.equipment-paper-doll,.equipment-card,.equipped-slot-card,.formation-member-drag,.equipment-paper-doll-portrait,.skill-owner-icon){image-rendering:auto!important}
+#app .formation-screen .formation-member-drag,
+#app .equipment-screen-v2 .equipment-paper-doll-portrait,
+#app .skill-screen :is(.skill-monster-tabs button,.skill-owner-icon){background-image:radial-gradient(ellipse at 50% 30%,#6c448340,transparent 70%),linear-gradient(#0e0a16be,#0e0a16ef),var(--sanctum437)!important;background-size:cover!important;background-position:center!important}
+#app .formation-screen .formation-circle-card{background-image:radial-gradient(ellipse,#72498530,transparent 70%),linear-gradient(#100b17dd,#100b17dd),var(--sanctum437)!important}
+#app .formation-screen .formation-actions button{border-image:var(--frame437) 128 / 5px stretch!important;background:linear-gradient(#392544,#1c1325)!important;box-shadow:inset 0 1px #c9a5d33d,0 2px 6px #0008!important}
+#app .formation-screen .formation-actions button.danger{background:linear-gradient(#66263c,#351323)!important}
+#app :is(.formation-screen,.equipment-screen-v2,.skill-screen) .v2-bottom-nav button.active{border-image:var(--frame437) 128 / 6px stretch!important;background:radial-gradient(ellipse at bottom,#714386,#251330)!important}
+#app .world-raid432 .raid-results432 .game-modal-card>h2{padding:0 0 8px!important;margin:0!important;min-height:0!important}
+#app .world-raid432 .raid-results432 .game-modal-body{padding:0!important}
+#app .raid-result437 .contribution-totals437{display:none}
+#app .raid-result-hero437{padding-top:5px;margin-bottom:9px}
+#app .raid-result437 .contribution-row437{padding-top:5px;padding-bottom:5px}
+#app .world-raid432 .raid-results432 .modal-primary{position:sticky!important;bottom:0!important;min-height:40px!important;margin-top:9px!important;font-size:16px!important}
+#app .world-raid432 .raid-results432 .game-modal-body{margin:0!important}
+#app .raid-result437 .contribution-row437{grid-template-columns:32px minmax(0,1fr) auto;padding:4px 7px}
+#app .raid-result437 .contribution-face437{width:32px;height:32px}
+#app .raid-result437 .contribution-face437 .monster-visual{width:32px!important;height:32px!important}
+#app .raid-result437 .contribution-detail437>summary{padding:7px 0}
+#app .raid-result-note437{line-height:1.25;margin:4px 0}
+#app .raid-result-status437{padding:6px 8px;margin-top:6px}
+#app .world-raid432 .raid-results432 .modal-primary{position:static!important}

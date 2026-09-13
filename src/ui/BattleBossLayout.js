@@ -1,3 +1,4 @@
+import {fitRaidVitals437} from '../worldRaid/WorldRaidVitals437.js';
 import {endgameSpriteBounds399,endgameArtFit399} from './EndgameSprite399.js?v=3.1.79-build399';
 import {chapterTwoFrameBounds383} from './ChapterTwoSprite383.js?v=3.1.82-build402';
 import {layoutBattleCircles405} from './BattleCircleLayout405.js?v=3.1.85-build405';
@@ -126,6 +127,7 @@ export function layoutPartyBosses(root){
  layoutChapterTwoEnemies382(root,arena);
  // Circle placement must follow all silhouette and name/card adjustments.
  layoutRaid435(root);
+ fitRaidVitals437(root);
  layoutBattleCircles405(root,visibleBounds);
 }
 

@@ -1,0 +1,23 @@
+[
+  "tests/build379-memory.test.mjs",
+  "tests/build365-battle-polish.test.mjs",
+  "tests/build405-battle-circles.test.mjs",
+  "tests/build422-primordial.test.mjs",
+  "tests/build423-finale.test.mjs",
+  "tests/build424-ten-laws.test.mjs",
+  "tests/build425-mother-stage.test.mjs",
+  "tests/build426-mother-cycle.test.mjs",
+  "tests/build431-upgrade-cache.test.mjs",
+  "tests/build432-world-raid.test.mjs",
+  "tests/build432-native-exchange.test.mjs",
+  "tests/build433-mother.test.mjs",
+  "tests/build434-royal.test.mjs",
+  "tests/build435-polish.test.mjs",
+  "tests/build436-guides.test.mjs",
+  "tests/build430-offline-server.test.mjs",
+  "tests/build430-offline-client.test.mjs",
+  "tests/build430-offline-cache.test.mjs",
+  "tests/build428-world-raid.test.mjs",
+  "tests/build429-world-rewards-server.test.mjs",
+  "tests/build437-raid.test.mjs"
+]

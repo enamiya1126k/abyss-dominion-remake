@@ -19,8 +19,8 @@ export function equipRaidBoss432(raid,campaign){
  for(const child of raid.minions){Object.assign(child,{circleId:'none',circleEffect:'none',magicCircle:null,magicCircleName:null,magicCircleAsset:null,magicCircleLevel:0,level:100});}
 }
 const blank=()=>({damage:0,taken:0,healing:0,revives:0,kills:0});
-export function snapshotExtras432(raid){return raid?.rules432?{rules432:raid.rules432,damage432:raid.damage432,performance432:structuredClone(raid.performance432??{}),circle432:structuredClone(raid.circle432)}:{};}
-export function withWorldRaidRules432(Base,snapshot){
+export function snapshotExtras432(raid){return raid?.rules432?{worldRaid428:structuredClone(raid.worldRaid428),rules432:raid.rules432,damage432:raid.damage432,performance432:structuredClone(raid.performance432??{}),circle432:structuredClone(raid.circle432)}:{};}
+export function withWorldRaidRules432(Base,snapshot,{maxRounds=10}={}){
  return class extends Base{
   create(session,campaign,id){const r=super.create(session,campaign,id);if(r.ok)equipRaidBoss432(r.room.raid,campaign);return r;}
   _withRules432(room,fn){
@@ -38,7 +38,7 @@ export function withWorldRaidRules432(Base,snapshot){
     const result=fn();
     if(hp===0&&def.effect==='revive'&&!circle.reviveUsed){
      circle.reviveUsed=true;hp=Math.max(1,Math.floor(boss.maxHp*def.reviveHpRate));raid.progress.hp=hp;
-     const survivors=Object.values(raid.players).some(p=>p.hp>0);raid.outcome=survivors?(raid.round>=10?'limit':null):'defeat';raid.phase='result';room.phase='raid';
+     const survivors=Object.values(raid.players).some(p=>p.hp>0);raid.outcome=survivors?(raid.round>=maxRounds?'limit':null):'defeat';raid.phase='result';room.phase='raid';
      raid.nextRoundAt=Math.max(raid.nextRoundAt??0,this.now()+1600/(raid.speed||1));
      extra.push({kind:'revive',actorId:boss.id,targetId:boss.id,targetKind:'boss',value:hp,label:def.name,message:'ボスがHP70%で復活。復活はこのボスにつき1回。'});
     }

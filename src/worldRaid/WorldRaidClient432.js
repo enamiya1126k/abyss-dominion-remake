@@ -1,3 +1,4 @@
+import {fitRaidVitals437} from './WorldRaidVitals437.js';
 import {WorldRaidClient430} from './WorldRaidClient430.js';
 import {worldRaidBattleView428} from './WorldRaidView428.js';
 import {worldRaidRankingView429} from './WorldRaidRankingView429.js';
@@ -23,6 +24,7 @@ export class WorldRaidClient432 extends WorldRaidClient430 {
   if(hp){hp.querySelector('.hp-fill').style.width=`${Math.max(0,Math.min(100,c.hp/c.maxHp*100))}%`;hp.querySelector('.bar-label').textContent=`HP ${c.hp}/${c.maxHp}`;}
   const shield=boss?.querySelector('.battle-shield-gauge');
   if(shield&&c.circle432){const {shield:value,maxShield}=c.circle432;shield.setAttribute('aria-valuenow',value);shield.querySelector('i').style.width=`${maxShield?value/maxShield*100:0}%`;shield.querySelector('.bar-label').textContent=`盾 ${value}/${maxShield}`;}
+  fitRaidVitals437(this.root.querySelector('.battle-screen'));
  }
  async handleClick(event){
   const b=event.target.closest?.('button');if(b?.disabled)return;
@@ -35,8 +37,7 @@ export class WorldRaidClient432 extends WorldRaidClient430 {
    finally{this.exchangePending432=null;this.render();}return;
   }
   if(this.showingResult432&&b?.matches('[data-modal-primary],[data-modal-dismiss]')){
-   if(this.resultStep432==='contribution'){this.resultStep432='reward';this.transport.worldRaidRewards429?.refresh();this.requestRanking429(this.state.attempt.raid?.weeklyBoss?.sequence??this.resultSequence432(),0);this.render();}
-   else{this.dismissedReport=this.state.attempt.id;this.resultStep432='contribution';this.panel429='challenge';if(this.localTicket430){this.localTicket430=null;this.ending=null;clearTimeout(this.endTimer);this.offlineUpdated();}else this.render();this.requestRanking429(this.onlineState430?.campaign?.sequence??null,0);}
+   this.dismissedReport=this.state.attempt.id;this.panel429='challenge';if(this.localTicket430){this.localTicket430=null;this.ending=null;clearTimeout(this.endTimer);this.offlineUpdated();}else this.render();this.requestRanking429(this.onlineState430?.campaign?.sequence??null,0);
    this.toTop432();return;
   }
   const panel=b?.matches('[data-world-panel429]');await super.handleClick(event);if(panel)this.toTop432();
@@ -59,7 +60,7 @@ export class WorldRaidClient432 extends WorldRaidClient430 {
    content.innerHTML=`${!connected&&!local?'<p class="raid-message432">接続待ち。つながると同じ戦闘を再開します。</p>':''}${local?'<small class="raid-local432">結果は保存し、接続後に自動送信</small>':''}${worldRaidBattleView428(this.state,p,{ending:Boolean(this.ending),compact432:true})}`;
    mountBattleBossLayout(content.querySelector('.battle-screen'));p._decorateBattleState();
   }else if(report){
-   if(this.resultId432!==a.id){this.resultId432=a.id;this.resultStep432='contribution';this.requestRanking429(this.resultSequence432(),0);}
+   if(this.resultId432!==a.id){this.resultId432=a.id;this.transport.worldRaidRewards429?.refresh();this.requestRanking429(this.resultSequence432(),0);}
    content.innerHTML=raidResult432(this);
   }else if(this.panel429==='exchange')content.innerHTML=raidExchange432(this.getState(),this.catalog432,this.prices432,{bossId:this.shopBoss432,pending:this.exchangePending432});
   else if(this.panel429==='ranking')content.innerHTML='<button data-raid-lobby432>‹ レイドへ戻る</button>'+worldRaidRankingView429(this.ranking429,{connected,supported:this.transport.capabilities.has('worldRaidRewardsV1')||Boolean(this.ranking429),loading:Boolean(this.rankRequest429),playerId:this.transport.selfId,received:id=>Boolean(this.getState().onlineParty?.worldRaidReceipts429?.[id]),error:this.error||this.transport.worldRaidRewards429?.lastError||''});

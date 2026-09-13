@@ -1,3 +1,4 @@
+import {raidRoundLimit437} from './WorldRaidLimit437.js';
 import {renderSharedBattle} from '../online/OnlineViews.js';
 import {escapeOnlineHtml} from '../ui/screens/OnlinePartyScreen.js';
 import {raidSpriteBase} from '../core/RaidPresentation.js';
@@ -9,10 +10,10 @@ export function worldRaidLobby428(state,{connected=false,supported=false,pending
  const notice=error||(!connected?'サーバーへ接続しています。接続後に挑戦できます。':!supported?'共闘レイドは開催準備中です。':!state?'戦況を確認しています。':state.available===false?'共闘レイドは現在調整中です。':'');
  if(!c)return `<div class="world-raid-notice428" role="status">${escapeOnlineHtml(notice)}</div><button type="button" data-world-refresh>戦況を確認</button>`;
  const boss=c.boss,base=raidSpriteBase(boss.id),asset=base?`${base}-idle1.png`:boss.heroAsset;
- const reportTitle={victory:'討伐成功！',sharedVictory:'みんなの力で討伐成功！',limit:'10ラウンド終了',defeat:'今回の挑戦終了',retreat:'挑戦を中断'}[report?.result]??'挑戦結果';
+ const reportTitle={victory:'討伐成功！',sharedVictory:'みんなの力で討伐成功！',limit:`${number(report?.rounds||raidRoundLimit437(a?.raid))}ラウンド終了`,defeat:'今回の挑戦終了',retreat:'挑戦を中断'}[report?.result]??'挑戦結果';
  return `${notice?`<p class="world-raid-notice428" role="status">${escapeOnlineHtml(notice)}</p>`:''}${report?`<section class="world-raid-report428"><h2>${reportTitle}</h2><p>${escapeOnlineHtml(report.bossName)}</p><small>今回ボスに与えたダメージ</small><strong>${number(report.damage)}</strong><p>攻撃の成果はサーバー共通HPへ反映済みです。</p><button type="button" data-world-report-close>レイド受付へ</button></section>`:''}
  ${worldRaidProgress428(state)}<article class="world-raid-boss428"><img src="${escapeOnlineHtml(asset)}" alt="${escapeOnlineHtml(boss.name)}"><div><small>Lv.${number(boss.level)}</small><h2>${escapeOnlineHtml(boss.name)}</h2><p>倒すまで、全員で同じ一体に挑む。</p></div></article>
- <section class="world-raid-rules428"><p><b>1〜5ラウンド：</b>ボスは待機。Lv.100の取り巻き2体は行動する。</p><p><b>6〜10ラウンド：</b>ボスも攻撃開始。10ラウンドで今回の挑戦終了。</p><p>手動・自動で挑戦可能。討伐されると次のボスが出現する。</p><p>巨体耐性：割合攻撃・継続ダメージはHP160万を上限に計算。即死は最大40万ダメージに変換。</p><p>このボスへの累積ダメージ：${number(c.myDamage)}</p></section>
+ <section class="world-raid-rules428"><p><b>1〜5ラウンド：</b>ボスは待機。Lv.100の取り巻き2体は行動する。</p><p><b>6ラウンド以降：</b>ボスも攻撃開始。最大${number(state.rules?.maxRounds??99)}ラウンドで今回の挑戦終了。</p><p>手動・自動で挑戦可能。討伐されると次のボスが出現する。</p><p>巨体耐性：割合攻撃・継続ダメージはHP160万を上限に計算。即死は最大40万ダメージに変換。</p><p>このボスへの累積ダメージ：${number(c.myDamage)}</p></section>
  <button type="button" class="world-raid-start428" data-world-start ${!connected||!supported||!state.available||state.remaining<=0||pending?'disabled':''}>${pending?'挑戦を確認中…':state.remaining<=0?'本日の挑戦は終了':'挑戦する（1回消費）'}</button>${pending?'<button type="button" data-world-retry>受付状況を再確認</button>':''}<button type="button" data-world-refresh>戦況を更新</button>`;
 }
 export function worldRaidBattleView428(state,presentation,{ending=false,compact432=false}={}){
@@ -20,6 +21,6 @@ export function worldRaidBattleView428(state,presentation,{ending=false,compact4
  if(a.campaignId===state.campaign.id){raid.boss.hp=state.campaign.hp;raid.progress.hp=raid.boss.hp;if(state.campaign.circle432){raid.boss.shield=state.campaign.circle432.shield;raid.boss.maxShield=state.campaign.circle432.maxShield;}}
  if(ending)raid.phase='result';
  if(compact432){raid.telegraph=null;raid.worldRaid432=true;}
- const info=compact432?`<div class="raid-battle-info432"><b>今回 ${number(a.damage)} ダメージ</b><span>${raid.round<=5?`ボス行動まで ${6-raid.round}ラウンド`:`${number(raid.round)} / 10ラウンド`}</span></div>`:worldRaidProgress428(state);
- return `${compact432?info:`<div class="world-raid-battle-meta428"><b>今回 ${number(a.damage)} ダメージ</b><span>ラウンド ${number(raid.round)}／10</span></div>${info}`}${renderSharedBattle({mode:'raid',room,battle:raid,selfId:presentation.selfId,title:raid.name,enemies:[raid.boss,...raid.minions],selectedTarget:presentation.selectedTarget.raid,selectedAlly:presentation.selectedAlly.raid,skillMenu:presentation.skillMenu.raid,itemMenu:presentation.itemMenu.raid,itemTargetMenu:presentation.itemTargetMenu.raid,hpTrails:presentation.hpTrails.raid,presentationKoIds:[...presentation.presentationKoIds.raid],autoSupported:true,readOnly:ending,biomePanelCollapsed:true})}<button type="button" data-world-retreat ${ending?'disabled':''}>この挑戦を中断する</button>`;
+ const info=compact432?`<div class="raid-battle-info432"><b>今回 ${number(a.damage)} ダメージ</b><span>${raid.round<=5?`ボス行動まで ${6-raid.round}ラウンド`:`${number(raid.round)} / ${raidRoundLimit437(raid)}ラウンド`}</span></div>`:worldRaidProgress428(state);
+ return `${compact432?info:`<div class="world-raid-battle-meta428"><b>今回 ${number(a.damage)} ダメージ</b><span>ラウンド ${number(raid.round)}／${raidRoundLimit437(raid)}</span></div>${info}`}${renderSharedBattle({mode:'raid',room,battle:raid,selfId:presentation.selfId,title:raid.name,enemies:[raid.boss,...raid.minions],selectedTarget:presentation.selectedTarget.raid,selectedAlly:presentation.selectedAlly.raid,skillMenu:presentation.skillMenu.raid,itemMenu:presentation.itemMenu.raid,itemTargetMenu:presentation.itemTargetMenu.raid,hpTrails:presentation.hpTrails.raid,presentationKoIds:[...presentation.presentationKoIds.raid],autoSupported:true,readOnly:ending,biomePanelCollapsed:true})}<button type="button" data-world-retreat ${ending?'disabled':''}>この挑戦を中断する</button>`;
 }

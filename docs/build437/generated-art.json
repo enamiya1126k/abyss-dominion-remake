@@ -1,0 +1,31 @@
+{
+  "method": "ImageGen original art; full-image WebP conversion at quality 92; no cropping, no third-party asset sourcing",
+  "files": {
+    "frame": "exec-2afb39c5-09ef-410b-bd5d-0b688ecc4827.png",
+    "button": "exec-02cb2331-e44a-4cd2-b518-1796ce1a8d31.png",
+    "sanctum": "exec-6459ae71-25ec-4846-99e2-29342c416737.png"
+  },
+  "design": {
+    "frame": "Antique gold engraved symmetrical rectangular frame, amethyst corner clasps, dark quiet plum center. Original straight-on scalable panel material. No text or characters.",
+    "button": "Gold and silver bevelled aubergine enamel plate with violet gemstone side clasps. Center left empty for existing live text. Original horizontal button art.",
+    "sanctum": "Obsidian and antique gold engraved magic circle on the right, quiet dark plum left area. Original background material without text or characters."
+  },
+  "integration": "Existing geometry preserved. Nine-slice material frames and CSS background layers; small card patterns subdued behind text. Existing character sprites retained.",
+  "assets": [
+    {
+      "path": "assets/ui/build437/sanctum.webp",
+      "bytes": 458648,
+      "sha256": "edc747af0b4e51af224ab2cc5bd5cf59b7d14e41bd364541aa58ca1dc373b0e6"
+    },
+    {
+      "path": "assets/ui/build437/frame.webp",
+      "bytes": 211584,
+      "sha256": "de10e0077c18683b57c4fdc23235f23b8ea804f40b239ea6b5f785e04047e670"
+    },
+    {
+      "path": "assets/ui/build437/button.webp",
+      "bytes": 224656,
+      "sha256": "2fecf04b5fd884daf61c71ab48d6e20b5ace4a2755ca069d88ecd26571360c74"
+    }
+  ]
+}

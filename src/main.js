@@ -1,3 +1,6 @@
+import {contributionBody437} from './ui/Contribution437.js';
+import {ROLE_GUIDE436,roleRoster436,roleCandidates436,roleGuideShell436,roleResult436,roleDetail436} from './ui/RoleGuide436.js';
+import {escapeGuide436,motherSkillSummary436,skillReadingMs436,holdSkillBanner436} from './ui/SkillGuide436.js';
 import {motherFieldHitBounds433} from './primordial/FieldHit433.js';
 import {raidContributionSnapshot432} from './online/OnlineViews.js';
 import {WorldRaidOfflineClient430} from './worldRaid/WorldRaidOfflineClient430.js';
@@ -2676,7 +2679,31 @@ function openFormationGearMenu(itemId,ownerId,subslot){
  modal.querySelector("[data-gear-detail-remove]").onclick=()=>{if(!confirm(`${item.name}を外しますか？`))return;modal.remove();unequipItem(item.id)};
  modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
 }
+function openRoleGuide436(){
+ const roster=roleRoster436(save.state);let role='healDown',page=0,candidates=[];
+ app.insertAdjacentHTML('beforeend',Modal('役割から仲間を探す',roleGuideShell436(),'編成へ戻る'));
+ const modal=topModal();modal.classList.add('role-guide-modal436');
+ const select=modal.querySelector('[data-role-select436]'),query=modal.querySelector('[data-role-query436]'),learned=modal.querySelector('[data-role-learned436]'),results=modal.querySelector('[data-role-results436]'),pages=modal.querySelector('[data-role-pages436]');
+ const redraw=()=>{
+  role=select.value;candidates=roleCandidates436(roster,role,{query:query.value,learnedOnly:learned.checked});page=Math.min(page,Math.max(0,Math.ceil(candidates.length/8)-1));
+  modal.querySelector('[data-role-hint436]').textContent=ROLE_GUIDE436.find(r=>r.id===role).hint;
+  modal.querySelector('[data-role-count436]').textContent=`候補 ${candidates.length}体・設定中 → 習得済み → 未習得の順`;
+  results.innerHTML=candidates.length?candidates.slice(page*8,page*8+8).map(r=>roleResult436(r,role)).join(''):'<p class="role-empty436">条件に合う所持キャラがいません。別の役割を選ぶか、名前・習得済みの絞り込みを外してみよう。</p>';
+  const count=Math.ceil(candidates.length/8);pages.innerHTML=count>1?`<button type="button" data-role-page436="-1" ${page===0?'disabled':''}>前へ</button><span>${page+1} / ${count}</span><button type="button" data-role-page436="1" ${page===count-1?'disabled':''}>次へ</button>`:'';
+ };
+ select.onchange=query.oninput=learned.onchange=()=>{page=0;redraw();};
+ pages.onclick=e=>{const button=e.target.closest('[data-role-page436]');if(!button||button.disabled)return;page+=Number(button.dataset.rolePage436);redraw();results.scrollIntoView({block:'start'});};
+ results.onclick=e=>{
+  const button=e.target.closest('[data-role-detail436]'),entry=button&&candidates.find(r=>r.monster.id===button.dataset.roleDetail436);if(!entry)return;
+  const canNavigate=formationOrigin!=='explore'&&!save.state.player.inRun;
+  app.insertAdjacentHTML('beforeend',Modal(escapeGuide436(entry.name),roleDetail436(entry,role)+(canNavigate?'<button type="button" data-role-open-character436>キャラ詳細へ</button>':''),'候補へ戻る'));
+  const detail=topModal();detail.classList.add('role-guide-modal436');detail.querySelector('[data-modal-primary]').onclick=()=>detail.remove();
+  detail.querySelector('[data-role-open-character436]')?.addEventListener('click',()=>{detail.remove();modal.remove();detailNavigationOrigin='formation';selected=entry.monster.id;go('detail');});
+ };
+ modal.querySelector('[data-modal-primary]').onclick=()=>modal.remove();redraw();
+}
 function bindFormation(){
+ document.querySelector('[data-role-guide436]')?.addEventListener('click',openRoleGuide436);
  document.getElementById("backFormation")?.addEventListener("click",()=>{const target=formationOrigin;formationOrigin="home";returnFromMenu(target)});
  document.querySelector('[data-party-tab="online"]')?.addEventListener("click",()=>go("onlineParty"));
  const rarityDrawer=document.querySelector("[data-formation-rarity-drawer]");
@@ -3268,7 +3295,7 @@ function summonPermanentSignatureGear(){
 function openPermanentSignatureGacha(){
  const pool=permanentSignatureOwners(),counts=[1,10],rate=(PERMANENT_SIGNATURE_RATE*100).toFixed(1);if(!pool.length)return showToast("専用装備の対象がありません");
  const poolRows=pool.map(owner=>`<span><b>[${owner.rarity}]</b> ${owner.ownerName}</span>`).join("");
- app.insertAdjacentHTML("beforeend",Modal("常設・専用装備契約",`<div class="gacha-count-picker permanent-signature-picker"><div class="gacha-count-copy"><small>PERMANENT SIGNATURE EQUIPMENT</small><h3>専用装備契約</h3><p>1枠ごとの専用装備当選率はカテゴリ全体で <strong>${rate}%</strong>。外れは通常装備です。</p><p>当選キャラは均等抽選。未所持部位がある場合は、その部位を72%で優先します。</p><p><b>確定枠・天井・10連保証はありません。</b></p></div><div class="gacha-count-grid">${counts.map(count=>`<button type="button" data-permanent-signature-count="${count}"><b>${count}連</b><small>${pixelIcon("crystal")} ${gachaCost(count,"standard").toLocaleString()}</small></button>`).join("")}</div><details class="signature-pool-list"><summary>対象キャラ ${pool.length}体を確認</summary><div>${poolRows}</div></details><small>深淵・十神・シリアル限定の「えなみ／より／りおん／ひで」は排出対象外です。</small></div>`,"戻る"));
+ app.insertAdjacentHTML("beforeend",Modal("常設・専用装備契約",`<div class="gacha-count-picker permanent-signature-picker"><div class="gacha-count-copy"><small>PERMANENT SIGNATURE EQUIPMENT</small><h3>専用装備契約</h3><p>1枠ごとの専用装備当選率はカテゴリ全体で <strong>${rate}%</strong>。外れは通常装備です。</p><p>当選キャラは均等抽選。未所持部位がある場合は、その部位を72%で優先します。</p><p><b>確定枠・天井・10連保証はありません。</b></p></div><div class="gacha-count-grid">${counts.map(count=>`<button type="button" data-permanent-signature-count="${count}" class="summon-pull436"><img class="summon-button-art436" src="./assets/ui/build436/summon-button.webp" alt="" aria-hidden="true"><b><em>${count}</em>回召喚</b><small>${pixelIcon("crystal")} ${gachaCost(count,"standard").toLocaleString()}</small></button>`).join("")}</div><details class="signature-pool-list"><summary>対象キャラ ${pool.length}体を確認</summary><div>${poolRows}</div></details><small>深淵・十神・シリアル限定の「えなみ／より／りおん／ひで」は排出対象外です。</small></div>`,"戻る"));
  const modal=topModal();modal.classList.add("gacha-count-modal");modal.querySelectorAll("[data-permanent-signature-count]").forEach(button=>button.onclick=()=>performPermanentSignatureGacha(button.dataset.permanentSignatureCount));modal.querySelector("[data-modal-primary]").onclick=()=>modal.remove();
 }
 function performPermanentSignatureGacha(count=1){
@@ -3285,7 +3312,7 @@ function openWeekdayGachaPicker(kind){
  const schedule=weekdayGachaSchedule();if(!weekdayGachaKindAllowed(kind,schedule))return showToast("この曜日の限定召喚は終了しました");
  if(kind==="signature"&&!signatureEligibleOwners(save.state).length)return showToast("LR以上の仲間を所持すると専用装備召喚を利用できます");
  const title=kind==="experience"?"経験値パック召喚":kind==="signature"?"専用装備召喚":"日曜・深淵召喚",counts=[1,10],rateCopy=kind==="abyss"?`<strong>当選率 ${(WEEKDAY_ENDGAME_RATE*100).toFixed(1)}%（深淵カテゴリ全体）</strong><small>外れた場合は通常モンスターが召喚されます。確定・天井はありません。</small>`:kind==="signature"?`<small>対象キャラは均等抽選。未所持部位がある場合は、${Math.round(WEEKDAY_SIGNATURE_MISSING_PRIORITY*100)}%の確率で未所持部位から抽選します。</small>`:"";
- app.insertAdjacentHTML("beforeend",Modal(title,`<div class="gacha-count-picker weekday-gacha-picker"><div class="gacha-count-copy"><small>${schedule.dayName}曜限定</small><h3>${title}</h3><p>${schedule.copy}</p>${rateCopy}</div><div class="gacha-count-grid">${counts.map(count=>`<button type="button" data-weekday-count="${count}"><b>${count}連</b><small>${pixelIcon("crystal")} ${weekdayGachaCost(kind,count).toLocaleString()}</small></button>`).join("")}</div><small>毎日0:00（日本時間）に開催内容が切り替わります。</small></div>`,"戻る"));
+ app.insertAdjacentHTML("beforeend",Modal(title,`<div class="gacha-count-picker weekday-gacha-picker"><div class="gacha-count-copy"><small>${schedule.dayName}曜限定</small><h3>${title}</h3><p>${schedule.copy}</p>${rateCopy}</div><div class="gacha-count-grid">${counts.map(count=>`<button type="button" data-weekday-count="${count}" class="summon-pull436"><img class="summon-button-art436" src="./assets/ui/build436/summon-button.webp" alt="" aria-hidden="true"><b><em>${count}</em>回召喚</b><small>${pixelIcon("crystal")} ${weekdayGachaCost(kind,count).toLocaleString()}</small></button>`).join("")}</div><small>毎日0:00（日本時間）に開催内容が切り替わります。</small></div>`,"戻る"));
  const modal=topModal();modal.classList.add("gacha-count-modal");modal.querySelectorAll("[data-weekday-count]").forEach(button=>button.onclick=()=>performWeekdayGacha(kind,button.dataset.weekdayCount));modal.querySelector("[data-modal-primary]").onclick=()=>modal.remove();
 }
 function performWeekdayGacha(kind,count=1){
@@ -3397,7 +3424,7 @@ function openGachaCountPicker(mode,campaignId="standard"){
  app.insertAdjacentHTML("beforeend",Modal(label,`<div class="gacha-count-picker">
   <div class="gacha-count-copy"><small>${campaign.badge}</small><h3>${campaign.title}</h3><p>${campaign.copy}</p></div>
   ${mode==="gold"?"":paidGachaPityMarkup()}
-  <div class="gacha-count-grid">${counts.map(count=>`<button type="button" data-gacha-count="${count}"><b>${count}連</b><small>${pixelIcon("crystal")} ${gachaCost(count,campaignId).toLocaleString()}</small></button>`).join("")}</div>
+  <div class="gacha-count-grid">${counts.map(count=>`<button type="button" data-gacha-count="${count}" class="summon-pull436"><img class="summon-button-art436" src="./assets/ui/build436/summon-button.webp" alt="" aria-hidden="true"><b><em>${count}</em>回召喚</b><small>${pixelIcon("crystal")} ${gachaCost(count,campaignId).toLocaleString()}</small></button>`).join("")}</div>
   <label class="gacha-custom-count"><span>その他の回数（1〜100）</span><input id="gachaCustomCount" type="number" inputmode="numeric" min="1" max="100" value="15"><button type="button" data-gacha-custom>この回数で召喚</button></label>
   <small>所持 ${pixelIcon("crystal")} ${save.state.player.crystals.toLocaleString()} / 10連ごとの最後の枠にレア保証を適用</small>
  </div>`,"戻る"));
@@ -5571,13 +5598,17 @@ function conciseBattleSkillTitle(title,source){
  return value;
 }
 function battleSkillMechanics(skill){return skillCombatKeywords(skill).join("・")||"特殊効果"}
-async function battleBanner(title,subtitle="",type="normal",duration=700,source=null){
+async function battleBanner(title,subtitle="",type="normal",duration=700,source=null,detail436=""){
  const arena=document.querySelector(".battle-arena");if(!arena)return;
  arena.querySelector(".battle-cinematic-banner")?.remove();
  const skillBanner=String(type).split(/\s+/).includes("skill"),actorName=source?displayName(source):"",displayTitle=skillBanner?conciseBattleSkillTitle(title,source):String(title??"");
  const sourceArt=source?`<span class="battle-banner-source">${monsterVisual(source,source.emoji??SPECIES[source.speciesId]?.emoji??"●",{className:"battle-banner-source-visual"})}${skillBanner?"":`<em>${actorName}</em>`}</span>`:"";
  const titleClass=[...displayTitle].length>15?" very-long-title":[...displayTitle].length>10?" long-title":"";
  const el=document.createElement("div");el.className=`battle-cinematic-banner ${type}${titleClass}`;el.innerHTML=`${sourceArt}<span class="battle-banner-copy">${skillBanner&&actorName?`<small class="battle-banner-actor">${actorName}</small>`:""}<strong>${displayTitle}</strong>${subtitle?`<small class="battle-banner-effect">${subtitle}</small>`:""}</span>`;arena.appendChild(el);
+ if(detail436){
+  const owner=battle;el.classList.add('readable-skill436');const description=document.createElement('p');description.className='skill-description436';description.textContent=detail436;el.querySelector('.battle-banner-copy').appendChild(description);
+  await holdSkillBanner436(el,{getArena:()=>document.querySelector('.battle-arena'),isCurrent:()=>battle===owner&&!owner?.resultSettled,duration:skillReadingMs436(detail436,battleSpeed())});return;
+ }
  const kind=String(type),minimum=kind.includes("biome")?1100:kind.includes("boss")?850:/skill|synergy|capture/.test(kind)?720:duration;
  await wait(Math.max(duration,minimum));el.classList.add("leaving");await wait(kind.includes("biome")?350:minimum>=700?280:200);el.remove();
 }
@@ -5834,9 +5865,9 @@ function battleContributionSnapshot(source=battle){
  return{party:(source.party??[]).map(monster=>monster),performance:Object.fromEntries(Object.entries(source.performance??{}).map(([id,row])=>[id,{damage:Math.max(0,Math.floor(Number(row?.damage)||0)),taken:Math.max(0,Math.floor(Number(row?.taken)||0)),healing:Math.max(0,Math.floor(Number(row?.healing)||0)),revives:Math.max(0,Math.floor(Number(row?.revives)||0)),kills:Math.max(0,Math.floor(Number(row?.kills)||0))}])),reviveCount:Math.max(0,Math.floor(Number(source.reviveCount)||0))};
 }
 function battleContributionBody(snapshot){
- const rows=(snapshot.party??[]).map(monster=>{const row=snapshot.performance?.[monster.id]??{damage:0,taken:0,healing:0,revives:0,kills:0},score=row.damage+row.healing*1.15+row.kills*10000+row.revives*20000;return{monster,row,score}}),best=Math.max(0,...rows.map(entry=>entry.score));
- return`<div class="battle-contribution"><div class="contribution-heading"><span>${pixelIcon("crossed-swords")}</span><div><small>戦闘分析</small><h3>今回の活躍表</h3></div><em>蘇生 ${snapshot.reviveCount}/99</em></div><div class="contribution-list">${rows.map(({monster,row,score})=>`<article class="${best>0&&score===best?"mvp":""}"><div class="contribution-portrait">${monsterVisual(monster,SPECIES[monster.speciesId]?.emoji??"●",{className:"contribution-monster-visual"})}${best>0&&score===best?"<b>最高殊勲</b>":""}</div><div class="contribution-name"><strong>${escapeAttribute(monster.onlineName??displayName(monster))}</strong><small>Lv.${Number(monster.level).toLocaleString()}</small></div><dl><div><dt>与ダメージ</dt><dd>${row.damage.toLocaleString()}</dd></div><div><dt>被ダメージ</dt><dd>${row.taken.toLocaleString()}</dd></div><div><dt>回復</dt><dd>${row.healing.toLocaleString()}</dd></div><div><dt>蘇生</dt><dd>${row.revives}</dd></div><div><dt>撃破</dt><dd>${row.kills}</dd></div></dl></article>`).join("")}</div></div>`;
+ return contributionBody437(snapshot,{portrait:monster=>monsterVisual(monster,SPECIES[monster.speciesId]?.emoji??"●",{className:"contribution-monster-visual"}),name:monster=>monster.onlineName??displayName(monster)});
 }
+
 function openBattleContributionReport(snapshot,onClose,{auto=false}={}){
  app.insertAdjacentHTML("beforeend",Modal("活躍表",battleContributionBody(snapshot),"報酬を確認"));const modal=topModal();modal.classList.add("battle-contribution-modal");let closed=false,timer=null;
  const finish=()=>{if(closed)return;closed=true;if(timer)clearTimeout(timer);modal?.remove();onClose?.()};modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish;modal.querySelector("[data-modal-dismiss]").onclick=finish;if(auto)timer=setTimeout(finish,1500);return modal;
@@ -6746,7 +6777,7 @@ function grantEnemyAuthorityShield(source,rate,label="権能障壁"){
 async function resolveEnemySpecialAction(e,action){
  const sourceInfo=specialActionInfo(action);if(!sourceInfo)return false;const info=sourceInfo.randomElement?{...sourceInfo,element:RANDOM_SKILL_ELEMENTS[Math.floor(Math.random()*RANDOM_SKILL_ELEMENTS.length)]??"neutral"}:sourceInfo;
  const motherLaw=info.motherProjection424?MOTHER_LAWS424.find(l=>l.action===action):null;
- await battleBanner(motherLaw?.name??info.label,motherLaw?`${motherLaw.godName}より発動`:e.name,e.faction==="tenGod"?"boss":"skill",720,e);battleFlash(e.faction==="tenGod"?"boss":"danger");
+ await battleBanner(motherLaw?.name??info.label,motherLaw?`${motherLaw.godName}より発動`:e.name,e.faction==="tenGod"?"boss":"skill",720,e,battle?.specialBattleType==='mother422'?motherSkillSummary436(info):'');battleFlash(e.faction==="tenGod"?"boss":"danger");
  await applyFloorBossActionTax(e);
  if(Number(info.selfHpCostRate)>0&&e.hp>1){const cost=Math.min(e.hp-1,Math.max(1,Math.floor(e.hp*Math.min(.8,Number(info.selfHpCostRate)))));e.hp=Math.max(1,e.hp-cost);storeFloorBossSacrifice(e,cost);addBattleLog(battle,`${e.name}：${info.label}の代価 HP-${cost.toLocaleString()}`);await floatText(`代価 -${cost}`,e.id,"enemy")}
  if(info.utility){

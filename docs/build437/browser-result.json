@@ -1,0 +1,639 @@
+{
+  "checks": [
+    "formation geometry unchanged at 393",
+    "equipment geometry unchanged at 393",
+    "skills geometry unchanged at 393",
+    "online raid exact vitals / one viewport at 393",
+    "offline raid exact vitals / one viewport at 393",
+    "formation geometry unchanged at 375",
+    "equipment geometry unchanged at 375",
+    "skills geometry unchanged at 375",
+    "online raid exact vitals / one viewport at 375",
+    "offline raid exact vitals / one viewport at 375",
+    "formation geometry unchanged at 430",
+    "equipment geometry unchanged at 430",
+    "skills geometry unchanged at 430",
+    "online raid exact vitals / one viewport at 430",
+    "offline raid exact vitals / one viewport at 430",
+    "formation geometry unchanged at 1280",
+    "equipment geometry unchanged at 1280",
+    "skills geometry unchanged at 1280",
+    "online raid exact vitals / one viewport at 1280",
+    "offline raid exact vitals / one viewport at 1280",
+    "unified result with correct online status",
+    "unified result with correct pending status",
+    "unified result with correct accepted status",
+    "unified result with correct expired status",
+    "large result values fit short narrow viewport",
+    "existing role guide action works with decoration",
+    "all three full-resolution generated assets load"
+  ],
+  "errors": [],
+  "missing": [],
+  "metrics": {
+    "formation-393": {
+      "count": 65,
+      "moved": [],
+      "overflow": false
+    },
+    "equipment-393": {
+      "count": 39,
+      "moved": [],
+      "overflow": false
+    },
+    "skills-393": {
+      "count": 24,
+      "moved": [],
+      "overflow": false
+    },
+    "vitals-393-true": [
+      {
+        "text": "HP 11,375/11,375",
+        "font": 7,
+        "w": 74,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,380/1,380",
+        "font": 7,
+        "w": 74,
+        "tw": 52
+      },
+      {
+        "text": "HP 21,332/21,332",
+        "font": 7,
+        "w": 74,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,002/1,002",
+        "font": 7,
+        "w": 74,
+        "tw": 52
+      },
+      {
+        "text": "HP 29,038/29,038",
+        "font": 7,
+        "w": 74,
+        "tw": 58
+      },
+      {
+        "text": "MP 691/691",
+        "font": 7,
+        "w": 74,
+        "tw": 40
+      },
+      {
+        "text": "HP 23,455/23,455",
+        "font": 7,
+        "w": 74,
+        "tw": 58
+      },
+      {
+        "text": "MP 884/884",
+        "font": 7,
+        "w": 74,
+        "tw": 40
+      },
+      {
+        "text": "HP 99,988,295,077/100,000,000,000",
+        "font": 8,
+        "w": 159,
+        "tw": 143
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 73,
+        "tw": 58
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 73,
+        "tw": 58
+      }
+    ],
+    "vitals-393-false": [
+      {
+        "text": "HP 11,375/11,375",
+        "font": 7,
+        "w": 74,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,380/1,380",
+        "font": 7,
+        "w": 74,
+        "tw": 52
+      },
+      {
+        "text": "HP 21,332/21,332",
+        "font": 7,
+        "w": 74,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,002/1,002",
+        "font": 7,
+        "w": 74,
+        "tw": 52
+      },
+      {
+        "text": "HP 29,038/29,038",
+        "font": 7,
+        "w": 74,
+        "tw": 58
+      },
+      {
+        "text": "MP 691/691",
+        "font": 7,
+        "w": 74,
+        "tw": 40
+      },
+      {
+        "text": "HP 23,455/23,455",
+        "font": 7,
+        "w": 74,
+        "tw": 58
+      },
+      {
+        "text": "MP 884/884",
+        "font": 7,
+        "w": 74,
+        "tw": 40
+      },
+      {
+        "text": "HP 99,988,295,077/100,000,000,000",
+        "font": 8,
+        "w": 159,
+        "tw": 143
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 73,
+        "tw": 58
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 73,
+        "tw": 58
+      }
+    ],
+    "formation-375": {
+      "count": 65,
+      "moved": [],
+      "overflow": false
+    },
+    "equipment-375": {
+      "count": 39,
+      "moved": [],
+      "overflow": false
+    },
+    "skills-375": {
+      "count": 24,
+      "moved": [],
+      "overflow": false
+    },
+    "vitals-375-true": [
+      {
+        "text": "HP 11,375/11,375",
+        "font": 7,
+        "w": 70,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,380/1,380",
+        "font": 7,
+        "w": 70,
+        "tw": 52
+      },
+      {
+        "text": "HP 21,332/21,332",
+        "font": 7,
+        "w": 70,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,002/1,002",
+        "font": 7,
+        "w": 70,
+        "tw": 52
+      },
+      {
+        "text": "HP 29,038/29,038",
+        "font": 7,
+        "w": 70,
+        "tw": 58
+      },
+      {
+        "text": "MP 691/691",
+        "font": 7,
+        "w": 70,
+        "tw": 40
+      },
+      {
+        "text": "HP 23,455/23,455",
+        "font": 7,
+        "w": 70,
+        "tw": 58
+      },
+      {
+        "text": "MP 884/884",
+        "font": 7,
+        "w": 70,
+        "tw": 40
+      },
+      {
+        "text": "HP 99,988,295,077/100,000,000,000",
+        "font": 8,
+        "w": 150,
+        "tw": 143
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 69,
+        "tw": 58
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 69,
+        "tw": 58
+      }
+    ],
+    "vitals-375-false": [
+      {
+        "text": "HP 11,375/11,375",
+        "font": 7,
+        "w": 70,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,380/1,380",
+        "font": 7,
+        "w": 70,
+        "tw": 52
+      },
+      {
+        "text": "HP 21,332/21,332",
+        "font": 7,
+        "w": 70,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,002/1,002",
+        "font": 7,
+        "w": 70,
+        "tw": 52
+      },
+      {
+        "text": "HP 29,038/29,038",
+        "font": 7,
+        "w": 70,
+        "tw": 58
+      },
+      {
+        "text": "MP 691/691",
+        "font": 7,
+        "w": 70,
+        "tw": 40
+      },
+      {
+        "text": "HP 23,455/23,455",
+        "font": 7,
+        "w": 70,
+        "tw": 58
+      },
+      {
+        "text": "MP 884/884",
+        "font": 7,
+        "w": 70,
+        "tw": 40
+      },
+      {
+        "text": "HP 99,988,295,077/100,000,000,000",
+        "font": 8,
+        "w": 150,
+        "tw": 143
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 69,
+        "tw": 58
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 69,
+        "tw": 58
+      }
+    ],
+    "formation-430": {
+      "count": 65,
+      "moved": [],
+      "overflow": false
+    },
+    "equipment-430": {
+      "count": 39,
+      "moved": [],
+      "overflow": false
+    },
+    "skills-430": {
+      "count": 24,
+      "moved": [],
+      "overflow": false
+    },
+    "vitals-430-true": [
+      {
+        "text": "HP 11,375/11,375",
+        "font": 7,
+        "w": 84,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,380/1,380",
+        "font": 7,
+        "w": 84,
+        "tw": 52
+      },
+      {
+        "text": "HP 21,332/21,332",
+        "font": 7,
+        "w": 84,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,002/1,002",
+        "font": 7,
+        "w": 84,
+        "tw": 52
+      },
+      {
+        "text": "HP 29,038/29,038",
+        "font": 7,
+        "w": 84,
+        "tw": 58
+      },
+      {
+        "text": "MP 691/691",
+        "font": 7,
+        "w": 84,
+        "tw": 40
+      },
+      {
+        "text": "HP 23,455/23,455",
+        "font": 7,
+        "w": 84,
+        "tw": 58
+      },
+      {
+        "text": "MP 884/884",
+        "font": 7,
+        "w": 84,
+        "tw": 40
+      },
+      {
+        "text": "HP 99,988,295,077/100,000,000,000",
+        "font": 8,
+        "w": 177,
+        "tw": 143
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 83,
+        "tw": 58
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 83,
+        "tw": 58
+      }
+    ],
+    "vitals-430-false": [
+      {
+        "text": "HP 11,375/11,375",
+        "font": 7,
+        "w": 84,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,380/1,380",
+        "font": 7,
+        "w": 84,
+        "tw": 52
+      },
+      {
+        "text": "HP 21,332/21,332",
+        "font": 7,
+        "w": 84,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,002/1,002",
+        "font": 7,
+        "w": 84,
+        "tw": 52
+      },
+      {
+        "text": "HP 29,038/29,038",
+        "font": 7,
+        "w": 84,
+        "tw": 58
+      },
+      {
+        "text": "MP 691/691",
+        "font": 7,
+        "w": 84,
+        "tw": 40
+      },
+      {
+        "text": "HP 23,455/23,455",
+        "font": 7,
+        "w": 84,
+        "tw": 58
+      },
+      {
+        "text": "MP 884/884",
+        "font": 7,
+        "w": 84,
+        "tw": 40
+      },
+      {
+        "text": "HP 99,988,295,077/100,000,000,000",
+        "font": 8,
+        "w": 177,
+        "tw": 143
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 83,
+        "tw": 58
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 83,
+        "tw": 58
+      }
+    ],
+    "formation-1280": {
+      "count": 65,
+      "moved": [],
+      "overflow": false
+    },
+    "equipment-1280": {
+      "count": 39,
+      "moved": [],
+      "overflow": false
+    },
+    "skills-1280": {
+      "count": 24,
+      "moved": [],
+      "overflow": false
+    },
+    "vitals-1280-true": [
+      {
+        "text": "HP 11,375/11,375",
+        "font": 7,
+        "w": 191,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,380/1,380",
+        "font": 7,
+        "w": 191,
+        "tw": 52
+      },
+      {
+        "text": "HP 21,332/21,332",
+        "font": 7,
+        "w": 191,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,002/1,002",
+        "font": 7,
+        "w": 191,
+        "tw": 52
+      },
+      {
+        "text": "HP 29,038/29,038",
+        "font": 7,
+        "w": 191,
+        "tw": 58
+      },
+      {
+        "text": "MP 691/691",
+        "font": 7,
+        "w": 191,
+        "tw": 40
+      },
+      {
+        "text": "HP 23,455/23,455",
+        "font": 7,
+        "w": 191,
+        "tw": 58
+      },
+      {
+        "text": "MP 884/884",
+        "font": 7,
+        "w": 191,
+        "tw": 40
+      },
+      {
+        "text": "HP 99,988,295,077/100,000,000,000",
+        "font": 8,
+        "w": 392,
+        "tw": 143
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 190,
+        "tw": 58
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 190,
+        "tw": 58
+      }
+    ],
+    "vitals-1280-false": [
+      {
+        "text": "HP 11,375/11,375",
+        "font": 7,
+        "w": 191,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,380/1,380",
+        "font": 7,
+        "w": 191,
+        "tw": 52
+      },
+      {
+        "text": "HP 21,332/21,332",
+        "font": 7,
+        "w": 191,
+        "tw": 58
+      },
+      {
+        "text": "MP 1,002/1,002",
+        "font": 7,
+        "w": 191,
+        "tw": 52
+      },
+      {
+        "text": "HP 29,038/29,038",
+        "font": 7,
+        "w": 191,
+        "tw": 58
+      },
+      {
+        "text": "MP 691/691",
+        "font": 7,
+        "w": 191,
+        "tw": 40
+      },
+      {
+        "text": "HP 23,455/23,455",
+        "font": 7,
+        "w": 191,
+        "tw": 58
+      },
+      {
+        "text": "MP 884/884",
+        "font": 7,
+        "w": 191,
+        "tw": 40
+      },
+      {
+        "text": "HP 99,988,295,077/100,000,000,000",
+        "font": 8,
+        "w": 392,
+        "tw": 143
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 190,
+        "tw": 58
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "font": 7,
+        "w": 190,
+        "tw": 58
+      }
+    ]
+  }
+}

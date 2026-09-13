@@ -2,12 +2,12 @@ import http from"node:http";
 import process from"node:process";
 import{WebSocketServer,WebSocket}from"ws";
 import{RoomStore}from"./src/RoomStore.js";
-import {WorldRaidCoordinator432} from "./src/WorldRaidCoordinator432.js";
+import {WorldRaidCoordinator437} from "./src/WorldRaidCoordinator437.js";
 
 const HOST=process.env.HOST||"127.0.0.1",PORT=Math.max(1,Math.min(65535,Number(process.env.PORT)||8787)),store=new RoomStore({battleReconnectActionGraceMs:2500,friendStateFile:process.env.FRIEND_STATE_FILE||"./data/friends.json",guildStateFile:process.env.GUILD_STATE_FILE||"./data/guilds.json",powerRankingStateFile:process.env.POWER_RANKING_STATE_FILE||"./data/power-rankings.json",settlementStateFile:process.env.SETTLEMENT_STATE_FILE||"./data/settlements.json"}),clients=new Set();
 const WORLD_RAID_REQUESTS=new Set(["worldRaidStatus","worldRaidStart","worldRaidAction","worldRaidAuto","worldRaidSpeed","worldRaidRetreat","worldRaidRanking429","worldRaidRewardList429","worldRaidRewardAck429","worldRaidTicketList430","worldRaidReserve430","worldRaidSubmit430"]);
 const WORLD_RAID_BUSY_REQUESTS=new Set(["createRoom","joinRoom","joinListedRoom","quickJoin","startExpedition","startRaid","startTeamBattle","startResonance","tradeInvite","tradeAccept","guildPlanGather","guildRecruitmentJoin","friendInviteRespond"]);
-const worldRaid=new WorldRaidCoordinator432({sessions:store.sessions,stateFile:process.env.WORLD_RAID_STATE_FILE||"./data/world-raid.json",send:(playerId,message)=>{const session=store.sessions.get(playerId);if(session?.connected)reply(session.connection,message)},isBusy:session=>store.trade.blocksContent(session.playerId)});
+const worldRaid=new WorldRaidCoordinator437({sessions:store.sessions,stateFile:process.env.WORLD_RAID_STATE_FILE||"./data/world-raid.json",send:(playerId,message)=>{const session=store.sessions.get(playerId);if(session?.connected)reply(session.connection,message)},isBusy:session=>store.trade.blocksContent(session.playerId)});
 const DEFAULT_ORIGINS=[/^https:\/\/[a-z0-9-]+\.github\.io$/i,/^https?:\/\/localhost(?::\d+)?$/i,/^https?:\/\/127\.0\.0\.1(?::\d+)?$/i];
 const BACKGROUND_REQUESTS=new Set(["ping","powerRankingPresence","powerSnapshotSubmit","powerRankingList","powerRankingProfile","powerRankingRewardAck","setConnectionMode","rewardAck","expeditionVitalsAck","hostWorldDeltaAck","battleDefeatedAck","expeditionResultAck","tradeAck",...WORLD_RAID_REQUESTS]);
 const ONLINE_PROTOCOL="1.17.0",COMPATIBLE_PROTOCOLS=new Set(["1.16.0",ONLINE_PROTOCOL]);

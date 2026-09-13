@@ -1,0 +1,51 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import os from 'node:os';import path from 'node:path';
+import {WorldRaidCoordinator437,WorldRaidBattle437} from '../online-server/src/WorldRaidCoordinator437.js';
+import {WorldRaidCoordinator432} from '../online-server/src/WorldRaidCoordinator432.js';
+import {fixture430,reserve430} from '../tools/build430/offline-fixture.mjs';
+import {WorldRaidReplay430,createOfflineTicketBattle430,replayOffline430} from '../src/worldRaid/WorldRaidReplay430.js';
+import {newWorldRaidCampaign428} from '../online-server/src/WorldRaidStore428.js';
+import {raidRoundLimit437} from '../src/worldRaid/WorldRaidLimit437.js';
+import {contributionBody437} from '../src/ui/Contribution437.js';
+import {raidResult432} from '../src/worldRaid/WorldRaidView432.js';
+const protect=r=>{for(const p of Object.values(r.players)){p.hp=p.maxHp=1e12;p.stats.hp=1e12;p.stats.def=p.stats.mdef=1e9;p.effects.push({kind:"regen",value:1,turns:999});}};
+function fixture437(extra={}){const f=fixture430();f.c=new WorldRaidCoordinator437({sessions:f.sessions,now:f.now,random:()=>.5,send:(id,m)=>f.messages.push({id,...m}),...extra});return f;}
+function ticket(version=3,sequence=1){const f=fixture430(),c=newWorldRaidCampaign428(sequence,f.now()),t={id:'rules437-'+version,playerId:f.a.playerId,ruleVersion:version,seed:234,issuedAt:f.now()};t.initialRoom=createOfflineTicketBattle430(f.a,c,t.id,t.seed,t.issuedAt,version);protect(t.initialRoom.raid);return t;}
+function finish(t,{manual=false,toggles=false}={}){const r=new WorldRaidReplay430(t);if(manual)r.step({kind:'auto',round:1,enabled:false});let i=0;while(!r.ended&&i++<1000){const raid=r.room.raid;if(raid.phase==='command'){if(toggles)for(const speed of [.5,1,2])r.step({kind:'speed',round:raid.round,speed});if(manual){for(const p of Object.values(raid.players))if(p.hp>0&&!raid.actions[p.playerId])r.step({kind:'action',round:raid.round,action:{kind:'guard',actorId:p.playerId}});continue;}}r.step({kind:'advance',round:raid.round});}assert.ok(r.ended);return r;}
+test('437 all three bosses allow living parties through round 10 and stop at 99',()=>{
+ for(const sequence of [1,2,3]){const t=ticket(3,sequence),r=finish(t,{manual:sequence===3});assert.equal(r.room.raid.round,99);assert.equal(r.room.raid.outcome,'limit');assert.ok(Object.values(r.room.raid.players).some(p=>p.hp>0));assert.equal(raidRoundLimit437(r.snapshot().raid),99);}
+});
+test('old v1 and v2 ticket JSON replays remain at their original 10 rounds',()=>{
+ for(const version of [1,2]){const t=ticket(version),r=finish(t),replay=replayOffline430(JSON.parse(JSON.stringify(t)),JSON.parse(JSON.stringify(r.commands)));assert.equal(r.room.raid.round,10);assert.equal(replay.damage,r.damage);assert.equal(raidRoundLimit437(replay.snapshot().raid),10);}
+});
+test('99-round manual play with speed changes exceeds old command cap and resumes identically within transport budget',()=>{
+ const t=ticket(),players=t.initialRoom.raid.players,original=structuredClone(players[t.playerId]);for(let i=1;i<4;i++){const id=t.playerId+':m'+(i+1);players[id]={...structuredClone(original),playerId:id,ownerPlayerId:t.playerId,rosterOrder:i};}const r=finish(t,{manual:true,toggles:true});assert.ok(r.commands.length>256);assert.ok(Buffer.byteLength(JSON.stringify({type:'worldRaidSubmit430',ticketId:t.id,commands:r.commands}))<128*1024);const halfway=r.commands.slice(0,270),partial=replayOffline430(t,halfway,{complete:false});assert.ok(!partial.ended);const replay=replayOffline430(JSON.parse(JSON.stringify(t)),JSON.parse(JSON.stringify(r.commands)));assert.equal(replay.room.raid.round,99);assert.equal(replay.damage,r.damage);assert.deepEqual(replay.room.raid.performance432,r.room.raid.performance432);
+});
+test('online server stops only at 99, publishes the actual cap, and charges once',()=>{
+ const f=fixture437();f.setNow(Date.UTC(2026,8,14,1));assert.ok(f.c.start(f.a,{requestId:'build437-online-start',campaignId:f.c.ledger.state.current.id}).ok);f.c.ledger.transact(s=>{protect(Object.values(s.attempts)[0].room.raid);return{ok:true};});let i=0,sawEleven=false;while(f.c.active(f.a.playerId)&&i++<220){f.setNow(f.now()+40000);f.c.advance();if(f.c.snapshot(f.a.playerId).attempt.raid.round===11)sawEleven=true;}
+ const s=f.c.snapshot(f.a.playerId);assert.ok(sawEleven);assert.equal(s.attempt.status,'ended');assert.equal(s.attempt.report.rounds,99);assert.equal(s.attempt.report.result,'limit');assert.equal(s.remaining,2);assert.equal(s.rules.maxRounds,99);assert.equal(s.attempt.raid.worldRaid428.maxRounds,99);
+});
+test('v3 offline submission is verified, persisted once, and duplicate submission cannot double damage',()=>{
+ const f=fixture437();const [t]=reserve430(f);assert.equal(t.ruleVersion,3);protect(t.initialRoom.raid);const r=finish(t),before=f.c.ledger.state.current.hp;assert.ok(f.c.submit430(f.a,{ticketId:t.id,commands:r.commands}).ok);const after=f.c.ledger.state.current.hp;assert.equal(before-after,r.damage);assert.equal(f.c.submit430(f.a,{ticketId:t.id,commands:r.commands}).duplicate,true);assert.equal(f.c.ledger.state.current.hp,after);assert.equal(f.c.snapshot(f.a.playerId).remaining,2);
+});
+test('restarting with active online attempt extends its cap without rewriting issued v2 ticket or charging quota',()=>{
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'raid437-')),stateFile=path.join(dir,'state.json');try{const f=fixture430();const old=new WorldRaidCoordinator432({sessions:f.sessions,now:f.now,stateFile});old.reserve430(f.a,{requestId:'legacy-ticket-build437',count:1,campaignId:old.ledger.state.current.id});old.start(f.a,{requestId:'legacy-online-build437',campaignId:old.ledger.state.current.id});const before=old.snapshot(f.a.playerId),ticket=JSON.parse(JSON.stringify(old._tickets430()[0]));const c=new WorldRaidCoordinator437({sessions:f.sessions,now:f.now,stateFile}),after=c.snapshot(f.a.playerId);assert.ok(c.healthy());assert.equal(after.remaining,before.remaining);assert.equal(after.attempt.id,before.attempt.id);assert.equal(after.attempt.damage,before.attempt.damage);assert.equal(after.attempt.raid.worldRaid428.maxRounds,99);assert.deepEqual(c._tickets430()[0],ticket);const restarted=new WorldRaidCoordinator437({sessions:f.sessions,now:f.now,stateFile});assert.equal(restarted.snapshot(f.a.playerId).remaining,1);}finally{fs.rmSync(dir,{recursive:true,force:true});}
+});
+test('boss one-time revival on round 98 keeps the living party fighting; round 99 still ends',()=>{
+ for(const round of [98,99]){const f=fixture430(),engine=new WorldRaidBattle437({session:f.a,now:f.now,random:()=>.5}),room=engine.create(f.a,newWorldRaidCampaign428(1,f.now()),'revive437').room,r=room.raid;protect(r);r.round=round;r.boss.hp=1;r.boss.def=0;engine.action(room,f.a,{kind:'attack',actorId:f.a.playerId,enemyTargetId:r.boss.id});assert.ok(r.boss.hp>0);assert.equal(r.circle432.reviveUsed,true);assert.equal(r.outcome,round===99?'limit':null);}
+});
+test('defeat and retreat still finish before the limit',()=>{
+ const t=ticket(),r=new WorldRaidReplay430(t);r.step({kind:'retreat',round:1});assert.equal(r.ended,true);assert.equal(r.room.raid.outcome,'retreat');const d=new WorldRaidReplay430(t);Object.values(d.room.raid.players).forEach(p=>p.hp=0);d.step({kind:'advance',round:1});d.step({kind:'advance',round:1});assert.equal(d.ended,true);assert.equal(d.room.raid.outcome,'defeat');
+});
+test('compact contribution keeps exact recorded numbers and original MVP weighting without modifying input',()=>{
+ const s={party:[{id:'a',nickname:'<敵>',level:1500},{id:'b',nickname:'回復役',level:1500}],performance:{a:{damage:10000,taken:1200,healing:0,revives:0,kills:0},b:{damage:0,taken:0,healing:10000,revives:1,kills:0}}},before=JSON.stringify(s),html=contributionBody437(s);assert.match(html,/10,000/);assert.match(html,/&lt;敵&gt;/);assert.ok(html.indexOf('mvp437')>html.indexOf('&lt;敵&gt;'));assert.match(html,/<details class="contribution-detail437">/);assert.equal(JSON.stringify(s),before);
+});
+test('combined raid result shows legacy result round count, actual sync status, and no premature rewards',()=>{
+ const client={state:{attempt:{id:'a',campaignId:'c',raid:{round:10,worldRaid428:{maxRounds:10}},report:{result:'limit',rounds:10,damage:1234}}},localTicket430:'t',offline:{bank:()=>({tickets:{t:{receipt:{status:'expired'}}}})},getState:()=>({}),contributionBody432:()=>'<p>活躍表</p>'};const html=raidResult432(client);assert.match(html,/10ラウンド終了/);assert.match(html,/1,234/);assert.match(html,/集計対象外/);assert.match(html,/討伐後に報酬が確定/);assert.match(html,/レイドへ戻る/);assert.match(html,/活躍表/);
+});
+test('437 cache includes added art and replay dispatcher; frozen legacy engine is not aliased',()=>{
+ const html=fs.readFileSync('index.html','utf8'),map=JSON.parse(html.match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]).imports,assets=JSON.parse(fs.readFileSync('world-raid-offline437-assets.json'));for(const name of ['src/worldRaid/WorldRaidLimit437.js','src/worldRaid/WorldRaidReplay430.js','src/ui/Contribution437.js']){assert.match(map['./'+name],/3\.1\.116-build437$/);assert.ok(assets.includes('./'+name));}for(const n of ['frame','button','sanctum'])assert.ok(assets.includes('./assets/ui/build437/'+n+'.webp'));assert.ok(!Object.keys(map).some(k=>k.includes('/runtime430/')));assert.match(fs.readFileSync('online-server/server.js','utf8'),/new WorldRaidCoordinator437/);
+});
+test('one combined result returns directly to the lobby for online and offline attempts',async()=>{
+ const {WorldRaidClient432}=await import('../src/worldRaid/WorldRaidClient432.js');
+ for(const local of [false,true]){const c=Object.create(WorldRaidClient432.prototype);let rendered=0,updated=0,requested=0;Object.assign(c,{showingResult432:true,state:{attempt:{id:'ended437'}},localTicket430:local?'ticket437':null,onlineState430:{campaign:{sequence:1}},render(){rendered++;},offlineUpdated(){updated++;},requestRanking429(){requested++;},toTop432(){}});const button={disabled:false,matches:selector=>selector==='[data-modal-primary],[data-modal-dismiss]'};await c.handleClick({target:{closest:()=>button}});assert.equal(c.dismissedReport,'ended437');assert.equal(c.panel429,'challenge');assert.equal(c.localTicket430,null);assert.equal(requested,1);assert.equal(rendered+updated,1);}
+});

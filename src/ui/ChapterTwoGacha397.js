@@ -13,7 +13,7 @@ export function chapterTwoGachaRates397(){
 }
 function featuredPair406(id){
  const member=chapterTwoPairMember406(id),ids=[id,member.partner.id];
- return `<section class="chapter406-featured-pair" aria-label="${esc(member.group)}のペア"><div class="chapter406-pair-members">${ids.map(id=>`<figure>${monsterVisual({speciesId:id},SPECIES[id].name,{className:'chapter397-banner-sprite'})}<figcaption>${esc(SPECIES[id].name)}</figcaption></figure>`).join('')}</div><small>【${esc(member.group)}】の2体で共鳴</small></section>`;
+ return `<section class="chapter406-featured-pair" aria-label="${esc(member.group)}のペア"><div class="chapter406-pair-members">${ids.map(id=>`<figure>${monsterVisual({speciesId:id},SPECIES[id].name,{className:'chapter397-banner-sprite'})}<figcaption><small>【${esc(member.group)}】</small><b>${esc(chapterTwoPairMember406(id).short)}</b></figcaption></figure>`).join('')}</div><small>【${esc(member.group)}】の2体で共鳴</small></section>`;
 }
 export function chapterTwoGachaBody397(state){
  const crystals=Math.max(0,Number(state.player?.crystals)||0);
@@ -22,11 +22,11 @@ export function chapterTwoGachaBody397(state){
   <div class="gacha-campaign-carousel chapter406-banner-frame"><article class="gacha-campaign-slide chapter406-summon-banner">
    <header><small>第二章限定</small><h3>境界の召喚</h3><p>限定70体／全7ランク・仲間のみ</p></header>
    <div class="chapter406-featured-pairs">${featuredPair406('ch2_nemesia')}${featuredPair406('ch2_sephira')}</div>
-   <p class="chapter406-pair-note">同じ【共通名】の2体を編成して、ペア共鳴を発動。<small>登場する仲間の一例です。ペアでの排出保証はありません。</small></p>
   </article></div>
   <section class="gacha-category-section chapter406-pull-section"><div class="spread"><h3>召喚を選ぶ</h3><button type="button" data-chapter397-rates>提供割合・登場する仲間</button></div>
-   <div class="chapter397-pulls"><button type="button" data-chapter397-pull="1" ${crystals<100?'disabled':''}><b>1回召喚</b><span>魔晶石 100個</span></button><button type="button" data-chapter397-pull="10" ${crystals<1000?'disabled':''}><b>10回召喚</b><span>魔晶石 1000個</span></button></div>
+   <div class="chapter397-pulls"><button type="button" data-chapter397-pull="1" ${crystals<100?'disabled':''}><img class="summon-button-art436" src="./assets/ui/build436/summon-button.webp" alt="" aria-hidden="true"><b><em>1</em>回召喚</b><span>魔晶石 100個</span></button><button type="button" data-chapter397-pull="10" ${crystals<1000?'disabled':''}><img class="summon-button-art436" src="./assets/ui/build436/summon-button.webp" alt="" aria-hidden="true"><b><em>10</em>回召喚</b><span>魔晶石 1000個</span></button></div>
   </section>
+  <details class="chapter436-pair-help"><summary>ペア共鳴について</summary><p>同じ【共通名】の2体を編成して、ペア共鳴を発動。上の4体は登場する仲間の一例です。ペアでの排出保証はありません。</p></details>
   <p class="chapter397-gacha-note">神話1%・LR4%・UR15%<br>単発も10連も同じ割合／レア保証・天井なし</p>
  </div>`;
 }
