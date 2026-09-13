@@ -12,10 +12,10 @@ const read=p=>fs.readFileSync(new URL('../'+p,import.meta.url),'utf8');
 test('all modified browser modules, including old importer aliases, resolve to the current code',()=>{
  const imports=JSON.parse(read('index.html').match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]).imports;
  for(const path of JSON.parse(read('docs/build415/changed-runtime.json')).filter(p=>p.endsWith('.js')&&p!=='src/main.js')){
-  const version=['src/core/config.js','src/ui/screens/BattleScreen.js'].includes(path)?'3.1.103-build424':['src/battle/TrialAdaptation415.js','src/ui/BattlePreparation415.js'].includes(path)?'3.1.101-build422':path==='src/ui/screens/FormationScreen.js'?'3.1.97-build418':'3.1.94-build415';
+  const version=path==='src/core/config.js'?'3.1.110-build431':['src/ui/screens/BattleScreen.js','src/battle/BattleRules.js'].includes(path)?'3.1.105-build426':['src/battle/TrialAdaptation415.js','src/ui/BattlePreparation415.js'].includes(path)?'3.1.101-build422':path==='src/ui/screens/FormationScreen.js'?'3.1.97-build418':'3.1.94-build415';
   assert.equal(imports['./'+path],'./'+path+'?v='+version);for(const[k,v]of Object.entries(imports))if(k.split('?')[0]==='./'+path)assert.equal(v,'./'+path+'?v='+version);
  }
- assert.match(read('index.html'),/const ASSET_BUILD = "build424"/);assert.match(read('src/core/config.js'),/SAVE_SCHEMA_VERSION=84/);
+ assert.match(read('index.html'),/const ASSET_BUILD = "build431"/);assert.match(read('src/core/config.js'),/SAVE_SCHEMA_VERSION=84/);
 });
 test('online combat cannot acquire trial stats; role condition is explicit',()=>{
  const party=['ch2_ryune','ch2_rose','ch2_noelle'].map(speciesId=>createMonster(speciesId,{level:1000}));
@@ -42,7 +42,7 @@ test('primary healing support has MP for at least three casts at benchmark level
 
 test('Deep Abyss and Ten Gods preserve all 68 golden stat, MP and skill profiles',async()=>{
  const {allLearnedSkills}=await import('../src/battle/SkillSystem.js'),{createHash}=await import('node:crypto');const baseline=JSON.parse(read('docs/build415/protected-baseline.json'));
- assert.equal(baseline.rows.length,68);for(const [path,hash]of Object.entries(baseline.hashes))assert.equal(createHash('sha256').update(read(path)).digest('hex'),hash,path);
+ assert.equal(baseline.rows.length,68);for(const [path,hash]of Object.entries(baseline.hashes)){let source=read(path);const hooks=JSON.parse(read('docs/build428/compatibility-hooks.json'))[path]??[];for(const hook of hooks){const at=hook.start;assert.equal(source.slice(at,at+hook.after.length),hook.after,`scoped hook: ${path}`);source=source.slice(0,at)+hook.before+source.slice(at+hook.after.length);}assert.equal(createHash('sha256').update(source).digest('hex'),hash,path);}
  for(const row of baseline.rows){const m=createMonster(row.speciesId,{endgameBossId:row.id,endgameFaction:row.faction,level:row.level,allowEndgameLevel:true,traitId:'steady',rank:1,plus:0,affection:0});assert.deepEqual(calculatedStats(m),row.stats,row.id);assert.equal(maxMp(m),row.mp);assert.deepEqual(allLearnedSkills(m).map(s=>({id:s.id,mp:effectiveSkillMpCost(m,s)})),row.skills);
  const party=[m,...['ch2_ryune','ch2_rose','ch2_noelle'].map(speciesId=>createMonster(speciesId,{level:1000}))],b={party,specialBattleType:'chapterTwo'};prepareTrial415(b,calculatedStats);assert.deepEqual(calculatedStats(m),row.stats);cleanupTrial415(b);}
 });

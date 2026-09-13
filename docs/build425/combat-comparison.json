@@ -1,0 +1,77 @@
+[
+  {
+    "ids": [
+      "ch2_seria",
+      "ch2_carmia",
+      "ch2_rostia",
+      "ch2_althea"
+    ],
+    "identical": true,
+    "result": {
+      "won": false,
+      "lost": true,
+      "rounds": 9,
+      "remaining": 0,
+      "metrics": {
+        "damage": 742086,
+        "taken": 358873,
+        "healing": 140891,
+        "mpSpent": 391,
+        "mpDrained": 0,
+        "shieldAbsorbed": 227573,
+        "firstRoundDeaths": 0,
+        "firstMpShortageRound": null
+      }
+    }
+  },
+  {
+    "ids": [
+      "ch2_nemesia",
+      "ch2_everia",
+      "ch2_aeriel",
+      "ch2_vespera"
+    ],
+    "identical": true,
+    "result": {
+      "won": true,
+      "lost": false,
+      "rounds": 5,
+      "remaining": 0.6899046498824053,
+      "metrics": {
+        "damage": 1792000,
+        "taken": 254185,
+        "healing": 173000,
+        "mpSpent": 477,
+        "mpDrained": 0,
+        "shieldAbsorbed": 215805,
+        "firstRoundDeaths": 0,
+        "firstMpShortageRound": null
+      }
+    }
+  },
+  {
+    "ids": [
+      "ten_life",
+      "ten_time",
+      "abyss_wrath",
+      "abyss_gluttony"
+    ],
+    "identical": true,
+    "result": {
+      "won": false,
+      "lost": true,
+      "rounds": 7,
+      "remaining": 0,
+      "metrics": {
+        "damage": 630756,
+        "taken": 304199,
+        "healing": 141412,
+        "mpSpent": 540,
+        "mpDrained": 0,
+        "shieldAbsorbed": 94119,
+        "firstRoundDeaths": 0,
+        "firstMpShortageRound": null
+      }
+    }
+  }
+]

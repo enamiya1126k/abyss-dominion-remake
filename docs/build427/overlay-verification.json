@@ -1,0 +1,10 @@
+{
+  "base": "Build426",
+  "overlay": "ABYSS_Build427_home_shop.zip",
+  "test_command": "node --test tests/*.test.mjs",
+  "tests": 337,
+  "passed": 337,
+  "failed": 0,
+  "runtime": "same SHA-256 as work427/docs/build427/runtime-checks.json",
+  "iphone_safari": "not tested"
+}

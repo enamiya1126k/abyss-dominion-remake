@@ -1,0 +1,12 @@
+#app .coop-raid-entrance427{text-align:center;padding:12px 8px;color:#eee0bd}
+#app .coop-raid-entrance427 h3{margin:8px 0;color:#f3d68d;font-size:1.4rem}
+#app .coop-raid-emblem427{display:flex;justify-content:center;margin:8px auto}
+#app .coop-raid-emblem427 .home-pixel-icon{width:72px;height:72px}
+#app .coop-raid-state427{display:inline-block;border:1px solid #826844;padding:8px 22px;margin:12px 0;color:#d6b9e4;background:#201628}
+#app .chest-supplies427{position:relative;margin:12px 0;padding:10px;border:1px solid #79633f;background:#141019;color:#eaddc1;min-width:0;text-align:left}
+#app .chest-supplies427 h4{margin:0 0 8px;color:#e3c786;font-size:13px}
+#app .chest-supplies427 ul{list-style:none;display:grid;gap:8px;padding:0;margin:0}
+#app .chest-supplies427 li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:8px;font-size:13px;line-height:1.4}
+#app .chest-supplies427 li>.item-pixel-icon{width:28px;height:28px;object-fit:contain;image-rendering:pixelated}
+#app .chest-supplies427 li>span{overflow-wrap:anywhere}
+#app .chest-supplies427 li>b{white-space:nowrap;color:#f2d998}

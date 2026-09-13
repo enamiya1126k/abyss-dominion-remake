@@ -1,0 +1,48 @@
+✔ offline commands are saved before presentation; failed saves retain the previous recoverable battle (24.632846ms)
+✔ reload resumes a partially played ticket and saves a completed result before attempting upload (43.501008ms)
+✔ receipt loss retries the same result, and a later ticket list recovers acknowledgement without duplicate damage (6.860509ms)
+✔ reservation request persists with its original profile; lost response resends the same request ID (2.782584ms)
+✔ failed offline data preparation cannot consume quota or send a reservation (0.409958ms)
+✔ old sockets and other-account tickets cannot change the local ticket bank (1.024534ms)
+✔ offline lobby keeps the real ticket quota and explains delayed reward finalization (8.308082ms)
+✔ native manual action, speed and auto controls route locally with no network connection (10.299283ms)
+✔ ticket bank and pending results survive native SaveService serialization (17.338291ms)
+✔ expired tickets cannot start; replay after a lost terminal response stops retrying on receipt (1.695485ms)
+✔ provisional rankings clearly distinguish pending settlement from final rewards (0.616049ms)
+✔ an expired paused battle does not block another still-valid reserved ticket (1.750649ms)
+✔ ticket acknowledgement updates the quota used by the screen immediately (15.494282ms)
+✔ an unrelated offline bank update cannot roll an active online battle back to the cached lobby (26.652619ms)
+✔ reopening a cached online battle restores the native presentation state as well as its header (4.134822ms)
+✔ an old status packet cannot overwrite the accepted online state or durable cache (5.21559ms)
+✖ a delayed ticket-list snapshot cannot replace a newer battle, but still delivers its ticket (5.16909ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 16
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 575.090223
+
+✖ failing tests:
+
+test at tests/build431-screen-sync.test.mjs:33:1
+✖ a delayed ticket-list snapshot cannot replace a newer battle, but still delivers its ticket (5.16909ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 3
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/work431/tests/build431-screen-sync.test.mjs:35:43)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 3,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

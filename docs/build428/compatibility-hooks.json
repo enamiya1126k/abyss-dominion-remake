@@ -1,0 +1,84 @@
+{
+  "online-server/src/RaidCoordinator.js": [
+    {
+      "before": "",
+      "after": "import {worldRaidPercentHp428} from '../../src/worldRaid/WorldRaidDamage428.js';\n",
+      "start": 0,
+      "end": 0
+    },
+    {
+      "before": "",
+      "after": "worldRaidPercentHp428(enemy,",
+      "start": 12611,
+      "end": 12611
+    },
+    {
+      "before": "",
+      "after": ")",
+      "start": 12620,
+      "end": 12620
+    },
+    {
+      "before": "",
+      "after": "worldRaidPercentHp428(enemy,",
+      "start": 49426,
+      "end": 49426
+    },
+    {
+      "before": "",
+      "after": ")",
+      "start": 49437,
+      "end": 49437
+    },
+    {
+      "before": "",
+      "after": "worldRaidPercentHp428(enemy,",
+      "start": 64386,
+      "end": 64386
+    },
+    {
+      "before": "",
+      "after": ")",
+      "start": 64394,
+      "end": 64394
+    },
+    {
+      "before": "",
+      "after": "worldRaidPercentHp428(enemy,",
+      "start": 66920,
+      "end": 66920
+    },
+    {
+      "before": "",
+      "after": ")",
+      "start": 66928,
+      "end": 66928
+    }
+  ],
+  "src/core/EndgameUltimateSystem.js": [
+    {
+      "before": "",
+      "after": "import {worldRaidPercentHp428} from '../worldRaid/WorldRaidDamage428.js';\n",
+      "start": 0,
+      "end": 0
+    },
+    {
+      "before": "",
+      "after": "if(u.worldRaidBoss428===true){damage(b,source,u,worldRaidPercentHp428(u,ultimateHp(u))*.25,{label:label+'・巨体耐性',ignoreShield:true});return}",
+      "start": 12449,
+      "end": 12449
+    },
+    {
+      "before": "",
+      "after": "worldRaidPercentHp428(target,",
+      "start": 21532,
+      "end": 21532
+    },
+    {
+      "before": "",
+      "after": ")",
+      "start": 21549,
+      "end": 21549
+    }
+  ]
+}

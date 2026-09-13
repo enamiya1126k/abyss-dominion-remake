@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';
-import {run,monster} from '../tools/build424/native-harness.mjs';
+import {run,monster} from '../tools/build430/native-harness.mjs';
 import {MOTHER_ID422,MOTHER_ENEMY422,MOTHER_SPECIES422,tuneMother422,chooseMotherAction423} from '../src/primordial/Mother422.js';
 import {MOTHER_STORIES422,motherStoryScene423,motherStoryRead423} from '../src/primordial/Story422.js';
 import {createChapterTwoArchive401} from '../src/core/ChapterTwoArchive401.js';

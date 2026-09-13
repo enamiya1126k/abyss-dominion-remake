@@ -1,0 +1,122 @@
+✖ ticket acknowledgement updates the quota used by the screen immediately (15.439039ms)
+✖ an unrelated offline bank update cannot roll an active online battle back to the cached lobby (29.801205ms)
+✖ reopening a cached online battle restores the native presentation state as well as its header (5.148399ms)
+✖ an old status packet cannot overwrite the accepted online state or durable cache (4.084727ms)
+✖ a delayed ticket-list snapshot cannot replace a newer battle, but still delivers its ticket (4.354543ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 0
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 502.88998
+
+✖ failing tests:
+
+test at tests/build431-screen-sync.test.mjs:17:1
+✖ ticket acknowledgement updates the quota used by the screen immediately (15.439039ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  3 !== 2
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/work431/tests/build431-screen-sync.test.mjs:19:50)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 3,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/build431-screen-sync.test.mjs:21:1
+✖ an unrelated offline bank update cannot roll an active online battle back to the cached lobby (29.801205ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - 'wr-dfa56bc9b18cc30ca68de95584495f9b'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/work431/tests/build431-screen-sync.test.mjs:23:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'wr-dfa56bc9b18cc30ca68de95584495f9b',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/build431-screen-sync.test.mjs:25:1
+✖ reopening a cached online battle restores the native presentation state as well as its header (5.148399ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - 'wr-2f3090b9329e28ac91c0cb55549d289b'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/work431/tests/build431-screen-sync.test.mjs:27:67)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'wr-2f3090b9329e28ac91c0cb55549d289b',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/build431-screen-sync.test.mjs:29:1
+✖ an old status packet cannot overwrite the accepted online state or durable cache (4.084727ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  1 !== 2
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/work431/tests/build431-screen-sync.test.mjs:31:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 1,
+    expected: 2,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests/build431-screen-sync.test.mjs:33:1
+✖ a delayed ticket-list snapshot cannot replace a newer battle, but still delivers its ticket (4.354543ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 3
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/bdcbcfe37e75/work431/tests/build431-screen-sync.test.mjs:35:43)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 3,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

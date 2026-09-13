@@ -1,0 +1,170 @@
+[
+  {
+    "team": [
+      "myth_enami",
+      "myth_yori",
+      "myth_hide",
+      "myth_rion"
+    ],
+    "seed": 1,
+    "rounds": 10,
+    "damage": 3929823,
+    "result": "limit",
+    "commands": 20,
+    "replay": "identical"
+  },
+  {
+    "team": [
+      "myth_enami",
+      "myth_yori",
+      "myth_hide",
+      "myth_rion"
+    ],
+    "seed": 19,
+    "rounds": 10,
+    "damage": 3795407,
+    "result": "limit",
+    "commands": 20,
+    "replay": "identical"
+  },
+  {
+    "team": [
+      "myth_enami",
+      "myth_yori",
+      "myth_hide",
+      "myth_rion"
+    ],
+    "seed": 47,
+    "rounds": 10,
+    "damage": 3850428,
+    "result": "limit",
+    "commands": 20,
+    "replay": "identical"
+  },
+  {
+    "team": [
+      "ten_time",
+      "ten_life",
+      "abyss_wrath",
+      "abyss_gluttony"
+    ],
+    "seed": 1,
+    "rounds": 10,
+    "damage": 1671854,
+    "result": "limit",
+    "commands": 20,
+    "replay": "identical"
+  },
+  {
+    "team": [
+      "ten_time",
+      "ten_life",
+      "abyss_wrath",
+      "abyss_gluttony"
+    ],
+    "seed": 19,
+    "rounds": 10,
+    "damage": 1691328,
+    "result": "limit",
+    "commands": 20,
+    "replay": "identical"
+  },
+  {
+    "team": [
+      "ten_time",
+      "ten_life",
+      "abyss_wrath",
+      "abyss_gluttony"
+    ],
+    "seed": 47,
+    "rounds": 10,
+    "damage": 1520812,
+    "result": "limit",
+    "commands": 20,
+    "replay": "identical"
+  },
+  {
+    "team": [
+      "ten_death",
+      "ten_end",
+      "ten_divinity",
+      "abyss_envy"
+    ],
+    "seed": 1,
+    "rounds": 10,
+    "damage": 4103002,
+    "result": "limit",
+    "commands": 20,
+    "replay": "identical"
+  },
+  {
+    "team": [
+      "ten_death",
+      "ten_end",
+      "ten_divinity",
+      "abyss_envy"
+    ],
+    "seed": 19,
+    "rounds": 10,
+    "damage": 4713893,
+    "result": "limit",
+    "commands": 20,
+    "replay": "identical"
+  },
+  {
+    "team": [
+      "ten_death",
+      "ten_end",
+      "ten_divinity",
+      "abyss_envy"
+    ],
+    "seed": 47,
+    "rounds": 10,
+    "damage": 4358878,
+    "result": "limit",
+    "commands": 20,
+    "replay": "identical"
+  },
+  {
+    "team": [
+      "ch2_ryune",
+      "ch2_rose",
+      "ch2_mirea",
+      "ch2_viola"
+    ],
+    "seed": 1,
+    "rounds": 10,
+    "damage": 643478,
+    "result": "limit",
+    "commands": 20,
+    "replay": "identical"
+  },
+  {
+    "team": [
+      "ch2_ryune",
+      "ch2_rose",
+      "ch2_mirea",
+      "ch2_viola"
+    ],
+    "seed": 19,
+    "rounds": 10,
+    "damage": 825153,
+    "result": "limit",
+    "commands": 20,
+    "replay": "identical"
+  },
+  {
+    "team": [
+      "ch2_ryune",
+      "ch2_rose",
+      "ch2_mirea",
+      "ch2_viola"
+    ],
+    "seed": 47,
+    "rounds": 10,
+    "damage": 810835,
+    "result": "limit",
+    "commands": 20,
+    "replay": "identical"
+  }
+]

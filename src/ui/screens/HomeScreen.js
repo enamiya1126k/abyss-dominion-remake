@@ -187,7 +187,7 @@ export function HomeScreen(state,options={}){
       <nav class="home-left-menu" aria-label="主要メニュー">
         ${menuButton({id:"openGacha",icon:"summon",title:"召喚",sub:"仲間・装備を獲得"})}
         ${menuButton({id:"openMonsters",icon:"growth",title:"魔物一覧",sub:"図鑑・合成・逃す"})}
-        ${menuButton({id:"openEquipment",icon:"equipment",title:"装備管理",sub:"装備の確認・強化"})}
+        ${menuButton({id:"openCoopRaid",icon:"crossed-swords",title:"共闘レイド",sub:"みんなで巨敵に挑む"})}
         ${menuButton({id:"openSkills",icon:"skills",title:"スキル・深淵ツリー",sub:"戦闘スキル／恒久育成"})}
         ${menuButton({id:"openBattleMemory",icon:"memory",title:"記憶の間",sub:memoryEntries.length?`${memorySub}／物語回想`:"戦闘・物語を振り返る",className:memoryEntries.length?"memory-ready":""})}
       </nav>
@@ -215,9 +215,9 @@ export function HomeScreen(state,options={}){
 
       <nav class="home-bottom-nav" aria-label="画面メニュー">
         <button type="button" class="active" aria-current="page">${pixelIcon("home")}<b>ホーム</b></button>
-        <button type="button" id="openOnlineParty">${pixelIcon("party")}<b>パーティ</b></button>
+        <button type="button" id="openOnlineParty" aria-label="パーティ・現在調整中">${pixelIcon("party")}<b>パーティ</b></button>
         <button type="button" id="openExplore"${chapterTwoDungeonHint(state)?' class="chapter-two-dungeon-hint" aria-label="ダンジョン：第二章の新たな行き先"':""}>${pixelIcon("dungeon")}<b>ダンジョン</b>${chapterTwoDungeonHint(state)?'<small class="chapter-two-new-destination">新たな行き先</small>':""}</button>
-        <button type="button" id="openItemShop">${pixelIcon("shop")}<b>ショップ</b></button>
+        <button type="button" id="openEquipment">${pixelIcon("equipment")}<b>装備管理</b></button>
         <button type="button" id="openEventHub" class="${eventReady?"ready":""}">${eventReady?'<i class="home-notification-dot"></i>':""}${pixelIcon("event")}<b>試練</b></button>
       </nav>
 

@@ -1,0 +1,158 @@
+{
+  "online-server/src/WorldRaidBattle428.js": {
+    "sha256": "f1023e47575423977a0901ea1d85017c57b78d4747ce5241f4f6f4954d6dc59d",
+    "dependencies": [
+      "online-server/src/RaidCoordinator.js",
+      "online-server/src/WorldRaidStore428.js"
+    ]
+  },
+  "online-server/src/RaidCoordinator.js": {
+    "sha256": "bc13aaa6276874e7e1c897405fa1c2392cb5ac33511ad662fb2b9b7a4effb0c6",
+    "dependencies": [
+      "src/worldRaid/WorldRaidDamage428.js",
+      "online-server/src/OnlineMagicCircles398.js",
+      "online-server/src/EndgameUltimateAdapter.js",
+      "online-server/src/HeroAllianceAdapter.js",
+      "online-server/src/WeeklyRaidCatalog.js",
+      "src/data/attributes.js",
+      "online-server/src/CampaignFloorScale.js"
+    ]
+  },
+  "src/worldRaid/WorldRaidDamage428.js": {
+    "sha256": "b927b361eeeb75d788b10930d4db64180b20a1623544eead71c60815bafaae90",
+    "dependencies": []
+  },
+  "online-server/src/OnlineMagicCircles398.js": {
+    "sha256": "291e768cb5120cc7629a1fc76f48852b1c9eca0ba6339978a7c0b9fb82e4e32d",
+    "dependencies": [
+      "src/core/MagicCircleSystem.js",
+      "src/data/magicCircles398.js",
+      "src/data/attributes.js"
+    ]
+  },
+  "src/core/MagicCircleSystem.js": {
+    "sha256": "4fe8cbd3982649e353809e72f5e36de459b83a2e74c833e1fc2414d58411f1e9",
+    "dependencies": [
+      "src/data/chapterTwoRelics394.js",
+      "src/data/magicCircles398.js"
+    ]
+  },
+  "src/data/chapterTwoRelics394.js": {
+    "sha256": "210b19a366a44ffc48010cd1fcbc4696fd59b6aeda591cf685d1dce3822b6552",
+    "dependencies": []
+  },
+  "src/data/magicCircles398.js": {
+    "sha256": "51283f6fb1ed0eb1e6a587361fd880d934ddb11904a6476c09b75071a1d00db8",
+    "dependencies": []
+  },
+  "src/data/attributes.js": {
+    "sha256": "63474168f88e8b9ee5dd1879331b733b2e096ae14624c3953dee668c0c547c39",
+    "dependencies": []
+  },
+  "online-server/src/EndgameUltimateAdapter.js": {
+    "sha256": "ec6355764a2df92bc4a0b9a0f70e13bcea0b6ad0b15da40544824f8f9771dfe8",
+    "dependencies": [
+      "src/data/endgameCharacters.js",
+      "src/core/EndgameUltimateSystem.js"
+    ]
+  },
+  "src/data/endgameCharacters.js": {
+    "sha256": "7ac3759698cdecf26924e72f1e2c9494528e06b78728977aa0be7a7f646e9f57",
+    "dependencies": [
+      "src/data/endgameUltimates.js"
+    ]
+  },
+  "src/data/endgameUltimates.js": {
+    "sha256": "2266ca6a0e7fbed3261ccc050daaa8350ffd8c8ee54707a5eca0f74884da0e58",
+    "dependencies": []
+  },
+  "src/core/EndgameUltimateSystem.js": {
+    "sha256": "1c6bfac8024a54f7aff949274c95593f0a5407ece7deba5a10b35e6b60a0f46f",
+    "dependencies": [
+      "src/worldRaid/WorldRaidDamage428.js",
+      "src/battle/SingleTraits410.js",
+      "src/core/HeroShieldDisplay.js",
+      "src/core/HeroFortitudeSystem.js",
+      "src/data/endgameUltimates.js",
+      "src/data/attributes.js"
+    ]
+  },
+  "src/battle/SingleTraits410.js": {
+    "sha256": "e678d90e4f8517304b5b9c8faea3f789fa1d6ca1693fde4f55b574e32d09f6a7",
+    "dependencies": [
+      "src/data/ChapterTwoAbilityDesign408.js",
+      "src/battle/ChapterTwoAbilityRuntime408.js"
+    ]
+  },
+  "src/data/ChapterTwoAbilityDesign408.js": {
+    "sha256": "5ed30b47836c6593abc9e2625e0b48743b9f81cd2cf529dee5a900ad684dca09",
+    "dependencies": []
+  },
+  "src/battle/ChapterTwoAbilityRuntime408.js": {
+    "sha256": "39c688754652baf780e55154ebf18c08bb8b67471f150a6d46f13dbdecec6c13",
+    "dependencies": []
+  },
+  "src/core/HeroShieldDisplay.js": {
+    "sha256": "22acba1aca4047516b379f93677aa1e4d1ddabe4f0d4b7b455eb7654a8b8058d",
+    "dependencies": [
+      "src/primordial/Shield425.js"
+    ]
+  },
+  "src/primordial/Shield425.js": {
+    "sha256": "699ef8a84d2e904ab6bc185c7f3a87cd81b5b7f8031a410cbec09a1074c6252b",
+    "dependencies": [
+      "src/primordial/Mother422.js"
+    ]
+  },
+  "src/primordial/Mother422.js": {
+    "sha256": "33055a5bdb482d5c0929e1894f66371f620c086a67c5db0e60cb39b8255e4888",
+    "dependencies": []
+  },
+  "src/core/HeroFortitudeSystem.js": {
+    "sha256": "831cab0e6834388a03649a3a251de88c183471aa6522f9631318fd1481307e7f",
+    "dependencies": []
+  },
+  "online-server/src/HeroAllianceAdapter.js": {
+    "sha256": "5cdd7dafaea028a6350a70dec17c7e0c0dc9efccaf2fe8d79a5cb5b8847c812e",
+    "dependencies": [
+      "online-server/src/OnlineMagicCircles398.js",
+      "src/core/HeroResonanceSystem.js",
+      "src/core/HeroAllianceSystem.js"
+    ]
+  },
+  "src/core/HeroResonanceSystem.js": {
+    "sha256": "0bfaf29f031ddb1e015f8d13419eda41e783d5f7acf4db887e96ec618032f118",
+    "dependencies": []
+  },
+  "src/core/HeroAllianceSystem.js": {
+    "sha256": "bc271f582d469b95c4ab10b3d5457da051268b59f2ad46fcbc082cfaa5043649",
+    "dependencies": [
+      "src/core/HeroShieldDisplay.js",
+      "src/core/HeroFortitudeSystem.js",
+      "src/core/EndgameUltimateSystem.js",
+      "src/data/mythicSerialSpecies.js",
+      "src/data/attributes.js",
+      "src/core/HeroResonanceSystem.js"
+    ]
+  },
+  "src/data/mythicSerialSpecies.js": {
+    "sha256": "534d40f77f63edfb5c3cc424af767604f8d98d95f17b0e10c200bb2922a0d900",
+    "dependencies": [
+      "src/core/HeroResonanceSystem.js"
+    ]
+  },
+  "online-server/src/WeeklyRaidCatalog.js": {
+    "sha256": "7408eb8b38c043d47080a277d7c55a4e8181291b4d275bc07560605d80df9d46",
+    "dependencies": []
+  },
+  "online-server/src/CampaignFloorScale.js": {
+    "sha256": "0c52a00bcd61139372f4aa2fa36bd33db67da1bb7d897ec4ce0f1f1812a6c9ce",
+    "dependencies": []
+  },
+  "online-server/src/WorldRaidStore428.js": {
+    "sha256": "c10ac26cccbb2f58a5a13cd8027035ce475bb1ed30a13d736051ba08d3e6971f",
+    "dependencies": [
+      "online-server/src/WeeklyRaidCatalog.js"
+    ]
+  }
+}

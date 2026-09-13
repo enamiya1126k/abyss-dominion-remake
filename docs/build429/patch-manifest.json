@@ -1,0 +1,194 @@
+{
+  "build": 429,
+  "version": "3.1.108",
+  "requiresBuild": 428,
+  "saveSchema": 84,
+  "tests": {
+    "passed": 383,
+    "failed": 0,
+    "overlayPassed": 383,
+    "command": "node --test tests/*.test.mjs"
+  },
+  "files": [
+    {
+      "path": "README_Build429.md",
+      "bytes": 5899,
+      "sha256": "002c7ffaeda9d288fe5dfe755f91ca40d6008b56b9f61b420274665b5c90bce9"
+    },
+    {
+      "path": "docs/build429/overlay-tests.log",
+      "bytes": 36611,
+      "sha256": "878ed682e63e61f1ce9ed4670c80f383d9e5657231ad539ec14509267f10aa0c"
+    },
+    {
+      "path": "docs/build429/tests.log",
+      "bytes": 36613,
+      "sha256": "bac5c0e1e4483164586c131c8f62a36d2aec574601aec429cbd1c98e978cb8d8"
+    },
+    {
+      "path": "index.html",
+      "bytes": 44484,
+      "sha256": "696e8c35afe831fa6fb840140dd7b7023f1b0b3c525f946334aab6169f7323c5"
+    },
+    {
+      "path": "online-server/server.js",
+      "bytes": 21379,
+      "sha256": "9dcf9b62717c7c3d2a0ada381dad5f3a9d21745908b143a4bcba5dabd16fb261"
+    },
+    {
+      "path": "online-server/src/WorldRaidCoordinator429.js",
+      "bytes": 8167,
+      "sha256": "d93322c0d704fc67fc7da7b24c7b350ce37b1de9645a28b54fddddff390d8591"
+    },
+    {
+      "path": "src/Styles/build429-world-rewards.css",
+      "bytes": 2517,
+      "sha256": "cb6944a6222c333702a195de40e522112635a99b9b237425a1c8be395015ae02"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "c889b6144b5334f06222de03006cd14d9216eb8620266addfc87a9b53578ed9c"
+    },
+    {
+      "path": "src/main.js",
+      "bytes": 1131778,
+      "sha256": "c1493609775f494920a033493a6b0a9b00fa3a541a1579eca7a409cf8a3f4d28"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidClient428.js",
+      "bytes": 11852,
+      "sha256": "4ec54bdf5d56a9729916e4162a8e6cff90d7712cef96e6d7d96af596d78109b0"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidRankingView429.js",
+      "bytes": 5577,
+      "sha256": "e7dc2cb252e3bfe88838db659d027d54e899dc9e641e1f602c72e083bd40e1ee"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidRewards429.js",
+      "bytes": 4444,
+      "sha256": "2a5a96db32df4aee3a2a091348ba5cc9365f1e7b8c5260d19efa81507fcacf0b"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidRewardsClient429.js",
+      "bytes": 3196,
+      "sha256": "a8f7f95b633d5b289825f6acdc544767eb5483e17b5ea6f74f06e767b1d6f40d"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidView428.js",
+      "bytes": 5083,
+      "sha256": "76db6fb5ab2947ea227c3e01b10b24ba9274feb3c5b774ec3c24ddeef3dd4535"
+    },
+    {
+      "path": "tests/build412-operations.test.mjs",
+      "bytes": 10511,
+      "sha256": "30cc8f6e9781af2242ebf484adb1c5ccd6d1b799b6f91415938323a79779feb8"
+    },
+    {
+      "path": "tests/build413-display.test.mjs",
+      "bytes": 4686,
+      "sha256": "5f4790b0165c27875eb1ba366b5bb627bf02b3677ab73f61724aa723062659c5"
+    },
+    {
+      "path": "tests/build415-boundaries.test.mjs",
+      "bytes": 6788,
+      "sha256": "0194c12bba5b6c499c369e948fb399876f1148f80b946b6554e05199e8d9c276"
+    },
+    {
+      "path": "tests/build416-integration.test.mjs",
+      "bytes": 9906,
+      "sha256": "3a7ab942986a5c9252fca2ca9d7b4ade5b061b9c91ff9a2a4cfe060d1ffe3105"
+    },
+    {
+      "path": "tests/build417-progression.test.mjs",
+      "bytes": 11497,
+      "sha256": "1c5348de3b4eb4b055faf08ee27910dfeab6d1a53a1028c05ba190ae12b3737d"
+    },
+    {
+      "path": "tests/build418-field.test.mjs",
+      "bytes": 6300,
+      "sha256": "71ef706e0626747879d5188cc37bdf42212b7ef5ccf9632f882b870e4a0214b1"
+    },
+    {
+      "path": "tests/build419-display-hp.test.mjs",
+      "bytes": 7082,
+      "sha256": "45455a06b4e2293367899f6c2de6ab933c022d5c9fefb32147fdfb9dd3f37596"
+    },
+    {
+      "path": "tests/build420-expedition-integration.test.mjs",
+      "bytes": 5109,
+      "sha256": "8cd5a8d66d4907fdfd204cdd1e884a912d05b730e78509c3489a010d8f503859"
+    },
+    {
+      "path": "tests/build421-skill-close.test.mjs",
+      "bytes": 3577,
+      "sha256": "07a66a22a219b20e19abc3631dfa1ed3d28594b89c0b37f7bd8b5fcdd33a88fb"
+    },
+    {
+      "path": "tests/build422-primordial.test.mjs",
+      "bytes": 10200,
+      "sha256": "3e9f2010e8e79989a3821c0dfa88c1f5a1c2a41c750c36b9bf44c1024601f41d"
+    },
+    {
+      "path": "tests/build423-finale.test.mjs",
+      "bytes": 9345,
+      "sha256": "8bfb20695d37dca4dffb0eff9dba153ab9bcf79fcc9a52c357cd4bb8974b52d0"
+    },
+    {
+      "path": "tests/build424-ten-laws.test.mjs",
+      "bytes": 14158,
+      "sha256": "980d742159907eafaf4b98557d11c46e6150bcf65247e82a4f528bdadd317cec"
+    },
+    {
+      "path": "tests/build425-mother-stage.test.mjs",
+      "bytes": 8152,
+      "sha256": "15de9227241457f287f1ffede4896a5a4436f6f797991375a81b90ae7fb6651f"
+    },
+    {
+      "path": "tests/build426-mother-cycle.test.mjs",
+      "bytes": 9198,
+      "sha256": "d34aa62635babe1515ca011cd187ab46551e6b5a1eeb733f61847e69b9445877"
+    },
+    {
+      "path": "tests/build427-home-supplies.test.mjs",
+      "bytes": 10149,
+      "sha256": "dbe2eb75a26177afd52c213711357af417dddc5be642c88d2a44a7bb5e7045a0"
+    },
+    {
+      "path": "tests/build428-world-raid-dispatch.test.mjs",
+      "bytes": 4857,
+      "sha256": "1937a6a979dab0fc3f83d4b08582760b7f1ae115b417df6f3bf7543efaa48817"
+    },
+    {
+      "path": "tests/build429-world-rewards-client.test.mjs",
+      "bytes": 7542,
+      "sha256": "bab7f41ac3e114cd8eb08120d86af9d7ecb3cdc800a2539726612364e6772625"
+    },
+    {
+      "path": "tests/build429-world-rewards-server.test.mjs",
+      "bytes": 10332,
+      "sha256": "7f7eb702003fdab29abc4229dbbcebc746ced285f9799a5cd3658c5065e3fdc2"
+    },
+    {
+      "path": "tools/build429/map-source.mjs",
+      "bytes": 1334,
+      "sha256": "f5bd3bff8481dd0c451c4708790dfe07df6e441aec1e644098a24c0e4068321e"
+    },
+    {
+      "path": "tools/build429/native-harness.mjs",
+      "bytes": 11107,
+      "sha256": "6142371d17fe6436087a3c5ddbd30f2a658e00e6bf5010e084f16da4213e414a"
+    },
+    {
+      "path": "tools/build429/native-source-map.json",
+      "bytes": 109649,
+      "sha256": "69dd38c097ee4dd9c45edcecd9736c2d80f92993fa5e3d2141ed091b58a458dc"
+    },
+    {
+      "path": "tools/build429/source-identity.json",
+      "bytes": 82,
+      "sha256": "a9f46ad7a5f966fffc08d261b1aae888a89d237d51d5d80d37d162e64583d5de"
+    }
+  ]
+}

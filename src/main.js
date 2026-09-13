@@ -1,3 +1,12 @@
+import {WorldRaidOfflineClient430} from './worldRaid/WorldRaidOfflineClient430.js';
+import {WorldRaidRewardsClient429} from './worldRaid/WorldRaidRewardsClient429.js';
+import {claimWorldRaidReward429} from './worldRaid/WorldRaidRewards429.js';
+import {WorldRaidClient430 as WorldRaidClient428} from './worldRaid/WorldRaidClient430.js';
+import {rollChestSupplies427,grantChestSupplies427} from './core/ChestSupplies427.js';
+import {PARTY_MAINTENANCE427,coopRaidEntrance427,chestSuppliesMarkup427} from './ui/HomeNavigation427.js';
+import {prepareMother426,beginMotherAttack426,endMotherAttack426,endMotherRound426,motherCycleText426} from './primordial/Cycle426.js';
+import {rememberMotherShield425} from './primordial/Shield425.js';
+import {playMotherDial425,motherPortraitStyle425} from './ui/MotherDial425.js';
 import {MOTHER_LAWS424,motherLaw424,motherLawSummary424,motherDialEnemy424,motherDialDue424} from './primordial/Dial424.js';
 import {MOTHER_HOME_SKIN424,commitHomeSkin400} from './core/HomeSkinSystem400.js';
 import {motherHalo423,drawMotherHalo423} from './primordial/Presentation423.js';
@@ -193,12 +202,12 @@ function campaignBattleBossWasDefeated(state,floor,boss){
  return floorBossWasDefeated(state?.player,floor)
 }
 function floorBossDisplayFloor(definition){return floorBossCampaignDisplayFloor(definition)??Math.max(1,Math.floor(Number(definition?.floor)||1))}
-const SCREEN_SESSION_KEY="abyss-dominion:current-screen",INVITE_SESSION_KEY="abyss-dominion:last-party-invite",REFRESHABLE_SCREENS=new Set(["home","formation","onlineParty","monsters","settings","explore","campaignFinalFloor","gauntlet","equipment","shop","skills","abyssSkills","inventory","armory","storyArchive","campaignIntel","chapterTwo","chapterTwoField","primordial422"]);
+const SCREEN_SESSION_KEY="abyss-dominion:current-screen",INVITE_SESSION_KEY="abyss-dominion:last-party-invite",REFRESHABLE_SCREENS=new Set(["home","formation","onlineParty","monsters","settings","explore","campaignFinalFloor","gauntlet","equipment","shop","skills","abyssSkills","inventory","armory","storyArchive","campaignIntel","chapterTwo","chapterTwoField","primordial422","worldRaid428"]);
 const POWER_RANKING_CACHE_KEY="abyss-dominion:power-ranking-cache:v1";
 function readPowerRankingCache(){try{const cached=JSON.parse(localStorage.getItem(POWER_RANKING_CACHE_KEY)||"null");if(!cached?.state||!Array.isArray(cached.state.entries))return null;return{...cached.state,_cached:true,_cachedAt:Math.max(0,Number(cached.cachedAt)||0),entries:cached.state.entries.map(entry=>({...entry,online:false})),self:cached.state.self?{...cached.state.self,online:false}:null}}catch{return null}}
 function writePowerRankingCache(state){if(!state||state.loading||state.error||!Array.isArray(state.entries))return;try{const clean={...state};delete clean._receivedAt;delete clean._cached;delete clean._cachedAt;localStorage.setItem(POWER_RANKING_CACHE_KEY,JSON.stringify({cachedAt:Date.now(),state:clean}))}catch{}}
 let exploreActionGeneration=0,secretRoomAutoRunning=false;
-let onlinePartyController=null,onlineSecretRoomContext=null,fullResetInFlight=false;
+let onlinePartyController=null,onlineSecretRoomContext=null,fullResetInFlight=false,worldRaidClient428=null;
 let homeServerStatus={state:"checking",label:"サーバー確認中",checkedAt:0};
 let powerRankingUi={state:readPowerRankingCache(),profile:null,selectedPlayerId:null,loadingList:false,loadingProfile:false,listTimedOut:false};
 let powerRankingPublishTimer=null,powerRankingScheduledSignature="",powerRankingLastSignature="",powerRankingLastPublishedAt=0,powerRankingLastConnectAttempt=0;
@@ -584,6 +593,7 @@ function campaignHeroIntelPresentation(model){
  }))
 }
 function render(){
+ if(screen!=="worldRaid428")worldRaidClient428?.unmount();
  if(screen==="explore"&&!save.state.player.inRun&&!battle){stopGame();snapshot=null;activeEnemy=null;screen="home";}
  mountHomeEnvironment400(null);
  if(game?.chapterTwo)stopGame();
@@ -605,6 +615,7 @@ function render(){
  else if(screen==="storyArchive"){storyArchiveModel=createStoryArchiveModel401(save.state);if(!storyArchiveModel.categories.some(c=>c.id===storyArchiveCategory))storyArchiveCategory="prologue";app.innerHTML=StoryArchiveScreen(storyArchiveModel,{category:storyArchiveCategory});bindStoryArchive()}
  else if(screen==="formation"){app.innerHTML=FormationScreen(save.state,{origin:formationOrigin});bindFormation()}
  else if(screen==="onlineParty"){app.innerHTML=OnlinePartyScreen(save.state);bindOnlineParty()}
+ else if(screen==="worldRaid428"){ensureWorldRaidClient428().mount(app)}
  else if(screen==="monsters"){app.innerHTML=MonsterListScreen(save.state,{...monsterManage,...monsterListState});bindList()}
  else if(screen==="detail"){const m=save.state.monsters.find(x=>x.id===selected);app.innerHTML=MonsterDetailScreen(m,save.state);bindDetail(m)}
  else if(screen==="settings"){app.innerHTML=SettingsScreen(save.state,{playerName:powerRankingDisplayName()});bindSettings()}
@@ -1183,54 +1194,17 @@ function openIdleReturnPreview(){
   const result=claimIdleReturn(save.state);save.save();modal.remove();showIdleReturnReport(result);
  };
 }
-const HOME_ITEM_SHOP=[
- {id:"captureCrystals",icon:"",name:"捕獲結晶",description:"希少な捕獲触媒。1日3個まで購入可",price:5000000,dailyLimit:3},
- {id:"potions",icon:"🌿",name:"薬草",description:"単体HPを100＋最大HP10%回復",price:300},
- {id:"highPotions",icon:"🧪",name:"上級回復薬",description:"単体HPを300＋最大HP25%回復",price:1800},
- {id:"partyPotions",icon:"💚",name:"全体回復薬",description:"味方全員のHPを回復",price:4500},
- {id:"manaPotions",icon:"💧",name:"魔力水",description:"単体MPを30＋最大MP10%回復",price:450},
- {id:"highManaPotions",icon:"🔷",name:"上級魔力水",description:"単体MPを100＋最大MP25%回復",price:2500},
- {id:"partyManaPotions",icon:"🌊",name:"全体魔力水",description:"味方全員のMPを回復",price:6000},
- {id:"fullManaPotions",icon:"💠",name:"魔力全快薬",description:"単体のMPを全回復",price:12000},
- {id:"partyFullManaPotions",icon:"🌀",name:"全体魔力全快薬",description:"味方全員のMPを全回復",price:50000},
- {id:"reviveLeaves",icon:"🍃",name:"蘇生の葉",description:"戦闘不能の仲間を蘇生",price:60000},
- {id:"statusCures",icon:"🩹",name:"浄化薬",description:"単体の状態異常を解除",price:1800},
- {id:"partyStatusCures",icon:"💨",name:"全体浄化薬",description:"味方全員の状態異常を解除",price:9000},
- {id:"fullHeals",icon:"✨",name:"万能霊薬",description:"単体のHP・MP・状態異常を全回復",price:30000},
- {id:"partyFullHeals",icon:"🌟",name:"全体万能霊薬",description:"味方全員を完全回復",price:150000}
-];
-function shopItemArt(item){
- return`<span class="home-shop-item-art" style="--shop-item-art:url('../../assets/ui/items/${item.id}.png')"><i>${item.icon}</i></span>`;
+function openPartyMaintenance427(){
+ app.insertAdjacentHTML('beforeend',Modal('パーティ',`<p>${PARTY_MAINTENANCE427}</p>`,'閉じる'));
+ topModal().querySelector('[data-modal-primary]').onclick=closeTopModal;
 }
-function openHomeItemShop(){
- const gold=Math.max(0,Number(save.state.player.gold)||0);
- save.state.shop??={};const today=localDayKey();if(save.state.shop.captureDaily?.key!==today)save.state.shop.captureDaily={key:today,count:0};
- const rows=HOME_ITEM_SHOP.map(item=>{const remaining=item.dailyLimit?Math.max(0,item.dailyLimit-(save.state.shop.captureDaily?.count??0)):null,maxByGold=Math.floor(gold/item.price),maximum=Math.max(0,Math.min(999,remaining??999,maxByGold)),disabled=maximum<=0;return`<article class="home-item-shop-row" data-home-shop-row="${item.id}" data-unit-price="${item.price}" data-max-purchase="${maximum}">${shopItemArt(item)}<div class="home-shop-item-copy"><b>${item.name}</b><small>${item.description}</small><em>所持 ${save.state.inventory[item.id]??0}個${remaining!=null?`・本日あと${remaining}個`:""}</em></div><div class="home-shop-buy-actions"><div class="home-shop-quantity" aria-label="${item.name}の購入数"><button type="button" data-shop-qty-step="-1" aria-label="1個減らす" ${disabled?"disabled":""}>−</button><input type="number" inputmode="numeric" min="1" max="${Math.max(1,maximum)}" value="1" data-shop-qty aria-label="購入数" ${disabled?"disabled":""}><button type="button" data-shop-qty-step="1" aria-label="1個増やす" ${disabled?"disabled":""}>＋</button><button type="button" data-shop-qty-max ${disabled?"disabled":""}>MAX</button></div><button type="button" data-home-item-buy="${item.id}" ${disabled?"disabled":""}><span data-shop-buy-label>${disabled?"購入不可":"1個購入"}</span><b data-shop-total>${item.price.toLocaleString()}G</b></button></div></article>`}).join("");
- app.insertAdjacentHTML("beforeend",Modal("アイテムショップ",`<div class="home-item-shop"><div class="home-item-shop-wallet"><span>所持GOLD</span><b>${gold.toLocaleString()}G</b></div><p class="muted">探索前でも帰還後でも、いつでも利用できます。闇市場の限定品とは別の常設店です。</p><div class="home-item-shop-list">${rows}</div></div>`,"閉じる"));
- const modal=topModal();
- modal.classList.add("ornate-shop-modal");
- modal.querySelectorAll("[data-home-shop-row]").forEach(row=>{
-  const input=row.querySelector("[data-shop-qty]"),maximum=Math.max(0,Number(row.dataset.maxPurchase)||0),unitPrice=Math.max(0,Number(row.dataset.unitPrice)||0),buy=row.querySelector("[data-home-item-buy]"),label=row.querySelector("[data-shop-buy-label]"),total=row.querySelector("[data-shop-total]");
-  const normalize=()=>{if(!input||maximum<=0)return 0;const count=Math.max(1,Math.min(maximum,Math.floor(Number(input.value)||1)));input.value=String(count);if(label)label.textContent=`${count}個購入`;if(total)total.textContent=`${(unitPrice*count).toLocaleString()}G`;return count};
-  row.querySelectorAll("[data-shop-qty-step]").forEach(button=>button.addEventListener("click",()=>{input.value=String((Number(input.value)||1)+Number(button.dataset.shopQtyStep));normalize()}));
-  row.querySelector("[data-shop-qty-max]")?.addEventListener("click",()=>{input.value=String(maximum);normalize()});
-  input?.addEventListener("input",normalize);input?.addEventListener("change",normalize);if(buy)buy._selectedPurchaseCount=normalize;
- });
- modal.querySelectorAll("[data-home-item-buy]").forEach(button=>button.onclick=()=>{
-  const item=HOME_ITEM_SHOP.find(entry=>entry.id===button.dataset.homeItemBuy),count=Math.max(1,Number(button._selectedPurchaseCount?.())||1);
-  if(!item)return;
-  if(item.dailyLimit){const daily=save.state.shop.captureDaily;if(daily.key!==localDayKey()){daily.key=localDayKey();daily.count=0}if(daily.count+count>item.dailyLimit)return showToast("捕獲結晶は1日3個までです")}
-  const cost=item.price*count;
-  if(save.state.player.gold<cost)return showToast("GOLDが足りません");
-  save.state.player.gold-=cost;
-  save.state.inventory[item.id]=(save.state.inventory[item.id]??0)+count;
-  if(item.dailyLimit)save.state.shop.captureDaily.count+=count;
-  save.state.records??={};
-  save.state.records.purchases=(save.state.records.purchases??0)+count;
-  save.save();modal.remove();showToast(`${item.name} ×${count}を購入`);openHomeItemShop();
- });
- modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
+function ensureWorldRaidClient428(){
+ const transport=ensureOnlinePartyController();
+ if(!worldRaidClient428||worldRaidClient428.transport!==transport)worldRaidClient428=new WorldRaidClient428({transport,getState:()=>save.state,toast:showToast,onBack:()=>go("home"),onScene:scene=>audio.setScene(scene)});
+ return worldRaidClient428;
 }
+function openCoopRaid427(){go("worldRaid428")}
+
 function openFormationFromHome(){if(contextGuidePending("partyAdd"))completeContextGuide("party_open",{quiet:true});formationOrigin="home";go("formation")}
 function openCampaignReincarnationDialog(){openChapterTwo()}
 function chapterTwoCommit(change){
@@ -1398,7 +1372,7 @@ function renderChapterTwo(field=false){
  const syncAuto=on=>{const b=document.getElementById('exploreAutoToggle');b?.classList.toggle('active',on);b?.setAttribute('aria-pressed',String(on));if(b)b.querySelector('small').textContent=on?'ON':'OFF';if(on&&p.run.completed)showToast('残党と未回収の宝箱を探索します。宝物庫の番人への挑戦は手動で選べます。');save.save()};
  game={};mountChapterTwoField(game,{canvas:document.getElementById('gameCanvas'),Entity,Camera,findPath:path,drawScene:draw,bindInput,updateTrail:updateExplorationPartyTrail,TILE,run:p.run,party,onSave:()=>save.save(),onAutoChange:syncAuto,blocked:()=>Boolean(battle||document.querySelector('.game-modal')),onContact:object=>{
   if(object.type==='door'){const result=chapterTwoCommit(()=>moveChapterTwoRoom(save.state,object.id));if(result.ok){render();const curtain=document.createElement('div');curtain.className='section-passage-fade';curtain.innerHTML=`<span><small>区画移動</small><b>${chapterTwoRooms(p.run)[p.run.room].name}</b></span>`;document.querySelector('.explore-stage')?.append(curtain);setTimeout(()=>curtain.remove(),720)}else if(result.message)showToast(result.message);return}
-  if(object.type==='chest'){const result=chapterTwoCommit(()=>object.vaultIndex!=null?openVaultChest380(save.state,object.vaultIndex):(()=>{const x=openChapterTwoChest(save.state);if(x.ok)recordChapterTwo380(save.state,x);return x})());if(result.ok){render();app.insertAdjacentHTML('beforeend',Modal('宝箱を開いた',`<div class="chapter-two-reward">${result.equipment?equipmentReward404(result.equipment,save.state):`${pixelIcon('chest')}<h3>${result.experiencePacks?`経験値パック（超） ×${result.experiencePacks}`:`GOLD +${result.gold.toLocaleString()}`}</h3><p>探索で見つけた宝を獲得した。</p>`}</div>`,'探索へ戻る'));const m=topModal();m.classList.add('chapter-two-reward-modal');m.querySelector('[data-modal-primary]').onclick=()=>m.remove();chapterTwoAutoModal380(m,()=>m.remove(),p.run.auto377)}return}
+  if(object.type==='chest'){const result=chapterTwoCommit(()=>object.vaultIndex!=null?openVaultChest380(save.state,object.vaultIndex):(()=>{const x=openChapterTwoChest(save.state);if(x.ok)recordChapterTwo380(save.state,x);return x})());if(result.ok){render();app.insertAdjacentHTML('beforeend',Modal('宝箱を開いた',`<div class="chapter-two-reward">${result.equipment?equipmentReward404(result.equipment,save.state):`${pixelIcon('chest')}<h3>${result.experiencePacks?`経験値パック（超） ×${result.experiencePacks}`:`GOLD +${result.gold.toLocaleString()}`}</h3><p>探索で見つけた宝を獲得した。</p>`}${chestSuppliesMarkup427(result.supplies427)}</div>`,'探索へ戻る'));const m=topModal();m.classList.add('chapter-two-reward-modal');m.querySelector('[data-modal-primary]').onclick=()=>m.remove();chapterTwoAutoModal380(m,()=>m.remove(),p.run.auto377)}return}
   if(object.type==='spring'){recoverChapterTwoSpring418(object);return}
   if(object.type==='key'){const result=chapterTwoCommit(()=>pickupChapterTwoKey380(save.state,object.id));if(result.ok){render();showChapterTwoProgress(result)}return}
   if(object.type==='enemy'){const e=CHAPTER_TWO_ENCOUNTERS[object.id];if(e.roaming)openChapterTwoBattle(object.id);else{const info=chapterTwoEnemyEntries(object.id,p.run)[0];openFloorBossChallenge({...info,nameOverride:e.name,floorBossQuote:chapterTwoHint380(object.id),floorBossTitle:e.vault?'宝箱10個を守る強敵':chapterTwoArea(p.run).name},p.run.area+1,{chapterTwoId:object.id})}}
@@ -1866,12 +1840,12 @@ function bindHome(){
  document.getElementById("openSkills")?.addEventListener("click",()=>{completeContextGuide("skills_open",{quiet:true});skillNavigationOrigin="home";skillTarget=save.state.party[0]??save.state.monsters[0]?.id;skillSlotSelection=0;go("skills")});
  document.getElementById("openBattleMemory")?.addEventListener("click",openMemoryArchiveHub);
  document.getElementById("openStoryArchive")?.addEventListener("click",()=>{storyArchiveCategory="prologue";go("storyArchive")});
- document.getElementById("openItemShop")?.addEventListener("click",openHomeItemShop);
+ document.getElementById("openCoopRaid")?.addEventListener("click",openCoopRaid427);
  document.getElementById("openTeamBattle")?.addEventListener("click",openTeamBattle);
  document.getElementById("openRest")?.addEventListener("click",openRest);
  document.getElementById("openGacha")?.addEventListener("click",()=>{if(contextGuidePending("starterGacha"))completeContextGuide("starter_gacha_open",{quiet:true});openGacha()});
  document.getElementById("openNoticeCenter")?.addEventListener("click",openNoticeCenter);
- document.getElementById("openOnlineParty")?.addEventListener("click",()=>go("onlineParty"));
+ document.getElementById("openOnlineParty")?.addEventListener("click",openPartyMaintenance427);
  document.getElementById("openEventHub")?.addEventListener("click",openEventHub);
  document.getElementById("openSettings").onclick=()=>go("settings");
  document.getElementById("openExplore").onclick=()=>{completeContextGuide("home_dungeon",{quiet:true});openExploreFloorSelector()};
@@ -2935,6 +2909,8 @@ function ensureOnlinePartyController(){
 	  onPowerRankingReward:handlePowerRankingReward,
 	  onConnectionStatus:handleServerConnectionStatus
  });
+ onlinePartyController.worldRaidRewards429??=new WorldRaidRewardsClient429({transport:onlinePartyController,onReward:(entry,selfId)=>claimWorldRaidReward429(save,entry,selfId),toast:showToast,onUpdate:()=>{if(worldRaidClient428?.root&&!worldRaidClient428.ending&&worldRaidClient428.state?.attempt?.status!=="active")worldRaidClient428.render();}});
+ onlinePartyController.worldRaidOffline430??=new WorldRaidOfflineClient430({transport:onlinePartyController,getBank:()=>save.state.onlineParty?.worldRaidOffline430,setBank:bank=>{const previous=save.state.onlineParty?.worldRaidOffline430;save.state.onlineParty??={};save.state.onlineParty.worldRaidOffline430=bank;try{if(save.save())return true;}catch{}save.state.onlineParty.worldRaidOffline430=previous;return false;},toast:showToast,onUpdate:(id,events)=>worldRaidClient428?.offlineUpdated?.(id,events)});
  return onlinePartyController
 }
 function bindOnlineParty(){
@@ -4636,8 +4612,8 @@ function collectFieldCampaignKey(key){
 function campaignEquipmentEffectText(item){
  const stats=Object.entries(item?.stats??{}).filter(([,value])=>Number(value)).map(([key,value])=>`${equipmentStatLabel(key)} +${Number(value).toLocaleString()}`).slice(0,6);const special=item?.dedicatedWeapon?.skill?.name??(item?.ruleOverrides?.floorBossDedicated?"階層支配者の固有神装":"高位の神話補正");return{stats,special}
 }
-function showCampaignTrophyReveal({equipment,fragmentRows,locks,gold=0,crystals=0,keysReusable=false}){
- game.paused=true;const gear=equipment?campaignEquipmentEffectText(equipment):null,rewardRows=[...(fragmentRows??[])];if(gold>0)rewardRows.push({name:"GOLD",amount:gold,total:save.state.player.gold,currencyIcon:"coin"});if(crystals>0)rewardRows.push({name:"魔晶石",amount:crystals,total:save.state.player.crystals,currencyIcon:"crystal"});const fragments=rewardRows.map((row,index)=>{const visual=row.currencyIcon?pixelIcon(row.currencyIcon):monsterVisual(row.visual??row.id,row.visual?.fallback??"BOSS",{className:"campaign-fragment-boss-art"});return`<section class="campaign-fragment-get${row.currencyIcon?" is-currency":""}" style="--reward-order:${index}"><i>${visual}</i><span><small>${row.currencyIcon?row.name:`${row.name}の欠片`}</small><b>+${row.amount.toLocaleString()}${row.currencyIcon==="coin"?"G":""}</b><em>所持合計 ${row.total.toLocaleString()}</em></span></section>`}).join(""),body=`<div class="campaign-loot-reveal ${equipment?"mythic":"fragment"}"><div class="campaign-loot-rays" aria-hidden="true"></div><small>${equipment?"MYTHIC TREASURE":"BOSS TROPHY"}</small><h3>${equipment?"MYTHIC GET!":"GET!"}</h3>${equipment?`<section class="campaign-mythic-item"><div>${equipmentVisual(equipment,{className:"campaign-mythic-art",label:equipment.name})}</div><span><small>[${equipmentDisplayRarity(equipment)}] ${slotLabel(equipment.slot)}・Lv.${Math.max(1,Number(equipment.level)||1)}</small><b>${equipment.name}</b><em>${gear.special}</em></span></section><div class="campaign-loot-stats">${gear.stats.map(text=>`<span>${text}</span>`).join("")}</div>`:""}<div class="campaign-fragment-list">${fragments}</div><footer><b>${locks}/3 錠を解放</b><small>${keysReusable?"3本の鍵は同じ階の支配者宝箱すべてに使えます（消費なし）":"報酬はすでに所持品へ追加されています"}</small></footer></div>`;app.insertAdjacentHTML("beforeend",Modal("支配者の戦利品",body,"探索へ戻る"));const modal=topModal();modal.classList.add("campaign-loot-modal");let closed=false,autoCloseTimer=null;const close=()=>{if(closed)return;closed=true;if(autoCloseTimer)clearTimeout(autoCloseTimer);modal.remove();if(game){game.paused=false;if(exploreAutoActive())requestAnimationFrame(applyExploreAutoPath)}};modal._onDismiss=close;modal.querySelector("[data-modal-primary]").onclick=close;if(exploreAutoActive()){const generation=exploreActionGeneration;autoCloseTimer=setTimeout(()=>{if(generation===exploreActionGeneration&&modal.isConnected&&exploreAutoActive())close()},2200)}
+function showCampaignTrophyReveal({equipment,fragmentRows,locks,gold=0,crystals=0,keysReusable=false,supplies427=[]}){
+ game.paused=true;const gear=equipment?campaignEquipmentEffectText(equipment):null,rewardRows=[...(fragmentRows??[])];if(gold>0)rewardRows.push({name:"GOLD",amount:gold,total:save.state.player.gold,currencyIcon:"coin"});if(crystals>0)rewardRows.push({name:"魔晶石",amount:crystals,total:save.state.player.crystals,currencyIcon:"crystal"});const fragments=rewardRows.map((row,index)=>{const visual=row.currencyIcon?pixelIcon(row.currencyIcon):monsterVisual(row.visual??row.id,row.visual?.fallback??"BOSS",{className:"campaign-fragment-boss-art"});return`<section class="campaign-fragment-get${row.currencyIcon?" is-currency":""}" style="--reward-order:${index}"><i>${visual}</i><span><small>${row.currencyIcon?row.name:`${row.name}の欠片`}</small><b>+${row.amount.toLocaleString()}${row.currencyIcon==="coin"?"G":""}</b><em>所持合計 ${row.total.toLocaleString()}</em></span></section>`}).join(""),body=`<div class="campaign-loot-reveal ${equipment?"mythic":"fragment"}"><div class="campaign-loot-rays" aria-hidden="true"></div><small>${equipment?"MYTHIC TREASURE":"BOSS TROPHY"}</small><h3>${equipment?"MYTHIC GET!":"GET!"}</h3>${equipment?`<section class="campaign-mythic-item"><div>${equipmentVisual(equipment,{className:"campaign-mythic-art",label:equipment.name})}</div><span><small>[${equipmentDisplayRarity(equipment)}] ${slotLabel(equipment.slot)}・Lv.${Math.max(1,Number(equipment.level)||1)}</small><b>${equipment.name}</b><em>${gear.special}</em></span></section><div class="campaign-loot-stats">${gear.stats.map(text=>`<span>${text}</span>`).join("")}</div>`:""}<div class="campaign-fragment-list">${fragments}</div>${chestSuppliesMarkup427(supplies427)}<footer><b>${locks}/3 錠を解放</b><small>${keysReusable?"3本の鍵は同じ階の支配者宝箱すべてに使えます（消費なし）":"報酬はすでに所持品へ追加されています"}</small></footer></div>`;app.insertAdjacentHTML("beforeend",Modal("支配者の戦利品",body,"探索へ戻る"));const modal=topModal();modal.classList.add("campaign-loot-modal");let closed=false,autoCloseTimer=null;const close=()=>{if(closed)return;closed=true;if(autoCloseTimer)clearTimeout(autoCloseTimer);modal.remove();if(game){game.paused=false;if(exploreAutoActive())requestAnimationFrame(applyExploreAutoPath)}};modal._onDismiss=close;modal.querySelector("[data-modal-primary]").onclick=close;if(exploreAutoActive()){const generation=exploreActionGeneration;autoCloseTimer=setTimeout(()=>{if(generation===exploreActionGeneration&&modal.isConnected&&exploreAutoActive())close()},2200)}
 }
 function openCampaignTrophyChest(chest){
  if(!chest||chest.open)return false;const floor=save.state.player.currentFloor,bossId=String(chest.bossId??chest.bossInfo?.campaignBossId??chest.bossInfo?.endgameBossId??chest.bossInfo?.floorBossCatalogId??""),preview=trophyChestEntitlements(save.state,floor,bossId);if(!preview.available){const message=!preview.missingKeys?"この戦利品は受取済み":`戦利品の鍵があと${preview.missingKeys}本必要`;showExploreNotice(message,"warning");return false}
@@ -4648,8 +4624,9 @@ function openCampaignTrophyChest(chest){
   else if(fragmentPacks>0){const fragmentId=definition?.id??bossInfo.floorBossCatalogId??bossId,perLock=floor<=30?4:floor<=60?5:6,amount=perLock*fragmentPacks;save.state.floorBossChallenges??={};save.state.floorBossChallenges.fragments??={};save.state.floorBossChallenges.fragments[fragmentId]=(Number(save.state.floorBossChallenges.fragments[fragmentId])||0)+amount;fragmentRows.push({id:fragmentId,name:bossInfo.name??definition?.name??"階層支配者",amount,total:Number(save.state.floorBossChallenges.fragments[fragmentId])||0,visual:bossFragmentVisualIdentity(fragmentId,{floor})})}
   const currency=claim.currencyGuaranteed===true?campaignBossChestReward({floor,bossId:bossInfo,faction:ENDGAME_BOSSES[bossId]?.faction}):{gold:0,crystals:0},currentGold=Math.max(0,Math.min(Number.MAX_SAFE_INTEGER,Math.floor(Number(save.state.player.gold)||0))),currentCrystals=Math.max(0,Math.min(Number.MAX_SAFE_INTEGER,Math.floor(Number(save.state.player.crystals)||0))),gold=safeCurrencyGrant(currentGold,currency?.gold??0),crystals=safeCurrencyGrant(currentCrystals,currency?.crystals??0);save.state.player.gold=currentGold+gold;save.state.player.crystals=currentCrystals+crystals;
   let equipment=null;if(claim.equipmentGuaranteed){equipment=campaignTrophyEquipment({floor,boss:bossInfo,rewardId:`offline-campaign-trophy:${floor}:${bossId}`,obtainedMethod:"campaignTrophyChest"});if(!equipment)throw new Error("guaranteed boss equipment unavailable");receiveEquipment(save.state,equipment,{bossReward:true})}
+  const supplies427=suppressReplayRewards?[]:grantChestSupplies427(save.state,rollChestSupplies427({slots:3}));
   chest.locksOpened=CAMPAIGN_KEYS_PER_FLOOR;chest.open=true;save.state.player.bossRewards??={};const settled=campaignFloorState(save.state,floor);if(!isCampaignMultiBossFloor(floor)||settled.trophyClaimed)save.state.player.bossRewards[floor]="CAMPAIGN_TROPHY_COMPLETE";persistExpeditionSnapshot(expeditionSnapshotFromGame(),{saveNow:false});
-  if(!save.save())throw new Error("save failed");reveal={equipment,fragmentRows,locks:CAMPAIGN_KEYS_PER_FLOOR,gold,crystals,keysReusable:isCampaignMultiBossFloor(floor),replaySuppressed:suppressReplayRewards}
+  if(!save.save())throw new Error("save failed");reveal={equipment,fragmentRows,locks:CAMPAIGN_KEYS_PER_FLOOR,gold,crystals,keysReusable:isCampaignMultiBossFloor(floor),replaySuppressed:suppressReplayRewards,supplies427}
  }catch(error){save.state=checkpoint;chest.open=chestCheckpoint.open;chest.locksOpened=chestCheckpoint.locksOpened;showExploreNotice("戦利品を保存できなかったため、鍵と報酬を元に戻しました","warning");return false}
  try{refreshCampaignKeyCounter();if(reveal?.replaySuppressed){if(game)game.paused=false;showExploreNotice("この戦利品は元の時間軸ですでに回収済みです","info")}else showCampaignTrophyReveal(reveal)}catch(error){console.warn("Campaign trophy reveal skipped after a successful save",error);if(game)game.paused=false;showToast("戦利品は所持品へ保存済みです")}return true
 }
@@ -4786,10 +4763,10 @@ function update(dt){
  game.camera.follow(game.player.rx*TILE,game.player.ry*TILE,dt);
  game.camera.clamp(game.world)
 }
-function showChestRewardReveal({chest,gold=0,potions=0,crystals=0,receipt=null}){
+function showChestRewardReveal({chest,gold=0,potions=0,crystals=0,receipt=null,supplies427=[]}){
  const title=chest.locked?"鍵付き宝箱":chest.kind==="radiant"?"輝く宝箱":chest.kind==="cabinet"?"古い収納箱":chest.kind==="apple"?"深淵の果実":"宝箱",rows=[gold?`<article>${pixelIcon("coin")}<span><small>GOLD</small><b>+${gold.toLocaleString()}</b></span></article>`:"",potions?`<article>${pixelIcon("growth")}<span><small>回復薬</small><b>+${potions.toLocaleString()}</b></span></article>`:"",crystals?`<article>${pixelIcon("crystal")}<span><small>魔晶石</small><b>+${crystals.toLocaleString()}</b></span></article>`:""].filter(Boolean).join(""),item=receipt?.item,itemStats=item?Object.entries(item.stats??{}).filter(([,value])=>Number(value)).slice(0,6).map(([key,value])=>`<span>${equipmentStatLabel(key)} +${Number(value).toLocaleString()}</span>`).join(""):"";
  const equipment=item?`<section class="dungeon-chest-equipment"><div>${equipmentVisual(item,{className:"dungeon-chest-equipment-art",label:item.name})}</div><span><small>[${equipmentDisplayRarity(item)}] ${slotLabel(item.slot)}・Lv.${Math.max(1,Number(item.level)||1)}</small><b>${item.name}</b><em>${receipt.message??equipmentReceiptText(receipt)}</em></span></section><div class="dungeon-chest-stats">${itemStats}</div>`:"";
- const body=`<div class="dungeon-chest-reveal ${chest.locked?"locked":""}"><div class="dungeon-chest-rays" aria-hidden="true"></div><small>${chest.locked?"SEALED TREASURE":"TREASURE ACQUIRED"}</small><h3>獲得！</h3><strong>${title}</strong>${rows?`<div class="dungeon-chest-resource-grid">${rows}</div>`:""}${equipment}<footer>報酬は所持品へ保存されています</footer></div>`;
+ const body=`<div class="dungeon-chest-reveal ${chest.locked?"locked":""}"><div class="dungeon-chest-rays" aria-hidden="true"></div><small>${chest.locked?"SEALED TREASURE":"TREASURE ACQUIRED"}</small><h3>獲得！</h3><strong>${title}</strong>${rows?`<div class="dungeon-chest-resource-grid">${rows}</div>`:""}${equipment}${chestSuppliesMarkup427(supplies427)}<footer>報酬は所持品へ保存されています</footer></div>`;
  game.paused=true;app.insertAdjacentHTML("beforeend",Modal(title,body,"探索へ戻る"));const modal=topModal();modal.classList.add("dungeon-chest-reward-modal");let closed=false;const close=()=>{if(closed)return;closed=true;modal.remove();if(game){game.paused=false;if(exploreAutoActive())requestAnimationFrame(applyExploreAutoPath)}};modal._onDismiss=close;modal.querySelector("[data-modal-primary]").onclick=close;if(exploreAutoActive()){const generation=exploreActionGeneration;setTimeout(()=>{if(generation===exploreActionGeneration&&modal.isConnected&&exploreAutoActive())close()},1350)}
 }
 function openChest(c){
@@ -4798,11 +4775,11 @@ function openChest(c){
  const checkpoint=typeof structuredClone==="function"?structuredClone(save.state):JSON.parse(JSON.stringify(save.state)),chestCheckpoint={open:Boolean(c.open),autoSkipped:Boolean(c.autoSkipped)};let reward=null,gold=0,receipt=null;
  try{
   if(c.locked)save.state.inventory.abyssKeys--;c.open=true;if(!save.state.player.openedChests[floor].includes(c.id))save.state.player.openedChests[floor].push(c.id);recordBiomeChest(save.state,floor,c.id);save.state.records.chests++;
-  if(!c.mimic){const economyDepth=campaignFloorToLegacyFloor(floor);reward=rollTreasureChestReward({floor:economyDepth,kind:c.kind,locked:Boolean(c.locked),treasureRoom:Boolean(game.world.treasureRoom),luck:abyssEquipmentRarityBonus(save.state),baseGold:chestGoldBase(economyDepth),random:Math.random});gold=modifiedGoldReward(save.state,reward.gold,"exploration");if(gold)save.state.player.gold+=gold;if(reward.potions)save.state.inventory.potions=(save.state.inventory.potions??0)+reward.potions;if(reward.crystals)save.state.player.crystals=(save.state.player.crystals??0)+reward.crystals;if(reward.equipment){const item=createEquipment(reward.equipment.slot,{rarity:reward.equipment.rarity});item.level=reward.equipment.level;item.plus=reward.equipment.plus;item.obtainedFloor=floor;item.obtainedMethod=c.locked?"lockedTreasureChest":"explorationChest";receipt=equipmentReceipt(item,{scaleToFloor:false})}}
+  if(!c.mimic){const economyDepth=campaignFloorToLegacyFloor(floor);reward=rollTreasureChestReward({floor:economyDepth,kind:c.kind,locked:Boolean(c.locked),treasureRoom:Boolean(game.world.treasureRoom),luck:abyssEquipmentRarityBonus(save.state),baseGold:chestGoldBase(economyDepth),random:Math.random});gold=modifiedGoldReward(save.state,reward.gold,"exploration");if(gold)save.state.player.gold+=gold;if(reward.potions)save.state.inventory.potions=(save.state.inventory.potions??0)+reward.potions;if(reward.crystals)save.state.player.crystals=(save.state.player.crystals??0)+reward.crystals;if(reward.equipment){const item=createEquipment(reward.equipment.slot,{rarity:reward.equipment.rarity});item.level=reward.equipment.level;item.plus=reward.equipment.plus;item.obtainedFloor=floor;item.obtainedMethod=c.locked?"lockedTreasureChest":"explorationChest";receipt=equipmentReceipt(item,{scaleToFloor:false})}reward.supplies427=grantChestSupplies427(save.state,rollChestSupplies427({slots:c.locked||c.kind==="radiant"||game.world.treasureRoom?3:2}))}
   persistExpeditionSnapshot(expeditionSnapshotFromGame(),{saveNow:false});if(!save.save())throw new Error("save failed")
  }catch(error){save.state=checkpoint;c.open=chestCheckpoint.open;c.autoSkipped=chestCheckpoint.autoSkipped;showExploreNotice("宝箱の報酬を保存できなかったため、開封を取り消しました","warning");return false}
  if(c.mimic){game.player.path=[];const warning=pauseModal("ミミック出現",'<p>宝箱が牙を剥いた！</p><p class="muted">倒せば大量のGOLD・EXP・魔晶石を獲得できます。</p>');game.world.encountering=true;const generation=exploreActionGeneration;setTimeout(()=>{if(generation!==exploreActionGeneration||!game?.running||!save.state.player.inRun)return;warning?.remove();game.world.encountering=false;game.paused=false;beginEncounter(prepareEnemyEntry({speciesId:"mimic",level:enemyLevelForFloor(floor),boss:false,treasureMimic:true},floor,{forceGear:true,economyFloor:campaignFloorToLegacyFloor(floor)}))},650);return true}
- showChestRewardReveal({chest:c,gold,potions:reward?.potions??0,crystals:reward?.crystals??0,receipt});return true
+ showChestRewardReveal({chest:c,gold,potions:reward?.potions??0,crystals:reward?.crystals??0,receipt,supplies427:reward?.supplies427??[]});return true
 }
 function explorationPartyMembers(){return game?.online?(game.onlineMembers??[]).map(entry=>entry.monster).filter(Boolean):(save.state.party??[]).map(id=>save.state.monsters?.find(monster=>monster.id===id)).filter(Boolean)}
 const explorationSpriteCache=new Map();
@@ -5702,7 +5679,7 @@ function saveBattleCheckpoint(){
 	 const explorationSnapshot=battle.specialBattleType==='chapterTwo'?null:persistExpeditionSnapshot(snapshot??expeditionSnapshotFromGame(),{saveNow:false})??save.state.expeditionSnapshot??null;
  save.state.activeBattle={
   ...(battle.specialBattleType==='chapterTwo'?{chapterTwoToken:battle.chapterTwoToken,chapterTwoEncounter:battle.chapterTwoEncounter}:{}),
-  motherDial424:battle.motherDial424??null,balanceFloor415:battle.balanceFloor415??null,chapterPreparationTier415:battle.chapterPreparationTier415??0,chapterPreparationElite415:battle.chapterPreparationElite415??0,chapterPreparationVault415:Boolean(battle.chapterPreparationVault415),trialAdaptation415:snapshotTrial415(battle),pairPreparation415:battle.pairPreparation415??{},pairSynergy409:snapshotPairs409(battle),singleTraits410:snapshotSingles410(battle),chapterTwoAbilities408:snapshotAbilities408(battle),relicHits394:battle.relicHits394??null,twinResonance385:battle.twinResonance385??null,ultimates358:battle.ultimates358??null,ultimateActionKey358:battle.ultimateActionKey358??null,heroAlliance348:battle.heroAlliance348??{},heroFortitude361:battle.heroFortitude361??{},heroShieldMaxima378:Object.fromEntries(battle.party.map(u=>[u.id,u.heroShieldMax378??u.heroShield348??0])),heroShields348:Object.fromEntries(battle.party.map(u=>[u.id,u.heroShield348??0])),heroChains348:Object.fromEntries(battle.party.map(u=>[u.id,u.heroChain348??null])),battleId:battle.battleId,floor:save.state.player.currentFloor,enemies:battle.enemies,turn:battle.turn,turnQueue:battle.turnQueue,queueIndex:battle.queueIndex,
+  motherCycle426:battle.motherCycle426??null,motherDial424:battle.motherDial424??null,balanceFloor415:battle.balanceFloor415??null,chapterPreparationTier415:battle.chapterPreparationTier415??0,chapterPreparationElite415:battle.chapterPreparationElite415??0,chapterPreparationVault415:Boolean(battle.chapterPreparationVault415),trialAdaptation415:snapshotTrial415(battle),pairPreparation415:battle.pairPreparation415??{},pairSynergy409:snapshotPairs409(battle),singleTraits410:snapshotSingles410(battle),chapterTwoAbilities408:snapshotAbilities408(battle),relicHits394:battle.relicHits394??null,twinResonance385:battle.twinResonance385??null,ultimates358:battle.ultimates358??null,ultimateActionKey358:battle.ultimateActionKey358??null,heroAlliance348:battle.heroAlliance348??{},heroFortitude361:battle.heroFortitude361??{},heroShieldMaxima378:Object.fromEntries(battle.party.map(u=>[u.id,u.heroShieldMax378??u.heroShield348??0])),heroShields348:Object.fromEntries(battle.party.map(u=>[u.id,u.heroShield348??0])),heroChains348:Object.fromEntries(battle.party.map(u=>[u.id,u.heroChain348??null])),battleId:battle.battleId,floor:save.state.player.currentFloor,enemies:battle.enemies,turn:battle.turn,turnQueue:battle.turnQueue,queueIndex:battle.queueIndex,
   targetEnemyId:battle.targetEnemyId,auto:battle.auto,explorationAuto:Boolean(battle.explorationAuto),escapePending:Boolean(battle.escapePending),actionCommitted:Boolean(battle.actionCommitted),guards:battle.guards,cooldowns:battle.cooldowns,
   enemyStatuses:battle.enemyStatuses,allyAilments:battle.allyAilments,allyEffects:battle.allyEffects,enemyEffects:battle.enemyEffects,lastStatusTurn:battle.lastStatusTurn,log:battle.log,explorationSnapshot,
 	  specialBattle:battle.specialBattle,specialBattleType:battle.specialBattleType,specialTitle:battle.specialTitle,specialSubtitle:battle.specialSubtitle,campaignStage:battle.specialBattleType==="campaignFinal"?(battle.campaignStage==="party"?"party":null):battle.campaignStage??null,campaignHeroId:battle.campaignHeroId??null,campaignHeroEncounterId:battle.campaignHeroEncounterId??null,
@@ -5740,7 +5717,7 @@ function resumeSavedBattle(){
  battle={...data,battleId:data.battleId??crypto.randomUUID?.()??`${Date.now()}-${Math.random()}`,party,species:SPECIES,busy:false,guideReady:true,skillMenu:false,itemMenu:false,enemy:data.enemies[0],auto:Boolean(save.state.settings.autoBattle??data.auto),explorationAuto,reviveCount:data.reviveCount??0,delayedSkillEchoes:data.delayedSkillEchoes??[],performance:data.performance??Object.fromEntries(party.map(monster=>[monster.id,{damage:0,taken:0,healing:0,revives:0,kills:0}])),affectionDeathRecorded:data.affectionDeathRecorded??Object.fromEntries(party.map(monster=>[monster.id,monster.currentHp<=0])),circleTurnMultipliers:data.circleTurnMultipliers??{},circleTurnKeys:data.circleTurnKeys??{},circleCueKeys:data.circleCueKeys??{},enemyCircleTurnKeys:data.enemyCircleTurnKeys??{},circleShields:data.circleShields??{},signatureShields:data.signatureShields??{},signatureChains:data.signatureChains??{},signatureExtraRounds:data.signatureExtraRounds??{},signatureResonances:Object.fromEntries(activeSignatureResonances(save.state,party).map(entry=>[entry.monster.id,entry.definition])),magicCircleProfiles:data.magicCircleProfiles??Object.fromEntries(party.map(monster=>[monster.id,equippedMagicCircle(monster,save.state)])),magicCircleArt:data.magicCircleArt??Object.fromEntries(party.map(monster=>[monster.id,magicCircleMarkup(monster,save.state,{className:"battle-magic-circle"})])),enemyMagicCircleArt:Object.fromEntries((data.enemies??[]).map(enemy=>[enemy.id,enemyMagicCircleMarkup(enemy.enemyMagicCircle)])),openingCircleBuff:Boolean(data.openingCircleBuff),...createBattleRulesState(party),chapterTwoAbilities408:createAbilityState408(data.chapterTwoAbilities408),pairSynergy409:createPairState409(data.pairSynergy409),singleTraits410:createSingleState410(data.singleTraits410),cooldowns:data.cooldowns??{},enemyStatuses:data.enemyStatuses??{},allyAilments:data.allyAilments??Object.fromEntries(party.map(monster=>[monster.id,normalizePersistentAilments(monster.ailments)])),allyEffects:data.allyEffects??{},enemyEffects:data.enemyEffects??{},lastStatusTurn:data.lastStatusTurn??0,log:data.log??[]};
  for(const u of battle.party){u.heroShield348=Math.max(0,Number(data.heroShields348?.[u.id])||0);u.heroShieldMax378=Math.max(u.heroShield348,Number(data.heroShieldMaxima378?.[u.id])||0);u.heroChain348=data.heroChains348?.[u.id]??null;}for(const e of battle.enemies)if(e.campaignHeroId&&Number(e.heroLoadoutVersion348??0)<3){const rate=e.hp/Math.max(1,e.maxHp),mpRate=e.currentMp/Math.max(1,e.maxMp),shieldRate=Math.max(0,Number(e.heroShield348)||0)/Math.max(1,e.maxHp);applyCampaignHeroLoadout(e);e.hp=Math.round(e.maxHp*rate);e.currentMp=Math.floor(e.maxMp*mpRate);e.heroShield348=Math.floor(e.maxHp*shieldRate)}
  battle.hpDisplayRates={};battle.hpTrails={};if(!battle.floorBossAliveState)initializeFloorBossDeathTracking();battle.heroResonanceCount=heroResonanceProfile(battle.party).count;battle.invincibleAlliance=invincibleAllianceReady();
- battle.enemies.forEach(enemy=>hydrateEndgameEnemy(enemy));if(data.specialBattleType==='chapterTwo'&&!battle.enemies[0]?.chapterTwoTactics382?.roster397&&(CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter]?.boss||CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter]?.seal||CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter]?.vault)&&battle.enemies[0])battle.enemies[0].name=CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter].name;battle.enemy=battle.enemies[0];syncPersistentAilments(battle);battle.turnQueue=data.turnQueue??[];battle.queueIndex=data.queueIndex??0;battle.targetEnemyId=data.targetEnemyId??aliveEnemies(battle)[0]?.id??null;screen=data.specialBattleType==='mother422'?'primordial422':data.specialBattleType==='chapterTwo'?'chapterTwoField':'explore';renderBattle();setTimeout(()=>data.actionCommitted?finishCurrentAction():continueBattleFlow(),scaledBattleDelay(250));return true
+ battle.enemies.forEach(enemy=>hydrateEndgameEnemy(enemy));if(data.specialBattleType==='chapterTwo'&&!battle.enemies[0]?.chapterTwoTactics382?.roster397&&(CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter]?.boss||CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter]?.seal||CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter]?.vault)&&battle.enemies[0])battle.enemies[0].name=CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter].name;battle.enemy=battle.enemies[0];syncPersistentAilments(battle);battle.turnQueue=data.turnQueue??[];battle.queueIndex=data.queueIndex??0;battle.targetEnemyId=data.targetEnemyId??aliveEnemies(battle)[0]?.id??null;prepareBattleUltimates358();screen=data.specialBattleType==='mother422'?'primordial422':data.specialBattleType==='chapterTwo'?'chapterTwoField':'explore';renderBattle();setTimeout(()=>data.actionCommitted?finishCurrentAction():continueBattleFlow(),scaledBattleDelay(250));return true
 }
 function affixValue(monster,id,cap=Infinity){return Math.max(0,Math.min(cap,Number(monster?._equipmentAffixes?.[id]??0)))}
 function equipmentStatValue(monster,id,cap=Infinity){return Math.max(0,Math.min(cap,Number(monster?._equipmentStats?.[id]??0)))}
@@ -6448,6 +6425,7 @@ function prepareBattleUltimates358(){
  if(!battle)return;
  prepareUltimateBattle(battle,{stats:u=>battle.party.includes(u)?calculatedStats(u):{...u,hp:u.maxHp},mp:u=>battle.party.includes(u)?maxMp(u):u.maxMp,skills:u=>(battle.party.includes(u)?allLearnedSkills(u):endgameCharacter(u.endgameBossId)?.skills??[]).map(s=>({...s,_cost358:battle.party.includes(u)?effectiveSkillMpCost(u,s):Math.max(0,Number(s.mp)||0)})),statusProfile:u=>u.statusProfile??endgameCharacter(u.endgameBossId)?.statusProfile});
  prepareSingleBattle410();
+ prepareMother426(battle);
 }
 async function flushUltimateEvents358(){
  if(!battle)return;settleSingleDeaths410(battle);await flushSingleCues410();finishUltimateAction(battle);
@@ -6489,7 +6467,7 @@ async function command(type,skillId=null,{skipRandomCircle=false}={}){
  // the first action that still owns this exact turn may spend MP or advance it.
  if(battle!==commandBattle416||battle.busy||battle.resultSettled||battle.actionCommitted||battle.turn!==commandTurn416||battle.queueIndex!==commandIndex416||actor()!==a)return;
  if(ultimateBasicOnly(battle,a)&&type!=='attack'){if(battle.auto)return command('attack');return alert('領域中は通常攻撃のみ使用できます')}
- battle.busy=true;beginUltimateAction(battle,a,skillId?skillById(skillId):null);
+ battle.busy=true;beginMotherAttack426(battle,a);beginUltimateAction(battle,a,skillId?skillById(skillId):null);
  if(type==='skill'&&isEndgameUltimate(skillId)){if(!learnedSkills(a).some(s=>s.id===skillId)){battle.busy=false;finishUltimateAction(battle);if(battle.auto)return command("attack",null,{skipRandomCircle:true});return}return performUltimate358(a,skillId)}
  if(isHeroResonanceSpecies(a.speciesId)&&(type==="attack"||type==="skill"&&heroAuthoredSkills(a).some(s=>s.id===skillId))){const chosen=type==="skill"?heroAuthoredSkills(a).find(s=>s.id===skillId):null;return performHeroCommand348(a,"ally",chosen,battle.targetEnemyId)}
  if(isHeroResonanceSpecies(a.speciesId)&&!reserveHeroAction(battle,"ally",a)){battle.busy=false;return finishCurrentAction()}
@@ -6702,7 +6680,7 @@ async function advancePhosphorCountdown(enemy,target,marks=1){
 function grantEnemyAuthorityShield(source,rate,label="権能障壁"){
  if(source.speciesId==='ch2_fiora'){refreshPaperShield410(battle,source,'enemy','skill');return;}
  const safeRate=Math.max(0,Math.min(.8,Number(rate)||0));if(!safeRate)return 0;
- let total=0;for(const ally of battle.enemies.filter(enemy=>enemy.hp>0)){const amount=Math.max(1,Math.floor(ally.maxHp*safeRate)),before=Math.max(0,Number(ally._floorBossHpShield)||0);ally._floorBossHpShield=Math.max(before,amount);total+=Math.max(0,ally._floorBossHpShield-before)}
+ let total=0;for(const ally of battle.enemies.filter(enemy=>enemy.hp>0)){const amount=Math.max(1,Math.floor(ally.maxHp*safeRate)),before=Math.max(0,Number(ally._floorBossHpShield)||0);ally._floorBossHpShield=Math.max(before,amount);rememberMotherShield425(ally);total+=Math.max(0,ally._floorBossHpShield-before)}
  if(total)addBattleLog(battle,`${source.name}：${label} ${total.toLocaleString()}`);return total;
 }
 async function resolveEnemySpecialAction(e,action){
@@ -6714,7 +6692,7 @@ async function resolveEnemySpecialAction(e,action){
   const allies=info.type==="allHeal"||info.target==="味方全体"||info.effects?.some(effect=>effect.allies)?battle.enemies.filter(enemy=>enemy.hp>0):[e];
   if(info.heal){for(const ally of allies){const amount=Math.max(1,Math.floor(ally.maxHp*info.heal)),gained=recoverFloorBossHp(ally,amount);await flushBattleRecoveries();await floatText(`+${gained}`,ally.id,"heal")}}
   if(info.revive&&canBattleRevive()&&!(e.chapterTwoTactics382?.commander397&&e.commanderRevived397)){
-	   const validReviveTarget=enemy=>enemy.hp<=0&&(!e.chapterTwoTactics382?.commander397||!enemy.captured)&&(!info.slimeOnly||enemy.race==="slime"||String(enemy.speciesId).includes("slime")),fallen=battle.enemies.find(enemy=>validReviveTarget(enemy)&&!hasEffect(battle,enemy.id,"reviveSeal","enemy")),sealed=battle.enemies.find(enemy=>validReviveTarget(enemy)&&hasEffect(battle,enemy.id,"reviveSeal","enemy"));
+	   const validReviveTarget=enemy=>enemy.hp<=0&&!(battle.specialBattleType==='mother422'&&enemy.motherRevision426===426)&&(!e.chapterTwoTactics382?.commander397||!enemy.captured)&&(!info.slimeOnly||enemy.race==="slime"||String(enemy.speciesId).includes("slime")),fallen=battle.enemies.find(enemy=>validReviveTarget(enemy)&&!hasEffect(battle,enemy.id,"reviveSeal","enemy")),sealed=battle.enemies.find(enemy=>validReviveTarget(enemy)&&hasEffect(battle,enemy.id,"reviveSeal","enemy"));
 	   if(fallen){const before=fallen.hp,transfer=info.reviveTransferRate?Math.floor(e.hp*Math.min(.9,info.reviveTransferRate)):0;if(transfer>0){e.hp=Math.max(1,e.hp-transfer);storeFloorBossSacrifice(e,transfer);fallen.hp=Math.max(1,Math.min(fallen.maxHp,transfer));addBattleLog(battle,`${e.name}はHP${transfer.toLocaleString()}を${fallen.name}へ分与`)}else fallen.hp=Math.max(1,Math.floor(fallen.maxHp*info.revive));battle.reviveCount++;if(e.chapterTwoTactics382?.commander397)e.commanderRevived397=true;queueBattleRecovery(fallen,"hp",before,fallen.hp);if(info.reviveMp!==undefined){const oldMp=fallen.currentMp??0;fallen.currentMp=Math.max(oldMp,Math.floor((fallen.maxMp??0)*info.reviveMp));queueBattleRecovery(fallen,"mp",oldMp,fallen.currentMp);}for(const effect of info.revivedEffects??info.reviveEffects??[])applyBattleEffect(battle,fallen.id,{...effect,sourceKey:`${e.id}:${action}:revive`,sourceSkillName:info.label},"enemy");if(e.floorBossDomain?.effect==="healingFlare")e._floorBossHealedPowerReady=true;await flushBattleRecoveries()}
 	   else if(sealed)addBattleLog(battle,`${sealed.name}は蘇生封印中のため再構成できない`)
    else if(info.fallbackHeal){const gained=recoverFloorBossHp(e,Math.max(1,Math.floor(e.maxHp*info.fallbackHeal)));await flushBattleRecoveries();await floatText(`+${gained}`,e.id,"heal")}
@@ -6729,7 +6707,7 @@ async function resolveEnemySpecialAction(e,action){
 	  if(info.breakAllyMagicCircle)breakRandomAllyMagicCircle(e);
 	  if(Number(info.partyShieldRate)>0)grantEnemyAuthorityShield(e,info.partyShieldRate,"味方全体障壁");
 	  if(Number(info.reducePartyCooldowns)>0){const amount=Math.max(1,Math.floor(info.reducePartyCooldowns)),targets=battle.enemies.filter(enemy=>enemy.hp>0);for(const ally of targets)ally.specialCooldown=Math.max(0,(Number(ally.specialCooldown)||0)-amount);if(e.chapterTwoTactics382?.commander397)reduceChapterTwoCooldowns397(battle,e,amount);addBattleLog(battle,`${e.name}：味方固有技の再使用を${amount}ターン短縮`)}
-	  if(Number(info.hpShieldRate)>0){const amount=Math.max(1,Math.floor(e.maxHp*Math.min(.8,Number(info.hpShieldRate))));e._floorBossHpShield=Math.max(Math.max(0,Number(e._floorBossHpShield)||0),amount);addBattleLog(battle,`${e.name}：増殖障壁 ${amount.toLocaleString()}`)}
+	  if(Number(info.hpShieldRate)>0){const amount=Math.max(1,Math.floor(e.maxHp*Math.min(.8,Number(info.hpShieldRate))));e._floorBossHpShield=Math.max(Math.max(0,Number(e._floorBossHpShield)||0),amount);rememberMotherShield425(e);addBattleLog(battle,`${e.name}：増殖障壁 ${amount.toLocaleString()}`)}
 	  if(Number(info.restoreArmorLayers)>0){const cap=Math.max(1,Math.floor(Number(e.floorBossPassive?.startingArmorLayers)||Number(info.restoreArmorLayers))),before=Math.max(0,Math.floor(Number(e._floorBossArmorLayers)||0));e._floorBossArmorLayers=Math.min(cap,Math.max(before,Math.floor(Number(info.restoreArmorLayers))));if(e._floorBossArmorLayers>before)addBattleLog(battle,`${e.name}：${e.floorBossPassive?.name??"城甲"} ${e._floorBossArmorLayers}/${cap}層へ再構築`)}
 	  if(Number(info.selfMpHealRate)>0){const maximum=Math.max(1,Number(e.maxMp)||1),gain=recoverEnemyBattleMp(e,Math.max(1,Math.floor(maximum*Math.min(.8,Number(info.selfMpHealRate)))));if(gain){addBattleLog(battle,`${e.name}：磁力再充填 MP+${gain}`);await flushBattleRecoveries();await floatText(`MP +${gain}`,e.id,"heal")}}
 	  if(info.beginHealingChorus&&e.floorBossDomain?.effect==="healingChorusChannel"){e._floorBossHealingChorus={dueTurn:Math.max(1,Number(battle.turn)||1)+1,damage:0};addBattleLog(battle,`${e.floorBossDomain.name}：一巡後の満命聖歌を詠唱・最大HP${Math.round((Number(e.floorBossDomain.thresholdRate)||.10)*100)}%で阻止可能`)}
@@ -6812,7 +6790,7 @@ if(e.chapterTwoTactics382&&info.pattern!=='all'&&info.pattern!=='random3'&&e.cha
  if(info.selfSpd)e.spd=Math.max(1,Math.floor(e.spd*(1+info.selfSpd)));
  if(info.barrier)e.divineBarrier=Math.max(e.divineBarrier??0,info.barrier);
  if(Number(info.partyShieldRate)>0)grantEnemyAuthorityShield(e,info.partyShieldRate,"味方全体障壁");
- if(Number(info.hpShieldRate)>0){const amount=Math.max(1,Math.floor(e.maxHp*Math.min(.8,Number(info.hpShieldRate))));e._floorBossHpShield=Math.max(Math.max(0,Number(e._floorBossHpShield)||0),amount);addBattleLog(battle,`${e.name}：権能障壁 ${amount.toLocaleString()}`)}
+ if(Number(info.hpShieldRate)>0){const amount=Math.max(1,Math.floor(e.maxHp*Math.min(.8,Number(info.hpShieldRate))));e._floorBossHpShield=Math.max(Math.max(0,Number(e._floorBossHpShield)||0),amount);rememberMotherShield425(e);addBattleLog(battle,`${e.name}：権能障壁 ${amount.toLocaleString()}`)}
  if(info.slow)for(const target of targets.filter(monster=>monster.currentHp>0))applyBattleEffect(battle,target.id,{kind:"spdDown",value:info.slow,turns:3,chance:1},"ally");
  return true;
 }
@@ -6839,6 +6817,7 @@ async function enemyTurn({skipUltimate=false}={}){
 }
 async function finishCurrentAction(){
  if(!battle||battle.resultSettled)return;
+ endMotherAttack426(battle);
  if(!battle)return;settleSingleDeaths410(battle);await flushSingleCues410();for(const side of ['ally','enemy'])for(const u of side==='ally'?battle.party:battle.enemies)observePairImpact409(battle,u,side);await flushPairSynergyCues409();const counters390=await flushPairCounters390();if(counters390){if(!aliveEnemies(battle).length)return win(false,null);if(!battle.party.some(u=>u.currentHp>0))return lose();}await flushUltimateEvents358();
  if(battle?.escapePending){battle.busy=false;const escaped=await resolveEscape();if(escaped||!battle)return;if(!battle.escapePending&&battle.busy)return}
  const finished=currentTurnEntry(battle);if(finished?.type==="ally"&&battle.circleTurnMultipliers)delete battle.circleTurnMultipliers[finished.id];if(finished?.type==="enemy"){const enemy=(battle.enemies??[]).find(entry=>entry.id===finished.id);if(enemy)delete enemy._circleActionMultiplier}
@@ -6852,7 +6831,7 @@ async function finishCurrentAction(){
 }
 async function endRound(){
  if(!battle||battle.resultSettled)return;
- battle.busy=true;prepareBattleUltimates358();finishUltimateAction(battle);
+ battle.busy=true;prepareBattleUltimates358();endMotherAttack426(battle);finishUltimateAction(battle);
  const dueSkillEchoes=(battle.delayedSkillEchoes??[]).filter(entry=>Math.max(0,Number(entry.dueTurn)||0)<=Math.max(1,Number(battle.turn)||1));battle.delayedSkillEchoes=(battle.delayedSkillEchoes??[]).filter(entry=>!dueSkillEchoes.includes(entry));
  for(const echo of dueSkillEchoes){const source=battle.party.find(monster=>monster.id===echo.sourceId),target=(battle.enemies??[]).find(enemy=>enemy.id===echo.targetId&&enemy.hp>0)??aliveEnemies(battle)[0];if(!target||ultimateExtraBlocked(battle,source))continue;const applied=applyEnemyDamage(battle,target,Math.max(1,Math.floor(Number(echo.amount)||0)),{sourceId:echo.sourceId,element:echo.element??source?.attribute??"neutral",damageClass:echo.damageClass??"physical",relicKind394:"excluded"});if(source){recordBattleDamage(source,applied.damage);registerWeaponFinisher(source,target,applied.beforeHp)}addBattleLog(battle,`${source?displayName(source):"時の残響"}：${echo.skillName??"残響"}が再来し ${applied.damage.toLocaleString()}ダメージ`);await animateHit(target.id,true);await floatText(applied.damage?`残響 -${applied.damage}`:"完全ガード",target.id,applied.damage?"skill":"guard")}
  const statusResults=processEnemyStatuses(battle);
@@ -6878,6 +6857,7 @@ async function endRound(){
  for(const e of(battle.enemies??[]).filter(x=>x.hp<=0))await animateDefeat(e.id);if(!aliveEnemies(battle).length)return win(false,null)
  if(!battle.party.some(m=>m.currentHp>0))return lose();
  const judge=battle.party.find(monster=>monster.currentHp>0&&hasCircleEffect(monster,"turn20")&&!monster._circleJudgmentUsed&&battle.turn>=Math.max(1,Math.floor(circleEffectNumber(monster,"triggerTurn",20))));if(judge){const triggerTurn=Math.max(1,Math.floor(circleEffectNumber(judge,"triggerTurn",20)));judge._circleJudgmentUsed=true;for(const ally of battle.party)if(ally.id!==judge.id)magicCircleInstantDeath(ally,judge);for(const enemy of aliveEnemies(battle)){const before=enemy.hp;magicCircleInstantDeath(enemy,judge);registerWeaponFinisher(judge,enemy,before)}await magicCircleActivationFx(judge,circleInfo(judge),triggerTurn===20?"二十刻終焉":`${triggerTurn}刻終焉`,`${displayName(judge)}以外へ即死判定`,{danger:true,duration:900});await flushMagicCircleEvents();if(!aliveEnemies(battle).length)return win(false,null);if(!battle.party.some(monster=>monster.currentHp>0))return lose()}
+ endMotherRound426(battle);
  battle.turn++;
  buildTurnQueue(battle);
 	 const pageEditor=(battle.enemies??[]).find(enemy=>enemy.hp>0&&enemy._floorBossShuffleNextRound);if(pageEditor){for(const enemy of battle.enemies??[])enemy._floorBossShuffleNextRound=false;battle.turnQueue=shuffledBattleEntries(battle.turnQueue);addBattleLog(battle,`${pageEditor.floorBossDomain?.name??pageEditor.name}：第${battle.turn}ラウンドの行動頁を並べ替え`)}
@@ -7118,7 +7098,7 @@ function drawChapterTwoFieldLabels(){
 // Each timeout owns one modal; manual dismissal/navigation invalidates it.
 function chapterTwoAutoModal380(modal,finish,enabled){if(!enabled)return;const timer=setTimeout(()=>{if(modal.isConnected&&!modal.hidden&&topModal()===modal&&!battle)finish()},1500);const observer=new MutationObserver(()=>{if(!modal.isConnected){clearTimeout(timer);observer.disconnect()}});observer.observe(app,{childList:true,subtree:true});}
 function returnChapterTwo380(){if(!game?.chapterTwo||!game.running||battle)return;game.saveChapterTwo();const area=chapterTwoArea(chapterTwoState(save.state).run),result=chapterTwoCommit(()=>({ok:true,report:takeChapterTwoSummary380(save.state)}));if(!result.ok)return;stopGame();snapshot=null;const x=result.report;
- showManualReturnResult({startFloor:1,endFloor:6,floorsCleared:x.battles,gold:x.gold,equipment:x.equipment.map(e=>({item:{...e,slot:e.slot??'weapon'},receipt:{message:e.receipt??'獲得済み'}}))},{title:'第二章・探索帰還報告',onClose:()=>go('home')});const modal=topModal();modal.classList.add('chapter-two-return380');modal.querySelector('.return-floor-progress').innerHTML=`<header><strong>${area.name}</strong><small>今回の探索</small></header>`;const first=modal.querySelector('.return-result-summary article');first.querySelector('small').textContent='勝利数';first.querySelector('b').dataset.countSuffix='戦';const extra=document.createElement('p');extra.textContent=`各員EXP +${(x.experience??0).toLocaleString()} ／ 魔晶石 +${x.crystals??0} ／ 経験値パック（超） ×${x.experiencePacks??0}`;modal.querySelector('.return-result-summary').after(extra);if(x.circles395?.length){const circles=document.createElement('p');circles.textContent='専用魔法陣（受領済み）：'+x.circles395.map(c=>`${c.name} Lv.${c.level}`).join(' ／ ');extra.after(circles);}const ticket=chapterTwoRepeatTicket395(save.state);if(ticket){const repeat=document.createElement('button');repeat.type='button';repeat.className='collection395-entry';repeat.textContent=`${area.name}・段階${ticket.tier}でもう一度挑戦`;repeat.onclick=()=>startChapterTwoRepeat395(ticket,modal);extra.after(repeat);}countUpReturnValues(modal);
+ showManualReturnResult({startFloor:1,endFloor:6,floorsCleared:x.battles,gold:x.gold,equipment:x.equipment.map(e=>({item:{...e,slot:e.slot??'weapon'},receipt:{message:e.receipt??'獲得済み'}}))},{title:'第二章・探索帰還報告',onClose:()=>go('home')});const modal=topModal();modal.classList.add('chapter-two-return380');modal.querySelector('.return-floor-progress').innerHTML=`<header><strong>${area.name}</strong><small>今回の探索</small></header>`;const first=modal.querySelector('.return-result-summary article');first.querySelector('small').textContent='勝利数';first.querySelector('b').dataset.countSuffix='戦';const extra=document.createElement('p');extra.textContent=`各員EXP +${(x.experience??0).toLocaleString()} ／ 魔晶石 +${x.crystals??0} ／ 経験値パック（超） ×${x.experiencePacks??0}`;modal.querySelector('.return-result-summary').after(extra);if(x.supplies427?.length)extra.insertAdjacentHTML('afterend',chestSuppliesMarkup427(x.supplies427));if(x.circles395?.length){const circles=document.createElement('p');circles.textContent='専用魔法陣（受領済み）：'+x.circles395.map(c=>`${c.name} Lv.${c.level}`).join(' ／ ');extra.after(circles);}const ticket=chapterTwoRepeatTicket395(save.state);if(ticket){const repeat=document.createElement('button');repeat.type='button';repeat.className='collection395-entry';repeat.textContent=`${area.name}・段階${ticket.tier}でもう一度挑戦`;repeat.onclick=()=>startChapterTwoRepeat395(ticket,modal);extra.after(repeat);}countUpReturnValues(modal);
 }
 
 function enterMotherRoom422(){
@@ -7168,7 +7148,7 @@ function openMotherAltar422(){
 }
 function openMotherChallenge422(){
  if(battle||!motherUnlocked422(save.state))return;
- app.insertAdjacentHTML('beforeend',Modal('原母イオネア・最終決戦',`<div class="mother-challenge422"><div class="mother-challenge-art423">${motherHalo423()}${monsterVisual({speciesId:MOTHER_ID422},'原母イオネア')}</div><h3>原初の聖胎</h3><p><strong>十律輪</strong>が毎ラウンド開始時に回転し、Ⅰ〜Ⅹに対応する十神の技を追加発動する。母が行動不能でも、MP・再使用待ちに関係なく発動。<strong>次の数字を読み、障壁・浄化・強化解除・回復阻害で備えよう。</strong></p><p>Lv.5,000 ／ HP1,600,000 ／ 魔力14,000 ／ 速度8,000</p><p>手動・自動戦闘で挑戦。使用した消耗品は戦闘終了時に戻ります。初回撃破で専用ホームスキン「原初の聖胎・明けゆく世界」を解放。</p><details class="mother-law-list424"><summary>Ⅰ〜Ⅹの技と対策を見る</summary><p>母の「原初再演」は専用の威力。次の数字を確認して備えよう。</p><ol>${MOTHER_LAWS424.map(l=>`<li><b>${l.numeral} ${l.godName.replace(/^十神[^ ]+ /,'')}・${l.name}</b><small>${motherLawSummary424(l)}</small></li>`).join('')}</ol></details></div>`,'決戦を始める'));
+ app.insertAdjacentHTML('beforeend',Modal('原母イオネア・最終決戦',`<div class="mother-challenge422"><div class="mother-challenge-art423" style="${motherPortraitStyle425()}">${motherHalo423()}${monsterVisual({speciesId:MOTHER_ID422},'原母イオネア')}</div><h3>原初の聖胎</h3><p><strong>十律輪</strong>が毎ラウンド開始時に回転し、Ⅰ〜Ⅹに対応する十神の技を追加発動する。母が行動不能でも、MP・再使用待ちに関係なく発動。<strong>輪が止まると数字と技が明らかになる。障壁・浄化・強化解除・回復阻害を使い分けよう。</strong></p><p><b>万命の産声</b>：攻撃を受けると空き枠へ1体召喚（1行動1回・母を含め最大4体）。召喚敵は次ラウンドから行動。毒・反撃では召喚しない。</p><p><b>ふんばり</b>は1戦1回、致死ダメージをHP1で耐える。母の撃破後は、翌ラウンドから5ラウンド以内に召喚敵を全滅させよう。残っていると母がHP30%で1度だけ復活。倒れている間は十律輪・召喚とも停止。</p><p>Lv.5,000 ／ HP1,600,000 ／ 魔力14,000 ／ 速度8,000</p><p>手動・自動戦闘で挑戦。使用した消耗品は戦闘終了時に戻ります。初回撃破で専用ホームスキン「原初の聖胎・明けゆく世界」を解放。</p><details class="mother-law-list424"><summary>Ⅰ〜Ⅹの技と対策を見る</summary><p>母の「原初再演」は専用の威力。各技の特徴を確認して備えよう。</p><ol>${MOTHER_LAWS424.map(l=>`<li><b>${l.numeral} ${l.godName.replace(/^十神[^ ]+ /,'')}・${l.name}</b><small>${motherLawSummary424(l)}</small></li>`).join('')}</ol></details></div>`,'決戦を始める'));
  const m=topModal();let starting=false;m.querySelector('[data-modal-primary]').onclick=()=>{if(starting)return;starting=true;const result=chapterTwoCommit(()=>beginMother422(save.state));if(!result.ok){starting=false;return;}m.remove();const prior=capturePartyVitals();stopGame();startSpecialBattle([{...MOTHER_ENEMY422}],{battleId:result.id,type:'mother422',title:'第二章・原母イオネア',subtitle:'原初の聖胎',priorVitals:prior,returnScreen:'primordial422'});};
 }
 function finishMotherBattle422(won,{retreated=false}={}){
@@ -7184,11 +7164,9 @@ function finishMotherBattle422(won,{retreated=false}={}){
 
 
 async function showMotherDialCue424(law){
- const root=document.querySelector('.battle-screen');if(!root)return;
- root.insertAdjacentHTML('beforeend',`<div class="mother-dial-cue424" role="status"><div><small>原初の聖胎 ／ 十律輪</small>${motherHalo423({index:law.index,spinning:true})}<b>${law.godName}</b><p>${law.name}</p></div></div>`);
- const cue=root.querySelector('.mother-dial-cue424');
- cue?.style.setProperty('--mother-spin-time424',`${scaledBattleDelay(1250)}ms`);
- try{audio?.sfx?.('skill');await wait(window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches?260:1450);}finally{cue?.remove();}
+ const current=battle;if(!current||!document.querySelector('.battle-screen'))return;
+ await playMotherDial425({getRoot:()=>document.querySelector('.battle-screen'),law,previousIndex:current.motherDial424?.index??0,speed:battleSpeed(),reducedMotion:Boolean(window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches),isCurrent:()=>battle===current&&!current.resultSettled,
+  onPhase:phase=>{current._motherDialPresentation425={round:current.turn,index:law.index,phase};},sound:kind=>audio?.sfx?.(kind==='stop'?'skill':'click')});
 }
 async function runMotherDial424(){
  if(!motherDialDue424(battle))return;
@@ -7204,7 +7182,7 @@ async function runMotherDial424(){
   finishUltimateAction(current);settleSingleDeaths410(current);await flushSingleCues410();
   await flushPairCounters390();await flushBattleRecoveries();await flushUltimateEvents358();
   current.motherDial424={version:424,lastRound:round,index:law.index};
- }finally{current._motherDialInFlight424=false;current.busy=false;}
+ }finally{delete current._motherDialPresentation425;current._motherDialInFlight424=false;current.busy=false;}
  if(battle!==current||current.resultSettled)return;
  saveBattleCheckpoint();renderBattle();
  if(!aliveEnemies(current).length)return win(false,null);

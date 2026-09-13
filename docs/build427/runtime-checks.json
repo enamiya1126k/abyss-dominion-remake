@@ -1,0 +1,30 @@
+{
+  "version": "3.1.106",
+  "build": 427,
+  "base_build": 426,
+  "runtime_files": [
+    "index.html",
+    "src/Styles/build427-home-supplies.css",
+    "src/chapterTwo/ChapterTwoSystem.js",
+    "src/core/ChestSupplies427.js",
+    "src/core/config.js",
+    "src/main.js",
+    "src/ui/HomeNavigation427.js",
+    "src/ui/screens/HomeScreen.js"
+  ],
+  "import_alias_references_checked": 36,
+  "javascript_syntax": "pass",
+  "import_map_targets": "pass",
+  "save_schema": 84,
+  "browser_visual_test": "not performed; real iPhone Safari not available",
+  "hashes": {
+    "index.html": "a5af45e74c400f1f5254a72064e0e0fbbc69b0804d4c4c25ebcc9751c38b7770",
+    "src/Styles/build427-home-supplies.css": "aa4981a12a25c54b83bd96eff8d95950ca1ebdb12f5a5618ba991554ceab8fc2",
+    "src/chapterTwo/ChapterTwoSystem.js": "36f8408d9ad4d4d39d98131eb2a40c7261d5d26a5b24a0fcd49ee884d5ae845f",
+    "src/core/ChestSupplies427.js": "999592c4f68cd222c1cb642c04515075eef9e5f968a94e20a8811883d772d4e2",
+    "src/core/config.js": "11c99398a7eda0c728c1cf1c6a83fb668379f88009212b208d683261c4bd3d63",
+    "src/main.js": "4ec1e56f39589142f6802ccd8ef91c800a62f576da118cf8843c804d694035f2",
+    "src/ui/HomeNavigation427.js": "25d2a7f539c15d3b4fa80e8c04ebeb7c4c4b32ce3a7ca293c3a36b62d83eecc1",
+    "src/ui/screens/HomeScreen.js": "2a56e178bfa4dfc9b6be1802bd49cb18dd0685e4a2d0011f377826fa14037c06"
+  }
+}

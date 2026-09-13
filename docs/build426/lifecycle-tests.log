@@ -1,0 +1,22 @@
+✔ ordinary hits summon once per attack, use at most three slots, and join next round (47.452791ms)
+✔ poison, counters, reflection, echoes and guarded hits do not summon (55.418622ms)
+✔ one battle-local guts works through native damage and direct ultimate HP writers (27.531268ms)
+✔ countdown starts after death round, survives five complete rounds, then returns exactly 30% once (5.394824ms)
+✔ last child defeated on the fifth round prevents revival; native flow awards victory (8.670907ms)
+✔ generic healing/revive cannot bring back the mother early or mint a second revival (6.36816ms)
+✔ checkpoint serialization carries roster, rolled equipment, guts and exact remaining rounds (5.585331ms)
+✔ old active 425 mothers do not gain new abilities in the middle of a fight (5.583918ms)
+✔ real automatic command follows native multi-target and turn flow with dynamic summons (100.914257ms)
+✔ actual resume path preserves a fallen mother and does not replay an already committed summon (9.030599ms)
+✔ poison from a named player can consume guts but cannot trigger a summon (4.897766ms)
+✔ summon death before the mother does not arm a revival countdown (4.778025ms)
+✔ a partner follow-up can trigger the one summon even when the first attacker missed (4.625035ms)
+✔ native endRound itself advances the full death grace period and revives before the next queue (11.222731ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 829.47853

@@ -1,0 +1,14 @@
+[
+  "index.html",
+  "src/Styles/build425-mother-stage.css",
+  "src/battle/BattleRules.js",
+  "src/core/HeroShieldDisplay.js",
+  "src/core/config.js",
+  "src/main.js",
+  "src/primordial/Mother422.js",
+  "src/primordial/Shield425.js",
+  "src/ui/BattleBossLayout.js",
+  "src/ui/BattleCircleLayout405.js",
+  "src/ui/MotherDial425.js",
+  "src/ui/screens/BattleScreen.js"
+]

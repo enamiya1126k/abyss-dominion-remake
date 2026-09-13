@@ -1,0 +1,37 @@
+/* Mother backdrop: explicit longhands beat the older !important inset.
+   Translation, expansion and wheel rotation belong to different layers. */
+#app .mother-dial424{
+ position:absolute!important;inset:auto!important;left:50%!important;top:50%!important;
+ right:auto!important;bottom:auto!important;width:116%;height:auto!important;aspect-ratio:1;
+ max-width:none!important;max-height:none!important;margin:0!important;
+ translate:-50% -50%!important;transform:translate(var(--dial-dx425,0px),var(--dial-dy425,0px)) scale(var(--dial-grow425,1))!important;
+ transform-origin:50% 50%!important;pointer-events:none!important;
+}
+#app .mother-dial424>svg{display:block!important;width:100%!important;height:auto!important;aspect-ratio:1;overflow:visible!important}
+#app .mother-dial424 .mother-dial-wheel424{animation:none!important;transform-origin:80px 80px!important}
+#app .mother-challenge-art423{position:relative!important;width:min(240px,64vw)!important;height:auto!important;aspect-ratio:1;margin:26px auto!important}
+#app .mother-challenge-art423>.monster-visual{position:absolute!important;inset:0!important;width:100%!important;height:100%!important}
+#app .mother-challenge-art423>.mother-dial424{
+ left:var(--mother-portrait-x425,50%)!important;top:var(--mother-portrait-y425,50%)!important;
+ width:var(--mother-portrait-d425,100%)!important;
+}
+/* The solo mother uses both enemy columns and rows. Do not scale the HP card. */
+#app .mother-battle422 .side-enemies>[data-mother-unit425]:only-child{
+ grid-column:1 / -1!important;grid-row:1 / -1!important;width:100%!important;height:88%!important;
+ max-width:none!important;align-self:center!important;justify-self:center!important;transform:none!important;
+}
+#app .mother-battle422 [data-mother-unit425]>.enemy-orb{
+ width:100%!important;height:auto!important;aspect-ratio:1;bottom:88px!important;
+ left:50%!important;transform:translateX(-50%)!important;filter:none!important;
+}
+#app .mother-battle422 [data-mother-unit425]>.enemy-info{left:3px!important;right:3px!important;bottom:12%!important;padding:5px 6px!important}
+#app .mother-battle422 [data-mother-unit425] .enemy-card-name{font-size:clamp(10px,2.7vw,14px)!important}
+#app .mother-battle422 [data-mother-unit425] .enemy-card-meta{font-size:clamp(8px,2vw,11px)!important}
+#app .mother-battle422 [data-mother-unit425] .battle-bar .bar-label{font-size:clamp(7px,1.9vw,10px)!important;white-space:nowrap!important;font-variant-numeric:tabular-nums}
+#app .mother-battle422 [data-mother-unit425] .mother-hp-shield425{margin:0!important;padding:0!important}
+#app .mother-battle422 .mother-dial424[data-dial-phase425]{filter:brightness(1.35) drop-shadow(0 0 5px #dfb95c)!important}
+#app .mother-battle422 .mother-dial424[data-dial-phase425="revealed"]{filter:brightness(1.8) drop-shadow(0 0 10px #ffe3a0)!important}
+#app .mother-battle422 [data-mother-result425]{font-variant-numeric:tabular-nums}
+/* Keep the cast's bottom alignment from Build424. */
+#app .variant-primordial423 [data-story-character-id="ch2_ionea"] .mother-dial424{left:50%!important;top:auto!important;bottom:0!important;translate:-50% 0!important;width:110%!important}
+@media(prefers-reduced-motion:reduce){#app .mother-battle422 .mother-dial424[data-dial-phase425]{filter:brightness(1.2)!important}}

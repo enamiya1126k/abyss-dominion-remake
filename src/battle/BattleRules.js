@@ -1,3 +1,4 @@
+import {rememberMotherShield425} from '../primordial/Shield425.js';
 import {singleEffectOrigin410,inversionCandidate410,invertSingleDebuff410,noteSingleDamage410,absorbPaperShield410,withSingleCause410,enforcePaperBody410} from './SingleTraits410.js?v=3.1.90-build410';
 import {observePairImpact409,consumePairGuard409} from './PairSynergy409.js?v=3.1.89-build409';
 import {createAbilityState408} from './ChapterTwoAbilityRuntime408.js?v=3.1.88-build408';
@@ -75,7 +76,7 @@ export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicA
  const pairGuard409=Math.min(.85,enemyEffectsFor(battle,enemy.id).filter(e=>e.pairMaximum409&&e.kind==='guard'&&(e.turns??1)>0).reduce((v,e)=>Math.max(v,Number(e.value)||0),0));
  damage=Math.floor(damage*(1-pairGuard409));damage=consumePairGuard409(battle,enemy,'enemy',damage,pairGuard409);
  damage=absorbPaperShield410(battle,enemy,damage);
- if(damage>0&&Number(enemy._floorBossHpShield)>0){const beforeShield=Math.max(0,Math.floor(enemy._floorBossHpShield)),absorbed=Math.min(damage,beforeShield);enemy._floorBossHpShield=Math.max(0,beforeShield-absorbed);damage-=absorbed;if(absorbed)addBattleLog(battle,`${enemy.name}：余命障壁が${absorbed.toLocaleString()}吸収`);if(beforeShield>0&&enemy._floorBossHpShield<=0&&domain.effect==="shieldBreakCounter")enemy._floorBossShieldBrokenReady=true}
+ if(damage>0&&Number(enemy._floorBossHpShield)>0){const beforeShield=(rememberMotherShield425(enemy),Math.max(0,Math.floor(enemy._floorBossHpShield))),absorbed=Math.min(damage,beforeShield);enemy._floorBossHpShield=Math.max(0,beforeShield-absorbed);damage-=absorbed;if(absorbed)addBattleLog(battle,`${enemy.name}：余命障壁が${absorbed.toLocaleString()}吸収`);if(beforeShield>0&&enemy._floorBossHpShield<=0&&domain.effect==="shieldBreakCounter")enemy._floorBossShieldBrokenReady=true}
  // A mimic is a slow evasive fortress. A source can chip it once per round,
  // at most four different sources can chip it, and every accepted hit is 1.
  if(enemy.enemyMimicArmor&&!bypassMimicArmor){
@@ -85,7 +86,7 @@ export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicA
   if(sources.has(source)||sources.size>=4)damage=0;
   else{sources.add(source);enemy._mimicArmorSources=[...sources];damage=Math.min(1,damage)}
  }
-	 damage=Math.min(damage,Math.max(0,maximumDamage415));enemy.hp=Math.max(0,enemy.hp-damage);tryHeroLastStand(battle,"enemy",enemy,beforeHp);
+	 damage=Math.min(damage,Math.max(0,maximumDamage415));const previousCause426=battle._motherDamageCause426;battle._motherDamageCause426={sourceId,kind:traitCause410??(['pairCounter','counter'].includes(relicKind394)?'counter':relicKind394==='excluded'?'excluded':'primary')};try{enemy.hp=Math.max(0,enemy.hp-damage);}finally{battle._motherDamageCause426=previousCause426;}tryHeroLastStand(battle,"enemy",enemy,beforeHp);
 	 const directArmorHit=!String(sourceId??"").startsWith("status:");
 	 if(requested>0&&directArmorHit&&armorLayersAtHit>0){const next=Math.max(0,armorLayersAtHit-1);enemy._floorBossArmorLayers=next;addBattleLog(battle,`${enemy.name}：${passive.name} ${next}/${startingArmorLayers}層`);if(next===0&&domain.effect==="armorBreakCounter"){enemy._floorBossArmorBreakReady=true;addBattleLog(battle,`${domain.name}：最終城甲破損・反城準備`)} }
 	 let manaGuardTriggered=false;

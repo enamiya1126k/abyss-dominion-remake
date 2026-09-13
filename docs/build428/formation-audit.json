@@ -1,0 +1,173 @@
+{
+  "description": "Native auto combat, four level-10000 formations without equipment, three deterministic seeds each. No browser rendering.",
+  "results": [
+    {
+      "team": [
+        "myth_enami",
+        "myth_yori",
+        "myth_hide",
+        "myth_rion"
+      ],
+      "seed": 1,
+      "result": "limit",
+      "rounds": 10,
+      "damage": 3745068,
+      "maxEventDamage": 107522,
+      "remaining": 2
+    },
+    {
+      "team": [
+        "myth_enami",
+        "myth_yori",
+        "myth_hide",
+        "myth_rion"
+      ],
+      "seed": 19,
+      "result": "limit",
+      "rounds": 10,
+      "damage": 3817915,
+      "maxEventDamage": 166536,
+      "remaining": 2
+    },
+    {
+      "team": [
+        "myth_enami",
+        "myth_yori",
+        "myth_hide",
+        "myth_rion"
+      ],
+      "seed": 47,
+      "result": "limit",
+      "rounds": 10,
+      "damage": 3740122,
+      "maxEventDamage": 143069,
+      "remaining": 2
+    },
+    {
+      "team": [
+        "ten_time",
+        "ten_life",
+        "abyss_wrath",
+        "abyss_gluttony"
+      ],
+      "seed": 1,
+      "result": "limit",
+      "rounds": 10,
+      "damage": 1623619,
+      "maxEventDamage": 160000,
+      "remaining": 2
+    },
+    {
+      "team": [
+        "ten_time",
+        "ten_life",
+        "abyss_wrath",
+        "abyss_gluttony"
+      ],
+      "seed": 19,
+      "result": "limit",
+      "rounds": 10,
+      "damage": 1752079,
+      "maxEventDamage": 160000,
+      "remaining": 2
+    },
+    {
+      "team": [
+        "ten_time",
+        "ten_life",
+        "abyss_wrath",
+        "abyss_gluttony"
+      ],
+      "seed": 47,
+      "result": "limit",
+      "rounds": 10,
+      "damage": 1716721,
+      "maxEventDamage": 160000,
+      "remaining": 2
+    },
+    {
+      "team": [
+        "ten_death",
+        "ten_end",
+        "ten_divinity",
+        "abyss_envy"
+      ],
+      "seed": 1,
+      "result": "limit",
+      "rounds": 10,
+      "damage": 4536850,
+      "maxEventDamage": 240000,
+      "remaining": 2
+    },
+    {
+      "team": [
+        "ten_death",
+        "ten_end",
+        "ten_divinity",
+        "abyss_envy"
+      ],
+      "seed": 19,
+      "result": "limit",
+      "rounds": 10,
+      "damage": 4403264,
+      "maxEventDamage": 240000,
+      "remaining": 2
+    },
+    {
+      "team": [
+        "ten_death",
+        "ten_end",
+        "ten_divinity",
+        "abyss_envy"
+      ],
+      "seed": 47,
+      "result": "limit",
+      "rounds": 10,
+      "damage": 4231651,
+      "maxEventDamage": 240000,
+      "remaining": 2
+    },
+    {
+      "team": [
+        "slime",
+        "wolf",
+        "ghost",
+        "goblin"
+      ],
+      "seed": 1,
+      "result": "limit",
+      "rounds": 10,
+      "damage": 471130,
+      "maxEventDamage": 48000,
+      "remaining": 2
+    },
+    {
+      "team": [
+        "slime",
+        "wolf",
+        "ghost",
+        "goblin"
+      ],
+      "seed": 19,
+      "result": "limit",
+      "rounds": 10,
+      "damage": 626076,
+      "maxEventDamage": 48000,
+      "remaining": 2
+    },
+    {
+      "team": [
+        "slime",
+        "wolf",
+        "ghost",
+        "goblin"
+      ],
+      "seed": 47,
+      "result": "limit",
+      "rounds": 10,
+      "damage": 463401,
+      "maxEventDamage": 48000,
+      "remaining": 2
+    }
+  ]
+}

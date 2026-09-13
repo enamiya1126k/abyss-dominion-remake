@@ -1,0 +1,46 @@
+✔ all modified browser modules, including old importer aliases, resolve to the current code (3.421064ms)
+✔ online combat cannot acquire trial stats; role condition is explicit (15.308588ms)
+✔ enemy-side preparation belongs to its side, pair, target and status type (1.118956ms)
+✔ protected damage caps final HP loss after shield absorption (2.150119ms)
+✔ full outgoing online profile stays at its ordinary stats while local battle uses adaptation (13.960392ms)
+✔ primary healing support has MP for at least three casts at benchmark levels (14.404131ms)
+✔ Deep Abyss and Ten Gods preserve all 68 golden stat, MP and skill profiles (48.569058ms)
+✔ native cue delegates to the in-arena animation and publishes phases only to this battle (34.347056ms)
+✔ manual command waits until the round law ends, then spends exactly one normal skill turn (40.056959ms)
+✔ ten Roman laws map to the actual ten signatures without mutating the characters (1.978781ms)
+✔ all ten laws occur once per cycle; rematches and reloads use the same preview (0.463398ms)
+✔ dial fires once despite zero MP, sealed skill cooldown and action-stopping effects; does not spend a natural turn (7.219557ms)
+✔ two callbacks during the spin cannot trigger twice, and the overlay finishes before the attack (5.631093ms)
+✔ ordinary, older active mother, dead mother and settled battles do not receive the new dial (5.005421ms)
+✔ native turn flow resolves the round law before the enemy natural action (5.320696ms)
+✔ native projection damage passes through defensive shields and damages the real party (18.453722ms)
+✔ mother healing projection uses native heal suppression and expiring, removable guard/regen (5.775662ms)
+✔ native checkpoint includes the completed round receipt; reopening does not repeat its law (7.879201ms)
+✔ exclusive home skin stays locked until a real victory and selection rejects forged settings (5.232784ms)
+✔ old cleared saves unlock the skin on read without migration, extra currency or a rematch (4.142701ms)
+✔ skin selection and completion survive SaveService reload; failed skin saves roll back (18.156344ms)
+✔ completion is gated by victory and ending; viewing grants no additional rewards (9.062574ms)
+✔ completion dismiss waits for its receipt to save and exclusive skin is only equipped by its button (6.162233ms)
+✔ pixel dial contains all ten pixel-drawn Roman numerals and no thin circle primitives (0.2389ms)
+✔ field halo center follows the actual sprite body and zoom rather than an unrelated tile offset (0.435386ms)
+✔ shared visible-pixel fitter lifts the mother entirely above her HP card (1.026206ms)
+✔ HP barrier reuses the shield meter, remembers capacity after absorption, and preserves zero (55.664713ms)
+✔ native mother shield grants remember the full value before it can be consumed (22.068597ms)
+✔ mother art seeks triple ordinary size, respecting width and card/status headroom (0.207633ms)
+✔ challenge center uses visible atlas bounds and the battle supplies a dedicated solo mother target (7.469142ms)
+✔ upcoming result is absent until stopping, including a new round after checkpoint resume (0.290367ms)
+✔ all ten stops point to the selected numeral after multiple full revolutions (0.271238ms)
+✔ expanded dial stays inside the arena at narrow and wide viewports (0.275976ms)
+✔ in-arena spin at x1 reveals only at stop, then releases the existing backdrop (1.417966ms)
+✔ in-arena spin at x2 reveals only at stop, then releases the existing backdrop (0.237027ms)
+✔ in-arena spin at x4 reveals only at stop, then releases the existing backdrop (0.311209ms)
+✔ rerender during spin joins the same elapsed animation without a result preview (0.378701ms)
+✔ reduced motion does not rotate before reveal; interrupted battles clean up without revealing (0.343838ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 755.734274

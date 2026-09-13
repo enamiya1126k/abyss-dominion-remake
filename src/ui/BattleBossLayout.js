@@ -30,6 +30,9 @@ const overlaps=(a,b,gap=3)=>a.left<b.right+gap&&a.right>b.left-gap&&a.top<b.bott
 export function chapterTwoArtScale382({width,height,slotWidth,headroom,normalSize,boss=false}){
  return Math.max(.01,Math.min(boss?1:normalSize/Math.max(1,height),Math.max(1,slotWidth-8)/Math.max(1,width),Math.max(1,headroom)/Math.max(1,height)));
 }
+export function motherArtScale425({width,height,slotWidth,headroom,normalSize}){
+ return Math.max(.01,Math.min(normalSize*3/Math.max(1,height),Math.max(1,slotWidth-16)/Math.max(1,width),Math.max(1,headroom)/Math.max(1,height)));
+}
 function layoutChapterTwoEnemies382(root,arena){
  const arenaRect=arena.getBoundingClientRect();
  for(const unit of root.querySelectorAll((root.classList.contains('chapter-two-battle380')||root.classList.contains('mother-battle422'))?'.side-enemies .side-battle-unit,.side-party .side-battle-unit:not(.party-floor-boss)':'.side-party .side-battle-unit:not(.party-floor-boss)')){
@@ -39,10 +42,13 @@ function layoutChapterTwoEnemies382(root,arena){
   art.style.setProperty('translate','none','important');art.style.setProperty('scale','1','important');
   const ally=Boolean(unit.closest(".side-party")),native=chapterTwoFrameBounds383(image.dataset.monsterAtlas),source=native??visibleBounds(image),mirrored=ally?Boolean(native):!native,b=mirrored?{...source,left:1-source.right,right:1-source.left}:source;
   const ur=unit.getBoundingClientRect(),cr=card.getBoundingClientRect(),initial=image.getBoundingClientRect(),labelHeight=label.getBoundingClientRect().height;
-  const top=Math.max(ur.top,arenaRect.top+4),headroom=cr.top-top-labelHeight-12;
-  const scale=chapterTwoArtScale382({width:initial.width*(b.right-b.left),height:initial.height*(b.bottom-b.top),slotWidth:ur.width,headroom,normalSize:Math.max(54,Math.min(88,(globalThis.innerWidth||390)*.16)),boss:unit.classList.contains('party-floor-boss')||root.classList.contains('mother-battle422')&&!ally});
+  const mother=root.classList.contains('mother-battle422')&&!ally,imageIsMother=image.dataset.monsterAtlas==='ch2_ionea';
+  const statusGap=mother&&imageIsMother?(unit.querySelector('.enemy-status-row')?.getBoundingClientRect().height||0)+8:0;
+  const top=Math.max(ur.top,arenaRect.top+4),headroom=cr.top-statusGap-top-labelHeight-12;
+  const fit=mother&&imageIsMother?motherArtScale425:chapterTwoArtScale382;
+  const scale=fit({width:initial.width*(b.right-b.left),height:initial.height*(b.bottom-b.top),slotWidth:ur.width,headroom,normalSize:Math.max(54,Math.min(88,(globalThis.innerWidth||390)*.16)),boss:unit.classList.contains('party-floor-boss')||mother});
   art.style.setProperty('scale',String(scale),'important');
-  const ir=image.getBoundingClientRect(),dx=ur.left+ur.width/2-(ir.left+ir.width*(b.left+b.right)/2),dy=cr.top-5-(ir.top+ir.height*b.bottom);
+  const ir=image.getBoundingClientRect(),dx=ur.left+ur.width/2-(ir.left+ir.width*(b.left+b.right)/2),dy=cr.top-statusGap-5-(ir.top+ir.height*b.bottom);
   art.style.setProperty('translate',`${dx}px ${dy}px`,'important');
   label.style.setProperty('--chapter-name-y',`${ir.top+ir.height*b.top+dy-ur.top-labelHeight-5}px`);
   unit.dataset.bossLayout='ready';

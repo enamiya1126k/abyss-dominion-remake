@@ -175,6 +175,7 @@ function teamBattleAction(enemy,context,hpRate){
  return null;
 }
 export function chooseEnemyAction(enemy,context={}){
+ if(context.battle?.specialBattleType==='mother422')context={...context,allies:(context.allies??[enemy]).filter(u=>!(u?.motherRevision426===426&&u.hp<=0))};
  const commanderAction397=chooseChapterTwoCommander397(enemy,context);if(commanderAction397)return commanderAction397;
  const motherAction423=chooseMotherAction423(enemy,context);if(motherAction423)return motherAction423;
  const nativeAction=chooseChapterTwoAction383(enemy,context);if(nativeAction)return nativeAction;

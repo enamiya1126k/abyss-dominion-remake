@@ -1,0 +1,8 @@
+import assert from 'node:assert/strict';
+import {WorldRaidCoordinator430} from '../../online-server/src/WorldRaidCoordinator430.js';
+import {sanitizeProfile} from '../../online-server/src/RoomStore.js';
+import {WorldRaidReplay430} from '../../src/worldRaid/WorldRaidReplay430.js';
+const profile=sanitizeProfile({displayName:'挑戦者',speciesId:'slime',level:1000,battleStats:{hp:1000000,mp:1000,atk:20000,matk:20000,def:5000,mdef:5000,spd:1000},skills:[]});
+export function fixture430(options={}){let now=Date.UTC(2026,8,14,14),writable=true;const messages=[],a={playerId:'AD-AAAA-AAAA',connected:true,profile},b={playerId:'AD-BBBB-BBBB',connected:true,profile},sessions=new Map([[a.playerId,a],[b.playerId,b]]),c=new WorldRaidCoordinator430({sessions,now:()=>now,random:()=>.5,persist:()=>writable,send:(id,m)=>messages.push({id,...m}),...options});return {c,a,b,sessions,messages,now:()=>now,setNow:n=>now=n,setWritable:v=>writable=v};}
+export function reserve430(f,who=f.a,count=1,key='offline-request-00001'){assert.equal(f.c.reserve430(who,{requestId:key,count,profile:who.profile,campaignId:f.c.ledger.state.current.id}).ok,true);return f.c._tickets430().filter(t=>t.playerId===who.playerId&&t.requestId===key);}
+export function finish430(t,{manual=false}={}){const r=new WorldRaidReplay430(t);if(manual)r.step({kind:'auto',round:1,enabled:false});let count=0;while(!r.ended&&count++<50){if(manual&&r.room.raid.phase==='command')r.step({kind:'action',round:r.room.raid.round,action:{kind:'attack',actorId:t.playerId,enemyTargetId:r.room.raid.boss.id}});else r.step({kind:'advance',round:r.room.raid.round});}assert.equal(r.ended,true);return r;}

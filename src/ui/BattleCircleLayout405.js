@@ -2,10 +2,10 @@ import {chapterTwoFrameBounds383} from './ChapterTwoSprite383.js?v=3.1.82-build4
 
 // Convert the final visible silhouette, after fitting/mirroring, to the
 // unscaled sprite anchor. This also handles transparent, asymmetric canvases.
-export function battleCircleGeometry405({image,bounds,sprite,slotWidth,mirrored=false}){
+export function battleCircleGeometry405({image,bounds,sprite,slotWidth,mirrored=false,mother=false}){
  const b=mirrored?{...bounds,left:1-bounds.right,right:1-bounds.left}:bounds;
  const width=image.width*(b.right-b.left),height=image.height*(b.bottom-b.top);
- const diameter=Math.max(32,Math.min(160,Math.max(32,slotWidth)*1.28,Math.max(width,height)*1.16));
+ const diameter=Math.max(32,Math.min(mother?400:160,Math.max(32,slotWidth)*(mother?1.1:1.28),Math.max(width,height)*1.16));
  const sx=sprite.width/Math.max(1,sprite.layoutWidth||sprite.width),sy=sprite.height/Math.max(1,sprite.layoutHeight||sprite.height);
  return {left:(image.left+image.width*(b.left+b.right)/2-sprite.left)/sx,
   top:(image.top+image.height*(b.top+b.bottom)/2-sprite.top)/sy,
@@ -36,7 +36,7 @@ export function layoutBattleCircles405(root,visibleBounds){
   const sr=sprite.getBoundingClientRect(),rect=containedImageBox(image,image.getBoundingClientRect());
   if(!sr.width||!sr.height||!rect.width||!rect.height)continue;
   const bounds=chapterTwoFrameBounds383(image.dataset.monsterAtlas)??visibleBounds(image);
-  const geometry=battleCircleGeometry405({image:rect,bounds,sprite:{left:sr.left,top:sr.top,width:sr.width,height:sr.height,layoutWidth:sprite.offsetWidth,layoutHeight:sprite.offsetHeight},slotWidth:unit.getBoundingClientRect().width,mirrored:mirroredImage(image,sprite)});
+  const geometry=battleCircleGeometry405({image:rect,bounds,sprite:{left:sr.left,top:sr.top,width:sr.width,height:sr.height,layoutWidth:sprite.offsetWidth,layoutHeight:sprite.offsetHeight},slotWidth:unit.getBoundingClientRect().width,mirrored:mirroredImage(image,sprite),mother:image.dataset.monsterAtlas==='ch2_ionea'});
   for(const [key,value] of Object.entries(geometry))circle.style.setProperty(key,`${value}px`,'important');
   circle.dataset.aligned405='true';
  }
