@@ -1,3 +1,4 @@
+import {raidQuota435} from './WorldRaidQuota435.js';
 import {escapeOnlineHtml as esc} from '../ui/screens/OnlinePartyScreen.js';
 import {raidSpriteBase} from '../core/RaidPresentation.js';
 import {Modal} from '../ui/components/Modal.js';
@@ -16,14 +17,14 @@ export function raidLobby432(client){
  const boss=c.boss,base=raidSpriteBase(boss.id),asset=base?`${base}-idle1.png`:boss.heroAsset;
  const rank=client.ranking429?.campaign?.id===c.id?client.ranking429:null,mine=rank?.mine;
  const rows=(rank?.page===0?rank.rows:[]).slice(0,3),remaining=state.remaining??0,materials=client.getState().onlineParty?.raidMaterials??0;
- const playable=tickets[0],disabled=connected?(!client.supported()||!state.available||remaining<=0||client.pending):!playable;
+ const quota=raidQuota435(state,tickets,client.offline.time()),playable=tickets[0],disabled=connected?(!client.supported()||!state.available||remaining<=0||client.pending):!playable;
  const start=connected&&remaining>0?'data-world-start':playable?`data-world-ticket430="${esc(playable.ticket.id)}"`:'data-world-start';
  const canUseTicket=Boolean(playable)&&(!connected||remaining<=0);
  const buttonDisabled=canUseTicket?false:disabled;
  return `${client.error?`<p class="raid-message432" role="alert">${esc(client.error)}</p>`:''}
- ${raidFrame432(`<div class="raid-boss-stage432"><small>第${n(c.sequence)}戦</small><img src="${esc(asset)}" alt="${esc(boss.name)}"><h2>${esc(boss.name)}</h2></div>${raidSummary432(state)}<div class="raid-quota432"><span>今日の残り <b>${n(remaining)} / 3回</b></span><small>毎日0時に回復</small></div><button class="raid-challenge432" ${start} ${buttonDisabled?'disabled':''}>${client.pending?'受付を確認中…':canUseTicket?'保存した挑戦で遊ぶ':remaining<=0?'本日の挑戦は終了':'挑戦する'}</button>${tickets.length?`<small class="raid-ticket-count432">保存済みの挑戦：${tickets.length}回分</small>`:''}${client.pending?'<button data-world-retry>受付を再確認</button>':''}`,'raid-boss-panel432')}
+ ${raidFrame432(`<div class="raid-boss-stage432"><small>第${n(c.sequence)}戦</small><img src="${esc(asset)}" alt="${esc(boss.name)}"><h2>${esc(boss.name)}</h2></div>${raidSummary432(state)}<div class="raid-quota432"><span>今日の残り <b>${quota.fresh?`${n(quota.remaining)} / 3回`:`${quota.today}回 保存済み`}</b></span><small>${quota.fresh?"毎日0時に回復":"本日の枠は接続後に確認"}</small></div><button class="raid-challenge432" ${start} ${buttonDisabled?'disabled':''}>${client.pending?'受付を確認中…':canUseTicket?'保存した挑戦で遊ぶ':remaining<=0?'本日の挑戦は終了':'挑戦する'}</button>${tickets.length?`<small class="raid-ticket-count432">保存分：本日 ${quota.today}回${quota.older?` ＋ 前日分 ${quota.older}回`:""}</small>`:''}${client.pending?'<button data-world-retry>受付を再確認</button>':''}`,'raid-boss-panel432')}
  ${raidFrame432(`<header class="raid-section-head432"><h2>ダメージランキング</h2><button data-world-panel429="ranking">全順位 ›</button></header><ol class="raid-ranks432">${rows.map(r=>`<li><b>${n(r.rank)}位</b><span>${esc(r.name)}</span><strong>${n(r.damage)}</strong></li>`).join('')||`<li class="raid-empty432">${rank?'まだ参加者はいません':connected?'順位を確認中…':'最後に取得した順位はありません'}</li>`}</ol><div class="raid-mine432"><span>あなた <b>${mine?`${n(mine.rank)}位`:c.myRank?`${n(c.myRank)}位`:'—'}</b></span><strong>${n(mine?.damage??c.myDamage)} <small>ダメージ</small></strong></div>`)}
- <div class="raid-footer432"><button data-raid-exchange432>${pixelIcon('crystal')} カケラ ${n(materials)}<b>交換所 ›</b></button><button data-world-panel429="ranking">討伐報酬${client.transport.worldRaidRewards429?.pending?'・未受取あり':''} ›</button></div>
+ <div class="raid-footer432"><button data-raid-exchange432>カケラ交換所 <b>${n(materials)}個 ›</b></button><button data-world-panel429="ranking">討伐報酬${client.transport.worldRaidRewards429?.pending?'・未受取あり':''} ›</button></div>
  <details class="raid-offline432" data-raid-details432="offline" ${client.details432?.offline?'open':''}><summary>オフラインで遊ぶ${tickets.length?`（${tickets.length}回分）`:''}</summary>${worldRaidOfflineView430(client.offline,state)}</details>
  <details class="raid-rules432" data-raid-details432="rules" ${client.details432?.rules?'open':''}><summary>遊び方</summary><p>1日3回、みんなで同じボスに挑戦。1回10ラウンド。</p><p>ボスは6ラウンド目から攻撃。Lv100の子分2体は最初から行動します。</p><p>討伐後、参加・順位・最後の一撃の報酬を受け取れます。送信待ちの挑戦がある間は集計中になります。</p></details>`;
 }
@@ -44,6 +45,6 @@ export function raidResult432(client){
  const local=client.localTicket430&&client.offline.bank().tickets[client.localTicket430],receipt=local?.receipt;
  const reflection=local?(receipt?.status==='accepted'?'ダメージを反映しました。':receipt?.status==='expired'?'期限切れのため、今回の結果は集計対象外です。':'結果を保存しました。接続後に自動送信します。'):'ダメージを反映しました。';
  const rewardStatus=reward?(received?'受取済み':'受取待ち'):rank?.campaign?.provisional430?'集計中':rank?.campaign?.completedAt&&!rank?.mine?'今回の討伐報酬はありません。':'討伐後に報酬が確定します。';
- const totals=reward?.reward,items=totals?[['crystal','カケラ',totals.raidMaterials],['crystal','魔晶石',totals.crystals],['gold','GOLD',totals.gold],['growth','経験値パック（超）',totals.experienceItemsUltra]]:[];
- return Modal('戦闘結果',`<div class="battle-reward-summary raid-reward432"><h2>${labels[report?.result]??'挑戦終了'}</h2><p>${esc(report?.bossName??a.raid?.name)}</p><small>今回のダメージ</small><strong>${n(report?.damage??a.damage)}</strong><p>${reflection}</p><h3>討伐報酬：${rewardStatus}</h3>${items.map(([icon,label,amount])=>`<p>${pixelIcon(icon)} ${label} <b>×${n(amount)}</b></p>`).join('')}<p class="raid-reward-note432">参加・順位・最後の一撃の報酬は、ボスごとに1度だけ受け取れます。</p></div>`,'レイドへ戻る');
+ const totals=reward?.reward,items=totals?[[null,'カケラ',totals.raidMaterials],['crystal','魔晶石',totals.crystals],['gold','GOLD',totals.gold],['growth','経験値パック（超）',totals.experienceItemsUltra]]:[];
+ return Modal('戦闘結果',`<div class="battle-reward-summary raid-reward432"><h2>${labels[report?.result]??'挑戦終了'}</h2><p>${esc(report?.bossName??a.raid?.name)}</p><small>今回のダメージ</small><strong>${n(report?.damage??a.damage)}</strong><p>${reflection}</p><h3>討伐報酬：${rewardStatus}</h3>${items.map(([icon,label,amount])=>`<p>${icon?pixelIcon(icon):''} ${label} <b>×${n(amount)}</b></p>`).join('')}<p class="raid-reward-note432">参加・順位・最後の一撃の報酬は、ボスごとに1度だけ受け取れます。</p></div>`,'レイドへ戻る');
 }

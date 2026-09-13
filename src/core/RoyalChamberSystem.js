@@ -33,7 +33,7 @@ export function settleRoyalAttempt(state,{won=false,ending='narrow',variant=null
  const room=royalState(state);if(room.lastResultId===resultId)return{duplicate:true};
  if(!room.attempt)return{missing:true};room.lastResultId=resultId;
  if(room.attempt.memory){memoryProgress(state);const stage=room.attempt.stage??1,partyIds=room.attempt.partyIds??state.party;restoreRoyalSupplies(state);room.phase='cleared';room.memoryWins=(Number(room.memoryWins)||0)+(won?1:0);if(won)room.memoryCleared379=Math.min(MEMORY_MAX_STAGE,Math.max(room.memoryCleared379,stage));let awarded=false;if(won&&!state.campaign100.royalMemoryChampion360){state.campaign100.royalMemoryChampion360=true;awarded=true}state.campaign100.revengeBest361=Math.max(Number(state.campaign100.revengeBest361)||0,room.memoryCleared379);room.attempt=null;room.position={x:10,y:17};return{memory:true,won,awarded,stage,partyIds};}
- room.phase=won?'victory':'rewind';room.pendingEnding={ending,variant,resultId};room.dialogueIndex=0;room.position={x:10,y:17};return{won,phase:room.phase};
+ if(won)room.memoryCleared379=Math.max(1,Number(room.memoryCleared379)||0);room.phase=won?'victory':'rewind';room.pendingEnding={ending,variant,resultId};room.dialogueIndex=0;room.position={x:10,y:17};return{won,phase:room.phase};
 }
 export function restoreRoyalSupplies(state){const attempt=royalState(state).attempt;if(!attempt)return;state.inventory??={};for(const[k,v]of Object.entries(attempt.items??{}))state.inventory[k]=v;state.player.gold=attempt.gold;}
 export function rewindRoyalAttempt(state,ledger){

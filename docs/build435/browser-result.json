@@ -1,0 +1,26 @@
+{
+  "checks": [
+    "mother no key counter and working HUD toggle",
+    "mother body opens rematch before reading the ending",
+    "dismissed gift reveal grants nothing",
+    "gift save failure retries and subsequent reveal cannot duplicate",
+    "personal challenge creates actual Lv1500 opponent",
+    "ranking native tabs, 7 real rows and portrait detail targets",
+    "generated summon banner opens native count picker without spending",
+    "raid 393x720 auto fits with 7 cards and interrupt",
+    "raid 393x720 manual fits with 7 cards and interrupt",
+    "raid 393x720 skills fits with 7 cards and interrupt",
+    "raid 375x540 auto fits with 7 cards and interrupt",
+    "raid 375x540 manual fits with 7 cards and interrupt",
+    "raid 375x540 skills fits with 7 cards and interrupt",
+    "raid 430x760 auto fits with 7 cards and interrupt",
+    "raid 430x760 manual fits with 7 cards and interrupt",
+    "raid 430x760 skills fits with 7 cards and interrupt",
+    "raid 1280x800 auto fits with 7 cards and interrupt",
+    "raid 1280x800 manual fits with 7 cards and interrupt",
+    "raid 1280x800 skills fits with 7 cards and interrupt",
+    "raid lobby playable remaining 3 to 0 and fragment icon removed"
+  ],
+  "errors": [],
+  "missing": []
+}

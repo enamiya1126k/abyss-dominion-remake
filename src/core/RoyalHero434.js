@@ -9,19 +9,24 @@ export const ROYAL_HEROES434=Object.freeze({
  myth_rion:{name:'りおん',greeting:'いらっしゃい。今日は話か、それとも手合わせか？',talk:'これは先行投資や。部隊を強くして、次の旅の話を持って帰ってきてくれよ！',again:'今日の取り分は、手合わせで得る経験やな。さあ、いこうぜ！'}
 });
 const copy=x=>JSON.parse(JSON.stringify(x));
-export function royalVisits434(state){state.campaign100??={};const c=state.campaign100;c.royalVisits434??={version:1,gifts:{},victories:{},serial:0};const p=c.royalVisits434;p.gifts??={};p.victories??={};return p;}
+export function royalVisits434(state){state.campaign100??={};const c=state.campaign100;c.royalVisits434??={version:1,gifts:{},victories:{},serial:0};const p=c.royalVisits434;p.gifts??={};p.victories??={};p.soloCleared435??={};return p;}
 export function royalHeroAvailable434(state,id){return Boolean(ROYAL_HEROES434[id]&&state.campaign100?.finalCompleted===true);}
 export function claimRoyalGift434(state,id){
  if(!royalHeroAvailable434(state,id)||state.activeBattle||state.campaign100.royal360?.attempt||royalVisits434(state).attempt)return {ok:false};
  const p=royalVisits434(state);if(p.gifts[id])return{ok:true,first:false,amount:0};
  state.inventory??={};state.inventory.experienceItemsUltra=Math.max(0,Number(state.inventory.experienceItemsUltra)||0)+3;p.gifts[id]=true;return{ok:true,first:true,amount:3};
 }
+// Old Lv1000 wins keep their reward flag; the first new challenge is Lv1500.
+export function royalSoloLevel435(state,id){
+ const cleared=Math.max(1000,Math.min(10000,Math.floor((Number(royalVisits434(state).soloCleared435[id])||1000)/500)*500));
+ return Math.min(10000,cleared+500);
+}
 export function beginRoyalSolo434(state,id){
  if(!royalHeroAvailable434(state,id)||state.activeBattle||state.player?.inRun||state.campaign100.royal360?.attempt)return{ok:false};
  const p=royalVisits434(state),party=(state.party??[]).map(id=>(state.monsters??[]).find(m=>m.id===id)).filter(Boolean);
  if(p.attempt||party.length!==4||new Set(party.map(m=>m.id)).size!==4)return{ok:false};
  p.serial=Math.max(0,Math.floor(Number(p.serial)||0))+1;
- p.attempt={id:`royal-solo434:${p.serial}`,heroId:id,partyIds:party.map(m=>m.id),vitals:Object.fromEntries(party.map(m=>[m.id,{hp:m.currentHp,mp:m.currentMp,ailments:copy(m.ailments??{})}])),items:Object.fromEntries(ROYAL_ITEM_KEYS.map(k=>[k,Number(state.inventory?.[k])||0])),gold:Number(state.player.gold)||0};
+ p.attempt={id:`royal-solo434:${p.serial}`,heroId:id,level435:royalSoloLevel435(state,id),partyIds:party.map(m=>m.id),vitals:Object.fromEntries(party.map(m=>[m.id,{hp:m.currentHp,mp:m.currentMp,ailments:copy(m.ailments??{})}])),items:Object.fromEntries(ROYAL_ITEM_KEYS.map(k=>[k,Number(state.inventory?.[k])||0])),gold:Number(state.player.gold)||0};
  return{ok:true,...copy(p.attempt)};
 }
 export function royalSoloCheckpoint434(state,data){
@@ -35,8 +40,10 @@ export function settleRoyalSolo434(state,{id,won=false,abandoned=false}={}){
  if(first){const item=createSignatureEquipment(a.heroId,0);if(!item)return{ok:false};item.id=`royal434:${a.heroId}:first-weapon`;item.level=1000;item.plus=0;item.obtainedMethod='royalSolo434';item.equippedBy=null;
  const received=receiveEquipment(state,item,{bossReward:true});reward={name:item.name,level:1000,plus:0,location:received.location,message:received.message};
  state.codex??={};state.codex.equipment??={};state.codex.equipment[item.name]=(Number(state.codex.equipment[item.name])||0)+1;p.victories[a.heroId]=true;}
+ const level=Math.max(1000,Math.min(10000,Number(a.level435)||1000));
+ if(won)p.soloCleared435[a.heroId]=Math.max(Number(p.soloCleared435[a.heroId])||1000,level);
  state.inventory??={};Object.assign(state.inventory,a.items);state.player.gold=a.gold;
  state.party=[...a.partyIds];for(const m of state.monsters??[]){const v=a.vitals[m.id];if(v){m.currentHp=v.hp;m.currentMp=v.mp;m.ailments=copy(v.ailments);}}
  if(state.activeBattle?.battleId===a.id)delete state.activeBattle;
- state.player.inRun=false;p.attempt=null;p.receipt={id:a.id,heroId:a.heroId,won:Boolean(won),first,reward,abandoned};return{ok:true,...p.receipt};
+ state.player.inRun=false;p.attempt=null;p.receipt={id:a.id,heroId:a.heroId,won:Boolean(won),first,reward,abandoned,level,nextLevel:royalSoloLevel435(state,a.heroId)};return{ok:true,...p.receipt};
 }

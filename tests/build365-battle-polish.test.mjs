@@ -12,7 +12,7 @@ const section=(start,end)=>main.slice(main.indexOf(start),main.indexOf(end,main.
 function state(){globalThis.localStorage??={getItem:()=>null,setItem(){},removeItem(){}};const s=new SaveService().state;s.campaign100.finalCompleted=true;s.monsters=Array.from({length:4},()=>createMonster('slime',{level:1}));s.party=s.monsters.map(m=>m.id);s.player.gold=1000;s.player.crystals=25;royalState(s).phase='cleared';return s;}
 test('four deployed members gain EXP including fallen members; restored supplies precede net currency reward; receipt survives reload',()=>{
  const data=new Map();globalThis.localStorage={getItem:k=>data.get(k)??null,setItem:(k,v)=>data.set(k,v),removeItem:k=>data.delete(k)};
- try{const s=state();s.monsters[1].currentHp=0;const exp=s.monsters.map(totalExperience);s.inventory.potions=10;beginRoyalAttempt(s,{heroes:{}},{memory:true});s.player.gold=0;s.inventory.potions=0;
+ try{const s=state();s.monsters[1].currentHp=0;const exp=s.monsters.map(totalExperience);s.inventory.potions=10;beginRoyalAttempt(s,{heroes:{}},{memory:true,stage:1});s.player.gold=0;s.inventory.potions=0;
  const result=settleRoyalAttempt(s,{won:true,resultId:'win1'}),receipt=grantRoyalRevengeRewards(s,result,'win1');
  assert.equal(receipt.members.length,4);s.monsters.forEach((m,i)=>assert.equal(totalExperience(m)-exp[i],120000));assert.equal(s.player.gold,251000);assert.equal(s.player.crystals,125);assert.equal(s.inventory.potions,10);
  const before=JSON.stringify(s);grantRoyalRevengeRewards(s,result,'win1');assert.equal(JSON.stringify(s),before);assert.equal(settleRoyalAttempt(s,{won:true,resultId:'win1'}).duplicate,true);
@@ -21,14 +21,14 @@ test('four deployed members gain EXP including fallen members; restored supplies
  }finally{delete globalThis.localStorage}
 });
 test('defeat and retreat pay nothing; higher stages increase rewards; capped wallets cannot overflow',()=>{
- for(const mode of ['loss','retreat']){const s=state(),before=s.monsters.map(totalExperience);beginRoyalAttempt(s,{heroes:{}},{memory:true});s.player.gold=0;
+ for(const mode of ['loss','retreat']){const s=state(),before=s.monsters.map(totalExperience);beginRoyalAttempt(s,{heroes:{}},{memory:true,stage:1});s.player.gold=0;
  if(mode==='loss'){const r=settleRoyalAttempt(s,{won:false,resultId:'loss'});assert.equal(grantRoyalRevengeRewards(s,r,'loss'),null)}else abandonRoyalAttempt(s);
  assert.equal(s.player.gold,1000);assert.equal(s.player.crystals,25);assert.deepEqual(s.monsters.map(totalExperience),before);assert.equal(royalState(s).memoryWins,0);}
  for(const key of ['experience','gold','crystals'])assert.ok(royalRevengeRewards(2)[key]>royalRevengeRewards(1)[key]);
- const s=state();s.player.gold=Number.MAX_SAFE_INTEGER-5;s.player.crystals=Number.MAX_SAFE_INTEGER-2;beginRoyalAttempt(s,{heroes:{}},{memory:true});const r=settleRoyalAttempt(s,{won:true,resultId:'cap'}),receipt=grantRoyalRevengeRewards(s,r,'cap');assert.equal(receipt.gold,5);assert.equal(receipt.crystals,2);assert.equal(s.player.gold,Number.MAX_SAFE_INTEGER);
+ const s=state();s.player.gold=Number.MAX_SAFE_INTEGER-5;s.player.crystals=Number.MAX_SAFE_INTEGER-2;beginRoyalAttempt(s,{heroes:{}},{memory:true,stage:1});const r=settleRoyalAttempt(s,{won:true,resultId:'cap'}),receipt=grantRoyalRevengeRewards(s,r,'cap');assert.equal(receipt.gold,5);assert.equal(receipt.crystals,2);assert.equal(s.player.gold,Number.MAX_SAFE_INTEGER);
 });
 test('failed final save rolls rewards back; retry commits once and shows the persisted result',()=>{
- const s=state(),ledger={heroes:{},finalArena:{}};beginRoyalAttempt(s,ledger,{memory:true});const beforeGold=s.player.gold,beforeExp=totalExperience(s.monsters[0]);let succeeds=false,shown=0;const retry={querySelector:()=>({}),remove(){}};
+ const s=state(),ledger={heroes:{},finalArena:{}};beginRoyalAttempt(s,ledger,{memory:true,stage:1});const beforeGold=s.player.gold,beforeExp=totalExperience(s.monsters[0]);let succeeds=false,shown=0;const retry={querySelector:()=>({}),remove(){}};
  const ctx=vm.createContext({battle:{battleId:'retry',party:s.monsters},save:{state:s,save:()=>succeeds},campaignHeroLedger:()=>ledger,campaignCanonicalEnding:()=>({ending:'complete'}),campaignRemainingHeroes:()=>[],royalState,beginRoyalAttempt,settleRoyalAttempt,grantRoyalRevengeRewards,battleContributionSnapshot:()=>({}),openBattleContributionReport:(snapshot,next)=>next(),cleanupSingles410(){},cleanupTrial415(){},cleanupUltimateBattle(){},restoreCampaignFinalParty(){},fullyRecoverParty(){},clearPartySynergy(){},normalizeCampaignState:s=>s.campaign100,recordCampaignConclusion(){},app:{insertAdjacentHTML(){}},Modal:()=>'',topModal:()=>retry,document:{querySelector:()=>null},audio:{setScene(){}},go(){},showRoyalRevengeRewards365:()=>shown++,showToast(){},activeEnemy:null,snapshot:null});
  vm.runInContext(section('function finishCampaignFinalBattle(won)','function showRoyalRevengeRewards365('),ctx);
  ctx.finishCampaignFinalBattle(true);assert.equal(ctx.save.state.player.gold,beforeGold);assert.equal(totalExperience(ctx.save.state.monsters[0]),beforeExp);assert.equal(ctx.save.state.campaign100.royal360.rewardReceipt365,undefined);assert.equal(shown,0);

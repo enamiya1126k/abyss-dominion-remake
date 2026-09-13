@@ -1,0 +1,1645 @@
+{
+  "build": 435,
+  "version": "3.1.114",
+  "baseline_build": 424,
+  "kind": "cumulative-overwrite",
+  "save_schema": 84,
+  "data_files_included": false,
+  "removed": [],
+  "previous_archive_sha256": "7a51730e4783d4fbec8b88038d160b96869a7493317fe58d0604136a7011d76e",
+  "source_base_commit": "53b7e195e0138f72f8b131ec3b185d2c736d438d",
+  "updated_in_435": [
+    "README_Build433.md",
+    "README_Build434.md",
+    "README_Build435.md",
+    "assets/ui/build435/gift-seal.webp",
+    "assets/ui/build435/ranking-frame.webp",
+    "assets/ui/build435/summon-banner.webp",
+    "docs/build433/browser-result.json",
+    "docs/build433/dial-spinning.png",
+    "docs/build433/dial-stopped.png",
+    "docs/build433/mother-0.png",
+    "docs/build433/mother-1.png",
+    "docs/build433/mother-3.png",
+    "docs/build433/patch-manifest.json",
+    "docs/build433/rematch.png",
+    "docs/build433/sanctum.png",
+    "docs/build433/skill.png",
+    "docs/build433/tests.tap",
+    "docs/build434/browser-result.json",
+    "docs/build434/contribution.png",
+    "docs/build434/first-victory.png",
+    "docs/build434/group-rematch.png",
+    "docs/build434/hero-0.png",
+    "docs/build434/hero-1.png",
+    "docs/build434/hero-2.png",
+    "docs/build434/hero-3.png",
+    "docs/build434/main-changes.diff",
+    "docs/build434/mother-regression/browser-result.json",
+    "docs/build434/mother-regression/dial-spinning.png",
+    "docs/build434/mother-regression/dial-stopped.png",
+    "docs/build434/mother-regression/mother-0.png",
+    "docs/build434/mother-regression/mother-1.png",
+    "docs/build434/mother-regression/mother-3.png",
+    "docs/build434/mother-regression/rematch.png",
+    "docs/build434/mother-regression/sanctum.png",
+    "docs/build434/mother-regression/skill.png",
+    "docs/build434/patch-manifest.json",
+    "docs/build434/personal-battle.png",
+    "docs/build434/royal-room.png",
+    "docs/build434/short-screen-scroll.png",
+    "docs/build434/tests.tap",
+    "docs/build435/browser-result.json",
+    "docs/build435/final-ui-result.json",
+    "docs/build435/gacha-banners.png",
+    "docs/build435/gacha.png",
+    "docs/build435/generated-art.json",
+    "docs/build435/gift-before.png",
+    "docs/build435/gift-received.png",
+    "docs/build435/mother-room.png",
+    "docs/build435/raid-1280-800-auto.png",
+    "docs/build435/raid-1280-800-manual.png",
+    "docs/build435/raid-1280-800-skills.png",
+    "docs/build435/raid-375-540-auto.png",
+    "docs/build435/raid-375-540-manual.png",
+    "docs/build435/raid-375-540-skills.png",
+    "docs/build435/raid-393-720-auto.png",
+    "docs/build435/raid-393-720-manual.png",
+    "docs/build435/raid-393-720-skills.png",
+    "docs/build435/raid-430-760-auto.png",
+    "docs/build435/raid-430-760-manual.png",
+    "docs/build435/raid-430-760-skills.png",
+    "docs/build435/raid-lobby.png",
+    "docs/build435/ranking.png",
+    "docs/build435/tests.tap",
+    "index.html",
+    "src/Styles/build433-mother.css",
+    "src/Styles/build434-royal.css",
+    "src/Styles/build435-polish.css",
+    "src/core/RoyalChamberSystem.js",
+    "src/core/RoyalHero434.js",
+    "src/core/RoyalMemory379.js",
+    "src/core/config.js",
+    "src/main.js",
+    "src/primordial/Cycle426.js",
+    "src/primordial/FieldHit433.js",
+    "src/primordial/State422.js",
+    "src/ui/BattleBossLayout.js",
+    "src/ui/BattleCircleLayout405.js",
+    "src/ui/MotherDial425.js",
+    "src/ui/RoyalChamberField.js",
+    "src/ui/RoyalHeroHit434.js",
+    "src/ui/screens/BattleScreen.js",
+    "src/ui/screens/CampaignFinalFloorScreen.js",
+    "src/worldRaid/WorldRaidOfflineCache430.js",
+    "src/worldRaid/WorldRaidOfflineView430.js",
+    "src/worldRaid/WorldRaidQuota435.js",
+    "src/worldRaid/WorldRaidView432.js",
+    "tests/build365-battle-polish.test.mjs",
+    "tests/build379-memory.test.mjs",
+    "tests/build405-battle-circles.test.mjs",
+    "tests/build423-finale.test.mjs",
+    "tests/build425-mother-stage.test.mjs",
+    "tests/build426-mother-cycle.test.mjs",
+    "tests/build431-upgrade-cache.test.mjs",
+    "tests/build433-mother.test.mjs",
+    "tests/build434-royal.test.mjs",
+    "tests/build435-polish.test.mjs",
+    "tools/build430/native-source-map.json",
+    "tools/build430/source-identity.json",
+    "tools/build433/browser-qa.mjs",
+    "tools/build433/package.py",
+    "tools/build433/preview-server.mjs",
+    "tools/build433/refresh-assets.py",
+    "tools/build434/browser-qa.mjs",
+    "tools/build434/package.py",
+    "tools/build434/preview-server.mjs",
+    "tools/build434/refresh-assets.py",
+    "tools/build435/browser-qa.mjs",
+    "tools/build435/final-ui.mjs",
+    "tools/build435/inspect-ui.mjs",
+    "tools/build435/package.py",
+    "tools/build435/preview-server.mjs",
+    "tools/build435/refresh-assets.py",
+    "world-raid-offline433-assets.json",
+    "world-raid-offline433-sw.js",
+    "world-raid-offline434-assets.json",
+    "world-raid-offline434-sw.js",
+    "world-raid-offline435-assets.json",
+    "world-raid-offline435-sw.js"
+  ],
+  "validation": {
+    "targeted_tests": 140,
+    "passed": 140,
+    "browser_checks": 23,
+    "production_deployed": false,
+    "real_safari_tested": false
+  },
+  "files": [
+    {
+      "path": "BUILD428_MANIFEST.json",
+      "bytes": 7692,
+      "sha256": "7df67afe94eb8d633358b603324f8895a18c72999b88852c4c96a1e2ccde2584"
+    },
+    {
+      "path": "README_Build425.md",
+      "bytes": 3261,
+      "sha256": "21c19bce9dafaceb4a0cee7f582660a4d3dd8454f3733e0f2b7c92ab9eba611d"
+    },
+    {
+      "path": "README_Build426.md",
+      "bytes": 4680,
+      "sha256": "3c2e3d75199f43eacb71868f29d5459be1f1d906316e16f37af71a08b5bcb6c9"
+    },
+    {
+      "path": "README_Build427.md",
+      "bytes": 4270,
+      "sha256": "e0bbe3c38095b538de7da98397c0ddec58c79819f8f0e2a58905120a1ee63878"
+    },
+    {
+      "path": "README_Build428.md",
+      "bytes": 5175,
+      "sha256": "a90323ce995e8c6143f6e1ccc77031031f4d56a92d9d5590b39873bbfa2a243b"
+    },
+    {
+      "path": "README_Build429.md",
+      "bytes": 5899,
+      "sha256": "002c7ffaeda9d288fe5dfe755f91ca40d6008b56b9f61b420274665b5c90bce9"
+    },
+    {
+      "path": "README_Build430.md",
+      "bytes": 7907,
+      "sha256": "956f2c5375ce29d745358986e94d86274f529204a5fb2965fdd3e0b1752ad9bb"
+    },
+    {
+      "path": "README_Build431.md",
+      "bytes": 6613,
+      "sha256": "347208ff08df9698d86730056794faa8e4e3b5deab8d1e9ca25f365e467cc177"
+    },
+    {
+      "path": "README_Build432.md",
+      "bytes": 6086,
+      "sha256": "c9aba0028b20395b4c21ead32658bd1c2a463e9cba58e20697e22af7f1422bfb"
+    },
+    {
+      "path": "README_Build433.md",
+      "bytes": 4951,
+      "sha256": "e27cf422062ab1f598c57eb8e056b75cb282de539fa6872cf50c409142cdd969"
+    },
+    {
+      "path": "README_Build434.md",
+      "bytes": 4645,
+      "sha256": "8461d9fe239ee2be9e1231e819b050c767967d2f496458b28a0855e5be18d950"
+    },
+    {
+      "path": "README_Build435.md",
+      "bytes": 5226,
+      "sha256": "c7372bc82a963440d267a5412bc4492dc5b632f92ab1e6fb033079f5085a434f"
+    },
+    {
+      "path": "assets/ui/build435/gift-seal.webp",
+      "bytes": 299884,
+      "sha256": "0b8372a8a7c3371d76b0f2619df6f4e5b176e67f4fefce6cbbaaa7a89ce1b51a"
+    },
+    {
+      "path": "assets/ui/build435/ranking-frame.webp",
+      "bytes": 394194,
+      "sha256": "60337d71f0389bed9336a1804cac206cd0597d8d7f31c32ca68758f2d7e4ac58"
+    },
+    {
+      "path": "assets/ui/build435/summon-banner.webp",
+      "bytes": 473574,
+      "sha256": "a222bcb74040fd57e46181785e75399d7b570ac43c262e0fd61394db54766625"
+    },
+    {
+      "path": "docs/build425/changed-runtime.json",
+      "bytes": 367,
+      "sha256": "6a8708536d2440d121d6a9f43151005327a238762e3cf2bc6cff53bac7d216c4"
+    },
+    {
+      "path": "docs/build425/combat-comparison.json",
+      "bytes": 1488,
+      "sha256": "6eb590d2f9d12ce840b39a815e276854689c6f645bbc5eac0eb46ee7da4db118"
+    },
+    {
+      "path": "docs/build425/css-cascade.json",
+      "bytes": 1684,
+      "sha256": "edc23b09e3e39638fdb46fff8ce0dfedc2256068a4853b30a6b9aa2534263bf8"
+    },
+    {
+      "path": "docs/build425/focused.log",
+      "bytes": 3962,
+      "sha256": "27794399dbc2c5fcf6890661b25e1f6b13835ae7470289c27c02212438930c54"
+    },
+    {
+      "path": "docs/build425/regression.log",
+      "bytes": 29443,
+      "sha256": "4bdffa750a204baa7c7dfe4c5dcf77298b2448adfc60bf1b0fe5767a4e996071"
+    },
+    {
+      "path": "docs/build425/runtime-manifest.json",
+      "bytes": 1655,
+      "sha256": "87000d5a12f33c2a1ab4c4882b9744ad3590629a713123f3995c7d2dba69e183"
+    },
+    {
+      "path": "docs/build425/staged-regression.log",
+      "bytes": 29459,
+      "sha256": "9f91c6eada0c527111b0a3df20771d6c8f42d9be67f46d8fe0c9d9401b5602b3"
+    },
+    {
+      "path": "docs/build426/balance-audit.json",
+      "bytes": 18128,
+      "sha256": "9080963ff25b38a1ea1027b8378789f1e81e80d83a175b430ddbed4f7f4782e2"
+    },
+    {
+      "path": "docs/build426/balance-audit.log",
+      "bytes": 718,
+      "sha256": "ee45286b3bf3494df8a10b15f0b1e0c4ef6b70a1852e456e4666a0f372785a9e"
+    },
+    {
+      "path": "docs/build426/changed-files.json",
+      "bytes": 1223,
+      "sha256": "b1bbda71fa302a89059d096adedb9a509521b189071cca2c0ccf5e990815f034"
+    },
+    {
+      "path": "docs/build426/lifecycle-tests.log",
+      "bytes": 1512,
+      "sha256": "3d15ab1ad05691106e3b174b2add1114eb48102f1b03c80b57235269d93901ca"
+    },
+    {
+      "path": "docs/build426/regression.log",
+      "bytes": 30855,
+      "sha256": "22b61433f38ae3c59aef424f352403a61e17294ab2c17a3bce4afb46dbd90001"
+    },
+    {
+      "path": "docs/build426/runtime-manifest.json",
+      "bytes": 971,
+      "sha256": "3a97be9f2b2a2fa6dcd77b3dc1ee91df6d09e759eb0b398b346474576e70b363"
+    },
+    {
+      "path": "docs/build427/changed-runtime.json",
+      "bytes": 244,
+      "sha256": "25c9d9a9b56bc0b9a8c126085ff07b0f718bd8468dfdb7f985afdc54e019ceeb"
+    },
+    {
+      "path": "docs/build427/overlay-tests.log",
+      "bytes": 31985,
+      "sha256": "d97d3f31652e4bcc0b02d672babaafd292c09103db09a3eb310b17481b6c7bd4"
+    },
+    {
+      "path": "docs/build427/overlay-verification.json",
+      "bytes": 275,
+      "sha256": "3fd219bb984744393bc0feffe19d9cf03d6b14f9694546a61d834f723159ddf7"
+    },
+    {
+      "path": "docs/build427/patch-manifest.json",
+      "bytes": 5567,
+      "sha256": "23b1ada447b3603af57801d665a2b7e0407c88edeeeabd3bfc523fb9970b5f17"
+    },
+    {
+      "path": "docs/build427/runtime-checks.json",
+      "bytes": 1366,
+      "sha256": "c9efeca08fdaf362eaf76a5652cc051e106c17cb9c2e34c95be218f8a1626f10"
+    },
+    {
+      "path": "docs/build427/tests.log",
+      "bytes": 31990,
+      "sha256": "6bad3ecb725caa96a45339850585d5e236dc91bf24399de769f12f57911a813b"
+    },
+    {
+      "path": "docs/build428/compatibility-hooks.json",
+      "bytes": 1741,
+      "sha256": "32a830bb46fb1fe114bf2072775c2769479c5937f7fd8147008fe80139aef3cb"
+    },
+    {
+      "path": "docs/build428/dispatch-tests.log",
+      "bytes": 242,
+      "sha256": "ed4b038d82420b09cb8c8b6f4ea5ee1f206e8fe9b8a1c2c1fba147ca7ab22c51"
+    },
+    {
+      "path": "docs/build428/formation-audit.json",
+      "bytes": 3273,
+      "sha256": "4f61927789a18939c978d5c0d981951a7f68a4f0ba372603536e25eac4c8009b"
+    },
+    {
+      "path": "docs/build428/formation-audit.log",
+      "bytes": 1568,
+      "sha256": "8fc21786eb2fe9e9105534ad19dbf1aa1b366660b1bd92571dd981c66a7f9a1e"
+    },
+    {
+      "path": "docs/build428/overlay-tests.log",
+      "bytes": 34422,
+      "sha256": "18cd803cd655b16fa7945d38a5a61ac6f43b53acc9e10ee1c01563515f74b4fe"
+    },
+    {
+      "path": "docs/build428/tests.log",
+      "bytes": 34411,
+      "sha256": "33ae80fad286722244f8d5657a8d4e402aba5cb7161c18bd1cad5af4115d55b8"
+    },
+    {
+      "path": "docs/build429/overlay-tests.log",
+      "bytes": 36611,
+      "sha256": "878ed682e63e61f1ce9ed4670c80f383d9e5657231ad539ec14509267f10aa0c"
+    },
+    {
+      "path": "docs/build429/patch-manifest.json",
+      "bytes": 6289,
+      "sha256": "419c5d0893a6b31855ff2a872311585c1ba10e427b257d8f28012cc3ecbd1732"
+    },
+    {
+      "path": "docs/build429/tests.log",
+      "bytes": 36613,
+      "sha256": "bac5c0e1e4483164586c131c8f62a36d2aec574601aec429cbd1c98e978cb8d8"
+    },
+    {
+      "path": "docs/build430/formation-audit.json",
+      "bytes": 2789,
+      "sha256": "ccc637dea9f8b1a0da06dbf065f53a4b9cdbc9854580a64179cc39c5e9c1faf8"
+    },
+    {
+      "path": "docs/build430/formation-audit.log",
+      "bytes": 1816,
+      "sha256": "49aece9d06d994e1c774f1aa1d55567b9c702e08cfd077828fc57a953c46cd9b"
+    },
+    {
+      "path": "docs/build430/overlay-tests.log",
+      "bytes": 39712,
+      "sha256": "6a01fcf001722047e32a244bdeac9abde54623589ac3dab433b8f1bb4b19cbd8"
+    },
+    {
+      "path": "docs/build430/patch-manifest.json",
+      "bytes": 13029,
+      "sha256": "d386caf9c1a7542925d3b274e3b857a1af96759b0bf99bc360c0f3f146b6be56"
+    },
+    {
+      "path": "docs/build430/tests.log",
+      "bytes": 39709,
+      "sha256": "f48acb1fe9fbddcd9bf02514f97e43577a7be7ecf44e3ceedbd5969c2b1cac3d"
+    },
+    {
+      "path": "docs/build431/overlay-tests.log",
+      "bytes": 40704,
+      "sha256": "8c4e6e10c0b678126404fcd779e694d0e70f0cea6333657940bf34a12c414a2d"
+    },
+    {
+      "path": "docs/build431/patch-manifest.json",
+      "bytes": 30898,
+      "sha256": "77b971148076f5d59972b83623b3a443f159f95baa2f99dbe3b640770bb5b612"
+    },
+    {
+      "path": "docs/build431/regressions-before.log",
+      "bytes": 5252,
+      "sha256": "247dfff3a739129827278ddd047f90d9f3011c88eb0e0dcab4af4f6fdbb9ea1b"
+    },
+    {
+      "path": "docs/build431/screen-tests.log",
+      "bytes": 2816,
+      "sha256": "375240ee120f8c9227e0a20a351c4192ad45c07b0fb2693a0d3588c50b53f09d"
+    },
+    {
+      "path": "docs/build431/source-audit.json",
+      "bytes": 3763,
+      "sha256": "07c726162bac191125d593fff54668ef2c36c416cecbf77e975caca8a91859d4"
+    },
+    {
+      "path": "docs/build431/tests.log",
+      "bytes": 40717,
+      "sha256": "3932a7daaf66ae21610f29a533b608c2ffe12621cd5d66cc678213f96dc5943c"
+    },
+    {
+      "path": "docs/build431/verification.md",
+      "bytes": 4670,
+      "sha256": "7c25b0e81eac94f50304ae59b9b10270b901390c39a23b7d088d857e36f95570"
+    },
+    {
+      "path": "docs/build432/browser-checks.json",
+      "bytes": 598,
+      "sha256": "0d481a235d02e65ecc7bbfe0a19822f955daa89b453ed9bf07bca5843c27fe9d"
+    },
+    {
+      "path": "docs/build432/contribution.png",
+      "bytes": 74580,
+      "sha256": "f3c109b2c7fc32fbbef061faafac760531a4e602361460ec7b66ad43536a6302"
+    },
+    {
+      "path": "docs/build432/lobby.png",
+      "bytes": 203819,
+      "sha256": "7ff7900b25fd665cd88d9d6b44b04958403f7559335a2c00fc7ca21672b6a674"
+    },
+    {
+      "path": "docs/build432/patch-manifest.json",
+      "bytes": 34217,
+      "sha256": "fda66da6ea29313828c4bfaebdf017fab864a9bd6c851679e0725ef9514519ca"
+    },
+    {
+      "path": "docs/build432/reward.png",
+      "bytes": 113998,
+      "sha256": "b3e2e1913c84c27981a3d6644472322d50b8a895bc43e932c1a4d85512b5df8a"
+    },
+    {
+      "path": "docs/build432/tests.log",
+      "bytes": 9978,
+      "sha256": "4955d9850eb60315b1994c6223d042545ffa54f3bd6ad87ee9017ad67506a153"
+    },
+    {
+      "path": "docs/build433/browser-result.json",
+      "bytes": 4518,
+      "sha256": "5651ea2f5ba04fa2f4bff29a0e32ca350d039bd80410240edbac87198a0cc7b6"
+    },
+    {
+      "path": "docs/build433/dial-spinning.png",
+      "bytes": 342838,
+      "sha256": "73915f134248407c43129b5f07b9188c97215eddbfbd845704904bb9111e1dba"
+    },
+    {
+      "path": "docs/build433/dial-stopped.png",
+      "bytes": 342515,
+      "sha256": "d6b8e4884698c041af915154eba13e89a13737b1cf1cfee54c3c05345d6c1129"
+    },
+    {
+      "path": "docs/build433/mother-0.png",
+      "bytes": 338327,
+      "sha256": "3649a844c17b2ef144a4de27b2ce61da8263d96dadd0cd194cd83c3e8a529ac3"
+    },
+    {
+      "path": "docs/build433/mother-1.png",
+      "bytes": 340655,
+      "sha256": "a58ba3efdb61e7baf28d60fe98001e40cd85accb837638d741d8467745dd0f70"
+    },
+    {
+      "path": "docs/build433/mother-3.png",
+      "bytes": 341351,
+      "sha256": "163eb365fe860f64a9274934eb238ac291a2b75d72af368f84af4e1ee26a1c3c"
+    },
+    {
+      "path": "docs/build433/patch-manifest.json",
+      "bytes": 39784,
+      "sha256": "06e2171fdad81a5e0fe54a7a4efb5a809e87281b8c9def779740fc2524215cff"
+    },
+    {
+      "path": "docs/build433/rematch.png",
+      "bytes": 97640,
+      "sha256": "318acc3ef06fe1967f21acb8ef55b2e8d8053e1452a5d9b474ed7c23cc17b2e0"
+    },
+    {
+      "path": "docs/build433/sanctum.png",
+      "bytes": 327471,
+      "sha256": "31855222a9cd971d934c9a81c5311d75b8d33b9b050cec7cd0c9e10435e20fbd"
+    },
+    {
+      "path": "docs/build433/skill.png",
+      "bytes": 330199,
+      "sha256": "df8d8ebc4424daebd634cdb383455f18cca5876ddbd0b511be82757c2ccf9dec"
+    },
+    {
+      "path": "docs/build433/tests.tap",
+      "bytes": 25502,
+      "sha256": "ff0c0c0e08e542a0edd379a56a918ce5a9663efaacc17e1c7a4397730db1e816"
+    },
+    {
+      "path": "docs/build434/browser-result.json",
+      "bytes": 980,
+      "sha256": "30229b6fa5118017f223bb7a7d9db041c9de750813e1767f85d4fc1ff31b1cc3"
+    },
+    {
+      "path": "docs/build434/contribution.png",
+      "bytes": 98445,
+      "sha256": "bc0dd2d5c8f2fc38e2611445174199690954eb7f5cdce0c636eaa2a477424d02"
+    },
+    {
+      "path": "docs/build434/first-victory.png",
+      "bytes": 114282,
+      "sha256": "e9cd56fb4154244b1c0bbac0d8de6f6ae0fa1820b8b9596304c3f8f4e3b91047"
+    },
+    {
+      "path": "docs/build434/group-rematch.png",
+      "bytes": 172728,
+      "sha256": "87194fbd12ac6a6776687e9cd27901747e7fa851abda278162d5fac6b1fbb382"
+    },
+    {
+      "path": "docs/build434/hero-0.png",
+      "bytes": 172334,
+      "sha256": "d0aa929c30e1004f9e6c012f4f921286619b23cd1cc7f0108a2f2edf1ec208a5"
+    },
+    {
+      "path": "docs/build434/hero-1.png",
+      "bytes": 170849,
+      "sha256": "5ffb387e7a2ab4eaf1397ede0894538e40b6c9762bbd7ead5835276e8a868285"
+    },
+    {
+      "path": "docs/build434/hero-2.png",
+      "bytes": 172332,
+      "sha256": "671e0b5dd4f6598aba44b9d268adbdc99b4e1fa21f06b337e7365c54eeafb74d"
+    },
+    {
+      "path": "docs/build434/hero-3.png",
+      "bytes": 171441,
+      "sha256": "edb69048c6e7ee1547fe46059c6e4f7b64bb493d5707f1fe5b643d631b727fe0"
+    },
+    {
+      "path": "docs/build434/main-changes.diff",
+      "bytes": 21752,
+      "sha256": "c27baacb875ec012a9c310a0ae51bb50c495f142d203a20766ffa1756966e02a"
+    },
+    {
+      "path": "docs/build434/mother-regression/browser-result.json",
+      "bytes": 4518,
+      "sha256": "5651ea2f5ba04fa2f4bff29a0e32ca350d039bd80410240edbac87198a0cc7b6"
+    },
+    {
+      "path": "docs/build434/mother-regression/dial-spinning.png",
+      "bytes": 343093,
+      "sha256": "bb93ed58c276b63a2bac46c276ed5af83c02258f39837f62a2504faf5e535db8"
+    },
+    {
+      "path": "docs/build434/mother-regression/dial-stopped.png",
+      "bytes": 342377,
+      "sha256": "d9ac671c4638483ad42c154b172f6292f954571559523cd519618d64d2cf8222"
+    },
+    {
+      "path": "docs/build434/mother-regression/mother-0.png",
+      "bytes": 338228,
+      "sha256": "85d51ddb5159d326babc564a0661193caac89c5f7cc178c34a3a3cd913c42542"
+    },
+    {
+      "path": "docs/build434/mother-regression/mother-1.png",
+      "bytes": 340607,
+      "sha256": "9faf37bf206ff8b4d92366d2a5819349450a5df69f21e05bbfec4429fc88c698"
+    },
+    {
+      "path": "docs/build434/mother-regression/mother-3.png",
+      "bytes": 340736,
+      "sha256": "4f5ce24934ab0bba9f5dd36b5094422c0573f4f85c9990d9c5374f1a9133d9ba"
+    },
+    {
+      "path": "docs/build434/mother-regression/rematch.png",
+      "bytes": 97618,
+      "sha256": "70dd59430594897f2f629ab5349983879d03a731b38e95857f93f5b35c8b657f"
+    },
+    {
+      "path": "docs/build434/mother-regression/sanctum.png",
+      "bytes": 327578,
+      "sha256": "831a8f29d251903d57e8149fb33f698d6de1a2a3589f965558e9fee4f71f0639"
+    },
+    {
+      "path": "docs/build434/mother-regression/skill.png",
+      "bytes": 330131,
+      "sha256": "32a5d1fc20065b5ca43f1be1f1a800f8b8aed3d1235d59af1122e4fb5878e334"
+    },
+    {
+      "path": "docs/build434/patch-manifest.json",
+      "bytes": 47361,
+      "sha256": "7422ef68b2f9e6d65dc667e84c1495b42d8d6f20c26f70a447e68a86974dc907"
+    },
+    {
+      "path": "docs/build434/personal-battle.png",
+      "bytes": 329914,
+      "sha256": "390576ab40ebc2899440f00ff8cc3b200cac82d1c921838a159a0336ee3bc003"
+    },
+    {
+      "path": "docs/build434/royal-room.png",
+      "bytes": 361312,
+      "sha256": "f00795cb424d9f4766e0c0aa7333180ef4bd4879e2687e20a8da0bedb279ffdc"
+    },
+    {
+      "path": "docs/build434/short-screen-scroll.png",
+      "bytes": 127895,
+      "sha256": "646fa479dd657f276347913407d9849750a6656016e7c4a89a05bee2ea055fb0"
+    },
+    {
+      "path": "docs/build434/tests.tap",
+      "bytes": 32132,
+      "sha256": "abc7f7dea7b9f51461fce47a237e72d761e6b2234edc170d773c2b2c88068251"
+    },
+    {
+      "path": "docs/build435/browser-result.json",
+      "bytes": 1252,
+      "sha256": "291b11faaa37b088726eded4db3ebdf840afc4180c3f003b60e56748993879ab"
+    },
+    {
+      "path": "docs/build435/final-ui-result.json",
+      "bytes": 2365,
+      "sha256": "3c923a837d6a73d261e7d52fc17a544cd8399999ec2f2aaaa4c5f5eb67ea180f"
+    },
+    {
+      "path": "docs/build435/gacha-banners.png",
+      "bytes": 287834,
+      "sha256": "fc3ec16096608a3b51d0ae841e27e4e07e00a4c93c3d1ad4c17de6d1a8830a46"
+    },
+    {
+      "path": "docs/build435/gacha.png",
+      "bytes": 258579,
+      "sha256": "dea9dccc60cf1fb36269730c60417d52f507f39b348247f986486d20ff8f9cf4"
+    },
+    {
+      "path": "docs/build435/generated-art.json",
+      "bytes": 3942,
+      "sha256": "812cb076b2d5a814c1c009944c2346a8e738a1d40026976b28e291acd7a2edeb"
+    },
+    {
+      "path": "docs/build435/gift-before.png",
+      "bytes": 212844,
+      "sha256": "09814e93d71155d2e745fb3b52eb49f9a3174c411883beec13339f89bda8040c"
+    },
+    {
+      "path": "docs/build435/gift-received.png",
+      "bytes": 174997,
+      "sha256": "d816838db52d3057f8a55681accccc0eec46c59e57402d916c91a277a5109322"
+    },
+    {
+      "path": "docs/build435/mother-room.png",
+      "bytes": 355535,
+      "sha256": "92ce9cc8e502b94f248bb930aff204a55ce374e6b9ef656bca1f9b8731fdd568"
+    },
+    {
+      "path": "docs/build435/raid-1280-800-auto.png",
+      "bytes": 811447,
+      "sha256": "a53ba32cd79178130d65f438a8825c5d86779ae211cca48b0914fed75f89cf4f"
+    },
+    {
+      "path": "docs/build435/raid-1280-800-manual.png",
+      "bytes": 776378,
+      "sha256": "f9ff271a8d369002d381d12308b066ef7a04bd34922ab2d5c5c0dd5b12ecd0fb"
+    },
+    {
+      "path": "docs/build435/raid-1280-800-skills.png",
+      "bytes": 395194,
+      "sha256": "35859aaadb537b9c120089e1a7f7afb10ea72177e51d69ac9329862c9bbab2ff"
+    },
+    {
+      "path": "docs/build435/raid-375-540-auto.png",
+      "bytes": 227441,
+      "sha256": "4c8cfaf8125312cd8ef2ae13c188fdea1974274b040e514ac95228f0e0b6580c"
+    },
+    {
+      "path": "docs/build435/raid-375-540-manual.png",
+      "bytes": 194094,
+      "sha256": "3263bd189f9dcaa5610292effb51d1a02d8c4b7eeeeebea893c2d7d6dcbf9b60"
+    },
+    {
+      "path": "docs/build435/raid-375-540-skills.png",
+      "bytes": 102428,
+      "sha256": "48d23618d0d31b809af0d2320d0fde953f6f0680ee77deb56998c103cfd67383"
+    },
+    {
+      "path": "docs/build435/raid-393-720-auto.png",
+      "bytes": 343576,
+      "sha256": "ffb4ff206a4e7729e2b585a927c3705505e7a9cc7600bfad4f11205e59bb7c76"
+    },
+    {
+      "path": "docs/build435/raid-393-720-manual.png",
+      "bytes": 322689,
+      "sha256": "1a580da400513574e291421e72565849db8622ab31012b3796f648f48fe6db9b"
+    },
+    {
+      "path": "docs/build435/raid-393-720-skills.png",
+      "bytes": 164053,
+      "sha256": "c3f576d7e145bd94200cc93bbf62f6fc69414a6d1ffacc35984ec0930fbbc355"
+    },
+    {
+      "path": "docs/build435/raid-430-760-auto.png",
+      "bytes": 390671,
+      "sha256": "f55923f78e46b803422257e2d073620cd4c5d6a780263291048f4500b2a1837e"
+    },
+    {
+      "path": "docs/build435/raid-430-760-manual.png",
+      "bytes": 368411,
+      "sha256": "dbc7d899956026c68c65af94f61057daf03f43dd71e078b6703d2049a4556ea3"
+    },
+    {
+      "path": "docs/build435/raid-430-760-skills.png",
+      "bytes": 187108,
+      "sha256": "12f46ecf04ff62298a84c6c5febbde2e14045a12b3c06478206cf2469d9d3c24"
+    },
+    {
+      "path": "docs/build435/raid-lobby.png",
+      "bytes": 175759,
+      "sha256": "6664d406c146149fd360c9728c52a2ecab3dacf58ecae71ce877ad6e3b3ddfbf"
+    },
+    {
+      "path": "docs/build435/ranking.png",
+      "bytes": 244227,
+      "sha256": "960da71a643434e25824d80301a3c5b25ed8f9660993d967ac3cf077817bc761"
+    },
+    {
+      "path": "docs/build435/tests.tap",
+      "bytes": 34596,
+      "sha256": "e3c01ab0d1cb7137f2bc6ca10c993606a68d09dc5ea75f1333aa438098053f47"
+    },
+    {
+      "path": "index.html",
+      "bytes": 54111,
+      "sha256": "d24335a860b58268d274ba396883a15a90d99ded67c20de650c5b97e46a7ddc3"
+    },
+    {
+      "path": "online-server/server.js",
+      "bytes": 21471,
+      "sha256": "439cd5fa32b72f0bd4fd905bdf8b05f8687d5c79a644106c9f23115ec1680388"
+    },
+    {
+      "path": "online-server/src/RaidCoordinator.js",
+      "bytes": 86118,
+      "sha256": "7b7218404a4a537b244edea2fe9a1f75221896be54dc1bf51fd05754afdcd138"
+    },
+    {
+      "path": "online-server/src/WorldRaidBattle428.js",
+      "bytes": 4411,
+      "sha256": "f1023e47575423977a0901ea1d85017c57b78d4747ce5241f4f6f4954d6dc59d"
+    },
+    {
+      "path": "online-server/src/WorldRaidBattle432.js",
+      "bytes": 279,
+      "sha256": "ecfed6252ae094f10886437aedf597196c032488c2055b4ca84f10e9251eb29d"
+    },
+    {
+      "path": "online-server/src/WorldRaidCoordinator428.js",
+      "bytes": 9940,
+      "sha256": "db095695a362a6e88c75d01f416c258b52d107a610be4c4d821e851ade56f3c0"
+    },
+    {
+      "path": "online-server/src/WorldRaidCoordinator429.js",
+      "bytes": 8167,
+      "sha256": "d93322c0d704fc67fc7da7b24c7b350ce37b1de9645a28b54fddddff390d8591"
+    },
+    {
+      "path": "online-server/src/WorldRaidCoordinator430.js",
+      "bytes": 10076,
+      "sha256": "fd1501f7d28a1acaaf2052a411f1982b257f40ecd43682c112be704d0d34dc1f"
+    },
+    {
+      "path": "online-server/src/WorldRaidCoordinator432.js",
+      "bytes": 2363,
+      "sha256": "10590f030c979df50927d6a9e02cc2eb65819dd88e9c5b4540173e3594b801fd"
+    },
+    {
+      "path": "online-server/src/WorldRaidStore428.js",
+      "bytes": 4019,
+      "sha256": "c10ac26cccbb2f58a5a13cd8027035ce475bb1ed30a13d736051ba08d3e6971f"
+    },
+    {
+      "path": "src/Styles/build425-mother-stage.css",
+      "bytes": 3286,
+      "sha256": "fc677ccda60543dbcba78ccc07b06ca1dd014eb00d33fd47a76b3341bc04dfb3"
+    },
+    {
+      "path": "src/Styles/build426-mother-cycle.css",
+      "bytes": 291,
+      "sha256": "e435cb7c88248f96b8283290b15b557863628d6f870a319288b61fd75d943e72"
+    },
+    {
+      "path": "src/Styles/build427-home-supplies.css",
+      "bytes": 1125,
+      "sha256": "aa4981a12a25c54b83bd96eff8d95950ca1ebdb12f5a5618ba991554ceab8fc2"
+    },
+    {
+      "path": "src/Styles/build428-world-raid.css",
+      "bytes": 3046,
+      "sha256": "ee701c6ddab465b94a8691c18b754a95570532573f222482458dda2fd87acf77"
+    },
+    {
+      "path": "src/Styles/build429-world-rewards.css",
+      "bytes": 2517,
+      "sha256": "cb6944a6222c333702a195de40e522112635a99b9b237425a1c8be395015ae02"
+    },
+    {
+      "path": "src/Styles/build430-world-offline.css",
+      "bytes": 734,
+      "sha256": "e2d915ec513c29e91d767bc6dd43a2cf5ac7b4c1f279ce52f408466cf3125372"
+    },
+    {
+      "path": "src/Styles/build432-world-raid.css",
+      "bytes": 9722,
+      "sha256": "5df89f12ce9c7ebd6fae4123bc8bbd4313b1320b02e0f46bcb65c6cd5e06255b"
+    },
+    {
+      "path": "src/Styles/build433-mother.css",
+      "bytes": 2880,
+      "sha256": "50f17d05c535b48f39c380029dbc2c810b4f631edd2476de144a3c814f987af5"
+    },
+    {
+      "path": "src/Styles/build434-royal.css",
+      "bytes": 1926,
+      "sha256": "dfdb4b1d7f8763b2c7cb8c48bda73e41b7790eb63427fb176c3a953afdd4365f"
+    },
+    {
+      "path": "src/Styles/build435-polish.css",
+      "bytes": 16656,
+      "sha256": "946df6eb00900e9e081164168e278109d77f953e70e52199a93b0e2a199a9215"
+    },
+    {
+      "path": "src/battle/BattleRules.js",
+      "bytes": 38832,
+      "sha256": "c0b9036541fcb698fc3c0a3a44bfa25cad7c06be6c03c765ac5fe84d62d5d0b7"
+    },
+    {
+      "path": "src/battle/EnemyAI.js",
+      "bytes": 25185,
+      "sha256": "173f9155e8d2cb5fdb8cc8f94f316435b11ee41ab70686c65143b4d050e964b6"
+    },
+    {
+      "path": "src/battle/TurnSystem.js",
+      "bytes": 3252,
+      "sha256": "00fafde34500dd351a9245bf2decf218b5aa91b37b2c1d86f13ac6083135607c"
+    },
+    {
+      "path": "src/chapterTwo/ChapterTwoSystem.js",
+      "bytes": 25375,
+      "sha256": "36f8408d9ad4d4d39d98131eb2a40c7261d5d26a5b24a0fcd49ee884d5ae845f"
+    },
+    {
+      "path": "src/core/ChestSupplies427.js",
+      "bytes": 2324,
+      "sha256": "999592c4f68cd222c1cb642c04515075eef9e5f968a94e20a8811883d772d4e2"
+    },
+    {
+      "path": "src/core/EndgameUltimateSystem.js",
+      "bytes": 33561,
+      "sha256": "1c6bfac8024a54f7aff949274c95593f0a5407ece7deba5a10b35e6b60a0f46f"
+    },
+    {
+      "path": "src/core/HeroShieldDisplay.js",
+      "bytes": 599,
+      "sha256": "22acba1aca4047516b379f93677aa1e4d1ddabe4f0d4b7b455eb7654a8b8058d"
+    },
+    {
+      "path": "src/core/RoyalChamberSystem.js",
+      "bytes": 5265,
+      "sha256": "0c5b79cf5e02ac665861b284cab3d4aff5ead6439bb366226d61018e40606476"
+    },
+    {
+      "path": "src/core/RoyalHero434.js",
+      "bytes": 5371,
+      "sha256": "be723172b243fb1c61e6e43508d8c5816bf78c5f29264fdd10c39356f619c9a6"
+    },
+    {
+      "path": "src/core/RoyalMemory379.js",
+      "bytes": 639,
+      "sha256": "e218bf2d98e642fda7eb7eff78fefcdb4da392efa216f4c7e45a61e69c48b8d0"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "8491c97e48eded21ca2e8db645fb01e97f3cc524cef7bd5be77bb18f7c5bf741"
+    },
+    {
+      "path": "src/main.js",
+      "bytes": 1141376,
+      "sha256": "a28dac993e2d0bc5bfac07429f9e87ccaf9f778c8d181717e0eaca9c1b075914"
+    },
+    {
+      "path": "src/online/OnlineViews.js",
+      "bytes": 108027,
+      "sha256": "dea4f321a4c3fd0bcbb3128677d22d3a7a835803a66edaa014cfc2a9c3cb51ee"
+    },
+    {
+      "path": "src/primordial/Cycle426.js",
+      "bytes": 7958,
+      "sha256": "388867de016dd677867b2044eff24026d580c55489ce3a1a85f728e9eec40e5f"
+    },
+    {
+      "path": "src/primordial/FieldHit433.js",
+      "bytes": 838,
+      "sha256": "f42e25127402a23950df3e8289f421912fe9ead8845ad555478e4ee0efbb2b26"
+    },
+    {
+      "path": "src/primordial/Mother422.js",
+      "bytes": 5438,
+      "sha256": "33055a5bdb482d5c0929e1894f66371f620c086a67c5db0e60cb39b8255e4888"
+    },
+    {
+      "path": "src/primordial/Shield425.js",
+      "bytes": 538,
+      "sha256": "699ef8a84d2e904ab6bc185c7f3a87cd81b5b7f8031a410cbec09a1074c6252b"
+    },
+    {
+      "path": "src/primordial/State422.js",
+      "bytes": 1729,
+      "sha256": "25c56ed79e4903e046e7824995e355c936cf0890b61b18a3989121ac94009c2a"
+    },
+    {
+      "path": "src/ui/BattleBossLayout.js",
+      "bytes": 10532,
+      "sha256": "47a9434e4308e2b0a5cf97b589574cee47fb9f061d77164c225d738df3598ade"
+    },
+    {
+      "path": "src/ui/BattleCircleLayout405.js",
+      "bytes": 3051,
+      "sha256": "3bf78c36d265c2e60a69339bc69ffe4405c343aaa084fd2b4b0b7615a6e0ab3f"
+    },
+    {
+      "path": "src/ui/HomeNavigation427.js",
+      "bytes": 1021,
+      "sha256": "25d2a7f539c15d3b4fa80e8c04ebeb7c4c4b32ce3a7ca293c3a36b62d83eecc1"
+    },
+    {
+      "path": "src/ui/MotherDial425.js",
+      "bytes": 4807,
+      "sha256": "bff13eefaa46667834f177870485d09fb77b62af241be8eda9e1c6ec2b91c974"
+    },
+    {
+      "path": "src/ui/RoyalChamberField.js",
+      "bytes": 7958,
+      "sha256": "c85f6dfc0b7e79e62c3942c991cd6f6d0182ff59fc141ac958cf007811d65800"
+    },
+    {
+      "path": "src/ui/RoyalHeroHit434.js",
+      "bytes": 916,
+      "sha256": "af68035b083061a3448b9ecb38af84bd3c8b582f58c5d4565f2dd1248134e94b"
+    },
+    {
+      "path": "src/ui/screens/BattleScreen.js",
+      "bytes": 36919,
+      "sha256": "44be20f9f04fc49289ff110a0507fcc6ddb4f3718013a9c3455245ce4d31ff40"
+    },
+    {
+      "path": "src/ui/screens/CampaignFinalFloorScreen.js",
+      "bytes": 6901,
+      "sha256": "7a1fd1621f731c3890bfd0a49dc6c9ea64ffb14001b9f3da87c57a06163cdd99"
+    },
+    {
+      "path": "src/ui/screens/HomeScreen.js",
+      "bytes": 18313,
+      "sha256": "cac2f484a35fa78cb7dd5627e7f92f6f4a11063161212ab3310091c73a60dcc4"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidClient428.js",
+      "bytes": 11852,
+      "sha256": "4ec54bdf5d56a9729916e4162a8e6cff90d7712cef96e6d7d96af596d78109b0"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidClient430.js",
+      "bytes": 7258,
+      "sha256": "c1b233c719c6d39a4e1a6955a8f15f822bdb841ddbc1c44efe885f4743a55d2b"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidClient432.js",
+      "bytes": 7502,
+      "sha256": "3e17811dd4cd2051ef79cb969b81ad7215c90cdd25a7ad65a0298f3e50e90ff6"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidDamage428.js",
+      "bytes": 342,
+      "sha256": "b927b361eeeb75d788b10930d4db64180b20a1623544eead71c60815bafaae90"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "efbf077e5123125d298990a47a67a00332502022d6d7701b28161680f14eb0b8"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineClient430.js",
+      "bytes": 7048,
+      "sha256": "d1612d5d6c2ab026798a787a760dd8cdb1d46ea8c67cd38ac0654a16b1acd0a5"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineView430.js",
+      "bytes": 2854,
+      "sha256": "a43e231e9b192c185d1bd294156c5b020753682bccdc0836739de3dfd34b2781"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidQuota435.js",
+      "bytes": 473,
+      "sha256": "d9f66717968b32d3d2bb9e882bb0b2dedb8b3f0a9f7f430bf4e12e00d845ec59"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidRankingView429.js",
+      "bytes": 5997,
+      "sha256": "4d8aff0d9caabb6c7e724e8dc5a39eedc5cb34d6b9e229999fea5abe18383af9"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidReplay430.js",
+      "bytes": 3910,
+      "sha256": "ccb3baee14a0929c14971fa9e091a0c4544684adbee664567cac93d95b1b0ffc"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidRewards429.js",
+      "bytes": 4444,
+      "sha256": "2a5a96db32df4aee3a2a091348ba5cc9365f1e7b8c5260d19efa81507fcacf0b"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidRewardsClient429.js",
+      "bytes": 3196,
+      "sha256": "a8f7f95b633d5b289825f6acdc544767eb5483e17b5ea6f74f06e767b1d6f40d"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidRules432.js",
+      "bytes": 7883,
+      "sha256": "a1dfa43d5dedc63ed39d27a731c751e9ba271555d76526ba309cd11cf07f0eba"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidState431.js",
+      "bytes": 354,
+      "sha256": "324975d3be610920813c6453ac07ec4f84574a1a4291f049766289223b1e0c3c"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidView428.js",
+      "bytes": 5529,
+      "sha256": "5422e6a8ba51d2fde07f158c46f272670b3484263bc4adf7671ca2fc251d20b7"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidView432.js",
+      "bytes": 8770,
+      "sha256": "343df43a4f2e705d87f09c2f1307e295bda867e5296716bb0b76451a16495598"
+    },
+    {
+      "path": "src/worldRaid/runtime430/online-server/src/CampaignFloorScale.js",
+      "bytes": 304,
+      "sha256": "0c52a00bcd61139372f4aa2fa36bd33db67da1bb7d897ec4ce0f1f1812a6c9ce"
+    },
+    {
+      "path": "src/worldRaid/runtime430/online-server/src/EndgameUltimateAdapter.js",
+      "bytes": 5562,
+      "sha256": "ec6355764a2df92bc4a0b9a0f70e13bcea0b6ad0b15da40544824f8f9771dfe8"
+    },
+    {
+      "path": "src/worldRaid/runtime430/online-server/src/HeroAllianceAdapter.js",
+      "bytes": 5604,
+      "sha256": "5cdd7dafaea028a6350a70dec17c7e0c0dc9efccaf2fe8d79a5cb5b8847c812e"
+    },
+    {
+      "path": "src/worldRaid/runtime430/online-server/src/OnlineMagicCircles398.js",
+      "bytes": 2519,
+      "sha256": "291e768cb5120cc7629a1fc76f48852b1c9eca0ba6339978a7c0b9fb82e4e32d"
+    },
+    {
+      "path": "src/worldRaid/runtime430/online-server/src/RaidCoordinator.js",
+      "bytes": 86022,
+      "sha256": "bf0ff27b0c62c3d3fc2de2a5fcef8be06e9cca2b944fa81c1f16745ab49df8dd"
+    },
+    {
+      "path": "src/worldRaid/runtime430/online-server/src/WeeklyRaidCatalog.js",
+      "bytes": 5214,
+      "sha256": "7408eb8b38c043d47080a277d7c55a4e8181291b4d275bc07560605d80df9d46"
+    },
+    {
+      "path": "src/worldRaid/runtime430/online-server/src/WorldRaidBattle428.js",
+      "bytes": 4411,
+      "sha256": "f1023e47575423977a0901ea1d85017c57b78d4747ce5241f4f6f4954d6dc59d"
+    },
+    {
+      "path": "src/worldRaid/runtime430/online-server/src/WorldRaidStore428.js",
+      "bytes": 975,
+      "sha256": "869e801586d0cc5e803dc4c8bd7597093be80550ea4397b15bef214dafa2e476"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/battle/ChapterTwoAbilityRuntime408.js",
+      "bytes": 12941,
+      "sha256": "39c688754652baf780e55154ebf18c08bb8b67471f150a6d46f13dbdecec6c13"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/battle/SingleTraits410.js",
+      "bytes": 17422,
+      "sha256": "e678d90e4f8517304b5b9c8faea3f789fa1d6ca1693fde4f55b574e32d09f6a7"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/core/EndgameUltimateSystem.js",
+      "bytes": 33561,
+      "sha256": "1c6bfac8024a54f7aff949274c95593f0a5407ece7deba5a10b35e6b60a0f46f"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/core/HeroAllianceSystem.js",
+      "bytes": 18902,
+      "sha256": "bc271f582d469b95c4ab10b3d5457da051268b59f2ad46fcbc082cfaa5043649"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/core/HeroFortitudeSystem.js",
+      "bytes": 826,
+      "sha256": "831cab0e6834388a03649a3a251de88c183471aa6522f9631318fd1481307e7f"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/core/HeroResonanceSystem.js",
+      "bytes": 3850,
+      "sha256": "0bfaf29f031ddb1e015f8d13419eda41e783d5f7acf4db887e96ec618032f118"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/core/HeroShieldDisplay.js",
+      "bytes": 599,
+      "sha256": "22acba1aca4047516b379f93677aa1e4d1ddabe4f0d4b7b455eb7654a8b8058d"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/core/MagicCircleSystem.js",
+      "bytes": 31566,
+      "sha256": "4fe8cbd3982649e353809e72f5e36de459b83a2e74c833e1fc2414d58411f1e9"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/data/ChapterTwoAbilityDesign408.js",
+      "bytes": 45614,
+      "sha256": "5ed30b47836c6593abc9e2625e0b48743b9f81cd2cf529dee5a900ad684dca09"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/data/attributes.js",
+      "bytes": 4197,
+      "sha256": "63474168f88e8b9ee5dd1879331b733b2e096ae14624c3953dee668c0c547c39"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/data/chapterTwoRelics394.js",
+      "bytes": 6733,
+      "sha256": "210b19a366a44ffc48010cd1fcbc4696fd59b6aeda591cf685d1dce3822b6552"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/data/endgameCharacters.js",
+      "bytes": 94839,
+      "sha256": "7ac3759698cdecf26924e72f1e2c9494528e06b78728977aa0be7a7f646e9f57"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/data/endgameUltimates.js",
+      "bytes": 4400,
+      "sha256": "2266ca6a0e7fbed3261ccc050daaa8350ffd8c8ee54707a5eca0f74884da0e58"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/data/magicCircles398.js",
+      "bytes": 2845,
+      "sha256": "51283f6fb1ed0eb1e6a587361fd880d934ddb11904a6476c09b75071a1d00db8"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/data/mythicSerialSpecies.js",
+      "bytes": 8093,
+      "sha256": "534d40f77f63edfb5c3cc424af767604f8d98d95f17b0e10c200bb2922a0d900"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/primordial/Mother422.js",
+      "bytes": 5438,
+      "sha256": "33055a5bdb482d5c0929e1894f66371f620c086a67c5db0e60cb39b8255e4888"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/primordial/Shield425.js",
+      "bytes": 538,
+      "sha256": "699ef8a84d2e904ab6bc185c7f3a87cd81b5b7f8031a410cbec09a1074c6252b"
+    },
+    {
+      "path": "src/worldRaid/runtime430/src/worldRaid/WorldRaidDamage428.js",
+      "bytes": 342,
+      "sha256": "b927b361eeeb75d788b10930d4db64180b20a1623544eead71c60815bafaae90"
+    },
+    {
+      "path": "tests/build365-battle-polish.test.mjs",
+      "bytes": 8868,
+      "sha256": "89f178b463322073cf0ec8844c0e4669130f0ef991fa09451a0f3fdc5c2381b4"
+    },
+    {
+      "path": "tests/build379-memory.test.mjs",
+      "bytes": 3570,
+      "sha256": "84d2301e8059cbcab12191d44ef75b2a8adff0a6c4023f02e27a7cc837de6c7e"
+    },
+    {
+      "path": "tests/build405-battle-circles.test.mjs",
+      "bytes": 17310,
+      "sha256": "a5071d30374aaa28d70f9756656cb87dc7ceffc05f6081d16ef7dae63c9b31f4"
+    },
+    {
+      "path": "tests/build412-operations.test.mjs",
+      "bytes": 10511,
+      "sha256": "310cb04217ecbf3c39f5547def23f30bd20cdbbaffdcfe18224f6e901eddf036"
+    },
+    {
+      "path": "tests/build413-display.test.mjs",
+      "bytes": 4686,
+      "sha256": "db56c95706787295350355976cf1bd492427d81219e221aecfefbfe9c122eaf7"
+    },
+    {
+      "path": "tests/build415-boundaries.test.mjs",
+      "bytes": 6788,
+      "sha256": "e97096f6f9a0340b3530feb6bb5be743607e4aa864c9fec0d589db516f8f635b"
+    },
+    {
+      "path": "tests/build416-integration.test.mjs",
+      "bytes": 9906,
+      "sha256": "52c30be94be659497ba27105a6e36ace470f0306c0dd6245b182e09b808dacf1"
+    },
+    {
+      "path": "tests/build417-progression.test.mjs",
+      "bytes": 11497,
+      "sha256": "da3829e5133f6cd093e751783fa024540c2917463f89e6b152cf2a8771d627b8"
+    },
+    {
+      "path": "tests/build418-field.test.mjs",
+      "bytes": 6300,
+      "sha256": "8bb35fdf63f209a09754099dd0eb92c1430e0fea783ebd2e41b64f478978df57"
+    },
+    {
+      "path": "tests/build419-display-hp.test.mjs",
+      "bytes": 7082,
+      "sha256": "c23163d7c97426609a5076489461af2e99f39658714b16a260dc46348972d308"
+    },
+    {
+      "path": "tests/build420-expedition-integration.test.mjs",
+      "bytes": 5109,
+      "sha256": "8f6a8b7c3f2bb6b857d4d611fd238fbcc73122dc42a75ee9ec184c436b2261ec"
+    },
+    {
+      "path": "tests/build421-skill-close.test.mjs",
+      "bytes": 3577,
+      "sha256": "fbfd87cc565048a221e8e6e97a1c23e41e93907268de76975d0b7a13bfbe0ba8"
+    },
+    {
+      "path": "tests/build422-primordial.test.mjs",
+      "bytes": 10200,
+      "sha256": "41d692109af8b773ff704f32e16161acc0edf8956320a0cd809f6b39dd5429f2"
+    },
+    {
+      "path": "tests/build423-finale.test.mjs",
+      "bytes": 9352,
+      "sha256": "b93d46e1d38fb36f30d71f8e9331673a414cde19311818d2157b7d9477da50be"
+    },
+    {
+      "path": "tests/build424-ten-laws.test.mjs",
+      "bytes": 14158,
+      "sha256": "f4268c86f2d9fabaae5f6530207fd15541fc2c7d2edf31397199aac7282ea04d"
+    },
+    {
+      "path": "tests/build425-mother-stage.test.mjs",
+      "bytes": 8177,
+      "sha256": "a5da316aee023c405dc1abd69625920aa3fd56da5828bc8e333b588c631aa9b8"
+    },
+    {
+      "path": "tests/build426-mother-cycle.test.mjs",
+      "bytes": 9260,
+      "sha256": "31dac059760115e1991b31c473740fe937237ef07088801f6cafd01db73df4e1"
+    },
+    {
+      "path": "tests/build427-home-supplies.test.mjs",
+      "bytes": 10149,
+      "sha256": "c8ddef958a21a9f0df49f6a47a8bf104a204b3d737d39a258ff2a3899cf3c54d"
+    },
+    {
+      "path": "tests/build428-world-raid-client.test.mjs",
+      "bytes": 4804,
+      "sha256": "dece6ca0b70671eb34b4bfe782a64e5b4803bad808946d471e91f57c4a6d6c96"
+    },
+    {
+      "path": "tests/build428-world-raid-damage.test.mjs",
+      "bytes": 2395,
+      "sha256": "d812eca4db43c5feb0eab9e94591d973d7e143535a844847d44b7967f16a440a"
+    },
+    {
+      "path": "tests/build428-world-raid-dispatch.test.mjs",
+      "bytes": 5749,
+      "sha256": "d9c2409c9a6b1ba4a6066b001a622d7650ff64748452b71bd530652bb9f0aa5b"
+    },
+    {
+      "path": "tests/build428-world-raid.test.mjs",
+      "bytes": 11306,
+      "sha256": "e76062abe6f32008382a33c89c727fffa41c37d5980122d484560db372e20ed5"
+    },
+    {
+      "path": "tests/build429-world-rewards-client.test.mjs",
+      "bytes": 7542,
+      "sha256": "bab7f41ac3e114cd8eb08120d86af9d7ecb3cdc800a2539726612364e6772625"
+    },
+    {
+      "path": "tests/build429-world-rewards-server.test.mjs",
+      "bytes": 10332,
+      "sha256": "7f7eb702003fdab29abc4229dbbcebc746ced285f9799a5cd3658c5065e3fdc2"
+    },
+    {
+      "path": "tests/build430-offline-cache.test.mjs",
+      "bytes": 3192,
+      "sha256": "e99ca6a5c41481ffdd3ec8838ddf7234234915075ec2f7cb4c76e7efe28dccd6"
+    },
+    {
+      "path": "tests/build430-offline-client.test.mjs",
+      "bytes": 9249,
+      "sha256": "519098fc80b27fb7626519f5f33bdaf632a067c0106fafed20880cc618cf829e"
+    },
+    {
+      "path": "tests/build430-offline-server.test.mjs",
+      "bytes": 9005,
+      "sha256": "e682c85faa9f8b3a1ddeb5bfe14e4e8a44d8bd435ba6b8b0b71d1ba689e67de8"
+    },
+    {
+      "path": "tests/build431-screen-sync.test.mjs",
+      "bytes": 3606,
+      "sha256": "50bbeefd887b8fa7088707ef168c82ba1a79a128bdcdd6a05205bf8c25f89a80"
+    },
+    {
+      "path": "tests/build431-through-flow.test.mjs",
+      "bytes": 7616,
+      "sha256": "d12d7a08b8b1354dc8dc89dca713317b4a2ddac268a4d1c00b33d0bbfbe9f751"
+    },
+    {
+      "path": "tests/build431-upgrade-cache.test.mjs",
+      "bytes": 3307,
+      "sha256": "cd3953867faab27dcb5c595d45b2fec40337f7b6d73435a757f256c3dc638f40"
+    },
+    {
+      "path": "tests/build432-native-exchange.test.mjs",
+      "bytes": 2037,
+      "sha256": "c0adf0db4c40abde6c72abc1822207d507bf8cf6a27c01438f2cb3bfa90fb3ff"
+    },
+    {
+      "path": "tests/build432-world-raid.test.mjs",
+      "bytes": 8343,
+      "sha256": "e5618fcd1bbfd22478a518365da9c9200a1cd046ae599a7514edca6db9aadd47"
+    },
+    {
+      "path": "tests/build433-mother.test.mjs",
+      "bytes": 8217,
+      "sha256": "e5f432e50608c5ec667305d5d51523ee56d1259c4c4c45878af2fb80eb2a95fc"
+    },
+    {
+      "path": "tests/build434-royal.test.mjs",
+      "bytes": 12196,
+      "sha256": "51bcba5779acdea9da5a450d155f9f36b9ebd93ff45b730e2800395104af5eca"
+    },
+    {
+      "path": "tests/build435-polish.test.mjs",
+      "bytes": 8016,
+      "sha256": "76b335adbb5ca5c5b786dfabba451326dcc0e6cc07d2be3cf1d664c035898493"
+    },
+    {
+      "path": "tools/build425/map-source.mjs",
+      "bytes": 1334,
+      "sha256": "3c69c9658ed8e3a704eca99b0dbddff01fc7e519b9937dc801ddf4ffd4725b0e"
+    },
+    {
+      "path": "tools/build425/native-harness.mjs",
+      "bytes": 10956,
+      "sha256": "fcfbdc7126494b9a4b74981f802dd036182c12ea661a67fe099c9f1907a86019"
+    },
+    {
+      "path": "tools/build425/native-source-map.json",
+      "bytes": 108353,
+      "sha256": "aff87beb82e1cf610c0845df1212821cb58296f3a7de4e772ab6779d4e5c096a"
+    },
+    {
+      "path": "tools/build425/source-identity.json",
+      "bytes": 82,
+      "sha256": "0b2b57f844d76c85e4540a38aadf2859d283a968e36648f1000bb501596f37af"
+    },
+    {
+      "path": "tools/build426/balance-audit.mjs",
+      "bytes": 1672,
+      "sha256": "6a50b15246182ec11df9257963ea46b2a53c6afddd2498e2f820c9413e25df1b"
+    },
+    {
+      "path": "tools/build426/map-source.mjs",
+      "bytes": 1334,
+      "sha256": "397a0aef02e672b6fd9531245271f9ff0e4bdd3328bf6382ffa69a843eb08f82"
+    },
+    {
+      "path": "tools/build426/native-harness.mjs",
+      "bytes": 11107,
+      "sha256": "6142371d17fe6436087a3c5ddbd30f2a658e00e6bf5010e084f16da4213e414a"
+    },
+    {
+      "path": "tools/build426/native-source-map.json",
+      "bytes": 108719,
+      "sha256": "fb1d3948bcfefe6509933c47d95906615f83f12e92fd76d2ed35308b30128a68"
+    },
+    {
+      "path": "tools/build426/source-identity.json",
+      "bytes": 82,
+      "sha256": "c1c550e7145ed433e33e4136a9859c19a2e7981078c082d8f270662ada7dda32"
+    },
+    {
+      "path": "tools/build427/map-source.mjs",
+      "bytes": 1334,
+      "sha256": "e03639ea1242fb51e8d4865ebb32935445a1fd319127e83ffd50f77c6caa324c"
+    },
+    {
+      "path": "tools/build427/native-harness.mjs",
+      "bytes": 11107,
+      "sha256": "6142371d17fe6436087a3c5ddbd30f2a658e00e6bf5010e084f16da4213e414a"
+    },
+    {
+      "path": "tools/build427/native-source-map.json",
+      "bytes": 109178,
+      "sha256": "fd0cc725a3ccc7402036313bb97d39e4d5ca8bf03a6d0e9966b76cdb65fc64a5"
+    },
+    {
+      "path": "tools/build427/source-identity.json",
+      "bytes": 82,
+      "sha256": "b4203b28ccd61ebc63bb5a25ac19bff9b7af683caa3c7bb37f94befd7938ca8d"
+    },
+    {
+      "path": "tools/build428/map-source.mjs",
+      "bytes": 1334,
+      "sha256": "4aa33ef93051644a5ebd565448d20fe21a13a82b88ef02764c45f76927c6752e"
+    },
+    {
+      "path": "tools/build428/native-harness.mjs",
+      "bytes": 11107,
+      "sha256": "6142371d17fe6436087a3c5ddbd30f2a658e00e6bf5010e084f16da4213e414a"
+    },
+    {
+      "path": "tools/build428/native-source-map.json",
+      "bytes": 109367,
+      "sha256": "166eb793ab312928a129fed0c0148bcb8cc2df463950cd1228713f6186246146"
+    },
+    {
+      "path": "tools/build428/source-identity.json",
+      "bytes": 82,
+      "sha256": "5209dc20871a4390c37ee1a75669d64b4dd4aceccd4398f820655b41a342a3f5"
+    },
+    {
+      "path": "tools/build428/world-raid-audit.mjs",
+      "bytes": 2718,
+      "sha256": "1edc3cd2cc9c6af3b321080d30571c25e4c9b7899da964d6ff89ed52043ca5fd"
+    },
+    {
+      "path": "tools/build429/map-source.mjs",
+      "bytes": 1334,
+      "sha256": "f5bd3bff8481dd0c451c4708790dfe07df6e441aec1e644098a24c0e4068321e"
+    },
+    {
+      "path": "tools/build429/native-harness.mjs",
+      "bytes": 11107,
+      "sha256": "6142371d17fe6436087a3c5ddbd30f2a658e00e6bf5010e084f16da4213e414a"
+    },
+    {
+      "path": "tools/build429/native-source-map.json",
+      "bytes": 109649,
+      "sha256": "69dd38c097ee4dd9c45edcecd9736c2d80f92993fa5e3d2141ed091b58a458dc"
+    },
+    {
+      "path": "tools/build429/source-identity.json",
+      "bytes": 82,
+      "sha256": "a9f46ad7a5f966fffc08d261b1aae888a89d237d51d5d80d37d162e64583d5de"
+    },
+    {
+      "path": "tools/build430/build-runtime.mjs",
+      "bytes": 1605,
+      "sha256": "001a6ede4ded2f95e259bff642accc694e8c8dd5b1a2abefae0b91507b329f92"
+    },
+    {
+      "path": "tools/build430/map-source.mjs",
+      "bytes": 1334,
+      "sha256": "48570f6fb891251b3ed5aee4fd61b04572774a3cc6269577eaf42071ea42d53f"
+    },
+    {
+      "path": "tools/build430/native-harness.mjs",
+      "bytes": 11107,
+      "sha256": "6142371d17fe6436087a3c5ddbd30f2a658e00e6bf5010e084f16da4213e414a"
+    },
+    {
+      "path": "tools/build430/native-source-map.json",
+      "bytes": 111089,
+      "sha256": "6e7756f4b4a7f03a0ac456c83b58378d641862d29c836d94b4b8ea0cea8bfa5f"
+    },
+    {
+      "path": "tools/build430/offline-fixture.mjs",
+      "bytes": 1654,
+      "sha256": "30ddf241a698bca36a6b8fae81b4f8dc16ea3cc8b6b5b26e50b5c12d39e92665"
+    },
+    {
+      "path": "tools/build430/offline-formation-audit.mjs",
+      "bytes": 2024,
+      "sha256": "26e6f33802e1eaa349d63d3fbc66e58747343c89f7cd7620aa330a2790808809"
+    },
+    {
+      "path": "tools/build430/runtime-sources.json",
+      "bytes": 5585,
+      "sha256": "b58667fb07dc684e345ff6445040f94d17a27798bb1eef53c7cb854b760982bd"
+    },
+    {
+      "path": "tools/build430/source-identity.json",
+      "bytes": 82,
+      "sha256": "ee94166ff061e3b93e0b7ef7b723bd4a3fae8b444abc79a96b019751fb95ab84"
+    },
+    {
+      "path": "tools/build431/package.py",
+      "bytes": 2204,
+      "sha256": "f85dea3ea576f39d4b9d589c49b98ea3b984d860abcde833bfe273e2f41d3555"
+    },
+    {
+      "path": "tools/build432/browser-qa.mjs",
+      "bytes": 5173,
+      "sha256": "7d70b819da42afed2b67da5e52d8ef741a630eda53dbcd67ca7e778c9f04879a"
+    },
+    {
+      "path": "tools/build432/preview-server.mjs",
+      "bytes": 5671,
+      "sha256": "758735b844567475074eb6e691ac513add9ede23fe16b9a90785a09c5dd46953"
+    },
+    {
+      "path": "tools/build433/browser-qa.mjs",
+      "bytes": 8336,
+      "sha256": "2f4c6c60d159a661954488bcb58293e57d1581e82ff8cd34ef3f5bf0595e7061"
+    },
+    {
+      "path": "tools/build433/package.py",
+      "bytes": 3116,
+      "sha256": "115ad3b9698a9bfd9b985aaeb0201be945773da334f53593e94cd63ca07c01fe"
+    },
+    {
+      "path": "tools/build433/preview-server.mjs",
+      "bytes": 5822,
+      "sha256": "6f19e54eb71b43dfba9177feda2a5ed238f51b303731af5ac2a31a66ee9645b7"
+    },
+    {
+      "path": "tools/build433/refresh-assets.py",
+      "bytes": 2366,
+      "sha256": "cb4023a05ac32076c62f010c20bee95944184fcb577239151075d46d30710a95"
+    },
+    {
+      "path": "tools/build434/browser-qa.mjs",
+      "bytes": 5808,
+      "sha256": "326c6130c39df27d87ba91c84c9bc118e71814fd257e13ba7c8a7074a0676f0f"
+    },
+    {
+      "path": "tools/build434/package.py",
+      "bytes": 3293,
+      "sha256": "1849c8e6fba7f8ec91599dbc8e2d9c63764a266e01b5f83e8b08865c069738ff"
+    },
+    {
+      "path": "tools/build434/preview-server.mjs",
+      "bytes": 5506,
+      "sha256": "4233dddf692ed711addb08b05db8c204c960379f322f8c2ff3f386beae50298c"
+    },
+    {
+      "path": "tools/build434/refresh-assets.py",
+      "bytes": 2285,
+      "sha256": "76bd58b5c94e0beef61b629a83dab0dbf1c4ec68c0ceb53ba1e098dba1f58f17"
+    },
+    {
+      "path": "tools/build435/browser-qa.mjs",
+      "bytes": 7428,
+      "sha256": "4ea4b0f87c7e6ef0dff188a62253c4e4ef41449c241fc985d249841212734a43"
+    },
+    {
+      "path": "tools/build435/final-ui.mjs",
+      "bytes": 3276,
+      "sha256": "b875a8bebd9ac28caa293d2ec136ac23d3fe40750bb2e23c58607603655a4066"
+    },
+    {
+      "path": "tools/build435/inspect-ui.mjs",
+      "bytes": 2029,
+      "sha256": "4ac0617f8ef07c0a97d4964dfc8b08c7895a6a1027156c688e2cce931b476af9"
+    },
+    {
+      "path": "tools/build435/package.py",
+      "bytes": 3276,
+      "sha256": "9b7500412f69f7396fa77e98900d87cc405f8ff5210e3ae0b9b4ae6f470fd21c"
+    },
+    {
+      "path": "tools/build435/preview-server.mjs",
+      "bytes": 10585,
+      "sha256": "7c1b4ad9065d59c1115abdfa262de0502065a3437f1f44ba3b4d17257763f8c1"
+    },
+    {
+      "path": "tools/build435/refresh-assets.py",
+      "bytes": 2620,
+      "sha256": "9c60ce98bc10cfc8c21a3ddcc89b0cf99dbb052aa1f168281017e1d4197d8dbd"
+    },
+    {
+      "path": "world-raid-offline430-assets.json",
+      "bytes": 18390,
+      "sha256": "11da86f35151d4ef515ec8e3bef543f1a1baaea58a27bdc0ea85a0929c9a319a"
+    },
+    {
+      "path": "world-raid-offline430-sw.js",
+      "bytes": 1737,
+      "sha256": "201f807949b99e6d2c4f4832c29fd4aba84417587b8ce6793c620c34b7de7607"
+    },
+    {
+      "path": "world-raid-offline431-assets.json",
+      "bytes": 18432,
+      "sha256": "b215c845e0bbe864a3e808d31d7043d66db9e602912840e5b6b1ad1c1f49a56b"
+    },
+    {
+      "path": "world-raid-offline431-sw.js",
+      "bytes": 1844,
+      "sha256": "970584519fe6f4f804e8e696a7538e3d2ecf66b1165259a87216fba432786df9"
+    },
+    {
+      "path": "world-raid-offline432-assets.json",
+      "bytes": 18788,
+      "sha256": "9ffde4d5c61043740215a80fc7dff3082c44ec8bbed2f9ebb3e1d27a52545b6e"
+    },
+    {
+      "path": "world-raid-offline432-sw.js",
+      "bytes": 1844,
+      "sha256": "d46b4b31672c898b8900c6fb462bfa5db09e895baac3d28fce16c1243918ff15"
+    },
+    {
+      "path": "world-raid-offline433-assets.json",
+      "bytes": 18863,
+      "sha256": "2d8a2b1e4d6e5f946735adefedad9d0845be5f78158628d0c440aa1626e747f8"
+    },
+    {
+      "path": "world-raid-offline433-sw.js",
+      "bytes": 1844,
+      "sha256": "d06021e2bcf2dae68852d38c2dcbb36126872024aca43d66db028b98eedab936"
+    },
+    {
+      "path": "world-raid-offline434-assets.json",
+      "bytes": 18965,
+      "sha256": "695937cf5cecf329171e79853e252563d361a010490bc9d86ea41b0e5fb3d221"
+    },
+    {
+      "path": "world-raid-offline434-sw.js",
+      "bytes": 1844,
+      "sha256": "d93b6f995d3d98feaba549ee4e10728070fddb2b4c2dec4ecdf942ff34ee4ca9"
+    },
+    {
+      "path": "world-raid-offline435-assets.json",
+      "bytes": 19176,
+      "sha256": "45f0345ce5d9058af446d26097928ba520bcf59f81c39d60db9695a6ce240c5c"
+    },
+    {
+      "path": "world-raid-offline435-sw.js",
+      "bytes": 1844,
+      "sha256": "ac1a48ef1b4e5e6f2990099d1d5eb3e2499bc9721bdd615cdd340d751f837201"
+    }
+  ]
+}

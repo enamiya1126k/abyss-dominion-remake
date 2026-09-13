@@ -1,0 +1,113 @@
+{
+  "checks": [
+    "short viewport HP labels and visible boss",
+    "generated category banner background",
+    "fully revealed gift artwork"
+  ],
+  "errors": [],
+  "missing": [],
+  "info": {
+    "boss": {
+      "x": 243.6328125,
+      "y": 192.34375,
+      "width": 79.234375,
+      "height": 79.234375,
+      "top": 192.34375,
+      "right": 322.8671875,
+      "bottom": 271.578125,
+      "left": 243.6328125
+    },
+    "labels": [
+      {
+        "text": "HP 11,375/11,375",
+        "display": "block",
+        "space": "nowrap",
+        "height": 9,
+        "width": 70,
+        "scroll": 70
+      },
+      {
+        "text": "MP 1,380/1,380",
+        "display": "block",
+        "space": "nowrap",
+        "height": 7,
+        "width": 70,
+        "scroll": 70
+      },
+      {
+        "text": "HP 21,332/21,332",
+        "display": "block",
+        "space": "nowrap",
+        "height": 9,
+        "width": 70,
+        "scroll": 70
+      },
+      {
+        "text": "MP 1,002/1,002",
+        "display": "block",
+        "space": "nowrap",
+        "height": 7,
+        "width": 70,
+        "scroll": 70
+      },
+      {
+        "text": "HP 29,038/29,038",
+        "display": "block",
+        "space": "nowrap",
+        "height": 9,
+        "width": 70,
+        "scroll": 70
+      },
+      {
+        "text": "MP 691/691",
+        "display": "block",
+        "space": "nowrap",
+        "height": 7,
+        "width": 70,
+        "scroll": 70
+      },
+      {
+        "text": "HP 23,455/23,455",
+        "display": "block",
+        "space": "nowrap",
+        "height": 9,
+        "width": 70,
+        "scroll": 70
+      },
+      {
+        "text": "MP 884/884",
+        "display": "block",
+        "space": "nowrap",
+        "height": 7,
+        "width": 70,
+        "scroll": 70
+      },
+      {
+        "text": "HP 100,000,000,000/100,000,000,000",
+        "display": "block",
+        "space": "nowrap",
+        "height": 9,
+        "width": 150,
+        "scroll": 150
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "display": "block",
+        "space": "nowrap",
+        "height": 9,
+        "width": 69,
+        "scroll": 69
+      },
+      {
+        "text": "HP 12,500/12,500",
+        "display": "block",
+        "space": "nowrap",
+        "height": 9,
+        "width": 69,
+        "scroll": 69
+      }
+    ],
+    "outer": 540,
+    "view": 540
+  }
+}

@@ -7,7 +7,7 @@ import {tuneFinalHero} from '../src/core/Postgame361System.js';
 import {fieldFixture} from './helpers/chapterTwoField.mjs';
 function fresh(){const mem=new Map();globalThis.localStorage={getItem:k=>mem.get(k)??null,setItem:(k,v)=>mem.set(k,String(v)),removeItem:k=>mem.delete(k)};const save=new SaveService();save.state.campaign100.finalCompleted=true;return save;}
 test('memory levels unlock by highest defeated stage, replay does not advance, and defeats restore supplies',()=>{
- const save=fresh(),s=save.state,l=s.campaign100.heroEncounters310;royalState(s);assert.deepEqual(memoryProgress(s),{best:0,unlocked:1});assert.equal(beginRoyalAttempt(s,l,{memory:true,stage:2}),false);
+ const save=fresh(),s=save.state,l=s.campaign100.heroEncounters310;royalState(s);assert.deepEqual(memoryProgress(s),{best:1,unlocked:2});assert.equal(beginRoyalAttempt(s,l,{memory:true,stage:3}),false);
  for(const [stage,won,resultId]of [[1,true,'a'],[1,true,'b'],[2,false,'c'],[2,true,'d']]){assert.equal(beginRoyalAttempt(s,l,{memory:true,stage}),true);assert.equal(royalState(s).attempt.memoryLevel379,memoryLevel(stage));s.inventory.potions=0;const result=settleRoyalAttempt(s,{won,resultId});assert.equal(result.stage,stage);assert.equal(royalState(s).attempt,null);if(resultId!=='d')assert.equal(memoryProgress(s).unlocked,2);}
  assert.equal(memoryProgress(s).unlocked,3);assert.equal(settleRoyalAttempt(s,{won:true,resultId:'d'}).duplicate,true);assert.equal(memoryProgress(s).unlocked,3);save.save();const reload=new SaveService();assert.equal(memoryProgress(reload.state).best,2);assert.equal(beginRoyalAttempt(reload.state,l,{memory:true,stage:3}),true);abandonRoyalAttempt(reload.state);assert.equal(memoryProgress(reload.state).best,2);
 });

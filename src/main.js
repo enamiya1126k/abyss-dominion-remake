@@ -67,7 +67,7 @@ import{runBattleGaugeAnimation}from'./ui/BattleGaugeAnimation.js?v=3.1.45-build3
 import{syncCycleEquipment,revengeStage,revengeExperience,tuneFinalHero,canPostclearEncounter,rearmPostclearEncounters,reincarnationPreview}from'./core/Postgame361System.js?v=3.1.41-build361';
 import{hasHeroFortitude,heroFortitudeUsed,tryHeroFortitude}from'./core/HeroFortitudeSystem.js?v=3.1.41-build361';
 import{royalState,beginRoyalAttempt,settleRoyalAttempt,rewindRoyalAttempt,abandonRoyalAttempt}from"./core/RoyalChamberSystem.js?v=3.1.59-build379";
-import {ROYAL_HEROES434,royalVisits434,royalHeroAvailable434,claimRoyalGift434,beginRoyalSolo434,settleRoyalSolo434,royalSoloCheckpoint434} from './core/RoyalHero434.js';
+import {royalSoloLevel435,ROYAL_HEROES434,royalVisits434,royalHeroAvailable434,claimRoyalGift434,beginRoyalSolo434,settleRoyalSolo434,royalSoloCheckpoint434} from './core/RoyalHero434.js';
 import {royalHeroHitBounds434} from './ui/RoyalHeroHit434.js';
 import{mountRoyalChamber}from"./ui/RoyalChamberField.js?v=3.1.59-build379";
 import{royalVictoryDialogue,royalDefeatDialogue}from"./data/royalChamberStory.js?v=3.1.41-build361";
@@ -843,27 +843,42 @@ function returnRoyalGate360(){
 function openRoyalHero434(heroId){
  if(battle||save.state.activeBattle||royalState(save.state).phase!=='cleared'||!royalHeroAvailable434(save.state,heroId)||royalVisits434(save.state).attempt||royalState(save.state).attempt)return;
  const hero=ROYAL_HEROES434[heroId];if(game?.royal)game.paused=true;
- app.insertAdjacentHTML('beforeend',Modal(hero.name,`<div class="royal-hero434-portrait">${monsterVisual({speciesId:heroId},hero.name)}</div><p data-royal-quote434>${escapeAttribute(hero.greeting)}</p><p data-royal-gift434 role="status"></p><div class="royal-hero434-actions"><button data-royal-talk434>話す${royalVisits434(save.state).gifts[heroId]?'':'（初回の贈り物）'}</button><button data-royal-solo434>個人戦に挑む<small>部隊4体 対 ${hero.name}1人・Lv.1,000</small></button><button data-royal-party434>勇者一行と再戦<small>4人との決戦の記憶</small></button></div><p class="royal-hero434-note">${royalVisits434(save.state).victories[heroId]?'個人戦の初勝利報酬：受領済み':'個人戦の初勝利：専用右手装備 Lv.1,000 ＋0'}<br>手合わせ後、HP・MP・回復アイテムは元に戻ります。</p>`,'王室へ戻る'));
+ app.insertAdjacentHTML('beforeend',Modal(hero.name,`<div class="royal-hero434-portrait">${monsterVisual({speciesId:heroId},hero.name)}</div><p data-royal-quote434>${escapeAttribute(hero.greeting)}</p><p data-royal-gift434 role="status"></p><div class="royal-hero434-actions"><button data-royal-talk434>話す${royalVisits434(save.state).gifts[heroId]?'':'（初回の贈り物）'}</button><button data-royal-solo434>個人戦に挑む<small>部隊4体 対 ${hero.name}1人・Lv.${royalSoloLevel435(save.state,heroId).toLocaleString()}</small></button><button data-royal-party434>勇者一行と再戦<small>4人との決戦の記憶</small></button></div><p class="royal-hero434-note">${royalVisits434(save.state).victories[heroId]?'個人戦の初勝利報酬：受領済み':'個人戦の初勝利：専用右手装備 Lv.1,000 ＋0'}<br>勝つと次はLv＋500（最大10,000）。<br>手合わせ後、HP・MP・回復アイテムは元に戻ります。</p>`,'王室へ戻る'));
  const modal=topModal();modal.classList.add('royal-hero434-modal','departure379-modal');modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label',hero.name+'と話す');
  const close=()=>{modal.remove();if(game?.royal)game.paused=false;};modal._onDismiss=close;modal.querySelector('[data-modal-primary]').onclick=close;
- modal.querySelector('[data-royal-talk434]').onclick=()=>{if(!modal.isConnected)return;const result=chapterTwoCommit(()=>claimRoyalGift434(save.state,heroId));if(!result.ok)return;modal.querySelector('[data-royal-quote434]').textContent=result.first?hero.talk:hero.again;modal.querySelector('[data-royal-gift434]').textContent=result.first?'経験値パック（超）×3 を受け取りました':'初回の贈り物は受け取り済みです';modal.querySelector('[data-royal-talk434]').textContent='話す';};
+ modal.querySelector('[data-royal-talk434]').onclick=()=>{if(!modal.isConnected)return;const received=royalVisits434(save.state).gifts[heroId];modal.querySelector('[data-royal-quote434]').textContent=received?hero.again:hero.talk;openRoyalGift435(heroId,modal);};
  modal.querySelector('[data-royal-solo434]').onclick=()=>{if(!modal.isConnected)return;openRoyalSolo434(heroId,modal);};
  modal.querySelector('[data-royal-party434]').onclick=()=>{if(!modal.isConnected)return;close();openRoyalMemory379();};
  requestAnimationFrame(()=>modal.querySelector('[data-royal-talk434]')?.focus({preventScroll:true}));
+}
+function openRoyalGift435(heroId,parent){
+ if(document.querySelector('.royal-gift435-modal'))return;
+ const hero=ROYAL_HEROES434[heroId],received=Boolean(royalVisits434(save.state).gifts[heroId]);
+ app.insertAdjacentHTML('beforeend',Modal(`${hero.name}からの贈り物`,`<div class="royal-gift435"><p>${escapeAttribute(hero.talk)}</p><div class="royal-gift435-seal" aria-hidden="true">${pixelIcon('growth')}</div><small>旅を託す、勇者の贈り物</small><h3>経験値パック（超）</h3><strong>×3</strong><p data-gift-status435 role="status">${received?'受け取り済みの贈り物':'君の部隊を、もっと強く。'}</p></div>`,received?'閉じる':'受け取る'));
+ const modal=topModal(),button=modal.querySelector('[data-modal-primary]');modal.classList.add('royal-gift435-modal');
+ const close=()=>modal.remove();modal._onDismiss=close;
+ button.onclick=()=>{
+  if(!modal.isConnected)return;if(received){close();return;}
+  const result=chapterTwoCommit(()=>claimRoyalGift434(save.state,heroId));if(!result.ok){modal.querySelector('[data-gift-status435]').textContent='まだ受け取れていません。もう一度お試しください。';return;}
+  modal.querySelector('[data-gift-status435]').textContent='経験値パック（超）×3 を受け取りました';button.textContent='ありがとう！';button.onclick=close;
+  modal.classList.add('is-received');if(result.first)audio.sfx('victory');
+  if(parent?.isConnected){parent.querySelector('[data-royal-talk434]').textContent='話す・贈り物を見る';parent.querySelector('[data-royal-gift434]').textContent='初回の贈り物：受け取り済み';}
+ };
+ requestAnimationFrame(()=>button.focus({preventScroll:true}));
 }
 function openRoyalSolo434(heroId,modal){
  if(battle||!royalHeroAvailable434(save.state,heroId)||royalState(save.state).phase!=='cleared')return;
  if(new Set(save.state.party??[]).size!==4)return showToast('現在の部隊を4体編成してください');
  const result=chapterTwoCommit(()=>{const a=beginRoyalSolo434(save.state,heroId);if(a.ok)fullyRecoverParty();return a;});if(!result.ok)return;
  modal?.remove();if(game?.royal)game.paused=false;stopGame();snapshot=null;
- startSpecialBattle([{...campaignHeroBattleEntry(heroId,{carryHpRate:1}),royalSolo434:true}],{battleId:result.id,type:'royalSolo434',title:`${ROYAL_HEROES434[heroId].name}との手合わせ`,subtitle:'部隊4体 対 勇者1人',priorVitals:result.vitals,returnScreen:'campaignFinalFloor'});
+ startSpecialBattle([{...campaignHeroBattleEntry(heroId,{carryHpRate:1}),level:result.level435,royalSolo434:true}],{battleId:result.id,type:'royalSolo434',title:`${ROYAL_HEROES434[heroId].name}との手合わせ`,subtitle:'部隊4体 対 勇者1人',priorVitals:result.vitals,returnScreen:'campaignFinalFloor'});
 }
 function finishRoyalSolo434(won,{retreated=false}={}){
  if(!battle||battle.resultSettled||battle.specialBattleType!=='royalSolo434')return;
  const current=battle,contribution=battleContributionSnapshot(),result=chapterTwoCommit(()=>settleRoyalSolo434(save.state,{id:current.battleId,won}));
  if(!result.ok){current.party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);app.insertAdjacentHTML('beforeend',Modal('結果の保存', '<p>まだ保存できていません。保存を再試行してください。</p>','保存を再試行'));const m=topModal();m.classList.add('royal-hero434-modal');const retry=()=>{m.remove();finishRoyalSolo434(won,{retreated});};m._onDismiss=retry;m.querySelector('[data-modal-primary]').onclick=retry;return;}
  current.resultSettled=true;current.escapePending=false;clearBattleCheckpoint({saveNow:false});restorePartyVitals(current.priorVitals);clearPartySynergy();save.save();document.querySelector('.battle-screen')?.remove();battle=null;activeEnemy=null;snapshot=null;screen='campaignFinalFloor';render();
- const hero=ROYAL_HEROES434[result.heroId],body=(won?battleVictoryHeader({boss:true,resultTitle:'勝利',resultCaption:hero.name+'との手合わせ',victorySubtitle:'個人戦に勝利した'}):`<p>${retreated?'手合わせを終えました。':'今回は勇者の勝利。また挑戦できます。'}</p>`)+(result.reward?`<div class="royal-hero434-reward"><small>初勝利報酬</small><b>${escapeAttribute(result.reward.name)}</b><span>Lv.1,000 ＋0</span><small>${escapeAttribute(result.reward.message)}</small></div>`:won?'<p>初勝利報酬は受領済みです。</p>':'')+'<p>部隊と回復アイテムは手合わせ前の状態に戻りました。</p>';
+ const hero=ROYAL_HEROES434[result.heroId],body=(won?`<header class="royal-victory435"><small>${hero.name}との手合わせ・Lv.${result.level.toLocaleString()}</small><h2>勝利</h2><p>${result.level<10000?`次の挑戦 Lv.${result.nextLevel.toLocaleString()} 解放`:'最高段階 Lv.10,000 制覇'}</p></header>`:`<p>${retreated?'手合わせを終えました。':'今回は勇者の勝利。また挑戦できます。'}</p>`)+(result.reward?`<div class="royal-hero434-reward"><small>初勝利報酬</small><b>${escapeAttribute(result.reward.name)}</b><span>Lv.1,000 ＋0</span><small>${escapeAttribute(result.reward.message)}</small></div>`:won?'<p>初勝利報酬は受領済みです。</p>':'')+'<p>部隊と回復アイテムは手合わせ前の状態に戻りました。</p>';
  const showResult=()=>{app.insertAdjacentHTML('beforeend',Modal(won?'戦闘結果':retreated?'撤退':'敗北',body,'王室へ戻る'));const m=topModal();m.classList.add('royal-hero434-modal','departure379-modal');m._onDismiss=()=>m.remove();m.querySelector('[data-modal-primary]').onclick=()=>m.remove();};
  if(won)openBattleContributionReport(contribution,showResult);else showResult();
 }
@@ -1146,7 +1161,7 @@ function combatPowerOwnMarkup(){
 }
 function powerRankingEntryMarkup(entry,{self=false,serverNow=0,receivedAt=0,presenceOnlineMs=90000}={}){
  const icon=entry?.icon??entry?.party?.[0]??{},rank=Math.max(1,Math.floor(Number(entry?.rank)||1)),fallback=icon.fallbackEmoji??SPECIES[icon.speciesId]?.emoji??"魔";
- return`<button type="button" class="power-ranking-row ${self?"is-self":""}" data-power-ranking-player="${escapeAttribute(entry?.playerId??"")}"><span class="power-ranking-position ${rank<=3?`rank-${rank}`:""}">${rank<=3?["","Ⅰ","Ⅱ","Ⅲ"][rank]:`#${rank}`}</span><span class="power-ranking-avatar">${monsterVisual(icon,fallback,{className:"power-ranking-monster-visual"})}</span><span class="power-ranking-identity"><small>${self?"YOU・":""}${escapeAttribute(icon.name??"スロット1")}</small><b>${escapeAttribute(self?powerRankingDisplayName():entry?.displayName??"冒険者")}</b><em>最高 ${Math.max(1,Math.floor(Number(entry?.maxFloor)||1)).toLocaleString()}階</em>${rankingPresenceMarkup(entry,{serverNow,receivedAt,presenceOnlineMs})}</span><strong>${formatCombatPower(entry?.power)}</strong><i aria-hidden="true">›</i></button>`
+ return`<button type="button" class="power-ranking-row podium-${Math.min(rank,4)} ${self?"is-self":""}" data-power-ranking-player="${escapeAttribute(entry?.playerId??"")}"><span class="power-ranking-position ${rank<=3?`rank-${rank}`:""}">${rank<=3?["","1","2","3"][rank]:`#${rank}`}</span><span class="power-ranking-avatar">${monsterVisual(icon,fallback,{className:"power-ranking-monster-visual"})}</span><span class="power-ranking-identity"><small>${self?"YOU・":""}${escapeAttribute(icon.name??"スロット1")}</small><b>${escapeAttribute(self?powerRankingDisplayName():entry?.displayName??"冒険者")}</b><em>最高 ${Math.max(1,Math.floor(Number(entry?.maxFloor)||1)).toLocaleString()}階</em>${rankingPresenceMarkup(entry,{serverNow,receivedAt,presenceOnlineMs})}</span><strong>${formatCombatPower(entry?.power)}</strong><i aria-hidden="true">›</i></button>`
 }
 function combatPowerRankingMarkup(){
  const controller=onlinePartyController,state=powerRankingUi.state,connected=Boolean(controller?.connectionReady),supported=powerRankingSupported();
@@ -3310,7 +3325,7 @@ function gachaCampaignSlides(campaigns=currentGachaCampaigns()){
    <div><small>${campaign.badge}</small><h3>${campaign.title}</h3><p>${campaign.copy}</p>
     ${campaign.id==="standard"&&daily?'<button type="button" data-gacha-daily>本日の無料召喚</button>':""}
     <button type="button" data-gacha-campaign="${campaign.id}" ${disabled?"disabled":""}>${firstUsed?"受取済み":campaign.disabled?"準備中":"ガチャページへ"}</button>
-   </div><span class="gacha-campaign-sigil sigil-${campaign.id}" aria-hidden="true"></span>
+   </div><span class="gacha-campaign-sigil sigil-${campaign.id}" aria-hidden="true">${["monster","mixed"].includes(campaign.mode)||campaign.weekdayKind==="sunday"?monsterVisual({speciesId:campaign.tone==="abyss"?"abyss_gluttony":"myth_enami"},"召喚"):pixelIcon(campaign.mode==="gold"?"coin":campaign.weekdayKind==="experience"?"growth":"equipment")}</span>
   </article>`;
  }).join("");
 }
@@ -3348,8 +3363,8 @@ function openGacha(){
   <div class="gacha-campaign-carousel" data-gacha-carousel>${gachaCampaignSlides(campaigns)}</div>
   <div class="gacha-carousel-dots">${campaigns.map((_,index)=>`<button type="button" data-gacha-dot="${index}" class="${index===0?"active":""}" aria-label="${index+1}枚目"></button>`).join("")}</div>
   <section class="gacha-category-section"><div class="spread"><h3>召喚を選ぶ</h3><button type="button" id="gachaBannerGuide">提供割合</button></div>
-   <button type="button" class="gacha-category-card monster" data-gacha-category="monster"><span class="gacha-category-art monster-art" aria-hidden="true"></span><div><small>MONSTER SUMMON</small><b>モンスター召喚</b><p>仲間だけを召喚。1連・10連・任意回数から選択。</p></div><i>›</i></button>
-   <button type="button" class="gacha-category-card equipment" data-gacha-category="equipment"><span class="gacha-category-art equipment-art" aria-hidden="true"></span><div><small>EQUIPMENT SUMMON</small><b>装備召喚</b><p>武器・防具・アクセだけを召喚。</p></div><i>›</i></button>
+   <button type="button" class="gacha-category-card monster" data-gacha-category="monster"><img class="gacha-banner-art435" src="./assets/ui/build435/summon-banner.webp" alt="" aria-hidden="true"><span class="gacha-category-art monster-art" aria-hidden="true">${monsterVisual({speciesId:"myth_enami"},"えなみ")}</span><div><small>MONSTER SUMMON</small><b>モンスター召喚</b><p>仲間だけを召喚。1連・10連・任意回数から選択。</p></div><i>›</i></button>
+   <button type="button" class="gacha-category-card equipment" data-gacha-category="equipment"><img class="gacha-banner-art435" src="./assets/ui/build435/summon-banner.webp" alt="" aria-hidden="true"><span class="gacha-category-art equipment-art" aria-hidden="true">${pixelIcon("equipment")}</span><div><small>EQUIPMENT SUMMON</small><b>装備召喚</b><p>武器・防具・アクセだけを召喚。</p></div><i>›</i></button>
   </section>
   <section class="gacha-event-list"><h3>常設特別召喚</h3><button type="button" class="guerrilla-entry active" data-permanent-signature><span class="gacha-event-mark signature-mark"></span><b>専用装備契約</b><small>SSR以上の対象キャラ専用装備・総率0.1%・天井なし</small><em>1 / 10連</em></button></section>
   <section class="gacha-event-list"><h3>曜日限定召喚</h3>${weekdayButtons}<div class="weekday-gacha-calendar">${WEEKDAY_GACHA_CALENDAR.map(entry=>`<span><b>${entry.days}</b>${entry.label}</span>`).join("")}</div></section>
@@ -7180,8 +7195,9 @@ function renderPrimordial422(){
  const room=motherState422(save.state),party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);
  if(room.attempt&&!save.state.activeBattle){if(!chapterTwoCommit(()=>settleMother422(save.state,false)).ok){screen='home';render();return;}}
  const hint=room.phase==='approach'?'中央へ進み、十神の母と対面しよう':room.phase==='victory'?'奥の祭壇で、第二章の結末を見届けよう':room.cleared?'原母に触れて再戦。祭壇では結末を回想できます':'準備ができたら、原母へ触れて決戦へ';
- app.innerHTML=ExploreScreen(save.state,{title:'原初の聖胎',party,className:'royal-explore-360 primordial-room422',stageContentHtml:'<canvas id="royalCanvas" tabindex="0" aria-label="原初の聖胎。原母をタップで挑戦。床をタップで移動、ドラッグでカメラ移動"></canvas><div class="royal-location-seal"><small>第二章・最終決戦</small><b>原初の聖胎</b></div>',stageToolsHtml:'',autoToggleHtml:'',miniMapHtml:'',navHtml:`<button data-mother-formation>${pixelIcon('formation')}編成</button><button data-mother-equipment>${pixelIcon('equipment')}装備</button><button data-mother-center>${pixelIcon('event')}現在地</button><button data-mother-home>${pixelIcon('rest')}拠点へ</button>`})+`<aside class="royal-objective-360" role="status">${hint}<span>${room.cleared?'世界を開いた記録':'原母イオネア'}</span></aside>`;
- game={};mountRoyalChamber(game,{canvas:document.getElementById('royalCanvas'),Entity,Camera,findPath:path,drawMonster:drawExplorationMonster,TILE,room,party,heroes:[{id:MOTHER_ID422,name:'原母イオネア',remainingHpRate:1}],asset:MOTHER_ROOM422,drawHeroBackdrop:drawMotherHalo423,heroHitBounds:motherFieldHitBounds433,contactAfterClear:true,throneLabel:'祭壇・旅の記録',blocked:()=>Boolean(battle||campaignStoryPresenting||document.querySelector('.game-modal')),onSave:()=>save.save(),onApproach:()=>showMotherStory422('audience'),onContact:openMotherChallenge422,onThrone:openMotherAltar422});
+ app.innerHTML=ExploreScreen(save.state,{title:'原初の聖胎',party,className:'royal-explore-360 primordial-room422',stageInfoHtml:'',stageContentHtml:'<canvas id="royalCanvas" tabindex="0" aria-label="原初の聖胎。原母をタップで挑戦。床をタップで移動、ドラッグでカメラ移動"></canvas><div class="royal-location-seal"><small>第二章・最終決戦</small><b>原初の聖胎</b></div>',stageToolsHtml:'',autoToggleHtml:'',miniMapHtml:'',navHtml:`<button data-mother-formation>${pixelIcon('formation')}編成</button><button data-mother-equipment>${pixelIcon('equipment')}装備</button><button data-mother-center>${pixelIcon('event')}現在地</button><button data-mother-home>${pixelIcon('rest')}拠点へ</button>`})+`<aside class="royal-objective-360" role="status">${hint}<span>${room.cleared?'世界を開いた記録':'原母イオネア'}</span></aside>`;
+ game={};mountRoyalChamber(game,{canvas:document.getElementById('royalCanvas'),Entity,Camera,findPath:path,drawMonster:drawExplorationMonster,TILE,room,party,heroes:[{id:MOTHER_ID422,name:'原母イオネア',remainingHpRate:1}],asset:MOTHER_ROOM422,drawHeroBackdrop:drawMotherHalo423,heroHitBounds:motherFieldHitBounds433,contactAfterClear:true,throneTap:true,clearedHeroY:14,throneLabel:'祭壇・旅の記録',blocked:()=>Boolean(battle||campaignStoryPresenting||document.querySelector('.game-modal')),onSave:()=>save.save(),onApproach:()=>showMotherStory422('audience'),onContact:openMotherChallenge422,onThrone:openMotherAltar422});
+ document.getElementById('toggleExplorePartyHud')?.addEventListener('click',()=>{if(chapterTwoCommit(()=>{save.state.settings.explorePartyHudCollapsed=!save.state.settings.explorePartyHudCollapsed;return{ok:true};}).ok)renderPrimordial422();});
  document.querySelector('[data-mother-formation]').onclick=()=>{stopGame();formationOrigin='primordial422';go('formation')};
  document.querySelector('[data-mother-equipment]').onclick=()=>{stopGame();navigationOrigin='primordial422';go('equipment')};
  document.querySelector('[data-mother-center]').onclick=()=>game?.centerRoyal?.();

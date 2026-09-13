@@ -55,6 +55,20 @@ function layoutChapterTwoEnemies382(root,arena){
  }
 }
 
+// Raid art uses the actual remaining slot height, including short mobile viewports.
+function layoutRaid435(root){
+ if(!root.closest?.('.world-raid432.is-battle432'))return;
+ for(const unit of root.querySelectorAll('.raid-main-boss,.raid-sub-boss')){
+  const art=unit.querySelector('.side-unit-sprite>.monster-visual'),image=art?.querySelector('img:not([hidden])'),card=unit.querySelector('.side-unit-card'),label=unit.querySelector('.battle-unit-floating-name');
+  if(!art||!image?.complete||!image.naturalWidth||!card)continue;
+  if(label)unit.prepend(label);
+  art.style.setProperty('translate','none','important');art.style.setProperty('scale','1','important');
+  const b=visibleBounds(image),ur=unit.getBoundingClientRect(),cr=card.getBoundingClientRect(),ir=image.getBoundingClientRect(),top=ur.top+(label?.getBoundingClientRect().height||0)+7;
+  const scale=endgameArtFit399({width:ir.width*(b.right-b.left),height:ir.height*(b.bottom-b.top),slotWidth:ur.width,headroom:cr.top-top-5});art.style.setProperty('scale',String(scale),'important');
+  const r=image.getBoundingClientRect();art.style.setProperty('translate',`${ur.left+ur.width/2-r.left-r.width*(b.left+b.right)/2}px ${cr.top-5-r.top-r.height*b.bottom}px`,'important');
+ }
+}
+
 export function layoutPartyBosses(root){
  if(!root?.isConnected)return;
  const arena=root.querySelector('.battle-arena');if(!arena)return;
@@ -111,6 +125,7 @@ export function layoutPartyBosses(root){
  }
  layoutChapterTwoEnemies382(root,arena);
  // Circle placement must follow all silhouette and name/card adjustments.
+ layoutRaid435(root);
  layoutBattleCircles405(root,visibleBounds);
 }
 
