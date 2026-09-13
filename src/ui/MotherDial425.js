@@ -24,10 +24,9 @@ export function motherDialMotion425({index,previousIndex=0,progress=0}){
  return {angle:from+(to-from)*(1-(1-t)**4),growth:Math.min(1,t/.18)};
 }
 export function motherDialExpansion425(circle,arena){
- const diameter=Math.max(1,Math.min(circle.width*1.55,arena.width*.88,arena.height-24)),scale=Math.max(1,diameter/Math.max(1,circle.width));
- const cx=circle.left+circle.width/2,cy=circle.top+circle.height/2,r=circle.width*scale/2;
- const clamp=(n,lo,hi)=>Math.max(lo,Math.min(hi,n));
- return {scale,dx:clamp(cx,arena.left+r+4,arena.left+arena.width-r-4)-cx,dy:clamp(cy,arena.top+r+4,arena.top+arena.height-r-4)-cy};
+ const cx=circle.left+circle.width/2,cy=circle.top+circle.height/2;
+ const radius=Math.max(1,Math.min(cx-arena.left,arena.left+arena.width-cx,cy-arena.top,arena.top+arena.height-cy)-4);
+ return {scale:Math.max(1,Math.min(1.18,radius*2/Math.max(1,circle.width))),dx:0,dy:0};
 }
 
 // Animates the existing boss backdrop. No clone, overlay, dialog or new timer
@@ -40,7 +39,7 @@ export async function playMotherDial425({getRoot,law,previousIndex=0,speed=1,red
   const root=getRoot(),circle=root?.querySelector('[data-mother-unit425] .mother-dial424'),arena=root?.querySelector('.battle-arena');
   if(!circle||!arena)return null;
   if(binding?.circle!==circle){
-   const wheel=circle.querySelector('.mother-dial-wheel424'),c=circle.getBoundingClientRect(),a=arena.getBoundingClientRect();
+   const wheel=circle.querySelector('.mother-dial-wheel424'),c=circle.getBoundingClientRect(),a=(root.querySelector('.side-enemies')??arena).getBoundingClientRect();
    if(!wheel||!c.width)return null;
    binding={root,circle,wheel,expansion:motherDialExpansion425(c,a)};touched.add(binding);
   }
@@ -50,6 +49,7 @@ export async function playMotherDial425({getRoot,law,previousIndex=0,speed=1,red
   const b=bind();if(!b)return;
   const motion=motherDialMotion425({index:law.index,previousIndex,progress}),g=reducedMotion?0:motion.growth*(1-returning),e=b.expansion;
   b.circle.dataset.dialPhase425=phase;
+  for(const numeral of b.wheel.querySelectorAll?.('[data-dial-numeral424]')??[])numeral.classList.toggle('is-selected433',phase!=='spinning'&&Number(numeral.dataset.dialNumeral424)===law.index);
   b.circle.style.setProperty('--dial-grow425',String(1+(e.scale-1)*g));
   b.circle.style.setProperty('--dial-dx425',`${e.dx*g}px`);b.circle.style.setProperty('--dial-dy425',`${e.dy*g}px`);
   b.wheel.style.setProperty('transform',`rotate(${phase!=='spinning'?-law.index*36:reducedMotion?-previousIndex*36:motion.angle}deg)`,'important');

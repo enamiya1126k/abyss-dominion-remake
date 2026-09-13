@@ -1,0 +1,32 @@
+/* Keep the mother in a permanent boss slot, even after births and defeats. */
+#app .mother-battle422 .side-enemies{
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ grid-template-rows:minmax(0,1.6fr) minmax(0,1fr)!important;gap:4px!important;
+}
+#app .mother-battle422 .side-enemies>[data-mother-unit425],
+#app .mother-battle422 .side-enemies>[data-mother-unit425]:only-child{
+ grid-column:1 / -1!important;grid-row:1!important;width:100%!important;height:100%!important;
+ align-self:stretch!important;justify-self:stretch!important;transform:none!important;
+}
+#app .mother-battle422 .side-enemies>.formation-slot-2{grid-column:1!important;grid-row:2!important}
+#app .mother-battle422 .side-enemies>.formation-slot-3{grid-column:2!important;grid-row:2!important}
+#app .mother-battle422 .side-enemies>.formation-slot-4{grid-column:3!important;grid-row:2!important}
+#app .mother-battle422 [data-mother-unit425]>.enemy-info{bottom:4px!important}
+#app .mother-battle422 .side-enemies .enemy-info .bar-label{
+ font-size:clamp(6px,1.6vw,9px)!important;line-height:1.1!important;letter-spacing:0!important;white-space:nowrap!important;
+}
+#app .mother-battle422 [data-mother-unit425] .enemy-info .bar-label{font-size:clamp(8px,2.1vw,11px)!important}
+#app .mother-battle422 .side-enemies>:not([data-mother-unit425]) .enemy-info{left:0!important;right:0!important;padding:3px 2px!important}
+#app .mother-battle422 .side-enemies>:not([data-mother-unit425]) .enemy-card-name{font-size:clamp(7px,1.8vw,10px)!important}
+#app .mother-battle422 .side-enemies>:not([data-mother-unit425]) .enemy-card-meta{font-size:clamp(6px,1.5vw,8px)!important;gap:1px!important}
+#app .mother-battle422 .mother-dial424 .is-selected433{fill:#fffef2;stroke:#fff0ac;stroke-width:.5;filter:drop-shadow(0 0 3px #ffd65c)}
+#app .mother-challenge-modal433 .game-modal-card{width:min(420px,92vw);background-color:#0d0d0b;color:#eee1bc}
+#app .mother-challenge-modal433 .game-modal-body{display:grid;gap:16px;text-align:center}
+#app .mother-challenge-modal433 p{margin:0;font-size:16px;line-height:1.7}
+#app .mother-challenge-modal433 small{font-size:12px;color:#c5b891}
+#app .mother-challenge-modal433 [data-mother-cancel433]{min-height:44px;background:#10100e;border:1px solid #947647;color:#e6d7b0}
+/* Additional synergy/status rows must not consume the arena's grid track. */
+html:has(.mother-battle422),body:has(.mother-battle422),#app:has(.mother-battle422){touch-action:pan-y!important}
+#app .battle-screen.mother-battle422{display:flex!important;flex-direction:column!important;overflow-y:auto!important;overflow-x:hidden!important;touch-action:pan-y!important;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch}
+#app .mother-battle422>.battle-arena{flex:1 0 440px!important;min-height:440px!important;height:auto!important}
+#app .mother-battle422>:not(.battle-arena){flex-shrink:0!important}

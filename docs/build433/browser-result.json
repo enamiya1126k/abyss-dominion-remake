@@ -1,0 +1,215 @@
+{
+  "checks": [
+    {
+      "size": {
+        "width": 393,
+        "height": 720
+      },
+      "summons": 0,
+      "motherHeight": 162.30303382873535,
+      "labels": [
+        {
+          "text": "HP 1,600,000/1,600,000",
+          "width": 94,
+          "available": 151,
+          "font": "8.253px"
+        },
+        {
+          "text": "HP障壁 57,276/96,000",
+          "width": 86,
+          "available": 149,
+          "font": "8.253px"
+        }
+      ]
+    },
+    {
+      "size": {
+        "width": 393,
+        "height": 720
+      },
+      "summons": 1,
+      "motherHeight": 162.30303382873535,
+      "labels": [
+        {
+          "text": "HP 1,600,000/1,600,000",
+          "width": 94,
+          "available": 151,
+          "font": "8.253px"
+        },
+        {
+          "text": "HP障壁 57,276/96,000",
+          "width": 86,
+          "available": 149,
+          "font": "8.253px"
+        }
+      ]
+    },
+    {
+      "size": {
+        "width": 393,
+        "height": 720
+      },
+      "summons": 3,
+      "motherHeight": 158.8906192779541,
+      "labels": [
+        {
+          "text": "HP 1,600,000/1,600,000",
+          "width": 94,
+          "available": 151,
+          "font": "8.253px"
+        },
+        {
+          "text": "HP障壁 57,276/96,000",
+          "width": 86,
+          "available": 149,
+          "font": "8.253px"
+        }
+      ]
+    },
+    {
+      "size": {
+        "width": 375,
+        "height": 620
+      },
+      "summons": 0,
+      "motherHeight": 144.03124046325684,
+      "labels": [
+        {
+          "text": "HP 1,600,000/1,600,000",
+          "width": 94,
+          "available": 142,
+          "font": "8px"
+        },
+        {
+          "text": "HP障壁 57,276/96,000",
+          "width": 86,
+          "available": 140,
+          "font": "8px"
+        }
+      ]
+    },
+    {
+      "size": {
+        "width": 375,
+        "height": 620
+      },
+      "summons": 1,
+      "motherHeight": 144.03124046325684,
+      "labels": [
+        {
+          "text": "HP 1,600,000/1,600,000",
+          "width": 94,
+          "available": 142,
+          "font": "8px"
+        },
+        {
+          "text": "HP障壁 57,276/96,000",
+          "width": 86,
+          "available": 140,
+          "font": "8px"
+        }
+      ]
+    },
+    {
+      "size": {
+        "width": 375,
+        "height": 620
+      },
+      "summons": 3,
+      "motherHeight": 144.03124046325684,
+      "labels": [
+        {
+          "text": "HP 1,600,000/1,600,000",
+          "width": 94,
+          "available": 142,
+          "font": "8px"
+        },
+        {
+          "text": "HP障壁 57,276/96,000",
+          "width": 86,
+          "available": 140,
+          "font": "8px"
+        }
+      ]
+    },
+    {
+      "size": {
+        "width": 1280,
+        "height": 800
+      },
+      "summons": 0,
+      "motherHeight": 202.03124618530273,
+      "labels": [
+        {
+          "text": "HP 1,600,000/1,600,000",
+          "width": 119,
+          "available": 594,
+          "font": "11px"
+        },
+        {
+          "text": "HP障壁 57,276/96,000",
+          "width": 111,
+          "available": 592,
+          "font": "11px"
+        }
+      ]
+    },
+    {
+      "size": {
+        "width": 1280,
+        "height": 800
+      },
+      "summons": 1,
+      "motherHeight": 202.03124618530273,
+      "labels": [
+        {
+          "text": "HP 1,600,000/1,600,000",
+          "width": 119,
+          "available": 594,
+          "font": "11px"
+        },
+        {
+          "text": "HP障壁 57,276/96,000",
+          "width": 111,
+          "available": 592,
+          "font": "11px"
+        }
+      ]
+    },
+    {
+      "size": {
+        "width": 1280,
+        "height": 800
+      },
+      "summons": 3,
+      "motherHeight": 181.10937881469727,
+      "labels": [
+        {
+          "text": "HP 1,600,000/1,600,000",
+          "width": 119,
+          "available": 594,
+          "font": "11px"
+        },
+        {
+          "text": "HP障壁 57,276/96,000",
+          "width": 111,
+          "available": 592,
+          "font": "11px"
+        }
+      ]
+    },
+    {
+      "scroll": {
+        "top": 155,
+        "max": 155,
+        "touch": "pan-y"
+      }
+    },
+    "native spin → stopped numeral IV → native skill banner",
+    "walking into the cleared mother also opens rematch",
+    "mother body/name taps, cancel, drag, initial challenge, rematch, separate altar"
+  ],
+  "errors": [],
+  "missing": [],
+  "browser": "Chromium mobile emulation; real iPhone Safari untested"
+}

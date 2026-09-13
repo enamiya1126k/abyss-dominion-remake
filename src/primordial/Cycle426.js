@@ -1,11 +1,12 @@
 // Battle-local mother lifecycle. Owned monsters and shared raid rules are untouched.
 import {MOTHER_ID422} from './Mother422.js';
 import {SPECIES} from '../data/species.js';
+import {ENDGAME_CHARACTERS} from '../data/endgameCharacters.js';
 import {createEnemyBattleState} from '../battle/EnemyAI.js';
 import {createEquipment,equipmentStatMultiplier} from '../models/Equipment.js';
 import {EQUIPMENT_BASES} from '../data/equipment.js';
 
-export const MOTHER_SUMMON_POOL426=Object.freeze(['king_slime','ghost','goblin_guard','goblin_shaman','stone_golem','wolf','dire_wolf','frost_slime']);
+export const MOTHER_SUMMON_POOL426=Object.freeze([...Object.values(SPECIES).filter(s=>s.id!==MOTHER_ID422&&['N','R','SR','SSR','UR','LR','神話'].includes(s.rarity)).map(s=>s.id),...Object.keys(ENDGAME_CHARACTERS)]);
 const bindings=globalThis[Symbol.for('abyss.mother426')]??=new WeakMap();
 const round=b=>Math.max(1,Math.floor(Number(b.turn)||1));
 export const mother426=b=>b?.specialBattleType==='mother422'?(b.enemies??[]).find(u=>u.speciesId===MOTHER_ID422&&u.motherRevision426===426):null;
@@ -17,11 +18,11 @@ export function motherCycleText426(b){
  const m=mother426(b),s=b?.motherCycle426;if(!m||!s)return '';
  if(m.hp<=0&&s.deathRound!=null&&!s.reviveUsed&&children(b).length)return `母の復活まで あと${s.remaining}ラウンド／召喚敵を全滅させると勝利`;
  if(m.hp<=0)return '母は撃破済み／残った召喚敵を倒そう';
- return `被ダメージで召喚（空き枠・攻撃1回につき1体）／ふんばり ${s.gutsUsed?'使用済み':'残り1回'}／復活 ${s.reviveUsed?'使用済み':'残り1回'}`;
+ return `HP半分未満で被ダメージ時に召喚（空き枠・攻撃1回につき1体）／ふんばり ${s.gutsUsed?'使用済み':'残り1回'}／復活 ${s.reviveUsed?'使用済み':'残り1回'}`;
 }
 export function createMotherChild426(b,m,rng=Math.random){
  const s=b.motherCycle426,roll=(min,max)=>min+Math.floor(rng()*(max-min+1)),pick=a=>a[roll(0,a.length-1)];
- const speciesId=pick(MOTHER_SUMMON_POOL426),level=roll(2500,4500),strength=roll(85,115)/100,id=`${m.id}-birth-${++s.birthSerial}`;
+ const candidate=pick(MOTHER_SUMMON_POOL426),god=ENDGAME_CHARACTERS[candidate],speciesId=god?.speciesId??candidate,level=roll(2500,4500),strength=roll(85,115)/100,id=`${m.id}-birth-${++s.birthSerial}`;
  const gear=['weapon','armor','accessory'].map((slot,i)=>{
   const item=createEquipment(slot,{rarity:pick(['SSR','UR','LR']),base:pick(EQUIPMENT_BASES[slot]),affixes:[],series:null});
   Object.assign(item,{id:`${id}:gear:${i}`,createdAt:null,level:roll(600,1800),plus:roll(0,10),series:null,equippedBy:id});return item;
@@ -31,11 +32,19 @@ export function createMotherChild426(b,m,rng=Math.random){
  for(const k of ['atk','matk','def','mdef','spd'])e[k]=Math.max(k==='spd'?1:0,Math.floor((e[k]+(extra[k]??0))*strength));
  e.maxHp=Math.max(1,Math.floor((e.maxHp+(extra.hp??0))*8*strength));e.hp=e.maxHp;
  e.maxMp=Math.max(8,e.maxMp+(extra.mp??0));e.currentMp=e.maxMp;e.motherStrength426=strength;e.intent='召喚直後：次のラウンドから行動';
+ if(god){
+  Object.assign(e,{endgameBossId:god.id,visualSpeciesId:god.id,name:god.name,faction:god.faction,endgameFaction:god.faction,element:god.element,elementMultipliers:god.elementMultipliers,statusProfile:god.statusProfile,bossPassive:god.passive});
+  // Use the same profile as native endgame enemies. Mark it before a checkpoint
+  // so the resume hydrator cannot apply the profile twice or revive a dead child.
+  const rates=god.statProfile??{};
+  for(const key of ['maxHp','atk','matk','def','mdef','spd'])e[key]=Math.max(['maxHp','atk','matk','spd'].includes(key)?1:0,Math.floor(e[key]*Math.max(.25,Math.min(3,Number(rates[key==='maxHp'?'hp':key])||1))));
+  e.hp=e.maxHp;e.crit=Math.max(0,(e.crit??0)+(Number(rates.crit)||0)/100);e.evasion=Math.max(0,Math.min(75,(e.evasion??0)+(Number(rates.evasion)||0)));e.accuracy=Math.max(20,Math.min(180,(e.accuracy??100)+(Number(rates.accuracy)||0)));e._endgameStatProfileApplied=god.id;
+ }
  return e;
 }
 function summonOnHit(b,m){
  const s=b.motherCycle426,a=s.action,c=b._singleCause410??b._motherDamageCause426??b._ultimateAction358??{};
- if(!a||a.summoned||a.round!==round(b)||m.hp<=0||s.deathRound!=null||b.resultSettled)return;
+ if(!a||a.summoned||a.round!==round(b)||m.hp<=0||m.hp>=m.maxHp*.5||s.deathRound!=null||b.resultSettled)return;
  if(c.direct===false||!['primary','direct','followup',undefined].includes(c.kind)||!b.party?.some(u=>String(u.id)===String(c.sourceId??'')))return;
  if(!b.party?.some(u=>u.id===a.actorId)||children(b).length>=3)return;
  const slot=b.enemies.findIndex(u=>u!==m&&u.hp<=0&&u.motherSummon426);

@@ -1,0 +1,790 @@
+TAP version 13
+# Subtest: four deployed members gain EXP including fallen members; restored supplies precede net currency reward; receipt survives reload
+ok 1 - four deployed members gain EXP including fallen members; restored supplies precede net currency reward; receipt survives reload
+  ---
+  duration_ms: 68.268382
+  type: 'test'
+  ...
+# Subtest: defeat and retreat pay nothing; higher stages increase rewards; capped wallets cannot overflow
+ok 2 - defeat and retreat pay nothing; higher stages increase rewards; capped wallets cannot overflow
+  ---
+  duration_ms: 6.539076
+  type: 'test'
+  ...
+# Subtest: failed final save rolls rewards back; retry commits once and shows the persisted result
+ok 3 - failed final save rolls rewards back; retry commits once and shows the persisted result
+  ---
+  duration_ms: 5.252853
+  type: 'test'
+  ...
+# Subtest: failed ultimate takes a normal action in auto, preserves manual choice, and enemy retry bypasses the same ultimate
+ok 4 - failed ultimate takes a normal action in auto, preserves manual choice, and enemy retry bypasses the same ultimate
+  ---
+  duration_ms: 7.169573
+  type: 'test'
+  ...
+# Subtest: finishing an action releases busy state before the next action; last action reaches endRound once
+ok 5 - finishing an action releases busy state before the next action; last action reaches endRound once
+  ---
+  duration_ms: 2.371491
+  type: 'test'
+  ...
+# Subtest: auto delay does not execute stale commands after auto is disabled, queue changes, or battle is replaced
+ok 6 - auto delay does not execute stale commands after auto is disabled, queue changes, or battle is replaced
+  ---
+  duration_ms: 9.690685
+  type: 'test'
+  ...
+# Subtest: gauge completes exactly once even if rAF never arrives; late frames cannot restart it
+ok 7 - gauge completes exactly once even if rAF never arrives; late frames cannot restart it
+  ---
+  duration_ms: 0.358418
+  type: 'test'
+  ...
+# Subtest: memory levels unlock by highest defeated stage, replay does not advance, and defeats restore supplies
+ok 8 - memory levels unlock by highest defeated stage, replay does not advance, and defeats restore supplies
+  ---
+  duration_ms: 39.727259
+  type: 'test'
+  ...
+# Subtest: legacy victories migrate once, old in-flight battle keeps its stage, and level cap is explicit
+ok 9 - legacy victories migrate once, old in-flight battle keeps its stage, and level cap is explicit
+  ---
+  duration_ms: 1.605864
+  type: 'test'
+  ...
+# Subtest: selected memory level creates actual stronger hero stats; first encounter scaling remains the same
+ok 10 - selected memory level creates actual stronger hero stats; first encounter scaling remains the same
+  ---
+  duration_ms: 13.713106
+  type: 'test'
+  ...
+# Subtest: auto remains on after clearing and still walks to a remaining objective
+ok 11 - auto remains on after clearing and still walks to a remaining objective
+  ---
+  duration_ms: 65.819138
+  type: 'test'
+  ...
+# Subtest: auto walks towards an enemy in an uncleared room
+ok 12 - auto walks towards an enemy in an uncleared room
+  ---
+  duration_ms: 7.335248
+  type: 'test'
+  ...
+# Subtest: enemy equipment stays in battle data but never appears in its rendered card
+ok 13 - enemy equipment stays in battle data but never appears in its rendered card
+  ---
+  duration_ms: 26.580287
+  type: 'test'
+  ...
+# Subtest: a Chapter II boss has one BOSS role badge and the actual rarity alongside it
+ok 14 - a Chapter II boss has one BOSS role badge and the actual rarity alongside it
+  ---
+  duration_ms: 4.534535
+  type: 'test'
+  ...
+# Subtest: ordinary, floor and endgame boss targeting, faction and art classes remain intact
+ok 15 - ordinary, floor and endgame boss targeting, faction and art classes remain intact
+  ---
+  duration_ms: 2.529113
+  type: 'test'
+  ...
+# Subtest: both pair statuses share one strip and retain quota, rest and unavailable-member messages
+ok 16 - both pair statuses share one strip and retain quota, rest and unavailable-member messages
+  ---
+  duration_ms: 3.202454
+  type: 'test'
+  ...
+# Subtest: circle centers on visible pixels including asymmetric mirrored enemy canvases
+ok 17 - circle centers on visible pixels including asymmetric mirrored enemy canvases
+  ---
+  duration_ms: 0.363946
+  type: 'test'
+  ...
+# Subtest: circle follows fitted art and converts viewport scale back to sprite coordinates
+ok 18 - circle follows fitted art and converts viewport scale back to sprite coordinates
+  ---
+  duration_ms: 0.15647
+  type: 'test'
+  ...
+# Subtest: ten taps reuse the same button and scrollport, charge each new price once, and survive reload
+ok 19 - ten taps reuse the same button and scrollport, charge each new price once, and survive reload
+  ---
+  duration_ms: 51.234253
+  type: 'test'
+  ...
+# Subtest: copy reflow compensates the clicked button offset without moving focus or rebuilding it
+ok 20 - copy reflow compensates the clicked button offset without moving focus or rebuilding it
+  ---
+  duration_ms: 7.465389
+  type: 'test'
+  ...
+# Subtest: last affordable upgrade disables all unaffordable purchases; extra taps spend nothing
+ok 21 - last affordable upgrade disables all unaffordable purchases; extra taps spend nothing
+  ---
+  duration_ms: 4.040378
+  type: 'test'
+  ...
+# Subtest: level 99 disables the existing button and never charges a level 100 purchase
+ok 22 - level 99 disables the existing button and never charges a level 100 purchase
+  ---
+  duration_ms: 4.676224
+  type: 'test'
+  ...
+# Subtest: false or thrown saves roll back level and GOLD; a retry on the same button works
+ok 23 - false or thrown saves roll back level and GOLD; a retry on the same button works
+  ---
+  duration_ms: 8.511529
+  type: 'test'
+  ...
+# Subtest: reentrant clicks during persistence commit only one upgrade
+ok 24 - reentrant clicks during persistence commit only one upgrade
+  ---
+  duration_ms: 5.087849
+  type: 'test'
+  ...
+# Subtest: upgrading a circle worn by another ally does not transfer its ownership
+ok 25 - upgrading a circle worn by another ally does not transfer its ownership
+  ---
+  duration_ms: 4.546132
+  type: 'test'
+  ...
+# Subtest: workshop close and X use the same refresh callback
+ok 26 - workshop close and X use the same refresh callback
+  ---
+  duration_ms: 2.830156
+  type: 'test'
+  ...
+# Subtest: Build405 stylesheet is loaded after the shared and equipment styles and save schema is unchanged
+ok 27 - Build405 stylesheet is loaded after the shared and equipment styles and save schema is unchanged
+  ---
+  duration_ms: 0.596488
+  type: 'test'
+  ...
+# Subtest: research rollback and retry grant exactly three instances once without spending GOLD
+ok 28 - research rollback and retry grant exactly three instances once without spending GOLD
+  ---
+  duration_ms: 4.21151
+  type: 'test'
+  ...
+# Subtest: battle updates retain both connected swipe surfaces and remove a vanished resonance row
+ok 29 - battle updates retain both connected swipe surfaces and remove a vanished resonance row
+  ---
+  duration_ms: 1.218293
+  type: 'test'
+  ...
+# Subtest: fresh second chapter and mother battles use natural stats for every party size
+ok 30 - fresh second chapter and mother battles use natural stats for every party size
+  ---
+  duration_ms: 14.803301
+  type: 'test'
+  ...
+# Subtest: cleared second chapter unlocks the sanctum without replaying or changing chapter one
+ok 31 - cleared second chapter unlocks the sanctum without replaying or changing chapter one
+  ---
+  duration_ms: 13.632106
+  type: 'test'
+  ...
+# Subtest: attempt IDs, defeat, retreat-equivalent settlement and first rewards are idempotent
+ok 32 - attempt IDs, defeat, retreat-equivalent settlement and first rewards are idempotent
+  ---
+  duration_ms: 29.291077
+  type: 'test'
+  ...
+# Subtest: dead parties cannot begin; partial dialogue and independent progression survive actual save reload
+ok 33 - dead parties cannot begin; partial dialogue and independent progression survive actual save reload
+  ---
+  duration_ms: 22.570834
+  type: 'test'
+  ...
+# Subtest: both enemy and allied glass pairs use two followups, 10% healing and the same round reset
+ok 34 - both enemy and allied glass pairs use two followups, 10% healing and the same round reset
+  ---
+  duration_ms: 29.216707
+  type: 'test'
+  ...
+# Subtest: mother uses registered native authored skills, complete atlas frames and existing battle markup
+ok 35 - mother uses registered native authored skills, complete atlas frames and existing battle markup
+  ---
+  duration_ms: 13.329752
+  type: 'test'
+  ...
+# Subtest: all mother dialogue is authored, ending stays replayable and leaves an optional continuation
+ok 36 - all mother dialogue is authored, ending stays replayable and leaves an optional continuation
+  ---
+  duration_ms: 0.253623
+  type: 'test'
+  ...
+# Subtest: mother native command reaches real enemy AI and can finish without a progress stall
+ok 37 - mother native command reaches real enemy AI and can finish without a progress stall
+  ---
+  duration_ms: 121.03775
+  type: 'test'
+  ...
+# Subtest: native mother result persists restored supplies/vitals before revealing contribution and cannot award twice
+ok 38 - native mother result persists restored supplies/vitals before revealing contribution and cannot award twice
+  ---
+  duration_ms: 7.087523
+  type: 'test'
+  ...
+# Subtest: native mother save checkpoint resumes in sanctum with its attempt and action commit preserved
+ok 39 - native mother save checkpoint resumes in sanctum with its attempt and action commit preserved
+  ---
+  duration_ms: 10.002604
+  type: 'test'
+  ...
+# Subtest: native mother dialogue preserves index on dismiss and only completes after final confirmation
+ok 40 - native mother dialogue preserves index on dismiss and only completes after final confirmation
+  ---
+  duration_ms: 18.881624
+  type: 'test'
+  ...
+# Subtest: destination navigates section 4 -> 5 -> 4; primary enters the sanctum, never region 5
+ok 41 - destination navigates section 4 -> 5 -> 4; primary enters the sanctum, never region 5
+  ---
+  duration_ms: 50.688284
+  type: 'test'
+  ...
+# Subtest: locked core cannot route to final battle; old cleared saves default to section 5
+ok 42 - locked core cannot route to final battle; old cleared saves default to section 5
+  ---
+  duration_ms: 37.338954
+  type: 'test'
+  ...
+# Subtest: existing and new endings appear in chronological archive; counts and home agree without editing saves
+ok 43 - existing and new endings appear in chronological archive; counts and home agree without editing saves
+  ---
+  duration_ms: 8.833784
+  type: 'test'
+  ...
+# Subtest: unseen stories remain locked; optional defeat is counted only when read
+ok 44 - unseen stories remain locked; optional defeat is counted only when read
+  ---
+  duration_ms: 6.808693
+  type: 'test'
+  ...
+# Subtest: all mother scenes use native cast presentation; ending has lines for all seven characters
+ok 45 - all mother scenes use native cast presentation; ending has lines for all seven characters
+  ---
+  duration_ms: 6.092859
+  type: 'test'
+  ...
+# Subtest: legacy partial scenes restart safely, new partial scenes resume and completed replay writes nothing
+ok 46 - legacy partial scenes restart safely, new partial scenes resume and completed replay writes nothing
+  ---
+  duration_ms: 12.244214
+  type: 'test'
+  ...
+# Subtest: mother cadence respects cooldowns and mana, and leaves old encounters unchanged
+ok 47 - mother cadence respects cooldowns and mana, and leaves old encounters unchanged
+  ---
+  duration_ms: 0.46887
+  type: 'test'
+  ...
+# Subtest: native mother veil is a removable guard and HP shield, without extra divineBarrier
+ok 48 - native mother veil is a removable guard and HP shield, without extra divineBarrier
+  ---
+  duration_ms: 8.310784
+  type: 'test'
+  ...
+# Subtest: all-enemy gold thread damages each survivor and applies recovery suppression through native effects
+ok 49 - all-enemy gold thread damages each survivor and applies recovery suppression through native effects
+  ---
+  duration_ms: 22.551656
+  type: 'test'
+  ...
+# Subtest: mother decoration is absent in other battles and never changes sprite/card ordering
+ok 50 - mother decoration is absent in other battles and never changes sprite/card ordering
+  ---
+  duration_ms: 12.428085
+  type: 'test'
+  ...
+# Subtest: native cue delegates to the in-arena animation and publishes phases only to this battle
+ok 51 - native cue delegates to the in-arena animation and publishes phases only to this battle
+  ---
+  duration_ms: 42.634799
+  type: 'test'
+  ...
+# Subtest: manual command waits until the round law ends, then spends exactly one normal skill turn
+ok 52 - manual command waits until the round law ends, then spends exactly one normal skill turn
+  ---
+  duration_ms: 57.989692
+  type: 'test'
+  ...
+# Subtest: ten Roman laws map to the actual ten signatures without mutating the characters
+ok 53 - ten Roman laws map to the actual ten signatures without mutating the characters
+  ---
+  duration_ms: 1.870975
+  type: 'test'
+  ...
+# Subtest: all ten laws occur once per cycle; rematches and reloads use the same preview
+ok 54 - all ten laws occur once per cycle; rematches and reloads use the same preview
+  ---
+  duration_ms: 0.557301
+  type: 'test'
+  ...
+# Subtest: dial fires once despite zero MP, sealed skill cooldown and action-stopping effects; does not spend a natural turn
+ok 55 - dial fires once despite zero MP, sealed skill cooldown and action-stopping effects; does not spend a natural turn
+  ---
+  duration_ms: 9.608354
+  type: 'test'
+  ...
+# Subtest: two callbacks during the spin cannot trigger twice, and the overlay finishes before the attack
+ok 56 - two callbacks during the spin cannot trigger twice, and the overlay finishes before the attack
+  ---
+  duration_ms: 15.105376
+  type: 'test'
+  ...
+# Subtest: ordinary, older active mother, dead mother and settled battles do not receive the new dial
+ok 57 - ordinary, older active mother, dead mother and settled battles do not receive the new dial
+  ---
+  duration_ms: 6.409916
+  type: 'test'
+  ...
+# Subtest: native turn flow resolves the round law before the enemy natural action
+ok 58 - native turn flow resolves the round law before the enemy natural action
+  ---
+  duration_ms: 6.553997
+  type: 'test'
+  ...
+# Subtest: native projection damage passes through defensive shields and damages the real party
+ok 59 - native projection damage passes through defensive shields and damages the real party
+  ---
+  duration_ms: 23.054647
+  type: 'test'
+  ...
+# Subtest: mother healing projection uses native heal suppression and expiring, removable guard/regen
+ok 60 - mother healing projection uses native heal suppression and expiring, removable guard/regen
+  ---
+  duration_ms: 9.592721
+  type: 'test'
+  ...
+# Subtest: native checkpoint includes the completed round receipt; reopening does not repeat its law
+ok 61 - native checkpoint includes the completed round receipt; reopening does not repeat its law
+  ---
+  duration_ms: 19.526974
+  type: 'test'
+  ...
+# Subtest: exclusive home skin stays locked until a real victory and selection rejects forged settings
+ok 62 - exclusive home skin stays locked until a real victory and selection rejects forged settings
+  ---
+  duration_ms: 6.579595
+  type: 'test'
+  ...
+# Subtest: old cleared saves unlock the skin on read without migration, extra currency or a rematch
+ok 63 - old cleared saves unlock the skin on read without migration, extra currency or a rematch
+  ---
+  duration_ms: 5.083864
+  type: 'test'
+  ...
+# Subtest: skin selection and completion survive SaveService reload; failed skin saves roll back
+ok 64 - skin selection and completion survive SaveService reload; failed skin saves roll back
+  ---
+  duration_ms: 29.325888
+  type: 'test'
+  ...
+# Subtest: completion is gated by victory and ending; viewing grants no additional rewards
+ok 65 - completion is gated by victory and ending; viewing grants no additional rewards
+  ---
+  duration_ms: 10.559984
+  type: 'test'
+  ...
+# Subtest: completion dismiss waits for its receipt to save and exclusive skin is only equipped by its button
+ok 66 - completion dismiss waits for its receipt to save and exclusive skin is only equipped by its button
+  ---
+  duration_ms: 8.067806
+  type: 'test'
+  ...
+# Subtest: pixel dial contains all ten pixel-drawn Roman numerals and no thin circle primitives
+ok 67 - pixel dial contains all ten pixel-drawn Roman numerals and no thin circle primitives
+  ---
+  duration_ms: 0.273142
+  type: 'test'
+  ...
+# Subtest: field halo center follows the actual sprite body and zoom rather than an unrelated tile offset
+ok 68 - field halo center follows the actual sprite body and zoom rather than an unrelated tile offset
+  ---
+  duration_ms: 0.520917
+  type: 'test'
+  ...
+# Subtest: shared visible-pixel fitter lifts the mother entirely above her HP card
+ok 69 - shared visible-pixel fitter lifts the mother entirely above her HP card
+  ---
+  duration_ms: 0.871804
+  type: 'test'
+  ...
+# Subtest: HP barrier reuses the shield meter, remembers capacity after absorption, and preserves zero
+ok 70 - HP barrier reuses the shield meter, remembers capacity after absorption, and preserves zero
+  ---
+  duration_ms: 44.19792
+  type: 'test'
+  ...
+# Subtest: native mother shield grants remember the full value before it can be consumed
+ok 71 - native mother shield grants remember the full value before it can be consumed
+  ---
+  duration_ms: 40.201777
+  type: 'test'
+  ...
+# Subtest: mother art seeks triple ordinary size, respecting width and card/status headroom
+ok 72 - mother art seeks triple ordinary size, respecting width and card/status headroom
+  ---
+  duration_ms: 0.27813
+  type: 'test'
+  ...
+# Subtest: challenge center uses visible atlas bounds and the battle supplies a dedicated solo mother target
+ok 73 - challenge center uses visible atlas bounds and the battle supplies a dedicated solo mother target
+  ---
+  duration_ms: 10.767961
+  type: 'test'
+  ...
+# Subtest: upcoming result is absent until stopping, including a new round after checkpoint resume
+ok 74 - upcoming result is absent until stopping, including a new round after checkpoint resume
+  ---
+  duration_ms: 0.273924
+  type: 'test'
+  ...
+# Subtest: all ten stops point to the selected numeral after multiple full revolutions
+ok 75 - all ten stops point to the selected numeral after multiple full revolutions
+  ---
+  duration_ms: 0.281975
+  type: 'test'
+  ...
+# Subtest: expanded dial stays inside the arena at narrow and wide viewports
+ok 76 - expanded dial stays inside the arena at narrow and wide viewports
+  ---
+  duration_ms: 0.240253
+  type: 'test'
+  ...
+# Subtest: in-arena spin at x1 reveals only at stop, then releases the existing backdrop
+ok 77 - in-arena spin at x1 reveals only at stop, then releases the existing backdrop
+  ---
+  duration_ms: 1.498065
+  type: 'test'
+  ...
+# Subtest: in-arena spin at x2 reveals only at stop, then releases the existing backdrop
+ok 78 - in-arena spin at x2 reveals only at stop, then releases the existing backdrop
+  ---
+  duration_ms: 0.257929
+  type: 'test'
+  ...
+# Subtest: in-arena spin at x4 reveals only at stop, then releases the existing backdrop
+ok 79 - in-arena spin at x4 reveals only at stop, then releases the existing backdrop
+  ---
+  duration_ms: 0.314202
+  type: 'test'
+  ...
+# Subtest: rerender during spin joins the same elapsed animation without a result preview
+ok 80 - rerender during spin joins the same elapsed animation without a result preview
+  ---
+  duration_ms: 0.311989
+  type: 'test'
+  ...
+# Subtest: reduced motion does not rotate before reveal; interrupted battles clean up without revealing
+ok 81 - reduced motion does not rotate before reveal; interrupted battles clean up without revealing
+  ---
+  duration_ms: 0.433978
+  type: 'test'
+  ...
+# Subtest: ordinary hits summon once per attack, use at most three slots, and join next round
+ok 82 - ordinary hits summon once per attack, use at most three slots, and join next round
+  ---
+  duration_ms: 54.452921
+  type: 'test'
+  ...
+# Subtest: poison, counters, reflection, echoes and guarded hits do not summon
+ok 83 - poison, counters, reflection, echoes and guarded hits do not summon
+  ---
+  duration_ms: 55.889751
+  type: 'test'
+  ...
+# Subtest: one battle-local guts works through native damage and direct ultimate HP writers
+ok 84 - one battle-local guts works through native damage and direct ultimate HP writers
+  ---
+  duration_ms: 20.191402
+  type: 'test'
+  ...
+# Subtest: countdown starts after death round, survives five complete rounds, then returns exactly 30% once
+ok 85 - countdown starts after death round, survives five complete rounds, then returns exactly 30% once
+  ---
+  duration_ms: 5.298299
+  type: 'test'
+  ...
+# Subtest: last child defeated on the fifth round prevents revival; native flow awards victory
+ok 86 - last child defeated on the fifth round prevents revival; native flow awards victory
+  ---
+  duration_ms: 8.922635
+  type: 'test'
+  ...
+# Subtest: generic healing/revive cannot bring back the mother early or mint a second revival
+ok 87 - generic healing/revive cannot bring back the mother early or mint a second revival
+  ---
+  duration_ms: 6.734524
+  type: 'test'
+  ...
+# Subtest: checkpoint serialization carries roster, rolled equipment, guts and exact remaining rounds
+ok 88 - checkpoint serialization carries roster, rolled equipment, guts and exact remaining rounds
+  ---
+  duration_ms: 5.400019
+  type: 'test'
+  ...
+# Subtest: old active 425 mothers do not gain new abilities in the middle of a fight
+ok 89 - old active 425 mothers do not gain new abilities in the middle of a fight
+  ---
+  duration_ms: 4.228284
+  type: 'test'
+  ...
+# Subtest: real automatic command follows native multi-target and turn flow with dynamic summons
+ok 90 - real automatic command follows native multi-target and turn flow with dynamic summons
+  ---
+  duration_ms: 95.14796
+  type: 'test'
+  ...
+# Subtest: actual resume path preserves a fallen mother and does not replay an already committed summon
+ok 91 - actual resume path preserves a fallen mother and does not replay an already committed summon
+  ---
+  duration_ms: 12.124858
+  type: 'test'
+  ...
+# Subtest: poison from a named player can consume guts but cannot trigger a summon
+ok 92 - poison from a named player can consume guts but cannot trigger a summon
+  ---
+  duration_ms: 8.571627
+  type: 'test'
+  ...
+# Subtest: summon death before the mother does not arm a revival countdown
+ok 93 - summon death before the mother does not arm a revival countdown
+  ---
+  duration_ms: 5.067619
+  type: 'test'
+  ...
+# Subtest: a partner follow-up can trigger the one summon even when the first attacker missed
+ok 94 - a partner follow-up can trigger the one summon even when the first attacker missed
+  ---
+  duration_ms: 5.223709
+  type: 'test'
+  ...
+# Subtest: native endRound itself advances the full death grace period and revives before the next queue
+ok 95 - native endRound itself advances the full death grace period and revives before the next queue
+  ---
+  duration_ms: 11.540167
+  type: 'test'
+  ...
+# Subtest: upgrade waits for the new worker, preserves saved results and warms code without reserving another ticket
+ok 96 - upgrade waits for the new worker, preserves saved results and warms code without reserving another ticket
+  ---
+  duration_ms: 4.685197
+  type: 'test'
+  ...
+# Subtest: same-build reload keeps the existing cache and does not download all boot files again
+ok 97 - same-build reload keeps the existing cache and does not download all boot files again
+  ---
+  duration_ms: 2.603503
+  type: 'test'
+  ...
+# Subtest: offline worker registration failure does not delete native battle or result records or block game boot
+ok 98 - offline worker registration failure does not delete native battle or result records or block game boot
+  ---
+  duration_ms: 0.784726
+  type: 'test'
+  ...
+# Subtest: native raid exchange saves actual items and a unique circle only once
+ok 99 - native raid exchange saves actual items and a unique circle only once
+  ---
+  duration_ms: 86.219051
+  type: 'test'
+  ...
+# Subtest: native exchange rolls back material, reward, codex and receipt when saving fails, then retries once
+ok 100 - native exchange rolls back material, reward, codex and receipt when saving fails, then retries once
+  ---
+  duration_ms: 26.387539
+  type: 'test'
+  ...
+# Subtest: all three bosses equip the exchange-exclusive circle; matching children are Lv100 and unequipped
+ok 101 - all three bosses equip the exchange-exclusive circle; matching children are Lv100 and unequipped
+  ---
+  duration_ms: 7.437197
+  type: 'test'
+  ...
+# Subtest: revival happens once for the shared boss, then a second death settles rewards and advances once
+ok 102 - revival happens once for the shared boss, then a second death settles rewards and advances once
+  ---
+  duration_ms: 13.049579
+  type: 'test'
+  ...
+# Subtest: shield damage counts as contribution and the shield is shared between independent attempts
+ok 103 - shield damage counts as contribution and the shield is shared between independent attempts
+  ---
+  duration_ms: 7.09259
+  type: 'test'
+  ...
+# Subtest: thunder circle increases boss damage and chains only the boss, while the first five rounds remain quiet
+ok 104 - thunder circle increases boss damage and chains only the boss, while the first five rounds remain quiet
+  ---
+  duration_ms: 1.020943
+  type: 'test'
+  ...
+# Subtest: version-2 replay resumes identically, includes performance, and submits exactly once
+ok 105 - version-2 replay resumes identically, includes performance, and submits exactly once
+  ---
+  duration_ms: 24.821157
+  type: 'test'
+  ...
+# Subtest: previously issued version-1 tickets still run the frozen engine
+ok 106 - previously issued version-1 tickets still run the frozen engine
+  ---
+  duration_ms: 2.678142
+  type: 'test'
+  ...
+# Subtest: failed persistence rolls back shield, HP, performance and quota together
+ok 107 - failed persistence rolls back shield, HP, performance and quota together
+  ---
+  duration_ms: 2.39161
+  type: 'test'
+  ...
+# Subtest: late version-2 results never damage the next boss or change the last hit
+ok 108 - late version-2 results never damage the next boss or change the last hit
+  ---
+  duration_ms: 15.171743
+  type: 'test'
+  ...
+# Subtest: upgrading a saved active online attempt preserves its quota, damage and issued legacy ticket
+ok 109 - upgrading a saved active online attempt preserves its quota, damage and issued legacy ticket
+  ---
+  duration_ms: 11.863072
+  type: 'test'
+  ...
+# Subtest: summoning begins strictly below half HP, including a hit crossing the threshold
+ok 110 - summoning begins strictly below half HP, including a hit crossing the threshold
+  ---
+  duration_ms: 85.532967
+  type: 'test'
+  ...
+# Subtest: every eligible species and each distinct abyss / ten-god record can be drawn without touching source data
+ok 111 - every eligible species and each distinct abyss / ten-god record can be drawn without touching source data
+  ---
+  duration_ms: 30.412317
+  type: 'test'
+  ...
+# Subtest: all ten native skill banners name the stopped god and the actual projected skill
+ok 112 - all ten native skill banners name the stopped god and the actual projected skill
+  ---
+  duration_ms: 76.959026
+  type: 'test'
+  ...
+# Subtest: dial growth stays centered on the mother and within the enemy-side budget
+ok 113 - dial growth stays centered on the mother and within the enemy-side budget
+  ---
+  duration_ms: 0.26439
+  type: 'test'
+  ...
+# Subtest: hit area encloses actual visible body and name at every zoom
+ok 114 - hit area encloses actual visible body and name at every zoom
+  ---
+  duration_ms: 0.67271
+  type: 'test'
+  ...
+# Subtest: native challenge confirmation cancels safely, prevents stale/double starts and uses short rematch copy
+ok 115 - native challenge confirmation cancels safely, prevents stale/double starts and uses short rematch copy
+  ---
+  duration_ms: 12.602731
+  type: 'test'
+  ...
+# Subtest: altar only opens the ending; rematch victory returns to the mother with no repeated first reward
+ok 116 - altar only opens the ending; rematch victory returns to the mother with no repeated first reward
+  ---
+  duration_ms: 6.421102
+  type: 'test'
+  ...
+# Subtest: cache maps route every edited module to the new build while frozen raid runtime stays isolated
+ok 117 - cache maps route every edited module to the new build while frozen raid runtime stays isolated
+  ---
+  duration_ms: 2.247729
+  type: 'test'
+  ...
+# Subtest: four first conversation gifts survive real save reload and do not depend on group stages
+ok 118 - four first conversation gifts survive real save reload and do not depend on group stages
+  ---
+  duration_ms: 112.867063
+  type: 'test'
+  ...
+# Subtest: locked heroes, missing party, another battle and concurrent group attempts cannot grant or start
+ok 119 - locked heroes, missing party, another battle and concurrent group attempts cannot grant or start
+  ---
+  duration_ms: 15.505304
+  type: 'test'
+  ...
+# Subtest: each personal opponent uses its real skills and six equipment slots at fixed level; first campaign roster is untouched
+ok 120 - each personal opponent uses its real skills and six equipment slots at fixed level; first campaign roster is untouched
+  ---
+  duration_ms: 19.964768
+  type: 'test'
+  ...
+# Subtest: win, defeat and interrupted start restore supplies and vitals; only first win gives its own signature
+ok 121 - win, defeat and interrupted start restore supplies and vitals; only first win gives its own signature
+  ---
+  duration_ms: 9.676854
+  type: 'test'
+  ...
+# Subtest: full inventory and reserve send the unique weapon to the vault, without selling it
+ok 122 - full inventory and reserve send the unique weapon to the vault, without selling it
+  ---
+  duration_ms: 11.330969
+  type: 'test'
+  ...
+# Subtest: native menu displays the chosen hero; failed gift save rolls back and can retry exactly once
+ok 123 - native menu displays the chosen hero; failed gift save rolls back and can retry exactly once
+  ---
+  duration_ms: 6.82027
+  type: 'test'
+  ...
+# Subtest: native start passes the selected single hero, saved attempt ID and return destination; double click cannot start twice
+ok 124 - native start passes the selected single hero, saved attempt ID and return destination; double click cannot start twice
+  ---
+  duration_ms: 23.993188
+  type: 'test'
+  ...
+# Subtest: native terminal dispatch uses personal settlement, supports retry on save failure, then shows contribution before reward
+ok 125 - native terminal dispatch uses personal settlement, supports retry on save failure, then shows contribution before reward
+  ---
+  duration_ms: 8.487133
+  type: 'test'
+  ...
+# Subtest: group rematches remain available from all four heroes; throne only replays the recorded ending
+ok 126 - group rematches remain available from all four heroes; throne only replays the recorded ending
+  ---
+  duration_ms: 30.918663
+  type: 'test'
+  ...
+# Subtest: tap overlap selects the nearest hero, while walking contact preserves identity at all four positions
+ok 127 - tap overlap selects the nearest hero, while walking contact preserves identity at all four positions
+  ---
+  duration_ms: 1.196592
+  type: 'test'
+  ...
+# Subtest: 434 boot maps updated modules and retains 433 mother CSS and frozen offline raid runtime
+ok 128 - 434 boot maps updated modules and retains 433 mother CSS and frozen offline raid runtime
+  ---
+  duration_ms: 2.308809
+  type: 'test'
+  ...
+# Subtest: native checkpoint resumes the same single opponent and attempt after a real save reload
+ok 129 - native checkpoint resumes the same single opponent and attempt after a real save reload
+  ---
+  duration_ms: 20.91659
+  type: 'test'
+  ...
+# Subtest: stale personal checkpoints cannot resume or pay rewards, and retreat restores the original supplies
+ok 130 - stale personal checkpoints cannot resume or pay rewards, and retreat restores the original supplies
+  ---
+  duration_ms: 7.548261
+  type: 'test'
+  ...
+1..130
+# tests 130
+# suites 0
+# pass 130
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1914.808256

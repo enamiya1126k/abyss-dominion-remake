@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "lobby fits {\"width\":393,\"height\":720}",
+    "lobby fits {\"width\":375,\"height\":620}",
+    "lobby fits {\"width\":1280,\"height\":800}",
+    "scroll {\"top\":253,\"max\":253,\"width\":393,\"client\":393}",
+    "scroll {\"top\":136,\"max\":136,\"width\":375,\"client\":375}",
+    "scroll {\"top\":390,\"max\":390,\"width\":375,\"client\":375}",
+    "scroll {\"top\":159,\"max\":159,\"width\":393,\"client\":393}",
+    "scroll {\"top\":211,\"max\":211,\"width\":393,\"client\":393}",
+    "battle → contribution → reward → lobby"
+  ],
+  "errors": [],
+  "missing": []
+}

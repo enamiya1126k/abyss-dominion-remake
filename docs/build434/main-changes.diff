@@ -1,0 +1,106 @@
+--- Build433/main.js
+
++++ Build434/main.js
+
+@@ -69,2 +69,4 @@
+
+ import{royalState,beginRoyalAttempt,settleRoyalAttempt,rewindRoyalAttempt,abandonRoyalAttempt}from"./core/RoyalChamberSystem.js?v=3.1.59-build379";
++import {ROYAL_HEROES434,royalVisits434,royalHeroAvailable434,claimRoyalGift434,beginRoyalSolo434,settleRoyalSolo434,royalSoloCheckpoint434} from './core/RoyalHero434.js';
++import {royalHeroHitBounds434} from './ui/RoyalHeroHit434.js';
+ import{mountRoyalChamber}from"./ui/RoyalChamberField.js?v=3.1.59-build379";
+@@ -794,3 +796,3 @@
+
+  const epilogue351=campaignEndingStoryScene(canonical,{variant,state:save.state});if(epilogue351)recordCampaignStoryArchiveScene(save.state,epilogue351);
+- let persisted=Boolean(save.save());app.insertAdjacentHTML("beforeend",Modal(outcome.victorious?"予言の十日間・完結":`予言の十日間・${copy.title}`,`<div class="campaign-ending ending-${canonical}${special?" ending-preemptive":""}"><div class="campaign-clear-seal361"><span>百階を越え、予言を打ち破った</span><strong>予言の十日間・完結</strong><small>あなたと四体が守った世界</small></div><small>ENDING ${canonical==="complete"?"I":canonical==="narrow"?"II":"III"}・予言10日目</small><h2>${copy.title}</h2><div class="clear-party361">${(save.state.party??[]).map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean).map(m=>`<figure>${monsterVisual(m,"",{className:"clear-monster361"})}<figcaption>${escapeAttribute(displayName(m))}</figcaption></figure>`).join("")}</div><p>${copy.lead}</p><p>${copy.detail}</p>${voices}${epilogue351?'<button type="button" data-campaign-ending-story>魔王側の後日譚を読む</button>':""}<b>${persisted?`${outcome.victorious?"勇者の進軍は止まり、予言は終わりました。踏破済み階層で探索・育成を続け、玉座では全快した四勇とのリベンジに挑めます。第二章では、育てた部隊で新しい物語へ進めます。":"敗北記録を保存しました。強制巻き戻しはありません。"}`:"記録をまだ保存できていません。空き容量を確認して再試行してください。"}</b></div>`,persisted?"魔王城へ戻る":"保存して魔王城へ戻る"));const modal=configureCampaignOutcomeModal(topModal(),"campaignEndingTitle"),finish=()=>{if(!persisted){persisted=Boolean(save.save());if(!persisted){showToast("結末を保存できませんでした。容量を確認してください");return}}modal?.remove();go("home")};modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish;modal.querySelector("[data-campaign-ending-story]")?.addEventListener("click",()=>showCampaignStoryReplaySequence([epilogue351]))
++ let persisted=Boolean(save.save());app.insertAdjacentHTML("beforeend",Modal(outcome.victorious?"予言の十日間・完結":`予言の十日間・${copy.title}`,`<div class="campaign-ending ending-${canonical}${special?" ending-preemptive":""}"><div class="campaign-clear-seal361"><span>百階を越え、予言を打ち破った</span><strong>予言の十日間・完結</strong><small>あなたと四体が守った世界</small></div><small>ENDING ${canonical==="complete"?"I":canonical==="narrow"?"II":"III"}・予言10日目</small><h2>${copy.title}</h2><div class="clear-party361">${(save.state.party??[]).map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean).map(m=>`<figure>${monsterVisual(m,"",{className:"clear-monster361"})}<figcaption>${escapeAttribute(displayName(m))}</figcaption></figure>`).join("")}</div><p>${copy.lead}</p><p>${copy.detail}</p>${voices}${epilogue351?'<button type="button" data-campaign-ending-story>魔王側の後日譚を読む</button>':""}<b>${persisted?`${outcome.victorious?"勇者の進軍は止まり、予言は終わりました。踏破済み階層で探索・育成を続け、王室の勇者に話しかけると、会話や手合わせ、四人との再戦を楽しめます。第二章では、育てた部隊で新しい物語へ進めます。":"敗北記録を保存しました。強制巻き戻しはありません。"}`:"記録をまだ保存できていません。空き容量を確認して再試行してください。"}</b></div>`,persisted?"魔王城へ戻る":"保存して魔王城へ戻る"));const modal=configureCampaignOutcomeModal(topModal(),"campaignEndingTitle"),finish=()=>{if(!persisted){persisted=Boolean(save.save());if(!persisted){showToast("結末を保存できませんでした。容量を確認してください");return}}modal?.remove();go("home")};modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish;modal.querySelector("[data-campaign-ending-story]")?.addEventListener("click",()=>showCampaignStoryReplaySequence([epilogue351]))
+ }
+@@ -840,2 +842,34 @@
+
+ }
++function openRoyalHero434(heroId){
++ if(battle||save.state.activeBattle||royalState(save.state).phase!=='cleared'||!royalHeroAvailable434(save.state,heroId)||royalVisits434(save.state).attempt||royalState(save.state).attempt)return;
++ const hero=ROYAL_HEROES434[heroId];if(game?.royal)game.paused=true;
++ app.insertAdjacentHTML('beforeend',Modal(hero.name,`<div class="royal-hero434-portrait">${monsterVisual({speciesId:heroId},hero.name)}</div><p data-royal-quote434>${escapeAttribute(hero.greeting)}</p><p data-royal-gift434 role="status"></p><div class="royal-hero434-actions"><button data-royal-talk434>話す${royalVisits434(save.state).gifts[heroId]?'':'（初回の贈り物）'}</button><button data-royal-solo434>個人戦に挑む<small>部隊4体 対 ${hero.name}1人・Lv.1,000</small></button><button data-royal-party434>勇者一行と再戦<small>4人との決戦の記憶</small></button></div><p class="royal-hero434-note">${royalVisits434(save.state).victories[heroId]?'個人戦の初勝利報酬：受領済み':'個人戦の初勝利：専用右手装備 Lv.1,000 ＋0'}<br>手合わせ後、HP・MP・回復アイテムは元に戻ります。</p>`,'王室へ戻る'));
++ const modal=topModal();modal.classList.add('royal-hero434-modal','departure379-modal');modal.setAttribute('role','dialog');modal.setAttribute('aria-modal','true');modal.setAttribute('aria-label',hero.name+'と話す');
++ const close=()=>{modal.remove();if(game?.royal)game.paused=false;};modal._onDismiss=close;modal.querySelector('[data-modal-primary]').onclick=close;
++ modal.querySelector('[data-royal-talk434]').onclick=()=>{if(!modal.isConnected)return;const result=chapterTwoCommit(()=>claimRoyalGift434(save.state,heroId));if(!result.ok)return;modal.querySelector('[data-royal-quote434]').textContent=result.first?hero.talk:hero.again;modal.querySelector('[data-royal-gift434]').textContent=result.first?'経験値パック（超）×3 を受け取りました':'初回の贈り物は受け取り済みです';modal.querySelector('[data-royal-talk434]').textContent='話す';};
++ modal.querySelector('[data-royal-solo434]').onclick=()=>{if(!modal.isConnected)return;openRoyalSolo434(heroId,modal);};
++ modal.querySelector('[data-royal-party434]').onclick=()=>{if(!modal.isConnected)return;close();openRoyalMemory379();};
++ requestAnimationFrame(()=>modal.querySelector('[data-royal-talk434]')?.focus({preventScroll:true}));
++}
++function openRoyalSolo434(heroId,modal){
++ if(battle||!royalHeroAvailable434(save.state,heroId)||royalState(save.state).phase!=='cleared')return;
++ if(new Set(save.state.party??[]).size!==4)return showToast('現在の部隊を4体編成してください');
++ const result=chapterTwoCommit(()=>{const a=beginRoyalSolo434(save.state,heroId);if(a.ok)fullyRecoverParty();return a;});if(!result.ok)return;
++ modal?.remove();if(game?.royal)game.paused=false;stopGame();snapshot=null;
++ startSpecialBattle([{...campaignHeroBattleEntry(heroId,{carryHpRate:1}),royalSolo434:true}],{battleId:result.id,type:'royalSolo434',title:`${ROYAL_HEROES434[heroId].name}との手合わせ`,subtitle:'部隊4体 対 勇者1人',priorVitals:result.vitals,returnScreen:'campaignFinalFloor'});
++}
++function finishRoyalSolo434(won,{retreated=false}={}){
++ if(!battle||battle.resultSettled||battle.specialBattleType!=='royalSolo434')return;
++ const current=battle,contribution=battleContributionSnapshot(),result=chapterTwoCommit(()=>settleRoyalSolo434(save.state,{id:current.battleId,won}));
++ if(!result.ok){current.party=save.state.party.map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);app.insertAdjacentHTML('beforeend',Modal('結果の保存', '<p>まだ保存できていません。保存を再試行してください。</p>','保存を再試行'));const m=topModal();m.classList.add('royal-hero434-modal');const retry=()=>{m.remove();finishRoyalSolo434(won,{retreated});};m._onDismiss=retry;m.querySelector('[data-modal-primary]').onclick=retry;return;}
++ current.resultSettled=true;current.escapePending=false;clearBattleCheckpoint({saveNow:false});restorePartyVitals(current.priorVitals);clearPartySynergy();save.save();document.querySelector('.battle-screen')?.remove();battle=null;activeEnemy=null;snapshot=null;screen='campaignFinalFloor';render();
++ const hero=ROYAL_HEROES434[result.heroId],body=(won?battleVictoryHeader({boss:true,resultTitle:'勝利',resultCaption:hero.name+'との手合わせ',victorySubtitle:'個人戦に勝利した'}):`<p>${retreated?'手合わせを終えました。':'今回は勇者の勝利。また挑戦できます。'}</p>`)+(result.reward?`<div class="royal-hero434-reward"><small>初勝利報酬</small><b>${escapeAttribute(result.reward.name)}</b><span>Lv.1,000 ＋0</span><small>${escapeAttribute(result.reward.message)}</small></div>`:won?'<p>初勝利報酬は受領済みです。</p>':'')+'<p>部隊と回復アイテムは手合わせ前の状態に戻りました。</p>';
++ const showResult=()=>{app.insertAdjacentHTML('beforeend',Modal(won?'戦闘結果':retreated?'撤退':'敗北',body,'王室へ戻る'));const m=topModal();m.classList.add('royal-hero434-modal','departure379-modal');m._onDismiss=()=>m.remove();m.querySelector('[data-modal-primary]').onclick=()=>m.remove();};
++ if(won)openBattleContributionReport(contribution,showResult);else showResult();
++}
++function openRoyalEnding434(){
++ if(battle||save.state.activeBattle||!save.state.campaign100?.finalCompleted)return;
++ const arena=campaignHeroLedger().finalArena,scene=campaignEndingStoryScene(arena.lastEnding??'complete',{variant:arena.lastEndingVariant,state:save.state});if(scene)showCampaignStoryReplaySequence([scene]);
++}
++
+ function openRoyalThrone360(){
+@@ -845,3 +879,3 @@
+
+  if(room.phase!=='cleared')return;
+- openRoyalMemory379();
++ openRoyalEnding434();
+ }
+@@ -862,3 +896,3 @@
+
+  const ledger=campaignHeroLedger();if(!ledger.finalArena?.unlocked&&!save.state.campaign100?.finalCompleted){screen='home';render();return}
+- stopGame();const room=royalState(save.state),party=(save.state.party??[]).map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean).slice(0,4),heroes=royalHeroes360().map(h=>room.phase==='cleared'?{...h,defeated:false,remainingHpRate:1}:h);
++ stopGame();if(!battle&&!save.state.activeBattle&&royalVisits434(save.state).attempt){const recovery=chapterTwoCommit(()=>settleRoyalSolo434(save.state,{id:royalVisits434(save.state).attempt.id,abandoned:true}));if(!recovery.ok)return;}const room=royalState(save.state),party=(save.state.party??[]).map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean).slice(0,4),heroes=royalHeroes360().map(h=>room.phase==='cleared'?{...h,defeated:false,remainingHpRate:1}:h);
+  if(room.phase==='battle'&&!battle&&!save.state.activeBattle){abandonRoyalAttempt(save.state);restoreCampaignFinalParty();fullyRecoverParty();save.save()}
+@@ -866,5 +900,5 @@
+
+  if(room.phase==='ready'&&!campaignRemainingHeroes(ledger).length){room.phase='victory';room.pendingEnding??={ending:'complete',variant:'all-preempted',resultId:`royal-empty:${room.cycle}`};}
+- save.save();app.innerHTML=CampaignFinalFloorScreen({heroes,party,state:save.state,room});game={};mountRoyalChamber(game,{canvas:document.getElementById('royalCanvas'),Entity,Camera,findPath:path,drawMonster:drawExplorationMonster,TILE,room,party,heroes,onSave:()=>save.save(),blocked:()=>Boolean(battle||document.querySelector('.game-modal,.royal-dialogue-360')),onApproach:()=>openRoyalDialogue360(finalAudienceDialogue({heroes,party}),'audience',()=>{
++ save.save();app.innerHTML=CampaignFinalFloorScreen({heroes,party,state:save.state,room});game={};mountRoyalChamber(game,{canvas:document.getElementById('royalCanvas'),Entity,Camera,findPath:path,drawMonster:drawExplorationMonster,TILE,room,party,heroes,heroHitBounds:royalHeroHitBounds434,contactAfterClear:true,throneTap:true,throneLabel:room.phase==='cleared'?'玉座・結末の回想':null,onSave:()=>save.save(),blocked:()=>Boolean(battle||document.querySelector('.game-modal,.royal-dialogue-360')),onApproach:()=>openRoyalDialogue360(finalAudienceDialogue({heroes,party}),'audience',()=>{
+  const fresh=campaignHeroLedger();fresh.finalArena.audienceCompleted=true;normalizeCampaignState(save.state).heroEncounters310=fresh;room.phase=campaignRemainingHeroes(fresh).length?'ready':'victory';room.dialogueKind=null;
+- if(room.phase==='victory')room.pendingEnding={ending:'complete',variant:'all-preempted',resultId:`royal-empty:${room.cycle}`};return true}),onContact:()=>openCampaignFinalPreparation(),onThrone:openRoyalThrone360});
++ if(room.phase==='victory')room.pendingEnding={ending:'complete',variant:'all-preempted',resultId:`royal-empty:${room.cycle}`};return true}),onContact:hero=>room.phase==='cleared'?openRoyalHero434(hero?.id):openCampaignFinalPreparation(),onThrone:openRoyalThrone360});
+  document.querySelector('[data-royal-formation]').onclick=()=>{stopGame();formationOrigin='campaignFinalFloor';go('formation')};document.querySelector('[data-royal-equipment]').onclick=()=>{stopGame();navigationOrigin='campaignFinalFloor';go('equipment')};document.querySelector('[data-royal-center]').onclick=()=>game.centerRoyal?.();document.querySelector('[data-royal-exit]').onclick=()=>{stopGame();go('home')};
+@@ -902,2 +936,3 @@
+
+  if(!battle?.specialBattle)return false;
++ if(battle.specialBattleType==='royalSolo434')return finishRoyalSolo434(false,{retreated:true});
+  if(battle.specialBattleType==='mother422')return finishMotherBattle422(false,{retreated:true});
+@@ -919,2 +954,3 @@
+
+  if(!battle||battle.resultSettled)return;
++ if(battle.specialBattleType==='royalSolo434')return finishRoyalSolo434(won);
+  if(battle.specialBattleType==='mother422')return finishMotherBattle422(won);
+@@ -1351,3 +1387,3 @@
+
+  const paint=()=>{const level=memoryLevel(selected),reward=royalRevengeRewards(selected),heroes=CAMPAIGN_HERO_IDS.map(id=>({speciesId:id,level}));
+- modal.querySelector('.game-modal-body').innerHTML=`<div class="departure-dialog"><small class="departure-eyebrow">ABYSS DOMINION</small><p>挑戦する勇者一行のレベルを選択</p>${departureChoice379({name:`Lv.${level.toLocaleString()}`,skin:'assets/ui/campaign/royal-hall-360.png',previous:selected>1,next:selected<progress.unlocked,status:`${selected<=progress.best?'勝利済み・再挑戦可能':'次の挑戦'}${progress.best?`<small>最高撃破 Lv.${memoryLevel(progress.best).toLocaleString()}</small>`:'<small>勝利するとLv.1,500が解放</small>'}`,caption:'決戦の記憶'})}${departureParty379(heroes,'対戦する勇者一行')}<div class="result-reward-grid departure379-rewards"><article><span>${pixelIcon('growth')}</span><small>各員EXP</small><b>+${reward.experience.toLocaleString()}</b></article><article><span>${pixelIcon('coin')}</span><small>GOLD</small><b>+${reward.gold.toLocaleString()}</b></article><article><span>${pixelIcon('crystal')}</span><small>魔晶石</small><b>+${reward.crystals.toLocaleString()}</b></article></div><details class="departure379-options"><summary>？ 挑戦ルール・その他</summary><p>勝利すると次のレベルを解放。500Lvずつ、最大Lv.10,000まで挑戦できます。勝利済みのレベルを再戦しても解放段階は進みません。</p><p>敗北・撤退では報酬なし。使用した物資は挑戦前に戻ります。</p>${room.rewardReceipt365?'<button type="button" data-memory-receipt>前回の勝利報酬を見る</button>':''}<button type="button" data-memory-chapter>第二章へ</button><button type="button" data-memory-home>拠点へ戻る</button></details></div>`;
++ modal.querySelector('.game-modal-body').innerHTML=`<div class="departure-dialog"><small class="departure-eyebrow">ABYSS DOMINION</small><p>挑戦する勇者一行のレベルを選択</p>${departureChoice379({name:`Lv.${level.toLocaleString()}`,skin:new URL('./assets/ui/campaign/royal-hall-360.png',document.baseURI).href,previous:selected>1,next:selected<progress.unlocked,status:`${selected<=progress.best?'勝利済み・再挑戦可能':'次の挑戦'}${progress.best?`<small>最高撃破 Lv.${memoryLevel(progress.best).toLocaleString()}</small>`:'<small>勝利するとLv.1,500が解放</small>'}`,caption:'決戦の記憶'})}${departureParty379(heroes,'対戦する勇者一行')}<div class="result-reward-grid departure379-rewards"><article><span>${pixelIcon('growth')}</span><small>各員EXP</small><b>+${reward.experience.toLocaleString()}</b></article><article><span>${pixelIcon('coin')}</span><small>GOLD</small><b>+${reward.gold.toLocaleString()}</b></article><article><span>${pixelIcon('crystal')}</span><small>魔晶石</small><b>+${reward.crystals.toLocaleString()}</b></article></div><details class="departure379-options"><summary>？ 挑戦ルール・その他</summary><p>勝利すると次のレベルを解放。500Lvずつ、最大Lv.10,000まで挑戦できます。勝利済みのレベルを再戦しても解放段階は進みません。</p><p>敗北・撤退では報酬なし。使用した物資は挑戦前に戻ります。</p>${room.rewardReceipt365?'<button type="button" data-memory-receipt>前回の勝利報酬を見る</button>':''}<button type="button" data-memory-chapter>第二章へ</button><button type="button" data-memory-home>拠点へ戻る</button></details></div>`;
+  modal.querySelector('[data-select-prev]').onclick=()=>{selected=Math.max(1,selected-1);paint()};modal.querySelector('[data-select-next]').onclick=()=>{selected=Math.min(progress.unlocked,selected+1);paint()};
+@@ -5658,2 +5694,3 @@
+
+  if(enemy.campaignHeroId)applyCampaignHeroLoadout(enemy);
++ if(prepared.royalSolo434&&enemy.campaignHeroId)tuneFinalHero(enemy,{count:1,stage:0});
+  if(enemy.campaignHeroFinal)tuneFinalHero(enemy,{count:royalState(save.state).attempt?.memory?4:Math.max(1,campaignRemainingHeroes(campaignHeroLedger()).length),stage:royalState(save.state).attempt?.memory?(royalState(save.state).attempt.memoryLevel379?1:(royalState(save.state).attempt.stage??revengeStage(save.state))):0});
+@@ -5705,2 +5742,4 @@
+
+ function resumeSavedBattle(){
++ if(save.state.activeBattle?.specialBattleType==='royalSolo434'&&!royalSoloCheckpoint434(save.state,save.state.activeBattle)){const a=royalVisits434(save.state).attempt;const recovered=chapterTwoCommit(()=>{if(a)settleRoyalSolo434(save.state,{id:a.id,abandoned:true});delete save.state.activeBattle;return{ok:true};});if(!recovered.ok)return false;screen='campaignFinalFloor';return false;}
++
+  if(save.state.activeBattle?.specialBattleType==='mother422'&&(!motherUnlocked422(save.state)||motherState422(save.state).attempt?.id!==save.state.activeBattle.battleId)){delete save.state.activeBattle;if(motherState422(save.state).attempt)settleMother422(save.state,false);save.save();screen='home';return false;}
+@@ -5725,3 +5764,3 @@
+
+  battle.hpDisplayRates={};battle.hpTrails={};if(!battle.floorBossAliveState)initializeFloorBossDeathTracking();battle.heroResonanceCount=heroResonanceProfile(battle.party).count;battle.invincibleAlliance=invincibleAllianceReady();
+- battle.enemies.forEach(enemy=>hydrateEndgameEnemy(enemy));if(data.specialBattleType==='chapterTwo'&&!battle.enemies[0]?.chapterTwoTactics382?.roster397&&(CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter]?.boss||CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter]?.seal||CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter]?.vault)&&battle.enemies[0])battle.enemies[0].name=CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter].name;battle.enemy=battle.enemies[0];syncPersistentAilments(battle);battle.turnQueue=data.turnQueue??[];battle.queueIndex=data.queueIndex??0;battle.targetEnemyId=data.targetEnemyId??aliveEnemies(battle)[0]?.id??null;prepareBattleUltimates358();screen=data.specialBattleType==='mother422'?'primordial422':data.specialBattleType==='chapterTwo'?'chapterTwoField':'explore';renderBattle();setTimeout(()=>data.actionCommitted?finishCurrentAction():continueBattleFlow(),scaledBattleDelay(250));return true
++ battle.enemies.forEach(enemy=>hydrateEndgameEnemy(enemy));if(data.specialBattleType==='chapterTwo'&&!battle.enemies[0]?.chapterTwoTactics382?.roster397&&(CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter]?.boss||CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter]?.seal||CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter]?.vault)&&battle.enemies[0])battle.enemies[0].name=CHAPTER_TWO_ENCOUNTERS[data.chapterTwoEncounter].name;battle.enemy=battle.enemies[0];syncPersistentAilments(battle);battle.turnQueue=data.turnQueue??[];battle.queueIndex=data.queueIndex??0;battle.targetEnemyId=data.targetEnemyId??aliveEnemies(battle)[0]?.id??null;prepareBattleUltimates358();screen=data.specialBattleType==='royalSolo434'?'campaignFinalFloor':data.specialBattleType==='mother422'?'primordial422':data.specialBattleType==='chapterTwo'?'chapterTwoField':'explore';renderBattle();setTimeout(()=>data.actionCommitted?finishCurrentAction():continueBattleFlow(),scaledBattleDelay(250));return true
+ }

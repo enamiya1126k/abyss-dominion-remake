@@ -1,0 +1,44 @@
+{
+  "checks": [
+    "body and name select えなみ",
+    "body and name select より",
+    "body and name select ひで",
+    "body and name select りおん",
+    {
+      "size": {
+        "width": 375,
+        "height": 540
+      },
+      "scroll": {
+        "top": 101,
+        "max": 101,
+        "touch": "pan-y",
+        "width": 375,
+        "view": 375
+      }
+    },
+    {
+      "size": {
+        "width": 1280,
+        "height": 800
+      },
+      "scroll": {
+        "top": 0,
+        "max": 0,
+        "touch": "pan-y",
+        "width": 1280,
+        "view": 1280
+      }
+    },
+    "drag on hero pans without opening dialogue",
+    "walking contact opens the nearest actual hero",
+    "group rematch selector retained",
+    "throne only invokes ending replay",
+    "selected hero in native 4 vs 1 battle screen",
+    "contribution then selected hero first victory reward"
+  ],
+  "errors": [],
+  "missing": [],
+  "realSafari": false,
+  "productionContacted": false
+}

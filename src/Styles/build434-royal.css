@@ -1,0 +1,14 @@
+/* Existing black/gold game frame; short dialogue with a scrollable body. */
+.royal-hero434-modal>.game-modal-card{width:min(94vw,540px)!important;background:#0b0c0b url('../../assets/ui/v2/panel-texture.png') center/cover!important;border:10px solid transparent!important;border-image:url('../../assets/ui/v2/ornate-frame.png') 44 fill / 9px stretch!important;padding:12px!important;color:#eadbb9!important;box-sizing:border-box}
+.royal-hero434-modal .game-modal-body{font-size:15px!important;line-height:1.7!important}
+.royal-hero434-modal h2{font-size:25px!important;line-height:1.4!important;color:#f4dfaa!important}
+.royal-hero434-modal button{font:inherit;color:#f4dfaa;background:#10120f;border:1px solid #92753d;border-radius:2px;min-height:46px;cursor:pointer}
+.royal-hero434-modal .modal-primary{background:linear-gradient(#3f2d13,#19140c)!important;font-size:17px!important;line-height:1.4!important}
+.royal-hero434-portrait{height:100px;display:flex;justify-content:center;align-items:center}
+.royal-hero434-portrait .monster-visual{width:100px!important;height:100px!important}
+.royal-hero434-actions{display:grid;gap:9px}.royal-hero434-actions button{padding:10px;font-weight:bold}.royal-hero434-actions small{display:block;font-size:12px;font-weight:normal;color:#c7bd9e}
+.royal-hero434-modal [data-royal-quote434]{margin:10px 0}.royal-hero434-modal [data-royal-gift434]{color:#f6d681;font-size:13px}.royal-hero434-note{font-size:12px;line-height:1.6;color:#c7bd9e}
+.royal-hero434-reward{display:grid;gap:6px;padding:15px;border:1px solid #91763b;background:#15130c}.royal-hero434-reward b{color:#f3d380}
+@media(max-height:600px){.royal-hero434-portrait{height:76px}.royal-hero434-portrait .monster-visual{width:76px!important;height:76px!important}}
+
+.special-battle-strip.royalSolo434{background:linear-gradient(90deg,#16130a,#302514,#16130a)!important;border-color:#8e723c!important;color:#efdeb3!important}

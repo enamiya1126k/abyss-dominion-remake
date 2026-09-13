@@ -5,7 +5,7 @@ import {chapterTwoFrameBounds383} from './ChapterTwoSprite383.js?v=3.1.82-build4
 export function battleCircleGeometry405({image,bounds,sprite,slotWidth,mirrored=false,mother=false}){
  const b=mirrored?{...bounds,left:1-bounds.right,right:1-bounds.left}:bounds;
  const width=image.width*(b.right-b.left),height=image.height*(b.bottom-b.top);
- const diameter=Math.max(32,Math.min(mother?400:160,Math.max(32,slotWidth)*(mother?1.1:1.28),Math.max(width,height)*1.16));
+ const diameter=Math.max(32,Math.min(mother?400:160,mother?Math.max(32,slotWidth-8):Math.max(32,slotWidth)*1.28,Math.max(width,height)*1.16));
  const sx=sprite.width/Math.max(1,sprite.layoutWidth||sprite.width),sy=sprite.height/Math.max(1,sprite.layoutHeight||sprite.height);
  return {left:(image.left+image.width*(b.left+b.right)/2-sprite.left)/sx,
   top:(image.top+image.height*(b.top+b.bottom)/2-sprite.top)/sy,

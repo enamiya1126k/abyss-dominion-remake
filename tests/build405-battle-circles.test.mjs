@@ -57,10 +57,10 @@ test('both pair statuses share one strip and retain quota, rest and unavailable-
  b.enemies=pair.members.map((id,i)=>({id:`e${i}`,speciesId:id,name:SPECIES[id].name,hp:100,maxHp:100}));
  let html=BattleScreen(b,{},{});
  assert.equal((html.match(/class="battle-resonance405"/g)??[]).length,1);assert.equal((html.match(/data-twin-pair="mirrors"/g)??[]).length,2);
- assert.equal((html.match(/残り2\/2/g)??[]).length,2);
+ assert.equal((html.match(/追加連携2\/2/g)??[]).length,2);
  b.twinResonance385={used:{'ally:mirrors:ch2_ryune':1,'ally:mirrors:ch2_rose':1}};
- assert.match(BattleScreen(b,{},{}),/残り0\/2/);
- b.enemies[0].hp=0;assert.match(BattleScreen(b,{},{}),/戦闘不能・行動不能・隔離などで休止/);
+ assert.match(BattleScreen(b,{},{}),/追加連携：使用済み/);
+ b.enemies[0].hp=0;assert.match(BattleScreen(b,{},{}),/連携休止・戦闘不能/);
  b.party=[];b.enemies=[];assert.doesNotMatch(BattleScreen(b,{},{}),/class="battle-resonance405"/);
  b.onlineMode='team';b.enemies=pair.members.map((id,i)=>({id:`e${i}`,speciesId:id,name:id,hp:100,maxHp:100}));
  assert.doesNotMatch(BattleScreen(b,{},{}),/class="battle-resonance405"/);
