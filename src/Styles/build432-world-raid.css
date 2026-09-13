@@ -1,0 +1,54 @@
+/* The existing game frame and BattleScreen are shared with exploration. */
+html:has(.world-raid-active432),body:has(.world-raid-active432),#app.world-raid-active432{touch-action:pan-y!important;overflow:hidden!important}
+#app.world-raid-active432{height:100dvh!important;max-height:100dvh!important;min-height:0!important}
+#app .world-raid428.world-raid432{--raid-frame432:url('../../assets/ui/v2/home-panel-frame.png');--raid-active432:url('../../assets/ui/v2/ornate-frame-active.png');box-sizing:border-box;width:100%;max-width:860px;height:100%;min-height:0;margin:auto;padding:0;display:flex;flex-direction:column;overflow:hidden;background:#090c0f url('../../assets/ui/v2/panel-texture.png');color:#e8ddc4;font:14px/1.45 Georgia,'Yu Mincho',serif;touch-action:pan-y}
+.world-raid432 *{box-sizing:border-box}
+#app .world-raid432 .raid-head432{flex:none;display:flex;align-items:center;gap:8px;padding:8px 10px;border:0;border-bottom:1px solid #695633;background:#0b0d10}
+.raid-head432 h1{flex:1;font-size:20px;line-height:1.2;margin:0;color:#f0d999}.raid-head432 small{font:11px/1.4 sans-serif;color:#94bdad}
+#app .world-raid432 button{min-height:42px;border:5px solid transparent;border-image:var(--raid-frame432) 44 fill / 5px stretch;border-radius:0;background:linear-gradient(#252725,#101317);color:#efdeb5;padding:6px 9px;font:600 13px/1.4 Georgia,'Yu Mincho',serif;cursor:pointer;touch-action:manipulation;overflow-wrap:anywhere;box-shadow:none}
+#app .world-raid432 button:disabled{opacity:.46;cursor:default}
+#app .world-raid432 button:focus-visible,.world-raid432 summary:focus-visible{outline:2px solid #e7c974;outline-offset:-3px}
+#app .world-raid432 .raid-scroll432{flex:1;min-height:0;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y!important;padding:9px 10px max(20px,env(safe-area-inset-bottom));scrollbar-gutter:stable;overflow-anchor:none}
+#app .world-raid432 .raid-frame432{border:7px solid transparent;border-image:var(--raid-frame432) 44 fill / 7px stretch;background:linear-gradient(135deg,#171b1e,#090c0f);padding:8px 10px;margin:0 0 8px;min-width:0}
+.raid-boss-stage432{position:relative;height:190px;display:grid;grid-template-rows:1fr auto;justify-items:center;background:radial-gradient(ellipse at 50% 55%,#36444855,transparent 70%)}
+.raid-boss-stage432>small{position:absolute;top:0;left:0;color:#bda778;font-size:11px}.raid-boss-stage432>img{display:block;width:100%;height:154px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 6px 10px #000)}
+.raid-boss-stage432 h2{font-size:17px;line-height:1.3;text-align:center;color:#f6df9c;margin:3px 0 6px;overflow-wrap:anywhere}
+#app .world-raid432 .world-raid-hp428{height:24px;border:1px solid #7c4e40;margin:5px 0;background:#33181a}
+#app .world-raid432 .world-raid-hp428>i{background:linear-gradient(90deg,#852f36,#c56c51)}
+#app .world-raid432 .world-raid-hp428>b{font:600 clamp(9px,2.65vw,12px)/22px monospace;white-space:nowrap}
+.raid-quota432{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:13px;margin:6px 0}.raid-quota432 b{color:#f3d78c}.raid-quota432 small{font-size:10px;color:#b4ad99}
+#app .world-raid432 .raid-challenge432{display:block;width:100%;min-height:46px;font-size:18px;border-image-source:var(--raid-active432);background:linear-gradient(#3d3420,#1c1c15)}
+.raid-ticket-count432{display:block;text-align:center;font-size:10px;margin-top:4px}.raid-shield432{font:11px/1.4 monospace;color:#9bdce1}
+.raid-section-head432{display:flex;justify-content:space-between;align-items:center;gap:6px;margin-bottom:3px}.raid-section-head432 h2{margin:0;font-size:15px;color:#e9cc8b}
+#app .world-raid432 .raid-section-head432 button{min-height:32px;padding:2px 6px;font-size:11px}
+.raid-ranks432{padding:0;margin:0;list-style:none;font-size:12px}.raid-ranks432 li{display:grid;grid-template-columns:32px minmax(0,1fr) auto;align-items:center;gap:6px;min-height:27px;border-bottom:1px solid #403b2d}
+.raid-ranks432 li>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.raid-ranks432 li>b{color:#d5b971}.raid-ranks432 li>strong{font:11px monospace}
+.raid-ranks432 li.raid-empty432{display:block;padding:10px 0;color:#ada795}
+.raid-mine432{display:flex;justify-content:space-between;gap:6px;padding-top:6px;font-size:12px}.raid-mine432 strong{font:12px monospace}.raid-mine432 small{font:10px sans-serif}.raid-mine432 b{color:#ead097}
+.raid-footer432{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:6px 0}.raid-footer432 button{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px}.raid-footer432 button>b{display:block}.raid-footer432 .home-pixel-icon{width:18px;height:18px}
+.raid-offline432,.raid-rules432{border-top:1px solid #5b4c33;margin-top:7px;padding:0 4px;color:#c8bea7;font-size:12px}.raid-offline432>summary,.raid-rules432>summary{min-height:36px;padding:9px 2px;cursor:pointer;touch-action:manipulation}
+#app .world-raid432 :is(.world-offline430,.world-ranking429,.world-my-rank429,.world-my-reward429,.world-raid-notice428,.world-reward-rules429){background:#111619;border-color:#75623d;border-radius:0;color:#e1d3b7;box-shadow:none}
+#app .world-raid432 .world-offline430{padding:8px;margin:0;font-size:12px;line-height:1.55;border:0}.world-raid432 .world-offline430 h2{display:none}.world-raid432 .world-offline430 article{padding:8px 0}.world-raid432 .world-offline430 article>b{font-size:13px}
+#app .world-raid432 .world-ticket-buttons430{display:flex;flex-wrap:wrap;gap:5px}.world-raid432 .world-ticket-buttons430 button{flex:1}
+#app .world-raid432 .world-ranking429{padding:10px 2px}.world-raid432 .world-ranking429>header h2{font-size:17px}.world-raid432 .world-ranking429 button{font-size:12px}.world-raid432 .world-my-rank429{padding:10px}
+.raid-shop-tabs432{display:flex;gap:5px;margin:10px 0}.raid-shop-tabs432 button{flex:1;min-width:0}.raid-shop-tabs432 button[aria-pressed=true]{border-image-source:var(--raid-active432)!important;color:#ffe29f!important}
+.raid-shop-items432 article{padding:15px 2px;border-bottom:1px solid #675331}.raid-shop-items432 article h3{margin:4px 0;font-size:17px}.raid-shop-items432 article p,.raid-shop-items432 small{font-size:12px;color:#b4ad99}.raid-shop-items432 article>button{width:100%}
+.raid-message432{padding:8px;border:1px solid #9f7650;font-size:12px;background:#241d15}.raid-battle-info432{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px;font:11px/1.5 sans-serif;color:#ddc99e;padding:4px 0 8px}.raid-local432{display:block;font-size:10px;color:#c0b090}
+#app .world-raid432 .online-shared-battle-shell{height:auto!important;min-height:0;max-height:none;overflow:visible!important}
+#app .world-raid432 .battle-screen{width:100%!important;height:max(640px,calc(100dvh - 115px))!important;max-height:none!important;margin:0!important;flex:none}
+#app .world-raid432 .battle-screen .turn-order{touch-action:pan-x pan-y!important;overflow-x:auto!important}
+#app .world-raid432 .battle-screen .battle-command{touch-action:pan-y!important}
+#app .world-raid432 .battle-screen .combatant{touch-action:manipulation}
+#app .world-raid432 .battle-screen :is(.battle-control,.battle-command button){border-image:var(--raid-frame432) 44 fill / 4px stretch;background:linear-gradient(#242624,#111416);border-radius:0}
+#app .world-raid432 .raid-results432>.game-modal{position:static!important;inset:auto!important;display:block!important;width:100%!important;height:auto!important;background:none!important;padding:0!important;backdrop-filter:none!important;overflow:visible!important}
+#app .world-raid432 .raid-results432 .game-modal-card{position:relative!important;width:100%!important;max-width:none!important;max-height:none!important;height:auto!important;background:#101519!important;border:8px solid transparent!important;border-image:var(--raid-frame432) 44 fill / 8px stretch!important;border-radius:0!important;padding:12px!important;box-shadow:none!important;overflow:visible!important}
+#app .world-raid432 .raid-results432 .game-modal-body{max-height:none!important;overflow:visible!important;color:#e3d5b7}
+.world-raid432 .raid-results432 .modal-x{display:none}.world-raid432 .raid-results432 .game-modal-card>h2{font-size:19px;color:#edd499}
+#app .world-raid432 .contribution-list>article{background:#12191b;border-color:#77623f;border-radius:0}.world-raid432 .contribution-list>article.mvp{background:#252318;border-color:#d5bb79}
+#app .world-raid432 .contribution-list dl{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.world-raid432 .contribution-list dt{font-size:10px}.world-raid432 .contribution-list dd{font-size:12px;white-space:normal;overflow-wrap:anywhere}.world-raid432 .contribution-name strong{font-size:13px}.world-raid432 .contribution-name small{font-size:11px}
+.raid-reward432{text-align:center}.raid-reward432>strong{display:block;font:700 27px/1.6 monospace;color:#edcd87}.raid-reward432>h3{font-size:15px}.raid-reward432>p{font-size:13px}.raid-reward432 .raid-reward-note432{font-size:11px;color:#b4ad99}.raid-reward432 .home-pixel-icon{width:22px;height:22px;vertical-align:middle}
+@media(min-width:700px){.raid-boss-stage432{height:220px}.raid-boss-stage432>img{height:183px}.raid-ranks432 li{min-height:30px}.raid-boss-stage432 h2{font-size:21px}}
+@media(max-height:680px){.raid-boss-stage432{height:149px}.raid-boss-stage432>img{height:114px}.raid-boss-stage432 h2{font-size:15px}#app .world-raid432 .raid-frame432{padding:5px 8px}.raid-ranks432 li{min-height:24px}}
+
+#app .world-raid432 .contribution-heading{background:#12191b;border-color:#75623d}
+#app .world-raid432 .contribution-list dl>div{background:#0b1013;border-color:#4d493b}

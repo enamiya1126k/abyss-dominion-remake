@@ -56,6 +56,7 @@ export function onlinePendingBattleActor(battle, ownerPlayerId) {
 }
 
 export function onlineBattleActorProfile(room, actor) {
+  if(actor?.worldRaidActor432)return {...actor,displayName:actor.name,battleStats:actor.battleStats??actor.stats??{}};
   const member = memberById(room, onlineBattleOwnerId(actor));
   const root = member?.profile ?? null;
   if (root) {
@@ -457,7 +458,7 @@ function onlineEnemy(room, enemy) {
   const staticRaidAsset = authoredRaidBase ? null : raidUnit ? enemy.heroAsset ?? enemy.asset ?? null : null;
   const selectedVisualBase = authoredRaidBase ?? (staticRaidAsset ? null : enemy.visualBase ?? raidVisualBase);
   return {
-    ...enemy, id: enemy.id ?? enemy.playerId, speciesId: profile?.speciesId ?? enemy.speciesId ?? "slime",
+    ...enemy, heroShield348: enemy.shield??0, heroShieldMax378: enemy.maxShield??enemy.shield??0, id: enemy.id ?? enemy.playerId, speciesId: profile?.speciesId ?? enemy.speciesId ?? "slime",
     visualSpeciesId: profile?.visualSpeciesId ?? enemy.visualSpeciesId ?? null, endgameBossId: profile?.endgameBossId ?? enemy.endgameBossId ?? null,
     floorBossCatalogId: profile?.floorBossCatalogId ?? enemy.floorBossCatalogId ?? null,
     customVisualBase: selectedVisualBase, customVisualAsset: staticRaidAsset ?? (selectedVisualBase ? null : enemy.asset ?? null), visualFrame: enemy.visualFrame ?? (Number(enemy.hp) <= 0 ? "down" : "idle"), name: profile?.monsterName || enemy.monsterName || enemy.name || profile?.displayName || "敵",
@@ -465,8 +466,8 @@ function onlineEnemy(room, enemy) {
     atk: Math.max(1, Number(enemy.atk ?? profile?.battleStats?.atk) || 1), matk: Math.max(1, Number(enemy.matk ?? profile?.battleStats?.matk) || 1),
     def: Math.max(0, Number(enemy.def ?? profile?.battleStats?.def) || 0), mdef: Math.max(0, Number(enemy.mdef ?? profile?.battleStats?.mdef) || 0),
     spd: Math.max(1, Number(enemy.spd ?? profile?.battleStats?.spd) || 1), element: profile?.attribute ?? enemy.element ?? "neutral",
-    emoji: profile?.fallbackEmoji ?? enemy.emoji ?? "魔", summonTier: profile?.summonTier ?? profile?.summonRarity ?? (raidUnit ? "神話" : null),
-    summonRarity: profile?.summonRarity ?? profile?.summonTier ?? (raidUnit ? "神話" : null), boss: Boolean(enemy.boss || enemy.coopBoss || enemy.raidMainBoss || enemy.id === "abyss-amalga"), raidMainBoss: Boolean(enemy.raidMainBoss || enemy.id === "abyss-amalga"), raidSubBoss: enemy.role === "subBoss", magicCircleName: enemy.magicCircleName ?? enemy.magicCircle ?? null, magicCircleLevel: Math.max(1, Number(enemy.magicCircleLevel ?? enemy.circleLevel) || 1), magicCircleAsset: enemy.magicCircleAsset ?? null, uncapturable: enemy.uncapturable ?? Boolean(enemy.boss || enemy.coopBoss || enemy.playerId || enemy.asset),
+    emoji: profile?.fallbackEmoji ?? enemy.emoji ?? "魔", summonTier: profile?.summonTier ?? profile?.summonRarity ?? enemy.summonTier ?? (raidUnit ? "神話" : null),
+    summonRarity: profile?.summonRarity ?? profile?.summonTier ?? enemy.summonRarity ?? (raidUnit ? "神話" : null), boss: Boolean(enemy.boss || enemy.coopBoss || enemy.raidMainBoss || enemy.id === "abyss-amalga"), raidMainBoss: Boolean(enemy.raidMainBoss || enemy.id === "abyss-amalga"), raidSubBoss: enemy.role === "subBoss", magicCircleName: enemy.magicCircleName ?? enemy.magicCircle ?? null, magicCircleLevel: Math.max(1, Number(enemy.magicCircleLevel ?? enemy.circleLevel) || 1), magicCircleAsset: enemy.magicCircleAsset ?? null, uncapturable: enemy.uncapturable ?? Boolean(enemy.boss || enemy.coopBoss || enemy.playerId || enemy.asset),
   };
 }
 
@@ -788,4 +789,9 @@ export function renderOnlineChat(room, selfId, state = "") {
     }).join("") : `<div class="online-v3-chat-empty"><b>まだ会話はありません</b><span>最初のメッセージを送ってみよう。</span></div>`}</div>
     <div class="online-v3-presets">${["よろしく！", "準備OK！", "ついてきて！", "ありがとう！", "👋", "✨", "❤️", "‼️"].map(text => `<button type="button" data-online-preset="${escapeOnlineHtml(text)}">${escapeOnlineHtml(text)}</button>`).join("")}</div>
     <form class="online-v3-compose" data-online-chat-form><label><textarea rows="2" maxlength="80" enterkeyhint="send" data-online-chat-input placeholder="メッセージを入力">${escapeOnlineHtml(legacyDraft)}</textarea><small><b data-online-chat-count>${number(String(legacyDraft).length)}</b>/80</small></label><button type="submit">送信</button></form></section>`;
+}
+
+export function raidContributionSnapshot432(room,raid){
+ const players=Array.isArray(raid?.players)?raid.players:[];
+ return {party:players.map(p=>onlineMonster(room,p)),performance:raid?.performance432??{},reviveCount:players.reduce((n,p)=>n+(raid?.performance432?.[p.playerId]?.revives??0),0)};
 }

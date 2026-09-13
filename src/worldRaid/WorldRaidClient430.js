@@ -27,7 +27,7 @@ export class WorldRaidClient430 extends WorldRaidClient428{
    this.render();return;
   }
   const e=view.entry,t=e.ticket,base=this.onlineState430??this.offline.bank().cachedState??{};
-  const state={...base,revision:Math.max(this.state?.revision??0,base.revision??0),campaign:{...t.campaign,hp:view.raid.boss.hp,myDamage:view.damage},attempt:{id:t.id,requestId:t.requestId,campaignId:t.campaignId,status:e.phase==='playing'?'active':'ended',damage:view.damage,raid:view.raid,report:e.phase==='playing'?null:{bossName:t.campaign.boss.name,damage:view.damage,result:view.result}}};
+  const state={...base,revision:Math.max(this.state?.revision??0,base.revision??0),campaign:{...t.campaign,hp:view.raid.boss.hp,myDamage:view.damage,circle432:view.raid.circle432??t.campaign.circle432},attempt:{id:t.id,requestId:t.requestId,campaignId:t.campaignId,status:e.phase==='playing'?'active':'ended',damage:view.damage,raid:view.raid,report:e.phase==='playing'?null:{bossName:t.campaign.boss.name,damage:view.damage,result:view.result}}};
   super.receive({type:'worldRaidState',state,events});
  }
  sendBattle(type,payload={}){

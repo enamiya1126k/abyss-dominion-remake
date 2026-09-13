@@ -44,7 +44,7 @@ export class WorldRaidCoordinator428{
    if(used>=3)return fail('WORLD_RAID_LIMIT','本日の挑戦は3回終了しました。日本時間0時に回復します。');
    if(message.campaignId!==s.current.id)return fail('WORLD_RAID_CHANGED','ボスが切り替わりました。最新のボスを確認してください。');
    const id='wr-'+randomBytes(16).toString('hex'),member={...session,profile},events=[];
-   const engine=new WorldRaidBattle428({session:member,now:this.now,random:this.random,broadcast:(_,e)=>events.push(e)}),created=engine.create(member,s.current,id);
+   const engine=new (this.BattleClass428??WorldRaidBattle428)({session:member,now:this.now,random:this.random,broadcast:(_,e)=>events.push(e)}),created=engine.create(member,s.current,id);
    if(!created.ok)return created;
    // Preserve receipts/reports for retries, but retain only the latest finished
    // battle per player instead of accumulating full rosters every day.
@@ -78,8 +78,8 @@ export class WorldRaidCoordinator428{
   let events=[],result=this.ledger.transact(s=>{
    const a=s.attempts[existing.id],room=reviveRoom(a.room),battle=room.raid;
    if(a.campaignId!==s.current.id)return fail('WORLD_RAID_CHANGED','このボスは討伐済みです。');
-   const before=s.current.hp;battle.boss.hp=before;battle.progress.hp=before;
-   const engine=new WorldRaidBattle428({session:{...session,profile:a.profile},now:this.now,random:this.random,broadcast:(_,e)=>events.push(e)});
+   this._prepareBattle432?.(s.current,battle);const before=s.current.hp;battle.boss.hp=before;battle.progress.hp=before;
+   const engine=new (this.BattleClass428??WorldRaidBattle428)({session:{...session,profile:a.profile},now:this.now,random:this.random,broadcast:(_,e)=>events.push(e)});
    let operated={ok:true};
    if(kind==='action')operated=engine.action(room,session,message.action??message);
    else if(kind==='auto')operated=engine.setAuto(room,session,message.enabled===true);

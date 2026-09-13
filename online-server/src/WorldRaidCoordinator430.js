@@ -12,7 +12,7 @@ export class WorldRaidCoordinator430 extends WorldRaidCoordinator429{
   try{if(this.healthy()){
    const s=this.ledger.state,counts={};if(s.offline430&&(!s.offline430.tickets||Array.isArray(s.offline430.tickets)||Array.isArray(s.offline430)))throw new Error('Invalid offline ledger');
    for(const [id,t]of Object.entries(s.offline430?.tickets??{})){
-    if(t.id!==id||t.ledgerId!==s.ledgerId429||!['reserved','submitted','expired'].includes(t.status)||!Number.isSafeInteger(t.expiresAt)||t.expiresAt-t.issuedAt!==OFFLINE_LIFETIME430||!Number.isInteger(t.seed)||t.seed<0||t.seed>4294967295||!t.playerId||!t.day||!Number.isSafeInteger(t.sequence)||t.sequence<1||t.ruleVersion!==1||t.status==='reserved'&&!t.initialRoom?.raid||t.status!=='reserved'&&!t.receipt)throw new Error('Invalid offline ticket');
+    if(t.id!==id||t.ledgerId!==s.ledgerId429||!['reserved','submitted','expired'].includes(t.status)||!Number.isSafeInteger(t.expiresAt)||t.expiresAt-t.issuedAt!==OFFLINE_LIFETIME430||!Number.isInteger(t.seed)||t.seed<0||t.seed>4294967295||!t.playerId||!t.day||!Number.isSafeInteger(t.sequence)||t.sequence<1||![1,2].includes(t.ruleVersion)||t.status==='reserved'&&!t.initialRoom?.raid||t.status!=='reserved'&&!t.receipt)throw new Error('Invalid offline ticket');
     const key=t.day+':'+t.playerId;counts[key]=(counts[key]??0)+1;if(counts[key]>(s.days[t.day]?.[t.playerId]??0))throw new Error('Invalid reserved quota');
    }
   }}catch(error){this.ledger.error=error;}
@@ -49,7 +49,7 @@ export class WorldRaidCoordinator430 extends WorldRaidCoordinator429{
    s.offline430??={tickets:{}};
    for(let i=0;i<count;i++){
     const id='wrt-'+randomBytes(16).toString('hex'),seed=randomBytes(4).readUInt32LE(),member={...session,profile};
-    s.offline430.tickets[id]={id,requestId:message.requestId,ruleVersion:OFFLINE_RULE_VERSION430,ledgerId:s.ledgerId429,playerId:session.playerId,day,campaignId:s.current.id,sequence:s.current.sequence,issuedAt:now,expiresAt:now+OFFLINE_LIFETIME430,seed,status:'reserved',initialRoom:createOfflineTicketBattle430(member,s.current,id,seed,now),campaign:{id:s.current.id,sequence:s.current.sequence,hp:s.current.hp,maxHp:s.current.maxHp,startedAt:s.current.startedAt,boss:worldRaidBoss428(s.current.sequence)},name:profile.displayName};
+    s.offline430.tickets[id]={id,requestId:message.requestId,ruleVersion:this.offlineRuleVersion430??OFFLINE_RULE_VERSION430,ledgerId:s.ledgerId429,playerId:session.playerId,day,campaignId:s.current.id,sequence:s.current.sequence,issuedAt:now,expiresAt:now+OFFLINE_LIFETIME430,seed,status:'reserved',initialRoom:createOfflineTicketBattle430(member,s.current,id,seed,now,this.offlineRuleVersion430??OFFLINE_RULE_VERSION430),campaign:{id:s.current.id,sequence:s.current.sequence,hp:s.current.hp,maxHp:s.current.maxHp,startedAt:s.current.startedAt,circle432:s.current.circle432,boss:worldRaidBoss428(s.current.sequence)},name:profile.displayName};
    }
    s.days[day]??={};s.days[day][session.playerId]=used+count;return {ok:true};
   });
@@ -78,9 +78,9 @@ export class WorldRaidCoordinator430 extends WorldRaidCoordinator429{
    else{
     const current=s.current.id===t.campaignId,c=current?s.current:s.history.find(c=>c.id===t.campaignId);
     if(!c||c.settlement429)return failure('WORLD_RAID_FINALIZED','このボスの集計は確定済みです。');
-    const damage=replay.damage,appliedHp=current?Math.min(c.hp,damage):0;
+    const damage=replay.damage,impact=current?this._applyOfflineImpact432?.(c,damage):null,appliedHp=impact?.appliedHp??(current?Math.min(c.hp,damage):0);
     c.contribution[t.playerId]??={damage:0,attempts:0,name:t.name};c.contribution[t.playerId].damage+=damage;c.contribution[t.playerId].attempts++;
-    c.hp-=appliedHp;const lastHit=current&&c.hp===0;
+    if(!impact)c.hp-=appliedHp;const lastHit=current&&c.hp===0;
     t.status='submitted';t.receipt={ticketId:t.id,campaignId:t.campaignId,sequence:t.sequence,status:'accepted',damage,appliedHp,lastHit,result:replay.room.raid.outcome,rounds:replay.room.raid.round,receivedAt:this.now(),late:!current,message:!current?'討伐済みボスの順位へ加算しました。次のボスのHPには影響しません。':'共通HPと順位に反映しました。'};
     if(lastHit){c.completedAt=this.now();c.killerId=t.playerId;s.history.push(clone(c));s.current=newWorldRaidCampaign428(c.sequence+1,this.now());for(const a of Object.values(s.attempts))if(a.status==='active'&&a.campaignId===c.id){if(a.room?.raid){a.room.raid.boss.hp=0;a.room.raid.progress.hp=0;}this._closeAttempt(s,a,'sharedVictory');}}
    }
