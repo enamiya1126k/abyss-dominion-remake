@@ -1,0 +1,217 @@
+{
+  "checks": [
+    "skills: no horizontal overflow 393x720",
+    "final skill and all badges visible inside cards 393",
+    "skill filter still hides other categories 393",
+    "home: no horizontal overflow 393x720",
+    "home diagram stays clear of formation banner 393",
+    "attributes: no horizontal overflow 393x720",
+    "settings: no horizontal overflow 393x720",
+    "name input and save button fit 393",
+    "altar: no horizontal overflow 393x720",
+    "summon category and permanent contract artwork 393",
+    "contract: no horizontal overflow 393x720",
+    "experience: no horizontal overflow 393x720",
+    "memory: no horizontal overflow 393x720",
+    "three dedicated memory scenes 393",
+    "archive: no horizontal overflow 393x720",
+    "archive tabs navigate 393",
+    "battle memory retains four enemies and cost 393",
+    "skills: no horizontal overflow 375x540",
+    "final skill and all badges visible inside cards 375",
+    "skill filter still hides other categories 375",
+    "home: no horizontal overflow 375x540",
+    "home diagram stays clear of formation banner 375",
+    "attributes: no horizontal overflow 375x540",
+    "settings: no horizontal overflow 375x540",
+    "name input and save button fit 375",
+    "altar: no horizontal overflow 375x540",
+    "summon category and permanent contract artwork 375",
+    "contract: no horizontal overflow 375x540",
+    "experience: no horizontal overflow 375x540",
+    "memory: no horizontal overflow 375x540",
+    "three dedicated memory scenes 375",
+    "archive: no horizontal overflow 375x540",
+    "archive tabs navigate 375",
+    "battle memory retains four enemies and cost 375",
+    "skills: no horizontal overflow 430x760",
+    "final skill and all badges visible inside cards 430",
+    "skill filter still hides other categories 430",
+    "home: no horizontal overflow 430x760",
+    "home diagram stays clear of formation banner 430",
+    "attributes: no horizontal overflow 430x760",
+    "settings: no horizontal overflow 430x760",
+    "name input and save button fit 430",
+    "altar: no horizontal overflow 430x760",
+    "summon category and permanent contract artwork 430",
+    "contract: no horizontal overflow 430x760",
+    "experience: no horizontal overflow 430x760",
+    "memory: no horizontal overflow 430x760",
+    "three dedicated memory scenes 430",
+    "archive: no horizontal overflow 430x760",
+    "archive tabs navigate 430",
+    "battle memory retains four enemies and cost 430",
+    "skills: no horizontal overflow 1280x800",
+    "final skill and all badges visible inside cards 1280",
+    "skill filter still hides other categories 1280",
+    "home: no horizontal overflow 1280x800",
+    "home diagram stays clear of formation banner 1280",
+    "attributes: no horizontal overflow 1280x800",
+    "settings: no horizontal overflow 1280x800",
+    "name input and save button fit 1280",
+    "altar: no horizontal overflow 1280x800",
+    "summon category and permanent contract artwork 1280",
+    "contract: no horizontal overflow 1280x800",
+    "experience: no horizontal overflow 1280x800",
+    "memory: no horizontal overflow 1280x800",
+    "three dedicated memory scenes 1280",
+    "archive: no horizontal overflow 1280x800",
+    "archive tabs navigate 1280",
+    "battle memory retains four enemies and cost 1280",
+    "last eligible skill can be equipped through native UI"
+  ],
+  "errors": [],
+  "missing": [],
+  "metrics": {
+    "skills-393": {
+      "last": {
+        "top": 431.9375,
+        "bottom": 589.625
+      },
+      "body": {
+        "top": 124,
+        "bottom": 616
+      },
+      "footer": 628,
+      "inside": true,
+      "cards": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    "home-393": {
+      "a": {
+        "top": 205.1875,
+        "bottom": 323.796875,
+        "left": 272.171875,
+        "right": 377.28125
+      },
+      "b": {
+        "top": 327.59375,
+        "bottom": 482.390625,
+        "left": 311.265625,
+        "right": 385.140625
+      },
+      "separate": true
+    },
+    "skills-375": {
+      "last": {
+        "top": 251.9375,
+        "bottom": 409.625
+      },
+      "body": {
+        "top": 124,
+        "bottom": 436
+      },
+      "footer": 448,
+      "inside": true,
+      "cards": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    "home-375": {
+      "a": {
+        "top": 159.59375,
+        "bottom": 248.546875,
+        "left": 281.171875,
+        "right": 360
+      },
+      "b": {
+        "top": 288.390625,
+        "bottom": 430.390625,
+        "left": 297.015625,
+        "right": 367.5
+      },
+      "separate": true
+    },
+    "skills-430": {
+      "last": {
+        "top": 472.4375,
+        "bottom": 630.125
+      },
+      "body": {
+        "top": 98,
+        "bottom": 656
+      },
+      "footer": 668,
+      "inside": true,
+      "cards": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    "home-430": {
+      "a": {
+        "top": 216.59375,
+        "bottom": 341.796875,
+        "left": 301.859375,
+        "right": 412.8125
+      },
+      "b": {
+        "top": 349.59375,
+        "bottom": 523.59375,
+        "left": 343.15625,
+        "right": 421.40625
+      },
+      "separate": true
+    },
+    "skills-1280": {
+      "last": {
+        "top": 524.9375,
+        "bottom": 666.125
+      },
+      "body": {
+        "top": 102,
+        "bottom": 692
+      },
+      "footer": 704,
+      "inside": true,
+      "cards": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    "home-1280": {
+      "a": {
+        "top": 228,
+        "bottom": 359.8125,
+        "left": 872.8125,
+        "right": 989.609375
+      },
+      "b": {
+        "top": 368,
+        "bottom": 542,
+        "left": 866.5,
+        "right": 1004.8125
+      },
+      "separate": true
+    }
+  }
+}

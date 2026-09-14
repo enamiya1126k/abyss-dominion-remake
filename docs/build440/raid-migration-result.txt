@@ -1,0 +1,16 @@
+✔ all three newly spawned campaigns have exactly 50000000 HP (1.018728ms)
+✔ resize keeps actual 14550631 damage, ranking and contribution; it is idempotent (1.559829ms)
+✔ existing revival is not granted twice and damage can exhaust new HP (0.409733ms)
+✔ shield damage is retained, including damage beyond the new shield size (0.246755ms)
+✔ restart migrates live battle without consuming attempts or changing issued offline tickets (16.849823ms)
+✔ failed migration preserves persisted ledger and disables changes until retry (5.254902ms)
+✔ already enough damage completes once, keeps pending ticket settlement and no invented final hitter (25.808381ms)
+✔ old issued replay records remain deterministic across resize (20.567425ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 295.973792

@@ -1,0 +1,8 @@
+[
+  "src/main.js",
+  "src/core/config.js",
+  "src/ui/components/AttributeVisual.js",
+  "src/worldRaid/WorldRaidBalance440.js",
+  "online-server/src/WorldRaidStore428.js",
+  "src/worldRaid/WorldRaidOfflineCache430.js"
+]

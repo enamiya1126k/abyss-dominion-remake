@@ -1,0 +1,11 @@
+[
+  "index.html",
+  "online-server/server.js",
+  "online-server/src/WorldRaidStore428.js",
+  "src/core/config.js",
+  "src/main.js",
+  "src/worldRaid/WorldRaidOfflineCache430.js",
+  "tests/build437-raid.test.mjs",
+  "tools/build430/native-source-map.json",
+  "tools/build430/source-identity.json"
+]

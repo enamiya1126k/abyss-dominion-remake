@@ -1,0 +1,50 @@
+[
+  {
+    "id": "summon-monsters",
+    "prompt": "A mysterious obsidian egg with a violet glowing fissure hovers on an ancient summoning pedestal at the RIGHT THIRD. Ethereal silhouettes of small magical beasts only in the distant background. Stone summoning chamber, violet sparks, delicate gold floor sigils.",
+    "asset": "assets/ui/build440/summon-monsters.webp",
+    "method": "image_gen / imagegen, resized to width 1200 and WebP quality 86 using Sharp; no new attribute symbols"
+  },
+  {
+    "id": "summon-equipment",
+    "prompt": "A majestic sword and shield of dark steel with sapphire jewels stand at the RIGHT THIRD in an ancient underground forge. Low amber furnace fire and black stone, weapon racks in soft focus.",
+    "asset": "assets/ui/build440/summon-equipment.webp",
+    "method": "image_gen / imagegen, resized to width 1200 and WebP quality 86 using Sharp; no new attribute symbols"
+  },
+  {
+    "id": "summon-contract",
+    "prompt": "An exquisite enchanted sword floats above an unrolled contract parchment with a wax seal at the RIGHT THIRD. Arcane golden filament binds the weapon to the seal, black and burgundy sanctuary, no readable script.",
+    "asset": "assets/ui/build440/summon-contract.webp",
+    "method": "image_gen / imagegen, resized to width 1200 and WebP quality 86 using Sharp; no new attribute symbols"
+  },
+  {
+    "id": "summon-experience",
+    "prompt": "A cluster of luminous violet and cyan experience crystals floating above a small gilded receptacle at the RIGHT THIRD, a quiet alchemist's laboratory, faint constellations of purple energy.",
+    "asset": "assets/ui/build440/summon-experience.webp",
+    "method": "image_gen / imagegen, resized to width 1200 and WebP quality 86 using Sharp; no new attribute symbols"
+  },
+  {
+    "id": "memory-battle",
+    "prompt": "An ancient bronze and black stone magical mirror showing faint crossed swords and distant silhouettes of four foes at the RIGHT THIRD. Violet floor sigil, fragmented memories like tiny silver shards, somber battleground reflected inside mirror.",
+    "asset": "assets/ui/build440/memory-battle.webp",
+    "method": "image_gen / imagegen, resized to width 1200 and WebP quality 86 using Sharp; no new attribute symbols"
+  },
+  {
+    "id": "memory-archive",
+    "prompt": "An open ancient black leather prophecy book on a brass lectern at the RIGHT THIRD of a vaulted dark library. Fine gold leaf, candlelit shelves, violet stardust rising from pages. No readable writing.",
+    "asset": "assets/ui/build440/memory-archive.webp",
+    "method": "image_gen / imagegen, resized to width 1200 and WebP quality 86 using Sharp; no new attribute symbols"
+  },
+  {
+    "id": "memory-chapter2",
+    "prompt": "A luminous fractured doorway to a distant otherworldly ruined city at the RIGHT THIRD, deep blue night, spectral violet trees and amber stars, echoes of a shattered world. Gothic fantasy.",
+    "asset": "assets/ui/build440/memory-chapter2.webp",
+    "method": "image_gen / imagegen, resized to width 1200 and WebP quality 86 using Sharp; no new attribute symbols"
+  },
+  {
+    "id": "settings",
+    "prompt": "An antique celestial astrolabe and folded traveller's map at the RIGHT THIRD on a black carved wood desk. Bronze mechanisms, subtle purple fabric and warm candlelight. A quiet elegant chamber of a dark fantasy castle.",
+    "asset": "assets/ui/build440/settings.webp",
+    "method": "image_gen / imagegen, resized to width 1200 and WebP quality 86 using Sharp; no new attribute symbols"
+  }
+]

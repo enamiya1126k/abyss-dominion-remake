@@ -1,0 +1,111 @@
+/* Build440: scene-specific artwork; controls and content keep native structure. */
+:root{--art-monsters440:url('../../assets/ui/build440/summon-monsters.webp');--art-equipment440:url('../../assets/ui/build440/summon-equipment.webp');--art-contract440:url('../../assets/ui/build440/summon-contract.webp');--art-exp440:url('../../assets/ui/build440/summon-experience.webp');--art-battle440:url('../../assets/ui/build440/memory-battle.webp');--art-archive440:url('../../assets/ui/build440/memory-archive.webp');--art-chapter440:url('../../assets/ui/build440/memory-chapter2.webp');--art-settings440:url('../../assets/ui/build440/settings.webp')}
+
+/* A single scrolling body prevents the last skill being clipped by the footer.
+   Auto-sized grid rows also keep long effects and equipped-slot badges inside. */
+#app .skill-picker-modal-v2>.game-modal-card{display:flex!important;flex-direction:column!important;max-height:calc(100dvh - 24px)!important;min-height:0!important;overflow:hidden!important}
+#app .skill-picker-modal-v2 .game-modal-card>h2,#app .skill-picker-modal-v2 .game-modal-card>[data-modal-primary]{flex:0 0 auto!important}
+#app .skill-picker-modal-v2 .game-modal-body{flex:1 1 auto!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch;padding-bottom:18px!important;scroll-padding-bottom:18px}
+#app .skill-picker-modal-v2 .skill-slot-picker-v2{display:block!important;height:auto!important;max-height:none!important;overflow:visible!important}
+#app .skill-picker-modal-v2 .skill-picker-filters{position:relative!important;top:auto!important;flex-wrap:wrap;gap:6px}
+#app .skill-picker-modal-v2 .skill-picker-card-list{display:grid!important;grid-auto-rows:max-content!important;gap:10px!important;height:auto!important;max-height:none!important;overflow:visible!important;padding-bottom:8px!important}
+#app .skill-picker-modal-v2 .skill-picker-card{display:grid!important;grid-template-columns:22px minmax(0,1fr)!important;grid-template-rows:auto auto auto auto!important;height:auto!important;max-height:none!important;min-height:0!important;overflow:visible!important;row-gap:5px!important;padding:13px 12px!important;align-content:start!important}
+#app .skill-picker-modal-v2 .skill-picker-card p{white-space:normal!important;overflow:visible!important;display:block!important;-webkit-line-clamp:unset!important;max-height:none!important;margin:0!important;line-height:1.5!important}
+#app .skill-picker-modal-v2 .skill-picker-chips{display:flex!important;flex-wrap:wrap!important;gap:4px!important;min-width:0!important}
+#app .skill-picker-modal-v2 .skill-slot-state438{position:static!important;transform:none!important;margin:0!important;justify-self:start;max-width:100%;white-space:normal!important}
+
+/* Summons: different artwork for banner, monster, gear, contract and training. */
+#app .gacha-modal-v2 .gacha-category-card>.gacha-category-art{display:none!important}
+#app .gacha-modal-v2 .gacha-category-card>div{max-width:74%!important}
+#app .gacha-modal-v2 .gacha-category-card>img.gacha-banner-art435{object-position:70% 55%!important}
+#app .gacha-modal-v2 .gacha-category-card::after{content:'';position:absolute;inset:0;pointer-events:none;border:1px solid #b49158;box-shadow:inset 0 0 0 4px #08070b88}
+#app [data-permanent-signature],#app [data-weekday-gacha='signature'],#app [data-summon-art440='signature']{--scene440:var(--art-contract440)}
+#app [data-weekday-gacha='experience'],#app [data-summon-art440='experience']{--scene440:var(--art-exp440)}
+#app [data-weekday-gacha='abyss'],#app [data-summon-art440='abyss'],#app [data-summon-art440='monster']{--scene440:var(--art-monsters440)}
+#app [data-summon-art440='equipment']{--scene440:var(--art-equipment440)}
+#app .game-modal.gacha-modal-v2 .game-modal-card .game-modal-body button.guerrilla-entry{border-image:var(--frame438) 110 / 8px stretch!important;background:linear-gradient(90deg,#09070d5e,#09070d22),var(--scene440,var(--art-monsters440)) 72% 55%/cover no-repeat!important;box-shadow:inset 0 0 18px #0009,0 3px 9px #0008!important;text-shadow:0 2px 4px #000!important}
+#app .game-modal.gacha-modal-v2 .game-modal-card .game-modal-body button.guerrilla-entry::before,#app .game-modal.gacha-modal-v2 .game-modal-card .game-modal-body button.guerrilla-entry::after{display:none!important}
+#app .game-modal.gacha-modal-v2 .game-modal-card .game-modal-body button.guerrilla-entry small{color:#d9d0c1!important;line-height:1.5!important}
+#app .game-modal.gacha-modal-v2 .game-modal-card .game-modal-body button.guerrilla-entry em{background:#08070ed9!important;border-color:#c5a267!important;color:#ffe7b2!important}
+#app [data-summon-art440] .gacha-count-copy{border-image:var(--frame438) 110 / 8px stretch!important;background:linear-gradient(90deg,#09070eab,#09070e99),var(--scene440,var(--art-contract440)) 70% center/cover no-repeat!important;box-shadow:inset 0 0 20px #0006!important;padding:18px!important;text-shadow:0 2px 3px #000}
+#app [data-summon-art440] .gacha-count-copy :is(p,small){color:#e1d8cc!important;line-height:1.65!important;overflow-wrap:anywhere}
+#app [data-summon-art440] .gacha-count-copy h3{color:#ffe3a9!important}
+#app [data-summon-art440] .gacha-count-copy strong{color:#ffd780!important}
+#app .weekday-gacha-calendar>span{border-image:var(--frame438) 110 / 5px stretch!important;background:linear-gradient(90deg,#09070ddb,#09070d99),var(--art-exp440) center/cover!important}
+#app .weekday-gacha-calendar>span:nth-child(2){background-image:linear-gradient(90deg,#09070ddb,#09070d99),var(--art-contract440)!important}
+#app .weekday-gacha-calendar>span:nth-child(3){background-image:linear-gradient(90deg,#09070ddb,#09070d99),var(--art-monsters440)!important}
+
+/* Memory hub: three dedicated scenes in the existing three choices. */
+#app .game-modal.memory-archive-hub-modal .game-modal-body .memory-archive-hub>button[data-memory-room='battle']{--scene440:var(--art-battle440)}
+#app .game-modal.memory-archive-hub-modal .game-modal-body .memory-archive-hub>button[data-memory-room='story']{--scene440:var(--art-archive440)}
+#app .game-modal.memory-archive-hub-modal .game-modal-body .memory-archive-hub>button[data-memory-room='chapterTwo']{--scene440:var(--art-chapter440)}
+#app .game-modal.memory-archive-hub-modal .game-modal-body .memory-archive-hub>button[data-memory-room]{border-image:var(--frame438) 110 / 8px stretch!important;background:linear-gradient(90deg,#09070d65,#09070d30),var(--scene440) 75% center/cover no-repeat!important;box-shadow:0 3px 9px #0007!important;text-shadow:0 2px 3px #000}
+#app .game-modal.memory-archive-hub-modal .game-modal-body .memory-archive-hub>button[data-memory-room]>span{background:var(--scene440) 83% 52%/350% auto no-repeat!important;border:1px solid #bd985c!important;box-shadow:inset 0 0 10px #0009,0 0 8px #000!important;font-size:0!important;color:transparent!important}
+#app .game-modal.memory-archive-hub-modal .game-modal-body .memory-archive-hub>button[data-memory-room]>span>*{visibility:hidden}
+#app .game-modal.memory-archive-hub-modal .game-modal-body .memory-archive-hub>button[data-memory-room] em{color:#dad1c3!important}
+#app .game-modal.memory-archive-hub-modal .game-modal-body .memory-archive-hub>button[data-memory-room] strong{color:#ffedc4!important;text-shadow:0 2px 4px #000,0 0 5px #000}
+#app .battle-memory-preview{border-image:var(--frame438) 110 / 10px stretch!important;background:linear-gradient(#0b0810b3,#0b0810dd),var(--art-battle440) 70% center/cover!important;box-shadow:inset 0 0 18px #0007}
+#app .battle-memory-enemy{border-image:var(--frame438) 110 / 6px stretch!important;background:linear-gradient(120deg,#17101ee8,#09080de8)!important;box-shadow:inset 0 0 18px #86714222}
+#app .battle-memory-enemy.boss{box-shadow:inset 0 0 18px #bf872d44!important}
+#app .battle-memory-cost{border-color:#977a4b!important;background:linear-gradient(90deg,#49301c99,#130d1dbb)!important}
+#app .battle-memory-preview>p{font-size:14px!important;line-height:1.7!important;color:#ece2d1!important}
+
+/* Attribute artwork stays native; only the diagram geometry changes. */
+.attribute-orbit440{position:relative!important;display:block!important;aspect-ratio:280/316;width:100%;max-width:280px;margin:auto;isolation:isolate;background:none!important;border:0!important;box-shadow:none!important}
+.attribute-orbit440 .attribute-arrows440{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:0;pointer-events:none}
+.attribute-orbit440 .attribute-node440{position:absolute;left:var(--x440);top:var(--y440);width:20%;aspect-ratio:1;transform:translate(-50%,-50%);display:grid;place-items:center;z-index:1;filter:drop-shadow(0 1px 2px #000)}
+.attribute-orbit440 .attribute-node440 .attribute-pixel-art{width:100%!important;height:100%!important;max-width:none!important;filter:drop-shadow(0 0 1px #000)!important}
+.attribute-orbit440 .attribute-neutral440{width:13%;opacity:.9}
+
+/* Settings: dimensional black/gold surfaces, with a compact usable name form. */
+#app .settings-screen-v3{background:linear-gradient(#08070ceb,#08070cf5),var(--art-settings440) top right/cover fixed!important}
+#app .settings-screen-v3 .settings-hero-v3{border-image:var(--frame438) 110 / 9px stretch!important;background:linear-gradient(90deg,#08070dd9,#08070d55),var(--art-settings440) 75% 42%/cover!important;box-shadow:0 4px 14px #0008}
+#app .settings-screen-v3 .settings-page-v3> :is(form,section,.settings-control-card-v3,.settings-audio-mix-v3,.settings-tutorial-v3,.serial-code-panel,.settings-version-plaque-v3){border-image:var(--frame438) 110 / 8px stretch!important;border-radius:0!important;background:linear-gradient(115deg,#17101de8,#08070fe8),var(--art-settings440) center/cover!important;box-shadow:0 4px 12px #0008!important}
+#app .settings-screen-v3 .player-name-form363{padding:18px 16px!important;min-height:0!important}
+#app .settings-screen-v3 .player-name-form363 header label{font-size:24px!important;line-height:1.4!important;color:#f7dfaa}
+#app .settings-screen-v3 .player-name-form363>p{font-size:13px!important;line-height:1.65!important;margin:10px 0!important}
+#app .settings-screen-v3 .player-name-form363>[data-player-name-status]:empty{margin:0!important;min-height:0!important}
+#app .settings-screen-v3 .player-name-controls363{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:8px!important;align-items:stretch}
+#app .settings-screen-v3 .player-name-controls363 input{min-width:0!important;width:100%!important;font-size:16px!important;background:#08070ddd!important;border-color:#917341!important;color:#f5e6c9!important;padding:10px!important}
+#app .settings-screen-v3 .player-name-controls363 button{padding:10px 12px!important;min-width:0!important;font-size:13px!important;white-space:nowrap;min-height:44px}
+#app .settings-screen-v3 :is(.player-name-controls363 button,#backHome,#openTutorialBook){border-image:var(--button438) 95 / 8px stretch!important;background:linear-gradient(#352515,#100c0a)!important;color:#ffe7b2!important;box-shadow:inset 0 1px #c4a26455!important}
+#app .settings-screen-v3 .home-skin-settings400>header p{font-size:13px!important;line-height:1.7!important}
+#app .settings-screen-v3 .home-skin-preview400{gap:14px!important}
+#app .settings-screen-v3 .home-skin-preview-art400{border:1px solid #b4945e!important;box-shadow:0 0 0 3px #08070d,inset 0 0 12px #0009,0 3px 12px #0008!important}
+#app .settings-screen-v3 .home-skin-choice400{border-radius:0!important;border-color:#6d583b!important;box-shadow:inset 0 0 12px #000!important}
+#app .settings-screen-v3 .home-skin-choice400.is-selected{border-color:#edd69a!important;box-shadow:0 0 9px #d1a75855!important}
+
+/* Archives: chapter art in the existing tab/list geometry; no new navigation. */
+#app .story-archive-screen{--chapter-scene440:var(--art-archive440);background:linear-gradient(#09070ddd,#09070df2),var(--art-archive440) center/cover fixed!important}
+#app .story-archive-screen[data-story-archive-category='chapterTwo']{--chapter-scene440:var(--art-chapter440)}
+#app .story-archive-screen[data-story-archive-category='heroes']{--chapter-scene440:var(--art-battle440)}
+#app .story-archive-screen[data-story-archive-category='demon']{--chapter-scene440:var(--art-contract440)}
+#app .story-archive-header{border-image:var(--frame438) 110 / 9px stretch!important;background:linear-gradient(90deg,#09070dc9,#09070d77),var(--art-archive440) 75% 55%/cover!important;box-shadow:0 4px 12px #0008!important}
+#app .story-archive-header h1{font-size:clamp(18px,5vw,30px)!important;line-height:1.35!important}
+#app .story-archive-header [data-story-archive-back]{background:linear-gradient(#292017,#0b090e)!important;border:1px solid #a48a5f!important;border-radius:0!important;flex-shrink:0}
+#app .story-archive-header [data-story-archive-back] i{display:block!important;width:12px!important;height:12px!important;border:0!important;border-left:3px solid #edd398!important;border-bottom:3px solid #edd398!important;transform:rotate(45deg)!important;margin:auto!important}
+#app .story-archive-header [data-story-archive-back] i::before,#app .story-archive-header [data-story-archive-back] i::after{display:none!important}
+#app .story-archive-progress{min-width:0!important}
+#app .story-archive-progress>b{white-space:nowrap!important;font-size:20px!important}
+#app .story-archive-progress small{display:inline!important;font-size:12px!important}
+#app .story-archive-tabs button{border-image:var(--frame438) 110 / 6px stretch!important;background:linear-gradient(90deg,#09070dbb,#09070d77),var(--art-archive440) 75% center/cover!important;box-shadow:0 2px 6px #0007!important}
+#app .story-archive-tabs [data-story-archive-category-button='heroes']{background-image:linear-gradient(90deg,#09070dbb,#09070d77),var(--art-battle440)!important}
+#app .story-archive-tabs [data-story-archive-category-button='chapterTwo']{background-image:linear-gradient(90deg,#09070dbb,#09070d77),var(--art-chapter440)!important}
+#app .story-archive-tabs button.is-active{box-shadow:inset 0 0 0 1px #ebca80,0 0 10px #a786423b!important;filter:brightness(1.15)}
+#app .story-archive-card{border-image:var(--frame438) 110 / 7px stretch!important;background:linear-gradient(90deg,#09070dcf,#09070d88),var(--chapter-scene440) 75% center/cover!important;box-shadow:0 3px 9px #0007!important}
+#app .story-archive-card :is(b,em){text-shadow:0 2px 4px #000!important}
+#app .story-archive-card-copy em{color:#c8bdad!important}
+#app .story-archive-card.is-locked{filter:grayscale(.7);opacity:.65}
+#app .story-archive-card button{border-image:var(--frame438) 110 / 5px stretch!important;background:linear-gradient(#3a2b1e,#151017)!important;border-radius:0!important;color:#ffe7b2!important}
+#app .story-archive-footer{border-color:#665335!important;background:#100c17c9!important}
+
+/* Keep the borderless home diagram inside the space above the formation banner. */
+#app .home-attribute-orbit{width:min(29%,14.6dvh,172px)!important;top:28.5%!important;height:auto!important;aspect-ratio:280/316!important;display:block!important;padding:0!important;right:4%!important}
+#app .home-attribute-orbit>small,#app .home-attribute-orbit>em{display:none!important}
+#app .home-attribute-orbit>.attribute-orbit440{width:100%!important;height:auto!important;max-width:none!important}
+#app .skill-picker-modal-v2 .skill-picker-card-head b{font-size:14px!important;line-height:1.4!important}
+#app .skill-picker-modal-v2 .skill-picker-card-head :is(small,em){font-size:10px!important}
+#app .skill-picker-modal-v2 .skill-picker-card p{font-size:11px!important}
+#app .skill-picker-modal-v2 .skill-picker-chips span{font-size:9px!important;line-height:1.4!important}
+
+#app .gacha-modal-v2 .guerrilla-entry:active,#app .memory-archive-hub>button:active{filter:brightness(1.15)}
