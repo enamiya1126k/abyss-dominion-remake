@@ -29,7 +29,7 @@ test('summon maximum follows actual rounded price, capacity and empty resources,
 test('manual count rejects zero, empty, fractional, nonfinite and unaffordable values without clamping or charging',()=>{for(const n of ['',0,-1,1.5,Infinity,NaN,'abc',235])assert.equal(validSummonCount439(n,234),null);assert.equal(validSummonCount439('234',234),234);});
 test('new summon levels include both endpoints, floor odd values, and never modify owned items',()=>{
  const s={player:{maxFloor:101},monsters:[{level:10000}],equipment:[{level:5000}]},before=structuredClone(s);
- assert.equal(summonLevel439(s,'monster',()=>0),1);assert.equal(summonLevel439(s,'monster',()=>1),151);assert.equal(summonLevel439(s,'equipment',()=>1),202);assert.deepEqual(s,before);assert.equal(summonLevel439({player:{maxFloor:0}},'monster',()=>0),1);
+ assert.equal(summonLevel439(s,'monster',()=>0),1010);assert.equal(summonLevel439(s,'monster',()=>1),1515);assert.equal(summonLevel439(s,'equipment',()=>1),2020);assert.deepEqual(s,before);assert.equal(summonLevel439({player:{maxFloor:0}},'monster',()=>0),10);
 });
 for(const reward of ['monster','weapon','armor','accessory'])test(`floor ${reward} exchange costs existing fragments plus 5 keys; insufficient keys cannot grant`,()=>{
  const s=fixture(),id=FLOOR_BOSS_CATALOG[0].id;recordFloorBossDiscovery(s,id);s.floorBossChallenges.fragments[id]=100;s.inventory.abyssKeys=4;assert.equal(spendFloorBossFragments(s,id,reward).ok,false);assert.equal(s.floorBossChallenges.fragments[id],100);assert.equal(s.inventory.abyssKeys,4);
@@ -56,7 +56,7 @@ test('training cannot spend while exploring, with missing crystal stock, or on u
  s.inventory.captureCrystals=100;s.player.inRun=true;assert.equal(captureTrainingOffer439(s,m.id,'affection').ok,false);
 });
 test('second chapter gacha uses the same floor level range without changing rarity distribution or price',()=>{
- const s=fixture();s.player.maxFloor=100;s.campaign100.finalCompleted=true;s.player.crystals=1000;const r=drawChapterTwoGacha397(s,10,{random:()=>.999999});assert.ok(r.ok);assert.equal(s.player.crystals,0);for(const item of r.results){assert.equal(item.item.level,150);assert.equal(item.rarity,'神話');}
+ const s=fixture();s.player.maxFloor=100;s.campaign100.finalCompleted=true;s.player.crystals=1000;const r=drawChapterTwoGacha397(s,10,{random:()=>.999999});assert.ok(r.ok);assert.equal(s.player.crystals,0);for(const item of r.results){assert.equal(item.item.level,1500);assert.equal(item.rarity,'神話');}
 });
 test('role list includes unequipped learned skills, exposes explicit actions only in editable mode, and remains read-only',()=>{
  const s=fixture(),m=createMonster('ch2_shion',{level:1000});m.equippedSkills=[];m.skillLoadoutInitialized=true;s.monsters=[m];s.party=[];const before=JSON.stringify(s),entry=roleCandidates436(roleRoster436(s),'healDown')[0];assert.ok(entry.matches.some(r=>r.learned&&!r.equipped));assert.match(roleDetail436(entry,'healDown',{editable:true}),/data-role-equip439/);assert.doesNotMatch(roleDetail436(entry,'healDown'),/data-role-equip439/);assert.equal(JSON.stringify(s),before);

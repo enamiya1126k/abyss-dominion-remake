@@ -1,0 +1,12 @@
+/* Place the existing unframed diagram on the notice / formation centreline. */
+#app .home-attribute-orbit{right:calc(11% - min(15%,7.9dvh,92px))!important;top:29.5%!important;width:min(30%,15.8dvh,184px)!important}
+#app .raid-lobby-ranking441{display:grid;gap:8px;padding:5px 0 12px;overflow:visible}
+#app .raid-lobby-ranking441 .raid-ranking-row439{width:100%;min-height:94px;margin:0!important}
+#app .raid-lobby-ranking441 .power-ranking-identity b{font-size:clamp(11px,3.2vw,17px)!important}
+#app .raid-lobby-ranking441 .power-ranking-identity small{font-size:10px!important}
+#app .raid-lobby-ranking441 .raid-ranking-row439>strong{font-size:clamp(13px,3.8vw,22px)!important}
+#app .signature-weapon-badge small{line-height:1.5;white-space:normal}
+#app .magic-circle-list-art img[src*='/build441/'],#app .magic-circle-equipped img[src*='/build441/']{image-rendering:auto;filter:drop-shadow(0 0 4px #947cf455)}
+#app .magic-circle .magic-circle-frame[src*='/build441/']{image-rendering:auto}
+.battle-arena{isolation:isolate}
+.battle-effects441{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;z-index:16!important;pointer-events:none!important;contain:strict;border:0!important;background:transparent!important}

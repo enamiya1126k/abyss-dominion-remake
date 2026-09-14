@@ -1,8 +1,10 @@
 import{aggregateAffixes}from"../data/equipmentAffixes.js?v=3.1.55-build375";
-export function equipmentAffixesWithSeries(items,seriesEffects){
+import{signatureEquipmentOwnerId,signatureEquipmentMatchesMonster}from"./SignatureWeaponSystem.js";
+export function equipmentAffixesWithSeries(items,seriesEffects,monster=null){
  const result=aggregateAffixes(items);
  const appliedAuthorities=new Set();
  for(const item of items??[]){
+  if(monster&&signatureEquipmentOwnerId(item)&&!signatureEquipmentMatchesMonster(item,monster))continue;
   // Two different weapon instances may share one authored authority. Their
   // normal stats/affixes both count, but the named fixed authority only fires
   // once so equipping a duplicate in both hands cannot double it.

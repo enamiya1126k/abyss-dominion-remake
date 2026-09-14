@@ -1,0 +1,22 @@
+[
+  "src/ui/screens/EquipmentScreen.js",
+  "src/services/EquipmentLoadoutSystem.js",
+  "src/online/OnlinePartyClient.js",
+  "src/data/chapterTwoRelics394.js",
+  "src/core/config.js",
+  "src/data/magicCircles398.js",
+  "src/main.js",
+  "src/ui/BattleEffects441.js",
+  "online-server/src/WorldRaidCoordinator428.js",
+  "online-server/src/WorldRaidCoordinator430.js",
+  "src/core/SignatureWeaponSystem.js",
+  "src/core/AutoEquipment441.js",
+  "src/core/EquipmentAffixSystem.js",
+  "src/core/SummonLimits439.js",
+  "online-server/src/WorldRaidCoordinator429.js",
+  "src/worldRaid/WorldRaidClient428.js",
+  "src/worldRaid/WorldRaidView432.js",
+  "src/worldRaid/WorldRaidRankingView429.js",
+  "src/ui/screens/OnlinePartyScreen.js",
+  "src/worldRaid/WorldRaidOfflineCache430.js"
+]

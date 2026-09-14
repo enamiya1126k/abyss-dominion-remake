@@ -97,7 +97,7 @@ export class WorldRaidClient428{
   if(!this.connected()||!this.transport.capabilities.has('worldRaidRewardsV1'))return false;
   this.rankSequence429=sequence;this.rankPage429=page;this.rankRequest429=requestId();
   clearTimeout(this.rankTimer429);this.rankTimer429=setTimeout(()=>{this.rankRequest429=null;this.error='順位を取得できませんでした。再確認してください。';this.render();},8000);this.rankTimer429.unref?.();
-  this.transport._send('worldRaidRanking429',{requestId:this.rankRequest429,...(sequence==null?{}:{sequence}),page});return true;
+  this.transport._send('worldRaidRanking429',{playerName441:buildOnlinePartyProfile(this.getState()).displayName,requestId:this.rankRequest429,...(sequence==null?{}:{sequence}),page});return true;
  }
  receiveRanking429(message){
   if(message.requestId!==this.rankRequest429)return;

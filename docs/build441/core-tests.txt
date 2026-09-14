@@ -1,0 +1,42 @@
+✔ summon maximum follows actual rounded price, capacity and empty resources, including counts above 100 (1.067895ms)
+✔ manual count rejects zero, empty, fractional, nonfinite and unaffordable values without clamping or charging (0.250899ms)
+✔ new summon levels include both endpoints, floor odd values, and never modify owned items (0.817136ms)
+✔ floor monster exchange costs existing fragments plus 5 keys; insufficient keys cannot grant (7.781661ms)
+✔ floor weapon exchange costs existing fragments plus 5 keys; insufficient keys cannot grant (1.862798ms)
+✔ floor armor exchange costs existing fragments plus 5 keys; insufficient keys cannot grant (1.639861ms)
+✔ floor accessory exchange costs existing fragments plus 5 keys; insufficient keys cannot grant (1.24944ms)
+✔ abyss contract: keys 10, correct fragments, one atomic charge (1.951662ms)
+✔ abyss equipment: keys 10, correct fragments, one atomic charge (2.677631ms)
+✔ tenGod contract: keys 15, correct fragments, one atomic charge (1.082968ms)
+✔ tenGod equipment: keys 15, correct fragments, one atomic charge (1.708214ms)
+✔ affection training charges proportionally at cap and preserves current HP/MP and all existing levels (1.716196ms)
+✔ skill training works for learned unequipped skills, advances mastery, never increments actual uses (1.892924ms)
+✔ training cannot spend while exploring, with missing crystal stock, or on unlearned skill (1.05765ms)
+✔ second chapter gacha uses the same floor level range without changing rarity distribution or price (2.444578ms)
+✔ role list includes unequipped learned skills, exposes explicit actions only in editable mode, and remains read-only (4.59416ms)
+✔ raid ranking cards keep exact damage, ties, safe player names and real character art (12.635124ms)
+✔ online rank portraits survive disconnect without storing combat information (5.441552ms)
+✔ offline ticket preserves display portrait with unchanged verified replay and duplicate protection (22.748343ms)
+✔ all three newly spawned campaigns have exactly 50000000 HP (1.32164ms)
+✔ resize keeps actual 14550631 damage, ranking and contribution; it is idempotent (1.316101ms)
+✔ existing revival is not granted twice and damage can exhaust new HP (0.445364ms)
+✔ shield damage is retained, including damage beyond the new shield size (0.316148ms)
+✔ restart migrates live battle without consuming attempts or changing issued offline tickets (12.513921ms)
+✔ failed migration preserves persisted ledger and disables changes until retry (5.111563ms)
+✔ already enough damage completes once, keeps pending ticket settlement and no invented final hitter (25.832469ms)
+✔ old issued replay records remain deterministic across resize (14.538814ms)
+✔ foreign signature weapon survives normalization and reload with base stats but no unique skill, fixed effect or set effect (29.119631ms)
+✔ party recommendation reserves signature for owner, even when non-owner is processed first (27.888389ms)
+✔ very weak signature does not replace far stronger basic equipment (10.733197ms)
+✔ existing level rules and weapon category compatibility still apply (5.2952ms)
+✔ gacha floor100 endpoints are 1000–2000 and 1000–1500, including malformed random inputs (0.354907ms)
+✔ raid builder uses configured player name independently of selected character and empty party (7.811407ms)
+✔ authenticated ranking refresh replaces stale character name and persists without changing damage (2.12867ms)
+ℹ tests 34
+ℹ suites 0
+ℹ pass 34
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 730.953538

@@ -85,7 +85,7 @@ export function normalizeSignatureWeaponItem(item){
  if(weapon.skill)item.grantedSkillId=weapon.skill.id;
  normalizeEquipmentIdentity(item);return weapon
 }
-export function signatureWeaponGrantedSkill(item){return vaultSkill380(item)??normalizeSignatureWeaponItem(item)?.skill??null}
+export function signatureWeaponGrantedSkill(item,monster=null){if(monster&&signatureEquipmentOwnerId(item)&&!signatureEquipmentMatchesMonster(item,monster))return null;return vaultSkill380(item)??normalizeSignatureWeaponItem(item)?.skill??null}
 
 export function endgameSignatureEquipmentStats(ownerId,pieceIndex){
  const boss=ENDGAME_CHARACTERS[canonicalOwnerId(ownerId)];if(!boss)return null;

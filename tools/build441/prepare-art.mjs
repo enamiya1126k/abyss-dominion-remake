@@ -1,0 +1,4 @@
+import fs from'node:fs';import{createRequire}from'node:module';const require=createRequire(import.meta.url),sharp=require('/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/sharp');
+const assets=JSON.parse(fs.readFileSync('docs/build441/generated-assets.json'));
+for(const a of assets){const meta=await sharp(a.path).metadata();if(!meta.hasAlpha)throw Error('Missing alpha '+a.id);a.destination=`assets/magic-circles/build441/${a.id}.webp`;await sharp(a.path).resize(768,768,{fit:'contain',background:{r:0,g:0,b:0,alpha:0}}).webp({quality:88,alphaQuality:100}).toFile(a.destination);const stat=await sharp(a.destination).stats();a.bytes=fs.statSync(a.destination).size;a.alpha=stat.channels.at(-1);}
+fs.writeFileSync('docs/build441/generated-assets.json',JSON.stringify(assets,null,2)+'\n');console.log(assets.map(({id,bytes,alpha})=>({id,bytes,alphaMin:alpha.min,alphaMax:alpha.max})));

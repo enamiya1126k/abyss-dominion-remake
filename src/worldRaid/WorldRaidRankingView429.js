@@ -1,3 +1,8 @@
+export function worldRaidRankingCard441(row,{playerId=''}={}){
+  const rank=Math.max(1,Math.floor(Number(row.rank)||1)),self=row.playerId===playerId,portrait=row.portrait439;
+  return `<article class="power-ranking-row raid-ranking-row439 podium-${Math.min(rank,4)} ${self?'is-self':''}" aria-label="${rank}位 ${esc(row.name)} 累計ダメージ ${n(row.damage)}"><span class="power-ranking-position">${rank<=3?rank:`#${rank}`}</span><span class="power-ranking-avatar">${portrait?monsterVisual(portrait,'',{className:'power-ranking-monster-visual'}):'<span class="raid-portrait-placeholder439" aria-label="部隊の紋章"></span>'}</span><span class="power-ranking-identity"><small>${self?'YOU・':''}${esc(portrait?.name??'レイド参加者')}</small><b title="${esc(row.name)}">${esc(row.name)}</b><em>${row.lastHit?'最後の一撃':`挑戦 ${n(row.attempts)}回`}</em>${self?'<small>あなた</small>':''}</span><strong><small>累計ダメージ</small>${Number(n(row.damage)).toLocaleString("ja-JP")}</strong><i aria-hidden="true"></i></article>`;
+
+}
 import {monsterVisual} from '../ui/MonsterVisual.js';
 import {escapeOnlineHtml as esc} from '../ui/screens/OnlinePartyScreen.js';
 import {WORLD_RAID_RANK_REWARDS429,WORLD_RAID_PARTICIPATION429,WORLD_RAID_LAST_HIT429,worldRaidRewardBreakdown429,totalWorldRaidReward429} from './WorldRaidRewards429.js';
@@ -9,10 +14,7 @@ export function worldRaidRankingView429(data,{connected=false,supported=false,lo
  if(!supported)return '<p class="world-raid-notice428">ランキング・報酬はサーバー更新後に利用できます。</p>';
  if(!data)return `<p class="world-raid-notice428" role="status">${esc(error||(!connected?'接続後にランキングを確認できます。':'ランキングを読み込んでいます…'))}</p><button type="button" data-world-ranking-refresh429>再確認</button>`;
  const c=data.campaign,m=data.mine,r=data.myReward,parts=r?.breakdown??(m?worldRaidRewardBreakdown429(m.rank,false):[]),total=r?.reward??totalWorldRaidReward429(parts),earned=Boolean(r),confirmed=earned&&(r.acknowledgedAt!=null||received(r.rewardId));
- const rows=data.rows.map(row=>{
-  const rank=Math.max(1,Math.floor(Number(row.rank)||1)),self=row.playerId===playerId,portrait=row.portrait439;
-  return `<article class="power-ranking-row raid-ranking-row439 podium-${Math.min(rank,4)} ${self?'is-self':''}" aria-label="${rank}位 ${esc(row.name)} 累計ダメージ ${n(row.damage)}"><span class="power-ranking-position">${rank<=3?rank:`#${rank}`}</span><span class="power-ranking-avatar">${portrait?monsterVisual(portrait,'',{className:'power-ranking-monster-visual'}):'<span class="raid-portrait-placeholder439" aria-label="部隊の紋章"></span>'}</span><span class="power-ranking-identity"><small>${self?'YOU・':''}${esc(portrait?.name??'レイド参加者')}</small><b title="${esc(row.name)}">${esc(row.name)}</b><em>${row.lastHit?'最後の一撃':`挑戦 ${n(row.attempts)}回`}</em>${self?'<small>あなた</small>':''}</span><strong><small>累計ダメージ</small>${n(row.damage)}</strong><i aria-hidden="true"></i></article>`;
- }).join('');
+ const rows=data.rows.map(row=>worldRaidRankingCard441(row,{playerId})).join('');
  return `<section class="world-ranking429">${!connected?'<p class="world-raid-notice428">接続待ち・最後に取得した順位を表示中</p>':''}${error?`<p role="alert">${esc(error)}</p>`:''}
  <header><small>第${n(c.sequence)}戦・${c.completedAt?(c.provisional430?'討伐済み／オフライン結果を集計中':'討伐済み／順位確定'):'開催中／10秒ごとに更新'}</small><h2>${esc(c.bossName)}</h2></header>
  ${c.provisional430?`<p class="world-raid-notice428">順位・報酬は仮集計です。残りの結果が届くか、${new Date(c.settlementDeadline430).toLocaleString('ja-JP',{timeZone:'Asia/Tokyo'})}（日本時間）に確定します。</p>`:''}<nav class="world-history429" aria-label="ボスの切り替え"><button type="button" data-world-sequence429="${c.sequence-1}" ${c.sequence<=1||loading||!connected?'disabled':''}>前のボス</button><button type="button" data-world-sequence429="${data.latestSequence}" ${loading||!connected?'disabled':''}>開催中へ</button><button type="button" data-world-sequence429="${c.sequence+1}" ${c.sequence>=data.latestSequence||loading||!connected?'disabled':''}>次のボス</button></nav>

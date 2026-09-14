@@ -24,7 +24,7 @@ export function canEquipInSubslot(item,monster,subslot,{preserveExisting=false}=
  if(!item||!monster||!EQUIPMENT_SLOT_ORDER.includes(subslot))return false;
  if((Number(monster.level)||1)<(SLOT_UNLOCK_LEVEL[subslot]??1))return false;
  if(!preserveExisting&&(Number(monster.level)||1)<equipmentRequiredMonsterLevel(item))return false;
- if(signatureEquipmentOwnerId(item)&&!signatureEquipmentMatchesMonster(item,monster))return false;
+ if(item.slot!=="weapon"&&signatureEquipmentOwnerId(item)&&!signatureEquipmentMatchesMonster(item,monster))return false;
  return compatibleSubslots(item).includes(subslot);
 }
 

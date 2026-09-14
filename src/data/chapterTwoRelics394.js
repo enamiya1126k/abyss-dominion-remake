@@ -25,7 +25,7 @@ export const relicGrowth394=plus=>1+.25*Math.max(0,Math.min(30,Number(plus)||0))
 export const relicPercent394=n=>`${(n*100).toFixed(1).replace(/\.0$/,'')}%`;
 export function relicEffectText394(def,plus=0){return Object.entries(def.effects).map(([k,v])=>`${RELIC_EFFECT_LABELS394[k]} ${k==='guard'?'−':'+'}${relicPercent394(v*relicGrowth394(plus))}`).join(' ／ ');}
 export function relicItemText394(item){const d=relicById394(item?.chapterTwoRelic394);return d?`${relicEffectText394(d,item.plus)}${d.fixedEffects.healPower?' ／ HP回復量 +12%':''}${d.fixedEffects.mpCostReduction?' ／ MP消費 −12%':''}。条件付き効果は＋30まで成長。同じ品の固有效果は1個分（条件付き効果は最も高い＋値）。`:item?.fixedEffectText??'';}
-const circle=(area,key,name,glyph,tone,effects,summary)=>Object.freeze({id:`ch2_${key}394`,area,name,glyph,tone,effect:'chapterTwoRelic394',baseUpgrade:260000000,summary,effects:Object.freeze(effects),asset:`./assets/magic-circles/ch2_${key}394.svg`,frames:Object.freeze([`./assets/magic-circles/ch2_${key}394.svg`])});
+const circle=(area,key,name,glyph,tone,effects,summary)=>Object.freeze({id:`ch2_${key}394`,area,name,glyph,tone,effect:'chapterTwoRelic394',baseUpgrade:260000000,summary,effects:Object.freeze(effects),asset:`./assets/magic-circles/build441/ch2_${key}394.webp`,frames:Object.freeze([`./assets/magic-circles/build441/ch2_${key}394.webp`])});
 export const CHAPTER_TWO_CIRCLES394=Object.freeze([
  circle(0,'chain','鏡糸連環陣','連','rose',{chain:[.12,.24]},'同一ラウンドで、同じ敵への2撃目以降の直接与ダメージが増加。命中してHPを削った攻撃を数える。'),
  circle(1,'dream','夢喰封花陣','夢','violet',{sleep:[.25,.50]},'睡眠中の敵への直接与ダメージが増加。睡眠が解けると特効も終了。'),

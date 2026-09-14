@@ -1,5 +1,5 @@
 // Build398: chapter-II build choices; definitions contain no save or battle dependencies.
-const define=(key,name,glyph,tone,summary)=>Object.freeze({id:`ch2_${key}398`,name,glyph,tone,effect:`circle398_${key}`,baseUpgrade:260000000,summary,asset:`./assets/magic-circles/ch2_${key}398.svg`,frames:Object.freeze([`./assets/magic-circles/ch2_${key}398.svg`])});
+const define=(key,name,glyph,tone,summary)=>Object.freeze({id:`ch2_${key}398`,name,glyph,tone,effect:`circle398_${key}`,baseUpgrade:260000000,summary,asset:`./assets/magic-circles/build441/ch2_${key}398.webp`,frames:Object.freeze([`./assets/magic-circles/build441/ch2_${key}398.webp`])});
 export const MAGIC_CIRCLES398=Object.freeze([
  define('prism','異彩協奏陣','彩','rainbow','生存中の味方の属性が多いほど、装着者の直接攻撃を強化。同属性編成とは別の組み方を楽しむ陣。'),
  define('hex','百禍織刻陣','禍','violet','敵に残る状態異常の種類数で直接攻撃を強化。毒・火傷・睡眠などを重ね、攻撃役で刈り取る。'),

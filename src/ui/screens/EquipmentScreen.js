@@ -96,7 +96,7 @@ function itemAffixes(item,{compact=false}={}){
 }
 function itemFixedEffect(item){const text=relicItemText394(item);return text?`<div class="equipment-fixed-authority"><b>固有能力</b><span>${text}</span></div>`:""}
 function itemIdentityTags(item){const identity=equipmentIdentity(item),series=item.series?EQUIPMENT_SERIES[item.series]:null,slot=identity.subslot?screenSubslotLabel(identity.subslot):"武器";return`<span class="equipment-archetype-chip"><i>${slot}</i>${identity.label}</span>${series?`<span class="equipment-series-chip">◆ ${series.name}シリーズ</span>`:""}`}
-function signatureWeaponBadge(state,target,item){const resonance=signatureWeaponState(state,target,item);if(!resonance)return"";return`<div class="signature-weapon-badge ${resonance.active?"active":"inactive"}"><b>${resonance.status}</b><span>${resonance.definition.ownerName}専用・${resonance.definition.name}</span><small>${resonance.nextText}／${resonance.definition.description}</small></div>`}
+function signatureWeaponBadge(state,target,item){const resonance=signatureWeaponState(state,target,item);if(!resonance)return"";const owner=signatureEquipmentOwnerName(item),matches=signatureEquipmentMatchesMonster(item,target),active=matches&&item.equippedBy===target?.id;return`<div class="signature-weapon-badge ${active?"active":"inactive"}"><b>固有能力：${owner}のみ発動${item.equippedBy?active?"・発動中":"・未発動":""}</b><span>${resonance.definition.name}</span><small>${item.slot==="weapon"?"他の仲間も装備可能。本人以外は基本性能のみ。":""}${matches?resonance.nextText:""}</small></div>`}
 
 function equipmentCommand({label,icon="equipment",attributes="",tone="",note="",disabled=false}={}){
  return`<button type="button" class="equipment-command${tone?` tone-${tone}`:""}" ${attributes}${disabled?' disabled aria-disabled="true"':""}><i>${pixelIcon(icon)}</i><span><b>${label}</b>${note?`<small>${note}</small>`:""}</span></button>`;
@@ -187,7 +187,7 @@ function card(item,state,target,storage,{editing=false,selected=false,focused=fa
  }
  return`<article class="equipment-card ${selected?"selected":""} ${protectedItem?"protected-entry":""} ${focused?"focused-equipment":""}" data-equipment-card-id="${item.id}">
  ${editing&&inventory?`<label class="manage-check"><input type="checkbox" data-select-equipment-id="${item.id}" ${selected?"checked":""}><span></span></label>`:""}
-  <div class="equipment-card-identity">${equipmentVisual(item,{className:"equipment-list-art"})}<div class="spread">${coloredEquipmentName(item)}<span>${item.favorite?"★":""}${equipmentLockBadge404(item)}${item.ruleOverrides?.unsellable?"P":""}</span>${signatureEquipmentOwnerName(item)?`<small class="signature-owner-chip">${signatureEquipmentOwnerName(item)}専用</small>`:""}</div></div>
+  <div class="equipment-card-identity">${equipmentVisual(item,{className:"equipment-list-art"})}<div class="spread">${coloredEquipmentName(item)}<span>${item.favorite?"★":""}${equipmentLockBadge404(item)}${item.ruleOverrides?.unsellable?"P":""}</span>${signatureEquipmentOwnerName(item)?`<small class="signature-owner-chip">${signatureEquipmentOwnerName(item)}固有</small>`:""}</div></div>
   <div class="subline">
    <span class="equipment-level">Lv.${level} ∞</span> ${slotLabel(item.slot)} ${handLabel(item)} / ${itemStats(item)||"能力補正なし"}
    <span class="equipment-identity-chips">${itemIdentityTags(item)}</span>

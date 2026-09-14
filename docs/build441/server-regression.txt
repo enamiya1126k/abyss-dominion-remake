@@ -1,0 +1,34 @@
+✔ online attempts and reserved tickets use the same 3-per-day quota; retries do not reserve twice (13.705292ms)
+✔ JST midnight resets only the new day; old tickets remain charged to their issue day (4.847693ms)
+✔ reservation persistence failure changes neither quota nor tickets; same request succeeds on retry (2.399479ms)
+✔ manual and automatic offline combat replay identically after JSON checkpoint reload (31.00985ms)
+✔ result values and forged roster are ignored; only replayed commands determine accepted damage (7.114001ms)
+✔ duplicate uploads including concurrent arrivals settle a ticket exactly once (5.408352ms)
+✔ another account, unknown tickets, incomplete battle and invalid commands cannot affect the ledger (1.313597ms)
+✔ submit persistence failure rolls back HP, contribution, ticket receipt and rewards (8.635002ms)
+✔ late results rank on the original killed boss; next HP and original last-hit bonus remain intact (12.535122ms)
+✔ all outstanding tickets must settle or expire before rank rewards are fixed (7.952019ms)
+✔ expired uploads cannot change finalized ranks or get last-hit rewards; quota stays consumed (5.302351ms)
+✔ an offline finishing blow transitions boss once and waits for other outstanding tickets (4.799411ms)
+✔ server restart preserves tickets, seed, pending settlement and one-time result receipts (14.40461ms)
+✔ existing Build429 final rewards stay frozen during upgrade (23.311653ms)
+✔ 437 all three bosses allow living parties through round 10 and stop at 99 (116.69333ms)
+✔ old v1 and v2 ticket JSON replays remain at their original 10 rounds (9.556156ms)
+✔ 99-round manual play with speed changes exceeds old command cap and resumes identically within transport budget (215.679083ms)
+✔ online server stops only at 99, publishes the actual cap, and charges once (99.792353ms)
+✔ v3 offline submission is verified, persisted once, and duplicate submission cannot double damage (67.82118ms)
+✔ restarting with active online attempt extends its cap without rewriting issued v2 ticket or charging quota (5.787264ms)
+✔ boss one-time revival on round 98 keeps the living party fighting; round 99 still ends (2.124604ms)
+✔ defeat and retreat still finish before the limit (1.199064ms)
+✔ compact contribution keeps exact recorded numbers and original MVP weighting without modifying input (6.872447ms)
+✔ combined raid result shows legacy result round count, actual sync status, and no premature rewards (0.530313ms)
+✔ 437 cache includes added art and replay dispatcher; frozen legacy engine is not aliased (1.401991ms)
+✔ one combined result returns directly to the lobby for online and offline attempts (130.833361ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1076.991373

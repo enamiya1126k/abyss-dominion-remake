@@ -1,0 +1,154 @@
+[
+  {
+    "id": "ch2_chain394",
+    "prompt": "Use case: stylized-concept. Asset type: finished transparent 2D magic-circle sprite for an ornate dark fantasy Japanese RPG. Generate ONE square 1024x1024 production-quality asset. Top-down orthographic, perfectly circular outer silhouette, centered at 512,512, full circle contained within central 84% of canvas with generous transparent margins. Genuine alpha transparent background throughout exterior and gaps; no black square, no checkerboard, no scene, no ground, no cast shadow. Exquisite engraved dimensional metal, luminous crystalline inlays, crisp premium hand-painted game rendering, clear thick primary motifs readable at 80px icon size and detailed enough at 250px behind a character. Sparse short decorative rune strokes around rim, no readable text or letters. Controlled bloom directly around the magical strokes; mostly open negative space between rings, no opaque filled disc. Circular shape must stay complete, no cropped glow. Rich but disciplined contrast, well-defined major silhouette. Subject: A brilliant rose-magenta mirrored crystal spindle at the center, six angular mirrored petals interlocked by glowing threads, a continuous outer ring of interwoven silver chains; graceful precise symmetry, rose violet light. No UI, labels, people, interface frame, watermark, scene or additional separate objects.",
+    "path": "/workspace/scratch/ee830274688e/generated_images/exec-6e7bfe4c-b62d-4f5a-ae38-178c5821da90.png",
+    "destination": "assets/magic-circles/build441/ch2_chain394.webp",
+    "bytes": 361028,
+    "alpha": {
+      "min": 0,
+      "max": 255,
+      "sum": 62886775,
+      "squaresSum": 15032756325,
+      "mean": 106.61955939398871,
+      "stdev": 118.82400581619703,
+      "minX": 0,
+      "minY": 0,
+      "maxX": 374,
+      "maxY": 37
+    }
+  },
+  {
+    "id": "ch2_dream394",
+    "prompt": "Use case: stylized-concept. Asset type: finished transparent 2D magic-circle sprite for an ornate dark fantasy Japanese RPG. Generate ONE square 1024x1024 production-quality asset. Top-down orthographic, perfectly circular outer silhouette, centered at 512,512, full circle contained within central 84% of canvas with generous transparent margins. Genuine alpha transparent background throughout exterior and gaps; no black square, no checkerboard, no scene, no ground, no cast shadow. Exquisite engraved dimensional metal, luminous crystalline inlays, crisp premium hand-painted game rendering, clear thick primary motifs readable at 80px icon size and detailed enough at 250px behind a character. Sparse short decorative rune strokes around rim, no readable text or letters. Controlled bloom directly around the magical strokes; mostly open negative space between rings, no opaque filled disc. Circular shape must stay complete, no cropped glow. Rich but disciplined contrast, well-defined major silhouette. Subject: A luminous amethyst crescent moon cradling a dream-eating lotus flower, dark-violet petals, silver thorns forming the encircling seal, soft lavender and indigo light; clear crescent-and-flower silhouette. No UI, labels, people, interface frame, watermark, scene or additional separate objects.",
+    "path": "/workspace/scratch/ee830274688e/generated_images/exec-d5031fd0-4167-443c-a227-abb5e45f5c95.png",
+    "destination": "assets/magic-circles/build441/ch2_dream394.webp",
+    "bytes": 287052,
+    "alpha": {
+      "min": 0,
+      "max": 255,
+      "sum": 59247985,
+      "squaresSum": 14484892947,
+      "mean": 100.45027838812933,
+      "stdev": 120.28199319255224,
+      "minX": 0,
+      "minY": 0,
+      "maxX": 376,
+      "maxY": 29
+    }
+  },
+  {
+    "id": "ch2_pair394",
+    "prompt": "Use case: stylized-concept. Asset type: finished transparent 2D magic-circle sprite for an ornate dark fantasy Japanese RPG. Generate ONE square 1024x1024 production-quality asset. Top-down orthographic, perfectly circular outer silhouette, centered at 512,512, full circle contained within central 84% of canvas with generous transparent margins. Genuine alpha transparent background throughout exterior and gaps; no black square, no checkerboard, no scene, no ground, no cast shadow. Exquisite engraved dimensional metal, luminous crystalline inlays, crisp premium hand-painted game rendering, clear thick primary motifs readable at 80px icon size and detailed enough at 250px behind a character. Sparse short decorative rune strokes around rim, no readable text or letters. Controlled bloom directly around the magical strokes; mostly open negative space between rings, no opaque filled disc. Circular shape must stay complete, no cropped glow. Rich but disciplined contrast, well-defined major silhouette. Subject: Two radiant intertwined oath sigils shaped like elegant paired wings and two crossed blades, balanced silver and warm gold, braided double circle symbolizing two companions in resonance, tiny blue sapphires. No UI, labels, people, interface frame, watermark, scene or additional separate objects.",
+    "path": "/workspace/scratch/ee830274688e/generated_images/exec-a016cbe1-7dbe-48a5-ada7-b52d137910d4.png",
+    "destination": "assets/magic-circles/build441/ch2_pair394.webp",
+    "bytes": 343254,
+    "alpha": {
+      "min": 0,
+      "max": 255,
+      "sum": 51302056,
+      "squaresSum": 11962984188,
+      "mean": 86.97858344184027,
+      "stdev": 112.76986424249559,
+      "minX": 0,
+      "minY": 0,
+      "maxX": 363,
+      "maxY": 50
+    }
+  },
+  {
+    "id": "ch2_guard394",
+    "prompt": "Use case: stylized-concept. Asset type: finished transparent 2D magic-circle sprite for an ornate dark fantasy Japanese RPG. Generate ONE square 1024x1024 production-quality asset. Top-down orthographic, perfectly circular outer silhouette, centered at 512,512, full circle contained within central 84% of canvas with generous transparent margins. Genuine alpha transparent background throughout exterior and gaps; no black square, no checkerboard, no scene, no ground, no cast shadow. Exquisite engraved dimensional metal, luminous crystalline inlays, crisp premium hand-painted game rendering, clear thick primary motifs readable at 80px icon size and detailed enough at 250px behind a character. Sparse short decorative rune strokes around rim, no readable text or letters. Controlled bloom directly around the magical strokes; mostly open negative space between rings, no opaque filled disc. Circular shape must stay complete, no cropped glow. Rich but disciplined contrast, well-defined major silhouette. Subject: A powerful icy-blue celestial shield at center with broad crystalline facets, surrounded by four anchored silver chain arcs and an eight-point guardian star, bright blue and platinum light. No UI, labels, people, interface frame, watermark, scene or additional separate objects.",
+    "path": "/workspace/scratch/ee830274688e/generated_images/exec-c079f74d-fb5f-4797-821f-88b551188147.png",
+    "destination": "assets/magic-circles/build441/ch2_guard394.webp",
+    "bytes": 347706,
+    "alpha": {
+      "min": 0,
+      "max": 255,
+      "sum": 59647258,
+      "squaresSum": 14084532968,
+      "mean": 101.12721421983507,
+      "stdev": 116.84401036363933,
+      "minX": 0,
+      "minY": 0,
+      "maxX": 417,
+      "maxY": 39
+    }
+  },
+  {
+    "id": "ch2_crown394",
+    "prompt": "Use case: stylized-concept. Asset type: finished transparent 2D magic-circle sprite for an ornate dark fantasy Japanese RPG. Generate ONE square 1024x1024 production-quality asset. Top-down orthographic, perfectly circular outer silhouette, centered at 512,512, full circle contained within central 84% of canvas with generous transparent margins. Genuine alpha transparent background throughout exterior and gaps; no black square, no checkerboard, no scene, no ground, no cast shadow. Exquisite engraved dimensional metal, luminous crystalline inlays, crisp premium hand-painted game rendering, clear thick primary motifs readable at 80px icon size and detailed enough at 250px behind a character. Sparse short decorative rune strokes around rim, no readable text or letters. Controlled bloom directly around the magical strokes; mostly open negative space between rings, no opaque filled disc. Circular shape must stay complete, no cropped glow. Rich but disciplined contrast, well-defined major silhouette. Subject: A distinct regal five-point golden crown and a central bright star, concentric celestial astrolabe rings with twelve star anchors, antique gold and white-gold radiance, dark amber accents. No UI, labels, people, interface frame, watermark, scene or additional separate objects.",
+    "path": "/workspace/scratch/ee830274688e/generated_images/exec-802c5c5c-09d5-477b-93dd-cfa7f8807890.png",
+    "destination": "assets/magic-circles/build441/ch2_crown394.webp",
+    "bytes": 362664,
+    "alpha": {
+      "min": 0,
+      "max": 255,
+      "sum": 55595151,
+      "squaresSum": 12997700187,
+      "mean": 94.25718688964844,
+      "stdev": 114.68294972285946,
+      "minX": 0,
+      "minY": 0,
+      "maxX": 355,
+      "maxY": 40
+    }
+  },
+  {
+    "id": "ch2_prism398",
+    "prompt": "Use case: stylized-concept. Asset type: finished transparent 2D magic-circle sprite for an ornate dark fantasy Japanese RPG. Generate ONE square 1024x1024 production-quality asset. Top-down orthographic, perfectly circular outer silhouette, centered at 512,512, full circle contained within central 84% of canvas with generous transparent margins. Genuine alpha transparent background throughout exterior and gaps; no black square, no checkerboard, no scene, no ground, no cast shadow. Exquisite engraved dimensional metal, luminous crystalline inlays, crisp premium hand-painted game rendering, clear thick primary motifs readable at 80px icon size and detailed enough at 250px behind a character. Sparse short decorative rune strokes around rim, no readable text or letters. Controlled bloom directly around the magical strokes; mostly open negative space between rings, no opaque filled disc. Circular shape must stay complete, no cropped glow. Rich but disciplined contrast, well-defined major silhouette. Subject: A prismatic star at center, six distinct ruby sapphire emerald amethyst amber aquamarine gemstones equally spaced around concentric engraved gold rings, controlled radiant rainbow harmony without a muddy rainbow wash. No UI, labels, people, interface frame, watermark, scene or additional separate objects.",
+    "path": "/workspace/scratch/ee830274688e/generated_images/exec-70e4c1f8-61d2-4e31-a0a8-d5db79a9b92b.png",
+    "destination": "assets/magic-circles/build441/ch2_prism398.webp",
+    "bytes": 303282,
+    "alpha": {
+      "min": 0,
+      "max": 255,
+      "sum": 63540318,
+      "squaresSum": 15707119124,
+      "mean": 107.7275899251302,
+      "stdev": 122.57639072832836,
+      "minX": 0,
+      "minY": 0,
+      "maxX": 375,
+      "maxY": 32
+    }
+  },
+  {
+    "id": "ch2_hex398",
+    "prompt": "Use case: stylized-concept. Asset type: finished transparent 2D magic-circle sprite for an ornate dark fantasy Japanese RPG. Generate ONE square 1024x1024 production-quality asset. Top-down orthographic, perfectly circular outer silhouette, centered at 512,512, full circle contained within central 84% of canvas with generous transparent margins. Genuine alpha transparent background throughout exterior and gaps; no black square, no checkerboard, no scene, no ground, no cast shadow. Exquisite engraved dimensional metal, luminous crystalline inlays, crisp premium hand-painted game rendering, clear thick primary motifs readable at 80px icon size and detailed enough at 250px behind a character. Sparse short decorative rune strokes around rim, no readable text or letters. Controlled bloom directly around the magical strokes; mostly open negative space between rings, no opaque filled disc. Circular shape must stay complete, no cropped glow. Rich but disciplined contrast, well-defined major silhouette. Subject: An ominous violet crystalline hexagram woven from thorny occult threads, three distinct orbiting poison-green ember-red and violet gemstone seals, deep purple light and blackened silver filigree, sinister refined curse magic. No UI, labels, people, interface frame, watermark, scene or additional separate objects.",
+    "path": "/workspace/scratch/ee830274688e/generated_images/exec-9880e510-a0dc-4a7f-8916-8943f883cffc.png",
+    "destination": "assets/magic-circles/build441/ch2_hex398.webp",
+    "bytes": 291792,
+    "alpha": {
+      "min": 0,
+      "max": 255,
+      "sum": 65914012,
+      "squaresSum": 16211225708,
+      "mean": 111.75200059678819,
+      "stdev": 122.45966030262574,
+      "minX": 0,
+      "minY": 0,
+      "maxX": 382,
+      "maxY": 11
+    }
+  },
+  {
+    "id": "ch2_reserve398",
+    "prompt": "Use case: stylized-concept. Asset type: finished transparent 2D magic-circle sprite for an ornate dark fantasy Japanese RPG. Generate ONE square 1024x1024 production-quality asset. Top-down orthographic, perfectly circular outer silhouette, centered at 512,512, full circle contained within central 84% of canvas with generous transparent margins. Genuine alpha transparent background throughout exterior and gaps; no black square, no checkerboard, no scene, no ground, no cast shadow. Exquisite engraved dimensional metal, luminous crystalline inlays, crisp premium hand-painted game rendering, clear thick primary motifs readable at 80px icon size and detailed enough at 250px behind a character. Sparse short decorative rune strokes around rim, no readable text or letters. Controlled bloom directly around the magical strokes; mostly open negative space between rings, no opaque filled disc. Circular shape must stay complete, no cropped glow. Rich but disciplined contrast, well-defined major silhouette. Subject: A tall clear aquamarine crystal reservoir suspended at the center of a sapphire-white arcane seal, two concentric rings of liquid light, precise platinum filigree and eight luminous water-drop facets, calm concentrated cyan-blue radiance. No UI, labels, people, interface frame, watermark, scene or additional separate objects.",
+    "path": "/workspace/scratch/ee830274688e/generated_images/exec-ac8aa0d9-214f-44bb-a25d-b2472c45e9f6.png",
+    "destination": "assets/magic-circles/build441/ch2_reserve398.webp",
+    "bytes": 342312,
+    "alpha": {
+      "min": 0,
+      "max": 255,
+      "sum": 64426102,
+      "squaresSum": 15641237138,
+      "mean": 109.22936672634549,
+      "stdev": 120.77852538758377,
+      "minX": 0,
+      "minY": 0,
+      "maxX": 321,
+      "maxY": 30
+    }
+  }
+]

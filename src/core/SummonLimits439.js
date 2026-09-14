@@ -1,6 +1,7 @@
 const whole=value=>Number.isFinite(Number(value))?Math.max(0,Math.min(Number.MAX_SAFE_INTEGER,Math.floor(Number(value)))):0;
-export function summonLevelMax439(state,type='monster'){return Math.max(1,Math.floor(Math.max(1,whole(state.player?.maxFloor))*(type==='equipment'?2:1.5)));}
-export function summonLevel439(state,type='monster',random=Math.random){const roll=Number(random());return 1+Math.floor(Math.max(0,Math.min(1-Number.EPSILON,Number.isFinite(roll)?roll:0))*summonLevelMax439(state,type));}
+export function summonLevelMin441(state){return Math.min(Number.MAX_SAFE_INTEGER,Math.max(1,whole(state.player?.maxFloor))*10);}
+export function summonLevelMax439(state,type='monster'){return Math.min(Number.MAX_SAFE_INTEGER,Math.max(1,whole(state.player?.maxFloor))*(type==='equipment'?20:15));}
+export function summonLevel439(state,type='monster',random=Math.random){const roll=Number(random()),min=summonLevelMin441(state),max=summonLevelMax439(state,type);return Math.min(max,min+Math.floor(Math.max(0,Math.min(1-Number.EPSILON,Number.isFinite(roll)?roll:0))*(max-min+1)));}
 // Search the real price function: bulk prices round before crystal conversion.
 export function maxSummons439(state,mode,costFor,monsterCap=3000){
  const crystals=whole(state.player?.crystals),monsters=Math.max(0,monsterCap-(state.monsters?.length??0)),equipment=Math.max(0,500-(state.equipment?.length??0));

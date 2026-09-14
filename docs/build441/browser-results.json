@@ -1,0 +1,94 @@
+{
+  "errors": [],
+  "missing": [],
+  "metrics": {
+    "home-393": {
+      "diagram": {
+        "left": 292.890625,
+        "right": 406.640625,
+        "top": 212.390625,
+        "bottom": 340.765625,
+        "width": 113.75,
+        "height": 128.375
+      },
+      "banner": {
+        "left": 311.265625,
+        "right": 385.140625,
+        "top": 327.59375,
+        "bottom": 482.390625,
+        "width": 73.875,
+        "height": 154.796875
+      }
+    },
+    "circle-last-393": {
+      "bottom": 558.65625,
+      "listBottom": 573.125
+    },
+    "home-375": {
+      "diagram": {
+        "left": 291.09375,
+        "right": 376.40625,
+        "top": 165.1875,
+        "bottom": 261.46875,
+        "width": 85.3125,
+        "height": 96.28125
+      },
+      "banner": {
+        "left": 297.015625,
+        "right": 367.5,
+        "top": 288.390625,
+        "bottom": 430.390625,
+        "width": 70.484375,
+        "height": 142
+      }
+    },
+    "circle-last-375": {
+      "bottom": 378.84375,
+      "listBottom": 393.125
+    },
+    "home-430": {
+      "diagram": {
+        "left": 322.65625,
+        "right": 442.734375,
+        "top": 224.1875,
+        "bottom": 359.703125,
+        "width": 120.078125,
+        "height": 135.515625
+      },
+      "banner": {
+        "left": 343.15625,
+        "right": 421.40625,
+        "top": 349.59375,
+        "bottom": 523.59375,
+        "width": 78.25,
+        "height": 174
+      }
+    },
+    "circle-last-430": {
+      "bottom": 598.484375,
+      "listBottom": 613.125
+    },
+    "home-1280": {
+      "diagram": {
+        "left": 873.21875,
+        "right": 999.609375,
+        "top": 236,
+        "bottom": 378.640625,
+        "width": 126.390625,
+        "height": 142.640625
+      },
+      "banner": {
+        "left": 866.5,
+        "right": 1004.8125,
+        "top": 368,
+        "bottom": 542,
+        "width": 138.3125,
+        "height": 174
+      }
+    },
+    "circle-last-1280": {
+      "bottom": 654.9375,
+      "listBottom": 669.0625
+    }
+  }
+}

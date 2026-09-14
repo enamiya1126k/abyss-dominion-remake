@@ -389,7 +389,7 @@ export function buildOnlinePartyProfile(state, { monsterId = null, displayName: 
   const priority = onlineBattleRosterPriority(state, { monsterId: requestedMonster?.id });
   const monster = priority[0] ?? requestedMonster;
   if (!monster) return {
-    displayName: onlineName || "冒険者", monsterId: null, speciesId: "slime", visualSpeciesId: null, endgameBossId: null, floorBossCatalogId: null, summonTier: null, summonRarity: null, endgameFaction: null, monsterName: "未編成",
+    displayName: onlineName || readPlayerName(), monsterId: null, speciesId: "slime", visualSpeciesId: null, endgameBossId: null, floorBossCatalogId: null, summonTier: null, summonRarity: null, endgameFaction: null, monsterName: "未編成",
     fallbackEmoji: "？", level: 1, stars: 1, plus: 0, power: 0, maxFloor: 1, attribute: "neutral",
     circleId: "none", circleName: "魔法陣なし", circleLevel: 0, circleEffect: "none", goldPowerMultiplier: 1, goldPowerActionCost: 0, goldPowerGold: 0, equipment: [], equipmentAuthorities: [], equipmentCombatEffects: {}, abyssSkillEffects: {}, rewardModifiers: {},
     battleStats: { hp: 100, mp: 10, atk: 10, matk: 10, def: 5, mdef: 5, spd: 10, crit: 5, evasion: 3, accuracy: 100 },
@@ -399,7 +399,7 @@ export function buildOnlinePartyProfile(state, { monsterId = null, displayName: 
   };
   const primary = onlineBattleMonsterProfile(state, monster);
   return {
-    displayName: String(onlineName || displayName(monster) || "冒険者").trim().slice(0, 16),
+    displayName: String(onlineName || readPlayerName()).trim().slice(0, 16),
     ...primary,
     maxFloor: Math.max(1, Number(state.player?.maxFloor) || 1), rewardModifiers: onlineRewardModifiers(state),
     captureStock: Math.max(0, Number(state.inventory?.captureCrystals) || 0),
@@ -959,7 +959,7 @@ export function OnlinePartyScreen(state) {
   const invite = inviteParameters();
   const { monster: requestedMonster } = selectedPartyMonster(state);
   const monster = onlineBattleRosterPriority(state, { monsterId: requestedMonster?.id })[0] ?? requestedMonster;
-  const defaultName = readPlayerName(monster ? displayName(monster) : "冒険者");
+  const defaultName = readPlayerName();
   const server = enforceFixedOnlineServerUrl();
   return `<section class="screen online-v3-screen" data-online-v3-root>
     ${resourceHud(state, { backId: "backOnlineParty", title: "オンライン", eyebrow: "ABYSS DOMINION / CO-OP" })}

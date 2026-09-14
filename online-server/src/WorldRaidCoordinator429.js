@@ -62,13 +62,22 @@ export class WorldRaidCoordinator429 extends WorldRaidCoordinator428{
   const result=this.ledger.transact(s=>{const r=s.rewards429[reward.rewardId];if(r.acknowledgedAt!=null)return {ok:true,unchanged:true,duplicate:true};r.acknowledgedAt=this.now();return {ok:true};});
   if(result.ok)this.send(session.playerId,{type:'worldRaidRewardAck429',rewardId:reward.rewardId,pending:this._pending429(session.playerId).length});return result;
  }
+ _syncPlayerName441(session,value){
+  if(typeof value!=='string')return;const name=value.normalize('NFKC').replace(/[\u0000-\u001f\u007f\u202a-\u202e\u2066-\u2069]/g,'').trim().slice(0,16).replace(/[\uD800-\uDBFF]$/,'');if(!name)return;
+  if(session.profile)session.profile.displayName=name;
+  const campaigns=[this.ledger.state.current,...this.ledger.state.history];
+  if(!campaigns.some(c=>c.contribution[session.playerId]&&(c.contribution[session.playerId].name!==name||!c.contribution[session.playerId].playerName441)))return;
+  const result=this.ledger.transact(s=>{for(const c of [s.current,...s.history]){const r=c.contribution[session.playerId];if(r){r.name=name;r.playerName441=true}}return{ok:true}});
+  if(result.ok)this.rankingCache429.clear();
+ }
  ranking429(session,message={}){
   if(!this._authenticated(session))return {ok:false,code:'NOT_READY',message:'先に接続してください。'};
+  this._syncPlayerName441(session,message.playerName441);
   const s=this.ledger.state,sequence=message.sequence??s.current.sequence;
   if(!Number.isSafeInteger(sequence)||sequence<1||sequence>s.current.sequence)return {ok:false,code:'WORLD_RAID_RANKING_MISSING',message:'この討伐記録は見つかりません。'};
   const c=sequence===s.current.sequence?s.current:s.history.find(h=>h.sequence===sequence);if(!c)return {ok:false,code:'WORLD_RAID_RANKING_MISSING',message:'この討伐記録は見つかりません。'};
   const rows=this._rows429(c),pageSize=20,page=Math.min(Math.max(0,Math.floor(Number(message.page)||0)),Math.max(0,Math.ceil(rows.length/pageSize)-1)),mine=rows.find(r=>r.playerId===session.playerId)??null;
-  const result={type:'worldRaidRanking429',requestId:message.requestId,revision:s.revision,serverNow:this.now(),campaign:{id:c.id,sequence:c.sequence,bossName:worldRaidBoss428(c.sequence).name,hp:c.hp,maxHp:c.maxHp,completedAt:c.completedAt??null,killerId:c.killerId??null},latestSequence:s.current.sequence,total:rows.length,totalDamage:rows.reduce((n,r)=>n+r.damage,0),page,pageSize,rows:rows.slice(page*pageSize,(page+1)*pageSize).map(row=>({...row,portrait439:c.contribution[row.playerId]?.portrait439??raidPortrait439(this.sessions.get(row.playerId)?.profile)})),mine,myReward:this._publicReward429(s.rewards429?.[worldRaidRewardId429(s.ledgerId429,c.sequence,session.playerId)])};
+  const result={type:'worldRaidRanking429',requestId:message.requestId,revision:s.revision,serverNow:this.now(),campaign:{id:c.id,sequence:c.sequence,bossName:worldRaidBoss428(c.sequence).name,hp:c.hp,maxHp:c.maxHp,completedAt:c.completedAt??null,killerId:c.killerId??null},latestSequence:s.current.sequence,total:rows.length,totalDamage:rows.reduce((n,r)=>n+r.damage,0),page,pageSize,rows:rows.slice(page*pageSize,(page+1)*pageSize).map(row=>({...row,name:c.contribution[row.playerId]?.playerName441?c.contribution[row.playerId].name:this.sessions.get(row.playerId)?.profile?.displayName||row.name,portrait439:c.contribution[row.playerId]?.portrait439??raidPortrait439(this.sessions.get(row.playerId)?.profile)})),mine,myReward:this._publicReward429(s.rewards429?.[worldRaidRewardId429(s.ledgerId429,c.sequence,session.playerId)])};
   this.send(session.playerId,result);return {ok:true};
  }
  _operate(session,kind,message={}){
