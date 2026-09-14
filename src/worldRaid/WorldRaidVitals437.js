@@ -4,7 +4,7 @@ export function fitRaidVitals437(root){
  if(!root?.closest?.('.world-raid432.is-battle432')&&!root?.matches?.('.world-raid432.is-battle432'))return;
  for(const label of root.querySelectorAll('.side-unit-card .bar-label')){
   const width=label.clientWidth;if(!width)continue;
-  let size=label.closest('.raid-main-boss')?8:7;
+  let size=label.closest('.raid-main-boss')?6.5:6;
   label.style.setProperty('font-size',size+'px','important');
   // A Range measures the text, even when the gauge intentionally clips fills.
   const range=label.ownerDocument.createRange();range.selectNodeContents(label);

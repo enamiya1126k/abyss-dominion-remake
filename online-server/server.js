@@ -128,12 +128,13 @@ wss.on("connection",socket=>{
  });
  socket.on("close",()=>{clients.delete(socket);store.disconnect(socket.session,socket)});socket.on("error",()=>{});
 });
-const battleClock=setInterval(()=>{store.advanceBattles();worldRaid.advance()},250);battleClock.unref?.();
+const battleClock=setInterval(()=>{store.advanceBattles()},250);battleClock.unref?.();
+const worldRaidClock438=setInterval(()=>worldRaid.advance(),50);worldRaidClock438.unref?.();
 const heartbeat=setInterval(()=>{store.pruneExpired();for(const socket of clients){if(socket.isAlive===false){socket.terminate();continue}socket.isAlive=false;socket.ping()}},10_000);heartbeat.unref?.();
 let powerRankingRolloverTimer=null;
 function schedulePowerRankingRollover(retry=false){if(powerRankingRolloverTimer)clearTimeout(powerRankingRolloverTimer);const now=Date.now(),target=store.powerRanking.nextRolloverAt(),delay=retry?60_000:Math.max(250,Math.min(7*24*60*60_000,target-now+100));powerRankingRolloverTimer=setTimeout(()=>{const ok=store.rollPowerRankingSeason(Date.now());if(!ok)console.error("Power ranking weekly rollover could not be persisted; retrying in 60 seconds");schedulePowerRankingRollover(!ok)},delay);powerRankingRolloverTimer.unref?.()}
 schedulePowerRankingRollover();
 server.listen(PORT,HOST,()=>{console.log(`\nABYSS DOMINION CO-OP SERVER`);console.log(`Local: http://${HOST}:${PORT}`);console.log(`Health: http://${HOST}:${PORT}/health`);console.log(`Online home, exploration, raid, free team battle and chat are ready (up to 4 players).`);console.log(`Protocol: ${ONLINE_PROTOCOL} (compatible: ${[...COMPATIBLE_PROTOCOLS].join(", ")})\n`)});
-function shutdown(){clearInterval(battleClock);clearInterval(heartbeat);if(powerRankingRolloverTimer)clearTimeout(powerRankingRolloverTimer);for(const socket of clients)try{socket.close(1001,"server shutdown")}catch{};server.close(()=>process.exit(0));setTimeout(()=>process.exit(0),1500).unref()}
+function shutdown(){clearInterval(worldRaidClock438);clearInterval(battleClock);clearInterval(heartbeat);if(powerRankingRolloverTimer)clearTimeout(powerRankingRolloverTimer);for(const socket of clients)try{socket.close(1001,"server shutdown")}catch{};server.close(()=>process.exit(0));setTimeout(()=>process.exit(0),1500).unref()}
 process.on("SIGINT",shutdown);process.on("SIGTERM",shutdown);
 export{server,store};

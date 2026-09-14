@@ -1,9 +1,10 @@
 import {WorldRaidCoordinator432} from './WorldRaidCoordinator432.js';
+import {withWorldRaidSpeed438} from '../../src/worldRaid/WorldRaidSpeed438.js';
 import {WorldRaidBattle428} from './WorldRaidBattle428.js';
 import {RaidCoordinator,raidSnapshot} from './RaidCoordinator.js';
 import {withWorldRaidRules432} from '../../src/worldRaid/WorldRaidRules432.js';
 import {withWorldRaidLimit437,WORLD_RAID_MAX_ROUNDS437} from '../../src/worldRaid/WorldRaidLimit437.js';
-export const WorldRaidBattle437=withWorldRaidRules432(withWorldRaidLimit437(WorldRaidBattle428,RaidCoordinator),raidSnapshot,{maxRounds:WORLD_RAID_MAX_ROUNDS437});
+export const WorldRaidBattle437=withWorldRaidSpeed438(withWorldRaidRules432(withWorldRaidLimit437(WorldRaidBattle428,RaidCoordinator),raidSnapshot,{maxRounds:WORLD_RAID_MAX_ROUNDS437}),raidSnapshot);
 export class WorldRaidCoordinator437 extends WorldRaidCoordinator432{
  constructor(options={}){super(options);this.BattleClass428=WorldRaidBattle437;this.offlineRuleVersion430=3;
   // Already-ended results and issued tickets are immutable. Active online

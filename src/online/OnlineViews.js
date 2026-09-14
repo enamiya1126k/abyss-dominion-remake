@@ -563,7 +563,7 @@ export function renderSharedBattle({ mode, room, battle, selfId, selectedTarget 
     onlineCountdownMode: mode, onlineSelectedAlly: party.some(monster => monster.id === selectedAlly) ? selectedAlly : actorId, onlineSkills: actionSkills.map(onlineSkill),
     enemies: foes, enemy: foes[0], targetEnemyId: target?.id ?? null, party, species: {}, turn: Math.max(1, Number(battle?.round) || 1), turnQueue, queueIndex: 0, onlineActorId: actorId,
     auto: autoPlayers.includes(selfId), onlineAutoAvailable: autoSupported && !effectiveReadOnly, onlineAutoUnsupported: !autoSupported && !effectiveReadOnly, busy: false, phase: battle?.phase ?? "command", speed: battle?.speed ?? 1, skillMenu: Boolean(skillMenu), itemMenu: Boolean(itemMenu), onlineItemTargetMenu: Boolean(itemTargetMenu), onlineItemCharges: Math.max(0, Number(actionActor?.itemCharges) || 0),
-    guards: {}, cooldowns: onlineCooldowns, enemyStatuses: enemyState.ailments, allyAilments: allyState.ailments, allyEffects: allyState.effects, enemyEffects: enemyState.effects, hpTrails, presentationKoIds,
+    worldRaid428: battle?.worldRaid428, guards: {}, cooldowns: onlineCooldowns, enemyStatuses: enemyState.ailments, allyAilments: allyState.ailments, allyEffects: allyState.effects, enemyEffects: enemyState.effects, hpTrails, presentationKoIds,
     magicCircleProfiles, magicCircleArt, enemyMagicCircleArt, log: events.slice(-6).map(eventLine),
     biomeBattle, biomePanelCollapsed: Boolean(biomePanelCollapsed), specialTitle: title, battleTheme: mode === "raid" || battle?.coopBoss ? "boss" : mode === "team" ? "abyss" : biomeBattle.theme,
   };

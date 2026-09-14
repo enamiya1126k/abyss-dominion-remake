@@ -19,6 +19,7 @@ import{monsterVisual}from"../MonsterVisual.js?v=3.1.82-build402";
 import{pixelIcon,itemIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{normalizeBattleSpeed}from"../../core/config.js?v=3.1.90-build410";
+import {WORLD_RAID_SPEEDS438} from '../../worldRaid/WorldRaidSpeed438.js';
 import{ATTRIBUTE_MATCHUP_MULTIPLIERS,attributesEffectiveAgainst,attributesIneffectiveAgainst}from"../../data/attributes.js?v=3.1.1-build311";
 import{heroResonanceProfile,isHeroResonanceSpecies}from"../../core/HeroResonanceSystem.js?v=3.1.39-build359";
 
@@ -207,7 +208,7 @@ export function BattleScreen(battle,inventory,settings,floor=1){
  const pairStatus405=battle.onlineMode?"":twinStatus385(party,{battle,compact:true})+twinStatus385(battle.enemies??[],{side:"enemy",battle,compact:true});
  const special=battle.specialBattle?`<div class="special-battle-strip ${battle.specialBattleType}"><b>${battle.specialTitle??"特別戦"}</b><small>${battle.specialSubtitle??"敗北ペナルティなし"}</small></div>`:"";
  const floorBand=Math.max(1,Math.min(20,Math.floor((Math.max(1,Number(floor)||1)-1)/50)+1));
- const speed=normalizeBattleSpeed(battle.onlineMode?battle.speed??settings.battleSpeed:settings.battleSpeed),scaled=ms=>`${Math.max(1,Math.round(ms/speed))}ms`;
+ const speed=battle.onlineMode==='raid'&&battle.worldRaid428&&WORLD_RAID_SPEEDS438.includes(Number(battle.speed))?Number(battle.speed):normalizeBattleSpeed(battle.onlineMode?battle.speed??settings.battleSpeed:settings.battleSpeed),scaled=ms=>`${Math.max(1,Math.round(ms/speed))}ms`;
  const timingStyle=`--battle-lunge:${scaled(220)};--battle-skill-lunge:${scaled(300)};--battle-hit:${scaled(260)};--battle-critical-hit:${scaled(300)};--battle-defeat:${scaled(500)};--battle-float:1500ms;--battle-banner-in:${scaled(280)};--battle-banner-out:${scaled(220)};--battle-flash:${scaled(380)};--battle-particle:${Math.max(560,Math.round(920/speed))}ms`;
  const theme=String(battle.battleTheme??"default").replace(/[^a-z0-9-]/gi,"");
  const biomeBadge=battle.biomePanelCollapsed?renderBiomeBadge(battle.biomeBattle,{collapsed:true}):renderBiomeBadge(battle.biomeBattle);

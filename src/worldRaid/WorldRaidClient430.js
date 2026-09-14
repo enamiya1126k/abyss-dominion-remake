@@ -7,7 +7,7 @@ import {mountBattleBossLayout} from '../ui/BattleBossLayout.js';
 import {acceptsWorldRaidState431} from './WorldRaidState431.js';
 export class WorldRaidClient430 extends WorldRaidClient428{
  constructor(options){super(options);this.offline=options.transport.worldRaidOffline430;this.localTicket430=null;this.onlineState430=null;}
- mount(root){this.state=this.offline.bank().cachedState??this.state;this.onlineState430=this.state;this.localTicket430=this.offline.active()?.ticket.id??null;super.mount(root);this.offline.flush(true);this.offlineUpdated();this.localClock430=setInterval(()=>{if(this.root){const selected=this.offline.bank().tickets[this.localTicket430];if(selected?.phase==='playing'&&selected.ticket.expiresAt<=this.offline.time())this.offlineUpdated();else this.offline.tick();}},250);}
+ mount(root){this.state=this.offline.bank().cachedState??this.state;this.onlineState430=this.state;this.localTicket430=this.offline.active()?.ticket.id??null;super.mount(root);this.offline.flush(true);this.offlineUpdated();this.localClock430=setInterval(()=>{if(this.root){const selected=this.offline.bank().tickets[this.localTicket430];if(selected?.phase==='playing'&&selected.ticket.expiresAt<=this.offline.time())this.offlineUpdated();else this.offline.tick();}},50);}
  unmount(){clearInterval(this.localClock430);super.unmount();}
  receive(message){
   if(message.state){if(!acceptsWorldRaidState431(this.onlineState430,message.state))return;try{this.offline?.cacheState(message.state);}catch(error){this.toast(error.message);}this.onlineState430=message.state;}

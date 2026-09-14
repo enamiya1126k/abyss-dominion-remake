@@ -1,4 +1,5 @@
 import {prepareOfflineCache430,warmTicketImages430} from './WorldRaidOfflineCache430.js';
+import {raidResultDelay438,raidCommandDelay438} from './WorldRaidSpeed438.js';
 import {replayOffline430} from './WorldRaidReplay430.js';
 import {acceptsWorldRaidState431} from './WorldRaidState431.js';
 const clone=structuredClone,uid=()=>globalThis.crypto?.randomUUID?.()??`request-${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -39,7 +40,7 @@ export class WorldRaidOfflineClient430{
   if(e.ticket.expiresAt<=this.time())throw new Error('挑戦権の有効期限を過ぎました。接続して確認してください。');
   const replay=replayOffline430(e.ticket,e.commands,{complete:false}),snapshot=replay.step(command);e.commands=clone(replay.commands);
   if(snapshot.ended){e.phase='pending';e.result={damage:snapshot.damage,result:snapshot.result,rounds:snapshot.raid.round};}
-  const auto=snapshot.raid.autoPlayers.includes(this.transport.selfId);e.nextAt=this.now()+(snapshot.raid.phase==='result'?Math.max(1600,2600/snapshot.raid.speed):auto?Math.max(500,1200/snapshot.raid.speed):18000);
+  const auto=snapshot.raid.autoPlayers.includes(this.transport.selfId);e.nextAt=this.now()+(snapshot.raid.phase==='result'?raidResultDelay438(snapshot.raid.speed):auto?raidCommandDelay438(snapshot.raid.speed):18000);
   this.write(b);this.onUpdate(ticketId,snapshot.events);if(snapshot.ended)this.flush();return true;
  });}
  tick(){const e=this.active();if(!e||e.nextAt>this.now()||this.busy||e.ticket.expiresAt<=this.time())return;this.busy=true;

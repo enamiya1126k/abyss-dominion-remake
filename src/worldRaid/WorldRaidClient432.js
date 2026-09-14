@@ -13,7 +13,7 @@ export class WorldRaidClient432 extends WorldRaidClient430 {
   p._queueBattlePresentation=(mode,events)=>queue(mode,events.filter(e=>e.kind!=='raidTelegraph'&&e.kind!=='weeklyRule'));
   this.detailsChanged432=e=>{const key=e.target.dataset?.raidDetails432;if(key)this.details432[key]=e.target.open;};
  }
- mount(root){super.mount(root);root.classList.add('world-raid-active432');root.addEventListener('toggle',this.detailsChanged432,true);this.render();}
+ mount(root){this.panel429='challenge';this.resultEligible438=null;super.mount(root);root.classList.add('world-raid-active432');root.addEventListener('toggle',this.detailsChanged432,true);this.render();}
  unmount(){this.root?.classList.remove('world-raid-active432');this.root?.removeEventListener('toggle',this.detailsChanged432,true);super.unmount();}
  refresh(){const result=super.refresh();if(this.panel429!=='ranking'&&this.connected()&&!this.rankRequest429)this.requestRanking429(this.showingResult432?this.resultSequence432():this.onlineState430?.campaign?.sequence??null,0);return result;}
  updateSharedMeter(){
@@ -53,7 +53,10 @@ export class WorldRaidClient432 extends WorldRaidClient430 {
   const content=shell.querySelector('[data-world-content]');if(!content)return;content.classList.add('raid-scroll432');
   const oldTop=content.scrollTop,turnScroll=content.querySelector('.turn-order')?.scrollLeft??0;
   this.ranking429??=this.offline.bank().cachedRanking??null;
-  const report=Boolean(!active&&a?.report&&a.id!==this.dismissedReport);
+  // Results belong to the attempt observed in this visit, never an old snapshot
+  // received when Home opens the lobby. An active attempt still resumes safely.
+  if(active&&a?.status==='active')this.resultEligible438=a.id;
+  const report=Boolean(!active&&a?.report&&a.id===this.resultEligible438&&a.id!==this.dismissedReport);
   this.showingResult432=report;content.classList.toggle('raid-results432',report);shell.classList.toggle('is-battle432',Boolean(active));
   const pageKey=active?`battle:${a.id}`:report?`result:${a.id}:${this.resultStep432}`:this.panel429;
   if(active&&a?.raid){

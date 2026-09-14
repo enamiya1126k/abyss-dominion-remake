@@ -1939,19 +1939,19 @@ function bindSkills(){
    return"attack";
   };
   const categoryLabel={attack:"攻撃",recovery:"回復",buff:"強化",defense:"防御"};
-  const rows=learned.map(skill=>{const kind=category(skill),progress=skillProgressFor(monster,skill.id),effect=skillEffectSummary(skill," / ");return`<button type="button" class="skill-picker-card ${skill.id===current?"current":""}" data-skill-pick="${skill.id}" data-skill-picker-category="${kind}">
+  const rows=learned.map(skill=>{const kind=category(skill),progress=skillProgressFor(monster,skill.id),effect=skillEffectSummary(skill," / "),usedSlot=monster.equippedSkills?.indexOf(skill.id)??-1,elsewhere=usedSlot>=0&&usedSlot!==slot;return`<button type="button" class="skill-picker-card ${skill.id===current?"current":""} ${elsewhere?"used-elsewhere438":""}" data-skill-pick="${skill.id}" data-skill-picker-category="${kind}" ${elsewhere?'disabled aria-disabled="true"':""}>
    <span class="skill-picker-check" aria-hidden="true">${skill.id===current?"✓":""}</span>
    <div class="skill-picker-card-head"><small>${categoryLabel[kind]}</small><em>${skillElementLabel(skill)}属性</em><b>${skill.name}</b></div>
    <p>${effect}</p>
    <div class="skill-picker-chips"><span>${skill.target??"敵単体"}</span><span>熟練Lv.${progress.level}${progress.need?` ${Math.floor(progress.exp)}/${progress.need}`:" MASTER"}</span><span>MP ${effectiveSkillMpCost(monster,skill)}</span><span>CT ${skill.cooldown??0}</span></div>
-   ${skill.id===current?'<strong>設定中</strong>':""}
+   ${usedSlot>=0?`<strong class="skill-slot-state438">${elsewhere?`SLOT ${usedSlot+1}に設定中`:"この枠に設定中"}</strong>`:""}
   </button>`}).join("");
   app.insertAdjacentHTML("beforeend",Modal(`SLOT ${slot+1}に設定するスキル`,`<div class="skill-slot-picker-v2"><nav class="skill-picker-filters"><button type="button" class="active" data-skill-picker-filter="all">すべて</button><button type="button" data-skill-picker-filter="attack">攻撃</button><button type="button" data-skill-picker-filter="recovery">回復</button><button type="button" data-skill-picker-filter="buff">強化</button><button type="button" data-skill-picker-filter="defense">防御</button></nav>${current?`<button type="button" class="skill-picker-remove-v2" data-skill-remove>スロットを空にする</button>`:""}<div class="skill-picker-card-list">${rows||'<p class="empty">習得済みスキルがありません</p>'}</div></div>`,"閉じる"));
   const modal=topModal();
   modal.classList.add("skill-picker-modal-v2");
   modal.querySelectorAll("[data-skill-picker-filter]").forEach(button=>button.onclick=()=>{modal.querySelectorAll("[data-skill-picker-filter]").forEach(entry=>entry.classList.toggle("active",entry===button));modal.querySelectorAll("[data-skill-picker-category]").forEach(card=>card.hidden=button.dataset.skillPickerFilter!=="all"&&card.dataset.skillPickerCategory!==button.dataset.skillPickerFilter)});
   let choosing=false;
-  modal.querySelectorAll("[data-skill-pick]").forEach(button=>button.onclick=()=>{if(choosing)return;choosing=true;if(!equipSkill(monster,button.dataset.skillPick,slot)){choosing=false;return}monster.skillRecommendationProfileVersion=199;modal.remove();persist(`SLOT ${slot+1} に装着`)});
+  modal.querySelectorAll("[data-skill-pick]").forEach(button=>button.onclick=()=>{if(choosing||button.disabled)return;const used=monster.equippedSkills?.indexOf(button.dataset.skillPick)??-1;if(used>=0&&used!==slot)return;choosing=true;if(!equipSkill(monster,button.dataset.skillPick,slot)){choosing=false;return}monster.skillRecommendationProfileVersion=199;modal.remove();persist(`SLOT ${slot+1} に装着`)});
   modal.querySelector("[data-skill-remove]")?.addEventListener("click",()=>{monster.equippedSkills=Array.from({length:4},(_,index)=>index===slot?null:(monster.equippedSkills?.[index]??null));monster.skillLoadoutInitialized=true;monster.skillRecommendationProfileVersion=199;modal.remove();persist(`SLOT ${slot+1} から外しました`)});
   modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
  };

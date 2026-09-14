@@ -1,10 +1,12 @@
 import {withWorldRaidLimit437} from './WorldRaidLimit437.js';
+import {withWorldRaidSpeed438} from './WorldRaidSpeed438.js';
 import {withWorldRaidRules432,snapshotExtras432} from './WorldRaidRules432.js';
 const WorldRaidBattle432=withWorldRaidRules432(WorldRaidBattle428,raidSnapshot);
 import {WorldRaidBattle428} from './runtime430/online-server/src/WorldRaidBattle428.js';
 import {RaidCoordinator,raidSnapshot} from './runtime430/online-server/src/RaidCoordinator.js';
 const WorldRaidBattle437=withWorldRaidRules432(withWorldRaidLimit437(WorldRaidBattle428,RaidCoordinator),raidSnapshot,{maxRounds:99});
-const Engine430=version=>version===3?WorldRaidBattle437:version===2?WorldRaidBattle432:WorldRaidBattle428;
+const engines438=[WorldRaidBattle428,WorldRaidBattle432,WorldRaidBattle437].map(Base=>withWorldRaidSpeed438(Base,raidSnapshot));
+const Engine430=version=>engines438[version-1];
 const limits430=t=>t.ruleVersion===3?{commands:1024,bytes:112000}:{commands:256,bytes:48000};
 export const OFFLINE_RULE_VERSION430=1,OFFLINE_LIFETIME430=86400000,OFFLINE_MAX_COMMANDS430=256;
 export function seededRandom430(seed){let s=seed>>>0;const random=()=>{s=(s+0x6D2B79F5)>>>0;let t=s;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296;};return random;}

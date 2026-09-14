@@ -1,0 +1,12 @@
+[
+  "tests/build431-upgrade-cache.test.mjs",
+  "tests/build432-world-raid.test.mjs",
+  "tests/build432-native-exchange.test.mjs",
+  "tests/build430-offline-server.test.mjs",
+  "tests/build430-offline-client.test.mjs",
+  "tests/build430-offline-cache.test.mjs",
+  "tests/build428-world-raid.test.mjs",
+  "tests/build429-world-rewards-server.test.mjs",
+  "tests/build437-raid.test.mjs",
+  "tests/build438-polish.test.mjs"
+]

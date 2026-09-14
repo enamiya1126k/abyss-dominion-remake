@@ -1,0 +1,30 @@
+{
+  "build": 438,
+  "method": "ImageGen original raster artwork, WebP conversion for in-game integration",
+  "assets": [
+    {
+      "name": "frame",
+      "prompt": "Create ONE production-ready bitmap game UI panel frame for ABYSS DOMINION, a mature gothic fantasy RPG. Square 1024x1024, front-facing perfectly aligned rectangular frame extending to image edges, no exterior margins. Fine sculpted aged champagne gold double rails, restrained carved gothic corner flourishes inset with tiny dark amethyst gems, physically convincing softly lit metal, premium Japanese fantasy RPG craftsmanship. Thin frame confined to outer 9% of image, vast center quiet almost-black charcoal vellum with subtle violet undertones and barely visible fine grain, uniformly dark to support readable white text. All four edges continuous and straight, center completely EMPTY, no symbols in center, no text, no letters, no numbers, no characters, no logo. Designed for nine-slice scalable UI panel, corner decoration must stay inside corners, restrained gleam, no large glow, no bright center. This will be integrated directly into existing game panels; NOT a screenshot, not a mockup.",
+      "source": "generated_images/exec-6d0ecfd6-a60f-4296-a7ea-c383c96a05ef.png",
+      "file": "assets/ui/build438/frame.webp"
+    },
+    {
+      "name": "button",
+      "prompt": "One production-ready bitmap BUTTON MATERIAL for ABYSS DOMINION gothic fantasy RPG, horizontal 4:1 canvas. Orthographic perfectly front-on rectangular plate occupying the entire canvas edge to edge, no outside margins. Black obsidian inlay with subtle horizontal brushed metal grain, bevelled champagne gold narrow double frame, sculpted gothic gold finials only at extreme corners, tiny dark amethyst corner cabochons. High-end tactile RPG interface texture, old royal armory craftsmanship. Keep the middle 75 percent EMPTY and very dark black for readable HTML labels. Balanced muted highlights along upper bevel, shadow below for physical depth. Straight edges, not rounded pill, no banner tails, NO TEXT, NO SYMBOLS, NO NUMBERS, NO LETTERS, NO LOGO, no characters. Nine-slice compatible top and bottom center must be simple repeating horizontal rail, decorative ends confined to outer 12 percent. Asset only, not a mockup.",
+      "source": "generated_images/exec-a0df46b2-74dc-4e89-bff7-cbbf15301023.png",
+      "file": "assets/ui/build438/button.webp"
+    },
+    {
+      "name": "archive",
+      "prompt": "A production-ready dark fantasy RPG background illustration for an ancient royal archive, landscape 1536x1024. ABYSS DOMINION aesthetic: black stone, antique champagne gold, very restrained amethyst accents. Cinematic painterly high detail. Wide cavernous Gothic library with intricate carved tall shelves, gilded book spines, astrolabes, subtle violet crystals set in architectural metalwork. Details at far LEFT and RIGHT edges only; large central 65% softly shadowed, empty, extremely dark, no central props and no people, so UI text overlays remain readable. Warm dim candle sconces around perimeter, atmospheric depth, archival dusty air, dark black-violet center. Bottom contains only subtle dark stone floor. No text, no typography, no borders, no UI controls, no characters. Sophisticated coherent fantasy game background art, not photorealism, not a screenshot.",
+      "source": "generated_images/exec-5023d681-7ad3-4af6-8a94-ff3e444570ef.png",
+      "file": "assets/ui/build438/archive.webp"
+    },
+    {
+      "name": "raid",
+      "prompt": "Production-ready landscape environment background for a premium gothic fantasy RPG raid lobby, ABYSS DOMINION. Wide 1536x1024. A subterranean ceremonial hall built from black obsidian stone, ornate bronze-gold buttresses and gothic pillars on the far left and far right, abandoned black altar architecture, faint amethyst glows inside broken stone seams, a very dim ember-red glow far behind the center. Dramatic fantasy illustration, finely crafted metal ornaments, rich stone texture, restrained warm highlights, convincing depth. Center two-thirds is uncluttered almost-black negative space, floor low contrast with extremely faint ancient etched circles. Intended to be darkened under existing text and existing monster sprites, so no monster, no people, no weapons, no throne in center, NO TEXT, no logo, no UI, no borders. A separate background art asset, not a whole game screen. Atmospheric dark fantasy, elegant rather than horror gore.",
+      "source": "generated_images/exec-9d70cec0-72b2-4045-b6bd-d566d0ef0dab.png",
+      "file": "assets/ui/build438/raid.webp"
+    }
+  ]
+}

@@ -25,6 +25,17 @@ import{EQUIPMENT_SERIES,activeSeriesBonuses,describeSeriesEffect}from"../../data
 import{EQUIPMENT_LIMIT,slotLabel,equipmentSellPrice as equipmentSellPriceForState}from"../../services/EquipmentStorage.js?v=3.1.78-build398";
 import{ensureEquipmentAffixes,affixQuality,formatAffix,equipmentAffixPower,affixDefinition}from"../../data/equipmentAffixes.js?v=3.1.55-build375";
 import{monsterVisual}from"../MonsterVisual.js?v=3.1.82-build402";
+import {monsterVisualId} from '../MonsterVisual.js?v=3.1.82-build402';
+import {chapterTwoFrameBounds383} from '../ChapterTwoSprite383.js?v=3.1.82-build402';
+
+// Frame the stable idle footprint only in this showcase; battle sprite scale is unchanged.
+function equipmentMonsterArt438(monster,fallback){
+ const html=monsterVisual(monster,fallback,{className:'equipment-target-monster-visual'});
+ const b=chapterTwoFrameBounds383(monsterVisualId(monster));
+ if(!b)return html;
+ const pad=5,box=[b.left*256-pad,b.top*256-pad,(b.right-b.left)*256+pad*2,(b.bottom-b.top)*256+pad*2];
+ return html.replace('viewBox="0 0 256 256"',`viewBox="${box.join(' ')}"`);
+}
 import{attributeVisual}from"../components/AttributeVisual.js?v=3.1.1-build311";
 import{resourceHud,bottomNav,pixelIcon}from"../components/GameChrome.js?v=3.1.1-build311";
 import{equipmentSocketSummary}from"../components/EquipmentSocketSummary.js?v=3.1.55-build375";
@@ -249,8 +260,11 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
       ${equippedCards.weaponRight}${equippedCards.accessoryNeck}${equippedCards.armorBody}
      </div>
      <div class="equipment-paper-doll">
-      <div class="equipment-paper-doll-portrait">${monsterVisual(target,species.emoji??"MONSTER",{className:"equipment-target-monster-visual"})}</div>
+      <div class="equipment-showcase438">
+      <header class="equipment-showcase-name438"><span>【${monsterRarity(target)}】</span>${coloredMonsterName(target)}</header>
+      <div class="equipment-paper-doll-portrait">${equipmentMonsterArt438(target,species.emoji??"MONSTER")}</div>
       <button type="button" class="equipment-magic-circle-button" data-open-magic-circle="${target.id}" title="魔法陣を変更・強化"><img src="${circle.asset}" alt=""><span><b>魔法陣設定</b><small>${circle.name}${circle.level?` Lv.${circle.level}`:""}</small></span><i>変更・強化 ›</i></button>
+      </div>
       <div class="selected-equipment-identity">${coloredMonsterName(target)}<small class="selected-equipment-growth">Lv.${target.level}　+${target.plus??0}</small><button type="button" class="equipment-affection-button" data-affection-info="${target.id}"><em class="attribute-chip">${attributeVisual(attributeId,{label:`${attribute.name}属性`})}${attribute.name}属性</em><span>なつき ${target.affection??0}/1000</span><i>詳細</i></button></div>
       <div class="selected-equipment-power"><small>戦力</small><strong>${formatCombatPower(power)}</strong></div>
       ${signature?.active?`<div class="signature-loadout-status active ${signature.pieces>=6?"awakened":""}"><small>${signature.status}・${signature.nextText}</small><b>${signature.definition.name}${signature.pieces>=6?"・完全覚醒":""}</b><span>${signature.pieces>=6?(signature.definition.awakenedText??signature.definition.description):signature.definition.description}</span></div>`:""}

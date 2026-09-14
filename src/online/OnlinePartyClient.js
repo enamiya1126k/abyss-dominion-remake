@@ -111,7 +111,7 @@ function storageRemove(key) { try { localStorage.removeItem(key); } catch {} }
 function clamp(value, min, max) { return Math.max(min, Math.min(max, Number(value) || 0)); }
 export function onlineBattlePresentationSpeed(value) {
   const speed = Number(value);
-  return Number.isFinite(speed) && speed > 0 ? clamp(speed, .5, 2) : 1;
+  return Number.isFinite(speed) && speed > 0 ? clamp(speed, .5, 32) : 1;
 }
 export function onlineBattlePresentationDelay(delay, speed = 1) {
   return Math.max(0, Math.round(Math.max(0, Number(delay) || 0) / onlineBattlePresentationSpeed(speed)));
@@ -1843,7 +1843,7 @@ export class OnlinePartyController {
     if (button.matches("[data-online-close-raid-report]")) { this.raidReport = null; this._render(); return; }
     if (button.matches("[data-online-close-team-report]")) { this.teamBattleReport = null; this._render(); return; }
     if (button.matches("[data-online-close-expedition-report]")) { const reward = this.pendingFloorBossReward; this.expeditionReport = null; this.pendingFloorBossReward = null; if (reward) this.onFloorBossDefeated({ ...reward, resume: true }); this._render(); this._showPendingExpeditionReturnResult(); return; }
-    if (button.matches("[data-online-speed-cycle]")) { const mode = button.dataset.onlineSpeedCycle, current = Number(this._battle(mode)?.speed) || 1, speeds = [.5, 1, 2], speed = speeds[(speeds.indexOf(current) + 1) % speeds.length]; this._send(mode === "raid" ? "raidSpeed" : mode === "team" ? "teamSpeed" : "battleSpeed", { speed }); return; }
+    if (button.matches("[data-online-speed-cycle]")) { const mode = button.dataset.onlineSpeedCycle, current = Number(this._battle(mode)?.speed) || 1, speeds = mode==='raid'&&this._battle(mode)?.worldRaid428 ? [.5, 1, 2, 4, 16, 32] : [.5, 1, 2], speed = speeds[(speeds.indexOf(current) + 1) % speeds.length]; this._send(mode === "raid" ? "raidSpeed" : mode === "team" ? "teamSpeed" : "battleSpeed", { speed }); return; }
     if (button.matches("[data-online-center]") || button.id === "centerCamera") { this.path = []; if (this.exploreCanvasMounted) this.onExploreCanvasUpdate(this.roomState, this.selfId, { center: true }); return; }
     if (["pauseParty", "fieldEquipment"].includes(button.id)) {
       const panel = this._query("[data-online-profile-panel]"), toggle = this._query("[data-online-profile-toggle]");

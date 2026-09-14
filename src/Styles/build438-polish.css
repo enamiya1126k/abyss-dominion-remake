@@ -1,0 +1,104 @@
+/* Build438: original bitmap materials; existing menu geometry is retained. */
+:root{--frame438:url('../../assets/ui/build438/frame.webp');--button438:url('../../assets/ui/build438/button.webp');--archive438:url('../../assets/ui/build438/archive.webp');--raid438:url('../../assets/ui/build438/raid.webp')}
+
+/* The two former rows form one equally sized showcase, with unchanged lower rows. */
+#app .equipment-screen-v2 .equipment-paper-doll{--portrait438:70px;--circle438:102px;--identity438:38px;grid-template-rows:calc(var(--portrait438) + var(--circle438) + 3px) var(--identity438) minmax(0,1fr)!important}
+@media(max-width:600px){#app .equipment-screen-v2 .equipment-paper-doll{--circle438:116px}}
+@media(max-width:420px){#app .equipment-screen-v2 .equipment-paper-doll{--portrait438:62px;--identity438:34px}}
+@media(max-height:740px){#app .equipment-screen-v2 .equipment-paper-doll{--portrait438:54px;--identity438:31px}}
+#app .equipment-showcase438{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:26px minmax(0,1fr);min-width:0;min-height:0;overflow:hidden;background:linear-gradient(90deg,#110b1788,#0d0813cc),var(--sanctum437) right center/cover;border-image:var(--frame438) 110 / 6px stretch;isolation:isolate}
+#app .equipment-showcase-name438{grid-column:1/-1;display:flex;align-items:center;justify-content:center;gap:3px;min-width:0;padding:3px 9px;color:#ffe5a5;font:700 13px/1.2 Georgia,'Hiragino Mincho ProN',serif;text-shadow:0 1px 3px #000}
+#app .equipment-showcase-name438>span{flex:none;font-size:11px}
+#app .equipment-showcase-name438>b{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#app .equipment-screen-v2 .equipment-showcase438 .equipment-paper-doll-portrait{position:relative;min-height:0;background:radial-gradient(ellipse at 50% 75%,#80602b40,transparent 70%)!important}
+#app .equipment-screen-v2 .equipment-showcase438 .equipment-paper-doll-portrait>.equipment-target-monster-visual{position:absolute;inset:4px;width:calc(100% - 8px)!important;height:calc(100% - 8px)!important;min-height:0!important;aspect-ratio:auto!important}
+#app .equipment-screen-v2 .equipment-showcase438 .equipment-target-monster-visual,
+#app .equipment-screen-v2 .equipment-showcase438 .equipment-target-monster-visual img{width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;filter:drop-shadow(0 3px 5px #0009)}
+#app .equipment-screen-v2 .equipment-showcase438 .equipment-magic-circle-button{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:minmax(32px,1fr) auto auto!important;justify-items:center;align-items:center;gap:3px;min-width:0;min-height:0;height:100%;margin:0!important;padding:5px 6px 7px!important;border-width:0!important;border-image:none!important;border-radius:0!important;background:linear-gradient(90deg,#2b1b3222,#130d20bb)!important;box-shadow:inset 1px 0 #a17b4b70!important;text-align:center}
+#app .equipment-showcase438 .equipment-magic-circle-button>img{width:58px!important;height:58px!important;max-height:100%;object-fit:contain}
+#app .equipment-showcase438 .equipment-magic-circle-button>span{width:100%;gap:2px}
+#app .equipment-showcase438 .equipment-magic-circle-button b{font:700 13px/1.2 Georgia,'Hiragino Mincho ProN',serif;letter-spacing:.02em;color:#ffe4a0}
+#app .equipment-showcase438 .equipment-magic-circle-button small{white-space:normal;overflow-wrap:anywhere;font:10px/1.2 Arial,sans-serif;color:#d6c7df}
+#app .equipment-showcase438 .equipment-magic-circle-button>i{grid-column:1!important;font:700 10px/1.2 Arial,sans-serif;color:#efce83}
+
+/* Inventory, selection and management controls share the finished metal material. */
+#app .equipment-screen-v2 :is(.manage-edit-button,.bulk-presets button,.bulk-secondary,.bulk-primary,.equipment-slot-tabs button,.equipment-storage-tabs button,.v2-hud-back,.affix-help-button),
+#app .skill-picker-modal-v2 :is(.skill-picker-filters button,.skill-picker-remove-v2),
+#app :is(.monster-index-screen,.notice-modal-v2,.idle-reward-modal-v2,.memory-archive-hub-modal,[data-power-record-modal]) :is(.modal-primary,.modal-dismiss,.v2-hud-back,.notice-tabs button,.notice-gift-claim,.notice-claim-all,.notice-detail-action,.power-record-tabs button,.power-ranking-toolbar403 button,.player-name-shortcut363 button,#bulkSynthesizeMonsters),
+#app .world-raid432:not(.is-battle432) button:not(.notice-card-toggle){border-image:var(--button438) 90 240 fill / 7px 10px stretch!important;border-image-outset:0!important;border-radius:0!important;background:#100e12!important;box-shadow:0 2px 7px #0008!important;color:#f6e5c6!important;text-shadow:0 1px 2px #000!important;image-rendering:auto!important}
+#app .equipment-screen-v2 :is(.bulk-presets button,.equipment-slot-tabs button,.equipment-storage-tabs button),
+#app .skill-picker-modal-v2 .skill-picker-filters button{border-image-width:5px 7px!important}
+#app .equipment-screen-v2 :is(.bulk-primary.danger,.equipment-command.tone-danger){border-image:var(--frame438) 110 / 6px stretch!important;background:linear-gradient(#651f2a,#300e19)!important;color:#ffe4d5!important}
+#app .equipment-screen-v2 :is(select,.equipment-affection-button){border-color:#a18457!important;border-radius:3px!important;background:linear-gradient(#251d26,#100d15)!important;box-shadow:inset 0 1px #d2b66a30!important;color:#e8ddc6!important}
+#app .equipment-screen-v2 .manage-check>span{border-color:#b79a65!important;background:linear-gradient(#201824,#09080e)!important;box-shadow:inset 0 1px #d2b66a40}
+#app .equipment-screen-v2 .manage-check input:checked+span{background:linear-gradient(#604822,#2a2012)!important;border-color:#ffe1a0!important;color:#fff0bd!important}
+#app .equipment-screen-v2 :is(.equipment-slot-tabs,.equipment-storage-tabs) button.active,
+#app .skill-picker-modal-v2 .skill-picker-filters button.active,
+#app .notice-modal-v2 .notice-tabs button.active,
+#app .world-raid432:not(.is-battle432) button[aria-pressed='true']{border-image:var(--frame438) 110 / 7px stretch!important;background:linear-gradient(#5e4422,#23190f)!important;color:#ffe9a8!important;box-shadow:inset 0 0 14px #b4853740!important}
+
+/* Skill pickers keep their list structure; slot badges have their own full line. */
+#app .skill-picker-modal-v2 .skill-picker-card{border-image:var(--frame438) 110 fill / 8px stretch!important;image-rendering:auto!important;box-shadow:0 3px 8px #0008!important}
+#app .skill-picker-modal-v2 .skill-picker-card[hidden]{display:none!important}
+#app .skill-picker-card>:is(.skill-picker-card-head,p,.skill-picker-chips,.skill-slot-state438){grid-column:2}
+#app .skill-picker-card .skill-picker-check{grid-row:1/5;background:radial-gradient(circle,#25202a,#0b0a0e);border-color:#8d7959;box-shadow:inset 0 1px #c8ad6f44}
+#app .skill-picker-card.current{box-shadow:inset 0 0 18px #d8af4530,0 0 9px #c9a15640!important}
+#app .skill-picker-card.current .skill-picker-check{background:radial-gradient(circle at 35% 30%,#b18734,#4b3314);color:#fff2ba;border-color:#f2cf7f}
+#app .skill-slot-state438{grid-row:4;justify-self:start;display:inline-flex;align-items:center;white-space:nowrap!important;word-break:keep-all;min-width:max-content;padding:3px 7px;font:700 10px/1.2 Arial,sans-serif!important;color:#ffdfa0;border:1px solid #9d7a37;background:#39280f;border-radius:2px;letter-spacing:0!important}
+#app .skill-picker-card.used-elsewhere438{opacity:1!important;cursor:default;filter:none!important;box-shadow:inset 0 0 0 1000px #05050966!important}
+#app .skill-picker-card.used-elsewhere438 :is(b,p){color:#b6afb7!important}
+#app .skill-picker-card.used-elsewhere438 .skill-slot-state438{color:#d2c4ad;background:#211d23;border-color:#6e5e48}
+#app .skill-picker-card.used-elsewhere438 .skill-picker-chips span{color:#b6aeb7;background:#121015}
+#app .skill-picker-modal-v2 .skill-picker-chips span{border-color:#6b5a43;background:linear-gradient(#29212d,#151019)}
+#app .skill-picker-modal-v2 .game-modal-card>h2{text-wrap:balance}
+
+/* Archive, return rewards, notices and power records: the same layout in new materials. */
+#app :is(.skill-picker-modal-v2,.notice-modal-v2,.idle-reward-modal-v2,.memory-archive-hub-modal,[data-power-record-modal]) .game-modal-card{border-image:var(--frame438) 110 / 16px stretch!important;background:linear-gradient(#0c0912ce,#0b0812e8),var(--archive438) center/cover!important;box-shadow:0 9px 34px #000d!important;image-rendering:auto!important}
+#app .monster-index-screen{background:linear-gradient(#0a0811e0,#07070be8),var(--archive438) center/cover fixed!important}
+#app .monster-index-screen :is(.v2-screen-hud,.v2-bottom-nav,.monster-index-tools),
+#app .memory-archive-hub>button,
+#app .idle-reward-v2 :is(.idle-v2-reward-grid>article,.idle-v2-route,.return-rarity-table),
+#app .notice-modal-v2 .home-notice-card,
+#app [data-power-record-modal] :is(.combat-power-summary>div,.combat-power-breakdown,.power-record-summary>div,.power-source-breakdown){border-image:var(--frame438) 110 / 9px stretch!important;background:linear-gradient(120deg,#1f1723dd,#0e0b12ee),var(--archive438) center/cover!important;box-shadow:inset 0 1px #c6a66b25,0 3px 8px #0008!important;image-rendering:auto!important}
+#app [data-power-record-modal] .power-source-breakdown h3{color:#f3dca4}
+#app .monster-index-screen .monster-species-card{border-image:var(--frame438) 110 fill / 8px stretch!important;background:#0a090f!important;image-rendering:auto!important;box-shadow:0 3px 9px #0008!important}
+#app .monster-index-screen .open-complete-codex{border-image:var(--frame438) 110 / 9px stretch!important;border-radius:0!important;background:linear-gradient(90deg,#261c29dd,#0c1017b8),var(--archive438) right center/cover!important;box-shadow:inset 0 0 18px #b0924424!important;color:#ffe7aa!important}
+#app .monster-index-screen .monster-bulk-synthesis{border-image:var(--frame438) 110 / 7px stretch!important;background:linear-gradient(#171219,#0d0b11)!important}
+#app .monster-index-screen :is(input,select){border-color:#8d704c!important;background:linear-gradient(#17121c,#0c0911)!important;color:#e9decb!important;border-radius:2px!important}
+#app .memory-archive-hub>button>span{background:radial-gradient(ellipse,#6e472745,#151019)!important;border-color:#a0824b!important;box-shadow:inset 0 0 10px #0008,0 0 8px #caa05925!important;color:#f5d896!important}
+#app .memory-archive-hub>button:nth-child(1){background:linear-gradient(90deg,#100b14f5,#160d16c9),var(--raid438) center/cover!important}
+#app .memory-archive-hub>button:nth-child(3){background:linear-gradient(90deg,#100b14ee,#221530aa),var(--sanctum437) right center/cover!important}
+#app .memory-archive-hub>button small{color:#cfb87e!important}
+#app .idle-reward-v2 .idle-v2-route>i{border-color:#927544!important;background:#09080d!important;box-shadow:inset 0 1px 3px #000}
+#app .idle-reward-v2 .idle-v2-route>i::before{background:linear-gradient(90deg,#775128,#f3d18b)!important}
+#app .notice-modal-v2 .home-notice-card.unread{border-image-width:10px!important;box-shadow:inset 3px 0 #e8bc66,0 0 9px #b8892c29!important}
+#app .notice-modal-v2 .notice-type{background:#21160d!important;border-color:#af8b46!important;color:#f5d796!important}
+#app .notice-modal-v2 .notice-tabs button>small{background:#392a1d!important;color:#f7e3b5!important}
+
+/* Raid menus use the illustrated vault behind existing panels and controls. */
+#app .world-raid432:not(.is-battle432){background:linear-gradient(#09070ec9,#09070ee8),var(--raid438) center/cover fixed!important}
+#app .world-raid432:not(.is-battle432) :is(.raid-frame432,.world-my-rank429,.world-my-reward429){border-image:var(--frame438) 110 / 12px stretch!important;background:linear-gradient(115deg,#20171fe3,#0c0a12f2),var(--raid438) center/cover!important;box-shadow:0 4px 14px #0009!important;image-rendering:auto!important}
+#app .world-raid432:not(.is-battle432) .raid-head432{border-image:var(--frame438) 110 / 8px stretch!important;background:linear-gradient(#171119,#08080d)!important;image-rendering:auto!important}
+#app .world-raid432 .raid-boss-panel432{background:linear-gradient(90deg,#10091099,#100910c0),var(--raid438) center/cover!important}
+#app .world-raid432 .raid-boss-stage432>img{filter:drop-shadow(0 3px 10px #000) drop-shadow(0 0 10px #b35bcd33)}
+#app .world-raid432 .raid-boss-stage432>h2{text-shadow:0 2px 3px #000,0 0 10px #ddbb6630;color:#ffe5a5!important}
+#app .world-raid432:not(.is-battle432) .world-raid-hp428{border-color:#b38c53!important;background:#180b12!important;box-shadow:inset 0 0 8px #000!important}
+#app .world-raid432:not(.is-battle432) .world-raid-hp428>i{background:linear-gradient(#c54b60,#7b2438)!important;box-shadow:inset 0 1px #ffbda044}
+#app .world-raid432 .raid-shop-items432>article{background:linear-gradient(95deg,#31201955,#16111c22)!important;border-color:#8c714b!important}
+#app .world-raid432 .world-ranking429{background:transparent!important}
+#app .world-raid432 :is(.world-ranking-table429,.world-reward-table429) :is(th,td){border-color:#6f5a3e!important}
+#app .world-raid432 .world-ranking-table429 tr.is-self{background:linear-gradient(90deg,#6b4b243b,#2c1e353b)!important;box-shadow:inset 3px 0 #dbb967}
+#app .world-raid432 :is(.world-my-rank429>strong,.raid-ranks432 b){color:#ffe1a1!important;text-shadow:0 1px 2px #000,0 0 9px #ca914636}
+#app .world-raid432.is-battle432 .battle-screen .side-unit-card .bar-label{font-size:6px!important}
+#app .world-raid432.is-battle432 .battle-screen .raid-main-boss .side-unit-card .bar-label{font-size:6.5px!important}
+
+/* Numerals centered in the existing frame's medallion; all other columns stay put. */
+#app .power-ranking-row:is(.podium-1,.podium-2,.podium-3)>.power-ranking-position{position:absolute;left:6%;top:36%;width:14%;height:40%;display:flex;align-items:center;justify-content:center;font:900 27px/1 Georgia,serif!important;text-align:center;letter-spacing:0;z-index:2}
+#app .power-ranking-row:is(.podium-1,.podium-2,.podium-3)>.power-ranking-avatar{grid-column:2;grid-row:1}
+#app .power-ranking-row:is(.podium-1,.podium-2,.podium-3)>.power-ranking-identity{grid-column:3;grid-row:1}
+#app .power-ranking-row:is(.podium-1,.podium-2,.podium-3)>strong{grid-column:4;grid-row:1}
+#app .power-ranking-row:is(.podium-1,.podium-2,.podium-3)>i{grid-column:5;grid-row:1}
+#app .podium-1>.power-ranking-position{color:#ffe8a3!important;text-shadow:0 -1px #fff4ce,0 2px #986221,0 3px 2px #000,0 0 9px #ecb64377!important}
+#app .podium-2>.power-ranking-position{color:#e5edf5!important;text-shadow:0 -1px #fff,0 2px #6a7889,0 3px 2px #000!important}
+#app .podium-3>.power-ranking-position{color:#e9ba8e!important;text-shadow:0 -1px #fff0d0,0 2px #784329,0 3px 2px #000!important}
+#app :is(.monster-index-screen,.equipment-screen-v2,.skill-picker-modal-v2,.notice-modal-v2,.memory-archive-hub-modal,.idle-reward-modal-v2,.world-raid432,[data-power-record-modal]) button:focus-visible{outline:2px solid #ffe4a4!important;outline-offset:2px}
