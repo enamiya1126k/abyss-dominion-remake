@@ -1,6 +1,7 @@
 import{FLOOR_BOSS_CATALOG,floorBossDefinitionById}from"../data/floorBosses.js?v=2.11.30-build195";
 import{SPECIES}from"../data/species.js?v=3.1.72-build392";
 
+import {exchangeKeys439} from './ExchangeCosts439.js';
 export const FLOOR_BOSS_CONTRACT_COST=50;
 export const FLOOR_BOSS_EQUIPMENT_COST=20;
 
@@ -38,7 +39,7 @@ export function recordFloorBossDiscovery(state,bossId){
 export function floorBossChallengeStatus(state,bossId){
  const boss=floorBossDefinitionById(bossId);if(!boss)return null;
  const challenge=normalizeFloorBossChallengeState(state),fragments=integer(challenge.fragments[boss.id]),victories=integer(challenge.victories[boss.id]);
- return{boss,unlocked:Boolean(challenge.discovered[boss.id]),encounters:integer(challenge.encounters[boss.id]),fragments,victories,contracted:Boolean(challenge.contracts[boss.id]),contractCost:FLOOR_BOSS_CONTRACT_COST,equipmentCost:FLOOR_BOSS_EQUIPMENT_COST};
+ return{...exchangeKeys439(state,'floor'),boss,unlocked:Boolean(challenge.discovered[boss.id]),encounters:integer(challenge.encounters[boss.id]),fragments,victories,contracted:Boolean(challenge.contracts[boss.id]),contractCost:FLOOR_BOSS_CONTRACT_COST,equipmentCost:FLOOR_BOSS_EQUIPMENT_COST};
 }
 
 function compatibleSupports(boss){
@@ -82,8 +83,9 @@ export function spendFloorBossFragments(state,bossId,reward){
  if(!cost)return{ok:false,message:"交換対象が見つかりません。"};
  if(body&&status.contracted)return{ok:false,message:"この階層ボス本体は契約済みです。"};
  if(status.fragments<cost)return{ok:false,message:`欠片が不足しています（${status.fragments}/${cost}）`};
- challenge.fragments[bossId]=status.fragments-cost;if(body)challenge.contracts[bossId]=true;
- return{ok:true,boss:status.boss,reward,piece,cost,remaining:challenge.fragments[bossId]};
+ if(!status.keysEnough)return{ok:false,message:`深淵の鍵が不足しています（${status.availableKeys}/${status.keyCost}）`};
+ state.inventory.abyssKeys=status.availableKeys-status.keyCost;challenge.fragments[bossId]=status.fragments-cost;if(body)challenge.contracts[bossId]=true;
+ return{ok:true,boss:status.boss,reward,piece,cost,keyCost:status.keyCost,remaining:challenge.fragments[bossId]};
 }
 
 export function restoreFloorBossFragments(state,bossId,amount,{contract=false}={}){

@@ -351,9 +351,11 @@ export function applyPreludeToEncounter(event,prelude){
 }
 
 
+import {exchangeKeys439} from './ExchangeCosts439.js';
+
 export function endgameContractStatus(state,bossId,floor=state?.player?.currentFloor){
- const canonicalId=canonicalEndgameId(bossId),boss=ENDGAME_BOSSES[canonicalId],e=normalizeEndgameState(state).emergency,contract=e.contracts[canonicalId]??{},availableFragments=Math.max(0,Math.floor(Number(e.fragments[canonicalId])||0)),required=boss?.faction==="tenGod"?150:50,maxFloor=Math.max(Number(state?.player?.maxFloor)||1,Number(floor)||1),eligible=Boolean(boss&&maxFloor>=EMERGENCY_UNLOCK_FLOOR),contracted=Boolean(contract.contracted),canContract=eligible&&!contracted&&availableFragments>=required;
- return{bossId:canonicalId,boss,eligible,contracted,canContract,availableFragments,totalFragments:availableFragments,required,remaining:Math.max(0,required-availableFragments),attempts:Number(contract.attempts??0),contractedAt:contract.contractedAt??null,reason:contracted?"契約済み":!eligible?`${EMERGENCY_UNLOCK_FLOOR}階到達で契約機能が解放される`:availableFragments<required?`欠片が不足（${availableFragments}/${required}）`:null};
+ const canonicalId=canonicalEndgameId(bossId),boss=ENDGAME_BOSSES[canonicalId],e=normalizeEndgameState(state).emergency,contract=e.contracts[canonicalId]??{},availableFragments=Math.max(0,Math.floor(Number(e.fragments[canonicalId])||0)),required=boss?.faction==="tenGod"?150:50,maxFloor=Math.max(Number(state?.player?.maxFloor)||1,Number(floor)||1),eligible=Boolean(boss&&maxFloor>=EMERGENCY_UNLOCK_FLOOR),contracted=Boolean(contract.contracted),keys=exchangeKeys439(state,boss?.faction),canContract=eligible&&!contracted&&availableFragments>=required&&keys.keysEnough;
+ return{...keys,bossId:canonicalId,boss,eligible,contracted,canContract,availableFragments,totalFragments:availableFragments,required,remaining:Math.max(0,required-availableFragments),attempts:Number(contract.attempts??0),contractedAt:contract.contractedAt??null,reason:contracted?"契約済み":!eligible?`${EMERGENCY_UNLOCK_FLOOR}階到達で契約機能が解放される`:availableFragments<required?`欠片が不足（${availableFragments}/${required}）`:!keys.keysEnough?`深淵の鍵が不足（${keys.availableKeys}/${keys.keyCost}）`:null};
 }
 export function attemptEndgameContract(state,bossId,floor=state?.player?.currentFloor){
  const status=endgameContractStatus(state,bossId,floor),e=normalizeEndgameState(state).emergency;
@@ -361,12 +363,12 @@ export function attemptEndgameContract(state,bossId,floor=state?.player?.current
  bossId=status.bossId;e.contracts[bossId]??={contracted:false,attempts:0,contractedAt:null,contractedFloor:null};const contract=e.contracts[bossId];
  if(!status.canContract)return{...status,attempted:false,success:false};
  const before=Math.max(0,Math.floor(Number(e.fragments[bossId])||0));if(before<status.required)return{...endgameContractStatus(state,bossId,floor),attempted:false,success:false};
- e.fragments[bossId]=before-status.required;contract.attempts=Math.max(0,Number(contract.attempts??0))+1;contract.contracted=true;contract.contractedAt=new Date().toISOString();contract.contractedFloor=Math.max(1,Number(floor)||1);contract.spentFragments=status.required;
- return{...endgameContractStatus(state,bossId,floor),attempted:true,success:true,spent:status.required};
+ state.inventory.abyssKeys=status.availableKeys-status.keyCost;e.fragments[bossId]=before-status.required;contract.attempts=Math.max(0,Number(contract.attempts??0))+1;contract.contracted=true;contract.contractedAt=new Date().toISOString();contract.contractedFloor=Math.max(1,Number(floor)||1);contract.spentFragments=status.required;
+ return{...endgameContractStatus(state,bossId,floor),attempted:true,success:true,spent:status.required,keyCost:status.keyCost};
 }
 
 export function fragmentRequirement(craftCount=0){return[50,75,100,125,150,200][Math.min(5,Math.max(0,Number(craftCount)||0))]}
-export function emergencyFragmentStatus(state,bossId){bossId=canonicalEndgameId(bossId);const e=normalizeEndgameState(state).emergency,count=e.fragments[bossId]??0,crafted=e.craftCounts[bossId]??0;return{bossId,count,crafted,required:fragmentRequirement(crafted),canCraft:count>=fragmentRequirement(crafted)}}
+export function emergencyFragmentStatus(state,bossId){bossId=canonicalEndgameId(bossId);const e=normalizeEndgameState(state).emergency,count=e.fragments[bossId]??0,crafted=e.craftCounts[bossId]??0,keys=exchangeKeys439(state,ENDGAME_BOSSES[bossId]?.faction);return{...keys,bossId,count,crafted,required:fragmentRequirement(crafted),canCraft:count>=fragmentRequirement(crafted)&&keys.keysEnough}}
 export function awardEmergencyFragments(state,bossId,won,resultId=null,rewardOverride=null){
  bossId=canonicalEndgameId(bossId);if(!bossId)return 0;const e=normalizeEndgameState(state).emergency,key=resultId?String(resultId):null;
  if(key&&Object.prototype.hasOwnProperty.call(e.processedFragmentResults,key))return Number(e.processedFragmentResults[key])||0;
@@ -378,8 +380,8 @@ export function awardEmergencyFragments(state,bossId,won,resultId=null,rewardOve
 }
 export function craftEndgameEquipment(state,bossId){
  const canonicalId=canonicalEndgameId(bossId),boss=ENDGAME_BOSSES[canonicalId];if(!boss)return{ok:false,message:"対象が見つかりません。"};
- const e=normalizeEndgameState(state).emergency,status=emergencyFragmentStatus(state,canonicalId);if(!status.canCraft)return{ok:false,message:`欠片が不足しています（${status.count}/${status.required}）`};
+ const e=normalizeEndgameState(state).emergency,status=emergencyFragmentStatus(state,canonicalId);if(!status.canCraft)return{ok:false,message:status.count<status.required?`欠片が不足しています（${status.count}/${status.required}）`:`深淵の鍵が不足しています（${status.availableKeys}/${status.keyCost}）`};
  const gearIndex=status.crafted%boss.gear.length,gear=boss.gear[gearIndex],item=createSignatureEquipment(canonicalId,gearIndex);if(!item)return{ok:false,message:"専用装備の定義が見つかりません。"};
- e.fragments[canonicalId]-=status.required;e.craftCounts[canonicalId]=status.crafted+1;e.craftedGear.push({bossId:canonicalId,itemId:item.id,slot:gear.slot,subslot:gear.subslot,at:item.createdAt});return{ok:true,item,spent:status.required,boss,gearIndex};
+ state.inventory.abyssKeys=status.availableKeys-status.keyCost;e.fragments[canonicalId]-=status.required;e.craftCounts[canonicalId]=status.crafted+1;e.craftedGear.push({bossId:canonicalId,itemId:item.id,slot:gear.slot,subslot:gear.subslot,at:item.createdAt});return{ok:true,item,spent:status.required,keyCost:status.keyCost,boss,gearIndex};
 }
 export function recordEmergencyResult(state,battle,won){const end=normalizeEndgameState(state).emergency,bossId=battle?.specialBossId,floor=state.player?.currentFloor||1,key=battle?.battleId?String(battle.battleId):null;if(key&&end.processedBattleResults[key])return false;if(key){end.processedBattleResults[key]=won?"win":"loss";const keys=Object.keys(end.processedBattleResults);for(const old of keys.slice(0,Math.max(0,keys.length-100)))delete end.processedBattleResults[old]}end.encounters++;won?end.wins++:end.losses++;end.lastFloor=floor;if(hasCleared1000(state)&&floor>1000){end.rescue.post1000Encounters++;end.rescue.consecutiveLosses=won?0:Math.min(5,end.rescue.consecutiveLosses+1);end.rescue.lastResult=won?"win":"loss";}if(bossId){const r=end.records[bossId]??={encounters:0,wins:0,losses:0,highestPower:0,firstFloor:null,firstVictoryFloor:null,bestRemainingHpPercent:100,totalFragments:0};r.encounters++;won?r.wins++:r.losses++;r.highestPower=Math.max(r.highestPower,battle.powerPercent||0);r.firstFloor??=end.lastFloor;if(won)r.firstVictoryFloor??=end.lastFloor;const leader=battle.enemies?.find(x=>x.endgameBossId===bossId),remaining=leader?.maxHp?Math.max(0,Math.round((leader.hp/leader.maxHp)*100)):won?0:100;r.bestRemainingHpPercent=Math.min(r.bestRemainingHpPercent??100,remaining);end.records[bossId]=r;if(won&&ENDGAME_BOSSES[bossId]?.faction==="tenGod")end.blessings[bossId]=true}return true}

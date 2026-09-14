@@ -1,0 +1,760 @@
+TAP version 13
+# Subtest: daily raid uses JST midnight; a boss change never refreshes the three daily entries
+ok 1 - daily raid uses JST midnight; a boss change never refreshes the three daily entries
+  ---
+  duration_ms: 11.559846
+  type: 'test'
+  ...
+# Subtest: retry of a start receipt and active encounter rejection consume exactly one entry
+ok 2 - retry of a start receipt and active encounter rejection consume exactly one entry
+  ---
+  duration_ms: 1.580913
+  type: 'test'
+  ...
+# Subtest: two independent parties cumulatively damage one server HP; client damage fields are ignored
+ok 3 - two independent parties cumulatively damage one server HP; client damage fields are ignored
+  ---
+  duration_ms: 13.228619
+  type: 'test'
+  ...
+# Subtest: last hit advances exactly once, credits only remaining HP, and closes other old encounters
+ok 4 - last hit advances exactly once, credits only remaining HP, and closes other old encounters
+  ---
+  duration_ms: 6.711603
+  type: 'test'
+  ...
+# Subtest: boss does not rotate by date and rejects a stale boss start without charging
+ok 5 - boss does not rotate by date and rejects a stale boss start without charging
+  ---
+  duration_ms: 0.375334
+  type: 'test'
+  ...
+# Subtest: boss waits for five full rounds while level 100 minions act, then attacks in round six
+ok 6 - boss waits for five full rounds while level 100 minions act, then attacks in round six
+  ---
+  duration_ms: 14.906305
+  type: 'test'
+  ...
+# Subtest: a surviving party finishes at ten rounds without resetting the campaign or issuing legacy rewards
+ok 7 - a surviving party finishes at ten rounds without resetting the campaign or issuing legacy rewards
+  ---
+  duration_ms: 9.140142
+  type: 'test'
+  ...
+# Subtest: another player cannot operate the attempt and stale rounds cannot hit twice
+ok 8 - another player cannot operate the attempt and stale rounds cannot hit twice
+  ---
+  duration_ms: 4.317411
+  type: 'test'
+  ...
+# Subtest: disconnect pauses the same battle and reconnect keeps its quota and damage
+ok 9 - disconnect pauses the same battle and reconnect keeps its quota and damage
+  ---
+  duration_ms: 1.866444
+  type: 'test'
+  ...
+# Subtest: server restart restores active battle, shared HP, receipt and daily count
+ok 10 - server restart restores active battle, shared HP, receipt and daily count
+  ---
+  duration_ms: 4.716419
+  type: 'test'
+  ...
+# Subtest: failed durable writes roll back entry, damage, actions and next-boss advancement
+ok 11 - failed durable writes roll back entry, damage, actions and next-boss advancement
+  ---
+  duration_ms: 2.364409
+  type: 'test'
+  ...
+# Subtest: invalid ledger cannot silently reset daily limits or shared HP
+ok 12 - invalid ledger cannot silently reset daily limits or shared HP
+  ---
+  duration_ms: 1.144008
+  type: 'test'
+  ...
+# Subtest: current online room and trade block starting a separate raid
+ok 13 - current online room and trade block starting a separate raid
+  ---
+  duration_ms: 0.202919
+  type: 'test'
+  ...
+# Subtest: damage over time uses 1.6 million reference HP only on the world boss
+ok 14 - damage over time uses 1.6 million reference HP only on the world boss
+  ---
+  duration_ms: 2.602159
+  type: 'test'
+  ...
+# Subtest: old completed battle payloads compact without losing their start receipts or reports
+ok 15 - old completed battle payloads compact without losing their start receipts or reports
+  ---
+  duration_ms: 0.983942
+  type: 'test'
+  ...
+# Subtest: same damage shares rank and reward; zero damage never ranks
+ok 16 - same damage shares rank and reward; zero damage never ranks
+  ---
+  duration_ms: 2.312202
+  type: 'test'
+  ...
+# Subtest: all ranking tier boundaries have the intended additive rewards
+ok 17 - all ranking tier boundaries have the intended additive rewards
+  ---
+  duration_ms: 0.398197
+  type: 'test'
+  ...
+# Subtest: ranking accumulates across attempts and returns the personal row outside page one
+ok 18 - ranking accumulates across attempts and returns the personal row outside page one
+  ---
+  duration_ms: 14.714677
+  type: 'test'
+  ...
+# Subtest: simultaneous finishing requests settle every player once with exactly one last hit
+ok 19 - simultaneous finishing requests settle every player once with exactly one last hit
+  ---
+  duration_ms: 3.721561
+  type: 'test'
+  ...
+# Subtest: a past boss freezes ranks; next boss begins without carrying scores
+ok 20 - a past boss freezes ranks; next boss begins without carrying scores
+  ---
+  duration_ms: 3.82863
+  type: 'test'
+  ...
+# Subtest: disconnected contributors keep rewards, while zero-damage attempts get none
+ok 21 - disconnected contributors keep rewards, while zero-damage attempts get none
+  ---
+  duration_ms: 4.964516
+  type: 'test'
+  ...
+# Subtest: save failure rolls back boss death, all rewards, scores, and next boss together
+ok 22 - save failure rolls back boss death, all rewards, scores, and next boss together
+  ---
+  duration_ms: 2.264732
+  type: 'test'
+  ...
+# Subtest: receipt ownership, ack retry, and failed ack persistence cannot double settle or lose pending rewards
+ok 23 - receipt ownership, ack retry, and failed ack persistence cannot double settle or lose pending rewards
+  ---
+  duration_ms: 2.464997
+  type: 'test'
+  ...
+# Subtest: server restart preserves outstanding and acknowledged rewards with their original IDs
+ok 24 - server restart preserves outstanding and acknowledged rewards with their original IDs
+  ---
+  duration_ms: 5.960605
+  type: 'test'
+  ...
+# Subtest: Build428 completed records migrate to rewards once without resetting HP, attempts or daily count
+ok 25 - Build428 completed records migrate to rewards once without resetting HP, attempts or daily count
+  ---
+  duration_ms: 4.707416
+  type: 'test'
+  ...
+# Subtest: ranking and reward listing require the authenticated connected session
+ok 26 - ranking and reward listing require the authenticated connected session
+  ---
+  duration_ms: 0.321874
+  type: 'test'
+  ...
+# Subtest: incomplete reward data stops delivery without overwriting the saved ledger
+ok 27 - incomplete reward data stops delivery without overwriting the saved ledger
+  ---
+  duration_ms: 4.458689
+  type: 'test'
+  ...
+# Subtest: backlog delivery is paged, and acknowledged pages never appear again
+ok 28 - backlog delivery is paged, and acknowledged pages never appear again
+  ---
+  duration_ms: 50.798876
+  type: 'test'
+  ...
+# Subtest: service worker caches boot files, then serves modules with version queries and navigation offline
+ok 29 - service worker caches boot files, then serves modules with version queries and navigation offline
+  ---
+  duration_ms: 10.418658
+  type: 'test'
+  ...
+# Subtest: offline cache never intercepts WebSocket, API POSTs or external origins
+ok 30 - offline cache never intercepts WebSocket, API POSTs or external origins
+  ---
+  duration_ms: 1.018103
+  type: 'test'
+  ...
+# Subtest: failed prefetch reports failure and cannot claim offline readiness
+ok 31 - failed prefetch reports failure and cannot claim offline readiness
+  ---
+  duration_ms: 1.364784
+  type: 'test'
+  ...
+# Subtest: offline boot manifest includes every runtime dependency and only files that exist
+ok 32 - offline boot manifest includes every runtime dependency and only files that exist
+  ---
+  duration_ms: 7.090021
+  type: 'test'
+  ...
+# Subtest: offline commands are saved before presentation; failed saves retain the previous recoverable battle
+ok 33 - offline commands are saved before presentation; failed saves retain the previous recoverable battle
+  ---
+  duration_ms: 22.266035
+  type: 'test'
+  ...
+# Subtest: reload resumes a partially played ticket and saves a completed result before attempting upload
+ok 34 - reload resumes a partially played ticket and saves a completed result before attempting upload
+  ---
+  duration_ms: 144.114749
+  type: 'test'
+  ...
+# Subtest: receipt loss retries the same result, and a later ticket list recovers acknowledgement without duplicate damage
+ok 35 - receipt loss retries the same result, and a later ticket list recovers acknowledgement without duplicate damage
+  ---
+  duration_ms: 15.772863
+  type: 'test'
+  ...
+# Subtest: reservation request persists with its original profile; lost response resends the same request ID
+ok 36 - reservation request persists with its original profile; lost response resends the same request ID
+  ---
+  duration_ms: 16.884494
+  type: 'test'
+  ...
+# Subtest: failed offline data preparation cannot consume quota or send a reservation
+ok 37 - failed offline data preparation cannot consume quota or send a reservation
+  ---
+  duration_ms: 0.517804
+  type: 'test'
+  ...
+# Subtest: old sockets and other-account tickets cannot change the local ticket bank
+ok 38 - old sockets and other-account tickets cannot change the local ticket bank
+  ---
+  duration_ms: 16.649273
+  type: 'test'
+  ...
+# Subtest: offline lobby keeps the real ticket quota and explains delayed reward finalization
+ok 39 - offline lobby keeps the real ticket quota and explains delayed reward finalization
+  ---
+  duration_ms: 9.712551
+  type: 'test'
+  ...
+# Subtest: native manual action, speed and auto controls route locally with no network connection
+ok 40 - native manual action, speed and auto controls route locally with no network connection
+  ---
+  duration_ms: 17.194252
+  type: 'test'
+  ...
+# Subtest: ticket bank and pending results survive native SaveService serialization
+ok 41 - ticket bank and pending results survive native SaveService serialization
+  ---
+  duration_ms: 28.96589
+  type: 'test'
+  ...
+# Subtest: expired tickets cannot start; replay after a lost terminal response stops retrying on receipt
+ok 42 - expired tickets cannot start; replay after a lost terminal response stops retrying on receipt
+  ---
+  duration_ms: 2.523684
+  type: 'test'
+  ...
+# Subtest: provisional rankings clearly distinguish pending settlement from final rewards
+ok 43 - provisional rankings clearly distinguish pending settlement from final rewards
+  ---
+  duration_ms: 1.178979
+  type: 'test'
+  ...
+# Subtest: an expired paused battle does not block another still-valid reserved ticket
+ok 44 - an expired paused battle does not block another still-valid reserved ticket
+  ---
+  duration_ms: 2.721476
+  type: 'test'
+  ...
+# Subtest: online attempts and reserved tickets use the same 3-per-day quota; retries do not reserve twice
+ok 45 - online attempts and reserved tickets use the same 3-per-day quota; retries do not reserve twice
+  ---
+  duration_ms: 17.571208
+  type: 'test'
+  ...
+# Subtest: JST midnight resets only the new day; old tickets remain charged to their issue day
+ok 46 - JST midnight resets only the new day; old tickets remain charged to their issue day
+  ---
+  duration_ms: 3.858944
+  type: 'test'
+  ...
+# Subtest: reservation persistence failure changes neither quota nor tickets; same request succeeds on retry
+ok 47 - reservation persistence failure changes neither quota nor tickets; same request succeeds on retry
+  ---
+  duration_ms: 1.890028
+  type: 'test'
+  ...
+# Subtest: manual and automatic offline combat replay identically after JSON checkpoint reload
+ok 48 - manual and automatic offline combat replay identically after JSON checkpoint reload
+  ---
+  duration_ms: 25.420159
+  type: 'test'
+  ...
+# Subtest: result values and forged roster are ignored; only replayed commands determine accepted damage
+ok 49 - result values and forged roster are ignored; only replayed commands determine accepted damage
+  ---
+  duration_ms: 7.524252
+  type: 'test'
+  ...
+# Subtest: duplicate uploads including concurrent arrivals settle a ticket exactly once
+ok 50 - duplicate uploads including concurrent arrivals settle a ticket exactly once
+  ---
+  duration_ms: 3.161485
+  type: 'test'
+  ...
+# Subtest: another account, unknown tickets, incomplete battle and invalid commands cannot affect the ledger
+ok 51 - another account, unknown tickets, incomplete battle and invalid commands cannot affect the ledger
+  ---
+  duration_ms: 1.083829
+  type: 'test'
+  ...
+# Subtest: submit persistence failure rolls back HP, contribution, ticket receipt and rewards
+ok 52 - submit persistence failure rolls back HP, contribution, ticket receipt and rewards
+  ---
+  duration_ms: 4.497487
+  type: 'test'
+  ...
+# Subtest: late results rank on the original killed boss; next HP and original last-hit bonus remain intact
+ok 53 - late results rank on the original killed boss; next HP and original last-hit bonus remain intact
+  ---
+  duration_ms: 10.618618
+  type: 'test'
+  ...
+# Subtest: all outstanding tickets must settle or expire before rank rewards are fixed
+ok 54 - all outstanding tickets must settle or expire before rank rewards are fixed
+  ---
+  duration_ms: 9.694565
+  type: 'test'
+  ...
+# Subtest: expired uploads cannot change finalized ranks or get last-hit rewards; quota stays consumed
+ok 55 - expired uploads cannot change finalized ranks or get last-hit rewards; quota stays consumed
+  ---
+  duration_ms: 3.454418
+  type: 'test'
+  ...
+# Subtest: an offline finishing blow transitions boss once and waits for other outstanding tickets
+ok 56 - an offline finishing blow transitions boss once and waits for other outstanding tickets
+  ---
+  duration_ms: 3.587935
+  type: 'test'
+  ...
+# Subtest: server restart preserves tickets, seed, pending settlement and one-time result receipts
+ok 57 - server restart preserves tickets, seed, pending settlement and one-time result receipts
+  ---
+  duration_ms: 11.811248
+  type: 'test'
+  ...
+# Subtest: existing Build429 final rewards stay frozen during upgrade
+ok 58 - existing Build429 final rewards stay frozen during upgrade
+  ---
+  duration_ms: 4.842045
+  type: 'test'
+  ...
+# Subtest: upgrade waits for the new worker, preserves saved results and warms code without reserving another ticket
+ok 59 - upgrade waits for the new worker, preserves saved results and warms code without reserving another ticket
+  ---
+  duration_ms: 6.062665
+  type: 'test'
+  ...
+# Subtest: same-build reload keeps the existing cache and does not download all boot files again
+ok 60 - same-build reload keeps the existing cache and does not download all boot files again
+  ---
+  duration_ms: 2.702137
+  type: 'test'
+  ...
+# Subtest: offline worker registration failure does not delete native battle or result records or block game boot
+ok 61 - offline worker registration failure does not delete native battle or result records or block game boot
+  ---
+  duration_ms: 1.508416
+  type: 'test'
+  ...
+# Subtest: native raid exchange saves actual items and a unique circle only once
+ok 62 - native raid exchange saves actual items and a unique circle only once
+  ---
+  duration_ms: 107.085195
+  type: 'test'
+  ...
+# Subtest: native exchange rolls back material, reward, codex and receipt when saving fails, then retries once
+ok 63 - native exchange rolls back material, reward, codex and receipt when saving fails, then retries once
+  ---
+  duration_ms: 32.398496
+  type: 'test'
+  ...
+# Subtest: all three bosses equip the exchange-exclusive circle; matching children are Lv100 and unequipped
+ok 64 - all three bosses equip the exchange-exclusive circle; matching children are Lv100 and unequipped
+  ---
+  duration_ms: 5.17718
+  type: 'test'
+  ...
+# Subtest: revival happens once for the shared boss, then a second death settles rewards and advances once
+ok 65 - revival happens once for the shared boss, then a second death settles rewards and advances once
+  ---
+  duration_ms: 12.017492
+  type: 'test'
+  ...
+# Subtest: shield damage counts as contribution and the shield is shared between independent attempts
+ok 66 - shield damage counts as contribution and the shield is shared between independent attempts
+  ---
+  duration_ms: 13.569683
+  type: 'test'
+  ...
+# Subtest: thunder circle increases boss damage and chains only the boss, while the first five rounds remain quiet
+ok 67 - thunder circle increases boss damage and chains only the boss, while the first five rounds remain quiet
+  ---
+  duration_ms: 9.722907
+  type: 'test'
+  ...
+# Subtest: version-2 replay resumes identically, includes performance, and submits exactly once
+ok 68 - version-2 replay resumes identically, includes performance, and submits exactly once
+  ---
+  duration_ms: 37.227111
+  type: 'test'
+  ...
+# Subtest: previously issued version-1 tickets still run the frozen engine
+ok 69 - previously issued version-1 tickets still run the frozen engine
+  ---
+  duration_ms: 3.141766
+  type: 'test'
+  ...
+# Subtest: failed persistence rolls back shield, HP, performance and quota together
+ok 70 - failed persistence rolls back shield, HP, performance and quota together
+  ---
+  duration_ms: 2.939718
+  type: 'test'
+  ...
+# Subtest: late version-2 results never damage the next boss or change the last hit
+ok 71 - late version-2 results never damage the next boss or change the last hit
+  ---
+  duration_ms: 13.525938
+  type: 'test'
+  ...
+# Subtest: upgrading a saved active online attempt preserves its quota, damage and issued legacy ticket
+ok 72 - upgrading a saved active online attempt preserves its quota, damage and issued legacy ticket
+  ---
+  duration_ms: 11.996872
+  type: 'test'
+  ...
+# Subtest: role filters use real effect fields, not names, AI tags or conditional bonuses
+ok 73 - role filters use real effect fields, not names, AI tags or conditional bonuses
+  ---
+  duration_ms: 20.777498
+  type: 'test'
+  ...
+# Subtest: viewing every role, detail and filter leaves all save fields unchanged
+ok 74 - viewing every role, detail and filter leaves all save fields unchanged
+  ---
+  duration_ms: 17.797001
+  type: 'test'
+  ...
+# Subtest: learned and equipped skills are distinguished, with locked skills and exact unlock level
+ok 75 - learned and equipped skills are distinguished, with locked skills and exact unlock level
+  ---
+  duration_ms: 0.457325
+  type: 'test'
+  ...
+# Subtest: real equipped weapon skills and endgame identity participate without granting unowned skills
+ok 76 - real equipped weapon skills and endgame identity participate without granting unowned skills
+  ---
+  duration_ms: 3.64576
+  type: 'test'
+  ...
+# Subtest: search is stable, escaped, and has an empty result without inventing a candidate
+ok 77 - search is stable, escaped, and has an empty result without inventing a candidate
+  ---
+  duration_ms: 0.984954
+  type: 'test'
+  ...
+# Subtest: mother description is based on the scaled projection, not the original 920% skill
+ok 78 - mother description is based on the scaled projection, not the original 920% skill
+  ---
+  duration_ms: 0.705351
+  type: 'test'
+  ...
+# Subtest: reading hold is at least 3 wall-clock seconds for every speed and reattaches after arena replacement
+ok 79 - reading hold is at least 3 wall-clock seconds for every speed and reattaches after arena replacement
+  ---
+  duration_ms: 0.728655
+  type: 'test'
+  ...
+# Subtest: 3000 owned characters can be filtered locally without changing save or skill data
+ok 80 - 3000 owned characters can be filtered locally without changing save or skill data
+  ---
+  duration_ms: 274.919933
+  type: 'test'
+  ...
+# Subtest: 436 cache and import aliases include the new UI and art without touching frozen replay modules
+ok 81 - 436 cache and import aliases include the new UI and art without touching frozen replay modules
+  ---
+  duration_ms: 5.572713
+  type: 'test'
+  ...
+# Subtest: 437 all three bosses allow living parties through round 10 and stop at 99
+ok 82 - 437 all three bosses allow living parties through round 10 and stop at 99
+  ---
+  duration_ms: 287.320911
+  type: 'test'
+  ...
+# Subtest: old v1 and v2 ticket JSON replays remain at their original 10 rounds
+ok 83 - old v1 and v2 ticket JSON replays remain at their original 10 rounds
+  ---
+  duration_ms: 28.153362
+  type: 'test'
+  ...
+# Subtest: 99-round manual play with speed changes exceeds old command cap and resumes identically within transport budget
+ok 84 - 99-round manual play with speed changes exceeds old command cap and resumes identically within transport budget
+  ---
+  duration_ms: 254.712786
+  type: 'test'
+  ...
+# Subtest: online server stops only at 99, publishes the actual cap, and charges once
+ok 85 - online server stops only at 99, publishes the actual cap, and charges once
+  ---
+  duration_ms: 102.575495
+  type: 'test'
+  ...
+# Subtest: v3 offline submission is verified, persisted once, and duplicate submission cannot double damage
+ok 86 - v3 offline submission is verified, persisted once, and duplicate submission cannot double damage
+  ---
+  duration_ms: 70.160435
+  type: 'test'
+  ...
+# Subtest: restarting with active online attempt extends its cap without rewriting issued v2 ticket or charging quota
+ok 87 - restarting with active online attempt extends its cap without rewriting issued v2 ticket or charging quota
+  ---
+  duration_ms: 8.03743
+  type: 'test'
+  ...
+# Subtest: boss one-time revival on round 98 keeps the living party fighting; round 99 still ends
+ok 88 - boss one-time revival on round 98 keeps the living party fighting; round 99 still ends
+  ---
+  duration_ms: 3.085253
+  type: 'test'
+  ...
+# Subtest: defeat and retreat still finish before the limit
+ok 89 - defeat and retreat still finish before the limit
+  ---
+  duration_ms: 2.246565
+  type: 'test'
+  ...
+# Subtest: compact contribution keeps exact recorded numbers and original MVP weighting without modifying input
+ok 90 - compact contribution keeps exact recorded numbers and original MVP weighting without modifying input
+  ---
+  duration_ms: 6.819122
+  type: 'test'
+  ...
+# Subtest: combined raid result shows legacy result round count, actual sync status, and no premature rewards
+ok 91 - combined raid result shows legacy result round count, actual sync status, and no premature rewards
+  ---
+  duration_ms: 0.7251
+  type: 'test'
+  ...
+# Subtest: 437 cache includes added art and replay dispatcher; frozen legacy engine is not aliased
+ok 92 - 437 cache includes added art and replay dispatcher; frozen legacy engine is not aliased
+  ---
+  duration_ms: 1.740007
+  type: 'test'
+  ...
+# Subtest: one combined result returns directly to the lobby for online and offline attempts
+ok 93 - one combined result returns directly to the lobby for online and offline attempts
+  ---
+  duration_ms: 167.159783
+  type: 'test'
+  ...
+# Subtest: shared battle UI preserves 16x and 32x labels and CSS animation timing
+ok 94 - shared battle UI preserves 16x and 32x labels and CSS animation timing
+  ---
+  duration_ms: 25.095991
+  type: 'test'
+  ...
+# Subtest: all six speeds change result deadlines and animation duration, with no skipped round
+ok 95 - all six speeds change result deadlines and animation duration, with no skipped round
+  ---
+  duration_ms: 17.967832
+  type: 'test'
+  ...
+# Subtest: invalid speed and another player cannot change the clock or current speed
+ok 96 - invalid speed and another player cannot change the clock or current speed
+  ---
+  duration_ms: 0.844936
+  type: 'test'
+  ...
+# Subtest: changing speed while an animation is in progress preserves the elapsed proportion
+ok 97 - changing speed while an animation is in progress preserves the elapsed proportion
+  ---
+  duration_ms: 7.970912
+  type: 'test'
+  ...
+# Subtest: boss 1: all six playback speeds preserve damage, effects, contribution and final round
+ok 98 - boss 1: all six playback speeds preserve damage, effects, contribution and final round
+  ---
+  duration_ms: 223.299164
+  type: 'test'
+  ...
+# Subtest: boss 2: all six playback speeds preserve damage, effects, contribution and final round
+ok 99 - boss 2: all six playback speeds preserve damage, effects, contribution and final round
+  ---
+  duration_ms: 127.292927
+  type: 'test'
+  ...
+# Subtest: boss 3: all six playback speeds preserve damage, effects, contribution and final round
+ok 100 - boss 3: all six playback speeds preserve damage, effects, contribution and final round
+  ---
+  duration_ms: 8.235462
+  type: 'test'
+  ...
+# Subtest: legacy v1 ticket keeps its original 10-round rules at new playback speeds
+ok 101 - legacy v1 ticket keeps its original 10-round rules at new playback speeds
+  ---
+  duration_ms: 5.317156
+  type: 'test'
+  ...
+# Subtest: legacy v2 ticket keeps its original 10-round rules at new playback speeds
+ok 102 - legacy v2 ticket keeps its original 10-round rules at new playback speeds
+  ---
+  duration_ms: 8.729732
+  type: 'test'
+  ...
+# Subtest: 32x offline battle resumes from serialized commands and server accepts its result only once
+ok 103 - 32x offline battle resumes from serialized commands and server accepts its result only once
+  ---
+  duration_ms: 9.804236
+  type: 'test'
+  ...
+# Subtest: online 32x progresses faster than 16x while charging the same quota
+ok 104 - online 32x progresses faster than 16x while charging the same quota
+  ---
+  duration_ms: 44.131648
+  type: 'test'
+  ...
+# Subtest: offline 32x is saved with a shorter next tick and cannot run early
+ok 105 - offline 32x is saved with a shorter next tick and cannot run early
+  ---
+  duration_ms: 6.818701
+  type: 'test'
+  ...
+# Subtest: 438 boot and offline assets include every new material and runtime module
+ok 106 - 438 boot and offline assets include every new material and runtime module
+  ---
+  duration_ms: 3.34094
+  type: 'test'
+  ...
+# Subtest: summon maximum follows actual rounded price, capacity and empty resources, including counts above 100
+ok 107 - summon maximum follows actual rounded price, capacity and empty resources, including counts above 100
+  ---
+  duration_ms: 1.097819
+  type: 'test'
+  ...
+# Subtest: manual count rejects zero, empty, fractional, nonfinite and unaffordable values without clamping or charging
+ok 108 - manual count rejects zero, empty, fractional, nonfinite and unaffordable values without clamping or charging
+  ---
+  duration_ms: 0.143552
+  type: 'test'
+  ...
+# Subtest: new summon levels include both endpoints, floor odd values, and never modify owned items
+ok 109 - new summon levels include both endpoints, floor odd values, and never modify owned items
+  ---
+  duration_ms: 0.876453
+  type: 'test'
+  ...
+# Subtest: floor monster exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+ok 110 - floor monster exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+  ---
+  duration_ms: 7.814391
+  type: 'test'
+  ...
+# Subtest: floor weapon exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+ok 111 - floor weapon exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+  ---
+  duration_ms: 3.215515
+  type: 'test'
+  ...
+# Subtest: floor armor exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+ok 112 - floor armor exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+  ---
+  duration_ms: 2.32393
+  type: 'test'
+  ...
+# Subtest: floor accessory exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+ok 113 - floor accessory exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+  ---
+  duration_ms: 1.44335
+  type: 'test'
+  ...
+# Subtest: abyss contract: keys 10, correct fragments, one atomic charge
+ok 114 - abyss contract: keys 10, correct fragments, one atomic charge
+  ---
+  duration_ms: 2.657622
+  type: 'test'
+  ...
+# Subtest: abyss equipment: keys 10, correct fragments, one atomic charge
+ok 115 - abyss equipment: keys 10, correct fragments, one atomic charge
+  ---
+  duration_ms: 5.101146
+  type: 'test'
+  ...
+# Subtest: tenGod contract: keys 15, correct fragments, one atomic charge
+ok 116 - tenGod contract: keys 15, correct fragments, one atomic charge
+  ---
+  duration_ms: 2.412429
+  type: 'test'
+  ...
+# Subtest: tenGod equipment: keys 15, correct fragments, one atomic charge
+ok 117 - tenGod equipment: keys 15, correct fragments, one atomic charge
+  ---
+  duration_ms: 2.641047
+  type: 'test'
+  ...
+# Subtest: affection training charges proportionally at cap and preserves current HP/MP and all existing levels
+ok 118 - affection training charges proportionally at cap and preserves current HP/MP and all existing levels
+  ---
+  duration_ms: 3.32773
+  type: 'test'
+  ...
+# Subtest: skill training works for learned unequipped skills, advances mastery, never increments actual uses
+ok 119 - skill training works for learned unequipped skills, advances mastery, never increments actual uses
+  ---
+  duration_ms: 3.485794
+  type: 'test'
+  ...
+# Subtest: training cannot spend while exploring, with missing crystal stock, or on unlearned skill
+ok 120 - training cannot spend while exploring, with missing crystal stock, or on unlearned skill
+  ---
+  duration_ms: 2.473109
+  type: 'test'
+  ...
+# Subtest: second chapter gacha uses the same floor level range without changing rarity distribution or price
+ok 121 - second chapter gacha uses the same floor level range without changing rarity distribution or price
+  ---
+  duration_ms: 3.553664
+  type: 'test'
+  ...
+# Subtest: role list includes unequipped learned skills, exposes explicit actions only in editable mode, and remains read-only
+ok 122 - role list includes unequipped learned skills, exposes explicit actions only in editable mode, and remains read-only
+  ---
+  duration_ms: 7.724968
+  type: 'test'
+  ...
+# Subtest: raid ranking cards keep exact damage, ties, safe player names and real character art
+ok 123 - raid ranking cards keep exact damage, ties, safe player names and real character art
+  ---
+  duration_ms: 0.879468
+  type: 'test'
+  ...
+# Subtest: online rank portraits survive disconnect without storing combat information
+ok 124 - online rank portraits survive disconnect without storing combat information
+  ---
+  duration_ms: 7.511554
+  type: 'test'
+  ...
+# Subtest: offline ticket preserves display portrait with unchanged verified replay and duplicate protection
+ok 125 - offline ticket preserves display portrait with unchanged verified replay and duplicate protection
+  ---
+  duration_ms: 33.437419
+  type: 'test'
+  ...
+1..125
+# tests 125
+# suites 0
+# pass 125
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1833.105888

@@ -1,0 +1,7 @@
+{
+  "build": 439,
+  "asset": "assets/ui/build439/growth-medallion.png",
+  "use": "Monster portrait backdrop; existing sprite and panel geometry preserved",
+  "generator": "image_gen.imagegen",
+  "prompt": "Use case: stylized-concept. Asset type: square portrait backdrop texture for ABYSS DOMINION dark fantasy RPG monster growth screen. Create a SINGLE original front-facing ornate circular black obsidian medallion with a very thin antique gold filigree outer ring and subtly glowing amethyst inlays at cardinal points. The center 75% is empty nearly-black smoky velvet with faint restrained violet magical glow, to place an existing character sprite on top in code. Premium Japanese dark fantasy RPG interface, intricate hand-painted metal texture, strong black/gold palette, elegant not garish. Medallion fills 92% of a square canvas, complete ring visible, solid near-black #0b0811 outside the ring. No character, no text, no letters, no numerals, no UI mockup, no panels, no watermark. Fine detail remains clear at 90px displayed size. Output a single square image."
+}

@@ -43,6 +43,6 @@ test('3000 owned characters can be filtered locally without changing save or ski
 });
 test('436 cache and import aliases include the new UI and art without touching frozen replay modules',()=>{
  const html=fs.readFileSync('index.html','utf8'),map=JSON.parse(html.match(/<script type="importmap">([\s\S]*?)<\/script>/)[1]).imports,assets=JSON.parse(fs.readFileSync('world-raid-offline436-assets.json'));
- for(const name of ['RoleGuide436','SkillGuide436','ChapterTwoGacha397'])assert.match(map['./src/ui/'+name+'.js'],/3\.1\.115-build436$/);
- assert.ok(assets.includes('./assets/ui/build436/summon-button.webp'));assert.ok(assets.includes('./src/Styles/build436-guides.css'));assert.ok(!Object.keys(map).some(k=>k.includes('/runtime430/')));assert.match(html,/ASSET_BUILD = "build437"/);
+ for(const name of ['RoleGuide436','SkillGuide436','ChapterTwoGacha397'])assert.match(map['./src/ui/'+name+'.js'],name==='RoleGuide436'?/3\.1\.118-build439$/:/3\.1\.115-build436$/);
+ assert.ok(assets.includes('./assets/ui/build436/summon-button.webp'));assert.ok(assets.includes('./src/Styles/build436-guides.css'));assert.ok(!Object.keys(map).some(k=>k.includes('/runtime430/')));assert.match(html,/ASSET_BUILD = "build439"/);
 });

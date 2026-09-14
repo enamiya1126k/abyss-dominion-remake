@@ -17,7 +17,7 @@ function monsterRarity(monster){return monster.summonTier??monster.summonRarity?
 function rarityNameClass(rarity){return ({"神話":"mythic","深淵":"abyss","十神":"ten-god"}[rarity]??rarity).toLowerCase()}
 function nextAffection(aff){if(aff>=1000)return null;return Math.min(1000,Math.ceil((aff+1)/100)*100)}
 function sourceLabel(method){
-  return({capture:"探索・捕獲",summon:"召喚",market:"闇市場",darkMarket:"闇市場",endgameContract:"契約",deepSummon:"深淵召喚",serialCode:"シリアルコード",onlineWeeklyRaidExchange:"週間レイド・核片交換"}[method]??method??"不明");
+  return({capture:"探索・捕獲",chapterTwoSummon:"第二章召喚",guerrillaGacha:"曜日限定召喚",floorBossContract:"階層ボス・欠片交換",summon:"召喚",market:"闇市場",darkMarket:"闇市場",endgameContract:"契約",deepSummon:"深淵召喚",serialCode:"シリアルコード",onlineWeeklyRaidExchange:"週間レイド・核片交換"}[method]??method??"不明");
 }
 function obtainedFloorLabel(monster){
  if(monster?.obtainedMethod==="floorBossContract"){
@@ -46,7 +46,7 @@ export function MonsterDetailScreen(monster,state){
     <div class="monster-switcher"><button data-switch-monster="${previous?.id??monster.id}" aria-label="前の魔物">‹</button><div><small>${state.party.includes(monster.id)?"出撃メンバー":"控え魔物"} ${index+1}/${ordered.length}</small><b class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</b></div><button data-switch-monster="${nextMonster?.id??monster.id}" aria-label="次の魔物">›</button></div>
 
     <div class="panel compact-growth-summary">
-     <div class="compact-growth-identity"><div class="detail-orb" style="background:${colorValue(monster)}">${monsterVisual(monster,species.emoji??"👹",{className:"monster-detail-visual"})}</div><div><small>${rankName(monster)} / ${species.race}族</small><h1 class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</h1><p><b>${rarity}</b>・${attributeVisual(attributeId,{label:`${attribute.name}属性`})}${attribute.name}属性・${species.growthLabel??"標準"}成長</p><em>Lv.${monster.level}　+${monster.plus??0}　❤️${aff}</em></div></div>
+     <div class="compact-growth-identity"><div class="detail-orb" style="--growth-color439:${colorValue(monster)}">${monsterVisual(monster,species.emoji??"👹",{className:"monster-detail-visual"})}</div><div><small>${rankName(monster)} / ${species.race}族</small><h1 class="monster-rarity-name rarity-name-${rarityClass}">${displayName(monster)}</h1><p><b>${rarity}</b>・${attributeVisual(attributeId,{label:`${attribute.name}属性`})}${attribute.name}属性・${species.growthLabel??"標準"}成長</p><em>Lv.${monster.level}　+${monster.plus??0}　❤️${aff}</em></div></div>
      ${ailments.length?`<div class="status-row ally-status-row">${ailments.map(status=>`<span class="status-chip ${status.id}">${persistentAilmentLabel(status)}・治療まで持続</span>`).join("")}</div>`:""}
      <div class="compact-growth-stats">
       <span><small>HP</small><b>${stats.hp.toLocaleString()}</b></span><span><small>MP</small><b>${mp.toLocaleString()}</b></span>
@@ -64,7 +64,7 @@ export function MonsterDetailScreen(monster,state){
     </div>
 
     <div class="panel compact-affection-panel">
-     <div class="spread"><div><small>仲良し補正</small><h2>❤️ なつき度</h2></div><b>${aff}/1000${aff>=1000?"・親友":""}</b></div>
+     <div class="spread"><div><small>仲良し補正</small><h2>❤️ なつき度</h2></div><b>${aff}/1000${aff>=1000?"・親友":""}<button type="button" data-capture-training439>結晶で育成</button></b></div>
      <div class="affection-meter"><i style="width:${Math.min(100,aff/10)}%"></i></div>
      <p>現在の補正：<b>${affectionText}</b></p>
      <small>${next?`次のボーナスまであと ${next-aff}（${next}/1000）`:"すべてのなつきボーナスを解放済み"}</small>

@@ -1,3 +1,4 @@
+import {raidPortrait439} from '../../src/worldRaid/WorldRaidPortrait439.js';
 import {randomBytes} from 'node:crypto';
 import {sanitizeProfile} from './RoomStore.js';
 import {raidSnapshot} from './RaidCoordinator.js';
@@ -51,7 +52,7 @@ export class WorldRaidCoordinator428{
    for(const previous of Object.values(s.attempts))if(previous.playerId===playerId&&previous.status==='ended'){delete previous.room;delete previous.profile;}
    s.days[day]??={};s.days[day][playerId]=used+1;
    s.attempts[id]={id,requestId,playerId,campaignId:s.current.id,sequence:s.current.sequence,bossName:s.current.bossId,day,status:'active',startedAt:now,damage:0,profile,room:roomData(created.room)};
-   s.current.contribution[playerId]??={damage:0,attempts:0,name:profile.displayName};s.current.contribution[playerId].attempts++;
+   s.current.contribution[playerId]??={damage:0,attempts:0,name:profile.displayName};s.current.contribution[playerId].attempts++;s.current.contribution[playerId].portrait439=raidPortrait439(profile);
    return {ok:true,id};
   });
   if(result.ok){this.watchers.add(playerId);this._publish({playerId,requestId,started:true});}

@@ -1,0 +1,55 @@
+/* Build439: existing layout and touch targets, painted metal and obsidian. */
+:root{--growth-medallion439:url('../../assets/ui/build439/growth-medallion.png')}
+#app .monster-growth-screen{background:linear-gradient(#0c0811ef,#08070beb),var(--archive438) center/cover fixed}
+#app .monster-growth-screen :is(.topbar,.monster-switcher,.panel){border-image:var(--frame438) 110 / 9px stretch!important;border-radius:0!important;background:linear-gradient(115deg,#1c1321ed,#0b0910ed),var(--archive438) center/cover!important;box-shadow:inset 0 0 18px #0008,0 4px 12px #0008!important;image-rendering:auto!important}
+#app .monster-growth-screen .topbar{background:linear-gradient(#191020,#09080cee)!important}
+#app .monster-growth-screen :is(h2,h3){color:#f6e2b4;text-shadow:0 1px 3px #000}
+#app .monster-growth-screen .detail-orb{border-radius:50%;background:var(--growth-medallion439) center/contain no-repeat!important;box-shadow:0 0 9px color-mix(in srgb,var(--growth-color439,#725c8e) 22%,transparent)!important}
+#app .monster-growth-screen .detail-orb>.monster-detail-visual{max-width:83%;max-height:83%;filter:drop-shadow(0 3px 3px #000)}
+#app .monster-growth-screen :is(.compact-growth-stats>span,.acquisition-guide-grid>div,.endgame-dossier-grid>section,.endgame-dossier-skills>article){border-image:var(--frame438) 110 / 5px stretch!important;border-radius:0!important;background:linear-gradient(#201824aa,#0c0911)!important;box-shadow:inset 0 0 8px #0008!important}
+#app .monster-growth-screen button:not(.color-dot),
+#app :is(.role-guide-modal436,.capture-training-modal439) button{border-image:var(--button438) 90 240 fill / 7px 10px stretch!important;border-radius:0!important;background:#100e12!important;box-shadow:0 2px 6px #0007!important;color:#f4e4c3;text-shadow:0 1px 2px #000;image-rendering:auto!important}
+#app .monster-growth-screen button.danger{border-image:var(--frame438) 110 / 7px stretch!important;background:linear-gradient(#632831,#290f18)!important;color:#ffded9}
+#app .monster-growth-screen button:disabled{filter:saturate(.2);opacity:.5;cursor:default}
+#app .monster-growth-screen :is(input,select){border-color:#8c704f;border-radius:2px;background:#0e0b12;color:#eee1cc}
+#app .monster-growth-screen .compact-exp-line>i,#app .monster-growth-screen .affection-meter{background:#0b080e;box-shadow:inset 0 0 0 1px #907449;border-radius:2px}
+#app .monster-growth-screen .compact-exp-line>i>u,#app .monster-growth-screen .affection-meter>i{background:linear-gradient(90deg,#70502c,#dfbe71);box-shadow:inset 0 1px #fff1c666}
+/* Use the spare vertical space beneath the affection count, without a new row. */
+#app .compact-affection-panel>.spread{position:relative}
+#app .compact-affection-panel>.spread>b{position:relative;align-self:flex-start;padding-bottom:0}
+#app [data-capture-training439]{position:absolute;right:0;top:calc(100% + 3px);white-space:nowrap;font:700 10px/1.2 Arial,sans-serif;min-width:76px;min-height:25px;padding:5px 8px}
+#app :is(.role-guide-modal436,.capture-training-modal439) .game-modal-card{border-image:var(--frame438) 110 / 13px stretch!important;background:linear-gradient(#0d0912ee,#09080eee),var(--archive438) center/cover!important;image-rendering:auto!important}
+#app .role-result436,#app .role-detail436 aside,#app .role-guide436>[data-role-hint436]{border-image:var(--frame438) 110 / 7px stretch!important;background:linear-gradient(110deg,#251c2580,#100c17)!important}
+#app .role-other-skills439{display:block;color:#d0c2ac;line-height:1.5}
+#app .role-needs-setting439{color:#e4c27c}
+#app .role-actions439{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#app .role-actions439 button{min-width:0;min-height:42px;padding:8px;font-size:12px}
+#app .role-slot-choices439{display:grid;gap:8px}
+#app .role-slot-choices439 button{display:flex;gap:12px;align-items:center;min-height:52px;text-align:left;min-width:0}
+#app .role-slot-choices439 span{overflow-wrap:anywhere}
+#app .capture-training439{display:grid;gap:12px}
+#app .capture-training439>strong{color:#f5dca5}
+#app .capture-training439 nav{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+#app .capture-training439 nav button{min-width:0;min-height:44px;font-size:12px}
+#app .capture-training439 nav button[aria-pressed='true']{border-image:var(--frame438) 110 / 7px stretch!important;background:linear-gradient(#5e4422,#23190f)!important}
+#app .capture-training439 label{display:grid;gap:6px;font-size:12px}
+#app .capture-training439 label[hidden]{display:none!important}
+#app .capture-training439 select{width:100%;min-width:0;background:#120e17;color:#f2dfba;border-color:#998056;font-size:14px}
+#app .capture-training439 p{margin:0;line-height:1.6}
+#app .capture-training439 small{font-size:11px;color:#c5bacb;line-height:1.5}
+#app .role-detail436 [data-role-equip439]{min-height:42px;width:100%;font-size:12px}
+#app .summon-result-pages439{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:10px}
+#app .gacha-count-picker [data-gacha-custom-cost439]{display:block;font-size:11px;color:#efd396;min-height:1.4em}
+/* Same ranking card art, with cumulative damage in the score column. */
+#app .raid-ranking-list439{display:grid;gap:8px;overflow:visible;margin:16px 0}
+#app .raid-ranking-row439{width:100%;box-sizing:border-box;cursor:default}
+#app .raid-ranking-row439>strong{font-size:clamp(10px,3vw,14px);text-align:right;min-width:0;white-space:nowrap}
+#app .raid-ranking-row439>strong>small{display:block;color:#c5b393;font:10px/1.6 Arial,sans-serif}
+#app .raid-ranking-row439 .power-ranking-identity{min-width:0}
+#app .raid-ranking-row439 .power-ranking-identity b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#app .raid-ranking-row439 .power-ranking-identity small{font-size:10px}
+#app .raid-portrait-placeholder439{display:block;width:52px;height:60px;background:var(--growth-medallion439) center/contain no-repeat}
+#app .raid-ranking-row439 .power-ranking-monster-visual{pointer-events:none}
+#app .raid-ranking-row439 .power-ranking-position{pointer-events:none}
+#app .raid-ranking-row439 .power-ranking-avatar{z-index:1}
+#app .monster-growth-screen button:focus-visible,#app .role-guide-modal436 button:focus-visible{outline:2px solid #ffe4a4;outline-offset:2px}

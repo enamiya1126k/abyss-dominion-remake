@@ -1,0 +1,15 @@
+[
+  "src/main.js",
+  "src/core/config.js",
+  "src/core/ExchangeCosts439.js",
+  "src/core/SummonLimits439.js",
+  "src/core/CaptureTraining439.js",
+  "src/core/FloorBossChallengeSystem.js",
+  "src/core/EndgameSystem.js",
+  "src/chapterTwo/ChapterTwoGacha397.js",
+  "src/ui/RoleGuide436.js",
+  "src/ui/screens/MonsterDetailScreen.js",
+  "src/worldRaid/WorldRaidRankingView429.js",
+  "src/worldRaid/WorldRaidPortrait439.js",
+  "src/worldRaid/WorldRaidOfflineCache430.js"
+]

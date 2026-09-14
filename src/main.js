@@ -1,4 +1,6 @@
 import {contributionBody437} from './ui/Contribution437.js';
+import {summonLevel439,summonLevelMax439,maxSummons439,validSummonCount439} from './core/SummonLimits439.js';
+import {captureTrainingOffer439,trainWithCapture439} from './core/CaptureTraining439.js';
 import {ROLE_GUIDE436,roleRoster436,roleCandidates436,roleGuideShell436,roleResult436,roleDetail436} from './ui/RoleGuide436.js';
 import {escapeGuide436,motherSkillSummary436,skillReadingMs436,holdSkillBanner436} from './ui/SkillGuide436.js';
 import {motherFieldHitBounds433} from './primordial/FieldHit433.js';
@@ -1017,22 +1019,24 @@ function finishSpecialBattle(won){
 }
 
 function openEndgameForge(){
- const rows=Object.values(ENDGAME_BOSSES).map(b=>{const gear=emergencyFragmentStatus(save.state,b.id),contract=endgameContractStatus(save.state,b.id),record=save.state.endgame?.emergency?.records?.[b.id]??{},count=contract.availableFragments;return`<article class="endgame-forge-card ${b.faction}"><div class="fragment-card-aura"></div><div class="spread"><div><small>${b.faction==="tenGod"?"TEN GODS / 十神":"ABYSS / 深淵"}</small><h3>${monsterVisual(b.id,b.icon,{className:"endgame-forge-monster-visual"})}<span>${b.name}</span></h3></div><b>欠片 ${count}</b></div><div class="fragment-meter"><i style="width:${Math.min(100,count/Math.max(1,Math.min(contract.required,gear.required))*100)}%"></i></div><small>遭遇 ${record.encounters??0} / 討伐 ${record.wins??0} / 神装 ${gear.crafted}/6</small><div class="fragment-altar-actions"><button data-contract-endgame="${b.id}" ${contract.canContract?"":"disabled"}>${contract.contracted?"人物契約済み":contract.canContract?`人物を呼び出す　−${contract.required}`:`人物契約 ${count}/${contract.required}`}</button><button data-craft-endgame="${b.id}" ${gear.canCraft?"":"disabled"}>${gear.canCraft?`専用装備を顕現　−${gear.required}`:`神装 ${count}/${gear.required}`}</button></div></article>`}).join("");
- app.insertAdjacentHTML("beforeend",Modal("欠片祭壇",`<div class="fragment-altar-head"><span class="trial-pixel-emblem endgame"></span><div><small>FRAGMENT ALTAR</small><h2>存在を、欠片から再構成する</h2><p>人物との契約、または6部位の専用装備顕現を選択できます。</p></div></div><div class="endgame-forge-list">${rows}</div>`,"閉じる"));
+ const rows=Object.values(ENDGAME_BOSSES).map(b=>{const gear=emergencyFragmentStatus(save.state,b.id),contract=endgameContractStatus(save.state,b.id),record=save.state.endgame?.emergency?.records?.[b.id]??{},count=contract.availableFragments;return`<article class="endgame-forge-card ${b.faction}"><div class="fragment-card-aura"></div><div class="spread"><div><small>${b.faction==="tenGod"?"TEN GODS / 十神":"ABYSS / 深淵"}</small><h3>${monsterVisual(b.id,b.icon,{className:"endgame-forge-monster-visual"})}<span>${b.name}</span></h3></div><b>欠片 ${count}</b></div><div class="fragment-meter"><i style="width:${Math.min(100,count/Math.max(1,Math.min(contract.required,gear.required))*100)}%"></i></div><small>遭遇 ${record.encounters??0} / 討伐 ${record.wins??0} / 神装 ${gear.crafted}/6</small><div class="fragment-altar-actions"><button data-contract-endgame="${b.id}" ${contract.canContract?"":"disabled"}>${contract.contracted?"人物契約済み":`人物契約　欠片 ${contract.required} ＋ 鍵 ${contract.keyCost}`}</button><button data-craft-endgame="${b.id}" ${gear.canCraft?"":"disabled"}>${`神装顕現　欠片 ${gear.required} ＋ 鍵 ${gear.keyCost}`}</button></div></article>`}).join("");
+ app.insertAdjacentHTML("beforeend",Modal("欠片祭壇",`<div class="fragment-altar-head"><span class="trial-pixel-emblem endgame"></span><div><small>FRAGMENT ALTAR</small><h2>存在を、欠片から再構成する</h2><p>人物契約・専用装備顕現には、欠片と深淵の鍵が必要です。鍵 所持 ${Math.floor(Number(save.state.inventory.abyssKeys)||0)}個。</p></div></div><div class="endgame-forge-list">${rows}</div>`,"閉じる"));
  const modal=topModal();modal.classList.add("fragment-altar-modal");modal.querySelector("[data-modal-primary]").onclick=closeTopModal;modal.querySelectorAll("[data-contract-endgame]").forEach(b=>b.onclick=()=>contractEndgameCharacter(b.dataset.contractEndgame));modal.querySelectorAll("[data-craft-endgame]").forEach(b=>b.onclick=()=>craftEndgameGear(b.dataset.craftEndgame));
 }
 function contractEndgameCharacter(bossId){
  if(save.state.monsters.length>=MONSTER_STORAGE_CAP)return showToast(`所持上限 ${MONSTER_STORAGE_CAP}体です。先に魔物を整理してください`);
  if(save.state.monsters.some(monster=>monster.endgameBossId===bossId&&monster.isContractedEndgame))return showToast("この存在とはすでに契約済みです");
- const result=attemptEndgameContract(save.state,bossId,save.state.player.maxFloor);if(!result.success)return showToast(result.reason??"欠片が不足しています");
- const level=Math.max(999,Math.min(ENDGAME_MAX_LEVEL,save.state.player.maxFloor||999)),monster=createContractedEndgameMonster(result.boss,bossId,level,save.state.player.maxFloor);
- save.state.monsters.push(monster);save.state.codex.encounters[monster.speciesId]=(save.state.codex.encounters[monster.speciesId]??0)+1;save.state.codex.captures[monster.speciesId]=(save.state.codex.captures[monster.speciesId]??0)+1;save.save();closeTopModal();audio.sfx(result.boss.faction==="tenGod"?"divineReveal":"abyssReveal");
- app.insertAdjacentHTML("beforeend",Modal(result.boss.faction==="tenGod"?"世界法則、顕現":"深淵契約、成立",`<div class="fragment-contract-result ${result.boss.faction}"><div class="contract-reality-rings"><i></i><i></i><i></i></div>${monsterVisual(result.boss.id,result.boss.icon,{className:"fragment-contract-monster"})}<small>${result.boss.title}</small><h2>${result.boss.name}</h2><b>Lv.${level.toLocaleString()}</b><p>欠片${result.spent}個を代償に、存在の再構成が完了しました。</p></div>`,`魔物一覧へ`));topModal().querySelector("[data-modal-primary]").onclick=()=>{closeTopModal();go("monsters")};
+ const level=Math.max(999,Math.min(ENDGAME_MAX_LEVEL,save.state.player.maxFloor||999));
+ const result=chapterTwoCommit(()=>{const result=attemptEndgameContract(save.state,bossId,save.state.player.maxFloor);if(!result.success)return{...result,ok:false,message:result.reason};
+ const monster=createContractedEndgameMonster(result.boss,bossId,level,save.state.player.maxFloor);
+ save.state.monsters.push(monster);save.state.codex.encounters[monster.speciesId]=(save.state.codex.encounters[monster.speciesId]??0)+1;save.state.codex.captures[monster.speciesId]=(save.state.codex.captures[monster.speciesId]??0)+1;return{...result,ok:true};});
+ if(!result.ok)return showToast(result.message??'契約を保存できませんでした。');closeTopModal();audio.sfx(result.boss.faction==="tenGod"?"divineReveal":"abyssReveal");
+ app.insertAdjacentHTML("beforeend",Modal(result.boss.faction==="tenGod"?"世界法則、顕現":"深淵契約、成立",`<div class="fragment-contract-result ${result.boss.faction}"><div class="contract-reality-rings"><i></i><i></i><i></i></div>${monsterVisual(result.boss.id,result.boss.icon,{className:"fragment-contract-monster"})}<small>${result.boss.title}</small><h2>${result.boss.name}</h2><b>Lv.${level.toLocaleString()}</b><p>欠片${result.spent}個と深淵の鍵${result.keyCost}個を代償に、存在の再構成が完了しました。</p></div>`,`魔物一覧へ`));topModal().querySelector("[data-modal-primary]").onclick=()=>{closeTopModal();go("monsters")};
 }
 function craftEndgameGear(bossId){
- const result=craftEndgameEquipment(save.state,bossId);if(!result.ok)return showToast(result.message);
- const received=receiveEquipment(save.state,result.item,{bossReward:true});save.save();closeTopModal();
- app.insertAdjacentHTML("beforeend",Modal("神装顕現",`<div class="crafted-endgame-gear"><div class="warning-icon">${monsterVisual(result.boss.id,result.boss.icon,{className:"endgame-crafted-monster-visual"})}</div><small>${result.boss.name}シリーズ・${equipmentSubslotLabel(result.item.ruleOverrides.subslot)}</small><h2>[${equipmentDisplayRarity(result.item)}] ${result.item.name}</h2><p>${Object.entries(result.item.stats).map(([k,v])=>`${equipmentStatLabel(k)} +${v}`).join(" / ")}</p><div class="equipment-fixed-authority"><b>固有能力</b><span>${result.item.fixedEffectText}</span></div><b>欠片 ${result.spent}個を消費</b><small>${received.message}</small></div>`,`受け取る`));
+ const result=chapterTwoCommit(()=>{const result=craftEndgameEquipment(save.state,bossId);if(!result.ok)return result;const received=receiveEquipment(save.state,result.item,{bossReward:true});if(received?.ok===false)return received;return{...result,received};});if(!result.ok)return showToast(result.message??'交換を保存できませんでした。');
+ const received=result.received;closeTopModal();
+ app.insertAdjacentHTML("beforeend",Modal("神装顕現",`<div class="crafted-endgame-gear"><div class="warning-icon">${monsterVisual(result.boss.id,result.boss.icon,{className:"endgame-crafted-monster-visual"})}</div><small>${result.boss.name}シリーズ・${equipmentSubslotLabel(result.item.ruleOverrides.subslot)}</small><h2>[${equipmentDisplayRarity(result.item)}] ${result.item.name}</h2><p>${Object.entries(result.item.stats).map(([k,v])=>`${equipmentStatLabel(k)} +${v}`).join(" / ")}</p><div class="equipment-fixed-authority"><b>固有能力</b><span>${result.item.fixedEffectText}</span></div><b>欠片 ${result.spent}個 ＋ 深淵の鍵 ${result.keyCost}個を消費</b><small>${received.message}</small></div>`,`受け取る`));
  topModal().querySelector("[data-modal-primary]").onclick=()=>{closeTopModal();openEndgameForge()};
 }
 
@@ -1219,7 +1223,7 @@ function openPowerRankingProfile(playerId){
  try{Promise.resolve(controller.requestPowerRankingProfile(id)).then(result=>{if(!modal.isConnected||modal.dataset.playerId!==id)return;if(result?.queued)return;if(result?.profile||result===null||result?.ok===false)handlePowerRankingProfile(result,{modal,playerId:id})}).catch(()=>handlePowerRankingProfile(null,{modal,playerId:id}))}catch{handlePowerRankingProfile(null,{modal,playerId:id})}
 }
 function openCombatPowerHistory(){
- app.insertAdjacentHTML("beforeend",Modal("戦力記録",'<div class="power-record-panel"></div>',"閉じる"));const modal=topModal(),close=()=>{clearTimeout(modal._powerRankingListTimer);clearTimeout(modal._powerRankingPresenceTimer);powerRankingUi.loadingList=false;modal.remove()};modal.dataset.powerRecordModal="1";renderCombatPowerRecordModal(modal,"own");modal._onDismiss=close;modal.querySelector("[data-modal-primary]").onclick=close
+ app.insertAdjacentHTML("beforeend",Modal("戦力記録",'<div class="power-record-panel"></div>',"閉じる"));const modal=topModal(),close=()=>{clearTimeout(modal._powerRankingListTimer);clearTimeout(modal._powerRankingPresenceTimer);powerRankingUi.loadingList=false;modal.remove()};modal.dataset.powerRecordModal="1";renderCombatPowerRecordModal(modal,"ranking");requestPowerRankings({force:Boolean(powerRankingUi.state)});modal._onDismiss=close;modal.querySelector("[data-modal-primary]").onclick=close
 }
 function idleReturnPreviewBody(preview){
  const capText=preview.capped&&preview.equipmentCapped?"・両方とも上限到達":preview.capped?"・GOLD上限到達":preview.equipmentCapped?"・装備上限到達":"";
@@ -1651,13 +1655,15 @@ function createContractedFloorBoss(definition){
 function confirmFloorBossExchange(bossId,reward){
  const status=floorBossChallengeStatus(save.state,bossId);if(!status)return;
  const labels={monster:`${status.boss.name}本体`,weapon:"専用武器",armor:"専用防具",accessory:"専用アクセ"},cost=reward==="monster"?FLOOR_BOSS_CONTRACT_COST:FLOOR_BOSS_EQUIPMENT_COST;
- app.insertAdjacentHTML("beforeend",Modal("欠片交換の確認",`<div class="floor-boss-exchange-confirm">${monsterVisual({speciesId:status.boss.speciesId,visualSpeciesId:status.boss.visualSpeciesId},SPECIES[status.boss.speciesId]?.emoji??"BOSS",{className:"floor-boss-exchange-visual"})}<h3>${labels[reward]}</h3><p>${status.boss.name}の欠片を <b>${cost}個</b> 消費します。</p><small>所持 ${status.fragments}個 → ${Math.max(0,status.fragments-cost)}個</small></div>`,"交換する"));
- const modal=topModal();modal.classList.add("floor-boss-exchange-confirm-modal");modal.querySelector("[data-modal-primary]").onclick=()=>{if(reward==="monster"&&save.state.monsters.length>=MONSTER_STORAGE_CAP)return showToast(`所持上限 ${MONSTER_STORAGE_CAP}体です`);const result=spendFloorBossFragments(save.state,bossId,reward);if(!result.ok)return showToast(result.message);let obtained=null;try{if(reward==="monster"){obtained=createContractedFloorBoss(result.boss);save.state.monsters.push(obtained);save.state.codex.encounters[obtained.speciesId]=(save.state.codex.encounters[obtained.speciesId]??0)+1;save.state.codex.captures[obtained.speciesId]=(save.state.codex.captures[obtained.speciesId]??0)+1}else{obtained=dedicatedFloorBossEquipment(result.boss.floor,{floorBossCatalogId:result.boss.id},reward);if(!obtained)throw new Error("equipment-design-missing");receiveEquipment(save.state,obtained,{bossReward:true})}}catch(error){restoreFloorBossFragments(save.state,bossId,result.cost,{contract:reward==="monster"});return showToast("交換を完了できなかったため欠片を返却しました")};save.save();modal.remove();showToast(`${labels[reward]}を獲得！`);openFloorBossExchange(bossId)};
+ app.insertAdjacentHTML("beforeend",Modal("欠片交換の確認",`<div class="floor-boss-exchange-confirm">${monsterVisual({speciesId:status.boss.speciesId,visualSpeciesId:status.boss.visualSpeciesId},SPECIES[status.boss.speciesId]?.emoji??"BOSS",{className:"floor-boss-exchange-visual"})}<h3>${labels[reward]}</h3><p>${status.boss.name}の欠片を <b>${cost}個</b> と深淵の鍵 <b>${status.keyCost}個</b> を消費します。</p><small>欠片 ${status.fragments} → ${Math.max(0,status.fragments-cost)} ／ 鍵 ${status.availableKeys} → ${Math.max(0,status.availableKeys-status.keyCost)}</small></div>`,"交換する"));
+ const modal=topModal();modal.classList.add("floor-boss-exchange-confirm-modal");modal.querySelector("[data-modal-primary]").onclick=()=>{if(reward==="monster"&&save.state.monsters.length>=MONSTER_STORAGE_CAP)return showToast(`所持上限 ${MONSTER_STORAGE_CAP}体です`);if(!modal.isConnected)return;const result=chapterTwoCommit(()=>{const result=spendFloorBossFragments(save.state,bossId,reward);if(!result.ok)return result;
+ if(reward==="monster"){const obtained=createContractedFloorBoss(result.boss);save.state.monsters.push(obtained);save.state.codex.encounters[obtained.speciesId]=(save.state.codex.encounters[obtained.speciesId]??0)+1;save.state.codex.captures[obtained.speciesId]=(save.state.codex.captures[obtained.speciesId]??0)+1;}
+ else{const obtained=dedicatedFloorBossEquipment(result.boss.floor,{floorBossCatalogId:result.boss.id},reward);if(!obtained)throw Error('equipment-design-missing');const received=receiveEquipment(save.state,obtained,{bossReward:true});if(received?.ok===false)return received;}return result;});if(!result.ok)return showToast(result.message??'交換を保存できませんでした。');modal.remove();showToast(`${labels[reward]}を獲得！`);openFloorBossExchange(bossId)};
 }
 function openFloorBossExchange(bossId){
  const status=floorBossChallengeStatus(save.state,bossId);if(!status?.unlocked)return showToast("ダンジョンでこの階層ボスに出会うと解禁されます");
- const boss=status.boss,pieces=[["monster",boss.name,FLOOR_BOSS_CONTRACT_COST,status.contracted],["weapon",boss.dedicatedWeapon?.name??"専用武器",FLOOR_BOSS_EQUIPMENT_COST,false],["armor",boss.dedicatedArmor?.name??"専用防具",FLOOR_BOSS_EQUIPMENT_COST,false],["accessory",boss.dedicatedAccessory?.name??"専用アクセ",FLOOR_BOSS_EQUIPMENT_COST,false]],rows=pieces.map(([id,name,cost,claimed])=>`<button type="button" data-floor-boss-exchange="${id}" ${claimed||status.fragments<cost?"disabled":""}><span>${id==="monster"?monsterVisual({speciesId:boss.speciesId,visualSpeciesId:boss.visualSpeciesId},SPECIES[boss.speciesId]?.emoji??"BOSS",{className:"floor-boss-exchange-mini"}):equipmentVisual(floorBossEquipmentDesignByPiece(boss.id,id),{className:"floor-boss-exchange-equipment"})}</span><div><small>${id==="monster"?"階層支配者との契約":"神話ランク・固有装備"}</small><b>${name}</b><em>${claimed?"契約済み":`欠片 ${cost}個`}</em></div></button>`).join("");
- app.insertAdjacentHTML("beforeend",Modal(`${floorBossDisplayFloor(boss)}階・欠片交換`, `<div class="floor-boss-exchange"><header><b>${boss.name}の欠片</b><strong>${status.fragments}</strong><small>討伐 ${status.victories}回・初勝利10個／再勝利2～5個</small></header><div>${rows}</div></div>`,"挑戦門へ戻る"));const modal=topModal();modal.classList.add("floor-boss-exchange-modal");modal.querySelectorAll("[data-floor-boss-exchange]").forEach(button=>button.onclick=()=>{const reward=button.dataset.floorBossExchange;modal.remove();confirmFloorBossExchange(bossId,reward)});modal.querySelector("[data-modal-primary]").onclick=()=>{modal.remove();openEndgameTrialPicker()};
+ const boss=status.boss,pieces=[["monster",boss.name,FLOOR_BOSS_CONTRACT_COST,status.contracted],["weapon",boss.dedicatedWeapon?.name??"専用武器",FLOOR_BOSS_EQUIPMENT_COST,false],["armor",boss.dedicatedArmor?.name??"専用防具",FLOOR_BOSS_EQUIPMENT_COST,false],["accessory",boss.dedicatedAccessory?.name??"専用アクセ",FLOOR_BOSS_EQUIPMENT_COST,false]],rows=pieces.map(([id,name,cost,claimed])=>`<button type="button" data-floor-boss-exchange="${id}" ${claimed||status.fragments<cost||!status.keysEnough?"disabled":""}><span>${id==="monster"?monsterVisual({speciesId:boss.speciesId,visualSpeciesId:boss.visualSpeciesId},SPECIES[boss.speciesId]?.emoji??"BOSS",{className:"floor-boss-exchange-mini"}):equipmentVisual(floorBossEquipmentDesignByPiece(boss.id,id),{className:"floor-boss-exchange-equipment"})}</span><div><small>${id==="monster"?"階層支配者との契約":"神話ランク・固有装備"}</small><b>${name}</b><em>${claimed?"契約済み":`欠片 ${cost}個 ＋ 深淵の鍵 ${status.keyCost}個`}</em></div></button>`).join("");
+ app.insertAdjacentHTML("beforeend",Modal(`${floorBossDisplayFloor(boss)}階・欠片交換`, `<div class="floor-boss-exchange"><header><b>${boss.name}の欠片</b><strong>${status.fragments}</strong><small>深淵の鍵 所持 ${status.availableKeys}個・討伐 ${status.victories}回</small></header><div>${rows}</div></div>`,"挑戦門へ戻る"));const modal=topModal();modal.classList.add("floor-boss-exchange-modal");modal.querySelectorAll("[data-floor-boss-exchange]").forEach(button=>button.onclick=()=>{const reward=button.dataset.floorBossExchange;modal.remove();confirmFloorBossExchange(bossId,reward)});modal.querySelector("[data-modal-primary]").onclick=()=>{modal.remove();openEndgameTrialPicker()};
 }
 function triggerFloorBossChallenge(bossId){
  const event=createFloorBossChallengeEncounter(save.state,bossId);if(!event)return showToast("ダンジョンでこの階層ボスに出会うと解禁されます");
@@ -2162,7 +2168,18 @@ function selectableMonsters(){return save.state.monsters.filter(m=>!save.state.p
 function selectMonstersPreset(mode){const pool=selectableMonsters();if(mode==="none")monsterManage.selected.clear();else{const picks=pool.filter(m=>mode==="all"||mode==="plus0"&&(m.plus??0)===0||mode==="unfavorite"&&!m.favorite||["N","R"].includes(mode)&&(m.summonTier??m.summonRarity??SPECIES[m.speciesId]?.rarity??"N")===mode);picks.forEach(m=>monsterManage.selected.add(m.id))}render()}
 function releaseSelectedMonsters(){const targets=selectableMonsters().filter(m=>monsterManage.selected.has(m.id));if(!targets.length)return alert("手放せるモンスターが選択されていません");if(save.state.monsters.length-targets.length<1)return alert("最後の1体は手放せません");if(!confirm(`${targets.length}体を手放します。\n魔晶石 ${targets.length}個を獲得します。`))return;const ids=new Set(targets.map(m=>m.id));targets.forEach(m=>Object.values(m.equipment??{}).forEach(id=>{const i=save.state.equipment.find(x=>x.id===id);if(i)i.equippedBy=null}));save.state.monsters=save.state.monsters.filter(m=>!ids.has(m.id));save.state.player.crystals+=targets.length;monsterManage.selected.clear();save.save();render()}
 function detailButtons(origin="monsters"){document.querySelectorAll("[data-monster-id]").forEach(b=>b.onclick=()=>{detailNavigationOrigin=origin;selected=b.dataset.monsterId;go("detail")})}
-function bindDetail(m){document.getElementById("backMonsters").onclick=()=>{const target=detailNavigationOrigin;detailNavigationOrigin="monsters";go(target)};document.querySelectorAll("[data-switch-monster]").forEach(b=>b.onclick=()=>{selected=b.dataset.switchMonster;render();window.scrollTo({top:0,behavior:"smooth"})});document.getElementById("releaseMonster")?.addEventListener("click",()=>releaseMonster(m));document.getElementById("toggleFavorite").onclick=()=>{m.favorite=!m.favorite;save.save();render()};document.getElementById("saveNickname")?.addEventListener("click",()=>{const v=document.getElementById("nicknameInput").value.trim();if(v)m.nickname=v.slice(0,12);save.save();render()});document.querySelectorAll("[data-color-id]").forEach(b=>b.onclick=()=>{m.colorId=b.dataset.colorId;save.save();render()});document.getElementById("limitBreakButton")?.addEventListener("click",()=>performLimitBreak(m.id,{returnToDetail:true}));document.getElementById("openMonsterEquipment")?.addEventListener("click",()=>{equipmentTarget=m.id;equipmentFocusItemId=null;navigationOrigin="detail";go("equipment")});document.querySelectorAll("[data-open-codex-species]").forEach(button=>button.onclick=()=>{const sorted=orderedMonsterSpecies(SPECIES),index=Math.max(0,sorted.findIndex(species=>species.id===button.dataset.openCodexSpecies));openMonsterCodexDetail(button.dataset.openCodexSpecies,true,index)})}
+function openCaptureTraining439(monsterId,kind='affection'){
+ const owner=save.state.monsters.find(m=>m.id===monsterId);if(!owner)return;
+ const skills=allLearnedSkills(owner);app.insertAdjacentHTML('beforeend',Modal('捕獲結晶で育成',`<div class="capture-training439"><strong>${escapeGuide436(displayName(owner))}</strong><nav><button type="button" data-training-kind439="affection">なつき度</button><button type="button" data-training-kind439="skill">スキル経験値</button></nav><label data-training-skill-label439>育成するスキル<select data-training-skill439>${skills.map(s=>`<option value="${escapeGuide436(s.id)}">${escapeGuide436(s.name)}</option>`).join('')}</select></label><p data-training-status439></p><p data-training-cost439></p><small>捕獲結晶5個につき＋1。1回最大＋20、上限までの分だけ消費します。</small></div>`,'育成する'));
+ const modal=topModal();modal.classList.add('capture-training-modal439');const choice=modal.querySelector('[data-training-skill439]'),primary=modal.querySelector('[data-modal-primary]');
+ const draw=()=>{const current=save.state.monsters.find(m=>m.id===monsterId),offer=captureTrainingOffer439(save.state,monsterId,kind,choice.value);modal.querySelector('[data-training-skill-label439]').hidden=kind!=='skill';modal.querySelectorAll('[data-training-kind439]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.trainingKind439===kind)));
+  modal.querySelector('[data-training-status439]').textContent=kind==='affection'?`なつき度 ${current?.affection??current?.bond??0}/1000${offer.amount?` → ${Math.min(1000,(Number(current?.affection??current?.bond)||0)+offer.amount)}/1000`:''}`:offer.progress?`熟練Lv.${offer.progress.level}・EXP ${offer.progress.exp}/${offer.progress.need} → EXP＋${offer.amount}`:offer.complete?'熟練度 MAX':offer.message;
+  modal.querySelector('[data-training-cost439]').textContent=`所持 捕獲結晶 ${Math.floor(Number(save.state.inventory.captureCrystals)||0)}個${offer.cost?` ／ 消費 ${offer.cost}個`:''}${offer.message?`・${offer.message}`:''}`;primary.disabled=!offer.ok;primary.textContent=offer.ok?`結晶${offer.cost}個で${kind==='affection'?'なつき度':'スキルEXP'}＋${offer.amount}`:offer.complete?'育成上限':'育成できません';};
+ modal.querySelectorAll('[data-training-kind439]').forEach(b=>b.onclick=()=>{kind=b.dataset.trainingKind439;draw();});choice.onchange=draw;
+ primary.onclick=()=>{if(!modal.isConnected)return;const result=chapterTwoCommit(()=>trainWithCapture439(save.state,monsterId,kind,choice.value));if(!result.ok){if(result.message)showToast(result.message);draw();return;}showToast(`${kind==='affection'?'なつき度':'スキル経験値'}＋${result.amount}`);draw();};
+ modal._onDismiss=()=>{modal.remove();render();};modal.querySelector('[data-modal-dismiss]').onclick=modal._onDismiss;draw();
+}
+function bindDetail(m){document.querySelector("[data-capture-training439]")?.addEventListener("click",()=>openCaptureTraining439(m.id));document.getElementById("backMonsters").onclick=()=>{const target=detailNavigationOrigin;detailNavigationOrigin="monsters";go(target)};document.querySelectorAll("[data-switch-monster]").forEach(b=>b.onclick=()=>{selected=b.dataset.switchMonster;render();window.scrollTo({top:0,behavior:"smooth"})});document.getElementById("releaseMonster")?.addEventListener("click",()=>releaseMonster(m));document.getElementById("toggleFavorite").onclick=()=>{m.favorite=!m.favorite;save.save();render()};document.getElementById("saveNickname")?.addEventListener("click",()=>{const v=document.getElementById("nicknameInput").value.trim();if(v)m.nickname=v.slice(0,12);save.save();render()});document.querySelectorAll("[data-color-id]").forEach(b=>b.onclick=()=>{m.colorId=b.dataset.colorId;save.save();render()});document.getElementById("limitBreakButton")?.addEventListener("click",()=>performLimitBreak(m.id,{returnToDetail:true}));document.getElementById("openMonsterEquipment")?.addEventListener("click",()=>{equipmentTarget=m.id;equipmentFocusItemId=null;navigationOrigin="detail";go("equipment")});document.querySelectorAll("[data-open-codex-species]").forEach(button=>button.onclick=()=>{const sorted=orderedMonsterSpecies(SPECIES),index=Math.max(0,sorted.findIndex(species=>species.id===button.dataset.openCodexSpecies));openMonsterCodexDetail(button.dataset.openCodexSpecies,true,index)})}
 async function redeemSettingsSerialCode(event){
  event?.preventDefault();
  const input=document.getElementById("serialCodeInput"),button=document.getElementById("redeemSerialCode");
@@ -2585,7 +2602,7 @@ function formationPickerBody(replacingId=null){
   <div class="formation-picker-list">${rows||'<div class="empty">控えモンスターがいません</div>'}<div class="empty formation-filter-empty" hidden>条件に合う魔物がいません</div></div>
  </div>`;
 }
-function replacePartyMember(outgoingId,incomingId,inherit=false){
+function replacePartyMember(outgoingId,incomingId,inherit=false,{persist=true}={}){
  const index=save.state.party.indexOf(outgoingId),outgoing=save.state.monsters.find(monster=>monster.id===outgoingId),incoming=save.state.monsters.find(monster=>monster.id===incomingId);
  if(index<0||!outgoing||!incoming||save.state.party.includes(incomingId))return false;
  const outgoingVital=captureVitalSnapshot(outgoing),incomingVital=captureVitalSnapshot(incoming);
@@ -2615,7 +2632,7 @@ function replacePartyMember(outgoingId,incomingId,inherit=false){
   restoreVitalSnapshot(incoming,incomingVital);
   restoreVitalSnapshot(outgoing,outgoingVital);
  }
- save.save();
+ if(persist)save.save();
  return true;
 }
 function confirmFormationReplacement(outgoingId,incomingId){
@@ -2680,27 +2697,49 @@ function openFormationGearMenu(itemId,ownerId,subslot){
  modal.querySelector("[data-modal-primary]").onclick=closeTopModal;
 }
 function openRoleGuide436(){
- const roster=roleRoster436(save.state);let role='healDown',page=0,candidates=[];
+ let roster=roleRoster436(save.state),role='healDown',page=0,candidates=[];
  app.insertAdjacentHTML('beforeend',Modal('役割から仲間を探す',roleGuideShell436(),'編成へ戻る'));
  const modal=topModal();modal.classList.add('role-guide-modal436');
  const select=modal.querySelector('[data-role-select436]'),query=modal.querySelector('[data-role-query436]'),learned=modal.querySelector('[data-role-learned436]'),results=modal.querySelector('[data-role-results436]'),pages=modal.querySelector('[data-role-pages436]');
+ const editable=()=>formationOrigin!=='explore'&&!save.state.player.inRun&&!save.state.activeBattle&&!battle;
  const redraw=()=>{
-  role=select.value;candidates=roleCandidates436(roster,role,{query:query.value,learnedOnly:learned.checked});page=Math.min(page,Math.max(0,Math.ceil(candidates.length/8)-1));
+  roster=roleRoster436(save.state);role=select.value;candidates=roleCandidates436(roster,role,{query:query.value,learnedOnly:learned.checked});page=Math.min(page,Math.max(0,Math.ceil(candidates.length/8)-1));
   modal.querySelector('[data-role-hint436]').textContent=ROLE_GUIDE436.find(r=>r.id===role).hint;
-  modal.querySelector('[data-role-count436]').textContent=`候補 ${candidates.length}体・設定中 → 習得済み → 未習得の順`;
-  results.innerHTML=candidates.length?candidates.slice(page*8,page*8+8).map(r=>roleResult436(r,role)).join(''):'<p class="role-empty436">条件に合う所持キャラがいません。別の役割を選ぶか、名前・習得済みの絞り込みを外してみよう。</p>';
+  modal.querySelector('[data-role-count436]').textContent=`候補 ${candidates.length}体・習得済み（未設定を含む）→ 未習得の順`;
+  results.innerHTML=candidates.length?candidates.slice(page*8,page*8+8).map(r=>roleResult436(r,role)).join(''):'<p class="role-empty436">条件に合う所持キャラがいません。別の役割を選ぶか、絞り込みを外してみよう。</p>';
   const count=Math.ceil(candidates.length/8);pages.innerHTML=count>1?`<button type="button" data-role-page436="-1" ${page===0?'disabled':''}>前へ</button><span>${page+1} / ${count}</span><button type="button" data-role-page436="1" ${page===count-1?'disabled':''}>次へ</button>`:'';
  };
  select.onchange=query.oninput=learned.onchange=()=>{page=0;redraw();};
  pages.onclick=e=>{const button=e.target.closest('[data-role-page436]');if(!button||button.disabled)return;page+=Number(button.dataset.rolePage436);redraw();results.scrollIntoView({block:'start'});};
- results.onclick=e=>{
-  const button=e.target.closest('[data-role-detail436]'),entry=button&&candidates.find(r=>r.monster.id===button.dataset.roleDetail436);if(!entry)return;
-  const canNavigate=formationOrigin!=='explore'&&!save.state.player.inRun;
-  app.insertAdjacentHTML('beforeend',Modal(escapeGuide436(entry.name),roleDetail436(entry,role)+(canNavigate?'<button type="button" data-role-open-character436>キャラ詳細へ</button>':''),'候補へ戻る'));
-  const detail=topModal();detail.classList.add('role-guide-modal436');detail.querySelector('[data-modal-primary]').onclick=()=>detail.remove();
-  detail.querySelector('[data-role-open-character436]')?.addEventListener('click',()=>{detail.remove();modal.remove();detailNavigationOrigin='formation';selected=entry.monster.id;go('detail');});
+ const showDetail=id=>{
+  const entry=roleCandidates436(roleRoster436(save.state),role).find(r=>r.monster.id===id);if(!entry)return;
+  app.insertAdjacentHTML('beforeend',Modal(escapeGuide436(entry.name),roleDetail436(entry,role,{editable:editable()})+(editable()?`<div class="role-actions439"><button type="button" data-role-party439 ${entry.inParty?'disabled':''}>${entry.inParty?'編成中':'編成に入れる'}</button><button type="button" data-role-open-character436>キャラ詳細へ</button></div>`:''),'候補へ戻る'));
+  const detail=topModal();detail.classList.add('role-guide-modal436');const refresh=()=>{detail.remove();redraw();showDetail(id);};detail.querySelector('[data-modal-primary]').onclick=()=>{detail.remove();redraw();};
+  detail.querySelectorAll('[data-role-equip439]').forEach(button=>button.onclick=()=>{
+   if(!editable())return showToast('探索・戦闘を終えてから設定できます。');
+   const skillId=button.dataset.roleEquip439,owner=save.state.monsters.find(m=>m.id===id);if(!owner)return;
+   app.insertAdjacentHTML('beforeend',Modal('設定するSLOTを選択',`<div class="role-slot-choices439">${Array.from({length:4},(_,i)=>`<button type="button" data-role-slot439="${i}"><b>SLOT ${i+1}</b><span>${escapeGuide436(skillById(owner.equippedSkills?.[i])?.name??'空きスロット')}</span></button>`).join('')}</div><p>選んだ枠のスキルを置き換えます。</p>`,'戻る'));
+   const picker=topModal();picker.querySelector('[data-modal-primary]').onclick=()=>picker.remove();picker.querySelectorAll('[data-role-slot439]').forEach(b=>b.onclick=()=>{
+    if(!picker.isConnected||!editable())return;
+    const result=chapterTwoCommit(()=>{const m=save.state.monsters.find(m=>m.id===id);return{ok:Boolean(m&&equipSkill(m,skillId,Number(b.dataset.roleSlot439)))};});
+    if(!result.ok)return;picker.remove();refresh();showToast('スキルを設定しました');
+   });
+  });
+  detail.querySelector('[data-role-party439]')?.addEventListener('click',()=>{
+   if(!editable())return showToast('探索・戦闘を終えてから編成できます。');
+   const add=outgoing=>{if(!editable()||!detail.isConnected)return;const result=chapterTwoCommit(()=>{
+    if(!save.state.monsters.some(m=>m.id===id)||save.state.party.includes(id))return{ok:false};
+    if(outgoing)return{ok:replacePartyMember(outgoing,id,false,{persist:false})};
+    if(save.state.party.length>=4)return{ok:false};save.state.party.push(id);delete save.state.player.homePartySlots;return{ok:true};});
+    if(result.ok){document.querySelector('[data-role-replace-picker439]')?.remove();refresh();showToast('編成に加えました');}};
+   if(save.state.party.length<4)return add();
+   app.insertAdjacentHTML('beforeend',Modal('交代する仲間を選択',`<div class="role-slot-choices439">${save.state.party.map((mid,i)=>{const m=save.state.monsters.find(m=>m.id===mid);return`<button type="button" data-role-replace439="${escapeGuide436(mid)}"><b>${i+1}</b><span>${escapeGuide436(m?displayName(m):'仲間')}</span></button>`;}).join('')}</div><p>外れる仲間の装備・魔法陣は所持品へ戻ります。</p>`,'戻る'));
+   const picker=topModal();picker.dataset.roleReplacePicker439='1';picker.querySelector('[data-modal-primary]').onclick=()=>picker.remove();picker.querySelectorAll('[data-role-replace439]').forEach(b=>b.onclick=()=>{if(picker.isConnected)add(b.dataset.roleReplace439);});
+  });
+  detail.querySelector('[data-role-open-character436]')?.addEventListener('click',()=>{detail.remove();modal.remove();detailNavigationOrigin='formation';selected=id;go('detail');});
  };
- modal.querySelector('[data-modal-primary]').onclick=()=>modal.remove();redraw();
+ results.onclick=e=>{const button=e.target.closest('[data-role-detail436]');if(button)showDetail(button.dataset.roleDetail436);};
+ modal.querySelector('[data-modal-primary]').onclick=()=>{modal.remove();render();};redraw();
 }
 function bindFormation(){
  document.querySelector('[data-role-guide436]')?.addEventListener('click',openRoleGuide436);
@@ -3254,7 +3293,7 @@ function summonOne({mode="mixed",guaranteedMonster=false,guaranteedEquipment=fal
   if(!pool.length)pool=Object.values(SPECIES).filter(species=>eligible(species)&&species.rarity===rarity);
   if(!pool.length)pool=[SPECIES.slime];
   const selected=balancedGachaEntry(pool,deep?"monster:deep":`monster:${rarity}`,species=>species.id),speciesId=selected?.id??"slime",isNew=!save.state.monsters.some(entry=>entry.speciesId===speciesId);
-  const monster=createMonster(speciesId,{nickname:SPECIES[speciesId].name,obtainedMethod:deep?"deepSummon":"summon",obtainedFloor:save.state.player.maxFloor});
+  const monster=createMonster(speciesId,{nickname:SPECIES[speciesId].name,level:summonLevel439(save.state),obtainedMethod:deep?"deepSummon":"summon",obtainedFloor:save.state.player.maxFloor});
   monster.summonRarity=rarity;if(deep)monster.summonTier="深淵";
   save.state.monsters.push(monster);save.state.codex.captures[speciesId]=(save.state.codex.captures[speciesId]??0)+1;save.state.codex.encounters[speciesId]=(save.state.codex.encounters[speciesId]??0)+1;
   return{type:"monster",rarity,displayRarity:deep?"深淵":rarity,name:displayName(monster),icon:SPECIES[speciesId].emoji,speciesId,item:monster,isNew};
@@ -3262,12 +3301,12 @@ function summonOne({mode="mixed",guaranteedMonster=false,guaranteedEquipment=fal
  const slot=requestedSlot??balancedGachaEntry(["weapon","armor","accessory"],"equipment:slot",entry=>entry),base=balancedGachaEntry(EQUIPMENT_BASES[slot],`equipment:base:${slot}`,entry=>entry.name),item=createEquipment(slot,{rarity,base});
  if(deep){item.summonTier="深淵";item.name=`深淵・${item.name}`}
  const isNew=!(save.state.codex.equipment[item.name]??0);
- receiveEquipment(save.state,item);save.state.codex.equipment[item.name]=(save.state.codex.equipment[item.name]??0)+1;
+ item.level=summonLevel439(save.state,"equipment");receiveEquipment(save.state,item);save.state.codex.equipment[item.name]=(save.state.codex.equipment[item.name]??0)+1;
  return{type:"equipment",rarity,displayRarity:deep?"深淵":rarity,name:item.name,icon:{weapon:"⚔️",armor:"🛡️",accessory:"💍"}[slot],item,isNew};
 }
 function summonEndgameGacha(faction){
  if(faction==="tenGod")return null;
- const pool=Object.values(ENDGAME_BOSSES).filter(boss=>boss.faction===faction),boss=balancedGachaEntry(pool,`endgame:${faction}`,entry=>entry.id);if(!boss)return null;const isNew=!save.state.monsters.some(monster=>monster.endgameBossId===boss.id),monster=createMonster(boss.speciesId,{nickname:boss.name,title:boss.title,rank:4,attribute:boss.element??SPECIES[boss.speciesId]?.element,obtainedFloor:save.state.player.maxFloor,obtainedMethod:"guerrillaGacha",endgameBossId:boss.id,endgameFaction:boss.faction,isContractedEndgame:true,allowEndgameLevel:true,tags:[SPECIES[boss.speciesId]?.race,boss.faction,boss.id,"contractedEndgame"].filter(Boolean)});
+ const pool=Object.values(ENDGAME_BOSSES).filter(boss=>boss.faction===faction),boss=balancedGachaEntry(pool,`endgame:${faction}`,entry=>entry.id);if(!boss)return null;const isNew=!save.state.monsters.some(monster=>monster.endgameBossId===boss.id),monster=createMonster(boss.speciesId,{nickname:boss.name,title:boss.title,level:summonLevel439(save.state),rank:4,attribute:boss.element??SPECIES[boss.speciesId]?.element,obtainedFloor:save.state.player.maxFloor,obtainedMethod:"guerrillaGacha",endgameBossId:boss.id,endgameFaction:boss.faction,isContractedEndgame:true,allowEndgameLevel:true,tags:[SPECIES[boss.speciesId]?.race,boss.faction,boss.id,"contractedEndgame"].filter(Boolean)});
  monster.endgameBossId=boss.id;monster.endgameFaction=boss.faction;monster.visualSpeciesId=boss.id;monster.isContractedEndgame=true;monster.contractProfileVersion=3;monster.contractSignature=boss.signature;monster.contractSeriesId=boss.seriesId;monster.summonRarity=faction==="tenGod"?"十神":"深淵";monster.currentHp=calculatedStats(monster).hp;monster.currentMp=maxMp(monster);save.state.monsters.push(monster);save.state.codex.captures[monster.speciesId]=(save.state.codex.captures[monster.speciesId]??0)+1;save.state.codex.encounters[monster.speciesId]=(save.state.codex.encounters[monster.speciesId]??0)+1;
  return{type:"monster",rarity:monster.summonRarity,displayRarity:monster.summonRarity,name:boss.name,icon:boss.icon,speciesId:monster.speciesId,item:monster,isNew,endgameBossId:boss.id};
 }
@@ -3283,13 +3322,13 @@ function summonSignatureGear(){
  const owners=signatureEligibleOwners(save.state);if(!owners.length)return null;
  const owner=balancedGachaEntry(owners,"signature:weekday-owner",entry=>entry.ownerId),ownedPieces=new Set(save.state.equipment.filter(item=>signatureEquipmentOwnerId(item)===owner.ownerId).map(item=>Number(item.ruleOverrides?.signaturePieceIndex)).filter(Number.isInteger)),missing=[0,1,2,3,4,5].filter(index=>!ownedPieces.has(index)),piecePool=missing.length&&Math.random()<WEEKDAY_SIGNATURE_MISSING_PRIORITY?missing:[0,1,2,3,4,5],pieceIndex=balancedGachaEntry(piecePool,`signature:weekday-piece:${owner.ownerId}`,entry=>entry);
  const item=createSignatureEquipment(owner.ownerId,pieceIndex);if(!item)return null;
- receiveEquipment(save.state,item);save.state.codex.equipment[item.name]=(save.state.codex.equipment[item.name]??0)+1;
+ item.level=summonLevel439(save.state,"equipment");receiveEquipment(save.state,item);save.state.codex.equipment[item.name]=(save.state.codex.equipment[item.name]??0)+1;
  return{type:"equipment",rarity:equipmentDisplayRarity(item),displayRarity:equipmentDisplayRarity(item),name:item.name,icon:"⚔️",item,isNew:!ownedPieces.has(pieceIndex),signatureOwner:owner.ownerName};
 }
 function summonPermanentSignatureGear(){
  const owners=permanentSignatureOwners();if(!owners.length)return null;
  const owner=balancedGachaEntry(owners,"signature:permanent-owner",entry=>entry.ownerId),ownedPieces=new Set(save.state.equipment.filter(item=>signatureEquipmentOwnerId(item)===owner.ownerId).map(item=>Number(item.ruleOverrides?.signaturePieceIndex)).filter(Number.isInteger)),missing=[0,1,2,3,4,5].filter(index=>!ownedPieces.has(index)),piecePool=missing.length&&Math.random()<.72?missing:[0,1,2,3,4,5],pieceIndex=balancedGachaEntry(piecePool,`signature:permanent-piece:${owner.ownerId}`,entry=>entry),item=createSignatureEquipment(owner.ownerId,pieceIndex);if(!item)return null;
- receiveEquipment(save.state,item);save.state.codex.equipment[item.name]=(save.state.codex.equipment[item.name]??0)+1;
+ item.level=summonLevel439(save.state,"equipment");receiveEquipment(save.state,item);save.state.codex.equipment[item.name]=(save.state.codex.equipment[item.name]??0)+1;
  return{type:"equipment",rarity:equipmentDisplayRarity(item),displayRarity:equipmentDisplayRarity(item),name:item.name,icon:"⚔️",item,isNew:!ownedPieces.has(pieceIndex),signatureOwner:owner.ownerName};
 }
 function openPermanentSignatureGacha(){
@@ -3420,22 +3459,26 @@ function gachaCost(count,campaign="standard"){
 }
 function openGachaCountPicker(mode,campaignId="standard"){
  const campaigns=currentGachaCampaigns(),campaign=campaigns.find(entry=>entry.id===campaignId)??campaigns[0],label=mode==="monster"?"モンスター召喚":mode==="equipment"?"装備召喚":campaign.title;
- const counts=[1,10,20,30,50,100];
+ const counts=[1,10,20,30,50,100],maximum=maxSummons439(save.state,mode,n=>gachaCost(n,campaignId),MONSTER_STORAGE_CAP);
  app.insertAdjacentHTML("beforeend",Modal(label,`<div class="gacha-count-picker">
   <div class="gacha-count-copy"><small>${campaign.badge}</small><h3>${campaign.title}</h3><p>${campaign.copy}</p></div>
   ${mode==="gold"?"":paidGachaPityMarkup()}
-  <div class="gacha-count-grid">${counts.map(count=>`<button type="button" data-gacha-count="${count}" class="summon-pull436"><img class="summon-button-art436" src="./assets/ui/build436/summon-button.webp" alt="" aria-hidden="true"><b><em>${count}</em>回召喚</b><small>${pixelIcon("crystal")} ${gachaCost(count,campaignId).toLocaleString()}</small></button>`).join("")}</div>
-  <label class="gacha-custom-count"><span>その他の回数（1〜100）</span><input id="gachaCustomCount" type="number" inputmode="numeric" min="1" max="100" value="15"><button type="button" data-gacha-custom>この回数で召喚</button></label>
-  <small>所持 ${pixelIcon("crystal")} ${save.state.player.crystals.toLocaleString()} / 10連ごとの最後の枠にレア保証を適用</small>
+  <div class="gacha-count-grid">${counts.map(count=>`<button type="button" data-gacha-count="${count}" class="summon-pull436" ${count>maximum?'disabled':''}><img class="summon-button-art436" src="./assets/ui/build436/summon-button.webp" alt="" aria-hidden="true"><b><em>${count}</em>回召喚</b><small>${pixelIcon("crystal")} ${gachaCost(count,campaignId)}</small></button>`).join("")}</div>
+  <label class="gacha-custom-count"><span>その他の回数（${maximum?`1〜${maximum}`:'現在0'}回）</span><input id="gachaCustomCount" type="number" inputmode="numeric" min="1" max="${maximum}" step="1" value="${Math.min(15,maximum)}" ${maximum?'':'disabled'}><button type="button" data-gacha-custom ${maximum?'':'disabled'}>この回数で召喚</button></label>
+  <small data-gacha-custom-cost439 aria-live="polite"></small>
+  <small>所持 ${pixelIcon("crystal")} ${save.state.player.crystals} / ${mode==='gold'?'':`10連ごとの最後の枠にレア保証を適用<br>排出Lv：${mode==='equipment'?`装備 1〜${summonLevelMax439(save.state,'equipment')}`:mode==='monster'?`魔物 1〜${summonLevelMax439(save.state)}`:`魔物 1〜${summonLevelMax439(save.state)}・装備 1〜${summonLevelMax439(save.state,'equipment')}`}`}</small>
  </div>`,"戻る"));
- const modal=topModal();modal.classList.add("gacha-count-modal");
- const run=count=>{count=Math.max(1,Math.min(100,Number(count)||1));performGachaBatch(mode,count,{campaign:campaignId,cost:gachaCost(count,campaignId)})};
- modal.querySelectorAll("[data-gacha-count]").forEach(button=>button.onclick=()=>run(button.dataset.gachaCount));
- modal.querySelector("[data-gacha-custom]").onclick=()=>run(modal.querySelector("#gachaCustomCount").value);
- modal.querySelector("[data-modal-primary]").onclick=()=>modal.remove();
+ const modal=topModal();modal.classList.add("gacha-count-modal");const input=modal.querySelector('#gachaCustomCount'),button=modal.querySelector('[data-gacha-custom]');
+ const check=()=>{const max=maxSummons439(save.state,mode,n=>gachaCost(n,campaignId),MONSTER_STORAGE_CAP),count=validSummonCount439(input.value,max);input.max=max;button.disabled=count===null;modal.querySelector('[data-gacha-custom-cost439]').textContent=count===null?(max?`1〜${max}の整数を入力してください`:'魔晶石または所持枠が不足しています'):`必要 魔晶石 ${gachaCost(count,campaignId)}個`;};
+ input.oninput=check;check();
+ const run=count=>{if(!modal.isConnected)return;performGachaBatch(mode,count,{campaign:campaignId});if(modal.isConnected)check();};
+ modal.querySelectorAll('[data-gacha-count]').forEach(button=>button.onclick=()=>run(button.dataset.gachaCount));button.onclick=()=>run(input.value);
+ modal.querySelector('[data-modal-primary]').onclick=()=>modal.remove();
 }
 function performGachaBatch(mode,count,{campaign="standard",cost=gachaCost(count,campaign)}={}){
- count=Math.max(1,Math.min(100,Number(count)||1));save.state.gacha??={};
+ const freeCount={beginner:10,daily:1,tutorial:1}[campaign],maximum=freeCount??maxSummons439(save.state,mode,n=>gachaCost(n,campaign),MONSTER_STORAGE_CAP);
+ count=validSummonCount439(count,maximum);if(count===null||freeCount&&count!==freeCount)return showToast(maximum?`現在は${maximum}回まで召喚できます。`:'魔晶石または所持枠が不足しています。');
+ cost=gachaCost(count,campaign);save.state.gacha??={};
  if(campaign==="beginner"&&save.state.gacha.firstTenUsed)return showToast("初回限定召喚は受取済みです");
  if(campaign==="daily"&&save.state.gacha.lastDailyKey===localDayKey())return showToast("本日の無料召喚は受取済みです");
  if(campaign==="tutorial"&&(save.state.gacha.tutorialFreeSummons??0)<=0)return showToast("無料チュートリアル召喚は使用済みです");
@@ -3445,6 +3488,7 @@ function performGachaBatch(mode,count,{campaign="standard",cost=gachaCost(count,
  const monsterSpace=Math.max(0,MONSTER_STORAGE_CAP-save.state.monsters.length),equipmentSpace=Math.max(0,500-save.state.equipment.length);
  if(mode==="mixed"&&monsterSpace+equipmentSpace<count)return showToast(`所持枠が不足しています（空き ${monsterSpace+equipmentSpace}枠 / 必要 ${count}枠）`);
  if(save.state.player.crystals<cost)return showToast(`魔晶石が足りません（必要 ${cost}個）`);
+ const committed=chapterTwoCommit(()=>{
  save.state.player.crystals-=cost;if(campaign==="beginner")save.state.gacha.firstTenUsed=true;if(campaign==="daily")save.state.gacha.lastDailyKey=localDayKey();if(campaign==="tutorial")save.state.gacha.tutorialFreeSummons=Math.max(0,(save.state.gacha.tutorialFreeSummons??0)-1);
  const pityEligible=cost>0&&!['gold','guerrilla'].includes(mode);let beginnerTopTierSeen=false;
  const results=Array.from({length:count},(_,index)=>{
@@ -3462,6 +3506,8 @@ function performGachaBatch(mode,count,{campaign="standard",cost=gachaCost(count,
   const forcedSlot=["weapon","armor","accessory"].includes(effectiveMode)?effectiveMode:null;
   return summonOne({mode:effectiveMode,guaranteedMonster:effectiveMode==="monster",guaranteedEquipment:effectiveMode==="equipment"||Boolean(forcedSlot),equipmentSlot:forcedSlot,guaranteedRare:guarantee,forcedRarity:pityRarity,monsterRate:campaign==="daily"?.3:.5});
  });
+ return{ok:true,results};});if(!committed.ok)return;
+ const results=committed.results;
  if(campaign==="beginner"){
   const guide=contextualGuideState();setGuidePending(guide,"starterGacha",false);completeContextGuide("starter_gacha_pull",{quiet:true});
  }
@@ -3493,13 +3539,13 @@ function showSummonResults(results,deep=false,{campaign="standard"}={}){
  </div>`,"閉じる"));
  const modal=topModal(),container=modal.querySelector("[data-gacha-results]"),premiumStage=modal.querySelector("[data-gacha-premium]"),stage=modal.querySelector(".gacha-reveal-stage"),skip=modal.querySelector("[data-gacha-skip]"),primary=modal.querySelector("[data-modal-primary]"),dismiss=modal.querySelector("[data-modal-dismiss]");
  const visual=result=>result.type==="monster"?monsterVisual(result.item??result,result.icon,{className:"gacha-result-monster-visual"}):result.type==="gold"?pixelIcon("coin","gacha-result-gold-art"):result.type==="experience"?pixelIcon("present","gacha-result-gold-art"):equipmentVisual(result.item,{className:"gacha-result-equipment-art"});
- const row=(result,index)=>{const rarity=result.displayRarity??result.rarity,key=rarityCssClass(rarity),typeLabel=result.type==="monster"?"魔物":result.type==="gold"?"GOLD":result.type==="experience"?"育成":"装備";return`<article class="gacha-result-card rarity-${key}" style="--reveal-index:${index}"><span>${visual(result)}</span><div><small>${typeLabel} ${String(index+1).padStart(2,"0")}</small><b class="rarity-name-${key}">[${rarity}] ${result.name}</b><em>${result.isNew?"新規":result.type==="equipment"?"重複":"獲得"}</em></div></article>`};
+ const row=(result,index)=>{const rarity=result.displayRarity??result.rarity,key=rarityCssClass(rarity),typeLabel=result.type==="monster"?"魔物":result.type==="gold"?"GOLD":result.type==="experience"?"育成":"装備";return`<article class="gacha-result-card rarity-${key}" style="--reveal-index:${index}"><span>${visual(result)}</span><div><small>${typeLabel} ${String(index+1).padStart(2,"0")}</small><b class="rarity-name-${key}">[${rarity}] ${result.name}</b><em>${result.isNew?"新規":result.type==="equipment"?"重複":"獲得"}${result.item?.level?`・Lv.${result.item.level}`:""}</em></div></article>`};
  const premium=results.map((result,index)=>({result,index})).filter(({result})=>(RARITY_ORDER[result.displayRarity??result.rarity]??0)>=RARITY_ORDER.SSR);
  let premiumIndex=0,completed=false,closed=false,transitioning=false,introTimer=null,transitionTimer=null;
  const finish=()=>{
   if(closed||completed)return;completed=true;if(introTimer)clearTimeout(introTimer);
   stage.classList.add("finished");stage.hidden=true;premiumStage.hidden=true;skip.hidden=true;
-  container.hidden=false;container.innerHTML=results.map(row).join("");
+  container.hidden=false;let resultPage=0;const draw=()=>{const start=resultPage*50;container.innerHTML=results.slice(start,start+50).map((r,i)=>row(r,start+i)).join('')+(results.length>50?`<nav class="summon-result-pages439"><button data-summon-page439="-1" ${resultPage===0?'disabled':''}>前へ</button><span>${resultPage+1} / ${Math.ceil(results.length/50)}</span><button data-summon-page439="1" ${(resultPage+1)*50>=results.length?'disabled':''}>次へ</button></nav>`:'');};container.onclick=e=>{const b=e.target.closest('[data-summon-page439]');if(!b||b.disabled)return;resultPage+=Number(b.dataset.summonPage439);draw();container.scrollIntoView({block:'start'});};draw();
   primary.disabled=false;dismiss.disabled=false;
  };
  const revealPremium=()=>{

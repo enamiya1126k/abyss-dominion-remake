@@ -1,0 +1,124 @@
+TAP version 13
+# Subtest: summon maximum follows actual rounded price, capacity and empty resources, including counts above 100
+ok 1 - summon maximum follows actual rounded price, capacity and empty resources, including counts above 100
+  ---
+  duration_ms: 1.15354
+  type: 'test'
+  ...
+# Subtest: manual count rejects zero, empty, fractional, nonfinite and unaffordable values without clamping or charging
+ok 2 - manual count rejects zero, empty, fractional, nonfinite and unaffordable values without clamping or charging
+  ---
+  duration_ms: 0.143862
+  type: 'test'
+  ...
+# Subtest: new summon levels include both endpoints, floor odd values, and never modify owned items
+ok 3 - new summon levels include both endpoints, floor odd values, and never modify owned items
+  ---
+  duration_ms: 0.749645
+  type: 'test'
+  ...
+# Subtest: floor monster exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+ok 4 - floor monster exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+  ---
+  duration_ms: 7.366124
+  type: 'test'
+  ...
+# Subtest: floor weapon exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+ok 5 - floor weapon exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+  ---
+  duration_ms: 1.935952
+  type: 'test'
+  ...
+# Subtest: floor armor exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+ok 6 - floor armor exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+  ---
+  duration_ms: 1.515903
+  type: 'test'
+  ...
+# Subtest: floor accessory exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+ok 7 - floor accessory exchange costs existing fragments plus 5 keys; insufficient keys cannot grant
+  ---
+  duration_ms: 1.165037
+  type: 'test'
+  ...
+# Subtest: abyss contract: keys 10, correct fragments, one atomic charge
+ok 8 - abyss contract: keys 10, correct fragments, one atomic charge
+  ---
+  duration_ms: 2.100385
+  type: 'test'
+  ...
+# Subtest: abyss equipment: keys 10, correct fragments, one atomic charge
+ok 9 - abyss equipment: keys 10, correct fragments, one atomic charge
+  ---
+  duration_ms: 2.543507
+  type: 'test'
+  ...
+# Subtest: tenGod contract: keys 15, correct fragments, one atomic charge
+ok 10 - tenGod contract: keys 15, correct fragments, one atomic charge
+  ---
+  duration_ms: 1.145437
+  type: 'test'
+  ...
+# Subtest: tenGod equipment: keys 15, correct fragments, one atomic charge
+ok 11 - tenGod equipment: keys 15, correct fragments, one atomic charge
+  ---
+  duration_ms: 1.356108
+  type: 'test'
+  ...
+# Subtest: affection training charges proportionally at cap and preserves current HP/MP and all existing levels
+ok 12 - affection training charges proportionally at cap and preserves current HP/MP and all existing levels
+  ---
+  duration_ms: 1.82552
+  type: 'test'
+  ...
+# Subtest: skill training works for learned unequipped skills, advances mastery, never increments actual uses
+ok 13 - skill training works for learned unequipped skills, advances mastery, never increments actual uses
+  ---
+  duration_ms: 1.790097
+  type: 'test'
+  ...
+# Subtest: training cannot spend while exploring, with missing crystal stock, or on unlearned skill
+ok 14 - training cannot spend while exploring, with missing crystal stock, or on unlearned skill
+  ---
+  duration_ms: 1.522043
+  type: 'test'
+  ...
+# Subtest: second chapter gacha uses the same floor level range without changing rarity distribution or price
+ok 15 - second chapter gacha uses the same floor level range without changing rarity distribution or price
+  ---
+  duration_ms: 2.540283
+  type: 'test'
+  ...
+# Subtest: role list includes unequipped learned skills, exposes explicit actions only in editable mode, and remains read-only
+ok 16 - role list includes unequipped learned skills, exposes explicit actions only in editable mode, and remains read-only
+  ---
+  duration_ms: 4.877336
+  type: 'test'
+  ...
+# Subtest: raid ranking cards keep exact damage, ties, safe player names and real character art
+ok 17 - raid ranking cards keep exact damage, ties, safe player names and real character art
+  ---
+  duration_ms: 0.682115
+  type: 'test'
+  ...
+# Subtest: online rank portraits survive disconnect without storing combat information
+ok 18 - online rank portraits survive disconnect without storing combat information
+  ---
+  duration_ms: 6.139085
+  type: 'test'
+  ...
+# Subtest: offline ticket preserves display portrait with unchanged verified replay and duplicate protection
+ok 19 - offline ticket preserves display portrait with unchanged verified replay and duplicate protection
+  ---
+  duration_ms: 22.813113
+  type: 'test'
+  ...
+1..19
+# tests 19
+# suites 0
+# pass 19
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 480.468167

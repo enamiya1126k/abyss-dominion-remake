@@ -1,0 +1,692 @@
+{
+  "checks": [
+    "growth: no horizontal overflow at 393",
+    "growth frame geometry preserved at 393",
+    "training button fits existing affection space at 393",
+    "gacha: no horizontal overflow at 393",
+    "ranking: no horizontal overflow at 393",
+    "rank digits and 12-digit damage fit at 393",
+    "power: no horizontal overflow at 393",
+    "exchange: no horizontal overflow at 393",
+    "forge: no horizontal overflow at 393",
+    "growth: no horizontal overflow at 375",
+    "growth frame geometry preserved at 375",
+    "training button fits existing affection space at 375",
+    "gacha: no horizontal overflow at 375",
+    "ranking: no horizontal overflow at 375",
+    "rank digits and 12-digit damage fit at 375",
+    "power: no horizontal overflow at 375",
+    "exchange: no horizontal overflow at 375",
+    "forge: no horizontal overflow at 375",
+    "growth: no horizontal overflow at 430",
+    "growth frame geometry preserved at 430",
+    "training button fits existing affection space at 430",
+    "gacha: no horizontal overflow at 430",
+    "ranking: no horizontal overflow at 430",
+    "rank digits and 12-digit damage fit at 430",
+    "power: no horizontal overflow at 430",
+    "exchange: no horizontal overflow at 430",
+    "forge: no horizontal overflow at 430",
+    "growth: no horizontal overflow at 1280",
+    "growth frame geometry preserved at 1280",
+    "training button fits existing affection space at 1280",
+    "gacha: no horizontal overflow at 1280",
+    "ranking: no horizontal overflow at 1280",
+    "rank digits and 12-digit damage fit at 1280",
+    "power: no horizontal overflow at 1280",
+    "exchange: no horizontal overflow at 1280",
+    "forge: no horizontal overflow at 1280",
+    "input upper bound and invalid count disabled",
+    "234 summons charge 10530 with levels 1–150",
+    "gacha save failure restores all costs and grants",
+    "affection and skill training spend through visible UI",
+    "training save failure restores progression and crystal stock",
+    "floor weapon UI spends 5 keys",
+    "key shortage disables every floor exchange",
+    "recommendation sets a chosen skill slot and refreshes readiness",
+    "reserve role candidate replaces the chosen member in a full party",
+    "exploration guide remains read-only",
+    "power record opens ranking and requests current data",
+    "large summon result list paginates all items"
+  ],
+  "errors": [],
+  "missing": [],
+  "metrics": {
+    "growth-393": {
+      "before": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 393,
+          "h": 71,
+          "c": "topbar"
+        },
+        {
+          "x": 14,
+          "y": 85,
+          "w": 365,
+          "h": 60,
+          "c": "monster-switcher"
+        },
+        {
+          "x": 14,
+          "y": 167,
+          "w": 365,
+          "h": 345.5625,
+          "c": "panel compact-growth-summary"
+        },
+        {
+          "x": 14,
+          "y": 546.5625,
+          "w": 365,
+          "h": 163,
+          "c": "panel compact-limit-panel"
+        },
+        {
+          "x": 14,
+          "y": 743.5625,
+          "w": 365,
+          "h": 178,
+          "c": "panel compact-affection-panel"
+        },
+        {
+          "x": 14,
+          "y": 955.5625,
+          "w": 365,
+          "h": 374,
+          "c": "panel acquisition-guide"
+        },
+        {
+          "x": 14,
+          "y": 1351.5625,
+          "w": 365,
+          "h": 48,
+          "c": "growth-quick-actions"
+        },
+        {
+          "x": 14,
+          "y": 1421.5625,
+          "w": 365,
+          "h": 54,
+          "c": "panel detail-fold"
+        },
+        {
+          "x": 14,
+          "y": 1509.5625,
+          "w": 365,
+          "h": 153,
+          "c": "panel danger-zone"
+        }
+      ],
+      "after": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 393,
+          "h": 71,
+          "c": "topbar"
+        },
+        {
+          "x": 14,
+          "y": 85,
+          "w": 365,
+          "h": 60,
+          "c": "monster-switcher"
+        },
+        {
+          "x": 14,
+          "y": 167,
+          "w": 365,
+          "h": 345.5625,
+          "c": "panel compact-growth-summary"
+        },
+        {
+          "x": 14,
+          "y": 546.5625,
+          "w": 365,
+          "h": 163,
+          "c": "panel compact-limit-panel"
+        },
+        {
+          "x": 14,
+          "y": 743.5625,
+          "w": 365,
+          "h": 178,
+          "c": "panel compact-affection-panel"
+        },
+        {
+          "x": 14,
+          "y": 955.5625,
+          "w": 365,
+          "h": 374,
+          "c": "panel acquisition-guide"
+        },
+        {
+          "x": 14,
+          "y": 1351.5625,
+          "w": 365,
+          "h": 48,
+          "c": "growth-quick-actions"
+        },
+        {
+          "x": 14,
+          "y": 1421.5625,
+          "w": 365,
+          "h": 54,
+          "c": "panel detail-fold"
+        },
+        {
+          "x": 14,
+          "y": 1509.5625,
+          "w": 365,
+          "h": 153,
+          "c": "panel danger-zone"
+        }
+      ]
+    },
+    "ranking-393": [
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      }
+    ],
+    "growth-375": {
+      "before": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 375,
+          "h": 71,
+          "c": "topbar"
+        },
+        {
+          "x": 14,
+          "y": 85,
+          "w": 347,
+          "h": 60,
+          "c": "monster-switcher"
+        },
+        {
+          "x": 14,
+          "y": 167,
+          "w": 347,
+          "h": 345.5625,
+          "c": "panel compact-growth-summary"
+        },
+        {
+          "x": 14,
+          "y": 546.5625,
+          "w": 347,
+          "h": 163,
+          "c": "panel compact-limit-panel"
+        },
+        {
+          "x": 14,
+          "y": 743.5625,
+          "w": 347,
+          "h": 178,
+          "c": "panel compact-affection-panel"
+        },
+        {
+          "x": 14,
+          "y": 955.5625,
+          "w": 347,
+          "h": 374,
+          "c": "panel acquisition-guide"
+        },
+        {
+          "x": 14,
+          "y": 1351.5625,
+          "w": 347,
+          "h": 48,
+          "c": "growth-quick-actions"
+        },
+        {
+          "x": 14,
+          "y": 1421.5625,
+          "w": 347,
+          "h": 54,
+          "c": "panel detail-fold"
+        },
+        {
+          "x": 14,
+          "y": 1509.5625,
+          "w": 347,
+          "h": 153,
+          "c": "panel danger-zone"
+        }
+      ],
+      "after": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 375,
+          "h": 71,
+          "c": "topbar"
+        },
+        {
+          "x": 14,
+          "y": 85,
+          "w": 347,
+          "h": 60,
+          "c": "monster-switcher"
+        },
+        {
+          "x": 14,
+          "y": 167,
+          "w": 347,
+          "h": 345.5625,
+          "c": "panel compact-growth-summary"
+        },
+        {
+          "x": 14,
+          "y": 546.5625,
+          "w": 347,
+          "h": 163,
+          "c": "panel compact-limit-panel"
+        },
+        {
+          "x": 14,
+          "y": 743.5625,
+          "w": 347,
+          "h": 178,
+          "c": "panel compact-affection-panel"
+        },
+        {
+          "x": 14,
+          "y": 955.5625,
+          "w": 347,
+          "h": 374,
+          "c": "panel acquisition-guide"
+        },
+        {
+          "x": 14,
+          "y": 1351.5625,
+          "w": 347,
+          "h": 48,
+          "c": "growth-quick-actions"
+        },
+        {
+          "x": 14,
+          "y": 1421.5625,
+          "w": 347,
+          "h": 54,
+          "c": "panel detail-fold"
+        },
+        {
+          "x": 14,
+          "y": 1509.5625,
+          "w": 347,
+          "h": 153,
+          "c": "panel danger-zone"
+        }
+      ]
+    },
+    "ranking-375": [
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      }
+    ],
+    "growth-430": {
+      "before": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 430,
+          "h": 71,
+          "c": "topbar"
+        },
+        {
+          "x": 14,
+          "y": 85,
+          "w": 402,
+          "h": 60,
+          "c": "monster-switcher"
+        },
+        {
+          "x": 14,
+          "y": 167,
+          "w": 402,
+          "h": 345.5625,
+          "c": "panel compact-growth-summary"
+        },
+        {
+          "x": 14,
+          "y": 546.5625,
+          "w": 402,
+          "h": 163,
+          "c": "panel compact-limit-panel"
+        },
+        {
+          "x": 14,
+          "y": 743.5625,
+          "w": 402,
+          "h": 178,
+          "c": "panel compact-affection-panel"
+        },
+        {
+          "x": 14,
+          "y": 955.5625,
+          "w": 402,
+          "h": 374,
+          "c": "panel acquisition-guide"
+        },
+        {
+          "x": 14,
+          "y": 1351.5625,
+          "w": 402,
+          "h": 48,
+          "c": "growth-quick-actions"
+        },
+        {
+          "x": 14,
+          "y": 1421.5625,
+          "w": 402,
+          "h": 54,
+          "c": "panel detail-fold"
+        },
+        {
+          "x": 14,
+          "y": 1509.5625,
+          "w": 402,
+          "h": 153,
+          "c": "panel danger-zone"
+        }
+      ],
+      "after": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 430,
+          "h": 71,
+          "c": "topbar"
+        },
+        {
+          "x": 14,
+          "y": 85,
+          "w": 402,
+          "h": 60,
+          "c": "monster-switcher"
+        },
+        {
+          "x": 14,
+          "y": 167,
+          "w": 402,
+          "h": 345.5625,
+          "c": "panel compact-growth-summary"
+        },
+        {
+          "x": 14,
+          "y": 546.5625,
+          "w": 402,
+          "h": 163,
+          "c": "panel compact-limit-panel"
+        },
+        {
+          "x": 14,
+          "y": 743.5625,
+          "w": 402,
+          "h": 178,
+          "c": "panel compact-affection-panel"
+        },
+        {
+          "x": 14,
+          "y": 955.5625,
+          "w": 402,
+          "h": 374,
+          "c": "panel acquisition-guide"
+        },
+        {
+          "x": 14,
+          "y": 1351.5625,
+          "w": 402,
+          "h": 48,
+          "c": "growth-quick-actions"
+        },
+        {
+          "x": 14,
+          "y": 1421.5625,
+          "w": 402,
+          "h": 54,
+          "c": "panel detail-fold"
+        },
+        {
+          "x": 14,
+          "y": 1509.5625,
+          "w": 402,
+          "h": 153,
+          "c": "panel danger-zone"
+        }
+      ]
+    },
+    "ranking-430": [
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      }
+    ],
+    "growth-1280": {
+      "before": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 71,
+          "c": "topbar"
+        },
+        {
+          "x": 14,
+          "y": 85,
+          "w": 1252,
+          "h": 58,
+          "c": "monster-switcher"
+        },
+        {
+          "x": 14,
+          "y": 165,
+          "w": 1252,
+          "h": 288.5625,
+          "c": "panel compact-growth-summary"
+        },
+        {
+          "x": 14,
+          "y": 487.5625,
+          "w": 1252,
+          "h": 99,
+          "c": "panel compact-limit-panel"
+        },
+        {
+          "x": 14,
+          "y": 620.5625,
+          "w": 1252,
+          "h": 178,
+          "c": "panel compact-affection-panel"
+        },
+        {
+          "x": 14,
+          "y": 832.5625,
+          "w": 1252,
+          "h": 237,
+          "c": "panel acquisition-guide"
+        },
+        {
+          "x": 14,
+          "y": 1091.5625,
+          "w": 1252,
+          "h": 48,
+          "c": "growth-quick-actions"
+        },
+        {
+          "x": 14,
+          "y": 1161.5625,
+          "w": 1252,
+          "h": 54,
+          "c": "panel detail-fold"
+        },
+        {
+          "x": 14,
+          "y": 1249.5625,
+          "w": 1252,
+          "h": 153,
+          "c": "panel danger-zone"
+        }
+      ],
+      "after": [
+        {
+          "x": 0,
+          "y": 0,
+          "w": 1280,
+          "h": 71,
+          "c": "topbar"
+        },
+        {
+          "x": 14,
+          "y": 85,
+          "w": 1252,
+          "h": 58,
+          "c": "monster-switcher"
+        },
+        {
+          "x": 14,
+          "y": 165,
+          "w": 1252,
+          "h": 288.5625,
+          "c": "panel compact-growth-summary"
+        },
+        {
+          "x": 14,
+          "y": 487.5625,
+          "w": 1252,
+          "h": 99,
+          "c": "panel compact-limit-panel"
+        },
+        {
+          "x": 14,
+          "y": 620.5625,
+          "w": 1252,
+          "h": 178,
+          "c": "panel compact-affection-panel"
+        },
+        {
+          "x": 14,
+          "y": 832.5625,
+          "w": 1252,
+          "h": 237,
+          "c": "panel acquisition-guide"
+        },
+        {
+          "x": 14,
+          "y": 1091.5625,
+          "w": 1252,
+          "h": 48,
+          "c": "growth-quick-actions"
+        },
+        {
+          "x": 14,
+          "y": 1161.5625,
+          "w": 1252,
+          "h": 54,
+          "c": "panel detail-fold"
+        },
+        {
+          "x": 14,
+          "y": 1249.5625,
+          "w": 1252,
+          "h": 153,
+          "c": "panel danger-zone"
+        }
+      ]
+    },
+    "ranking-1280": [
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      },
+      {
+        "inside": true,
+        "scoreFits": true,
+        "overflow": false
+      }
+    ]
+  }
+}

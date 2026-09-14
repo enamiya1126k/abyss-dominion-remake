@@ -1,10 +1,12 @@
+import {MOTHER_ID422} from '../primordial/Mother422.js';
 import {chapterTwoUnlocked} from './ChapterTwoSystem.js?v=3.1.82-build402';
 import {SPECIES} from '../data/species.js';
 import {createMonster} from '../models/Monster.js?v=3.1.82-build402';
 import {MONSTER_STORAGE_CAP} from '../core/config.js?v=3.1.82-build402';
 
+import {summonLevel439} from '../core/SummonLimits439.js';
 export const CHAPTER_TWO_GACHA_RATES397=Object.freeze({N:5,R:15,SR:35,SSR:25,UR:15,LR:4,'神話':1});
-export const CHAPTER_TWO_GACHA_POOLS397=Object.freeze(Object.fromEntries(Object.keys(CHAPTER_TWO_GACHA_RATES397).map(rank=>[rank,Object.freeze(Object.values(SPECIES).filter(s=>s.chapterTwoOnly&&s.rarity===rank).map(s=>s.id))])));
+export const CHAPTER_TWO_GACHA_POOLS397=Object.freeze(Object.fromEntries(Object.keys(CHAPTER_TWO_GACHA_RATES397).map(rank=>[rank,Object.freeze(Object.values(SPECIES).filter(s=>s.chapterTwoOnly&&s.id!==MOTHER_ID422&&s.rarity===rank).map(s=>s.id))])));
 export const chapterTwoGachaUnlocked397=state=>chapterTwoUnlocked(state);
 const roll=random=>{const n=Number(random());return Number.isFinite(n)?Math.max(0,Math.min(.999999999999,n)):0;};
 export function rollChapterTwoGacha397(random=Math.random){
@@ -31,7 +33,7 @@ export function drawChapterTwoGacha397(state,count,{random=Math.random}={}){
  const owned=new Set((state.monsters??[]).map(m=>m.speciesId));
  const results=Array.from({length:count},()=>{
   const {speciesId,rarity}=rollChapterTwoGacha397(random),species=SPECIES[speciesId],isNew=!owned.has(speciesId);
-  const item=createMonster(speciesId,{nickname:species.name,obtainedMethod:'chapterTwoSummon',obtainedFloor:state.player.maxFloor});item.summonRarity=rarity;owned.add(speciesId);
+  const item=createMonster(speciesId,{nickname:species.name,level:summonLevel439(state,'monster',random),obtainedMethod:'chapterTwoSummon',obtainedFloor:state.player.maxFloor});item.summonRarity=rarity;owned.add(speciesId);
   return{type:'monster',rarity,displayRarity:rarity,name:species.name,icon:species.emoji,speciesId,item,isNew};
  });
  state.monsters??=[];state.codex??={};state.codex.captures??={};state.codex.encounters??={};

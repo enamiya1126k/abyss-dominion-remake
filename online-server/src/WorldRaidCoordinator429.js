@@ -1,3 +1,4 @@
+import {raidPortrait439} from '../../src/worldRaid/WorldRaidPortrait439.js';
 import {randomBytes} from 'node:crypto';
 import {WorldRaidCoordinator428} from './WorldRaidCoordinator428.js';
 import {worldRaidBoss428} from './WorldRaidStore428.js';
@@ -67,7 +68,7 @@ export class WorldRaidCoordinator429 extends WorldRaidCoordinator428{
   if(!Number.isSafeInteger(sequence)||sequence<1||sequence>s.current.sequence)return {ok:false,code:'WORLD_RAID_RANKING_MISSING',message:'この討伐記録は見つかりません。'};
   const c=sequence===s.current.sequence?s.current:s.history.find(h=>h.sequence===sequence);if(!c)return {ok:false,code:'WORLD_RAID_RANKING_MISSING',message:'この討伐記録は見つかりません。'};
   const rows=this._rows429(c),pageSize=20,page=Math.min(Math.max(0,Math.floor(Number(message.page)||0)),Math.max(0,Math.ceil(rows.length/pageSize)-1)),mine=rows.find(r=>r.playerId===session.playerId)??null;
-  const result={type:'worldRaidRanking429',requestId:message.requestId,revision:s.revision,serverNow:this.now(),campaign:{id:c.id,sequence:c.sequence,bossName:worldRaidBoss428(c.sequence).name,hp:c.hp,maxHp:c.maxHp,completedAt:c.completedAt??null,killerId:c.killerId??null},latestSequence:s.current.sequence,total:rows.length,totalDamage:rows.reduce((n,r)=>n+r.damage,0),page,pageSize,rows:rows.slice(page*pageSize,(page+1)*pageSize),mine,myReward:this._publicReward429(s.rewards429?.[worldRaidRewardId429(s.ledgerId429,c.sequence,session.playerId)])};
+  const result={type:'worldRaidRanking429',requestId:message.requestId,revision:s.revision,serverNow:this.now(),campaign:{id:c.id,sequence:c.sequence,bossName:worldRaidBoss428(c.sequence).name,hp:c.hp,maxHp:c.maxHp,completedAt:c.completedAt??null,killerId:c.killerId??null},latestSequence:s.current.sequence,total:rows.length,totalDamage:rows.reduce((n,r)=>n+r.damage,0),page,pageSize,rows:rows.slice(page*pageSize,(page+1)*pageSize).map(row=>({...row,portrait439:c.contribution[row.playerId]?.portrait439??raidPortrait439(this.sessions.get(row.playerId)?.profile)})),mine,myReward:this._publicReward429(s.rewards429?.[worldRaidRewardId429(s.ledgerId429,c.sequence,session.playerId)])};
   this.send(session.playerId,result);return {ok:true};
  }
  _operate(session,kind,message={}){
