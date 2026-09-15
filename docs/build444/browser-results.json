@@ -1,0 +1,1531 @@
+{
+  "fixtures": [
+    {
+      "id": "home-none",
+      "circle": "none",
+      "context": "home",
+      "frames": 1
+    },
+    {
+      "id": "battle-none",
+      "circle": "none",
+      "context": "battle",
+      "frames": 1
+    },
+    {
+      "id": "workshop-none",
+      "circle": "none",
+      "context": "workshop",
+      "frames": 1
+    },
+    {
+      "id": "online-none",
+      "circle": "none",
+      "context": "online",
+      "frames": 1
+    },
+    {
+      "id": "home-reincarnation",
+      "circle": "reincarnation",
+      "context": "home",
+      "frames": 3
+    },
+    {
+      "id": "battle-reincarnation",
+      "circle": "reincarnation",
+      "context": "battle",
+      "frames": 3
+    },
+    {
+      "id": "workshop-reincarnation",
+      "circle": "reincarnation",
+      "context": "workshop",
+      "frames": 3
+    },
+    {
+      "id": "online-reincarnation",
+      "circle": "reincarnation",
+      "context": "online",
+      "frames": 3
+    },
+    {
+      "id": "home-raid_zero_sovereign",
+      "circle": "raid_zero_sovereign",
+      "context": "home",
+      "frames": 1
+    },
+    {
+      "id": "battle-raid_zero_sovereign",
+      "circle": "raid_zero_sovereign",
+      "context": "battle",
+      "frames": 1
+    },
+    {
+      "id": "workshop-raid_zero_sovereign",
+      "circle": "raid_zero_sovereign",
+      "context": "workshop",
+      "frames": 1
+    },
+    {
+      "id": "online-raid_zero_sovereign",
+      "circle": "raid_zero_sovereign",
+      "context": "online",
+      "frames": 1
+    },
+    {
+      "id": "home-raid_vajra_beast",
+      "circle": "raid_vajra_beast",
+      "context": "home",
+      "frames": 1
+    },
+    {
+      "id": "battle-raid_vajra_beast",
+      "circle": "raid_vajra_beast",
+      "context": "battle",
+      "frames": 1
+    },
+    {
+      "id": "workshop-raid_vajra_beast",
+      "circle": "raid_vajra_beast",
+      "context": "workshop",
+      "frames": 1
+    },
+    {
+      "id": "online-raid_vajra_beast",
+      "circle": "raid_vajra_beast",
+      "context": "online",
+      "frames": 1
+    },
+    {
+      "id": "home-ch2_chain394",
+      "circle": "ch2_chain394",
+      "context": "home",
+      "frames": 1
+    },
+    {
+      "id": "battle-ch2_chain394",
+      "circle": "ch2_chain394",
+      "context": "battle",
+      "frames": 1
+    },
+    {
+      "id": "workshop-ch2_chain394",
+      "circle": "ch2_chain394",
+      "context": "workshop",
+      "frames": 1
+    },
+    {
+      "id": "online-ch2_chain394",
+      "circle": "ch2_chain394",
+      "context": "online",
+      "frames": 1
+    },
+    {
+      "id": "home-ch2_dream394",
+      "circle": "ch2_dream394",
+      "context": "home",
+      "frames": 1
+    },
+    {
+      "id": "battle-ch2_dream394",
+      "circle": "ch2_dream394",
+      "context": "battle",
+      "frames": 1
+    },
+    {
+      "id": "workshop-ch2_dream394",
+      "circle": "ch2_dream394",
+      "context": "workshop",
+      "frames": 1
+    },
+    {
+      "id": "online-ch2_dream394",
+      "circle": "ch2_dream394",
+      "context": "online",
+      "frames": 1
+    },
+    {
+      "id": "home-ch2_pair394",
+      "circle": "ch2_pair394",
+      "context": "home",
+      "frames": 1
+    },
+    {
+      "id": "battle-ch2_pair394",
+      "circle": "ch2_pair394",
+      "context": "battle",
+      "frames": 1
+    },
+    {
+      "id": "workshop-ch2_pair394",
+      "circle": "ch2_pair394",
+      "context": "workshop",
+      "frames": 1
+    },
+    {
+      "id": "online-ch2_pair394",
+      "circle": "ch2_pair394",
+      "context": "online",
+      "frames": 1
+    },
+    {
+      "id": "home-ch2_guard394",
+      "circle": "ch2_guard394",
+      "context": "home",
+      "frames": 1
+    },
+    {
+      "id": "battle-ch2_guard394",
+      "circle": "ch2_guard394",
+      "context": "battle",
+      "frames": 1
+    },
+    {
+      "id": "workshop-ch2_guard394",
+      "circle": "ch2_guard394",
+      "context": "workshop",
+      "frames": 1
+    },
+    {
+      "id": "online-ch2_guard394",
+      "circle": "ch2_guard394",
+      "context": "online",
+      "frames": 1
+    },
+    {
+      "id": "home-ch2_crown394",
+      "circle": "ch2_crown394",
+      "context": "home",
+      "frames": 1
+    },
+    {
+      "id": "battle-ch2_crown394",
+      "circle": "ch2_crown394",
+      "context": "battle",
+      "frames": 1
+    },
+    {
+      "id": "workshop-ch2_crown394",
+      "circle": "ch2_crown394",
+      "context": "workshop",
+      "frames": 1
+    },
+    {
+      "id": "online-ch2_crown394",
+      "circle": "ch2_crown394",
+      "context": "online",
+      "frames": 1
+    },
+    {
+      "id": "home-ch2_prism398",
+      "circle": "ch2_prism398",
+      "context": "home",
+      "frames": 1
+    },
+    {
+      "id": "battle-ch2_prism398",
+      "circle": "ch2_prism398",
+      "context": "battle",
+      "frames": 1
+    },
+    {
+      "id": "workshop-ch2_prism398",
+      "circle": "ch2_prism398",
+      "context": "workshop",
+      "frames": 1
+    },
+    {
+      "id": "online-ch2_prism398",
+      "circle": "ch2_prism398",
+      "context": "online",
+      "frames": 1
+    },
+    {
+      "id": "home-ch2_hex398",
+      "circle": "ch2_hex398",
+      "context": "home",
+      "frames": 1
+    },
+    {
+      "id": "battle-ch2_hex398",
+      "circle": "ch2_hex398",
+      "context": "battle",
+      "frames": 1
+    },
+    {
+      "id": "workshop-ch2_hex398",
+      "circle": "ch2_hex398",
+      "context": "workshop",
+      "frames": 1
+    },
+    {
+      "id": "online-ch2_hex398",
+      "circle": "ch2_hex398",
+      "context": "online",
+      "frames": 1
+    },
+    {
+      "id": "home-ch2_reserve398",
+      "circle": "ch2_reserve398",
+      "context": "home",
+      "frames": 1
+    },
+    {
+      "id": "battle-ch2_reserve398",
+      "circle": "ch2_reserve398",
+      "context": "battle",
+      "frames": 1
+    },
+    {
+      "id": "workshop-ch2_reserve398",
+      "circle": "ch2_reserve398",
+      "context": "workshop",
+      "frames": 1
+    },
+    {
+      "id": "online-ch2_reserve398",
+      "circle": "ch2_reserve398",
+      "context": "online",
+      "frames": 1
+    }
+  ],
+  "before": "none",
+  "after": [
+    {
+      "id": "home-none",
+      "circle": "none",
+      "context": "home",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 55000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "battle-none",
+      "circle": "none",
+      "context": "battle",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 55000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "workshop-none",
+      "circle": "none",
+      "context": "workshop",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 55000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "online-none",
+      "circle": "none",
+      "context": "online",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 55000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "home-reincarnation",
+      "circle": "reincarnation",
+      "context": "home",
+      "frames": 3,
+      "name": "magic-circle-art-spin, magic-circle-frame-cycle",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94"
+      ]
+    },
+    {
+      "id": "battle-reincarnation",
+      "circle": "reincarnation",
+      "context": "battle",
+      "frames": 3,
+      "name": "magic-circle-art-spin, magic-circle-frame-cycle",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94"
+      ]
+    },
+    {
+      "id": "workshop-reincarnation",
+      "circle": "reincarnation",
+      "context": "workshop",
+      "frames": 3,
+      "name": "magic-circle-art-spin, magic-circle-frame-cycle",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94"
+      ]
+    },
+    {
+      "id": "online-reincarnation",
+      "circle": "reincarnation",
+      "context": "online",
+      "frames": 3,
+      "name": "magic-circle-art-spin, magic-circle-frame-cycle",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94",
+        "0.94"
+      ]
+    },
+    {
+      "id": "home-raid_zero_sovereign",
+      "circle": "raid_zero_sovereign",
+      "context": "home",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "battle-raid_zero_sovereign",
+      "circle": "raid_zero_sovereign",
+      "context": "battle",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "workshop-raid_zero_sovereign",
+      "circle": "raid_zero_sovereign",
+      "context": "workshop",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "online-raid_zero_sovereign",
+      "circle": "raid_zero_sovereign",
+      "context": "online",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "home-raid_vajra_beast",
+      "circle": "raid_vajra_beast",
+      "context": "home",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "battle-raid_vajra_beast",
+      "circle": "raid_vajra_beast",
+      "context": "battle",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "workshop-raid_vajra_beast",
+      "circle": "raid_vajra_beast",
+      "context": "workshop",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "online-raid_vajra_beast",
+      "circle": "raid_vajra_beast",
+      "context": "online",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "home-ch2_chain394",
+      "circle": "ch2_chain394",
+      "context": "home",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "battle-ch2_chain394",
+      "circle": "ch2_chain394",
+      "context": "battle",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "workshop-ch2_chain394",
+      "circle": "ch2_chain394",
+      "context": "workshop",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "online-ch2_chain394",
+      "circle": "ch2_chain394",
+      "context": "online",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "home-ch2_dream394",
+      "circle": "ch2_dream394",
+      "context": "home",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "battle-ch2_dream394",
+      "circle": "ch2_dream394",
+      "context": "battle",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "workshop-ch2_dream394",
+      "circle": "ch2_dream394",
+      "context": "workshop",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "online-ch2_dream394",
+      "circle": "ch2_dream394",
+      "context": "online",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "home-ch2_pair394",
+      "circle": "ch2_pair394",
+      "context": "home",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "battle-ch2_pair394",
+      "circle": "ch2_pair394",
+      "context": "battle",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "workshop-ch2_pair394",
+      "circle": "ch2_pair394",
+      "context": "workshop",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "online-ch2_pair394",
+      "circle": "ch2_pair394",
+      "context": "online",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "home-ch2_guard394",
+      "circle": "ch2_guard394",
+      "context": "home",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "battle-ch2_guard394",
+      "circle": "ch2_guard394",
+      "context": "battle",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "workshop-ch2_guard394",
+      "circle": "ch2_guard394",
+      "context": "workshop",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "online-ch2_guard394",
+      "circle": "ch2_guard394",
+      "context": "online",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "home-ch2_crown394",
+      "circle": "ch2_crown394",
+      "context": "home",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "battle-ch2_crown394",
+      "circle": "ch2_crown394",
+      "context": "battle",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "workshop-ch2_crown394",
+      "circle": "ch2_crown394",
+      "context": "workshop",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "online-ch2_crown394",
+      "circle": "ch2_crown394",
+      "context": "online",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "home-ch2_prism398",
+      "circle": "ch2_prism398",
+      "context": "home",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "battle-ch2_prism398",
+      "circle": "ch2_prism398",
+      "context": "battle",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "workshop-ch2_prism398",
+      "circle": "ch2_prism398",
+      "context": "workshop",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "online-ch2_prism398",
+      "circle": "ch2_prism398",
+      "context": "online",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "home-ch2_hex398",
+      "circle": "ch2_hex398",
+      "context": "home",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "battle-ch2_hex398",
+      "circle": "ch2_hex398",
+      "context": "battle",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "workshop-ch2_hex398",
+      "circle": "ch2_hex398",
+      "context": "workshop",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "online-ch2_hex398",
+      "circle": "ch2_hex398",
+      "context": "online",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "home-ch2_reserve398",
+      "circle": "ch2_reserve398",
+      "context": "home",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "battle-ch2_reserve398",
+      "circle": "ch2_reserve398",
+      "context": "battle",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "workshop-ch2_reserve398",
+      "circle": "ch2_reserve398",
+      "context": "workshop",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    },
+    {
+      "id": "online-ch2_reserve398",
+      "circle": "ch2_reserve398",
+      "context": "online",
+      "frames": 1,
+      "name": "magic-circle-art-spin",
+      "duration": 28000,
+      "transform0": "matrix(1, 0, 0, 1, 0, 0)",
+      "transform1": "matrix(0, 1, -1, 0, 0, 0)",
+      "wrapperStable": true,
+      "centerShift": 0,
+      "opacities": [
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1",
+        "1"
+      ]
+    }
+  ],
+  "realTimeProgress": 399.9470000003487,
+  "desktop": [
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin",
+    "magic-circle-art-spin"
+  ],
+  "reduced": [
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    },
+    {
+      "name": "none",
+      "opacity": "1"
+    }
+  ],
+  "passed": true,
+  "errors": [],
+  "missing": []
+}

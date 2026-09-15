@@ -1,0 +1,18 @@
+/* Single-image artwork stays visible, including online battle markup which
+   predates the static413 class. Only-of-type ignores the decorative i/b tags. */
+#app .magic-circle > img.magic-circle-frame:only-of-type {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+/* Rotate only the image, never its positioned wrapper. Keep reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  #app .magic-circle > img.magic-circle-frame:only-of-type {
+    animation: magic-circle-art-spin 28s linear infinite !important;
+  }
+  #app .magic-circle.magic-circle-slot > img.magic-circle-frame:only-of-type {
+    animation-duration: 7.77s !important;
+  }
+  #app .magic-circle[data-circle-id="none"] > img.magic-circle-frame:only-of-type {
+    animation-duration: 55s !important;
+  }
+}
