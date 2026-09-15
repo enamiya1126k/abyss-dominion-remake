@@ -1,0 +1,85 @@
+✖ ranking snapshot is bounded to four unique slots and safe public fields (2.950291ms)
+✖ foreground mode synchronizes the latest profile once after the stable acknowledgement (1.990465ms)
+✖ an open pre-ACK background socket still synchronizes once after foregrounding (3.292889ms)
+✖ background mode serializes hello/mount/unmount acknowledgement races (0.70705ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 0
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 343.056108
+
+✖ failing tests:
+
+test at ../repo444/tests/build253-power-ranking-client.test.mjs:43:1
+✖ ranking snapshot is bounded to four unique slots and safe public fields (2.950291ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  100 !== 10000
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo444/tests/build253-power-ranking-client.test.mjs:68:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 100,
+    expected: 10000,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at ../repo444/tests/build253-power-ranking-client.test.mjs:207:1
+✖ foreground mode synchronizes the latest profile once after the stable acknowledgement (1.990465ms)
+  TypeError: this.root?.querySelector is not a function
+      at OnlinePartyController._query (file:///workspace/scratch/ee830274688e/repo444/src/online/OnlinePartyClient.js?build253-power-ranking-client:1466:40)
+      at OnlinePartyController._pendingInviteRoomId (file:///workspace/scratch/ee830274688e/repo444/src/online/OnlinePartyClient.js?build253-power-ranking-client:2656:25)
+      at OnlinePartyController._ensurePersonalHub (file:///workspace/scratch/ee830274688e/repo444/src/online/OnlinePartyClient.js?build253-power-ranking-client:2666:26)
+      at OnlinePartyController._handleMessage (file:///workspace/scratch/ee830274688e/repo444/src/online/OnlinePartyClient.js?build253-power-ranking-client:2821:77)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo444/tests/build253-power-ranking-client.test.mjs:255:16)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at node:internal/test_runner/test:1285:31
+
+test at ../repo444/tests/build253-power-ranking-client.test.mjs:266:1
+✖ an open pre-ACK background socket still synchronizes once after foregrounding (3.292889ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + []
+  - [
+  -   false
+  - ]
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo444/tests/build253-power-ranking-client.test.mjs:313:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [],
+    expected: [ false ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at ../repo444/tests/build253-power-ranking-client.test.mjs:394:1
+✖ background mode serializes hello/mount/unmount acknowledgement races (0.70705ms)
+  TypeError: Cannot read properties of undefined (reading 'type')
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo444/tests/build253-power-ranking-client.test.mjs:418:29)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at node:internal/test_runner/test:1285:31
+      at node:internal/process/task_queues:151:7
+      at AsyncResource.runInAsyncScope (node:async_hooks:227:14)
+      at AsyncResource.runMicrotask (node:internal/process/task_queues:148:8)

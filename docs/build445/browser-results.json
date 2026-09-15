@@ -1,0 +1,4037 @@
+{
+  "rows": [
+    {
+      "width": 320,
+      "kind": "home",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 37.578125,
+          "textWidth": 37.578125,
+          "parentWidth": 84.359375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 37.578125,
+          "textWidth": 37.578125,
+          "parentWidth": 84.359375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 37.578125,
+          "textWidth": 37.578125,
+          "parentWidth": 84.359375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 37.578125,
+          "textWidth": 37.578125,
+          "parentWidth": 84.359375,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "home",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 37.1875,
+          "textWidth": 37.1875,
+          "parentWidth": 83.96875,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 37.1875,
+          "textWidth": 37.1875,
+          "parentWidth": 83.96875,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 37.1875,
+          "textWidth": 37.1875,
+          "parentWidth": 83.96875,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 37.1875,
+          "textWidth": 37.1875,
+          "parentWidth": 83.96875,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "home",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 34.0625,
+          "textWidth": 34.0625,
+          "parentWidth": 80.84375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 34.0625,
+          "textWidth": 34.0625,
+          "parentWidth": 80.84375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 34.0625,
+          "textWidth": 34.0625,
+          "parentWidth": 80.84375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 34.0625,
+          "textWidth": 34.0625,
+          "parentWidth": 80.84375,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "home",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 34.0625,
+          "textWidth": 34.0625,
+          "parentWidth": 80.84375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 34.0625,
+          "textWidth": 34.0625,
+          "parentWidth": 80.84375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 34.0625,
+          "textWidth": 34.0625,
+          "parentWidth": 80.84375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 34.0625,
+          "textWidth": 34.0625,
+          "parentWidth": 80.84375,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "formation",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 72.09375,
+          "textWidth": 72.09375,
+          "parentWidth": 121.125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 60.5,
+          "textWidth": 46.71875,
+          "parentWidth": 66.5,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 60.5,
+          "textWidth": 46.71875,
+          "parentWidth": 66.5,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 60.5,
+          "textWidth": 46.71875,
+          "parentWidth": 66.5,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 60.5,
+          "textWidth": 46.71875,
+          "parentWidth": 66.5,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "formation",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 54.625,
+          "textWidth": 54.625,
+          "parentWidth": 120.96875,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 60.5,
+          "textWidth": 46.390625,
+          "parentWidth": 66.5,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 60.5,
+          "textWidth": 46.390625,
+          "parentWidth": 66.5,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 60.5,
+          "textWidth": 46.390625,
+          "parentWidth": 66.5,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 60.5,
+          "textWidth": 46.390625,
+          "parentWidth": 66.5,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "formation",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 49.609375,
+          "textWidth": 48.0625,
+          "parentWidth": 118.625,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60.5,
+          "textWidth": 42.140625,
+          "parentWidth": 66.5,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60.5,
+          "textWidth": 42.140625,
+          "parentWidth": 66.5,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60.5,
+          "textWidth": 42.140625,
+          "parentWidth": 66.5,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60.5,
+          "textWidth": 42.140625,
+          "parentWidth": 66.5,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "formation",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 49.609375,
+          "textWidth": 48.0625,
+          "parentWidth": 118.625,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60.5,
+          "textWidth": 42.140625,
+          "parentWidth": 66.5,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60.5,
+          "textWidth": 42.140625,
+          "parentWidth": 66.5,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60.5,
+          "textWidth": 42.140625,
+          "parentWidth": 66.5,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60.5,
+          "textWidth": 42.140625,
+          "parentWidth": 66.5,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "equipment",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 54.734375,
+          "textWidth": 54.734375,
+          "parentWidth": 268,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "equipment",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 54.46875,
+          "textWidth": 54.46875,
+          "parentWidth": 268,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "equipment",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 49.5,
+          "textWidth": 49.5,
+          "parentWidth": 268,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "equipment",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 49.5,
+          "textWidth": 49.5,
+          "parentWidth": 268,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "records",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 70.328125,
+          "textWidth": 50.109375,
+          "parentWidth": 78.328125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 70.328125,
+          "textWidth": 50.109375,
+          "parentWidth": 78.328125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 70.34375,
+          "textWidth": 50.109375,
+          "parentWidth": 78.34375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 60,
+          "textWidth": 41.75,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 60,
+          "textWidth": 41.75,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 214,
+          "textWidth": 41.75,
+          "parentWidth": 213,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 60,
+          "textWidth": 41.75,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 60,
+          "textWidth": 41.75,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 214,
+          "textWidth": 41.75,
+          "parentWidth": 213,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 60,
+          "textWidth": 41.75,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 60,
+          "textWidth": 41.75,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 214,
+          "textWidth": 41.75,
+          "parentWidth": 213,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 60,
+          "textWidth": 41.75,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 60,
+          "textWidth": 41.75,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 214,
+          "textWidth": 41.75,
+          "parentWidth": 213,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "records",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 70.328125,
+          "textWidth": 49.96875,
+          "parentWidth": 78.328125,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 70.328125,
+          "textWidth": 49.96875,
+          "parentWidth": 78.328125,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 70.34375,
+          "textWidth": 49.96875,
+          "parentWidth": 78.34375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 60,
+          "textWidth": 41.640625,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 60,
+          "textWidth": 41.640625,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 214,
+          "textWidth": 41.640625,
+          "parentWidth": 213,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 60,
+          "textWidth": 41.640625,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 60,
+          "textWidth": 41.640625,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 214,
+          "textWidth": 41.640625,
+          "parentWidth": 213,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 60,
+          "textWidth": 41.640625,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 60,
+          "textWidth": 41.640625,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 214,
+          "textWidth": 41.640625,
+          "parentWidth": 213,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 60,
+          "textWidth": 41.640625,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 60,
+          "textWidth": 41.640625,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 214,
+          "textWidth": 41.640625,
+          "parentWidth": 213,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "records",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 70.328125,
+          "textWidth": 45.40625,
+          "parentWidth": 78.328125,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 70.328125,
+          "textWidth": 45.40625,
+          "parentWidth": 78.328125,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 70.34375,
+          "textWidth": 45.40625,
+          "parentWidth": 78.34375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 214,
+          "textWidth": 37.84375,
+          "parentWidth": 213,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 214,
+          "textWidth": 37.84375,
+          "parentWidth": 213,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 214,
+          "textWidth": 37.84375,
+          "parentWidth": 213,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 214,
+          "textWidth": 37.84375,
+          "parentWidth": 213,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "records",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 70.328125,
+          "textWidth": 45.40625,
+          "parentWidth": 78.328125,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 70.328125,
+          "textWidth": 45.40625,
+          "parentWidth": 78.328125,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 70.34375,
+          "textWidth": 45.40625,
+          "parentWidth": 78.34375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 214,
+          "textWidth": 37.84375,
+          "parentWidth": 213,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 214,
+          "textWidth": 37.84375,
+          "parentWidth": 213,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 214,
+          "textWidth": 37.84375,
+          "parentWidth": 213,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60,
+          "textWidth": 37.84375,
+          "parentWidth": 60,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 214,
+          "textWidth": 37.84375,
+          "parentWidth": 213,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "ranking",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 72,
+          "textWidth": 45.9375,
+          "parentWidth": 237,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 72,
+          "textWidth": 45.9375,
+          "parentWidth": 237,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 72,
+          "textWidth": 45.9375,
+          "parentWidth": 237,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 72,
+          "textWidth": 45.9375,
+          "parentWidth": 237,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "ranking",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 72,
+          "textWidth": 45.453125,
+          "parentWidth": 237,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 72,
+          "textWidth": 45.453125,
+          "parentWidth": 237,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 72,
+          "textWidth": 45.453125,
+          "parentWidth": 237,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 72,
+          "textWidth": 45.453125,
+          "parentWidth": 237,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "ranking",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 72,
+          "textWidth": 41.625,
+          "parentWidth": 237,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 72,
+          "textWidth": 41.625,
+          "parentWidth": 237,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 72,
+          "textWidth": 41.625,
+          "parentWidth": 237,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 72,
+          "textWidth": 41.625,
+          "parentWidth": 237,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "ranking",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 72,
+          "textWidth": 41.625,
+          "parentWidth": 237,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 72,
+          "textWidth": 41.625,
+          "parentWidth": 237,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 72,
+          "textWidth": 41.625,
+          "parentWidth": 237,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 72,
+          "textWidth": 41.625,
+          "parentWidth": 237,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "explore",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 84,
+          "textWidth": 57.40625,
+          "parentWidth": 84,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "explore",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 84,
+          "textWidth": 57.0625,
+          "parentWidth": 84,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "explore",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 84,
+          "textWidth": 52.28125,
+          "parentWidth": 84,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "kind": "explore",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 84,
+          "textWidth": 52.28125,
+          "parentWidth": 84,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "home",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 42.609375,
+          "textWidth": 42.609375,
+          "parentWidth": 89.390625,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 42.609375,
+          "textWidth": 42.609375,
+          "parentWidth": 89.390625,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 42.609375,
+          "textWidth": 42.609375,
+          "parentWidth": 89.390625,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 42.609375,
+          "textWidth": 42.609375,
+          "parentWidth": 89.390625,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "home",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 41.953125,
+          "textWidth": 41.953125,
+          "parentWidth": 88.734375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 41.953125,
+          "textWidth": 41.953125,
+          "parentWidth": 88.734375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 41.953125,
+          "textWidth": 41.953125,
+          "parentWidth": 88.734375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 41.953125,
+          "textWidth": 41.953125,
+          "parentWidth": 88.734375,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "home",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 38.40625,
+          "textWidth": 38.40625,
+          "parentWidth": 85.1875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 38.40625,
+          "textWidth": 38.40625,
+          "parentWidth": 85.1875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 38.40625,
+          "textWidth": 38.40625,
+          "parentWidth": 85.1875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 38.40625,
+          "textWidth": 38.40625,
+          "parentWidth": 85.1875,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "home",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 38.40625,
+          "textWidth": 38.40625,
+          "parentWidth": 85.1875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 38.40625,
+          "textWidth": 38.40625,
+          "parentWidth": 85.1875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 38.40625,
+          "textWidth": 38.40625,
+          "parentWidth": 85.1875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 38.40625,
+          "textWidth": 38.40625,
+          "parentWidth": 85.1875,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "formation",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 72.09375,
+          "textWidth": 72.09375,
+          "parentWidth": 160.125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 78.75,
+          "textWidth": 46.71875,
+          "parentWidth": 84.75,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 78.75,
+          "textWidth": 46.71875,
+          "parentWidth": 84.75,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 78.75,
+          "textWidth": 46.71875,
+          "parentWidth": 84.75,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 78.75,
+          "textWidth": 46.71875,
+          "parentWidth": 84.75,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "formation",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 71.625,
+          "textWidth": 71.625,
+          "parentWidth": 159.65625,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 78.75,
+          "textWidth": 46.390625,
+          "parentWidth": 84.75,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 78.75,
+          "textWidth": 46.390625,
+          "parentWidth": 84.75,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 78.75,
+          "textWidth": 46.390625,
+          "parentWidth": 84.75,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 78.75,
+          "textWidth": 46.390625,
+          "parentWidth": 84.75,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "formation",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 65.0625,
+          "textWidth": 65.0625,
+          "parentWidth": 153.09375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 78.75,
+          "textWidth": 42.140625,
+          "parentWidth": 84.75,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 78.75,
+          "textWidth": 42.140625,
+          "parentWidth": 84.75,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 78.75,
+          "textWidth": 42.140625,
+          "parentWidth": 84.75,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 78.75,
+          "textWidth": 42.140625,
+          "parentWidth": 84.75,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "formation",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 65.0625,
+          "textWidth": 65.0625,
+          "parentWidth": 153.09375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 78.75,
+          "textWidth": 42.140625,
+          "parentWidth": 84.75,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 78.75,
+          "textWidth": 42.140625,
+          "parentWidth": 84.75,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 78.75,
+          "textWidth": 42.140625,
+          "parentWidth": 84.75,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 78.75,
+          "textWidth": 42.140625,
+          "parentWidth": 84.75,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "equipment",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 54.734375,
+          "textWidth": 54.734375,
+          "parentWidth": 341,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "equipment",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 54.46875,
+          "textWidth": 54.46875,
+          "parentWidth": 341,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "equipment",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 49.5,
+          "textWidth": 49.5,
+          "parentWidth": 341,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "equipment",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 49.5,
+          "textWidth": 49.5,
+          "parentWidth": 341,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "records",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 92,
+          "textWidth": 60.671875,
+          "parentWidth": 100,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 92,
+          "textWidth": 60.671875,
+          "parentWidth": 100,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 92,
+          "textWidth": 60.671875,
+          "parentWidth": 100,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 81.234375,
+          "textWidth": 44.296875,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 81.234375,
+          "textWidth": 44.296875,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 278,
+          "textWidth": 44.296875,
+          "parentWidth": 278,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 81.234375,
+          "textWidth": 44.296875,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 81.234375,
+          "textWidth": 44.296875,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 278,
+          "textWidth": 44.296875,
+          "parentWidth": 278,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 81.234375,
+          "textWidth": 44.296875,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 81.234375,
+          "textWidth": 44.296875,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 278,
+          "textWidth": 44.296875,
+          "parentWidth": 278,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 81.234375,
+          "textWidth": 44.296875,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 81.234375,
+          "textWidth": 44.296875,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 278,
+          "textWidth": 44.296875,
+          "parentWidth": 278,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "records",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 92,
+          "textWidth": 60.96875,
+          "parentWidth": 100,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 92,
+          "textWidth": 60.96875,
+          "parentWidth": 100,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 92,
+          "textWidth": 60.96875,
+          "parentWidth": 100,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 81.234375,
+          "textWidth": 44.5625,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 81.234375,
+          "textWidth": 44.5625,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 278,
+          "textWidth": 44.5625,
+          "parentWidth": 278,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 81.234375,
+          "textWidth": 44.5625,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 81.234375,
+          "textWidth": 44.5625,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 278,
+          "textWidth": 44.5625,
+          "parentWidth": 278,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 81.234375,
+          "textWidth": 44.5625,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 81.234375,
+          "textWidth": 44.5625,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 278,
+          "textWidth": 44.5625,
+          "parentWidth": 278,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 81.234375,
+          "textWidth": 44.5625,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 81.234375,
+          "textWidth": 44.5625,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 278,
+          "textWidth": 44.5625,
+          "parentWidth": 278,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "records",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 92,
+          "textWidth": 55.453125,
+          "parentWidth": 100,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 92,
+          "textWidth": 55.453125,
+          "parentWidth": 100,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 92,
+          "textWidth": 55.453125,
+          "parentWidth": 100,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 278,
+          "textWidth": 40.53125,
+          "parentWidth": 278,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 278,
+          "textWidth": 40.53125,
+          "parentWidth": 278,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 278,
+          "textWidth": 40.53125,
+          "parentWidth": 278,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 278,
+          "textWidth": 40.53125,
+          "parentWidth": 278,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "records",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 92,
+          "textWidth": 55.453125,
+          "parentWidth": 100,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 92,
+          "textWidth": 55.453125,
+          "parentWidth": 100,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 92,
+          "textWidth": 55.453125,
+          "parentWidth": 100,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 278,
+          "textWidth": 40.53125,
+          "parentWidth": 278,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 278,
+          "textWidth": 40.53125,
+          "parentWidth": 278,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 278,
+          "textWidth": 40.53125,
+          "parentWidth": 278,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 81.234375,
+          "textWidth": 40.53125,
+          "parentWidth": 81.234375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 278,
+          "textWidth": 40.53125,
+          "parentWidth": 278,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "ranking",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 72,
+          "textWidth": 52.453125,
+          "parentWidth": 310,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 72,
+          "textWidth": 52.453125,
+          "parentWidth": 310,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 72,
+          "textWidth": 52.453125,
+          "parentWidth": 310,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 72,
+          "textWidth": 52.453125,
+          "parentWidth": 310,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "ranking",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 72,
+          "textWidth": 52.34375,
+          "parentWidth": 310,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 72,
+          "textWidth": 52.34375,
+          "parentWidth": 310,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 72,
+          "textWidth": 52.34375,
+          "parentWidth": 310,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 72,
+          "textWidth": 52.34375,
+          "parentWidth": 310,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "ranking",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 72,
+          "textWidth": 47.96875,
+          "parentWidth": 310,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 72,
+          "textWidth": 47.96875,
+          "parentWidth": 310,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 72,
+          "textWidth": 47.96875,
+          "parentWidth": 310,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 72,
+          "textWidth": 47.96875,
+          "parentWidth": 310,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "ranking",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 72,
+          "textWidth": 47.96875,
+          "parentWidth": 310,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 72,
+          "textWidth": 47.96875,
+          "parentWidth": 310,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 72,
+          "textWidth": 47.96875,
+          "parentWidth": 310,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 72,
+          "textWidth": 47.96875,
+          "parentWidth": 310,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "explore",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 113.1875,
+          "textWidth": 57.40625,
+          "parentWidth": 113.1875,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "explore",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 113.1875,
+          "textWidth": 57.0625,
+          "parentWidth": 113.1875,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "explore",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 113.1875,
+          "textWidth": 52.28125,
+          "parentWidth": 113.1875,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 393,
+      "kind": "explore",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 113.1875,
+          "textWidth": 52.28125,
+          "parentWidth": 113.1875,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "home",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 46.640625,
+          "textWidth": 46.640625,
+          "parentWidth": 93.421875,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 46.640625,
+          "textWidth": 46.640625,
+          "parentWidth": 93.421875,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 46.640625,
+          "textWidth": 46.640625,
+          "parentWidth": 93.421875,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 46.640625,
+          "textWidth": 46.640625,
+          "parentWidth": 93.421875,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "home",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 45.984375,
+          "textWidth": 45.984375,
+          "parentWidth": 92.765625,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 45.984375,
+          "textWidth": 45.984375,
+          "parentWidth": 92.765625,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 45.984375,
+          "textWidth": 45.984375,
+          "parentWidth": 92.765625,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 45.984375,
+          "textWidth": 45.984375,
+          "parentWidth": 92.765625,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "home",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 42.09375,
+          "textWidth": 42.09375,
+          "parentWidth": 88.875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 42.09375,
+          "textWidth": 42.09375,
+          "parentWidth": 88.875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 42.09375,
+          "textWidth": 42.09375,
+          "parentWidth": 88.875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 42.09375,
+          "textWidth": 42.09375,
+          "parentWidth": 88.875,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "home",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 42.09375,
+          "textWidth": 42.09375,
+          "parentWidth": 88.875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 42.09375,
+          "textWidth": 42.09375,
+          "parentWidth": 88.875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 42.09375,
+          "textWidth": 42.09375,
+          "parentWidth": 88.875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 42.09375,
+          "textWidth": 42.09375,
+          "parentWidth": 88.875,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "formation",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 72.09375,
+          "textWidth": 72.09375,
+          "parentWidth": 160.125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 88,
+          "textWidth": 46.71875,
+          "parentWidth": 94,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 88,
+          "textWidth": 46.71875,
+          "parentWidth": 94,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 88,
+          "textWidth": 46.71875,
+          "parentWidth": 94,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 88,
+          "textWidth": 46.71875,
+          "parentWidth": 94,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "formation",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 71.625,
+          "textWidth": 71.625,
+          "parentWidth": 159.65625,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 88,
+          "textWidth": 46.390625,
+          "parentWidth": 94,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 88,
+          "textWidth": 46.390625,
+          "parentWidth": 94,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 88,
+          "textWidth": 46.390625,
+          "parentWidth": 94,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 88,
+          "textWidth": 46.390625,
+          "parentWidth": 94,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "formation",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 65.0625,
+          "textWidth": 65.0625,
+          "parentWidth": 153.09375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 88,
+          "textWidth": 42.140625,
+          "parentWidth": 94,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 88,
+          "textWidth": 42.140625,
+          "parentWidth": 94,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 88,
+          "textWidth": 42.140625,
+          "parentWidth": 94,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 88,
+          "textWidth": 42.140625,
+          "parentWidth": 94,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "formation",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 65.0625,
+          "textWidth": 65.0625,
+          "parentWidth": 153.09375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 88,
+          "textWidth": 42.140625,
+          "parentWidth": 94,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 88,
+          "textWidth": 42.140625,
+          "parentWidth": 94,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 88,
+          "textWidth": 42.140625,
+          "parentWidth": 94,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 88,
+          "textWidth": 42.140625,
+          "parentWidth": 94,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "equipment",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 54.734375,
+          "textWidth": 54.734375,
+          "parentWidth": 378,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "equipment",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 54.46875,
+          "textWidth": 54.46875,
+          "parentWidth": 378,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "equipment",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 49.5,
+          "textWidth": 49.5,
+          "parentWidth": 378,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "equipment",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 49.5,
+          "textWidth": 49.5,
+          "parentWidth": 378,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "records",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 104.328125,
+          "textWidth": 66.40625,
+          "parentWidth": 112.328125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 104.328125,
+          "textWidth": 66.40625,
+          "parentWidth": 112.328125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 104.34375,
+          "textWidth": 66.40625,
+          "parentWidth": 112.34375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 92.609375,
+          "textWidth": 48.46875,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 92.625,
+          "textWidth": 48.46875,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 315,
+          "textWidth": 48.46875,
+          "parentWidth": 315,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 92.609375,
+          "textWidth": 48.46875,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 92.625,
+          "textWidth": 48.46875,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 315,
+          "textWidth": 48.46875,
+          "parentWidth": 315,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 92.609375,
+          "textWidth": 48.46875,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 92.625,
+          "textWidth": 48.46875,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 315,
+          "textWidth": 48.46875,
+          "parentWidth": 315,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 92.609375,
+          "textWidth": 48.46875,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 92.625,
+          "textWidth": 48.46875,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 315,
+          "textWidth": 48.46875,
+          "parentWidth": 315,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "records",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 104.328125,
+          "textWidth": 66.328125,
+          "parentWidth": 112.328125,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 104.328125,
+          "textWidth": 66.328125,
+          "parentWidth": 112.328125,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 104.34375,
+          "textWidth": 66.328125,
+          "parentWidth": 112.34375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 92.609375,
+          "textWidth": 48.734375,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 92.625,
+          "textWidth": 48.734375,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 315,
+          "textWidth": 48.734375,
+          "parentWidth": 315,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 92.609375,
+          "textWidth": 48.734375,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 92.625,
+          "textWidth": 48.734375,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 315,
+          "textWidth": 48.734375,
+          "parentWidth": 315,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 92.609375,
+          "textWidth": 48.734375,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 92.625,
+          "textWidth": 48.734375,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 315,
+          "textWidth": 48.734375,
+          "parentWidth": 315,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 92.609375,
+          "textWidth": 48.734375,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 92.625,
+          "textWidth": 48.734375,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 315,
+          "textWidth": 48.734375,
+          "parentWidth": 315,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "records",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 104.328125,
+          "textWidth": 60.28125,
+          "parentWidth": 112.328125,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 104.328125,
+          "textWidth": 60.28125,
+          "parentWidth": 112.328125,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 104.34375,
+          "textWidth": 60.28125,
+          "parentWidth": 112.34375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 92.609375,
+          "textWidth": 44.3125,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 92.625,
+          "textWidth": 44.3125,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 315,
+          "textWidth": 44.3125,
+          "parentWidth": 315,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 92.609375,
+          "textWidth": 44.3125,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 92.625,
+          "textWidth": 44.3125,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 315,
+          "textWidth": 44.3125,
+          "parentWidth": 315,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 92.609375,
+          "textWidth": 44.3125,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 92.625,
+          "textWidth": 44.3125,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 315,
+          "textWidth": 44.3125,
+          "parentWidth": 315,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 92.609375,
+          "textWidth": 44.3125,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 92.625,
+          "textWidth": 44.3125,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 315,
+          "textWidth": 44.3125,
+          "parentWidth": 315,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "records",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 104.328125,
+          "textWidth": 60.28125,
+          "parentWidth": 112.328125,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 104.328125,
+          "textWidth": 60.28125,
+          "parentWidth": 112.328125,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 104.34375,
+          "textWidth": 60.28125,
+          "parentWidth": 112.34375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 92.609375,
+          "textWidth": 44.3125,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 92.625,
+          "textWidth": 44.3125,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 315,
+          "textWidth": 44.3125,
+          "parentWidth": 315,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 92.609375,
+          "textWidth": 44.3125,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 92.625,
+          "textWidth": 44.3125,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 315,
+          "textWidth": 44.3125,
+          "parentWidth": 315,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 92.609375,
+          "textWidth": 44.3125,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 92.625,
+          "textWidth": 44.3125,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 315,
+          "textWidth": 44.3125,
+          "parentWidth": 315,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 92.609375,
+          "textWidth": 44.3125,
+          "parentWidth": 92.609375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 92.625,
+          "textWidth": 44.3125,
+          "parentWidth": 92.625,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 315,
+          "textWidth": 44.3125,
+          "parentWidth": 315,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "ranking",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 72,
+          "textWidth": 57.40625,
+          "parentWidth": 347,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 72,
+          "textWidth": 57.40625,
+          "parentWidth": 347,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 72,
+          "textWidth": 57.40625,
+          "parentWidth": 347,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 72,
+          "textWidth": 57.40625,
+          "parentWidth": 347,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "ranking",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 72,
+          "textWidth": 57.0625,
+          "parentWidth": 347,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 72,
+          "textWidth": 57.0625,
+          "parentWidth": 347,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 72,
+          "textWidth": 57.0625,
+          "parentWidth": 347,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 72,
+          "textWidth": 57.0625,
+          "parentWidth": 347,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "ranking",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 72,
+          "textWidth": 52.28125,
+          "parentWidth": 347,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 72,
+          "textWidth": 52.28125,
+          "parentWidth": 347,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 72,
+          "textWidth": 52.28125,
+          "parentWidth": 347,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 72,
+          "textWidth": 52.28125,
+          "parentWidth": 347,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "ranking",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 72,
+          "textWidth": 52.28125,
+          "parentWidth": 347,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 72,
+          "textWidth": 52.28125,
+          "parentWidth": 347,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 72,
+          "textWidth": 52.28125,
+          "parentWidth": 347,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 72,
+          "textWidth": 52.28125,
+          "parentWidth": 347,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "explore",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 124,
+          "textWidth": 70,
+          "parentWidth": 124,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "explore",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 124,
+          "textWidth": 69.5,
+          "parentWidth": 124,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "explore",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 124,
+          "textWidth": 63.671875,
+          "parentWidth": 124,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "kind": "explore",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 124,
+          "textWidth": 63.671875,
+          "parentWidth": 124,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "home",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 50.109375,
+          "textWidth": 50.109375,
+          "parentWidth": 102.140625,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 50.109375,
+          "textWidth": 50.109375,
+          "parentWidth": 102.140625,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 50.109375,
+          "textWidth": 50.109375,
+          "parentWidth": 102.140625,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 50.109375,
+          "textWidth": 50.109375,
+          "parentWidth": 102.140625,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "home",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 49.578125,
+          "textWidth": 49.578125,
+          "parentWidth": 101.609375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 49.578125,
+          "textWidth": 49.578125,
+          "parentWidth": 101.609375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 49.578125,
+          "textWidth": 49.578125,
+          "parentWidth": 101.609375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 49.578125,
+          "textWidth": 49.578125,
+          "parentWidth": 101.609375,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "home",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 45.40625,
+          "textWidth": 45.40625,
+          "parentWidth": 97.4375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 45.40625,
+          "textWidth": 45.40625,
+          "parentWidth": 97.4375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 45.40625,
+          "textWidth": 45.40625,
+          "parentWidth": 97.4375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 45.40625,
+          "textWidth": 45.40625,
+          "parentWidth": 97.4375,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "home",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 45.40625,
+          "textWidth": 45.40625,
+          "parentWidth": 97.4375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 45.40625,
+          "textWidth": 45.40625,
+          "parentWidth": 97.4375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 45.40625,
+          "textWidth": 45.40625,
+          "parentWidth": 97.4375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 45.40625,
+          "textWidth": 45.40625,
+          "parentWidth": 97.4375,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "formation",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 72.09375,
+          "textWidth": 72.09375,
+          "parentWidth": 160.125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 193,
+          "textWidth": 46.71875,
+          "parentWidth": 199,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 193,
+          "textWidth": 46.71875,
+          "parentWidth": 199,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 193,
+          "textWidth": 46.71875,
+          "parentWidth": 199,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 193,
+          "textWidth": 46.71875,
+          "parentWidth": 199,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "formation",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 71.625,
+          "textWidth": 71.625,
+          "parentWidth": 159.65625,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 193,
+          "textWidth": 46.390625,
+          "parentWidth": 199,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 193,
+          "textWidth": 46.390625,
+          "parentWidth": 199,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 193,
+          "textWidth": 46.390625,
+          "parentWidth": 199,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 193,
+          "textWidth": 46.390625,
+          "parentWidth": 199,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "formation",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 65.0625,
+          "textWidth": 65.0625,
+          "parentWidth": 153.09375,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 193,
+          "textWidth": 42.140625,
+          "parentWidth": 199,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 193,
+          "textWidth": 42.140625,
+          "parentWidth": 199,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 193,
+          "textWidth": 42.140625,
+          "parentWidth": 199,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 193,
+          "textWidth": 42.140625,
+          "parentWidth": 199,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "formation",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 65.0625,
+          "textWidth": 65.0625,
+          "parentWidth": 153.09375,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 193,
+          "textWidth": 42.140625,
+          "parentWidth": 199,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 193,
+          "textWidth": 42.140625,
+          "parentWidth": 199,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 193,
+          "textWidth": 42.140625,
+          "parentWidth": 199,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 193,
+          "textWidth": 42.140625,
+          "parentWidth": 199,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "equipment",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 54.734375,
+          "textWidth": 54.734375,
+          "parentWidth": 322.578125,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "equipment",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 54.46875,
+          "textWidth": 54.46875,
+          "parentWidth": 322.578125,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "equipment",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 49.5,
+          "textWidth": 49.5,
+          "parentWidth": 322.578125,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "equipment",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 49.5,
+          "textWidth": 49.5,
+          "parentWidth": 322.578125,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "records",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 184.328125,
+          "textWidth": 60.078125,
+          "parentWidth": 200.328125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 184.328125,
+          "textWidth": 74.765625,
+          "parentWidth": 200.328125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 184.328125,
+          "textWidth": 60.078125,
+          "parentWidth": 200.328125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 147.453125,
+          "textWidth": 58.453125,
+          "parentWidth": 147.453125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 147.4375,
+          "textWidth": 58.453125,
+          "parentWidth": 147.4375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 58.46875,
+          "textWidth": 58.453125,
+          "parentWidth": 585,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 147.453125,
+          "textWidth": 58.453125,
+          "parentWidth": 147.453125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 147.4375,
+          "textWidth": 58.453125,
+          "parentWidth": 147.4375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 58.46875,
+          "textWidth": 58.453125,
+          "parentWidth": 585,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 147.453125,
+          "textWidth": 58.453125,
+          "parentWidth": 147.453125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 147.4375,
+          "textWidth": 58.453125,
+          "parentWidth": 147.4375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 58.46875,
+          "textWidth": 58.453125,
+          "parentWidth": 585,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 147.453125,
+          "textWidth": 58.453125,
+          "parentWidth": 147.453125,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 147.4375,
+          "textWidth": 58.453125,
+          "parentWidth": 147.4375,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 58.46875,
+          "textWidth": 58.453125,
+          "parentWidth": 585,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "records",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 184.328125,
+          "textWidth": 59.53125,
+          "parentWidth": 200.328125,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 184.328125,
+          "textWidth": 74.640625,
+          "parentWidth": 200.328125,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 184.328125,
+          "textWidth": 59.53125,
+          "parentWidth": 200.328125,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 147.5,
+          "textWidth": 58.296875,
+          "parentWidth": 147.5,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 147.484375,
+          "textWidth": 58.296875,
+          "parentWidth": 147.484375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 58.3125,
+          "textWidth": 58.296875,
+          "parentWidth": 585,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 147.5,
+          "textWidth": 58.296875,
+          "parentWidth": 147.5,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 147.484375,
+          "textWidth": 58.296875,
+          "parentWidth": 147.484375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 58.3125,
+          "textWidth": 58.296875,
+          "parentWidth": 585,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 147.5,
+          "textWidth": 58.296875,
+          "parentWidth": 147.5,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 147.484375,
+          "textWidth": 58.296875,
+          "parentWidth": 147.484375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 58.3125,
+          "textWidth": 58.296875,
+          "parentWidth": 585,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 147.5,
+          "textWidth": 58.296875,
+          "parentWidth": 147.5,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 147.484375,
+          "textWidth": 58.296875,
+          "parentWidth": 147.484375,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 58.3125,
+          "textWidth": 58.296875,
+          "parentWidth": 585,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "records",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 184.328125,
+          "textWidth": 54.0625,
+          "parentWidth": 200.328125,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 184.328125,
+          "textWidth": 67.84375,
+          "parentWidth": 200.328125,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 184.328125,
+          "textWidth": 54.0625,
+          "parentWidth": 200.328125,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 52.984375,
+          "textWidth": 52.96875,
+          "parentWidth": 585,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 52.984375,
+          "textWidth": 52.96875,
+          "parentWidth": 585,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 52.984375,
+          "textWidth": 52.96875,
+          "parentWidth": 585,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 52.984375,
+          "textWidth": 52.96875,
+          "parentWidth": 585,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "records",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 184.328125,
+          "textWidth": 54.0625,
+          "parentWidth": 200.328125,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 184.328125,
+          "textWidth": 67.84375,
+          "parentWidth": 200.328125,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 184.328125,
+          "textWidth": 54.0625,
+          "parentWidth": 200.328125,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 52.984375,
+          "textWidth": 52.96875,
+          "parentWidth": 585,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 52.984375,
+          "textWidth": 52.96875,
+          "parentWidth": 585,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 52.984375,
+          "textWidth": 52.96875,
+          "parentWidth": 585,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 149.046875,
+          "textWidth": 52.96875,
+          "parentWidth": 149.046875,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 52.984375,
+          "textWidth": 52.96875,
+          "parentWidth": 585,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "ranking",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 66.796875,
+          "textWidth": 66.796875,
+          "parentWidth": 609,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 66.796875,
+          "textWidth": 66.796875,
+          "parentWidth": 609,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 66.796875,
+          "textWidth": 66.796875,
+          "parentWidth": 609,
+          "overflow": false
+        },
+        {
+          "text": "999999",
+          "width": 66.796875,
+          "textWidth": 66.796875,
+          "parentWidth": 609,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "ranking",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 66.109375,
+          "textWidth": 66.109375,
+          "parentWidth": 609,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 66.109375,
+          "textWidth": 66.109375,
+          "parentWidth": 609,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 66.109375,
+          "textWidth": 66.109375,
+          "parentWidth": 609,
+          "overflow": false
+        },
+        {
+          "text": "140.5万",
+          "width": 66.109375,
+          "textWidth": 66.109375,
+          "parentWidth": 609,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "ranking",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 60.53125,
+          "textWidth": 60.53125,
+          "parentWidth": 609,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60.53125,
+          "textWidth": 60.53125,
+          "parentWidth": 609,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60.53125,
+          "textWidth": 60.53125,
+          "parentWidth": 609,
+          "overflow": false
+        },
+        {
+          "text": "9999万",
+          "width": 60.53125,
+          "textWidth": 60.53125,
+          "parentWidth": 609,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "ranking",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 60.53125,
+          "textWidth": 60.53125,
+          "parentWidth": 609,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60.53125,
+          "textWidth": 60.53125,
+          "parentWidth": 609,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60.53125,
+          "textWidth": 60.53125,
+          "parentWidth": 609,
+          "overflow": false
+        },
+        {
+          "text": "9007兆",
+          "width": 60.53125,
+          "textWidth": 60.53125,
+          "parentWidth": 609,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "explore",
+      "value": 999999,
+      "cells": [
+        {
+          "text": "999999",
+          "width": 357.25,
+          "textWidth": 88.140625,
+          "parentWidth": 357.25,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "explore",
+      "value": 1405071,
+      "cells": [
+        {
+          "text": "140.5万",
+          "width": 357.25,
+          "textWidth": 87.109375,
+          "parentWidth": 357.25,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "explore",
+      "value": 99999999,
+      "cells": [
+        {
+          "text": "9999万",
+          "width": 357.25,
+          "textWidth": 79.765625,
+          "parentWidth": 357.25,
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "kind": "explore",
+      "value": 9007199254740991,
+      "cells": [
+        {
+          "text": "9007兆",
+          "width": 357.25,
+          "textWidth": 79.765625,
+          "parentWidth": 357.25,
+          "overflow": false
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

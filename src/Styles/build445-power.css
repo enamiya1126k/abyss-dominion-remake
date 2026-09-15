@@ -1,0 +1,17 @@
+/* Power text uses bounded Japanese units at large magnitudes. */
+#app :is(.home-scene-power-value,.formation-power strong,.selected-equipment-power strong,[data-combat-power-value],.power-record-summary b,.power-record-summary strong,.power-ranking-row>strong){
+ min-width:0;max-width:100%;font-variant-numeric:tabular-nums;white-space:nowrap;letter-spacing:0;
+}
+#app .home-scene-power-value{font-size:clamp(9px,2.6vw,12px)!important;line-height:1.2!important}
+#app .power-ranking-row>strong{font-size:clamp(11px,3.2vw,16px)!important;text-align:right}
+#app .power-ranking-identity{min-width:0}
+#app .power-legacy445{display:block;font:9px/1.4 sans-serif;color:#bcb3a1}
+#app .power-legacy-record445{margin:10px 0;padding:10px;border:1px solid #665735;color:#c8bea8;font-size:12px}
+#app .power-source-total{flex-wrap:wrap}
+#app .power-source-breakdown article>*{min-width:0}
+#app .power-source-breakdown article :is(strong,em){font-size:clamp(10px,2.7vw,14px)!important;white-space:nowrap}
+#app .power-record-summary>*{min-width:0}
+@media(max-width:430px){
+ #app .power-ranking-row,#app .power-ranking-row:is(.podium-1,.podium-2,.podium-3){grid-template-columns:18px 52px minmax(0,1fr) 72px 7px!important;gap:5px!important}
+ #app .power-record-summary :is(b,strong){font-size:clamp(12px,3.7vw,16px)!important}
+}

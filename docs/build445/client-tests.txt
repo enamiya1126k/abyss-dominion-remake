@@ -1,0 +1,12 @@
+✔ snapshot preserves fractional combat stats for exact server verification (1.848025ms)
+✔ ranking list and public profile resolve matching request promises (3.104261ms)
+✔ out-of-order ranking responses only publish the latest list and profile (0.691978ms)
+✔ profile normalizer rejects invalid player IDs and caps public party size (0.454155ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 411.807811

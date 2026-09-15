@@ -1,3 +1,4 @@
+import{expandedPower445}from"./PowerScale445.js";
 import{calculatedStats}from"../models/Monster.js?v=3.1.82-build402";
 import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=3.1.91-build411";
 
@@ -6,7 +7,7 @@ import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=3.1.91-build411";
  * 実戦で使われる最終ステータスを基礎にし、HP・攻撃・防御・速度・会心・回避を
  * ひとつの比較しやすい数値へ圧縮する。戦闘処理そのものには影響しない。
  */
-export function monsterCombatPower(monster,stats=null){
+export function legacyMonsterCombatPower445(monster,stats=null){
   if(!monster)return 0;
   const s=stats??calculatedStats(monster);
   const highAttack=Math.max(Math.max(0,s.atk),Math.max(0,s.matk??0));
@@ -26,6 +27,8 @@ export function monsterCombatPower(monster,stats=null){
   // early party record into a ten-digit value.
   return Math.max(1,Math.round(Math.pow(Math.max(1,raw),.32)*COMBAT_POWER_DISPLAY_SCALE));
 }
+
+export function monsterCombatPower(monster,stats=null){return expandedPower445(legacyMonsterCombatPower445(monster,stats));}
 
 export function partyCombatPower(state){
   if(!state)return 0;
@@ -71,10 +74,14 @@ export function partyCombatPowerBreakdown(state){
  };
 }
 
-export function formatCombatPower(value,{scientificAt=1_000_000_000}={}){
-  const number=Math.max(0,Math.round(Number(value)||0));
-  if(number>=scientificAt)return number.toExponential(3).replace("e+0","e+").replace("e-0","e-");
-  return number.toLocaleString("ja-JP");
+export function formatCombatPower(value){
+ const n=Number(value),number=Number.isFinite(n)?Math.max(0,Math.min(Number.MAX_SAFE_INTEGER,Math.round(n))):0;
+ if(number<1_000_000)return String(number);
+ for(const [unit,suffix] of [[1e16,"京"],[1e12,"兆"],[1e8,"億"],[1e4,"万"]])if(number>=unit){
+  const scaled=number/unit,places=scaled>=1000?0:1;
+  return (Math.floor(scaled*10**places)/10**places).toFixed(places).replace(/\.0$/,'')+suffix;
+ }
+ return String(number);
 }
 
 export function normalizeCombatPowerRecord(state,fallbackPower=0){
@@ -105,17 +112,22 @@ export function normalizeCombatPowerRecord(state,fallbackPower=0){
     at:typeof entry.at==="string"?entry.at:new Date(0).toISOString()
   })).filter(entry=>entry.power>0).slice(-20);
   state.records.combatPower={
-    scaleVersion:4,
+    scaleVersion:5,
+    ...(source.legacyRecord445?{legacyRecord445:source.legacyRecord445}:{}),
     highest:highest||current,
     previous:previous||highest||current,
     updatedAt:typeof source.updatedAt==="string"?source.updatedAt:null,
     history
   };
+  if(version<5){
+    const legacy={...state.records.combatPower,scaleVersion:4};delete legacy.legacyRecord445;
+    state.records.combatPower={scaleVersion:5,highest:current,previous:current,updatedAt:null,history:[],...(Number(source.highest)>0||history.length?{legacyRecord445:legacy}:{})};
+  }
   return state.records.combatPower;
 }
 
 export function recordPartyCombatPower(state,now=new Date()){
-  const current=partyCombatPower(state),hadRecord=Math.max(0,Math.round(Number(state?.records?.combatPower?.highest)||0)),record=normalizeCombatPowerRecord(state,current);
+  const current=partyCombatPower(state),hadRecord=Number(state?.records?.combatPower?.scaleVersion)>=5?Math.max(0,Math.round(Number(state?.records?.combatPower?.highest)||0)):0,record=normalizeCombatPowerRecord(state,current);
   const at=now instanceof Date?now.toISOString():new Date(now).toISOString();
   if(current&&!hadRecord){
     record.highest=current;record.previous=current;record.updatedAt=at;
@@ -129,3 +141,4 @@ export function recordPartyCombatPower(state,now=new Date()){
   if(record.history.length>20)record.history.splice(0,record.history.length-20);
   return{changed:true,current,record};
 }
+

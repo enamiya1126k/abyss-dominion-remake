@@ -2,7 +2,7 @@ import {onlineStats411,onlineHp411} from '../../online/OnlineTraitCompatibility4
 import {chapterTwoPairDisplayName406} from '../../data/chapterTwoPairNames406.js?v=3.1.86-build406';
 import { SPECIES } from "../../data/species.js?v=3.1.86-build406";
 import { displayName, calculatedStats } from "../../models/Monster.js?v=3.1.86-build406";
-import { monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=3.1.91-build411";
+import { legacyMonsterCombatPower445, monsterCombatPower, formatCombatPower } from "../../core/CombatPower.js?v=3.1.91-build411";
 import { magicCircleById, equippedMagicCircle, goldPowerDamageMultiplier, goldPowerActionCost } from "../../core/MagicCircleSystem.js?v=3.1.78-build398";
 import { learnedSkills, maxMp, effectiveSkillMpCost, applySkillMastery } from "../../battle/SkillSystem.js?v=3.1.75-build395";
 import { signatureWeaponForMonster, signatureWeaponOwnerId } from "../../core/SignatureWeaponSystem.js?v=3.1.72-build392";
@@ -351,7 +351,7 @@ function onlineBattleMonsterProfile(state, monster) {
     summonTier: monster.summonTier ?? monster.summonRarity ?? null, summonRarity: monster.summonRarity ?? monster.summonTier ?? null, endgameFaction: monster.endgameFaction ?? null,
     monsterName: displayName(monster), fallbackEmoji: species.emoji ?? "魔",
     level: Math.max(1, Number(monster.level) || 1), stars: Math.max(1, Number(monster.stars) || 1),
-    plus: Math.max(0, Number(monster.plus) || 0), power: monsterCombatPower(monster, stats),
+    plus: Math.max(0, Number(monster.plus) || 0), power: legacyMonsterCombatPower445(monster, stats),
     attribute: monster.attribute ?? species.element ?? "neutral",
     circleId: circle.id, circleName: circle.name, circleLevel: circle.id === "none" ? 0 : Math.max(1, Number(circle.level) || 1),
     circleEffect: circle.effect ?? "none", goldPowerMultiplier: circle.effect === "goldPower" ? goldPowerDamageMultiplier(state.player?.gold ?? 0, circle.level) : 1, goldPowerActionCost: circle.effect === "goldPower" ? goldPowerActionCost(state.player?.gold ?? 0) : 0, goldPowerGold: circle.effect === "goldPower" ? Math.max(0, Math.floor(Number(state.player?.gold) || 0)) : 0, equipment: equipmentProfile(state, monster), equipmentAuthorities: onlineEquipmentAuthorities(monster), equipmentCombatEffects: onlineEquipmentCombatEffects(monster), abyssSkillEffects: onlineAbyssSkillEffects(monster),

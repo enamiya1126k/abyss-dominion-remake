@@ -1,0 +1,12 @@
+[
+  "online-server/src/PlayerPowerRanking.js",
+  "src/core/CombatPower.js",
+  "src/core/PowerScale445.js",
+  "src/core/config.js",
+  "src/main.js",
+  "src/online/OnlinePartyClient.js",
+  "src/online/OnlineViews.js",
+  "src/ui/screens/HomeScreen.js",
+  "src/ui/screens/OnlinePartyScreen.js",
+  "src/worldRaid/WorldRaidOfflineCache430.js"
+]

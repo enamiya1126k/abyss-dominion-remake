@@ -181,7 +181,7 @@ export function HomeScreen(state,options={}){
         <strong title="最高 ${state.player.maxFloor.toLocaleString()}階">${reincarnation.cycle>0?`今周回 <em>${cycleFloor}</em> 階<small>歴代最高 ${state.player.maxFloor}階</small>`:`最高 <em>${compactHomeNumber(state.player.maxFloor)}</em> 階`}</strong>
         <i></i>
         <span class="home-record-cue">戦力・ランキングを見る ›</span>
-        <b title="戦力 ${formatCombatPower(combatPower)}">${pixelIcon("crossed-swords","record-power-icon")} ${compactHomeNumber(combatPower)}</b>
+        <b title="戦力 ${formatCombatPower(combatPower)}">${pixelIcon("crossed-swords","record-power-icon")} ${formatCombatPower(combatPower)}</b>
       </button>
 
       <nav class="home-left-menu" aria-label="主要メニュー">

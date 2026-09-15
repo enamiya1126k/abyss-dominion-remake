@@ -1,0 +1,16 @@
+✔ screenshot party is the sum of all four displayed ratings (0.974317ms)
+✔ growth contrast increases while preserving member order (1.375823ms)
+✔ real stats are unchanged; party equals member sum (3.526367ms)
+✔ old high scores are preserved separately, migration is idempotent (0.775562ms)
+✔ both old and new clients validate, old retry identity survives restart (6.26895ms)
+✔ existing disconnected players convert from persisted member scores exactly (1.351828ms)
+✔ forged scores rejected under either scale (0.378722ms)
+✔ compact labels stay short and never expose NaN/Infinity (0.36385ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 148.777624
