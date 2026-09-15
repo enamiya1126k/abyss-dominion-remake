@@ -24,7 +24,7 @@ export function relicDamageMultiplier394(battle,actor,target,kind='direct'){
  const round=Math.max(1,Number(battle.turn)||1),hits=battle.relicHits394?.round===round?battle.relicHits394.counts?.[key(actor,target)]??0:0;
  const flags={pair:!!ready,chain:hits>=1,counter:kind==='counter'||kind==='pairCounter',poison:status.has('poison'),sleep:status.has('sleep'),burn:status.has('burn'),freeze:status.has('freeze'),ailment:[...status].some(s=>ailments.has(s)),buff:(battle.enemyEffects?.[target?.id]??[]).some(e=>positive.has(e.kind)&&active(e)),execute:Number(target?.hp)/Math.max(1,Number(target?.maxHp)||1)<=.35};
  const sum=source=>Object.entries(source).reduce((n,[k,v])=>n+(flags[k]?Number(v)||0:0),0);
- return (1+Math.min(1.5,sum(gear)))*(1+Math.min(.6,sum(circle)));
+ return (1+Math.min(1.5,sum(gear)))*(1+Math.min(.9,sum(circle)));
 }
 export function recordRelicHit394(battle,actor,target,damage,kind='direct'){
  if(kind==='excluded'||!(damage>0)||!(battle.party??[]).includes(actor)||!actor||actor.currentHp<=0)return;

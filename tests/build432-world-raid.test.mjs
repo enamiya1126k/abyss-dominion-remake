@@ -14,7 +14,9 @@ test('all three bosses equip the exchange-exclusive circle; matching children ar
  const f=setup();for(const sequence of [1,2,3]){const engine=new WorldRaidBattle432({session:f.a,random:()=>.5,now:f.now}),raid=engine.create(f.a,newWorldRaidCampaign428(sequence,f.now()),'preview').room.raid,def=RAID_CIRCLES432[raid.boss.id];
   assert.equal(raid.boss.circleId,def.id);assert.equal(raid.boss.magicCircleName,magicCircleById(def.id).name);assert.equal(raid.boss.magicCircleAsset,def.asset);
   assert.equal(raid.minions.length,2);for(const child of raid.minions){assert.equal(child.level,100);assert.equal(child.circleId,'none');assert.equal(child.magicCircleAsset,null);assert.match(child.id,new RegExp('^'+raid.weeklyBoss.subBoss.id));}
-  const native=magicCircleLevelEffect(magicCircleById(def.id),1);for(const field of ['reviveHpRate','shieldRate','damagePerHit','maxDamageBonus','firstChainHits','secondChainHits'])if(def[field]!=null)assert.equal(def[field],native[field]);
+  // Build443 strengthens acquired player circles; issued boss rules remain frozen.
+  const frozen={reincarnation:{reviveHpRate:.7},raid_zero_sovereign:{shieldRate:1},raid_vajra_beast:{damagePerHit:.14,maxDamageBonus:1.5,firstChainHits:2,secondChainHits:5}};
+  for(const [field,value]of Object.entries(frozen[def.id]))assert.equal(def[field],value);
  }
 });
 test('revival happens once for the shared boss, then a second death settles rewards and advances once',()=>{

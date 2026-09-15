@@ -13,7 +13,7 @@ export class WorldRaidCoordinator430 extends WorldRaidCoordinator429{
   try{if(this.healthy()){
    const s=this.ledger.state,counts={};if(s.offline430&&(!s.offline430.tickets||Array.isArray(s.offline430.tickets)||Array.isArray(s.offline430)))throw new Error('Invalid offline ledger');
    for(const [id,t]of Object.entries(s.offline430?.tickets??{})){
-    if(t.id!==id||t.ledgerId!==s.ledgerId429||!['reserved','submitted','expired'].includes(t.status)||!Number.isSafeInteger(t.expiresAt)||t.expiresAt-t.issuedAt!==OFFLINE_LIFETIME430||!Number.isInteger(t.seed)||t.seed<0||t.seed>4294967295||!t.playerId||!t.day||!Number.isSafeInteger(t.sequence)||t.sequence<1||![1,2,3].includes(t.ruleVersion)||t.status==='reserved'&&!t.initialRoom?.raid||t.status!=='reserved'&&!t.receipt)throw new Error('Invalid offline ticket');
+    if(t.id!==id||t.ledgerId!==s.ledgerId429||!['reserved','submitted','expired'].includes(t.status)||!Number.isSafeInteger(t.expiresAt)||t.expiresAt-t.issuedAt!==OFFLINE_LIFETIME430||!Number.isInteger(t.seed)||t.seed<0||t.seed>4294967295||!t.playerId||!t.day||!Number.isSafeInteger(t.sequence)||t.sequence<1||![1,2,3,4].includes(t.ruleVersion)||t.status==='reserved'&&!t.initialRoom?.raid||t.status!=='reserved'&&!t.receipt)throw new Error('Invalid offline ticket');
     const key=t.day+':'+t.playerId;counts[key]=(counts[key]??0)+1;if(counts[key]>(s.days[t.day]?.[t.playerId]??0))throw new Error('Invalid reserved quota');
    }
   }}catch(error){this.ledger.error=error;}

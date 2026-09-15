@@ -1,3 +1,4 @@
+import {circleOffense443,circleExtraHits443} from './battle/MagicCircleBalance443.js?v=3.1.122-build443';
 import{playBattleEffect441,setBattleAction441,battleAction441}from"./ui/BattleEffects441.js";
 import{autoEquipmentEligible441,bestAutoEquipment441}from"./core/AutoEquipment441.js";
 import {contributionBody437} from './ui/Contribution437.js';
@@ -156,7 +157,7 @@ import{attackHits}from"./battle/HitSystem.js?v=3.1.1-build311";
 import{buildTurnQueue,currentTurnEntry,currentAlly,currentEnemy,aliveEnemies,selectedEnemy,advanceQueue,queueFinished,skipInvalidEntries}from"./battle/TurnSystem.js?v=3.1.82-build402";
 import{dangerConfig}from"./core/DangerSystem.js?v=3.1.1-build311";
 import{bossLevelForFloor,enemyLevelForFloor as scaledEnemyLevelForFloor,enemyHiddenProfileForFloor,enemyEquipmentLevelForFloor,equipmentHolderRateForFloor,equipmentSlotsForFloor,rollEnemyEquipmentRarity}from"./core/EnemyScalingSystem.js?v=3.1.25-build345";
-import{MAGIC_CIRCLES,magicCircleById,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,autoEquipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost,magicCircleLevelEffect,isRaidExclusiveMagicCircle}from"./core/MagicCircleSystem.js?v=3.1.78-build398";
+import{MAGIC_CIRCLES,magicCircleTier443,magicCircleById,equippedMagicCircle,magicCircleLevel,magicCirclePrice,magicCircleNextEffect,buyOrUpgradeMagicCircle,equipMagicCircle,autoEquipMagicCircle,magicCircleOwner,magicCircleMarkup,rollEnemyMagicCircle,enemyMagicCircleMarkup,slotDamageMultiplier,createMagicCircleInstance,goldPowerDamageMultiplier,goldPowerActionCost,magicCircleLevelEffect,isRaidExclusiveMagicCircle}from"./core/MagicCircleSystem.js?v=3.1.78-build398";
 import{biomeForFloor,battleEnvironmentForFloor,biomeProgress,recordBiomeFloor,recordBiomeEncounter,recordBiomeChest,recordBiomeBoss}from"./data/biomes.js?v=3.1.1-build311";
 import{campaignBossSupportCount,campaignEncounterPartySize,recordEncounterHistory,rollAttributeEncounterGroup}from"./core/EncounterPoolSystem.js?v=3.1.13-build332";
 import{dungeonThemeForFloor,dungeonThemeForAttribute}from"./data/dungeonThemes.js?v=3.1.1-build311";
@@ -2390,7 +2391,7 @@ function magicCircleWorkshopBody(monster){
  const current=equippedMagicCircle(monster,save.state),gold=Math.max(0,Number(save.state.player.gold)||0);
  return`<div class="magic-circle-workshop"><header>${magicCircleMarkup(monster,save.state,{className:"workshop-circle"})}<div><small>装着中</small><h3>${current.name}${current.level?` Lv.${current.level}`:""}</h3><p>${current.levelEffect?.summary??current.summary}</p><strong>所持 ${gold.toLocaleString()}G</strong><output class="circle-feedback405" role="status" aria-live="polite"></output></div></header><div class="magic-circle-list" tabindex="0" aria-label="魔法陣一覧">${chapterTwoUnlocked(save.state)&&!save.state.magicCircleResearch398?.claimed?`<section class="circle-research398"><h3>第二章・新術式の研究</h3><p>異彩協奏陣・百禍織刻陣・澄明蓄魔陣を各1個受け取れます。消費なし・各セーブ1回。</p><button type="button" data-circle-research398>新しい魔法陣3個を受け取る</button></section>`:""}${MAGIC_CIRCLES.map(circle=>{
   const level=magicCircleLevel(save.state,circle.id),owned=circle.id==="none"||level>0,price=magicCirclePrice(save.state,circle.id),equipped=current.id===circle.id,owner=magicCircleOwner(save.state,circle.id,{excludeMonsterId:monster.id}),inUse=Boolean(owner),maxed=level>=99,sourceLabel=isMagicCircle398(circle.id)?"第二章解放後、この画面の「新術式の研究」で入手":isChapterTwoCircle394(circle.id)?`第二章・${CHAPTER_TWO_AREAS[circle.area].name}の精鋭3部隊制圧`:isRaidExclusiveMagicCircle(circle.id)?"レイドボス交換所限定":"深淵ツリーで解禁";
-  return`<article class="magic-circle-row tone-${circle.tone} ${equipped?"equipped":""} ${inUse?"in-use":""} ${owned?"owned":"locked"}" data-circle-row405="${circle.id}"><span class="magic-circle-list-art"><img src="${circle.asset}" alt=""></span><div class="circle-copy405"><b>${circle.name}${level?` Lv.${level}`:""}</b><small>${circle.summary}</small>${circle.id!=="none"?`<p>${level?"現在の効果":"Lv.1の効果"}：${magicCircleLevelEffect(circle,level||1).summary}</p>`:""}<em>${circle.id==="none"?"いつでも選択可能":inUse?`${displayName(owner)}が装着中`:owned?magicCircleNextEffect(circle,level):sourceLabel}</em>${owned&&circle.id!=="none"?`<strong>${maxed?"最大Lv.99・強化完了":`次の強化 ${price.toLocaleString()}G`}</strong>`:""}</div><div class="circle-actions405"><button type="button" data-circle-equip="${circle.id}" ${equipped||inUse?"disabled":""}>${equipped?"装着中":inUse?"使用中":"装着"}</button>${circle.id!=="none"&&owned?`<button type="button" data-circle-buy="${circle.id}" ${gold<price||maxed?"disabled":""}>${maxed?"最大Lv.":"GOLD強化"}</button>`:""}</div></article>`
+  return`<article class="magic-circle-row tone-${circle.tone} ${equipped?"equipped":""} ${inUse?"in-use":""} ${owned?"owned":"locked"}" data-circle-row405="${circle.id}"><span class="magic-circle-list-art"><img src="${circle.asset}" alt=""></span><div class="circle-copy405"><b>${circle.name}${level?` Lv.${level}`:""}</b><small>${circle.id!=="none"?`${magicCircleTier443(circle.id).label} ／ `:""}${circle.summary}</small>${circle.id!=="none"?`<p>${level?"現在の効果":"Lv.1の効果"}：${magicCircleLevelEffect(circle,level||1).summary}</p>`:""}<em>${circle.id==="none"?"いつでも選択可能":inUse?`${displayName(owner)}が装着中`:owned?magicCircleNextEffect(circle,level):sourceLabel}</em>${owned&&circle.id!=="none"?`<strong>${maxed?"最大Lv.99・強化完了":`次の強化 ${price.toLocaleString()}G`}</strong>`:""}</div><div class="circle-actions405"><button type="button" data-circle-equip="${circle.id}" ${equipped||inUse?"disabled":""}>${equipped?"装着中":inUse?"使用中":"装着"}</button>${circle.id!=="none"&&owned?`<button type="button" data-circle-buy="${circle.id}" ${gold<price||maxed?"disabled":""}>${maxed?"最大Lv.":"GOLD強化"}</button>`:""}</div></article>`
  }).join("")}</div><p class="muted">魔法陣は1個につき1人だけ装着できます。別の仲間が使用中の魔法陣は、その仲間から外すまで選べません。</p></div>`;
 }
 function openMagicCircleWorkshop(monsterId){
@@ -5870,7 +5871,7 @@ function outgoingLifeSteal(monster){return affixValue(monster,"lifeSteal",30)/10
 function equipmentRegenRate(monster){return affixValue(monster,"regen",20)/100}
 function circleInfo(monster){
  if(!monster)return null;
- const original=battle?.magicCircleProfiles&&Object.prototype.hasOwnProperty.call(battle.magicCircleProfiles,monster.id)?battle.magicCircleProfiles[monster.id]:equippedMagicCircle(monster,save.state),profile=ultimateCircle(battle,monster,original);if(!profile||profile.id==="none"||profile.levelEffect)return profile;
+ const original=battle?.magicCircleProfiles&&Object.prototype.hasOwnProperty.call(battle.magicCircleProfiles,monster.id)?battle.magicCircleProfiles[monster.id]:equippedMagicCircle(monster,save.state),profile=ultimateCircle(battle,monster,original);if(!profile||profile.id==="none"||profile.levelEffect?.balanceVersion443===443)return profile;
  const levelEffect=magicCircleLevelEffect(profile,profile.level??1);if(Object.isExtensible(profile)){profile.levelEffect=levelEffect;return profile}return{...profile,levelEffect};
 }
 function hasCircleEffect(monster,effect){return circleInfo(monster)?.effect===effect}
@@ -5963,16 +5964,9 @@ function recoverEnemyBattleMp(enemy,amount){
  if(!enemy||enemy.hp<=0)return 0;const maximum=Math.max(0,Number(enemy.maxMp)||0),before=Math.max(0,Number(enemy.currentMp)||0),rate=battle?Math.max(0,1-Math.min(1,effectValue(battle,enemy.id,"mpRecoveryDown","enemy"))):1,gain=Math.max(0,Math.floor((Number(amount)||0)*rate));enemy.currentMp=Math.min(maximum,before+gain);queueBattleRecovery(enemy,"mp",before,enemy.currentMp);return enemy.currentMp-before;
 }
 function magicCircleDamageMultiplier(monster){
- if(!monster||!battle)return 1;let value=Math.max(.5,Number(battle.circleTurnMultipliers?.[monster.id])||1),level=circleInfo(monster)?.level??1;
- if(hasCircleEffect(monster,"manaReversal"))value*=circleEffectNumber(monster,"damageMultiplier",1.12+Math.min(.18,level*.004));
- if(battle.openingCircleBuff)value*=1+openingCircleRate("damageRate",.2);
- if(hasCircleEffect(monster,"rage")){const rage=rageCircleValues(monster);value*=1+Math.min(rage.maxDamageBonus,(monster._circleRage??0)*rage.damagePerHit)}
- if(hasCircleEffect(monster,"lowHpPower")){const ratio=monster.currentHp/Math.max(1,calculatedStats(monster).hp);value*=1+(1-ratio)*circleEffectNumber(monster,"maximumDamageBonus",1.25)}
- if(hasCircleEffect(monster,"soleSurvivor")&&battle.party.filter(member=>member.currentHp>0).length===1)value*=circleEffectNumber(monster,"damageMultiplier",2);
- if(hasCircleEffect(monster,"randomSkill")&&monster._randomCircleSkill)value*=1+circleEffectNumber(monster,"randomSkillDamageRate",0);
- if(hasCircleEffect(monster,"weakCrit"))value*=1+circleEffectNumber(monster,"damageRate",.15);
- if(hasCircleEffect(monster,"goldPower"))value*=goldPowerDamageMultiplier(save.state.player.gold,level);
- return value;
+ if(!monster||!battle)return 1;
+ const roll=Number(battle.circleTurnMultipliers?.[monster.id]),turn=Number.isFinite(roll)?Math.max(0,roll):1;
+ return turn*(battle.openingCircleBuff?1+openingCircleRate("damageRate",.08):1)*circleOffense443(circleInfo(monster),{hits:monster._circleRage??0,hpRatio:monster.currentHp/Math.max(1,calculatedStats(monster).hp),aliveCount:battle.party.filter(m=>m.currentHp>0).length,gold:save.state.player.gold,randomSkill:Boolean(monster._randomCircleSkill)});
 }
 function magicCircleCriticalBonus(monster,power=1){let bonus=openingCircleRate("criticalRate",.2);if(hasCircleEffect(monster,"weakCrit"))bonus+=Math.max(circleEffectNumber(monster,"minimumCriticalBonus",.05),circleEffectNumber(monster,"criticalCeiling",.48)-Math.max(0,Number(power)||1)*.1);return bonus}
 function consumeMagicCircleActionCost(monster){if(!hasCircleEffect(monster,"goldPower"))return;const cost=Math.min(Math.max(0,Number(save.state.player.gold)||0),goldPowerActionCost(save.state.player.gold));save.state.player.gold=Math.max(0,Math.floor(save.state.player.gold-cost));addBattleLog(battle,`${displayName(monster)}：黄金換力 -${cost.toLocaleString()}G`)}
@@ -6043,11 +6037,16 @@ async function trySeriesBurn(monster,enemy,skill){
  if(!applied)return false;
  addBattleLog(battle,`${enemy.name}は炎上した`);await floatText("炎上",enemy.id,"burn");return true;
 }
+function initializeOpeningCircleShields443(){
+ const party=battle?.party??[],rate=Math.max(0,...party.filter(m=>m.currentHp>0&&hasCircleEffect(m,"shield")).map(m=>circleEffectNumber(m,"shieldRate",.5)));
+ if(!rate)return;battle.circleShields??={};
+ for(const m of party.filter(m=>m.currentHp>0))battle.circleShields[m.id]=Math.max(battle.circleShields[m.id]??0,Math.floor(calculatedStats(m).hp*rate));
+}
 async function applyOpeningMagicCircles(){
  if(!battle)return;
  for(const owner of battle.party.filter(m=>m.currentHp>0&&hasCircleEffect(m,"deathMirror"))){battle.circleShields??={};const rate=circleEffectNumber(owner,"openingShieldRate",.25);battle.circleShields[owner.id]=Math.max(battle.circleShields[owner.id]??0,Math.floor(calculatedStats(owner).hp*rate));}
 
- const shieldOwner=battle.party.find(monster=>hasCircleEffect(monster,"shield"));if(shieldOwner){const rate=circleEffectNumber(shieldOwner,"shieldRate",.5);await magicCircleActivationFx(shieldOwner,circleInfo(shieldOwner),`最大HP${Math.round(rate*100)}%の障壁を展開`,`味方全体を保護`,{duration:580})}
+ const shieldOwner=battle.party.filter(monster=>monster.currentHp>0&&hasCircleEffect(monster,"shield")).sort((a,b)=>circleEffectNumber(b,"shieldRate",.5)-circleEffectNumber(a,"shieldRate",.5))[0];if(shieldOwner){const rate=circleEffectNumber(shieldOwner,"shieldRate",.5);await magicCircleActivationFx(shieldOwner,circleInfo(shieldOwner),`最大HP${Math.round(rate*100)}%の障壁を展開`,`味方全体を保護`,{duration:580})}
  const opener=battle.party.find(monster=>hasCircleEffect(monster,"openingBuff"));if(opener){const damageRate=openingCircleRate("damageRate",.2),criticalRate=openingCircleRate("criticalRate",.2);await magicCircleActivationFx(opener,circleInfo(opener),`最終ダメージ +${Math.round(damageRate*100)}%・会心率 +${Math.round(criticalRate*100)}%`,`味方全体・戦闘開始時`,{duration:620})}
  for(const owner of battle.party.filter(monster=>monster.currentHp>0&&hasCircleEffect(monster,"sacrifice"))){
   const allies=battle.party.filter(monster=>monster.currentHp>0),foes=aliveEnemies(battle);if(allies.length<2||!foes.length)continue;
@@ -6058,7 +6057,7 @@ async function applyOpeningMagicCircles(){
 function allyMagicCircleTurnCue(monster,circle){
  const level=Math.max(1,Number(circle?.level)||1),effect=circle?.levelEffect??magicCircleLevelEffect(circle,level),hpRatio=monster.currentHp/Math.max(1,calculatedStats(monster).hp);
  if(circle.effect==="manaReversal"){const multiplier=Number(effect.damageMultiplier)||(1.12+Math.min(.18,level*.004));return{headline:`与ダメージ ×${multiplier.toFixed(2)}`,detail:"MP回復時は回復量に応じてHPを消費"}}
- if(circle.effect==="rage"&&(monster._circleRage??0)>0){const hits=monster._circleRage??0,damagePerHit=Number(effect.damagePerHit)||.08,maxDamageBonus=Number(effect.maxDamageBonus)||1,multiplier=1+Math.min(maxDamageBonus,hits*damagePerHit),first=Math.max(1,Math.floor(Number(effect.firstChainHits)||4)),second=Math.max(first+1,Math.floor(Number(effect.secondChainHits)||9)),chains=hits>=second?2:hits>=first?1:0;return{headline:`被弾 ${hits}回・最終ダメージ ×${multiplier.toFixed(2)}`,detail:`追加連撃 ${chains}回`}}
+ if(circle.effect==="rage"){const hits=monster._circleRage??0,damagePerHit=Number(effect.damagePerHit)||.08,maxDamageBonus=Number(effect.maxDamageBonus)||1,multiplier=1+(effect.baseDamageRate??0)+Math.min(maxDamageBonus,hits*damagePerHit),first=Math.max(1,Math.floor(Number(effect.firstChainHits)||4)),second=Math.max(first+1,Math.floor(Number(effect.secondChainHits)||9)),chains=hits>=second?2:hits>=first?1:0;return{headline:`被弾 ${hits}回・最終ダメージ ×${multiplier.toFixed(2)}`,detail:`追加連撃 ${chains}回`}}
  if(circle.effect==="weakCrit"){const bonus=Math.max(Number(effect.minimumCriticalBonus)||.05,(Number(effect.criticalCeiling)||.48)-.1);return{headline:`弱攻撃の会心率 +${Math.round(bonus*100)}%`,detail:"攻撃倍率が低いほど会心補正が上昇"}}
  if(circle.effect==="goldPower"){const gold=Math.max(0,Number(save.state.player.gold)||0),multiplier=goldPowerDamageMultiplier(gold,circle.level),cost=Math.min(gold,goldPowerActionCost(gold)),cap=Math.round((effect.damageCap??.30)*100);return{headline:`所持GOLD換力 ×${multiplier.toFixed(2)}`,detail:`強い逓減・最大+${cap}% / 行動後 ${cost.toLocaleString()}G消費`}}
  if(circle.effect==="soleSurvivor"&&battle.party.filter(member=>member.currentHp>0).length===1){const multiplier=Number(effect.damageMultiplier)||2,reduction=Number(effect.damageReductionRate)||.4;return{headline:`孤王覚醒・最終ダメージ ×${multiplier.toFixed(2)}`,detail:`被ダメージ${Math.round(reduction*100)}%軽減・最後の生存者`}}
@@ -6138,7 +6137,7 @@ function startBattle(encounter,options={}){
  if(tutorialCaptureEligible){battle.auto=false;save.state.settings.autoBattle=false;save.state.settings.exploreAutoMode="off";const target=enemies[0];if(target){tuneFirstCaptureEnemy(target);save.state.inventory.captureCrystals=Math.max(Number(save.state.inventory.captureCrystals)||0,captureCrystalCost(target))}save.state.inventory.potions=Math.max(1,Number(save.state.inventory.potions)||0);save.save()}
  if(tutorialAttributeBattle){battle.auto=false;save.state.settings.autoBattle=false;save.save()}
  for(const u of battle.party){u.heroShield348=0;u.heroShieldMax378=0;u.heroChain348=null;}initializeFloorBossDeathTracking();battle.heroResonanceCount=heroResonanceProfile(battle.party).count;battle.invincibleAlliance=invincibleAllianceReady();
- const shieldOwner=party.find(monster=>hasCircleEffect(monster,"shield"));if(shieldOwner){const shieldRate=circleEffectNumber(shieldOwner,"shieldRate",.5);party.forEach(monster=>battle.circleShields[monster.id]=Math.floor(calculatedStats(monster).hp*shieldRate))}
+ initializeOpeningCircleShields443();
  audio.setScene(enemies.some(enemy=>enemy.faction==="tenGod")?"divine":enemies.some(enemy=>enemy.faction==="abyss")?"abyss":enemies.some(enemy=>enemy.elite)?"elite":enemies.some(enemy=>enemy.boss)?"boss":"battle");audio.sfx(enemies.some(enemy=>enemy.endgameBossId||enemy.boss)?"boss":"select");
  buildTurnQueue(battle);
  if(tutorialCaptureEligible||tutorialAttributeBattle){const firstAlly=battle.turnQueue.findIndex(entry=>entry.type==="ally");if(firstAlly>0)battle.turnQueue.unshift(...battle.turnQueue.splice(firstAlly,1))}
@@ -6630,7 +6629,7 @@ async function command(type,skillId=null,{skipRandomCircle=false}={}){
    const base=Math.max(1,Math.floor(attackStat*(.9+Math.random()*.2)-defenseStat*.4));
    const attackElement=a.attribute??SPECIES[a.speciesId]?.element??"neutral",targetElement=e.trialElement??e.element??SPECIES[e.speciesId]?.element??"neutral",critMult=1.7+affixValue(a,"critDamage",150)/100,damageStats={...combatStats,_currentHpRatio:a.currentHp/Math.max(1,combatStats.hp)},raw=(critical?Math.floor(base*critMult):base)*formationMultiplier*affixOutgoingDamageMultiplier(damageStats,e,attackElement)*affixExecutionMultiplier(a,e)*signatureBonus.damageMultiplier,d=Math.max(1,Math.floor(raw*attributeDamageMultiplier(attackElement,targetElement)*abyssBattleMultiplier(a,"partyDamageRate")*enemyDamageMultiplier(e)*(e.hiddenDamageTaken??1)*endgameIncomingDamageMultiplier(e,attackElement)*weaponMasteryDamageMultiplier(save.state,a,e)*magicCircleDamageMultiplier(a))),applied=applyEnemyDamage(battle,e,d,{sourceId:a.id,element:attackElement,damageClass:magicWeapon?"magic":"physical"});recordBattleDamage(a,applied.damage);registerWeaponFinisher(a,e,applied.beforeHp);consumeMagicCircleActionCost(a);const steal=outgoingLifeSteal(a);if(steal&&applied.damage){const h=Math.max(1,Math.floor(applied.damage*steal)),gained=recoverBattleHp(a,h,s.hp);recordBattleHealing(a,gained)}
    setBattleAction441(battle,{...battleAction441(battle),magic:magicWeapon,element:attackElement});await animateHit(e.id,critical);if(critical&&applied.damage)burstParticles(e.id,"critical",16);await floatText(applied.damage?`${critical?"会心 ":""}-${applied.damage}`:"完全ガード",e.id,applied.damage?(critical?"critical":"damage"):"guard");await trySeriesChainAttack(a,e,applied.damage);
-   const rageProfile=hasCircleEffect(a,"rage")?rageCircleValues(a):null,rageHits=rageProfile?(a._circleRage>=rageProfile.secondChainHits?2:a._circleRage>=rageProfile.firstChainHits?1:0):0;
+   const rageProfile=hasCircleEffect(a,"rage")?rageCircleValues(a):null,rageHits=rageProfile?circleExtraHits443(circleInfo(a),a._circleRage??0):0;
    for(let hit=0;!ultimateExtraBlocked(battle,a)&&hit<rageHits&&e.hp>0;hit++){const follow=Math.max(1,Math.floor(applied.damage*(hit?0.45:0.65))),extra=applyEnemyDamage(battle,e,follow,{traitCause410:"followup",sourceId:a.id,element:attackElement,damageClass:magicWeapon?"magic":"physical"});recordBattleDamage(a,extra.damage);registerWeaponFinisher(a,e,extra.beforeHp);await animateHit(e.id,false);await floatText(extra.damage?`連撃 -${extra.damage}`:"完全ガード",e.id,extra.damage?"skill":"guard")}
   }
   completeContextGuide("battle_attack",{quiet:true});

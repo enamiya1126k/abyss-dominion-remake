@@ -1,0 +1,17 @@
+[
+  "online-server/src/OnlineMagicCircleBalance443.js",
+  "online-server/src/RaidCoordinator.js",
+  "online-server/src/RoomStore.js",
+  "online-server/src/WorldRaidCoordinator430.js",
+  "online-server/src/WorldRaidCoordinator440.js",
+  "src/battle/ChapterTwoRelicCombat394.js",
+  "src/battle/MagicCircleBalance443.js",
+  "src/core/MagicCircleSystem.js",
+  "src/core/config.js",
+  "src/data/chapterTwoRelics394.js",
+  "src/data/magicCircles398.js",
+  "src/main.js",
+  "src/worldRaid/WorldRaidEngine443.js",
+  "src/worldRaid/WorldRaidOfflineCache430.js",
+  "src/worldRaid/WorldRaidReplay430.js"
+]

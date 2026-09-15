@@ -1,0 +1,54 @@
+{
+  "rows": [
+    {
+      "width": 393,
+      "id": "raid_vajra_beast",
+      "title": "天雷轟界陣 Lv.99",
+      "summary": "常時与ダメ +100% ／ 被弾ごと +20%（被弾分の上限+200%） ／ 1・3回被弾で追加連撃1・2回"
+    },
+    {
+      "width": 393,
+      "id": "raid_zero_sovereign",
+      "title": "零界凍結陣 Lv.99",
+      "summary": "味方全体に開戦障壁 最大HP200% ／ 装着者の常時与ダメ +85%"
+    },
+    {
+      "width": 393,
+      "id": "reincarnation",
+      "title": "輪廻の魔法陣 Lv.7",
+      "summary": "蘇生 HP85.9%・MP76.5%（1戦1回） ／ 常時与ダメ +61.5%"
+    },
+    {
+      "width": 393,
+      "id": "ch2_dream394",
+      "title": "夢喰封花陣 Lv.99",
+      "summary": "睡眠中の敵への直接与ダメージ +90%"
+    },
+    {
+      "width": 1280,
+      "id": "raid_vajra_beast",
+      "title": "天雷轟界陣 Lv.99",
+      "summary": "常時与ダメ +100% ／ 被弾ごと +20%（被弾分の上限+200%） ／ 1・3回被弾で追加連撃1・2回"
+    },
+    {
+      "width": 1280,
+      "id": "raid_zero_sovereign",
+      "title": "零界凍結陣 Lv.99",
+      "summary": "味方全体に開戦障壁 最大HP200% ／ 装着者の常時与ダメ +85%"
+    },
+    {
+      "width": 1280,
+      "id": "reincarnation",
+      "title": "輪廻の魔法陣 Lv.7",
+      "summary": "蘇生 HP85.9%・MP76.5%（1戦1回） ／ 常時与ダメ +61.5%"
+    },
+    {
+      "width": 1280,
+      "id": "ch2_dream394",
+      "title": "夢喰封花陣 Lv.99",
+      "summary": "睡眠中の敵への直接与ダメージ +90%"
+    }
+  ],
+  "errors": [],
+  "missing": []
+}

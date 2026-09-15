@@ -4,7 +4,7 @@ import {resizeCampaign440} from '../../src/worldRaid/WorldRaidBalance440.js';
 
 export class WorldRaidCoordinator440 extends WorldRaidCoordinator437{
  constructor(options={}){
-  super(options);
+  super(options);this.offlineRuleVersion430=4;
   if(!this.healthy()||this.ledger.state.current.balance440===1)return;
   const result=this.ledger.transact(s=>{
    const c=s.current;resizeCampaign440(c);
