@@ -1,0 +1,28 @@
+✔ real attack animation: none / normal (2.324745ms)
+✔ real attack animation: none / skill (0.603479ms)
+✔ real attack animation: ch2_chain394 / normal (0.549018ms)
+✔ real attack animation: ch2_chain394 / skill (0.512496ms)
+✔ real attack animation: ch2_dream394 / normal (0.587506ms)
+✔ real attack animation: ch2_dream394 / skill (0.548609ms)
+✔ real attack animation: ch2_pair394 / normal (0.561768ms)
+✔ real attack animation: ch2_pair394 / skill (0.531212ms)
+✔ real attack animation: ch2_guard394 / normal (0.601367ms)
+✔ real attack animation: ch2_guard394 / skill (0.674573ms)
+✔ real attack animation: ch2_crown394 / normal (0.520236ms)
+✔ real attack animation: ch2_crown394 / skill (0.537753ms)
+✔ real attack animation: ch2_prism398 / normal (0.465556ms)
+✔ real attack animation: ch2_prism398 / skill (0.470383ms)
+✔ real attack animation: ch2_hex398 / normal (0.518204ms)
+✔ real attack animation: ch2_hex398 / skill (0.445746ms)
+✔ real attack animation: ch2_reserve398 / normal (0.458696ms)
+✔ real attack animation: ch2_reserve398 / skill (0.440069ms)
+✔ real attack animation: aegis / normal (0.404686ms)
+✔ real attack animation: aegis / skill (0.462802ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 108.917659

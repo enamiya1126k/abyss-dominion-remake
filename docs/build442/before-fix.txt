@@ -1,0 +1,246 @@
+✔ real attack animation: none / normal (2.909896ms)
+✔ real attack animation: none / skill (0.691769ms)
+✖ real attack animation: ch2_chain394 / normal (0.985281ms)
+✖ real attack animation: ch2_chain394 / skill (1.125288ms)
+✖ real attack animation: ch2_dream394 / normal (1.265164ms)
+✖ real attack animation: ch2_dream394 / skill (1.33752ms)
+✖ real attack animation: ch2_pair394 / normal (1.32366ms)
+✖ real attack animation: ch2_pair394 / skill (1.074573ms)
+✖ real attack animation: ch2_guard394 / normal (1.399272ms)
+✖ real attack animation: ch2_guard394 / skill (1.460091ms)
+✖ real attack animation: ch2_crown394 / normal (1.331312ms)
+✖ real attack animation: ch2_crown394 / skill (1.058639ms)
+✖ real attack animation: ch2_prism398 / normal (1.09285ms)
+✖ real attack animation: ch2_prism398 / skill (1.220518ms)
+✖ real attack animation: ch2_hex398 / normal (0.994806ms)
+✖ real attack animation: ch2_hex398 / skill (1.187099ms)
+✖ real attack animation: ch2_reserve398 / normal (1.295328ms)
+✖ real attack animation: ch2_reserve398 / skill (1.199828ms)
+✖ real attack animation: aegis / normal (1.144466ms)
+✖ real attack animation: aegis / skill (1.04571ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 2
+ℹ fail 18
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 194.239558
+
+✖ failing tests:
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_chain394 / normal (0.985281ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_chain394 / skill (1.125288ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_dream394 / normal (1.265164ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_dream394 / skill (1.33752ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_pair394 / normal (1.32366ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_pair394 / skill (1.074573ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_guard394 / normal (1.399272ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_guard394 / skill (1.460091ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_crown394 / normal (1.331312ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_crown394 / skill (1.058639ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_prism398 / normal (1.09285ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_prism398 / skill (1.220518ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_hex398 / normal (0.994806ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_hex398 / skill (1.187099ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_reserve398 / normal (1.295328ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: ch2_reserve398 / skill (1.199828ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: aegis / normal (1.144466ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
+
+test at repo442/tests/build442-attack.test.mjs:7:238
+✖ real attack animation: aegis / skill (1.04571ms)
+  ReferenceError: magicCircleById is not defined
+      at Object.animateAttack (evalmachine.<anonymous>:3:318)
+      at TestContext.<anonymous> (file:///workspace/scratch/ee830274688e/repo442/tests/build442-attack.test.mjs:11:54)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7)
