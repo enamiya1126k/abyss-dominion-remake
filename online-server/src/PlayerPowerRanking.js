@@ -1,3 +1,4 @@
+import{displayPower448,displayPartyPower448}from"../../src/core/PowerScale448.js";
 import{expandedPower445,expandedPartyPower445}from"../../src/core/PowerScale445.js";
 import{displayPower446,displayPartyPower446}from"../../src/core/PowerScale446.js";
 import{displayPower447,displayPartyPower447}from"../../src/core/PowerScale447.js";
@@ -125,7 +126,7 @@ function sanitizeMonster(source, index, { maxFloor = 1, enforcePlausibility = tr
   const battleStats = sanitizeStats(source.battleStats ?? source.stats);
   if (!battleStats) return { error: "POWER_STATS_REQUIRED" };
   const power = verifiedMonsterPower(battleStats);
-  if (![power,expandedPower445(power),displayPower446(power),displayPower447(power,{speciesId:safeId(source.speciesId)})].some(expected=>powerMatches(source.power,expected))) return { error: "POWER_MISMATCH" };
+  if (![power,expandedPower445(power),displayPower446(power),displayPower447(power,{speciesId:safeId(source.speciesId)}),displayPower448(power,{speciesId:safeId(source.speciesId),endgameBossId:safeId(source.endgameBossId),rarity:rarity(source.rarity),level:integer(source.level,1,99_999_999,1)})].some(expected=>powerMatches(source.power,expected))) return { error: "POWER_MISMATCH" };
   const level = integer(source.level, 1, 99_999_999, 1), equipment = sanitizeEquipment(source.equipment);
   const plausibilityError = enforcePlausibility ? monsterPlausibilityError({ maxFloor, level, equipment, battleStats }) : null;
   if (plausibilityError) return { error: plausibilityError };
@@ -165,7 +166,7 @@ function sanitizeSnapshot(source = {}, { enforcePlausibility = true } = {}) {
   party.sort((left, right) => left.slot - right.slot);
   party.forEach((entry, index) => entry.slot = index + 1);
   const power = party.reduce((sum, entry) => sum + entry.power, 0);
-  if (![power,expandedPartyPower445(party),displayPartyPower446(party),displayPartyPower447(party)].some(expected=>powerMatches(source.power,expected))) return { error: "POWER_MISMATCH" };
+  if (![power,expandedPartyPower445(party),displayPartyPower446(party),displayPartyPower447(party),displayPartyPower448(party)].some(expected=>powerMatches(source.power,expected))) return { error: "POWER_MISMATCH" };
   return { value: {
     displayName: text(source.displayName, 16) || "冒険者",
     maxFloor,
@@ -234,13 +235,13 @@ function sanitizePersistedRecord(source) {
   return persistedRecord(record) ? record : null;
 }
 function compareRanking(left, right) {
-  return displayPartyPower447(right.party) - displayPartyPower447(left.party) || right.maxFloor - left.maxFloor || left.updatedAt - right.updatedAt || left.playerId.localeCompare(right.playerId);
+  return displayPartyPower448(right.party) - displayPartyPower448(left.party) || right.maxFloor - left.maxFloor || left.updatedAt - right.updatedAt || left.playerId.localeCompare(right.playerId);
 }
 function publicMonster(source, { icon = false } = {}) {
   const result = {
     speciesId: source.speciesId, visualSpeciesId: source.visualSpeciesId, endgameBossId: source.endgameBossId,
     floorBossCatalogId: source.floorBossCatalogId, customVisualAsset: source.customVisualAsset, customVisualBase: source.customVisualBase,
-    name: source.name, level: source.level, rarity: source.rarity, power: displayPower447(source.power,source),
+    name: source.name, level: source.level, rarity: source.rarity, power: displayPower448(source.power,source),
   };
   if (!icon) Object.assign(result, { slot: source.slot, attribute: source.attribute, equipmentStatus: source.equipmentStatus ?? "unknown", equipment: source.equipment.map(item => ({ ...item })), magicCircle: { ...source.magicCircle } });
   return result;
@@ -256,10 +257,10 @@ function publicPresence(source, recordUpdatedAt, at) {
   };
 }
 function publicEntry(record, rank, presence, at) {
-  return { rank, playerId: record.playerId, displayName: record.displayName, power: displayPartyPower447(record.party), powerScaleVersion:7, maxFloor: record.maxFloor, updatedAt: record.updatedAt, ...publicPresence(presence, record.updatedAt, at), icon: publicMonster(record.party[0], { icon: true }) };
+  return { rank, playerId: record.playerId, displayName: record.displayName, power: displayPartyPower448(record.party), powerScaleVersion:8, maxFloor: record.maxFloor, updatedAt: record.updatedAt, ...publicPresence(presence, record.updatedAt, at), icon: publicMonster(record.party[0], { icon: true }) };
 }
 function publicProfile(record, presence, at) {
-  return { playerId: record.playerId, displayName: record.displayName, power: displayPartyPower447(record.party), powerScaleVersion:7, maxFloor: record.maxFloor, updatedAt: record.updatedAt, ...publicPresence(presence, record.updatedAt, at), party: record.party.map(entry => publicMonster(entry)) };
+  return { playerId: record.playerId, displayName: record.displayName, power: displayPartyPower448(record.party), powerScaleVersion:8, maxFloor: record.maxFloor, updatedAt: record.updatedAt, ...publicPresence(presence, record.updatedAt, at), party: record.party.map(entry => publicMonster(entry)) };
 }
 
 export function powerRankingSeason(value = Date.now()) {

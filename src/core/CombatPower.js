@@ -1,4 +1,4 @@
-import{displayPower447}from"./PowerScale447.js";
+import{displayPower448}from"./PowerScale448.js";
 import{calculatedStats}from"../models/Monster.js?v=3.1.82-build402";
 import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=3.1.91-build411";
 
@@ -28,7 +28,7 @@ export function legacyMonsterCombatPower445(monster,stats=null){
   return Math.max(1,Math.round(Math.pow(Math.max(1,raw),.32)*COMBAT_POWER_DISPLAY_SCALE));
 }
 
-export function monsterCombatPower(monster,stats=null){return displayPower447(legacyMonsterCombatPower445(monster,stats),monster);}
+export function monsterCombatPower(monster,stats=null){return displayPower448(legacyMonsterCombatPower445(monster,stats),monster);}
 
 export function partyCombatPower(state){
   if(!state)return 0;
@@ -112,10 +112,11 @@ export function normalizeCombatPowerRecord(state,fallbackPower=0){
     at:typeof entry.at==="string"?entry.at:new Date(0).toISOString()
   })).filter(entry=>entry.power>0).slice(-20);
   state.records.combatPower={
-    scaleVersion:7,
+    scaleVersion:8,
     ...(source.legacyRecord445?{legacyRecord445:source.legacyRecord445}:{}),
     ...(source.legacyRecord446?{legacyRecord446:source.legacyRecord446}:{}),
     ...(source.legacyRecord447?{legacyRecord447:source.legacyRecord447}:{}),
+    ...(source.legacyRecord448?{legacyRecord448:source.legacyRecord448}:{}),
     highest:highest||current,
     previous:previous||highest||current,
     updatedAt:typeof source.updatedAt==="string"?source.updatedAt:null,
@@ -123,19 +124,23 @@ export function normalizeCombatPowerRecord(state,fallbackPower=0){
   };
   if(version<5){
     const legacy={...state.records.combatPower,scaleVersion:4};delete legacy.legacyRecord445;
-    state.records.combatPower={scaleVersion:7,highest:current,previous:current,updatedAt:null,history:[],...(Number(source.highest)>0||history.length?{legacyRecord445:legacy}:{})};
+    state.records.combatPower={scaleVersion:8,highest:current,previous:current,updatedAt:null,history:[],...(Number(source.highest)>0||history.length?{legacyRecord445:legacy}:{})};
   }else if(version===5){
     const legacy={...state.records.combatPower,scaleVersion:5};delete legacy.legacyRecord445;delete legacy.legacyRecord446;
-    state.records.combatPower={scaleVersion:7,highest:current,previous:current,updatedAt:null,history:[],...(source.legacyRecord445?{legacyRecord445:source.legacyRecord445}:{}),...(Number(source.highest)>0||history.length?{legacyRecord446:legacy}:{})};
+    state.records.combatPower={scaleVersion:8,highest:current,previous:current,updatedAt:null,history:[],...(source.legacyRecord445?{legacyRecord445:source.legacyRecord445}:{}),...(Number(source.highest)>0||history.length?{legacyRecord446:legacy}:{})};
   }else if(version===6){
     const legacy={scaleVersion:6,highest,previous,updatedAt:state.records.combatPower.updatedAt,history};
-    state.records.combatPower={scaleVersion:7,highest:current,previous:current,updatedAt:null,history:[],...(source.legacyRecord445?{legacyRecord445:source.legacyRecord445}:{}),...(source.legacyRecord446?{legacyRecord446:source.legacyRecord446}:{}),...(Number(source.highest)>0||history.length?{legacyRecord447:legacy}:{})};
+    state.records.combatPower={scaleVersion:8,highest:current,previous:current,updatedAt:null,history:[],...(source.legacyRecord445?{legacyRecord445:source.legacyRecord445}:{}),...(source.legacyRecord446?{legacyRecord446:source.legacyRecord446}:{}),...(Number(source.highest)>0||history.length?{legacyRecord447:legacy}:{})};
+  }
+  if(version===7){
+    const legacy={scaleVersion:7,highest,previous,updatedAt:state.records.combatPower.updatedAt,history};
+    state.records.combatPower={scaleVersion:8,highest:current,previous:current,updatedAt:null,history:[],...(source.legacyRecord445?{legacyRecord445:source.legacyRecord445}:{}),...(source.legacyRecord446?{legacyRecord446:source.legacyRecord446}:{}),...(source.legacyRecord447?{legacyRecord447:source.legacyRecord447}:{}),...(Number(source.highest)>0||history.length?{legacyRecord448:legacy}:{})};
   }
   return state.records.combatPower;
 }
 
 export function recordPartyCombatPower(state,now=new Date()){
-  const current=partyCombatPower(state),hadRecord=Number(state?.records?.combatPower?.scaleVersion)>=7?Math.max(0,Math.round(Number(state?.records?.combatPower?.highest)||0)):0,record=normalizeCombatPowerRecord(state,current);
+  const current=partyCombatPower(state),hadRecord=Number(state?.records?.combatPower?.scaleVersion)>=8?Math.max(0,Math.round(Number(state?.records?.combatPower?.highest)||0)):0,record=normalizeCombatPowerRecord(state,current);
   const at=now instanceof Date?now.toISOString():new Date(now).toISOString();
   if(current&&!hadRecord){
     record.highest=current;record.previous=current;record.updatedAt=at;

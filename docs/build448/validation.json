@@ -1,0 +1,25 @@
+{
+  "build": 448,
+  "version": "3.1.127",
+  "tests": {
+    "command": "node --test tests/build448-power.test.mjs",
+    "passed": 11,
+    "failed": 0
+  },
+  "progressive_comparisons": {
+    "species": 4,
+    "gear_conditions": 4,
+    "levels": 10000,
+    "comparisons": 160000,
+    "decreases": 0
+  },
+  "cache": {
+    "changedRuntime": 7,
+    "cachedPaths": 577,
+    "frozenRule4Modules": 32,
+    "frozenRuntimeAliased": false,
+    "syntax": "pass"
+  },
+  "browser_report": "browser-results.json",
+  "deployed": false
+}

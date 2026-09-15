@@ -4,8 +4,8 @@ import {raidSpriteBase} from '../core/RaidPresentation.js';
 export async function prepareOfflineCache430(){
  if(typeof navigator==='undefined'||!navigator.serviceWorker)return {reload:false};
  const registration=await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('オフライン保存の準備ができません。再読み込みしてお試しください。')),8000);navigator.serviceWorker.ready.then(r=>{clearTimeout(timer);resolve(r);},reject);});
- if(!registration.active?.scriptURL?.includes('world-raid-offline447-sw.js'))throw new Error('画面を再読み込みしてから挑戦権を取得してください。');
- const response=await fetch('./world-raid-offline447-assets.json',{cache:'no-store'});if(!response.ok)throw new Error('オフライン用データを取得できません。');const urls=await response.json();
+ if(!registration.active?.scriptURL?.includes('world-raid-offline448-sw.js'))throw new Error('画面を再読み込みしてから挑戦権を取得してください。');
+ const response=await fetch('./world-raid-offline448-assets.json',{cache:'no-store'});if(!response.ok)throw new Error('オフライン用データを取得できません。');const urls=await response.json();
  return new Promise((resolve,reject)=>{
   const channel=new MessageChannel(),timer=setTimeout(()=>{channel.port1.close();reject(new Error('オフライン用データの保存がタイムアウトしました。再試行してください。'));},120000);
   channel.port1.onmessage=event=>{clearTimeout(timer);channel.port1.close();event.data?.ok?resolve({reload:true}):reject(new Error('オフライン用データを保存できません。接続・空き容量を確認してください。'));};
