@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "heroLabels": [
+    "111,031",
+    "118,126",
+    "112,270",
+    "130,574"
+  ],
+  "total": "472001",
+  "homeViewports": [
+    320,
+    393
+  ],
+  "formationTotalMatches": true,
+  "recordTotalMatches": true,
+  "legacyArchives": 3,
+  "errors": []
+}

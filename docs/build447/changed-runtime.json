@@ -1,0 +1,9 @@
+[
+  "online-server/src/PlayerPowerRanking.js",
+  "src/core/CombatPower.js",
+  "src/core/PowerScale447.js",
+  "src/core/config.js",
+  "src/main.js",
+  "src/online/OnlineViews.js",
+  "src/worldRaid/WorldRaidOfflineCache430.js"
+]

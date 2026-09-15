@@ -1,0 +1,18 @@
+{
+  "build": 447,
+  "version": "3.1.126",
+  "tests": {
+    "command": "node --test tests/build447-power.test.mjs",
+    "passed": 15,
+    "failed": 0
+  },
+  "cache": {
+    "changedRuntime": 7,
+    "cachedPaths": 576,
+    "frozenRule4Modules": 32,
+    "frozenRuntimeAliased": false,
+    "syntax": "pass"
+  },
+  "browser_report": "browser-results.json",
+  "deployed": false
+}
