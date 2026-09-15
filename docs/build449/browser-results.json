@@ -1,0 +1,89 @@
+{
+  "rows": [
+    {
+      "width": 67.125,
+      "level": 10000,
+      "plus": 10,
+      "fits": true,
+      "height": 10.796875
+    },
+    {
+      "width": 42.078125,
+      "level": 7,
+      "plus": 50,
+      "fits": true,
+      "height": 10.796875
+    },
+    {
+      "width": 98.4375,
+      "level": 99999999,
+      "plus": 9999,
+      "fits": true,
+      "height": 10.796875
+    },
+    {
+      "width": 73.375,
+      "level": 10000,
+      "plus": 10,
+      "fits": true,
+      "height": 11.78125
+    },
+    {
+      "width": 46.0625,
+      "level": 7,
+      "plus": 50,
+      "fits": true,
+      "height": 11.78125
+    },
+    {
+      "width": 107.515625,
+      "level": 99999999,
+      "plus": 9999,
+      "fits": true,
+      "height": 11.78125
+    },
+    {
+      "width": 73.359375,
+      "level": 10000,
+      "plus": 10,
+      "fits": true,
+      "height": 24
+    },
+    {
+      "width": 46.75,
+      "level": 7,
+      "plus": 50,
+      "fits": true,
+      "height": 12
+    },
+    {
+      "width": 90.046875,
+      "level": 99999999,
+      "plus": 9999,
+      "fits": true,
+      "height": 24
+    },
+    {
+      "width": 74.59375,
+      "level": 10000,
+      "plus": 10,
+      "fits": true,
+      "height": 12
+    },
+    {
+      "width": 46.75,
+      "level": 7,
+      "plus": 50,
+      "fits": true,
+      "height": 12
+    },
+    {
+      "width": 109.375,
+      "level": 99999999,
+      "plus": 9999,
+      "fits": true,
+      "height": 12
+    }
+  ],
+  "errors": []
+}

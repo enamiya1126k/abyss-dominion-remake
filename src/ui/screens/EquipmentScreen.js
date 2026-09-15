@@ -261,7 +261,7 @@ export function EquipmentScreen(state,targetId,{home=false,editing=false,selecte
      </div>
      <div class="equipment-paper-doll">
       <div class="equipment-showcase438">
-      <header class="equipment-showcase-name438"><span>【${monsterRarity(target)}】</span>${coloredMonsterName(target)}</header>
+      <header class="equipment-showcase-name438"><small class="equipment-level449">Lv.${Math.max(1,Math.floor(Number(target.level)||1))}＋${Math.max(0,Math.floor(Number(target.plus)||0))}</small><span>【${monsterRarity(target)}】</span>${coloredMonsterName(target)}</header>
       <div class="equipment-paper-doll-portrait">${equipmentMonsterArt438(target,species.emoji??"MONSTER")}</div>
       <button type="button" class="equipment-magic-circle-button" data-open-magic-circle="${target.id}" title="魔法陣を変更・強化"><img src="${circle.asset}" alt=""><span><b>魔法陣設定</b><small>${circle.name}${circle.level?` Lv.${circle.level}`:""}</small></span><i>変更・強化 ›</i></button>
       </div>

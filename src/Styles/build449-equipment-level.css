@@ -1,0 +1,6 @@
+/* Keep growth visible in the upper-left of the character showcase. */
+#app .equipment-showcase-name438{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:4px}
+#app .equipment-showcase-name438 .equipment-level449{justify-self:start;min-width:0;max-width:100%;color:#ffe4a0;font:700 clamp(9px,2.5vw,10px)/1.2 Arial,sans-serif;white-space:normal;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+#app .equipment-showcase-name438>b{font-size:clamp(10px,2.8vw,13px)}
+
+#app .equipment-showcase438{grid-template-rows:34px minmax(0,1fr)}
