@@ -1,0 +1,1248 @@
+{
+  "before": [
+    {
+      "text": "324,558",
+      "available": 45,
+      "needed": 81
+    },
+    {
+      "text": "292,465",
+      "available": 45,
+      "needed": 81
+    },
+    {
+      "text": "367,236",
+      "available": 45,
+      "needed": 81
+    },
+    {
+      "text": "420,812",
+      "available": 45,
+      "needed": 81
+    }
+  ],
+  "rows": [
+    {
+      "label": "reported digits in 78px plates with enlarged font",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 320, plate 72",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 320, plate 78",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 320, plate 94",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 320, plate 120",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 375, plate 72",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 375, plate 78",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 375, plate 94",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 375, plate 120",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 393, plate 72",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 393, plate 78",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 393, plate 94",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 393, plate 120",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 430, plate 72",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 430, plate 78",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 430, plate 94",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 430, plate 120",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 1280, plate 72",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 8.4,
+          "available": 39,
+          "needed": 37.890625,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 1280, plate 78",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 9.72,
+          "available": 45,
+          "needed": 43.96875,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 1280, plate 94",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 13.26,
+          "available": 61,
+          "needed": 59.9375,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "viewport 1280, plate 120",
+      "cells": [
+        {
+          "text": "324,558",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "292,465",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "367,236",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "420,812",
+          "size": 18,
+          "available": 87,
+          "needed": 81.421875,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "short numbers restore original size",
+      "cells": [
+        {
+          "text": "12",
+          "size": 18,
+          "available": 87,
+          "needed": 25.0625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "12",
+          "size": 18,
+          "available": 87,
+          "needed": 25.0625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "12",
+          "size": 18,
+          "available": 87,
+          "needed": 25.0625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "12",
+          "size": 18,
+          "available": 87,
+          "needed": 25.0625,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "updated six-digit values",
+      "cells": [
+        {
+          "text": "999999",
+          "size": 18,
+          "available": 87,
+          "needed": 75.15625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "999999",
+          "size": 18,
+          "available": 87,
+          "needed": 75.15625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "999999",
+          "size": 18,
+          "available": 87,
+          "needed": 75.15625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "999999",
+          "size": 18,
+          "available": 87,
+          "needed": 75.15625,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "reference seven-digit value",
+      "cells": [
+        {
+          "text": "1,999,999",
+          "size": 15.44,
+          "available": 87,
+          "needed": 85.953125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "1,999,999",
+          "size": 15.44,
+          "available": 87,
+          "needed": 85.953125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "1,999,999",
+          "size": 15.44,
+          "available": 87,
+          "needed": 85.953125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "1,999,999",
+          "size": 15.44,
+          "available": 87,
+          "needed": 85.953125,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "home re-render reconnects fitter",
+      "cells": [
+        {
+          "text": "154,606",
+          "size": 15,
+          "available": 112,
+          "needed": 67.859375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "160,801",
+          "size": 15,
+          "available": 112,
+          "needed": 67.859375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "101,633",
+          "size": 15,
+          "available": 112,
+          "needed": 67.859375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "113,704",
+          "size": 15,
+          "available": 112,
+          "needed": 67.859375,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "native plate layout 320",
+      "cells": [
+        {
+          "text": "154,606",
+          "size": 12,
+          "available": 56,
+          "needed": 54.28125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "160,801",
+          "size": 12,
+          "available": 56,
+          "needed": 54.28125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "101,633",
+          "size": 12,
+          "available": 56,
+          "needed": 54.28125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "113,704",
+          "size": 12,
+          "available": 56,
+          "needed": 54.28125,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "native seven-digit layout 320",
+      "cells": [
+        {
+          "text": "9,999,999",
+          "size": 9.87,
+          "available": 56,
+          "needed": 54.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 9.87,
+          "available": 56,
+          "needed": 54.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 9.87,
+          "available": 56,
+          "needed": 54.890625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 9.87,
+          "available": 56,
+          "needed": 54.890625,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "native plate layout 375",
+      "cells": [
+        {
+          "text": "9,999,999",
+          "size": 10.46,
+          "available": 59.25,
+          "needed": 58.203125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 10.46,
+          "available": 59.25,
+          "needed": 58.203125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 10.46,
+          "available": 59.25,
+          "needed": 58.203125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 10.46,
+          "available": 59.25,
+          "needed": 58.203125,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "native seven-digit layout 375",
+      "cells": [
+        {
+          "text": "9,999,999",
+          "size": 10.46,
+          "available": 59.25,
+          "needed": 58.203125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 10.46,
+          "available": 59.25,
+          "needed": 58.203125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 10.46,
+          "available": 59.25,
+          "needed": 58.203125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 10.46,
+          "available": 59.25,
+          "needed": 58.203125,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "native plate layout 393",
+      "cells": [
+        {
+          "text": "9,999,999",
+          "size": 11.34,
+          "available": 64.109375,
+          "needed": 63.078125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 11.34,
+          "available": 64.109375,
+          "needed": 63.078125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 11.34,
+          "available": 64.109375,
+          "needed": 63.078125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 11.34,
+          "available": 64.109375,
+          "needed": 63.078125,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "native seven-digit layout 393",
+      "cells": [
+        {
+          "text": "9,999,999",
+          "size": 11.34,
+          "available": 64.109375,
+          "needed": 63.078125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 11.34,
+          "available": 64.109375,
+          "needed": 63.078125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 11.34,
+          "available": 64.109375,
+          "needed": 63.078125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 11.34,
+          "available": 64.109375,
+          "needed": 63.078125,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "native plate layout 430",
+      "cells": [
+        {
+          "text": "9,999,999",
+          "size": 13.12,
+          "available": 74.09375,
+          "needed": 72.984375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 13.12,
+          "available": 74.09375,
+          "needed": 72.984375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 13.12,
+          "available": 74.09375,
+          "needed": 72.984375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 13.12,
+          "available": 74.09375,
+          "needed": 72.984375,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "native seven-digit layout 430",
+      "cells": [
+        {
+          "text": "9,999,999",
+          "size": 13.12,
+          "available": 74.09375,
+          "needed": 72.984375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 13.12,
+          "available": 74.09375,
+          "needed": 72.984375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 13.12,
+          "available": 74.09375,
+          "needed": 72.984375,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 13.12,
+          "available": 74.09375,
+          "needed": 72.984375,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "native plate layout 1280",
+      "cells": [
+        {
+          "text": "9,999,999",
+          "size": 15,
+          "available": 112,
+          "needed": 83.515625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 15,
+          "available": 112,
+          "needed": 83.515625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 15,
+          "available": 112,
+          "needed": 83.515625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 15,
+          "available": 112,
+          "needed": 83.515625,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "native seven-digit layout 1280",
+      "cells": [
+        {
+          "text": "9,999,999",
+          "size": 15,
+          "available": 112,
+          "needed": 83.515625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 15,
+          "available": 112,
+          "needed": 83.515625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 15,
+          "available": 112,
+          "needed": 83.515625,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 15,
+          "available": 112,
+          "needed": 83.515625,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "reference screenshot",
+      "cells": [
+        {
+          "text": "9,999,999",
+          "size": 11.34,
+          "available": 64.109375,
+          "needed": 63.078125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 11.34,
+          "available": 64.109375,
+          "needed": 63.078125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 11.34,
+          "available": 64.109375,
+          "needed": 63.078125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "9,999,999",
+          "size": 11.34,
+          "available": 64.109375,
+          "needed": 63.078125,
+          "ellipsis": "clip"
+        }
+      ]
+    },
+    {
+      "label": "navigation back home",
+      "cells": [
+        {
+          "text": "154,606",
+          "size": 13.755,
+          "available": 64.109375,
+          "needed": 62.203125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "160,801",
+          "size": 13.755,
+          "available": 64.109375,
+          "needed": 62.203125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "101,633",
+          "size": 13.755,
+          "available": 64.109375,
+          "needed": 62.203125,
+          "ellipsis": "clip"
+        },
+        {
+          "text": "113,704",
+          "size": 13.755,
+          "available": 64.109375,
+          "needed": 62.203125,
+          "ellipsis": "clip"
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

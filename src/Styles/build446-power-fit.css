@@ -1,0 +1,31 @@
+/* The label sits above the digits so only the existing attribute reserves width. */
+#app .home-scene-unit .home-scene-power {
+ display:grid!important;
+ grid-template-columns:minmax(0,1fr);
+ grid-template-rows:7px auto;
+ justify-items:stretch;
+ align-items:center;
+ gap:0!important;
+ width:calc(100% - 9px);
+ min-width:0;
+ padding:1px 5px 2px 18px!important;
+ -webkit-text-size-adjust:100%;
+ text-size-adjust:100%;
+}
+#app .home-scene-unit .home-scene-power>i {
+ grid-row:1;
+ text-align:left;
+ font-size:6px!important;
+ line-height:7px;
+ letter-spacing:0;
+}
+#app .home-scene-unit .home-scene-power-value {
+ display:block!important;
+ grid-row:2;
+ min-width:0!important;
+ font-size:clamp(12px,3.5vw,15px)!important;
+ line-height:1.1!important;
+ text-align:left;
+ text-overflow:clip!important;
+ white-space:nowrap!important;
+}

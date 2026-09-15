@@ -1,0 +1,19 @@
+{
+  "build": 446,
+  "version": "3.1.125",
+  "power_test_command": "node --test tests/build446-power.test.mjs",
+  "power_tests": {
+    "passed": 11,
+    "failed": 0
+  },
+  "cache_validation": {
+    "changedRuntime": 9,
+    "cachedPaths": 575,
+    "frozenRule4Modules": 32,
+    "frozenRuntimeAliased": false,
+    "syntax": "pass"
+  },
+  "browser_report": "browser-results.json",
+  "device_limit": "Chromium emulation; iPhone Safari hardware not tested",
+  "deployed": false
+}

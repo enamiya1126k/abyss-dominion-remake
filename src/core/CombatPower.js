@@ -1,4 +1,4 @@
-import{expandedPower445}from"./PowerScale445.js";
+import{displayPower446}from"./PowerScale446.js";
 import{calculatedStats}from"../models/Monster.js?v=3.1.82-build402";
 import{COMBAT_POWER_DISPLAY_SCALE}from"./config.js?v=3.1.91-build411";
 
@@ -28,7 +28,7 @@ export function legacyMonsterCombatPower445(monster,stats=null){
   return Math.max(1,Math.round(Math.pow(Math.max(1,raw),.32)*COMBAT_POWER_DISPLAY_SCALE));
 }
 
-export function monsterCombatPower(monster,stats=null){return expandedPower445(legacyMonsterCombatPower445(monster,stats));}
+export function monsterCombatPower(monster,stats=null){return displayPower446(legacyMonsterCombatPower445(monster,stats));}
 
 export function partyCombatPower(state){
   if(!state)return 0;
@@ -112,8 +112,9 @@ export function normalizeCombatPowerRecord(state,fallbackPower=0){
     at:typeof entry.at==="string"?entry.at:new Date(0).toISOString()
   })).filter(entry=>entry.power>0).slice(-20);
   state.records.combatPower={
-    scaleVersion:5,
+    scaleVersion:6,
     ...(source.legacyRecord445?{legacyRecord445:source.legacyRecord445}:{}),
+    ...(source.legacyRecord446?{legacyRecord446:source.legacyRecord446}:{}),
     highest:highest||current,
     previous:previous||highest||current,
     updatedAt:typeof source.updatedAt==="string"?source.updatedAt:null,
@@ -121,13 +122,16 @@ export function normalizeCombatPowerRecord(state,fallbackPower=0){
   };
   if(version<5){
     const legacy={...state.records.combatPower,scaleVersion:4};delete legacy.legacyRecord445;
-    state.records.combatPower={scaleVersion:5,highest:current,previous:current,updatedAt:null,history:[],...(Number(source.highest)>0||history.length?{legacyRecord445:legacy}:{})};
+    state.records.combatPower={scaleVersion:6,highest:current,previous:current,updatedAt:null,history:[],...(Number(source.highest)>0||history.length?{legacyRecord445:legacy}:{})};
+  }else if(version===5){
+    const legacy={...state.records.combatPower,scaleVersion:5};delete legacy.legacyRecord445;delete legacy.legacyRecord446;
+    state.records.combatPower={scaleVersion:6,highest:current,previous:current,updatedAt:null,history:[],...(source.legacyRecord445?{legacyRecord445:source.legacyRecord445}:{}),...(Number(source.highest)>0||history.length?{legacyRecord446:legacy}:{})};
   }
   return state.records.combatPower;
 }
 
 export function recordPartyCombatPower(state,now=new Date()){
-  const current=partyCombatPower(state),hadRecord=Number(state?.records?.combatPower?.scaleVersion)>=5?Math.max(0,Math.round(Number(state?.records?.combatPower?.highest)||0)):0,record=normalizeCombatPowerRecord(state,current);
+  const current=partyCombatPower(state),hadRecord=Number(state?.records?.combatPower?.scaleVersion)>=6?Math.max(0,Math.round(Number(state?.records?.combatPower?.highest)||0)):0,record=normalizeCombatPowerRecord(state,current);
   const at=now instanceof Date?now.toISOString():new Date(now).toISOString();
   if(current&&!hadRecord){
     record.highest=current;record.previous=current;record.updatedAt=at;
@@ -141,4 +145,3 @@ export function recordPartyCombatPower(state,now=new Date()){
   if(record.history.length>20)record.history.splice(0,record.history.length-20);
   return{changed:true,current,record};
 }
-

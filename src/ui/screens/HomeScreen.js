@@ -40,7 +40,7 @@ function scenePartySlot(monster,index,state){
     </button>`;
   const species=SPECIES[monster.speciesId];
   const attribute=monster.attribute??species?.element??"neutral";
-  const power=formatCombatPower(monsterCombatPower(monster));
+  const rawPower=monsterCombatPower(monster),fullPower=rawPower.toLocaleString("en-US"),power=rawPower<10_000_000?fullPower:formatCombatPower(rawPower);
   const vitals=homeCriticalVitals(monster),criticalReason=vitals.hp<=0?"戦闘不能":vitals.hpRate<=.05?"HP残量わずか":"MP残量わずか",formerFloorBoss=Boolean(monster.floorBossCatalogId||monster.floorBossId||monster.obtainedMethod==="floorBossContract");
   return`
     <button type="button" class="home-scene-unit ${positions[index]} ${vitals.critical?"is-exhausted":""} ${formerFloorBoss?"is-floor-boss":""}" data-open-home-formation data-home-party-slot="${index}" data-home-party-member="${monster.id}" aria-label="${displayName(monster)}・編成スロット${index+1}${vitals.critical?`・${criticalReason}`:""}">
@@ -50,7 +50,7 @@ function scenePartySlot(monster,index,state){
       ${vitals.critical?`<span class="home-exhausted-state" aria-hidden="true">${criticalReason}</span>`:""}
       <span class="home-scene-name">${displayName(monster)}</span>
       <small>Lv.${monster.level}</small>
-      <strong class="home-scene-power"><span class="home-slot-attribute" data-home-attribute-help="${attribute}" title="属性相性を確認">${attributeVisual(attribute,{label:`${attribute}属性`})}</span><i>戦力</i><span class="home-scene-power-value" title="${power}">${power}</span></strong>
+      <strong class="home-scene-power"><span class="home-slot-attribute" data-home-attribute-help="${attribute}" title="属性相性を確認">${attributeVisual(attribute,{label:`${attribute}属性`})}</span><i>戦力</i><span class="home-scene-power-value" title="${fullPower}">${power}</span></strong>
     </button>`;
 }
 
