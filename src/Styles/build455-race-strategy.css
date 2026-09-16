@@ -1,0 +1,21 @@
+.race-forecast455{background:linear-gradient(145deg,#282034,#100c17 60%);border-color:#b39155}
+.race-outlook455{color:#f2d58e;font-weight:800;border-left:3px solid #b39155;padding:8px 10px;background:#efd2800c}
+.race-form-list455{display:grid;gap:7px}
+.race-form-list455 .race-form-row455{display:grid;grid-template-columns:28px minmax(0,1fr) 78px;gap:8px;align-items:center;text-align:left;padding:10px 8px;min-height:76px;margin:0;width:100%;background:#0d0a14;border:1px solid #685672}
+.race-form-list455 .race-form-row455.is-favorite{border-color:#dbb870;background:linear-gradient(110deg,#5b422645,#1d1126)}
+.race-form-rank455{text-align:center;color:#f3d08c;font:bold 23px/1.2 Georgia,serif}
+.race-form-rank455 small,.race-form-name455 small,.race-form-odds455 small{display:block;font:10px/1.5 sans-serif;color:#c9bacf;white-space:normal;overflow-wrap:anywhere}
+.race-form-name455 b{display:block;font-size:13px;line-height:1.4;overflow-wrap:anywhere}
+.race-form-odds455{text-align:right;color:#f5d791;white-space:nowrap}
+.race-form-odds455 b{font-size:16px}
+.race-forecast455>p,.race-forecast455 details{font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.race-forecast455 details{margin-top:12px;color:#cdbfd6}
+.race-forecast455 summary{padding:10px 0;color:#e5ce99;cursor:pointer}
+.race-assessment455{display:grid;gap:5px;margin:12px 0;padding:10px;border:1px solid #ba965960;background:#100b1d}
+.race-assessment455 b{font-size:14px;color:#f2d68a}
+.race-assessment455 span{font-size:12px;color:#d2bdde}
+.race-assessment455 small{font-size:10px;line-height:1.7;overflow-wrap:anywhere;color:#ab9daf}
+.race-picks451 .race-forecast-badge455{position:static;display:block;font-size:11px;line-height:1.5;white-space:normal;color:#f1ce88;padding-top:3px}
+.race-roster451 .race-fatigue455{font-size:11px;color:#e1c89a}
+.race-rule-note455{font-size:12px;line-height:1.6;color:#baaec5}
+@media(max-width:350px){.race-form-list455 .race-form-row455{grid-template-columns:24px minmax(0,1fr) 66px;gap:5px;padding:8px 5px}.race-form-name455 b{font-size:12px}.race-form-odds455 b{font-size:14px}}

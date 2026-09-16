@@ -1,0 +1,38 @@
+✔ four seats and eight entrants for 1–4 humans; foreign selection and fifth human rejected (15.676788ms)
+✔ race profiles ignore level/equipment, seeded result and animation agree with finishing order (1.927165ms)
+✔ all bet types, locked odds, ownership prize and ticket reward combine independently (5.118107ms)
+✔ durable acceptance, no late redraw, duplicate bet and refund deliveries survive restart (6.441071ms)
+✔ late wager becomes a once-only refund; a non-buyer loses no GOLD (1.788868ms)
+✔ selection deadline defaults to owned monster; disconnections finish without duplicate awards (0.76974ms)
+✔ wallet debit, payout, EXP, affection, repeat receipt and rejected save are atomic (20.125075ms)
+✔ refund requires the exact local escrow; receipt remains retryable on save failure (0.628297ms)
+✔ server persistence failure rolls back, corrupt state fails closed, account key cannot be replaced (2.237644ms)
+✔ GOLD payout uses integer tenths; special endgame monsters remain selectable (1.245778ms)
+✔ all 334 creature identities use 210 points and no combat progression multiplier (6.640743ms)
+✔ every skill trajectory is monotonic, finishes exactly once and has a real acceleration window (26.593098ms)
+✔ new rooms use unique system picks, equal-point traits and version negotiation (7.660931ms)
+✔ older game clients cannot join a room with new rules, but can continue legacy rooms (4.677774ms)
+✔ podium prizes and scaled training are fixed before delivery and independent from betting (23.02702ms)
+✔ reward save failure rolls back new training and allows exactly one retry (3.112733ms)
+✔ all pending new payouts and trajectories survive server restart unchanged (8.021144ms)
+✔ unconfirmed offline purchase after the deadline refunds escrow once with result training intact (2.124293ms)
+✔ host handoff waits thirty seconds, preserves choices and cancels when host returns (1.024765ms)
+✔ offline finisher does not block next race; their earlier receipt remains recoverable (3.679167ms)
+✔ server rules-version changes invalidate an otherwise identical lobby render (0.236157ms)
+✔ 1–4 humans may duplicate, every AI/system entrant remains different (400 rooms) (228.607682ms)
+✔ late human choice replaces both conflicting provisional system and AI picks before odds lock (1.3661ms)
+✔ selection timeout uses owned creature and deduplicates the full field (0.680396ms)
+✔ fatigue advances once per completed race, rests one step, persists across rooms/restart and copies (11.207148ms)
+✔ fatigue never exceeds three; old values recover and identical species share a key (0.609859ms)
+✔ fatigue and all results roll back together when persistence fails (1.157535ms)
+✔ v3 bets lock published odds; restart neither redraws nor reveals result before finish (3.787792ms)
+✔ older rooms keep their accepted outcome/odds/rules and cannot be joined by incompatible clients (1.659292ms)
+✔ same conditions are a genuine 8-way tie; fatigue reduces chance without eliminating a runner (0.441556ms)
+ℹ tests 30
+ℹ suites 0
+ℹ pass 30
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 382.195963

@@ -1,0 +1,27 @@
+{
+  "checks": [
+    "four real authenticated clients enter one race",
+    "eight forecast rows, popularity, odds and likelihood fit 320–1280px",
+    "same-state polling preserves the parade animation DOM",
+    "all four purchases saved exactly once",
+    "real socket interruption reconnects without another debit",
+    "all four clients recover after full server restart with same race and accepted tickets",
+    "page reload resumes accepted ticket without debit",
+    "one player leaves the screen and disconnects during the race",
+    "tap a player ticket highlights its selected runners",
+    "offline finisher receives saved GOLD and training in background after reconnect",
+    "all four wallets equal original GOLD plus published net and all gain affection",
+    "result replay/skip/poll leaves saved money, affection and receipts unchanged",
+    "settled result reload does not award twice",
+    "solo AI and system all distinct, human choice retained",
+    "completed race fatigue persists into a new room"
+  ],
+  "errors": [],
+  "mobileWidths": [
+    320,
+    393,
+    709
+  ],
+  "transport": "native OnlinePartyController over loopback real server",
+  "artAssets": "existing sprite paths; base sprites not provided to QA"
+}

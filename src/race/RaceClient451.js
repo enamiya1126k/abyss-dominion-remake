@@ -17,11 +17,11 @@ export class RaceClient451{
   this.click=e=>this.onClick(e);this.input=e=>this.onInput(e);
  }
  connected(){return this.transport.connectionReady&&this.transport.ws?.readyState===1}
- ready(){return this.connected()&&this.transport.capabilities?.has('monsterRaceV1')&&this.state?.available===true&&this.state?.rulesVersion>=2}
- connectionMessage(){if(!this.connected())return '接続待ちです。復帰後に現在のレースと保留中の受取を確認します。';if(!this.state)return 'サーバーへレース状況を確認しています。';if(!(this.state.rulesVersion>=2))return '③はゲームとサーバー両方の更新が必要です。サーバーをBuild453へ更新・再起動してください。';return 'サーバーのレース保存状態を確認しています。受取・購入の記録を保持して再接続します。'}
+ ready(){return this.connected()&&this.transport.capabilities?.has('monsterRaceV1')&&this.state?.available===true&&this.state?.rulesVersion>=3}
+ connectionMessage(){if(!this.connected())return '接続待ちです。復帰後に現在のレースと保留中の受取を確認します。';if(!this.state)return 'サーバーへレース状況を確認しています。';if(!(this.state.rulesVersion>=3))return '予想と疲労の新ルールにはゲームとサーバー両方の更新が必要です。サーバーをBuild455へ更新・再起動してください。';return 'サーバーのレース保存状態を確認しています。受取・購入の記録を保持して再接続します。'}
  key(){if(!this.transport.selfId||!this.transport.ws?.url)return null;try{const url=new URL(this.transport.ws.url);return `${url.origin}${url.pathname}|${this.transport.selfId}`}catch{return null}}
  bank(){const key=this.key();return key?raceBank451(this.save.state,key):null}
- raw(op,payload={}){if(!this.connected()||!this.transport.capabilities?.has('monsterRaceV1'))return false;return this.transport._send('raceRequest451',{op,rulesVersion:2,...payload})}
+ raw(op,payload={}){if(!this.connected()||!this.transport.capabilities?.has('monsterRaceV1'))return false;return this.transport._send('raceRequest451',{op,rulesVersion:3,...payload})}
  refresh(){this.raw('status',{subscribe:true})}
  retryPurchase(){const pending=this.bank()?.pending;if(!pending||!this.connected())return;const decision=this.state?.decisions?.find(d=>d.requestId===pending.requestId);if(!decision)this.raw('bet',pending)}
  receive(message){

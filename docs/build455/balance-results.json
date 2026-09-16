@@ -1,0 +1,318 @@
+{
+  "fields": 2000,
+  "races": 200000,
+  "favoriteOldPercent": 15.197704539385128,
+  "favoriteExpectedPercent": 40.30990806764802,
+  "favoriteObservedPercent": 40.472,
+  "scenarios": [
+    {
+      "course": "芝",
+      "rows": [
+        {
+          "index": 0,
+          "rank": 2,
+          "probability": 0.24765877253471924,
+          "odds": 3.6,
+          "speciesId": "earth_sovereign",
+          "fatigue": 0,
+          "condition": 4
+        },
+        {
+          "index": 1,
+          "rank": 1,
+          "probability": 0.26035650932971427,
+          "odds": 3.4,
+          "speciesId": "dark_archon",
+          "fatigue": 0,
+          "condition": 4
+        },
+        {
+          "index": 2,
+          "rank": 4,
+          "probability": 0.1292892162795671,
+          "odds": 6.9,
+          "speciesId": "frost_sovereign",
+          "fatigue": 0,
+          "condition": 3
+        },
+        {
+          "index": 3,
+          "rank": 6,
+          "probability": 0.06582843458405965,
+          "odds": 13.6,
+          "speciesId": "ch2_astera",
+          "fatigue": 0,
+          "condition": 2
+        },
+        {
+          "index": 4,
+          "rank": 5,
+          "probability": 0.0720277802584488,
+          "odds": 12.4,
+          "speciesId": "king_behemoth",
+          "fatigue": 0,
+          "condition": 2
+        },
+        {
+          "index": 5,
+          "rank": 8,
+          "probability": 0.006309471275512682,
+          "odds": 142.6,
+          "speciesId": "dread_centaur",
+          "fatigue": 0,
+          "condition": 0
+        },
+        {
+          "index": 6,
+          "rank": 7,
+          "probability": 0.035059684532589064,
+          "odds": 25.6,
+          "speciesId": "ch2_shion",
+          "fatigue": 0,
+          "condition": 3
+        },
+        {
+          "index": 7,
+          "rank": 3,
+          "probability": 0.183470131205389,
+          "odds": 4.9,
+          "speciesId": "baby_slime",
+          "fatigue": 0,
+          "condition": 4
+        }
+      ]
+    },
+    {
+      "course": "砂",
+      "rows": [
+        {
+          "index": 0,
+          "rank": 3,
+          "probability": 0.15855966629547957,
+          "odds": 5.6,
+          "speciesId": "ch2_ionea",
+          "fatigue": 0,
+          "condition": 3
+        },
+        {
+          "index": 1,
+          "rank": 4,
+          "probability": 0.07873840005640524,
+          "odds": 11.4,
+          "speciesId": "kiara",
+          "fatigue": 0,
+          "condition": 2
+        },
+        {
+          "index": 2,
+          "rank": 6,
+          "probability": 0.02431591236768619,
+          "odds": 37,
+          "speciesId": "light_sovereign",
+          "fatigue": 3,
+          "condition": 3
+        },
+        {
+          "index": 3,
+          "rank": 2,
+          "probability": 0.16257362335806289,
+          "odds": 5.5,
+          "speciesId": "ch2_ticta",
+          "fatigue": 2,
+          "condition": 3
+        },
+        {
+          "index": 4,
+          "rank": 8,
+          "probability": 0.003161766739003007,
+          "odds": 284.6,
+          "speciesId": "gluepot_mimic",
+          "fatigue": 3,
+          "condition": 0
+        },
+        {
+          "index": 5,
+          "rank": 5,
+          "probability": 0.04970626422899021,
+          "odds": 18.1,
+          "speciesId": "ch2_virelle",
+          "fatigue": 3,
+          "condition": 4
+        },
+        {
+          "index": 6,
+          "rank": 7,
+          "probability": 0.006931879343569614,
+          "odds": 129.8,
+          "speciesId": "king_behemoth",
+          "fatigue": 3,
+          "condition": 1
+        },
+        {
+          "index": 7,
+          "rank": 1,
+          "probability": 0.5160124876108033,
+          "odds": 1.7,
+          "speciesId": "kraken_knight",
+          "fatigue": 0,
+          "condition": 3
+        }
+      ]
+    },
+    {
+      "course": "芝",
+      "rows": [
+        {
+          "index": 0,
+          "rank": 6,
+          "probability": 0.04436608752819392,
+          "odds": 20.2,
+          "speciesId": "lantern_ghost",
+          "fatigue": 0,
+          "condition": 1
+        },
+        {
+          "index": 1,
+          "rank": 2,
+          "probability": 0.20694962024582078,
+          "odds": 4.3,
+          "speciesId": "solar_sphinx",
+          "fatigue": 0,
+          "condition": 3
+        },
+        {
+          "index": 2,
+          "rank": 3,
+          "probability": 0.17199671592787236,
+          "odds": 5.2,
+          "speciesId": "ten_chaos",
+          "fatigue": 0,
+          "condition": 3
+        },
+        {
+          "index": 3,
+          "rank": 1,
+          "probability": 0.42729531704780027,
+          "odds": 2.1,
+          "speciesId": "cave_rat",
+          "fatigue": 0,
+          "condition": 4
+        },
+        {
+          "index": 4,
+          "rank": 7,
+          "probability": 0.010723905230445257,
+          "odds": 83.9,
+          "speciesId": "abyssal_leviathan",
+          "fatigue": 0,
+          "condition": 0
+        },
+        {
+          "index": 5,
+          "rank": 8,
+          "probability": 0.00918411520124923,
+          "odds": 97.9,
+          "speciesId": "myth_yori",
+          "fatigue": 0,
+          "condition": 0
+        },
+        {
+          "index": 6,
+          "rank": 4,
+          "probability": 0.07845109077713038,
+          "odds": 11.4,
+          "speciesId": "frozen_mirror_knight",
+          "fatigue": 0,
+          "condition": 2
+        },
+        {
+          "index": 7,
+          "rank": 5,
+          "probability": 0.05103314804148782,
+          "odds": 17.6,
+          "speciesId": "ch2_sayo",
+          "fatigue": 0,
+          "condition": 1
+        }
+      ]
+    },
+    {
+      "course": "砂",
+      "rows": [
+        {
+          "index": 0,
+          "rank": 6,
+          "probability": 0.04190442381947814,
+          "odds": 21.4,
+          "speciesId": "zombie",
+          "fatigue": 1,
+          "condition": 0
+        },
+        {
+          "index": 1,
+          "rank": 8,
+          "probability": 0.026719440304789253,
+          "odds": 33.6,
+          "speciesId": "divine_machine",
+          "fatigue": 3,
+          "condition": 1
+        },
+        {
+          "index": 2,
+          "rank": 1,
+          "probability": 0.3651803721417707,
+          "odds": 2.4,
+          "speciesId": "ch2_rosette",
+          "fatigue": 1,
+          "condition": 3
+        },
+        {
+          "index": 3,
+          "rank": 4,
+          "probability": 0.07048439950906286,
+          "odds": 12.7,
+          "speciesId": "infinite_dragon",
+          "fatigue": 1,
+          "condition": 1
+        },
+        {
+          "index": 4,
+          "rank": 2,
+          "probability": 0.32550942014647205,
+          "odds": 2.7,
+          "speciesId": "obsidian_titan",
+          "fatigue": 0,
+          "condition": 2
+        },
+        {
+          "index": 5,
+          "rank": 7,
+          "probability": 0.02908991067245311,
+          "odds": 30.9,
+          "speciesId": "wolf",
+          "fatigue": 2,
+          "condition": 2
+        },
+        {
+          "index": 6,
+          "rank": 3,
+          "probability": 0.0891563349978859,
+          "odds": 10,
+          "speciesId": "grave_bishop",
+          "fatigue": 2,
+          "condition": 2
+        },
+        {
+          "index": 7,
+          "rank": 5,
+          "probability": 0.05195569840808795,
+          "odds": 17.3,
+          "speciesId": "ch2_solaria",
+          "fatigue": 2,
+          "condition": 3
+        }
+      ]
+    }
+  ],
+  "allTicketExpectedReturnAtMost": 0.9
+}

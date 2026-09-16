@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "touch scroll still reaches start with fatigue labels",
+    "Japanese font forecast and picks fit 320",
+    "Japanese font forecast and picks fit 393",
+    "Japanese font forecast and picks fit 709",
+    "Japanese font forecast and picks fit 1280",
+    "selecting a runner updates ticket odds"
+  ],
+  "errors": [],
+  "font": "Noto Sans CJK JP",
+  "browser": "Chromium mobile touch; physical iPhone Safari not tested",
+  "limitation": "Native base424 sprite files not in recovered working copy; existing asset references unchanged"
+}
