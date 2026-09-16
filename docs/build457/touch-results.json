@@ -1,0 +1,39 @@
+{
+  "checks": [
+    "touch scroll still reaches start with fatigue labels",
+    "all observation details available; comparison row opens monster; ticket kind, order and amount survive tab switches",
+    "full/follow camera changes only presentation, retains eight ranks and never uses a boost",
+    "five real touchscreen taps are accepted without a cooldown; the sixth is disabled",
+    "reduced-motion preference disables added burst loops"
+  ],
+  "bounds": [
+    {
+      "text": "‹ ホーム",
+      "x": 10,
+      "right": 71
+    },
+    {
+      "text": "♪ ON",
+      "x": 346,
+      "right": 383
+    },
+    {
+      "text": "◈ 観察",
+      "x": 16,
+      "right": 120.65625
+    },
+    {
+      "text": "▤ 出走表",
+      "x": 124.65625,
+      "right": 229.328125
+    },
+    {
+      "text": "▣ 馬券",
+      "x": 233.328125,
+      "right": 337.984375
+    }
+  ],
+  "errors": [],
+  "font": "Noto Sans CJK JP",
+  "browser": "Chromium mobile touch; physical iPhone Safari not tested"
+}

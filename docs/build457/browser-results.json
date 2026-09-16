@@ -1,0 +1,22 @@
+{
+  "checks": [
+    "four authenticated clients, selectable turf/sand, no predetermined outcome",
+    "per-monster article opens in place; pause/resume and compact observation fit 320–1280px",
+    "four new ticket kinds purchased once, including three ordered selections",
+    "mid-race server restart preserves rapid-control windows, tickets, secret RNG and race ID",
+    "repeated control packet does not consume a second use",
+    "rapid four-tap burst responds under200ms without ack lock; fifth cap, stamina and turf art verified",
+    "three-number tickets and reachable control fit small touch screens",
+    "offline player receives one payout/training/fatigue after reconnect; all wallets match published net",
+    "result replay never pays twice",
+    "next race automatically alternates to sand with distinct track artwork"
+  ],
+  "errors": [],
+  "mobileWidths": [
+    320,
+    393,
+    709
+  ],
+  "transport": "native authenticated OnlinePartyController / real local server",
+  "limitations": "Physical iPhone Safari and missing unchanged base monster sprites not re-audited"
+}
