@@ -1,0 +1,48 @@
+✔ four seats and eight entrants for 1–4 humans; foreign selection and fifth human rejected (12.969658ms)
+✔ race profiles ignore level/equipment, seeded result and animation agree with finishing order (1.514925ms)
+✔ all bet types, locked odds, ownership prize and ticket reward combine independently (3.448431ms)
+✔ durable acceptance, no late redraw, duplicate bet and refund deliveries survive restart (7.28763ms)
+✔ late wager becomes a once-only refund; a non-buyer loses no GOLD (1.318258ms)
+✔ selection deadline defaults to owned monster; disconnections finish without duplicate awards (0.692545ms)
+✔ wallet debit, payout, EXP, affection, repeat receipt and rejected save are atomic (9.154847ms)
+✔ refund requires the exact local escrow; receipt remains retryable on save failure (0.396327ms)
+✔ server persistence failure rolls back, corrupt state fails closed, account key cannot be replaced (2.430575ms)
+✔ GOLD payout uses integer tenths; special endgame monsters remain selectable (0.783352ms)
+✔ all 334 creature identities use 210 points and no combat progression multiplier (2.962647ms)
+✔ every skill trajectory is monotonic, finishes exactly once and has a real acceleration window (20.300163ms)
+✔ new rooms use unique system picks, equal-point traits and version negotiation (5.887078ms)
+✔ older game clients cannot join a room with new rules, but can continue legacy rooms (4.11153ms)
+✔ podium prizes and scaled training are fixed before delivery and independent from betting (14.485956ms)
+✔ reward save failure rolls back new training and allows exactly one retry (2.673201ms)
+✔ all pending new payouts and trajectories survive server restart unchanged (21.78917ms)
+✔ unconfirmed offline purchase after the deadline refunds escrow once with result training intact (3.960082ms)
+✔ host handoff waits thirty seconds, preserves choices and cancels when host returns (1.451729ms)
+✔ offline finisher does not block next race; their earlier receipt remains recoverable (4.798506ms)
+✔ server rules-version changes invalidate an otherwise identical lobby render (0.210247ms)
+✔ 1–4 humans may duplicate, every AI/system entrant remains different (400 rooms) (204.799289ms)
+✔ late human choice replaces both conflicting provisional system and AI picks before odds lock (1.045307ms)
+✔ selection timeout uses owned creature and deduplicates the full field (0.645994ms)
+✔ fatigue advances once per completed race, rests one step, persists across rooms/restart and copies (11.664411ms)
+✔ fatigue never exceeds three; old values recover and identical species share a key (0.466975ms)
+✔ fatigue and all results roll back together when persistence fails (1.069363ms)
+✔ v3 bets lock published odds; restart neither redraws nor reveals result before finish (4.461318ms)
+✔ older rooms keep their accepted outcome/odds/rules and cannot be joined by incompatible clients (1.516207ms)
+✔ same conditions are a genuine 8-way tie; fatigue reduces chance without eliminating a runner (0.502358ms)
+✔ all seven tickets validate and settle exactly against podium, including order sensitivity (1.109523ms)
+✔ manual boost changes real distance and can change finishing order with the same random seed (31.57715ms)
+✔ tap counter, sequence, cooldown, stamina and post-finish guards are authoritative (1.741486ms)
+✔ chunked simulation and persisted roundtrip are deterministic, monotonic, no early finish (8.970729ms)
+✔ all four effects occur; debuffs are bounded and barriers block an incoming hit (19.975474ms)
+✔ forecast gives finite quotes for every combination of seven types and does not determine actual race (114.608617ms)
+✔ course selection is host-only, locks on start, and alternates for the next race (180.098289ms)
+✔ real coordinator snapshots/restart/duplicate command keep exactly one boost and one payout (157.225496ms)
+✔ new tickets are rejected in legacy rooms and refunded once, never priced with old rules (1.637529ms)
+✔ snapshot write failure rolls back movement and accepted controls; retry succeeds once (120.555349ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 795.588851

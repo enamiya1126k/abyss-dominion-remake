@@ -1,0 +1,9 @@
+{
+  "checks": [
+    "touch scroll still reaches start with fatigue labels",
+    "parade pause/resume works; polling preserves visible article"
+  ],
+  "errors": [],
+  "font": "Noto Sans CJK JP",
+  "browser": "Chromium mobile touch; physical iPhone Safari not tested"
+}

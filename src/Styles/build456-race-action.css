@@ -1,0 +1,53 @@
+/* Keep the familiar parade stage; only the racing arena receives new turf art. */
+.race456.is-turf453 .race-track-panel451{--arena452:url('../../assets/race456/turf.webp')}
+.race456 .race-bet-tabs451{grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.race456 .race-bet-tabs451 button{font-size:12px;min-height:44px;padding:7px 2px}
+.race456 .race-picks451{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.race456 .race-picks451 button{display:grid;grid-template-columns:28px minmax(0,1fr);gap:4px;padding:10px 8px;text-align:left;align-content:start}
+.race456 .race-picks451 .race-art451{grid-column:1/-1;height:68px;width:100%}
+.race456 .race-picks451 strong{grid-column:1;grid-row:1;font-size:17px;color:#efcb88}
+.race456 .race-picks451 small,.race456 .race-picks451 em,.race456 .race-picks451 .race-forecast-badge455{grid-column:1/-1;font-size:11px;min-height:0;line-height:1.5;overflow-wrap:anywhere;text-align:center}
+.race456 .race-picks451 small{font-weight:bold;color:#f2dfae}
+.race456 .race-picks451 i{padding:3px 5px;right:7px;top:7px;background:#6b4c28;border:1px solid #dab667;color:#ffe9b2;font-size:10px}
+.race-compare456{border:1px solid #826d48;margin:12px 0;background:#171021}
+.race-compare456>summary{padding:15px;color:#e5ca90;font-size:13px;cursor:pointer}
+.race-compare456>.race-panel451{margin:0;border:0}
+.race-news456{padding:14px 12px;margin:12px 0;text-align:left;border:1px solid #b09560;background:linear-gradient(120deg,#34262f,#1b1423);box-shadow:inset 0 0 0 3px #15101d}
+.race-news456>header{display:block!important;margin:0 0 10px!important;padding:0 0 9px!important;border-bottom:1px solid #877145;min-height:0!important}
+.race-news456 header small{display:block;color:#ae98c8;font-size:9px;letter-spacing:.15em;margin-bottom:5px}
+.race-news456 header b{font:700 16px/1.6 Georgia,'Yu Mincho',serif;color:#f4dba1}
+.race-news456 p{font-size:12px;line-height:1.8;color:#d8ccd9;margin:6px 0}
+.race-tactic456{display:grid;gap:5px;margin:12px 0;padding:10px;border-left:2px solid #a6e0cf;background:#101a1e}
+.race-tactic456 b{font-size:12px;color:#b1e5d4}.race-tactic456 span{font-size:11px;line-height:1.6;color:#d0d9d2}
+.race-estimate456{display:block;font-size:10px;line-height:1.7;color:#b4a6be}
+.race-course456{display:grid;gap:9px;padding-bottom:15px;border-bottom:1px solid #756341;color:#e4d8bc;font-size:12px}
+.race-course456>div{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.race-course456 button{min-height:44px;font-size:13px}
+.race456.is-racing451 .race-track-panel451{padding:6px;box-shadow:0 0 0 1px #cca86150,inset 0 0 18px #0009}
+.race456.is-racing451 .race-lane451{height:clamp(34px,5.5dvh,49px);border-bottom:1px solid #e1cc9225}
+.race456.is-racing451 .race-runner451{width:56px;height:100%;justify-content:center}
+.race456.is-racing451 .race-runner451 .race-art451{width:44px!important;height:38px!important;max-width:none;max-height:none;filter:drop-shadow(0 3px 2px #0009)}
+.race456.is-racing451 .race-runway451{width:calc(100% - 60px)}
+.race456.is-racing451 .race-runner-name452{font-size:7px!important;width:68px;max-width:68px;line-height:1.15;position:absolute;bottom:0;left:-6px;text-shadow:0 1px 2px #000;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;z-index:5}
+.race456 .race-track451:before{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;background:repeating-linear-gradient(90deg,transparent 0 53px,#eefbd312 54px 56px,transparent 57px 120px);background-size:240px 100%;z-index:1}
+.race456 .race-track451.is-moving456:before{opacity:1;animation:race-ground456 .9s linear infinite}
+.race456.is-turf453 .race-dust452{background:#9abc66!important;box-shadow:-8px -3px #9cd96866,-14px 2px #ddedac44!important}
+.race456 .race-runner451:after{content:'';pointer-events:none;position:absolute;inset:3px 4px;border-radius:50%;opacity:0;z-index:2}
+.race456 .race-runner451.is-boost456:after{opacity:.8;border:2px solid #f6d577;box-shadow:0 0 12px #ffe67a,inset 0 0 8px #ffcc6666;animation:race-boost456 .35s ease-out infinite}
+.race456 .race-runner451.is-wind456:after{opacity:.8;border-bottom:3px solid #91ecc8;box-shadow:0 5px 12px #58e6ab}
+.race456 .race-runner451.is-draft456:after{opacity:.9;border-left:3px solid #9bcffd;box-shadow:-8px 0 12px #6abaf7}
+.race456 .race-runner451.is-slow456:after{opacity:.8;background:radial-gradient(ellipse at 50% 85%,#654022bb,transparent 60%)}
+.race456 .race-runner451.is-guard456:before{content:'';position:absolute;inset:1px 5px 6px;border:1px solid #c5a1fa80;border-radius:50%;box-shadow:0 0 5px #b67be866;pointer-events:none}
+.race-control456{position:sticky;bottom:0;z-index:25;display:grid;grid-template-columns:minmax(0,1fr) 138px;gap:10px;align-items:center;padding:9px 10px;margin:8px 0;background:linear-gradient(110deg,#271a31,#110c19);border:1px solid #b39055;box-shadow:0 4px 15px #0009}
+.race-control456>div{display:grid;gap:3px}.race-control456>div b{font-size:12px;color:#f1d497;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.race-control456>div span{font-size:10px;color:#bbaac9}
+.race-control456 meter{height:10px;width:100%;accent-color:#92d1ac}
+.race-control456 button{min-height:51px;background:linear-gradient(#845328,#39211e);border:1px solid #e1ba6e;box-shadow:inset 0 0 0 2px #392432,0 0 10px #e5b46122;color:#ffe7af;padding:6px;touch-action:manipulation}
+.race-control456 button b{display:block;font-size:15px;line-height:1.5}.race-control456 button small{display:block;font-size:10px}.race-control456 button:active:not(:disabled){transform:scale(.97);filter:brightness(1.3)}.race-control456 button:disabled{opacity:.55}
+.race456 .ticket-chips452{flex-wrap:wrap;gap:3px}.race456 .ticket-chips452 b{min-width:19px;font-size:13px;padding:1px 4px}.race456 .ticket-selection452{gap:4px;flex-wrap:wrap}
+.race456 .track452.is-photo456:after{content:'PHOTO FINISH · スロー再生';position:absolute;top:5px;left:50%;transform:translateX(-50%);background:#161020dc;border:1px solid #e2c279;color:#f5d58c;font:bold 11px/1.6 sans-serif;white-space:nowrap;padding:4px 8px;z-index:20}
+@keyframes race-ground456{from{background-position:240px 0}to{background-position:0 0}}
+@keyframes race-boost456{from{transform:scale(.85);opacity:.9}to{transform:scale(1.1);opacity:.3}}
+@media(min-width:600px){.race456 .race-picks451{grid-template-columns:repeat(4,minmax(0,1fr))}.race-news456 p{font-size:13px}.race-control456{grid-template-columns:minmax(0,1fr) 180px}}
+@media(prefers-reduced-motion:reduce){.race456 .race-track451:before,.race456 .race-runner451:after{animation:none!important}.race456 .race-track451:before{opacity:0!important}}
+
+.race456 .parade-pause456{display:block;width:auto;margin:0 0 10px auto;padding:7px 12px;font-size:11px;min-height:36px;color:#cbb995}

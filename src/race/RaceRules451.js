@@ -1,3 +1,4 @@
+import{validTicket456,ticketWins456}from'./RaceTickets456.js';
 import{raceWeight455}from'./RaceStrategy455.js';
 import{raceProfile453,PLACE_PRIZES453,trainingReward453}from'./RaceTraits453.js';
 // Shared race rules. Combat level, rarity, equipment and affection never enter these calculations.
@@ -8,9 +9,9 @@ export function rng451(seed){let x=Number(seed)>>>0;return()=>{x+=0x6D2B79F5;let
 const styles=[['逃げ','序盤ダッシュ',.77],['先行','安定した走り',.92],['差し','中盤から加速',1.12],['追込','最後のひと伸び',1.35]];
 export function raceProfile451(speciesId,version=2){if(version>=2)return raceProfile453(speciesId);const n=hash451(speciesId),style=styles[n%4],speed=60+(n>>>4)%21,stamina=60+(n>>>9)%21;return{style:style[0],skill:style[1],curve:style[2],speed,stamina,technique:210-speed-stamina,ground:(n>>>15)%2?'芝':'砂'}};
 export function raceWeight451(racer,course){if(racer.rulesVersion>=3)return raceWeight455(racer,course);const p=racer.profile;if(p.version===2){const weights=course==='砂'?[.3,.45,.25]:[.45,.2,.35];return Math.max(1,p.speed*weights[0]+p.stamina*weights[1]+p.technique*weights[2]+(racer.condition-2)*7+(p.ground===course?8:0))}return Math.max(1,70+(p.speed-70)*.45+(p.stamina-70)*.25+(p.technique-70)*.3+(racer.condition-2)*6+(p.ground===course?5:0))}
-export function validTicket451(ticket){return ticket&&Object.hasOwn(BET_NAMES451,ticket.kind)&&Array.isArray(ticket.picks)&&ticket.picks.length===(ticket.kind==='win'?1:2)&&ticket.picks.every(n=>Number.isInteger(n)&&n>=0&&n<8)&&new Set(ticket.picks).size===ticket.picks.length}
+export const validTicket451=validTicket456;
 export function odds451(racers,course,ticket){if(!validTicket451(ticket)||racers.length!==8)return 0;const w=raceWeights455(racers,course),sum=w.reduce((a,b)=>a+b,0),[a,b]=ticket.picks;let prob=w[a]/sum;if(ticket.kind==='exact')prob*=w[b]/(sum-w[a]);if(ticket.kind==='pair')prob=prob*w[b]/(sum-w[a])+w[b]/sum*w[a]/(sum-w[b]);return Math.max(1.1,Math.min(1000,Math.floor(.9/prob*10)/10))}
-export function ticketWins451(ticket,order){if(!validTicket451(ticket))return false;return ticket.kind==='win'?ticket.picks[0]===order[0]:ticket.kind==='exact'?ticket.picks[0]===order[0]&&ticket.picks[1]===order[1]:ticket.picks.every(n=>order.slice(0,2).includes(n))}
+export const ticketWins451=ticketWins456;
 export function drawRace451(racers,course,seed){const random=rng451(seed),remaining=raceWeights455(racers,course).map((w,i)=>({i,w})),order=[];while(remaining.length){let value=random()*remaining.reduce((sum,r)=>sum+r.w,0),index=remaining.length-1;for(let j=0;j<remaining.length;j++){value-=remaining[j].w;if(value<0){index=j;break}}order.push(remaining.splice(index,1)[0].i)}const finishMs=Array(8);let time=21000;for(const i of order){finishMs[i]=time;time+=500+Math.floor(random()*300)}return{order,finishMs}}
 export function raceProgress451(racer,elapsed,finishMs){const t=Math.max(0,Math.min(1,elapsed/finishMs));let progress=Math.pow(t,racer.profile.curve);const p=racer.profile;if(p.version===2&&elapsed>p.skillAt&&elapsed<p.skillAt+p.skillMs)progress+=.012*Math.sin(Math.PI*(elapsed-p.skillAt)/p.skillMs)**2;return Math.min(1,progress)}
 export const payout451=(amount,odds)=>Math.floor(amount*Math.round(odds*10)/10);

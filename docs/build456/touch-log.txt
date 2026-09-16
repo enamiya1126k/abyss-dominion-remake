@@ -1,0 +1,1 @@
+{"checks":["touch scroll still reaches start with fatigue labels","parade pause/resume works; polling preserves visible article"],"errors":[]}

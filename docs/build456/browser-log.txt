@@ -1,0 +1,4 @@
+Restart OK
+Five controls and mobile layout OK
+Four settlements OK
+{"checks":["four authenticated clients, selectable turf/sand, no predetermined outcome","per-monster article, pause/resume, collapsed comparison and seven tabs fit 320–1280px","four new ticket kinds purchased once, including three ordered selections","mid-race server restart preserves accepted control, tickets, secret RNG and race ID","repeated control packet does not consume a second use","five actual boosts, cooldown, stamina and disabled exhausted button; new turf art loads","three-number tickets and reachable control fit small touch screens","offline player receives one payout/training/fatigue after reconnect; all wallets match published net","result replay never pays twice","next race automatically alternates to sand with distinct track artwork"],"errors":[]}

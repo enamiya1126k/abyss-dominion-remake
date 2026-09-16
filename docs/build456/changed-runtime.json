@@ -1,0 +1,14 @@
+[
+  "online-server/src/RaceCoordinator451.js",
+  "src/core/config.js",
+  "src/race/RaceClient451.js",
+  "src/race/RaceForecastView455.js",
+  "src/race/RacePresentation452.js",
+  "src/race/RaceRules451.js",
+  "src/race/RaceSimulation456.js",
+  "src/race/RaceTickets456.js",
+  "src/race/RaceView451.js",
+  "src/race/RaceView452.js",
+  "src/race/RaceVisual456.js",
+  "src/worldRaid/WorldRaidOfflineCache430.js"
+]

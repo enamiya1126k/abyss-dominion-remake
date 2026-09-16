@@ -1,0 +1,80 @@
+{
+  "exhaustedAllCatalogRaces": 1336,
+  "longestFinishMs": 32962.79004336025,
+  "hardLimitMs": 40000,
+  "calibration": [
+    {
+      "group": 0,
+      "course": "芝",
+      "estimatedFavorite": 0.6827617328519856,
+      "observedFavorite": 0.72
+    },
+    {
+      "group": 1,
+      "course": "砂",
+      "estimatedFavorite": 0.47157039711191334,
+      "observedFavorite": 0.507
+    },
+    {
+      "group": 2,
+      "course": "芝",
+      "estimatedFavorite": 0.32716606498194944,
+      "observedFavorite": 0.349
+    },
+    {
+      "group": 3,
+      "course": "砂",
+      "estimatedFavorite": 0.31362815884476536,
+      "observedFavorite": 0.366
+    },
+    {
+      "group": 4,
+      "course": "芝",
+      "estimatedFavorite": 0.5573104693140795,
+      "observedFavorite": 0.59
+    },
+    {
+      "group": 5,
+      "course": "砂",
+      "estimatedFavorite": 0.5979241877256317,
+      "observedFavorite": 0.662
+    },
+    {
+      "group": 6,
+      "course": "芝",
+      "estimatedFavorite": 0.3109205776173285,
+      "observedFavorite": 0.329
+    },
+    {
+      "group": 7,
+      "course": "砂",
+      "estimatedFavorite": 0.45442238267148016,
+      "observedFavorite": 0.47
+    },
+    {
+      "group": 8,
+      "course": "芝",
+      "estimatedFavorite": 0.3713898916967509,
+      "observedFavorite": 0.381
+    },
+    {
+      "group": 9,
+      "course": "砂",
+      "estimatedFavorite": 0.5564079422382672,
+      "observedFavorite": 0.577
+    },
+    {
+      "group": 10,
+      "course": "芝",
+      "estimatedFavorite": 0.3479241877256318,
+      "observedFavorite": 0.39
+    },
+    {
+      "group": 11,
+      "course": "砂",
+      "estimatedFavorite": 0.4138086642599278,
+      "observedFavorite": 0.428
+    }
+  ],
+  "scope": "Independent seeds; standard AI control for all. Player timing changes actual odds; estimates include pseudocount smoothing."
+}
