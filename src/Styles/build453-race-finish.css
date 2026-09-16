@@ -1,0 +1,43 @@
+/* Build453: native creature traits, separate sand course and readable receipts. */
+.race453{padding-bottom:calc(30px + env(safe-area-inset-bottom,0px))}
+.race453.is-sand453{--arena452:url('../../assets/race453/sand.png')}
+.race453 .race-hero451{margin-top:12px;padding:26px 8px 15px;position:relative;isolation:isolate;overflow:hidden;border:1px solid #b4935a;background:linear-gradient(#0b071c35,#110a1b20 48%,#100b1ce8),url('../../assets/race453/gate.png') center/cover;box-shadow:inset 0 0 0 4px #1d112b,0 8px 25px #0005}
+.race453 .race-hero451:before{content:'';position:absolute;inset:7px;border:1px solid #a387533d;pointer-events:none}
+.race453 .race-hero451>small{color:#dcc7ee;text-shadow:0 1px 5px #000}
+.race453 .race-hero451 h1{font-size:clamp(30px,9vw,44px);margin:6px 0 12px;color:#ffe4ad;text-shadow:0 2px #332114,0 0 12px #0b0715}
+.race453 .race-hero-pack451{height:145px;gap:17px;filter:drop-shadow(0 5px 3px #06020dcc)}
+.race453 .race-hero-pack451>.race-art451{height:98px;width:75px}
+.race453 .race-hero-pack451>.race-art451:nth-child(2){height:119px;width:90px}
+.race453 .race-hero451>p{color:#f1dcb8;font-size:12px;text-shadow:0 1px 3px #000}
+.race453 .race-room451{margin-top:10px;padding:12px;border:1px solid #907141;background:linear-gradient(90deg,#140b22d9,#22172bb0),var(--arena452) center 15%/cover}
+.race453 .race-seats451 .is-you{box-shadow:inset 0 0 0 2px #201628;border-color:#c9a65e}
+.race453 .race-style-tabs453{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin-top:10px}
+.race453 .race-style-tabs453 button{font-size:11px;padding:6px 2px;min-height:44px}
+.race453 .race-roster451{grid-template-columns:repeat(2,minmax(0,1fr));max-height:360px;gap:8px;scrollbar-color:#b1955c #170f22}
+.race453 .race-roster451 button{position:relative;background:radial-gradient(ellipse at 50% 32%,#62445c45,transparent 66%),linear-gradient(145deg,#281b32,#100c18);border-color:#736047;padding:8px 5px}
+.race453 .race-roster451 button.is-picked{border-color:#efd391;box-shadow:inset 0 0 0 2px #2f2218,0 0 10px #ae844c33;background:radial-gradient(ellipse at top,#68503a66,transparent 80%),#241925}
+.race453 .race-roster451 button.is-picked:after{content:'出走';position:absolute;top:6px;left:6px;background:#352914;color:#f5d28d;border:1px solid #c9a85e;padding:2px 5px;font-size:8px}
+.race453 .race-roster451 .race-art451{height:70px;width:90px}
+.race453 .race-roster451 b{font-size:11px;margin:6px 0 2px}
+.race453 .race-roster451 small{font-size:10px;color:#e0cba1}
+.race453 .roster-skill453{font-size:10px;font-style:normal;color:#bdb1e3;margin-top:4px;text-align:center}
+.race453 .roster-stats453{font-size:8px;color:#a69bb8;line-height:1.4;margin-top:5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.race453 .race-selected453{margin-top:10px;border:1px solid #9c7b48;background:linear-gradient(110deg,#4e342744,#281a32);padding:11px;font-size:12px;color:#f3d9a3}
+.race453 .race-selected453 p{font-size:11px;margin:6px 0 0;color:#cbb8d8}
+.race453 .parade-skill453{font-size:10px;margin:7px 0 4px;padding:7px 5px;border-top:1px solid #74604955;color:#dacda9}
+.race453 .race-amounts453{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:6px 0 10px}
+.race453 .race-amounts453 button{font-size:12px;padding:7px;min-height:44px;background:linear-gradient(#392832,#181020)}
+.race453 .is-skill453 .race-art451{filter:drop-shadow(0 0 4px #f5d581)!important}
+.race453 .is-skill453 .race-runner-name452{color:#ffe8a1!important;background:#231421cf;padding:0 2px;max-width:75px!important;border-bottom:1px solid #ba9753}
+.race453 .race-training453{padding:12px 8px;border:1px solid #709883;color:#a4dbc6;font-size:11px;background:#14231e;text-align:center}
+.race453 .ticket-money452>span{font-size:8px;white-space:nowrap;flex-shrink:0}
+.race453 .ticket-money452>strong{font-size:9px;white-space:nowrap;flex-shrink:0}
+.race453 .ticket-money452>i{font-size:8px}
+.race453 .race-system451 small{font-size:10px;line-height:1.5}
+.race453 .settlement-card452 dd{font-size:11px}.race453 .settlement-owner452{flex-wrap:wrap}
+.race453 .race-ready452 small{white-space:normal}
+.race453.is-racing451 .race-status451{font-size:10px;padding:5px 7px;margin:5px 0;line-height:1.4}
+.race453.is-racing451 .race-status451 button{min-height:30px;font-size:10px;padding:4px;margin-top:4px}
+@media(min-width:600px){.race453 .race-roster451{grid-template-columns:repeat(4,minmax(0,1fr));max-height:420px}.race453 .race-hero451{background-position:center 47%;padding-top:30px}.race453 .race-hero-pack451{height:185px}.race453 .race-hero-pack451>.race-art451{height:120px;width:95px}.race453 .race-hero-pack451>.race-art451:nth-child(2){height:155px;width:120px}.race453 .parade-skill453{font-size:12px}}
+@media(max-width:350px){.race453 .race-roster451 .race-art451{height:61px;width:80px}.race453 .race-style-tabs453 button{font-size:10px}.race453 .roster-stats453{font-size:7px}}
+@media(max-height:620px) and (max-width:599px){.race453.is-racing451 .race-grandstand452{height:46px}.race453.is-racing451 .race-lane451{height:27px}.race453.is-racing451 .race-commentary452{height:25px}.race453.is-racing451 .race-ticket-panel452 .race-section452{padding-bottom:5px}}

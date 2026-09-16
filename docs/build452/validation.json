@@ -1,0 +1,86 @@
+{
+  "build": 452,
+  "version": "3.1.131",
+  "tests": {
+    "command": "node --test tests/build452-presentation.test.mjs tests/build451-race.test.mjs tests/build450-practice.test.mjs",
+    "pass": 27,
+    "fail": 0
+  },
+  "browser_live": {
+    "checks": [
+      "four real authenticated clients enter one race",
+      "same-state polling preserves the parade animation DOM",
+      "all four purchases saved exactly once",
+      "page reload resumes accepted ticket without debit",
+      "tap a player ticket highlights its selected runners",
+      "all four wallets equal original GOLD plus published net and all gain affection",
+      "result replay/skip/poll leaves saved money, affection and receipts unchanged",
+      "settled result reload does not award twice",
+      "solo lobby fills three AI seats automatically"
+    ],
+    "errors": [],
+    "mobileWidths": [
+      320,
+      393,
+      709
+    ],
+    "transport": "native OnlinePartyController over loopback real server",
+    "artAssets": "55 original sprite frames from pinned base424"
+  },
+  "browser_presentation": {
+    "checks": [
+      {
+        "fiveConditionAnimations": [
+          "mood-restless452",
+          "mood-heavy452",
+          "mood-calm452",
+          "mood-bright452",
+          "mood-spark452"
+        ]
+      },
+      "native audio, local/global mute and inactive-page suppression",
+      "mid-race resume does not replay gate opening",
+      {
+        "size": {
+          "width": 320,
+          "height": 640
+        },
+        "ticketsVisible": true
+      },
+      {
+        "size": {
+          "width": 393,
+          "height": 852
+        },
+        "ticketsVisible": true
+      },
+      {
+        "size": {
+          "width": 709,
+          "height": 900
+        },
+        "ticketsVisible": true
+      },
+      "skip instantly reveals all three podium places and four exact signed receipts",
+      "reduced motion reveals complete result without animated count-up",
+      "reduced motion disables parade movement"
+    ],
+    "errors": [],
+    "fixture": "synthetic visual edge cases after native room setup; money and four-player live flow tested separately"
+  },
+  "cache": {
+    "changedRuntime": 7,
+    "cachedPaths": 596,
+    "frozenRule4Modules": 32,
+    "frozenRuntimeAliased": false,
+    "syntax": "pass"
+  },
+  "unchanged_from_451": [
+    "online-server/server.js",
+    "online-server/src/RaceCoordinator451.js",
+    "src/race/RaceRules451.js",
+    "src/race/RaceWallet451.js"
+  ],
+  "qa_scope": "Chromium mobile widths with native game CSS/imports/transport/save/audio on loopback; no live account or external game server contacted",
+  "safari_hardware_tested": false
+}

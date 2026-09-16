@@ -1,0 +1,240 @@
+{
+  "profiles": 334,
+  "totalPoints": 210,
+  "skills": 22,
+  "groundCounts": {
+    "芝": 188,
+    "砂": 146
+  },
+  "simulatedRaces": 200000,
+  "checks": [
+    {
+      "course": "芝",
+      "conditions": "all normal",
+      "races": 50000,
+      "rows": [
+        {
+          "id": "slime",
+          "expectedWinPercent": 12.82,
+          "observedWinPercent": 12.7
+        },
+        {
+          "id": "ember_gecko",
+          "expectedWinPercent": 12.23,
+          "observedWinPercent": 12.34
+        },
+        {
+          "id": "glacier_queen",
+          "expectedWinPercent": 13.3,
+          "observedWinPercent": 13.28
+        },
+        {
+          "id": "myth_rion",
+          "expectedWinPercent": 13.7,
+          "observedWinPercent": 13.97
+        },
+        {
+          "id": "myth_yori",
+          "expectedWinPercent": 11.73,
+          "observedWinPercent": 11.62
+        },
+        {
+          "id": "myth_hide",
+          "expectedWinPercent": 11.53,
+          "observedWinPercent": 11.59
+        },
+        {
+          "id": "myth_enami",
+          "expectedWinPercent": 12.98,
+          "observedWinPercent": 12.99
+        },
+        {
+          "id": "ten_time",
+          "expectedWinPercent": 11.7,
+          "observedWinPercent": 11.51
+        }
+      ],
+      "expectedReturnRange": [
+        0.8890374331550802,
+        0.8999862827341158
+      ]
+    },
+    {
+      "course": "芝",
+      "conditions": "mixed 1–5",
+      "races": 50000,
+      "rows": [
+        {
+          "id": "slime",
+          "expectedWinPercent": 10.86,
+          "observedWinPercent": 10.77
+        },
+        {
+          "id": "ember_gecko",
+          "expectedWinPercent": 11.47,
+          "observedWinPercent": 11.63
+        },
+        {
+          "id": "glacier_queen",
+          "expectedWinPercent": 13.79,
+          "observedWinPercent": 13.77
+        },
+        {
+          "id": "myth_rion",
+          "expectedWinPercent": 15.41,
+          "observedWinPercent": 15.56
+        },
+        {
+          "id": "myth_yori",
+          "expectedWinPercent": 14.58,
+          "observedWinPercent": 14.58
+        },
+        {
+          "id": "myth_hide",
+          "expectedWinPercent": 9.53,
+          "observedWinPercent": 9.48
+        },
+        {
+          "id": "myth_enami",
+          "expectedWinPercent": 12.24,
+          "observedWinPercent": 12.29
+        },
+        {
+          "id": "ten_time",
+          "expectedWinPercent": 12.12,
+          "observedWinPercent": 11.93
+        }
+      ],
+      "expectedReturnRange": [
+        0.8895393141669552,
+        0.8999969826546333
+      ]
+    },
+    {
+      "course": "砂",
+      "conditions": "all normal",
+      "races": 50000,
+      "rows": [
+        {
+          "id": "slime",
+          "expectedWinPercent": 12.06,
+          "observedWinPercent": 11.99
+        },
+        {
+          "id": "ember_gecko",
+          "expectedWinPercent": 12.96,
+          "observedWinPercent": 13.03
+        },
+        {
+          "id": "glacier_queen",
+          "expectedWinPercent": 11.65,
+          "observedWinPercent": 11.66
+        },
+        {
+          "id": "myth_rion",
+          "expectedWinPercent": 11.48,
+          "observedWinPercent": 11.6
+        },
+        {
+          "id": "myth_yori",
+          "expectedWinPercent": 13.46,
+          "observedWinPercent": 13.53
+        },
+        {
+          "id": "myth_hide",
+          "expectedWinPercent": 13.35,
+          "observedWinPercent": 13.35
+        },
+        {
+          "id": "myth_enami",
+          "expectedWinPercent": 11.77,
+          "observedWinPercent": 11.81
+        },
+        {
+          "id": "ten_time",
+          "expectedWinPercent": 13.25,
+          "observedWinPercent": 13.04
+        }
+      ],
+      "expectedReturnRange": [
+        0.8878695208970437,
+        0.8999934933957966
+      ]
+    },
+    {
+      "course": "砂",
+      "conditions": "mixed 1–5",
+      "races": 50000,
+      "rows": [
+        {
+          "id": "slime",
+          "expectedWinPercent": 10.04,
+          "observedWinPercent": 9.92
+        },
+        {
+          "id": "ember_gecko",
+          "expectedWinPercent": 12.21,
+          "observedWinPercent": 12.39
+        },
+        {
+          "id": "glacier_queen",
+          "expectedWinPercent": 12.09,
+          "observedWinPercent": 12.18
+        },
+        {
+          "id": "myth_rion",
+          "expectedWinPercent": 13.14,
+          "observedWinPercent": 13.11
+        },
+        {
+          "id": "myth_yori",
+          "expectedWinPercent": 16.42,
+          "observedWinPercent": 16.46
+        },
+        {
+          "id": "myth_hide",
+          "expectedWinPercent": 11.38,
+          "observedWinPercent": 11.4
+        },
+        {
+          "id": "myth_enami",
+          "expectedWinPercent": 10.98,
+          "observedWinPercent": 11.07
+        },
+        {
+          "id": "ten_time",
+          "expectedWinPercent": 13.74,
+          "observedWinPercent": 13.47
+        }
+      ],
+      "expectedReturnRange": [
+        0.8866807610993659,
+        0.8999152429384986
+      ]
+    }
+  ],
+  "prizes": [
+    8000,
+    3000,
+    1000
+  ],
+  "training": {
+    "first": {
+      "expPercent": 3,
+      "affection": 8
+    },
+    "second": {
+      "expPercent": 2.5,
+      "affection": 7
+    },
+    "third": {
+      "expPercent": 2.2,
+      "affection": 6
+    },
+    "other": {
+      "expPercent": 2,
+      "affection": 5
+    }
+  },
+  "oddsPolicy": "Same 90% theoretical ticket return target, rounded down to 0.1 odds; no hidden post-purchase changes"
+}

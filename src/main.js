@@ -1,3 +1,4 @@
+import{RaceClient451}from'./race/RaceClient451.js';
 import {prepareDuelCircles450,duelOffense450} from './practice/PracticeCombat450.js';
 import{installPowerTextFit446}from"./ui/PowerTextFit446.js";
 import {circleOffense443,circleExtraHits443} from './battle/MagicCircleBalance443.js?v=3.1.122-build443';
@@ -221,12 +222,12 @@ function campaignBattleBossWasDefeated(state,floor,boss){
  return floorBossWasDefeated(state?.player,floor)
 }
 function floorBossDisplayFloor(definition){return floorBossCampaignDisplayFloor(definition)??Math.max(1,Math.floor(Number(definition?.floor)||1))}
-const SCREEN_SESSION_KEY="abyss-dominion:current-screen",INVITE_SESSION_KEY="abyss-dominion:last-party-invite",REFRESHABLE_SCREENS=new Set(["home","formation","onlineParty","monsters","settings","explore","campaignFinalFloor","gauntlet","equipment","shop","skills","abyssSkills","inventory","armory","storyArchive","campaignIntel","chapterTwo","chapterTwoField","primordial422","worldRaid428"]);
+const SCREEN_SESSION_KEY="abyss-dominion:current-screen",INVITE_SESSION_KEY="abyss-dominion:last-party-invite",REFRESHABLE_SCREENS=new Set(["home","formation","onlineParty","monsters","settings","explore","campaignFinalFloor","gauntlet","equipment","shop","skills","abyssSkills","inventory","armory","storyArchive","campaignIntel","chapterTwo","chapterTwoField","primordial422","worldRaid428","race451"]);
 const POWER_RANKING_CACHE_KEY="abyss-dominion:power-ranking-cache:v1";
 function readPowerRankingCache(){try{const cached=JSON.parse(localStorage.getItem(POWER_RANKING_CACHE_KEY)||"null");if(!cached?.state||!Array.isArray(cached.state.entries))return null;return{...cached.state,_cached:true,_cachedAt:Math.max(0,Number(cached.cachedAt)||0),entries:cached.state.entries.map(entry=>({...entry,online:false})),self:cached.state.self?{...cached.state.self,online:false}:null}}catch{return null}}
 function writePowerRankingCache(state){if(!state||state.loading||state.error||!Array.isArray(state.entries))return;try{const clean={...state};delete clean._receivedAt;delete clean._cached;delete clean._cachedAt;localStorage.setItem(POWER_RANKING_CACHE_KEY,JSON.stringify({cachedAt:Date.now(),state:clean}))}catch{}}
 let exploreActionGeneration=0,secretRoomAutoRunning=false;
-let onlinePartyController=null,onlineSecretRoomContext=null,fullResetInFlight=false,worldRaidClient428=null;
+let onlinePartyController=null,onlineSecretRoomContext=null,fullResetInFlight=false,worldRaidClient428=null,raceClient451=null;
 let homeServerStatus={state:"checking",label:"サーバー確認中",checkedAt:0};
 let powerRankingUi={state:readPowerRankingCache(),profile:null,selectedPlayerId:null,loadingList:false,loadingProfile:false,listTimedOut:false};
 let powerRankingPublishTimer=null,powerRankingScheduledSignature="",powerRankingLastSignature="",powerRankingLastPublishedAt=0,powerRankingLastConnectAttempt=0;
@@ -613,6 +614,7 @@ function campaignHeroIntelPresentation(model){
 }
 function render(){
  if(screen!=="worldRaid428")worldRaidClient428?.unmount();
+ if(screen!=="race451")raceClient451?.unmount();
  if(screen==="explore"&&!save.state.player.inRun&&!battle){stopGame();snapshot=null;activeEnemy=null;screen="home";}
  mountHomeEnvironment400(null);
  if(game?.chapterTwo)stopGame();
@@ -635,6 +637,7 @@ function render(){
  else if(screen==="formation"){app.innerHTML=FormationScreen(save.state,{origin:formationOrigin});bindFormation()}
  else if(screen==="onlineParty"){app.innerHTML=OnlinePartyScreen(save.state);bindOnlineParty()}
  else if(screen==="worldRaid428"){ensureWorldRaidClient428().mount(app)}
+ else if(screen==="race451"){ensureOnlinePartyController();raceClient451.mount(app)}
  else if(screen==="monsters"){app.innerHTML=MonsterListScreen(save.state,{...monsterManage,...monsterListState});bindList()}
  else if(screen==="detail"){const m=save.state.monsters.find(x=>x.id===selected);app.innerHTML=MonsterDetailScreen(m,save.state);bindDetail(m)}
  else if(screen==="settings"){app.innerHTML=SettingsScreen(save.state,{playerName:powerRankingDisplayName()});bindSettings()}
@@ -1267,8 +1270,7 @@ function openIdleReturnPreview(){
  };
 }
 function openPartyMaintenance427(){
- app.insertAdjacentHTML('beforeend',Modal('パーティ',`<p>${PARTY_MAINTENANCE427}</p>`,'閉じる'));
- topModal().querySelector('[data-modal-primary]').onclick=closeTopModal;
+ go('race451');
 }
 function ensureWorldRaidClient428(){
  const transport=ensureOnlinePartyController();
@@ -3046,6 +3048,7 @@ function ensureOnlinePartyController(){
  });
  onlinePartyController.worldRaidRewards429??=new WorldRaidRewardsClient429({transport:onlinePartyController,onReward:(entry,selfId)=>claimWorldRaidReward429(save,entry,selfId),toast:showToast,onUpdate:()=>{if(worldRaidClient428?.root&&!worldRaidClient428.ending&&worldRaidClient428.state?.attempt?.status!=="active")worldRaidClient428.render();}});
  onlinePartyController.worldRaidOffline430??=new WorldRaidOfflineClient430({transport:onlinePartyController,getBank:()=>save.state.onlineParty?.worldRaidOffline430,setBank:bank=>{const previous=save.state.onlineParty?.worldRaidOffline430;save.state.onlineParty??={};save.state.onlineParty.worldRaidOffline430=bank;try{if(save.save())return true;}catch{}save.state.onlineParty.worldRaidOffline430=previous;return false;},toast:showToast,onUpdate:(id,events)=>worldRaidClient428?.offlineUpdated?.(id,events)});
+ raceClient451??=new RaceClient451({transport:onlinePartyController,save,audio,displayName:powerRankingDisplayName,onBack:()=>go("home"),toast:showToast});
  return onlinePartyController
 }
 function bindOnlineParty(){

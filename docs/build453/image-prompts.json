@@ -1,0 +1,14 @@
+{
+  "mode": "built-in image generation",
+  "assets": [
+    {
+      "path": "assets/race453/sand.png",
+      "prompt": "Use case: stylized-concept. Asset type: actual game racing background plate. Create one landscape 1536x1024 high-definition pixel-art DARK FANTASY ROYAL MONSTER RACE STADIUM on a SAND course. Upper quarter only: ornate antique gold rails, dark violet gothic grandstands, jewel lamps, purple pennants and warm torches, dusk indigo sky. Bottom three quarters: completely empty flat straight sand racing strip running left to right, elevated side-on view, subdued ochre and umber sand with fine deliberate pixel grain, horizontal raked-sand bands. Bottom must be unobstructed for eight running sprites. Rich black/gold/purple RPG aesthetic. No lane lines, no finish line, no creatures, no people in foreground, no lettering, no numerals, no UI. Keep ground dark and low contrast so small colorful sprites remain legible. Crisp intentional pixel clusters, detailed gold architecture, no blur or smooth illustration."
+    },
+    {
+      "path": "assets/race453/gate.png",
+      "prompt": "Use case: stylized-concept. Asset type: actual mobile pixel-art RPG lobby hero background. Create one landscape 1536x1024 lavish gothic royal racecourse entrance at blue hour. Monumental open gates on far left and right, finely wrought antique gold horse-free wing and laurel ornament, deep violet royal fabric, glowing amber lamps, dark obsidian carved pillars. Beyond gates in upper half: luminous race stadium grandstands and a few tiny pennants under purple dusk sky. Bottom half: broad EMPTY dark cobbled entrance plaza and purple carpet, generous uncluttered space for three small game creature sprites to be overlaid in code. Center upper area relatively dark enough for a gold Japanese title overlaid later. Premium high-definition pixel art with crisp pixel clusters and meticulous gold highlights, black-gold-violet palette, enchanting inviting competitive atmosphere. No monsters, no people, no text, no letters, no numbers, no interface mockup, no logos, no watermark."
+    }
+  ],
+  "postprocessing": "None. Original generated PNGs copied into the project."
+}

@@ -1,0 +1,63 @@
+{
+  "checks": [
+    "touch amount preset only changes input and never spends GOLD",
+    {
+      "fiveConditionAnimations": [
+        "mood-restless452",
+        "mood-heavy452",
+        "mood-calm452",
+        "mood-bright452",
+        "mood-spark452"
+      ]
+    },
+    "native audio, local/global mute and inactive-page suppression",
+    "mid-race resume does not replay gate opening",
+    {
+      "size": {
+        "width": 320,
+        "height": 568
+      },
+      "ticketsVisible": true
+    },
+    {
+      "size": {
+        "width": 320,
+        "height": 640
+      },
+      "ticketsVisible": true
+    },
+    {
+      "size": {
+        "width": 393,
+        "height": 640
+      },
+      "ticketsVisible": true
+    },
+    {
+      "size": {
+        "width": 393,
+        "height": 852
+      },
+      "ticketsVisible": true
+    },
+    {
+      "size": {
+        "width": 709,
+        "height": 900
+      },
+      "ticketsVisible": true
+    },
+    {
+      "size": {
+        "width": 1280,
+        "height": 900
+      },
+      "ticketsVisible": true
+    },
+    "skip instantly reveals all three podium places and four exact signed receipts",
+    "reduced motion reveals complete result without animated count-up",
+    "reduced motion disables parade movement"
+  ],
+  "errors": [],
+  "fixture": "synthetic visual edge cases after native room setup; money and four-player live flow tested separately"
+}

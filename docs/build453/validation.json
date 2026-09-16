@@ -1,0 +1,115 @@
+{
+  "build": 453,
+  "version": "3.1.132",
+  "tests": {
+    "command": "node --test tests/build453-race-finish.test.mjs tests/build451-race.test.mjs tests/build450-practice.test.mjs",
+    "pass": 31,
+    "fail": 0
+  },
+  "balance": {
+    "profiles": 334,
+    "skills": 22,
+    "simulatedRaces": 200000,
+    "result": "pass"
+  },
+  "live_browser": {
+    "checks": [
+      "four real authenticated clients enter one race",
+      "same-state polling preserves the parade animation DOM",
+      "all four purchases saved exactly once",
+      "real socket interruption reconnects without another debit",
+      "all four clients recover after full server restart with same race and accepted tickets",
+      "page reload resumes accepted ticket without debit",
+      "one player leaves the screen and disconnects during the race",
+      "tap a player ticket highlights its selected runners",
+      "offline finisher receives saved GOLD and training in background after reconnect",
+      "all four wallets equal original GOLD plus published net and all gain affection",
+      "result replay/skip/poll leaves saved money, affection and receipts unchanged",
+      "settled result reload does not award twice",
+      "solo lobby fills three AI seats automatically"
+    ],
+    "errors": [],
+    "mobileWidths": [
+      320,
+      393,
+      709
+    ],
+    "transport": "native OnlinePartyController over loopback real server",
+    "artAssets": "55 original sprite frames from pinned base424"
+  },
+  "layout_browser": {
+    "checks": [
+      "touch amount preset only changes input and never spends GOLD",
+      {
+        "fiveConditionAnimations": [
+          "mood-restless452",
+          "mood-heavy452",
+          "mood-calm452",
+          "mood-bright452",
+          "mood-spark452"
+        ]
+      },
+      "native audio, local/global mute and inactive-page suppression",
+      "mid-race resume does not replay gate opening",
+      {
+        "size": {
+          "width": 320,
+          "height": 568
+        },
+        "ticketsVisible": true
+      },
+      {
+        "size": {
+          "width": 320,
+          "height": 640
+        },
+        "ticketsVisible": true
+      },
+      {
+        "size": {
+          "width": 393,
+          "height": 640
+        },
+        "ticketsVisible": true
+      },
+      {
+        "size": {
+          "width": 393,
+          "height": 852
+        },
+        "ticketsVisible": true
+      },
+      {
+        "size": {
+          "width": 709,
+          "height": 900
+        },
+        "ticketsVisible": true
+      },
+      {
+        "size": {
+          "width": 1280,
+          "height": 900
+        },
+        "ticketsVisible": true
+      },
+      "skip instantly reveals all three podium places and four exact signed receipts",
+      "reduced motion reveals complete result without animated count-up",
+      "reduced motion disables parade movement"
+    ],
+    "errors": [],
+    "fixture": "synthetic visual edge cases after native room setup; money and four-player live flow tested separately"
+  },
+  "environment": "Chromium with native CSS, sprites, SaveService, AudioSystem and OnlinePartyController; four independent authenticated contexts; real server on loopback only; ephemeral test save files",
+  "safari_hardware_tested": false,
+  "upgrade": "Game and online server both required; existing race records keep their recorded legacy outcomes and reward rules",
+  "cache": {
+    "changedRuntime": 10,
+    "cachedPaths": 600,
+    "frozenRule4Modules": 32,
+    "frozenRuntimeAliased": false,
+    "syntax": "pass"
+  },
+  "old_archive_files_preserved": 750,
+  "save_schema": 84
+}

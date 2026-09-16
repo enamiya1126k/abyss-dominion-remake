@@ -1,0 +1,42 @@
+{
+  "checks": [
+    {
+      "size": {
+        "width": 320,
+        "height": 640
+      },
+      "art": {
+        "width": 42,
+        "height": 25.671875,
+        "loaded": true
+      },
+      "ticketsVisible": true
+    },
+    {
+      "size": {
+        "width": 393,
+        "height": 852
+      },
+      "art": {
+        "width": 42,
+        "height": 38.8125,
+        "loaded": true
+      },
+      "ticketsVisible": true
+    },
+    {
+      "size": {
+        "width": 709,
+        "height": 900
+      },
+      "art": {
+        "width": 42,
+        "height": 41.796875,
+        "loaded": true
+      },
+      "ticketsVisible": true
+    }
+  ],
+  "errors": [],
+  "fixture": "rendered race snapshot; money and live flow tested separately"
+}

@@ -1,0 +1,18 @@
+{
+  "checks": [
+    "four real authenticated clients enter one race",
+    "all four purchases saved exactly once",
+    "page reload resumes accepted ticket without debit",
+    "all four wallets equal original GOLD plus published net and all gain affection",
+    "settled result reload does not award twice",
+    "solo lobby fills three AI seats automatically"
+  ],
+  "errors": [],
+  "mobileWidths": [
+    320,
+    393,
+    709
+  ],
+  "transport": "native OnlinePartyController over loopback real server",
+  "artAssets": "55 original sprite frames from pinned base424"
+}

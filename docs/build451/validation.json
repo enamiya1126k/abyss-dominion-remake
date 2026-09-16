@@ -1,0 +1,27 @@
+{
+  "build": 451,
+  "version": "3.1.130",
+  "node_tests": {
+    "passed": 20,
+    "failed": 0,
+    "suites": [
+      "tests/build451-race.test.mjs",
+      "tests/build450-practice.test.mjs"
+    ]
+  },
+  "browser": "docs/build451/browser-results.json",
+  "native_home_entry": "openOnlineParty -> openPartyMaintenance427 -> race451 -> RaceClient451",
+  "mobile_widths": [
+    320,
+    393,
+    709
+  ],
+  "real_safari_tested": false,
+  "new_image_generation": false,
+  "race_art": "existing native monster sprites, idle and walk frames",
+  "frozen_raid_runtimes": "unchanged",
+  "persistence": "atomic server snapshot and local save-before-ack wallet receipts",
+  "user_scope": "basic four-seat eight-entrant monster racing",
+  "layout": "docs/build451/layout-results.json",
+  "race_and_all_tickets_fit_mobile_viewport": true
+}
