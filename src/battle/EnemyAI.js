@@ -18,6 +18,7 @@ import{bossProfileForFloor,post9000DepthProfile}from"../core/EnemyScalingSystem.
 import{endgameCharacter,endgameSkillById}from"../data/endgameCharacters.js?v=3.1.38-build358";
 import{speciesLevelStats}from"../models/Monster.js?v=3.1.82-build402";
 import{floorBossActionInfo}from"../data/floorBosses.js?v=3.1.1-build311";
+import{duelActionInfo450,chooseDuelAction450}from"../practice/PracticeAI450.js";
 export const ENEMY_ACTIONS={
  attack:"attack",guard:"guard",charge:"charge",power:"power",heal:"heal",enrage:"enrage",divineBarrier:"divineBarrier",
  devour:"devour",annihilate:"annihilate",wrathBurst:"wrathBurst",mirror:"mirror",sleepMist:"sleepMist",plunder:"plunder",sovereign:"sovereign",
@@ -128,6 +129,7 @@ function specialAction(enemy,hpRate){
  return null;
 }
 export function enemyActionMpCost(enemy,action){
+ if(enemy.duel450)return Math.max(0,Number(duelActionInfo450(action)?.mp)||0);
  if(enemy?.chapterTwoTactics382?.commander397&&String(action).startsWith('authority:'))return Math.max(0,Number(endgameSkillById(action.slice(10))?.mp)||0);
  if(CHAPTER_TWO_ACTIONS392[action])return CHAPTER_TWO_ACTIONS392[action].mp;
  if(CHAPTER_TWO_ACTIONS391[action])return CHAPTER_TWO_ACTIONS391[action].mp;
@@ -175,6 +177,7 @@ function teamBattleAction(enemy,context,hpRate){
  return null;
 }
 export function chooseEnemyAction(enemy,context={}){
+ if(enemy.duel450)return chooseDuelAction450(enemy,context);
  if(context.battle?.specialBattleType==='mother422')context={...context,allies:(context.allies??[enemy]).filter(u=>!(u?.motherRevision426===426&&u.hp<=0))};
  const commanderAction397=chooseChapterTwoCommander397(enemy,context);if(commanderAction397)return commanderAction397;
  const motherAction423=chooseMotherAction423(enemy,context);if(motherAction423)return motherAction423;
@@ -216,5 +219,5 @@ function authorityInfo(action){
  const utility=["buff","stance","allHeal","selfHeal","revive","cleanse","mpHeal"].includes(skill.type);
  return{...skill,label:skill.name,pattern:utility?"self":skill.allEnemies?"all":skill.execute||skill.drain?"singleWeak":"singleStrong",multiplier:Math.max(0,Number(skill.power)||0),utility,element:skill.element};
 }
-export function specialActionMultiplier(action){return motherLawAction424(action)?.multiplier??CHAPTER_TWO_ACTIONS392[action]?.multiplier??CHAPTER_TWO_ACTIONS391[action]?.multiplier??CHAPTER_TWO_ACTIONS390[action]?.multiplier??CHAPTER_TWO_ACTIONS389[action]?.multiplier??CHAPTER_TWO_ACTIONS388[action]?.multiplier??CHAPTER_TWO_ACTIONS387[action]?.multiplier??CHAPTER_TWO_ACTIONS386[action]?.multiplier??CHAPTER_TWO_ACTIONS385[action]?.multiplier??CHAPTER_TWO_ACTIONS384[action]?.multiplier??CHAPTER_TWO_ACTIONS383[action]?.multiplier??CHAPTER_TWO_ACTIONS[action]?.multiplier??campaignHeroSkillInfo(action)?.multiplier??authorityInfo(action)?.multiplier??SPECIAL_ACTION_INFO[action]?.multiplier??1}
-export function specialActionInfo(action){return motherLawAction424(action)??CHAPTER_TWO_ACTIONS392[action]??CHAPTER_TWO_ACTIONS391[action]??CHAPTER_TWO_ACTIONS390[action]??CHAPTER_TWO_ACTIONS389[action]??CHAPTER_TWO_ACTIONS388[action]??CHAPTER_TWO_ACTIONS387[action]??CHAPTER_TWO_ACTIONS386[action]??CHAPTER_TWO_ACTIONS385[action]??CHAPTER_TWO_ACTIONS384[action]??CHAPTER_TWO_ACTIONS383[action]??CHAPTER_TWO_ACTIONS[action]??campaignHeroSkillInfo(action)??authorityInfo(action)??floorBossActionInfo(action)??SPECIAL_ACTION_INFO[action]??null}
+export function specialActionMultiplier(action){return duelActionInfo450(action)?.multiplier??motherLawAction424(action)?.multiplier??CHAPTER_TWO_ACTIONS392[action]?.multiplier??CHAPTER_TWO_ACTIONS391[action]?.multiplier??CHAPTER_TWO_ACTIONS390[action]?.multiplier??CHAPTER_TWO_ACTIONS389[action]?.multiplier??CHAPTER_TWO_ACTIONS388[action]?.multiplier??CHAPTER_TWO_ACTIONS387[action]?.multiplier??CHAPTER_TWO_ACTIONS386[action]?.multiplier??CHAPTER_TWO_ACTIONS385[action]?.multiplier??CHAPTER_TWO_ACTIONS384[action]?.multiplier??CHAPTER_TWO_ACTIONS383[action]?.multiplier??CHAPTER_TWO_ACTIONS[action]?.multiplier??campaignHeroSkillInfo(action)?.multiplier??authorityInfo(action)?.multiplier??SPECIAL_ACTION_INFO[action]?.multiplier??1}
+export function specialActionInfo(action){return duelActionInfo450(action)??motherLawAction424(action)??CHAPTER_TWO_ACTIONS392[action]??CHAPTER_TWO_ACTIONS391[action]??CHAPTER_TWO_ACTIONS390[action]??CHAPTER_TWO_ACTIONS389[action]??CHAPTER_TWO_ACTIONS388[action]??CHAPTER_TWO_ACTIONS387[action]??CHAPTER_TWO_ACTIONS386[action]??CHAPTER_TWO_ACTIONS385[action]??CHAPTER_TWO_ACTIONS384[action]??CHAPTER_TWO_ACTIONS383[action]??CHAPTER_TWO_ACTIONS[action]??campaignHeroSkillInfo(action)??authorityInfo(action)??floorBossActionInfo(action)??SPECIAL_ACTION_INFO[action]??null}

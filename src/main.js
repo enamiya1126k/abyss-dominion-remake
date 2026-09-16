@@ -1,3 +1,4 @@
+import {prepareDuelCircles450,duelOffense450} from './practice/PracticeCombat450.js';
 import{installPowerTextFit446}from"./ui/PowerTextFit446.js";
 import {circleOffense443,circleExtraHits443} from './battle/MagicCircleBalance443.js?v=3.1.122-build443';
 import{playBattleEffect441,setBattleAction441,battleAction441}from"./ui/BattleEffects441.js";
@@ -199,6 +200,10 @@ import{FLOOR_BOSS_CONTRACT_COST,FLOOR_BOSS_EQUIPMENT_COST,normalizeFloorBossChal
 import{equipmentDropLevelForFloor}from"./core/EquipmentDropSystem.js?v=3.1.82-build402";
 import{monsterSpriteUrl,monsterVisual,setMonsterVisualFrame,partyMonsterArtScale}from"./ui/MonsterVisual.js?v=3.1.82-build402";
 import{activeSignatureResonances,signatureSetState,signatureStatBonuses,signatureEquipmentOwnerId,signatureEquipmentOwnerName,signatureEquipmentMatchesMonster,signatureEligibleOwners,permanentSignatureOwners,rollPermanentSignatureHit,PERMANENT_SIGNATURE_RATE,createSignatureEquipment,normalizeSignatureWeaponItem,signatureWeaponGrantedSkill}from"./core/SignatureWeaponSystem.js?v=3.1.72-build392";
+
+import{normalizeDuel450,duelReady450,makeDuelEnemy450}from"./practice/PracticeSnapshot450.js";
+import{registerDuelSkills450,commitDuelAction450}from"./practice/PracticeAI450.js";
+import{openPracticeFrame450}from"./practice/PracticeFrame450.js";
 
 const TILE=88,COLS=39,ROWS=39,app=document.getElementById("app"),save=new SaveService(),audio=new AudioSystem(()=>save.state.settings);
 installPowerTextFit446(app);
@@ -1065,7 +1070,7 @@ function powerRankingPublicSnapshot(){
   const monster=save.state.monsters?.find(entry=>entry.id===id);if(!monster)return null;
   const stats=calculatedStats(monster),species=SPECIES[monster.speciesId]??{},circle=equippedMagicCircle(monster,save.state);
   const equipment=Object.values(monster.equipment??{}).map(itemId=>{const item=byId.get(String(itemId));if(!item)return null;return{slot:item.slot,name:String(item.name??"装備").slice(0,48),rarity:equipmentDisplayRarity(item),level:Math.max(1,Math.floor(Number(item.level)||1)),plus:Math.max(0,Math.floor(Number(item.plus)||0)),visualAsset:item.visualAsset??null}}).filter(Boolean).slice(0,6);
-  return{slot:index+1,speciesId:monster.speciesId,visualSpeciesId:monster.visualSpeciesId??null,endgameBossId:monster.endgameBossId??null,floorBossCatalogId:monster.floorBossCatalogId??null,customVisualAsset:monster.customVisualAsset??null,customVisualBase:monster.customVisualBase??null,name:String(displayName(monster)).slice(0,32),level:Math.max(1,Math.floor(Number(monster.level)||1)),rarity:monsterVisibleRarity(monster),power:monsterCombatPower(monster),battleStats:{hp:Math.max(1,Number(stats.hp)||1),atk:Math.max(1,Number(stats.atk)||1),matk:Math.max(1,Number(stats.matk??stats.atk)||1),def:Math.max(0,Number(stats.def)||0),mdef:Math.max(0,Number(stats.mdef??stats.def)||0),spd:Math.max(1,Number(stats.spd)||1),crit:Math.max(0,Number(stats.crit)||0),evasion:Math.max(0,Number(stats.evasion)||0)},equipment,equipmentStatus:equipment.length===Object.values(monster.equipment??{}).filter(value=>value!=null&&value!==""&&value!==false).length?"complete":"partial",magicCircle:{name:String(circle?.name??"魔法陣なし").slice(0,40),level:Math.max(0,Math.floor(Number(circle?.level)||0))}}
+  return{slot:index+1,speciesId:monster.speciesId,visualSpeciesId:monster.visualSpeciesId??null,endgameBossId:monster.endgameBossId??null,floorBossCatalogId:monster.floorBossCatalogId??null,customVisualAsset:monster.customVisualAsset??null,customVisualBase:monster.customVisualBase??null,name:String(displayName(monster)).slice(0,32),level:Math.max(1,Math.floor(Number(monster.level)||1)),rarity:monsterVisibleRarity(monster),power:monsterCombatPower(monster),duel:normalizeDuel450({version:1,stats:{...stats,accuracy:stats.accuracy??100},maxMp:maxMp(monster),plus:monster.plus,rank:monster.rank,affection:monster.affection,element:monster.attribute??species.element,skills:learnedSkills(monster).map(s=>({...applySkillMastery(monster,s),mp:effectiveSkillMpCost(monster,s)})),circleId:circle?.id,circleLevel:circle?.level,goldRate:circle?.effect==='goldPower'?goldPowerDamageMultiplier(save.state.player.gold,circle.level):1,affixes:monster._equipmentAffixes,abyss:monster._abyssSkillEffects,signature:activeSignatureResonances(save.state,[monster])[0]?.definition??null}),battleStats:{hp:Math.max(1,Number(stats.hp)||1),atk:Math.max(1,Number(stats.atk)||1),matk:Math.max(1,Number(stats.matk??stats.atk)||1),def:Math.max(0,Number(stats.def)||0),mdef:Math.max(0,Number(stats.mdef??stats.def)||0),spd:Math.max(1,Number(stats.spd)||1),crit:Math.max(0,Number(stats.crit)||0),evasion:Math.max(0,Number(stats.evasion)||0)},equipment,equipmentStatus:equipment.length===Object.values(monster.equipment??{}).filter(value=>value!=null&&value!==""&&value!==false).length?"complete":"partial",magicCircle:{name:String(circle?.name??"魔法陣なし").slice(0,40),level:Math.max(0,Math.floor(Number(circle?.level)||0))}}
  }).filter(Boolean);
  return{displayName:powerRankingDisplayName(),maxFloor:Math.max(1,Math.floor(Number(save.state.player?.maxFloor)||1)),power:partyCombatPower(save.state),party}
 }
@@ -1078,6 +1083,7 @@ function powerRankingSupported(){
  return Boolean(onlinePartyController.capabilities?.has?.("powerRankingsV1"));
 }
 function publishPowerRankingSnapshot({force=false}={}){
+ if(battle||globalThis.__practiceBoot450)return;
  const controller=ensureOnlinePartyController(),snapshot=powerRankingPublicSnapshot(),signature=powerRankingSnapshotSignature(snapshot);
  if(!force&&signature===powerRankingLastSignature&&Date.now()-powerRankingLastPublishedAt<300000)return;
  if(typeof controller?.publishPowerRankingSnapshot!=="function"||controller.connectionReady&&!powerRankingSupported())return;
@@ -1173,7 +1179,7 @@ function combatPowerOwnMarkup(){
 }
 function powerRankingEntryMarkup(entry,{self=false,serverNow=0,receivedAt=0,presenceOnlineMs=90000}={}){
  const icon=entry?.icon??entry?.party?.[0]??{},rank=Math.max(1,Math.floor(Number(entry?.rank)||1)),fallback=icon.fallbackEmoji??SPECIES[icon.speciesId]?.emoji??"魔";
- return`<button type="button" class="power-ranking-row podium-${Math.min(rank,4)} ${self?"is-self":""}" data-power-ranking-player="${escapeAttribute(entry?.playerId??"")}"><span class="power-ranking-position ${rank<=3?`rank-${rank}`:""}">${rank<=3?["","1","2","3"][rank]:`#${rank}`}</span><span class="power-ranking-avatar">${monsterVisual(icon,fallback,{className:"power-ranking-monster-visual"})}</span><span class="power-ranking-identity"><small>${self?"YOU・":""}${escapeAttribute(icon.name??"スロット1")}</small><b>${escapeAttribute(self?powerRankingDisplayName():entry?.displayName??"冒険者")}</b><em>最高 ${Math.max(1,Math.floor(Number(entry?.maxFloor)||1)).toLocaleString()}階</em>${rankingPresenceMarkup(entry,{serverNow,receivedAt,presenceOnlineMs})}</span><strong>${formatCombatPower(entry?.power)}${Number(entry?.powerScaleVersion??4)<8?'<small class="power-legacy445">旧基準</small>':''}</strong><i aria-hidden="true">›</i></button>`
+ return`<div class="practice-ranking-row450"><button type="button" class="power-ranking-row podium-${Math.min(rank,4)} ${self?"is-self":""}" data-power-ranking-player="${escapeAttribute(entry?.playerId??"")}"><span class="power-ranking-position ${rank<=3?`rank-${rank}`:""}">${rank<=3?["","1","2","3"][rank]:`#${rank}`}</span><span class="power-ranking-avatar">${monsterVisual(icon,fallback,{className:"power-ranking-monster-visual"})}</span><span class="power-ranking-identity"><small>${self?"YOU・":""}${escapeAttribute(icon.name??"スロット1")}</small><b>${escapeAttribute(self?powerRankingDisplayName():entry?.displayName??"冒険者")}</b><em>最高 ${Math.max(1,Math.floor(Number(entry?.maxFloor)||1)).toLocaleString()}階</em>${rankingPresenceMarkup(entry,{serverNow,receivedAt,presenceOnlineMs})}</span><strong>${formatCombatPower(entry?.power)}${Number(entry?.powerScaleVersion??4)<8?'<small class="power-legacy445">旧基準</small>':''}</strong><i aria-hidden="true">›</i></button>${!self?`<button type="button" class="practice-challenge450" data-practice-player="${escapeAttribute(entry?.playerId??'')}" ${entry.duelReady450?'':'disabled'} aria-label="${escapeAttribute(entry.displayName)}と対戦する"><span aria-hidden="true">⚔</span><b>${entry.duelReady450?'対戦する':'更新待ち'}</b></button>`:''}</div>`
 }
 function combatPowerRankingMarkup(){
  const controller=onlinePartyController,state=powerRankingUi.state,connected=Boolean(controller?.connectionReady),supported=powerRankingSupported();
@@ -1205,6 +1211,7 @@ function renderCombatPowerRecordModal(modal,tab="own"){
  body.querySelector("[data-player-name-edit]")?.addEventListener("click",()=>openPlayerNameEditor(modal));
  body.querySelector("[data-power-ranking-refresh]")?.addEventListener("click",()=>requestPowerRankings({force:true}));
  body.querySelector("[data-power-ranking-retry]")?.addEventListener("click",()=>{ensurePowerRankingConnection({force:true});requestPowerRankings({force:true})});
+ body.querySelectorAll("[data-practice-player]").forEach(button=>button.onclick=()=>challengePlayer450(button.dataset.practicePlayer,button));
  body.querySelectorAll("[data-power-ranking-player]").forEach(button=>button.onclick=()=>openPowerRankingProfile(button.dataset.powerRankingPlayer));
  if(tab==="ranking"&&powerRankingUi.state){const rankingState=powerRankingUi.state,entries=[...(rankingState.entries??[]),rankingState.self].filter(Boolean),options={serverNow:rankingState.serverNow,receivedAt:rankingState._receivedAt,presenceOnlineMs:rankingState.presenceOnlineMs};schedulePowerRankingPresenceRefresh(modal,entries,options,()=>renderCombatPowerRecordModal(modal,"ranking"))}
 }
@@ -5768,6 +5775,7 @@ function applyFloorBossSignatureProfile(enemy){
  return enemy;
 }
 function makeBattleEnemy(e,index=0){
+ if(e.duel450)return e;
  const hiddenFloor=Math.max(1,Number(e.enemyFloor??(e.memorySourceFloor||save.state.player.currentFloor))||1),prepared=e.enemyLoadoutVersion===5?e:prepareEnemyEntry(e,hiddenFloor,{forceGear:Boolean(e.boss&&hiddenFloor>=50)}),sp=SPECIES[prepared.speciesId],scaled={...prepared,level:Math.max(1,prepared.level??1)},battleFloor=prepared.fixedTrialScaling?hiddenFloor:save.state.player.currentFloor,enemy=createEnemyBattleState(sp,scaled,battleFloor),profile=prepared.endgameBossId?endgameCharacter(prepared.endgameBossId):null,endgameBase=endgameFactionStatMultiplier(prepared.faction??profile?.faction),mult=(Number(prepared.statMultiplier)||1)*endgameBase;
  enemy.dangerLevel=prepared.boss?5:prepared.speciesId==="mimic"?5:prepared.equipped?4:((prepared.level??1)>save.state.player.currentFloor+4?2:1);
  if(prepared.nameOverride)enemy.name=prepared.nameOverride;
@@ -5812,7 +5820,7 @@ function sanitizeBattleParty(){
  return repaired;
 }
 function saveBattleCheckpoint(){
- if(!battle||battle.resultSettled||battle._motherDialInFlight424)return;
+ if(!battle||battle.resultSettled||battle._motherDialInFlight424||battle.specialBattleType==='practice450')return;
  if(battle)settleSingleDeaths410(battle);
  if(!battle)return;
  sanitizeBattleParty();
@@ -6068,6 +6076,7 @@ function allyMagicCircleTurnCue(monster,circle){
  return null;
 }
 function enemyMagicCircleTurnCue(enemy,profile){
+ if(enemy.duel450)return{headline:`${profile.name} Lv.${profile.level}`,detail:profile.description??"保存された装着魔法陣"};
  const level=Math.max(1,Number(profile?.level)||1),base=Math.round(Math.min(.42,level*.0042)*100),offensive=["rage","weakCrit","lowHpPower","goldPower"].includes(profile.effect),defensive=["shield","lastLife","revive","soleSurvivor"].includes(profile.effect);
  if(offensive)return{headline:`全能力 +${base}%・攻撃性能 +18%`,detail:"敵専用補正として常時発動"};
  if(defensive)return{headline:`全能力 +${base}%・HP／防御 +18%`,detail:"敵専用補正として常時発動"};
@@ -6120,9 +6129,10 @@ function startBattle(encounter,options={}){
  });
  entries.forEach(entry=>save.state.codex.encounters[entry.speciesId]=(save.state.codex.encounters[entry.speciesId]??0)+1);
  save.save();
- const enemies=ensureUniqueEnemyMagicCircles(entries.map(makeBattleEnemy),options.memorySourceFloor??save.state.player.currentFloor);
+ const enemies=options.specialBattleType==='practice450'?entries.map(makeBattleEnemy):ensureUniqueEnemyMagicCircles(entries.map(makeBattleEnemy),options.memorySourceFloor??save.state.player.currentFloor);
  const enemySynergy=attributeSynergyFor(enemies.map(enemy=>enemy.trialElement));
  enemies.forEach(enemy=>{
+  if(enemy.duel450)return;
   const matches=enemySynergy&&normalizedElement(enemy.trialElement)===enemySynergy.element,terrain=biomeElementMultiplier(biomeBattle,enemy.trialElement),resonance=matches?1+Math.max(enemySynergy.atk??0,enemySynergy.def??0,enemySynergy.hp??0,enemySynergy.spd??0):1;
   applyEnemyMultiplier(enemy,terrain*resonance);if(matches){enemy.crit=(enemy.crit??0)+(enemySynergy.crit??0);enemy.evasion=(enemy.evasion??0)+(enemySynergy.evasion??0)}
  });
@@ -6139,7 +6149,7 @@ function startBattle(encounter,options={}){
  if(tutorialCaptureEligible){battle.auto=false;save.state.settings.autoBattle=false;save.state.settings.exploreAutoMode="off";const target=enemies[0];if(target){tuneFirstCaptureEnemy(target);save.state.inventory.captureCrystals=Math.max(Number(save.state.inventory.captureCrystals)||0,captureCrystalCost(target))}save.state.inventory.potions=Math.max(1,Number(save.state.inventory.potions)||0);save.save()}
  if(tutorialAttributeBattle){battle.auto=false;save.state.settings.autoBattle=false;save.save()}
  for(const u of battle.party){u.heroShield348=0;u.heroShieldMax378=0;u.heroChain348=null;}initializeFloorBossDeathTracking();battle.heroResonanceCount=heroResonanceProfile(battle.party).count;battle.invincibleAlliance=invincibleAllianceReady();
- initializeOpeningCircleShields443();
+ initializeOpeningCircleShields443();prepareDuelCircles450(battle);
  audio.setScene(enemies.some(enemy=>enemy.faction==="tenGod")?"divine":enemies.some(enemy=>enemy.faction==="abyss")?"abyss":enemies.some(enemy=>enemy.elite)?"elite":enemies.some(enemy=>enemy.boss)?"boss":"battle");audio.sfx(enemies.some(enemy=>enemy.endgameBossId||enemy.boss)?"boss":"select");
  buildTurnQueue(battle);
  if(tutorialCaptureEligible||tutorialAttributeBattle){const firstAlly=battle.turnQueue.findIndex(entry=>entry.type==="ally");if(firstAlly>0)battle.turnQueue.unshift(...battle.turnQueue.splice(firstAlly,1))}
@@ -6241,7 +6251,7 @@ function renderBattle(){
 async function requestEscape(){
  if(!battle||battle.escapePending)return;
  const special=Boolean(battle.specialBattle);
- if(special&&!confirm("この戦闘から撤退しますか？\n撤退した戦闘の報酬は獲得できず、消費済みの挑戦回数は戻りません。"))return;
+ if(special&&!confirm(battle.specialBattleType==='practice450'?"模擬戦から撤退しますか？\n本編のHP・MP・アイテムは変わりません。":"この戦闘から撤退しますか？\n撤退した戦闘の報酬は獲得できず、消費済みの挑戦回数は戻りません。"))return;
  battle.auto=false;save.state.settings.autoBattle=false;save.save();
  battle.escapePending=true;addBattleLog(battle,special?(battle.busy?"オートを停止。現在の行動後に撤退します":"撤退を選択した"):(battle.busy?"オートを停止。現在の行動後に逃走します":"逃走を試みる"));saveBattleCheckpoint();renderBattle();
  if(!battle.busy)await resolveEscape();
@@ -6249,6 +6259,7 @@ async function requestEscape(){
 async function resolveEscape(){
  if(!battle?.escapePending||battle.busy)return false;
  battle.busy=true;battle.escapePending=false;
+ if(battle.specialBattleType==='practice450'){finishPractice450('撤退');return true}
  if(battle.specialBattle)return retreatSpecialBattle();
  if(battle.memoryBattle){clearBattleCheckpoint();document.querySelector(".battle-screen")?.remove();activeEnemy=null;battle=null;go("home");return true}
  if(Math.random()<.65){clearBattleCheckpoint();document.querySelector(".battle-screen")?.remove();activeEnemy=null;battle=null;screen="explore";render();return true}
@@ -6493,7 +6504,7 @@ function heroBattleEnvironment348(){
  cleanse:(unit,side)=>{if(side==="ally"){clearNegativeAllyEffects(battle,unit.id);clearAilments(unit)}else{battle.enemyStatuses[unit.id]=[]}},
  damage:(target,side,amount,{source,element,damageClass,traitCause410="primary"})=>{
   if(side==="enemy"){const applied=applyEnemyDamage(battle,target,Math.floor(amount*enemyDamageMultiplier(target)*(target.hiddenDamageTaken??1)*endgameIncomingDamageMultiplier(target,element)*(source.currentHp!==undefined?magicCircleDamageMultiplier(source):1)),{sourceId:heroId(source),element,damageClass,heroRulesApplied:true,traitCause410});if(source.currentHp!==undefined){recordBattleDamage(source,applied.damage);registerWeaponFinisher(source,target,applied.beforeHp)}return applied.damage}
-  const before=target.currentHp,pairShieldBefore409=Number(battle.circleShields?.[target.id])||0;let damage=mitigateHeroDamage(battle,"ally",target,Math.floor(amount*relicIncomingMultiplier394(battle,target)));
+  const before=target.currentHp,pairShieldBefore409=Number(battle.circleShields?.[target.id])||0;let damage=mitigateHeroDamage(battle,"ally",target,Math.floor(amount*relicIncomingMultiplier394(battle,target)*duelOffense450(battle,source,target)));
   damage=absorbPaperShield410(battle,target,damage);enforcePaperBody410(battle);
   for(const store of [battle.circleShields??{},battle.signatureShields??{}]){const absorbed=Math.min(store[target.id]??0,damage);store[target.id]=Math.max(0,(store[target.id]??0)-absorbed);damage-=absorbed}
   target.currentHp=Math.max(0,before-damage);if(!tryHeroLastStand(battle,"ally",target,before)&&target.currentHp<=0)tryUnyielding(target);recordBattleTaken(target,Math.max(0,before-target.currentHp));if(target.currentHp<=0)handleMagicCircleDeath(target);noteSingleDamage410(battle,target,source,{kind:traitCause410});observePairImpact409(battle,target,'ally',{beforeShield:pairShieldBefore409,afterShield:Number(battle.circleShields?.[target.id])||0,direct:true});return Math.max(0,before-target.currentHp)
@@ -6565,7 +6576,7 @@ function prepareBattleUltimates358(){
  if(battle)prepareSingleBattle410();
  if(battle)preparePairVitals409(battle,(u,side)=>side==='enemy'?u.maxHp:calculatedStats(u).hp);
  if(!battle)return;
- prepareUltimateBattle(battle,{stats:u=>battle.party.includes(u)?calculatedStats(u):{...u,hp:u.maxHp},mp:u=>battle.party.includes(u)?maxMp(u):u.maxMp,skills:u=>(battle.party.includes(u)?allLearnedSkills(u):endgameCharacter(u.endgameBossId)?.skills??[]).map(s=>({...s,_cost358:battle.party.includes(u)?effectiveSkillMpCost(u,s):Math.max(0,Number(s.mp)||0)})),statusProfile:u=>u.statusProfile??endgameCharacter(u.endgameBossId)?.statusProfile});
+ prepareUltimateBattle(battle,{stats:u=>battle.party.includes(u)?calculatedStats(u):{...u,hp:u.maxHp},mp:u=>battle.party.includes(u)?maxMp(u):u.maxMp,skills:u=>(battle.party.includes(u)?allLearnedSkills(u):u.duel450?.skills??endgameCharacter(u.endgameBossId)?.skills??[]).map(s=>({...s,_cost358:battle.party.includes(u)?effectiveSkillMpCost(u,s):Math.max(0,Number(s.mp)||0)})),statusProfile:u=>u.statusProfile??endgameCharacter(u.endgameBossId)?.statusProfile});
  prepareSingleBattle410();
  prepareMother426(battle);
 }
@@ -6715,7 +6726,7 @@ function chooseEnemyTarget(enemy=null,mode="normal"){
  const taunters=alive.filter(monster=>hasEffect(battle,monster.id,"taunt"));if(taunters.length)return taunters[Math.floor(Math.random()*taunters.length)];
  const guarded=alive.filter(monster=>battle.guards[monster.id]);if(guarded.length&&Math.random()<.45)return guarded[Math.floor(Math.random()*guarded.length)];
  if(enemy?.elitePolicy393){const focus=alive.find(monster=>monster.id===enemy.chapterTwoFocus382&&!monster.captured);if(focus)return focus;}
- if(enemy?.endgameBossId){
+ if(enemy?.endgameBossId||enemy?.duel450){
   if(mode==="weak")return [...alive].sort((a,b)=>(a.currentHp/calculatedStats(a).hp)-(b.currentHp/calculatedStats(b).hp))[0];
   if(mode==="threat")return [...alive].sort((a,b)=>Math.max(calculatedStats(b).atk,calculatedStats(b).matk??0)-Math.max(calculatedStats(a).atk,calculatedStats(a).matk??0))[0];
  }
@@ -6725,7 +6736,7 @@ async function dealEnemyHit(e,target,multiplier=1,label="",criticalChance=.08,el
  if(ultimateIsolated(battle,target))return 0;beginUltimateAction(battle,e,{...rules,element:element??e.element});
  if(!rules.pair409&&battle._pairNaturalEnemy409===e.id)recordNaturalPairAction409(battle,e,'enemy',target);
  const pairShieldBefore409=Number(battle.circleShields?.[target.id])||0;
- const st=calculatedStats(target),guard=Boolean(battle.guards[target.id]),endgameNoCrit=hasCircleEffect(target,"endgameNoCrit")&&Boolean(e.endgameBossId||["abyss","tenGod"].includes(e.faction)),endgameCircleReduction=endgameNoCrit?circleEffectNumber(target,"damageReductionRate",0):0,criticalStatus=e.floorBossPassive?.criticalAgainstStatus,criticalEffects=e.floorBossPassive?.criticalAgainstEffects,critical=!endgameNoCrit&&(Boolean(rules.guaranteedCritical)||hasEffect(battle,e.id,"guaranteedCritical","enemy")||Boolean(e._floorBossForceCritical)||Boolean(criticalStatus&&allyAilment(target,criticalStatus))||Boolean(Array.isArray(criticalEffects)&&criticalEffects.length&&criticalEffects.every(kind=>hasEffect(battle,target.id,kind)))||Math.random()<Math.min(.9,criticalChance+(e.crit??0)+effectValue(battle,e.id,"critUp","enemy")));
+ const st=calculatedStats(target),guard=Boolean(battle.guards[target.id]),endgameNoCrit=hasCircleEffect(target,"endgameNoCrit")&&Boolean(e.endgameBossId||["abyss","tenGod"].includes(e.faction)),endgameCircleReduction=endgameNoCrit?circleEffectNumber(target,"damageReductionRate",0):0,criticalStatus=e.floorBossPassive?.criticalAgainstStatus,criticalEffects=e.floorBossPassive?.criticalAgainstEffects,critical=!endgameNoCrit&&(Boolean(rules.guaranteedCritical)||hasEffect(battle,e.id,"guaranteedCritical","enemy")||Boolean(e._floorBossForceCritical)||Boolean(criticalStatus&&allyAilment(target,criticalStatus))||Boolean(Array.isArray(criticalEffects)&&criticalEffects.length&&criticalEffects.every(kind=>hasEffect(battle,target.id,kind)))||Math.random()<Math.min(.9,(e.duel450?(e.crit??0)/100:criticalChance+(e.crit??0))+effectValue(battle,e.id,"critUp","enemy")));
  syncInvincibleAllianceState();if(battle.invincibleAlliance){addBattleLog(battle,`${displayName(target)}：四神話共鳴・無敵`);await floatText("無敵",target.id,"guard");return 0}
  const guaranteedStatus=e.floorBossPassive?.guaranteedHitAgainstStatus,guaranteedBuff=e.floorBossPassive?.guaranteedHitAgainstBuff&&(battle.allyEffects?.[target.id]??[]).some(effect=>POSITIVE_ENEMY_EFFECTS.has(effect.kind));if(!attackHits({accuracy:e.accuracy??100,accuracyUp:effectValue(battle,e.id,"accuracyUp","enemy")+(rules.accuracyBonus415??0),accuracyDown:effectValue(battle,e.id,"accuracyDown","enemy"),evasion:st.evasion??0,evasionUp:effectValue(battle,target.id,"evasionUp"),evasionDown:effectValue(battle,target.id,"evasionDown"),guaranteedHit:Boolean(rules.guaranteedHit||hasEffect(battle,e.id,"guaranteedHit","enemy")||e.endgameUnavoidable||guaranteedBuff||(guaranteedStatus&&allyAilment(target,guaranteedStatus)))})){addBattleLog(battle,`${displayName(target)}が攻撃を回避した`);await floatText("MISS / 回避",target.id,"miss");return 0}
  const protector=battle.party.find(monster=>monster.id!==target.id&&monster.currentHp>0&&signatureResonance(monster)?.id==="hide-guardian"&&target.currentHp/Math.max(1,st.hp)<=signatureResonance(monster).lowHpThreshold),protection=protector?1-(signatureResonance(protector).damageReduction??.4):1;
@@ -6733,8 +6744,8 @@ async function dealEnemyHit(e,target,multiplier=1,label="",criticalChance=.08,el
  const guardRuin=guard&&e.floorBossDomain?.effect==="guardRuin",guardPierce=guardRuin?Math.max(0,Math.min(1,Number(e.floorBossDomain.guardPierce)||0)):0,guardFxBase=Math.min(.85,effectValue(battle,target.id,"guard")*(1+affixValue(target,"guardPower",100)/100)),guardFx=guardFxBase*(1-guardPierce),guardBase=guard&&!rules.guaranteedHit?Math.max(.15,.45-affixValue(target,"guardPower",100)/200):1,guardMultiplier=guardRuin?1-(1-guardBase)*(1-guardPierce):guardBase;
  const vulnerable=effectValue(battle,target.id,"vulnerable"),reduction=Math.min(.75,affixValue(target,"damageReduction",75)/100+(signatureResonance(target)?.damageReduction??0)),attackElement=element??SPECIES[e.speciesId]?.element??null,targetElement=target.attribute??SPECIES[target.speciesId]?.element??"neutral",resistance=elementalResistance(target,attackElement),magic=rules.damageClass==="magic",hybrid=rules.damageClass==="hybrid",split=rules.damageClass==="split",conversionRate=e.endgameBossId?Math.max(0,Math.min(1,effectValue(battle,e.id,"magicToPhysical","enemy"))):0,convertedAtk=e.atk+(e.matk??e.atk)*conversionRate,convertedMatk=(e.matk??e.atk)*(1-conversionRate),attackValue=split?((convertedAtk+convertedMatk)/2):hybrid?Math.max(convertedAtk,convertedMatk):magic?convertedMatk:convertedAtk,defenseValue=split?((st.def+(st.mdef??st.def))/2):hybrid?Math.min(st.def,st.mdef??st.def):magic?(st.mdef??st.def):st.def,debuffPursuit=e.floorBossDomain?.effect==="debuffPursuit"&&hasEffect(battle,target.id,e.floorBossDomain.kind)?Math.max(1,Number(e.floorBossDomain.powerMultiplier)||1):1,convergenceDomain=e.floorBossDomain?.effect==="dualDebuffConvergence"?e.floorBossDomain:null,convergenceBonus=convergenceDomain?Math.min(Number(convergenceDomain.maxPower)||.26,(convergenceDomain.kinds??[]).filter(kind=>hasEffect(battle,target.id,kind)).length*Math.max(0,Number(convergenceDomain.perEffect)||0)):0,gravityBonus=e.floorBossDomain?.effect==="gravityPressure"?Math.min(Number(e.floorBossDomain.maxPower)||.30,(1-target.currentHp/Math.max(1,st.hp))*Math.max(0,Number(e.floorBossDomain.maxPower)||.30)):0,frozenBonus=e.floorBossDomain?.effect==="frozenShatter"&&allyAilment(target,"freeze")?Math.max(1,Number(e.floorBossDomain.powerMultiplier)||1):1,defenseImbalance=e.floorBossDomain?.effect==="defenseImbalance"?Math.min(Number(e.floorBossDomain.maxPower)||.26,Math.abs(st.def-(st.mdef??st.def))/Math.max(1,st.def,st.mdef??st.def)*Math.max(0,Number(e.floorBossDomain.maxPower)||.26)):0;
  const attackPower=attackValue*enemyAttackFactor(e.id),defensePower=defenseValue*(1-ignore)*allyDefenseFactor(target.id)*.55,baseDamage=enemyDamageAfterDefense(attackPower,defensePower);
- let d=Math.max(1,Math.floor(baseDamage*multiplier*debuffPursuit*(1+convergenceBonus)*(1+gravityBonus)*(1+defenseImbalance)*frozenBonus*attributeDamageMultiplier(attackElement,targetElement)*execute*guardMultiplier*(1-guardFx)*(1+vulnerable)*(1-reduction)*(1-resistance)*(1-endgameCircleReduction)*abyssBattleMultiplier(target,"partyDamageTakenRate")*protection));if(rules.currentHpDamage)d+=Math.max(1,Math.floor(target.currentHp*Math.min(.25,rules.currentHpDamage))*protection);if(critical)d=Math.floor(d*Math.max(1,Number(e.floorBossPassive?.critDamageMultiplier)||1.55));if(hasCircleEffect(target,"soleSurvivor")&&battle.party.filter(member=>member.currentHp>0).length===1)d=Math.max(1,Math.floor(d*(1-circleEffectNumber(target,"damageReductionRate",.4))));d=Math.floor(d*relicIncomingMultiplier394(battle,target)*(rules.damageMultiplier409??1));d=consumePairGuard409(battle,target,'ally',d,guardFx);d=absorbSignatureShield(target,d);d=absorbMagicCircleShield(target,d);if(critical&&d>0&&e.floorBossDomain?.effect==="criticalCharge")e._floorBossCriticalReady=true;
- const heroBefore348=target.currentHp;d=mitigateHeroDamage(battle,"ally",target,d);target.currentHp=Math.max(0,target.currentHp-d);tryHeroLastStand(battle,"ally",target,heroBefore348);d=Math.max(0,heroBefore348-target.currentHp);recordBattleTaken(target,d);if(hasCircleEffect(target,"rage")&&d>0){const rage=rageCircleValues(target),cap=Math.max(rage.secondChainHits,Math.ceil(rage.maxDamageBonus/Math.max(.001,rage.damagePerHit)));target._circleRage=Math.min(cap,(target._circleRage??0)+1)}if(target.currentHp<=0&&tryUnyielding(target))addBattleLog(battle,`${displayName(target)}の復活・耐久効果が発動（${battle.reviveCount}/99）`);else addBattleLog(battle,`${displayName(target)}に${d}ダメージ`);await flushMagicCircleEvents();
+ let d=Math.max(1,Math.floor(baseDamage*multiplier*debuffPursuit*(1+convergenceBonus)*(1+gravityBonus)*(1+defenseImbalance)*frozenBonus*attributeDamageMultiplier(attackElement,targetElement)*execute*guardMultiplier*(1-guardFx)*(1+vulnerable)*(1-reduction)*(1-resistance)*(1-endgameCircleReduction)*abyssBattleMultiplier(target,"partyDamageTakenRate")*protection));if(rules.currentHpDamage)d+=Math.max(1,Math.floor(target.currentHp*Math.min(.25,rules.currentHpDamage))*protection);if(e.duel450)d=Math.max(1,Math.floor(d*duelOffense450(battle,e,target)*affixOutgoingDamageMultiplier({...e,_currentHpRatio:e.hp/Math.max(1,e.maxHp)},target,attackElement)*abyssBattleMultiplier(e,"partyDamageRate")*(e.heroSignature348?.damageMultiplier??1)*(rules.id?1+affixValue(e,"skillPower",200)/100:1)));if(critical)d=Math.floor(d*(e.duel450?1.65+affixValue(e,"critDamage",150)/100:Math.max(1,Number(e.floorBossPassive?.critDamageMultiplier)||1.55)));if(hasCircleEffect(target,"soleSurvivor")&&battle.party.filter(member=>member.currentHp>0).length===1)d=Math.max(1,Math.floor(d*(1-circleEffectNumber(target,"damageReductionRate",.4))));d=Math.floor(d*relicIncomingMultiplier394(battle,target)*(rules.damageMultiplier409??1));d=consumePairGuard409(battle,target,'ally',d,guardFx);d=absorbSignatureShield(target,d);d=absorbMagicCircleShield(target,d);if(critical&&d>0&&e.floorBossDomain?.effect==="criticalCharge")e._floorBossCriticalReady=true;
+ const heroBefore348=target.currentHp;d=mitigateHeroDamage(battle,"ally",target,d);target.currentHp=Math.max(0,target.currentHp-d);tryHeroLastStand(battle,"ally",target,heroBefore348);d=Math.max(0,heroBefore348-target.currentHp);recordBattleTaken(target,d);if(e.duel450&&d>0&&outgoingLifeSteal(e)&&!rules.noLifeSteal)recoverFloorBossHp(e,Math.max(1,Math.floor(d*outgoingLifeSteal(e))));if(hasCircleEffect(target,"rage")&&d>0){const rage=rageCircleValues(target),cap=Math.max(rage.secondChainHits,Math.ceil(rage.maxDamageBonus/Math.max(.001,rage.damagePerHit)));target._circleRage=Math.min(cap,(target._circleRage??0)+1)}if(target.currentHp<=0&&tryUnyielding(target))addBattleLog(battle,`${displayName(target)}の復活・耐久効果が発動（${battle.reviveCount}/99）`);else addBattleLog(battle,`${displayName(target)}に${d}ダメージ`);await flushMagicCircleEvents();
  noteSingleDamage410(battle,target,e,{kind:rules.pair409?'followup':'primary'});observePairImpact409(battle,target,'ally',{beforeShield:pairShieldBefore409,afterShield:Number(battle.circleShields?.[target.id])||0,direct:true});
  if(guard&&d>0&&e.floorBossDomain?.effect==="curtainGuardOpening"){const hits=Math.max(1,Math.floor(Number(e.floorBossDomain.openHits)||2));e._floorBossCurtainOpenHits=Math.max(Math.max(0,Math.floor(Number(e._floorBossCurtainOpenHits)||0)),hits);addBattleLog(battle,`${e.floorBossDomain.name}：${displayName(target)}のガードで聖幕開放・反撃${hits}撃`)}
  if(guardRuin&&d>0){battle.guards[target.id]=false;battle.allyEffects[target.id]=(battle.allyEffects?.[target.id]??[]).filter(effect=>effect.kind!=="guard");addBattleLog(battle,`${e.floorBossDomain.name}：${displayName(target)}のガードを破砕`)}
@@ -6832,6 +6843,8 @@ async function resolveEnemySpecialAction(e,action){
  await applyFloorBossActionTax(e);
  if(Number(info.selfHpCostRate)>0&&e.hp>1){const cost=Math.min(e.hp-1,Math.max(1,Math.floor(e.hp*Math.min(.8,Number(info.selfHpCostRate)))));e.hp=Math.max(1,e.hp-cost);storeFloorBossSacrifice(e,cost);addBattleLog(battle,`${e.name}：${info.label}の代価 HP-${cost.toLocaleString()}`);await floatText(`代価 -${cost}`,e.id,"enemy")}
  if(info.utility){
+  if(e.duel450&&info.type==='cleanse'){battle.enemyStatuses[e.id]=[];battle.enemyEffects[e.id]=(battle.enemyEffects[e.id]??[]).filter(x=>POSITIVE_ENEMY_EFFECTS.has(x.kind));}
+  if(e.duel450&&info.type==='mpHeal'){recoverEnemyBattleMp(e,e.maxMp*Math.max(0,Number(info.mpHeal??info.power)||.2));await flushBattleRecoveries();}
   const allies=info.type==="allHeal"||info.target==="味方全体"||info.effects?.some(effect=>effect.allies)?battle.enemies.filter(enemy=>enemy.hp>0):[e];
   if(info.heal){for(const ally of allies){const amount=Math.max(1,Math.floor(ally.maxHp*info.heal)),gained=recoverFloorBossHp(ally,amount);await flushBattleRecoveries();await floatText(`+${gained}`,ally.id,"heal")}}
   if(info.revive&&canBattleRevive()&&!(e.chapterTwoTactics382?.commander397&&e.commanderRevived397)){
@@ -6844,7 +6857,7 @@ async function resolveEnemySpecialAction(e,action){
 	  if(info.consumePearlHeal&&e.floorBossDomain?.effect==="pearlRebirth"&&e._floorBossPearlReady){e._floorBossPearlReady=false;const rate=Math.max(0,Math.min(.8,Number(e.floorBossDomain.healRate)||.12)),gained=recoverFloorBossHp(e,Math.max(1,Math.floor(e.maxHp*rate)));e.divineBarrier=Math.max(Number(e.divineBarrier)||0,Math.max(1,Math.floor(Number(e.floorBossDomain.barrier)||1)));addBattleLog(battle,`${e.floorBossDomain.name}：真珠心を追加回復と障壁へ変換`);await flushBattleRecoveries();await floatText(`真珠 +${gained}`,e.id,"heal")}
   if(info.cleanse){battle.enemyStatuses??={};battle.enemyEffects??={};let removed=0;for(const ally of allies){removed+=(battle.enemyStatuses[ally.id]??[]).length+(battle.enemyEffects[ally.id]??[]).filter(effect=>!POSITIVE_ENEMY_EFFECTS.has(effect.kind)).length;battle.enemyStatuses[ally.id]=[];battle.enemyEffects[ally.id]=(battle.enemyEffects[ally.id]??[]).filter(effect=>POSITIVE_ENEMY_EFFECTS.has(effect.kind))}if(removed)addBattleLog(battle,`${e.name}：${info.label}で味方の状態異常・弱体${removed}件を清浄`)}
   if(info.clearNegativeSelf){const removed=(battle.enemyStatuses?.[e.id]??[]).length+(battle.enemyEffects?.[e.id]??[]).filter(effect=>!POSITIVE_ENEMY_EFFECTS.has(effect.kind)).length;battle.enemyStatuses[e.id]=[];battle.enemyEffects[e.id]=(battle.enemyEffects?.[e.id]??[]).filter(effect=>POSITIVE_ENEMY_EFFECTS.has(effect.kind));if(removed)addBattleLog(battle,`${e.name}：${info.label}で状態異常・弱体${removed}件を清浄`)}
-	  for(const effect of info.effects??[])for(const ally of(effect.allies?allies:[e])){if(e.floorBossCatalogId||e.endgameBossId||e.campaignHeroId||e.chapterTwoTactics382)applyBattleEffect(battle,ally.id,{...effect,...(e.chapterTwoTactics382?.commander397?{commanderEffect397:true}:{}),sourceKey:`${e.id}:${action}`,sourceSkillName:info.label},"enemy");else{if(effect.kind==="atkUp")ally.atk=Math.floor(ally.atk*(1+(effect.value??.2)));if(effect.kind==="defUp")ally.def=Math.floor(ally.def*(1+(effect.value??.2)));if(effect.kind==="spdUp")ally.spd=Math.floor(ally.spd*(1+(effect.value??.2)))}if(effect.kind==="guard"&&!e.chapterTwoTactics382?.commander397&&e.speciesId!==MOTHER_ID422)ally.divineBarrier=Math.max(ally.divineBarrier??0,Math.max(1,effect.turns??2));if(effect.kind==="regen"&&!e.chapterTwoTactics382?.commander397&&e.speciesId!==MOTHER_ID422)ally.eliteRegen=Math.max(ally.eliteRegen??0,effect.value??.1);if(effect.kind==="magicToPhysical"&&!ally.endgameBossId&&!ally._floorBossActionConversion){ally._floorBossActionConversion=true;const rate=Math.max(0,Math.min(1,Number(effect.value)||0)),magic=Math.max(0,Number(ally.matk)||0);ally.atk=Math.max(1,Math.floor(ally.atk+magic*rate));ally.matk=Math.max(1,Math.floor(magic*(1-rate)))}}
+	  for(const effect of info.effects??[])for(const ally of(effect.allies?allies:[e])){if(e.duel450||e.floorBossCatalogId||e.endgameBossId||e.campaignHeroId||e.chapterTwoTactics382)applyBattleEffect(battle,ally.id,{...effect,...(e.chapterTwoTactics382?.commander397?{commanderEffect397:true}:{}),sourceKey:`${e.id}:${action}`,sourceSkillName:info.label},"enemy");else{if(effect.kind==="atkUp")ally.atk=Math.floor(ally.atk*(1+(effect.value??.2)));if(effect.kind==="defUp")ally.def=Math.floor(ally.def*(1+(effect.value??.2)));if(effect.kind==="spdUp")ally.spd=Math.floor(ally.spd*(1+(effect.value??.2)))}if(effect.kind==="guard"&&!e.chapterTwoTactics382?.commander397&&e.speciesId!==MOTHER_ID422)ally.divineBarrier=Math.max(ally.divineBarrier??0,Math.max(1,effect.turns??2));if(effect.kind==="regen"&&!e.chapterTwoTactics382?.commander397&&e.speciesId!==MOTHER_ID422)ally.eliteRegen=Math.max(ally.eliteRegen??0,effect.value??.1);if(effect.kind==="magicToPhysical"&&!ally.endgameBossId&&!ally._floorBossActionConversion){ally._floorBossActionConversion=true;const rate=Math.max(0,Math.min(1,Number(effect.value)||0)),magic=Math.max(0,Number(ally.matk)||0);ally.atk=Math.max(1,Math.floor(ally.atk+magic*rate));ally.matk=Math.max(1,Math.floor(magic*(1-rate)))}}
 	  if(info.dispelOne||Number(info.stealOneBuffRate)>0){const stolen=dispelRandomAllyBuff(e);if(stolen&&Number(info.stealOneBuffRate)>0&&POSITIVE_ENEMY_EFFECTS.has(stolen.kind)){const rate=Math.max(0,Math.min(1,Number(info.stealOneBuffRate)));applyBattleEffect(battle,e.id,{...stolen,value:Number(stolen.value||0)*rate,turns:Math.max(1,Math.min(3,Number(stolen.turns)||1)),sourceKey:`${e.id}:${action}:utility-theft`,sourceSkillName:info.label},"enemy");addBattleLog(battle,`${e.name}：解除した加護を${Math.round(rate*100)}%で複写`)}}
 	  if(info.invertOneBuff)invertRandomAllyBuff(e,info.invertRate);
 	  if(info.breakAllyMagicCircle)breakRandomAllyMagicCircle(e);
@@ -6945,13 +6958,13 @@ async function resolveEnemyFlee(e){
 async function enemyTurn({skipUltimate=false}={}){
  if(!battle||battle.resultSettled)return;
  if(battle.busy)return;const entry=currentTurnEntry(battle);if(entry?.type!=="enemy")return continueBattleFlow();
- battle.busy=true;const e=currentEnemy(battle);if(!e){battle.busy=false;return finishCurrentAction()}battle.enemy=e;prepareBattleUltimates358();const ultimate358=skipUltimate||!chapterTwoUltimateAllowed382(e,battle.turn)?null:chooseEndgameUltimate(battle,e);if(ultimate358){if(e.chapterTwoTactics382)e.chapterTwoUltimateUsed382=true;return performUltimate358(e,ultimate358.id)}beginUltimateAction(battle,e);if(isHeroResonanceSpecies(e.speciesId)){heroBattleEnvironment348();return performHeroCommand348(e,"enemy",chooseHeroAllianceSkill(battle,"enemy",e))}if(e.fleeAfterTurns&&battle.turn>=e.fleeAfterTurns)return resolveEnemyFlee(e);let action=ultimateBasicOnly(battle,e)?ENEMY_ACTIONS.attack:chooseEnemyAction(e,{allies:battle.enemies,opponents:battle.party,battle}),mpCost=pairSkillCost409(battle,e,specialActionInfo(action),enemyActionMpCost(e,action),'enemy');if(mpCost>(e.currentMp??0)){e.intent="魔力不足で通常攻撃へ切替";action=ENEMY_ACTIONS.attack;mpCost=0}e.currentMp=Math.max(0,(e.currentMp??0)-mpCost);consumePairDiscount409(battle,e,'enemy',specialActionInfo(action));battle._pairNaturalEnemy409=e.id;addBattleLog(battle,`${e.name}：${e.intent}${mpCost?`（内部MP -${mpCost}）`:""}`);battle.actionCommitted=true;
- if(action===ENEMY_ACTIONS.guard){await floatText("防御",e.id,"guard")}
+ battle.busy=true;const e=currentEnemy(battle);if(!e){battle.busy=false;return finishCurrentAction()}battle.enemy=e;prepareBattleUltimates358();const ultimate358=skipUltimate||!chapterTwoUltimateAllowed382(e,battle.turn)?null:chooseEndgameUltimate(battle,e,e.duel450?.skills??null);if(ultimate358){if(e.chapterTwoTactics382)e.chapterTwoUltimateUsed382=true;return performUltimate358(e,ultimate358.id)}beginUltimateAction(battle,e);if(isHeroResonanceSpecies(e.speciesId)){heroBattleEnvironment348();return performHeroCommand348(e,"enemy",chooseHeroAllianceSkill(battle,"enemy",e))}if(e.fleeAfterTurns&&battle.turn>=e.fleeAfterTurns)return resolveEnemyFlee(e);let action=ultimateBasicOnly(battle,e)?ENEMY_ACTIONS.attack:chooseEnemyAction(e,{allies:battle.enemies,opponents:battle.party,battle}),mpCost=pairSkillCost409(battle,e,specialActionInfo(action),enemyActionMpCost(e,action),'enemy');if(mpCost>(e.currentMp??0)){e.intent="魔力不足で通常攻撃へ切替";action=ENEMY_ACTIONS.attack;mpCost=0}e.currentMp=Math.max(0,(e.currentMp??0)-mpCost);consumePairDiscount409(battle,e,'enemy',specialActionInfo(action));battle._pairNaturalEnemy409=e.id;addBattleLog(battle,`${e.name}：${e.intent}${mpCost?`（内部MP -${mpCost}）`:""}`);battle.actionCommitted=true;
+ if(action===ENEMY_ACTIONS.guard){if(e.duel450)e.guard=true;await floatText("防御",e.id,"guard")}
  else if(action===ENEMY_ACTIONS.charge){await floatText("力溜め",e.id,"charge")}
  else if(action===ENEMY_ACTIONS.heal){const h=recoverFloorBossHp(e,enemyHealAmount(e));await flushBattleRecoveries();await floatText(`+${h}`,e.id,"heal")}
  else if(action===ENEMY_ACTIONS.enrage){e.atk=Math.floor(e.atk*1.18);e.def=Math.floor(e.def*1.08);await battleBanner(e.endgameBossId?"権能解放":"狂暴化",e.intent,e.faction==="tenGod"?"boss":"skill",620);await floatText("狂暴化",e.id,"enrage");await animateHit(e.id,true)}
  else if(action===ENEMY_ACTIONS.divineBarrier){await battleBanner("神域障壁","受けるダメージを大幅軽減","boss",650);await floatText("障壁",e.id,"guard")}
- else if(specialActionInfo(action)){const ordinary358=specialActionInfo(action);beginUltimateAction(battle,e,ordinary358);commitCampaignHeroSkill(e,action,battle.turn);await resolveEnemySpecialAction(e,action);afterUltimateOrdinary(battle,e,{...ordinary358,id:ordinary358.id??action,name:ordinary358.name??ordinary358.label,_cost358:mpCost});await flushUltimateEvents358()}
+ else if(specialActionInfo(action)){const ordinary358=specialActionInfo(action);beginUltimateAction(battle,e,ordinary358);commitCampaignHeroSkill(e,action,battle.turn);if(e.duel450)commitDuelAction450(e,action,battle.turn);await resolveEnemySpecialAction(e,action);afterUltimateOrdinary(battle,e,{...ordinary358,id:ordinary358.id??action,name:ordinary358.name??ordinary358.label,_cost358:mpCost});await flushUltimateEvents358()}
  else{
   const target=chooseEnemyTarget(e,e.teamBattleTargetMode??e.campaignHeroTargetMode??(e.endgameBossId?"threat":"normal"));if(!target){battle.busy=false;if(!battle.party.some(u=>u.currentHp>0))return lose();return finishCurrentAction()};await animateAttack(e.id,action===ENEMY_ACTIONS.power);
   await dealEnemyHit(e,target,enemyAttackMultiplier(e,action)*Math.max(.5,Number(e._circleActionMultiplier)||1),action===ENEMY_ACTIONS.power?"強撃 ":"",e.enraged?.13:.08);
@@ -7010,6 +7023,7 @@ async function endRound(){
  return continueBattleFlow();
 }
 async function continueBattleFlow(){
+ if(battle?.specialBattleType==='practice450'&&battle.turn>100)return finishPractice450('引き分け');
  if(!battle||battle.busy||battle.resultSettled)return;
  sanitizeBattleParty();
  if(battle.escapePending)return resolveEscape();
@@ -7044,6 +7058,7 @@ function finishBossMemoryVictory(caught,monster){
  modal._onDismiss=finish;modal.querySelector("[data-modal-primary]").onclick=finish
 }
 function win(caught,m){
+ if(battle?.specialBattleType==='practice450')return finishPractice450('勝利');
  if(!battle||battle.resultSettled)return;
  settleSingleDeaths410(battle);if(battle&&!battle.party.some(u=>u.currentHp>0))return lose();
  if(battle?.specialBattle&&advanceSpecialBattleWave())return;
@@ -7170,6 +7185,7 @@ function dedicatedFloorBossEquipment(floor,boss,piece="weapon"){
 function dedicatedFloorBossWeapon(floor,boss){return dedicatedFloorBossEquipment(floor,boss,"weapon")}
 
 function lose(){
+ if(battle?.specialBattleType==='practice450')return finishPractice450('敗北');
  if(!battle||battle.resultSettled)return;
  settleSingleDeaths410(battle);if(battle?.party.some(u=>u.currentHp>0))return aliveEnemies(battle).length?continueBattleFlow():win(false,null);
  if(battle?.specialBattle)return finishSpecialBattle(false);
@@ -7192,6 +7208,7 @@ function lose(){
  save.save();app.insertAdjacentHTML("beforeend",Modal("敗北",`<div class="defeat-cinematic"><div class="defeat-mark">☠</div><h2>深淵に敗れた…</h2><p><b>${lost}G</b>を失い、${save.state.player.checkpoint}階の拠点へ帰還します。</p><small>仲間はHP1で救出されました。拠点の寝台で回復できます。</small></div>`,"拠点へ戻る"));
  const modal=topModal(),returnHome=()=>{modal?.remove();stopGame();battle=null;activeEnemy=null;screen="home";render()};modal._onDismiss=returnHome;modal.querySelector("[data-modal-primary]").onclick=returnHome
 }
+if(globalThis.__practiceBoot450){queueMicrotask(startPracticeChild450)}else{
 if(retireLegacyCampaignSairanBattle())save.save();
 normalizeEquipmentState();
 if(save.state.player.inRun&&!save.state.activeBattle)screen="explore";
@@ -7231,6 +7248,8 @@ document.addEventListener("visibilitychange",()=>{
  ensurePowerRankingConnection({force:true});
  setTimeout(()=>publishPowerRankingSnapshot({force:true}),900);
 });
+
+}
 
 function drawChapterTwoFieldLabels(){
  const c=game.ctx,tile=TILE*game.camera.z,r=chapterTwoState(save.state).run;
@@ -7341,4 +7360,39 @@ function showMotherCompletion424(){
  const close=()=>{if(closed||busy)return;if(!room.completionSeen424&&!chapterTwoCommit(()=>{motherState422(save.state).completionSeen424=true;return{ok:true};}).ok)return;closed=true;modal.remove();if(game)game.paused=false;go('home');};
  modal._onDismiss=close;modal.querySelector('[data-modal-primary]').onclick=close;
  modal.querySelector('[data-equip-mother-skin424]').onclick=async()=>{if(closed||busy)return;busy=true;const button=modal.querySelector('[data-equip-mother-skin424]');button.disabled=true;const result=await commitHomeSkin400(save,{id:MOTHER_HOME_SKIN424});busy=false;button.disabled=false;button.textContent=result.ok?'ホームに設定しました':result.message;};
+}
+
+async function challengePlayer450(playerId,button){
+ if(battle||game?.running||save.state.activeBattle)return showToast('拠点で対戦できます');
+ if(!save.state.party?.length)return showToast('先に部隊を編成してください');
+ if(document.querySelector('.practice-frame-shell450'))return;
+ button.disabled=true;const label=button.querySelector('b');if(label)label.textContent='準備中…';
+ try{
+  const result=await ensurePowerRankingConnection().requestPowerRankingProfile(playerId),profile=result?.profile;
+  if(!button.isConnected)return;
+  if(!profile||!duelReady450(profile.party))throw Error('対戦情報がまだありません。相手が最新版で接続すると更新されます');
+  const state=structuredClone(save.state);state.activeBattle=null;state.expeditionSnapshot=null;state.player.inRun=false;state.settings.autoBattle=false;state.settings.exploreAutoMode='off';
+  await openPracticeFrame450({state,opponent:profile,onClose:()=>{audio.setScene('home')}});audio.setScene('home');
+ }catch(error){showToast(error?.message??'対戦情報を取得できませんでした')}
+ finally{if(button.isConnected){button.disabled=false;if(label)label.textContent='対戦する'}}
+}
+function startPracticeChild450(){
+ const boot=globalThis.__practiceBoot450;normalizeEquipmentState();
+ const members=(save.state.party??[]).map(id=>save.state.monsters.find(m=>m.id===id)).filter(Boolean);
+ if(!members.length||!duelReady450(boot.opponent.party))throw Error('模擬戦の編成情報が不足しています');
+ for(const m of members){m.currentHp=calculatedStats(m).hp;m.currentMp=maxMp(m);m.ailments=[];}
+ const enemies=boot.opponent.party.map((m,i)=>{
+  const d=normalizeDuel450(m.duel),definition=magicCircleById(d.circleId),circle=definition&&definition.id!=='none'?{...definition,level:d.circleLevel,levelEffect:magicCircleLevelEffect(definition,d.circleLevel)}:null;
+  const e=makeDuelEnemy450(m,i,{species:SPECIES[m.speciesId],circle});registerDuelSkills450(e);return e;
+ });
+ startBattle(enemies,{specialBattle:true,specialBattleType:'practice450',specialTitle:`${boot.opponent.displayName}との模擬戦`,specialSubtitle:'AI対戦・報酬なし',auto:false});
+ globalThis.__practiceReady450=true;
+}
+function finishPractice450(result){
+ if(!battle||battle.resultSettled)return;const current=battle;current.resultSettled=true;current.busy=true;
+ const report=battleContributionSnapshot(current);audio.setScene(result==='勝利'?'victory':'defeat');
+ const close=()=>parent.postMessage({type:'practice-close450'},new URL(document.baseURI).origin);
+ const summary=()=>{document.querySelector('.battle-screen')?.remove();battle=null;app.insertAdjacentHTML('beforeend',Modal(`模擬戦・${result}`,`<div class="practice-result450"><span>⚔</span><h2>${escapeAttribute(result)}</h2><p>${escapeAttribute(globalThis.__practiceBoot450.opponent.displayName)}との模擬戦</p><small>本編のHP・MP・アイテム・進行に影響はありません。</small></div>`,'ランキングへ戻る'));const modal=topModal();modal._onDismiss=close;modal.querySelector('[data-modal-primary]').onclick=close;modal.querySelector('[data-modal-dismiss]').onclick=close;};
+ document.querySelector('.battle-screen')?.remove();app.classList.remove('battle-active');
+ const modal=openBattleContributionReport(report,summary,{auto:false});modal.querySelector('[data-modal-primary]').textContent='結果を見る';
 }

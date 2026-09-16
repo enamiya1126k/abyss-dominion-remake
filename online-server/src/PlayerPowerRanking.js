@@ -6,6 +6,7 @@ import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
+import{normalizeDuel450}from"../../src/practice/PracticeSnapshot450.js";
 const PLAYER_ID = /^AD-[A-Z2-9]{4}-[A-Z2-9]{4}$/;
 // Ranking state is rewritten atomically.  Keep the bounded public snapshots
 // comfortably below the loader's hard limit even when every retained account
@@ -15,8 +16,8 @@ const MAX_PARTY = 4;
 const MAX_EQUIPMENT = 6;
 const MAX_STAT = 1_000_000_000_000;
 const MAX_SOURCE_BYTES = 64 * 1024;
-const MAX_PERSISTED_RECORD_BYTES = 8 * 1024;
-const MAX_STATE_BYTES = 64 * 1024 * 1024;
+const MAX_PERSISTED_RECORD_BYTES = 32 * 1024;
+const MAX_STATE_BYTES = 192 * 1024 * 1024;
 const STALE_AFTER_MS = 30 * 24 * 60 * 60_000;
 const PRESENCE_ONLINE_MS = 90_000;
 const DAY_MS = 24 * 60 * 60_000;
@@ -125,6 +126,8 @@ function sanitizeMonster(source, index, { maxFloor = 1, enforcePlausibility = tr
   if (Array.isArray(source.equipment) && source.equipment.length > MAX_EQUIPMENT) return { error: "POWER_EQUIPMENT_TOO_LARGE" };
   const battleStats = sanitizeStats(source.battleStats ?? source.stats);
   if (!battleStats) return { error: "POWER_STATS_REQUIRED" };
+  const duel=normalizeDuel450(source.duel);
+  if(source.duel&&(!duel||["hp","atk","matk","def","mdef","spd","crit","evasion"].some(k=>Math.abs(duel.stats[k]-battleStats[k])>1)))return{error:"POWER_DUEL_INVALID"};
   const power = verifiedMonsterPower(battleStats);
   if (![power,expandedPower445(power),displayPower446(power),displayPower447(power,{speciesId:safeId(source.speciesId)}),displayPower448(power,{speciesId:safeId(source.speciesId),endgameBossId:safeId(source.endgameBossId),rarity:rarity(source.rarity),level:integer(source.level,1,99_999_999,1)})].some(expected=>powerMatches(source.power,expected))) return { error: "POWER_MISMATCH" };
   const level = integer(source.level, 1, 99_999_999, 1), equipment = sanitizeEquipment(source.equipment);
@@ -145,7 +148,7 @@ function sanitizeMonster(source, index, { maxFloor = 1, enforcePlausibility = tr
     rarity: rarity(source.rarity ?? source.summonTier ?? source.summonRarity),
     power,
     attribute: text(source.attribute, 20) || "neutral",
-    battleStats,
+    battleStats,duel:normalizeDuel450(source.duel),
     equipment,
     equipmentStatus: ["complete", "partial"].includes(source.equipmentStatus) ? source.equipmentStatus : "unknown",
     magicCircle: { name: text(circle.name ?? source.circleName, 32) || "魔法陣なし", level: integer(circle.level ?? source.circleLevel, 0, 99, 0) },
@@ -200,7 +203,7 @@ function persistedMonster(source, { dropAssets = false } = {}) {
     level: integer(source?.level, 1, 99_999_999, 1),
     rarity: rarity(source?.rarity),
     power: integer(source?.power, 1, Number.MAX_SAFE_INTEGER, 1),
-    attribute: text(source?.attribute, 20) || "neutral",
+    attribute: text(source?.attribute, 20) || "neutral",duel:normalizeDuel450(source?.duel),
     equipmentStatus: ["complete", "partial"].includes(source?.equipmentStatus) ? source.equipmentStatus : "unknown",
     equipment: sanitizeEquipment(source?.equipment).map(item => dropAssets ? { ...item, visualAsset: null } : item),
     magicCircle: {
@@ -243,7 +246,7 @@ function publicMonster(source, { icon = false } = {}) {
     floorBossCatalogId: source.floorBossCatalogId, customVisualAsset: source.customVisualAsset, customVisualBase: source.customVisualBase,
     name: source.name, level: source.level, rarity: source.rarity, power: displayPower448(source.power,source),
   };
-  if (!icon) Object.assign(result, { slot: source.slot, attribute: source.attribute, equipmentStatus: source.equipmentStatus ?? "unknown", equipment: source.equipment.map(item => ({ ...item })), magicCircle: { ...source.magicCircle } });
+  if (!icon) Object.assign(result, { slot: source.slot, attribute: source.attribute,duel:normalizeDuel450(source.duel), equipmentStatus: source.equipmentStatus ?? "unknown", equipment: source.equipment.map(item => ({ ...item })), magicCircle: { ...source.magicCircle } });
   return result;
 }
 function publicPresence(source, recordUpdatedAt, at) {
@@ -257,7 +260,7 @@ function publicPresence(source, recordUpdatedAt, at) {
   };
 }
 function publicEntry(record, rank, presence, at) {
-  return { rank, playerId: record.playerId, displayName: record.displayName, power: displayPartyPower448(record.party), powerScaleVersion:8, maxFloor: record.maxFloor, updatedAt: record.updatedAt, ...publicPresence(presence, record.updatedAt, at), icon: publicMonster(record.party[0], { icon: true }) };
+  return { rank,duelReady450:record.party.every(m=>Boolean(normalizeDuel450(m.duel))), playerId: record.playerId, displayName: record.displayName, power: displayPartyPower448(record.party), powerScaleVersion:8, maxFloor: record.maxFloor, updatedAt: record.updatedAt, ...publicPresence(presence, record.updatedAt, at), icon: publicMonster(record.party[0], { icon: true }) };
 }
 function publicProfile(record, presence, at) {
   return { playerId: record.playerId, displayName: record.displayName, power: displayPartyPower448(record.party), powerScaleVersion:8, maxFloor: record.maxFloor, updatedAt: record.updatedAt, ...publicPresence(presence, record.updatedAt, at), party: record.party.map(entry => publicMonster(entry)) };

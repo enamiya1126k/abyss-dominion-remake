@@ -1,0 +1,33 @@
+{
+  "build": 450,
+  "version": "3.1.129",
+  "automated_tests": {
+    "practice450": 10,
+    "power448": 11,
+    "passed": 21
+  },
+  "cache": {
+    "changed_runtime": 14,
+    "cached_paths": 583,
+    "frozen_rule4_modules": 32,
+    "syntax": "pass",
+    "frozen_runtime_aliased": false
+  },
+  "legacy_checks": {
+    "build253": {
+      "failures_also_reproduced_on_baseline449": [
+        "ranking snapshot is bounded to four unique slots and safe public fields",
+        "foreground mode synchronizes the latest profile once after the stable acknowledgement",
+        "an open pre-ACK background socket still synchronizes once after foregrounding",
+        "background mode serializes hello/mount/unmount acknowledgement races"
+      ],
+      "complete_suite_claimed": false,
+      "note": "An old auxiliary test run was rejected by automatic review because it referenced an external endpoint. Its inspected client tests use fake sockets; the local-only current-spec tests and browser routes supplied the validation for this delivery."
+    }
+  },
+  "limits": [
+    "Physical iPhone Safari not available for this run",
+    "Browser layout screenshot environment has no Japanese font; geometry and button artwork were checked; production uses device fonts",
+    "This is AI-controlled saved-party practice, not simultaneous PvP or a replay of human decisions"
+  ]
+}

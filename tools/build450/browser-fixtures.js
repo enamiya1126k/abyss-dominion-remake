@@ -1,0 +1,11 @@
+window.qa450={
+ ranking(opponent){
+  qa435.rank();save.state.activeBattle=null;save.state.player.inRun=false;
+  onlinePartyController.ws={readyState:1};
+  onlinePartyController.worldRaidRewards429={};onlinePartyController.worldRaidOffline430={};
+  onlinePartyController.requestPowerRankingProfile=async()=>({profile:opponent});
+  powerRankingUi.state.entries.forEach((e,i)=>{e.duelReady450=i!==3;e.powerScaleVersion=8;});
+  renderCombatPowerRecordModal(topModal(),'ranking');
+ },
+ snapshot:()=>powerRankingPublicSnapshot()
+};

@@ -1,0 +1,25 @@
+.practice-ranking-row450{position:relative;min-width:0}
+#app .practice-ranking-row450>.power-ranking-row{width:100%;margin-bottom:0}
+#app .practice-ranking-row450:has(.practice-challenge450) .power-ranking-row>strong{align-self:start;margin-top:4px}
+#app .practice-challenge450{position:absolute;right:12px;bottom:10px;z-index:2;display:flex;align-items:center;justify-content:center;gap:4px;width:90px;min-height:36px;padding:5px 8px;color:#ffedb2;border:1px solid #d4a95d;border-radius:3px;background:linear-gradient(120deg,#49245288,#130c1faa 52%,#3d2148aa),var(--button438) center/100% 100%;box-shadow:inset 0 0 0 2px #0d0911,inset 0 0 12px #ad67d338,0 2px 5px #0009;font:700 12px/1.2 Georgia,'Hiragino Mincho ProN',serif;text-shadow:0 1px 2px #000;overflow:hidden}
+#app .practice-challenge450::after{content:'';position:absolute;inset:3px;pointer-events:none;border:1px solid #aa7b3a6b;clip-path:polygon(0 0,35% 0,35% 100%,0 100%,0 0,100% 0,100% 100%,70% 100%,70% 0)}
+#app .practice-challenge450>span{font-size:17px;color:#e6ccff;text-shadow:0 0 5px #b27df7}
+#app .practice-challenge450:active{transform:translateY(1px);filter:brightness(1.25)}
+#app .practice-challenge450:focus-visible{outline:2px solid #eee0ff;outline-offset:3px}
+#app .practice-challenge450:disabled{filter:saturate(.15);opacity:.65}
+#app .practice-ranking-row450:has(.practice-challenge450) .power-ranking-identity{padding-right:5px}
+.practice-frame-shell450{position:fixed;inset:0;z-index:100000;background:#09060e}
+.practice-frame-shell450>iframe{border:0;width:100%;height:100%;display:block}
+.practice-frame-close450{position:absolute;right:8px;top:max(6px,env(safe-area-inset-top));z-index:2;background:#1c1126dd;color:#ffe2aa;border:1px solid #ad864d;border-radius:4px;padding:6px 9px;font-size:11px}
+.practice-result450{text-align:center;padding:20px;color:#f4d795}.practice-result450>span{font-size:40px}.practice-result450 small{display:block;color:#c6b6cf;line-height:1.6}
+@media(max-width:360px){#app .practice-challenge450{right:8px;width:78px;font-size:11px;bottom:8px}#app .practice-ranking-row450>.power-ranking-row{min-height:88px}#app .practice-ranking-row450 .power-ranking-row>strong{font-size:12px}}
+
+#app .practice-challenge450>b{font:inherit;white-space:nowrap}
+#app .game-modal[data-power-record-modal] .game-modal-card .game-modal-body .practice-ranking-row450>button.practice-challenge450{isolation:isolate;border-image:var(--button438) 90 240 fill / 6px 9px stretch!important;border-image-outset:0!important;background:#1b1025!important;box-shadow:0 2px 6px #0009,0 0 7px #ba85eb28!important}
+#app .practice-challenge450::before{content:'';position:absolute;inset:7px 10px;z-index:0;pointer-events:none;background:linear-gradient(115deg,#703a824d,#20102750 60%,#70442b30)}
+#app .practice-challenge450::after{display:none}
+#app .practice-challenge450>span,#app .practice-challenge450>b{position:relative;z-index:1}
+#app .practice-ranking-row450:has(.practice-challenge450)>.power-ranking-row{grid-template-columns:20px 65px minmax(0,1fr) 90px 7px!important}
+@media(max-width:430px){#app .practice-ranking-row450:has(.practice-challenge450)>.power-ranking-row{grid-template-columns:18px 52px minmax(0,1fr) 84px 7px!important}}
+@media(max-width:360px){#app .practice-ranking-row450:has(.practice-challenge450)>.power-ranking-row{grid-template-columns:18px 52px minmax(0,1fr) 72px 7px!important}}
+@media(max-width:360px){#app .practice-challenge450{padding:5px 6px;gap:3px}#app .practice-challenge450>span{font-size:15px}}

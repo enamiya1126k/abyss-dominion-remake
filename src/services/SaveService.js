@@ -426,7 +426,7 @@ export function recoverEndedExpeditionBattle417(state){
 }
 
 export class SaveService{
- constructor(){this.loadFailed=false;this.state=this.load();if(!this.loadFailed)this.save()}
+ constructor(){if(globalThis.__practiceBoot450){this.loadFailed=false;this.state=structuredClone(globalThis.__practiceBoot450.state);this.save=()=>true;return}this.loadFailed=false;this.state=this.load();if(!this.loadFailed)this.save()}
  load(){try{const raw=localStorage.getItem(SAVE_KEY);if(!raw)return initialState();const parsed=JSON.parse(raw);if(!plainRecord(parsed))throw new TypeError("Saved data root must be an object");return this.migrate(parsed)}catch(e){console.error(e);this.loadFailed=true;this.lastLoadError={name:e?.name??"LoadError",message:String(e?.message??e),at:Date.now()};return initialState()}}
  migrate(s){
   if(!plainRecord(s))return initialState();

@@ -1,3 +1,4 @@
+import {duelIncoming450,duelAfterHit450} from '../practice/PracticeCombat450.js';
 import {rememberMotherShield425} from '../primordial/Shield425.js';
 import {singleEffectOrigin410,inversionCandidate410,invertSingleDebuff410,noteSingleDamage410,absorbPaperShield410,withSingleCause410,enforcePaperBody410} from './SingleTraits410.js?v=3.1.90-build410';
 import {observePairImpact409,consumePairGuard409} from './PairSynergy409.js?v=3.1.89-build409';
@@ -51,7 +52,7 @@ export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicA
  const kind394=["physical","magic","hybrid","split"].includes(damageClass)?relicKind394:"excluded";
  const requested=Math.max(0,Math.floor((Number(amount)||0)*relicDamageMultiplier394(battle,source358,enemy,kind394)*battleCircleMultiplier398(battle,source358,enemy,kind394))),beforeHp=enemy.hp;
  const heroEquipmentReduction=heroRulesApplied?0:Math.min(.75,Math.max(0,Number(enemy._affixes?.damageReduction)||0)/100+(enemy.heroSignature348?.damageReduction??0));
- let damage=mitigateHeroDamage(battle,"enemy",enemy,Math.floor(requested*(1-heroEquipmentReduction))),convertedFortressShield=0,armorLayersAtHit=0;
+ let damage=mitigateHeroDamage(battle,"enemy",enemy,duelIncoming450(battle,enemy,Math.floor(requested*(1-heroEquipmentReduction)),{source:source358})),convertedFortressShield=0,armorLayersAtHit=0;
  const passive=enemy.floorBossPassive??{},domain=enemy.floorBossDomain??{},round=Math.max(0,Number(battle?.turn??battle?.round)||0),damageSource=String(sourceId??""),directDamageSource=Boolean(damageSource&&!damageSource.startsWith("status:")),prismClass=["physical","magic"].includes(damageClass)?damageClass:null;
  if(damage>0&&Number(passive.firstHitReduction)>0&&enemy._floorBossGuardRound!==round){enemy._floorBossGuardRound=round;damage=Math.max(1,Math.floor(damage*(1-Math.min(.85,passive.firstHitReduction))));addBattleLog(battle,`${enemy.name}：${passive.name}で初撃を軽減`)}
 	 const reduction=passive.incomingReduction,hpRate=beforeHp/Math.max(1,enemy.maxHp);
@@ -86,7 +87,7 @@ export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicA
   if(sources.has(source)||sources.size>=4)damage=0;
   else{sources.add(source);enemy._mimicArmorSources=[...sources];damage=Math.min(1,damage)}
  }
-	 damage=Math.min(damage,Math.max(0,maximumDamage415));const previousCause426=battle._motherDamageCause426;battle._motherDamageCause426={sourceId,kind:traitCause410??(['pairCounter','counter'].includes(relicKind394)?'counter':relicKind394==='excluded'?'excluded':'primary')};try{enemy.hp=Math.max(0,enemy.hp-damage);}finally{battle._motherDamageCause426=previousCause426;}tryHeroLastStand(battle,"enemy",enemy,beforeHp);
+	 damage=Math.min(damage,Math.max(0,maximumDamage415));const previousCause426=battle._motherDamageCause426;battle._motherDamageCause426={sourceId,kind:traitCause410??(['pairCounter','counter'].includes(relicKind394)?'counter':relicKind394==='excluded'?'excluded':'primary')};let duelRecovery450=false;try{enemy.hp=Math.max(0,enemy.hp-damage);duelRecovery450=Boolean(duelAfterHit450(battle,enemy,beforeHp));}finally{battle._motherDamageCause426=previousCause426;}tryHeroLastStand(battle,"enemy",enemy,beforeHp);
 	 const directArmorHit=!String(sourceId??"").startsWith("status:");
 	 if(requested>0&&directArmorHit&&armorLayersAtHit>0){const next=Math.max(0,armorLayersAtHit-1);enemy._floorBossArmorLayers=next;addBattleLog(battle,`${enemy.name}：${passive.name} ${next}/${startingArmorLayers}層`);if(next===0&&domain.effect==="armorBreakCounter"){enemy._floorBossArmorBreakReady=true;addBattleLog(battle,`${domain.name}：最終城甲破損・反城準備`)} }
 	 let manaGuardTriggered=false;
@@ -97,7 +98,7 @@ export function applyEnemyDamage(battle,enemy,amount,{sourceId=null,bypassMimicA
  if(enemy.hp<=0&&Number(passive.lastStandHealRate)>0&&!enemy._floorBossLastStandUsed){enemy._floorBossLastStandUsed=true;lastStandTriggered=true;enemy.hp=Math.max(1,Math.floor(enemy.maxHp*Math.min(.8,passive.lastStandHealRate)));addBattleLog(battle,`${enemy.name}：${passive.name}が命を繋いだ`)}
  // 致死耐久は「受けたダメージ」と「直後の回復」を分けて扱う。
  // 回復後HPが被弾前HPを上回っても、負のダメージを返してはいけない。
-	 let applied=lastStandTriggered||manaGuardTriggered||lifeSeedTriggered?Math.min(beforeHp,damage):beforeHp-enemy.hp;
+	 let applied=lastStandTriggered||manaGuardTriggered||lifeSeedTriggered||duelRecovery450?Math.min(beforeHp,damage):beforeHp-enemy.hp;
 	 if(applied>0&&directDamageSource&&passive.prismAdaptation&&prismClass)enemy._floorBossPrismLastClass=prismClass;
 	 if(applied>0&&directDamageSource&&enemy._floorBossHealingChorus)enemy._floorBossHealingChorus.damage=Math.max(0,Number(enemy._floorBossHealingChorus.damage)||0)+applied;
 	 if(applied>0&&domain.effect==="eclipseDeadline"){if(enemy._floorBossEclipseDamageRound!==round){enemy._floorBossEclipseDamageRound=round;enemy._floorBossEclipseRoundDamage=0}enemy._floorBossEclipseRoundDamage=Math.max(0,Number(enemy._floorBossEclipseRoundDamage)||0)+applied}

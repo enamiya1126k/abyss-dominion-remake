@@ -55,7 +55,7 @@ function putEffect(b,u,side,e,source){
  if(existing){existing.value=Math.max(Number(existing.value)||0,Number(e.value)||0);existing.turns=Math.max(existing.turns??0,e.turns??3)}
  else list.push({...e,turns:e.turns??3,sourceKey:key,sourceMonsterId:heroId(source)});
 }
-export function heroAuthoredSkills(u){return (MYTHIC_SERIAL_SPECIES[u?.speciesId]?.authoredSkills??[]).filter(s=>(s.unlock?.value??1)<=(u.level??1))}
+export function heroAuthoredSkills(u){if(u?.duel450)return u.duel450.skills;return (MYTHIC_SERIAL_SPECIES[u?.speciesId]?.authoredSkills??[]).filter(s=>(s.unlock?.value??1)<=(u.level??1))}
 export function heroSkillCost(u,s){if(Number.isFinite(u.heroSkillCosts348?.[s.id]))return u.heroSkillCosts348[s.id];const base=Math.max(Number(s.mp)||0,Math.ceil((Number(u.maxMp)||0)*(Number(s.mpRate)||0))),reduction=Math.min(50,Math.max(0,Number((u._equipmentAffixes??u._affixes??u.equipmentCombatEffects)?.mpCostReduction)||0));return Math.ceil(base*(1-reduction/100))}
 export function chooseHeroAllianceSkill(b,side,u,{free=false}={}){
  const allies=heroSideUnits(b,side),opposite=side==='ally'?'enemy':'ally',enemies=heroSideUnits(b,opposite).filter(x=>heroHp(x)>0),cd=heroCooldowns(b,u);

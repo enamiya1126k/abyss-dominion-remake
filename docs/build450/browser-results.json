@@ -1,0 +1,35 @@
+{
+  "checks": [
+    {
+      "case": "win",
+      "passed": true
+    },
+    {
+      "case": "loss",
+      "passed": true
+    },
+    {
+      "case": "retreat",
+      "passed": true
+    },
+    {
+      "case": "hero",
+      "passed": true
+    },
+    {
+      "viewport": 320,
+      "layout": true
+    },
+    {
+      "viewport": 393,
+      "layout": true
+    },
+    {
+      "viewport": 709,
+      "layout": true
+    }
+  ],
+  "rankingButtonLaunch": true,
+  "parentStateAndStorageUntouched": true,
+  "errors": []
+}

@@ -1,0 +1,16 @@
+[
+  "online-server/src/PlayerPowerRanking.js",
+  "src/battle/BattleRules.js",
+  "src/battle/EnemyAI.js",
+  "src/battle/TrialAdaptation415.js",
+  "src/core/HeroAllianceSystem.js",
+  "src/core/config.js",
+  "src/main.js",
+  "src/online/OnlinePartyClient.js",
+  "src/practice/PracticeAI450.js",
+  "src/practice/PracticeCombat450.js",
+  "src/practice/PracticeFrame450.js",
+  "src/practice/PracticeSnapshot450.js",
+  "src/services/SaveService.js",
+  "src/worldRaid/WorldRaidOfflineCache430.js"
+]

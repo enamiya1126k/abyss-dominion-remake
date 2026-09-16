@@ -31,6 +31,7 @@ const ONLINE_EXPLORE_EMOTE_POSITION = "abyss-online-explore-emote-position";
 const HANDSHAKE_TOKEN_RETRY_LIMIT = 2;
 const RESUME_TOKEN_MAP_LIMIT = 32;
 const RESUME_TOKEN_MAX_LENGTH = 512;
+import{normalizeDuel450}from"../practice/PracticeSnapshot450.js";
 const RESUME_TOKEN_MAP_MAX_BYTES = 64 * 1024;
 const GUILD_ID_PATTERN = /^GD-[A-Z2-9]{6}$/;
 const PLAYER_ID_PATTERN = /^AD-[A-Z2-9]{4}-[A-Z2-9]{4}$/;
@@ -435,7 +436,7 @@ function normalizePowerRankingMonster(source, fallbackSlot = 1) {
     stars: boundedInteger(source.stars, 0, 99, 0),
     plus: boundedInteger(source.plus, 0, 99_999, 0),
     power: rankingPower(source.power),
-    battleStats: normalizePowerRankingBattleStats(source.battleStats),
+    battleStats: normalizePowerRankingBattleStats(source.battleStats),duel:normalizeDuel450(source.duel),
     equipment,
     equipmentStatus: ["complete", "partial"].includes(source.equipmentStatus) ? source.equipmentStatus : "unknown",
     magicCircle: {
@@ -489,7 +490,7 @@ function normalizePowerRankingEntry(source) {
     playerId,
     displayName: rankingText(source.displayName, 16, "冒険者"),
     power: rankingPower(source.power),
-    powerScaleVersion:Number(source.powerScaleVersion)||4,
+    powerScaleVersion:Number(source.powerScaleVersion)||4,duelReady450:source.duelReady450===true,
     maxFloor: boundedInteger(source.maxFloor, 1, 100, 1),
     updatedAt: boundedInteger(source.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
     online: source.online === true,
@@ -540,7 +541,7 @@ export function normalizePowerRankingProfile(source) {
     playerId,
     displayName: rankingText(source.displayName, 16, "冒険者"),
     power: rankingPower(source.power),
-    powerScaleVersion:Number(source.powerScaleVersion)||4,
+    powerScaleVersion:Number(source.powerScaleVersion)||4,duelReady450:source.duelReady450===true,
     maxFloor: boundedInteger(source.maxFloor, 1, 100, 1),
     updatedAt: boundedInteger(source.updatedAt, 0, Number.MAX_SAFE_INTEGER, 0),
     online: source.online === true,
