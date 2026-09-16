@@ -1,0 +1,15 @@
+{
+  "checks": [
+    "baseline native app clipping reproduced with touch",
+    "touch reaches start before any auto-scroll at 320",
+    "touch reaches start before any auto-scroll at 393",
+    "touch reaches start before any auto-scroll at 709",
+    "roster retains independent touch scrolling",
+    "roster bottom chains gesture to outer scroll",
+    "start enters selection phase",
+    "visible start tapped successfully; solo room progresses to parade",
+    "unmount restores native non-race overflow"
+  ],
+  "errors": [],
+  "browser": "Chromium mobile touch via CDP; physical Safari not tested"
+}

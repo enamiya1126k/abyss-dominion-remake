@@ -1,0 +1,11 @@
+/* The native app clips overflow; racing owns its viewport until unmount. */
+#app.race-host454 {
+  height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+#app.race-host454 .race-roster451 {
+  overscroll-behavior-y: auto;
+}
