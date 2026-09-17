@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "393px touch viewport and 1280px desktop: catalog, lobby, cards, board, overview, drag/follow, no horizontal overflow",
+    "socket reconnect restores private hand",
+    "four browser clients finish a full match; main game GOLD unchanged",
+    "results -> same party -> race lobby, same code and members"
+  ],
+  "steps": 544,
+  "errors": [],
+  "responses": [],
+  "scope": "Actual RaceClient and RaceCoordinator over loopback WebSocket; fixture login/save, baseline166 plus supplied patches for unchanged dependencies. Full production server and physical iPhone Safari not verified."
+}

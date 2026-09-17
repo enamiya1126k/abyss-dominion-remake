@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "393px / 320px mobile and 1280px desktop without horizontal overflow",
+    "readable tile effects",
+    "playable hand glow / inspectable dim cards",
+    "card back then front; rerender preserves animation clock",
+    "explicit target seat highlighted",
+    "three server-provided dice and corrected total",
+    "defense choice waits for reveal without auto-accepting",
+    "reduced motion and no history replay on first snapshot"
+  ],
+  "errors": [],
+  "scope": "Production View/Engine in a local UI fixture; not physical iPhone Safari."
+}

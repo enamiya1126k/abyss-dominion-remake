@@ -1,8 +1,8 @@
 import{randomBytes}from'node:crypto';
-import{makeLobby463,start463,action463,botAction463,current463,log463}from'../../src/sugoroku/Engine463.js';
+import{makeLobby463,start463,action463,botAction463,current463,log463,automaticAction464}from'../../src/sugoroku/Engine463.js';
 export const boardFor463=(c,id)=>Object.values(c.data.boardRooms463??{}).find(g=>g.members.some(m=>m.playerId===id&&!m.departed))??null;
 export function createBoard463(c,p,people){return makeLobby463({id:`sg463-${++c.data.serial}-${randomBytes(4).toString('hex')}`,code:p.code,partyId:p.id,hostId:p.hostId,members:people,now:c.now(),seed:randomBytes(4).readUInt32LE()})}
-function mark(g,now){g.revision++;g.updatedAt=now;g.deadline=now+75000;g.nextAutoAt=now+1300}
+function mark(g,now){g.revision++;g.updatedAt=now;g.deadline=now+75000;g.nextAutoAt=now+Math.min(18000,Math.max(1800,(g.presentation464??[]).filter(e=>e.at===now).reduce((ms,e)=>ms+({card:2200,dice:1800,effect:850,move:600}[e.kind]??0),0)))}
 export function handleSugoroku463(c,session,m){
  if(m.op!=='sg463')return false;
  const g=boardFor463(c,session.playerId),p=Object.values(c.data.parties462??{}).find(x=>x.id===g?.partyId462),me=g?.members.find(x=>x.playerId===session.playerId);
@@ -31,8 +31,8 @@ export function advanceSugoroku463(c){
   if(!online){if(now-g.updatedAt>24*60*60*1000){c.transaction(()=>{delete c.data.boardRooms463[g.code];const p=Object.values(c.data.parties462??{}).find(p=>p.id===g.partyId462);if(p){p.game=null;p.raceCode=null;p.members.forEach(m=>m.ready=false)}});c.broadcast()}continue}
   if(g.phase!=='playing')continue;
   const id=g.pending?.playerId??current463(g)?.playerId,player=g.players.find(p=>p.playerId===id);if(!player)continue;
-  const connected=c.sessions.get(id)?.connected,auto=player.ai?now>=g.nextAutoAt:now>=g.deadline||!connected&&now>=g.updatedAt+30000;
+  const connected=c.sessions.get(id)?.connected,emptyDecision=connected&&now>=g.nextAutoAt?automaticAction464(g):null,auto=!!emptyDecision||(player.ai?now>=g.nextAutoAt:now>=g.deadline||!connected&&now>=g.updatedAt+30000);
   if(!auto)continue;
-  c.transaction(()=>{const command=botAction463(g,id);if(command){if(!player.ai)log463(g,`${player.name}の操作を一時的にAIが代行`);action463(g,id,command,now);mark(g,now)}});c.broadcast();
+  c.transaction(()=>{const command=emptyDecision??botAction463(g,id);if(command){if(!player.ai&&!emptyDecision)log463(g,`${player.name}の操作を一時的にAIが代行`);action463(g,id,command,now);mark(g,now)}});c.broadcast();
  }
 }
