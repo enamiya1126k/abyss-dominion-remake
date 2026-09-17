@@ -1,0 +1,18 @@
+[
+  "src/worldRaid/WorldRaidOfflineCache430.js",
+  "src/party/PartyGames462.js",
+  "src/party/PartyView462.js",
+  "src/core/config.js",
+  "src/Styles/build463-sugoroku.css",
+  "src/sugoroku/Catalog463.js",
+  "src/sugoroku/View463.js",
+  "src/sugoroku/Engine463.js",
+  "src/sugoroku/Board463.js",
+  "src/race/RacePresentation452.js",
+  "src/race/RaceUX458.js",
+  "src/race/RaceClient451.js",
+  "online-server/server.js",
+  "online-server/src/SugorokuCoordinator463.js",
+  "online-server/src/RaceCoordinator451.js",
+  "online-server/src/PartyCoordinator462.js"
+]

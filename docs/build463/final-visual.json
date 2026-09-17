@@ -1,0 +1,18 @@
+{
+  "layout": {
+    "scrollWidth": 393,
+    "width": 393,
+    "firstCard": 797.854248046875,
+    "height": 852,
+    "header": 1
+  },
+  "errors": [],
+  "uiCommands": [
+    "select",
+    "ready",
+    "start",
+    "draw",
+    "choices when applicable",
+    "roll when applicable"
+  ]
+}

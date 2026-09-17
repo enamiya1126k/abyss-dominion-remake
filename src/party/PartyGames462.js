@@ -1,2 +1,2 @@
 // Only released games appear here. Future game adapters reuse the same party.
-export const PARTY_GAMES462=Object.freeze([{id:'race',name:'魔物レース',tag:'予想 × 育成 × 大逆転',players:'1〜4人 ＋ AI',image:'./assets/party462/monster-race.webp',description:'相棒を送り出し、勝者を見抜け。叩くタイミングと絆が勝負を変える！'}]);
+export const PARTY_GAMES462=Object.freeze([{id:'race',name:'魔物レース',tag:'予想 × 育成 × 大逆転',players:'1〜4人 ＋ AI',image:'./assets/party462/monster-race.webp',description:'相棒を送り出し、勝者を見抜け。叩くタイミングと絆が勝負を変える！'},{id:'sugoroku',name:'カードすごろく',tag:'手札 × 妨害 × 大逆転',players:'4人対戦 · 不足席はAI',image:'./assets/sugoroku463/cover.png',description:'先にゴールするか、切り札をためるか。呪いも交換できる、秘密の手札バトル！'}]);

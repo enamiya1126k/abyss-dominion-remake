@@ -2,7 +2,7 @@
 export const LEGACY_BET458=1000000;
 export const MAX_BET458=Math.floor((Number.MAX_SAFE_INTEGER-8000)/1000);
 export function betLimit458(gold,version=6){return Math.max(0,Math.min(Math.floor(Number(gold)||0),version>=6?MAX_BET458:LEGACY_BET458))}
-export function panelKey458(c){const r=c.state?.room;if(c.partyBrowse462||!r)return `party:${c.state?.party?.id??'catalog'}:hub`;return `${r?.id??'home'}:${r?.phase??'home'}:${r?.phase==='parade'?(c.predictionTab457??'watch'):''}`}
+export function panelKey458(c){if(c.state?.sugoroku&&!c.partyBrowse462)return `sg463-${c.state.sugoroku.id}:${c.state.sugoroku.phase}`;const r=c.state?.room;if(c.partyBrowse462||!r)return `party:${c.state?.party?.id??'catalog'}:hub`;return `${r?.id??'home'}:${r?.phase??'home'}:${r?.phase==='parade'?(c.predictionTab457??'watch'):''}`}
 export function rememberScroll458(c){if(!c.root)return;c.scroll458??={};if(c.renderKey458)c.scroll458[c.renderKey458]={top:c.root.scrollTop,window:globalThis.scrollY??0,roster:c.root.querySelector('.race-roster451')?.scrollTop??0}}
 export function restoreScroll458(c,key,oldKey){const samePhase=key.split(':').slice(0,2).join(':')===oldKey?.split(':').slice(0,2).join(':');const v=c.scroll458?.[key]??(samePhase?c.scroll458?.[oldKey]:null)??{top:0,window:0,roster:0};c.root.scrollTop=v.top;const roster=c.root.querySelector('.race-roster451');if(roster)roster.scrollTop=v.roster;if(globalThis.scrollY!==v.window)globalThis.scrollTo?.(0,v.window);c.renderKey458=key}
 export function swipeDirection458(start,end){const dx=end.x-start.x,dy=end.y-start.y;return end.at-start.at<=1000&&Math.abs(dx)>=38&&Math.abs(dx)>Math.abs(dy)*1.4?(dx<0?1:-1):0}

@@ -1,0 +1,40 @@
+✔ MAX and integer payout cover actual55M balance and safe boundary, legacy rooms retain1M (1.497053ms)
+✔ MAX debit and payout/refund remain atomic and once-only across server restart (715.576519ms)
+✔ legacy over-limit packet refunds once, late max refund and unsupported clients are safe (834.323933ms)
+✔ free participation at zero GOLD still settles prize and training without stake (438.094016ms)
+✔ swipes distinguish horizontal/vertical, direction and long drags (0.324403ms)
+✔ ordered slot correction swaps duplicate picks and never loses the other picks (1.499641ms)
+✔ each panel remembers scroll and rerender restores current position (0.564071ms)
+✔ all four courses finish, preserve distance and deterministic restart on turf/sand (158.339503ms)
+✔ 500m and3000m change winners and odds; course and bond are included in Monte Carlo (1139.891322ms)
+✔ oval is continuous, corners exist, two laps return to finish, straight stays straight (0.772701ms)
+✔ low bond delays only first command600ms, accepts burst, persists, costs once, hides random roll (3.457895ms)
+✔ host distance validation, locked snapshot, history and reward once after restart; legacy unchanged (1513.55606ms)
+✔ history separates same-species individuals, bounds retained records and never duplicates receipts (1.643275ms)
+✔ all eight portraits fit without overlap at start, corners, finish and spread out (2327.81731ms)
+✔ camera layout leaves progress immutable and is deterministic (1.233652ms)
+✔ world positions stay on fixed race lanes and preserve centreline progress (7.029747ms)
+✔ smooth camera contains all eight sprites during corners, spreads, laps, finish and resizes (660.631474ms)
+✔ default following crops the course and moves smoothly with the pack; overlap is allowed (0.54741ms)
+✔ party identity, ready gate, host authority, home presence, spectator admission, reuse and persistence (962.839302ms)
+✔ disconnect preserves seats and transfers host after grace; game registry rejects unknown games (0.816987ms)
+✔ 5/10/10/20 commands, idempotency, no over-limit, fixed total cost and capped stacking (11.068874ms)
+✔ low bond produces bounded rests, bursts and missed commands; high bond obeys; seeded outcomes reproduce (190.547328ms)
+✔ old room v7 keeps five uses and old temperament; overview height follows track shape (0.543404ms)
+300 matches: { min: 60, mean: 79.60333333333334, max: 104 }
+✔ 335 cards, secret opening, attribute semantics and conservation across 300 complete matches (4676.549013ms)
+✔ dice count and +2 movement are separate; explicit landing exception is preserved (0.789424ms)
+✔ curse transfers via concealed draw, blocks overshoot goal once, and finish scores freeze (0.86086ms)
+✔ one defense cancels every remaining effect from the same card for this target (0.52225ms)
+✔ new public special is compared, set is optional and cannot loop, duplicate uid cannot be replayed in one turn (0.819042ms)
+✔ public-special score multiplier includes negative score; none stays independent (0.607224ms)
+✔ authenticated coordinator: persistent party, all ready, idempotence, spectators, restart, host transfer and game switch (25.452862ms)
+✔ bad instant immunity applies to the recipient of an area event; reflection never chains (0.433052ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4924.37028

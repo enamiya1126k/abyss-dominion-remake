@@ -1,0 +1,4413 @@
+{
+  "cards": [
+    {
+      "id": "yori-0",
+      "name": "拳の疾走",
+      "attrs": [
+        "yori"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "bonus",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 0,
+      "text": "合計出目＋2。"
+    },
+    {
+      "id": "yori-1",
+      "name": "青い衝動",
+      "attrs": [
+        "yori"
+      ],
+      "points": 2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "bonus",
+          "n": 3
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 0,
+      "text": "合計出目＋3。"
+    },
+    {
+      "id": "yori-2",
+      "name": "海原の一歩",
+      "attrs": [
+        "yori"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "move",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 1,
+      "text": "2マス進む。移動先のマス効果は発動しない。"
+    },
+    {
+      "id": "yori-3",
+      "name": "拳の連撃",
+      "attrs": [
+        "yori"
+      ],
+      "points": 2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "dice",
+          "n": 1
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 0,
+      "text": "サイコロを1個追加して振る。"
+    },
+    {
+      "id": "yori-4",
+      "name": "拳の加速",
+      "attrs": [
+        "yori"
+      ],
+      "points": -1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "dice",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 2,
+      "art": 0,
+      "text": "サイコロを2個追加して振る。"
+    },
+    {
+      "id": "yori-5",
+      "name": "蒼雷の突進",
+      "attrs": [
+        "yori"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "direct",
+          "n": 6
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 1,
+      "text": "6マス進む。このターンはサイコロを振らない。移動先のマス効果は発動しない。"
+    },
+    {
+      "id": "yori-6",
+      "name": "影の小突き",
+      "attrs": [
+        "yori"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "move",
+          "n": -2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 2,
+      "text": "相手1人を2マス戻す。移動先のマス効果は発動しない。"
+    },
+    {
+      "id": "yori-7",
+      "name": "氷のけん制",
+      "attrs": [
+        "yori"
+      ],
+      "points": -1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 2,
+      "text": "相手1人の手札をランダムに2枚捨てる。"
+    },
+    {
+      "id": "yori-8",
+      "name": "蒼の盗賊",
+      "attrs": [
+        "yori"
+      ],
+      "points": 2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "steal",
+          "n": 1,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 3,
+      "text": "相手1人の裏向きの手札から1枚引く。呪いを引くこともある。"
+    },
+    {
+      "id": "yori-9",
+      "name": "青い引力",
+      "attrs": [
+        "yori"
+      ],
+      "points": -2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "steal",
+          "n": 2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 3,
+      "text": "相手1人の裏向きの手札から2枚引く。"
+    },
+    {
+      "id": "yori-10",
+      "name": "海辺の交換",
+      "attrs": [
+        "yori"
+      ],
+      "points": 1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "swapHand",
+          "n": 2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 3,
+      "text": "相手1人とランダムに手札を2枚ずつ交換する。"
+    },
+    {
+      "id": "yori-11",
+      "name": "旅の備え",
+      "attrs": [
+        "yori"
+      ],
+      "points": 1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 4,
+      "text": "カードを2枚引く。速攻は発動する。"
+    },
+    {
+      "id": "yori-12",
+      "name": "拳の護り",
+      "attrs": [
+        "yori"
+      ],
+      "points": -3,
+      "timing": "reaction",
+      "effects": [],
+      "kind": "normal",
+      "copies": 3,
+      "art": 5,
+      "text": "自分へのカード1枚またはマス1つの効果をすべて無効化する。",
+      "defense": true
+    },
+    {
+      "id": "yori-13",
+      "name": "蒼の書庫",
+      "attrs": [
+        "yori"
+      ],
+      "points": -1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 4,
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。"
+    },
+    {
+      "id": "yori-14",
+      "name": "潮の記憶",
+      "attrs": [
+        "yori"
+      ],
+      "points": 1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 6,
+      "text": "カードを1枚引く。このカードが捨てられると1マス進む。",
+      "onDiscard": 1
+    },
+    {
+      "id": "yori-15",
+      "name": "海原の共鳴",
+      "attrs": [
+        "yori"
+      ],
+      "points": -1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "boostAttr",
+          "attr": "yori"
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 7,
+      "text": "このターン、次に使うより属性カードの移動・補充・破棄枚数を2倍にする。"
+    },
+    {
+      "id": "rion-0",
+      "name": "森の疾走",
+      "attrs": [
+        "rion"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "bonus",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 0,
+      "text": "合計出目＋2。"
+    },
+    {
+      "id": "rion-1",
+      "name": "緑の衝動",
+      "attrs": [
+        "rion"
+      ],
+      "points": 2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "bonus",
+          "n": 3
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 0,
+      "text": "合計出目＋3。"
+    },
+    {
+      "id": "rion-2",
+      "name": "木漏れ日の一歩",
+      "attrs": [
+        "rion"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "move",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 1,
+      "text": "2マス進む。移動先のマス効果は発動しない。"
+    },
+    {
+      "id": "rion-3",
+      "name": "風の連撃",
+      "attrs": [
+        "rion"
+      ],
+      "points": 2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "dice",
+          "n": 1
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 0,
+      "text": "サイコロを1個追加して振る。"
+    },
+    {
+      "id": "rion-4",
+      "name": "森の加速",
+      "attrs": [
+        "rion"
+      ],
+      "points": -1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "dice",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 2,
+      "art": 0,
+      "text": "サイコロを2個追加して振る。"
+    },
+    {
+      "id": "rion-5",
+      "name": "翠嵐の突進",
+      "attrs": [
+        "rion"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "direct",
+          "n": 6
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 1,
+      "text": "6マス進む。このターンはサイコロを振らない。移動先のマス効果は発動しない。"
+    },
+    {
+      "id": "rion-6",
+      "name": "蔦の小突き",
+      "attrs": [
+        "rion"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "move",
+          "n": -2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 2,
+      "text": "相手1人を2マス戻す。移動先のマス効果は発動しない。"
+    },
+    {
+      "id": "rion-7",
+      "name": "根のけん制",
+      "attrs": [
+        "rion"
+      ],
+      "points": -1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 2,
+      "text": "相手1人の手札をランダムに2枚捨てる。"
+    },
+    {
+      "id": "rion-8",
+      "name": "森の盗賊",
+      "attrs": [
+        "rion"
+      ],
+      "points": 2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "steal",
+          "n": 1,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 3,
+      "text": "相手1人の裏向きの手札から1枚引く。呪いを引くこともある。"
+    },
+    {
+      "id": "rion-9",
+      "name": "緑の引力",
+      "attrs": [
+        "rion"
+      ],
+      "points": -2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "steal",
+          "n": 2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 3,
+      "text": "相手1人の裏向きの手札から2枚引く。"
+    },
+    {
+      "id": "rion-10",
+      "name": "森の交換",
+      "attrs": [
+        "rion"
+      ],
+      "points": 1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "swapHand",
+          "n": 2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 3,
+      "text": "相手1人とランダムに手札を2枚ずつ交換する。"
+    },
+    {
+      "id": "rion-11",
+      "name": "薬草の備え",
+      "attrs": [
+        "rion"
+      ],
+      "points": 1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 4,
+      "text": "カードを2枚引く。速攻は発動する。"
+    },
+    {
+      "id": "rion-12",
+      "name": "風の護り",
+      "attrs": [
+        "rion"
+      ],
+      "points": -3,
+      "timing": "reaction",
+      "effects": [],
+      "kind": "normal",
+      "copies": 3,
+      "art": 5,
+      "text": "自分へのカード1枚またはマス1つの効果をすべて無効化する。",
+      "defense": true
+    },
+    {
+      "id": "rion-13",
+      "name": "翠の書庫",
+      "attrs": [
+        "rion"
+      ],
+      "points": -1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 4,
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。"
+    },
+    {
+      "id": "rion-14",
+      "name": "森の記憶",
+      "attrs": [
+        "rion"
+      ],
+      "points": 1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 6,
+      "text": "カードを1枚引く。このカードが捨てられると1マス進む。",
+      "onDiscard": 1
+    },
+    {
+      "id": "rion-15",
+      "name": "森の共鳴",
+      "attrs": [
+        "rion"
+      ],
+      "points": -1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "boostAttr",
+          "attr": "rion"
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 7,
+      "text": "このターン、次に使うりおん属性カードの移動・補充・破棄枚数を2倍にする。"
+    },
+    {
+      "id": "enami-0",
+      "name": "メンタル疾走",
+      "attrs": [
+        "enami"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "bonus",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 0,
+      "text": "合計出目＋2。"
+    },
+    {
+      "id": "enami-1",
+      "name": "橙の衝動",
+      "attrs": [
+        "enami"
+      ],
+      "points": 2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "bonus",
+          "n": 3
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 0,
+      "text": "合計出目＋3。"
+    },
+    {
+      "id": "enami-2",
+      "name": "炎の一歩",
+      "attrs": [
+        "enami"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "move",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 1,
+      "text": "2マス進む。移動先のマス効果は発動しない。"
+    },
+    {
+      "id": "enami-3",
+      "name": "炎の連撃",
+      "attrs": [
+        "enami"
+      ],
+      "points": 2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "dice",
+          "n": 1
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 0,
+      "text": "サイコロを1個追加して振る。"
+    },
+    {
+      "id": "enami-4",
+      "name": "炎の加速",
+      "attrs": [
+        "enami"
+      ],
+      "points": -1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "dice",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 2,
+      "art": 0,
+      "text": "サイコロを2個追加して振る。"
+    },
+    {
+      "id": "enami-5",
+      "name": "跳躍メンタル",
+      "attrs": [
+        "enami"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "direct",
+          "n": 6
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 1,
+      "text": "6マス進む。このターンはサイコロを振らない。移動先のマス効果は発動しない。"
+    },
+    {
+      "id": "enami-6",
+      "name": "塩の小突き",
+      "attrs": [
+        "enami"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "move",
+          "n": -2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 2,
+      "text": "相手1人を2マス戻す。移動先のマス効果は発動しない。"
+    },
+    {
+      "id": "enami-7",
+      "name": "炎のけん制",
+      "attrs": [
+        "enami"
+      ],
+      "points": -1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 2,
+      "text": "相手1人の手札をランダムに2枚捨てる。"
+    },
+    {
+      "id": "enami-8",
+      "name": "炎の盗賊",
+      "attrs": [
+        "enami"
+      ],
+      "points": 2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "steal",
+          "n": 1,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 3,
+      "text": "相手1人の裏向きの手札から1枚引く。呪いを引くこともある。"
+    },
+    {
+      "id": "enami-9",
+      "name": "橙の引力",
+      "attrs": [
+        "enami"
+      ],
+      "points": -2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "steal",
+          "n": 2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 3,
+      "text": "相手1人の裏向きの手札から2枚引く。"
+    },
+    {
+      "id": "enami-10",
+      "name": "焚火の交換",
+      "attrs": [
+        "enami"
+      ],
+      "points": 1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "swapHand",
+          "n": 2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 3,
+      "text": "相手1人とランダムに手札を2枚ずつ交換する。"
+    },
+    {
+      "id": "enami-11",
+      "name": "香辛料の備え",
+      "attrs": [
+        "enami"
+      ],
+      "points": 1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 4,
+      "text": "カードを2枚引く。速攻は発動する。"
+    },
+    {
+      "id": "enami-12",
+      "name": "炎の護り",
+      "attrs": [
+        "enami"
+      ],
+      "points": -3,
+      "timing": "reaction",
+      "effects": [],
+      "kind": "normal",
+      "copies": 3,
+      "art": 5,
+      "text": "自分へのカード1枚またはマス1つの効果をすべて無効化する。",
+      "defense": true
+    },
+    {
+      "id": "enami-13",
+      "name": "橙の書庫",
+      "attrs": [
+        "enami"
+      ],
+      "points": -1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 4,
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。"
+    },
+    {
+      "id": "enami-14",
+      "name": "炎の記憶",
+      "attrs": [
+        "enami"
+      ],
+      "points": 1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 6,
+      "text": "カードを1枚引く。このカードが捨てられると1マス進む。",
+      "onDiscard": 1
+    },
+    {
+      "id": "enami-15",
+      "name": "炎の共鳴",
+      "attrs": [
+        "enami"
+      ],
+      "points": -1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "boostAttr",
+          "attr": "enami"
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 7,
+      "text": "このターン、次に使うえなみ属性カードの移動・補充・破棄枚数を2倍にする。"
+    },
+    {
+      "id": "hide-0",
+      "name": "ピンクの疾走",
+      "attrs": [
+        "hide"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "bonus",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 0,
+      "text": "合計出目＋2。"
+    },
+    {
+      "id": "hide-1",
+      "name": "桃の衝動",
+      "attrs": [
+        "hide"
+      ],
+      "points": 2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "bonus",
+          "n": 3
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 0,
+      "text": "合計出目＋3。"
+    },
+    {
+      "id": "hide-2",
+      "name": "星明かりの一歩",
+      "attrs": [
+        "hide"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "move",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 1,
+      "text": "2マス進む。移動先のマス効果は発動しない。"
+    },
+    {
+      "id": "hide-3",
+      "name": "魔法の連撃",
+      "attrs": [
+        "hide"
+      ],
+      "points": 2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "dice",
+          "n": 1
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 0,
+      "text": "サイコロを1個追加して振る。"
+    },
+    {
+      "id": "hide-4",
+      "name": "魔法の加速",
+      "attrs": [
+        "hide"
+      ],
+      "points": -1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "dice",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 2,
+      "art": 0,
+      "text": "サイコロを2個追加して振る。"
+    },
+    {
+      "id": "hide-5",
+      "name": "ひでの大跳躍",
+      "attrs": [
+        "hide"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "direct",
+          "n": 6
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 1,
+      "text": "6マス進む。このターンはサイコロを振らない。移動先のマス効果は発動しない。"
+    },
+    {
+      "id": "hide-6",
+      "name": "呪いの小突き",
+      "attrs": [
+        "hide"
+      ],
+      "points": 1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "move",
+          "n": -2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 2,
+      "text": "相手1人を2マス戻す。移動先のマス効果は発動しない。"
+    },
+    {
+      "id": "hide-7",
+      "name": "闇のけん制",
+      "attrs": [
+        "hide"
+      ],
+      "points": -1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 2,
+      "text": "相手1人の手札をランダムに2枚捨てる。"
+    },
+    {
+      "id": "hide-8",
+      "name": "魔法の盗賊",
+      "attrs": [
+        "hide"
+      ],
+      "points": 2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "steal",
+          "n": 1,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 3,
+      "text": "相手1人の裏向きの手札から1枚引く。呪いを引くこともある。"
+    },
+    {
+      "id": "hide-9",
+      "name": "桃の引力",
+      "attrs": [
+        "hide"
+      ],
+      "points": -2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "steal",
+          "n": 2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 3,
+      "text": "相手1人の裏向きの手札から2枚引く。"
+    },
+    {
+      "id": "hide-10",
+      "name": "秘密の交換",
+      "attrs": [
+        "hide"
+      ],
+      "points": 1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "swapHand",
+          "n": 2,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 3,
+      "text": "相手1人とランダムに手札を2枚ずつ交換する。"
+    },
+    {
+      "id": "hide-11",
+      "name": "魔法の備え",
+      "attrs": [
+        "hide"
+      ],
+      "points": 1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 4,
+      "text": "カードを2枚引く。速攻は発動する。"
+    },
+    {
+      "id": "hide-12",
+      "name": "闇の護り",
+      "attrs": [
+        "hide"
+      ],
+      "points": -3,
+      "timing": "reaction",
+      "effects": [],
+      "kind": "normal",
+      "copies": 3,
+      "art": 5,
+      "text": "自分へのカード1枚またはマス1つの効果をすべて無効化する。",
+      "defense": true
+    },
+    {
+      "id": "hide-13",
+      "name": "桃の書庫",
+      "attrs": [
+        "hide"
+      ],
+      "points": -1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 4,
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。"
+    },
+    {
+      "id": "hide-14",
+      "name": "星の記憶",
+      "attrs": [
+        "hide"
+      ],
+      "points": 1,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 6,
+      "text": "カードを1枚引く。このカードが捨てられると1マス進む。",
+      "onDiscard": 1
+    },
+    {
+      "id": "hide-15",
+      "name": "溶岩帯",
+      "attrs": [
+        "hide"
+      ],
+      "points": -1,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "boostAttr",
+          "attr": "hide"
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 7,
+      "text": "このターン、次に使うひで属性カードの移動・補充・破棄枚数を2倍にする。"
+    },
+    {
+      "id": "relic-yori",
+      "name": "よりの宝物",
+      "attrs": [
+        "yori"
+      ],
+      "points": 8,
+      "timing": "passive",
+      "effects": [],
+      "kind": "normal",
+      "copies": 4,
+      "art": 8,
+      "text": "使う効果はない。手札に残して8点を獲得する。"
+    },
+    {
+      "id": "affliction-yori",
+      "name": "よりの災難",
+      "attrs": [
+        "yori"
+      ],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "discardAttr",
+          "attr": "yori",
+          "harmful": true
+        }
+      ],
+      "kind": "bad",
+      "copies": 2,
+      "art": 9,
+      "text": "速攻。自分のより属性の手札をすべて捨てる。"
+    },
+    {
+      "id": "gift-yori",
+      "name": "よりの追い風",
+      "attrs": [
+        "yori"
+      ],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        },
+        {
+          "type": "bonus",
+          "n": 1
+        }
+      ],
+      "kind": "good",
+      "copies": 2,
+      "art": 4,
+      "text": "速攻。カードを2枚引く（悪い速攻は無効）。このターンの合計出目＋1。"
+    },
+    {
+      "id": "mixed-0",
+      "name": "よりとりおんの約束",
+      "attrs": [
+        "yori",
+        "rion"
+      ],
+      "points": 4,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        },
+        {
+          "type": "bonus",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 7,
+      "text": "カードを1枚引き、合計出目＋2。2つの属性として扱う。"
+    },
+    {
+      "id": "face-0",
+      "name": "四勇者の肖像・より",
+      "attrs": [
+        "yori"
+      ],
+      "points": 2,
+      "timing": "set",
+      "effects": [
+        {
+          "type": "move",
+          "n": 10
+        },
+        {
+          "type": "draw",
+          "n": 3,
+          "mode": "safe"
+        },
+        {
+          "type": "discard",
+          "target": "allOthers",
+          "n": 3,
+          "harmful": true
+        }
+      ],
+      "kind": "set",
+      "copies": 2,
+      "art": 12,
+      "set": "heroes",
+      "part": 0,
+      "text": "4種類をそろえて全4枚を消費。10マス進む→安全に3枚引く→相手全員の手札を3枚ずつ捨てる。移動先のマス効果なし。"
+    },
+    {
+      "id": "dark-0",
+      "name": "闇を持つひで・左上",
+      "attrs": [
+        "hide"
+      ],
+      "points": 1,
+      "timing": "set",
+      "effects": [
+        {
+          "type": "recover",
+          "n": 6
+        },
+        {
+          "type": "resetLeader",
+          "harmful": true,
+          "target": "leader"
+        }
+      ],
+      "kind": "set",
+      "copies": 2,
+      "art": 9,
+      "set": "dark",
+      "part": 0,
+      "text": "4パーツをそろえて全4枚を消費。捨て札から6枚選んで回収→先頭の相手をスタートへ戻す。回収した速攻は手札に保持。"
+    },
+    {
+      "id": "relic-rion",
+      "name": "りおんの宝物",
+      "attrs": [
+        "rion"
+      ],
+      "points": 8,
+      "timing": "passive",
+      "effects": [],
+      "kind": "normal",
+      "copies": 4,
+      "art": 8,
+      "text": "使う効果はない。手札に残して8点を獲得する。"
+    },
+    {
+      "id": "affliction-rion",
+      "name": "りおんの災難",
+      "attrs": [
+        "rion"
+      ],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "discardAttr",
+          "attr": "rion",
+          "harmful": true
+        }
+      ],
+      "kind": "bad",
+      "copies": 2,
+      "art": 9,
+      "text": "速攻。自分のりおん属性の手札をすべて捨てる。"
+    },
+    {
+      "id": "gift-rion",
+      "name": "りおんの追い風",
+      "attrs": [
+        "rion"
+      ],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        },
+        {
+          "type": "bonus",
+          "n": 1
+        }
+      ],
+      "kind": "good",
+      "copies": 2,
+      "art": 4,
+      "text": "速攻。カードを2枚引く（悪い速攻は無効）。このターンの合計出目＋1。"
+    },
+    {
+      "id": "mixed-1",
+      "name": "りおんとえなみの約束",
+      "attrs": [
+        "rion",
+        "enami"
+      ],
+      "points": 4,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        },
+        {
+          "type": "bonus",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 7,
+      "text": "カードを1枚引き、合計出目＋2。2つの属性として扱う。"
+    },
+    {
+      "id": "face-1",
+      "name": "四勇者の肖像・りおん",
+      "attrs": [
+        "rion"
+      ],
+      "points": 2,
+      "timing": "set",
+      "effects": [
+        {
+          "type": "move",
+          "n": 10
+        },
+        {
+          "type": "draw",
+          "n": 3,
+          "mode": "safe"
+        },
+        {
+          "type": "discard",
+          "target": "allOthers",
+          "n": 3,
+          "harmful": true
+        }
+      ],
+      "kind": "set",
+      "copies": 2,
+      "art": 13,
+      "set": "heroes",
+      "part": 1,
+      "text": "4種類をそろえて全4枚を消費。10マス進む→安全に3枚引く→相手全員の手札を3枚ずつ捨てる。移動先のマス効果なし。"
+    },
+    {
+      "id": "dark-1",
+      "name": "闇を持つひで・右上",
+      "attrs": [
+        "hide"
+      ],
+      "points": 1,
+      "timing": "set",
+      "effects": [
+        {
+          "type": "recover",
+          "n": 6
+        },
+        {
+          "type": "resetLeader",
+          "harmful": true,
+          "target": "leader"
+        }
+      ],
+      "kind": "set",
+      "copies": 2,
+      "art": 9,
+      "set": "dark",
+      "part": 1,
+      "text": "4パーツをそろえて全4枚を消費。捨て札から6枚選んで回収→先頭の相手をスタートへ戻す。回収した速攻は手札に保持。"
+    },
+    {
+      "id": "relic-enami",
+      "name": "えなみの宝物",
+      "attrs": [
+        "enami"
+      ],
+      "points": 8,
+      "timing": "passive",
+      "effects": [],
+      "kind": "normal",
+      "copies": 4,
+      "art": 8,
+      "text": "使う効果はない。手札に残して8点を獲得する。"
+    },
+    {
+      "id": "affliction-enami",
+      "name": "えなみの災難",
+      "attrs": [
+        "enami"
+      ],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "discardAttr",
+          "attr": "enami",
+          "harmful": true
+        }
+      ],
+      "kind": "bad",
+      "copies": 2,
+      "art": 9,
+      "text": "速攻。自分のえなみ属性の手札をすべて捨てる。"
+    },
+    {
+      "id": "gift-enami",
+      "name": "えなみの追い風",
+      "attrs": [
+        "enami"
+      ],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        },
+        {
+          "type": "bonus",
+          "n": 1
+        }
+      ],
+      "kind": "good",
+      "copies": 2,
+      "art": 4,
+      "text": "速攻。カードを2枚引く（悪い速攻は無効）。このターンの合計出目＋1。"
+    },
+    {
+      "id": "mixed-2",
+      "name": "えなみとひでの約束",
+      "attrs": [
+        "enami",
+        "hide"
+      ],
+      "points": 4,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        },
+        {
+          "type": "bonus",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 7,
+      "text": "カードを1枚引き、合計出目＋2。2つの属性として扱う。"
+    },
+    {
+      "id": "face-2",
+      "name": "四勇者の肖像・えなみ",
+      "attrs": [
+        "enami"
+      ],
+      "points": 2,
+      "timing": "set",
+      "effects": [
+        {
+          "type": "move",
+          "n": 10
+        },
+        {
+          "type": "draw",
+          "n": 3,
+          "mode": "safe"
+        },
+        {
+          "type": "discard",
+          "target": "allOthers",
+          "n": 3,
+          "harmful": true
+        }
+      ],
+      "kind": "set",
+      "copies": 2,
+      "art": 14,
+      "set": "heroes",
+      "part": 2,
+      "text": "4種類をそろえて全4枚を消費。10マス進む→安全に3枚引く→相手全員の手札を3枚ずつ捨てる。移動先のマス効果なし。"
+    },
+    {
+      "id": "dark-2",
+      "name": "闇を持つひで・左下",
+      "attrs": [
+        "hide"
+      ],
+      "points": 1,
+      "timing": "set",
+      "effects": [
+        {
+          "type": "recover",
+          "n": 6
+        },
+        {
+          "type": "resetLeader",
+          "harmful": true,
+          "target": "leader"
+        }
+      ],
+      "kind": "set",
+      "copies": 2,
+      "art": 9,
+      "set": "dark",
+      "part": 2,
+      "text": "4パーツをそろえて全4枚を消費。捨て札から6枚選んで回収→先頭の相手をスタートへ戻す。回収した速攻は手札に保持。"
+    },
+    {
+      "id": "relic-hide",
+      "name": "ひでの宝物",
+      "attrs": [
+        "hide"
+      ],
+      "points": 8,
+      "timing": "passive",
+      "effects": [],
+      "kind": "normal",
+      "copies": 4,
+      "art": 8,
+      "text": "使う効果はない。手札に残して8点を獲得する。"
+    },
+    {
+      "id": "affliction-hide",
+      "name": "ひでの災難",
+      "attrs": [
+        "hide"
+      ],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "discardAttr",
+          "attr": "hide",
+          "harmful": true
+        }
+      ],
+      "kind": "bad",
+      "copies": 2,
+      "art": 9,
+      "text": "速攻。自分のひで属性の手札をすべて捨てる。"
+    },
+    {
+      "id": "gift-hide",
+      "name": "ひでの追い風",
+      "attrs": [
+        "hide"
+      ],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        },
+        {
+          "type": "bonus",
+          "n": 1
+        }
+      ],
+      "kind": "good",
+      "copies": 2,
+      "art": 4,
+      "text": "速攻。カードを2枚引く（悪い速攻は無効）。このターンの合計出目＋1。"
+    },
+    {
+      "id": "mixed-3",
+      "name": "ひでとよりの約束",
+      "attrs": [
+        "hide",
+        "yori"
+      ],
+      "points": 4,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        },
+        {
+          "type": "bonus",
+          "n": 2
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 7,
+      "text": "カードを1枚引き、合計出目＋2。2つの属性として扱う。"
+    },
+    {
+      "id": "face-3",
+      "name": "四勇者の肖像・ひで",
+      "attrs": [
+        "hide"
+      ],
+      "points": 2,
+      "timing": "set",
+      "effects": [
+        {
+          "type": "move",
+          "n": 10
+        },
+        {
+          "type": "draw",
+          "n": 3,
+          "mode": "safe"
+        },
+        {
+          "type": "discard",
+          "target": "allOthers",
+          "n": 3,
+          "harmful": true
+        }
+      ],
+      "kind": "set",
+      "copies": 2,
+      "art": 15,
+      "set": "heroes",
+      "part": 3,
+      "text": "4種類をそろえて全4枚を消費。10マス進む→安全に3枚引く→相手全員の手札を3枚ずつ捨てる。移動先のマス効果なし。"
+    },
+    {
+      "id": "dark-3",
+      "name": "闇を持つひで・右下",
+      "attrs": [
+        "hide"
+      ],
+      "points": 1,
+      "timing": "set",
+      "effects": [
+        {
+          "type": "recover",
+          "n": 6
+        },
+        {
+          "type": "resetLeader",
+          "harmful": true,
+          "target": "leader"
+        }
+      ],
+      "kind": "set",
+      "copies": 2,
+      "art": 9,
+      "set": "dark",
+      "part": 3,
+      "text": "4パーツをそろえて全4枚を消費。捨て札から6枚選んで回収→先頭の相手をスタートへ戻す。回収した速攻は手札に保持。"
+    },
+    {
+      "id": "exchange",
+      "name": "特殊カード交換",
+      "attrs": [],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "special"
+        }
+      ],
+      "kind": "exchange",
+      "copies": 16,
+      "art": 10,
+      "text": "公開する特殊カードをランダムに1枚獲得。すでに持っていれば残す1枚を選ぶ。"
+    },
+    {
+      "id": "curse-goal",
+      "name": "無念・帰れない呪い",
+      "attrs": [],
+      "points": -5,
+      "timing": "passive",
+      "effects": [],
+      "kind": "curse",
+      "copies": 3,
+      "art": 9,
+      "curse": "goal",
+      "text": "持っている間はゴール不可。到達すると20マス戻り、この呪いを1枚捨てる。交換・奪取で相手に渡せる。"
+    },
+    {
+      "id": "curse-heavy",
+      "name": "鉛の呪い",
+      "attrs": [],
+      "points": -4,
+      "timing": "passive",
+      "effects": [],
+      "kind": "curse",
+      "copies": 3,
+      "art": 9,
+      "curse": "heavy",
+      "text": "所持中、サイコロの合計出目−2（最低1）。複数枚でも−2。交換・奪取で相手に渡せる。"
+    },
+    {
+      "id": "curse-hunger",
+      "name": "底なしの呪い",
+      "attrs": [],
+      "points": -8,
+      "timing": "passive",
+      "effects": [],
+      "kind": "curse",
+      "copies": 3,
+      "art": 9,
+      "curse": "hunger",
+      "text": "自分の手番開始時に、ほかの手札をランダムに1枚失う。複数枚でも1枚。"
+    },
+    {
+      "id": "cleanse",
+      "name": "浄化の灯",
+      "attrs": [],
+      "points": 2,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "cleanse"
+        },
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "kind": "good",
+      "copies": 3,
+      "art": 5,
+      "text": "自分の呪いをすべて捨てて、カードを1枚引く。"
+    },
+    {
+      "id": "chance",
+      "name": "チャンス！！！",
+      "attrs": [],
+      "points": 5,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "swapSpecial",
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "good",
+      "copies": 3,
+      "art": 10,
+      "text": "相手1人と特殊カードを交換する。片方だけの所持でも交換できる。"
+    },
+    {
+      "id": "rob-special",
+      "name": "王冠泥棒",
+      "attrs": [],
+      "points": -3,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "stealSpecial",
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 3,
+      "text": "相手1人の特殊カードを奪う。所持中なら残す1枚を選ぶ。"
+    },
+    {
+      "id": "break-special",
+      "name": "忘却の雷",
+      "attrs": [],
+      "points": -2,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "loseSpecial",
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 2,
+      "text": "相手1人の特殊カードを捨てる。"
+    },
+    {
+      "id": "dove",
+      "name": "ハト払い",
+      "attrs": [
+        "yori"
+      ],
+      "points": 2,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "discardMove"
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 1,
+      "text": "手札を好きな枚数捨て、その枚数だけ進む。そのターンはサイコロなし。移動先のマス効果なし。"
+    },
+    {
+      "id": "mental",
+      "name": "不屈のメンタル",
+      "attrs": [
+        "enami"
+      ],
+      "points": 3,
+      "timing": "any",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 1,
+          "select": true
+        },
+        {
+          "type": "draw",
+          "n": 3,
+          "mode": "safe"
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 4,
+      "text": "手札を1枚捨てて、安全に3枚引く。"
+    },
+    {
+      "id": "guard",
+      "name": "破片になっても",
+      "attrs": [
+        "enami"
+      ],
+      "points": -3,
+      "timing": "reaction",
+      "effects": [],
+      "kind": "normal",
+      "copies": 6,
+      "art": 5,
+      "defense": true,
+      "text": "自分へのカード1枚またはマス1つの効果をすべて無効化する。相手のターンでも防御に使える。"
+    },
+    {
+      "id": "reflect",
+      "name": "鏡のいたずら",
+      "attrs": [
+        "hide"
+      ],
+      "points": -4,
+      "timing": "reaction",
+      "effects": [],
+      "kind": "normal",
+      "copies": 3,
+      "art": 5,
+      "defense": true,
+      "reflect": true,
+      "text": "自分を対象にした相手のカードを1回だけ相手へ跳ね返す。マスや速攻なら無効化する。"
+    },
+    {
+      "id": "cerberus",
+      "name": "声の良いケルベロス",
+      "attrs": [
+        "rion"
+      ],
+      "points": 10,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "move",
+          "n": 1,
+          "event": true,
+          "target": "chooseAny",
+          "harmful": true
+        },
+        {
+          "type": "skip",
+          "n": 1,
+          "target": "choose",
+          "harmful": true
+        },
+        {
+          "type": "discard",
+          "n": 3,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "kind": "rare",
+      "copies": 1,
+      "art": 11,
+      "text": "誰か1人を1マス進め、移動先のマス効果も発動→相手1人を1回休み→相手1人の手札を3枚捨てる。"
+    },
+    {
+      "id": "fremens",
+      "name": "フレメンズはいいぞ",
+      "attrs": [
+        "yori",
+        "rion",
+        "enami",
+        "hide"
+      ],
+      "points": 5,
+      "timing": "post",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 3,
+          "mode": "safe"
+        },
+        {
+          "type": "extraTurn"
+        }
+      ],
+      "kind": "rare",
+      "copies": 1,
+      "art": 7,
+      "text": "安全に3枚引き、追加ターンを得る。追加ターンからさらに追加ターンは得られない。"
+    },
+    {
+      "id": "hide",
+      "name": "ひで・秘蔵の一枚",
+      "attrs": [
+        "hide"
+      ],
+      "points": 40,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "recover",
+          "n": 4
+        },
+        {
+          "type": "bonus",
+          "n": 4
+        }
+      ],
+      "kind": "rare",
+      "copies": 1,
+      "art": 15,
+      "text": "捨て札から4枚回収し、合計出目＋4。使うと40点を失う。回収した速攻は手札に保持。"
+    },
+    {
+      "id": "fist",
+      "name": "539.936kgの拳",
+      "attrs": [
+        "yori"
+      ],
+      "points": 5,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "special"
+        },
+        {
+          "type": "move",
+          "n": 7
+        },
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        },
+        {
+          "type": "discard",
+          "target": "allOthers",
+          "n": 1,
+          "harmful": true
+        }
+      ],
+      "kind": "rare",
+      "copies": 1,
+      "art": 12,
+      "text": "特殊カード獲得→7マス進む→安全に2枚引く→相手全員が1枚失う。移動先のマス効果なし。"
+    },
+    {
+      "id": "destroyer",
+      "name": "破壊神ヒデ",
+      "attrs": [
+        "hide"
+      ],
+      "points": -5,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "loseSpecial",
+          "target": "allOthers",
+          "harmful": true
+        },
+        {
+          "type": "discard",
+          "target": "allOthers",
+          "n": 3,
+          "harmful": true
+        },
+        {
+          "type": "move",
+          "target": "allOthers",
+          "n": -3,
+          "harmful": true
+        }
+      ],
+      "kind": "rare",
+      "copies": 1,
+      "art": 15,
+      "text": "相手全員の特殊カードを破棄→手札を3枚ずつ破棄→3マスずつ戻す。移動先のマス効果なし。"
+    },
+    {
+      "id": "principal",
+      "name": "園長先生（より）",
+      "attrs": [
+        "yori"
+      ],
+      "points": -4,
+      "timing": "pre",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 4,
+          "mode": "hold"
+        }
+      ],
+      "kind": "normal",
+      "copies": 3,
+      "art": 4,
+      "text": "カードを4枚引く。速攻は発動せず手札に保持する。"
+    },
+    {
+      "id": "forest",
+      "name": "森のより",
+      "attrs": [
+        "yori"
+      ],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "handSize",
+          "n": 5
+        }
+      ],
+      "kind": "good",
+      "copies": 3,
+      "art": 6,
+      "text": "速攻。手札を5枚にそろえる。不足分は安全に引き、余分は自分で選んで捨てる。"
+    },
+    {
+      "id": "poison",
+      "name": "毒",
+      "attrs": [],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "skip",
+          "n": 1,
+          "harmful": true
+        },
+        {
+          "type": "discardAttr",
+          "attr": "rion",
+          "harmful": true
+        }
+      ],
+      "kind": "bad",
+      "copies": 2,
+      "art": 9,
+      "text": "速攻。次の手番を1回休み、りおん属性の手札をすべて捨てる。"
+    },
+    {
+      "id": "sleep",
+      "name": "よりの寝落ち",
+      "attrs": [
+        "yori"
+      ],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "endNow",
+          "harmful": true
+        }
+      ],
+      "kind": "bad",
+      "copies": 2,
+      "art": 9,
+      "text": "速攻。今が自分のターンなら直ちに終了。それ以外は次の手番を1回休む。"
+    },
+    {
+      "id": "cup",
+      "name": "土佐鶴ワンカップ",
+      "attrs": [],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "catastrophe",
+          "harmful": true
+        }
+      ],
+      "kind": "bad",
+      "copies": 2,
+      "art": 9,
+      "text": "速攻。手札をすべて失う。より・えなみ属性を1枚捨てて回避できる。"
+    },
+    {
+      "id": "experiment",
+      "name": "ヒデの化学実験",
+      "attrs": [
+        "hide"
+      ],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "move",
+          "n": -2,
+          "target": "allOthers",
+          "harmful": true
+        }
+      ],
+      "kind": "good",
+      "copies": 2,
+      "art": 2,
+      "text": "速攻。相手全員を2マス戻す。移動先のマス効果なし。"
+    },
+    {
+      "id": "thunder",
+      "name": "奇行ヒデ",
+      "attrs": [
+        "hide"
+      ],
+      "points": 0,
+      "timing": "instant",
+      "effects": [
+        {
+          "type": "move",
+          "n": -5,
+          "target": "all",
+          "harmful": true
+        }
+      ],
+      "kind": "bad",
+      "copies": 2,
+      "art": 2,
+      "text": "速攻。自分を含む未ゴールの全員が5マス戻る。移動先のマス効果なし。"
+    },
+    {
+      "id": "hide-date",
+      "name": "ヒデート風",
+      "attrs": [
+        "hide"
+      ],
+      "points": 2,
+      "timing": "passive",
+      "effects": [],
+      "kind": "normal",
+      "copies": 2,
+      "art": 8,
+      "score": "specialDouble",
+      "text": "精算時、特殊カードの印刷点を2倍にする。マイナス点も2倍。複数枚でも2倍。"
+    },
+    {
+      "id": "nothing",
+      "name": "10kg",
+      "attrs": [],
+      "points": 1,
+      "timing": "passive",
+      "effects": [],
+      "kind": "normal",
+      "copies": 5,
+      "art": 8,
+      "text": "特に効果なし。無属性なので4属性の指定効果を受けない。"
+    },
+    {
+      "id": "treasure",
+      "name": "星の財宝",
+      "attrs": [],
+      "points": 12,
+      "timing": "passive",
+      "effects": [],
+      "kind": "normal",
+      "copies": 3,
+      "art": 8,
+      "text": "手札に残して12点。無属性。"
+    },
+    {
+      "id": "phoenix",
+      "name": "人類の進化とは",
+      "attrs": [
+        "hide"
+      ],
+      "points": 1,
+      "timing": "passive",
+      "effects": [],
+      "kind": "normal",
+      "copies": 4,
+      "art": 6,
+      "onDiscard": 2,
+      "text": "このカードが捨てられると2マス進む。移動先のマス効果は発動しない。"
+    }
+  ],
+  "specials": [
+    {
+      "id": "worker",
+      "name": "限界社畜",
+      "points": 10,
+      "text": "一回休みと後退を無効化。サイコロの4・5・6は1として数える。",
+      "art": 0
+    },
+    {
+      "id": "grudge",
+      "name": "怨念",
+      "points": 3,
+      "text": "後退させられた時、攻撃者から1枚奪い、安全に2枚引く。自分の手番につき1回。",
+      "art": 9
+    },
+    {
+      "id": "chuni",
+      "name": "厨二病",
+      "points": -5,
+      "text": "終了時に手札2枚を捨てて追加ターン。追加ターン中は再発動不可。",
+      "art": 12
+    },
+    {
+      "id": "surprise",
+      "name": "サプライズ",
+      "points": -3,
+      "text": "開始時に単独最下位なら、手札2枚を捨てて相手全員を2マス戻せる。",
+      "art": 4
+    },
+    {
+      "id": "want",
+      "name": "物欲",
+      "points": 10,
+      "text": "手番開始時に相手1人の裏向きの手札から1枚引く。",
+      "art": 3
+    },
+    {
+      "id": "genius",
+      "name": "天才",
+      "points": 10,
+      "text": "サイコロの代わりに手札枚数だけ進む（1〜10マス）。移動先のマス効果は発動する。",
+      "art": 4
+    },
+    {
+      "id": "hacker",
+      "name": "ハッカー",
+      "points": 3,
+      "text": "自分が引いた速攻を発動させず手札に保持する。奪取・交換で渡すと新しい持ち主に速攻が発動する。",
+      "art": 9
+    },
+    {
+      "id": "greed",
+      "name": "強欲",
+      "points": 5,
+      "text": "自分への補充・破棄、自分が奪う枚数を2倍にする。強制破棄も2倍。得点・サイコロ・移動・支払コストは変わらない。",
+      "art": 8
+    },
+    {
+      "id": "power",
+      "name": "権力",
+      "points": 10,
+      "text": "黒いマスのイベントを無効化する。",
+      "art": 10
+    },
+    {
+      "id": "buddha",
+      "name": "ブッダ",
+      "points": -10,
+      "text": "悪い速攻を無効化。相手がスタートへ戻された後の自分の手番はサイコロを2個追加。",
+      "art": 5
+    },
+    {
+      "id": "tsundere",
+      "name": "ツンデレ",
+      "points": -15,
+      "text": "自分1人を対象にした相手の攻撃を跳ね返せる。各相手ターンに1回。跳ね返しは連鎖しない。",
+      "art": 5
+    },
+    {
+      "id": "thief",
+      "name": "怪盗",
+      "points": -20,
+      "text": "最初のゴールが確定する直前に割り込み、自分が1位、相手が2位になる。自分がゴールを阻む呪いを持つ場合は発動しない。",
+      "art": 3
+    },
+    {
+      "id": "drunk",
+      "name": "酒乱",
+      "points": -7,
+      "text": "精算時、より属性の手札1枚につき＋3点。より属性の悪い速攻を無効化。",
+      "art": 12
+    },
+    {
+      "id": "shiva",
+      "name": "シヴァ",
+      "points": -15,
+      "text": "悪い速攻を無効化。自分のターン中に手札を1枚防御札にできる。保持は1枚まで。",
+      "art": 15
+    },
+    {
+      "id": "punch",
+      "name": "拳",
+      "points": -5,
+      "text": "終了時、前後2マス以内の相手1人をサイコロ1個の出目だけ戻せる。",
+      "art": 12
+    },
+    {
+      "id": "swift",
+      "name": "瞬足",
+      "points": 5,
+      "text": "手番開始時に安全に1枚追加で引き、手札を1枚選んで捨てる。",
+      "art": 1
+    }
+  ],
+  "board": [
+    {
+      "name": "旅立ち",
+      "icon": "始",
+      "tone": "gold",
+      "text": "カードと運命の旅が始まる。",
+      "effects": [],
+      "id": "0",
+      "index": 0,
+      "x": 280,
+      "y": 130,
+      "next": [
+        "1"
+      ],
+      "kind": "start"
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "1",
+      "index": 1,
+      "x": 415,
+      "y": 130,
+      "next": [
+        "2"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "カードの泉",
+      "icon": "＋",
+      "tone": "blue",
+      "text": "カードを2枚引く。速攻は発動する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "id": "2",
+      "index": 2,
+      "x": 550,
+      "y": 130,
+      "next": [
+        "3"
+      ],
+      "kind": "draw"
+    },
+    {
+      "name": "追い風",
+      "icon": "↑",
+      "tone": "green",
+      "text": "3マス進む。移動先のマス効果は発動しない。",
+      "effects": [
+        {
+          "type": "move",
+          "n": 3
+        }
+      ],
+      "id": "3",
+      "index": 3,
+      "x": 685,
+      "y": 130,
+      "next": [
+        "4"
+      ],
+      "kind": "move"
+    },
+    {
+      "name": "静かな書庫",
+      "icon": "本",
+      "tone": "green",
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "id": "4",
+      "index": 4,
+      "x": 820,
+      "y": 130,
+      "next": [
+        "5"
+      ],
+      "kind": "safe"
+    },
+    {
+      "name": "逆風",
+      "icon": "↓",
+      "tone": "purple",
+      "text": "2マス戻る。移動先のマス効果は発動しない。",
+      "effects": [
+        {
+          "type": "move",
+          "n": -2,
+          "harmful": true
+        }
+      ],
+      "id": "5",
+      "index": 5,
+      "x": 955,
+      "y": 130,
+      "next": [
+        "6"
+      ],
+      "kind": "back"
+    },
+    {
+      "name": "すり替え市場",
+      "icon": "⇄",
+      "tone": "pink",
+      "text": "相手を1人選び、手札をランダムに1枚ずつ交換する。",
+      "effects": [
+        {
+          "type": "swapHand",
+          "n": 1,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "id": "6",
+      "index": 6,
+      "x": 1090,
+      "y": 130,
+      "next": [
+        "7"
+      ],
+      "kind": "trade"
+    },
+    {
+      "name": "宝庫の契約",
+      "icon": "宝",
+      "tone": "gold",
+      "text": "手札を1枚捨てて、カードを3枚引く。",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 1,
+          "select": true
+        },
+        {
+          "type": "draw",
+          "n": 3
+        }
+      ],
+      "id": "7",
+      "index": 7,
+      "x": 1225,
+      "y": 130,
+      "next": [
+        "8",
+        "b7-0"
+      ],
+      "kind": "wager",
+      "fork": true
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "8",
+      "index": 8,
+      "x": 1225,
+      "y": 290,
+      "next": [
+        "9"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "カードの泉",
+      "icon": "＋",
+      "tone": "blue",
+      "text": "カードを2枚引く。速攻は発動する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "id": "9",
+      "index": 9,
+      "x": 1090,
+      "y": 290,
+      "next": [
+        "10"
+      ],
+      "kind": "draw"
+    },
+    {
+      "name": "奈落の徴収",
+      "icon": "捨",
+      "tone": "black",
+      "text": "手札を2枚選んで捨てる。",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 2,
+          "select": true,
+          "harmful": true
+        }
+      ],
+      "id": "10",
+      "index": 10,
+      "x": 955,
+      "y": 290,
+      "next": [
+        "11"
+      ],
+      "kind": "discard"
+    },
+    {
+      "name": "追い風",
+      "icon": "↑",
+      "tone": "green",
+      "text": "3マス進む。移動先のマス効果は発動しない。",
+      "effects": [
+        {
+          "type": "move",
+          "n": 3
+        }
+      ],
+      "id": "11",
+      "index": 11,
+      "x": 820,
+      "y": 290,
+      "next": [
+        "12"
+      ],
+      "kind": "move"
+    },
+    {
+      "name": "影の取引",
+      "icon": "奪",
+      "tone": "purple",
+      "text": "相手を1人選び、裏向きの手札から1枚を引く。",
+      "effects": [
+        {
+          "type": "steal",
+          "n": 1,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "id": "12",
+      "index": 12,
+      "x": 685,
+      "y": 290,
+      "next": [
+        "13"
+      ],
+      "kind": "steal"
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "13",
+      "index": 13,
+      "x": 550,
+      "y": 290,
+      "next": [
+        "14"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "静かな書庫",
+      "icon": "本",
+      "tone": "green",
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "id": "14",
+      "index": 14,
+      "x": 415,
+      "y": 290,
+      "next": [
+        "15"
+      ],
+      "kind": "safe"
+    },
+    {
+      "name": "属性の審判",
+      "icon": "り",
+      "tone": "pink",
+      "text": "りおん属性の手札をすべて捨てる。無属性は対象外。",
+      "effects": [
+        {
+          "type": "discardAttr",
+          "attr": "rion",
+          "harmful": true
+        }
+      ],
+      "id": "15",
+      "index": 15,
+      "x": 280,
+      "y": 290,
+      "next": [
+        "16"
+      ],
+      "kind": "attribute"
+    },
+    {
+      "name": "逆風",
+      "icon": "↓",
+      "tone": "purple",
+      "text": "2マス戻る。移動先のマス効果は発動しない。",
+      "effects": [
+        {
+          "type": "move",
+          "n": -2,
+          "harmful": true
+        }
+      ],
+      "id": "16",
+      "index": 16,
+      "x": 280,
+      "y": 450,
+      "next": [
+        "17"
+      ],
+      "kind": "back"
+    },
+    {
+      "name": "カードの泉",
+      "icon": "＋",
+      "tone": "blue",
+      "text": "カードを2枚引く。速攻は発動する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "id": "17",
+      "index": 17,
+      "x": 415,
+      "y": 450,
+      "next": [
+        "18"
+      ],
+      "kind": "draw"
+    },
+    {
+      "name": "浄化の泉",
+      "icon": "浄",
+      "tone": "green",
+      "text": "呪いをすべて捨てて、カードを1枚引く。",
+      "effects": [
+        {
+          "type": "cleanse"
+        },
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "18",
+      "index": 18,
+      "x": 550,
+      "y": 450,
+      "next": [
+        "19"
+      ],
+      "kind": "cleanse"
+    },
+    {
+      "name": "運命の祭壇",
+      "icon": "◆",
+      "tone": "gold",
+      "text": "特殊カードを1枚獲得する。所持中なら残す1枚を選ぶ。",
+      "effects": [
+        {
+          "type": "special"
+        }
+      ],
+      "id": "19",
+      "index": 19,
+      "x": 685,
+      "y": 450,
+      "next": [
+        "20"
+      ],
+      "kind": "special"
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "20",
+      "index": 20,
+      "x": 820,
+      "y": 450,
+      "next": [
+        "21"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "眠りの霧",
+      "icon": "休",
+      "tone": "black",
+      "text": "次の自分の手番を1回休む。",
+      "effects": [
+        {
+          "type": "skip",
+          "n": 1,
+          "harmful": true
+        }
+      ],
+      "id": "21",
+      "index": 21,
+      "x": 955,
+      "y": 450,
+      "next": [
+        "22"
+      ],
+      "kind": "skip"
+    },
+    {
+      "name": "カードの泉",
+      "icon": "＋",
+      "tone": "blue",
+      "text": "カードを2枚引く。速攻は発動する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "id": "22",
+      "index": 22,
+      "x": 1090,
+      "y": 450,
+      "next": [
+        "23"
+      ],
+      "kind": "draw"
+    },
+    {
+      "name": "必ず止まる",
+      "icon": "門",
+      "tone": "gold",
+      "text": "残りの移動を止め、カードを2枚引く。特殊カードを1枚獲得する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        },
+        {
+          "type": "special"
+        }
+      ],
+      "id": "23",
+      "index": 23,
+      "x": 1225,
+      "y": 450,
+      "next": [
+        "24"
+      ],
+      "kind": "gate"
+    },
+    {
+      "name": "奈落の徴収",
+      "icon": "捨",
+      "tone": "black",
+      "text": "手札を2枚選んで捨てる。",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 2,
+          "select": true,
+          "harmful": true
+        }
+      ],
+      "id": "24",
+      "index": 24,
+      "x": 1225,
+      "y": 610,
+      "next": [
+        "25"
+      ],
+      "kind": "discard"
+    },
+    {
+      "name": "静かな書庫",
+      "icon": "本",
+      "tone": "green",
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "id": "25",
+      "index": 25,
+      "x": 1090,
+      "y": 610,
+      "next": [
+        "26"
+      ],
+      "kind": "safe"
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "26",
+      "index": 26,
+      "x": 955,
+      "y": 610,
+      "next": [
+        "27"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "すり替え市場",
+      "icon": "⇄",
+      "tone": "pink",
+      "text": "相手を1人選び、手札をランダムに1枚ずつ交換する。",
+      "effects": [
+        {
+          "type": "swapHand",
+          "n": 1,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "id": "27",
+      "index": 27,
+      "x": 820,
+      "y": 610,
+      "next": [
+        "28"
+      ],
+      "kind": "trade"
+    },
+    {
+      "name": "運命の祭壇",
+      "icon": "◆",
+      "tone": "gold",
+      "text": "特殊カードを1枚獲得する。所持中なら残す1枚を選ぶ。",
+      "effects": [
+        {
+          "type": "special"
+        }
+      ],
+      "id": "28",
+      "index": 28,
+      "x": 685,
+      "y": 610,
+      "next": [
+        "29"
+      ],
+      "kind": "special"
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "29",
+      "index": 29,
+      "x": 550,
+      "y": 610,
+      "next": [
+        "30"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "カードの泉",
+      "icon": "＋",
+      "tone": "blue",
+      "text": "カードを2枚引く。速攻は発動する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "id": "30",
+      "index": 30,
+      "x": 415,
+      "y": 610,
+      "next": [
+        "31"
+      ],
+      "kind": "draw"
+    },
+    {
+      "name": "追い風",
+      "icon": "↑",
+      "tone": "green",
+      "text": "3マス進む。移動先のマス効果は発動しない。",
+      "effects": [
+        {
+          "type": "move",
+          "n": 3
+        }
+      ],
+      "id": "31",
+      "index": 31,
+      "x": 280,
+      "y": 610,
+      "next": [
+        "32",
+        "b31-0"
+      ],
+      "kind": "move",
+      "fork": true
+    },
+    {
+      "name": "静かな書庫",
+      "icon": "本",
+      "tone": "green",
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "id": "32",
+      "index": 32,
+      "x": 280,
+      "y": 770,
+      "next": [
+        "33"
+      ],
+      "kind": "safe"
+    },
+    {
+      "name": "逆風",
+      "icon": "↓",
+      "tone": "purple",
+      "text": "2マス戻る。移動先のマス効果は発動しない。",
+      "effects": [
+        {
+          "type": "move",
+          "n": -2,
+          "harmful": true
+        }
+      ],
+      "id": "33",
+      "index": 33,
+      "x": 415,
+      "y": 770,
+      "next": [
+        "34"
+      ],
+      "kind": "back"
+    },
+    {
+      "name": "すり替え市場",
+      "icon": "⇄",
+      "tone": "pink",
+      "text": "相手を1人選び、手札をランダムに1枚ずつ交換する。",
+      "effects": [
+        {
+          "type": "swapHand",
+          "n": 1,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "id": "34",
+      "index": 34,
+      "x": 550,
+      "y": 770,
+      "next": [
+        "35"
+      ],
+      "kind": "trade"
+    },
+    {
+      "name": "宝庫の契約",
+      "icon": "宝",
+      "tone": "gold",
+      "text": "手札を1枚捨てて、カードを3枚引く。",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 1,
+          "select": true
+        },
+        {
+          "type": "draw",
+          "n": 3
+        }
+      ],
+      "id": "35",
+      "index": 35,
+      "x": 685,
+      "y": 770,
+      "next": [
+        "36"
+      ],
+      "kind": "wager"
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "36",
+      "index": 36,
+      "x": 820,
+      "y": 770,
+      "next": [
+        "37"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "カードの泉",
+      "icon": "＋",
+      "tone": "blue",
+      "text": "カードを2枚引く。速攻は発動する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "id": "37",
+      "index": 37,
+      "x": 955,
+      "y": 770,
+      "next": [
+        "38"
+      ],
+      "kind": "draw"
+    },
+    {
+      "name": "奈落の徴収",
+      "icon": "捨",
+      "tone": "black",
+      "text": "手札を2枚選んで捨てる。",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 2,
+          "select": true,
+          "harmful": true
+        }
+      ],
+      "id": "38",
+      "index": 38,
+      "x": 1090,
+      "y": 770,
+      "next": [
+        "39"
+      ],
+      "kind": "discard"
+    },
+    {
+      "name": "追い風",
+      "icon": "↑",
+      "tone": "green",
+      "text": "3マス進む。移動先のマス効果は発動しない。",
+      "effects": [
+        {
+          "type": "move",
+          "n": 3
+        }
+      ],
+      "id": "39",
+      "index": 39,
+      "x": 1225,
+      "y": 770,
+      "next": [
+        "40"
+      ],
+      "kind": "move"
+    },
+    {
+      "name": "影の取引",
+      "icon": "奪",
+      "tone": "purple",
+      "text": "相手を1人選び、裏向きの手札から1枚を引く。",
+      "effects": [
+        {
+          "type": "steal",
+          "n": 1,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "id": "40",
+      "index": 40,
+      "x": 1225,
+      "y": 930,
+      "next": [
+        "41"
+      ],
+      "kind": "steal"
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "41",
+      "index": 41,
+      "x": 1090,
+      "y": 930,
+      "next": [
+        "42"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "静かな書庫",
+      "icon": "本",
+      "tone": "green",
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "id": "42",
+      "index": 42,
+      "x": 955,
+      "y": 930,
+      "next": [
+        "43"
+      ],
+      "kind": "safe"
+    },
+    {
+      "name": "属性の審判",
+      "icon": "り",
+      "tone": "pink",
+      "text": "りおん属性の手札をすべて捨てる。無属性は対象外。",
+      "effects": [
+        {
+          "type": "discardAttr",
+          "attr": "rion",
+          "harmful": true
+        }
+      ],
+      "id": "43",
+      "index": 43,
+      "x": 820,
+      "y": 930,
+      "next": [
+        "44"
+      ],
+      "kind": "attribute"
+    },
+    {
+      "name": "逆風",
+      "icon": "↓",
+      "tone": "purple",
+      "text": "2マス戻る。移動先のマス効果は発動しない。",
+      "effects": [
+        {
+          "type": "move",
+          "n": -2,
+          "harmful": true
+        }
+      ],
+      "id": "44",
+      "index": 44,
+      "x": 685,
+      "y": 930,
+      "next": [
+        "45"
+      ],
+      "kind": "back"
+    },
+    {
+      "name": "カードの泉",
+      "icon": "＋",
+      "tone": "blue",
+      "text": "カードを2枚引く。速攻は発動する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "id": "45",
+      "index": 45,
+      "x": 550,
+      "y": 930,
+      "next": [
+        "46"
+      ],
+      "kind": "draw"
+    },
+    {
+      "name": "浄化の泉",
+      "icon": "浄",
+      "tone": "green",
+      "text": "呪いをすべて捨てて、カードを1枚引く。",
+      "effects": [
+        {
+          "type": "cleanse"
+        },
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "46",
+      "index": 46,
+      "x": 415,
+      "y": 930,
+      "next": [
+        "47"
+      ],
+      "kind": "cleanse"
+    },
+    {
+      "name": "必ず止まる",
+      "icon": "門",
+      "tone": "gold",
+      "text": "残りの移動を止め、カードを2枚引く。特殊カードを1枚獲得する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        },
+        {
+          "type": "special"
+        }
+      ],
+      "id": "47",
+      "index": 47,
+      "x": 280,
+      "y": 930,
+      "next": [
+        "48"
+      ],
+      "kind": "gate"
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "48",
+      "index": 48,
+      "x": 280,
+      "y": 1090,
+      "next": [
+        "49"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "眠りの霧",
+      "icon": "休",
+      "tone": "black",
+      "text": "次の自分の手番を1回休む。",
+      "effects": [
+        {
+          "type": "skip",
+          "n": 1,
+          "harmful": true
+        }
+      ],
+      "id": "49",
+      "index": 49,
+      "x": 415,
+      "y": 1090,
+      "next": [
+        "50"
+      ],
+      "kind": "skip"
+    },
+    {
+      "name": "カードの泉",
+      "icon": "＋",
+      "tone": "blue",
+      "text": "カードを2枚引く。速攻は発動する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "id": "50",
+      "index": 50,
+      "x": 550,
+      "y": 1090,
+      "next": [
+        "51"
+      ],
+      "kind": "draw"
+    },
+    {
+      "name": "追い風",
+      "icon": "↑",
+      "tone": "green",
+      "text": "3マス進む。移動先のマス効果は発動しない。",
+      "effects": [
+        {
+          "type": "move",
+          "n": 3
+        }
+      ],
+      "id": "51",
+      "index": 51,
+      "x": 685,
+      "y": 1090,
+      "next": [
+        "52"
+      ],
+      "kind": "move"
+    },
+    {
+      "name": "奈落の徴収",
+      "icon": "捨",
+      "tone": "black",
+      "text": "手札を2枚選んで捨てる。",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 2,
+          "select": true,
+          "harmful": true
+        }
+      ],
+      "id": "52",
+      "index": 52,
+      "x": 820,
+      "y": 1090,
+      "next": [
+        "53"
+      ],
+      "kind": "discard"
+    },
+    {
+      "name": "静かな書庫",
+      "icon": "本",
+      "tone": "green",
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "id": "53",
+      "index": 53,
+      "x": 955,
+      "y": 1090,
+      "next": [
+        "54"
+      ],
+      "kind": "safe"
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "54",
+      "index": 54,
+      "x": 1090,
+      "y": 1090,
+      "next": [
+        "55"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "すり替え市場",
+      "icon": "⇄",
+      "tone": "pink",
+      "text": "相手を1人選び、手札をランダムに1枚ずつ交換する。",
+      "effects": [
+        {
+          "type": "swapHand",
+          "n": 1,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "id": "55",
+      "index": 55,
+      "x": 1225,
+      "y": 1090,
+      "next": [
+        "56",
+        "b55-0"
+      ],
+      "kind": "trade",
+      "fork": true
+    },
+    {
+      "name": "運命の祭壇",
+      "icon": "◆",
+      "tone": "gold",
+      "text": "特殊カードを1枚獲得する。所持中なら残す1枚を選ぶ。",
+      "effects": [
+        {
+          "type": "special"
+        }
+      ],
+      "id": "56",
+      "index": 56,
+      "x": 1225,
+      "y": 1250,
+      "next": [
+        "57"
+      ],
+      "kind": "special"
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "57",
+      "index": 57,
+      "x": 1090,
+      "y": 1250,
+      "next": [
+        "58"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "カードの泉",
+      "icon": "＋",
+      "tone": "blue",
+      "text": "カードを2枚引く。速攻は発動する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "id": "58",
+      "index": 58,
+      "x": 955,
+      "y": 1250,
+      "next": [
+        "59"
+      ],
+      "kind": "draw"
+    },
+    {
+      "name": "追い風",
+      "icon": "↑",
+      "tone": "green",
+      "text": "3マス進む。移動先のマス効果は発動しない。",
+      "effects": [
+        {
+          "type": "move",
+          "n": 3
+        }
+      ],
+      "id": "59",
+      "index": 59,
+      "x": 820,
+      "y": 1250,
+      "next": [
+        "60"
+      ],
+      "kind": "move"
+    },
+    {
+      "name": "静かな書庫",
+      "icon": "本",
+      "tone": "green",
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "id": "60",
+      "index": 60,
+      "x": 685,
+      "y": 1250,
+      "next": [
+        "61"
+      ],
+      "kind": "safe"
+    },
+    {
+      "name": "逆風",
+      "icon": "↓",
+      "tone": "purple",
+      "text": "2マス戻る。移動先のマス効果は発動しない。",
+      "effects": [
+        {
+          "type": "move",
+          "n": -2,
+          "harmful": true
+        }
+      ],
+      "id": "61",
+      "index": 61,
+      "x": 550,
+      "y": 1250,
+      "next": [
+        "62"
+      ],
+      "kind": "back"
+    },
+    {
+      "name": "すり替え市場",
+      "icon": "⇄",
+      "tone": "pink",
+      "text": "相手を1人選び、手札をランダムに1枚ずつ交換する。",
+      "effects": [
+        {
+          "type": "swapHand",
+          "n": 1,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "id": "62",
+      "index": 62,
+      "x": 415,
+      "y": 1250,
+      "next": [
+        "63"
+      ],
+      "kind": "trade"
+    },
+    {
+      "name": "必ず止まる",
+      "icon": "門",
+      "tone": "gold",
+      "text": "残りの移動を止め、カードを2枚引く。特殊カードを1枚獲得する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        },
+        {
+          "type": "special"
+        }
+      ],
+      "id": "63",
+      "index": 63,
+      "x": 280,
+      "y": 1250,
+      "next": [
+        "64"
+      ],
+      "kind": "gate"
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "64",
+      "index": 64,
+      "x": 280,
+      "y": 1410,
+      "next": [
+        "65"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "カードの泉",
+      "icon": "＋",
+      "tone": "blue",
+      "text": "カードを2枚引く。速攻は発動する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "id": "65",
+      "index": 65,
+      "x": 415,
+      "y": 1410,
+      "next": [
+        "66"
+      ],
+      "kind": "draw"
+    },
+    {
+      "name": "奈落の徴収",
+      "icon": "捨",
+      "tone": "black",
+      "text": "手札を2枚選んで捨てる。",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 2,
+          "select": true,
+          "harmful": true
+        }
+      ],
+      "id": "66",
+      "index": 66,
+      "x": 550,
+      "y": 1410,
+      "next": [
+        "67"
+      ],
+      "kind": "discard"
+    },
+    {
+      "name": "追い風",
+      "icon": "↑",
+      "tone": "green",
+      "text": "3マス進む。移動先のマス効果は発動しない。",
+      "effects": [
+        {
+          "type": "move",
+          "n": 3
+        }
+      ],
+      "id": "67",
+      "index": 67,
+      "x": 685,
+      "y": 1410,
+      "next": [
+        "68"
+      ],
+      "kind": "move"
+    },
+    {
+      "name": "影の取引",
+      "icon": "奪",
+      "tone": "purple",
+      "text": "相手を1人選び、裏向きの手札から1枚を引く。",
+      "effects": [
+        {
+          "type": "steal",
+          "n": 1,
+          "target": "choose",
+          "harmful": true
+        }
+      ],
+      "id": "68",
+      "index": 68,
+      "x": 820,
+      "y": 1410,
+      "next": [
+        "69"
+      ],
+      "kind": "steal"
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "69",
+      "index": 69,
+      "x": 955,
+      "y": 1410,
+      "next": [
+        "70"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "静かな書庫",
+      "icon": "本",
+      "tone": "green",
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "id": "70",
+      "index": 70,
+      "x": 1090,
+      "y": 1410,
+      "next": [
+        "71"
+      ],
+      "kind": "safe"
+    },
+    {
+      "name": "属性の審判",
+      "icon": "よ",
+      "tone": "pink",
+      "text": "より属性の手札をすべて捨てる。無属性は対象外。",
+      "effects": [
+        {
+          "type": "discardAttr",
+          "attr": "yori",
+          "harmful": true
+        }
+      ],
+      "id": "71",
+      "index": 71,
+      "x": 1225,
+      "y": 1410,
+      "next": [
+        "72"
+      ],
+      "kind": "attribute"
+    },
+    {
+      "name": "逆風",
+      "icon": "↓",
+      "tone": "purple",
+      "text": "2マス戻る。移動先のマス効果は発動しない。",
+      "effects": [
+        {
+          "type": "move",
+          "n": -2,
+          "harmful": true
+        }
+      ],
+      "id": "72",
+      "index": 72,
+      "x": 1225,
+      "y": 1570,
+      "next": [
+        "73"
+      ],
+      "kind": "back"
+    },
+    {
+      "name": "カードの泉",
+      "icon": "＋",
+      "tone": "blue",
+      "text": "カードを2枚引く。速攻は発動する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "id": "73",
+      "index": 73,
+      "x": 1090,
+      "y": 1570,
+      "next": [
+        "74"
+      ],
+      "kind": "draw"
+    },
+    {
+      "name": "浄化の泉",
+      "icon": "浄",
+      "tone": "green",
+      "text": "呪いをすべて捨てて、カードを1枚引く。",
+      "effects": [
+        {
+          "type": "cleanse"
+        },
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "74",
+      "index": 74,
+      "x": 955,
+      "y": 1570,
+      "next": [
+        "75"
+      ],
+      "kind": "cleanse"
+    },
+    {
+      "name": "運命の祭壇",
+      "icon": "◆",
+      "tone": "gold",
+      "text": "特殊カードを1枚獲得する。所持中なら残す1枚を選ぶ。",
+      "effects": [
+        {
+          "type": "special"
+        }
+      ],
+      "id": "75",
+      "index": 75,
+      "x": 820,
+      "y": 1570,
+      "next": [
+        "76"
+      ],
+      "kind": "special"
+    },
+    {
+      "name": "月明かり",
+      "icon": "月",
+      "tone": "blue",
+      "text": "カードを1枚引く。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "76",
+      "index": 76,
+      "x": 685,
+      "y": 1570,
+      "next": [
+        "77"
+      ],
+      "kind": "rest"
+    },
+    {
+      "name": "眠りの霧",
+      "icon": "休",
+      "tone": "black",
+      "text": "次の自分の手番を1回休む。",
+      "effects": [
+        {
+          "type": "skip",
+          "n": 1,
+          "harmful": true
+        }
+      ],
+      "id": "77",
+      "index": 77,
+      "x": 550,
+      "y": 1570,
+      "next": [
+        "78"
+      ],
+      "kind": "skip"
+    },
+    {
+      "name": "カードの泉",
+      "icon": "＋",
+      "tone": "blue",
+      "text": "カードを2枚引く。速攻は発動する。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2
+        }
+      ],
+      "id": "78",
+      "index": 78,
+      "x": 415,
+      "y": 1570,
+      "next": [
+        "79"
+      ],
+      "kind": "draw"
+    },
+    {
+      "name": "星の王座",
+      "icon": "冠",
+      "tone": "gold",
+      "text": "到着順ボーナスと手札の得点を確定する。",
+      "effects": [],
+      "id": "79",
+      "index": 79,
+      "x": 280,
+      "y": 1570,
+      "next": [],
+      "kind": "goal"
+    },
+    {
+      "name": "静かな書庫",
+      "icon": "本",
+      "tone": "green",
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "id": "b7-0",
+      "index": 7.2,
+      "x": 1365,
+      "y": 110,
+      "kind": "safe",
+      "detour": true,
+      "next": [
+        "b7-1"
+      ]
+    },
+    {
+      "name": "宝庫の契約",
+      "icon": "宝",
+      "tone": "gold",
+      "text": "手札を1枚捨てて、カードを3枚引く。",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 1,
+          "select": true
+        },
+        {
+          "type": "draw",
+          "n": 3
+        }
+      ],
+      "id": "b7-1",
+      "index": 7.4,
+      "x": 1485,
+      "y": 150,
+      "kind": "wager",
+      "detour": true,
+      "next": [
+        "b7-2"
+      ]
+    },
+    {
+      "name": "運命の祭壇",
+      "icon": "◆",
+      "tone": "gold",
+      "text": "特殊カードを1枚獲得する。所持中なら残す1枚を選ぶ。",
+      "effects": [
+        {
+          "type": "special"
+        }
+      ],
+      "id": "b7-2",
+      "index": 7.6,
+      "x": 1485,
+      "y": 255,
+      "kind": "special",
+      "detour": true,
+      "next": [
+        "b7-3"
+      ]
+    },
+    {
+      "name": "浄化の泉",
+      "icon": "浄",
+      "tone": "green",
+      "text": "呪いをすべて捨てて、カードを1枚引く。",
+      "effects": [
+        {
+          "type": "cleanse"
+        },
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "b7-3",
+      "index": 7.8,
+      "x": 1365,
+      "y": 290,
+      "kind": "cleanse",
+      "detour": true,
+      "next": [
+        "8"
+      ]
+    },
+    {
+      "name": "静かな書庫",
+      "icon": "本",
+      "tone": "green",
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "id": "b31-0",
+      "index": 31.2,
+      "x": 140,
+      "y": 590,
+      "kind": "safe",
+      "detour": true,
+      "next": [
+        "b31-1"
+      ]
+    },
+    {
+      "name": "宝庫の契約",
+      "icon": "宝",
+      "tone": "gold",
+      "text": "手札を1枚捨てて、カードを3枚引く。",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 1,
+          "select": true
+        },
+        {
+          "type": "draw",
+          "n": 3
+        }
+      ],
+      "id": "b31-1",
+      "index": 31.4,
+      "x": 20,
+      "y": 630,
+      "kind": "wager",
+      "detour": true,
+      "next": [
+        "b31-2"
+      ]
+    },
+    {
+      "name": "運命の祭壇",
+      "icon": "◆",
+      "tone": "gold",
+      "text": "特殊カードを1枚獲得する。所持中なら残す1枚を選ぶ。",
+      "effects": [
+        {
+          "type": "special"
+        }
+      ],
+      "id": "b31-2",
+      "index": 31.6,
+      "x": 20,
+      "y": 735,
+      "kind": "special",
+      "detour": true,
+      "next": [
+        "b31-3"
+      ]
+    },
+    {
+      "name": "浄化の泉",
+      "icon": "浄",
+      "tone": "green",
+      "text": "呪いをすべて捨てて、カードを1枚引く。",
+      "effects": [
+        {
+          "type": "cleanse"
+        },
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "b31-3",
+      "index": 31.8,
+      "x": 140,
+      "y": 770,
+      "kind": "cleanse",
+      "detour": true,
+      "next": [
+        "32"
+      ]
+    },
+    {
+      "name": "静かな書庫",
+      "icon": "本",
+      "tone": "green",
+      "text": "カードを2枚引く。悪い速攻は無効にして捨てる。",
+      "effects": [
+        {
+          "type": "draw",
+          "n": 2,
+          "mode": "safe"
+        }
+      ],
+      "id": "b55-0",
+      "index": 55.2,
+      "x": 1365,
+      "y": 1070,
+      "kind": "safe",
+      "detour": true,
+      "next": [
+        "b55-1"
+      ]
+    },
+    {
+      "name": "宝庫の契約",
+      "icon": "宝",
+      "tone": "gold",
+      "text": "手札を1枚捨てて、カードを3枚引く。",
+      "effects": [
+        {
+          "type": "discard",
+          "n": 1,
+          "select": true
+        },
+        {
+          "type": "draw",
+          "n": 3
+        }
+      ],
+      "id": "b55-1",
+      "index": 55.4,
+      "x": 1485,
+      "y": 1110,
+      "kind": "wager",
+      "detour": true,
+      "next": [
+        "b55-2"
+      ]
+    },
+    {
+      "name": "運命の祭壇",
+      "icon": "◆",
+      "tone": "gold",
+      "text": "特殊カードを1枚獲得する。所持中なら残す1枚を選ぶ。",
+      "effects": [
+        {
+          "type": "special"
+        }
+      ],
+      "id": "b55-2",
+      "index": 55.6,
+      "x": 1485,
+      "y": 1215,
+      "kind": "special",
+      "detour": true,
+      "next": [
+        "b55-3"
+      ]
+    },
+    {
+      "name": "浄化の泉",
+      "icon": "浄",
+      "tone": "green",
+      "text": "呪いをすべて捨てて、カードを1枚引く。",
+      "effects": [
+        {
+          "type": "cleanse"
+        },
+        {
+          "type": "draw",
+          "n": 1
+        }
+      ],
+      "id": "b55-3",
+      "index": 55.8,
+      "x": 1365,
+      "y": 1250,
+      "kind": "cleanse",
+      "detour": true,
+      "next": [
+        "56"
+      ]
+    }
+  ]
+}
