@@ -1,0 +1,13 @@
+✔ party identity, ready gate, host authority, home presence, spectator admission, reuse and persistence (626.615322ms)
+✔ disconnect preserves seats and transfers host after grace; game registry rejects unknown games (0.669501ms)
+✔ 5/10/10/20 commands, idempotency, no over-limit, fixed total cost and capped stacking (11.538564ms)
+✔ low bond produces bounded rests, bursts and missed commands; high bond obeys; seeded outcomes reproduce (161.798423ms)
+✔ old room v7 keeps five uses and old temperament; overview height follows track shape (0.288391ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 955.124633

@@ -1,3 +1,4 @@
+import{isPartyHub462,updateParty462}from'../party/PartyView462.js';
 import{courseLabel459}from'./RaceCourse459.js';
 import{updateCourseView459}from'./RaceExperience459.js';
 import{lobby458,prediction458,parade458,bet458,broadcast458,result458,updateExperience458}from'./RaceExperience458.js';
@@ -30,7 +31,7 @@ export function raceView452(c){const r=c.state?.room;if(!r)return raceView451(c)
 
 function refs(c,p){if(p.dom?.element===c.root.firstElementChild)return p.dom;return p.dom={element:c.root.firstElementChild,stage:c.root.querySelector('[data-parade-stage]'),runners:[...c.root.querySelectorAll('[data-race-runner]')],lanes:[...c.root.querySelectorAll('[data-race-lane]')],tickets:[...c.root.querySelectorAll('[data-race-ticket]')],rows:[...c.root.querySelectorAll('[data-result-row]')],track:c.root.querySelector('[data-race-track]'),start:c.root.querySelector('[data-race-start]'),commentary:c.root.querySelector('[data-commentary]')}}
 function put(el,text){if(el&&el.textContent!==text)el.textContent=text}
-export function updateRaceClock452(c){const r=c.state?.room;if(!c.root||!r||document.visibilityState==='hidden'){c.sound452?.stop();return}const p=presentation452(c),dom=refs(c,p),at=Date.now()+c.offset,reduced=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches??false;
+export function updateRaceClock452(c){const r=c.state?.room;if(!c.root||!r||isPartyHub462(c)||document.visibilityState==='hidden'){c.sound452?.stop();return}const p=presentation452(c),dom=refs(c,p),at=Date.now()+c.offset,reduced=globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches??false;
  for(const el of c.root.querySelectorAll('[data-race-timer]'))put(el,String(Math.max(0,Math.ceil((r.deadline-at)/1000))));
  if(r.phase==='parade'){
   const i=paradeIndex452(r,at,c.paradePinned),x=r.racers[i],mood=condition452(x.condition),elapsed=Math.max(0,at-r.phaseAt)%2000;
@@ -62,5 +63,5 @@ export function updateRaceClock452(c){const r=c.state?.room;if(!c.root||!r||docu
   if(elapsed<250&&!p.skip&&!reduced)once452(p,'victory',()=>c.sound452?.play(mine?.won||mine?.prize?'win':'finish'));
  }
  const q=c.root.querySelector('[data-race-quote]');if(q){const odds=quote456(r,c.draft.ticket),amount=Number(c.draft.amount)||0;put(q,odds?`予想 ${c.draft.ticket.picks.map(i=>i+1).join(ordered456(c.draft.ticket.kind)?' → ':'・')} ／ ${odds.toFixed(1)}倍\n購入 ${n(amount)}G → 的中払戻 ${n(payout451(amount,odds))}G`:'魔物を選ぶと倍率と払戻予定額が表示されます')}
- updateExperience458(c);
+ updateExperience458(c);updateParty462(c);
 }

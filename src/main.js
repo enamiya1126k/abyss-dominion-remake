@@ -1270,7 +1270,7 @@ function openIdleReturnPreview(){
  };
 }
 function openPartyMaintenance427(){
- go('race451');
+ if(raceClient451)raceClient451.partyBrowse462=true;go('race451');
 }
 function ensureWorldRaidClient428(){
  const transport=ensureOnlinePartyController();
@@ -7220,7 +7220,8 @@ else if(!save.state.activeBattle){
   const invite=new URLSearchParams(location.search),server=invite.get("partyServer"),room=invite.get("partyRoom"),inviteKey=server&&room?`${server}|${room}`:"",lastInvite=sessionStorage.getItem(INVITE_SESSION_KEY)??"",restored=sessionStorage.getItem(SCREEN_SESSION_KEY);
   // 同じ招待URLのままホームへ戻って更新しても、古いqueryでオンラインへ
   // 引き戻さない。別の招待URLを明示的に開いた時だけ招待を優先する。
-  if(inviteKey&&inviteKey!==lastInvite){screen="onlineParty";sessionStorage.setItem(INVITE_SESSION_KEY,inviteKey)}
+  if(/^[A-Fa-f0-9]{6}$/.test(invite.get('party462')??'')&&sessionStorage.getItem('party462-invite')!==invite.get('party462')){screen='race451';sessionStorage.setItem('party462-invite',invite.get('party462'))}
+  else if(inviteKey&&inviteKey!==lastInvite){screen="onlineParty";sessionStorage.setItem(INVITE_SESSION_KEY,inviteKey)}
   else if(restored&&REFRESHABLE_SCREENS.has(restored))screen=restored;
  }catch{}
 }

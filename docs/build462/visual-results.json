@@ -1,0 +1,18 @@
+{
+  "nativeSprite": "ch2_lumea",
+  "frames": [
+    {
+      "frame": "idle1",
+      "pixels": 16294
+    },
+    {
+      "frame": "idle2",
+      "pixels": 16581
+    },
+    {
+      "frame": "idle3",
+      "pixels": 17168
+    }
+  ],
+  "bundledAtlas": true
+}

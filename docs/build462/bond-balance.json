@@ -1,0 +1,30 @@
+[
+  {
+    "distance": 500,
+    "samples": 512,
+    "lowBondMeanSeconds": 16.023757666251083,
+    "highBondMeanSeconds": 15.130668972620057,
+    "highBondPairWins": 369
+  },
+  {
+    "distance": 1000,
+    "samples": 512,
+    "lowBondMeanSeconds": 21.717794879522433,
+    "highBondMeanSeconds": 20.525722554909077,
+    "highBondPairWins": 383
+  },
+  {
+    "distance": 1600,
+    "samples": 512,
+    "lowBondMeanSeconds": 30.87974277332218,
+    "highBondMeanSeconds": 29.356452299503665,
+    "highBondPairWins": 377
+  },
+  {
+    "distance": 3000,
+    "samples": 512,
+    "lowBondMeanSeconds": 40.960851224393814,
+    "highBondMeanSeconds": 39.28009699932474,
+    "highBondPairWins": 348
+  }
+]

@@ -1,0 +1,22 @@
+[
+  "online-server/src/PartyCoordinator462.js",
+  "online-server/src/RaceCoordinator451.js",
+  "src/core/config.js",
+  "src/main.js",
+  "src/party/PartyGames462.js",
+  "src/party/PartyView462.js",
+  "src/race/RaceBoost457.js",
+  "src/race/RaceClient451.js",
+  "src/race/RaceExperience458.js",
+  "src/race/RaceExperience459.js",
+  "src/race/RaceLayout457.js",
+  "src/race/RaceOverview462.js",
+  "src/race/RacePresentation452.js",
+  "src/race/RaceRules462.js",
+  "src/race/RaceSimulation456.js",
+  "src/race/RaceUX458.js",
+  "src/race/RaceView452.js",
+  "src/race/RaceVisual456.js",
+  "src/race/RaceWorld461.js",
+  "src/worldRaid/WorldRaidOfflineCache430.js"
+]

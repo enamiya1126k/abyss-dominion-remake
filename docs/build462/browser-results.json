@@ -1,0 +1,16 @@
+{
+  "checks": [
+    "same party survives home/remount; every human must explicitly ready",
+    "late join is read-only spectator; ticket and boost cannot be purchased",
+    "straight overview collapses blank margins; follow restores full viewport",
+    "result → catalogue keeps code, party and all three humans",
+    "3000m accepts 20 fast taps once each with correct UI; spectator participates next game",
+    "socket reconnect resumes same party and active race"
+  ],
+  "errors": [],
+  "overview": {
+    "straight": 56,
+    "oval": 271
+  },
+  "limitations": "Chromium mobile touch; physical Safari untested."
+}

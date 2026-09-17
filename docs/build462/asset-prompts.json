@@ -1,0 +1,22 @@
+{
+  "mode": "built-in image_gen",
+  "operation": "generate",
+  "assets": [
+    {
+      "path": "assets/party462/monster-race.webp",
+      "source": "generated_images/exec-da3ee40c-31ee-44e4-8cea-f5617c52f50b.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: landscape thumbnail for the existing Japanese dark fantasy pixel-art RPG ABYSS DOMINION's multiplayer monster racing minigame. Create an immediately recognizable, exhilarating monster race key visual, 1536x1024 landscape. A glossy sapphire blue slime in the foreground bouncing over a finish stripe, a purple wolf and a small golden armored dragon racing closely beside it, other distinct fantasy monsters in the pack behind; ALL running toward the viewer at a dramatic diagonal, actual grassy racing track and checkered finish flag clearly recognizable, flying dust, magical golden speed streaks, purple gothic stadium with cheering stands, radiant finish-line lights. Premium detailed Japanese RPG pixel illustration with crisp intentional pixel clusters, expressive memorable silhouettes, dynamic perspective, readable at small mobile thumbnail size. Palette midnight purple, gold, emerald turf, vivid blue highlights. Compose principal monsters in upper and middle two thirds; lower quarter darker and less busy so game title will be overlaid in HTML. No text, no letters, no numbers, no logos, no watermarks. This is a game-cover illustration, not a screenshot or UI.",
+      "conversion": "WebP format conversion; illustration unchanged"
+    }
+  ],
+  "nativeRestoration": {
+    "path": "assets/monsters/ch2_389_lumea/sheet.png",
+    "sourceCommit": "53b7e195e0138f72f8b131ec3b185d2c736d438d",
+    "sha256": "d699406b8ae833ec8a3332f078fd1b6ef365ef8864b36e96e3465cad0ef30e04",
+    "note": "Exact original sprite, not generated or repainted."
+  }
+}
