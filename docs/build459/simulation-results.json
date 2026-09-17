@@ -1,0 +1,61 @@
+{
+  "species": 334,
+  "rows": [
+    {
+      "distance": 500,
+      "ground": "芝",
+      "races": 84,
+      "minSeconds": 13.4,
+      "maxSeconds": 22.3
+    },
+    {
+      "distance": 500,
+      "ground": "砂",
+      "races": 84,
+      "minSeconds": 13.64,
+      "maxSeconds": 22.82
+    },
+    {
+      "distance": 1000,
+      "ground": "芝",
+      "races": 84,
+      "minSeconds": 19.43,
+      "maxSeconds": 31.16
+    },
+    {
+      "distance": 1000,
+      "ground": "砂",
+      "races": 84,
+      "minSeconds": 19.3,
+      "maxSeconds": 32.49
+    },
+    {
+      "distance": 1600,
+      "ground": "芝",
+      "races": 84,
+      "minSeconds": 26.2,
+      "maxSeconds": 47.93
+    },
+    {
+      "distance": 1600,
+      "ground": "砂",
+      "races": 84,
+      "minSeconds": 27.35,
+      "maxSeconds": 46.24
+    },
+    {
+      "distance": 3000,
+      "ground": "芝",
+      "races": 84,
+      "minSeconds": 37.79,
+      "maxSeconds": 66.3
+    },
+    {
+      "distance": 3000,
+      "ground": "砂",
+      "races": 84,
+      "minSeconds": 37.3,
+      "maxSeconds": 66.77
+    }
+  ]
+}

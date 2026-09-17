@@ -1,3 +1,4 @@
+import{appendHistory459}from'./RaceCourse459.js';
 import{expNeedFor,totalExperience,applyTotalExperience}from'../models/Monster.js';
 import{RACE451,validTicket451}from'./RaceRules451.js';
 export function raceBank451(state,key){state.race451??={accounts:{}};state.race451.accounts??={};return state.race451.accounts[key]??={pending:null,applied:{}}}
@@ -9,7 +10,7 @@ export function applyRaceDelivery451(save,key,entry){const bank=raceBank451(save
  if(needsEscrow&&(!pending||pending.requestId!==entry.requestId||pending.amount!==amount))throw Error('馬券の購入記録と精算が一致しません。元のセーブで再接続してください');
  const training=entry.training??{affection:5,expRate:.02};if(entry.kind==='result'&&(!Number.isInteger(training.affection)||training.affection<5||training.affection>8||![.02,.022,.025,.03].includes(training.expRate)))throw Error('育成報酬を確認できません');
  return commit(save,()=>{const b=raceBank451(save.state,key);save.state.player.gold=Math.min(Number.MAX_SAFE_INTEGER,Math.max(0,Number(save.state.player.gold)||0)+entry.gold);let exp=0;
-  if(entry.kind==='result'){const m=save.state.monsters?.find(m=>m.id===entry.monsterId);if(m){exp=Math.max(10,Math.floor(expNeedFor(m)*training.expRate));applyTotalExperience(m,totalExperience(m)+exp);m.affection=Math.min(1000,Math.max(0,Number(m.affection??m.bond)||0)+training.affection);m.bond=m.affection}}
+  if(entry.kind==='result'){if(entry.history459&&entry.history459.raceId===entry.raceId&&entry.history459.monsterId===entry.monsterId)b.history459=appendHistory459(b.history459,entry.history459);const m=save.state.monsters?.find(m=>m.id===entry.monsterId);if(m){exp=Math.max(10,Math.floor(expNeedFor(m)*training.expRate));applyTotalExperience(m,totalExperience(m)+exp);m.affection=Math.min(1000,Math.max(0,Number(m.affection??m.bond)||0)+training.affection);m.bond=m.affection}}
   if(needsEscrow)b.pending=null;b.applied[entry.id]={at:Date.now(),gold:entry.gold,exp,affection:entry.kind==='result'?training.affection:0};return{duplicate:false,gold:entry.gold,exp};
  })
 }

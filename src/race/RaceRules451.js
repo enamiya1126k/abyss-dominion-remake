@@ -2,7 +2,7 @@ import{MAX_BET458}from'./RaceUX458.js';
 import{validTicket456,ticketWins456}from'./RaceTickets456.js';
 import{raceWeight455}from'./RaceStrategy455.js';
 import{raceProfile453,PLACE_PRIZES453,trainingReward453}from'./RaceTraits453.js';
-// Shared race rules. Combat level, rarity, equipment and affection never enter these calculations.
+// Combat level, rarity and equipment never affect race attributes. V7 affection only affects command response in the live simulation.
 export const RACE451={minBet:1,maxBet:MAX_BET458,prize:5000,maxPrize:8000,entryMs:45000,paradeMs:16000,betMs:75000,countdownMs:3000,raceMs:28000};
 export const BET_NAMES451={win:'単勝',pair:'二連複',exact:'二連単'};
 export const hash451=value=>{let h=2166136261;for(const c of String(value))h=Math.imul(h^c.charCodeAt(0),16777619);return h>>>0};
