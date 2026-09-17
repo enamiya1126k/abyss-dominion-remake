@@ -1,0 +1,10 @@
+✔ all eight portraits fit without overlap at start, corners, finish and spread out (1380.361626ms)
+✔ camera layout leaves progress immutable and is deterministic (1.506642ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1476.888679

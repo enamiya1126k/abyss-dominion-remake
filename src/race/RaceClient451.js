@@ -1,3 +1,4 @@
+import{toggleExpanded460}from'./RaceExperience460.js';
 import{bond459}from'./RaceCourse459.js';
 import{panelKey458,rememberScroll458,restoreScroll458,swipeDirection458,editPick458,betLimit458}from'./RaceUX458.js';
 import{nextBoost457}from'./RaceBoost457.js';
@@ -18,7 +19,7 @@ export class RaceClient451{
   this.retryClock=setInterval(()=>{if(this.connected()&&transport.capabilities?.has('monsterRaceV1')){this.refresh();this.retryPurchase();if(this.boostPending456)this.raw('boost',this.boostPending456)}if(this.root)this.renderConnection()},5000);
   this.retryClock.unref?.();
   this.sound452=new RaceAudio452(this);this.onHidden452=()=>{if(document.visibilityState==='hidden'||document.hasFocus?.()===false)this.sound452.stop()};document.addEventListener('visibilitychange',this.onHidden452);window.addEventListener('blur',this.onHidden452);
-  this.keydown459=e=>{const dialog=this.root?.querySelector('[data-system-dialog459]');if(!dialog)return;const buttons=[...dialog.querySelectorAll('button,summary')];if(e.key==='Escape'){e.preventDefault();buttons[0]?.click()}if(e.key==='Tab'){const first=buttons[0],last=buttons.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}}};this.click=e=>this.onClick(e);this.input=e=>this.onInput(e);
+  this.keydown459=e=>{if(e.key==='Escape'&&this.expanded460){e.preventDefault();toggleExpanded460(this,false);return}const dialog=this.root?.querySelector('[data-system-dialog459]');if(!dialog)return;const buttons=[...dialog.querySelectorAll('button,summary')];if(e.key==='Escape'){e.preventDefault();buttons[0]?.click()}if(e.key==='Tab'){const first=buttons[0],last=buttons.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last?.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus()}}};this.click=e=>this.onClick(e);this.input=e=>this.onInput(e);
   this.pointerDown458=e=>{if(e.isPrimary!==false&&e.button===0&&!e.target.closest('button')&&e.target.closest('[data-parade-swipe]'))this.swipeStart458={x:e.clientX,y:e.clientY,at:Date.now(),pointer:e.pointerId}};
   this.pointerUp458=e=>{const start=this.swipeStart458;this.swipeStart458=null;if(!start||start.pointer!==e.pointerId)return;const direction=swipeDirection458(start,{x:e.clientX,y:e.clientY,at:Date.now()});if(direction){this.suppressClick458=Date.now()+350;this.moveParade458(direction)}};
   this.pointerCancel458=()=>this.swipeStart458=null;
@@ -41,7 +42,7 @@ export class RaceClient451{
   const deferred=this.bank()?.leave458;if(deferred){if(message.room?.id===deferred&&['lobby','result'].includes(message.room.phase))this.raw('leave');else if(message.room?.id!==deferred){delete this.bank().leave458;this.save.save()}}
   if(this.boostPending456){const p=this.boostPending456,room=message.room,x=room?.live456?.runners?.[room.racers?.findIndex(r=>r.ownerId===this.transport.selfId)];if(room?.id!==p.raceId||room.phase!=='race'||x?.boostSeq>=p.seq)this.boostPending456=null}
   if(old?.id!==message.room?.id){this.draft.ticket={kind:'win',picks:[]};this.pickSlot458=null;this.systemDetail459=null;this.openDetails458={};this.ticketExpanded458=null;this.paradePinned=null;this.watchPlayer452=null;this.predictionTab457='watch';this.newsOpen457=false;this.detailsOpen457=false;this.error='';this.sound452?.stop()}
-  if(old?.phase!==message.room?.phase){this.paradePinned=null;this.systemDetail459=null;}
+  if(old?.phase!==message.room?.phase){if(!['countdown','race'].includes(message.room?.phase))this.expanded460=false;this.paradePinned=null;this.systemDetail459=null;}
   const ack=[];this.rewardError='';
   for(const entry of message.deliveries??[])try{const result=applyRaceDelivery451(this.save,this.key(),entry);ack.push(entry.id);if(!result.duplicate&&entry.kind==='result')this.toast(`魔物レース：${entry.gold.toLocaleString()}G受取・出走魔物のEXPとなつき度アップ`)}catch(e){this.rewardError=e.message}
   // ACK only after the whole local state has successfully persisted.
@@ -61,6 +62,7 @@ export class RaceClient451{
  onClick(event){if(Date.now()<(this.suppressClick458??0))return;const b=event.target.closest('button');if(!b||b.disabled||!this.root?.contains(b))return;this.sound452?.unlock();
   if(b.dataset.systemDetail459!==undefined){this.systemDetail459=Number(b.dataset.systemDetail459);this.render();this.root.querySelector('[data-system-dialog459] button')?.focus({preventScroll:true});return}
   if(b.dataset.raceAction==='closeSystem459'){const old=this.systemDetail459;this.systemDetail459=null;this.render();this.root.querySelector(`[data-system-detail459="${old}"]`)?.focus({preventScroll:true});return}
+  if(b.dataset.raceAction==='expand460'){toggleExpanded460(this);updateRaceClock451(this);return}
   if(b.dataset.raceCamera){this.camera457=b.dataset.raceCamera;updateRaceClock451(this);return}
   if(b.dataset.predictionTab){this.switchTab458(b.dataset.predictionTab);return}
   if(b.dataset.paradeStep){this.moveParade458(Number(b.dataset.paradeStep));return}

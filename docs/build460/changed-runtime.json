@@ -1,0 +1,10 @@
+[
+  "src/core/config.js",
+  "src/race/RaceCamera460.js",
+  "src/race/RaceClient451.js",
+  "src/race/RaceExperience458.js",
+  "src/race/RaceExperience459.js",
+  "src/race/RaceExperience460.js",
+  "src/race/RaceView452.js",
+  "src/worldRaid/WorldRaidOfflineCache430.js"
+]
