@@ -1,0 +1,1 @@
+{"checks":["default camera follows all eight; course cropped; every sprite shares the exact course matrix, no leader lines or portrait relocation","overview toggle, expanded portrait and landscape, return restores scroll"],"errors":[],"video":null,"clipStart":23.962}

@@ -1,0 +1,11 @@
+✔ world positions stay on fixed race lanes and preserve centreline progress (5.83432ms)
+✔ smooth camera contains all eight sprites during corners, spreads, laps, finish and resizes (505.8261ms)
+✔ default following crops the course and moves smoothly with the pack; overlap is allowed (0.573312ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 603.026478

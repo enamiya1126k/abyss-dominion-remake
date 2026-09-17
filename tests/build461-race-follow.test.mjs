@@ -1,0 +1,12 @@
+import test from'node:test';import assert from'node:assert/strict';
+import{course459,coursePoint459}from'../src/race/RaceCourse459.js';
+import{worldPoint461,worldSize461,followCamera461,project461,SPRITE461}from'../src/race/RaceCamera461.js';
+test('world positions stay on fixed race lanes and preserve centreline progress',()=>{
+ for(const distance of[500,1000,1600,3000])for(let n=0;n<=100;n++){const t=n/100,c=course459(distance),point=worldPoint461(t,3.5,c),original=coursePoint459(t,c);if(c.shape==='oval'){assert.ok(Math.abs(point.x-(original.x+30)*12)<1e-7);assert.ok(Math.abs(point.y-(original.y+10)*12)<1e-7)}else{assert.equal(point.x,240+2720*t);assert.equal(point.y,500)}for(let i=0;i<8;i++){const p=worldPoint461(t,i,c);assert.ok(Math.abs(Math.hypot(p.x-point.x,p.y-point.y)-Math.abs((i-3.5)*25.8))<1e-7)}}
+});
+test('smooth camera contains all eight sprites during corners, spreads, laps, finish and resizes',()=>{
+ for(const distance of[500,1000,1600,3000])for(const[width,height]of[[284,310],[357,373],[371,440],[687,473],[822,155]])for(const spread of[0,.003,.02,.12]){let previous=null;const course=course459(distance),world=worldSize461(course);for(let n=0;n<=300;n++){const progress=n/300,points=Array.from({length:8},(_,i)=>worldPoint461(Math.max(0,Math.min(1,progress-i*spread)),i,course)),copy=structuredClone(points),camera=followCamera461(points,width,height,previous,33,false,world);for(const p of points){const s=project461(p,camera,width,height),scale=camera.scale;assert.ok(s.x-(SPRITE461.width/2+8)*scale>=7.99&&s.x+(SPRITE461.width/2+8)*scale<=width-7.99&&s.y-SPRITE461.top*scale>=7.99&&s.y+SPRITE461.bottom*scale<=height-7.99,JSON.stringify({distance,width,height,spread,n,s,camera}))}assert.deepEqual(points,copy);previous=camera;}}
+});
+test('default following crops the course and moves smoothly with the pack; overlap is allowed',()=>{
+ const c=course459(1600),world=worldSize461(c),points=Array.from({length:8},(_,i)=>worldPoint461(.2,i,c)),a=followCamera461(points,393,420,null,33,false,world),overview=followCamera461(points,393,420,null,33,true,world);assert.ok(a.scale>overview.scale*3);const moved=points.map(p=>({...p,x:p.x-10,y:p.y-10})),b=followCamera461(moved,393,420,a,33,false,world);assert.ok(b.cx<a.cx&&b.cx>a.cx-10);assert.ok(b.cy<a.cy&&b.cy>a.cy-10);const identical=Array.from({length:8},()=>points[0]);assert.deepEqual(project461(identical[0],a,393,420),project461(identical[7],a,393,420));
+});

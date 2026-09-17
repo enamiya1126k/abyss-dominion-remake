@@ -63,6 +63,7 @@ export class RaceClient451{
   if(b.dataset.systemDetail459!==undefined){this.systemDetail459=Number(b.dataset.systemDetail459);this.render();this.root.querySelector('[data-system-dialog459] button')?.focus({preventScroll:true});return}
   if(b.dataset.raceAction==='closeSystem459'){const old=this.systemDetail459;this.systemDetail459=null;this.render();this.root.querySelector(`[data-system-detail459="${old}"]`)?.focus({preventScroll:true});return}
   if(b.dataset.raceAction==='expand460'){toggleExpanded460(this);updateRaceClock451(this);return}
+  if(b.dataset.raceCamera461){this.camera461=b.dataset.raceCamera461;this.worldCamera461=null;updateRaceClock451(this);return}
   if(b.dataset.raceCamera){this.camera457=b.dataset.raceCamera;updateRaceClock451(this);return}
   if(b.dataset.predictionTab){this.switchTab458(b.dataset.predictionTab);return}
   if(b.dataset.paradeStep){this.moveParade458(Number(b.dataset.paradeStep));return}
