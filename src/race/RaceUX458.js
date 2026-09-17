@@ -1,0 +1,9 @@
+// Presentation state is kept separately from authoritative room/game state.
+export const LEGACY_BET458=1000000;
+export const MAX_BET458=Math.floor((Number.MAX_SAFE_INTEGER-8000)/1000);
+export function betLimit458(gold,version=6){return Math.max(0,Math.min(Math.floor(Number(gold)||0),version>=6?MAX_BET458:LEGACY_BET458))}
+export function panelKey458(c){const r=c.state?.room;return `${r?.id??'home'}:${r?.phase??'home'}:${r?.phase==='parade'?(c.predictionTab457??'watch'):''}`}
+export function rememberScroll458(c){if(!c.root)return;c.scroll458??={};if(c.renderKey458)c.scroll458[c.renderKey458]={top:c.root.scrollTop,window:globalThis.scrollY??0,roster:c.root.querySelector('.race-roster451')?.scrollTop??0}}
+export function restoreScroll458(c,key,oldKey){const samePhase=key.split(':').slice(0,2).join(':')===oldKey?.split(':').slice(0,2).join(':');const v=c.scroll458?.[key]??(samePhase?c.scroll458?.[oldKey]:null)??{top:0,window:0,roster:0};c.root.scrollTop=v.top;const roster=c.root.querySelector('.race-roster451');if(roster)roster.scrollTop=v.roster;if(globalThis.scrollY!==v.window)globalThis.scrollTo?.(0,v.window);c.renderKey458=key}
+export function swipeDirection458(start,end){const dx=end.x-start.x,dy=end.y-start.y;return end.at-start.at<=1000&&Math.abs(dx)>=38&&Math.abs(dx)>Math.abs(dy)*1.4?(dx<0?1:-1):0}
+export function editPick458(ticket,index,slot=null){const sizes={win:1,place:1,pair:2,wide:2,exact:2,trio:3,trifecta:3},max=sizes[ticket.kind]??1,picks=[...ticket.picks],at=picks.indexOf(index);if(Number.isInteger(slot)&&slot>=0&&slot<max){if(at>=0&&at!==slot){const old=picks[slot];picks[slot]=index;if(old===undefined)picks.splice(at,1);else picks[at]=old}else if(slot<picks.length)picks[slot]=index;else picks.push(index)}else if(at>=0)picks.splice(at,1);else if(picks.length<max)picks.push(index);else if(max===1)picks[0]=index;else picks[max-1]=index;return{kind:ticket.kind,picks}}

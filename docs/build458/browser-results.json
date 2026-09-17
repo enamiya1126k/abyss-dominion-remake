@@ -1,0 +1,54 @@
+{
+  "checks": [
+    "four authenticated members; selected card keeps scroll, search/sort, reachable fixed start",
+    "real touch left/right switch monsters; vertical swipe remains page scroll",
+    "folds/communication preserve scroll; per-tab positions, candidate transfer, slot swap and MAX input preserve draft and do not charge",
+    "four tickets debit exactly once, host MAX charges55,838,554G with old1M cap removed",
+    "five touchscreen boost taps, spent icons, own/ticket markings, camera and ticket details",
+    "mid-race restart and disconnected guest settle MAX money/training/fatigue once",
+    "compact four-player results, persistent expanded details, dock always reachable, replay never repays",
+    "next race has immediate pending feedback then alternates to sand",
+    "offline leave returns home immediately and leaves the same room once after reconnect",
+    "online leave returns to room entry without a dead button"
+  ],
+  "errors": [],
+  "bounds": [
+    {
+      "width": 320,
+      "purchase": {
+        "x": 175,
+        "y": 665.5,
+        "width": 135,
+        "height": 48
+      }
+    },
+    {
+      "width": 393,
+      "purchase": {
+        "x": 219.4375,
+        "y": 665.5,
+        "width": 163.5625,
+        "height": 48
+      }
+    },
+    {
+      "width": 709,
+      "purchase": {
+        "x": 395,
+        "y": 665.5,
+        "width": 304,
+        "height": 48
+      }
+    },
+    {
+      "width": 1280,
+      "purchase": {
+        "x": 684.4375,
+        "y": 665.5,
+        "width": 335.5625,
+        "height": 48
+      }
+    }
+  ],
+  "limitations": "Chromium mobile touch, not physical iPhone Safari. Original baseline monster sprite files and Japanese font unavailable in local renderer; asset paths unchanged."
+}

@@ -1,8 +1,9 @@
+import{MAX_BET458}from'./RaceUX458.js';
 import{validTicket456,ticketWins456}from'./RaceTickets456.js';
 import{raceWeight455}from'./RaceStrategy455.js';
 import{raceProfile453,PLACE_PRIZES453,trainingReward453}from'./RaceTraits453.js';
 // Shared race rules. Combat level, rarity, equipment and affection never enter these calculations.
-export const RACE451={minBet:1,maxBet:1000000,prize:5000,maxPrize:8000,entryMs:45000,paradeMs:16000,betMs:75000,countdownMs:3000,raceMs:28000};
+export const RACE451={minBet:1,maxBet:MAX_BET458,prize:5000,maxPrize:8000,entryMs:45000,paradeMs:16000,betMs:75000,countdownMs:3000,raceMs:28000};
 export const BET_NAMES451={win:'単勝',pair:'二連複',exact:'二連単'};
 export const hash451=value=>{let h=2166136261;for(const c of String(value))h=Math.imul(h^c.charCodeAt(0),16777619);return h>>>0};
 export function rng451(seed){let x=Number(seed)>>>0;return()=>{x+=0x6D2B79F5;let t=x;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}};
@@ -14,7 +15,7 @@ export function odds451(racers,course,ticket){if(!validTicket451(ticket)||racers
 export const ticketWins451=ticketWins456;
 export function drawRace451(racers,course,seed){const random=rng451(seed),remaining=raceWeights455(racers,course).map((w,i)=>({i,w})),order=[];while(remaining.length){let value=random()*remaining.reduce((sum,r)=>sum+r.w,0),index=remaining.length-1;for(let j=0;j<remaining.length;j++){value-=remaining[j].w;if(value<0){index=j;break}}order.push(remaining.splice(index,1)[0].i)}const finishMs=Array(8);let time=21000;for(const i of order){finishMs[i]=time;time+=500+Math.floor(random()*300)}return{order,finishMs}}
 export function raceProgress451(racer,elapsed,finishMs){const t=Math.max(0,Math.min(1,elapsed/finishMs));let progress=Math.pow(t,racer.profile.curve);const p=racer.profile;if(p.version===2&&elapsed>p.skillAt&&elapsed<p.skillAt+p.skillMs)progress+=.012*Math.sin(Math.PI*(elapsed-p.skillAt)/p.skillMs)**2;return Math.min(1,progress)}
-export const payout451=(amount,odds)=>Math.floor(amount*Math.round(odds*10)/10);
+export const payout451=(amount,odds)=>Number.isSafeInteger(amount)&&amount>=0&&Number.isFinite(odds)&&odds>=0&&odds<=1000?Number(BigInt(amount)*BigInt(Math.round(odds*10))/10n):0;
 export function outcome451(room,member){const ticket=member.ticket,stake=ticket?.amount??0,won=ticketWins451(ticket,room.outcome.order),payout=won?payout451(stake,ticket.odds):0,place=room.outcome.order.findIndex(i=>room.racers[i].ownerId===member.playerId)+1,prize=room.rulesVersion>=2?(PLACE_PRIZES453[place-1]??0):place===1?RACE451.prize:0,training=room.rulesVersion>=2?trainingReward453(place):{affection:5,expRate:.02};return{playerId:member.playerId,name:member.name,ai:member.ai,ticket:ticket??null,won,stake,payout,prize,place,training,net:payout+prize-stake,monsterId:member.choice?.id??null}};
 
 // Forecast and payouts use precisely the same public weights as the server draw.
