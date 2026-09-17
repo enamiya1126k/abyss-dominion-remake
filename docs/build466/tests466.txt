@@ -1,0 +1,42 @@
+300 matches: { min: 60, mean: 79.60333333333334, max: 104 }
+✔ 335 cards, secret opening, attribute semantics and conservation across 300 complete matches (12245.6972ms)
+✔ dice count and +2 movement are separate; explicit landing exception is preserved (1.290286ms)
+✔ curse transfers via concealed draw, blocks overshoot goal once, and finish scores freeze (1.87383ms)
+✔ one defense cancels every remaining effect from the same card for this target (0.637855ms)
+✔ new public special is compared, set is optional and cannot loop, duplicate uid cannot be replayed in one turn (1.426478ms)
+✔ public-special score multiplier includes negative score; none stays independent (0.848583ms)
+✔ authenticated coordinator: persistent party, all ready, idempotence, spectators, restart, host transfer and game switch (65.848051ms)
+✔ bad instant immunity applies to the recipient of an area event; reflection never chains (0.755693ms)
+✔ empty pre/post phases advance but drawing, cards, pending choices, and abilities are preserved (5.354586ms)
+✔ special eligibility matches phase, cost, distance and use limits (1.839124ms)
+✔ server advances connected human with no optional action after pacing delay only (1.565211ms)
+✔ card reveals are public, targets are explicit, defense remains a real choice (5.78843ms)
+✔ dice animation uses actual roll and movement follows it in the event stream (1.128632ms)
+✔ private draw and hacker-held instants do not reveal identities in presentation (2.180054ms)
+✔ an illegal play emits no reveal; rehydrated older saves acquire presentation fields safely (1.396802ms)
+✔ every authored tile has a concise visible effect independent of color (0.414844ms)
+✔ a forced rest turn advances without a pointless draw tap (0.858967ms)
+✔ sequential event budget protects full reading time and subsequent 75-second choice (1.26452ms)
+✔ server rejects commands and AI advancement during presentation, preserving idempotence (14.94274ms)
+✔ solo restart works during AI turn, queued animation and pending choice, retains party/monster only (8.657296ms)
+✔ solo exit persists lounge state, keeps invitation code and prevents stale commands (4.964559ms)
+✔ reset and exit reject all multi-human matches even when another player is disconnected (14.917406ms)
+✔ spectators and outsiders cannot reset; sole player may retry after spectator leaves (8.205938ms)
+✔ adventure map preserves all rule nodes and connections and keeps nodes inside painted world (1.264883ms)
+✔ movement includes every traversed node; public status omits hidden cards (4.162255ms)
+✔ all 116 cards have known ranks and concise readable summaries (2.961568ms)
+✔ two draws interleave instant activation before the second draw (5.621044ms)
+✔ ordinary, curse and set draws remain private for opponents and spectators (6.271355ms)
+✔ hacker-held instant is private; public activation has explicit cause (0.92745ms)
+✔ per-event hands and counts reflect one draw at a time (1.330793ms)
+✔ steal exposes opaque back slots and advances remaining count one by one (3.290316ms)
+✔ awakening occurs only for acquired special, with full pacing budget (1.906249ms)
+✔ local order keeps duplicate card instances distinct and appends newly drawn cards (0.429554ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12484.990066

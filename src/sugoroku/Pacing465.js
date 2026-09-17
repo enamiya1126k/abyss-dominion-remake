@@ -1,8 +1,10 @@
 // Shared reading time for server scheduling and client presentation. Reduced motion keeps reading time.
 export function duration465(e){
+ if(e.kind==='awaken')return 5800;
+ if(e.kind==='draw')return 2400;
  if(e.kind==='card')return 4800;
  if(e.kind==='dice')return 3000;
- if(e.kind==='effect')return 2600;
+ if(e.kind==='effect')return 1900;
  if(e.kind==='move')return Math.max(1200,Math.min(5200,450*(e.path465?.length??2)));
  return 1600;
 }

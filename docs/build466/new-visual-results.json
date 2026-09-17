@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "camera transform unchanged throughout card detail open and close",
+    "long press reorder commits by UID; tap still opens details",
+    "central draw action is clickable without map pointer interception",
+    "draw 2: visual hand/count increments only after each card arrives",
+    "opponent draw rotates identical backs with no hidden card face in DOM",
+    "steal fan shows opponent portrait, uniform backs and remaining count",
+    "public awakening followed by persistent ability badge",
+    "dice keeps map visible"
+  ],
+  "errors": [],
+  "scope": "Production renderer in Chromium mobile emulation; physical Safari unavailable."
+}

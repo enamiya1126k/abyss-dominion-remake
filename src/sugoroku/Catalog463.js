@@ -1,3 +1,4 @@
+import{rankInfo466}from'./CardRanks466.js';
 import{ATTRS463}from'./Board463.js';
 export const CARDS463=[];
 function card(id,name,attrs,points,timing,effects,extra={}){const c={id,name,attrs,points,timing,effects,kind:'normal',copies:3,art:0,...extra};CARDS463.push(c);return c}
@@ -64,6 +65,7 @@ const extra=[
  ['phoenix','人類の進化とは',['hide'],1,'passive',[],{onDiscard:2,art:6,copies:4,text:'このカードが捨てられると2マス進む。移動先のマス効果は発動しない。'}]
 ];
 for(const args of extra)card(...args);
+for(const c of CARDS463)Object.assign(c,rankInfo466(c));
 export const CARD_BY_ID463=Object.fromEntries(CARDS463.map(c=>[c.id,c]));
 export const SPECIALS463=[
  ['worker','限界社畜',10,'一回休みと後退を無効化。サイコロの4・5・6は1として数える。',0],
