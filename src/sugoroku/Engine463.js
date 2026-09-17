@@ -13,9 +13,9 @@ const label=(g,id)=>player463(g,id)?.name??'冒険者';
 const posValue=p=>NODES463[p.pos]?.index??0;
 export function log463(g,text,cardId=null){g.log.push({id:++g.eventId,text,cardId,turn:g.turnNumber});if(g.log.length>100)g.log.shift()}
 // Public presentation events contain only revealed information, never concealed UIDs.
-export function present464(g,kind,data={}){g.presentation464??=[];g.presentationSequence464=(g.presentationSequence464??0)+1;g.presentation464.push({id:g.presentationSequence464,kind,turn:g.turnNumber,at:g.updatedAt,...data});if(g.presentation464.length>100)g.presentation464.shift()}
+export function present464(g,kind,data={}){g.presentation464??=[];g.presentationSequence464=(g.presentationSequence464??0)+1;g.presentation464.push({id:g.presentationSequence464,kind,turn:g.turnNumber,at:g.updatedAt,status465:(g.players??[]).map(p=>({playerId:p.playerId,pos:p.pos,handCount:p.hand.length,special:p.special,skip:p.skip})),...data});if(g.presentation464.length>100)g.presentation464.shift()}
 function cardPresentation464(g,p,c){present464(g,'card',{actorId:p.playerId,cardId:c.id})}
-function movementPresentation464(g,p,from){if(from!==p.pos)present464(g,'move',{actorId:p.playerId,targetIds:[p.playerId],from,to:p.pos})}
+function movementPresentation464(g,p,from,path465=[from,p.pos]){if(from!==p.pos)present464(g,'move',{actorId:p.playerId,targetIds:[p.playerId],from,to:p.pos,path465})}
 function add(g,list,front=false){const fx=list.filter(Boolean);if(front)g.queue.unshift(...fx);else g.queue.push(...fx)}
 function meta(g,actor,cardId,source='card'){return{actor,group:`${g.turnNumber}:${++g.effectId}`,cardId,source}}
 function cardEffects(g,p,c,over={}){const m={...meta(g,p.playerId,c.id),...over};let mult=p.boostAttr&&c.attrs.includes(p.boostAttr)?2:1;if(mult>1)p.boostAttr=null;return c.effects.map(e=>({...e,...m,n:e.n!=null?e.n*(['move','bonus','draw','discard','steal'].includes(e.type)?mult:1):e.n,target:e.target??p.playerId}))}
@@ -67,15 +67,15 @@ function goal(g,p){
 function landing(g,p,e){if(p.pos===GOAL463){goal(g,p);return}if(!e.event||p.finished)return;const node=NODES463[p.pos];if(p.special==='power'&&node.tone==='black'){log463(g,`${p.name}は権力で黒マスを無効化`);return}log463(g,`${p.name}が「${node.name}」に止まった`);const m=meta(g,p.playerId,null,'tile');add(g,node.effects.map(fx=>({...fx,...m,target:fx.target??p.playerId,tile:node.id,...(fx.type==='move'?{event:false}:{})})),true)}
 function move(g,p,e){
  if(p.finished)return;let n=Math.trunc(e.n??0);if(!n)return;
- if(n<0){if(p.special==='worker'){log463(g,`${p.name}は後退を無効化`);return}const from=p.pos;p.trail=p.trail.slice(0,Math.max(1,p.trail.length+n));p.pos=p.trail.at(-1);log463(g,`${p.name}が${Math.abs(n)}マス戻る`);movementPresentation464(g,p,from);landing(g,p,e);if(from!=='0'&&p.pos==='0')for(const x of active(g))if(x!==p&&x.special==='buddha')x.buddhaReady=true;
+ if(n<0){if(p.special==='worker'){log463(g,`${p.name}は後退を無効化`);return}const from=p.pos,oldTrail465=[...p.trail];p.trail=p.trail.slice(0,Math.max(1,p.trail.length+n));p.pos=p.trail.at(-1);log463(g,`${p.name}が${Math.abs(n)}マス戻る`);movementPresentation464(g,p,from,oldTrail465.slice(Math.max(0,oldTrail465.length+n-1)).reverse());landing(g,p,e);if(from!=='0'&&p.pos==='0')for(const x of active(g))if(x!==p&&x.special==='buddha')x.buddhaReady=true;
   if(p.special==='grudge'&&!p.grudgeUsed){p.grudgeUsed=true;const fx=[{...meta(g,p.playerId,null,'special'),type:'draw',target:p.playerId,n:2,mode:'safe'}];if(e.actor!==p.playerId&&player463(g,e.actor)&&!player463(g,e.actor).finished)fx.unshift({...meta(g,p.playerId,null,'special'),type:'steal',target:e.actor,n:1,harmful:true});add(g,fx,true)}return}
- const origin=p.pos;let reachedGoal=false;
+ const origin=p.pos,route465=[p.pos];let reachedGoal=false;
  while(n>0&&!p.finished){const node=NODES463[p.pos];if(!node.next.length)break;
-  if(node.next.length>1&&!e.path){movementPresentation464(g,p,origin);ask(g,p.playerId,'fork','近道か、宝庫への寄り道か',[{value:node.next[0],label:'近道を進む',note:'ゴールへ最短の道'},{value:node.next[1],label:'宝庫へ寄り道',note:'4マス長い。補充・特殊カードのチャンス'}],{effect:{...e,n}});return}
-  const next=e.path??node.next[0];delete e.path;if(!node.next.includes(next))fail('通れない道です');p.pos=next;p.trail.push(next);n--;
+  if(node.next.length>1&&!e.path){movementPresentation464(g,p,origin,route465);ask(g,p.playerId,'fork','近道か、宝庫への寄り道か',[{value:node.next[0],label:'近道を進む',note:'ゴールへ最短の道'},{value:node.next[1],label:'宝庫へ寄り道',note:'4マス長い。補充・特殊カードのチャンス'}],{effect:{...e,n}});return}
+  const next=e.path??node.next[0];delete e.path;if(!node.next.includes(next))fail('通れない道です');p.pos=next;p.trail.push(next);route465.push(next);n--;
   if(p.pos===GOAL463){reachedGoal=true;goal(g,p);break}if(NODES463[p.pos].kind==='gate'){e.event=true;break}
  }
- movementPresentation464(g,p,origin);if(p.pos!==origin)log463(g,`${p.name}が${NODES463[p.pos].name}へ進む`);if(!p.finished&&!reachedGoal)landing(g,p,e);
+ movementPresentation464(g,p,origin,route465);if(p.pos!==origin)log463(g,`${p.name}が${NODES463[p.pos].name}へ進む`);if(!p.finished&&!reachedGoal)landing(g,p,e);
 }
 function defend(g,p,e){
  if(!e.harmful||e.checked||g.blocked[e.group+':'+p.playerId])return false;
@@ -199,7 +199,7 @@ export function action463(g,playerId,m,now=0){
 }
 export function public463(g,id){
  const me=player463(g,id),q=g.pending;const pending=q?{context464:q.data?.effect?{actorId:q.data.effect.actor,targetId:q.data.effect.target,cardId:q.data.effect.cardId??null,tile:q.data.effect.tile??null}:null,id:q.id,playerId:q.playerId,kind:q.kind,prompt:q.prompt,...(q.playerId===id?{options:q.options}:{} )}:null;
- return{id:g.id,code:g.code,phase:g.phase,game:g.game,revision:g.revision,hostId:g.hostId,members:g.members.map(m=>({playerId:m.playerId,name:m.name,choice:m.choice,ai:!!m.ai})),players:(g.players??[]).map(p=>({playerId:p.playerId,name:p.name,seat:p.seat,ai:p.ai,choice:p.choice,pos:p.pos,skip:p.skip,special:p.special,handCount:p.hand.length,finished:p.finished,turns:p.turns,wardReady:!!p.ward})),hand:me?.hand.map(uid=>({uid,cardId:g.cards[uid],ward:uid===me.ward,playable:playable463(g,me,uid)}))??[],deckCount:g.deck?.length??0,discardCount:g.discard?.length??0,discardCards:(g.discard??[]).map(uid=>g.cards[uid]),step:g.step,turnNumber:g.turnNumber,turnPlayerId:current463(g)?.playerId,pending,deadline:g.deadline,lastRoll:g.lastRoll??null,presentation464:g.presentation464??[],presentationSequence464:g.presentationSequence464??0,autoAdvance464:automaticAction464(g)?.kind??null,autoAt464:g.nextAutoAt,ownSpecialPlayable464:!!me&&specialPlayable464(g,me),log:g.log.slice(-24),results:g.results??null,ownScore:me?(me.finished??score463(g,me)):null,ownMods:me?.mods??null,ownSpecialUsed:me?.specialUsed??false,extraChain:g.extraChain??0};
+ return{id:g.id,code:g.code,phase:g.phase,game:g.game,revision:g.revision,hostId:g.hostId,members:g.members.map(m=>({playerId:m.playerId,name:m.name,choice:m.choice,ai:!!m.ai})),players:(g.players??[]).map(p=>({playerId:p.playerId,name:p.name,seat:p.seat,ai:p.ai,choice:p.choice,pos:p.pos,skip:p.skip,special:p.special,handCount:p.hand.length,finished:p.finished,turns:p.turns,wardReady:!!p.ward})),hand:me?.hand.map(uid=>({uid,cardId:g.cards[uid],ward:uid===me.ward,playable:playable463(g,me,uid)}))??[],deckCount:g.deck?.length??0,discardCount:g.discard?.length??0,discardCards:(g.discard??[]).map(uid=>g.cards[uid]),step:g.step,turnNumber:g.turnNumber,turnPlayerId:current463(g)?.playerId,pending,deadline:g.deadline,lastRoll:g.lastRoll??null,presentation464:g.presentation464??[],presentationSequence464:g.presentationSequence464??0,autoAdvance464:automaticAction464(g)?.kind??null,autoAt464:g.nextAutoAt,presentationUntil465:g.presentationUntil465??0,ownSpecialPlayable464:!!me&&specialPlayable464(g,me),log:g.log.slice(-24),results:g.results??null,ownScore:me?(me.finished??score463(g,me)):null,ownMods:me?.mods??null,ownSpecialUsed:me?.specialUsed??false,extraChain:g.extraChain??0};
 }
 export function botAction463(g,playerId){
  const p=player463(g,playerId),q=g.pending;if(!p||p.finished)return null;

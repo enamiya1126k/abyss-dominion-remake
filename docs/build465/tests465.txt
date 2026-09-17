@@ -1,0 +1,16 @@
+✔ sequential event budget protects full reading time and subsequent 75-second choice (1.099678ms)
+✔ server rejects commands and AI advancement during presentation, preserving idempotence (22.550622ms)
+✔ solo restart works during AI turn, queued animation and pending choice, retains party/monster only (8.017909ms)
+✔ solo exit persists lounge state, keeps invitation code and prevents stale commands (5.335717ms)
+✔ reset and exit reject all multi-human matches even when another player is disconnected (15.698647ms)
+✔ spectators and outsiders cannot reset; sole player may retry after spectator leaves (8.636639ms)
+✔ adventure map preserves all rule nodes and connections and keeps nodes inside painted world (2.470471ms)
+✔ movement includes every traversed node; public status omits hidden cards (4.450867ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 279.967116

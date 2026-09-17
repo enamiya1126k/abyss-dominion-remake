@@ -1,0 +1,26 @@
+300 matches: { min: 60, mean: 79.60333333333334, max: 104 }
+✔ 335 cards, secret opening, attribute semantics and conservation across 300 complete matches (4420.438112ms)
+✔ dice count and +2 movement are separate; explicit landing exception is preserved (0.848893ms)
+✔ curse transfers via concealed draw, blocks overshoot goal once, and finish scores freeze (1.135353ms)
+✔ one defense cancels every remaining effect from the same card for this target (0.547628ms)
+✔ new public special is compared, set is optional and cannot loop, duplicate uid cannot be replayed in one turn (0.992444ms)
+✔ public-special score multiplier includes negative score; none stays independent (0.548822ms)
+✔ authenticated coordinator: persistent party, all ready, idempotence, spectators, restart, host transfer and game switch (35.399666ms)
+✔ bad instant immunity applies to the recipient of an area event; reflection never chains (0.675605ms)
+✔ empty pre/post phases advance but drawing, cards, pending choices, and abilities are preserved (3.193477ms)
+✔ special eligibility matches phase, cost, distance and use limits (1.747003ms)
+✔ server advances connected human with no optional action after pacing delay only (1.38359ms)
+✔ card reveals are public, targets are explicit, defense remains a real choice (3.712567ms)
+✔ dice animation uses actual roll and movement follows it in the event stream (0.931694ms)
+✔ private draw and hacker-held instants do not reveal identities in presentation (0.610423ms)
+✔ an illegal play emits no reveal; rehydrated older saves acquire presentation fields safely (0.963854ms)
+✔ every authored tile has a concise visible effect independent of color (0.334708ms)
+✔ a forced rest turn advances without a pointless draw tap (0.471494ms)
+ℹ tests 17
+ℹ suites 0
+ℹ pass 17
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4607.299273

@@ -1,0 +1,11 @@
+[
+  "src/worldRaid/WorldRaidOfflineCache430.js",
+  "src/core/config.js",
+  "src/Styles/build465-sugoroku.css",
+  "src/sugoroku/Presentation464.js",
+  "src/sugoroku/View463.js",
+  "src/sugoroku/Adventure465.js",
+  "src/sugoroku/Engine463.js",
+  "src/sugoroku/Pacing465.js",
+  "online-server/src/SugorokuCoordinator463.js"
+]

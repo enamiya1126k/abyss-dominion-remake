@@ -1,0 +1,20 @@
+{
+  "checks": [
+    {
+      "layout": {
+        "board": 380.03125,
+        "hand": 178,
+        "height": 694,
+        "overflow": false
+      }
+    },
+    "nonzero card back/front at 393px including rerender; caster portrait visible",
+    "attacker and target characters / names / arrow / effect visible",
+    "illustrated branch choice with lengths and upcoming rewards",
+    "discard is a physical card selection then confirmation",
+    "solo restart confirmation reachable from header",
+    "320px, 393px and desktop; reduced motion remains readable"
+  ],
+  "errors": [],
+  "scope": "Production renderer and public engine in isolated local fixture. Physical iPhone Safari not available."
+}

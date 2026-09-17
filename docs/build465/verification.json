@@ -1,0 +1,9 @@
+{
+  "version": "3.1.144-build465",
+  "baselineTests": {"passed": 17, "engineMatches": 300, "report": "tests463-464.txt"},
+  "newTests": {"passed": 8, "report": "tests465.txt"},
+  "ui": "visual-results.json",
+  "websocket": "browser-results.json",
+  "deployment": "not deployed",
+  "limitations": ["Unchanged dependencies supplied from prior QA baseline", "Fixture login and save", "Physical iPhone Safari not available", "No full-length browser match with new reading durations", "Real-world network latency unverified"]
+}
