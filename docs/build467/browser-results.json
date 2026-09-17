@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "real button -> server -> fresh solo game, same party and opening hand",
+    "restart during active dice animation clears old event queue",
+    "exit returns to playable game list with same invitation code",
+    "two WebSocket clients display identical scheduled dice; ordinary commands wait; reset hidden in multiplayer",
+    "reconnect retains secret hand and skips historical presentation"
+  ],
+  "errors": [],
+  "scope": "Actual RaceClient and RaceCoordinator over local WebSocket. Fixture login/save and baseline unchanged dependencies; real Safari and deployed production unverified."
+}

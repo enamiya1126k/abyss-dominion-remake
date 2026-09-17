@@ -53,7 +53,7 @@ const extra=[
  ['fist','539.936kgの拳',['yori'],5,'pre',[{type:'special'},{type:'move',n:7},{type:'draw',n:2,mode:'safe'},{type:'discard',target:'allOthers',n:1,harmful:true}],{kind:'rare',art:12,copies:1,text:'特殊カード獲得→7マス進む→安全に2枚引く→相手全員が1枚失う。移動先のマス効果なし。'}],
  ['destroyer','破壊神ヒデ',['hide'],-5,'pre',[{type:'loseSpecial',target:'allOthers',harmful:true},{type:'discard',target:'allOthers',n:3,harmful:true},{type:'move',target:'allOthers',n:-3,harmful:true}],{kind:'rare',art:15,copies:1,text:'相手全員の特殊カードを破棄→手札を3枚ずつ破棄→3マスずつ戻す。移動先のマス効果なし。'}],
  ['principal','園長先生（より）',['yori'],-4,'pre',[{type:'draw',n:4,mode:'hold'}],{art:4,text:'カードを4枚引く。速攻は発動せず手札に保持する。'}],
- ['forest','森のより',['yori'],0,'instant',[{type:'handSize',n:5}],{kind:'good',copies:3,art:6,text:'速攻。手札を5枚にそろえる。不足分は安全に引き、余分は自分で選んで捨てる。'}],
+ ['forest','森のより',['yori'],0,'instant',[{type:'handSize',n:5}],{kind:'good',copies:1,art:6,text:'速攻。手札を5枚にそろえる。不足分は安全に引き、余分は自分で選んで捨てる。'}],
  ['poison','毒',[],0,'instant',[{type:'skip',n:1,harmful:true},{type:'discardAttr',attr:'rion',harmful:true}],{kind:'bad',art:9,copies:2,text:'速攻。次の手番を1回休み、りおん属性の手札をすべて捨てる。'}],
  ['sleep','よりの寝落ち',['yori'],0,'instant',[{type:'endNow',harmful:true}],{kind:'bad',art:9,copies:2,text:'速攻。今が自分のターンなら直ちに終了。それ以外は次の手番を1回休む。'}],
  ['cup','土佐鶴ワンカップ',[],0,'instant',[{type:'catastrophe',harmful:true}],{kind:'bad',art:9,copies:2,text:'速攻。手札をすべて失う。より・えなみ属性を1枚捨てて回避できる。'}],

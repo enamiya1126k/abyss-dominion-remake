@@ -144,12 +144,12 @@ function executeBody466(g,e){
 }
 function nextTurn(g){if(g.phase!=='playing')return;const last=current463(g);if(last?.extraTurn&&!last.finished&&!g.extraChain){last.extraTurn=false;g.extraChain=1}else{g.extraChain=0;do{g.turn=(g.turn+1)%4}while(current463(g).finished)}g.turnNumber++;g.step='draw';g.blocked={};const p=current463(g);p.mods={bonus:0,dice:1};p.boostAttr=null;p.grudgeUsed=false;p.specialUsed=false;p.playedTurn={};log463(g,`${p.name}の手番${g.extraChain?'（追加）':''}`)}
 export function settle463(g){let safety=0;while(g.queue.length&&!g.pending&&g.phase==='playing'){if(++safety>1500)fail('効果の処理回数を超えました');execute(g,g.queue.shift())}if(g.phase==='playing'&&!g.queue.length&&!g.pending&&(g.step==='ending'||current463(g).finished))nextTurn(g)}
-function resolveChoice(g,p,value){const q=g.pending;if(!q||q.playerId!==p.playerId)fail('今はあなたの選択ではありません');if(!q.options.some(o=>o.value===value))fail('選択肢を選んでください');g.pending=null;const d=q.data,e=d.effect;
+function resolveChoice(g,p,value){const q=g.pending;if(!q||q.playerId!==p.playerId)fail('今はあなたの選択ではありません');if(Array.isArray(value)){if(q.kind!=='discard'||value.length!==Math.min(q.data.remaining,p.hand.length)||new Set(value).size!==value.length||!value.every(v=>typeof v==='string'&&q.options.some(o=>o.value===v)&&p.hand.includes(v)))fail('必要な枚数の手札を選んでください')}else if(!q.options.some(o=>o.value===value))fail('選択肢を選んでください');g.pending=null;const d=q.data,e=d.effect;
  switch(q.kind){
  case'target':add(g,[{...e,target:value}],true);break;
  case'fork':add(g,[{...e,target:p.playerId,path:value}],true);break;
  case'special':{const unused=value===d.old?d.next:d.old;if(unused)g.specialDiscard.push(unused);p.special=value;p.ward=null;if(value!==d.old)awaken466(g,p);log463(g,`${p.name}は「${special(p).name}」を選んだ`);break}
- case'discard':{drop(g,p,[value]);if(d.remaining>1&&p.hand.length)ask(g,p.playerId,'discard',`あと${d.remaining-1}枚捨てる`,p.hand.map(uid=>({value:uid,label:definition463(g,uid).name,cardId:g.cards[uid]})),{...d,remaining:d.remaining-1});break}
+ case'discard':{const picked=Array.isArray(value)?value:[value];drop(g,p,picked);if(d.remaining>picked.length&&p.hand.length)ask(g,p.playerId,'discard',`あと${d.remaining-picked.length}枚捨てる`,p.hand.map(uid=>({value:uid,label:definition463(g,uid).name,cardId:g.cards[uid]})),{...d,remaining:d.remaining-picked.length});break}
  case'recover':{const i=g.discard.indexOf(value);if(i<0)fail('そのカードはもう捨て札にありません');g.discard.splice(i,1);receiveCard(g,p,value,'hold');if(d.remaining>1&&g.discard.length)ask(g,p.playerId,'recover',`あと${d.remaining-1}枚回収`,g.discard.map(uid=>({value:uid,label:definition463(g,uid).name,cardId:g.cards[uid]})),{remaining:d.remaining-1});break}
  case'discardMove':if(value==='done'){p.mods.noRoll=true;add(g,[{...meta(g,p.playerId,'dove'),type:'move',target:p.playerId,n:d.count}],true)}else{drop(g,p,[value]);ask(g,p.playerId,'discardMove',`${d.count+1}マス分選択中`,[...p.hand.map(uid=>({value:uid,label:definition463(g,uid).name,cardId:g.cards[uid]})),{value:'done',label:`${d.count+1}マス進む`}],{count:d.count+1})}break;
  case'steal':{const other=player463(g,d.target),uid=d.concealed[Number(value)],i=other?.hand.indexOf(uid);if(i==null||i<0)fail('そのカードは選べません');other.hand.splice(i,1);if(other.ward===uid)other.ward=null;receiveCard(g,p,uid,'normal',{...e,fromPlayerId466:other.playerId,ordinal466:(d.total466??d.remaining)-d.remaining+1,total466:d.total466??d.remaining});log463(g,`${p.name}が${other.name}から1枚引いた`);if(d.remaining>1)add(g,[{...e,n:d.remaining-1,total466:d.total466??d.remaining,noGreed:true,checked:true}],false);break}
@@ -175,6 +175,7 @@ export function automaticAction464(g){
  const p=current463(g);
  if(g.phase!=='playing'||!p||p.finished||g.pending||g.queue?.length)return null;
  if(g.step==='draw'&&p.skip>0)return {kind:'draw'};
+ if(g.step==='pre'&&!p.ai&&!p.mods.noRoll)return null;
  // Preserve every optional card and special ability; skip only empty decision phases.
  if(!['pre','post'].includes(g.step)||p.hand.some(uid=>playable463(g,p,uid))||specialPlayable464(g,p))return null;
  return {kind:g.step==='pre'?'roll':'end'};
@@ -189,7 +190,7 @@ function useSpecial(g,p,payload){
 }
 export function action463(g,playerId,m,now=0){
  if(g.phase!=='playing')fail('ゲームは進行中ではありません');const p=player463(g,playerId);if(!p||p.finished)fail('観戦中は操作できません');g.updatedAt=now;
- if(m.kind==='choice'){resolveChoice(g,p,String(m.value));settle463(g);return}
+ if(m.kind==='choice'){resolveChoice(g,p,Array.isArray(m.values)?m.values:String(m.value));settle463(g);return}
  if(g.pending)fail('選択が終わるまでお待ちください');if(current463(g)!==p)fail('あなたの手番ではありません');
  if(m.kind==='draw'){
   if(g.step!=='draw')fail('この手番のカードは引いています');p.turns++;p.mods={bonus:0,dice:1};p.grudgeUsed=false;p.specialUsed=false;p.playedTurn={};
@@ -208,7 +209,7 @@ export function action463(g,playerId,m,now=0){
  else if(m.kind==='special')useSpecial(g,p,m);else fail('未対応の操作です');settle463(g);
 }
 export function public463(g,id){
- const me=player463(g,id),q=g.pending;const pending=q?{context464:q.data?.effect?{actorId:q.data.effect.actor,targetId:q.data.effect.target,cardId:q.data.effect.cardId??null,tile:q.data.effect.tile??null}:null,id:q.id,playerId:q.playerId,kind:q.kind,prompt:q.prompt,...(q.kind==='steal'?{remaining466:q.data.remaining,total466:q.data.total466,targetId466:q.data.target}:{}),...(q.playerId===id?{options:q.options}:{} )}:null;
+ const me=player463(g,id),q=g.pending;const pending=q?{context464:q.data?.effect?{actorId:q.data.effect.actor,targetId:q.data.effect.target,cardId:q.data.effect.cardId??null,tile:q.data.effect.tile??null}:null,id:q.id,playerId:q.playerId,kind:q.kind,prompt:q.prompt,...(q.kind==='discard'&&q.playerId===id?{required467:Math.min(q.data.remaining,me.hand.length)}:{}),...(q.kind==='steal'?{remaining466:q.data.remaining,total466:q.data.total466,targetId466:q.data.target}:{}),...(q.playerId===id?{options:q.options}:{} )}:null;
  return{id:g.id,code:g.code,phase:g.phase,game:g.game,revision:g.revision,hostId:g.hostId,members:g.members.map(m=>({playerId:m.playerId,name:m.name,choice:m.choice,ai:!!m.ai})),players:(g.players??[]).map(p=>({playerId:p.playerId,name:p.name,seat:p.seat,ai:p.ai,choice:p.choice,pos:p.pos,skip:p.skip,special:p.special,handCount:p.hand.length,finished:p.finished,turns:p.turns,wardReady:!!p.ward})),hand:me?.hand.map(uid=>({uid,cardId:g.cards[uid],ward:uid===me.ward,playable:playable463(g,me,uid)}))??[],deckCount:g.deck?.length??0,discardCount:g.discard?.length??0,discardCards:(g.discard??[]).map(uid=>g.cards[uid]),step:g.step,turnNumber:g.turnNumber,turnPlayerId:current463(g)?.playerId,pending,deadline:g.deadline,lastRoll:g.lastRoll??null,presentation464:(g.presentation464??[]).map(e=>projectEvent466(e,id)),presentationSequence464:g.presentationSequence464??0,autoAdvance464:automaticAction464(g)?.kind??null,autoAt464:g.nextAutoAt,presentationUntil465:g.presentationUntil465??0,ownSpecialPlayable464:!!me&&specialPlayable464(g,me),log:g.log.slice(-24),results:g.results??null,ownScore:me?(me.finished??score463(g,me)):null,ownMods:me?.mods??null,ownSpecialUsed:me?.specialUsed??false,extraChain:g.extraChain??0};
 }
 export function botAction463(g,playerId){

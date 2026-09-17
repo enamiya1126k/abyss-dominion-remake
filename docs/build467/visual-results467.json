@@ -1,0 +1,14 @@
+{
+  "checks": [
+    "illustrated die sends roll once; double tap blocked",
+    "hand collapse expands board and preserves viewed center and zoom; reopen reachable",
+    "80 main road spaces and 12 side spaces with no artificial main route stripe",
+    "public bad instant gets dark image VFX and forced activation label; card art has nonzero height",
+    "ordinary card uses new ornate front without bad-instant VFX",
+    "discard selection requires exact count and sends one batch",
+    "steal cards use the same generated back, with no hidden rank or identity",
+    "320px and reduced motion keep readable content"
+  ],
+  "errors": [],
+  "scope": "Production UI in Chromium with mobile emulation. Real iPhone Safari not available."
+}

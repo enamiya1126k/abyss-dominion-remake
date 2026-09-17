@@ -1,0 +1,40 @@
+✔ sequential event budget protects full reading time and subsequent 75-second choice (4.608991ms)
+✔ server rejects commands and AI advancement during presentation, preserving idempotence (26.391283ms)
+✔ solo restart works during AI turn, queued animation and pending choice, retains party/monster only (7.501463ms)
+✔ solo exit persists lounge state, keeps invitation code and prevents stale commands (5.098073ms)
+✔ reset and exit reject all multi-human matches even when another player is disconnected (7.237642ms)
+✔ spectators and outsiders cannot reset; sole player may retry after spectator leaves (8.585197ms)
+✔ adventure map preserves all rule nodes and connections and keeps nodes inside painted world (1.240553ms)
+✔ movement includes every traversed node; public status omits hidden cards (4.03973ms)
+✔ all 116 cards have known ranks and concise readable summaries (2.86892ms)
+✔ two draws interleave instant activation before the second draw (8.87991ms)
+✔ ordinary, curse and set draws remain private for opponents and spectators (5.193391ms)
+✔ hacker-held instant is private; public activation has explicit cause (0.574323ms)
+✔ per-event hands and counts reflect one draw at a time (0.819463ms)
+✔ steal exposes opaque back slots and advances remaining count one by one (2.475542ms)
+✔ awakening occurs only for acquired special, with full pacing budget (1.711064ms)
+✔ local order keeps duplicate card instances distinct and appends newly drawn cards (0.473388ms)
+300 matches: { min: 58, mean: 79.44333333333333, max: 107 }
+✔ 333 cards, secret opening, attribute semantics and conservation across 300 complete matches (17692.874533ms)
+✔ dice count and +2 movement are separate; explicit landing exception is preserved (1.209652ms)
+✔ curse transfers via concealed draw, blocks overshoot goal once, and finish scores freeze (1.200933ms)
+✔ one defense cancels every remaining effect from the same card for this target (1.20567ms)
+✔ new public special is compared, set is optional and cannot loop, duplicate uid cannot be replayed in one turn (1.458634ms)
+✔ public-special score multiplier includes negative score; none stays independent (0.490005ms)
+✔ authenticated coordinator: persistent party, all ready, idempotence, spectators, restart, host transfer and game switch (64.915422ms)
+✔ bad instant immunity applies to the recipient of an area event; reflection never chains (0.927731ms)
+✔ five-card adjustment has only one copy in the 333-card deck (3.46742ms)
+✔ human waits to tap dice even with no playable cards; AI and empty post turn progress (3.466756ms)
+✔ all main nodes sit on the traced painted road, board rules and 3 detours preserved (2.356589ms)
+✔ batch discard exactly selected cards in one command, including discard-trigger movement (6.555654ms)
+✔ invalid duplicate, stale, wrong count and foreign batch choices reject without changing state (5.410092ms)
+✔ adjust hand to five with greed preserves exactly five; batch requires excess count (1.461797ms)
+✔ bad instant publicly reveals only when activated; ordinary held curse stays concealed (5.121604ms)
+ℹ tests 31
+ℹ suites 0
+ℹ pass 31
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18083.812433

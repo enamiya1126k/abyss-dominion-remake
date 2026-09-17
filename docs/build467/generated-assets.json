@@ -1,0 +1,11 @@
+{
+  "method": "built-in image_gen",
+  "assets": {
+    "world.png": "exec-f642f926-ab41-44c8-b445-9e1b21408c84.png",
+    "card-back.png": "exec-69d9c4f0-85b6-46c6-a625-10f927617f42.png",
+    "card-frame.png": "exec-b94dac9d-aade-44df-aa6e-9c062fc3fc14.png",
+    "dice.png": "exec-4a6caedb-dc45-4c7e-b851-55f436644962.png",
+    "curse.png": "exec-d6899624-8a0c-46f2-8f82-6032cba808ac.png"
+  },
+  "use": "world road traced into Adventure467; card back shared across every concealed card; front frame CSS masked as ornamental edges; dice used for direct tapping; curse used only for public bad-instant activation"
+}
