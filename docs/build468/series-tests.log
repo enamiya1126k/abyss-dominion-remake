@@ -1,0 +1,12 @@
+✔ duplicates count as held cards, never as missing puzzle parts (1.587292ms)
+✔ tidy keeps every physical UID, stable ordinary order and groups each series (0.5318ms)
+✔ completion fires on fourth unique part and never consumes cards (0.367453ms)
+✔ all 43 supplied photos are actually referenced by cards or series (1.86279ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 107.755425

@@ -1,0 +1,303 @@
+[
+  {
+    "group": "yori",
+    "index": 1,
+    "original": "DC43768E-9046-46EC-8120-726702C133ED.jpeg",
+    "asset": "assets/sugoroku468/photos/yori-01.jpeg",
+    "sha256": "dcc97b1edd617ac3641185e8d426c142ef5df8ce429a56a708bc4096bc09e9b8"
+  },
+  {
+    "group": "yori",
+    "index": 2,
+    "original": "IMG_5577.jpeg",
+    "asset": "assets/sugoroku468/photos/yori-02.jpeg",
+    "sha256": "d734721c007c5a2adc2c2750b2f53046be032310e8bb25a545e8abdae1c6d213"
+  },
+  {
+    "group": "yori",
+    "index": 3,
+    "original": "IMG_4855.jpeg",
+    "asset": "assets/sugoroku468/photos/yori-03.jpeg",
+    "sha256": "75bd9d692895a07c6c712e81e407cdafd48fa5cec6912965afb4d706963a985b"
+  },
+  {
+    "group": "yori",
+    "index": 4,
+    "original": "IMG_4577.jpeg",
+    "asset": "assets/sugoroku468/photos/yori-04.jpeg",
+    "sha256": "d59a7b17c185ac5373fba51b63c7a7012d486513a6322b58e08891e9356b6a03"
+  },
+  {
+    "group": "yori",
+    "index": 5,
+    "original": "IMG_0168.jpeg",
+    "asset": "assets/sugoroku468/photos/yori-05.jpeg",
+    "sha256": "6447f8f6ee93f0fe1284874c9348bd9bbadeef7ae9475965a1218e8a666c2e52"
+  },
+  {
+    "group": "yori",
+    "index": 6,
+    "original": "IMG_2263.jpeg",
+    "asset": "assets/sugoroku468/photos/yori-06.jpeg",
+    "sha256": "7ac67183b5f95df3359ba625dabee2404cff279e8d22c48768045853a9066184"
+  },
+  {
+    "group": "yori",
+    "index": 7,
+    "original": "IMG_4136.jpeg",
+    "asset": "assets/sugoroku468/photos/yori-07.jpeg",
+    "sha256": "7d5f9917fe026e16463bd5af11ef7e8da01863bed8ffd49935dd0a6287277716"
+  },
+  {
+    "group": "enami",
+    "index": 1,
+    "original": "IMG_2200.jpeg",
+    "asset": "assets/sugoroku468/photos/enami-01.jpeg",
+    "sha256": "f7aff3ac62dc2df6d5c3a416b815741d2ab09f66a11890894d07c9ba1fb6ee20"
+  },
+  {
+    "group": "enami",
+    "index": 2,
+    "original": "IMG_7284.jpeg",
+    "asset": "assets/sugoroku468/photos/enami-02.jpeg",
+    "sha256": "0d7c9f42c6b75bafd2d2972fae7708f0e4c7c1650e8b267bf2bf3f7fa45470e7"
+  },
+  {
+    "group": "enami",
+    "index": 3,
+    "original": "IMG_2441.jpeg",
+    "asset": "assets/sugoroku468/photos/enami-03.jpeg",
+    "sha256": "61126e37d5c943c024a6f4da1ff2345906dd423401bf55a14f72c5e5444a3533"
+  },
+  {
+    "group": "enami",
+    "index": 4,
+    "original": "IMG_4550.jpeg",
+    "asset": "assets/sugoroku468/photos/enami-04.jpeg",
+    "sha256": "5bd536cdcf1f38adb736ba6c7dca325d37d73d4f1b37a6c44e3300d7b899de7a"
+  },
+  {
+    "group": "enami",
+    "index": 5,
+    "original": "IMG_7792.jpeg",
+    "asset": "assets/sugoroku468/photos/enami-05.jpeg",
+    "sha256": "462d5715c6188f93f34b6f7f33b542d56da5523dadd577975c9742e4f0c28756"
+  },
+  {
+    "group": "enami",
+    "index": 6,
+    "original": "IMG_0997.jpeg",
+    "asset": "assets/sugoroku468/photos/enami-06.jpeg",
+    "sha256": "363bfa5bb4f41da168cfdecffc9c98d9a53fb12fd7c71ab25ede7addd94ad729"
+  },
+  {
+    "group": "enami",
+    "index": 7,
+    "original": "IMG_0397.jpeg",
+    "asset": "assets/sugoroku468/photos/enami-07.jpeg",
+    "sha256": "685d6baadf3752099cb4e45156ab17200f1959b5ef49644fa5a759c798d8810b"
+  },
+  {
+    "group": "rion",
+    "index": 1,
+    "original": "41B0BB56-1500-4132-A6E8-4681CA78D6F8.jpeg",
+    "asset": "assets/sugoroku468/photos/rion-01.jpeg",
+    "sha256": "3a8d4f1c447edeb90275a31220b55eb4d374032e288dafa1331dd33557edfdcc"
+  },
+  {
+    "group": "rion",
+    "index": 2,
+    "original": "IMG_2883.jpeg",
+    "asset": "assets/sugoroku468/photos/rion-02.jpeg",
+    "sha256": "3a6eb480b15d562606ce88585f670db938b069b5bde3bd6c688b449ed3a24b09"
+  },
+  {
+    "group": "rion",
+    "index": 3,
+    "original": "IMG_3148.jpeg",
+    "asset": "assets/sugoroku468/photos/rion-03.jpeg",
+    "sha256": "781172dbcb7c0cee5234b5f69ee99656b2c20be8a8c4ce11fb88c62ff61093b8"
+  },
+  {
+    "group": "rion",
+    "index": 4,
+    "original": "IMG_4542.jpeg",
+    "asset": "assets/sugoroku468/photos/rion-04.jpeg",
+    "sha256": "bb2ca197233c95063a6b00d256793735848c8f7d3d7f97a29f896246fb8a2fc9"
+  },
+  {
+    "group": "rion",
+    "index": 5,
+    "original": "IMG_4625.jpeg",
+    "asset": "assets/sugoroku468/photos/rion-05.jpeg",
+    "sha256": "d79cf2b6505651f56ad73a349171d713c76c5afb14707a5eff5d4b442a4b326e"
+  },
+  {
+    "group": "rion",
+    "index": 6,
+    "original": "IMG_4811.jpeg",
+    "asset": "assets/sugoroku468/photos/rion-06.jpeg",
+    "sha256": "4b2002726cbb7c7bb437b7e483678021ce18ecc2bfe802b4c3ede6d5e2004bd2"
+  },
+  {
+    "group": "rion",
+    "index": 7,
+    "original": "IMG_5259.jpeg",
+    "asset": "assets/sugoroku468/photos/rion-07.jpeg",
+    "sha256": "72719c6ddfe1c4c0c50a640b8b6f7474a591211da249f1bf87f35548af6f9562"
+  },
+  {
+    "group": "rion",
+    "index": 8,
+    "original": "IMG_7375.jpeg",
+    "asset": "assets/sugoroku468/photos/rion-08.jpeg",
+    "sha256": "232c6a0e422726b0effec96698a5cfa3ef256abea6981c274e8c1430c1a87bdf"
+  },
+  {
+    "group": "rion",
+    "index": 9,
+    "original": "IMG_9950.jpeg",
+    "asset": "assets/sugoroku468/photos/rion-09.jpeg",
+    "sha256": "2f0a491fc4119b6516f6f8f03c1572af4a159a0f6d00180db0d605ee441e0b14"
+  },
+  {
+    "group": "hide",
+    "index": 1,
+    "original": "IMG_7692.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-01.jpeg",
+    "sha256": "5de53dfcc24d57fe948ab76ebd23b2f439c12cf89c1a828d8a4fe77ff2bf5712"
+  },
+  {
+    "group": "hide",
+    "index": 2,
+    "original": "DAD5DD99-EF0B-499B-A403-3A9A85BBAE03.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-02.jpeg",
+    "sha256": "05e20c0ebd14144e439999899210ad129da52bd0ae2dca8168f9be003bf6c96d"
+  },
+  {
+    "group": "hide",
+    "index": 3,
+    "original": "IMG_7206.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-03.jpeg",
+    "sha256": "bcbd89bbd4a16c85b99934a3defcac030df028e31902d7aed80ffae923d8ffd1"
+  },
+  {
+    "group": "hide",
+    "index": 4,
+    "original": "IMG_5649.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-04.jpeg",
+    "sha256": "d689436aa57435b41ddde8ea2c102cb7df266d71b285b58d123abf3b292737ac"
+  },
+  {
+    "group": "hide",
+    "index": 5,
+    "original": "IMG_5221.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-05.jpeg",
+    "sha256": "72f020c9d93823659ebfe35755ba872403505ca5f1ddb7472ddd07ce35662127"
+  },
+  {
+    "group": "hide",
+    "index": 6,
+    "original": "IMG_5242.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-06.jpeg",
+    "sha256": "4199f033bdfb8f8b474503339b6ee9ae4f13bc80b3846ebb78564b27ed2f7b49"
+  },
+  {
+    "group": "hide",
+    "index": 7,
+    "original": "IMG_3159.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-07.jpeg",
+    "sha256": "4013cc49c105764dc6517c4fec8a5e37d2885bd26daaae8676330adc6eacec3b"
+  },
+  {
+    "group": "hide",
+    "index": 8,
+    "original": "IMG_3088.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-08.jpeg",
+    "sha256": "aa3b38f5bc8855df81f1244e419d6638dd65aaa06b039e0ece629aee7ed47035"
+  },
+  {
+    "group": "hide",
+    "index": 9,
+    "original": "IMG_3087.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-09.jpeg",
+    "sha256": "7b753b1a08f45407f62284babddb6383efa26e99b6a12febff3a2097399328cc"
+  },
+  {
+    "group": "hide",
+    "index": 10,
+    "original": "IMG_2628.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-10.jpeg",
+    "sha256": "66ba702ac10cffdb913d8f1ee82fb4ae2f01aca76d44c5631397224a83f8ca63"
+  },
+  {
+    "group": "hide",
+    "index": 11,
+    "original": "IMG_5706.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-11.jpeg",
+    "sha256": "bc0a1da5bc66265e74513f99e9f839defb7de85857f1fb988751b1dd6d8a0b5d"
+  },
+  {
+    "group": "hide",
+    "index": 12,
+    "original": "IMG_9771.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-12.jpeg",
+    "sha256": "b69dc280422936443a11896b840570993eaa10722622d9382398f7753db654d2"
+  },
+  {
+    "group": "hide",
+    "index": 13,
+    "original": "IMG_9917.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-13.jpeg",
+    "sha256": "eea82005a31f2bc4a1b6d7de862a5527bf85fd79983648befcf22a96675dadc2"
+  },
+  {
+    "group": "hide",
+    "index": 14,
+    "original": "IMG_4180.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-14.jpeg",
+    "sha256": "cd4435222c6c7aecb579b28ec213009bf38f012f0cc27bc7d8685c67167cfd15"
+  },
+  {
+    "group": "hide",
+    "index": 15,
+    "original": "IMG_1918.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-15.jpeg",
+    "sha256": "04281a542595aa0e5814f591f9641b461632071c1b7f92f0176daefe26aa193f"
+  },
+  {
+    "group": "hide",
+    "index": 16,
+    "original": "IMG_1926.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-16.jpeg",
+    "sha256": "ebd52233ae15a404384b89cad15e6b3f75351662a17376f8b5ff99799285fb70"
+  },
+  {
+    "group": "hide",
+    "index": 17,
+    "original": "IMG_2277.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-17.jpeg",
+    "sha256": "9514f592e303d2dbbad0c81e01ac6a7396faa820c78dacf1ef95cc62621f2440"
+  },
+  {
+    "group": "hide",
+    "index": 18,
+    "original": "IMG_2421.png",
+    "asset": "assets/sugoroku468/photos/hide-18.png",
+    "sha256": "7c1710e061639ec4eb2b343db38e913f2554669deae4aa2835a93f23745ee808"
+  },
+  {
+    "group": "hide",
+    "index": 19,
+    "original": "IMG_2475.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-19.jpeg",
+    "sha256": "301286c1ee77d87430122d7599c53709254f7a769191e29eddc89c21e21e940c"
+  },
+  {
+    "group": "hide",
+    "index": 20,
+    "original": "IMG_5379.jpeg",
+    "asset": "assets/sugoroku468/photos/hide-20.jpeg",
+    "sha256": "c1a9335855db24b5d04f675be07da3683beef79ce581ba6884d14897ea035d6d"
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "photo hand renders; duplicate 3 held / 2 unique; local tidy preserves every UID and prioritizes usable cards",
+    "target selection is full-width portrait rows, highlights choice, sends only on confirmation; safe detail padding and return to bundle",
+    "four unique pieces assemble once across rerender; completion never consumes or auto-plays; explicit activation remains available",
+    "opponent draw remains identical backs with no photo, series or completion disclosure",
+    "bundle can be manually dragged without losing duplicates or cards; 320px details scroll without horizontal overflow",
+    "reduced motion shows the completed photo without movement"
+  ],
+  "errors": [],
+  "scope": "Production renderer and public engine in Chromium mobile emulation 320/393px and desktop 1280px. Physical iPhone Safari not available."
+}
