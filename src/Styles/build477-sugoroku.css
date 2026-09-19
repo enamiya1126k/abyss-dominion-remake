@@ -1,6 +1,8 @@
-/* Build477: one physical card proportion in every view. Container units keep
+/* Build478: full-width columns also contain absolutely positioned puzzle art.
+   Choice cards clear the old 115px vertical flex basis.
+   Build477: one physical card proportion in every view. Container units keep
    the title, artwork and rules panel together when a card is scaled. */
-.sg-screen .sg-tcg476{container-type:inline-size;aspect-ratio:63/88;min-height:0!important;height:auto!important;display:grid!important;grid-template-rows:9% 8% 45% 25% 8% 5%;align-items:stretch!important;justify-items:stretch;align-content:stretch;gap:0!important;padding:7px!important}
+.sg-screen .sg-tcg476{container-type:inline-size;aspect-ratio:63/88;min-height:0!important;height:auto!important;display:grid!important;grid-template-columns:minmax(0,1fr);grid-template-rows:9% 8% 45% 25% 8% 5%;align-items:stretch!important;justify-items:stretch;align-content:stretch;gap:0!important;padding:7px!important}
 /* The frame uses a fixed inset; its contents scale with the card width. */
 .sg-screen button.sg-tcg476,.sg-screen .sg-detail-card476,.sg-screen .sg-special-card470.sg-tcg476{padding:7px!important}
 .sg-screen .sg-tcg476 .sg-title476{grid-row:1;box-sizing:border-box;width:100%;height:100%;min-height:0!important;min-width:0;margin:0!important;padding:0 3px!important;font-size:clamp(6px,5.5cqw,14px)!important;line-height:1.15!important;overflow-wrap:anywhere;align-self:stretch;letter-spacing:0;box-shadow:inset 0 1px #fff3,0 1px 2px #0007;border-radius:3px}
@@ -27,7 +29,7 @@
 /* Stronger than the legacy fixed choice-card height and first-button rules. */
 .sg-screen .sg-card-choices465{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:22px 13px;margin:18px 0;padding:0 2px 6px}
 .sg-screen .sg-card-choices465>.sg-choice-card465{width:100%;min-width:0;max-width:215px;justify-self:center;flex:none;position:relative}
-.sg-screen .sg-card-choices465 button.sg-card.sg-tcg476{width:100%;height:auto!important;min-height:0!important;align-items:stretch;aspect-ratio:63/88}
+.sg-screen .sg-card-choices465 button.sg-card.sg-tcg476{flex:none;width:100%;height:auto!important;min-height:0!important;align-items:stretch;aspect-ratio:63/88}
 .sg-screen .sg-card-choices465 .sg-choice-inspect{width:100%;min-height:32px;margin:8px 0 0;padding:5px 8px;font-size:10px;border-radius:9px;background:#ffffff04;color:#dbc9eb}
 .sg-screen .sg-card-choices465 .sg-choice-card465.is-picked>button.sg-card{transform:none;outline:2px solid #f1d59c;outline-offset:2px;box-shadow:0 0 22px #e2b46044}
 .sg-screen .sg-card-choices465 .sg-choice-card465.is-picked:before{top:-12px;z-index:8}
