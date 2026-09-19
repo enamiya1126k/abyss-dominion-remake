@@ -1,0 +1,105 @@
+@charset "UTF-8";
+/* Feet stay attached to the tile at every zoom, including during movement. */
+.sg-game .sg-token,.sg-game .sg-all-players469 .sg-token{width:61px;height:64px;scale:none;transform:translate(-50%,-100%) scale(var(--ground-scale470,1));transform-origin:50% 100%}
+.sg-game .sg-all-players469{--ground-scale470:var(--pawn-scale469)}
+.sg-game .sg-token>.sg-monster,.sg-game .sg-token>.sg-art{display:block;width:61px;height:64px;margin:0}
+.sg-game .sg-token:after{content:'';position:absolute;z-index:-1;bottom:-2px;left:16px;width:30px;height:8px;border-radius:50%;background:#09081088;box-shadow:0 0 5px #070612}
+.sg-game .sg-token>b{top:-16px;bottom:auto;font-size:9px;line-height:13px;padding:1px 4px}
+.sg-game .sg-all-players469 .sg-token>b{font-size:10px;max-width:120px}
+.sg-game .sg-token.is-current:before{top:-37px;left:24px}
+/* A public ability card belongs visibly to each player, even with the hand closed. */
+.sg-seat-slot470{min-width:0;display:grid;grid-template-rows:47px 40px;gap:2px}
+.sg-game .sg-seat-slot470 .sg-seat{width:100%;min-width:0;min-height:0;margin:0;border-radius:8px 8px 3px 3px}
+.sg-screen button.sg-special-slot470{min-height:40px;width:100%;display:flex;align-items:center;gap:4px;padding:3px 4px;min-width:0;border:1px solid #bca27388;border-radius:3px 3px 7px 7px;background:linear-gradient(110deg,#273b45,#181222);text-align:left;box-shadow:inset 0 1px #eee0ad20}
+.sg-special-slot470>.sg-art{width:23px;height:32px;flex:0 0 23px;border:1px solid #d3bd88;border-radius:3px;box-shadow:1px 2px 0 #090814}
+.sg-special-slot470>span:last-child{display:grid;gap:2px;min-width:0;line-height:1.2}
+.sg-special-slot470 b{font-size:10px;color:#ffe9b8;white-space:nowrap}
+.sg-special-slot470 small{font-size:8px;color:#d6dde0;line-height:1.25;overflow-wrap:anywhere}
+.sg-screen button.sg-special-slot470.is-empty{background:#191322;border-color:#71617766}
+.sg-special-empty470{width:23px;flex:0 0 23px;text-align:center;font-size:24px;color:#baa378}
+.sg-special-slot470:focus-visible{outline:2px solid #ffe1a0;outline-offset:1px}
+.sg-game .sg-hand-hint464{display:flex;align-items:center;gap:7px;min-height:26px}
+.sg-hand-hint464>span{min-width:0}
+.sg-screen button.sg-recent-button470{font-size:10px;min-height:26px;white-space:nowrap;padding:3px 7px;color:#f7dca4;flex-shrink:0}
+.sg-recent470{display:grid;gap:8px}
+.sg-recent470>button{display:flex;gap:12px;align-items:center;text-align:left;padding:9px}
+.sg-recent470 .sg-art{width:68px;height:55px;flex:0 0 68px;border-radius:5px}
+.sg-recent470>button>span{display:grid;gap:3px;min-width:0}
+.sg-recent470 b{font-size:13px}.sg-recent470 em{font-size:12px;font-style:normal;color:#e9d7b2}.sg-recent470 small{font-size:10px;color:#c5bada}.sg-recent470 i{margin-left:auto}
+/* Dice results are the physical top face. The steeper camera makes it dominant. */
+.sg-die-hop469{transform:rotateX(-52deg) rotateY(-22deg)}
+.sg-die-scene469.is-rolling .sg-die-hop469{animation-name:sg-hop470}
+.sg-die-scene469.is-rolling .sg-die-face469.is-result470{animation:sg-top-light470 1700ms both;animation-delay:calc(var(--fx-age,0ms) + var(--die-i)*45ms)}
+@keyframes sg-hop470{0%{transform:translate(-32px,-42px) rotateX(-52deg) rotateY(-22deg)}24%{transform:translate(10px,7px) rotateX(-52deg) rotateY(-22deg)}46%{transform:translate(6px,-19px) rotateX(-52deg) rotateY(-22deg)}66%{transform:translate(-3px,3px) rotateX(-52deg) rotateY(-22deg)}81%{transform:translate(2px,-5px) rotateX(-52deg) rotateY(-22deg)}100%{transform:translate(0,0) rotateX(-52deg) rotateY(-22deg)}}
+@keyframes sg-top-light470{0%,76%{box-shadow:inset 0 0 5px #6c431b55}100%{box-shadow:inset 0 0 9px #fff5bc,0 0 5px #f2d793}}
+/* Card acquisition: deal first, hold the face readable, then tuck into the hand. */
+.sg-game .sg-presentation464[data-kind=draw]{padding:8px;background:linear-gradient(#100c1c88,#100b1dd6);place-items:center;align-content:center}
+.sg-draw470{display:grid;justify-items:center;gap:7px;max-width:410px;width:100%}
+.sg-draw-title470{display:grid;gap:3px;padding:6px 14px;background:#1f142cec;border:1px solid #b6986677;border-radius:11px;max-width:95%}
+.sg-draw-title470 small{font-size:10px;color:#d0bbd6}.sg-draw-title470 b{font-size:13px;color:#ffe7aa}.sg-draw-title470 em{font-size:10px;font-style:normal;padding-left:10px;color:#dfd0d7}
+.sg-draw-layout470{display:flex;align-items:center;justify-content:center;gap:16px;max-width:100%;width:100%}
+.sg-draw-table470{position:relative;padding-left:23px;flex:none}
+.sg-draw-table470>.sg-deck469{position:absolute;left:0;top:28%;scale:.66;transform-origin:left center;opacity:.6}
+.sg-game .sg-draw470 .sg-draw-card466{height:232px;width:156px;animation:sg-deal470 var(--event-duration469) both;animation-delay:var(--fx-age,0ms)}
+.sg-game .sg-draw470 .sg-draw-flipper466{animation:sg-draw-flip470 var(--event-duration469) both;animation-delay:var(--fx-age,0ms)}
+.sg-game .sg-draw470 .sg-front464{padding:13px 12px 17px;gap:5px}
+.sg-game .sg-draw470 .sg-front464>b{font-size:12px}.sg-game .sg-draw470 .sg-front464>p{font-size:12px}
+.sg-draw-cue470{width:130px;max-width:42%;display:grid;justify-items:center;gap:7px;animation:sg-cue470 var(--event-duration469) both;animation-delay:var(--fx-age,0ms);color:#ffebc2}
+.sg-cue-symbol470{display:grid;place-items:center;width:51px;height:51px;border:1px solid #dbc18f;border-radius:14px;background:linear-gradient(135deg,#584467,#20172f);box-shadow:inset 0 0 12px #bd9de333,0 4px 15px #0007}
+.sg-effect-icon470{width:30px;height:30px}.sg-cue-symbol470.cue-defend{color:#b2f5dc}.sg-cue-symbol470.cue-curse{color:#dfa7f9}.sg-cue-symbol470.cue-move{color:#f8dd91}
+.sg-draw-cue470>small{font-size:10px;color:#c3cbd8}.sg-draw-cue470>strong{font-size:16px;line-height:1.55;overflow-wrap:anywhere}.sg-draw-cue470>span:last-of-type{font-size:10px;line-height:1.5;color:#dccadf}
+.sg-screen .sg-draw-cue470>button{pointer-events:auto;min-height:32px;padding:5px 9px;font-size:11px}
+.sg-reading470{height:2px;width:80%;background:#c6a97733;overflow:hidden;border-radius:2px}.sg-reading470>span{display:block;height:100%;background:#ead093;transform-origin:left;animation:sg-reading470 var(--event-duration469) linear both;animation-delay:var(--fx-age,0ms)}
+.sg-draw-foot470,.sg-hidden-cue470{font-size:10px;color:#e5d7bd}.sg-hidden-cue470{width:95px;line-height:1.7}
+@keyframes sg-deal470{0%{transform:translate(-55px,6px) scale(.66);opacity:1}12%{transform:translate(-20px,-8px) scale(.86)}24%,89%{transform:none;opacity:1}100%{transform:translate(15px,80px) scale(.6);opacity:0}}
+@keyframes sg-draw-flip470{0%,10%{transform:rotateY(0)}24%,100%{transform:rotateY(180deg)}}
+@keyframes sg-cue470{0%,23%{opacity:0;transform:translateY(5px);visibility:hidden}24%,100%{opacity:1;transform:none;visibility:visible}}
+@keyframes sg-reading470{0%,24%{transform:scaleX(0)}89%,100%{transform:scaleX(1)}}
+/* Dedicated public ability deck and card face, with one visual identity throughout. */
+.sg-special-back470,.sg-special-deck470 i{background:#17343f url('../../assets/sugoroku470/special-back.png') center/100% 100%;border:1px solid #eddbb1;border-radius:9px;box-shadow:0 4px 12px #0008}
+.sg-special-deck470{position:relative;display:block;width:98px;height:145px;perspective:800px}
+.sg-special-deck470 i{position:absolute;inset:0;transform:rotate(-8deg);box-shadow:0 4px 0 #ae987b,0 7px 0 #162534,0 11px 16px #000a}
+.sg-special-deck470 i:nth-child(1){translate:-6px 6px}.sg-special-deck470 i:nth-child(2){translate:-3px 3px}
+.sg-special-card470{width:166px;height:242px;display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 13px 10px;background:radial-gradient(ellipse at 50% 30%,#42636b,#172b38 65%,#101320);border:2px solid #e8d3a3;border-radius:10px;box-shadow:inset 0 0 0 3px #182e3a,inset 0 0 0 4px #ae9163,0 8px 20px #0008;color:#fff0cc;margin:0;position:relative}
+.sg-special-card470:before{content:'✧';position:absolute;top:-9px;left:calc(50% - 7px);color:#ffedb7;font-size:17px;line-height:17px;text-shadow:0 0 6px #efd48c}
+.sg-special-card470>small{font-size:9px;letter-spacing:1px;color:#e8d8b7;line-height:1.3;white-space:nowrap}
+.sg-special-card470>.sg-art{width:100%;height:99px;flex:0 0 99px;margin:0;border:1px solid #d3bc84;border-radius:7px;box-shadow:0 0 14px #94d9e155}
+.sg-special-card470>h2{font-size:20px;line-height:1.2;margin:0;color:#fff1c5;white-space:nowrap}
+.sg-special-card470>p{font-size:12px;line-height:1.5;margin:0;text-align:center;overflow-wrap:anywhere;flex:1}
+.sg-special-card470>span:last-child{font-size:8px;color:#c2dce0;letter-spacing:3px;border-top:1px solid #debd7566;width:90%;padding-top:5px}
+.sg-game .sg-presentation464[data-kind=specialDraw470],.sg-game .sg-presentation464[data-kind=awaken]{background:radial-gradient(ellipse at center,#21414bdc,#110e20f5);padding:8px;place-items:center;align-content:center;overflow:hidden}
+.sg-special-reveal470{display:grid;justify-items:center;gap:12px;width:100%}.sg-special-heading470{display:grid;gap:5px}.sg-special-heading470 small{font-size:11px;color:#d1e3e1}.sg-special-heading470 b{font-size:18px;color:#ffe8b1;letter-spacing:3px}
+.sg-special-table470{display:flex;align-items:center;justify-content:center;gap:24px;width:100%}.sg-special-fly470{width:166px;height:242px;perspective:900px;animation:sg-special-deal470 3400ms both;animation-delay:var(--fx-age,0ms)}
+.sg-special-flipper470{position:relative;width:100%;height:100%;transform-style:preserve-3d;animation:sg-special-flip470 3400ms both;animation-delay:var(--fx-age,0ms)}
+.sg-special-back470,.sg-special-front470{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}.sg-special-front470{transform:rotateY(180deg)}
+.sg-special-reveal470>p{font-size:11px;line-height:1.5;color:#e4d1ad;margin:0;max-width:95%}
+@keyframes sg-special-deal470{0%,9%{transform:translate(-110px,5px) scale(.63)}22%{transform:translate(-20px,-12px) scale(.9)}34%,100%{transform:none}}
+@keyframes sg-special-flip470{0%,23%{transform:rotateY(0)}42%,100%{transform:rotateY(180deg)}}
+.sg-awakening470{display:grid;justify-items:center;gap:8px;position:relative;width:100%;isolation:isolate}
+.sg-awakening470>small{font-size:11px;color:#e0e8da;line-height:1.4;z-index:1}
+.sg-awaken-word470{font-size:40px;line-height:1.15;color:#fff3bc;text-shadow:0 0 24px #eadba899;letter-spacing:9px;animation:sg-awaken-word470 600ms both;animation-delay:var(--fx-age,0ms)}
+.sg-awaken-card470{z-index:1;animation:sg-awaken-card470 900ms both;animation-delay:var(--fx-age,0ms)}
+.sg-awaken-equipped470{font-size:14px;color:#ffe6a4;border:1px solid #bda47588;background:#152737d9;padding:5px 16px;border-radius:15px;z-index:1}
+.sg-awaken-halo470{position:absolute;width:320px;height:320px;top:50%;left:50%;translate:-50% -50%;border:1px solid #f8dfa799;border-radius:50%;box-shadow:0 0 0 14px #f5e4b00a,0 0 0 15px #e6d39c44,0 0 40px #82d7ec55,inset 0 0 55px #92deed44;z-index:-1;animation:sg-awaken-halo470 2200ms both;animation-delay:var(--fx-age,0ms)}
+.sg-awaken-rays470{position:absolute;inset:-70px;background:repeating-conic-gradient(from 12deg,transparent 0deg 23deg,#dff5ff12 24deg 26deg,transparent 27deg 45deg);border-radius:50%;z-index:-2;mask-image:radial-gradient(ellipse,black,transparent 68%);animation:sg-awaken-rays470 2200ms both;animation-delay:var(--fx-age,0ms)}
+@keyframes sg-awaken-word470{from{opacity:0;transform:scale(1.12)}to{opacity:1;transform:none}}
+@keyframes sg-awaken-card470{0%{transform:scale(.94);filter:brightness(1.7)}70%,100%{transform:none;filter:brightness(1)}}
+@keyframes sg-awaken-halo470{from{opacity:0;scale:.8}30%,100%{opacity:1;scale:1}}
+@keyframes sg-awaken-rays470{from{rotate:-10deg;opacity:.3}to{rotate:10deg;opacity:1}}
+.sg-special-detail470{display:flex;align-items:center;gap:24px}.sg-special-detail470>div{flex:1;font-size:15px;line-height:1.9}.sg-special-detail470>div>small{font-size:10px;color:#cabfa4}.sg-special-detail470>.sg-special-card470{flex-shrink:0}
+/* Compact phone stage: preserve readable cues without running under the hand tray. */
+.sg-game .is-compact470 .sg-draw470{gap:5px}.sg-game .is-compact470 .sg-draw-title470{padding:4px 10px;gap:1px}.sg-game .is-compact470 .sg-draw-title470 small{font-size:9px}.sg-game .is-compact470 .sg-draw-title470 b{font-size:11px}
+.sg-game .is-compact470 .sg-draw-card466{height:178px;width:122px}.sg-game .is-compact470 .sg-draw470 .sg-front464{padding:10px 10px 15px;gap:3px}.sg-game .is-compact470 .sg-draw470 .sg-front464>b{font-size:10px}.sg-game .is-compact470 .sg-draw470 .sg-front464>p{font-size:11px}
+.sg-game .is-compact470 .sg-draw-cue470{gap:5px}.sg-game .is-compact470 .sg-cue-symbol470{width:35px;height:35px;border-radius:10px}.sg-game .is-compact470 .sg-effect-icon470{width:24px;height:24px}.sg-game .is-compact470 .sg-draw-cue470>strong{font-size:14px}.sg-game .is-compact470 .sg-draw-foot470{font-size:9px}
+.sg-game .is-compact470 .sg-special-card470,.sg-game .is-compact470 .sg-special-fly470{width:128px;height:184px}.sg-game .is-compact470 .sg-special-card470{gap:4px;padding:9px 10px}.sg-game .is-compact470 .sg-special-card470>.sg-art{height:66px;flex-basis:66px}.sg-game .is-compact470 .sg-special-card470>h2{font-size:17px}.sg-game .is-compact470 .sg-special-card470>p{font-size:11px}.sg-game .is-compact470 .sg-special-card470>small{font-size:8px}.sg-game .is-compact470 .sg-special-card470>span:last-child{font-size:7px;padding-top:3px}
+.sg-game .is-compact470 .sg-special-heading470{gap:3px}.sg-game .is-compact470 .sg-special-heading470 b{font-size:14px}.sg-game .is-compact470 .sg-special-deck470{width:74px;height:110px}.sg-game .is-compact470 .sg-special-reveal470{gap:7px}.sg-game .is-compact470 .sg-awakening470{gap:4px}.sg-game .is-compact470 .sg-awaken-word470{font-size:26px}.sg-game .is-compact470 .sg-awakening470>small{font-size:9px}.sg-game .is-compact470 .sg-awaken-equipped470{font-size:11px;padding:3px 12px}
+@media(min-width:900px){.sg-game{grid-template-rows:43px 98px minmax(0,1fr) 30px 24px}.sg-seat-slot470{grid-template-rows:47px 40px}.sg-special-slot470 small{font-size:10px}.sg-special-slot470 b{font-size:12px}}
+@media(max-width:360px){.sg-game .sg-seats{gap:3px;padding:4px}.sg-screen button.sg-special-slot470{padding:3px;gap:3px}.sg-special-slot470>.sg-art{width:18px;flex-basis:18px;height:28px}.sg-special-slot470 b{font-size:9px}.sg-special-slot470 small{font-size:7px}.sg-draw-layout470{gap:10px}.sg-draw-cue470{width:110px}.sg-special-detail470{flex-direction:column;gap:12px}.sg-special-detail470>div{font-size:14px}.sg-game .sg-hand-hint464>span{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.sg-game .sg-draw470 .sg-draw-card466,.sg-game .sg-draw470 .sg-draw-cue470,.sg-special-fly470,.sg-awaken-word470,.sg-awaken-card470,.sg-awaken-halo470,.sg-awaken-rays470,.sg-reading470>span,.sg-die-scene469 .sg-die-face469.is-result470{animation:none!important}.sg-game .sg-draw470 .sg-draw-flipper466,.sg-special-flipper470{animation:none!important;transform:rotateY(180deg)}.sg-game .sg-draw-cue470{opacity:1;visibility:visible}.sg-game .sg-die-hop469{animation:none!important;transform:rotateX(-52deg) rotateY(-22deg)}}
+.sg-awaken-halo470{box-shadow:0 0 38px #82d7ec44,inset 0 0 42px #92deed22;outline:1px solid #e6d39c55;outline-offset:12px}
+.sg-game .is-compact470 .sg-awaken-card470 .sg-special-card470{height:160px;width:128px;gap:3px}
+.sg-game .is-compact470 .sg-awaken-card470 .sg-special-card470>.sg-art{height:52px;flex-basis:52px}
+.sg-game .is-compact470 .sg-awaken-card470 .sg-special-card470>p{font-size:10px;line-height:1.45}
+.sg-game .is-compact470 .sg-awaken-card470 .sg-special-card470>span:last-child{display:none}
+/* Private draws keep their back visible throughout the flight. */
+.sg-game .sg-draw470.is-hidden .sg-draw-flipper466{animation:none!important;transform:none}

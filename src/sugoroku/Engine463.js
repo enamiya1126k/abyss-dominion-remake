@@ -32,7 +32,7 @@ function multiplier(p,e){return p.special==='greed'&&!e.cost&&!e.noGreed&&['draw
 export function makeLobby463({id,code,partyId,hostId,members,now=0,seed=1}){return{id,code,game:'sugoroku',partyId462:partyId,hostId,rulesVersion:10,rules469:RULES469.id,phase:'lobby',createdAt:now,updatedAt:now,seed:seed||1,members:members.map(m=>({...m,choice:null,ai:false})),players:[],revision:0,seen:{},log:[],eventId:0,effectId:0,choiceId:0,deadline:0}}
 export function start463(g,now=0){
  if(g.phase!=='lobby')fail('すでに開始しています');
- g.rules469=RULES469.id;g.rulesVersion=10;g.presentation464=[];g.presentationSequence464=0;g.cards={};g.deck=[];g.discard=[];g.specialDeck=shuffle463(g,SPECIALS463.map(s=>s.id));g.specialDiscard=[];g.queue=[];g.pending=null;g.turnNumber=1;g.turn=0;g.extraChain=0;g.finishOrder=[];g.blocked={};g.step='draw';g.usedSet={};g.startedAt=now;
+ g.rules469=RULES469.id;g.rulesVersion=11;g.presentation464=[];g.presentationSequence464=0;g.cards={};g.deck=[];g.discard=[];g.specialDeck=shuffle463(g,SPECIALS463.map(s=>s.id));g.specialDiscard=[];g.queue=[];g.pending=null;g.turnNumber=1;g.turn=0;g.extraChain=0;g.finishOrder=[];g.blocked={};g.step='draw';g.usedSet={};g.startedAt=now;
  let serial=0;for(const c of CARDS463)for(let i=0;i<c.copies;i++){const uid='c'+(++serial);g.cards[uid]=c.id;g.deck.push(uid)}shuffle463(g,g.deck);
  g.players=g.members.map((m,i)=>({playerId:m.playerId,name:m.name,seat:i,ai:!!m.ai,choice:m.choice,hand:[],special:null,pos:'0',trail:['0'],skip:0,turns:0,mods:{bonus:0,dice:2},finished:null,ward:null}));
  const aiNames=['旅するスライム','火花のスライム','月影の狼','いたずら悪魔'];const aiSpecies=['slime','ember_slime','wolf','goblin'];
@@ -63,7 +63,7 @@ function receiveBody466(g,p,uid,mode='normal'){
  }else p.hand.push(uid);
 }
 function safeSpecial(g,p,id){if(!id)return;if(p.special)ask(g,p.playerId,'special','残す特殊カードを選ぶ',[{value:p.special,label:special(p).name,special:p.special},{value:id,label:SPECIAL_BY_ID463[id].name,special:id}],{old:p.special,next:id});else{p.special=id;awaken466(g,p);log463(g,`${p.name}が「${SPECIAL_BY_ID463[id].name}」を獲得！`)}}
-function takeSpecial(g,p){if(!g.specialDeck.length)g.specialDeck=shuffle463(g,g.specialDiscard.splice(0));const id=g.specialDeck.pop();if(id)safeSpecial(g,p,id);else log463(g,'特殊カードの山札は空だった')}
+function takeSpecial(g,p){if(!g.specialDeck.length)g.specialDeck=shuffle463(g,g.specialDiscard.splice(0));const id=g.specialDeck.pop();if(id){present464(g,'specialDraw470',{actorId:p.playerId,specialId466:id,replacing470:!!p.special});safeSpecial(g,p,id)}else log463(g,'特殊カードの山札は空だった')}
 function loseSpecial(g,p){if(p.special){log463(g,`${p.name}は「${special(p).name}」を失った`);g.specialDiscard.push(p.special);p.special=null;p.ward=null}}
 // Compatibility shape only; scores never determine race results.
 export function score463(){return{hand:0,special:0,affinity:0,bonus:0,total:0,specialDouble:false}}
