@@ -11,11 +11,14 @@ export function roadPoint467(t){const d=t*lengths.at(-1);let i=1;while(i<lengths
 export const BOARD465=BOARD463.map(n=>({...n,next:[...n.next],...(!n.detour?roadPoint467(n.index/79):{})}));
 for(const n of BOARD465){const m=LANDMARKS469[n.id];if(m)Object.assign(n,{x:m.x,y:m.y});}
 export const NODES465=Object.fromEntries(BOARD465.map(n=>[n.id,n]));
-// Short side bridges to physical shrines. Geometry does not change the 3 four-space detours.
-for(const id of [7,31,55]){const root=NODES465[id],end=NODES465[id+1],dx=end.x-root.x,dy=end.y-root.y,len=Math.hypot(dx,dy)||1,sign=-1,nx=-dy/len*sign,ny=dx/len*sign;for(let j=0;j<4;j++){const t=(j+1)/5,bulge=Math.sin(Math.PI*t)*165,n=NODES465[`b${id}-${j}`];n.x=root.x+dx*t+nx*bulge;n.y=root.y+dy*t+ny*bulge;}}
+// Spacious, individually traced side routes. IDs and game rules are unchanged.
+// Move the first junction away from the temple entrance so its pawn and label fit.
+Object.assign(NODES465['7'],{x:935,y:360,repositioned473:true});
+export const DETOURS473={7:[[1090,210],[1150,65],[950,65],[770,125]],31:[[1500,1090],[1480,1260],[1300,1280],[1170,1210]],55:[[1340,1990],[1330,2160],[1110,2190],[1000,2070]]};
+for(const [id,points]of Object.entries(DETOURS473))points.forEach(([x,y],i)=>Object.assign(NODES465[`b${id}-${i}`],{x,y,branchOrder473:i+1}));
 export const region465=n=>REGIONS465[n?.y<580?0:n?.y<1170?1:n?.y<2080?2:3];
 export function path465(n,end){return`M${n.x} ${n.y} L${end.x} ${end.y}`}
 export const tileArt465={start:'✦',goal:'♛',draw:'＋',safe:'▥',move:'↑',back:'↓',skip:'☾',trade:'⇄',discard:'−',special:'✧',lose:'×',steal:'↝',rest:'＋',cleanse:'✺',wager:'♜',attribute:'✦',gate:'♜'};
-export function tileSvg467(n,label){const landmark=['start','goal','special','gate','wager'].includes(n.kind);const r=landmark?26:20;return`<ellipse class="sg-ground-shadow467" cy="8" rx="${r+6}" ry="${r*.65}"/><ellipse class="sg-stone-top465" rx="${r}" ry="${r*.72}"/><ellipse class="sg-rune-ring467" rx="${r-4}" ry="${r*.72-4}"/><text class="sg-tile-icon" x="0" y="6">${tileArt465[n.kind]??n.icon}</text><text class="sg-tile-number" x="${-r-4}" y="-11">${n.detour?'枝':n.index}</text><text class="sg-tile-effect464" x="0" y="${r*.72+19}">${label}</text>${n.fork?'<circle cx="24" cy="-17" r="9" class="sg-fork-dot"/><text x="24" y="-13" class="sg-fork-label">分</text>':''}`}
+export function tileSvg467(n,label){const landmark=['start','goal','special','gate','wager'].includes(n.kind);const r=landmark?26:20;return`<ellipse class="sg-ground-shadow467" cy="8" rx="${r+6}" ry="${r*.65}"/><ellipse class="sg-stone-top465" rx="${r}" ry="${r*.72}"/><ellipse class="sg-rune-ring467" rx="${r-4}" ry="${r*.72-4}"/><text class="sg-tile-icon" x="0" y="6">${tileArt465[n.kind]??n.icon}</text><text class="sg-tile-number" x="${-r-4}" y="-11">${n.detour?'寄'+n.branchOrder473:n.index}</text><text class="sg-tile-effect464" x="0" y="${r*.72+19}">${label}</text>${n.fork?'<circle cx="24" cy="-17" r="9" class="sg-fork-dot"/><text x="24" y="-13" class="sg-fork-label">分</text>':''}`}
 
 export function bridgeSvg467(a,b){const dx=b.x-a.x,dy=b.y-a.y,l=Math.hypot(dx,dy)||1,nx=-dy/l*13,ny=dx/l*13,d=path465(a,b);return`<g class="sg-bridge467"><path class="sg-bridge-shadow467" d="${d}"/><path class="sg-bridge-deck467" d="${d}"/><path class="sg-bridge-stones467" d="${d}"/><path class="sg-bridge-rail467" d="M${a.x+nx} ${a.y+ny} L${b.x+nx} ${b.y+ny} M${a.x-nx} ${a.y-ny} L${b.x-nx} ${b.y-ny}"/></g>`}

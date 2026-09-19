@@ -1,0 +1,37 @@
+/* Build473: stable portrait cards, spatial routes and consistent companions. */
+.sg-map-atmosphere473{position:absolute;inset:-20px;pointer-events:none;background:linear-gradient(#10293855,#10182566),url('../../assets/sugoroku467/world.png') center 20%/cover;filter:blur(10px);opacity:.85}
+.sg-roster-portrait473{display:block;position:relative;isolation:isolate;width:100%;height:96px;margin:0 auto 7px}
+.sg-roster-portrait473>.sg-monster,.sg-roster-portrait473>.sg-art{position:absolute!important;bottom:16px;left:50%;transform:translateX(-50%);width:70px!important;height:74px!important;margin:0!important;z-index:2;filter:drop-shadow(0 3px 3px #0007)}
+.sg-roster-portrait473 .sg-monster-visual{width:100%;height:100%;object-fit:contain}
+.sg-roster-ground473{position:absolute;bottom:2px;left:calc(50% - 29px);width:58px;height:10px;border-radius:50%;border:1px solid #92d5d799;background:radial-gradient(ellipse,#72babb55,#18333f);box-shadow:0 4px 0 #0a1824,0 7px 8px #0007;z-index:0}
+.is-selected .sg-roster-ground473{border-color:#ffe5a7;box-shadow:0 4px 0 #152b32,0 0 14px #ffe4a766}
+.sg-ability473{width:min(100%,520px);padding:0 10px;display:flex;flex-direction:column;align-items:center;gap:10px;isolation:isolate}
+.sg-ability-title473{display:grid;text-align:center;gap:3px;color:#fff0bd}.sg-ability-title473 small{font-size:10px;color:#d0e6e2}.sg-ability-title473 b{font-size:28px;letter-spacing:5px;text-shadow:0 0 18px #e5db9988}
+.sg-ability-body473{display:flex;align-items:center;justify-content:center;gap:18px;width:100%}
+.sg-ability-display473{position:relative;flex:none;width:var(--portrait-w473);height:var(--portrait-h473);perspective:900px}
+.is-deal473 .sg-ability-display473{width:calc(var(--portrait-w473) + 30px)}
+.sg-ability473 .sg-special-deck470{position:absolute;left:0;top:28%;width:calc(var(--portrait-w473) * .46)!important;height:calc(var(--portrait-h473) * .46)!important}
+.sg-ability-fly473{position:absolute;right:0;top:0;animation:sg-ability-deal473 3400ms both;animation-delay:var(--fx-age,0ms)}
+.sg-special-frame473{position:relative;flex:none}
+.sg-game .sg-special-frame473 .sg-special-card470{position:absolute;width:166px!important;height:242px!important;min-height:242px!important;max-height:none!important;display:flex!important;flex-direction:column!important;padding:12px 13px 10px!important;gap:7px!important;transform:scale(var(--card-scale473));transform-origin:top left}
+.sg-game .sg-special-frame473 .sg-special-card470>.sg-art{width:100%!important;height:99px!important;min-height:99px!important;align-self:auto!important}
+.sg-game .sg-special-frame473 .sg-special-card470>small{display:block!important;font-size:8px!important;letter-spacing:0!important}
+.sg-game .sg-special-frame473 .sg-special-card470>h2{font-size:20px!important;line-height:1.25!important;white-space:normal!important}
+.sg-game .sg-special-frame473 .sg-special-card470>p{font-size:12px!important;line-height:1.4!important}
+.sg-game .sg-special-frame473 .sg-special-card470>span:last-child{display:block!important;font-size:8px!important;margin-top:auto}
+.sg-ability-copy473{min-width:0;width:160px;text-align:left;border-left:1px solid #e6d8a766;padding-left:12px}.sg-ability-copy473>span{font-size:9px;color:#b7d8d7}.sg-ability-copy473 h2{font-size:24px!important;color:#fff1bc;margin:5px 0!important}.sg-ability-copy473 p{font-size:13px;line-height:1.6!important;color:#fff5d8}.sg-ability-copy473 small{display:block;font-size:9px;color:#b6d0d2;margin-top:12px}
+.sg-ability-aura473{position:absolute;inset:-12px;border:1px solid #f3d89999;border-radius:48%;box-shadow:0 0 25px #a9ddc855,inset 0 0 25px #f5ce6633;animation:sg-ability-aura473 3s ease-in-out infinite}
+.sg-ability473.is-compact473{gap:4px}.is-compact473 .sg-ability-title473{gap:0}.is-compact473 .sg-ability-title473 b{font-size:18px;line-height:1.3}.is-compact473 .sg-ability-title473 small{font-size:8px}.is-compact473 .sg-ability-body473{gap:10px}.is-compact473 .sg-ability-copy473{width:145px;padding-left:9px}.is-compact473 .sg-ability-copy473 h2{font-size:20px!important;margin:2px 0!important}.is-compact473 .sg-ability-copy473 small{margin-top:5px;font-size:8px}
+.sg-ability473.is-deal473 .sg-ability-copy473{animation:sg-ability-copy473 3400ms both;animation-delay:var(--fx-age,0ms)}
+@keyframes sg-ability-deal473{0%,15%{transform:translateX(-25px) rotate(-8deg) scale(.6)}30%,100%{transform:none}}
+@keyframes sg-ability-copy473{0%,41%{opacity:0}49%,100%{opacity:1}}
+@keyframes sg-ability-aura473{50%{box-shadow:0 0 40px #bce9cb99,inset 0 0 25px #f5ce6655}}
+.sg-modal:has(.sg-fork473){background:radial-gradient(ellipse at top,#203842,#111825 70%);border-color:#d1b775}
+.sg-fork473 .sg-fork-map472{height:180px;border-color:#9ab6b188;box-shadow:inset 0 0 25px #07121c,0 4px 16px #0004}
+.sg-fork473 .sg-route-glow473{stroke:#72ffdf;stroke-width:18;opacity:.35;filter:url(#sg-route-glow473)}
+.sg-fork473 .sg-fork-map472 text{font-size:23px}.sg-fork473 .sg-fork-map472 .sg-route-number473{font-size:20px;stroke-width:2px}
+.sg-fork473 .sg-fork-options472>button{position:relative;padding-left:45px!important;box-shadow:inset 0 1px #ffefc833,0 4px 12px #0005;overflow:hidden}
+.sg-route-emblem473{position:absolute;top:14px;left:10px;width:27px;height:32px;display:grid;place-items:center;font-size:25px;font-style:normal;color:#ffe3a0;text-shadow:0 0 12px #ffda8477}.is-treasure .sg-route-emblem473{color:#a9fff0}
+@media(max-width:350px){.sg-fork473 .sg-fork-map472{height:150px}.sg-ability-copy473{width:115px}.sg-ability-body473{gap:9px}.is-compact473 .sg-ability-copy473{width:135px}.sg-ability-copy473 p{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.sg-ability-fly473,.sg-ability-aura473,.sg-ability473.is-deal473 .sg-ability-copy473{animation:none!important}}
+@container(max-height:185px){.sg-ability-copy473>small{display:none}.sg-ability-copy473>span{font-size:8px}.sg-ability-copy473 h2{font-size:16px!important}.sg-ability-copy473 p{font-size:10px;line-height:1.35!important}.sg-ability-title473 small{display:none}.sg-ability473.is-compact473{gap:3px}.sg-ability-copy473{padding-left:7px}}

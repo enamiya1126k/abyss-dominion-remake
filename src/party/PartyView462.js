@@ -1,3 +1,4 @@
+import{prepareEntry474}from'../sugoroku/Wallet474.js';
 import{PARTY_GAMES462}from'./PartyGames462.js';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const isPartyHub462=c=>(!c.state?.room&&!c.state?.sugoroku)||!!c.partyBrowse462;
@@ -13,9 +14,10 @@ export function partyClick462(c,b){const action=b.dataset.partyAction462,game=b.
  const p=c.state?.party;
  if(action==='copy'||action==='invite'){const value=action==='copy'?p?.code:(()=>{const u=new URL(location.href);u.searchParams.set('party462',p.code);return u.href})();if(value){if(navigator.clipboard)navigator.clipboard.writeText(value).then(()=>c.toast('コピーしたよ'),()=>c.toast(value));else c.toast(value)}return true}
  if(!c.ready()){c.error='接続を確認してから操作してね';c.render();return true}
- if(game){if(game==='sugoroku'&&c.state.rulesVersion<13){c.error='カードすごろくにはサーバーのBuild472更新・再起動が必要です';c.render();return true}if(!p){c.selectedGame462=game;c.render();c.root.querySelector('.party-entry462')?.scrollIntoView({block:'nearest',behavior:'smooth'})}else{c.partyBrowse462=false;c.raw('partyGame462',{game})}return true}
+ if(game){if(game==='sugoroku'&&c.state.rulesVersion<14){c.error='カードすごろくにはサーバーのBuild474更新・再起動が必要です';c.render();return true}if(!p){c.selectedGame462=game;c.render();c.root.querySelector('.party-entry462')?.scrollIntoView({block:'nearest',behavior:'smooth'})}else{c.partyBrowse462=false;c.raw('partyGame462',{game})}return true}
  if(action==='create'){c.raw('partyCreate462',{displayName:c.displayName(),roster:c.roster(),game:c.selectedGame462});return true}
  if(action==='join'){c.raw('partyJoin462',{code:c.draft.code.trim(),displayName:c.displayName(),roster:c.roster()});return true}
+ if(action==='ready'&&c.state.sugoroku?.economy474?.mode==='crystal'&&!p?.members.find(m=>m.playerId===c.transport.selfId)?.ready){try{prepareEntry474(c)}catch(e){c.error=e.message;c.render()}return true}
  if(action==='ready'){c.raw('partyReady462',{ready:!p?.members.find(m=>m.playerId===c.transport.selfId)?.ready});return true}
  if(action==='lounge'){c.raw('partyLounge462');return true}
  if(action==='leave'){c.raw('partyLeave462');return true}return true;

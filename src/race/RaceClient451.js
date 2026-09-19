@@ -1,3 +1,5 @@
+import{deferHandRender474}from'../sugoroku/HandOrder466.js';
+import{applyCrystalDelivery474,retryEntry474,availableCrystals474}from'../sugoroku/Wallet474.js';
 import{sugorokuView463,sugorokuBefore463,sugorokuAfter463,sugorokuClick463,sugorokuInput463,sugorokuTick463,sugorokuKey463}from'../sugoroku/View463.js';
 import{monsterVisual}from'../ui/MonsterVisual.js';
 import{raceSpecies451}from'./RaceCatalog451.js';
@@ -37,9 +39,9 @@ export class RaceClient451{
  key(){const id=this.transport.selfId,url=this.transport.ws?.url;if(id&&url)try{const u=new URL(url);this.lastBankKey458={id,key:`${u.origin}${u.pathname}|${id}`};return this.lastBankKey458.key}catch{}return this.lastBankKey458&&(this.lastBankKey458.id===id||!id&&!this.connected())?this.lastBankKey458.key:null}
 
  bank(){const key=this.key();return key?raceBank451(this.save.state,key):null}
- raw(op,payload={}){if(!this.connected()||!this.transport.capabilities?.has('monsterRaceV1'))return false;return this.transport._send('raceRequest451',{op,rulesVersion:8,...payload})}
+ raw(op,payload={}){if(['sgAck474','status','partyCreate462','partyJoin462','partyRoster462'].includes(op))payload={crystals474:availableCrystals474(this),...payload};if(!this.connected()||!this.transport.capabilities?.has('monsterRaceV1'))return false;return this.transport._send('raceRequest451',{op,rulesVersion:8,...payload})}
  refresh(){this.raw('status',{subscribe:true})}
- retryPurchase(){const pending=this.bank()?.pending;if(!pending||!this.connected())return;const decision=this.state?.decisions?.find(d=>d.requestId===pending.requestId);if(!decision)this.raw('bet',pending)}
+ retryPurchase(){retryEntry474(this);const pending=this.bank()?.pending;if(!pending||!this.connected())return;const decision=this.state?.decisions?.find(d=>d.requestId===pending.requestId);if(!decision)this.raw('bet',pending)}
  receive(message){
   if(message.selfId!==this.transport.selfId)return;
   const old=this.state?.room,oldBoard=this.state?.sugoroku;if(this.sgUI463&&oldBoard?.revision!==message.sugoroku?.revision)this.sgUI463.inFlight=null;this.offset=message.serverNow-Date.now();this.state=message;if(old?.id!==message.room?.id||oldBoard?.id!==message.sugoroku?.id)this.partyBrowse462=false;const presenceKey=message.party?.id+':'+!!this.root;if(message.party&&this.presenceKey462!==presenceKey){this.presenceKey462=presenceKey;this.raw('partyPresence462',{atHome:!this.root});if(this.root)this.raw('partyRoster462',{roster:this.roster()})}
@@ -50,6 +52,8 @@ export class RaceClient451{
   if(old?.phase!==message.room?.phase){if(!['countdown','race'].includes(message.room?.phase))this.expanded460=false;this.paradePinned=null;this.systemDetail459=null;}
   const ack=[];this.rewardError='';
   for(const entry of message.deliveries??[])try{const result=applyRaceDelivery451(this.save,this.key(),entry);ack.push(entry.id);if(!result.duplicate&&entry.kind==='result')this.toast(`魔物レース：${entry.gold.toLocaleString()}G受取・出走魔物のEXPとなつき度アップ`)}catch(e){this.rewardError=e.message}
+  const crystalAck474=[];for(const entry of message.crystalDeliveries474??[])try{const result=applyCrystalDelivery474(this.save,this.key(),entry);crystalAck474.push(entry.id);if(!result.duplicate&&entry.kind==='refund')this.toast(`カードすごろく：参加費💎${entry.crystals.toLocaleString()}を返金しました`)}catch(e){this.rewardError=e.message}
+  if(crystalAck474.length)this.raw('sgAck474',{ids:crystalAck474,rulesVersion:14});
   // ACK only after the whole local state has successfully persisted.
   if(ack.length)this.raw('ack',{ids:ack});
   if(this.renderSignature452!==raceDomSignature452(this))this.render();
@@ -58,7 +62,7 @@ export class RaceClient451{
  unmount(){sugorokuBefore463(this);if(this.root){if(this.state?.party){this.presenceKey462=null;this.raw('partyPresence462',{atHome:true})}this.root.classList.remove("race-host454");this.root.removeEventListener('keydown',this.keydown459);this.root.removeEventListener('click',this.click);this.root.removeEventListener('input',this.input);this.root.removeEventListener('pointerdown',this.pointerDown458);this.root.removeEventListener('pointerup',this.pointerUp458);this.root.removeEventListener('pointercancel',this.pointerCancel458);this.root.removeEventListener('toggle',this.toggle458,true)}clearInterval(this.animationClock);this.sound452?.stop();this.root=null}
  dispose(){this.unmount();clearInterval(this.retryClock);document.removeEventListener('visibilitychange',this.onHidden452);window.removeEventListener('blur',this.onHidden452)}
  renderConnection(){if(this.renderSignature452!==raceDomSignature452(this))this.render()}
- render(){if(!this.root||this.sgUI463?.dragging)return;sugorokuBefore463(this);rememberScroll458(this);const oldKey=this.renderKey458,key=panelKey458(this),active=this.root.contains(document.activeElement)?document.activeElement:null,name=active?.name,selection=active?.selectionStart;this.renderSignature452=raceDomSignature452(this);this.root.innerHTML=isPartyHub462(this)?partyHub462(this):this.state?.sugoroku?sugorokuView463(this):partyDecorate462(this,raceView451(this));for(const detail of this.root.querySelectorAll('details[data-detail-key]'))detail.open=!!this.openDetails458?.[detail.dataset.detailKey];if(name){const field=[...this.root.querySelectorAll('input,select')].find(e=>e.name===name);field?.focus({preventScroll:true});try{field?.setSelectionRange(selection,selection)}catch{}}updateRaceClock451(this);restoreScroll458(this,key,oldKey);sugorokuAfter463(this)}
+ render(){if(!this.root||this.sgUI463?.dragging)return;if(deferHandRender474(this))return;sugorokuBefore463(this);rememberScroll458(this);const oldKey=this.renderKey458,key=panelKey458(this),active=this.root.contains(document.activeElement)?document.activeElement:null,name=active?.name,selection=active?.selectionStart;this.renderSignature452=raceDomSignature452(this);this.root.innerHTML=isPartyHub462(this)?partyHub462(this):this.state?.sugoroku?sugorokuView463(this):partyDecorate462(this,raceView451(this));for(const detail of this.root.querySelectorAll('details[data-detail-key]'))detail.open=!!this.openDetails458?.[detail.dataset.detailKey];if(name){const field=[...this.root.querySelectorAll('input,select')].find(e=>e.name===name);field?.focus({preventScroll:true});try{field?.setSelectionRange(selection,selection)}catch{}}updateRaceClock451(this);restoreScroll458(this,key,oldKey);sugorokuAfter463(this)}
  moveParade458(direction){const r=this.state?.room;if(r?.phase!=='parade')return;this.paradePinned=(paradeIndex452(r,Date.now()+this.offset,this.paradePinned)+direction+8)%8;this.render()}
  switchTab458(tab){if(!['watch','compare','bet'].includes(tab))return;this.predictionTab457=tab;this.render()}
 

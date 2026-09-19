@@ -1,3 +1,4 @@
+import{abilityPresentation473}from'./Visual473.js';
 import{arrivalText472}from'./Experience472.js';
 import{pawnAnchor470,specialDeck470,specialBack470,specialCard470,cardCue470,effectIcon470}from'./Readability470.js';
 import{die469,deck469,defenseResult469}from'./Objects469.js';
@@ -44,12 +45,11 @@ function write464(c,f,art,token){
   if(!own){layer.innerHTML=`<div class="sg-observer-draw472"><span class="sg-observer-back472" aria-hidden="true"></span><div><small>${escape(source)}</small><b>${escape(name465(c,actor))}がカードを獲得</b><span>${e.ordinal466??1} / ${e.total466??1} 枚 · 中身は本人だけに表示</span></div></div>`;}
   else layer.innerHTML=`<div class="sg-draw470 ${own?'is-own':'is-hidden'}"><div class="sg-draw-title470"><small>${escape(from?name465(c,from)+'の手札から':source)}</small><b>${escape(name465(c,actor))}が1枚獲得 <em>${e.ordinal466??1} / ${e.total466??1}</em></b></div><div class="sg-draw-layout470"><div class="sg-draw-table470">${deck469()}<div class="sg-draw-card466"><div class="sg-draw-flipper466">${back466()}${drawn?`<div class="sg-front464" style="${rankStyle466(drawn)}">${photoCardArt468(drawn,art)}<small class="sg-rank466">${escape(drawn.rank466)}</small><b>${escape(drawn.name)}</b><p>${escape(drawn.summary466)}</p></div>`:back466()}</div></div></div>${drawn?`<div class="sg-draw-cue470"><span class="sg-cue-symbol470 cue-${cue.key}">${effectIcon470(cue.key)}</span><small>${escape(cue.category)}</small><strong>${escape(drawn.summary466)}</strong><span>${escape(cue.timing)}</span><button data-sg-action="card" data-card="${drawn.id}">詳しく読む</button></div>`:'<span class="sg-hidden-cue470">中身は本人だけに表示</span>'}</div><div class="sg-reading470"><span></span></div><small class="sg-draw-foot470">${drawn?'獲得後も「直近の獲得」で読み返せます':'相手の手札へ'}</small></div>`;
  }
+ else if(e.kind==='crystal474'){layer.innerHTML=`<div class="sg-crystal-arrival474"><small>${escape(name465(c,actor))} · 神殿の宝石</small><b>💎 +${e.n.toLocaleString()}</b><span>道中の獲得分 ${e.total474.toLocaleString()} 💎</span><small>終了時に本編の所持💎へ加算</small></div>`;}
  else if(e.kind==='arrival472'){const node=NODES463[e.tile];layer.innerHTML=`<div class="sg-arrival472"><small>${escape(name465(c,actor))}が到着${e.forcedStop472?' · 必ず停止するマス':''}</small><b>✧ ${escape(node?.name)}</b><span>${escape(arrivalText472(node,e.hasSpecial472))}</span></div>`;}
- else if(e.kind==='specialDraw470'){
-  const sp=SPECIAL_BY_ID463[e.specialId466];layer.innerHTML=`<div class="sg-special-reveal470"><div class="sg-special-heading470"><small>${escape(e.tile?NODES463[e.tile]?.name:CARD_BY_ID463[e.sourceCardId466]?.name??name465(c,actor))} · 特殊カード獲得</small><b>覚醒の山札</b></div><div class="sg-special-table470">${specialDeck470()}<div class="sg-special-fly470"><div class="sg-special-flipper470">${specialBack470()}<div class="sg-special-front470">${specialCard470(sp?.id,art)}</div></div></div></div><p>${e.replacing470?'持っている特殊カードと、残す1枚を選ぼう':'この力が、あなたの新しい能力になる'}</p></div>`;
- }
- else if(e.kind==='awaken'){
-  const sp=SPECIAL_BY_ID463[e.specialId466];layer.innerHTML=`<div class="sg-awakening470"><div class="sg-awaken-halo470"></div><div class="sg-awaken-rays470"></div><small>${escape(name465(c,actor))}の力が目覚める</small><b class="sg-awaken-word470">覚 醒</b><div class="sg-awaken-card470">${specialCard470(sp?.id,art)}</div><span class="sg-awaken-equipped470">✦ ${escape(sp?.name)}を装備</span><small>上の特殊カードから、いつでも効果を確認</small></div>`;
+ else if(e.kind==='specialDraw470'||e.kind==='awaken'){
+  const source=e.tile?NODES463[e.tile]?.name:CARD_BY_ID463[e.sourceCardId466]?.name??name465(c,actor);
+  layer.innerHTML=abilityPresentation473(e,art,height,source,name465(c,actor));
  }
  else if(e.kind==='defense469'){
   const defender=CARD_BY_ID463[e.cardId];layer.innerHTML=`<div class="sg-defense469"><div class="sg-defense-face469">${defender?`<div class="sg-flip464"><div class="sg-flip-inner464">${back466()}<div class="sg-front464" style="${rankStyle466(defender)}">${photoCardArt468(defender,art)}<b>${escape(defender.name)}</b><p>${escape(defender.summary466)}</p></div></div></div>`:pawn465(c,actor,token)}</div><div class="sg-defense-outcome469"><span class="sg-shield469">${e.reflected469?'↩':'✦'}</span><small>${escape(name465(c,actor))}</small><b>${e.reflected469?'反射成功！':'防御成功！'}</b><strong>${escape(defenseResult469(e))}</strong><span>この攻撃は通らない</span></div></div>`;
