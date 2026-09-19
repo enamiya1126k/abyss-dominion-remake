@@ -13,7 +13,7 @@ export function partyClick462(c,b){const action=b.dataset.partyAction462,game=b.
  const p=c.state?.party;
  if(action==='copy'||action==='invite'){const value=action==='copy'?p?.code:(()=>{const u=new URL(location.href);u.searchParams.set('party462',p.code);return u.href})();if(value){if(navigator.clipboard)navigator.clipboard.writeText(value).then(()=>c.toast('コピーしたよ'),()=>c.toast(value));else c.toast(value)}return true}
  if(!c.ready()){c.error='接続を確認してから操作してね';c.render();return true}
- if(game){if(game==='sugoroku'&&c.state.rulesVersion<11){c.error='カードすごろくにはサーバーのBuild470更新・再起動が必要です';c.render();return true}if(!p){c.selectedGame462=game;c.render();c.root.querySelector('.party-entry462')?.scrollIntoView({block:'nearest',behavior:'smooth'})}else{c.partyBrowse462=false;c.raw('partyGame462',{game})}return true}
+ if(game){if(game==='sugoroku'&&c.state.rulesVersion<12){c.error='カードすごろくにはサーバーのBuild471更新・再起動が必要です';c.render();return true}if(!p){c.selectedGame462=game;c.render();c.root.querySelector('.party-entry462')?.scrollIntoView({block:'nearest',behavior:'smooth'})}else{c.partyBrowse462=false;c.raw('partyGame462',{game})}return true}
  if(action==='create'){c.raw('partyCreate462',{displayName:c.displayName(),roster:c.roster(),game:c.selectedGame462});return true}
  if(action==='join'){c.raw('partyJoin462',{code:c.draft.code.trim(),displayName:c.displayName(),roster:c.roster()});return true}
  if(action==='ready'){c.raw('partyReady462',{ready:!p?.members.find(m=>m.playerId===c.transport.selfId)?.ready});return true}

@@ -8,7 +8,7 @@ export function handleSugoroku463(c,session,m){
  if(m.op!=='sg463')return false;
  const g=boardFor463(c,session.playerId),p=Object.values(c.data.parties462??{}).find(x=>x.id===g?.partyId462),me=g?.members.find(x=>x.playerId===session.playerId);
  if(!g||!p||!me)throw Error('カードすごろくの参加者ではありません');
- if(Number(m.rulesVersion)<11)throw Error('本体をBuild470に更新してください');
+ if(Number(m.rulesVersion)<12)throw Error('本体をBuild471に更新してください');
  if(m.gameId!==g.id)throw Error('ゲームが切り替わりました');
  const requestId=String(m.requestId??'');if(!/^[a-zA-Z0-9_-]{8,100}$/.test(requestId))throw Error('操作情報を再送してください');
  if(g.seen[session.playerId]?.includes(requestId))return true;

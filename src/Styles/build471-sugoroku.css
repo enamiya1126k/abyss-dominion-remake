@@ -1,0 +1,72 @@
+@charset "UTF-8";
+/* Reserve the complete hand tray; the map uses the remaining viewport height. */
+@media(max-width:899px){
+ .sg-screen.sg-game{height:var(--sg-game-h471,100dvh);min-height:0;max-height:none;padding-bottom:env(safe-area-inset-bottom,0px);display:flex;flex-direction:column}
+ .sg-game>.sg-board-wrap{flex:1 1 0;min-height:0}
+ .sg-game .sg-viewport{flex:1 1 0;min-height:0;height:auto;container-type:size}
+ .sg-game>.sg-hand-section{flex:none;padding:4px 0 0}
+ .sg-game .sg-hand,.sg-game.hand-open465 .sg-hand{height:216px;min-height:216px;padding:19px 12px 16px;align-items:flex-start}
+ .sg-game .sg-hand button.sg-card{height:181px;min-height:181px}
+ .sg-game.hand-open465 .sg-hand{height:241px;min-height:241px}
+ .sg-game.hand-open465 .sg-hand button.sg-card{height:206px;min-height:206px}
+ .sg-game .sg-hand-hint464{min-height:26px;line-height:1.4}
+ .sg-game .sg-hand-hint464>span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+ .sg-game.sg-short471 .sg-hand,.sg-game.sg-short471.hand-open465 .sg-hand{height:200px;min-height:200px;padding-top:12px;padding-bottom:15px}
+ .sg-game.sg-short471 .sg-hand button.sg-card,.sg-game.sg-short471.hand-open465 .sg-hand button.sg-card{height:173px;min-height:173px}
+ .sg-game.sg-short471 .sg-hand .sg-card>.sg-art{height:48px;flex-basis:48px}
+ .sg-game.sg-short471 .sg-hand .sg-card-state464{font-size:8px;min-height:19px}
+ .sg-game.sg-short471 .sg-hand .sg-set-bundle468{height:173px;min-height:173px}
+ .sg-game.sg-short471 .sg-bundle-face468>.sg-puzzle468{height:65px;width:49px}
+ .sg-game .sg-hand:has(.sg-hand-empty){height:60px;min-height:60px}
+}
+/* Glow follows the silhouette and a soft oval at the feet, never a square box. */
+.sg-game .sg-token{outline:none;box-shadow:none;transition:left var(--sg-hop-ms471,140ms) ease-in-out,top var(--sg-hop-ms471,140ms) ease-in-out}
+.sg-game .sg-token.sg-target464,.sg-game .sg-token.sg-attacker464{outline:none;box-shadow:none}
+.sg-game .sg-token.is-current>.sg-monster,.sg-game .sg-token.is-current>.sg-art{animation:sg-pawn-glow471 1.8s ease-in-out infinite}
+.sg-game .sg-token.is-current:after{left:8px;bottom:-4px;width:45px;height:12px;background:radial-gradient(ellipse,#ffe6a985,color-mix(in srgb,var(--seat) 65%,transparent) 50%,transparent 74%);box-shadow:0 0 12px color-mix(in srgb,var(--seat) 60%,transparent);animation:sg-ground-glow471 1.8s ease-in-out infinite}
+@keyframes sg-pawn-glow471{0%,100%{filter:drop-shadow(0 0 2px #ffe8af99) drop-shadow(0 0 4px var(--seat))}50%{filter:drop-shadow(0 0 5px #ffe9bfbb) drop-shadow(0 0 10px var(--seat))}}
+@keyframes sg-ground-glow471{0%,100%{opacity:.55;scale:.9}50%{opacity:.95;scale:1.12}}
+@media(prefers-reduced-motion:reduce){.sg-game .sg-token{transition:none}.sg-game .sg-token.is-current>.sg-monster,.sg-game .sg-token.is-current>.sg-art{animation:none;filter:drop-shadow(0 0 5px var(--seat))}.sg-game .sg-token.is-current:after{animation:none;opacity:.75}}
+/* Short boards use a horizontal action prompt. No action label falls under the tray. */
+@container (max-height:320px){
+ .sg-game .sg-turn-prompt466{inset:62px 8px 6px}
+ .sg-game .sg-deck-prompt469>div,.sg-game .sg-object-prompt469>div{display:grid;grid-template-columns:132px minmax(0,1fr);grid-template-rows:auto auto auto;column-gap:9px;row-gap:3px;width:min(360px,100%);min-width:0}
+ .sg-game .sg-deck-prompt469>div>button,.sg-game .sg-object-prompt469>div>button{grid-column:1;grid-row:1/4;width:132px;height:108px;min-height:108px}
+ .sg-game .sg-deck-prompt469>div>small,.sg-game .sg-object-prompt469>div>small{grid-column:2;grid-row:1;font-size:9px;align-self:end;padding:3px 7px}
+ .sg-game .sg-deck-prompt469>div>b,.sg-game .sg-object-prompt469>div>b{grid-column:2;grid-row:2;font-size:12px;padding:5px 9px}
+ .sg-game .sg-deck-prompt469>div>span,.sg-game .sg-object-prompt469>div>span{grid-column:2;grid-row:3;display:block;align-self:start;font-size:9px;padding:3px 6px}
+ .sg-game .sg-waiting-dice469{gap:3px}
+ .sg-game .sg-waiting-dice469 .sg-die-scene469{--die-size:clamp(16px,calc(88px / var(--dice-count469)),44px)}
+ .sg-game .sg-tap-deck469>.sg-deck469{scale:.76}
+}
+@container (max-height:200px){
+ .sg-game .sg-phase466{display:none}
+ .sg-game .sg-turn-prompt466{inset:35px 7px 3px}
+ .sg-game .sg-deck-prompt469>div,.sg-game .sg-object-prompt469>div{grid-template-columns:90px minmax(0,1fr);grid-template-rows:auto auto;column-gap:5px}
+ .sg-game .sg-deck-prompt469>div>button,.sg-game .sg-object-prompt469>div>button{grid-row:1/3;width:90px!important;height:66px!important;min-height:66px!important}
+ .sg-game .sg-deck-prompt469>div>span,.sg-game .sg-object-prompt469>div>span{display:none}
+ .sg-game .sg-deck-prompt469>div>b,.sg-game .sg-object-prompt469>div>b{align-self:start;font-size:12px}
+ .sg-game .sg-waiting-dice469 .sg-die-scene469{--die-size:clamp(13px,calc(56px / var(--dice-count469)),28px)}
+ .sg-game .sg-tap-deck469>.sg-deck469{scale:.48}
+ .sg-game .sg-turn-prompt466:not(.sg-deck-prompt469):not(.sg-object-prompt469)>div{padding:5px 12px;gap:3px;display:flex;align-items:center;min-width:0}
+ .sg-game .sg-turn-prompt466:not(.sg-deck-prompt469):not(.sg-object-prompt469)>div>span{display:none}
+ .sg-game .sg-turn-prompt466 button.sg-primary{font-size:13px;padding:5px 10px;min-height:42px}
+ .sg-game .sg-movement465{padding:3px 9px;gap:6px}
+ .sg-game .sg-movement465 .sg-event-pawn465{display:none}
+ .sg-game .sg-movement465>div:last-child{display:flex;gap:8px;align-items:center}
+ .sg-game .sg-presentation464[data-kind=move]{padding:0 5px 4px}
+}
+/* A reveal can temporarily cover the tray on short screens, without closing or resizing it. */
+.sg-game{position:relative}
+.sg-game>.sg-stage-overlay471{position:absolute;inset:var(--sg-stage-top471) 0 0;z-index:30;background:radial-gradient(ellipse,#291b37f5,#100b1df8)!important;backdrop-filter:blur(4px)!important}
+@container (max-height:110px){
+ .sg-game .sg-turn-prompt466{inset:34px 5px 1px}
+ .sg-game .sg-deck-prompt469>div,.sg-game .sg-object-prompt469>div{grid-template-rows:40px}
+ .sg-game .sg-deck-prompt469>div>small,.sg-game .sg-object-prompt469>div>small{display:none}
+ .sg-game .sg-deck-prompt469>div>button,.sg-game .sg-object-prompt469>div>button{grid-row:1;height:40px!important;min-height:40px!important}
+ .sg-game .sg-deck-prompt469>div>b,.sg-game .sg-object-prompt469>div>b{grid-row:1;align-self:center;font-size:11px}
+ .sg-game .sg-waiting-dice469 .sg-die-scene469{--die-size:clamp(12px,calc(40px / var(--dice-count469)),20px)}
+ .sg-game .sg-tap-deck469>.sg-deck469{scale:.3}
+}
+.sg-game>.sg-stage-overlay471[data-kind=dice],.sg-game>.sg-stage-overlay471[data-kind=effect]{padding:20px 10px;place-items:center;align-content:center}
+.sg-game>.sg-presentation464.sg-stage-overlay471{pointer-events:auto}

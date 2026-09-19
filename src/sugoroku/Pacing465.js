@@ -7,7 +7,7 @@ export function duration465(e){
  if(e.kind==='card')return e.activation466==='instant'?1600:1400;
  if(e.kind==='dice')return 2200;
  if(e.kind==='effect')return 1000;
- if(e.kind==='move')return Math.max(500,Math.min(2400,140*(e.path465?.length??2)));
+ if(e.kind==='move'){const steps=Math.max(1,(e.path465?.length??2)-1),beat=steps>24?120:steps>12?170:210;return Math.max(500,(steps+1)*beat);}
  return 1200;
 }
 export function schedule465(g,now,afterId){

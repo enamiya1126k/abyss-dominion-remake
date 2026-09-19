@@ -14,7 +14,7 @@ const label=(g,id)=>player463(g,id)?.name??'冒険者';
 const posValue=p=>NODES463[p.pos]?.index??0;
 export function log463(g,text,cardId=null){g.log.push({id:++g.eventId,text,cardId,turn:g.turnNumber});if(g.log.length>100)g.log.shift()}
 // Private snapshots are server-only; public463 projects each event for its viewer.
-function snapshot466(g){return{status465:(g.players??[]).map(p=>({playerId:p.playerId,pos:p.pos,handCount:p.hand.length,special:p.special,skip:p.skip,finished:p.finished})),turnPlayerId466:current463(g)?.playerId,step466:g.step,private466:Object.fromEntries((g.players??[]).map(p=>[p.playerId,{hand:p.hand.map(uid=>({uid,cardId:g.cards[uid],ward:uid===p.ward,playable:false})),score:score463(g,p)}]))}}
+function snapshot466(g){return{status465:(g.players??[]).map(p=>({playerId:p.playerId,pos:p.pos,handCount:p.hand.length,special:p.special,skip:p.skip,finished:p.finished})),turnPlayerId466:current463(g)?.playerId,turnNumber466:g.turnNumber,step466:g.step,private466:Object.fromEntries((g.players??[]).map(p=>[p.playerId,{hand:p.hand.map(uid=>({uid,cardId:g.cards[uid],ward:uid===p.ward,playable:false})),score:score463(g,p)}]))}}
 export function present464(g,kind,data={}){g.presentation464??=[];g.presentationSequence464=(g.presentationSequence464??0)+1;const event={id:g.presentationSequence464,kind,turn:g.turnNumber,at:g.updatedAt,...snapshot466(g),...data};g.presentation464.push(event);if(g.presentation464.length>100)g.presentation464.shift();return event}
 function cardPresentation464(g,p,c,activation466='play'){return present464(g,'card',{actorId:p.playerId,cardId:c.id,activation466})}
 function awaken466(g,p){if(p.special)present464(g,'awaken',{actorId:p.playerId,specialId466:p.special})}
@@ -29,10 +29,10 @@ function ownCards(g,p){return p.hand.map(uid=>({uid,c:definition463(g,uid)}))}
 function leading(g,exclude){return active(g).filter(p=>p.playerId!==exclude).sort((a,b)=>distance463(a.pos)-distance463(b.pos)||a.seat-b.seat)[0]}
 function hostileTarget(g,e){return typeof e.target==='string'&&player463(g,e.target)&&e.actor!==e.target&&e.harmful}
 function multiplier(p,e){return p.special==='greed'&&!e.cost&&!e.noGreed&&['draw','discard','steal'].includes(e.type)?2:1}
-export function makeLobby463({id,code,partyId,hostId,members,now=0,seed=1}){return{id,code,game:'sugoroku',partyId462:partyId,hostId,rulesVersion:10,rules469:RULES469.id,phase:'lobby',createdAt:now,updatedAt:now,seed:seed||1,members:members.map(m=>({...m,choice:null,ai:false})),players:[],revision:0,seen:{},log:[],eventId:0,effectId:0,choiceId:0,deadline:0}}
+export function makeLobby463({id,code,partyId,hostId,members,now=0,seed=1}){return{id,code,game:'sugoroku',partyId462:partyId,hostId,rulesVersion:12,rules469:RULES469.id,phase:'lobby',createdAt:now,updatedAt:now,seed:seed||1,members:members.map(m=>({...m,choice:null,ai:false})),players:[],revision:0,seen:{},log:[],eventId:0,effectId:0,choiceId:0,deadline:0}}
 export function start463(g,now=0){
  if(g.phase!=='lobby')fail('すでに開始しています');
- g.rules469=RULES469.id;g.rulesVersion=11;g.presentation464=[];g.presentationSequence464=0;g.cards={};g.deck=[];g.discard=[];g.specialDeck=shuffle463(g,SPECIALS463.map(s=>s.id));g.specialDiscard=[];g.queue=[];g.pending=null;g.turnNumber=1;g.turn=0;g.extraChain=0;g.finishOrder=[];g.blocked={};g.step='draw';g.usedSet={};g.startedAt=now;
+ g.rules469=RULES469.id;g.rulesVersion=12;g.presentation464=[];g.presentationSequence464=0;g.cards={};g.deck=[];g.discard=[];g.specialDeck=shuffle463(g,SPECIALS463.map(s=>s.id));g.specialDiscard=[];g.queue=[];g.pending=null;g.turnNumber=1;g.turn=0;g.extraChain=0;g.finishOrder=[];g.blocked={};g.step='draw';g.usedSet={};g.startedAt=now;
  let serial=0;for(const c of CARDS463)for(let i=0;i<c.copies;i++){const uid='c'+(++serial);g.cards[uid]=c.id;g.deck.push(uid)}shuffle463(g,g.deck);
  g.players=g.members.map((m,i)=>({playerId:m.playerId,name:m.name,seat:i,ai:!!m.ai,choice:m.choice,hand:[],special:null,pos:'0',trail:['0'],skip:0,turns:0,mods:{bonus:0,dice:2},finished:null,ward:null}));
  const aiNames=['旅するスライム','火花のスライム','月影の狼','いたずら悪魔'];const aiSpecies=['slime','ember_slime','wolf','goblin'];
