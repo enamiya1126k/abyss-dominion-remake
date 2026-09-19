@@ -1,3 +1,4 @@
+import{landmarkRules469}from'./Landmarks469.js';
 // Authored board; no rules or text are baked into its illustration.
 const effects={
  draw:{name:'カードの泉',icon:'＋',tone:'blue',text:'カードを2枚引く。速攻は発動する。',effects:[{type:'draw',n:2}]},
@@ -13,18 +14,18 @@ const effects={
  rest:{name:'月明かり',icon:'月',tone:'blue',text:'カードを1枚引く。',effects:[{type:'draw',n:1}]},
  cleanse:{name:'浄化の泉',icon:'浄',tone:'green',text:'呪いをすべて捨てて、カードを1枚引く。',effects:[{type:'cleanse'},{type:'draw',n:1}]},
  wager:{name:'宝庫の契約',icon:'宝',tone:'gold',text:'手札を1枚捨てて、カードを3枚引く。',effects:[{type:'discard',n:1,select:true},{type:'draw',n:3}]},
- attribute:{name:'属性の審判',icon:'属',tone:'pink',text:'指定属性のカードをすべて捨てる。無属性は対象外。',effects:[]},
+ attribute:{name:'属性の審判',icon:'属',tone:'pink',text:'指定属性のカードを最大2枚捨てる。無属性は対象外。',effects:[]},
  gate:{name:'必ず止まる',icon:'門',tone:'gold',text:'残りの移動を止め、カードを2枚引く。特殊カードを1枚獲得する。',effects:[{type:'draw',n:2},{type:'special'}]}
 };
 export const ATTRS463=[{id:'yori',name:'より',color:'#52a8ff'},{id:'rion',name:'りおん',color:'#6ddba1'},{id:'enami',name:'えなみ',color:'#ffae61'},{id:'hide',name:'ひで',color:'#f18cc7'}];
 const pattern=['rest','draw','move','safe','back','trade','wager','rest','draw','discard','move','steal','rest','safe','attribute','back','draw','cleanse','special','rest','skip','draw','move','discard','safe','rest','trade','special'];
 export const BOARD463=[];
 for(let i=0;i<80;i++){
- const row=Math.floor(i/8),col=row%2?7-i%8:i%8,kind=i===0?'start':i===79?'goal':[23,47,63].includes(i)?'gate':pattern[(i-1)%pattern.length];
- const base=effects[kind]??{name:kind==='start'?'旅立ち':'星の王座',icon:kind==='start'?'始':'冠',tone:'gold',text:kind==='start'?'カードと運命の旅が始まる。':'到着順ボーナスと手札の得点を確定する。',effects:[]};
+ const row=Math.floor(i/8),col=row%2?7-i%8:i%8,kind=i===0?'start':i===79?'goal':pattern[(i-1)%pattern.length];
+ const base=effects[kind]??{name:kind==='start'?'旅立ち':'星の王座',icon:kind==='start'?'始':'冠',tone:'gold',text:kind==='start'?'カードと運命の旅が始まる。':'最初に到着したプレイヤーがその場で優勝！',effects:[]};
  const node={...base,id:String(i),index:i,x:280+col*135,y:130+row*160,next:i<79?[String(i+1)]:[],kind,effects:base.effects.map(e=>({...e}))};
- if(kind==='attribute'){const a=ATTRS463[Math.floor(i/8)%4];node.text=`${a.name}属性の手札をすべて捨てる。無属性は対象外。`;node.effects=[{type:'discardAttr',attr:a.id,harmful:true}];node.icon=a.name.slice(0,1)}
- BOARD463.push(node);
+ if(kind==='attribute'){const a=ATTRS463[Math.floor(i/8)%4];node.text=`${a.name}属性の手札を最大2枚捨てる。無属性は対象外。`;node.effects=[{type:'discardAttr',attr:a.id,harmful:true}];node.icon=a.name.slice(0,1)}
+ BOARD463.push(landmarkRules469(node));
 }
 for(const [index,dir] of [[7,1],[31,-1],[55,1]]){
  const root=BOARD463[index],types=['safe','wager','special','cleanse'],coords=[[140,-20],[260,20],[260,125],[140,160]];

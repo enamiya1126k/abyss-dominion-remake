@@ -40,4 +40,4 @@ export function rankInfo466(c){
  return{rank466:row[0],summary466:row[1],note466:row[2],rankIndex466:RANKS466.indexOf(row[0])};
 }
 export const rankStyle466=c=>`--rank-face:${RANK_COLORS466[c.rankIndex466??0]};--rank-index:${c.rankIndex466??0};--card-accent:${({yori:'#70afff',rion:'#83d4ac',enami:'#ecb678',hide:'#de97c5'})[c.attrs?.[0]]??'#d5c094'}`;
-export const SPECIAL_SHORT466={worker:'休み・後退を無効',grudge:'後退されたら奪取＋補充',chuni:'手札2枚で追加手番',surprise:'最下位から全員を後退',want:'手番ごとに相手から1枚',genius:'手札の枚数だけ移動',hacker:'速攻を手札に隠せる',greed:'補充・破棄・奪取が2倍',power:'黒マスを無効化',buddha:'悪い速攻を無効化',tsundere:'単体攻撃を反射',thief:'最初のゴールを横取り',drunk:'よりの手札1枚につき＋3点',shiva:'手札を防御札に変える',punch:'近くの相手を後退',swift:'毎手番、安全に1枚補充'};
+export const SPECIAL_SHORT466={worker:'休み・後退を無効',grudge:'後退されたら奪取＋補充',chuni:'手札2枚で出目＋5',surprise:'最下位から全員を後退',want:'手番ごとに相手から1枚',genius:'素の出目が最低7に',hacker:'速攻を手札に隠せる',greed:'補充・破棄・奪取が2倍',power:'黒マスを無効化',buddha:'悪い速攻を無効化',tsundere:'単体攻撃を反射',thief:'単独最下位なら出目＋3',drunk:'よりの札があれば出目＋2',shiva:'手札を防御札に変える',punch:'近くの相手を後退',swift:'毎手番、安全に1枚補充'};

@@ -1,3 +1,4 @@
+import{LANDMARKS469}from'./Landmarks469.js';
 import{BOARD463}from'./Board463.js';
 export const WORLD465={width:1600,height:3200};
 export const REGIONS465=[{name:'月影の樹海',color:'#83c8ad'},{name:'蒼晶の洞窟',color:'#77cfff'},{name:'灰燼の火山',color:'#ffb475'},{name:'星冠の王城',color:'#d1adff'}];
@@ -8,6 +9,7 @@ const points=ROAD467.map(([x,y])=>({x:x*1600,y:y*3200})),lengths=[0];
 for(let i=1;i<points.length;i++)lengths.push(lengths.at(-1)+Math.hypot(points[i].x-points[i-1].x,points[i].y-points[i-1].y));
 export function roadPoint467(t){const d=t*lengths.at(-1);let i=1;while(i<lengths.length-1&&lengths[i]<d)i++;const a=points[i-1],b=points[i],f=(d-lengths[i-1])/(lengths[i]-lengths[i-1]);return{x:a.x+(b.x-a.x)*f,y:a.y+(b.y-a.y)*f}}
 export const BOARD465=BOARD463.map(n=>({...n,next:[...n.next],...(!n.detour?roadPoint467(n.index/79):{})}));
+for(const n of BOARD465){const m=LANDMARKS469[n.id];if(m)Object.assign(n,{x:m.x,y:m.y});}
 export const NODES465=Object.fromEntries(BOARD465.map(n=>[n.id,n]));
 // Short side bridges to physical shrines. Geometry does not change the 3 four-space detours.
 for(const id of [7,31,55]){const root=NODES465[id],end=NODES465[id+1],dx=end.x-root.x,dy=end.y-root.y,len=Math.hypot(dx,dy)||1,sign=-1,nx=-dy/len*sign,ny=dx/len*sign;for(let j=0;j<4;j++){const t=(j+1)/5,bulge=Math.sin(Math.PI*t)*165,n=NODES465[`b${id}-${j}`];n.x=root.x+dx*t+nx*bulge;n.y=root.y+dy*t+ny*bulge;}}

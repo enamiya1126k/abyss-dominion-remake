@@ -1,3 +1,4 @@
+import{configureCard469,configureSpecial469}from'./Rules469.js';
 import{PHOTO_TITLES468}from'./PhotoArt468.js';
 import{rankInfo466}from'./CardRanks466.js';
 import{ATTRS463}from'./Board463.js';
@@ -66,7 +67,7 @@ const extra=[
  ['phoenix','人類の進化とは',['hide'],1,'passive',[],{onDiscard:2,art:6,copies:4,text:'このカードが捨てられると2マス進む。移動先のマス効果は発動しない。'}]
 ];
 for(const args of extra)card(...args);
-for(const c of CARDS463){if(PHOTO_TITLES468[c.id])c.name=PHOTO_TITLES468[c.id];if(c.set==='heroes')c.name=`天空の盟約・${['左上','右上','左下','右下'][c.part]}`;Object.assign(c,rankInfo466(c));}
+for(const c of CARDS463){if(PHOTO_TITLES468[c.id])c.name=PHOTO_TITLES468[c.id];if(c.set==='heroes')c.name=`天空の盟約・${['左上','右上','左下','右下'][c.part]}`;Object.assign(c,rankInfo466(c));configureCard469(c);}
 export const CARD_BY_ID463=Object.fromEntries(CARDS463.map(c=>[c.id,c]));
 export const SPECIALS463=[
  ['worker','限界社畜',10,'一回休みと後退を無効化。サイコロの4・5・6は1として数える。',0],
@@ -86,8 +87,9 @@ export const SPECIALS463=[
  ['punch','拳',-5,'終了時、前後2マス以内の相手1人をサイコロ1個の出目だけ戻せる。',12],
  ['swift','瞬足',5,'手番開始時に安全に1枚追加で引き、手札を1枚選んで捨てる。',1]
 ].map(([id,name,points,text,art])=>({id,name,points,text,art}));
+for(const s of SPECIALS463)configureSpecial469(s);
 export const SPECIAL_BY_ID463=Object.fromEntries(SPECIALS463.map(s=>[s.id,s]));
-export const TIMING463={pre:'移動前',post:'移動後',any:'自分のターン',reaction:'防御',passive:'持っている間',instant:'速攻',set:'4枚完成・移動前'};
+export const TIMING463={pre:'手番に1枚',post:'手番に1枚',any:'手番に1枚',reaction:'防御',passive:'持っている間',instant:'速攻',set:'4枚完成・移動前'};
 export const isInstant463=c=>c?.timing==='instant';
 export const hasAttr463=(c,a)=>c?.attrs.includes(a);
 export const DECK_COUNT463=CARDS463.reduce((n,c)=>n+c.copies,0);
