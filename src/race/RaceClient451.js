@@ -1,3 +1,4 @@
+import{slotOne476}from'../party/PartyPortrait476.js';
 import{deferHandRender474}from'../sugoroku/HandOrder466.js';
 import{applyCrystalDelivery474,retryEntry474,availableCrystals474}from'../sugoroku/Wallet474.js';
 import{sugorokuView463,sugorokuBefore463,sugorokuAfter463,sugorokuClick463,sugorokuInput463,sugorokuTick463,sugorokuKey463}from'../sugoroku/View463.js';
@@ -39,7 +40,7 @@ export class RaceClient451{
  key(){const id=this.transport.selfId,url=this.transport.ws?.url;if(id&&url)try{const u=new URL(url);this.lastBankKey458={id,key:`${u.origin}${u.pathname}|${id}`};return this.lastBankKey458.key}catch{}return this.lastBankKey458&&(this.lastBankKey458.id===id||!id&&!this.connected())?this.lastBankKey458.key:null}
 
  bank(){const key=this.key();return key?raceBank451(this.save.state,key):null}
- raw(op,payload={}){if(['sgAck474','status','partyCreate462','partyJoin462','partyRoster462'].includes(op))payload={crystals474:availableCrystals474(this),...payload};if(!this.connected()||!this.transport.capabilities?.has('monsterRaceV1'))return false;return this.transport._send('raceRequest451',{op,rulesVersion:8,...payload})}
+ raw(op,payload={}){if(['partyCreate462','partyJoin462','partyRoster462'].includes(op)){const id=slotOne476(this.save.state)?.id??null,roster=payload.roster;payload={...payload,slotOne476:id,...(Array.isArray(roster)&&roster.findIndex(m=>m.id===id)>=500?{roster:[roster.find(m=>m.id===id),...roster.filter(m=>m.id!==id)]}:{})}}if(['sgAck474','status','partyCreate462','partyJoin462','partyRoster462'].includes(op))payload={crystals474:availableCrystals474(this),...payload};if(!this.connected()||!this.transport.capabilities?.has('monsterRaceV1'))return false;return this.transport._send('raceRequest451',{op,rulesVersion:8,...payload})}
  refresh(){this.raw('status',{subscribe:true})}
  retryPurchase(){retryEntry474(this);const pending=this.bank()?.pending;if(!pending||!this.connected())return;const decision=this.state?.decisions?.find(d=>d.requestId===pending.requestId);if(!decision)this.raw('bet',pending)}
  receive(message){

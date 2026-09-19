@@ -1,3 +1,4 @@
+import{cardBody476,cardClass476,cardStyle476}from'./CardDesign476.js';
 import {SPECIAL_BY_ID463} from './Catalog463.js';
 import {SPECIAL_SHORT466} from './CardRanks466.js';
 
@@ -23,7 +24,7 @@ export function cardCue470(card){
 export const SPECIAL_TINY470={worker:'休み・後退無効',grudge:'後退に反撃',chuni:'2枚で出目＋5',surprise:'最下位で妨害',want:'手番ごとに奪取',genius:'素の出目7以上',hacker:'速攻を手札へ',greed:'補充・破棄2倍',power:'黒マス無効',buddha:'闇無効・＋1マス',tsundere:'単体攻撃を反射',thief:'最下位で＋3',drunk:'より所持で＋2',shiva:'手札を防御に',punch:'近くの相手−3',swift:'安全に1枚補充'};
 export function specialBack470(){return '<div class="sg-special-back470" aria-hidden="true"></div>';}
 export function specialDeck470(){return '<span class="sg-special-deck470" aria-hidden="true"><i></i><i></i><i></i></span>';}
-export function specialCard470(id,art){const s=SPECIAL_BY_ID463[id];if(!s)return '';return `<article class="sg-special-card470"><small>特殊カード · 公開</small>${art(s.art)}<h2>${esc(s.name)}</h2><p>${esc(SPECIAL_SHORT466[id]??s.text)}</p><span>覚醒能力</span></article>`;}
+export function specialCard470(id,art){const s=SPECIAL_BY_ID463[id];if(!s)return '';return `<article class="sg-special-card470 ${cardClass476(s,true)}" style="${cardStyle476(s,true)}">${cardBody476(s,art,{special:true})}</article>`;}
 
 // Both still and animated pawns use the same ground anchor and overlap offsets.
 export function pawnAnchor470(players,id,nodes,zoom=.72,overview=false){const p=players.find(x=>x.playerId===id),n=nodes[p?.pos];if(!n)return null;const stack=players.filter(x=>x.pos===p.pos),i=stack.findIndex(x=>x.playerId===id),scale=overview?Math.max(1,.55/zoom):1;return {x:n.x+(i-(stack.length-1)/2)*44*scale,y:n.y-5};}
