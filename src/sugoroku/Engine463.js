@@ -29,10 +29,10 @@ function ownCards(g,p){return p.hand.map(uid=>({uid,c:definition463(g,uid)}))}
 function leading(g,exclude){return active(g).filter(p=>p.playerId!==exclude).sort((a,b)=>distance463(a.pos)-distance463(b.pos)||a.seat-b.seat)[0]}
 function hostileTarget(g,e){return typeof e.target==='string'&&player463(g,e.target)&&e.actor!==e.target&&e.harmful}
 function multiplier(p,e){return p.special==='greed'&&!e.cost&&!e.noGreed&&['draw','discard','steal'].includes(e.type)?2:1}
-export function makeLobby463({id,code,partyId,hostId,members,now=0,seed=1}){return{id,code,game:'sugoroku',partyId462:partyId,hostId,rulesVersion:12,rules469:RULES469.id,phase:'lobby',createdAt:now,updatedAt:now,seed:seed||1,members:members.map(m=>({...m,choice:null,ai:false})),players:[],revision:0,seen:{},log:[],eventId:0,effectId:0,choiceId:0,deadline:0}}
+export function makeLobby463({id,code,partyId,hostId,members,now=0,seed=1}){return{id,code,game:'sugoroku',partyId462:partyId,hostId,rulesVersion:13,rules469:RULES469.id,phase:'lobby',createdAt:now,updatedAt:now,seed:seed||1,members:members.map(m=>({...m,choice:null,ai:false})),players:[],revision:0,seen:{},log:[],eventId:0,effectId:0,choiceId:0,deadline:0}}
 export function start463(g,now=0){
  if(g.phase!=='lobby')fail('すでに開始しています');
- g.rules469=RULES469.id;g.rulesVersion=12;g.presentation464=[];g.presentationSequence464=0;g.cards={};g.deck=[];g.discard=[];g.specialDeck=shuffle463(g,SPECIALS463.map(s=>s.id));g.specialDiscard=[];g.queue=[];g.pending=null;g.turnNumber=1;g.turn=0;g.extraChain=0;g.finishOrder=[];g.blocked={};g.step='draw';g.usedSet={};g.startedAt=now;
+ g.rules469=RULES469.id;g.rulesVersion=13;g.presentation464=[];g.presentationSequence464=0;g.cards={};g.deck=[];g.discard=[];g.specialDeck=shuffle463(g,SPECIALS463.map(s=>s.id));g.specialDiscard=[];g.queue=[];g.pending=null;g.turnNumber=1;g.turn=0;g.extraChain=0;g.finishOrder=[];g.blocked={};g.step='draw';g.usedSet={};g.startedAt=now;
  let serial=0;for(const c of CARDS463)for(let i=0;i<c.copies;i++){const uid='c'+(++serial);g.cards[uid]=c.id;g.deck.push(uid)}shuffle463(g,g.deck);
  g.players=g.members.map((m,i)=>({playerId:m.playerId,name:m.name,seat:i,ai:!!m.ai,choice:m.choice,hand:[],special:null,pos:'0',trail:['0'],skip:0,turns:0,mods:{bonus:0,dice:2},finished:null,ward:null}));
  const aiNames=['旅するスライム','火花のスライム','月影の狼','いたずら悪魔'];const aiSpecies=['slime','ember_slime','wolf','goblin'];
@@ -63,7 +63,7 @@ function receiveBody466(g,p,uid,mode='normal'){
  }else p.hand.push(uid);
 }
 function safeSpecial(g,p,id){if(!id)return;if(p.special)ask(g,p.playerId,'special','残す特殊カードを選ぶ',[{value:p.special,label:special(p).name,special:p.special},{value:id,label:SPECIAL_BY_ID463[id].name,special:id}],{old:p.special,next:id});else{p.special=id;awaken466(g,p);log463(g,`${p.name}が「${SPECIAL_BY_ID463[id].name}」を獲得！`)}}
-function takeSpecial(g,p){if(!g.specialDeck.length)g.specialDeck=shuffle463(g,g.specialDiscard.splice(0));const id=g.specialDeck.pop();if(id){present464(g,'specialDraw470',{actorId:p.playerId,specialId466:id,replacing470:!!p.special});safeSpecial(g,p,id)}else log463(g,'特殊カードの山札は空だった')}
+function takeSpecial(g,p,e={}){if(!g.specialDeck.length)g.specialDeck=shuffle463(g,g.specialDiscard.splice(0));const id=g.specialDeck.pop();if(id){present464(g,'specialDraw470',{actorId:p.playerId,specialId466:id,replacing470:!!p.special,tile:e.tile??null,source:e.source??null,sourceCardId466:e.cardId??null});safeSpecial(g,p,id)}else log463(g,'特殊カードの山札は空だった')}
 function loseSpecial(g,p){if(p.special){log463(g,`${p.name}は「${special(p).name}」を失った`);g.specialDiscard.push(p.special);p.special=null;p.ward=null}}
 // Compatibility shape only; scores never determine race results.
 export function score463(){return{hand:0,special:0,affinity:0,bonus:0,total:0,specialDouble:false}}
@@ -75,7 +75,7 @@ function goal(g,p){
  g.results=ranked.map((x,i)=>({playerId:x.playerId,name:x.name,choice:x.choice,winner:i===0,place:i===0?1:2+ranked.slice(1).filter(y=>distance463(y.pos)<distance463(x.pos)).length,remaining:distance463(x.pos),specialId:x.special}));
  g.phase='result';g.queue=[];g.pending=null;g.endedAt=g.updatedAt;log463(g,`${p.name}が先着ゴール！ 優勝！`);
 }
-function landing(g,p,e){if(p.pos===GOAL463){goal(g,p);return}if(!e.event||p.finished)return;const node=NODES463[p.pos];if(p.special==='power'&&node.tone==='black'){log463(g,`${p.name}は権力で黒マスを無効化`);return}log463(g,`${p.name}が「${node.name}」に止まった`);const m=meta(g,p.playerId,null,'tile');add(g,node.effects.map(fx=>({...fx,...m,target:fx.target??p.playerId,tile:node.id,...(fx.type==='move'?{event:false}:{})})),true)}
+function landing(g,p,e){if(p.pos===GOAL463){goal(g,p);return}if(!e.event||p.finished)return;const node=NODES463[p.pos];if(p.special==='power'&&node.tone==='black'){log463(g,`${p.name}は権力で黒マスを無効化`);return}log463(g,`${p.name}が「${node.name}」に止まった`);if(node.landmark469||node.kind==='special')present464(g,'arrival472',{actorId:p.playerId,tile:node.id,source:'tile',forcedStop472:!!e.forcedStop472,hasSpecial472:!!p.special});const m=meta(g,p.playerId,null,'tile');add(g,node.effects.map(fx=>({...fx,...m,target:fx.target??p.playerId,tile:node.id,...(fx.type==='move'?{event:false}:{})})),true)}
 function move(g,p,e){
  if(p.finished)return;let n=Math.trunc(e.n??0);if(!n)return;
  if(n<0){if(p.special==='worker'){log463(g,`${p.name}は後退を無効化`);return}const from=p.pos,oldTrail465=[...p.trail];p.trail=p.trail.slice(0,Math.max(1,p.trail.length+n));p.pos=p.trail.at(-1);log463(g,`${p.name}が${Math.abs(n)}マス戻る`);movementPresentation464(g,p,from,oldTrail465.slice(Math.max(0,oldTrail465.length+n-1)).reverse());landing(g,p,e);if(from!=='0'&&p.pos==='0')for(const x of active(g))if(x!==p&&x.special==='buddha')x.buddhaReady=true;
@@ -84,7 +84,7 @@ function move(g,p,e){
  while(n>0&&!p.finished){const node=NODES463[p.pos];if(!node.next.length)break;
   if(node.next.length>1&&!e.path){movementPresentation464(g,p,origin,route465);ask(g,p.playerId,'fork','近道か、宝庫への寄り道か',[{value:node.next[0],label:'近道を進む',note:'ゴールへ最短の道'},{value:node.next[1],label:'宝庫へ寄り道',note:'4マス長い。補充・特殊カードのチャンス'}],{effect:{...e,n}});return}
   const next=e.path??node.next[0];delete e.path;if(!node.next.includes(next))fail('通れない道です');p.pos=next;p.trail.push(next);route465.push(next);n--;
-  if(p.pos===GOAL463){reachedGoal=true;break}if(NODES463[p.pos].kind==='gate'&&!p.visited469?.includes(p.pos)){p.visited469??=[];p.visited469.push(p.pos);e.event=true;break}
+  if(p.pos===GOAL463){reachedGoal=true;break}if(NODES463[p.pos].kind==='gate'&&!p.visited469?.includes(p.pos)){p.visited469??=[];p.visited469.push(p.pos);e.event=true;e.forcedStop472=true;break}
  }
  movementPresentation464(g,p,origin,route465);if(reachedGoal){goal(g,p);return}if(p.pos!==origin)log463(g,`${p.name}が${NODES463[p.pos].name}へ進む`);if(!p.finished&&!reachedGoal)landing(g,p,e);
 }
@@ -120,7 +120,7 @@ function executeBody466(g,e){
  case'dice':p.mods.dice=Math.min(5,p.mods.dice+e.n);log463(g,`${p.name}のサイコロが${p.mods.dice}個に`);break;
  case'resonance':{const n=p.hand.some(uid=>hasAttr463(definition463(g,uid),e.attr))?4:2;p.mods.bonus+=n;log463(g,`${p.name}の共鳴で出目＋${n}`);break}
  case'piece':{const sets=['heroes','dark'].filter(set=>!g.usedSet[p.playerId+':'+set]).map(set=>({set,parts:new Set(p.hand.map(u=>definition463(g,u)).filter(c=>c.set===set).map(c=>c.part))})).filter(x=>x.parts.size<4).sort((a,b)=>b.parts.size-a.parts.size);let found=false;for(const st of sets){for(const pool of [g.deck,g.discard]){const at=pool.findIndex(uid=>{const c=definition463(g,uid);return c.set===st.set&&!st.parts.has(c.part)});if(at>=0){receiveCard(g,p,pool.splice(at,1)[0],'hold',e);log463(g,`${p.name}が未所持の絵柄を1種獲得`);found=true;break}}if(found)break}if(!found)add(g,[{...e,type:'draw',n:1,mode:'safe',noGreed:true}],true);break}
- case'shrine469':if(!p.special)takeSpecial(g,p);else add(g,[{...e,type:'draw',n:1,mode:'safe',noGreed:true}],true);break;
+ case'shrine469':if(!p.special)takeSpecial(g,p,e);else add(g,[{...e,type:'draw',n:1,mode:'safe',noGreed:true}],true);break;
  case'boostAttr':p.boostAttr=e.attr;log463(g,`${p.name}が属性の力をためた`);break;
  case'direct':p.mods.noRoll=true;move(g,p,{...e,type:'move'});break;
  case'move':move(g,p,e);break;
@@ -133,7 +133,7 @@ function executeBody466(g,e){
  case'handSize':if(p.hand.length<e.n)add(g,[{...e,type:'draw',n:e.n-p.hand.length,noGreed:true,mode:'safe'}],true);else if(p.hand.length>e.n)add(g,[{...e,type:'discard',n:p.hand.length-e.n,select:true,noGreed:true}],true);break;
  case'steal':{if(actor.finished)return;const n=Math.min(p.hand.length,Math.max(0,e.n)*multiplier(actor,e));if(!n)return;const concealed=shuffle463(g,[...p.hand]);ask(g,actor.playerId,'steal',`${p.name}の裏向きの手札から1枚選ぶ`,concealed.map((uid,i)=>({value:String(i),label:`裏向きのカード ${i+1}`})),{target:p.playerId,concealed,remaining:n,total466:e.total466??n,effect:e});break}
  case'swapHand':{if(actor.finished)return;const n=Math.min(e.n,actor.hand.length,p.hand.length);const fromA=shuffle463(g,[...actor.hand]).slice(0,n),fromB=shuffle463(g,[...p.hand]).slice(0,n);actor.hand=actor.hand.filter(uid=>!fromA.includes(uid));p.hand=p.hand.filter(uid=>!fromB.includes(uid));for(const uid of fromA){if(actor.ward===uid)actor.ward=null;receiveCard(g,p,uid,'normal',{...e,fromPlayerId466:actor.playerId,ordinal466:fromA.indexOf(uid)+1,total466:n})}for(const uid of fromB){if(p.ward===uid)p.ward=null;receiveCard(g,actor,uid,'normal',{...e,fromPlayerId466:p.playerId,ordinal466:fromB.indexOf(uid)+1,total466:n})}log463(g,`${actor.name}と${p.name}が手札${n}枚を交換`);break}
- case'special':takeSpecial(g,p);break;
+ case'special':takeSpecial(g,p,e);break;
  case'loseSpecial':loseSpecial(g,p);break;
  case'swapSpecial':if(!actor.finished){[actor.special,p.special]=[p.special,actor.special];actor.ward=null;p.ward=null;awaken466(g,actor);awaken466(g,p);log463(g,`${actor.name}と${p.name}が特殊カードを交換`)}break;
  case'stealSpecial':if(p.special&&!actor.finished){const s=p.special;p.special=null;p.ward=null;log463(g,`${actor.name}が${p.name}の特殊カードを奪った`);safeSpecial(g,actor,s)}break;
@@ -219,7 +219,7 @@ export function action463(g,playerId,m,now=0){
  else if(m.kind==='special')useSpecial(g,p,m);else fail('未対応の操作です');settle463(g);
 }
 export function public463(g,id){
- const me=player463(g,id),q=g.pending;const pending=q?{context464:q.data?.effect?{actorId:q.data.effect.actor,targetId:q.data.effect.target,cardId:q.data.effect.cardId??null,tile:q.data.effect.tile??null}:null,id:q.id,playerId:q.playerId,kind:q.kind,prompt:q.prompt,...(q.kind==='discard'&&q.playerId===id?{required467:Math.min(q.data.remaining,me.hand.length)}:{}),...(q.kind==='steal'?{remaining466:q.data.remaining,total466:q.data.total466,targetId466:q.data.target}:{}),...(q.playerId===id?{options:q.options}:{} )}:null;
+ const me=player463(g,id),q=g.pending;const pending=q?{context464:q.data?.effect?{actorId:q.data.effect.actor,targetId:q.data.effect.target,cardId:q.data.effect.cardId??null,tile:q.data.effect.tile??null}:null,id:q.id,playerId:q.playerId,kind:q.kind,prompt:q.prompt,...(q.kind==='fork'?{fork472:{nodeId:player463(g,q.playerId).pos,remaining:q.data.effect.n,visitedGateIds:[...(player463(g,q.playerId).visited469??[])]}}:{}),...(q.kind==='discard'&&q.playerId===id?{required467:Math.min(q.data.remaining,me.hand.length)}:{}),...(q.kind==='steal'?{remaining466:q.data.remaining,total466:q.data.total466,targetId466:q.data.target}:{}),...(q.playerId===id?{options:q.options}:{} )}:null;
  return{id:g.id,code:g.code,phase:g.phase,game:g.game,revision:g.revision,hostId:g.hostId,members:g.members.map(m=>({playerId:m.playerId,name:m.name,choice:m.choice,ai:!!m.ai})),players:(g.players??[]).map(p=>({playerId:p.playerId,name:p.name,seat:p.seat,ai:p.ai,choice:p.choice,pos:p.pos,skip:p.skip,special:p.special,handCount:p.hand.length,finished:p.finished,turns:p.turns,wardReady:!!p.ward})),hand:me?.hand.map(uid=>({uid,cardId:g.cards[uid],ward:uid===me.ward,playable:playable463(g,me,uid)}))??[],deckCount:g.deck?.length??0,discardCount:g.discard?.length??0,discardCards:(g.discard??[]).map(uid=>g.cards[uid]),step:g.step,turnNumber:g.turnNumber,turnPlayerId:current463(g)?.playerId,pending,deadline:g.deadline,lastRoll:g.lastRoll??null,presentation464:(g.presentation464??[]).map(e=>projectEvent466(e,id)),presentationSequence464:g.presentationSequence464??0,autoAdvance464:automaticAction464(g)?.kind??null,autoAt464:g.nextAutoAt,presentationUntil465:g.presentationUntil465??0,ownSpecialPlayable464:!!me&&specialPlayable464(g,me),log:g.log.slice(-24),results:g.results??null,ownScore:me?(me.finished??score463(g,me)):null,ownMods:me?.mods??null,ownSpecialUsed:me?.specialUsed??false,ownCardsUsed469:me?.cardsUsed469??0,rules469:RULES469,extraChain:g.extraChain??0};
 }
 export function botAction463(g,playerId){
