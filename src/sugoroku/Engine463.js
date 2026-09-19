@@ -1,3 +1,4 @@
+import{initCrystals477,applyCrystal477}from'./CrystalRules477.js';
 import{checkpoint474,finishRewards474}from'./Rewards474.js';
 import{RULES469,cardValue469}from'./Rules469.js';
 import{CARDS463,CARD_BY_ID463,SPECIALS463,SPECIAL_BY_ID463,isInstant463,hasAttr463}from'./Catalog463.js';
@@ -30,17 +31,17 @@ function ownCards(g,p){return p.hand.map(uid=>({uid,c:definition463(g,uid)}))}
 function leading(g,exclude){return active(g).filter(p=>p.playerId!==exclude).sort((a,b)=>distance463(a.pos)-distance463(b.pos)||a.seat-b.seat)[0]}
 function hostileTarget(g,e){return typeof e.target==='string'&&player463(g,e.target)&&e.actor!==e.target&&e.harmful}
 function multiplier(p,e){return p.special==='greed'&&!e.cost&&!e.noGreed&&['draw','discard','steal'].includes(e.type)?2:1}
-export function makeLobby463({id,code,partyId,hostId,members,now=0,seed=1}){return{id,code,game:'sugoroku',partyId462:partyId,hostId,rulesVersion:14,rules469:RULES469.id,phase:'lobby',createdAt:now,updatedAt:now,seed:seed||1,members:members.map(m=>({...m,choice:null,ai:false})),players:[],revision:0,seen:{},log:[],eventId:0,effectId:0,choiceId:0,deadline:0}}
+export function makeLobby463({id,code,partyId,hostId,members,now=0,seed=1}){return{id,code,game:'sugoroku',partyId462:partyId,hostId,rulesVersion:15,rules469:RULES469.id,phase:'lobby',createdAt:now,updatedAt:now,seed:seed||1,members:members.map(m=>({...m,choice:null,ai:false})),players:[],revision:0,seen:{},log:[],eventId:0,effectId:0,choiceId:0,deadline:0}}
 export function start463(g,now=0){
  if(g.phase!=='lobby')fail('すでに開始しています');
- g.rules469=RULES469.id;g.rulesVersion=14;g.presentation464=[];g.presentationSequence464=0;g.cards={};g.deck=[];g.discard=[];g.specialDeck=shuffle463(g,SPECIALS463.map(s=>s.id));g.specialDiscard=[];g.queue=[];g.pending=null;g.turnNumber=1;g.turn=0;g.extraChain=0;g.finishOrder=[];g.blocked={};g.step='draw';g.usedSet={};g.startedAt=now;
+ g.rules469=RULES469.id;g.rulesVersion=15;g.presentation464=[];g.presentationSequence464=0;g.cards={};g.deck=[];g.discard=[];g.specialDeck=shuffle463(g,SPECIALS463.map(s=>s.id));g.specialDiscard=[];g.queue=[];g.pending=null;g.turnNumber=1;g.turn=0;g.extraChain=0;g.finishOrder=[];g.blocked={};g.step='draw';g.usedSet={};g.startedAt=now;
  let serial=0;for(const c of CARDS463)for(let i=0;i<c.copies;i++){const uid='c'+(++serial);g.cards[uid]=c.id;g.deck.push(uid)}shuffle463(g,g.deck);
  g.players=g.members.map((m,i)=>({playerId:m.playerId,name:m.name,seat:i,ai:!!m.ai,choice:m.choice,hand:[],special:null,pos:'0',trail:['0'],skip:0,turns:0,mods:{bonus:0,dice:2},finished:null,ward:null}));
  const aiNames=['旅するスライム','火花のスライム','月影の狼','いたずら悪魔'];const aiSpecies=['slime','ember_slime','wolf','goblin'];
  while(g.players.length<4){const i=g.players.length;g.players.push({playerId:`AI-${g.id}-${i}`,name:aiNames[i],seat:i,ai:true,choice:{id:'ai-'+i,speciesId:aiSpecies[i]},hand:[],special:null,pos:'0',trail:['0'],skip:0,turns:0,mods:{bonus:0,dice:2},finished:null,ward:null})}
  // Draw from the shuffled non-instant portion without revealing or discarding the excluded cards.
  for(const p of g.players)for(let i=0;i<3;i++){const at=g.deck.findIndex(uid=>i===0?!!definition463(g,uid).set:!isInstant463(definition463(g,uid)));p.hand.push(g.deck.splice(at,1)[0])}shuffle463(g,g.deck);
- g.phase='playing';g.updatedAt=now;g.deadline=now+75000;g.nextAutoAt=now+1400;log463(g,'先着ゴールで優勝！ 手札3枚（絵柄1枚入り）でスタート！');log463(g,`${current463(g).name}の手番`);
+ initCrystals477(g);g.phase='playing';g.updatedAt=now;g.deadline=now+75000;g.nextAutoAt=now+1400;log463(g,'先着ゴールで優勝！ 手札3枚（絵柄1枚入り）でスタート！');log463(g,`${current463(g).name}の手番`);
 }
 function drop(g,p,uids,{silent=false}={}){const actual=[];for(const uid of uids){const i=p.hand.indexOf(uid);if(i<0)continue;p.hand.splice(i,1);g.discard.push(uid);actual.push(uid);if(p.ward===uid)p.ward=null}
  if(actual.length&&!silent)log463(g,`${p.name}は手札を${actual.length}枚捨てた`);
@@ -76,7 +77,7 @@ function goal(g,p){
  g.results=ranked.map((x,i)=>({playerId:x.playerId,name:x.name,choice:x.choice,winner:i===0,place:i===0?1:2+ranked.slice(1).filter(y=>distance463(y.pos)<distance463(x.pos)).length,remaining:distance463(x.pos),specialId:x.special}));
  finishRewards474(g);g.phase='result';g.queue=[];g.pending=null;g.endedAt=g.updatedAt;log463(g,`${p.name}が先着ゴール！ 優勝！`);
 }
-function landing(g,p,e){if(p.pos===GOAL463){goal(g,p);return}if(!e.event||p.finished)return;const node=NODES463[p.pos];const gems474=checkpoint474(g,p,node.id);if(gems474){present464(g,'crystal474',{actorId:p.playerId,n:gems474,tile:node.id,total474:p.crystals474});log463(g,`${p.name}が💎${gems474}獲得（終了時に精算）`)}if(p.special==='power'&&node.tone==='black'){log463(g,`${p.name}は権力で黒マスを無効化`);return}log463(g,`${p.name}が「${node.name}」に止まった`);if(node.landmark469||node.kind==='special')present464(g,'arrival472',{actorId:p.playerId,tile:node.id,source:'tile',forcedStop472:!!e.forcedStop472,hasSpecial472:!!p.special});const m=meta(g,p.playerId,null,'tile');add(g,node.effects.map(fx=>({...fx,...m,target:fx.target??p.playerId,tile:node.id,...(fx.type==='move'?{event:false}:{})})),true)}
+function landing(g,p,e){if(p.pos===GOAL463){goal(g,p);return}if(!e.event||p.finished)return;const node=NODES463[p.pos];const gems474=checkpoint474(g,p,node.id);if(gems474){present464(g,'crystal474',{actorId:p.playerId,n:gems474,tile:node.id,total474:p.crystals474});log463(g,`${p.name}が💎${gems474}獲得（終了時に精算）`)}if(p.special==='power'&&node.tone==='black'){log463(g,`${p.name}は権力で黒マスを無効化`);return}log463(g,`${p.name}が「${node.name}」に止まった`);if(node.crystalMode477){p.crystalVisits477??=[];if(p.crystalVisits477.includes(node.id)){log463(g,'この💎マスは獲得・処理済み');return}p.crystalVisits477.push(node.id);}if(node.landmark469||node.kind==='special')present464(g,'arrival472',{actorId:p.playerId,tile:node.id,source:'tile',forcedStop472:!!e.forcedStop472,hasSpecial472:!!p.special});const m=meta(g,p.playerId,null,'tile');add(g,node.effects.map(fx=>({...fx,...m,target:fx.target??p.playerId,tile:node.id,...(fx.type==='move'?{event:false}:{})})),true)}
 function move(g,p,e){
  if(p.finished)return;let n=Math.trunc(e.n??0);if(!n)return;
  if(n<0){if(p.special==='worker'){log463(g,`${p.name}は後退を無効化`);return}const from=p.pos,oldTrail465=[...p.trail];p.trail=p.trail.slice(0,Math.max(1,p.trail.length+n));p.pos=p.trail.at(-1);log463(g,`${p.name}が${Math.abs(n)}マス戻る`);movementPresentation464(g,p,from,oldTrail465.slice(Math.max(0,oldTrail465.length+n-1)).reverse());landing(g,p,e);if(from!=='0'&&p.pos==='0')for(const x of active(g))if(x!==p&&x.special==='buddha')x.buddhaReady=true;
@@ -102,19 +103,20 @@ function expandTarget(g,e){
  if(['all','allOthers'].includes(e.target)){add(g,active(g).filter(p=>e.target==='all'||p.playerId!==e.actor).map(p=>({...e,target:p.playerId,area:true})),true);return true}
  if(e.target==='leader'){const p=leading(g,e.actor);if(p)add(g,[{...e,target:p.playerId}],true);return true}
  if(e.target==='choose'||e.target==='chooseAny'){
-  let choices=active(g).filter(p=>e.target==='chooseAny'||p.playerId!==e.actor);if(['steal','swapHand','discard'].includes(e.type))choices=choices.filter(p=>p.hand.length);if(['stealSpecial','loseSpecial'].includes(e.type))choices=choices.filter(p=>p.special);
+  let choices=active(g).filter(p=>e.target==='chooseAny'||p.playerId!==e.actor);if(['steal','swapHand','discard'].includes(e.type))choices=choices.filter(p=>p.hand.length);if(e.type==='crystal477'&&e.mode==='steal')choices=choices.filter(p=>(p.crystals474??0)>0);if(e.type==='crystal477'&&e.mode==='steal'&&!choices.length)log463(g,'奪える💎を持つ相手はいなかった');if(['stealSpecial','loseSpecial'].includes(e.type))choices=choices.filter(p=>p.special);
   if(!choices.length)return true;
-  ask(g,e.actor,'target','対象のプレイヤーを選ぶ',choices.map(p=>({value:p.playerId,label:p.name,note:`残り${distance463(p.pos)}マス・手札${p.hand.length}枚`})),{effect:e});return true;
+  ask(g,e.actor,'target','対象のプレイヤーを選ぶ',choices.map(p=>({value:p.playerId,label:p.name,note:e.type==='crystal477'?`獲得分 💎${p.crystals474??0}`:`残り${distance463(p.pos)}マス・手札${p.hand.length}枚`})),{effect:e});return true;
  }return false;
 }
 function execute(g,e){const before=g.presentationSequence464??0;executeBody466(g,e);if((g.presentationSequence464??0)>before)g.presentation464.at(-1).after466=snapshot466(g)}
 function executeBody466(g,e){
  if(g.phase!=='playing'||player463(g,e.actor)?.finished)return;if(expandTarget(g,e))return;const p=player463(g,e.target);if(!p||p.finished||g.blocked[e.group+':'+p.playerId])return;
  if(e.source==='instant'&&CARD_BY_ID463[e.cardId]?.kind==='bad'&&(['buddha','shiva'].includes(p.special)||p.special==='drunk'&&hasAttr463(CARD_BY_ID463[e.cardId],'yori'))){log463(g,`${p.name}は悪い速攻を無効化した`);return}
- if(!e.presented464&&!['draw','drawOne','roll','move','direct','special','shrine469','piece'].includes(e.type)){present464(g,'effect',{actorId:e.actor,targetIds:[p.playerId],cardId:e.cardId??null,effectType:e.type,n:e.type==='draw'?(e.n??1)*multiplier(p,e):e.n??null,source:e.source,specialId466:e.source==='special'?player463(g,e.actor)?.special:null,tile:e.tile??null,harmful:!!e.harmful});e.presented464=true}
+ if(!e.presented464&&!['draw','drawOne','roll','move','direct','special','shrine469','piece','crystal477'].includes(e.type)){present464(g,'effect',{actorId:e.actor,targetIds:[p.playerId],cardId:e.cardId??null,effectType:e.type,n:e.type==='draw'?(e.n??1)*multiplier(p,e):e.n??null,source:e.source,specialId466:e.source==='special'?player463(g,e.actor)?.special:null,tile:e.tile??null,harmful:!!e.harmful});e.presented464=true}
  if(defend(g,p,e))return;
  const actor=player463(g,e.actor)??p;
  switch(e.type){
+ case'crystal477':{const changes=applyCrystal477(g,actor,p,e.mode);present464(g,'crystal477',{actorId:actor.playerId,targetIds:[p.playerId],mode477:e.mode,changes477:changes,tile:e.tile??null});for(const x of changes)log463(g,`${label(g,x.playerId)}の💎 ${x.delta>=0?'+':''}${x.delta}（獲得分 ${x.total}）`);break}
  case'draw':{const n=Math.min(24,Math.max(0,e.n??1)*multiplier(p,e));add(g,Array.from({length:n},(_,i)=>({...e,type:'drawOne',ordinal466:i+1,total466:n})),true);break}
  case'drawOne':{recycle(g);const uid=g.deck.pop();if(uid)receiveCard(g,p,uid,e.mode,e);break}
  case'bonus':p.mods.bonus+=e.n;log463(g,`${p.name}の合計出目＋${e.n}`);break;
@@ -162,12 +164,12 @@ function resolveChoice(g,p,value){const q=g.pending;if(!q||q.playerId!==p.player
  case'defense':{
   if(value==='accept'){add(g,[{...e,checked:true}],true);break}
   let reflect=value==='passive-reflect'||(!value.startsWith('cost:')&&!!definition463(g,value)?.reflect);
-  const reflected=!!(reflect&&e.actor!==p.playerId&&e.source!=='tile'&&e.source!=='instant'&&!e.reflected);
+  const reflected=!!(reflect&&e.actor!==p.playerId&&(e.source!=='tile'||e.type==='crystal477'&&e.mode==='steal')&&e.source!=='instant'&&!e.reflected);
   const defenseCard=value==='passive-reflect'?null:g.cards[value.replace('cost:','')];
   present464(g,'defense469',{actorId:p.playerId,attackerId469:e.actor,targetIds:[p.playerId],cardId:defenseCard,attackCardId469:e.cardId??null,effectType:e.type,n:e.n!=null?e.n*multiplier(p,e):null,reflected469:reflected});
   if(value.startsWith('cost:'))drop(g,p,[value.slice(5)]);else if(value==='passive-reflect')p.reflectTurn=g.turnNumber;else drop(g,p,[value]);
   g.blocked[e.group+':'+p.playerId]=true;const remaining=g.queue.filter(x=>x.group===e.group&&x.target===p.playerId);g.queue=g.queue.filter(x=>!(x.group===e.group&&x.target===p.playerId));
-  if(reflect&&e.actor!==p.playerId&&e.source!=='tile'&&e.source!=='instant'&&!e.reflected){const group=meta(g,p.playerId,null).group;add(g,[e,...remaining].map(x=>({...x,actor:p.playerId,target:e.actor,group,reflected:true,checked:false,presented464:false})),true);log463(g,`${p.name}が効果を跳ね返した！`)}else log463(g,`${p.name}が効果を無効化した！`);break}
+  if(reflect&&e.actor!==p.playerId&&(e.source!=='tile'||e.type==='crystal477'&&e.mode==='steal')&&e.source!=='instant'&&!e.reflected){const group=meta(g,p.playerId,null).group;add(g,[e,...remaining].map(x=>({...x,actor:p.playerId,target:e.actor,group,reflected:true,checked:false,presented464:false})),true);log463(g,`${p.name}が効果を跳ね返した！`)}else log463(g,`${p.name}が効果を無効化した！`);break}
  case'ward':p.ward=value;log463(g,`${p.name}が防御札を用意した`);break;
  default:fail('未対応の選択です');
  }
@@ -199,7 +201,7 @@ function useSpecial(g,p,payload){
  p.specialUsed=true;p.cardsUsed469=(p.cardsUsed469??0)+1;add(g,fx.map(e=>({...e,...m,target:e.target??p.playerId})));
 }
 export function action463(g,playerId,m,now=0){
- if(g.phase!=='playing')fail('ゲームは進行中ではありません');const p=player463(g,playerId);if(!p||p.finished)fail('観戦中は操作できません');g.updatedAt=now;
+ if(g.phase!=='playing')fail('ゲームは進行中ではありません');const p=player463(g,playerId);if(!p||p.finished)fail('観戦中は操作できません');g.updatedAt=now;initCrystals477(g);
  if(m.kind==='choice'){resolveChoice(g,p,Array.isArray(m.values)?m.values:String(m.value));settle463(g);return}
  if(g.pending)fail('選択が終わるまでお待ちください');if(current463(g)!==p)fail('あなたの手番ではありません');
  if(m.kind==='draw'){
@@ -221,7 +223,7 @@ export function action463(g,playerId,m,now=0){
 }
 export function public463(g,id){
  const me=player463(g,id),q=g.pending;const pending=q?{context464:q.data?.effect?{actorId:q.data.effect.actor,targetId:q.data.effect.target,cardId:q.data.effect.cardId??null,tile:q.data.effect.tile??null}:null,id:q.id,playerId:q.playerId,kind:q.kind,prompt:q.prompt,...(q.kind==='fork'?{fork472:{nodeId:player463(g,q.playerId).pos,remaining:q.data.effect.n,visitedGateIds:[...(player463(g,q.playerId).visited469??[])]}}:{}),...(q.kind==='discard'&&q.playerId===id?{required467:Math.min(q.data.remaining,me.hand.length)}:{}),...(q.kind==='steal'?{remaining466:q.data.remaining,total466:q.data.total466,targetId466:q.data.target}:{}),...(q.playerId===id?{options:q.options}:{} )}:null;
- return{economy474:g.economy474?{mode:g.economy474.mode,fee:g.economy474.fee,epoch:g.economy474.epoch??0,entries:Object.keys(g.economy474.entries??{}),settled:!!g.economy474.settled}:null,id:g.id,code:g.code,phase:g.phase,game:g.game,revision:g.revision,hostId:g.hostId,members:g.members.map(m=>({playerId:m.playerId,name:m.name,choice:m.choice,ai:!!m.ai})),players:(g.players??[]).map(p=>({playerId:p.playerId,name:p.name,seat:p.seat,ai:p.ai,choice:p.choice,pos:p.pos,skip:p.skip,special:p.special,handCount:p.hand.length,crystals474:p.crystals474??0,finished:p.finished,turns:p.turns,wardReady:!!p.ward})),hand:me?.hand.map(uid=>({uid,cardId:g.cards[uid],ward:uid===me.ward,playable:playable463(g,me,uid)}))??[],deckCount:g.deck?.length??0,discardCount:g.discard?.length??0,discardCards:(g.discard??[]).map(uid=>g.cards[uid]),step:g.step,turnNumber:g.turnNumber,turnPlayerId:current463(g)?.playerId,pending,deadline:g.deadline,lastRoll:g.lastRoll??null,presentation464:(g.presentation464??[]).map(e=>projectEvent466(e,id)),presentationSequence464:g.presentationSequence464??0,autoAdvance464:automaticAction464(g)?.kind??null,autoAt464:g.nextAutoAt,presentationUntil465:g.presentationUntil465??0,ownSpecialPlayable464:!!me&&specialPlayable464(g,me),log:g.log.slice(-24),results:g.results??null,ownScore:me?(me.finished??score463(g,me)):null,ownMods:me?.mods??null,ownSpecialUsed:me?.specialUsed??false,ownCardsUsed469:me?.cardsUsed469??0,rules469:RULES469,extraChain:g.extraChain??0};
+ return{crystalRules477:g.crystalRules477??0,economy474:g.economy474?{mode:g.economy474.mode,fee:g.economy474.fee,epoch:g.economy474.epoch??0,entries:Object.keys(g.economy474.entries??{}),settled:!!g.economy474.settled}:null,id:g.id,code:g.code,phase:g.phase,game:g.game,revision:g.revision,hostId:g.hostId,members:g.members.map(m=>({playerId:m.playerId,name:m.name,choice:m.choice,ai:!!m.ai})),players:(g.players??[]).map(p=>({playerId:p.playerId,name:p.name,seat:p.seat,ai:p.ai,choice:p.choice,pos:p.pos,skip:p.skip,special:p.special,handCount:p.hand.length,crystals474:p.crystals474??0,finished:p.finished,turns:p.turns,wardReady:!!p.ward})),hand:me?.hand.map(uid=>({uid,cardId:g.cards[uid],ward:uid===me.ward,playable:playable463(g,me,uid)}))??[],deckCount:g.deck?.length??0,discardCount:g.discard?.length??0,discardCards:(g.discard??[]).map(uid=>g.cards[uid]),step:g.step,turnNumber:g.turnNumber,turnPlayerId:current463(g)?.playerId,pending,deadline:g.deadline,lastRoll:g.lastRoll??null,presentation464:(g.presentation464??[]).map(e=>projectEvent466(e,id)),presentationSequence464:g.presentationSequence464??0,autoAdvance464:automaticAction464(g)?.kind??null,autoAt464:g.nextAutoAt,presentationUntil465:g.presentationUntil465??0,ownSpecialPlayable464:!!me&&specialPlayable464(g,me),log:g.log.slice(-24),results:g.results??null,ownScore:me?(me.finished??score463(g,me)):null,ownMods:me?.mods??null,ownSpecialUsed:me?.specialUsed??false,ownCardsUsed469:me?.cardsUsed469??0,rules469:RULES469,extraChain:g.extraChain??0};
 }
 export function botAction463(g,playerId){
  const p=player463(g,playerId),q=g.pending;if(!p||p.finished)return null;
@@ -231,7 +233,7 @@ export function botAction463(g,playerId){
   if(q.kind==='discard'||q.kind==='ward')value=[...q.options].sort((a,b)=>{const ca=CARD_BY_ID463[a.cardId],cb=CARD_BY_ID463[b.cardId];return cardValue469(ca,p,g)-cardValue469(cb,p,g)})[0].value;
   if(q.kind==='recover')value=[...q.options].sort((a,b)=>cardValue469(CARD_BY_ID463[b.cardId],p,g)-cardValue469(CARD_BY_ID463[a.cardId],p,g))[0].value;
   if(q.kind==='special')value=[...q.options].sort((a,b)=>specialRating(b.special,p)-specialRating(a.special,p))[0].value;
-  if(q.kind==='target')value=[...q.options].sort((a,b)=>distance463(player463(g,a.value)?.pos)-distance463(player463(g,b.value)?.pos))[0].value;
+  if(q.kind==='target')value=[...q.options].sort((a,b)=>q.data?.effect?.type==='crystal477'?(player463(g,b.value)?.crystals474??0)-(player463(g,a.value)?.crystals474??0):distance463(player463(g,a.value)?.pos)-distance463(player463(g,b.value)?.pos))[0].value;
   if(q.kind==='steal')value=q.options[rng463(g,q.options.length)].value;
   if(q.kind==='discardMove')value=q.data.count>=3||p.hand.length<=4?'done':q.options.find(o=>o.value!=='done')?.value??'done';
   return{kind:'choice',value};

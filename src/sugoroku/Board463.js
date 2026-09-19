@@ -1,3 +1,4 @@
+import{crystalTile477}from'./CrystalRules477.js';
 import{landmarkRules469}from'./Landmarks469.js';
 // Authored board; no rules or text are baked into its illustration.
 const effects={
@@ -25,7 +26,7 @@ for(let i=0;i<80;i++){
  const base=effects[kind]??{name:kind==='start'?'旅立ち':'星の王座',icon:kind==='start'?'始':'冠',tone:'gold',text:kind==='start'?'カードと運命の旅が始まる。':'最初に到着したプレイヤーがその場で優勝！',effects:[]};
  const node={...base,id:String(i),index:i,x:280+col*135,y:130+row*160,next:i<79?[String(i+1)]:[],kind,effects:base.effects.map(e=>({...e}))};
  if(kind==='attribute'){const a=ATTRS463[Math.floor(i/8)%4];node.text=`${a.name}属性の手札を最大2枚捨てる。無属性は対象外。`;node.effects=[{type:'discardAttr',attr:a.id,harmful:true}];node.icon=a.name.slice(0,1)}
- BOARD463.push(landmarkRules469(node));
+ BOARD463.push(crystalTile477(landmarkRules469(node)));
 }
 for(const [index,dir] of [[7,1],[31,-1],[55,1]]){
  const root=BOARD463[index],types=['safe','wager','special','cleanse'],coords=[[140,-20],[260,20],[260,125],[140,160]];

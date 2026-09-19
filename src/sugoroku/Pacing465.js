@@ -1,5 +1,6 @@
 // Shared event pacing; the client never advances gameplay before the server permits it.
 export function duration465(e){
+ if(e.kind==='crystal477')return 1800;
  if(e.kind==='arrival472')return 1400;
  if(e.kind==='specialDraw470')return 3400;
  if(e.kind==='awaken')return 2200;

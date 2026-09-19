@@ -9,7 +9,7 @@ export function handleSugoroku463(c,session,m){
  if(m.op!=='sg463')return false;
  const g=boardFor463(c,session.playerId),p=Object.values(c.data.parties462??{}).find(x=>x.id===g?.partyId462),me=g?.members.find(x=>x.playerId===session.playerId);
  if(!g||!p||!me)throw Error('カードすごろくの参加者ではありません');
- if(Number(m.rulesVersion)<14)throw Error('本体をBuild474に更新してください');
+ if(Number(m.rulesVersion)<15)throw Error('本体をBuild477に更新してください');
  if(m.gameId!==g.id)throw Error('ゲームが切り替わりました');
  const requestId=String(m.requestId??'');if(!/^[a-zA-Z0-9_-]{8,100}$/.test(requestId))throw Error('操作情報を再送してください');
  if(g.seen[session.playerId]?.includes(requestId))return true;
@@ -20,7 +20,7 @@ export function handleSugoroku463(c,session,m){
   if(g.economy474?.mode==='crystal')throw Error('報酬戦は終了まで中断できません。ホームへは戻れます');const humans=g.players.filter(x=>!x.ai);
   if(g.phase!=='playing'||p.hostId!==session.playerId||humans.length!==1||humans[0].playerId!==session.playerId||p.members.some(x=>x.playerId!==session.playerId))throw Error('他のプレイヤーが参加している対戦は中断できません');
   if(m.kind==='exitSolo465'){delete c.data.boardRooms463[g.code];p.game=null;p.raceCode=null;for(const member of p.members)member.ready=false;return true}
-  const fresh=createBoard463(c,p,g.members.map(x=>({...x})));fresh.members[0].choice={...g.members[0].choice};start463(fresh,c.now());fresh.seen[session.playerId]=[requestId];mark(fresh,c.now(),0);c.data.boardRooms463[g.code]=fresh;return true;
+  const fresh=createBoard463(c,p,g.members.map(x=>({...x})));fresh.economy474={mode:'practice',fee:500,epoch:0,entries:{}};fresh.members[0].choice={...g.members[0].choice};start463(fresh,c.now());fresh.seen[session.playerId]=[requestId];mark(fresh,c.now(),0);c.data.boardRooms463[g.code]=fresh;return true;
  }
  if(m.kind==='economy474'){if(g.phase!=='lobby'||p.hostId!==session.playerId||!['crystal','practice'].includes(m.mode))throw Error('部屋主が開始前に選べます');if(m.mode==='crystal'&&(!Number.isSafeInteger(m.fee)||m.fee<1||m.fee>minimumFee474(p)))throw Error('参加費は全員の所持💎の範囲内にしてください');for(const id of Object.keys(g.economy474?.entries??{}))refundEntry474(c,g,id,'参加費の変更');g.economy474={mode:m.mode,fee:m.mode==='crystal'?m.fee:500,epoch:(g.economy474?.epoch??0)+1,entries:{}};p.members.forEach(m=>m.ready=false);
  }else if(m.kind==='select'){

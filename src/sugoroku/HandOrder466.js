@@ -6,25 +6,45 @@ export function orderedHand466(u,g,selfId){
 }
 export function deferHandRender474(c){const u=c.sgUI463;if(u?.handInteracting474||u?.handDragging466){u.handRenderPending474=true;return true}return false}
 export function bindHand466(c,u){
- const hand=c.root.querySelector('.sg-hand');if(!hand)return()=>{};let state=null,hold=null,idle=null,ghost=null,raf=null,disposed=false;
- const flush=()=>{if(disposed||state?.drag||state?.down)return;u.handInteracting474=false;if(u.handRenderPending474){u.handRenderPending474=false;c.render()}};
+ const hand=c.root.querySelector('.sg-hand');if(!hand)return()=>{};
+ let state=null,hold=null,idle=null,raf=null,disposed=false;
+ const flush=()=>{if(disposed||state?.down)return;u.handInteracting474=false;if(u.handRenderPending474){u.handRenderPending474=false;c.render()}};
  const settle=()=>{clearTimeout(idle);idle=setTimeout(flush,180)};
- const clearDrag=()=>{hand.removeEventListener('touchmove',touchmove);clearTimeout(hold);cancelAnimationFrame(raf);ghost?.remove();ghost=null;state?.card?.classList.remove('is-dragging466');hand.classList.remove('is-sorting466');u.handDragging466=false};
- const tick=()=>{if(!state?.drag)return;const r=hand.getBoundingClientRect();if(state.x<r.left+35)hand.scrollLeft-=8;else if(state.x>r.right-35)hand.scrollLeft+=8;ghost.style.setProperty('--ghost-x',state.x-state.w/2+'px');ghost.style.setProperty('--ghost-y',state.y-state.h*.55+'px');const cards=[...hand.querySelectorAll('[data-uid]')].filter(x=>x!==state.card);const target=cards.find(x=>{const r=x.getBoundingClientRect();return state.x<r.left+r.width/2});if(target&&state.card.nextElementSibling!==target)hand.insertBefore(state.card,target);else if(!target&&hand.lastElementChild!==state.card)hand.append(state.card);raf=requestAnimationFrame(tick)};
- const down=e=>{if(e.isPrimary===false||e.button>0)return;const card=e.target.closest('[data-uid]');if(!card)return;clearTimeout(idle);u.handInteracting474=true;state={id:e.pointerId,card,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,scroll:hand.scrollLeft,swipe:false,drag:false,down:true,touch:e.pointerType==='touch'};
- hold=setTimeout(()=>{if(!state?.down||state.swipe)return;state.drag=true;hand.addEventListener('touchmove',touchmove,{passive:false});u.handDragging466=true;const r=card.getBoundingClientRect();ghost=card.cloneNode(true);copyCardLook476(card,ghost);ghost.classList.add('sg-hand-ghost466','sg-hand-ghost474','sg-hand-ghost476');ghost.style.cssText+=`;position:fixed;left:0;top:0;width:${r.width}px;height:${r.height}px`;ghost.removeAttribute('data-sg-action');document.body.append(ghost);state.w=r.width;state.h=r.height;card.setPointerCapture?.(e.pointerId);card.classList.add('is-dragging466');hand.classList.add('is-sorting466');tick()},420)};
- const move=e=>{if(!state||e.pointerId!==state.id)return;state.x=e.clientX;state.y=e.clientY;if(!state.drag){if(Math.hypot(e.clientX-state.startX,e.clientY-state.startY)>8){clearTimeout(hold);state.swipe=true;if(!state.touch)hand.scrollLeft=state.scroll-(e.clientX-state.startX)}return}e.preventDefault()};
- const finish=e=>{if(!state||e.pointerId!==state.id)return;const {drag,swipe}=state;state.down=false;if(drag){const visible=[...hand.querySelectorAll('[data-uid]')].flatMap(x=>x.dataset.handIds?.split(',')??[x.dataset.uid]),set=new Set(visible);let i=0;u.order466=u.order466.map(id=>set.has(id)?visible[i++]:id);u.sort='manual';try{localStorage.setItem(u.orderKey466,JSON.stringify(u.order466))}catch{}u.handRenderPending474=true}if(drag||swipe||e.type==='pointercancel')u.suppressHandClick466=Date.now()+450;clearDrag();state=null;if(drag){u.handInteracting474=false;flush()}else settle()};
+ const clearDrag=()=>{clearTimeout(hold);cancelAnimationFrame(raf);if(state){state.card.style.removeProperty('transform');state.card.classList.remove('is-dragging477');}hand.classList.remove('is-sorting477');u.handDragging466=false};
+ const tick=()=>{
+  if(!state?.drag)return;const s=state,r=hand.getBoundingClientRect();
+  if(s.x<r.left+28)hand.scrollLeft-=7;else if(s.x>r.right-28)hand.scrollLeft+=7;
+  // Move the actual hand card, inside its tray. No detached clone or second card.
+  s.card.style.removeProperty('transform');
+  const others=[...hand.querySelectorAll('[data-uid]')].filter(x=>x!==s.card);
+  const target=others.find(x=>{const b=x.getBoundingClientRect();return s.x<b.left+b.width/2});
+  if(target&&s.card.nextElementSibling!==target)hand.insertBefore(s.card,target);else if(!target&&hand.lastElementChild!==s.card)hand.append(s.card);
+  const b=s.card.getBoundingClientRect(),left=Math.max(r.left+3,Math.min(r.right-b.width-3,s.x-s.offsetX)),top=Math.max(r.top+5,Math.min(r.bottom-b.height-5,s.y-s.offsetY));
+  s.card.style.setProperty('transform',`translate3d(${left-b.left}px,${top-b.top}px,0) scale(1.025)`,'important');
+  raf=requestAnimationFrame(tick);
+ };
+ const down=e=>{
+  if(state||e.isPrimary===false||e.button>0)return;const card=e.target.closest('[data-uid]');if(!card)return;
+  clearTimeout(idle);u.handInteracting474=true;state={id:e.pointerId,card,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,scroll:hand.scrollLeft,swipe:false,drag:false,down:true,touch:e.pointerType==='touch',before:[...hand.children]};
+  hold=setTimeout(()=>{if(!state?.down||state.swipe||disposed)return;const r=card.getBoundingClientRect();state.offsetX=state.x-r.left;state.offsetY=state.y-r.top;state.drag=true;u.handDragging466=true;u.tidyNotice468=false;card.classList.add('is-dragging477');hand.classList.add('is-sorting477');tick()},420);
+ };
+ const move=e=>{if(!state||e.pointerId!==state.id)return;state.x=e.clientX;state.y=e.clientY;if(!state.drag){if(Math.hypot(e.clientX-state.startX,e.clientY-state.startY)>8){clearTimeout(hold);state.swipe=true;if(!state.touch)hand.scrollLeft=state.scroll-(e.clientX-state.startX)}return}if(e.cancelable)e.preventDefault()};
+ const finish=e=>{
+  if(!state||e.pointerId!==state.id)return;const {drag,swipe}=state,cancel=e.type==='pointercancel'||e.type==='blur';state.down=false;
+  if(drag&&cancel){for(const card of state.before)hand.append(card);}
+  if(drag&&!cancel){
+   const visible=[...hand.querySelectorAll('[data-uid]')].flatMap(x=>x.dataset.handIds?.split(',')??[x.dataset.uid]),set=new Set(visible);let i=0;
+   u.order466=(u.order466??visible).map(id=>set.has(id)?visible[i++]:id);u.sort='manual';u.scrolls??={};u.scrolls.hand={x:hand.scrollLeft,y:hand.scrollTop};
+   try{localStorage.setItem(u.orderKey466,JSON.stringify(u.order466))}catch{}u.handRenderPending474=true;
+  }
+  if(drag||swipe||cancel)u.suppressHandClick466=Date.now()+450;
+  clearDrag();state=null;settle();
+ };
  const scroll=()=>{u.handInteracting474=true;u.suppressHandClick466=Date.now()+200;settle()};
  const click=e=>{if(Date.now()<(u.suppressHandClick466??0)){e.preventDefault();e.stopImmediatePropagation()}else{clearTimeout(idle);u.handInteracting474=false}};
- const touchmove=e=>{if(state?.drag)e.preventDefault()};const context=e=>e.preventDefault();
- for(const[n,fn]of[['pointerdown',down],['pointermove',move],['pointerup',finish],['pointercancel',finish],['contextmenu',context]])hand.addEventListener(n,fn);
- hand.addEventListener('scroll',scroll,{passive:true});hand.addEventListener('click',click,true);
- return()=>{disposed=true;clearTimeout(idle);clearDrag();u.handInteracting474=false;for(const[n,fn]of[['pointerdown',down],['pointermove',move],['pointerup',finish],['pointercancel',finish],['contextmenu',context],['scroll',scroll],['touchmove',touchmove]])hand.removeEventListener(n,fn);hand.removeEventListener('click',click,true)};
-}
-
-// The floating clone leaves .sg-screen; preserve its measured appearance during drag.
-export function copyCardLook476(source,clone){
- const originals=[source,...source.querySelectorAll('*')],copies=[clone,...clone.querySelectorAll('*')];
- for(let i=0;i<originals.length;i++){const style=getComputedStyle(originals[i]);for(const key of style)copies[i].style.setProperty(key,style.getPropertyValue(key));}
+ const touchmove=e=>{if(state?.drag&&e.cancelable)e.preventDefault()};
+ const context=e=>e.preventDefault(),blur=()=>{if(state)finish({pointerId:state.id,type:'blur'})};
+ hand.addEventListener('pointerdown',down);hand.addEventListener('touchmove',touchmove,{passive:false});hand.addEventListener('contextmenu',context);hand.addEventListener('scroll',scroll,{passive:true});hand.addEventListener('click',click,true);
+ window.addEventListener('pointermove',move,{passive:false});window.addEventListener('pointerup',finish);window.addEventListener('pointercancel',finish);window.addEventListener('blur',blur);
+ return()=>{disposed=true;clearTimeout(idle);clearDrag();state=null;u.handInteracting474=false;hand.removeEventListener('pointerdown',down);hand.removeEventListener('touchmove',touchmove);hand.removeEventListener('contextmenu',context);hand.removeEventListener('scroll',scroll);hand.removeEventListener('click',click,true);window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',finish);window.removeEventListener('pointercancel',finish);window.removeEventListener('blur',blur)};
 }

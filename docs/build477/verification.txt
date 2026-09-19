@@ -1,0 +1,40 @@
+✔ duplicates count as held cards, never as missing puzzle parts (3.226106ms)
+✔ tidy keeps every physical UID, stable ordinary order and groups each series (0.689546ms)
+✔ completion fires on fourth unique part and never consumes cards (0.299299ms)
+✔ all 43 supplied photos are actually referenced by cards or series (1.021104ms)
+✔ SLOT1 broadcasts per owner across join, reconnect, departure and saved party state (2.297942ms)
+✔ SLOT1 remains distinct from chosen game pawn; invalid and removed IDs produce no false portrait (0.648154ms)
+✔ client packets send the current SLOT1 including IDs past roster position 500 (3.367434ms)
+✔ all 132 card faces keep stable IDs, original artwork and descriptions; dark and premium are explicit (85.874519ms)
+✔ card library filters and navigation remain read-only (1.723959ms)
+✔ lounge portraits escape names, retain vacant seats and never substitute another owned monster (0.364358ms)
+✔ production game view renders redesigned hand, full details and premium special (20.334858ms)
+✔ crystals support gain, conserved theft, double, half, total loss and caps (3.74777ms)
+✔ shrines add to event balance, cannot repeat and cannot restore previously lost earnings (0.691148ms)
+✔ legacy ongoing balances migrate once without adding earned crystals twice (0.462695ms)
+✔ small and maximum permitted entry fees use safe integer arithmetic (1.982699ms)
+✔ 12 crystal spaces and every self-harming space have appropriate danger classification (0.429685ms)
+✔ theft chooses only opponents with match earnings and can be defended or reflected (4.332659ms)
+✔ empty theft finishes without an invalid target prompt; total-loss defense works (0.443887ms)
+✔ landing on a crystal space triggers once per player, not once for the whole room (0.978049ms)
+✔ server result, wallet settlement and reconnect replay agree; modified amounts are rejected (1.209687ms)
+✔ legacy Build474/476 receipts remain payable, including refunds, ties and failed-save rollback (0.678409ms)
+✔ practice gems are simulated and never generate wallet deliveries (0.590127ms)
+✔ all 132 faces put the small title above rank and artwork without changing card rules (1.807696ms)
+✔ dice form one centered action and the hand toolbar has only auto sort (20.759435ms)
+✔ defense and discard dialogs render cards fully and keep confirmation outside the scroll area (6.614897ms)
+✔ full seeded matches finish, keep crystals bounded and private hands private (295.900749ms)
+✔ long press moves the real card, saves grouped UIDs in order and suppresses the release click (1.639764ms)
+✔ a swipe scrolls without sorting, tap opens normally, and canceled drag restores order (0.535815ms)
+✔ cleanup during a held gesture removes listeners and prevents orphan timers (0.243476ms)
+✔ manual order survives reload and incorporates newly drawn or removed cards (0.488434ms)
+✔ a retried server theft request cannot transfer crystals twice, including after reload (1.640755ms)
+✔ restarting free practice cannot create a paid match without collecting entry fees (0.767403ms)
+ℹ tests 32
+ℹ suites 0
+ℹ pass 32
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 469.173196
