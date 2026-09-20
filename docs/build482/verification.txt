@@ -1,0 +1,57 @@
+✔ crystals support gain, conserved theft, double, half, total loss and caps (6.856178ms)
+✔ shrines add to event balance, cannot repeat and cannot restore previously lost earnings (1.43897ms)
+✔ legacy ongoing balances migrate once without adding earned crystals twice (1.430814ms)
+✔ small and maximum permitted entry fees use safe integer arithmetic (11.683357ms)
+✔ 12 crystal spaces and every self-harming space have appropriate danger classification (1.755648ms)
+✔ theft chooses only opponents with match earnings and can be defended or reflected (12.089683ms)
+✔ empty theft finishes without an invalid target prompt; total-loss defense works (0.767869ms)
+✔ landing on a crystal space triggers once per player, not once for the whole room (1.657382ms)
+✔ server result, wallet settlement and reconnect replay agree; modified amounts are rejected (3.040386ms)
+✔ legacy Build474/476 receipts remain payable, including refunds, ties and failed-save rollback (0.972738ms)
+✔ practice gems are simulated and never generate wallet deliveries (0.69763ms)
+✔ all 132 faces put the small title above rank and artwork without changing card rules (4.36491ms)
+✔ dice form one centered action and the hand toolbar has only auto sort (65.233615ms)
+✔ defense and discard dialogs render cards fully and keep confirmation outside the scroll area (23.227818ms)
+✔ full seeded matches finish, keep crystals bounded and private hands private (767.490169ms)
+✔ long press moves the real card, saves grouped UIDs in order and suppresses the release click (3.429154ms)
+✔ a swipe scrolls without sorting, tap opens normally, and canceled drag restores order (0.759148ms)
+✔ cleanup during a held gesture removes listeners and prevents orphan timers (0.412134ms)
+✔ manual order survives reload and incorporates newly drawn or removed cards (0.326337ms)
+✔ a retried server theft request cannot transfer crystals twice, including after reload (4.472547ms)
+✔ restarting free practice cannot create a paid match without collecting entry fees (2.85073ms)
+✔ table gems circulate with bounded supply, including repeated loss/double/theft (21.522379ms)
+✔ all four humans can finish positive while total new gems stays within 400 (5.043338ms)
+✔ AI holdings never inflate a solo payout beyond fee plus 20 percent; receipts apply once (5.910378ms)
+✔ detour bonus occurs immediately once, including when the roll skips all four spaces (7.370098ms)
+✔ paid solo pause survives reload, blocks AI, resumes and supports explicit zero-reward exit (4.774302ms)
+✔ multiplayer pause/quit cannot terminate others; autoplay and missing timer recovery work (2.899449ms)
+✔ an orphan ending phase resumes without skipping pending choices (1.52313ms)
+✔ complete 200 seeded matches preserve the pool and cap actual human payouts (2561.33985ms)
+✔ the replaced photo is the supplied river original (5.323669ms)
+✔ upward release casts once; short, canceled, unavailable and horizontal gestures do not (3.096854ms)
+✔ legality is rechecked at release and abandoned holds expire (0.587497ms)
+✔ the bonus is 20 percent at large fees, with no fixed per-player ceiling (0.505175ms)
+✔ an animation boundary keeps its next frame when dragging defers the DOM render (13.051161ms)
+✔ every presentation receives 1.5 times its Build480 reading budget (2.634142ms)
+✔ mixed human, AI, dark, defense and special events keep one clock and a full choice window (1.928403ms)
+✔ AI and player commands cannot overtake the extended special-card presentation (7.838938ms)
+✔ client rerenders retain elapsed time and finish at the authoritative duration, including replay (5.005347ms)
+✔ theft takes the full balance above the old holding limit without minting gems (11.24246ms)
+✔ full theft still supports acceptance, card defense and one-hop reflection (13.690974ms)
+✔ above-cap winnings settle once and actual new supply remains 20 percent (8.434469ms)
+✔ replayed acceptance never transfers twice and Build481 commands are rejected (8.287779ms)
+✔ single awakening defense uses the real card, preselects it, and waits for explicit confirmation (75.540135ms)
+✔ multiple defenses require a selection and block card buttons while sending or disconnected (1.842904ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3128.922986
+
+Changed JS syntax: PASS (14 files)
+Import-map aliases and offline asset references: PASS
+Defense UI: generated HTML / interaction-state assertions passed.
+Visual browser / physical Safari QA: NOT RUN.

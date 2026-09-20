@@ -8,7 +8,7 @@ export function settleCrystals474(c,g){if(!rewardMode474(g)||g.phase!=='result'|
 export function handleCrystal474(c,session,m){
  if(m.op==='sgAck474'){const pm=Object.values(c.data.parties462??{}).flatMap(p=>p.members).find(x=>x.playerId===session.playerId),balance=crystalBalance474(m.crystals474);if(pm&&balance!==null)pm.crystals474=balance;const a=c.data.accounts[session.playerId],ids=new Set((Array.isArray(m.ids)?m.ids:[]).filter(x=>typeof x==='string').slice(0,24));a.sgDeliveries474=(a.sgDeliveries474??[]).filter(e=>!ids.has(e.id));return true}
  if(m.op!=='sgEntry474')return false;
- if(Number(m.rulesVersion)<16||!validFee474(m.amount)||!/^sg463-\d+-[a-f0-9]{8}$/.test(m.gameId)||!/^[\w-]{8,100}$/.test(m.requestId))throw Error('参加情報を確認してください');
+ if(Number(m.rulesVersion)<17||!validFee474(m.amount)||!/^sg463-\d+-[a-f0-9]{8}$/.test(m.gameId)||!/^[\w-]{8,100}$/.test(m.requestId))throw Error('参加情報を確認してください');
  const a=c.data.accounts[session.playerId];a.sgDecisions474??={};const previous=a.sgDecisions474[m.requestId];if(previous){if(previous.gameId!==m.gameId||previous.amount!==m.amount)throw Error('参加番号が一致しません');return true}
  const g=Object.values(c.data.boardRooms463??{}).find(g=>g.id===m.gameId),p=Object.values(c.data.parties462??{}).find(p=>p.id===g?.partyId462),member=g?.members.find(m=>m.playerId===session.playerId),pm=p?.members.find(m=>m.playerId===session.playerId);
  const valid=g?.economy474?.fee===m.amount&&(g.economy474.epoch??0)===m.epoch&&g?.phase==='lobby'&&rewardMode474(g)&&member?.choice&&pm&&!pm.atHome&&!g.economy474.entries[session.playerId]&&!Object.values(c.data.boardRooms463??{}).some(x=>x!==g&&x.economy474?.entries?.[session.playerId]&&!x.economy474.settled)&&!(a.sgDeliveries474?.length)&&!c.isBusy(session);

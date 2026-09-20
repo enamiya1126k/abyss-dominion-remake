@@ -1,0 +1,51 @@
+✔ crystals support gain, conserved theft, double, half, total loss and caps (6.727009ms)
+✔ shrines add to event balance, cannot repeat and cannot restore previously lost earnings (2.057035ms)
+✔ legacy ongoing balances migrate once without adding earned crystals twice (1.849419ms)
+✔ small and maximum permitted entry fees use safe integer arithmetic (9.734052ms)
+✔ 12 crystal spaces and every self-harming space have appropriate danger classification (0.982895ms)
+✔ theft chooses only opponents with match earnings and can be defended or reflected (13.986056ms)
+✔ empty theft finishes without an invalid target prompt; total-loss defense works (0.725419ms)
+✔ landing on a crystal space triggers once per player, not once for the whole room (1.94384ms)
+✔ server result, wallet settlement and reconnect replay agree; modified amounts are rejected (3.092339ms)
+✔ legacy Build474/476 receipts remain payable, including refunds, ties and failed-save rollback (1.364385ms)
+✔ practice gems are simulated and never generate wallet deliveries (0.880759ms)
+✔ all 132 faces put the small title above rank and artwork without changing card rules (7.226976ms)
+✔ dice form one centered action and the hand toolbar has only auto sort (78.917343ms)
+✔ defense and discard dialogs render cards fully and keep confirmation outside the scroll area (20.710908ms)
+✔ full seeded matches finish, keep crystals bounded and private hands private (754.928528ms)
+✔ long press moves the real card, saves grouped UIDs in order and suppresses the release click (3.251799ms)
+✔ a swipe scrolls without sorting, tap opens normally, and canceled drag restores order (0.864991ms)
+✔ cleanup during a held gesture removes listeners and prevents orphan timers (0.408425ms)
+✔ manual order survives reload and incorporates newly drawn or removed cards (0.316445ms)
+✔ a retried server theft request cannot transfer crystals twice, including after reload (3.820909ms)
+✔ restarting free practice cannot create a paid match without collecting entry fees (2.130514ms)
+✔ table gems circulate with bounded supply, including repeated loss/double/theft (21.155553ms)
+✔ all four humans can finish positive while total new gems stays within 400 (3.908521ms)
+✔ AI holdings never inflate a solo payout beyond fee plus 20 percent; receipts apply once (4.911016ms)
+✔ detour bonus occurs immediately once, including when the roll skips all four spaces (8.914503ms)
+✔ paid solo pause survives reload, blocks AI, resumes and supports explicit zero-reward exit (5.761832ms)
+✔ multiplayer pause/quit cannot terminate others; autoplay and missing timer recovery work (3.879621ms)
+✔ an orphan ending phase resumes without skipping pending choices (2.039914ms)
+✔ complete 200 seeded matches preserve the pool and cap actual human payouts (2404.228065ms)
+✔ the replaced photo is the supplied river original (4.3853ms)
+✔ upward release casts once; short, canceled, unavailable and horizontal gestures do not (3.598494ms)
+✔ legality is rechecked at release and abandoned holds expire (0.536399ms)
+✔ the bonus is 20 percent at large fees, with no fixed per-player ceiling (0.607572ms)
+✔ an animation boundary keeps its next frame when dragging defers the DOM render (17.660746ms)
+✔ every presentation receives 1.5 times its Build480 reading budget (1.966969ms)
+✔ mixed human, AI, dark, defense and special events keep one clock and a full choice window (2.186793ms)
+✔ AI and player commands cannot overtake the extended special-card presentation (11.374218ms)
+✔ client rerenders retain elapsed time and finish at the authoritative duration, including replay (5.449378ms)
+ℹ tests 38
+ℹ suites 0
+ℹ pass 38
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2878.021852
+
+JS syntax checks: PASS
+Import-map aliases and offline asset references: PASS
+CSS: portrait grid overrides the legacy short-stage two-column template.
+Visual browser / physical Safari QA: NOT RUN.

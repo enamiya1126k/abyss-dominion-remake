@@ -54,7 +54,7 @@ export class RaceClient451{
   const ack=[];this.rewardError='';
   for(const entry of message.deliveries??[])try{const result=applyRaceDelivery451(this.save,this.key(),entry);ack.push(entry.id);if(!result.duplicate&&entry.kind==='result')this.toast(`魔物レース：${entry.gold.toLocaleString()}G受取・出走魔物のEXPとなつき度アップ`)}catch(e){this.rewardError=e.message}
   const crystalAck474=[];for(const entry of message.crystalDeliveries474??[])try{const result=applyCrystalDelivery474(this.save,this.key(),entry);crystalAck474.push(entry.id);if(!result.duplicate&&entry.kind==='refund')this.toast(`カードすごろく：参加費💎${entry.crystals.toLocaleString()}を返金しました`)}catch(e){this.rewardError=e.message}
-  if(crystalAck474.length)this.raw('sgAck474',{ids:crystalAck474,rulesVersion:16});
+  if(crystalAck474.length)this.raw('sgAck474',{ids:crystalAck474,rulesVersion:17});
   // ACK only after the whole local state has successfully persisted.
   if(ack.length)this.raw('ack',{ids:ack});
   if(this.renderSignature452!==raceDomSignature452(this))this.render();

@@ -14,5 +14,7 @@ export function validReceipt480(e){
  const ints=['fee','prize','journey','crystals','raw480','stake480','pool480','humanCount480','humanRaw480','adjustment480'];if(ints.some(k=>!Number.isSafeInteger(e[k])||e[k]<0))return false;
  const fee=e.fee,h=e.humanCount480;if(h<1||h>4||!Number.isInteger(e.place)||e.place<1||e.place>4||!Number.isInteger(e.tied)||e.tied<1||e.place+e.tied>5)return false;
  const pool=e.pool480,slots=[Math.floor(pool*.5),Math.floor(pool*.3),Math.floor(pool*.15)];slots.push(pool-slots.reduce((a,b)=>a+b,0));const prize=Math.floor(slots.slice(e.place-1,e.place-1+e.tied).reduce((a,b)=>a+b,0)/e.tied);
- return pool<=Math.floor(fee/5)*4&&e.stake480<=Math.floor(fee/5)&&e.journey+e.stake480<=fee*4&&e.prize===prize&&e.raw480===e.prize+e.journey&&e.humanRaw480>=e.raw480&&e.humanRaw480<=fee*4+bonus480(fee,4)&&e.crystals===scale480(e.raw480,fee*h+bonus480(fee,h),e.humanRaw480)&&e.adjustment480===e.raw480-e.crystals;
+ // Theft can concentrate the entire conserved table pool in one player's hand.
+ const tableTotal=fee*4+bonus480(fee,4);
+ return pool<=Math.floor(fee/5)*4&&e.stake480<=Math.floor(fee/5)&&e.journey+e.stake480<=tableTotal&&e.prize===prize&&e.raw480===e.prize+e.journey&&e.humanRaw480>=e.raw480&&e.humanRaw480<=tableTotal&&e.crystals===scale480(e.raw480,fee*h+bonus480(fee,h),e.humanRaw480)&&e.adjustment480===e.raw480-e.crystals;
 }

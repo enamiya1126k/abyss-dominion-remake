@@ -1,9 +1,12 @@
 // Shared event pacing; the client never advances gameplay before the server permits it.
-export function duration465(e){
+export const PRESENTATION_SCALE481=1.5;
+export function duration465(e){return Math.round(baseDuration465(e)*PRESENTATION_SCALE481);}
+function baseDuration465(e){
  if(e.kind==='crystal477')return 1800;
  if(e.kind==='arrival472')return 1400;
  if(e.kind==='specialDraw470')return 3400;
  if(e.kind==='awaken')return 2200;
+ if(e.kind==='series468')return 2200;
  if(e.kind==='defense469')return 1700;
  if(e.kind==='draw')return e.readable470===false?1650:3400;
  if(e.kind==='card')return e.activation466==='instant'?1600:1400;
