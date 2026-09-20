@@ -1,3 +1,4 @@
+import{grant480,fee480}from'./Economy480.js';
 import{initCrystals477,applyCrystal477}from'./CrystalRules477.js';
 import{checkpoint474,finishRewards474}from'./Rewards474.js';
 import{RULES469,cardValue469}from'./Rules469.js';
@@ -31,17 +32,17 @@ function ownCards(g,p){return p.hand.map(uid=>({uid,c:definition463(g,uid)}))}
 function leading(g,exclude){return active(g).filter(p=>p.playerId!==exclude).sort((a,b)=>distance463(a.pos)-distance463(b.pos)||a.seat-b.seat)[0]}
 function hostileTarget(g,e){return typeof e.target==='string'&&player463(g,e.target)&&e.actor!==e.target&&e.harmful}
 function multiplier(p,e){return p.special==='greed'&&!e.cost&&!e.noGreed&&['draw','discard','steal'].includes(e.type)?2:1}
-export function makeLobby463({id,code,partyId,hostId,members,now=0,seed=1}){return{id,code,game:'sugoroku',partyId462:partyId,hostId,rulesVersion:15,rules469:RULES469.id,phase:'lobby',createdAt:now,updatedAt:now,seed:seed||1,members:members.map(m=>({...m,choice:null,ai:false})),players:[],revision:0,seen:{},log:[],eventId:0,effectId:0,choiceId:0,deadline:0}}
+export function makeLobby463({id,code,partyId,hostId,members,now=0,seed=1}){return{id,code,game:'sugoroku',partyId462:partyId,hostId,rulesVersion:16,rules469:RULES469.id,phase:'lobby',createdAt:now,updatedAt:now,seed:seed||1,members:members.map(m=>({...m,choice:null,ai:false})),players:[],revision:0,seen:{},log:[],eventId:0,effectId:0,choiceId:0,deadline:0}}
 export function start463(g,now=0){
  if(g.phase!=='lobby')fail('すでに開始しています');
- g.rules469=RULES469.id;g.rulesVersion=15;g.presentation464=[];g.presentationSequence464=0;g.cards={};g.deck=[];g.discard=[];g.specialDeck=shuffle463(g,SPECIALS463.map(s=>s.id));g.specialDiscard=[];g.queue=[];g.pending=null;g.turnNumber=1;g.turn=0;g.extraChain=0;g.finishOrder=[];g.blocked={};g.step='draw';g.usedSet={};g.startedAt=now;
+ g.rules469=RULES469.id;g.rulesVersion=16;g.presentation464=[];g.presentationSequence464=0;g.cards={};g.deck=[];g.discard=[];g.specialDeck=shuffle463(g,SPECIALS463.map(s=>s.id));g.specialDiscard=[];g.queue=[];g.pending=null;g.turnNumber=1;g.turn=0;g.extraChain=0;g.finishOrder=[];g.blocked={};g.step='draw';g.usedSet={};g.startedAt=now;
  let serial=0;for(const c of CARDS463)for(let i=0;i<c.copies;i++){const uid='c'+(++serial);g.cards[uid]=c.id;g.deck.push(uid)}shuffle463(g,g.deck);
  g.players=g.members.map((m,i)=>({playerId:m.playerId,name:m.name,seat:i,ai:!!m.ai,choice:m.choice,hand:[],special:null,pos:'0',trail:['0'],skip:0,turns:0,mods:{bonus:0,dice:2},finished:null,ward:null}));
  const aiNames=['旅するスライム','火花のスライム','月影の狼','いたずら悪魔'];const aiSpecies=['slime','ember_slime','wolf','goblin'];
  while(g.players.length<4){const i=g.players.length;g.players.push({playerId:`AI-${g.id}-${i}`,name:aiNames[i],seat:i,ai:true,choice:{id:'ai-'+i,speciesId:aiSpecies[i]},hand:[],special:null,pos:'0',trail:['0'],skip:0,turns:0,mods:{bonus:0,dice:2},finished:null,ward:null})}
  // Draw from the shuffled non-instant portion without revealing or discarding the excluded cards.
  for(const p of g.players)for(let i=0;i<3;i++){const at=g.deck.findIndex(uid=>i===0?!!definition463(g,uid).set:!isInstant463(definition463(g,uid)));p.hand.push(g.deck.splice(at,1)[0])}shuffle463(g,g.deck);
- initCrystals477(g);g.phase='playing';g.updatedAt=now;g.deadline=now+75000;g.nextAutoAt=now+1400;log463(g,'先着ゴールで優勝！ 手札3枚（絵柄1枚入り）でスタート！');log463(g,`${current463(g).name}の手番`);
+ g.crystalRules480??=1;initCrystals477(g);g.phase='playing';g.updatedAt=now;g.deadline=now+75000;g.nextAutoAt=now+1400;log463(g,'先着ゴールで優勝！ 手札3枚（絵柄1枚入り）でスタート！');log463(g,`${current463(g).name}の手番`);
 }
 function drop(g,p,uids,{silent=false}={}){const actual=[];for(const uid of uids){const i=p.hand.indexOf(uid);if(i<0)continue;p.hand.splice(i,1);g.discard.push(uid);actual.push(uid);if(p.ward===uid)p.ward=null}
  if(actual.length&&!silent)log463(g,`${p.name}は手札を${actual.length}枚捨てた`);
@@ -155,7 +156,7 @@ export function settle463(g){let safety=0;while(g.queue.length&&!g.pending&&g.ph
 function resolveChoice(g,p,value){const q=g.pending;if(!q||q.playerId!==p.playerId)fail('今はあなたの選択ではありません');if(Array.isArray(value)){if(q.kind!=='discard'||value.length!==Math.min(q.data.remaining,p.hand.length)||new Set(value).size!==value.length||!value.every(v=>typeof v==='string'&&q.options.some(o=>o.value===v)&&p.hand.includes(v)))fail('必要な枚数の手札を選んでください')}else if(!q.options.some(o=>o.value===value))fail('選択肢を選んでください');g.pending=null;const d=q.data,e=d.effect;
  switch(q.kind){
  case'target':add(g,[{...e,target:value}],true);break;
- case'fork':add(g,[{...e,target:p.playerId,path:value}],true);break;
+ case'fork':{const root=NODES463[p.pos];p.detours480??=[];if(g.crystalRules480&&value===root.next[1]&&!p.detours480.includes(root.id)){p.detours480.push(root.id);const n=grant480(g,p,Math.max(1,Math.floor(fee480(g)/5)));if(n)present464(g,'crystal474',{actorId:p.playerId,n,tile:root.id,total474:p.crystals474});log463(g,`${p.name}が寄り道の宝箱：安全に2枚・未所持の絵柄1種・💎${n}`);const bonus=meta(g,p.playerId,null,'detour');add(g,[{...bonus,type:'draw',target:p.playerId,n:2,mode:'safe',noGreed:true},{...bonus,type:'piece',target:p.playerId},{...e,target:p.playerId,path:value}],true);}else add(g,[{...e,target:p.playerId,path:value}],true);break;}
  case'special':{const unused=value===d.old?d.next:d.old;if(unused)g.specialDiscard.push(unused);p.special=value;p.ward=null;if(value!==d.old)awaken466(g,p);log463(g,`${p.name}は「${special(p).name}」を選んだ`);break}
  case'discard':{const picked=Array.isArray(value)?value:[value];drop(g,p,picked);if(d.remaining>picked.length&&p.hand.length)ask(g,p.playerId,'discard',`あと${d.remaining-picked.length}枚捨てる`,p.hand.map(uid=>({value:uid,label:definition463(g,uid).name,cardId:g.cards[uid]})),{...d,remaining:d.remaining-picked.length});break}
  case'recover':{const i=g.discard.indexOf(value);if(i<0)fail('そのカードはもう捨て札にありません');g.discard.splice(i,1);receiveCard(g,p,value,'hold');if(d.remaining>1&&g.discard.length)ask(g,p.playerId,'recover',`あと${d.remaining-1}枚回収`,g.discard.map(uid=>({value:uid,label:definition463(g,uid).name,cardId:g.cards[uid]})),{remaining:d.remaining-1});break}
@@ -185,7 +186,7 @@ export function specialPlayable464(g,p){
 }
 export function automaticAction464(g){
  const p=current463(g);
- if(g.phase!=='playing'||!p||p.finished||g.pending||g.queue?.length)return null;
+ if(g.phase!=='playing'||g.paused480||!p||p.finished||g.pending||g.queue?.length)return null;
  if(g.step==='draw'&&p.skip>0)return {kind:'draw'};
  if(g.step==='pre'&&!p.ai&&!p.mods.noRoll)return null;
  // Preserve every optional card and special ability; skip only empty decision phases.
@@ -202,7 +203,7 @@ function useSpecial(g,p,payload){
 }
 export function action463(g,playerId,m,now=0){
  if(g.phase!=='playing')fail('ゲームは進行中ではありません');const p=player463(g,playerId);if(!p||p.finished)fail('観戦中は操作できません');g.updatedAt=now;initCrystals477(g);
- if(m.kind==='choice'){resolveChoice(g,p,Array.isArray(m.values)?m.values:String(m.value));settle463(g);return}
+ if(g.paused480)fail('中断中です。再開してください');if(m.kind==='choice'){resolveChoice(g,p,Array.isArray(m.values)?m.values:String(m.value));settle463(g);return}
  if(g.pending)fail('選択が終わるまでお待ちください');if(current463(g)!==p)fail('あなたの手番ではありません');
  if(m.kind==='draw'){
   if(g.step!=='draw')fail('この手番のカードは引いています');p.turns++;p.mods={bonus:0,dice:2};p.grudgeUsed=false;p.specialUsed=false;p.cardsUsed469=0;p.playedTurn={};
@@ -222,8 +223,8 @@ export function action463(g,playerId,m,now=0){
  else if(m.kind==='special')useSpecial(g,p,m);else fail('未対応の操作です');settle463(g);
 }
 export function public463(g,id){
- const me=player463(g,id),q=g.pending;const pending=q?{context464:q.data?.effect?{actorId:q.data.effect.actor,targetId:q.data.effect.target,cardId:q.data.effect.cardId??null,tile:q.data.effect.tile??null}:null,id:q.id,playerId:q.playerId,kind:q.kind,prompt:q.prompt,...(q.kind==='fork'?{fork472:{nodeId:player463(g,q.playerId).pos,remaining:q.data.effect.n,visitedGateIds:[...(player463(g,q.playerId).visited469??[])]}}:{}),...(q.kind==='discard'&&q.playerId===id?{required467:Math.min(q.data.remaining,me.hand.length)}:{}),...(q.kind==='steal'?{remaining466:q.data.remaining,total466:q.data.total466,targetId466:q.data.target}:{}),...(q.playerId===id?{options:q.options}:{} )}:null;
- return{crystalRules477:g.crystalRules477??0,economy474:g.economy474?{mode:g.economy474.mode,fee:g.economy474.fee,epoch:g.economy474.epoch??0,entries:Object.keys(g.economy474.entries??{}),settled:!!g.economy474.settled}:null,id:g.id,code:g.code,phase:g.phase,game:g.game,revision:g.revision,hostId:g.hostId,members:g.members.map(m=>({playerId:m.playerId,name:m.name,choice:m.choice,ai:!!m.ai})),players:(g.players??[]).map(p=>({playerId:p.playerId,name:p.name,seat:p.seat,ai:p.ai,choice:p.choice,pos:p.pos,skip:p.skip,special:p.special,handCount:p.hand.length,crystals474:p.crystals474??0,finished:p.finished,turns:p.turns,wardReady:!!p.ward})),hand:me?.hand.map(uid=>({uid,cardId:g.cards[uid],ward:uid===me.ward,playable:playable463(g,me,uid)}))??[],deckCount:g.deck?.length??0,discardCount:g.discard?.length??0,discardCards:(g.discard??[]).map(uid=>g.cards[uid]),step:g.step,turnNumber:g.turnNumber,turnPlayerId:current463(g)?.playerId,pending,deadline:g.deadline,lastRoll:g.lastRoll??null,presentation464:(g.presentation464??[]).map(e=>projectEvent466(e,id)),presentationSequence464:g.presentationSequence464??0,autoAdvance464:automaticAction464(g)?.kind??null,autoAt464:g.nextAutoAt,presentationUntil465:g.presentationUntil465??0,ownSpecialPlayable464:!!me&&specialPlayable464(g,me),log:g.log.slice(-24),results:g.results??null,ownScore:me?(me.finished??score463(g,me)):null,ownMods:me?.mods??null,ownSpecialUsed:me?.specialUsed??false,ownCardsUsed469:me?.cardsUsed469??0,rules469:RULES469,extraChain:g.extraChain??0};
+ const me=player463(g,id),q=g.pending;const pending=q?{context464:q.data?.effect?{actorId:q.data.effect.actor,targetId:q.data.effect.target,cardId:q.data.effect.cardId??null,tile:q.data.effect.tile??null}:null,id:q.id,playerId:q.playerId,kind:q.kind,prompt:q.prompt,...(q.kind==='fork'?{fork472:{bonus480:!!g.crystalRules480,nodeId:player463(g,q.playerId).pos,remaining:q.data.effect.n,visitedGateIds:[...(player463(g,q.playerId).visited469??[])],claimedDetours480:[...(player463(g,q.playerId).detours480??[])]}}:{}),...(q.kind==='discard'&&q.playerId===id?{required467:Math.min(q.data.remaining,me.hand.length)}:{}),...(q.kind==='steal'?{remaining466:q.data.remaining,total466:q.data.total466,targetId466:q.data.target}:{}),...(q.playerId===id?{options:q.options}:{} )}:null;
+ return{crystalRules480:g.crystalRules480??0,crystalReserve480:g.crystalReserve480??0,paused480:!!g.paused480,crystalRules477:g.crystalRules477??0,economy474:g.economy474?{mode:g.economy474.mode,fee:g.economy474.fee,epoch:g.economy474.epoch??0,entries:Object.keys(g.economy474.entries??{}),settled:!!g.economy474.settled}:null,id:g.id,code:g.code,phase:g.phase,game:g.game,revision:g.revision,hostId:g.hostId,members:g.members.map(m=>({playerId:m.playerId,name:m.name,choice:m.choice,ai:!!m.ai})),players:(g.players??[]).map(p=>({playerId:p.playerId,name:p.name,seat:p.seat,ai:p.ai,auto480:!!p.auto480,choice:p.choice,pos:p.pos,skip:p.skip,special:p.special,handCount:p.hand.length,crystals474:p.crystals474??0,finished:p.finished,turns:p.turns,wardReady:!!p.ward})),hand:me?.hand.map(uid=>({uid,cardId:g.cards[uid],ward:uid===me.ward,playable:playable463(g,me,uid)}))??[],deckCount:g.deck?.length??0,discardCount:g.discard?.length??0,discardCards:(g.discard??[]).map(uid=>g.cards[uid]),step:g.step,turnNumber:g.turnNumber,turnPlayerId:current463(g)?.playerId,pending,deadline:g.deadline,lastRoll:g.lastRoll??null,presentation464:(g.presentation464??[]).map(e=>projectEvent466(e,id)),presentationSequence464:g.presentationSequence464??0,autoAdvance464:automaticAction464(g)?.kind??null,autoAt464:g.nextAutoAt,presentationUntil465:g.presentationUntil465??0,ownSpecialPlayable464:!!me&&specialPlayable464(g,me),log:g.log.slice(-24),results:g.results??null,ownScore:me?(me.finished??score463(g,me)):null,ownMods:me?.mods??null,ownSpecialUsed:me?.specialUsed??false,ownCardsUsed469:me?.cardsUsed469??0,rules469:RULES469,extraChain:g.extraChain??0};
 }
 export function botAction463(g,playerId){
  const p=player463(g,playerId),q=g.pending;if(!p||p.finished)return null;

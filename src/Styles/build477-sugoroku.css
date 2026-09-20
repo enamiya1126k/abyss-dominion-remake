@@ -107,3 +107,14 @@
 @media(min-width:900px){.sg-game .sg-hand,.sg-game.hand-open465 .sg-hand{height:212px;min-height:212px}.sg-game .sg-seat .sg-seat-gems477{font-size:8px}}
 @media(prefers-reduced-motion:reduce){.sg-game .sg-hand button.is-dragging477{transition:none!important}}
 @container(max-height:125px){.sg-game .sg-presentation464 .sg-caster465 .sg-event-pawn465>span{display:none}.sg-game .sg-presentation464 .sg-caster465{gap:3px}.sg-crystal-event477{gap:2px;padding:5px 12px}.sg-crystal-event477>b{font-size:12px}.sg-crystal-event477 strong{font-size:14px}.sg-crystal-event477>small:last-child{display:none}}
+
+/* Build479: the legacy reveal used flex; percentage card rows require grid. */
+.sg-game .sg-special-frame473 .sg-special-card470.sg-tcg476{display:grid!important;width:166px!important;height:auto!important;min-height:0!important;padding:7px!important;gap:0!important}
+.sg-special-choices479 .sg-special-origin479{display:block;font-size:10px;line-height:1.4;color:#e4d3a9;text-align:center;margin:0 0 9px}
+.sg-special-choices479 .sg-choice-card465.is-picked:before{top:12px}
+.sg-special-choices479 .sg-special-effect479{font-size:11px;line-height:1.7;font-weight:400;color:#e3d9e8;margin:10px 0 0;overflow-wrap:anywhere}
+/* Build480: lift the real card; horizontal dragging keeps its existing sorting. */
+.sg-game .sg-hand-section:has(.is-casting480){overflow:visible;z-index:45;position:relative}
+.sg-game .sg-hand.is-casting480{overflow:visible;position:relative;z-index:46}
+.sg-game .sg-hand.is-casting480:before{content:'↑ もう少し上へ';position:absolute;left:50%;bottom:calc(100% + 64px);transform:translateX(-50%);padding:9px 20px;border:1px solid #b7bcbb;border-radius:20px;background:#132632ee;color:#d9f3e6;font-size:13px;pointer-events:none;z-index:60;white-space:nowrap}
+.sg-game .sg-hand.is-cast-ready480:before{content:'離してカードを使う';border-color:#f6d691;background:#3e3449f2;color:#ffe3a5;box-shadow:0 0 22px #ffd58a44}

@@ -1,6 +1,6 @@
 // Original user photos are copied byte-for-byte. Cropping is display-only CSS.
 export const PHOTO_GROUPS468={yori:7,enami:7,rion:9,hide:20};
-export const photoUrl468=(group,index)=>`./assets/sugoroku468/photos/${group}-${String(index).padStart(2,'0')}.${group==='hide'&&index===18?'png':'jpeg'}`;
+export const photoUrl468=(group,index)=>group==='enami'&&index===2?'./assets/sugoroku480/enami-river.jpeg':`./assets/sugoroku468/photos/${group}-${String(index).padStart(2,'0')}.${group==='hide'&&index===18?'png':'jpeg'}`;
 export const SERIES_ART468={heroes:{name:'天空の盟約',group:'hide',index:10},dark:{name:'闇を持つひで',group:'hide',index:1}};
 const pieceStyle468=(set,part)=>{const scale=set==='dark'?1.4:1,x=set==='dark'?.2:0,y=set==='dark'?.4:0;return `width:${200*scale}%;height:${200*scale}%;left:${-200*x-(part%2)*100}%;top:${-200*y-Math.floor(part/2)*100}%`};
 const specialPhotos={'rob-special':['hide',19],sleep:['yori',3],principal:['yori',1],fist:['yori',6],dove:['yori',7],forest:['yori',4],mental:['enami',5],guard:['enami',3],cerberus:['rion',3],hide:['hide',2],destroyer:['hide',1],experiment:['hide',6],thunder:['hide',15],'hide-date':['hide',16],phoenix:['hide',17],reflect:['hide',18],cup:['hide',11],chance:['rion',9],fremens:['enami',2],poison:['hide',20],nothing:['hide',13]};

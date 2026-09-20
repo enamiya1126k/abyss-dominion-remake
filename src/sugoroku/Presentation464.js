@@ -86,6 +86,7 @@ export function presentationAfter464(c,art,token,focus){
   if(f.active?.event.kind==='move'){const a=f.active,e=a.event,path=e.path465?.length?e.path465:[e.from,e.to],index=Math.min(path.length-1,Math.floor((performance.now()-a.start)/a.duration*path.length));if(index!==a.lastStep){a.lastStep=index;if(index>0)hop471(c,f,e.actorId,a.duration/path.length,index);f.positions[e.actorId]=path[index];position464(c,f,e.actorId,path[index]);focus(path[index]);const counter=c.root.querySelector('[data-move-count465]');if(counter)counter.textContent=`${index} / ${path.length-1} マス`;}}
   c.root.querySelector('.sg-game')?.classList.toggle('is-presenting465',!!f.active);
   if(!f.active&&!f.queue.length){f.positions={};f.visual466=capture466(c.state.sugoroku);write464(c,f,art,token);for(const el of c.root.querySelectorAll('.sg-target464,.sg-attacker464,.sg-landed466,.is-moving471'))el.classList.remove('sg-target464','sg-attacker464','sg-landed466','is-moving471');f.raf=null;const finished=f.justFinished;f.justFinished=false;if(finished)c.render();return}
-  if(boundary){c.render();return}f.raf=requestAnimationFrame(frame);
+  // Keep ticking if the DOM render is deferred by a hand/map gesture.
+  f.raf=requestAnimationFrame(frame);if(boundary)c.render();
  };frame();
 }
