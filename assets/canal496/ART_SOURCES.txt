@@ -1,0 +1,7 @@
+Build496 generated background
+File: shared-pond.png
+Method: built-in image_gen tool, generated from canal494/waterway.png as a style reference.
+Original generated output: exec-0bf8623b-9459-4bcb-bd6b-b40896edb7b1.png
+Purpose: production playfield background. This is not a game screenshot.
+Prompt:
+Use case: stylized-concept. Asset: portrait 1024x1536 background for an actual cooperative touch defense minigame, NOT a screenshot. Image 1 is a visual style reference (turquoise Japanese rural irrigation pond, charming polished miniature 3D game art, stone banks, hydrangeas and rice fields). Create a new wider shared pond composition matching that style. Nearly top-down perspective, water should span from 12% to 88% of width and 10% to 72% of height, broad uncluttered calm turquoise center for moving sprites. Four small water inlets along the very top edge. One small orange-roof Japanese house centered at x50%,y86%, on a small connected island. Four EMPTY small wooden fishing platforms around the house centered approximately at x15%,y76%; x85%,y76%; x18%,y93%; x82%,y93%, clear places for four runtime characters. House top edge below y78%. Narrow detailed rural banks only at far sides. Warm sunlight, fine illustrative textures, vivid readable blue water, high quality crafted 3D game background. No enemies, no animals, no characters, no nets, no words, no numbers, no UI, no frame, no watermark. Maintain empty generous play space.

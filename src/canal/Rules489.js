@@ -1,3 +1,4 @@
+import{start496,sweep496,input496,advance496,public496}from'./Rules496.js';
 import{start494,sweep494,input494,advance494,public494}from'./Rules494.js';
 import{start492,input492,sweep492,advance492,public492}from'./Rules492.js';
 // Server-authoritative, fixed-step cooperative defense. No currency or main-game stats.
@@ -15,7 +16,7 @@ export const enemyProgress489=(e,at)=>clamp((at-e.spawnAt)/e.travelMs,0,1);
 export function gates489(elapsed){if(elapsed>=50000)return[0,1,2,3];const n=Math.floor(Math.max(0,elapsed)/10000)%4;return[n,(n+1)%4]}
 function rand(g){let x=g.rng|0;x^=x<<13;x^=x>>>17;x^=x<<5;g.rng=x>>>0;return g.rng/4294967296}
 export function makeCanal489({id,code,partyId,hostId,members,now,seed=1}){return{id,code,partyId462:partyId,hostId,game:'canal',version489:1,phase:'lobby',createdAt:now,updatedAt:now,revision:0,members:members.map(m=>({...m})),rng:seed>>>0||1,players:[],enemies:[],events:[],eventSerial:0,enemySerial:0,hp:100,captured:0,breaches:0,points:0}}
-export function startCanal489(g,now){if(g.rules494===1)return start494(g,now);if(g.rules492===1)return start492(g,now);
+export function startCanal489(g,now){if(g.rules496===1)return start496(g,now);if(g.rules494===1)return start494(g,now);if(g.rules492===1)return start492(g,now);
  if(g.phase!=='lobby')return false;
  if(!g.members.length||g.members.length>4||g.members.some(m=>!m.choice))throw Error('全員の魔物を選んでください');
  g.players=g.members.map((m,seat)=>({playerId:m.playerId,name:m.name,choice:{...m.choice},seat,ai:false}));
@@ -27,7 +28,7 @@ export function startCanal489(g,now){if(g.rules494===1)return start494(g,now);if
 function event(g,kind,at,extra={}){g.events.push({id:++g.eventSerial,kind,at,...extra});if(g.events.length>48)g.events.splice(0,g.events.length-48)}
 function spawn(g,at,lane){if(g.enemies.length>=CANAL489.maxEnemies)return;const r=rand(g),kind=r<.44?0:r<.71?1:r<.95?2:3,s=SPECIES489[kind];g.enemies.push({id:++g.enemySerial,kind,lane,hp:s.hp,maxHp:s.hp,spawnAt:at,travelMs:s.travelMs*(.92+rand(g)*.16)*(at-g.startAt>=50000?.55:1),wiggle:rand(g)});}
 function hit(g,p,e,damage,at){e.hp-=damage;if(e.hp>0)return;const s=SPECIES489[e.kind];g.enemies=g.enemies.filter(x=>x.id!==e.id);g.captured++;g.points+=s.points;p.captured++;p.points+=s.points;if(e.lane!==p.seat)p.assists++;event(g,'catch',at,{enemyId:e.id,kindIndex:e.kind,lane:e.lane,progress:enemyProgress489(e,at),seat:p.seat,assist:e.lane!==p.seat});}
-export function sweep489(g,p,lane,at,burst=false){if(g.rules494===1)return sweep494(g,p,lane,at,burst);if(g.rules492===1)return sweep492(g,p,lane,at,burst);
+export function sweep489(g,p,lane,at,burst=false){if(g.rules496===1)return sweep496(g,p,lane,at,burst);if(g.rules494===1)return sweep494(g,p,lane,at,burst);if(g.rules492===1)return sweep492(g,p,lane,at,burst);
  if(g.phase!=='playing'||at<g.startAt||at>=g.endAt||!lanes489(p.seat).includes(lane))return false;
  if(burst?at<p.burstAt:at<p.nextFireAt)return false;
  const targets=g.enemies.filter(e=>e.lane===lane&&enemyProgress489(e,at)>=.18).sort((a,b)=>enemyProgress489(b,at)-enemyProgress489(a,at)||a.id-b.id);
@@ -36,7 +37,7 @@ export function sweep489(g,p,lane,at,burst=false){if(g.rules494===1)return sweep
  for(const e of targets.slice(0,burst?12:1))hit(g,p,e,burst?3:1,at);
  return true;
 }
-export function inputCanal489(g,p,input,receivedAt){if(g.rules494===1)return input494(g,p,input,receivedAt);if(g.rules492===1)return input492(g,p,input,receivedAt);
+export function inputCanal489(g,p,input,receivedAt){if(g.rules496===1)return input496(g,p,input,receivedAt);if(g.rules494===1)return input494(g,p,input,receivedAt);if(g.rules492===1)return input492(g,p,input,receivedAt);
  if(!p||p.ai||!['countdown','playing'].includes(g.phase)||!Number.isSafeInteger(input.seq)||input.seq<=p.lastSeq||input.seq>CANAL489.maxSequence)return false;
  if(!Number.isInteger(input.lane)||!lanes489(p.seat).includes(input.lane)||typeof input.held!=='boolean'||typeof input.pulse!=='boolean'||typeof input.burst!=='boolean')return false;
  p.lastSeq=input.seq;p.lane=input.lane;p.held=input.held;p.holdUntil=receivedAt+CANAL489.leaseMs;
@@ -46,7 +47,7 @@ export function inputCanal489(g,p,input,receivedAt){if(g.rules494===1)return inp
  return true;
 }
 function finish(g,at){g.phase='result';g.finishedAt=at;g.success=g.hp>0;g.grade=!g.success?'再出動':g.hp>=75?'S':g.hp>=50?'A':'B';for(const p of g.players){p.held=false;p.holdUntil=0}event(g,'finish',at,{success:g.success});}
-export function advanceCanal489(g,now,connected=()=>true){if(g.rules494===1)return advance494(g,now,connected);if(g.rules492===1)return advance492(g,now,connected);
+export function advanceCanal489(g,now,connected=()=>true){if(g.rules496===1)return advance496(g,now,connected);if(g.rules494===1)return advance494(g,now,connected);if(g.rules492===1)return advance492(g,now,connected);
  if(!['countdown','playing'].includes(g.phase)||now<g.startAt)return;
  g.phase='playing';const until=Math.min(now,g.endAt);
  // At most 601 fixed steps even after a long disconnect/restart; no lost waves.
@@ -67,4 +68,4 @@ export function advanceCanal489(g,now,connected=()=>true){if(g.rules494===1)retu
   if(g.hp<=0)finish(g,at);
  }
 }
-export function publicCanal489(g,selfId,now,connected=()=>true){if(g.rules494===1)return public494(g,selfId,now,connected);if(g.rules492===1)return public492(g,selfId,now,connected);return{id:g.id,code:g.code,hostId:g.hostId,game:g.game,phase:g.phase,revision:g.revision,startAt:g.startAt,endAt:g.endAt,simAt:g.simAt,serverNow:now,hp:g.hp,captured:g.captured,breaches:g.breaches,points:g.points,success:g.success,grade:g.grade,finishedAt:g.finishedAt,members:g.members.map(m=>({playerId:m.playerId,name:m.name,choice:m.choice?{id:m.choice.id,speciesId:m.choice.speciesId}:null,departed:!!m.departed})),players:g.players.map(p=>({playerId:p.playerId,name:p.name,choice:{...p.choice},seat:p.seat,ai:p.ai,auto:p.auto,connected:p.ai||!!connected(p.playerId),lane:p.lane,held:p.held,burstAt:p.burstAt,captured:p.captured,assists:p.assists,points:p.points,bursts:p.bursts,lastAction:p.lastAction?{...p.lastAction}:null,...(p.playerId===selfId?{lastSeq:p.lastSeq}: {})})),enemies:g.enemies.map(e=>({...e})),events:g.events.filter(e=>now-e.at<2500).map(e=>({...e}))}}
+export function publicCanal489(g,selfId,now,connected=()=>true){if(g.rules496===1)return public496(g,selfId,now,connected);if(g.rules494===1)return public494(g,selfId,now,connected);if(g.rules492===1)return public492(g,selfId,now,connected);return{id:g.id,code:g.code,hostId:g.hostId,game:g.game,phase:g.phase,revision:g.revision,startAt:g.startAt,endAt:g.endAt,simAt:g.simAt,serverNow:now,hp:g.hp,captured:g.captured,breaches:g.breaches,points:g.points,success:g.success,grade:g.grade,finishedAt:g.finishedAt,members:g.members.map(m=>({playerId:m.playerId,name:m.name,choice:m.choice?{id:m.choice.id,speciesId:m.choice.speciesId}:null,departed:!!m.departed})),players:g.players.map(p=>({playerId:p.playerId,name:p.name,choice:{...p.choice},seat:p.seat,ai:p.ai,auto:p.auto,connected:p.ai||!!connected(p.playerId),lane:p.lane,held:p.held,burstAt:p.burstAt,captured:p.captured,assists:p.assists,points:p.points,bursts:p.bursts,lastAction:p.lastAction?{...p.lastAction}:null,...(p.playerId===selfId?{lastSeq:p.lastSeq}: {})})),enemies:g.enemies.map(e=>({...e})),events:g.events.filter(e=>now-e.at<2500).map(e=>({...e}))}}

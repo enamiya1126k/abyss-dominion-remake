@@ -1,0 +1,9 @@
+Build497 generated effects atlas
+File: net-effects.png
+Method: built-in image_gen tool. New transparent RGBA atlas, four cells.
+Original output: exec-41464088-0be5-410c-ba6b-cfe111ab2fd3.png
+Purpose: production cast-net and water effects; not a gameplay screenshot.
+Cell order: folded flying net, spread net, cinched catch bag, water splash.
+
+Prompt:
+Use case: stylized-concept. Asset type: transparent game VFX sprite atlas for a premium cozy Japanese canal defense game. Create one square 1024x1024 PNG with TRUE TRANSPARENT BACKGROUND, 2 by 2 equally sized cells; one isolated centered object per cell, no labels, no dividers. Match charming high quality 3D illustrated game assets, realistic warm ivory hemp rope and tiny brass fishing-net weights, cool turquoise water, sunlight from upper left. TOP LEFT: a compact hand-thrown round cast-net in flight, folded billowing linen mesh, small weighted rim, dynamic oblique three-quarter view, no long tether rope, no handle. TOP RIGHT: same cast-net fully spreading into a wide foreshortened oval bowl, ivory twisted thick perimeter rope, airy translucent woven diamond mesh, tiny brass weights regularly spaced, no pole or tether. BOTTOM LEFT: same net cinched into a rounded little catch bag with a short gathered knot, empty visible bag and detailed rope texture, no creatures, no long lines. BOTTOM RIGHT: an isolated elegant crown-shaped turquoise water impact splash with white foam and a few separated droplets, mostly transparent interior. All cells safely inset 14%, no cell overlaps. No continuous trails, no magical circles, no beams, no symbols, no text, no black or white backgrounds, no decorative backgrounds, no checkerboard. Strong readable silhouette at 64px display, richly modeled highlights and soft self-shadow, transparent pixels all around every sprite.
