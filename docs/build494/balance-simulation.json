@@ -1,0 +1,104 @@
+[
+  {
+    "mode": "idle",
+    "players": 1,
+    "wins": 0,
+    "total": 50,
+    "avgHp": 0,
+    "avgEnd": 33.6,
+    "sample": {
+      "hp": 0,
+      "win": false,
+      "caught": 37,
+      "you": 0,
+      "mega": 0,
+      "breaches": 7,
+      "ended": 37.6
+    }
+  },
+  {
+    "mode": "own",
+    "players": 1,
+    "wins": 0,
+    "total": 50,
+    "avgHp": 0,
+    "avgEnd": 45,
+    "sample": {
+      "hp": 0,
+      "win": false,
+      "caught": 62,
+      "you": 25,
+      "mega": 0,
+      "breaches": 6,
+      "ended": 43.3
+    }
+  },
+  {
+    "mode": "casual",
+    "players": 1,
+    "wins": 39,
+    "total": 50,
+    "avgHp": 35.6,
+    "avgEnd": 59,
+    "sample": {
+      "hp": 40,
+      "win": true,
+      "caught": 123,
+      "you": 78,
+      "mega": 4,
+      "breaches": 4,
+      "ended": 60
+    }
+  },
+  {
+    "mode": "active",
+    "players": 1,
+    "wins": 50,
+    "total": 50,
+    "avgHp": 80.8,
+    "avgEnd": 60,
+    "sample": {
+      "hp": 100,
+      "win": true,
+      "caught": 141,
+      "you": 108,
+      "mega": 5,
+      "breaches": 0,
+      "ended": 60
+    }
+  },
+  {
+    "mode": "active",
+    "players": 4,
+    "wins": 50,
+    "total": 50,
+    "avgHp": 100,
+    "avgEnd": 60,
+    "sample": {
+      "hp": 100,
+      "win": true,
+      "caught": 268,
+      "you": 78,
+      "mega": 10,
+      "breaches": 0,
+      "ended": 60
+    }
+  },
+  {
+    "mode": "auto",
+    "players": 1,
+    "wins": 15,
+    "total": 50,
+    "avgHp": 11.7,
+    "avgEnd": 56.9,
+    "sample": {
+      "hp": 29,
+      "win": true,
+      "caught": 123,
+      "you": 30,
+      "mega": 4,
+      "breaches": 5,
+      "ended": 60
+    }
+  }
+]
