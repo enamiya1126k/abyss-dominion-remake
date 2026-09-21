@@ -1,0 +1,46 @@
+{
+  "tool": "built-in image_gen",
+  "prompts": {
+    "stages": "Use case: precise-object-edit. Input image is the edit target and exact character reference. Create a production game sprite atlas, genuine transparent RGBA background, 2048x2048 square, exactly 2 columns by 2 rows of equally sized square cells. The SAME crowned gorilla from the reference is seated front-facing full body in each cell, gold crown emerald gem, brown fur, broad bare tan chest and belly, feet and hands entirely visible, same size, same alignment, same pose, hands resting at sides. Crown top at 2% and feet bottom at 97% of each cell. Match reference style, silhouette and warm detailed rendered material. Change ONLY facial expression and facial skin flushing through a gradual accumulated pain progression:\nTop left: completely neutral bored king, flat relaxed mouth CLOSED, half relaxed eyes, no smile, no tears, natural skin.\nTop right: tiny irritated eyebrow twitch, compressed closed lips, subtle strain, faint warm blush at cheeks, no tears.\nBottom left: visibly struggling, lips clamped, one tiny sweat bead, cheeks and nose getting red, brows pinching, mouth still CLOSED.\nBottom right: extremely red flushed face, tightly clenched teeth showing, glaring watery eyes but NO flying tears, vein-like angry crease on forehead, barely holding it together, cheeks puffing slightly. Still enduring; NOT screaming.\nKeep body/chest, crown, arms, legs, crop, lighting and camera IDENTICAL across frames. NO chest hairs (hair is dynamically rendered by the game), no tweezers, no background, no floor, no labels, no borders, no typography, no extra effects outside silhouette, no cropped crowns. High quality premium comical family party game. Actual alpha transparency, no checkerboard drawn into image.",
+    "tension": "Use case: precise-object-edit. Reference input1 original crowned gorilla character, input2 is existing gradual pain atlas used for matching. Make a companion production game sprite atlas on genuine transparent RGBA background. Square 2048x2048, EXACTLY 2 columns and 2 rows, 4 equally sized cells. The same full body front seated gold-crowned brown gorilla in each, bare chest and belly, hands resting beside belly. Same reference body, scale, crown, bounding box and warm rendered lighting. Crown and toes fully inside each cell. New additional pain expressions, in reading order:\n1 top left: nearly neutral, one eyebrow rising just a LITTLE, closed flat tense mouth, absolutely no smile, natural face skin, no tears.\n2 top right: pinched brows, squinting eyes and compressed CLOSED mouth, mild rosy cheeks, obvious restrained annoyance but no grin.\n3 bottom left: increasingly painful tight tooth-baring grimace, a SMALL clenched teeth strip, red cheeks and nose, brow creased, a single small sweat drop, forehead mostly natural brown.\n4 bottom right: the MOST extreme barely suppressed fury, ENTIRE exposed face deep crimson red including forehead and ears, veins at temple, very tightly clenched teeth, trembling watery glare, nostrils flared, shoulders tense. Still NOT screaming, mouth clenched closed; pressure-about-to-explode expression, a little steam at ears within cell bounds.\nDO NOT reuse giggling, smiling, tongue out, comedic flying tears, or randomly varying poses. Keep chest/abdomen and hands UNCHANGED in all 4. No hairs drawn on chest because game adds interactive hairs. NO background, NO checker pattern, NO text, NO panels/borders, NO flooring, no extra props. Keep alpha transparency. High quality detailed comical family party-game character.",
+    "rage": "Use case: precise-object-edit. Input1 exact crowned gorilla reference, input2 flushed pain atlas style reference. Create a transparent 2x2 animation sprite atlas of the climactic royal tantrum for the same comical party game. Four equal square cells, full body centered in each, seated/crouching crowned king, gold crown green emerald. Detailed stylized 3D furry brown gorilla. True RGBA transparent background. 2048x2048.\nTop left: the chilling beat right after the wrong hair: face FROZEN, wide small pupils locked at viewer, closed tight tiny mouth, head very slightly lowered, forearms tense at sides, red flushing cheeks, stunned silence.\nTop right: catastrophic red faced ROAR, ENTIRE face and ears deep red, huge open mouth, clenched fists raised high beside the head, intensely furrowed brows and comic forehead veins, crown tilted. Expression MUCH stronger than ordinary anger.\nBottom left: violent chest drumming frame A: left fist strikes chest, right fist drawn back high, furious OPEN roaring mouth, red face, muscles strained. Hands cover chest naturally, no extra arms.\nBottom right: alternating drumming frame B: right fist strikes chest, left fist raised, roaring furious red face, crown tilted opposite direction, as if shaking the entire palace.\nMatch body proportions/reference personality, no gore, no injury, family friendly comic catastrophe. All four complete silhouettes fit each cell, crown, fists and feet never cross cell boundaries. No motion blur, no background, no shadow floor, no text, no borders, no chest hair, no effects behind character (game renders shockwaves). Actual alpha transparency.",
+    "tension_layout_fix": "Use case: precise-object-edit. Edit target is this transparent gorilla sprite sheet. KEEP all four exact gorilla designs, facial expressions and poses. ONLY repair the SPRITE SHEET LAYOUT. The output must be a SQUARE transparent PNG, with 4 identical-sized square cells in EXACTLY 2 columns and 2 rows. Each character must have at least EIGHT PERCENT TRANSPARENT MARGIN on ALL four sides WITHIN ITS OWN CELL. Scale each character down enough to achieve that. The character's crown, fists, steam and toes must be COMPLETELY CONTAINED within its own cell. Absolutely NO part of the upper row (especially FEET AND TOES) can enter the lower two cells. The horizontal and vertical boundaries at exactly 50% of image dimensions must be a wide entirely transparent cross-shaped gutter. Four characters should have equal body scale, not touch each other, same baseline within each respective cell. Do NOT change the facial expressions, red skin progression, anatomy, colors, rendering style or poses. No new background, no labels, no borders, no text. Genuine alpha transparency. Production sprite atlas, 2x2 exact uniform cells with extra breathing room.",
+    "rage_layout_fix": "Use case: precise-object-edit. Edit target is this transparent gorilla sprite sheet. KEEP all four exact gorilla designs, facial expressions and poses. ONLY repair the SPRITE SHEET LAYOUT. The output must be a SQUARE transparent PNG, with 4 identical-sized square cells in EXACTLY 2 columns and 2 rows. Each character must have at least EIGHT PERCENT TRANSPARENT MARGIN on ALL four sides WITHIN ITS OWN CELL. Scale each character down enough to achieve that. The character's crown, fists, steam and toes must be COMPLETELY CONTAINED within its own cell. Absolutely NO part of the upper row (especially FEET AND TOES) can enter the lower two cells. The horizontal and vertical boundaries at exactly 50% of image dimensions must be a wide entirely transparent cross-shaped gutter. Four characters should have equal body scale, not touch each other, same baseline within each respective cell. Do NOT change the facial expressions, red skin progression, anatomy, colors, rendering style or poses. No new background, no labels, no borders, no text. Genuine alpha transparency. Production sprite atlas, 2x2 exact uniform cells with extra breathing room."
+  },
+  "assets": [
+    {
+      "name": "patience",
+      "path": "game/assets/gorilla504/patience.png",
+      "source": "generated_images/exec-3dec02c8-29d3-4cd7-8fd4-3e0a989d675d.png",
+      "sha256": "e5122945e050e29bff1b285a80a799485a5fde991ffab99cad62c3f368de4502",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "format": "RGBA PNG, alpha retained"
+    },
+    {
+      "name": "tension",
+      "path": "game/assets/gorilla504/tension.png",
+      "source": "generated_images/exec-ace9a3f8-f05d-4969-8d52-5e74e9ccc5ff.png",
+      "sha256": "c68baac03f5bea27b53b542f2f9d10a6ca03b9c217f3e4754961081a953cf322",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "format": "RGBA PNG, alpha retained"
+    },
+    {
+      "name": "rage",
+      "path": "game/assets/gorilla504/rage.png",
+      "source": "generated_images/exec-273f0689-fa79-4c43-b8ca-c848dffd98b8.png",
+      "sha256": "0d2e3e25c64feb9ce09a816adc10d92bad1cff131f063864a89d0b13d8352b08",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "format": "RGBA PNG, alpha retained"
+    }
+  ],
+  "notes": "Original tension/rage sheets were discarded for cross-frame bleed. Final sheets repacked via image_gen. Runtime source rectangles normalize transparent margins without modifying image bytes."
+}

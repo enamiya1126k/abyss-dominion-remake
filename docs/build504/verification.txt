@@ -1,0 +1,29 @@
+Build504 verification
+Base: Build503. v3.1.183. No deployment.
+
+88 automated tests passed. New tests cover:
+- Every initial trigger hair with both independent 50/50 outcomes.
+- Public state is identical until the reveal. Private crypto coin/target order stays private.
+- A mercy keeps the selected hair removed, preserves thinking time and cumulative cosmetic pain.
+- Repeated requests cannot change a coin or perform a pull during the suspense.
+- All 30 hairs safely removed terminates the match with an all-safe result.
+- Delayed ticks and persisted-state reconstruction remain deterministic.
+- Eight monotonic expression stages; each bumped hair adds exactly two cosmetic pain points.
+- Thirty 44px targets fit portrait widths 320/375/390/430 and 620px landscape with a 350px stage.
+- Current player colors and actor tags, including safe placement below the cue.
+- Suspense has no premature flight; only the out branch launches players.
+- Reduced motion removes flight and shake.
+- Real server coordinator capabilities, 4-client projection and all-safe result actions.
+- Existing 503 matches continue through their original rule engine.
+
+Existing 76 tests cover game state, timeouts, one/two/three-pull decisions, roster/color synchronization,
+disk restart, result replay/list navigation, cabbage scoring, canal rules and touch zoom guards.
+Missing base catalogs and MonsterVisual are in-memory fixtures only in tests, never production files.
+No browser was used after the prior automatic approval rejection. Actual iOS Safari and real
+4-device interaction have not been tested. Native Canvas renders were inspected for the production
+scene and 8 expression frames. Cross-frame sprite bleed was repaired with image_gen, then normalized
+using source rectangles in the runtime atlas renderer.
+
+Native design previews intentionally omit HTML sprites and controls. They are not browser screenshots.
+Built-in image_gen produced the 3 final transparent atlases; full prompts and hashes are recorded.
+Syntax, import-map aliases, stylesheet loading, versioned offline cache and ZIP extraction checked.

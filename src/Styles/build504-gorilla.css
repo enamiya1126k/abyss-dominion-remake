@@ -1,0 +1,13 @@
+/* Actor tags never intercept a hair tap; the creature is the player's real choice. */
+.gg-tool-tags504{position:absolute;inset:0;z-index:6;pointer-events:none}
+.gg-tool-tag504{position:absolute;width:76px;height:66px;transform:translate(-50%,-100%);display:grid;justify-items:center;align-content:end;gap:1px;pointer-events:none;filter:drop-shadow(0 3px 4px #28160899)}
+.gg-tool-tag504::before{content:"";position:absolute;bottom:14px;width:41px;height:10px;border:1px solid var(--player);border-radius:50%;background:var(--player);opacity:.45;box-shadow:0 0 12px var(--player)}
+.gg-tool-tag504 .sg-monster{display:block;position:relative;width:43px;height:43px;z-index:1}
+.gg-tool-tag504 .sg-monster-visual{width:100%;height:100%}
+.gg-tool-tag504 b{z-index:2;max-width:76px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:2px 6px;border:1px solid var(--player);border-radius:9px;font-size:9px;line-height:1.3;color:var(--player);background:#14271df2}
+.gg504[data-phase="blast"] .gg-cue503{border-color:#ecaa70;background:linear-gradient(110deg,#321810f5,#6b2819f5,#321810f5);box-shadow:0 3px 24px #ab421840}
+.gg504[data-phase="blast"] .gg-cue503 strong{color:#ffe6a3}
+.gg504 .gg-result-king502{background-image:url('../../assets/gorilla504/patience.png');background-size:200% 200%;background-position:0 0}
+@media(prefers-reduced-motion:reduce){.gg-tool-tag504{filter:none}}
+
+@media(orientation:landscape) and (max-height:500px){.gg504.gg-play503{height:auto;min-height:100dvh;max-height:none;overflow:visible}.gg504 .gg-stage503{min-height:350px}}

@@ -1,0 +1,147 @@
+{
+  "build": 504,
+  "version": "3.1.183",
+  "baseBuild": 503,
+  "files": [
+    {
+      "path": "README_Build504.txt",
+      "bytes": 4676,
+      "sha256": "0eb45fe49d537ed0d645ca50f6a7d4561c8582aebdc564503c4df617b4e4c177"
+    },
+    {
+      "path": "assets/gorilla504/patience.png",
+      "bytes": 2344558,
+      "sha256": "e5122945e050e29bff1b285a80a799485a5fde991ffab99cad62c3f368de4502"
+    },
+    {
+      "path": "assets/gorilla504/rage.png",
+      "bytes": 1520227,
+      "sha256": "0d2e3e25c64feb9ce09a816adc10d92bad1cff131f063864a89d0b13d8352b08"
+    },
+    {
+      "path": "assets/gorilla504/tension.png",
+      "bytes": 1633781,
+      "sha256": "c68baac03f5bea27b53b542f2f9d10a6ca03b9c217f3e4754961081a953cf322"
+    },
+    {
+      "path": "docs/build504/expressions.png",
+      "bytes": 882711,
+      "sha256": "cc0bcda959b581479887e23ab527de4cb22022096951d318b7a988011db14c98"
+    },
+    {
+      "path": "docs/build504/generated-assets.json",
+      "bytes": 8878,
+      "sha256": "2b31ea55d05fb2035e24bbaae7f5201e9c549882981a1f55ea463bc126c33ce8"
+    },
+    {
+      "path": "docs/build504/gorilla-preview.png",
+      "bytes": 1289493,
+      "sha256": "9ce96cf4568356a4447613edacadb0b09b02bae75bae7c4e06d348e1ee76f0c1"
+    },
+    {
+      "path": "docs/build504/tests.txt",
+      "bytes": 9664,
+      "sha256": "49dcf7d16ea5bc641106c56ed84293723407078483f0bc34906b7a6f46c97077"
+    },
+    {
+      "path": "docs/build504/verification.txt",
+      "bytes": 2097,
+      "sha256": "3dbf17bfa898f41891260c63db567327d719a4fb0e2469d21464cf89c41d9d6c"
+    },
+    {
+      "path": "index.html",
+      "bytes": 142382,
+      "sha256": "c9d18a0d1a82a9bfc7da3f68a0c953d4baa08430b545c49ce726c63d77319370"
+    },
+    {
+      "path": "online-server/src/GorillaCoordinator502.js",
+      "bytes": 4309,
+      "sha256": "174bc03b051bfb71f2f3985067e5026502fc1e429697af92376b2f6c26a1f2f5"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 15286,
+      "sha256": "bb0913dc0e186d927a2235f5a575e418d632c1fabf09e3f055ab34ad220a6cbe"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 23203,
+      "sha256": "6c8d5dd3954da408c4ed67e9bb6f2a4049cddb05128ce7fe92b7b9c7c12cb786"
+    },
+    {
+      "path": "src/Styles/build504-gorilla.css",
+      "bytes": 1568,
+      "sha256": "dffaa830ae4de9c045e53775b63cbe7fd29e358a192fa1b70e370372fd161cea"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "15b4a1c3965ee85c0e93c1acff0aef9742783e71168a1e126a595d7358d754fa"
+    },
+    {
+      "path": "src/gorilla/Audio504.js",
+      "bytes": 1286,
+      "sha256": "0f92350719ba5acf2942dad3940d1a7a2448f0a81255fdf1d44c88cad95f269c"
+    },
+    {
+      "path": "src/gorilla/Presentation504.js",
+      "bytes": 7120,
+      "sha256": "84ffbc23cbd033691ac544bae66c1a6332feaa4aa30b87dc8301e59d53a1e702"
+    },
+    {
+      "path": "src/gorilla/Rules504.js",
+      "bytes": 2572,
+      "sha256": "9196df6092d3857112495cb44c681e83e246d637d4d29b9cc4ec8a3f5402669b"
+    },
+    {
+      "path": "src/gorilla/Scene504.js",
+      "bytes": 8590,
+      "sha256": "3c623421f8f4406e19f1f0b4a4dc8b2259a17e7cc4f715b034233eab1f7e783a"
+    },
+    {
+      "path": "src/gorilla/View502.js",
+      "bytes": 16510,
+      "sha256": "5b8ef0adad906d33d21c2c7f035641f295235c61675915dafa9c47ec97d520cf"
+    },
+    {
+      "path": "src/gorilla/View503.js",
+      "bytes": 12077,
+      "sha256": "1f69701897ebdd6daeb5192d5d6fcf18de2c5880dc87ea212741b7a3e4c08c95"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 9832,
+      "sha256": "4e06137eb3a626e8a99c9a9e4df414cc218f9ad653eb9bce18d839f7b59b8a4d"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 23501,
+      "sha256": "82bcafa680c7de168e3c15c44b34f8b45b9632f784f159596ef6178be1511338"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "bac2df3e62a9b8e5486822837920ae844d3616c7eeca7e68a83fd01b2dfdbe81"
+    },
+    {
+      "path": "tests/build503-gorilla.test.mjs",
+      "bytes": 16227,
+      "sha256": "3f1bd1d0a82131a567eca06ac6d46ad2dc55229ab59ae9592c4fd47eec5eabe1"
+    },
+    {
+      "path": "tests/build504-gorilla.test.mjs",
+      "bytes": 12127,
+      "sha256": "bf9c127f1eba7176ddb05f9fe6ba47b559d49f51c5a0a599f701a214e0c5c5f5"
+    },
+    {
+      "path": "world-raid-offline504-assets.json",
+      "bytes": 36503,
+      "sha256": "18b37300ee3a7c97812a72b4ec04f87205dd03b28afd3a16b0b19dd219ff1030"
+    },
+    {
+      "path": "world-raid-offline504-sw.js",
+      "bytes": 1844,
+      "sha256": "666a8d408cfe7a81f3a502e8c2b3a1d08ce6346893fd9d76098885c7d6dab4ea"
+    }
+  ]
+}
