@@ -1,0 +1,52 @@
+{
+  "build": 498,
+  "version": "3.1.177",
+  "baseBuild": 497,
+  "files": [
+    {
+      "path": "README_Build498.txt",
+      "bytes": 2258,
+      "sha256": "a54e2c5e022d325ffdc8936ddd97c0428ebeee8218c5af4113a6a45d37a349a8"
+    },
+    {
+      "path": "index.html",
+      "bytes": 131483,
+      "sha256": "703f7cc40a128ecbb6ca32a85baf85ae780c1be6be3c8b516f51e757f107cb7c"
+    },
+    {
+      "path": "src/cabbage/Input486.js",
+      "bytes": 3657,
+      "sha256": "3130f63d9252f6a5bd40f87941b1d66cadf956c992ee04ed3645be6b7977e7d9"
+    },
+    {
+      "path": "src/cabbage/Zoom498.js",
+      "bytes": 4325,
+      "sha256": "866ad686a1e1e09022c35a2dce270b9cf89d61e493685636b3b8f8bbd661cfc9"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "71d26a26d2017a9e1faf1e8a73b6a2eb9cda4462a15ac0565226e9af90424c10"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "5c04eb877944e84d446f8234551355d4b01a8b89007204c311a2fa87eb237063"
+    },
+    {
+      "path": "tests/build498-zoom.test.mjs",
+      "bytes": 4632,
+      "sha256": "f95c640e7dfcfa81a0008dd77be294be370bf05a1d1ae7bfdaa4cb6ec2c99c6b"
+    },
+    {
+      "path": "world-raid-offline498-assets.json",
+      "bytes": 35254,
+      "sha256": "6063244ed2581e38087451e97060fc9f2c920789d48481d044f3ff7c588f39de"
+    },
+    {
+      "path": "world-raid-offline498-sw.js",
+      "bytes": 1844,
+      "sha256": "43ec7301bd95525bb67b45ea0c825faf1d37bcfae80de44a24d49a45001449cb"
+    }
+  ]
+}

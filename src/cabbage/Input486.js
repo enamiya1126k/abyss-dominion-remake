@@ -32,31 +32,8 @@ export function material486(player, signal) {
   return { ...chopMaterial487(player?.cuts ?? 0), board: Math.min(7, damage), damage };
 }
 
-// These listeners and viewport settings exist only while the playable surface is mounted.
-// Other screens retain the user's ordinary scrolling and zoom behavior.
-export function lockPlayZoom486(surface, doc = globalThis.document) {
-  const viewport = doc?.querySelector('meta[name="viewport"]');
-  const previous = viewport?.getAttribute('content');
-  const locked = (previous ?? 'width=device-width,initial-scale=1').split(',')
-    .filter(part => !/^\s*(maximum-scale|minimum-scale|user-scalable)\s*=/i.test(part))
-    .concat(['maximum-scale=1', 'minimum-scale=1', 'user-scalable=no']).join(',');
-  viewport?.setAttribute('content', locked);
-  const prevent = event => { if (event.cancelable !== false) event.preventDefault(); };
-  const multi = event => { if (event.touches?.length > 1) prevent(event); };
-  const gestures = ['gesturestart', 'gesturechange', 'gestureend', 'dblclick'];
-  for (const name of gestures) surface.addEventListener(name, prevent, { passive: false });
-  surface.addEventListener('touchstart', multi, { passive: false });
-  surface.addEventListener('touchmove', multi, { passive: false });
-  return () => {
-    for (const name of gestures) surface.removeEventListener(name, prevent);
-    surface.removeEventListener('touchstart', multi);
-    surface.removeEventListener('touchmove', multi);
-    if (viewport?.getAttribute('content') === locked) {
-      if (previous == null) viewport.removeAttribute('content');
-      else viewport.setAttribute('content', previous);
-    }
-  };
-}
+// Shared by cabbage and canal. Safari touch completion is guarded at document capture.
+export { lockPlayZoom498 as lockPlayZoom486 } from './Zoom498.js';
 
 // Track every pointer, including the second thumb. A follow-up click must not cut twice.
 export function bindPads486(root, onTap, supportsPointer = !!globalThis.PointerEvent) {
