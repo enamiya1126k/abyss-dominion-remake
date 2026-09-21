@@ -1,0 +1,36 @@
+Build507 verification
+New tests: game/tests/build507-luck.test.mjs (32)
+Full affected regression set: 143 passed, 0 failed.
+
+Engine/coordinator:
+- Four human clients, 1–3 humans with AI, authenticated selection and readiness.
+- Private cryptographic per-seat/per-round draws generated at match start.
+- Public whitelist excludes future draws, unopened alternatives and opponents' choices.
+- Identical retry acknowledges once, changed selection rejected, no reroll.
+- Minimum 2 s selection, maximum 12 s, all 4 reveal together.
+- Server restart and large delayed ticks converge to exactly the same result.
+- Last-place rocket can pass the leader; catch-up computed from pre-move positions.
+- 300 sampled games finish eight rounds; nonnegative bounded distances.
+- Shared ranks, four-way wins, late spectator joins, host transfer, expiry, replay/list.
+- Failed state writes roll back the accepted action.
+
+Presentation:
+- Actual View507 markup: 3 labeled buttons, four colored runners and results.
+- Existing DOM preserved across choose/reveal/run/settle; scene changes rebuild.
+- 40 tick requests coalesce into one animation frame.
+- 1,800 unchanged selection paints produce zero DOM mutations after initial paint.
+- Mid-animation state, final position, reduced-motion endpoints and track bounds.
+- Hidden tabs stop updates; detached scene cancels RAF and removes listeners.
+- Failed send unlocks selection; disconnect presents reconnect state.
+- Natural-size generated assets load successfully, 1536x1024 / 1254x1254 RGBA.
+
+Browser limitation:
+Browser skill loaded and its supported Cloud Browser used.
+Direct http://127.0.0.1:18497 navigation returned net::ERR_BLOCKED_BY_CLIENT.
+No alternate browser, port, tunnel or security workaround was attempted.
+No claim of actual Safari, browser interaction, real network latency or device FPS verification.
+
+Native design check:
+work507/design-check.mjs used the actual assets and raceFrame507 math to inspect
+composition. It is a layout study with a sample portrait, NOT a browser screenshot.
+This temporary study is not shipped as production imagery.

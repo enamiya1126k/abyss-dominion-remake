@@ -1,0 +1,1 @@
+299 asset, stylesheet, server, game-rule and presentation files retain their Build505 SHA-256. Play HTML is byte-identical. All original Scene505 painter bodies are unchanged.

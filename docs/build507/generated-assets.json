@@ -1,0 +1,15 @@
+{
+  "mode": "built-in image_gen",
+  "assets": [
+    {
+      "file": "assets/luck507/stadium.png",
+      "source": "generated_images/exec-fe216bdd-0d7f-4c0f-a593-a5efef6b21c1.png",
+      "prompt": "Use case: stylized-concept. Asset type: production environment background for a premium Japanese fantasy party racing minigame, landscape 1536x1024. Create a spectacular charming fantasy sports stadium at warm twilight, lush emerald grass, ancient gold-trimmed stone spectator terraces, teal pennants and magical lanterns, distant waterfall cliffs and a small castle, fireflies, jewel-like warm light, polished storybook game illustration with tactile painted 3D detail. Camera fixed broadside from a moderately elevated angle. Gameplay composition is critical: the lower two thirds of the image is one uninterrupted rectangular EMPTY grass racing field, exactly four straight horizontal running lanes running from left to right, subtly separated by pale painted lines. No perspective convergence in the lanes. The field extends past both left and right image edges, no oval curve, no obstacles on the lanes. Upper third is the richly detailed crowd-free stadium backdrop. Border decorations confined to top and bottom edges. Very clear readable track surface, warm rich colors, high-end whimsical fantasy art. No characters, no boxes, no text, no numbers, no logos, no watermark. The game will add all racers and UI separately."
+    },
+    {
+      "file": "assets/luck507/items.png",
+      "source": "generated_images/exec-3d900451-0108-4271-9e29-a19af2bef126.png",
+      "prompt": "Use case: stylized-concept. Asset type: production game item sprite atlas on a genuinely transparent background, square 1536x1536. Exactly NINE isolated objects in an evenly spaced 3 by 3 grid, each fits entirely within its own square cell with generous transparent margins. Premium whimsical fantasy party game art, detailed polished storybook 3D painting, warm gold highlights, teal gems, readable silhouettes. Row1: (1) closed small mystery treasure chest, deep teal painted wood, ornate brass trim, one diamond-shaped glowing gem lock, frontal three-quarter view; (2) the SAME treasure chest open with its lid raised and soft golden light inside, no flying particles outside cell; (3) ornate golden winged winner trophy cup with teal jewel. Row2: (4) funny red and gold chunky rocket pointing to the right, small fire exhaust to the left; (5) bright yellow slippery banana peel, three curved flaps; (6) circular grassy pit with dark hole and crumbled earth rim, seen obliquely above. Row3: (7) polished brass toy spring platform with compressed steel coil; (8) emerald leather winged running boot pointing right; (9) luminous turquoise meteor with golden flaming trail pointing toward right. No letters, no text, no labels, no panel lines, no characters, no shadows outside the objects. Preserve true alpha transparency between objects. All nine cells same size, centered object, no overlaps. This atlas will be cropped using exact thirds by the game."
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-export const resultGame490=c=>c.state?.gorilla??c.state?.canal??c.state?.cabbage??c.state?.sugoroku??c.state?.room;
+export const resultGame490=c=>c.state?.luck??c.state?.gorilla??c.state?.canal??c.state?.cabbage??c.state?.sugoroku??c.state?.room;
 export function resultActions490(c){
  const g=resultGame490(c),host=(c.state?.party?.hostId??g?.hostId)===c.transport.selfId,pending=c.resultPending490;
  return `<nav class="party-result-actions490" aria-label="ゲーム終了後の操作" aria-busy="${!!pending}"><button data-party-result490="again" ${!host||pending?'disabled':''}>もう一度</button><button data-party-result490="list" ${pending?'disabled':''}>ミニゲーム一覧へ戻る</button>${!host?'<p>再戦は部屋主が開始できます。</p>':''}<p role="status">${pending?(pending.kind==='again'?'次のゲームを準備中…':'結果を閉じています…'):''}</p>${c.error||c.rewardError?`<p role="alert">${esc(c.error||c.rewardError)}</p>`:''}</nav>`;

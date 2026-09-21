@@ -1,0 +1,59 @@
+Build506 / v3.1.185 performance verification
+
+Observed causes in Build505:
+- The 33ms clock redrew the entire canvas even with no visual change.
+- One untouched scene issued 541 stroke calls, 60 fill calls and 30 radial gradients.
+- Repeated attribute and style writes included CSS coordinates on thirty hair targets.
+- The race DOM signature contained all gorilla state; gameplay updates recreated the
+  play canvas, participant sprites, controls and input bindings.
+
+Corrections:
+- Stable scenes retain their original exact pixels. Countdown changes remain live.
+- One pending requestAnimationFrame per scene, with stale callbacks cancelled on exit.
+- Two bounded transparent hair layers surround the moving strand in its original order.
+  Raster density equals the maximum visible pixel density; no resolution downgrade.
+- The background and fixed-camera king/shadow are cached. Camera travel and subpixel
+  shaking sample the original king directly to retain texture detail.
+- Dynamic hand, hair, pore, pinch, aura, shockwaves and flight use existing functions.
+- Unchanged CSS values do not write again, including browser-rounded fractional pixels.
+- Structural identity controls full DOM rebuilds; each server update still reaches tick.
+- Hidden pages and lost contexts suspend drawing; resume/context restore invalidate it.
+- At most two hair layers, three fixed-camera body surfaces and one background surface.
+  The phone-size tests remain below 28 MiB of auxiliary RGBA surface storage. Exit frees all.
+
+Automated tests: 111 passed, 0 failed.
+New tests: tests/build506-performance.test.mjs (11).
+Existing tests: build505/504/503 gorilla, build501/499 colors, build500 canal and
+integration, build484 cabbage, build498 zoom (100).
+The partial source tree lacks the base species/endgame catalogs and MonsterVisual.
+Their fixtures are in-memory Node test loader definitions, never production modules.
+
+Deterministic operation counts:
+- Unchanging 60-second choice: 1800 draws -> 1 draw.
+- Warm pull animation: 543 strokes per frame -> 20 live strokes (18 strand + 2 tweezers).
+  Static layers build only on invalidation, not every frame.
+- 100 repeated unchanged controller ticks: 0 further canvas draws and 0 DOM mutations.
+- Network/timer bursts: 40 requests coalesce into 1 scheduled frame.
+
+Rendering:
+Native @napi-rs/canvas at DPR 2. 12 moments at 320x344, 390x500 and 620x350 CSS pixels.
+All 15 static comparisons are exactly identical to the Build505 renderer.
+For the 21 animated comparisons, maximum mean absolute RGBA-channel error is 0.131/255,
+from cached transparent-layer sampling/composition. Existing PNGs and geometry are unchanged.
+Detailed measurements are in native-results.json. These timings are container measurements,
+not iOS frame-rate claims; readback flushes native drawing for both versions.
+
+Preservation:
+299 asset, stylesheet, server, rule and presentation files retain their Build505 SHA-256.
+The play HTML is byte-identical. Original Scene505 painter functions are unchanged;
+only an export of those functions was added for cache reuse.
+No server change, no new rules capability, no save migration and no deployment.
+
+Limits:
+Native drawing and DOM/controller fixtures do not establish actual iOS Safari performance.
+Cloud Browser local navigation had previously been rejected by automatic approval review.
+No alternate browser/proxy/tunnel was used. Real-device interaction remains unverified.
+
+Release checks:
+JavaScript syntax, changed import aliases, entry version, unchanged CSS, offline cache
+membership, ZIP CRC and all extracted-file SHA-256 values were checked.

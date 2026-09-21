@@ -1,0 +1,323 @@
+{
+  "environment": "Native @napi-rs/canvas, DPR 2. Not iOS or a browser benchmark.",
+  "comparisons": [
+    {
+      "name": "selection",
+      "w": 320,
+      "h": 344,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "decision",
+      "w": 320,
+      "h": 344,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "focus",
+      "w": 320,
+      "h": 344,
+      "meanAbsoluteChannelError": 0.038893304869186046,
+      "maxChannelError": 51,
+      "changedChannelPercent": 0.9934820130813954
+    },
+    {
+      "name": "pluck",
+      "w": 320,
+      "h": 344,
+      "meanAbsoluteChannelError": 0.12021995367005814,
+      "maxChannelError": 47,
+      "changedChannelPercent": 5.762456849563954
+    },
+    {
+      "name": "release",
+      "w": 320,
+      "h": 344,
+      "meanAbsoluteChannelError": 0.12159736101017442,
+      "maxChannelError": 47,
+      "changedChannelPercent": 5.784883720930233
+    },
+    {
+      "name": "pinch",
+      "w": 320,
+      "h": 344,
+      "meanAbsoluteChannelError": 0.11992357830668604,
+      "maxChannelError": 47,
+      "changedChannelPercent": 5.721009720203488
+    },
+    {
+      "name": "reaction",
+      "w": 320,
+      "h": 344,
+      "meanAbsoluteChannelError": 0.04701523891715116,
+      "maxChannelError": 50,
+      "changedChannelPercent": 1.1335505995639534
+    },
+    {
+      "name": "full-reaction",
+      "w": 320,
+      "h": 344,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "drum",
+      "w": 320,
+      "h": 344,
+      "meanAbsoluteChannelError": 0.005627725290697674,
+      "maxChannelError": 73,
+      "changedChannelPercent": 0.07653524709302326
+    },
+    {
+      "name": "blast",
+      "w": 320,
+      "h": 344,
+      "meanAbsoluteChannelError": 0.0018861282703488372,
+      "maxChannelError": 42,
+      "changedChannelPercent": 0.04536473473837209
+    },
+    {
+      "name": "mercy",
+      "w": 320,
+      "h": 344,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "countdown",
+      "w": 320,
+      "h": 344,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "selection",
+      "w": 390,
+      "h": 500,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "decision",
+      "w": 390,
+      "h": 500,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "focus",
+      "w": 390,
+      "h": 500,
+      "meanAbsoluteChannelError": 0.03246923076923077,
+      "maxChannelError": 51,
+      "changedChannelPercent": 0.7818589743589744
+    },
+    {
+      "name": "pluck",
+      "w": 390,
+      "h": 500,
+      "meanAbsoluteChannelError": 0.12069967948717948,
+      "maxChannelError": 55,
+      "changedChannelPercent": 5.43176282051282
+    },
+    {
+      "name": "release",
+      "w": 390,
+      "h": 500,
+      "meanAbsoluteChannelError": 0.12203173076923077,
+      "maxChannelError": 55,
+      "changedChannelPercent": 5.443846153846154
+    },
+    {
+      "name": "pinch",
+      "w": 390,
+      "h": 500,
+      "meanAbsoluteChannelError": 0.12049262820512821,
+      "maxChannelError": 55,
+      "changedChannelPercent": 5.394358974358974
+    },
+    {
+      "name": "reaction",
+      "w": 390,
+      "h": 500,
+      "meanAbsoluteChannelError": 0.03848205128205128,
+      "maxChannelError": 50,
+      "changedChannelPercent": 0.8773717948717948
+    },
+    {
+      "name": "full-reaction",
+      "w": 390,
+      "h": 500,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "drum",
+      "w": 390,
+      "h": 500,
+      "meanAbsoluteChannelError": 0.0035717948717948716,
+      "maxChannelError": 63,
+      "changedChannelPercent": 0.06294871794871795
+    },
+    {
+      "name": "blast",
+      "w": 390,
+      "h": 500,
+      "meanAbsoluteChannelError": 0.002610576923076923,
+      "maxChannelError": 50,
+      "changedChannelPercent": 0.0478525641025641
+    },
+    {
+      "name": "mercy",
+      "w": 390,
+      "h": 500,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "countdown",
+      "w": 390,
+      "h": 500,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "selection",
+      "w": 620,
+      "h": 350,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "decision",
+      "w": 620,
+      "h": 350,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "focus",
+      "w": 620,
+      "h": 350,
+      "meanAbsoluteChannelError": 0.024462557603686635,
+      "maxChannelError": 53,
+      "changedChannelPercent": 0.5927995391705069
+    },
+    {
+      "name": "pluck",
+      "w": 620,
+      "h": 350,
+      "meanAbsoluteChannelError": 0.1294092741935484,
+      "maxChannelError": 56,
+      "changedChannelPercent": 5.1616359447004605
+    },
+    {
+      "name": "release",
+      "w": 620,
+      "h": 350,
+      "meanAbsoluteChannelError": 0.130974366359447,
+      "maxChannelError": 56,
+      "changedChannelPercent": 5.176267281105991
+    },
+    {
+      "name": "pinch",
+      "w": 620,
+      "h": 350,
+      "meanAbsoluteChannelError": 0.12952851382488478,
+      "maxChannelError": 56,
+      "changedChannelPercent": 5.151497695852535
+    },
+    {
+      "name": "reaction",
+      "w": 620,
+      "h": 350,
+      "meanAbsoluteChannelError": 0.02872119815668203,
+      "maxChannelError": 52,
+      "changedChannelPercent": 0.6784274193548387
+    },
+    {
+      "name": "full-reaction",
+      "w": 620,
+      "h": 350,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "drum",
+      "w": 620,
+      "h": 350,
+      "meanAbsoluteChannelError": 0.0029507488479262674,
+      "maxChannelError": 68,
+      "changedChannelPercent": 0.04115783410138249
+    },
+    {
+      "name": "blast",
+      "w": 620,
+      "h": 350,
+      "meanAbsoluteChannelError": 0.0014012096774193548,
+      "maxChannelError": 54,
+      "changedChannelPercent": 0.028513824884792625
+    },
+    {
+      "name": "mercy",
+      "w": 620,
+      "h": 350,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    },
+    {
+      "name": "countdown",
+      "w": 620,
+      "h": 350,
+      "meanAbsoluteChannelError": 0,
+      "maxChannelError": 0,
+      "changedChannelPercent": 0
+    }
+  ],
+  "performance": [
+    {
+      "name": "selection",
+      "medianMs505": 59.019,
+      "totalMs505": 1209.233,
+      "medianMs506": 0.007,
+      "totalMs506": 65.563
+    },
+    {
+      "name": "decision",
+      "medianMs505": 39.67,
+      "totalMs505": 857.734,
+      "medianMs506": 0.007,
+      "totalMs506": 47.863
+    },
+    {
+      "name": "pluck",
+      "medianMs505": 68.168,
+      "totalMs505": 1544.285,
+      "medianMs506": 52.872,
+      "totalMs506": 1104.996
+    },
+    {
+      "name": "focus",
+      "medianMs505": 54.29,
+      "totalMs505": 1105.529,
+      "medianMs506": 49.441,
+      "totalMs506": 988.544
+    }
+  ]
+}
