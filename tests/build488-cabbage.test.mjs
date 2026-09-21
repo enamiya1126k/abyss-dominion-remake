@@ -108,5 +108,5 @@ test('results show the winner’s collapsed table rather than restoring it; repl
   const g=game();g.players[0].score=2000;g.players[0].boardDamage=48;g.phase='result';
   const c={state:{cabbage:publicCabbage484(g,'p',g.endAt)},transport:{selfId:'p'},sgMonster463:()=>'<span class="sg-monster"></span>'};
   const html=cabbageView484(c);assert.match(html,/優勝者の全壊したテーブル/);assert.match(html,/cb-result-table488[^>]*opacity:0/);assert.doesNotMatch(html,/class="cb-result-board487"/);
-  assert.match(html,/まな板全壊 · テーブルも全壊/);assert.match(html,/cb-crown488/);assert.doesNotMatch(html,/♛/);assert.match(html,/data-cb-action="again"/);
+  assert.match(html,/まな板全壊 · テーブルも全壊/);assert.match(html,/cb-crown488/);assert.doesNotMatch(html,/♛/);assert.match(html,/data-party-result490="again"/);
 });

@@ -87,7 +87,7 @@ test('result gives the podium only to rank one, shows final point quantities for
   assert.match(html,/data-pile-score="1645"/);
   assert.deepEqual([...html.matchAll(/data-harvest-score="(\d+)"/g)].map(m=>Number(m[1])),[1645,1320,1110,670]);
   assert.match(html,/同じまな板に2打の傷/);assert.doesNotMatch(html,/枚粉砕/);
-  assert.match(html,/data-cb-action="again"/);assert.match(html,/data-party-action462="browse"/);assert.match(html,/data-race-action="back"/);
+  assert.match(html,/data-party-result490="again"/);assert.match(html,/data-party-action462="browse"/);assert.doesNotMatch(html,/data-race-action="back"/);assert.match(html,/data-party-result490="list"/);
 });
 
 test('tied winners share the summit and zero points never invent a cabbage mountain or divide by zero',()=>{

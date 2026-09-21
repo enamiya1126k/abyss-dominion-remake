@@ -140,7 +140,7 @@ test('each illegal tap swaps board art locally; the board persists through stop 
 
 test('generated material keeps changing the minced pile after the final art stage, never restocks',t=>{
   const g=game();g.players[0].cuts=300;const x=domClient(g);let now=g.startAt+100;t.mock.method(Date,'now',()=>now);
-  cabbageTap484(x.c,'left');const a=x.food.values['--mince-turn'];now+=25;cabbageTap484(x.c,'right');assert.notEqual(x.food.values['--mince-turn'],a);assert.equal(x.layers[0].style.backgroundPosition,'100% 100%');
+  cabbageTap484(x.c,'left');const a=x.food.style.transform;now+=25;cabbageTap484(x.c,'right');assert.notEqual(x.food.style.transform,a);assert.match(x.layers[0].style.backgroundImage,/fine-stages/);const height=v=>Number(v.match(/,([\d.]+)\)/)[1]);assert.ok(height(x.food.style.transform)<height(a));
 });
 
 test('pointer binding accepts both simultaneous thumbs, suppresses duplicate downs and clears capture on cancel',()=>{

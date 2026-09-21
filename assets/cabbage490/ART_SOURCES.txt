@@ -1,0 +1,8 @@
+Build490 floor-stages.png
+Original artwork generated with OpenAI image generation for ABYSS DOMINION.
+Reference: assets/cabbage488/kitchen-floor.png, the existing generated kitchen scene.
+4 columns x 2 rows transparent sprite atlas, same camera/lighting: cracked stone floor,
+spreading cracks, chipped depression, small dark hole, larger hole, collapsed earth,
+deep abyss, broad abyss. Warm amber lighting from left, cool blue from right.
+No external photographs or third-party stock assets used.
+Runtime crops the atlas using CSS; original generated PNG is included unchanged.

@@ -1,0 +1,17 @@
+/* A single cabbage flattens continuously. Bottom pivot keeps every sprite grounded. */
+.cb-stage486 .cb-food{transform-origin:50% 100%}
+.cb-food-layers486{transform-origin:50% 100%;will-change:transform}
+.cb-food-layers486>i{background-repeat:no-repeat}
+.cb-floor490{position:absolute;pointer-events:none;left:1%;top:51%;width:98%;height:52%;z-index:-2;transform-origin:50% 75%;background:url('../../assets/cabbage490/floor-stages.png') 0 0/400% 200% no-repeat;opacity:0;filter:drop-shadow(0 3px 2px #100f16a0)}
+.cb-result-floor490{top:auto;bottom:-46px;left:-5%;width:110%;height:205px;z-index:-3}
+/* The shared result dock stays in sight while long rankings scroll above it. */
+.party-result-actions490{position:sticky;bottom:0;z-index:8;display:grid;grid-template-columns:1fr;gap:10px;padding:16px max(14px,env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom));margin:12px 0 0;border:1px solid #cdb77770;border-radius:14px;background:linear-gradient(145deg,#1d332afa,#101b24fa);box-shadow:0 -8px 24px #060e1480;box-sizing:border-box;text-align:center}
+.party-result-actions490 button{display:block;min-height:52px;width:100%;margin:0;padding:13px 12px;border:1px solid #d3c18b;border-radius:9px;background:linear-gradient(#2b443c,#152b27);color:#fff2c9;font:700 15px/1.5 sans-serif;box-shadow:inset 0 1px #fff2;cursor:pointer;touch-action:manipulation}
+.party-result-actions490 button:first-of-type{background:linear-gradient(135deg,#f5dfaa,#c5a260);color:#1b2b25;border-color:#ffedb8;box-shadow:0 3px 0 #6d5734,inset 0 1px #fff8}
+.party-result-actions490 button:disabled{cursor:default;opacity:.52}
+.party-result-actions490 button:focus-visible{outline:3px solid #f9efbc;outline-offset:3px}
+.party-result-actions490 p{grid-column:1/-1;margin:0;font-size:12px;line-height:1.6;color:#d9dfcd}
+.party-result-actions490 [role=alert]{color:#ffd0b7;overflow-wrap:anywhere}
+.party-result-actions490 [role=status]:empty{display:none}
+@media(min-width:650px){.party-result-actions490{grid-template-columns:1fr 1fr}}
+@media(prefers-reduced-motion:reduce){.cb-food-layers486{will-change:auto}}

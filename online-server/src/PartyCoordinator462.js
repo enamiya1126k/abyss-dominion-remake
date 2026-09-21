@@ -48,6 +48,15 @@ export function handleParty462(c,session,m){
  if(m.op==='partyReady462'){if(r?.phase!=='lobby')fail('ゲームの準備画面で押してください');if(r.game==='canal'&&m.canalVersion489!==1)fail('本体をBuild489へ更新してください');if(r.game==='cabbage'&&m.cabbageVersion484!==1)fail('本体をBuild484へ更新してください');const rm=c.member(r,id);if(!rm?.choice)fail('コマにする魔物を選んでください');if(me.atHome)fail('準備画面へ戻ってください');if(r.game==='sugoroku'&&r.economy474?.mode==='crystal'){if(m.ready===true&&!r.economy474.entries[id])fail('表示された💎の参加費を支払って準備してください');if(m.ready!==true)refundEntry474(c,r,id)}me.ready=m.ready===true;return true}
  if(m.op==='partyLeave462'){const participant=r?.members.find(x=>x.playerId===id&&!x.departed);if(participant&&!['lobby','result'].includes(r.phase))fail('ゲーム終了後に退出できます。ホームへは戻れます');p.members=p.members.filter(x=>x!==me);if(participant){if(r.phase==='lobby'){refundEntry474(c,r,id);r.members=r.members.filter(x=>x!==participant)}else participant.departed=true}if(!p.members.length){if(r&&['lobby','result'].includes(r.phase))deleteGame463(c,r);delete c.data.parties462[p.code];return true}if(p.hostId===id)p.hostId=(p.members.find(x=>c.sessions.get(x.playerId)?.connected)??p.members[0]).playerId;if(r)r.hostId=p.hostId;return true}
  if(p.hostId!==id)fail('ゲームの切替は部屋主が行えます');
+ if(m.op==='partyResult490'){
+  if(m.partyId!==p.id||!['again','list'].includes(m.kind))fail('結果画面の操作が無効です。更新してもう一度選んでください');
+  // Retransmitting the same completed action must never clear the NEXT game.
+  if(p.lastResult490?.gameId===m.gameId&&p.lastResult490.kind===m.kind)return true;
+  if(!r||r.id!==m.gameId||r.phase!=='result')fail('ゲームの状態が変わりました。最新の画面を確認してください');
+  if(m.kind==='again')openGame462(c,p,p.game);
+  else{deleteGame463(c,r);p.game=null;p.raceCode=null;for(const x of p.members)x.ready=false}
+  p.lastResult490={gameId:m.gameId,kind:m.kind};return true;
+ }
  if(m.op==='partyGame462'){openGame462(c,p,m.game);return true}
  if(m.op==='partyLounge462'){if(r&&!['lobby','result'].includes(r.phase))fail('ゲーム終了後に一覧へ戻れます');if(r)deleteGame463(c,r);p.game=null;p.raceCode=null;for(const x of p.members)x.ready=false;return true}
  fail('未対応のパーティー操作です');
