@@ -1,0 +1,64 @@
+Build503 verification / v3.1.182
+
+Scope: Gorilla minigame pacing, 1-3 sequential pulls per turn, camera staging,
+natural hair drawing, five cosmetic raised follicles, new countdown art and
+four additional safe reaction poses. Every pull has a mandatory reaction reveal.
+
+76 passing tests:
+node --test tests/build503-gorilla.test.mjs tests/build501-colors.test.mjs tests/build500-canal.test.mjs tests/build500-integration.test.mjs tests/build499-colors.test.mjs tests/build484-cabbage.test.mjs tests/build498-zoom.test.mjs
+
+New 20 tests cover:
+1-4 humans with AI and frozen colors; 50/60 second boundaries; paused reaction
+and camera time; continuing without refreshing the budget; 1/2/3-pull turns;
+all 30 losing hairs x 4 first seats; no cosmetic odds bias or secret-field leak;
+identical delayed and frequent ticks; automatic pull/pass behavior; duplicate,
+stale, invalid and out-of-turn input; host/ownership/version gates; old 502
+active-match completion followed by a new 503 replay; persisted server restart;
+matching four-client results without account charges; replay/list idempotency;
+rapid frontend requests; camera reveal and reduced-motion behavior; 44px touch
+target positions at phone sizes 320x344, 375x430, 390x460, 430x540; longer loser
+flight; no always-visible progress/timer and clear result controls.
+
+Existing Build502 tests describe the old 6-hair protocol and are not included in
+this total. Active legacy behavior is explicitly exercised by the new tests.
+Missing base-game catalogs and MonsterVisual.js in this partial checkout are
+supplied only as in-memory test fixtures when absent. No fake production files
+are shipped. The real server coordinator/party routing and all current engines
+are loaded by integration tests.
+
+Timing and randomness:
+60,000ms thinking budget per turn; warning shown only for remaining <=10,000ms
+in playing/decision states. Countdown 4,000ms, focus 650ms, pull 850ms, safe reveal
+2,600ms, handoff 850ms, final blast 5,200ms do not consume thinking budget.
+At deadline, a turn with zero pulls selects one random remaining hair; a turn
+with at least one pull passes. Secret target uses server crypto.randomInt(30).
+The five pimple roots, bends and hair positions are public cosmetic constants;
+no effect on the target or odds. No rank/attribute/ownership benefit.
+Duplicate decisions are keyed by sender + turn + event count + action.
+
+Visual implementation:
+Scene503.js is the production native Canvas renderer. It uses the generated
+RGBA full-body king, reaction atlas, countdown emblem and existing court and
+rage/drumming atlas. Rooted tapered hair curves, pores, five soft red raised
+follicles, skin stretch/recoil, pinching tool and detached hair are code-native
+animation, anchored in the same camera space as the king. Thirty transparent
+44px HTML buttons provide accessible labels and keyboard focus. They do not
+show numbers, heavy outlines or circular icons in normal play.
+The canvas uses up to 2x DPR. Existing play zoom lock includes new hair targets.
+Reduced motion removes the camera tween, skin-pull movement and flying actors.
+
+Preview:
+The final PNG was rendered with production Scene503.js and actual art, inspected,
+and adjusted to keep targets below the top cue on narrow screens. Native preview
+uses the crying safe pose for the demonstration; real poses are server-selected.
+Player monster HTML, top player cards and action toolbar are omitted.
+This is not a browser screenshot and is not evidence of actual Safari interaction.
+Local Cloud Browser navigation was previously rejected by automatic approval
+review (ERR_BLOCKED_BY_CLIENT); no alternative route was used.
+Actual Safari, real multi-device network latency and full DOM layout remain
+unverified. No deployment was performed.
+
+Release:
+All changed JavaScript parses. Import map aliases, CSS link, app version,
+new worker key, offline asset entries and package manifest were checked.
+ZIP uses standard Deflate; CRC and hashes of all extracted files are verified.

@@ -1,0 +1,39 @@
+{
+  "build": 503,
+  "assets": [
+    {
+      "path": "assets/gorilla503/king-closeup.png",
+      "tool": "built-in imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: high resolution transparent full-body game character, used for camera zoom into chest and belly. Input image is identity and pose reference ONLY: use the TOP LEFT calm gorilla king as reference, output ONE character, no atlas. Same funny chocolate-brown gorilla king, warm tan muzzle, expressive eyebrows, ornate golden crown with emerald gemstone, seated frontal pose with legs and feet visible, arms down at sides. Render a single matching gorilla, smug closed-mouth smile, broad bare warm brown chest and upper belly with fine realistic soft skin texture and subtle small pores, framed by richly detailed chocolate fur. Keep chest/upper belly completely unobstructed by hands. The skin area from x30 to70 percent and y46 to74 percent of the square image will get interactive hair overlays later: NO long chest hairs, NO pimples baked into the base, no symbols. Premium humorous fantasy game art, polished painterly 3D materials, warm cinematic lighting, no flat vector appearance. Strong facial personality; head around top third, crown above head, shoulders at y40 percent, feet around y90 percent. Same silhouette as reference TOP LEFT. Entire gorilla fits inside square canvas with 4 percent transparent margin, especially crown and feet. Actual transparent alpha background, NO scenery, NO floor, NO checkerboard, NO labels or letters, NO numbers, no blood, no injury, no genitals, no watermark. Prefer 1536x1536 or higher resolution, very crisp details suited to zooming into torso.",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "2a1f8f72fb4909a89978f62e86d9f1cc274cc494f7c411c503aa600ba4b33dd5"
+    },
+    {
+      "path": "assets/gorilla503/reactions.png",
+      "tool": "built-in imagegen",
+      "prompt": "Use case: stylized-concept. Create an actual isolated transparent cutout sprite atlas. ONE SQUARE PNG, 2 by 2 precise equal square cells, genuine ALPHA TRANSPARENCY in all corners and every space outside the four gorilla silhouettes. NO COLORED BACKGROUND. NO BROWN BACKGROUND. No floor or shadows behind characters. Four full-body seated gorilla kings matching the provided reference identity, same gold emerald crown, chocolate fur, tan muzzle, broad bare brown chest. All aligned at identical front-facing pose, arms resting at sides, crown through feet fully inside each cell with transparent margins, same size. Only facial expressions differ: TOP LEFT huge forced toothy smile and tears squirting from squeezed eyes; TOP RIGHT puffed cheeks and tightly closed eyes enduring comical discomfort; BOTTOM LEFT one eye shut, tongue sticking sideways and a comical grimace; BOTTOM RIGHT brave small smile with very watery eyes and one large sweat drop. These are SAFE reactions to chest-hair plucking. Exaggerated funny expressive faces. Keep broad chest and belly clear for game code to add hairs; no long chest hairs, no symbols on body. Premium painterly 3D fantasy game detail, exact same gorilla identity and lighting as reference. Every panel must be a TRANSPARENT CUTOUT, NOT an illustration scene. No text, no labels, no borders, no checkerboard, no blood. Square RGBA PNG sprite sheet, transparent background.",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "5179e2627a540d4f426e74449ca19e2b88742d515e8c61aaa58575578229e829"
+    },
+    {
+      "path": "assets/gorilla503/countdown.png",
+      "tool": "built-in imagegen",
+      "prompt": "Use case: stylized-concept. Asset type: production transparent countdown emblem for a luxurious comical jungle gorilla king party game. One square PNG with genuine alpha transparent outside silhouette. An ornate wide circular royal emblem in sculpted antique gold and mossy jade, thick dimensional engraved rim, small golden gorilla crown with large green emerald centered on top, realistic banana leaves and two small bananas framing lower outside corners. Broad smooth dark emerald inset disk in the CENTER with NO WRITING, empty central 50 percent of image for a very large live countdown numeral that will be added by code. Fine etched jungle patterns, warm golden glints, polished painterly 3D game UI, magical but grounded materials. Emblem fills 88 percent of canvas with clear transparent margin all around. Symmetric balanced readable silhouette. No animals or faces, no text, no numbers, no letters, no logo, no opaque scenery or backdrop, no checkerboard. Actual transparent cutout game ornament, not a screenshot.",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "5e2d87c731392013df3c268e398fe1228bd8a55819f5b6f9c05c7f1f93329142"
+    }
+  ],
+  "unused": "Two 3x2 reaction trials had opaque backgrounds and are not used or shipped."
+}
