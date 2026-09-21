@@ -133,7 +133,7 @@ test('each illegal tap swaps board art locally; the board persists through stop 
   const g=game(),a=g.startAt+500;g.players[0].cuts=140;g.players[0].score=300;g.windows=[{kind:'stop',at:a,until:a+2000,index:1},{kind:'cut',at:a+2000,until:g.endAt,index:2}];
   const x=domClient(g);let now=a+250;t.mock.method(Date,'now',()=>now);const positions=[];
   for(let i=0;i<10;i++){now=a+250+i*35;cabbageTap484(x.c,'left');assert.equal(x.board.dataset.damage,i+1);positions.push(x.board.style.backgroundPosition)}
-  assert.equal(new Set(positions.slice(0,7)).size,7);assert.equal(x.board.values['--rubble-loss'],'4.5%');assert.equal(x.stage.classes.has('is-broken'),true);
+  assert.equal(new Set(positions.slice(0,7)).size,7);assert.equal(x.board.style.clipPath,'none');assert.equal(x.board.style.opacity,0);assert.equal(x.stage.dataset.destruction,'table');assert.equal(x.stage.classes.has('is-broken'),true);
   assert.equal(x.root.querySelector('[data-cb-score="0"]').dataset.score,'220');
   const previous=x.layers[0].style.backgroundPosition;now=a+2000;for(const hit of x.c.cbUI484.pending)tap484(g,g.players[0],hit,hit.at);x.c.state.cabbage=publicCabbage484(g,'p',now);cabbageReceive484(x.c);cabbageTap484(x.c,'right');assert.equal(x.board.dataset.damage,10);assert.equal(x.stage.classes.has('is-broken'),true);assert.equal(x.layers[0].style.backgroundPosition,previous);
 });

@@ -1,0 +1,82 @@
+{
+  "build": 488,
+  "version": "3.1.167",
+  "baseBuild": 487,
+  "files": [
+    {
+      "path": "README_Build488.txt",
+      "bytes": 4379,
+      "sha256": "bccf572164c641bb3332ee51e698d518ccd0d035d40af1db43ae2d82b5fff13e"
+    },
+    {
+      "path": "assets/cabbage488/ART_SOURCES.txt",
+      "bytes": 4385,
+      "sha256": "59724754ee5460c48a7391ca0ffe3cb2ea7234ffe156e802afaa9e35f0113d71"
+    },
+    {
+      "path": "assets/cabbage488/cleaver.png",
+      "bytes": 1138184,
+      "sha256": "0c5847032d8339cd8b148e003b82a468dfa59102746d9bf839f952155aeefbae"
+    },
+    {
+      "path": "assets/cabbage488/kitchen-floor.png",
+      "bytes": 2781389,
+      "sha256": "b77e93c810dd0af8a83f8db6ab26bb62827260c214e2e7c3d0f770a1abaec571"
+    },
+    {
+      "path": "assets/cabbage488/table-stages.png",
+      "bytes": 1478202,
+      "sha256": "d3c902b5c56f4b78451af0125cff58c04a782cbde3de0b01eb930c518f3b5b60"
+    },
+    {
+      "path": "index.html",
+      "bytes": 120039,
+      "sha256": "f885135c83e1532ae99f54b86aefdae9a000f814a3faf1dcadeaa42808150e98"
+    },
+    {
+      "path": "src/Styles/build488-cabbage.css",
+      "bytes": 6876,
+      "sha256": "9784aa2dbcb48ea2caeef4248cf35918e64a28af412e2809e2d2a31de41fd8cf"
+    },
+    {
+      "path": "src/cabbage/Destruction488.js",
+      "bytes": 2953,
+      "sha256": "495effa47a54e6d31b88ce4bff29c220e1780312ce940fa8947d6538a599c53f"
+    },
+    {
+      "path": "src/cabbage/View484.js",
+      "bytes": 24225,
+      "sha256": "7817ac28dfb3f490b8427576f650296e449b559df03ec2a06bc5db9bae496806"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "7a249111ea2379adcb3a736203dc872ed8d404d03dc191e4ab9da4ed257e9920"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "4acc93c4183ff346767446fce7b3c0c45245f90d1add6a9fa84884b1229c7b47"
+    },
+    {
+      "path": "tests/build486-cabbage.test.mjs",
+      "bytes": 15973,
+      "sha256": "839f384afe8e7a0ddd533397955733819ca48dca54fe19002464fbe52f98bee3"
+    },
+    {
+      "path": "tests/build488-cabbage.test.mjs",
+      "bytes": 9300,
+      "sha256": "13a71cbbc87a4d0f13aec6c6c5adf48164f0fd57a45ca60e5be25a79b9a431a5"
+    },
+    {
+      "path": "world-raid-offline488-assets.json",
+      "bytes": 33787,
+      "sha256": "e7a9052de91b9ba674f322642a3c98a07025e4db82d549881fae4cda47af3942"
+    },
+    {
+      "path": "world-raid-offline488-sw.js",
+      "bytes": 1844,
+      "sha256": "8920585b5af59eaabb0a68d9539a86a83ecc1edbb53f219f158b0e75d27aa7a9"
+    }
+  ]
+}
