@@ -1,6 +1,6 @@
 // Membership actions decorate the existing seat elements without changing their layout.
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const room=c=>c.state?.room??c.state?.sugoroku??c.state?.cabbage;
+const room=c=>c.state?.room??c.state?.sugoroku??c.state?.cabbage??c.state?.canal;
 const host=c=>c.state?.party?.hostId===c.transport.selfId;
 const idle=c=>!room(c)||['lobby','result'].includes(room(c).phase);
 export function memberAttrs485(c,m){return m&&host(c)&&m.playerId!==c.transport.selfId?` data-party-member485="${esc(m.playerId)}" role="button" tabindex="0" aria-haspopup="dialog" aria-label="${esc(m.name)}の参加者メニューを開く"`:''}
