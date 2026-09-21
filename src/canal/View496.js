@@ -1,3 +1,4 @@
+import{countdown501,updateCountdown501}from'./Countdown501.js';
 import{SPECIES500}from'./Rules500.js';
 import{missileLayout500}from'./Motion500.js';
 import{playerColor499}from'../party/PartyColors499.js';
@@ -23,7 +24,7 @@ return`<section class="cn-screen cn-play cn496"><header class="cn-header"><butto
 <div class="cn-alert496" role="status" aria-live="polite" data-cn-alert496>敵をタップ！数字の回数で捕獲</div>
 <div class="cn-feed496" data-cn-feed496 aria-hidden="true"></div>
 ${g.players.map(x=>`<div class="cn-helper496 ${x.playerId===c.transport.selfId?'is-self':''}" data-cn-helper496="${x.seat}" style="--crew:${playerColor499(x).hex};left:${crew496[x.seat].x*100}%;top:${crew496[x.seat].y*100}%" aria-hidden="true">${portrait(c,x.choice.speciesId)}<span>${x.playerId===c.transport.selfId?'あなた':esc(x.name)}</span><small data-cn-work496="${x.seat}"></small></div>`).join('')}
-<div class="cn-count496" data-cn-count496 role="status"><small>この家を、みんなで守る。</small><strong data-cn-count-number496>3</strong><b>敵をタップして捕獲！</b><span>仲間の色の網に続けて、連携捕獲！<br>家に着かれると共通HPが減る！${g.rules500===1?'<br>飛んでくるミサイルも1タップで迎撃！':''}</span></div>
+${countdown501(g)}
 <div class="cn-hp-sr496" data-cn-health496 role="progressbar" aria-label="みんなの家の体力" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"></div>
 </div><footer class="cn-bottom496"><button class="cn-mega496" data-cn-action="burst" disabled><i aria-hidden="true"></i><span><b>4人で、一網打尽！</b><small data-cn-net-note496>捕獲で大網をためよう</small><em><i data-cn-energy496></i></em></span><strong data-cn-net-count496>0 / ${CANAL496.netMax}</strong></button></footer>
 <div class="cn-offline" data-cn-offline496 hidden><strong>再接続中…AIが援護しているよ</strong><button data-race-action="refresh">接続を確認</button></div>${c.error?`<p class="cn-error" role="alert">${esc(c.error)}</p>`:''}</section>`}
@@ -63,7 +64,7 @@ export function tick496(c){const root=c.root,g=game(c),stage=root?.querySelector
  const note=at<g.startAt?'敵をタップ！ 数字の回数で捕獲':u.callout?.until>now?u.callout.text:ready?'大網が満タン！ 下の金色ボタンで一網打尽！':danger?'家の手前！ 赤い敵を急いで捕獲！':u.feedback?.until>now?u.feedback.text:u.snareNote?.until>now?u.snareNote.text:elapsed>=50000?'全水門、開放中！ 最後まで守れ！':g.rules500===1&&g.enemies.some(e=>e.kind===3)?'巨大将軍を集中捕獲！ ミサイルは1タップで迎撃！':(p?.captured??0)<3?'敵をタップ！ 数字の回数で捕獲':wave496(elapsed).name;
  set('[data-cn-alert496]',note);alert?.classList.toggle('is-danger',danger||g.hp<=30);if((g.hp<=30||elapsed>=50000)&&u.signal!==Math.floor(elapsed/5000)){u.signal=Math.floor(elapsed/5000);sound(c,'alarm')}
  const health=root.querySelector('[data-cn-health496]');health?.setAttribute('aria-valuenow',String(g.hp));stage.classList.toggle('is-critical',g.hp<=30);stage.classList.toggle('is-finale',elapsed>=50000);
- const count=root.querySelector('[data-cn-count496]');if(count){count.hidden=at>=g.startAt;set('[data-cn-count-number496]',at<g.startAt-3000?'準備！':Math.max(1,Math.ceil((g.startAt-at)/1000)))}
+ updateCountdown501(root,g,at,u.reduced);
  const feed=root.querySelector('[data-cn-feed496]');if(feed){const items=(u.feed??[]).filter(x=>x.until>now),signature=items.map(x=>x.text).join('|');if(signature!==u.feedSignature){u.feedSignature=signature;feed.innerHTML=items.map(x=>`<span style="--crew:${x.color}">${esc(x.text)}</span>`).join('')}}
  const mega=root.querySelector('[data-cn-action="burst"]');if(mega){mega.disabled=!playable(c)||!ready||now-(u.burstPending??0)<700;mega.classList.toggle('is-ready',ready)}set('[data-cn-net-note496]',ready?'今だ！ 仲間と一緒に全員で網を投げる！':'捕獲で＋1・仲間と連携なら＋2');set('[data-cn-net-count496]',ready?'発動！':g.netEnergy+' / '+CANAL496.netMax);const energy=root.querySelector('[data-cn-energy496]');if(energy)energy.style.width=Math.min(100,g.netEnergy/CANAL496.netMax*100)+'%';const off=root.querySelector('[data-cn-offline496]');if(off)off.hidden=c.ready();
  const missiles=missileLayout500(g.missiles,at,stage.clientWidth,stage.clientHeight).map(m=>({...m,id:-m.id,missile500:true}));targets(c,u,[...u.frameLayout,...missiles]);draw496(canvas,g,u,at,now,u.frameLayout);

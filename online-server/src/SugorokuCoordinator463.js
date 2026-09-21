@@ -31,7 +31,7 @@ export function handleSugoroku463(c,session,m){
   if(g.economy474?.mode==='crystal')throw Error('報酬戦は終了まで中断できません。ホームへは戻れます');const humans=g.players.filter(x=>!x.ai);
   if(g.phase!=='playing'||p.hostId!==session.playerId||humans.length!==1||humans[0].playerId!==session.playerId||p.members.some(x=>x.playerId!==session.playerId))throw Error('他のプレイヤーが参加している対戦は中断できません');
   if(m.kind==='exitSolo465'){delete c.data.boardRooms463[g.code];p.game=null;p.raceCode=null;for(const member of p.members)member.ready=false;return true}
-  const fresh=createBoard463(c,p,g.members.map(x=>({...x})));fresh.economy474={mode:'practice',fee:500,epoch:0,entries:{}};fresh.members[0].choice={...g.members[0].choice};start463(fresh,c.now());fresh.seen[session.playerId]=[requestId];mark(fresh,c.now(),0);c.data.boardRooms463[g.code]=fresh;return true;
+  const fresh=createBoard463(c,p,g.members.map(x=>({...x})));fresh.economy474={mode:'practice',fee:500,epoch:0,entries:{}};fresh.members[0].choice={...g.members[0].choice};fresh.aiColors500={...(p.aiColors500??{})};start463(fresh,c.now());fresh.seen[session.playerId]=[requestId];mark(fresh,c.now(),0);c.data.boardRooms463[g.code]=fresh;return true;
  }
  if(m.kind==='economy474'){if(g.phase!=='lobby'||p.hostId!==session.playerId||!['crystal','practice'].includes(m.mode))throw Error('部屋主が開始前に選べます');if(m.mode==='crystal'&&(!Number.isSafeInteger(m.fee)||m.fee<1||m.fee>minimumFee474(p)))throw Error('参加費は全員の所持💎の範囲内にしてください');for(const id of Object.keys(g.economy474?.entries??{}))refundEntry474(c,g,id,'参加費の変更');g.economy474={mode:m.mode,fee:m.mode==='crystal'?m.fee:500,epoch:(g.economy474?.epoch??0)+1,entries:{}};p.members.forEach(m=>m.ready=false);
  }else if(m.kind==='select'){
@@ -41,7 +41,7 @@ export function handleSugoroku463(c,session,m){
   if(p.hostId!==session.playerId||g.phase!=='lobby')throw Error('部屋主が準備画面で開始できます');
   if(p.members.some(x=>!x.ready||x.atHome||!c.sessions.get(x.playerId)?.connected)||g.members.some(x=>!x.choice))throw Error('全員がコマを選んで「準備OK」を押してください');
   if(g.economy474?.mode==='crystal'&&g.members.some(m=>!g.economy474.entries[m.playerId]))throw Error('全員の参加費の受付を待っています');
-  if(p.members.some(x=>c.isBusy(c.sessions.get(x.playerId))))throw Error('全員のオンラインコンテンツ終了を待っています');start463(g,c.now());
+  if(p.members.some(x=>c.isBusy(c.sessions.get(x.playerId))))throw Error('全員のオンラインコンテンツ終了を待っています');g.aiColors500={...(p.aiColors500??{})};start463(g,c.now());
  }else{
   if(m.kind==='choice'&&m.choiceId!==g.pending?.id)throw Error('この選択は終了しています');
   action463(g,session.playerId,m,c.now());

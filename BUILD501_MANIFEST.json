@@ -1,0 +1,132 @@
+{
+  "build": 501,
+  "version": "3.1.180",
+  "baseBuild": 500,
+  "files": [
+    {
+      "path": "README_Build501.txt",
+      "bytes": 3758,
+      "sha256": "69fcd743221efffb55edee6816e0c1cb2e00f2f9e415f6fbcccd10354254c368"
+    },
+    {
+      "path": "assets/canal501/countdown-medallion.png",
+      "bytes": 2298199,
+      "sha256": "8ff5dc3990f2ac6c13489e692001c2bd49b8aae28b263f9690328a2631e12d4f"
+    },
+    {
+      "path": "docs/build501/countdown-preview.png",
+      "bytes": 1309983,
+      "sha256": "08116515aefc898404355ce5f7b5e6e8d2156a29632de241ee3c74a19855fc59"
+    },
+    {
+      "path": "docs/build501/tests.txt",
+      "bytes": 6082,
+      "sha256": "515456820503ee612263c80b2a4d30085b1523110f2072f5eb330c4a5d1dac1d"
+    },
+    {
+      "path": "docs/build501/verification.txt",
+      "bytes": 3553,
+      "sha256": "0243b84c03194c79c13f1c9fa069f1d031091d2f86bb2024a8d07e67e330bab3"
+    },
+    {
+      "path": "index.html",
+      "bytes": 137285,
+      "sha256": "0794ae7fdaa8789af0d67d078db5fe367f20f71d71030319621a02836a7cca3a"
+    },
+    {
+      "path": "online-server/src/CabbageCoordinator484.js",
+      "bytes": 4337,
+      "sha256": "85a0226aaaabace9c0665075a0df7cb0173b95fe51f9deb7cca29c7832e54a0d"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 22789,
+      "sha256": "1e515003e60a9a4c26fa1573c096865a18629415d2e097bc5174bbb6a0abf59c"
+    },
+    {
+      "path": "online-server/src/SugorokuCoordinator463.js",
+      "bytes": 8227,
+      "sha256": "18b39f5067601bc2bf6cab1bb772be26710ddaff22b7743bb292dc7aafd3173b"
+    },
+    {
+      "path": "src/Styles/build501-party-polish.css",
+      "bytes": 5205,
+      "sha256": "fe1f692de6df9cf86700d15aa06f959ae6c4c6d5d93b3f338490b2649374fdd5"
+    },
+    {
+      "path": "src/cabbage/Rules484.js",
+      "bytes": 6644,
+      "sha256": "bfa512392e246ac60b9a453659047128085fc9fdf1b49d4f48fd24ca07d94f84"
+    },
+    {
+      "path": "src/cabbage/View484.js",
+      "bytes": 23892,
+      "sha256": "efb468d9918bf9fece15424129e38ad0f987cc69ee4f33a490cc8e45f950c860"
+    },
+    {
+      "path": "src/canal/Countdown501.js",
+      "bytes": 2219,
+      "sha256": "40d1fbf2aaf28751111046fd94b4a56ab52343a8fe50af5c596c75aceb5ff127"
+    },
+    {
+      "path": "src/canal/View496.js",
+      "bytes": 14468,
+      "sha256": "791ac5afa35e4317138e65ccec505d4344307a0514cf919532b7532eb01b15ee"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "51c3df4ed165be0d8d1203f8e33da02fcfd87ee5e9bada30d04d50efbd48c384"
+    },
+    {
+      "path": "src/party/GameColors501.js",
+      "bytes": 918,
+      "sha256": "b1b49ce8de8cc6be69a4ee6cb57f8c39608d7f3242198d447454f80ab0b31377"
+    },
+    {
+      "path": "src/party/PartyColorUI499.js",
+      "bytes": 7447,
+      "sha256": "750a05b035426cb1ca49a9c8b51259593d374568511afefdbe34bba4c1ba3f91"
+    },
+    {
+      "path": "src/race/RaceExperience458.js",
+      "bytes": 23643,
+      "sha256": "2d76bdfa39fc041e881a331d4cf4ce6218d5f617881753b201decdb9b4c007bc"
+    },
+    {
+      "path": "src/race/RaceView452.js",
+      "bytes": 21577,
+      "sha256": "da1717691f894a68cbab26ed8cd9945085c55ee978dddd2b1ea3ee166d9d6103"
+    },
+    {
+      "path": "src/sugoroku/Engine463.js",
+      "bytes": 39865,
+      "sha256": "228efa2bb051e4a3f642f8a530f21954f0022e983f59da74476d297a93f8f513"
+    },
+    {
+      "path": "src/sugoroku/View463.js",
+      "bytes": 55276,
+      "sha256": "15e73e5266888f8fe5cb7e7557b8bc2cdc320cc54cf296fe7ce2a7357e6aa188"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "bedf902f29cf5f939b7e0162f03bdf647401a3126ff6c204e53efa67063ddc11"
+    },
+    {
+      "path": "tests/build501-colors.test.mjs",
+      "bytes": 9737,
+      "sha256": "f23fc0f0f75774d140ac91db0b41f6d6d979b5fa108c8b71393fee74061e8c9a"
+    },
+    {
+      "path": "world-raid-offline501-assets.json",
+      "bytes": 35687,
+      "sha256": "9a7a42394e357d331cf6dcd0b478df605f67b651859f1fceb0d3bda3c7702e1c"
+    },
+    {
+      "path": "world-raid-offline501-sw.js",
+      "bytes": 1844,
+      "sha256": "a6f15c193033d835a30a4a94a71d958a30d79b8bb223b1188f4a5b3fcc2da60d"
+    }
+  ]
+}

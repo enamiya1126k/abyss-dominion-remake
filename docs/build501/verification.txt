@@ -1,0 +1,37 @@
+Build501 verification
+
+Scope: visual-only countdown and player color propagation in cabbage, race, sugoroku.
+The patch checkout is partial: base species catalogs and MonsterVisual.js are absent.
+Build501 tests use in-memory fixtures only when those files are absent; production
+source files are not replaced by fixtures. A complete checkout uses its real files.
+The old build463 test file could not load in this checkout without those catalogs;
+it is not included in the passing test count. Current engine behavior is covered
+by the new coordinator and seeded gameplay comparisons instead.
+
+56 passing tests:
+node --test tests/build501-colors.test.mjs tests/build500-canal.test.mjs tests/build500-integration.test.mjs tests/build499-colors.test.mjs tests/build484-cabbage.test.mjs tests/build498-zoom.test.mjs
+
+Manual source checks:
+- Cabbage and sugoroku attach validated color metadata at match creation and public projection.
+- Race colors are keyed by playerId, including reordered result rows.
+- AI settings pass from party to game; the standalone race lobby uses the account preference.
+- No random calls were added. Rules, inputs, timing, bets and pawn anchor functions are unchanged.
+- Styles outside the countdown change colors/shadows only, keeping existing geometry.
+- A contender ticket retains its player-colored border despite the older important gold-border rule.
+- Every changed client module is mapped to v3.1.180-build501, including older import aliases.
+- The new CSS, JS and medal asset are included in the offline asset list.
+
+Visual check:
+countdown-preview.png uses the production draw496 background and the actual medal asset.
+The HTML countdown is composed with native Canvas for a design preview; it is not a
+browser screenshot or proof of DOM layout/touch behavior. Monster HTML, toolbar and
+controls are omitted. Image was inspected after rendering and labels centered.
+Cloud Browser local navigation was blocked by automatic approval review earlier in
+this session (ERR_BLOCKED_BY_CLIENT); no alternate route was attempted.
+iPhone Safari and live four-device multiplayer operation remain unverified.
+
+Image generation:
+Built-in imagegen was used for assets/canal501/countdown-medallion.png.
+Final PNG: 1254 x 1254, RGBA, transparent outside the ornament.
+Prompt:
+Use case: stylized-concept. Asset type: transparent game UI countdown medallion for a premium Japanese fantasy river-defense party game. Generate ONE square 1024x1024 PNG with genuine transparent outside background. Centered circular medallion occupying 88% of the canvas, dark emerald teal smooth inset center with a LARGE EMPTY circular area for a live countdown number placed later in code. Ornate but readable antique gold and weathered bronze rim, braided fishing rope, two small realistic fishing cast nets attached symmetrically to lower sides, beautiful sculpted turquoise water splash accents curling at bottom and sides, a small gold house emblem centered at the top. Painterly polished 3D game asset, crisp metal highlights, rich material texture, warm golden glints, coherent dimensional lighting. Fits a game with turquoise water, mossy Japanese stone banks and wood fishing docks. Keep all decorations within bounds with transparent padding. No characters, NO text, NO numbers, NO letters, no rectangular panel, no opaque background, no checkerboard. Preserve broad smooth dark teal empty central area 50% of the whole image width so a countdown 3/2/1 can be read clearly. This is the actual isolated UI ornament, not a screenshot or a UI mockup.
