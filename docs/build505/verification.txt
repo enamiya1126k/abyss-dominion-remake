@@ -1,0 +1,36 @@
+Build505 / v3.1.184 — verification
+
+Automated suites: 100 passed, 0 failed.
+New coverage: 12 tests in tests/build505-gorilla.test.mjs.
+- Pinch branch outcomes at both probability boundaries, only after reveal.
+- No hair removal, capture credit, trap change, AI seed change or mercy-coin consumption.
+- Wrong actor, invalid target, stale sequence, expired budget and duplicate rejection before RNG.
+- Pinch + two hair pulls share the three-action budget; voluntary handoff after one works.
+- Repeated pinch actions have distinct sequences and cannot hang timeout progression.
+- Existing independent 50/50 drum resolution is unchanged by near-fury.
+- Public state hides pending pain, trap, seed and the mercy deck.
+- Disk restart during pinch preserves the exact draw and phase.
+- Actual RaceCoordinator451 synchronizes all four client views and rejects old capabilities.
+- All thirty long strands resolve to themselves via nearest-path picking at tested viewport sizes.
+- Only the visible nipple-tip ellipse uses the pinch action.
+- Configured colors, owner badges, reaction camera and reduced-motion paths.
+- Rendered HTML removes in-game narration, damage multipliers, odds and reaction popups.
+- Input bursts dispatch once; compatibility click does not choose an overlapping target.
+- Legacy 504 rooms retain their previous engine.
+
+Regression suites: build504-gorilla, build503-gorilla, build501-colors,
+build500-canal, build500-integration, build499-colors, build484-cabbage,
+build498-zoom.
+The partial checkout lacks base species, endgame catalogs and MonsterVisual.
+Their test fixtures exist only in the Node loader, never in production files.
+
+Visual QA: native Canvas executed the production Scene505 with existing PNG assets.
+The design preview is NOT a browser screenshot; participant HTML, sprites and controls are omitted.
+No new generated or modified PNG game assets: existing gorilla and nipple artwork is retained.
+Real iOS Safari and four-device interaction remain unverified.
+Cloud Browser's earlier local navigation was denied by automatic approval review.
+No alternative browser, tunnel or proxy was used.
+
+Release checks: JavaScript parser, all changed import aliases, entry version,
+CSS inclusion, offline cache membership, archive CRC and extracted-file SHA-256.
+No deployment performed. Apply to Build504 and restart the updated server.

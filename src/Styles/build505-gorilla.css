@@ -1,0 +1,13 @@
+/* The king speaks with his face. Keep only turn ownership and actual controls. */
+.gg505.gg-play503 .gg-controls503{min-height:88px;height:88px;box-sizing:border-box;padding:8px 14px;gap:5px;grid-template-rows:20px 44px;align-content:center}
+.gg505 .gg-turn-note503{justify-content:flex-end;min-height:20px}
+.gg505 .gg-decisions503{gap:10px}
+.gg505 .gg-decisions503 button{min-height:44px;padding:8px;font-size:13px}
+.gg505 .gg-targets503 button{pointer-events:none;touch-action:manipulation}
+.gg505 .gg-targets503 button:focus-visible{outline:1px solid var(--turn-color);border-radius:50%;background:color-mix(in srgb,var(--turn-color) 10%,transparent)}
+.gg505 [data-gg-spot505]{position:absolute;width:24px;height:24px;transform:translate(-50%,-50%);border:0;padding:0;background:none;color:transparent}
+.gg505 .gg-warning503{top:12px}
+.gg505 .gg-tool-tag504{filter:drop-shadow(0 2px 3px #1b100bac)}
+.gg505 .gg-pawn503 small{display:none}
+.gg505 [data-gg-error503]{position:absolute;bottom:90px;left:12px;right:12px;z-index:8;padding:10px;background:#351e16f0;border:1px solid #ba815f;border-radius:10px}
+@media(max-height:500px) and (orientation:landscape){.gg505.gg-play503 .gg-controls503{height:auto;min-height:130px;grid-template-rows:24px auto;align-self:stretch}.gg505 .gg-decisions503{grid-template-columns:1fr}.gg505 .gg-stage503{min-height:350px}}

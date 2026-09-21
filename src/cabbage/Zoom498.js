@@ -28,7 +28,7 @@ export function lockPlayZoom498(surface, doc = globalThis.document) {
   };
   const belongs = e => host === surface || inside(e.target) || active.size > 0;
   const isPlayTouch = target => {
-    if (target?.closest?.('[data-gg-hair503],[data-gg-hair],[data-cb-side],[data-cn-target496],[data-cn-target494],[data-cn-lane]')) return true;
+    if (target?.closest?.('[data-gg-hair503],[data-gg-spot505],[data-gg-hair],[data-cb-side],[data-cn-target496],[data-cn-target494],[data-cn-lane]')) return true;
     return !target?.closest?.('button,a,input,select,textarea');
   };
   on('touchstart', e => {

@@ -1,0 +1,127 @@
+{
+  "build": 505,
+  "version": "3.1.184",
+  "baseBuild": 504,
+  "files": [
+    {
+      "path": "README_Build505.txt",
+      "bytes": 4161,
+      "sha256": "f85ba74fc0e8ea4e1284935b1dcfc9518bf9b7fbc654cca9858012a709f3a164"
+    },
+    {
+      "path": "docs/build505/gorilla-preview.png",
+      "bytes": 1146871,
+      "sha256": "fb4e4e8c98e609a99be198c0ccd54c0ca7cb9e0dbf0e027c3a9b6adeb593cd24"
+    },
+    {
+      "path": "docs/build505/tests.txt",
+      "bytes": 10920,
+      "sha256": "f0e2aeb4fec1f18c4428fd88ed39f8c318f4dc0b8ffefc57ef3b056dce345f1e"
+    },
+    {
+      "path": "docs/build505/verification.txt",
+      "bytes": 2362,
+      "sha256": "461e1fa95a0c7465897e3b4e44d1c5709ce6f4be503766d970ef06f7e5bb3984"
+    },
+    {
+      "path": "index.html",
+      "bytes": 143922,
+      "sha256": "cbbcc009db044b879bb7bcb46de890634d2cdbc40a3c520c606cb714a3072a5d"
+    },
+    {
+      "path": "online-server/src/GorillaCoordinator502.js",
+      "bytes": 4864,
+      "sha256": "50277fe1d951e5ce25588226fb8ea8784419ee4b49fefcecf6eafb8c2196e3c6"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 15551,
+      "sha256": "fc45623172aae3afc219dd16f70e0513bb5d143786d9965c6e3b73be2250a598"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 23221,
+      "sha256": "49f01dfc94dc0aef42928a1772fc1f430541ee1d6f236b4f52f3a6ca80214bde"
+    },
+    {
+      "path": "src/Styles/build505-gorilla.css",
+      "bytes": 1361,
+      "sha256": "56e39bd187c0fcce345c2fa4e011818f81354618df76e5823b7a11af570f635f"
+    },
+    {
+      "path": "src/cabbage/Zoom498.js",
+      "bytes": 4376,
+      "sha256": "70ad5234170a608eb932cd81bd14ca9614e83b8073798df6aeff041b032e9c0e"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "3181029b2c341f75c73ccae5081b12013831d75aedbec652ff29aa6363c49307"
+    },
+    {
+      "path": "src/gorilla/Presentation505.js",
+      "bytes": 4868,
+      "sha256": "f4afbdb0ad29ede9ff1d47c8745c2a9d846c2172aa21f8a1db13c585fb5f0c9b"
+    },
+    {
+      "path": "src/gorilla/Rules505.js",
+      "bytes": 2533,
+      "sha256": "97f9978ee961c7dc820d4e93f280da49c35c84dfce67bdfda3e678fdd3002738"
+    },
+    {
+      "path": "src/gorilla/Scene505.js",
+      "bytes": 8825,
+      "sha256": "da71e2c347d9dbf79ba5e6f2ced5fcafe63ba0befe9004475e47094553ea5651"
+    },
+    {
+      "path": "src/gorilla/View502.js",
+      "bytes": 16715,
+      "sha256": "8ae231849161ca1475f58f8ce2e0ef38bb3aaa6c5a2d8ed2d69b380c63c2a1ae"
+    },
+    {
+      "path": "src/gorilla/View505.js",
+      "bytes": 11592,
+      "sha256": "09fb7bfd2f179010df8ab58c12fd6168692e9f04052f222efa11d7338828ac25"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 9832,
+      "sha256": "9819c3d7fd39e8a0e1b8ed80fa8ba1f2fe8762a88eab9206ff3a848fae25b94c"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 23519,
+      "sha256": "36749a40a129678436520a84b3e12f90f6c87f772afd19519e8b1e3937b0963b"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "3c8b32d40b1448c2ccb1801fdc59d75be9b15c60d6d86a0e6a8f24309f3a5ea5"
+    },
+    {
+      "path": "tests/build503-gorilla.test.mjs",
+      "bytes": 16245,
+      "sha256": "adabab7a6d966c5ebc0d9e66f1ef45442ec461184994915c48ac41d3f90a0322"
+    },
+    {
+      "path": "tests/build504-gorilla.test.mjs",
+      "bytes": 12145,
+      "sha256": "5d28078825c19cb7823bbf15aaf9c1e4a507939ca7c59cac8a36614acb24a1d4"
+    },
+    {
+      "path": "tests/build505-gorilla.test.mjs",
+      "bytes": 12770,
+      "sha256": "de7e38df9af0304ba9a8a81199e57b4f2cc3c12e977d4596424b572c9580d28f"
+    },
+    {
+      "path": "world-raid-offline505-assets.json",
+      "bytes": 36672,
+      "sha256": "71099a01b48a3974c4582fa379642ecb13e6972aceb90520014f6a2e818f210b"
+    },
+    {
+      "path": "world-raid-offline505-sw.js",
+      "bytes": 1844,
+      "sha256": "33233e1a382298bc091eac40526a1509c2b1249c7ec00d16ffeb1ec34248860d"
+    }
+  ]
+}
