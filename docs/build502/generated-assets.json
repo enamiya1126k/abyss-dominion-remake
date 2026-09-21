@@ -1,0 +1,41 @@
+{
+  "build": 502,
+  "assets": [
+    {
+      "path": "assets/gorilla502/king-atlas.png",
+      "tool": "built-in imagegen",
+      "reference": null,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "sha256": "c2821f4ae62a3e85d9615743a0024a1e99e83ecd1409daf0fe8bf50157fa305c",
+      "prompt": "Use case: stylized-concept. Asset type: actual 2x2 transparent sprite atlas for a premium funny fantasy party game named Gorilla King's chest-hair plucking. Generate ONE square PNG with four equal square cells in an exact 2 by 2 grid, genuine alpha transparent background in every cell, no borders or labels. All four cells depict the SAME adorable grumpy huge male gorilla king, same gold crown with emerald gem, same dark chocolate fur, broad warm tan muzzle, exaggerated expressive eyebrows, huge ears, premium painterly 3D fantasy game finish, crisp detailed material, warm cinematic light. Front-facing seated gorilla, head to hips visible, very broad chest, crown fully inside each cell, arms and hands inside each cell, centered identical scale and anchor in all four cells. Character fills 88% width and 90% height of each cell with clear transparent margins; do not cross cells. A wide bare short-fur warm brown chest area at x30%-70%, y48%-70% of each cell is reserved for six selectable curly hairs added later by code; NO long chest hairs baked into the painting. TOP LEFT: calm arrogant king with a smug closed-mouth grin, both arms relaxed at sides, chest unobstructed. TOP RIGHT: comical stoic pain face, tightly clenched teeth, one eye squeezed shut and one tear at cheek, one hand clutching upper chest to the side. BOTTOM LEFT: suddenly furious funny king, eyes huge, mouth roaring, both fists raised beside shoulders, chest unobstructed. BOTTOM RIGHT: exaggerated chest-drumming king, determined puckered expression and fists on upper chest, comedic body tension. No clothing on chest, no humanoid genitals, no blood or injury, no weapons, no scenery, no text, no numbers, no watermark, no checkerboard. Strong appealing personality, polished collectible game-character quality, not a flat emoji. Identical character proportions and camera angle in all four panels."
+    },
+    {
+      "path": "assets/gorilla502/court.png",
+      "tool": "built-in imagegen",
+      "reference": null,
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "sha256": "ff61f53b6de43a92e1f4669551787919cf069bdf62d3118114dcba30b04cb769",
+      "prompt": "Use case: stylized-concept. Asset type: production vertical game background for a humorous fantasy gorilla king party game. Generate a richly detailed premium painterly 3D fantasy environment, portrait 1024x1536 composition. A jungle king's ancient moss-covered stone throne courtyard deep in an emerald tropical forest. Warm gold sunlight shafts enter from upper corners, banana leaves and carved stone columns framing both sides, subtle gold royal ornaments, a few ripe bananas and small candles at the extreme edges. A broad empty dark mossy throne alcove in the center behind where a large seated character will be overlaid later, and a smooth broad circular stone arena floor occupying lower 30 percent for four player monsters. Camera straight-on with slight downward view toward floor. Keep the central 70 percent readable and uncluttered, do not put a chair, creature, text or prop in the character area. High quality magical game environment matching antique gold, emerald green and warm brown palette. Bright enough to see floor texture, darker at edges, playful regal mood. NO characters, NO gorilla, NO animals, NO writing, NO letters, NO numbers, NO UI, no watermark. Edge-to-edge opaque background."
+    },
+    {
+      "path": "assets/gorilla502/cover.png",
+      "tool": "built-in imagegen",
+      "reference": "assets/gorilla502/king-atlas.png",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "mode": "RGB",
+      "sha256": "c52c97e2e82b28d9c1a663df4965397d519653dedbc085b47200bc6c94f88888",
+      "prompt": "Use case: stylized-concept. Asset type: one landscape game selection cover illustration, 1536x1024 preferred. Use the provided sprite atlas ONLY as a character identity reference: SAME funny brown gorilla king with gold crown, emerald center jewel, warm tan muzzle, big expressive eyebrows. Draw only ONE gorilla, not an atlas or split panels. Scene: lush magical jungle stone throne courtyard with gold sunbeams, emerald foliage, ornate weathered golden royal decorations. Gorilla king fills middle 70% with a comically strained toothy grin and one watery eye as one tiny loose curly chest hair floats in the air, one hand pressing his broad chest, other arm raised in comic alarm. Chest hair is cartoonish, not dirty or gross; family friendly humor. Tilted crown adds personality. A handful of small bananas fly harmlessly at side edges with a golden comic shockwave suggesting imminent chaos. The image must read clearly as a high-budget silly fantasy party minigame. Detailed painterly 3D game rendering matching the reference's fur and face. Dynamic close composition, crown and face fully visible, rich emerald/antique-gold/warm-brown colors, strong focal face. NO text, NO letters, NO numbers, NO logos, no interface, no grid, no extra gorillas, no blood or violence, no watermark. Do not recreate the sprite sheet."
+    }
+  ]
+}

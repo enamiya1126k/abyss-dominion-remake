@@ -1,0 +1,56 @@
+Build502 verification / 2026-09-21
+
+Scope: New free four-player luck-only party minigame: Gorilla King's chest-hair plucking.
+Existing minigame mechanics are unchanged; common party routing now recognizes gorilla.
+
+74 passing tests:
+node --test tests/build502-gorilla.test.mjs tests/build501-colors.test.mjs tests/build500-canal.test.mjs tests/build500-integration.test.mjs tests/build499-colors.test.mjs tests/build484-cabbage.test.mjs tests/build498-zoom.test.mjs
+
+The checkout contains patches only. Missing base species/endgame catalogs and
+MonsterVisual.js are supplied as in-memory test fixtures only when absent. No
+production catalog, MonsterVisual module, or browser runtime was fabricated.
+The real RaceCoordinator, party handlers and all game engines are tested.
+
+New tests cover:
+- 1, 2, 3, 4 authenticated humans plus AI, capabilities and matching public states.
+- All 24 first-seat/losing-hair combinations; a single loser and sequential turns.
+- No secret target or private PRNG/owned roster in network projections.
+- Safe feedback does not depend on the secret target; AI/timeouts sample remaining hairs.
+- Server-time enforcement, ownership, host-only starts, readiness and active-game locks.
+- Duplicate, rapid, stale, out-of-turn and late input behavior.
+- Automatic completion during disconnection; bounded deterministic catch-up.
+- Atomic state persistence and restart without duplicated pulls.
+- No GOLD, crystal, reward, fatigue or progression changes from the new game.
+- Correct longer flight for the loser, landing before result, reduced-motion behavior.
+- Frozen player colors; HTML targets and preloading guard.
+- Host/guest result navigation; idempotent replay/list and switching to other minigames.
+
+Timing:
+1.5 second initial cue; each turn at most 1.5 seconds; safe reaction 0.4 seconds;
+final blast 2.9 seconds. All-human all-timeout arithmetic average over equally likely
+losing positions is 10.65 seconds, maximum 15.4 seconds. Manual and AI selections are
+usually faster. Network display follows the authoritative server clock and may lag.
+
+Art and native preview:
+The three production PNG assets are imagegen outputs, with actual alpha for the
+four-pose 2x2 atlas. Sprite atlas cell size is 627 x 627; CSS uses 200% background
+sizing and four exact positions. Selectable curls and numeric labels are code-native
+SVG/HTML overlays, never part of the secret-target image. New play assets decode
+before Ready is enabled. CSS is scoped to .gg502. Changed modules and new art are
+registered in import map / build502 offline cache.
+
+The preview was composed with native Canvas from the actual production court,
+atlas, shared hair anchors, frame selector, and caption functions, then inspected.
+It omits player monsters, top player list, and action toolbar. It is a design
+preview, NOT a browser screenshot or evidence of actual DOM/touch behavior.
+Cloud Browser local navigation was previously rejected by automatic approval
+review (ERR_BLOCKED_BY_CLIENT); no retry, alternative browser, proxy or tunnel was used.
+iPhone Safari and live four-device interaction remain unverified.
+
+Release checks:
+JavaScript syntax for all changed modules, changed-module import aliases, entry
+version, CSS link, worker registration and offline resource entries verified.
+ZIP CRC and all extracted file SHA-256 hashes match the included manifest.
+The ZIP is a standard Deflate archive containing paths relative to the existing
+Build501 game root. No server state, credentials, base stubs or temporary modules
+are included. No deployment was performed.

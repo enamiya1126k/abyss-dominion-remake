@@ -1,3 +1,4 @@
 // Only released games appear here. Future game adapters reuse the same party.
 export const PARTY_GAMES462=Object.freeze([
+ {id:'gorilla',name:'ゴリラ大王の胸毛抜き',tag:'完全運 × 1本勝負 × 大ぶっとび',players:'4人対戦 · 約10秒 · 不足席はAI',image:'./assets/gorilla502/cover.png',description:'王の胸毛、抜けるかな？ セーフなら我慢顔。ハズレで大激怒、引いた本人だけ遠くへ飛んでいく！'},
  {id:'canal',name:'用水路防衛隊',tag:'タップ捕獲 × 4人で連携 × 一網打尽',players:'4人協力 · 不足席はAI',image:'./assets/canal489/cover.png',description:'4人が同じ水場で大さわぎ！仲間の網に続けて連携捕獲。みんなの一網打尽で、家を60秒守り切れ！'},{id:'cabbage',name:'限界キャベツ千切り',tag:'連打 × 反射神経 × 大粉砕',players:'4人対戦 · 不足席はAI',image:'./assets/cabbage484/kitchen.png',description:'左右交互に、限界まで刻め！「切るな！」で止まれないと、まな板まで粉砕。'},{id:'race',name:'魔物レース',tag:'予想 × 育成 × 大逆転',players:'1〜4人 ＋ AI',image:'./assets/party462/monster-race.webp',description:'相棒を送り出し、勝者を見抜け。叩くタイミングと絆が勝負を変える！'},{id:'sugoroku',name:'カードすごろく',tag:'防御 × 奪取 × 覚醒',players:'4人対戦 · 不足席はAI',image:'./assets/sugoroku463/cover.png',description:'最初のゴールで優勝！ 手番に1枚の切り札と、割り込み防御で大逆転。'}]);
