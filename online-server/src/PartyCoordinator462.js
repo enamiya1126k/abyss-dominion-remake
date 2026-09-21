@@ -9,7 +9,7 @@ const fail=s=>{throw Error(s)};
 const clean=(s,n=16)=>String(s??'').replace(/[<>\u0000-\u001f]/g,'').slice(0,n);
 export const partyFor462=(c,id)=>Object.values(c.data.parties462??{}).find(p=>p.members.some(m=>m.playerId===id))??null;
 export const partyRace462=(c,p)=>p?.raceCode?(p.game==='sugoroku'?c.data.boardRooms463?.[p.raceCode]:p.game==='cabbage'?c.data.cabbageRooms484?.[p.raceCode]:c.data.rooms[p.raceCode])??null:null;
-export function partyView462(c,session){const p=partyFor462(c,session.playerId);if(!p)return null;const r=partyRace462(c,p);return{minimumCrystals474:minimumFee474(p),id:p.id,code:p.code,hostId:p.hostId,game:p.game,phase:r?.phase??'lounge',raceId:r?.id??null,members:p.members.map(m=>({playerId:m.playerId,name:m.name,portrait476:portrait476(m),connected:!!c.sessions.get(m.playerId)?.connected,atHome:!!m.atHome,ready:!!m.ready,spectating:!!r&&!r.members.some(x=>x.playerId===m.playerId&&!x.departed)}))}}
+export function partyView462(c,session){const p=partyFor462(c,session.playerId);if(!p)return null;const r=partyRace462(c,p);return{minimumCrystals474:minimumFee474(p),id:p.id,code:p.code,hostId:p.hostId,game:p.game,phase:r?.phase??'lounge',raceId:r?.id??null,members:p.members.map(m=>({playerId:m.playerId,name:m.name,seatToken485:m.seatToken485??null,portrait476:portrait476(m),connected:!!c.sessions.get(m.playerId)?.connected,atHome:!!m.atHome,ready:!!m.ready,spectating:!!r&&!r.members.some(x=>x.playerId===m.playerId&&!x.departed)}))}}
 export function clearReady462(c,r){const p=Object.values(c.data.parties462??{}).find(p=>p.id===r?.partyId462);if(p)for(const m of p.members)m.ready=false}
 function deleteGame463(c,r){if(r?.game==='cabbage'){delete c.data.cabbageRooms484[r.code];for(const [key]of c.cabbageQueue484??[])if(key.startsWith(r.id+':'))c.cabbageQueue484.delete(key)}else if(r?.game==='sugoroku'){cancelEntries474(c,r);delete c.data.boardRooms463[r.code]}else if(r)delete c.data.rooms[r.code]}
 export function openGame462(c,p,game){if(!PARTY_GAMES462.some(g=>g.id===game))fail('このゲームはまだ遊べません');const old=partyRace462(c,p);if(old&&!['lobby','result'].includes(old.phase))fail('今のゲームが終わってから切り替えられます');if(p.members.some(m=>c.sessions.get(m.playerId)&&c.isBusy(c.sessions.get(m.playerId))))fail('ほかのオンラインコンテンツの終了を待っています');if(old)deleteGame463(c,old);const people=p.members.map(m=>({playerId:m.playerId,name:m.name,owned:m.owned,choice:null,ai:false}));const r=game==='sugoroku'?createBoard463(c,p,people):game==='cabbage'?createCabbage484(c,p,people):c.makeRoom(p.code,people,8);r.hostId=p.hostId;r.partyId462=p.id;if(game==='sugoroku'&&old?.economy474){const fee=Math.min(old.economy474.fee,minimumFee474(p));r.economy474={mode:old.economy474.mode==='crystal'&&fee>0?'crystal':'practice',fee:fee||500,epoch:0,entries:{}}}if(old?.game!=='sugoroku'&&old?.game!=='cabbage'&&old&&game==='race'){r.track459=old.track459;r.course=old.course==='芝'?'砂':'芝';r.aiFatigue455=old.aiFatigue455??{}}if(game==='sugoroku'){c.data.boardRooms463??={};c.data.boardRooms463[p.code]=r}else if(game==='cabbage'){c.data.cabbageRooms484??={};c.data.cabbageRooms484[p.code]=r}else c.data.rooms[p.code]=r;p.raceCode=p.code;p.game=game;for(const m of p.members)m.ready=false}
@@ -20,12 +20,28 @@ export function handleParty462(c,session,m){
  if(m.op==='partyCreate462'||m.op==='partyJoin462'){
   if(p)return true;if(c.roomFor(id)||c.isBusy(session))fail('参加中のコンテンツを終了してから集合してください');
   const person={playerId:id,name:clean(m.displayName??session.profile?.displayName??'冒険者'),owned:c.roster(m.roster),ready:false,atHome:false,crystals474:crystalBalance474(m.crystals474)};
-  person.cabbageVersion484=m.cabbageVersion484===1?1:0;person.slotOne476=slot476(person.owned,m.slotOne476);
+  person.seatToken485=randomBytes(8).toString('hex');person.cabbageVersion484=m.cabbageVersion484===1?1:0;person.slotOne476=slot476(person.owned,m.slotOne476);
   c.data.parties462??={};
   if(m.op==='partyCreate462'){if(Object.keys(c.data.parties462).length>=1000)fail('部屋がいっぱいです');let code;do{code=randomBytes(3).toString('hex').toUpperCase()}while(c.data.parties462[code]||c.data.rooms[code]);p={id:'p462-'+randomBytes(8).toString('hex'),code,hostId:id,createdAt:c.now(),game:null,raceCode:null,members:[person]};c.data.parties462[code]=p;if(m.game)openGame462(c,p,m.game);return true}
   p=c.data.parties462[clean(m.code,6).toUpperCase()];if(!p)fail('合言葉の部屋が見つかりません');if(p.members.length>=4)fail('パーティーは4人までです');if(!c.canJoin(session,p.members))fail('この部屋には参加できません');p.members.push(person);r=partyRace462(c,p);if(r?.phase==='lobby'){r.members.push({...person,choice:null,ai:false,ticket:null,passed:false});clearReady462(c,r)}return true;
  }
  if(!p||!me)fail('先にパーティーへ参加してください');
+ if(m.op==='partyKick485'){
+  if(p.hostId!==id)fail('部屋主だけが退場させられます');
+  if(m.partyId!==p.id||m.gameId!==(r?.id??null))fail('部屋の状態が変わりました。参加者を選び直してください');
+  if(m.playerId===id)fail('自分は「パーティーから退出」を使ってください');
+  if(r&&!['lobby','result'].includes(r.phase))fail('対戦中は退場させられません。ゲーム終了後に操作してください');
+  const target=p.members.find(x=>x.playerId===m.playerId);if(!target)return true;
+  if((target.seatToken485??null)!==(m.seatToken485??null))fail('このプレイヤーは入り直しています。参加者を選び直してください');
+  const participant=r?.members.find(x=>x.playerId===target.playerId&&!x.departed);
+  if(r?.phase==='lobby'){
+   refundEntry474(c,r,target.playerId,'部屋主による開始前の退場');
+   r.members=r.members.filter(x=>x.playerId!==target.playerId);
+  }else if(participant)participant.departed=true;
+  p.members=p.members.filter(x=>x.playerId!==target.playerId);
+  if(r){r.updatedAt=c.now();if(r.game==='sugoroku'||r.game==='cabbage')r.revision=(r.revision??0)+1}
+  return true;
+ }
  if(m.op==='partyPresence462'){me.atHome=m.atHome===true;if(me.atHome)me.ready=false;return true}
  if(m.op==='partyRoster462'){me.cabbageVersion484=m.cabbageVersion484===1?1:0;me.crystals474=crystalBalance474(m.crystals474);me.owned=c.roster(m.roster);me.slotOne476=slot476(me.owned,Object.hasOwn(m,'slotOne476')?m.slotOne476:me.slotOne476);if(r?.phase==='lobby'){const rm=c.member(r,id);if(rm){rm.owned=me.owned;if(rm.choice){rm.choice=rm.owned.find(x=>x.id===rm.choice.id)??null;me.ready=false}}}return true}
  if(m.op==='partyReady462'){if(r?.phase!=='lobby')fail('ゲームの準備画面で押してください');if(r.game==='cabbage'&&m.cabbageVersion484!==1)fail('本体をBuild484へ更新してください');const rm=c.member(r,id);if(!rm?.choice)fail('コマにする魔物を選んでください');if(me.atHome)fail('準備画面へ戻ってください');if(r.game==='sugoroku'&&r.economy474?.mode==='crystal'){if(m.ready===true&&!r.economy474.entries[id])fail('表示された💎の参加費を支払って準備してください');if(m.ready!==true)refundEntry474(c,r,id)}me.ready=m.ready===true;return true}

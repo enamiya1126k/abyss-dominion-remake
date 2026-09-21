@@ -1,0 +1,77 @@
+{
+  "build": 485,
+  "version": "3.1.164",
+  "baseBuild": 484,
+  "files": [
+    {
+      "path": "README_Build485.txt",
+      "bytes": 3935,
+      "sha256": "a85b459200d475b81f0559ab7a67ea27e67855702c90b9592a809f9bdaec3735"
+    },
+    {
+      "path": "index.html",
+      "bytes": 117686,
+      "sha256": "f545b5ce9b7da23a637e9d1b6aa72631454386030b9e861965a15394e647f506"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 9603,
+      "sha256": "8edc48e8b480aabb852e173f73eda8f950cd701e6d8e90e1576f7c6d034ea922"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 21844,
+      "sha256": "f6daf6ef9ef2056a0083dc2976cf44d6ea1ccf4949bc3fec617aafa44fcc0f42"
+    },
+    {
+      "path": "src/Styles/build485-party-members.css",
+      "bytes": 2765,
+      "sha256": "a65625189f2dd621cba6e9a0b86a31774da9328d9b30dcf53253e3cd54b382dd"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "cce69e5326af4657af66d15b7f72e0620b5278c0c86e972070b8870fdec4ef1a"
+    },
+    {
+      "path": "src/party/PartyMember485.js",
+      "bytes": 6308,
+      "sha256": "dd9f6065f3d3ab0586b9d13d6c8a78da6c2e2b3f0e2ee55fcbb9087dae176cb6"
+    },
+    {
+      "path": "src/party/PartyPortrait476.js",
+      "bytes": 1346,
+      "sha256": "1d9b7516a13c9abe06ec34f243ff838f909b0758ed0c198800595765639a4389"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 8936,
+      "sha256": "67fb5d9a281c287123f6ef048d0409fa10bc9aeb23cebb1fe73eef17082cf88d"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 21997,
+      "sha256": "b606aa20c76222ab735a4388813c2f04a40ea807c22d86cfb09847f4e002c5c6"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "d39473fc4e7745723cde05cce5d253e290a89358624db045ea841b0ebfda8d4e"
+    },
+    {
+      "path": "tests/build485-party.test.mjs",
+      "bytes": 12608,
+      "sha256": "7a03087833e2b688098018dcc72fe919f17b61d3457ea9421e14dddc27f0ce70"
+    },
+    {
+      "path": "world-raid-offline485-assets.json",
+      "bytes": 33231,
+      "sha256": "693fbeeebef6efbe3b14a193a3853184207ef9947e5fe9a66fc969dedfd23251"
+    },
+    {
+      "path": "world-raid-offline485-sw.js",
+      "bytes": 1844,
+      "sha256": "bb1202f7b9f954ff6638f3785105ebaf7c3f26ac7548d120d6f76544a72d0954"
+    }
+  ]
+}
