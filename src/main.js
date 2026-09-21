@@ -7211,7 +7211,8 @@ function lose(){
  save.save();app.insertAdjacentHTML("beforeend",Modal("敗北",`<div class="defeat-cinematic"><div class="defeat-mark">☠</div><h2>深淵に敗れた…</h2><p><b>${lost}G</b>を失い、${save.state.player.checkpoint}階の拠点へ帰還します。</p><small>仲間はHP1で救出されました。拠点の寝台で回復できます。</small></div>`,"拠点へ戻る"));
  const modal=topModal(),returnHome=()=>{modal?.remove();stopGame();battle=null;activeEnemy=null;screen="home";render()};modal._onDismiss=returnHome;modal.querySelector("[data-modal-primary]").onclick=returnHome
 }
-if(globalThis.__practiceBoot450){queueMicrotask(startPracticeChild450)}else{
+// The isolated frame starts combat only after the complete module has loaded.
+if(globalThis.__practiceBoot450){globalThis.__practiceStart483=startPracticeChild450}else{
 if(retireLegacyCampaignSairanBattle())save.save();
 normalizeEquipmentState();
 if(save.state.player.inRun&&!save.state.activeBattle)screen="explore";

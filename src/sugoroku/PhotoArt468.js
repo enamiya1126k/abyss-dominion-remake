@@ -5,6 +5,7 @@ export const SERIES_ART468={heroes:{name:'天空の盟約',group:'hide',index:10
 const pieceStyle468=(set,part)=>{const scale=set==='dark'?1.4:1,x=set==='dark'?.2:0,y=set==='dark'?.4:0;return `width:${200*scale}%;height:${200*scale}%;left:${-200*x-(part%2)*100}%;top:${-200*y-Math.floor(part/2)*100}%`};
 const specialPhotos={'rob-special':['hide',19],sleep:['yori',3],principal:['yori',1],fist:['yori',6],dove:['yori',7],forest:['yori',4],mental:['enami',5],guard:['enami',3],cerberus:['rion',3],hide:['hide',2],destroyer:['hide',1],experiment:['hide',6],thunder:['hide',15],'hide-date':['hide',16],phoenix:['hide',17],reflect:['hide',18],cup:['hide',11],chance:['rion',9],fremens:['enami',2],poison:['hide',20],nothing:['hide',13]};
 export function photoFor468(c){
+ if(c.photo483)return c.photo483;
  if(c.set)return null;
  if(specialPhotos[c.id])return photoUrl468(...specialPhotos[c.id]);
  const match=/^(yori|enami|rion|hide)-(\d+)$/.exec(c.id);
@@ -15,7 +16,7 @@ export function photoFor468(c){
 }
 export function photoCardArt468(c,fallback){
  if(c.set){const s=SERIES_ART468[c.set];return `<span class="sg-art sg-photo468 sg-piece468" data-part="${c.part}" aria-hidden="true"><img src="${photoUrl468(s.group,s.index)}" alt="" draggable="false" style="${pieceStyle468(c.set,c.part)}"></span>`}
- const url=photoFor468(c);return url?`<span class="sg-art sg-photo468" aria-hidden="true"><img src="${url}" alt="" draggable="false" loading="lazy"></span>`:fallback(c.art);
+ const url=photoFor468(c);return url?`<span class="sg-art sg-photo468${c.photo483?' sg-photo483':''}" aria-hidden="true"><img src="${url}" alt="" draggable="false" loading="lazy"></span>`:fallback(c.art);
 }
 export function puzzle468(set,owned=[0,1,2,3],className=''){
  const s=SERIES_ART468[set],url=photoUrl468(s.group,s.index);

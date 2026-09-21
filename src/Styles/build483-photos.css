@@ -1,0 +1,3 @@
+/* Preserve the complete photo inside the existing card artwork window. */
+.sg-photo483{background:radial-gradient(ellipse at center,#3b3049,#15101e)!important}
+.sg-photo483 img{object-fit:contain!important;object-position:center!important}

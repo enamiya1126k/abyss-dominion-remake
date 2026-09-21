@@ -1,0 +1,10 @@
+Build484 original generated artwork
+Mode: image_gen text-to-image. No user photographs edited or replaced.
+
+kitchen.png — RGB, 1254 x 1254.
+Prompt: Premium square game environment for an original Japanese cabbage chopping fantasy monster party minigame. Polished tactile illustration, warm amber light / deep teal shadows. Slight overhead front view of an empty broad golden oak chopping board on a walnut counter, stone kitchen, cast iron stove at left, hanging copper pots, cabbage basket at right. Clear playable center. No characters, hands, knife, cabbage on board, text, logos or UI.
+
+cabbage.png — RGBA with transparent alpha, 1254 x 1254.
+Prompt: Single isolated fresh green cabbage half, vertically cut, ruffled cream concentric layers visible, emerald curling outer leaves and dew. Three-quarter front / slightly overhead view, amber rim light, teal fill, polished detailed game sprite. True transparent background. No board, ground, rectangular shadow, knife, characters, text or other objects.
+
+Both generated files are included byte-for-byte. UI text, knife, crack paths and particles are rendered by HTML/CSS/SVG/canvas and remain resolution-independent.

@@ -32,10 +32,10 @@ function ownCards(g,p){return p.hand.map(uid=>({uid,c:definition463(g,uid)}))}
 function leading(g,exclude){return active(g).filter(p=>p.playerId!==exclude).sort((a,b)=>distance463(a.pos)-distance463(b.pos)||a.seat-b.seat)[0]}
 function hostileTarget(g,e){return typeof e.target==='string'&&player463(g,e.target)&&e.actor!==e.target&&e.harmful}
 function multiplier(p,e){return p.special==='greed'&&!e.cost&&!e.noGreed&&['draw','discard','steal'].includes(e.type)?2:1}
-export function makeLobby463({id,code,partyId,hostId,members,now=0,seed=1}){return{id,code,game:'sugoroku',partyId462:partyId,hostId,rulesVersion:16,rules469:RULES469.id,phase:'lobby',createdAt:now,updatedAt:now,seed:seed||1,members:members.map(m=>({...m,choice:null,ai:false})),players:[],revision:0,seen:{},log:[],eventId:0,effectId:0,choiceId:0,deadline:0}}
+export function makeLobby463({id,code,partyId,hostId,members,now=0,seed=1}){return{id,code,game:'sugoroku',partyId462:partyId,hostId,rulesVersion:18,rules469:RULES469.id,phase:'lobby',createdAt:now,updatedAt:now,seed:seed||1,members:members.map(m=>({...m,choice:null,ai:false})),players:[],revision:0,seen:{},log:[],eventId:0,effectId:0,choiceId:0,deadline:0}}
 export function start463(g,now=0){
  if(g.phase!=='lobby')fail('すでに開始しています');
- g.rules469=RULES469.id;g.rulesVersion=16;g.presentation464=[];g.presentationSequence464=0;g.cards={};g.deck=[];g.discard=[];g.specialDeck=shuffle463(g,SPECIALS463.map(s=>s.id));g.specialDiscard=[];g.queue=[];g.pending=null;g.turnNumber=1;g.turn=0;g.extraChain=0;g.finishOrder=[];g.blocked={};g.step='draw';g.usedSet={};g.startedAt=now;
+ g.rules469=RULES469.id;g.rulesVersion=18;g.presentation464=[];g.presentationSequence464=0;g.cards={};g.deck=[];g.discard=[];g.specialDeck=shuffle463(g,SPECIALS463.map(s=>s.id));g.specialDiscard=[];g.queue=[];g.pending=null;g.turnNumber=1;g.turn=0;g.extraChain=0;g.finishOrder=[];g.blocked={};g.step='draw';g.usedSet={};g.startedAt=now;
  let serial=0;for(const c of CARDS463)for(let i=0;i<c.copies;i++){const uid='c'+(++serial);g.cards[uid]=c.id;g.deck.push(uid)}shuffle463(g,g.deck);
  g.players=g.members.map((m,i)=>({playerId:m.playerId,name:m.name,seat:i,ai:!!m.ai,choice:m.choice,hand:[],special:null,pos:'0',trail:['0'],skip:0,turns:0,mods:{bonus:0,dice:2},finished:null,ward:null}));
  const aiNames=['旅するスライム','火花のスライム','月影の狼','いたずら悪魔'];const aiSpecies=['slime','ember_slime','wolf','goblin'];
@@ -120,7 +120,7 @@ function executeBody466(g,e){
  case'crystal477':{const changes=applyCrystal477(g,actor,p,e.mode);present464(g,'crystal477',{actorId:actor.playerId,targetIds:[p.playerId],mode477:e.mode,changes477:changes,tile:e.tile??null});for(const x of changes)log463(g,`${label(g,x.playerId)}の💎 ${x.delta>=0?'+':''}${x.delta}（獲得分 ${x.total}）`);break}
  case'draw':{const n=Math.min(24,Math.max(0,e.n??1)*multiplier(p,e));add(g,Array.from({length:n},(_,i)=>({...e,type:'drawOne',ordinal466:i+1,total466:n})),true);break}
  case'drawOne':{recycle(g);const uid=g.deck.pop();if(uid)receiveCard(g,p,uid,e.mode,e);break}
- case'bonus':p.mods.bonus+=e.n;log463(g,`${p.name}の合計出目＋${e.n}`);break;
+ case'bonus':p.mods.bonus+=e.n;log463(g,`${p.name}の合計出目${e.n<0?'−':'＋'}${Math.abs(e.n)}`);break;
  case'dice':p.mods.dice=Math.min(5,p.mods.dice+e.n);log463(g,`${p.name}のサイコロが${p.mods.dice}個に`);break;
  case'resonance':{const n=p.hand.some(uid=>hasAttr463(definition463(g,uid),e.attr))?4:2;p.mods.bonus+=n;log463(g,`${p.name}の共鳴で出目＋${n}`);break}
  case'piece':{const sets=['heroes','dark'].filter(set=>!g.usedSet[p.playerId+':'+set]).map(set=>({set,parts:new Set(p.hand.map(u=>definition463(g,u)).filter(c=>c.set===set).map(c=>c.part))})).filter(x=>x.parts.size<4).sort((a,b)=>b.parts.size-a.parts.size);let found=false;for(const st of sets){for(const pool of [g.deck,g.discard]){const at=pool.findIndex(uid=>{const c=definition463(g,uid);return c.set===st.set&&!st.parts.has(c.part)});if(at>=0){receiveCard(g,p,pool.splice(at,1)[0],'hold',e);log463(g,`${p.name}が未所持の絵柄を1種獲得`);found=true;break}}if(found)break}if(!found)add(g,[{...e,type:'draw',n:1,mode:'safe',noGreed:true}],true);break}

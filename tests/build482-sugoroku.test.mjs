@@ -53,8 +53,8 @@ test('above-cap winnings settle once and actual new supply remains 20 percent',(
 });
 
 test('replayed acceptance never transfers twice and Build481 commands are rejected',()=>{
- const g=game(),[a,b]=g.players;b.hand=[];b.special='tsundere';grant480(g,b,400);attack(g);const c=context(g),m={op:'sg463',kind:'choice',value:'accept',rulesVersion:17,gameId:g.id,revision:g.revision,choiceId:g.pending.id,requestId:'accept-theft-482'};
- assert.throws(()=>handleSugoroku463(c,{playerId:b.playerId},{...m,rulesVersion:16}),/Build482/);
+ const g=game(),[a,b]=g.players;b.hand=[];b.special='tsundere';grant480(g,b,400);attack(g);const c=context(g),m={op:'sg463',kind:'choice',value:'accept',rulesVersion:18,gameId:g.id,revision:g.revision,choiceId:g.pending.id,requestId:'accept-theft-482'};
+ assert.throws(()=>handleSugoroku463(c,{playerId:b.playerId},{...m,rulesVersion:16}),/Build483/);
  handleSugoroku463(c,{playerId:b.playerId},m);assert.deepEqual([a.crystals474,b.crystals474],[1400,0]);c.data=JSON.parse(JSON.stringify(c.data));const snapshot=JSON.stringify(c.data);handleSugoroku463(c,{playerId:b.playerId},m);assert.equal(JSON.stringify(c.data),snapshot);
 });
 
@@ -64,7 +64,7 @@ test('single awakening defense uses the real card, preselects it, and waits for 
  assert.match(html,/sg-defense-threat482/);assert.match(html,/💎 600 を奪われる/);assert.match(html,/sg-premium476/);assert.match(html,/S-011/);assert.match(html,/sg-art/);assert.doesNotMatch(html,/sg-defense-ability477/);
  assert.match(html,/aria-pressed="true"/);assert.match(footer,/data-value="passive-reflect" >ツンデレで跳ね返す/);assert.equal(sent.length,0);
  assert.match(html,/<details class="sg-defense-details482"><summary>攻撃の詳細/);assert.doesNotMatch(html,/<details[^>]+open/);
- sugorokuClick463(c,{dataset:{sgAction:'choice',value:'passive-reflect'}});sugorokuClick463(c,{dataset:{sgAction:'choice',value:'passive-reflect'}});assert.equal(sent.length,1);assert.equal(sent[0][1].rulesVersion,17);assert.equal(sent[0][1].value,'passive-reflect');
+ sugorokuClick463(c,{dataset:{sgAction:'choice',value:'passive-reflect'}});sugorokuClick463(c,{dataset:{sgAction:'choice',value:'passive-reflect'}});assert.equal(sent.length,1);assert.equal(sent[0][1].rulesVersion,18);assert.equal(sent[0][1].value,'passive-reflect');
 });
 
 test('multiple defenses require a selection and block card buttons while sending or disconnected',()=>{

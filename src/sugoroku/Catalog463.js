@@ -1,3 +1,4 @@
+import{PHOTO_CARDS483}from'./PhotoExpansion483.js';
 import{configureCard469,configureSpecial469}from'./Rules469.js';
 import{PHOTO_TITLES468}from'./PhotoArt468.js';
 import{rankInfo466}from'./CardRanks466.js';
@@ -68,6 +69,7 @@ const extra=[
 ];
 for(const args of extra)card(...args);
 for(const c of CARDS463){if(PHOTO_TITLES468[c.id])c.name=PHOTO_TITLES468[c.id];if(c.set==='heroes')c.name=`天空の盟約・${['左上','右上','左下','右下'][c.part]}`;Object.assign(c,rankInfo466(c));configureCard469(c);}
+CARDS463.push(...PHOTO_CARDS483);
 export const CARD_BY_ID463=Object.fromEntries(CARDS463.map(c=>[c.id,c]));
 export const SPECIALS463=[
  ['worker','限界社畜',10,'一回休みと後退を無効化。サイコロの4・5・6は1として数える。',0],

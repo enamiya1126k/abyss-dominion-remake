@@ -1,0 +1,118 @@
+{
+  "build": 484,
+  "version": "3.1.163",
+  "requires_build": 483,
+  "description": "限界キャベツ千切り — 4-player party minigame",
+  "files": [
+    {
+      "path": "README_Build484.txt",
+      "bytes": 5470,
+      "sha256": "075b23bd48c312a07370135c81788e8cd2626b70992c99d148247cc71482ca44"
+    },
+    {
+      "path": "assets/cabbage484/ART_SOURCES.txt",
+      "bytes": 1173,
+      "sha256": "d0ae6ee159c94097586bfb8c2fabf539aa2e54863a6761287bbbf483bbeedc11"
+    },
+    {
+      "path": "assets/cabbage484/cabbage.png",
+      "bytes": 2300369,
+      "sha256": "12ff5d243dde19a407029603d3fefe6c7ffb1c678491bb58560757d3878cdb52"
+    },
+    {
+      "path": "assets/cabbage484/kitchen.png",
+      "bytes": 2405662,
+      "sha256": "2e6227d0746d67caa46b7a9980234640b0649a88de39e6b108f3916d3ad132f7"
+    },
+    {
+      "path": "index.html",
+      "bytes": 116663,
+      "sha256": "fa22a1380460dd2cadcbe3158ebdfcd10af0ef764949b7be2e4cc2ae37bb2c12"
+    },
+    {
+      "path": "online-server/src/CabbageCoordinator484.js",
+      "bytes": 4190,
+      "sha256": "5850c54bad73c17f9ca98f5e21b83e92a4fd8fd02d9e814b02a39bfdca647482"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 8319,
+      "sha256": "954cd7939245e32e870ea7d7cbe517b3456be99417f284b3c7201f23a6ba4989"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 21820,
+      "sha256": "14bc23f1ad64e244bde5a12d2cfbd33f214b38d7f3a40ce2af8e0090c042f523"
+    },
+    {
+      "path": "src/Styles/build484-cabbage.css",
+      "bytes": 18769,
+      "sha256": "24a45efe81a29c8f2be7274949cbddf3e60cfff4e56deb7a2d711a0694d8b5f3"
+    },
+    {
+      "path": "src/cabbage/Rules484.js",
+      "bytes": 5291,
+      "sha256": "1d0752e461af051246d51b1e163927d066e0361f225552c7814e09956ccda7d2"
+    },
+    {
+      "path": "src/cabbage/View484.js",
+      "bytes": 19762,
+      "sha256": "58b08e45b8855dacad69cb60e77fc2d2817b75d05b521c16f5d08f776200216f"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "21122cff8326f3383afdfa90204aef8f917515d1af35ecb598a7093e4708c666"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "bytes": 934,
+      "sha256": "912608c95815743f805779dd733dc64def6ee85da976d5fc29599681f3c14ff6"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 8865,
+      "sha256": "3c5f4ead62edc858e65800e12f63aa04cfa5b3ad445a6df7759b2cc5a2f6c083"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 21577,
+      "sha256": "86eb9fd0c612fd2b8956512e403a53b4bb36a5c76688db9fbf4c4b8a99408bd2"
+    },
+    {
+      "path": "src/race/RacePresentation452.js",
+      "bytes": 5007,
+      "sha256": "6c1421f483363f584e0f90b4352b58bc839ed212750e53f0f84c49516504a267"
+    },
+    {
+      "path": "src/race/RaceUX458.js",
+      "bytes": 2193,
+      "sha256": "e26f7422ba2617b7fb8b72edea07b12042aa6632305e55d3b0af835abb5e6900"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "1a882a7e2bc34376e7ec365d45e475fd1d975cdb8b258a2b7567c0cf53dfc862"
+    },
+    {
+      "path": "tests/build484-cabbage.test.mjs",
+      "bytes": 10224,
+      "sha256": "07003eb568cb7e64b81d156cbb39171f174fa159174a76b6093e105933ae0d40"
+    },
+    {
+      "path": "tests/build484-integration.test.mjs",
+      "bytes": 5996,
+      "sha256": "c5e30cc341766f4313070e29cd7b1e9843d59b08d7de8ee9b96f0e7d3713879d"
+    },
+    {
+      "path": "world-raid-offline484-assets.json",
+      "bytes": 33151,
+      "sha256": "edd23966051727298c283bb3f4b7e16a709450b7ea054067e787d50e85d93a7d"
+    },
+    {
+      "path": "world-raid-offline484-sw.js",
+      "bytes": 1844,
+      "sha256": "c7e128ec264e9fa44e75d25e5605949fed44a44040eeeda4961b97add850d886"
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import{PHOTO_CODES483}from'./PhotoExpansion483.js';
 // Stable public card numbers. Keep existing assignments when editing titles or artwork.
 export const CARD_CODES475=Object.freeze({
   "basic:yori-0": "B-001",
@@ -131,5 +132,6 @@ export const CARD_CODES475=Object.freeze({
   "special:drunk": "S-013",
   "special:shiva": "S-014",
   "special:punch": "S-015",
-  "special:swift": "S-016"
+  "special:swift": "S-016",
+  ...PHOTO_CODES483
 });

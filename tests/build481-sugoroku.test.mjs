@@ -42,7 +42,7 @@ test('AI and player commands cannot overtake the extended special-card presentat
  const snapshot=JSON.stringify(g);
  for(now of [5401,g.presentationUntil465-1,g.nextAutoAt-1]){advanceSugoroku463(c);assert.equal(JSON.stringify(g),snapshot);}
  now=g.presentationUntil465-1;
- assert.throws(()=>handleSugoroku463(c,{playerId:'p0'},{op:'sg463',rulesVersion:17,gameId:g.id,revision:g.revision,requestId:'reading-481',kind:'draw'}),/演出/);
+ assert.throws(()=>handleSugoroku463(c,{playerId:'p0'},{op:'sg463',rulesVersion:18,gameId:g.id,revision:g.revision,requestId:'reading-481',kind:'draw'}),/演出/);
  assert.equal(JSON.stringify(g),snapshot);
  now=g.nextAutoAt;advanceSugoroku463(c);
  assert.ok(g.presentationSequence464>1,'AI resumes once the longer presentation and normal gap finish');
