@@ -1,3 +1,4 @@
+import{seatColors499}from'../party/PartyColors499.js';
 import{progress496,remaining496}from'./Rules496.js';
 import{draw497}from'./Scene497.js';
 export const colors496=['#ffdc83','#78ddff','#c1f18c','#f6a7d8'];
@@ -8,4 +9,4 @@ export function layout496(enemies,at,width,height){const size=Math.max(42,Math.m
 // Network corrections may slow a sprite briefly, but never rewind or teleport it.
 // Coordinates and touch targets consume the same final layout.
 export function stable496(layout,u,now,width,height){u.motion??=new Map();const live=new Set();const result=layout.map(e=>{live.add(e.id);const prev=u.motion.get(e.id),dt=prev?Math.max(0,Math.min(100,now-prev.at)):0;const progress=prev?Math.max(prev.progress,Math.min(e.progress,prev.progress+dt/e.travelMs*1.5)):e.progress;u.motion.set(e.id,{at:now,progress});return{...e,progress,...point496(e,progress,width,height)}});for(const id of u.motion.keys())if(!live.has(id))u.motion.delete(id);return result}
-export function draw496(canvas,g,u,at,now,layout){return draw497(canvas,g,u,at,now,layout,colors496,crew496,point496)}
+export function draw496(canvas,g,u,at,now,layout){return draw497(canvas,g,u,at,now,layout,seatColors499(g.players),crew496,point496)}

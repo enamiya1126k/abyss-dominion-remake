@@ -1,0 +1,132 @@
+{
+  "build": 499,
+  "version": "3.1.178",
+  "baseBuild": 498,
+  "files": [
+    {
+      "path": "README_Build499.txt",
+      "bytes": 3716,
+      "sha256": "9b5da0695188a14fc286d610854c0186b7da926e8afff869378a5a9390268330"
+    },
+    {
+      "path": "docs/build499/colored-nets-playfield.png",
+      "bytes": 749620,
+      "sha256": "544230bcabad7d5e911d0da7d77d8c10532927eeb6ebf551b5a6b7423a09dc01"
+    },
+    {
+      "path": "docs/build499/four-net-colors.png",
+      "bytes": 269337,
+      "sha256": "b4af9ee40cd9e3b757a93c739fd7bacb08acbd2815e67b46034bf3726d50dcc1"
+    },
+    {
+      "path": "index.html",
+      "bytes": 133363,
+      "sha256": "2e4a057689158fd27637e33c8dd49fce41098459db6e1c5b8df6d1e98521a39f"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 12763,
+      "sha256": "5410ac94a0afc834a7509d2f0b2f8cb9ca82f840f5b2bdc529e3feeac0f27a77"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 22409,
+      "sha256": "8a2b4fd21192113058ff61d171d437801976295f9a2853a555e253b911447919"
+    },
+    {
+      "path": "src/Styles/build499-party-colors.css",
+      "bytes": 1909,
+      "sha256": "675559656d0d664c43c1cb3463e2e1251a428fe1d26128954c47e14407963337"
+    },
+    {
+      "path": "src/canal/NetColor499.js",
+      "bytes": 1382,
+      "sha256": "deef7334ffeca9e9c930266a8e8a5d7007774b16849cf0073fa74c017e796987"
+    },
+    {
+      "path": "src/canal/Rules496.js",
+      "bytes": 10489,
+      "sha256": "cebed04a7e32f3d72728e0c5ffa7ffe39c9af9aa9d88743fad5df0e1a0cf5b20"
+    },
+    {
+      "path": "src/canal/Scene496.js",
+      "bytes": 1685,
+      "sha256": "619d2fc14c495e0f321276f8baed0382dc45854c74fa74c0e5c5fd71b674c1a9"
+    },
+    {
+      "path": "src/canal/Scene497.js",
+      "bytes": 9381,
+      "sha256": "532a24ca10e34de86fec1e84584174bd870e244f3616e552454945d47ae0163a"
+    },
+    {
+      "path": "src/canal/View492.js",
+      "bytes": 19472,
+      "sha256": "ac38589f6ab31269d00983138a34d3ff8ef65c6fd8e73e8d67e7f788de5486af"
+    },
+    {
+      "path": "src/canal/View496.js",
+      "bytes": 13555,
+      "sha256": "d5eb483385b1146400d91842a49f740b55733a578522a41930ebc83f55b832e0"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "3350edd059ab885aa0e6428f637fe3a61449e56c5711206bf8015057bf4b6f84"
+    },
+    {
+      "path": "src/party/PartyColorUI499.js",
+      "bytes": 5938,
+      "sha256": "4a95fe04cb6b81b48b99f6ae83fd87642ac69ffd07ca827d6b36ee8ab1a2d72c"
+    },
+    {
+      "path": "src/party/PartyColors499.js",
+      "bytes": 1195,
+      "sha256": "8f533d2b95f4260878b5e3fbbd7b7f45b442a72303360579b96e8173712113d8"
+    },
+    {
+      "path": "src/party/PartyMember485.js",
+      "bytes": 6805,
+      "sha256": "e39d95bd76c6b30433bf31d87733059e5295994602273c0d78fd3654f80057b5"
+    },
+    {
+      "path": "src/party/PartyPortrait476.js",
+      "bytes": 1372,
+      "sha256": "e47efdbc026d7de93d6e266a87d8796761299d5918ec58593ac8aa43dc6fae22"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 9419,
+      "sha256": "e9d7c5c67d56505e6241c6683e123bc6ac6216116b22a06a16c770290388b8d6"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 22834,
+      "sha256": "ce2a85d43d2721d413356dcd33bc451964f01af23559b24ee36f136906e12324"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "80a99bae8aa381359a26d8d83e38029f2f64309bee051b6b7dfaf2a00c68867b"
+    },
+    {
+      "path": "tests/build485-party.test.mjs",
+      "bytes": 12714,
+      "sha256": "a8143687039963b3d3f70b06311779be8df46d35a1b70c696eb904d4e33ece17"
+    },
+    {
+      "path": "tests/build499-colors.test.mjs",
+      "bytes": 10487,
+      "sha256": "8e606e438a9b04306d814ec5d9e3b9e6e2b98507f975cacacdcf6cbd9e97ecd7"
+    },
+    {
+      "path": "world-raid-offline499-assets.json",
+      "bytes": 35401,
+      "sha256": "5d3cd73ab6130687552d60c408913f205b7dc390862b974ab25e0dbef0b88171"
+    },
+    {
+      "path": "world-raid-offline499-sw.js",
+      "bytes": 1844,
+      "sha256": "8716a9bf83bce7416bfc22efd465b078afcca602752eae628bd7fab41febf5fc"
+    }
+  ]
+}

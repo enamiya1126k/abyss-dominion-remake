@@ -1,3 +1,4 @@
+import{color499,assignColors499}from'../party/PartyColors499.js';
 // Build496 shared pond. Earlier games retain their versioned engines.
 export const CANAL496=Object.freeze({duration:60000,countdown:4500,step:100,fireMs:220,aiFireMs:1350,leaseMs:1100,netMax:28,maxEnemies:22,hp:100});
 export const SPECIES496=Object.freeze([
@@ -17,9 +18,10 @@ function event(g,kind,at,extra={}){g.events.push({id:++g.eventSerial,kind,at,...
 export function start496(g,now){
  if(g.phase!=='lobby')return false;
  if(!g.members.length||g.members.length>4||g.members.some(m=>!m.choice))throw Error('全員の魔物を選んでください');
- g.players=g.members.map((m,seat)=>({playerId:m.playerId,name:m.name,choice:{id:m.choice.id,speciesId:m.choice.speciesId},seat,ai:false}));
+ g.players=g.members.map((m,seat)=>({playerId:m.playerId,name:m.name,color499:color499(m.color499,seat).id,choice:{id:m.choice.id,speciesId:m.choice.speciesId},seat,ai:false}));
  const bots=['slime','goblin','wolf','skeleton'],names=['網係スライム','長靴ゴブリン','見回りオオカミ','骨まで働く係'];
  while(g.players.length<4){const seat=g.players.length;g.players.push({playerId:`AI-${g.id}-${seat}`,name:names[seat],choice:{id:`ai-${seat}`,speciesId:bots[seat]},seat,ai:true})}
+ assignColors499(g.players);
  g.startAt=now+CANAL496.countdown;g.endAt=g.startAt+CANAL496.duration;
  for(const p of g.players)Object.assign(p,{lane:p.seat,held:false,holdUntil:0,lastSeq:0,nextFireAt:g.startAt,burstAt:g.startAt,captured:0,assists:0,teamwork:0,rescues:0,points:0,bursts:0,hits:0,auto:false,lastAction:null});
  Object.assign(g,{rules492:1,rules494:1,rules496:1,phase:'countdown',simAt:g.startAt-100,nextSpawnAt:g.startAt+500,updatedAt:now,enemies:[],events:[],eventSerial:0,enemySerial:0,hp:100,captured:0,breaches:0,points:0,netEnergy:0,netMax:CANAL496.netMax,netUntil:0,megaCount:0,teamCatches:0,bySpecies:[0,0,0,0],bossMask:0});return true;
@@ -96,7 +98,7 @@ export function advance496(g,now,connected=()=>true){
 export function public496(g,selfId,now,connected=()=>true){return{
  id:g.id,code:g.code,hostId:g.hostId,game:g.game,rules492:1,rules494:1,rules496:1,phase:g.phase,revision:g.revision,startAt:g.startAt,endAt:g.endAt,simAt:g.simAt,serverNow:now,hp:g.hp,captured:g.captured,breaches:g.breaches,points:g.points,success:g.success,grade:g.grade,finishedAt:g.finishedAt,
  netEnergy:g.netEnergy,netMax:CANAL496.netMax,netUntil:g.netUntil,megaCount:g.megaCount,teamCatches:g.teamCatches,bySpecies:[...g.bySpecies],
- members:g.members.map(m=>({playerId:m.playerId,name:m.name,choice:m.choice?{id:m.choice.id,speciesId:m.choice.speciesId}:null,departed:!!m.departed})),
- players:g.players.map(p=>({playerId:p.playerId,name:p.name,choice:{id:p.choice.id,speciesId:p.choice.speciesId},seat:p.seat,ai:p.ai,auto:p.auto,connected:p.ai||!!connected(p.playerId),lane:p.lane,held:p.held,captured:p.captured,assists:p.assists,teamwork:p.teamwork,rescues:p.rescues,points:p.points,bursts:p.bursts,hits:p.hits,lastAction:p.lastAction?{...p.lastAction}:null,...(p.playerId===selfId?{lastSeq:p.lastSeq,nextFireAt:p.nextFireAt}:{})})),
+ members:g.members.map((m,i)=>({playerId:m.playerId,name:m.name,color499:color499(m.color499,i).id,choice:m.choice?{id:m.choice.id,speciesId:m.choice.speciesId}:null,departed:!!m.departed})),
+ players:g.players.map(p=>({playerId:p.playerId,name:p.name,color499:color499(p.color499,p.seat).id,choice:{id:p.choice.id,speciesId:p.choice.speciesId},seat:p.seat,ai:p.ai,auto:p.auto,connected:p.ai||!!connected(p.playerId),lane:p.lane,held:p.held,captured:p.captured,assists:p.assists,teamwork:p.teamwork,rescues:p.rescues,points:p.points,bursts:p.bursts,hits:p.hits,lastAction:p.lastAction?{...p.lastAction}:null,...(p.playerId===selfId?{lastSeq:p.lastSeq,nextFireAt:p.nextFireAt}:{})})),
  enemies:g.enemies.map(({contributors,...e})=>({...e})),events:g.events.filter(e=>now-e.at<2500).map(e=>({...e}))
 }}

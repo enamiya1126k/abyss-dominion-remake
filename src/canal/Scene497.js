@@ -1,3 +1,4 @@
+import{netCell499}from'./NetColor499.js';
 // Build497 presentation only: physical cast-net sprites, water impact and localized danger.
 // The shared movement, hit areas, timing and scoring still belong to Rules/Scene496.
 import{imageCell492}from'./Scene492.js';
@@ -10,7 +11,7 @@ function label(ctx,value,x,y,size,color='#fff5d6',weight=800){ctx.fillStyle=colo
 function glow(ctx,x,y,rx,ry,color,alpha){ctx.save();ctx.globalAlpha=clamp(alpha);ctx.translate(x,y);ctx.scale(1,ry/rx);const g=ctx.createRadialGradient(0,0,0,0,0,rx);g.addColorStop(0,color);g.addColorStop(1,color.slice(0,7)+'00');ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,rx,0,Math.PI*2);ctx.fill();ctx.restore()}
 // Small cloth tabs on the nets identify the teammate, without a screen-spanning guide.
 function ribbon(ctx,x,y,color,size=8){ctx.save();ctx.translate(x,y);ctx.fillStyle='#173e3b88';ctx.beginPath();ctx.moveTo(1,2);ctx.lineTo(size+2,size*.55+2);ctx.lineTo(size*.6+2,size*1.4+2);ctx.lineTo(-size*.3+1,size*.9+2);ctx.fill();ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(size,size*.55);ctx.lineTo(size*.55,size*1.25);ctx.lineTo(size*.25,size*.85);ctx.lineTo(-size*.3,size*.95);ctx.closePath();ctx.fill();ctx.fillStyle='#ffecb4';ctx.beginPath();ctx.arc(0,0,2,0,Math.PI*2);ctx.fill();ctx.restore()}
-function net(ctx,u,index,x,y,size,color,alpha=1,rotation=0){ctx.save();ctx.globalAlpha=clamp(alpha);ctx.translate(x,y);ctx.rotate(rotation);if(ready(u.netArt497))imageCell492(ctx,u.netArt497,index,0,0,size);else if(ready(u.props))imageCell492(ctx,u.props,0,0,0,size);ribbon(ctx,size*.23,size*.15,color,Math.max(5,size*.105));ctx.restore()}
+function net(ctx,u,index,x,y,size,color,alpha=1,rotation=0){ctx.save();ctx.globalAlpha=clamp(alpha);ctx.translate(x,y);ctx.rotate(rotation);if(ready(u.netArt497)){if(!netCell499(ctx,u,index,0,0,size,color))imageCell492(ctx,u.netArt497,index,0,0,size);}else if(ready(u.props))imageCell492(ctx,u.props,0,0,0,size);ribbon(ctx,size*.23,size*.15,color,Math.max(5,size*.105));ctx.restore()}
 function splash(ctx,u,x,y,age,size,reduced=false,color='#dbfbff'){if(age<0||age>650)return;const t=reduced?.35:age/650,alpha=reduced?.6:clamp(1-t);ctx.save();ctx.globalAlpha=alpha;
  if(ready(u.netArt497))imageCell492(ctx,u.netArt497,3,x,y-size*.10,size*(.65+t*.65));
  if(!reduced){for(let i=0;i<8;i++){const a=i*Math.PI/4+.22,dx=Math.cos(a)*size*(.18+t*.55),dy=Math.sin(a)*size*(.10+t*.25)-Math.sin(t*Math.PI)*size*.28;ctx.fillStyle=i%3?color:'#ffffff';ctx.beginPath();ctx.ellipse(x+dx,y+dy,1.7*(1-t)+.7,2.5*(1-t)+1,a,0,Math.PI*2);ctx.fill()}}

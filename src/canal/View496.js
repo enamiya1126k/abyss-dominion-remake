@@ -1,3 +1,4 @@
+import{playerColor499}from'../party/PartyColors499.js';
 import{CANAL496,SPECIES496,wave496}from'./Rules496.js';
 import{layout496,draw496,stable496,colors496,crew496}from'./Scene496.js';
 import{bindFocus496}from'./Input496.js';
@@ -13,12 +14,12 @@ function playable(c){const g=game(c);return!!mine(c)&&c.ready()&&['countdown','p
 export function cooldown496(p,u,at,now){return Math.max(0,Math.min(CANAL496.fireMs,Math.max((p?.nextFireAt??0)-at,u.localFire?CANAL496.fireMs-(now-u.localFire):0)))}
 export function view496(c){const g=game(c),u=ui(c),p=mine(c);if(u.gameId!==g.id){Object.assign(u,{gameId:g.id,lane:p?.seat??0,seat:p?.seat??0,pending:[],seq:0,lastFlush:0,targets:new Map(),effects:[],seen:0,localFire:0,preview:null,feedback:null,burstPending:0,callout:null,feed:[],feedSignature:null,snareNote:null,frameLayout:[],motion:new Map(),signal:null})}if(g.phase==='result')return view492(c);
 return`<section class="cn-screen cn-play cn496"><header class="cn-header"><button data-party-action462="browse">‹ パーティー</button><div><b>用水路防衛隊</b><small>家を60秒守れ！</small></div><button data-cn-action="sound">音 ${sound493(c)?'ON':'OFF'}</button></header>
-<div class="cn-crew496" aria-label="同じ家を守る4人">${g.players.map(x=>`<article style="--crew:${colors496[x.seat]}" class="${x.playerId===c.transport.selfId?'is-self':''}"><span>${portrait(c,x.choice.speciesId)}</span><b>${x.playerId===c.transport.selfId?'あなた':esc(x.name)}${x.ai?' · AI':''}</b><small data-cn-player496="${x.seat}">0匹</small></article>`).join('')}</div>
+<div class="cn-crew496" aria-label="同じ家を守る4人">${g.players.map(x=>`<article title="${playerColor499(x).name}" style="--crew:${playerColor499(x).hex}" class="${x.playerId===c.transport.selfId?'is-self':''}"><span>${portrait(c,x.choice.speciesId)}</span><b>${x.playerId===c.transport.selfId?'あなた':esc(x.name)}${x.ai?' · AI':''}</b><small data-cn-player496="${x.seat}">0匹</small></article>`).join('')}</div>
 <div class="cn-stage496" data-cn-stage496><canvas aria-label="生き物をタップして家を守る水路"></canvas><div class="cn-targets496" data-cn-targets496></div>
 <div class="cn-lane-title496"><div><small>ONE TEAM / ONE HOME</small><b>みんなで守れ！</b></div><div><b data-cn-time496>60</b><small>秒</small></div><span data-cn-total496>捕獲 0</span></div>
 <div class="cn-alert496" role="status" aria-live="polite" data-cn-alert496>敵をタップ！数字の回数で捕獲</div>
 <div class="cn-feed496" data-cn-feed496 aria-hidden="true"></div>
-${g.players.map(x=>`<div class="cn-helper496 ${x.playerId===c.transport.selfId?'is-self':''}" data-cn-helper496="${x.seat}" style="--crew:${colors496[x.seat]};left:${crew496[x.seat].x*100}%;top:${crew496[x.seat].y*100}%" aria-hidden="true">${portrait(c,x.choice.speciesId)}<span>${x.playerId===c.transport.selfId?'あなた':esc(x.name)}</span><small data-cn-work496="${x.seat}"></small></div>`).join('')}
+${g.players.map(x=>`<div class="cn-helper496 ${x.playerId===c.transport.selfId?'is-self':''}" data-cn-helper496="${x.seat}" style="--crew:${playerColor499(x).hex};left:${crew496[x.seat].x*100}%;top:${crew496[x.seat].y*100}%" aria-hidden="true">${portrait(c,x.choice.speciesId)}<span>${x.playerId===c.transport.selfId?'あなた':esc(x.name)}</span><small data-cn-work496="${x.seat}"></small></div>`).join('')}
 <div class="cn-count496" data-cn-count496 role="status"><small>この家を、みんなで守る。</small><strong data-cn-count-number496>3</strong><b>敵をタップして捕獲！</b><span>仲間の色の網に続けて、連携捕獲！<br>家に着かれると共通HPが減る！</span></div>
 <div class="cn-hp-sr496" data-cn-health496 role="progressbar" aria-label="みんなの家の体力" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"></div>
 </div><footer class="cn-bottom496"><button class="cn-mega496" data-cn-action="burst" disabled><i aria-hidden="true"></i><span><b>4人で、一網打尽！</b><small data-cn-net-note496>捕獲で大網をためよう</small><em><i data-cn-energy496></i></em></span><strong data-cn-net-count496>0 / ${CANAL496.netMax}</strong></button></footer>
@@ -37,7 +38,7 @@ export function receive496(c){const u=ui(c),g=game(c);if(u.gameId!==g?.id)return
  const who=seat=>seat===u.seat?'あなた':(g.players.find(p=>p.seat===seat)?.name??'仲間');
  for(const e of g.events??[]){if(e.id<=u.seen)continue;u.seen=e.id;if(clock(c)-e.at>1800)continue;u.effects.push({...e,point:u.targets.get(e.enemyId)?.point,localAt:Date.now()});
   if(e.kind==='catch'&&!e.mega){if(e.seat===u.seat)sound(c,'catch');const helpers=(e.helpers??[]).map(who);const text=e.teamwork?`${helpers.join('・')} ＋ ${who(e.seat)}：連携捕獲！`:e.rescue?`${who(e.seat)}、ナイス救援！`:`${who(e.seat)}が捕獲！`;
-   u.feed??=[];u.feed.push({text,color:colors496[e.seat],until:Date.now()+1600});u.feed=u.feed.slice(-2);
+   u.feed??=[];u.feed.push({text,color:playerColor499(g.players.find(p=>p.seat===e.seat)).hex,until:Date.now()+1600});u.feed=u.feed.slice(-2);
    if(e.teamwork||e.rescue)u.feedback={until:Date.now()+1100,text:e.rescue?'ナイス救援！ 家を守った！':'連携捕獲！ 大網ゲージ＋2'};
   }
   if(e.kind==='hit'&&e.slow)u.snareNote={until:Date.now()+650,text:who(e.seat)+'が足止め！ みんなで続け！'};
