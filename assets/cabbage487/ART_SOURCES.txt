@@ -1,0 +1,16 @@
+Build487 cabbage artwork / 2026-09-21
+Tool: built-in image_gen.imagegen. Transparent PNG assets copied without pixel editing.
+Reference: assets/cabbage486/cabbage-stages.png (existing generated game art).
+
+fine-stages.png
+Original: generated_images/exec-8d12d7bd-0cf8-4995-9a6d-9c910e66c33b.png
+Use: 2 x 2 atlas. Frame 0 is unused because its strips are coarser than the existing mince.
+Frames 1, 2, 3 add tiny granules, cabbage snow, finest powder to the existing eight stages.
+Prompt:
+Create a production-ready transparent PNG sprite atlas for a high-quality fantasy kitchen cabbage-chopping game. Use the provided cabbage sprites as visual style reference: believable fresh pale-green and creamy-white cabbage, warm directional light from upper left, detailed photorealistic game prop, camera slightly above front. FOUR sprites in an exact 2-column by 2-row grid, each equal square cell, fully transparent background (real alpha), clean generous transparent gutters, no borders, text, board, knife, or characters. Every sprite represents THE SAME AMOUNT of the SAME cabbage, with identical centered position, same baseline at 84% cell height, similar mound silhouette; never a whole cabbage. Top-left: very fine minced cabbage, individual fragments about 2mm, distinctly finer than the last reference sprite. Top-right: extremely fine 1mm cabbage granules. Bottom-left: ultra-fine fluffy pale green cabbage snow, almost powder, no strips or large leaves whatsoever. Bottom-right: finest possible dense soft green cabbage powder, tiny specks and smooth compact edges, slightly lower compressed mound, still fresh and food-like, not soup, not wet paste. Keep every complete mound well inside its cell with 10% padding, no sprite crosses into adjacent cell. No shadows outside sprite except a subtle contact shadow. The differences in particle size across all four states must be clearly visible.
+
+champion-mountain.png
+Original: generated_images/exec-7528ee14-5cb3-43a9-ae2b-65620a403a82.png
+Use: result podium. The monster and crown are separate DOM elements.
+Prompt:
+Create a single production-ready game prop image on a genuinely TRANSPARENT background with alpha: a magnificent mountain of freshly finely shredded cabbage, for the champion podium in a fantasy kitchen minigame. Match the supplied reference cabbage's photorealistic warm lit pale lime-green and ivory leaf textures. One broad symmetrical softly conical mound, steep enough to be a proud mountain, full base visible, camera straight ahead slightly above tabletop, contact shadow very subtle. Delicate MANY thin fresh cabbage threads make a luscious dense monumental heap; no large intact cabbage chunks or whole cabbages. Give its very top a small almost flat crest suitable for a tiny creature standing there later, but DO NOT include any creature, crown, knife, board, plate, words, frame, stars, background or extra objects. Precisely centered, mound base at 92% of canvas height, peak at 12%, width 90% of square canvas, 5% transparent margin on left and right. Premium game asset, clean silhouette, warm golden rim light with natural fresh green highlights, excellent texture, believable volume.

@@ -1,5 +1,5 @@
 // Shared deterministic rules. The coordinator is the only score authority.
-export const CABBAGE484=Object.freeze({version:2,duration:45000,countdown:3500,warning:700,grace:180,minTap:20,maxAge:1000,points:10,penalty:80,repair:950,comboGap:900,maxSequence:4500,maxBatch:32,maxQueue:256});
+export const CABBAGE484=Object.freeze({version:3,duration:45000,countdown:3500,warning:700,grace:180,minTap:20,maxAge:1000,points:10,penalty:80,repair:950,comboGap:900,maxSequence:4500,maxBatch:32,maxQueue:256});
 const rng=g=>{let x=g.seed|0;x^=x<<13;x^=x>>>17;x^=x<<5;g.seed=x>>>0;return g.seed/4294967296};
 export function makeCabbage484({id,code,partyId,hostId,members,now=0,seed=1}){return{id,code,game:'cabbage',partyId462:partyId,hostId,phase:'lobby',createdAt:now,updatedAt:now,revision:0,seed:seed||1,members:members.map(m=>({...m,choice:m.choice??null})),players:[],windows:[]}}
 export function startCabbage484(g,now){
@@ -25,14 +25,15 @@ export function tap484(g,p,{seq,side,at},received){
  const w=window484(g,at);
  if(w.kind==='stop'){
   if(at<w.at+CABBAGE484.grace)return'grace';
-  if(p.boardWindow!==w.index){p.boardWindow=w.index;p.boardDamage=0}
+  p.boardWindow=w.index;
   p.boardDamage=(p.boardDamage??0)+1;p.lockedUntil=w.until;p.combo=0;p.lastSide=null;
   // Every wrong tap damages the board; keep the existing one -80 penalty per stop signal.
   if(p.brokenWindow===w.index)return event(p,'damage',at,{damage:p.boardDamage,seq});
   p.score=Math.max(0,p.score-CABBAGE484.penalty);p.breaks++;p.brokenWindow=w.index;return event(p,'break',at,{delta:-CABBAGE484.penalty,damage:p.boardDamage,seq});
  }
  if(!['cut','warning'].includes(w.kind))return'late';
- p.boardDamage=0;p.boardWindow=-1;p.lockedUntil=0;
+ // The same board keeps every scar until a new match starts.
+ p.lockedUntil=0;
  if(side===p.lastSide){p.combo=0;return event(p,'same',at,{seq})}
  if(at-p.lastCutAt>CABBAGE484.comboGap)p.combo=0;
  p.lastSide=side;p.lastCutAt=at;p.combo++;p.maxCombo=Math.max(p.maxCombo,p.combo);p.cuts++;const delta=CABBAGE484.points+(p.combo%10===0?5:0);p.score+=delta;return event(p,'cut',at,{side,delta,seq});

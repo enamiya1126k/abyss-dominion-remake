@@ -1,0 +1,87 @@
+{
+  "build": 487,
+  "version": "3.1.166",
+  "baseBuild": 486,
+  "files": [
+    {
+      "path": "README_Build487.txt",
+      "bytes": 4806,
+      "sha256": "f8474eb8a41e7fe79adf8d3935027e3fb83c0a6aec45fdce78dba429b945ba50"
+    },
+    {
+      "path": "assets/cabbage487/ART_SOURCES.txt",
+      "bytes": 3171,
+      "sha256": "1e47e1bfc05f1e58a2e4ec802d2772e6cd82794395530303fe72c5f9cae74839"
+    },
+    {
+      "path": "assets/cabbage487/champion-mountain.png",
+      "bytes": 2078968,
+      "sha256": "f442141baba561509e6e400a78cfef4fef0bb3a565176165a4050842c20b3bdb"
+    },
+    {
+      "path": "assets/cabbage487/fine-stages.png",
+      "bytes": 1680613,
+      "sha256": "5c339f25d9583e5954e34043eddb804c1e951e8eb9a8520262d6aaef73cb6d9c"
+    },
+    {
+      "path": "index.html",
+      "bytes": 119348,
+      "sha256": "a0578d6a309295e1e73abf11fee03f45e1e9037b52068a312ca87ca54e8b97d5"
+    },
+    {
+      "path": "src/Styles/build487-cabbage.css",
+      "bytes": 3212,
+      "sha256": "b7d857fb1b2e9748dddf0845b020609d56e2ae84057d77f9a0d79cf58a80ae6b"
+    },
+    {
+      "path": "src/cabbage/Input486.js",
+      "bytes": 5013,
+      "sha256": "b3d8ae79161b74de706d67c2d534b3537d7157e2e9b2538aa13f7ca79637fda2"
+    },
+    {
+      "path": "src/cabbage/Presentation487.js",
+      "bytes": 1990,
+      "sha256": "019336ee4dd33170448610a71cd5dff6522f2a2ffeb09bddd8ee2bf631a2fe2f"
+    },
+    {
+      "path": "src/cabbage/Rules484.js",
+      "bytes": 6131,
+      "sha256": "60383a9d35edcde2bf67856c2e3bbf005e87fd639c29e4c6a19a23b1f7a2edec"
+    },
+    {
+      "path": "src/cabbage/View484.js",
+      "bytes": 23255,
+      "sha256": "1e9cfdf298415a8fe79b3f3c76269996a6274a597e006a009d4867bedb2a30c1"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "0870c89e166c9163eafcea4eae369e1c56988123dc4eec2e53844dc36d91dbb1"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "5af71752a781a8c5047dca0e31f1bfc74276b38a1557edca8a20fc380f6bb0ee"
+    },
+    {
+      "path": "tests/build486-cabbage.test.mjs",
+      "bytes": 15894,
+      "sha256": "9526a1f3fbb8e48833bf77b3ea41dc82822d646400a83748c0518d833f6ef529"
+    },
+    {
+      "path": "tests/build487-cabbage.test.mjs",
+      "bytes": 7332,
+      "sha256": "e21345cda243fa1c971f892a68a1b2f7c364f3f1acc6a5088c3436e216596b87"
+    },
+    {
+      "path": "world-raid-offline487-assets.json",
+      "bytes": 33589,
+      "sha256": "bb25cd181ee75f5336bd8065f24a83544ff38aa1c94ba553991b335a7f08f6af"
+    },
+    {
+      "path": "world-raid-offline487-sw.js",
+      "bytes": 1844,
+      "sha256": "85fe93b726c52974c7fe11a31709d0325fc7cd70615f22de764aef5f941dcbb1"
+    }
+  ]
+}

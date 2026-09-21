@@ -1,3 +1,4 @@
+import { chopMaterial487 } from './Presentation487.js';
 import { CABBAGE484 as RULES, tap484 } from './Rules484.js';
 
 // Run the exact server rules on a copy. Scores sent by the server remain authoritative.
@@ -27,12 +28,8 @@ export function flush486(client, ui, game, now) {
 }
 
 export function material486(player, signal) {
-  const damage = signal.kind === 'stop' && player?.boardWindow === signal.index ? player.boardDamage ?? 0 : 0;
-  // Keep chopping the SAME cabbage for the entire match. Each cut advances the
-  // blend between generated stages; it never wraps back to an intact cabbage.
-  const progress = Math.min(7, Math.log2(1 + Math.max(0, player?.cuts ?? 0) / 2));
-  const food = Math.floor(progress);
-  return { food, next: Math.min(7, food + 1), mix: progress - food, board: Math.min(7, damage), damage };
+  const damage = Math.max(0, player?.boardDamage ?? 0);
+  return { ...chopMaterial487(player?.cuts ?? 0), board: Math.min(7, damage), damage };
 }
 
 // These listeners and viewport settings exist only while the playable surface is mounted.

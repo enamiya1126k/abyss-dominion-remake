@@ -1,0 +1,23 @@
+/* One cabbage and one scarred board, from the first cut to the final harvest. */
+.cb-texture487{position:absolute;z-index:3;left:4%;right:4%;bottom:2%;text-align:center;font-size:10px;line-height:1.5;color:#eef7cf;text-shadow:0 1px 3px #000;pointer-events:none}
+.cb-harvest487{padding:27px 16px 22px;background:radial-gradient(ellipse at 50% 55%,#a8ba5866,#10221b 76%)}
+.cb-harvest487>img{filter:brightness(.42)}
+.cb-harvest487 h1{margin:12px 0 0;font-size:clamp(25px,7.4vw,38px)}
+.cb-podium487{position:relative;isolation:isolate;height:calc(var(--pile-height) + 135px);max-width:530px;margin:5px auto 8px;filter:drop-shadow(0 7px 8px #08150f70)}
+.cb-result-board487{position:absolute;left:0;bottom:-12px;width:100%;height:150px;clip-path:inset(0 var(--rubble-loss,0%) 0 var(--rubble-loss,0%));background:url('../../assets/cabbage486/board-stages.png') 0 0/400% 200% no-repeat;z-index:-1}
+.cb-mountain487{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:var(--pile-width);height:var(--pile-height);object-fit:fill;filter:drop-shadow(0 7px 3px #23371675)}
+.cb-champion487{position:absolute;left:var(--winner-x);bottom:calc(var(--pile-height) * var(--winner-foot));transform:translateX(-50%);width:var(--winner-size);height:var(--winner-size);display:flex;align-items:flex-end;justify-content:center;filter:drop-shadow(0 0 12px #ffe18e5c);z-index:2}
+.cb-champion487 .sg-monster,.cb-champion487 .sg-monster>*{display:block;width:var(--winner-size);height:var(--winner-size);object-fit:contain;max-width:100%;max-height:100%}
+.cb-champion487>i{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:27px;font-style:normal;color:#ffe495;text-shadow:0 2px 0 #694114}
+.cb-harvest487>b{max-width:100%;font-size:16px;overflow-wrap:anywhere;line-height:1.5}
+.cb-harvest487>strong{font-size:clamp(38px,12vw,60px);line-height:1.2;text-shadow:0 3px 12px #09180f}
+.cb-harvest-caption487{font-size:11px;color:#d2deb3;margin:6px 0 0;letter-spacing:.05em}
+.cb-harvest-heading487{display:grid;gap:5px;margin-top:4px}
+.cb-harvest-heading487>span{font-family:serif;font-size:21px;color:#eee6b7}
+.cb-harvest-heading487>small{font-size:10px;line-height:1.6;color:#b6c5a5}
+.cb-ranking487 article{display:grid;grid-template-columns:22px 38px minmax(0,1fr) auto;column-gap:9px;row-gap:10px}
+.cb-ranking487 article>em{font-variant-numeric:tabular-nums;white-space:nowrap}
+.cb-harvest-bar487{grid-column:1/-1;height:13px;overflow:hidden;border-radius:4px;background:#071c1480;box-shadow:inset 0 1px 3px #0005}
+.cb-harvest-bar487>i{display:block;height:100%;background:linear-gradient(0deg,#719c4160,#e3f4b080),url('../../assets/cabbage487/champion-mountain.png') center/38px 32px repeat-x,#9cbe65;border-radius:4px;box-shadow:inset 0 1px 0 #e9f9b76b}
+.cb-result .cb-your-result>span,.cb-result .cb-your-result>em{padding-right:8px;line-height:1.6}
+@media(max-width:360px){.cb-ranking487 article{column-gap:6px;padding:10px 8px;grid-template-columns:18px 30px minmax(0,1fr) auto}.cb-ranking487 .cb-rank-portrait,.cb-ranking487 .cb-rank-portrait .sg-monster,.cb-ranking487 .cb-rank-portrait .sg-monster>*{width:30px;height:30px}.cb-ranking487 article em{font-size:17px}.cb-texture487{font-size:9px}}

@@ -35,15 +35,15 @@ test('every forbidden tap damages the board, including consecutive hits from one
   for(let i=0;i<12;i++){const t=at+200+i*35;assert.equal(tap484(g,p,input(i+2,'left',t),t),i?'damage':'break');assert.equal(p.boardDamage,i+1)}
   assert.equal(p.breaks,1);assert.equal(p.score,220);assert.equal(p.combo,0);
   assert.equal(material486(p,g.windows[0]).board,7);assert.equal(material486(p,g.windows[0]).damage,12);
-  assert.equal(material486(p,g.windows[1]).damage,0);
-  const next=at+2000;assert.equal(tap484(g,p,input(14,'right',next),next),'cut');assert.equal(p.boardDamage,0);assert.equal(p.cuts,1);
+  assert.equal(material486(p,g.windows[1]).damage,12);
+  const next=at+2000;assert.equal(tap484(g,p,input(14,'right',next),next),'cut');assert.equal(p.boardDamage,12);assert.equal(p.cuts,1);
 });
 
-test('another stop starts a new board; duplicated input does not damage or charge twice',()=>{
+test('another stop keeps the same board; duplicated input does not damage or charge twice',()=>{
   const g=game(),p=g.players[0],a=g.startAt+1000;p.score=300;
   g.windows=[{kind:'stop',at:a,until:a+1000,index:1},{kind:'stop',at:a+1000,until:a+2000,index:2}];
   const first=input(1,'left',a+250);tap484(g,p,first,first.at);assert.equal(tap484(g,p,first,first.at),'duplicate');
-  const next=input(2,'left',a+1300);tap484(g,p,next,next.at);assert.equal(p.boardDamage,1);assert.equal(p.breaks,2);assert.equal(p.score,140);
+  const next=input(2,'left',a+1300);tap484(g,p,next,next.at);assert.equal(p.boardDamage,2);assert.equal(p.breaks,2);assert.equal(p.score,140);
 });
 
 test('saved games without new timing and damage fields migrate on first input',()=>{
@@ -56,8 +56,8 @@ test('the same cabbage only gets finer across 1,000 cuts; every pre-mince tap ad
   let last=-1;
   for(let cuts=0;cuts<=1000;cuts++){
     const m=material486({cuts},{kind:'cut'}),progress=m.food+m.mix;
-    assert.ok(progress>=last);if(cuts&&cuts<=254)assert.ok(progress>last);
-    assert.ok(m.food>=0&&m.next<=7);if(cuts>=254)assert.equal(m.food,7);last=progress;
+    assert.ok(progress>=last);if(cuts&&cuts<=175)assert.ok(progress>last);
+    assert.ok(m.food>=0&&m.next<=10);if(cuts>=175)assert.equal(m.food,10);last=progress;
   }
   const chopped={cuts:64,boardWindow:1,boardDamage:7};assert.equal(material486(chopped,{kind:'cut'}).food,material486(chopped,{kind:'stop',index:1}).food);
 });
@@ -129,13 +129,13 @@ test('view updates score, combo, expected hand and generated food immediately be
   x.c.state.cabbage=publicCabbage484(g,'p',now);cabbageReceive484(x.c);assert.equal(x.c.cbUI484.pending.length,0);assert.equal(x.root.querySelector('[data-cb-combo]').textContent,80);
 });
 
-test('each illegal tap swaps board art locally; the board persists through stop and resets at cut while cabbage remains minced',t=>{
+test('each illegal tap swaps board art locally; the board persists through stop and the next cut while cabbage remains minced',t=>{
   const g=game(),a=g.startAt+500;g.players[0].cuts=140;g.players[0].score=300;g.windows=[{kind:'stop',at:a,until:a+2000,index:1},{kind:'cut',at:a+2000,until:g.endAt,index:2}];
   const x=domClient(g);let now=a+250;t.mock.method(Date,'now',()=>now);const positions=[];
   for(let i=0;i<10;i++){now=a+250+i*35;cabbageTap484(x.c,'left');assert.equal(x.board.dataset.damage,i+1);positions.push(x.board.style.backgroundPosition)}
   assert.equal(new Set(positions.slice(0,7)).size,7);assert.equal(x.board.values['--rubble-loss'],'4.5%');assert.equal(x.stage.classes.has('is-broken'),true);
   assert.equal(x.root.querySelector('[data-cb-score="0"]').dataset.score,'220');
-  const previous=x.layers[0].style.backgroundPosition;now=a+2000;for(const hit of x.c.cbUI484.pending)tap484(g,g.players[0],hit,hit.at);x.c.state.cabbage=publicCabbage484(g,'p',now);cabbageReceive484(x.c);cabbageTap484(x.c,'right');assert.equal(x.board.dataset.damage,0);assert.equal(x.stage.classes.has('is-broken'),false);assert.equal(x.layers[0].style.backgroundPosition,previous);
+  const previous=x.layers[0].style.backgroundPosition;now=a+2000;for(const hit of x.c.cbUI484.pending)tap484(g,g.players[0],hit,hit.at);x.c.state.cabbage=publicCabbage484(g,'p',now);cabbageReceive484(x.c);cabbageTap484(x.c,'right');assert.equal(x.board.dataset.damage,10);assert.equal(x.stage.classes.has('is-broken'),true);assert.equal(x.layers[0].style.backgroundPosition,previous);
 });
 
 test('generated material keeps changing the minced pile after the final art stage, never restocks',t=>{
@@ -177,7 +177,7 @@ test('render cleanup restores zoom and removes active input handlers when leavin
 test('private input timestamps are self-only; public damage survives reconnect and result sealing',()=>{
   const g=game(),p=g.players[0],a=g.startAt+1000;g.windows=[{kind:'stop',at:a,until:g.endAt,index:2}];
   tap484(g,p,input(1,'left',a+250),a+250);const view=publicCabbage484(g,'p',a+300),other=publicCabbage484(g,'other',a+300);
-  assert.equal(view.players[0].boardDamage,1);assert.equal(view.players[0].lastLeftAt,a+250);assert.ok(!('lastLeftAt'in other.players[0]));assert.equal(view.inputVersion486,2);
+  assert.equal(view.players[0].boardDamage,1);assert.equal(view.players[0].lastLeftAt,a+250);assert.ok(!('lastLeftAt'in other.players[0]));assert.equal(view.inputVersion486,3);
   const restored=JSON.parse(JSON.stringify(g));advanceCabbage484(restored,g.endAt+R.maxAge);assert.equal(restored.phase,'result');assert.equal(restored.players[0].boardDamage,1);
   const score=restored.players[0].score;assert.equal(tap484(restored,restored.players[0],input(2,'right',g.endAt-1),g.endAt),'late');assert.equal(restored.players[0].score,score);
 });
