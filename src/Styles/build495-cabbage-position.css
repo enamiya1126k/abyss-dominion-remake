@@ -1,0 +1,7 @@
+/* Lift the cabbage, cleaver and their contact point together by 8% of the stage.
+   Keep the existing floor-collapse offset and chopping animation intact. */
+.cb-play .cb-stage486 .cb-food{top:calc(34% + var(--floor-drop488,0%))}
+.cb-play .cb-stage486 .cb-knife488{top:calc(41% + var(--floor-drop488,0%))}
+@supports(width:1cqw){
+ .cb-play .cb-stage486 .cb-food{top:auto;bottom:calc(21% - var(--floor-drop488,0%))}
+}

@@ -1,0 +1,39 @@
+{
+  "build": 495,
+  "baseBuild": 494,
+  "version": "3.1.174",
+  "files": [
+    {
+      "path": "README_Build495.txt",
+      "sha256": "8f7e071ee29a3222b82dcb6128bca53196d0313d68fb3e85bb4463a97abdc34f"
+    },
+    {
+      "path": "index.html",
+      "sha256": "e5f25e1b604697c5de5e1c8636fd85f2ac0ed7698c87fdef9fa0f91ac5761228"
+    },
+    {
+      "path": "src/Styles/build495-cabbage-position.css",
+      "sha256": "3bd4423b86e87cd4db5848b9fcf3c1fa389b166433039d151575b794af6f60e2"
+    },
+    {
+      "path": "src/cabbage/View484.js",
+      "sha256": "bb22352394a5c1f1886ae424b8f5efadfd06fd14a5df77f7299fee0e5126d999"
+    },
+    {
+      "path": "src/core/config.js",
+      "sha256": "850bed3feaddedab998609987529f6ad5fdef81fa045256b1cc6a2bba366fcbd"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "sha256": "fc2e33a9f02ca0802d266d8127da9bb96b9007954bba8310e4ba97a4715c7499"
+    },
+    {
+      "path": "world-raid-offline495-assets.json",
+      "sha256": "d74218d6b2e1821ef490c0fd1889070d0a5b32de564dc197d4fc6bd9732cc5b2"
+    },
+    {
+      "path": "world-raid-offline495-sw.js",
+      "sha256": "f7ef5d583b23ece61e303e30240d41549a814078a1cca202fac54b3a7c326d8f"
+    }
+  ]
+}
