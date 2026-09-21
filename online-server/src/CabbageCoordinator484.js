@@ -1,13 +1,13 @@
 import{randomBytes}from'node:crypto';
-import{makeCabbage484,startCabbage484,tap484,advanceCabbage484}from'../../src/cabbage/Rules484.js';
+import{CABBAGE484 as RULES,makeCabbage484,startCabbage484,tap484,advanceCabbage484}from'../../src/cabbage/Rules484.js';
 export const cabbageFor484=(c,id)=>Object.values(c.data.cabbageRooms484??{}).find(g=>g.members.some(m=>m.playerId===id&&!m.departed))??null;
 export function createCabbage484(c,p,members){return makeCabbage484({id:`cb484-${++c.data.serial}-${randomBytes(4).toString('hex')}`,code:p.code,partyId:p.id,hostId:p.hostId,members,now:c.now(),seed:randomBytes(4).readUInt32LE()})}
 export function queueCabbage484(c,session,m){
  const g=cabbageFor484(c,session.playerId),p=g?.players.find(p=>p.playerId===session.playerId&&!p.ai);
  if(!g||!p||m.gameId!==g.id||!['countdown','playing'].includes(g.phase))return;
- if(!Array.isArray(m.taps)||m.taps.length>8)return;
+ if(!Array.isArray(m.taps)||m.taps.length>RULES.maxBatch)return;
  c.cabbageQueue484??=new Map();const key=g.id+':'+p.playerId,list=c.cabbageQueue484.get(key)??[];
- for(const t of m.taps){if(list.length>=32)break;if(!t||!Number.isSafeInteger(t.seq)||t.seq<=p.lastSeq||t.seq>2000||!['left','right'].includes(t.side)||!Number.isFinite(t.at)||list.some(x=>x.seq===t.seq))continue;list.push({seq:t.seq,side:t.side,at:t.at,received:c.now()})}
+ for(const t of m.taps){if(list.length>=RULES.maxQueue)break;if(!t||!Number.isSafeInteger(t.seq)||t.seq<=p.lastSeq||t.seq>RULES.maxSequence||!['left','right'].includes(t.side)||!Number.isFinite(t.at)||list.some(x=>x.seq===t.seq))continue;list.push({seq:t.seq,side:t.side,at:t.at,received:c.now()})}
  if(list.length)c.cabbageQueue484.set(key,list);
 }
 export function handleCabbage484(c,session,m){

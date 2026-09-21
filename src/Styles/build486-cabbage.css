@@ -1,0 +1,19 @@
+/* Generated food / board layers. Scope zoom suppression to the active match. */
+.cb-play{touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.cb-play *{touch-action:none}
+.cb-stage486 .cb-board486{position:absolute;left:2%;top:22%;width:96%;height:78%;background:url('../../assets/cabbage486/board-stages.png') 0 0/400% 200% no-repeat;z-index:0;pointer-events:none;filter:drop-shadow(0 7px 4px #120a0780);clip-path:inset(0 var(--rubble-loss,0%) 0 var(--rubble-loss,0%))}
+.cb-stage486 .cb-food{left:30%;top:42%;width:45%;height:44%;z-index:2;filter:drop-shadow(0 9px 4px #17150885)}
+.cb-food-layers486{position:relative;width:100%;height:100%;transform:translateX(var(--mince-x,0%)) rotate(var(--mince-turn,0deg))}
+.cb-food-layers486>i{position:absolute;inset:0;background:url('../../assets/cabbage486/cabbage-stages.png') 0 0/400% 200% no-repeat;pointer-events:none}
+.cb-food-layers486>i+i{opacity:0}
+.cb-stage486.is-broken .cb-food{transform:none;filter:drop-shadow(0 9px 4px #17150885)}
+.cb-stage486 .cb-chef{z-index:2}
+.cb-stage486 .cb-feedback{top:78%;font-size:14px;max-width:94%;white-space:normal;text-align:center}
+.cb-stage486 .cb-feedback.is-bad{font-size:17px}
+.cb-stage486 .cb-knife{z-index:3;top:47%}
+.cb-play .cb-pads{touch-action:none}
+@supports(width:1cqw){
+ .cb-stage486{container-type:size}
+ .cb-stage486 .cb-food{width:min(45cqw,44cqh);height:min(45cqw,44cqh);left:calc(52% - min(22.5cqw,22cqh));top:auto;bottom:13%}
+}
+@media(prefers-reduced-motion:reduce){.cb-food-layers486{transform:none}}

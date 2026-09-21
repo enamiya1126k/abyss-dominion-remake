@@ -1,0 +1,102 @@
+{
+  "build": 486,
+  "version": "3.1.165",
+  "baseBuild": 485,
+  "files": [
+    {
+      "path": "README_Build486.txt",
+      "bytes": 5476,
+      "sha256": "7f1e5d9e9771fdd8e573f4c3dde3933de654b993fd28738fcd9c8cf1d8f2470d"
+    },
+    {
+      "path": "assets/cabbage486/ART_SOURCES.txt",
+      "bytes": 3829,
+      "sha256": "5cd4940a77cbec02c975bfbebe0ce5517af0fff988ecc5eec76b6f8e8b549db2"
+    },
+    {
+      "path": "assets/cabbage486/board-stages.png",
+      "bytes": 1857777,
+      "sha256": "7af5279f468fc75c7ae8eb7c2f585c9adde2f0b98e345293a09ea9a29799c110"
+    },
+    {
+      "path": "assets/cabbage486/cabbage-stages.png",
+      "bytes": 1851833,
+      "sha256": "cd305e5bbe8c58b2e096c150fb2b16a1998a38adddabd57c97a21b887f480c13"
+    },
+    {
+      "path": "assets/cabbage486/kitchen.png",
+      "bytes": 2443783,
+      "sha256": "1785eb905bcd9b81ccfa6189898576b193f986f3a2c487f7518025af92b2bf09"
+    },
+    {
+      "path": "index.html",
+      "bytes": 118453,
+      "sha256": "03a582b49a0d4df3364743d9b56c4545e2509dc34f31ea9f6aaf28cf17ded059"
+    },
+    {
+      "path": "online-server/src/CabbageCoordinator484.js",
+      "bytes": 4248,
+      "sha256": "357faa45b3548f32adc790c0a838a71b2881c2edef732039115226db2dfd1eed"
+    },
+    {
+      "path": "src/Styles/build486-cabbage.css",
+      "bytes": 1574,
+      "sha256": "ea3f367725a1844e566cc797743ca632520cbceaab99bb05c3f98ca3b9b56e5c"
+    },
+    {
+      "path": "src/cabbage/Input486.js",
+      "bytes": 5309,
+      "sha256": "366328c205280227cbbe16c281f7e5173cdac12fef9b09dd068c3a49bff1ae62"
+    },
+    {
+      "path": "src/cabbage/Rules484.js",
+      "bytes": 6146,
+      "sha256": "725593c0b9ab35bf3d27c9b16966a864d6d799b7ddaaa9e0fbffa9700534b929"
+    },
+    {
+      "path": "src/cabbage/View484.js",
+      "bytes": 21371,
+      "sha256": "6644fe75c5d3e32b5b0ce31bb4673504099b1b331a8138927b92fcd2a354e6c8"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "c8cc80fead5dfc081e8c296d070ce77330827bd943f7f482cc21ef2eec06c89e"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "2bbb7c7e7226405507554449594016a413d00d16713dd2bc2c3db4c1d9892e16"
+    },
+    {
+      "path": "tests/build484-cabbage.test.mjs",
+      "bytes": 10298,
+      "sha256": "2c362a6b338e6baedeaa67bbdfb91a032ea45dd4d1706a236e049746471b108a"
+    },
+    {
+      "path": "tests/build484-integration.test.mjs",
+      "bytes": 6108,
+      "sha256": "39ee428e96056778e367ad61c5b79bd901c00d54055695061a87f591f869ba68"
+    },
+    {
+      "path": "tests/build485-party.test.mjs",
+      "bytes": 12688,
+      "sha256": "5e9ea5c04e9e9c7b4bc53e456362a68b071134a979cf865b55dc9c1c40689159"
+    },
+    {
+      "path": "tests/build486-cabbage.test.mjs",
+      "bytes": 15889,
+      "sha256": "b628d1af1c3c1595447afc97e614d8d3fb7334efd6ec8682782d4454b3480ec9"
+    },
+    {
+      "path": "world-raid-offline486-assets.json",
+      "bytes": 33424,
+      "sha256": "85747cae0735b818d2f0a0a4cb1745212216a1943461f2ed4cfec8606cdd7000"
+    },
+    {
+      "path": "world-raid-offline486-sw.js",
+      "bytes": 1844,
+      "sha256": "d24714a94906c6530c0962d210d20e5d819b0321f6465effe27a5ab460b929eb"
+    }
+  ]
+}
