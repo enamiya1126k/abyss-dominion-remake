@@ -35,9 +35,9 @@ test('old or invalid counters never display negative damage or an invalid atlas 
 test('persistent table damage survives the next cut, a later stop, save and result without changing scoring rules',()=>{
   const g=game(),p=g.players[0];p.score=500;
   for(let i=0;i<20;i++){const at=g.startAt+200+i*30;tap484(g,p,{seq:i+1,side:i%2?'right':'left',at},at)}
-  assert.equal(p.score,420);assert.equal(p.breaks,1);assert.equal(destruction488(p.boardDamage).tableHits,13);
-  let at=g.startAt+2100;tap484(g,p,{seq:21,side:'left',at},at);assert.equal(p.score,430);assert.equal(p.boardDamage,20);
-  at=g.startAt+3250;tap484(g,p,{seq:22,side:'right',at},at);assert.equal(p.score,350);assert.equal(p.breaks,2);assert.equal(p.boardDamage,21);
+  assert.equal(p.score,-1100);assert.equal(p.breaks,20);assert.equal(destruction488(p.boardDamage).tableHits,13);
+  let at=g.startAt+2100;tap484(g,p,{seq:21,side:'left',at},at);assert.equal(p.score,-1090);assert.equal(p.boardDamage,20);
+  at=g.startAt+3250;tap484(g,p,{seq:22,side:'right',at},at);assert.equal(p.score,-1170);assert.equal(p.breaks,21);assert.equal(p.boardDamage,21);
   const restored=JSON.parse(JSON.stringify(g));advanceCabbage484(restored,g.endAt+R.maxAge);
   assert.deepEqual(destruction488(publicCabbage484(restored,'p',g.endAt).players[0].boardDamage),destruction488(21));
   assert.equal(game().players[0].boardDamage,0);

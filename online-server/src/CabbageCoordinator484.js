@@ -21,7 +21,7 @@ export function handleCabbage484(c,session,m){
  }else if(m.kind==='start'){
   if(g.hostId!==session.playerId)throw Error('部屋主が開始できます');if(g.phase!=='lobby')return true;
   if(p.members.some(x=>!x.ready||x.atHome||!c.sessions.get(x.playerId)?.connected)||g.members.some(x=>!x.choice))throw Error('全員が魔物を選んで「準備OK」を押してください');
-  if(p.members.some(x=>x.cabbageVersion484!==1))throw Error('全員がBuild484へ更新してから開始してください');
+  if(m.cabbageScoring491!==1||p.members.some(x=>x.cabbageVersion484!==1||x.cabbageScoring491!==1))throw Error('全員がBuild491へ更新してから開始してください');
   if(p.members.some(x=>c.isBusy(c.sessions.get(x.playerId))))throw Error('ほかの対戦の終了を待っています');
   startCabbage484(g,c.now());
  }else throw Error('未対応の操作です');

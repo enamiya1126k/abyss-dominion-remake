@@ -1,0 +1,18 @@
+Build491 generated signal assets
+Mode: builtin image generation (not CLI).
+Assets included unchanged as RGBA PNGs; runtime crops the plaque atlas with CSS.
+No external stock assets were used. Japanese copy and numerals are live HTML text.
+
+assets/cabbage491/countdown-crest.png
+Reference: user-provided IMG_9259.jpeg for kitchen palette and lighting.
+Prompt:
+Use case: stylized-concept. Asset type: production transparent game UI crest for the countdown in a fantasy tavern cabbage chopping minigame. Reference image is ONLY a reference for warm kitchen lighting, green/gold palette and realistic rendered materials; do not reproduce the screenshot, phone or scene. Create one beautifully crafted circular brass kitchen countdown medallion, with dark forest-green enamel center completely blank for large live HTML countdown numerals. Thin layered brass rings and restrained engraved cooking motifs; two small steel kitchen cleavers crossed behind the lower half, cabbage leaves tucked symmetrically at the sides, tiny warm amber accents. Front facing, symmetrical, sharp silhouette, premium tactile 3D rendered game prop, worn brass and believable brushed steel. The center must stay uncluttered, very dark flat green, occupying at least 60 percent of the disc diameter for readable numerals. Complete object fits inside canvas with 8 percent transparent margin. NO text, NO numbers, NO letters, NO logo, NO watermark, no background scene. Genuine transparent RGBA background, not a checkerboard.
+
+assets/cabbage491/signal-plaques.png
+Reference: the generated countdown crest above.
+Prompt:
+Use case: stylized-concept. Asset type: transparent 2 by 2 sprite atlas of FOUR premium fantasy kitchen game announcement plaques, for an existing cabbage chopping minigame. First input is reference for tactile brass, warm steel, dark forest enamel and cabbage accent style; do not copy the circular shape. Each of FOUR equally sized atlas cells has a single WIDE HORIZONTAL plaque of the SAME dimensions and silhouette, centered, 2.6:1 width to height within its cell, ample transparent padding, no overlap between cells. Rounded rectangular handcrafted brass rim, small decorative corner rivets, very small kitchen details at far ends only. Interiors have at least 75% central empty area for LIVE Japanese HTML text. TOP LEFT: deep emerald green enamel with subtle fresh cabbage leaves at extreme corners, action/start. TOP RIGHT: dark amber enamel with small warning notch motif at ends, imminent stop. BOTTOM LEFT: deep crimson/burgundy enamel and crossed cleaver symbol at each extreme edge, clear dangerous stop, not gore. BOTTOM RIGHT: deep midnight teal enamel with celebratory golden laurel ends and subtle brass chef hat crest, finish. Rich restrained photorealistic game prop render, low specular dark centers so cream letters will read clearly. All four front-facing, same scale, no perspective distortion. Genuine transparent RGBA background. NO text, NO letters, NO numbers, NO phone, NO UI screenshot, NO background scene, NO checkered pattern.
+
+Atlas size: 1774 x 887. Crop rectangles [left,top,right,bottom]:
+green [18,123,873,390], amber [901,123,1754,390], red [15,508,875,776], finish [896,508,1763,776].
+

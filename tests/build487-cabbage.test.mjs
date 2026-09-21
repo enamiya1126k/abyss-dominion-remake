@@ -16,29 +16,29 @@ const hit=(g,p,seq,side,elapsed)=>{const at=g.startAt+elapsed;return tap484(g,p,
 test('one board retains cumulative damage through cut, another stop, save/reconnect and results; only a new match repairs it',()=>{
   const g=game(),p=g.players[0];p.score=500;
   hit(g,p,1,'left',1200);hit(g,p,2,'right',1250);hit(g,p,3,'left',1300);
-  assert.equal(p.boardDamage,3);assert.equal(p.score,420);
+  assert.equal(p.boardDamage,3);assert.equal(p.score,260);
   hit(g,p,4,'right',2100);assert.equal(p.boardDamage,3);assert.equal(p.cuts,1);
-  hit(g,p,5,'left',3250);assert.equal(p.boardDamage,4);assert.equal(p.breaks,2);assert.equal(p.score,350);
+  hit(g,p,5,'left',3250);assert.equal(p.boardDamage,4);assert.equal(p.breaks,4);assert.equal(p.score,190);
   const restored=JSON.parse(JSON.stringify(g)),rp=restored.players[0];
   const reconnected=publicCabbage484(restored,'me',g.startAt+4500);
   assert.equal(material486(reconnected.players[0],{kind:'cut',index:4}).damage,4);
-  hit(restored,rp,6,'right',4500);assert.equal(rp.boardDamage,4);assert.equal(rp.score,360);
+  hit(restored,rp,6,'right',4500);assert.equal(rp.boardDamage,4);assert.equal(rp.score,200);
   advanceCabbage484(restored,g.endAt+R.maxAge);assert.equal(restored.phase,'result');assert.equal(publicCabbage484(restored,'me',g.endAt+R.maxAge).players[0].boardDamage,4);
   const fresh=game();assert.equal(fresh.players[0].boardDamage,0);assert.equal(fresh.players[0].cuts,0);
 });
 
-test('a completely shattered board never prevents legal cuts and repeated damage is still charged once per stop',()=>{
+test('a completely shattered board never prevents legal cuts and repeated damage is charged on every tap',()=>{
   const g=game(),p=g.players[0];p.score=1000;
   for(let i=0;i<20;i++)hit(g,p,i+1,i%2?'right':'left',1200+i*25);
-  assert.equal(p.boardDamage,20);assert.equal(p.breaks,1);assert.equal(p.score,920);
+  assert.equal(p.boardDamage,20);assert.equal(p.breaks,20);assert.equal(p.score,-600);
   for(let i=0;i<20;i++)assert.equal(hit(g,p,21+i,i%2?'right':'left',2100+i*25),'cut');
-  assert.equal(p.boardDamage,20);assert.equal(p.score,1130);assert.equal(p.cuts,20);
+  assert.equal(p.boardDamage,20);assert.equal(p.score,-390);assert.equal(p.cuts,20);
 });
 
 test('predicted cumulative damage reconciles across the stop boundary without double damage or losing old scars',()=>{
   const g=game(),p=g.players[0];p.boardDamage=5;p.score=300;
   const taps=[{seq:1,side:'left',at:g.startAt+1200},{seq:2,side:'right',at:g.startAt+1250},{seq:3,side:'left',at:g.startAt+2100}];
-  const predicted=predict486(g,p,taps);assert.equal(predicted.boardDamage,7);assert.equal(predicted.score,230);assert.equal(p.boardDamage,5);
+  const predicted=predict486(g,p,taps);assert.equal(predicted.boardDamage,7);assert.equal(predicted.score,150);assert.equal(p.boardDamage,5);
   const ui={pending:taps,sequence:3};tap484(g,p,taps[0],taps[0].at);acknowledge486(ui,p,taps[2].at);
   assert.deepEqual(predict486(g,p,ui.pending),predicted);
   for(const input of ui.pending)tap484(g,p,input,input.at);

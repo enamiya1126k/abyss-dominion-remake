@@ -25,13 +25,13 @@ function scene(){const nodes=new Map();const el=()=>({dataset:{},style:{setPrope
 test('paint and reconnect preserve floor holes; starting a new match alone restores all surfaces',()=>{
  const stage=scene();paintDestruction490(stage,40);const floor=stage.querySelector('[data-cb-floor]'),style={...floor.style};paintDestruction490(stage,40);assert.deepEqual(floor.style,style);assert.equal(floor.dataset.damage,14);assert.equal(stage.querySelector('[data-cb-board]').style.opacity,0);assert.equal(stage.querySelector('[data-cb-table]').style.opacity,0);paintDestruction490(stage,0);assert.equal(floor.style.opacity,0);assert.equal(stage.querySelector('[data-cb-board]').style.opacity,1);assert.equal(stage.querySelector('[data-cb-table]').style.opacity,1);
 });
-test('floor damage survives real cuts, next stop, persisted snapshot and final result; one penalty per stop remains',()=>{
+test('floor damage survives real cuts, next stop, persisted snapshot and final result; every forbidden tap deducts points',()=>{
  const g=startCabbage484(makeCabbage484({id:'490',hostId:'p',members:[{playerId:'p',name:'Chef',choice:{id:'m',speciesId:'wolf'}}],now:0}),0),p=g.players[0],a=g.startAt;
  g.windows=[{kind:'stop',at:a,until:a+2000,index:0},{kind:'cut',at:a+2000,until:a+3000,index:1},{kind:'stop',at:a+3000,until:a+5000,index:2},{kind:'cut',at:a+5000,until:g.endAt,index:3}];p.score=1000;
  for(let i=0;i<40;i++){const at=a+200+i*30;tap484(g,p,{seq:i+1,side:i%2?'right':'left',at},at)}
- assert.equal(p.boardDamage,40);assert.equal(p.score,920);assert.equal(p.breaks,1);
- let at=a+2100;tap484(g,p,{seq:41,side:'left',at},at);assert.equal(p.boardDamage,40);assert.equal(p.score,930);
- at=a+3250;tap484(g,p,{seq:42,side:'right',at},at);assert.equal(p.boardDamage,41);assert.equal(p.score,850);assert.equal(p.breaks,2);
+ assert.equal(p.boardDamage,40);assert.equal(p.score,-2200);assert.equal(p.breaks,40);
+ let at=a+2100;tap484(g,p,{seq:41,side:'left',at},at);assert.equal(p.boardDamage,40);assert.equal(p.score,-2190);
+ at=a+3250;tap484(g,p,{seq:42,side:'right',at},at);assert.equal(p.boardDamage,41);assert.equal(p.score,-2270);assert.equal(p.breaks,41);
  const restored=JSON.parse(JSON.stringify(g));advanceCabbage484(restored,g.endAt+R.maxAge);const view=publicCabbage484(restored,'p',g.endAt);assert.equal(destruction490(view.players[0].boardDamage).floorHits,15);
  const html=cabbageView484({state:{cabbage:view},transport:{selfId:'p'},sgMonster463:()=>''});assert.match(html,/床の破壊 15打/);assert.match(html,/cb-result-floor490/);assert.match(html,/data-party-result490="again"/);assert.match(html,/data-party-result490="list"/);assert.doesNotMatch(html,/ホームへ戻る/);
  assert.match(damageMessage490(27,true),/床.*−80/);assert.doesNotMatch(damageMessage490(28,false),/80/);

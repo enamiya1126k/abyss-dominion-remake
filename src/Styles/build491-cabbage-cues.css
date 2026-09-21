@@ -1,0 +1,29 @@
+/* Atlas-backed kitchen signals; numerals/copy remain crisp live text. */
+.cb-stage[data-signal] .cb-signal491{position:absolute;top:4%;left:4%;right:4%;width:92%;height:auto;aspect-ratio:3.2;padding:0;border:0;border-radius:0;background:none;box-shadow:none;filter:drop-shadow(0 4px 5px #080f11aa);pointer-events:none;box-sizing:border-box}
+.cb-cue-art491{position:absolute;inset:0;display:block;background-repeat:no-repeat;background-position:center;background-size:contain;pointer-events:none}
+.cb-stage[data-signal] .cb-signal491 small,.cb-stage[data-signal] .cb-signal491 strong,.cb-stage[data-signal] .cb-signal491>span{position:absolute;display:block;left:17%;width:66%;margin:0;padding:0;text-align:center;white-space:nowrap}
+.cb-stage[data-signal] .cb-signal491 small{top:17%;font-size:clamp(7px,2.3cqh,10px);line-height:1.2;letter-spacing:.14em;color:#e2d6a4;text-shadow:0 1px 2px #101411}
+.cb-stage[data-signal] .cb-signal491 strong{top:30%;font-size:clamp(26px,8.4cqw,40px);line-height:1.15;letter-spacing:.05em;color:#f6f6b9;text-shadow:0 2px 0 #193f29,0 3px 7px #03140e;font-weight:900;transform-origin:center}
+.cb-stage[data-signal] .cb-signal491>span{bottom:15%;font-size:clamp(8px,2.5cqh,11px);line-height:1.2;color:#fff2cd;letter-spacing:0;text-shadow:0 1px 2px #111}
+.cb-count-dots491{display:none}
+.cb-stage[data-signal=warning] .cb-signal491 strong{font-size:clamp(22px,7.2cqw,34px);color:#ffe7a4;text-shadow:0 2px 0 #643a10,0 3px 7px #241607}
+.cb-stage[data-signal=stop] .cb-signal491 strong{color:#fff2d9;text-shadow:0 2px 0 #772019,0 3px 7px #2c0809}
+.cb-stage[data-signal=stop] .cb-signal491>span{color:#ffdfb0;font-weight:700}
+.cb-stage[data-signal=finish] .cb-signal491 strong,.cb-stage[data-signal=waiting] .cb-signal491 strong{font-size:clamp(23px,7.8cqw,36px);color:#fff0b7}
+.cb-stage[data-signal=countdown] .cb-signal491{top:2%;left:50%;right:auto;width:62%;height:auto;width:min(62cqw,60cqh);height:min(62cqw,60cqh);aspect-ratio:1;transform:translateX(-50%);filter:drop-shadow(0 6px 8px #080e12a8)}
+.cb-stage[data-signal=countdown] .cb-signal491 small{top:24%;left:15%;width:70%;font-size:clamp(8px,2.7cqh,11px);letter-spacing:.1em;color:#ece0b7}
+.cb-stage[data-signal=countdown] .cb-signal491 strong{top:32%;left:15%;width:70%;font-family:Georgia,'Times New Roman',serif;font-size:clamp(36px,min(20cqw,18cqh),83px);line-height:1;color:#fff1b7;text-shadow:0 3px 0 #846121,0 0 16px #f6d67855}
+.cb-stage[data-signal=countdown] .cb-signal491>span{top:100%;bottom:auto;left:-25%;width:150%;padding:5px 0;font-size:clamp(9px,2.8cqh,12px);color:#fff5cf;text-shadow:0 2px 4px #07100b,0 0 12px #06100b}
+.cb-stage[data-signal=countdown] .cb-count-dots491{position:absolute;top:68%;left:35%;width:30%;display:flex;justify-content:center;gap:7px}
+.cb-count-dots491 i{width:5px;height:5px;border-radius:50%;background:#ffe8a1;box-shadow:0 0 7px #f2c25a;border:1px solid #efdf9a}
+.cb-stage[data-count="2"] .cb-count-dots491 i:first-child,.cb-stage[data-count="1"] .cb-count-dots491 i:nth-child(-n+2){background:#4b5841;box-shadow:none;border-color:#b8a87677}
+/* Negative scores never clip at zero; full digits fit even deep into the red. */
+.cb-score-value491{font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+.cb-score-value491.is-medium491{font-size:.80em}
+.cb-score-value491.is-long491{font-size:.64em}
+.cb-score-value491.is-negative491,.cb-ranking487 .is-negative491{color:#ffc0ab}
+.cb-result .cb-harvest491-negative>strong{color:#ffc0ab;background:none;-webkit-text-fill-color:#ffc0ab;text-shadow:0 2px 8px #230c0b}
+.cb-result .cb-harvest491-negative .cb-harvest-caption487{color:#f0b99e}
+.cb-play .cb-instruction{font-size:9px;letter-spacing:0}
+@media(max-height:720px){.cb-stage[data-signal] .cb-signal491 strong{font-size:27px}.cb-stage[data-signal=warning] .cb-signal491 strong{font-size:22px}.cb-stage[data-signal=countdown] .cb-signal491 strong{font-size:clamp(36px,min(20cqw,18cqh),64px)}.cb-stage[data-signal=countdown] .cb-signal491 small{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.cb-signal491 *{animation:none!important;transition:none!important}}
