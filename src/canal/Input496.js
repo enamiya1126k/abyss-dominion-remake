@@ -1,5 +1,5 @@
 // A stroke is committed only on release. Dragging from an animal never captures it.
-export function bindFocus496(surface, { tap }, win=globalThis, pointer=!!globalThis.PointerEvent) {
+export function bindFocus496(surface, { tap, instantMissiles=false }, win=globalThis, pointer=!!globalThis.PointerEvent) {
   let active=null, blocked=false;
   const ids=new Set(), listeners=[];
   const on=(node,name,fn,options)=>{node?.addEventListener?.(name,fn,options);listeners.push(()=>node?.removeEventListener?.(name,fn,options))};
@@ -7,6 +7,7 @@ export function bindFocus496(surface, { tap }, win=globalThis, pointer=!!globalT
     ids.add(id);if(ids.size>1){blocked=true;active=null;return}
     if(blocked)return;e.preventDefault();
     const b=target.closest?.('[data-cn-target496]');
+    if(instantMissiles&&b&&!b.disabled&&Number(b.dataset.cnTarget496)<0){active=null;tap(Number(b.dataset.cnTarget496));return}
     active={id,x,y,max:0,target:b&&!b.disabled?Number(b.dataset.cnTarget496):null};
   };
   const move=(id,x,y,e)=>{if(active?.id!==id)return;e.preventDefault();active.max=Math.max(active.max,Math.hypot(x-active.x,y-active.y))};

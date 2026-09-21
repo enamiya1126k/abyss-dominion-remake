@@ -1,3 +1,4 @@
+import{drawMissiles500}from'./Missiles500.js';
 import{netCell499}from'./NetColor499.js';
 // Build497 presentation only: physical cast-net sprites, water impact and localized danger.
 // The shared movement, hit areas, timing and scoring still belong to Rules/Scene496.
@@ -20,7 +21,7 @@ export function cast497(ctx,u,seat,point,age,w,h,colors,crew){if(age<0||age>900)
  if(age<flight){const t=clamp(age/flight),ease=1-(1-t)**2,x=origin.x*w+(point.x-origin.x*w)*ease,y=(origin.y-.045)*h+(point.y-(origin.y-.045)*h)*ease-Math.sin(t*Math.PI)*Math.min(55,h*.09);net(ctx,u,0,x,y,42+20*t,color,1,(1-t)*(seat%2?.4:-.4));return}
  const impact=age-flight;splash(ctx,u,point.x,point.y,impact,64,u.reduced);net(ctx,u,1,point.x,point.y,66+Math.sin(clamp(impact/260)*Math.PI)*9,color,clamp(1-impact/560)*.9);
 }
-function badge(ctx,e){const s=e.size,x=s*.18,y=-s*.43,w=25,h=24,danger=e.eta<2500;ctx.shadowColor='#07302d88';ctx.shadowBlur=4;ctx.shadowOffsetY=2;fill(ctx,x,y,w,h,gradient(ctx,x,y,h,danger?'#c96643':'#376658',danger?'#672a20':'#143d37'),7);ctx.shadowBlur=0;ctx.shadowOffsetY=0;ctx.strokeStyle=danger?'#ffe0a0':'#cfdbb2';ctx.lineWidth=.9;round(ctx,x+.5,y+.5,w-1,h-1,7);ctx.stroke();label(ctx,String(e.hp),x+w/2,y+17,15)}
+function badge(ctx,e){const s=e.size,x=e.path500===1&&e.kind===3?-19:s*.18,y=e.path500===1&&e.kind===3?Math.max(30-e.y,s*.05):-s*.43,w=e.path500===1&&e.kind===3?38:25,h=24,danger=e.eta<2500||e.path500===1&&e.kind===3;ctx.shadowColor='#07302d88';ctx.shadowBlur=4;ctx.shadowOffsetY=2;fill(ctx,x,y,w,h,gradient(ctx,x,y,h,danger?'#c96643':'#376658',danger?'#672a20':'#143d37'),7);ctx.shadowBlur=0;ctx.shadowOffsetY=0;ctx.strokeStyle=danger?'#ffe0a0':'#cfdbb2';ctx.lineWidth=.9;round(ctx,x+.5,y+.5,w-1,h-1,7);ctx.stroke();label(ctx,String(e.hp),x+w/2,y+17,15)}
 function houseHealth(ctx,g,w,h,danger,now,reduced){const x=w*.5,y=h*.743,hp=g.hp<=30?'#ff9169':g.hp<=60?'#ffe18a':'#a6f4cb';
  if(danger||g.hp<=30)glow(ctx,x,h*.837,w*.23,h*.12,'#ff744d',reduced?.17:.14+.05*Math.sin(now/280));
  const width=Math.min(224,w*.59),left=x-width/2;ctx.save();ctx.shadowColor='#072b2fa0';ctx.shadowBlur=8;ctx.shadowOffsetY=3;fill(ctx,left-8,y-21,width+16,46,gradient(ctx,left,y-21,46,'#284e44f2','#102c29f5'),11);ctx.shadowBlur=0;ctx.shadowOffsetY=0;ctx.strokeStyle=g.hp<=30?'#eeae74':'#baad75';ctx.lineWidth=1;round(ctx,left-7.5,y-20.5,width+15,45,10);ctx.stroke();label(ctx,`みんなの家  ${g.hp} / 100`,x,y-4,12,hp);
@@ -34,7 +35,7 @@ export function draw497(canvas,g,u,at,now,layout,colors,crew,pointFor){
  // Soft contact-light replaces the flat colored foot rings. No boundary or trajectory lines.
  for(const p of g.players??[]){const a=crew[p.seat];glow(ctx,a.x*w,a.y*h,w*.07,h*.021,colors[p.seat],.30)}
  const danger=layout.some(e=>e.eta<2500);if(danger)glow(ctx,w/2,h*.70,w*.18,h*.065,'#ff9c66',.12);
- for(const e of [...layout].sort((a,b)=>a.y-b.y||a.id-b.id)){const {x,y,size:s}=e;ctx.save();ctx.translate(x,y);
+ for(const e of [...layout].sort((a,b)=>(a.path500===1&&a.kind===3?-1:0)-(b.path500===1&&b.kind===3?-1:0)||a.y-b.y||a.id-b.id)){const {x,y,size:s}=e;ctx.save();ctx.translate(x,y);
   glow(ctx,0,s*.29,s*.4,s*.13,'#124b54',.35);
   // A short foam wake stays with its creature instead of connecting it to another object.
   if(!u.reduced){ctx.fillStyle='#ddffff77';for(let i=0;i<3;i++){const t=((now/800+i/3+e.id*.13)%1),dx=(i-1)*s*.10;ctx.globalAlpha=(1-t)*.55;ctx.beginPath();ctx.ellipse(dx,-s*(.16+t*.23),s*(.10+t*.025),1.5,0,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1}
@@ -42,6 +43,7 @@ export function draw497(canvas,g,u,at,now,layout,colors,crew,pointFor){
   if(ready(u.atlas))imageCell492(ctx,u.atlas,e.kind,0,0,s);else{ctx.fillStyle=['#f96840','#99b740','#a3b66b','#d19eef'][e.kind];ctx.beginPath();ctx.arc(0,0,s*.30,0,Math.PI*2);ctx.fill()}
   if(e.slowUntil>at){net(ctx,u,1,0,s*.14,s*.92,colors[e.snareSeat]??colors[0],.65);fill(ctx,-24,s*.44,48,16,'#164538ed',6);label(ctx,'足止め中',0,s*.44+12,9,'#ecffe6')}
   badge(ctx,e);
+  if(e.path500===1&&e.kind===3){fill(ctx,-67,s*.05+27,134,21,'#6b3227ee',8);label(ctx,'巨大将軍 · ミサイル注意',0,s*.05+42,10,'#fff1c6');}
   if(e.eta<1700){fill(ctx,-24,s*.39,48,17,'#903e26f0',7);label(ctx,'家が危険',0,s*.39+12,9,'#fff1c6')}else if(u.teach&&e.id===layout[0]?.id){fill(ctx,-29,s*.4,58,20,'#f6e6a8',7);label(ctx,'タップ！',0,s*.4+14,11,'#27422f')}
   ctx.restore();
  }
@@ -50,15 +52,16 @@ export function draw497(canvas,g,u,at,now,layout,colors,crew,pointFor){
  if(g.hp<=30){const grad=ctx.createRadialGradient(w/2,h/2,w*.22,w/2,h/2,h*.8);grad.addColorStop(0,'#a7251600');grad.addColorStop(1,'#a7251644');ctx.fillStyle=grad;ctx.fillRect(0,0,w,h)}
  const effects=[...(u.effects??[])];if(u.preview&&now-u.preview.localAt<220&&!effects.some(e=>e.enemyId===u.preview.enemyId&&e.seat===u.seat))effects.push(u.preview);
  const mega=effects.findLast(e=>e.kind==='mega'&&now-e.localAt>=0&&now-e.localAt<1300);
- for(const e of effects){const age=now-e.localAt;if(age<0||age>1300)continue;const point=e.point??(e.progress!=null?pointFor(e,e.progress,w,h):null);
+ for(const e of effects){const age=now-e.localAt;if(age<0||age>1300)continue;const point=e.kind==='intercept'?{x:e.x*w,y:e.y*h}:e.point??(e.progress!=null?pointFor(e,e.progress,w,h):null);
   if(e.kind==='mega')continue;
-  if(e.kind==='breach'){splash(ctx,u,w*.5,h*.807,age,85,u.reduced,'#ffe9cc');fill(ctx,w*.34,h*.84,w*.32,25,'#843721ee',8);label(ctx,'家に −'+e.damage,w/2,h*.84+18,14);continue}
-  if(!point||!['hit','catch','stroke'].includes(e.kind))continue;
+  if(e.kind==='breach'||e.kind==='missileImpact'){splash(ctx,u,w*.5,h*.807,age,85,u.reduced,'#ffe9cc');fill(ctx,w*.34,h*.84,w*.32,25,'#843721ee',8);label(ctx,'家に −'+e.damage,w/2,h*.84+18,14);continue}
+  if(!point||!['hit','catch','stroke','intercept'].includes(e.kind))continue;
   // The shared cast has its own four-net animation, not 22 simultaneous ropes.
   if(e.mega&&mega)continue;
   cast497(ctx,u,e.seat,point,age,w,h,colors,crew);
-  if(e.kind==='catch'&&age>=240&&age<1100){const t=clamp((age-240)/850);splash(ctx,u,point.x,point.y,age-240,e.teamwork?86:62,u.reduced);net(ctx,u,2,point.x,point.y-(u.reduced?8:t*30),58-t*9,colors[e.seat],Math.min(1,(1-t)*2));if(e.teamwork)glow(ctx,point.x,point.y-10,42,32,'#ffebb0',.25*(1-t))}
+  if((e.kind==='catch'||e.kind==='intercept')&&age>=240&&age<1100){const t=clamp((age-240)/850);splash(ctx,u,point.x,point.y,age-240,e.teamwork?86:62,u.reduced);net(ctx,u,2,point.x,point.y-(u.reduced?8:t*30),58-t*9,colors[e.seat],Math.min(1,(1-t)*2));if(e.teamwork)glow(ctx,point.x,point.y-10,42,32,'#ffebb0',.25*(1-t))}
  }
+ if(g.rules500===1)drawMissiles500(ctx,g,at,now,w,h,u.reduced);
  if(mega){const age=now-mega.localAt;for(const p of g.players)cast497(ctx,u,p.seat,{x:w*(p.seat%2?.67:.33),y:h*(p.seat<2?.32:.55)},Math.min(age,850),w,h,colors,crew);
   if(age>=230){const size=Math.min(w*.78,340)*(u.reduced?1:.76+.24*Math.sin(clamp((age-230)/720)*Math.PI)),alpha=clamp((1300-age)/380);glow(ctx,w/2,h*.42,size*.53,size*.25,'#fff2b2',alpha*.25);net(ctx,u,age>880?2:1,w/2,h*.42,size,'#fff1a6',alpha*.86);splash(ctx,u,w/2,h*.56,Math.max(0,age-350),w*.53,u.reduced);}
   banner(ctx,w,h,'4人で、一網打尽！');

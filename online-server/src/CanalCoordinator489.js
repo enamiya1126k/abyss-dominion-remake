@@ -6,9 +6,9 @@ const party=(c,g)=>Object.values(c.data.parties462??{}).find(p=>p.id===g.partyId
 const present=(c,g,id)=>!!c.sessions.get(id)?.connected&&!party(c,g)?.members.find(m=>m.playerId===id)?.atHome;
 export function queueCanal489(c,session,m){
  const g=canalFor489(c,session.playerId),p=g?.players.find(p=>!p.ai&&p.playerId===session.playerId);
- if(!g||!p||m.gameId!==g.id||m.canalVersion489!==1||(g.rules492===1&&m.canalRules492!==1)||(g.rules494===1&&m.canalRules494!==1)||(g.rules496===1&&m.canalRules496!==1)||!['countdown','playing'].includes(g.phase)||!Array.isArray(m.inputs)||m.inputs.length>24)return;
+ if(!g||!p||m.gameId!==g.id||m.canalVersion489!==1||(g.rules492===1&&m.canalRules492!==1)||(g.rules494===1&&m.canalRules494!==1)||(g.rules496===1&&m.canalRules496!==1)||(g.rules500===1&&m.canalRules500!==1)||!['countdown','playing'].includes(g.phase)||!Array.isArray(m.inputs)||m.inputs.length>24)return;
  const key=g.id+':'+p.playerId;c.canalQueue489??=new Map();const queue=c.canalQueue489.get(key)??[];
- for(const x of m.inputs){if(queue.length>=CANAL489.maxQueue)break;if(!x||!Number.isSafeInteger(x.seq)||x.seq<=p.lastSeq||x.seq>CANAL489.maxSequence||queue.some(y=>y.seq===x.seq)||!Number.isInteger(x.lane)||x.lane<0||x.lane>3||typeof x.held!=='boolean'||typeof x.pulse!=='boolean'||typeof x.burst!=='boolean'||(x.targetId!=null&&(!Number.isSafeInteger(x.targetId)||x.targetId<1)))continue;queue.push({seq:x.seq,lane:x.lane,held:x.held,pulse:x.pulse,burst:x.burst,...(g.rules492===1&&x.targetId!=null?{targetId:x.targetId}:{}),receivedAt:c.now()})}
+ for(const x of m.inputs){if(queue.length>=CANAL489.maxQueue)break;if(!x||!Number.isSafeInteger(x.seq)||x.seq<=p.lastSeq||x.seq>CANAL489.maxSequence||queue.some(y=>y.seq===x.seq)||!Number.isInteger(x.lane)||x.lane<0||x.lane>3||typeof x.held!=='boolean'||typeof x.pulse!=='boolean'||typeof x.burst!=='boolean'||(x.targetId!=null&&(!Number.isSafeInteger(x.targetId)||x.targetId<1))||(x.missileId500!=null&&(!Number.isSafeInteger(x.missileId500)||x.missileId500<1||g.rules500!==1||x.targetId!=null||x.burst||!x.pulse)))continue;queue.push({seq:x.seq,lane:x.lane,held:x.held,pulse:x.pulse,burst:x.burst,...(g.rules492===1&&x.targetId!=null?{targetId:x.targetId}:{}),...(g.rules500===1&&x.missileId500!=null?{missileId500:x.missileId500}:{}),receivedAt:c.now()})}
  if(queue.length)c.canalQueue489.set(key,queue);
 }
 export function handleCanal489(c,session,m){
@@ -28,7 +28,8 @@ export function handleCanal489(c,session,m){
   if(m.canalRules496!==1||p.members.some(x=>x.canalRules496!==1))throw Error('全員の本体をBuild496へ更新してください');
   if(g.members.some(x=>!x.choice))throw Error('全員の魔物を選んでください');
   if(p.members.some(x=>c.isBusy(c.sessions.get(x.playerId))))throw Error('ほかのオンラインコンテンツの終了を待っています');
-  g.rules492=1;g.rules494=1;g.rules496=1;startCanal489(g,c.now());
+  if(m.canalRules500===1&&p.members.some(x=>x.canalRules500!==1))throw Error('全員の本体をBuild500へ更新してください');
+  g.rules492=1;g.rules494=1;g.rules496=1;g.rules500=m.canalRules500===1?1:0;g.aiColors500={...(p.aiColors500??{})};startCanal489(g,c.now());
  }else throw Error('未対応の用水路操作です');
  g.revision++;g.updatedAt=c.now();return true;
 }
