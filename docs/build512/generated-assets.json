@@ -1,0 +1,62 @@
+[
+  {
+    "id": "forest",
+    "path": "assets/luck512/forest.png",
+    "width": 2171,
+    "height": 724,
+    "bytes": 3207506,
+    "sha256": "e3fc219c05a05ffce0f3160882b8020ae80b5563beab66a859c151bd9c6d5301",
+    "prompt": "Use case: stylized-concept. Asset type: a production panoramic background for a polished fantasy side-scrolling racing game. Output a very wide 3:1 landscape image, 2048 by 683 pixels. No text, no numbers, no UI, no racers, no characters, no logos, no marked lane lines. The camera is SIDE ON and parallel to a horizontal course, never looking along a road, no vanishing-point road, no diagonal track. Composition: the distant scenery occupies the TOP 34 percent; a broad unobstructed horizontal traversable surface occupies the MIDDLE 55 percent, with open readable space for four racers at different heights; decorative near foreground only in the BOTTOM 11 percent. The surface remains flat and horizontal from left to right. Designed to repeat horizontally while scrolling: matching terrain height and colors at both left and right edges, no central subject or hard side borders. Premium richly painted 3D fantasy adventure art, crisp illustrated textures, dramatic atmospheric depth, vibrant cinematic light, detailed yet clean at phone size. Every scene is part of the same emerald-and-gold fantasy world. Scene: the race has escaped into a gigantic emerald rainforest. In the upper band: towering mossy trees, deep turquoise waterfalls cascading from distant cliffs, sunbeams and mist, small ancient golden stone arches hidden among leaves. The broad middle course is velvety vivid green forest turf with tiny flowers, without obstacles, trees, or rocks in front of racers. Bottom band: close fern tips and short mossy golden ruins, below the playable area. Lush, epic and inviting; distinctly a wilderness, not a stadium.",
+    "processing": "Original generated PNG, unchanged."
+  },
+  {
+    "id": "desert",
+    "path": "assets/luck512/desert.png",
+    "width": 2170,
+    "height": 725,
+    "bytes": 2305879,
+    "sha256": "e931425f88fb5626170375e11c650092aeac2e5bf1f711363f7288553d890c6e",
+    "prompt": "Use case: stylized-concept. Asset type: a production panoramic background for a polished fantasy side-scrolling racing game. Output a very wide 3:1 landscape image, 2048 by 683 pixels. No text, no numbers, no UI, no racers, no characters, no logos, no marked lane lines. The camera is SIDE ON and parallel to a horizontal course, never looking along a road, no vanishing-point road, no diagonal track. Composition: the distant scenery occupies the TOP 34 percent; a broad unobstructed horizontal traversable surface occupies the MIDDLE 55 percent, with open readable space for four racers at different heights; decorative near foreground only in the BOTTOM 11 percent. The surface remains flat and horizontal from left to right. Designed to repeat horizontally while scrolling: matching terrain height and colors at both left and right edges, no central subject or hard side borders. Premium richly painted 3D fantasy adventure art, crisp illustrated textures, dramatic atmospheric depth, vibrant cinematic light, detailed yet clean at phone size. Every scene is part of the same emerald-and-gold fantasy world. Scene: a sunlit golden desert of magnificent ancient ruins. Upper band: warm dunes, distant sandstone pyramidal temples, eroded columns, ancient gold-and-teal obelisks, a clear turquoise sky and mirage haze. Broad middle course: smooth ochre and amber sand with subtle horizontal wind ripples, perfectly open. Bottom band: small close pieces of carved sandstone and lapis gemstones, kept below playable area. Rich warm sunlight; clearly different from a green forest. No modern objects.",
+    "processing": "Original generated PNG, unchanged."
+  },
+  {
+    "id": "sky",
+    "path": "assets/luck512/sky.png",
+    "width": 2170,
+    "height": 725,
+    "bytes": 2494291,
+    "sha256": "3838d4562b7ccd94943e34b31893b944895cbade193d5d422d23d9e40663c075",
+    "prompt": "Use case: stylized-concept. Asset type: a production panoramic background for a polished fantasy side-scrolling racing game. Output a very wide 3:1 landscape image, 2048 by 683 pixels. No text, no numbers, no UI, no racers, no characters, no logos, no marked lane lines. The camera is SIDE ON and parallel to a horizontal course, never looking along a road, no vanishing-point road, no diagonal track. Composition: the distant scenery occupies the TOP 34 percent; a broad unobstructed horizontal traversable surface occupies the MIDDLE 55 percent, with open readable space for four racers at different heights; decorative near foreground only in the BOTTOM 11 percent. The surface remains flat and horizontal from left to right. Designed to repeat horizontally while scrolling: matching terrain height and colors at both left and right edges, no central subject or hard side borders. Premium richly painted 3D fantasy adventure art, crisp illustrated textures, dramatic atmospheric depth, vibrant cinematic light, detailed yet clean at phone size. Every scene is part of the same emerald-and-gold fantasy world. Scene: a breathtaking floating city above the clouds. Upper band: ivory-and-gold castle spires on floating islands, delicate teal banners and suspension bridges, brilliant blue sky. Broad middle course: luminous pale turquoise crystalline cloud causeway, a horizontal open ribbon suspended above a deep sea of white clouds, no staircase, no converging perspective. Bottom band: soft fluffy cloud tops and a low filigree gold rim. Airy, magical, immense height, sunlit white and aquamarine palette.",
+    "processing": "Original generated PNG, unchanged."
+  },
+  {
+    "id": "stratosphere",
+    "path": "assets/luck512/stratosphere.png",
+    "width": 2170,
+    "height": 725,
+    "bytes": 2252043,
+    "sha256": "59d74d4b02cb1b2ebf59164ecc63351097db83ea9aefa28e5ce7c1a27e35e11d",
+    "prompt": "Use case: stylized-concept. Asset type: a production panoramic background for a polished fantasy side-scrolling racing game. Output a very wide 3:1 landscape image, 2048 by 683 pixels. No text, no numbers, no UI, no racers, no characters, no logos, no marked lane lines. The camera is SIDE ON and parallel to a horizontal course, never looking along a road, no vanishing-point road, no diagonal track. Composition: the distant scenery occupies the TOP 34 percent; a broad unobstructed horizontal traversable surface occupies the MIDDLE 55 percent, with open readable space for four racers at different heights; decorative near foreground only in the BOTTOM 11 percent. The surface remains flat and horizontal from left to right. Designed to repeat horizontally while scrolling: matching terrain height and colors at both left and right edges, no central subject or hard side borders. Premium richly painted 3D fantasy adventure art, crisp illustrated textures, dramatic atmospheric depth, vibrant cinematic light, detailed yet clean at phone size. Every scene is part of the same emerald-and-gold fantasy world. Scene: the edge of the atmosphere. Upper band: deep cobalt sky becoming indigo space, bright sunlight at the rim, a sweeping distant curved blue Earth horizon with thin electric-blue atmosphere and white clouds. Broad middle course: open dark cobalt translucent aurora road with subtle teal currents flowing horizontally, keeping enough contrast for small characters. Bottom band: wisps of icy cloud and faint luminous golden particles. The curved Earth is distant background, never a large obstacle on the race surface. No city, no grass, no stadium, no spacecraft. The atmosphere is majestic and visibly near space.",
+    "processing": "Original generated PNG, unchanged."
+  },
+  {
+    "id": "space",
+    "path": "assets/luck512/space.png",
+    "width": 2170,
+    "height": 725,
+    "bytes": 2537575,
+    "sha256": "907602de0b3c9b63aa0e9927ede94500e53c52aa1e6e90c86e3eeb93c05db850",
+    "prompt": "Use case: stylized-concept. Asset type: a production panoramic background for a polished fantasy side-scrolling racing game. Output a very wide 3:1 landscape image, 2048 by 683 pixels. No text, no numbers, no UI, no racers, no characters, no logos, no marked lane lines. The camera is SIDE ON and parallel to a horizontal course, never looking along a road, no vanishing-point road, no diagonal track. Composition: the distant scenery occupies the TOP 34 percent; a broad unobstructed horizontal traversable surface occupies the MIDDLE 55 percent, with open readable space for four racers at different heights; decorative near foreground only in the BOTTOM 11 percent. The surface remains flat and horizontal from left to right. Designed to repeat horizontally while scrolling: matching terrain height and colors at both left and right edges, no central subject or hard side borders. Premium richly painted 3D fantasy adventure art, crisp illustrated textures, dramatic atmospheric depth, vibrant cinematic light, detailed yet clean at phone size. Every scene is part of the same emerald-and-gold fantasy world. Scene: interplanetary outer space. Upper band: dense but delicate stars, a beautiful distant blue Earth on the left, a gold-ringed amber planet far to the right, small colorful moons and a thin cyan nebula. Broad middle course: a dark midnight-blue, translucent cosmic racing ribbon made of subtle starlight flowing horizontally, open and very readable, not green ground. Bottom band: close gentle bands of glowing turquoise and gold cosmic dust. Epic feeling of floating between planets. No spacecraft, no giant objects blocking racer area. Balanced darkness and jewel colors, no large white glare.",
+    "processing": "Original generated PNG, unchanged."
+  },
+  {
+    "id": "galaxy",
+    "path": "assets/luck512/galaxy.png",
+    "width": 2170,
+    "height": 725,
+    "bytes": 2616139,
+    "sha256": "518f9c2d1b81e75cc9d3964e0279d4606bd3e504cd26f6d61740f63a85cc8731",
+    "prompt": "Use case: stylized-concept. Asset type: a production panoramic background for a polished fantasy side-scrolling racing game. Output a very wide 3:1 landscape image, 2048 by 683 pixels. No text, no numbers, no UI, no racers, no characters, no logos, no marked lane lines. The camera is SIDE ON and parallel to a horizontal course, never looking along a road, no vanishing-point road, no diagonal track. Composition: the distant scenery occupies the TOP 34 percent; a broad unobstructed horizontal traversable surface occupies the MIDDLE 55 percent, with open readable space for four racers at different heights; decorative near foreground only in the BOTTOM 11 percent. The surface remains flat and horizontal from left to right. Designed to repeat horizontally while scrolling: matching terrain height and colors at both left and right edges, no central subject or hard side borders. Premium richly painted 3D fantasy adventure art, crisp illustrated textures, dramatic atmospheric depth, vibrant cinematic light, detailed yet clean at phone size. Every scene is part of the same emerald-and-gold fantasy world. Scene: far beyond the solar system, racing through a radiant galaxy. Upper band: sweeping violet-magenta nebula clouds, turquoise star clusters, distant spiral galaxies and thousands of tiny gold stars. Broad middle course: an open dark violet celestial river-road with soft horizontal iridescent currents and small star specks, readable open space, no buildings and no obstacles. Bottom band: close flowing ribbons of purple and cyan nebular dust and tiny glowing gold crystals. Awe-inspiring finale, richer cosmic colors than interplanetary space, no blinding central sun, no giant object filling the middle.",
+    "processing": "Original generated PNG, unchanged."
+  }
+]

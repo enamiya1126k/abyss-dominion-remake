@@ -1,0 +1,41 @@
+{
+  "build": 513,
+  "assets": [
+    {
+      "id": "arena",
+      "prompt": "Use case: stylized-concept. Asset type: production environment background for a premium four-player true/false survival quiz game, landscape 1536x1024. A vast ancient fantasy judgment chamber built over a bottomless abyss, symmetrical front-facing camera tilted gently downward, imposing weathered dark stone pillars at far left and right, tarnished gold mechanisms and chains, teal rune-like abstract illumination with small amber warning lamps, distant overhead arch and receding machinery. The LOWER HALF is an unobstructed dark atmospheric chasm with layered mist, ready for separate game platforms and characters to be composited on top. The central upper-middle is open dark space for a separately animated advancing stone wall. Richly painted high-end 3D fantasy game art, cinematic volumetric light, crisp stone and metal detail, dramatic tension but readable on a phone. Match an emerald-and-gold fantasy RPG world. No people, no monsters, no platforms crossing the lower chasm, no crushing wall in foreground, no text, no letters, no numbers, no circle or cross symbols, no UI, no logo. Keep both edges dark, avoid a blinding central light.",
+      "path": "assets/quiz513/arena.png",
+      "sha256": "4ea938bf572dc6e763ba2c0f2cc0ef2031e8d384740734226cb8672b2ac1c5d8",
+      "bytes": 2379924,
+      "width": 1536,
+      "height": 1024,
+      "format": "PNG",
+      "mode": "RGBA",
+      "alteredAfterGeneration": false
+    },
+    {
+      "id": "wall",
+      "prompt": "Use case: stylized-concept. Asset type: transparent-background foreground game sprite of an advancing giant stone press wall, wide landscape image. One single broad rectangular massive dark basalt wall viewed STRAIGHT ON with a little visible thickness at the top and sides. It is about twice as wide as tall, fills the central 85 percent, entire silhouette visible with generous transparent margin. Weathered stone slabs, ornate heavy antique gold frame and corner gears, a large central amber gemstone glowing ominously, narrow orange warning light slits and dramatic edge lighting. Ancient fantasy mechanical temple, polished premium 3D game illustration, richly textured and crisp, dark teal shadows and warm amber-gold metal. It must look frighteningly HEAVY, advancing toward the viewer. Fully isolated on genuine transparent alpha background, no surrounding environment, no floor, no fog that hides the silhouette, no shadows outside the object, no people, no letters, no text, no logos, no circle/cross signs, no gore.",
+      "path": "assets/quiz513/wall.png",
+      "sha256": "ddce06b3587379790f7f4ccf1e841c6c083589a3f9e897cb8363cdb1ee71e7f4",
+      "bytes": 2993557,
+      "width": 1774,
+      "height": 887,
+      "format": "PNG",
+      "mode": "RGBA",
+      "alteredAfterGeneration": false
+    },
+    {
+      "id": "platforms",
+      "prompt": "Use case: stylized-concept. Asset type: transparent sprite atlas for a premium fantasy quiz survival game's two answer platforms. Square image containing EXACTLY FOUR evenly sized isolated objects arranged in a perfectly regular 2 by 2 grid, equal square cells, no visible grid, transparent alpha background and broad empty margins around every object. All objects share identical camera angle, scale and shape: a wide raised octagonal dark stone platform seen from a gentle elevated front view, a flat broad top for four small characters, heavy beveled antique gold rim and thick stone front face. TOP LEFT: pristine intact platform with subtle emerald/teal glowing rim. TOP RIGHT: same pristine intact platform with warm coral/amber glowing rim. BOTTOM LEFT: the teal platform shattered into a handful of large separated stone pieces, center collapsing into a dark hole, pieces remain entirely inside its cell. BOTTOM RIGHT: the amber platform similarly shattered. Detailed 3D fantasy game illustration, dramatic warm and cool edge lighting, polished stone and old gold, readable at small phone size. No characters, no scenery, no words, no numbers, no symbols on top, no circles, no crosses, no UI, no gridlines. Four clean isolated platform sprites on true transparency.",
+      "path": "assets/quiz513/platforms.png",
+      "sha256": "4316f8a23f1695a56a1730dc7cd4aacae48ce63ae01ddca6d694519489307127",
+      "bytes": 1764450,
+      "width": 1254,
+      "height": 1254,
+      "format": "PNG",
+      "mode": "RGBA",
+      "alteredAfterGeneration": false
+    }
+  ]
+}

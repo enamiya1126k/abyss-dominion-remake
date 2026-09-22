@@ -1,0 +1,102 @@
+{
+  "build": 512,
+  "version": "3.1.191",
+  "baseBuild": 511,
+  "files": [
+    {
+      "path": "README_BUILD512.md",
+      "bytes": 3139,
+      "sha256": "a1242bfa465341262d6ec1f871501b1716b4eac70aae9295f6c686110a9a4faa"
+    },
+    {
+      "path": "assets/luck512/desert.png",
+      "bytes": 2305879,
+      "sha256": "e931425f88fb5626170375e11c650092aeac2e5bf1f711363f7288553d890c6e"
+    },
+    {
+      "path": "assets/luck512/forest.png",
+      "bytes": 3207506,
+      "sha256": "e3fc219c05a05ffce0f3160882b8020ae80b5563beab66a859c151bd9c6d5301"
+    },
+    {
+      "path": "assets/luck512/galaxy.png",
+      "bytes": 2616139,
+      "sha256": "518f9c2d1b81e75cc9d3964e0279d4606bd3e504cd26f6d61740f63a85cc8731"
+    },
+    {
+      "path": "assets/luck512/sky.png",
+      "bytes": 2494291,
+      "sha256": "3838d4562b7ccd94943e34b31893b944895cbade193d5d422d23d9e40663c075"
+    },
+    {
+      "path": "assets/luck512/space.png",
+      "bytes": 2537575,
+      "sha256": "907602de0b3c9b63aa0e9927ede94500e53c52aa1e6e90c86e3eeb93c05db850"
+    },
+    {
+      "path": "assets/luck512/stratosphere.png",
+      "bytes": 2252043,
+      "sha256": "59d74d4b02cb1b2ebf59164ecc63351097db83ea9aefa28e5ce7c1a27e35e11d"
+    },
+    {
+      "path": "docs/build512/generated-assets.json",
+      "bytes": 11715,
+      "sha256": "4fe0f6461847ff322906b506bbff5260e799fcc65c23016e4fccaeb35e993b18"
+    },
+    {
+      "path": "docs/build512/tests.tap",
+      "bytes": 67581,
+      "sha256": "dc5243be7d9cf0dac59fb2b1f844ad9d81f2e55611361244f1c904e93a074e26"
+    },
+    {
+      "path": "docs/build512/verification.md",
+      "bytes": 2821,
+      "sha256": "56cb03e0603f39ca6f65ccd81ae82b6d1544ed8c7186d3db80cccf3b83d6be24"
+    },
+    {
+      "path": "index.html",
+      "bytes": 154211,
+      "sha256": "e1ce4dc96c09c585c67bcc91cf71bf1212ce2a915bc62ea892be123e03d0883f"
+    },
+    {
+      "path": "src/Styles/build512-luck.css",
+      "bytes": 3095,
+      "sha256": "0141d47c78c75f4c6b1d010a8ca8888c33510212d4fa2048c33a22cd88ab5a52"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "31ef5cce86a4b365dd2251ad4496f781511c9e421bb5d6d9ffa466ad6c0364bf"
+    },
+    {
+      "path": "src/luck/Scenery512.js",
+      "bytes": 7702,
+      "sha256": "4de0999a8932beb51bf479938cea861be03dea71f1fe03c4a0a8b00a08d87d21"
+    },
+    {
+      "path": "src/luck/View511.js",
+      "bytes": 34577,
+      "sha256": "8e55b846f4fca63f655871edbb906ba19db1def0543f0da7a2fed2f5be941560"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "31f0a97f16290e20f8afa997dee7bd764b20058baf66ec90ba6a8f526dd20f99"
+    },
+    {
+      "path": "tests/build512-scenery.test.mjs",
+      "bytes": 17543,
+      "sha256": "37760b3b8dcb8373eede1f7725acedbb3962ffe47ac87e6c6c7e80756b376118"
+    },
+    {
+      "path": "world-raid-offline512-assets.json",
+      "bytes": 38143,
+      "sha256": "3f49d9f60cb47e8173918fdef1184c8c39c66cddee622f14deb4abaed1a4f258"
+    },
+    {
+      "path": "world-raid-offline512-sw.js",
+      "bytes": 1844,
+      "sha256": "3306d685221b8721b8ee2880be52d3de645daf0f1d1444609763c487c233d9f1"
+    }
+  ]
+}

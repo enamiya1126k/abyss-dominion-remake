@@ -1,0 +1,162 @@
+{
+  "build": 513,
+  "version": "3.1.192",
+  "baseBuild": 512,
+  "files": [
+    {
+      "path": "README_BUILD513.md",
+      "bytes": 4428,
+      "sha256": "69a88844be4be494ee4b552ac75b7698766854ea221a5ecb23cb462922f8b37c"
+    },
+    {
+      "path": "assets/quiz513/arena.png",
+      "bytes": 2379924,
+      "sha256": "4ea938bf572dc6e763ba2c0f2cc0ef2031e8d384740734226cb8672b2ac1c5d8"
+    },
+    {
+      "path": "assets/quiz513/platforms.png",
+      "bytes": 1764450,
+      "sha256": "4316f8a23f1695a56a1730dc7cd4aacae48ce63ae01ddca6d694519489307127"
+    },
+    {
+      "path": "assets/quiz513/wall.png",
+      "bytes": 2993557,
+      "sha256": "ddce06b3587379790f7f4ccf1e841c6c083589a3f9e897cb8363cdb1ee71e7f4"
+    },
+    {
+      "path": "docs/build513/generated-assets.json",
+      "bytes": 4482,
+      "sha256": "59dfc75800781170293af6b44b47916eb143abd11b731e7170cd8971cd8fcf43"
+    },
+    {
+      "path": "docs/build513/question-sources.md",
+      "bytes": 20813,
+      "sha256": "f8beb1314b4dddbb24b04ef1f5244b575781acbf94ce28963c113d76dd838b25"
+    },
+    {
+      "path": "docs/build513/tests.tap",
+      "bytes": 76713,
+      "sha256": "c4680eeff21e429a3fbf90fc462ae1e19a523f007e57fe0d1dda55b28af89b09"
+    },
+    {
+      "path": "docs/build513/verification.md",
+      "bytes": 3100,
+      "sha256": "3c95b847b3a8c9540a58c60a04f7218151d29a9cb3a18f4d9c4ccb49c4e91690"
+    },
+    {
+      "path": "index.html",
+      "bytes": 156148,
+      "sha256": "c41e90b4642fec67c69b0e67cda6073673fcc0f8f74397a5aca0cc58aef51f7a"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 17485,
+      "sha256": "a3221333320847c82e96ab4a3e58ae4ad1c0462a5f080a210fe3a33109409f56"
+    },
+    {
+      "path": "online-server/src/QuizCoordinator513.js",
+      "bytes": 3120,
+      "sha256": "ddc6a1ee69bf007896d20a4708737cc443ef4c712a775a1c4e6b23a236298165"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 24031,
+      "sha256": "7364c822e5a86c6c6fa3fa9014d37fb07d73bf2692a021e99a123eb2c079abcb"
+    },
+    {
+      "path": "online-server/src/quiz/Questions513.js",
+      "bytes": 41680,
+      "sha256": "79f3eb7c320d40742c09fd89c33fde7eecf47c4663e1b0b4c6cc35d338d2dbf6"
+    },
+    {
+      "path": "src/Styles/build513-quiz.css",
+      "bytes": 13310,
+      "sha256": "add61aa6203f63a039b63b27853aaed31feda27e2684eb46b45bb7573fb3fe10"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "8a3cb579a4733665792d1c106130482fd091f511d16ff20dc533a1dee2c0d53a"
+    },
+    {
+      "path": "src/party/PartyColorUI499.js",
+      "bytes": 7495,
+      "sha256": "2d458eb5b2dd0f1456f820c97e37c8dc162d2c4f40ce3af0e60d8c0afafc63fd"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "bytes": 2245,
+      "sha256": "f251f30d1c6c69393bf4647aef574494e0e22542f03f8961a74da4e9bb414ad8"
+    },
+    {
+      "path": "src/party/PartyMember485.js",
+      "bytes": 7116,
+      "sha256": "74bf18ce4c11fb7b69d8b25ae894352e87cd85c67fdc69995ab3fa38f317c5e6"
+    },
+    {
+      "path": "src/party/PartyResults490.js",
+      "bytes": 3433,
+      "sha256": "c46861954c8c60032b55a6b28a4d71c48f2fa38f4774987671496729f4ed3114"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 10353,
+      "sha256": "709acd0c14552c69e835b9ffa1b4b161a85f2982a15d7f47a9cbfa74b9ddf198"
+    },
+    {
+      "path": "src/quiz/Audio513.js",
+      "bytes": 1521,
+      "sha256": "e7ba3a0e7181e64e3033df583797e2c0d01daa537777e12fa705b170689f4206"
+    },
+    {
+      "path": "src/quiz/Presentation513.js",
+      "bytes": 2368,
+      "sha256": "f0d84b907364a1050515953b3022f85637a4ebf1a43e3df6e80461cce762bcfe"
+    },
+    {
+      "path": "src/quiz/Rules513.js",
+      "bytes": 7150,
+      "sha256": "61df93277f6e6033a336d4085e1690530c986437a432b74b936ad698f99fd758"
+    },
+    {
+      "path": "src/quiz/View513.js",
+      "bytes": 15187,
+      "sha256": "d3903dbbb50b735c056e51b8a010f2635fe0f06c56958c0bf2f4c05d74a90efb"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 24730,
+      "sha256": "bcb7c791ddf48d2bd0490a231b3fb1d71fae4e74b9d40b89adf1bd5e7c76de83"
+    },
+    {
+      "path": "src/race/RacePresentation452.js",
+      "bytes": 5680,
+      "sha256": "ec491e29dc8322e5d32657cef8440af1e381cadf2219de6c4e2f100ece7cd0aa"
+    },
+    {
+      "path": "src/race/RaceUX458.js",
+      "bytes": 2749,
+      "sha256": "f2d6d3c36b62911493c4907cfbfdc1d0b1f00573f089fefe81dca91198f603f2"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "89e61ca11fcf617e4e42d8fd09b2debaef92b6d9df7c50b0dcfaee1c3208ad56"
+    },
+    {
+      "path": "tests/build513-quiz.test.mjs",
+      "bytes": 26224,
+      "sha256": "25b3ed4614a57c6d08e4781dd79f258daa9891cf57e3a40a3331a3e7062d1aaa"
+    },
+    {
+      "path": "world-raid-offline513-assets.json",
+      "bytes": 38396,
+      "sha256": "570912cbd5d86ce893ffd8b1cb837aae9ded059f63316f63ee5bc7ca1435e74a"
+    },
+    {
+      "path": "world-raid-offline513-sw.js",
+      "bytes": 1844,
+      "sha256": "bd28c3c386a28d04b4d8ae37a482e960368ca82481a68c0b40a0cd3bf5f2974a"
+    }
+  ]
+}
