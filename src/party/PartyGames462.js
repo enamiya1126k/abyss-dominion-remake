@@ -1,5 +1,6 @@
 // Only released games appear here. Future game adapters reuse the same party.
 export const PARTY_GAMES462=Object.freeze([
+ {id:'tower',name:'ブロック落としサバイバル',tag:'1対3 × 落とせ、かわせ、登れ',players:'4人対戦 · 空席はAI',image:'./assets/tower517/cover.svg',description:'頭上から迫るブロックをかわして、天空へ脱出！ 4つの手札で追い詰める1人と、仲間の頭も足場にする3人の決戦。'},
  {id:'quiz',name:'〇×サバイバル',tag:'タップで歩く × 最大20問',players:'1〜4人 · 空席はAI',image:'./assets/quiz513/arena.png',description:'壁が閉まる前に、自分の足で〇か×へ！ 正解の台で上へ、不正解はマグマへ。最後まで生き残れ！'},
  {id:'luck',name:'運だけ大運動会',tag:'継続装備 × 掛け算コンボ × 攻撃中継',players:'4人対戦 · 全8ラウンド · 不足席はAI',image:'./assets/luck507/stadium.png',description:'28種類の手札から、毎ターン発動する装備を育てよう。加速・攻撃・防御を重ねて、大技でとんでもない距離へ！'},
  {id:'gorilla',name:'ゴリラ大王の胸毛抜き',tag:'完全運 × 1〜3本の度胸試し × 大ぶっとび',players:'4人対戦 · 1〜3本ずつ · 不足席はAI',image:'./assets/gorilla502/cover.png',description:'胸元アップで、毛を1本。王の顔を見て、もう1本？ それとも交代？ ハズレで大激怒、引いた本人だけ遠くへ飛んでいく！'},

@@ -1,7 +1,7 @@
 import{openColor500,colorAttrs499,colorDialog499,colorClick499,colorKey499,colorAfter499,colorReceive499,colorError499,colorPoll499}from'./PartyColorUI499.js';
 // Membership actions decorate the existing seat elements without changing their layout.
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const room=c=>c.state?.quiz??c.state?.luck??c.state?.gorilla??c.state?.room??c.state?.sugoroku??c.state?.cabbage??c.state?.canal;
+const room=c=>c.state?.tower??c.state?.quiz??c.state?.luck??c.state?.gorilla??c.state?.room??c.state?.sugoroku??c.state?.cabbage??c.state?.canal;
 const host=c=>c.state?.party?.hostId===c.transport.selfId;
 const idle=c=>!room(c)||['lobby','result'].includes(room(c).phase);
 export function memberAttrs485(c,m){if(m&&m.playerId===c.transport.selfId)return colorAttrs499(c,m);return m&&host(c)&&m.playerId!==c.transport.selfId?` data-party-member485="${esc(m.playerId)}" role="button" tabindex="0" aria-haspopup="dialog" aria-label="${esc(m.name)}の参加者メニューを開く"`:''}

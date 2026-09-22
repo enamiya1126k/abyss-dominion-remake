@@ -1,0 +1,189 @@
+{
+  "build": 517,
+  "version": "3.1.196",
+  "requires_build": 516,
+  "patch": true,
+  "deployed": false,
+  "tests": {
+    "passed": 100,
+    "failed": 0,
+    "actual_browser": false,
+    "physical_iphone": false
+  },
+  "files": [
+    {
+      "path": "README_BUILD517.md",
+      "bytes": 4656,
+      "sha256": "372fc6a7ebdb408bf5af28b77df321414d8d57457f5b711acb280b899cab9d91",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/tower517/cover.svg",
+      "bytes": 13790,
+      "sha256": "3624db21824b43204f507a79b8fac9c79d214308afe9a4d5b30e0f9e1002649c",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build517/verification.md",
+      "bytes": 3802,
+      "sha256": "402c3ad96e492ed051c2f3fb8de58a5436fb19a6fd623844d6016eff0eff84a6",
+      "base_sha256": null
+    },
+    {
+      "path": "index.html",
+      "bytes": 160402,
+      "sha256": "e69cf3face7df116754a91e7d06891c062a4d565267c4a673f4de5b7dc0c347d",
+      "base_sha256": "b72c2711dd38eb334bef9e9f0e4d73dd6b80e34b7ded3106c7f3742d79f5f485"
+    },
+    {
+      "path": "online-server/server.js",
+      "bytes": 22988,
+      "sha256": "1de43545b8cc1d182b7633c8de4e548769ec4afbdc6fc84987416e3057e977c7",
+      "base_sha256": "c6aff8121c55a74944220c3afd80d4933e0533c4cffa4148f648ecd575c97096"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 18191,
+      "sha256": "e4815cf59860446f8ce617e31edeecf7b3992c19d2574e6df5c552c74fff4873",
+      "base_sha256": "dca0da9b4c4fdba896f797a76a095dd4010349f2989818c32b11780f564d6f63"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 24502,
+      "sha256": "853d3e3663637d65c214649538a8059e7d5468a890d8bbbb38bc6509a9921339",
+      "base_sha256": "27227b6d406c4a353aebcf37e1f59a3d68691b193a5c77b164401f46d3d9dfd6"
+    },
+    {
+      "path": "online-server/src/TowerCoordinator517.js",
+      "bytes": 5673,
+      "sha256": "f89b18cc0c51727c8d2e00d3200c28a6677efc7c532dabf4ad5313e851b03845",
+      "base_sha256": null
+    },
+    {
+      "path": "src/Styles/build517-tower.css",
+      "bytes": 11551,
+      "sha256": "8a1fe658fe6cb31f9e5cff1fd132aea1d04bdc4bb5a25f357f4a76aed241f440",
+      "base_sha256": null
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "b3b235a4b45cdc8a8f0c5d68b6e39b5bb40aa542ca17d3ac2673c3ea44544812",
+      "base_sha256": "0f2a73ded879f916c7e68ffc29eba741129b4613fc0c6b6463e20a2b159d127d"
+    },
+    {
+      "path": "src/party/PartyColorUI499.js",
+      "bytes": 7511,
+      "sha256": "428ffced292755c9f44b101dc627bd6744cd9d61cdeb62e324c94d5995cda987",
+      "base_sha256": "2d458eb5b2dd0f1456f820c97e37c8dc162d2c4f40ce3af0e60d8c0afafc63fd"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "bytes": 2649,
+      "sha256": "2d88b4f9a0140fdb6e6046f85bb327cee0dfbe712a24abf81d3ab92b1e0f0c87",
+      "base_sha256": "723eab527fc0bec446534d57c827a7c3554c2ca4503c2202369756deb8e93159"
+    },
+    {
+      "path": "src/party/PartyMember485.js",
+      "bytes": 7132,
+      "sha256": "1eb7aab18184fa0ac63ed1d293e0d2d692d9298092296a8b6cecc0896a6a2e7b",
+      "base_sha256": "74bf18ce4c11fb7b69d8b25ae894352e87cd85c67fdc69995ab3fa38f317c5e6"
+    },
+    {
+      "path": "src/party/PartyResults490.js",
+      "bytes": 3449,
+      "sha256": "463c62b8a7943b86a6f6cae1853e17553e4179dc87e9e04d2302e2efe2d56603",
+      "base_sha256": "c46861954c8c60032b55a6b28a4d71c48f2fa38f4774987671496729f4ed3114"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 10619,
+      "sha256": "13b0162894878e1e01f06d6fdb46c6be20b1cfbb1fec1e6313a9f297172fe4e3",
+      "base_sha256": "8a78d9d8bce65761fa1d0a65a0eecb96a5bd05d469080ac0baa58ffce3a6acb9"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 25281,
+      "sha256": "f32514524597bd38cd2afd55c9a7cb8a9c2bcde911a2205c43157bb36b26fea7",
+      "base_sha256": "bc9c6373752fbf3ce5bb55e968307348bf809cf8a799b7fb8d0c216d7b949a1a"
+    },
+    {
+      "path": "src/race/RacePresentation452.js",
+      "bytes": 5855,
+      "sha256": "3eede2489e2bfc175baa94353e0b3d39e5629bc1fb538d9655ed995573dd52f1",
+      "base_sha256": "ec491e29dc8322e5d32657cef8440af1e381cadf2219de6c4e2f100ece7cd0aa"
+    },
+    {
+      "path": "src/race/RaceUX458.js",
+      "bytes": 2899,
+      "sha256": "7079239360248ca5023f35b6d25aab9a9a4d9164bb4d9c744c30028a01b2128a",
+      "base_sha256": "f2d6d3c36b62911493c4907cfbfdc1d0b1f00573f089fefe81dca91198f603f2"
+    },
+    {
+      "path": "src/tower/Audio517.js",
+      "bytes": 820,
+      "sha256": "92bff3038593e35dc0165d05f2799645feb7b52312d31eddc538ff4574a8a03b",
+      "base_sha256": null
+    },
+    {
+      "path": "src/tower/Renderer517.js",
+      "bytes": 5857,
+      "sha256": "44bd802046fb3740b58e40154810d90704e7b64f216a150e9a4b99fd156c2c52",
+      "base_sha256": null
+    },
+    {
+      "path": "src/tower/Rules517.js",
+      "bytes": 13508,
+      "sha256": "92c082a8660514c7e9fa867b5dcffb6f68576097cc44e5e6fe1edc5c615aeb7f",
+      "base_sha256": null
+    },
+    {
+      "path": "src/tower/View517.js",
+      "bytes": 22027,
+      "sha256": "f1f74f879042f6c8189ee7a662a846d2e561193a972a731b56dea80562726057",
+      "base_sha256": null
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "697c9e1cab2d9ac0afac4a96681dd098b19d9832600cf831d2a80bd64c34e83a",
+      "base_sha256": "83934eba7539b0695d46e4682d615d5a7c283ded5d252b0fd2e02b6acd614522"
+    },
+    {
+      "path": "tests/build517-tower.test.mjs",
+      "bytes": 18869,
+      "sha256": "5bf70873e171aac3c92ece87365c6faf1dd417f4ec9a0eb530f5928904e8f8a3",
+      "base_sha256": null
+    },
+    {
+      "path": "tools/tower517-preview-frame.html",
+      "bytes": 910,
+      "sha256": "f40ed39fe56ed11609f60ade1c695aeefdf5352e4399feb05934c6acf1844a69",
+      "base_sha256": null
+    },
+    {
+      "path": "tools/tower517-preview.html",
+      "bytes": 804,
+      "sha256": "d922a09d252999a1cb897ce406ee4c009a427a8d9958c9de9c9c430ad84683ba",
+      "base_sha256": null
+    },
+    {
+      "path": "tools/tower517-preview.js",
+      "bytes": 3125,
+      "sha256": "befdbd52784fb34e2cfb1b3f3f996cf414f82725bd12a98ca77023c6e9a12af3",
+      "base_sha256": null
+    },
+    {
+      "path": "world-raid-offline517-assets.json",
+      "bytes": 38792,
+      "sha256": "a65498764a3be024727f7629d73fe60f59c13026eae4a3b16894ceb0330d5e2b",
+      "base_sha256": null
+    },
+    {
+      "path": "world-raid-offline517-sw.js",
+      "bytes": 1844,
+      "sha256": "2811b20138efe6ad040f3bc4ac908ae4950bb90b885da99e92f33b8fcc5b6cd8",
+      "base_sha256": null
+    }
+  ]
+}
