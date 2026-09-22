@@ -133,7 +133,7 @@ export function advanceLuck509(g,now){if(!Number.isFinite(now))return false;let 
   else if(['chest','hand'].includes(g.phase)){
    for(const p of g.players)if(slots(g)[p.seat]===null&&(at>=g.deadline||p.ai&&at>=g.phaseAt+(g.phase==='chest'?draw(g,p.seat).waitBox:draw(g,p.seat).waitItem))){const d=draw(g,p.seat);slots(g)[p.seat]=g.phase==='chest'?d.autoBox:p.ai?aiPick509(g,p):d.autoItem;g.auto509[p.seat]=true;g.lastChoiceAt=at}
    if(slots(g).every(x=>x!==null)&&at>=g.phaseAt+LUCK509.minChooseMs){if(g.phase==='chest')choosePhase(g,'hand',at);else reveal(g,at)}else schedule(g);
-  }else if(g.phase==='reveal'){g.phase='power';g.phaseAt=at;g.nextAt=at+LUCK509.powerMs}
+  }else if(g.phase==='reveal'){g.phase=g.presentation510===1?(g.event.attacks.length?'broadcast':'run'):'power';g.phaseAt=at;g.nextAt=at+(g.phase==='broadcast'?g.event.castMs:g.phase==='run'?LUCK509.runMs:LUCK509.powerMs)}
   else if(g.phase==='power'){g.phase=g.event.attacks.length?'broadcast':'run';g.phaseAt=at;g.nextAt=at+(g.phase==='broadcast'?g.event.castMs:LUCK509.runMs)}
   else if(g.phase==='broadcast'){g.phase='run';g.phaseAt=at;g.nextAt=at+LUCK509.runMs}
   else if(g.phase==='run'){for(const p of g.players){const r=g.event.rows[p.seat];p.distance=r.to;p.loadout=copy(r.loadout);p.coils=r.coils;p.wards=r.wards;if(r.automatic)p.autoRounds++}g.scaleMax=g.event.toMax;g.phase='settle';g.phaseAt=at;g.nextAt=at+LUCK509.settleMs}
@@ -145,7 +145,7 @@ export function advanceLuck509(g,now){if(!Number.isFinite(now))return false;let 
 export function publicLuck509(g,selfId,connected=()=>true){
  if(g.rules509!==1)return publicLuck508(g,selfId,connected);
  const me=g.players.find(p=>p.playerId===selfId),choosing=['chest','hand'].includes(g.phase),seat=me?.seat;
- return{id:g.id,code:g.code,game:'luck',rules509:1,hostId:g.hostId,phase:g.phase,phaseAt:g.phaseAt,revision:g.revision,round:g.round,rounds:8,scaleMax:g.scaleMax,startAt:g.startAt??null,deadline:choosing?g.deadline:null,
+ return{id:g.id,code:g.code,game:'luck',rules509:1,presentation510:g.presentation510===1?1:0,hostId:g.hostId,phase:g.phase,phaseAt:g.phaseAt,revision:g.revision,round:g.round,rounds:8,scaleMax:g.scaleMax,startAt:g.startAt??null,deadline:choosing?g.deadline:null,
  members:g.members.map(m=>({playerId:m.playerId,name:m.name,color499:m.color499,choice:m.choice?{id:m.choice.id,speciesId:m.choice.speciesId}:null})),
  players:g.players.map(p=>({playerId:p.playerId,name:p.name,choice:{...p.choice},seat:p.seat,ai:p.ai,color499:p.color499,distance:p.distance,loadout:copy(p.loadout),coils:p.coils,wards:p.wards,connected:p.ai||!!connected(p.playerId),locked:choosing?slots(g)[p.seat]!==null:false})),
  ownBox:choosing&&me?g.boxes509[seat]:null,ownPick:g.phase==='hand'&&me?g.items509[seat]:null,

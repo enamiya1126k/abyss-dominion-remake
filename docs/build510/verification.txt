@@ -1,0 +1,8 @@
+228 tests pass; 20 new camera/timeline cases + 208 regression cases.
+500 races compared with old timeline: identical players, inventories, distances, ranks and sealed draw plans; exactly 24 seconds shorter.
+Personal ±1000m view, circular edge notices, reciprocal passing, 50,000m uncapped background, huge-integer nearby gaps, synchronized markers.
+Finite RAF lifecycle, hidden/cleanup behavior, real view DOM, protocol and legacy saved games verified.
+Original image assets reused; no new raster image or browser engine added.
+JS parsing, import aliases, cache/entry versions and ZIP extraction hashes verified.
+Browser/Safari visual and FPS checks are not completed; local browser preview is blocked in this environment.
+Tests use in-memory fixtures for three missing original modules; production replacements are not shipped.

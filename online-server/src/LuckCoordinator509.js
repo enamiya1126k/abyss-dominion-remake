@@ -5,7 +5,7 @@ import {advanceLuck508} from '../../src/luck/Rules508.js';
 import {handleLuck508} from './LuckCoordinator508.js';
 import {luckFor507,handleLuck507} from './LuckCoordinator507.js';
 export {luckFor507};
-export function createLuck509(c,p,members){return makeLuck509({id:`lk509-${++c.data.serial}-${randomBytes(4).toString('hex')}`,code:p.code,partyId:p.id,hostId:p.hostId,now:c.now(),members:members.map(m=>({...m,choice:m.owned.find(x=>x.id===p.members.find(pm=>pm.playerId===m.playerId)?.slotOne476)??m.owned[0]}))})}
+export function createLuck509(c,p,members){return {...makeLuck509({id:`lk509-${++c.data.serial}-${randomBytes(4).toString('hex')}`,code:p.code,partyId:p.id,hostId:p.hostId,now:c.now(),members:members.map(m=>({...m,choice:m.owned.find(x=>x.id===p.members.find(pm=>pm.playerId===m.playerId)?.slotOne476)??m.owned[0]}))}),presentation510:1}}
 export function handleLuck509(c,session,m){
  if(m.op!=='luck507'&&m.op!=='luck508'&&m.op!=='luck509')return false;
  const g=luckFor507(c,session.playerId);

@@ -1,0 +1,97 @@
+{
+  "build": 510,
+  "version": "3.1.189",
+  "baseBuild": 509,
+  "files": [
+    {
+      "path": "README_Build510.txt",
+      "bytes": 4698,
+      "sha256": "ac40e238545e7afd94d98e857a7127a83a30c01a5156bfe97d3bdb244728fa8c"
+    },
+    {
+      "path": "docs/build510/preservation.txt",
+      "bytes": 259,
+      "sha256": "ef0991706212d0b79d638c4d0f0d7229c1842019975876880de079bfe192d689"
+    },
+    {
+      "path": "docs/build510/tests.txt",
+      "bytes": 24002,
+      "sha256": "4c7ed04dd6ae7518c770e2f0c2a9abb89be5836497c6b9795b99ef7b22172f0e"
+    },
+    {
+      "path": "docs/build510/verification.txt",
+      "bytes": 830,
+      "sha256": "946a8673c63cb5eb6df6887cd7c74fba2e4cf477986d2bfbccc91363045e21d5"
+    },
+    {
+      "path": "index.html",
+      "bytes": 151926,
+      "sha256": "11e5a880f843f5e4d26fb3da8fc9aded35bfa8e7bfb836c6854d650049a468e7"
+    },
+    {
+      "path": "online-server/src/LuckCoordinator509.js",
+      "bytes": 3154,
+      "sha256": "7c793b8598f4ca3bc9367f8cd2f57de61d3cae2c44c717872d42d9442b6d122a"
+    },
+    {
+      "path": "src/Styles/build510-luck.css",
+      "bytes": 4446,
+      "sha256": "7149a526518f9f77892fc82fb4734ee5b851dcfcf1dd7ae7e2c5e4e210836a6a"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "209a120298cc2fe8cae0478c8b0ee1651a439c2fe9960b6e948de4d584afbe59"
+    },
+    {
+      "path": "src/luck/Audio510.js",
+      "bytes": 1224,
+      "sha256": "5a8cae2fae654cfe43e45f9cef022a974a6f54343d72bd16761db5f36c9eb646"
+    },
+    {
+      "path": "src/luck/Bridge510.js",
+      "bytes": 1018,
+      "sha256": "17ca1d4bb722a68285183ef598e95953525e72c150e0f06c5a1a651c9cfe83bf"
+    },
+    {
+      "path": "src/luck/Presentation510.js",
+      "bytes": 6459,
+      "sha256": "09142b44108a099613d05b3db3a68124b523f0949dc804808741e365f70b819f"
+    },
+    {
+      "path": "src/luck/Rules509.js",
+      "bytes": 16230,
+      "sha256": "5c0efb3f2bfee33eef2a901ac80ce33378f8d094cc3d78f0ef46ed543139d75c"
+    },
+    {
+      "path": "src/luck/View510.js",
+      "bytes": 30310,
+      "sha256": "e9b3744a49e2a60703ec6c5f7644145fedcb407223ba73bcced1dfd968f0d5cb"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 24157,
+      "sha256": "6f443b137d258800632d16203884469f3823e786db6257b9dfb4372a02151b29"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "95702da4563ddfe13aa98c9b38c281c4321a321e9ff0c6481a580fde68e3d0ff"
+    },
+    {
+      "path": "tests/build510-camera.test.mjs",
+      "bytes": 18437,
+      "sha256": "d79e7adbc82fbd7c0e03daa4c105a8f58baef351c5b0f20308bef37a789a6e80"
+    },
+    {
+      "path": "world-raid-offline510-assets.json",
+      "bytes": 37634,
+      "sha256": "6f2cf04764ae9909bc1eaf0d4de01d7479e275918819e5ccc8c9276dcd031849"
+    },
+    {
+      "path": "world-raid-offline510-sw.js",
+      "bytes": 1844,
+      "sha256": "25ca4ba08114d906592d36bc9d1aeb847437493f2e338698a1510168a69a8e9a"
+    }
+  ]
+}

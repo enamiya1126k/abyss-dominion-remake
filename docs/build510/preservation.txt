@@ -1,0 +1,3 @@
+257 assets/gameplay/protected files match Build509 SHA256 exactly.
+Rules509 movement, ranking, AI, gear, attack and resolution functions match Build509 source exactly.
+Only the optional new-match presentation timeline and its public flag changed in Rules509.

@@ -1,4 +1,4 @@
-import{luckView507,luckBefore507,luckAfter507,luckDispose507,luckClick507,luckInput507,luckKey507,luckTick507,luckReceive507,luckError507}from'../luck/Bridge509.js';
+import{luckView507,luckBefore507,luckAfter507,luckDispose507,luckClick507,luckInput507,luckKey507,luckTick507,luckReceive507,luckError507}from'../luck/Bridge510.js';
 import{gorillaView505,gorillaBefore505,gorillaAfter505,gorillaDispose505,gorillaClick505,gorillaInput505,gorillaKey505,gorillaTick505,gorillaReceive505,gorillaError505}from'../gorilla/View505.js';
 import{resultClick490,resultReceive490,resultError490,resultPoll490}from'../party/PartyResults490.js';
 import{canalView489,canalBefore489,canalAfter489,canalDispose489,canalClick489,canalInput489,canalKey489,canalTick489,canalReceive489}from'../canal/View489.js';
