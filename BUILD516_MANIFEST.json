@@ -1,0 +1,67 @@
+{
+  "build": 516,
+  "version": "3.1.195",
+  "baseBuild": 515,
+  "files": [
+    {
+      "path": "README_BUILD516.md",
+      "bytes": 2313,
+      "sha256": "2124b0f136f1b3fe6f0585de00bfc9056f331556c3947567a98f14bdd5910cfc"
+    },
+    {
+      "path": "docs/build516/question-sources.md",
+      "bytes": 120698,
+      "sha256": "0a5ad006c6a2cc92ede5a374f0dab442eba27f3a0d225bea77ed03e83d87d53c"
+    },
+    {
+      "path": "docs/build516/verification.md",
+      "bytes": 2870,
+      "sha256": "0ffb0393d4639b8c43f8c439f2294bfaf6d9963d5b6c19414e940bc5974a8c9e"
+    },
+    {
+      "path": "index.html",
+      "bytes": 158462,
+      "sha256": "b72c2711dd38eb334bef9e9f0e4d73dd6b80e34b7ded3106c7f3742d79f5f485"
+    },
+    {
+      "path": "online-server/src/QuizCoordinator513.js",
+      "bytes": 3656,
+      "sha256": "b344999a7c29ded6f0138973f8bd5954a1f222d7afed950db45d69f992bce6c7"
+    },
+    {
+      "path": "online-server/src/quiz/QuestionData516.js",
+      "bytes": 105444,
+      "sha256": "ec156f79316fbd9e69db89239fb30c0c6f5b6a16613ce6a8e0c99b3e5bd90321"
+    },
+    {
+      "path": "online-server/src/quiz/Questions516.js",
+      "bytes": 1889,
+      "sha256": "d93d0e63a941cfb7ceab199664f5d8c4ac77fc1e139feda0a014ec6d0537dd42"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "0f2a73ded879f916c7e68ffc29eba741129b4613fc0c6b6463e20a2b159d127d"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "83934eba7539b0695d46e4682d615d5a7c283ded5d252b0fd2e02b6acd614522"
+    },
+    {
+      "path": "tests/build516-questions.test.mjs",
+      "bytes": 6686,
+      "sha256": "a56bc614d9d03766993087930e7331d601d7230400a4e7ab2d036081100d709b"
+    },
+    {
+      "path": "world-raid-offline516-assets.json",
+      "bytes": 38604,
+      "sha256": "c53f7d5e3acf5a25d0abeaa12dd752b39d1f225c05f18b4e5e93125905ba2f18"
+    },
+    {
+      "path": "world-raid-offline516-sw.js",
+      "bytes": 1844,
+      "sha256": "cdb38154cd2fb0252f675c36b70ed9fa12fc6e048fcdf624dced0584f04a2342"
+    }
+  ]
+}
