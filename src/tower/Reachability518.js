@@ -33,6 +33,13 @@ export function impossible518(g) {
  // Optimistically allow any ledge in the board and unlimited lateral travel.
  // Failure even with these advantages proves the sole runner cannot get out.
  const heights=[0,...g.board.filter(b=>b.y===15||!occupied[(b.y+1)*10+b.x]).map(b=>b.y+1)].sort((a,b)=>a-b);
- for(const h of heights)if(h<=high+2.17)high=Math.max(high,h);
- return high+2.17<16?'unreachable':null;
+ // A cooldown will expire: never declare defeat merely because the boost is not ready yet.
+ const reach=g.rules517>=3?5.18:2.17;
+ for(const h of heights)if(h<=high+reach)high=Math.max(high,h);
+ return high+reach<16?'unreachable':null;
+}
+export function sealedRunners520(g){
+ if(g.phase!=='play'||g.falling)return [];
+ const {outside}=topology(g);
+ return g.players.filter(p=>p.role==='run'&&p.alive&&!p.escaped&&p.y+.41<16&&!outside[Math.max(0,Math.min(159,Math.floor(p.y+.41)*10+Math.floor(p.x)))]);
 }

@@ -1,0 +1,4 @@
+{"run":"old","drop":"old","matches":12,"runnerWins":2,"meanHeight":8.811620601021296,"meanSeconds":42.358333333332176,"cpuMs":241.68245500000003,"reasons":{"sealed":8,"crushed":2,"escape":2}}
+{"run":"old","drop":"new","matches":12,"runnerWins":1,"meanHeight":11.784799142399336,"meanSeconds":47.19999999999832,"cpuMs":615.2361859999999,"reasons":{"sealed":9,"crushed":2,"escape":1}}
+{"run":"new","drop":"old","matches":12,"runnerWins":6,"meanHeight":12.101646831986583,"meanSeconds":52.67916666666464,"cpuMs":20521.657003,"reasons":{"escape":6,"sealed":6}}
+{"run":"new","drop":"new","matches":12,"runnerWins":1,"meanHeight":10.138365010301245,"meanSeconds":41.497222222220884,"cpuMs":16447.335870999996,"reasons":{"sealed":11,"escape":1}}

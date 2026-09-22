@@ -1,0 +1,118 @@
+{
+  "build": 519,
+  "version": "3.1.198",
+  "requires_build": 518,
+  "patch": true,
+  "deployed": false,
+  "tests": {
+    "passed": 132,
+    "failed": 0,
+    "ai_matches": 100,
+    "actual_browser": false,
+    "physical_iphone": false
+  },
+  "files": [
+    {
+      "path": "README_BUILD519.md",
+      "bytes": 4444,
+      "sha256": "ecba83373aac5c602af8090434612f74a9098404cd3eefa94e9b4e2f333fd5df",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build519/ai-comparison.jsonl",
+      "bytes": 739,
+      "sha256": "3a6ad6d147b2c7b274010944ce17c0a828b930df0892f72cfd8c22d7321dd9cc",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build519/verification.md",
+      "bytes": 5472,
+      "sha256": "2fe37e571afed912042fdb0e03ee0136f3f68f5f52b9edbfcc469e69b886b872",
+      "base_sha256": null
+    },
+    {
+      "path": "index.html",
+      "bytes": 161889,
+      "sha256": "3a25e3c1592175bf35f30d666288074bad541d37b4cd63b73e63bbd4e856b5f8",
+      "base_sha256": "2c761b39e164d9710d8ab20cdc4e32edd175f37a7c62d059da592f5963426ce0"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "d185773a2d30c368e80009d40fbd07fb09ce2ab7970069b0469321f23f545d56",
+      "base_sha256": "0b596b6a32d2a2b96456b780514655d799e1c104016e8541e6a131d14dfdea3f"
+    },
+    {
+      "path": "src/quiz/AI519.js",
+      "bytes": 670,
+      "sha256": "ab695456d64c9beefaf866c11b641a56a03db06588a20203afbb394d1363741a",
+      "base_sha256": null
+    },
+    {
+      "path": "src/quiz/Rules513.js",
+      "bytes": 7636,
+      "sha256": "4ecc051edd62eeb88c5c8249288d937fd4600917ffc9033e32eea4b93dfe3cc5",
+      "base_sha256": "551229942e6b3258dc9225cb1d369822eda9d5bbd45ee4d38ab5966ab574f3c4"
+    },
+    {
+      "path": "src/tower/AI519.js",
+      "bytes": 7381,
+      "sha256": "7025d9345e31b9b72ea19be98b3f4e32e7271c540ddd607e16bd5560365f92ad",
+      "base_sha256": null
+    },
+    {
+      "path": "src/tower/LobbyScroll519.js",
+      "bytes": 1708,
+      "sha256": "bca0a03c33d30a3a99be4b609b386a728cc2b01719165cfca8a35916f8341080",
+      "base_sha256": null
+    },
+    {
+      "path": "src/tower/Rules517.js",
+      "bytes": 12344,
+      "sha256": "cc341125905947b4a8910a6c2a96182259c751ce246e08d15a930e7db0ec1f8f",
+      "base_sha256": "b19790daa46a3f3b0b48016414938824548b8d5b21a4a113eb26f38d49cc4996"
+    },
+    {
+      "path": "src/tower/View517.js",
+      "bytes": 26478,
+      "sha256": "d547f1bb6e40846ac50edfae984796b191623024e05f582ade882165185f7f1c",
+      "base_sha256": "b46f6fd75a51233dfb8e7fa8873c2c46ba65c854a26af3a10d6f442f662ad6d7"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "8267a4b3bf38a1b63c0b43d94eb9c2a29c92e021ce2d452badb01d11195fed17",
+      "base_sha256": "4c6ee91a7f45ebefbbbef4f9829b513b87cab8ea40b5ccc92694af434d5eb8f2"
+    },
+    {
+      "path": "tests/build519-ai.test.mjs",
+      "bytes": 8831,
+      "sha256": "6f05d458587d6ed79a9dc7e9a342221192a5b6aac72feeb1cbc0eee6f788e58e",
+      "base_sha256": null
+    },
+    {
+      "path": "tests/fixtures/tower-ai518.mjs",
+      "bytes": 2923,
+      "sha256": "465eb1f050a574200dfdef4999f5c452f0caf991cfd41e91e4d1bc1bafd66184",
+      "base_sha256": null
+    },
+    {
+      "path": "tools/benchmark519-ai.mjs",
+      "bytes": 1444,
+      "sha256": "a35b9ced1c5135d565f190f5759570bb9a81981be6e76dd0eb55fe36ee020ebd",
+      "base_sha256": null
+    },
+    {
+      "path": "world-raid-offline519-assets.json",
+      "bytes": 39082,
+      "sha256": "094c9284a85f9fb479df0ac430c5e85531397cd9f096ed5c2698dd6c6bb1db73",
+      "base_sha256": null
+    },
+    {
+      "path": "world-raid-offline519-sw.js",
+      "bytes": 1844,
+      "sha256": "e9cbf7714ba4138a9cda1e9e45d7ebcab60377826a567d51f0d02db7f66fe2e6",
+      "base_sha256": null
+    }
+  ]
+}

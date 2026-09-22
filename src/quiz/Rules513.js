@@ -1,3 +1,4 @@
+import {quizPlans519} from './AI519.js';
 import {spawn514,position514,walk514,settle514,closeGate514} from './Movement514.js';
 import {freezeColors501,gameColors501} from '../party/GameColors501.js';
 export const QUIZ513=Object.freeze({rounds:20,countdownMs:3000,questionMs:12000,lockMs:650,revealMs:6200,moveMs:280});
@@ -16,7 +17,7 @@ export function startQuiz513(g,at,deck,randomInt){
  while(g.players.length<4){const seat=g.players.length,[name,speciesId]=bots[seat];g.players.push({playerId:`AI-${g.id}-${seat}`,name,choice:{id:'ai-'+seat,speciesId},seat,ai:true,alive:true,side:null,seq:0,correct:0,eliminatedRound:null})}
  freezeColors501(g.players,g.members,g.aiColors500);
  // Private, precommitted AI knowledge/hesitation. Bots never adapt to a human's answer.
- g.botPlan513=deck.map(q=>g.players.map(p=>{const final=randomInt(100)<[0,91,82,70][q.difficulty]?q.answer:!q.answer,hesitate=randomInt(100)<32;return[{ms:1800+randomInt(4001),side:(hesitate?!final:final)?'o':'x'},...(hesitate?[{ms:7200+randomInt(2101),side:final?'o':'x'}]:[])]}));
+ g.botPlan513=quizPlans519(deck,g.players,randomInt);
  for(const p of g.players){p.side=p.seat%2?'x':'o';p.location514=spawn514(p.seat,p.side)}
  g.phase='countdown';g.phaseAt=at;g.deadline=at+QUIZ513.countdownMs;g.nextAt=g.deadline;g.updatedAt=at;g.revision++;return g;
 }
