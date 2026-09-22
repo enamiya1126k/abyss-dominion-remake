@@ -1,0 +1,382 @@
+TAP version 13
+# Subtest: 120 unique authored questions cover 12 genres with true/false and three difficulties
+ok 1 - 120 unique authored questions cover 12 genres with true/false and three difficulties
+  ---
+  duration_ms: 2.7364
+  type: 'test'
+  ...
+# Subtest: direct numeric and word puzzles independently verify the stored answer
+ok 2 - direct numeric and word puzzles independently verify the stored answer
+  ---
+  duration_ms: 0.264339
+  type: 'test'
+  ...
+# Subtest: bad decks reject atomically before a game starts
+ok 3 - bad decks reject atomically before a game starts
+  ---
+  duration_ms: 0.575909
+  type: 'test'
+  ...
+# Subtest: one through four humans fill exactly four seats with fixed colors
+ok 4 - one through four humans fill exactly four seats with fixed colors
+  ---
+  duration_ms: 5.061389
+  type: 'test'
+  ...
+# Subtest: all wrong ends with zero winners including rank-one ties
+ok 5 - all wrong ends with zero winners including rank-one ties
+  ---
+  duration_ms: 2.010975
+  type: 'test'
+  ...
+# Subtest: dead players never move or resurrect in future questions
+ok 6 - dead players never move or resurrect in future questions
+  ---
+  duration_ms: 1.144848
+  type: 'test'
+  ...
+# Subtest: later eliminations outrank earlier ones without claiming all-out winner
+ok 7 - later eliminations outrank earlier ones without claiming all-out winner
+  ---
+  duration_ms: 0.727157
+  type: 'test'
+  ...
+# Subtest: server restart or stall grants full next-question time instead of skipping it
+ok 8 - server restart or stall grants full next-question time instead of skipping it
+  ---
+  duration_ms: 1.176986
+  type: 'test'
+  ...
+# Subtest: private future questions, explanations and bot plans are absent in all live views
+ok 9 - private future questions, explanations and bot plans are absent in all live views
+  ---
+  duration_ms: 1.160311
+  type: 'test'
+  ...
+# Subtest: each viewer sees identical accepted moves and reveal, own sequence only
+ok 10 - each viewer sees identical accepted moves and reveal, own sequence only
+  ---
+  duration_ms: 0.919508
+  type: 'test'
+  ...
+# Subtest: AI includes both right and wrong outcomes and cannot copy human last-second changes
+ok 11 - AI includes both right and wrong outcomes and cannot copy human last-second changes
+  ---
+  duration_ms: 103.224321
+  type: 'test'
+  ...
+# Subtest: 500 seeded games persist every phase and always terminate with valid history
+ok 12 - 500 seeded games persist every phase and always terminate with valid history
+  ---
+  duration_ms: 3230.479121
+  type: 'test'
+  ...
+# Subtest: play DOM signature ignores live movement, answer lock, floor collapse and connectivity
+ok 13 - play DOM signature ignores live movement, answer lock, floor collapse and connectivity
+  ---
+  duration_ms: 1.282005
+  type: 'test'
+  ...
+# Subtest: results show no fake winner for an all-out and escape player-supplied HTML
+ok 14 - results show no fake winner for an all-out and escape player-supplied HTML
+  ---
+  duration_ms: 1.421134
+  type: 'test'
+  ...
+# Subtest: one RAF at most, no hidden-tab writes, all event handlers cleaned on exit
+ok 15 - one RAF at most, no hidden-tab writes, all event handlers cleaned on exit
+  ---
+  duration_ms: 2.848238
+  type: 'test'
+  ...
+# Subtest: after finite animations, repeated idle paint produces zero DOM property writes
+ok 16 - after finite animations, repeated idle paint produces zero DOM property writes
+  ---
+  duration_ms: 15.609506
+  type: 'test'
+  ...
+# Subtest: disconnected, spectator and dead controls cannot send choices
+ok 17 - disconnected, spectator and dead controls cannot send choices
+  ---
+  duration_ms: 0.880839
+  type: 'test'
+  ...
+# Subtest: keyboard does not steal typing, auto-repeat or modified shortcuts
+ok 18 - keyboard does not steal typing, auto-repeat or modified shortcuts
+  ---
+  duration_ms: 0.655329
+  type: 'test'
+  ...
+# Subtest: production coordinator starts 1-4 people, advertises protocol, and marks active game
+ok 19 - production coordinator starts 1-4 people, advertises protocol, and marks active game
+  ---
+  duration_ms: 12.431801
+  type: 'test'
+  ...
+# Subtest: production moves use authenticated sender, not playerId in payload
+ok 20 - production moves use authenticated sender, not playerId in payload
+  ---
+  duration_ms: 2.102222
+  type: 'test'
+  ...
+# Subtest: stale version, wrong room and non-host start are rejected without mutation
+ok 21 - stale version, wrong room and non-host start are rejected without mutation
+  ---
+  duration_ms: 2.189745
+  type: 'test'
+  ...
+# Subtest: active late joiners spectate and cannot answer but may join next game
+ok 22 - active late joiners spectate and cannot answer but may join next game
+  ---
+  duration_ms: 1.545753
+  type: 'test'
+  ...
+# Subtest: disconnect preserves accepted floor and reconnect does not change it
+ok 23 - disconnect preserves accepted floor and reconnect does not change it
+  ---
+  duration_ms: 3.067199
+  type: 'test'
+  ...
+# Subtest: sealed deck, AI moves, choices and recent questions survive server JSON reload
+ok 24 - sealed deck, AI moves, choices and recent questions survive server JSON reload
+  ---
+  duration_ms: 8.15056
+  type: 'test'
+  ...
+# Subtest: new art fully decodes with alpha and all four platform cells have content
+ok 25 - new art fully decodes with alpha and all four platform cells have content
+  ---
+  duration_ms: 388.979677
+  type: 'test'
+  ...
+# Subtest: mixed-version ready gate cannot start a quiz with an old client
+ok 26 - mixed-version ready gate cannot start a quiz with an old client
+  ---
+  duration_ms: 3.540713
+  type: 'test'
+  ...
+# Subtest: server write failure rolls back a choice without acknowledging a move that was not saved
+ok 27 - server write failure rolls back a choice without acknowledging a move that was not saved
+  ---
+  duration_ms: 3.383636
+  type: 'test'
+  ...
+# Subtest: 20 questions are unique, strictly progress in difficulty and avoid recent 30 where available
+ok 28 - 20 questions are unique, strictly progress in difficulty and avoid recent 30 where available
+  ---
+  duration_ms: 253.69218
+  type: 'test'
+  ...
+# Subtest: all four survivors can complete all twenty questions with joint victory
+ok 29 - all four survivors can complete all twenty questions with joint victory
+  ---
+  duration_ms: 1.023294
+  type: 'test'
+  ...
+# Subtest: all players picking never closes the wall early even after movement arrival
+ok 30 - all players picking never closes the wall early even after movement arrival
+  ---
+  duration_ms: 0.422167
+  type: 'test'
+  ...
+# Subtest: standing without tapping is judged on the actual starting floor
+ok 31 - standing without tapping is judged on the actual starting floor
+  ---
+  duration_ms: 0.45755
+  type: 'test'
+  ...
+# Subtest: free targets on the same floor retain distinct x and y positions
+ok 32 - free targets on the same floor retain distinct x and y positions
+  ---
+  duration_ms: 0.46391
+  type: 'test'
+  ...
+# Subtest: walking crosses via the bridge at constant finite speed, never teleports
+ok 33 - walking crosses via the bridge at constant finite speed, never teleports
+  ---
+  duration_ms: 0.381916
+  type: 'test'
+  ...
+# Subtest: mid-walk retargeting is continuous and reordered packets cannot reverse it
+ok 34 - mid-walk retargeting is continuous and reordered packets cannot reverse it
+  ---
+  duration_ms: 0.434285
+  type: 'test'
+  ...
+# Subtest: deadline ignores unreachable target and freezes the real position even after a server stall
+ok 35 - deadline ignores unreachable target and freezes the real position even after a server stall
+  ---
+  duration_ms: 0.48985
+  type: 'test'
+  ...
+# Subtest: both crossing directions get pushed back to their incoming side when trapped
+ok 36 - both crossing directions get pushed back to their incoming side when trapped
+  ---
+  duration_ms: 0.397309
+  type: 'test'
+  ...
+# Subtest: player who fully crosses the wall stays on the destination side
+ok 37 - player who fully crosses the wall stays on the destination side
+  ---
+  duration_ms: 0.168374
+  type: 'test'
+  ...
+# Subtest: stopping in the gate then retargeting still pushes toward the last safe floor
+ok 38 - stopping in the gate then retargeting still pushes toward the last safe floor
+  ---
+  duration_ms: 0.22506
+  type: 'test'
+  ...
+# Subtest: invalid coordinates and packet abuse cannot mutate the game
+ok 39 - invalid coordinates and packet abuse cannot mutate the game
+  ---
+  duration_ms: 1.077255
+  type: 'test'
+  ...
+# Subtest: tap mapping is viewport independent and rejects scenery, preserving floor bounds
+ok 40 - tap mapping is viewport independent and rejects scenery, preserving floor bounds
+  ---
+  duration_ms: 0.186621
+  type: 'test'
+  ...
+# Subtest: wall descends without scaling; countdown and lock predict the authoritative collision
+ok 41 - wall descends without scaling; countdown and lock predict the authoritative collision
+  ---
+  duration_ms: 2.376587
+  type: 'test'
+  ...
+# Subtest: either correct symbol ascends and only eliminated seats trigger magma
+ok 42 - either correct symbol ascends and only eliminated seats trigger magma
+  ---
+  duration_ms: 1.163225
+  type: 'test'
+  ...
+# Subtest: all-out does not play a survivor elevator and all reveal animations stop
+ok 43 - all-out does not play a survivor elevator and all reveal animations stop
+  ---
+  duration_ms: 0.496189
+  type: 'test'
+  ...
+# Subtest: reduced motion suppresses camera shake, elevator travel and frame loops
+ok 44 - reduced motion suppresses camera shake, elevator travel and frame loops
+  ---
+  duration_ms: 0.493806
+  type: 'test'
+  ...
+# Subtest: view exposes a tappable stage and wall timer, no old choice buttons
+ok 45 - view exposes a tappable stage and wall timer, no old choice buttons
+  ---
+  duration_ms: 1.186901
+  type: 'test'
+  ...
+# Subtest: rapid destination taps coalesce, acknowledge newest coordinate and stop at deadline
+ok 46 - rapid destination taps coalesce, acknowledge newest coordinate and stop at deadline
+  ---
+  duration_ms: 1.341574
+  type: 'test'
+  ...
+# Subtest: public trajectories match every viewer at arbitrary timestamps without exposing answers
+ok 47 - public trajectories match every viewer at arbitrary timestamps without exposing answers
+  ---
+  duration_ms: 1.715569
+  type: 'test'
+  ...
+# Subtest: production accepts coordinate movement from authenticated seat and persists its trajectory
+ok 48 - production accepts coordinate movement from authenticated seat and persists its trajectory
+  ---
+  duration_ms: 2.131647
+  type: 'test'
+  ...
+# Subtest: Build513 active quiz migrates to lobby without deleting other game/account data
+ok 49 - Build513 active quiz migrates to lobby without deleting other game/account data
+  ---
+  duration_ms: 4.613332
+  type: 'test'
+  ...
+# Subtest: new generated frame and divider decode with alpha; frame center stays empty
+ok 50 - new generated frame and divider decode with alpha; frame center stays empty
+  ---
+  duration_ms: 87.955022
+  type: 'test'
+  ...
+# Subtest: standing in the closed divider still returns to the last safe floor
+ok 51 - standing in the closed divider still returns to the last safe floor
+  ---
+  duration_ms: 0.423739
+  type: 'test'
+  ...
+# Subtest: touching the live stage sends normalized floor coordinates and cleans its listener
+ok 52 - touching the live stage sends normalized floor coordinates and cleans its listener
+  ---
+  duration_ms: 2.028641
+  type: 'test'
+  ...
+# Subtest: result replay and a stale move are idempotent after all-out
+ok 53 - result replay and a stale move are idempotent after all-out
+  ---
+  duration_ms: 7.562172
+  type: 'test'
+  ...
+# Subtest: last visible 1 keeps a full sprite plus clearance across mobile/landscape sizes
+ok 54 - last visible 1 keeps a full sprite plus clearance across mobile/landscape sizes
+  ---
+  duration_ms: 2.043484
+  type: 'test'
+  ...
+# Subtest: zero triggers a 140ms slam, a finite impact and dust, independent of server lock arrival
+ok 55 - zero triggers a 140ms slam, a finite impact and dust, independent of server lock arrival
+  ---
+  duration_ms: 0.122736
+  type: 'test'
+  ...
+# Subtest: 3 2 1 pulses stay readable and do not survive zero
+ok 56 - 3 2 1 pulses stay readable and do not survive zero
+  ---
+  duration_ms: 0.193562
+  type: 'test'
+  ...
+# Subtest: old wall exits below with no alpha fade while next floor and divider arrive from above
+ok 57 - old wall exits below with no alpha fade while next floor and divider arrive from above
+  ---
+  duration_ms: 0.193012
+  type: 'test'
+  ...
+# Subtest: all-out, final question and last survivor never spawn a phantom next floor
+ok 58 - all-out, final question and last survivor never spawn a phantom next floor
+  ---
+  duration_ms: 0.11949
+  type: 'test'
+  ...
+# Subtest: reduced motion preserves closure and final position with no impact or camera animation
+ok 59 - reduced motion preserves closure and final position with no impact or camera animation
+  ---
+  duration_ms: 0.082805
+  type: 'test'
+  ...
+# Subtest: timeline retains frames through landing and lift settlement then becomes idle
+ok 60 - timeline retains frames through landing and lift settlement then becomes idle
+  ---
+  duration_ms: 0.068293
+  type: 'test'
+  ...
+# Subtest: slam audio is deduplicated between predicted zero and server lock
+ok 61 - slam audio is deduplicated between predicted zero and server lock
+  ---
+  duration_ms: 0.089025
+  type: 'test'
+  ...
+# Subtest: view uses separate opaque next-floor nodes and opaque old wall; marks are centered
+ok 62 - view uses separate opaque next-floor nodes and opaque old wall; marks are centered
+  ---
+  duration_ms: 0.410119
+  type: 'test'
+  ...
+1..62
+# tests 62
+# suites 0
+# pass 62
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4341.204148

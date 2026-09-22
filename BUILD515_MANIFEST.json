@@ -1,0 +1,72 @@
+{
+  "build": 515,
+  "version": "3.1.194",
+  "baseBuild": 514,
+  "files": [
+    {
+      "path": "README_BUILD515.md",
+      "bytes": 1881,
+      "sha256": "ff898b694a35914777baba8a5725e8e99bd7bbaee83ceb7f6cf4af126543fcbd"
+    },
+    {
+      "path": "docs/build515/tests.tap",
+      "bytes": 13717,
+      "sha256": "ce6344dbbcb0f87ef7240ab6f1310668260ba6c42d2d175b4838789ef9c896f2"
+    },
+    {
+      "path": "docs/build515/verification.md",
+      "bytes": 1943,
+      "sha256": "b1646ed9fdf285c182af8e306a9485bd516c7b61a67b73db78f9026910ce48ab"
+    },
+    {
+      "path": "index.html",
+      "bytes": 158160,
+      "sha256": "9ec7adb749c4b94f25d7e6074f0b7dfa091579f6704680536d324b6e044e2e76"
+    },
+    {
+      "path": "src/Styles/build515-quiz.css",
+      "bytes": 2494,
+      "sha256": "4f0fb8e98ae08142133d6de99b8835aad8b4e8345c91182007829e7c6e3adfe8"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "775cb794f44da5ca00f7fe11c07e45b470ba2efa644b5bc663228d14e928f106"
+    },
+    {
+      "path": "src/quiz/Audio513.js",
+      "bytes": 2194,
+      "sha256": "37b58d5d6d9cfc7eb7799d21bf54890096d2f22d262e31912a1addab6f3fc054"
+    },
+    {
+      "path": "src/quiz/Effects515.js",
+      "bytes": 2027,
+      "sha256": "d4bf5825128f0aac80fd5da055e61b0298b850c065a99a5e98b988d743edabf4"
+    },
+    {
+      "path": "src/quiz/View513.js",
+      "bytes": 20729,
+      "sha256": "4d20e4575c86542588454f009a674341c72e10bbe3deaf13bd4771958fdf1007"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "2a52087378c068b0c5ccc153ea93ff63d1d06093a55fec6948c2114fa7b10a24"
+    },
+    {
+      "path": "tests/build515-effects.test.mjs",
+      "bytes": 4434,
+      "sha256": "b162214dfb2a2338568c7fbee9edcb8cf89a6ca3e43be2e8a02e491f8975027b"
+    },
+    {
+      "path": "world-raid-offline515-assets.json",
+      "bytes": 38604,
+      "sha256": "c53f7d5e3acf5a25d0abeaa12dd752b39d1f225c05f18b4e5e93125905ba2f18"
+    },
+    {
+      "path": "world-raid-offline515-sw.js",
+      "bytes": 1844,
+      "sha256": "8fb474bb3d436feab1b36910799ce09780bd90605ef9f3ceb654d076ee5821ca"
+    }
+  ]
+}
