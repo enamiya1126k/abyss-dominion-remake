@@ -1,0 +1,10 @@
+208 tests pass, 0 fail.
+29 Build509 cases + 179 existing cases.
+1000 seeded full races and JSON restarts, 784 item pairs, 36 dice products.
+Server capability/privacy/authentication checks, four-viewer broadcast, exact huge integer math and ranking.
+Persistent gear, growth timing, stacking, defence, reflection, theft, AI information boundary, finite cutscenes.
+Retained-DOM paint, both atlases, multi-target volleys, hidden-tab cleanup, and 12-cell PNG decode.
+JavaScript parsed; import-map aliases, entry version and offline cache membership verified.
+No fake production modules included; missing original dependencies are test-only memory fixtures.
+Browser localhost preview is blocked in this environment (ERR_BLOCKED_BY_CLIENT). No iPhone/Safari visual or FPS verification.
+62 protected files match Build508 SHA256 exactly. Gorilla, other minigames, legacy luck rules/views, original 508 CSS and main entry preserved.

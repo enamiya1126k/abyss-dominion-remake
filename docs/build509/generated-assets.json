@@ -1,0 +1,16 @@
+{
+  "build": 509,
+  "assets": [
+    {
+      "path": "assets/luck509/items.png",
+      "generator": "image_gen",
+      "originalOutput": "exec-580c1394-266f-4fec-b9a0-03da51eca9fa.png",
+      "width": 1448,
+      "height": 1086,
+      "format": "RGBA PNG",
+      "layout": "4 columns x 3 rows; 362px square cells",
+      "treatment": "Original generated output copied without raster edits.",
+      "prompt": "Use case: stylized-concept. Asset type: production transparent fantasy racing item sprite atlas. Create exactly twelve separate premium 3D painted game icons in a STRICT 4 columns by 3 rows rectangular landscape atlas, each equal square cell, transparent background, generous empty padding (at least 17% on every edge in every cell). No icon may cross cell boundary. No text, no letters, no numbers, no cell borders, no backdrop, no floor, no drop shadow outside icon. All consistent polished gold and emerald/teal fantasy toy style with vivid accent colors and readable silhouettes. First row, left to right: a gold compound turbine with two stacked teal spinning gears; a tiny bright green plant growing a miniature red rocket as its flower; a gold hourglass with a red rocket sealed inside glass; a luminous purple electrical coil spool. Second row: a protective sky-blue balloon with gold shield charm; an orange battery with red electrical sparks and tiny lightning emblem; TWO dice together, one ivory and one ruby red, with black/gold pips only; an oversized blue-and-gold powerful rocket with triple engines pointing right. Third row: a gold and burgundy cannon with star-decorated barrel pointing right; a dramatic red and black winged spiked projectile with a small crown emblem; a silver teal crossbow with green telescope and a golden arrow; a gold steel wrench embracing a teal cogwheel. Strong distinction among icons, detailed sculpted materials with soft light, crisp cutout edges. Emphasize visibly empty separation between all icons. Output the atlas alone."
+    }
+  ]
+}
