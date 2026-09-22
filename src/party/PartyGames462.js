@@ -1,5 +1,5 @@
 // Only released games appear here. Future game adapters reuse the same party.
 export const PARTY_GAMES462=Object.freeze([
- {id:'luck',name:'運だけ大運動会',tag:'箱を選ぶ × 一斉オープン × 大逆転',players:'4人対戦 · 全8ラウンド · 不足席はAI',image:'./assets/luck507/stadium.png',description:'ロケットで空へ、バナナでつるん！ 選ぶのは箱ひとつ。最後の一箱まで、誰が勝つか分からない。'},
+ {id:'luck',name:'運だけ大運動会',tag:'ランダムな手札 × 読み合い × 攻撃中継',players:'4人対戦 · 全8ラウンド · 不足席はAI',image:'./assets/luck507/stadium.png',description:'箱を開けたら、4つのアイテムから勝負の1つを選べ！ 防御・反射・大加速。全員で直撃中継を見届けろ。'},
  {id:'gorilla',name:'ゴリラ大王の胸毛抜き',tag:'完全運 × 1〜3本の度胸試し × 大ぶっとび',players:'4人対戦 · 1〜3本ずつ · 不足席はAI',image:'./assets/gorilla502/cover.png',description:'胸元アップで、毛を1本。王の顔を見て、もう1本？ それとも交代？ ハズレで大激怒、引いた本人だけ遠くへ飛んでいく！'},
  {id:'canal',name:'用水路防衛隊',tag:'タップ捕獲 × 4人で連携 × 一網打尽',players:'4人協力 · 不足席はAI',image:'./assets/canal489/cover.png',description:'4人が同じ水場で大さわぎ！仲間の網に続けて連携捕獲。みんなの一網打尽で、家を60秒守り切れ！'},{id:'cabbage',name:'限界キャベツ千切り',tag:'連打 × 反射神経 × 大粉砕',players:'4人対戦 · 不足席はAI',image:'./assets/cabbage484/kitchen.png',description:'左右交互に、限界まで刻め！「切るな！」で止まれないと、まな板まで粉砕。'},{id:'race',name:'魔物レース',tag:'予想 × 育成 × 大逆転',players:'1〜4人 ＋ AI',image:'./assets/party462/monster-race.webp',description:'相棒を送り出し、勝者を見抜け。叩くタイミングと絆が勝負を変える！'},{id:'sugoroku',name:'カードすごろく',tag:'防御 × 奪取 × 覚醒',players:'4人対戦 · 不足席はAI',image:'./assets/sugoroku463/cover.png',description:'最初のゴールで優勝！ 手番に1枚の切り札と、割り込み防御で大逆転。'}]);

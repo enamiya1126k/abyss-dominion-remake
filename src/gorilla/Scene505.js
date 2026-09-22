@@ -46,7 +46,7 @@ export function draw505(canvas,g,assets,at,u={}){
  if(g.phase==='countdown')drawCountdown505(c,w,h,g,assets,at);
  return l;
 }
-export function drawCountdown505(c,w,h,g,assets,at){c.save();const shade=c.createRadialGradient(w/2,h*.48,0,w/2,h*.48,h*.7);shade.addColorStop(0,'#061e16ed');shade.addColorStop(1,'#061e1650');c.fillStyle=shade;c.fillRect(0,0,w,h);const sz=Math.min(w*.85,h*.68,360),x=(w-sz)/2,y=h*.43-sz*.5;if(assets.countdown)c.drawImage(assets.countdown,x,y,sz,sz);const write=(s,yy,size,color='#ffebb0',bold=false)=>{c.font=`${bold?'900 ':''}${size}px system-ui`;c.fillStyle=color;c.textAlign='center';c.fillText(s,w/2,yy)};const number=count505(g,at);c.shadowColor='#9c7437';c.shadowOffsetY=3;write(number,y+sz*.66,number.length>1?sz*.17:sz*.29,'#fff1bc',true);c.shadowOffsetY=0;c.restore()}
+export function drawCountdown505(c,w,h,g,assets,at){c.save();const shade=c.createRadialGradient(w/2,h*.48,0,w/2,h*.48,h*.7);shade.addColorStop(0,'#061e16ed');shade.addColorStop(1,'#061e1650');c.fillStyle=shade;c.fillRect(0,0,w,h);const sz=Math.min(w*.85,h*.68,360),x=(w-sz)/2,y=h*.43-sz*.5;if(assets.countdown)c.drawImage(assets.countdown,x,y,sz,sz);const write=(s,yy,size,color='#ffebb0',bold=false)=>{c.font=`${bold?'900 ':''}${size}px system-ui`;c.fillStyle=color;c.textAlign='center';c.fillText(s,w/2,yy)};const number=count505(g,at);c.shadowColor='#9c7437';c.shadowOffsetY=3;write(number,y+sz*.59,number.length>1?sz*.17:sz*.29,'#fff1bc',true);c.shadowOffsetY=0;c.restore()}
 // Shared original painters: the optimized renderer reuses the exact geometry,
 // colours, timing and composition instead of maintaining a second art definition.
 export const painters505=Object.freeze({cover,drawHair,tile,aura,shockwave,undercoat,drawPinch});
