@@ -1,0 +1,16 @@
+{
+  "build": 511,
+  "assets": [
+    {
+      "path": "assets/luck511/items.png",
+      "generator": "built-in image_gen",
+      "originalOutput": "exec-9f931653-e1df-48d9-a49b-116280bc6174.png",
+      "width": 1448,
+      "height": 1086,
+      "format": "RGBA PNG",
+      "layout": "4 columns × 3 rows",
+      "treatment": "Original generated output copied without raster edits. Exact dice faces are code-native CSS cubes.",
+      "prompt": "Use case: stylized-concept. Asset type: one production transparent sprite atlas for a premium fantasy racing game. Create exactly TWELVE separate item icons in a STRICT 4 columns by 3 rows rectangular landscape atlas of equal square cells. Every icon must be centered in its own cell with at least 18% clear padding on all four sides. Genuinely transparent background with alpha, no drawn checkerboard. Cohesive richly painted 3D toy treasures, polished gold trims, emerald and teal details, luminous colored accents, crisp silhouettes legible at 64px. Row 1 left to right: (1) an ornate violet hourglass with two glowing crystalline arrowheads growing upward, time-doubling crystal; (2) an emerald piggy bank with golden star coins stacked beside it; (3) a miniature gold solar collector holding a glowing amber sun in a glass orb; (4) a chunky gilded forge anvil with a red-hot golden hammer. Row 2 left to right: (5) two nested teal spiral wave rings with a bright cyan core, echo amplifier; (6) an ivory die within a gold monocle-like circular focus lens, with simple black pips; (7) a magnificent gold crown with a large ruby and purple velvet; (8) a twin-chamber emerald and gold supercharger engine with luminous aqua vents. Row 3 left to right: (9) a cluster of exactly three dice, ivory, ruby and sapphire, with simple contrasting pips; (10) a golden harvest cornucopia spilling small emerald gears and bright star coins; (11) an oversized white-gold comet rocket with a violet cosmic engine flame, pointing right; (12) a coiled teal-and-gold dragon-shaped rocket wrapped around a glowing golden energy orb, pointing right. No letters, no words, no labels, no numbers, no cell borders, no frame around cells, no floor, no background scenery. Icons must not overlap or touch cell boundaries. Transparent separation between all twelve. Output the atlas alone."
+    }
+  ]
+}
