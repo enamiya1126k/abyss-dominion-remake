@@ -1384,6 +1384,10 @@ export const QUESTIONS513=Object.freeze([
 
 const shuffle=(a,r)=>{for(let i=a.length-1;i>0;i--){const j=r(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
 export function drawQuestions513(randomInt,recent=[]){
- const seen=new Set(recent),categories=shuffle([...new Set(QUESTIONS513.map(q=>q.category))],randomInt).slice(0,10);
- return categories.map((category,i)=>{const difficulty=i<3?1:i<7?2:3,all=QUESTIONS513.filter(q=>q.category===category),fresh=all.filter(q=>!seen.has(q.id)),available=fresh.length?fresh:all,preferred=available.filter(q=>q.difficulty===difficulty),pool=preferred.length?preferred:available;return structuredClone(pool[randomInt(pool.length)])});
+ const recentSet=new Set(recent),used=new Set(),counts=new Map(),deck=[];
+ for(let i=0;i<20;i++){
+  const difficulty=i<6?1:i<13?2:3,all=QUESTIONS513.filter(q=>q.difficulty===difficulty&&!used.has(q.id)),fresh=all.filter(q=>!recentSet.has(q.id)),pool=fresh.length?fresh:all;
+  const categories=shuffle([...new Set(pool.map(q=>q.category))],randomInt).sort((a,b)=>(counts.get(a)??0)-(counts.get(b)??0)),category=categories.find(c=>c!==deck.at(-1)?.category)??categories[0],choices=pool.filter(q=>q.category===category),q=choices[randomInt(choices.length)];
+  deck.push(structuredClone(q));used.add(q.id);counts.set(category,(counts.get(category)??0)+1);
+ }return deck;
 }

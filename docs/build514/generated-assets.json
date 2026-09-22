@@ -1,0 +1,24 @@
+[
+  {
+    "asset": "assets/quiz514/divider.png",
+    "prompt": "Use case: stylized-concept. Asset type: transparent sprite for a premium fantasy survival quiz game. Create a tall narrow central descending stone partition seen from its front edge, with shallow 3D left and right faces receding backward, dividing two adjacent platforms. Reference image is STYLE ONLY: match its cracked charcoal stone, aged ornate gold trim, amber energy and realistic fantasy game rendering. Primary form must be a vertical narrow monolith, not a horizontal gate. Full object visible, straight rectangular blunt lower edge, no weapons or spikes. Portrait canvas about 1:3, object centered filling 75% width and 95% height. Gold side rails, subtle mechanical collars, a small amber jewel near the lower quarter and a dark blank plaque near the lower part to place a live digital counter with CSS. Top continues as stone not a crown. Genuinely transparent background, isolated object, clean alpha. No environment, no text, no numbers, no characters. Strong readable silhouette even displayed at 65px wide.",
+    "mode": "built-in image_gen",
+    "alteredAfterGeneration": false,
+    "size": [
+      726,
+      2167
+    ],
+    "sha256": "939d45d8afbec007375c95c7b4e9e6475d11caf6059a679770f29073966a2565"
+  },
+  {
+    "asset": "assets/quiz514/question-frame.png",
+    "prompt": "Use case: stylized-concept. Asset type: ornamental frame sprite for a mobile fantasy quiz question panel. Wide landscape frame 2:1, a single premium aged gold and dark charcoal stone border with understated amber gems at four corners, subtle engraved geometry. Corners occupy at most 8% of width, edge border is thin and elegant. The entire inner 85% rectangle must be genuinely transparent and completely empty, so live Japanese question text can be drawn on a dark panel beneath it. Outer background also truly transparent. Near rectangular shape with softly chamfered corners, balanced symmetrical front-facing flat UI frame, no perspective distortion. Matching expensive realistic dark fantasy game UI, tactile metal with restrained highlights. No letters, no numbers, no icons, no symbols inside, no banner blocking center, no watermark. A frame only, no background scene.",
+    "mode": "built-in image_gen",
+    "alteredAfterGeneration": false,
+    "size": [
+      1774,
+      887
+    ],
+    "sha256": "657c82ae988412f1a35048c199960ca94e83494b002b6ae1446073268e174893"
+  }
+]

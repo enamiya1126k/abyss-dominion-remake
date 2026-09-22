@@ -1,0 +1,1972 @@
+TAP version 13
+# Subtest: 1–4 humans always creates exactly four chefs; monster identity never affects scoring
+ok 1 - 1–4 humans always creates exactly four chefs; monster identity never affects scoring
+  ---
+  duration_ms: 2.110404
+  type: 'test'
+  ...
+# Subtest: seeded schedule covers all 45 seconds, warns before every stop and changes across matches
+ok 2 - seeded schedule covers all 45 seconds, warns before every stop and changes across matches
+  ---
+  duration_ms: 2.780956
+  type: 'test'
+  ...
+# Subtest: alternation, repeated side, minimum cadence, combos and floors are enforced by server
+ok 3 - alternation, repeated side, minimum cadence, combos and floors are enforced by server
+  ---
+  duration_ms: 0.326333
+  type: 'test'
+  ...
+# Subtest: every forbidden tap is charged from the stop boundary and negative points persist
+ok 4 - every forbidden tap is charged from the stop boundary and negative points persist
+  ---
+  duration_ms: 0.196306
+  type: 'test'
+  ...
+# Subtest: replays, forged times, invalid sides, before/after match and nonmonotonic inputs cannot earn points
+ok 5 - replays, forged times, invalid sides, before/after match and nonmonotonic inputs cannot earn points
+  ---
+  duration_ms: 0.184448
+  type: 'test'
+  ...
+# Subtest: finish waits for in-flight inputs, then seals scores with shared ranks for ties
+ok 6 - finish waits for in-flight inputs, then seals scores with shared ranks for ties
+  ---
+  duration_ms: 0.509418
+  type: 'test'
+  ...
+# Subtest: AI cadence is deterministic across server ticks and restart serialization
+ok 7 - AI cadence is deterministic across server ticks and restart serialization
+  ---
+  duration_ms: 2.150595
+  type: 'test'
+  ...
+# Subtest: public packets do not expose ownership rosters, RNG or future stop schedule
+ok 8 - public packets do not expose ownership rosters, RNG or future stop schedule
+  ---
+  duration_ms: 0.671623
+  type: 'test'
+  ...
+# Subtest: only current members may select owned monsters and host needs everyone ready, connected and updated
+ok 9 - only current members may select owned monsters and host needs everyone ready, connected and updated
+  ---
+  duration_ms: 0.910794
+  type: 'test'
+  ...
+# Subtest: batched retries are deduplicated; scoring is durable before packets are broadcast
+ok 10 - batched retries are deduplicated; scoring is durable before packets are broadcast
+  ---
+  duration_ms: 1.123875
+  type: 'test'
+  ...
+# Subtest: spectator, old round, oversized payloads and queue flooding do not create arbitrary score
+ok 11 - spectator, old round, oversized payloads and queue flooding do not create arbitrary score
+  ---
+  duration_ms: 1.549517
+  type: 'test'
+  ...
+# Subtest: disconnection and restart still finish; idle rooms expire without touching other games
+ok 12 - disconnection and restart still finish; idle rooms expire without touching other games
+  ---
+  duration_ms: 0.903884
+  type: 'test'
+  ...
+# Subtest: UI switches lobby/play/results; live score changes keep tap buttons mounted
+ok 13 - UI switches lobby/play/results; live score changes keep tap buttons mounted
+  ---
+  duration_ms: 14.478246
+  type: 'test'
+  ...
+# Subtest: UI escapes names, never treats pointer follow-up click as another tap and ignores held keys
+ok 14 - UI escapes names, never treats pointer follow-up click as another tap and ignores held keys
+  ---
+  duration_ms: 0.507265
+  type: 'test'
+  ...
+# Subtest: clock calibration uses round-trip midpoint and ignores foreign or stale replies
+ok 15 - clock calibration uses round-trip midpoint and ignores foreign or stale replies
+  ---
+  duration_ms: 0.159471
+  type: 'test'
+  ...
+# Subtest: 100 rapid enemy releases cancel native zoom, including enemies removed before touchend
+ok 16 - 100 rapid enemy releases cancel native zoom, including enemies removed before touchend
+  ---
+  duration_ms: 2.625671
+  type: 'test'
+  ...
+# Subtest: native header/footer buttons and keyboard clicks remain usable; outside screens are untouched
+ok 17 - native header/footer buttons and keyboard clicks remain usable; outside screens are untouched
+  ---
+  duration_ms: 0.332992
+  type: 'test'
+  ...
+# Subtest: empty playfield and simultaneous touches cannot start native zoom; cancel clears tracked ids
+ok 18 - empty playfield and simultaneous touches cannot start native zoom; cancel clears tracked ids
+  ---
+  duration_ms: 0.237278
+  type: 'test'
+  ...
+# Subtest: scaled exit requests scale 1 then restores original viewport; quick replay cannot restore a stale lock
+ok 19 - scaled exit requests scale 1 then restores original viewport; quick replay cannot restore a stale lock
+  ---
+  duration_ms: 0.328315
+  type: 'test'
+  ...
+# Subtest: cleanup never overwrites another screen viewport settings
+ok 20 - cleanup never overwrites another screen viewport settings
+  ---
+  duration_ms: 0.16563
+  type: 'test'
+  ...
+# Subtest: every authenticated member can choose all four colors; forged target changes only the sender
+ok 21 - every authenticated member can choose all four colors; forged target changes only the sender
+  ---
+  duration_ms: 10.656077
+  type: 'test'
+  ...
+# Subtest: invalid color and stale membership reject atomically without changing saved preference
+ok 22 - invalid color and stale membership reject atomically without changing saved preference
+  ---
+  duration_ms: 2.144977
+  type: 'test'
+  ...
+# Subtest: selected color follows identity across room changes, leave/rejoin, restart and client roster refresh
+ok 23 - selected color follows identity across room changes, leave/rejoin, restart and client roster refresh
+  ---
+  duration_ms: 7.852288
+  type: 'test'
+  ...
+# Subtest: match snapshots freeze colors; AI uses unused colors; result preferences apply on replay
+ok 24 - match snapshots freeze colors; AI uses unused colors; result preferences apply on replay
+  ---
+  duration_ms: 11.16152
+  type: 'test'
+  ...
+# Subtest: legacy rooms without color fields get safe defaults; duplicate human preferences remain their choice
+ok 25 - legacy rooms without color fields get safe defaults; duplicate human preferences remain their choice
+  ---
+  duration_ms: 1.679414
+  type: 'test'
+  ...
+# Subtest: own frame opens color settings; selection saves once after confirmation and server acknowledgement
+ok 26 - own frame opens color settings; selection saves once after confirmation and server acknowledgement
+  ---
+  duration_ms: 1.056364
+  type: 'test'
+  ...
+# Subtest: old server, active match, failed send and Escape cannot silently change a color
+ok 27 - old server, active match, failed send and Escape cannot silently change a color
+  ---
+  duration_ms: 0.429558
+  type: 'test'
+  ...
+# Subtest: lounge and all four in-game panels use the player color rather than a seat color
+ok 28 - lounge and all four in-game panels use the player color rather than a seat color
+  ---
+  duration_ms: 0.804043
+  type: 'test'
+  ...
+# Subtest: species hit counts, speed order and fourfold giant size match the requested roles
+ok 29 - species hit counts, speed order and fourfold giant size match the requested roles
+  ---
+  duration_ms: 4.48696
+  type: 'test'
+  ...
+# Subtest: new spawns start at the inflow; bass swims in waves without changing route on hits
+ok 30 - new spawns start at the inflow; bass swims in waves without changing route on hits
+  ---
+  duration_ms: 0.614527
+  type: 'test'
+  ...
+# Subtest: giant fires every second after its windup; each uncaught missile damages the house once
+ok 31 - giant fires every second after its windup; each uncaught missile damages the house once
+  ---
+  duration_ms: 0.665303
+  type: 'test'
+  ...
+# Subtest: one tap intercepts a live missile even immediately after an animal stroke; no double credit
+ok 32 - one tap intercepts a live missile even immediately after an animal stroke; no double credit
+  ---
+  duration_ms: 0.491401
+  type: 'test'
+  ...
+# Subtest: late taps, malformed inputs and retransmits cannot erase impact or intercept other objects
+ok 33 - late taps, malformed inputs and retransmits cannot erase impact or intercept other objects
+  ---
+  duration_ms: 0.706987
+  type: 'test'
+  ...
+# Subtest: capturing the launcher stops new launches; existing airborne missiles remain interceptable
+ok 34 - capturing the launcher stops new launches; existing airborne missiles remain interceptable
+  ---
+  duration_ms: 0.352111
+  type: 'test'
+  ...
+# Subtest: the shared super net also catches airborne missiles and still deals three hits to a giant
+ok 35 - the shared super net also catches airborne missiles and still deals three hits to a giant
+  ---
+  duration_ms: 0.290488
+  type: 'test'
+  ...
+# Subtest: server restart and delayed advancement preserve missile schedule and damage
+ok 36 - server restart and delayed advancement preserve missile schedule and damage
+  ---
+  duration_ms: 1.022933
+  type: 'test'
+  ...
+# Subtest: rendered missile and its touch target share one position, vanish at arrival, and remain on stage
+ok 37 - rendered missile and its touch target share one position, vanish at arrival, and remain on stage
+  ---
+  duration_ms: 0.641658
+  type: 'test'
+  ...
+# Subtest: touching a missile fires immediately once; regular animals still commit on release; wire payload keeps missile ids
+ok 38 - touching a missile fires immediately once; regular animals still commit on release; wire payload keeps missile ids
+  ---
+  duration_ms: 0.846056
+  type: 'test'
+  ...
+# Subtest: seeded gameplay: idle teams lose; deliberate play can win without an unbeatable giant
+ok 39 - seeded gameplay: idle teams lose; deliberate play can win without an unbeatable giant
+  ---
+  duration_ms: 187.283986
+  type: 'test'
+  ...
+# Subtest: host can set another member color for this room without changing their account preference
+ok 40 - host can set another member color for this room without changing their account preference
+  ---
+  duration_ms: 12.259447
+  type: 'test'
+  ...
+# Subtest: host color actions reject invalid values, departed/rejoined membership and active matches
+ok 41 - host color actions reject invalid values, departed/rejoined membership and active matches
+  ---
+  duration_ms: 3.316875
+  type: 'test'
+  ...
+# Subtest: empty seats configure AI colors, while occupied seats reject AI impersonation; replay preserves settings
+ok 42 - empty seats configure AI colors, while occupied seats reject AI impersonation; replay preserves settings
+  ---
+  duration_ms: 8.681689
+  type: 'test'
+  ...
+# Subtest: a new-rule start rejects mixed-version parties; old active matches keep their original rules
+ok 43 - a new-rule start rejects mixed-version parties; old active matches keep their original rules
+  ---
+  duration_ms: 1.986527
+  type: 'test'
+  ...
+# Subtest: coordinator receives, authenticates, orders and deduplicates missile interception over the real input queue
+ok 44 - coordinator receives, authenticates, orders and deduplicates missile interception over the real input queue
+  ---
+  duration_ms: 10.534655
+  type: 'test'
+  ...
+# Subtest: host member menu keeps removal and opens a room color dialog; save acknowledges the selected target
+ok 45 - host member menu keeps removal and opens a room color dialog; save acknowledges the selected target
+  ---
+  duration_ms: 1.330338
+  type: 'test'
+  ...
+# Subtest: empty slot color menu is host-only, and a join invalidates an open empty-slot dialog
+ok 46 - empty slot color menu is host-only, and a join invalidates an open empty-slot dialog
+  ---
+  duration_ms: 0.727307
+  type: 'test'
+  ...
+# Subtest: client sends missile id, not a forged negative creature id; rapid follow-up taps do not duplicate sends
+ok 47 - client sends missile id, not a forged negative creature id; rapid follow-up taps do not duplicate sends
+  ---
+  duration_ms: 0.916933
+  type: 'test'
+  ...
+# Subtest: cabbage: real party host/guest/AI colors survive start, public projection, and persisted restart
+ok 48 - cabbage: real party host/guest/AI colors survive start, public projection, and persisted restart
+  ---
+  duration_ms: 12.213368
+  type: 'test'
+  ...
+# Subtest: sugoroku: real party host/guest/AI colors survive start, public projection, and persisted restart
+ok 49 - sugoroku: real party host/guest/AI colors survive start, public projection, and persisted restart
+  ---
+  duration_ms: 7.551754
+  type: 'test'
+  ...
+# Subtest: race: real party host/guest/AI colors survive start, public projection, and persisted restart
+ok 50 - race: real party host/guest/AI colors survive start, public projection, and persisted restart
+  ---
+  duration_ms: 466.149971
+  type: 'test'
+  ...
+# Subtest: solo sugoroku replay keeps selected AI and human colors
+ok 51 - solo sugoroku replay keeps selected AI and human colors
+  ---
+  duration_ms: 2.718562
+  type: 'test'
+  ...
+# Subtest: legacy snapshots resolve colors by identity without mutation; malicious color values never become CSS
+ok 52 - legacy snapshots resolve colors by identity without mutation; malicious color values never become CSS
+  ---
+  duration_ms: 0.246041
+  type: 'test'
+  ...
+# Subtest: color selection does not consume RNG or change cabbage scores and sugoroku cards/movement
+ok 53 - color selection does not consume RNG or change cabbage scores and sugoroku cards/movement
+  ---
+  duration_ms: 43.078498
+  type: 'test'
+  ...
+# Subtest: cabbage panels and sugoroku panels/pawns render the frozen player color
+ok 54 - cabbage panels and sugoroku panels/pawns render the frozen player color
+  ---
+  duration_ms: 21.626911
+  type: 'test'
+  ...
+# Subtest: race tickets use the owner color, while horse number chips keep their lane colors
+ok 55 - race tickets use the owner color, while horse number chips keep their lane colors
+  ---
+  duration_ms: 384.404231
+  type: 'test'
+  ...
+# Subtest: countdown honors the existing start instant, changes only once per beat, and respects reduced motion
+ok 56 - countdown honors the existing start instant, changes only once per beat, and respects reduced motion
+  ---
+  duration_ms: 0.668919
+  type: 'test'
+  ...
+# Subtest: 1 humans: new rules and chosen colors synchronize to all players and AI
+ok 57 - 1 humans: new rules and chosen colors synchronize to all players and AI
+  ---
+  duration_ms: 10.172458
+  type: 'test'
+  ...
+# Subtest: 2 humans: new rules and chosen colors synchronize to all players and AI
+ok 58 - 2 humans: new rules and chosen colors synchronize to all players and AI
+  ---
+  duration_ms: 2.573223
+  type: 'test'
+  ...
+# Subtest: 3 humans: new rules and chosen colors synchronize to all players and AI
+ok 59 - 3 humans: new rules and chosen colors synchronize to all players and AI
+  ---
+  duration_ms: 3.276644
+  type: 'test'
+  ...
+# Subtest: 4 humans: new rules and chosen colors synchronize to all players and AI
+ok 60 - 4 humans: new rules and chosen colors synchronize to all players and AI
+  ---
+  duration_ms: 5.406217
+  type: 'test'
+  ...
+# Subtest: 50 seconds without visible timer, then exact 10-to-0 countdown and a 60-second deadline
+ok 61 - 50 seconds without visible timer, then exact 10-to-0 countdown and a 60-second deadline
+  ---
+  duration_ms: 0.561857
+  type: 'test'
+  ...
+# Subtest: reaction and camera movement pause the shared turn budget; continuing does not grant another 60s
+ok 62 - reaction and camera movement pause the shared turn budget; continuing does not grant another 60s
+  ---
+  duration_ms: 0.357259
+  type: 'test'
+  ...
+# Subtest: one, two, or three safe pulls are allowed; each pull reaches a full-view reaction first
+ok 63 - one, two, or three safe pulls are allowed; each pull reaches a full-view reaction first
+  ---
+  duration_ms: 0.547706
+  type: 'test'
+  ...
+# Subtest: all 30 hairs can be the secret loser, across every first seat; the loser is not exposed until the reveal
+ok 64 - all 30 hairs can be the secret loser, across every first seat; the loser is not exposed until the reveal
+  ---
+  duration_ms: 1.547715
+  type: 'test'
+  ...
+# Subtest: bumps and curly hair have no special odds or public hints; no secrets leak in any phase
+ok 65 - bumps and curly hair have no special odds or public hints; no secrets leak in any phase
+  ---
+  duration_ms: 1.534085
+  type: 'test'
+  ...
+# Subtest: unattended play and delayed ticks are deterministic and bounded; an expired decision passes without another pull
+ok 66 - unattended play and delayed ticks are deterministic and bounded; an expired decision passes without another pull
+  ---
+  duration_ms: 11.372049
+  type: 'test'
+  ...
+# Subtest: duplicates, stale choices, early input, late input, removed hairs and contradictory decisions reject safely
+ok 67 - duplicates, stale choices, early input, late input, removed hairs and contradictory decisions reject safely
+  ---
+  duration_ms: 0.410549
+  type: 'test'
+  ...
+# Subtest: old clients cannot start or become ready in a 503 game; ownership and host gates still apply
+ok 68 - old clients cannot start or become ready in a 503 game; ownership and host gates still apply
+  ---
+  duration_ms: 6.109809
+  type: 'test'
+  ...
+# Subtest: legacy 502 active matches are projected and finished with legacy rules, then replay uses 503
+ok 69 - legacy 502 active matches are projected and finished with legacy rules, then replay uses 503
+  ---
+  duration_ms: 9.171539
+  type: 'test'
+  ...
+# Subtest: authoritative decisions survive disk restart and keep all four clients identical without charges
+ok 70 - authoritative decisions survive disk restart and keep all four clients identical without charges
+  ---
+  duration_ms: 11.453131
+  type: 'test'
+  ...
+# Subtest: replay and list remain idempotent; late old-result messages cannot delete the next minigame
+ok 71 - replay and list remain idempotent; late old-result messages cannot delete the next minigame
+  ---
+  duration_ms: 6.777406
+  type: 'test'
+  ...
+# Subtest: front-end burst emits one command and waits for the reveal; decision burst also emits once
+ok 72 - front-end burst emits one command and waits for the reveal; decision burst also emits once
+  ---
+  duration_ms: 4.358766
+  type: 'test'
+  ...
+# Subtest: camera exposes chest only for selection, pulls back for every expression, and respects reduced motion
+ok 73 - camera exposes chest only for selection, pulls back for every expression, and respects reduced motion
+  ---
+  duration_ms: 0.448177
+  type: 'test'
+  ...
+# Subtest: 30 invisible 44px touch targets fit phone widths without hiding behind the top cue
+ok 74 - 30 invisible 44px touch targets fit phone widths without hiding behind the top cue
+  ---
+  duration_ms: 1.010715
+  type: 'test'
+  ...
+# Subtest: long-flight loser lands after every other monster but before the result
+ok 75 - long-flight loser lands after every other monster but before the result
+  ---
+  duration_ms: 0.227143
+  type: 'test'
+  ...
+# Subtest: new lobby removes 10-second promise, play has no always-visible meter, results keep two clear buttons
+ok 76 - new lobby removes 10-second promise, play has no always-visible meter, results keep two clear buttons
+  ---
+  duration_ms: 5.071042
+  type: 'test'
+  ...
+# Subtest: all 30 hairs can trigger the first-turn drum, both unbiased coin outcomes work without reaching a pain threshold
+ok 77 - all 30 hairs can trigger the first-turn drum, both unbiased coin outcomes work without reaching a pain threshold
+  ---
+  duration_ms: 4.748815
+  type: 'test'
+  ...
+# Subtest: safe/out views are identical before the 50/50 reveal; hidden decks and coin index never cross the network
+ok 78 - safe/out views are identical before the 50/50 reveal; hidden decks and coin index never cross the network
+  ---
+  duration_ms: 1.343357
+  type: 'test'
+  ...
+# Subtest: mercy keeps the pulled hair removed, carries time and pain, and picks the next trap from remaining hairs
+ok 79 - mercy keeps the pulled hair removed, carries time and pain, and picks the next trap from remaining hairs
+  ---
+  duration_ms: 0.47664
+  type: 'test'
+  ...
+# Subtest: duplicate pulls and forbidden inputs during drumming cannot consume coins or alter outcomes
+ok 80 - duplicate pulls and forbidden inputs during drumming cannot consume coins or alter outcomes
+  ---
+  duration_ms: 0.654017
+  type: 'test'
+  ...
+# Subtest: a lucky complete pluck ends as all-safe, rather than selecting from an empty set or hanging
+ok 81 - a lucky complete pluck ends as all-safe, rather than selecting from an empty set or hanging
+  ---
+  duration_ms: 0.94794
+  type: 'test'
+  ...
+# Subtest: delayed ticks and restart checkpoints resolve the same precommitted coin even in the middle of drumming
+ok 82 - delayed ticks and restart checkpoints resolve the same precommitted coin even in the middle of drumming
+  ---
+  duration_ms: 1.964143
+  type: 'test'
+  ...
+# Subtest: 8 nondecreasing expression levels: bumps are exactly double; picked history survives every handoff/reconnect
+ok 83 - 8 nondecreasing expression levels: bumps are exactly double; picked history survives every handoff/reconnect
+  ---
+  duration_ms: 0.91436
+  type: 'test'
+  ...
+# Subtest: relocated roots cluster centrally and 30 separate 44px targets fit small phones and the short landscape layout
+ok 84 - relocated roots cluster centrally and 30 separate 44px targets fit small phones and the short landscape layout
+  ---
+  duration_ms: 1.085268
+  type: 'test'
+  ...
+# Subtest: tweezers use configured colors and current actor, including AI; monster badge stays inside the stage below the cue
+ok 85 - tweezers use configured colors and current actor, including AI; monster badge stays inside the stage below the cue
+  ---
+  duration_ms: 1.468005
+  type: 'test'
+  ...
+# Subtest: drumming has identical suspense visuals and no flights; only out launches, reduced motion removes shakes and flight
+ok 86 - drumming has identical suspense visuals and no flights; only out launches, reduced motion removes shakes and flight
+  ---
+  duration_ms: 0.480124
+  type: 'test'
+  ...
+# Subtest: server start, four views, 504 capability guard and all-safe result buttons use the real coordinator
+ok 87 - server start, four views, 504 capability guard and all-safe result buttons use the real coordinator
+  ---
+  duration_ms: 14.173145
+  type: 'test'
+  ...
+# Subtest: existing 503 games remain deterministic on their original rule engine
+ok 88 - existing 503 games remain deterministic on their original rule engine
+  ---
+  duration_ms: 0.563119
+  type: 'test'
+  ...
+# Subtest: hidden pinch can leap to near-fury; no hair, capture count, trap or coin is consumed
+ok 89 - hidden pinch can leap to near-fury; no hair, capture count, trap or coin is consumed
+  ---
+  duration_ms: 2.62392
+  type: 'test'
+  ...
+# Subtest: pinch results remain concealed until reaction and persist identically across restart
+ok 90 - pinch results remain concealed until reaction and persist identically across restart
+  ---
+  duration_ms: 1.067821
+  type: 'test'
+  ...
+# Subtest: wrong player, stale seq, invalid spot, early/late input and duplicate bursts cannot reroll
+ok 91 - wrong player, stale seq, invalid spot, early/late input and duplicate bursts cannot reroll
+  ---
+  duration_ms: 0.500245
+  type: 'test'
+  ...
+# Subtest: a pinch and two hairs share the three-action cap; a single pinch can also pass the turn
+ok 92 - a pinch and two hairs share the three-action cap; a single pinch can also pass the turn
+  ---
+  duration_ms: 0.790532
+  type: 'test'
+  ...
+# Subtest: repeat pinching consumes actions and time without reusing the same event id
+ok 93 - repeat pinching consumes actions and time without reusing the same event id
+  ---
+  duration_ms: 0.864735
+  type: 'test'
+  ...
+# Subtest: near-fury does not bias either drumming outcome or expose a loser in advance
+ok 94 - near-fury does not bias either drumming outcome or expose a loser in advance
+  ---
+  duration_ms: 0.267103
+  type: 'test'
+  ...
+# Subtest: every long strand is directly selectable at phone sizes; only the actual nipple center pinches
+ok 95 - every long strand is directly selectable at phone sizes; only the actual nipple center pinches
+  ---
+  duration_ms: 16.260904
+  type: 'test'
+  ...
+# Subtest: all four pinch badges retain player color, with paused timer and reduced camera motion
+ok 96 - all four pinch badges retain player color, with paused timer and reduced camera motion
+  ---
+  duration_ms: 0.730853
+  type: 'test'
+  ...
+# Subtest: production coordinator synchronizes pinch to all four clients and persists the unrevealed draw
+ok 97 - production coordinator synchronizes pinch to all four clients and persists the unrevealed draw
+  ---
+  duration_ms: 14.621461
+  type: 'test'
+  ...
+# Subtest: 505 markup has no narration, multiplier, odds or reaction popups; real controls remain
+ok 98 - 505 markup has no narration, multiplier, odds or reaction popups; real controls remain
+  ---
+  duration_ms: 5.088758
+  type: 'test'
+  ...
+# Subtest: front-end sends only one pinch under rapid taps; compatibility click cannot select a different overlapping hair
+ok 99 - front-end sends only one pinch under rapid taps; compatibility click cannot select a different overlapping hair
+  ---
+  duration_ms: 0.69554
+  type: 'test'
+  ...
+# Subtest: older in-flight rooms retain their engine and do not accept the hidden action
+ok 100 - older in-flight rooms retain their engine and do not accept the hidden action
+  ---
+  duration_ms: 1.30535
+  type: 'test'
+  ...
+# Subtest: a sixty-second choice does not repaint the same scene 1800 times
+ok 101 - a sixty-second choice does not repaint the same scene 1800 times
+  ---
+  duration_ms: 10.788718
+  type: 'test'
+  ...
+# Subtest: pinch/pull animations cache stationary hair; the active strand is still drawn every frame
+ok 102 - pinch/pull animations cache stationary hair; the active strand is still drawn every frame
+  ---
+  duration_ms: 3.264095
+  type: 'test'
+  ...
+# Subtest: resizing, new assets, new game, picked hairs and pending selection invalidate an otherwise stationary scene
+ok 103 - resizing, new assets, new game, picked hairs and pending selection invalidate an otherwise stationary scene
+  ---
+  duration_ms: 4.709856
+  type: 'test'
+  ...
+# Subtest: countdown numbers refresh once per visible value, and the settled camera repaints once
+ok 104 - countdown numbers refresh once per visible value, and the settled camera repaints once
+  ---
+  duration_ms: 3.939504
+  type: 'test'
+  ...
+# Subtest: cache memory stays bounded across every hair and camera size; leaving frees each offscreen surface
+ok 105 - cache memory stays bounded across every hair and camera size; leaving frees each offscreen surface
+  ---
+  duration_ms: 13.346578
+  type: 'test'
+  ...
+# Subtest: all pointer targets follow the exact old camera path through every animation
+ok 106 - all pointer targets follow the exact old camera path through every animation
+  ---
+  duration_ms: 58.858997
+  type: 'test'
+  ...
+# Subtest: all authoritative phases reuse the play skeleton but lobby, result, player and game changes rebuild
+ok 107 - all authoritative phases reuse the play skeleton but lobby, result, player and game changes rebuild
+  ---
+  duration_ms: 1.001601
+  type: 'test'
+  ...
+# Subtest: repeated network/timer updates coalesce into one frame and stop rewriting unchanged DOM values
+ok 108 - repeated network/timer updates coalesce into one frame and stop rewriting unchanged DOM values
+  ---
+  duration_ms: 6.07051
+  type: 'test'
+  ...
+# Subtest: authoritative phase transitions refresh the retained DOM, timer and targets without remounting
+ok 109 - authoritative phase transitions refresh the retained DOM, timer and targets without remounting
+  ---
+  duration_ms: 2.528986
+  type: 'test'
+  ...
+# Subtest: background tabs stop drawing and detached scenes cancel queued work and free surfaces
+ok 110 - background tabs stop drawing and detached scenes cancel queued work and free surfaces
+  ---
+  duration_ms: 2.455966
+  type: 'test'
+  ...
+# Subtest: an unchanged scene repaints once after returning from a hidden tab or a restored canvas context
+ok 111 - an unchanged scene repaints once after returning from a hidden tab or a restored canvas context
+  ---
+  duration_ms: 1.919086
+  type: 'test'
+  ...
+# Subtest: all 100 random values map to intended probabilities; boxes share identical distribution
+ok 112 - all 100 random values map to intended probabilities; boxes share identical distribution
+  ---
+  duration_ms: 2.168762
+  type: 'test'
+  ...
+# Subtest: 1–4 humans get exactly four entrants and preserve chosen monsters, human and AI colors
+ok 113 - 1–4 humans get exactly four entrants and preserve chosen monsters, human and AI colors
+  ---
+  duration_ms: 1.21348
+  type: 'test'
+  ...
+# Subtest: invalid sealed draws cannot start or partially mutate a game
+ok 114 - invalid sealed draws cannot start or partially mutate a game
+  ---
+  duration_ms: 0.691423
+  type: 'test'
+  ...
+# Subtest: public state conceals the sealed plan, other choices and future outcomes
+ok 115 - public state conceals the sealed plan, other choices and future outcomes
+  ---
+  duration_ms: 1.01415
+  type: 'test'
+  ...
+# Subtest: rapid duplicate input acknowledges once; changing a locked box cannot reroll
+ok 116 - rapid duplicate input acknowledges once; changing a locked box cannot reroll
+  ---
+  duration_ms: 0.514716
+  type: 'test'
+  ...
+# Subtest: invalid, stale, early, late and spectator inputs do not mutate the draw
+ok 117 - invalid, stale, early, late and spectator inputs do not mutate the draw
+  ---
+  duration_ms: 0.481466
+  type: 'test'
+  ...
+# Subtest: all four choices reveal simultaneously after minimum time, without input-order advantage
+ok 118 - all four choices reveal simultaneously after minimum time, without input-order advantage
+  ---
+  duration_ms: 0.740647
+  type: 'test'
+  ...
+# Subtest: AI and absent humans use their sealed automatic choice; late human cannot replace it
+ok 119 - AI and absent humans use their sealed automatic choice; late human cannot replace it
+  ---
+  duration_ms: 0.471992
+  type: 'test'
+  ...
+# Subtest: banana cannot produce negative distance; a pit loses the round but never freezes the race
+ok 120 - banana cannot produce negative distance; a pit loses the round but never freezes the race
+  ---
+  duration_ms: 0.622218
+  type: 'test'
+  ...
+# Subtest: last place can leap into first with a rocket; catch-up is bounded and computed before movement
+ok 121 - last place can leap into first with a rocket; catch-up is bounded and computed before movement
+  ---
+  duration_ms: 0.385181
+  type: 'test'
+  ...
+# Subtest: equal distances are shared ranks, including a four-way winner
+ok 122 - equal distances are shared ranks, including a four-way winner
+  ---
+  duration_ms: 1.626615
+  type: 'test'
+  ...
+# Subtest: delayed ticks and JSON restart recover exactly the same eight-round outcome
+ok 123 - delayed ticks and JSON restart recover exactly the same eight-round outcome
+  ---
+  duration_ms: 1.049303
+  type: 'test'
+  ...
+# Subtest: all sampled full games finish within 158 seconds and distances stay bounded
+ok 124 - all sampled full games finish within 158 seconds and distances stay bounded
+  ---
+  duration_ms: 54.483396
+  type: 'test'
+  ...
+# Subtest: production coordinator runs four clients with matching public events and no base-race room
+ok 125 - production coordinator runs four clients with matching public events and no base-race room
+  ---
+  duration_ms: 11.408504
+  type: 'test'
+  ...
+# Subtest: server restart preserves sealed choices, pending phase and replayed selections
+ok 126 - server restart preserves sealed choices, pending phase and replayed selections
+  ---
+  duration_ms: 6.591095
+  type: 'test'
+  ...
+# Subtest: disconnects auto-select; reconnects can participate next round without reset
+ok 127 - disconnects auto-select; reconnects can participate next round without reset
+  ---
+  duration_ms: 3.894556
+  type: 'test'
+  ...
+# Subtest: joining a running game is spectator-only; replay adds that person as a player
+ok 128 - joining a running game is spectator-only; replay adds that person as a player
+  ---
+  duration_ms: 2.514695
+  type: 'test'
+  ...
+# Subtest: result can return to party catalog and switch to existing gorilla game
+ok 129 - result can return to party catalog and switch to existing gorilla game
+  ---
+  duration_ms: 1.481035
+  type: 'test'
+  ...
+# Subtest: host-only start, readiness and protocol guards reject outdated clients
+ok 130 - host-only start, readiness and protocol guards reject outdated clients
+  ---
+  duration_ms: 1.042984
+  type: 'test'
+  ...
+# Subtest: foreign player id cannot choose for another seat; live switching and color changes are blocked
+ok 131 - foreign player id cannot choose for another seat; live switching and color changes are blocked
+  ---
+  duration_ms: 3.735987
+  type: 'test'
+  ...
+# Subtest: host transfer and stale result cleanup retain party correctness
+ok 132 - host transfer and stale result cleanup retain party correctness
+  ---
+  duration_ms: 1.848239
+  type: 'test'
+  ...
+# Subtest: failed persistence rolls back choices instead of accepting an unrecorded draw
+ok 133 - failed persistence rolls back choices instead of accepting an unrecorded draw
+  ---
+  duration_ms: 1.298719
+  type: 'test'
+  ...
+# Subtest: play markup includes exactly three real buttons, four colored runners, accessible labels and result ties
+ok 134 - play markup includes exactly three real buttons, four colored runners, accessible labels and result ties
+  ---
+  duration_ms: 1.596488
+  type: 'test'
+  ...
+# Subtest: phase and score updates keep the play DOM signature while game, roster and result changes rebuild
+ok 135 - phase and score updates keep the play DOM signature while game, roster and result changes rebuild
+  ---
+  duration_ms: 1.518962
+  type: 'test'
+  ...
+# Subtest: every motion stays inside the track, starts/ends exactly and honors reduced motion
+ok 136 - every motion stays inside the track, starts/ends exactly and honors reduced motion
+  ---
+  duration_ms: 4.643075
+  type: 'test'
+  ...
+# Subtest: selection updates only once per second, running updates at bounded frame cadence
+ok 137 - selection updates only once per second, running updates at bounded frame cadence
+  ---
+  duration_ms: 1.132719
+  type: 'test'
+  ...
+# Subtest: 40 ticks coalesce to one frame; unchanged state causes zero DOM mutations
+ok 138 - 40 ticks coalesce to one frame; unchanged state causes zero DOM mutations
+  ---
+  duration_ms: 4.130733
+  type: 'test'
+  ...
+# Subtest: click bursts send one request and mark the selected box without replacing DOM
+ok 139 - click bursts send one request and mark the selected box without replacing DOM
+  ---
+  duration_ms: 0.906238
+  type: 'test'
+  ...
+# Subtest: the same play nodes update across reveal, run, settle and next-round choice
+ok 140 - the same play nodes update across reveal, run, settle and next-round choice
+  ---
+  duration_ms: 1.406903
+  type: 'test'
+  ...
+# Subtest: hidden tabs queue no frames; unmount cancels outstanding work and listeners
+ok 141 - hidden tabs queue no frames; unmount cancels outstanding work and listeners
+  ---
+  duration_ms: 0.60956
+  type: 'test'
+  ...
+# Subtest: failed sends release the input lock and display a recoverable error
+ok 142 - failed sends release the input lock and display a recoverable error
+  ---
+  duration_ms: 0.68244
+  type: 'test'
+  ...
+# Subtest: generated assets load completely, are correctly dimensioned and contain genuine alpha
+ok 143 - generated assets load completely, are correctly dimensioned and contain genuine alpha
+  ---
+  duration_ms: 346.888451
+  type: 'test'
+  ...
+# Subtest: each of 128 chests holds four distinct random items; all random bounds are valid
+ok 144 - each of 128 chests holds four distinct random items; all random bounds are valid
+  ---
+  duration_ms: 3.051594
+  type: 'test'
+  ...
+# Subtest: malformed entropy cannot partially start; one to four people preserve monster/color and fill AI seats
+ok 145 - malformed entropy cannot partially start; one to four people preserve monster/color and fill AI seats
+  ---
+  duration_ms: 8.753638
+  type: 'test'
+  ...
+# Subtest: box and hand choices are separately private; no future random outcomes leak to another player or spectator
+ok 146 - box and hand choices are separately private; no future random outcomes leak to another player or spectator
+  ---
+  duration_ms: 1.624181
+  type: 'test'
+  ...
+# Subtest: duplicate choice bursts cannot reroll or change choices; stale phase, range, seat and deadline reject
+ok 147 - duplicate choice bursts cannot reroll or change choices; stale phase, range, seat and deadline reject
+  ---
+  duration_ms: 4.407861
+  type: 'test'
+  ...
+# Subtest: simultaneous reveal and attack order are independent of client input order
+ok 148 - simultaneous reveal and attack order are independent of client input order
+  ---
+  duration_ms: 2.533452
+  type: 'test'
+  ...
+# Subtest: AI decisions ignore opponents hidden boxes, selected items and future entropy
+ok 149 - AI decisions ignore opponents hidden boxes, selected items and future entropy
+  ---
+  duration_ms: 0.915111
+  type: 'test'
+  ...
+# Subtest: shell hits the round-start leader, deals exactly -100m, and shows authenticated source and target
+ok 150 - shell hits the round-start leader, deals exactly -100m, and shows authenticated source and target
+  ---
+  duration_ms: 1.002382
+  type: 'test'
+  ...
+# Subtest: lightning halves only this round forward movement and never the accumulated distance
+ok 151 - lightning halves only this round forward movement and never the accumulated distance
+  ---
+  duration_ms: 0.669891
+  type: 'test'
+  ...
+# Subtest: external hit fizzles +1000m turbo, while unhit turbo advances +1000m
+ok 152 - external hit fizzles +1000m turbo, while unhit turbo advances +1000m
+  ---
+  duration_ms: 1.17294
+  type: 'test'
+  ...
+# Subtest: shield blocks every external attack, including position swap, and preserves base movement
+ok 153 - shield blocks every external attack, including position swap, and preserves base movement
+  ---
+  duration_ms: 0.734508
+  type: 'test'
+  ...
+# Subtest: mirror returns first attack, accepts later attacks, never recursively bounces
+ok 154 - mirror returns first attack, accepts later attacks, never recursively bounces
+  ---
+  duration_ms: 0.667998
+  type: 'test'
+  ...
+# Subtest: spring jumps banana/pit traps but remains vulnerable to lightning
+ok 155 - spring jumps banana/pit traps but remains vulnerable to lightning
+  ---
+  duration_ms: 0.871295
+  type: 'test'
+  ...
+# Subtest: engines stack from the following round; charge doubles one round, including engine, then expires
+ok 156 - engines stack from the following round; charge doubles one round, including engine, then expires
+  ---
+  duration_ms: 0.724714
+  type: 'test'
+  ...
+# Subtest: magnet steals bounded movement and swap exchanges starting positions before movement
+ok 157 - magnet steals bounded movement and swap exchanges starting positions before movement
+  ---
+  duration_ms: 1.073279
+  type: 'test'
+  ...
+# Subtest: gamble has two sealed outcomes; comet catchup is bounded; distance never becomes negative
+ok 158 - gamble has two sealed outcomes; comet catchup is bounded; distance never becomes negative
+  ---
+  duration_ms: 1.417438
+  type: 'test'
+  ...
+# Subtest: no target is a visible miss, not an implicit attack on self
+ok 159 - no target is a visible miss, not an implicit attack on self
+  ---
+  duration_ms: 0.641308
+  type: 'test'
+  ...
+# Subtest: all 256 item pairs resolve with finite, nonnegative distances and correct recipient ids
+ok 160 - all 256 item pairs resolve with finite, nonnegative distances and correct recipient ids
+  ---
+  duration_ms: 67.456208
+  type: 'test'
+  ...
+# Subtest: 500 complete random games finish with eight rounds, ties supported, JSON restart exactly deterministic
+ok 161 - 500 complete random games finish with eight rounds, ties supported, JSON restart exactly deterministic
+  ---
+  duration_ms: 530.880418
+  type: 'test'
+  ...
+# Subtest: broadcast timing and target outcomes match for every viewer and survive reconnect halfway through
+ok 162 - broadcast timing and target outcomes match for every viewer and survive reconnect halfway through
+  ---
+  duration_ms: 14.180856
+  type: 'test'
+  ...
+# Subtest: run camera follows self while ground traverses real distance; minimap retains distant rivals
+ok 163 - run camera follows self while ground traverses real distance; minimap retains distant rivals
+  ---
+  duration_ms: 2.513171
+  type: 'test'
+  ...
+# Subtest: four production clients see only their own hand, then the identical attack broadcast
+ok 164 - four production clients see only their own hand, then the identical attack broadcast
+  ---
+  duration_ms: 16.2318
+  type: 'test'
+  ...
+# Subtest: server restart persists private hand and selected item; duplicate replay is harmless
+ok 165 - server restart persists private hand and selected item; duplicate replay is harmless
+  ---
+  duration_ms: 10.524529
+  type: 'test'
+  ...
+# Subtest: old clients, forged player ids, changing game/color, and nonhost start are rejected
+ok 166 - old clients, forged player ids, changing game/color, and nonhost start are rejected
+  ---
+  duration_ms: 2.992736
+  type: 'test'
+  ...
+# Subtest: legacy match saved by Build507 completes after upgrade without rule changes
+ok 167 - legacy match saved by Build507 completes after upgrade without rule changes
+  ---
+  duration_ms: 3.363204
+  type: 'test'
+  ...
+# Subtest: spectator join, reconnect next round, and result replay all preserve party membership
+ok 168 - spectator join, reconnect next round, and result replay all preserve party membership
+  ---
+  duration_ms: 5.552598
+  type: 'test'
+  ...
+# Subtest: failed persistence rolls back item choice rather than accepting unrecorded action
+ok 169 - failed persistence rolls back item choice rather than accepting unrecorded action
+  ---
+  duration_ms: 2.393451
+  type: 'test'
+  ...
+# Subtest: new view has four actual chest buttons and four labeled item buttons; no hand values in another seat markup
+ok 170 - new view has four actual chest buttons and four labeled item buttons; no hand values in another seat markup
+  ---
+  duration_ms: 1.091837
+  type: 'test'
+  ...
+# Subtest: updates preserve play DOM signature through all phases and rebuild on result
+ok 171 - updates preserve play DOM signature through all phases and rebuild on result
+  ---
+  duration_ms: 1.218869
+  type: 'test'
+  ...
+# Subtest: paint cadence is bounded and stops when a timed animation has finished
+ok 172 - paint cadence is bounded and stops when a timed animation has finished
+  ---
+  duration_ms: 0.68259
+  type: 'test'
+  ...
+# Subtest: coalesced frames and unchanged state perform zero DOM writes; custom CSS properties are applied correctly
+ok 173 - coalesced frames and unchanged state perform zero DOM writes; custom CSS properties are applied correctly
+  ---
+  duration_ms: 5.65352
+  type: 'test'
+  ...
+# Subtest: chest then hand double-tap bursts send only one message per choice without rebuilding DOM
+ok 174 - chest then hand double-tap bursts send only one message per choice without rebuilding DOM
+  ---
+  duration_ms: 1.800006
+  type: 'test'
+  ...
+# Subtest: actual paint code updates every attack, reflected result and run frame without null nodes or NaNs
+ok 175 - actual paint code updates every attack, reflected result and run frame without null nodes or NaNs
+  ---
+  duration_ms: 38.566329
+  type: 'test'
+  ...
+# Subtest: private hand descriptions and item atlas positions update when hand changes, without exposing another hand
+ok 176 - private hand descriptions and item atlas positions update when hand changes, without exposing another hand
+  ---
+  duration_ms: 1.32536
+  type: 'test'
+  ...
+# Subtest: hidden/unmounted views cancel frames and clean listeners; failed send releases input and reports error
+ok 177 - hidden/unmounted views cancel frames and clean listeners; failed send releases input and reports error
+  ---
+  duration_ms: 1.212579
+  type: 'test'
+  ...
+# Subtest: all-safe gorilla hero displays four actual survivors and no empty loser panel
+ok 178 - all-safe gorilla hero displays four actual survivors and no empty loser panel
+  ---
+  duration_ms: 1.072358
+  type: 'test'
+  ...
+# Subtest: both new image assets decode completely; item sheet has alpha and sixteen occupied cells
+ok 179 - both new image assets decode completely; item sheet has alpha and sixteen occupied cells
+  ---
+  duration_ms: 351.818872
+  type: 'test'
+  ...
+# Subtest: 28 items include 20 permanent, stackable pieces; 128 chests uniformly draw all 28 and seal both dice
+ok 180 - 28 items include 20 permanent, stackable pieces; 128 chests uniformly draw all 28 and seal both dice
+  ---
+  duration_ms: 4.157453
+  type: 'test'
+  ...
+# Subtest: invalid dice fail before mutating the lobby
+ok 181 - invalid dice fail before mutating the lobby
+  ---
+  duration_ms: 3.608905
+  type: 'test'
+  ...
+# Subtest: persistent movement keeps firing on subsequent picks and duplicates add together
+ok 182 - persistent movement keeps firing on subsequent picks and duplicates add together
+  ---
+  duration_ms: 2.944032
+  type: 'test'
+  ...
+# Subtest: 36 products all compute die 1 × die 2 × 100; extrema are 100 and 3600
+ok 183 - 36 products all compute die 1 × die 2 × 100; extrema are 100 and 3600
+  ---
+  duration_ms: 32.758551
+  type: 'test'
+  ...
+# Subtest: product, turbines, coils and permanent chargers multiply with no hidden small cap
+ok 184 - product, turbines, coils and permanent chargers multiply with no hidden small cap
+  ---
+  duration_ms: 17.841849
+  type: 'test'
+  ...
+# Subtest: seed doubles each later turn; periodic rockets arrive every second turn and keep repeating
+ok 185 - seed doubles each later turn; periodic rockets arrive every second turn and keep repeating
+  ---
+  duration_ms: 1.450438
+  type: 'test'
+  ...
+# Subtest: coil factories produce next turn; banking persists and the next big move consumes all coils
+ok 186 - coil factories produce next turn; banking persists and the next big move consumes all coils
+  ---
+  duration_ms: 1.454054
+  type: 'test'
+  ...
+# Subtest: permanent attacks fire together in one bounded broadcast per source every turn
+ok 187 - permanent attacks fire together in one bounded broadcast per source every turn
+  ---
+  duration_ms: 1.413763
+  type: 'test'
+  ...
+# Subtest: guards refresh every turn, stack by count, and one guard does not block a whole volley
+ok 188 - guards refresh every turn, stack by count, and one guard does not block a whole volley
+  ---
+  duration_ms: 0.951345
+  type: 'test'
+  ...
+# Subtest: spring immunity, limited reflections and persistent wards resolve without reflection loops
+ok 189 - spring immunity, limited reflections and persistent wards resolve without reflection loops
+  ---
+  duration_ms: 0.722039
+  type: 'test'
+  ...
+# Subtest: revenge equipment converts successful hits into future coils; blocked hits give none
+ok 190 - revenge equipment converts successful hits into future coils; blocked hits give none
+  ---
+  duration_ms: 0.573305
+  type: 'test'
+  ...
+# Subtest: mega boost fizzles on a hit, while shielding lets it survive
+ok 191 - mega boost fizzles on a hit, while shielding lets it survive
+  ---
+  duration_ms: 0.875171
+  type: 'test'
+  ...
+# Subtest: jackpot is sealed 1 in 6; miss still receives passive income and consumes loaded coils
+ok 192 - jackpot is sealed 1 in 6; miss still receives passive income and consumes loaded coils
+  ---
+  duration_ms: 2.251007
+  type: 'test'
+  ...
+# Subtest: sniper reads planned speed, not secret choices, and zeros the fastest qualifying opponent
+ok 193 - sniper reads planned speed, not secret choices, and zeros the fastest qualifying opponent
+  ---
+  duration_ms: 1.980753
+  type: 'test'
+  ...
+# Subtest: breaker removes 30% per stacked copy of initial cumulative metres with exact rounding
+ok 194 - breaker removes 30% per stacked copy of initial cumulative metres with exact rounding
+  ---
+  duration_ms: 0.710782
+  type: 'test'
+  ...
+# Subtest: wrench transfers existing gear for next round, conserves pieces and respects guards
+ok 195 - wrench transfers existing gear for next round, conserves pieces and respects guards
+  ---
+  duration_ms: 0.977675
+  type: 'test'
+  ...
+# Subtest: huge exact distances survive JSON, ranking distinguishes adjacent integers above 2^53
+ok 196 - huge exact distances survive JSON, ranking distinguishes adjacent integers above 2^53
+  ---
+  duration_ms: 1.37236
+  type: 'test'
+  ...
+# Subtest: opponent choices, sealed dice and future boxes remain private until reveal
+ok 197 - opponent choices, sealed dice and future boxes remain private until reveal
+  ---
+  duration_ms: 0.839317
+  type: 'test'
+  ...
+# Subtest: AI decision never reads sealed rolls or rival hands
+ok 198 - AI decision never reads sealed rolls or rival hands
+  ---
+  duration_ms: 0.678704
+  type: 'test'
+  ...
+# Subtest: all 784 item pairs resolve; no negative inventory or distance and at most four broadcasts
+ok 199 - all 784 item pairs resolve; no negative inventory or distance and at most four broadcasts
+  ---
+  duration_ms: 275.235098
+  type: 'test'
+  ...
+# Subtest: 1000 seeded complete races match after JSON restart, retain gear and remain bounded in duration
+ok 200 - 1000 seeded complete races match after JSON restart, retain gear and remain bounded in duration
+  ---
+  duration_ms: 2870.195518
+  type: 'test'
+  ...
+# Subtest: power and volley timeline is identical to every viewer and bounded after end
+ok 201 - power and volley timeline is identical to every viewer and bounded after end
+  ---
+  duration_ms: 15.659958
+  type: 'test'
+  ...
+# Subtest: huge movement preserves finite camera geometry, caps visual travel and ends on exact distance
+ok 202 - huge movement preserves finite camera geometry, caps visual travel and ends on exact distance
+  ---
+  duration_ms: 4.101809
+  type: 'test'
+  ...
+# Subtest: production clients negotiate version, preserve private state on disk and reject old clients
+ok 203 - production clients negotiate version, preserve private state on disk and reject old clients
+  ---
+  duration_ms: 23.692868
+  type: 'test'
+  ...
+# Subtest: four clients, forged ids, duplicates, and stale phases follow authenticated server choices
+ok 204 - four clients, forged ids, duplicates, and stale phases follow authenticated server choices
+  ---
+  duration_ms: 5.071391
+  type: 'test'
+  ...
+# Subtest: loadout details show public gear, hand has four choices, and idle DOM makes zero writes
+ok 205 - loadout details show public gear, hand has four choices, and idle DOM makes zero writes
+  ---
+  duration_ms: 6.094706
+  type: 'test'
+  ...
+# Subtest: actual DOM painting covers growth calculation, all volleys, huge race, and both image atlases
+ok 206 - actual DOM painting covers growth calculation, all volleys, huge race, and both image atlases
+  ---
+  duration_ms: 16.343369
+  type: 'test'
+  ...
+# Subtest: touch bursts send one choice, visibility pauses paint and cleanup releases every listener
+ok 207 - touch bursts send one choice, visibility pauses paint and cleanup releases every listener
+  ---
+  duration_ms: 1.501345
+  type: 'test'
+  ...
+# Subtest: new transparent 4 by 3 item atlas fully decodes with 12 occupied cells
+ok 208 - new transparent 4 by 3 item atlas fully decodes with 12 occupied cells
+  ---
+  duration_ms: 316.295194
+  type: 'test'
+  ...
+# Subtest: camera is exactly self ±1000m and distant sprites are never pinned to the viewport
+ok 209 - camera is exactly self ±1000m and distant sprites are never pinned to the viewport
+  ---
+  duration_ms: 17.262246
+  type: 'test'
+  ...
+# Subtest: window boundaries and all four personal camera views use the same physical gaps
+ok 210 - window boundaries and all four personal camera views use the same physical gaps
+  ---
+  duration_ms: 2.55889
+  type: 'test'
+  ...
+# Subtest: a rival 5000m behind enters on the left, passes self, exits right; reciprocal view reverses
+ok 211 - a rival 5000m behind enters on the left, passes self, exits right; reciprocal view reverses
+  ---
+  duration_ms: 18.708787
+  type: 'test'
+  ...
+# Subtest: one-metre gaps stay exact even at 10^40m; window does not zoom out to fit everyone
+ok 212 - one-metre gaps stay exact even at 10^40m; window does not zoom out to fit everyone
+  ---
+  duration_ms: 1.843502
+  type: 'test'
+  ...
+# Subtest: ground, near layer, horizon and markers follow actual distance without the 6000m cap
+ok 213 - ground, near layer, horizon and markers follow actual distance without the 6000m cap
+  ---
+  duration_ms: 8.912578
+  type: 'test'
+  ...
+# Subtest: labels and dashed lines have one transform and 500m spacing with subpixel interpolation
+ok 214 - labels and dashed lines have one transform and 500m spacing with subpixel interpolation
+  ---
+  duration_ms: 5.244392
+  type: 'test'
+  ...
+# Subtest: negative start markers are hidden, giant absolute marker labels retain distinct last digits
+ok 215 - negative start markers are hidden, giant absolute marker labels retain distinct last digits
+  ---
+  duration_ms: 1.23917
+  type: 'test'
+  ...
+# Subtest: background modulo remains finite and within one tile at huge distances and viewport resizes
+ok 216 - background modulo remains finite and within one tile at huge distances and viewport resizes
+  ---
+  duration_ms: 0.940939
+  type: 'test'
+  ...
+# Subtest: backward motion scrolls the world in the opposite direction, stationary players do not bob
+ok 217 - backward motion scrolls the world in the opposite direction, stationary players do not bob
+  ---
+  duration_ms: 0.734508
+  type: 'test'
+  ...
+# Subtest: camera and scrolling are continuous at the run/settle and settle/next-round boundaries
+ok 218 - camera and scrolling are continuous at the run/settle and settle/next-round boundaries
+  ---
+  duration_ms: 1.051276
+  type: 'test'
+  ...
+# Subtest: sub-frame passes have a bounded crossing afterimage while ordinary passes stay physical
+ok 219 - sub-frame passes have a bounded crossing afterimage while ordinary passes stay physical
+  ---
+  duration_ms: 1.208724
+  type: 'test'
+  ...
+# Subtest: reduced motion renders a stable final world and no residual crossing/animation
+ok 220 - reduced motion renders a stable final world and no residual crossing/animation
+  ---
+  duration_ms: 0.477831
+  type: 'test'
+  ...
+# Subtest: new production rooms skip the power phase for all 8 rounds; saves keep the same rolls and results
+ok 221 - new production rooms skip the power phase for all 8 rounds; saves keep the same rolls and results
+  ---
+  duration_ms: 69.07828
+  type: 'test'
+  ...
+# Subtest: old saved power phase still resumes safely but new view never creates the calculation panel
+ok 222 - old saved power phase still resumes safely but new view never creates the calculation panel
+  ---
+  duration_ms: 3.3667
+  type: 'test'
+  ...
+# Subtest: new view renders four circular edge locators and labels without extra course image assets
+ok 223 - new view renders four circular edge locators and labels without extra course image assets
+  ---
+  duration_ms: 0.862562
+  type: 'test'
+  ...
+# Subtest: actual DOM paint hides remote bodies and updates edge distance, then restores a passing rival
+ok 224 - actual DOM paint hides remote bodies and updates edge distance, then restores a passing rival
+  ---
+  duration_ms: 10.097054
+  type: 'test'
+  ...
+# Subtest: finite RAF chain keeps animating without a 33ms server/UI poll and stops when finished
+ok 225 - finite RAF chain keeps animating without a 33ms server/UI poll and stops when finished
+  ---
+  duration_ms: 2.057565
+  type: 'test'
+  ...
+# Subtest: hidden/unmounted screens cancel RAF and do not replay an old passing animation on return
+ok 226 - hidden/unmounted screens cancel RAF and do not replay an old passing animation on return
+  ---
+  duration_ms: 1.67656
+  type: 'test'
+  ...
+# Subtest: static choosing screens retain DOM and perform zero writes for repeated identical times
+ok 227 - static choosing screens retain DOM and perform zero writes for repeated identical times
+  ---
+  duration_ms: 3.719822
+  type: 'test'
+  ...
+# Subtest: 500 seeded races preserve results with the new shorter timeline
+ok 228 - 500 seeded races preserve results with the new shorter timeline
+  ---
+  duration_ms: 2553.238095
+  type: 'test'
+  ...
+# Subtest: 40 items: eight added self buffs, four new finishers, no new attacks
+ok 229 - 40 items: eight added self buffs, four new finishers, no new attacks
+  ---
+  duration_ms: 2.20042
+  type: 'test'
+  ...
+# Subtest: every final chest guarantees a finisher; all hands remain four distinct choices
+ok 230 - every final chest guarantees a finisher; all hands remain four distinct choices
+  ---
+  duration_ms: 35.971704
+  type: 'test'
+  ...
+# Subtest: invalid third die rejects before starting or mutating a room
+ok 231 - invalid third die rejects before starting or mutating a room
+  ---
+  duration_ms: 3.854836
+  type: 'test'
+  ...
+# Subtest: one crystal independently grows x2, x4, x8 each successive turn and stacks multiplicatively
+ok 232 - one crystal independently grows x2, x4, x8 each successive turn and stacks multiplicatively
+  ---
+  duration_ms: 3.066757
+  type: 'test'
+  ...
+# Subtest: bank deposits on installation and each turn; a big move cashes fourfold once then saving restarts
+ok 233 - bank deposits on installation and each turn; a big move cashes fourfold once then saving restarts
+  ---
+  duration_ms: 1.364188
+  type: 'test'
+  ...
+# Subtest: solar buffers charge only without a big move; duplicates accumulate and big move consumes all
+ok 234 - solar buffers charge only without a big move; duplicates accumulate and big move consumes all
+  ---
+  duration_ms: 1.4515
+  type: 'test'
+  ...
+# Subtest: forge grows its additive foundation while echo uses actual last advance starting next turn
+ok 235 - forge grows its additive foundation while echo uses actual last advance starting next turn
+  ---
+  duration_ms: 0.858245
+  type: 'test'
+  ...
+# Subtest: echo uses net actual positive movement after attacks, not the planned unhit boost
+ok 236 - echo uses net actual positive movement after attacks, not the planned unhit boost
+  ---
+  duration_ms: 5.092984
+  type: 'test'
+  ...
+# Subtest: overdrive doubles ordinary turns and quadruples big moves; crowns multiply final round only
+ok 237 - overdrive doubles ordinary turns and quadruples big moves; crowns multiply final round only
+  ---
+  duration_ms: 1.185679
+  type: 'test'
+  ...
+# Subtest: all 36 two-dice and 216 three-dice outcomes match exact displayed faces and products
+ok 238 - all 36 two-dice and 216 three-dice outcomes match exact displayed faces and products
+  ---
+  duration_ms: 90.967696
+  type: 'test'
+  ...
+# Subtest: focus increases each face, clamps at six and applies to product, triple, gamble and cannon
+ok 239 - focus increases each face, clamps at six and applies to product, triple, gamble and cannon
+  ---
+  duration_ms: 2.680494
+  type: 'test'
+  ...
+# Subtest: unbuffed gamble has three wins and three losses; cannon has one jackpot out of six
+ok 240 - unbuffed gamble has three wins and three losses; cannon has one jackpot out of six
+  ---
+  duration_ms: 2.436546
+  type: 'test'
+  ...
+# Subtest: new finishers preserve gear, cash resources, and use exact uncapped cumulative distance
+ok 241 - new finishers preserve gear, cash resources, and use exact uncapped cumulative distance
+  ---
+  duration_ms: 0.880679
+  type: 'test'
+  ...
+# Subtest: a grown full combo stacks seed, savings, echo, suns, coils, batteries, crystals and crown exactly
+ok 242 - a grown full combo stacks seed, savings, echo, suns, coils, batteries, crystals and crown exactly
+  ---
+  duration_ms: 0.943814
+  type: 'test'
+  ...
+# Subtest: banked savings and unused suns survive hostile attacks; no new attack triggers appear
+ok 243 - banked savings and unused suns survive hostile attacks; no new attack triggers appear
+  ---
+  duration_ms: 1.027731
+  type: 'test'
+  ...
+# Subtest: dice-only cinematic replaces no ordinary gameplay phase and duration is bounded for four rolls
+ok 244 - dice-only cinematic replaces no ordinary gameplay phase and duration is bounded for four rolls
+  ---
+  duration_ms: 0.974119
+  type: 'test'
+  ...
+# Subtest: all viewers see the same sequential rolls, stopped faces, formula and power before attacks
+ok 245 - all viewers see the same sequential rolls, stopped faces, formula and power before attacks
+  ---
+  duration_ms: 3.463615
+  type: 'test'
+  ...
+# Subtest: reduced motion immediately displays exact faces without a rolling transform or perpetual RAF
+ok 246 - reduced motion immediately displays exact faces without a rolling transform or perpetual RAF
+  ---
+  duration_ms: 0.766797
+  type: 'test'
+  ...
+# Subtest: sealed third die and future hands remain private; AI ignores all sealed outcomes
+ok 247 - sealed third die and future hands remain private; AI ignores all sealed outcomes
+  ---
+  duration_ms: 0.896843
+  type: 'test'
+  ...
+# Subtest: 1,600 item pairs resolve with nonnegative exact metres and bounded dice/attack broadcasts
+ok 248 - 1,600 item pairs resolve with nonnegative exact metres and bounded dice/attack broadcasts
+  ---
+  duration_ms: 577.80007
+  type: 'test'
+  ...
+# Subtest: 500 random complete races survive JSON restart exactly with all eight rounds and huge-score geometry
+ok 249 - 500 random complete races survive JSON restart exactly with all eight rounds and huge-score geometry
+  ---
+  duration_ms: 1648.478704
+  type: 'test'
+  ...
+# Subtest: production version gates reject stale clients, trust authenticated seats, and persist roll/buff state
+ok 250 - production version gates reject stale clients, trust authenticated seats, and persist roll/buff state
+  ---
+  duration_ms: 23.503663
+  type: 'test'
+  ...
+# Subtest: new UI has exact pip dice, three cubes, 40 gear slots and no discarded power panel
+ok 251 - new UI has exact pip dice, three cubes, 40 gear slots and no discarded power panel
+  ---
+  duration_ms: 3.129091
+  type: 'test'
+  ...
+# Subtest: DOM stops each die at the server face, announces result and keeps one finite RAF loop
+ok 252 - DOM stops each die at the server face, announces result and keeps one finite RAF loop
+  ---
+  duration_ms: 5.299295
+  type: 'test'
+  ...
+# Subtest: ordinary idle UI does no repeat writes and touch bursts send only one choice
+ok 253 - ordinary idle UI does no repeat writes and touch bursts send only one choice
+  ---
+  duration_ms: 2.752502
+  type: 'test'
+  ...
+# Subtest: new atlas fully decodes with alpha and all twelve item cells occupied
+ok 254 - new atlas fully decodes with alpha and all twelve item cells occupied
+  ---
+  duration_ms: 304.345442
+  type: 'test'
+  ...
+# Subtest: all seven boundaries are exact, including decimal strings beyond safe Number range
+ok 255 - all seven boundaries are exact, including decimal strings beyond safe Number range
+  ---
+  duration_ms: 2.718316
+  type: 'test'
+  ...
+# Subtest: every viewer follows their own distance, independently of the leader and the minimap
+ok 256 - every viewer follows their own distance, independently of the leader and the minimap
+  ---
+  duration_ms: 1.814407
+  type: 'test'
+  ...
+# Subtest: the user screenshot distances enter the stratosphere and space, not stadium
+ok 257 - the user screenshot distances enter the stratosphere and space, not stadium
+  ---
+  duration_ms: 0.494606
+  type: 'test'
+  ...
+# Subtest: ordinary crossings begin at their actual marker crossing and fade for at most 180ms
+ok 258 - ordinary crossings begin at their actual marker crossing and fade for at most 180ms
+  ---
+  duration_ms: 15.183609
+  type: 'test'
+  ...
+# Subtest: a huge jump reveals every intermediate world without adding run time
+ok 259 - a huge jump reveals every intermediate world without adding run time
+  ---
+  duration_ms: 1.234082
+  type: 'test'
+  ...
+# Subtest: scenery never leads physical distance during a forward run
+ok 260 - scenery never leads physical distance during a forward run
+  ---
+  duration_ms: 24.097118
+  type: 'test'
+  ...
+# Subtest: reverse travel descends through worlds, handles exact boundaries, and ends at the real destination
+ok 261 - reverse travel descends through worlds, handles exact boundaries, and ends at the real destination
+  ---
+  duration_ms: 1.015342
+  type: 'test'
+  ...
+# Subtest: very late crossings, stationary scores and already-galactic scores cannot queue transitions after the run
+ok 262 - very late crossings, stationary scores and already-galactic scores cannot queue transitions after the run
+  ---
+  duration_ms: 1.361344
+  type: 'test'
+  ...
+# Subtest: late join is derived from shared run time without replay state; reduced motion jumps directly
+ok 263 - late join is derived from shared run time without replay state; reduced motion jumps directly
+  ---
+  duration_ms: 0.873738
+  type: 'test'
+  ...
+# Subtest: all presentation phases keep exact camera, flowing markers, offsets and distance gaps untouched
+ok 264 - all presentation phases keep exact camera, flowing markers, offsets and distance gaps untouched
+  ---
+  duration_ms: 1.691012
+  type: 'test'
+  ...
+# Subtest: background loader caps downloads at two, prioritizes the current world and caches completed images
+ok 265 - background loader caps downloads at two, prioritizes the current world and caches completed images
+  ---
+  duration_ms: 0.947299
+  type: 'test'
+  ...
+# Subtest: failed and timed-out scenery uses fallback, allows remaining downloads and retries explicitly
+ok 266 - failed and timed-out scenery uses fallback, allows remaining downloads and retries explicitly
+  ---
+  duration_ms: 0.29146
+  type: 'test'
+  ...
+# Subtest: leaving the game cancels downloads, timers and callbacks; reopening resumes only missing assets
+ok 267 - leaving the game cancels downloads, timers and callbacks; reopening resumes only missing assets
+  ---
+  duration_ms: 0.176135
+  type: 'test'
+  ...
+# Subtest: async decode completion after disposal cannot repaint a dead game
+ok 268 - async decode completion after disposal cannot repaint a dead game
+  ---
+  duration_ms: 0.209246
+  type: 'test'
+  ...
+# Subtest: only two three-depth world slots are used; existing markers, runners and controls remain separate
+ok 269 - only two three-depth world slots are used; existing markers, runners and controls remain separate
+  ---
+  duration_ms: 0.163637
+  type: 'test'
+  ...
+# Subtest: crossfade retains continuous world offsets for both worlds, falls back on failure and caches writes
+ok 270 - crossfade retains continuous world offsets for both worlds, falls back on failure and caches writes
+  ---
+  duration_ms: 3.148791
+  type: 'test'
+  ...
+# Subtest: generated assets fully decode with documented hashes and a consistent panoramic aspect
+ok 271 - generated assets fully decode with documented hashes and a consistent panoramic aspect
+  ---
+  duration_ms: 414.743976
+  type: 'test'
+  ...
+# Subtest: the victory background uses the winning distance and safely falls back to the original stadium
+ok 272 - the victory background uses the winning distance and safely falls back to the original stadium
+  ---
+  duration_ms: 0.613686
+  type: 'test'
+  ...
+# Subtest: live View511 paints the local space world, preserves ±1000m camera, stops idle writes and cleans up
+ok 273 - live View511 paints the local space world, preserves ±1000m camera, stops idle writes and cleans up
+  ---
+  duration_ms: 11.22096
+  type: 'test'
+  ...
+# Subtest: integrated render crosses all worlds while retaining the existing finite RAF and hidden-tab suspension
+ok 274 - integrated render crosses all worlds while retaining the existing finite RAF and hidden-tab suspension
+  ---
+  duration_ms: 5.091391
+  type: 'test'
+  ...
+# Subtest: 120 unique authored questions cover 12 genres with true/false and three difficulties
+ok 275 - 120 unique authored questions cover 12 genres with true/false and three difficulties
+  ---
+  duration_ms: 2.648145
+  type: 'test'
+  ...
+# Subtest: direct numeric and word puzzles independently verify the stored answer
+ok 276 - direct numeric and word puzzles independently verify the stored answer
+  ---
+  duration_ms: 0.244739
+  type: 'test'
+  ...
+# Subtest: bad decks reject atomically before a game starts
+ok 277 - bad decks reject atomically before a game starts
+  ---
+  duration_ms: 0.691783
+  type: 'test'
+  ...
+# Subtest: one through four humans fill exactly four seats with fixed colors
+ok 278 - one through four humans fill exactly four seats with fixed colors
+  ---
+  duration_ms: 5.164172
+  type: 'test'
+  ...
+# Subtest: all wrong ends with zero winners including rank-one ties
+ok 279 - all wrong ends with zero winners including rank-one ties
+  ---
+  duration_ms: 1.852605
+  type: 'test'
+  ...
+# Subtest: dead players never move or resurrect in future questions
+ok 280 - dead players never move or resurrect in future questions
+  ---
+  duration_ms: 0.899266
+  type: 'test'
+  ...
+# Subtest: later eliminations outrank earlier ones without claiming all-out winner
+ok 281 - later eliminations outrank earlier ones without claiming all-out winner
+  ---
+  duration_ms: 0.791214
+  type: 'test'
+  ...
+# Subtest: server restart or stall grants full next-question time instead of skipping it
+ok 282 - server restart or stall grants full next-question time instead of skipping it
+  ---
+  duration_ms: 1.01422
+  type: 'test'
+  ...
+# Subtest: private future questions, explanations and bot plans are absent in all live views
+ok 283 - private future questions, explanations and bot plans are absent in all live views
+  ---
+  duration_ms: 1.200341
+  type: 'test'
+  ...
+# Subtest: each viewer sees identical accepted moves and reveal, own sequence only
+ok 284 - each viewer sees identical accepted moves and reveal, own sequence only
+  ---
+  duration_ms: 0.84831
+  type: 'test'
+  ...
+# Subtest: AI includes both right and wrong outcomes and cannot copy human last-second changes
+ok 285 - AI includes both right and wrong outcomes and cannot copy human last-second changes
+  ---
+  duration_ms: 105.912925
+  type: 'test'
+  ...
+# Subtest: 500 seeded games persist every phase and always terminate with valid history
+ok 286 - 500 seeded games persist every phase and always terminate with valid history
+  ---
+  duration_ms: 3169.909774
+  type: 'test'
+  ...
+# Subtest: play DOM signature ignores live movement, answer lock, floor collapse and connectivity
+ok 287 - play DOM signature ignores live movement, answer lock, floor collapse and connectivity
+  ---
+  duration_ms: 1.387583
+  type: 'test'
+  ...
+# Subtest: results show no fake winner for an all-out and escape player-supplied HTML
+ok 288 - results show no fake winner for an all-out and escape player-supplied HTML
+  ---
+  duration_ms: 1.445181
+  type: 'test'
+  ...
+# Subtest: one RAF at most, no hidden-tab writes, all event handlers cleaned on exit
+ok 289 - one RAF at most, no hidden-tab writes, all event handlers cleaned on exit
+  ---
+  duration_ms: 3.309173
+  type: 'test'
+  ...
+# Subtest: after finite animations, repeated idle paint produces zero DOM property writes
+ok 290 - after finite animations, repeated idle paint produces zero DOM property writes
+  ---
+  duration_ms: 13.460509
+  type: 'test'
+  ...
+# Subtest: disconnected, spectator and dead controls cannot send choices
+ok 291 - disconnected, spectator and dead controls cannot send choices
+  ---
+  duration_ms: 0.930724
+  type: 'test'
+  ...
+# Subtest: keyboard does not steal typing, auto-repeat or modified shortcuts
+ok 292 - keyboard does not steal typing, auto-repeat or modified shortcuts
+  ---
+  duration_ms: 0.861861
+  type: 'test'
+  ...
+# Subtest: production coordinator starts 1-4 people, advertises protocol, and marks active game
+ok 293 - production coordinator starts 1-4 people, advertises protocol, and marks active game
+  ---
+  duration_ms: 15.605516
+  type: 'test'
+  ...
+# Subtest: production moves use authenticated sender, not playerId in payload
+ok 294 - production moves use authenticated sender, not playerId in payload
+  ---
+  duration_ms: 3.573572
+  type: 'test'
+  ...
+# Subtest: stale version, wrong room and non-host start are rejected without mutation
+ok 295 - stale version, wrong room and non-host start are rejected without mutation
+  ---
+  duration_ms: 2.039978
+  type: 'test'
+  ...
+# Subtest: active late joiners spectate and cannot answer but may join next game
+ok 296 - active late joiners spectate and cannot answer but may join next game
+  ---
+  duration_ms: 1.776821
+  type: 'test'
+  ...
+# Subtest: disconnect preserves accepted floor and reconnect does not change it
+ok 297 - disconnect preserves accepted floor and reconnect does not change it
+  ---
+  duration_ms: 2.980767
+  type: 'test'
+  ...
+# Subtest: sealed deck, AI moves, choices and recent questions survive server JSON reload
+ok 298 - sealed deck, AI moves, choices and recent questions survive server JSON reload
+  ---
+  duration_ms: 7.541949
+  type: 'test'
+  ...
+# Subtest: new art fully decodes with alpha and all four platform cells have content
+ok 299 - new art fully decodes with alpha and all four platform cells have content
+  ---
+  duration_ms: 368.425129
+  type: 'test'
+  ...
+# Subtest: mixed-version ready gate cannot start a quiz with an old client
+ok 300 - mixed-version ready gate cannot start a quiz with an old client
+  ---
+  duration_ms: 2.04749
+  type: 'test'
+  ...
+# Subtest: server write failure rolls back a choice without acknowledging a move that was not saved
+ok 301 - server write failure rolls back a choice without acknowledging a move that was not saved
+  ---
+  duration_ms: 3.690749
+  type: 'test'
+  ...
+# Subtest: 20 questions are unique, strictly progress in difficulty and avoid recent 30 where available
+ok 302 - 20 questions are unique, strictly progress in difficulty and avoid recent 30 where available
+  ---
+  duration_ms: 246.938941
+  type: 'test'
+  ...
+# Subtest: all four survivors can complete all twenty questions with joint victory
+ok 303 - all four survivors can complete all twenty questions with joint victory
+  ---
+  duration_ms: 1.005337
+  type: 'test'
+  ...
+# Subtest: all players picking never closes the wall early even after movement arrival
+ok 304 - all players picking never closes the wall early even after movement arrival
+  ---
+  duration_ms: 0.43059
+  type: 'test'
+  ...
+# Subtest: standing without tapping is judged on the actual starting floor
+ok 305 - standing without tapping is judged on the actual starting floor
+  ---
+  duration_ms: 0.517881
+  type: 'test'
+  ...
+# Subtest: free targets on the same floor retain distinct x and y positions
+ok 306 - free targets on the same floor retain distinct x and y positions
+  ---
+  duration_ms: 0.47734
+  type: 'test'
+  ...
+# Subtest: walking crosses via the bridge at constant finite speed, never teleports
+ok 307 - walking crosses via the bridge at constant finite speed, never teleports
+  ---
+  duration_ms: 0.246763
+  type: 'test'
+  ...
+# Subtest: mid-walk retargeting is continuous and reordered packets cannot reverse it
+ok 308 - mid-walk retargeting is continuous and reordered packets cannot reverse it
+  ---
+  duration_ms: 0.421266
+  type: 'test'
+  ...
+# Subtest: deadline ignores unreachable target and freezes the real position even after a server stall
+ok 309 - deadline ignores unreachable target and freezes the real position even after a server stall
+  ---
+  duration_ms: 0.452162
+  type: 'test'
+  ...
+# Subtest: both crossing directions get pushed back to their incoming side when trapped
+ok 310 - both crossing directions get pushed back to their incoming side when trapped
+  ---
+  duration_ms: 0.280533
+  type: 'test'
+  ...
+# Subtest: player who fully crosses the wall stays on the destination side
+ok 311 - player who fully crosses the wall stays on the destination side
+  ---
+  duration_ms: 0.126401
+  type: 'test'
+  ...
+# Subtest: stopping in the gate then retargeting still pushes toward the last safe floor
+ok 312 - stopping in the gate then retargeting still pushes toward the last safe floor
+  ---
+  duration_ms: 0.096786
+  type: 'test'
+  ...
+# Subtest: invalid coordinates and packet abuse cannot mutate the game
+ok 313 - invalid coordinates and packet abuse cannot mutate the game
+  ---
+  duration_ms: 0.9744
+  type: 'test'
+  ...
+# Subtest: tap mapping is viewport independent and rejects scenery, preserving floor bounds
+ok 314 - tap mapping is viewport independent and rejects scenery, preserving floor bounds
+  ---
+  duration_ms: 0.262286
+  type: 'test'
+  ...
+# Subtest: wall descends without scaling; countdown and lock predict the authoritative collision
+ok 315 - wall descends without scaling; countdown and lock predict the authoritative collision
+  ---
+  duration_ms: 1.548126
+  type: 'test'
+  ...
+# Subtest: either correct symbol ascends and only eliminated seats trigger magma
+ok 316 - either correct symbol ascends and only eliminated seats trigger magma
+  ---
+  duration_ms: 1.315114
+  type: 'test'
+  ...
+# Subtest: all-out does not play a survivor elevator and all reveal animations stop
+ok 317 - all-out does not play a survivor elevator and all reveal animations stop
+  ---
+  duration_ms: 0.537842
+  type: 'test'
+  ...
+# Subtest: reduced motion suppresses camera shake, elevator travel and frame loops
+ok 318 - reduced motion suppresses camera shake, elevator travel and frame loops
+  ---
+  duration_ms: 0.611853
+  type: 'test'
+  ...
+# Subtest: view exposes a tappable stage and wall timer, no old choice buttons
+ok 319 - view exposes a tappable stage and wall timer, no old choice buttons
+  ---
+  duration_ms: 1.307423
+  type: 'test'
+  ...
+# Subtest: rapid destination taps coalesce, acknowledge newest coordinate and stop at deadline
+ok 320 - rapid destination taps coalesce, acknowledge newest coordinate and stop at deadline
+  ---
+  duration_ms: 1.255815
+  type: 'test'
+  ...
+# Subtest: public trajectories match every viewer at arbitrary timestamps without exposing answers
+ok 321 - public trajectories match every viewer at arbitrary timestamps without exposing answers
+  ---
+  duration_ms: 1.791633
+  type: 'test'
+  ...
+# Subtest: production accepts coordinate movement from authenticated seat and persists its trajectory
+ok 322 - production accepts coordinate movement from authenticated seat and persists its trajectory
+  ---
+  duration_ms: 2.178397
+  type: 'test'
+  ...
+# Subtest: Build513 active quiz migrates to lobby without deleting other game/account data
+ok 323 - Build513 active quiz migrates to lobby without deleting other game/account data
+  ---
+  duration_ms: 3.285137
+  type: 'test'
+  ...
+# Subtest: new generated frame and divider decode with alpha; frame center stays empty
+ok 324 - new generated frame and divider decode with alpha; frame center stays empty
+  ---
+  duration_ms: 89.987943
+  type: 'test'
+  ...
+# Subtest: standing in the closed divider still returns to the last safe floor
+ok 325 - standing in the closed divider still returns to the last safe floor
+  ---
+  duration_ms: 0.403459
+  type: 'test'
+  ...
+# Subtest: touching the live stage sends normalized floor coordinates and cleans its listener
+ok 326 - touching the live stage sends normalized floor coordinates and cleans its listener
+  ---
+  duration_ms: 1.606313
+  type: 'test'
+  ...
+# Subtest: result replay and a stale move are idempotent after all-out
+ok 327 - result replay and a stale move are idempotent after all-out
+  ---
+  duration_ms: 6.910146
+  type: 'test'
+  ...
+1..327
+# tests 327
+# suites 0
+# pass 327
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 18815.6161
