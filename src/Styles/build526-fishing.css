@@ -1,0 +1,10 @@
+/* Keep the two familiar large touch buttons; timing feedback lives by the float. */
+.fi-play524 .fi-meters524{display:none}
+.fi-controls524 button.is-cue526{border-color:#f4e0a0;box-shadow:inset 0 0 0 3px #f4dfa138,inset 0 0 0 4px #f2dfac80,0 4px #384a2b}
+.fi-controls524 .fi-ease524.is-cue526{background:linear-gradient(135deg,#626244,#3c573a);color:#fff0c9}
+.fi-catch524.is-revealing526{top:3%;left:8%;right:8%;grid-template-columns:1fr;background:linear-gradient(90deg,#092d2200,#103b2bba,#092d2200);border:0;box-shadow:none;padding:5px 10px}
+.fi-catch524.is-revealing526 .fi-fish524,.fi-catch524.is-revealing526 em{display:none}
+.fi-catch524.is-revealing526 strong{font-size:21px;text-shadow:0 2px 5px #082218}
+.fi-catch524.is-revealing526 span{font-size:12px}
+.fi-notice524{top:8%;font-size:17px}
+@media(max-height:670px){.fi-catch524.is-revealing526 strong{font-size:18px}.fi-catch524.is-revealing526>div{gap:3px}.fi-notice524{font-size:14px}}

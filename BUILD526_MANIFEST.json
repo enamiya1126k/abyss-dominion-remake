@@ -1,0 +1,226 @@
+{
+  "build": 526,
+  "version": "3.1.205",
+  "requires_build": 525,
+  "patch": true,
+  "deployed": false,
+  "fishing_protocol": 3,
+  "sumo_protocol": 1,
+  "tower_protocol": 4,
+  "server_restart_required": true,
+  "tests": {
+    "passed_latest": 151,
+    "failed": 0,
+    "fishing_tests": 56,
+    "fishing_ai_matches": 100,
+    "lord_schedule_samples": 1000,
+    "actual_browser": false,
+    "physical_iphone": false
+  },
+  "files": [
+    {
+      "path": "README_BUILD526.md",
+      "bytes": 4764,
+      "sha256": "3be430cd187d05a9551ce5345dde15250f13157445aed4fe89adb63f61287fe8",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/fishing526/fish-shadow.webp",
+      "bytes": 17252,
+      "sha256": "214b90951a52c068bfce3ff2402b84b9145142701c7a16fccea8130ff13537e9",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build526/art-sources.md",
+      "bytes": 1573,
+      "sha256": "9df336ef13524e1b281048b21c99b5653ba2f0961199ea2d23b4a5fe9051a58e",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build526/balance.json",
+      "bytes": 1102,
+      "sha256": "83d0643191e1b7d5ec7eb8251c61f4f81ce41df234ebda147a580eda6249ae41",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build526/catch.webp",
+      "bytes": 147188,
+      "sha256": "b65611542d88a94969c1e323e8e29a411e2890a5625ebc66c080cf445fd514e4",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build526/critical.webp",
+      "bytes": 141510,
+      "sha256": "baa871dde9f6257074c6a49cdc7899b8b16ffd3c1f1256ac92749602e043c566",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build526/ease.webp",
+      "bytes": 141204,
+      "sha256": "91bb4b1a3a01ec8b27638889f5406bd9d4bc43e3cae0567930fc6017bb9ea51b",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build526/perspective.webp",
+      "bytes": 141294,
+      "sha256": "79cd414690dc40629fac0324c4f3b0efd0f9fadf6b21449509754d16ad79424f",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build526/reel.webp",
+      "bytes": 140870,
+      "sha256": "c8a4521725c33aaf92e71d1342d986011c752b2565e50b0a5f4905fd10915451",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build526/source-checks.txt",
+      "bytes": 695,
+      "sha256": "e393fe3e054173803b10ff50f38768b16ed3a77b5d9a4941e1e7eb602c880db3",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build526/tests-final.txt",
+      "bytes": 15541,
+      "sha256": "b012cdcacd44a4dd8cd04be043e345f397ff617992a644a2c9b1f92745dcb5ac",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build526/verification.md",
+      "bytes": 4662,
+      "sha256": "c567159e5be51464044246530e3d5b29e3223ff630fd7707bfb79066bfb16b19",
+      "base_sha256": null
+    },
+    {
+      "path": "index.html",
+      "bytes": 171938,
+      "sha256": "ff79217219776eef7d68f1e197ac314683397e1e10e824580f6ddacb974f8d68",
+      "base_sha256": "99831ad5f18e65a69bffa01ddc85763a4721e255722e7a90082883012e4b81f4"
+    },
+    {
+      "path": "online-server/src/FishingCoordinator524.js",
+      "bytes": 5024,
+      "sha256": "5c7031efd8bb49970622249cc2dd51ff7c383e6da7ab0358b7f762a5894dc0c3",
+      "base_sha256": "fd4cb830f17c8f05fb7882ce8570d33b29a3e2ce59f3721b1de417d3eb867dab"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 19449,
+      "sha256": "fbe817f62c80b62411567b2d94215cbf2e867d879b1d557a5d384e646650ac1f",
+      "base_sha256": "01a1d41541af892817f0da6d13c76a92d8ea778b2014ad0f548264395e9c8c93"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 25436,
+      "sha256": "82fb6f3f3ed15749b39032e7bdcbb1d19ca9674afceddbaac30cb6536521d0e9",
+      "base_sha256": "37140638c2e174d7320c74b0863292d26f7cea5d0215a3d7e4668e44227583f2"
+    },
+    {
+      "path": "src/Styles/build526-fishing.css",
+      "bytes": 951,
+      "sha256": "e3e5168772ae2ecaf11ce8496144c59f6311428b70c342593279a8b499b1c344",
+      "base_sha256": null
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "1687c85945dec411f6b24c74b1ee305a5d04eace49e9e9f1cd95f592062a0431",
+      "base_sha256": "b18222fbb6301a32b7b5da4acdb6041b4f4a063ccb7d93a43b4f03d2aef75e13"
+    },
+    {
+      "path": "src/fishing/Audio524.js",
+      "bytes": 956,
+      "sha256": "1d18eccb0460b58756e2a6ecce2b8cf1ba79fdef054d1b49b75a11854f5e3051",
+      "base_sha256": "b70f9a376328c6930002fb07a49097f7a645b366c0283880c466d1867aa0091a"
+    },
+    {
+      "path": "src/fishing/Controls524.js",
+      "bytes": 2102,
+      "sha256": "c78469696d0249812a2ddd16474c52f301c43b97782a63527c1315e4b0e8c179",
+      "base_sha256": "5d7b522bf5785b7968f6f8a192ae3c166670d4241ebde30dc95d8a2368ab54d3"
+    },
+    {
+      "path": "src/fishing/Renderer524.js",
+      "bytes": 14069,
+      "sha256": "646b7cf7ab30d7273663703dc72357ec16108abf4461b1ab13d2e1c036d9cb09",
+      "base_sha256": "4ff80279887bcff7a8ac509d370994f3e468e53e25de09789c2c542bfc175647"
+    },
+    {
+      "path": "src/fishing/Rules524.js",
+      "bytes": 13603,
+      "sha256": "6477117ef176b0cff4bead81688b2ad84a8a83dddaacef08186242e4e0748f1c",
+      "base_sha256": "0caf967959e808d2352adeebfd8d3bf3b85b14ddf5f2c4d5a8ddd193d8b80cef"
+    },
+    {
+      "path": "src/fishing/View524.js",
+      "bytes": 21682,
+      "sha256": "09bc3d9fbc44a78aab87e3b051f2cf23b275d744a16cd0037655d826003f9125",
+      "base_sha256": "e68b958b997427c09b54bebc8790f2e794e2eb4aab42a0f651c70abd446979a5"
+    },
+    {
+      "path": "src/fishing/Water526.js",
+      "bytes": 1997,
+      "sha256": "23e6d9d603d686f8fb5165d5d85e6071e5f2371b8e71caf56f117b0a1b4b82dd",
+      "base_sha256": null
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "bytes": 3331,
+      "sha256": "c1ad4022caec69cb4c1f4f5df4c179dc4a7ec0543920011d415464e81d1496f1",
+      "base_sha256": "0ab5975735c9ede8dada5c3eb46270542af93c87283a438514199eeee93a2492"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 11164,
+      "sha256": "d99ef39264e0c1c54acede2394569675460b34702d0d51555fbb995a1353b734",
+      "base_sha256": "5be9bdbc5991aec303fa2c8ea7cdd57ceafd580807d76bd8347f006eb340e84e"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 26376,
+      "sha256": "0bc6ce9a03a27ae2540be5ba1c51a5679cbd37028f6ce1458b7aa5ef359945a4",
+      "base_sha256": "57bd54261d3feb8a3e0e2aee4888d3e2e83d1f747eecc9dec6634ca82162b9a9"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "2b47dbbd633979a2e592e1d22968f68a9e2a071e7d475edcd8f42840fd125014",
+      "base_sha256": "24168313af518657f366092843a6f5f092341af213054001a3424e122e8284b5"
+    },
+    {
+      "path": "tests/build524-fishing.test.mjs",
+      "bytes": 26810,
+      "sha256": "826ec347babe917babbeb027691b06bf5be3e8233390cad426cb7cfb0bab15db",
+      "base_sha256": "9f07af1122a2b1c4194c26c300557c33d1c796c35d19c94a4aecbee59ff84f3b"
+    },
+    {
+      "path": "tests/build525-fishing.test.mjs",
+      "bytes": 6810,
+      "sha256": "dffe67409139103b6469cb05f6c03a28ee9d1ece0729cfa1c82b7a5cb3a9c783",
+      "base_sha256": "af0d91d7ea1704ba93c369b83fa18aa82aa57ffdd1db58316d088c10e043b60a"
+    },
+    {
+      "path": "tests/build526-fishing.test.mjs",
+      "bytes": 6638,
+      "sha256": "7af669432a394e79d8b308b4b9d4e770d1c00743d3606a719f76ab7de2590e4b",
+      "base_sha256": null
+    },
+    {
+      "path": "tools/build526/canvas-check.mjs",
+      "bytes": 2676,
+      "sha256": "1e65fb065a681face190e6041cc2d5d85bbfad0b8c91c07292e2116b073ef219",
+      "base_sha256": null
+    },
+    {
+      "path": "world-raid-offline526-assets.json",
+      "bytes": 40743,
+      "sha256": "1c9862b782965d0208d389531d6c12db4f2b9ecf3525bd3652e610c8d1c23035",
+      "base_sha256": null
+    },
+    {
+      "path": "world-raid-offline526-sw.js",
+      "bytes": 1844,
+      "sha256": "bcb2f612d5420f6105c689130e597ca4b5f0c474a5bcf3fab874cb9ea703642a",
+      "base_sha256": null
+    }
+  ]
+}

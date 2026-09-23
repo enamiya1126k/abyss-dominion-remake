@@ -1,0 +1,54 @@
+{
+  "baseline525": {
+    "matches": 100,
+    "catches": 4722,
+    "misses": 82,
+    "score": 696938,
+    "bosses": 492,
+    "humanWins": 0,
+    "humanScore": 0,
+    "meanCatches": 11.805,
+    "meanMisses": 0.205,
+    "meanScore": 1742.345,
+    "meanHumanScore": null
+  },
+  "build526": {
+    "matches": 100,
+    "catches": 2668,
+    "misses": 716,
+    "score": 123939,
+    "bosses": 1,
+    "humanWins": 0,
+    "humanScore": 0,
+    "meanCatches": 6.67,
+    "meanMisses": 1.79,
+    "meanScore": 309.8475,
+    "meanHumanScore": null
+  },
+  "simulatedHuman525": {
+    "matches": 100,
+    "catches": 4336,
+    "misses": 81,
+    "score": 653877,
+    "bosses": 463,
+    "humanWins": 5,
+    "humanScore": 131143,
+    "meanCatches": 10.84,
+    "meanMisses": 0.2025,
+    "meanScore": 1634.6925,
+    "meanHumanScore": 1311.43
+  },
+  "simulatedHuman526": {
+    "matches": 100,
+    "catches": 2794,
+    "misses": 532,
+    "score": 189203,
+    "bosses": 28,
+    "humanWins": 96,
+    "humanScore": 98905,
+    "meanCatches": 6.985,
+    "meanMisses": 1.33,
+    "meanScore": 473.0075,
+    "meanHumanScore": 989.05
+  }
+}
