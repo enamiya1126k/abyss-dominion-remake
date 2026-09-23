@@ -1,0 +1,15 @@
+/* Only the fishing game; keep its existing touch targets and stage layout. */
+.fi-cover524{background-image:linear-gradient(0deg,#032419f2,transparent 80%),url('../../assets/fishing525/cover.webp')}
+.fi-catch524{left:5%;right:5%;display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px;padding:9px 10px;align-items:center;background:linear-gradient(110deg,#153b30f0,#10392bef);border:1px solid #cbb375;border-radius:8px;box-shadow:0 4px 15px #021c2040}
+.fi-catch524>div{display:grid;gap:5px;min-width:0}
+.fi-catch524 .fi-fish524{width:72px;height:72px}
+.fi-catch524 strong{font-size:19px;overflow-wrap:anywhere}
+.fi-catch524 em{font-style:normal;font-size:9px;line-height:1.4;color:#d6ddbb}
+.fi-catch524 small{letter-spacing:1.7px}
+.fi-catch524.is-golden{border-color:#fff0a8;background:linear-gradient(110deg,#4d5130f5,#163b2bef);box-shadow:inset 0 0 12px #e3bb6233,0 4px 15px #021c2040}
+.fi524 .fi-fish524.fi-lord525{height:auto;aspect-ratio:3/2}
+.fi524 .fi-choice524 .is-chain525{border-color:#edda8d;background:linear-gradient(135deg,#456d42,#20543b 65%,#173d2c);color:#fff0b5;box-shadow:inset 0 0 0 3px #103c2544,inset 0 0 0 4px #d3c58999,0 4px #051e15}
+.fi-choice524 b{font-size:15px}
+.fi-choice524 button>small{white-space:normal;text-align:center;line-height:1.4}
+.fi-instruction524 span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:359px){.fi-catch524{grid-template-columns:60px minmax(0,1fr)}.fi-catch524 .fi-fish524{width:60px;height:60px}.fi-catch524 strong{font-size:17px}.fi-choice524 b{font-size:12px}.fi-choice524 small{font-size:8px}}

@@ -1,6 +1,6 @@
 // Only released games appear here. Future game adapters reuse the same party.
 export const PARTY_GAMES462=Object.freeze([
- {id:'fishing',name:'ぬし釣り大騒動',tag:'のんびり釣って、大物で大逆転',players:'４人対戦・空席はAI',image:'./assets/fishing524/cover.webp',description:'魚影を狙って糸を垂らそう。釣果を得点にする？ 大物のエサにする？ 育てた竿で最後は伝説のぬしへ！'},
+ {id:'fishing',name:'ぬし釣り大騒動',tag:'のんびり釣って、大物で大逆転',players:'４人対戦・空席はAI',image:'./assets/fishing525/cover.webp',description:'全32種類！ 長靴からまさかのお宝へ、釣果をエサに連鎖をつなげ。黄金魚、ルアー、最後は千年の大鯰を釣り上げよう！'},
  {id:'sumo',name:'魔獣ぶっとばし相撲',tag:'巨大化 × 溜め体当たり × 土俵崩壊',players:'4人対戦 · 90秒 · 空席はAI',image:'./assets/sumo523/cover.webp',description:'結晶を集めて巨大化、溜めた一撃で場外へ！ 崩れる土俵で、最後に立つ魔獣は誰だ。'},
  {id:'tower',name:'ブロック落としサバイバル',tag:'1対3 × 落とせ、かわせ、登れ',players:'4人対戦 · 空席はAI',image:'./assets/tower518/cover.webp',description:'頭上から迫るブロックをかわして、天空へ脱出！ 4つの手札で追い詰める1人と、仲間の頭も足場にする3人の決戦。'},
  {id:'quiz',name:'〇×サバイバル',tag:'タップで歩く × 最大20問',players:'1〜4人 · 空席はAI',image:'./assets/quiz518/cover.webp',description:'壁が閉まる前に、自分の足で〇か×へ！ 正解の台で上へ、不正解はマグマへ。最後まで生き残れ！'},

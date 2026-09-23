@@ -1,0 +1,9 @@
+Build525 source checks: PASS
+Node syntax: 17 changed/new JS and MJS files passed.
+Import map: all changed frontend aliases target v3.1.204-build525.
+Offline cache: Build525 registration, cache, asset list coherent; all inherited asset paths retained.
+Changed asset paths: assets/fishing525 only.
+Existing minigame dedicated sources/assets and all inherited CSS: byte-identical to Build524.
+Shared changes: fishing version gating, fishing catalog, version/cache only.
+Inherited unavailable modules (not replaced): src/data/species.js, src/data/endgameCharacters.js, src/ui/MonsterVisual.js.
+Actual browser / physical iPhone / deployed server: NOT tested or updated.
