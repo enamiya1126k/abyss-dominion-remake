@@ -30,11 +30,11 @@ export function botRunner519(g,p,A){if(!p.alive||p.escaped)return{axis:0};let gr
   if(g.falling){const f=g.falling,left=f.x-.70,right=f.x+Math.max(...f.cells.map(c=>c[0]))+1.70;for(const x of [left,right])if(x>=.3&&x<=9.7)for(const jump of [false,true])options.push({x,y:p.y,jump,dash:false});}
   for(const o of alive(g))if(o!==p&&(o.y>p.y+.4||o.seat<p.seat)&&Math.abs(o.x-p.x)<2.7&&o.y+A.C.ph<=p.y+2.1&&o.y+A.C.ph>p.y+.2)options.push({x:o.x,y:o.y+A.C.ph,head:o.playerId,jump:true,dash:false});
   if(g.elapsed>=(p.superReady??0)){
-   const high=ledges.filter(t=>t.y>p.y+2.17&&t.y<=p.y+5.17&&Math.abs(t.x-p.x)<4.4).sort((a,b)=>(b.y*3-Math.abs(b.x-p.x))-(a.y*3-Math.abs(a.x-p.x))).slice(0,5);
+   const high=ledges.filter(t=>t.y>p.y+2.17&&t.y<=p.y+(A.C.superJump**2/(2*A.C.gravity))&&Math.abs(t.x-p.x)<4.4).sort((a,b)=>(b.y*3-Math.abs(b.x-p.x))-(a.y*3-Math.abs(a.x-p.x))).slice(0,5);
    for(const t of high)options.push({...t,super:true,jump:false});
-   if(p.y>=10.9)options.push({x:p.x,y:16,super:true,jump:false});
+   if(p.y>=A.C.height-(A.C.superJump**2/(2*A.C.gravity))+.02)options.push({x:p.x,y:A.C.height,super:true,jump:false});
   }
-  if(p.y>=13.8||p.support)options.push({x:p.x,y:16,jump:true,dash:false});
+  if(p.y>=A.C.height-2.2||p.support)options.push({x:p.x,y:A.C.height,jump:true,dash:false});
   let best=null;for(const plan of options){const score=trial(g,p,plan,A).score+(memory&&Math.abs(memory.plan.x-plan.x)<.2?.35:0);if(!best||score>best.score)best={score,plan};}
   memory={plan:best.plan,until:g.elapsed+(g.falling?200:300),board:g.boardRevision,falling};group.set(p.playerId,memory);
  }
@@ -44,13 +44,13 @@ function covering(cells,x,px){return cells.some(([dx])=>Math.abs(x+dx+.5-px)<.8)
 export function chooseDrop519(g,A){const runners=alive(g);if(!runners.length)return null;const all=[];const ledges=boardInfo(g,A).ledges;
  for(let slot=0;slot<4;slot++){const seen=new Set();for(let rotation=0;rotation<4;rotation++){const cells=A.shape(g.hand[slot],rotation),key=cells.map(String).sort().join(';');if(seen.has(key))continue;seen.add(key);const width=1+Math.max(...cells.map(c=>c[0]));for(let x=0;x<=10-width;x++){
   const land=A.landing(g,cells,x);if(!A.fits(g,cells,x))continue;const placed=cells.map(([dx,dy])=>({x:x+dx,y:land+dy,type:g.hand[slot]}));let score=-land*.08,threat=0,gift=0;
-  for(const p of runners){const weight=1+p.y/8,eta=Math.max(0,(18-p.y-A.C.ph)/A.fallSpeed(g.elapsed)),projected=clamp(p.x+p.vx*Math.min(.65,eta),.3,9.7),hits=covering(cells,x,p.x),ahead=covering(cells,x,projected);let escapes=0,covered=0;
+  for(const p of runners){const weight=1+p.y/8,eta=Math.max(0,(A.C.height+2-p.y-A.C.ph)/A.fallSpeed(g.elapsed)),projected=clamp(p.x+p.vx*Math.min(.65,eta),.3,9.7),hits=covering(cells,x,p.x),ahead=covering(cells,x,projected);let escapes=0,covered=0;
    for(let px=Math.max(.5,p.x-2);px<=Math.min(9.5,p.x+2);px+=.5)if(!A.solid(g,px,p.y,false)){escapes++;if(covering(cells,x,px))covered++;}
    const fraction=covered/Math.max(1,escapes),under=placed.some(b=>b.y<p.y+A.C.ph&&Math.abs(b.x+.5-projected)<.8);
    threat+=(ahead?4:0)*weight+(hits?2:0)*weight+fraction*8*weight+(under?14*fraction*weight:0);
    const rises=placed.filter(b=>b.y+1>p.y+.05&&b.y+1<=p.y+2.2&&Math.abs(b.x+.5-p.x)<3.3);
    if(rises.length)gift+=Math.max(...rises.map(b=>b.y+1-p.y))*weight*3;
-   if(placed.some(b=>b.y+1>=16&&p.y>=13.8&&Math.abs(b.x+.5-p.x)<3.4))gift+=150;
+   if(placed.some(b=>b.y+1>=A.C.height&&p.y>=A.C.height-2.2&&Math.abs(b.x+.5-p.x)<3.4))gift+=150;
   }
   const candidate={...g,board:[...g.board,...placed],boardRevision:g.boardRevision+1,falling:null};const sealed=A.impossible(candidate)==='sealed';
   // Prefer denying an exit/covering a pocket over constructing the enemy a staircase.

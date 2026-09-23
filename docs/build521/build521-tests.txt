@@ -1,0 +1,16 @@
+✔ Build521 dropper mounts in fixed full overview and cannot toggle into a cropped camera (360.491592ms)
+✔ Build521 runner retains the wide follow camera and optional overview toggle (21.13219ms)
+✔ Build521 exit is 20: boosting from 15 is insufficient, from 16 wins, normal jump from 18 wins (10.810014ms)
+✔ Build521 all 200 cells participate in sealing, including the upper four new rows (1.615753ms)
+✔ Build521 blocks fit up to row 20 without overflowing the new ceiling (0.525098ms)
+✔ Build521 migration from Build520 preserves an existing boost cooldown (1.014113ms)
+✔ Build521 three initially stacked runners cannot instantly clear by using all boosts together (5.797615ms)
+✔ Build521 rejects the actual previous Build520 wire capability while accepting the new one (5.383197ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 619.271403
