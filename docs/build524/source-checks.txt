@@ -1,0 +1,5 @@
+Changed JS/MJS syntax: PASS
+Changed frontend import-map aliases: PASS
+New offline manifest + CSS + art references: PASS
+Dedicated game directories and all existing CSS unchanged byte-for-byte from Build523: PASS
+No production fixture substitutes for missing inherited modules: PASS

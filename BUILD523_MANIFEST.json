@@ -1,0 +1,219 @@
+{
+  "build": 523,
+  "version": "3.1.202",
+  "requires_build": 522,
+  "patch": true,
+  "deployed": false,
+  "sumo_protocol": 1,
+  "tower_protocol": 4,
+  "server_restart_required": true,
+  "server_prerequisite": "Build522 source plus this patch, including online-server and shared src/sumo/Rules523.js",
+  "tests": {
+    "passed": 95,
+    "failed": 0,
+    "sumo_tests": 25,
+    "ai_matches": 100,
+    "actual_browser": false,
+    "physical_iphone": false
+  },
+  "files": [
+    {
+      "path": "README_BUILD523.md",
+      "bytes": 4337,
+      "sha256": "3b9c0501775dc58837a7c8b7b3fed4ee7dd10f2dff6e421143cc103120628bc4",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/sumo523/cover.webp",
+      "bytes": 192708,
+      "sha256": "65137d1f82099043432e3428d778f9a8d2162170869b75ea1419a22f200abc0d",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/NEXT_MINIGAME.md",
+      "bytes": 568,
+      "sha256": "30b771d8e767ae6d810e308e574744ffb142c4cdb716bbc312c93f3b5da5135b",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build523/art-sources.md",
+      "bytes": 1702,
+      "sha256": "fc8f1540b36146c01a55b32c37e5e8ca08bbd5577d89dc102c7fe42241932c60",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build523/source-checks.txt",
+      "bytes": 225,
+      "sha256": "8e0f226b9a57bb793e5673dbf9d5ce67b647fe9e160efca7b11b125b3109c215",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build523/tests-regression.txt",
+      "bytes": 9596,
+      "sha256": "513470417c1fc1f7818e239a38f9c188eea06debf61a1f29f4113b817a341aeb",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build523/tests-sumo.txt",
+      "bytes": 2728,
+      "sha256": "7ea44014e6b439422a07c3461d55f7345942f3feac5a8d4e47ce8a7825b050f3",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build523/verification.md",
+      "bytes": 2902,
+      "sha256": "5edbec16ce5028362711a6e1483c9e64e3448d006d2f0c27c8301157eb70e112",
+      "base_sha256": null
+    },
+    {
+      "path": "index.html",
+      "bytes": 167317,
+      "sha256": "863391860f8ba9c8dad8ad7e23c92862645c0a3b0be75b9aed23754b03e427ae",
+      "base_sha256": "c8ce00eff0b966b16615ab5452a7b0cb929f8c948f2757c378320607723a9917"
+    },
+    {
+      "path": "online-server/server.js",
+      "bytes": 23111,
+      "sha256": "f4f1834e75fb016494296830df79e2b3ed6e5e7b55d675f810aa3bd120e0a6e2",
+      "base_sha256": "1de43545b8cc1d182b7633c8de4e548769ec4afbdc6fc84987416e3057e977c7"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 18790,
+      "sha256": "6accb110eec8ed6acec4a5da1519b4286393c9a60b01dc9020214f8506d3f35c",
+      "base_sha256": "7038355d3e33c6a98dde58bf7921c013354f0aa372fd5e880687e6606564f0b2"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 24938,
+      "sha256": "e4ec1e36075f24ddfbc1c84aa8ab6a96c1dfb45bbfa1bf6963a69a6cdeb0e4a3",
+      "base_sha256": "690ba276444af54595ae15d09f0af96074ae1203c7806cb111e295a11d223662"
+    },
+    {
+      "path": "online-server/src/SumoCoordinator523.js",
+      "bytes": 4743,
+      "sha256": "951ba72e5a925a7892f2f049d56f5f2c18a56e3ff8508015833203a9b0069f4a",
+      "base_sha256": null
+    },
+    {
+      "path": "src/Styles/build523-sumo.css",
+      "bytes": 10883,
+      "sha256": "dcbbfe904c8226322bb3d00a12c15ffef29fe457279d4db8c086ef9d2466d9b4",
+      "base_sha256": null
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "3b95f10a3585d51223ac081a58e5ba4954c5ffa02a17b61ab8a469339e269906",
+      "base_sha256": "55c592d9c78863643abc52f69708866a932093b313331bee28f0e845aeb1a5fe"
+    },
+    {
+      "path": "src/party/PartyColorUI499.js",
+      "bytes": 7526,
+      "sha256": "87ab6c445449db099e2b11ea0ebbe23142236c5a6f8f51119ebe9f32115adb7d",
+      "base_sha256": "428ffced292755c9f44b101dc627bd6744cd9d61cdeb62e324c94d5995cda987"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "bytes": 2965,
+      "sha256": "bf1d5ee545687da93b9d2d3f8502e5842e6c6b89be36c9b0799302449ef09efc",
+      "base_sha256": "3ae398ff224dcdd655bbee18cd88cc95d44b443347446588f0d97f5da6a084f2"
+    },
+    {
+      "path": "src/party/PartyMember485.js",
+      "bytes": 7147,
+      "sha256": "8237e8b2200f023f514cdcd0a9dec1d42763445e25625efb536a4c9e5e1f2d46",
+      "base_sha256": "1eb7aab18184fa0ac63ed1d293e0d2d692d9298092296a8b6cecc0896a6a2e7b"
+    },
+    {
+      "path": "src/party/PartyResults490.js",
+      "bytes": 3464,
+      "sha256": "8621285d44991de474774d9915469f8c2f9aa71af1db39c8226dca3784319dd5",
+      "base_sha256": "463c62b8a7943b86a6f6cae1853e17553e4179dc87e9e04d2302e2efe2d56603"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 10886,
+      "sha256": "1b68f4884259748f0dca5d74fd5550f619c3880d9ba31fdf84917a5d66364ff1",
+      "base_sha256": "5fa4518152604271b678ff84ae0679d6555be4f45de84fdc6f7f2aa3e145481e"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 25788,
+      "sha256": "cb679e1b635747fc20da7d56c3f5f240f601a6a6f1cf3e365c7d27518693b339",
+      "base_sha256": "8a2e140629c082669c4e0b43086056c2619f01259620659516f05f28ec8bcb81"
+    },
+    {
+      "path": "src/race/RacePresentation452.js",
+      "bytes": 6015,
+      "sha256": "64bb8bbd9c7176b273269bdf74397a285775578278253448fb543a92afa13090",
+      "base_sha256": "3eede2489e2bfc175baa94353e0b3d39e5629bc1fb538d9655ed995573dd52f1"
+    },
+    {
+      "path": "src/race/RaceUX458.js",
+      "bytes": 3045,
+      "sha256": "5fd08dd5d49f9154707ccc8b6aa4f578c8ac6dc62c10578e7bba93fee935c313",
+      "base_sha256": "7079239360248ca5023f35b6d25aab9a9a4d9164bb4d9c744c30028a01b2128a"
+    },
+    {
+      "path": "src/sumo/Audio523.js",
+      "bytes": 1016,
+      "sha256": "b001c0e20639be7768cc2c06469b43071acb817a6d0ab96903f3bb4ab95190f2",
+      "base_sha256": null
+    },
+    {
+      "path": "src/sumo/Controls523.js",
+      "bytes": 3010,
+      "sha256": "1de58468e77aecbd436f433002ee9327ca388e0306e3eb1b35d4f367198629b8",
+      "base_sha256": null
+    },
+    {
+      "path": "src/sumo/Renderer523.js",
+      "bytes": 7123,
+      "sha256": "23f5436ec1dc8821357a59c44c43c7c22372c3c7fbf65c1c673576d6daa3469d",
+      "base_sha256": null
+    },
+    {
+      "path": "src/sumo/Rules523.js",
+      "bytes": 10008,
+      "sha256": "52398bad40c54337e81c06c70de5b7d2459bd8165eeb580cbca368462104138b",
+      "base_sha256": null
+    },
+    {
+      "path": "src/sumo/View523.js",
+      "bytes": 17344,
+      "sha256": "035d5a660ba31cb657896e579fb5005fd9b51db40faf3a235c7036a73b00abbc",
+      "base_sha256": null
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "238393eb0a8cd6938b585ce0ab6ea252b37e4f2ee60b881366d9b15f8db271a4",
+      "base_sha256": "3a8b6f0456a1aace6d0c7a8d82c411aa7656bced6f999611a1c1bf447de5a94f"
+    },
+    {
+      "path": "tests/build517-tower.test.mjs",
+      "bytes": 25640,
+      "sha256": "b91c79dc8b9f18b6179016434a8e064dc2242781c1f860909cab0996eaed2890",
+      "base_sha256": "45c596d22b4a490c5416049c528f11d35b19a53dc6e862917e5005cd0d0c6e8d"
+    },
+    {
+      "path": "tests/build523-sumo.test.mjs",
+      "bytes": 20167,
+      "sha256": "5917ea09cd2cba538f0f4a6a8cf17a334445768438036a102bac152042afb59b",
+      "base_sha256": null
+    },
+    {
+      "path": "world-raid-offline523-assets.json",
+      "bytes": 39877,
+      "sha256": "90e64eb0be68b064e1d2b3083d393408121c77add7e11dbfaa953d24e95ca5d8",
+      "base_sha256": null
+    },
+    {
+      "path": "world-raid-offline523-sw.js",
+      "bytes": 1844,
+      "sha256": "21bf779dd71636eab5dfaac42048af8086b5ced5cb51f2c8c301424594614ce9",
+      "base_sha256": null
+    }
+  ]
+}

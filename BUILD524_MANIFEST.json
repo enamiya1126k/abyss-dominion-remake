@@ -1,0 +1,243 @@
+{
+  "build": 524,
+  "version": "3.1.203",
+  "requires_build": 523,
+  "patch": true,
+  "deployed": false,
+  "fishing_protocol": 1,
+  "sumo_protocol": 1,
+  "tower_protocol": 4,
+  "server_restart_required": true,
+  "tests": {
+    "passed_latest": 121,
+    "failed": 0,
+    "fishing_tests": 26,
+    "fishing_ai_matches": 100,
+    "actual_browser": false,
+    "physical_iphone": false
+  },
+  "files": [
+    {
+      "path": "README_BUILD524.md",
+      "bytes": 5202,
+      "sha256": "783b82fe7f54bdb697cbbdf2ecc39758fc288f764042fadb938a3f1bba5c4ad4",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/fishing524/cover.webp",
+      "bytes": 219788,
+      "sha256": "06b5211a41791b723249453cbbe3057e3a5ae9a461f0651587e7ebcb5217523d",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/fishing524/fish-atlas.webp",
+      "bytes": 231926,
+      "sha256": "ad4900df967367a96ec0a6112449f8c25d4cde0cf470804c41b7d8f059d337e8",
+      "base_sha256": null
+    },
+    {
+      "path": "assets/fishing524/pond.webp",
+      "bytes": 409472,
+      "sha256": "89dee5ab6ff2e2fa4ea01356520a648d4e14f26ba7c4ae274825d2eba183c473",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/NEXT_MINIGAME.md",
+      "bytes": 893,
+      "sha256": "7ae4b25c7971ef7e4909fc5a3743a35546e904eabae39ccce2ca9a10266edc19",
+      "base_sha256": "30b771d8e767ae6d810e308e574744ffb142c4cdb716bbc312c93f3b5da5135b"
+    },
+    {
+      "path": "docs/build524/art-sources.md",
+      "bytes": 6019,
+      "sha256": "0e842d3fc260923cca343f2b1907a632b34cdd4fd4444f45fba251fe85a9969f",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build524/source-checks.txt",
+      "bytes": 282,
+      "sha256": "99e8fc13b19138006e4268676d67350f83dc653645b2f9357f5a1fee86e46787",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build524/tests-final.txt",
+      "bytes": 12371,
+      "sha256": "46d053a604f199d2a9154be2ea20084a5f35d7e3547608592e308e2a135a320a",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build524/tests-fishing.txt",
+      "bytes": 2894,
+      "sha256": "54ec014890e81360eca8065427fe1d5b4003fc668ef363c672ec2ce2d2120a43",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build524/tests-regression.txt",
+      "bytes": 12421,
+      "sha256": "f886a4e4a55f4b103558d8faf58b025a7212db0f2eb543d65cae549f0c270fdd",
+      "base_sha256": null
+    },
+    {
+      "path": "docs/build524/verification.md",
+      "bytes": 3418,
+      "sha256": "92c567dd156a107f3f04a706d92467c3bd3518ce990a7f92bcc0106727a94055",
+      "base_sha256": null
+    },
+    {
+      "path": "index.html",
+      "bytes": 169406,
+      "sha256": "97e32831136069aa141bbaa437964174f32bb2da7685bd015628f0c7240df060",
+      "base_sha256": "863391860f8ba9c8dad8ad7e23c92862645c0a3b0be75b9aed23754b03e427ae"
+    },
+    {
+      "path": "online-server/server.js",
+      "bytes": 23246,
+      "sha256": "5b2856eba1de82220b4244e02981d0cec3ff43c262e7b01c9467fce121bc0f02",
+      "base_sha256": "f4f1834e75fb016494296830df79e2b3ed6e5e7b55d675f810aa3bd120e0a6e2"
+    },
+    {
+      "path": "online-server/src/FishingCoordinator524.js",
+      "bytes": 4868,
+      "sha256": "7aa5804483879a48cb0a936c14a1b48d5ba1969daf1d856278431ed44e3d5f8e",
+      "base_sha256": null
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 19449,
+      "sha256": "4855dcf495474831812efee9845737a2f1578a65808d4121b64903cc8cb230e3",
+      "base_sha256": "6accb110eec8ed6acec4a5da1519b4286393c9a60b01dc9020214f8506d3f35c"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 25436,
+      "sha256": "8ef1a5a67a3b4b259b76828b813cfafa457ebf8b6cde8e136184ca47350f6077",
+      "base_sha256": "e4ec1e36075f24ddfbc1c84aa8ab6a96c1dfb45bbfa1bf6963a69a6cdeb0e4a3"
+    },
+    {
+      "path": "src/Styles/build524-fishing.css",
+      "bytes": 11622,
+      "sha256": "4476ae75a0d8deade765b2b4b614e2d731b092285d858ba0d9be7b8566f9f3bf",
+      "base_sha256": null
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "1a31ecb39cc024667b5648ef224c16ce1e2b065d7223f335454bc2afe37c2361",
+      "base_sha256": "3b95f10a3585d51223ac081a58e5ba4954c5ffa02a17b61ab8a469339e269906"
+    },
+    {
+      "path": "src/fishing/Audio524.js",
+      "bytes": 915,
+      "sha256": "ca95d9f7c6314c514f6f024eeef6f8ebf97e9cd2a5664aa7d6a8d07d48d81353",
+      "base_sha256": null
+    },
+    {
+      "path": "src/fishing/Controls524.js",
+      "bytes": 2074,
+      "sha256": "5d7b522bf5785b7968f6f8a192ae3c166670d4241ebde30dc95d8a2368ab54d3",
+      "base_sha256": null
+    },
+    {
+      "path": "src/fishing/Renderer524.js",
+      "bytes": 7404,
+      "sha256": "9e4ccb7591fcf45251121f15de8e6c3bb20ed291b8c0c3eb1b9c52d4ec37c21a",
+      "base_sha256": null
+    },
+    {
+      "path": "src/fishing/Rules524.js",
+      "bytes": 9185,
+      "sha256": "e66bf4a5bee987a8e76032390723d9ac6e6ba55ce6ab21624223a061c40dc64e",
+      "base_sha256": null
+    },
+    {
+      "path": "src/fishing/View524.js",
+      "bytes": 18094,
+      "sha256": "57fd25eb6b363d59224a484ab183584db83b7d38445c6dfa37a5b95ca7c147af",
+      "base_sha256": null
+    },
+    {
+      "path": "src/party/PartyColorUI499.js",
+      "bytes": 7544,
+      "sha256": "da3aaff294476d6fb87e0633fe74a2f61fb0d34618f81288f710344c9114e933",
+      "base_sha256": "87ab6c445449db099e2b11ea0ebbe23142236c5a6f8f51119ebe9f32115adb7d"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "bytes": 3291,
+      "sha256": "ba54ed22539d1bc07b58b7668b1d78b5ec112f14e3b1726026c5c70b9bee4f65",
+      "base_sha256": "bf1d5ee545687da93b9d2d3f8502e5842e6c6b89be36c9b0799302449ef09efc"
+    },
+    {
+      "path": "src/party/PartyMember485.js",
+      "bytes": 7165,
+      "sha256": "7bfb351ab9f2fae7fae053104a5bb69b2a0308a53cc48fdc1e518e5a8f2f4afe",
+      "base_sha256": "8237e8b2200f023f514cdcd0a9dec1d42763445e25625efb536a4c9e5e1f2d46"
+    },
+    {
+      "path": "src/party/PartyResults490.js",
+      "bytes": 3482,
+      "sha256": "f0cc49609f4b8a094c8f6988f043fea3182e02a36ee5f196e51bb18896e926e5",
+      "base_sha256": "8621285d44991de474774d9915469f8c2f9aa71af1db39c8226dca3784319dd5"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 11164,
+      "sha256": "4137d7c39688775e4336fb5d175b8e0dfb95120811d20dec895af2a8714bfc9e",
+      "base_sha256": "1b68f4884259748f0dca5d74fd5550f619c3880d9ba31fdf84917a5d66364ff1"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 26376,
+      "sha256": "cf968ac95b86ffcb918dc8ed46c7510dc6509e9e4d3248b2d9513ea035cdbde2",
+      "base_sha256": "cb679e1b635747fc20da7d56c3f5f240f601a6a6f1cf3e365c7d27518693b339"
+    },
+    {
+      "path": "src/race/RacePresentation452.js",
+      "bytes": 6190,
+      "sha256": "6a8fc6b3ac40cec5a50c5fe9b1830eef92d1bbfb9eaa371640c43ef831bef285",
+      "base_sha256": "64bb8bbd9c7176b273269bdf74397a285775578278253448fb543a92afa13090"
+    },
+    {
+      "path": "src/race/RaceUX458.js",
+      "bytes": 3203,
+      "sha256": "704bc6b5923747bee32908b3e4efd95a59977990c96435a220b1d571d4449819",
+      "base_sha256": "5fd08dd5d49f9154707ccc8b6aa4f578c8ac6dc62c10578e7bba93fee935c313"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "f7e69cf594580bd41852dc08c1b835b04d63784543240fa09c87e9d1fee34091",
+      "base_sha256": "238393eb0a8cd6938b585ce0ab6ea252b37e4f2ee60b881366d9b15f8db271a4"
+    },
+    {
+      "path": "tests/build517-tower.test.mjs",
+      "bytes": 25658,
+      "sha256": "6f31b6f6976d939b4b10f856c6d0452e793dc75743490cb69e2623bb03d9c718",
+      "base_sha256": "b91c79dc8b9f18b6179016434a8e064dc2242781c1f860909cab0996eaed2890"
+    },
+    {
+      "path": "tests/build523-sumo.test.mjs",
+      "bytes": 20185,
+      "sha256": "320a033b25ea470aef652526b0de164b72e7b0a8739c5089451b5fa54f58fd62",
+      "base_sha256": "5917ea09cd2cba538f0f4a6a8cf17a334445768438036a102bac152042afb59b"
+    },
+    {
+      "path": "tests/build524-fishing.test.mjs",
+      "bytes": 22015,
+      "sha256": "20f9a671ec875d82dad5dd7464d83947ccc5a894758603ab33a96bed3858b257",
+      "base_sha256": null
+    },
+    {
+      "path": "world-raid-offline524-assets.json",
+      "bytes": 40302,
+      "sha256": "11b0c0bd9bd11c72be29a9b793f824d3c068ab22b1629cce4d533bf3dfa589a4",
+      "base_sha256": null
+    },
+    {
+      "path": "world-raid-offline524-sw.js",
+      "bytes": 1844,
+      "sha256": "024d1bde7028ac2d3961aa16e1337ea0f2da39d91c7df2d59ed7b6787c600a2f",
+      "base_sha256": null
+    }
+  ]
+}

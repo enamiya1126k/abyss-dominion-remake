@@ -1,0 +1,34 @@
+SUMO_AI_523 {"matches":100,"wins":[19,23,25,33],"draws":0,"meanSeconds":70.72950000000029,"maxHits":128}
+✔ 1–4 humans always produce four seats, equal base stats, and 18 crystals (2.417058ms)
+✔ diagonal movement normalizes and held charge slows movement without unlimited growth (7.812039ms)
+✔ release respects cooldown; cancellation never fires a charge (0.504531ms)
+✔ crystals increase body and resistance but remain capped (1.486595ms)
+✔ a strong small attacker can knock a max-size opponent sideways; one hit per charge (0.528931ms)
+✔ simultaneous head-on charges trade impulses rather than granting first-seat priority (7.035188ms)
+✔ ring out is immediate, one survivor wins, and a simultaneous wipe is a draw (1.769743ms)
+✔ rings collapse at 45/60/75/85 seconds and complete within 90 seconds (0.622573ms)
+✔ restart pauses unseen fatal time and snapshots hide roster and RNG (1.286389ms)
+✔ 100 AI matches terminate, all seats can win, physics stays finite and events remain bounded (2037.836482ms)
+✔ party creation/selection/readiness/start routes into sumo with old catalog intact (15.560287ms)
+✔ input rejects missing protocol, spectators, stale ids, forged coordinates and sequences (2.068745ms)
+✔ same-millisecond move/press/release packets merge; timeout cancels held input without firing (3.240804ms)
+✔ disconnect/home AI takeover and reconnect return control without persistent writes per input (2.484976ms)
+✔ frames stay party-scoped and replay/list clears only the completed sumo runtime (2.904033ms)
+✔ old clients cannot ready/start sumo; owned-character validation is enforced (0.960339ms)
+✔ actual sumo view mounts one RAF, caps DPR, reuses DOM on frames and stops hidden/after disposal (559.866841ms)
+✔ two-thumb movement and charge/release stay independent; cancellation and blur never fire (52.770587ms)
+✔ direction pad normalizes diagonals, avoids layout on moves and releases pointer ownership correctly (47.383093ms)
+✔ disabled keyboard charge cannot retain ownership or interfere with a later touch release (44.119653ms)
+✔ copy/select/drag gestures are suppressed on sumo controls only (42.66947ms)
+✔ stale or foreign frames cannot replace state; acknowledged direction and release remain predictable (66.46158ms)
+✔ victory remains on arena for 4.6 seconds before results and replay controls (54.473758ms)
+✔ character selection remount preserves nested roster, host, ancestor and window scroll (0.793518ms)
+✔ native Canvas renderer preserves floor/background caches for stationary-size frames and fits 320–430 widths (350.159499ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3488.32592

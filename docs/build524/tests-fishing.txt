@@ -1,0 +1,35 @@
+FISHING_AI_524 {"matches":100,"wins":[19,29,28,24],"bosses":565,"meanCatches":11.625,"meanMisses":0.2825}
+✔ one to four humans fill exactly four equal-stat seats with distinct colors (3.185377ms)
+✔ casts target visible shoals, clamp to water, reject double cast and consume at most one bait (7.94944ms)
+✔ bite is visible after waiting; public waiting state does not reveal fish or exact bite time (1.343188ms)
+✔ reeling makes progress; holding through a surge breaks line, easing lowers tension (0.527502ms)
+✔ surge has a readable warning and tired period rewards correct timing (0.324724ms)
+✔ landing grows rod; keep and bait are exclusive and repeated choices cannot duplicate rewards (7.092776ms)
+✔ choice defaults to points, boss cannot be accidentally discarded, bait and rod have caps (0.352108ms)
+✔ boss arrives only at 90 seconds and the last hook gets at most ten seconds overtime (0.893543ms)
+✔ time finish banks landed fish, unresolved hooks never score; exact point ties share rank (2.229777ms)
+✔ restart gap pauses unseen time; published objects do not leak the random seed or roster (0.370304ms)
+✔ 100 seeded four-AI matches finish, contain catches and bosses, bound data, and allow all seats to win (250.755292ms)
+✔ party selection/start routes into fishing while all nine existing catalog entries remain (13.513653ms)
+✔ input rejects old clients, outsiders, stale game/sequence, forged coordinates and invalid choices (1.853783ms)
+✔ rapid cast plus reel packets merge and input timeout releases the line (1.879703ms)
+✔ disconnect and home hand control to AI; reconnect returns it without persistence per input (1.910913ms)
+✔ frames stay party-scoped; completed game can replay or switch to sumo without old runtime (3.253686ms)
+✔ old capability and unowned character cannot start or replace owned selection (0.704707ms)
+✔ fishing view mounts one RAF, caches DOM, stops while hidden and removes listeners on dispose (384.050759ms)
+✔ casting uses water coordinates and ignores cancelled gestures or the pier (6.604231ms)
+✔ reel hold, ease override, multi-touch ownership and all release paths send correct state (8.086073ms)
+✔ copy/select/drag gestures stay scoped to fishing controls and captured water (9.699923ms)
+✔ stale/foreign frames are ignored and choice switches buttons without rebuilding the scene (7.917864ms)
+✔ final catch stays on the pond before results, same-score winners share presentation (8.821381ms)
+✔ lobby selection preserves roster, host, ancestor and page scroll (0.634826ms)
+✔ decoded pond and fish atlas render at mobile sizes and cache rebuilds only on size/art changes (984.242957ms)
+✔ mid-match party members can spectate but cannot cast or reel until the next game (11.178615ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1914.521922
