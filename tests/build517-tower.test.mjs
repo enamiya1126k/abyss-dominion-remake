@@ -59,3 +59,29 @@ test('Build518 pointer rotation happens once, directional hold releases, and pai
 test('Build518 finale uses gameplay stage first and only then exposes replay/result controls',()=>{const g=make();g.players[1].escaped=true;finish517(g,'run','escape');const d=browserFixture(g);try{assert.match(towerView517(d.c),/tw-cinema518/);assert.doesNotMatch(towerView517(d.c),/tw-resultrow517/);towerAfter517(d.c);assert.equal(d.rafs.size,1);assert.equal(d.elements.get('[data-tw-cinema517]').hidden,false);d.c.offset=g.finale518.until+100-Date.now();assert.match(towerView517(d.c),/tw-resultrow517/);assert.doesNotMatch(towerView517(d.c),/tw-cinema518/);d.flush();assert.equal(d.c.renders,1)}finally{d.restore()}});
 test('Build521 dropper mounts in fixed full overview and cannot toggle into a cropped camera',()=>{const d=browserFixture(make(),'p0');try{assert.doesNotMatch(towerView517(d.c),/data-tw-action517="camera"/);towerAfter517(d.c);const r=d.c.towerUI517.renderer;assert.equal(r.overview520,true);assert.ok(r.top>=0&&r.bottom<=r.height);towerClick517(d.c,{dataset:{twAction517:'camera'}});assert.equal(r.overview520,true);d.c.state.tower.players[1].y=19;d.flush();assert.ok(r.top>=0&&r.bottom<=r.height)}finally{d.restore()}});
 test('Build521 runner retains the wide follow camera and optional overview toggle',()=>{const d=browserFixture();try{assert.match(towerView517(d.c),/data-tw-action517="camera"/);towerAfter517(d.c);const r=d.c.towerUI517.renderer;assert.equal(r.overview520,false);assert.equal(r.left,12);const b=d.elements.get('[data-tw-camera517]');b.dataset.twAction517='camera';towerClick517(d.c,b);assert.equal(r.overview520,true);towerClick517(d.c,b);assert.equal(r.overview520,false);assert.equal(r.left,12)}finally{d.restore()}});
+
+test('Build522 animation reuses DOM references and only the shared displayed pose drives the camera',()=>{
+ const d=browserFixture(),oldPerf=globalThis.performance;let now=1000,queries=0;
+ globalThis.performance={now:()=>now};
+ try{towerAfter517(d.c);const u=d.c.towerUI517,r=u.renderer;const all=d.root.querySelectorAll;d.root.querySelectorAll=(...a)=>{queries++;return all(...a)};
+ for(const pawn of Object.values(u.pawns)){const query=pawn.querySelector;pawn.querySelector=(...a)=>{queries++;return query(...a)}}
+ u.pred.players[1].y=8;u.pred.players[1].vy=0;u.positions[1]={x:5,y:6};
+ const previousCamera=r.cameraY;now+=16;d.flush();assert.equal(queries,0);assert.equal(d.rafs.size,1);
+ const focusY=u.positions[1].y,max=r.worldHeight-r.height,target=Math.max(0,Math.min(max,r.worldBottom-focusY*r.cell-r.height*.81));
+ let expected=previousCamera+(target-previousCamera)*(1-Math.exp(-.016*11));expected=Math.min(expected,Math.max(0,r.worldBottom-(focusY+1.1)*r.cell-48));expected=Math.max(0,Math.min(max,expected));
+ assert.ok(Math.abs(r.cameraY-expected)<1e-8);assert.equal(d.c.renders,undefined);
+ }finally{d.restore();globalThis.performance=oldPerf}
+});
+test('Build522 touch guards are detached on dispose and held input still releases on blur',()=>{
+ const d=browserFixture();try{towerAfter517(d.c);assert.ok(d.root.events.has('selectstart'));assert.ok(d.root.events.has('contextmenu'));
+ d.moves[1].events.get('pointerdown')({pointerId:11,preventDefault(){}});assert.equal(d.c.towerUI517.input.axis,1);window.events.get('blur')();assert.equal(d.packets.at(-1).axis,0);towerBefore517(d.c);assert.equal(d.root.events.has('contextmenu'),false);assert.equal(d.rafs.size,0);
+ }finally{d.restore()}
+});
+test('Build522 acknowledged held direction survives a zero-velocity snapshot and release stays immediate',()=>{
+ const d=browserFixture(),oldPerf=globalThis.performance;let now=1000;globalThis.performance={now:()=>now};
+ try{towerAfter517(d.c);const u=d.c.towerUI517,right=d.moves[1];right.events.get('pointerdown')({pointerId:8,preventDefault(){}});const seq=d.packets.at(-1).seq;
+ const frame=structuredClone(d.c.state.tower);frame.serverAt+=10;frame.players[1].lastSeq=seq;frame.players[1].vx=0;
+ now+=10;towerFrame517(d.c,{selfId:'p1',serverNow:frame.serverAt,tower:frame});now+=20;d.flush();assert.ok(u.pred.players[1].x>frame.players[1].x);assert.equal(u.ackAxis522,1);
+ right.events.get('pointerup')({pointerId:8});const x=u.pred.players[1].x;now+=20;d.flush();assert.equal(u.pred.players[1].x,x);assert.equal(d.packets.at(-1).axis,0);
+ }finally{d.restore();globalThis.performance=oldPerf}
+});

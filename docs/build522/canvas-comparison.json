@@ -1,0 +1,44 @@
+[
+  {
+    "overview": false,
+    "y": 0,
+    "changed_channels": 0,
+    "max_channel_difference": 0,
+    "mean_channel_difference": 0
+  },
+  {
+    "overview": false,
+    "y": 8,
+    "changed_channels": 0,
+    "max_channel_difference": 0,
+    "mean_channel_difference": 0
+  },
+  {
+    "overview": false,
+    "y": 16,
+    "changed_channels": 0,
+    "max_channel_difference": 0,
+    "mean_channel_difference": 0
+  },
+  {
+    "overview": true,
+    "y": 0,
+    "changed_channels": 0,
+    "max_channel_difference": 0,
+    "mean_channel_difference": 0
+  },
+  {
+    "overview": true,
+    "y": 8,
+    "changed_channels": 0,
+    "max_channel_difference": 0,
+    "mean_channel_difference": 0
+  },
+  {
+    "overview": true,
+    "y": 16,
+    "changed_channels": 0,
+    "max_channel_difference": 0,
+    "mean_channel_difference": 0
+  }
+]

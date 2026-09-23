@@ -1,4 +1,6 @@
 /* Full-width fortress and thumb-sized controls. All selectors stay in this minigame. */
+/* No native selection/callout on descendants of a held game control. */
+.tw-play517 .tw-actionarea517,.tw-play517 .tw-actionarea517 *{-webkit-user-select:none!important;user-select:none!important;-webkit-touch-callout:none;-webkit-user-drag:none}
 .tw-play517{box-sizing:border-box;max-width:640px;background:#061d17}
 .tw-play517 .tw-head517{height:47px;padding:4px 9px}
 .tw-play517 .tw-head517>button{min-height:36px;height:36px;border-radius:7px}
