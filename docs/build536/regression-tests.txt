@@ -1,0 +1,157 @@
+✔ party identity, ready gate, host authority, home presence, spectator admission, reuse and persistence (934.505266ms)
+✔ disconnect preserves seats and transfers host after grace; game registry rejects unknown games (1.821142ms)
+✔ 5/10/10/20 commands, idempotency, no over-limit, fixed total cost and capped stacking (138.249576ms)
+✔ low bond produces bounded rests, bursts and missed commands; high bond obeys; seeded outcomes reproduce (181.422344ms)
+✔ old room v7 keeps five uses and old temperament; overview height follows track shape (0.580022ms)
+✔ race: offline member blocks start; host removal preserves ready status and enables AI match (847.148328ms)
+✖ sugoroku: offline member blocks start; host removal preserves ready status and enables AI match (4.135996ms)
+✔ cabbage: offline member blocks start; host removal preserves ready status and enables AI match (2.99361ms)
+✔ host-only permission, self-removal, stale room and active-match guards reject without membership mutation (2.164594ms)
+✔ repeated removal is idempotent and a stale request cannot remove someone who joined again (2.235378ms)
+✔ old saved members without new membership token can be removed from a lounge (1.535536ms)
+✔ result removal keeps the final scoreboard and returns the online removed player to the lounge (4.052326ms)
+✖ paid sugoroku entry is refunded exactly once and delivered after offline member reconnects (1.294064ms)
+✖ failed refund rolls back the entire removal; no player or payment is partially lost (1.572021ms)
+✔ removal survives restart and reconnect does not put the member back (4.202844ms)
+✔ host member controls and self color controls remain separate; empty seats are inert (1.497579ms)
+✔ tap → member dialog → remove sends exact member and room; cancel sends nothing (0.943091ms)
+✔ old server and playing game show a disabled removal; hostile display names remain text (0.215158ms)
+✔ acknowledged removal closes menu; stale member incarnation cannot remain selected (0.177029ms)
+✔ member menu is keyboard accessible and Escape cancels without removing (0.279541ms)
+✔ charge survives a direct hit, continues while stunned, and releasing immediately counters (4.776819ms)
+✔ MAX emits once per fill, can stay held, and gaining a level increases the capacity (1.243972ms)
+✔ all 13 levels increase capacity and force, but reach MAX within 1.6 seconds (0.844787ms)
+✔ Lv.13 full dash is over four times stronger than Lv.1 against the same opponent (4.644551ms)
+✔ direction guide uses the same speed and duration as the authoritative dash (1.828772ms)
+✔ iron boots absorb one direct hit without interrupting charge; the next hit knocks back (0.639222ms)
+✔ boots do not turn into timed invulnerability against two separate simultaneous attacks (0.81209ms)
+✔ blocking a dash on the lip keeps the defender planted and stops repeated body shoves (3.107076ms)
+✔ boots cannot save walking off the edge or a collapsing floor; edge rescue keeps a held charge (5.117447ms)
+✔ boots pickup does not stack or consume a second item when already equipped (3.918749ms)
+✔ magnet and boots both spawn; at most two collectible items are present (68.844274ms)
+✔ v2 migration keeps progress, geometry, existing edge rescue and magnet, and charge ratio (0.521946ms)
+✔ AI chooses the same tactic when only human/AI flags of opponents change (2.370463ms)
+✔ AI leaves a collapsing band along its own sector rather than aiming at the origin (0.331652ms)
+✔ v2 clients cannot submit inputs after the rule change (0.509295ms)
+✔ new effects, results and assets have import aliases and offline coverage without replacing fishing rules (3.230452ms)
+ℹ tests 36
+ℹ suites 0
+ℹ pass 33
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1526.648059
+
+✖ failing tests:
+
+test at game/tests/build485-party.test.mjs:31:49
+✖ sugoroku: offline member blocks start; host removal preserves ready status and enables AI match (4.135996ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   {
+  +     id: 'p0',
+  +     m: {
+  +       held: false,
+  +       message: '本体をBuild528に更新してください',
+  +       op: 'sg463',
+  +       raceId: undefined,
+  +       requestId: 'party485-1',
+  +       seq: undefined,
+  +       type: 'raceError451'
+  +     }
+  +   }
+  + ]
+  - []
+  
+      at lobby485 (file:///workspace/scratch/f849e4a30ac8/game/tests/build485-party.test.mjs:27:317)
+      at TestContext.<anonymous> (file:///workspace/scratch/f849e4a30ac8/game/tests/build485-party.test.mjs:31:164)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { id: 'p0', m: [Object] } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at game/tests/build485-party.test.mjs:36:1
+✖ paid sugoroku entry is refunded exactly once and delivered after offline member reconnects (1.294064ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   {
+  +     id: 'p0',
+  +     m: {
+  +       held: false,
+  +       message: '本体をBuild528に更新してください',
+  +       op: 'sg463',
+  +       raceId: undefined,
+  +       requestId: 'party485-2',
+  +       seq: undefined,
+  +       type: 'raceError451'
+  +     }
+  +   }
+  + ]
+  - []
+  
+      at lobby485 (file:///workspace/scratch/f849e4a30ac8/game/tests/build485-party.test.mjs:27:317)
+      at TestContext.<anonymous> (file:///workspace/scratch/f849e4a30ac8/game/tests/build485-party.test.mjs:36:112)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { id: 'p0', m: [Object] } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at game/tests/build485-party.test.mjs:37:1
+✖ failed refund rolls back the entire removal; no player or payment is partially lost (1.572021ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + [
+  +   {
+  +     id: 'p0',
+  +     m: {
+  +       held: false,
+  +       message: '本体をBuild528に更新してください',
+  +       op: 'sg463',
+  +       raceId: undefined,
+  +       requestId: 'party485-3',
+  +       seq: undefined,
+  +       type: 'raceError451'
+  +     }
+  +   }
+  + ]
+  - []
+  
+      at lobby485 (file:///workspace/scratch/f849e4a30ac8/game/tests/build485-party.test.mjs:27:317)
+      at TestContext.<anonymous> (file:///workspace/scratch/f849e4a30ac8/game/tests/build485-party.test.mjs:37:105)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ { id: 'p0', m: [Object] } ],
+    expected: [],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

@@ -1,0 +1,131 @@
+{
+  "engine": "153.0.8010.0",
+  "viewportEmulation": "Chromium mobile touch; not physical iPhone Safari",
+  "baseCharacterCatalog": "QA-only character placeholders for missing original modules. Production game view, canvas, generated artwork, rules and online coordinator are used unchanged.",
+  "results": [
+    {
+      "width": 320,
+      "height": 568,
+      "fit": {
+        "width": 320,
+        "height": 568,
+        "stage": {
+          "x": 0,
+          "y": 134,
+          "width": 320,
+          "height": 305,
+          "top": 134,
+          "right": 320,
+          "bottom": 439,
+          "left": 0
+        },
+        "jump": {
+          "x": 49,
+          "y": 484,
+          "width": 222,
+          "height": 43,
+          "top": 484,
+          "right": 271,
+          "bottom": 527,
+          "left": 49
+        },
+        "scale": 1
+      },
+      "chargeRelease": true,
+      "landing": true,
+      "pointerCancel": true,
+      "touchCancel": true,
+      "splashRespawn": true,
+      "timeout": true,
+      "replay": true,
+      "returnToList": true,
+      "zoomRestored": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "fit": {
+        "width": 390,
+        "height": 844,
+        "stage": {
+          "x": 0,
+          "y": 158,
+          "width": 390,
+          "height": 543,
+          "top": 158,
+          "right": 390,
+          "bottom": 701,
+          "left": 0
+        },
+        "jump": {
+          "x": 58,
+          "y": 755,
+          "width": 274,
+          "height": 49,
+          "top": 755,
+          "right": 332,
+          "bottom": 804,
+          "left": 58
+        },
+        "scale": 1
+      },
+      "chargeRelease": true,
+      "landing": true,
+      "pointerCancel": true,
+      "touchCancel": true,
+      "splashRespawn": true,
+      "timeout": true,
+      "replay": true,
+      "returnToList": true,
+      "zoomRestored": true
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "fit": {
+        "width": 430,
+        "height": 932,
+        "stage": {
+          "x": 0,
+          "y": 158,
+          "width": 430,
+          "height": 631,
+          "top": 158,
+          "right": 430,
+          "bottom": 789,
+          "left": 0
+        },
+        "jump": {
+          "x": 58,
+          "y": 843,
+          "width": 314,
+          "height": 49,
+          "top": 843,
+          "right": 372,
+          "bottom": 892,
+          "left": 58
+        },
+        "scale": 1
+      },
+      "chargeRelease": true,
+      "landing": true,
+      "pointerCancel": true,
+      "touchCancel": true,
+      "splashRespawn": true,
+      "timeout": true,
+      "replay": true,
+      "returnToList": true,
+      "zoomRestored": true
+    },
+    {
+      "fourWebSocketClients": true,
+      "courseRetained": true,
+      "fourHumanGoals": true,
+      "identicalResults": true
+    }
+  ],
+  "errors": [],
+  "baseAssetsMissing": [
+    "Historical checkout omits cabbage kitchen art"
+  ]
+}

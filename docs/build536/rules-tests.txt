@@ -1,0 +1,23 @@
+AI hunter wins / 30: 15
+✔ one hunter, three hiders, six disguises and exactly four seats, with 0–3 AI fillers (16.298633ms)
+✔ hunter cannot memorize hiding phase; hiders can move and transform during eight seconds (4.748386ms)
+✔ hunter snapshot cannot link names, player IDs, AI state, or owners to furniture (0.997583ms)
+✔ invalid, distant, duplicate, out-of-cooldown and non-hunter attacks do not spend charges (2.296229ms)
+✔ all three captures end once, while the final shot can still win (1.890723ms)
+✔ twelve misses lose, checked furniture cannot consume extra shots (2.364001ms)
+✔ one survivor at timeout gives the entire hiding team the win (12.961149ms)
+✔ small jiggles do not reset the 20 second reveal; meaningful relocation does (2.703364ms)
+✔ smoke hides all nearby furniture from hunter, blocks stale ID attacks, and expires (2.437515ms)
+✔ sonar gives anonymous nearby clues only and has two uses plus cooldown (1.123708ms)
+✔ malformed/stale/cross-game packets reject; queues preserve one-shot actions (1.821783ms)
+✔ real coordinator: four humans, selection, role authority, ready gate, private frames and result replay/list (48.459312ms)
+✔ disconnect/home takeover resumes human control without losing identity or sequence (11.499404ms)
+✔ serialization/restart and full AI matches terminate with valid scores and finite positions (575.713518ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 950.688222

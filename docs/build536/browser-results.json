@@ -1,0 +1,310 @@
+{
+  "engine": "153.0.8010.0",
+  "viewportEmulation": "Chromium, mobile touch",
+  "baseCharacterCatalog": "QA-only placeholders for absent historical base modules; production hide rules, view, canvas, assets, coordinator and WebSocket frames",
+  "results": [
+    {
+      "width": 320,
+      "height": 568,
+      "movement": true,
+      "disguise": true,
+      "smoke": true,
+      "timeout": true,
+      "replay": true,
+      "returnToList": true,
+      "zoomRestored": true,
+      "fit": {
+        "width": 320,
+        "button": {
+          "x": 226,
+          "y": 514,
+          "width": 84,
+          "height": 43,
+          "top": 514,
+          "right": 310,
+          "bottom": 557,
+          "left": 226
+        },
+        "props": [
+          {
+            "x": 10,
+            "y": 451,
+            "width": 47.5,
+            "height": 51,
+            "top": 451,
+            "right": 57.5,
+            "bottom": 502,
+            "left": 10
+          },
+          {
+            "x": 60.5,
+            "y": 451,
+            "width": 47.5,
+            "height": 51,
+            "top": 451,
+            "right": 108,
+            "bottom": 502,
+            "left": 60.5
+          },
+          {
+            "x": 111,
+            "y": 451,
+            "width": 47.5,
+            "height": 51,
+            "top": 451,
+            "right": 158.5,
+            "bottom": 502,
+            "left": 111
+          },
+          {
+            "x": 161.5,
+            "y": 451,
+            "width": 47.5,
+            "height": 51,
+            "top": 451,
+            "right": 209,
+            "bottom": 502,
+            "left": 161.5
+          },
+          {
+            "x": 212,
+            "y": 451,
+            "width": 47.5,
+            "height": 51,
+            "top": 451,
+            "right": 259.5,
+            "bottom": 502,
+            "left": 212
+          },
+          {
+            "x": 262.5,
+            "y": 451,
+            "width": 47.5,
+            "height": 51,
+            "top": 451,
+            "right": 310,
+            "bottom": 502,
+            "left": 262.5
+          }
+        ],
+        "stage": {
+          "x": 0,
+          "y": 129,
+          "width": 320,
+          "height": 274,
+          "top": 129,
+          "right": 320,
+          "bottom": 403,
+          "left": 0
+        },
+        "scale": 1
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "movement": true,
+      "disguise": true,
+      "smoke": true,
+      "timeout": true,
+      "replay": true,
+      "returnToList": true,
+      "zoomRestored": true,
+      "fit": {
+        "width": 390,
+        "button": {
+          "x": 279,
+          "y": 785.5,
+          "width": 98,
+          "height": 48,
+          "top": 785.5,
+          "right": 377,
+          "bottom": 833.5,
+          "left": 279
+        },
+        "props": [
+          {
+            "x": 13,
+            "y": 717,
+            "width": 56.5,
+            "height": 59,
+            "top": 717,
+            "right": 69.5,
+            "bottom": 776,
+            "left": 13
+          },
+          {
+            "x": 74.5,
+            "y": 717,
+            "width": 56.5,
+            "height": 59,
+            "top": 717,
+            "right": 131,
+            "bottom": 776,
+            "left": 74.5
+          },
+          {
+            "x": 136,
+            "y": 717,
+            "width": 56.5,
+            "height": 59,
+            "top": 717,
+            "right": 192.5,
+            "bottom": 776,
+            "left": 136
+          },
+          {
+            "x": 197.5,
+            "y": 717,
+            "width": 56.5,
+            "height": 59,
+            "top": 717,
+            "right": 254,
+            "bottom": 776,
+            "left": 197.5
+          },
+          {
+            "x": 259,
+            "y": 717,
+            "width": 56.5,
+            "height": 59,
+            "top": 717,
+            "right": 315.5,
+            "bottom": 776,
+            "left": 259
+          },
+          {
+            "x": 320.5,
+            "y": 717,
+            "width": 56.5,
+            "height": 59,
+            "top": 717,
+            "right": 377,
+            "bottom": 776,
+            "left": 320.5
+          }
+        ],
+        "stage": {
+          "x": 0,
+          "y": 151,
+          "width": 390,
+          "height": 506,
+          "top": 151,
+          "right": 390,
+          "bottom": 657,
+          "left": 0
+        },
+        "scale": 1
+      }
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "movement": true,
+      "disguise": true,
+      "smoke": true,
+      "timeout": true,
+      "replay": true,
+      "returnToList": true,
+      "zoomRestored": true,
+      "fit": {
+        "width": 430,
+        "button": {
+          "x": 319,
+          "y": 873.5,
+          "width": 98,
+          "height": 48,
+          "top": 873.5,
+          "right": 417,
+          "bottom": 921.5,
+          "left": 319
+        },
+        "props": [
+          {
+            "x": 13,
+            "y": 805,
+            "width": 63.15625,
+            "height": 59,
+            "top": 805,
+            "right": 76.15625,
+            "bottom": 864,
+            "left": 13
+          },
+          {
+            "x": 81.15625,
+            "y": 805,
+            "width": 63.171875,
+            "height": 59,
+            "top": 805,
+            "right": 144.328125,
+            "bottom": 864,
+            "left": 81.15625
+          },
+          {
+            "x": 149.328125,
+            "y": 805,
+            "width": 63.171875,
+            "height": 59,
+            "top": 805,
+            "right": 212.5,
+            "bottom": 864,
+            "left": 149.328125
+          },
+          {
+            "x": 217.5,
+            "y": 805,
+            "width": 63.15625,
+            "height": 59,
+            "top": 805,
+            "right": 280.65625,
+            "bottom": 864,
+            "left": 217.5
+          },
+          {
+            "x": 285.65625,
+            "y": 805,
+            "width": 63.171875,
+            "height": 59,
+            "top": 805,
+            "right": 348.828125,
+            "bottom": 864,
+            "left": 285.65625
+          },
+          {
+            "x": 353.828125,
+            "y": 805,
+            "width": 63.171875,
+            "height": 59,
+            "top": 805,
+            "right": 417,
+            "bottom": 864,
+            "left": 353.828125
+          }
+        ],
+        "stage": {
+          "x": 0,
+          "y": 151,
+          "width": 430,
+          "height": 594,
+          "top": 151,
+          "right": 430,
+          "bottom": 745,
+          "left": 0
+        },
+        "scale": 1
+      }
+    },
+    {
+      "fourRealWebSocketClients": true,
+      "privateSnapshots": true,
+      "missConsumesOne": true,
+      "captureAll": true,
+      "caughtControlsDisabled": true,
+      "hunterVictory": true
+    }
+  ],
+  "errors": [],
+  "baseAssetsMissing": [
+    "Prior Build535 checkout omits cabbage kitchen art"
+  ]
+}

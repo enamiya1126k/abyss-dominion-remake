@@ -1,0 +1,48 @@
+BALANCE527 {"matches":100,"wins":[37,29,23,11],"reasons":{"last":100},"meanSeconds":63.05833333333093,"firstOutSeconds":42.98666666666552}
+✔ four seats, 150 seconds, four exact collapse boundaries and immutable central ground scale (3.566431ms)
+✔ tap destination stops within tolerance and never overshoots or oscillates (327.140342ms)
+✔ charge steering updates before same-frame release; diagonal speed and cancellation remain bounded (0.880651ms)
+✔ growth caps physical and visual size at 1.5 times, power at 48; small monsters can hit large ones (1.303867ms)
+✔ simultaneous charges trade hits and cannot hit twice in a single dash (0.386926ms)
+✔ brace rescues an enemy knockback once, but not walking or collapsing floor (0.401057ms)
+✔ actual collapse removes fighters on the falling band without granting brace (5.612562ms)
+✔ magnet lasts 8 seconds, refreshes instead of stacking and stops after expiry (3.204182ms)
+✔ attraction picks the nearest player regardless of array order; expired and fallen items cannot be collected (0.488916ms)
+✔ magnet appears periodically, one object at a time; full-size growth does not stop crystal scoring (20.771188ms)
+✔ old saved match migration is idempotent and preserves seats, life/death, timing and radius fraction (0.488395ms)
+✔ result is reached on ring-out, tie or time limit; snapshots do not expose private rosters/seed (2.271177ms)
+✔ server rejects old protocol, forged target, stale sequence, stale game and outsiders (0.73567ms)
+✔ server merges press/release, times out target movement and does not fire on cancel (2.880005ms)
+✔ disconnect gives AI control, reconnect returns control and frames remain party-scoped (1.795368ms)
+✔ 100 seeded full matches finish, all seats can win, and bounded state remains finite (2913.487487ms)
+✔ production UI mounts one RAF, reuses nodes, caps DPR and cancels inputs on hide/dispose (25.288071ms)
+✔ tap persists its world target; two fingers steer while charging; pointer cancel never releases an attack (3.715954ms)
+✔ tap coordinates use camera projection inverse and clamp the destination onto safe ground (5.458212ms)
+✔ keyboard and blur use independent charge ownership; double taps cannot invoke native zoom (2.446069ms)
+✔ stale frames cannot replace state; target position is retained in prediction acknowledgement (4.033223ms)
+✔ result keeps finale then provides replay and minigame list, with no forced home button (0.895294ms)
+✔ native Canvas renders 320–430 widths, warnings, falling sectors, magnets and final ring without errors (985.465167ms)
+✔ charge survives a direct hit, continues while stunned, and releasing immediately counters (5.17367ms)
+✔ MAX emits once per fill, can stay held, and gaining a level increases the capacity (0.964936ms)
+✔ all 13 levels increase capacity and force, but reach MAX within 1.6 seconds (0.400859ms)
+✔ Lv.13 full dash is over four times stronger than Lv.1 against the same opponent (0.842712ms)
+✔ direction guide uses the same speed and duration as the authoritative dash (2.35195ms)
+✔ iron boots absorb one direct hit without interrupting charge; the next hit knocks back (0.701235ms)
+✔ boots do not turn into timed invulnerability against two separate simultaneous attacks (0.489704ms)
+✔ blocking a dash on the lip keeps the defender planted and stops repeated body shoves (2.574861ms)
+✔ boots cannot save walking off the edge or a collapsing floor; edge rescue keeps a held charge (3.190938ms)
+✔ boots pickup does not stack or consume a second item when already equipped (0.855284ms)
+✔ magnet and boots both spawn; at most two collectible items are present (43.471523ms)
+✔ v2 migration keeps progress, geometry, existing edge rescue and magnet, and charge ratio (0.522071ms)
+✔ AI chooses the same tactic when only human/AI flags of opponents change (1.339133ms)
+✔ AI leaves a collapsing band along its own sector rather than aiming at the origin (0.263808ms)
+✔ v2 clients cannot submit inputs after the rule change (0.604599ms)
+✔ new effects, results and assets have import aliases and offline coverage without replacing fishing rules (3.543114ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4478.230423

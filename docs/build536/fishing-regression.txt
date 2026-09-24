@@ -1,0 +1,16 @@
+LITTER534 {"draws":60000,"combinedOddRate":0.04003333333333333,"litterRate":0.026766666666666668,"newSeen":32}
+✔ 534: every new fish and litter item is reachable, while combined litter/curio odds remain 4 percent (780.180073ms)
+✔ 534: garbage cannot become bait, cannot be chained, and manual recovery pays only once (3.459726ms)
+✔ 534: landed trash gives a recovery choice, automatically recovers on timeout and at game end (3.321825ms)
+✔ 534: bait casts and fixed reward recipes never become new trash (137.581473ms)
+✔ 534: poison, venomous spines and injury warnings are distinct; garbage is not listed as a real animal (2.925768ms)
+✔ 534: v7 migration preserves an active hook, accumulated XP and scheduled lord (0.664804ms)
+✔ 534: updated art and shared modules are present in the new cache and mapped version (11.021335ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1097.373214

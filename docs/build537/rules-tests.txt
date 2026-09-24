@@ -1,0 +1,27 @@
+✔ party identity, ready gate, host authority, home presence, spectator admission, reuse and persistence (933.070242ms)
+✔ disconnect preserves seats and transfers host after grace; game registry rejects unknown games (1.663201ms)
+✔ 5/10/10/20 commands, idempotency, no over-limit, fixed total cost and capped stacking (17.577292ms)
+✔ low bond produces bounded rests, bursts and missed commands; high bond obeys; seeded outcomes reproduce (213.86172ms)
+✔ old room v7 keeps five uses and old temperament; overview height follows track shape (0.425466ms)
+AI hunter wins / 4: 3
+✔ 100 seeded maps: connected room graph, loops, varied shapes and all 12 disguise lookalikes (1615.536407ms)
+✔ one hunter, three hiders; every hider receives exactly two distinct options and starts in an open staging area (31.533144ms)
+✔ choose only from own two options during preparation, then lock; hunter stays blind and stationary (7.377176ms)
+✔ equal cardinal and diagonal speed, no running bonus; stop and joystick expiry work (7.354833ms)
+✔ tap navigation goes around sea and furniture without crossing blocked geometry (14.189083ms)
+✔ mandatory 30-second shake for moving and still hiders; bounded 2.4 seconds; no global location leak (27.870966ms)
+✔ hunter has wider vision; walls and distance conceal opponent positions, names, options and routes (26.00031ms)
+✔ attacks validate role, sight, range, cooldown and duplicate; three catches may win on last shot (14.941156ms)
+✔ 12 wrong objects lose, timeout needs only one surviving teammate, finish is idempotent (49.844203ms)
+✔ packet validation includes new bounds, two-choice rules, finite analog controls and version gate (10.436105ms)
+✔ four-human coordinator: private frames omit terrain, reconnect full snapshot restores map, replay/list stay integrated (644.587062ms)
+✔ old active hide games return safely to a new lobby; other party state and roster persist (3.152384ms)
+✔ AI navigates actual geometry and serialized restart is deterministic (12366.720476ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 15027.940563

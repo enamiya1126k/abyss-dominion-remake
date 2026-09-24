@@ -1,0 +1,207 @@
+{
+  "build": 535,
+  "version": "3.1.214",
+  "type": "patch",
+  "baseBuild": 534,
+  "sumoProtocol": 3,
+  "fishingProtocol": 8,
+  "created": "2026-09-24",
+  "description": "魔獣ぶっとばし相撲：演出・チャージ・踏ん張りアイテム・AI・結果画面",
+  "tests": {
+    "sumo": 39,
+    "fishing": 103,
+    "other": 120,
+    "mobileViewports": [
+      "320x568",
+      "390x700",
+      "430x800"
+    ]
+  },
+  "files": [
+    {
+      "path": "README_BUILD535.md",
+      "bytes": 5246,
+      "sha256": "35d1194453f5022cfc913d26559d3dfec0c12299fbad8d50e775c5305f517234"
+    },
+    {
+      "path": "assets/sumo535/items.webp",
+      "bytes": 329042,
+      "sha256": "cf29f4b471a0bfb4b0b97507949e28f1cdbcdcbf9df79d5bf349ed3c93bfc040"
+    },
+    {
+      "path": "assets/sumo535/victory.webp",
+      "bytes": 397106,
+      "sha256": "e30775d9b6a5ef3d990b4b51813dfacfa25e9ee8c40bd3723dfacd6d618b72cb"
+    },
+    {
+      "path": "docs/build535/ART_PROVENANCE.md",
+      "bytes": 3004,
+      "sha256": "9f8d2ae39ed3241345e622cf55daefe8b911e938451f9e7e0c21215812c1e6a2"
+    },
+    {
+      "path": "docs/build535/VERIFICATION.md",
+      "bytes": 4708,
+      "sha256": "46cc08db28a0f40599f2fb3213eb34b2011070675305c62cf79195563c184b98"
+    },
+    {
+      "path": "docs/build535/browser-log.txt",
+      "bytes": 1588,
+      "sha256": "cba3d16ad309fced23e116926896a1159a3b4d0cf7afb3e490df9c94b2c2fda5"
+    },
+    {
+      "path": "docs/build535/browser-results.json",
+      "bytes": 1940,
+      "sha256": "2017f2b52aa3b90946d97699fecbc3474b559fda872c1179f4a296db0531db6b"
+    },
+    {
+      "path": "docs/build535/charge.png",
+      "bytes": 414642,
+      "sha256": "be839c4cab5e82e30119832b4935de30d307cc304c72e21030a0603d30f4edc5"
+    },
+    {
+      "path": "docs/build535/collapse.png",
+      "bytes": 414519,
+      "sha256": "48d0362ebf0ef7635e6c6620e353e6987e1de67924feaef9a746dd8f82881411"
+    },
+    {
+      "path": "docs/build535/fishing-regression.txt",
+      "bytes": 12047,
+      "sha256": "4977c071ea3fce26ed6deb5772a3a3db6d81cd7d4877e61acf6647eb8dff713e"
+    },
+    {
+      "path": "docs/build535/other-regression.txt",
+      "bytes": 12117,
+      "sha256": "8352b408436ed1d5ddcefe1230d215efb2bb0185ce2dfea3cf09a09a590bf521"
+    },
+    {
+      "path": "docs/build535/result.png",
+      "bytes": 318168,
+      "sha256": "d78e215efaaa66243d911a05f6b1723ab03593b1e64b2648aa30994e0d0e6d87"
+    },
+    {
+      "path": "docs/build535/sumo-tests.txt",
+      "bytes": 4287,
+      "sha256": "1975c45c006b914b8c36a420a90d29e08c45d3b9976ec023adbbed2e7b0a68d7"
+    },
+    {
+      "path": "docs/build535/warning.png",
+      "bytes": 416672,
+      "sha256": "f0b806aa4014ad7a3afb80bedaee1a8f6f8a5c06f85da8e9e28cf794470b707c"
+    },
+    {
+      "path": "index.html",
+      "bytes": 191208,
+      "sha256": "050e0fc380e3b805852028c14addf70923dc4a05f07a64bc01d7335511aba361"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 19825,
+      "sha256": "420255fd2944c1409517e47285d458da5f780f4cd69b7d1be2db8062bc4d1f03"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 25372,
+      "sha256": "c60ca2e83fdcee91f6c56e281bc63a0ff9650406d654f78c8b8b101635036def"
+    },
+    {
+      "path": "online-server/src/SumoCoordinator523.js",
+      "bytes": 5110,
+      "sha256": "f359ded5750386478c3eb8a3ba726c427bc14d812f4466bd76c04e980f01173d"
+    },
+    {
+      "path": "src/Styles/build535-sumo.css",
+      "bytes": 7961,
+      "sha256": "a1e2914c423440efe627321f2e2e25e5a3fec216a55d4d22a3f6c613d1d51cd5"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "56b5d3361c2e8b4fd89c9e6ad729bf4788f72ef7fef17eaa9fe73e422630c29b"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 11346,
+      "sha256": "e1ea7ac1a2ac4f1694a1a5e074aa635a9f79824417cd8dd2f4a739078cf588f8"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 26834,
+      "sha256": "97c42339c0f3808d787627f63cdc97f2f76de32652f054be66969e67b72fe03b"
+    },
+    {
+      "path": "src/sumo/Audio523.js",
+      "bytes": 1689,
+      "sha256": "fab400251aa89086125e20c24d87705ca57b192c7129a830b14040b8660ad6a2"
+    },
+    {
+      "path": "src/sumo/Brains535.js",
+      "bytes": 4568,
+      "sha256": "5d917794f0b4e9241c6b0bdd025b2bbfb224dd240452adc432f70593b69ebd72"
+    },
+    {
+      "path": "src/sumo/Effects535.js",
+      "bytes": 4544,
+      "sha256": "9d755bf46f3ae53476d4fa57e732b8053acc93bed6ff8dbe897a5e3bed3f419c"
+    },
+    {
+      "path": "src/sumo/Renderer523.js",
+      "bytes": 9927,
+      "sha256": "22fa95e8b5a11cc6aca0a02738aa17859d7a12c4c110c37d144a609257d0124f"
+    },
+    {
+      "path": "src/sumo/Results535.js",
+      "bytes": 2378,
+      "sha256": "a7a906875d80067cb13386c6c1f108c36ff2f1d5632db81926ced0d99d0bbad8"
+    },
+    {
+      "path": "src/sumo/Rules523.js",
+      "bytes": 14825,
+      "sha256": "a3a19a8e243f9829bf4e631c5bfc318bc6c2b0644a47f4c16472681b0c1445d1"
+    },
+    {
+      "path": "src/sumo/Stage535.js",
+      "bytes": 3972,
+      "sha256": "2df613c32a5d71ffb72c7dd6e7b604546d24a9fa66c8690b9a4d3d1cd9a97f09"
+    },
+    {
+      "path": "src/sumo/View523.js",
+      "bytes": 19780,
+      "sha256": "724b71d42bf1dc02bd2db97b3c5a62b2c95f8e5f6a2f3d4bee071bf011c6cff0"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "d4605a4086714f825604c4a8f9ef8b74e03627ad1e49ffb8a9ec2be766009b4c"
+    },
+    {
+      "path": "tests/build527-sumo.test.mjs",
+      "bytes": 18317,
+      "sha256": "c356f12791903e4bda60304cb735ab371e941991c2b1ebce384d838ae9405292"
+    },
+    {
+      "path": "tests/build535-sumo.test.mjs",
+      "bytes": 7765,
+      "sha256": "aebfc890c0fd49197e934386e4cf274cb6ea3f16dd895d6ede2ecdcc581e8768"
+    },
+    {
+      "path": "tools/build535/browser-qa.mjs",
+      "bytes": 6622,
+      "sha256": "deb65cc8e6e7674d222596075461dd9888daf6917ee60fd93677ff49f014db53"
+    },
+    {
+      "path": "tools/build535/preview.mjs",
+      "bytes": 3675,
+      "sha256": "9b29391da27bcf4ddb2370af855b39a6f8905c92b28ea76bd210862ca6b240e9"
+    },
+    {
+      "path": "world-raid-offline535-assets.json",
+      "bytes": 42541,
+      "sha256": "2a42d40f713be62ce9b683ebacf31a2afd5df5e0cc113d26d979eba8f6521490"
+    },
+    {
+      "path": "world-raid-offline535-sw.js",
+      "bytes": 1844,
+      "sha256": "e77557b151f910003f0a860d6378d0a01415bbbef43cf1f52d6b37a23bece484"
+    }
+  ]
+}

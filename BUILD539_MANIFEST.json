@@ -1,0 +1,234 @@
+{
+  "build": 539,
+  "version": "3.1.218",
+  "baseBuild": 538,
+  "type": "patch",
+  "requiredServerRestart": true,
+  "files": [
+    {
+      "path": "README_BUILD539.md",
+      "size": 5982,
+      "sha256": "d15b55fb0ef4f79b0f0944b524dcf42e8d1bbfa0ab51329a5ea84deba2903410"
+    },
+    {
+      "path": "assets/tetra539/cover.webp",
+      "size": 563074,
+      "sha256": "2c7e324c8814e58832da2a9f56f8766e40faa5efa4273736c9804be034b17773"
+    },
+    {
+      "path": "assets/tetra539/ocean.webp",
+      "size": 503766,
+      "sha256": "cc7f8bafe06a09f04c99b3b05bfec257c9e79186c825d450252c443ce96a16f4"
+    },
+    {
+      "path": "assets/tetra539/pads.webp",
+      "size": 509862,
+      "sha256": "61f6934a68a283a1bcd37e4e8500d7487d78d9e3225567200564f06b1010f879"
+    },
+    {
+      "path": "docs/build539/art-prompts.json",
+      "size": 3343,
+      "sha256": "e79252e8b377280038075d9ce8c1796c4b7e89b8261987f143249fcdbdfe7214"
+    },
+    {
+      "path": "docs/build539/browser-log.txt",
+      "size": 3016,
+      "sha256": "3151738012f0b67110c0a326b8d420de07a173c6c7e09096b77125da9fa0675c"
+    },
+    {
+      "path": "docs/build539/browser-results.json",
+      "size": 2936,
+      "sha256": "6b12b5e15a1aa8cdf00a9ce7e5cdff400edcc542890003eb14c09ae87de623bf"
+    },
+    {
+      "path": "docs/build539/rules-tests.txt",
+      "size": 1593,
+      "sha256": "f0190455ec06271f8e0056f48bbf093043bd872186e38a2e50ac82ed78f4c5b1"
+    },
+    {
+      "path": "docs/build539/screenshots/charge.png",
+      "size": 450043,
+      "sha256": "d0a2f98f4e98c8f4c311be8b676fc5706aae5ecec4c17ae13a4718189e84a95e"
+    },
+    {
+      "path": "docs/build539/screenshots/checkpoint.png",
+      "size": 452838,
+      "sha256": "c13758adb652cf59aceeb997e1e8d563c0d9e2c5b3dda8ecdf61658356c52abd"
+    },
+    {
+      "path": "docs/build539/screenshots/countdown.png",
+      "size": 394056,
+      "sha256": "60b288a6dc65af7e544ba22c4073a28a3a1ca96a80c27f71c7f1374511465c71"
+    },
+    {
+      "path": "docs/build539/screenshots/jump.png",
+      "size": 444604,
+      "sha256": "aaba73c128d637a73a9614357c9eca612635578769a44a29ac8a0c1fb5768b9c"
+    },
+    {
+      "path": "docs/build539/screenshots/lobby.png",
+      "size": 433508,
+      "sha256": "3c31d492dbb747a315fbdd29dbf2295814c1766eeb84ec961b425a612c5c154f"
+    },
+    {
+      "path": "docs/build539/screenshots/result.png",
+      "size": 291210,
+      "sha256": "d240df006bef50f46465e4549de9d44eb837c6ff5f29c410f34be34696d8c06d"
+    },
+    {
+      "path": "docs/build539/screenshots/splash.png",
+      "size": 458860,
+      "sha256": "5a24ef5ff4dacaf165d6b01c652cbf0dac1fb6fb2b324b53a103510dbd834a28"
+    },
+    {
+      "path": "docs/build539/screenshots/victory.png",
+      "size": 289929,
+      "sha256": "55216b37eac01fcd635820f10d299ad7de16c70d9a97cf1d0b8085dbcaad4409"
+    },
+    {
+      "path": "docs/build539/screenshots/warning.png",
+      "size": 449596,
+      "sha256": "11b453b75db7beb0996339720410dd4519e52b269e40baa10396a34836b153e0"
+    },
+    {
+      "path": "docs/build539/screenshots/wave.png",
+      "size": 449826,
+      "sha256": "973464b05ddee6f5f3a6970d8e6593eb5a3e050c97456afc524cd6b79dda8f3b"
+    },
+    {
+      "path": "index.html",
+      "size": 196604,
+      "sha256": "ed7ecf2570eac4a50559544ac4ea3defec8fcd150dd82346c8b11b35ada4d610"
+    },
+    {
+      "path": "online-server/server.js",
+      "size": 23467,
+      "sha256": "91dc189a9125b95113d32eccbe585bc3d694fb1f420a025df395a7d8586e400d"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 21083,
+      "sha256": "64237c975108c0418caf88fd674de52892e8ed977bf79df4a761a66f1af3b04f"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 26312,
+      "sha256": "ee698fe7d4daca003c2a90afd6053264819076d56822fa34e9e130ee6ecaaafb"
+    },
+    {
+      "path": "online-server/src/TetraCoordinator539.js",
+      "size": 4943,
+      "sha256": "783f0ffaa39ab431f010e69f328cea7f2fe7d51e4c98e1d7b53cd6243f74e00e"
+    },
+    {
+      "path": "src/Styles/build539-tetra.css",
+      "size": 12456,
+      "sha256": "7287a6bad245ca78ac7a3de9aa634344f8d776787d93dbcedd30f1a6d5a4f519"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "ef43aa0ad425499e3e855a005567d872d5b679217f8389d6f1f1e9311ff42b8d"
+    },
+    {
+      "path": "src/party/PartyColorUI499.js",
+      "size": 7560,
+      "sha256": "0ee2f216d24bc8a6472a278aeec95e8fc36071b9dc3a3e8dfb22e70ccf51f884"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 4158,
+      "sha256": "d4e5bde857b9c39c61b27943b625454ac963a67736834547ea751addfe62827c"
+    },
+    {
+      "path": "src/party/PartyMember485.js",
+      "size": 7181,
+      "sha256": "3bceb7d2f6bd4d1b1fae166571116927f595d74335614a1bdc8c70fb396fbbac"
+    },
+    {
+      "path": "src/party/PartyResults490.js",
+      "size": 3513,
+      "sha256": "690ac237b86e345ebd1d71792908bbd524021189714fcaf6123adfddf8823e2d"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 11872,
+      "sha256": "5481eba5d27f8de6a5657325d96fa30ab551d492024977ee53d173fcda3f4661"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 27875,
+      "sha256": "fb709707d1e49869578ae8d6a1355485badf70cb98865c191a17c0ce8e15b33b"
+    },
+    {
+      "path": "src/race/RacePresentation452.js",
+      "size": 6515,
+      "sha256": "5b9edaa7fdc6264b54ca1b6af7727d625c6b2da23262eac03ef5e92c38eeaf1f"
+    },
+    {
+      "path": "src/race/RaceUX458.js",
+      "size": 3499,
+      "sha256": "651ba13d4ccb84d69164dbf4c4f2429c1ea3a7a0ed77f4e4a50cc18f7b7eb70a"
+    },
+    {
+      "path": "src/tetra/Audio539.js",
+      "size": 916,
+      "sha256": "d7ced8b61bf3e6418a509ea5f023a3dfd22e50ce9de421c10a07507cd90e2f91"
+    },
+    {
+      "path": "src/tetra/Renderer539.js",
+      "size": 8334,
+      "sha256": "07dcbf154aea4118beb1c1edd0f9457e586a1cb1c50de0ef8ab53fd314d195c8"
+    },
+    {
+      "path": "src/tetra/Rules539.js",
+      "size": 12065,
+      "sha256": "9ab96a6933f197523c1c520a2d3f605464e79a3e7a1e4253e5a76d9853ebdfe5"
+    },
+    {
+      "path": "src/tetra/View539.js",
+      "size": 18050,
+      "sha256": "a1284a6e0bf46ce5e83122ae7ea9d8e0cce8e971e1fea271fd0c6e28b09f4d69"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "4bf4ab50f22441d2d237833aae91e011e1c579be36098beae019abbf968a346d"
+    },
+    {
+      "path": "tests/build539-tetra.test.mjs",
+      "size": 10150,
+      "sha256": "f6281e4bc5fe8e97960c19c22412ff983edd1ea99141bcc705e9be0851617ff2"
+    },
+    {
+      "path": "tools/build539/browser-qa.mjs",
+      "size": 10701,
+      "sha256": "92f19d08eef6efcc53c494db456bd8939b7eeb6050347fe217db6e12012b9f3d"
+    },
+    {
+      "path": "tools/build539/catalog-fixture.mjs",
+      "size": 2025,
+      "sha256": "7564bc3258a20ae81c417812dde16971f60319004aba6d9ae33fd9caaee1a3aa"
+    },
+    {
+      "path": "tools/build539/preview.mjs",
+      "size": 2634,
+      "sha256": "509ab3a57e55d78532c307b077fe11d14b7d8ad6bf415655826bfa528b0bca2d"
+    },
+    {
+      "path": "tools/build539/qa-server.mjs",
+      "size": 6301,
+      "sha256": "a0879fd5f686baf4733fd2a1d6af92b1aaa19a67f7870e6a255425d0e139ab68"
+    },
+    {
+      "path": "world-raid-offline539-assets.json",
+      "size": 43513,
+      "sha256": "1dcdb1329853954d535468ab6e8585b41d1fd454371892f6e2be2fdb92012146"
+    },
+    {
+      "path": "world-raid-offline539-sw.js",
+      "size": 1844,
+      "sha256": "8698662cb316fd2cb9a8fecbac6154c88626c3dbfc07bc1135ef796f5f82b69b"
+    }
+  ]
+}

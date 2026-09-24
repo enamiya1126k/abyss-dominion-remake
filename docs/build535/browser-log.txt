@@ -1,0 +1,101 @@
+[
+  {
+    "width": 320,
+    "height": 568,
+    "fit": {
+      "width": 320,
+      "button": {
+        "x": 113,
+        "y": 454,
+        "w": 94,
+        "h": 94,
+        "bottom": 548
+      },
+      "headLevels": 4,
+      "brackets": 0
+    },
+    "heldChargeAfterHit": true,
+    "releaseDuringStun": true,
+    "singleUseBoots": true,
+    "standings": 4,
+    "art": [
+      [
+        "items",
+        1774,
+        887
+      ],
+      [
+        "victory",
+        1024,
+        1536
+      ]
+    ],
+    "reducedMotion": true
+  },
+  {
+    "width": 390,
+    "height": 700,
+    "fit": {
+      "width": 390,
+      "button": {
+        "x": 137,
+        "y": 566,
+        "w": 116,
+        "h": 110,
+        "bottom": 676
+      },
+      "headLevels": 4,
+      "brackets": 0
+    },
+    "heldChargeAfterHit": true,
+    "releaseDuringStun": true,
+    "singleUseBoots": true,
+    "standings": 4,
+    "art": [
+      [
+        "items",
+        1774,
+        887
+      ],
+      [
+        "victory",
+        1024,
+        1536
+      ]
+    ],
+    "reducedMotion": true
+  },
+  {
+    "width": 430,
+    "height": 800,
+    "fit": {
+      "width": 430,
+      "button": {
+        "x": 157,
+        "y": 666,
+        "w": 116,
+        "h": 110,
+        "bottom": 776
+      },
+      "headLevels": 4,
+      "brackets": 0
+    },
+    "heldChargeAfterHit": true,
+    "releaseDuringStun": true,
+    "singleUseBoots": true,
+    "standings": 4,
+    "art": [
+      [
+        "items",
+        1774,
+        887
+      ],
+      [
+        "victory",
+        1024,
+        1536
+      ]
+    ],
+    "reducedMotion": true
+  }
+]

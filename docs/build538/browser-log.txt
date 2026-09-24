@@ -1,0 +1,140 @@
+viewport 320 568
+viewport 390 844
+viewport 430 932
+four websocket clients
+{
+  "engine": "153.0.8010.0",
+  "viewportEmulation": "Chromium mobile touch; not physical iPhone Safari",
+  "baseCharacterCatalog": "QA-only placeholders for four historical base modules absent from checkout; hide rules/view/canvas/assets/coordinator and WebSocket frames are production code",
+  "results": [
+    {
+      "width": 320,
+      "height": 568,
+      "twoChoices": true,
+      "tapMovement": true,
+      "dragDestinationAndStop": true,
+      "mandatoryShake": true,
+      "mapToggle": true,
+      "disguiseLocked": true,
+      "timeout": true,
+      "replay": true,
+      "returnToList": true,
+      "zoomRestored": true,
+      "fit": {
+        "width": 320,
+        "stop": {
+          "x": 266,
+          "y": 465,
+          "width": 44,
+          "height": 50,
+          "top": 465,
+          "right": 310,
+          "bottom": 515,
+          "left": 266
+        },
+        "stage": {
+          "x": 0,
+          "y": 129,
+          "width": 320,
+          "height": 291,
+          "top": 129,
+          "right": 320,
+          "bottom": 420,
+          "left": 0
+        },
+        "scale": 1
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "twoChoices": true,
+      "tapMovement": true,
+      "dragDestinationAndStop": true,
+      "mandatoryShake": true,
+      "mapToggle": true,
+      "disguiseLocked": true,
+      "timeout": true,
+      "replay": true,
+      "returnToList": true,
+      "zoomRestored": true,
+      "fit": {
+        "width": 390,
+        "stop": {
+          "x": 327,
+          "y": 725,
+          "width": 51,
+          "height": 58,
+          "top": 725,
+          "right": 378,
+          "bottom": 783,
+          "left": 327
+        },
+        "stage": {
+          "x": 0,
+          "y": 151,
+          "width": 390,
+          "height": 521,
+          "top": 151,
+          "right": 390,
+          "bottom": 672,
+          "left": 0
+        },
+        "scale": 1
+      }
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "twoChoices": true,
+      "tapMovement": true,
+      "dragDestinationAndStop": true,
+      "mandatoryShake": true,
+      "mapToggle": true,
+      "disguiseLocked": true,
+      "timeout": true,
+      "replay": true,
+      "returnToList": true,
+      "zoomRestored": true,
+      "fit": {
+        "width": 430,
+        "stop": {
+          "x": 367,
+          "y": 813,
+          "width": 51,
+          "height": 58,
+          "top": 813,
+          "right": 418,
+          "bottom": 871,
+          "left": 367
+        },
+        "stage": {
+          "x": 0,
+          "y": 151,
+          "width": 430,
+          "height": 609,
+          "top": 151,
+          "right": 430,
+          "bottom": 760,
+          "left": 0
+        },
+        "scale": 1
+      }
+    },
+    {
+      "fourRealWebSocketClients": true,
+      "privateSnapshots": true,
+      "mapRetainedAcrossFrames": true,
+      "alliedPositionsShared": true,
+      "chargeRefill": true,
+      "missConsumesOne": true,
+      "captureAll": true,
+      "caughtControlsDisabled": true,
+      "hunterVictory": true
+    }
+  ],
+  "errors": [],
+  "baseAssetsMissing": [
+    "Historical checkout omits cabbage kitchen art"
+  ]
+}

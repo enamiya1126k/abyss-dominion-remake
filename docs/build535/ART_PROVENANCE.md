@@ -1,0 +1,15 @@
+# Build535 artwork
+
+Generated with built-in imagegen on 2026-09-24. Converted to WebP using Sharp, quality 90 / alpha quality 100. No screenshot or existing character asset was edited.
+
+- `assets/sumo535/items.webp`: 1774 × 887 with alpha. Left half magnet, right half iron boots. Original `exec-fd121c8f-22ef-4551-9da7-e8f63c1872f3.png`.
+- `assets/sumo535/victory.webp`: 1024 × 1536 victory podium. Original `exec-983e0b7d-7a06-43df-b52f-41be6dc3158f.png`.
+- Aura, charge flash, guide, cracks and falling slabs are Canvas/CSS effects. Existing Build527 abyss and arena textures are retained.
+
+## Items prompt
+
+Use case: stylized-concept. Production sprites for a premium emerald-and-antique-gold fantasy arena game. ONE wide 2:1 image containing exactly TWO separate collectible objects, one in each equal square half. TRUE TRANSPARENT alpha outside the objects. Left: a powerful horseshoe MAGNET magical artifact, thick sculpted dark bronze body, polished gold beveled metal edges, clearly separated two silver pole tips pointing upwards, glowing teal induction coils wrapped around the two arms and tiny inset emerald runes. Must unmistakably read as a magnet even at 28px, NOT a flat letter U. Right: a pair of extremely heavy enchanted BOOTS, sturdy dark iron with ornate gold armor plates, blocky soles, emerald inset on each boot, standing together in slight three quarter view, clearly reads as immovable steadfast footing, NOT a shield. Hand painted realistic game inventory illustration, polished metal, strong clear silhouettes and bright specular highlights, no colored backgrounds, no floor shadows, no labels, no letters, no frames, no other objects, no loose particles, no halo. Every entire object centered and only 68 percent of the width and height of its square half, wide empty transparent gutter and padding all around. Both objects same scale, full object visible.
+
+## Victory prompt
+
+Use case: stylized-concept. Portrait 2:3 background art for the victory results screen of a lavish dark emerald and antique gold fantasy monster sumo arena. An EMPTY raised circular champion podium of weathered dark stone with beautifully sculpted gold laurels on the front, centered in the LOWER HALF, its flat empty top at 64 percent of the image height. No characters, no creatures. Behind the podium a huge ancient arched temple doorway frames a tranquil teal abyss of floating ruined citadels. Golden sunlight rays stream down from high above to illuminate the podium, subtle drifting gold dust. Deep shadowed stone architecture at the left and right, rich emerald and bronze palette, cinematic high quality painted game environment. The TOP third remains atmospheric dark open space for Japanese victory text to be overlaid in code. The lower corners are dark and uncluttered so UI overlays are readable. Strong composition focused on a winner sprite to be added later on the empty podium. No text, no letters, no numerals, no banners, no trophies, no crowns, no UI buttons, no watermark.

@@ -1,0 +1,10 @@
+import {level535} from './Rules523.js';
+import {playerColor499} from '../party/PartyColors499.js';
+import {resultActions490} from '../party/PartyResults490.js';
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export function result535(c,g,header,pic){
+ const winners=g.players.filter(p=>g.winnerIds.includes(p.playerId)),self=c.transport.selfId,won=g.winnerIds.includes(self),draw=!winners.length;
+ const title=draw?'相打ち、決着つかず':won?'土俵の覇者！':'勝負あり！';
+ const cause=draw?'全員が場外へ。次こそ頂点へ。':g.reason==='center'?'時間切れ · 中央に近い魔獣が勝利':'最後まで土俵に立ち続けた魔獣';
+ return`<section class="sm523 sm-result523 sm-result535">${header}<div class="sm-victory535 ${draw?'is-draw':''}"><div class="sm-result-title535"><small>魔獣ぶっとばし相撲 · 戦績</small><h1>${title}</h1><p>${cause}</p></div><div class="sm-champions535">${(draw?g.players:winners).map(p=>`<div class="sm-champion535" style="--sm-color:${playerColor499(p).hex}">${pic(c,p)}</div>`).join('')}</div><div class="sm-champion-name535">${draw?'次の一戦へ':winners.map(p=>esc(p.name)).join('・')}<small>${draw?'４体の意地が激突':winners.map(p=>'Lv.'+level535(p)).join(' / ')+' · 土俵の覇者'}</small></div></div><div class="sm-records535"><div class="sm-records-head535"><b>対戦結果</b><small>${Math.floor(g.elapsed/60000)}分${String(Math.floor(g.elapsed/1000)%60).padStart(2,'0')}秒の激闘</small></div><div class="sm-standing-grid535">${g.results.map(v=>{const p=g.players.find(p=>p.playerId===v.playerId);return`<article class="sm-resultrow523 sm-standing535 ${v.winner?'is-winner':''} ${p.playerId===self?'is-you':''}" style="--sm-color:${playerColor499(p).hex}"><div class="sm-standing-top535"><strong>${v.rank}<small>位</small></strong>${pic(c,p)}<span><b>${esc(p.name)}</b><small>Lv.${level535(p)}${p.playerId===self?' · あなた':''}</small></span></div><dl><div><dt>撃墜</dt><dd>${v.kos}<small>人</small></dd></div><div><dt>命中</dt><dd>${v.hits}<small>回</small></dd></div><div><dt>結晶</dt><dd>${v.collected}</dd></div></dl>${v.blocks535?`<small class="sm-blocks535">鉄靴で ${v.blocks535} 回耐えた</small>`:''}</article>`}).join('')}</div></div>${resultActions490(c)}</section>`;
+}

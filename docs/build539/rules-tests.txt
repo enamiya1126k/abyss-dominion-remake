@@ -1,0 +1,22 @@
+✔ party identity, ready gate, host authority, home presence, spectator admission, reuse and persistence (809.472829ms)
+✔ disconnect preserves seats and transfers host after grace; game registry rejects unknown games (1.993011ms)
+✔ 5/10/10/20 commands, idempotency, no over-limit, fixed total cost and capped stacking (16.076349ms)
+✔ low bond produces bounded rests, bursts and missed commands; high bond obeys; seeded outcomes reproduce (180.649904ms)
+✔ old room v7 keeps five uses and old temperament; overview height follows track shape (0.468459ms)
+✔ 100 seeded courses have reachable safe and shortcut routes with two checkpoints (16.663563ms)
+✔ charge is bounded; short taps cancel; release starts a single ballistic flight (2.86625ms)
+✔ a player can actually charge and jump the complete safe course with checkpoint recovery (8.041883ms)
+✔ waves warn for 3sec and submerge only low pads for 3.2sec every16sec (0.699949ms)
+✔ tilting slides the player off; spinning moves the pad; sinking resets after4.8sec (1.328885ms)
+✔ midair wave dodge, missed goal without checkpoints and tie-safe results (1.470293ms)
+✔ 5 seeded AI races complete, serialize deterministically and use real jump physics (74.797144ms)
+✔ coordinator enforces ready, version and host gates; handles private ack and invalid/replayed input (24.574124ms)
+✔ disconnect/home takeover and reconnect cancel stale charges; restart resumes; replay/list are idempotent (186.466073ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1236.475699

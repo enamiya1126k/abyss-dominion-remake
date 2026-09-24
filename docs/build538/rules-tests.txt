@@ -1,0 +1,24 @@
+✔ party identity, ready gate, host authority, home presence, spectator admission, reuse and persistence (823.70323ms)
+✔ disconnect preserves seats and transfers host after grace; game registry rejects unknown games (1.940349ms)
+✔ 5/10/10/20 commands, idempotency, no over-limit, fixed total cost and capped stacking (17.801749ms)
+✔ low bond produces bounded rests, bursts and missed commands; high bond obeys; seeded outcomes reproduce (167.631096ms)
+✔ old room v7 keeps five uses and old temperament; overview height follows track shape (0.47634ms)
+✔ 100 estates: 4800×4400 continuous grounds, connected manor and exits, all 12 props, contextual placement (6327.660752ms)
+✔ three-charge capacity: zero does not end match; ten-second replenishment cannot bank beyond three (44.381137ms)
+✔ 15 seconds of actual movement exhausts hider; half speed then stop-to-recover; hunter has no fatigue (41.170411ms)
+✔ standing at a wall does not drain stamina; preparation permits movement without consuming it (30.484466ms)
+✔ two distinct disguise candidates lock at start; 30-second shake includes moving hiders (34.088133ms)
+✔ all allied positions shared at any distance, never leaked to hunter; map/frame and prop schemas conceal identity (38.069785ms)
+✔ attack checks role, range, walls, repeat and cooldown; zero final charge can capture the third hider (34.338697ms)
+✔ tap path stays out of walls and furniture across indoor/outdoor travel (30.244097ms)
+✔ coordinator integration, reconnect, old-version gate, private frames and replay (307.837591ms)
+✔ Build537 active matches migrate to lobby, preserving membership and choices (1.769109ms)
+✔ AI matches and serialized restart preserve stamina/recharge and reach a valid result (6962.317591ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14049.645787
