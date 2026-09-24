@@ -1,0 +1,284 @@
+{
+  "build": 540,
+  "version": "3.1.219",
+  "baseBuild": 539,
+  "type": "patch",
+  "requiredServerRestart": true,
+  "files": [
+    {
+      "path": "README_BUILD540.md",
+      "size": 7573,
+      "sha256": "2b30d337545cba8c9a822f53a2611a34785a676480a9331c3de97ca5fada6123"
+    },
+    {
+      "path": "assets/tetra540/pads.webp",
+      "size": 496070,
+      "sha256": "f9a8e857b71a710956fd1cc24f1520746debf11879fbde01e7d707face776b33"
+    },
+    {
+      "path": "docs/build540/art-prompts.json",
+      "size": 1518,
+      "sha256": "94e8ddc3ef404b029441d25b39ede96b6a19857e42a5d294773ac5e7b21911ab"
+    },
+    {
+      "path": "docs/build540/browser-results.json",
+      "size": 1718,
+      "sha256": "da78fa8d279348a75a12c4882497c4874f0e314bf293b780496332bd60375693"
+    },
+    {
+      "path": "docs/build540/fishing-regression.txt",
+      "size": 855,
+      "sha256": "1c18f4f483da9026fdd5ce777f46ca4cc38a80f2eea82147f343b1044a97d400"
+    },
+    {
+      "path": "docs/build540/fishing540-guest.png",
+      "size": 456578,
+      "sha256": "8d25efa537d56865b332a0f35cc9582353ab39a3b598de9d9c1cf84d04b89bf5"
+    },
+    {
+      "path": "docs/build540/gorilla540.png",
+      "size": 462006,
+      "sha256": "902b71d5ece38bd90220cc82b04e48818e8c980a193b556c4735852c7c80d1b6"
+    },
+    {
+      "path": "docs/build540/hide-regression.txt",
+      "size": 1033,
+      "sha256": "28fe79112d9a6fc84e83d1384e080c34ad72cfdb1a12cb71d63f83fd0b4cbb4e"
+    },
+    {
+      "path": "docs/build540/hide540-disguise.png",
+      "size": 461673,
+      "sha256": "c1bcb9bb1f02284af36b31f87728d174ab25f7ebc7358dd81971701475d6720d"
+    },
+    {
+      "path": "docs/build540/hide540-hunter.png",
+      "size": 379076,
+      "sha256": "d22eedb25c5b5070830760e2fca42507889ac544a9ed96328e22c306c189ecd5"
+    },
+    {
+      "path": "docs/build540/luck-regression.txt",
+      "size": 2511,
+      "sha256": "035b02c7630d83ab16b2aa02734c89c057f2788fc7cde2b0bfcdc73778946a7f"
+    },
+    {
+      "path": "docs/build540/luck540-stacking.png",
+      "size": 202018,
+      "sha256": "9204fd4955d2f835d55cb06026046c839b7c47ef07e4a825f75f261e4a23b40b"
+    },
+    {
+      "path": "docs/build540/rules-tests.txt",
+      "size": 2058,
+      "sha256": "abafd586887722331e86a36746cb022c3a6cd71bbade90b5b8e99b3b168bda62"
+    },
+    {
+      "path": "docs/build540/tetra540-big-warning.png",
+      "size": 543783,
+      "sha256": "55750d80bd9f772020b29787c8dbfbb76bee13ac1017eb9e3bb662e84a734cf9"
+    },
+    {
+      "path": "docs/build540/tetra540-big-wave.png",
+      "size": 459284,
+      "sha256": "1374057c05381c33ba0bd4ba49e7f67b30be65847bb4b355407b90b7467ed68e"
+    },
+    {
+      "path": "docs/build540/tetra540-drag.png",
+      "size": 523191,
+      "sha256": "9d1ab4827ca431b3aaa5e4e29ea7055925ab17a4e9ac9ea6a51d58125e0f51dd"
+    },
+    {
+      "path": "docs/build540/tetra540-field.png",
+      "size": 546748,
+      "sha256": "03950f18e85101c5a58cfd0a70bf6a1b9dafbaeb6ef1b3888b2b6066ee0ebdb4"
+    },
+    {
+      "path": "docs/build540/tetra540-results.png",
+      "size": 290356,
+      "sha256": "200792638bef8243a33fe44ad5379833431830b1f7e0ac401468eea0b01adfd3"
+    },
+    {
+      "path": "docs/build540/tetra540-wave.png",
+      "size": 502945,
+      "sha256": "4beafb3e8b81ae73f6d8c7a32181c27c99e83a8a1c6431a20e88b090f9d98bea"
+    },
+    {
+      "path": "docs/build540/verification.json",
+      "size": 518,
+      "sha256": "60da1eca1c6211d9b30ebbc2d5f41b40e52b83824c7ca6e4dc3664b48cc05cb5"
+    },
+    {
+      "path": "index.html",
+      "size": 199763,
+      "sha256": "c1ddfb7720592b6476ebbc9a70ec3afb68b494a575bf479183e70e9e30646e48"
+    },
+    {
+      "path": "online-server/src/AtomicSnapshot540.js",
+      "size": 2868,
+      "sha256": "d7a45cfe62f0a37c6018f1a3b99624ccdea7a929952bd2bb068324cbcd2587f1"
+    },
+    {
+      "path": "online-server/src/FishingCoordinator524.js",
+      "size": 5132,
+      "sha256": "e30d1fe091c94aa07fd20ae1d5235d624d7bbdb9c5e5ba60be58c2dc152b43dd"
+    },
+    {
+      "path": "online-server/src/HideCoordinator536.js",
+      "size": 6063,
+      "sha256": "dc3a91eb08589609dc855961b10a11349cf91012ba0da2e0234850abb27587f2"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 21083,
+      "sha256": "308824a53977d962ffab1c3e58769d10167a11acd096fb0f6328c12d73620ae2"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 26189,
+      "sha256": "004c31a59f74f3e8cf0311da72e9d55010d8a908f16d0f604724debf889b47ff"
+    },
+    {
+      "path": "online-server/src/TetraCoordinator539.js",
+      "size": 5441,
+      "sha256": "0f1422e8413177e024e7ff6f6d69abc1080fa39587b910c572ff9e0bb679c214"
+    },
+    {
+      "path": "src/Styles/build539-tetra.css",
+      "size": 14060,
+      "sha256": "a30311641c4035920f4ed03283875a107ab77570556bd4bf7c850f5e86f95df3"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "8f12cfa93c92308239f832b1d511834254593d7fc2454eb3090e41e9ef1e48fe"
+    },
+    {
+      "path": "src/fishing/Renderer524.js",
+      "size": 16023,
+      "sha256": "76741ad666c991068006184651764629ac3e1c7df319dd1a8894025664ff7f4e"
+    },
+    {
+      "path": "src/fishing/Rules524.js",
+      "size": 22251,
+      "sha256": "e95521f5d1d25ec9872ba7c76ef07a3227dcc04c7326618202e45bb9c5d7fe3f"
+    },
+    {
+      "path": "src/fishing/View524.js",
+      "size": 25938,
+      "sha256": "dd841f73bf044ce89b55404111443bd6c6e8bffd78fe5fb5d75aefaeef3d4e5d"
+    },
+    {
+      "path": "src/gorilla/View505.js",
+      "size": 13734,
+      "sha256": "032d6a8931a33f39a5edabf2099925aaf4ec303629a83aa53ef0942cebe3bb5e"
+    },
+    {
+      "path": "src/hide/Renderer536.js",
+      "size": 11755,
+      "sha256": "f1184d85df970a3fdf2dcc062b7e437f0b42a134749ec45efd1cc1bab5bbcdfc"
+    },
+    {
+      "path": "src/hide/Rules536.js",
+      "size": 12277,
+      "sha256": "ffa6da2c05ea1ad5773fdfb171133d677f3ac4d48a2117ea903169d14f14c0e1"
+    },
+    {
+      "path": "src/hide/View536.js",
+      "size": 21416,
+      "sha256": "117bdc80c24579a5ea4fbdabe917f174847ed18f0a1a0c06ca494686696d737d"
+    },
+    {
+      "path": "src/luck/Items509.js",
+      "size": 5547,
+      "sha256": "87383cb3ef1564d90254e027048f89ac6ed6ede20ed964fb41fbcb5b5a82f57c"
+    },
+    {
+      "path": "src/luck/Items511.js",
+      "size": 3131,
+      "sha256": "022deda9ace80017a86a14ea66bb75936b9533048b752cd6a4d8f929106fc065"
+    },
+    {
+      "path": "src/luck/Rules511.js",
+      "size": 18728,
+      "sha256": "17d81a3593eff63195654397f2a6c8650a675efce4b0719d99ff76500175b7fd"
+    },
+    {
+      "path": "src/party/PartyColorUI499.js",
+      "size": 7575,
+      "sha256": "4052bc40858bda88ce3575a292dba268eae1e2b4b3f187abfb6cce01d7e65f2c"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 4179,
+      "sha256": "257dc12836949298aac910e5efe9753545f2f17ffccd2a27091b666a0d8c317d"
+    },
+    {
+      "path": "src/party/PartyMember485.js",
+      "size": 7196,
+      "sha256": "eaf42c733ad1a23c9c0bed41a88c5d741436a724a6425e18a229696f89d8d62a"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 11872,
+      "sha256": "aa57795fb05bb57e5570df635e43114d4b139ad102a9a17eabb3cab04f43bc0d"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 27894,
+      "sha256": "46056e7f48a487bfe3922243939db7b7fe66dfe4d9dfa7993d01c9a26b15dc9b"
+    },
+    {
+      "path": "src/tetra/Renderer539.js",
+      "size": 8028,
+      "sha256": "9f45564e944abd92605eb1770bbd00d0fdb96ac2685b5454875cbea788c34649"
+    },
+    {
+      "path": "src/tetra/Rules539.js",
+      "size": 14785,
+      "sha256": "1c90e595d5950dd91c2125319a93a6e4d50c16671d48bab854c0abf3d8d0bad4"
+    },
+    {
+      "path": "src/tetra/View539.js",
+      "size": 17394,
+      "sha256": "b099e858b89d01672262d7dd67c47506f3a891c47050792ca613ec4a7b8bf183"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "db4581acf02a97f104ac3be72c9f51146731bd17a97568909379cb8584e6af93"
+    },
+    {
+      "path": "tests/build540-fixes.test.mjs",
+      "size": 11200,
+      "sha256": "e019be012e0f403c86e408f314d7f1240b5cf0f6cfe997e8eb972ed5f880bb4e"
+    },
+    {
+      "path": "tools/build540/browser-qa.mjs",
+      "size": 11486,
+      "sha256": "e91428bf7b9375b8036adea253f2c61cf27f6c3764402d241b7d00510c7957ee"
+    },
+    {
+      "path": "tools/build540/package.py",
+      "size": 1848,
+      "sha256": "1a32a0561c9860390d1f232bf36f3f53a480b272f520c60cc8a7d660885f4935"
+    },
+    {
+      "path": "tools/build540/preview.mjs",
+      "size": 3861,
+      "sha256": "ee6e06dd322c9f2b48794418d2fc2b804efe0d2f64770f4fc10d5541331176e9"
+    },
+    {
+      "path": "tools/build540/qa-server.mjs",
+      "size": 8313,
+      "sha256": "cc4c4bafd13132b5b30bb46d885d2174c1071ab554b9f7d9bb33cab0b0386281"
+    },
+    {
+      "path": "world-raid-offline540-assets.json",
+      "size": 43546,
+      "sha256": "e26301558bf4a320369da12892085fe0a1843889a14af8dff03d75fac9bdb6c7"
+    },
+    {
+      "path": "world-raid-offline540-sw.js",
+      "size": 1844,
+      "sha256": "afe77ce5f3fb697423c322b3952e3529c5534e57bf130a07660bc281fc940134"
+    }
+  ]
+}

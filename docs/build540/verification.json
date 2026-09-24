@@ -1,0 +1,16 @@
+{
+  "rules": 18,
+  "luckRegression": 23,
+  "hideRegression": 8,
+  "fishingRegression": 6,
+  "totalPassed": 55,
+  "syntaxChangedModules": 26,
+  "version": "3.1.219",
+  "baseBuild": 539,
+  "limitations": [
+    "Chromium mobile emulation, not physical iPhone Safari",
+    "OneDrive EPERM injected in file adapter, not actual OneDrive",
+    "QA-only placeholders for four missing historical base modules",
+    "Historical test assertions for replaced rules and old DOM mocks excluded; full legacy suite not claimed"
+  ]
+}

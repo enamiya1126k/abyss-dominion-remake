@@ -1,0 +1,27 @@
+✔ party identity, ready gate, host authority, home presence, spectator admission, reuse and persistence (877.450744ms)
+✔ disconnect preserves seats and transfers host after grace; game registry rejects unknown games (3.282511ms)
+✔ 5/10/10/20 commands, idempotency, no over-limit, fixed total cost and capped stacking (17.458686ms)
+✔ low bond produces bounded rests, bursts and missed commands; high bond obeys; seeded outcomes reproduce (228.310422ms)
+✔ old room v7 keeps five uses and old temperament; overview height follows track shape (0.663128ms)
+frame bytes 17449 2591
+✔ snapshot: locked Windows rename keeps durable newest data, retries, recovers after restart (3.371707ms)
+✔ snapshot: real disk failure rejects, truncated pending file never replaces valid save (1.37048ms)
+✔ tetra: 100 random fields connect all checkpoints and offer wide branching choices (114.363043ms)
+✔ tetra: drag power determines distance independently of holding time; cancelled and malformed input cannot jump (6.427053ms)
+✔ tetra: ordinary wave saves only tips/checkpoints; great wave washes tips and airborne players (2.205064ms)
+✔ tetra: low pad tide and moss affect feet; tip stays put between waves (1.716148ms)
+✔ tetra: occupied landings do not overlap; respawns use separate spaces (1.75198ms)
+✔ tetra: checkpoints must be visited in order; seeded bots use the same physics and reach goals (195.180211ms)
+✔ hide: move and attack together at 200 units; shots max three and recharge ten seconds (82.343104ms)
+✔ hide: live disguise swapping retains movement, stamina and privacy (66.425278ms)
+✔ luck: a stop hit cannot be undone by a later magnet; huge legal growth is preserved (18.007019ms)
+✔ fishing: compact frames reduce wire size, retain live controls, and full results retain records (4.914262ms)
+✔ coordinator: new protocol, authoritative identity, sequence and power validation, reconnect save (25.926273ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1423.528677

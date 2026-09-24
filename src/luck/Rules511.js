@@ -102,7 +102,7 @@ export function resolveRound511(g,at){
   const echo=metres511(p.lastAdvance)/2n*BigInt(count(grown,'echo'));
   const crowns=g.round===rounds528(g)?count(active,'crown'):0,overdrive=count(grown,'overdrive')*(big?2:1);
   const gain=(max(0n,base)+passive+seed+bond+forge+cash+echo)*3n**BigInt(turbines+usedSuns)*2n**BigInt(usedCoils+batteries+doubling+overdrive)*5n**BigInt(crowns)/2n**BigInt(turbines);
-  return{playerId:p.playerId,seat:p.seat,box,pick,item:it.id,from:metres511(p.distance),start:metres511(p.distance),gain,planned:gain,knockback:max(0n,-base),hit:false,loadout,savings:big?0n:saved,suns:big?0:suns,coils:big?0:coils,wards:Math.max(p.wards,count(active,'ward')),guards:count(active,'shield'),mirrors:count(active,'mirror'),revenge:count(grown,'revenge'),automatic:g.auto511[p.seat],beforeRank:before.find(x=>x.playerId===p.playerId).rank,
+  return{playerId:p.playerId,seat:p.seat,box,pick,item:it.id,from:metres511(p.distance),start:metres511(p.distance),gain,planned:gain,knockback:max(0n,-base),stopped:false,hit:false,loadout,savings:big?0n:saved,suns:big?0:suns,coils:big?0:coils,wards:Math.max(p.wards,count(active,'ward')),guards:count(active,'shield'),mirrors:count(active,'mirror'),revenge:count(grown,'revenge'),automatic:g.auto511[p.seat],beforeRank:before.find(x=>x.playerId===p.playerId).rank,
    calculation:{base,passive,seed,bond,forge,cash,echo,doubling,overdrive,crowns,suns:usedSuns,focus,turbines,coils:usedCoils,batteries,dice:DICE511.includes(it.id)?it.id==='jackpot'?[jackpot]:faces.slice(0,it.id==='triple'?3:it.id==='product'?2:1):null,rawDice:DICE511.includes(it.id)?it.id==='jackpot'?[d.jackpot]:d.dice.slice(0,it.id==='triple'?3:it.id==='product'?2:1):null,jackpot:it.id==='jackpot'?jackpot:null,planned:gain}};
  });
  const attacks=[];
@@ -124,7 +124,7 @@ export function resolveRound511(g,at){
   if(kind==='shell'||kind==='banana'){hit.amount=BigInt((kind==='shell'?100:250)*strength);b.knockback+=hit.amount}
   if(kind==='breaker'){const remaining=b.from*7n**BigInt(strength)/10n**BigInt(strength);hit.amount=b.from-remaining;b.knockback+=hit.amount}
   if(kind==='lightning'){const after=b.gain/2n**BigInt(strength);hit.amount=b.gain-after;b.gain=after}
-  if(kind==='pit'||kind==='sniper'){hit.amount=b.gain;b.gain=0n}
+  if(kind==='pit'||kind==='sniper'){hit.amount=b.gain;b.gain=0n;b.stopped=true}
   if(kind==='magnet'){const n=min(BigInt(300*strength),b.gain/2n);b.gain-=n;a.gain+=n;hit.amount=n}
   if(kind==='swap'){[a.start,b.start]=[b.start,a.start];hit.amount=b.start-a.start}
   if(['turbo','mega'].includes(b.item))b.gain=0n;
@@ -141,7 +141,7 @@ export function resolveRound511(g,at){
   }
   if(volleys.length)attacks.push({id:`${g.id}:${g.round}:${seat}`,source:seat,item:volleys[0].item,volleys,targets:volleys.flatMap(v=>v.targets)});
  }
- for(const r of rows){if(['turbo','mega'].includes(r.item)&&r.hit)r.gain=0n;r.to=max(0n,r.start+r.gain-r.knockback);r.delta=r.to-r.from;r.lastAdvance=max(0n,r.delta)}
+ for(const r of rows){if(r.stopped||['turbo','mega'].includes(r.item)&&r.hit){r.gain=0n;r.stopped=true;}r.to=max(0n,r.start+r.gain-r.knockback);r.delta=r.to-r.from;r.lastAdvance=max(0n,r.delta)}
  const after=ranks511(rows.map(r=>({playerId:r.playerId,distance:r.to})));for(const r of rows)r.afterRank=after.find(x=>x.playerId===r.playerId).rank;
  return serial({round:g.round,at,fromMax:g.scaleMax,toMax:rows.reduce((n,r)=>max(n,r.to+100n),600n),rows,attacks,castMs:attacks.length*LUCK511.castMs,diceOrder:g.plan511[g.round-1].order.filter(seat=>DICE511.includes(rows[seat].item)),diceMs:rows.filter(r=>DICE511.includes(r.item)).length*LUCK511.diceMs});
 }

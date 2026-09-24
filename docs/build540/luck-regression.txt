@@ -1,0 +1,31 @@
+✔ 40 items: eight added self buffs, four new finishers, no new attacks (1.807273ms)
+✔ every final chest guarantees a finisher; all hands remain four distinct choices (49.779714ms)
+✔ invalid third die rejects before starting or mutating a room (7.772327ms)
+✔ one crystal independently grows x2, x4, x8 each successive turn and stacks multiplicatively (4.795835ms)
+✔ bank deposits on installation and each turn; a big move cashes fourfold once then saving restarts (2.315196ms)
+✔ solar buffers charge only without a big move; duplicates accumulate and big move consumes all (1.961097ms)
+✔ forge grows its additive foundation while echo uses actual last advance starting next turn (1.395222ms)
+✔ echo uses net actual positive movement after attacks, not the planned unhit boost (2.725984ms)
+✔ overdrive doubles ordinary turns and quadruples big moves; crowns multiply final round only (1.464561ms)
+✔ all 36 two-dice and 216 three-dice outcomes match exact displayed faces and products (117.059652ms)
+✔ focus increases each face, clamps at six and applies to product, triple, gamble and cannon (3.19042ms)
+✔ unbuffed gamble has three wins and three losses; cannon has one jackpot out of six (2.873787ms)
+✔ new finishers preserve gear, cash resources, and use exact uncapped cumulative distance (1.629365ms)
+✔ a grown full combo stacks seed, savings, echo, suns, coils, batteries, crystals and crown exactly (1.140366ms)
+✔ banked savings and unused suns survive hostile attacks; no new attack triggers appear (1.465106ms)
+✔ dice-only cinematic replaces no ordinary gameplay phase and duration is bounded for four rolls (1.555568ms)
+✔ all viewers see the same sequential rolls, stopped faces, formula and power before attacks (5.291896ms)
+✔ reduced motion immediately displays exact faces without a rolling transform or perpetual RAF (1.831566ms)
+✔ sealed third die and future hands remain private; AI ignores all sealed outcomes (2.331985ms)
+✔ 1,600 item pairs resolve with nonnegative exact metres and bounded dice/attack broadcasts (773.352584ms)
+✔ 500 random complete races survive JSON restart exactly with all eight rounds and huge-score geometry (2256.679901ms)
+✔ new UI has exact pip dice, three cubes, 40 gear slots and no discarded power panel (5.676829ms)
+✔ new atlas fully decodes with alpha and all twelve item cells occupied (416.757191ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3936.87146

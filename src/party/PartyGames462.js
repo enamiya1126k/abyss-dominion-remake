@@ -1,6 +1,6 @@
 // Only released games appear here. Future game adapters reuse the same party.
 export const PARTY_GAMES462=Object.freeze([
- {id:'tetra',name:'因縁の決戦！テトラポット渡り',tag:'長押しジャンプ × 荒波 × よりの因縁',players:'４人レース · 最大150秒 · 空席はAI',image:'./assets/tetra539/cover.webp',description:'長押しでためて、離して跳べ！ 傾く・回る・沈むテトラポットを越え、因縁の海へ。安全な外回りか、荒波の近道か。落ちても、よりは「イージー！」'},
+ {id:'tetra',name:'因縁の決戦！テトラポット渡り',tag:'引っぱりジャンプ × 荒波 × よりの因縁',players:'４人レース · 最大150秒 · 空席はAI',image:'./assets/tetra539/cover.webp',description:'手前に引いて、離して跳べ！ 広い群礁から好きなルートへ。通常波は先端、大波は中継に避難。低い足場の水没と滑る苔にも注意。落ちても、よりは「イージー！」'},
  {id:'hide',name:'魔王のかくれんぼ',tag:'化ける３人 × 探す１人 × 迷いの館と庭園',players:'鬼１人 VS ３人 · 180秒 · 空席はAI',image:'./assets/hide538/cover.webp',description:'館のどこかに、きみがいる。館・庭・森を探索！ ２択で化けて仲間と逃走。鬼の攻撃チャージと逃げる側のスタミナが勝負を分ける。'},
  {id:'fishing',name:'ぬし釣り大騒動',tag:'釣って発見、実在の魚と小さな学び',players:'４人対戦・空席はAI',image:'./assets/fishing525/cover.webp',description:'全152種類・ルアー６種・ヌシ級６種！ サバやアユ、毒に注意の魚も。エサをつないで竿を育て、釣果と豆知識を集めよう！'},
  {id:'sumo',name:'魔獣ぶっとばし相撲',tag:'巨大化 × 磁石争奪 × 四段崩壊',players:'4人対戦 · 最大150秒 · 空席はAI',image:'./assets/sumo523/cover.webp',description:'結晶を集めて巨大化、溜めた一撃で場外へ！ 崩れる土俵で、最後に立つ魔獣は誰だ。'},

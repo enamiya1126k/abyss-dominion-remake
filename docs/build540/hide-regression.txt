@@ -1,0 +1,16 @@
+✔ 100 estates: 4800×4400 continuous grounds, connected manor and exits, all 12 props, contextual placement (5655.748167ms)
+✔ three-charge capacity: zero does not end match; ten-second replenishment cannot bank beyond three (45.928029ms)
+✔ 15 seconds of actual movement exhausts hider; half speed then stop-to-recover; hunter has no fatigue (37.465088ms)
+✔ standing at a wall does not drain stamina; preparation permits movement without consuming it (36.129009ms)
+✔ all allied positions shared at any distance, never leaked to hunter; map/frame and prop schemas conceal identity (35.387579ms)
+✔ attack checks role, range, walls, repeat and cooldown; zero final charge can capture the third hider (36.887874ms)
+✔ tap path stays out of walls and furniture across indoor/outdoor travel (38.742242ms)
+✔ AI matches and serialized restart preserve stamina/recharge and reach a valid result (4951.226648ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11099.784303

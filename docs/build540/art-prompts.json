@@ -1,0 +1,11 @@
+{
+  "tool": "imagegen",
+  "asset": "assets/tetra540/pads.webp",
+  "sourceSize": [
+    1254,
+    1254
+  ],
+  "transparent": true,
+  "conversion": "PNG to WebP, alpha preserved, quality 90",
+  "prompt": "Use case: stylized-concept. Asset type: transparent game sprite atlas for a top-down coastal tetrapod jumping race, no UI. Create 4 equally-sized isolated sprites in a precise 2x2 grid on transparent background, each centered in its quarter with generous transparent padding. Top-left: weathered pale ivory concrete tetrapod with four tapered rounded arms, true overhead view, the upright central arm has a clearly visible circular flat top at the exact center of the sprite. Top-right: low squat dark grey wet concrete tetrapod with seaweed at its feet and clearly visible central round flat top. Bottom-left: slippery moss-covered tetrapod, glossy green algae on its sloping arms but the small central top is dry pale concrete. Bottom-right: a broad round elevated stone checkpoint platform with bronze rim, four subtle separate standing spots on its flat deck, ocean-worn stone, emerald beacon inset at the far edge. All sprites same orthographic overhead camera, detailed premium hand-painted realistic game art, upper-left sunlight and subtle contact shading, readable silhouettes, crisp central landing tips. Tetrapods must look heavy and immobile, not mechanical. No sea or surrounding landscape, no perspective horizon, no characters, no text, no letters, no grids, no labels, no watermark. Square atlas."
+}

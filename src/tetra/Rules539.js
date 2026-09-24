@@ -1,75 +1,69 @@
-// Shared, deterministic, server-authoritative physics. Milliseconds / world units.
-export const TETRA539=Object.freeze({width:1200,height:5800,startY:5400,goalY:360,step:50,countdown:4000,duration:150000,grace:20000,charge:1150,minJump:85,maxJump:435,respawn:1600,waveEvery:16000,waveLife:3200,waveWarning:3000});
+// Build540: drag-distance jumps, fixed tetrapods and authoritative wave/contact physics.
+export const TETRA539=Object.freeze({width:1500,height:6500,startY:6100,goalY:300,step:50,countdown:4000,duration:150000,grace:20000,minJump:38,maxJump:520,respawn:1500,waveEvery:12000,waveLife:2700,waveWarning:3500,bigEvery:36000,bigLife:3500,bigWarning:6500,body:45});
+const C=TETRA539,copy=x=>structuredClone(x),dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 export const clamp539=(v,a,b)=>Math.max(a,Math.min(b,v));
-const copy=x=>structuredClone(x),dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
-const random=g=>{let n=g.seed|0;n^=n<<13;n^=n>>>17;n^=n<<5;g.seed=n>>>0||539;return g.seed/4294967296};
-export function course539(seed=539){const r={seed:seed||539},pads=[],safeRoutes=[],shortRoutes=[];const add=p=>{p.id=pads.length;pads.push(p);return p.id};
- const checkpoints=Array.from({length:4},(_,i)=>add({x:600,y:5400-i*1680,r:i===3?132:122,kind:i===3?'finish':'refuge',checkpoint:i,section:i,low:false}));
- for(let section=0;section<3;section++){const top=5400-section*1680,side=section%2?-1:1,safe=[checkpoints[section]],short=[checkpoints[section]];
-  for(let i=1;i<=7;i++)safe.push(add({x:600+side*(220+Math.sin(i*.85)*85)+(random(r)-.5)*28,y:top-i*210+(random(r)-.5)*22,r:72,kind:'stable',low:false,section}));
-  for(let i=1;i<=4;i++)short.push(add({x:600+Math.sin(i*1.3+section)*70+(random(r)-.5)*22,y:top-i*336+(random(r)-.5)*16,r:i%2?59:64,kind:['tilt','spin','sink','tilt'][(i-1+section)%4],low:true,section}));
-  safe.push(checkpoints[section+1]);short.push(checkpoints[section+1]);safeRoutes.push(safe);shortRoutes.push(short);
+const random=g=>{let n=g.seed|0;n^=n<<13;n^=n>>>17;n^=n<<5;g.seed=n>>>0||540;return g.seed/4294967296};
+export function course539(seed=540){
+ const rng={seed:seed||540},pads=[],checkpoints=[];const add=p=>{p.id=pads.length;pads.push(p);return p.id};
+ for(let i=0;i<6;i++)checkpoints.push(add({x:i===0||i===5?750:530+random(rng)*440,y:C.startY-i*1160,r:180,tip:180,angle:0,kind:i===5?'finish':'refuge',checkpoint:i,section:Math.max(0,i-1)}));
+ // Jitter both axes independently; no safe lane or prescribed shortcut.
+ for(let row=1;row<31;row++)for(let col=0;col<6;col++){
+  const x=125+col*250+(random(rng)-.5)*110,y=C.startY-row*190+(random(rng)-.5)*135,r=78+random(rng)*15;
+  if(y<370||pads.some(p=>dist(p,{x,y})<p.r+r+16))continue;
+  const draw=random(rng),kind=draw<.28?'low':draw<.58?'slippery':'stable';
+  add({x,y,r,tip:30,angle:(random(rng)-.5)*.7,kind,section:Math.min(4,Math.floor((C.startY-y)/1160)),tideOffset:Math.floor(random(rng)*12000)});
  }
- return{width:1200,height:5800,pads,checkpoints,safeRoutes,shortRoutes};
+ // Validate connectivity and fill only unusually large gaps after random placement.
+ for(let i=0;i<5;i++){const a=pads[checkpoints[i]],b=pads[checkpoints[i+1]];for(let j=1;j<=4;j++){const q={x:a.x+(b.x-a.x)*j/5,y:a.y+(b.y-a.y)*j/5};if(!pads.some(p=>dist(p,q)<180))add({...q,r:82,tip:30,angle:0,kind:j%2?'slippery':'low',section:i,tideOffset:Math.floor(random(rng)*12000)})}}
+ return{version:2,seed,width:C.width,height:C.height,pads,checkpoints};
 }
-export function wave539(at){if(at<0)return{active:false,warning:false,next:TETRA539.waveEvery,phase:0};const cycle=Math.floor(at/TETRA539.waveEvery),phase=at%TETRA539.waveEvery;return{active:cycle>0&&phase<TETRA539.waveLife,warning:phase>=TETRA539.waveEvery-TETRA539.waveWarning,next:TETRA539.waveEvery-phase,phase};}
-export function pad539(g,pad,at=g.elapsed){const state=g.padStates?.[pad.id]??{},spin=pad.kind==='spin'&&state.spinAt!=null?clamp539((at-state.spinAt)/8000,0,1):0,angle=spin*Math.PI*4;
- const sinking=pad.kind==='sink'&&state.sinkAt!=null?at-state.sinkAt:-1,submerged=pad.low&&wave539(at).active||sinking>=2200&&sinking<4800;
- return{...pad,x:pad.x+(spin>0&&spin<1?Math.sin(angle)*30:0),y:pad.y+(spin>0&&spin<1?(Math.cos(angle)-1)*24:0),angle,submerged,sinking,tilt:pad.kind==='tilt'&&state.tiltAt!=null?clamp539((at-state.tiltAt)/1400,0,1):0};
-}
-export const jumpDistance539=ms=>TETRA539.minJump+(TETRA539.maxJump-TETRA539.minJump)*clamp539(ms/TETRA539.charge,0,1);
-export const flightTime539=d=>Math.round(480+d*.85);
-export function landing539(g,x,y,at=g.elapsed){return g.course.pads.map(p=>pad539(g,p,at)).filter(p=>!p.submerged&&Math.hypot(x-p.x,y-p.y)<=p.r-7).sort((a,b)=>Math.hypot(x-a.x,y-a.y)-Math.hypot(x-b.x,y-b.y))[0]??null;}
-export function pose539(g,p,at=g.elapsed){if(p.flight){const f=p.flight,t=clamp539((at-f.at)/f.duration,0,1);return{x:f.x+(f.tx-f.x)*t,y:f.y+(f.ty-f.y)*t,z:Math.sin(t*Math.PI)*(80+f.distance*.18)}}if(p.padId!=null){const pad=pad539(g,g.course.pads[p.padId],at);return{x:pad.x+p.ox,y:pad.y+p.oy,z:0}}return{x:p.x,y:p.y,z:0};}
+export function wave539(at){const t=Math.max(0,at),bigPhase=t%C.bigEvery,phase=t%C.waveEvery,big=t>=C.bigEvery&&bigPhase<C.bigLife,bigWarning=!big&&bigPhase>=C.bigEvery-C.bigWarning,active=big||t>=C.waveEvery&&phase<C.waveLife;return{active,big,bigWarning,warning:bigWarning||!active&&phase>=C.waveEvery-C.waveWarning,next:bigWarning?C.bigEvery-bigPhase:C.waveEvery-phase,bigNext:C.bigEvery-bigPhase,phase:big?bigPhase:phase,life:big?C.bigLife:C.waveLife}}
+// The crest sweeps up the whole course, then the water remains high until the wave recedes.
+export function waveAt539(at,y){const wave=wave539(at),arrival=(C.height-y)/C.height*950;return{...wave,here:wave.active&&wave.phase>=arrival}}
+export function pad539(g,p,at=g.elapsed){const wave=waveAt539(at,p.y),tide=(Math.max(0,at)+(p.tideOffset??0))%17000,submerged=p.kind==='low'&&(tide>13000||wave.here)||wave.here&&wave.big&&p.checkpoint==null;return{...p,angle:p.angle??0,submerged,wet:wave.here,tide,tideWarning:p.kind==='low'&&tide>11200&&tide<=13000}}
+export const jumpDistance539=power=>C.maxJump*clamp539(power,0,1);
+export const flightTime539=d=>Math.round(420+d*.7);
+export function support539(p,x,y){const dx=x-p.x,dy=y-p.y;if(p.checkpoint!=null)return Math.hypot(dx,dy)<=p.r-12;if(Math.hypot(dx,dy)<=p.tip+9)return true;const co=Math.cos(p.angle??0),si=Math.sin(p.angle??0),xx=dx*co+dy*si,yy=-dx*si+dy*co;return Math.abs(xx)<=p.r*.84&&Math.abs(yy)<=p.r*.30||Math.abs(yy)<=p.r*.84&&Math.abs(xx)<=p.r*.30}
+export const tip539=(pad,x,y)=>pad.checkpoint!=null||Math.hypot(x-pad.x,y-pad.y)<=pad.tip;
+export function landing539(g,x,y,at=g.elapsed){return g.course.pads.map(p=>pad539(g,p,at)).filter(p=>!p.submerged&&support539(p,x,y)&&(!p.wet||tip539(p,x,y))).sort((a,b)=>dist(a,{x,y})-dist(b,{x,y}))[0]??null}
+export function pose539(g,p,at=g.elapsed){if(p.flight){const f=p.flight,t=clamp539((at-f.at)/f.duration,0,1);return{x:f.x+(f.tx-f.x)*t,y:f.y+(f.ty-f.y)*t,z:Math.sin(t*Math.PI)*(100+f.distance*.45)}}return{x:p.x,y:p.y,z:0}}
+export function occupied539(g,x,y,at,except){return g.players.some(p=>p.playerId!==except&&p.fallAt==null&&p.finishedAt==null&&(()=>{const q=pose539(g,p,at);return q.z<45&&Math.hypot(q.x-x,q.y-y)<C.body*2+3})())}
+export function aim539(g,p,angle,power,at=g.elapsed){const from=pose539(g,p,at),d=jumpDistance539(power);let x=from.x+Math.cos(angle)*d,y=from.y+Math.sin(angle)*d;
+ // A small, visible tip assist uses exactly the same endpoint on client and server.
+ const tip=g.course.pads.filter(pad=>pad.checkpoint==null&&Math.hypot(pad.x-x,pad.y-y)<=24&&dist(from,pad)<=C.maxJump).sort((a,b)=>dist(a,{x,y})-dist(b,{x,y}))[0];if(tip){x=tip.x;y=tip.y}
+ const distance=Math.hypot(x-from.x,y-from.y),arrival=at+flightTime539(distance),pad=landing539(g,x,y,arrival),occupied=occupied539(g,x,y,arrival,p.playerId);return{x,y,distance,arrival,pad,occupied,tip:!!pad&&tip539(pad,x,y)}}
 const event=(g,type,extra={})=>{g.events.push({id:++g.eventSeq,at:g.elapsed,type,...extra});g.events=g.events.slice(-28)};
-export function makeTetra539({id,code,partyId,hostId,members,now=0}){return{id,code,game:'tetra',rulesVersion:1,partyId462:partyId,hostId,members:copy(members),phase:'lobby',revision:0,createdAt:now,updatedAt:now,serverAt:now,lastAt:now,elapsed:0,players:[],events:[],eventSeq:0,results:[]};}
-export function startTetra539(g,now,seed=539){g.seed=seed||539;g.course=course539(seed);g.padStates={};g.players=g.members.filter(m=>!m.departed).map((m,seat)=>({playerId:m.playerId,name:m.name,seat,ai:!!m.ai,speciesId:m.choice?.speciesId??'slime',color499:m.color499??['blue','green','pink','orange'][seat]}));
- while(g.players.length<4){const seat=g.players.length;g.players.push({playerId:`AI-${g.id}-${seat}`,name:['しぶき','しおかぜ','より','なみのり'][seat],seat,ai:true,speciesId:['myth_yori','wolf','myth_yori','slime'][seat],color499:g.aiColors500?.[seat]??['blue','green','pink','orange'][seat]});}
- Object.assign(g,{phase:'countdown',startAt:now+TETRA539.countdown,endAt:now+TETRA539.countdown+TETRA539.duration,lastAt:now,serverAt:now,elapsed:-TETRA539.countdown,firstFinish:null,events:[],eventSeq:0,results:[],waveCycle:0});
- for(const p of g.players)Object.assign(p,{x:600+(p.seat-1.5)*42,y:5400,padId:g.course.checkpoints[0],ox:(p.seat-1.5)*42,oy:0,checkpoint:0,bestY:5400,falls:0,jumps:0,landings:0,lastSeq:0,chargeAt:null,aim:-Math.PI/2,flight:null,fallAt:null,finishedAt:null,auto:p.ai,brain:{next:350+p.seat*230},landedAt:0});
- g.updatedAt=now;g.revision++;return g;
-}
-export function fall539(g,p,reason='miss'){if(p.fallAt!=null||p.finishedAt!=null)return;const pos=pose539(g,p);Object.assign(p,{x:pos.x,y:pos.y,padId:null,flight:null,chargeAt:null,fallAt:g.elapsed,falls:p.falls+1});event(g,'splash',{seat:p.seat,x:p.x,y:p.y,reason});}
-export function inputTetra539(g,p,a){if(g.phase!=='play'||p.finishedAt!=null||p.fallAt!=null||p.flight)return false;const at=clamp539(a.at??g.elapsed,Math.max(0,g.elapsed-200),g.elapsed);
- if(a.action==='cancel'){p.chargeAt=null;return true}
- if(Number.isFinite(a.angle))p.aim=clamp539(a.angle,-Math.PI,Math.PI);
- if(a.action==='begin'){if(p.chargeAt!=null)return false;p.chargeAt=at;return true}
- if(a.action==='aim')return p.chargeAt!=null;
- if(a.action!=='release'||p.chargeAt==null)return false;const hold=at-p.chargeAt;p.chargeAt=null;if(hold<60)return false;
- const d=jumpDistance539(hold),pos=pose539(g,p),tx=pos.x+Math.cos(p.aim)*d,ty=pos.y+Math.sin(p.aim)*d;Object.assign(p,{flight:{x:pos.x,y:pos.y,tx,ty,at:g.elapsed,distance:d,duration:flightTime539(d)},x:pos.x,y:pos.y,padId:null,jumps:p.jumps+1});event(g,'jump',{seat:p.seat,x:pos.x,y:pos.y});return true;
-}
-export function order539(g){return [...g.players].sort((a,b)=>a.finishedAt!=null&&b.finishedAt!=null?a.finishedAt-b.finishedAt||a.seat-b.seat:a.finishedAt!=null?-1:b.finishedAt!=null?1:b.checkpoint-a.checkpoint||a.bestY-b.bestY||a.falls-b.falls||a.seat-b.seat);}
-export function finishTetra539(g,reason='time'){if(g.phase==='result')return;g.phase='result';g.reason=reason;let previous=null;g.results=order539(g).map((p,i)=>{const key=p.finishedAt!=null?'f'+p.finishedAt:`p${p.checkpoint}:${p.bestY}:${p.falls}`,rank=key===previous?.key?previous.rank:i+1;previous={key,rank};return{playerId:p.playerId,seat:p.seat,name:p.name,rank,finishedAt:p.finishedAt,progress:Math.round((5400-p.bestY)/5040*100),falls:p.falls,jumps:p.jumps,landings:p.landings}});g.players.forEach(p=>p.chargeAt=null);event(g,'finish');g.updatedAt=g.lastAt;g.revision++;}
-function land(g,p){const f=p.flight,x=f.tx,y=f.ty,pad=landing539(g,x,y);if(!pad){p.x=x;p.y=y;p.flight=null;fall539(g,p);return}Object.assign(p,{x,y,ox:x-pad.x,oy:y-pad.y,padId:pad.id,flight:null,landedAt:g.elapsed,landings:p.landings+1});
- const state=g.padStates[pad.id]??={};if(pad.kind==='sink'&&(state.sinkAt==null||g.elapsed-state.sinkAt>=4800))state.sinkAt=g.elapsed;if(pad.kind==='tilt'){state.tiltAt=g.elapsed;state.direction=(p.seat%2?1:-1)}if(pad.kind==='spin'&&(state.spinAt==null||g.elapsed-state.spinAt>=8000))state.spinAt=g.elapsed;
+export function makeTetra539({id,code,partyId,hostId,members,now=0}){return{id,code,game:'tetra',rulesVersion:2,partyId462:partyId,hostId,members:copy(members),phase:'lobby',revision:0,createdAt:now,updatedAt:now,serverAt:now,lastAt:now,elapsed:0,players:[],events:[],eventSeq:0,results:[]}}
+function spawn(g,p){const pad=g.course.pads[g.course.checkpoints[p.checkpoint]],offsets=[[ -65,55],[65,55],[-65,-55],[65,-55],[0,0],[-115,0],[115,0],[0,115],[0,-115]];for(let n=0;n<offsets.length;n++){const [x,y]=offsets[(p.seat+n)%offsets.length],q={x:pad.x+x,y:pad.y+y};if(!occupied539(g,q.x,q.y,g.elapsed,p.playerId)){Object.assign(p,{...q,padId:pad.id,ox:x,oy:y,fallAt:null,flight:null,chargeAt:null,landedAt:g.elapsed});return true}}return false}
+export function startTetra539(g,now,seed=540){g.seed=seed||540;g.rulesVersion=2;g.course=course539(seed);g.padStates={};g.players=g.members.filter(m=>!m.departed).map((m,seat)=>({playerId:m.playerId,name:m.name,seat,ai:!!m.ai,speciesId:m.choice?.speciesId??'slime',color499:m.color499??['blue','green','pink','orange'][seat]}));while(g.players.length<4){const seat=g.players.length;g.players.push({playerId:`AI-${g.id}-${seat}`,name:['しぶき','しおかぜ','より','なみのり'][seat],seat,ai:true,speciesId:['myth_yori','wolf','myth_yori','slime'][seat],color499:g.aiColors500?.[seat]??['blue','green','pink','orange'][seat]})}
+ Object.assign(g,{phase:'countdown',startAt:now+C.countdown,endAt:now+C.countdown+C.duration,lastAt:now,serverAt:now,elapsed:-C.countdown,firstFinish:null,events:[],eventSeq:0,results:[],waveCycle:0});
+ for(const p of g.players)Object.assign(p,{x:0,y:0,padId:null,checkpoint:0,bestY:C.startY,falls:0,jumps:0,landings:0,lastSeq:0,chargeAt:null,power:0,aim:-Math.PI/2,flight:null,fallAt:-C.countdown,finishedAt:null,auto:p.ai,brain:{next:350+p.seat*280},landedAt:0});for(const p of g.players)spawn(g,p);g.updatedAt=now;g.revision++;return g}
+export function fall539(g,p,reason='miss'){if(p.fallAt!=null||p.finishedAt!=null)return;const q=pose539(g,p);Object.assign(p,{x:q.x,y:q.y,padId:null,flight:null,chargeAt:null,fallAt:g.elapsed,falls:p.falls+1});event(g,'splash',{seat:p.seat,x:p.x,y:p.y,reason})}
+export function inputTetra539(g,p,a){if(g.phase!=='play'||p.finishedAt!=null||p.fallAt!=null||p.flight)return false;if(a.action==='cancel'){p.chargeAt=null;p.power=0;return true}if(!Number.isFinite(a.angle)||!Number.isFinite(a.power)||a.power<0||a.power>1||a.angle< -Math.PI||a.angle>Math.PI)return false;p.aim=a.angle;p.power=a.power;
+ if(a.action==='begin'){if(p.chargeAt!=null)return false;p.chargeAt=g.elapsed;return true}if(a.action==='aim')return p.chargeAt!=null;if(a.action!=='release'||p.chargeAt==null)return false;p.chargeAt=null;if(jumpDistance539(p.power)<C.minJump)return false;
+ const q=aim539(g,p,p.aim,p.power),from=pose539(g,p);Object.assign(p,{flight:{x:from.x,y:from.y,tx:q.x,ty:q.y,at:g.elapsed,distance:q.distance,duration:flightTime539(q.distance)},padId:null,jumps:p.jumps+1});event(g,'jump',{seat:p.seat,x:p.x,y:p.y});return true}
+export function order539(g){return [...g.players].sort((a,b)=>a.finishedAt!=null&&b.finishedAt!=null?a.finishedAt-b.finishedAt||a.seat-b.seat:a.finishedAt!=null?-1:b.finishedAt!=null?1:b.checkpoint-a.checkpoint||a.bestY-b.bestY||a.falls-b.falls||a.seat-b.seat)}
+export function finishTetra539(g,reason='time'){if(g.phase==='result')return;g.phase='result';g.reason=reason;let previous;g.results=order539(g).map((p,i)=>{const key=p.finishedAt!=null?'f'+p.finishedAt:`p${p.checkpoint}:${p.bestY}:${p.falls}`,rank=key===previous?.key?previous.rank:i+1;previous={key,rank};return{playerId:p.playerId,seat:p.seat,name:p.name,rank,finishedAt:p.finishedAt,progress:Math.round((C.startY-p.bestY)/(C.startY-C.goalY)*100),falls:p.falls,jumps:p.jumps,landings:p.landings}});g.players.forEach(p=>p.chargeAt=null);event(g,'finish');g.updatedAt=g.lastAt;g.revision++}
+function land(g,p){const f=p.flight,x=f.tx,y=f.ty,pad=landing539(g,x,y);if(!pad||occupied539(g,x,y,g.elapsed,p.playerId)){p.x=x;p.y=y;p.flight=null;fall539(g,p,pad?'occupied':'miss');return}Object.assign(p,{x,y,ox:x-pad.x,oy:y-pad.y,padId:pad.id,flight:null,landedAt:g.elapsed,landings:p.landings+1});
  if(pad.checkpoint===p.checkpoint+1){p.checkpoint=pad.checkpoint;event(g,'checkpoint',{seat:p.seat,checkpoint:p.checkpoint})}if(pad.section<=p.checkpoint)p.bestY=Math.min(p.bestY,y);
- if(pad.kind==='finish'&&p.checkpoint===3){p.finishedAt=g.elapsed;p.bestY=TETRA539.goalY;if(g.firstFinish==null){g.firstFinish=g.elapsed;g.endAt=Math.min(g.endAt,g.startAt+g.elapsed+TETRA539.grace)}event(g,'goal',{seat:p.seat})}else event(g,'land',{seat:p.seat,x,y});
- p.brain.next=g.elapsed+700+random(g)*900;
-}
-function bot539(g,p){if(p.flight||p.fallAt!=null||p.finishedAt!=null||g.elapsed<p.brain.next)return;if(p.chargeAt!=null){if(g.elapsed>=p.brain.releaseAt)inputTetra539(g,p,{action:'release',angle:p.brain.angle});return}
- const pos=pose539(g,p),wave=wave539(g.elapsed),section=Math.min(2,p.checkpoint),routes=[g.course.safeRoutes[section],g.course.shortRoutes[section]],candidates=[];
- for(let route=0;route<2;route++)for(const id of routes[route].slice(1)){const pad=pad539(g,g.course.pads[id]),d=dist(pos,pad);if(pad.y>=pos.y-75||d>TETRA539.maxJump-12||d<TETRA539.minJump+5||pad.submerged||pad.low&&(wave.active||wave.warning))continue;candidates.push({pad,d,score:(pos.y-pad.y)+(route===1?(p.seat%2?20:-90):40)-Math.abs(pad.x-pos.x)*.08})}
- candidates.sort((a,b)=>b.score-a.score);const target=candidates[0];if(!target){p.brain.next=g.elapsed+250;return}
- // AI uses visible geometry and the same charge/release physics; occasional imperfect aim.
- let error=(random(g)-.5)*.045;if(random(g)<.055)error+=(random(g)<.5?-1:1)*.24;const angle=Math.atan2(target.pad.y-pos.y,target.pad.x-pos.x)+error,hold=(target.d-TETRA539.minJump)/(TETRA539.maxJump-TETRA539.minJump)*TETRA539.charge;
- inputTetra539(g,p,{action:'begin',angle});p.brain.angle=angle;p.brain.releaseAt=g.elapsed+hold;p.brain.next=g.elapsed;
-}
-export function advanceTetra539(g,now,inputs=new Map(),auto=new Set()){if(!['countdown','play'].includes(g.phase))return;const steps=Math.min(200,Math.floor((now-g.lastAt)/TETRA539.step));
- for(let s=0;s<steps&&g.phase!=='result';s++){g.lastAt+=TETRA539.step;g.elapsed=g.lastAt-g.startAt;if(g.phase==='countdown'&&g.elapsed>=0){g.phase='play';g.revision++;event(g,'begin')}if(g.phase==='countdown')continue;
-  const cycle=Math.floor(g.elapsed/TETRA539.waveEvery);if(cycle>g.waveCycle){g.waveCycle=cycle;event(g,'wave')}
-  for(const p of g.players){const wasAuto=p.auto;p.auto=p.ai||auto.has(p.playerId);if(wasAuto!==p.auto){p.chargeAt=null;p.brain.next=g.elapsed+400;inputs.delete(p.playerId)}
-   if(p.finishedAt!=null)continue;
-   if(p.fallAt!=null){if(g.elapsed-p.fallAt>=TETRA539.respawn){const pad=g.course.pads[g.course.checkpoints[p.checkpoint]];Object.assign(p,{x:pad.x,y:pad.y,padId:pad.id,ox:(p.seat-1.5)*26,oy:0,fallAt:null,chargeAt:null,landedAt:g.elapsed});p.brain.next=g.elapsed+350;event(g,'respawn',{seat:p.seat})}continue}
-   if(p.flight){if(g.elapsed-p.flight.at>=p.flight.duration)land(g,p);else{const pos=pose539(g,p);p.x=pos.x;p.y=pos.y}continue}
-   const pad=pad539(g,g.course.pads[p.padId]);if(pad.submerged){fall539(g,p,'wave');continue}
-   if(pad.kind==='tilt'&&g.elapsed-p.landedAt>500){p.ox+=(g.padStates[pad.id]?.direction??1)*TETRA539.step/1000*48*pad.tilt;if(Math.hypot(p.ox,p.oy)>pad.r-5){fall539(g,p,'tilt');continue}}
-   const pos=pose539(g,p);p.x=pos.x;p.y=pos.y;
-   if(p.chargeAt!=null&&g.elapsed-p.chargeAt>3500)p.chargeAt=null;
-   if(p.auto){inputs.delete(p.playerId);bot539(g,p)}else{const actions=inputs.get(p.playerId)??[];while(actions.length&&actions[0].at<=g.elapsed)inputTetra539(g,p,actions.shift());if(!actions.length)inputs.delete(p.playerId)}
-  }
-  if(g.players.every(p=>p.finishedAt!=null))finishTetra539(g,'all');else if(g.lastAt>=g.endAt)finishTetra539(g,g.firstFinish!=null?'grace':'time');
+ if(pad.kind==='finish'&&p.checkpoint===g.course.checkpoints.length-1){p.finishedAt=g.elapsed;p.bestY=C.goalY;if(g.firstFinish==null){g.firstFinish=g.elapsed;g.endAt=Math.min(g.endAt,g.startAt+g.elapsed+C.grace)}event(g,'goal',{seat:p.seat})}else event(g,'land',{seat:p.seat,x,y});p.brain.next=g.elapsed+450+random(g)*650}
+function clearFlight539(g,p,target,distance){const duration=flightTime539(distance);for(let dt=50;dt<duration;dt+=50){const t=dt/duration,q={x:p.x+(target.x-p.x)*t,y:p.y+(target.y-p.y)*t,z:Math.sin(t*Math.PI)*(100+distance*.45)};for(const other of g.players){if(other===p||other.fallAt!=null||other.finishedAt!=null)continue;const v=pose539(g,other,g.elapsed+dt);if(dist(q,v)<C.body*2+4&&Math.abs(q.z-v.z)<42)return false}}return true}
+function bot539(g,p){if(p.flight||p.fallAt!=null||p.finishedAt!=null||g.elapsed<p.brain.next)return;const target=g.course.pads[g.course.checkpoints[p.checkpoint+1]],current=g.course.pads[p.padId];if(!target)return;const wave=wave539(g.elapsed),bigSoon=wave.big||wave.bigNext<6000;if(current.checkpoint!=null&&bigSoon)return;
+ const candidates=[];for(const pad of g.course.pads){if(pad.checkpoint!=null&&pad.checkpoint!==p.checkpoint+1)continue;if(pad.y<target.y-100||dist(p,pad)>C.maxJump-15||pad.y>=p.y-25)continue;const offsets=pad.checkpoint!=null?[[-65,55],[65,55],[-65,-55],[65,-55]]:[[0,0]];for(const [dx,dy]of offsets){const q={x:pad.x+dx,y:pad.y+dy},distance=dist(p,q);if(distance>C.maxJump||distance<C.minJump)continue;const arrival=g.elapsed+flightTime539(distance),land=landing539(g,q.x,q.y,arrival);if(!land||occupied539(g,q.x,q.y,arrival,p.playerId)||!clearFlight539(g,p,q,distance))continue;const score=dist(p,target)-dist(q,target)+(pad.checkpoint!=null?240:0)-(pad.kind==='low'?35:0)+random(g)*45;candidates.push({...q,distance,score})}}
+ candidates.sort((a,b)=>b.score-a.score);const q=candidates[0];if(!q){p.brain.next=g.elapsed+200;return}const angle=Math.atan2(q.y-p.y,q.x-p.x),power=q.distance/C.maxJump;inputTetra539(g,p,{action:'begin',angle,power});inputTetra539(g,p,{action:'release',angle,power})}
+export function advanceTetra539(g,now,inputs=new Map(),auto=new Set()){if(!['countdown','play'].includes(g.phase))return;const steps=Math.min(200,Math.floor((now-g.lastAt)/C.step));for(let s=0;s<steps&&g.phase!=='result';s++){g.lastAt+=C.step;g.elapsed=g.lastAt-g.startAt;if(g.phase==='countdown'&&g.elapsed>=0){g.phase='play';g.revision++;event(g,'begin')}if(g.phase==='countdown')continue;
+ const cycle=Math.floor(g.elapsed/C.waveEvery);if(cycle>g.waveCycle){g.waveCycle=cycle;event(g,'wave',{big:wave539(g.elapsed).big})}
+ for(const p of g.players){const wasAuto=p.auto;p.auto=p.ai||auto.has(p.playerId);if(wasAuto!==p.auto){p.chargeAt=null;p.brain.next=g.elapsed+400;inputs.delete(p.playerId)}if(p.finishedAt!=null)continue;if(p.fallAt!=null){if(g.elapsed-p.fallAt>=C.respawn&&spawn(g,p)){p.brain.next=g.elapsed+400;event(g,'respawn',{seat:p.seat})}continue}
+ const q=pose539(g,p),wave=waveAt539(g.elapsed,q.y),standing=p.padId!=null?g.course.pads[p.padId]:null;if(wave.here&&(!standing||standing.checkpoint==null&&(wave.big||!tip539(standing,q.x,q.y)))){fall539(g,p,'wave');continue}
+ if(p.flight){if(g.elapsed-p.flight.at>=p.flight.duration)land(g,p);else{p.x=q.x;p.y=q.y}continue}
+ const pad=pad539(g,standing);if(pad.submerged){fall539(g,p,'tide');continue}
+ if(pad.kind==='slippery'&&!tip539(pad,p.x,p.y)&&g.elapsed-p.landedAt>600){const length=dist(p,pad)||1,x=p.x+(p.x-pad.x)/length*3.5,y=p.y+(p.y-pad.y)/length*3.5;if(!occupied539(g,x,y,g.elapsed,p.playerId)){p.x=x;p.y=y}if(!support539(pad,p.x,p.y)){fall539(g,p,'slip');continue}}
+ if(p.chargeAt!=null&&g.elapsed-p.chargeAt>30000)p.chargeAt=null;
+ if(p.auto){inputs.delete(p.playerId);bot539(g,p)}else{const actions=inputs.get(p.playerId)??[];while(actions.length&&actions[0].at<=g.elapsed)inputTetra539(g,p,actions.shift());if(!actions.length)inputs.delete(p.playerId)}
  }
- if(now>=g.endAt&&g.phase!=='result'){g.lastAt=now;g.elapsed=Math.min(TETRA539.duration,now-g.startAt);finishTetra539(g,g.firstFinish!=null?'grace':'time')}g.serverAt=now;g.updatedAt=now;
-}
-export function publicTetra539(g,viewerId,{frame=false}={}){return{id:g.id,code:g.code,game:'tetra',rulesVersion:1,hostId:g.hostId,phase:g.phase,revision:g.revision,serverAt:g.serverAt,elapsed:g.elapsed,startAt:g.startAt,endAt:g.endAt,firstFinish:g.firstFinish,...(!frame&&g.course?{course:copy(g.course)}:{}),padStates:copy(g.padStates??{}),members:g.members.map(m=>({playerId:m.playerId,name:m.name,departed:!!m.departed,choice:m.choice?{id:m.choice.id,speciesId:m.choice.speciesId}:null})),players:g.players.map(({brain,lastSeq,...p})=>({...copy(p),...(p.playerId===viewerId?{lastSeq}:{})})),events:copy(g.events),results:copy(g.results),reason:g.reason};}
+ // Crossing jumps also collide when the bodies are at similar heights.
+ for(let a=0;a<g.players.length;a++)for(let b=a+1;b<g.players.length;b++){const p=g.players[a],q=g.players[b];if(p.fallAt!=null||q.fallAt!=null||p.finishedAt!=null||q.finishedAt!=null||!p.flight&&!q.flight)continue;const u=pose539(g,p),v=pose539(g,q);if(dist(u,v)<C.body*2&&Math.abs(u.z-v.z)<38){if(p.flight)fall539(g,p,'collision');if(q.flight)fall539(g,q,'collision')}}
+ if(g.players.every(p=>p.finishedAt!=null))finishTetra539(g,'all');else if(g.lastAt>=g.endAt)finishTetra539(g,g.firstFinish!=null?'grace':'time')}
+ if(now>=g.endAt&&g.phase!=='result'){g.lastAt=now;g.elapsed=Math.min(C.duration,now-g.startAt);finishTetra539(g,g.firstFinish!=null?'grace':'time')}g.serverAt=now;g.updatedAt=now}
+export function publicTetra539(g,viewerId,{frame=false}={}){return{id:g.id,code:g.code,game:'tetra',rulesVersion:2,hostId:g.hostId,phase:g.phase,revision:g.revision,serverAt:g.serverAt,elapsed:g.elapsed,startAt:g.startAt,endAt:g.endAt,firstFinish:g.firstFinish,...(!frame&&g.course?{course:copy(g.course)}:{}),padStates:{},members:g.members.map(m=>({playerId:m.playerId,name:m.name,departed:!!m.departed,choice:m.choice?{id:m.choice.id,speciesId:m.choice.speciesId}:null})),players:g.players.map(({brain,lastSeq,...p})=>({...copy(p),...(p.playerId===viewerId?{lastSeq}:{})})),events:copy(g.events),results:copy(g.results),reason:g.reason}}
 export const signature539=g=>!g?null:g.phase==='lobby'?g:{id:g.id,phase:g.phase==='result'?'result':'play',members:g.members,results:g.phase==='result'?g.results:null};

@@ -1,5 +1,5 @@
 import {randomBytes} from 'node:crypto';
-import {makeFishing524,startFishing524,advanceFishing524,publicFishing524} from '../../src/fishing/Rules524.js';
+import {makeFishing524,startFishing524,advanceFishing524,publicFishing524,fishingFrame540} from '../../src/fishing/Rules524.js';
 export const fishingFor524=(c,id)=>Object.values(c.data.fishingRooms524??{}).find(g=>g.members.some(m=>m.playerId===id&&!m.departed))??null;
 const runtimes=c=>c.fishingRuntime524??=new Map();
 export const liveFishing524=(c,g)=>runtimes(c).get(g?.id)?.g??g;
@@ -21,7 +21,7 @@ export function advanceFishings524(c){const now=c.now();for(const saved of Objec
  advanceFishing524(g,now,r.inputs,auto);const changed=r.phase!==g.phase;
  if(changed||now-r.lastSave>=2000){c.transaction(()=>{c.data.fishingRooms524[g.code]=structuredClone(g)});r.lastSave=now;r.phase=g.phase}
  if(changed)for(const m of party?.members??[])c.push(c.sessions.get(m.playerId));
- if(now-r.lastSend>=100){r.lastSend=now;const frame=publicFishing524(g);for(const m of party?.members??[])if(c.sessions.get(m.playerId)?.connected&&c.subscribers.has(m.playerId))c.send(m.playerId,{type:'fishingFrame524',selfId:m.playerId,serverNow:now,fishing:frame})}
+ if(now-r.lastSend>=100){r.lastSend=now;const compact=fishingFrame540(g);let frame;for(const m of party?.members??[])if(c.sessions.get(m.playerId)?.connected&&c.subscribers.has(m.playerId))c.send(m.playerId,{type:'fishingFrame524',selfId:m.playerId,serverNow:now,fishing:c.sessions.get(m.playerId).fishingFrames540===1?compact:(frame??=publicFishing524(g))})}
  }
  for(const[id]of runtimes(c))if(!Object.values(c.data.fishingRooms524??{}).some(g=>g.id===id))runtimes(c).delete(id);
 }

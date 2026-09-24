@@ -1,0 +1,79 @@
+{
+  "engine": "153.0.8010.0",
+  "environment": "Chromium mobile touch emulation, not physical iPhone Safari",
+  "fixtures": "Original character modules absent from restored patches; local QA uses explicit placeholder portraits/catalog. Production views, assets, rules and coordinator are exercised.",
+  "results": [
+    {
+      "game": "tetra",
+      "width": 320,
+      "height": 568,
+      "field": 445,
+      "buttons": false,
+      "dragLanding": true,
+      "returnCancel": true,
+      "touchCancel": true,
+      "resultReplay": true
+    },
+    {
+      "game": "tetra",
+      "width": 390,
+      "height": 844,
+      "field": 721,
+      "buttons": false,
+      "dragLanding": true,
+      "returnCancel": true,
+      "touchCancel": true,
+      "resultReplay": true
+    },
+    {
+      "game": "tetra",
+      "width": 430,
+      "height": 932,
+      "field": 809,
+      "buttons": false,
+      "dragLanding": true,
+      "returnCancel": true,
+      "touchCancel": true,
+      "resultReplay": true
+    },
+    {
+      "game": "hide",
+      "cache": {
+        "terrain": 2,
+        "mini": 1
+      },
+      "after": {
+        "terrain": 2,
+        "mini": 1
+      },
+      "liveDisguise": true,
+      "movingTwoFingerAttack": true
+    },
+    {
+      "game": "fishing",
+      "guestCast": true,
+      "flag": true,
+      "records": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "assets": [
+        "/assets/fishing525/cover.webp",
+        "/assets/fishing524/pond.webp",
+        "/assets/fishing526/fish-shadow.webp"
+      ]
+    },
+    {
+      "game": "gorilla",
+      "secretHintRemoved": true
+    },
+    {
+      "game": "luck",
+      "stackDescriptions": true
+    }
+  ],
+  "errors": [],
+  "missing": []
+}
