@@ -1,0 +1,62 @@
+{
+  "results": [
+    {
+      "width": 320,
+      "height": 568,
+      "fit": {
+        "width": 320,
+        "height": 568,
+        "field": 338.65625,
+        "controlsBottom": 568,
+        "bodyWidth": 320,
+        "cache": 3
+      }
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "fit": {
+        "width": 390,
+        "height": 844,
+        "field": 560.3125,
+        "controlsBottom": 844,
+        "bodyWidth": 390,
+        "cache": 3
+      }
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "fit": {
+        "width": 430,
+        "height": 932,
+        "field": 648.3125,
+        "controlsBottom": 932,
+        "bodyWidth": 430,
+        "cache": 4
+      }
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "fit": {
+        "width": 844,
+        "height": 390,
+        "field": 347,
+        "controlsBottom": 390,
+        "bodyWidth": 844,
+        "cache": 3
+      }
+    },
+    {
+      "twoPlayer": true,
+      "perf": {
+        "frames": 91,
+        "p95": 16.700000000000728,
+        "cacheBuilds": 0
+      }
+    }
+  ],
+  "errors": [],
+  "missing": []
+}

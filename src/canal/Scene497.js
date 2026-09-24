@@ -30,8 +30,8 @@ function houseHealth(ctx,g,w,h,danger,now,reduced){const x=w*.5,y=h*.743,hp=g.hp
 }
 function banner(ctx,w,h,text){const bw=Math.min(290,w*.72),x=(w-bw)/2,y=h*.46;ctx.save();ctx.shadowColor='#163c3890';ctx.shadowBlur=16;ctx.shadowOffsetY=5;fill(ctx,x,y,bw,38,gradient(ctx,x,y,38,'#315a49f5','#13392ef5'),12);ctx.shadowBlur=0;ctx.shadowOffsetY=0;ctx.strokeStyle='#efd59a';ctx.lineWidth=1.2;round(ctx,x+.6,y+.6,bw-1.2,36.8,11);ctx.stroke();label(ctx,text,w/2,y+25,Math.min(20,w*.043),'#fff0b2');ctx.restore()}
 export function draw497(canvas,g,u,at,now,layout,colors,crew,pointFor){
- const ctx=canvas?.getContext('2d'),w=canvas?.clientWidth,h=canvas?.clientHeight;if(!ctx||!w||!h)return;const dpr=Math.min(globalThis.devicePixelRatio??1,2);if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr)}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
- if(ready(u.background))ctx.drawImage(u.background,0,0,w,h);else{ctx.fillStyle='#138e94';ctx.fillRect(0,0,w,h)}
+ const ctx=canvas?.getContext('2d'),w=canvas?.clientWidth,h=canvas?.clientHeight;if(!ctx||!w||!h)return;const dpr=Math.min(globalThis.devicePixelRatio??1,1.5);if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr)}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+ if(ready(u.background)){if(!u.bgCache541||u.bgCache541.width!==canvas.width||u.bgCache541.height!==canvas.height||u.bgSource541!==u.background){u.bgCache541=document.createElement('canvas');u.bgCache541.width=canvas.width;u.bgCache541.height=canvas.height;u.bgCache541.getContext('2d').drawImage(u.background,0,0,canvas.width,canvas.height);u.bgSource541=u.background}ctx.drawImage(u.bgCache541,0,0,w,h);}else{ctx.fillStyle='#138e94';ctx.fillRect(0,0,w,h)}
  // Soft contact-light replaces the flat colored foot rings. No boundary or trajectory lines.
  for(const p of g.players??[]){const a=crew[p.seat];glow(ctx,a.x*w,a.y*h,w*.07,h*.021,colors[p.seat],.30)}
  const danger=layout.some(e=>e.eta<2500);if(danger)glow(ctx,w/2,h*.70,w*.18,h*.065,'#ff9c66',.12);
@@ -43,7 +43,7 @@ export function draw497(canvas,g,u,at,now,layout,colors,crew,pointFor){
   if(ready(u.atlas))imageCell492(ctx,u.atlas,e.kind,0,0,s);else{ctx.fillStyle=['#f96840','#99b740','#a3b66b','#d19eef'][e.kind];ctx.beginPath();ctx.arc(0,0,s*.30,0,Math.PI*2);ctx.fill()}
   if(e.slowUntil>at){net(ctx,u,1,0,s*.14,s*.92,colors[e.snareSeat]??colors[0],.65);fill(ctx,-24,s*.44,48,16,'#164538ed',6);label(ctx,'足止め中',0,s*.44+12,9,'#ecffe6')}
   badge(ctx,e);
-  if(e.path500===1&&e.kind===3){fill(ctx,-67,s*.05+27,134,21,'#6b3227ee',8);label(ctx,'巨大将軍 · ミサイル注意',0,s*.05+42,10,'#fff1c6');}
+  if(e.path541===1&&e.kind===3){const by=s*.05+30;fill(ctx,-61,by,122,22,'#163c38ed',6);fill(ctx,-55,by+15,110,4,'#092c27',2);fill(ctx,-55,by+15,110*e.hp/e.maxHp,4,at<(e.breakUntil541??0)?'#a0f8e8':'#f5be78',2);label(ctx,at<(e.breakUntil541??0)?'BREAK！ 網を重ねろ！':'巨大将軍 · ２人連携でBREAK',0,by+11,8);}else if(e.path500===1&&e.kind===3){fill(ctx,-67,s*.05+27,134,21,'#6b3227ee',8);label(ctx,'巨大将軍 · ミサイル注意',0,s*.05+42,10,'#fff1c6');}
   if(e.eta<1700){fill(ctx,-24,s*.39,48,17,'#903e26f0',7);label(ctx,'家が危険',0,s*.39+12,9,'#fff1c6')}else if(u.teach&&e.id===layout[0]?.id){fill(ctx,-29,s*.4,58,20,'#f6e6a8',7);label(ctx,'タップ！',0,s*.4+14,11,'#27422f')}
   ctx.restore();
  }
@@ -64,7 +64,8 @@ export function draw497(canvas,g,u,at,now,layout,colors,crew,pointFor){
  if(g.rules500===1)drawMissiles500(ctx,g,at,now,w,h,u.reduced);
  if(mega){const age=now-mega.localAt;for(const p of g.players)cast497(ctx,u,p.seat,{x:w*(p.seat%2?.67:.33),y:h*(p.seat<2?.32:.55)},Math.min(age,850),w,h,colors,crew);
   if(age>=230){const size=Math.min(w*.78,340)*(u.reduced?1:.76+.24*Math.sin(clamp((age-230)/720)*Math.PI)),alpha=clamp((1300-age)/380);glow(ctx,w/2,h*.42,size*.53,size*.25,'#fff2b2',alpha*.25);net(ctx,u,age>880?2:1,w/2,h*.42,size,'#fff1a6',alpha*.86);splash(ctx,u,w/2,h*.56,Math.max(0,age-350),w*.53,u.reduced);}
-  banner(ctx,w,h,'4人で、一網打尽！');
+  banner(ctx,w,h,`${mega.strength541??4}人合体！ 一網打尽！`);
  }
+ if(g.rules541){const sweeps=effects.filter(e=>e.kind==='sweep541'&&now-e.localAt<500);for(const e of [...sweeps,...(u.stroke541?[{path:u.stroke541,localAt:now,seat:u.seat}]:[])]){if(!e.path?.length)continue;ctx.save();ctx.globalAlpha=Math.max(0,1-(now-e.localAt)/500);ctx.lineCap='round';ctx.lineJoin='round';for(const [width,color] of [[19,'#f6e29b22'],[5,'#17423cb0'],[2,'#fff1af']]){ctx.lineWidth=width;ctx.strokeStyle=color;ctx.beginPath();e.path.forEach((p,i)=>i?ctx.lineTo(p.x*w,p.y*h):ctx.moveTo(p.x*w,p.y*h));if(e.path.length===1){ctx.lineTo(e.path[0].x*w+.1,e.path[0].y*h)}ctx.stroke()}const q=e.path.at(-1);net(ctx,u,0,q.x*w,q.y*h,40,colors[e.seat],.85);ctx.restore()}}
  u.effects=(u.effects??[]).filter(e=>now-e.localAt<1300);
 }

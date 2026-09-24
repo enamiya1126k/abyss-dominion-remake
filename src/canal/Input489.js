@@ -20,7 +20,7 @@ export function flushCanal489(c,u,game,now){
  if(!game||!c.connected()||!u.pending.length||now-u.lastFlush<80)return;
  const fresh=u.pending.filter(x=>x.sentAt==null),batch=(fresh.length?fresh:u.pending.filter(x=>now-x.sentAt>=500)).slice(0,24);
  if(!batch.length)return;
- if(c.raw('canalInput489',{gameId:game.id,inputs:batch.map(({seq,lane,held,pulse,burst,targetId,missileId500})=>({seq,lane,held,pulse,burst,...(targetId!=null?{targetId}:{}),...(missileId500!=null?{missileId500}:{})}))})===false)return;
+ if(c.raw('canalInput489',{gameId:game.id,inputs:batch.map(({seq,lane,held,pulse,burst,targetId,missileId500,stroke541})=>({seq,lane,held,pulse,burst,...(targetId!=null?{targetId}:{}),...(missileId500!=null?{missileId500}:{}),...(stroke541?{stroke541}:{})}))})===false)return;
  u.lastFlush=now;for(const x of batch)x.sentAt=now;
 }
 export function acknowledgeCanal489(u,p){u.seq=Math.max(u.seq??0,p?.lastSeq??0);u.pending=u.pending.filter(x=>x.seq>(p?.lastSeq??0));}

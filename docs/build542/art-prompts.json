@@ -1,0 +1,22 @@
+[
+  {
+    "asset": "assets/bomb542/cover.webp",
+    "mode": "built-in image_gen",
+    "prompt": "Use case: stylized-concept. Asset type: landscape cover illustration for a polished Japanese fantasy party game, 'Demon Castle Bomb Relay'. A mischievous little blue slime, a green goblin, a small black wolf and a tiny skeleton sprinting and kicking a glowing round iron bomb between each other on the floating battlements of a grand enchanted castle, dramatic explosive orange sparks, broken stone slabs falling into a deep violet magical abyss. Fun exciting friendly rivalry, no gore. Rich jewel tones, teal slate stone with antique brass, warm amber light against midnight violet, detailed premium hand-painted 3D fantasy board game art. Foreground kicked bomb large, readable clear character silhouettes, cinematic three-quarter overhead perspective, beautiful distant gothic castle towers. Wide 3:2 composition. No letters, no text, no UI, no watermarks."
+  },
+  {
+    "asset": "assets/bomb542/atlas.webp",
+    "mode": "built-in image_gen",
+    "prompt": "Use case: stylized-concept. Asset type: production game sprite atlas, precisely four items in a square 2 by 2 grid, each isolated centered in its own equal square cell with generous transparent padding, actual transparent background. Top left: a single square teal-grey stone castle floor slab with subtle antique gold inlay, viewed nearly directly from above with very shallow front thickness. Top right: an indestructible squat square castle column with a crowned gargoyle carving, same nearly top-down perspective. Bottom left: a square wooden explosive arena crate reinforced with ornate brass, same camera. Bottom right: a beautiful round black iron bomb with gold rivets and a short glowing orange fuse, same camera. Premium hand painted stylized 3D fantasy mobile game, readable silhouettes at small size, detailed materials, upper-left soft warm light. No floor under objects, no shadows outside own cells, no text, no labels, no separators, no characters. All four separate and entirely within their quadrants, consistent scale and perspective."
+  },
+  {
+    "asset": "assets/bomb542/abyss.webp",
+    "mode": "built-in image_gen",
+    "prompt": "Use case: stylized-concept. Asset type: portrait background painting for top-down fantasy mobile arena game. Nearly straight downward view into a vast midnight violet magical abyss below a ruined floating castle. Detailed small gothic towers, stone gargoyles and ornate bronze battlements frame only the far left and right edges and top corners. Central 80 percent of the image is open deep indigo-violet mist, soft drifting stars, distant falling stone shards, gentle golden motes, atmospheric depth. No central floor, no central structures; a separate game board will be drawn on top. Premium hand-painted 3D fantasy art, muted rich shadows, warm amber torchlight on edge architecture, readability, beautiful restrained cinematic contrast. Portrait 2:3. No characters, no bombs, no UI, no text, no watermark."
+  },
+  {
+    "asset": "assets/bomb542/players.webp",
+    "mode": "built-in image_gen",
+    "prompt": "Use case: stylized-concept. Production character sprite sheet for a fantasy party arena game. Exactly FOUR separate characters in a square 2 by 2 atlas; each character centered and entirely contained within its quadrant, generous transparent margins. True transparent background, no scenery, no floor, no UI. Top left: happy round translucent sapphire blue slime with large expressive black eyes. Top right: mischievous small charcoal-grey wolf cub with gold eyes and a burgundy scarf. Bottom left: cute green goblin with large ears in a little brown leather adventurer outfit and gold buckles. Bottom right: cute chibi ivory skeleton with large dark eye sockets and tiny black cape, small shoes. All stand, facing viewer, very slightly top-down viewing angle, full body seen; squat proportions fit a square, strong distinct recognizable silhouettes at 32 pixels. Premium richly shaded hand-painted 3D fantasy board-game figurines, fine material textures, warm upper-left lighting. Friendly playful daring expressions, no weapons, no bombs, no text, no emblems, no duplicates. All four equal visual mass and same camera. Wide separation between quadrants."
+  }
+]

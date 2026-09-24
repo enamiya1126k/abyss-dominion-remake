@@ -1,14 +1,15 @@
+import {validStroke541} from '../../src/canal/Team541.js';
 import{randomBytes}from'node:crypto';
 import{CANAL489,makeCanal489,startCanal489,inputCanal489,advanceCanal489}from'../../src/canal/Rules489.js';
 export const canalFor489=(c,id)=>Object.values(c.data.canalRooms489??{}).find(g=>g.members.some(m=>m.playerId===id&&!m.departed))??null;
-export function createCanal489(c,p,members){return {...makeCanal489({id:`cn489-${++c.data.serial}-${randomBytes(4).toString('hex')}`,code:p.code,partyId:p.id,hostId:p.hostId,members,now:c.now(),seed:randomBytes(4).readUInt32LE()}),rules492:1,rules494:1,rules496:1,netEnergy:0,netUntil:0,megaCount:0,teamCatches:0,bySpecies:[0,0,0,0]}}
+export function createCanal489(c,p,members){return {...makeCanal489({id:`cn489-${++c.data.serial}-${randomBytes(4).toString('hex')}`,code:p.code,partyId:p.id,hostId:p.hostId,members,now:c.now(),seed:randomBytes(4).readUInt32LE()}),rules541:1,rules492:1,rules494:1,rules496:1,netEnergy:0,netUntil:0,megaCount:0,teamCatches:0,bySpecies:[0,0,0,0]}}
 const party=(c,g)=>Object.values(c.data.parties462??{}).find(p=>p.id===g.partyId462);
 const present=(c,g,id)=>!!c.sessions.get(id)?.connected&&!party(c,g)?.members.find(m=>m.playerId===id)?.atHome;
 export function queueCanal489(c,session,m){
  const g=canalFor489(c,session.playerId),p=g?.players.find(p=>!p.ai&&p.playerId===session.playerId);
- if(!g||!p||m.gameId!==g.id||m.canalVersion489!==1||(g.rules492===1&&m.canalRules492!==1)||(g.rules494===1&&m.canalRules494!==1)||(g.rules496===1&&m.canalRules496!==1)||(g.rules500===1&&m.canalRules500!==1)||!['countdown','playing'].includes(g.phase)||!Array.isArray(m.inputs)||m.inputs.length>24)return;
+ if(!g||!p||m.gameId!==g.id||m.canalVersion489!==1||(g.rules492===1&&m.canalRules492!==1)||(g.rules494===1&&m.canalRules494!==1)||(g.rules496===1&&m.canalRules496!==1)||(g.rules500===1&&m.canalRules500!==1)||(g.rules541===1&&m.canalRules541!==1)||!['countdown','playing'].includes(g.phase)||!Array.isArray(m.inputs)||m.inputs.length>24)return;
  const key=g.id+':'+p.playerId;c.canalQueue489??=new Map();const queue=c.canalQueue489.get(key)??[];
- for(const x of m.inputs){if(queue.length>=CANAL489.maxQueue)break;if(!x||!Number.isSafeInteger(x.seq)||x.seq<=p.lastSeq||x.seq>CANAL489.maxSequence||queue.some(y=>y.seq===x.seq)||!Number.isInteger(x.lane)||x.lane<0||x.lane>3||typeof x.held!=='boolean'||typeof x.pulse!=='boolean'||typeof x.burst!=='boolean'||(x.targetId!=null&&(!Number.isSafeInteger(x.targetId)||x.targetId<1))||(x.missileId500!=null&&(!Number.isSafeInteger(x.missileId500)||x.missileId500<1||g.rules500!==1||x.targetId!=null||x.burst||!x.pulse)))continue;queue.push({seq:x.seq,lane:x.lane,held:x.held,pulse:x.pulse,burst:x.burst,...(g.rules492===1&&x.targetId!=null?{targetId:x.targetId}:{}),...(g.rules500===1&&x.missileId500!=null?{missileId500:x.missileId500}:{}),receivedAt:c.now()})}
+ for(const x of m.inputs){if(x?.stroke541!=null&&(g.rules541!==1||!validStroke541(x.stroke541)||x.targetId!=null||x.missileId500!=null||x.burst||x.pulse||x.held))continue;if(queue.length>=CANAL489.maxQueue)break;if(!x||!Number.isSafeInteger(x.seq)||x.seq<=p.lastSeq||x.seq>CANAL489.maxSequence||queue.some(y=>y.seq===x.seq)||!Number.isInteger(x.lane)||x.lane<0||x.lane>3||typeof x.held!=='boolean'||typeof x.pulse!=='boolean'||typeof x.burst!=='boolean'||(x.targetId!=null&&(!Number.isSafeInteger(x.targetId)||x.targetId<1))||(x.missileId500!=null&&(!Number.isSafeInteger(x.missileId500)||x.missileId500<1||g.rules500!==1||x.targetId!=null||x.burst||!x.pulse)))continue;queue.push({seq:x.seq,lane:x.lane,held:x.held,pulse:x.pulse,burst:x.burst,...(g.rules492===1&&x.targetId!=null?{targetId:x.targetId}:{}),...(g.rules500===1&&x.missileId500!=null?{missileId500:x.missileId500}:{}),...(x.stroke541?{stroke541:x.stroke541.map(p=>({x:p.x,y:p.y}))}:{}),receivedAt:c.now()})}
  if(queue.length)c.canalQueue489.set(key,queue);
 }
 export function handleCanal489(c,session,m){
@@ -29,7 +30,7 @@ export function handleCanal489(c,session,m){
   if(g.members.some(x=>!x.choice))throw Error('全員の魔物を選んでください');
   if(p.members.some(x=>c.isBusy(c.sessions.get(x.playerId))))throw Error('ほかのオンラインコンテンツの終了を待っています');
   if(m.canalRules500===1&&p.members.some(x=>x.canalRules500!==1))throw Error('全員の本体をBuild500へ更新してください');
-  g.rules492=1;g.rules494=1;g.rules496=1;g.rules500=m.canalRules500===1?1:0;g.aiColors500={...(p.aiColors500??{})};startCanal489(g,c.now());
+  if(m.canalRules541!==1||p.members.some(x=>x.canalRules541!==1))throw Error('全員の本体をBuild541へ更新してください');g.rules541=1;g.rules492=1;g.rules494=1;g.rules496=1;g.rules500=m.canalRules500===1?1:0;g.aiColors500={...(p.aiColors500??{})};startCanal489(g,c.now());
  }else throw Error('未対応の用水路操作です');
  g.revision++;g.updatedAt=c.now();return true;
 }

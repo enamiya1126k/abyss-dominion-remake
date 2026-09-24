@@ -132,6 +132,7 @@ wss.on("connection",socket=>{
  });
  socket.on("close",()=>{clients.delete(socket);store.disconnect(socket.session,socket)});socket.on("error",()=>{});
 });
+const bombClock542=setInterval(()=>monsterRace451.advanceBomb542(),50);bombClock542.unref?.();
 const tetraClock539=setInterval(()=>monsterRace451.advanceTetra539(),50);tetraClock539.unref?.();
 const hideClock536=setInterval(()=>monsterRace451.advanceHide536(),50);hideClock536.unref?.();
 const fishingClock524=setInterval(()=>monsterRace451.advanceFishing524(),50);fishingClock524.unref?.();

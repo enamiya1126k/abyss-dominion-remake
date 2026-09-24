@@ -1,0 +1,45 @@
+frame bytes 17449 2591
+✔ snapshot: locked Windows rename keeps durable newest data, retries, recovers after restart (6.812722ms)
+✔ snapshot: real disk failure rejects, truncated pending file never replaces valid save (4.931425ms)
+✔ tetra: 100 random fields connect all checkpoints and offer wide branching choices (124.140982ms)
+✔ tetra: drag power determines distance independently of holding time; cancelled and malformed input cannot jump (8.585849ms)
+✔ tetra: ordinary wave saves only tips/checkpoints; great wave washes tips and airborne players (2.354433ms)
+✔ tetra: low pad tide and moss affect feet; tip stays put between waves (3.248203ms)
+✔ tetra: occupied landings do not overlap; respawns use separate spaces (1.451291ms)
+✔ tetra: checkpoints must be visited in order; seeded bots use the same physics and reach goals (162.34035ms)
+✔ hide: move and attack together at 200 units; shots max three and recharge ten seconds (108.149298ms)
+✔ hide: live disguise swapping retains movement, stamina and privacy (91.737291ms)
+✔ luck: a stop hit cannot be undone by a later magnet; huge legal growth is preserved (6.278591ms)
+✔ fishing: compact frames reduce wire size, retain live controls, and full results retain records (2.828717ms)
+✖ coordinator: new protocol, authoritative identity, sequence and power validation, reconnect save (10.123185ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 12
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 832.223653
+
+✖ failing tests:
+
+test at game/tests/build540-fixes.test.mjs:63:1
+✖ coordinator: new protocol, authoritative identity, sequence and power validation, reconnect save (10.123185ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'lobby' !== 'play'
+  
+      at TestContext.<anonymous> (file:///workspace/scratch/f849e4a30ac8/game/tests/build540-fixes.test.mjs:64:708)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'lobby',
+    expected: 'play',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }

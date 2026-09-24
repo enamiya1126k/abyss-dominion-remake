@@ -1,0 +1,11 @@
+{
+  "moduleCacheKeysChecked": 24,
+  "newArtCached": 4,
+  "saveSchemaUnchanged": true,
+  "preexistingMissingImportsOutsideGameQA": [
+    "src/ui/MonsterVisual.js",
+    "src/ui/MonsterVisual.js",
+    "src/core/RaidPresentation.js"
+  ],
+  "newMissingImports": []
+}

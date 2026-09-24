@@ -1,0 +1,28 @@
+✔ three precise tips unlock one longer jump; prediction equals server endpoint (8.11661ms)
+✔ same-pad hop cannot farm charge; water resets charge (3.602044ms)
+✔ big waves still sweep tips and spare checkpoints (2.017844ms)
+✔ seal requires stopping, decays after leaving, then opens exit; one escape wins team (105.021323ms)
+✔ waiting for timeout now wins for hunter (97.863827ms)
+✔ decoy preserves an ordinary target and swaps identity; cooldown prevents spam (85.786599ms)
+✔ sense is private and only exposes a distance band; seal progress stays private (76.372963ms)
+✔ rescue succeeds once per hider; nearby hunter blocks rescue (84.3471ms)
+✔ stroke validates length, bounds and finite points before consuming sequence (3.496168ms)
+✔ stroke hits only crossed enemies, caps at six, and shares cooldown (3.270988ms)
+✔ eight consecutive catches trigger eight-second fever; subsequent catch doubles score (2.70195ms)
+✔ two contributors BREAK boss, extend snare and increase following damage (1.372354ms)
+✔ rally accepts each seat once; four-player net clears enemies and heals (1.975335ms)
+✔ solo rally fires at deadline without forcing absent humans to join (0.568394ms)
+✔ AI joins rally and saved-round continuation is deterministic (1.641981ms)
+✔ continuous furniture collision rejects corner cuts missed by sampled paths (0.574029ms)
+✔ hide AI navigates furniture, opens seals and reaches escape instead of corner-stalling (173.718087ms)
+✔ coordinator rejects old tetra protocol and applies current input to authenticated seat (33.883088ms)
+✔ hide ability and steering share input; old protocol cannot move new match (147.973717ms)
+✔ canal wire validates stroke, deduplicates sequence and uses authenticated contributor (10.597964ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1113.191228

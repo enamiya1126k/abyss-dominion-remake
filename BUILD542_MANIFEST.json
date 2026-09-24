@@ -1,0 +1,229 @@
+{
+  "build": 542,
+  "version": "3.1.221",
+  "baseBuild": 541,
+  "type": "patch",
+  "requiredServerRestart": true,
+  "files": [
+    {
+      "path": "README_BUILD542.md",
+      "size": 6995,
+      "sha256": "1847f9d7623023ccb48cd6fadb215059ff8ab51c39726ef45fd269761bc64f95"
+    },
+    {
+      "path": "assets/bomb542/abyss.webp",
+      "size": 230506,
+      "sha256": "e348a300819fc551e493aac0bd80dc64d966cf0b500fe46025bde8c6dc50d9df"
+    },
+    {
+      "path": "assets/bomb542/atlas.webp",
+      "size": 344826,
+      "sha256": "6e045f3bc56ac013e8f52f3ddd178b150fa5bb82063ce7364974ed938a8c7ddb"
+    },
+    {
+      "path": "assets/bomb542/cover.webp",
+      "size": 400440,
+      "sha256": "e8c000625a726223883000cf0cb99eedd4db3a160fd888556ed9138ff97e388b"
+    },
+    {
+      "path": "assets/bomb542/players.webp",
+      "size": 285804,
+      "sha256": "4b4b182f693af857be11bc73ed694d35c84a807437c4edb694b5c4f4ae96a64b"
+    },
+    {
+      "path": "docs/build542/art-prompts.json",
+      "size": 4290,
+      "sha256": "5e5f1a241de271e22f7fca8d51a54da147c269680e83095e96a9b27cdc4ae7bb"
+    },
+    {
+      "path": "docs/build542/browser-report542.json",
+      "size": 1094,
+      "sha256": "bea8ca52dfe88757ba150b15613f45786b6cfa1c89cb9eba5ea02507ec7ed651"
+    },
+    {
+      "path": "docs/build542/color-fixtures.json",
+      "size": 93273,
+      "sha256": "8decc331456fdc7aa62981f37156ff8760391a139a47a6ad4fb800794ecbd2c7"
+    },
+    {
+      "path": "docs/build542/color-layout-report542.json",
+      "size": 2948,
+      "sha256": "b4837a5458c304dc64c7ca3004d7604b05088e69af201be50a06d0867262da1e"
+    },
+    {
+      "path": "docs/build542/tests.txt",
+      "size": 4273,
+      "sha256": "c41e404ab34bbb12fac0e28d2be263617cd1c4a59be18c22d57fc6bd374589c6"
+    },
+    {
+      "path": "index.html",
+      "size": 204844,
+      "sha256": "ece6ef8278cfebcbf1704594becf870d82c7a63bf25ea9d3f99aa42618cc6bc9"
+    },
+    {
+      "path": "online-server/server.js",
+      "size": 23562,
+      "sha256": "33cfb17d3b81e57ffe5ec50694cd3f34692e63855d7dfd4f23513381d9e852c2"
+    },
+    {
+      "path": "online-server/src/BombCoordinator542.js",
+      "size": 5336,
+      "sha256": "83680b436ec49e9a17cbd484eb316a6330e172458b8d1dd9e59228d199086008"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 21797,
+      "sha256": "66ea7431372353acdbf6e9857d5381df09f90fa330ced09b4af01e663271f2a2"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 26666,
+      "sha256": "0dd95a329b74bf670b216cd32a37c57d6e04e5858cca6289e5ce258bdc0f34cc"
+    },
+    {
+      "path": "src/Styles/build542-bomb.css",
+      "size": 11811,
+      "sha256": "19014d40f9cf8b31b2c48ae9b75d502022635aed2cc5a1175bff1e430e93b2ba"
+    },
+    {
+      "path": "src/Styles/build542-player-colors.css",
+      "size": 1862,
+      "sha256": "de4785c977141573533e8e40d1f94832b68b79fa6e16949fda1607473a5c8b4f"
+    },
+    {
+      "path": "src/bomb/Audio542.js",
+      "size": 996,
+      "sha256": "a8e72ed83161aa18a749fece1fc601f9b8cf9a41ca4c1d94c64b50c1118616b6"
+    },
+    {
+      "path": "src/bomb/Renderer542.js",
+      "size": 7220,
+      "sha256": "72be8a5b4b06a0433088133d85e8dffeafbbb62b046a2d1cbf1b37333d5d9a96"
+    },
+    {
+      "path": "src/bomb/Rules542.js",
+      "size": 14031,
+      "sha256": "93209d633e7be77a612f957d4a8031b623ecf9174d27257d18cca7558a8ebdc0"
+    },
+    {
+      "path": "src/bomb/View542.js",
+      "size": 16623,
+      "sha256": "31efcf6ff4c48f287ac68a42896c79a56bc18b2a48b4c45b389a9541e5f12e12"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "7a21e76bb79c74904f1b56f0c9062ff56a780053a962eb2aea411cc7e6caf22e"
+    },
+    {
+      "path": "src/hide/Renderer536.js",
+      "size": 12021,
+      "sha256": "9d7a3b900a4c84fc9b7b57311fb757501cea50e369989fb82c558583f092c922"
+    },
+    {
+      "path": "src/party/PartyColorUI499.js",
+      "size": 7590,
+      "sha256": "876f1072edc4ca4889119f7397b7eeaa8e6c789524c28574c011e594077c64ab"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 4655,
+      "sha256": "4a5002b980cc687831b5b5fee577760faa2544209df243c544a31b6a7a1926f7"
+    },
+    {
+      "path": "src/party/PartyMember485.js",
+      "size": 7211,
+      "sha256": "54769b28a97ae3b0ab7be13d8dacd61e0dd23752c8d7b61fb72e7cad53f14d5e"
+    },
+    {
+      "path": "src/party/PartyResults490.js",
+      "size": 3528,
+      "sha256": "b2b6c03443abea16935e33f960db2c220cc4f7ae2d2e8dada199b1b0f7502d1f"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 12289,
+      "sha256": "7f16f59db2c07e32ffec2c8bc4435ef48d0a00a217ebeb144d4906b1afbf269b"
+    },
+    {
+      "path": "src/party/PlayerColors542.js",
+      "size": 2272,
+      "sha256": "55cd0311ff2fba761cb02620f1d3b9e37e43c31e53324a23f047467af01664a4"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 28507,
+      "sha256": "98209c222dc3cf96ae1aee9ccd2166b6c734e0ae8e1756e776c0ef3f08e3e8ff"
+    },
+    {
+      "path": "src/race/RacePresentation452.js",
+      "size": 6675,
+      "sha256": "6578125f6b8fd1e9aeaa32947f4cc2c88811c4805e9b76735c4da6711868664d"
+    },
+    {
+      "path": "src/race/RaceUX458.js",
+      "size": 3645,
+      "sha256": "55b7b74f930b123e4e94f55ccc5e6bad9edd65bc2953b5fba76916575bf8a26c"
+    },
+    {
+      "path": "src/tetra/Renderer539.js",
+      "size": 9134,
+      "sha256": "5d8b6b9f2eb0b6a329142f488a7c844dc5327ca6259193e7a8598077fde01361"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "6f4e9ea0347a9cd3f664428f66b457554631a212bcd5b1aa765318783b1763ee"
+    },
+    {
+      "path": "tests/build542-bomb.test.mjs",
+      "size": 7970,
+      "sha256": "61d04cc097a5676e8483eeb09974717c297b92b4cfadce53008f15570fb480ae"
+    },
+    {
+      "path": "tools/build542/browser-qa.mjs",
+      "size": 8084,
+      "sha256": "e4c0f93ebe3f8b2fcf28bb2f704b9e4c39b50b8171a0acbea140e6cfbcf02d40"
+    },
+    {
+      "path": "tools/build542/color-fixtures.mjs",
+      "size": 2781,
+      "sha256": "02f9dba74d28669fbdb47c58200500562db0d3ac77eccd29e964810015a1ad99"
+    },
+    {
+      "path": "tools/build542/color-layout-qa.mjs",
+      "size": 5781,
+      "sha256": "43898aa5f8eae4c6e0f944bdbfea5d6774d55140cd18fb11461230ba014f430d"
+    },
+    {
+      "path": "tools/build542/package.py",
+      "size": 1901,
+      "sha256": "66214f2f204eb7786e88af7f9de5fd507dbd13a902b9e1e959e973de7d0a5b4b"
+    },
+    {
+      "path": "tools/build542/preview.mjs",
+      "size": 4350,
+      "sha256": "1b5e68303cf43935be631b3f48bfe9e41042710e83b690196fff5ae22acb9182"
+    },
+    {
+      "path": "tools/build542/qa-server.mjs",
+      "size": 10820,
+      "sha256": "518c28c91f332e4a6f02a090ea9f35ca43b080835d2ca71c21bf5d693140a82f"
+    },
+    {
+      "path": "tools/build542/visual-qa.mjs",
+      "size": 3445,
+      "sha256": "69718953217bc5fd7549366d3e231ff2983e2493fd9a9c3145420951e72eee33"
+    },
+    {
+      "path": "world-raid-offline542-assets.json",
+      "size": 44200,
+      "sha256": "d60708ccec42cb4f41b4d408a022e5caf7d40ac7f638954a3badcb075d0d4259"
+    },
+    {
+      "path": "world-raid-offline542-sw.js",
+      "size": 1844,
+      "sha256": "42e964d28811377a861a4552af36b9ebc53e5c5ebd07e29df8ba2835c208505b"
+    }
+  ]
+}

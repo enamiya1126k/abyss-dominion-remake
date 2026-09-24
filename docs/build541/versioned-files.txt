@@ -1,0 +1,26 @@
+Changed source/style files: 25
+./src/race/RaceClient451.js
+./src/party/PartyGames462.js
+./src/party/PartyView462.js
+./src/canal/Scene496.js
+./src/canal/Team541.js
+./src/canal/Input541.js
+./src/canal/Input489.js
+./src/canal/Motion500.js
+./src/canal/Scene497.js
+./src/canal/View492.js
+./src/canal/View496.js
+./src/canal/Rules500.js
+./src/canal/View489.js
+./src/tetra/Rules539.js
+./src/tetra/Renderer539.js
+./src/tetra/View539.js
+./src/worldRaid/WorldRaidOfflineCache430.js
+./src/Styles/build541-trio.css
+./src/hide/Rules536.js
+./src/hide/Relics541.js
+./src/hide/Renderer536.js
+./src/hide/Heist541.js
+./src/hide/Map537.js
+./src/hide/View536.js
+./src/core/config.js

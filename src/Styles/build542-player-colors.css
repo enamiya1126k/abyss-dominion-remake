@@ -1,0 +1,12 @@
+/* Identity colors only. No dimensions, spacing, transforms, visibility or controls. */
+.fi-pawn524.is-self>span{border-color:var(--fi-color);color:var(--fi-color)}
+.sm-pawn523.is-self>span{border-color:var(--sm-color);color:var(--sm-color)}
+.tt-runner539.is-self b{background:var(--seat);border-color:var(--seat)}
+.hd-players536 [data-identity542],.hd-players536>div[data-identity542] b{color:var(--identity542)}
+.hd-players536>div[data-identity542] .hd-seatportrait536{border-color:var(--identity542)}
+[data-identity542].fi-resultrow524,[data-identity542].tw-resultrow517,.tt-results539 article[data-identity542],.hd-standings536 article[data-identity542]{border-color:var(--identity542)}
+.fi-resultrow524[data-identity542] b,.tw-resultrow517[data-identity542] b,.tt-results539 article[data-identity542] b,.hd-standings536 article[data-identity542] b,.tw-winners517 [data-identity542] b,.fi-result-hero524 [data-identity542]>b,.tt-podium539 [data-identity542]>b,.hd-winners536 [data-identity542]>span,.sg-results-table tr[data-identity542]>th{color:var(--identity542)}
+.cb-seat[data-identity542] b,.cn-crew496 article[data-identity542] b,.cn-result-crew article[data-identity542] b,.gg-players502 article[data-identity542]>b,.gg-records502 article[data-identity542]>b,.lk-players507 article[data-identity542]>b,.lk-results507 article[data-identity542] strong,.q-seats513 article[data-identity542]>b,.q-results513 article[data-identity542] b,.tw-people517>div[data-identity542] b,.sm-seats523>div[data-identity542] b,.fi-seats524>div[data-identity542] b,.tt-standings539>div[data-identity542] b,.sg-seat-slot470[data-identity542] .sg-seat-name{color:var(--identity542)}
+.race-runner451[data-identity542] .race-runner-name452,.podium-monster452[data-identity542]>small{color:var(--identity542)}
+
+.cb-ranking article[data-identity542] b{color:var(--identity542)}

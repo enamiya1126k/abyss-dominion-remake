@@ -1,0 +1,328 @@
+{
+  "tetra": [
+    {
+      "seed": 1,
+      "finished": 4,
+      "perfect": [
+        13,
+        13,
+        12,
+        14
+      ],
+      "falls": [
+        3,
+        2,
+        4,
+        3
+      ]
+    },
+    {
+      "seed": 2,
+      "finished": 4,
+      "perfect": [
+        13,
+        14,
+        15,
+        15
+      ],
+      "falls": [
+        2,
+        4,
+        2,
+        5
+      ]
+    },
+    {
+      "seed": 3,
+      "finished": 4,
+      "perfect": [
+        17,
+        15,
+        13,
+        15
+      ],
+      "falls": [
+        6,
+        4,
+        3,
+        2
+      ]
+    },
+    {
+      "seed": 540,
+      "finished": 3,
+      "perfect": [
+        16,
+        17,
+        16,
+        11
+      ],
+      "falls": [
+        4,
+        8,
+        3,
+        3
+      ]
+    },
+    {
+      "seed": 541,
+      "finished": 4,
+      "perfect": [
+        17,
+        12,
+        11,
+        14
+      ],
+      "falls": [
+        4,
+        2,
+        2,
+        3
+      ]
+    }
+  ],
+  "hide": [
+    {
+      "seed": 1,
+      "side": "hunter",
+      "reason": "caught",
+      "elapsed": 24850,
+      "seals": 2,
+      "rescues": 0,
+      "positions": [
+        {
+          "x": 3704.931350749915,
+          "y": 450.18963424695625,
+          "alive": true
+        },
+        {
+          "x": 3124.0657424875126,
+          "y": 369.2476637908874,
+          "alive": false
+        },
+        {
+          "x": 3261.9919613741986,
+          "y": 815.5759310989201,
+          "alive": false
+        },
+        {
+          "x": 3750,
+          "y": 450.9329143843747,
+          "alive": false
+        }
+      ]
+    },
+    {
+      "seed": 2,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 26150,
+      "seals": 3,
+      "rescues": 0,
+      "positions": [
+        {
+          "x": 1386.099788380659,
+          "y": 3511.8635401730257,
+          "alive": true
+        },
+        {
+          "x": 2250,
+          "y": 3219.699445634405,
+          "alive": true
+        },
+        {
+          "x": 2250,
+          "y": 3845.084978063542,
+          "alive": true
+        },
+        {
+          "x": 2250,
+          "y": 3231.199445634405,
+          "alive": true
+        }
+      ]
+    },
+    {
+      "seed": 3,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 35400,
+      "seals": 3,
+      "rescues": 0,
+      "positions": [
+        {
+          "x": 2288.5405547509204,
+          "y": 2772.9188904981597,
+          "alive": true
+        },
+        {
+          "x": 2288.5405547509204,
+          "y": 2772.9188904981597,
+          "alive": false
+        },
+        {
+          "x": 2294.723768194567,
+          "y": 3819.05496120383,
+          "alive": true
+        },
+        {
+          "x": 2957.759895703138,
+          "y": 236.20791656251058,
+          "alive": false
+        }
+      ]
+    },
+    {
+      "seed": 540,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 24500,
+      "seals": 3,
+      "rescues": 0,
+      "positions": [
+        {
+          "x": 1250,
+          "y": 3450,
+          "alive": true
+        },
+        {
+          "x": 2350,
+          "y": 3808.9706548917293,
+          "alive": true
+        },
+        {
+          "x": 2434.7537637639684,
+          "y": 2767.4874541200957,
+          "alive": true
+        },
+        {
+          "x": 2432.6150397714396,
+          "y": 2774.6165340951916,
+          "alive": true
+        }
+      ]
+    },
+    {
+      "seed": 541,
+      "side": "hunter",
+      "reason": "caught",
+      "elapsed": 25000,
+      "seals": 2,
+      "rescues": 0,
+      "positions": [
+        {
+          "x": 2938.231421072222,
+          "y": 496.60221594164403,
+          "alive": true
+        },
+        {
+          "x": 3085.7655048666766,
+          "y": 648.6122162492469,
+          "alive": false
+        },
+        {
+          "x": 3115.516947131563,
+          "y": 1155.711938158622,
+          "alive": false
+        },
+        {
+          "x": 2751.760626155299,
+          "y": 434.1453429130481,
+          "alive": false
+        }
+      ]
+    }
+  ],
+  "canal": [
+    {
+      "seed": 1,
+      "humans": 1,
+      "hp": 100,
+      "catches": 148,
+      "combo": 114,
+      "mega": 4,
+      "success": true
+    },
+    {
+      "seed": 1,
+      "humans": 4,
+      "hp": 100,
+      "catches": 291,
+      "combo": 165,
+      "mega": 9,
+      "success": true
+    },
+    {
+      "seed": 2,
+      "humans": 1,
+      "hp": 100,
+      "catches": 148,
+      "combo": 114,
+      "mega": 4,
+      "success": true
+    },
+    {
+      "seed": 2,
+      "humans": 4,
+      "hp": 100,
+      "catches": 292,
+      "combo": 166,
+      "mega": 9,
+      "success": true
+    },
+    {
+      "seed": 3,
+      "humans": 1,
+      "hp": 100,
+      "catches": 130,
+      "combo": 130,
+      "mega": 3,
+      "success": true
+    },
+    {
+      "seed": 3,
+      "humans": 4,
+      "hp": 100,
+      "catches": 293,
+      "combo": 167,
+      "mega": 9,
+      "success": true
+    },
+    {
+      "seed": 540,
+      "humans": 1,
+      "hp": 100,
+      "catches": 149,
+      "combo": 114,
+      "mega": 4,
+      "success": true
+    },
+    {
+      "seed": 540,
+      "humans": 4,
+      "hp": 100,
+      "catches": 293,
+      "combo": 171,
+      "mega": 9,
+      "success": true
+    },
+    {
+      "seed": 541,
+      "humans": 1,
+      "hp": 100,
+      "catches": 155,
+      "combo": 155,
+      "mega": 4,
+      "success": true
+    },
+    {
+      "seed": 541,
+      "humans": 4,
+      "hp": 100,
+      "catches": 295,
+      "combo": 174,
+      "mega": 9,
+      "success": true
+    }
+  ]
+}

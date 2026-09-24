@@ -1,0 +1,163 @@
+{
+  "results": [
+    {
+      "game": "bomb",
+      "elements": 83,
+      "identityMarks": 4,
+      "colors": [
+        "#f5a1cb",
+        "#ffb376",
+        "#78cfff",
+        "#91e3b0"
+      ],
+      "geometryChanges": 0
+    },
+    {
+      "game": "tetra",
+      "elements": 116,
+      "identityMarks": 4,
+      "colors": [
+        "#f5a1cb",
+        "#ffb376",
+        "#78cfff",
+        "#91e3b0"
+      ],
+      "geometryChanges": 0
+    },
+    {
+      "game": "hide",
+      "elements": 109,
+      "identityMarks": 4,
+      "colors": [
+        "#f5a1cb",
+        "#ffb376",
+        "#78cfff",
+        "#91e3b0"
+      ],
+      "geometryChanges": 0
+    },
+    {
+      "game": "fishing",
+      "elements": 146,
+      "identityMarks": 4,
+      "colors": [
+        "#f5a1cb",
+        "#ffb376",
+        "#78cfff",
+        "#91e3b0"
+      ],
+      "geometryChanges": 0
+    },
+    {
+      "game": "sumo",
+      "elements": 142,
+      "identityMarks": 4,
+      "colors": [
+        "#f5a1cb",
+        "#ffb376",
+        "#78cfff",
+        "#91e3b0"
+      ],
+      "geometryChanges": 0
+    },
+    {
+      "game": "tower",
+      "elements": 127,
+      "identityMarks": 4,
+      "colors": [
+        "#f5a1cb",
+        "#ffb376",
+        "#78cfff",
+        "#91e3b0"
+      ],
+      "geometryChanges": 0
+    },
+    {
+      "game": "quiz",
+      "elements": 180,
+      "identityMarks": 4,
+      "colors": [
+        "#f5a1cb",
+        "#ffb376",
+        "#78cfff",
+        "#91e3b0"
+      ],
+      "geometryChanges": 0
+    },
+    {
+      "game": "luck",
+      "elements": 755,
+      "identityMarks": 4,
+      "colors": [
+        "#f5a1cb",
+        "#ffb376",
+        "#78cfff",
+        "#91e3b0"
+      ],
+      "geometryChanges": 0
+    },
+    {
+      "game": "gorilla",
+      "elements": 173,
+      "identityMarks": 4,
+      "colors": [
+        "#f5a1cb",
+        "#ffb376",
+        "#78cfff",
+        "#91e3b0"
+      ],
+      "geometryChanges": 0
+    },
+    {
+      "game": "canal",
+      "elements": 133,
+      "identityMarks": 4,
+      "colors": [
+        "#f5a1cb",
+        "#ffb376",
+        "#78cfff",
+        "#91e3b0"
+      ],
+      "geometryChanges": 0
+    },
+    {
+      "game": "cabbage",
+      "elements": 123,
+      "identityMarks": 4,
+      "colors": [
+        "#f5a1cb",
+        "#ffb376",
+        "#78cfff",
+        "#91e3b0"
+      ],
+      "geometryChanges": 0
+    },
+    {
+      "game": "sugoroku",
+      "elements": 1156,
+      "identityMarks": 4,
+      "colors": [
+        "#f5a1cb",
+        "#ffb376",
+        "#78cfff",
+        "#91e3b0"
+      ],
+      "geometryChanges": 0
+    },
+    {
+      "game": "race",
+      "elements": 544,
+      "identityMarks": 4,
+      "colors": [
+        "#f5a1cb",
+        "#ffb376",
+        "#78cfff",
+        "#91e3b0"
+      ],
+      "geometryChanges": 0
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "scope": "Live game view HTML and production styles; all element bounds before/after color-only changes."
+}
