@@ -1,0 +1,29 @@
+{
+  "build": 530,
+  "version": "3.1.209",
+  "baseBuild": 529,
+  "type": "patch",
+  "fishingVersion524": 4,
+  "files": [
+    {"path":"README_BUILD530.md","bytes":1855,"sha256":"9fd84b86df1e8d2faacf44c8f16790aad4ed5ffd8f7c9ee8a400fd25f5e4db79"},
+    {"path":"index.html","bytes":178497,"sha256":"052453d660a8c9f379067d736cca24bcf8d0754263de9d65bc768d0223e96f58"},
+    {"path":"online-server/src/FishingCoordinator524.js","bytes":5025,"sha256":"8f9e9d0de66d390791bed729c631e1cbeeef6f34062f01db4cf2888e839a6fc6"},
+    {"path":"online-server/src/PartyCoordinator462.js","bytes":19825,"sha256":"0b1c0c01517e3b296c6d53c9174b6554ff4e9d6ea955b8bcf65060c293404117"},
+    {"path":"online-server/src/RaceCoordinator451.js","bytes":25372,"sha256":"b1e9f68b73533732a32f130c77c4a884c246717530c443bf8df0801c04bc5de0"},
+    {"path":"src/Styles/build530-fishing.css","bytes":968,"sha256":"66fd3e37ab52a4c9fafa1d59e8c7395eaca6090eadc0a0258259a8447b24dd1b"},
+    {"path":"src/core/config.js","bytes":2257,"sha256":"1e3ad64a9388e01f6d558faba21e45ab71a692554957e91792e0123dd9298b34"},
+    {"path":"src/fishing/Renderer524.js","bytes":14513,"sha256":"9c16038fe670b3932a9efdfb6c5e77b8ff4f265a01c9809571fb3cae7381c272"},
+    {"path":"src/fishing/Rules524.js","bytes":17594,"sha256":"b7d67beaca219e6334d3ac7de05afddeb09cdfeb90d8f1aed43494428e1a53b3"},
+    {"path":"src/fishing/View524.js","bytes":22074,"sha256":"fbbb59c64a2611aeb79a6aadaf718c263e2812413869b8fca6f2c1e17c78882c"},
+    {"path":"src/fishing/Water526.js","bytes":2775,"sha256":"386f7af4d6566b25ae38f395bb1024a3f5ac16480543129a9a1fc6022e2863dc"},
+    {"path":"src/party/PartyView462.js","bytes":11346,"sha256":"da395071c4d5710e4394fa49efc1b1e55d27b6209f1a00dc78c9f3fbffe526f4"},
+    {"path":"src/race/RaceClient451.js","bytes":26834,"sha256":"801073c4f2c6dbcf66e0c53fc8ced4a06900481a6add9886b2577ba76c09de59"},
+    {"path":"src/worldRaid/WorldRaidOfflineCache430.js","bytes":2884,"sha256":"71b9810897b1d70cdbbd2a06e29526592a38d1f8b756edd40288bec50eeb012e"},
+    {"path":"tests/build524-fishing.test.mjs","bytes":26816,"sha256":"6ac6167151ee2c2bac2073cf7549111589c7a13e7c7c9f6da005b4ad13fb8028"},
+    {"path":"tests/build525-fishing.test.mjs","bytes":7036,"sha256":"5b1bf85f2d98522d7ca1e0bfc1e90f1b27d3d85c491feb6b76193de541af0f7b"},
+    {"path":"tests/build526-fishing.test.mjs","bytes":6638,"sha256":"bf50f1a3f763f7d2738912097142283eccffb21dff29516393b8c2b361ee21c2"},
+    {"path":"tests/build530-fishing.test.mjs","bytes":4115,"sha256":"cfc7127fea33a10278b2edc8c19268e6c0bcfc4240910427efacc0926170d41c"},
+    {"path":"world-raid-offline530-assets.json","bytes":41303,"sha256":"3e43bb0ea7942344e1c7c7af6ab6b48ecbe5ed8559f77eb5539a7bd0477bfaf1"},
+    {"path":"world-raid-offline530-sw.js","bytes":1844,"sha256":"55787417ff929622312ce9f41ca1a5d9e8482c709324345ad80ee649898c0d09"}
+  ]
+}

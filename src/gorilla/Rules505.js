@@ -3,8 +3,11 @@ import{GORILLA503}from'./Rules503.js';
 const bumps=new Set([3,8,16,21,27]);
 export const painWeight505=id=>bumps.has(id)?2:1;
 export const discomfort505=g=>(g.picked??[]).reduce((n,id)=>n+painWeight505(id),0)+(g.painOffset505??0);
+// Pinches are dangerous actions, independent of the hidden losing hair.
+// Anger is shared by the table; repeated pinches by the same player in this turn escalate.
+export function pinchRisk528(g,id){const anger=discomfort505(g),count=g.events.filter(e=>e.action505==='pinch'&&e.turn===g.turn&&e.playerId===id).length;return count>=2?100:Math.min(95,(anger>=24?80:anger>=12?55:25)+count*15);}
 export function makeGorilla505(args){return{...makeGorilla504(args),rules505:1,painOffset505:0}}
-export function startGorilla505(g,at,options){startGorilla504(g,at,options);g.rules505=1;g.painOffset505=0;g.pendingPain505=null;return g}
+export function startGorilla505(g,at,options){startGorilla504(g,at,options);g.rules505=1;g.painOffset505=0;g.pendingPain505=null;g.pendingRage528=null;return g}
 // Spot coordinates exist only in presentation. The server validates the action,
 // owns its independent random draw and never lets pinching select a losing hair.
 export function pinchGorilla505(g,id,spot,turn,seq,at,roll){
@@ -13,7 +16,9 @@ export function pinchGorilla505(g,id,spot,turn,seq,at,roll){
  if(g.phase!=='playing'||g.players[g.turnSeat]?.playerId!==id||turn!==g.turn||seq!==g.events.length)throw Error('いまは操作できません');
  if(g.turnPulls503>=GORILLA503.maxPulls||g.deadline==null||!Number.isFinite(at)||at<g.thinkAt503||at>=g.deadline)throw Error('選ぶ時間が終了しました');
  const value=roll();if(!Number.isInteger(value)||value<0||value>=100)throw Error('抽選情報が不正です');
- const before=discomfort505(g);g.pendingPain505=value<65?Math.max(2,24-before):2;
+ const before=discomfort505(g),risk=pinchRisk528(g,id);g.pendingRage528=value<risk;
+ // Most surviving pinches jump to the visibly furious stage; no cosmetic-only rage.
+ g.pendingPain505=value<risk+(100-risk)*.8?Math.max(4,24-before):4;
  g.remaining503=Math.max(0,g.deadline-at);g.turnPulls503++;
  g.events.push({seq,turn,playerId:id,seat:g.turnSeat,action505:'pinch',spot505:spot,at,kind:'safe',automatic:false});
  g.phase='pinch';g.phaseAt503=at;g.deadline=null;g.nextAt=at+GORILLA503.pluckMs;g.updatedAt=at;g.revision++;return true;
@@ -21,7 +26,12 @@ export function pinchGorilla505(g,id,spot,turn,seq,at,roll){
 export function advanceGorilla505(g,now){if(g.rules505!==1)return advanceGorilla504(g,now);let changed=false;
  for(let i=0;i<512&&!['lobby','result'].includes(g.phase)&&now>=g.nextAt;i++){
   const at=g.nextAt;
-  if(g.phase==='pinch'){g.painOffset505=(g.painOffset505??0)+(g.pendingPain505??0);g.pendingPain505=null;g.phase='reaction';g.phaseAt503=at;g.deadline=null;g.nextAt=at+GORILLA503.reactionMs;g.updatedAt=at;g.revision++}
+  if(g.phase==='pinch'){
+   g.painOffset505=(g.painOffset505??0)+(g.pendingPain505??0);g.pendingPain505=null;
+   const rage=g.pendingRage528===true;g.pendingRage528=null;const e=g.events.at(-1);
+   e.kind=rage?'rage':'safe';if(rage){g.loserId=e.playerId;g.blastAt=at;}
+   g.phase=rage?'blast':'reaction';g.phaseAt503=at;g.deadline=null;g.nextAt=at+(rage?GORILLA503.blastMs:GORILLA503.reactionMs);g.updatedAt=at;g.revision++;
+  }
   else advanceGorilla504(g,at);
   changed=true;
  }

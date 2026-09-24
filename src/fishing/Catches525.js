@@ -1,4 +1,8 @@
+import {EXTRA_CATCHES534,LITTER_IDS534} from './Catalog534.js';
+import {EXTRA_CATCHES533} from './Catalog533.js';
 // Catch metadata and recipes for this fantasy minigame. Forced-bait flags are game rules.
+import {EXTRA_CATCHES532,varietyPick532} from './Catalog532.js';
+import {EXTRA_CATCHES531,MAX_CHAIN531} from './Catalog531.js';
 const entry=(id,name,tier,base,kg,difficulty,color,size,sheet,cell,extra={})=>Object.freeze({id,name,tier,base,kg,difficulty,color,size,art525:{sheet,cell},...extra});
 export const CATCHES525=Object.freeze([
  entry('silver','銀葉ウグイ',0,24,1.2,.9,'#a9ded8',.65,'legacy',0),
@@ -32,28 +36,32 @@ export const CATCHES525=Object.freeze([
  entry('mimic','宝箱ミミック',2,166,15,1.65,'#d1b876',1.3,'oddities',5,{exclusive525:true,item525:true}),
  entry('keyeel','鍵角ウナギ',2,205,19,1.7,'#b8c8ae',1.4,'oddities',6,{exclusive525:true}),
  entry('kingcrab','王冠ガニ',3,282,38,1.9,'#ebc883',1.6,'oddities',7,{exclusive525:true}),
- entry('treasure','深淵の宝箱',3,365,65,1.9,'#efd899',1.8,'oddities',8,{exclusive525:true,item525:true,terminal525:true})
+ entry('treasure','深淵の宝箱',3,365,65,1.9,'#efd899',1.8,'oddities',8,{exclusive525:true,item525:true,terminal525:true}),
+ ...EXTRA_CATCHES531, ...EXTRA_CATCHES532, ...EXTRA_CATCHES533, ...EXTRA_CATCHES534
 ]);
 const byId=new Map(CATCHES525.map(s=>[s.id,s]));
 export const catch525=id=>byId.get(id)??null;
-export const pool525=tier=>CATCHES525.filter(f=>f.tier===tier&&!f.item525&&!f.exclusive525&&!f.baitOnly525&&f.id!=='lord');
-export const RECIPES525=Object.freeze({boot:[['hermit',1]],hermit:[['mimic',.72],['keyeel',.28]],mimic:[['keyeel',1]],keyeel:[['kingcrab',1]],kingcrab:[['treasure',1]],crayfish:[['catfish',.65],['sturgeon',.35]],turtle:[['sturgeon',.7],['keyeel',.3]],catfish:[['sturgeon',1]],sturgeon:[['kingcrab',1]],gold:[['arowana',.6],['kingcrab',.4]]});
-export const canChain525=f=>!!f&&!f.terminal525&&f.tier!==4&&(f.chainDepth525??0)<6&&(f.id==='lure'||!!RECIPES525[f.id]||f.chainDepth525>0);
-export function chainHint525(f){if(f?.baitOnly525)return'エサ専用 · この獲物で次を狙おう';if(f?.id==='boot')return'長靴に住みつく、何かがいる…';if(f?.lure525)return'ルアー効果 · 次は大物を狙いやすい';if(f?.id==='keyeel')return'その鍵に、王冠が反応している';if(f?.id==='kingcrab')return'湖底のお宝へ、あと一投';if(f?.terminal525)return f.tier===4?'伝説のヌシ、釣り上げ成功！':'連鎖完走！ お宝を確保！';return canChain525(f)?'得点を確保する？ エサにしてつなぐ？':''}
+export const pool525=tier=>CATCHES525.filter(f=>f.tier===tier&&f.tier<4&&!f.item525&&!f.exclusive525&&!f.baitOnly525);
+export const RECIPES525=Object.freeze({slipper:[['bicycle',1]],bicycle:[['wallet',1]],mossycat:[['wallet',1]],boot:[['hermit',1]],hermit:[['mimic',.72],['keyeel',.28]],mimic:[['keyeel',1]],keyeel:[['kingcrab',1]],kingcrab:[['treasure',1]],crayfish:[['catfish',.65],['sturgeon',.35]],turtle:[['sturgeon',.7],['keyeel',.3]],catfish:[['sturgeon',1]],sturgeon:[['kingcrab',1]],gold:[['arowana',.6],['kingcrab',.4]]});
+export const canChain525=f=>!!f&&!f.terminal525&&f.tier!==4&&(f.chainDepth525??0)<MAX_CHAIN531;
+export function chainHint525(f){if(f?.trash534)return'ゴミを回収して少し得点。次は魚が来るかな？';if(f?.baitOnly525)return'エサ専用 · 次を狙って竿も育てよう';if(f?.id==='slipper')return'片っぽだけ？ 次はもっと大きな落とし物かも';if(f?.id==='bicycle')return'前カゴの奥に、何かが引っかかっている…';if(f?.id==='mossycat')return'招き猫のご利益は、次の一投で？';if(f?.id==='boot')return'長靴に住みつく、何かがいる…';if(f?.specialId531)return catch525(f.specialId531).name+'を呼ぶルアー';if(f?.lure525)return'ルアー効果 · 大物候補＋取り込み補助';if(f?.id==='keyeel')return'その鍵に、王冠が反応している';if(f?.id==='kingcrab')return'湖底のお宝へ、あと一投';if(f?.terminal525)return f.tier===4?'伝説のヌシ級、釣り上げ成功！':'連鎖完走！ お宝を確保！';return canChain525(f)?'エサにすると竿が成長。確保しても強化は残る':''}
 const pick=(list,random)=>list[Math.min(list.length-1,Math.floor(random()*list.length))];
-export function selectCatch525(tier,random,{bait=false,previous=null}={}){
+export function selectCatch525(tier,random,{bait=false,previous=null,lordId531='lord',theme='river',recent=[]}={}){
+ // A visible lord always wins over a bait recipe: reservation and catch must agree.
+ if(tier===4)return catch525(lordId531);
  if(previous&&canChain525(previous)){
+  if(previous.specialId531)return catch525(previous.specialId531);
   const recipe=RECIPES525[previous.id];let found;
   if(recipe){const x=random();let acc=0;found=recipe.find(row=>(acc+=row[1])>x)?.[0]??recipe.at(-1)[0];return catch525(found)}
-  if(previous.lure525)return pick(pool525(random()<.58?3:2),random);
-  return pick(pool525(Math.min(3,Math.max(1,previous.tier+1))),random);
+  if(previous.lure525)return varietyPick532(pool525(random()<.58?3:2),random,{theme,recent});
+  const pool=pool525(Math.min(3,Math.max(tier,1,previous.tier+1))),large=pool.filter(f=>f.kg>=(previous.kg??0)*.65&&f.id!==previous.id);
+  return varietyPick532(large.length?large:pool,random,{theme,recent});
  }
- if(tier===4)return catch525('lord');
- if(!bait&&tier<=1){const v=random();if(v<.10)return catch525('boot');if(v<.17)return catch525('lure');if(v<.25)return catch525(tier===0?'crayfish':'turtle')}
- return pick(pool525(tier),random);
+ if(!bait){const v=random();if(v<.04)return pick(['boot','slipper','mossycat','bicycle',...LITTER_IDS534].map(catch525),random);if(v<.11)return pick(CATCHES525.filter(f=>f.lure525),random);if(tier<=1&&v<.14)return catch525(tier===0?'crayfish':'turtle')}
+ return varietyPick532(pool525(tier),random,{theme,recent});
 }
 export function artSpec525(f){const spec=catch525(f?.id??f),a=f?.art525??spec?.art525;return a??{sheet:'legacy',cell:Math.min(4,f?.tier??0)}}
 // Frame boundaries follow the transparent gutters in the generated sheets.
 // Sharing these UVs keeps CSS catch cards and Canvas sprites identical.
-export function artFrame525(f){const a=artSpec525(f);if(a.sheet==='lord')return{x:0,y:0,w:1,h:1};const xs=a.sheet==='river'?[0,.356,2/3,1]:a.sheet==='oddities'?[0,1/3,.681,1]:[0,1/3,2/3,1],ys=a.sheet==='legacy'?[0,.5,1]:a.sheet==='oddities'?[0,.355,.643,1]:[0,1/3,2/3,1],col=a.cell%3,row=Math.floor(a.cell/3);return{x:xs[col],y:ys[row],w:xs[col+1]-xs[col],h:ys[row+1]-ys[row]}}
-export function atlasCSS525(f){const a=artSpec525(f),fuv=artFrame525(f),url=a.sheet==='legacy'?'./assets/fishing524/fish-atlas.webp':`./assets/fishing525/${a.sheet}.webp`;return{url,size:`${100/fuv.w}% ${100/fuv.h}%`,position:`${fuv.w===1?0:fuv.x/(1-fuv.w)*100}% ${fuv.h===1?0:fuv.y/(1-fuv.h)*100}%`}}
+export function artFrame525(f){const a=artSpec525(f);if(a.sheet.endsWith('534')){const row=Math.floor(a.cell/4),col=a.cell%4,shore=a.sheet==='shore534',ys=shore?[0,.25,.5,.72,1]:[0,.25,.485,.73,1],cuts=shore?[[311,621,933],[319,625,930],[318,636,962],[316,627,940]]:[[314,627,949],[318,625,945],[310,625,942],[309,628,943]],xs=[0,...cuts[row].map(v=>v/1254),1];return{x:xs[col],y:ys[row],w:xs[col+1]-xs[col],h:ys[row+1]-ys[row]}}if(a.sheet==='sea532'){const row=Math.floor(a.cell/4),col=a.cell%4,ys=[0,.25,.485,.735,1],xs=row===2?[0,.255,.485,.756,1]:row===3?[0,.23,.51,.755,1]:[0,.25,.5,.75,1];return{x:xs[col],y:ys[row],w:xs[col+1]-xs[col],h:ys[row+1]-ys[row]}}if(a.sheet==='coast533'){const row=Math.floor(a.cell/4),col=a.cell%4,xs=[0,.255,.505,.75,1],ys=[0,.25,.5,.715,1];return{x:xs[col],y:ys[row],w:xs[col+1]-xs[col],h:ys[row+1]-ys[row]}}if(a.sheet.endsWith('533'))return{x:a.cell%4/4,y:Math.floor(a.cell/4)/4,w:.25,h:.25};if(a.sheet.endsWith('532')){const cols=a.sheet==='danger532'?2:4;return{x:a.cell%cols/cols,y:Math.floor(a.cell/cols)/cols,w:1/cols,h:1/cols}}if(a.sheet==='collection531'){const ys=[0,.2,.397,.60,.777,1],row=Math.floor(a.cell/4);return{x:a.cell%4/4,y:ys[row],w:.25,h:ys[row+1]-ys[row]}}if(a.sheet==='lord')return{x:0,y:0,w:1,h:1};const xs=a.sheet==='river'?[0,.356,2/3,1]:a.sheet==='oddities'?[0,1/3,.681,1]:[0,1/3,2/3,1],ys=a.sheet==='legacy'?[0,.5,1]:a.sheet==='oddities'?[0,.355,.643,1]:[0,1/3,2/3,1],col=a.cell%3,row=Math.floor(a.cell/3);return{x:xs[col],y:ys[row],w:xs[col+1]-xs[col],h:ys[row+1]-ys[row]}}
+export function atlasCSS525(f){const a=artSpec525(f),fuv=artFrame525(f),url=a.sheet.endsWith('534')?`./assets/fishing534/${a.sheet.replace('534','')}.webp`:a.sheet.endsWith('533')?`./assets/fishing533/${a.sheet.replace('533','')}.webp`:a.sheet.endsWith('532')?`./assets/fishing532/${a.sheet.replace('532','')}.webp`:a.sheet==='collection531'?'./assets/fishing531/collection.webp':a.sheet==='legacy'?'./assets/fishing524/fish-atlas.webp':`./assets/fishing525/${a.sheet}.webp`;return{url,size:`${100/fuv.w}% ${100/fuv.h}%`,position:`${fuv.w===1?0:fuv.x/(1-fuv.w)*100}% ${fuv.h===1?0:fuv.y/(1-fuv.h)*100}%`}}

@@ -1,0 +1,269 @@
+{
+  "build": 533,
+  "version": "3.1.212",
+  "baseBuild": 532,
+  "type": "patch",
+  "fishingVersion524": 7,
+  "files": [
+    {
+      "path": "README_BUILD533.md",
+      "bytes": 4473,
+      "sha256": "45cebf45176b8f20afb475ee4f3f1af557ee58c2ecbaef090972d7067a61a606"
+    },
+    {
+      "path": "assets/fishing533/coast.webp",
+      "bytes": 443332,
+      "sha256": "57b35d9ea8502bc5b038fd62afd50d79c1457651f223889422c83eb615d741a0"
+    },
+    {
+      "path": "assets/fishing533/market.webp",
+      "bytes": 371540,
+      "sha256": "b24f9fe83aab0047735f77b31d20b10faac0145ac016b2eb5018db53d67ad24e"
+    },
+    {
+      "path": "docs/build533/ART_PROVENANCE.md",
+      "bytes": 7378,
+      "sha256": "7aacd66da55f0d2916cc3d205e381658c9efd9d8ceedd50b747157802e66bd13"
+    },
+    {
+      "path": "docs/build533/SOURCES.md",
+      "bytes": 7200,
+      "sha256": "ca814fd19ffbb29ace4a444ea26bd14e977bcc8f397f7f86c215273a7747a24e"
+    },
+    {
+      "path": "docs/build533/VERIFICATION.md",
+      "bytes": 1008,
+      "sha256": "c9534d02f0abd65913782359e253e5c1f5b5a0d47585645453b6643023c83490"
+    },
+    {
+      "path": "docs/build533/balance-log.txt",
+      "bytes": 314,
+      "sha256": "7c4ac847b968c357aabb298f9795df31072927adc3515bf2f1eef8abee6f8738"
+    },
+    {
+      "path": "docs/build533/balance.json",
+      "bytes": 483,
+      "sha256": "05e23fc9ea255142d8a8de68e4e60bf497e0ba2800e57e1efcd5879b8f4d3238"
+    },
+    {
+      "path": "docs/build533/barreleye-catch.png",
+      "bytes": 324383,
+      "sha256": "b9eadc4171064138cbc52d5bd30968eca483f7322824d05c88876317c56af12f"
+    },
+    {
+      "path": "docs/build533/browser-log.txt",
+      "bytes": 2253,
+      "sha256": "7a6d794d8a6e72f3b986d9533ceae1cae1f2d087990da5ade6075bffa48ddc99"
+    },
+    {
+      "path": "docs/build533/browser-results.json",
+      "bytes": 2692,
+      "sha256": "8830dfac8c305278f20e07fa0b5ff611f5eb0fd2ee9207e141263d4f6d0ef947"
+    },
+    {
+      "path": "docs/build533/catalog-lords.png",
+      "bytes": 95123,
+      "sha256": "08fb94648172849245bc479394e35f13eafa4fe4567172af91204a9c19e2442a"
+    },
+    {
+      "path": "docs/build533/danger-catch.png",
+      "bytes": 325080,
+      "sha256": "e25b77d0eef4de24ada9a193409a04bc74e1ec9208406f6834c6d4aa84c53b13"
+    },
+    {
+      "path": "docs/build533/guide-deep.png",
+      "bytes": 101984,
+      "sha256": "6871f755ed943f168a7ef0308935056482e440c5975ffd8014fc618447ae10d0"
+    },
+    {
+      "path": "docs/build533/guide-market.png",
+      "bytes": 85893,
+      "sha256": "d0f0a0ac793a65db9bd1e77fdc40c5dc4a14bc6dd90d36adf91dc9e73d2841ee"
+    },
+    {
+      "path": "docs/build533/guide-new.png",
+      "bytes": 93870,
+      "sha256": "4b5124125a2f88132f49aa4f548f47128a663eb83e7c6856612b91fd6dfa8756"
+    },
+    {
+      "path": "docs/build533/regression-log.txt",
+      "bytes": 6192,
+      "sha256": "13d19d714c2a233e86f86b565ea5a7f868b6a59d59f7ca3f65d7778115d7514f"
+    },
+    {
+      "path": "docs/build533/special-catch.png",
+      "bytes": 323792,
+      "sha256": "6b3f7c610c390dadf6256adcf376a434ebe097acb6ac79bf2f7db0a60009a3ca"
+    },
+    {
+      "path": "docs/build533/tests.txt",
+      "bytes": 11081,
+      "sha256": "0eda757394762b4f70c6d745471b759da88b14d90c00c726747d771f458aadd9"
+    },
+    {
+      "path": "index.html",
+      "bytes": 186972,
+      "sha256": "0289c1ddf4a950307ce5eaf30177badb17ff40566235445c2c185ac21cbbd064"
+    },
+    {
+      "path": "online-server/src/FishingCoordinator524.js",
+      "bytes": 5025,
+      "sha256": "7762f13357117a94d22afea3ed8cd9e2312a5acf6570e8005ce4ac8e680141ba"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 19825,
+      "sha256": "d772ba97f2e40e8ac010bc11cf8bd575420944a22d4f902824d56fe15bd78e58"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 25372,
+      "sha256": "9f4c9b76c856e79cfba3b6e941dd15c5cca148d5acf1f81f237a172bed91b1b4"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "57e2d17a2e72e3715a41ade3689c3b08b91422aaa9c14f2e9c00f99461cbf9f9"
+    },
+    {
+      "path": "src/fishing/Catalog532.js",
+      "bytes": 4296,
+      "sha256": "ddbc73cc414e6c1b120fa1b2f332f0e7095d0cbdb781974cb0fbd6bfc71816e2"
+    },
+    {
+      "path": "src/fishing/Catalog533.js",
+      "bytes": 2708,
+      "sha256": "95604bcf0f056bbfe715b27009069baddf67e082d34c585cb6b8ad7f8401e1c4"
+    },
+    {
+      "path": "src/fishing/Catches525.js",
+      "bytes": 8098,
+      "sha256": "eeb5fccca52593e352821b2cc54e4a7a5a41f6e04101c42570f1a6277ae92c72"
+    },
+    {
+      "path": "src/fishing/Guide532.js",
+      "bytes": 3286,
+      "sha256": "00b7879926783a0dedb606f0ded09aa64608bcea85f9dd55758b6654e4b0f02c"
+    },
+    {
+      "path": "src/fishing/Knowledge532.js",
+      "bytes": 8012,
+      "sha256": "cb2e26960ca8223315f2e097e240ad730872ea1d136443a48215b649d927f429"
+    },
+    {
+      "path": "src/fishing/Knowledge533.js",
+      "bytes": 6481,
+      "sha256": "c443ab2b7111f4cccb89a20cb51139d09af774534a03c47f6a12c17bc3265e20"
+    },
+    {
+      "path": "src/fishing/Renderer524.js",
+      "bytes": 15346,
+      "sha256": "5cdb8920b8ed895fe33703afeb7e49a901ec17eb07b477d7f153178de7a47f10"
+    },
+    {
+      "path": "src/fishing/Rules524.js",
+      "bytes": 21849,
+      "sha256": "6ee10fa2eadd87acf8e764518e4c6b7c0326e226b24b6348b12444595c62c388"
+    },
+    {
+      "path": "src/fishing/View524.js",
+      "bytes": 24959,
+      "sha256": "77d75e76536df4f28775f5eb36267db17b2f90a30d4d9fc48dbbc555a9f8390a"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "bytes": 3326,
+      "sha256": "989d0cb1a72e013022d8df9e419a9a021e60168f76691c7bb709cf6126a311a9"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 11346,
+      "sha256": "ab6393714e51260a771bbcd384609688a7d99c74ecf3d7ca9cefae7a2f05f167"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 26834,
+      "sha256": "bd68131d533a1d4816a8256f9b81c8d9eb6c3daa869b2a7532962b4792d66ddf"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "e432441d4e6f61b8f762fb9eff345e67f47223e139f03327d85d8cecaecd0924"
+    },
+    {
+      "path": "tests/build520-tower.qa529.test.mjs",
+      "bytes": 10258,
+      "sha256": "793f725017915837c107c60e886e319a1c97f2e1cb701f9342809ffe364bcb6f"
+    },
+    {
+      "path": "tests/build521-tower.qa529.test.mjs",
+      "bytes": 3197,
+      "sha256": "23e31617cfc9b6f1c71a6527ad6b621f97e14a5e4733ef986570ed7f550dcbc9"
+    },
+    {
+      "path": "tests/build524-fishing.test.mjs",
+      "bytes": 26914,
+      "sha256": "7954dad18fe07e49140ae6f249e5fb52fbd1e9684d3ae4ad76b342c4a9ba8ad7"
+    },
+    {
+      "path": "tests/build525-fishing.test.mjs",
+      "bytes": 7069,
+      "sha256": "0d24127db965f281edb2deefa33ea3ae2f39a037b0d6e118f34a5a489c639ea3"
+    },
+    {
+      "path": "tests/build526-fishing.test.mjs",
+      "bytes": 6685,
+      "sha256": "103dc5fd5105ea9203c543205bbcd273b49dd0dd0a6de0161e4b5084a64b6773"
+    },
+    {
+      "path": "tests/build531-fishing.test.mjs",
+      "bytes": 10777,
+      "sha256": "dac32aaeb1f05e2fc5aed3239d9fa2b856083e381c5d51c2b2717b82170d7b55"
+    },
+    {
+      "path": "tests/build532-fishing.test.mjs",
+      "bytes": 6082,
+      "sha256": "542d4bd49e5e71fa485f813b470f3dec6032c7c1adbfd4c39bdd006aca124a1d"
+    },
+    {
+      "path": "tests/build533-fishing.test.mjs",
+      "bytes": 3995,
+      "sha256": "466e8343403f4fdf21d69db59bc5748074331e712928fa9760f5785ec5dd5f9d"
+    },
+    {
+      "path": "tools/build529/catalog-fixture.mjs",
+      "bytes": 2025,
+      "sha256": "7564bc3258a20ae81c417812dde16971f60319004aba6d9ae33fd9caaee1a3aa"
+    },
+    {
+      "path": "tools/build529/regression.mjs",
+      "bytes": 1534,
+      "sha256": "937b90104f3f35d581c5ea92d9ebed8eb4b21761108a799c963be922d83516be"
+    },
+    {
+      "path": "tools/build533/balance.mjs",
+      "bytes": 2111,
+      "sha256": "6048155c6cd8a93f489b5d8d488f52468c31dffc96157beae1e5e9c97525d765"
+    },
+    {
+      "path": "tools/build533/browser-qa.mjs",
+      "bytes": 7374,
+      "sha256": "318c4eba7040f067a6e7954e8e4ddc11a5c7f79d291d0a6ed9803b94b8a16ce6"
+    },
+    {
+      "path": "tools/build533/preview.mjs",
+      "bytes": 2570,
+      "sha256": "bf1b7381338696f8e8006914f875cdd18d6c4fcfef477727f65b41e57cd440df"
+    },
+    {
+      "path": "world-raid-offline533-assets.json",
+      "bytes": 41980,
+      "sha256": "62bdbff3df679caf158f7b6cb491493bebbc32aa901d6fdb2d2c68f6b4a5bd56"
+    },
+    {
+      "path": "world-raid-offline533-sw.js",
+      "bytes": 1844,
+      "sha256": "12079d10c65558156fc8620f42f819ff1349669efa9ac2992643198126bb9587"
+    }
+  ]
+}

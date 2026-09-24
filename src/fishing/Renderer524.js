@@ -1,12 +1,16 @@
 import {WATER526,depth526,waterScale526,clampWater526,shadowSize526,available526,landingDuration526,retrievalPoint526,visualCue526} from './Water526.js';
-import {SPECIES524,fishPose524,mood524,clamp524} from './Rules524.js';
+import {SPECIES524,fishPose524,approachPose530,mood524,clamp524} from './Rules524.js';
 import {playerColor499} from '../party/PartyColors499.js';
 import {artSpec525,artFrame525} from './Catches525.js';
 const art={};
 function image524(name){if(art[name]||typeof Image==='undefined')return art[name];const img=new Image();img.decoding='async';img.src=`./assets/fishing524/${name}.webp`;art[name]=img;return img}
 function image525(name){const key='525/'+name;if(art[key]||typeof Image==='undefined')return art[key];const img=new Image();img.decoding='async';img.src=`./assets/fishing525/${name}.webp`;art[key]=img;return img}
+function image532(name){const key='532/'+name;if(art[key]||typeof Image==='undefined')return art[key];const img=new Image();img.decoding='async';img.src=`./assets/fishing532/${name}.webp`;art[key]=img;return img}
+function image533(name){const key='533/'+name;if(art[key]||typeof Image==='undefined')return art[key];const img=new Image();img.decoding='async';img.src=`./assets/fishing533/${name}.webp`;art[key]=img;return img}
+function image534(name){const key='534/'+name;if(art[key]||typeof Image==='undefined')return art[key];const img=new Image();img.decoding='async';img.src=`./assets/fishing534/${name}.webp`;art[key]=img;return img}
+function collection531(){if(art.collection531||typeof Image==='undefined')return art.collection531;const img=new Image();img.decoding='async';img.src='./assets/fishing531/collection.webp';art.collection531=img;return img}
 function shadowImage526(){if(art.shadow526||typeof Image==='undefined')return art.shadow526;const img=new Image();img.decoding='async';img.src='./assets/fishing526/fish-shadow.webp';art.shadow526=img;return img}
-export function renderer524(canvas){return{canvas,ctx:canvas.getContext('2d',{alpha:false}),background:document.createElement('canvas'),pond:image524('pond'),atlas:image524('fish-atlas'),atlases525:Object.fromEntries(['river','rare','oddities','lord'].map(n=>[n,image525(n)])),width:0,height:0,artReady:false,shadow526:shadowImage526(),motion526:new Map()}}
+export function renderer524(canvas){return{canvas,ctx:canvas.getContext('2d',{alpha:false}),background:document.createElement('canvas'),pond:image524('pond'),atlas:image524('fish-atlas'),atlases525:{...Object.fromEntries(['river','rare','oddities','lord'].map(n=>[n,image525(n)])),collection531:collection531(),...Object.fromEntries(['shore','finds'].map(n=>[n+'534',image534(n)])),...Object.fromEntries(['market','coast'].map(n=>[n+'533',image533(n)])),...Object.fromEntries(['river','sea','danger'].map(n=>[n+'532',image532(n)]))},width:0,height:0,artReady:false,shadow526:shadowImage526(),motion526:new Map()}}
 export function resize524(r,w,h,dpr=1){const d=Math.min(1.5,dpr),ready=!!(r.pond?.complete&&r.pond?.naturalWidth),key=[w,h,d,ready].join(':');if(r.key===key)return;r.key=key;Object.assign(r,{width:w,height:h,dpr:d,artReady:ready});for(const c of[r.canvas,r.background]){c.width=Math.max(1,Math.round(w*d));c.height=Math.max(1,Math.round(h*d))}const b=r.background.getContext('2d');b.setTransform(d,0,0,d,0,0);b.fillStyle='#143f35';b.fillRect(0,0,w,h);if(ready)b.drawImage(r.pond,0,0,w,h);else{const grad=b.createLinearGradient(0,0,0,h);grad.addColorStop(0,'#536e44');grad.addColorStop(.25,'#205c4b');grad.addColorStop(.75,'#0e594e');grad.addColorStop(1,'#4a3826');b.fillStyle=grad;b.fillRect(0,0,w,h);b.fillStyle='#755f3d';b.fillRect(0,h*.8,w,h*.2)}const shade=b.createLinearGradient(0,0,0,h);shade.addColorStop(0,'#041b1b33');shade.addColorStop(.65,'#02191600');shade.addColorStop(1,'#0a1c1844');b.fillStyle=shade;b.fillRect(0,0,w,h);r.cacheBuilds=(r.cacheBuilds??0)+1}
 export const dock524=(r,seat)=>({x:r.width*(.13+seat*.2467),y:r.height*.91});
 export function bobber524(r,p,t){const pos=retrievalPoint526(p,p.mode==='fight'?p.progress:0),scale=waterScale526(pos.y),wiggle=(p.mode==='fight'?Math.sin(t/190+p.seat)*(mood524(p,t)==='surge'?5:1.3):Math.sin(t/900+p.seat)*.65)*scale,water=clampWater526(pos.x+wiggle/r.width,pos.y,.003);return{x:r.width*water.x,y:r.height*water.y,scale}}
@@ -66,7 +70,8 @@ export function paint524(r,g,t,reduced=false,selfId=null){
  const c=r.ctx,w=r.width,h=r.height,elapsed=g.phase==='result'?g.elapsed+Math.max(0,t-(g.finaleUntil-5200)):Math.max(0,t-g.startAt);
  c.setTransform(1,0,0,1,0,0);c.drawImage(r.background,0,0);c.setTransform(r.dpr,0,0,r.dpr,0,0);
  c.save();waterClip526(c,w,h);
- for(const s of g.shoals){if(!available526(s,elapsed))continue;const p=fishPose524(s,elapsed),past=fishPose524(s,elapsed-100),heading=Math.atan2((p.y-past.y)*h*1.7,(p.x-past.x)*w)-Math.PI;drawShadow526(c,r,s.tier,p,reduced?0:elapsed+s.id*70,heading)}
+	for(const s of g.shoals){if(!available526(s,elapsed))continue;const p=fishPose524(s,elapsed),past=fishPose524(s,elapsed-100),heading=Math.atan2((p.y-past.y)*h*1.7,(p.x-past.x)*w)-Math.PI;drawShadow526(c,r,s.tier,p,reduced?0:elapsed+s.id*70,heading)}
+	for(const p of g.players){if(p.mode!=='waiting')continue;const q=approachPose530(g,p,elapsed);if(!q)continue;const before=approachPose530(g,p,elapsed-70)??q,heading=Math.atan2((q.y-before.y)*h*1.7,(q.x-before.x)*w)-Math.PI;drawShadow526(c,r,q.tier,q,reduced?0:elapsed+p.seat*91,heading,q.phase==='startle'?.72:.92);if(q.phase==='nibble'&&!reduced){const touch=.5+.5*Math.sin(elapsed/105+p.seat);ripple(c,p.castX*w,p.castY*h,(4+touch*8)*waterScale526(p.castY),.18+touch*.34)}}
  // Water highlights pass over the sprites, so the fish sit below the surface.
  if(!reduced)for(let i=0;i<16;i++){const y=.185+(i*.061)%.55,scale=waterScale526(y),x=(i*61+Math.sin(t/2200+i)*8)%w;c.strokeStyle='#d0ebc31b';c.lineWidth=.7;c.beginPath();c.moveTo(x,y*h);c.quadraticCurveTo(x+8*scale,y*h-1,x+21*scale,y*h);c.stroke()}
  c.restore();
@@ -75,7 +80,7 @@ export function paint524(r,g,t,reduced=false,selfId=null){
   c.fillStyle='#00150c55';c.beginPath();c.ellipse(dock.x,dock.y+2,w*.051,4,0,0,Math.PI*2);c.fill();c.strokeStyle=color;c.lineWidth=self?2:1;c.beginPath();c.ellipse(dock.x,dock.y+2,w*.053,5,0,0,Math.PI*2);c.stroke();
   if(!['waiting','fight'].includes(p.mode))continue;
   let float=bobber524(r,p,elapsed);const castT=clamp524((elapsed-p.castAt)/650,0,1),fight=p.mode==='fight',mood=mood524(p,elapsed);
-  if(castT<1)float={...float,x:dock.x+(float.x-dock.x)*castT,y:dock.y+(float.y-dock.y)*castT-Math.sin(castT*Math.PI)*h*.20,scale:1+(float.scale-1)*castT};
+	  if(castT<1){float={...float,x:dock.x+(float.x-dock.x)*castT,y:dock.y+(float.y-dock.y)*castT-Math.sin(castT*Math.PI)*h*.20,scale:1+(float.scale-1)*castT};if(p.castBait530)drawCatch525(c,r,p.castBait530,float.x-5,float.y+6,w*.075*(1-castT*.28),castT*Math.PI*.9,.96)}
   if(fight){c.save();waterClip526(c,w,h);drawShadow526(c,r,p.fish?.tier??0,{x:float.x/w,y:(float.y+3)/h},reduced?0:elapsed,Math.sin(elapsed/700+p.seat)*.35,.6);c.restore()}
   rodAndLine526(c,r,p,float,mood,elapsed,self,reduced);
   if(fight&&mood==='surge'&&!reduced)spray(c,float.x,float.y,(elapsed-p.hookedAt)%700,float.scale*.34);
@@ -88,7 +93,7 @@ export function paint524(r,g,t,reduced=false,selfId=null){
  const eventKey=g.id+':'+selfId+':'+g.events.length+':'+(g.events.at(-1)?.id??0);if(r.eventKey526!==eventKey){r.eventKey526=eventKey;r.events526=[...g.events].sort((a,b)=>(a.type==='land'&&g.players[a.seat]?.playerId===selfId?1:0)-(b.type==='land'&&g.players[b.seat]?.playerId===selfId?1:0))}
  for(const e of r.events526){const age=elapsed-e.at;if(age<0)continue;
   if((e.type==='cast'||e.type==='bite')&&age<900)spray(c,w*e.x,h*e.y,age,waterScale526(e.y)*(e.type==='bite'?.7:.35));
-  if(e.type==='chain'&&age<1050){const d=dock524(r,e.seat),f=clamp524(age/800,0,1),x=d.x+(e.x*w-d.x)*f,y=d.y+(e.y*h-d.y)*f-Math.sin(f*Math.PI)*h*.24;if(f<1)drawCatch525(c,r,e.from,x,y,w*.16*(1-f*.5),f*Math.PI*.7);else spray(c,e.x*w,e.y*h,age-800,waterScale526(e.y)*.5)}
+	  if(e.type==='recover'&&age<700){const d=dock524(r,e.seat),q=age/700;ripple(c,d.x,d.y-2,6+q*24,(1-q)*.5)}
   if(e.type==='land'&&age<landingDuration526(e.fish)+160){
    const d=dock524(r,e.seat),boss=e.fish.tier===4,self=g.players[e.seat]?.playerId===selfId,duration=landingDuration526(e.fish),f=clamp524(age/duration,0,1),reveal=clamp524(f/.42,0,1),leave=clamp524((f-.72)/.28,0,1),cx=self?w*.5:d.x,cy=self?h*.46:d.y-h*.18;
    const x=e.x*w+(cx-e.x*w)*reveal+(d.x-cx)*leave,y=e.y*h+(cy-e.y*h)*reveal-Math.sin(reveal*Math.PI)*h*.12+(d.y-cy)*leave,size=w*(boss?(self?.82:.40):self?.36:.20)*(waterScale526(e.y)+(1-waterScale526(e.y))*reveal)*(1-leave*.48);

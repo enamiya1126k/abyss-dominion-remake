@@ -1,0 +1,18 @@
+[
+  {
+    "policy": "shore_cashout",
+    "matches": 100,
+    "meanScore": 577.35,
+    "meanCatches": 13,
+    "lordsCaught": 0,
+    "meanMisses": 0
+  },
+  {
+    "policy": "grow_and_explore",
+    "matches": 100,
+    "meanScore": 2653.58,
+    "meanCatches": 8.64,
+    "lordsCaught": 200,
+    "meanMisses": 0.14
+  }
+]

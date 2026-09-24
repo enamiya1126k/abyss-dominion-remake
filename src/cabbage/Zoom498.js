@@ -1,7 +1,7 @@
 // Cancel native touch completion even when a captured enemy is removed on pointerup.
 // Game input still runs through its own pointer/touch handlers; never synthesize clicks.
 const owners = new WeakMap();
-export function lockPlayZoom498(surface, doc = globalThis.document) {
+export function lockPlayZoom498(surface, doc = globalThis.document, { scrollSelector = null } = {}) {
   if (!surface) return () => {};
   const viewport = doc?.querySelector('meta[name="viewport"]');
   const content = viewport?.getAttribute('content');
@@ -16,8 +16,8 @@ export function lockPlayZoom498(surface, doc = globalThis.document) {
   const style = surface.style;
   const oldAction = style?.getPropertyValue?.('touch-action') ?? style?.touchAction ?? '';
   const oldPriority = style?.getPropertyPriority?.('touch-action') ?? '';
-  if (style?.setProperty) style.setProperty('touch-action', 'none', 'important');
-  else if (style) style.touchAction = 'none';
+  if (style?.setProperty) style.setProperty('touch-action', scrollSelector ? 'pan-y' : 'none', 'important');
+  else if (style) style.touchAction = scrollSelector ? 'pan-y' : 'none';
   const host = doc?.addEventListener ? doc : surface;
   const active = new Map(), listeners = [];
   const inside = target => target === surface || !!surface.contains?.(target);
@@ -28,7 +28,9 @@ export function lockPlayZoom498(surface, doc = globalThis.document) {
   };
   const belongs = e => host === surface || inside(e.target) || active.size > 0;
   const isPlayTouch = target => {
-    if (target?.closest?.('[data-gg-hair503],[data-gg-spot505],[data-gg-hair],[data-cb-side],[data-cn-target496],[data-cn-target494],[data-cn-lane]')) return true;
+    // Optional native scrolling for an equipment sheet; all other games keep their input lock.
+    if (scrollSelector && target?.closest?.(scrollSelector)) return false;
+    if (target?.closest?.('[data-cb-side],[data-cn-target496],[data-cn-target494],[data-cn-lane]')) return true;
     return !target?.closest?.('button,a,input,select,textarea');
   };
   on('touchstart', e => {

@@ -1,0 +1,28 @@
+✔ greed doubles extra dice, caps at five, and amplifies roll and bonus exactly once (20.231916ms)
+✔ greed +10 card becomes 20, including exact remaining distance through forks (4.991048ms)
+✔ normal roll never doubles a second time after selecting a fork (103.279428ms)
+✔ unvisited gates stop +10/greed before wasting remainder; preview matches authority (6.309772ms)
+✔ visited gates are passable and preview shows the next first-visit stop (2.232983ms)
+✔ negative movement and discards double; payment costs and fixed effects do not (2.200368ms)
+✔ draw/recover/steal amplify once, and the receiver greed does not multiply incoming theft again (4.032013ms)
+✔ greed expires after two playable own turns, and skipped turns do not spend it (2.041106ms)
+✔ greed acquired after movement keeps two future turns; transfer preserves remaining lifetime (1.962506ms)
+✔ pinch rage probability escalates with shared anger: 25 / 55 / 80 percent (8.767893ms)
+✔ three consecutive pinches cannot escape: third always loses, even RNG 99 (0.90925ms)
+✔ pending pinch outcome survives serialization, stays private, and duplicate input does not reroll (2.74717ms)
+✔ wrong actor / expired / stale pinch rejects before RNG draw (0.939884ms)
+✔ ordinary hair still uses the original mercy coin even at maximum anger (1.089574ms)
+✔ 8/16 plans have unique hands and a finisher in every final box; mismatched plans reject (12.779019ms)
+✔ complete 8/16-round matches with four humans and with three AI reach results exactly once (28.816762ms)
+✔ crown fires on round16 only; round8 is an ordinary turn in a 16-round match (5.294601ms)
+✔ round16 preserves exact enormous distances and other player hands stay secret (3.688735ms)
+✔ host round selection validates phase/value, resets ready only on a change, and starts chosen length (10.989141ms)
+✔ mixed old/new clients cannot start a changed minigame (0.454318ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 412.138814

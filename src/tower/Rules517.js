@@ -1,9 +1,10 @@
+import {squeeze529} from './Squeeze529.js';
 import {GEOMETRY521 as G} from './Geometry521.js';
 // Server-authoritative, fixed-step platformer. Units are one square block; y points up.
 import {botRunner519,botDrop519,chooseDrop519 as chooseDropAI519} from './AI519.js';
 import {impossible518,sealedRunners520} from './Reachability518.js';
 import {freezeColors501} from '../party/GameColors501.js';
-export const TOWER517=Object.freeze({width:G.width,height:G.height,duration:150000,step:1000/60,gravity:25,jump:Math.sqrt(2*25*G.normalRise),pw:.60,ph:.82,speed:3.7,superJump:Math.sqrt(2*25*G.superRise),superCooldown:15000,autoDrop:2200,countdown:3000});
+export const TOWER517=Object.freeze({width:G.width,height:G.height,duration:150000,step:1000/60,gravity:25,jump:Math.sqrt(2*25*G.normalRise),pw:.60,ph:.82,speed:3.7,superJump:Math.sqrt(2*25*G.superRise),superCooldown:10000,autoDrop:2200,countdown:3000});
 export const SHAPES517=Object.freeze({I:[[0,0],[1,0],[2,0],[3,0]],O:[[0,0],[1,0],[0,1],[1,1]],T:[[0,0],[1,0],[2,0],[1,1]],L:[[0,0],[1,0],[2,0],[2,1]],J:[[0,0],[1,0],[2,0],[0,1]],S:[[0,0],[1,0],[1,1],[2,1]],Z:[[1,0],[2,0],[0,1],[1,1]]});
 export const BLOCK_COLORS517={I:'#73ceda',O:'#e4b663',T:'#bb94e7',L:'#f29a64',J:'#799feb',S:'#80cf9d',Z:'#e58295'};
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
@@ -11,7 +12,7 @@ const overlap=(a,b,c,d)=>a<d-1e-6&&b>c+1e-6;
 export function shape517(type,rotation=0){let cells=(SHAPES517[type]??SHAPES517.O).map(c=>[...c]);for(let i=0;i<((rotation%4)+4)%4;i++){cells=cells.map(([x,y])=>[-y,x]);const minX=Math.min(...cells.map(c=>c[0])),minY=Math.min(...cells.map(c=>c[1]));cells=cells.map(([x,y])=>[x-minX,y-minY])}return cells}
 export function random517(g,n){let x=g.seed|0;x^=x<<13;x^=x>>>17;x^=x<<5;g.seed=x>>>0;return g.seed%n}
 const draw=g=>Object.keys(SHAPES517)[random517(g,7)];
-export function makeTower517({id,code,partyId,hostId,members,now=0}){return{id,code,game:'tower',rules517:4,partyId462:partyId,hostId,phase:'lobby',revision:0,createdAt:now,updatedAt:now,members:members.map(m=>({...m,preference:'random'})),roleMode:'preference',players:[],board:[],events:[],eventSeq:0,boardRevision:0,elapsed:0,seed:1}}
+export function makeTower517({id,code,partyId,hostId,members,now=0}){return{id,code,game:'tower',rules517:5,partyId462:partyId,hostId,phase:'lobby',revision:0,createdAt:now,updatedAt:now,members:members.map(m=>({...m,preference:'random'})),roleMode:'preference',players:[],board:[],events:[],eventSeq:0,boardRevision:0,elapsed:0,seed:1}}
 export function startTower517(g,now,seed=1){if(g.phase!=='lobby')return false;g.seed=seed>>>0||1;while(g.members.length<4){const seat=g.members.length,sp=['slime','wolf','goblin','skeleton'][seat];g.members.push({playerId:`AI-${g.id}-${seat}`,name:`AI ${seat+1}`,ai:true,choice:{id:'ai-'+seat,speciesId:sp},preference:'random'})}freezeColors501(g.members,[],g.aiColors500??{});
  let candidates=g.members.filter(m=>m.playerId===g.roleMode);if(g.roleMode==='ai')candidates=g.members.filter(m=>m.ai);if(!candidates.length&&g.roleMode==='preference'){candidates=g.members.filter(m=>m.preference==='drop');if(!candidates.length)candidates=g.members.filter(m=>m.preference!=='run')}if(!candidates.length)candidates=g.members;
  g.dropperId=candidates[random517(g,candidates.length)].playerId;let runner=0;g.players=g.members.map((m,seat)=>({playerId:m.playerId,name:m.name,seat,ai:!!m.ai,color499:m.color499,speciesId:m.choice.speciesId,role:m.playerId===g.dropperId?'drop':'run',alive:true,escaped:false,x:m.playerId===g.dropperId?5:2+runner++*3,y:0,vx:0,vy:0,facing:1,grounded:true,support:null,coyote:0,jumpUntil:0,superUntil:0,superReady:0,superActiveUntil:0,lastSeq:0,maxHeight:0,auto:!!m.ai}));g.hand=Array.from({length:4},()=>draw(g));g.aim={slot:0,rotation:0,x:3};g.board=[];g.boardRevision=0;g.events=[];g.eventSeq=0;g.falling=null;g.dropSerial=0;g.elapsed=0;g.startAt=now+TOWER517.countdown;g.deadline=g.startAt+TOWER517.duration;g.lastAt=now;g.phaseAt=now;g.phase='countdown';g.nextDropAt=0;g.autoAt=TOWER517.autoDrop;g.revision++;return true}
@@ -46,7 +47,7 @@ function fallStep(g,dt){const f=g.falling;if(!f)return;const oldY=f.y;f.y=Math.m
  // Swept underside contact: push down only by actual travel, then kill only if solid space is exhausted.
  for(const p of g.players){if(p.role!=='run'||!p.alive||p.escaped)continue;let ceiling=Infinity;
   for(const[dx,dy]of f.cells){const x=f.x+dx,oldBottom=oldY+dy,newBottom=f.y+dy;if(overlap(p.x-TOWER517.pw/2,p.x+TOWER517.pw/2,x,x+1)&&p.y<oldBottom&&p.y+TOWER517.ph>newBottom+1e-6)ceiling=Math.min(ceiling,newBottom-TOWER517.ph)}
-  if(ceiling<Infinity){if(ceiling<-.0001||solid517(g,p.x,ceiling,false))kill517(g,p);else{p.y=ceiling;p.vy=Math.min(0,p.vy);p.coyote=-1}}
+  if(ceiling<Infinity){const slide=squeeze529(g,p,oldY,TOWER517,solid517);if(slide!==null){if(slide.blocked)kill517(g,p);else{const from=p.x;p.x=slide.x;p.vx=0;event(g,'squeeze529',{playerId:p.playerId,from,x:p.x,y:p.y+.4})}continue}if(ceiling<-.0001||solid517(g,p.x,ceiling,false))kill517(g,p);else{p.y=ceiling;p.vy=Math.min(0,p.vy);p.coyote=-1}}
  }
  if(f.y===f.land){for(const[dx,dy]of f.cells)g.board.push({x:f.x+dx,y:f.land+dy,type:f.type});g.boardRevision++;event(g,'slam',{x:f.x+1.5,y:f.land});g.falling=null;g.nextDropAt=g.elapsed+dropGap518(g.elapsed);g.autoAt=g.nextDropAt+aimTime518(g.elapsed);for(const p of g.players)if(p.role==='run'&&p.alive&&solid517(g,p.x,p.y,false))kill517(g,p)}
 }
@@ -55,7 +56,7 @@ export function botRunner517(g,p){return botRunner519(g,p,aiPhysics519)}
 export function chooseDrop517(g){return chooseDropAI519(g,aiPhysics519)}
 function botDrop(g){return botDrop519(g,aiPhysics519)}
 export function advanceTower517(g,now,inputs=new Map(),autoIds=new Set()){
- if(!['countdown','play'].includes(g.phase))return false;if(g.rules517!==4){g.rules517=4;for(const p of g.players){p.superUntil=0;p.superReady??=0;p.superActiveUntil=0;p.dashUntil=0;p.dashReady=0}}if(now<g.startAt){g.lastAt=now;return false}if(g.phase==='countdown'){g.phase='play';g.lastAt=g.startAt;g.revision++}
+ if(!['countdown','play'].includes(g.phase))return false;if(g.rules517!==5){g.rules517=5;for(const p of g.players){p.superUntil=0;p.superReady??=0;p.superActiveUntil=0;p.dashUntil=0;p.dashReady=0}}if(now<g.startAt){g.lastAt=now;return false}if(g.phase==='countdown'){g.phase='play';g.lastAt=g.startAt;g.revision++}
  // Stall/restart pauses, rather than simulating unseen fatal seconds.
  if(now-g.lastAt>500){const delay=now-g.lastAt-100;g.startAt+=delay;g.deadline+=delay;g.lastAt+=delay}
  let steps=0;while(g.lastAt+TOWER517.step<=now+.001&&g.phase==='play'&&steps++<30){g.lastAt+=TOWER517.step;g.elapsed=g.lastAt-g.startAt;
@@ -65,7 +66,10 @@ export function advanceTower517(g,now,inputs=new Map(),autoIds=new Set()){
  }
  g.updatedAt=now;return steps>0;
 }
-export function publicTower517(g,connected=()=>true){const simple=p=>{const{botNext,botTarget,botJump,...out}=p;return out};return{id:g.id,code:g.code,game:'tower',rules517:4,hostId:g.hostId,partyId462:g.partyId462,phase:g.phase,revision:g.revision,roleMode:g.roleMode,dropperId:g.dropperId,members:g.members.map(m=>({playerId:m.playerId,name:m.name,ai:!!m.ai,color499:m.color499,choice:m.choice,preference:m.preference,connected:m.ai||!!connected(m.playerId),departed:!!m.departed})),players:g.players.map(simple),board:g.board.map(b=>({...b})),boardRevision:g.boardRevision,hand:g.hand?[...g.hand]:[],aim:g.aim?{...g.aim}:null,falling:g.falling?{...g.falling,cells:g.falling.cells.map(c=>[...c])}:null,elapsed:g.elapsed,startAt:g.startAt,deadline:g.deadline,nextDropAt:g.nextDropAt,autoAt:g.autoAt,dropSerial:g.dropSerial,events:g.events.map(e=>({...e})),winner:g.winner,reason:g.reason,finale518:g.finale518?{...g.finale518}:null,results:g.results,serverAt:g.lastAt}}
+export function publicTower517(g,connected=()=>true){const simple=p=>{const{botNext,botTarget,botJump,...out}=p;return out};return{id:g.id,code:g.code,game:'tower',rules517:5,hostId:g.hostId,partyId462:g.partyId462,phase:g.phase,revision:g.revision,roleMode:g.roleMode,dropperId:g.dropperId,members:g.members.map(m=>({playerId:m.playerId,name:m.name,ai:!!m.ai,color499:m.color499,choice:m.choice,preference:m.preference,connected:m.ai||!!connected(m.playerId),departed:!!m.departed})),players:g.players.map(simple),board:g.board.map(b=>({...b})),boardRevision:g.boardRevision,hand:g.hand?[...g.hand]:[],aim:g.aim?{...g.aim}:null,falling:g.falling?{...g.falling,cells:g.falling.cells.map(c=>[...c])}:null,elapsed:g.elapsed,startAt:g.startAt,deadline:g.deadline,nextDropAt:g.nextDropAt,autoAt:g.autoAt,dropSerial:g.dropSerial,events:g.events.map(e=>({...e})),winner:g.winner,reason:g.reason,finale518:g.finale518?{...g.finale518}:null,results:g.results,serverAt:g.lastAt}}
 export function towerSignature517(g){if(!g)return null;return['lobby','result'].includes(g.phase)?g:{id:g.id,phase:'play',players:g.players.map(p=>[p.playerId,p.speciesId,p.role,p.color499])}}
 // Also used for local movement prediction; authoritative outcomes remain server-only.
 export {moveRunner as predictRunner517};
+
+// Shared contact step: authoritative simulation and deterministic regression fixtures.
+export {fallStep as advanceFalling529};

@@ -1,0 +1,20 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import * as R from '../src/fishing/Rules524.js';
+import * as W from '../src/fishing/Water526.js';
+import {catch525} from '../src/fishing/Catches525.js';
+
+const make=(seed=530)=>{const g=R.makeFishing524({id:'530',code:'FISH',hostId:'p0',members:Array.from({length:4},(_,i)=>({playerId:'p'+i,name:'P'+i,choice:{speciesId:'slime'}}))});R.startFishing524(g,0,seed);R.advanceFishing524(g,3000);return g};
+const step=(g,ms,inputs=new Map())=>{for(let end=g.lastAt+ms;g.lastAt<end&&g.phase==='play';)R.advanceFishing524(g,g.lastAt+50,inputs)};
+
+test('530 chaining waits for a fresh manual target and carries the selected catch on that cast',()=>{const g=make(),p=g.players[0],boot={...catch525('boot'),value:catch525('boot').base,chainDepth525:0};Object.assign(p,{mode:'choice',fish:boot,choiceUntil:g.elapsed+5000});assert.ok(R.choose524(g,p,'continue'));assert.equal(p.mode,'aim');assert.equal(p.fish,null);assert.equal(p.pendingBait530.name,boot.name);step(g,800);assert.equal(p.mode,'aim');assert.ok(R.cast524(g,p,.48,.52));assert.equal(p.mode,'waiting');assert.equal(p.castBait530.id,'boot');assert.equal(p.fish.chainDepth525,1);assert.ok(g.events.some(e=>e.type==='chain'))});
+
+test('530 every cast is manually positioned and a reserved fish shadow remains visible while approaching',()=>{const g=make(),p=g.players[0],s=g.shoals[0],at=R.fishPose524(s,g.elapsed);assert.ok(R.cast524(g,p,at.x,at.y));assert.equal(s.reservedBy530,p.playerId);assert.equal(W.available526(s,g.elapsed),false);assert.ok(g.shoals.includes(s));const startled=R.approachPose530(g,p,p.castAt+850),nibble=R.approachPose530(g,p,p.biteAt-80);assert.ok(startled&&W.inWater526(startled.x,startled.y));assert.equal(nibble.phase,'nibble');assert.ok(Math.hypot(nibble.x-p.castX,nibble.y-p.castY)<.04)});
+
+test('530 pre-bite reel moves the float, releases to pause, and full recovery permits recasting',()=>{const g=make(),p=g.players[0];assert.ok(R.cast524(g,p,.5,.2));const before=W.lineDistance530(p);p.reel=true;step(g,500);assert.equal(p.mode,'waiting');assert.ok(W.lineDistance530(p)<before);p.reel=false;const paused=W.lineDistance530(p);step(g,250);assert.ok(Math.abs(W.lineDistance530(p)-paused)<1e-9);p.reel=true;step(g,4000);assert.equal(p.mode,'idle');assert.equal(p.fish,null);assert.ok(g.events.some(e=>e.type==='recover'));assert.ok(R.cast524(g,p,.42,.48))});
+
+test('530 an unused stocked bait is shown in flight and returned only after a complete recovery',()=>{const g=make(),p=g.players[0],bait={...catch525('boot')};p.bait=1;p.baitItems530=[bait];assert.ok(R.cast524(g,p,.5,.2,true));assert.equal(p.bait,0);assert.equal(p.castBait530.id,'boot');p.reel=true;step(g,4000);assert.equal(p.mode,'idle');assert.equal(p.bait,1);assert.equal(p.baitItems530[0].id,'boot');assert.equal(p.castBait530,null)});
+
+test('530 close fish come in faster than far fish under identical fight conditions',()=>{const g=make(),near=g.players[0],far=g.players[1],fish={...R.SPECIES524[1],difficulty:1,rhythm:0};Object.assign(near,{mode:'fight',fish:{...fish},hookedAt:g.elapsed,castX:.16,castY:.69,progress:.1,tension:.1,reel:true});Object.assign(far,{mode:'fight',fish:{...fish},hookedAt:g.elapsed,castX:.5,castY:.18,progress:.1,tension:.1,reel:true});const a=near.progress,b=far.progress;R.fight524(g,near,.5);R.fight524(g,far,.5);assert.ok(near.progress-a>far.progress-b);assert.ok(W.haulScale530(near)<W.haulScale530(far))});
+
+test('530 a bite consumes the reservation and publishes the fish only after it hooks',()=>{const g=make(),p=g.players[0],s=g.shoals[0],pos=R.fishPose524(s,g.elapsed);R.cast524(g,p,pos.x,pos.y);const pub=R.publicFishing524(g);assert.equal(pub.players[0].fish,null);assert.equal(pub.players[0].biteAt,undefined);const visible=R.approachPose530(pub,pub.players[0],pub.elapsed+1200);assert.ok(Number.isFinite(visible.x)&&Number.isFinite(visible.y));step(g,5000);assert.equal(p.mode,'fight');assert.equal(g.shoals.find(q=>q.id===s.id)?.reservedBy530,undefined);assert.ok(R.publicFishing524(g).players[0].fish);assert.ok(g.events.some(e=>e.type==='bite'))});

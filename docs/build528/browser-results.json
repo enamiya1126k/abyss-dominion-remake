@@ -1,0 +1,72 @@
+{
+  "engine": "Chromium 153; mobile viewport emulation",
+  "views": "Production modules + local controller fixture; placeholder portraits, Japanese QA font",
+  "results": [
+    {
+      "width": 320,
+      "viewportHeight": 568,
+      "title": "EQUIPMENT & EFFECTS\nあなた · 装備 16個\n×",
+      "top": 130,
+      "bottom": 568,
+      "scrollHeight": 2621,
+      "height": 337,
+      "items": 16,
+      "dots": 16,
+      "inert": true,
+      "extraSelectors": 0,
+      "touchScroll": 321,
+      "scrollRestored": true,
+      "selectedPlayer": "追い風オオカミ · 装備 8個"
+    },
+    {
+      "width": 375,
+      "viewportHeight": 667,
+      "title": "EQUIPMENT & EFFECTS\nあなた · 装備 16個\n×",
+      "top": 140,
+      "bottom": 667,
+      "scrollHeight": 2556,
+      "height": 426,
+      "items": 16,
+      "dots": 16,
+      "inert": true,
+      "extraSelectors": 0,
+      "touchScroll": 296,
+      "scrollRestored": true,
+      "selectedPlayer": "追い風オオカミ · 装備 8個"
+    },
+    {
+      "width": 390,
+      "viewportHeight": 700,
+      "title": "EQUIPMENT & EFFECTS\nあなた · 装備 16個\n×",
+      "top": 140,
+      "bottom": 700,
+      "scrollHeight": 2513,
+      "height": 459,
+      "items": 16,
+      "dots": 16,
+      "inert": true,
+      "extraSelectors": 0,
+      "touchScroll": 302,
+      "scrollRestored": true,
+      "selectedPlayer": "追い風オオカミ · 装備 8個"
+    },
+    {
+      "width": 430,
+      "viewportHeight": 800,
+      "title": "EQUIPMENT & EFFECTS\nあなた · 装備 16個\n×",
+      "top": 149,
+      "bottom": 800,
+      "scrollHeight": 2426,
+      "height": 550,
+      "items": 16,
+      "dots": 16,
+      "inert": true,
+      "extraSelectors": 0,
+      "touchScroll": 283,
+      "scrollRestored": true,
+      "selectedPlayer": "追い風オオカミ · 装備 8個"
+    }
+  ],
+  "cardNotice": "STOP20マス進む → 1〜5マス先で初回停止月影の神殿 · 残りの移動は繰り越さない",
+  "errors": []
+}

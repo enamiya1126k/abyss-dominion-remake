@@ -1,0 +1,62 @@
+{
+  "engine": "Chromium 153 mobile emulation; local production client/simulation, QA-only missing catalog/portrait/EXP stubs",
+  "results": [
+    {
+      "version": "base",
+      "width": 390,
+      "height": 700,
+      "sizeReads": 273,
+      "draws": 91,
+      "runnerCount": 8,
+      "layoutCount": 268,
+      "layoutMs": 162.849,
+      "scriptMs": 105.161
+    },
+    {
+      "version": "game",
+      "width": 390,
+      "height": 700,
+      "sizeReads": 0,
+      "draws": 181,
+      "runnerCount": 8,
+      "layoutCount": 235,
+      "layoutMs": 160.98999999999998,
+      "scriptMs": 101.47399999999999,
+      "rotatedSize": [
+        668,
+        558
+      ]
+    },
+    {
+      "version": "game",
+      "width": 320,
+      "height": 568,
+      "sizeReads": 0,
+      "draws": 181,
+      "runnerCount": 8,
+      "layoutCount": 243,
+      "layoutMs": 162.113,
+      "scriptMs": 95.122,
+      "rotatedSize": [
+        536,
+        538
+      ]
+    },
+    {
+      "version": "game",
+      "width": 430,
+      "height": 800,
+      "sizeReads": 0,
+      "draws": 180,
+      "runnerCount": 8,
+      "layoutCount": 239,
+      "layoutMs": 178.59,
+      "scriptMs": 101.964,
+      "rotatedSize": [
+        768,
+        558
+      ]
+    }
+  ],
+  "errors": []
+}

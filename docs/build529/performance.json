@@ -1,0 +1,28 @@
+{
+  "description": "Two concurrent 3000m races, four human seats each, one idle subscriber, 10 seconds at server 250ms cadence. Identical fixture catalog and seeded simulation; modules loaded before timing; wall time is indicative.",
+  "before": {
+    "messages": 360,
+    "bytes": 4019712,
+    "otherRoomMessages": 40,
+    "storeTransactions": 40,
+    "elapsedMs": 74.321955
+  },
+  "after": {
+    "messages": 320,
+    "bytes": 1090924,
+    "otherRoomMessages": 0,
+    "storeTransactions": 10,
+    "elapsedMs": 32.816682000000014
+  },
+  "flatAI": {
+    "description": "30 seconds, three neighboring runners, no falling block or higher platform; count authoritative jump/bounce/super events, not animation frames.",
+    "before": {
+      "jumps": 110,
+      "elapsedMs": 90.67836
+    },
+    "after": {
+      "jumps": 0,
+      "elapsedMs": 9.658481000000052
+    }
+  }
+}

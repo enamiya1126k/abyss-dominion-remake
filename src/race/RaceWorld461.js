@@ -12,14 +12,33 @@ export function broadcast461(r,c,html){if(r.rulesVersion<7)return html;const tra
  html=html.replace('class="race-track451 track452"','class="race-track451 track452 world-viewport461"').replace('<div class="race-track-glint452">',`<div class="world-plane461" data-world-plane461 style="width:${world.width}px;height:${world.height}px">${worldArt461(r)}<div class="race-track-glint452">`).replace('<div class="race-start452"','</div><div class="race-start452"');
  html=html.replace('<div class="race-grandstand452">',`<div class="race-grandstand452"><button class="expand-race460" data-race-action="expand460" aria-pressed="${!!c.expanded460}">${c.expanded460?'通常表示':'拡大表示'}</button>`);if(track.shape==='oval')html=html.replace('最後の直線</b>','勝負の終盤</b>');return html;
 }
-export function updateWorld461(c,r,frame,p){if(r.rulesVersion<7)return;const viewport=c.root.querySelector('.world-viewport461'),plane=viewport?.querySelector('[data-world-plane461]');if(!plane)return;
- const mode462=c.camera461??'follow',overview462=overviewFrame462(r.track459,viewport.clientWidth);viewport.dataset.camera461=mode462;viewport.style.height=mode462==='overview'?overview462.height+'px':'';viewport.style.flex=mode462==='overview'?'0 0 auto':'';const track=course459(r.track459),world=worldSize461(track),width=viewport.clientWidth,height=viewport.clientHeight,live=r.live456,ownIndex=r.racers.findIndex(x=>x.ownerId===c.transport.selfId),watched=r.members.find(m=>m.playerId===(c.watchPlayer452??c.transport.selfId)),put=(s,t)=>{const el=c.root.querySelector(s);if(el&&el.textContent!==t)el.textContent=t};
- viewport.classList.remove('is-follow457');viewport.dataset.shape462=track.shape;
+const worlds529=new WeakMap();
+export function disposeWorld529(c){worlds529.get(c)?.observer?.disconnect();worlds529.delete(c)}
+function nodes529(c){let n=worlds529.get(c);if(n?.root===c.root.firstElementChild)return n;
+ disposeWorld529(c);const viewport=c.root.querySelector('.world-viewport461'),plane=viewport?.querySelector('[data-world-plane461]');if(!plane)return null;
+ n={root:c.root.firstElementChild,viewport,plane,width:viewport.clientWidth,height:viewport.clientHeight,
+  runners:[...plane.querySelectorAll('[data-race-runner]')],buttons:[...c.root.querySelectorAll('[data-race-camera461]')],labels:{}};
+ for(const s of ['[data-remaining457]','[data-course-lap459]','[data-course-section459]','[data-boost-status]'])n.labels[s]=c.root.querySelector(s);
+ for(const el of n.runners){let number=el.querySelector('.runner-number461');if(!number){number=document.createElement('b');number.className='runner-number461';number.textContent=String(Number(el.dataset.raceRunner)+1);el.append(number)}}
+ if(typeof ResizeObserver!=='undefined'){n.observer=new ResizeObserver(entries=>{const box=entries[0]?.contentRect;if(box){n.width=box.width;n.height=box.height}});n.observer.observe(viewport)}
+ worlds529.set(c,n);return n;
+}
+const style529=(el,key,value)=>{if(el.style[key]!==value)el.style[key]=value};
+export function updateWorld461(c,r,frame,p){if(r.rulesVersion<7)return;const n=nodes529(c);if(!n)return;const{viewport,plane}=n;
+ const mode=c.camera461??'follow',track=course459(r.track459),world=worldSize461(track),overview=overviewFrame462(r.track459,n.width);
+ if(n.mode!==mode||n.modeWidth!==n.width){n.mode=mode;n.modeWidth=n.width;viewport.dataset.camera461=mode;style529(viewport,'height',mode==='overview'?overview.height+'px':'');style529(viewport,'flex',mode==='overview'?'0 0 auto':'');viewport.classList.remove('is-follow457');viewport.dataset.shape462=track.shape;for(const button of n.buttons)button.setAttribute('aria-pressed',String(button.dataset.raceCamera461===mode))}
+ const width=n.width,height=mode==='overview'?overview.height:n.height,live=r.live456,ownIndex=r.racers.findIndex(x=>x.ownerId===c.transport.selfId),watched=r.members.find(m=>m.playerId===(c.watchPlayer452??c.transport.selfId)),put=(s,t)=>{const el=n.labels[s];if(el&&el.textContent!==t)el.textContent=t};
  const close=frame.allFinished&&frame.finished.length>1&&Math.abs(live.runners[frame.finished[0].i].finishMs-live.runners[frame.finished[1].i].finishMs)<650,replayT=Math.min(1,Math.max(0,(Date.now()-(p.photoAt456??Date.now()))/1800)),replay=close&&replayT<1&&!globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches&&live.history.length>1;
  const points=r.racers.map((_,i)=>{const position=frame.positions.find(x=>x.i===i);let progress=position?.p??0;if(replay){const t=replayT*(live.history.length-1),a=Math.floor(t),b=Math.min(a+1,live.history.length-1);progress=(live.history[a][i]*(1-t+a)+live.history[b][i]*(t-a))/track.distance}return{i,...worldPoint461(progress,i,track)}});
- const mode=c.camera461??'follow',key=[r.id,width,height,mode].join(':'),now=performance.now(),previous=c.worldCamera461?.key===key?c.worldCamera461:null,camera=mode==='overview'?overview462.camera:followCamera461(points,width,height,previous,previous?now-previous.at:33,false,world);
- c.worldCamera461={...camera,key,at:now};plane.style.transform=`translate(${width/2-camera.cx*camera.scale}px,${height/2-camera.cy*camera.scale}px) scale(${camera.scale})`;viewport.dataset.camera461=mode;
- for(const point of points){const el=plane.querySelector(`[data-race-runner="${point.i}"]`);if(!el)continue;el.style.left=point.x+'px';el.style.top=point.y+'px';el.style.zIndex=String(Math.round(point.y));el.style.setProperty('--facing461',Math.cos(point.angle*Math.PI/180)<0?-1:1);el.dataset.worldX461=point.x;el.dataset.worldY461=point.y;el.classList.toggle('is-own458',point.i===ownIndex);el.classList.toggle('is-ticket461',!!watched?.ticket?.picks.includes(point.i));let number=el.querySelector('.runner-number461');if(!number){number=document.createElement('b');number.className='runner-number461';number.textContent=String(point.i+1);el.append(number)}el.setAttribute('aria-label',`${point.i+1}番 ${r.racers[point.i].name}`)}
- for(const button of c.root.querySelectorAll('[data-race-camera461]'))button.setAttribute('aria-pressed',String(button.dataset.raceCamera461===mode));
- const lp=frame.leader?.p??0;put('[data-remaining457]',frame.allFinished?'全匹ゴール':`先頭 残り${Math.max(0,Math.ceil((1-lp)*track.distance))}m`);put('[data-course-lap459]',frame.allFinished?'全匹ゴール':track.shape==='oval'?`${Math.min(track.laps,Math.floor(lp*track.laps)+1)} / ${track.laps}周`:'直線');put('[data-course-section459]',frame.allFinished?'着順確定':worldPoint461(lp,0,track).corner?'コーナー':'直線区間');if(live?.runners[ownIndex]?.pendingBoost459?.length)put('[data-boost-status]','いうことを聞かない…！ 少し遅れて加速');
+ const key=[r.id,width,height,mode].join(':'),now=performance.now(),previous=c.worldCamera461?.key===key?c.worldCamera461:null,camera=mode==='overview'?overview.camera:followCamera461(points,width,height,previous,previous?now-previous.at:16,false,world);
+ c.worldCamera461={...camera,key,at:now};style529(plane,'transform',`translate3d(${width/2-camera.cx*camera.scale}px,${height/2-camera.cy*camera.scale}px,0) scale(${camera.scale})`);
+ for(const point of points){const el=n.runners.find(el=>Number(el.dataset.raceRunner)===point.i);if(!el)continue;
+  style529(el,'transform',`translate3d(${point.x}px,${point.y}px,0) translate(-50%,-100%)`);style529(el,'zIndex',String(Math.round(point.y)));
+  const facing=String(Math.cos(point.angle*Math.PI/180)<0?-1:1);if(el.style.getPropertyValue('--facing461')!==facing)el.style.setProperty('--facing461',facing);
+  el.classList.toggle('is-own458',point.i===ownIndex);el.classList.toggle('is-ticket461',!!watched?.ticket?.picks.includes(point.i));
+  if(n.race!==r.id)el.setAttribute('aria-label',`${point.i+1}番 ${r.racers[point.i].name}`);
+ }
+ n.race=r.id;
+ // Human-readable counters need not invalidate layout at display refresh rate.
+ if(now-(n.hudAt??-Infinity)>=100||frame.allFinished){n.hudAt=now;const lp=frame.leader?.p??0;put('[data-remaining457]',frame.allFinished?'全匹ゴール':`先頭 残り${Math.max(0,Math.ceil((1-lp)*track.distance))}m`);put('[data-course-lap459]',frame.allFinished?'全匹ゴール':track.shape==='oval'?`${Math.min(track.laps,Math.floor(lp*track.laps)+1)} / ${track.laps}周`:'直線');put('[data-course-section459]',frame.allFinished?'着順確定':worldPoint461(lp,0,track).corner?'コーナー':'直線区間');if(live?.runners[ownIndex]?.pendingBoost459?.length)put('[data-boost-status]','いうことを聞かない…！ 少し遅れて加速')}
 }

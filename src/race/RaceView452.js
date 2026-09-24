@@ -1,3 +1,4 @@
+import{raceTime529,smoothFrame529}from'./RaceMotion529.js';
 import{ticketColor501}from'../party/GameColors501.js';
 import{isPartyHub462,updateParty462}from'../party/PartyView462.js';
 import{courseLabel459}from'./RaceCourse459.js';
@@ -40,11 +41,11 @@ export function updateRaceClock452(c){const r=c.state?.room;if(!c.root||!r||isPa
   const actor=dom.stage?.querySelector('.parade-actor452');if(actor){const frame=reduced?'idle1':x.condition===1?'idle'+(1+Math.floor(at/650)%3):Math.floor(at/mood.frameMs)%2?'walk1':'walk2';if(actor.dataset.frame!==frame){actor.dataset.frame=frame;setMonsterVisualFrame(actor,frame)}}
  }
  if(['countdown','race'].includes(r.phase)){
-  const elapsed=at-r.startAt,frame=raceFrame452(r,at),startVisible=r.phase==='countdown'||elapsed<1100;
+  const elapsed=at-r.startAt,frame=smoothFrame529(c,r,raceFrame452(r,raceTime529(c,r,at))),startVisible=r.phase==='countdown'||elapsed<1100;
   dom.track?.classList.toggle('is-running452',r.phase==='race');dom.track?.classList.toggle('is-past-start452',r.phase==='race'&&elapsed>=650);dom.track?.classList.toggle('is-spurt452',frame.late&&!frame.allFinished);dom.track?.classList.toggle('is-finished452',frame.allFinished);
   if(dom.start){dom.start.hidden=!startVisible;if(startVisible){const count=Math.max(1,Math.ceil(-elapsed/1000));dom.start.classList.toggle('is-go',elapsed>=0);put(dom.start.querySelector('[data-start-number]'),elapsed>=0?'START!':String(count));put(dom.start.querySelector('[data-start-caption]'),elapsed>=0?'一斉にスタート！':'全8匹、ゲートイン');dom.start.querySelectorAll('.race-lights452 i').forEach((e,i)=>e.classList.toggle('is-lit',elapsed>=0||i<4-count));if(elapsed>=-3000)once452(p,`start-${elapsed>=0?'go':count}`,()=>c.sound452?.play(elapsed>=0?'start':'count'))}}
   if(r.phase==='race'){
-   for(const x of frame.positions){const e=dom.runners.find(e=>Number(e.dataset.raceRunner)===x.i),lane=dom.lanes[x.i],racer=r.racers[x.i],chasing=frame.late&&!x.finished&&['差し','追込'].includes(racer.profile.style);if(e){const skillActive=r.rulesVersion<4&&activeRaceSkill453(racer,frame.elapsed)&&!x.finished;e.classList.toggle('is-skill453',skillActive);put(e.querySelector('.race-runner-name452'),skillActive?racer.profile.skill:racer.name);if(skillActive)once452(p,`skill-${x.i}`,()=>c.sound452?.play('parade'));e.style.left=`${x.p*100}%`;e.classList.toggle('is-charging452',chasing);e.classList.toggle('is-finished452',x.finished);const spriteFrame=reduced?'idle1':x.finished?'idle':Math.floor(at/(chasing?100:170))%2?'walk1':'walk2';if(e.dataset.raceFrame!==spriteFrame){e.dataset.raceFrame=spriteFrame;setMonsterVisualFrame(e,spriteFrame)}put(e.querySelector('[data-finish-place]'),x.finished?String(frame.finished.findIndex(f=>f.i===x.i)+1):'')};lane?.classList.toggle('is-leading452',x.i===frame.leader.i);if(x.finished)once452(p,`finish-${x.i}`,()=>{if(frame.finished.findIndex(f=>f.i===x.i)===0)c.sound452?.play('finish')})}
+   for(const x of frame.positions){const e=dom.runners.find(e=>Number(e.dataset.raceRunner)===x.i),lane=dom.lanes[x.i],racer=r.racers[x.i],chasing=frame.late&&!x.finished&&['差し','追込'].includes(racer.profile.style);if(e){const skillActive=r.rulesVersion<4&&activeRaceSkill453(racer,frame.elapsed)&&!x.finished;e.classList.toggle('is-skill453',skillActive);put(e.querySelector('.race-runner-name452'),skillActive?racer.profile.skill:racer.name);if(skillActive)once452(p,`skill-${x.i}`,()=>c.sound452?.play('parade'));if(r.rulesVersion<7)e.style.left=`${x.p*100}%`;e.classList.toggle('is-charging452',chasing);e.classList.toggle('is-finished452',x.finished);const spriteFrame=reduced?'idle1':x.finished?'idle':Math.floor(at/(chasing?100:170))%2?'walk1':'walk2';if(e.dataset.raceFrame!==spriteFrame){e.dataset.raceFrame=spriteFrame;setMonsterVisualFrame(e,spriteFrame)}put(e.querySelector('[data-finish-place]'),x.finished?String(frame.finished.findIndex(f=>f.i===x.i)+1):'')};lane?.classList.toggle('is-leading452',x.i===frame.leader.i);if(x.finished)once452(p,`finish-${x.i}`,()=>{if(frame.finished.findIndex(f=>f.i===x.i)===0)c.sound452?.play('finish')})}
    if(frame.late)once452(p,'spurt',()=>c.sound452?.play('spurt'));
    if(!frame.allFinished)once452(p,`step-${Math.floor(frame.elapsed/500)}`,()=>c.sound452?.play('step'));
    const live=c.root.querySelector('[data-race-live]');put(live,frame.allFinished?'全匹ゴール':frame.finished.length?'1着 '+(frame.finished[0].i+1)+'番':'先頭 '+frame.positions.slice(0,3).map(x=>x.i+1).join(' › '));
@@ -52,7 +53,7 @@ export function updateRaceClock452(c){const r=c.state?.room;if(!c.root||!r||isPa
    const spurt=c.root.querySelector('[data-spurt-banner]');if(frame.late&&r.rulesVersion>=4)p.spurtAt456??=at;if(spurt)spurt.hidden=!(r.rulesVersion>=4?frame.late&&!frame.allFinished&&at-p.spurtAt456<1500:frame.elapsed>=14500&&frame.elapsed<16600);
    for(const m of r.members){const e=dom.tickets.find(e=>e.dataset.raceTicket===m.playerId);if(!e)continue;const state=ticketState452(m.ticket,frame);e.dataset.state=state.state;put(e.querySelector('[data-ticket-status]'),state.label)}
   }else put(dom.commentary,'馬券を握りしめて、スタートを待とう。');
-  updateVisual456(c,r,frame,p);updateLayout457(c,r,frame,p);updateCourseView459(c,r,frame,p);
+  if(at-(p.hudAt529??0)>=100||p.hudLive529!==r.live456||p.hudPending529!==c.boostPending456){p.hudAt529=at;p.hudLive529=r.live456;p.hudPending529=c.boostPending456;updateVisual456(c,r,frame,p);updateLayout457(c,r,frame,p)}updateCourseView459(c,r,frame,p);
   const watch=r.members.find(m=>m.playerId===(c.watchPlayer452??c.transport.selfId));for(const lane of dom.lanes)lane.classList.toggle('is-ticket-pick452',!!watch?.ticket?.picks.includes(Number(lane.dataset.raceLane)));for(const e of dom.tickets)e.setAttribute('aria-pressed',String(e.dataset.raceTicket===(c.watchPlayer452??c.transport.selfId)));
  }
  if(r.phase==='result'){
@@ -64,5 +65,5 @@ export function updateRaceClock452(c){const r=c.state?.room;if(!c.root||!r||isPa
   if(elapsed<250&&!p.skip&&!reduced)once452(p,'victory',()=>c.sound452?.play(mine?.won||mine?.prize?'win':'finish'));
  }
  const q=c.root.querySelector('[data-race-quote]');if(q){const odds=quote456(r,c.draft.ticket),amount=Number(c.draft.amount)||0;put(q,odds?`予想 ${c.draft.ticket.picks.map(i=>i+1).join(ordered456(c.draft.ticket.kind)?' → ':'・')} ／ ${odds.toFixed(1)}倍\n購入 ${n(amount)}G → 的中払戻 ${n(payout451(amount,odds))}G`:'魔物を選ぶと倍率と払戻予定額が表示されます')}
- updateExperience458(c);updateParty462(c);
+ if(at-(p.extraAt529??0)>=100||p.extraPending529!==c.boostPending456){p.extraAt529=at;p.extraPending529=c.boostPending456;updateExperience458(c);updateParty462(c)}
 }

@@ -1,0 +1,30 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync,existsSync} from 'node:fs';
+import * as C from '../src/fishing/Catches525.js';
+import * as N from '../src/fishing/Catalog532.js';
+import * as K from '../src/fishing/Knowledge532.js';
+import * as R from '../src/fishing/Rules524.js';
+import {guide532,matchesGuide532} from '../src/fishing/Guide532.js';
+const rng=seed=>()=>{seed^=seed<<13;seed^=seed>>>17;seed^=seed<<5;return(seed>>>0)/4294967296};
+const make=seed=>{const g=R.makeFishing524({id:'532',code:'532',hostId:'p0',members:[{playerId:'p0',name:'you',choice:{speciesId:'slime'}}]});R.startFishing524(g,0,seed);R.advanceFishing524(g,3000);return g};
+test('532 adds 32 real animals and 4 curious objects, with unique local art and sourced notes',()=>{
+ assert.equal(N.EXTRA_CATCHES532.length,36);assert.equal(C.CATCHES525.length,152);assert.equal(N.EXTRA_CATCHES532.filter(f=>f.real532).length,32);
+ for(const f of N.EXTRA_CATCHES532){const uv=C.artFrame525(f);assert.ok(uv.x>=0&&uv.y>=0&&uv.w>0&&uv.h>0&&uv.x+uv.w<=1.001&&uv.y+uv.h<=1.001);assert.ok(existsSync(new URL('../'+C.atlasCSS525(f).url,import.meta.url)));if(f.real532){const k=K.knowledge532(f);assert.ok(k.fact.length>5&&k.habitat.length>0);assert.ok(new URL(k.source.url).protocol==='https:')}}
+});
+test('532 all themes remain diverse; real species dominate ordinary fish draws',()=>{
+ const rows=[];
+ for(const t of N.THEMES532){let real=0,total=0,items=0,curios=0;const seen=new Set(),random=rng(532);
+  for(let i=0;i<30000;i++){const f=C.selectCatch525(i%4,random,{theme:t.id});seen.add(f.id);if(f.item525||f.baitOnly525){items++;if(f.group532==='curio')curios++}else{total++;real+=!!f.real532}}
+  assert.ok(real/total>.78,t.id);assert.ok(curios/30000<.045&&curios>0);for(const f of C.CATCHES525.filter(f=>f.tier<4&&!f.exclusive525))assert.ok(seen.has(f.id),t.id+' missing '+f.id);rows.push({theme:t.id,realFishRate:real/total,curioRate:curios/30000,reachable:seen.size});
+ }console.log('VARIETY_532',JSON.stringify(rows));
+});
+test('532 featured fish odds increase without eliminating any ordinary fish',()=>{let favored=0,other=0;for(const [theme,add]of [['market',v=>favored+=v],['river',v=>other+=v]]){const random=rng(551);for(let i=0;i<20000;i++)add(N.varietyPick532(C.pool525(0),random,{theme}).id==='horsemackerel')}assert.ok(favored>other*1.5)});
+test('532 recent catches are excluded only when alternatives exist; recipes retain exact meaning',()=>{const fish=C.pool525(1),recent=fish.slice(0,3).map(f=>f.id),random=rng(33);for(let i=0;i<1000;i++)assert.ok(!recent.includes(N.varietyPick532(fish,random,{recent}).id));assert.equal(N.varietyPick532([fish[0]],random,{recent}).id,fish[0].id);assert.equal(C.selectCatch525(0,random,{previous:C.catch525('slipper'),recent:['bicycle']}).id,'bicycle');assert.equal(C.selectCatch525(0,random,{previous:C.catch525('bicycle')}).id,'wallet');assert.equal(C.selectCatch525(0,random,{previous:C.catch525('moonlure')}).id,'moonray');assert.equal(C.selectCatch525(4,random,{previous:C.catch525('slipper'),lordId531:'arapaima'}).id,'arapaima')});
+test('532 landing remembers only three catches, not escapes, and never publishes that history',()=>{const g=make(732),p=g.players[0];for(const id of ['medaka','ayu','sardine','mackerel']){Object.assign(p,{mode:'fight',fish:{...C.catch525(id),value:30,rhythm:0},progress:.99999,tension:0,reel:true,hookedAt:0});R.fight524(g,p);assert.equal(p.mode,'landing')}assert.deepEqual(p.recent532,['ayu','sardine','mackerel']);assert.equal(R.publicFishing524(g).players[0].recent532,undefined);assert.ok(!JSON.stringify(R.publicFishing524(g)).includes('食中毒に注意'));assert.equal(R.publicFishing524(g).theme532,g.theme532)});
+test('532 migrating v5 preserves scheduled or active boss and rod progress',()=>{for(const phase of ['hidden','visible','hooked']){const g=make(555),p=g.players[0];g.rules524=5;delete g.theme532;g.lord526.phase=phase;g.lord526.at=88999;g.lord526.catch531={id:'lord',kg:512};p.rodXP531=14;const old=JSON.stringify(g.lord526);R.advanceFishing524(g,g.lastAt);assert.equal(g.rules524,8);assert.equal(g.theme532,'river');assert.equal(JSON.stringify(g.lord526),old);assert.equal(p.rodXP531,14)}});
+test('532 small animals keep nonzero gram weights; their scores are finite',()=>{const g=make(773),p=g.players[0];g.shoals=[];let medakas=0;for(let i=0;i<4000;i++){p.mode='idle';R.cast524(g,p,.5,.7);assert.ok(p.fish.kg>0&&Number.isFinite(p.fish.value));if(p.fish.id==='medaka'){medakas++;assert.ok(p.fish.kg<.01);assert.match(N.gameWeight532(p.fish.kg),/g$/)}}assert.ok(medakas>30);assert.equal(N.gameWeight532(.003),'3g')});
+test('532 food poison and venomous spines have distinct warnings, never an edibility stamp',()=>{assert.equal(K.knowledge532('tigerpuffer').danger,'food');for(const id of ['lionfish','stonefish','stingray'])assert.equal(K.knowledge532(id).danger,'spine');assert.ok(K.SAFETY532.includes('安全を保証'));assert.ok(K.FICTION532.includes('ゲーム設定'));assert.equal(K.knowledge532('moonray'),null)});
+test('532 guide includes all catches, safe external source links, real/fiction distinction and filters',()=>{const html=guide532();assert.equal((html.match(/data-fi-entry532=/g)??[]).length,152);assert.equal((html.match(/rel="noopener noreferrer"/g)??[]).length,96);assert.ok(html.includes('ゲーム基準')&&html.includes('採食・同定用ではありません'));for(const [filter,n]of [['real',88],['market',24],['danger',14],['curio',4]])assert.equal(C.CATCHES525.filter(f=>matchesGuide532(f,filter)).length,n)});
+test('532 all seven match themes can be selected by seeded matches',()=>{const seen=new Set(),random=rng(32);for(let i=0;i<100;i++)seen.add(make(Math.floor(random()*4294967296)).theme532);assert.equal(seen.size,7)});
+test('532 historical core modules do not import bulky learning text into the server',()=>{for(const p of ['src/fishing/Rules524.js','src/fishing/Catches525.js','src/fishing/Catalog532.js'])assert.ok(!readFileSync(new URL('../'+p,import.meta.url),'utf8').match(/from ['"][^'"]*Knowledge532/))});

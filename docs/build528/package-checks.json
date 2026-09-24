@@ -1,0 +1,10 @@
+{
+  "syntaxChecked": 26,
+  "versionAliases": 398,
+  "preserved": [
+    "src/sumo",
+    "assets/sumo527",
+    "src/fishing",
+    "src/tower"
+  ]
+}

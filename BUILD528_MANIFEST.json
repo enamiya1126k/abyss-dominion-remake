@@ -1,0 +1,235 @@
+{
+  "build": 528,
+  "version": "3.1.207",
+  "baseBuild": 527,
+  "type": "patch",
+  "sugorokuRulesVersion": 19,
+  "minigamesVersion528": 1,
+  "files": [
+    {
+      "path": "README_BUILD528.md",
+      "bytes": 4798,
+      "sha256": "53da2c5eabe9fa6839197f98b49f0858140568cdafa63977318ac03f9294c59d"
+    },
+    {
+      "path": "docs/build528/browser-results.json",
+      "bytes": 2012,
+      "sha256": "10d5161e9c947358918f7ee99202cdc9e08d3fbab5e83a471f507787cd5c1aff"
+    },
+    {
+      "path": "docs/build528/equipment-bottom.png",
+      "bytes": 195398,
+      "sha256": "d2a2c9b77c3bb7eb2660cbfdfa7a5491750199e8899a2dc638a7fcb8ff47e20f"
+    },
+    {
+      "path": "docs/build528/equipment-top.png",
+      "bytes": 175091,
+      "sha256": "3e333fb7c1b107e0a18f510223e6e5c2e9174e2d326a16c35f7a06b7de92f036"
+    },
+    {
+      "path": "docs/build528/gorilla-pinch.png",
+      "bytes": 398719,
+      "sha256": "e5a238fd50c880c308cfd914526cb99492f611fb99067dbb58f10db3a440b3f1"
+    },
+    {
+      "path": "docs/build528/package-checks.json",
+      "bytes": 146,
+      "sha256": "78132bf259e25e0086548497852c3d7528c0eeb54e46747613e5af28b5409412"
+    },
+    {
+      "path": "docs/build528/regression.tap",
+      "bytes": 3940,
+      "sha256": "3ef9550ac2f456b80bdb2f4b6a58d47a24e7ba15984f76dd1a57a8c3919df52b"
+    },
+    {
+      "path": "docs/build528/round-selection.png",
+      "bytes": 424471,
+      "sha256": "401a3d2ede566e99612e8b41e35d89a162a726335718845e76d2345b9b07a5b8"
+    },
+    {
+      "path": "docs/build528/stop-board.png",
+      "bytes": 279795,
+      "sha256": "04a094f8f56d9d7182e97db4ab4cef9796fd9043bc2287bc997e92fd1147e285"
+    },
+    {
+      "path": "docs/build528/stop-card.png",
+      "bytes": 169325,
+      "sha256": "cf6aa4132808fbfff4cb1c7fbe97ea6c7d174e6a3bce6b00ddb2aa199ec70338"
+    },
+    {
+      "path": "docs/build528/tests.tap",
+      "bytes": 2039,
+      "sha256": "41d1b492ec3493a2ae31f498ebf8a00f48f0cb61301156b1b74899c8ffde098a"
+    },
+    {
+      "path": "docs/build528/verification.md",
+      "bytes": 1611,
+      "sha256": "b530f22a813d8cd16b560797806179df746010f3febe11def7f4f86b9dfac232"
+    },
+    {
+      "path": "index.html",
+      "bytes": 175967,
+      "sha256": "900ed5a6789447964c669de69ba09de8df6d7a41cb3e5ecc5becdb2d9ecd0603"
+    },
+    {
+      "path": "online-server/src/GorillaCoordinator502.js",
+      "bytes": 5020,
+      "sha256": "7bf646370f2764078a175ee0e86a0e9a5aa7e5019d64246d58394f2517208090"
+    },
+    {
+      "path": "online-server/src/LuckCoordinator511.js",
+      "bytes": 3858,
+      "sha256": "293467850c0dd9ecf7166ccce3e8e2b280d6707fbdb09c1ba0b145ee7bd8fa1a"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "bytes": 19825,
+      "sha256": "4a45a430c79666966943ebe4cd6e51357408502ba0022b97dd74b2237003cce3"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "bytes": 25458,
+      "sha256": "b95079f106c1d45e4cee2377b4ba28c932e876654e4f4f31aafa3f29319a80e0"
+    },
+    {
+      "path": "online-server/src/SugorokuCoordinator463.js",
+      "bytes": 8383,
+      "sha256": "bc2d41cf367e3ac7634c6c6928ac8693e5ca36cf8d0dcb6b129b2c1ae9f65c1a"
+    },
+    {
+      "path": "src/Styles/build528-party.css",
+      "bytes": 6456,
+      "sha256": "8b381a7df1a893eedee2f11062ac9d977cf84a1890cafbbecde65c78f4aa5afa"
+    },
+    {
+      "path": "src/cabbage/Zoom498.js",
+      "bytes": 4582,
+      "sha256": "b7d560c6a2aab2d42df68171a12f33068c303c3835c6f7537618e4ab54f965f0"
+    },
+    {
+      "path": "src/core/config.js",
+      "bytes": 2257,
+      "sha256": "718fe567ad32765a93859c37516945f5a56c7696ce47cad160a4a28dcfea4ae1"
+    },
+    {
+      "path": "src/gorilla/Rules505.js",
+      "bytes": 3313,
+      "sha256": "237e5382d8636fbf9b68269c068b36c382082cf88a600253e031b315323b1f14"
+    },
+    {
+      "path": "src/gorilla/View505.js",
+      "bytes": 13877,
+      "sha256": "f1ee04432eb1c01f4488b399c9d1c58c4e4b14a5000eece94262db16951661ee"
+    },
+    {
+      "path": "src/luck/Presentation509.js",
+      "bytes": 7094,
+      "sha256": "e1a2cf678238db73dfa060c325acacf2715463b666b4a3f6c0ffbd810cf2c255"
+    },
+    {
+      "path": "src/luck/Presentation511.js",
+      "bytes": 3704,
+      "sha256": "b19444e3c04c171474f8c8021111c52ed2081fc08d51ceaee1b661c5c50c6989"
+    },
+    {
+      "path": "src/luck/Rules511.js",
+      "bytes": 18671,
+      "sha256": "bf196653160e81e9b479f03310428c3070d506a567472f23826f2ecd25c69bbe"
+    },
+    {
+      "path": "src/luck/View511.js",
+      "bytes": 38125,
+      "sha256": "dae06f5fd74c25f4c88a4532b4d509efeca44ad978d6fc5244158a57d539ef70"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "bytes": 3334,
+      "sha256": "5ec3894c57cda767b947acfe22ee500734d3edd8046ae3e5da56dc85154fc7a9"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "bytes": 11346,
+      "sha256": "4166b6ca413808d9af496671179c92f00f7fdf8823df3f8e4b3e591c3db76f31"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "bytes": 26398,
+      "sha256": "cf49191670ecd766cf72e6e491e16c57466d46f05a1c8c4f5615aa082396ee0c"
+    },
+    {
+      "path": "src/sugoroku/Catalog463.js",
+      "bytes": 14748,
+      "sha256": "180fc9771f966537fd0bf52d1360255394513979f61e194742eb5b523c2594a3"
+    },
+    {
+      "path": "src/sugoroku/Engine463.js",
+      "bytes": 40865,
+      "sha256": "1e2db778816f856fa68cae6206d962efa1f9c6dac231f976819628a83b7dbc15"
+    },
+    {
+      "path": "src/sugoroku/Greed528.js",
+      "bytes": 1380,
+      "sha256": "f78359c03a3257c07381e2258dde8f45918c99f8189b53993c30deccb03e74b9"
+    },
+    {
+      "path": "src/sugoroku/Landmarks469.js",
+      "bytes": 1835,
+      "sha256": "9d8adae4629e208721a4cdaed2510b26a6686b59b00eecbccbbd77b6720de66c"
+    },
+    {
+      "path": "src/sugoroku/Presentation464.js",
+      "bytes": 19410,
+      "sha256": "23af0d3ac8a1f7dc9797561ede247a4bf3d941865cc9a400050811a887360c73"
+    },
+    {
+      "path": "src/sugoroku/Rules469.js",
+      "bytes": 7731,
+      "sha256": "00a2be8106b8c96b383ce5deffb8dda637a3ed69392c83518dd84b3d7a07a6dc"
+    },
+    {
+      "path": "src/sugoroku/Stops528.js",
+      "bytes": 2476,
+      "sha256": "35108199319ca2d96831e97659956fca39d74178f50df199a44f09b3c7d335b7"
+    },
+    {
+      "path": "src/sugoroku/View463.js",
+      "bytes": 56207,
+      "sha256": "82dea15100bd20cca7597733e15c0e6953b36e840a04decb20a0111e16516a64"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "bytes": 2884,
+      "sha256": "dae31f0f18b8ac19f98f858dca8ea02299cb08e6591217330f5340c2fc1551b7"
+    },
+    {
+      "path": "tests/build528-party.test.mjs",
+      "bytes": 12588,
+      "sha256": "13ebd55f05552ee6dc4e47b867f883437eafc51de1a9ec23cf89f3ac71a36397"
+    },
+    {
+      "path": "tools/build528/browser-qa.mjs",
+      "bytes": 7553,
+      "sha256": "da818f9065880f1ac72d9c338e0ea5a474395a03be639329da5955d5636098b7"
+    },
+    {
+      "path": "tools/build528/preview.mjs",
+      "bytes": 4305,
+      "sha256": "9fd9c36f55c99c5fa44d0990ccd6dca3a417bf3299df47f94b59f68959da6c97"
+    },
+    {
+      "path": "tools/build528/regression.mjs",
+      "bytes": 1019,
+      "sha256": "645d6f1f2f7151cbce1dc82a3dd6780660997f019ece78d60f7880fe5c47763c"
+    },
+    {
+      "path": "world-raid-offline528-assets.json",
+      "bytes": 41121,
+      "sha256": "4ac8314b1b29d33fa27c5861d88976ad0321967291d8194c748c4a3b9ca8d89e"
+    },
+    {
+      "path": "world-raid-offline528-sw.js",
+      "bytes": 1844,
+      "sha256": "8dfb52110d6ad5bc5896ed0dd895a9ecf958a0e15353621b603f1464a2c04dba"
+    }
+  ]
+}

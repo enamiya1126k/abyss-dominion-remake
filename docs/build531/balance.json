@@ -1,0 +1,21 @@
+{
+  "note": "Same-seed solo deterministic timing policies; 2-minute matches. No input delay, not real-player evidence.",
+  "compare": [
+    {
+      "policy": "shore_cashout",
+      "matches": 100,
+      "meanScore": 612.55,
+      "meanCatches": 12.97,
+      "lordsCaught": 0,
+      "meanMisses": 0
+    },
+    {
+      "policy": "grow_and_explore",
+      "matches": 100,
+      "meanScore": 2566.48,
+      "meanCatches": 8.67,
+      "lordsCaught": 200,
+      "meanMisses": 0.05
+    }
+  ]
+}

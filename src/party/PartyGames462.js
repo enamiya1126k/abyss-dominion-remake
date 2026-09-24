@@ -1,9 +1,9 @@
 // Only released games appear here. Future game adapters reuse the same party.
 export const PARTY_GAMES462=Object.freeze([
- {id:'fishing',name:'ぬし釣り大騒動',tag:'のんびり釣って、大物で大逆転',players:'４人対戦・空席はAI',image:'./assets/fishing525/cover.webp',description:'全32種類！ 長靴からまさかのお宝へ、釣果をエサに連鎖をつなげ。黄金魚やルアーも登場。たまに現れる千年のヌシは、早い者勝ち！'},
- {id:'sumo',name:'魔獣ぶっとばし相撲',tag:'巨大化 × 溜め体当たり × 土俵崩壊',players:'4人対戦 · 90秒 · 空席はAI',image:'./assets/sumo523/cover.webp',description:'結晶を集めて巨大化、溜めた一撃で場外へ！ 崩れる土俵で、最後に立つ魔獣は誰だ。'},
+ {id:'fishing',name:'ぬし釣り大騒動',tag:'釣って発見、実在の魚と小さな学び',players:'４人対戦・空席はAI',image:'./assets/fishing525/cover.webp',description:'全152種類・ルアー６種・ヌシ級６種！ サバやアユ、毒に注意の魚も。エサをつないで竿を育て、釣果と豆知識を集めよう！'},
+ {id:'sumo',name:'魔獣ぶっとばし相撲',tag:'巨大化 × 磁石争奪 × 四段崩壊',players:'4人対戦 · 最大150秒 · 空席はAI',image:'./assets/sumo523/cover.webp',description:'結晶を集めて巨大化、溜めた一撃で場外へ！ 崩れる土俵で、最後に立つ魔獣は誰だ。'},
  {id:'tower',name:'ブロック落としサバイバル',tag:'1対3 × 落とせ、かわせ、登れ',players:'4人対戦 · 空席はAI',image:'./assets/tower518/cover.webp',description:'頭上から迫るブロックをかわして、天空へ脱出！ 4つの手札で追い詰める1人と、仲間の頭も足場にする3人の決戦。'},
  {id:'quiz',name:'〇×サバイバル',tag:'タップで歩く × 最大20問',players:'1〜4人 · 空席はAI',image:'./assets/quiz518/cover.webp',description:'壁が閉まる前に、自分の足で〇か×へ！ 正解の台で上へ、不正解はマグマへ。最後まで生き残れ！'},
- {id:'luck',name:'運だけ大運動会',tag:'継続装備 × 掛け算コンボ × 攻撃中継',players:'4人対戦 · 全8ラウンド · 不足席はAI',image:'./assets/luck507/stadium.png',description:'28種類の手札から、毎ターン発動する装備を育てよう。加速・攻撃・防御を重ねて、大技でとんでもない距離へ！'},
+ {id:'luck',name:'運だけ大運動会',tag:'継続装備 × 掛け算コンボ × 攻撃中継',players:'4人対戦 · 8／16ラウンド · 不足席はAI',image:'./assets/luck507/stadium.png',description:'28種類の手札から、毎ターン発動する装備を育てよう。加速・攻撃・防御を重ねて、大技でとんでもない距離へ！'},
  {id:'gorilla',name:'ゴリラ大王の胸毛抜き',tag:'完全運 × 1〜3本の度胸試し × 大ぶっとび',players:'4人対戦 · 1〜3本ずつ · 不足席はAI',image:'./assets/gorilla502/cover.png',description:'胸元アップで、毛を1本。王の顔を見て、もう1本？ それとも交代？ ハズレで大激怒、引いた本人だけ遠くへ飛んでいく！'},
  {id:'canal',name:'用水路防衛隊',tag:'タップ捕獲 × 4人で連携 × 一網打尽',players:'4人協力 · 不足席はAI',image:'./assets/canal489/cover.png',description:'4人が同じ水場で大さわぎ！仲間の網に続けて連携捕獲。みんなの一網打尽で、家を60秒守り切れ！'},{id:'cabbage',name:'限界キャベツ千切り',tag:'連打 × 反射神経 × 大粉砕',players:'4人対戦 · 不足席はAI',image:'./assets/cabbage484/kitchen.png',description:'左右交互に、限界まで刻め！「切るな！」で止まれないと、まな板まで粉砕。'},{id:'race',name:'魔物レース',tag:'予想 × 育成 × 大逆転',players:'1〜4人 ＋ AI',image:'./assets/party462/monster-race.webp',description:'相棒を送り出し、勝者を見抜け。叩くタイミングと絆が勝負を変える！'},{id:'sugoroku',name:'カードすごろく',tag:'防御 × 奪取 × 覚醒',players:'4人対戦 · 不足席はAI',image:'./assets/sugoroku463/cover.png',description:'最初のゴールで優勝！ 手番に1枚の切り札と、割り込み防御で大逆転。'}]);

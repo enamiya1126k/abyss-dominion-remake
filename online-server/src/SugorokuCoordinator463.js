@@ -9,7 +9,7 @@ export function handleSugoroku463(c,session,m){
  if(m.op!=='sg463')return false;
  const g=boardFor463(c,session.playerId),p=Object.values(c.data.parties462??{}).find(x=>x.id===g?.partyId462),me=g?.members.find(x=>x.playerId===session.playerId);
  if(!g||!p||!me)throw Error('カードすごろくの参加者ではありません');
- if(Number(m.rulesVersion)<18)throw Error('本体をBuild483に更新してください');
+ if(Number(m.rulesVersion)<19)throw Error('本体をBuild528に更新してください');
  if(m.gameId!==g.id)throw Error('ゲームが切り替わりました');
  const requestId=String(m.requestId??'');if(!/^[a-zA-Z0-9_-]{8,100}$/.test(requestId))throw Error('操作情報を再送してください');
  if(g.seen[session.playerId]?.includes(requestId))return true;
@@ -38,6 +38,7 @@ export function handleSugoroku463(c,session,m){
   if(g.phase!=='lobby')throw Error('開始後はコマを変更できません');
   if(m.roster)me.owned=c.roster(m.roster);const choice=me.owned.find(x=>x.id===m.monsterId);if(!choice)throw Error('手持ちの魔物を選んでください');me.choice=choice;const pm=p.members.find(x=>x.playerId===session.playerId);pm.owned=me.owned;pm.ready=false;
  }else if(m.kind==='start'){
+  if(m.minigamesVersion528!==1||p.members.some(x=>x.minigamesVersion528!==1))throw Error('全員がBuild528へ更新してから開始してください');
   if(p.hostId!==session.playerId||g.phase!=='lobby')throw Error('部屋主が準備画面で開始できます');
   if(p.members.some(x=>!x.ready||x.atHome||!c.sessions.get(x.playerId)?.connected)||g.members.some(x=>!x.choice))throw Error('全員がコマを選んで「準備OK」を押してください');
   if(g.economy474?.mode==='crystal'&&g.members.some(m=>!g.economy474.entries[m.playerId]))throw Error('全員の参加費の受付を待っています');

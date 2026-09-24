@@ -1,0 +1,45 @@
+✔ theft takes the full balance above the old holding limit without minting gems (9.660819ms)
+✔ full theft still supports acceptance, card defense and one-hop reflection (8.54793ms)
+✔ above-cap winnings settle once and actual new supply remains 20 percent (3.995186ms)
+✔ replayed acceptance never transfers twice and Build481 commands are rejected (2.629608ms)
+✔ single awakening defense uses the real card, preselects it, and waits for explicit confirmation (40.304796ms)
+✔ multiple defenses require a selection and block card buttons while sending or disconnected (5.763924ms)
+✔ 100 rapid enemy releases cancel native zoom, including enemies removed before touchend (5.46051ms)
+✔ native header/footer buttons and keyboard clicks remain usable; outside screens are untouched (0.454687ms)
+✔ empty playfield and simultaneous touches cannot start native zoom; cancel clears tracked ids (0.420721ms)
+✔ scaled exit requests scale 1 then restores original viewport; quick replay cannot restore a stale lock (0.433737ms)
+✔ cleanup never overwrites another screen viewport settings (0.292757ms)
+✔ 40 items: eight added self buffs, four new finishers, no new attacks (1.24174ms)
+✔ every final chest guarantees a finisher; all hands remain four distinct choices (79.125644ms)
+✔ invalid third die rejects before starting or mutating a room (6.187291ms)
+✔ one crystal independently grows x2, x4, x8 each successive turn and stacks multiplicatively (11.930831ms)
+✔ bank deposits on installation and each turn; a big move cashes fourfold once then saving restarts (9.353115ms)
+✔ solar buffers charge only without a big move; duplicates accumulate and big move consumes all (1.673887ms)
+✔ forge grows its additive foundation while echo uses actual last advance starting next turn (3.271713ms)
+✔ echo uses net actual positive movement after attacks, not the planned unhit boost (12.547388ms)
+✔ overdrive doubles ordinary turns and quadruples big moves; crowns multiply final round only (2.139224ms)
+✔ all 36 two-dice and 216 three-dice outcomes match exact displayed faces and products (212.322008ms)
+✔ focus increases each face, clamps at six and applies to product, triple, gamble and cannon (14.752207ms)
+✔ unbuffed gamble has three wins and three losses; cannon has one jackpot out of six (14.874948ms)
+✔ new finishers preserve gear, cash resources, and use exact uncapped cumulative distance (6.488132ms)
+✔ a grown full combo stacks seed, savings, echo, suns, coils, batteries, crystals and crown exactly (2.38123ms)
+✔ banked savings and unused suns survive hostile attacks; no new attack triggers appear (1.352262ms)
+✔ dice-only cinematic replaces no ordinary gameplay phase and duration is bounded for four rolls (2.309956ms)
+✔ all viewers see the same sequential rolls, stopped faces, formula and power before attacks (5.349175ms)
+✔ reduced motion immediately displays exact faces without a rolling transform or perpetual RAF (1.204075ms)
+✔ sealed third die and future hands remain private; AI ignores all sealed outcomes (3.42209ms)
+✔ 1,600 item pairs resolve with nonnegative exact metres and bounded dice/attack broadcasts (1266.83775ms)
+✔ 500 random complete races survive JSON restart exactly with all eight rounds and huge-score geometry (3199.210922ms)
+✔ production version gates reject stale clients, trust authenticated seats, and persist roll/buff state (43.794101ms)
+✔ new UI has exact pip dice, three cubes, 40 gear slots and no discarded power panel (4.22846ms)
+✔ DOM stops each die at the server face, announces result and keeps one finite RAF loop (11.989924ms)
+✔ ordinary idle UI does no repeat writes and touch bursts send only one choice (4.065869ms)
+✔ new atlas fully decodes with alpha and all twelve item cells occupied (532.527815ms)
+ℹ tests 37
+ℹ suites 0
+ℹ pass 37
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5819.408099

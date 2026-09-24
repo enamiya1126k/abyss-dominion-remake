@@ -1,0 +1,5 @@
+All changed JS modules: syntax PASS
+All historical aliases for changed client modules point to Build527: PASS
+CSS order, app version, worker registration/controller and offline manifest agree: PASS
+Fishing, tower, canal, cabbage dedicated source/assets unchanged: PASS
+Client/server readiness, start and input protocol use sumo version 2: PASS

@@ -53,7 +53,7 @@ export function banner509(g,selfId){
  if(g.phase==='reveal')return{title:'装備を重ねて、発動！',sub:''};
  if(g.phase==='broadcast')return{title:'',sub:''};
  if(g.phase==='run')return{title:'',sub:''};
- if(g.phase==='settle'){const me=g.event?.rows.find(r=>r.playerId===selfId),lead=g.event?.rows.find(r=>r.afterRank===1&&r.beforeRank===4);return{title:g.round===8?'フィニッシュ！':lead?'最後尾から、一気に先頭！':me?delta509(me.delta):'順位が動いた！',sub:me?`${me.afterRank}位 · ${distance509(me.to)}`:''}};
+ if(g.phase==='settle'){const me=g.event?.rows.find(r=>r.playerId===selfId),lead=g.event?.rows.find(r=>r.afterRank===1&&r.beforeRank===4);return{title:g.round===(g.rounds??8)?'フィニッシュ！':lead?'最後尾から、一気に先頭！':me?delta509(me.delta):'順位が動いた！',sub:me?`${me.afterRank}位 · ${distance509(me.to)}`:''}};
  return{title:'',sub:''};
 }
 export function hitLabel509(hit){return hit.outcome==='miss'?'空振り！':hit.outcome==='blocked'?'ガード！':hit.outcome==='reflected'?'反射！':hit.kind==='swap'?'入れ替わった！':hit.kind==='magnet'?'横取り！':hit.kind==='lightning'?'直撃！':hit.kind==='pit'?'落下！':'直撃！'}

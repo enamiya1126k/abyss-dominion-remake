@@ -1,0 +1,117 @@
+{
+  "engine": "Chromium mobile emulation, production fishing view/rules/controls; QA-only absent base catalogs and character portraits",
+  "results": [
+    {
+      "width": 320,
+      "height": 568,
+      "fit": {
+        "bodyWidth": 320,
+        "stage": {
+          "x": 0,
+          "y": 144,
+          "w": 320,
+          "h": 253,
+          "bottom": 397
+        },
+        "deck": {
+          "x": 0,
+          "y": 397,
+          "w": 320,
+          "h": 171,
+          "bottom": 568
+        },
+        "growth": {
+          "x": 0,
+          "y": 76,
+          "w": 320,
+          "h": 33,
+          "bottom": 109
+        }
+      },
+      "catalog": 52,
+      "art": {
+        "width": 1122,
+        "height": 1402
+      },
+      "manualCast": true,
+      "recovery": true,
+      "rodRetained": true,
+      "lordRetry": true
+    },
+    {
+      "width": 390,
+      "height": 700,
+      "fit": {
+        "bodyWidth": 390,
+        "stage": {
+          "x": 0,
+          "y": 177,
+          "w": 390,
+          "h": 323,
+          "bottom": 500
+        },
+        "deck": {
+          "x": 0,
+          "y": 500,
+          "w": 390,
+          "h": 200,
+          "bottom": 700
+        },
+        "growth": {
+          "x": 0,
+          "y": 90,
+          "w": 390,
+          "h": 45,
+          "bottom": 135
+        }
+      },
+      "catalog": 52,
+      "art": {
+        "width": 1122,
+        "height": 1402
+      },
+      "manualCast": true,
+      "recovery": true,
+      "rodRetained": true,
+      "lordRetry": true
+    },
+    {
+      "width": 430,
+      "height": 800,
+      "fit": {
+        "bodyWidth": 430,
+        "stage": {
+          "x": 0,
+          "y": 177,
+          "w": 430,
+          "h": 423,
+          "bottom": 600
+        },
+        "deck": {
+          "x": 0,
+          "y": 600,
+          "w": 430,
+          "h": 200,
+          "bottom": 800
+        },
+        "growth": {
+          "x": 0,
+          "y": 90,
+          "w": 430,
+          "h": 45,
+          "bottom": 135
+        }
+      },
+      "catalog": 52,
+      "art": {
+        "width": 1122,
+        "height": 1402
+      },
+      "manualCast": true,
+      "recovery": true,
+      "rodRetained": true,
+      "lordRetry": true
+    }
+  ],
+  "errors": []
+}

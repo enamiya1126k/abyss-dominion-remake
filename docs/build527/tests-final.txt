@@ -1,0 +1,32 @@
+BALANCE527 {"matches":100,"wins":[18,26,34,22],"reasons":{"last":100},"meanSeconds":111.26350000000939,"firstOutSeconds":56.09999999999962}
+✔ four seats, 150 seconds, four exact collapse boundaries and immutable central ground scale (3.322013ms)
+✔ tap destination stops within tolerance and never overshoots or oscillates (388.3723ms)
+✔ charge steering updates before same-frame release; diagonal speed and cancellation remain bounded (1.06104ms)
+✔ growth caps physical and visual size at 1.5 times, power at 48; small monsters can hit large ones (1.848365ms)
+✔ simultaneous charges trade hits and cannot hit twice in a single dash (0.364777ms)
+✔ brace rescues an enemy knockback once, but not walking or collapsing floor (0.390337ms)
+✔ actual collapse removes fighters on the falling band without granting brace (0.954159ms)
+✔ magnet lasts 8 seconds, refreshes instead of stacking and stops after expiry (10.788804ms)
+✔ attraction picks the nearest player regardless of array order; expired and fallen items cannot be collected (0.484013ms)
+✔ magnet appears periodically, one object at a time; full-size growth does not stop crystal scoring (31.244158ms)
+✔ old saved match migration is idempotent and preserves seats, life/death, timing and radius fraction (0.514427ms)
+✔ result is reached on ring-out, tie or time limit; snapshots do not expose private rosters/seed (2.525963ms)
+✔ server rejects old protocol, forged target, stale sequence, stale game and outsiders (0.880214ms)
+✔ server merges press/release, times out target movement and does not fire on cancel (2.808575ms)
+✔ disconnect gives AI control, reconnect returns control and frames remain party-scoped (1.543894ms)
+✔ 100 seeded full matches finish, all seats can win, and bounded state remains finite (9746.455227ms)
+✔ production UI mounts one RAF, reuses nodes, caps DPR and cancels inputs on hide/dispose (33.181641ms)
+✔ tap persists its world target; two fingers steer while charging; pointer cancel never releases an attack (5.25122ms)
+✔ tap coordinates use camera projection inverse and clamp the destination onto safe ground (115.193902ms)
+✔ keyboard and blur use independent charge ownership; double taps cannot invoke native zoom (2.562412ms)
+✔ stale frames cannot replace state; target position is retained in prediction acknowledgement (4.49204ms)
+✔ result keeps finale then provides replay and minigame list, with no forced home button (0.76889ms)
+✔ native Canvas renders 320–430 widths, warnings, falling sectors, magnets and final ring without errors (1499.645749ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 12040.628868

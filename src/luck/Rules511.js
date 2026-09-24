@@ -3,17 +3,18 @@ import {ITEMS511,item511,ATTACKS511,BIG511,DICE511} from './Items511.js';
 import {publicLuck509} from './Rules509.js';
 export {ITEMS511,item511} from './Items511.js';
 export const LUCK511 = Object.freeze({rounds:8,boxes:4,hand:4,countdownMs:3500,chestMs:15000,handMs:35000,minChooseMs:1500,revealMs:1600,castMs:3200,diceMs:2400,runMs:4800,settleMs:1700});
+export const rounds528=g=>g?.rounds===16?16:8;
 const copy = x=>JSON.parse(JSON.stringify(x));
 const fail = x=>{throw Error(x)};
 const integer = (x,min,max)=>Number.isInteger(x)&&x>=min&&x<=max;
 const shuffled = (a,randomInt)=>{for(let i=a.length-1;i>0;i--){const j=randomInt(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
 // Outcomes are sealed on the server before choices. Final hands guarantee a finisher.
-export function drawPlan511(randomInt){return Array.from({length:8},(_,round)=>({order:shuffled([0,1,2,3],randomInt),seats:Array.from({length:4},()=>({boxes:Array.from({length:4},()=>{const hand=shuffled(ITEMS511.map(x=>x.id),randomInt).slice(0,4);if(round===7&&!hand.some(id=>BIG511.includes(id)))hand[randomInt(4)]=BIG511[randomInt(BIG511.length)];return hand}),autoBox:randomInt(4),autoItem:randomInt(4),waitBox:1500+randomInt(1501),waitItem:3000+randomInt(3001),dice:[1+randomInt(6),1+randomInt(6),1+randomInt(6)],jackpot:1+randomInt(6),coin:randomInt(2),tie:randomInt(4)}))}))}
-function validPlan(plan){return Array.isArray(plan)&&plan.length===8&&plan.every(r=>Array.isArray(r.order)&&r.order.length===4&&new Set(r.order).size===4&&r.order.every(x=>integer(x,0,3))&&Array.isArray(r.seats)&&r.seats.length===4&&r.seats.every(p=>Array.isArray(p.boxes)&&p.boxes.length===4&&p.boxes.every(b=>Array.isArray(b)&&b.length===4&&new Set(b).size===4&&b.every(id=>ITEMS511.some(x=>x.id===id)))&&integer(p.autoBox,0,3)&&integer(p.autoItem,0,3)&&integer(p.waitBox,1500,3000)&&integer(p.waitItem,3000,6000)&&Array.isArray(p.dice)&&p.dice.length===3&&p.dice.every(x=>integer(x,1,6))&&integer(p.jackpot,1,6)&&integer(p.coin,0,1)&&integer(p.tie,0,3)))}
-export function makeLuck511({id,code,partyId,hostId,members,now=0}){return{id,code,game:'luck',rules511:1,partyId462:partyId,hostId,phase:'lobby',phaseAt:now,createdAt:now,updatedAt:now,revision:0,members:members.map(m=>({...m,choice:m.choice??null})),players:[],round:0,scaleMax:600,event:null,history:[],results:null,nextAt:null}}
+export function drawPlan511(randomInt,rounds=8){if(![8,16].includes(rounds))throw Error('8か16ラウンドを選んでください');return Array.from({length:rounds},(_,round)=>({order:shuffled([0,1,2,3],randomInt),seats:Array.from({length:4},()=>({boxes:Array.from({length:4},()=>{const hand=shuffled(ITEMS511.map(x=>x.id),randomInt).slice(0,4);if(round===rounds-1&&!hand.some(id=>BIG511.includes(id)))hand[randomInt(4)]=BIG511[randomInt(BIG511.length)];return hand}),autoBox:randomInt(4),autoItem:randomInt(4),waitBox:1500+randomInt(1501),waitItem:3000+randomInt(3001),dice:[1+randomInt(6),1+randomInt(6),1+randomInt(6)],jackpot:1+randomInt(6),coin:randomInt(2),tie:randomInt(4)}))}))}
+function validPlan(plan,rounds){return Array.isArray(plan)&&plan.length===rounds&&plan.every(r=>Array.isArray(r.order)&&r.order.length===4&&new Set(r.order).size===4&&r.order.every(x=>integer(x,0,3))&&Array.isArray(r.seats)&&r.seats.length===4&&r.seats.every(p=>Array.isArray(p.boxes)&&p.boxes.length===4&&p.boxes.every(b=>Array.isArray(b)&&b.length===4&&new Set(b).size===4&&b.every(id=>ITEMS511.some(x=>x.id===id)))&&integer(p.autoBox,0,3)&&integer(p.autoItem,0,3)&&integer(p.waitBox,1500,3000)&&integer(p.waitItem,3000,6000)&&Array.isArray(p.dice)&&p.dice.length===3&&p.dice.every(x=>integer(x,1,6))&&integer(p.jackpot,1,6)&&integer(p.coin,0,1)&&integer(p.tie,0,3)))}
+export function makeLuck511({id,code,partyId,hostId,members,now=0}){return{id,code,game:'luck',rounds:8,rules511:1,partyId462:partyId,hostId,phase:'lobby',phaseAt:now,createdAt:now,updatedAt:now,revision:0,members:members.map(m=>({...m,choice:m.choice??null})),players:[],round:0,scaleMax:600,event:null,history:[],results:null,nextAt:null}}
 export function startLuck511(g,at,plan){
  if(g.phase!=='lobby'||!g.members.length||g.members.length>4||g.members.some(m=>!m.choice))fail('全員の魔物を選んでください');
- if(!Number.isFinite(at)||!validPlan(plan))fail('抽選情報が不正です');
+ if(!Number.isFinite(at)||!validPlan(plan,rounds528(g)))fail('抽選情報が不正です');
  g.plan511=copy(plan);g.players=g.members.map((m,seat)=>({playerId:m.playerId,name:m.name,choice:{id:m.choice.id,speciesId:m.choice.speciesId},seat,ai:false,distance:0,loadout:[],coils:0,wards:0,savings:0,suns:0,lastAdvance:0,autoRounds:0}));
  const bots=[['ころころスライム','slime'],['一発屋ゴブリン','goblin'],['追い風オオカミ','wolf'],['骨までラッキー','skeleton']];
  while(g.players.length<4){const seat=g.players.length,[name,speciesId]=bots[seat];g.players.push({playerId:`AI-${g.id}-${seat}`,name,choice:{id:'ai-'+seat,speciesId},seat,ai:true,distance:0,loadout:[],coils:0,wards:0,savings:0,suns:0,lastAdvance:0,autoRounds:0})}
@@ -24,7 +25,7 @@ const slots = g=>g.phase==='chest'?g.boxes511:g.items511;
 function schedule(g){const ai=g.players.filter(p=>p.ai&&slots(g)[p.seat]===null).map(p=>g.phaseAt+(g.phase==='chest'?draw(g,p.seat).waitBox:draw(g,p.seat).waitItem));g.nextAt=slots(g).every(x=>x!==null)?Math.max(g.phaseAt+LUCK511.minChooseMs,g.lastChoiceAt??g.phaseAt):Math.min(g.deadline,...ai)}
 function choosePhase(g,phase,at){g.phase=phase;g.phaseAt=at;g.deadline=at+(phase==='chest'?LUCK511.chestMs:LUCK511.handMs);g.lastChoiceAt=at;if(phase==='chest'){g.boxes511=[null,null,null,null];g.items511=[null,null,null,null];g.auto511=[false,false,false,false];g.event=null}schedule(g)}
 export function chooseLuck511(g,id,kind,index,round,at){
- if(!['chest','hand'].includes(kind)||!integer(index,0,3)||!integer(round,1,8)||!Number.isFinite(at))fail('4つの中から1つ選んでください');
+ if(!['chest','hand'].includes(kind)||!integer(index,0,3)||!integer(round,1,rounds528(g))||!Number.isFinite(at))fail('4つの中から1つ選んでください');
  const p=g.players.find(p=>p.playerId===id&&!p.ai);if(!p)fail('このレースには観戦で参加しています');
  const field=kind==='chest'?'box':'pick',prior=g.history.find(e=>e.round===round)?.rows.find(r=>r.playerId===id);
  if(prior?.[field]===index)return false;
@@ -42,7 +43,7 @@ const serial=x=>JSON.parse(JSON.stringify(x,(_k,v)=>typeof v==='bigint'?packed(v
 export function ranks511(players){return [...players].sort((a,b)=>metres511(a.distance)>metres511(b.distance)?-1:metres511(a.distance)<metres511(b.distance)?1:0).map(p=>({playerId:p.playerId,distance:p.distance,rank:1+players.filter(o=>metres511(o.distance)>metres511(p.distance)).length}))}
 const count=(loadout,id)=>loadout.filter(x=>x.id===id).length;
 // AI uses public installed equipment and its own hand, never sealed dice or rival choices.
-export function aiPick511(g,p){const d=draw(g,p.seat),hand=d.boxes[g.boxes511[p.seat]],lead=Math.max(...g.players.map(o=>Number(o.distance))),gap=lead-Number(p.distance),future=8-g.round;
+export function aiPick511(g,p){const d=draw(g,p.seat),hand=d.boxes[g.boxes511[p.seat]],lead=Math.max(...g.players.map(o=>Number(o.distance))),gap=lead-Number(p.distance),future=rounds528(g)-g.round;
  const scores=hand.map((id,i)=>{const it=item511(id);let value=it.move;
   if(it.persistent)value=value*(1+future*.6)+future*100;
   if(id==='turbine')value=200+future*500;
@@ -99,7 +100,7 @@ export function resolveRound511(g,at){
   const suns=(p.suns??0)+(big?0:count(active,'solar')),usedSuns=big?suns:0;
   const doubling=grown.filter(x=>x.id==='doubling').reduce((n,x)=>n+g.round-x.round,0);
   const echo=metres511(p.lastAdvance)/2n*BigInt(count(grown,'echo'));
-  const crowns=g.round===8?count(active,'crown'):0,overdrive=count(grown,'overdrive')*(big?2:1);
+  const crowns=g.round===rounds528(g)?count(active,'crown'):0,overdrive=count(grown,'overdrive')*(big?2:1);
   const gain=(max(0n,base)+passive+seed+bond+forge+cash+echo)*3n**BigInt(turbines+usedSuns)*2n**BigInt(usedCoils+batteries+doubling+overdrive)*5n**BigInt(crowns)/2n**BigInt(turbines);
   return{playerId:p.playerId,seat:p.seat,box,pick,item:it.id,from:metres511(p.distance),start:metres511(p.distance),gain,planned:gain,knockback:max(0n,-base),hit:false,loadout,savings:big?0n:saved,suns:big?0:suns,coils:big?0:coils,wards:Math.max(p.wards,count(active,'ward')),guards:count(active,'shield'),mirrors:count(active,'mirror'),revenge:count(grown,'revenge'),automatic:g.auto511[p.seat],beforeRank:before.find(x=>x.playerId===p.playerId).rank,
    calculation:{base,passive,seed,bond,forge,cash,echo,doubling,overdrive,crowns,suns:usedSuns,focus,turbines,coils:usedCoils,batteries,dice:DICE511.includes(it.id)?it.id==='jackpot'?[jackpot]:faces.slice(0,it.id==='triple'?3:it.id==='product'?2:1):null,rawDice:DICE511.includes(it.id)?it.id==='jackpot'?[d.jackpot]:d.dice.slice(0,it.id==='triple'?3:it.id==='product'?2:1):null,jackpot:it.id==='jackpot'?jackpot:null,planned:gain}};
@@ -157,7 +158,7 @@ export function advanceLuck511(g,now){if(!Number.isFinite(now))return false;let 
   else if(g.phase==='dice'){g.phase=g.event.attacks.length?'broadcast':'run';g.phaseAt=at;g.nextAt=at+(g.phase==='broadcast'?g.event.castMs:LUCK511.runMs)}
   else if(g.phase==='broadcast'){g.phase='run';g.phaseAt=at;g.nextAt=at+LUCK511.runMs}
   else if(g.phase==='run'){for(const p of g.players){const r=g.event.rows[p.seat];p.distance=r.to;p.loadout=copy(r.loadout);p.coils=r.coils;p.wards=r.wards;p.savings=r.savings;p.suns=r.suns;p.lastAdvance=r.lastAdvance;if(r.automatic)p.autoRounds++}g.scaleMax=g.event.toMax;g.phase='settle';g.phaseAt=at;g.nextAt=at+LUCK511.settleMs}
-  else if(g.phase==='settle'){if(g.round===8){g.phase='result';g.phaseAt=at;g.nextAt=null;g.results=ranks511(g.players);g.resultAt=at}else{g.round++;choosePhase(g,'chest',at)}}
+  else if(g.phase==='settle'){if(g.round===rounds528(g)){g.phase='result';g.phaseAt=at;g.nextAt=null;g.results=ranks511(g.players);g.resultAt=at}else{g.round++;choosePhase(g,'chest',at)}}
   else break;
   g.updatedAt=at;g.revision++;changed=true;
  }return changed;
@@ -165,7 +166,7 @@ export function advanceLuck511(g,now){if(!Number.isFinite(now))return false;let 
 export function publicLuck511(g,selfId,connected=()=>true){
  if(g.rules511!==1)return publicLuck509(g,selfId,connected);
  const me=g.players.find(p=>p.playerId===selfId),choosing=['chest','hand'].includes(g.phase),seat=me?.seat;
- return{id:g.id,code:g.code,game:'luck',rules511:1,hostId:g.hostId,phase:g.phase,phaseAt:g.phaseAt,revision:g.revision,round:g.round,rounds:8,scaleMax:g.scaleMax,startAt:g.startAt??null,deadline:choosing?g.deadline:null,
+ return{id:g.id,code:g.code,game:'luck',rules511:1,hostId:g.hostId,phase:g.phase,phaseAt:g.phaseAt,revision:g.revision,round:g.round,rounds:rounds528(g),scaleMax:g.scaleMax,startAt:g.startAt??null,deadline:choosing?g.deadline:null,
  members:g.members.map(m=>({playerId:m.playerId,name:m.name,color499:m.color499,choice:m.choice?{id:m.choice.id,speciesId:m.choice.speciesId}:null})),
  players:g.players.map(p=>({playerId:p.playerId,name:p.name,choice:{...p.choice},seat:p.seat,ai:p.ai,color499:p.color499,distance:p.distance,loadout:copy(p.loadout),coils:p.coils,wards:p.wards,savings:p.savings,suns:p.suns,lastAdvance:p.lastAdvance,connected:p.ai||!!connected(p.playerId),locked:choosing?slots(g)[p.seat]!==null:false})),
  ownBox:choosing&&me?g.boxes511[seat]:null,ownPick:g.phase==='hand'&&me?g.items511[seat]:null,

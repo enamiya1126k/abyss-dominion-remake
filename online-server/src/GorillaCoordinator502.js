@@ -17,6 +17,7 @@ export function handleGorilla502(c,session,m){
   if(g.phase!=='lobby')throw Error('開始後は魔物を変更できません');
   const choice=me.owned.find(x=>x.id===m.monsterId);if(!choice)throw Error('所持している魔物を選んでね');me.choice={...choice};p.members.find(x=>x.playerId===session.playerId).ready=false;g.updatedAt=c.now();g.revision++;
  }else if(m.kind==='start'){
+  if(m.minigamesVersion528!==1||p.members.some(x=>x.minigamesVersion528!==1))throw Error('全員がBuild528へ更新してから開始してください');
   if(p.hostId!==session.playerId)throw Error('部屋主が開始できます');if(g.phase!=='lobby')return true;
   if(p.members.some(x=>x.gorillaVersion502!==1))throw Error('全員がBuild502へ更新してから開始してください');
   if(p.members.some(x=>!x.ready||x.atHome||!c.sessions.get(x.playerId)?.connected)||g.members.some(x=>!x.choice))throw Error('全員が魔物を選んで「準備OK」を押してください');

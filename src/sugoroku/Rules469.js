@@ -1,3 +1,4 @@
+import{GREED_TEXT528}from'./Greed528.js';
 // First-goal party rules. Old points remain zero-valued only for save compatibility.
 export const RULES469={id:'first-goal-469',cardLimit:1,baseDice:2,finish:'first-goal'};
 export function configureCard469(c){
@@ -39,6 +40,6 @@ export function configureSpecial469(s){s.points=0;const texts={
  shiva:'悪い速攻を無効化。自分の移動前、手札1枚を防御札にできる。カード使用の代わりに1回。保持1枚まで。',
  buddha:'悪い速攻を無効化。自分の手番開始時、覚醒能力の出目補正＋1。',
  hacker:'引いた速攻を手札に保持。自分の移動前に1枚として使える。奪取・交換で渡すと、渡した先で速攻が発動。',
- greed:'自分への補充・破棄、自分が奪う枚数が2倍。強制破棄も2倍。移動・サイコロ・支払コストはそのまま。'
+ greed:GREED_TEXT528
  };if(texts[s.id])s.text=texts[s.id];}
 export function cardValue469(c,p,g){if(!c)return 0;if(c.kind==='curse')return -20;if(c.kind==='bad')return -8;if(c.set)return 8+new Set(p.hand.map(u=>g.cards[u]).filter(id=>id.startsWith(c.set==='heroes'?'face-':'dark-'))).size*3;if(c.defense)return 9;return c.effects.reduce((n,e)=>n+({bonus:2,dice:5,move:e.n>0?1:.6,direct:1,draw:p.hand.length<5?3:1,steal:3,piece:8,special:8,resonance:7,cleanse:p.hand.some(u=>g.cards[u].startsWith('curse'))?15:1}[e.type]??2)*Math.abs(e.n??1),0);}
