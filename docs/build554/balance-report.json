@@ -1,0 +1,621 @@
+{
+  "summary": {
+    "scope": "Eight seeded AI races, eight continuous shots each. Counts characterize pacing, not subjective fun or human skill.",
+    "meanAdditionalShotsPerDriver": 24.53125,
+    "meanContactsPerDriver": 438.03125,
+    "meanGatePassesPerDriver": 30.4375,
+    "meanSixesPerRace": 10.25,
+    "winners": [
+      1,
+      0,
+      3,
+      1,
+      2,
+      2,
+      2,
+      3
+    ]
+  },
+  "runs": [
+    {
+      "seed": 23,
+      "events": {
+        "nitro": 100,
+        "gate": 140,
+        "safe": 69,
+        "wild": 71,
+        "six": 12
+      },
+      "leadChanges": 17,
+      "winner": 1,
+      "players": [
+        {
+          "seat": 0,
+          "distance": 34955,
+          "hits": 444,
+          "nitros": 25,
+          "gates": 35,
+          "sixes": 2,
+          "parts": {
+            "rocket": 4,
+            "bank": 1,
+            "hook": 1,
+            "bumper": 1,
+            "armor": 1
+          }
+        },
+        {
+          "seat": 1,
+          "distance": 36428,
+          "hits": 442,
+          "nitros": 24,
+          "gates": 37,
+          "sixes": 4,
+          "parts": {
+            "wheels": 2,
+            "coil": 2,
+            "dice": 1,
+            "turbo": 3
+          }
+        },
+        {
+          "seat": 2,
+          "distance": 35268,
+          "hits": 517,
+          "nitros": 27,
+          "gates": 35,
+          "sixes": 3,
+          "parts": {
+            "spring": 1,
+            "bank": 1,
+            "dice": 1,
+            "wheels": 1,
+            "engine": 2,
+            "turbo": 1,
+            "coil": 1
+          }
+        },
+        {
+          "seat": 3,
+          "distance": 34503,
+          "hits": 433,
+          "nitros": 24,
+          "gates": 33,
+          "sixes": 3,
+          "parts": {
+            "turbo": 1,
+            "hook": 2,
+            "spring": 2,
+            "armor": 1,
+            "rocket": 1,
+            "cell": 1
+          }
+        }
+      ]
+    },
+    {
+      "seed": 91,
+      "events": {
+        "nitro": 107,
+        "gate": 141,
+        "safe": 62,
+        "wild": 79,
+        "six": 11
+      },
+      "leadChanges": 30,
+      "winner": 0,
+      "players": [
+        {
+          "seat": 0,
+          "distance": 37537,
+          "hits": 582,
+          "nitros": 28,
+          "gates": 34,
+          "sixes": 5,
+          "parts": {
+            "turbo": 1,
+            "cell": 1,
+            "spring": 4,
+            "engine": 2
+          }
+        },
+        {
+          "seat": 1,
+          "distance": 36365,
+          "hits": 397,
+          "nitros": 27,
+          "gates": 35,
+          "sixes": 2,
+          "parts": {
+            "wheels": 3,
+            "engine": 2,
+            "bumper": 2,
+            "rocket": 1
+          }
+        },
+        {
+          "seat": 2,
+          "distance": 35988,
+          "hits": 422,
+          "nitros": 26,
+          "gates": 36,
+          "sixes": 3,
+          "parts": {
+            "coil": 4,
+            "bumper": 1,
+            "hook": 1,
+            "engine": 2
+          }
+        },
+        {
+          "seat": 3,
+          "distance": 36619,
+          "hits": 487,
+          "nitros": 26,
+          "gates": 36,
+          "sixes": 1,
+          "parts": {
+            "bumper": 1,
+            "bank": 1,
+            "cell": 1,
+            "engine": 2,
+            "spring": 1,
+            "rocket": 1,
+            "armor": 1
+          }
+        }
+      ]
+    },
+    {
+      "seed": 554,
+      "events": {
+        "nitro": 92,
+        "gate": 110,
+        "safe": 45,
+        "wild": 65,
+        "six": 8
+      },
+      "leadChanges": 31,
+      "winner": 3,
+      "players": [
+        {
+          "seat": 0,
+          "distance": 29495,
+          "hits": 489,
+          "nitros": 25,
+          "gates": 27,
+          "sixes": 1,
+          "parts": {
+            "spring": 1,
+            "bumper": 1,
+            "engine": 2,
+            "cell": 1,
+            "wheels": 1,
+            "rocket": 1,
+            "bank": 1
+          }
+        },
+        {
+          "seat": 1,
+          "distance": 29645,
+          "hits": 377,
+          "nitros": 24,
+          "gates": 29,
+          "sixes": 2,
+          "parts": {
+            "armor": 1,
+            "engine": 2,
+            "turbo": 3,
+            "rocket": 1,
+            "dice": 1
+          }
+        },
+        {
+          "seat": 2,
+          "distance": 29746,
+          "hits": 379,
+          "nitros": 22,
+          "gates": 28,
+          "sixes": 1,
+          "parts": {
+            "bank": 3,
+            "engine": 1,
+            "dice": 2,
+            "armor": 2
+          }
+        },
+        {
+          "seat": 3,
+          "distance": 29914,
+          "hits": 447,
+          "nitros": 21,
+          "gates": 26,
+          "sixes": 4,
+          "parts": {
+            "bank": 4,
+            "wheels": 1,
+            "spring": 1,
+            "turbo": 1,
+            "hook": 1
+          }
+        }
+      ]
+    },
+    {
+      "seed": 714,
+      "events": {
+        "nitro": 97,
+        "gate": 119,
+        "safe": 59,
+        "wild": 60,
+        "six": 11
+      },
+      "leadChanges": 34,
+      "winner": 1,
+      "players": [
+        {
+          "seat": 0,
+          "distance": 31300,
+          "hits": 378,
+          "nitros": 25,
+          "gates": 29,
+          "sixes": 3,
+          "parts": {
+            "dice": 1,
+            "bumper": 2,
+            "bank": 3,
+            "hook": 2
+          }
+        },
+        {
+          "seat": 1,
+          "distance": 31401,
+          "hits": 393,
+          "nitros": 25,
+          "gates": 33,
+          "sixes": 2,
+          "parts": {
+            "cell": 1,
+            "hook": 1,
+            "wheels": 1,
+            "rocket": 2,
+            "engine": 1,
+            "bumper": 1,
+            "turbo": 1
+          }
+        },
+        {
+          "seat": 2,
+          "distance": 30971,
+          "hits": 408,
+          "nitros": 23,
+          "gates": 29,
+          "sixes": 3,
+          "parts": {
+            "wheels": 1,
+            "hook": 2,
+            "dice": 2,
+            "cell": 1,
+            "engine": 1,
+            "coil": 1
+          }
+        },
+        {
+          "seat": 3,
+          "distance": 31087,
+          "hits": 414,
+          "nitros": 24,
+          "gates": 28,
+          "sixes": 3,
+          "parts": {
+            "rocket": 1,
+            "bank": 1,
+            "cell": 3,
+            "coil": 1,
+            "hook": 2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 960,
+      "events": {
+        "nitro": 94,
+        "gate": 103,
+        "safe": 51,
+        "wild": 52,
+        "six": 11
+      },
+      "leadChanges": 43,
+      "winner": 2,
+      "players": [
+        {
+          "seat": 0,
+          "distance": 26748,
+          "hits": 436,
+          "nitros": 25,
+          "gates": 27,
+          "sixes": 1,
+          "parts": {
+            "hook": 1,
+            "turbo": 3,
+            "dice": 1,
+            "armor": 2,
+            "coil": 1
+          }
+        },
+        {
+          "seat": 1,
+          "distance": 26469,
+          "hits": 389,
+          "nitros": 21,
+          "gates": 26,
+          "sixes": 2,
+          "parts": {
+            "wheels": 3,
+            "bank": 2,
+            "armor": 1,
+            "rocket": 1,
+            "engine": 1
+          }
+        },
+        {
+          "seat": 2,
+          "distance": 27298,
+          "hits": 464,
+          "nitros": 24,
+          "gates": 25,
+          "sixes": 4,
+          "parts": {
+            "hook": 1,
+            "spring": 2,
+            "coil": 2,
+            "dice": 1,
+            "engine": 2
+          }
+        },
+        {
+          "seat": 3,
+          "distance": 26774,
+          "hits": 430,
+          "nitros": 24,
+          "gates": 25,
+          "sixes": 4,
+          "parts": {
+            "bank": 3,
+            "wheels": 1,
+            "dice": 1,
+            "hook": 2,
+            "cell": 1
+          }
+        }
+      ]
+    },
+    {
+      "seed": 1729,
+      "events": {
+        "nitro": 100,
+        "gate": 112,
+        "safe": 57,
+        "wild": 55,
+        "six": 11
+      },
+      "leadChanges": 42,
+      "winner": 2,
+      "players": [
+        {
+          "seat": 0,
+          "distance": 29511,
+          "hits": 378,
+          "nitros": 23,
+          "gates": 28,
+          "sixes": 2,
+          "parts": {
+            "bank": 4,
+            "hook": 1,
+            "armor": 2,
+            "rocket": 1
+          }
+        },
+        {
+          "seat": 1,
+          "distance": 29404,
+          "hits": 484,
+          "nitros": 28,
+          "gates": 28,
+          "sixes": 2,
+          "parts": {
+            "wheels": 2,
+            "turbo": 1,
+            "hook": 1,
+            "rocket": 1,
+            "cell": 1,
+            "armor": 1,
+            "spring": 1
+          }
+        },
+        {
+          "seat": 2,
+          "distance": 30821,
+          "hits": 477,
+          "nitros": 24,
+          "gates": 27,
+          "sixes": 4,
+          "parts": {
+            "cell": 3,
+            "spring": 1,
+            "turbo": 1,
+            "hook": 2,
+            "dice": 1
+          }
+        },
+        {
+          "seat": 3,
+          "distance": 29856,
+          "hits": 517,
+          "nitros": 25,
+          "gates": 29,
+          "sixes": 3,
+          "parts": {
+            "wheels": 1,
+            "spring": 1,
+            "bumper": 1,
+            "hook": 2,
+            "rocket": 1,
+            "armor": 1,
+            "turbo": 1
+          }
+        }
+      ]
+    },
+    {
+      "seed": 2501,
+      "events": {
+        "nitro": 96,
+        "gate": 123,
+        "safe": 65,
+        "wild": 58,
+        "six": 10
+      },
+      "leadChanges": 36,
+      "winner": 2,
+      "players": [
+        {
+          "seat": 0,
+          "distance": 33009,
+          "hits": 413,
+          "nitros": 26,
+          "gates": 31,
+          "sixes": 2,
+          "parts": {
+            "wheels": 2,
+            "engine": 1,
+            "rocket": 1,
+            "turbo": 1,
+            "spring": 1,
+            "hook": 1,
+            "cell": 1
+          }
+        },
+        {
+          "seat": 1,
+          "distance": 32525,
+          "hits": 437,
+          "nitros": 24,
+          "gates": 30,
+          "sixes": 2,
+          "parts": {
+            "engine": 2,
+            "turbo": 1,
+            "cell": 2,
+            "hook": 2,
+            "wheels": 1
+          }
+        },
+        {
+          "seat": 2,
+          "distance": 33492,
+          "hits": 519,
+          "nitros": 24,
+          "gates": 32,
+          "sixes": 3,
+          "parts": {
+            "engine": 3,
+            "spring": 4,
+            "bank": 1
+          }
+        },
+        {
+          "seat": 3,
+          "distance": 32736,
+          "hits": 388,
+          "nitros": 22,
+          "gates": 30,
+          "sixes": 3,
+          "parts": {
+            "bumper": 1,
+            "coil": 1,
+            "wheels": 1,
+            "cell": 1,
+            "rocket": 1,
+            "turbo": 1,
+            "hook": 1,
+            "armor": 1
+          }
+        }
+      ]
+    },
+    {
+      "seed": 4191,
+      "events": {
+        "nitro": 99,
+        "gate": 126,
+        "safe": 71,
+        "wild": 55,
+        "six": 8
+      },
+      "leadChanges": 27,
+      "winner": 3,
+      "players": [
+        {
+          "seat": 0,
+          "distance": 34229,
+          "hits": 397,
+          "nitros": 23,
+          "gates": 28,
+          "sixes": 2,
+          "parts": {
+            "hook": 4,
+            "coil": 1,
+            "wheels": 2,
+            "engine": 1
+          }
+        },
+        {
+          "seat": 1,
+          "distance": 34245,
+          "hits": 421,
+          "nitros": 25,
+          "gates": 32,
+          "sixes": 2,
+          "parts": {
+            "cell": 2,
+            "dice": 1,
+            "engine": 1,
+            "coil": 3,
+            "armor": 1
+          }
+        },
+        {
+          "seat": 2,
+          "distance": 34388,
+          "hits": 442,
+          "nitros": 25,
+          "gates": 31,
+          "sixes": 1,
+          "parts": {
+            "wheels": 4,
+            "engine": 2,
+            "rocket": 1,
+            "dice": 1
+          }
+        },
+        {
+          "seat": 3,
+          "distance": 34812,
+          "hits": 416,
+          "nitros": 26,
+          "gates": 35,
+          "sixes": 3,
+          "parts": {
+            "dice": 1,
+            "coil": 1,
+            "bank": 1,
+            "wheels": 3,
+            "armor": 2
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+import {spawn} from 'node:child_process';
+import {mkdir,writeFile} from 'node:fs/promises';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE);
+const server=spawn(process.execPath,['game/tools/build551/qa-server.mjs'],{env:process.env,stdio:['ignore','pipe','pipe']});let err='';server.stderr.on('data',b=>err+=b);await new Promise((res,rej)=>{server.stdout.on('data',b=>{if(String(b).includes('QA ready'))res()});server.on('exit',()=>rej(Error(err)))});
+const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH,headless:true,args:['--no-sandbox']});
+const out='game/docs/build551/';await mkdir(out,{recursive:true});const errors=[];
+try{const page=await browser.newPage({viewport:{width:390,height:750},deviceScaleFactor:2});page.on('pageerror',e=>errors.push(String(e)));await page.goto('http://127.0.0.1:8550/preview.html');await page.waitForFunction(()=>window.qaReady);await page.evaluate(()=>document.fonts.ready);
+const api=(name,data={})=>fetch('http://127.0.0.1:8550/qa/'+name,{method:'POST',body:JSON.stringify(data)}).then(r=>r.json());
+for(const mode of ['junkgp','pinball']){await api('reset',{mode,phase:'choice'});await api('pause',{value:true});await page.waitForTimeout(450);await page.screenshot({path:out+mode+'-choice-first.png'});await api('reset',{mode,phase:'play',round:4,upgrades:true});if(mode==='junkgp')await api('position',{players:[{seat:0,x:-1,y:54,vx:4,vy:25},{seat:1,x:1.2,y:55.8,vx:-7,vy:20},{seat:2,x:3,y:53.5,vx:-5,vy:12},{seat:3,x:-2,y:60,vx:2,vy:14}]});await api('pause',{value:true});await page.waitForTimeout(350);await page.screenshot({path:out+mode+'-play-first.png'})}await writeFile(out+'visual-errors.json',JSON.stringify({errors,serverErrors:err}));console.log(JSON.stringify({errors,serverErrors:err}));}finally{await browser.close();server.kill()}

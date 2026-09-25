@@ -1,0 +1,642 @@
+{
+  "summary": {
+    "scope": "8 fixed seeded AI games, 8 shots each. Useful pacing evidence, not a subjective fun score or human playtest.",
+    "baseline552": {
+      "meanHitsPerPlayer": 786.625,
+      "meanFevers": 12.75,
+      "meanJackpots": 20
+    },
+    "build553": {
+      "meanHitsPerPlayer": 485.03125,
+      "meanFevers": 8.25,
+      "meanJackpots": 16.625,
+      "meanEarnedShotsPerPlayer": 8,
+      "tiers": {
+        "1": 84,
+        "3": 39,
+        "7": 10
+      }
+    }
+  },
+  "runs": [
+    {
+      "seed": 23,
+      "fevers": 8,
+      "jackpots": 18,
+      "tiers": {
+        "1": 13,
+        "3": 4,
+        "7": 1
+      },
+      "bursts": 32,
+      "leadChanges": 3,
+      "lowSpeedFraction": 0.44614583333333335,
+      "winner": 2,
+      "players": [
+        {
+          "seat": 0,
+          "score": 611092,
+          "hits": 454,
+          "bestChain": 115,
+          "jackpots": 3,
+          "bursts": 8,
+          "parts": {
+            "echo": 2,
+            "cell": 2,
+            "comet": 2,
+            "link": 1,
+            "magnet": 1
+          }
+        },
+        {
+          "seat": 1,
+          "score": 776428,
+          "hits": 507,
+          "bestChain": 213,
+          "jackpots": 6,
+          "bursts": 8,
+          "parts": {
+            "dice": 1,
+            "spark": 2,
+            "crown": 2,
+            "comet": 1,
+            "spring": 1,
+            "echo": 1
+          }
+        },
+        {
+          "seat": 2,
+          "score": 1007727,
+          "hits": 483,
+          "bestChain": 270,
+          "jackpots": 6,
+          "bursts": 8,
+          "parts": {
+            "bank": 1,
+            "mirror": 2,
+            "chest": 2,
+            "echo": 2,
+            "crown": 1
+          }
+        },
+        {
+          "seat": 3,
+          "score": 131161,
+          "hits": 532,
+          "bestChain": 245,
+          "jackpots": 3,
+          "bursts": 8,
+          "parts": {
+            "comet": 2,
+            "spring": 1,
+            "crown": 2,
+            "mirror": 1,
+            "cell": 1,
+            "bank": 1
+          }
+        }
+      ]
+    },
+    {
+      "seed": 91,
+      "fevers": 8,
+      "jackpots": 16,
+      "tiers": {
+        "1": 12,
+        "3": 3,
+        "7": 1
+      },
+      "bursts": 32,
+      "leadChanges": 8,
+      "lowSpeedFraction": 0.5019444444444444,
+      "winner": 0,
+      "players": [
+        {
+          "seat": 0,
+          "score": 892250,
+          "hits": 446,
+          "bestChain": 161,
+          "jackpots": 2,
+          "bursts": 8,
+          "parts": {
+            "crown": 3,
+            "cell": 2,
+            "echo": 1,
+            "comet": 1,
+            "chest": 1
+          }
+        },
+        {
+          "seat": 1,
+          "score": 190063,
+          "hits": 472,
+          "bestChain": 139,
+          "jackpots": 6,
+          "bursts": 8,
+          "parts": {
+            "spring": 3,
+            "bank": 2,
+            "spark": 1,
+            "link": 1,
+            "chest": 1
+          }
+        },
+        {
+          "seat": 2,
+          "score": 686595,
+          "hits": 482,
+          "bestChain": 129,
+          "jackpots": 4,
+          "bursts": 8,
+          "parts": {
+            "spark": 1,
+            "link": 3,
+            "comet": 2,
+            "echo": 1,
+            "cell": 1
+          }
+        },
+        {
+          "seat": 3,
+          "score": 183896,
+          "hits": 516,
+          "bestChain": 261,
+          "jackpots": 4,
+          "bursts": 8,
+          "parts": {
+            "mirror": 1,
+            "cell": 3,
+            "dice": 2,
+            "spring": 2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 552,
+      "fevers": 8,
+      "jackpots": 15,
+      "tiers": {
+        "1": 10,
+        "3": 5,
+        "7": 0
+      },
+      "bursts": 32,
+      "leadChanges": 8,
+      "lowSpeedFraction": 0.48538194444444444,
+      "winner": 2,
+      "players": [
+        {
+          "seat": 0,
+          "score": 167655,
+          "hits": 449,
+          "bestChain": 244,
+          "jackpots": 2,
+          "bursts": 8,
+          "parts": {
+            "crown": 1,
+            "mirror": 2,
+            "dice": 1,
+            "magnet": 1,
+            "chest": 2,
+            "cell": 1
+          }
+        },
+        {
+          "seat": 1,
+          "score": 204833,
+          "hits": 467,
+          "bestChain": 256,
+          "jackpots": 1,
+          "bursts": 8,
+          "parts": {
+            "link": 4,
+            "crown": 3,
+            "spring": 1
+          }
+        },
+        {
+          "seat": 2,
+          "score": 1754019,
+          "hits": 420,
+          "bestChain": 203,
+          "jackpots": 6,
+          "bursts": 8,
+          "parts": {
+            "comet": 3,
+            "echo": 1,
+            "crown": 1,
+            "spark": 1,
+            "mirror": 2
+          }
+        },
+        {
+          "seat": 3,
+          "score": 1433424,
+          "hits": 543,
+          "bestChain": 270,
+          "jackpots": 6,
+          "bursts": 8,
+          "parts": {
+            "echo": 1,
+            "spark": 1,
+            "magnet": 1,
+            "mirror": 3,
+            "comet": 1,
+            "spring": 1
+          }
+        }
+      ]
+    },
+    {
+      "seed": 714,
+      "fevers": 9,
+      "jackpots": 17,
+      "tiers": {
+        "1": 10,
+        "3": 6,
+        "7": 1
+      },
+      "bursts": 32,
+      "leadChanges": 10,
+      "lowSpeedFraction": 0.4546875,
+      "winner": 1,
+      "players": [
+        {
+          "seat": 0,
+          "score": 128268,
+          "hits": 490,
+          "bestChain": 258,
+          "jackpots": 3,
+          "bursts": 8,
+          "parts": {
+            "spring": 2,
+            "spark": 2,
+            "mirror": 1,
+            "comet": 1,
+            "chest": 2
+          }
+        },
+        {
+          "seat": 1,
+          "score": 585004,
+          "hits": 471,
+          "bestChain": 186,
+          "jackpots": 2,
+          "bursts": 8,
+          "parts": {
+            "spring": 1,
+            "comet": 1,
+            "link": 1,
+            "echo": 4,
+            "dice": 1
+          }
+        },
+        {
+          "seat": 2,
+          "score": 470719,
+          "hits": 502,
+          "bestChain": 201,
+          "jackpots": 4,
+          "bursts": 8,
+          "parts": {
+            "bank": 1,
+            "mirror": 4,
+            "cell": 1,
+            "echo": 1,
+            "spark": 1
+          }
+        },
+        {
+          "seat": 3,
+          "score": 322274,
+          "hits": 544,
+          "bestChain": 234,
+          "jackpots": 8,
+          "bursts": 8,
+          "parts": {
+            "spring": 1,
+            "cell": 1,
+            "spark": 2,
+            "chest": 1,
+            "mirror": 1,
+            "bank": 1,
+            "dice": 1
+          }
+        }
+      ]
+    },
+    {
+      "seed": 960,
+      "fevers": 8,
+      "jackpots": 15,
+      "tiers": {
+        "1": 10,
+        "3": 5,
+        "7": 0
+      },
+      "bursts": 32,
+      "leadChanges": 14,
+      "lowSpeedFraction": 0.4069097222222222,
+      "winner": 2,
+      "players": [
+        {
+          "seat": 0,
+          "score": 208540,
+          "hits": 586,
+          "bestChain": 306,
+          "jackpots": 7,
+          "bursts": 8,
+          "parts": {
+            "crown": 1,
+            "magnet": 3,
+            "mirror": 3,
+            "bank": 1
+          }
+        },
+        {
+          "seat": 1,
+          "score": 477253,
+          "hits": 505,
+          "bestChain": 164,
+          "jackpots": 3,
+          "bursts": 8,
+          "parts": {
+            "crown": 1,
+            "cell": 1,
+            "spring": 2,
+            "echo": 1,
+            "comet": 2,
+            "mirror": 1
+          }
+        },
+        {
+          "seat": 2,
+          "score": 731232,
+          "hits": 539,
+          "bestChain": 149,
+          "jackpots": 4,
+          "bursts": 8,
+          "parts": {
+            "comet": 2,
+            "mirror": 2,
+            "crown": 1,
+            "chest": 1,
+            "cell": 1,
+            "echo": 1
+          }
+        },
+        {
+          "seat": 3,
+          "score": 86916,
+          "hits": 500,
+          "bestChain": 178,
+          "jackpots": 1,
+          "bursts": 8,
+          "parts": {
+            "chest": 3,
+            "magnet": 1,
+            "link": 1,
+            "mirror": 2,
+            "spring": 1
+          }
+        }
+      ]
+    },
+    {
+      "seed": 1729,
+      "fevers": 8,
+      "jackpots": 18,
+      "tiers": {
+        "1": 10,
+        "3": 5,
+        "7": 3
+      },
+      "bursts": 32,
+      "leadChanges": 14,
+      "lowSpeedFraction": 0.5347222222222222,
+      "winner": 0,
+      "players": [
+        {
+          "seat": 0,
+          "score": 793790,
+          "hits": 458,
+          "bestChain": 249,
+          "jackpots": 4,
+          "bursts": 8,
+          "parts": {
+            "comet": 1,
+            "spark": 4,
+            "crown": 1,
+            "dice": 1,
+            "echo": 1
+          }
+        },
+        {
+          "seat": 1,
+          "score": 129546,
+          "hits": 400,
+          "bestChain": 206,
+          "jackpots": 3,
+          "bursts": 8,
+          "parts": {
+            "bank": 1,
+            "cell": 2,
+            "comet": 2,
+            "dice": 1,
+            "crown": 1,
+            "mirror": 1
+          }
+        },
+        {
+          "seat": 2,
+          "score": 328825,
+          "hits": 486,
+          "bestChain": 366,
+          "jackpots": 5,
+          "bursts": 8,
+          "parts": {
+            "bank": 3,
+            "comet": 1,
+            "dice": 2,
+            "spark": 1,
+            "mirror": 1
+          }
+        },
+        {
+          "seat": 3,
+          "score": 217025,
+          "hits": 552,
+          "bestChain": 228,
+          "jackpots": 6,
+          "bursts": 8,
+          "parts": {
+            "magnet": 1,
+            "comet": 2,
+            "cell": 3,
+            "bank": 1,
+            "dice": 1
+          }
+        }
+      ]
+    },
+    {
+      "seed": 2501,
+      "fevers": 9,
+      "jackpots": 18,
+      "tiers": {
+        "1": 11,
+        "3": 6,
+        "7": 1
+      },
+      "bursts": 32,
+      "leadChanges": 16,
+      "lowSpeedFraction": 0.4474652777777778,
+      "winner": 2,
+      "players": [
+        {
+          "seat": 0,
+          "score": 1402396,
+          "hits": 478,
+          "bestChain": 257,
+          "jackpots": 4,
+          "bursts": 8,
+          "parts": {
+            "echo": 2,
+            "mirror": 1,
+            "magnet": 1,
+            "spring": 1,
+            "chest": 1,
+            "link": 1,
+            "crown": 1
+          }
+        },
+        {
+          "seat": 1,
+          "score": 235263,
+          "hits": 431,
+          "bestChain": 136,
+          "jackpots": 3,
+          "bursts": 8,
+          "parts": {
+            "link": 1,
+            "comet": 2,
+            "bank": 1,
+            "cell": 1,
+            "mirror": 1,
+            "echo": 1,
+            "magnet": 1
+          }
+        },
+        {
+          "seat": 2,
+          "score": 1545751,
+          "hits": 529,
+          "bestChain": 202,
+          "jackpots": 8,
+          "bursts": 8,
+          "parts": {
+            "bank": 1,
+            "link": 3,
+            "magnet": 2,
+            "crown": 1,
+            "echo": 1
+          }
+        },
+        {
+          "seat": 3,
+          "score": 174920,
+          "hits": 516,
+          "bestChain": 303,
+          "jackpots": 3,
+          "bursts": 8,
+          "parts": {
+            "comet": 2,
+            "crown": 2,
+            "cell": 1,
+            "mirror": 1,
+            "link": 2
+          }
+        }
+      ]
+    },
+    {
+      "seed": 4191,
+      "fevers": 8,
+      "jackpots": 16,
+      "tiers": {
+        "1": 8,
+        "3": 5,
+        "7": 3
+      },
+      "bursts": 32,
+      "leadChanges": 8,
+      "lowSpeedFraction": 0.5159027777777778,
+      "winner": 2,
+      "players": [
+        {
+          "seat": 0,
+          "score": 218551,
+          "hits": 469,
+          "bestChain": 164,
+          "jackpots": 5,
+          "bursts": 8,
+          "parts": {
+            "chest": 1,
+            "dice": 1,
+            "bank": 2,
+            "spring": 2,
+            "comet": 1,
+            "link": 1
+          }
+        },
+        {
+          "seat": 1,
+          "score": 218221,
+          "hits": 462,
+          "bestChain": 184,
+          "jackpots": 7,
+          "bursts": 8,
+          "parts": {
+            "bank": 1,
+            "magnet": 4,
+            "spark": 1,
+            "crown": 1,
+            "comet": 1
+          }
+        },
+        {
+          "seat": 2,
+          "score": 974188,
+          "hits": 421,
+          "bestChain": 216,
+          "jackpots": 2,
+          "bursts": 8,
+          "parts": {
+            "chest": 2,
+            "dice": 1,
+            "bank": 2,
+            "spark": 1,
+            "cell": 1,
+            "crown": 1
+          }
+        },
+        {
+          "seat": 3,
+          "score": 81884,
+          "hits": 411,
+          "bestChain": 121,
+          "jackpots": 2,
+          "bursts": 8,
+          "parts": {
+            "spring": 1,
+            "magnet": 3,
+            "bank": 1,
+            "cell": 2,
+            "dice": 1
+          }
+        }
+      ]
+    }
+  ]
+}

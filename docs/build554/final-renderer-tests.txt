@@ -1,0 +1,9 @@
+✔ main client polling and full snapshots preserve the play surface across picks and rounds (2.794176ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 103.220602

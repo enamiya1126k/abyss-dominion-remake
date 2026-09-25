@@ -1,0 +1,39 @@
+{
+  "source": "Real local authoritative simulation and actual client input, 1 human + 3 AI; no positions, scores, gems or effects injected.",
+  "rounds": 8,
+  "results": [
+    {
+      "playerId": "AI-rc550-3-dd4b4689-3",
+      "seat": 3,
+      "name": "ネジ余った骨",
+      "score": 1735103,
+      "rank": 1
+    },
+    {
+      "playerId": "AI-rc550-3-dd4b4689-2",
+      "seat": 2,
+      "name": "より",
+      "score": 1159124,
+      "rank": 2
+    },
+    {
+      "playerId": "AI-rc550-3-dd4b4689-1",
+      "seat": 1,
+      "name": "改造ゴブ",
+      "score": 437885,
+      "rank": 3
+    },
+    {
+      "playerId": "p0",
+      "seat": 0,
+      "name": "あなた",
+      "score": 144682,
+      "rank": 4
+    }
+  ],
+  "errors": [],
+  "serverErrors": "",
+  "savedPlay": true,
+  "savedJackpot": true,
+  "savedChoice": true
+}

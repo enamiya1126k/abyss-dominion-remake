@@ -1,0 +1,1 @@
+{"savedPlay":true,"savedJackpot":true,"savedChoice":true,"errors":[],"serverErrors":""}

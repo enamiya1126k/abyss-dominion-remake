@@ -1,0 +1,6 @@
+import {overdrive553} from './Rush553.js';
+export const asset553=new URL('../../assets/ricochet553/rush-emblems.png',import.meta.url).href;
+export const emblem553=(id=0)=>`<i class="rc-emblem553 emblem-${id}" aria-hidden="true"></i>`;
+export function rushHud553(){return `<div class="rc-rush553" data-rc-rush role="meter" aria-label="限界突破ゲージ" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">${emblem553()}<b data-rc-rushlabel>限界突破</b><span><i data-rc-rushfill></i></span><strong data-rc-rushvalue>0%</strong></div>`}
+export function marquee553(){return `<div class="rc-jackpot553" data-rc-jackpot hidden aria-live="polite">${emblem553(1)}<div><small data-rc-jackpotname></small><b data-rc-jackpottitle></b><strong data-rc-jackpotvalue></strong><span data-rc-jackpotsub></span></div><div class="rc-reels553" aria-hidden="true"><i>×1</i><i>×3</i><i>×7</i></div></div>`}
+export function aura553(c,p,at,reduced){if(!overdrive553(p,at))return;c.save();c.translate(p.x,p.y);const glow=c.createRadialGradient(0,0,p.r*.6,0,0,p.r*2.1);glow.addColorStop(0,'#ffca7622');glow.addColorStop(.6,'#ffbf4a66');glow.addColorStop(1,'#ffc74c00');c.fillStyle=glow;c.beginPath();c.arc(0,0,p.r*2.1,0,Math.PI*2);c.fill();c.lineWidth=.065;c.strokeStyle='#ffe59b';for(let i=0;i<3;i++){const a=(reduced?0:at/270)+i*Math.PI*2/3;c.beginPath();c.arc(0,0,p.r*1.5,a,a+.95);c.stroke()}c.restore();}

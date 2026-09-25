@@ -1,0 +1,249 @@
+{
+  "build": 553,
+  "version": "3.1.232",
+  "baseBuild": 552,
+  "type": "patch",
+  "games": [
+    "pinball",
+    "junkgp"
+  ],
+  "ricochetVersion550": 4,
+  "requiredServerRestart": true,
+  "files": [
+    {
+      "path": "README_BUILD553.md",
+      "size": 5260,
+      "sha256": "a67c23a701fe5ecb912c99bc34ef6fff6a9d062d92932e8e59fe87d0b12bb531"
+    },
+    {
+      "path": "assets/ricochet553/rush-emblems.png",
+      "size": 2378732,
+      "sha256": "45c02f79c4bdc0b42275c7e2141a9252463379d4192bb80fc217e9485c801add"
+    },
+    {
+      "path": "docs/build553/asset-prompts.json",
+      "size": 625,
+      "sha256": "8227b9bcc4b48e999defe5a06bcb9ea72345512f273ee0393a0af4f9743de461"
+    },
+    {
+      "path": "docs/build553/balance-report.json",
+      "size": 13244,
+      "sha256": "551966efeaaf6c021962d57c9fc387a1b4101bd028a490f0ae43766b74a4e4dd"
+    },
+    {
+      "path": "docs/build553/browser-report.json",
+      "size": 2508,
+      "sha256": "4ba992ad6dcd02ec42274b5d35455b8f72cbc8a27380b29ad84baea705bdb284"
+    },
+    {
+      "path": "docs/build553/capture-report.json",
+      "size": 911,
+      "sha256": "900cc173bc0725adcaf7f996dae5a5ade1dac7e1d78c5f13dfaa295f84c80e2f"
+    },
+    {
+      "path": "docs/build553/static-report.json",
+      "size": 1807,
+      "sha256": "fa886d09c06c11d75d595a250c886e4d8c6a5de80c8183adfe11d12f203fe423"
+    },
+    {
+      "path": "docs/build553/test-results.txt",
+      "size": 7931,
+      "sha256": "b6acf4ae966173211065db4a974a845155141ff7956df56878283106204c79be"
+    },
+    {
+      "path": "index.html",
+      "size": 221477,
+      "sha256": "8394fc28fe00643558868bc3f0bbb706ae39e7d53836f93ea6bd7a6578ae18fb"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 23302,
+      "sha256": "685a0b8e101ef07260e05b811b6f1c1dae78c28e5222f07c862167aabab7b01b"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 27671,
+      "sha256": "dc7952bb1d40c996e7baff3775e0638cc5bba2780f73cb610eadb94fac9e4f1f"
+    },
+    {
+      "path": "online-server/src/RicochetCoordinator550.js",
+      "size": 6688,
+      "sha256": "e84c7aeb683400ca31c4f4d3e7c418fdbff302a812fd0a7764f938eb053efd3b"
+    },
+    {
+      "path": "src/Styles/build553-rush.css",
+      "size": 5688,
+      "sha256": "fb2bfbe63d2dce196053eabfe36aa92f40c6e74965e17cb85addf739fec1bae6"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "7c30c7a2e7ff237aa304df347d8be49da5998a78afe258e49306ca857032956a"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 12839,
+      "sha256": "37f84b9b0750926bbba96fbd18c92682327af7604da831d238f0456afe6f3294"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 29632,
+      "sha256": "ad67307310d088fe8a9e57d3ca354d66fe65578e7338c3723f94103461b625da"
+    },
+    {
+      "path": "src/ricochet550/Art552.js",
+      "size": 5507,
+      "sha256": "9c082b35a4a15b804ace12a43ba278dad7772a6d6e8df782787ebe05070d93b8"
+    },
+    {
+      "path": "src/ricochet550/Art553.js",
+      "size": 1399,
+      "sha256": "0dea9e232a3eaffe60b62438e0ce00bb483f2bb090e43d58adcc4e5bc53618fb"
+    },
+    {
+      "path": "src/ricochet550/Audio552.js",
+      "size": 1433,
+      "sha256": "ea992306399bd416019acafb73622858aae6eb0e6abfeaf8177796c8e41b26a3"
+    },
+    {
+      "path": "src/ricochet550/Carnival552.js",
+      "size": 4062,
+      "sha256": "73d0ae94ecd7286bf479f0dab77e7f9dd0f4d80f385c72f5ebafe0b7efb7397c"
+    },
+    {
+      "path": "src/ricochet550/Catalog550.js",
+      "size": 4921,
+      "sha256": "00d3f6506038d867070f3a66659885d8ff0fc123bf4b13d388d275eb0243244b"
+    },
+    {
+      "path": "src/ricochet550/Input550.js",
+      "size": 4433,
+      "sha256": "d5e0c15ca328b61584594b20dfb83ae8da0ac25d72e41975f304f7e593c7ce62"
+    },
+    {
+      "path": "src/ricochet550/Renderer550.js",
+      "size": 11747,
+      "sha256": "ed705368812354edb3e46b1cf02fafb116e71e2a18a6352cab081d046005009c"
+    },
+    {
+      "path": "src/ricochet550/Rules550.js",
+      "size": 17165,
+      "sha256": "f34e79e3f629eb848330f17af0416d61b5a9abf1a2f18f013ea5e02347231ed4"
+    },
+    {
+      "path": "src/ricochet550/Rush553.js",
+      "size": 3061,
+      "sha256": "f80bd7793fcd0adff39344942345f0200f3be4bb6f685b8f97d5821c410759e4"
+    },
+    {
+      "path": "src/ricochet550/View550.js",
+      "size": 25814,
+      "sha256": "ca22ccb92db39740aafcc0d94e536ee24ce0b621d8ef48afa3be7a12ec3ed259"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "4a0645dc3e254263912553975defa002b44be126beeeb1b676ec5121104b746d"
+    },
+    {
+      "path": "tests/build553-carnival.test.mjs",
+      "size": 7035,
+      "sha256": "3a02b76b5eb0aea80f0bd0c32025dd59d66aea9fa80bb52af06a7c53e96cc7db"
+    },
+    {
+      "path": "tests/build553-client.test.mjs",
+      "size": 1340,
+      "sha256": "e121d2156938c668bbeadf16a5248f5dc1292d66a5cc4561fdc1d198c172fb53"
+    },
+    {
+      "path": "tests/build553-main-wire.test.mjs",
+      "size": 1703,
+      "sha256": "093fdc87ded0160200b43155501780b0045531f4396ae56d34b2041da69fc767"
+    },
+    {
+      "path": "tests/build553-party.test.mjs",
+      "size": 4217,
+      "sha256": "a9aad800085c77bb27936693ab6f4e829aa40530da7124d1e3d5b6dff24407a7"
+    },
+    {
+      "path": "tests/build553-ricochet.test.mjs",
+      "size": 17210,
+      "sha256": "2bee5bdca5ffdf73cedaa35ac2fa9268ff7a4aae487d5dd62a8398f765280f61"
+    },
+    {
+      "path": "tests/build553-rush.test.mjs",
+      "size": 7054,
+      "sha256": "a5888e9011939d4ed1deb18ed5942cd4039b86740ddbe44f958f0aab3e3917c9"
+    },
+    {
+      "path": "tools/build553/balance.mjs",
+      "size": 2163,
+      "sha256": "4f2aafa9d9a893af6ee9df9e72994edae18d64d02a99d111fe078a97ec88aa52"
+    },
+    {
+      "path": "tools/build553/browser-qa.mjs",
+      "size": 16791,
+      "sha256": "5dfe0c923bb76dda4b2ce6b9c78021a19ba6d3f51575e9fd7b1d1700e2147d46"
+    },
+    {
+      "path": "tools/build553/capture.mjs",
+      "size": 4195,
+      "sha256": "06138cf8a32e99f1891372094850a4ec3b6974a32eee893253db4bd28c3a3a50"
+    },
+    {
+      "path": "tools/build553/client-fixture.mjs",
+      "size": 1450,
+      "sha256": "b9bf21f76277f1964aa24064bccd07fc1f6141eeb803a0651ba2c2128b525988"
+    },
+    {
+      "path": "tools/build553/main-fixture.mjs",
+      "size": 1241,
+      "sha256": "bcef004486d3a7205cb7db012671046c64c8138ae61b3808191c15ea8e6da279"
+    },
+    {
+      "path": "tools/build553/package.py",
+      "size": 1677,
+      "sha256": "293e438b889f25a869997a35995c2d99c4e0236bb407d244c5b99fd3fe71c992"
+    },
+    {
+      "path": "tools/build553/party-fixture.mjs",
+      "size": 1190,
+      "sha256": "890f980dcb9b0c55dfbe2599bb8d5ae96ba292e3b7775713cb3ff3ec4f8a634d"
+    },
+    {
+      "path": "tools/build553/preview.mjs",
+      "size": 2162,
+      "sha256": "0bbbe741e0c0c5e3da426221203acd7642b30eb6ec5791a1cce3aed7e9290f38"
+    },
+    {
+      "path": "tools/build553/qa-server.mjs",
+      "size": 8113,
+      "sha256": "580055cda6e8e704cc41ebeca9147174f5cf596c8df5681b28143dc9f41651d2"
+    },
+    {
+      "path": "tools/build553/stamp.py",
+      "size": 2069,
+      "sha256": "a79106ec59fb87c9256cb8fa25eefd550a1c63a6a18c3b960445bbf11d901565"
+    },
+    {
+      "path": "tools/build553/static-check.py",
+      "size": 1621,
+      "sha256": "8f7e9db608d369a5f086ee669bbc2bfee7abddc84208c144d50e798c7b18ae71"
+    },
+    {
+      "path": "tools/build553/visual.mjs",
+      "size": 1818,
+      "sha256": "9e6804908468e54f12e45f6b52b30216c1ab7b1b6c2f6b423c3c1597de19f90a"
+    },
+    {
+      "path": "world-raid-offline553-assets.json",
+      "size": 46466,
+      "sha256": "f081ffa9723acea45bd59b0b824a52c0e9605819c1172877888e449769cbb74c"
+    },
+    {
+      "path": "world-raid-offline553-sw.js",
+      "size": 1844,
+      "sha256": "fb4e05d13ffd0400ad24c06fff4cc1db06b9b7b4d76463e435ecd3a140eb1a7b"
+    }
+  ]
+}

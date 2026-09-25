@@ -1,0 +1,55 @@
+{
+  "build": 554,
+  "tool": "image_gen.imagegen",
+  "notes": "Original generated PNGs are copied without raster editing. Atlas cells and road scale are selected in runtime Canvas. A transparent cutout edit of kart-modules was used as the final kart atlas.",
+  "prompts": [
+    {
+      "name": "foundry-road",
+      "transparent_background": false,
+      "prompt": "Use case: stylized-concept. Asset type: seamless vertical-scrolling top-down racing game road background, portrait 1024x1536. A spectacular clockwork fantasy foundry raceway, emerald enamel and aged brass, luminous amber furnace light, dark petrol blue steel and worn stone. Strict orthographic overhead camera, vertical parallel road, NO vanishing point. The center 75 percent of the width, from x=128 to x=896, is a completely clear drivable surface of weathered dark desaturated blue-green metal slabs and subtle warm gray stone seams, no objects or obstacles or vehicles or painted symbols. Fine rivets and long subtle seams give motion texture. Two thin continuous polished brass guard rails precisely at x=128 and x=896, parallel full height, never bending. Outside those rails in the 12.5 percent side strips are lavish steampunk workshop pipes, beautiful cog mechanisms, emerald housings, warm copper industrial lamps, tiny crates and tools. Luxurious hand painted 3D fantasy game rendering, sophisticated material detail, strongly readable road. Warm golden lighting on road edges, low contrast quiet darker center for characters and effects to be readable. Top and bottom edges are matching cross sections for repeatable vertical scrolling, uniform open roadway the entire height, side rails straight. No perspective, no text, no letters, no arrows, no characters, no carts, no banner, no UI. Fill canvas."
+    },
+    {
+      "name": "kart-modules",
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. Asset type: production modular kart sprite atlas, landscape 1536x1024, fully transparent background. EXACTLY SIX separate isolated objects in a perfectly regular 3 columns by 2 rows grid; ample transparent margin per cell. All objects viewed strictly from directly overhead orthographic, front points UP, consistent world orientation and lighting, polished aged brass, emerald enamel, dark brown leather, gunmetal, lavish hand painted 3D fantasy racing game style. NO perspective side view. TOP LEFT: a complete small charming scrapyard racing kart chassis, front bumper at top, four worn black rubber wheels, emerald curved body, brass rivets, ONE large EMPTY dark leather driver seat centered in the kart, open cockpit, no driver, no rocket or engine protrusion; readable outer silhouette. TOP CENTER: a detached broad heavy brass and gunmetal armored FRONT BUMPER module, viewed overhead, gently curved horizontal shield shape, screw heads and reinforced corners, wide low rectangular silhouette. TOP RIGHT: a detached twin cylindrical ROCKET ENGINE module pointing upward, emerald barrels with brass bands and dark exhaust nozzles at bottom, no flame, compact vertical shape. BOTTOM LEFT: a detached compact mechanical ENGINE block with stacked brass pistons, luminous amber power core, intricately cast green enamel housing. BOTTOM CENTER: a detached WHEEL AND SPRING assembly, two black rubber tires and polished coil suspension linked horizontally, overhead view. BOTTOM RIGHT: a detached CAPACITOR BATTERY module with green glass center and bright turquoise electrical core encased in brass protective cage. Each object must fit fully inside its own 512x512 cell, no crossover, no text, no letters, no characters, no ground, no shadows outside objects. Consistent asset set that can be layered onto the empty chassis in gameplay."
+    },
+    {
+      "name": "race-props",
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. Asset type: fantasy racing course props sprite atlas, square 1024x1024, transparent background. EXACTLY FOUR isolated objects in a regular 2 columns by 2 rows grid with wide transparent margins. Consistent strictly orthographic overhead camera, luxurious hand painted 3D clockwork fantasy game art, realistic worn brass, emerald enamel, weathered gunmetal, turquoise and amber glow. TOP LEFT: a wide rectangular TURQUOISE INDUCTION BOOST PAD embedded flush in road, 2:1 width to height ratio, five beautiful turquoise glowing rollers, riveted dark brass edging, slim coiled pipes at its ends, physical integrated industrial machine, NO arrows. TOP RIGHT: a wide rectangular GOLD CHAOS ENGINE BOOST PAD, 2:1 width to height ratio, three beautiful amber glowing spinning mechanical drums under metal grating, warm amber cores, copper and brass edging with tiny screw heads, visually richer explosive variant of the left pad, NO dice numbers or text. BOTTOM LEFT: one round mechanical SPRING BUMPER bollard, brass toothed cog perimeter, deep emerald central shield, reinforced metal spring collar, circular silhouette, from directly above. BOTTOM RIGHT: one small fuel canister collectible, glowing amber liquid inside an emerald glass bulb with brass protective cage, round compact readable shape viewed overhead. All same lighting from upper left, crisp recognizable silhouettes at small game resolution, entire objects completely within their quadrant. No words, no typography, no symbols, no surrounding road, no characters, no vehicles, no other objects, true transparency."
+    },
+    {
+      "name": "foundry-poster",
+      "transparent_background": false,
+      "prompt": "Use case: illustration-story. Asset type: dramatic portrait cover illustration for a fantasy scrapyard kart racing videogame, 1024x1536. Four mischievous fantasy racers drifting and colliding along a spectacular emerald-and-brass clockwork foundry racetrack at golden furnace hour. The main kart in the lower foreground is a ridiculous lovingly customized open cockpit green-enamel brass machine with huge fat rubber wheels, riveted armored bumper, visible pistons, twin rear rockets blasting luminous amber flames; a cute bright blue slime with an excited expression drives it. Racing nearby: a grinning small green goblin in a rocket kart, a tiny heroic dark gray wolf character in a heavy armored kart, a playful small skeleton in a sparking electric kart. They are all friendly stylized fantasy creatures, no people. Exaggerated acceleration, short sparkling metal contact sparks between fenders, individual readable silhouettes, energetic sweeping diagonal composition, rich crafted machinery, beautiful copper tubes and emerald glass capacitors. Authentic premium hand-painted 3D fantasy mobile game key art, rich tactile metal and leather detail, warm gold light, cool deep teal shadows, cinematic depth, exciting but clean and readable, not photorealistic. Top quarter recedes into a quiet dark teal foundry arch for an overlaid game title; action is centered in middle two thirds. NO text, no typography, no words, no logo, no UI, no borders, no watermark. All characters clearly seated inside their machines."
+    }
+  ],
+  "sources": {
+    "foundry-road": "exec-31af7d6a-b7b1-40ca-9b7a-cbb9b556785f.png",
+    "kart-modules": "exec-c02715b2-5568-4e60-a77d-e56ad3b6643d.png",
+    "race-props": "exec-304d64d5-1369-4b07-9a8a-06b62b7f803a.png",
+    "foundry-poster": "exec-22b6e936-c0e9-4a0b-a5bd-308d486826b1.png"
+  },
+  "assets": [
+    {
+      "path": "assets/ricochet554/foundry-poster.png",
+      "bytes": 3085551,
+      "sha256": "4f6faded1a30614b5f048ee6e5806830a3ab52b53ebf5e9abbaf967281bf0912"
+    },
+    {
+      "path": "assets/ricochet554/foundry-road.png",
+      "bytes": 3363191,
+      "sha256": "a4c5492ea7b7108d018f8376c31625d7111fdebc2f5b35dc7452ce86501cd5a3"
+    },
+    {
+      "path": "assets/ricochet554/kart-modules.png",
+      "bytes": 2418834,
+      "sha256": "a2e9541eede4364f8bb3ec677f10cec55bf1b01f096f5dd8932b014836648d6c"
+    },
+    {
+      "path": "assets/ricochet554/race-props.png",
+      "bytes": 1908875,
+      "sha256": "8d271935311c43a106ade06784d568cc4f16d15a1b9d0786667074fccbe22aed"
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "source": "Production modules in local QA, one automated human input + three AI; no score, position, upgrade, gate result or effect injection. Equipment is chosen from actual offers and steering uses actual drag gestures.",
+  "rounds": 8,
+  "results": [
+    {
+      "playerId": "AI-rc550-3-851749ac-3",
+      "seat": 3,
+      "name": "ネジ余った骨",
+      "score": 32524,
+      "rank": 1
+    },
+    {
+      "playerId": "AI-rc550-3-851749ac-1",
+      "seat": 1,
+      "name": "改造ゴブ",
+      "score": 32387,
+      "rank": 2
+    },
+    {
+      "playerId": "AI-rc550-3-851749ac-2",
+      "seat": 2,
+      "name": "より",
+      "score": 32386,
+      "rank": 3
+    },
+    {
+      "playerId": "p0",
+      "seat": 0,
+      "name": "あなた",
+      "score": 32256,
+      "rank": 4
+    }
+  ],
+  "players": [
+    {
+      "seat": 0,
+      "parts": {
+        "cell": 2,
+        "turbo": 1,
+        "rocket": 1,
+        "spring": 1,
+        "wheels": 1,
+        "engine": 2
+      },
+      "nitros": 36,
+      "gates": 33,
+      "sixes": 4
+    },
+    {
+      "seat": 1,
+      "parts": {
+        "cell": 1,
+        "rocket": 1,
+        "wheels": 1,
+        "spring": 1,
+        "armor": 1,
+        "hook": 2,
+        "bank": 1
+      },
+      "nitros": 25,
+      "gates": 29,
+      "sixes": 2
+    },
+    {
+      "seat": 2,
+      "parts": {
+        "coil": 2,
+        "bank": 1,
+        "spring": 1,
+        "turbo": 1,
+        "cell": 2,
+        "hook": 1
+      },
+      "nitros": 23,
+      "gates": 27,
+      "sixes": 0
+    },
+    {
+      "seat": 3,
+      "parts": {
+        "wheels": 1,
+        "rocket": 4,
+        "turbo": 1,
+        "spring": 1,
+        "cell": 1
+      },
+      "nitros": 28,
+      "gates": 33,
+      "sixes": 0
+    }
+  ],
+  "errors": [],
+  "serverErrors": "",
+  "savedTurbo": true,
+  "savedGate": true,
+  "savedSix": true,
+  "savedChoice": true,
+  "savedMachine": true
+}

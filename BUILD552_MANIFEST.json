@@ -1,0 +1,269 @@
+{
+  "build": 552,
+  "version": "3.1.231",
+  "baseBuild": 551,
+  "type": "patch",
+  "games": [
+    "pinball",
+    "junkgp"
+  ],
+  "ricochetVersion550": 3,
+  "requiredServerRestart": true,
+  "files": [
+    {
+      "path": "README_BUILD552.md",
+      "size": 4397,
+      "sha256": "6bbd29ea2c7c9d6d1cf39226c831e080d85647851d3ece2233d99c69620be11a"
+    },
+    {
+      "path": "assets/ricochet552/carnival-poster.png",
+      "size": 2777208,
+      "sha256": "78c319cb97939156256192413ef13e55e3147ad0ee77eca1c9655d9fcbeeaa85"
+    },
+    {
+      "path": "assets/ricochet552/carnival-props.png",
+      "size": 2096629,
+      "sha256": "ca4bf69e9c78a0a1a2eaea5e8b5c83c008b41866ec43655a3368d9a0034a4509"
+    },
+    {
+      "path": "assets/ricochet552/carnival-table.png",
+      "size": 3186447,
+      "sha256": "1e7f2b580831d7885a189ab6ccc717455d9dcfc8df3c02978f9fe1fdb4ccbced"
+    },
+    {
+      "path": "docs/build552/all-tests.txt",
+      "size": 6401,
+      "sha256": "9323706ed7657e69a87eb67f784d63d1b829f6f7ea52f4007e3e2c18d840a637"
+    },
+    {
+      "path": "docs/build552/asset-prompts.json",
+      "size": 4344,
+      "sha256": "2d49df9b734d07186c3ecbf7dc321272aa583fd6a207b30272126598117ab4af"
+    },
+    {
+      "path": "docs/build552/balance-report.json",
+      "size": 9986,
+      "sha256": "fadf13d1bbbe3d0a4acbb4856f1f7d96d1d5f52aed9043b430215e11eb2b06c5"
+    },
+    {
+      "path": "docs/build552/browser-log.txt",
+      "size": 1831,
+      "sha256": "4ea7a98893c5a6b5c2797327c790f20f896732a5504cb30c378b5d8805f9f92d"
+    },
+    {
+      "path": "docs/build552/browser-report.json",
+      "size": 2198,
+      "sha256": "e2d7d80518c0c6998dfe6a5fdfee5215bb5140b055648bc2ed2873c7d69015e3"
+    },
+    {
+      "path": "docs/build552/capture-log.txt",
+      "size": 88,
+      "sha256": "9af74b73f0e58a0b40cf34abbde183838f92ef84d8ce821123b6407bbc8c262a"
+    },
+    {
+      "path": "docs/build552/capture-report.json",
+      "size": 831,
+      "sha256": "14f31e49ac59e119ed1c5256c4bbcfdb6dc714f8a52e61af2ce450dea2323aaf"
+    },
+    {
+      "path": "docs/build552/design.md",
+      "size": 2100,
+      "sha256": "4a4ebbdf4b9caf7bd46218320ebbda897c9ddf26dc812d42826a22bb59fbcb4e"
+    },
+    {
+      "path": "docs/build552/static-report.json",
+      "size": 1669,
+      "sha256": "f8bb63397170bb6afa59488d277e0cddcbc5a345bf5ae16500f61e0f82f0ce41"
+    },
+    {
+      "path": "docs/build552/visual-errors.json",
+      "size": 31,
+      "sha256": "610f315a36736640ee34d97fe07e9553ac9712fa0b3734ded8dbf05ec94289a8"
+    },
+    {
+      "path": "index.html",
+      "size": 218848,
+      "sha256": "a6c5814054ec9f35c5cbf7f9f885e2a1de3e926c45e383a9d1a48c3fedd9a890"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 23302,
+      "sha256": "b1b97e0c887178cb27c2f447c8806a2bb1bc6d9924da3c62d206567b38a9d7d0"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 27671,
+      "sha256": "a42879b18f62c7f317bbd07c4051c87017d7aeded5178128fa97929d242b0404"
+    },
+    {
+      "path": "online-server/src/RicochetCoordinator550.js",
+      "size": 6268,
+      "sha256": "511b437191b422be47914be7dd0ba5f26bd6e8f3baf15892bac2c27f6027e4f7"
+    },
+    {
+      "path": "src/Styles/build552-carnival.css",
+      "size": 9606,
+      "sha256": "22a9bc5e55a2e0a96b1b0cbd55f41f17932e2012b346ab5c2771b2e697220fe7"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "0b607836a7ff8be4e30dcdff45edb3f0208b8b7834ec18a8b6d33d459acf2e89"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 6009,
+      "sha256": "fcb26ca9c81ecac04dcf154f5f03a3201a931b29e52cfd07971706a382421c7b"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 12839,
+      "sha256": "e54dadd81056523a9877dd24be87fca44f4247c524d456d125f313aac77af5f2"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 29632,
+      "sha256": "be78223180ef14ad117d6e700723a6577cd081cc57972ae569b64d8882aef1b7"
+    },
+    {
+      "path": "src/ricochet550/Art551.js",
+      "size": 3200,
+      "sha256": "8b0eeab5c1ea266866c63657da8e194aad1ad557c887807fe07f23aa884e0f9a"
+    },
+    {
+      "path": "src/ricochet550/Art552.js",
+      "size": 5451,
+      "sha256": "304d7bdec748ebca1d3ed2cc4e43e0398cea783477f4cfac2542d017458779ef"
+    },
+    {
+      "path": "src/ricochet550/Audio552.js",
+      "size": 1124,
+      "sha256": "a9c8599ddbb57f5ca5ca29edc0b1c611b0c1acf846a08064f9be07ca75ce6f8c"
+    },
+    {
+      "path": "src/ricochet550/Carnival552.js",
+      "size": 4114,
+      "sha256": "e3a0397244e16eff13c89f81b1c8947453fbb9ae08e4490f6e09c4059c55b72e"
+    },
+    {
+      "path": "src/ricochet550/Catalog550.js",
+      "size": 4964,
+      "sha256": "f8bc66dbbfde27a5284b0be0b04e34a2db5d1b01f86097b1a385bc059d64e499"
+    },
+    {
+      "path": "src/ricochet550/Renderer550.js",
+      "size": 11335,
+      "sha256": "806202a03b0b05716b099f0301497b3e4ae88b7642d0711a43466869c8499b45"
+    },
+    {
+      "path": "src/ricochet550/Rules550.js",
+      "size": 16034,
+      "sha256": "0c79ca305da13e0547e93e35041bf9085fa471298d65e222f809a934416dfc8d"
+    },
+    {
+      "path": "src/ricochet550/View550.js",
+      "size": 22307,
+      "sha256": "8e4d44aba5bb3db4cbdefd8057039fe219a67e107bbc9babcf299c0a91a026ea"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "f1c218bc6ef12bee0c89fb3ae4e5bcc0e294bb4962ba79c131951253b713df6e"
+    },
+    {
+      "path": "tests/build552-carnival.test.mjs",
+      "size": 6774,
+      "sha256": "e622c9a7bc504e747240cdcdb418226bba5aa5e6898f3cfe9f6d9bab9cb0b179"
+    },
+    {
+      "path": "tests/build552-client.test.mjs",
+      "size": 1340,
+      "sha256": "dab0971e3e22c3ed55df60c29247c2e72269d0b09e164b72c1ae6def1e177ed1"
+    },
+    {
+      "path": "tests/build552-main-wire.test.mjs",
+      "size": 1703,
+      "sha256": "6d04934d15ceefc7bfe6551285ae111707ee14d8bd6d4854b535aca1b142ed55"
+    },
+    {
+      "path": "tests/build552-party.test.mjs",
+      "size": 4217,
+      "sha256": "25d70bb486202aa93907f5f14e9d498a7e0179cd109358ba6d47057663884a22"
+    },
+    {
+      "path": "tests/build552-ricochet.test.mjs",
+      "size": 14998,
+      "sha256": "4ad238ec960903d25aecb700de78f7b798f9707a66cc2b74645d21e7f4f383bf"
+    },
+    {
+      "path": "tools/build552/balance.mjs",
+      "size": 1007,
+      "sha256": "d8a62619ac44150d571eaf10a213dae28754e3808f40a385bbf218d8bb163107"
+    },
+    {
+      "path": "tools/build552/browser-qa.mjs",
+      "size": 13846,
+      "sha256": "3c84f9254708705f3b4fdf702eb8b69a776127a2a726eb41573eb641e523fd72"
+    },
+    {
+      "path": "tools/build552/capture.mjs",
+      "size": 3043,
+      "sha256": "1d609dd732c9040fcc1b5a52faa59c6d811f70ff21cf4c3b58548acc4fad147b"
+    },
+    {
+      "path": "tools/build552/client-fixture.mjs",
+      "size": 1450,
+      "sha256": "b9bf21f76277f1964aa24064bccd07fc1f6141eeb803a0651ba2c2128b525988"
+    },
+    {
+      "path": "tools/build552/main-fixture.mjs",
+      "size": 1241,
+      "sha256": "bcef004486d3a7205cb7db012671046c64c8138ae61b3808191c15ea8e6da279"
+    },
+    {
+      "path": "tools/build552/package.py",
+      "size": 1677,
+      "sha256": "6ab49d7b579fb0fa0b52d8c1fc3ebf84ac98a52fe2422974b5556f34deb0473f"
+    },
+    {
+      "path": "tools/build552/party-fixture.mjs",
+      "size": 1190,
+      "sha256": "890f980dcb9b0c55dfbe2599bb8d5ae96ba292e3b7775713cb3ff3ec4f8a634d"
+    },
+    {
+      "path": "tools/build552/preview.mjs",
+      "size": 2162,
+      "sha256": "101e28e5036fd1ee3b195d3e653a13c7b1332b8240fcc69f8c72fb45db043e9c"
+    },
+    {
+      "path": "tools/build552/qa-server.mjs",
+      "size": 8053,
+      "sha256": "661170a750ffd02ab0cb22ab794338b14d3ee0468db13a21cad709f3847df09f"
+    },
+    {
+      "path": "tools/build552/stamp.py",
+      "size": 2094,
+      "sha256": "f3f777cc53d920664120b72b8e566eb2413e03c5827df4ca76b6abd286d5d684"
+    },
+    {
+      "path": "tools/build552/static-check.py",
+      "size": 1625,
+      "sha256": "4a20fc024ba26b6df6b8ea243c35f1998a1aa4f68a5a1d69b279d0ebe481db64"
+    },
+    {
+      "path": "tools/build552/visual.mjs",
+      "size": 1818,
+      "sha256": "1af80d77c607fa5aa286b88f15800925b8bc0125664b580b0ee632448ff92f57"
+    },
+    {
+      "path": "world-raid-offline552-assets.json",
+      "size": 46263,
+      "sha256": "7c570cd55bba9c15f728a4fd52f33a3c60fad8fcb7eaa02d5d40ef1605a9b002"
+    },
+    {
+      "path": "world-raid-offline552-sw.js",
+      "size": 1844,
+      "sha256": "e492219342f3f758d3e0c7dfd1d54bfd8ef004e42b1aec525fc22fb82ae01c6d"
+    }
+  ]
+}

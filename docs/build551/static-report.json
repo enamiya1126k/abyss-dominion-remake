@@ -1,0 +1,43 @@
+{
+  "changedJSChecked": [
+    "online-server/src/PartyCoordinator462.js",
+    "online-server/src/RaceCoordinator451.js",
+    "online-server/src/RicochetCoordinator550.js",
+    "src/core/config.js",
+    "src/party/PartyView462.js",
+    "src/race/RaceClient451.js",
+    "src/ricochet550/Art551.js",
+    "src/ricochet550/Catalog550.js",
+    "src/ricochet550/Input550.js",
+    "src/ricochet550/Renderer550.js",
+    "src/ricochet550/Rules550.js",
+    "src/ricochet550/View550.js",
+    "src/worldRaid/WorldRaidOfflineCache430.js",
+    "tests/build551-client.test.mjs",
+    "tests/build551-main-wire.test.mjs",
+    "tests/build551-party.test.mjs",
+    "tests/build551-ricochet.test.mjs",
+    "tools/build551/balance.mjs",
+    "tools/build551/browser-qa.mjs",
+    "tools/build551/client-fixture.mjs",
+    "tools/build551/main-fixture.mjs",
+    "tools/build551/party-fixture.mjs",
+    "tools/build551/preview.mjs",
+    "tools/build551/qa-server.mjs",
+    "tools/build551/visual.mjs",
+    "world-raid-offline551-sw.js"
+  ],
+  "moduleMappings": [
+    "src/ricochet550/View550.js",
+    "src/ricochet550/Input550.js",
+    "src/ricochet550/Catalog550.js",
+    "src/ricochet550/Renderer550.js",
+    "src/ricochet550/Art551.js",
+    "src/ricochet550/Rules550.js",
+    "src/ricochet550/Icons550.js"
+  ],
+  "generatedAssets": 7,
+  "version": "3.1.230",
+  "ricochetVersion550": 2,
+  "syntaxErrors": 0
+}

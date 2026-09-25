@@ -1,0 +1,43 @@
+/* A stable control deck; only earned moments receive the bright amber treatment. */
+.rc-pinball552{--rush553:url('../../assets/ricochet553/rush-emblems.png')}
+.rc-emblem553{display:inline-block;flex-shrink:0;width:34px;height:34px;background:var(--rush553) 0 0/200% 200% no-repeat}
+.rc-emblem553.emblem-1{background-position:100% 0}.rc-emblem553.emblem-2{background-position:0 100%}.rc-emblem553.emblem-3{background-position:100% 100%}
+.rc-pinball552 .rc-controls550{height:151px;min-height:151px;gap:5px;padding:9px 13px}
+.rc-rush553{display:flex;align-items:center;gap:7px;min-height:29px;width:100%;position:relative}
+.rc-pinball552 .rc-rush553>b{font-size:10px;letter-spacing:.2px;white-space:nowrap;color:#dcc791}
+.rc-rush553>span{height:8px;flex:1;border:1px solid #8a7345;border-radius:5px;background:#021711;overflow:hidden;box-shadow:inset 0 2px 4px #0009}
+.rc-rush553>span>i{display:block;width:100%;height:100%;transform:scaleX(0);transform-origin:left;background:linear-gradient(#fff0ae,#cd873f);transition:transform .12s linear}
+.rc-rush553>strong{width:40px;font:700 11px/1.3 Georgia,serif;color:#e6d8b4;text-align:right}
+.rc-rush553 .rc-emblem553{width:30px;height:30px;filter:saturate(.5) brightness(.8)}
+.rc-pinball552[data-rush=ready] .rc-rush553 .rc-emblem553,.rc-pinball552[data-rush=active] .rc-rush553 .rc-emblem553{filter:drop-shadow(0 0 5px #ffb13a77)}
+.rc-pinball552[data-rush=ready] .rc-rush553>b,.rc-pinball552[data-rush=active] .rc-rush553>b{color:#ffe9a2}
+.rc-pinball552[data-rush=ready] .rc-controls550,.rc-pinball552[data-rush=active] .rc-controls550{background:radial-gradient(ellipse at 15% 30%,#ac681c40,transparent 85%),linear-gradient(100deg,#29442c,#103228);border-top-color:#ffdf93}
+.rc-pinball552[data-rush=ready] .rc-rush553>span,.rc-pinball552[data-rush=active] .rc-rush553>span{border-color:#edc777;box-shadow:0 0 8px #ffcc693b}
+.rc-pinball552[data-rush=active] .rc-meter550 i,.rc-pinball552[data-rush=ready] .rc-meter550 i{background:linear-gradient(#fff3b7,#ffad5c 55%,#ffe69c)}
+.rc-pinball552[data-final=true] .rc-pot552 small{color:#ffe292;letter-spacing:1px}
+.rc-pinball552[data-final=true] .rc-round550{background:linear-gradient(100deg,#704222,#243e2e);border-color:#e9c077}
+.rc-jackpot553{position:absolute;z-index:5;left:50%;top:12px;transform:translateX(-50%);width:min(290px,calc(100% - 26px));pointer-events:none;display:flex;align-items:center;gap:7px;padding:11px 12px 26px;border:1px solid #f2ce82;border-radius:8px;background:radial-gradient(ellipse at 20% 40%,#a0742355,transparent 80%),linear-gradient(120deg,#102e24f5,#284a32f8,#0a2b22f5);box-shadow:0 5px 22px #001b16c0,inset 0 0 0 3px #b28f4835;text-align:left}
+.rc-jackpot553[hidden]{display:none}.rc-jackpot553>.rc-emblem553{width:72px;height:72px;filter:drop-shadow(0 2px 6px #e9ad352e)}
+.rc-jackpot553>div:not(.rc-reels553){min-width:0;flex:1;display:flex;flex-direction:column}
+.rc-jackpot553 small{font-size:8px;color:#dfd2b0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:175px}
+.rc-jackpot553 b{font:800 16px/1.5 Georgia,serif;letter-spacing:1px;color:#ffe2a0;white-space:nowrap}
+.rc-jackpot553 strong{font:700 30px/1.15 Georgia,serif;color:#fff0b1;text-shadow:0 2px #8c562b;font-variant-numeric:tabular-nums}
+.rc-jackpot553 span{font-size:8px;color:#e9d7ac;margin-top:4px;min-height:12px}
+.rc-reels553{position:absolute;bottom:7px;left:0;right:0;display:flex;justify-content:center;gap:10px}
+.rc-reels553>i{border:1px solid #bda46c77;border-radius:3px;font:700 10px/16px Georgia,serif;color:#b5aa8b;background:#06261dd9;width:32px;text-align:center;font-style:normal}
+.rc-reels553>i.is-lit{color:#fff4bd;border-color:#f7d790;background:#835627;box-shadow:0 0 10px #ffbc5633}
+.rc-jackpot553[data-tier="7"]{border-color:#fff1a6;background:radial-gradient(ellipse at 15% 40%,#b17a365e,transparent 90%),linear-gradient(120deg,#3d4326f8,#3d532ef8,#142d22f8)}
+.rc-jackpot553[data-tier="7"] strong{color:#fff5c4}.rc-pinball552[data-jackpot=true] .rc-toast550{top:auto;bottom:9px}
+.rc-pinball552[data-rush=ready] .rc-rush553 .rc-emblem553{animation:rc-ready553 1.2s ease-in-out infinite alternate}
+@keyframes rc-ready553{to{filter:drop-shadow(0 0 7px #ffc351b0) brightness(1.15)}}
+@media(max-width:359px){.rc-pinball552 .rc-controls550{padding-inline:10px}.rc-rush553{gap:5px}.rc-pinball552 .rc-rush553>b{font-size:9px}.rc-jackpot553{padding:7px 10px 25px}.rc-jackpot553>.rc-emblem553{width:57px;height:57px}.rc-jackpot553 b{font-size:14px}.rc-jackpot553 strong{font-size:26px}}
+@media(orientation:landscape) and (max-height:500px){.rc-pinball552 .rc-controls550{height:139px;min-height:139px;padding:6px 8px;gap:3px}.rc-rush553{gap:4px;min-height:23px}.rc-rush553 .rc-emblem553{width:23px;height:23px}.rc-pinball552 .rc-rush553>b{font-size:8px}.rc-rush553>strong{font-size:9px;width:33px}.rc-pinball552 .rc-buildbar550{min-height:29px}.rc-jackpot553{max-width:270px;top:7px}}
+@media(prefers-reduced-motion:reduce){.rc-pinball552 .rc-rush553 .rc-emblem553{animation:none!important}.rc-rush553>span>i{transition:none}}
+/* Ordinary wins are brief and compact. The rare sevenfold win earns the large marquee. */
+.rc-jackpot553[data-tier="1"]{width:min(258px,calc(100% - 26px));padding:7px 10px;gap:8px}
+.rc-jackpot553[data-tier="1"]>.rc-emblem553{width:43px;height:43px}
+.rc-jackpot553[data-tier="1"] b{font-size:12px;line-height:1.3}
+.rc-jackpot553[data-tier="1"] strong{font-size:24px;line-height:1.15}
+.rc-jackpot553[data-tier="1"] .rc-reels553{display:none}
+.rc-jackpot553[data-tier="1"] span{min-height:0;margin-top:1px;font-size:7px}
+@media(max-width:359px){.rc-jackpot553 strong{font-size:23px}.rc-jackpot553[data-tier="1"] strong{font-size:22px}}

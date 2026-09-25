@@ -1,0 +1,61 @@
+{
+  "engine": "133.0.6943.0",
+  "scope": "Production View/Input/Renderer, main client receive/renderConnection, RicochetCoordinator and PartyCoordinator, with unrelated adapters stubbed; four local WebSocket browser clients, mobile viewport and touch emulation. No public deployment or real iPhone test.",
+  "checks": [
+    "junkgp: 4 humans, real lobby/readiness, 8/16 settings, private live choices, immediate distance-based launch",
+    "junkgp: collisions affect waiting carts, held drag survives peer impact and release adds carried velocity",
+    "junkgp: all 8 shots on a single persistent canvas; no intermediate phase; all 4 clients agree on final result",
+    "pinball: 4 humans, real lobby/readiness, 8/16 settings, private live choices, immediate distance-based launch",
+    "pinball: collisions affect waiting carts, held drag survives peer impact and release adds carried velocity",
+    "pinball: all 8 shots on a single persistent canvas; no intermediate phase; all 4 clients agree on final result",
+    "Crown jackpot and its six-second recharge synchronize across four real clients; only the winner consumes gems and the canvas stays intact",
+    "A pending jackpot survives reconnection, hides the preselected multiplier, and reveals one identical payout on all four clients",
+    "Touch can pull a moving, already launched body for a burst; live frames preserve the gesture, momentum adds correctly, all clients agree, duplicate bursts are rejected",
+    "Opponent choice updates cards without interrupting a local held drag",
+    "Tap, return to origin, pointer cancellation, blur, multitouch and game switch cancel safely",
+    "Inventory shows image art and stacked effects; keyboard direction/power/release and Escape work",
+    "Replay, return to minigame list, and both menu entries work",
+    "Disconnected participant uses AI, and reduced-motion mode is honored"
+  ],
+  "viewports": [
+    {
+      "width": 320,
+      "height": 690,
+      "bothModes": [
+        "choice",
+        "play",
+        "result"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 664,
+      "bothModes": [
+        "choice",
+        "play",
+        "result"
+      ]
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "bothModes": [
+        "choice",
+        "play",
+        "result"
+      ]
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "bothModes": [
+        "choice",
+        "play",
+        "result"
+      ]
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "serverErrors": ""
+}

@@ -1,0 +1,274 @@
+{
+  "build": 554,
+  "version": "3.1.233",
+  "baseBuild": 553,
+  "type": "patch",
+  "games": [
+    "junkgp",
+    "pinball"
+  ],
+  "ricochetVersion550": 5,
+  "requiredServerRestart": true,
+  "files": [
+    {
+      "path": "README_BUILD554.md",
+      "size": 6165,
+      "sha256": "cb61952947721cbca068f5d96548be1275a3b036ec73a4cc9bc55d9ce4f84076"
+    },
+    {
+      "path": "assets/ricochet554/foundry-poster.png",
+      "size": 3085551,
+      "sha256": "4f6faded1a30614b5f048ee6e5806830a3ab52b53ebf5e9abbaf967281bf0912"
+    },
+    {
+      "path": "assets/ricochet554/foundry-road.png",
+      "size": 3363191,
+      "sha256": "a4c5492ea7b7108d018f8376c31625d7111fdebc2f5b35dc7452ce86501cd5a3"
+    },
+    {
+      "path": "assets/ricochet554/kart-modules.png",
+      "size": 2418834,
+      "sha256": "a2e9541eede4364f8bb3ec677f10cec55bf1b01f096f5dd8932b014836648d6c"
+    },
+    {
+      "path": "assets/ricochet554/race-props.png",
+      "size": 1908875,
+      "sha256": "8d271935311c43a106ade06784d568cc4f16d15a1b9d0786667074fccbe22aed"
+    },
+    {
+      "path": "docs/build554/asset-prompts.json",
+      "size": 8086,
+      "sha256": "353b502e149301bd1237fb74eeacfa83e02e56882d067f37456d0e10deadfbf7"
+    },
+    {
+      "path": "docs/build554/balance-report.json",
+      "size": 12528,
+      "sha256": "7757173528b1a4a2ef010e5e05d1518b6920140286ab59cfef807df2d28c1c4f"
+    },
+    {
+      "path": "docs/build554/browser-report.json",
+      "size": 2806,
+      "sha256": "dfb3f6e4dc1115f19dffe0b27dd8a5880e65afb82508ed5e033af64d1368f1aa"
+    },
+    {
+      "path": "docs/build554/capture-report.json",
+      "size": 1898,
+      "sha256": "84a73ce5856dc306d68d9956757f2d71a60c0cb1f584f4a8c68afdbb46542230"
+    },
+    {
+      "path": "docs/build554/final-renderer-tests.txt",
+      "size": 221,
+      "sha256": "51916ea776d2c45dbdccd4b5f198b563548ff3ffcc4d7ebaad681a51f741bd54"
+    },
+    {
+      "path": "docs/build554/initial-tests.txt",
+      "size": 5924,
+      "sha256": "c41040a7c5a64a2937d4c51576d6de6be4abb2c27e5b89027d37a49685fb22d5"
+    },
+    {
+      "path": "docs/build554/static-report.json",
+      "size": 1954,
+      "sha256": "0477c5984ee2834d2e91c36102a2309596833530a3b6004fcbeae0c0547a7b56"
+    },
+    {
+      "path": "docs/build554/test-results.txt",
+      "size": 9780,
+      "sha256": "5b185995bfcd1ce54e1b7beeb03e8f43a3e25a9eec56dab0409c8b6f75a6b17c"
+    },
+    {
+      "path": "index.html",
+      "size": 224523,
+      "sha256": "0d0a5c9dbd4010fd956d3f94c5462264fe1ab8957ef00ae29aa2d49dd94a0f58"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 23302,
+      "sha256": "0ef55c11910f8029151a9f3c3520ebd0443602223711b41ee4bfa8e18ff70f3a"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 27671,
+      "sha256": "704a6decf212e1deee778ad594d7875772e2df2243ce8e61d5fa3d9e68ca8df1"
+    },
+    {
+      "path": "online-server/src/RicochetCoordinator550.js",
+      "size": 7000,
+      "sha256": "7065349b529417443c152f8dce53ec373aab5ba455e4dcddfb6adcd9295d25a9"
+    },
+    {
+      "path": "src/Styles/build554-scrapworks.css",
+      "size": 10314,
+      "sha256": "23d93fd824711474348f231f0f1b1fc637146505d4bb8ddc0a4e41148c67182b"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "8d6d58669afc96567ffc548c8081988cc233341170a4770f0e7164d815529db7"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 6080,
+      "sha256": "1d400e6df457505f0462062c2845655392ce6f75dccc5576beea8c90bfcc29d2"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 12839,
+      "sha256": "ba23980841939982e60217907ce4960a1327ef495daf41680da1ea4652dcf992"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 29632,
+      "sha256": "3c53abf39dfe00195c5e46a19f7e3250cb363f08a4288ae10536c558d848ff0e"
+    },
+    {
+      "path": "src/ricochet550/Art554.js",
+      "size": 8424,
+      "sha256": "c8c61b7f54dbb5decb81659f9d6113b43ef643c3c0e3f603b88bc8527b5e6f2e"
+    },
+    {
+      "path": "src/ricochet550/Audio554.js",
+      "size": 1036,
+      "sha256": "0c6d350c76959bf9f1ba78bd5d1af6f7109db8893c948fecb6a7cd2e1fd9ab6b"
+    },
+    {
+      "path": "src/ricochet550/Catalog550.js",
+      "size": 5048,
+      "sha256": "2a066019eccf848002b44a250d868164b7e8aaf34f16204a5dc75040dc735757"
+    },
+    {
+      "path": "src/ricochet550/Input550.js",
+      "size": 4603,
+      "sha256": "f1c59213f022aecd040e2883efbeaa91e1fad72dc2ff0761c6ece744217268f3"
+    },
+    {
+      "path": "src/ricochet550/Motor554.js",
+      "size": 4319,
+      "sha256": "58493d631757ef1ff010ddcec295501a12a633649a13a52198243668bcc68c16"
+    },
+    {
+      "path": "src/ricochet550/Renderer550.js",
+      "size": 11257,
+      "sha256": "d879b5d74ed1c81d71cc3b94afd12fa3f332b9e54215bac3e1219941389c096e"
+    },
+    {
+      "path": "src/ricochet550/Rules550.js",
+      "size": 18416,
+      "sha256": "f8146575b51989fad654b8803d885f488f0536617731a6e5a960089014d9ac9e"
+    },
+    {
+      "path": "src/ricochet550/View550.js",
+      "size": 28736,
+      "sha256": "7b80fbf0d7fb0787ff8f28fd4a8353baded69a050c4f942abed6e979875a9c52"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "1e9f4cef6ab3b6e19d22141e2237f96f1a4ddf13b2bb19c401e2c2a05bf2ae02"
+    },
+    {
+      "path": "tests/build554-carnival.test.mjs",
+      "size": 7035,
+      "sha256": "3a02b76b5eb0aea80f0bd0c32025dd59d66aea9fa80bb52af06a7c53e96cc7db"
+    },
+    {
+      "path": "tests/build554-client.test.mjs",
+      "size": 1340,
+      "sha256": "03f83acd9baa2eac7a810b69a70d0f0a12a396e96026adfd543b8352147e4ea4"
+    },
+    {
+      "path": "tests/build554-main-wire.test.mjs",
+      "size": 1703,
+      "sha256": "db201d9d25c3d36f6bb106050116402c5ffc188ce94549d5517e8d75fc138198"
+    },
+    {
+      "path": "tests/build554-motor.test.mjs",
+      "size": 8064,
+      "sha256": "dc003ed52ec0a4d5c9636996ef71d06f4b57ceeff758f4b71eae2ea45b0c85d5"
+    },
+    {
+      "path": "tests/build554-party.test.mjs",
+      "size": 4217,
+      "sha256": "feb2e16caa7cf0488c0dd8344b8e9e560a0c6dd9dc5712b31d9f41dcc3020064"
+    },
+    {
+      "path": "tests/build554-ricochet.test.mjs",
+      "size": 19108,
+      "sha256": "dac73fdbfea97e9a039baa35011048a9f6e7f2b9c33da298c444ad980b3df449"
+    },
+    {
+      "path": "tests/build554-rush.test.mjs",
+      "size": 7054,
+      "sha256": "a5888e9011939d4ed1deb18ed5942cd4039b86740ddbe44f958f0aab3e3917c9"
+    },
+    {
+      "path": "tools/build554/balance.mjs",
+      "size": 1800,
+      "sha256": "51621211447b53f8ba5affce50bc1940c79cd5d0517cbda3c16202c9a2ed723b"
+    },
+    {
+      "path": "tools/build554/browser-qa.mjs",
+      "size": 20326,
+      "sha256": "586adc7a23740eb57047da45236a91cb8d83405d26c66a5e95bce0833161ebf6"
+    },
+    {
+      "path": "tools/build554/capture.mjs",
+      "size": 4353,
+      "sha256": "5390d919f0bfe8317b2ee404272ed31f34e39f25c00bd05a79f1fa55bf144347"
+    },
+    {
+      "path": "tools/build554/client-fixture.mjs",
+      "size": 1450,
+      "sha256": "b9bf21f76277f1964aa24064bccd07fc1f6141eeb803a0651ba2c2128b525988"
+    },
+    {
+      "path": "tools/build554/main-fixture.mjs",
+      "size": 1241,
+      "sha256": "bcef004486d3a7205cb7db012671046c64c8138ae61b3808191c15ea8e6da279"
+    },
+    {
+      "path": "tools/build554/package.py",
+      "size": 1750,
+      "sha256": "e9ff555d9addb21e9b739214299d14c70de0d646a089b7be5218f44b29f171bf"
+    },
+    {
+      "path": "tools/build554/party-fixture.mjs",
+      "size": 1190,
+      "sha256": "890f980dcb9b0c55dfbe2599bb8d5ae96ba292e3b7775713cb3ff3ec4f8a634d"
+    },
+    {
+      "path": "tools/build554/preview.mjs",
+      "size": 2162,
+      "sha256": "20945e65f1823fe46e6e50a3a1aac83530a1750d7a27377454a16a4b8610d0a4"
+    },
+    {
+      "path": "tools/build554/qa-server.mjs",
+      "size": 8179,
+      "sha256": "77f94f1dbeaada3ba5d85c0b57c34219747b37415c704a109eeeaef42569b9a3"
+    },
+    {
+      "path": "tools/build554/stamp.py",
+      "size": 2034,
+      "sha256": "2a6aa85c9f593b85f71ea55d3c7fab57b3d370d03133dfe79fc80b8bbaafb68b"
+    },
+    {
+      "path": "tools/build554/static-check.py",
+      "size": 2234,
+      "sha256": "4c8a636fd0cf0bad9395070ae0acc715abbdf69f4f4c582881c41bac80dcc714"
+    },
+    {
+      "path": "tools/build554/visual.mjs",
+      "size": 1818,
+      "sha256": "f41aa4a7e796fce054191865bb45b0da745c2255aff44ab819c274e3d5b6c1c8"
+    },
+    {
+      "path": "world-raid-offline554-assets.json",
+      "size": 46859,
+      "sha256": "fffbf96ba3d6b486be10d188b5d8306e96535661147f93be16374d2042c50411"
+    },
+    {
+      "path": "world-raid-offline554-sw.js",
+      "size": 1844,
+      "sha256": "e80ede296dbd2d71e9d5a3e86c9a81ce9c29a3c32e157c888c2c2ddefd08a9c8"
+    }
+  ]
+}
