@@ -6,7 +6,7 @@ export function applyPlayerColors542(c){
  const root=c.root;if(!root)return;
  const paint=(e,p)=>{if(!e||!p)return;e.style.setProperty('--identity542',playerColor499(p).hex);e.dataset.identity542=p.playerId;};
  const group=(selector,rows)=>[...root.querySelectorAll(selector)].forEach((e,i)=>paint(e,rows?.[i]));
- const sets={
+ const sets={cart:['.ct-players543 article','.ct-results543 article'],
   cabbage:['.cb-seat','.cb-ranking article'],canal:['.cn-crew496 article','.cn-result-crew>article'],
   gorilla:['.gg-players502 article','.gg-records502 article'],luck:['.lk-players507 article','.lk-results507 article'],
   quiz:['.q-seats513 article','.q-results513 article'],tower:['.tw-people517>div','.tw-resultrow517'],

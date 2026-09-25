@@ -1,0 +1,174 @@
+{
+  "build": 544,
+  "version": "3.1.223",
+  "baseBuild": 543,
+  "type": "patch",
+  "requiredServerRestart": true,
+  "files": [
+    {
+      "path": "README_BUILD544.md",
+      "size": 5934,
+      "sha256": "165719c578e216a913bacfcc84c6370ef02af498501a11e18ca02c311d98ed6d"
+    },
+    {
+      "path": "assets/cart544/cart.webp",
+      "size": 73294,
+      "sha256": "0c41b66e7615f336cf9d01e6505cd8211fd8b27caa415acd9981cc25bf7c2571"
+    },
+    {
+      "path": "assets/cart544/track.webp",
+      "size": 408726,
+      "sha256": "2c4a6f209146210a96fac8438585ffc967ccd814ae03dbce5987c613038431f7"
+    },
+    {
+      "path": "docs/build544/art-prompts.json",
+      "size": 3135,
+      "sha256": "6e7cdf3a826df0f2f9c36c47f2a2e93395637bf723847abb87569aa2b522968f"
+    },
+    {
+      "path": "docs/build544/browser-report544.json",
+      "size": 1143,
+      "sha256": "566cfb6eefeb17e55ecdde902810e28623a74167073413c8fdc457aed54ed79b"
+    },
+    {
+      "path": "docs/build544/layout-report544.json",
+      "size": 394,
+      "sha256": "dd0be233a7ef04b04cbab11bc08405b97bbb5db71b9dff73b09d645674606093"
+    },
+    {
+      "path": "docs/build544/production-report544.json",
+      "size": 500,
+      "sha256": "75c701696e000c87c17085df34571cf00ab5b9e26cfe397dc2687f731e7b617c"
+    },
+    {
+      "path": "docs/build544/tests.txt",
+      "size": 6760,
+      "sha256": "5d0b0238af8e83a26fb3431c32a50ef61a47fcc76dd803b6c5dc4db7caced4c3"
+    },
+    {
+      "path": "index.html",
+      "size": 207981,
+      "sha256": "25d0a06a98054efa9d54aa7fbcad129339bab85197f282d430e0606d896831bf"
+    },
+    {
+      "path": "online-server/src/CartCoordinator543.js",
+      "size": 5258,
+      "sha256": "b7ac2e6e0627b116b0713f8a8a540c55605f36fc73050904b01096586952c15e"
+    },
+    {
+      "path": "online-server/src/PartyCoordinator462.js",
+      "size": 22384,
+      "sha256": "eecc71516cd27099c37c740123a0e4bc60e78c0dd936927723584160908e24ce"
+    },
+    {
+      "path": "online-server/src/RaceCoordinator451.js",
+      "size": 27127,
+      "sha256": "f7d6df873290020d486ac66edab6f514c940bc753f7aecc0cbbd1b01c6466548"
+    },
+    {
+      "path": "src/Styles/build544-cart.css",
+      "size": 3515,
+      "sha256": "0c0a757a27d5931737f9f336b11170c148a84165c6f225b65c03383fa6b7bc10"
+    },
+    {
+      "path": "src/cart/Audio543.js",
+      "size": 953,
+      "sha256": "60437595313661b1a9d35bfdf784a412ce56df3029c7b10b45cbcd19874beb4b"
+    },
+    {
+      "path": "src/cart/Courses544.js",
+      "size": 1673,
+      "sha256": "545d7d2afb93532490aa1bf0ff43e45254d728fcd0b5b904ee77cfe72361ce6d"
+    },
+    {
+      "path": "src/cart/Renderer543.js",
+      "size": 10175,
+      "sha256": "d6f32f9808d3292530c3f787853f0f26ae285b02c4a760964731d2fd75724c3e"
+    },
+    {
+      "path": "src/cart/Rules543.js",
+      "size": 9312,
+      "sha256": "4e6772df8a0e6e9bbb9d68956d160a4af1b1ec38e146acaaeccb0ae13d1b07d6"
+    },
+    {
+      "path": "src/cart/View543.js",
+      "size": 18327,
+      "sha256": "1836a3aaaeeb96f8c0187a4a43af9132566892d672f5f5300fbd79dfbdce6bc8"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "7b3fc47b93ff1085c59639b0ce52de4886e26c12b8351678c2ccd33c8eb3962d"
+    },
+    {
+      "path": "src/party/PartyGames462.js",
+      "size": 5143,
+      "sha256": "8c7ba70b2a287e1a3e4bb3828fca1b0a8ac06c50e82017d34d1ddddee6dd60c5"
+    },
+    {
+      "path": "src/party/PartyView462.js",
+      "size": 12545,
+      "sha256": "73a62072e8f56454106f3d4af847942d0d448d591151fbf159f5fef1d59e0cb5"
+    },
+    {
+      "path": "src/race/RaceClient451.js",
+      "size": 29014,
+      "sha256": "fbf10de3bb5ae7ed14313381a32f0f30f54b7f1eaf5809d4df0d7b2b36c21ffa"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "ed20187e0b3cc2e5708a27995ba004acbcb95d90dfad0c2756ecb680e97a66c3"
+    },
+    {
+      "path": "tests/build543-cart.test.mjs",
+      "size": 8791,
+      "sha256": "fbaafb42e53e16b0d8b7c7727c51f578bd1e8c1fc90bf36f605e7680867d5b71"
+    },
+    {
+      "path": "tests/build544-cart.test.mjs",
+      "size": 6991,
+      "sha256": "3f4f8eae7ffc2b6db047385b746eb586d22b553b13c36804107127873d007dc9"
+    },
+    {
+      "path": "tools/build544/browser-qa.mjs",
+      "size": 8122,
+      "sha256": "4407479ae9a56948ab5809609fa8aeea761a67347d2e8426f31e8dc7ebda11e2"
+    },
+    {
+      "path": "tools/build544/layout-qa.mjs",
+      "size": 3361,
+      "sha256": "8021b078e6057c9705570d93b37cd63a349acf5952eb6a66267f0aef538c994e"
+    },
+    {
+      "path": "tools/build544/package.py",
+      "size": 1901,
+      "sha256": "2e2a94340f46cf705aa47e28483b723b5b33c656998ad8780f91227ddbfaead6"
+    },
+    {
+      "path": "tools/build544/preview.mjs",
+      "size": 4577,
+      "sha256": "cacc9571c0a4a58e250cbebcc44815bb06b7596135642089f5964df6dd7ac396"
+    },
+    {
+      "path": "tools/build544/production-qa.mjs",
+      "size": 8497,
+      "sha256": "4fc44962de6caa6967a8bb7b04c3854525dd80734ec37c35f280c614c8768cc7"
+    },
+    {
+      "path": "tools/build544/qa-server.mjs",
+      "size": 6971,
+      "sha256": "81d1687e0d4057608bd982cf7a23ac3d7f39cf1249910504965e535da1b1b919"
+    },
+    {
+      "path": "world-raid-offline544-assets.json",
+      "size": 44579,
+      "sha256": "1ab7467b7aaf00e40f37ed205cd46d58cc7e82333cdba06745ce589116a319f4"
+    },
+    {
+      "path": "world-raid-offline544-sw.js",
+      "size": 1844,
+      "sha256": "99b5dd6e03e2508348735905ca5fe2d48b3d4af491d480594177c0de23958218"
+    }
+  ]
+}

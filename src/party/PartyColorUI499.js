@@ -1,6 +1,6 @@
 import{PARTY_COLORS499,color499,validColor499}from'./PartyColors499.js';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const room=c=>c.state?.bomb??c.state?.tetra??c.state?.hide??c.state?.fishing??c.state?.sumo??c.state?.tower??c.state?.quiz??c.state?.luck??c.state?.gorilla??c.state?.canal??c.state?.cabbage??c.state?.sugoroku??c.state?.room;
+const room=c=>c.state?.cart??c.state?.bomb??c.state?.tetra??c.state?.hide??c.state?.fishing??c.state?.sumo??c.state?.tower??c.state?.quiz??c.state?.luck??c.state?.gorilla??c.state?.canal??c.state?.cabbage??c.state?.sugoroku??c.state?.room;
 const idle=c=>!room(c)||['lobby','result'].includes(room(c).phase);
 const host=c=>c.state?.party?.hostId===c.transport.selfId;
 const self=c=>c.state?.party?.members.find(m=>m.playerId===c.transport.selfId);

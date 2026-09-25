@@ -1,0 +1,85 @@
+frame bytes 17449 2591
+✔ snapshot: locked Windows rename keeps durable newest data, retries, recovers after restart (23.294812ms)
+✔ snapshot: real disk failure rejects, truncated pending file never replaces valid save (7.669854ms)
+✔ tetra: 100 random fields connect all checkpoints and offer wide branching choices (1226.51122ms)
+✔ tetra: drag power determines distance independently of holding time; cancelled and malformed input cannot jump (36.931696ms)
+✔ tetra: ordinary wave saves only tips/checkpoints; great wave washes tips and airborne players (4.916344ms)
+✔ tetra: low pad tide and moss affect feet; tip stays put between waves (3.463329ms)
+✔ tetra: occupied landings do not overlap; respawns use separate spaces (1.684629ms)
+✔ tetra: checkpoints must be visited in order; seeded bots use the same physics and reach goals (1083.231871ms)
+✔ hide: move and attack together at 200 units; shots max three and recharge ten seconds (186.278154ms)
+✔ hide: live disguise swapping retains movement, stamina and privacy (175.910593ms)
+✔ luck: a stop hit cannot be undone by a later magnet; huge legal growth is preserved (5.951574ms)
+✔ fishing: compact frames reduce wire size, retain live controls, and full results retain records (2.595497ms)
+✔ coordinator: new protocol, authoritative identity, sequence and power validation, reconnect save (16.505627ms)
+✔ three precise tips unlock one longer jump; prediction equals server endpoint (11.185454ms)
+✔ same-pad hop cannot farm charge; water resets charge (2.754236ms)
+✔ big waves still sweep tips and spare checkpoints (8.435202ms)
+✔ seal requires stopping, decays after leaving, then opens exit; one escape wins team (262.690215ms)
+✔ waiting for timeout now wins for hunter (139.043418ms)
+✔ decoy preserves an ordinary target and swaps identity; cooldown prevents spam (125.54802ms)
+✔ sense is private and only exposes a distance band; seal progress stays private (62.153482ms)
+✔ rescue succeeds once per hider; nearby hunter blocks rescue (100.155361ms)
+✔ stroke validates length, bounds and finite points before consuming sequence (1.001907ms)
+✔ stroke hits only crossed enemies, caps at six, and shares cooldown (1.934892ms)
+✔ eight consecutive catches trigger eight-second fever; subsequent catch doubles score (0.94727ms)
+✔ two contributors BREAK boss, extend snare and increase following damage (0.556334ms)
+✔ rally accepts each seat once; four-player net clears enemies and heals (0.839582ms)
+✔ solo rally fires at deadline without forcing absent humans to join (0.68473ms)
+✔ AI joins rally and saved-round continuation is deterministic (0.990865ms)
+✔ continuous furniture collision rejects corner cuts missed by sampled paths (0.417532ms)
+✔ hide AI navigates furniture, opens seals and reaches escape instead of corner-stalling (276.529678ms)
+✔ coordinator rejects old tetra protocol and applies current input to authenticated seat (21.841264ms)
+✔ hide ability and steering share input; old protocol cannot move new match (186.498737ms)
+✔ canal wire validates stroke, deduplicates sequence and uses authenticated contributor (6.865451ms)
+✔ four colors preserved, empty seats get selected AI colors (4.254076ms)
+✔ place has strict capacity, cooldown, and finite fuse (1.018117ms)
+✔ a return changes owner/range but never resets the fuse (0.953246ms)
+✔ columns stop blast, crates take the first hit and shelter behind (7.657731ms)
+✔ chain reactions terminate and shield consumes exactly once (1.80655ms)
+✔ tap routing avoids obstacles, collision stops overlap, inputs keep moving when placing (4.705901ms)
+✔ 18/24 second collapse removes outer floor and eliminates exposed players (1.638157ms)
+✔ three rounds, score, shared ties and all players return (1.501493ms)
+✔ no private roster or other input counters in snapshot (0.899764ms)
+✔ deterministic bots finish 20 seeds with bounded state and legal numbers (396.58496ms)
+✔ server validates version, owner, sequence, finite targets, replay and lifecycle (89.878351ms)
+✔ existing game mechanics and shared color assignment are byte-identical to Build541 (3.534149ms)
+✔ chosen colors and companions persist; missing seats get chosen AI colors (5.628265ms)
+✔ hold duration sets power; one launch only and no post-launch input (0.669928ms)
+✔ cancel never launches, repeated hold never resets charge, power capped (0.432303ms)
+✔ more power travels further with consistent rolling resistance (5.89124ms)
+✔ stationary high-score cart is pushed across edge by a later cart (0.913888ms)
+✔ side walls bounce, collision separates, impulses do not create energy (0.576019ms)
+✔ maximal launch falls; prior total score is retained (0.628014ms)
+✔ deadline auto-launches untouched player; scores wait for every cart (4.800826ms)
+✔ five rounds, final double, shared ranking and rotating starts (5.39246ms)
+✔ snapshots hide input counters and AI future decisions (0.813482ms)
+✔ fixed steps are deterministic across timer chunks and recover after pause (4.579643ms)
+✔ 30 seeds finish without infinite motion and AI shows score/fall/collision variety (371.030147ms)
+✔ server authenticates, validates version/sequence/round; takeover, reconnect, replay (65.756117ms)
+✔ all existing game directories and styles are byte-identical to Build542 (16.29246ms)
+course stats [
+  { id: 'market', gold: 61, falls: 40, total: 20501 },
+  { id: 'wax', gold: 51, falls: 56, total: 19038 },
+  { id: 'rug', gold: 53, falls: 66, total: 17867 },
+  { id: 'boost', gold: 52, falls: 55, total: 18754 },
+  { id: 'sale', gold: 50, falls: 71, total: 34860 }
+]
+✔ same power has visibly different outcomes on regular, wax, rug and boost floors (23.52753ms)
+✔ each of five courses has reachable golden parking from all four starts (27.514215ms)
+✔ boost applies once, requires forward motion, and cannot farm more speed by reentry (2.29216ms)
+✔ gold bonus requires the whole footprint, stationary, launched and still on the course (0.316548ms)
+✔ park message and provisional gold do not bank points; collision removes the bonus immediately (0.483013ms)
+✔ five-round scoring banks each gold once and doubles base plus bonus only in final (5.458876ms)
+✔ isolated hold preview matches rolling physics for every floor and does not mutate match state (29.435037ms)
+✔ AI aims vary with surface and golden bonus never exceeds bounded totals (452.107555ms)
+✔ old rules reset active match safely; old client cannot ready and updated lobby can start (8.186022ms)
+✔ all preexisting game mechanics and styles remain byte-identical to Build543 (12.084573ms)
+ℹ tests 69
+ℹ suites 0
+ℹ pass 69
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4612.518355

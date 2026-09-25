@@ -1,0 +1,18 @@
+{
+  "build": 544,
+  "method": "built-in image_gen",
+  "assets": [
+    {
+      "path": "assets/cart544/track.webp",
+      "source": "generated_images/exec-faebde75-81fe-4408-b38a-f162de625ea6.png",
+      "prompt": "Use case: stylized-concept. Asset type: finished portrait 2D game background, 1024x1536. A gorgeous whimsical fantasy market cart race ramp above a turquoise seaside gorge, premium hand-painted 3D animated feature quality, sunny golden afternoon, lush plants, striped emerald and ivory market awnings, little crates of colorful vegetables and pumpkins, warm honey sandstone and brass details. Camera high above the starting end looking straight forward down a long gently sloping ramp, symmetric perspective but charming asymmetric set dressing. GAMEPLAY COMPOSITION IS CRITICAL: one continuous empty unobstructed straight pale honey wooden/paved roadway occupies the central corridor, from x18% to82% at y96% narrowing to x30% to70% at y20%. The road ENDS abruptly at y20%, opening onto sparkling turquoise water beyond; open unrailed end, no building, barrier, arch, bridge or rail crossing the end. Above that show distant sunlit coastal fantasy town and a waterfall. Side rails run only ALONG left/right edges. Market booths are outside the central roadway. Road surface low contrast and calm so small game characters read clearly. Lots of depth, rounded tactile materials, exquisite crafted details along margins, brighter cheerful colors than dark medieval art. Empty road, no vehicles, people, UI, text, parking marks, arrows, labels, logos or watermark. The image fills entire rectangle with scenery.",
+      "conversion": "WebP quality 88, 1024×1536. Renderer frames source from 20% down to align the road edge."
+    },
+    {
+      "path": "assets/cart544/cart.webp",
+      "source": "generated_images/exec-e1a48169-f371-4535-821d-a988232fc77b.png",
+      "prompt": "Use case: stylized-concept. Asset type: transparent game sprite, one shopping cart seen from high behind, pointing toward the TOP of the image, no character. A beautiful chunky silver-and-warm-brass shopping trolley in a whimsical fantasy seaside market, high-end animated feature / tactile 3D game art. Exaggerated small caster wheels, wire mesh basket with readable thick rims, sturdy wooden push handle at the bottom rear. A few colorful carrots, a cabbage, baguette and bright tomatoes packed in the FRONT half of the basket (upper image); rear half remains visibly empty for a game character drawn separately. Compact playful proportions, easy to recognize at only 70 pixels tall. Camera 65 degrees from horizontal, exact straight rear view, centered, no yaw, no perspective tilt to either side. Warm directional afternoon sun from upper left, lovely metal highlights, soft ambient shading within object only. Cart nearly fills a square with 8% transparent margin, all wheels and handles inside frame. Isolated on genuinely transparent background, no ground plane, no cast shadow extending beyond object, no text, no UI, no border, no multiple views.",
+      "conversion": "WebP quality 88, 512×512, original alpha retained."
+    }
+  ]
+}

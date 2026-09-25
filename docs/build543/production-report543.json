@@ -1,0 +1,17 @@
+{
+  "productionRaceClient": true,
+  "partyStyles": 79,
+  "fit": {
+    "left": 0,
+    "width": 390,
+    "height": 844,
+    "controlBottom": 817,
+    "bodyWidth": 390
+  },
+  "refreshWhileHolding": true,
+  "release": true,
+  "replay": true,
+  "blurCancel": true,
+  "errors": [],
+  "missing": []
+}

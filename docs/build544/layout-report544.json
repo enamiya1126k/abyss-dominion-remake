@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "width": 320,
+      "height": 568,
+      "nameplatesInside": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "nameplatesInside": true
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "nameplatesInside": true
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "nameplatesInside": true
+    }
+  ],
+  "errors": [],
+  "missing": []
+}
