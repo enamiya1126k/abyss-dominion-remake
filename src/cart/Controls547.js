@@ -4,7 +4,7 @@ import {pull547} from './Sling547.js';
 import {unlock543} from './Audio543.js';
 const ui=c=>c.cartUI543;
 const me=c=>c.state?.cart?.players.find(p=>p.playerId===c.transport.selfId);
-export function canPull547(c){const g=c.state?.cart;return g?.phase==='play'&&me(c)&&!me(c).launched&&!ui(c).pending547&&c.ready()&&Date.now()+(c.offset??0)<g.roundAt+C.launchWindow}
+export function canPull547(c){const g=c.state?.cart;return g?.phase==='play'&&me(c)&&me(c).fallenAt==null&&!me(c).launched&&!ui(c).pending547&&c.ready()&&Date.now()+(c.offset??0)<g.roundAt+C.launchWindow}
 function send(c,action,pull){
  const g=c.state?.cart;if(!canPull547(c))return false;
  const seq=++ui(c).seq;
@@ -26,16 +26,15 @@ function update(c,pull,force=false){const u=ui(c);u.pull547=pull;u.aim545=pull.a
 export function bindSling547(c,root,signal){
  const u=ui(c),on=(host,event,fn)=>host.addEventListener(event,fn,{signal});
  const local=e=>{const b=root.getBoundingClientRect();return{x:e.clientX-b.left,y:e.clientY-b.top}};
- let start,metrics;
- const sample=e=>pull547(start,local(e),metrics);
+ let start;
+ const sample=e=>{const r=u.renderer,p=me(c),a=point543(r,p.x,p.y),x=point543(r,p.x+1,p.y),y=point543(r,p.x,p.y+1);return pull547(start,local(e),{width:r.width,height:r.height,xScale:x.x-a.x,yScale:a.y-y.y,skewX:y.x-a.x})};
  on(root,'pointerdown',e=>{
   // A second finger cancels the pull. Its eventual lift must never be mistaken
   // for releasing the launch finger (including native pinch gesture sequences).
   if(e.pointerType==='touch'&&u.pointer547!=null&&e.pointerId!==u.pointer547){e.preventDefault();cancelPull547(c);return}
   if(e.button!==0||e.isPrimary===false||u.pointer547!=null||!e.target.closest('[data-ct-sling]')||!canPull547(c))return;
   e.preventDefault();unlock543(u);u.nodes.canvas.focus({preventScroll:true});
-  const r=u.renderer,p=me(c),a=point543(r,p.x,p.y),x=point543(r,p.x+1,p.y),y=point543(r,p.x,p.y+1);
-  start=local(e);metrics={width:r.width,height:r.height,xScale:x.x-a.x,yScale:a.y-y.y,skewX:y.x-a.x};
+  start=local(e);
   u.pointer547=e.pointerId;u.capture547=root;root.setPointerCapture(e.pointerId);update(c,sample(e),true);
  });
  on(root,'pointermove',e=>{if(e.pointerId!==u.pointer547)return;e.preventDefault();if(!canPull547(c)){cancelPull547(c,false);return}update(c,sample(e))});

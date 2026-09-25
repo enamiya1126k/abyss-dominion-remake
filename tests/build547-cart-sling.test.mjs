@@ -7,11 +7,11 @@ const members=Array.from({length:4},(_,i)=>({playerId:'p'+i,name:'仲間'+i,owne
 export function fixture547(){
  let now=10000;const sent=[],g=R.makeCart543({id:'test547',code:'LOCAL',partyId:'party',hostId:'p0',now,members});R.startCart543(g,now,547);g.phase='play';g.roundAt=now;g.lastAt=now;
  const sessions=new Map(members.map(p=>[p.playerId,{playerId:p.playerId,connected:true}]));
- const party={id:'party',hostId:'p0',members:members.map(p=>({...p,cartVersion543:4,ready:true}))};
+ const party={id:'party',hostId:'p0',members:members.map(p=>({...p,cartVersion543:5,ready:true}))};
  const c={data:{cartRooms543:{LOCAL:g},parties462:{party}},sessions,subscribers:new Set(sessions.keys()),now:()=>now,transaction:fn=>fn(),broadcast(){},push(){},isBusy:()=>false,send:(id,m)=>sent.push({id,m})};
  return{c,g,party,sessions,sent,clock:value=>now=value,tick(ms=25){now+=ms;advanceCarts543(c)},live:()=>liveCart543(c,c.data.cartRooms543.LOCAL)};
 }
-const message=(g,extra={})=>({cartVersion543:4,gameId:g.id,round:g.round,seq:1,action:'shoot',power:.5,angle:0,...extra});
+const message=(g,extra={})=>({cartVersion543:5,gameId:g.id,round:g.round,seq:1,action:'shoot',power:.5,angle:0,...extra});
 test('pull length controls power independent of hold time, bounded in CSS pixels',()=>{
  const metrics={width:390,height:560,xScale:32,yScale:13,skewX:0},start={x:100,y:100};
  assert.equal(pull547(start,{x:102,y:106},metrics).active,false);
@@ -54,7 +54,7 @@ test('an on-time release survives the next simulation tick; deadline uses pull d
 test('disconnect and home state reject inputs, and incompatible live rooms return to lobby',()=>{
  const f=fixture547();f.sessions.get('p0').connected=false;assert.equal(queueCart543(f.c,f.sessions.get('p0'),message(f.g)),false);f.sessions.get('p0').connected=true;f.party.members[0].atHome=true;assert.equal(queueCart543(f.c,f.sessions.get('p0'),message(f.g)),false);
  f.g.rules543=3;advanceCarts543(f.c);assert.equal(f.c.data.cartRooms543.LOCAL.phase,'lobby');assert(f.party.members.every(p=>!p.ready));
- assert.throws(()=>handleCart543(f.c,f.sessions.get('p0'),{op:'cart543',gameId:f.g.id,cartVersion543:3,kind:'start'}),/Build547/);
+ assert.throws(()=>handleCart543(f.c,f.sessions.get('p0'),{op:'cart543',gameId:f.g.id,cartVersion543:3,kind:'start'}),/Build549/);
 });
 test('actual movement matches the guide on all five surfaces including backward and bank shots',()=>{
  for(let round=1;round<=5;round++)for(const angle of [-2.5,-.8,0,.5,2.5]){

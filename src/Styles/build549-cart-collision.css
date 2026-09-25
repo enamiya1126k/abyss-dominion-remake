@@ -1,0 +1,20 @@
+/* Confine the pawn depth order to the field, behind every result overlay. */
+.ct-play549 .ct-stage543{isolation:isolate}
+.ct-play549 .ct-stage543>canvas{position:relative;z-index:0}
+.ct-play549 .ct-pawns543{z-index:2;isolation:isolate}
+.ct-play549 .ct-stage-title543{z-index:3}
+.ct-play549 .ct-overlay543{z-index:5;background:radial-gradient(ellipse,#123c38f7 20%,#10352ddb 66%,#173d3299);gap:12px}
+.ct-play549 .ct-notice543{z-index:6}
+.ct-play549 .ct-network543{z-index:7}
+.ct-play549.is-summary549 .ct-stage-title543,.ct-play549.is-countdown549 .ct-stage-title543{visibility:hidden}
+.ct-play549.is-summary549 .ct-pawns543{visibility:hidden}
+.ct-play549 .ct-round-results543>div{background:linear-gradient(135deg,#214b3aed,#10372ff5);padding:12px 9px;min-width:0;border-radius:8px}
+.ct-play549 .ct-round-results543 b{display:block;width:100%;max-width:none;font-size:10px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.ct-play549 .ct-round-results543 strong{white-space:nowrap;font-size:27px}
+.ct-play549 .ct-players543 article>span{grid-row:1;width:18px;height:18px}
+.ct-play549 .ct-players543 article>span .sg-monster{width:18px;height:18px}
+.ct-play549 .ct-players543 strong{grid-column:1/-1;white-space:nowrap;display:flex;align-items:baseline;gap:2px;min-width:0;font-size:19px;line-height:1.1}
+.ct-play549 .ct-players543 strong small{font-size:9px;margin:0}
+@media(max-width:350px){.ct-play549 .ct-players543 strong{font-size:17px}.ct-play549 .ct-overlay543{padding:12px;gap:9px}.ct-play549 .ct-overlay543>strong{font-size:36px}.ct-play549 .ct-round-results543>div{padding:9px 7px}.ct-play549 .ct-round-results543 strong{font-size:24px}}
+@media(max-height:650px){.ct-play549 .ct-overlay543{gap:7px;padding:10px}.ct-play549 .ct-overlay543>strong{font-size:32px}.ct-play549 .ct-round-results543>div{padding:7px}.ct-play549 .ct-round-results543 strong{font-size:23px}}
+@media(orientation:landscape) and (max-height:550px){.ct-play549 .ct-overlay543{gap:6px;padding:10px}.ct-play549 .ct-overlay543>strong{font-size:27px}.ct-play549 .ct-round-results543>div{padding:7px}.ct-play549 .ct-round-results543 strong{font-size:23px}.ct-play549 .ct-players543 article{gap:2px 4px;padding:4px 5px}.ct-play549 .ct-players543 strong{grid-column:2;grid-row:2}.ct-play549 .ct-players543 article>span{grid-row:1/3;align-self:center}}

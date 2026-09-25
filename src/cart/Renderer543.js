@@ -1,6 +1,7 @@
 import {CART543 as C,clamp543} from './Rules543.js';
 import {course544,GOLD544,parkingBonus544} from './Courses544.js';
 import {playerColor499} from '../party/PartyColors499.js';
+import {conveyorBase549,conveyorMotion549} from './Conveyor549.js';
 import {direction548,sling548,launch548} from './Craft548.js';
 const images={};function art(name){if(!images[name]){const i=new Image();i.decoding='async';const folder={wax:'cart546',sale:'cart546',obstacle:'cart545'}[name]??'cart544';i.src=`./assets/${folder}/${name}.webp`;images[name]=i}return images[name]}
 const ready=i=>i?.complete&&i.naturalWidth,mix=(a,b,t)=>a+(b-a)*t;
@@ -18,7 +19,7 @@ function background(r,g){const course=course544(g),variant=course.id==='wax'?r.w
  if(ready(track))c.drawImage(track,0,track.naturalHeight*.2,track.naturalWidth,track.naturalHeight*.8,0,0,r.width,r.height);
  for(const z of course.zones){
   if(z.kind==='rug'){band(r,c,z.from,z.to,'#8e254bc9','#ffcd92');for(let side of [-1,1])line(r,c,side*3.9,z.from,side*3.9,z.to,'#f3c580',2);for(let y=z.from+.8;y<z.to;y+=1.9){for(let x of [-2,0,2]){const p=point543(r,x,y);text(c,'◆',p.x,p.y,8,'#f4d192')}}}
-  if(z.kind==='boost'){band(r,c,z.from,z.to,'#286957ee','#ffed9b');for(let y=z.from+.25;y<z.to;y+=.55)line(r,c,-4.4,y,4.4,y,'#ffffff1c',1);for(let x of [-2.6,0,2.6]){line(r,c,x-.6,(z.from+z.to)/2-.4,x,(z.from+z.to)/2+.4,'#ffe589',3);line(r,c,x,(z.from+z.to)/2+.4,x+.6,(z.from+z.to)/2-.4,'#ffe589',3)}}
+  if(z.kind==='boost')conveyorBase549(c,(x,y)=>point543(r,x,y),z);
  }
  // Solid stacked freight crates; their footprint exactly matches collision bounds.
  for(const b of course.blocks){const front=b.y-b.h/2,back=b.y+b.h/2,a=point543(r,b.x-b.w/2,front),d=point543(r,b.x+b.w/2,front),e=point543(r,b.x+b.w/2,back),f=point543(r,b.x-b.w/2,back),lift=16*a.scale;
@@ -41,15 +42,17 @@ function background(r,g){const course=course544(g),variant=course.id==='wax'?r.w
 }
 function groceries(c,x,y,age,seed,large=false){const seconds=age/1000;for(let i=0;i<7;i++){const a=(i*2.4+seed)*1.7,speed=22+i%3*17,dx=Math.cos(a)*speed*seconds,dy=-Math.abs(Math.sin(a))*70*seconds+70*seconds*seconds;c.save();c.translate(x+dx,y+dy);c.rotate(a+seconds*(i%2?5:-5));c.fillStyle=['#f08037','#d9503e','#83b45d','#ecc58b'][i%4];c.beginPath();c.ellipse(0,0,large?3.5:2.8,i%4===3?7:3.5,0,0,Math.PI*2);c.fill();c.fillStyle='#337a4e';c.fillRect(-1,-5,2,3);c.restore()}}
 export function paint543(r,g,selfId,u,at){if(!r.width||!r.height||!g.players.length)return;const c=r.ctx;background(r,g);
- const live=g.players.filter(p=>p.fallenAt==null),low=Math.min(...live.map(p=>p.y),30),high=Math.max(...live.map(p=>p.y),0),follow=g.players.every(p=>p.launched)&&live.length&&g.phase!=='countdown',weight=follow?clamp543((low-4)/18,0,1):0;
+ const live=g.players.filter(p=>p.fallenAt==null),low=Math.min(...live.map(p=>p.y),30),high=Math.max(...live.map(p=>p.y),0),follow=g.players.every(p=>p.launched||p.fallenAt!=null)&&live.length&&g.phase!=='countdown',weight=follow?clamp543((low-4)/18,0,1):0;
  const targetZoom=1+weight*.74,targetFocus=mix(r.height*.5,(point543(r,0,Math.min(31,high+2)).y+point543(r,0,Math.max(0,low-2)).y)/2,weight);
  if(r.round!==g.round){r.round=g.round;r.zoom=1;r.focus=r.height*.5}
  r.zoom=mix(r.zoom??1,targetZoom,u.reduced?1:.09);r.focus=mix(r.focus??r.height*.5,targetFocus,u.reduced?1:.09);
- const zoom=r.zoom,tx=r.width*(1-zoom)/2,ty=clamp543(r.height*.5-r.focus*zoom,r.height*(1-zoom),0),elapsed=g.phase==='play'?g.elapsed+clamp543(at-g.serverAt,0,130):g.elapsed,t=clamp543((performance.now()-(u.receivedAt??0))/100,0,1);
+ const zoom=r.zoom,tx=r.width*(1-zoom)/2,ty=clamp543(r.height*.5-r.focus*zoom,r.height*(1-zoom),0),elapsed=g.phase==='play'?g.elapsed+clamp543(at-g.serverAt,0,65):g.elapsed,t=clamp543((performance.now()-(u.receivedAt??0))/50,0,1);
  c.setTransform(r.dpr*zoom,0,0,r.dpr*zoom,tx*r.dpr,ty*r.dpr);c.drawImage(r.terrain,0,0,r.width,r.height);r.points=[];
+ for(const z of course544(g).zones)if(z.kind==='boost')conveyorMotion549(c,(x,y)=>point543(r,x,y),z,g.phase==='play'&&!u.reduced?elapsed:0,u.reduced);
  const self=g.players.find(p=>p.playerId===selfId);
  if(g.phase==='play'&&self&&!self.launched&&u.pull547?.active&&!u.pending547){
-  const {power,angle}=u.pull547,a=point543(r,self.x,self.y),b=point543(r,self.x+Math.sin(angle),self.y+Math.cos(angle));
+  const oldSelf=u.previous?.round===g.round?u.previous.players.find(p=>p.seat===self.seat&&!p.launched):null,sx=oldSelf?mix(oldSelf.x,self.x,t):self.x,sy=oldSelf?mix(oldSelf.y,self.y,t):self.y;
+  const {power,angle}=u.pull547,a=point543(r,sx,sy),b=point543(r,sx+Math.sin(angle),sy+Math.cos(angle));
   const size=clamp543(r.width*.22,62,110)*a.scale,direction=Math.atan2(b.y-a.y,b.x-a.x),color=playerColor499(self).hex;
   const visual={x:a.x,y:a.y,size,direction,power,color,tint:playerColor499(self).tint,at:performance.now(),reduced:u.reduced,width:r.width,height:r.height};
   direction548(c,visual);sling548(c,visual);
@@ -72,7 +75,8 @@ export function paint543(r,g,selfId,u,at){if(!r.width||!r.height||!g.players.len
   c.fillStyle=color;c.fillRect(size*.22,-size*.37,size*.17,size*.11);c.fillStyle='#fff1ca';c.fillRect(size*.21,-size*.39,1,size*.29);
   c.restore();r.points.push({seat:p.seat,x:v.x*zoom+tx,y:(v.y-size*.07)*zoom+ty,scale:v.scale*scale*zoom,size,angle,alpha,visible:fall<1});
  }
- for(const e of g.events){const age=elapsed-e.at;if(age<0||age>1100||!['bump','fall','boost','park','block'].includes(e.type))continue;const p=point543(r,e.x,e.y);c.save();c.globalAlpha=1-age/1100;
+ for(const e of g.events){const age=elapsed-e.at;if(age<0||age>1100||!['bump','fall','boost','park','block','wall'].includes(e.type))continue;const p=point543(r,e.x,e.y);c.save();c.globalAlpha=1-age/1100;
+  if(e.type==='wall'){if(!u.reduced){c.strokeStyle='#fff0b5';c.lineWidth=1.4;for(let i=0;i<5;i++){const a=i*1.15,dist=5+age/24;c.beginPath();c.moveTo(p.x+Math.cos(a)*dist*.5,p.y+Math.sin(a)*dist*.5);c.lineTo(p.x+Math.cos(a)*dist,p.y+Math.sin(a)*dist);c.stroke()}}text(c,'カン！',p.x,p.y-18-age/45,10,'#fff1b1')}
   if(e.type==='block')text(c,'搬入中です！',p.x,p.y-20-age/60,11);
   if(e.type==='bump'){if(!u.reduced){groceries(c,p.x,p.y-15,age,e.id);c.strokeStyle='#fff1b2';c.lineWidth=2;for(let i=0;i<9;i++){const a=i*Math.PI/4.5,dist=7+age/30;c.beginPath();c.moveTo(p.x+Math.cos(a)*dist,p.y+Math.sin(a)*dist);c.lineTo(p.x+Math.cos(a)*(dist+5),p.y+Math.sin(a)*(dist+5));c.stroke()}}text(c,'ガシャーン！',p.x,p.y-26-age/60,13)}
   if(e.type==='fall'){if(!u.reduced)groceries(c,p.x,p.y,age,e.id,true);text(c,'返品できませーん！',p.x,p.y-25-age/45,12,'#fff0c6')}

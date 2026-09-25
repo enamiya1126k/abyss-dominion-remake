@@ -1,0 +1,13 @@
+✔ production party router registers both games, accepts ready and starts four humans (5.199248ms)
+✔ finished games replay with same 16-round setting, then switch or close cleanly (1.471583ms)
+✔ old client cannot ready and guest cannot force start or replay (0.563333ms)
+✔ leaving host transfers ownership; empty party deletes game runtime (0.402259ms)
+✔ cart regression: ready now retains protocol 5 and start succeeds (1.725268ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 132.500648

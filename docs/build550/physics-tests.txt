@@ -1,0 +1,26 @@
+✔ both games offer three distinct upgrades, private to each owner (2.664195ms)
+✔ draft rejects forged choices and repeat selections (0.434799ms)
+✔ new start resets score, parts, charge; rounds kept at 8 or 16 (1.902716ms)
+✔ waiting bodies stay still until a real impact (14.242116ms)
+✔ both modes collide with unlaunched opponents without spending their shot (4.149427ms)
+✔ release adds momentum, cancel keeps it, repeat shots are rejected (0.503323ms)
+✔ maximum opposing speeds do not tunnel through bodies or rails (25.188571ms)
+✔ pinball gold pin awards points and a chest has one owner (0.625144ms)
+✔ bank invests later, abilities stack and persist across rounds (0.878825ms)
+✔ capacitor charges from impacts and is consumed only at launch (0.537549ms)
+✔ heavy armor makes a cart harder to accelerate and harder to push (0.34978ms)
+✔ rocket is a delayed impulse; once-only belt boosts cannot be farmed (26.813383ms)
+✔ draft timeout and unattended launch finish full 8/16-round games with finite results (3584.772457ms)
+✔ ties receive the same rank (0.787032ms)
+✔ pull depends on distance, not hold time; all directions are allowed (0.624473ms)
+✔ coordinator enforces host, readiness, version, roster ownership, and 8/16 setting (2.42565ms)
+✔ input queue rejects NaN, spoofed IDs, old rounds, duplicates, and other players offers (2.283295ms)
+✔ empty seats fill with AI and reconnection keeps parts, charge and sequence (15.241982ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3807.307465

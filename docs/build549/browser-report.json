@@ -1,0 +1,125 @@
+{
+  "engine": "133.0.6943.0",
+  "scope": "Production cart View / Controls / Renderer with real CartCoordinator over two WebSocket clients; no public deployment or physical iPhone",
+  "viewports": [
+    {
+      "width": 320,
+      "scrollWidth": 320,
+      "stage": {
+        "x": 0,
+        "y": 157.6875,
+        "width": 320,
+        "height": 453.8125,
+        "top": 157.6875,
+        "right": 320,
+        "bottom": 611.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 611.5,
+        "width": 320,
+        "height": 78.5,
+        "top": 611.5,
+        "right": 320,
+        "bottom": 690,
+        "left": 0
+      },
+      "oldControls": 0
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "stage": {
+        "x": 0,
+        "y": 165.890625,
+        "width": 390,
+        "height": 595.609375,
+        "top": 165.890625,
+        "right": 390,
+        "bottom": 761.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 761.5,
+        "width": 390,
+        "height": 82.5,
+        "top": 761.5,
+        "right": 390,
+        "bottom": 844,
+        "left": 0
+      },
+      "oldControls": 0
+    },
+    {
+      "width": 430,
+      "scrollWidth": 430,
+      "stage": {
+        "x": 0,
+        "y": 165.890625,
+        "width": 430,
+        "height": 683.609375,
+        "top": 165.890625,
+        "right": 430,
+        "bottom": 849.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 849.5,
+        "width": 430,
+        "height": 82.5,
+        "top": 849.5,
+        "right": 430,
+        "bottom": 932,
+        "left": 0
+      },
+      "oldControls": 0
+    },
+    {
+      "width": 844,
+      "scrollWidth": 844,
+      "stage": {
+        "x": 155,
+        "y": 43,
+        "width": 504,
+        "height": 347,
+        "top": 43,
+        "right": 659,
+        "bottom": 390,
+        "left": 155
+      },
+      "footer": {
+        "x": 659,
+        "y": 43,
+        "width": 185,
+        "height": 347,
+        "top": 43,
+        "right": 844,
+        "bottom": 390,
+        "left": 659
+      },
+      "oldControls": 0
+    }
+  ],
+  "checks": [
+    "No stopping forecast, landing marker, hazard text, parking P letters or floating joystick; actual canvas labels inspected",
+    "Two connected clients agree on exact released power; holding 1.6 seconds does not increase it",
+    "A peer collides with an unreleased cart while its finger stays down; local and peer agree that the subsequent shot retains lateral carry",
+    "Final throttled movement reaches server even when finger stops; deadline uses that strength",
+    "tap safely cancels",
+    "return safely cancels",
+    "cancel safely cancels",
+    "blur safely cancels",
+    "round safely cancels",
+    "Second finger cancels safely; lifting it cannot launch",
+    "Resize cancels safely",
+    "Release outside the original stage stays captured and fires once",
+    "Keyboard arrows and Enter work",
+    "Five course variants draw without forecasts; pulling reuses the cached environment; reduced motion works",
+    "Result overlays keep field avatars behind the panel; three-digit score units and result cards fit in four layouts including Safari-sized 390x664"
+  ],
+  "errors": [],
+  "missing": []
+}

@@ -1,0 +1,14 @@
+{
+  "build": 549,
+  "baseBuild": 548,
+  "version": "3.1.228",
+  "serverUpdateRequired": true,
+  "cartProtocol": 5,
+  "testsPassed": 21,
+  "maxLaunchSpeed": 36,
+  "previousMaxLaunchSpeed": 12,
+  "browserReport": "docs/build549/browser-report.json",
+  "cacheAndImportMap": "passed",
+  "physicalDeviceTested": false,
+  "fullApplicationIntegrationTested": false
+}

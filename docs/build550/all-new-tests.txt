@@ -1,0 +1,31 @@
+✔ production party router registers both games, accepts ready and starts four humans (6.124745ms)
+✔ finished games replay with same 16-round setting, then switch or close cleanly (1.375067ms)
+✔ old client cannot ready and guest cannot force start or replay (0.985535ms)
+✔ leaving host transfers ownership; empty party deletes game runtime (0.794212ms)
+✔ cart regression: ready now retains protocol 5 and start succeeds (1.378298ms)
+✔ both games offer three distinct upgrades, private to each owner (3.046973ms)
+✔ draft rejects forged choices and repeat selections (0.487635ms)
+✔ new start resets score, parts, charge; rounds kept at 8 or 16 (2.159ms)
+✔ waiting bodies stay still until a real impact (13.103291ms)
+✔ both modes collide with unlaunched opponents without spending their shot (5.087812ms)
+✔ release adds momentum, cancel keeps it, repeat shots are rejected (0.861523ms)
+✔ maximum opposing speeds do not tunnel through bodies or rails (28.345351ms)
+✔ pinball gold pin awards points and a chest has one owner (0.633446ms)
+✔ bank invests later, abilities stack and persist across rounds (0.897394ms)
+✔ capacitor charges from impacts and is consumed only at launch (0.841515ms)
+✔ heavy armor makes a cart harder to accelerate and harder to push (0.435728ms)
+✔ rocket is a delayed impulse; once-only belt boosts cannot be farmed (17.169047ms)
+✔ draft timeout and unattended launch finish full 8/16-round games with finite results (3518.571759ms)
+✔ ties receive the same rank (0.356661ms)
+✔ pull depends on distance, not hold time; all directions are allowed (0.279722ms)
+✔ coordinator enforces host, readiness, version, roster ownership, and 8/16 setting (1.908401ms)
+✔ input queue rejects NaN, spoofed IDs, old rounds, duplicates, and other players offers (1.860981ms)
+✔ empty seats fill with AI and reconnection keeps parts, charge and sequence (13.795664ms)
+ℹ tests 23
+ℹ suites 0
+ℹ pass 23
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3756.758342

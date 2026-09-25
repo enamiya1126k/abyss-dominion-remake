@@ -1,5 +1,7 @@
 // Only released games appear here. Future game adapters reuse the same party.
 export const PARTY_GAMES462=Object.freeze([
+ {id:'pinball',name:'人間ピンボール大運動会',tag:'引っ張り × 能力の連鎖 × 得点大爆発',players:'４人対戦 · ８／16回 · 空席はAI',image:'./assets/ricochet550/pinball-cover.png',description:'反射で倍率、衝突で充電！ 毎回３択から能力を重ね、金ピンと宝箱へ体当たり。全員で育てた仕返し電池が、最後に大暴走。'},
+ {id:'junkgp',name:'ポンコツ改造グランプリ',tag:'重ねて改造 × 追突ターボ × 大逆転',players:'４人対戦 · ８／16回 · 空席はAI',image:'./assets/ricochet550/junkgp-cover.png',description:'ロケット、巨大バネ、鉄板よろい。毎回の３択でマシンを育て、引いて離して大暴走！ 押された勢いも味方に、合計走行距離を競え。'},
  {id:'cart',name:'帰ってこい！暴走ショッピングカート',tag:'５つの坂 × 金枠ボーナス × 大追突',players:'４人対戦 · 全５回 · 空席はAI',image:'./assets/cart543/cover.webp',description:'止まったからって、安心するな。逆方向に引いて、離すと発進！ 引く長さで勢いを決めたら、あとは見守るだけ。 後ろからの追突で天国から場外へ。滑る床と加速ベルトを読み、金枠にピタッと停めて＋50点！ 最後は得点２倍。'},
  {id:'bomb',name:'魔王城の爆弾リレー！',tag:'置く × けり返す × 最後の１秒',players:'４人対戦 · 30秒×３回 · 空席はAI',image:'./assets/bomb542/cover.webp',description:'その爆弾、お返しします。床タップで逃げ、迫る爆弾をけり返せ！ 導火線はそのまま、爆風はどんどん長くなる。崩れゆく魔王城で、最後に笑うのは誰だ！'},
  {id:'tetra',name:'因縁の決戦！テトラポット渡り',tag:'先端３連続で大ジャンプ × 荒波 × よりの因縁',players:'４人レース · 最大150秒 · 空席はAI',image:'./assets/tetra539/cover.webp',description:'手前に引いて、離して跳べ！ 先端３連続で追い風ジャンプ。広い群礁から好きなルートへ。通常波は先端、大波は中継に避難。低い足場の水没と滑る苔にも注意。落ちても、よりは「イージー！」'},

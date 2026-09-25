@@ -1,0 +1,29 @@
+✔ pull length controls power independent of hold time, bounded in CSS pixels (1.291434ms)
+✔ launch direction is opposite finger after projection in every lane and aspect ratio (0.700991ms)
+✔ a short and long hold with the same pull launch at identical velocity (3.116726ms)
+✔ return, cancellation, legacy release and repeated shot never accidentally launch (0.773995ms)
+✔ wire validates power, angle, version, ownership, round and sequence (9.098014ms)
+✔ pull updates coalesce and release carries its own final power without depending on a last move packet (3.305567ms)
+✔ an on-time release survives the next simulation tick; deadline uses pull distance, not held seconds (3.730949ms)
+✔ disconnect and home state reject inputs, and incompatible live rooms return to lobby (1.09419ms)
+✔ actual movement matches the guide on all five surfaces including backward and bank shots (107.81533ms)
+✔ MAX is exactly three times the previous top launch speed; low power remains controllable (2.262207ms)
+✔ untouched starting carts do not drift or acquire a launch state (20.632597ms)
+✔ a launched cart hits and displaces an unreleased neighbor without consuming its shot (1.42088ms)
+✔ a release adds a vector to the current momentum, including sideways and reverse carries (1.102065ms)
+✔ cancelling a pull does not erase momentum from a collision (0.495755ms)
+✔ opposing fast carts cannot pass through each other in one server tick (0.613154ms)
+✔ fast carts repeatedly ricochet from walls without leaving bounds or gaining energy (6.51125ms)
+✔ an unreleased cart pushed into the sea loses its turn and does not block round completion (1.281501ms)
+✔ a fast pushed cart is blocked by freight crates (0.922008ms)
+✔ crossing a conveyor while unreleased accelerates once and keeps the shot available (0.959995ms)
+✔ all five rounds settle with AI using the recalibrated pull curve (149.456685ms)
+✔ saved v4 live rooms migrate to lobby before v5 physics is applied (0.614673ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 359.148065
