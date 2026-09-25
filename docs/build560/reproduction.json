@@ -1,0 +1,30 @@
+{
+  "deployedBuild559": {
+    "pendingEffectResume": {
+      "bgmPlayCalls": 0,
+      "unlocked": false
+    },
+    "rejectedFirstTouch": {
+      "playCalls": 2,
+      "playing": false
+    },
+    "perElementPermission": {
+      "elements": 2,
+      "playing": false
+    }
+  },
+  "fixedBuild560": {
+    "pendingEffectResume": {
+      "bgmPlayCalls": 1,
+      "unlocked": true
+    },
+    "rejectedFirstTouch": {
+      "playCalls": 2,
+      "playing": true
+    },
+    "perElementPermission": {
+      "elements": 1,
+      "playing": true
+    }
+  }
+}

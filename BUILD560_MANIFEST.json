@@ -1,0 +1,94 @@
+{
+  "build": 560,
+  "version": "3.1.239",
+  "baseBuild": 559,
+  "type": "patch",
+  "requiredServerRestart": false,
+  "files": [
+    {
+      "path": "README_BUILD560.md",
+      "size": 3961,
+      "sha256": "f795148a03da7c861024d3c85902bbd7b1529d644c16a69abdafafeeafbe6b5d"
+    },
+    {
+      "path": "docs/build560/QA.md",
+      "size": 1521,
+      "sha256": "ae6ec09d744c00f30971b256fec2ef502a6adbb10095a58072660c8fe2e06f0a"
+    },
+    {
+      "path": "docs/build560/browser.json",
+      "size": 1851,
+      "sha256": "4455ac3874a007dc8a1ac001d4b86cfa5d1acc2990d4197ddb0bdadae8c6e43d"
+    },
+    {
+      "path": "docs/build560/reproduction.json",
+      "size": 544,
+      "sha256": "8fbe6ea4658cbfd40fc61d28160349baedbc8efbe403831d8da9548e8fe198b1"
+    },
+    {
+      "path": "docs/build560/source-verification.json",
+      "size": 1180,
+      "sha256": "8edee70b653150e075624405dfffd2eada555e2120bf9f518ae475d6a866f8df"
+    },
+    {
+      "path": "index.html",
+      "size": 234740,
+      "sha256": "62e849f3f009bb36adb45da8276491820c499ecb1066e0e3339fda4d4ab68477"
+    },
+    {
+      "path": "src/core/AudioSystem.js",
+      "size": 10483,
+      "sha256": "6044883e4247317edd9be5739464d5b66ce716056d23e13265d14d6da2fc6ba2"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "a88177eec0abda641bd7b5d47ca5a6f66699db9a38b206c7373b6e9fbe5a5f58"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "6f1d47b76f95bbb800d855d5db87092d38205bc8c2f667fe2f1a6c8211950774"
+    },
+    {
+      "path": "tests/build560-audio.test.mjs",
+      "size": 5211,
+      "sha256": "c58768a1a9247b154bb58659b2491e5dfe218b69e20acf6fbe1a5b050ece5c9d"
+    },
+    {
+      "path": "tools/build560/audio-fixture.mjs",
+      "size": 2257,
+      "sha256": "80ab43222801e2be01799ecf0949b76428f903103ea326e14067f182cc17a025"
+    },
+    {
+      "path": "tools/build560/browser.mjs",
+      "size": 5800,
+      "sha256": "94003a4195b60bcf340fb4bcf60d3ed3bd949b16a23ec250fa2ed9435882722c"
+    },
+    {
+      "path": "tools/build560/package.py",
+      "size": 2546,
+      "sha256": "1d80c62587681fd7868aede5831b0faadf5fd4f3c5a28163c09c46f0204ac320"
+    },
+    {
+      "path": "tools/build560/reproduce.mjs",
+      "size": 1469,
+      "sha256": "6305bcb3d8e75d45452c1d8d218febc0d0374cfa0d9027cc03a0e9b3db8e0879"
+    },
+    {
+      "path": "tools/build560/stamp.py",
+      "size": 1976,
+      "sha256": "fa7ac3026ce154345d44b61b3066eaecf58722eb491d45d596aba36555b3f86f"
+    },
+    {
+      "path": "world-raid-offline560-assets.json",
+      "size": 48302,
+      "sha256": "1ba63e76daf969d752e8c03210f8978ef28a73ad72fd54db9ad8f93637a5ad72"
+    },
+    {
+      "path": "world-raid-offline560-sw.js",
+      "size": 1844,
+      "sha256": "62dfd29db690a791939724caae603152167a38d2deee706f81f9379dbbf93d9a"
+    }
+  ]
+}

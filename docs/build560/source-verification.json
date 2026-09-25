@@ -1,0 +1,44 @@
+{
+  "repo": "enamiya1126k/abyss-dominion-remake",
+  "commit": "82a990b31cf6ed455502da3654b8ad805249086c",
+  "appVersion": "3.1.238",
+  "audioSourceBlob": "8025f4f90f7468c224277b3142d077f0d8b28c13",
+  "mainSourceBlob": "e0cf1b2109ae7f131e9eeacb829609ca74b721f0",
+  "music": [
+    {
+      "name": "main-bgm.mp3",
+      "bytes": 3640405,
+      "gitBlob": "2d93bc2ed0bfe8ad464d9adc74225e9259745cf0"
+    },
+    {
+      "name": "dungeon-bgm.mp3",
+      "bytes": 4515612,
+      "gitBlob": "a3e61f40939019d6fd147905d0748c93a6f599f2"
+    },
+    {
+      "name": "battle-bgm.mp3",
+      "bytes": 5124160,
+      "gitBlob": "69b4650734c51cf9132ea324d754f02e60400c6c"
+    },
+    {
+      "name": "boss-bgm.mp3",
+      "bytes": 3012212,
+      "gitBlob": "0a5583d041fca320e4b5fa9557568e8421fb1256"
+    },
+    {
+      "name": "elite-bgm.mp3",
+      "bytes": 2434593,
+      "gitBlob": "40226d40a01a148d0ca508a47ad7adfc174608cc"
+    },
+    {
+      "name": "abyss-bgm.mp3",
+      "bytes": 3079922,
+      "gitBlob": "d6d39c5b27f70325939c0369f5bee621ecae7afe"
+    },
+    {
+      "name": "ten-gods-bgm.mp3",
+      "bytes": 3569770,
+      "gitBlob": "bef5cf40abc46dd8a618ef9703650712b923f870"
+    }
+  ]
+}

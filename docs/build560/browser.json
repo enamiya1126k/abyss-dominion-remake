@@ -1,0 +1,76 @@
+{
+  "browser": "Chromium mobile touch, real bundled MP3s; not iPhone Safari hardware",
+  "tracks": [
+    {
+      "scene": "home",
+      "src": "main-bgm.mp3?v=2.11.2-build166",
+      "time": 0.206077,
+      "rms": 0.015263261061567232,
+      "volume": 0.28,
+      "oneElement": true
+    },
+    {
+      "scene": "explore",
+      "src": "dungeon-bgm.mp3?v=2.11.2-build166",
+      "time": 0.661451,
+      "rms": 0.000055700881284423115,
+      "volume": 0.28,
+      "oneElement": true
+    },
+    {
+      "scene": "battle",
+      "src": "battle-bgm.mp3?v=2.11.2-build166",
+      "time": 0.208662,
+      "rms": 0.00004290633789141104,
+      "volume": 0.168,
+      "oneElement": true
+    },
+    {
+      "scene": "boss",
+      "src": "boss-bgm.mp3?v=2.11.2-build166",
+      "time": 0.260907,
+      "rms": 0.000014650397917813813,
+      "volume": 0.22400000000000003,
+      "oneElement": true
+    },
+    {
+      "scene": "elite",
+      "src": "elite-bgm.mp3?v=2.11.2-build166",
+      "time": 0.710794,
+      "rms": 0.000020179998851874965,
+      "volume": 0.28,
+      "oneElement": true
+    },
+    {
+      "scene": "abyss",
+      "src": "abyss-bgm.mp3?v=2.11.2-build166",
+      "time": 0.211565,
+      "rms": 0.00020566252020858664,
+      "volume": 0.196,
+      "oneElement": true
+    },
+    {
+      "scene": "divine",
+      "src": "ten-gods-bgm.mp3?v=2.11.2-build166",
+      "time": 0.52819,
+      "rms": 0.00011050546491922226,
+      "volume": 0.28,
+      "oneElement": true
+    }
+  ],
+  "errors": [],
+  "noRewind": {
+    "before": 0.529335,
+    "after": 0.578248
+  },
+  "recovery": true,
+  "requests": [
+    "/assets/audio/main-bgm.mp3",
+    "/assets/audio/dungeon-bgm.mp3",
+    "/assets/audio/battle-bgm.mp3",
+    "/assets/audio/boss-bgm.mp3",
+    "/assets/audio/elite-bgm.mp3",
+    "/assets/audio/abyss-bgm.mp3",
+    "/assets/audio/ten-gods-bgm.mp3"
+  ]
+}

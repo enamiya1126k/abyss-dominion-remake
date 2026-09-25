@@ -4,77 +4,142 @@ const TRACKS=Object.freeze({
  victory:"assets/audio/main-bgm.mp3",defeat:"assets/audio/dungeon-bgm.mp3"
 });
 const AUDIO_OWNER_KEY=Symbol.for("abyss-dominion.audio-owner");
+const GESTURES=["pointerup","touchend","keydown"];
 function safeVolume(value,fallback){const number=Number(value);return Number.isFinite(number)?Math.max(0,Math.min(1,number)):fallback}
+function ignoreRejection(promise){promise?.catch?.(()=>{})}
 
-/** One owner for every BGM track. A hidden/unfocused document is always silent. */
+/** One media element keeps its playback permission when scenes change. */
 export class AudioSystem{
  constructor(settings=()=>({})){
   this.settings=settings;this.scene="home";this.context=null;this.sfxGain=null;this.unlocked=false;this.current=null;this.fadeToken=0;this.cache=new Map();this.suspendedByPage=false;
+  this.music=null;this.trackSource=null;this.pendingPlay=null;this.needsGesture=false;this.lastError=null;this.destroyed=false;
   this.onVisibility=()=>{if(this.pageIsActive())this.resumeForPage();else this.pauseForPage()};
   this.onPageHide=()=>this.pauseForPage();this.onPageShow=()=>this.onVisibility();this.onBlur=()=>this.pauseForPage();this.onFocus=()=>this.onVisibility();this.onFreeze=()=>this.pauseForPage();
+  this.onUserGesture=event=>{
+   if(event?.isTrusted===false||event?.repeat||!this.pageIsActive()||this.settings()?.audioEnabled===false)return;
+   if(!this.unlocked||this.needsGesture||!this.current||this.current.paused||this.context?.state!=="running")this.unlock();
+  };
+  this.onContextState=()=>{
+   if(this.destroyed||!this.unlocked)return;
+   if(this.context?.state==="running"&&this.pageIsActive()&&!this.suspendedByPage)this.switchTrack(this.scene,true);
+   else if(this.context?.state==="interrupted"||this.context?.state==="suspended")this.needsGesture=true;
+  };
   if(typeof window!=="undefined"){const previous=window[AUDIO_OWNER_KEY];if(previous&&previous!==this)previous.destroy?.();window[AUDIO_OWNER_KEY]=this}
-  if(typeof document!=="undefined"){document.addEventListener("visibilitychange",this.onVisibility,{passive:true});document.addEventListener("freeze",this.onFreeze,{passive:true})}
+  if(typeof document!=="undefined"){
+   document.addEventListener("visibilitychange",this.onVisibility,{passive:true});document.addEventListener("freeze",this.onFreeze,{passive:true});
+   // Touch release is a playback gesture on mobile. Keep recovery available after
+   // the main application's one-shot pointerdown listener has already fired.
+   for(const name of GESTURES)document.addEventListener(name,this.onUserGesture,{passive:true,capture:true});
+  }
   if(typeof window!=="undefined"){
    window.addEventListener("pagehide",this.onPageHide,{passive:true});window.addEventListener("beforeunload",this.onPageHide,{passive:true});
    window.addEventListener("pageshow",this.onPageShow,{passive:true});window.addEventListener("blur",this.onBlur,{passive:true});window.addEventListener("focus",this.onFocus,{passive:true});
   }
  }
- pageIsActive(){return typeof document==="undefined"||document.visibilityState==="visible"&&(!document.hasFocus||document.hasFocus())}
+ pageIsActive(){return !this.destroyed&&(typeof document==="undefined"||document.visibilityState==="visible"&&(!document.hasFocus||document.hasFocus()))}
+ enabled(){return this.settings()?.audioEnabled!==false}
  track(scene){
   const src=TRACKS[scene]??TRACKS.home;
-  if(this.cache.has(src))return this.cache.get(src);
-  const audio=new Audio(`${src}?v=2.11.2-build166`);audio.loop=true;audio.preload="metadata";audio.playsInline=true;audio.volume=0;
-  this.cache.set(src,audio);return audio;
+  if(!this.music){
+   this.music=new Audio();this.music.loop=true;this.music.preload="metadata";this.music.playsInline=true;this.music.volume=0;
+   this.onMediaError=()=>{this.needsGesture=true;this.lastError={name:"MediaError",code:this.music.error?.code??0,source:this.trackSource};};
+   this.music.addEventListener("error",this.onMediaError);
+  }
+  if(this.trackSource!==src){
+   this.music.pause();this.music.src=`${src}?v=2.11.2-build166`;this.trackSource=src;
+   this.cache.clear();this.cache.set(src,this.music);
+  }
+  return this.music;
  }
- async unlock(){
-  if(typeof window==="undefined")return false;
-  if(!this.context){const Context=window.AudioContext??window.webkitAudioContext;if(Context){try{this.context=new Context();this.sfxGain=this.context.createGain();this.sfxGain.connect(this.context.destination)}catch(_error){this.context=null}}}
-  try{await this.context?.resume?.()}catch(_error){}
-  this.unlocked=true;this.applySettings();if(this.pageIsActive())await this.switchTrack(this.scene,true);return true;
+ resumeContext(){
+  if(!this.context||this.context.state==="closed"){
+   const Context=typeof window!=="undefined"&&(window.AudioContext??window.webkitAudioContext);
+   if(Context)try{
+    this.context?.removeEventListener?.("statechange",this.onContextState);
+    this.context=new Context();this.sfxGain=this.context.createGain();this.sfxGain.connect(this.context.destination);
+    this.context.addEventListener?.("statechange",this.onContextState);
+   }catch(_error){this.context=null;this.sfxGain=null}
+  }
+  // An interrupted effect context may leave resume() pending. BGM must not wait
+  // for that independent promise, or leave the synchronous user gesture.
+  if(this.context?.state!=="running")try{ignoreRejection(this.context?.resume?.())}catch(_error){}
+ }
+ updateGain(){
+  const state=this.settings()??{},enabled=this.enabled();
+  if(this.sfxGain)try{this.sfxGain.gain.setTargetAtTime(enabled?safeVolume(state.sfxVolume,.45):0,this.context?.currentTime??0,.04)}catch(_error){}
+  if(this.current)this.current.volume=enabled?safeVolume(state.musicVolume,.28):0;
+ }
+ unlock(){
+  if(typeof window==="undefined"||this.destroyed)return Promise.resolve(false);
+  if(!this.enabled()){this.applySettings();return Promise.resolve(false)}
+  this.unlocked=true;this.resumeContext();this.updateGain();
+  // Start play() here, before any await. The returned promise never holds up the
+  // settings UI, even if the OS postpones starting an audio session.
+  if(this.pageIsActive())this.switchTrack(this.scene,true);
+  return Promise.resolve(true);
  }
  applySettings(){
-  const state=this.settings()??{},enabled=state.audioEnabled!==false,volume=enabled?safeVolume(state.musicVolume,.28):0;
-  if(this.sfxGain){const now=this.context?.currentTime??0;this.sfxGain.gain.setTargetAtTime(enabled?safeVolume(state.sfxVolume,.45):0,now,.04)}
-  if(this.current)this.current.volume=volume;
-  if(!enabled)this.stopAll(false);else if(this.unlocked&&this.pageIsActive()&&!this.suspendedByPage)this.switchTrack(this.scene,true);
+  if(this.destroyed)return;
+  this.updateGain();
+  if(!this.enabled())this.stopAll(false);
+  else if(this.unlocked&&this.pageIsActive()&&!this.suspendedByPage)this.switchTrack(this.scene,true);
  }
  setScene(scene){
   if(!TRACKS[scene])scene="home";
   const changed=this.scene!==scene;this.scene=scene;
-  if(!this.unlocked||!this.pageIsActive()||this.settings()?.audioEnabled===false)return;
-  if(changed||!this.current||this.current.paused)this.switchTrack(scene,!changed);
+  if(!this.unlocked||!this.pageIsActive()||!this.enabled())return;
+  if(changed||!this.current||this.current.paused||this.needsGesture)this.switchTrack(scene,!changed);
  }
- async switchTrack(scene,immediate=false){
-  if(!this.unlocked||!this.pageIsActive()||this.settings()?.audioEnabled===false)return;
-  this.suspendedByPage=false;
-  const next=this.track(scene),target=safeVolume(this.settings()?.musicVolume,.28),token=++this.fadeToken;
-  this.cache.forEach(track=>{if(track!==next){track.pause();track.volume=0;track.currentTime=0}});
-  this.current=next;next.volume=immediate?target:0;
-  try{if(next.paused){next.currentTime=0;await next.play()}}catch(_error){if(token===this.fadeToken&&this.current===next)this.current=null;return}
-  if(token!==this.fadeToken||this.current!==next||!this.pageIsActive()||this.suspendedByPage){if(this.current!==next||!this.pageIsActive()||this.suspendedByPage){next.pause();next.volume=0}return}
-  const steps=immediate?1:10,delay=immediate?0:32;
-  for(let i=1;i<=steps;i++){
-   if(token!==this.fadeToken||this.current!==next||!this.pageIsActive()||this.suspendedByPage){if(this.current!==next||!this.pageIsActive()||this.suspendedByPage){next.pause();next.volume=0}return}
-   next.volume=Math.min(1,target*i/steps);
-   if(delay)await new Promise(resolve=>setTimeout(resolve,delay));
-  }
+ switchTrack(scene,immediate=false){
+  if(!this.unlocked||!this.pageIsActive()||!this.enabled())return Promise.resolve(false);
+  const source=TRACKS[scene]??TRACKS.home;
+  if(this.pendingPlay?.source===source)return this.pendingPlay.promise;
+  const changed=this.trackSource!==source,next=this.track(scene),token=++this.fadeToken;
+  this.suspendedByPage=false;this.current=next;
+  const target=safeVolume(this.settings()?.musicVolume,.28);
+  next.volume=immediate||!changed?target:0;
+  const pending={source,token,promise:null};this.pendingPlay=pending;
+  let request;
+  try{request=next.paused?next.play():Promise.resolve()}catch(error){request=Promise.reject(error)}
+  pending.promise=Promise.resolve(request).then(async()=>{
+   if(token!==this.fadeToken||!this.pageIsActive()||this.suspendedByPage||!this.enabled())return false;
+   this.needsGesture=false;this.lastError=null;
+   const steps=immediate||!changed?1:10;
+   for(let i=1;i<=steps;i++){
+    if(token!==this.fadeToken||!this.pageIsActive()||this.suspendedByPage||!this.enabled())return false;
+    next.volume=safeVolume(this.settings()?.musicVolume,.28)*i/steps;
+    if(steps>1)await new Promise(resolve=>setTimeout(resolve,32));
+   }
+   return true;
+  },error=>{
+   if(token===this.fadeToken&&!this.destroyed){this.needsGesture=true;this.lastError={name:error?.name??"PlaybackError",message:String(error?.message??error),source};}
+   return false;
+  }).finally(()=>{if(this.pendingPlay===pending)this.pendingPlay=null});
+  return pending.promise;
  }
  pauseForPage(){
-  this.suspendedByPage=true;++this.fadeToken;this.cache.forEach(track=>{track.pause();track.volume=0});
-  try{this.context?.suspend?.()}catch(_error){}
+  this.suspendedByPage=true;++this.fadeToken;this.pendingPlay=null;
+  this.cache.forEach(track=>{track.pause();track.volume=0});
+  try{ignoreRejection(this.context?.suspend?.())}catch(_error){}
  }
- async resumeForPage(){
-  if(!this.suspendedByPage||!this.unlocked||this.settings()?.audioEnabled===false||!this.pageIsActive())return;
-  this.suspendedByPage=false;try{await this.context?.resume?.()}catch(_error){}await this.switchTrack(this.scene,true);
+ resumeForPage(){
+  if(!this.unlocked||!this.enabled()||!this.pageIsActive())return Promise.resolve(false);
+  this.resumeContext();this.updateGain();return this.switchTrack(this.scene,true);
  }
  stopAll(reset=true){
-  ++this.fadeToken;this.cache.forEach(track=>{track.pause();track.volume=0;if(reset)track.currentTime=0});if(reset)this.current=null;
+  ++this.fadeToken;this.pendingPlay=null;
+  this.cache.forEach(track=>{track.pause();track.volume=0;if(reset)try{track.currentTime=0}catch(_error){}});
+  if(reset)this.current=null;
  }
  destroy(){
-  this.stopAll(true);this.unlocked=false;
-  if(typeof document!=="undefined"){document.removeEventListener("visibilitychange",this.onVisibility);document.removeEventListener("freeze",this.onFreeze)}
+  this.destroyed=true;this.stopAll(true);this.unlocked=false;
+  if(typeof document!=="undefined"){
+   document.removeEventListener("visibilitychange",this.onVisibility);document.removeEventListener("freeze",this.onFreeze);
+   for(const name of GESTURES)document.removeEventListener(name,this.onUserGesture,true);
+  }
   if(typeof window!=="undefined"){window.removeEventListener("pagehide",this.onPageHide);window.removeEventListener("beforeunload",this.onPageHide);window.removeEventListener("pageshow",this.onPageShow);window.removeEventListener("blur",this.onBlur);window.removeEventListener("focus",this.onFocus);if(window[AUDIO_OWNER_KEY]===this)delete window[AUDIO_OWNER_KEY]}
-  try{const closing=this.context?.close?.();closing?.catch?.(()=>{})}catch(_error){}
+  this.music?.removeEventListener("error",this.onMediaError);this.context?.removeEventListener?.("statechange",this.onContextState);
+  try{ignoreRejection(this.context?.close?.())}catch(_error){}
  }
  sfx(kind="select"){
   if(!this.pageIsActive()||!this.context||!this.sfxGain||this.settings()?.audioEnabled===false)return;
