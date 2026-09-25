@@ -1,0 +1,92 @@
+{
+  "report": {
+    "layouts": [
+      {
+        "kind": "hide",
+        "width": 320,
+        "height": 568,
+        "stage": {
+          "x": 0,
+          "y": 125,
+          "width": 320,
+          "height": 262,
+          "top": 125,
+          "right": 320,
+          "bottom": 387,
+          "left": 0
+        },
+        "footer": {
+          "x": 0,
+          "y": 387,
+          "width": 320,
+          "height": 181,
+          "top": 387,
+          "right": 320,
+          "bottom": 568,
+          "left": 0
+        },
+        "viewport": 320,
+        "viewportHeight": 568,
+        "error": ""
+      },
+      {
+        "kind": "hide",
+        "width": 430,
+        "height": 932,
+        "stage": {
+          "x": 0,
+          "y": 151,
+          "width": 430,
+          "height": 557,
+          "top": 151,
+          "right": 430,
+          "bottom": 708,
+          "left": 0
+        },
+        "footer": {
+          "x": 0,
+          "y": 708,
+          "width": 430,
+          "height": 224,
+          "top": 708,
+          "right": 430,
+          "bottom": 932,
+          "left": 0
+        },
+        "viewport": 430,
+        "viewportHeight": 932,
+        "error": ""
+      },
+      {
+        "kind": "hide",
+        "width": 844,
+        "height": 390,
+        "stage": {
+          "x": 130,
+          "y": 40,
+          "width": 494,
+          "height": 350,
+          "top": 40,
+          "right": 624,
+          "bottom": 390,
+          "left": 130
+        },
+        "footer": {
+          "x": 624,
+          "y": 40,
+          "width": 220,
+          "height": 350,
+          "top": 40,
+          "right": 844,
+          "bottom": 390,
+          "left": 624
+        },
+        "viewport": 844,
+        "viewportHeight": 390,
+        "error": ""
+      }
+    ]
+  },
+  "errors": [],
+  "missing": []
+}

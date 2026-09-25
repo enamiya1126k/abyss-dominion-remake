@@ -1,0 +1,94 @@
+{
+  "build": 546,
+  "version": "3.1.225",
+  "baseBuild": 545,
+  "type": "patch",
+  "requiredServerRestart": false,
+  "files": [
+    {
+      "path": "README_BUILD546.md",
+      "size": 2515,
+      "sha256": "70596611ce3e5c7fdb30140cdde3743eee456b6e8a8cd6f87fed6ecaa4425aff"
+    },
+    {
+      "path": "index.html",
+      "size": 210454,
+      "sha256": "448f0a024e0189875effd4c7c61854cfeb89d48106ce06f94de30971c4481fda"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "22c8f4a73c8cdfb6b5ada5e4983430749f47fce133dd6e141fd48e00306b6b06"
+    },
+    {
+      "path": "src/cart/Renderer543.js",
+      "size": 11598,
+      "sha256": "22e58dc2805139f3ec5b2e3ecd0addfa66d85b2df00a3397cf6cbcdfc6789e65"
+    },
+    {
+      "path": "src/cart/Courses544.js",
+      "size": 1759,
+      "sha256": "be672ec08e9faf5c52c8edb4891443ccbfabad0608e77ea7b89a24830994b370"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "b309a057e15a65051f05d932fc869b5d41816c971a5d6589c0a122af9fbf3f15"
+    },
+    {
+      "path": "world-raid-offline546-sw.js",
+      "size": 1844,
+      "sha256": "4803cbe08c254fe779c38afbed86c6a2bdc2c265a0edce555c92164048717f0e"
+    },
+    {
+      "path": "world-raid-offline546-assets.json",
+      "size": 44895,
+      "sha256": "3de2094d88d7f9459b4df36b1a83f1d356035a3d1d794c01dd4b40243e2c0cf1"
+    },
+    {
+      "path": "assets/cart546/wax.webp",
+      "size": 331280,
+      "sha256": "ee5b9e02516bbf5aee7bb5dd8366185e584cbd800996d242a6d1441bc4cf1cd5"
+    },
+    {
+      "path": "assets/cart546/sale.webp",
+      "size": 323278,
+      "sha256": "2608a2c19bc5a8284e0f6181fe1de1a56125de53f9681cd934cc7638378b4381"
+    },
+    {
+      "path": "docs/build546/art-prompts.json",
+      "size": 3048,
+      "sha256": "4d6fd625035486d2e355e3b95cc9aed1273c49f77920a12f6962e3c8b8a8562f"
+    },
+    {
+      "path": "docs/build546/browser-report.json",
+      "size": 3369,
+      "sha256": "303bfc7b9d51e0d5e7403f1f56dd433acca2947c798d5eab2638e473a194d6f6"
+    },
+    {
+      "path": "docs/build546/verification.json",
+      "size": 675,
+      "sha256": "82789a9443f01e040fe0aa24e63ce15951be8425caf0e546747c320c904be3b8"
+    },
+    {
+      "path": "tools/build546/browser-qa.mjs",
+      "size": 5759,
+      "sha256": "64a0f483ca40f5618270d9c3028557697f02d0f893b7f0a1b58809c2400c4495"
+    },
+    {
+      "path": "tools/build546/package.py",
+      "size": 1589,
+      "sha256": "77bdede3bdad5307af51b1ef2f7b60af60de673e76fb48a8b9b9d0721f80bf0e"
+    },
+    {
+      "path": "tools/build546/preview.mjs",
+      "size": 2057,
+      "sha256": "016d432068146e501b82147cd632ee2672220b965e00b6c1af8510b4da9998c9"
+    },
+    {
+      "path": "tools/build546/qa-server.mjs",
+      "size": 2447,
+      "sha256": "e38051d0305e8075fefd3f137fd1431d5c09a0d458a1adcc1d1cfcf3e38cfa60"
+    }
+  ]
+}

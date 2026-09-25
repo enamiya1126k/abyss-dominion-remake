@@ -1,0 +1,18 @@
+{
+  "mode": "built-in image_gen",
+  "use_case": "precise-object-edit",
+  "reference": "assets/cart544/track.webp",
+  "assets": [
+    {
+      "path": "assets/cart546/wax.webp",
+      "prompt": "Use case: precise-object-edit. Asset type: complete portrait game environment background, 1024x1536. Image 1 is the edit target. Preserve this exact camera, roadway trapezoid, vanishing point, uninterrupted wooden boards, shops, plants, coastline and road endpoint. ONLY change the surface finish of the existing wooden road in its middle stretch, between image y=50.5% and y=81.8%. This stretch has just been waxed and buffed: honey-gold timber still clearly visible, a convincing low-angle glossy sheen, subtle blue sky and neighboring green market awning reflections along the edges, warm sun glints and the SAME foliage shadows sitting naturally on the wood. The lower foreground and far upper end remain matte wood. Blend the change in roughness naturally over a few boards, with faint irregular buffing marks at transition, never a sharp rectangular patch. The floor is still one continuous flush wooden road. Preserve wood grain and board joints continuing uninterrupted through the polished stretch. Realistic outdoor lighting, no indoor window reflections. Do not introduce marble, stone tiles, mats, sheets, panels, border outlines, elevated edges, glass slabs, opaque blue overlays, white glow bars, puddles, text, characters, carts or UI. Keep all non-road pixels as close as possible to input, exact same composition. This must look like the scene itself has polished wood, not any pasted texture.",
+      "sourceImage": "exec-6f932f55-7465-4c86-9178-0c0b52ae1735.png"
+    },
+    {
+      "path": "assets/cart546/sale.webp",
+      "prompt": "Use case: precise-object-edit. Asset type: 1024x1536 portrait game background, second polished-floor course variant. Image 1 is the edit target. Keep the exact same scene, camera, shops, coastline, every timber board, vanishing point and lighting. Change ONLY the LENGTH of the glossy wax finish on the wooden roadway: the glossy stretch now runs from image y=63.4% through y=81.8%, i.e. a shorter nearer section than before. Restore the upper part of the road from y=50% to y=63.4% to the original matte warm honey wood. Keep the lower foreground below y=81.8% matte as it is. In the short waxed stretch keep outdoor sunny sheen and subtle neighboring market reflections, wood grain and continuous board joints clear underneath. Fade the roughness difference gradually over 2 to 3 boards with natural buffing marks. The actual floor does not change material, color, height, pattern or thickness. No tiled patch, raised slab, edge borders, mat, geometry overlay, indoor window reflections, text, characters, carts or UI. Do not change anything outside the wooden road. Produce the whole environment image, not an isolated floor texture.",
+      "sourceImage": "exec-efa6a147-34dd-4495-b469-1757293c3a5e.png"
+    }
+  ],
+  "conversion": "PNG to WebP, quality 86, unchanged resolution and composition"
+}

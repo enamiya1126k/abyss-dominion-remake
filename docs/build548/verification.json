@@ -1,0 +1,17 @@
+{
+  "build": 548,
+  "version": "3.1.227",
+  "baseBuild": 547,
+  "serverUpdateRequired": false,
+  "inputTestsPassed": 9,
+  "browserReport": "docs/build548/browser-report.json",
+  "cacheAndImportMap": "passed",
+  "forbiddenForecastUI": "absent",
+  "changedScope": "Cart view, renderer, presentation CSS; app version and cache references",
+  "browserRuntime": "Chromium 133; mobile emulation and local CartCoordinator",
+  "limitations": [
+    "No physical iPhone verification",
+    "No production deployment",
+    "No full-game integration run"
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "engine": "133.0.6943.0",
+  "scope": "Production cart View543 / Renderer543 / Rules543 in deterministic local visual fixture; no live server or physical iPhone",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "stage": {
+        "x": 0,
+        "y": 168,
+        "width": 390,
+        "height": 489,
+        "top": 168,
+        "right": 390,
+        "bottom": 657,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 657,
+        "width": 390,
+        "height": 187,
+        "top": 657,
+        "right": 390,
+        "bottom": 844,
+        "left": 0
+      },
+      "dpr": 1.5
+    },
+    {
+      "width": 320,
+      "height": 690,
+      "scrollWidth": 320,
+      "stage": {
+        "x": 0,
+        "y": 155.546875,
+        "width": 320,
+        "height": 347.453125,
+        "top": 155.546875,
+        "right": 320,
+        "bottom": 503,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 503,
+        "width": 320,
+        "height": 187,
+        "top": 503,
+        "right": 320,
+        "bottom": 690,
+        "left": 0
+      },
+      "dpr": 1.5
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "scrollWidth": 430,
+      "stage": {
+        "x": 0,
+        "y": 168,
+        "width": 430,
+        "height": 577,
+        "top": 168,
+        "right": 430,
+        "bottom": 745,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 745,
+        "width": 430,
+        "height": 187,
+        "top": 745,
+        "right": 430,
+        "bottom": 932,
+        "left": 0
+      },
+      "dpr": 1.5
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "scrollWidth": 844,
+      "stage": {
+        "x": 155,
+        "y": 43,
+        "width": 504,
+        "height": 347,
+        "top": 43,
+        "right": 659,
+        "bottom": 390,
+        "left": 155
+      },
+      "footer": {
+        "x": 659,
+        "y": 43,
+        "width": 185,
+        "height": 347,
+        "top": 43,
+        "right": 844,
+        "bottom": 390,
+        "left": 659
+      },
+      "dpr": 1.5
+    }
+  ],
+  "rounds": [
+    {
+      "round": 1,
+      "key": "390:489:1.5:http://127.0.0.1:8546/assets/cart544/track.webp:true:true:market",
+      "cacheBuilds": 2,
+      "source": false
+    },
+    {
+      "round": 2,
+      "key": "390:489:1.5:http://127.0.0.1:8546/assets/cart546/wax.webp:true:true:wax",
+      "cacheBuilds": 2,
+      "source": true
+    },
+    {
+      "round": 3,
+      "key": "390:489:1.5:http://127.0.0.1:8546/assets/cart544/track.webp:true:true:bank",
+      "cacheBuilds": 2,
+      "source": false
+    },
+    {
+      "round": 4,
+      "key": "390:489:1.5:http://127.0.0.1:8546/assets/cart544/track.webp:true:true:boost",
+      "cacheBuilds": 2,
+      "source": false
+    },
+    {
+      "round": 5,
+      "key": "390:489:1.5:http://127.0.0.1:8546/assets/cart546/sale.webp:true:true:sale",
+      "cacheBuilds": 2,
+      "source": true
+    }
+  ],
+  "unchanged": [
+    {
+      "round": 1,
+      "pixelIdenticalTo545": true
+    },
+    {
+      "round": 3,
+      "pixelIdenticalTo545": true
+    },
+    {
+      "round": 4,
+      "pixelIdenticalTo545": true
+    }
+  ],
+  "input": {
+    "angleDegrees": 15,
+    "holdReleaseLaunched": true
+  },
+  "delayedAsset": {
+    "woodFallback": true,
+    "refreshAfterDecode": true
+  },
+  "errors": [],
+  "missing": []
+}

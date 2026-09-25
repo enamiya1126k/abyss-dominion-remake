@@ -1,0 +1,458 @@
+{
+  "report": {
+    "canal": {
+      "phase": "playing",
+      "error": "",
+      "stage": {
+        "x": 0,
+        "y": 103,
+        "width": 390,
+        "height": 654,
+        "top": 103,
+        "right": 390,
+        "bottom": 757,
+        "left": 0
+      },
+      "assets": [],
+      "feed": {
+        "x": 12,
+        "y": 727,
+        "width": 366,
+        "height": 24,
+        "top": 727,
+        "right": 378,
+        "bottom": 751,
+        "left": 12
+      },
+      "bg": {
+        "src": "http://127.0.0.1:8545/assets/canal545/watermill.webp",
+        "loaded": 1024
+      }
+    },
+    "hide": {
+      "phase": "play",
+      "error": "",
+      "stage": {
+        "x": 0,
+        "y": 151,
+        "width": 390,
+        "height": 469,
+        "top": 151,
+        "right": 390,
+        "bottom": 620,
+        "left": 0
+      },
+      "assets": [],
+      "feed": null,
+      "bg": null
+    },
+    "bomb": {
+      "phase": "play",
+      "error": "",
+      "stage": {
+        "x": 0,
+        "y": 168.6875,
+        "width": 390,
+        "height": 560.3125,
+        "top": 168.6875,
+        "right": 390,
+        "bottom": 729,
+        "left": 0
+      },
+      "assets": [],
+      "feed": null,
+      "bg": null
+    },
+    "cart": {
+      "phase": "play",
+      "error": "",
+      "stage": {
+        "x": 0,
+        "y": 171,
+        "width": 390,
+        "height": 483,
+        "top": 171,
+        "right": 390,
+        "bottom": 654,
+        "left": 0
+      },
+      "assets": [],
+      "feed": null,
+      "bg": null
+    },
+    "layouts": [
+      {
+        "kind": "bomb",
+        "width": 320,
+        "height": 568,
+        "stage": {
+          "x": 0,
+          "y": 136.34375,
+          "width": 320,
+          "height": 338.65625,
+          "top": 136.34375,
+          "right": 320,
+          "bottom": 475,
+          "left": 0
+        },
+        "footer": {
+          "x": 0,
+          "y": 475,
+          "width": 320,
+          "height": 93,
+          "top": 475,
+          "right": 320,
+          "bottom": 568,
+          "left": 0
+        },
+        "viewport": 320,
+        "viewportHeight": 568,
+        "error": ""
+      },
+      {
+        "kind": "bomb",
+        "width": 430,
+        "height": 932,
+        "stage": {
+          "x": 0,
+          "y": 168.6875,
+          "width": 430,
+          "height": 648.3125,
+          "top": 168.6875,
+          "right": 430,
+          "bottom": 817,
+          "left": 0
+        },
+        "footer": {
+          "x": 0,
+          "y": 817,
+          "width": 430,
+          "height": 115,
+          "top": 817,
+          "right": 430,
+          "bottom": 932,
+          "left": 0
+        },
+        "viewport": 430,
+        "viewportHeight": 932,
+        "error": ""
+      },
+      {
+        "kind": "bomb",
+        "width": 844,
+        "height": 390,
+        "stage": {
+          "x": 155,
+          "y": 43,
+          "width": 509,
+          "height": 347,
+          "top": 43,
+          "right": 664,
+          "bottom": 390,
+          "left": 155
+        },
+        "footer": {
+          "x": 664,
+          "y": 43,
+          "width": 180,
+          "height": 347,
+          "top": 43,
+          "right": 844,
+          "bottom": 390,
+          "left": 664
+        },
+        "viewport": 844,
+        "viewportHeight": 390,
+        "error": ""
+      },
+      {
+        "kind": "cart",
+        "width": 320,
+        "height": 568,
+        "stage": {
+          "x": 0,
+          "y": 136.546875,
+          "width": 320,
+          "height": 281.453125,
+          "top": 136.546875,
+          "right": 320,
+          "bottom": 418,
+          "left": 0
+        },
+        "footer": {
+          "x": 0,
+          "y": 418,
+          "width": 320,
+          "height": 150,
+          "top": 418,
+          "right": 320,
+          "bottom": 568,
+          "left": 0
+        },
+        "viewport": 320,
+        "viewportHeight": 568,
+        "error": ""
+      },
+      {
+        "kind": "cart",
+        "width": 430,
+        "height": 932,
+        "stage": {
+          "x": 0,
+          "y": 171,
+          "width": 430,
+          "height": 571,
+          "top": 171,
+          "right": 430,
+          "bottom": 742,
+          "left": 0
+        },
+        "footer": {
+          "x": 0,
+          "y": 742,
+          "width": 430,
+          "height": 190,
+          "top": 742,
+          "right": 430,
+          "bottom": 932,
+          "left": 0
+        },
+        "viewport": 430,
+        "viewportHeight": 932,
+        "error": ""
+      },
+      {
+        "kind": "cart",
+        "width": 844,
+        "height": 390,
+        "stage": {
+          "x": 155,
+          "y": 43,
+          "width": 504,
+          "height": 347,
+          "top": 43,
+          "right": 659,
+          "bottom": 390,
+          "left": 155
+        },
+        "footer": {
+          "x": 659,
+          "y": 43,
+          "width": 185,
+          "height": 347,
+          "top": 43,
+          "right": 844,
+          "bottom": 390,
+          "left": 659
+        },
+        "viewport": 844,
+        "viewportHeight": 390,
+        "error": ""
+      },
+      {
+        "kind": "canal",
+        "width": 320,
+        "height": 568,
+        "stage": {
+          "x": 0,
+          "y": 103,
+          "width": 320,
+          "height": 378,
+          "top": 103,
+          "right": 320,
+          "bottom": 481,
+          "left": 0
+        },
+        "footer": {
+          "x": 10,
+          "y": 490,
+          "width": 300,
+          "height": 68,
+          "top": 490,
+          "right": 310,
+          "bottom": 558,
+          "left": 10
+        },
+        "viewport": 320,
+        "viewportHeight": 568,
+        "error": ""
+      },
+      {
+        "kind": "canal",
+        "width": 430,
+        "height": 932,
+        "stage": {
+          "x": 0,
+          "y": 103,
+          "width": 430,
+          "height": 742,
+          "top": 103,
+          "right": 430,
+          "bottom": 845,
+          "left": 0
+        },
+        "footer": {
+          "x": 10,
+          "y": 854,
+          "width": 410,
+          "height": 68,
+          "top": 854,
+          "right": 420,
+          "bottom": 922,
+          "left": 10
+        },
+        "viewport": 430,
+        "viewportHeight": 932,
+        "error": ""
+      },
+      {
+        "kind": "canal",
+        "width": 844,
+        "height": 390,
+        "stage": {
+          "x": 0,
+          "y": 45,
+          "width": 664,
+          "height": 345,
+          "top": 45,
+          "right": 664,
+          "bottom": 390,
+          "left": 0
+        },
+        "footer": {
+          "x": 672,
+          "y": 309,
+          "width": 164,
+          "height": 72,
+          "top": 309,
+          "right": 836,
+          "bottom": 381,
+          "left": 672
+        },
+        "viewport": 844,
+        "viewportHeight": 390,
+        "error": ""
+      },
+      {
+        "kind": "hide",
+        "width": 320,
+        "height": 568,
+        "stage": {
+          "x": 0,
+          "y": 125,
+          "width": 320,
+          "height": 262,
+          "top": 125,
+          "right": 320,
+          "bottom": 387,
+          "left": 0
+        },
+        "footer": {
+          "x": 0,
+          "y": 387,
+          "width": 320,
+          "height": 181,
+          "top": 387,
+          "right": 320,
+          "bottom": 568,
+          "left": 0
+        },
+        "viewport": 320,
+        "viewportHeight": 568,
+        "error": ""
+      },
+      {
+        "kind": "hide",
+        "width": 430,
+        "height": 932,
+        "stage": {
+          "x": 0,
+          "y": 151,
+          "width": 430,
+          "height": 557,
+          "top": 151,
+          "right": 430,
+          "bottom": 708,
+          "left": 0
+        },
+        "footer": {
+          "x": 0,
+          "y": 708,
+          "width": 430,
+          "height": 224,
+          "top": 708,
+          "right": 430,
+          "bottom": 932,
+          "left": 0
+        },
+        "viewport": 430,
+        "viewportHeight": 932,
+        "error": ""
+      },
+      {
+        "kind": "hide",
+        "width": 844,
+        "height": 390,
+        "stage": {
+          "x": 130,
+          "y": 40,
+          "width": 494,
+          "height": 350,
+          "top": 40,
+          "right": 624,
+          "bottom": 390,
+          "left": 130
+        },
+        "footer": {
+          "x": 624,
+          "y": 40,
+          "width": 220,
+          "height": 350,
+          "top": 40,
+          "right": 844,
+          "bottom": 390,
+          "left": 624
+        },
+        "viewport": 844,
+        "viewportHeight": 390,
+        "error": ""
+      }
+    ],
+    "canalInteraction": {
+      "boundedFeed": 24,
+      "pointerAccepted": true,
+      "fallbackLoaded": true
+    },
+    "bombInteraction": {
+      "twoFingerPlace": true,
+      "liftStop": true,
+      "cancelStop": true,
+      "keyUpStop": true,
+      "kickPeerSync": true
+    },
+    "cartInteraction": {
+      "aim": -0.12217304763960307,
+      "power": 0.6111111111111112,
+      "peerSync": true
+    },
+    "hidePresentation": {
+      "terrainBuildsBefore": 2,
+      "terrainBuildsAfter": 2,
+      "miniBuildsBefore": 1,
+      "miniBuildsAfter": 1,
+      "decorCacheReused": true,
+      "sceneObjects": 61,
+      "visibleObjects": 11,
+      "medianMs": 0.20000000298023224,
+      "p95Ms": 0.4000000059604645,
+      "friendCount": 2
+    },
+    "hideVisibility": {
+      "authorityRespected": true,
+      "freezeAtLastSeen": true,
+      "fadeExpires": true
+    }
+  },
+  "errors": [],
+  "missing": []
+}

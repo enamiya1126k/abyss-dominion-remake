@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "checks": [
+    "src/cart/Rules543.js byte-identical to Build545",
+    "src/cart/Collisions545.js byte-identical to Build545",
+    "src/cart/View543.js byte-identical to Build545",
+    "src/cart/Audio543.js byte-identical to Build545",
+    "src/Styles/build543-cart.css byte-identical to Build545",
+    "src/Styles/build544-cart.css byte-identical to Build545",
+    "src/Styles/build545-minigames.css byte-identical to Build545",
+    "All course zones, friction, boosts, blocks, aim and scoring unchanged",
+    "Changed-module import aliases all point to Build546",
+    "New backgrounds included in offline cache; obsolete floor no longer loaded"
+  ]
+}

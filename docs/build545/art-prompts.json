@@ -1,0 +1,17 @@
+{
+  "mode": "built-in imagegen",
+  "assets": [
+    {
+      "name": "cart545/polished.webp",
+      "prompt": "Square seamless overhead texture of polished pale celadon and ivory limestone floor tiles, subtle gold mineral veins, waxed highly glossy surface with soft elongated daylight window reflections. Premium sunny Mediterranean market videogame material, realistic painterly PBR detail. Direct orthographic top down, full bleed texture only, no props, no text, no border, no symbols, no blue transparent overlay. Restrained mint ivory warm silver palette, surface should look hard smooth and slippery, elegant rectangular slab joints."
+    },
+    {
+      "name": "bomb545/readability.webp",
+      "prompt": "Production videogame sprite atlas, exact equal 2 by 2 grid, four isolated assets centered inside each quadrant on transparent background. Upper left: overhead square stone floor collapsed into a deep irregular dark pit, clearly jagged broken gray masonry rim, visible inner wall depth, subtle violet darkness at bottom, no purple flat rectangle. Upper right: large collectible shield, chunky silver and golden rim, luminous turquoise blue enamel face, clear shield silhouette and central white protection emblem. Lower left: dramatic orange yellow fire burst sprite with hot white core, organic curled flame tongues and few sparks. Lower right: overhead square cracked gray stone tile with deeply visible orange illuminated fissures warning of collapse. High-end hand painted fantasy game assets, bold readable silhouette at small mobile size. No words, letters, numbers, no grid lines, no background outside assets. Generous transparent margins between four separate sprites."
+    },
+    {
+      "name": "cart545/obstacle.webp",
+      "prompt": "Use case: stylized-concept. Asset type: transparent obstacle sprite for a premium coastal market shopping-cart racing game. Primary request: one low wide rectangular barricade made of a tightly packed row of three wooden produce shipping crates, with a few oranges and folded burlap sacks contained on top. Honey oak wood, iron corner bands, convincing wood grain, warm sunlight. View from elevated 65 degree front perspective, facing the long front side, visible top and front face, no environment, no ground plane, very small soft contact shadow only. The whole obstacle has a clean rectangular footprint, width to height about 3.2:1, fills most of a wide canvas, centered with generous transparent margin. Painterly realistic game rendering, readable silhouette, no words, no letters, no logos, no characters, no cart. Actual transparent background."
+    }
+  ]
+}

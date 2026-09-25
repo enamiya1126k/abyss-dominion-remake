@@ -1,0 +1,121 @@
+{
+  "engine": "133.0.6943.0",
+  "scope": "Production cart View / Controls / Renderer with real CartCoordinator over two WebSocket clients; no public deployment or physical iPhone",
+  "viewports": [
+    {
+      "width": 320,
+      "scrollWidth": 320,
+      "stage": {
+        "x": 0,
+        "y": 155.546875,
+        "width": 320,
+        "height": 446.953125,
+        "top": 155.546875,
+        "right": 320,
+        "bottom": 602.5,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 602.5,
+        "width": 320,
+        "height": 87.5,
+        "top": 602.5,
+        "right": 320,
+        "bottom": 690,
+        "left": 0
+      },
+      "oldControls": 0
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390,
+      "stage": {
+        "x": 0,
+        "y": 168,
+        "width": 390,
+        "height": 578,
+        "top": 168,
+        "right": 390,
+        "bottom": 746,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 746,
+        "width": 390,
+        "height": 98,
+        "top": 746,
+        "right": 390,
+        "bottom": 844,
+        "left": 0
+      },
+      "oldControls": 0
+    },
+    {
+      "width": 430,
+      "scrollWidth": 430,
+      "stage": {
+        "x": 0,
+        "y": 168,
+        "width": 430,
+        "height": 666,
+        "top": 168,
+        "right": 430,
+        "bottom": 834,
+        "left": 0
+      },
+      "footer": {
+        "x": 0,
+        "y": 834,
+        "width": 430,
+        "height": 98,
+        "top": 834,
+        "right": 430,
+        "bottom": 932,
+        "left": 0
+      },
+      "oldControls": 0
+    },
+    {
+      "width": 844,
+      "scrollWidth": 844,
+      "stage": {
+        "x": 155,
+        "y": 43,
+        "width": 504,
+        "height": 347,
+        "top": 43,
+        "right": 659,
+        "bottom": 390,
+        "left": 155
+      },
+      "footer": {
+        "x": 659,
+        "y": 43,
+        "width": 185,
+        "height": 347,
+        "top": 43,
+        "right": 844,
+        "bottom": 390,
+        "left": 659
+      },
+      "oldControls": 0
+    }
+  ],
+  "checks": [
+    "Two connected clients agree on exact released power; holding 1.6 seconds does not increase it",
+    "Final throttled movement reaches server even when finger stops; deadline uses that strength",
+    "tap safely cancels",
+    "return safely cancels",
+    "cancel safely cancels",
+    "blur safely cancels",
+    "round safely cancels",
+    "Second finger cancels safely; lifting it cannot launch",
+    "Resize cancels safely",
+    "Release outside the original stage stays captured and fires once",
+    "Keyboard arrows and Enter work"
+  ],
+  "errors": [],
+  "missing": []
+}

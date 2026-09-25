@@ -1,0 +1,17 @@
+✔ pull length controls power independent of hold time, bounded in CSS pixels (1.322897ms)
+✔ launch direction is opposite finger after projection in every lane and aspect ratio (1.069827ms)
+✔ a short and long hold with the same pull launch at identical velocity (2.564568ms)
+✔ return, cancellation, legacy release and repeated shot never accidentally launch (0.468653ms)
+✔ wire validates power, angle, version, ownership, round and sequence (3.689633ms)
+✔ pull updates coalesce and release carries its own final power without depending on a last move packet (0.887541ms)
+✔ an on-time release survives the next simulation tick; deadline uses pull distance, not held seconds (1.761522ms)
+✔ disconnect and home state reject inputs, and incompatible live rooms return to lobby (0.850107ms)
+✔ actual movement matches the guide on all five surfaces including backward and bank shots (54.634781ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 201.752834

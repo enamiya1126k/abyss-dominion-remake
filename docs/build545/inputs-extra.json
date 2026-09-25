@@ -1,0 +1,24 @@
+{
+  "report": {
+    "layouts": [],
+    "hideVisibility": {
+      "authorityRespected": true,
+      "freezeAtLastSeen": true,
+      "fadeExpires": true
+    },
+    "hidePresentation": {
+      "terrainBuildsBefore": 2,
+      "terrainBuildsAfter": 2,
+      "miniBuildsBefore": 1,
+      "miniBuildsAfter": 1,
+      "decorCacheReused": true,
+      "sceneObjects": 61,
+      "visibleObjects": 11,
+      "medianMs": 0.20000000298023224,
+      "p95Ms": 0.4000000059604645,
+      "friendCount": 2
+    }
+  },
+  "errors": [],
+  "missing": []
+}
