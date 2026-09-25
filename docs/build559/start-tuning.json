@@ -1,0 +1,114 @@
+[
+  {
+    "speed": 230,
+    "seed": 1,
+    "side": "hunter",
+    "elapsed": 76000,
+    "catches": 3
+  },
+  {
+    "speed": 230,
+    "seed": 2,
+    "side": "hiders",
+    "elapsed": 67550,
+    "catches": 1
+  },
+  {
+    "speed": 230,
+    "seed": 3,
+    "side": "hunter",
+    "elapsed": 51650,
+    "catches": 3
+  },
+  {
+    "speed": 230,
+    "seed": 4,
+    "side": "hunter",
+    "elapsed": 48050,
+    "catches": 3
+  },
+  {
+    "speed": 230,
+    "seed": 5,
+    "side": "hunter",
+    "elapsed": 180000,
+    "catches": 2
+  },
+  {
+    "speed": 230,
+    "seed": 6,
+    "side": "hunter",
+    "elapsed": 40750,
+    "catches": 3
+  },
+  {
+    "speed": 230,
+    "seed": 540,
+    "side": "hunter",
+    "elapsed": 34200,
+    "catches": 3
+  },
+  {
+    "speed": 230,
+    "seed": 541,
+    "side": "hunter",
+    "elapsed": 75150,
+    "catches": 3
+  },
+  {
+    "speed": 260,
+    "seed": 1,
+    "side": "hiders",
+    "elapsed": 90000,
+    "catches": 2
+  },
+  {
+    "speed": 260,
+    "seed": 2,
+    "side": "hunter",
+    "elapsed": 37850,
+    "catches": 3
+  },
+  {
+    "speed": 260,
+    "seed": 3,
+    "side": "hiders",
+    "elapsed": 53700,
+    "catches": 2
+  },
+  {
+    "speed": 260,
+    "seed": 4,
+    "side": "hunter",
+    "elapsed": 42200,
+    "catches": 3
+  },
+  {
+    "speed": 260,
+    "seed": 5,
+    "side": "hunter",
+    "elapsed": 56600,
+    "catches": 3
+  },
+  {
+    "speed": 260,
+    "seed": 6,
+    "side": "hunter",
+    "elapsed": 68900,
+    "catches": 3
+  },
+  {
+    "speed": 260,
+    "seed": 540,
+    "side": "hunter",
+    "elapsed": 44000,
+    "catches": 3
+  },
+  {
+    "speed": 260,
+    "seed": 541,
+    "side": "hiders",
+    "elapsed": 43050,
+    "catches": 1
+  }
+]

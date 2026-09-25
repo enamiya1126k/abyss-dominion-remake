@@ -1,0 +1,1154 @@
+[
+  {
+    "course": "market",
+    "lane": 0,
+    "selected": [
+      {
+        "power": 0.43,
+        "angle": 0.28,
+        "score": 64,
+        "y": 22.37
+      },
+      {
+        "power": 0.79,
+        "angle": 0.75,
+        "score": 79,
+        "y": 25.31
+      },
+      {
+        "power": 0.49,
+        "angle": 0.22,
+        "score": 93,
+        "y": 28.12
+      }
+    ]
+  },
+  {
+    "course": "market",
+    "lane": 1,
+    "selected": [
+      {
+        "power": 0.82,
+        "angle": -0.75,
+        "score": 64,
+        "y": 22.39
+      },
+      {
+        "power": 0.52,
+        "angle": -0.38,
+        "score": 79,
+        "y": 25.26
+      },
+      {
+        "power": 0.505,
+        "angle": -0.208,
+        "score": 93,
+        "y": 27.97
+      }
+    ]
+  },
+  {
+    "course": "market",
+    "lane": 2,
+    "selected": [
+      {
+        "power": 0.82,
+        "angle": 0.75,
+        "score": 64,
+        "y": 22.39
+      },
+      {
+        "power": 0.52,
+        "angle": 0.38,
+        "score": 79,
+        "y": 25.26
+      },
+      {
+        "power": 0.505,
+        "angle": 0.208,
+        "score": 93,
+        "y": 27.97
+      }
+    ]
+  },
+  {
+    "course": "market",
+    "lane": 3,
+    "selected": [
+      {
+        "power": 0.43,
+        "angle": -0.28,
+        "score": 64,
+        "y": 22.37
+      },
+      {
+        "power": 0.79,
+        "angle": -0.75,
+        "score": 79,
+        "y": 25.31
+      },
+      {
+        "power": 0.49,
+        "angle": -0.22,
+        "score": 93,
+        "y": 28.12
+      }
+    ]
+  },
+  {
+    "course": "wax",
+    "lane": 0,
+    "selected": [
+      {
+        "power": 0.37,
+        "angle": -0.44,
+        "score": 64,
+        "y": 22.45
+      },
+      {
+        "power": 0.34,
+        "angle": -0.22,
+        "score": 79,
+        "y": 25.26
+      },
+      {
+        "power": 0.475,
+        "angle": -0.392,
+        "score": 93,
+        "y": 27.98
+      }
+    ]
+  },
+  {
+    "course": "wax",
+    "lane": 1,
+    "selected": [
+      {
+        "power": 0.46,
+        "angle": 0.65,
+        "score": 64,
+        "y": 22.37
+      },
+      {
+        "power": 0.58,
+        "angle": 0.65,
+        "score": 79,
+        "y": 25.36
+      },
+      {
+        "power": 0.385,
+        "angle": 0.244,
+        "score": 93,
+        "y": 28.01
+      }
+    ]
+  },
+  {
+    "course": "wax",
+    "lane": 2,
+    "selected": [
+      {
+        "power": 0.46,
+        "angle": -0.65,
+        "score": 64,
+        "y": 22.37
+      },
+      {
+        "power": 0.58,
+        "angle": -0.65,
+        "score": 79,
+        "y": 25.36
+      },
+      {
+        "power": 0.385,
+        "angle": -0.244,
+        "score": 93,
+        "y": 28.01
+      }
+    ]
+  },
+  {
+    "course": "wax",
+    "lane": 3,
+    "selected": [
+      {
+        "power": 0.37,
+        "angle": 0.44,
+        "score": 64,
+        "y": 22.45
+      },
+      {
+        "power": 0.31,
+        "angle": -0.22,
+        "score": 79,
+        "y": 25.35
+      },
+      {
+        "power": 0.475,
+        "angle": 0.392,
+        "score": 93,
+        "y": 27.98
+      }
+    ]
+  },
+  {
+    "course": "bank",
+    "lane": 0,
+    "selected": [
+      {
+        "power": 0.49,
+        "angle": -0.22,
+        "score": 65,
+        "y": 22.64
+      },
+      {
+        "power": 0.475,
+        "angle": -0.144,
+        "score": 79,
+        "y": 25.35
+      },
+      {
+        "power": 0.493,
+        "angle": -0.096,
+        "score": 93,
+        "y": 28.03
+      }
+    ]
+  },
+  {
+    "course": "bank",
+    "lane": 1,
+    "selected": [
+      {
+        "power": 0.55,
+        "angle": -0.38,
+        "score": 64,
+        "y": 22.37
+      },
+      {
+        "power": 0.838,
+        "angle": -0.108,
+        "score": 79,
+        "y": 25.36
+      },
+      {
+        "power": 0.853,
+        "angle": -0.108,
+        "score": 93,
+        "y": 28.1
+      }
+    ]
+  },
+  {
+    "course": "bank",
+    "lane": 2,
+    "selected": [
+      {
+        "power": 0.55,
+        "angle": 0.38,
+        "score": 64,
+        "y": 22.37
+      },
+      {
+        "power": 0.838,
+        "angle": 0.108,
+        "score": 79,
+        "y": 25.36
+      },
+      {
+        "power": 0.853,
+        "angle": 0.108,
+        "score": 93,
+        "y": 28.1
+      }
+    ]
+  },
+  {
+    "course": "bank",
+    "lane": 3,
+    "selected": [
+      {
+        "power": 0.49,
+        "angle": 0.22,
+        "score": 65,
+        "y": 22.64
+      },
+      {
+        "power": 0.475,
+        "angle": 0.144,
+        "score": 79,
+        "y": 25.35
+      },
+      {
+        "power": 0.493,
+        "angle": 0.096,
+        "score": 93,
+        "y": 28.03
+      }
+    ]
+  },
+  {
+    "course": "boost",
+    "lane": 0,
+    "selected": [
+      {
+        "power": 0.61,
+        "angle": -0.65,
+        "score": 64,
+        "y": 22.48
+      },
+      {
+        "power": 0.43,
+        "angle": -0.28,
+        "score": 79,
+        "y": 25.29
+      },
+      {
+        "power": 0.415,
+        "angle": -0.096,
+        "score": 93,
+        "y": 28.03
+      }
+    ]
+  },
+  {
+    "course": "boost",
+    "lane": 1,
+    "selected": [
+      {
+        "power": 0.37,
+        "angle": -0.28,
+        "score": 64,
+        "y": 22.34
+      },
+      {
+        "power": 0.76,
+        "angle": 0.75,
+        "score": 79,
+        "y": 25.39
+      },
+      {
+        "power": 0.43,
+        "angle": -0.22,
+        "score": 93,
+        "y": 28.05
+      }
+    ]
+  },
+  {
+    "course": "boost",
+    "lane": 2,
+    "selected": [
+      {
+        "power": 0.37,
+        "angle": 0.28,
+        "score": 64,
+        "y": 22.34
+      },
+      {
+        "power": 0.76,
+        "angle": -0.75,
+        "score": 79,
+        "y": 25.39
+      },
+      {
+        "power": 0.43,
+        "angle": 0.22,
+        "score": 93,
+        "y": 28.05
+      }
+    ]
+  },
+  {
+    "course": "boost",
+    "lane": 3,
+    "selected": [
+      {
+        "power": 0.49,
+        "angle": -0.65,
+        "score": 64,
+        "y": 22.34
+      },
+      {
+        "power": 0.43,
+        "angle": 0.28,
+        "score": 79,
+        "y": 25.29
+      },
+      {
+        "power": 0.46,
+        "angle": 0.28,
+        "score": 93,
+        "y": 28
+      }
+    ]
+  },
+  {
+    "course": "sale",
+    "lane": 0,
+    "selected": [
+      {
+        "power": 0.49,
+        "angle": -0.55,
+        "score": 64,
+        "y": 22.4
+      },
+      {
+        "power": 0.37,
+        "angle": -0.22,
+        "score": 79,
+        "y": 25.28
+      },
+      {
+        "power": 0.37,
+        "angle": 0.12,
+        "score": 93,
+        "y": 28.05
+      }
+    ]
+  },
+  {
+    "course": "sale",
+    "lane": 1,
+    "selected": [
+      {
+        "power": 0.31,
+        "angle": -0.22,
+        "score": 64,
+        "y": 22.42
+      },
+      {
+        "power": 0.34,
+        "angle": 0.22,
+        "score": 79,
+        "y": 25.34
+      },
+      {
+        "power": 0.37,
+        "angle": -0.12,
+        "score": 93,
+        "y": 28.02
+      }
+    ]
+  },
+  {
+    "course": "sale",
+    "lane": 2,
+    "selected": [
+      {
+        "power": 0.31,
+        "angle": 0.22,
+        "score": 64,
+        "y": 22.42
+      },
+      {
+        "power": 0.34,
+        "angle": -0.22,
+        "score": 79,
+        "y": 25.34
+      },
+      {
+        "power": 0.37,
+        "angle": -0.12,
+        "score": 93,
+        "y": 28.05
+      }
+    ]
+  },
+  {
+    "course": "sale",
+    "lane": 3,
+    "selected": [
+      {
+        "power": 0.49,
+        "angle": 0.55,
+        "score": 64,
+        "y": 22.4
+      },
+      {
+        "power": 0.37,
+        "angle": 0.22,
+        "score": 79,
+        "y": 25.28
+      },
+      {
+        "power": 0.37,
+        "angle": -0.12,
+        "score": 93,
+        "y": 28.05
+      }
+    ]
+  },
+  {
+    "course": "frost",
+    "lane": 0,
+    "selected": [
+      {
+        "power": 0.28,
+        "angle": -0.28,
+        "score": 64,
+        "y": 22.45
+      },
+      {
+        "power": 0.34,
+        "angle": 0.44,
+        "score": 79,
+        "y": 25.43
+      },
+      {
+        "power": 0.295,
+        "angle": 0,
+        "score": 93,
+        "y": 28.1
+      }
+    ]
+  },
+  {
+    "course": "frost",
+    "lane": 1,
+    "selected": [
+      {
+        "power": 0.28,
+        "angle": 0.38,
+        "score": 64,
+        "y": 22.4
+      },
+      {
+        "power": 0.31,
+        "angle": -0.28,
+        "score": 79,
+        "y": 25.36
+      },
+      {
+        "power": 0.295,
+        "angle": 0,
+        "score": 93,
+        "y": 28.1
+      }
+    ]
+  },
+  {
+    "course": "frost",
+    "lane": 2,
+    "selected": [
+      {
+        "power": 0.28,
+        "angle": -0.38,
+        "score": 64,
+        "y": 22.4
+      },
+      {
+        "power": 0.31,
+        "angle": 0.28,
+        "score": 79,
+        "y": 25.36
+      },
+      {
+        "power": 0.295,
+        "angle": 0,
+        "score": 93,
+        "y": 28.1
+      }
+    ]
+  },
+  {
+    "course": "frost",
+    "lane": 3,
+    "selected": [
+      {
+        "power": 0.28,
+        "angle": 0.28,
+        "score": 64,
+        "y": 22.45
+      },
+      {
+        "power": 0.34,
+        "angle": -0.44,
+        "score": 79,
+        "y": 25.43
+      },
+      {
+        "power": 0.295,
+        "angle": 0,
+        "score": 93,
+        "y": 28.1
+      }
+    ]
+  },
+  {
+    "course": "icefork",
+    "lane": 0,
+    "selected": [
+      {
+        "power": 0.52,
+        "angle": 0.28,
+        "score": 64,
+        "y": 22.35
+      },
+      {
+        "power": 0.349,
+        "angle": -0.232,
+        "score": 79,
+        "y": 25.32
+      },
+      {
+        "power": 0.271,
+        "angle": 0.12,
+        "score": 93,
+        "y": 28.07
+      }
+    ]
+  },
+  {
+    "course": "icefork",
+    "lane": 1,
+    "selected": [
+      {
+        "power": 0.67,
+        "angle": -0.65,
+        "score": 64,
+        "y": 22.37
+      },
+      {
+        "power": 0.55,
+        "angle": -0.404,
+        "score": 79,
+        "y": 25.4
+      },
+      {
+        "power": 0.646,
+        "angle": 0.356,
+        "score": 93,
+        "y": 28.13
+      }
+    ]
+  },
+  {
+    "course": "icefork",
+    "lane": 2,
+    "selected": [
+      {
+        "power": 0.58,
+        "angle": 0,
+        "score": 64,
+        "y": 22.38
+      },
+      {
+        "power": 0.61,
+        "angle": 0,
+        "score": 79,
+        "y": 25.4
+      },
+      {
+        "power": 0.418,
+        "angle": -0.38,
+        "score": 93,
+        "y": 28.12
+      }
+    ]
+  },
+  {
+    "course": "icefork",
+    "lane": 3,
+    "selected": [
+      {
+        "power": 0.58,
+        "angle": 0,
+        "score": 64,
+        "y": 22.38
+      },
+      {
+        "power": 0.61,
+        "angle": 0,
+        "score": 79,
+        "y": 25.4
+      },
+      {
+        "power": 0.619,
+        "angle": -0.096,
+        "score": 93,
+        "y": 28.09
+      }
+    ]
+  },
+  {
+    "course": "slalom",
+    "lane": 0,
+    "selected": [
+      {
+        "power": 0.64,
+        "angle": -0.65,
+        "score": 66,
+        "y": 22.82
+      },
+      {
+        "power": 0.7,
+        "angle": -0.65,
+        "score": 78,
+        "y": 25.06
+      },
+      {
+        "power": 0.79,
+        "angle": -0.65,
+        "score": 93,
+        "y": 28.03
+      }
+    ]
+  },
+  {
+    "course": "slalom",
+    "lane": 1,
+    "selected": [
+      {
+        "power": 0.865,
+        "angle": -0.38,
+        "score": 63,
+        "y": 22.21
+      },
+      {
+        "power": 0.868,
+        "angle": -0.392,
+        "score": 79,
+        "y": 25.38
+      },
+      {
+        "power": 0.907,
+        "angle": -0.44,
+        "score": 93,
+        "y": 28.15
+      }
+    ]
+  },
+  {
+    "course": "slalom",
+    "lane": 2,
+    "selected": [
+      {
+        "power": 0.4,
+        "angle": 0.44,
+        "score": 64,
+        "y": 22.39
+      },
+      {
+        "power": 0.898,
+        "angle": -0.452,
+        "score": 79,
+        "y": 25.27
+      },
+      {
+        "power": 0.478,
+        "angle": 0.416,
+        "score": 93,
+        "y": 28.05
+      }
+    ]
+  },
+  {
+    "course": "slalom",
+    "lane": 3,
+    "selected": [
+      {
+        "power": 0.31,
+        "angle": -0.28,
+        "score": 64,
+        "y": 22.4
+      },
+      {
+        "power": 0.34,
+        "angle": -0.22,
+        "score": 76,
+        "y": 24.77
+      },
+      {
+        "power": 0.388,
+        "angle": -0.256,
+        "score": 93,
+        "y": 28.05
+      }
+    ]
+  },
+  {
+    "course": "relay",
+    "lane": 0,
+    "selected": [
+      {
+        "power": 0.31,
+        "angle": 0,
+        "score": 64,
+        "y": 22.5
+      },
+      {
+        "power": 0.37,
+        "angle": -0.12,
+        "score": 79,
+        "y": 25.36
+      },
+      {
+        "power": 0.334,
+        "angle": 0.196,
+        "score": 93,
+        "y": 28.07
+      }
+    ]
+  },
+  {
+    "course": "relay",
+    "lane": 1,
+    "selected": [
+      {
+        "power": 0.31,
+        "angle": 0,
+        "score": 64,
+        "y": 22.5
+      },
+      {
+        "power": 0.85,
+        "angle": -0.75,
+        "score": 79,
+        "y": 25.29
+      },
+      {
+        "power": 0.421,
+        "angle": -0.232,
+        "score": 93,
+        "y": 28.14
+      }
+    ]
+  },
+  {
+    "course": "relay",
+    "lane": 2,
+    "selected": [
+      {
+        "power": 0.37,
+        "angle": 0.12,
+        "score": 65,
+        "y": 22.6
+      },
+      {
+        "power": 0.52,
+        "angle": 0.38,
+        "score": 79,
+        "y": 25.26
+      },
+      {
+        "power": 0.445,
+        "angle": 0.208,
+        "score": 93,
+        "y": 28.15
+      }
+    ]
+  },
+  {
+    "course": "relay",
+    "lane": 3,
+    "selected": [
+      {
+        "power": 0.43,
+        "angle": -0.28,
+        "score": 64,
+        "y": 22.37
+      },
+      {
+        "power": 0.4,
+        "angle": -0.38,
+        "score": 79,
+        "y": 25.27
+      },
+      {
+        "power": 0.49,
+        "angle": -0.22,
+        "score": 93,
+        "y": 28.12
+      }
+    ]
+  },
+  {
+    "course": "reversal",
+    "lane": 0,
+    "selected": [
+      {
+        "power": 0.4,
+        "angle": -0.12,
+        "score": 64,
+        "y": 22.34
+      },
+      {
+        "power": 0.46,
+        "angle": -0.12,
+        "score": 79,
+        "y": 25.38
+      },
+      {
+        "power": 0.685,
+        "angle": -0.55,
+        "score": 93,
+        "y": 27.97
+      }
+    ]
+  },
+  {
+    "course": "reversal",
+    "lane": 1,
+    "selected": [
+      {
+        "power": 0.46,
+        "angle": 0.44,
+        "score": 64,
+        "y": 22.42
+      },
+      {
+        "power": 0.58,
+        "angle": 0.55,
+        "score": 79,
+        "y": 25.29
+      },
+      {
+        "power": 0.505,
+        "angle": -0.196,
+        "score": 93,
+        "y": 28.15
+      }
+    ]
+  },
+  {
+    "course": "reversal",
+    "lane": 2,
+    "selected": [
+      {
+        "power": 0.46,
+        "angle": -0.44,
+        "score": 64,
+        "y": 22.42
+      },
+      {
+        "power": 0.58,
+        "angle": -0.55,
+        "score": 79,
+        "y": 25.29
+      },
+      {
+        "power": 0.55,
+        "angle": 0.38,
+        "score": 93,
+        "y": 28.02
+      }
+    ]
+  },
+  {
+    "course": "reversal",
+    "lane": 3,
+    "selected": [
+      {
+        "power": 0.4,
+        "angle": 0.12,
+        "score": 64,
+        "y": 22.34
+      },
+      {
+        "power": 0.46,
+        "angle": 0.12,
+        "score": 79,
+        "y": 25.38
+      },
+      {
+        "power": 0.685,
+        "angle": 0.55,
+        "score": 93,
+        "y": 27.97
+      }
+    ]
+  },
+  {
+    "course": "bumpers",
+    "lane": 0,
+    "selected": [
+      {
+        "power": 0.76,
+        "angle": -0.65,
+        "score": 64,
+        "y": 22.37
+      },
+      {
+        "power": 0.91,
+        "angle": 0.28,
+        "score": 79,
+        "y": 25.38
+      },
+      {
+        "power": 0.685,
+        "angle": -0.55,
+        "score": 93,
+        "y": 28.11
+      }
+    ]
+  },
+  {
+    "course": "bumpers",
+    "lane": 1,
+    "selected": [
+      {
+        "power": 0.49,
+        "angle": 0.9,
+        "score": 64,
+        "y": 22.41
+      },
+      {
+        "power": 0.52,
+        "angle": -0.38,
+        "score": 79,
+        "y": 25.26
+      },
+      {
+        "power": 0.745,
+        "angle": 0.12,
+        "score": 93,
+        "y": 28.08
+      }
+    ]
+  },
+  {
+    "course": "bumpers",
+    "lane": 2,
+    "selected": [
+      {
+        "power": 0.7,
+        "angle": 0.38,
+        "score": 65,
+        "y": 22.58
+      },
+      {
+        "power": 0.655,
+        "angle": -0.562,
+        "score": 79,
+        "y": 25.3
+      },
+      {
+        "power": 0.505,
+        "angle": 0.208,
+        "score": 93,
+        "y": 27.97
+      }
+    ]
+  },
+  {
+    "course": "bumpers",
+    "lane": 3,
+    "selected": [
+      {
+        "power": 0.43,
+        "angle": -0.28,
+        "score": 64,
+        "y": 22.37
+      },
+      {
+        "power": 0.73,
+        "angle": 0,
+        "score": 79,
+        "y": 25.41
+      },
+      {
+        "power": 0.49,
+        "angle": -0.22,
+        "score": 93,
+        "y": 28.12
+      }
+    ]
+  },
+  {
+    "course": "crosswind",
+    "lane": 0,
+    "selected": [
+      {
+        "power": 0.46,
+        "angle": 0.28,
+        "score": 64,
+        "y": 22.47
+      },
+      {
+        "power": 0.505,
+        "angle": -0.232,
+        "score": 79,
+        "y": 25.4
+      },
+      {
+        "power": 0.55,
+        "angle": 0.22,
+        "score": 93,
+        "y": 28.1
+      }
+    ]
+  },
+  {
+    "course": "crosswind",
+    "lane": 1,
+    "selected": [
+      {
+        "power": 0.4,
+        "angle": 0,
+        "score": 64,
+        "y": 22.49
+      },
+      {
+        "power": 0.55,
+        "angle": 0.28,
+        "score": 79,
+        "y": 25.35
+      },
+      {
+        "power": 0.535,
+        "angle": 0.132,
+        "score": 93,
+        "y": 28.01
+      }
+    ]
+  },
+  {
+    "course": "crosswind",
+    "lane": 2,
+    "selected": [
+      {
+        "power": 0.46,
+        "angle": -0.44,
+        "score": 64,
+        "y": 22.42
+      },
+      {
+        "power": 0.55,
+        "angle": 0.22,
+        "score": 79,
+        "y": 25.33
+      },
+      {
+        "power": 0.52,
+        "angle": 0,
+        "score": 93,
+        "y": 27.97
+      }
+    ]
+  },
+  {
+    "course": "crosswind",
+    "lane": 3,
+    "selected": [
+      {
+        "power": 0.43,
+        "angle": -0.38,
+        "score": 64,
+        "y": 22.41
+      },
+      {
+        "power": 0.52,
+        "angle": 0.28,
+        "score": 79,
+        "y": 25.35
+      },
+      {
+        "power": 0.55,
+        "angle": 0.28,
+        "score": 93,
+        "y": 28.07
+      }
+    ]
+  }
+]

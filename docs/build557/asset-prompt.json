@@ -1,0 +1,18 @@
+{
+  "generator": "image_gen.imagegen",
+  "file": "assets/cart557/woven-runner.png",
+  "transparentBackground": true,
+  "prompt": "Use case: stylized-concept. Asset type: a single highly polished fantasy game floor texture/sprite, an antique woven runner carpet, on a genuinely transparent background. Create only ONE very long narrow rectangular carpet, full object entirely visible including short tasseled fringes at both short ends, no floor or other objects. The carpet's physical length-to-width ratio must be about 4.4:1, centered vertically inside a portrait canvas with transparent space on both sides; keep long sides straight and parallel. STRICT exact overhead orthographic view looking straight down, no perspective, no tilted trapezoid, no roll, no curl. Luxurious hand-knotted wool, thick soft dense pile visible, softly worn naturally varied plum-violet and muted mulberry field, ornate antique ivory and warm golden thread woven floral borders, small emerald-teal accents, three elongated interlocking botanical medallions and fine curling vine motifs through the center, rich irregular fine fibers and handwoven knot texture. Embroidered broad edges and delicate ivory fringes, subtly irregular fabric silhouette but laid fully flat. Premium painterly 3D fantasy prop quality suitable for a warm-lantern-lit icy harbor wooden boardwalk. Soft diffuse light from above-left, subtle natural textile shading, warm thread highlights; gold is yarn, never metal. No thick dark outline, no cast shadow, no baked floor, no white rectangle, no letters, no text, no numbers, no logos, no watermarks. Fine elegant Persian-inspired weaving, tactile and believable textile, not a flat vector mat, not a repeated line of simple diamonds. Full complete isolated carpet. Preserve real alpha transparency outside the carpet and between the fringes.",
+  "projection": "Unmodified original PNG sampled onto the existing world floor in the cached renderer; outside alpha trimmed only by drawImage source rectangle.",
+  "sha256": "5b5a1b7b15249e889679183b5a0bdb3a26efaf51a7895c2358be68505bdf40f8",
+  "dimensions": [
+    795,
+    1977
+  ],
+  "sourceRectangle": {
+    "x": 186,
+    "y": 8,
+    "width": 426,
+    "height": 1957
+  }
+}

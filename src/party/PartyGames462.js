@@ -1,11 +1,10 @@
 // Only released games appear here. Future game adapters reuse the same party.
 export const PARTY_GAMES462=Object.freeze([
- {id:'pinball',name:'人間ピンボール大運動会',tag:'３色収集 × カンカン連鎖 × JACKPOT',players:'４人対戦 · ８／16回 · 空席はAI',image:'./assets/ricochet552/carnival-poster.png',description:'３色の宝石を集め、王冠で大当たり！ 回転バー、連鎖加速、みんなで起こすフィーバー。能力も勢いも持ち越す、止まらない８回勝負。'},
- {id:'junkgp',name:'ポンコツ改造グランプリ',tag:'重ねて改造 × 再噴射 × 大暴発',players:'４人対戦 · ８／16回 · 空席はAI',image:'./assets/ricochet554/foundry-poster.png',description:'ロケット、巨大バネ、鉄板よろい。改造が見えるマシンで工房コースを駆け抜けろ！ 接触でターボを溜めて再噴射。安定加速か、６で大暴発のギアか。引いて狙って、最長到達距離を競え。'},
- {id:'cart',name:'帰ってこい！暴走ショッピングカート',tag:'５つの坂 × 金枠ボーナス × 大追突',players:'４人対戦 · 全５回 · 空席はAI',image:'./assets/cart543/cover.webp',description:'止まったからって、安心するな。逆方向に引いて、離すと発進！ 引く長さで勢いを決めたら、あとは見守るだけ。 後ろからの追突で天国から場外へ。滑る床と加速ベルトを読み、金枠にピタッと停めて＋50点！ 最後は得点２倍。'},
+ {id:'pinball',name:'人間ピンボール大運動会',tag:'３色レーン × 衝撃回転 × JACKPOT',players:'４人対戦 · 90／150秒 · 空席はAI',image:'./assets/ricochet552/carnival-poster.png',description:'３色を集めて王冠へ！ 外周レーンを駆け抜け、中央の棒を一撃で回せ。2.8秒ごとに狙って発射、回転からフィーバーを起こす90秒の得点勝負。'},
+ {id:'cart',name:'帰ってこい！暴走ショッピングカート',tag:'12の坂 × 崖際200点 × 大追突',players:'４人対戦 · 全５回 · 12コース抽選 · 空席はAI',image:'./assets/cart543/cover.webp',description:'止まったからって、安心するな。逆方向に引いて、離すと発進！ 引く長さで勢いを決めたら、あとは見守るだけ。 後ろからの追突で天国から場外へ。滑る床と加速ベルトを読み、金枠に停めて＋50点、その先の崖際は最大200点！ 最後は得点２倍。'},
  {id:'bomb',name:'魔王城の爆弾リレー！',tag:'置く × けり返す × 最後の１秒',players:'４人対戦 · 30秒×３回 · 空席はAI',image:'./assets/bomb542/cover.webp',description:'その爆弾、お返しします。床タップで逃げ、迫る爆弾をけり返せ！ 導火線はそのまま、爆風はどんどん長くなる。崩れゆく魔王城で、最後に笑うのは誰だ！'},
  {id:'tetra',name:'因縁の決戦！テトラポット渡り',tag:'先端３連続で大ジャンプ × 荒波 × よりの因縁',players:'４人レース · 最大150秒 · 空席はAI',image:'./assets/tetra539/cover.webp',description:'手前に引いて、離して跳べ！ 先端３連続で追い風ジャンプ。広い群礁から好きなルートへ。通常波は先端、大波は中継に避難。低い足場の水没と滑る苔にも注意。落ちても、よりは「イージー！」'},
- {id:'hide',name:'魔王のかくれんぼ',tag:'化けて潜入 × 封印解除 × 仲間と脱出',players:'鬼１人 VS ３人 · 180秒 · 空席はAI',image:'./assets/hide538/cover.webp',description:'３つの封印を解いて、庭門から脱出！ 身代わりで鬼をまき、捕まった仲間を救出。鬼は気配を頼りに脱出を阻止！'},
+ {id:'hide',name:'魔王のかくれんぼ',tag:'化けて潜入 × 封印解除 × 仲間と脱出',players:'鬼１人 VS ３人 · 180秒 · 空席はAI',image:'./assets/hide538/cover.webp',description:'５つから３つの封印を解除！ 音で鬼を誘い、東西の門から脱出。分担・身代わり・救出で仲間を逃がそう。'},
  {id:'fishing',name:'ぬし釣り大騒動',tag:'釣って発見、実在の魚と小さな学び',players:'４人対戦・空席はAI',image:'./assets/fishing525/cover.webp',description:'全152種類・ルアー６種・ヌシ級６種！ サバやアユ、毒に注意の魚も。エサをつないで竿を育て、釣果と豆知識を集めよう！'},
  {id:'sumo',name:'魔獣ぶっとばし相撲',tag:'巨大化 × 磁石争奪 × 四段崩壊',players:'4人対戦 · 最大150秒 · 空席はAI',image:'./assets/sumo523/cover.webp',description:'結晶を集めて巨大化、溜めた一撃で場外へ！ 崩れる土俵で、最後に立つ魔獣は誰だ。'},
  {id:'tower',name:'ブロック落としサバイバル',tag:'1対3 × 落とせ、かわせ、登れ',players:'4人対戦 · 空席はAI',image:'./assets/tower518/cover.webp',description:'頭上から迫るブロックをかわして、天空へ脱出！ 4つの手札で追い詰める1人と、仲間の頭も足場にする3人の決戦。'},

@@ -1,0 +1,67 @@
+{
+  "checks": [
+    {
+      "id": "market",
+      "name": "はじめての坂",
+      "scene": "market"
+    },
+    {
+      "id": "wax",
+      "name": "床、磨きたて。",
+      "scene": "market"
+    },
+    {
+      "id": "bank",
+      "name": "搬入中につき、遠回り。",
+      "scene": "market"
+    },
+    {
+      "id": "boost",
+      "name": "返品エクスプレス",
+      "scene": "market"
+    },
+    {
+      "id": "sale",
+      "name": "閉店ダッシュ",
+      "scene": "market"
+    },
+    {
+      "id": "frost",
+      "name": "つるつる氷の港",
+      "scene": "frost-harbor"
+    },
+    {
+      "id": "icefork",
+      "name": "氷か、じゅうたんか。",
+      "scene": "frost-harbor"
+    },
+    {
+      "id": "slalom",
+      "name": "雪どけジグザグ便",
+      "scene": "frost-harbor"
+    },
+    {
+      "id": "relay",
+      "name": "二段ロケット配送",
+      "scene": "foundry-quay"
+    },
+    {
+      "id": "reversal",
+      "name": "行きすぎ返品ベルト",
+      "scene": "foundry-quay"
+    },
+    {
+      "id": "bumpers",
+      "name": "真夜中のばね樽",
+      "scene": "moonlit-bazaar"
+    },
+    {
+      "id": "crosswind",
+      "name": "横取りクロスベルト",
+      "scene": "moonlit-bazaar"
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "stderr": ""
+}

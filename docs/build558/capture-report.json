@@ -1,0 +1,388 @@
+{
+  "source": "Production game modules, one automated human using actual mouse drags, three AI; server clock accelerated in 25 ms simulation steps. Normal seeded random draw. No course, score, position, velocity or outcome injection.",
+  "phase": "result",
+  "rounds": [
+    {
+      "round": 1,
+      "courseId556": "frost",
+      "multiplier": 1,
+      "results": [
+        {
+          "seat": 0,
+          "base": 80,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 80,
+          "power": 0.33999998467998327,
+          "fallen": false,
+          "y": 25.457455573036547
+        },
+        {
+          "seat": 1,
+          "base": 82,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 82,
+          "power": 0.2781299769652542,
+          "fallen": false,
+          "y": 25.89405312341686
+        },
+        {
+          "seat": 2,
+          "base": 79,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 79,
+          "power": 0.31261439745058306,
+          "fallen": false,
+          "y": 25.392892078946403
+        },
+        {
+          "seat": 3,
+          "base": 59,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 59,
+          "power": 0.3374953915062361,
+          "fallen": false,
+          "y": 21.41178279595781
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "courseId556": "crosswind",
+      "multiplier": 1,
+      "results": [
+        {
+          "seat": 0,
+          "base": 86,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 86,
+          "power": 0.5500000300487039,
+          "fallen": false,
+          "y": 26.790374123238
+        },
+        {
+          "seat": 1,
+          "base": 75,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 75,
+          "power": 0.5186462162190583,
+          "fallen": false,
+          "y": 24.542321272796492
+        },
+        {
+          "seat": 2,
+          "base": 63,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 63,
+          "power": 0.42831798824178985,
+          "fallen": false,
+          "y": 22.297255588626143
+        },
+        {
+          "seat": 3,
+          "base": 78,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 78,
+          "power": 0.5016504210173153,
+          "fallen": false,
+          "y": 25.05762758052238
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "courseId556": "reversal",
+      "multiplier": 1,
+      "results": [
+        {
+          "seat": 0,
+          "base": 79,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 79,
+          "power": 0.5799999690388916,
+          "fallen": false,
+          "y": 25.28641100671141
+        },
+        {
+          "seat": 1,
+          "base": 78,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 78,
+          "power": 0.4560241434827913,
+          "fallen": false,
+          "y": 25.157631843505207
+        },
+        {
+          "seat": 2,
+          "base": 59,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 59,
+          "power": 0.4592368467997294,
+          "fallen": false,
+          "y": 21.495489772702484
+        },
+        {
+          "seat": 3,
+          "base": 0,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 0,
+          "power": 0.5762250991440377,
+          "fallen": true,
+          "y": 29.490687687507183
+        }
+      ]
+    },
+    {
+      "round": 4,
+      "courseId556": "icefork",
+      "multiplier": 1,
+      "results": [
+        {
+          "seat": 0,
+          "base": 79,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 79,
+          "power": 0.609999976915233,
+          "fallen": false,
+          "y": 25.399543639747165
+        },
+        {
+          "seat": 1,
+          "base": 0,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 0,
+          "power": 0.27423189559113237,
+          "fallen": true,
+          "y": 29.427613504664766
+        },
+        {
+          "seat": 2,
+          "base": 0,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 0,
+          "power": 0.5541152351051569,
+          "fallen": true,
+          "y": 29.4767422817682
+        },
+        {
+          "seat": 3,
+          "base": 60,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 60,
+          "power": 0.41691823771852066,
+          "fallen": false,
+          "y": 21.641807982768118
+        }
+      ]
+    },
+    {
+      "round": 5,
+      "courseId556": "bumpers",
+      "multiplier": 2,
+      "results": [
+        {
+          "seat": 0,
+          "base": 0,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 0,
+          "power": 0.9100001054952735,
+          "fallen": true,
+          "y": 29.489296525272383
+        },
+        {
+          "seat": 1,
+          "base": 36,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 72,
+          "power": 0.5172374463444576,
+          "fallen": false,
+          "y": 17.066210229720717
+        },
+        {
+          "seat": 2,
+          "base": 0,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 0,
+          "power": 0.6562264160180931,
+          "fallen": true,
+          "y": 29.447856593013736
+        },
+        {
+          "seat": 3,
+          "base": 27,
+          "bonus": 0,
+          "goldBonus557": 0,
+          "edgeBonus557": 0,
+          "parking557": "none",
+          "points": 54,
+          "power": 0.4944578238851391,
+          "fallen": false,
+          "y": 15.306179836638817
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "playerId": "p0",
+      "name": "あなた",
+      "seat": 0,
+      "score": 324,
+      "best": 86,
+      "perfects": 0,
+      "edgeParks557": 0,
+      "bumps": 4,
+      "falls": 1,
+      "rank": 1
+    },
+    {
+      "playerId": "AI-c543-3-67ee1bb8-1",
+      "name": "押すなよゴブ",
+      "seat": 1,
+      "score": 307,
+      "best": 82,
+      "perfects": 0,
+      "edgeParks557": 0,
+      "bumps": 5,
+      "falls": 1,
+      "rank": 2
+    },
+    {
+      "playerId": "AI-c543-3-67ee1bb8-3",
+      "name": "おさきに骨さん",
+      "seat": 3,
+      "score": 251,
+      "best": 78,
+      "perfects": 0,
+      "edgeParks557": 0,
+      "bumps": 7,
+      "falls": 1,
+      "rank": 3
+    },
+    {
+      "playerId": "AI-c543-3-67ee1bb8-2",
+      "name": "より",
+      "seat": 2,
+      "score": 201,
+      "best": 79,
+      "perfects": 0,
+      "edgeParks557": 0,
+      "bumps": 4,
+      "falls": 2,
+      "rank": 4
+    }
+  ],
+  "shots": [
+    {
+      "round": 1,
+      "course": "frost",
+      "power": 0.33999998467998327,
+      "angle": 0.43999993872424825
+    },
+    {
+      "round": 2,
+      "course": "crosswind",
+      "power": 0.5500000300487039,
+      "angle": 0.28000001623913334
+    },
+    {
+      "round": 3,
+      "course": "reversal",
+      "power": 0.5799999690388916,
+      "angle": -0.5500001007165112
+    },
+    {
+      "round": 4,
+      "course": "icefork",
+      "power": 0.609999976915233,
+      "angle": -1.4131304988262074e-8
+    },
+    {
+      "round": 5,
+      "course": "bumpers",
+      "power": 0.9100001054952735,
+      "angle": 0.27999993322458555
+    }
+  ],
+  "screens": [
+    "frost",
+    "crosswind",
+    "reversal",
+    "icefork",
+    "bumpers"
+  ],
+  "zoomCapture": {
+    "zoom": 1.3007952063668313,
+    "elapsed": 6125
+  },
+  "eventCounts": {
+    "round": 5,
+    "go": 5,
+    "launch": 20,
+    "wall": 38,
+    "park": 16,
+    "bump": 10,
+    "score": 5,
+    "boost": 16,
+    "fall": 5,
+    "spring": 10
+  },
+  "errors": [],
+  "stderr": ""
+}

@@ -1,0 +1,247 @@
+{
+  "checks": [
+    "Four actual browser clients: ready/start, 90/150 settings, private equipment, repeated touch shots after reload, carried momentum.",
+    "Stale shot tokens are rejected; 30-second supplies and peer equipment selections preserve the live canvas and held input.",
+    "Impact-driven rotor synchronizes across four clients and reconnect. Crown payout is private until reveal and identical for everyone; no blocking jackpot panel.",
+    "Earned burst works with actual touch while moving and adds existing momentum.",
+    "One final result agrees on four clients; replay and game list work; retired GP is absent.",
+    "320–430px portrait and 844×390 landscape, inventory images, keyboard, touch cancel, blur and reduced motion verified."
+  ],
+  "viewports": [
+    {
+      "width": 320,
+      "height": 690,
+      "phase": "choice",
+      "overflow": 0,
+      "stage": 449,
+      "ratio": 0.9875,
+      "offers": [
+        {
+          "x": 8,
+          "y": 585,
+          "width": 98,
+          "height": 98,
+          "top": 585,
+          "right": 106,
+          "bottom": 683,
+          "left": 8
+        },
+        {
+          "x": 111,
+          "y": 585,
+          "width": 98,
+          "height": 98,
+          "top": 585,
+          "right": 209,
+          "bottom": 683,
+          "left": 111
+        },
+        {
+          "x": 214,
+          "y": 585,
+          "width": 98,
+          "height": 98,
+          "top": 585,
+          "right": 312,
+          "bottom": 683,
+          "left": 214
+        }
+      ]
+    },
+    {
+      "width": 320,
+      "height": 690,
+      "phase": "play",
+      "overflow": 0,
+      "stage": 449,
+      "ratio": 0.9875,
+      "offers": []
+    },
+    {
+      "width": 320,
+      "height": 690,
+      "phase": "result",
+      "overflow": 0,
+      "stage": 449,
+      "ratio": 0.9875,
+      "offers": []
+    },
+    {
+      "width": 390,
+      "height": 664,
+      "phase": "choice",
+      "overflow": 0,
+      "stage": 421,
+      "ratio": 0.9324421846809907,
+      "offers": [
+        {
+          "x": 8,
+          "y": 559,
+          "width": 121.328125,
+          "height": 98,
+          "top": 559,
+          "right": 129.328125,
+          "bottom": 657,
+          "left": 8
+        },
+        {
+          "x": 134.328125,
+          "y": 559,
+          "width": 121.328125,
+          "height": 98,
+          "top": 559,
+          "right": 255.65625,
+          "bottom": 657,
+          "left": 134.328125
+        },
+        {
+          "x": 260.65625,
+          "y": 559,
+          "width": 121.34375,
+          "height": 98,
+          "top": 559,
+          "right": 382,
+          "bottom": 657,
+          "left": 260.65625
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "height": 664,
+      "phase": "play",
+      "overflow": 0,
+      "stage": 421,
+      "ratio": 0.9324421846809907,
+      "offers": []
+    },
+    {
+      "width": 390,
+      "height": 664,
+      "phase": "result",
+      "overflow": 0,
+      "stage": 421,
+      "ratio": 0.9324421846809907,
+      "offers": []
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "phase": "choice",
+      "overflow": 0,
+      "stage": 689,
+      "ratio": 0.9906976744186047,
+      "offers": [
+        {
+          "x": 8,
+          "y": 827,
+          "width": 134.65625,
+          "height": 98,
+          "top": 827,
+          "right": 142.65625,
+          "bottom": 925,
+          "left": 8
+        },
+        {
+          "x": 147.65625,
+          "y": 827,
+          "width": 134.671875,
+          "height": 98,
+          "top": 827,
+          "right": 282.328125,
+          "bottom": 925,
+          "left": 147.65625
+        },
+        {
+          "x": 287.328125,
+          "y": 827,
+          "width": 134.671875,
+          "height": 98,
+          "top": 827,
+          "right": 422,
+          "bottom": 925,
+          "left": 287.328125
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "phase": "play",
+      "overflow": 0,
+      "stage": 689,
+      "ratio": 0.9906976744186047,
+      "offers": []
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "phase": "result",
+      "overflow": 0,
+      "stage": 689,
+      "ratio": 0.9906976744186047,
+      "offers": []
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "phase": "choice",
+      "overflow": 0,
+      "stage": 357,
+      "ratio": 0.49974039819455596,
+      "offers": [
+        {
+          "x": 8,
+          "y": 285,
+          "width": 67.328125,
+          "height": 98,
+          "top": 285,
+          "right": 75.328125,
+          "bottom": 383,
+          "left": 8
+        },
+        {
+          "x": 80.328125,
+          "y": 285,
+          "width": 67.328125,
+          "height": 98,
+          "top": 285,
+          "right": 147.65625,
+          "bottom": 383,
+          "left": 80.328125
+        },
+        {
+          "x": 152.65625,
+          "y": 285,
+          "width": 67.34375,
+          "height": 98,
+          "top": 285,
+          "right": 220,
+          "bottom": 383,
+          "left": 152.65625
+        }
+      ]
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "phase": "play",
+      "overflow": 0,
+      "stage": 357,
+      "ratio": 0.49974039819455596,
+      "offers": []
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "phase": "result",
+      "overflow": 0,
+      "stage": 357,
+      "ratio": 0.49974039819455596,
+      "offers": []
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "serverErrors": ""
+}

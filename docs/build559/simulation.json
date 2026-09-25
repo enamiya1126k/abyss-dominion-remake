@@ -1,0 +1,273 @@
+{
+  "summary": {
+    "games": 26,
+    "hunterWins": 11,
+    "hiderWins": 15,
+    "medianSeconds": 36.7,
+    "maximumSeconds": 87.65,
+    "noAlarmGames": 0,
+    "notes": "Deterministic AI-versus-AI calibration, not a human win-rate estimate."
+  },
+  "rows": [
+    {
+      "seed": 1,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 87650,
+      "catches": 2,
+      "seals": 3,
+      "alarms": 4,
+      "gate": "east"
+    },
+    {
+      "seed": 2,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 67800,
+      "catches": 2,
+      "seals": 3,
+      "alarms": 5,
+      "gate": "east"
+    },
+    {
+      "seed": 3,
+      "side": "hunter",
+      "reason": "caught",
+      "elapsed": 57500,
+      "catches": 3,
+      "seals": 3,
+      "alarms": 4,
+      "gate": null
+    },
+    {
+      "seed": 4,
+      "side": "hunter",
+      "reason": "caught",
+      "elapsed": 57350,
+      "catches": 3,
+      "seals": 2,
+      "alarms": 4,
+      "gate": null
+    },
+    {
+      "seed": 5,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 23950,
+      "catches": 0,
+      "seals": 3,
+      "alarms": 3,
+      "gate": "west"
+    },
+    {
+      "seed": 6,
+      "side": "hunter",
+      "reason": "caught",
+      "elapsed": 35100,
+      "catches": 3,
+      "seals": 2,
+      "alarms": 3,
+      "gate": null
+    },
+    {
+      "seed": 7,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 22700,
+      "catches": 0,
+      "seals": 3,
+      "alarms": 3,
+      "gate": "west"
+    },
+    {
+      "seed": 8,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 36250,
+      "catches": 1,
+      "seals": 3,
+      "alarms": 3,
+      "gate": "east"
+    },
+    {
+      "seed": 9,
+      "side": "hunter",
+      "reason": "caught",
+      "elapsed": 29850,
+      "catches": 3,
+      "seals": 2,
+      "alarms": 3,
+      "gate": null
+    },
+    {
+      "seed": 10,
+      "side": "hunter",
+      "reason": "caught",
+      "elapsed": 46550,
+      "catches": 3,
+      "seals": 1,
+      "alarms": 4,
+      "gate": null
+    },
+    {
+      "seed": 11,
+      "side": "hunter",
+      "reason": "caught",
+      "elapsed": 56550,
+      "catches": 3,
+      "seals": 3,
+      "alarms": 4,
+      "gate": null
+    },
+    {
+      "seed": 12,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 74400,
+      "catches": 2,
+      "seals": 3,
+      "alarms": 5,
+      "gate": "west"
+    },
+    {
+      "seed": 13,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 22350,
+      "catches": 0,
+      "seals": 3,
+      "alarms": 3,
+      "gate": "west"
+    },
+    {
+      "seed": 14,
+      "side": "hunter",
+      "reason": "caught",
+      "elapsed": 40800,
+      "catches": 3,
+      "seals": 2,
+      "alarms": 3,
+      "gate": null
+    },
+    {
+      "seed": 15,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 22400,
+      "catches": 0,
+      "seals": 3,
+      "alarms": 3,
+      "gate": "west"
+    },
+    {
+      "seed": 16,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 22900,
+      "catches": 0,
+      "seals": 3,
+      "alarms": 3,
+      "gate": "west"
+    },
+    {
+      "seed": 17,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 22900,
+      "catches": 0,
+      "seals": 3,
+      "alarms": 4,
+      "gate": "west"
+    },
+    {
+      "seed": 18,
+      "side": "hunter",
+      "reason": "caught",
+      "elapsed": 36700,
+      "catches": 3,
+      "seals": 2,
+      "alarms": 5,
+      "gate": null
+    },
+    {
+      "seed": 19,
+      "side": "hunter",
+      "reason": "caught",
+      "elapsed": 40250,
+      "catches": 3,
+      "seals": 2,
+      "alarms": 4,
+      "gate": null
+    },
+    {
+      "seed": 20,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 59150,
+      "catches": 2,
+      "seals": 3,
+      "alarms": 4,
+      "gate": "west"
+    },
+    {
+      "seed": 21,
+      "side": "hunter",
+      "reason": "caught",
+      "elapsed": 19350,
+      "catches": 3,
+      "seals": 1,
+      "alarms": 1,
+      "gate": null
+    },
+    {
+      "seed": 22,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 22800,
+      "catches": 0,
+      "seals": 3,
+      "alarms": 3,
+      "gate": "west"
+    },
+    {
+      "seed": 23,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 23900,
+      "catches": 0,
+      "seals": 3,
+      "alarms": 4,
+      "gate": "west"
+    },
+    {
+      "seed": 24,
+      "side": "hunter",
+      "reason": "caught",
+      "elapsed": 28300,
+      "catches": 3,
+      "seals": 0,
+      "alarms": 1,
+      "gate": null
+    },
+    {
+      "seed": 540,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 75600,
+      "catches": 2,
+      "seals": 3,
+      "alarms": 4,
+      "gate": "east"
+    },
+    {
+      "seed": 541,
+      "side": "hiders",
+      "reason": "escape",
+      "elapsed": 52600,
+      "catches": 0,
+      "seals": 3,
+      "alarms": 3,
+      "gate": "west"
+    }
+  ]
+}

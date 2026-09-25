@@ -1,0 +1,320 @@
+{
+  "source": "Production game modules, one automated human using actual mouse drags, three AI; server clock accelerated in 25 ms simulation steps. Normal seeded random draw. No course, score, position, velocity or outcome injection.",
+  "phase": "result",
+  "rounds": [
+    {
+      "round": 1,
+      "courseId556": "frost",
+      "multiplier": 1,
+      "results": [
+        {
+          "seat": 0,
+          "base": 80,
+          "bonus": 0,
+          "points": 80,
+          "power": 0.33999994673648143,
+          "fallen": false,
+          "y": 25.45744575798973
+        },
+        {
+          "seat": 1,
+          "base": 82,
+          "bonus": 0,
+          "points": 82,
+          "power": 0.2781299769652542,
+          "fallen": false,
+          "y": 25.89405312341686
+        },
+        {
+          "seat": 2,
+          "base": 79,
+          "bonus": 0,
+          "points": 79,
+          "power": 0.31261439745058306,
+          "fallen": false,
+          "y": 25.39289357793268
+        },
+        {
+          "seat": 3,
+          "base": 59,
+          "bonus": 0,
+          "points": 59,
+          "power": 0.3374953915062361,
+          "fallen": false,
+          "y": 21.41178279595781
+        }
+      ]
+    },
+    {
+      "round": 2,
+      "courseId556": "crosswind",
+      "multiplier": 1,
+      "results": [
+        {
+          "seat": 0,
+          "base": 86,
+          "bonus": 0,
+          "points": 86,
+          "power": 0.5500001042928686,
+          "fallen": false,
+          "y": 26.79039583458833
+        },
+        {
+          "seat": 1,
+          "base": 75,
+          "bonus": 0,
+          "points": 75,
+          "power": 0.5186462162190583,
+          "fallen": false,
+          "y": 24.54230029244336
+        },
+        {
+          "seat": 2,
+          "base": 63,
+          "bonus": 0,
+          "points": 63,
+          "power": 0.42831798824178985,
+          "fallen": false,
+          "y": 22.29725558862614
+        },
+        {
+          "seat": 3,
+          "base": 78,
+          "bonus": 0,
+          "points": 78,
+          "power": 0.5016504210173153,
+          "fallen": false,
+          "y": 25.057657449107758
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "courseId556": "reversal",
+      "multiplier": 1,
+      "results": [
+        {
+          "seat": 0,
+          "base": 79,
+          "bonus": 0,
+          "points": 79,
+          "power": 0.580000025075145,
+          "fallen": false,
+          "y": 25.2864237417969
+        },
+        {
+          "seat": 1,
+          "base": 78,
+          "bonus": 0,
+          "points": 78,
+          "power": 0.4560241434827913,
+          "fallen": false,
+          "y": 25.157631843505207
+        },
+        {
+          "seat": 2,
+          "base": 59,
+          "bonus": 0,
+          "points": 59,
+          "power": 0.4592368467997294,
+          "fallen": false,
+          "y": 21.495489772702484
+        },
+        {
+          "seat": 3,
+          "base": 0,
+          "bonus": 0,
+          "points": 0,
+          "power": 0.5762250991440377,
+          "fallen": true,
+          "y": 29.490687687507183
+        }
+      ]
+    },
+    {
+      "round": 4,
+      "courseId556": "icefork",
+      "multiplier": 1,
+      "results": [
+        {
+          "seat": 0,
+          "base": 79,
+          "bonus": 0,
+          "points": 79,
+          "power": 0.6099999719033267,
+          "fallen": false,
+          "y": 25.399543029140535
+        },
+        {
+          "seat": 1,
+          "base": 0,
+          "bonus": 0,
+          "points": 0,
+          "power": 0.27423189559113237,
+          "fallen": true,
+          "y": 29.427613504664766
+        },
+        {
+          "seat": 2,
+          "base": 0,
+          "bonus": 0,
+          "points": 0,
+          "power": 0.5541152351051569,
+          "fallen": true,
+          "y": 29.476742281768214
+        },
+        {
+          "seat": 3,
+          "base": 60,
+          "bonus": 0,
+          "points": 60,
+          "power": 0.41691823771852066,
+          "fallen": false,
+          "y": 21.641807982768086
+        }
+      ]
+    },
+    {
+      "round": 5,
+      "courseId556": "bumpers",
+      "multiplier": 2,
+      "results": [
+        {
+          "seat": 0,
+          "base": 0,
+          "bonus": 0,
+          "points": 0,
+          "power": 0.9099999617951693,
+          "fallen": true,
+          "y": 29.455747561925236
+        },
+        {
+          "seat": 1,
+          "base": 39,
+          "bonus": 0,
+          "points": 78,
+          "power": 0.5172374463444576,
+          "fallen": false,
+          "y": 17.52532331491417
+        },
+        {
+          "seat": 2,
+          "base": 0,
+          "bonus": 0,
+          "points": 0,
+          "power": 0.6562264160180931,
+          "fallen": true,
+          "y": 29.44871138961621
+        },
+        {
+          "seat": 3,
+          "base": 27,
+          "bonus": 0,
+          "points": 54,
+          "power": 0.4944578238851391,
+          "fallen": false,
+          "y": 15.310097409562625
+        }
+      ]
+    }
+  ],
+  "results": [
+    {
+      "playerId": "p0",
+      "name": "あなた",
+      "seat": 0,
+      "score": 324,
+      "best": 86,
+      "perfects": 0,
+      "bumps": 4,
+      "falls": 1,
+      "rank": 1
+    },
+    {
+      "playerId": "AI-c543-3-6315c6aa-1",
+      "name": "押すなよゴブ",
+      "seat": 1,
+      "score": 313,
+      "best": 82,
+      "perfects": 0,
+      "bumps": 5,
+      "falls": 1,
+      "rank": 2
+    },
+    {
+      "playerId": "AI-c543-3-6315c6aa-3",
+      "name": "おさきに骨さん",
+      "seat": 3,
+      "score": 251,
+      "best": 78,
+      "perfects": 0,
+      "bumps": 7,
+      "falls": 1,
+      "rank": 3
+    },
+    {
+      "playerId": "AI-c543-3-6315c6aa-2",
+      "name": "より",
+      "seat": 2,
+      "score": 201,
+      "best": 79,
+      "perfects": 0,
+      "bumps": 4,
+      "falls": 2,
+      "rank": 4
+    }
+  ],
+  "shots": [
+    {
+      "round": 1,
+      "course": "frost",
+      "power": 0.33999994673648143,
+      "angle": 0.44000026611632376
+    },
+    {
+      "round": 2,
+      "course": "crosswind",
+      "power": 0.5500001042928686,
+      "angle": 0.2799999398779414
+    },
+    {
+      "round": 3,
+      "course": "reversal",
+      "power": 0.580000025075145,
+      "angle": -0.54999981272582
+    },
+    {
+      "round": 4,
+      "course": "icefork",
+      "power": 0.6099999719033267,
+      "angle": -2.4035828930742e-8
+    },
+    {
+      "round": 5,
+      "course": "bumpers",
+      "power": 0.9099999617951693,
+      "angle": 0.2800000140744561
+    }
+  ],
+  "screens": [
+    "frost",
+    "crosswind",
+    "reversal",
+    "icefork",
+    "bumpers"
+  ],
+  "eventCounts": {
+    "round": 5,
+    "go": 5,
+    "launch": 20,
+    "wall": 38,
+    "park": 16,
+    "bump": 10,
+    "score": 5,
+    "boost": 16,
+    "fall": 5,
+    "spring": 8
+  },
+  "errors": [],
+  "stderr": ""
+}

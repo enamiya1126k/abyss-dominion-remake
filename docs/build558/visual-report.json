@@ -1,0 +1,135 @@
+{
+  "checks": [
+    {
+      "id": "market",
+      "name": "はじめての坂",
+      "scene": "market",
+      "viewport": {
+        "width": 390,
+        "height": 664
+      },
+      "geometry": {
+        "floor": null,
+        "overflow": false,
+        "finite": true,
+        "width": 390,
+        "height": 414
+      }
+    },
+    {
+      "id": "icefork",
+      "name": "氷か、じゅうたんか。",
+      "scene": "frost-harbor",
+      "viewport": {
+        "width": 390,
+        "height": 664
+      },
+      "geometry": {
+        "floor": "frost-harbor",
+        "overflow": false,
+        "finite": true,
+        "width": 390,
+        "height": 414
+      }
+    },
+    {
+      "id": "market",
+      "name": "はじめての坂",
+      "scene": "market",
+      "viewport": {
+        "width": 320,
+        "height": 690
+      },
+      "geometry": {
+        "floor": null,
+        "overflow": false,
+        "finite": true,
+        "width": 320,
+        "height": 454
+      }
+    },
+    {
+      "id": "icefork",
+      "name": "氷か、じゅうたんか。",
+      "scene": "frost-harbor",
+      "viewport": {
+        "width": 320,
+        "height": 690
+      },
+      "geometry": {
+        "floor": "frost-harbor",
+        "overflow": false,
+        "finite": true,
+        "width": 320,
+        "height": 454
+      }
+    },
+    {
+      "id": "market",
+      "name": "はじめての坂",
+      "scene": "market",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "geometry": {
+        "floor": null,
+        "overflow": false,
+        "finite": true,
+        "width": 430,
+        "height": 682
+      }
+    },
+    {
+      "id": "icefork",
+      "name": "氷か、じゅうたんか。",
+      "scene": "frost-harbor",
+      "viewport": {
+        "width": 430,
+        "height": 932
+      },
+      "geometry": {
+        "floor": "frost-harbor",
+        "overflow": false,
+        "finite": true,
+        "width": 430,
+        "height": 682
+      }
+    },
+    {
+      "id": "market",
+      "name": "はじめての坂",
+      "scene": "market",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "geometry": {
+        "floor": null,
+        "overflow": false,
+        "finite": true,
+        "width": 504,
+        "height": 347
+      }
+    },
+    {
+      "id": "icefork",
+      "name": "氷か、じゅうたんか。",
+      "scene": "frost-harbor",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "geometry": {
+        "floor": "frost-harbor",
+        "overflow": false,
+        "finite": true,
+        "width": 504,
+        "height": 347
+      }
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "stderr": ""
+}

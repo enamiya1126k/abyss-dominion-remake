@@ -1,0 +1,66 @@
+[
+  {
+    "seed": 1,
+    "side": "hunter",
+    "reason": "caught",
+    "elapsed": 24850,
+    "catches": 3,
+    "seals": 2
+  },
+  {
+    "seed": 2,
+    "side": "hiders",
+    "reason": "escape",
+    "elapsed": 26150,
+    "catches": 0,
+    "seals": 3
+  },
+  {
+    "seed": 3,
+    "side": "hiders",
+    "reason": "escape",
+    "elapsed": 35400,
+    "catches": 2,
+    "seals": 3
+  },
+  {
+    "seed": 4,
+    "side": "hunter",
+    "reason": "caught",
+    "elapsed": 67050,
+    "catches": 3,
+    "seals": 3
+  },
+  {
+    "seed": 5,
+    "side": "hiders",
+    "reason": "escape",
+    "elapsed": 36900,
+    "catches": 0,
+    "seals": 3
+  },
+  {
+    "seed": 6,
+    "side": "hiders",
+    "reason": "escape",
+    "elapsed": 36350,
+    "catches": 1,
+    "seals": 3
+  },
+  {
+    "seed": 540,
+    "side": "hiders",
+    "reason": "escape",
+    "elapsed": 24500,
+    "catches": 0,
+    "seals": 3
+  },
+  {
+    "seed": 541,
+    "side": "hunter",
+    "reason": "caught",
+    "elapsed": 25000,
+    "catches": 3,
+    "seals": 2
+  }
+]

@@ -1,0 +1,50 @@
+{
+  "generator": "image_gen.imagegen",
+  "reference": "assets/cart544/track.webp",
+  "backgrounds": [
+    {
+      "name": "frost-harbor",
+      "prompt": "Use case: lighting-weather. Asset type: portrait fantasy shopping-cart game course background, matching the supplied image EXACTLY in camera and walkable-road geometry. Input image is the edit target. Preserve the wide straight trapezoidal downhill boardwalk: clear uninterrupted floor occupying the bottom 62 percent, near side left/right at about 7/93 percent width and vanishing-end at 32/68 percent width and 38 percent height. Preserve dock edge at this exact location, open dangerous water beyond, railing height, framing, planks, elevated looking-down perspective. Keep the ENTIRE central road open and empty; no carts, characters, crates, belts, obstacles, lettering, UI, icons, arrows, road markings, logos or watermarks. High-end lush hand-painted 3D fantasy-game background, crisp material detail, similar luminosity to the reference with readable floor. Change the surrounding scenery, lighting and materials as follows: A spectacular winter harbor in icy mountains. Snow-dusted fairy-tale chalet market stalls beside the railing, evergreen wreaths and warm golden lanterns; pale turquoise deep unfrozen water with icebergs beyond the dock, a distant ice castle and frozen waterfalls. The road is the exact same wooden boardwalk, entirely coated by thin glossy pale blue translucent frost so the wood grain and plank joins remain legible, subtle reflections; no opaque ice tiles pasted onto the floor. Icy blue and pearl white scene with warm gold accents, bright cool daylight. No snow mounds anywhere on the walkable center.",
+      "file": "assets/cart556/frost-harbor.png",
+      "sha256": "446257801f750c7514785d0785d90a459b7f37dace6180e33303445a2d36e279",
+      "dimensions": [
+        1024,
+        1536
+      ]
+    },
+    {
+      "name": "foundry-quay",
+      "prompt": "Use case: lighting-weather. Asset type: portrait fantasy shopping-cart game course background, matching the supplied image EXACTLY in camera and walkable-road geometry. Input image is the edit target. Preserve the wide straight trapezoidal downhill boardwalk: clear uninterrupted floor occupying the bottom 62 percent, near side left/right at about 7/93 percent width and vanishing-end at 32/68 percent width and 38 percent height. Preserve dock edge at this exact location, open dangerous water beyond, railing height, framing, planks, elevated looking-down perspective. Keep the ENTIRE central road open and empty; no carts, characters, crates, belts, obstacles, lettering, UI, icons, arrows, road markings, logos or watermarks. High-end lush hand-painted 3D fantasy-game background, crisp material detail, similar luminosity to the reference with readable floor. Change the surrounding scenery, lighting and materials as follows: A magnificent fantasy steam-powered foundry harbor at late golden afternoon. Bronze machinery, copper pipes, curved pressure tanks, hanging green workshop banners, gears and distant industrial towers OUTSIDE the two railings; deep teal water and waterfall cliffs beyond the abrupt dock end. Exact same empty wooden dock geometry, mature smoked honey-brown timber with finely grained brushed brass plank edge details, warm light and lively but controlled steam only outside the road. Rich amber, copper, emerald and teal palette. No mechanical parts on the actual playable central floor.",
+      "file": "assets/cart556/foundry-quay.png",
+      "sha256": "5532569bb576b14385ab866876ad75b5b0b474ad888d559cd6e02fd796df9299",
+      "dimensions": [
+        1024,
+        1536
+      ]
+    },
+    {
+      "name": "moonlit-bazaar",
+      "prompt": "Use case: lighting-weather. Asset type: portrait fantasy shopping-cart game course background, matching the supplied image EXACTLY in camera and walkable-road geometry. Input image is the edit target. Preserve the wide straight trapezoidal downhill boardwalk: clear uninterrupted floor occupying the bottom 62 percent, near side left/right at about 7/93 percent width and vanishing-end at 32/68 percent width and 38 percent height. Preserve dock edge at this exact location, open dangerous water beyond, railing height, framing, planks, elevated looking-down perspective. Keep the ENTIRE central road open and empty; no carts, characters, crates, belts, obstacles, lettering, UI, icons, arrows, road markings, logos or watermarks. High-end lush hand-painted 3D fantasy-game background, crisp material detail, similar luminosity to the reference with readable floor. Change the surrounding scenery, lighting and materials as follows: A lush magical night market on a moonlit harbor, same daylight-level readability on the path. Rich midnight-turquoise sky, huge softly glowing moon far above the dock, distant illuminated white cliff palaces and waterfalls. Elegant violet awnings, countless warm golden lanterns and glass bottles outside the railings, flowering lilac vines, brass rail caps. Exact same wooden dock, wet dark chestnut planks gleaming in the lantern light with subtle cool moon reflections, no standing puddle polygons. Deep blue, violet, emerald and gold palette. Atmospheric premium fantasy setting, central floor clear and well illuminated.",
+      "file": "assets/cart556/moonlit-bazaar.png",
+      "sha256": "86ed8612b54fde969d2d484aa194c6846f262bc38e5a4ba8494c3d7086d1f59d",
+      "dimensions": [
+        1024,
+        1536
+      ]
+    }
+  ],
+  "sprite": {
+    "file": "assets/cart556/spring-barrel.png",
+    "transparentBackground": true,
+    "prompt": "Use case: stylized-concept. Asset type: one transparent-background game sprite of a fantasy pinball spring barrel for an elevated-perspective shopping cart game. A SINGLE isolated short squat closed wooden barrel with emerald lacquered oak staves, rich antique brass hoops, small gold bolts and a beautifully embossed closed brass-and-emerald round top cap, surrounded by a chunky polished gold bumper ring. Beneath it is a visibly exposed sturdy dark bronze helical compression spring on a matching small circular brass base, making it immediately read as a spring-loaded bumper that will launch carts away. 3D hand-painted fantasy game prop, highly detailed tactile wood, brass, softly worn highlights, matching a luxurious moonlit market with warm lantern lighting. Camera facing the front from about 40 degrees above horizontal so the elliptical top and front side are visible; symmetric front view. Complete object centered occupying about 80% width and height in a square 1024x1024 canvas. No writing, no letters, no arrows, no watermarks, no floor, no background, no scene, no other objects. No ground plane or opaque shadow plate. True transparent background beyond silhouette.",
+    "sha256": "f3106a19226530dc16bde044656b742d291d2a104d838838666e96b001e2681c",
+    "dimensions": [
+      1254,
+      1254
+    ],
+    "alpha": [
+      0,
+      255
+    ]
+  }
+}

@@ -1,0 +1,6 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {make550,start550,pick550,finishRound550} from '../src/ricochet550/Rules550.js';
+import {clientURL551,presentationURL551} from '../tools/build555/client-fixture.mjs';
+const {RaceClient451}=await import(await clientURL551()),{raceDomSignature452}=await import(await presentationURL551());
+test('main client polling and full snapshots preserve the play surface across picks and live supplies',()=>{const g=make550({id:'test',code:'A',partyId:'P',hostId:'a',now:0,members:[],mode:'pinball'});start550(g,0,52);let renders=0;const c=Object.create(RaceClient451.prototype);Object.assign(c,{state:{selfId:'a',ricochet:g},transport:{selfId:'a'},save:{state:{player:{gold:0,crystals:0}}},draft:{},error:'',rewardError:'',connected:()=>true,key:()=>null,bank:()=>null,render(){renders++;c.renderSignature452=raceDomSignature452(c)},raw:()=>true});c.renderSignature452=raceDomSignature452(c);pick550(g,g.players[1],g.players[1].offers[0]);c.renderConnection();assert.equal(renders,0);g.session555.supplyCount++;g.players[0].offerId555++;c.renderConnection();assert.equal(renders,0);c.receive({selfId:'a',serverNow:18000,ricochet:structuredClone(g)});assert.equal(renders,0);finishRound550(g,20000);c.receive({selfId:'a',serverNow:20000,ricochet:structuredClone(g)});assert.equal(renders,1)});

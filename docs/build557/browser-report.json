@@ -1,0 +1,115 @@
+{
+  "checks": [
+    "Four clients use the real lobby, ready/start and touch controls. Shared course matches; unrevealed deck stays server-only.",
+    "Distinct belt claims synchronize to all four clients and survive reconnect.",
+    "Reverse belt and spring barrel impacts cross the actual physics/frame/render path without duplicate hits.",
+    "Four synchronized clients settle safe stops at 140, 146, 173 and 200; final round doubles all to 280, 292, 346 and 400. HUD, overlay, final history and ranks agree; characters stay behind the result overlay.",
+    "Five-round play through one canvas uses five distinct courses; reconnect keeps the course, final x2 and results agree on all clients, and history lists course names.",
+    "Replay draws a new five-course match.",
+    "Four viewport sizes including Safari-sized 390×664, keyboard and reduced motion verified."
+  ],
+  "rounds": [
+    {
+      "round": 1,
+      "course": "frost",
+      "multiplier": 1
+    },
+    {
+      "round": 2,
+      "course": "crosswind",
+      "multiplier": 1
+    },
+    {
+      "round": 3,
+      "course": "reversal",
+      "multiplier": 1
+    },
+    {
+      "round": 4,
+      "course": "icefork",
+      "multiplier": 1
+    },
+    {
+      "round": 5,
+      "course": "bumpers",
+      "multiplier": 2
+    }
+  ],
+  "viewports": [
+    {
+      "width": 320,
+      "height": 690,
+      "overflow": 0,
+      "stage": 453.8125,
+      "footer": 690,
+      "hint": {
+        "x": 18,
+        "y": 202.6875,
+        "width": 192,
+        "height": 12.390625,
+        "top": 202.6875,
+        "right": 210,
+        "bottom": 215.078125,
+        "left": 18
+      },
+      "viewport": 690
+    },
+    {
+      "width": 390,
+      "height": 664,
+      "overflow": 0,
+      "stage": 414.109375,
+      "footer": 664,
+      "hint": {
+        "x": 24,
+        "y": 217.890625,
+        "width": 216,
+        "height": 13.9375,
+        "top": 217.890625,
+        "right": 240,
+        "bottom": 231.828125,
+        "left": 24
+      },
+      "viewport": 664
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "overflow": 0,
+      "stage": 682.109375,
+      "footer": 932,
+      "hint": {
+        "x": 24,
+        "y": 217.890625,
+        "width": 216,
+        "height": 13.9375,
+        "top": 217.890625,
+        "right": 240,
+        "bottom": 231.828125,
+        "left": 24
+      },
+      "viewport": 932
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "overflow": 0,
+      "stage": 347,
+      "footer": 390,
+      "hint": {
+        "x": 176,
+        "y": 73,
+        "width": 216,
+        "height": 13.9375,
+        "top": 73,
+        "right": 392,
+        "bottom": 86.9375,
+        "left": 176
+      },
+      "viewport": 390
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "serverErrors": ""
+}

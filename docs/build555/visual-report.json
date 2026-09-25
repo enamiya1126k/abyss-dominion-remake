@@ -1,0 +1,26 @@
+{
+  "metrics": {
+    "stage": [
+      390,
+      421
+    ],
+    "boardWidth": 363.6524520255864,
+    "ratio": 0.9324421846809907,
+    "inner": [
+      390,
+      664
+    ],
+    "root": {
+      "x": 0,
+      "y": 0,
+      "width": 390,
+      "height": 664,
+      "top": 0,
+      "right": 390,
+      "bottom": 664,
+      "left": 0
+    }
+  },
+  "errors": [],
+  "stderr": ""
+}

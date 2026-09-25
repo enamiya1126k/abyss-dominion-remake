@@ -1,0 +1,30 @@
+{
+  "version": "3.1.237",
+  "changedJSChecked": [
+    "src/cart/Projection558.js",
+    "src/cart/Renderer543.js",
+    "src/cart/Rug557.js",
+    "src/core/config.js",
+    "src/worldRaid/WorldRaidOfflineCache430.js",
+    "tools/build558/capture.mjs",
+    "tools/build558/client-fixture.mjs",
+    "tools/build558/party-fixture.mjs",
+    "tools/build558/preview.mjs",
+    "tools/build558/qa-server.mjs",
+    "tools/build558/visual.mjs",
+    "world-raid-offline558-sw.js"
+  ],
+  "unchangedRulesInputsAndArt": [
+    "src/cart/Rules543.js",
+    "src/cart/Parking557.js",
+    "src/cart/Courses556.js",
+    "src/cart/Controls547.js",
+    "src/cart/Sling547.js",
+    "assets/cart557/woven-runner.png"
+  ],
+  "onlineServerUnchanged": true,
+  "pinballUnchanged": true,
+  "historicalAliasesRetained": 1958,
+  "cartProtocol": 7,
+  "serverRestartRequired": false
+}

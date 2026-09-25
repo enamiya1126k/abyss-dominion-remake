@@ -1,0 +1,48 @@
+✔ main coordinator wire path opens each mode, authorizes inputs, snapshots and broadcasts frames (105.42025ms)
+✔ each server draw has five unique courses and at least three scenery families (49.092747ms)
+✔ seed is reproducible, deck is hidden from clients, current and past course IDs are public (1.285579ms)
+✔ course ID drives surface geometry independently of the round number (0.402717ms)
+✔ a complete match consumes its saved draw, preserves five rounds and doubles only the final round (248.98753ms)
+✔ save restoration retains the exact deck, active course and next transition (236.213273ms)
+✔ left ice and right rug have distinct friction and stopping distances (7.211379ms)
+✔ narrow conveyors ignore adjacent lanes and swept crossings cannot skip a belt (0.977685ms)
+✔ each belt activates once independently, including a second belt in the same round (0.641558ms)
+✔ reverse belt applies an upward-board braking impulse; sideways belts add the shown lateral force (4.208084ms)
+✔ spring barrels repel physical carts at high speed and only one impulse is applied per contact (3.333539ms)
+✔ every course has usable calibrated shots from every starting position (501.911368ms)
+✔ new collision objects fit inside the road and keep the gold parking zone clear (0.291369ms)
+✔ MAX is exactly three times the previous top launch speed; low power remains controllable (1.487064ms)
+✔ untouched starting carts do not drift or acquire a launch state (30.697061ms)
+✔ a launched cart hits and displaces an unreleased neighbor without consuming its shot (2.33978ms)
+✔ a release adds a vector to the current momentum, including sideways and reverse carries (0.866998ms)
+✔ cancelling a pull does not erase momentum from a collision (0.373774ms)
+✔ opposing fast carts cannot pass through each other in one server tick (1.005827ms)
+✔ fast carts repeatedly ricochet from walls without leaving bounds or gaining energy (19.22955ms)
+✔ an unreleased cart pushed into the sea loses its turn and does not block round completion (1.780206ms)
+✔ a fast pushed cart is blocked by freight crates (1.686995ms)
+✔ crossing a conveyor while unreleased accelerates once and keeps the shot available (1.809891ms)
+✔ all five rounds settle with AI using the recalibrated pull curve (269.340409ms)
+✔ saved v6 live rooms migrate to lobby before v7 scoring are applied (0.600737ms)
+✔ main coordinator advertises cart v7, opens a random-course match and forwards authorized shots (15.012678ms)
+✔ gold and progressively riskier stops pay 140, 146, 173 and 200 with no score cliff (2.33993ms)
+✔ every safe stopping position is monotonic, integral and capped at 200 (93.656312ms)
+✔ gold requires full entry; the edge uses the same cart front as the fall boundary (0.21218ms)
+✔ moving, waiting and fallen carts cannot claim a parking bonus (0.208344ms)
+✔ a gentle push past the brink loses the entire round, not just its bonus (1.402997ms)
+✔ a cart pushed back from an edge stop receives only its new final location score (1.106058ms)
+✔ round settlement stores the full breakdown once; only the final round doubles it (10.835057ms)
+✔ a time-limit stop agrees with displayed score and restoring a save cannot change the award (0.798254ms)
+✔ four humans ready with protocol 6 and start a continuous match (4.857397ms)
+✔ host duration is preserved on replay; results return to minigame list (1.205889ms)
+✔ old protocol, guest settings and retired GP creation are rejected (0.605944ms)
+✔ retiring saved GP preserves the party and its members; old pinball returns to lobby (1.538015ms)
+✔ host transfer and other minigames still work (4.181558ms)
+✔ saved snapshot restores rotor, reload and lane progress after runtime recreation (5.851798ms)
+ℹ tests 40
+ℹ suites 0
+ℹ pass 40
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1176.640535

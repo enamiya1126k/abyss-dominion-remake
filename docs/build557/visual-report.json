@@ -1,0 +1,12 @@
+{
+  "checks": [
+    {
+      "id": "icefork",
+      "name": "氷か、じゅうたんか。",
+      "scene": "frost-harbor"
+    }
+  ],
+  "errors": [],
+  "missing": [],
+  "stderr": ""
+}

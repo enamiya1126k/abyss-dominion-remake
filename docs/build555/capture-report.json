@@ -1,0 +1,143 @@
+{
+  "source": "Production game modules, one automated human using actual UI offers and mouse drags, three AI, accelerated server clock. No score, position, velocity, ability or outcome injection.",
+  "duration": 90000,
+  "phase": "result",
+  "results": [
+    {
+      "playerId": "AI-rc550-3-446b0d78-2",
+      "seat": 2,
+      "name": "より",
+      "score": 81350,
+      "rank": 1
+    },
+    {
+      "playerId": "AI-rc550-3-446b0d78-3",
+      "seat": 3,
+      "name": "ホネスピン",
+      "score": 70193,
+      "rank": 2
+    },
+    {
+      "playerId": "p0",
+      "seat": 0,
+      "name": "あなた",
+      "score": 67696,
+      "rank": 3
+    },
+    {
+      "playerId": "AI-rc550-3-446b0d78-1",
+      "seat": 1,
+      "name": "ねらうゴブ",
+      "score": 22960,
+      "rank": 4
+    }
+  ],
+  "players": [
+    {
+      "seat": 0,
+      "parts": {
+        "cell": 1,
+        "mirror": 2
+      },
+      "shots": 29,
+      "bursts": 8,
+      "lanes": 3,
+      "jackpots": 5,
+      "rotorWins": 2,
+      "breakdown": {
+        "pin": 12456,
+        "lane": 4760,
+        "spinner": 2000,
+        "jackpot": 48480
+      }
+    },
+    {
+      "seat": 1,
+      "parts": {
+        "cell": 1,
+        "echo": 2
+      },
+      "shots": 20,
+      "bursts": 6,
+      "lanes": 3,
+      "jackpots": 2,
+      "rotorWins": 0,
+      "breakdown": {
+        "pin": 9050,
+        "lane": 8640,
+        "spinner": 0,
+        "jackpot": 5270
+      }
+    },
+    {
+      "seat": 2,
+      "parts": {
+        "mirror": 1,
+        "spark": 1,
+        "spring": 1
+      },
+      "shots": 17,
+      "bursts": 7,
+      "lanes": 4,
+      "jackpots": 3,
+      "rotorWins": 1,
+      "breakdown": {
+        "pin": 13305,
+        "lane": 10240,
+        "spinner": 1000,
+        "jackpot": 56805
+      }
+    },
+    {
+      "seat": 3,
+      "parts": {
+        "echo": 1,
+        "spark": 1,
+        "mirror": 1
+      },
+      "shots": 19,
+      "bursts": 6,
+      "lanes": 1,
+      "jackpots": 5,
+      "rotorWins": 1,
+      "breakdown": {
+        "pin": 14743,
+        "lane": 3200,
+        "spinner": 1000,
+        "jackpot": 51250
+      }
+    }
+  ],
+  "eventCounts": {
+    "start": 1,
+    "pick": 12,
+    "launch": 85,
+    "gem": 57,
+    "pin": 277,
+    "wall": 432,
+    "laneGate": 37,
+    "ready": 19,
+    "lane": 11,
+    "laneComplete": 11,
+    "hit": 44,
+    "bell": 28,
+    "combo": 25,
+    "jackpotSpin": 15,
+    "rotor": 98,
+    "jackpot": 15,
+    "burstReady": 27,
+    "burst": 27,
+    "spinner": 4,
+    "fever": 4,
+    "supply": 2,
+    "score": 1
+  },
+  "screens": {
+    "saveRotor": true,
+    "saveFever": true,
+    "saveCrown": true,
+    "saveAim": true
+  },
+  "errors": [],
+  "stderr": ""
+}

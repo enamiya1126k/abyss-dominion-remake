@@ -1,0 +1,192 @@
+{
+  "realGoalInput": {
+    "op": "hideInput536",
+    "gameId": "h536-1-c3dad7df",
+    "kind": "input",
+    "seq": 1,
+    "target": {
+      "x": 2450,
+      "y": 1150
+    }
+  },
+  "coopProgress": 3999.9999999999964,
+  "result": "‹\nABYSS · THE HIDDEN MANOR\n魔王のかくれんぼ\n音 ON\n迷いの館と庭園 · 決着\nVICTORY\n脱出、大成功！\n\n５つの封印から３つを解除。仲間が門を突破！\n\n封印 3 / 3\n決着 6秒\nふわり\nコトコト\nコソコソ\n隠れる３人チームの勝利\nもう一度\nミニゲーム一覧へ戻る\n\n再戦は部屋主が開始できます。\n\n·\nあなた\n鬼 · 0人を発見\n健闘\n♛\nふわり\n隠れる側 · 東門から脱出\n勝利\n♛\nコトコト\n隠れる側 · 脱出を援護\n勝利\n♛\nコソコソ\n隠れる側 · 脱出を援護\n勝利\n\n鬼の残り攻撃 3回 · 6秒で決着",
+  "layouts": [
+    {
+      "size": {
+        "width": 320,
+        "height": 690
+      },
+      "stage": {
+        "x": 0,
+        "y": 140,
+        "width": 320,
+        "height": 337
+      },
+      "goals": {
+        "y": 511,
+        "bottom": 547
+      },
+      "buttons": [
+        {
+          "width": 58.390625,
+          "height": 36
+        },
+        {
+          "width": 58.40625,
+          "height": 36
+        },
+        {
+          "width": 58.390625,
+          "height": 36
+        },
+        {
+          "width": 58.40625,
+          "height": 36
+        },
+        {
+          "width": 58.40625,
+          "height": 36
+        }
+      ],
+      "scrollWidth": 320,
+      "scrollHeight": 690,
+      "innerHeight": 690,
+      "innerWidth": 320
+    },
+    {
+      "size": {
+        "width": 390,
+        "height": 664
+      },
+      "stage": {
+        "x": 0,
+        "y": 140,
+        "width": 390,
+        "height": 311
+      },
+      "goals": {
+        "y": 485,
+        "bottom": 521
+      },
+      "buttons": [
+        {
+          "width": 70.796875,
+          "height": 36
+        },
+        {
+          "width": 70.796875,
+          "height": 36
+        },
+        {
+          "width": 70.796875,
+          "height": 36
+        },
+        {
+          "width": 70.796875,
+          "height": 36
+        },
+        {
+          "width": 70.8125,
+          "height": 36
+        }
+      ],
+      "scrollWidth": 390,
+      "scrollHeight": 664,
+      "innerHeight": 664,
+      "innerWidth": 390
+    },
+    {
+      "size": {
+        "width": 430,
+        "height": 932
+      },
+      "stage": {
+        "x": 0,
+        "y": 151,
+        "width": 430,
+        "height": 531
+      },
+      "goals": {
+        "y": 713,
+        "bottom": 755
+      },
+      "buttons": [
+        {
+          "width": 77.1875,
+          "height": 42
+        },
+        {
+          "width": 77.203125,
+          "height": 42
+        },
+        {
+          "width": 77.203125,
+          "height": 42
+        },
+        {
+          "width": 77.203125,
+          "height": 42
+        },
+        {
+          "width": 77.1875,
+          "height": 42
+        }
+      ],
+      "scrollWidth": 430,
+      "scrollHeight": 932,
+      "innerHeight": 932,
+      "innerWidth": 430
+    },
+    {
+      "size": {
+        "width": 844,
+        "height": 390
+      },
+      "stage": {
+        "x": 0,
+        "y": 114,
+        "width": 574,
+        "height": 276
+      },
+      "goals": {
+        "y": 86.1875,
+        "bottom": 153.1875
+      },
+      "buttons": [
+        {
+          "width": 82.328125,
+          "height": 32
+        },
+        {
+          "width": 82.328125,
+          "height": 32
+        },
+        {
+          "width": 82.34375,
+          "height": 32
+        },
+        {
+          "width": 82.328125,
+          "height": 32
+        },
+        {
+          "width": 82.328125,
+          "height": 32
+        }
+      ],
+      "scrollWidth": 844,
+      "scrollHeight": 390,
+      "innerHeight": 390,
+      "innerWidth": 844
+    }
+  ],
+  "reducedMotion": true,
+  "reconnect": {
+    "rules": 6,
+    "seals": 5,
+    "exits": 2
+  },
+  "errors": [],
+  "failed": []
+}

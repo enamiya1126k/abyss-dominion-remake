@@ -1,0 +1,119 @@
+{
+  "build": 558,
+  "version": "3.1.237",
+  "baseBuild": 557,
+  "type": "patch",
+  "games": [
+    "cart"
+  ],
+  "cartVersion543": 7,
+  "ricochetVersion550": 6,
+  "requiredServerRestart": false,
+  "files": [
+    {
+      "path": "BUILD558_README.md",
+      "size": 2910,
+      "sha256": "688c904c59a1932b8f97364b681ac8057733d1b267504f43eaa9aaef94408907"
+    },
+    {
+      "path": "docs/build558/capture-report.json",
+      "size": 8823,
+      "sha256": "1fabed94facd5daa18f63c8d9a18397d641221b98b8b6f302695eb8591e1f362"
+    },
+    {
+      "path": "docs/build558/static-report.json",
+      "size": 850,
+      "sha256": "072c9c3a45f6f878ffae9246827008fe2ebee9e69a509a2e1da44793310254d0"
+    },
+    {
+      "path": "docs/build558/visual-report.json",
+      "size": 2705,
+      "sha256": "72aa240a3901d9e776bfdec07a51a43755a3cdb361f9477c0ddc6d15654dd103"
+    },
+    {
+      "path": "index.html",
+      "size": 232678,
+      "sha256": "9c8cdeddd952b35e01f2ca61bc92b9f70b9e0f97cc6ad287f66e674eddd51e06"
+    },
+    {
+      "path": "src/cart/Projection558.js",
+      "size": 841,
+      "sha256": "e99d49a33f819187789431709eb50318a68259b0650a00ee40c15874d5240899"
+    },
+    {
+      "path": "src/cart/Renderer543.js",
+      "size": 13744,
+      "sha256": "bf576214e347263546eac20a1a75d872c29cc8f5d45f2e0a8c4483662051f469"
+    },
+    {
+      "path": "src/cart/Rug557.js",
+      "size": 1699,
+      "sha256": "0c4ac51558bc07324a0c6a258214000531610dd3b6e41300a162c272943ea2e8"
+    },
+    {
+      "path": "src/core/config.js",
+      "size": 2257,
+      "sha256": "60c4c9e000d9df048996007bae660ababd15bdac8164cc6c90ef4d9d6f0dc4e8"
+    },
+    {
+      "path": "src/worldRaid/WorldRaidOfflineCache430.js",
+      "size": 2884,
+      "sha256": "873835d294d70f9a7230e72c5ca2eb0689a286be5df9a0e2f61865cef2545e3a"
+    },
+    {
+      "path": "tools/build558/capture.mjs",
+      "size": 4258,
+      "sha256": "8ccc10f1c38e1b374eb0c44afda6a4007534dfcd98661f92fafd669ae05562db"
+    },
+    {
+      "path": "tools/build558/client-fixture.mjs",
+      "size": 1634,
+      "sha256": "c9af9cacafb2dd0195c760aea4eec6b91652cd20080604a87e30cc53f2bc5882"
+    },
+    {
+      "path": "tools/build558/package.py",
+      "size": 1796,
+      "sha256": "6c346fb9c46a73e05647ac14b2743519019639f0cd65dbb310a6606b177d4104"
+    },
+    {
+      "path": "tools/build558/party-fixture.mjs",
+      "size": 1190,
+      "sha256": "890f980dcb9b0c55dfbe2599bb8d5ae96ba292e3b7775713cb3ff3ec4f8a634d"
+    },
+    {
+      "path": "tools/build558/preview.mjs",
+      "size": 2115,
+      "sha256": "f44c82c9912e68f8904d2cd810b1d267a3962512309f348c91f595be7680872c"
+    },
+    {
+      "path": "tools/build558/qa-server.mjs",
+      "size": 7345,
+      "sha256": "c7f5b960477aa6d5c885270a2b2ee2b3508e165104097afa20c1352dd6653032"
+    },
+    {
+      "path": "tools/build558/stamp.py",
+      "size": 1716,
+      "sha256": "5084268941e4d7d75042e77cb307a403d2e0740e2ac84d516055f248a5629fdc"
+    },
+    {
+      "path": "tools/build558/static-check.py",
+      "size": 2183,
+      "sha256": "294ba308e200ed1ac05b0268e2b1c92dcd4024782959a1b6b05018c8dc497af8"
+    },
+    {
+      "path": "tools/build558/visual.mjs",
+      "size": 2982,
+      "sha256": "c1cb1e33396ed5cf5d42e53f09b63ecd6420bd64d34080d0d5a334c6ba1a956f"
+    },
+    {
+      "path": "world-raid-offline558-assets.json",
+      "size": 48013,
+      "sha256": "691622055beb7c79e8de054bd2ca5767b219dee8e12d2ec4169ba5004f403b94"
+    },
+    {
+      "path": "world-raid-offline558-sw.js",
+      "size": 1844,
+      "sha256": "24455676436fe67728d9ddd3e36f60ab907d5cb7cecec51a38176bb8d7154e59"
+    }
+  ]
+}

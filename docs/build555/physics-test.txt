@@ -1,0 +1,23 @@
+✔ rotor rests without a motor; freely rotating rotor slows down (2.294041ms)
+✔ off-axis impact gives the opposite torque on left/right; hub receives no torque (1.066359ms)
+✔ stronger and farther impacts spin harder; contact does not generate kinetic energy (1.170976ms)
+✔ moving rotor kicks resting bodies and receives equal opposing torque (0.222726ms)
+✔ actual rotation fills FEVER, awards the latest torque owner once, then waits seven seconds (0.361876ms)
+✔ adaptive physics catches a 95-unit shot against a shaft, pin, and rail (7.476849ms)
+✔ waiting players receive collisions; their own launch adds existing momentum (0.474095ms)
+✔ normal shots recharge after 2.8 seconds and stale shot counters cannot spend a later reload (0.393674ms)
+✔ abilities refresh inside the same match without resetting position, speed, score, gems or charge (0.936783ms)
+✔ outside lane requires three ordered forward crossings and cannot be farmed at the exit (0.37153ms)
+✔ crown spends only its winner gems, hides its roll, and credits the delayed payout once (0.632725ms)
+✔ last fifteen seconds double crown base, then finishing credits one pending reveal and ends once (0.329307ms)
+✔ burst can be re-earned during the same match but not while overdrive is active (0.317319ms)
+✔ 90/150 seconds run continuously to one result; score breakdowns balance, bodies remain finite (1257.122449ms)
+✔ offers are private, capped at level three; GP cannot be created (0.718674ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1364.881683

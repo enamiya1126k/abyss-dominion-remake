@@ -1,0 +1,34 @@
+import {spawn} from 'node:child_process';
+import {mkdir,writeFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const {chromium}=await import('/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs');
+const server=spawn(process.execPath,['tools/build559/qa-server.mjs'],{cwd:process.cwd(),env:{...process.env,PLAYWRIGHT_WS_MODULE:'/opt/codex/runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright-core/lib/utilsBundle.js'},stdio:['ignore','pipe','pipe']});
+const watchdog=setTimeout(()=>{console.error('QA timed out');server.kill('SIGTERM');process.exit(1)},90000);server.stderr.on('data',b=>process.stderr.write(b));await new Promise((yes,no)=>{server.stdout.on('data',b=>{if(String(b).includes('QA ready')){console.log('server ready');yes()}});server.on('exit',code=>no(Error('server exit '+code)))});
+let browser;const errors=[],failed=[],report={};
+try{
+ browser=await chromium.launch({executablePath:'/workspace/scratch/f849e4a30ac8/runtime546/chromium',headless:true,args:['--no-sandbox']});
+ console.log('browser ready');const base='http://127.0.0.1:8559',api=async(path,body={})=>{const r=await fetch(base+'/qa/'+path,{method:'POST',body:JSON.stringify(body)});if(!r.ok)throw Error(await r.text());return r.json()};
+ const pages=[];for(let i=0;i<4;i++){const page=await browser.newPage({viewport:{width:390,height:740},deviceScaleFactor:2,isMobile:true,hasTouch:true});page.on('pageerror',e=>{errors.push(e.message);console.error(e.message)});page.on('response',r=>{if(r.status()>=400){failed.push([r.status(),r.url()]);console.error(r.status(),r.url())}});await page.goto(base+'/preview.html?self=p'+i);await page.waitForFunction(()=>window.qaReady&&window.c?.state?.hide);pages.push(page);console.log('page ready',i)}
+ const [hunter,hider]=pages;await hider.bringToFront();await hider.evaluate(()=>document.fonts.ready);await hider.waitForSelector('[data-hd-goal559="seal:0"]');
+ assert.equal(await hider.locator('[data-hd-seal559]').count(),5);await hider.locator('[data-hd-goal559="seal:0"]').click();
+ await hider.waitForFunction(()=>window.sent559?.some(m=>m.op==='hideInput536'&&m.target));await api('advance',{ms:500});
+ report.realGoalInput=await hider.evaluate(()=>window.sent559.find(m=>m.op==='hideInput536'&&m.target));
+ let g=await api('state'),s=g.heist541.seals[0];
+ await hider.locator('[data-hd-action="stop"]').click();await api('advance',{ms:50});await api('position',{players:[{seat:1,x:s.x,y:s.y,route:[],goal:null,moving:false,target:null},{seat:2,x:s.x+40,y:s.y,route:[],goal:null,moving:false,target:null}]});
+ await api('advance',{ms:3000});await hider.waitForFunction(()=>window.c.state.hide.heist541.seals[0].alarmUntil>0);await hider.waitForTimeout(150);
+ report.coopProgress=await hider.evaluate(()=>window.c.state.hide.heist541.seals[0].progress);assert(report.coopProgress>3900&&report.coopProgress<4200);
+ await hunter.bringToFront();await hunter.waitForFunction(()=>window.c.state.hide.heist541.seals[0].alarmUntil>0);assert.equal(await hunter.evaluate(()=>window.c.state.hide.heist541.seals[0].progress),undefined);assert.equal(await hunter.evaluate(()=>window.c.state.hide.players[1].x),undefined);
+ await hider.bringToFront();await mkdir('docs/build559',{recursive:true});await hider.screenshot({path:'docs/build559/channel-mobile.png'});
+ await api('advance',{ms:3000});g=await api('state');assert(g.heist541.seals[0].done);
+ await api('unlock',{ids:[1,4]});await api('advance',{ms:50});await hider.waitForSelector('[data-hd-exits]:not([hidden])');assert.equal(await hider.locator('[data-hd-exits] button:visible').count(),2);
+ await hider.screenshot({path:'docs/build559/two-gates-mobile.png'});
+ await hider.locator('[data-hd-goal559="gate:east"]').click();await hider.waitForFunction(()=>window.sent559?.some(m=>m.target?.x>4000&&m.target?.y>3000));await api('advance',{ms:50});await hider.locator('[data-hd-action="stop"]').click();await api('advance',{ms:50});
+ g=await api('state');const east=g.heist541.exits[1];await api('position',{players:[{seat:1,x:east.x,y:east.y,route:[],goal:null,target:null,moving:false}]});await api('advance',{ms:50});await hider.waitForSelector('.hd-result536');report.result=await hider.locator('.hd-result536').innerText();assert(report.result.includes('東門から脱出'));assert(report.result.includes('援護'));await hider.screenshot({path:'docs/build559/result-mobile.png',fullPage:true});
+ await api('reset');await api('deadline');await hunter.bringToFront();await hunter.waitForSelector('.hd-result536');assert((await hunter.locator('.hd-result536').innerText()).includes('脱出を阻止'));
+ await api('reset',{seed:559,role:'hider'});await hunter.waitForSelector('.hd-play536');report.layouts=[];
+ for(const size of [{width:320,height:690},{width:390,height:664},{width:430,height:932},{width:844,height:390}]){await hunter.setViewportSize(size);await hunter.waitForTimeout(180);const metrics=await hunter.evaluate(()=>{const stage=document.querySelector('[data-hd-stage]').getBoundingClientRect(),goals=document.querySelector('[data-hd-goals]').getBoundingClientRect(),buttons=[...document.querySelectorAll('[data-hd-seal559]')].map(b=>{const r=b.getBoundingClientRect();return{width:r.width,height:r.height}});return{stage:{x:stage.x,y:stage.y,width:stage.width,height:stage.height},goals:{y:goals.y,bottom:goals.bottom},buttons,scrollWidth:document.documentElement.scrollWidth,scrollHeight:document.documentElement.scrollHeight,innerHeight,innerWidth}});assert(metrics.scrollWidth<=size.width+1);assert(metrics.stage.height>=180);report.layouts.push({size,...metrics});await hunter.screenshot({path:`docs/build559/layout-${size.width}.png`,fullPage:true})}
+ await hunter.setViewportSize({width:390,height:740});await hunter.emulateMedia({reducedMotion:'reduce'});await hunter.evaluate(()=>window.c.render());await hunter.locator('[data-hd-action="map"]').click();await hunter.waitForTimeout(180);await hunter.screenshot({path:'docs/build559/map-mobile.png'});report.reducedMotion=await hunter.evaluate(()=>window.c.hideUI536.reduced);
+ // Reconnect the same identity; production snapshot must carry both gates, map and sequence.
+ await hider.close();const re=await browser.newPage();await re.goto(base+'/preview.html?self=p1');await re.waitForFunction(()=>window.qaReady);report.reconnect=await re.evaluate(()=>({rules:window.c.state.hide.rulesVersion,seals:window.c.state.hide.heist541.seals.length,exits:window.c.state.hide.heist541.exits.length}));assert.deepEqual(report.reconnect,{rules:6,seals:5,exits:2});
+ report.errors=errors;report.failed=failed;await writeFile('docs/build559/browser.json',JSON.stringify(report,null,2));assert.deepEqual(errors,[]);assert.deepEqual(failed,[]);console.log(JSON.stringify({ok:true,layouts:report.layouts.map(x=>[x.size.width,x.stage.height]),errors,failed}));
+}finally{clearTimeout(watchdog);await browser?.close();server.kill('SIGTERM')}

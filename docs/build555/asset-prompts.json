@@ -1,0 +1,21 @@
+{
+  "build": 555,
+  "tool": "image_gen.imagegen",
+  "assets": [
+    {
+      "name": "arena-floor",
+      "transparent_background": false,
+      "prompt": "Use case: stylized-concept. Asset type: orthographic straight overhead playfield texture for an emerald-and-gold fantasy pinball arena, portrait 1280x1536. Very premium hand-painted 3D game materials: deep rich emerald velvet-green metal enamel playing floor, soft polished gold corner filigree and tiny glowing teal inlays. STRICT flat overhead camera, no perspective. A VERY THIN continuous polished brass rail rectangle only in the outermost 3 percent on all four edges, with small corner bolts; the remaining 94 percent of the canvas is open playable floor. The floor has beautifully subtle etched radial clockwork engraving around the center and delicate flourishes near the edges, but is quiet, dark enough and spacious enough for brightly colored game pieces to be legible. No raised parts inside the play area. A restrained luminous jade glow from the center, antique gold highlights and tiny evenly spaced pin lights along the thin edge. No bulky decorative frame, no border outside the canvas, no external scene, no side margins. No props, no bumpers, no targets, no paddles, no characters, no gems, no symbols indicating routes, no text, no letters, no UI. Fill entire canvas.",
+      "file": "assets/ricochet555/arena-floor.png",
+      "sha256": "2b2f94fac311f68c5e2204306a7d94307645430104343eb650f6ba1e38ac7506"
+    },
+    {
+      "name": "impact-rotor",
+      "transparent_background": true,
+      "prompt": "Use case: stylized-concept. Asset type: single isolated collision-driven pinball rotor sprite on a fully transparent background, landscape 1536x1024. Exactly ONE object, directly overhead orthographic view. A gorgeous horizontal symmetric antique brass mechanical paddle, long narrow capsule shape, two rounded weighted ends, narrow reinforced arms and one medium circular emerald mechanical bearing at the exact midpoint. Overall object width about 1300 pixels, object height about 220 pixels, perfectly horizontal along the x axis, centered on canvas. Its two heavy rounded brass end weights sit at the two far endpoints. Emerald enamel inset strip along the arms, visible tiny screw heads and engraved lightning flourishes, subtle copper details, handsome tactile polished metal, high-end hand-painted 3D fantasy game asset. The central bearing is a round brass cog with one green glass lens; it must remain within the height of the end weights or only slightly taller. Entire complete object visible with ample transparent empty space. No shadow plane, no floor, no background color, no cast shadow beyond object, no glow outside silhouette, no scene, no extra components, no text, no letters. Strong clear silhouette that matches a long narrow physical capsule.",
+      "file": "assets/ricochet555/impact-rotor.png",
+      "sha256": "6c984995cfbb4f6e20daa9e80965d44698fa91cec92a191c325d56297d92a6b4"
+    }
+  ],
+  "notes": "Original generated PNG bytes; rotor alpha preserved. Rendering samples its tight source rectangle; no image edits."
+}

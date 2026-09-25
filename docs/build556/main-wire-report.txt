@@ -1,0 +1,10 @@
+✔ main coordinator wire path opens each mode, authorizes inputs, snapshots and broadcasts frames (73.191398ms)
+✔ main coordinator advertises cart v6, opens a random-course match and forwards authorized shots (14.904756ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 190.97836
